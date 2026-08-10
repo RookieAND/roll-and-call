@@ -1,0 +1,30 @@
+{
+  "name": "trpg-reservation-check",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm -F @trpg/web dev",
+    "build": "pnpm -F @trpg/web build",
+    "start": "pnpm -F @trpg/web start",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "oxlint",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.5.1",
+      "onFail": "download"
+    }
+  },
+  "devDependencies": {
+    "oxlint": "^1.77.0",
+    "oxfmt": "^0.62.0",
+    "typescript": "^5.9.3"
+  }
+}

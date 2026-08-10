@@ -1,0 +1,9 @@
+{
+  "plugins": ["react", "typescript", "unicorn"],
+  "env": { "browser": true, "es2024": true, "node": true },
+  "categories": { "correctness": "error", "suspicious": "warn" },
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "unicorn/consistent-function-scoping": "off"
+  }
+}
