@@ -1,37 +1,28 @@
 import Link from "next/link";
-import { Container, Grid, HStack, VStack } from "@trpg/ui";
-import { GameCard } from "@/entities/game";
-import { getGames } from "@/entities/game/api/queries";
+import { Button } from "@trpg/ui";
+import type { GamesFilter } from "@/entities/game/api/queries";
+import { AppBar } from "@/shared/ui/app-bar";
+import { GameBoard } from "@/widgets/game-board";
 
-export async function GamesView() {
-  const games = await getGames();
+type Props = {
+  page?: number;
+  q?: string;
+  status?: GamesFilter["status"];
+  sort?: GamesFilter["sort"];
+};
 
+export function GamesView({ page, q, status, sort }: Props) {
   return (
-    <Container>
-      <VStack gap={6} className="py-8">
-        <HStack justify="between" align="center">
-          <h1 className="text-2xl font-bold">구인 목록</h1>
-          <Link
-            href="/games/new"
-            className="rounded-md bg-black px-4 py-2 font-medium text-white"
-          >
-            새 구인
-          </Link>
-        </HStack>
-        {games.length === 0 ? (
-          <p className="text-gray-500">아직 등록된 구인이 없어요.</p>
-        ) : (
-          <Grid
-            cols={1}
-            gap={4}
-            className="sm:grid-cols-2 lg:grid-cols-3"
-          >
-            {games.map((game) => (
-              <GameCard key={game.id} game={game} />
-            ))}
-          </Grid>
-        )}
-      </VStack>
-    </Container>
+    <>
+      <AppBar
+        title="구인 목록"
+        action={
+          <Button asChild size="sm">
+            <Link href="/games/new">새 구인</Link>
+          </Button>
+        }
+      />
+      <GameBoard page={page} q={q} status={status} sort={sort} />
+    </>
   );
 }

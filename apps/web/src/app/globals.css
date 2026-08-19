@@ -1,2 +1,15 @@
 @import "tailwindcss";
 @import "@trpg/ui/styles.css";
+
+:root {
+  --min-width-screen-min: 320px;
+  --max-width-screen-max: 412px;
+}
+
+@utility min-w-screen-min {
+  min-width: var(--min-width-screen-min);
+}
+
+@utility max-w-screen-max {
+  max-width: var(--max-width-screen-max);
+}

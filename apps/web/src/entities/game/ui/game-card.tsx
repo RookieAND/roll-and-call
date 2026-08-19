@@ -1,38 +1,46 @@
-import Link from "next/link";
-import { Box, HStack, VStack } from "@trpg/ui";
+import { Card, HStack, Text, VStack } from "@trpg/ui";
 import type { Game } from "@/shared/api/db";
-import { deriveGameStatus, gameStatusLabel } from "../model/status";
+import { deriveGameStatus } from "../model/derive-game-status";
+import { GameGmLabel } from "./game-gm-label";
+import { GameSeatProgress } from "./game-seat-progress";
+import { GameStatusBadge } from "./game-status-badge";
 
 type Props = {
   game: Game & {
-    kp: { username: string } | null;
+    gm: { username: string; avatarUrl: string | null } | null;
     participants: { userId: string }[];
   };
 };
 
 export function GameCard({ game }: Props) {
   const count = game.participants.length;
-  const status = deriveGameStatus(game, count);
+  const status = deriveGameStatus({
+    maxPlayers: game.maxPlayers,
+    endDate: game.endDate,
+    participantCount: count,
+  });
 
   return (
-    <Link href={`/games/${game.id}`}>
-      <Box className="h-full rounded-lg border border-gray-200 p-4 transition-colors hover:bg-gray-50">
-        <VStack gap={2}>
-          <HStack justify="between" align="center">
-            <span className="font-bold">{game.title}</span>
-            <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
-              {gameStatusLabel[status]}
-            </span>
-          </HStack>
-          <span className="text-sm text-gray-500">{game.rule}</span>
-          <HStack justify="between" className="text-sm text-gray-600">
-            <span>KP {game.kp?.username ?? "?"}</span>
-            <span>
-              {count}/{game.maxPlayers}명
-            </span>
-          </HStack>
-        </VStack>
-      </Box>
-    </Link>
+    <Card interactive className="h-full">
+      <VStack gap={2}>
+        <HStack justify="between" align="start" gap={2}>
+          <Text weight="bold" className="text-[15.5px]">
+            {game.title}
+          </Text>
+          <GameStatusBadge status={status} />
+        </HStack>
+        <Text size="sm" color="muted">
+          {game.rule}
+        </Text>
+        <HStack justify="between" align="center">
+          <GameGmLabel name={game.gm?.username} avatarUrl={game.gm?.avatarUrl} />
+          <GameSeatProgress
+            current={count}
+            max={game.maxPlayers}
+            status={status}
+          />
+        </HStack>
+      </VStack>
+    </Card>
   );
 }

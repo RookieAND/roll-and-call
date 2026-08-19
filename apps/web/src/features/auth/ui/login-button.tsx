@@ -1,23 +1,18 @@
 "use client";
 
-import { createClient } from "@/shared/api/supabase/client";
+import { Button, cn } from "@trpg/ui";
+import { signInWithDiscord } from "../api/sign-in";
 
-export function LoginButton() {
-  async function signIn() {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: "discord",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
-  }
-
+export function LoginButton({ className }: { className?: string }) {
   return (
-    <button
-      type="button"
-      onClick={signIn}
-      className="rounded-md bg-[#5865F2] px-4 py-2 font-medium text-white transition-colors hover:bg-[#4752c4]"
+    <Button
+      variant="discord"
+      size="lg"
+      onClick={signInWithDiscord}
+      className={cn(className)}
     >
+      <span className="h-2 w-2 rounded-full bg-white" aria-hidden />
       Discord로 로그인
-    </button>
+    </Button>
   );
 }

@@ -7,7 +7,7 @@ export const DAY_END_HOUR = 24;
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 const pad = (n: number) => String(n).padStart(2, "0");
 
-export type DayColumn = { date: string; label: string };
+export type DayColumn = { date: string; label: string; dow: string; md: string };
 export type TimeRow = { hour: number; minute: number; label: string };
 
 export function buildDayColumns(
@@ -22,14 +22,37 @@ export function buildDayColumns(
   while (cur.getTime() <= last.getTime()) {
     const mo = cur.getUTCMonth() + 1;
     const d = cur.getUTCDate();
+    const dow = WEEKDAYS[cur.getUTCDay()]!;
+    const md = `${mo}/${d}`;
     cols.push({
       date: `${cur.getUTCFullYear()}-${pad(mo)}-${pad(d)}`,
-      label: `${mo}/${d}(${WEEKDAYS[cur.getUTCDay()]})`,
+      label: `${md}(${dow})`,
+      dow,
+      md,
     });
     cur.setUTCDate(cur.getUTCDate() + 1);
     if (cols.length > 60) break; // guard against absurd ranges
   }
   return cols;
+}
+
+// Overlap heat palette (0→5+) — 시안 uses saturation steps, not a green ramp.
+export const HEAT_LIGHT = [
+  "#FFFFFF",
+  "#EDEEFC",
+  "#D8DAFA",
+  "#B7BAF5",
+  "#8E92EF",
+  "#5B60E4",
+] as const;
+
+export function heatColor(count: number): string {
+  return HEAT_LIGHT[Math.min(5, Math.max(0, count))]!;
+}
+
+// Count label reads white once the cell is dark enough, else the deep indigo.
+export function heatTextColor(count: number): string {
+  return count >= 3 ? "#FFFFFF" : "#5B60E4";
 }
 
 export function buildTimeRows(): TimeRow[] {

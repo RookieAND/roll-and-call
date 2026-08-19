@@ -1,25 +1,25 @@
 import { notFound, redirect } from "next/navigation";
 import { Container, VStack } from "@trpg/ui";
 import { getGameById } from "@/entities/game/api/queries";
-import { EditGameForm } from "@/features/edit-game";
-import { createClient } from "@/shared/api/supabase/server";
+import { EditGameForm } from "@/widgets/game-form";
+import { getCurrentUser } from "@/shared/api/supabase/server";
+import { AppBar } from "@/shared/ui/app-bar";
 
 export async function EditGameView({ id }: { id: string }) {
   const game = await getGameById(id);
   if (!game) notFound();
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (user?.id !== game.kpId) redirect(`/games/${id}`);
+  const user = await getCurrentUser();
+  if (user?.id !== game.gmId) redirect(`/games/${id}`);
 
   return (
-    <Container size="md">
-      <VStack gap={6} className="py-8">
-        <h1 className="text-2xl font-bold">구인 수정</h1>
-        <EditGameForm game={game} />
-      </VStack>
-    </Container>
+    <>
+      <AppBar back={`/games/${id}`} title="구인 수정" />
+      <Container size="md">
+        <VStack gap={6} className="py-6">
+          <EditGameForm game={game} />
+        </VStack>
+      </Container>
+    </>
   );
 }

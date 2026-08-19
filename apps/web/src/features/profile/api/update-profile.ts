@@ -1,0 +1,43 @@
+"use server";
+
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { SLOT_KEYS } from "@/entities/profile";
+import { db, profiles } from "@/shared/api/db";
+import { createClient } from "@/shared/api/supabase/server";
+
+export type ProfileResult = { error?: string; redirect?: string };
+
+export type UpdateProfileInput = {
+  username: string;
+  bio: string;
+  defaultSlots: string[];
+};
+
+export async function updateProfile(
+  input: UpdateProfileInput,
+): Promise<ProfileResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "로그인이 필요합니다." };
+
+  const name = input.username.trim();
+  if (name.length < 1 || name.length > 30) {
+    return { error: "닉네임은 1~30자로 입력하세요." };
+  }
+  const bio = input.bio.trim();
+  if (bio.length > 200) {
+    return { error: "한 줄 소개는 200자 이내로 입력하세요." };
+  }
+  const defaultSlots = input.defaultSlots.filter((s) => SLOT_KEYS.includes(s));
+
+  await db
+    .update(profiles)
+    .set({ username: name, bio: bio || null, defaultSlots })
+    .where(eq(profiles.id, user.id));
+
+  revalidatePath("/me");
+  return { redirect: "/me" };
+}

@@ -1,21 +1,21 @@
 import { redirect } from "next/navigation";
 import { Container, VStack } from "@trpg/ui";
-import { CreateGameForm } from "@/features/create-game";
-import { createClient } from "@/shared/api/supabase/server";
+import { CreateGameForm } from "@/widgets/game-form";
+import { getCurrentUser } from "@/shared/api/supabase/server";
+import { AppBar } from "@/shared/ui/app-bar";
 
 export async function CreateGameView() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user) redirect("/");
 
   return (
-    <Container size="md">
-      <VStack gap={6} className="py-8">
-        <h1 className="text-2xl font-bold">새 구인 등록</h1>
-        <CreateGameForm />
-      </VStack>
-    </Container>
+    <>
+      <AppBar back="/games" title="새 구인 등록" />
+      <Container size="md">
+        <VStack gap={6} className="py-6">
+          <CreateGameForm />
+        </VStack>
+      </Container>
+    </>
   );
 }

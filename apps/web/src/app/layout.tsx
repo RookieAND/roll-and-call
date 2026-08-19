@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import Script from "next/script";
+import { BottomNav } from "@/shared/ui/bottom-nav";
+import { Toaster } from "@/shared/ui/toaster";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -11,7 +14,27 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
+        />
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          // eslint-disable-next-line react/no-danger -- pre-paint theme to avoid FOUC
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}`,
+          }}
+        />
+      </head>
+      <body className="bg-canvas font-sans text-gray-900 antialiased">
+        <div className="mx-auto flex min-h-screen w-full min-w-screen-min max-w-screen-max flex-col border-x border-gray-200 bg-surface">
+          <div className="flex-1">{children}</div>
+          <BottomNav />
+        </div>
+        <Toaster />
+      </body>
     </html>
   );
 }

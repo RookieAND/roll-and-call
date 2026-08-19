@@ -1,0 +1,46 @@
+"use server";
+
+import { db, games } from "@/shared/api/db";
+import { createClient } from "@/shared/api/supabase/server";
+import {
+  gameFormSchema,
+  type GameFormState,
+  type GameFormValues,
+} from "@/entities/game";
+
+export async function createGame(
+  values: GameFormValues,
+): Promise<GameFormState> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "로그인이 필요합니다." };
+
+  // re-validate server-side (never trust the client)
+  const parsed = gameFormSchema.safeParse(values);
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "입력값을 확인하세요." };
+  }
+  const v = parsed.data;
+
+  const [created] = await db
+    .insert(games)
+    .values({
+      gmId: user.id,
+      title: v.title,
+      rule: v.rule,
+      synopsis: v.synopsis || null,
+      thumbnailUrl: v.thumbnailUrl || null,
+      playTime: v.playTime || null,
+      maxPlayers: Number(v.maxPlayers),
+      scheduleMode: v.scheduleMode,
+      endDate: new Date(v.endDate),
+      rangeStart: v.rangeStart || null,
+      rangeEnd: v.rangeEnd || null,
+      confirmedAt: v.confirmedAt ? new Date(v.confirmedAt) : null,
+    })
+    .returning({ id: games.id });
+
+  return { redirect: `/games/${created!.id}` };
+}

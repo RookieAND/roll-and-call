@@ -1,0 +1,141 @@
+"use client";
+
+import { Button } from "@trpg/ui";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { toast } from "@/shared/lib/toast";
+import { slotIso, type DayColumn, type TimeRow } from "@/shared/lib/slots";
+import { saveAvailability } from "../api/save-availability";
+
+type Props = {
+  gameId: string;
+  days: DayColumn[];
+  timeRows: TimeRow[];
+  initialMine: string[];
+  blocked: string[];
+  readOnly?: boolean;
+};
+
+export function AvailabilityGrid({
+  gameId,
+  days,
+  timeRows,
+  initialMine,
+  blocked,
+  readOnly = false,
+}: Props) {
+  const blockedSet = useMemo(() => new Set(blocked), [blocked]);
+  const [mine, setMine] = useState<Set<string>>(() => new Set(initialMine));
+  const painting = useRef<boolean | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const stop = () => {
+      painting.current = null;
+    };
+    window.addEventListener("pointerup", stop);
+    return () => window.removeEventListener("pointerup", stop);
+  }, []);
+
+  function apply(key: string) {
+    if (readOnly || blockedSet.has(key)) return;
+    setMine((prev) => {
+      const next = new Set(prev);
+      if (painting.current) next.add(key);
+      else next.delete(key);
+      return next;
+    });
+  }
+
+  function onDown(e: React.PointerEvent, key: string) {
+    if (readOnly || blockedSet.has(key)) return;
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {
+      /* no-op */
+    }
+    painting.current = !mine.has(key);
+    apply(key);
+  }
+
+  function save() {
+    startTransition(async () => {
+      const result = await saveAvailability(gameId, [...mine]);
+      if (!result.error) toast.success("가능 시간을 저장했습니다");
+    });
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      {!readOnly && (
+        <p className="text-xs text-gray-500">
+          드래그해서 가능한 시간을 칠하세요. 30분 단위, 다시 드래그하면
+          지워집니다.
+        </p>
+      )}
+      <div className="overflow-x-auto">
+        <div
+          className="grid min-w-full select-none text-[9.5px]"
+          style={{
+            gridTemplateColumns: `40px repeat(${days.length}, minmax(0, 1fr))`,
+          }}
+        >
+          <span />
+          {days.map((d) => (
+            <div key={d.date} className="flex flex-col items-center pb-1">
+              <span className="text-[10.5px] text-gray-400">{d.dow}</span>
+              <span className="text-[11.5px] font-bold text-gray-700">
+                {d.md}
+              </span>
+            </div>
+          ))}
+
+          {timeRows.map((row) => [
+            <span
+              key={`${row.label}-t`}
+              className="pr-1.5 text-right text-[9.5px] font-bold text-gray-400"
+            >
+              {row.minute === 0 ? row.label : ""}
+            </span>,
+            ...days.map((d) => {
+              const key = slotIso(d.date, row.hour, row.minute);
+              const isBlocked = blockedSet.has(key);
+              const isMine = mine.has(key);
+              return (
+                <div
+                  key={key}
+                  onPointerDown={(e) => onDown(e, key)}
+                  onPointerEnter={() => apply(key)}
+                  className={`h-[22px] touch-none border-b border-l border-b-[#F1F1F5] border-l-[#EFEFF3] ${
+                    isBlocked
+                      ? "cursor-not-allowed bg-[#E9E9EE]"
+                      : isMine
+                        ? "bg-primary-600"
+                        : readOnly
+                          ? "bg-surface"
+                          : "cursor-pointer bg-surface hover:bg-primary-50"
+                  }`}
+                />
+              );
+            }),
+          ])}
+        </div>
+      </div>
+      {!readOnly && (
+        <>
+          <p className="text-xs text-gray-500">
+            선택 {mine.size}칸 · 회색은 다른 확정 세션과 겹침
+          </p>
+          <Button
+            type="button"
+            size="lg"
+            className="h-12 w-full"
+            loading={pending}
+            onClick={save}
+          >
+            가능 시간 저장
+          </Button>
+        </>
+      )}
+    </div>
+  );
+}

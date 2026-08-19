@@ -1,0 +1,14 @@
+"use client";
+
+import { createGame } from "@/features/game";
+import { GameForm } from "./game-form";
+
+export function CreateGameForm() {
+  return (
+    <GameForm
+      onSubmit={createGame}
+      submitLabel="구인 등록"
+      successMessage="구인이 등록되었습니다"
+    />
+  );
+}

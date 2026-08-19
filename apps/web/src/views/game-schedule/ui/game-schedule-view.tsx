@@ -1,116 +1,144 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Container, VStack } from "@trpg/ui";
+import { Container, Text, VStack } from "@trpg/ui";
 import {
   getGameAvailabilities,
   getGameById,
   getUserConfirmedSlots,
 } from "@/entities/game/api/queries";
-import { AvailabilityGrid, Heatmap } from "@/features/availability";
-import { ConfirmSessionForm } from "@/features/confirm-session";
-import { createClient } from "@/shared/api/supabase/server";
+import {
+  AvailabilityGrid,
+  ConfirmSessionForm,
+  HeatLegend,
+  Heatmap,
+} from "@/features/session";
+import {
+  aggregateAvailability,
+  hasUserJoined,
+  isGameGm,
+  rankSlots,
+  SCHEDULE_MODE,
+} from "@/entities/game";
+import { getCurrentUser } from "@/shared/api/supabase/server";
 import { formatDateTime } from "@/shared/lib/format";
 import { buildDayColumns, buildTimeRows } from "@/shared/lib/slots";
+import { AppBar } from "@/shared/ui/app-bar";
+import { StatusNotice } from "@/shared/ui/status-notice";
+import { ScheduleTabs } from "./schedule-tabs";
 
 export async function GameScheduleView({ id }: { id: string }) {
   const game = await getGameById(id);
   if (!game) notFound();
 
-  const backLink = (
-    <Link href={`/games/${id}`} className="text-sm text-gray-500 underline">
-      ← 게임으로
-    </Link>
-  );
-
-  if (game.scheduleMode !== "coordinate" || !game.rangeStart || !game.rangeEnd) {
+  if (
+    game.scheduleMode !== SCHEDULE_MODE.coordinate ||
+    !game.rangeStart ||
+    !game.rangeEnd
+  ) {
     return (
-      <Container size="md">
-        <VStack gap={4} className="py-8">
-          <h1 className="text-2xl font-bold">{game.title}</h1>
-          <p className="text-gray-500">일시가 지정된 게임이라 조율이 필요 없어요.</p>
-          {backLink}
-        </VStack>
-      </Container>
+      <>
+        <AppBar back={`/games/${id}`} title={`${game.title} · 일정 조율`} />
+        <Container size="md">
+          <VStack gap={4} className="py-6">
+            <p className="text-gray-500">
+              일시가 지정된 게임이라 조율이 필요 없어요.
+            </p>
+          </VStack>
+        </Container>
+      </>
     );
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
 
-  const isKp = user?.id === game.kpId;
+  const isGm = isGameGm({ gmId: game.gmId, userId: user?.id ?? null });
   const involved =
-    !!user &&
-    (isKp || game.participants.some((p) => p.userId === user.id));
+    isGm ||
+    hasUserJoined({ participants: game.participants, userId: user?.id ?? null });
 
   const days = buildDayColumns(game.rangeStart, game.rangeEnd);
   const timeRows = buildTimeRows();
 
   const avails = await getGameAvailabilities(id);
-  const counts: Record<string, number> = {};
-  const names: Record<string, string[]> = {};
-  const mine: string[] = [];
-  for (const a of avails) {
-    const iso = a.slotStart.toISOString();
-    counts[iso] = (counts[iso] ?? 0) + 1;
-    (names[iso] ??= []).push(a.user?.username ?? "?");
-    if (user && a.userId === user.id) mine.push(iso);
-  }
-  const maxCount = Math.max(0, ...Object.values(counts));
+  const { counts, names, mine } = aggregateAvailability({
+    avails,
+    userId: user?.id ?? null,
+  });
 
   const blocked = user ? await getUserConfirmedSlots(user.id, id) : [];
 
-  const confirmOptions = Object.entries(counts)
-    .toSorted((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .slice(0, 40)
-    .map(([iso, count]) => ({
-      iso,
-      label: `${formatDateTime(iso)} · ${count}명`,
-    }));
+  const confirmedIso = game.confirmedAt ? game.confirmedAt.toISOString() : null;
+
+  const confirmOptions = rankSlots({ counts }).map(({ iso, count }) => ({
+    iso,
+    label: `${formatDateTime(iso)} · ${count}명 가능`,
+  }));
+
+  const overlapBlock = (hint: string) => (
+    <VStack gap={3}>
+      <Text size="xs" color="muted">
+        {hint}
+      </Text>
+      <HeatLegend />
+      <Heatmap
+        days={days}
+        timeRows={timeRows}
+        counts={counts}
+        names={names}
+        confirmedIso={confirmedIso}
+      />
+    </VStack>
+  );
 
   return (
-    <Container>
-      <VStack gap={6} className="py-8">
-        <VStack gap={1}>
-          <h1 className="text-2xl font-bold">{game.title} · 일정 조율</h1>
-          {backLink}
-        </VStack>
+    <>
+      <AppBar back={`/games/${id}`} title={`${game.title} · 일정 조율`} />
+      <Container>
+        <VStack gap={6} className="py-6">
+          {game.confirmedAt && (
+            <div className="flex items-center gap-2 rounded-[14px] border border-success-200 bg-success-50 px-4 py-3">
+              <span className="h-2 w-2 rounded-full bg-success-600" />
+              <div>
+                <div className="text-xs font-bold text-success-700">
+                  세션 확정
+                </div>
+                <div className="text-[15px] font-extrabold text-success-800">
+                  {formatDateTime(game.confirmedAt)}
+                </div>
+              </div>
+            </div>
+          )}
 
-        {game.confirmedAt && (
-          <p className="rounded-md bg-green-50 px-4 py-2 text-green-700">
-            확정된 세션: {formatDateTime(game.confirmedAt)}
-          </p>
-        )}
-
-        {involved && !game.confirmedAt && (
-          <VStack gap={2}>
-            <h2 className="font-semibold">내 가능 시간</h2>
-            <AvailabilityGrid
-              gameId={id}
-              days={days}
-              timeRows={timeRows}
-              initialMine={mine}
-              blocked={blocked}
+          {game.confirmedAt ? (
+            overlapBlock("확정된 슬롯은 초록 테두리로 표시됩니다. 편집은 잠깁니다.")
+          ) : involved ? (
+            <ScheduleTabs
+              mine={
+                <AvailabilityGrid
+                  gameId={id}
+                  days={days}
+                  timeRows={timeRows}
+                  initialMine={mine}
+                  blocked={blocked}
+                />
+              }
+              overlap={overlapBlock(
+                "색이 진할수록 많은 인원이 가능합니다. 셀에 커서를 올리면 이름이 보입니다.",
+              )}
             />
-          </VStack>
-        )}
+          ) : (
+            <VStack gap={3}>
+              {overlapBlock("전체 겹침만 열람할 수 있습니다.")}
+              <StatusNotice tone="muted">
+                참여자만 가능 시간을 입력할 수 있습니다.
+              </StatusNotice>
+            </VStack>
+          )}
 
-        <VStack gap={2}>
-          <h2 className="font-semibold">전체 겹침</h2>
-          <Heatmap
-            days={days}
-            timeRows={timeRows}
-            counts={counts}
-            names={names}
-            maxCount={maxCount}
-          />
+          {isGm && !game.confirmedAt && (
+            <ConfirmSessionForm gameId={id} options={confirmOptions} />
+          )}
         </VStack>
-
-        {isKp && !game.confirmedAt && (
-          <ConfirmSessionForm gameId={id} options={confirmOptions} />
-        )}
-      </VStack>
-    </Container>
+      </Container>
+    </>
   );
 }
