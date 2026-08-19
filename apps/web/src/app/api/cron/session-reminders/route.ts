@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sendDueReminders } from "@/features/session-reminder";
+import { sendDueReminders } from "@/features/session";
 
 export const dynamic = "force-dynamic";
 
