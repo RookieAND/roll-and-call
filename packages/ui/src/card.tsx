@@ -1,0 +1,19 @@
+import { cva, type VariantProps } from "class-variance-authority";
+import type { ComponentPropsWithRef } from "react";
+import { cn } from "./cn";
+
+const card = cva("rounded-[14px] border border-gray-200 bg-surface", {
+  variants: {
+    padding: { none: "", sm: "p-3", md: "p-4", lg: "p-6" },
+    interactive: { true: "transition-colors hover:bg-gray-50", false: "" },
+  },
+  defaultVariants: { padding: "md", interactive: false },
+});
+
+export type CardProps = ComponentPropsWithRef<"div"> & VariantProps<typeof card>;
+
+export function Card({ padding, interactive, className, ...props }: CardProps) {
+  return (
+    <div className={cn(card({ padding, interactive }), className)} {...props} />
+  );
+}

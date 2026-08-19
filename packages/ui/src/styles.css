@@ -1,2 +1,77 @@
 /* Registers this package's component sources with the consuming app's Tailwind. */
 @source ".";
+
+/* Design tokens (Vapor-UI-inspired). Generates utilities like bg-primary-600, text-primary-500. */
+@theme {
+  --font-sans:
+    "Pretendard Variable", Pretendard, ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+
+  --color-primary-50: #eef0fe;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #312e81;
+
+  /* 확정(success) — mockup green */
+  --color-success-50: #f1faf5;
+  --color-success-100: #e3f5ec;
+  --color-success-200: #cdebdd;
+  --color-success-600: #0b9c6c;
+  --color-success-700: #0b7a55;
+  --color-success-800: #0a5c41;
+
+  /* Warm neutral scale — matches mockup's neutrals (Tailwind's default gray is bluer). */
+  --color-gray-50: #fafafc;
+  --color-gray-100: #f2f2f6;
+  --color-gray-200: #eaeaef;
+  --color-gray-300: #dcdce4;
+  --color-gray-400: #b4b4be;
+  --color-gray-500: #8a8a95;
+  --color-gray-600: #5f5f6b;
+  --color-gray-700: #3a3a45;
+  --color-gray-800: #26262e;
+  --color-gray-900: #17171c;
+
+  /* brand + surface */
+  --color-discord: #5865f2;
+  --color-discord-dark: #4752c4;
+  --color-canvas: #e9e9ee;
+  --color-toast: #23232b;
+  --color-surface: #ffffff;
+}
+
+/* Dark mode: override the CSS variables that token utilities reference.
+   No dark: utilities needed — bg-surface/text-gray-900/etc. flip automatically. */
+.dark {
+  --color-canvas: #131318;
+  --color-surface: #1e1e26;
+  --color-toast: #3a3a45;
+
+  --color-gray-50: #26262e;
+  --color-gray-100: #2e2e38;
+  --color-gray-200: #3a3a45;
+  --color-gray-300: #4a4a55;
+  --color-gray-400: #6a6a76;
+  --color-gray-500: #9a9aa5;
+  --color-gray-600: #b4b4be;
+  --color-gray-700: #cfcfd6;
+  --color-gray-800: #e6e6ea;
+  --color-gray-900: #f2f2f5;
+}
+
+/* Skeleton shimmer (mockup uses this instead of Tailwind's default pulse). */
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
