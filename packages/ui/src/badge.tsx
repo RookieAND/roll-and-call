@@ -18,8 +18,7 @@ const badge = cva(
   },
 );
 
-export type BadgeProps = ComponentPropsWithRef<"span"> &
-  VariantProps<typeof badge>;
+export type BadgeProps = ComponentPropsWithRef<"span"> & VariantProps<typeof badge>;
 
 export function Badge({ color, className, ...props }: BadgeProps) {
   return <span className={cn(badge({ color }), className)} {...props} />;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, Chip, Field, TextInput, Textarea, VStack } from "@trpg/ui";
+import { Avatar, Button, Chip, Field, Text, TextInput, Textarea, VStack } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { SLOT_PRESETS } from "@/entities/profile";
@@ -26,9 +26,7 @@ export function EditProfileForm({
   const [pending, startTransition] = useTransition();
 
   function toggleSlot(key: string) {
-    setSlots((prev) =>
-      prev.includes(key) ? prev.filter((s) => s !== key) : [...prev, key],
-    );
+    setSlots((prev) => (prev.includes(key) ? prev.filter((s) => s !== key) : [...prev, key]));
   }
 
   function submit(e: React.FormEvent) {
@@ -50,9 +48,9 @@ export function EditProfileForm({
       <VStack gap={4}>
         <VStack gap={2} className="items-center">
           <Avatar src={avatarUrl} name={username} size="3xl" />
-          <span className="text-xs font-semibold text-primary-600">
+          <Text typography="subtitle2" foreground="primary">
             Discord 아바타 다시 불러오기
-          </span>
+          </Text>
         </VStack>
         <Field
           label="표시 이름"
@@ -78,33 +76,19 @@ export function EditProfileForm({
             className="min-h-[76px]"
           />
         </Field>
-        <Field
-          label="기본 가능 시간대"
-          description="일정 조율 그리드의 초기값으로 씁니다."
-        >
+        <Field label="기본 가능 시간대" description="일정 조율 그리드의 초기값으로 씁니다.">
           <div className="flex gap-[7px]">
             {SLOT_PRESETS.map((s) => {
               const on = slots.includes(s.key);
               return (
-                <Chip
-                  key={s.key}
-                  shape="block"
-                  selected={on}
-                  onClick={() => toggleSlot(s.key)}
-                  className="text-[13px]"
-                >
+                <Chip key={s.key} shape="block" selected={on} onClick={() => toggleSlot(s.key)}>
                   {s.label}
                 </Chip>
               );
             })}
           </div>
         </Field>
-        <Button
-          type="submit"
-          size="lg"
-          className="h-[50px] w-full"
-          loading={pending}
-        >
+        <Button type="submit" size="lg" className="h-[50px] w-full" loading={pending}>
           저장
         </Button>
       </VStack>

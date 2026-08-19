@@ -43,6 +43,13 @@
       "when": 1787081681147,
       "tag": "0005_rename_kp_to_gm",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1787155092663,
+      "tag": "0006_tan_crusher_hogan",
+      "breakpoints": true
     }
   ]
 }

@@ -12,9 +12,7 @@ export async function EditProfileView() {
 
   const profile = await getProfile(user.id);
   const avatar =
-    profile?.avatarUrl ??
-    (user.user_metadata.avatar_url as string | undefined) ??
-    null;
+    profile?.avatarUrl ?? (user.user_metadata.avatar_url as string | undefined) ?? null;
 
   return (
     <>

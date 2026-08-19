@@ -1,41 +1,47 @@
+import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ComponentPropsWithRef, ElementType } from "react";
+import type { ComponentPropsWithRef, ReactElement } from "react";
 import { cn } from "./cn";
 
 const text = cva("", {
   variants: {
-    size: {
-      xs: "text-xs",
-      sm: "text-sm",
-      base: "text-base",
-      lg: "text-lg",
-      xl: "text-xl",
-      "2xl": "text-2xl",
+    typography: {
+      display1: "text-[28px] leading-[1.2] font-extrabold tracking-tight",
+      heading1: "text-[22px] leading-[1.25] font-extrabold tracking-tight",
+      heading2: "text-[18px] leading-[1.3] font-bold",
+      heading3: "text-[16px] leading-[1.4] font-bold",
+      subtitle1: "text-[14px] leading-[1.4] font-bold",
+      subtitle2: "text-[12px] leading-[1.4] font-bold",
+      body1: "text-[16px] leading-[1.6] font-normal",
+      body2: "text-[14px] leading-[1.5] font-normal",
+      body3: "text-[13px] leading-[1.5] font-normal",
+      body4: "text-[12px] leading-[1.4] font-normal",
+      code1: "font-mono text-[13px] leading-[1.5] font-normal",
+      code2: "font-mono text-[12px] leading-[1.4] font-normal",
     },
-    weight: {
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-    },
-    color: {
-      default: "text-gray-900",
+    foreground: {
+      normal: "text-gray-900",
       muted: "text-gray-500",
+      hint: "text-gray-400",
       primary: "text-primary-600",
+      success: "text-success-700",
       danger: "text-red-600",
+      white: "text-white",
     },
   },
-  defaultVariants: { size: "base", weight: "normal", color: "default" },
+  defaultVariants: { typography: "body2", foreground: "normal" },
 });
 
 export type TextProps = ComponentPropsWithRef<"span"> &
   VariantProps<typeof text> & {
-    as?: "span" | "p" | "div" | "label" | "h1" | "h2" | "h3";
+    /** Render as a different element (e.g. <Text render={<h1 />} />). */
+    render?: ReactElement<Record<string, unknown>>;
   };
 
-export function Text({ as, size, weight, color, className, ...props }: TextProps) {
-  const Tag = (as ?? "span") as ElementType;
-  return (
-    <Tag className={cn(text({ size, weight, color }), className)} {...props} />
-  );
+export function Text({ typography, foreground, className, render, ...props }: TextProps) {
+  return useRender({
+    defaultTagName: "span",
+    render,
+    props: { className: cn(text({ typography, foreground }), className), ...props },
+  });
 }

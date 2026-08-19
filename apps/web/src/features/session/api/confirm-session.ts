@@ -7,10 +7,7 @@ import { createClient } from "@/shared/api/supabase/server";
 
 export type ConfirmResult = { error?: string; redirect?: string };
 
-export async function confirmSession(
-  gameId: string,
-  slotIso: string,
-): Promise<ConfirmResult> {
+export async function confirmSession(gameId: string, slotIso: string): Promise<ConfirmResult> {
   const supabase = await createClient();
   const {
     data: { user },

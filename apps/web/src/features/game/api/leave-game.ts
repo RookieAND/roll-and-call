@@ -2,6 +2,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { PARTICIPANT_STATUS } from "@/entities/game";
 import { db, participants } from "@/shared/api/db";
 import { createClient } from "@/shared/api/supabase/server";
 import type { JoinActionResult } from "./join-game";
@@ -13,29 +14,34 @@ export async function leaveGame(gameId: string): Promise<JoinActionResult> {
   } = await supabase.auth.getUser();
   if (!user) return { error: "로그인이 필요합니다." };
 
-  // Cancel is allowed only while recruiting. Once closed (full / past deadline /
-  // confirmed) the GM must be consulted, so we block self-cancel.
   const game = await db.query.games.findFirst({
     where: (g, { eq: eqOp }) => eqOp(g.id, gameId),
-    with: { participants: { columns: { userId: true } } },
+    with: { participants: { columns: { userId: true, status: true } } },
   });
   if (!game) return { error: "존재하지 않는 게임입니다." };
+
+  const me = game.participants.find((p) => p.userId === user.id);
+  if (!me) return { error: "참여 중이 아닙니다." };
   if (game.confirmedAt) {
     return { error: "확정된 게임은 취소할 수 없습니다. GM에게 문의하세요." };
   }
-  const full = game.participants.length >= game.maxPlayers;
-  const expired = game.endDate.getTime() <= Date.now();
-  if (full || expired) {
-    return { error: "마감된 게임은 취소할 수 없습니다. GM에게 문의하세요." };
+
+  // 대기자는 언제든 대기를 취소할 수 있다. 확정자만 마감(정원 충족·기한 경과) 후
+  // 자가 취소가 막히고 GM을 거친다.
+  if (me.status === PARTICIPANT_STATUS.confirmed) {
+    const full = game.participants.length >= game.maxPlayers;
+    const expired = game.endDate.getTime() <= Date.now();
+    if (full || expired) {
+      return { error: "마감된 게임은 취소할 수 없습니다. GM에게 문의하세요." };
+    }
   }
 
   await db
     .delete(participants)
-    .where(
-      and(eq(participants.gameId, gameId), eq(participants.userId, user.id)),
-    );
+    .where(and(eq(participants.gameId, gameId), eq(participants.userId, user.id)));
 
   revalidatePath(`/games/${gameId}`);
+  revalidatePath(`/games/${gameId}/participants`);
   revalidatePath("/games");
   return {};
 }

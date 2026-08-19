@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, Container, Skeleton, TextInput, VStack } from "@trpg/ui";
+import { Button, Container, Skeleton, Text, TextInput, VStack } from "@trpg/ui";
 import { AppBar } from "@/shared/ui/app-bar";
 
 // 시안 2b: search + filter bar render immediately (not skeletonized); only cards shimmer.
@@ -19,12 +19,14 @@ export default function Loading() {
           <TextInput placeholder="게임명 · 룰 검색" disabled />
           <div className="flex gap-2">
             {["전체", "일정조율", "확정", "마감"].map((c) => (
-              <span
+              <Text
                 key={c}
-                className="rounded-full border border-gray-200 bg-surface px-[11px] py-1.5 text-[12.5px] font-semibold text-gray-600"
+                typography="subtitle2"
+                foreground="muted"
+                className="rounded-full border border-gray-200 bg-surface px-[11px] py-1.5"
               >
                 {c}
-              </span>
+              </Text>
             ))}
           </div>
           <VStack className="gap-2.5">

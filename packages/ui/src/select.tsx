@@ -88,13 +88,7 @@ function Trigger({
   );
 }
 
-function Popup({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+function Popup({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <BaseSelect.Portal>
       <BaseSelect.Positioner

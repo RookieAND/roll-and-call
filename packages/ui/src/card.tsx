@@ -13,7 +13,5 @@ const card = cva("rounded-[14px] border border-gray-200 bg-surface", {
 export type CardProps = ComponentPropsWithRef<"div"> & VariantProps<typeof card>;
 
 export function Card({ padding, interactive, className, ...props }: CardProps) {
-  return (
-    <div className={cn(card({ padding, interactive }), className)} {...props} />
-  );
+  return <div className={cn(card({ padding, interactive }), className)} {...props} />;
 }

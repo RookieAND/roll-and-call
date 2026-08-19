@@ -1,21 +1,11 @@
 import { redirect } from "next/navigation";
-import { Container, VStack } from "@trpg/ui";
 import { CreateGameForm } from "@/widgets/game-form";
 import { getCurrentUser } from "@/shared/api/supabase/server";
-import { AppBar } from "@/shared/ui/app-bar";
 
 export async function CreateGameView() {
   const user = await getCurrentUser();
   if (!user) redirect("/");
 
-  return (
-    <>
-      <AppBar back="/games" title="새 구인 등록" />
-      <Container size="md">
-        <VStack gap={6} className="py-6">
-          <CreateGameForm />
-        </VStack>
-      </Container>
-    </>
-  );
+  // 위저드는 단계별로 앱바·진행바를 바꾸므로 CreateGameForm이 페이지 셸을 소유한다.
+  return <CreateGameForm />;
 }

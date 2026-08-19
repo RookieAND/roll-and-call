@@ -4,13 +4,7 @@ import { Dialog } from "@base-ui-components/react/dialog";
 import { cn } from "@trpg/ui";
 import type { ReactNode } from "react";
 
-function Content({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+function Content({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <Dialog.Portal>
       <Dialog.Backdrop className="fixed inset-0 z-40 bg-black/30" />
@@ -27,13 +21,7 @@ function Content({
   );
 }
 
-function Title({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+function Title({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <Dialog.Title className={cn("mb-3 text-sm font-bold text-gray-500", className)}>
       {children}

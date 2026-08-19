@@ -1,28 +1,33 @@
+import { Avatar, Button, Container, HStack, IconButton, Text, VStack } from "@trpg/ui";
+import { ChevronRight, Pencil } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Avatar, Button, Container, HStack, Text, VStack } from "@trpg/ui";
-import {
-  countGamesByStatus,
-  GAME_LIST_CONTEXT,
-  GAME_STATUS,
-} from "@/entities/game";
+import { bucketHosted, bucketJoined, type SessionCardModel } from "@/entities/game";
 import { getGamesByGm, getJoinedGames } from "@/entities/game/api/queries";
 import { getProfile } from "@/entities/profile/api/queries";
 import { getCurrentUser } from "@/shared/api/supabase/server";
 import { AppBar } from "@/shared/ui/app-bar";
 import { EmptyState } from "@/shared/ui/empty-state";
 import { ThemeToggle } from "@/shared/ui/theme-toggle";
-import { GameListItem } from "@/widgets/game-list-item";
+import { SessionList } from "@/widgets/session-list";
+
+const TOP = 3;
 
 export async function MyPageView() {
   const user = await getCurrentUser();
   if (!user) redirect("/");
 
-  const [profile, mine, joined] = await Promise.all([
+  const [profile, hosted, joined] = await Promise.all([
     getProfile(user.id),
     getGamesByGm(user.id),
     getJoinedGames(user.id),
   ]);
+
+  const hostedBuckets = bucketHosted(hosted, user.id);
+  const joinedBuckets = bucketJoined(joined, user.id);
+  const upcoming = joinedBuckets.confirmed; // 참여 예정
+  const hosting = hostedBuckets.recruiting; // 운영 중
+  const pastCount = joinedBuckets.closed.length + hostedBuckets.closed.length;
 
   const name =
     profile?.username ??
@@ -31,136 +36,152 @@ export async function MyPageView() {
     user.email ??
     "";
   const avatar =
-    profile?.avatarUrl ??
-    (user.user_metadata.avatar_url as string | undefined) ??
-    null;
+    profile?.avatarUrl ?? (user.user_metadata.avatar_url as string | undefined) ?? null;
   const handle =
     (user.user_metadata.user_name as string | undefined) ??
     (user.user_metadata.preferred_username as string | undefined) ??
     null;
 
-  // 확정/모집중을 구분하지 않고, 참여 중인 세션과 모집 중인 세션 개수만 노출.
-  const recruitingCount = countGamesByStatus({
-    games: mine,
-    status: GAME_STATUS.recruiting,
-  });
   const summary = [
-    { n: joined.length, label: "참여 중인 세션" },
-    { n: recruitingCount, label: "모집 중인 세션" },
+    { n: upcoming.length, label: "참여 예정" },
+    { n: hosting.length, label: "운영 중" },
   ];
 
   return (
     <>
       <AppBar title="마이페이지" />
-      <Container>
+      <Container size="sm">
         <VStack gap={6} className="py-6">
           <HStack justify="between" align="center">
             <HStack gap={3} align="center">
               <Avatar src={avatar} name={name} size="2xl" />
               <div>
-                <Text size="lg" weight="bold" className="block">
+                <Text typography="heading1" className="block text-[19px] leading-tight">
                   {name}
                 </Text>
                 {handle && (
-                  <span className="font-mono text-xs text-[#9A9AA5]">
+                  <Text typography="code2" foreground="hint" render={<span />}>
                     @{handle}
-                  </span>
+                  </Text>
                 )}
               </div>
             </HStack>
             <HStack gap={2} align="center">
               <ThemeToggle />
-              <Button asChild size="sm" variant="outline">
-                <Link href="/me/edit">편집</Link>
-              </Button>
+              <IconButton
+                asChild
+                variant="outline"
+                aria-label="프로필 편집"
+                className="h-9 w-9 border-gray-200 text-gray-600"
+              >
+                <Link href="/me/edit">
+                  <Pencil size={16} />
+                </Link>
+              </IconButton>
             </HStack>
           </HStack>
 
-          <HStack gap={2}>
+          <HStack className="gap-[9px]">
             {summary.map((m) => (
-              <div
-                key={m.label}
-                className="flex-1 rounded-[13px] border border-gray-200 p-3"
-              >
-                <div
-                  className={`text-[21px] font-extrabold tabular-nums ${
-                    m.n === 0 ? "text-[#C6C6CE]" : ""
-                  }`}
+              <div key={m.label} className="flex-1 rounded-[14px] border border-gray-200 p-3.5">
+                <Text
+                  render={<div />}
+                  className="text-[24px] font-extrabold leading-none tracking-[-0.03em] tabular-nums"
                 >
                   {m.n}
-                </div>
-                <Text size="xs" color="muted" className="mt-0.5 block text-[11.5px]">
+                </Text>
+                <Text typography="body4" foreground="muted" className="mt-1.5 block font-semibold">
                   {m.label}
                 </Text>
               </div>
             ))}
           </HStack>
 
-          <VStack gap={2}>
-            <HStack justify="between" align="center">
-              <Text as="h2" weight="bold" size="sm">
-                내가 만든 구인
-              </Text>
-              <Text size="xs" color="muted">
-                {mine.length}건
-              </Text>
-            </HStack>
-            {mine.length === 0 ? (
-              <EmptyState
-                title="아직 만든 구인이 없습니다"
-                description="GM으로 첫 세션을 열어보세요."
-                action={
-                  <Button asChild variant="outline">
-                    <Link href="/games/new">새 구인 등록</Link>
-                  </Button>
-                }
-              />
-            ) : (
-              <VStack gap={2}>
-                {mine.map((game) => (
-                  <GameListItem
-                    key={game.id}
-                    game={game}
-                    context={GAME_LIST_CONTEXT.mine}
-                  />
-                ))}
-              </VStack>
-            )}
-          </VStack>
+          <SummarySection
+            title="참여 예정인 세션"
+            total={upcoming.length}
+            items={upcoming.slice(0, TOP)}
+            moreHref="/me/sessions/joined"
+            emptyTitle="아직 참여 예정인 세션이 없습니다"
+            emptyCta={{ label: "구인 목록 보기", href: "/games" }}
+          />
 
-          <VStack gap={2}>
-            <HStack justify="between" align="center">
-              <Text as="h2" weight="bold" size="sm">
-                참여 중인 게임
+          <SummarySection
+            title="운영 중인 세션"
+            total={hosting.length}
+            items={hosting.slice(0, TOP)}
+            moreHref="/me/sessions/hosted"
+            emptyTitle="아직 KP로 연 세션이 없습니다"
+            emptyCta={{ label: "새 구인 등록", href: "/games/new" }}
+          />
+
+          {pastCount > 0 && (
+            <Link
+              href="/me/sessions/joined?tab=closed"
+              className="flex items-center justify-center gap-1 border-t border-gray-100 pt-4 text-gray-500"
+            >
+              <Text typography="body3" foreground="muted" className="font-semibold">
+                지난 세션 {pastCount}
               </Text>
-              <Text size="xs" color="muted">
-                {joined.length}건
-              </Text>
-            </HStack>
-            {joined.length === 0 ? (
-              <EmptyState
-                title="아직 참여 중인 게임이 없습니다"
-                description="모집 중인 구인을 둘러보세요."
-                action={
-                  <Button asChild variant="outline">
-                    <Link href="/games">구인 목록 보기</Link>
-                  </Button>
-                }
-              />
-            ) : (
-              <VStack gap={2}>
-                {joined.map((game) => (
-                  <GameListItem
-                    key={game.id}
-                    game={game}
-                    context={GAME_LIST_CONTEXT.joined}
-                  />
-                ))}
-              </VStack>
-            )}
-          </VStack>
+              <ChevronRight size={15} aria-hidden />
+            </Link>
+          )}
         </VStack>
       </Container>
     </>
+  );
+}
+
+function SummarySection({
+  title,
+  total,
+  items,
+  moreHref,
+  emptyTitle,
+  emptyCta,
+}: {
+  title: string;
+  total: number;
+  items: SessionCardModel[];
+  moreHref: string;
+  emptyTitle: string;
+  emptyCta: { label: string; href: string };
+}) {
+  return (
+    <VStack gap={2}>
+      <HStack justify="between" align="center">
+        <HStack gap={1} align="baseline">
+          <Text render={<h2 />} className="text-[13.5px] font-extrabold">
+            {title}
+          </Text>
+          <Text typography="code2" foreground="hint">
+            {total}
+          </Text>
+        </HStack>
+        {total > 0 && (
+          <Link href={moreHref}>
+            <Text
+              typography="body4"
+              foreground="primary"
+              className="inline-flex items-center gap-0.5 font-semibold"
+            >
+              더 보기 <ChevronRight size={14} aria-hidden />
+            </Text>
+          </Link>
+        )}
+      </HStack>
+      {total === 0 ? (
+        <EmptyState
+          title={emptyTitle}
+          action={
+            <Button asChild size="sm">
+              <Link href={emptyCta.href}>{emptyCta.label}</Link>
+            </Button>
+          }
+        />
+      ) : (
+        <SessionList items={items} />
+      )}
+    </VStack>
   );
 }

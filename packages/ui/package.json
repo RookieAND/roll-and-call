@@ -16,12 +16,12 @@
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0"
   },
-  "peerDependencies": {
-    "react": "^19.0.0"
-  },
   "devDependencies": {
     "@trpg/typescript-config": "workspace:*",
     "@types/react": "^19.2.18",
     "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
   }
 }

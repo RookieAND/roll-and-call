@@ -52,8 +52,7 @@ export const gameFormSchema = z
           path: ["rangeEnd"],
         });
       } else if (v.rangeStart) {
-        const days =
-          (Date.parse(v.rangeEnd) - Date.parse(v.rangeStart)) / 86_400_000;
+        const days = (Date.parse(v.rangeEnd) - Date.parse(v.rangeStart)) / 86_400_000;
         if (days > 14) {
           ctx.addIssue({
             code: "custom",

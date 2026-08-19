@@ -1,29 +1,26 @@
 "use client";
 
-import { Button, Chip } from "@trpg/ui";
+import { Button, Text } from "@trpg/ui";
+import { Check, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { GAME_SORT_DEFAULT, GAME_SORTS, type GameSort, parseGameSort } from "@/entities/game";
 import { Sheet } from "@/shared/ui/sheet";
 
-const SORT = [
-  { key: undefined, label: "최신순" },
-  { key: "deadline", label: "마감 임박순" },
-] as const;
+type Props = { q?: string; sort?: string };
 
-type Props = { q?: string; status?: string; sort?: string };
-
-export function GamesFilterSheet({ q, status, sort }: Props) {
+export function GamesFilterSheet({ q, sort }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [so, setSo] = useState<string | undefined>(sort);
+  const current = parseGameSort(sort);
+  const [so, setSo] = useState<GameSort>(current);
 
-  const currentLabel = SORT.find((o) => o.key === sort)?.label ?? "최신순";
+  const currentLabel = GAME_SORTS.find((o) => o.key === current)!.label;
 
-  function apply(next: string | undefined = so) {
+  function apply() {
     const sp = new URLSearchParams();
     if (q) sp.set("q", q);
-    if (status) sp.set("status", status);
-    if (next) sp.set("sort", next);
+    if (so !== GAME_SORT_DEFAULT) sp.set("sort", so);
     const query = sp.toString();
     router.push(query ? `/games?${query}` : "/games");
     setOpen(false);
@@ -34,42 +31,40 @@ export function GamesFilterSheet({ q, status, sort }: Props) {
       <Button
         variant="ghost"
         onClick={() => {
-          setSo(sort);
+          setSo(current);
           setOpen(true);
         }}
-        className="h-auto shrink-0 px-0 text-[12.5px] font-semibold text-gray-700 hover:bg-transparent"
+        className="h-auto shrink-0 gap-0.5 px-0 text-xs text-gray-700 hover:bg-transparent"
       >
-        {currentLabel} ▾
+        {currentLabel}
+        <ChevronDown size={14} aria-hidden />
       </Button>
 
       <Sheet.Root open={open} onOpenChange={setOpen}>
         <Sheet.Content>
-          <div className="mb-1 text-xs font-bold text-gray-500">정렬</div>
-          <div className="flex flex-col gap-2">
-            {SORT.map((o) => (
-              <Chip
-                key={o.label}
-                shape="block"
-                selected={so === o.key}
-                onClick={() => setSo(o.key)}
-                className="w-full justify-start px-3.5"
-              >
-                {o.label}
-              </Chip>
-            ))}
+          <Sheet.Title className="mb-2 text-base font-bold text-gray-900">정렬</Sheet.Title>
+          {/* ponytail: single-select list w/ dividers + check — not a Chip/segment look, hand-rolled rows */}
+          <div className="divide-y divide-gray-100">
+            {GAME_SORTS.map((o) => {
+              const selected = so === o.key;
+              return (
+                <button
+                  key={o.key}
+                  type="button"
+                  onClick={() => setSo(o.key)}
+                  className="flex min-h-12 w-full items-center justify-between text-left"
+                >
+                  <Text typography={selected ? "subtitle1" : "body2"} render={<span />}>
+                    {o.label}
+                  </Text>
+                  {selected && <Check size={16} className="text-primary-600" aria-hidden />}
+                </button>
+              );
+            })}
           </div>
-          <div className="mt-4 flex gap-2">
-            <Button
-              variant="outline"
-              className="w-[104px]"
-              onClick={() => apply(undefined)}
-            >
-              초기화
-            </Button>
-            <Button className="flex-1" onClick={() => apply()}>
-              적용하기
-            </Button>
-          </div>
+          <Button className="mt-4 w-full" onClick={apply}>
+            적용하기
+          </Button>
         </Sheet.Content>
       </Sheet.Root>
     </>

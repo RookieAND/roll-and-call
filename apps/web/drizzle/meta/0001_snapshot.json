@@ -32,26 +32,18 @@
         "availabilities_game_id_games_id_fk": {
           "name": "availabilities_game_id_games_id_fk",
           "tableFrom": "availabilities",
-          "columnsFrom": [
-            "game_id"
-          ],
+          "columnsFrom": ["game_id"],
           "tableTo": "games",
-          "columnsTo": [
-            "id"
-          ],
+          "columnsTo": ["id"],
           "onUpdate": "no action",
           "onDelete": "cascade"
         },
         "availabilities_user_id_profiles_id_fk": {
           "name": "availabilities_user_id_profiles_id_fk",
           "tableFrom": "availabilities",
-          "columnsFrom": [
-            "user_id"
-          ],
+          "columnsFrom": ["user_id"],
           "tableTo": "profiles",
-          "columnsTo": [
-            "id"
-          ],
+          "columnsTo": ["id"],
           "onUpdate": "no action",
           "onDelete": "cascade"
         }
@@ -59,11 +51,7 @@
       "compositePrimaryKeys": {
         "availabilities_game_id_user_id_slot_start_pk": {
           "name": "availabilities_game_id_user_id_slot_start_pk",
-          "columns": [
-            "game_id",
-            "user_id",
-            "slot_start"
-          ]
+          "columns": ["game_id", "user_id", "slot_start"]
         }
       },
       "uniqueConstraints": {},
@@ -168,13 +156,9 @@
         "games_kp_id_profiles_id_fk": {
           "name": "games_kp_id_profiles_id_fk",
           "tableFrom": "games",
-          "columnsFrom": [
-            "kp_id"
-          ],
+          "columnsFrom": ["kp_id"],
           "tableTo": "profiles",
-          "columnsTo": [
-            "id"
-          ],
+          "columnsTo": ["id"],
           "onUpdate": "no action",
           "onDelete": "cascade"
         }
@@ -214,26 +198,18 @@
         "participants_game_id_games_id_fk": {
           "name": "participants_game_id_games_id_fk",
           "tableFrom": "participants",
-          "columnsFrom": [
-            "game_id"
-          ],
+          "columnsFrom": ["game_id"],
           "tableTo": "games",
-          "columnsTo": [
-            "id"
-          ],
+          "columnsTo": ["id"],
           "onUpdate": "no action",
           "onDelete": "cascade"
         },
         "participants_user_id_profiles_id_fk": {
           "name": "participants_user_id_profiles_id_fk",
           "tableFrom": "participants",
-          "columnsFrom": [
-            "user_id"
-          ],
+          "columnsFrom": ["user_id"],
           "tableTo": "profiles",
-          "columnsTo": [
-            "id"
-          ],
+          "columnsTo": ["id"],
           "onUpdate": "no action",
           "onDelete": "cascade"
         }
@@ -241,10 +217,7 @@
       "compositePrimaryKeys": {
         "participants_game_id_user_id_pk": {
           "name": "participants_game_id_user_id_pk",
-          "columns": [
-            "game_id",
-            "user_id"
-          ]
+          "columns": ["game_id", "user_id"]
         }
       },
       "uniqueConstraints": {},
@@ -294,9 +267,7 @@
       "uniqueConstraints": {
         "profiles_discord_id_unique": {
           "name": "profiles_discord_id_unique",
-          "columns": [
-            "discord_id"
-          ],
+          "columns": ["discord_id"],
           "nullsNotDistinct": false
         }
       },
@@ -309,10 +280,7 @@
     "public.schedule_mode": {
       "name": "schedule_mode",
       "schema": "public",
-      "values": [
-        "fixed",
-        "coordinate"
-      ]
+      "values": ["fixed", "coordinate"]
     }
   },
   "schemas": {},

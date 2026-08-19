@@ -1,11 +1,5 @@
 export { Box, type BoxProps } from "./box";
-export {
-  Flex,
-  VStack,
-  HStack,
-  type FlexProps,
-  type StackProps,
-} from "./flex";
+export { Flex, VStack, HStack, type FlexProps, type StackProps } from "./flex";
 export { Grid, type GridProps } from "./grid";
 export { Container, type ContainerProps } from "./container";
 export { Text, type TextProps } from "./text";
@@ -22,18 +16,8 @@ export { IconButton, type IconButtonProps } from "./icon-button";
 export { Chip, type ChipProps } from "./chip";
 export { Card, type CardProps } from "./card";
 export { Field, type FieldProps } from "./field";
-export {
-  TextInput,
-  Textarea,
-  type TextInputProps,
-  type TextareaProps,
-} from "./text-input";
-export {
-  Select,
-  type SelectRootProps,
-  type SelectTriggerProps,
-  type SelectOption,
-} from "./select";
+export { TextInput, Textarea, type TextInputProps, type TextareaProps } from "./text-input";
+export { Select, type SelectRootProps, type SelectTriggerProps, type SelectOption } from "./select";
 export { Pagination, type PaginationProps } from "./pagination";
 export { Skeleton, type SkeletonProps } from "./skeleton";
 export { Progress, type ProgressProps } from "./progress";

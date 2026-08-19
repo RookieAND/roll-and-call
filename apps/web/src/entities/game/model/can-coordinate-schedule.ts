@@ -14,9 +14,5 @@ export function canCoordinateSchedule({
   confirmedAt: Game["confirmedAt"];
   status: GameStatus;
 }): boolean {
-  return (
-    canCoordinate({ scheduleMode }) &&
-    !confirmedAt &&
-    status !== GAME_STATUS.closed
-  );
+  return canCoordinate({ scheduleMode }) && !confirmedAt && status !== GAME_STATUS.closed;
 }

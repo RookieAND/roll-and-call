@@ -31,21 +31,14 @@ export function ConfirmDialog({
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-40 bg-black/40" />
         <Dialog.Popup className="fixed top-1/2 left-1/2 z-50 w-[calc(100%-3rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-gray-200 bg-surface p-5 shadow-xl outline-none">
-          <Dialog.Title className="text-base font-bold text-gray-900">
-            {title}
-          </Dialog.Title>
+          <Dialog.Title className="text-base font-bold text-gray-900">{title}</Dialog.Title>
           {description && (
             <Dialog.Description className="mt-1.5 text-sm text-gray-500">
               {description}
             </Dialog.Description>
           )}
           <div className="mt-5 flex justify-end gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => onOpenChange(false)}
-            >
+            <Button type="button" variant="outline" size="sm" onClick={() => onOpenChange(false)}>
               {cancelLabel}
             </Button>
             <Button

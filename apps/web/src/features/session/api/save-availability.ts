@@ -8,10 +8,7 @@ import { createClient } from "@/shared/api/supabase/server";
 
 export type SaveResult = { error?: string };
 
-export async function saveAvailability(
-  gameId: string,
-  slotIsos: string[],
-): Promise<SaveResult> {
+export async function saveAvailability(gameId: string, slotIsos: string[]): Promise<SaveResult> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -45,12 +42,7 @@ export async function saveAvailability(
   await db.transaction(async (tx) => {
     await tx
       .delete(availabilities)
-      .where(
-        and(
-          eq(availabilities.gameId, gameId),
-          eq(availabilities.userId, user.id),
-        ),
-      );
+      .where(and(eq(availabilities.gameId, gameId), eq(availabilities.userId, user.id)));
     if (rows.length > 0) await tx.insert(availabilities).values(rows);
   });
 

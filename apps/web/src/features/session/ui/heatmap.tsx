@@ -1,3 +1,4 @@
+import { Text } from "@trpg/ui";
 import {
   heatColor,
   heatTextColor,
@@ -11,14 +12,15 @@ type Props = {
   timeRows: TimeRow[];
   counts: Record<string, number>;
   names: Record<string, string[]>;
-  confirmedIso?: string | null;
+  confirmedAt?: Date | null;
 };
 
-export function Heatmap({ days, timeRows, counts, names, confirmedIso }: Props) {
+export function Heatmap({ days, timeRows, counts, names, confirmedAt }: Props) {
+  const confirmedIso = confirmedAt?.toISOString() ?? null;
   return (
     <div className="overflow-x-auto">
       <div
-        className="grid min-w-full text-[9.5px]"
+        className="grid min-w-full text-xs"
         style={{
           gridTemplateColumns: `40px repeat(${days.length}, minmax(0, 1fr))`,
         }}
@@ -26,20 +28,27 @@ export function Heatmap({ days, timeRows, counts, names, confirmedIso }: Props) 
         <span />
         {days.map((d) => (
           <div key={d.date} className="flex flex-col items-center pb-1">
-            <span className="text-[10.5px] text-gray-400">{d.dow}</span>
-            <span className="text-[11.5px] font-bold text-gray-700">{d.md}</span>
+            <Text typography="body4" foreground="hint" render={<span />}>
+              {d.dow}
+            </Text>
+            <Text typography="subtitle2" render={<span />}>
+              {d.md}
+            </Text>
           </div>
         ))}
 
         {timeRows.map((row) => {
           const showLabel = row.minute === 0;
           return [
-            <span
+            <Text
               key={`${row.label}-t`}
-              className="pr-1.5 text-right text-[9.5px] font-bold text-gray-400"
+              typography="subtitle2"
+              foreground="hint"
+              render={<span />}
+              className="pr-1.5 text-right"
             >
               {showLabel ? row.label : ""}
-            </span>,
+            </Text>,
             ...days.map((d) => {
               const key = slotIso(d.date, row.hour, row.minute);
               const count = counts[key] ?? 0;
@@ -69,7 +78,12 @@ export function Heatmap({ days, timeRows, counts, names, confirmedIso }: Props) 
 
 export function HeatLegend() {
   return (
-    <div className="flex items-center gap-1.5 text-[11px] text-gray-500">
+    <Text
+      typography="body4"
+      foreground="muted"
+      render={<div />}
+      className="flex items-center gap-1.5"
+    >
       <span>겹침</span>
       {[0, 1, 2, 3, 4, 5].map((n) => (
         <span
@@ -78,6 +92,6 @@ export function HeatLegend() {
           style={{ backgroundColor: heatColor(n) }}
         />
       ))}
-    </div>
+    </Text>
   );
 }

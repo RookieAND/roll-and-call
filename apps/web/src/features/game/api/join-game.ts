@@ -1,7 +1,8 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { PARTICIPANT_STATUS } from "@/entities/game";
 import { db, games, participants } from "@/shared/api/db";
 import { sendDiscordAnnouncement } from "@/shared/api/discord/webhook";
 import { createClient } from "@/shared/api/supabase/server";
@@ -20,11 +21,7 @@ export async function joinGame(gameId: string): Promise<JoinActionResult> {
   // ponytail: lock the game row so concurrent joins to the same game serialize
   // and can't overfill the last slot. Per-game throughput is tiny, so a row lock is plenty.
   const result: JoinActionResult = await db.transaction(async (tx) => {
-    const [game] = await tx
-      .select()
-      .from(games)
-      .where(eq(games.id, gameId))
-      .for("update");
+    const [game] = await tx.select().from(games).where(eq(games.id, gameId)).for("update");
 
     if (!game) return { error: "존재하지 않는 게임입니다." };
     if (game.gmId === user.id) {
@@ -35,18 +32,24 @@ export async function joinGame(gameId: string): Promise<JoinActionResult> {
       return { error: "모집이 마감되었습니다." };
     }
 
-    const count = await tx.$count(participants, eq(participants.gameId, gameId));
-    if (count >= game.maxPlayers) return { error: "정원이 가득 찼습니다." };
+    // 정원까지는 confirmed, 초과분은 waiting(대기열)으로 받는다 — 거절하지 않는다.
+    const confirmedCount = await tx.$count(
+      participants,
+      and(eq(participants.gameId, gameId), eq(participants.status, PARTICIPANT_STATUS.confirmed)),
+    );
+    const status =
+      confirmedCount < game.maxPlayers ? PARTICIPANT_STATUS.confirmed : PARTICIPANT_STATUS.waiting;
 
     const inserted = await tx
       .insert(participants)
-      .values({ gameId, userId: user.id })
+      .values({ gameId, userId: user.id, status })
       .onConflictDoNothing()
       .returning({ userId: participants.userId });
 
     if (inserted.length === 0) return { error: "이미 참여 중입니다." };
 
-    becameFull = count + 1 >= game.maxPlayers;
+    // 이번 참여로 확정 정원이 막 찼을 때만 구인 완료를 알린다.
+    becameFull = status === PARTICIPANT_STATUS.confirmed && confirmedCount + 1 === game.maxPlayers;
     return {};
   });
 
@@ -55,6 +58,7 @@ export async function joinGame(gameId: string): Promise<JoinActionResult> {
   if (becameFull) await announceRecruitmentComplete(gameId);
 
   revalidatePath(`/games/${gameId}`);
+  revalidatePath(`/games/${gameId}/participants`);
   revalidatePath("/games");
   return {};
 }

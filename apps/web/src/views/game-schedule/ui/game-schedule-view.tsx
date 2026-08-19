@@ -5,12 +5,7 @@ import {
   getGameById,
   getUserConfirmedSlots,
 } from "@/entities/game/api/queries";
-import {
-  AvailabilityGrid,
-  ConfirmSessionForm,
-  HeatLegend,
-  Heatmap,
-} from "@/features/session";
+import { AvailabilityGrid, ConfirmSessionForm, HeatLegend, Heatmap } from "@/features/session";
 import {
   aggregateAvailability,
   hasUserJoined,
@@ -29,19 +24,15 @@ export async function GameScheduleView({ id }: { id: string }) {
   const game = await getGameById(id);
   if (!game) notFound();
 
-  if (
-    game.scheduleMode !== SCHEDULE_MODE.coordinate ||
-    !game.rangeStart ||
-    !game.rangeEnd
-  ) {
+  if (game.scheduleMode !== SCHEDULE_MODE.coordinate || !game.rangeStart || !game.rangeEnd) {
     return (
       <>
         <AppBar back={`/games/${id}`} title={`${game.title} · 일정 조율`} />
         <Container size="md">
           <VStack gap={4} className="py-6">
-            <p className="text-gray-500">
+            <Text foreground="muted" render={<p />}>
               일시가 지정된 게임이라 조율이 필요 없어요.
-            </p>
+            </Text>
           </VStack>
         </Container>
       </>
@@ -52,8 +43,7 @@ export async function GameScheduleView({ id }: { id: string }) {
 
   const isGm = isGameGm({ gmId: game.gmId, userId: user?.id ?? null });
   const involved =
-    isGm ||
-    hasUserJoined({ participants: game.participants, userId: user?.id ?? null });
+    isGm || hasUserJoined({ participants: game.participants, userId: user?.id ?? null });
 
   const days = buildDayColumns(game.rangeStart, game.rangeEnd);
   const timeRows = buildTimeRows();
@@ -66,8 +56,6 @@ export async function GameScheduleView({ id }: { id: string }) {
 
   const blocked = user ? await getUserConfirmedSlots(user.id, id) : [];
 
-  const confirmedIso = game.confirmedAt ? game.confirmedAt.toISOString() : null;
-
   const confirmOptions = rankSlots({ counts }).map(({ iso, count }) => ({
     iso,
     label: `${formatDateTime(iso)} · ${count}명 가능`,
@@ -75,7 +63,7 @@ export async function GameScheduleView({ id }: { id: string }) {
 
   const overlapBlock = (hint: string) => (
     <VStack gap={3}>
-      <Text size="xs" color="muted">
+      <Text typography="body4" foreground="muted">
         {hint}
       </Text>
       <HeatLegend />
@@ -84,7 +72,7 @@ export async function GameScheduleView({ id }: { id: string }) {
         timeRows={timeRows}
         counts={counts}
         names={names}
-        confirmedIso={confirmedIso}
+        confirmedAt={game.confirmedAt}
       />
     </VStack>
   );
@@ -98,12 +86,12 @@ export async function GameScheduleView({ id }: { id: string }) {
             <div className="flex items-center gap-2 rounded-[14px] border border-success-200 bg-success-50 px-4 py-3">
               <span className="h-2 w-2 rounded-full bg-success-600" />
               <div>
-                <div className="text-xs font-bold text-success-700">
+                <Text typography="subtitle2" foreground="success" render={<div />}>
                   세션 확정
-                </div>
-                <div className="text-[15px] font-extrabold text-success-800">
+                </Text>
+                <Text typography="heading3" foreground="success" render={<div />}>
                   {formatDateTime(game.confirmedAt)}
-                </div>
+                </Text>
               </div>
             </div>
           )}
@@ -128,15 +116,11 @@ export async function GameScheduleView({ id }: { id: string }) {
           ) : (
             <VStack gap={3}>
               {overlapBlock("전체 겹침만 열람할 수 있습니다.")}
-              <StatusNotice tone="muted">
-                참여자만 가능 시간을 입력할 수 있습니다.
-              </StatusNotice>
+              <StatusNotice tone="muted">참여자만 가능 시간을 입력할 수 있습니다.</StatusNotice>
             </VStack>
           )}
 
-          {isGm && !game.confirmedAt && (
-            <ConfirmSessionForm gameId={id} options={confirmOptions} />
-          )}
+          {isGm && !game.confirmedAt && <ConfirmSessionForm gameId={id} options={confirmOptions} />}
         </VStack>
       </Container>
     </>

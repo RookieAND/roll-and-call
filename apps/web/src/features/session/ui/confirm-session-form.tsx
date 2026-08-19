@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Select } from "@trpg/ui";
+import { Button, Select, Text } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "@/shared/lib/toast";
@@ -8,13 +8,7 @@ import { confirmSession } from "../api/confirm-session";
 
 type Option = { iso: string; label: string };
 
-export function ConfirmSessionForm({
-  gameId,
-  options,
-}: {
-  gameId: string;
-  options: Option[];
-}) {
+export function ConfirmSessionForm({ gameId, options }: { gameId: string; options: Option[] }) {
   const router = useRouter();
   const [selected, setSelected] = useState(options[0]?.iso ?? "");
   const [pending, startTransition] = useTransition();
@@ -22,9 +16,9 @@ export function ConfirmSessionForm({
 
   if (options.length === 0) {
     return (
-      <p className="text-sm text-gray-500">
+      <Text typography="body2" foreground="muted" render={<p />}>
         아직 등록된 가능 시간이 없어 확정할 수 없어요.
-      </p>
+      </Text>
     );
   }
 
@@ -43,10 +37,12 @@ export function ConfirmSessionForm({
 
   return (
     <div className="rounded-[14px] border border-gray-200 p-4">
-      <div className="text-sm font-bold">세션 확정</div>
-      <p className="mt-1 mb-3 text-xs text-gray-500">
+      <Text typography="subtitle1" render={<div />}>
+        세션 확정
+      </Text>
+      <Text typography="body4" foreground="muted" render={<p />} className="mt-1 mb-3">
         겹치는 인원이 많은 순으로 후보를 보여줍니다.
-      </p>
+      </Text>
       <Select.Root
         items={options.map((o) => ({ label: o.label, value: o.iso }))}
         value={selected}
@@ -69,7 +65,11 @@ export function ConfirmSessionForm({
       >
         이 시간으로 확정
       </Button>
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && (
+        <Text typography="body2" foreground="danger" render={<p />} className="mt-2">
+          {error}
+        </Text>
+      )}
     </div>
   );
 }

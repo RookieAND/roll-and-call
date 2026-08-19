@@ -1,11 +1,8 @@
-import Link from "next/link";
 import { Avatar, Button, Container, HStack, Text, VStack } from "@trpg/ui";
-import { GAME_LIST_CONTEXT, GAME_STATUS, GameRow } from "@/entities/game";
-import {
-  getGamesByGm,
-  getGamesPage,
-  getJoinedGames,
-} from "@/entities/game/api/queries";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { GAME_LIST_CONTEXT, GameRow } from "@/entities/game";
+import { getGamesByGm, getGamesPage, getJoinedGames } from "@/entities/game/api/queries";
 import { LoginButton, SignOutButton } from "@/features/auth";
 import { getCurrentUser } from "@/shared/api/supabase/server";
 import { EmptyState } from "@/shared/ui/empty-state";
@@ -33,11 +30,7 @@ export async function HomePage() {
   const user = await getCurrentUser();
 
   if (!user) {
-    const { rows: recruitingGames } = await getGamesPage(
-      1,
-      { status: GAME_STATUS.recruiting },
-      2,
-    );
+    const { rows: recruitingGames } = await getGamesPage(1, {}, 2);
     return (
       <Container size="sm" className="px-0">
         <VStack gap={8} className="pb-10">
@@ -45,19 +38,22 @@ export async function HomePage() {
             <VStack gap={4}>
               <HStack gap={2} align="center">
                 <span className="h-[26px] w-[26px] rounded-lg bg-primary-600" />
-                <Text weight="bold">롤앤콜</Text>
+                <Text typography="heading3">롤앤콜</Text>
               </HStack>
-              <h1 className="text-[28px] font-extrabold leading-snug tracking-[-0.035em]">
+              <Text
+                typography="display1"
+                render={<h1 />}
+                className="leading-snug tracking-[-0.035em]"
+              >
                 TRPG 세션, 모집부터
                 <br />
                 일정 확정까지 한 곳에서
-              </h1>
-              <Text color="muted" className="leading-relaxed">
-                구인 글을 올려 플레이어를 모으고, 서로 가능한 시간을 겹쳐 세션
-                일시를 정합니다.
+              </Text>
+              <Text foreground="muted" className="leading-relaxed">
+                구인 글을 올려 플레이어를 모으고, 서로 가능한 시간을 겹쳐 세션 일시를 정합니다.
               </Text>
               <LoginButton className="w-full" />
-              <Text size="xs" color="muted" className="text-center leading-relaxed">
+              <Text typography="body4" foreground="muted" className="text-center leading-relaxed">
                 별도 가입 없이 디스코드 계정으로 시작합니다.
                 <br />
                 닉네임과 아바타만 가져옵니다.
@@ -66,25 +62,25 @@ export async function HomePage() {
           </div>
 
           <VStack gap={4} className="px-6">
-            <Text size="xs" weight="bold" color="muted">
+            <Text typography="subtitle2" foreground="muted">
               HOW IT WORKS
             </Text>
             <VStack gap={0}>
               {PITCH.map((p, i) => (
                 <HStack key={p.n} gap={3} align="stretch">
                   <div className="flex flex-col items-center">
-                    <span className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-primary-50 text-xs font-bold text-primary-700">
+                    <Text
+                      typography="subtitle2"
+                      foreground="primary"
+                      className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-primary-50"
+                    >
                       {p.n}
-                    </span>
-                    {i < PITCH.length - 1 && (
-                      <span className="mt-1 w-px flex-1 bg-[#EAEAF0]" />
-                    )}
+                    </Text>
+                    {i < PITCH.length - 1 && <span className="mt-1 w-px flex-1 bg-[#EAEAF0]" />}
                   </div>
                   <div className="pb-5">
-                    <Text weight="bold" size="sm">
-                      {p.t}
-                    </Text>
-                    <Text size="sm" color="muted" className="mt-0.5 block">
+                    <Text typography="subtitle1">{p.t}</Text>
+                    <Text typography="body2" foreground="muted" className="mt-0.5 block">
                       {p.d}
                     </Text>
                   </div>
@@ -95,12 +91,14 @@ export async function HomePage() {
 
           <VStack gap={3} className="border-t border-gray-100 px-6 pt-6">
             <HStack justify="between" align="center">
-              <Text weight="bold" size="sm">
-                지금 모집 중
-              </Text>
+              <Text typography="subtitle1">지금 모집 중</Text>
               <Link href="/games">
-                <Text size="sm" color="primary">
-                  전체 보기 ›
+                <Text
+                  typography="body2"
+                  foreground="primary"
+                  className="inline-flex items-center gap-0.5"
+                >
+                  전체 보기 <ChevronRight size={14} aria-hidden />
                 </Text>
               </Link>
             </HStack>
@@ -109,7 +107,7 @@ export async function HomePage() {
                 <GameRow game={g} />
               </Link>
             ))}
-            <Text size="xs" color="muted" className="text-center">
+            <Text typography="body4" foreground="muted" className="text-center">
               둘러보기는 로그인 없이, 참여는 로그인 후에.
             </Text>
           </VStack>
@@ -118,16 +116,9 @@ export async function HomePage() {
     );
   }
 
-  const name =
-    user.user_metadata.full_name ??
-    user.user_metadata.name ??
-    user.email ??
-    "";
+  const name = user.user_metadata.full_name ?? user.user_metadata.name ?? user.email ?? "";
   const avatar = (user.user_metadata.avatar_url as string | undefined) ?? null;
-  const [hosted, joined] = await Promise.all([
-    getGamesByGm(user.id),
-    getJoinedGames(user.id),
-  ]);
+  const [hosted, joined] = await Promise.all([getGamesByGm(user.id), getJoinedGames(user.id)]);
   const myGames = [
     ...hosted.map((game) => ({ game, context: GAME_LIST_CONTEXT.mine })),
     ...joined.map((game) => ({ game, context: GAME_LIST_CONTEXT.joined })),
@@ -140,10 +131,10 @@ export async function HomePage() {
         <HStack gap={3} align="center">
           <Avatar src={avatar} name={name} size="xl" />
           <div>
-            <Text size="lg" weight="bold" className="block">
+            <Text typography="heading2" className="block">
               {name}님, {empty ? "처음이시네요" : "반갑습니다"}
             </Text>
-            <Text size="sm" color="muted">
+            <Text typography="body2" foreground="muted">
               {empty
                 ? "아직 참여 중인 게임이 없습니다"
                 : `참여 중 ${joined.length} · 내가 만든 구인 ${hosted.length}`}
@@ -168,17 +159,17 @@ export async function HomePage() {
                 </VStack>
               }
             />
-            <HStack
-              justify="between"
-              align="center"
-              className="border-t border-gray-100 pt-4"
-            >
-              <Text size="sm" color="muted">
+            <HStack justify="between" align="center" className="border-t border-gray-100 pt-4">
+              <Text typography="body2" foreground="muted">
                 프로필과 기본 가능 시간대 설정
               </Text>
               <Link href="/me/edit">
-                <Text size="sm" color="primary">
-                  설정 ›
+                <Text
+                  typography="body2"
+                  foreground="primary"
+                  className="inline-flex items-center gap-0.5"
+                >
+                  설정 <ChevronRight size={14} aria-hidden />
                 </Text>
               </Link>
             </HStack>
@@ -186,7 +177,7 @@ export async function HomePage() {
         ) : (
           <>
             <VStack gap={3}>
-              <Text size="sm" weight="bold" color="muted">
+              <Text typography="subtitle1" foreground="muted">
                 내 게임
               </Text>
               <VStack gap={2}>

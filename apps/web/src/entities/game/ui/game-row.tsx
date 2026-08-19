@@ -13,10 +13,10 @@ export function GameRow({ game }: { game: GameRowData }) {
     <div className="flex items-center gap-3 rounded-[14px] border border-gray-200 p-3">
       <Avatar src={game.gm?.avatarUrl} name={game.gm?.username} size="stack" />
       <div className="min-w-0 flex-1">
-        <Text weight="bold" size="sm" className="block truncate">
+        <Text typography="subtitle1" className="block truncate">
           {game.title}
         </Text>
-        <Text size="xs" color="muted" className="block truncate">
+        <Text typography="body4" foreground="muted" className="block truncate">
           {game.rule} · GM {game.gm?.username ?? "?"}
         </Text>
       </div>

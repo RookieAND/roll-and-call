@@ -47,7 +47,7 @@ export function JoinButton({
         {label}
       </Button>
       {error && (
-        <Text size="sm" color="danger">
+        <Text typography="body2" foreground="danger">
           {error}
         </Text>
       )}

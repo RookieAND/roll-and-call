@@ -20,12 +20,7 @@ export type GridProps = ComponentPropsWithRef<"div"> & {
 export function Grid({ className, cols, gap, ...props }: GridProps) {
   return (
     <div
-      className={cn(
-        "grid",
-        cols && colsMap[cols],
-        gap !== undefined && gapMap[gap],
-        className,
-      )}
+      className={cn("grid", cols && colsMap[cols], gap !== undefined && gapMap[gap], className)}
       {...props}
     />
   );

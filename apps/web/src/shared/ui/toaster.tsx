@@ -12,10 +12,11 @@ export function Toaster() {
         duration: 2500,
         unstyled: true,
         classNames: {
-          // unstyled strips sonner's centering transform → self-center + w-fit
-          // re-centers the pill within the (centered) toaster container.
+          // toast is position:absolute; unstyled drops its full width so w-fit
+          // alone left-aligns it. inset-x-0 + mx-auto centers it without
+          // touching transform (keeps sonner's enter/exit animation).
           toast:
-            "mx-auto flex w-fit items-center justify-center gap-2 self-center rounded-lg px-4 py-2.5 text-sm font-semibold text-white shadow-lg",
+            "inset-x-0 mx-auto flex w-fit items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white shadow-lg",
           default: "bg-toast",
           success: "bg-toast",
           error: "bg-red-600",

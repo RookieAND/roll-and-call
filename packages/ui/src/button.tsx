@@ -13,8 +13,7 @@ const button = cva(
           "bg-discord text-white shadow-[0_6px_18px_rgba(88,101,242,0.24)] hover:bg-discord-dark",
         confirm: "bg-success-600 text-white hover:bg-success-700",
         outline: "border border-gray-200 text-gray-600 hover:bg-gray-50",
-        tinted:
-          "border border-[#D5D3F7] bg-[#F5F4FF] text-primary-700 hover:bg-[#EEEDFC]",
+        tinted: "border border-[#D5D3F7] bg-[#F5F4FF] text-primary-700 hover:bg-[#EEEDFC]",
         ghost: "text-gray-700 hover:bg-gray-100",
         danger: "border border-[#F0DADA] text-[#C33B3B] hover:bg-[#FEF5F5]",
       },
@@ -58,9 +57,7 @@ export function Button({
   return useRender({
     ref,
     defaultTagName: "button",
-    render: useAsChild
-      ? (children as ReactElement<Record<string, unknown>>)
-      : undefined,
+    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : undefined,
     props: useAsChild
       ? { className: classes, ...props }
       : {

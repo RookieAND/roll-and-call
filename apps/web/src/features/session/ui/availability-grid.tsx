@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@trpg/ui";
+import { Button, Text } from "@trpg/ui";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { toast } from "@/shared/lib/toast";
 import { slotIso, type DayColumn, type TimeRow } from "@/shared/lib/slots";
@@ -33,11 +33,15 @@ export function AvailabilityGrid({
       painting.current = null;
     };
     window.addEventListener("pointerup", stop);
-    return () => window.removeEventListener("pointerup", stop);
+    window.addEventListener("pointercancel", stop);
+    return () => {
+      window.removeEventListener("pointerup", stop);
+      window.removeEventListener("pointercancel", stop);
+    };
   }, []);
 
   function apply(key: string) {
-    if (readOnly || blockedSet.has(key)) return;
+    if (readOnly || blockedSet.has(key) || painting.current === null) return;
     setMine((prev) => {
       const next = new Set(prev);
       if (painting.current) next.add(key);
@@ -67,14 +71,13 @@ export function AvailabilityGrid({
   return (
     <div className="flex flex-col gap-3">
       {!readOnly && (
-        <p className="text-xs text-gray-500">
-          드래그해서 가능한 시간을 칠하세요. 30분 단위, 다시 드래그하면
-          지워집니다.
-        </p>
+        <Text typography="body4" foreground="muted" render={<p />}>
+          클릭하거나 드래그해서 가능한 시간을 칠하세요. 30분 단위, 다시 누르면 지워집니다.
+        </Text>
       )}
       <div className="overflow-x-auto">
         <div
-          className="grid min-w-full select-none text-[9.5px]"
+          className="grid min-w-full select-none"
           style={{
             gridTemplateColumns: `40px repeat(${days.length}, minmax(0, 1fr))`,
           }}
@@ -82,20 +85,25 @@ export function AvailabilityGrid({
           <span />
           {days.map((d) => (
             <div key={d.date} className="flex flex-col items-center pb-1">
-              <span className="text-[10.5px] text-gray-400">{d.dow}</span>
-              <span className="text-[11.5px] font-bold text-gray-700">
+              <Text typography="body4" foreground="hint" render={<span />}>
+                {d.dow}
+              </Text>
+              <Text typography="subtitle2" render={<span />}>
                 {d.md}
-              </span>
+              </Text>
             </div>
           ))}
 
           {timeRows.map((row) => [
-            <span
+            <Text
               key={`${row.label}-t`}
-              className="pr-1.5 text-right text-[9.5px] font-bold text-gray-400"
+              typography="subtitle2"
+              foreground="hint"
+              render={<span />}
+              className="pr-1.5 text-right"
             >
               {row.minute === 0 ? row.label : ""}
-            </span>,
+            </Text>,
             ...days.map((d) => {
               const key = slotIso(d.date, row.hour, row.minute);
               const isBlocked = blockedSet.has(key);
@@ -104,7 +112,9 @@ export function AvailabilityGrid({
                 <div
                   key={key}
                   onPointerDown={(e) => onDown(e, key)}
-                  onPointerEnter={() => apply(key)}
+                  onPointerEnter={(e) => {
+                    if (e.buttons !== 0) apply(key);
+                  }}
                   className={`h-[22px] touch-none border-b border-l border-b-[#F1F1F5] border-l-[#EFEFF3] ${
                     isBlocked
                       ? "cursor-not-allowed bg-[#E9E9EE]"
@@ -122,16 +132,10 @@ export function AvailabilityGrid({
       </div>
       {!readOnly && (
         <>
-          <p className="text-xs text-gray-500">
+          <Text typography="body4" foreground="muted" render={<p />}>
             선택 {mine.size}칸 · 회색은 다른 확정 세션과 겹침
-          </p>
-          <Button
-            type="button"
-            size="lg"
-            className="h-12 w-full"
-            loading={pending}
-            onClick={save}
-          >
+          </Text>
+          <Button type="button" size="lg" className="h-12 w-full" loading={pending} onClick={save}>
             가능 시간 저장
           </Button>
         </>

@@ -68,27 +68,19 @@ export type AvatarGroupProps = VariantProps<typeof avatar> & {
   className?: string;
 };
 
-export function AvatarGroup({
-  people,
-  max = 3,
-  size,
-  className,
-}: AvatarGroupProps) {
+export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupProps) {
   const shown = people.slice(0, max);
   const extra = people.length - shown.length;
   return (
     <div className={cn("flex items-center", className)}>
       {shown.map((p, i) => (
-        <span key={i} className="-ml-2 rounded-full ring-2 ring-white first:ml-0">
+        <span key={i} className="-ml-2 inline-flex rounded-full ring-2 ring-surface first:ml-0">
           <Avatar src={p.src} name={p.name} size={size} />
         </span>
       ))}
       {extra > 0 && (
         <span
-          className={cn(
-            avatar({ size }),
-            "-ml-2 bg-[#F0F0F5] text-[#6A6A76] ring-2 ring-white",
-          )}
+          className={cn(avatar({ size }), "-ml-2 bg-gray-100 text-gray-500 ring-2 ring-surface")}
         >
           +{extra}
         </span>

@@ -4,14 +4,14 @@
 
 ## 1. 레이어 경계
 
-| 레이어 | 역할 | 예 |
-|---|---|---|
-| `packages/ui` | 도메인 무관 순수 UI 키트 | Button, IconButton, Chip, Select, TextInput, Field, Card |
-| `shared/ui` | 앱 공용(도메인 약함) 조합 컴포넌트 | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle |
-| `entities/*` | 도메인 엔티티의 **작고 원자적인 표시** 단위 | GameCard, GameSummary, GameRow |
-| `features/*` | **단일 사용자 동작**(server action·toggle 등 상태 변경) | JoinButton, DeleteGameButton, GameStatusFilter, GameScheduleLink, ThumbnailUpload |
-| `widgets/*` | **entity + feature 조합** 블록, 또는 **덩치 큰 순수-표시 블록** | game-detail, game-board, game-form, game-list-item, GameInfoTable |
-| `views/*` | 위젯/피처 조합 + 라우트 글루 | GamesView, MyPageView |
+| 레이어        | 역할                                                            | 예                                                                                |
+| ------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `packages/ui` | 도메인 무관 순수 UI 키트                                        | Button, IconButton, Chip, Select, TextInput, Field, Card                          |
+| `shared/ui`   | 앱 공용(도메인 약함) 조합 컴포넌트                              | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                              |
+| `entities/*`  | 도메인 엔티티의 **작고 원자적인 표시** 단위                     | GameCard, GameSummary, GameRow                                                    |
+| `features/*`  | **단일 사용자 동작**(server action·toggle 등 상태 변경)         | JoinButton, DeleteGameButton, GameStatusFilter, GameScheduleLink, ThumbnailUpload |
+| `widgets/*`   | **entity + feature 조합** 블록, 또는 **덩치 큰 순수-표시 블록** | game-detail, game-board, game-form, game-list-item, GameInfoTable                 |
+| `views/*`     | 위젯/피처 조합 + 라우트 글루                                    | GamesView, MyPageView                                                             |
 
 **import 방향은 아래로만**: `shared ← entities ← features ← widgets ← views`. 상위 레이어를 import하지 않는다(예: feature는 widget을 import 금지). 교차 슬라이스는 각 슬라이스의 public API(배럴 `index.ts`)로 import한다.
 
@@ -42,7 +42,7 @@
 
 ```tsx
 // bad
-<Button variant={variant === "outline" ? "outline" : "solid"} />
+<Button variant={variant === "outline" ? "outline" : "solid"} />;
 
 // good
 const buttonVariant = variant === "outline" ? "outline" : "solid";

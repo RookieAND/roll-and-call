@@ -4,8 +4,8 @@
 /* Design tokens (Vapor-UI-inspired). Generates utilities like bg-primary-600, text-primary-500. */
 @theme {
   --font-sans:
-    "Pretendard Variable", Pretendard, ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", sans-serif;
+    "Pretendard Variable", Pretendard, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
 
   --color-primary-50: #eef0fe;
   --color-primary-100: #e0e7ff;

@@ -41,9 +41,7 @@ export function IconButton({
   return useRender({
     ref,
     defaultTagName: "button",
-    render: useAsChild
-      ? (children as ReactElement<Record<string, unknown>>)
-      : undefined,
+    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : undefined,
     props: useAsChild
       ? { className: classes, ...props }
       : { type: type ?? "button", className: classes, children, ...props },

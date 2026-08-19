@@ -14,10 +14,5 @@ export type ContainerProps = ComponentPropsWithRef<"div"> & {
 };
 
 export function Container({ className, size = "lg", ...props }: ContainerProps) {
-  return (
-    <div
-      className={cn("mx-auto w-full px-4", maxWidthMap[size], className)}
-      {...props}
-    />
-  );
+  return <div className={cn("mx-auto w-full px-4", maxWidthMap[size], className)} {...props} />;
 }

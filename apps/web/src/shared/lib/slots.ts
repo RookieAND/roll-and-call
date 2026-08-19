@@ -10,10 +10,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 export type DayColumn = { date: string; label: string; dow: string; md: string };
 export type TimeRow = { hour: number; minute: number; label: string };
 
-export function buildDayColumns(
-  rangeStart: string,
-  rangeEnd: string,
-): DayColumn[] {
+export function buildDayColumns(rangeStart: string, rangeEnd: string): DayColumn[] {
   const [ys, ms, ds] = rangeStart.split("-").map(Number);
   const [ye, me, de] = rangeEnd.split("-").map(Number);
   const cur = new Date(Date.UTC(ys!, ms! - 1, ds!));

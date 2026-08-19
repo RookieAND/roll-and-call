@@ -4,10 +4,7 @@ type AnnouncementInput = {
   userMentions?: string[];
 };
 
-export async function sendDiscordAnnouncement({
-  content,
-  userMentions = [],
-}: AnnouncementInput) {
+export async function sendDiscordAnnouncement({ content, userMentions = [] }: AnnouncementInput) {
   const url = process.env.DISCORD_WEBHOOK_URL;
   if (!url) {
     console.warn("DISCORD_WEBHOOK_URL not set; skipping announcement");

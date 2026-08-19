@@ -1,7 +1,8 @@
-import { HStack, Text } from "@trpg/ui";
+import { Badge, HStack, Text } from "@trpg/ui";
 import type { Game } from "@/shared/api/db";
 import { formatDateTime } from "@/shared/lib/format";
 import { deriveGameStatus } from "../model/derive-game-status";
+import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { GAME_STATUS } from "../model/status";
 import { GameStatusBadge } from "./game-status-badge";
 
@@ -9,12 +10,11 @@ export const GAME_LIST_CONTEXT = {
   mine: "mine",
   joined: "joined",
 } as const;
-export type GameListContext =
-  (typeof GAME_LIST_CONTEXT)[keyof typeof GAME_LIST_CONTEXT];
+export type GameListContext = (typeof GAME_LIST_CONTEXT)[keyof typeof GAME_LIST_CONTEXT];
 
 type GameSummaryData = Game & {
   gm: { username: string } | null;
-  participants: { userId: string }[];
+  participants: { userId: string; status: ParticipantStatus }[];
 };
 
 // 순수 표시: 제목·상태 뱃지·부가정보 한 줄. 링크·상호작용 없음.
@@ -26,7 +26,7 @@ export function GameSummary({
   game: GameSummaryData;
   context?: GameListContext;
 }) {
-  const count = game.participants.length;
+  const count = countConfirmed(game.participants);
   const status = deriveGameStatus({
     maxPlayers: game.maxPlayers,
     endDate: game.endDate,
@@ -45,12 +45,19 @@ export function GameSummary({
   return (
     <>
       <HStack justify="between" align="center" gap={2}>
-        <Text weight="bold" size="sm" className="truncate">
-          {game.title}
-        </Text>
+        <HStack align="center" gap={2} className="min-w-0">
+          {game.round > 1 && (
+            <Badge color="primary" className="shrink-0 font-mono">
+              {game.round}회차
+            </Badge>
+          )}
+          <Text typography="subtitle1" className="truncate">
+            {game.title}
+          </Text>
+        </HStack>
         <GameStatusBadge status={status} />
       </HStack>
-      <Text size="xs" color="muted" className="mt-1 block truncate">
+      <Text typography="body4" foreground="muted" className="mt-1 block truncate">
         {sub}
       </Text>
     </>

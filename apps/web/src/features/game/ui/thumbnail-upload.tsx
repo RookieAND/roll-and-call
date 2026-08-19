@@ -42,7 +42,7 @@ export function ThumbnailUpload({
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-sm font-medium">썸네일</span>
+      <Text typography="subtitle1">썸네일</Text>
       {value && (
         <img
           src={value}
@@ -58,12 +58,12 @@ export function ThumbnailUpload({
         className="text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary-700"
       />
       {uploading && (
-        <Text size="xs" color="muted">
+        <Text typography="body4" foreground="muted">
           업로드 중...
         </Text>
       )}
       {error && (
-        <Text size="xs" color="danger">
+        <Text typography="body4" foreground="danger">
           {error}
         </Text>
       )}

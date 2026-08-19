@@ -14,11 +14,7 @@ export function EditGameForm({ game }: { game: Game }) {
         submitLabel="수정 저장"
         successMessage="수정되었습니다"
       />
-      <DeleteGameButton
-        gameId={game.id}
-        label="구인 삭제"
-        className="h-[46px] w-full"
-      />
+      <DeleteGameButton gameId={game.id} label="구인 삭제" className="h-[46px] w-full" />
     </VStack>
   );
 }

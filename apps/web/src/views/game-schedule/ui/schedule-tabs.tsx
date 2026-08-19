@@ -10,13 +10,7 @@ const TABS = [
   { key: "overlap", label: "전체 겹침" },
 ] as const;
 
-export function ScheduleTabs({
-  mine,
-  overlap,
-}: {
-  mine: ReactNode;
-  overlap: ReactNode;
-}) {
+export function ScheduleTabs({ mine, overlap }: { mine: ReactNode; overlap: ReactNode }) {
   const [tab, setTab] = useState<"mine" | "overlap">("mine");
 
   return (

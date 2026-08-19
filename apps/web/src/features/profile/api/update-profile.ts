@@ -14,9 +14,7 @@ export type UpdateProfileInput = {
   defaultSlots: string[];
 };
 
-export async function updateProfile(
-  input: UpdateProfileInput,
-): Promise<ProfileResult> {
+export async function updateProfile(input: UpdateProfileInput): Promise<ProfileResult> {
   const supabase = await createClient();
   const {
     data: { user },

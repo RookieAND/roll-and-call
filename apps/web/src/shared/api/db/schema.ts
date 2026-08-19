@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  type AnyPgColumn,
   date,
   integer,
   pgEnum,
@@ -12,6 +13,10 @@ import {
 
 export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
 
+// confirmed = 확정 로스터, waiting = 대기열. 정원(maxPlayers)만큼 confirmed로 채우고
+// 초과분은 waiting으로 받는다. 승격/강등/자동 승계는 이 값만 바꾼다.
+export const participantStatus = pgEnum("participant_status", ["confirmed", "waiting"]);
+
 // Mirror of auth.users, kept in sync by a trigger. `id` equals the Supabase auth uid.
 export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(),
@@ -22,9 +27,7 @@ export const profiles = pgTable("profiles", {
   bio: text("bio"),
   // 기본 가능 시간대 preset keys (weekday_evening | weekend_day | weekend_evening)
   defaultSlots: text("default_slots").array(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const games = pgTable("games", {
@@ -47,9 +50,12 @@ export const games = pgTable("games", {
   confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
   // set when the 1h-before reminder has been sent (dedupe)
   notifiedAt: timestamp("notified_at", { withTimezone: true }),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  // 2회차 승계: 이 게임을 만든 원본(직전 회차). null이면 1회차.
+  parentGameId: uuid("parent_game_id").references((): AnyPgColumn => games.id, {
+    onDelete: "set null",
+  }),
+  round: integer("round").notNull().default(1),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const participants = pgTable(
@@ -61,9 +67,8 @@ export const participants = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade" }),
-    joinedAt: timestamp("joined_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
+    status: participantStatus("status").notNull().default("confirmed"),
   },
   (t) => [primaryKey({ columns: [t.gameId, t.userId] })],
 );
@@ -91,6 +96,12 @@ export const profilesRelations = relations(profiles, ({ many }) => ({
 
 export const gamesRelations = relations(games, ({ one, many }) => ({
   gm: one(profiles, { fields: [games.gmId], references: [profiles.id] }),
+  parent: one(games, {
+    fields: [games.parentGameId],
+    references: [games.id],
+    relationName: "gameRounds",
+  }),
+  rounds: many(games, { relationName: "gameRounds" }),
   participants: many(participants),
   availabilities: many(availabilities),
 }));

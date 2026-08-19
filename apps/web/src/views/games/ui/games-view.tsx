@@ -7,11 +7,10 @@ import { GameBoard } from "@/widgets/game-board";
 type Props = {
   page?: number;
   q?: string;
-  status?: GamesFilter["status"];
   sort?: GamesFilter["sort"];
 };
 
-export function GamesView({ page, q, status, sort }: Props) {
+export function GamesView({ page, q, sort }: Props) {
   return (
     <>
       <AppBar
@@ -22,7 +21,7 @@ export function GamesView({ page, q, status, sort }: Props) {
           </Button>
         }
       />
-      <GameBoard page={page} q={q} status={status} sort={sort} />
+      <GameBoard page={page} q={q} sort={sort} />
     </>
   );
 }

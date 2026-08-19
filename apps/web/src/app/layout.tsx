@@ -9,9 +9,7 @@ export const metadata: Metadata = {
   description: "TRPG 세션 구인 및 일정 조율",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko">
       <head>

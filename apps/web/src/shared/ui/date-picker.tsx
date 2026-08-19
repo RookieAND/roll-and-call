@@ -1,7 +1,8 @@
 "use client";
 
 import { Popover } from "@base-ui-components/react/popover";
-import { Calendar, cn } from "@trpg/ui";
+import { Calendar, Text, cn } from "@trpg/ui";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
 const triggerClass =
@@ -34,14 +35,8 @@ export function DatePicker({
         id={id}
         className={cn(triggerClass, invalid ? "border-red-400" : "border-gray-300")}
       >
-        {value ? (
-          <span>{value}</span>
-        ) : (
-          <span className="text-gray-400">{placeholder}</span>
-        )}
-        <span aria-hidden className="text-xs text-gray-400">
-          📅
-        </span>
+        {value ? <span>{value}</span> : <Text foreground="hint">{placeholder}</Text>}
+        <CalendarIcon size={16} aria-hidden className="text-gray-400" />
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Positioner sideOffset={4} className="z-50">
