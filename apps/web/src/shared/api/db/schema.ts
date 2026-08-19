@@ -18,6 +18,10 @@ export const profiles = pgTable("profiles", {
   discordId: text("discord_id").notNull().unique(),
   username: text("username").notNull(),
   avatarUrl: text("avatar_url"),
+  // 한 줄 소개
+  bio: text("bio"),
+  // 기본 가능 시간대 preset keys (weekday_evening | weekend_day | weekend_evening)
+  defaultSlots: text("default_slots").array(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -25,12 +29,13 @@ export const profiles = pgTable("profiles", {
 
 export const games = pgTable("games", {
   id: uuid("id").primaryKey().defaultRandom(),
-  kpId: uuid("kp_id")
+  gmId: uuid("gm_id")
     .notNull()
     .references(() => profiles.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   rule: text("rule").notNull(),
   synopsis: text("synopsis"),
+  thumbnailUrl: text("thumbnail_url"),
   playTime: text("play_time"),
   maxPlayers: integer("max_players").notNull(),
   scheduleMode: scheduleMode("schedule_mode").notNull(),
@@ -85,7 +90,7 @@ export const profilesRelations = relations(profiles, ({ many }) => ({
 }));
 
 export const gamesRelations = relations(games, ({ one, many }) => ({
-  kp: one(profiles, { fields: [games.kpId], references: [profiles.id] }),
+  gm: one(profiles, { fields: [games.gmId], references: [profiles.id] }),
   participants: many(participants),
   availabilities: many(availabilities),
 }));

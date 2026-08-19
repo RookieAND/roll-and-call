@@ -15,6 +15,34 @@
       "when": 1786352634156,
       "tag": "0001_auth_trigger_and_rls",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786362586943,
+      "tag": "0002_cold_talos",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786362587429,
+      "tag": "0003_thumbnail_storage",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786373895387,
+      "tag": "0004_gray_madame_masque",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1787081681147,
+      "tag": "0005_rename_kp_to_gm",
+      "breakpoints": true
     }
   ]
 }
