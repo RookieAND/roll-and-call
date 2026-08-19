@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-rc.0",
+    "@hookform/resolvers": "^5.7.1",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.2",
     "@tanstack/react-query": "^5.101.4",
@@ -24,18 +25,20 @@
     "postgres": "^3.4.9",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-hook-form": "^7.85.0",
+    "sonner": "^2.0.8",
     "zod": "^4.4.3",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "dotenv": "^17.4.2",
-    "drizzle-kit": "^0.31.10",
     "@trpg/oxlint-config": "workspace:*",
     "@trpg/typescript-config": "workspace:*",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
+    "dotenv": "^17.4.2",
+    "drizzle-kit": "^0.31.10",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3"
   }

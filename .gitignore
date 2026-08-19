@@ -11,3 +11,5 @@ out/
 .turbo/
 coverage/
 *.tsbuildinfo
+.vercel
+.env*
