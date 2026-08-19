@@ -22,6 +22,9 @@ export { GameSeatCount } from "./ui/game-seat-count";
 export { GameSeatProgress } from "./ui/game-seat-progress";
 export { GameGmLabel } from "./ui/game-gm-label";
 export { GameSummary, GAME_LIST_CONTEXT, type GameListContext } from "./ui/game-summary";
+export { ConfirmedSessionNotice } from "./ui/confirmed-session-notice";
+export { WaitlistNotice } from "./ui/waitlist-notice";
+export { deriveActionView, type GameActionView } from "./model/derive-action-view";
 export {
   deriveSessionState,
   dday,
