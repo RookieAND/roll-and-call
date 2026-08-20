@@ -56,9 +56,17 @@ export async function notifyGameCreated(game: Game, gmName: string) {
   await sendDiscordAnnouncement({ content: "📢 새로운 구인 글이 올라왔어요!", embeds: [embed] });
 }
 
-type JoinInfo = { applicantName: string; confirmedCount: number; isWaiting: boolean };
+type JoinInfo = {
+  applicantName: string;
+  gmName: string;
+  confirmedCount: number;
+  isWaiting: boolean;
+};
 
-export async function notifyGameJoined(game: Game, { applicantName, confirmedCount, isWaiting }: JoinInfo) {
+export async function notifyGameJoined(
+  game: Game,
+  { applicantName, gmName, confirmedCount, isWaiting }: JoinInfo,
+) {
   const embed: DiscordEmbed = {
     title: `🙋 ${game.title}`,
     url: gameUrl(game.id),
@@ -69,6 +77,7 @@ export async function notifyGameJoined(game: Game, { applicantName, confirmedCou
       { name: "현재 인원", value: `${confirmedCount}/${game.maxPlayers}`, inline: true },
       { name: "📜 사용 룰", value: game.rule, inline: true },
     ],
+    footer: { text: `GM ${gmName}` },
     timestamp: new Date().toISOString(),
   };
 

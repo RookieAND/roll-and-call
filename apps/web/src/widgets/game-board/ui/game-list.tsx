@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Button, Pagination, Text, VStack } from "@trpg/ui";
 import { GameCard } from "@/entities/game";
@@ -31,7 +32,12 @@ export async function GameList({ promise, page, q, sort }: Props) {
   if (rows.length === 0) {
     return (
       <VStack gap={4} className="items-center px-5 pt-[76px] pb-[90px] text-center">
-        <span className="h-11 w-11 rounded-[13px] bg-gray-100" />
+        <Image
+          src="/empty-states/empty-search.png"
+          alt="조건에 맞는 구인이 없습니다"
+          width={140}
+          height={140}
+        />
         <div>
           <Text typography="heading3" className="block">
             조건에 맞는 구인이 없습니다

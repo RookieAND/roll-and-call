@@ -95,12 +95,19 @@ async function announceNewApplication(
   isWaiting: boolean,
   confirmedCount: number,
 ) {
-  const applicant = await db.query.profiles.findFirst({
-    where: (p, { eq }) => eq(p.id, applicantId),
-    columns: { username: true },
-  });
+  const [applicant, gm] = await Promise.all([
+    db.query.profiles.findFirst({
+      where: (p, { eq }) => eq(p.id, applicantId),
+      columns: { username: true },
+    }),
+    db.query.profiles.findFirst({
+      where: (p, { eq }) => eq(p.id, game.gmId),
+      columns: { username: true },
+    }),
+  ]);
   await notifyGameJoined(game, {
     applicantName: applicant?.username ?? "?",
+    gmName: gm?.username ?? "?",
     confirmedCount,
     isWaiting,
   });
