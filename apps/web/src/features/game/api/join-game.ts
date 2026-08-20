@@ -3,8 +3,8 @@
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { db, games, participants } from "@/shared/api/db";
-import { sendDiscordAnnouncement } from "@/shared/api/discord/webhook";
+import { db, games, participants, type Game } from "@/shared/api/db";
+import { notifyGameJoined, notifyRecruitmentComplete } from "@/shared/api/discord/notify";
 import { createClient } from "@/shared/api/supabase/server";
 
 export type JoinActionResult = { error?: string };
@@ -17,6 +17,9 @@ export async function joinGame(gameId: string): Promise<JoinActionResult> {
   if (!user) return { error: "로그인이 필요합니다." };
 
   let becameFull = false;
+  let joinedGame: Game | undefined;
+  let joinedWaiting = false;
+  let confirmedAfter = 0;
 
   // ponytail: lock the game row so concurrent joins to the same game serialize
   // and can't overfill the last slot. Per-game throughput is tiny, so a row lock is plenty.
@@ -48,6 +51,9 @@ export async function joinGame(gameId: string): Promise<JoinActionResult> {
 
     if (inserted.length === 0) return { error: "이미 참여 중입니다." };
 
+    joinedGame = game;
+    joinedWaiting = status === PARTICIPANT_STATUS.waiting;
+    confirmedAfter = status === PARTICIPANT_STATUS.confirmed ? confirmedCount + 1 : confirmedCount;
     // 이번 참여로 확정 정원이 막 찼을 때만 구인 완료를 알린다.
     becameFull = status === PARTICIPANT_STATUS.confirmed && confirmedCount + 1 === game.maxPlayers;
     return {};
@@ -55,7 +61,9 @@ export async function joinGame(gameId: string): Promise<JoinActionResult> {
 
   if (result.error) return result;
 
+  // 정원이 막 찼으면 구인 완료 알림(핑 포함)만, 아니면 참여 신청 알림.
   if (becameFull) await announceRecruitmentComplete(gameId);
+  else if (joinedGame) await announceNewApplication(joinedGame, user.id, joinedWaiting, confirmedAfter);
 
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/participants`);
@@ -78,10 +86,22 @@ async function announceRecruitmentComplete(gameId: string) {
     ...game.participants.map((p) => p.user?.discordId),
   ].filter((id): id is string => Boolean(id));
 
-  const mentions = mentionIds.map((id) => `<@${id}>`).join(" ");
-  const content =
-    `🎲 **${game.title}** 구인 완료! (${game.maxPlayers}/${game.maxPlayers})\n` +
-    `룰: ${game.rule} · GM: ${game.gm?.username ?? "?"}\n${mentions}`;
+  await notifyRecruitmentComplete(game, game.gm?.username ?? "?", mentionIds);
+}
 
-  await sendDiscordAnnouncement({ content, userMentions: mentionIds });
+async function announceNewApplication(
+  game: Game,
+  applicantId: string,
+  isWaiting: boolean,
+  confirmedCount: number,
+) {
+  const applicant = await db.query.profiles.findFirst({
+    where: (p, { eq }) => eq(p.id, applicantId),
+    columns: { username: true },
+  });
+  await notifyGameJoined(game, {
+    applicantName: applicant?.username ?? "?",
+    confirmedCount,
+    isWaiting,
+  });
 }

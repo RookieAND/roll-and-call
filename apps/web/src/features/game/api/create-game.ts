@@ -1,6 +1,7 @@
 "use server";
 
 import { db, games } from "@/shared/api/db";
+import { notifyGameCreated } from "@/shared/api/discord/notify";
 import { createClient } from "@/shared/api/supabase/server";
 import { gameFormSchema, type GameFormState, type GameFormValues } from "@/entities/game";
 
@@ -35,6 +36,12 @@ export async function createGame(values: GameFormValues): Promise<GameFormState>
       confirmedAt: v.confirmedAt ? new Date(v.confirmedAt) : null,
     })
     .returning({ id: games.id });
+
+  const game = await db.query.games.findFirst({
+    where: (g, { eq }) => eq(g.id, created!.id),
+    with: { gm: { columns: { username: true } } },
+  });
+  if (game) await notifyGameCreated(game, game.gm?.username ?? "?");
 
   return { redirect: `/games/${created!.id}` };
 }
