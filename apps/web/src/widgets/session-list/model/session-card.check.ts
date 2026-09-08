@@ -1,5 +1,5 @@
 // Runnable self-check for session derivation (no test framework).
-// Run: pnpm dlx tsx --tsconfig tsconfig.json src/widgets/session-list/model/session-card.check.ts
+// Run: pnpm check
 import assert from "node:assert";
 import { deriveSessionState } from "@/entities/game";
 import { dday } from "@/shared/lib";

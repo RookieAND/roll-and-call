@@ -1,9 +1,10 @@
-import { Badge, HStack, Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 import type { Game } from "@/shared/server";
 import { formatDateTime } from "@/shared/lib";
 import { deriveGameStatus } from "../model/derive-game-status";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { GAME_STATUS } from "../model/status";
+import { GameRoundBadge } from "./game-round-badge";
 import { GameStatusBadge } from "./game-status-badge";
 
 export const GAME_LIST_CONTEXT = {
@@ -46,11 +47,7 @@ export function GameSummary({
     <>
       <HStack justify="between" align="center" gap={2}>
         <HStack align="center" gap={2} className="min-w-0">
-          {game.round > 1 && (
-            <Badge color="primary" className="shrink-0 font-mono">
-              {game.round}회차
-            </Badge>
-          )}
+          <GameRoundBadge round={game.round} />
           <Text typography="subtitle1" className="truncate">
             {game.title}
           </Text>

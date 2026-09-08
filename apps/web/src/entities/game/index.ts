@@ -3,7 +3,6 @@ export { gameStatusLabel, gameStatusColor, GAME_STATUS, type GameStatus } from "
 export { deriveGameStatus } from "./model/derive-game-status";
 export { PARTICIPANT_STATUS, countConfirmed, type ParticipantStatus } from "./model/participant";
 export { splitRoster, type RosterMember } from "./model/split-roster";
-export { formatGameSchedule } from "./model/format-game-schedule";
 export { isGameGm } from "./model/is-game-gm";
 export { hasUserJoined } from "./model/has-user-joined";
 export { canCoordinate } from "./model/can-coordinate";
@@ -15,6 +14,7 @@ export { GameCard } from "./ui/game-card";
 export { GameThumbnail } from "./ui/game-thumbnail";
 export { GameRow } from "./ui/game-row";
 export { GameStatusBadge } from "./ui/game-status-badge";
+export { GameRoundBadge } from "./ui/game-round-badge";
 export { GameSeatCount } from "./ui/game-seat-count";
 export { GameSeatProgress } from "./ui/game-seat-progress";
 export { GameGmLabel } from "./ui/game-gm-label";

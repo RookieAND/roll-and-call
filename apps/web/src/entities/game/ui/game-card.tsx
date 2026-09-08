@@ -1,9 +1,10 @@
-import { Badge, Card, HStack, Text, VStack } from "@trpg/ui";
+import { Card, HStack, Text, VStack } from "@trpg/ui";
 import type { Game } from "@/shared/server";
 import { deriveGameStatus } from "../model/derive-game-status";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { GameGmLabel } from "./game-gm-label";
 import { GameSeatProgress } from "./game-seat-progress";
+import { GameRoundBadge } from "./game-round-badge";
 import { GameStatusBadge } from "./game-status-badge";
 import { GameThumbnail } from "./game-thumbnail";
 
@@ -34,11 +35,7 @@ export function GameCard({ game }: Props) {
       <VStack gap={2} className="p-4">
         <HStack justify="between" align="start" gap={2}>
           <HStack align="center" gap={2} className="min-w-0">
-            {game.round > 1 && (
-              <Badge color="primary" className="shrink-0 font-mono">
-                {game.round}회차
-              </Badge>
-            )}
+            <GameRoundBadge round={game.round} />
             <Text typography="heading3" className="truncate">
               {game.title}
             </Text>

@@ -25,7 +25,9 @@ export function SessionTabFilter({
               selected={selected}
               className={selected ? "border-[#17171C] bg-[#17171C] text-white" : undefined}
             >
-              <Link href={hrefFor(tab.key)}>{tab.label}</Link>
+              <Link href={hrefFor(tab.key)} aria-current={selected ? "page" : undefined}>
+                {tab.label}
+              </Link>
             </Chip>
           );
         })}

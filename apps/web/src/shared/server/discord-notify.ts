@@ -1,5 +1,5 @@
 import type { Game } from "@/shared/server";
-import { formatDate, formatDateTime, formatMonthDay } from "@/shared/lib";
+import { formatDateTime, formatGameSchedule, formatMonthDay } from "@/shared/lib";
 import { sendDiscordAnnouncement, type DiscordEmbed } from "./discord-webhook";
 
 const COLOR = {
@@ -17,14 +17,6 @@ function gameUrl(id: string): string | undefined {
   return base ? `${base.replace(/\/$/, "")}/games/${id}` : undefined;
 }
 
-function scheduleText(game: Game): string {
-  if (game.confirmedAt) return formatDateTime(game.confirmedAt);
-  if (game.scheduleMode === "coordinate" && game.rangeStart && game.rangeEnd) {
-    return `${formatDate(game.rangeStart)} ~ ${formatDate(game.rangeEnd)} 중 조율`;
-  }
-  return "조율 후 확정";
-}
-
 // 개요는 긴 텍스트 — Discord description 상한(4096)에 맞춰 잘라 넣는다.
 function overview(synopsis: string | null): string | undefined {
   if (!synopsis) return undefined;
@@ -37,7 +29,7 @@ export async function notifyGameCreated(game: Game, gmName: string) {
   const fields = [
     { name: "📜 사용 룰", value: game.rule, inline: true },
     { name: "👥 인원", value: `${game.maxPlayers}명`, inline: true },
-    { name: "🕒 시간", value: scheduleText(game), inline: false },
+    { name: "🕒 시간", value: formatGameSchedule(game), inline: false },
   ];
   // webhook은 진짜 버튼을 못 붙이므로 마스크드 링크를 CTA로 쓴다. base URL 있을 때만.
   if (url) fields.push({ name: "\u200b", value: `**[▶ 참여하러 가기](${url})**`, inline: false });
@@ -93,7 +85,7 @@ export async function notifyRecruitmentComplete(game: Game, gmName: string, ment
     fields: [
       { name: "📜 사용 룰", value: game.rule, inline: true },
       { name: "👥 인원", value: `${game.maxPlayers}/${game.maxPlayers}`, inline: true },
-      { name: "🕒 시간", value: scheduleText(game), inline: false },
+      { name: "🕒 시간", value: formatGameSchedule(game), inline: false },
     ],
     footer: { text: `GM ${gmName}` },
     timestamp: new Date().toISOString(),

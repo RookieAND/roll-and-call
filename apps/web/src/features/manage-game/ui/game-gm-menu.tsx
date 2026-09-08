@@ -3,32 +3,19 @@
 import { IconButton } from "@trpg/ui";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { toast, ConfirmDialog, Sheet } from "@/shared/ui";
-import { deleteGame } from "../api/delete-game";
+import { useState } from "react";
+import { ConfirmDialog, Sheet } from "@/shared/ui";
+import { useDeleteGame } from "../model/use-delete-game";
 
 // 4g: GM 본인 시점의 ⋯ 메뉴. 수정·삭제는 빈도가 낮고 파괴적이라
 // 하단 액션 자리 대신 이 시트로 접는다. 삭제만 빨강 + 확인 다이얼로그.
 export function GameGmMenu({ gameId }: { gameId: string }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
-  const [pending, startTransition] = useTransition();
-
-  function onDelete() {
-    startTransition(async () => {
-      const result = await deleteGame(gameId);
-      if (result.error) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success("삭제되었습니다");
-      setConfirming(false);
-      setOpen(false);
-      if (result.redirect) router.push(result.redirect);
-    });
-  }
+  const { pending, remove } = useDeleteGame(gameId, () => {
+    setConfirming(false);
+    setOpen(false);
+  });
 
   return (
     <>
@@ -61,7 +48,7 @@ export function GameGmMenu({ gameId }: { gameId: string }) {
         confirmLabel="삭제"
         danger
         pending={pending}
-        onConfirm={onDelete}
+        onConfirm={remove}
       />
     </>
   );

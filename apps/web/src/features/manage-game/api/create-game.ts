@@ -1,14 +1,11 @@
 "use server";
 
-import { db, games, notifyGameCreated, createSupabaseServerClient } from "@/shared/server";
+import { db, games, notifyGameCreated, getCurrentUser } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
 
 export async function createGame(values: GameFormValues): Promise<ActionResult> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user) return { error: "로그인이 필요합니다." };
 
   // re-validate server-side (never trust the client)

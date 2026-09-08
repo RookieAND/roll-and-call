@@ -3,7 +3,7 @@
 import { and, asc, desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { db, games, participants, createSupabaseServerClient } from "@/shared/server";
+import { db, games, participants, getCurrentUser } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 const { confirmed, waiting } = PARTICIPANT_STATUS;
 
@@ -14,11 +14,7 @@ function revalidate(gameId: string) {
 }
 
 async function currentUserId(): Promise<string | null> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user?.id ?? null;
+  return (await getCurrentUser())?.id ?? null;
 }
 
 // 대기 → 확정 승격. 확정 정원이 이미 찼으면 가장 늦게 신청한 확정자를 대기로 밀어낸다.

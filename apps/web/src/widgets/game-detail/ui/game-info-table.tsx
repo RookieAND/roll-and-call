@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { Text } from "@trpg/ui";
-import { formatGameSchedule, GameGmLabel } from "@/entities/game";
+import { GameGmLabel } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
-import { formatDateTime } from "@/shared/lib";
+import { formatDateTime, formatGameSchedule } from "@/shared/lib";
 // 순수 표시: 게임 상세 정보 표. 링크·동작 없음.
 // 값이 composite(GM 아바타)거나 조건부 포맷(세션 일정)인 행은 entity에 위임하고,
 // 나머지는 문자열로 둔다.

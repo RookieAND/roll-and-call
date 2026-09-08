@@ -1,4 +1,5 @@
-import { Badge, HStack, Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
+import { GameRoundBadge } from "@/entities/game";
 import type { SessionCardModel } from "../model/session-card";
 import { SessionBadge } from "./session-badge";
 
@@ -13,11 +14,7 @@ export function SessionCard({ model }: { model: SessionCardModel }) {
     <div className={cardClass}>
       <HStack justify="between" align="center" gap={2}>
         <HStack align="center" gap={2} className="min-w-0">
-          {model.round > 1 && (
-            <Badge color="primary" className="shrink-0 font-mono">
-              {model.round}회차
-            </Badge>
-          )}
+          <GameRoundBadge round={model.round} />
           <Text typography="subtitle1" className="truncate">
             {model.title}
           </Text>

@@ -25,7 +25,7 @@ export function EditProfileForm({
   const [username, setUsername] = useState(defaultUsername);
   const [bio, setBio] = useState(defaultBio);
   const [slots, setSlots] = useState<string[]>(defaultSlots);
-  const [error, setError] = useState<string | null>(null);
+  const [failure, setFailure] = useState<{ error: string; field?: string } | null>(null);
   const [pending, startTransition] = useTransition();
 
   function toggleSlot(key: string) {
@@ -46,11 +46,11 @@ export function EditProfileForm({
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
+    setFailure(null);
     startTransition(async () => {
       const result = await updateProfile({ username, bio, defaultSlots: slots });
       if (result.error) {
-        setError(result.error);
+        setFailure({ error: result.error, field: result.field });
         return;
       }
       toast.success("프로필을 저장했습니다");
@@ -58,8 +58,9 @@ export function EditProfileForm({
     });
   }
 
-  const usernameError = error?.includes("닉네임") ? error : undefined;
-  const formError = error && !usernameError ? error : null;
+  const usernameError = failure?.field === "username" ? failure.error : undefined;
+  const bioError = failure?.field === "bio" ? failure.error : undefined;
+  const formError = failure && !failure.field ? failure.error : null;
 
   return (
     <form onSubmit={submit}>
@@ -84,7 +85,7 @@ export function EditProfileForm({
             maxLength={30}
           />
         </Field>
-        <Field label="한 줄 소개" htmlFor="bio">
+        <Field label="한 줄 소개" htmlFor="bio" error={bioError}>
           <Textarea
             id="bio"
             value={bio}

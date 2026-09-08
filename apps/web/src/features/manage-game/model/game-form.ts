@@ -30,6 +30,25 @@ export const gameFormSchema = z
         path: ["confirmedAt"],
       });
     }
+    // 모집 마감은 세션이 시작되기 전이어야 한다(문자열은 로컬 ISO라 사전순 비교가 시간순).
+    if (v.scheduleMode === SCHEDULE_MODE.fixed && v.confirmedAt && v.endDate > v.confirmedAt) {
+      ctx.addIssue({
+        code: "custom",
+        message: "모집 마감은 세션 일시보다 이전이어야 합니다.",
+        path: ["endDate"],
+      });
+    }
+    if (
+      v.scheduleMode === SCHEDULE_MODE.coordinate &&
+      v.rangeEnd &&
+      v.endDate.slice(0, 10) > v.rangeEnd
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "모집 마감은 조율 종료일보다 이전이어야 합니다.",
+        path: ["endDate"],
+      });
+    }
     if (v.scheduleMode === SCHEDULE_MODE.coordinate) {
       if (!v.rangeStart) {
         ctx.addIssue({

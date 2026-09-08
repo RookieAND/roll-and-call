@@ -161,6 +161,7 @@ export function GameForm({
         <TextInput
           id="title"
           placeholder="예: 마지막 열차"
+          maxLength={100}
           invalid={!!errors.title}
           {...register("title")}
         />
@@ -169,12 +170,13 @@ export function GameForm({
         <TextInput
           id="rule"
           placeholder="예: 크툴루의 부름 7판, 던전월드"
+          maxLength={100}
           invalid={!!errors.rule}
           {...register("rule")}
         />
       </Field>
       <Field label="시놉시스" htmlFor="synopsis" error={errors.synopsis?.message}>
-        <Textarea id="synopsis" rows={4} {...register("synopsis")} />
+        <Textarea id="synopsis" rows={4} maxLength={2000} {...register("synopsis")} />
       </Field>
       <Field label="플레이타임" htmlFor="playTime" error={errors.playTime?.message}>
         <HStack gap={2} className="w-full items-center">

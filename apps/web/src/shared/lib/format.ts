@@ -51,3 +51,22 @@ export function dday(target: Date | string, now: Date = new Date()): number {
   const b = new Date(t.getFullYear(), t.getMonth(), t.getDate());
   return Math.round((b.getTime() - a.getTime()) / 86_400_000);
 }
+
+// 세션 일정 한 줄 표기. 우선순위: 확정 일시 > 조율 범위 > 미정. UI와 Discord 알림이 같은 문구를 쓴다.
+export function formatGameSchedule({
+  scheduleMode,
+  confirmedAt,
+  rangeStart,
+  rangeEnd,
+}: {
+  scheduleMode: "fixed" | "coordinate";
+  confirmedAt: Date | string | null;
+  rangeStart: string | null;
+  rangeEnd: string | null;
+}): string {
+  if (confirmedAt) return formatDateTime(confirmedAt);
+  if (scheduleMode === "coordinate" && rangeStart && rangeEnd) {
+    return `${formatDate(rangeStart)} ~ ${formatDate(rangeEnd)} 조율`;
+  }
+  return "미정";
+}

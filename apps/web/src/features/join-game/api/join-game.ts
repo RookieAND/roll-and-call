@@ -10,14 +10,11 @@ import {
   type Game,
   notifyGameJoined,
   notifyRecruitmentComplete,
-  createSupabaseServerClient,
+  getCurrentUser,
 } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 export async function joinGame(gameId: string): Promise<ActionResult> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user) return { error: "로그인이 필요합니다." };
 
   let becameFull = false;

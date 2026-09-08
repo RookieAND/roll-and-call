@@ -25,6 +25,9 @@ export function AvailabilityGrid({
 }: Props) {
   const blockedSet = useMemo(() => new Set(blocked), [blocked]);
   const [mine, setMine] = useState<Set<string>>(() => new Set(initialMine));
+  // 마지막으로 저장된 상태. 변경이 없으면 저장 버튼을 잠근다.
+  const [saved, setSaved] = useState<Set<string>>(() => new Set(initialMine));
+  const dirty = mine.size !== saved.size || [...mine].some((k) => !saved.has(k));
   const painting = useRef<boolean | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -64,8 +67,12 @@ export function AvailabilityGrid({
   function save() {
     startTransition(async () => {
       const result = await saveAvailability(gameId, [...mine]);
-      if (result.error) toast.error(result.error);
-      else toast.success("가능 시간을 저장했습니다");
+      if (result.error) {
+        toast.error(result.error);
+        return;
+      }
+      setSaved(new Set(mine));
+      toast.success("가능 시간을 저장했습니다");
     });
   }
 
@@ -136,7 +143,14 @@ export function AvailabilityGrid({
           <Text typography="body4" foreground="muted" render={<p />}>
             선택 {mine.size}칸 · 회색은 다른 확정 세션과 겹침
           </Text>
-          <Button type="button" size="lg" className="h-12 w-full" loading={pending} onClick={save}>
+          <Button
+            type="button"
+            size="lg"
+            className="h-12 w-full"
+            loading={pending}
+            disabled={!dirty}
+            onClick={save}
+          >
             가능 시간 저장
           </Button>
         </>

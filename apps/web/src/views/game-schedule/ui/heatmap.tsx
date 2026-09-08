@@ -1,5 +1,8 @@
+"use client";
+
 import { Text } from "@trpg/ui";
-import { slotIso, type DayColumn, type TimeRow } from "@/shared/lib";
+import { useState } from "react";
+import { formatDateTime, slotIso, type DayColumn, type TimeRow } from "@/shared/lib";
 // Overlap heat palette (0→5+) — 시안 uses saturation steps, not a green ramp.
 const HEAT_LIGHT = ["#FFFFFF", "#EDEEFC", "#D8DAFA", "#B7BAF5", "#8E92EF", "#5B60E4"] as const;
 
@@ -22,61 +25,73 @@ type Props = {
 
 export function Heatmap({ days, timeRows, counts, names, confirmedAt }: Props) {
   const confirmedIso = confirmedAt?.toISOString() ?? null;
-  return (
-    <div className="overflow-x-auto">
-      <div
-        className="grid min-w-full text-xs"
-        style={{
-          gridTemplateColumns: `40px repeat(${days.length}, minmax(0, 1fr))`,
-        }}
-      >
-        <span />
-        {days.map((d) => (
-          <div key={d.date} className="flex flex-col items-center pb-1">
-            <Text typography="body4" foreground="hint" render={<span />}>
-              {d.dow}
-            </Text>
-            <Text typography="subtitle2" render={<span />}>
-              {d.md}
-            </Text>
-          </div>
-        ))}
+  // 모바일엔 hover 툴팁이 없어서, 누른 칸의 명단을 그리드 아래에 보여준다.
+  const [picked, setPicked] = useState<string | null>(null);
+  const pickedNames = picked ? (names[picked] ?? []) : [];
 
-        {timeRows.map((row) => {
-          const showLabel = row.minute === 0;
-          return [
-            <Text
-              key={`${row.label}-t`}
-              typography="subtitle2"
-              foreground="hint"
-              render={<span />}
-              className="pr-1.5 text-right"
-            >
-              {showLabel ? row.label : ""}
-            </Text>,
-            ...days.map((d) => {
-              const key = slotIso(d.date, row.hour, row.minute);
-              const count = counts[key] ?? 0;
-              const isConfirmed = confirmedIso === key;
-              return (
-                <div
-                  key={key}
-                  title={names[key]?.join(", ")}
-                  className="flex h-[22px] items-center justify-center border-b border-l border-b-[#F1F1F5] border-l-[#EFEFF3] font-bold"
-                  style={{
-                    backgroundColor: heatColor(count),
-                    color: heatTextColor(count),
-                    outline: isConfirmed ? "2px solid #0B9C6C" : undefined,
-                    outlineOffset: isConfirmed ? "-2px" : undefined,
-                  }}
-                >
-                  {count > 0 ? count : ""}
-                </div>
-              );
-            }),
-          ];
-        })}
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="overflow-x-auto">
+        <div
+          className="grid min-w-full text-xs"
+          style={{
+            gridTemplateColumns: `40px repeat(${days.length}, minmax(0, 1fr))`,
+          }}
+        >
+          <span />
+          {days.map((d) => (
+            <div key={d.date} className="flex flex-col items-center pb-1">
+              <Text typography="body4" foreground="hint" render={<span />}>
+                {d.dow}
+              </Text>
+              <Text typography="subtitle2" render={<span />}>
+                {d.md}
+              </Text>
+            </div>
+          ))}
+
+          {timeRows.map((row) => {
+            const showLabel = row.minute === 0;
+            return [
+              <Text
+                key={`${row.label}-t`}
+                typography="subtitle2"
+                foreground="hint"
+                render={<span />}
+                className="pr-1.5 text-right"
+              >
+                {showLabel ? row.label : ""}
+              </Text>,
+              ...days.map((d) => {
+                const key = slotIso(d.date, row.hour, row.minute);
+                const count = counts[key] ?? 0;
+                const isConfirmed = confirmedIso === key;
+                return (
+                  <div
+                    key={key}
+                    title={names[key]?.join(", ")}
+                    onClick={() => setPicked(count > 0 ? key : null)}
+                    className="flex h-[22px] cursor-pointer items-center justify-center border-b border-l border-b-[#F1F1F5] border-l-[#EFEFF3] font-bold"
+                    style={{
+                      backgroundColor: heatColor(count),
+                      color: heatTextColor(count),
+                      outline: isConfirmed || picked === key ? "2px solid #0B9C6C" : undefined,
+                      outlineOffset: isConfirmed || picked === key ? "-2px" : undefined,
+                    }}
+                  >
+                    {count > 0 ? count : ""}
+                  </div>
+                );
+              }),
+            ];
+          })}
+        </div>
       </div>
+      <Text typography="body4" foreground="muted" render={<p />}>
+        {picked
+          ? `${formatDateTime(picked)} · ${pickedNames.length}명: ${pickedNames.join(", ")}`
+          : "칸을 누르면 그 시간에 가능한 사람을 볼 수 있어요."}
+      </Text>
     </div>
   );
 }

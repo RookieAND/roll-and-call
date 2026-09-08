@@ -31,6 +31,10 @@ export async function MyPageView() {
   const upcoming = joinedBuckets.confirmed; // 참여 예정
   const hosting = hostedBuckets.recruiting; // 운영 중
   const pastCount = joinedBuckets.closed.length + hostedBuckets.closed.length;
+  const pastHref =
+    joinedBuckets.closed.length > 0
+      ? "/me/sessions/joined?tab=closed"
+      : "/me/sessions/hosted?tab=closed";
 
   const { name, avatar, handle } = profileDisplay({ profile, user });
 
@@ -99,7 +103,7 @@ export async function MyPageView() {
 
           {pastCount > 0 && (
             <Link
-              href="/me/sessions/joined?tab=closed"
+              href={pastHref}
               className="flex items-center justify-center gap-1 border-t border-gray-100 pt-4 text-gray-500"
             >
               <Text typography="body3" foreground="muted" className="font-semibold">

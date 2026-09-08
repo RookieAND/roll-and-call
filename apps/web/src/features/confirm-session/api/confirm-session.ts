@@ -2,13 +2,10 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { db, games, createSupabaseServerClient } from "@/shared/server";
+import { db, games, getCurrentUser } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 export async function confirmSession(gameId: string, slotIso: string): Promise<ActionResult> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user) return { error: "로그인이 필요합니다." };
 
   const at = new Date(slotIso);

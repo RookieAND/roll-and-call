@@ -3,13 +3,7 @@
 import { and, asc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import {
-  availabilities,
-  db,
-  games,
-  participants,
-  createSupabaseServerClient,
-} from "@/shared/server";
+import { availabilities, db, games, participants, getCurrentUser } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 import { SECOND_ROUND_MAX_DAYS } from "../model/second-round";
 export type SecondRoundInput = { rangeStart: string; rangeEnd: string };
@@ -22,10 +16,7 @@ export async function createSecondRound(
   gameId: string,
   input: SecondRoundInput,
 ): Promise<ActionResult> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user) return { error: "로그인이 필요합니다." };
 
   const { rangeStart, rangeEnd } = input;

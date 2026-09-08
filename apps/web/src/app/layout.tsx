@@ -4,8 +4,8 @@ import { BottomNav, Toaster } from "@/shared/ui";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "TRPG 예약",
-  description: "TRPG 세션 구인 및 일정 조율",
+  title: "롤앤콜",
+  description: "TRPG 세션, 모집부터 일정 확정까지 한 곳에서",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

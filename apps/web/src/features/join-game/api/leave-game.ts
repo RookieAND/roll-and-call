@@ -3,13 +3,10 @@
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { countConfirmed, PARTICIPANT_STATUS } from "@/entities/game";
-import { db, participants, createSupabaseServerClient } from "@/shared/server";
+import { db, participants, getCurrentUser } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 export async function leaveGame(gameId: string): Promise<ActionResult> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user) return { error: "로그인이 필요합니다." };
 
   const game = await db.query.games.findFirst({

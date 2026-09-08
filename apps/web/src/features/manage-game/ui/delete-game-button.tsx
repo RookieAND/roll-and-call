@@ -1,10 +1,9 @@
 "use client";
 
 import { Button, cn } from "@trpg/ui";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { toast, ConfirmDialog } from "@/shared/ui";
-import { deleteGame } from "../api/delete-game";
+import { useState } from "react";
+import { ConfirmDialog } from "@/shared/ui";
+import { useDeleteGame } from "../model/use-delete-game";
 
 export function DeleteGameButton({
   gameId,
@@ -15,23 +14,8 @@ export function DeleteGameButton({
   label?: string;
   className?: string;
 }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [pending, startTransition] = useTransition();
-
-  function onConfirm() {
-    startTransition(async () => {
-      const result = await deleteGame(gameId);
-      if (result.error) {
-        toast.error(result.error);
-        setOpen(false);
-        return;
-      }
-      toast.success("삭제되었습니다");
-      setOpen(false);
-      if (result.redirect) router.push(result.redirect);
-    });
-  }
+  const { pending, remove } = useDeleteGame(gameId, () => setOpen(false));
 
   return (
     <>
@@ -51,7 +35,7 @@ export function DeleteGameButton({
         confirmLabel="삭제"
         danger
         pending={pending}
-        onConfirm={onConfirm}
+        onConfirm={remove}
       />
     </>
   );
