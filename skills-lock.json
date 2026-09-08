@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "feature-sliced-design": {
+      "source": "feature-sliced/skills",
+      "sourceType": "github",
+      "skillPath": "feature-sliced-design/SKILL.md",
+      "computedHash": "c82f20352d839903cff4cd4d686eca7fa2d2d22a0434e9ee63d3f20f182cd93d"
+    },
     "supabase": {
       "source": "supabase/agent-skills",
       "sourceType": "github",
