@@ -5,9 +5,9 @@ import { revalidatePath } from "next/cache";
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { availabilities, db, games, participants } from "@/shared/api/db";
 import { createClient } from "@/shared/api/supabase/server";
+import type { ActionResult } from "@/shared/api/action-result";
 
 export type SecondRoundInput = { rangeStart: string; rangeEnd: string };
-export type SecondRoundResult = { error?: string; redirect?: string };
 
 const { confirmed, waiting } = PARTICIPANT_STATUS;
 
@@ -16,7 +16,7 @@ const { confirmed, waiting } = PARTICIPANT_STATUS;
 export async function createSecondRound(
   gameId: string,
   input: SecondRoundInput,
-): Promise<SecondRoundResult> {
+): Promise<ActionResult> {
   const supabase = await createClient();
   const {
     data: { user },

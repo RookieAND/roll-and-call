@@ -1,15 +1,16 @@
-import { Avatar, Button, Container, HStack, IconButton, Text, VStack } from "@trpg/ui";
+import { Avatar, Container, HStack, IconButton, Text, VStack } from "@trpg/ui";
 import { ChevronRight, Pencil } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import type { ReactNode } from "react";
 import { bucketHosted, bucketJoined, type SessionCardModel } from "@/entities/game";
-import { getGamesByGm, getJoinedGames } from "@/entities/game/api/queries";
-import { getProfile } from "@/entities/profile/api/queries";
+import { getGamesByGm, getJoinedGames } from "@/entities/game/index.server";
+import { getProfile } from "@/entities/profile/index.server";
 import { getCurrentUser } from "@/shared/api/supabase/server";
 import { AppBar } from "@/shared/ui/app-bar";
-import { EmptyState } from "@/shared/ui/empty-state";
 import { ThemeToggle } from "@/shared/ui/theme-toggle";
 import { SessionList } from "@/widgets/session-list";
+import { HostedSessionsEmpty, UpcomingSessionsEmpty } from "./session-summary-empty";
 
 const TOP = 3;
 
@@ -102,8 +103,7 @@ export async function MyPageView() {
             total={upcoming.length}
             items={upcoming.slice(0, TOP)}
             moreHref="/me/sessions/joined"
-            emptyTitle="아직 참여 예정인 세션이 없습니다"
-            emptyCta={{ label: "구인 목록 보기", href: "/games" }}
+            empty={<UpcomingSessionsEmpty />}
           />
 
           <SummarySection
@@ -111,8 +111,7 @@ export async function MyPageView() {
             total={hosting.length}
             items={hosting.slice(0, TOP)}
             moreHref="/me/sessions/hosted"
-            emptyTitle="아직 KP로 연 세션이 없습니다"
-            emptyCta={{ label: "새 구인 등록", href: "/games/new" }}
+            empty={<HostedSessionsEmpty withImage={upcoming.length > 0} />}
           />
 
           {pastCount > 0 && (
@@ -137,15 +136,13 @@ function SummarySection({
   total,
   items,
   moreHref,
-  emptyTitle,
-  emptyCta,
+  empty,
 }: {
   title: string;
   total: number;
   items: SessionCardModel[];
   moreHref: string;
-  emptyTitle: string;
-  emptyCta: { label: string; href: string };
+  empty: ReactNode;
 }) {
   return (
     <VStack gap={2}>
@@ -170,18 +167,7 @@ function SummarySection({
           </Link>
         )}
       </HStack>
-      {total === 0 ? (
-        <EmptyState
-          title={emptyTitle}
-          action={
-            <Button asChild size="sm">
-              <Link href={emptyCta.href}>{emptyCta.label}</Link>
-            </Button>
-          }
-        />
-      ) : (
-        <SessionList items={items} />
-      )}
+      {total === 0 ? empty : <SessionList items={items} />}
     </VStack>
   );
 }

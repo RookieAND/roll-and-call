@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, Card, cn, Container, HStack, Text, VStack } from "@trpg/ui";
+import { Avatar, Button, Card, cn, Container, HStack, IconButton, Text, VStack } from "@trpg/ui";
 import { Check, MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -10,7 +10,7 @@ import {
   demoteParticipant,
   promoteParticipant,
   removeParticipant,
-} from "@/features/game";
+} from "@/features/manage-participants";
 import { formatDateTime } from "@/shared/lib/format";
 import { AppBar } from "@/shared/ui/app-bar";
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
@@ -30,8 +30,8 @@ export type ManagedMember = {
 type Props = {
   gameId: string;
   title: string;
-  endDate: string;
-  confirmedAt: string | null;
+  endDate: Date;
+  confirmedAt: Date | null;
   maxPlayers: number;
   confirmed: ManagedMember[];
   waiting: ManagedMember[];
@@ -54,7 +54,7 @@ export function ParticipantManager({
   const total = confirmed.length + waiting.length;
   const isFull = confirmed.length >= maxPlayers;
   const remainingDays = dday(endDate);
-  const urgent = new Date(endDate).getTime() - Date.now() < 24 * 60 * 60 * 1000;
+  const urgent = endDate.getTime() - Date.now() < 24 * 60 * 60 * 1000;
 
   function run(action: () => Promise<{ error?: string }>, success: string) {
     startTransition(async () => {
@@ -74,28 +74,21 @@ export function ParticipantManager({
       <AppBar back={`/games/${gameId}`} title="참여자 관리" />
       <Container size="md">
         <VStack gap={5} className="py-4">
-          <HStack gap={2}>
-            <StatCard value={total} label="신청" />
-            <StatCard value={maxPlayers} label="정원" />
-          </HStack>
-
-          <Card
-            padding="none"
-            className={cn("px-3.5 py-3", urgent ? "border-red-200 bg-red-50/40" : "border-gray-200")}
-          >
-            <HStack justify="between" align="baseline" gap={2}>
-              <Text typography="subtitle2">마감 {formatDateTime(endDate)}</Text>
-              <Text
-                typography="subtitle2"
-                className={cn("shrink-0 font-extrabold", urgent ? "text-red-600" : "text-gray-500")}
-              >
-                D-{remainingDays}
+          <VStack gap={2}>
+            <div className="grid grid-cols-3 gap-2">
+              <StatCard value={total} label="신청" />
+              <StatCard value={maxPlayers} label="정원" />
+              <StatCard value={`D-${remainingDays}`} label="마감" urgent={urgent} />
+            </div>
+            <Card padding="none" className="px-3.5 py-3">
+              <Text typography="body3" foreground="muted" render={<p />}>
+                마감일 | {formatDateTime(endDate)}
               </Text>
-            </HStack>
-            <Text typography="body3" foreground="muted" render={<p />} className="mt-1.5">
-              마감되면 아래 확정 목록이 그대로 확정됩니다.
-            </Text>
-          </Card>
+              <Text typography="body3" foreground="muted" render={<p />}>
+                마감되면 아래 확정 목록이 그대로 확정됩니다.
+              </Text>
+            </Card>
+          </VStack>
 
           <VStack gap={2}>
             <HStack justify="between" align="center">
@@ -232,10 +225,26 @@ export function ParticipantManager({
   );
 }
 
-function StatCard({ value, label }: { value: number; label: string }) {
+function StatCard({
+  value,
+  label,
+  urgent,
+}: {
+  value: number | string;
+  label: string;
+  urgent?: boolean;
+}) {
   return (
-    <Card padding="none" className="flex-1 px-3.5 py-3.5">
-      <Text className="text-[26px] font-extrabold leading-none tracking-tight tabular-nums">
+    <Card
+      padding="none"
+      className={cn("flex flex-col px-3.5 py-3.5", urgent && "border-red-200 bg-red-50/40")}
+    >
+      <Text
+        className={cn(
+          "text-2xl font-extrabold leading-none tracking-tight tabular-nums",
+          urgent && "text-red-600",
+        )}
+      >
         {value}
       </Text>
       <Text typography="body3" className="mt-1.5 font-semibold text-gray-600">
@@ -256,7 +265,11 @@ function RosterRow({
 }) {
   const availText = member.hasAvailability ? "가능 시간 입력" : "가능 시간 미입력";
   return (
-    <HStack align="center" gap={3} className="min-h-14 border-t border-gray-100 px-3 py-2 first:border-t-0">
+    <HStack
+      align="center"
+      gap={3}
+      className="min-h-14 border-t border-gray-100 px-3 py-2 first:border-t-0"
+    >
       <Avatar src={member.avatarUrl} name={member.username} size="stack" />
       <VStack gap={0} className="flex-1">
         <Text typography="subtitle2">{member.username}</Text>
@@ -267,14 +280,14 @@ function RosterRow({
           {subtitle} · {availText}
         </Text>
       </VStack>
-      <button
-        type="button"
+      <IconButton
+        variant="outline"
         aria-label="참여자 메뉴"
         onClick={onMenu}
-        className="flex size-10 shrink-0 items-center justify-center rounded-[10px] border border-gray-200 text-gray-500 hover:bg-gray-50"
+        className="shrink-0 rounded-[10px] border-gray-200 text-gray-500"
       >
         <MoreHorizontal size={16} aria-hidden />
-      </button>
+      </IconButton>
     </HStack>
   );
 }
@@ -308,25 +321,19 @@ function MemberActionSheet({
                 </Text>
               </VStack>
             </HStack>
-            <button
-              type="button"
-              disabled={pending}
-              onClick={() => onDemote(member)}
-              className="flex min-h-13 items-center justify-between border-b border-gray-100 text-left text-[14.5px] text-gray-800 disabled:opacity-50"
-            >
+            <Sheet.Item disabled={pending} onClick={() => onDemote(member)}>
               대기로 이동
               <Text typography="body4" foreground="muted">
                 대기 맨 앞
               </Text>
-            </button>
-            <button
-              type="button"
+            </Sheet.Item>
+            <Sheet.Item
               disabled={pending}
               onClick={() => onRemove(member)}
-              className="flex min-h-13 items-center text-left text-[14.5px] font-semibold text-red-600 disabled:opacity-50"
+              className="font-semibold text-red-600"
             >
               내보내기
-            </button>
+            </Sheet.Item>
             {waitingHead && (
               <div className="mt-1.5 rounded-xl bg-gray-50 px-3 py-3">
                 <Text typography="body4" foreground="muted" render={<p />}>
@@ -360,7 +367,7 @@ function RoundSheet({
   gameId: string;
   title: string;
   waitingCount: number;
-  confirmedAt: string | null;
+  confirmedAt: Date | null;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -368,7 +375,7 @@ function RoundSheet({
   const [rangeEnd, setRangeEnd] = useState("");
 
   const minDate = confirmedAt
-    ? new Date(new Date(confirmedAt).getTime() + 86_400_000).toISOString().slice(0, 10)
+    ? new Date(confirmedAt.getTime() + 86_400_000).toISOString().slice(0, 10)
     : new Date().toISOString().slice(0, 10);
 
   function submit() {

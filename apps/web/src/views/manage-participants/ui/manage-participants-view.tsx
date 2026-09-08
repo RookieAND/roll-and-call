@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { splitRoster } from "@/entities/game";
-import { getGameParticipants } from "@/entities/game/api/queries";
+import { getGameParticipants } from "@/entities/game/index.server";
 import { getCurrentUser } from "@/shared/api/supabase/server";
 import { type ManagedMember, ParticipantManager } from "@/widgets/participant-manager";
 
@@ -27,8 +27,8 @@ export async function ManageParticipantsView({ id }: { id: string }) {
     <ParticipantManager
       gameId={game.id}
       title={game.title}
-      endDate={game.endDate.toISOString()}
-      confirmedAt={game.confirmedAt ? game.confirmedAt.toISOString() : null}
+      endDate={game.endDate}
+      confirmedAt={game.confirmedAt}
       maxPlayers={game.maxPlayers}
       confirmed={confirmed.map(toMember)}
       waiting={waiting.map(toMember)}

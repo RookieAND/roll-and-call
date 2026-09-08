@@ -69,7 +69,7 @@ export type SessionCardModel = {
   id: string;
   title: string;
   round: number;
-  href: string;
+  role: SessionRole;
   state: SessionState;
   urgent: boolean; // 마감 24h 이내 → 카드 강조
   badge: SessionBadgeModel;
@@ -132,7 +132,7 @@ export function toSessionCard({
     id: game.id,
     title: game.title,
     round: game.round,
-    href: role === "host" && !past ? `/games/${game.id}/participants` : `/games/${game.id}`,
+    role,
     state,
     urgent,
     badge,

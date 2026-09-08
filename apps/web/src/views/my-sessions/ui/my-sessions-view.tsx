@@ -6,8 +6,8 @@ import {
   type SessionCardModel,
   type SessionRole,
 } from "@/entities/game";
-import { getGamesByGm, getJoinedGames } from "@/entities/game/api/queries";
-import { SessionTabFilter, type SessionTab } from "@/features/game";
+import { getGamesByGm, getJoinedGames } from "@/entities/game/index.server";
+import { SessionTabFilter, type SessionTab } from "./session-tab-filter";
 import { getCurrentUser } from "@/shared/api/supabase/server";
 import { AppBar } from "@/shared/ui/app-bar";
 import { EmptyState } from "@/shared/ui/empty-state";

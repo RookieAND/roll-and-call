@@ -1,11 +1,17 @@
 import { Text } from "@trpg/ui";
-import {
-  heatColor,
-  heatTextColor,
-  slotIso,
-  type DayColumn,
-  type TimeRow,
-} from "@/shared/lib/slots";
+import { slotIso, type DayColumn, type TimeRow } from "@/shared/lib/slots";
+
+// Overlap heat palette (0→5+) — 시안 uses saturation steps, not a green ramp.
+const HEAT_LIGHT = ["#FFFFFF", "#EDEEFC", "#D8DAFA", "#B7BAF5", "#8E92EF", "#5B60E4"] as const;
+
+function heatColor(count: number): string {
+  return HEAT_LIGHT[Math.min(5, Math.max(0, count))]!;
+}
+
+// Count label reads white once the cell is dark enough, else the deep indigo.
+function heatTextColor(count: number): string {
+  return count >= 3 ? "#FFFFFF" : "#5B60E4";
+}
 
 type Props = {
   days: DayColumn[];

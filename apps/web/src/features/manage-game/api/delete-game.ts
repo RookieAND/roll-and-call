@@ -3,10 +3,9 @@
 import { and, eq } from "drizzle-orm";
 import { db, games } from "@/shared/api/db";
 import { createClient } from "@/shared/api/supabase/server";
+import type { ActionResult } from "@/shared/api/action-result";
 
-export type DeleteResult = { error?: string; redirect?: string };
-
-export async function deleteGame(id: string): Promise<DeleteResult> {
+export async function deleteGame(id: string): Promise<ActionResult> {
   const supabase = await createClient();
   const {
     data: { user },

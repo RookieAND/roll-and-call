@@ -4,10 +4,9 @@ import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db, games } from "@/shared/api/db";
 import { createClient } from "@/shared/api/supabase/server";
+import type { ActionResult } from "@/shared/api/action-result";
 
-export type ConfirmResult = { error?: string; redirect?: string };
-
-export async function confirmSession(gameId: string, slotIso: string): Promise<ConfirmResult> {
+export async function confirmSession(gameId: string, slotIso: string): Promise<ActionResult> {
   const supabase = await createClient();
   const {
     data: { user },

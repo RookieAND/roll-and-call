@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { db, games, participants } from "@/shared/api/db";
 import { createClient } from "@/shared/api/supabase/server";
-import type { JoinActionResult } from "./join-game";
+import type { ActionResult } from "@/shared/api/action-result";
 
 const { confirmed, waiting } = PARTICIPANT_STATUS;
 
@@ -24,10 +24,7 @@ async function currentUserId(): Promise<string | null> {
 }
 
 // 대기 → 확정 승격. 확정 정원이 이미 찼으면 가장 늦게 신청한 확정자를 대기로 밀어낸다.
-export async function promoteParticipant(
-  gameId: string,
-  userId: string,
-): Promise<JoinActionResult> {
+export async function promoteParticipant(gameId: string, userId: string): Promise<ActionResult> {
   const gmId = await currentUserId();
   if (!gmId) return { error: "로그인이 필요합니다." };
 
@@ -77,7 +74,7 @@ export async function promoteParticipant(
 }
 
 // 확정 → 대기 강등. 빈 확정 자리는 대기열 맨 앞(가장 먼저 신청한 대기자)이 자동으로 채운다.
-export async function demoteParticipant(gameId: string, userId: string): Promise<JoinActionResult> {
+export async function demoteParticipant(gameId: string, userId: string): Promise<ActionResult> {
   const gmId = await currentUserId();
   if (!gmId) return { error: "로그인이 필요합니다." };
 
@@ -110,7 +107,7 @@ export async function demoteParticipant(gameId: string, userId: string): Promise
 }
 
 // GM이 참여자를 내보낸다. 확정자였다면 대기열 맨 앞이 빈 자리를 채운다.
-export async function removeParticipant(gameId: string, userId: string): Promise<JoinActionResult> {
+export async function removeParticipant(gameId: string, userId: string): Promise<ActionResult> {
   const gmId = await currentUserId();
   if (!gmId) return { error: "로그인이 필요합니다." };
 

@@ -6,10 +6,9 @@ import { PARTICIPANT_STATUS } from "@/entities/game";
 import { db, games, participants, type Game } from "@/shared/api/db";
 import { notifyGameJoined, notifyRecruitmentComplete } from "@/shared/api/discord/notify";
 import { createClient } from "@/shared/api/supabase/server";
+import type { ActionResult } from "@/shared/api/action-result";
 
-export type JoinActionResult = { error?: string };
-
-export async function joinGame(gameId: string): Promise<JoinActionResult> {
+export async function joinGame(gameId: string): Promise<ActionResult> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -23,7 +22,7 @@ export async function joinGame(gameId: string): Promise<JoinActionResult> {
 
   // ponytail: lock the game row so concurrent joins to the same game serialize
   // and can't overfill the last slot. Per-game throughput is tiny, so a row lock is plenty.
-  const result: JoinActionResult = await db.transaction(async (tx) => {
+  const result: ActionResult = await db.transaction(async (tx) => {
     const [game] = await tx.select().from(games).where(eq(games.id, gameId)).for("update");
 
     if (!game) return { error: "존재하지 않는 게임입니다." };
@@ -63,7 +62,8 @@ export async function joinGame(gameId: string): Promise<JoinActionResult> {
 
   // 정원이 막 찼으면 구인 완료 알림(핑 포함)만, 아니면 참여 신청 알림.
   if (becameFull) await announceRecruitmentComplete(gameId);
-  else if (joinedGame) await announceNewApplication(joinedGame, user.id, joinedWaiting, confirmedAfter);
+  else if (joinedGame)
+    await announceNewApplication(joinedGame, user.id, joinedWaiting, confirmedAfter);
 
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/participants`);
@@ -97,11 +97,11 @@ async function announceNewApplication(
 ) {
   const [applicant, gm] = await Promise.all([
     db.query.profiles.findFirst({
-      where: (p, { eq }) => eq(p.id, applicantId),
+      where: (p, { eq: eqOp }) => eqOp(p.id, applicantId),
       columns: { username: true },
     }),
     db.query.profiles.findFirst({
-      where: (p, { eq }) => eq(p.id, game.gmId),
+      where: (p, { eq: eqOp }) => eqOp(p.id, game.gmId),
       columns: { username: true },
     }),
   ]);

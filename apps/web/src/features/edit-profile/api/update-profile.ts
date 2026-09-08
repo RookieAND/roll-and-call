@@ -5,8 +5,7 @@ import { revalidatePath } from "next/cache";
 import { SLOT_KEYS } from "@/entities/profile";
 import { db, profiles } from "@/shared/api/db";
 import { createClient } from "@/shared/api/supabase/server";
-
-export type ProfileResult = { error?: string; redirect?: string };
+import type { ActionResult } from "@/shared/api/action-result";
 
 export type UpdateProfileInput = {
   username: string;
@@ -14,7 +13,7 @@ export type UpdateProfileInput = {
   defaultSlots: string[];
 };
 
-export async function updateProfile(input: UpdateProfileInput): Promise<ProfileResult> {
+export async function updateProfile(input: UpdateProfileInput): Promise<ActionResult> {
   const supabase = await createClient();
   const {
     data: { user },

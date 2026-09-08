@@ -42,27 +42,15 @@ export function GameGmMenu({ gameId }: { gameId: string }) {
         <Sheet.Content>
           <Sheet.Title>구인 관리</Sheet.Title>
           <div className="flex flex-col">
-            <Link
-              href={`/games/${gameId}/edit`}
-              onClick={() => setOpen(false)}
-              className="flex min-h-[52px] items-center border-b border-gray-100 text-[14.5px] text-gray-800"
-            >
-              구인 수정
-            </Link>
-            <Link
-              href={`/games/${gameId}/participants`}
-              onClick={() => setOpen(false)}
-              className="flex min-h-[52px] items-center border-b border-gray-100 text-[14.5px] text-gray-800"
-            >
-              참여자 관리
-            </Link>
-            <button
-              type="button"
-              onClick={() => setConfirming(true)}
-              className="flex min-h-[52px] items-center text-left text-[14.5px] font-semibold text-red-600"
-            >
+            <Sheet.Item asChild onClick={() => setOpen(false)}>
+              <Link href={`/games/${gameId}/edit`}>구인 수정</Link>
+            </Sheet.Item>
+            <Sheet.Item asChild onClick={() => setOpen(false)}>
+              <Link href={`/games/${gameId}/participants`}>참여자 관리</Link>
+            </Sheet.Item>
+            <Sheet.Item onClick={() => setConfirming(true)} className="font-semibold text-red-600">
               구인 삭제
-            </button>
+            </Sheet.Item>
           </div>
         </Sheet.Content>
       </Sheet.Root>

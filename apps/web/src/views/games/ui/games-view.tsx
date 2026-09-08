@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@trpg/ui";
-import type { GamesFilter } from "@/entities/game/api/queries";
+import type { GamesFilter } from "@/entities/game/index.server";
 import { AppBar } from "@/shared/ui/app-bar";
 import { GameBoard } from "@/widgets/game-board";
 

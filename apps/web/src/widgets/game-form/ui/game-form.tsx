@@ -21,16 +21,12 @@ import { toast } from "@/shared/lib/toast";
 import { AppBar } from "@/shared/ui/app-bar";
 import { DatePicker } from "@/shared/ui/date-picker";
 import { DateTimePicker } from "@/shared/ui/date-time-picker";
-import {
-  gameFormSchema,
-  type GameFormState,
-  type GameFormValues,
-  SCHEDULE_MODE,
-} from "@/entities/game";
-import { ThumbnailUpload } from "@/features/game";
+import { SCHEDULE_MODE } from "@/entities/game";
+import type { ActionResult } from "@/shared/api/action-result";
+import { gameFormSchema, type GameFormValues, ThumbnailUpload } from "@/features/manage-game";
 
 type Props = {
-  onSubmit: (values: GameFormValues) => Promise<GameFormState | void>;
+  onSubmit: (values: GameFormValues) => Promise<ActionResult | void>;
   defaultGame?: Game;
   submitLabel: string;
   successMessage?: string;
@@ -112,7 +108,8 @@ export function GameForm({
       title: defaultGame?.title ?? "",
       rule: defaultGame?.rule ?? "",
       synopsis: defaultGame?.synopsis ?? "",
-      playTime: defaultGame?.playTime ?? formatPlayTime(initialPlayTime.hours, initialPlayTime.minutes),
+      playTime:
+        defaultGame?.playTime ?? formatPlayTime(initialPlayTime.hours, initialPlayTime.minutes),
       maxPlayers: String(defaultGame?.maxPlayers ?? 4),
       scheduleMode: defaultGame?.scheduleMode ?? SCHEDULE_MODE.coordinate,
       endDate: defaultGame?.endDate ? toLocalInput(defaultGame.endDate) : "",

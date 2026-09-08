@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { Container, VStack } from "@trpg/ui";
-import { getGameById } from "@/entities/game/api/queries";
+import { getGameById } from "@/entities/game/index.server";
 import { EditGameForm } from "@/widgets/game-form";
 import { getCurrentUser } from "@/shared/api/supabase/server";
 import { AppBar } from "@/shared/ui/app-bar";

@@ -3,11 +3,11 @@
 import { Button, Text, cn } from "@trpg/ui";
 import { useState, useTransition } from "react";
 import { toast } from "@/shared/lib/toast";
-import type { JoinActionResult } from "../api/join-game";
+import type { ActionResult } from "@/shared/api/action-result";
 
 type Props = {
   gameId: string;
-  action: (gameId: string) => Promise<JoinActionResult>;
+  action: (gameId: string) => Promise<ActionResult>;
   label: string;
   variant?: "primary" | "outline";
   successMessage: string;

@@ -33,25 +33,6 @@ export function buildDayColumns(rangeStart: string, rangeEnd: string): DayColumn
   return cols;
 }
 
-// Overlap heat palette (0→5+) — 시안 uses saturation steps, not a green ramp.
-export const HEAT_LIGHT = [
-  "#FFFFFF",
-  "#EDEEFC",
-  "#D8DAFA",
-  "#B7BAF5",
-  "#8E92EF",
-  "#5B60E4",
-] as const;
-
-export function heatColor(count: number): string {
-  return HEAT_LIGHT[Math.min(5, Math.max(0, count))]!;
-}
-
-// Count label reads white once the cell is dark enough, else the deep indigo.
-export function heatTextColor(count: number): string {
-  return count >= 3 ? "#FFFFFF" : "#5B60E4";
-}
-
 export function buildTimeRows(): TimeRow[] {
   const rows: TimeRow[] = [];
   for (let h = DAY_START_HOUR; h < DAY_END_HOUR; h++) {

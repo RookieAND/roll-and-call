@@ -13,7 +13,9 @@
 | `widgets/*`   | **entity + feature 조합** 블록, 또는 **덩치 큰 순수-표시 블록** | game-detail, game-board, game-form, game-list-item, GameInfoTable                 |
 | `views/*`     | 위젯/피처 조합 + 라우트 글루                                    | GamesView, MyPageView                                                             |
 
-**import 방향은 아래로만**: `shared ← entities ← features ← widgets ← views`. 상위 레이어를 import하지 않는다(예: feature는 widget을 import 금지). 교차 슬라이스는 각 슬라이스의 public API(배럴 `index.ts`)로 import한다.
+**import 방향은 아래로만**: `shared ← entities ← features ← widgets ← views`. 상위 레이어를 import하지 않는다(예: feature는 widget을 import 금지). 교차 슬라이스는 각 슬라이스의 public API(배럴 `index.ts`)로 import한다. 서버 전용 읽기(DB 쿼리)는 `index.server.ts`로 따로 내보낸다(`@/entities/game/index.server`) — 클라이언트 번들에 postgres가 섞이지 않게 하면서도 내부 파일 deep import는 금지.
+
+**feature 슬라이스는 동작명으로 짓는다**: `join-game`, `manage-game`, `confirm-session`처럼 사용자 동작 단위. 엔티티명(`features/game`)으로 두면 CRUD·참여·필터가 한 슬라이스에 쌓이는 god slice가 된다. 사용처가 한 곳뿐이고 상태 변경이 없는 표시/탭 UI는 feature로 빼지 말고 그 view·widget 안에 둔다(예: `ScheduleTabs`, `SessionTabFilter`, `Heatmap`은 view 소유). 서버 액션 반환은 `shared/api/action-result`의 `ActionResult` 하나를 쓴다.
 
 **표시 컴포넌트의 체급**: 엔티티는 작고 반복되는 원자적 표시 단위(목록 카드·행 등)만 담는다. **순수 표시라도 덩치가 크면(복합 정보 블록·상세 표 등) entity가 아니라 widget에 둔다.** 표시 컴포넌트는 링크·동작을 갖지 않고, 네비게이션/상호작용은 상위(widget·view)가 감싸서 조합한다. (예: `GameCard`/`GameSummary`/`GameRow`는 링크 없는 entity, 상세 링크는 이를 감싸는 widget/view가 소유. `GameInfoTable`은 순수 표시지만 커서 widget에 둔다.)
 
@@ -22,6 +24,7 @@
 - 버튼·셀렉트·칩·아이콘버튼은 **오직 `@trpg/ui`**에서 가져온다. raw `<button>`, `<Link>`/`<div>`를 버튼처럼 스타일링한 손코딩 금지.
 - **링크처럼 보이는 버튼**은 `<Button asChild><Link/></Button>` (또는 `IconButton asChild`). `asChild`는 자식 엘리먼트에 버튼 스타일을 입혀 실제 `<a href>`로 렌더한다.
 - **선택 가능한 pill/토글**은 `<Chip>` (`shape="pill" | "block"`, `selected`, `asChild`).
+- **바텀시트 메뉴 행**은 `<Sheet.Item>` (Button ghost 기반, `asChild`로 Link 렌더).
 - 예외(세그먼트 컨트롤 등 프리미티브와 룩이 다른 1회성 UI)는 손코딩하되 `// ponytail:` 주석으로 이유를 남긴다.
 
 ## 3. 핸들러는 props로, 레이아웃은 호출부가

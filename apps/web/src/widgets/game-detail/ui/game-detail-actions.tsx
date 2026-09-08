@@ -11,9 +11,10 @@ import {
   type ParticipantStatus,
   WaitlistNotice,
 } from "@/entities/game";
-import type { GameDetailData } from "@/entities/game/api/queries";
+import type { GameDetailData } from "@/entities/game/index.server";
 import { LoginButton } from "@/features/auth";
-import { GameScheduleLink, JoinButton, joinGame, leaveGame } from "@/features/game";
+import { GameScheduleLink } from "@/features/coordinate-session";
+import { JoinButton, joinGame, leaveGame } from "@/features/join-game";
 import { StatusNotice } from "@/shared/ui/status-notice";
 
 type Props = {
@@ -91,7 +92,11 @@ function ActionZone({
       <VStack gap={3}>
         <ConfirmedSessionNotice confirmedAt={game.confirmedAt!} />
         {canSchedule && (
-          <GameScheduleLink gameId={game.id} label="일정 조율 보기" className="h-12 w-full text-sm" />
+          <GameScheduleLink
+            gameId={game.id}
+            label="일정 조율 보기"
+            className="h-12 w-full text-sm"
+          />
         )}
       </VStack>
     );
@@ -102,7 +107,11 @@ function ActionZone({
       <VStack gap={3}>
         <WaitlistNotice rank={waitlistRank} waitingCount={waitingCount} endDate={game.endDate} />
         {canSchedule && (
-          <GameScheduleLink gameId={game.id} label="가능 시간 입력" className="h-12 w-full text-sm" />
+          <GameScheduleLink
+            gameId={game.id}
+            label="가능 시간 입력"
+            className="h-12 w-full text-sm"
+          />
         )}
         <JoinButton
           gameId={game.id}
@@ -153,11 +162,6 @@ function ActionZone({
   }
 
   return (
-    <JoinButton
-      gameId={game.id}
-      action={joinGame}
-      label="참여하기"
-      successMessage="참여했습니다"
-    />
+    <JoinButton gameId={game.id} action={joinGame} label="참여하기" successMessage="참여했습니다" />
   );
 }

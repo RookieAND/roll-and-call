@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog } from "@base-ui-components/react/dialog";
-import { cn } from "@trpg/ui";
+import { Button, type ButtonProps, cn } from "@trpg/ui";
 import type { ReactNode } from "react";
 
 function Content({ children, className }: { children: ReactNode; className?: string }) {
@@ -29,6 +29,20 @@ function Title({ children, className }: { children: ReactNode; className?: strin
   );
 }
 
+// 시트 메뉴 행: 좌우 꽉 찬 텍스트 행, 마지막 행만 구분선 없음. asChild로 Link 렌더.
+function Item({ className, ...props }: ButtonProps) {
+  return (
+    <Button
+      variant="ghost"
+      className={cn(
+        "h-auto min-h-[52px] w-full justify-between rounded-none border-b border-gray-100 px-0 text-left text-[14.5px] font-normal text-gray-800 last:border-b-0 hover:bg-transparent",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
 // Compound API (Select와 동일한 dot-notation): Sheet.Root / Trigger / Content / Title.
 // Base UI Dialog에 스타일만 입혀 내보낸다. 열림 상태는 Root에 open/onOpenChange로 제어하거나
 // Sheet.Trigger(asChild)로 조합한다.
@@ -38,4 +52,5 @@ export const Sheet = {
   Close: Dialog.Close,
   Content,
   Title,
+  Item,
 };

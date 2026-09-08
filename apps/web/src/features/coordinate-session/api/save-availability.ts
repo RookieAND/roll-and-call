@@ -5,10 +5,9 @@ import { revalidatePath } from "next/cache";
 import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
 import { availabilities, db } from "@/shared/api/db";
 import { createClient } from "@/shared/api/supabase/server";
+import type { ActionResult } from "@/shared/api/action-result";
 
-export type SaveResult = { error?: string };
-
-export async function saveAvailability(gameId: string, slotIsos: string[]): Promise<SaveResult> {
+export async function saveAvailability(gameId: string, slotIsos: string[]): Promise<ActionResult> {
   const supabase = await createClient();
   const {
     data: { user },

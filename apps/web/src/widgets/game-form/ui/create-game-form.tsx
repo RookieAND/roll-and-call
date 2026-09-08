@@ -1,6 +1,6 @@
 "use client";
 
-import { createGame } from "@/features/game";
+import { createGame } from "@/features/manage-game";
 import { GameForm } from "./game-form";
 
 export function CreateGameForm() {

@@ -8,7 +8,7 @@ import {
   type GameListContext,
   type ParticipantStatus,
 } from "@/entities/game";
-import { GameScheduleLink } from "@/features/game";
+import { GameScheduleLink } from "@/features/coordinate-session";
 import type { Game } from "@/shared/api/db";
 
 type Props = {

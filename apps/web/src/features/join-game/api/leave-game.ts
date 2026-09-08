@@ -5,9 +5,9 @@ import { revalidatePath } from "next/cache";
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { db, participants } from "@/shared/api/db";
 import { createClient } from "@/shared/api/supabase/server";
-import type { JoinActionResult } from "./join-game";
+import type { ActionResult } from "@/shared/api/action-result";
 
-export async function leaveGame(gameId: string): Promise<JoinActionResult> {
+export async function leaveGame(gameId: string): Promise<ActionResult> {
   const supabase = await createClient();
   const {
     data: { user },

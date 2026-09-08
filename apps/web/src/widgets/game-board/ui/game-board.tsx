@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Container, Skeleton, TextInput, VStack } from "@trpg/ui";
-import { getGamesPage, type GamesFilter } from "@/entities/game/api/queries";
-import { GamesFilterSheet } from "@/features/game";
+import { getGamesPage, type GamesFilter } from "@/entities/game/index.server";
+import { GamesFilterSheet } from "@/features/filter-games";
 import { GameList, GamesCount } from "./game-list";
 import { GameListSkeleton } from "./game-list-skeleton";
 

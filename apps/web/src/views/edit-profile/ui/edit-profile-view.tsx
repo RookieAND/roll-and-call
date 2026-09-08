@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { Container, VStack } from "@trpg/ui";
-import { getProfile } from "@/entities/profile/api/queries";
+import { getProfile } from "@/entities/profile/index.server";
 import { SignOutButton } from "@/features/auth";
-import { EditProfileForm } from "@/features/profile";
+import { EditProfileForm } from "@/features/edit-profile";
 import { getCurrentUser } from "@/shared/api/supabase/server";
 import { AppBar } from "@/shared/ui/app-bar";
 

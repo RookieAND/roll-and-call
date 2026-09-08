@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Text } from "@trpg/ui";
 import { formatGameSchedule, GameGmLabel } from "@/entities/game";
-import type { GameDetailData } from "@/entities/game/api/queries";
+import type { GameDetailData } from "@/entities/game/index.server";
 import { formatDateTime } from "@/shared/lib/format";
 
 // 순수 표시: 게임 상세 정보 표. 링크·동작 없음.

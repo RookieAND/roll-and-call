@@ -1,4 +1,3 @@
-export { gameFormSchema, type GameFormValues, type GameFormState } from "./model/schema";
 export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./model/schedule-mode";
 export { gameStatusLabel, gameStatusColor, GAME_STATUS, type GameStatus } from "./model/status";
 export { GAME_SORTS, GAME_SORT_DEFAULT, parseGameSort, type GameSort } from "./model/sort";
@@ -43,5 +42,3 @@ export {
 } from "./model/session";
 export { SessionCard } from "./ui/session-card";
 export { SessionBadge } from "./ui/session-badge";
-// Server-only reads live in ./api/queries — import them directly from views
-// to keep the postgres client out of client bundles.

@@ -2,11 +2,11 @@ import { Avatar, Button, Container, HStack, Text, VStack } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { GAME_LIST_CONTEXT, GameRow } from "@/entities/game";
-import { getGamesByGm, getGamesPage, getJoinedGames } from "@/entities/game/api/queries";
+import { getGamesByGm, getGamesPage, getJoinedGames } from "@/entities/game/index.server";
 import { LoginButton, SignOutButton } from "@/features/auth";
 import { getCurrentUser } from "@/shared/api/supabase/server";
-import { EmptyState } from "@/shared/ui/empty-state";
 import { GameListItem } from "@/widgets/game-list-item";
+import { HomeStartEmpty } from "./home-start-empty";
 
 const PITCH = [
   {
@@ -26,7 +26,7 @@ const PITCH = [
   },
 ];
 
-export async function HomePage() {
+export async function HomeView() {
   const user = await getCurrentUser();
 
   if (!user) {
@@ -144,21 +144,7 @@ export async function HomePage() {
 
         {empty ? (
           <>
-            <EmptyState
-              icon={<span className="h-11 w-11 rounded-[13px] bg-gray-100" />}
-              title="두 가지 방법으로 시작합니다"
-              description="모집 중인 세션에 참여하거나, GM이 되어 직접 구인을 올리세요."
-              action={
-                <VStack gap={2} className="w-full pt-1">
-                  <Button asChild size="lg" className="h-12 w-full">
-                    <Link href="/games">구인 목록 둘러보기</Link>
-                  </Button>
-                  <Button asChild size="lg" variant="outline" className="h-12 w-full">
-                    <Link href="/games/new">새 구인 등록</Link>
-                  </Button>
-                </VStack>
-              }
-            />
+            <HomeStartEmpty />
             <HStack justify="between" align="center" className="border-t border-gray-100 pt-4">
               <Text typography="body2" foreground="muted">
                 프로필과 기본 가능 시간대 설정

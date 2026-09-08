@@ -102,3 +102,12 @@ export async function notifyRecruitmentComplete(game: Game, gmName: string, ment
   // 멘션은 content에 있어야 실제 알림이 울린다 (embed 내부 멘션은 핑 안 감).
   await sendDiscordAnnouncement({ content: mentions, embeds: [embed], userMentions: mentionIds });
 }
+
+// 세션 시작 1시간 전 리마인더. 멘션은 content에 있어야 핑이 간다.
+export async function notifySessionStartingSoon(game: Game, gmName: string, mentionIds: string[]) {
+  const mentions = mentionIds.map((did) => `<@${did}>`).join(" ");
+  const content =
+    `⏰ 곧 시작! **${game.title}** 세션이 ${formatDateTime(game.confirmedAt!)}에 시작해요.\n` +
+    `룰: ${game.rule} · GM: ${gmName}\n${mentions}`;
+  await sendDiscordAnnouncement({ content, userMentions: mentionIds });
+}

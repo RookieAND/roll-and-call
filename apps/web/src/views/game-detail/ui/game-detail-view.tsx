@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getGameById } from "@/entities/game/api/queries";
+import { getGameById } from "@/entities/game/index.server";
 import { getCurrentUser } from "@/shared/api/supabase/server";
 import { GameDetail } from "@/widgets/game-detail";
 

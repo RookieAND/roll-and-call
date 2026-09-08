@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SCHEDULE_MODE, SCHEDULE_MODES } from "./schedule-mode";
+import { SCHEDULE_MODE, SCHEDULE_MODES } from "@/entities/game";
 
 // String-based (RHF-friendly: input type === output type). The server action
 // re-validates and converts strings to DB types (Number/Date).
@@ -65,6 +65,3 @@ export const gameFormSchema = z
   });
 
 export type GameFormValues = z.infer<typeof gameFormSchema>;
-
-// error → show inline; redirect → client navigates (toast is called client-side)
-export type GameFormState = { error?: string; redirect?: string } | null;

@@ -6,8 +6,8 @@ import {
   isGameGm,
   splitRoster,
 } from "@/entities/game";
-import type { GameDetailData } from "@/entities/game/api/queries";
-import { GameGmMenu } from "@/features/game";
+import type { GameDetailData } from "@/entities/game/index.server";
+import { GameGmMenu } from "@/features/manage-game";
 import { AppBar } from "@/shared/ui/app-bar";
 import { GameDetailActions } from "./game-detail-actions";
 import { GameInfoTable } from "./game-info-table";

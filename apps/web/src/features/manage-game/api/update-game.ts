@@ -3,9 +3,10 @@
 import { and, eq } from "drizzle-orm";
 import { db, games } from "@/shared/api/db";
 import { createClient } from "@/shared/api/supabase/server";
-import { gameFormSchema, type GameFormState, type GameFormValues } from "@/entities/game";
+import type { ActionResult } from "@/shared/api/action-result";
+import { gameFormSchema, type GameFormValues } from "../model/game-form";
 
-export async function updateGame(id: string, values: GameFormValues): Promise<GameFormState> {
+export async function updateGame(id: string, values: GameFormValues): Promise<ActionResult> {
   const supabase = await createClient();
   const {
     data: { user },
