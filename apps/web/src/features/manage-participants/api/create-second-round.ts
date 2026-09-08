@@ -3,10 +3,15 @@
 import { and, asc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { availabilities, db, games, participants } from "@/shared/api/db";
-import { createClient } from "@/shared/api/supabase/server";
-import type { ActionResult } from "@/shared/api/action-result";
-
+import {
+  availabilities,
+  db,
+  games,
+  participants,
+  createSupabaseServerClient,
+} from "@/shared/server";
+import type { ActionResult } from "@/shared/api";
+import { SECOND_ROUND_MAX_DAYS } from "../model/second-round";
 export type SecondRoundInput = { rangeStart: string; rangeEnd: string };
 
 const { confirmed, waiting } = PARTICIPANT_STATUS;
@@ -17,7 +22,7 @@ export async function createSecondRound(
   gameId: string,
   input: SecondRoundInput,
 ): Promise<ActionResult> {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -27,6 +32,9 @@ export async function createSecondRound(
   if (!rangeStart || !rangeEnd) return { error: "조율 기간을 입력하세요." };
   if (rangeEnd <= rangeStart) {
     return { error: "종료일은 시작일보다 이후여야 합니다." };
+  }
+  if ((Date.parse(rangeEnd) - Date.parse(rangeStart)) / 86_400_000 > SECOND_ROUND_MAX_DAYS) {
+    return { error: `조율 기간은 최대 ${SECOND_ROUND_MAX_DAYS}일까지 설정할 수 있습니다.` };
   }
 
   const parent = await db.query.games.findFirst({
@@ -60,7 +68,8 @@ export async function createSecondRound(
         playTime: parent.playTime,
         maxPlayers: parent.maxPlayers,
         scheduleMode: "coordinate",
-        endDate: new Date(`${rangeEnd}T23:59:59`),
+        // KST 자정 기준. 서버 타임존에 따라 마감이 밀리지 않게 오프셋을 명시한다.
+        endDate: new Date(`${rangeEnd}T23:59:59+09:00`),
         rangeStart,
         rangeEnd,
         parentGameId: parent.id,

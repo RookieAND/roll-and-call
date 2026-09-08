@@ -1,7 +1,6 @@
 import { Chip, Text } from "@trpg/ui";
 import Link from "next/link";
-
-export type SessionTab = { key: string; label: string };
+import type { SessionTab } from "@/widgets/session-list";
 
 // 세션 목록 상단 필터 줄(스크롤 시 앱바 아래 고정). 칩은 탭 전환 링크.
 // 선택 칩은 시안대로 검정 배경. 정렬은 옵션이 하나뿐이라 정적 라벨.

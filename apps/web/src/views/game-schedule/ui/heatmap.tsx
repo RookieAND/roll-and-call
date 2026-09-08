@@ -1,6 +1,5 @@
 import { Text } from "@trpg/ui";
-import { slotIso, type DayColumn, type TimeRow } from "@/shared/lib/slots";
-
+import { slotIso, type DayColumn, type TimeRow } from "@/shared/lib";
 // Overlap heat palette (0→5+) — 시안 uses saturation steps, not a green ramp.
 const HEAT_LIGHT = ["#FFFFFF", "#EDEEFC", "#D8DAFA", "#B7BAF5", "#8E92EF", "#5B60E4"] as const;
 

@@ -2,9 +2,8 @@
 
 import { Button, Text, cn } from "@trpg/ui";
 import { useState, useTransition } from "react";
-import { toast } from "@/shared/lib/toast";
-import type { ActionResult } from "@/shared/api/action-result";
-
+import { toast } from "@/shared/ui";
+import type { ActionResult } from "@/shared/api";
 type Props = {
   gameId: string;
   action: (gameId: string) => Promise<ActionResult>;

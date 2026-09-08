@@ -3,7 +3,7 @@
 import { Button, Select, Text } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { toast } from "@/shared/lib/toast";
+import { toast } from "@/shared/ui";
 import { confirmSession } from "../api/confirm-session";
 
 type Option = { iso: string; label: string };

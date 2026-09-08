@@ -1,9 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { splitRoster } from "@/entities/game";
-import { getGameParticipants } from "@/entities/game/index.server";
-import { getCurrentUser } from "@/shared/api/supabase/server";
+import { getGameParticipants, getCurrentUser } from "@/shared/server";
 import { type ManagedMember, ParticipantManager } from "@/widgets/participant-manager";
-
 export async function ManageParticipantsView({ id }: { id: string }) {
   const data = await getGameParticipants(id);
   if (!data) notFound();

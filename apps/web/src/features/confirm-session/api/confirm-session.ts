@@ -2,12 +2,10 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { db, games } from "@/shared/api/db";
-import { createClient } from "@/shared/api/supabase/server";
-import type { ActionResult } from "@/shared/api/action-result";
-
+import { db, games, createSupabaseServerClient } from "@/shared/server";
+import type { ActionResult } from "@/shared/api";
 export async function confirmSession(gameId: string, slotIso: string): Promise<ActionResult> {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

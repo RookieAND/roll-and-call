@@ -1,6 +1,5 @@
 import { Container, Skeleton, VStack } from "@trpg/ui";
-import { AppBar } from "@/shared/ui/app-bar";
-
+import { AppBar } from "@/shared/ui";
 export default function Loading() {
   return (
     <>

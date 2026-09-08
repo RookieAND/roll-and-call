@@ -1,5 +1,5 @@
-import type { Game } from "@/shared/api/db";
-import { formatDate, formatDateTime } from "@/shared/lib/format";
+import type { Game } from "@/shared/server";
+import { formatDate, formatDateTime } from "@/shared/lib";
 import { SCHEDULE_MODE } from "./schedule-mode";
 
 // 세션 일정 한 줄 표기. 우선순위: 확정 일시 > 조율 범위 > 미정.

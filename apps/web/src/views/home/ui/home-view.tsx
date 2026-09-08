@@ -2,9 +2,14 @@ import { Avatar, Button, Container, HStack, Text, VStack } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { GAME_LIST_CONTEXT, GameRow } from "@/entities/game";
-import { getGamesByGm, getGamesPage, getJoinedGames } from "@/entities/game/index.server";
+import { profileDisplay } from "@/entities/profile";
+import {
+  getGamesByGm,
+  getRecruitingGamesPage,
+  getJoinedGames,
+  getCurrentUser,
+} from "@/shared/server";
 import { LoginButton, SignOutButton } from "@/features/auth";
-import { getCurrentUser } from "@/shared/api/supabase/server";
 import { GameListItem } from "@/widgets/game-list-item";
 import { HomeStartEmpty } from "./home-start-empty";
 
@@ -30,7 +35,7 @@ export async function HomeView() {
   const user = await getCurrentUser();
 
   if (!user) {
-    const { rows: recruitingGames } = await getGamesPage(1, {}, 2);
+    const { rows: recruitingGames } = await getRecruitingGamesPage(1, {}, 2);
     return (
       <Container size="sm" className="px-0">
         <VStack gap={8} className="pb-10">
@@ -116,8 +121,7 @@ export async function HomeView() {
     );
   }
 
-  const name = user.user_metadata.full_name ?? user.user_metadata.name ?? user.email ?? "";
-  const avatar = (user.user_metadata.avatar_url as string | undefined) ?? null;
+  const { name, avatar } = profileDisplay({ user });
   const [hosted, joined] = await Promise.all([getGamesByGm(user.id), getJoinedGames(user.id)]);
   const myGames = [
     ...hosted.map((game) => ({ game, context: GAME_LIST_CONTEXT.mine })),

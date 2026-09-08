@@ -1,5 +1,4 @@
-import type { Availability } from "@/shared/api/db";
-
+import type { Availability } from "@/shared/server";
 export type AvailabilityRow = Pick<Availability, "slotStart" | "userId"> & {
   user: { username: string } | null;
 };

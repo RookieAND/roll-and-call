@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Button, Container, Skeleton, Text, TextInput, VStack } from "@trpg/ui";
-import { AppBar } from "@/shared/ui/app-bar";
-
+import { AppBar } from "@/shared/ui";
 // 시안 2b: search + filter bar render immediately (not skeletonized); only cards shimmer.
 export default function Loading() {
   return (

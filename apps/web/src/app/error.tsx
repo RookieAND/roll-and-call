@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { Button } from "@trpg/ui";
-import { ErrorScreen } from "@/shared/ui/error-screen";
-
+import { ErrorScreen } from "@/shared/ui";
 export default function Error({
   error,
   retry,

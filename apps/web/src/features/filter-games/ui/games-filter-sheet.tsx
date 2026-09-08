@@ -4,9 +4,9 @@ import { Button, Text } from "@trpg/ui";
 import { Check, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { GAME_SORT_DEFAULT, GAME_SORTS, type GameSort, parseGameSort } from "@/entities/game";
-import { Sheet } from "@/shared/ui/sheet";
-
+import { GAME_SORT_DEFAULT, GAME_SORTS, type GameSort, parseGameSort } from "@/shared/api";
+import { Sheet } from "@/shared/ui";
+import { gamesHref } from "../lib/games-href";
 type Props = { q?: string; sort?: string };
 
 export function GamesFilterSheet({ q, sort }: Props) {
@@ -18,11 +18,7 @@ export function GamesFilterSheet({ q, sort }: Props) {
   const currentLabel = GAME_SORTS.find((o) => o.key === current)!.label;
 
   function apply() {
-    const sp = new URLSearchParams();
-    if (q) sp.set("q", q);
-    if (so !== GAME_SORT_DEFAULT) sp.set("sort", so);
-    const query = sp.toString();
-    router.push(query ? `/games?${query}` : "/games");
+    router.push(gamesHref({ q, sort: so === GAME_SORT_DEFAULT ? undefined : so }));
     setOpen(false);
   }
 

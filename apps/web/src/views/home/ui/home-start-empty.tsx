@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Button, VStack } from "@trpg/ui";
-import { EmptyState } from "@/shared/ui/empty-state";
-
+import { EmptyState } from "@/shared/ui";
 // 홈 · 신규 가입 직후(참여/운영 세션 0건) 시작 안내 빈 상태.
 export function HomeStartEmpty() {
   return (

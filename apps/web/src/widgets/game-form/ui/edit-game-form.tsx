@@ -2,7 +2,7 @@
 
 import { VStack } from "@trpg/ui";
 import { DeleteGameButton, updateGame } from "@/features/manage-game";
-import type { Game } from "@/shared/api/db";
+import type { Game } from "@/shared/server";
 import { GameForm } from "./game-form";
 
 export function EditGameForm({ game }: { game: Game }) {

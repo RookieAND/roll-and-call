@@ -1,7 +1,6 @@
-import { createClient } from "@/shared/api/supabase/client";
-
+import { createSupabaseBrowserClient } from "@/shared/api";
 export async function signInWithDiscord() {
-  const supabase = createClient();
+  const supabase = createSupabaseBrowserClient();
   await supabase.auth.signInWithOAuth({
     provider: "discord",
     options: { redirectTo: `${window.location.origin}/auth/callback` },

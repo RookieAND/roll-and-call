@@ -16,15 +16,11 @@ import {
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Controller, useForm, type FieldErrors } from "react-hook-form";
-import type { Game } from "@/shared/api/db";
-import { toast } from "@/shared/lib/toast";
-import { AppBar } from "@/shared/ui/app-bar";
-import { DatePicker } from "@/shared/ui/date-picker";
-import { DateTimePicker } from "@/shared/ui/date-time-picker";
+import type { Game } from "@/shared/server";
+import type { ActionResult } from "@/shared/api";
+import { toast, AppBar, DatePicker, DateTimePicker } from "@/shared/ui";
 import { SCHEDULE_MODE } from "@/entities/game";
-import type { ActionResult } from "@/shared/api/action-result";
 import { gameFormSchema, type GameFormValues, ThumbnailUpload } from "@/features/manage-game";
-
 type Props = {
   onSubmit: (values: GameFormValues) => Promise<ActionResult | void>;
   defaultGame?: Game;

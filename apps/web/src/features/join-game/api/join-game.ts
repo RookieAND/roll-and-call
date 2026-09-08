@@ -3,13 +3,18 @@
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { db, games, participants, type Game } from "@/shared/api/db";
-import { notifyGameJoined, notifyRecruitmentComplete } from "@/shared/api/discord/notify";
-import { createClient } from "@/shared/api/supabase/server";
-import type { ActionResult } from "@/shared/api/action-result";
-
+import {
+  db,
+  games,
+  participants,
+  type Game,
+  notifyGameJoined,
+  notifyRecruitmentComplete,
+  createSupabaseServerClient,
+} from "@/shared/server";
+import type { ActionResult } from "@/shared/api";
 export async function joinGame(gameId: string): Promise<ActionResult> {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

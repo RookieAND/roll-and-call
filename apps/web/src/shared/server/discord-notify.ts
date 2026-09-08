@@ -1,6 +1,6 @@
-import type { Game } from "@/shared/api/db";
-import { formatDate, formatDateTime, formatMonthDay } from "@/shared/lib/format";
-import { sendDiscordAnnouncement, type DiscordEmbed } from "./webhook";
+import type { Game } from "@/shared/server";
+import { formatDate, formatDateTime, formatMonthDay } from "@/shared/lib";
+import { sendDiscordAnnouncement, type DiscordEmbed } from "./discord-webhook";
 
 const COLOR = {
   recruit: 0x5865f2, // blurple — 새 구인

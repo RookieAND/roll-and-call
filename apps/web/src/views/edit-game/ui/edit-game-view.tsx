@@ -1,10 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 import { Container, VStack } from "@trpg/ui";
-import { getGameById } from "@/entities/game/index.server";
+import { getGameById, getCurrentUser } from "@/shared/server";
 import { EditGameForm } from "@/widgets/game-form";
-import { getCurrentUser } from "@/shared/api/supabase/server";
-import { AppBar } from "@/shared/ui/app-bar";
-
+import { AppBar } from "@/shared/ui";
 export async function EditGameView({ id }: { id: string }) {
   const game = await getGameById(id);
   if (!game) notFound();

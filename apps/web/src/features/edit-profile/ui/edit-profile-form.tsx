@@ -4,7 +4,8 @@ import { Avatar, Button, Chip, Field, Text, TextInput, Textarea, VStack } from "
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { SLOT_PRESETS } from "@/entities/profile";
-import { toast } from "@/shared/lib/toast";
+import { toast } from "@/shared/ui";
+import { refreshAvatar } from "../api/refresh-avatar";
 import { updateProfile } from "../api/update-profile";
 
 export function EditProfileForm({
@@ -19,6 +20,8 @@ export function EditProfileForm({
   avatarUrl?: string | null;
 }) {
   const router = useRouter();
+  const [avatar, setAvatar] = useState(avatarUrl ?? null);
+  const [refreshing, startRefresh] = useTransition();
   const [username, setUsername] = useState(defaultUsername);
   const [bio, setBio] = useState(defaultBio);
   const [slots, setSlots] = useState<string[]>(defaultSlots);
@@ -27,6 +30,18 @@ export function EditProfileForm({
 
   function toggleSlot(key: string) {
     setSlots((prev) => (prev.includes(key) ? prev.filter((s) => s !== key) : [...prev, key]));
+  }
+
+  function reloadAvatar() {
+    startRefresh(async () => {
+      const result = await refreshAvatar();
+      if (result.error) {
+        toast.error(result.error);
+        return;
+      }
+      setAvatar(result.avatarUrl ?? null);
+      toast.success("아바타를 다시 불러왔습니다");
+    });
   }
 
   function submit(e: React.FormEvent) {
@@ -43,26 +58,29 @@ export function EditProfileForm({
     });
   }
 
+  const usernameError = error?.includes("닉네임") ? error : undefined;
+  const formError = error && !usernameError ? error : null;
+
   return (
     <form onSubmit={submit}>
       <VStack gap={4}>
         <VStack gap={2} className="items-center">
-          <Avatar src={avatarUrl} name={username} size="3xl" />
-          <Text typography="subtitle2" foreground="primary">
+          <Avatar src={avatar} name={username} size="3xl" />
+          <Button variant="ghost" size="sm" loading={refreshing} onClick={reloadAvatar}>
             Discord 아바타 다시 불러오기
-          </Text>
+          </Button>
         </VStack>
         <Field
           label="표시 이름"
           htmlFor="username"
           description="구인 카드와 참여자 목록에 보이는 이름입니다."
-          error={error ?? undefined}
+          error={usernameError}
         >
           <TextInput
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            invalid={!!error}
+            invalid={!!usernameError}
             maxLength={30}
           />
         </Field>
@@ -88,6 +106,11 @@ export function EditProfileForm({
             })}
           </div>
         </Field>
+        {formError && (
+          <Text typography="body2" foreground="danger">
+            {formError}
+          </Text>
+        )}
         <Button type="submit" size="lg" className="h-[50px] w-full" loading={pending}>
           저장
         </Button>

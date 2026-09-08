@@ -1,13 +1,12 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
-import { db, games } from "@/shared/api/db";
-import { createClient } from "@/shared/api/supabase/server";
-import type { ActionResult } from "@/shared/api/action-result";
+import { db, games, createSupabaseServerClient } from "@/shared/server";
+import type { ActionResult } from "@/shared/api";
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
 
 export async function updateGame(id: string, values: GameFormValues): Promise<ActionResult> {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

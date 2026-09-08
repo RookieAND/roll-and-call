@@ -4,9 +4,8 @@ import {
   getGameAvailabilities,
   getGameById,
   getUserConfirmedSlots,
-} from "@/entities/game/index.server";
-import { ConfirmSessionForm } from "@/features/confirm-session";
-import { AvailabilityGrid } from "@/features/coordinate-session";
+  getCurrentUser,
+} from "@/shared/server";
 import {
   aggregateAvailability,
   ConfirmedSessionNotice,
@@ -15,11 +14,10 @@ import {
   rankSlots,
   SCHEDULE_MODE,
 } from "@/entities/game";
-import { getCurrentUser } from "@/shared/api/supabase/server";
-import { formatDateTime } from "@/shared/lib/format";
-import { buildDayColumns, buildTimeRows } from "@/shared/lib/slots";
-import { AppBar } from "@/shared/ui/app-bar";
-import { StatusNotice } from "@/shared/ui/status-notice";
+import { formatDateTime, buildDayColumns, buildTimeRows } from "@/shared/lib";
+import { ConfirmSessionForm } from "@/features/confirm-session";
+import { AvailabilityGrid } from "@/features/coordinate-session";
+import { AppBar, StatusNotice } from "@/shared/ui";
 import { HeatLegend, Heatmap } from "./heatmap";
 import { ScheduleOverlapEmpty } from "./schedule-overlap-empty";
 import { ScheduleTabs } from "./schedule-tabs";

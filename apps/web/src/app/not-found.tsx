@@ -1,5 +1,4 @@
-import { ErrorScreen } from "@/shared/ui/error-screen";
-
+import { ErrorScreen } from "@/shared/ui";
 export default function NotFound() {
   return (
     <ErrorScreen

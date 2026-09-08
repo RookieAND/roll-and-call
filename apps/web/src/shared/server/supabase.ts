@@ -1,17 +1,18 @@
+import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 // Current authenticated user (or null). Wraps the getUser boilerplate repeated
 // across server components.
 export async function getCurrentUser() {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   return user;
 }
 
-export async function createClient() {
+export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
 
   return createServerClient(

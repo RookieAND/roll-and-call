@@ -3,8 +3,7 @@
 import { Button, cn } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { toast } from "@/shared/lib/toast";
-import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
+import { toast, ConfirmDialog } from "@/shared/ui";
 import { deleteGame } from "../api/delete-game";
 
 export function DeleteGameButton({
@@ -24,6 +23,7 @@ export function DeleteGameButton({
     startTransition(async () => {
       const result = await deleteGame(gameId);
       if (result.error) {
+        toast.error(result.error);
         setOpen(false);
         return;
       }

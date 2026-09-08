@@ -1,13 +1,11 @@
 "use server";
 
-import { db, games } from "@/shared/api/db";
-import { notifyGameCreated } from "@/shared/api/discord/notify";
-import { createClient } from "@/shared/api/supabase/server";
-import type { ActionResult } from "@/shared/api/action-result";
+import { db, games, notifyGameCreated, createSupabaseServerClient } from "@/shared/server";
+import type { ActionResult } from "@/shared/api";
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
 
 export async function createGame(values: GameFormValues): Promise<ActionResult> {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

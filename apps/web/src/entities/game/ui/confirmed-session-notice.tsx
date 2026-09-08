@@ -1,7 +1,6 @@
 import { Text } from "@trpg/ui";
-import { formatDateTime } from "@/shared/lib/format";
-import { StatusNotice } from "@/shared/ui/status-notice";
-
+import { formatDateTime } from "@/shared/lib";
+import { StatusNotice } from "@/shared/ui";
 // 순수 표시: 확정된 세션 시각. 링크/동작 없음(감싸는 쪽이 소유).
 export function ConfirmedSessionNotice({ confirmedAt }: { confirmedAt: Date }) {
   return (

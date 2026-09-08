@@ -1,9 +1,8 @@
-import { createClient } from "@/shared/api/supabase/client";
-
+import { createSupabaseBrowserClient } from "@/shared/api";
 export type UploadResult = { url: string } | { error: string };
 
 export async function uploadThumbnail(file: File): Promise<UploadResult> {
-  const supabase = createClient();
+  const supabase = createSupabaseBrowserClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

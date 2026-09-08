@@ -1,18 +1,16 @@
 import { redirect } from "next/navigation";
 import { Container, VStack } from "@trpg/ui";
-import { getProfile } from "@/entities/profile/index.server";
+import { profileDisplay } from "@/entities/profile";
+import { getProfile, getCurrentUser } from "@/shared/server";
 import { SignOutButton } from "@/features/auth";
 import { EditProfileForm } from "@/features/edit-profile";
-import { getCurrentUser } from "@/shared/api/supabase/server";
-import { AppBar } from "@/shared/ui/app-bar";
-
+import { AppBar } from "@/shared/ui";
 export async function EditProfileView() {
   const user = await getCurrentUser();
   if (!user) redirect("/");
 
   const profile = await getProfile(user.id);
-  const avatar =
-    profile?.avatarUrl ?? (user.user_metadata.avatar_url as string | undefined) ?? null;
+  const { avatar } = profileDisplay({ profile, user });
 
   return (
     <>

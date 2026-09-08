@@ -1,4 +1,4 @@
-import type { Game } from "@/shared/api/db";
+import type { Game } from "@/shared/server";
 import { canCoordinate } from "./can-coordinate";
 import type { ScheduleMode } from "./schedule-mode";
 import { GAME_STATUS, type GameStatus } from "./status";

@@ -1,6 +1,5 @@
-import { parseGameSort } from "@/entities/game";
+import { parseGameSort } from "@/shared/api";
 import { GamesView } from "@/views/games";
-
 // Live recruiting board — read at request time, never prerendered.
 export const dynamic = "force-dynamic";
 

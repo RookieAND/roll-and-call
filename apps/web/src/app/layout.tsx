@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { BottomNav } from "@/shared/ui/bottom-nav";
-import { Toaster } from "@/shared/ui/toaster";
+import { BottomNav, Toaster } from "@/shared/ui";
 import "./globals.css";
 
 export const metadata: Metadata = {

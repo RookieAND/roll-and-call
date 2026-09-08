@@ -1,5 +1,5 @@
 import { Badge, Card, HStack, Text, VStack } from "@trpg/ui";
-import type { Game } from "@/shared/api/db";
+import type { Game } from "@/shared/server";
 import { deriveGameStatus } from "../model/derive-game-status";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { GameGmLabel } from "./game-gm-label";

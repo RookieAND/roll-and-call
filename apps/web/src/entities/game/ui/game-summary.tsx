@@ -1,6 +1,6 @@
 import { Badge, HStack, Text } from "@trpg/ui";
-import type { Game } from "@/shared/api/db";
-import { formatDateTime } from "@/shared/lib/format";
+import type { Game } from "@/shared/server";
+import { formatDateTime } from "@/shared/lib";
 import { deriveGameStatus } from "../model/derive-game-status";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { GAME_STATUS } from "../model/status";

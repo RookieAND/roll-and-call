@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Button } from "@trpg/ui";
-import { EmptyState } from "@/shared/ui/empty-state";
-
+import { EmptyState } from "@/shared/ui";
 // 참여 예정 세션 0건.
 export function UpcomingSessionsEmpty() {
   return (

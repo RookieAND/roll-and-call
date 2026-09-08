@@ -1,28 +1,18 @@
 "use client";
 
-import { Avatar, Button, Card, cn, Container, HStack, IconButton, Text, VStack } from "@trpg/ui";
-import { Check, MoreHorizontal } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { dday } from "@/entities/game";
+import { Avatar, Button, Card, Container, HStack, IconButton, Text, VStack } from "@trpg/ui";
+import { MoreHorizontal } from "lucide-react";
+import { useState } from "react";
 import {
-  createSecondRound,
-  demoteParticipant,
-  promoteParticipant,
-  removeParticipant,
+  MemberActionSheet,
+  type MemberSummary,
+  PromoteButton,
+  RoundSheet,
 } from "@/features/manage-participants";
-import { formatDateTime } from "@/shared/lib/format";
-import { AppBar } from "@/shared/ui/app-bar";
-import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
-import { DatePicker } from "@/shared/ui/date-picker";
-import { Sheet } from "@/shared/ui/sheet";
-import { toast } from "@/shared/lib/toast";
+import { dday, formatDateTime } from "@/shared/lib";
+import { AppBar, StatCard } from "@/shared/ui";
 
-export type ManagedMember = {
-  userId: string;
-  username: string;
-  avatarUrl: string | null;
-  applicationRank: number;
+export type ManagedMember = MemberSummary & {
   waitlistRank: number | null;
   hasAvailability: boolean;
 };
@@ -37,6 +27,10 @@ type Props = {
   waiting: ManagedMember[];
 };
 
+const URGENT_MS = 24 * 60 * 60 * 1000;
+
+// GM 전용 참여자 관리 화면. 요약 → 확정 목록 → 대기 목록 → 다음 회차 순.
+// 동작(승격·강등·내보내기·회차 생성)은 feature 컴포넌트가 각자 수행하고, 위젯은 배치와 열림 상태만 든다.
 export function ParticipantManager({
   gameId,
   title,
@@ -46,28 +40,15 @@ export function ParticipantManager({
   confirmed,
   waiting,
 }: Props) {
-  const [pending, startTransition] = useTransition();
   const [sheetMember, setSheetMember] = useState<ManagedMember | null>(null);
-  const [removing, setRemoving] = useState<ManagedMember | null>(null);
   const [roundOpen, setRoundOpen] = useState(false);
 
   const total = confirmed.length + waiting.length;
   const isFull = confirmed.length >= maxPlayers;
-  const remainingDays = dday(endDate);
-  const urgent = endDate.getTime() - Date.now() < 24 * 60 * 60 * 1000;
-
-  function run(action: () => Promise<{ error?: string }>, success: string) {
-    startTransition(async () => {
-      const result = await action();
-      if (result.error) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success(success);
-      setSheetMember(null);
-      setRemoving(null);
-    });
-  }
+  const remainingMs = endDate.getTime() - Date.now();
+  const closed = remainingMs <= 0;
+  const urgent = !closed && remainingMs < URGENT_MS;
+  const deadlineLabel = closed ? "마감" : `D-${dday(endDate)}`;
 
   return (
     <>
@@ -78,7 +59,7 @@ export function ParticipantManager({
             <div className="grid grid-cols-3 gap-2">
               <StatCard value={total} label="신청" />
               <StatCard value={maxPlayers} label="정원" />
-              <StatCard value={`D-${remainingDays}`} label="마감" urgent={urgent} />
+              <StatCard value={deadlineLabel} label="마감" urgent={urgent} />
             </div>
             <Card padding="none" className="px-3.5 py-3">
               <Text typography="body3" foreground="muted" render={<p />}>
@@ -101,15 +82,10 @@ export function ParticipantManager({
             </HStack>
             <div className="overflow-hidden rounded-xl border border-gray-200">
               {confirmed.map((m) => (
-                <RosterRow
-                  key={m.userId}
-                  member={m}
-                  subtitle={`${m.applicationRank}번째 신청`}
-                  onMenu={() => setSheetMember(m)}
-                />
+                <RosterRow key={m.userId} member={m} onMenu={() => setSheetMember(m)} />
               ))}
               {confirmed.length === 0 && (
-                <div className="border-t border-gray-100 px-3 py-4">
+                <div className="px-3 py-4">
                   <Text typography="body3" foreground="muted">
                     아직 확정된 참여자가 없어요.
                   </Text>
@@ -125,7 +101,7 @@ export function ParticipantManager({
                   대기 {waiting.length}명
                 </Text>
                 <Text typography="body3" foreground="muted">
-                  상한 없음
+                  {isFull ? "정원이 차서 승격하려면 먼저 자리를 비워야 해요" : "상한 없음"}
                 </Text>
               </HStack>
               <div className="overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
@@ -147,19 +123,7 @@ export function ParticipantManager({
                     <Text typography="subtitle2" className="flex-1">
                       {m.username}
                     </Text>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={pending || isFull}
-                      onClick={() =>
-                        run(
-                          () => promoteParticipant(gameId, m.userId),
-                          `${m.username}님을 확정했습니다`,
-                        )
-                      }
-                    >
-                      확정으로
-                    </Button>
+                    <PromoteButton gameId={gameId} member={m} disabled={isFull} />
                   </HStack>
                 ))}
               </div>
@@ -183,34 +147,10 @@ export function ParticipantManager({
       </Container>
 
       <MemberActionSheet
+        gameId={gameId}
         member={sheetMember}
-        pending={pending}
-        onOpenChange={(open) => !open && setSheetMember(null)}
-        onDemote={(m) =>
-          run(() => demoteParticipant(gameId, m.userId), `${m.username}님을 대기로 옮겼습니다`)
-        }
-        onRemove={(m) => {
-          setSheetMember(null);
-          setRemoving(m);
-        }}
         waitingHead={waiting[0]?.username}
-      />
-
-      <ConfirmDialog
-        open={removing !== null}
-        onOpenChange={(open) => !open && setRemoving(null)}
-        title="참여자 내보내기"
-        description={
-          removing
-            ? `${removing.username}님을 내보내면 신청이 취소됩니다. 되돌릴 수 없어요.`
-            : undefined
-        }
-        confirmLabel="내보내기"
-        danger
-        pending={pending}
-        onConfirm={() =>
-          removing && run(() => removeParticipant(gameId, removing.userId), "내보냈습니다")
-        }
+        onClose={() => setSheetMember(null)}
       />
 
       <RoundSheet
@@ -225,44 +165,7 @@ export function ParticipantManager({
   );
 }
 
-function StatCard({
-  value,
-  label,
-  urgent,
-}: {
-  value: number | string;
-  label: string;
-  urgent?: boolean;
-}) {
-  return (
-    <Card
-      padding="none"
-      className={cn("flex flex-col px-3.5 py-3.5", urgent && "border-red-200 bg-red-50/40")}
-    >
-      <Text
-        className={cn(
-          "text-2xl font-extrabold leading-none tracking-tight tabular-nums",
-          urgent && "text-red-600",
-        )}
-      >
-        {value}
-      </Text>
-      <Text typography="body3" className="mt-1.5 font-semibold text-gray-600">
-        {label}
-      </Text>
-    </Card>
-  );
-}
-
-function RosterRow({
-  member,
-  subtitle,
-  onMenu,
-}: {
-  member: ManagedMember;
-  subtitle: string;
-  onMenu: () => void;
-}) {
+function RosterRow({ member, onMenu }: { member: ManagedMember; onMenu: () => void }) {
   const availText = member.hasAvailability ? "가능 시간 입력" : "가능 시간 미입력";
   return (
     <HStack
@@ -277,7 +180,7 @@ function RosterRow({
           typography="body4"
           className={member.hasAvailability ? "text-gray-500" : "text-amber-600"}
         >
-          {subtitle} · {availText}
+          {member.applicationRank}번째 신청 · {availText}
         </Text>
       </VStack>
       <IconButton
@@ -289,174 +192,5 @@ function RosterRow({
         <MoreHorizontal size={16} aria-hidden />
       </IconButton>
     </HStack>
-  );
-}
-
-function MemberActionSheet({
-  member,
-  pending,
-  onOpenChange,
-  onDemote,
-  onRemove,
-  waitingHead,
-}: {
-  member: ManagedMember | null;
-  pending: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDemote: (m: ManagedMember) => void;
-  onRemove: (m: ManagedMember) => void;
-  waitingHead?: string;
-}) {
-  return (
-    <Sheet.Root open={member !== null} onOpenChange={onOpenChange}>
-      <Sheet.Content>
-        {member && (
-          <VStack gap={0}>
-            <HStack align="center" gap={3} className="border-b border-gray-100 pb-3.5">
-              <Avatar src={member.avatarUrl} name={member.username} size="lg" />
-              <VStack gap={0}>
-                <Text typography="subtitle1">{member.username}</Text>
-                <Text typography="body4" foreground="muted">
-                  확정 예정 · {member.applicationRank}번째 신청
-                </Text>
-              </VStack>
-            </HStack>
-            <Sheet.Item disabled={pending} onClick={() => onDemote(member)}>
-              대기로 이동
-              <Text typography="body4" foreground="muted">
-                대기 맨 앞
-              </Text>
-            </Sheet.Item>
-            <Sheet.Item
-              disabled={pending}
-              onClick={() => onRemove(member)}
-              className="font-semibold text-red-600"
-            >
-              내보내기
-            </Sheet.Item>
-            {waitingHead && (
-              <div className="mt-1.5 rounded-xl bg-gray-50 px-3 py-3">
-                <Text typography="body4" foreground="muted" render={<p />}>
-                  빈 자리는 대기 맨 앞({waitingHead})이 자동으로 채웁니다.
-                </Text>
-              </div>
-            )}
-          </VStack>
-        )}
-      </Sheet.Content>
-    </Sheet.Root>
-  );
-}
-
-const INHERITED = [
-  { title: "게임 정보", desc: "룰 · 시놉시스 · 플레이타임" },
-  { title: "대기자 자동 초대", desc: "확정 참여로 승계" },
-  { title: "입력한 가능 시간표", desc: "조율을 처음부터 다시 안 함" },
-];
-
-function RoundSheet({
-  open,
-  onOpenChange,
-  gameId,
-  title,
-  waitingCount,
-  confirmedAt,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  gameId: string;
-  title: string;
-  waitingCount: number;
-  confirmedAt: Date | null;
-}) {
-  const router = useRouter();
-  const [pending, startTransition] = useTransition();
-  const [rangeStart, setRangeStart] = useState("");
-  const [rangeEnd, setRangeEnd] = useState("");
-
-  const minDate = confirmedAt
-    ? new Date(confirmedAt.getTime() + 86_400_000).toISOString().slice(0, 10)
-    : new Date().toISOString().slice(0, 10);
-
-  function submit() {
-    startTransition(async () => {
-      const result = await createSecondRound(gameId, { rangeStart, rangeEnd });
-      if (result.error) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success("다음 회차를 열었습니다");
-      onOpenChange(false);
-      if (result.redirect) router.push(result.redirect);
-    });
-  }
-
-  return (
-    <Sheet.Root open={open} onOpenChange={onOpenChange}>
-      <Sheet.Content>
-        <VStack gap={4}>
-          <VStack gap={1}>
-            <Text typography="heading3">다음 회차 만들기</Text>
-            <Text typography="body3" foreground="muted">
-              {title} · 대기 {waitingCount}명
-            </Text>
-          </VStack>
-
-          <VStack gap={2}>
-            <Text typography="body4" foreground="muted" className="font-bold">
-              승계할 항목
-            </Text>
-            <div className="overflow-hidden rounded-xl border border-gray-200">
-              {INHERITED.map((item) => (
-                <HStack
-                  key={item.title}
-                  align="center"
-                  gap={3}
-                  className="min-h-13 border-b border-gray-100 px-3 py-2.5 last:border-b-0"
-                >
-                  <span className="flex size-5 items-center justify-center rounded-md bg-primary-600 text-white">
-                    <Check size={12} aria-hidden />
-                  </span>
-                  <VStack gap={0}>
-                    <Text typography="subtitle2">{item.title}</Text>
-                    <Text typography="body4" foreground="hint">
-                      {item.desc}
-                    </Text>
-                  </VStack>
-                </HStack>
-              ))}
-            </div>
-          </VStack>
-
-          <HStack gap={3} align="start">
-            <VStack gap={2} className="flex-1">
-              <Text typography="body4" className="font-bold">
-                조율 시작일
-              </Text>
-              <DatePicker value={rangeStart} onChange={setRangeStart} min={minDate} />
-            </VStack>
-            <VStack gap={2} className="flex-1">
-              <Text typography="body4" className="font-bold">
-                조율 종료일
-              </Text>
-              <DatePicker value={rangeEnd} onChange={setRangeEnd} min={rangeStart || minDate} />
-            </VStack>
-          </HStack>
-
-          <HStack gap={2}>
-            <Button variant="outline" className="w-24" onClick={() => onOpenChange(false)}>
-              취소
-            </Button>
-            <Button
-              className="flex-1"
-              disabled={pending || !rangeStart || !rangeEnd}
-              onClick={submit}
-            >
-              회차 열기
-            </Button>
-          </HStack>
-        </VStack>
-      </Sheet.Content>
-    </Sheet.Root>
   );
 }

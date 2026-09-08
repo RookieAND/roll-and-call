@@ -1,7 +1,8 @@
 "use client";
 
 import { Badge, cn } from "@trpg/ui";
-import { dday, type SessionBadgeModel } from "../model/session";
+import { dday } from "@/shared/lib";
+import type { SessionBadgeModel } from "../model/session-card";
 
 // 배지는 "언제"만 말한다. D-N은 사용자 타임존 기준으로 클라이언트에서 계산.
 const BASE = "rounded-md px-2 py-1";

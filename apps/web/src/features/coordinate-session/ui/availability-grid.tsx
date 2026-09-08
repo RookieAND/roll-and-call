@@ -2,8 +2,8 @@
 
 import { Button, Text } from "@trpg/ui";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { toast } from "@/shared/lib/toast";
-import { slotIso, type DayColumn, type TimeRow } from "@/shared/lib/slots";
+import { toast } from "@/shared/ui";
+import { slotIso, type DayColumn, type TimeRow } from "@/shared/lib";
 import { saveAvailability } from "../api/save-availability";
 
 type Props = {
@@ -64,7 +64,8 @@ export function AvailabilityGrid({
   function save() {
     startTransition(async () => {
       const result = await saveAvailability(gameId, [...mine]);
-      if (!result.error) toast.success("가능 시간을 저장했습니다");
+      if (result.error) toast.error(result.error);
+      else toast.success("가능 시간을 저장했습니다");
     });
   }
 

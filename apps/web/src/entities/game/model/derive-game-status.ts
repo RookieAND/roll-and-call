@@ -1,4 +1,4 @@
-import type { Game } from "@/shared/api/db";
+import type { Game } from "@/shared/server";
 import { GAME_STATUS, type GameStatus } from "./status";
 
 // 확정 = 정원이 다 찬 상태(사람이 다 모임), 세션 시간 확정(confirmedAt)과는 별개.

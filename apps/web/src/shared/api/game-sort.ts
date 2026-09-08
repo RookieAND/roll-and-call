@@ -11,3 +11,6 @@ export const GAME_SORT_DEFAULT: GameSort = "latest";
 export function parseGameSort(value?: string): GameSort {
   return GAME_SORTS.find((o) => o.key === value)?.key ?? GAME_SORT_DEFAULT;
 }
+
+// 목록 조회 파라미터(검색어·정렬). 서버 쿼리와 클라이언트 필터 UI가 같은 타입을 본다.
+export type GamesFilter = { q?: string; sort?: GameSort };

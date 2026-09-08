@@ -1,5 +1,5 @@
 import { Badge, HStack, Text } from "@trpg/ui";
-import type { SessionCardModel } from "../model/session";
+import type { SessionCardModel } from "../model/session-card";
 import { SessionBadge } from "./session-badge";
 
 // 순수 표시: 제목 · 시간 배지 · 서브라인. 링크/동작 없음(감싸는 쪽이 소유).

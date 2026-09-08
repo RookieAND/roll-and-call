@@ -43,3 +43,11 @@ export function formatDate(value: Date | string) {
   );
   return `${p.month}월 ${p.day}일`;
 }
+
+// 사용자 타임존(로컬) 기준 남은 "날짜 수". 오늘=0, 3일 뒤=3. 클라이언트에서만 호출.
+export function dday(target: Date | string, now: Date = new Date()): number {
+  const t = new Date(target);
+  const a = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const b = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+  return Math.round((b.getTime() - a.getTime()) / 86_400_000);
+}

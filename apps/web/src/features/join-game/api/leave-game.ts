@@ -2,13 +2,11 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { PARTICIPANT_STATUS } from "@/entities/game";
-import { db, participants } from "@/shared/api/db";
-import { createClient } from "@/shared/api/supabase/server";
-import type { ActionResult } from "@/shared/api/action-result";
-
+import { countConfirmed, PARTICIPANT_STATUS } from "@/entities/game";
+import { db, participants, createSupabaseServerClient } from "@/shared/server";
+import type { ActionResult } from "@/shared/api";
 export async function leaveGame(gameId: string): Promise<ActionResult> {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -29,7 +27,7 @@ export async function leaveGame(gameId: string): Promise<ActionResult> {
   // 대기자는 언제든 대기를 취소할 수 있다. 확정자만 마감(정원 충족·기한 경과) 후
   // 자가 취소가 막히고 GM을 거친다.
   if (me.status === PARTICIPANT_STATUS.confirmed) {
-    const full = game.participants.length >= game.maxPlayers;
+    const full = countConfirmed(game.participants) >= game.maxPlayers;
     const expired = game.endDate.getTime() <= Date.now();
     if (full || expired) {
       return { error: "마감된 게임은 취소할 수 없습니다. GM에게 문의하세요." };

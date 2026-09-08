@@ -1,10 +1,11 @@
 import { Avatar, Text } from "@trpg/ui";
-import type { Game } from "@/shared/api/db";
+import type { Game } from "@/shared/server";
+import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { GameSeatCount } from "./game-seat-count";
 
 type GameRowData = Game & {
   gm: { username: string; avatarUrl: string | null } | null;
-  participants: { userId: string }[];
+  participants: { userId: string; status: ParticipantStatus }[];
 };
 
 // 순수 표시: 아바타 좌측 가로형 요약 행(홈 "지금 모집 중" 등). 링크·동작 없음.
@@ -20,7 +21,7 @@ export function GameRow({ game }: { game: GameRowData }) {
           {game.rule} · GM {game.gm?.username ?? "?"}
         </Text>
       </div>
-      <GameSeatCount current={game.participants.length} max={game.maxPlayers} />
+      <GameSeatCount current={countConfirmed(game.participants)} max={game.maxPlayers} />
     </div>
   );
 }

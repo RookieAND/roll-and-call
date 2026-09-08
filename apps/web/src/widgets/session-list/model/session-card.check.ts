@@ -1,14 +1,9 @@
 // Runnable self-check for session derivation (no test framework).
-// Run: pnpm -F web exec tsx src/entities/game/model/session.check.ts
+// Run: pnpm dlx tsx --tsconfig tsconfig.json src/widgets/session-list/model/session-card.check.ts
 import assert from "node:assert";
-import {
-  bucketHosted,
-  bucketJoined,
-  dday,
-  deriveSessionState,
-  type SessionGame,
-  toSessionCard,
-} from "./session";
+import { deriveSessionState } from "@/entities/game";
+import { dday } from "@/shared/lib";
+import { bucketHosted, bucketJoined, type SessionGame, toSessionCard } from "./session-card";
 
 const NOW = new Date("2026-08-20T12:00:00+09:00");
 const HOUR = 60 * 60 * 1000;

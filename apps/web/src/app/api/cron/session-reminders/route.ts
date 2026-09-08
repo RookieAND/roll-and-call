@@ -1,8 +1,6 @@
 import { and, gt, isNotNull, isNull, lte } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { db, games } from "@/shared/api/db";
-import { notifySessionStartingSoon } from "@/shared/api/discord/notify";
-
+import { db, games, notifySessionStartingSoon } from "@/shared/server";
 export const dynamic = "force-dynamic";
 
 const ONE_HOUR_MS = 60 * 60 * 1000;

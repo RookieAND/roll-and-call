@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
-import { getGameById } from "@/entities/game/index.server";
-import { getCurrentUser } from "@/shared/api/supabase/server";
+import { getGameById, getCurrentUser } from "@/shared/server";
 import { GameDetail } from "@/widgets/game-detail";
-
 export async function GameDetailView({ id }: { id: string }) {
   const game = await getGameById(id);
   if (!game) notFound();

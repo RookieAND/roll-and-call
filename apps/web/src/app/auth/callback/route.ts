@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/shared/api/supabase/server";
-
+import { createSupabaseServerClient } from "@/shared/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
@@ -9,7 +8,7 @@ export async function GET(request: Request) {
   if (!next.startsWith("/")) next = "/";
 
   if (code) {
-    const supabase = await createClient();
+    const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       // behind Vercel's proxy the real host is in x-forwarded-host

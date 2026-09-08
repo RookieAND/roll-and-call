@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { Pagination, Text, VStack } from "@trpg/ui";
 import { GameCard } from "@/entities/game";
-import { getGamesPage, type GamesFilter } from "@/entities/game/index.server";
-import { gamesHref } from "../lib/games-href";
+import { getRecruitingGamesPage } from "@/shared/server";
+import type { GamesFilter } from "@/shared/api";
+import { gamesHref } from "@/features/filter-games";
 import { GamesEmpty } from "./games-empty";
 
-type GamesPage = Awaited<ReturnType<typeof getGamesPage>>;
+type GamesPage = Awaited<ReturnType<typeof getRecruitingGamesPage>>;
 
 // sticky 헤더의 총 건수. GameList와 같은 조회 프로미스를 await 하므로 쿼리는 한 번만 돈다.
 export async function GamesCount({ promise }: { promise: Promise<GamesPage> }) {

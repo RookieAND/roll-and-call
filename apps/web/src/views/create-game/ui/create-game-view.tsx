@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { CreateGameForm } from "@/widgets/game-form";
-import { getCurrentUser } from "@/shared/api/supabase/server";
-
+import { getCurrentUser } from "@/shared/server";
 export async function CreateGameView() {
   const user = await getCurrentUser();
   if (!user) redirect("/");

@@ -5,9 +5,7 @@ import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { toast } from "@/shared/lib/toast";
-import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
-import { Sheet } from "@/shared/ui/sheet";
+import { toast, ConfirmDialog, Sheet } from "@/shared/ui";
 import { deleteGame } from "../api/delete-game";
 
 // 4g: GM 본인 시점의 ⋯ 메뉴. 수정·삭제는 빈도가 낮고 파괴적이라

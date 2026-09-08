@@ -1,5 +1,4 @@
-import { EmptyState } from "@/shared/ui/empty-state";
-
+import { EmptyState } from "@/shared/ui";
 // 조율 현황(전체 겹침) 응답자 0명 빈 상태.
 export function ScheduleOverlapEmpty() {
   return (

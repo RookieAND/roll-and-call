@@ -1,9 +1,7 @@
 "use client";
 
 import { cn } from "@trpg/ui";
-import { useState } from "react";
-import type { ReactNode } from "react";
-
+import { useState, type ReactNode } from "react";
 // ponytail: iOS식 세그먼트 컨트롤(트랙+shadow)이라 테두리 pill인 Chip과 룩이 달라 유지.
 const TABS = [
   { key: "mine", label: "내 가능 시간" },

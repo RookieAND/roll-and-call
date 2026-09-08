@@ -1,28 +1,12 @@
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  gt,
-  ilike,
-  isNotNull,
-  isNull,
-  ne,
-  or,
-  sql,
-  type SQL,
-} from "drizzle-orm";
-import { availabilities, db, games, participants } from "@/shared/api/db";
-import type { GameSort } from "../model/sort";
+import "server-only";
+import { and, asc, desc, eq, gt, ilike, isNull, or, sql, type SQL } from "drizzle-orm";
+import type { GamesFilter } from "@/shared/api";
+import { availabilities, db, games, participants } from "./db";
 
 export const GAMES_PAGE_SIZE = 12;
 
-export type GamesFilter = {
-  q?: string;
-  sort?: GameSort;
-};
-
-export async function getGamesPage(
+// 목록에 노출되는 모집 중 게임만(기한 내 + 정원 여유 + 미완료). 이름이 곧 필터 규칙.
+export async function getRecruitingGamesPage(
   page: number,
   filter: GamesFilter = {},
   pageSize = GAMES_PAGE_SIZE,
@@ -131,32 +115,4 @@ export async function getGameParticipants(gameId: string) {
     .where(eq(availabilities.gameId, gameId));
 
   return { game, availableUserIds: new Set(rows.map((r) => r.userId)) };
-}
-
-export async function getGameAvailabilities(gameId: string) {
-  return db.query.availabilities.findMany({
-    where: (a, { eq: eqOp }) => eqOp(a.gameId, gameId),
-    with: { user: { columns: { username: true } } },
-  });
-}
-
-// Confirmed session start times of OTHER games the user is involved in (GM or
-// participant). These block the user's grid — only confirmed sessions collide.
-export async function getUserConfirmedSlots(
-  userId: string,
-  excludeGameId: string,
-): Promise<string[]> {
-  const rows = await db
-    .selectDistinct({ confirmedAt: games.confirmedAt })
-    .from(games)
-    .leftJoin(participants, and(eq(participants.gameId, games.id), eq(participants.userId, userId)))
-    .where(
-      and(
-        isNotNull(games.confirmedAt),
-        ne(games.id, excludeGameId),
-        or(eq(games.gmId, userId), eq(participants.userId, userId)),
-      ),
-    );
-
-  return rows.map((r) => r.confirmedAt!.toISOString());
 }

@@ -3,10 +3,8 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { SLOT_KEYS } from "@/entities/profile";
-import { db, profiles } from "@/shared/api/db";
-import { createClient } from "@/shared/api/supabase/server";
-import type { ActionResult } from "@/shared/api/action-result";
-
+import { db, profiles, createSupabaseServerClient } from "@/shared/server";
+import type { ActionResult } from "@/shared/api";
 export type UpdateProfileInput = {
   username: string;
   bio: string;
@@ -14,7 +12,7 @@ export type UpdateProfileInput = {
 };
 
 export async function updateProfile(input: UpdateProfileInput): Promise<ActionResult> {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

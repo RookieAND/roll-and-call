@@ -13,9 +13,24 @@
 | `widgets/*`   | **entity + feature 조합** 블록, 또는 **덩치 큰 순수-표시 블록** | game-detail, game-board, game-form, game-list-item, GameInfoTable                 |
 | `views/*`     | 위젯/피처 조합 + 라우트 글루                                    | GamesView, MyPageView                                                             |
 
-**import 방향은 아래로만**: `shared ← entities ← features ← widgets ← views`. 상위 레이어를 import하지 않는다(예: feature는 widget을 import 금지). 교차 슬라이스는 각 슬라이스의 public API(배럴 `index.ts`)로 import한다. 서버 전용 읽기(DB 쿼리)는 `index.server.ts`로 따로 내보낸다(`@/entities/game/index.server`) — 클라이언트 번들에 postgres가 섞이지 않게 하면서도 내부 파일 deep import는 금지.
+**import 방향은 아래로만**: `shared ← entities ← features ← widgets ← views`. 상위 레이어를 import하지 않는다(예: feature는 widget을 import 금지).
 
-**feature 슬라이스는 동작명으로 짓는다**: `join-game`, `manage-game`, `confirm-session`처럼 사용자 동작 단위. 엔티티명(`features/game`)으로 두면 CRUD·참여·필터가 한 슬라이스에 쌓이는 god slice가 된다. 사용처가 한 곳뿐이고 상태 변경이 없는 표시/탭 UI는 feature로 빼지 말고 그 view·widget 안에 둔다(예: `ScheduleTabs`, `SessionTabFilter`, `Heatmap`은 view 소유). 서버 액션 반환은 `shared/api/action-result`의 `ActionResult` 하나를 쓴다.
+**절대 경로는 2 depth까지만**: `@/레이어/슬라이스`(`@/features/join-game`) 또는 `@/shared/세그먼트`(`@/shared/ui`)까지. 슬라이스 내부 파일(`@/features/join-game/api/join-game`)이나 shared 세그먼트 내부(`@/shared/ui/app-bar`)를 직접 가리키지 않는다. 슬라이스/세그먼트마다 `index.ts` 배럴이 public API다. 같은 슬라이스 안에서는 상대 경로.
+
+**shared 세그먼트는 런타임으로 나뉜다**: 배럴은 tree-shaking되지 않으므로 서버 전용 모듈이 섞이면 클라이언트 번들이 깨진다.
+
+| 세그먼트         | 내용                                                                          |
+| ---------------- | ----------------------------------------------------------------------------- |
+| `shared/api`     | 클라이언트 안전: `ActionResult`, Supabase 브라우저 클라이언트, 목록 정렬/필터 파라미터 |
+| `shared/server`  | 서버 전용(`server-only`): drizzle `db`·스키마, DB 읽기 쿼리, Supabase 서버 클라이언트·`getCurrentUser`, Discord 알림 |
+| `shared/lib`     | 순수 유틸: 날짜 포맷, 슬롯 계산                                                |
+| `shared/ui`      | 앱 공용 조합 컴포넌트 + `toast`                                                |
+
+DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 아니라 `shared/server`에 둔다(FSD 권장). 클라이언트 컴포넌트가 스키마 타입만 필요하면 `import type { Game } from "@/shared/server"`로 가져온다(타입 import는 번들에 남지 않는다). 세션 쿠키 갱신은 유일한 사용처인 `src/proxy.ts`가 소유한다.
+
+**feature 슬라이스는 동작명으로 짓는다**: `join-game`, `manage-game`, `confirm-session`처럼 사용자 동작 단위. 엔티티명(`features/game`)으로 두면 CRUD·참여·필터가 한 슬라이스에 쌓이는 god slice가 된다. 사용처가 한 곳뿐이고 상태 변경이 없는 표시/탭 UI는 feature로 빼지 말고 그 view·widget 안에 둔다(예: `ScheduleTabs`, `SessionTabFilter`, `Heatmap`은 view 소유). 서버 액션 반환은 `shared/api`의 `ActionResult` 하나를 쓴다.
+
+**entity에는 도메인 규칙과 원자 표시만**: 상태 판정(`deriveGameStatus`, `deriveSessionState`), 정원·순번 계산, 작은 표시 단위. 특정 화면의 문구·탭·라우트를 만드는 뷰 모델(`toSessionCard`, `bucketHosted`)이나 액션 존 분기(`deriveActionView`)는 그걸 그리는 widget의 `model/`에 둔다.
 
 **표시 컴포넌트의 체급**: 엔티티는 작고 반복되는 원자적 표시 단위(목록 카드·행 등)만 담는다. **순수 표시라도 덩치가 크면(복합 정보 블록·상세 표 등) entity가 아니라 widget에 둔다.** 표시 컴포넌트는 링크·동작을 갖지 않고, 네비게이션/상호작용은 상위(widget·view)가 감싸서 조합한다. (예: `GameCard`/`GameSummary`/`GameRow`는 링크 없는 entity, 상세 링크는 이를 감싸는 widget/view가 소유. `GameInfoTable`은 순수 표시지만 커서 widget에 둔다.)
 

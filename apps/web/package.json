@@ -27,6 +27,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.85.0",
+    "server-only": "^0.0.1",
     "sonner": "^2.0.8",
     "zod": "^4.4.3",
     "zustand": "^5.0.14"

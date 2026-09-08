@@ -3,12 +3,10 @@
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
-import { availabilities, db } from "@/shared/api/db";
-import { createClient } from "@/shared/api/supabase/server";
-import type { ActionResult } from "@/shared/api/action-result";
-
+import { availabilities, db, createSupabaseServerClient } from "@/shared/server";
+import type { ActionResult } from "@/shared/api";
 export async function saveAvailability(gameId: string, slotIsos: string[]): Promise<ActionResult> {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

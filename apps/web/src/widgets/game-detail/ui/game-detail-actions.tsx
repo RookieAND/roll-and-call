@@ -4,19 +4,18 @@ import Link from "next/link";
 import {
   canCoordinate,
   ConfirmedSessionNotice,
-  deriveActionView,
   GAME_STATUS,
   type GameStatus,
   PARTICIPANT_STATUS,
   type ParticipantStatus,
   WaitlistNotice,
 } from "@/entities/game";
-import type { GameDetailData } from "@/entities/game/index.server";
+import { deriveActionView } from "../model/derive-action-view";
+import type { GameDetailData } from "@/shared/server";
 import { LoginButton } from "@/features/auth";
 import { GameScheduleLink } from "@/features/coordinate-session";
 import { JoinButton, joinGame, leaveGame } from "@/features/join-game";
-import { StatusNotice } from "@/shared/ui/status-notice";
-
+import { StatusNotice } from "@/shared/ui";
 type Props = {
   game: GameDetailData;
   viewerId: string | null;

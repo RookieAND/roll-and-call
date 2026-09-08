@@ -3,13 +3,15 @@ import { ChevronRight, Pencil } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
-import { bucketHosted, bucketJoined, type SessionCardModel } from "@/entities/game";
-import { getGamesByGm, getJoinedGames } from "@/entities/game/index.server";
-import { getProfile } from "@/entities/profile/index.server";
-import { getCurrentUser } from "@/shared/api/supabase/server";
-import { AppBar } from "@/shared/ui/app-bar";
-import { ThemeToggle } from "@/shared/ui/theme-toggle";
-import { SessionList } from "@/widgets/session-list";
+import { profileDisplay } from "@/entities/profile";
+import { getGamesByGm, getJoinedGames, getProfile, getCurrentUser } from "@/shared/server";
+import { AppBar, StatCard, ThemeToggle } from "@/shared/ui";
+import {
+  bucketHosted,
+  bucketJoined,
+  type SessionCardModel,
+  SessionList,
+} from "@/widgets/session-list";
 import { HostedSessionsEmpty, UpcomingSessionsEmpty } from "./session-summary-empty";
 
 const TOP = 3;
@@ -30,18 +32,7 @@ export async function MyPageView() {
   const hosting = hostedBuckets.recruiting; // 운영 중
   const pastCount = joinedBuckets.closed.length + hostedBuckets.closed.length;
 
-  const name =
-    profile?.username ??
-    user.user_metadata.full_name ??
-    user.user_metadata.name ??
-    user.email ??
-    "";
-  const avatar =
-    profile?.avatarUrl ?? (user.user_metadata.avatar_url as string | undefined) ?? null;
-  const handle =
-    (user.user_metadata.user_name as string | undefined) ??
-    (user.user_metadata.preferred_username as string | undefined) ??
-    null;
+  const { name, avatar, handle } = profileDisplay({ profile, user });
 
   const summary = [
     { n: upcoming.length, label: "참여 예정" },
@@ -84,16 +75,8 @@ export async function MyPageView() {
 
           <HStack className="gap-[9px]">
             {summary.map((m) => (
-              <div key={m.label} className="flex-1 rounded-[14px] border border-gray-200 p-3.5">
-                <Text
-                  render={<div />}
-                  className="text-[24px] font-extrabold leading-none tracking-[-0.03em] tabular-nums"
-                >
-                  {m.n}
-                </Text>
-                <Text typography="body4" foreground="muted" className="mt-1.5 block font-semibold">
-                  {m.label}
-                </Text>
+              <div key={m.label} className="flex-1">
+                <StatCard value={m.n} label={m.label} />
               </div>
             ))}
           </HStack>
