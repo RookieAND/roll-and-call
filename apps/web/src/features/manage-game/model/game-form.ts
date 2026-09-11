@@ -1,5 +1,8 @@
 import { z } from "zod";
 import { SCHEDULE_MODE, SCHEDULE_MODES } from "@/entities/game";
+
+// 세션 예정일 범위 상한(일). 스키마 검증과 달력 max가 같은 값을 본다.
+export const GAME_RANGE_MAX_DAYS = 14;
 // String-based (RHF-friendly: input type === output type). The server action
 // re-validates and converts strings to DB types (Number/Date).
 export const gameFormSchema = z
@@ -71,10 +74,10 @@ export const gameFormSchema = z
         });
       } else if (v.rangeStart) {
         const days = (Date.parse(v.rangeEnd) - Date.parse(v.rangeStart)) / 86_400_000;
-        if (days > 14) {
+        if (days > GAME_RANGE_MAX_DAYS) {
           ctx.addIssue({
             code: "custom",
-            message: "세션 예정일 범위는 최대 2주까지 설정할 수 있습니다.",
+            message: `세션 예정일 범위는 최대 ${GAME_RANGE_MAX_DAYS}일까지 설정할 수 있습니다.`,
             path: ["rangeEnd"],
           });
         }

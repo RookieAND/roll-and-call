@@ -8,7 +8,7 @@
 | ------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `packages/ui` | 도메인 무관 순수 UI 키트                                        | Button, IconButton, Chip, Select, TextInput, Field, Card                          |
 | `shared/ui`   | 앱 공용(도메인 약함) 조합 컴포넌트                              | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                              |
-| `entities/*`  | 도메인 엔티티의 **작고 원자적인 표시** 단위                     | GameCard, GameSummary, GameRow                                                    |
+| `entities/*`  | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위        | game, profile, availability                                                       |
 | `features/*`  | **단일 사용자 동작**(server action·toggle 등 상태 변경)         | JoinButton, DeleteGameButton, GameStatusFilter, GameScheduleLink, ThumbnailUpload |
 | `widgets/*`   | **entity + feature 조합** 블록, 또는 **덩치 큰 순수-표시 블록** | game-detail, game-board, game-form, game-list-item, GameInfoTable                 |
 | `views/*`     | 위젯/피처 조합 + 라우트 글루                                    | GamesView, MyPageView                                                             |
@@ -32,7 +32,15 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 
 **feature 슬라이스는 동작명으로 짓는다**: `join-game`, `manage-game`, `confirm-session`처럼 사용자 동작 단위. 엔티티명(`features/game`)으로 두면 CRUD·참여·필터가 한 슬라이스에 쌓이는 god slice가 된다. 사용처가 한 곳뿐이고 상태 변경이 없는 표시/탭 UI는 feature로 빼지 말고 그 view·widget 안에 둔다(예: `ScheduleTabs`, `SessionTabFilter`, `Heatmap`은 view 소유). 서버 액션 반환은 `shared/api`의 `ActionResult` 하나를 쓴다.
 
-**entity에는 도메인 규칙과 원자 표시만**: 상태 판정(`deriveGameStatus`, `deriveSessionState`), 정원·순번 계산, 작은 표시 단위. 특정 화면의 문구·탭·라우트를 만드는 뷰 모델(`toSessionCard`, `bucketHosted`)이나 액션 존 분기(`deriveActionView`)는 그걸 그리는 widget의 `model/`에 둔다.
+**엔티티는 실제 개념 단위로 나누되, 쪼개면 교차 import가 생기는 것은 합친다.** FSD는 "슬라이스는 같은 레이어의 다른 슬라이스를 쓸 수 없다"고 못박으므로, 이 규칙이 곧 분할 가능 여부의 시험대다. 현재 엔티티는 셋이다.
+
+| 엔티티 | 담는 개념 | 비고 |
+| ------ | --------- | ---- |
+| `game` | 구인글 + 참여자 로스터 + 세션 일정 | 셋은 한 aggregate다. `deriveGameStatus`가 참여자 수로 모집 상태를 정하고, 세션 일정은 games의 컬럼이다. 쪼개면 양방향 교차 import가 생긴다 |
+| `availability` | 가능 시간 집계·후보 슬롯 | game 쪽과 서로 참조가 없어 독립 슬라이스로 뗐다 |
+| `profile` | 사용자 표시 정보 | 특정 feature만 쓰는 값(기본 가능 시간대 프리셋)은 그 feature의 `model`에 둔다 |
+
+**entity에는 도메인 규칙과 원자 표시만**: 상태 판정(`deriveGameStatus`, `deriveSessionState`), 정원·순번 계산, 작은 표시 단위. 특정 화면의 문구·탭·라우트를 만드는 뷰 모델(`toSessionCard`, `bucketHosted`)이나 액션 존 분기(`deriveActionView`), 목록 행 문구(`gameSubline`)는 그걸 그리는 widget의 `model/`에 둔다. 화면별 구분이 필요하면 새 타입을 만들지 말고 도메인에 이미 있는 `SessionRole`(`host` | `player`)을 쓴다.
 
 **표시 컴포넌트의 체급**: 엔티티는 작고 반복되는 원자적 표시 단위(목록 카드·행 등)만 담는다. **순수 표시라도 덩치가 크면(복합 정보 블록·상세 표 등) entity가 아니라 widget에 둔다.** 표시 컴포넌트는 링크·동작을 갖지 않고, 네비게이션/상호작용은 상위(widget·view)가 감싸서 조합한다. (예: `GameCard`/`GameSummary`/`GameRow`는 링크 없는 entity, 상세 링크는 이를 감싸는 widget/view가 소유. `GameInfoTable`은 순수 표시지만 커서 widget에 둔다.)
 

@@ -3,7 +3,6 @@ import assert from "node:assert";
 import { canCoordinateSchedule } from "./can-coordinate-schedule";
 import { deriveGameStatus } from "./derive-game-status";
 import { countConfirmed } from "./participant";
-import { rankSlots } from "./rank-slots";
 import { splitRoster } from "./split-roster";
 
 const DAY = 86_400_000;
@@ -59,18 +58,6 @@ assert.equal(
 assert.equal(
   canCoordinateSchedule({ scheduleMode: "fixed", confirmedAt: null, status: "recruiting" }),
   false,
-);
-
-// 후보 슬롯: 인원 내림차순, 동률이면 이른 시각
-assert.deepEqual(
-  rankSlots({
-    counts: { "2026-09-10T11:00:00.000Z": 2, "2026-09-09T11:00:00.000Z": 2, x: 3 },
-    limit: 2,
-  }),
-  [
-    { iso: "x", count: 3 },
-    { iso: "2026-09-09T11:00:00.000Z", count: 2 },
-  ],
 );
 
 console.log("game.check: OK");

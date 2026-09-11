@@ -1,48 +1,20 @@
 import { HStack, Text } from "@trpg/ui";
 import type { Game } from "@/shared/server";
-import { formatDateTime } from "@/shared/lib";
-import { deriveGameStatus } from "../model/derive-game-status";
-import { countConfirmed, type ParticipantStatus } from "../model/participant";
-import { GAME_STATUS } from "../model/status";
+import type { GameStatus } from "../model/status";
 import { GameRoundBadge } from "./game-round-badge";
 import { GameStatusBadge } from "./game-status-badge";
 
-export const GAME_LIST_CONTEXT = {
-  mine: "mine",
-  joined: "joined",
-} as const;
-export type GameListContext = (typeof GAME_LIST_CONTEXT)[keyof typeof GAME_LIST_CONTEXT];
-
-type GameSummaryData = Game & {
-  gm: { username: string } | null;
-  participants: { userId: string; status: ParticipantStatus }[];
-};
-
-// 순수 표시: 제목·상태 뱃지·부가정보 한 줄. 링크·상호작용 없음.
-// "mine" → rule · seats ; "joined" → GM · datetime/조율중 (matches 시안 6a)
+// 순수 표시: 회차·제목·상태 뱃지 한 줄 + 부가정보 한 줄. 링크·상호작용 없음.
+// subline 문구는 화면마다 다르므로 호출부(위젯)가 만들어 넘긴다.
 export function GameSummary({
   game,
-  context = GAME_LIST_CONTEXT.joined,
+  status,
+  subline,
 }: {
-  game: GameSummaryData;
-  context?: GameListContext;
+  game: Pick<Game, "title" | "round">;
+  status: GameStatus;
+  subline: string;
 }) {
-  const count = countConfirmed(game.participants);
-  const status = deriveGameStatus({
-    maxPlayers: game.maxPlayers,
-    endDate: game.endDate,
-    participantCount: count,
-  });
-  const gm = game.gm?.username ?? "?";
-  const sub =
-    context === GAME_LIST_CONTEXT.mine
-      ? `${game.rule} · ${count}/${game.maxPlayers}`
-      : game.confirmedAt
-        ? `GM ${gm} · ${formatDateTime(game.confirmedAt)}`
-        : status === GAME_STATUS.closed
-          ? `GM ${gm} · 마감`
-          : `GM ${gm} · 조율 중`;
-
   return (
     <>
       <HStack justify="between" align="center" gap={2}>
@@ -55,7 +27,7 @@ export function GameSummary({
         <GameStatusBadge status={status} />
       </HStack>
       <Text typography="body4" foreground="muted" className="mt-1 block truncate">
-        {sub}
+        {subline}
       </Text>
     </>
   );

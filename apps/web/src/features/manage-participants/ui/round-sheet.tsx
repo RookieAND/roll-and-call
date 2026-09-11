@@ -4,6 +4,7 @@ import { Button, HStack, Text, VStack } from "@trpg/ui";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { addDays } from "@/shared/lib";
 import { DatePicker, Sheet, toast } from "@/shared/ui";
 import { createSecondRound } from "../api/create-second-round";
 import { SECOND_ROUND_MAX_DAYS } from "../model/second-round";
@@ -13,12 +14,6 @@ const INHERITED = [
   { title: "대기자 자동 초대", desc: "확정 참여로 승계" },
   { title: "입력한 가능 시간표", desc: "조율을 처음부터 다시 안 함" },
 ];
-
-function addDays(date: string, n: number): string {
-  const d = new Date(`${date}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + n);
-  return d.toISOString().slice(0, 10);
-}
 
 // 대기자를 승계해 다음 회차를 여는 시트. 조율 기간만 입력받는다.
 export function RoundSheet({

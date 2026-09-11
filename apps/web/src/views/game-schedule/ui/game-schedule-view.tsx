@@ -1,35 +1,30 @@
-import { notFound } from "next/navigation";
 import { Container, Text, VStack } from "@trpg/ui";
+import { notFound } from "next/navigation";
+import { aggregateAvailability, rankSlots } from "@/entities/availability";
+import { ConfirmedSessionNotice, hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
+import { ConfirmSessionForm } from "@/features/confirm-session";
+import { buildDayColumns, buildTimeRows, formatDateTime } from "@/shared/lib";
 import {
+  getCurrentUser,
   getGameAvailabilities,
   getGameById,
   getUserConfirmedSlots,
-  getCurrentUser,
 } from "@/shared/server";
-import {
-  aggregateAvailability,
-  ConfirmedSessionNotice,
-  hasUserJoined,
-  isGameGm,
-  rankSlots,
-  SCHEDULE_MODE,
-} from "@/entities/game";
-import { formatDateTime, buildDayColumns, buildTimeRows } from "@/shared/lib";
-import { ConfirmSessionForm } from "@/features/confirm-session";
-import { AvailabilityGrid } from "@/features/coordinate-session";
-import { AppBar, StatusNotice } from "@/shared/ui";
-import { HeatLegend, Heatmap } from "./heatmap";
-import { ScheduleOverlapEmpty } from "./schedule-overlap-empty";
-import { ScheduleTabs } from "./schedule-tabs";
+import { AppBar } from "@/shared/ui";
+import { ScheduleBody } from "./schedule-body";
 
 export async function GameScheduleView({ id }: { id: string }) {
   const game = await getGameById(id);
   if (!game) notFound();
 
-  if (game.scheduleMode !== SCHEDULE_MODE.coordinate || !game.rangeStart || !game.rangeEnd) {
+  const appBar = <AppBar back={`/games/${id}`} title={`${game.title} · 일정 조율`} />;
+  const isCoordinated =
+    game.scheduleMode === SCHEDULE_MODE.coordinate && game.rangeStart && game.rangeEnd;
+
+  if (!isCoordinated) {
     return (
       <>
-        <AppBar back={`/games/${id}`} title={`${game.title} · 일정 조율`} />
+        {appBar}
         <Container size="md">
           <VStack gap={4} className="py-6">
             <Text foreground="muted" render={<p />}>
@@ -42,86 +37,38 @@ export async function GameScheduleView({ id }: { id: string }) {
   }
 
   const user = await getCurrentUser();
+  const viewerId = user?.id ?? null;
+  const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
+  const involved = isGm || hasUserJoined({ participants: game.participants, userId: viewerId });
 
-  const isGm = isGameGm({ gmId: game.gmId, userId: user?.id ?? null });
-  const involved =
-    isGm || hasUserJoined({ participants: game.participants, userId: user?.id ?? null });
+  const [avails, blocked] = await Promise.all([
+    getGameAvailabilities(id),
+    user ? getUserConfirmedSlots(user.id, id) : [],
+  ]);
+  const aggregate = aggregateAvailability({ avails, userId: viewerId });
 
-  const days = buildDayColumns(game.rangeStart, game.rangeEnd);
-  const timeRows = buildTimeRows();
-
-  const avails = await getGameAvailabilities(id);
-  const hasResponses = avails.length > 0;
-  const { counts, names, mine } = aggregateAvailability({
-    avails,
-    userId: user?.id ?? null,
-  });
-
-  const blocked = user ? await getUserConfirmedSlots(user.id, id) : [];
-
-  const confirmOptions = rankSlots({ counts }).map(({ iso, count }) => ({
+  const confirmOptions = rankSlots({ counts: aggregate.counts }).map(({ iso, count }) => ({
     iso,
     label: `${formatDateTime(iso)} · ${count}명 가능`,
   }));
-
-  const overlapBlock = (hint: string) => (
-    <VStack gap={3}>
-      <Text typography="body4" foreground="muted">
-        {hint}
-      </Text>
-      <HeatLegend />
-      <Heatmap
-        days={days}
-        timeRows={timeRows}
-        counts={counts}
-        names={names}
-        confirmedAt={game.confirmedAt}
-      />
-    </VStack>
-  );
+  const canConfirm = isGm && !game.confirmedAt;
 
   return (
     <>
-      <AppBar back={`/games/${id}`} title={`${game.title} · 일정 조율`} />
+      {appBar}
       <Container>
         <VStack gap={6} className="py-6">
           {game.confirmedAt && <ConfirmedSessionNotice confirmedAt={game.confirmedAt} />}
-
-          {game.confirmedAt ? (
-            overlapBlock("확정된 슬롯은 초록 테두리로 표시됩니다. 편집은 잠깁니다.")
-          ) : involved ? (
-            <ScheduleTabs
-              mine={
-                <AvailabilityGrid
-                  gameId={id}
-                  days={days}
-                  timeRows={timeRows}
-                  initialMine={mine}
-                  blocked={blocked}
-                />
-              }
-              overlap={
-                hasResponses ? (
-                  overlapBlock(
-                    "색이 진할수록 많은 인원이 가능합니다. 셀에 커서를 올리면 이름이 보입니다.",
-                  )
-                ) : (
-                  <ScheduleOverlapEmpty />
-                )
-              }
-            />
-          ) : (
-            <VStack gap={3}>
-              {hasResponses ? (
-                overlapBlock("전체 겹침만 열람할 수 있습니다.")
-              ) : (
-                <ScheduleOverlapEmpty />
-              )}
-              <StatusNotice tone="muted">참여자만 가능 시간을 입력할 수 있습니다.</StatusNotice>
-            </VStack>
-          )}
-
-          {isGm && !game.confirmedAt && <ConfirmSessionForm gameId={id} options={confirmOptions} />}
+          <ScheduleBody
+            gameId={id}
+            days={buildDayColumns(game.rangeStart!, game.rangeEnd!)}
+            timeRows={buildTimeRows()}
+            aggregate={aggregate}
+            blocked={blocked}
+            confirmedAt={game.confirmedAt}
+            involved={involved}
+          />
+          {canConfirm && <ConfirmSessionForm gameId={id} options={confirmOptions} />}
         </VStack>
       </Container>
     </>

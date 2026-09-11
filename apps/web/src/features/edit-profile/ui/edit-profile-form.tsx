@@ -3,7 +3,7 @@
 import { Avatar, Button, Chip, Field, Text, TextInput, Textarea, VStack } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { SLOT_PRESETS } from "@/entities/profile";
+import { SLOT_PRESETS } from "../model/slot-presets";
 import { toast } from "@/shared/ui";
 import { refreshAvatar } from "../api/refresh-avatar";
 import { updateProfile } from "../api/update-profile";

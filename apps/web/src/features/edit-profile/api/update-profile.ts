@@ -2,7 +2,7 @@
 
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { SLOT_KEYS } from "@/entities/profile";
+import { SLOT_KEYS } from "../model/slot-presets";
 import { db, profiles, getCurrentUser } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 export type UpdateProfileInput = {
