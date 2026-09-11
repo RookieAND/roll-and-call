@@ -1,45 +1,20 @@
-import Link from "next/link";
-import { Button, Container, Skeleton, Text, TextInput, VStack } from "@trpg/ui";
-import { AppBar } from "@/shared/ui";
-// 시안 2b: search + filter bar render immediately (not skeletonized); only cards shimmer.
+import { Container, Skeleton, VStack } from "@trpg/ui";
+import { GameSearchForm } from "@/features/filter-games";
+import { GameListSkeleton, GamesAppBar } from "@/views/games";
+
+// 시안 2b: 머리말과 검색바는 바로 뜨고 카드만 셰이머로 채운다.
+// 셸을 손으로 다시 그리지 않고 실제 화면과 같은 조각을 쓴다.
 export default function Loading() {
   return (
     <>
-      <AppBar
-        title="구인 목록"
-        action={
-          <Link href="/games/new">
-            <Button size="sm">새 구인</Button>
-          </Link>
-        }
-      />
+      <GamesAppBar />
       <Container>
-        <VStack gap={4} className="py-4">
-          <TextInput placeholder="게임명 · 룰 검색" disabled />
-          <div className="flex gap-2">
-            {["전체", "일정조율", "확정", "마감"].map((c) => (
-              <Text
-                key={c}
-                typography="subtitle2"
-                foreground="muted"
-                className="rounded-full border border-gray-200 bg-surface px-[11px] py-1.5"
-              >
-                {c}
-              </Text>
-            ))}
-          </div>
-          <VStack className="gap-2.5">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-[14px] border border-gray-200 p-4">
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="mt-2 h-3 w-1/3" />
-                <div className="mt-4 flex justify-between">
-                  <Skeleton className="h-5 w-24" />
-                  <Skeleton className="h-5 w-16" />
-                </div>
-              </div>
-            ))}
-          </VStack>
+        <div className="flex flex-col gap-3 px-4 pt-4 pb-2">
+          <GameSearchForm />
+          <Skeleton className="h-4 w-16" />
+        </div>
+        <VStack gap={4} className="pt-3 pb-4">
+          <GameListSkeleton />
         </VStack>
       </Container>
     </>
