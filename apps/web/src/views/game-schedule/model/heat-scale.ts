@@ -9,7 +9,7 @@ export function heatColor(count: number): string {
   return `var(--color-heat-${step})`;
 }
 
-// 칸이 충분히 진해지면 숫자를 흰색으로, 아니면 잉크색으로 읽는다.
+// 가장 진한 칸에서만 흰 숫자를 쓴다. 중간 단계에 흰 글씨를 얹으면 라이트에서 안 읽힌다.
 export function heatTextColor(count: number): string {
-  return `var(--color-heat-ink${count >= 3 ? "-strong" : ""})`;
+  return `var(--color-heat-ink${count >= MAX_STEP ? "-strong" : ""})`;
 }

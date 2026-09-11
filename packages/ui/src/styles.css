@@ -65,15 +65,18 @@
   --color-tinted-bg-hover: #eeedfc;
   --color-tinted-border: #d5d3f7;
   --color-tinted-ink: #4338ca;
+}
 
-  /* 겹침 히트맵 단계(0→5+). 초록 그라데이션이 아니라 채도 단계다. */
+/* 히트맵 단계는 유틸리티(bg-heat-3)가 아니라 인라인 style의 var()로만 쓴다.
+   @theme에 두면 Tailwind가 "쓰이지 않는 토큰"으로 보고 걷어내므로 여기에 직접 둔다. */
+:root {
   --color-heat-0: #ffffff;
   --color-heat-1: #edeefc;
   --color-heat-2: #d8dafa;
   --color-heat-3: #b7baf5;
   --color-heat-4: #8e92ef;
   --color-heat-5: #5b60e4;
-  --color-heat-ink: #5b60e4;
+  --color-heat-ink: #2b2d78;
   /* 진한 칸 위에 얹히는 글씨. 두 테마 모두 흰색이라 .dark 오버라이드가 없다. */
   --color-heat-ink-strong: #ffffff;
 }
@@ -104,7 +107,6 @@
   --color-success-50: #12291f;
   --color-success-100: #17352a;
   --color-success-200: #1f4a39;
-  --color-success-600: #34d399;
   --color-success-700: #6ee7b7;
   --color-success-800: #a7f3d0;
 
