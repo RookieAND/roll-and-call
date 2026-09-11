@@ -3,7 +3,7 @@ import type { ComponentPropsWithRef } from "react";
 import { cn } from "./cn";
 
 const field = cva(
-  "w-full rounded-[10px] border bg-surface px-3 text-sm outline-none transition-colors placeholder:text-gray-400 focus:ring-2 [color-scheme:light]",
+  "w-full rounded-[10px] border bg-surface px-3 text-sm outline-none transition-colors placeholder:text-hint focus:ring-2 [color-scheme:light]",
   {
     variants: {
       invalid: {

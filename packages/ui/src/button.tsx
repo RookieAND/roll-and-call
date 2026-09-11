@@ -11,7 +11,7 @@ const button = cva(
         solid: "bg-primary-600 text-white hover:bg-primary-700",
         discord:
           "bg-discord text-white shadow-[0_6px_18px_rgba(88,101,242,0.24)] hover:bg-discord-dark",
-        confirm: "bg-success-600 text-white hover:bg-success-700",
+        confirm: "bg-success-solid text-white hover:bg-success-solid-hover",
         outline: "border border-gray-200 text-gray-600 hover:bg-gray-50",
         tinted: "border border-tinted-border bg-tinted-bg text-tinted-ink hover:bg-tinted-bg-hover",
         ghost: "text-gray-700 hover:bg-gray-100",

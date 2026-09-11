@@ -52,14 +52,20 @@
   --color-danger-300: #e9c9c9;
   --color-danger-400: #e5a0a0;
   --color-danger-600: #c33b3b;
-  /* 토스트처럼 항상 흰 글씨가 얹히는 솔리드 배경. 테마가 바뀌어도 빨강으로 남는다. */
+  /* 항상 흰 글씨가 얹히는 솔리드 배경. 테마가 바뀌어도 색이 그대로 남는다.
+     숫자 램프(success-700 등)는 다크에서 글씨색으로 뒤집히므로 여기에 쓰면 안 된다. */
   --color-danger-solid: #c33b3b;
+  --color-success-solid: #0b7a55;
+  --color-success-solid-hover: #0a5c41;
 
   /* 주의(warning) — 아직 하지 않은 일 */
   --color-warning-600: #b45309;
 
   /* 배경·글씨가 한 세트로 움직이는 역할 토큰.
      숫자 램프를 배경과 글씨에 같이 쓰면 다크에서 한쪽이 반드시 깨진다. */
+  /* 보조 문구(요일·순번·핸들·placeholder). gray 램프에는 surface 위에서 4.5:1을 넘는
+     단계가 없어서(400=2.06, 500=3.41) 역할 토큰으로 따로 둔다. */
+  --color-hint: #70707a;
   --color-primary-ink: #4f46e5;
   --color-tinted-bg: #f5f4ff;
   --color-tinted-bg-hover: #eeedfc;
@@ -119,6 +125,7 @@
 
   --color-warning-600: #fbbf24;
 
+  --color-hint: #8f8f9a;
   --color-primary-ink: #a5b4fc;
   --color-tinted-bg: #262647;
   --color-tinted-bg-hover: #2f2f57;

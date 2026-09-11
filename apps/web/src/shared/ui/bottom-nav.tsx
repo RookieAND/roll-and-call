@@ -23,7 +23,7 @@ export function BottomNav() {
             href={tab.href}
             className={cn(
               "flex flex-col items-center justify-center gap-1.5 transition-colors",
-              active ? "text-primary-600" : "text-gray-400",
+              active ? "text-primary-600" : "text-hint",
             )}
           >
             <tab.Icon size={18} aria-hidden />

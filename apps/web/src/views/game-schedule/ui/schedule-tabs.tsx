@@ -25,7 +25,7 @@ export function ScheduleTabs({ mine, overlap }: { mine: ReactNode; overlap: Reac
               onClick={() => setTab(t.key)}
               className={cn(
                 "h-9 flex-1 rounded-lg text-sm font-bold transition-colors",
-                active ? "bg-surface text-gray-900 shadow-sm" : "text-gray-500",
+                active ? "bg-surface text-gray-900 shadow-sm" : "text-gray-600",
               )}
             >
               {t.label}

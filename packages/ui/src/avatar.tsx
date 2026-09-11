@@ -80,7 +80,7 @@ export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupPro
       ))}
       {extra > 0 && (
         <span
-          className={cn(avatar({ size }), "-ml-2 bg-gray-100 text-gray-500 ring-2 ring-surface")}
+          className={cn(avatar({ size }), "-ml-2 bg-gray-100 text-gray-600 ring-2 ring-surface")}
         >
           +{extra}
         </span>

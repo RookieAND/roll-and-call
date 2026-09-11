@@ -36,7 +36,7 @@ export function DatePicker({
         className={cn(triggerClass, invalid ? "border-danger-400" : "border-gray-300")}
       >
         {value ? <span>{value}</span> : <Text foreground="hint">{placeholder}</Text>}
-        <CalendarIcon size={16} aria-hidden className="text-gray-400" />
+        <CalendarIcon size={16} aria-hidden className="text-gray-500" />
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Positioner sideOffset={4} className="z-50">

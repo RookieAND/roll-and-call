@@ -23,7 +23,7 @@ function Content({ children, className }: { children: ReactNode; className?: str
 
 function Title({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <Dialog.Title className={cn("mb-3 text-sm font-bold text-gray-500", className)}>
+    <Dialog.Title className={cn("mb-3 text-sm font-bold text-gray-600", className)}>
       {children}
     </Dialog.Title>
   );

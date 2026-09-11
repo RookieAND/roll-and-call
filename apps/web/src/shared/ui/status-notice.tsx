@@ -17,7 +17,7 @@ export function StatusNotice({
         "rounded-xl p-4 text-center",
         tone === "success"
           ? "border border-success-200 bg-success-50"
-          : "bg-gray-50 text-sm text-gray-500",
+          : "bg-gray-50 text-sm text-gray-600",
         className,
       )}
     >

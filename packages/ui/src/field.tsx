@@ -29,7 +29,7 @@ export function Field({
         </label>
       )}
       {children}
-      {description && !error && <p className="text-xs text-gray-500">{description}</p>}
+      {description && !error && <p className="text-xs text-gray-600">{description}</p>}
       {error && <p className="text-xs text-danger-600">{error}</p>}
     </div>
   );

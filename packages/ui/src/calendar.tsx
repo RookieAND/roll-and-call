@@ -63,7 +63,7 @@ export function Calendar({ value, onSelect, min, max }: CalendarProps) {
           ›
         </button>
       </div>
-      <div className="grid grid-cols-7 text-center text-xs text-gray-400">
+      <div className="grid grid-cols-7 text-center text-xs text-hint">
         {WEEKDAYS.map((w) => (
           <div key={w} className="py-1">
             {w}

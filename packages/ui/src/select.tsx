@@ -77,11 +77,11 @@ function Trigger({
           <BaseSelect.Value>
             {(v: string) =>
               items.find((o) => o.value === v)?.label ?? (
-                <span className="text-gray-400">{placeholder}</span>
+                <span className="text-hint">{placeholder}</span>
               )
             }
           </BaseSelect.Value>
-          <BaseSelect.Icon className="text-gray-400">▾</BaseSelect.Icon>
+          <BaseSelect.Icon className="text-gray-500">▾</BaseSelect.Icon>
         </>
       )}
     </BaseSelect.Trigger>

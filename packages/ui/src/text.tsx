@@ -21,8 +21,8 @@ const text = cva("", {
     },
     foreground: {
       normal: "text-gray-900",
-      muted: "text-gray-500",
-      hint: "text-gray-400",
+      muted: "text-gray-600",
+      hint: "text-hint",
       primary: "text-primary-ink",
       success: "text-success-700",
       danger: "text-danger-600",

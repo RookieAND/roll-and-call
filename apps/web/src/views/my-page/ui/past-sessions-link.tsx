@@ -9,7 +9,7 @@ export function PastSessionsLink({ count, href }: { count: number; href: string 
   return (
     <Link
       href={href}
-      className="flex items-center justify-center gap-1 border-t border-gray-100 pt-4 text-gray-500"
+      className="flex items-center justify-center gap-1 border-t border-gray-100 pt-4 text-gray-600"
     >
       <Text typography="body3" foreground="muted" className="font-semibold">
         지난 세션 {count}
