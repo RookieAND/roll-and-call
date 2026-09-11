@@ -11,3 +11,4 @@ export { ThemeToggle } from "./theme-toggle";
 export { Toaster } from "./toaster";
 export { toast } from "./toast";
 export { StatCard } from "./stat-card";
+export { SlotGrid } from "./slot-grid";

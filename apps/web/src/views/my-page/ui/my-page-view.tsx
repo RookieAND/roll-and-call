@@ -1,20 +1,13 @@
-import { Avatar, Container, HStack, IconButton, Text, VStack } from "@trpg/ui";
-import { ChevronRight, Pencil } from "lucide-react";
-import Link from "next/link";
+import { Container, HStack, VStack } from "@trpg/ui";
 import { redirect } from "next/navigation";
-import type { ReactNode } from "react";
 import { profileDisplay } from "@/entities/profile";
-import { getGamesByGm, getJoinedGames, getProfile, getCurrentUser } from "@/shared/server";
-import { AppBar, StatCard, ThemeToggle } from "@/shared/ui";
-import {
-  bucketHosted,
-  bucketJoined,
-  type SessionCardModel,
-  SessionList,
-} from "@/widgets/session-list";
+import { getCurrentUser, getGamesByGm, getJoinedGames, getProfile } from "@/shared/server";
+import { AppBar, StatCard } from "@/shared/ui";
+import { summarizeMySessions } from "../model/my-page-summary";
+import { MyPageHeader } from "./my-page-header";
+import { PastSessionsLink } from "./past-sessions-link";
 import { HostedSessionsEmpty, UpcomingSessionsEmpty } from "./session-summary-empty";
-
-const TOP = 3;
+import { SessionSummarySection } from "./session-summary-section";
 
 export async function MyPageView() {
   const user = await getCurrentUser();
@@ -26,135 +19,46 @@ export async function MyPageView() {
     getJoinedGames(user.id),
   ]);
 
-  const hostedBuckets = bucketHosted(hosted, user.id);
-  const joinedBuckets = bucketJoined(joined, user.id);
-  const upcoming = joinedBuckets.confirmed; // 참여 예정
-  const hosting = hostedBuckets.recruiting; // 운영 중
-  const pastCount = joinedBuckets.closed.length + hostedBuckets.closed.length;
-  const pastHref =
-    joinedBuckets.closed.length > 0
-      ? "/me/sessions/joined?tab=closed"
-      : "/me/sessions/hosted?tab=closed";
-
   const { name, avatar, handle } = profileDisplay({ profile, user });
-
-  const summary = [
-    { n: upcoming.length, label: "참여 예정" },
-    { n: hosting.length, label: "운영 중" },
-  ];
+  const { upcoming, hosting, pastCount, pastHref } = summarizeMySessions({
+    hosted,
+    joined,
+    viewerId: user.id,
+  });
 
   return (
     <>
       <AppBar title="마이페이지" />
       <Container size="sm">
         <VStack gap={6} className="py-6">
-          <HStack justify="between" align="center">
-            <HStack gap={3} align="center">
-              <Avatar src={avatar} name={name} size="2xl" />
-              <div>
-                <Text typography="heading1" className="block text-[19px] leading-tight">
-                  {name}
-                </Text>
-                {handle && (
-                  <Text typography="code2" foreground="hint" render={<span />}>
-                    @{handle}
-                  </Text>
-                )}
-              </div>
-            </HStack>
-            <HStack gap={2} align="center">
-              <ThemeToggle />
-              <IconButton
-                asChild
-                variant="outline"
-                aria-label="프로필 편집"
-                className="h-9 w-9 border-gray-200 text-gray-600"
-              >
-                <Link href="/me/edit">
-                  <Pencil size={16} />
-                </Link>
-              </IconButton>
-            </HStack>
-          </HStack>
+          <MyPageHeader name={name} avatarUrl={avatar} handle={handle} />
 
           <HStack className="gap-[9px]">
-            {summary.map((m) => (
-              <div key={m.label} className="flex-1">
-                <StatCard value={m.n} label={m.label} />
-              </div>
-            ))}
+            <div className="flex-1">
+              <StatCard value={upcoming.length} label="참여 예정" />
+            </div>
+            <div className="flex-1">
+              <StatCard value={hosting.length} label="운영 중" />
+            </div>
           </HStack>
 
-          <SummarySection
+          <SessionSummarySection
             title="참여 예정인 세션"
-            total={upcoming.length}
-            items={upcoming.slice(0, TOP)}
+            items={upcoming}
             moreHref="/me/sessions/joined"
             empty={<UpcomingSessionsEmpty />}
           />
 
-          <SummarySection
+          <SessionSummarySection
             title="운영 중인 세션"
-            total={hosting.length}
-            items={hosting.slice(0, TOP)}
+            items={hosting}
             moreHref="/me/sessions/hosted"
             empty={<HostedSessionsEmpty withImage={upcoming.length > 0} />}
           />
 
-          {pastCount > 0 && (
-            <Link
-              href={pastHref}
-              className="flex items-center justify-center gap-1 border-t border-gray-100 pt-4 text-gray-500"
-            >
-              <Text typography="body3" foreground="muted" className="font-semibold">
-                지난 세션 {pastCount}
-              </Text>
-              <ChevronRight size={15} aria-hidden />
-            </Link>
-          )}
+          <PastSessionsLink count={pastCount} href={pastHref} />
         </VStack>
       </Container>
     </>
-  );
-}
-
-function SummarySection({
-  title,
-  total,
-  items,
-  moreHref,
-  empty,
-}: {
-  title: string;
-  total: number;
-  items: SessionCardModel[];
-  moreHref: string;
-  empty: ReactNode;
-}) {
-  return (
-    <VStack gap={2}>
-      <HStack justify="between" align="center">
-        <HStack gap={1} align="baseline">
-          <Text render={<h2 />} className="text-[13.5px] font-extrabold">
-            {title}
-          </Text>
-          <Text typography="code2" foreground="hint">
-            {total}
-          </Text>
-        </HStack>
-        {total > 0 && (
-          <Link href={moreHref}>
-            <Text
-              typography="body4"
-              foreground="primary"
-              className="inline-flex items-center gap-0.5 font-semibold"
-            >
-              더 보기 <ChevronRight size={14} aria-hidden />
-            </Text>
-          </Link>
-        )}
-      </HStack>
-      {total === 0 ? empty : <SessionList items={items} />}
-    </VStack>
   );
 }
