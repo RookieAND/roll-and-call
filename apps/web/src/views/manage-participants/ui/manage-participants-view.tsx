@@ -1,7 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 import { splitRoster } from "@/entities/game";
-import { getGameParticipants, getCurrentUser } from "@/shared/server";
-import { type ManagedMember, ParticipantManager } from "@/widgets/participant-manager";
+import { getCurrentUser, getGameParticipants } from "@/shared/server";
+import { ParticipantManager } from "@/widgets/participant-manager";
+import { toManagedMember } from "../model/to-managed-member";
+
 export async function ManageParticipantsView({ id }: { id: string }) {
   const data = await getGameParticipants(id);
   if (!data) notFound();
@@ -11,15 +13,7 @@ export async function ManageParticipantsView({ id }: { id: string }) {
   if (!user || user.id !== game.gmId) redirect(`/games/${id}`);
 
   const { confirmed, waiting } = splitRoster(game.participants);
-
-  const toMember = (p: (typeof confirmed)[number]): ManagedMember => ({
-    userId: p.userId,
-    username: p.user?.username ?? "익명",
-    avatarUrl: p.user?.avatarUrl ?? null,
-    applicationRank: p.applicationRank,
-    waitlistRank: p.waitlistRank,
-    hasAvailability: availableUserIds.has(p.userId),
-  });
+  const toMember = (p: (typeof confirmed)[number]) => toManagedMember(p, availableUserIds);
 
   return (
     <ParticipantManager

@@ -1,6 +1,7 @@
 // Runnable self-check for game domain rules (no test framework). Run: pnpm check
 import assert from "node:assert";
 import { canCoordinateSchedule } from "./can-coordinate-schedule";
+import { isDeadlinePassed, isDeadlineUrgent } from "./deadline";
 import { deriveGameStatus } from "./derive-game-status";
 import { countConfirmed } from "./participant";
 import { splitRoster } from "./split-roster";
@@ -59,5 +60,14 @@ assert.equal(
   canCoordinateSchedule({ scheduleMode: "fixed", confirmedAt: null, status: "recruiting" }),
   false,
 );
+
+// 마감 임박: 지나지 않았고 24시간 이내일 때만
+const NOW = new Date("2026-09-11T12:00:00+09:00");
+const HOUR = 60 * 60 * 1000;
+assert.equal(isDeadlineUrgent(new Date(NOW.getTime() + 5 * HOUR), NOW), true);
+assert.equal(isDeadlineUrgent(new Date(NOW.getTime() + 30 * HOUR), NOW), false);
+assert.equal(isDeadlineUrgent(new Date(NOW.getTime() - HOUR), NOW), false); // 이미 지남
+assert.equal(isDeadlinePassed(new Date(NOW.getTime() - HOUR), NOW), true);
+assert.equal(isDeadlinePassed(new Date(NOW.getTime() + HOUR), NOW), false);
 
 console.log("game.check: OK");

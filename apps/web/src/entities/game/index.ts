@@ -1,6 +1,7 @@
 export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./model/schedule-mode";
 export { gameStatusLabel, gameStatusColor, GAME_STATUS, type GameStatus } from "./model/status";
 export { deriveGameStatus } from "./model/derive-game-status";
+export { isDeadlineUrgent, isDeadlinePassed } from "./model/deadline";
 export { PARTICIPANT_STATUS, countConfirmed, type ParticipantStatus } from "./model/participant";
 export { splitRoster, type RosterMember } from "./model/split-roster";
 export { isGameGm } from "./model/is-game-gm";

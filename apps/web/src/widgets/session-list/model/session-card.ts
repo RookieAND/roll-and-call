@@ -1,6 +1,7 @@
 import {
   countConfirmed,
   deriveSessionState,
+  isDeadlineUrgent,
   type ParticipantStatus,
   type SessionRole,
   type SessionState,
@@ -23,8 +24,6 @@ export const JOINED_TABS = [
 export type SessionTab = { key: string; label: string };
 export type HostedTab = (typeof HOSTED_TABS)[number]["key"];
 export type JoinedTab = (typeof JOINED_TABS)[number]["key"];
-
-const URGENT_MS = 24 * 60 * 60 * 1000;
 
 // 배지는 "언제"만 말한다. target(ISO)은 클라이언트에서 D-N으로 계산.
 export type SessionBadgeModel =
@@ -129,9 +128,11 @@ function sessionBadge({
   }
   // 일정 미정 + 대기자 본인 → 대기 순번을 시간 대신 노출.
   if (myWait != null) return { kind: "waiting", label: `대기 ${myWait}번` };
-  const end = new Date(game.endDate).getTime();
-  const urgent = end > now.getTime() && end - now.getTime() < URGENT_MS;
-  return { kind: "deadline", target: new Date(game.endDate).toISOString(), urgent };
+  return {
+    kind: "deadline",
+    target: new Date(game.endDate).toISOString(),
+    urgent: isDeadlineUrgent(game.endDate, now),
+  };
 }
 
 function sessionSubline({
