@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getGameById, getCurrentUser } from "@/shared/server";
-import { GameDetail } from "@/widgets/game-detail";
+import { GameDetail } from "./game-detail";
 export async function GameDetailView({ id }: { id: string }) {
   const game = await getGameById(id);
   if (!game) notFound();

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@trpg/ui";
 import type { GamesFilter } from "@/shared/api";
 import { AppBar } from "@/shared/ui";
-import { GameBoard } from "@/widgets/game-board";
+import { GameBoard } from "./game-board";
 type Props = {
   page?: number;
   q?: string;

@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { splitRoster } from "@/entities/game";
 import { getCurrentUser, getGameParticipants } from "@/shared/server";
-import { ParticipantManager } from "@/widgets/participant-manager";
+import { ParticipantManager } from "./participant-manager";
 import { toManagedMember } from "../model/to-managed-member";
 
 export async function ManageParticipantsView({ id }: { id: string }) {

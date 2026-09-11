@@ -1,5 +1,5 @@
 import type { RosterMember } from "@/entities/game";
-import type { ManagedMember } from "@/widgets/participant-manager";
+import type { ManagedMember } from "./managed-member";
 
 type ParticipantRow = RosterMember<{
   userId: string;

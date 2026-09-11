@@ -5,7 +5,7 @@ import Link from "next/link";
 import { profileDisplay } from "@/entities/profile";
 import { SignOutButton } from "@/features/auth";
 import { getGamesByGm, getJoinedGames } from "@/shared/server";
-import { GameListItem } from "@/widgets/game-list-item";
+import { GameListItem } from "./game-list-item";
 import { HomeStartEmpty } from "./home-start-empty";
 
 const TOP = 4;

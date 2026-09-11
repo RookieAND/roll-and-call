@@ -10,8 +10,8 @@
 | `shared/ui`   | 앱 공용(도메인 약함) 조합 컴포넌트                              | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                              |
 | `entities/*`  | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위        | game, profile, availability                                                       |
 | `features/*`  | **단일 사용자 동작**(server action·toggle 등 상태 변경)         | JoinButton, DeleteGameButton, GameStatusFilter, GameScheduleLink, ThumbnailUpload |
-| `widgets/*`   | **entity + feature 조합** 블록, 또는 **덩치 큰 순수-표시 블록** | game-detail, game-board, game-form, game-list-item, GameInfoTable                 |
-| `views/*`     | 위젯/피처 조합 + 라우트 글루                                    | GamesView, MyPageView                                                             |
+| `widgets/*`   | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)          | game-form, session-list                                                           |
+| `views/*`     | 한 화면의 조합 전체 + 라우트 글루                               | GamesView, GameDetail, ParticipantManager                                         |
 
 **import 방향은 아래로만**: `shared ← entities ← features ← widgets ← views`. 상위 레이어를 import하지 않는다(예: feature는 widget을 import 금지).
 
@@ -30,7 +30,28 @@
 
 DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 아니라 `shared/server`에 둔다(FSD 권장). 클라이언트 컴포넌트가 스키마 타입만 필요하면 `import type { Game } from "@/shared/server"`로 가져온다(타입 import는 번들에 남지 않는다). 세션 쿠키 갱신은 유일한 사용처인 `src/proxy.ts`가 소유한다.
 
-**feature 슬라이스는 동작명으로 짓는다**: `join-game`, `manage-game`, `confirm-session`처럼 사용자 동작 단위. 엔티티명(`features/game`)으로 두면 CRUD·참여·필터가 한 슬라이스에 쌓이는 god slice가 된다. 사용처가 한 곳뿐이고 상태 변경이 없는 표시/탭 UI는 feature로 빼지 말고 그 view·widget 안에 둔다(예: `ScheduleTabs`, `SessionTabFilter`, `Heatmap`은 view 소유). 서버 액션 반환은 `shared/api`의 `ActionResult` 하나를 쓴다.
+**레이어마다 나누는 축이 다르다.** 같은 `game`이라는 낱말이 여러 레이어에 나와도 기준은 다르다.
+
+| 레이어     | 나누는 축   | 답하는 질문           | 예                        |
+| ---------- | ----------- | --------------------- | ------------------------- |
+| `entities` | 명사        | 이것은 무엇인가       | game, profile, availability |
+| `features` | 동사        | 사용자가 무엇을 하는가 | join-game, delete-game    |
+| `views`    | 화면        | 이 라우트는 무엇인가   | games, game-detail        |
+
+**feature 슬라이스는 하나의 동작이다.** FSD 문서의 표현으로 "하나의 피처는 사용자에게 유용한 하나의 기능이며, 여러 기능이 한 피처에 구현되면 경계 위반"이다. `manage-game`처럼 아무 동작도 지칭하지 않는 포괄어로 묶으면 엔티티명만 피한 자루가 된다. 단, 엔티티와 같은 시험대를 적용한다. **쪼갰을 때 교차 import가 생기면 한 동작으로 본다.** 지금 남아 있는 두 예외는 그래서다.
+
+- `write-game`: 등록과 수정이 `gameFormSchema`를 공유한다
+- `adjust-roster`: 승격·강등·내보내기가 "빈 자리는 대기 맨 앞이 채운다"는 규칙을 공유한다
+
+사용처가 한 곳뿐이고 상태 변경이 없는 표시/탭 UI는 feature로 빼지 말고 그 view 안에 둔다(예: `ScheduleTabs`, `SessionTabFilter`, `Heatmap`). 서버 액션 반환은 `shared/api`의 `ActionResult` 하나를 쓴다.
+
+**widgets는 새로 만들지 않는다.** FSD v2.1 공식 레이어 레퍼런스가 이 레이어를 권장하지 않는다. UI 블록이 조회·상태·이벤트를 품으면 사용자 흐름을 담당하는 features와 책임이 겹쳐 경계가 흐려지기 때문이다. 대신 이렇게 둔다.
+
+- 한 화면 전용 조합 → 그 `views/*` 슬라이스 안에
+- 재사용되는 동작과 그 UI → `features/*`
+- 맥락 없는 UI → `shared/ui`
+
+이미 있는 `widgets/game-form`과 `widgets/session-list`는 실제로 두 화면이 공유하므로 남긴다. 세 번째 화면이 생기기 전에는 widgets에 슬라이스를 늘리지 않는다.
 
 **엔티티는 실제 개념 단위로 나누되, 쪼개면 교차 import가 생기는 것은 합친다.** FSD는 "슬라이스는 같은 레이어의 다른 슬라이스를 쓸 수 없다"고 못박으므로, 이 규칙이 곧 분할 가능 여부의 시험대다. 현재 엔티티는 셋이다.
 
@@ -40,9 +61,9 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 | `availability` | 가능 시간 집계·후보 슬롯 | game 쪽과 서로 참조가 없어 독립 슬라이스로 뗐다 |
 | `profile` | 사용자 표시 정보 | 특정 feature만 쓰는 값(기본 가능 시간대 프리셋)은 그 feature의 `model`에 둔다 |
 
-**entity에는 도메인 규칙과 원자 표시만**: 상태 판정(`deriveGameStatus`, `deriveSessionState`), 정원·순번 계산, 작은 표시 단위. 특정 화면의 문구·탭·라우트를 만드는 뷰 모델(`toSessionCard`, `bucketHosted`)이나 액션 존 분기(`deriveActionView`), 목록 행 문구(`gameSubline`)는 그걸 그리는 widget의 `model/`에 둔다. 화면별 구분이 필요하면 새 타입을 만들지 말고 도메인에 이미 있는 `SessionRole`(`host` | `player`)을 쓴다.
+**entity에는 도메인 규칙과 원자 표시만**: 상태 판정(`deriveGameStatus`, `deriveSessionState`), 정원·순번 계산, 작은 표시 단위. 특정 화면의 문구·탭·라우트를 만드는 뷰 모델(`toSessionCard`, `bucketHosted`)이나 액션 존 분기(`deriveActionView`), 목록 행 문구(`gameSubline`)는 그걸 그리는 view·widget의 `model/`에 둔다. 화면별 구분이 필요하면 새 타입을 만들지 말고 도메인에 이미 있는 `SessionRole`(`host` | `player`)을 쓴다.
 
-**표시 컴포넌트의 체급**: 엔티티는 작고 반복되는 원자적 표시 단위(목록 카드·행 등)만 담는다. **순수 표시라도 덩치가 크면(복합 정보 블록·상세 표 등) entity가 아니라 widget에 둔다.** 표시 컴포넌트는 링크·동작을 갖지 않고, 네비게이션/상호작용은 상위(widget·view)가 감싸서 조합한다. (예: `GameCard`/`GameSummary`/`GameRow`는 링크 없는 entity, 상세 링크는 이를 감싸는 widget/view가 소유. `GameInfoTable`은 순수 표시지만 커서 widget에 둔다.)
+**표시 컴포넌트의 체급**: 엔티티는 작고 반복되는 원자적 표시 단위(목록 카드·행 등)만 담는다. **순수 표시라도 덩치가 크면(복합 정보 블록·상세 표 등) entity가 아니라 widget에 둔다.** 표시 컴포넌트는 링크·동작을 갖지 않고, 네비게이션/상호작용은 상위(widget·view)가 감싸서 조합한다. (예: `GameCard`/`GameSummary`/`GameRow`는 링크 없는 entity, 상세 링크는 이를 감싸는 view가 소유. `GameInfoTable`은 순수 표시지만 커서 상세 화면에 둔다.)
 
 ## 2. 상호작용 요소는 프리미티브만 사용
 
@@ -61,7 +82,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 ## 4. 폼의 레이어
 
 - **단일 동작 폼**(하나의 action + 일반 필드) → **feature**. widget으로 올리면 빈 레이어만 늘어난다. (예: edit-profile, confirm-session)
-- **조합형 폼**(2개 이상 독립 feature/entity를 조합) → **widget**. (예: game-form = ThumbnailUpload feature + 제출/삭제 feature + 필드)
+- **조합형 폼**(2개 이상 독립 feature/entity를 조합) → 그 화면의 **view**. 두 화면이 공유할 때만 widget. (예: game-form = upload-thumbnail + write-game + delete-game 조합이고, 등록·수정 두 화면이 쓴다)
 - Input/Field/Select 등 도메인 없는 입력 컨트롤은 feature가 아니라 `packages/ui`에 둔다.
 
 ## 5. 파생 상태 우선 (인라인 조건부 지양)

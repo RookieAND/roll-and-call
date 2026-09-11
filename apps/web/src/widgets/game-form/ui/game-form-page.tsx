@@ -2,7 +2,7 @@
 
 import { Button, cn, Text, VStack } from "@trpg/ui";
 import type { FieldErrors } from "react-hook-form";
-import type { GameFormValues } from "@/features/manage-game";
+import type { GameFormValues } from "@/features/write-game";
 import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";
 import { GameBasicsFields } from "./game-basics-fields";

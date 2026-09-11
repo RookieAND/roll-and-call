@@ -3,7 +3,7 @@
 import { cn, Container, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 import type { FieldErrors } from "react-hook-form";
-import type { GameFormValues } from "@/features/manage-game";
+import type { GameFormValues } from "@/features/write-game";
 import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";
 import { GAME_BASICS_FIELDS, GameBasicsFields } from "./game-basics-fields";

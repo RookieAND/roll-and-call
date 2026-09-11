@@ -1,7 +1,8 @@
 "use client";
 
 import { VStack } from "@trpg/ui";
-import { DeleteGameButton, updateGame } from "@/features/manage-game";
+import { DeleteGameButton } from "@/features/delete-game";
+import { updateGame } from "@/features/write-game";
 import type { Game } from "@/shared/server";
 import { GameForm } from "./game-form";
 

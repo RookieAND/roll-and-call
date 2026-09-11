@@ -2,7 +2,8 @@
 
 import { Field, TextInput, Textarea } from "@trpg/ui";
 import type { UseFormReturn } from "react-hook-form";
-import { type GameFormValues, ThumbnailUpload } from "@/features/manage-game";
+import { ThumbnailUpload } from "@/features/upload-thumbnail";
+import type { GameFormValues } from "@/features/write-game";
 import { PlayTimeField } from "./play-time-field";
 
 // Step 1(게임 자체, 변하지 않는 정보) 필드. 위저드의 "다음"은 이 필드들만 검증한다.

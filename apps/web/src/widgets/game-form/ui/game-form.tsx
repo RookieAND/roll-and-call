@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { SCHEDULE_MODE } from "@/entities/game";
-import { gameFormSchema, type GameFormValues } from "@/features/manage-game";
+import { gameFormSchema, type GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
 import { toLocalDateTimeInput } from "@/shared/lib";
 import { toast } from "@/shared/ui";

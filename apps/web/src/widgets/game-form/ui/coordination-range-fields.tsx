@@ -2,7 +2,7 @@
 
 import { Field, Text } from "@trpg/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
-import { GAME_RANGE_MAX_DAYS, type GameFormValues } from "@/features/manage-game";
+import { GAME_RANGE_MAX_DAYS, type GameFormValues } from "@/features/write-game";
 import { endDateBounds } from "@/shared/lib";
 import { DatePicker } from "@/shared/ui";
 
