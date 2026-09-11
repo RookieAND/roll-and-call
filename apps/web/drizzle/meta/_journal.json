@@ -50,6 +50,13 @@
       "when": 1787155092663,
       "tag": "0006_tan_crusher_hogan",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1789157133338,
+      "tag": "0007_revoke_handle_new_user_execute",
+      "breakpoints": true
     }
   ]
 }
