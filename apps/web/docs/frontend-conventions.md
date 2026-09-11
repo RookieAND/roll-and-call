@@ -97,3 +97,13 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 const buttonVariant = variant === "outline" ? "outline" : "solid";
 return <Button variant={buttonVariant} />;
 ```
+
+## 6. 색은 토큰만 쓴다
+
+다크 모드는 `packages/ui/src/styles.css`의 `.dark`가 `--color-*` 변수를 덮어쓰는 방식이다. 그래서 **생 hex(`bg-[#F3F3F7]`)와 Tailwind 기본 팔레트(`text-red-600`)는 테마가 바뀌어도 그대로 남아 화면을 반쯤 밝은 채로 만든다.** `pnpm lint:tokens`가 두 패키지를 훑어 이를 막는다.
+
+- 새 색이 필요하면 `styles.css`의 `@theme`에 추가하고 **`.dark` 값도 같이 넣는다.**
+- **숫자 램프(`gray-*`, `primary-*`)는 한 역할에만 쓴다.** 같은 단계를 배경과 글씨 양쪽에 쓰면 다크에서 한쪽이 반드시 깨진다. 예를 들어 `primary-700`은 solid 버튼의 hover 배경이라 뒤집을 수 없어서, 틴트 배경 위의 글씨는 `--color-tinted-ink`가 따로 맡는다.
+- 배경·테두리·글씨가 한 세트로 움직이는 것은 **역할 토큰**으로 묶는다: `tinted-{bg,bg-hover,border,ink}`, `heat-{0..5,ink,ink-strong}`, `primary-ink`, `danger-solid`.
+- 반전이 필요한 대비는 토큰 조합으로 표현한다. 선택된 칩의 `bg-gray-900 text-surface`는 라이트에서 검정 배경에 흰 글씨, 다크에서 밝은 배경에 어두운 글씨로 알아서 뒤집힌다.
+- 예외는 둘뿐이다. 토큰을 정의하는 `styles.css`, 그리고 테마와 무관한 고정 색인 아바타의 사람별 팔레트(`avatar.tsx`). 그 외에 불가피하면 해당 줄에 `tokens-check-ignore` 주석으로 이유를 남긴다.

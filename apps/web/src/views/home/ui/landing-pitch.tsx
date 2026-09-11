@@ -28,7 +28,7 @@ export function LandingPitch() {
               >
                 {step.n}
               </Text>
-              {i < STEPS.length - 1 && <span className="mt-1 w-px flex-1 bg-[#EAEAF0]" />}
+              {i < STEPS.length - 1 && <span className="mt-1 w-px flex-1 bg-gray-200" />}
             </div>
             <div className="pb-5">
               <Text typography="subtitle1">{step.title}</Text>

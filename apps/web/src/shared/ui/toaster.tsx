@@ -19,7 +19,7 @@ export function Toaster() {
             "inset-x-0 mx-auto flex w-fit items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white shadow-lg",
           default: "bg-toast",
           success: "bg-toast",
-          error: "bg-red-600",
+          error: "bg-danger-solid",
         },
       }}
     />

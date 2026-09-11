@@ -7,7 +7,7 @@ const field = cva(
   {
     variants: {
       invalid: {
-        true: "border-[1.5px] border-[#E5A0A0] bg-[#FEFAFA] focus:border-[#E5A0A0] focus:ring-[#F3D9D9]",
+        true: "border-[1.5px] border-danger-400 bg-danger-50 focus:border-danger-400 focus:ring-danger-200",
         false: "border-gray-200 focus:border-primary-500 focus:ring-primary-100",
       },
     },

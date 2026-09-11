@@ -17,7 +17,7 @@ type Props = {
   readOnly?: boolean;
 };
 
-const CELL = "h-[22px] touch-none border-b border-l border-b-[#F1F1F5] border-l-[#EFEFF3]";
+const CELL = "h-[22px] touch-none border-b border-l border-b-gray-100 border-l-gray-100";
 
 export function AvailabilityGrid({
   gameId,
@@ -46,7 +46,7 @@ export function AvailabilityGrid({
   function renderCell(key: string) {
     const blockedCell = painter.isBlocked(key);
     const tone = blockedCell
-      ? "cursor-not-allowed bg-[#E9E9EE]"
+      ? "cursor-not-allowed bg-gray-300"
       : painter.selected.has(key)
         ? "bg-primary-600"
         : readOnly

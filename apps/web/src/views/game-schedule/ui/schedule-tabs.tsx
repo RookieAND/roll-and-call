@@ -13,7 +13,7 @@ export function ScheduleTabs({ mine, overlap }: { mine: ReactNode; overlap: Reac
 
   return (
     <div className="flex flex-col gap-3">
-      <div role="tablist" className="flex gap-1 rounded-[11px] bg-[#F3F3F7] p-1">
+      <div role="tablist" className="flex gap-1 rounded-[11px] bg-gray-100 p-1">
         {TABS.map((t) => {
           const active = tab === t.key;
           return (

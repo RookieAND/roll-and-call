@@ -44,7 +44,7 @@ export function GameScheduleFields({ form }: { form: UseFormReturn<GameFormValue
         onChange={(next) => setValue("scheduleMode", next, { shouldDirty: true })}
       />
 
-      <div className="flex flex-col gap-4 rounded-xl border border-[#E7E9FA] bg-[#FAFAFF] p-3.5">
+      <div className="flex flex-col gap-4 rounded-xl border border-primary-100 bg-primary-50/50 p-3.5">
         {mode === SCHEDULE_MODE.fixed ? (
           <FixedSessionField form={form} />
         ) : (

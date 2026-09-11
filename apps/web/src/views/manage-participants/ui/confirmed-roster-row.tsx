@@ -23,7 +23,7 @@ export function ConfirmedRosterRow({
         <Text typography="subtitle2">{member.username}</Text>
         <Text
           typography="body4"
-          className={member.hasAvailability ? "text-gray-500" : "text-amber-600"}
+          className={member.hasAvailability ? "text-gray-500" : "text-warning-600"}
         >
           {member.applicationRank}번째 신청 · {availabilityText}
         </Text>

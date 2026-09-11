@@ -31,7 +31,7 @@ export function WizardHeader({
       <div className="flex gap-1.5 px-4 pt-2.5">
         <span className="h-1 flex-1 rounded-full bg-primary-600" />
         <span
-          className={cn("h-1 flex-1 rounded-full", step === 2 ? "bg-primary-600" : "bg-[#EAEAF0]")}
+          className={cn("h-1 flex-1 rounded-full", step === 2 ? "bg-primary-600" : "bg-gray-200")}
         />
       </div>
     </>

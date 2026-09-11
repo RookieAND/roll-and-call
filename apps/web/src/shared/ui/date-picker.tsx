@@ -33,7 +33,7 @@ export function DatePicker({
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger
         id={id}
-        className={cn(triggerClass, invalid ? "border-red-400" : "border-gray-300")}
+        className={cn(triggerClass, invalid ? "border-danger-400" : "border-gray-300")}
       >
         {value ? <span>{value}</span> : <Text foreground="hint">{placeholder}</Text>}
         <CalendarIcon size={16} aria-hidden className="text-gray-400" />

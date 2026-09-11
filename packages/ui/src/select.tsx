@@ -67,7 +67,7 @@ function Trigger({
       className={cn(
         "flex h-11 w-full items-center justify-between gap-2 rounded-[10px] border bg-surface px-3 text-left text-sm outline-none transition-colors focus:ring-2 disabled:opacity-50",
         invalid
-          ? "border-[1.5px] border-[#E5A0A0] bg-[#FEFAFA] focus:ring-[#F3D9D9]"
+          ? "border-[1.5px] border-danger-400 bg-danger-50 focus:ring-danger-200"
           : "border-gray-200 focus:border-primary-500 focus:ring-primary-100",
         className,
       )}

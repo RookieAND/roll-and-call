@@ -23,7 +23,7 @@ export function SessionTabFilter({
               key={tab.key}
               asChild
               selected={selected}
-              className={selected ? "border-[#17171C] bg-[#17171C] text-white" : undefined}
+              className={selected ? "border-gray-900 bg-gray-900 text-surface" : undefined}
             >
               <Link href={hrefFor(tab.key)} aria-current={selected ? "page" : undefined}>
                 {tab.label}

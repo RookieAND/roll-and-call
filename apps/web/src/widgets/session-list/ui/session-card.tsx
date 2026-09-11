@@ -7,7 +7,7 @@ import { SessionBadge } from "./session-badge";
 // 진행 단계 단어(lead)는 배지가 아니라 서브라인 첫 토큰에 굵게 둔다.
 export function SessionCard({ model }: { model: SessionCardModel }) {
   const cardClass = model.urgent
-    ? "rounded-[13px] border-[1.5px] border-[#E9C9C9] bg-[#FEFAFA] p-3.5"
+    ? "rounded-[13px] border-[1.5px] border-danger-300 bg-danger-50 p-3.5"
     : "rounded-[13px] border border-gray-200 p-3.5";
 
   return (
@@ -26,7 +26,7 @@ export function SessionCard({ model }: { model: SessionCardModel }) {
         foreground={model.dim ? "hint" : "muted"}
         className="mt-1 block truncate"
       >
-        {model.lead && <b className="font-bold text-[#5F5F6B]">{model.lead}</b>}
+        {model.lead && <b className="font-bold text-gray-600">{model.lead}</b>}
         {model.lead ? " · " : ""}
         {model.rest}
       </Text>

@@ -4,7 +4,7 @@ import { LoginButton } from "@/features/auth";
 // 첫 화면: 무엇을 하는 서비스인지 한 문장, 그리고 바로 로그인.
 export function LandingHero() {
   return (
-    <div className="bg-[linear-gradient(180deg,#F7F7FE,#FFFFFF)] px-6 pt-11 pb-[34px]">
+    <div className="bg-gradient-to-b from-primary-50 to-surface px-6 pt-11 pb-[34px]">
       <VStack gap={4}>
         <HStack gap={2} align="center">
           <span className="h-[26px] w-[26px] rounded-lg bg-primary-600" />

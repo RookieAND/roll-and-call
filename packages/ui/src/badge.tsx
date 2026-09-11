@@ -10,7 +10,7 @@ const badge = cva(
         gray: "bg-gray-100 text-gray-600",
         primary: "bg-primary-50 text-primary-700",
         success: "bg-success-100 text-success-700",
-        danger: "bg-red-100 text-red-700",
+        danger: "bg-danger-100 text-danger-600",
         discord: "bg-discord text-white",
       },
     },

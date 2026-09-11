@@ -12,7 +12,7 @@ const chip = cva(
         block: "flex-1 h-11 rounded-[10px] text-sm",
       },
       selected: {
-        true: "border-[#C7C9F0] bg-primary-50 text-primary-700",
+        true: "border-tinted-border bg-tinted-bg text-tinted-ink",
         false: "border-gray-200 bg-surface text-gray-600 hover:bg-gray-50",
       },
     },

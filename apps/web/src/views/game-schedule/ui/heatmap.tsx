@@ -15,8 +15,8 @@ type Props = {
 };
 
 const CELL =
-  "flex h-[22px] cursor-pointer items-center justify-center border-b border-l border-b-[#F1F1F5] border-l-[#EFEFF3] font-bold";
-const OUTLINE = "2px solid #0B9C6C";
+  "flex h-[22px] cursor-pointer items-center justify-center border-b border-l border-b-gray-100 border-l-gray-100 font-bold";
+const OUTLINE = "2px solid var(--color-success-600)";
 
 export function Heatmap({ days, timeRows, counts, names, confirmedAt }: Props) {
   const confirmedIso = confirmedAt?.toISOString() ?? null;

@@ -33,7 +33,7 @@ export function GameGmMenu({ gameId }: { gameId: string }) {
             <Sheet.Item asChild onClick={() => setOpen(false)}>
               <Link href={`/games/${gameId}/participants`}>참여자 관리</Link>
             </Sheet.Item>
-            <Sheet.Item onClick={() => setConfirming(true)} className="font-semibold text-red-600">
+            <Sheet.Item onClick={() => setConfirming(true)} className="font-semibold text-danger-600">
               구인 삭제
             </Sheet.Item>
           </div>

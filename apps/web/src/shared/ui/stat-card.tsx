@@ -13,13 +13,13 @@ export function StatCard({
   return (
     <Card
       padding="none"
-      className={cn("flex flex-col px-3.5 py-3.5", urgent && "border-red-200 bg-red-50/40")}
+      className={cn("flex flex-col px-3.5 py-3.5", urgent && "border-danger-200 bg-danger-50/40")}
     >
       <Text
         render={<div />}
         className={cn(
           "text-2xl leading-none font-extrabold tracking-tight tabular-nums",
-          urgent && "text-red-600",
+          urgent && "text-danger-600",
         )}
       >
         {value}

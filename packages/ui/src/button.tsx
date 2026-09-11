@@ -13,9 +13,10 @@ const button = cva(
           "bg-discord text-white shadow-[0_6px_18px_rgba(88,101,242,0.24)] hover:bg-discord-dark",
         confirm: "bg-success-600 text-white hover:bg-success-700",
         outline: "border border-gray-200 text-gray-600 hover:bg-gray-50",
-        tinted: "border border-[#D5D3F7] bg-[#F5F4FF] text-primary-700 hover:bg-[#EEEDFC]",
+        tinted:
+          "border border-tinted-border bg-tinted-bg text-tinted-ink hover:bg-tinted-bg-hover",
         ghost: "text-gray-700 hover:bg-gray-100",
-        danger: "border border-[#F0DADA] text-[#C33B3B] hover:bg-[#FEF5F5]",
+        danger: "border border-danger-200 text-danger-600 hover:bg-danger-50",
       },
       size: {
         sm: "h-8 px-3 text-sm",
@@ -50,7 +51,7 @@ export function Button({
   const classes = cn(
     button({ variant, size }),
     // ponytail: loading always reads as the muted-primary state from the 시안
-    loading && "bg-[#A5A0EE] text-white hover:bg-[#A5A0EE]",
+    loading && "bg-primary-300 text-white hover:bg-primary-300",
     className,
   );
 

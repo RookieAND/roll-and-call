@@ -36,7 +36,7 @@ export function RemoveMemberItem({
       <Sheet.Item
         disabled={pending}
         onClick={() => setConfirming(true)}
-        className="font-semibold text-red-600"
+        className="font-semibold text-danger-600"
       >
         내보내기
       </Sheet.Item>

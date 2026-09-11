@@ -55,7 +55,7 @@ export function ThumbnailUpload({
         accept="image/*"
         onChange={handleFile}
         disabled={uploading}
-        className="text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary-700"
+        className="text-sm file:mr-3 file:rounded-md file:border-0 file:bg-tinted-bg file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-tinted-ink"
       />
       {uploading && (
         <Text typography="body4" foreground="muted">

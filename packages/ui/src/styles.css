@@ -44,6 +44,38 @@
   --color-canvas: #e9e9ee;
   --color-toast: #23232b;
   --color-surface: #ffffff;
+
+  /* 위험·오류(danger) — 없어서 Tailwind 기본 red로 새던 축 */
+  --color-danger-50: #fef5f5;
+  --color-danger-100: #fbebeb;
+  --color-danger-200: #f0dada;
+  --color-danger-300: #e9c9c9;
+  --color-danger-400: #e5a0a0;
+  --color-danger-600: #c33b3b;
+  /* 토스트처럼 항상 흰 글씨가 얹히는 솔리드 배경. 테마가 바뀌어도 빨강으로 남는다. */
+  --color-danger-solid: #c33b3b;
+
+  /* 주의(warning) — 아직 하지 않은 일 */
+  --color-warning-600: #b45309;
+
+  /* 배경·글씨가 한 세트로 움직이는 역할 토큰.
+     숫자 램프를 배경과 글씨에 같이 쓰면 다크에서 한쪽이 반드시 깨진다. */
+  --color-primary-ink: #4f46e5;
+  --color-tinted-bg: #f5f4ff;
+  --color-tinted-bg-hover: #eeedfc;
+  --color-tinted-border: #d5d3f7;
+  --color-tinted-ink: #4338ca;
+
+  /* 겹침 히트맵 단계(0→5+). 초록 그라데이션이 아니라 채도 단계다. */
+  --color-heat-0: #ffffff;
+  --color-heat-1: #edeefc;
+  --color-heat-2: #d8dafa;
+  --color-heat-3: #b7baf5;
+  --color-heat-4: #8e92ef;
+  --color-heat-5: #5b60e4;
+  --color-heat-ink: #5b60e4;
+  /* 진한 칸 위에 얹히는 글씨. 두 테마 모두 흰색이라 .dark 오버라이드가 없다. */
+  --color-heat-ink-strong: #ffffff;
 }
 
 /* Dark mode: override the CSS variables that token utilities reference.
@@ -63,6 +95,41 @@
   --color-gray-700: #cfcfd6;
   --color-gray-800: #e6e6ea;
   --color-gray-900: #f2f2f5;
+
+  /* 틴트 배경만 어둡게 내린다. 솔리드(600 이상)는 흰 글씨가 그대로 읽힌다. */
+  --color-primary-50: #1e1e3a;
+  --color-primary-100: #26264d;
+  --color-primary-200: #313166;
+
+  --color-success-50: #12291f;
+  --color-success-100: #17352a;
+  --color-success-200: #1f4a39;
+  --color-success-600: #34d399;
+  --color-success-700: #6ee7b7;
+  --color-success-800: #a7f3d0;
+
+  --color-danger-50: #2a1a1a;
+  --color-danger-100: #3a2222;
+  --color-danger-200: #4f2e2e;
+  --color-danger-300: #5f3838;
+  --color-danger-400: #8a5252;
+  --color-danger-600: #f08a8a;
+
+  --color-warning-600: #fbbf24;
+
+  --color-primary-ink: #a5b4fc;
+  --color-tinted-bg: #262647;
+  --color-tinted-bg-hover: #2f2f57;
+  --color-tinted-border: #3a3a6b;
+  --color-tinted-ink: #c7d2fe;
+
+  --color-heat-0: #1e1e26;
+  --color-heat-1: #262649;
+  --color-heat-2: #2f2f66;
+  --color-heat-3: #3c3c8c;
+  --color-heat-4: #4b4bb5;
+  --color-heat-5: #6a6fe8;
+  --color-heat-ink: #c7d2fe;
 }
 
 /* Skeleton shimmer (mockup uses this instead of Tailwind's default pulse). */

@@ -25,12 +25,12 @@ export function Field({
       {label && (
         <label htmlFor={htmlFor} className="text-[12.5px] font-bold text-gray-700">
           {label}
-          {required && <span className="text-[#D14343]"> *</span>}
+          {required && <span className="text-danger-600"> *</span>}
         </label>
       )}
       {children}
       {description && !error && <p className="text-xs text-gray-500">{description}</p>}
-      {error && <p className="text-xs text-[#D14343]">{error}</p>}
+      {error && <p className="text-xs text-danger-600">{error}</p>}
     </div>
   );
 }
