@@ -29,9 +29,6 @@ export async function LandingRecruitingPreview() {
           <GameRow game={game} />
         </Link>
       ))}
-      <Text typography="body4" foreground="muted" className="text-center">
-        둘러보기는 로그인 없이, 참여는 로그인 후에.
-      </Text>
     </VStack>
   );
 }
