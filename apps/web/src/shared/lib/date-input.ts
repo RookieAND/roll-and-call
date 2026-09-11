@@ -17,3 +17,18 @@ export function addDays(date: string, n: number): string {
   d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
 }
+
+// 종료일이 고를 수 있는 범위. 시작일 다음 날부터 maxDays 뒤까지 열어 준다.
+// 시작일이 아직 없으면 하한(earliest)만 걸고 상한은 두지 않는다.
+export function endDateBounds({
+  start,
+  earliest,
+  maxDays,
+}: {
+  start?: string;
+  earliest?: string;
+  maxDays: number;
+}): { min?: string; max?: string } {
+  if (!start) return { min: earliest, max: undefined };
+  return { min: addDays(start, 1), max: addDays(start, maxDays) };
+}

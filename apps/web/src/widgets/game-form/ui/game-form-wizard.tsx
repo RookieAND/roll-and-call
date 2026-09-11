@@ -1,19 +1,20 @@
 "use client";
 
-import { Button, cn, Container, HStack, Text, VStack } from "@trpg/ui";
+import { cn, Container, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 import type { FieldErrors } from "react-hook-form";
 import type { GameFormValues } from "@/features/manage-game";
-import { AppBar } from "@/shared/ui";
 import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";
 import { GAME_BASICS_FIELDS, GameBasicsFields } from "./game-basics-fields";
 import { GameScheduleFields } from "./game-schedule-fields";
+import { WizardFooter } from "./wizard-footer";
+import { WizardHeader } from "./wizard-header";
 
 const STEP_TITLE = { 1: "게임 기본 설정", 2: "인원 · 일정 · 마감" } as const;
 
-// 등록(시안 3a): 2-Step 위저드. 단계에 따라 앱바 제목·뒤로가기·진행바가 바뀌므로
-// 폼이 앱바까지 소유한다(뷰는 CreateGameForm만 렌더).
+// 등록(시안 3a): 2-Step 위저드. 단계 전환과 스크롤만 여기서 관리하고,
+// 머리말·바닥글·필드 묶음은 각자 컴포넌트가 그린다.
 export function GameFormWizard({
   form,
   pending,
@@ -23,7 +24,6 @@ export function GameFormWizard({
 }: GameFormLayoutProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const { watch, trigger, handleSubmit } = form;
-  const rootError = form.formState.errors.root?.message;
   const isFirstStep = step === 1;
 
   // 오류가 1단계 필드에 있으면 그 단계로 먼저 되돌린 뒤 스크롤한다.
@@ -51,22 +51,12 @@ export function GameFormWizard({
       onSubmit={handleSubmit(onValid, onInvalid)}
       className="flex min-h-[calc(100dvh-58px)] flex-col"
     >
-      <AppBar
+      <WizardHeader
+        step={step}
         title={STEP_TITLE[step]}
-        back={isFirstStep ? "/games" : undefined}
+        backHref={isFirstStep ? "/games" : undefined}
         onBack={isFirstStep ? undefined : () => setStep(1)}
-        action={
-          <Text typography="code2" foreground="hint" className="tabular-nums">
-            {step} / 2
-          </Text>
-        }
       />
-      <div className="flex gap-1.5 px-4 pt-2.5">
-        <span className="h-1 flex-1 rounded-full bg-primary-600" />
-        <span
-          className={cn("h-1 flex-1 rounded-full", isFirstStep ? "bg-[#EAEAF0]" : "bg-primary-600")}
-        />
-      </div>
 
       <Container size="md" className="flex-1">
         <VStack gap={6} className="py-6">
@@ -97,38 +87,14 @@ export function GameFormWizard({
         </VStack>
       </Container>
 
-      {/* CTA를 BottomNav(높이 58px) 바로 위에 sticky로 고정한다. */}
-      <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface">
-        <Container size="md" className="py-3">
-          <VStack gap={3}>
-            {!isFirstStep && rootError && (
-              <Text typography="body2" foreground="danger">
-                {rootError}
-              </Text>
-            )}
-            {isFirstStep ? (
-              <Button type="button" onClick={goNext} size="lg" className="h-[50px] w-full">
-                다음
-              </Button>
-            ) : (
-              <HStack gap={2}>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setStep(1)}
-                  size="lg"
-                  className="h-[50px] w-[104px]"
-                >
-                  이전
-                </Button>
-                <Button type="submit" loading={pending} size="lg" className="h-[50px] flex-1">
-                  {pending ? "저장 중…" : submitLabel}
-                </Button>
-              </HStack>
-            )}
-          </VStack>
-        </Container>
-      </div>
+      <WizardFooter
+        step={step}
+        pending={pending}
+        submitLabel={submitLabel}
+        error={form.formState.errors.root?.message}
+        onNext={goNext}
+        onBack={() => setStep(1)}
+      />
     </form>
   );
 }

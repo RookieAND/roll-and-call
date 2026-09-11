@@ -1,30 +1,23 @@
-import { AvatarGroup, Container, HStack, Text, VStack } from "@trpg/ui";
-import {
-  deriveGameStatus,
-  GameStatusBadge,
-  GameThumbnail,
-  isGameGm,
-  splitRoster,
-} from "@/entities/game";
+import { Container, Text, VStack } from "@trpg/ui";
+import { deriveGameStatus, GameThumbnail, isGameGm, splitRoster } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
-import { GameGmMenu } from "@/features/manage-game";
 import { AppBar } from "@/shared/ui";
 import { GameDetailActions } from "./game-detail-actions";
+import { GameDetailHeader } from "./game-detail-header";
 import { GameInfoTable } from "./game-info-table";
+import { GameRosterPreview } from "./game-roster-preview";
 
 export function GameDetail({ game, viewerId }: { game: GameDetailData; viewerId: string | null }) {
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
   const { confirmed, waiting } = splitRoster(game.participants);
-  const confirmedCount = confirmed.length;
 
+  // 뷰어가 이 게임에 어떤 자격으로 들어와 있는지(확정·대기·무관).
   const me = viewerId ? [...confirmed, ...waiting].find((p) => p.userId === viewerId) : undefined;
-  const viewerStatus = me?.status ?? null;
-  const waitlistRank = me?.waitlistRank ?? null;
 
   const status = deriveGameStatus({
     maxPlayers: game.maxPlayers,
     endDate: game.endDate,
-    participantCount: confirmedCount,
+    participantCount: confirmed.length,
   });
 
   return (
@@ -39,17 +32,9 @@ export function GameDetail({ game, viewerId }: { game: GameDetailData; viewerId:
           />
 
           <VStack gap={4} className="px-4">
-            <HStack justify="between" align="start" gap={2}>
-              <Text typography="heading1" render={<h1 />}>
-                {game.title}
-              </Text>
-              <HStack align="center" gap={1} className="mt-0.5 shrink-0">
-                <GameStatusBadge status={status} />
-                {isGm && <GameGmMenu gameId={game.id} />}
-              </HStack>
-            </HStack>
+            <GameDetailHeader gameId={game.id} title={game.title} status={status} isGm={isGm} />
 
-            <GameInfoTable game={game} count={confirmedCount} />
+            <GameInfoTable game={game} count={confirmed.length} />
 
             {game.synopsis && (
               <VStack gap={2}>
@@ -60,38 +45,19 @@ export function GameDetail({ game, viewerId }: { game: GameDetailData; viewerId:
               </VStack>
             )}
 
-            <VStack gap={2}>
-              <Text typography="heading3">
-                참여자 {confirmedCount}/{game.maxPlayers}
-              </Text>
-              {confirmedCount === 0 ? (
-                <Text typography="body2" foreground="muted" render={<p />}>
-                  아직 참여자가 없어요.
-                </Text>
-              ) : (
-                <AvatarGroup
-                  max={5}
-                  size="stack"
-                  people={confirmed.map((p) => ({
-                    src: p.user?.avatarUrl,
-                    name: p.user?.username,
-                  }))}
-                />
-              )}
-              {waiting.length > 0 && (
-                <Text typography="body3" foreground="muted">
-                  대기 {waiting.length}명
-                </Text>
-              )}
-            </VStack>
+            <GameRosterPreview
+              confirmed={confirmed}
+              waitingCount={waiting.length}
+              maxPlayers={game.maxPlayers}
+            />
           </VStack>
 
           <GameDetailActions
             game={game}
             viewerId={viewerId}
             isGm={isGm}
-            viewerStatus={viewerStatus}
-            waitlistRank={waitlistRank}
+            viewerStatus={me?.status ?? null}
+            waitlistRank={me?.waitlistRank ?? null}
             waitingCount={waiting.length}
             status={status}
           />

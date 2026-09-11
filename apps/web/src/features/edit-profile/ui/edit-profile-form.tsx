@@ -1,12 +1,12 @@
 "use client";
 
-import { Avatar, Button, Chip, Field, Text, TextInput, Textarea, VStack } from "@trpg/ui";
+import { Button, Field, Text, TextInput, Textarea, VStack } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { SLOT_PRESETS } from "../model/slot-presets";
 import { toast } from "@/shared/ui";
-import { refreshAvatar } from "../api/refresh-avatar";
 import { updateProfile } from "../api/update-profile";
+import { AvatarRefreshField } from "./avatar-refresh-field";
+import { SlotPresetField } from "./slot-preset-field";
 
 export function EditProfileForm({
   defaultUsername,
@@ -20,32 +20,14 @@ export function EditProfileForm({
   avatarUrl?: string | null;
 }) {
   const router = useRouter();
-  const [avatar, setAvatar] = useState(avatarUrl ?? null);
-  const [refreshing, startRefresh] = useTransition();
   const [username, setUsername] = useState(defaultUsername);
   const [bio, setBio] = useState(defaultBio);
   const [slots, setSlots] = useState<string[]>(defaultSlots);
   const [failure, setFailure] = useState<{ error: string; field?: string } | null>(null);
   const [pending, startTransition] = useTransition();
 
-  function toggleSlot(key: string) {
-    setSlots((prev) => (prev.includes(key) ? prev.filter((s) => s !== key) : [...prev, key]));
-  }
-
-  function reloadAvatar() {
-    startRefresh(async () => {
-      const result = await refreshAvatar();
-      if (result.error) {
-        toast.error(result.error);
-        return;
-      }
-      setAvatar(result.avatarUrl ?? null);
-      toast.success("아바타를 다시 불러왔습니다");
-    });
-  }
-
-  function submit(e: React.FormEvent) {
-    e.preventDefault();
+  function submit(event: React.FormEvent) {
+    event.preventDefault();
     setFailure(null);
     startTransition(async () => {
       const result = await updateProfile({ username, bio, defaultSlots: slots });
@@ -58,6 +40,7 @@ export function EditProfileForm({
     });
   }
 
+  // 서버가 지목한 필드 옆에 붙이고, 지목이 없으면 폼 아래에 둔다.
   const usernameError = failure?.field === "username" ? failure.error : undefined;
   const bioError = failure?.field === "bio" ? failure.error : undefined;
   const formError = failure && !failure.field ? failure.error : null;
@@ -65,12 +48,8 @@ export function EditProfileForm({
   return (
     <form onSubmit={submit}>
       <VStack gap={4}>
-        <VStack gap={2} className="items-center">
-          <Avatar src={avatar} name={username} size="3xl" />
-          <Button variant="ghost" size="sm" loading={refreshing} onClick={reloadAvatar}>
-            Discord 아바타 다시 불러오기
-          </Button>
-        </VStack>
+        <AvatarRefreshField defaultUrl={avatarUrl} name={username} />
+
         <Field
           label="표시 이름"
           htmlFor="username"
@@ -85,6 +64,7 @@ export function EditProfileForm({
             maxLength={30}
           />
         </Field>
+
         <Field label="한 줄 소개" htmlFor="bio" error={bioError}>
           <Textarea
             id="bio"
@@ -95,18 +75,9 @@ export function EditProfileForm({
             className="min-h-[76px]"
           />
         </Field>
-        <Field label="기본 가능 시간대" description="일정 조율 그리드의 초기값으로 씁니다.">
-          <div className="flex gap-[7px]">
-            {SLOT_PRESETS.map((s) => {
-              const on = slots.includes(s.key);
-              return (
-                <Chip key={s.key} shape="block" selected={on} onClick={() => toggleSlot(s.key)}>
-                  {s.label}
-                </Chip>
-              );
-            })}
-          </div>
-        </Field>
+
+        <SlotPresetField value={slots} onChange={setSlots} />
+
         {formError && (
           <Text typography="body2" foreground="danger">
             {formError}
