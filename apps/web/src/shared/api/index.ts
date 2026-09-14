@@ -4,7 +4,11 @@ export { createSupabaseBrowserClient } from "./supabase-browser";
 export {
   GAME_SORTS,
   GAME_SORT_DEFAULT,
+  GAME_STATUS_FILTERS,
+  GAME_STATUS_FILTER_DEFAULT,
   parseGameSort,
+  parseGameStatusFilter,
   type GameSort,
+  type GameStatusFilter,
   type GamesFilter,
 } from "./game-sort";

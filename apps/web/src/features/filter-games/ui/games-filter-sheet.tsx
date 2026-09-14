@@ -4,33 +4,30 @@ import { Button, Text } from "@trpg/ui";
 import { Check, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { GAME_SORT_DEFAULT, GAME_SORTS, type GameSort, parseGameSort } from "@/shared/api";
+import { GAME_SORTS, type GameSort, type GamesFilter, parseGameSort } from "@/shared/api";
 import { Sheet } from "@/shared/ui";
+import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
-type Props = { q?: string; sort?: string };
 
-export function GamesFilterSheet({ q, sort }: Props) {
+// 정렬 시트. 한 번에 하나만 고르는 목록이라 탭하면 바로 적용되고 닫힌다("적용하기" 없음).
+export function GamesFilterSheet({ filter }: { filter: GamesFilter }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const current = parseGameSort(sort);
-  const [so, setSo] = useState<GameSort>(current);
-
+  const current = parseGameSort(filter.sort);
   const currentLabel = GAME_SORTS.find((o) => o.key === current)!.label;
 
-  function apply() {
-    router.push(gamesHref({ q, sort: so === GAME_SORT_DEFAULT ? undefined : so }));
+  function select(sort: GameSort) {
     setOpen(false);
+    if (sort !== current) router.push(gamesHref(filterParams({ ...filter, sort })));
   }
 
   return (
     <>
       <Button
         variant="ghost"
-        onClick={() => {
-          setSo(current);
-          setOpen(true);
-        }}
-        className="h-auto shrink-0 gap-0.5 px-0 text-xs text-gray-700 hover:bg-transparent"
+        onClick={() => setOpen(true)}
+        aria-label={`정렬: ${currentLabel}`}
+        className="-mr-3 h-10 shrink-0 gap-0.5 px-3 text-[13px] text-gray-700"
       >
         {currentLabel}
         <ChevronDown size={14} aria-hidden />
@@ -40,14 +37,16 @@ export function GamesFilterSheet({ q, sort }: Props) {
         <Sheet.Content>
           <Sheet.Title className="mb-2 text-base font-bold text-gray-900">정렬</Sheet.Title>
           {/* ponytail: single-select list w/ dividers + check — not a Chip/segment look, hand-rolled rows */}
-          <div className="divide-y divide-gray-100">
+          <div role="radiogroup" aria-label="정렬" className="divide-y divide-gray-100">
             {GAME_SORTS.map((o) => {
-              const selected = so === o.key;
+              const selected = current === o.key;
               return (
                 <button
                   key={o.key}
                   type="button"
-                  onClick={() => setSo(o.key)}
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => select(o.key)}
                   className="flex min-h-12 w-full items-center justify-between text-left"
                 >
                   <Text typography={selected ? "subtitle1" : "body2"} render={<span />}>
@@ -58,9 +57,6 @@ export function GamesFilterSheet({ q, sort }: Props) {
               );
             })}
           </div>
-          <Button className="mt-4 w-full" onClick={apply}>
-            적용하기
-          </Button>
         </Sheet.Content>
       </Sheet.Root>
     </>

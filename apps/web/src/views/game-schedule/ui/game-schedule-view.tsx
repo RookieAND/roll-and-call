@@ -1,9 +1,18 @@
-import { Container, Text, VStack } from "@trpg/ui";
-import { notFound } from "next/navigation";
-import { ConfirmedSessionNotice, hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
-import { buildDayColumns, buildTimeRows } from "@/shared/lib";
-import { getCurrentUser, getGameById } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { Button, Container, Text, VStack } from "@trpg/ui";
+import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+import {
+  ConfirmedSessionNotice,
+  countConfirmed,
+  hasUserJoined,
+  isDeadlinePassed,
+  isGameGm,
+  SCHEDULE_MODE,
+} from "@/entities/game";
+import { presetSlotPrefill } from "@/entities/profile";
+import { buildDayColumns, buildTimeRows, formatDate } from "@/shared/lib";
+import { getCurrentUser, getGameById, getProfile, getResponseCounts } from "@/shared/server";
+import { AppBar, EmptyState } from "@/shared/ui";
 import { getScheduleAvailability } from "../api/load-availability";
 import { ScheduleBody } from "./schedule-body";
 
@@ -11,47 +20,78 @@ export async function GameScheduleView({ id }: { id: string }) {
   const game = await getGameById(id);
   if (!game) notFound();
 
-  const appBar = <AppBar back={`/games/${id}`} title={`${game.title} · 일정 조율`} />;
-  const isCoordinated =
-    game.scheduleMode === SCHEDULE_MODE.coordinate && game.rangeStart && game.rangeEnd;
+  // 일시 지정 글에는 조율 화면이 없다(진입 버튼도 없음). 주소로 들어오면 상세로 보낸다.
+  if (game.scheduleMode !== SCHEDULE_MODE.coordinate) redirect(`/games/${id}`);
 
-  if (!isCoordinated) {
+  const user = await getCurrentUser();
+  const viewerId = user?.id ?? null;
+  const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
+  const appBar = <AppBar back={`/games/${id}`} title="일정 조율" />;
+
+  // 조율 기간이 비어 있는 범위 조율 글: GM에게는 먼저 기간을 정하라고 안내한다.
+  if (!game.rangeStart || !game.rangeEnd) {
+    if (!isGm) redirect(`/games/${id}`);
     return (
       <>
         {appBar}
-        <Container size="md">
-          <VStack gap={4} className="py-6">
-            <Text foreground="muted" render={<p />}>
-              일시가 지정된 게임이라 조율이 필요 없어요.
-            </Text>
-          </VStack>
+        <Container size="sm">
+          <div className="py-6">
+            <EmptyState
+              title="조율 기간을 먼저 정해주세요"
+              description="조율 기간이 있어야 참여자가 가능 시간을 낼 수 있습니다."
+              action={
+                <Button asChild className="h-11 w-full">
+                  <Link href={`/games/${id}/edit`}>구인 수정</Link>
+                </Button>
+              }
+            />
+          </div>
         </Container>
       </>
     );
   }
 
-  const user = await getCurrentUser();
-  const viewerId = user?.id ?? null;
-  const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
   const involved = isGm || hasUserJoined({ participants: game.participants, userId: viewerId });
+  const days = buildDayColumns(game.rangeStart, game.rangeEnd);
+  const timeRows = buildTimeRows();
 
   // 첫 렌더 값만 서버가 채운다. 이후 갱신은 ScheduleBody의 쿼리 캐시가 맡는다.
-  const initialAvailability = await getScheduleAvailability(id, viewerId);
+  const [initialAvailability, profile, responseCounts] = await Promise.all([
+    getScheduleAvailability(id, viewerId),
+    involved && viewerId && !game.confirmedAt ? getProfile(viewerId) : null,
+    isGm ? getResponseCounts([id]) : new Map<string, number>(),
+  ]);
+  const prefill = profile ? presetSlotPrefill(profile.defaultSlots ?? [], days, timeRows) : null;
 
   return (
     <>
       {appBar}
       <Container>
-        <VStack gap={6} className="py-6">
+        <VStack gap={5} className="pt-5 pb-4">
+          <div>
+            <Text typography="heading3" render={<h1 />} className="block truncate">
+              {game.title}
+            </Text>
+            <Text typography="body4" foreground="hint" render={<p />} className="mt-0.5">
+              {formatDate(game.rangeStart)} ~ {formatDate(game.rangeEnd)} 조율
+            </Text>
+          </div>
           {game.confirmedAt && <ConfirmedSessionNotice confirmedAt={game.confirmedAt} />}
           <ScheduleBody
             gameId={id}
-            days={buildDayColumns(game.rangeStart!, game.rangeEnd!)}
-            timeRows={buildTimeRows()}
+            days={days}
+            timeRows={timeRows}
             initialAvailability={initialAvailability}
             confirmedAt={game.confirmedAt}
             involved={involved}
             isGm={isGm}
+            isSignedIn={viewerId !== null}
+            capacity={game.maxPlayers}
+            gmName={game.gm?.username}
+            prefill={prefill}
+            deadlinePassed={isDeadlinePassed(game.endDate)}
+            confirmedCount={countConfirmed(game.participants)}
+            respondedCount={responseCounts.get(id) ?? 0}
           />
         </VStack>
       </Container>

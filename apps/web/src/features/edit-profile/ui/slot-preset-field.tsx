@@ -1,9 +1,9 @@
 "use client";
 
-import { Chip, Field } from "@trpg/ui";
-import { SLOT_PRESETS } from "../model/slot-presets";
+import { Chip, Field, Text } from "@trpg/ui";
+import { SLOT_PRESETS } from "@/entities/profile";
 
-// 자주 되는 시간대를 미리 골라 두면 조율 그리드가 그 값으로 시작한다.
+// 자주 되는 시간대를 미리 골라 두면 일정 조율 격자가 그 값으로 미리 칠해진다(저장 전 상태).
 export function SlotPresetField({
   value,
   onChange,
@@ -16,19 +16,25 @@ export function SlotPresetField({
   }
 
   return (
-    <Field label="기본 가능 시간대" description="일정 조율 그리드의 초기값으로 씁니다.">
-      <div className="flex gap-[7px]">
-        {SLOT_PRESETS.map((preset) => (
-          <Chip
-            key={preset.key}
-            shape="block"
-            selected={value.includes(preset.key)}
-            onClick={() => toggle(preset.key)}
-          >
-            {preset.label}
-          </Chip>
-        ))}
-      </div>
-    </Field>
+    <div className="flex flex-col gap-1.5">
+      <Field label="기본 가능 시간대">
+        <div className="flex gap-[7px]">
+          {SLOT_PRESETS.map((preset) => (
+            <Chip
+              key={preset.key}
+              shape="block"
+              selected={value.includes(preset.key)}
+              onClick={() => toggle(preset.key)}
+            >
+              {preset.label}
+            </Chip>
+          ))}
+        </div>
+      </Field>
+      <Text typography="body4" foreground="hint" render={<p />}>
+        일정 조율 화면에 들어가면 이 시간대가 미리 칠해져 있습니다. 그 자리에서 고칠 수 있고, 저장하기
+        전까지는 반영되지 않습니다.
+      </Text>
+    </div>
   );
 }

@@ -1,48 +1,51 @@
 import {
   countConfirmed,
+  deriveGameStatus,
   deriveSessionState,
+  gameStatusColor,
+  gameStatusLabel,
   isDeadlineUrgent,
   type ParticipantStatus,
+  SCHEDULE_MODE,
+  scheduleLine,
   type SessionRole,
-  type SessionState,
   splitRoster,
 } from "@/entities/game";
+import { ddayKst, formatDate, formatDateTime } from "@/shared/lib";
 import type { Game } from "@/shared/server";
-import { formatDateTime, formatMonthDay } from "@/shared/lib";
 
-// 마이페이지·세션 목록 카드의 표시 모델. 도메인 상태(deriveSessionState)를 문구·배지·탭으로 번역한다.
-export const HOSTED_TABS = [
-  { key: "recruiting", label: "모집 중" },
-  { key: "confirmed", label: "확정" },
-  { key: "closed", label: "종료" },
-] as const;
-export const JOINED_TABS = [
-  { key: "confirmed", label: "확정" },
-  { key: "waiting", label: "대기" },
-  { key: "closed", label: "종료" },
-] as const;
-export type SessionTab = { key: string; label: string };
-export type HostedTab = (typeof HOSTED_TABS)[number]["key"];
-export type JoinedTab = (typeof JOINED_TABS)[number]["key"];
+// 홈·내 세션·마이페이지가 같은 카드 모델을 쓴다. 도메인 상태를 탭·칩·배지·일정 한 줄·할 일로 번역한다.
+// 배지는 모집·참여 상태만, D-n은 일정 줄에. 역할이 달라도 같은 사실은 같은 자리에서 읽힌다.
 
-// 배지는 "언제"만 말한다. target(ISO)은 클라이언트에서 D-N으로 계산.
-export type SessionBadgeModel =
-  | { kind: "session"; target: string } // 초록 D-N (세션까지)
-  | { kind: "deadline"; target: string; urgent: boolean } // 회색/빨강 마감 D-N
-  | { kind: "waiting"; label: string } // 대기 N번
-  | { kind: "none" }; // 종료: 배지 없음
+export type SessionBucket = "joined" | "hosted" | "past";
+export type SessionChip = "scheduling" | "confirmed" | "waiting" | "recruiting";
+export type SessionTone = "normal" | "success" | "warning" | "hint";
+export type SessionAction = {
+  kind: "confirm-time" | "submit-availability";
+  label: string;
+  href: string;
+};
 
 export type SessionCardModel = {
   id: string;
   title: string;
   round: number;
   role: SessionRole;
-  state: SessionState;
-  urgent: boolean; // 마감 24h 이내 → 카드 강조
-  badge: SessionBadgeModel;
-  lead: string | null; // 진행 단계 단어(굵게)
-  rest: string; // 서브라인 나머지
-  dim: boolean; // 종료 → 지난 날짜 회색
+  bucket: SessionBucket;
+  chip: SessionChip | null;
+  badge: string;
+  badgeColor: "primary" | "success" | "gray";
+  schedule: string;
+  scheduleTone: SessionTone;
+  meta: string;
+  // 마감 24시간 이내 → 카드 강조
+  urgent: boolean;
+  // 지금 할 일이 있을 때만. 홈 할 일 카드와 같은 라벨.
+  action: SessionAction | null;
+  // 세션 시각이 정해졌으면 그 시각(ISO)
+  startsAt: string | null;
+  // 가까운 것부터(끝남은 최근 것부터) 정렬할 키
+  sortKey: number;
 };
 
 type SessionParticipant = {
@@ -56,17 +59,32 @@ export type SessionGame = Game & {
   participants: SessionParticipant[];
 };
 
-export function toSessionCard({
-  game,
-  role,
-  viewerId,
-  now = new Date(),
-}: {
-  game: SessionGame;
-  role: SessionRole;
+export type SessionContext = {
   viewerId: string;
+  // 뷰어가 가능 시간을 낸 게임
+  respondedGameIds: ReadonlySet<string>;
+  // 게임별 가능 시간을 낸 확정 참여자 수
+  responseCounts: ReadonlyMap<string, number>;
   now?: Date;
-}): SessionCardModel {
+};
+
+// 세션까지 남은 날: 오늘·내일·모레, 그 뒤는 D-n.
+function relativeDay(days: number): string | null {
+  if (days < 0) return null;
+  if (days === 0) return "오늘";
+  if (days === 1) return "내일";
+  if (days === 2) return "모레";
+  return `D-${days}`;
+}
+
+const joinParts = (...parts: (string | null | false)[]) => parts.filter(Boolean).join(" · ");
+
+export function toSessionCard(
+  game: SessionGame,
+  role: SessionRole,
+  ctx: SessionContext,
+): SessionCardModel {
+  const now = ctx.now ?? new Date();
   const confirmedCount = countConfirmed(game.participants);
   const state = deriveSessionState(
     {
@@ -78,193 +96,177 @@ export function toSessionCard({
     },
     now,
   );
-  const past = state === "closed" || state === "finished";
-  const gmName = game.gm?.username ?? "?";
+  const line = scheduleLine(game, now);
+  const coordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
+  // 조율형이 기한을 넘겼는데 확정자는 있고 세션 시각이 없다: 무산이 아니라 GM이 시간을 정할 차례.
+  // (deriveSessionState는 이 경우도 closed로 보므로 여기서 따로 살린다.)
+  const awaitingTime =
+    coordinate && !game.confirmedAt && line.deadlinePassed && confirmedCount > 0;
+  const past = (state === "closed" && !awaitingTime) || state === "finished";
+  // 세션 시각이 정해졌는가: 일시 지정형은 등록 때부터, 조율형은 GM이 확정한 뒤.
+  const timeSet = Boolean(game.confirmedAt) && (!coordinate || line.confirmed);
+  const startsAt = timeSet ? new Date(game.confirmedAt!).toISOString() : null;
+  const sessionWhen = startsAt
+    ? joinParts(formatDateTime(startsAt), relativeDay(ddayKst(startsAt, now)))
+    : null;
+  const seats = `${confirmedCount}/${game.maxPlayers}`;
+  const scheduleHref = `/games/${game.id}/schedule`;
 
-  const { waiting } = splitRoster(game.participants);
-  const myWait =
-    role === "player" ? (waiting.find((p) => p.userId === viewerId)?.waitlistRank ?? null) : null;
-
-  const badge = sessionBadge({ game, role, state, past, myWait, now });
-  const urgent = badge.kind === "deadline" && badge.urgent;
-  const { lead, rest } = sessionSubline({
-    game,
-    role,
-    state,
-    confirmedCount,
-    gmName,
-  });
-
-  return {
+  const base = {
     id: game.id,
     title: game.title,
     round: game.round,
     role,
-    state,
-    urgent,
-    badge,
-    lead,
-    rest,
-    dim: past,
+    startsAt,
+    urgent: !past && !timeSet && isDeadlineUrgent(game.endDate, now),
   };
-}
 
-function sessionBadge({
-  game,
-  role,
-  state,
-  past,
-  myWait,
-  now,
-}: {
-  game: SessionGame;
-  role: SessionRole;
-  state: SessionState;
-  past: boolean;
-  myWait: number | null;
-  now: Date;
-}): SessionBadgeModel {
-  if (past) return { kind: "none" };
-  if (state === "confirmed" && game.confirmedAt) {
-    return { kind: "session", target: new Date(game.confirmedAt).toISOString() };
+  if (past) {
+    const finished = state === "finished" && game.confirmedAt;
+    return {
+      ...base,
+      bucket: "past",
+      chip: null,
+      badge: finished ? "끝남" : "모집 마감",
+      badgeColor: "gray",
+      schedule: finished
+        ? `${formatDateTime(game.confirmedAt!)} 진행`
+        : `${formatDate(game.endDate)}에 모집 마감`,
+      scheduleTone: "hint",
+      meta: joinParts(game.rule, role === "player" && `GM ${game.gm?.username ?? "?"}`, seats),
+      action: null,
+      // 최근에 끝난 것부터
+      sortKey: -new Date(game.confirmedAt ?? game.endDate).getTime(),
+    };
   }
-  // 일정 미정 + 대기자 본인 → 대기 순번을 시간 대신 노출.
-  if (myWait != null) return { kind: "waiting", label: `대기 ${myWait}번` };
-  // 일시 지정형 모집 중: 참여자에겐 이미 정해진 세션까지 D-N. GM에겐 아래 모집 마감 D-N.
-  if (role === "player" && game.confirmedAt) {
-    return { kind: "session", target: new Date(game.confirmedAt).toISOString() };
-  }
-  return {
-    kind: "deadline",
-    target: new Date(game.endDate).toISOString(),
-    urgent: isDeadlineUrgent(game.endDate, now),
-  };
-}
 
-function sessionSubline({
-  game,
-  role,
-  state,
-  confirmedCount,
-  gmName,
-}: {
-  game: SessionGame;
-  role: SessionRole;
-  state: SessionState;
-  confirmedCount: number;
-  gmName: string;
-}): { lead: string | null; rest: string } {
-  const seats = `${confirmedCount} / ${game.maxPlayers}명`;
+  const sortKey = new Date(startsAt ?? game.endDate).getTime();
 
   if (role === "host") {
-    switch (state) {
-      case "recruiting":
-        return { lead: "모집 중", rest: seats };
-      case "scheduling":
-        return { lead: "조율 중", rest: seats };
-      case "pending_confirm":
-        return {
-          lead: "확정 대기",
-          rest: `신청 ${game.participants.length}명 · 정원 ${game.maxPlayers}명`,
-        };
-      case "confirmed":
-      case "finished":
-        return { lead: null, rest: formatDateTime(game.confirmedAt!) };
-      case "closed":
-        return { lead: null, rest: `마감 ${formatMonthDay(game.endDate)}` };
-    }
+    const status = deriveGameStatus({
+      maxPlayers: game.maxPlayers,
+      endDate: game.endDate,
+      participantCount: confirmedCount,
+      waitlistEnabled: game.waitlistEnabled,
+    });
+    const needsTime = awaitingTime;
+    const responses = ctx.responseCounts.get(game.id) ?? 0;
+    return {
+      ...base,
+      bucket: "hosted",
+      chip: state === "confirmed" ? "confirmed" : "recruiting",
+      badge: gameStatusLabel[status],
+      badgeColor: gameStatusColor[status],
+      schedule: needsTime
+        ? "기한이 지났는데 세션 시간이 없습니다"
+        : (sessionWhen ?? joinParts(line.text, line.deadline)),
+      scheduleTone: needsTime ? "warning" : line.confirmed ? "success" : "normal",
+      meta: joinParts(
+        game.rule,
+        coordinate && !timeSet && `응답 ${responses}/${confirmedCount}`,
+        `확정 ${seats}`,
+      ),
+      action: needsTime
+        ? { kind: "confirm-time", label: "세션 시간 확정하기", href: scheduleHref }
+        : null,
+      sortKey,
+    };
   }
 
-  // player: 날짜 자리 + GM 이름
-  switch (state) {
-    case "confirmed":
-    case "finished":
-      return { lead: null, rest: `${formatDateTime(game.confirmedAt!)} · GM ${gmName}` };
-    case "closed":
-      return { lead: null, rest: `마감 ${formatMonthDay(game.endDate)} · GM ${gmName}` };
-    default:
-      // 일시 지정형은 모집 중에도 세션 시각이 정해져 있다. 조율형만 "일정 미정".
-      if (game.confirmedAt) {
-        return { lead: null, rest: `${formatDateTime(game.confirmedAt)} · GM ${gmName}` };
-      }
-      return {
-        lead: null,
-        rest: `일정 미정 · 마감 ${formatMonthDay(game.endDate)} · GM ${gmName}`,
-      };
+  const meta = joinParts(game.rule, `GM ${game.gm?.username ?? "?"}`, seats);
+  const { waiting } = splitRoster(game.participants);
+  const waitRank = waiting.find((p) => p.userId === ctx.viewerId)?.waitlistRank ?? null;
+
+  if (waitRank !== null) {
+    return {
+      ...base,
+      bucket: "joined",
+      chip: "waiting",
+      badge: `대기 ${waitRank}번`,
+      badgeColor: "gray",
+      schedule: sessionWhen ?? joinParts(line.text, line.deadline),
+      scheduleTone: "normal",
+      meta,
+      action: null,
+      sortKey,
+    };
   }
-}
 
-function hostedTabOf(card: SessionCardModel): HostedTab {
-  if (card.state === "confirmed") return "confirmed";
-  if (card.dim) return "closed";
-  return "recruiting";
-}
-
-// 참여자 기준 "확정" = 세션 시각이 잡혔고 내가 대기자가 아닌 것(배지가 세션 D-N).
-// 일시 지정형 모집 중 게임에 확정 참여한 경우도 여기로 온다.
-function joinedTabOf(card: SessionCardModel): JoinedTab {
-  if (card.dim) return "closed";
-  if (card.badge.kind === "session") return "confirmed";
-  return "waiting";
-}
-
-// "가까운 순": 예정/모집 탭은 임박 오름차순, 종료 탭은 최근 지난 것부터.
-function sortKey(game: SessionGame, tab: string): number {
-  if (tab === "confirmed") return new Date(game.confirmedAt!).getTime();
-  if (tab === "closed") return new Date(game.confirmedAt ?? game.endDate).getTime();
-  return new Date(game.endDate).getTime();
-}
-
-function bucketBy<Tab extends string>({
-  games,
-  role,
-  viewerId,
-  tabs,
-  tabOf,
-  now,
-}: {
-  games: SessionGame[];
-  role: SessionRole;
-  viewerId: string;
-  tabs: readonly { key: Tab }[];
-  tabOf: (card: SessionCardModel) => Tab;
-  now: Date;
-}): Record<Tab, SessionCardModel[]> {
-  const rows = new Map<Tab, { card: SessionCardModel; key: number }[]>();
-  for (const { key } of tabs) rows.set(key, []);
-  for (const game of games) {
-    const card = toSessionCard({ game, role, viewerId, now });
-    const tab = tabOf(card);
-    rows.get(tab)!.push({ card, key: sortKey(game, tab) });
+  if (timeSet) {
+    return {
+      ...base,
+      bucket: "joined",
+      chip: "confirmed",
+      badge: "확정",
+      badgeColor: "success",
+      schedule: sessionWhen!,
+      scheduleTone: "success",
+      meta,
+      action: null,
+      sortKey,
+    };
   }
-  const out = {} as Record<Tab, SessionCardModel[]>;
-  for (const { key: tab } of tabs) {
-    const list = rows.get(tab)!;
-    const descending = tab === "closed";
-    list.sort((a, b) => (descending ? b.key - a.key : a.key - b.key));
-    out[tab] = list.map((r) => r.card);
-  }
-  return out;
+
+  // 일정 미정인 확정 참여자 = 조율 중. 가능 시간을 안 냈으면 그게 지금 할 일이다.
+  const needsResponse = !ctx.respondedGameIds.has(game.id) && !line.deadlinePassed;
+  return {
+    ...base,
+    bucket: "joined",
+    chip: "scheduling",
+    badge: "조율 중",
+    badgeColor: "primary",
+    schedule: needsResponse
+      ? joinParts("가능 시간 미제출", line.deadline)
+      : awaitingTime
+        ? "모집이 끝나 GM이 세션 시간을 정하는 중입니다"
+        : joinParts(line.text, line.deadline),
+    scheduleTone: needsResponse ? "warning" : "normal",
+    meta,
+    action: needsResponse
+      ? { kind: "submit-availability", label: "일정 조율", href: scheduleHref }
+      : null,
+    sortKey,
+  };
 }
 
-export function bucketHosted(games: SessionGame[], viewerId: string, now: Date = new Date()) {
-  return bucketBy({
-    games,
-    role: "host",
-    viewerId,
-    tabs: HOSTED_TABS,
-    tabOf: hostedTabOf,
-    now,
-  });
+export type MySessions = Record<SessionBucket, SessionCardModel[]>;
+
+// 운영·참여 게임을 카드로 바꿔 세 탭으로 나누고, 가까운 것부터 정렬한다.
+export function buildSessions({
+  hosted,
+  joined,
+  ...ctx
+}: SessionContext & { hosted: SessionGame[]; joined: SessionGame[] }): MySessions {
+  const cards = [
+    ...hosted.map((game) => toSessionCard(game, "host", ctx)),
+    ...joined.map((game) => toSessionCard(game, "player", ctx)),
+  ].toSorted((a, b) => a.sortKey - b.sortKey);
+
+  return {
+    joined: cards.filter((c) => c.bucket === "joined"),
+    hosted: cards.filter((c) => c.bucket === "hosted"),
+    past: cards.filter((c) => c.bucket === "past"),
+  };
 }
 
-export function bucketJoined(games: SessionGame[], viewerId: string, now: Date = new Date()) {
-  return bucketBy({
-    games,
-    role: "player",
-    viewerId,
-    tabs: JOINED_TABS,
-    tabOf: joinedTabOf,
-    now,
-  });
-}
+export const SESSION_TABS = [
+  { key: "joined", label: "참여 중" },
+  { key: "hosted", label: "내가 운영" },
+  { key: "past", label: "끝남" },
+] as const satisfies ReadonlyArray<{ key: SessionBucket; label: string }>;
+
+// 탭별 상태 칩. 목록(05)과 같은 primary 칩을 쓴다. 끝남 탭에는 칩이 없다.
+export const SESSION_CHIPS: Record<SessionBucket, ReadonlyArray<{ key: SessionChip | "all"; label: string }>> = {
+  joined: [
+    { key: "all", label: "전체" },
+    { key: "scheduling", label: "조율 중" },
+    { key: "confirmed", label: "확정" },
+    { key: "waiting", label: "대기" },
+  ],
+  hosted: [
+    { key: "all", label: "전체" },
+    { key: "recruiting", label: "모집 중" },
+    { key: "confirmed", label: "확정" },
+  ],
+  past: [],
+};

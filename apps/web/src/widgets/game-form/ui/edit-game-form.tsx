@@ -1,21 +1,23 @@
 "use client";
 
-import { VStack } from "@trpg/ui";
-import { DeleteGameButton } from "@/features/delete-game";
+import { countConfirmed } from "@/entities/game";
 import { updateGame } from "@/features/write-game";
-import type { Game } from "@/shared/server";
+import type { GameDetailData } from "@/shared/server";
 import { GameForm } from "./game-form";
 
-export function EditGameForm({ game }: { game: Game }) {
+// 수정 폼은 앱바·하단 바까지 한 화면 셸을 소유한다(이탈 확인 때문에). 삭제는 상세 GM 메뉴 한 곳.
+export function EditGameForm({ game }: { game: GameDetailData }) {
   return (
-    <VStack gap={3}>
-      <GameForm
-        onSubmit={updateGame.bind(null, game.id)}
-        defaultGame={game}
-        submitLabel="수정 저장"
-        successMessage="수정되었습니다"
-      />
-      <DeleteGameButton gameId={game.id} label="구인 삭제" className="h-[46px] w-full" />
-    </VStack>
+    <GameForm
+      onSubmit={updateGame.bind(null, game.id)}
+      defaultGame={game}
+      submitLabel="수정 저장"
+      successMessage="수정되었습니다"
+      edit={{
+        gameId: game.id,
+        applicantCount: game.participants.length,
+        confirmedCount: countConfirmed(game.participants),
+      }}
+    />
   );
 }

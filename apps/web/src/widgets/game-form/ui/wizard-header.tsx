@@ -1,44 +1,46 @@
 "use client";
 
-import { cn, Text } from "@trpg/ui";
+import { Text } from "@trpg/ui";
 import { AppBar } from "@/shared/ui";
 
 export const WIZARD_STEPS = [1, 2, 3] as const;
 export type WizardStep = (typeof WIZARD_STEPS)[number];
 export const LAST_WIZARD_STEP = WIZARD_STEPS.length as WizardStep;
 
-// 단계에 따라 제목·뒤로가기·진행바가 함께 바뀐다.
+// 앱바 제목은 무엇을 만드는지("구인 등록") 하나. 단계는 오른쪽 "n / 3" 숫자와 3px 진행바로만 말한다.
+// 첫 단계의 왼쪽 버튼은 작업을 그만두는 ✕, 그 뒤로는 이전 단계로 가는 ‹.
 export function WizardHeader({
   step,
   title,
-  backHref,
   onBack,
 }: {
   step: WizardStep;
   title: string;
-  // 1단계에서는 화면을 떠나고, 그 뒤로는 이전 단계로 돌아간다.
-  backHref?: string;
-  onBack?: () => void;
+  onBack: () => void;
 }) {
+  const percent = Math.round((step / LAST_WIZARD_STEP) * 100);
+
   return (
     <>
       <AppBar
         title={title}
-        back={backHref}
         onBack={onBack}
+        backIcon={step === 1 ? "close" : "back"}
         action={
           <Text typography="code2" foreground="hint" className="tabular-nums">
             {step} / {LAST_WIZARD_STEP}
           </Text>
         }
       />
-      <div className="flex gap-1.5 px-4 pt-2.5">
-        {WIZARD_STEPS.map((s) => (
-          <span
-            key={s}
-            className={cn("h-1 flex-1 rounded-full", s <= step ? "bg-primary-600" : "bg-gray-200")}
-          />
-        ))}
+      <div
+        role="progressbar"
+        aria-label="구인 등록 진행"
+        aria-valuemin={1}
+        aria-valuemax={LAST_WIZARD_STEP}
+        aria-valuenow={step}
+        className="h-[3px] bg-gray-100"
+      >
+        <div className="h-full bg-primary-600 transition-[width]" style={{ width: `${percent}%` }} />
       </div>
     </>
   );

@@ -3,6 +3,7 @@
 import { Dialog } from "@base-ui-components/react/dialog";
 import { Button } from "@trpg/ui";
 
+// 확인은 되돌릴 수 없는 동작에만 쓴다(삭제·내보내기·세션 종료·세션 확정·채널 열기).
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -26,8 +27,13 @@ export function ConfirmDialog({
   pending,
   onConfirm,
 }: Props) {
+  // 처리 중에는 닫히지 않는다. 결과를 모른 채 화면을 떠나지 않게.
+  const handleOpenChange = (next: boolean) => {
+    if (!pending) onOpenChange(next);
+  };
+
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-40 bg-black/40" />
         <Dialog.Popup className="fixed top-1/2 left-1/2 z-50 w-[calc(100%-3rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-gray-200 bg-surface p-5 shadow-xl outline-none">
@@ -37,14 +43,21 @@ export function ConfirmDialog({
               {description}
             </Dialog.Description>
           )}
-          <div className="mt-5 flex justify-end gap-2">
-            <Button type="button" variant="outline" size="sm" onClick={() => onOpenChange(false)}>
+          <div className="mt-5 flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11 flex-1"
+              disabled={pending}
+              onClick={() => onOpenChange(false)}
+            >
               {cancelLabel}
             </Button>
             <Button
               type="button"
               variant={danger ? "danger" : "solid"}
-              size="sm"
+              className="h-11 flex-1"
+              loading={pending}
               disabled={pending}
               onClick={onConfirm}
             >

@@ -1,35 +1,55 @@
-import { HStack, Text } from "@trpg/ui";
+import { Badge, Button, HStack, Text, cn } from "@trpg/ui";
+import Link from "next/link";
 import { GameRoundBadge } from "@/entities/game";
-import type { SessionCardModel } from "../model/session-card";
-import { SessionBadge } from "./session-badge";
+import type { SessionCardModel, SessionTone } from "../model/session-card";
 
-// 순수 표시: 제목 · 시간 배지 · 서브라인. 링크/동작 없음(감싸는 쪽이 소유).
-// 진행 단계 단어(lead)는 배지가 아니라 서브라인 첫 토큰에 굵게 둔다.
-export function SessionCard({ model }: { model: SessionCardModel }) {
+const TONE_CLASS: Record<SessionTone, string> = {
+  normal: "text-gray-600",
+  success: "font-semibold text-success-700",
+  warning: "font-semibold text-warning-600",
+  hint: "text-hint",
+};
+
+// 세션 카드: 제목·배지 → 일정 한 줄 → 룰·GM·인원. 카드 목적지는 항상 구인 상세이고,
+// 할 일(일정 조율·세션 시간 확정)은 카드 안 버튼으로만 간다. eyebrow는 홈 할 일의 이유 한 줄.
+export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebrow?: string }) {
   const cardClass = model.urgent
-    ? "rounded-[13px] border-[1.5px] border-danger-300 bg-danger-50 p-3.5"
-    : "rounded-[13px] border border-gray-200 p-3.5";
+    ? "border-[1.5px] border-danger-300 bg-danger-50"
+    : "border border-gray-200";
+  const titleForeground = model.bucket === "past" ? "muted" : "normal";
+  const actionVariant = model.action?.kind === "confirm-time" ? "solid" : "tinted";
 
   return (
-    <div className={cardClass}>
-      <HStack justify="between" align="center" gap={2}>
-        <HStack align="center" gap={2} className="min-w-0">
-          <GameRoundBadge round={model.round} />
-          <Text typography="subtitle1" className="truncate">
-            {model.title}
+    <div className={cn("rounded-[14px] p-3.5", cardClass)}>
+      <Link href={`/games/${model.id}`} className="block">
+        {eyebrow && (
+          <Text typography="body4" className="mb-1 block font-bold text-warning-600">
+            {eyebrow}
           </Text>
+        )}
+        <HStack justify="between" align="center" gap={2}>
+          <HStack align="center" gap={2} className="min-w-0">
+            <GameRoundBadge round={model.round} />
+            <Text typography="subtitle1" foreground={titleForeground} className="truncate">
+              {model.title}
+            </Text>
+          </HStack>
+          <Badge color={model.badgeColor} className="shrink-0">
+            {model.badge}
+          </Badge>
         </HStack>
-        <SessionBadge badge={model.badge} />
-      </HStack>
-      <Text
-        typography="body4"
-        foreground={model.dim ? "hint" : "muted"}
-        className="mt-1 block truncate"
-      >
-        {model.lead && <b className="font-bold text-gray-600">{model.lead}</b>}
-        {model.lead ? " · " : ""}
-        {model.rest}
-      </Text>
+        <Text typography="body3" className={cn("mt-1 block truncate", TONE_CLASS[model.scheduleTone])}>
+          {model.schedule}
+        </Text>
+        <Text typography="body4" foreground="hint" className="mt-0.5 block truncate">
+          {model.meta}
+        </Text>
+      </Link>
+      {model.action && (
+        <Button asChild variant={actionVariant} className="mt-2.5 h-10 w-full">
+          <Link href={model.action.href}>{model.action.label}</Link>
+        </Button>
+      )}
     </div>
   );
 }

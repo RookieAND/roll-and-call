@@ -1,46 +1,43 @@
 "use client";
 
-import { IconButton } from "@trpg/ui";
+import { IconButton, Text } from "@trpg/ui";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { ConfirmDialog, Sheet } from "@/shared/ui";
 import { useDeleteGame } from "@/features/delete-game";
-import { useEndSession } from "@/features/end-session";
-import { useOpenSessionRooms } from "@/features/open-session-rooms";
 
-// 4g: GM 본인 시점의 ⋯ 메뉴. 수정·삭제는 빈도가 낮고 파괴적이라
-// 하단 액션 자리 대신 이 시트로 접는다. 삭제만 빨강 + 확인 다이얼로그.
-// 디스코드 세션 채널은 열기 → 세션 종료(아카이브) 순서로 한 번씩만 노출된다.
+// GM 본인 시점의 ⋯ 메뉴. 상세에는 글 자신에 대한 것(수정 · 참여자 관리 · 삭제)만 둔다.
+// 디스코드 운영(세션 채널 열기·종료)은 참여자 관리 화면이 맡는다.
 export function GameGmMenu({
   gameId,
-  roomsOpened,
-  sessionEnded,
+  confirmedCount,
+  waitingCount,
+  canChangeTime,
 }: {
   gameId: string;
-  roomsOpened: boolean;
-  sessionEnded: boolean;
+  confirmedCount: number;
+  waitingCount: number;
+  // 조율형이고 이미 확정됐으면 확정 시간을 바꿀 수 있다(서버가 재확정을 받는다).
+  canChangeTime: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
-  const [confirmingEnd, setConfirmingEnd] = useState(false);
   const { pending, remove } = useDeleteGame(gameId, () => {
     setConfirming(false);
     setOpen(false);
   });
-  const { pending: opening, openRooms } = useOpenSessionRooms(gameId, () => setOpen(false));
-  const { pending: ending, endSession } = useEndSession(gameId, () => {
-    setConfirmingEnd(false);
-    setOpen(false);
-  });
 
-  const canOpenRooms = !roomsOpened;
-  const canEndSession = roomsOpened && !sessionEnded;
+  const rosterSummary = `확정 ${confirmedCount} · 대기 ${waitingCount}`;
+  const deleteDescription =
+    confirmedCount > 0
+      ? `이 구인을 삭제할까요? 되돌릴 수 없습니다. 확정 참여자 ${confirmedCount}명에게 삭제 사실이 따로 전해지지 않습니다. 디스코드 공지·스레드·세션 채널은 그대로 남습니다.`
+      : "이 구인을 삭제할까요? 되돌릴 수 없습니다. 디스코드 공지·스레드·세션 채널은 그대로 남습니다.";
 
   return (
     <>
-      <IconButton aria-label="구인 관리 메뉴" size="sm" onClick={() => setOpen(true)}>
-        <MoreHorizontal size={18} aria-hidden />
+      <IconButton aria-label="구인 관리 메뉴" className="h-11 w-11 -mr-2.5" onClick={() => setOpen(true)}>
+        <MoreHorizontal size={20} aria-hidden />
       </IconButton>
 
       <Sheet.Root open={open} onOpenChange={setOpen}>
@@ -50,42 +47,37 @@ export function GameGmMenu({
             <Sheet.Item asChild onClick={() => setOpen(false)}>
               <Link href={`/games/${gameId}/edit`}>구인 수정</Link>
             </Sheet.Item>
-            <Sheet.Item asChild onClick={() => setOpen(false)}>
-              <Link href={`/games/${gameId}/participants`}>참여자 관리</Link>
-            </Sheet.Item>
-            {canOpenRooms && (
-              <Sheet.Item onClick={openRooms} disabled={opening}>
-                디스코드 세션 채널 열기
+            {canChangeTime && (
+              <Sheet.Item asChild onClick={() => setOpen(false)}>
+                <Link href={`/games/${gameId}/schedule`}>확정 시간 변경</Link>
               </Sheet.Item>
             )}
-            {canEndSession && (
-              <Sheet.Item onClick={() => setConfirmingEnd(true)}>세션 종료</Sheet.Item>
-            )}
+            <Sheet.Item asChild onClick={() => setOpen(false)}>
+              <Link href={`/games/${gameId}/participants`}>
+                참여자 관리
+                <Text typography="body4" foreground="hint" render={<span />}>
+                  {rosterSummary}
+                </Text>
+              </Link>
+            </Sheet.Item>
             <Sheet.Item
               onClick={() => setConfirming(true)}
-              className="font-semibold text-danger-600"
+              className="flex-col items-start justify-center gap-0.5 py-2.5"
             >
-              구인 삭제
+              <span className="font-semibold text-danger-600">구인 삭제</span>
+              <Text typography="body4" foreground="hint" render={<span />}>
+                삭제하면 앱에서만 사라집니다. 디스코드 공지·스레드·세션 채널은 남습니다.
+              </Text>
             </Sheet.Item>
           </div>
         </Sheet.Content>
       </Sheet.Root>
 
       <ConfirmDialog
-        open={confirmingEnd}
-        onOpenChange={setConfirmingEnd}
-        title="세션 종료"
-        description="세션 채널에서 참여자 접근 권한을 모두 회수합니다. 기록은 GM만 읽을 수 있어요."
-        confirmLabel="종료"
-        pending={ending}
-        onConfirm={endSession}
-      />
-
-      <ConfirmDialog
         open={confirming}
         onOpenChange={setConfirming}
         title="구인 삭제"
-        description="이 구인을 삭제할까요? 되돌릴 수 없습니다."
+        description={deleteDescription}
         confirmLabel="삭제"
         danger
         pending={pending}

@@ -12,6 +12,7 @@ import {
   notifyRecruitmentComplete,
   refreshRecruitPost,
   getCurrentUser,
+  syncSessionRoomMembers,
 } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 // waiting: 정원 초과로 대기 접수됐는지. 화면 표시 시점과 달리 실제 결과라 토스트 문구는 이걸 따른다.
@@ -72,7 +73,11 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
   // 참여·대기 등록은 항상 스레드에, 정원이 막 찼으면 마감 채널에도 알린다.
   if (joinedGame) await announceNewApplication(joinedGame, user.id, joinedWaiting, confirmedAfter);
   if (becameFull) await announceRecruitmentComplete(gameId);
-  await refreshRecruitPost(gameId);
+  // 세션 채널이 이미 열려 있으면 확정으로 들어온 사람을 합류시킨다. 대기자는 권한이 없으니 건너뛴다.
+  await Promise.all([
+    refreshRecruitPost(gameId),
+    joinedWaiting ? undefined : syncSessionRoomMembers(gameId),
+  ]);
 
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/participants`);

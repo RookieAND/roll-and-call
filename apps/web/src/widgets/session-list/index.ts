@@ -1,9 +1,11 @@
 export { SessionList } from "./ui/session-list";
+export { SessionCard } from "./ui/session-card";
+export { loadMySessions } from "./api/load-sessions";
 export {
-  bucketHosted,
-  bucketJoined,
-  HOSTED_TABS,
-  JOINED_TABS,
+  SESSION_CHIPS,
+  SESSION_TABS,
+  type MySessions,
+  type SessionBucket,
   type SessionCardModel,
-  type SessionTab,
+  type SessionChip,
 } from "./model/session-card";

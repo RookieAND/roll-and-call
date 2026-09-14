@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, VStack } from "@trpg/ui";
+import { Avatar, Button, Text } from "@trpg/ui";
 import { useState, useTransition } from "react";
 import { toast } from "@/shared/ui";
 import { refreshAvatar } from "../api/refresh-avatar";
@@ -30,11 +30,14 @@ export function AvatarRefreshField({
   }
 
   return (
-    <VStack gap={2} className="items-center">
-      <Avatar src={url} name={name} size="3xl" />
-      <Button variant="ghost" size="sm" loading={pending} onClick={reload}>
-        Discord 아바타 다시 불러오기
+    <div className="flex items-center gap-3">
+      <Avatar src={url} name={name} size="2xl" />
+      <Text typography="body3" foreground="muted" className="min-w-0 flex-1">
+        아바타는 디스코드에서 가져옵니다.
+      </Text>
+      <Button variant="outline" size="sm" className="h-9 shrink-0" loading={pending} onClick={reload}>
+        다시 불러오기
       </Button>
-    </VStack>
+    </div>
   );
 }

@@ -14,6 +14,13 @@ export { Badge, type BadgeProps } from "./badge";
 export { Button, type ButtonProps } from "./button";
 export { IconButton, type IconButtonProps } from "./icon-button";
 export { Chip, type ChipProps } from "./chip";
+export {
+  SegmentControl,
+  type SegmentControlProps,
+  type SegmentOption,
+} from "./segment-control";
+export { Switch, type SwitchProps } from "./switch";
+export { Stepper, type StepperProps } from "./stepper";
 export { Card, type CardProps } from "./card";
 export { Field, type FieldProps } from "./field";
 export { TextInput, Textarea, type TextInputProps, type TextareaProps } from "./text-input";

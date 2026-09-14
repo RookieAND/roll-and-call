@@ -1,35 +1,37 @@
-import { HStack, IconButton } from "@trpg/ui";
-import { Pencil } from "lucide-react";
+import { Avatar, Button, Text } from "@trpg/ui";
 import Link from "next/link";
-import { ProfileIdentity } from "@/entities/profile";
-import { ThemeToggle } from "@/shared/ui";
 
-// 내 신원 + 이 화면에서만 쓰는 계정 조작(테마 전환 · 프로필 편집).
+// 내 신원: 아바타 · 이름(h1) · 한 줄 소개 + 프로필 편집 진입.
 export function MyPageHeader({
   name,
   avatarUrl,
-  handle,
+  bio,
 }: {
   name: string;
   avatarUrl: string | null;
-  handle?: string | null;
+  bio: string | null;
 }) {
+  const bioText = bio || "한 줄 소개를 적어보세요.";
+  const bioForeground = bio ? "muted" : "hint";
+
   return (
-    <HStack justify="between" align="center">
-      <ProfileIdentity name={name} avatarUrl={avatarUrl} handle={handle} />
-      <HStack gap={2} align="center">
-        <ThemeToggle />
-        <IconButton
-          asChild
-          variant="outline"
-          aria-label="프로필 편집"
-          className="h-9 w-9 border-gray-200 text-gray-600"
+    <div className="flex items-center gap-[13px]">
+      <Avatar src={avatarUrl} name={name} size="2xl" />
+      <div className="min-w-0 flex-1">
+        <Text
+          typography="heading2"
+          render={<h1 />}
+          className="text-[17px] font-extrabold tracking-[-0.015em]"
         >
-          <Link href="/me/edit">
-            <Pencil size={16} />
-          </Link>
-        </IconButton>
-      </HStack>
-    </HStack>
+          {name}
+        </Text>
+        <Text typography="body3" foreground={bioForeground} className="mt-[3px] block truncate">
+          {bioText}
+        </Text>
+      </div>
+      <Button asChild variant="outline" className="h-9 flex-none rounded-[10px] px-3 text-[12.5px] font-bold">
+        <Link href="/me/edit">편집</Link>
+      </Button>
+    </div>
   );
 }

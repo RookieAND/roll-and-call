@@ -1,11 +1,62 @@
-import { TextInput } from "@trpg/ui";
+"use client";
 
-// GET 폼 제출로 /games?q= 이동. 정렬은 hidden으로 유지, 페이지는 1로 초기화된다.
-export function GameSearchForm({ q, sort }: { q?: string; sort?: string }) {
+import { IconButton, TextInput } from "@trpg/ui";
+import { Loader2, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
+import type { GamesFilter } from "@/shared/api";
+import { filterParams } from "../lib/filter-params";
+import { gamesHref } from "../lib/games-href";
+
+// 게임명 검색. 제출하면 정렬·상태는 유지하고 1페이지로. 검색 중에는 스피너, 입력이 있으면 지우기(✕).
+export function GameSearchForm({ filter }: { filter: GamesFilter }) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [value, setValue] = useState(filter.q ?? "");
+
+  // 뒤로가기·칩 이동 등으로 주소의 q가 바뀌면 입력값도 따라간다.
+  useEffect(() => setValue(filter.q ?? ""), [filter.q]);
+
+  function search(q: string) {
+    startTransition(() => {
+      router.push(gamesHref(filterParams({ ...filter, q: q || undefined })));
+    });
+  }
+
+  function clear() {
+    setValue("");
+    if (filter.q) search("");
+  }
+
   return (
-    <form action="/games" method="get">
-      {sort && <input type="hidden" name="sort" value={sort} />}
-      <TextInput name="q" defaultValue={q} placeholder="게임명 검색" />
+    <form
+      role="search"
+      className="relative"
+      onSubmit={(event) => {
+        event.preventDefault();
+        search(value.trim());
+      }}
+    >
+      <TextInput
+        name="q"
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        placeholder="게임명 검색"
+        aria-label="게임명 검색"
+        enterKeyHint="search"
+        className="pr-11"
+      />
+      <div className="absolute inset-y-0 right-0 flex items-center">
+        {pending ? (
+          <Loader2 size={16} className="mr-3.5 animate-spin text-hint" aria-label="검색 중" />
+        ) : (
+          value && (
+            <IconButton variant="ghost" aria-label="검색어 지우기" className="h-11 w-11" onClick={clear}>
+              <X size={16} aria-hidden />
+            </IconButton>
+          )
+        )}
+      </div>
     </form>
   );
 }

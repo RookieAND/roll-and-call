@@ -1,14 +1,29 @@
 import { Container, Text, VStack } from "@trpg/ui";
-import { deriveGameStatus, GameThumbnail, isGameGm, splitRoster } from "@/entities/game";
+import {
+  deriveGameStatus,
+  GameThumbnail,
+  isGameGm,
+  SCHEDULE_MODE,
+  scheduleLine,
+  splitRoster,
+} from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { GameDetailActions } from "./game-detail-actions";
 import { GameDetailHeader } from "./game-detail-header";
 import { GameImageGallery } from "./game-image-gallery";
 import { GameInfoTable } from "./game-info-table";
-import { GameRosterPreview } from "./game-roster-preview";
+import { GameRosterSection } from "./game-roster-section";
 
-export function GameDetail({ game, viewerId }: { game: GameDetailData; viewerId: string | null }) {
+export function GameDetail({
+  game,
+  viewerId,
+  respondedIds,
+}: {
+  game: GameDetailData;
+  viewerId: string | null;
+  respondedIds: string[];
+}) {
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
   const { confirmed, waiting } = splitRoster(game.participants);
 
@@ -21,6 +36,8 @@ export function GameDetail({ game, viewerId }: { game: GameDetailData; viewerId:
     participantCount: confirmed.length,
     waitlistEnabled: game.waitlistEnabled,
   });
+  const respondedConfirmed = confirmed.filter((p) => respondedIds.includes(p.userId)).length;
+  const viewerResponded = viewerId !== null && respondedIds.includes(viewerId);
 
   return (
     <>
@@ -33,33 +50,44 @@ export function GameDetail({ game, viewerId }: { game: GameDetailData; viewerId:
             className="h-42 w-full"
           />
 
-          <VStack gap={4} className="px-4">
+          <VStack gap={5} className="px-4 pb-2">
             <GameDetailHeader
               gameId={game.id}
               title={game.title}
               status={status}
+              statusLine={scheduleLine(game)}
               isGm={isGm}
-              roomsOpened={game.discordCategoryId !== null}
-              sessionEnded={game.sessionEndedAt !== null}
+              confirmedCount={confirmed.length}
+              waitingCount={waiting.length}
+              canChangeTime={
+                game.scheduleMode === SCHEDULE_MODE.coordinate && game.confirmedAt !== null
+              }
             />
 
-            <GameInfoTable game={game} count={confirmed.length} />
+            <GameInfoTable game={game} isGm={isGm} />
 
             {game.synopsis && (
               <VStack gap={2}>
-                <Text typography="heading3">시놉시스</Text>
-                <Text typography="body4" foreground="muted" className="whitespace-pre-wrap">
+                <Text typography="heading3" render={<h2 />}>
+                  시놉시스
+                </Text>
+                <Text typography="body3" foreground="muted" className="whitespace-pre-wrap">
                   {game.synopsis}
                 </Text>
               </VStack>
             )}
 
-            {game.images.length > 0 && <GameImageGallery images={game.images} />}
+            {game.images.length > 0 && <GameImageGallery images={game.images} isGm={isGm} />}
 
-            <GameRosterPreview
+            <GameRosterSection
+              gameId={game.id}
               confirmed={confirmed}
-              waitingCount={waiting.length}
+              waiting={waiting}
               maxPlayers={game.maxPlayers}
+              status={status}
+              isGm={isGm}
+              viewerId={viewerId}
+              endDate={game.endDate}
             />
           </VStack>
 
@@ -70,6 +98,9 @@ export function GameDetail({ game, viewerId }: { game: GameDetailData; viewerId:
             viewerStatus={me?.status ?? null}
             waitlistRank={me?.waitlistRank ?? null}
             waitingCount={waiting.length}
+            confirmedCount={confirmed.length}
+            respondedConfirmed={respondedConfirmed}
+            viewerResponded={viewerResponded}
             status={status}
           />
         </VStack>

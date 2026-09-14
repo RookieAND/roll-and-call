@@ -1,14 +1,14 @@
 "use client";
 
-import { Button, IconButton, Text } from "@trpg/ui";
+import { Button, Grid, IconButton, Text, cn } from "@trpg/ui";
 import { ImagePlus, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { uploadThumbnail } from "../api/upload-thumbnail";
+import { IMAGE_ACCEPT, imageFileError } from "./upload-rules";
 
-const MAX_BYTES = 5 * 1024 * 1024;
-
-// 시놉시스·진행에 쓰는 이미지 여러 장. 올린 순서대로 상세 갤러리에 보인다.
-// 업로드 경로(스토리지 버킷)는 썸네일과 같다.
+// 추가 이미지(지도·NPC·핸드아웃 등) 최대 max장. 1:1 슬롯 3열, 끌어서 순서를 바꾼다.
+// 상세의 시놉시스 아래 가로 스크롤에 이 순서대로 보인다. 업로드 경로(스토리지 버킷)는 썸네일과 같다.
+// ponytail: 순서 변경은 HTML5 드래그라 데스크톱 전용. 터치 정렬이 필요해지면 위·아래 이동 버튼을 붙인다.
 export function GameImagesUpload({
   value,
   onChange,
@@ -21,6 +21,7 @@ export function GameImagesUpload({
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
   const remaining = max - value.length;
   const canAdd = remaining > 0 && !uploading;
 
@@ -31,12 +32,13 @@ export function GameImagesUpload({
     if (files.length === 0) return;
     setError(null);
 
-    if (files.some((f) => !f.type.startsWith("image/") || f.size > MAX_BYTES)) {
-      setError("5MB 이하 이미지 파일만 올릴 수 있어요.");
+    const invalid = files.map(imageFileError).find(Boolean);
+    if (invalid) {
+      setError(invalid);
       return;
     }
     if (files.length > remaining) {
-      setError(`이미지는 최대 ${max}장까지예요. 앞의 ${remaining}장만 올립니다.`);
+      setError(`이미지는 최대 ${max}장까지입니다. 앞의 ${remaining}장만 올립니다.`);
     }
 
     setUploading(true);
@@ -45,7 +47,7 @@ export function GameImagesUpload({
       for (const file of files.slice(0, remaining)) {
         const result = await uploadThumbnail(file);
         if ("error" in result) {
-          setError(result.error);
+          setError(`올리지 못했습니다. ${result.error}`);
           break;
         }
         urls.push(result.url);
@@ -60,33 +62,53 @@ export function GameImagesUpload({
     onChange(value.filter((_, i) => i !== index));
   }
 
+  function move(from: number, to: number) {
+    if (from === to) return;
+    const next = [...value];
+    const [item] = next.splice(from, 1);
+    next.splice(to, 0, item!);
+    onChange(next);
+  }
+
   return (
-    <div id="images" className="flex flex-col gap-2">
+    <div id="images" className="flex flex-col gap-1.5">
       <div className="flex items-baseline justify-between">
-        <Text typography="subtitle1">진행 이미지</Text>
+        <Text typography="subtitle2" className="text-[12.5px] text-gray-700">
+          추가 이미지 <span className="font-normal text-hint">선택</span>
+        </Text>
         <Text typography="body4" foreground="hint" className="tabular-nums">
           {value.length} / {max}
         </Text>
       </div>
-      <Text typography="body4" foreground="muted">
-        시놉시스나 진행에 필요한 이미지를 올려 주세요. 구인 상세에 올린 순서대로 보입니다.
-      </Text>
 
-      <div className="grid grid-cols-3 gap-2">
+      <Grid cols={3} gap={2}>
         {value.map((url, i) => (
           <div
             key={url}
-            className="relative aspect-square overflow-hidden rounded-lg border border-gray-200"
+            draggable={!uploading}
+            onDragStart={() => setDragIndex(i)}
+            onDragOver={(event) => event.preventDefault()}
+            onDrop={(event) => {
+              event.preventDefault();
+              if (dragIndex !== null) move(dragIndex, i);
+              setDragIndex(null);
+            }}
+            onDragEnd={() => setDragIndex(null)}
+            className={cn(
+              "relative aspect-square cursor-grab overflow-hidden rounded-lg border border-gray-200",
+              dragIndex === i && "opacity-55",
+            )}
           >
-            <img src={url} alt={`진행 이미지 ${i + 1}`} className="h-full w-full object-cover" />
+            <img src={url} alt={`추가 이미지 ${i + 1}`} className="h-full w-full object-cover" />
             <IconButton
-              size="sm"
-              aria-label={`진행 이미지 ${i + 1} 삭제`}
+              aria-label={`추가 이미지 ${i + 1} 삭제`}
               onClick={() => remove(i)}
               disabled={uploading}
-              className="absolute top-1 right-1 bg-surface/85"
+              className="absolute top-0 right-0 h-11 w-11 bg-transparent hover:bg-transparent"
             >
-              <X size={16} aria-hidden />
+              <span className="flex size-7 items-center justify-center rounded-full bg-surface/85">
+                <X size={14} aria-hidden />
+              </span>
             </IconButton>
           </div>
         ))}
@@ -99,25 +121,29 @@ export function GameImagesUpload({
             loading={uploading}
             className="aspect-square h-auto flex-col gap-1 border-dashed text-xs"
           >
-            <ImagePlus size={20} aria-hidden />
-            추가
+            <ImagePlus size={20} aria-hidden />+ 추가
           </Button>
         )}
-      </div>
+      </Grid>
+
+      {error ? (
+        <Text typography="body4" foreground="danger" render={<p />}>
+          {error}
+        </Text>
+      ) : (
+        <Text typography="body4" foreground="hint" render={<p />}>
+          상세의 시놉시스 아래에 가로로 넘겨 봅니다. 끌어서 순서를 바꿀 수 있습니다. 장당 5MB 이하.
+        </Text>
+      )}
 
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept={IMAGE_ACCEPT}
         multiple
         onChange={handleFiles}
         className="hidden"
       />
-      {error && (
-        <Text typography="body4" foreground="danger">
-          {error}
-        </Text>
-      )}
     </div>
   );
 }

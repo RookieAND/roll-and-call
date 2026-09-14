@@ -1,0 +1,41 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "홈 · 구인 목록" },
+    { "id": "page-2", "name": "구인 상세" },
+    { "id": "page-3", "name": "일정 · 참여자 · 등록" },
+    { "id": "page-4", "name": "마이페이지" }
+  ],
+  "artboards": [
+    { "file": "HomeLanding.dc.html", "title": "홈 · 비로그인 랜딩", "x": 0, "y": 0, "w": 412, "h": 915, "page": "page-1" },
+    { "file": "HomeDashboard.dc.html", "title": "홈 · 로그인 대시보드", "x": 492, "y": 0, "w": 412, "h": 915, "page": "page-1" },
+    { "file": "Main.dc.html", "title": "구인 목록", "x": 984, "y": 0, "w": 412, "h": 1633, "page": "page-1" },
+    { "file": "GamesSortSheet.dc.html", "title": "구인 목록 · 정렬 시트", "x": 1476, "y": 0, "w": 412, "h": 915, "page": "page-1" },
+    { "file": "NotFound.dc.html", "title": "404", "x": 1968, "y": 0, "w": 412, "h": 915, "page": "page-1" },
+
+    { "file": "DetailAnonRecruiting.dc.html", "title": "상세 · 비로그인 · 모집 중", "x": 0, "y": 0, "w": 412, "h": 1236, "page": "page-2" },
+    { "file": "DetailAnonFull.dc.html", "title": "상세 · 비로그인 · 정원 참(대기 모집)", "x": 492, "y": 0, "w": 412, "h": 1079, "page": "page-2" },
+    { "file": "DetailJoinable.dc.html", "title": "상세 · 로그인 · 참여 가능", "x": 984, "y": 0, "w": 412, "h": 1203, "page": "page-2" },
+    { "file": "DetailFullJoinable.dc.html", "title": "상세 · 로그인 · 대기 신청 가능", "x": 1476, "y": 0, "w": 412, "h": 915, "page": "page-2" },
+    { "file": "DetailWaitlisted.dc.html", "title": "상세 · 대기자", "x": 1968, "y": 0, "w": 412, "h": 1239, "page": "page-2" },
+    { "file": "DetailClosed.dc.html", "title": "상세 · 모집 마감(세션 확정)", "x": 2460, "y": 0, "w": 412, "h": 925, "page": "page-2" },
+    { "file": "DetailGm.dc.html", "title": "상세 · GM", "x": 0, "y": 1400, "w": 412, "h": 915, "page": "page-2" },
+    { "file": "DetailGmMenu.dc.html", "title": "상세 · GM 메뉴 시트", "x": 492, "y": 1400, "w": 412, "h": 915, "page": "page-2" },
+    { "file": "DetailGmDeleteConfirm.dc.html", "title": "상세 · 구인 삭제 확인", "x": 984, "y": 1400, "w": 412, "h": 915, "page": "page-2" },
+
+    { "file": "ScheduleParticipant.dc.html", "title": "일정 조율 · 참여자", "x": 0, "y": 0, "w": 412, "h": 915, "page": "page-3" },
+    { "file": "ScheduleGm.dc.html", "title": "일정 조율 · GM(일시 지정 게임)", "x": 492, "y": 0, "w": 412, "h": 915, "page": "page-3" },
+    { "file": "Participants.dc.html", "title": "참여자 관리 · 빈 상태", "x": 984, "y": 0, "w": 412, "h": 915, "page": "page-3" },
+    { "file": "NewStep1.dc.html", "title": "구인 등록 · 1단계", "x": 0, "y": 1035, "w": 412, "h": 915, "page": "page-3" },
+    { "file": "NewStep2.dc.html", "title": "구인 등록 · 2단계", "x": 492, "y": 1035, "w": 412, "h": 915, "page": "page-3" },
+    { "file": "EditGame.dc.html", "title": "구인 수정", "x": 984, "y": 1035, "w": 412, "h": 1224, "page": "page-3" },
+
+    { "file": "MyPage.dc.html", "title": "마이페이지", "x": 0, "y": 0, "w": 412, "h": 915, "page": "page-4" },
+    { "file": "EditProfile.dc.html", "title": "프로필 편집", "x": 492, "y": 0, "w": 412, "h": 915, "page": "page-4" },
+    { "file": "SessionsHosted.dc.html", "title": "운영 중인 세션", "x": 984, "y": 0, "w": 412, "h": 915, "page": "page-4" },
+    { "file": "SessionsJoined.dc.html", "title": "참여한 세션 · 대기 탭", "x": 1476, "y": 0, "w": 412, "h": 915, "page": "page-4" }
+  ],
+  "annotations": [
+    { "id": "about", "x": 0, "y": -200, "w": 520, "page": "page-1", "text": "현재 코드 기준 재현 시안 (1단계: 개선 없음). 412px 모바일, 라이트 테마.\n닉네임·아바타·썸네일·시놉시스는 가상 데이터로 바꿨고, 썸네일은 앱의 이미지 없음 그라데이션, 빈 상태 일러스트는 SVG 대체입니다.\nPretendard 대신 Noto Sans KR로 보입니다." }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}

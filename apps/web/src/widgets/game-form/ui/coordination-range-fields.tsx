@@ -5,59 +5,74 @@ import { Controller, type UseFormReturn } from "react-hook-form";
 import { GAME_RANGE_MAX_DAYS, type GameFormValues } from "@/features/write-game";
 import { endDateBounds } from "@/shared/lib";
 import { DatePicker } from "@/shared/ui";
+import { defaultEndDateForRange } from "../model/schedule-defaults";
 
-// 범위 조율 모드: 세션을 치를 기간만 정하고, 정확한 시각은 참여자 응답을 받아 나중에 확정한다.
+// 범위 조율 모드: 참여자가 가능 시간을 낼 기간(조율 기간). 정확한 시각은 응답을 받아 GM이 확정한다.
+// 03 일정 조율과 같은 말("조율 기간")을 쓴다.
 export function CoordinationRangeFields({ form }: { form: UseFormReturn<GameFormValues> }) {
   const {
     control,
     watch,
+    getValues,
+    setValue,
     formState: { errors },
   } = form;
   const rangeStart = watch("rangeStart");
   const rangeEnd = watch("rangeEnd");
   const endBounds = endDateBounds({ start: rangeStart, maxDays: GAME_RANGE_MAX_DAYS });
+  const error = errors.rangeStart?.message ?? errors.rangeEnd?.message;
 
   return (
-    <>
-      <div>
-        <Text typography="subtitle1" className="block">
-          세션 예정일
-        </Text>
-        <Text typography="body4" foreground="muted" className="mt-0.5 block">
-          언제까지 세션을 끝내고 싶은지, 며칠짜리 세션인지 알려주는 날짜예요.
-        </Text>
-      </div>
-      <Field label="시작일" htmlFor="rangeStart" error={errors.rangeStart?.message}>
-        <Controller
-          name="rangeStart"
-          control={control}
-          render={({ field }) => (
-            <DatePicker
-              id="rangeStart"
-              value={field.value}
-              onChange={field.onChange}
-              invalid={!!errors.rangeStart}
-              max={rangeEnd || undefined}
+    <div className="flex flex-col gap-1.5">
+      <Field label="조율 기간" htmlFor="rangeStart" required error={error}>
+        <div className="flex items-center gap-2">
+          <div className="min-w-0 flex-1">
+            <Controller
+              name="rangeStart"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  id="rangeStart"
+                  placeholder="시작일"
+                  value={field.value}
+                  invalid={!!errors.rangeStart}
+                  max={rangeEnd || undefined}
+                  onChange={(date) => {
+                    field.onChange(date);
+                    // 모집 마감이 비어 있으면 조율 시작 하루 전으로 채워 둔다.
+                    if (!getValues("endDate")) {
+                      setValue("endDate", defaultEndDateForRange(date), { shouldDirty: true });
+                    }
+                  }}
+                />
+              )}
             />
-          )}
-        />
-      </Field>
-      <Field label="종료일" htmlFor="rangeEnd" error={errors.rangeEnd?.message}>
-        <Controller
-          name="rangeEnd"
-          control={control}
-          render={({ field }) => (
-            <DatePicker
-              id="rangeEnd"
-              value={field.value}
-              onChange={field.onChange}
-              invalid={!!errors.rangeEnd}
-              min={endBounds.min}
-              max={endBounds.max}
+          </div>
+          <Text foreground="hint" aria-hidden>
+            ~
+          </Text>
+          <div className="min-w-0 flex-1">
+            <Controller
+              name="rangeEnd"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  id="rangeEnd"
+                  placeholder="종료일"
+                  value={field.value}
+                  invalid={!!errors.rangeEnd}
+                  min={endBounds.min}
+                  max={endBounds.max}
+                  onChange={field.onChange}
+                />
+              )}
             />
-          )}
-        />
+          </div>
+        </div>
       </Field>
-    </>
+      <Text typography="body4" foreground="hint" render={<p />}>
+        참여자가 이 기간 안에서 가능 시간을 냅니다. 최대 {GAME_RANGE_MAX_DAYS}일까지 고를 수 있습니다.
+      </Text>
+    </div>
   );
 }

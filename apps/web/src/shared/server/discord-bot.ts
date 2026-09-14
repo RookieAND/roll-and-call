@@ -151,6 +151,20 @@ function guildId() {
   return id;
 }
 
+// 봇 토큰과 서버가 설정돼 있어야 채널·공지·알림이 동작한다. 화면의 "연동 안 됨" 판단에 쓴다.
+export function isDiscordConfigured(): boolean {
+  return Boolean(process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID);
+}
+
+// 채널 바로가기 주소. 서버가 설정돼 있지 않으면 null.
+export function discordChannelUrl(channelId: string | null): string | null {
+  const guild = process.env.DISCORD_GUILD_ID;
+  return guild && channelId ? `https://discord.com/channels/${guild}/${channelId}` : null;
+}
+
+// GM 전용 채널(🔒GM-CHAT · 🎙️GM-VOICE). 텍스트 채널 이름은 디스코드가 소문자로 바꾸므로 대소문자를 가리지 않는다.
+const GM_ONLY_CHANNEL = /gm-(chat|voice)/i;
+
 // 서버에 없는 유저는 권한을 줄 수 없으니 뺀다.
 async function onlyGuildMembers(guild: string, ids: string[]) {
   const found = await Promise.all(
@@ -168,7 +182,7 @@ export async function createDiscordSessionRooms({
   title: string;
   gmDiscordId: string;
   playerDiscordIds: string[];
-}): Promise<string> {
+}): Promise<{ categoryId: string; channelId: string }> {
   const guild = guildId();
   const [me, channels, [gmId], playerIds] = await Promise.all([
     botApi<{ id: string }>("/users/@me"),
@@ -201,6 +215,7 @@ export async function createDiscordSessionRooms({
 
   const category = await create(`세션 ${n} · ${title}`.slice(0, 100), CATEGORY, everyone);
   const created = [category.id];
+  let playerChatId = "";
   try {
     const rooms: [string, number, Overwrite[]][] = [
       ["🔒GM-CHAT", TEXT, gm],
@@ -210,14 +225,40 @@ export async function createDiscordSessionRooms({
       ["🔊PLAYER-VOICE", VOICE, everyone],
     ];
     for (const [name, type, overwrites] of rooms) {
-      created.push((await create(name, type, overwrites, category.id)).id);
+      const channel = await create(name, type, overwrites, category.id);
+      created.push(channel.id);
+      if (name === "💬PLAYER-CHAT") playerChatId = channel.id;
     }
   } catch (err) {
     // 반쯤 만들어진 채널은 치운다 (카테고리를 지워도 하위 채널은 남는다).
     await Promise.allSettled(created.map((id) => botApi(`/channels/${id}`, { method: "DELETE" })));
     throw err;
   }
-  return category.id;
+  // 앱의 "열기" 바로가기는 참여자가 모두 들어가는 PLAYER-CHAT으로 보낸다.
+  return { categoryId: category.id, channelId: playerChatId };
+}
+
+// 채널을 연 뒤에 확정된 참여자를 합류시킨다. 이미 권한이 있으면 같은 값을 다시 쓰므로 여러 번 불러도 된다.
+// GM 전용 채널은 건드리지 않는다. 서버에 없는 유저는 권한을 줄 수 없으니 뺀다.
+export async function grantDiscordSessionRooms(categoryId: string, discordIds: string[]) {
+  const guild = guildId();
+  const [channels, ids] = await Promise.all([
+    botApi<DiscordChannel[]>(`/guilds/${guild}/channels`),
+    onlyGuildMembers(guild, discordIds),
+  ]);
+  if (ids.length === 0) return;
+
+  const targets = channels.filter(
+    (c) => c.id === categoryId || (c.parent_id === categoryId && !GM_ONLY_CHANNEL.test(c.name)),
+  );
+  for (const channel of targets) {
+    for (const id of ids) {
+      await botApi(`/channels/${channel.id}/permissions/${id}`, {
+        method: "PUT",
+        body: { type: 1, allow: MEMBER.toString(), deny: "0" },
+      });
+    }
+  }
 }
 
 // 참여자 권한을 모두 걷어낸다. 기록은 남기고, GM만 읽기 전용으로 볼 수 있다.

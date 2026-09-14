@@ -52,6 +52,13 @@ export function dday(target: Date | string, now: Date = new Date()): number {
   return Math.round((b.getTime() - a.getTime()) / 86_400_000);
 }
 
+// 서버에서 계산하는 D-n. 서버·클라이언트 타임존과 무관하게 KST 날짜 차이로 센다(날짜 경계에서 값이 갈리지 않게).
+const kstDate = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" });
+export function ddayKst(target: Date | string, now: Date = new Date()): number {
+  const day = (value: Date | string) => Date.parse(kstDate.format(new Date(value)));
+  return Math.round((day(target) - day(now)) / 86_400_000);
+}
+
 // 세션 일정 한 줄 표기. 우선순위: 확정 일시 > 조율 범위 > 미정. UI와 Discord 알림이 같은 문구를 쓴다.
 export function formatGameSchedule({
   scheduleMode,

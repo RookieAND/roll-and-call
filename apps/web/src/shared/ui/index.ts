@@ -1,4 +1,5 @@
 export { AppBar } from "./app-bar";
+export { NavigationTracker } from "./back-button";
 export { BottomNav } from "./bottom-nav";
 export { ConfirmDialog } from "./confirm-dialog";
 export { DatePicker, type DatePickerProps } from "./date-picker";
@@ -7,8 +8,7 @@ export { EmptyState } from "./empty-state";
 export { ErrorScreen } from "./error-screen";
 export { Sheet } from "./sheet";
 export { StatusNotice } from "./status-notice";
-export { ThemeToggle } from "./theme-toggle";
+export { ThemeSetting } from "./theme-setting";
 export { Toaster } from "./toaster";
 export { toast } from "./toast";
-export { StatCard } from "./stat-card";
-export { SlotGrid } from "./slot-grid";
+export { SLOT_ROW_PX, SlotGrid } from "./slot-grid";

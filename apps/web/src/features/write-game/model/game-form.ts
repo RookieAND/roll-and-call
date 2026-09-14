@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { SCHEDULE_MODE, SCHEDULE_MODES } from "@/entities/game";
 
-// 세션 예정일 범위 상한(일). 스키마 검증과 달력 max가 같은 값을 본다.
+// 조율 기간 상한(일). 스키마 검증과 달력 max가 같은 값을 본다.
 export const GAME_RANGE_MAX_DAYS = 14;
 // 진행 이미지 장수 상한. 스키마 검증과 업로드 칸 수가 같은 값을 본다.
 export const GAME_IMAGES_MAX = 5;
@@ -19,7 +19,7 @@ export const gameFormSchema = z
       .refine((v) => {
         const n = Number(v);
         return Number.isInteger(n) && n >= 1 && n <= 20;
-      }, "1~20 사이 인원을 입력하세요."),
+      }, "1~20 사이로 적어주세요."),
     scheduleMode: z.enum(SCHEDULE_MODES),
     endDate: z.string().min(1, "모집 마감 기한을 입력하세요."),
     confirmedAt: z.string().optional(),
@@ -83,7 +83,7 @@ export const gameFormSchema = z
         if (days > GAME_RANGE_MAX_DAYS) {
           ctx.addIssue({
             code: "custom",
-            message: `세션 예정일 범위는 최대 ${GAME_RANGE_MAX_DAYS}일까지 설정할 수 있습니다.`,
+            message: `조율 기간은 최대 ${GAME_RANGE_MAX_DAYS}일까지 고를 수 있습니다.`,
             path: ["rangeEnd"],
           });
         }

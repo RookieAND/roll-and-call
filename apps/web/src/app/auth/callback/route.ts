@@ -4,8 +4,8 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   let next = searchParams.get("next") ?? "/";
-  // open-redirect guard: only allow relative paths
-  if (!next.startsWith("/")) next = "/";
+  // open-redirect guard: only allow same-origin relative paths ("//host", "/\host" are protocol-relative)
+  if (!next.startsWith("/") || next.startsWith("//") || next.startsWith("/\\")) next = "/";
 
   if (code) {
     const supabase = await createSupabaseServerClient();

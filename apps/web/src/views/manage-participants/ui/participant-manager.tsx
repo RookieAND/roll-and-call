@@ -1,74 +1,108 @@
-"use client";
-
-import { Container, VStack } from "@trpg/ui";
+import { Container, Text, VStack } from "@trpg/ui";
+import { AppBar, EmptyState } from "@/shared/ui";
 import type { ManagedMember } from "../model/managed-member";
-import { summarizeRoster } from "../model/roster-summary";
-import { AppBar } from "@/shared/ui";
-import { ConfirmedRoster } from "./confirmed-roster";
+import type { RosterSummary } from "../model/roster-summary";
+import { CopyLinkButton } from "./copy-link-button";
+import { DiscordSessionActions, type DiscordRoomsStatus } from "./discord-session-actions";
 import { NextRoundBanner } from "./next-round-banner";
-import { RosterStats } from "./roster-stats";
-import { WaitingRoster } from "./waiting-roster";
+import { RosterHeader } from "./roster-header";
+import { RosterList } from "./roster-list";
 
 type Props = {
   gameId: string;
   title: string;
-  endDate: Date;
   confirmedAt: Date | null;
   maxPlayers: number;
   confirmed: ManagedMember[];
   waiting: ManagedMember[];
+  summary: RosterSummary;
+  isCoordinate: boolean;
+  // 세션 확정 후에는 서버가 명단 조정을 막는다 → 조작 버튼을 숨긴다.
+  locked: boolean;
+  discord: DiscordRoomsStatus;
 };
 
-// GM 전용 참여자 관리 화면. 요약 → 확정 목록 → 대기 목록 → 다음 회차 순으로 쌓는다.
+// GM 전용 참여자 관리 화면. 한 문장 요약 → 신청 순서 명단 → 미제출·잠김 안내 → 다음 회차 → 디스코드 상태.
 // 각 블록이 자기 동작과 열림 상태를 들고 있어서, 여기서는 순서와 여백만 정한다.
 export function ParticipantManager({
   gameId,
   title,
-  endDate,
   confirmedAt,
   maxPlayers,
   confirmed,
   waiting,
+  summary,
+  isCoordinate,
+  locked,
+  discord,
 }: Props) {
-  const { total, isFull, urgent, deadlineLabel } = summarizeRoster({
-    confirmedCount: confirmed.length,
-    waitingCount: waiting.length,
-    maxPlayers,
-    endDate,
-  });
-  const hasWaiting = waiting.length > 0;
+  const isEmpty = confirmed.length + waiting.length === 0;
+  const showFullNote = summary.isFull && waiting.length > 0 && !locked;
 
   return (
     <>
       <AppBar back={`/games/${gameId}`} title="참여자 관리" />
       <Container size="md">
         <VStack gap={5} className="py-4">
-          <RosterStats
-            total={total}
+          <RosterHeader
+            title={title}
+            confirmedCount={confirmed.length}
+            waitingCount={waiting.length}
             maxPlayers={maxPlayers}
-            deadlineLabel={deadlineLabel}
-            urgent={urgent}
-            endDate={endDate}
+            summary={summary}
+            locked={locked}
           />
 
-          <ConfirmedRoster
-            gameId={gameId}
-            members={confirmed}
-            maxPlayers={maxPlayers}
-            waitingHead={waiting[0]?.username}
-          />
-
-          {hasWaiting && (
-            <>
-              <WaitingRoster gameId={gameId} members={waiting} isFull={isFull} />
-              <NextRoundBanner
+          {isEmpty ? (
+            <EmptyState
+              image="/empty-states/empty-hosted.png"
+              size="section"
+              title="아직 신청한 사람이 없습니다"
+              description="구인글 링크를 디스코드에 공유하면 모집이 빨라집니다."
+              action={<CopyLinkButton gameId={gameId} />}
+            />
+          ) : (
+            <VStack gap={3}>
+              <RosterList
                 gameId={gameId}
-                title={title}
-                waitingCount={waiting.length}
-                confirmedAt={confirmedAt}
+                confirmed={confirmed}
+                waiting={waiting}
+                maxPlayers={maxPlayers}
+                isFull={summary.isFull}
+                isCoordinate={isCoordinate}
+                locked={locked}
               />
-            </>
+
+              {summary.unsubmittedCount > 0 && (
+                <Text typography="body3" render={<p />} className="font-semibold text-warning-600">
+                  {summary.unsubmittedCount}명이 아직 가능 시간을 내지 않았습니다.
+                </Text>
+              )}
+
+              {showFullNote && (
+                <div className="rounded-xl bg-gray-50 px-3.5 py-3">
+                  <Text typography="body3" foreground="muted" render={<p />}>
+                    정원이 차서 대기자를 바로 올릴 수 없습니다.
+                  </Text>
+                  <Text typography="body3" foreground="hint" render={<p />}>
+                    &quot;교체&quot;를 누르면 내릴 사람을 고르고 한 번에 바꿉니다.
+                  </Text>
+                </div>
+              )}
+            </VStack>
           )}
+
+          {waiting.length > 0 && (
+            <NextRoundBanner
+              gameId={gameId}
+              title={title}
+              waitingCount={waiting.length}
+              maxPlayers={maxPlayers}
+              confirmedAt={confirmedAt}
+            />
+          )}
+
+          <DiscordSessionActions gameId={gameId} status={discord} confirmedCount={confirmed.length} />
         </VStack>
       </Container>
     </>

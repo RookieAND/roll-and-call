@@ -6,7 +6,6 @@ export function HomeStartEmpty() {
   return (
     <EmptyState
       image="/empty-states/empty-my-games.png"
-      imageAlt="아직 참여 중인 게임이 없습니다"
       title="두 가지 방법으로 시작합니다"
       description="모집 중인 세션에 참여하거나, GM이 되어 직접 구인을 올리세요."
       action={

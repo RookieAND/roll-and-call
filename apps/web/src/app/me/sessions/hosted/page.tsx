@@ -1,7 +1,9 @@
-import { MySessionsView } from "@/views/my-sessions";
-export const dynamic = "force-dynamic";
+import { redirect } from "next/navigation";
 
+// 예전 주소: 참여·운영 두 화면을 내 세션 한 화면으로 합쳤다. 탭 값을 새 칩으로 옮겨 보낸다.
 export default async function Page({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
-  const sp = await searchParams;
-  return <MySessionsView role="host" tab={sp.tab} />;
+  const { tab } = await searchParams;
+  if (tab === "closed") redirect("/me/sessions?tab=past");
+  if (tab === "recruiting" || tab === "confirmed") redirect(`/me/sessions?tab=hosted&status=${tab}`);
+  redirect("/me/sessions?tab=hosted");
 }

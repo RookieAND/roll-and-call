@@ -32,12 +32,10 @@
     "react-hook-form": "^7.85.0",
     "server-only": "^0.0.1",
     "sonner": "^2.0.8",
-    "zod": "^4.4.3",
-    "zustand": "^5.0.14"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "@trpg/oxlint-config": "workspace:*",
     "@trpg/typescript-config": "workspace:*",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",

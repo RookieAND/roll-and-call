@@ -4,14 +4,9 @@ import { Select } from "@trpg/ui";
 import { DatePicker } from "./date-picker";
 
 const pad = (n: number) => String(n).padStart(2, "0");
-const hourOptions = Array.from({ length: 24 }, (_, h) => ({
-  label: `${pad(h)}시`,
-  value: pad(h),
-}));
-const minuteOptions = Array.from({ length: 60 }, (_, m) => ({
-  label: `${pad(m)}분`,
-  value: pad(m),
-}));
+// 시각은 30분 단위 한 칸("19:00"). 시/분 두 선택을 합쳤다.
+const TIME_VALUES = Array.from({ length: 48 }, (_, i) => `${pad(Math.floor(i / 2))}:${i % 2 ? "30" : "00"}`);
+const DEFAULT_TIME = "19:00";
 
 export type DateTimePickerProps = {
   value?: string;
@@ -19,42 +14,36 @@ export type DateTimePickerProps = {
   id?: string;
   invalid?: boolean;
   min?: string;
+  placeholder?: string;
 };
 
-// combines a custom date picker with hour/minute selects → "YYYY-MM-DDTHH:mm"
-export function DateTimePicker({ value, onChange, id, invalid, min }: DateTimePickerProps) {
-  const parts = value ? value.split("T") : [];
-  const datePart = parts[0] ?? "";
-  const timeParts = (parts[1] ?? "").split(":");
-  const hh = timeParts[0] || "19";
-  const mm = timeParts[1] || "00";
+// 날짜 선택 + 30분 단위 시각 선택 → "YYYY-MM-DDTHH:mm"
+export function DateTimePicker({ value, onChange, id, invalid, min, placeholder }: DateTimePickerProps) {
+  const [datePart = "", timePart = ""] = value ? value.split("T") : [];
+  const time = timePart.slice(0, 5) || DEFAULT_TIME;
+  // 예전에 30분 단위가 아닌 시각으로 저장된 값도 그대로 고를 수 있게 목록에 끼워 둔다.
+  const values = TIME_VALUES.includes(time) ? TIME_VALUES : [time, ...TIME_VALUES];
+  const items = values.map((v) => ({ label: v, value: v }));
 
-  const emit = (d: string, h: string, m: string) => onChange(d ? `${d}T${h}:${m}` : "");
+  const emit = (d: string, t: string) => onChange(d ? `${d}T${t}` : "");
 
   return (
-    <div className="flex flex-col gap-2">
-      <DatePicker
-        id={id}
-        value={datePart}
-        invalid={invalid}
-        min={min}
-        onChange={(d) => emit(d, hh, mm)}
-      />
-      <div className="flex gap-2">
-        <Select.Root items={hourOptions} value={hh} onValueChange={(v) => emit(datePart, v, mm)}>
-          <Select.Trigger />
+    <div className="flex gap-2">
+      <div className="min-w-0 flex-1">
+        <DatePicker
+          id={id}
+          value={datePart}
+          invalid={invalid}
+          min={min}
+          placeholder={placeholder}
+          onChange={(d) => emit(d, time)}
+        />
+      </div>
+      <div className="w-[112px] shrink-0">
+        <Select.Root items={items} value={time} onValueChange={(t) => emit(datePart, t)}>
+          <Select.Trigger aria-label="시각" />
           <Select.Popup>
-            {hourOptions.map((o) => (
-              <Select.Item key={o.value} value={o.value}>
-                {o.label}
-              </Select.Item>
-            ))}
-          </Select.Popup>
-        </Select.Root>
-        <Select.Root items={minuteOptions} value={mm} onValueChange={(v) => emit(datePart, hh, v)}>
-          <Select.Trigger />
-          <Select.Popup>
-            {minuteOptions.map((o) => (
+            {items.map((o) => (
               <Select.Item key={o.value} value={o.value}>
                 {o.label}
               </Select.Item>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { BottomNav, Toaster } from "@/shared/ui";
+import { BottomNav, NavigationTracker, Toaster } from "@/shared/ui";
 import "./globals.css";
 import { QueryProvider } from "./query-provider";
 
@@ -21,13 +21,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           id="theme-init"
           strategy="beforeInteractive"
           // eslint-disable-next-line react/no-danger -- pre-paint theme to avoid FOUC
+          // theme: 'light' | 'dark' | 'system'(또는 없음) → system은 OS 설정을 따른다.
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}`,
           }}
         />
       </head>
       <body className="bg-canvas font-sans text-gray-900 antialiased">
         <QueryProvider>
+          <NavigationTracker />
           <div className="mx-auto flex min-h-screen w-full min-w-screen-min max-w-screen-max flex-col border-x border-gray-200 bg-surface">
             <div className="flex-1">{children}</div>
             <BottomNav />

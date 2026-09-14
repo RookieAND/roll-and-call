@@ -1,11 +1,14 @@
 import "server-only";
-import { and, asc, desc, eq, gt, ilike, isNull, or, sql, type SQL } from "drizzle-orm";
+import { and, asc, desc, eq, gt, ilike, isNull, lte, not, or, sql, type SQL } from "drizzle-orm";
 import type { GamesFilter } from "@/shared/api";
-import { availabilities, db, games, participants } from "./db";
+import { getRespondedUserIds } from "./availabilities";
+import { db, games, participants } from "./db";
 
 export const GAMES_PAGE_SIZE = 12;
 
-// 목록에 노출되는 모집 중 게임만(기한 내 + 미완료). 정원이 차도 대기 신청 → 2차 세션 분리가 가능하므로 노출한다.
+// 구인 목록. 플레이가 끝난 게임은 늘 뺀다. 상태 필터는 모집 상태 배지(deriveGameStatus)와 같은 기준으로 거른다:
+// 모집 중 = 기한 안 · 자리 있음 / 대기 접수 중 = 기한 안 · 정원 참 · 대기 받음 / 마감 = 기한 지남 또는 정원 참 · 대기 안 받음.
+// status가 없으면 기한 안 글 전부(랜딩 "지금 모집 중").
 export async function getRecruitingGamesPage(
   page: number,
   filter: GamesFilter = {},
@@ -18,10 +21,30 @@ export async function getRecruitingGamesPage(
   }
   // 플레이 완료(확정 세션이 지난 게임)는 목록에서 항상 제외한다.
   conds.push(or(isNull(games.confirmedAt), gt(games.confirmedAt, now))!);
-  conds.push(gt(games.endDate, now));
-  const where = and(...conds);
+
   // ponytail: inner alias "p" + raw column, else RQB re-aliases participants.gameId to the outer games table → "games"."game_id" (does not exist).
-  const remaining = sql`${games.maxPlayers} - (select count(*) from ${participants} "p" where "p"."game_id" = ${games.id})`;
+  // 정원은 확정 인원으로만 센다(대기자는 자리를 차지하지 않는다).
+  const confirmedCount = sql`(select count(*) from ${participants} "p" where "p"."game_id" = ${games.id} and "p"."status" = 'confirmed')`;
+  const full = sql`${confirmedCount} >= ${games.maxPlayers}`;
+  const open = gt(games.endDate, now);
+  switch (filter.status) {
+    case undefined:
+      conds.push(open);
+      break;
+    case "recruiting":
+      conds.push(open, not(full));
+      break;
+    case "waitlist":
+      conds.push(open, full, eq(games.waitlistEnabled, true));
+      break;
+    case "closed":
+      conds.push(or(lte(games.endDate, now), and(full, eq(games.waitlistEnabled, false)))!);
+      break;
+    case "all":
+      break;
+  }
+  const where = and(...conds);
+  const remaining = sql`${games.maxPlayers} - ${confirmedCount}`;
   const orderBy =
     filter.sort === "deadline"
       ? asc(games.endDate)
@@ -98,7 +121,7 @@ export async function getGameParticipants(gameId: string) {
   const game = await db.query.games.findFirst({
     where: (g, { eq: eqOp }) => eqOp(g.id, gameId),
     with: {
-      gm: { columns: { id: true, username: true, avatarUrl: true } },
+      gm: { columns: { id: true, username: true, avatarUrl: true, discordAutoOpen: true } },
       participants: {
         columns: { userId: true, joinedAt: true, status: true },
         with: { user: { columns: { username: true, avatarUrl: true } } },
@@ -107,10 +130,5 @@ export async function getGameParticipants(gameId: string) {
   });
   if (!game) return null;
 
-  const rows = await db
-    .selectDistinct({ userId: availabilities.userId })
-    .from(availabilities)
-    .where(eq(availabilities.gameId, gameId));
-
-  return { game, availableUserIds: new Set(rows.map((r) => r.userId)) };
+  return { game, availableUserIds: new Set(await getRespondedUserIds(gameId)) };
 }

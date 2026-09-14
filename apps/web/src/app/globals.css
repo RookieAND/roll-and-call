@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @import "@trpg/ui/styles.css";
 
+/* 숫자 스피너·파일 선택 등 브라우저 기본 컨트롤이 테마를 따라오게 한다. */
+:root {
+  color-scheme: light;
+}
+:root.dark {
+  color-scheme: dark;
+}
+
 :root {
   --min-width-screen-min: 320px;
   --max-width-screen-max: 412px;

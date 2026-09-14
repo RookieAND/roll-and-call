@@ -71,7 +71,8 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 - **링크처럼 보이는 버튼**은 `<Button asChild><Link/></Button>` (또는 `IconButton asChild`). `asChild`는 자식 엘리먼트에 버튼 스타일을 입혀 실제 `<a href>`로 렌더한다.
 - **선택 가능한 pill/토글**은 `<Chip>` (`shape="pill" | "block"`, `selected`, `asChild`).
 - **바텀시트 메뉴 행**은 `<Sheet.Item>` (Button ghost 기반, `asChild`로 Link 렌더).
-- 예외(세그먼트 컨트롤 등 프리미티브와 룩이 다른 1회성 UI)는 손코딩하되 `// ponytail:` 주석으로 이유를 남긴다.
+- **즉시 적용되는 단일 선택 세그먼트**(테마 시스템/라이트/다크 등)는 `<SegmentControl>` (`options`, `value`, `onChange`).
+- 예외(프리미티브와 룩이 다른 1회성 UI)는 손코딩하되 `// ponytail:` 주석으로 이유를 남긴다.
 
 ## 3. 핸들러는 props로, 레이아웃은 호출부가
 
@@ -83,7 +84,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 ## 4. 폼의 레이어
 
 - **단일 동작 폼**(하나의 action + 일반 필드) → **feature**. widget으로 올리면 빈 레이어만 늘어난다. (예: edit-profile, confirm-session)
-- **조합형 폼**(2개 이상 독립 feature/entity를 조합) → 그 화면의 **view**. 두 화면이 공유할 때만 widget. (예: game-form = upload-thumbnail + write-game + delete-game 조합이고, 등록·수정 두 화면이 쓴다)
+- **조합형 폼**(2개 이상 독립 feature/entity를 조합) → 그 화면의 **view**. 두 화면이 공유할 때만 widget. (예: game-form = upload-thumbnail + write-game 조합이고, 등록·수정 두 화면이 쓴다. 구인 삭제는 상세 GM 메뉴 한 곳에만 둔다)
 - Input/Field/Select 등 도메인 없는 입력 컨트롤은 feature가 아니라 `packages/ui`에 둔다.
 
 ## 5. 파생 상태 우선 (인라인 조건부 지양)

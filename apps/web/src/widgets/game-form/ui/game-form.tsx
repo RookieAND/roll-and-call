@@ -8,19 +8,21 @@ import { SCHEDULE_MODE } from "@/entities/game";
 import { gameFormSchema, type GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
 import { toKstDateTimeInput } from "@/shared/lib";
+import type { Game } from "@/shared/server";
 import { toast } from "@/shared/ui";
-import { formatPlayTime, initialPlayTime } from "../model/play-time";
+import type { GameEditContext } from "../model/game-form-layout";
+import { DEFAULT_PLAY_TIME } from "../model/play-time";
 import { GameFormPage } from "./game-form-page";
 import { GameFormWizard } from "./game-form-wizard";
-import type { Game } from "@/shared/server";
 
 type Props = {
   onSubmit: (values: GameFormValues) => Promise<ActionResult | void>;
   defaultGame?: Game;
   submitLabel: string;
   successMessage?: string;
-  // 시안 3a: 등록은 3-Step 위저드(기본 → 이미지 → 일정), 수정(3b)은 단일 페이지.
+  // 등록은 3단계 위저드(게임 정보 → 이미지 → 일정), 수정은 같은 순서의 단일 페이지.
   wizard?: boolean;
+  edit?: GameEditContext;
 };
 
 // 폼 상태와 제출만 소유하고, 화면 배치는 두 레이아웃 중 하나에 맡긴다.
@@ -30,10 +32,10 @@ export function GameForm({
   submitLabel,
   successMessage = "저장되었습니다",
   wizard = false,
+  edit,
 }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const playTime = initialPlayTime(defaultGame?.playTime);
 
   const form = useForm<GameFormValues>({
     resolver: zodResolver(gameFormSchema),
@@ -41,7 +43,7 @@ export function GameForm({
       title: defaultGame?.title ?? "",
       rule: defaultGame?.rule ?? "",
       synopsis: defaultGame?.synopsis ?? "",
-      playTime: defaultGame?.playTime ?? formatPlayTime(playTime.hours, playTime.minutes),
+      playTime: defaultGame ? (defaultGame.playTime ?? "") : DEFAULT_PLAY_TIME,
       maxPlayers: String(defaultGame?.maxPlayers ?? 4),
       scheduleMode: defaultGame?.scheduleMode ?? SCHEDULE_MODE.coordinate,
       endDate: defaultGame?.endDate ? toKstDateTimeInput(defaultGame.endDate) : "",
@@ -66,13 +68,7 @@ export function GameForm({
     });
   }
 
-  const layoutProps = {
-    form,
-    pending,
-    submitLabel,
-    defaultPlayTime: defaultGame?.playTime,
-    onValid,
-  };
+  const layoutProps = { form, pending, submitLabel, onValid, edit };
 
   return wizard ? <GameFormWizard {...layoutProps} /> : <GameFormPage {...layoutProps} />;
 }

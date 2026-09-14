@@ -9,7 +9,7 @@ export type PaginationProps = {
 };
 
 const cell =
-  "inline-flex h-[34px] min-w-[34px] items-center justify-center rounded-[9px] px-2 text-[13px]";
+  "inline-flex h-10 min-w-10 items-center justify-center rounded-[10px] px-2 text-[13px]";
 
 // framework-agnostic: renders plain anchors so @trpg/ui stays free of next/link
 export function Pagination({

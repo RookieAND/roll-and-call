@@ -1,83 +1,85 @@
 import type { User } from "@supabase/supabase-js";
-import { Avatar, Button, Container, HStack, Text, VStack } from "@trpg/ui";
+import { Button, Container, HStack, Text, VStack } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { profileDisplay } from "@/entities/profile";
-import { SignOutButton } from "@/features/auth";
-import { getGamesByGm, getJoinedGames } from "@/shared/server";
-import { GameListItem } from "./game-list-item";
+import { AppBar, EmptyState } from "@/shared/ui";
+import { loadMySessions, SessionCard, SessionList } from "@/widgets/session-list";
+import { homeAgenda } from "../model/home-agenda";
 import { HomeStartEmpty } from "./home-start-empty";
 
-const TOP = 4;
-
-// 로그인 대시보드: 인사 + 내 게임 요약. 아무것도 없으면 시작 안내로 대체한다.
+// 로그인 홈 = 지금 해야 할 일. 숫자 세기(참여·운영 건수)는 마이페이지 한 곳에서만 한다.
 export async function HomeDashboard({ user }: { user: User }) {
-  const { name, avatar } = profileDisplay({ user });
-  const [hosted, joined] = await Promise.all([getGamesByGm(user.id), getJoinedGames(user.id)]);
-
-  const myGames = [
-    ...hosted.map((game) => ({ game, role: "host" as const })),
-    ...joined.map((game) => ({ game, role: "player" as const })),
-  ].slice(0, TOP);
-  const empty = myGames.length === 0;
+  const sessions = await loadMySessions(user.id);
+  const { todos, upcoming } = homeAgenda(sessions);
+  const hasAny = sessions.joined.length + sessions.hosted.length + sessions.past.length > 0;
 
   return (
-    <Container size="sm">
-      <VStack gap={6} className="py-8">
-        <HStack gap={3} align="center">
-          <Avatar src={avatar} name={name} size="xl" />
-          <div>
-            <Text typography="heading2" className="block">
-              {name}님, {empty ? "처음이시네요" : "반갑습니다"}
-            </Text>
-            <Text typography="body2" foreground="muted">
-              {empty
-                ? "아직 참여 중인 게임이 없습니다"
-                : `참여 중 ${joined.length} · 내가 만든 구인 ${hosted.length}`}
-            </Text>
-          </div>
-        </HStack>
+    <>
+      <AppBar
+        title="홈"
+        action={
+          <Button asChild size="sm">
+            <Link href="/games/new">새 구인</Link>
+          </Button>
+        }
+      />
+      <Container size="sm">
+        <VStack gap={6} className="py-5">
+          {!hasAny && <HomeStartEmpty />}
 
-        {empty ? (
-          <>
-            <HomeStartEmpty />
-            <HStack justify="between" align="center" className="border-t border-gray-100 pt-4">
-              <Text typography="body2" foreground="muted">
-                프로필과 기본 가능 시간대 설정
-              </Text>
-              <Link href="/me/edit">
-                <Text
-                  typography="body2"
-                  foreground="primary"
-                  className="inline-flex items-center gap-0.5"
-                >
-                  설정 <ChevronRight size={14} aria-hidden />
+          {todos.length > 0 && (
+            <section className="flex flex-col gap-2.5">
+              <div>
+                <Text typography="heading3" render={<h2 />}>
+                  할 일 {todos.length}건
                 </Text>
-              </Link>
-            </HStack>
-          </>
-        ) : (
-          <>
-            <VStack gap={3}>
-              <Text typography="subtitle1" foreground="muted">
-                내 게임
-              </Text>
-              <VStack gap={2}>
-                {myGames.map(({ game, role }) => (
-                  <GameListItem key={game.id} game={game} role={role} />
+                <Text typography="body4" foreground="hint" render={<p />} className="mt-0.5">
+                  먼저 처리하면 좋은 것부터 보여줍니다.
+                </Text>
+              </div>
+              <div className="flex flex-col gap-2.5">
+                {todos.map(({ card, eyebrow }) => (
+                  <SessionCard key={card.id} model={card} eyebrow={eyebrow} />
                 ))}
-              </VStack>
-            </VStack>
+              </div>
+            </section>
+          )}
 
-            <HStack gap={2}>
-              <Button asChild size="lg" className="h-[50px] w-full flex-1">
-                <Link href="/games">구인 목록 보기</Link>
-              </Button>
-              <SignOutButton className="h-[50px] w-[104px]" />
-            </HStack>
-          </>
-        )}
-      </VStack>
-    </Container>
+          {upcoming.length > 0 && (
+            <section className="flex flex-col gap-2.5">
+              <HStack justify="between" align="center">
+                <Text typography="heading3" render={<h2 />}>
+                  다가오는 세션
+                </Text>
+                <Link href="/me/sessions">
+                  <Text
+                    typography="body4"
+                    foreground="primary"
+                    className="inline-flex items-center gap-0.5 text-[12.5px] font-semibold"
+                  >
+                    내 세션 <ChevronRight size={14} aria-hidden />
+                  </Text>
+                </Link>
+              </HStack>
+              <SessionList items={upcoming} />
+            </section>
+          )}
+
+          {hasAny && todos.length === 0 && upcoming.length === 0 && (
+            <EmptyState
+              size="section"
+              image="/empty-states/empty-my-games.png"
+              title="지금 할 일이 없습니다"
+              description="새 구인을 둘러보거나 직접 열어보세요."
+              action={
+                <Button asChild className="h-11 w-full">
+                  <Link href="/games">구인 목록 보기</Link>
+                </Button>
+              }
+            />
+          )}
+        </VStack>
+      </Container>
+    </>
   );
 }

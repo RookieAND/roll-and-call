@@ -3,8 +3,8 @@
 import { Text } from "@trpg/ui";
 import { useState } from "react";
 import { formatDateTime, type DayColumn, type TimeRow } from "@/shared/lib";
-import { SlotGrid } from "@/shared/ui";
-import { heatColor, heatTextColor } from "../model/heat-scale";
+import { SLOT_ROW_PX, SlotGrid } from "@/shared/ui";
+import { heatColor, heatStep, heatTextColor } from "../model/heat-scale";
 
 type Props = {
   days: DayColumn[];
@@ -12,21 +12,26 @@ type Props = {
   counts: Record<string, number>;
   names: Record<string, string[]>;
   confirmedAt?: Date | null;
+  capacity: number;
+  gmName?: string;
 };
 
 const CELL =
-  "flex h-[22px] cursor-pointer items-center justify-center border-b border-l border-b-gray-100 border-l-gray-100 font-bold";
-const OUTLINE = "2px solid var(--color-success-600)";
+  "flex cursor-pointer items-center justify-center border-b border-l border-b-gray-100 border-l-gray-100 text-[11px] font-bold tabular-nums";
+// 누른 칸은 primary, 확정 칸은 success 테두리 — 서로 헷갈리지 않게 색을 나눈다.
+const PICKED = "2px solid var(--color-primary-600)";
+const CONFIRMED = "2px solid var(--color-success-600)";
 
-export function Heatmap({ days, timeRows, counts, names, confirmedAt }: Props) {
-  const confirmedIso = confirmedAt?.toISOString() ?? null;
-  // 모바일엔 hover 툴팁이 없어서, 누른 칸의 명단을 그리드 아래에 보여준다.
+export function Heatmap({ days, timeRows, counts, names, confirmedAt, capacity, gmName }: Props) {
+  const confirmedIso = confirmedAt ? new Date(confirmedAt).toISOString() : null;
+  // 터치에는 hover 툴팁이 없어서, 누른 칸의 명단을 격자 아래 카드로 보여준다.
   const [picked, setPicked] = useState<string | null>(null);
   const pickedNames = picked ? (names[picked] ?? []) : [];
 
   function renderCell(key: string) {
     const count = counts[key] ?? 0;
-    const outlined = confirmedIso === key || picked === key;
+    const step = heatStep(count, capacity);
+    const outline = picked === key ? PICKED : confirmedIso === key ? CONFIRMED : undefined;
 
     return (
       <div
@@ -35,10 +40,11 @@ export function Heatmap({ days, timeRows, counts, names, confirmedAt }: Props) {
         onClick={() => setPicked(count > 0 ? key : null)}
         className={CELL}
         style={{
-          backgroundColor: heatColor(count),
-          color: heatTextColor(count),
-          outline: outlined ? OUTLINE : undefined,
-          outlineOffset: outlined ? "-2px" : undefined,
+          height: SLOT_ROW_PX,
+          backgroundColor: heatColor(step),
+          color: heatTextColor(step),
+          outline,
+          outlineOffset: outline ? "-2px" : undefined,
         }}
       >
         {count > 0 ? count : ""}
@@ -48,12 +54,21 @@ export function Heatmap({ days, timeRows, counts, names, confirmedAt }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} className="text-xs" />
-      <Text typography="body4" foreground="muted" render={<p />}>
-        {picked
-          ? `${formatDateTime(picked)} · ${pickedNames.length}명: ${pickedNames.join(", ")}`
-          : "칸을 누르면 그 시간에 가능한 사람을 볼 수 있어요."}
-      </Text>
+      <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
+      {picked ? (
+        <div className="rounded-xl border border-gray-200 px-3.5 py-3" aria-live="polite">
+          <Text typography="subtitle2" render={<p />}>
+            {formatDateTime(picked)} · {pickedNames.length}명
+          </Text>
+          <Text typography="body4" foreground="muted" render={<p />} className="mt-0.5">
+            {pickedNames.map((name) => (name === gmName ? `${name}(GM)` : name)).join(", ")}
+          </Text>
+        </div>
+      ) : (
+        <Text typography="body4" foreground="hint" render={<p />}>
+          칸을 누르면 그 시간에 가능한 사람이 보입니다.
+        </Text>
+      )}
     </div>
   );
 }

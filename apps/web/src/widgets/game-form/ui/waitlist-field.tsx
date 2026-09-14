@@ -1,13 +1,8 @@
 "use client";
 
-import { Chip, Field, Text } from "@trpg/ui";
+import { Switch, Text } from "@trpg/ui";
 
-const OPTIONS = [
-  { value: true, label: "대기 받기" },
-  { value: false, label: "받지 않기" },
-] as const;
-
-// 켜고 끄는 게 무엇을 바꾸는지는 칩만으로 전해지지 않아서 아래에 한 줄로 설명한다(ScheduleModeField와 같은 모양).
+// 대기 접수 토글. 목록의 "대기 접수 중" 배지가 이 값에서 나온다.
 export function WaitlistField({
   value,
   onChange,
@@ -16,28 +11,26 @@ export function WaitlistField({
   onChange: (enabled: boolean) => void;
 }) {
   const hint = value
-    ? "정원이 차도 대기로 신청을 받습니다. 빈자리가 나면 대기 순서대로 확정됩니다."
-    : "정원이 차면 더 이상 신청을 받지 않습니다. 목록에는 '모집 마감'으로 남습니다.";
+    ? '켜두면 목록에 "대기 접수 중"으로 남고, 자리가 나면 GM이 순서대로 올릴 수 있습니다.'
+    : "끄면 정원이 차는 순간 신청이 닫힙니다.";
 
   return (
-    <>
-      <Field label="대기 신청">
-        <div className="grid grid-cols-2 gap-2">
-          {OPTIONS.map((option) => (
-            <Chip
-              key={option.label}
-              shape="block"
-              selected={value === option.value}
-              onClick={() => onChange(option.value)}
-            >
-              {option.label}
-            </Chip>
-          ))}
-        </div>
-      </Field>
-      <Text typography="body4" foreground="muted" className="-mt-2">
-        {hint}
-      </Text>
-    </>
+    <div className="flex min-h-11 items-start justify-between gap-3">
+      <div className="min-w-0">
+        <Text typography="subtitle2" render={<label htmlFor="waitlistEnabled" />} className="block">
+          정원이 차도 대기 신청 받기
+        </Text>
+        <Text typography="body4" foreground="hint" render={<p />} id="waitlistEnabled-hint" className="mt-0.5">
+          {hint}
+        </Text>
+      </div>
+      <Switch
+        id="waitlistEnabled"
+        checked={value}
+        onCheckedChange={onChange}
+        aria-describedby="waitlistEnabled-hint"
+        className="mt-0.5"
+      />
+    </div>
   );
 }

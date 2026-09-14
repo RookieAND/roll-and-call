@@ -1,23 +1,22 @@
-// 플레이타임은 DB에 "3시간 30분" 같은 자유 문자열로 저장된다.
-// 입력은 시/분 두 칸으로 받으므로 여기서 서로 변환한다.
-const DEFAULT_HOURS = "3";
-const DEFAULT_MINUTES = "0";
+// 플레이타임은 DB에 "3시간 30분" 같은 문자열로 저장된다. 입력은 30분 단위 한 칸(최대 12시간).
+const STEP_MINUTES = 30;
+const MAX_HOURS = 12;
 
-export function parsePlayTime(value?: string | null) {
-  return {
-    hours: value?.match(/(\d+)\s*시간/)?.[1] ?? "",
-    minutes: value?.match(/(\d+)\s*분/)?.[1] ?? "",
-  };
+export const DEFAULT_PLAY_TIME = "3시간";
+
+export function formatPlayTimeMinutes(total: number): string {
+  const hours = Math.floor(total / 60);
+  const minutes = total % 60;
+  return [hours ? `${hours}시간` : "", minutes ? `${minutes}분` : ""].filter(Boolean).join(" ");
 }
 
-// 저장된 값이 없으면 가장 흔한 3시간을 기본값으로 제안한다.
-export function initialPlayTime(value?: string | null) {
-  return value ? parsePlayTime(value) : { hours: DEFAULT_HOURS, minutes: DEFAULT_MINUTES };
-}
+export const PLAY_TIME_OPTIONS = Array.from({ length: (MAX_HOURS * 60) / STEP_MINUTES }, (_, i) =>
+  formatPlayTimeMinutes((i + 1) * STEP_MINUTES),
+);
 
-export function formatPlayTime(hours: string, minutes: string): string {
-  const parts = [];
-  if (hours) parts.push(`${hours}시간`);
-  if (minutes && minutes !== "0") parts.push(`${minutes}분`);
-  return parts.join(" ");
+// 목록에 없는 예전 값("2시간 15분" 등)도 그대로 고를 수 있게 앞에 끼워 둔다.
+export function playTimeOptions(current?: string | null): string[] {
+  return current && !PLAY_TIME_OPTIONS.includes(current)
+    ? [current, ...PLAY_TIME_OPTIONS]
+    : PLAY_TIME_OPTIONS;
 }
