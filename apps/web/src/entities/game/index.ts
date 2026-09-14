@@ -20,3 +20,4 @@ export { GameSummary } from "./ui/game-summary";
 export { ConfirmedSessionNotice } from "./ui/confirmed-session-notice";
 export { WaitlistNotice } from "./ui/waitlist-notice";
 export { deriveSessionState, type SessionState, type SessionRole } from "./model/session";
+export { isSessionLocked } from "./model/session-lock";

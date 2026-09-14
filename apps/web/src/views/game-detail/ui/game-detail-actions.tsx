@@ -1,4 +1,9 @@
-import { canCoordinate, type GameStatus, type ParticipantStatus } from "@/entities/game";
+import {
+  canCoordinate,
+  type GameStatus,
+  isSessionLocked,
+  type ParticipantStatus,
+} from "@/entities/game";
 import { GameScheduleLink } from "@/features/coordinate-session";
 import type { GameDetailData } from "@/shared/server";
 import { GameActionZone } from "./game-action-zone";
@@ -19,8 +24,10 @@ export function GameDetailActions({ game, isGm, ...rest }: Props) {
   const canSchedule = canCoordinate({ scheduleMode: game.scheduleMode });
 
   // 두 존은 상호배타: schedulePanel(GM·미확정)이면 actionZone은 항상 false.
-  const showSchedulePanel = isGm && canSchedule && !game.confirmedAt;
-  const showActionZone = Boolean(game.confirmedAt) || !isGm;
+  // 일시 지정형은 confirmedAt이 처음부터 있어도 세션 전까지는 잠기지 않는다(isSessionLocked).
+  const locked = isSessionLocked(game);
+  const showSchedulePanel = isGm && canSchedule && !locked;
+  const showActionZone = locked || !isGm;
   if (!showActionZone && !showSchedulePanel) return null;
 
   // ponytail: bottom-[58px]는 BottomNav 높이(h-[58px])와 결합. nav 높이 바뀌면 같이 조정.

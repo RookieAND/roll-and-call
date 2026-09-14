@@ -5,6 +5,7 @@ import {
   ConfirmedSessionNotice,
   GAME_STATUS,
   type GameStatus,
+  isSessionLocked,
   PARTICIPANT_STATUS,
   type ParticipantStatus,
   WaitlistNotice,
@@ -38,7 +39,8 @@ export function GameActionZone({
   canSchedule,
 }: Props) {
   const actionView = deriveActionView({
-    sessionConfirmed: Boolean(game.confirmedAt),
+    // 일시 지정형은 등록 때부터 confirmedAt이 있지만 모집 중이면 참여하기를 보여야 한다.
+    sessionConfirmed: isSessionLocked(game),
     isWaiting: viewerStatus === PARTICIPANT_STATUS.waiting,
     isClosed: status === GAME_STATUS.closed, // 기한 경과만. 정원 충족은 대기 신청 가능이라 마감이 아니다.
     isSignedIn: Boolean(viewerId),

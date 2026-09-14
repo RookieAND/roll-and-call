@@ -2,7 +2,7 @@
 
 import { and, asc, desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { PARTICIPANT_STATUS } from "@/entities/game";
+import { isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
 import { db, games, participants, getCurrentUser } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 const { confirmed, waiting } = PARTICIPANT_STATUS;
@@ -27,7 +27,7 @@ export async function promoteParticipant(gameId: string, userId: string): Promis
       const [game] = await tx.select().from(games).where(eq(games.id, gameId)).for("update");
       if (!game) return { error: "존재하지 않는 게임입니다." };
       if (game.gmId !== gmId) return { error: "권한이 없습니다." };
-      if (game.confirmedAt) return { error: "이미 확정된 게임입니다." };
+      if (isSessionLocked(game)) return { error: "이미 확정된 게임입니다." };
 
       const [target] = await tx
         .select({ status: participants.status })
@@ -77,7 +77,7 @@ export async function demoteParticipant(gameId: string, userId: string): Promise
       const [game] = await tx.select().from(games).where(eq(games.id, gameId)).for("update");
       if (!game) return { error: "존재하지 않는 게임입니다." };
       if (game.gmId !== gmId) return { error: "권한이 없습니다." };
-      if (game.confirmedAt) return { error: "이미 확정된 게임입니다." };
+      if (isSessionLocked(game)) return { error: "이미 확정된 게임입니다." };
 
       const [target] = await tx
         .select({ status: participants.status })
@@ -110,7 +110,7 @@ export async function removeParticipant(gameId: string, userId: string): Promise
       const [game] = await tx.select().from(games).where(eq(games.id, gameId)).for("update");
       if (!game) return { error: "존재하지 않는 게임입니다." };
       if (game.gmId !== gmId) return { error: "권한이 없습니다." };
-      if (game.confirmedAt) return { error: "이미 확정된 게임입니다." };
+      if (isSessionLocked(game)) return { error: "이미 확정된 게임입니다." };
 
       const [removed] = await tx
         .delete(participants)

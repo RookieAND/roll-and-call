@@ -2,7 +2,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { countConfirmed, PARTICIPANT_STATUS } from "@/entities/game";
+import { countConfirmed, isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
 import { db, participants, getCurrentUser } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 export async function leaveGame(gameId: string): Promise<ActionResult> {
@@ -17,7 +17,7 @@ export async function leaveGame(gameId: string): Promise<ActionResult> {
 
   const me = game.participants.find((p) => p.userId === user.id);
   if (!me) return { error: "참여 중이 아닙니다." };
-  if (game.confirmedAt) {
+  if (isSessionLocked(game)) {
     return { error: "확정된 게임은 취소할 수 없습니다. GM에게 문의하세요." };
   }
 

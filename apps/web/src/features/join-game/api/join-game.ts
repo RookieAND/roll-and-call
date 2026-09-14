@@ -2,7 +2,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { PARTICIPANT_STATUS } from "@/entities/game";
+import { isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
 import {
   db,
   games,
@@ -32,7 +32,8 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
     if (game.gmId === user.id) {
       return { error: "GM은 참여자로 참여할 수 없습니다." };
     }
-    if (game.confirmedAt) return { error: "이미 일정이 확정된 게임입니다." };
+    // 일시 지정형은 등록 때부터 confirmedAt이 있으므로, 확정 여부는 isSessionLocked로 본다.
+    if (isSessionLocked(game)) return { error: "이미 일정이 확정된 게임입니다." };
     if (game.endDate.getTime() <= Date.now()) {
       return { error: "모집이 마감되었습니다." };
     }
