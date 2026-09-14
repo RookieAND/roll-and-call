@@ -20,7 +20,7 @@ export async function MyPageView() {
   ]);
 
   const { name, avatar, handle } = profileDisplay({ profile, user });
-  const { upcoming, hosting, pastCount, pastHref } = summarizeMySessions({
+  const { upcoming, hosting, hostedBefore, pastCount, pastHref } = summarizeMySessions({
     hosted,
     joined,
     viewerId: user.id,
@@ -53,7 +53,9 @@ export async function MyPageView() {
             title="운영 중인 세션"
             items={hosting}
             moreHref="/me/sessions/hosted"
-            empty={<HostedSessionsEmpty withImage={upcoming.length > 0} />}
+            empty={
+              <HostedSessionsEmpty withImage={upcoming.length > 0} hostedBefore={hostedBefore} />
+            }
           />
 
           <PastSessionsLink count={pastCount} href={pastHref} />

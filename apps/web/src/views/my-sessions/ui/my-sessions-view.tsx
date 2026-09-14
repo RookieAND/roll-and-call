@@ -17,21 +17,22 @@ type RoleConfig = {
   basePath: string;
   title: string;
   tabs: readonly SessionTab[];
-  // headline count(앱바 옆 숫자) = 기본 탭 건수. 탭 전환과 무관하게 페이지 정체성 유지.
-  headlineTab: string;
+  // headline count(앱바 옆 숫자) = 이 탭들의 건수 합. 탭 전환과 무관하게 페이지 정체성 유지.
+  // 운영 중 = 모집 중 + 확정(마이페이지 "운영 중"과 같은 기준).
+  headlineTabs: readonly string[];
 };
 
 const CONFIG: Record<SessionRole, RoleConfig> = {
   host: {
     basePath: "/me/sessions/hosted",
     title: "운영 중인 세션",
-    headlineTab: "recruiting",
+    headlineTabs: ["recruiting", "confirmed"],
     tabs: HOSTED_TABS,
   },
   player: {
     basePath: "/me/sessions/joined",
     title: "참여한 세션",
-    headlineTab: "confirmed",
+    headlineTabs: ["confirmed"],
     tabs: JOINED_TABS,
   },
 };
@@ -50,7 +51,7 @@ export async function MySessionsView({ role, tab }: { role: SessionRole; tab?: s
   const known = config.tabs.some((t) => t.key === tab);
   const activeTab = known ? tab! : config.tabs[0]!.key;
   const items = byTab[activeTab] ?? [];
-  const headlineCount = (byTab[config.headlineTab] ?? []).length;
+  const headlineCount = config.headlineTabs.reduce((n, t) => n + (byTab[t]?.length ?? 0), 0);
 
   return (
     <>

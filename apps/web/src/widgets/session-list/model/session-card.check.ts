@@ -133,7 +133,7 @@ const urgent = toSessionCard({
 assert.equal(urgent.urgent, true);
 assert.equal(urgent.badge.kind === "deadline" && urgent.badge.urgent, true);
 
-// --- player: confirmed shows session badge + KP; waitlisted shows 대기 N번 ---
+// --- player: confirmed shows session badge + GM; waitlisted shows 대기 N번 ---
 const playerConfirmed = toSessionCard({
   game: game({ confirmedAt: new Date(NOW.getTime() + 3 * DAY), participants: confirmed(4) }),
   role: "player",
@@ -141,7 +141,7 @@ const playerConfirmed = toSessionCard({
   now: NOW,
 });
 assert.equal(playerConfirmed.badge.kind, "session");
-assert.ok(playerConfirmed.rest.includes("KP 도윤"));
+assert.ok(playerConfirmed.rest.includes("GM 도윤"));
 
 const playerWaiting = toSessionCard({
   game: game({
@@ -157,6 +157,48 @@ const playerWaiting = toSessionCard({
 assert.equal(playerWaiting.badge.kind, "waiting");
 assert.equal(playerWaiting.badge.kind === "waiting" && playerWaiting.badge.label, "대기 1번");
 assert.ok(playerWaiting.rest.startsWith("일정 미정"));
+
+// --- 일시 지정형: 등록 때부터 confirmedAt이 있어도 모집 중이면 확정이 아니다 ---
+const fixedOpen = {
+  scheduleMode: "fixed" as const,
+  confirmedAt: new Date(NOW.getTime() + 5 * DAY),
+};
+const fixedState = (endInDays: number, confirmedCount: number) =>
+  deriveSessionState(
+    {
+      ...fixedOpen,
+      maxPlayers: 4,
+      endDate: new Date(NOW.getTime() + endInDays * DAY),
+      confirmedCount,
+    },
+    NOW,
+  );
+assert.equal(fixedState(1, 1), "recruiting");
+assert.equal(fixedState(1, 4), "confirmed");
+assert.equal(fixedState(-1, 2), "confirmed");
+assert.equal(fixedState(-1, 0), "closed");
+
+// 마이페이지 "운영 중" 0건 버그: 모집 중인 일시 지정형 게임은 모집 중 버킷에 있어야 한다.
+assert.deepEqual(
+  bucketHosted([game({ id: "fx", ...fixedOpen })], "gm", NOW).recruiting.map((c) => c.id),
+  ["fx"],
+);
+
+// 확정 참여자에겐 세션 D-N + 날짜, "참여 예정"(confirmed 탭)으로 간다.
+const playerFixed = toSessionCard({
+  game: game({ ...fixedOpen, participants: confirmed(1) }),
+  role: "player",
+  viewerId: "c0",
+  now: NOW,
+});
+assert.equal(playerFixed.badge.kind, "session");
+assert.ok(!playerFixed.rest.startsWith("일정 미정") && playerFixed.rest.includes("GM 도윤"));
+assert.deepEqual(
+  bucketJoined([game({ id: "fx", ...fixedOpen, participants: confirmed(1) })], "c0", NOW).confirmed.map(
+    (c) => c.id,
+  ),
+  ["fx"],
+);
 
 // --- bucketing: tabs + sort ---
 const hostBuckets = bucketHosted(

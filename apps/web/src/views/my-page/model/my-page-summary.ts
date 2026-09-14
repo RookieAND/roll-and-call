@@ -18,7 +18,9 @@ export function summarizeMySessions({
 
   return {
     upcoming: joinedBuckets.confirmed,
-    hosting: hostedBuckets.recruiting,
+    // 운영 중 = 아직 끝나지 않은 운영 세션 전부. 손이 가는 모집 중을 앞에, 확정은 그 뒤에.
+    hosting: [...hostedBuckets.recruiting, ...hostedBuckets.confirmed],
+    hostedBefore: hostedBuckets.closed.length > 0,
     pastCount: joinedBuckets.closed.length + hostedBuckets.closed.length,
     // 지난 세션은 실제로 쌓여 있는 탭으로 보낸다.
     pastHref:
