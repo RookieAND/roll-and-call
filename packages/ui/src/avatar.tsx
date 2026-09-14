@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./cn";
+import { Tooltip } from "./tooltip";
 
 const avatar = cva(
   "inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-bold",
@@ -45,7 +46,7 @@ export function Avatar({ src, name, size, className }: AvatarProps) {
   const trimmed = (name ?? "").trim();
   const initial = trimmed.charAt(0) || "?";
   const [bg, fg] = trimmed ? colorFor(trimmed) : ["#EAEAEF", "#8A8A95"];
-  return (
+  const face = (
     <span
       className={cn(avatar({ size }), className)}
       style={src ? undefined : { backgroundColor: bg, color: fg }}
@@ -58,6 +59,10 @@ export function Avatar({ src, name, size, className }: AvatarProps) {
       )}
     </span>
   );
+
+  // 이름이 있으면 hover 시 툴팁으로 보여준다.
+  if (!trimmed) return face;
+  return <Tooltip content={trimmed}>{face}</Tooltip>;
 }
 
 export type AvatarPerson = { src?: string | null; name?: string | null };
@@ -71,6 +76,12 @@ export type AvatarGroupProps = VariantProps<typeof avatar> & {
 export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupProps) {
   const shown = people.slice(0, max);
   const extra = people.length - shown.length;
+  // +N 칩은 가려진 사람들의 이름을 툴팁으로 보여준다.
+  const hiddenNames = people
+    .slice(max)
+    .map((p) => p.name?.trim())
+    .filter(Boolean)
+    .join(", ");
   return (
     <div className={cn("flex items-center", className)}>
       {shown.map((p, i) => (
@@ -79,11 +90,13 @@ export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupPro
         </span>
       ))}
       {extra > 0 && (
-        <span
-          className={cn(avatar({ size }), "-ml-2 bg-gray-100 text-gray-600 ring-2 ring-surface")}
-        >
-          +{extra}
-        </span>
+        <Tooltip content={hiddenNames || `${extra}명 더`}>
+          <span
+            className={cn(avatar({ size }), "-ml-2 bg-gray-100 text-gray-600 ring-2 ring-surface")}
+          >
+            +{extra}
+          </span>
+        </Tooltip>
       )}
     </div>
   );

@@ -22,5 +22,6 @@ export { Pagination, type PaginationProps } from "./pagination";
 export { Skeleton, type SkeletonProps } from "./skeleton";
 export { Progress, type ProgressProps } from "./progress";
 export { Calendar, type CalendarProps } from "./calendar";
+export { Tooltip, type TooltipProps } from "./tooltip";
 export { cn } from "./cn";
 export { gapMap, type GapToken } from "./tokens";
