@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import { Container, Skeleton, VStack } from "@trpg/ui";
+import { Container, VStack } from "@trpg/ui";
 import { getRecruitingGamesPage } from "@/shared/server";
 import type { GamesFilter } from "@/shared/api";
-import { GameSearchForm, GamesFilterSheet } from "@/features/filter-games";
 import { GameList, GamesCount } from "./game-list";
 import { GameListSkeleton } from "./game-list-skeleton";
+import { GamesToolbar, gamesCountSkeleton } from "./games-toolbar";
 
 type Props = {
   page?: number;
@@ -12,7 +12,7 @@ type Props = {
   sort?: GamesFilter["sort"];
 };
 
-// 검색·건수·정렬은 스크롤 중에도 고정(sticky top = AppBar 높이)되고, 카드 목록만 아래로 흐른다.
+// 검색·건수·정렬은 스크롤 중에도 고정되고, 카드 목록만 아래로 흐른다.
 // 하나의 조회 프로미스를 건수와 목록이 공유해, sticky 건수 때문에 쿼리가 두 번 돌지 않게 한다.
 export function GameBoard({ page = 1, q, sort }: Props) {
   const gamesPage = getRecruitingGamesPage(page, { q, sort });
@@ -20,15 +20,15 @@ export function GameBoard({ page = 1, q, sort }: Props) {
 
   return (
     <Container>
-      <div className="sticky top-[52px] z-10 -mx-4 flex flex-col gap-3 bg-surface px-4 pt-4 pb-2">
-        <GameSearchForm q={q} sort={sort} />
-        <div className="flex items-center justify-between">
-          <Suspense key={key} fallback={<Skeleton className="h-4 w-16" />}>
+      <GamesToolbar
+        q={q}
+        sort={sort}
+        count={
+          <Suspense key={key} fallback={gamesCountSkeleton}>
             <GamesCount promise={gamesPage} />
           </Suspense>
-          <GamesFilterSheet q={q} sort={sort} />
-        </div>
-      </div>
+        }
+      />
 
       <VStack gap={4} className="pt-3 pb-4">
         <Suspense key={key} fallback={<GameListSkeleton />}>
