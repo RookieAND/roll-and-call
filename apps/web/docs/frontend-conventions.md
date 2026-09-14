@@ -9,7 +9,7 @@
 | `packages/ui` | 도메인 무관 순수 UI 키트                                        | Button, IconButton, Chip, Select, TextInput, Field, Card                          |
 | `shared/ui`   | 앱 공용(도메인 약함) 조합 컴포넌트                              | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                              |
 | `entities/*`  | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위        | game, profile, availability                                                       |
-| `features/*`  | **단일 사용자 동작**(server action·toggle 등 상태 변경)         | JoinButton, DeleteGameButton, GameStatusFilter, GameScheduleLink, ThumbnailUpload |
+| `features/*`  | **단일 사용자 동작**(server action·toggle 등 상태 변경)         | JoinGameButton, DeleteGameButton, GameStatusFilter, GameScheduleLink, ThumbnailUpload |
 | `widgets/*`   | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)          | game-form, session-list                                                           |
 | `views/*`     | 한 화면의 조합 전체 + 라우트 글루                               | GamesView, GameDetail, ParticipantManager                                         |
 
@@ -76,7 +76,8 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 ## 3. 핸들러는 props로, 레이아웃은 호출부가
 
 - 프리미티브는 고유 역할만 한다. 동작은 `onClick` 등 **props로 인계**한다.
-- 여러 맥락에서 재사용되는 feature 버튼(LoginButton, JoinButton 등)은 **크기·너비를 하드코딩하지 않는다.** `size`/`className`을 호출부(위젯·뷰)가 지정한다.
+- feature 버튼은 자기 동작(server action)과 결과 문구(토스트)를 **내부에 소유한다.** action·successMessage를 props로 받는 범용 버튼을 만들지 않는다(예: `JoinGameButton`/`LeaveGameButton`).
+- 여러 맥락에서 재사용되는 feature 버튼(LoginButton, JoinGameButton 등)은 **크기·너비를 하드코딩하지 않는다.** `size`/`className`을 호출부(위젯·뷰)가 지정한다.
 - 폼 내부 제출 버튼은 그 폼이 곧 호출부이므로, 폼이 `className`으로 레이아웃을 지정해도 된다.
 
 ## 4. 폼의 레이어

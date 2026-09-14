@@ -11,7 +11,7 @@ import {
 } from "@/entities/game";
 import { LoginButton } from "@/features/auth";
 import { GameScheduleLink } from "@/features/coordinate-session";
-import { JoinButton, joinGame, leaveGame } from "@/features/join-game";
+import { JoinGameButton, LeaveGameButton } from "@/features/join-game";
 import type { GameDetailData } from "@/shared/server";
 import { StatusNotice } from "@/shared/ui";
 import { deriveActionView } from "../model/derive-action-view";
@@ -46,11 +46,9 @@ export function GameActionZone({
   });
 
   const isClosed = status === GAME_STATUS.closed;
-  // 정원이 차도 신청은 받는다(초과분은 대기). 문구만 결과에 맞춘다.
-  // ponytail: 표시 시점 기준이라 그 사이 자리가 차면 문구와 결과가 어긋날 수 있다. 드물어서 둔다.
+  // 정원 충족이어도 신청은 받는다(초과분은 대기).
   const isFull = status === GAME_STATUS.confirmed;
   const joinLabel = isFull ? "대기 신청하기" : "참여하기";
-  const joinSuccessMessage = isFull ? "대기로 접수했습니다" : "참여했습니다";
   const anonMessage = isFull
     ? "정원이 찼지만 대기 신청은 가능합니다. 로그인 후 신청하세요."
     : "참여하려면 로그인이 필요합니다.";
@@ -83,13 +81,7 @@ export function GameActionZone({
             className="h-12 w-full text-sm"
           />
         )}
-        <JoinButton
-          gameId={game.id}
-          action={leaveGame}
-          label="대기 취소"
-          variant="outline"
-          successMessage="대기를 취소했습니다"
-        />
+        <LeaveGameButton gameId={game.id}>대기 취소</LeaveGameButton>
       </VStack>
     );
   }
@@ -122,13 +114,7 @@ export function GameActionZone({
           </Button>
         )}
         {canLeave ? (
-          <JoinButton
-            gameId={game.id}
-            action={leaveGame}
-            label="참여 취소"
-            variant="outline"
-            successMessage="참여를 취소했습니다"
-          />
+          <LeaveGameButton gameId={game.id}>참여 취소</LeaveGameButton>
         ) : (
           <StatusNotice tone="muted">
             참여가 확정되었습니다 · 모집이 마감되어 취소는 GM에게 문의하세요
@@ -139,11 +125,6 @@ export function GameActionZone({
   }
 
   return (
-    <JoinButton
-      gameId={game.id}
-      action={joinGame}
-      label={joinLabel}
-      successMessage={joinSuccessMessage}
-    />
+    <JoinGameButton gameId={game.id}>{joinLabel}</JoinGameButton>
   );
 }

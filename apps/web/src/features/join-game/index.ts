@@ -1,3 +1,4 @@
 export { joinGame } from "./api/join-game";
 export { leaveGame } from "./api/leave-game";
-export { JoinButton } from "./ui/join-button";
+export { JoinGameButton } from "./ui/join-game-button";
+export { LeaveGameButton } from "./ui/leave-game-button";

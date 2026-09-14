@@ -13,7 +13,8 @@ import {
   getCurrentUser,
 } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
-export async function joinGame(gameId: string): Promise<ActionResult> {
+// waiting: 정원 초과로 대기 접수됐는지. 화면 표시 시점과 달리 실제 결과라 토스트 문구는 이걸 따른다.
+export async function joinGame(gameId: string): Promise<ActionResult & { waiting?: boolean }> {
   const user = await getCurrentUser();
   if (!user) return { error: "로그인이 필요합니다." };
 
@@ -70,7 +71,7 @@ export async function joinGame(gameId: string): Promise<ActionResult> {
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/participants`);
   revalidatePath("/games");
-  return {};
+  return { waiting: joinedWaiting };
 }
 
 async function announceRecruitmentComplete(gameId: string) {
