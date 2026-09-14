@@ -53,9 +53,7 @@ export async function MyPageView() {
             title="운영 중인 세션"
             items={hosting}
             moreHref="/me/sessions/hosted"
-            empty={
-              <HostedSessionsEmpty withImage={upcoming.length > 0} hostedBefore={hostedBefore} />
-            }
+            empty={<HostedSessionsEmpty hostedBefore={hostedBefore} />}
           />
 
           <PastSessionsLink count={pastCount} href={pastHref} />
