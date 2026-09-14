@@ -1,5 +1,0 @@
-/* Compiled into .design-sync/.cache/ui.css by cfg.buildCmd - Tailwind utilities for @trpg/ui components. */
-@import "tailwindcss";
-@import "../packages/ui/src/styles.css";
-@source "../packages/ui/src";
-@source "./previews";
