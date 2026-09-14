@@ -4,6 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { db, games, participants, getCurrentUser } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
+import { fromKstDateTimeInput } from "@/shared/lib";
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
 
 export async function updateGame(id: string, values: GameFormValues): Promise<ActionResult> {
@@ -36,10 +37,10 @@ export async function updateGame(id: string, values: GameFormValues): Promise<Ac
       playTime: v.playTime || null,
       maxPlayers: Number(v.maxPlayers),
       scheduleMode: v.scheduleMode,
-      endDate: new Date(v.endDate),
+      endDate: fromKstDateTimeInput(v.endDate),
       rangeStart: v.rangeStart || null,
       rangeEnd: v.rangeEnd || null,
-      confirmedAt: v.confirmedAt ? new Date(v.confirmedAt) : null,
+      confirmedAt: v.confirmedAt ? fromKstDateTimeInput(v.confirmedAt) : null,
     })
     .where(and(eq(games.id, id), eq(games.gmId, user.id)))
     .returning({ id: games.id });

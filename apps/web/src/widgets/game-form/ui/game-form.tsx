@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { SCHEDULE_MODE } from "@/entities/game";
 import { gameFormSchema, type GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
-import { toLocalDateTimeInput } from "@/shared/lib";
+import { toKstDateTimeInput } from "@/shared/lib";
 import { toast } from "@/shared/ui";
 import { formatPlayTime, initialPlayTime } from "../model/play-time";
 import { GameFormPage } from "./game-form-page";
@@ -44,8 +44,8 @@ export function GameForm({
       playTime: defaultGame?.playTime ?? formatPlayTime(playTime.hours, playTime.minutes),
       maxPlayers: String(defaultGame?.maxPlayers ?? 4),
       scheduleMode: defaultGame?.scheduleMode ?? SCHEDULE_MODE.coordinate,
-      endDate: defaultGame?.endDate ? toLocalDateTimeInput(defaultGame.endDate) : "",
-      confirmedAt: defaultGame?.confirmedAt ? toLocalDateTimeInput(defaultGame.confirmedAt) : "",
+      endDate: defaultGame?.endDate ? toKstDateTimeInput(defaultGame.endDate) : "",
+      confirmedAt: defaultGame?.confirmedAt ? toKstDateTimeInput(defaultGame.confirmedAt) : "",
       rangeStart: defaultGame?.rangeStart ?? "",
       rangeEnd: defaultGame?.rangeEnd ?? "",
       thumbnailUrl: defaultGame?.thumbnailUrl ?? "",

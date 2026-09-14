@@ -4,7 +4,7 @@ import { Field, TextInput } from "@trpg/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
 import { SCHEDULE_MODE } from "@/entities/game";
 import type { GameFormValues } from "@/features/write-game";
-import { toLocalDateInput } from "@/shared/lib";
+import { toKstDateInput } from "@/shared/lib";
 import { DateTimePicker } from "@/shared/ui";
 import { CoordinationRangeFields } from "./coordination-range-fields";
 import { FixedSessionField } from "./fixed-session-field";
@@ -62,7 +62,7 @@ export function GameScheduleFields({ form }: { form: UseFormReturn<GameFormValue
               value={field.value}
               onChange={field.onChange}
               invalid={!!errors.endDate}
-              min={toLocalDateInput(new Date())}
+              min={toKstDateInput(new Date())}
             />
           )}
         />

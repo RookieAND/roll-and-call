@@ -3,7 +3,7 @@
 import { Button, HStack, Text, VStack } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { toLocalDateInput } from "@/shared/lib";
+import { toKstDateInput } from "@/shared/lib";
 import { Sheet, toast } from "@/shared/ui";
 import { createSecondRound } from "../api/create-second-round";
 import { RoundInheritedList } from "./round-inherited-list";
@@ -33,7 +33,7 @@ export function RoundSheet({
   const [rangeEnd, setRangeEnd] = useState("");
 
   // 1회차가 확정돼 있으면 그 세션 다음 날부터 고를 수 있다.
-  const earliest = toLocalDateInput(
+  const earliest = toKstDateInput(
     confirmedAt ? new Date(confirmedAt.getTime() + ONE_DAY_MS) : new Date(),
   );
 
