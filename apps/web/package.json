@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "lint:fsd": "node scripts/fsd-check.mjs",
     "lint:tokens": "node scripts/tokens-check.mjs",
-    "check": "tsx --tsconfig tsconfig.json src/entities/game/model/game.check.ts && tsx --tsconfig tsconfig.json src/entities/availability/model/availability.check.ts && tsx --tsconfig tsconfig.json src/features/write-game/model/game-form.check.ts && tsx --tsconfig tsconfig.json src/widgets/session-list/model/session-card.check.ts",
+    "check": "tsx --tsconfig tsconfig.json src/entities/game/model/game.check.ts && tsx --tsconfig tsconfig.json src/entities/availability/model/availability.check.ts && tsx --tsconfig tsconfig.json src/features/write-game/model/game-form.check.ts && tsx --tsconfig tsconfig.json src/widgets/session-list/model/session-card.check.ts && tsx --tsconfig tsconfig.json src/views/game-detail/model/derive-action-view.check.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",

@@ -40,10 +40,22 @@ export function GameActionZone({
   const actionView = deriveActionView({
     sessionConfirmed: Boolean(game.confirmedAt),
     isWaiting: viewerStatus === PARTICIPANT_STATUS.waiting,
-    isClosed: status === GAME_STATUS.closed,
+    isClosed: status === GAME_STATUS.closed, // 기한 경과만. 정원 충족은 대기 신청 가능이라 마감이 아니다.
     isSignedIn: Boolean(viewerId),
     viewerConfirmed: viewerStatus === PARTICIPANT_STATUS.confirmed,
   });
+
+  const isClosed = status === GAME_STATUS.closed;
+  // 정원이 차도 신청은 받는다(초과분은 대기). 문구만 결과에 맞춘다.
+  // ponytail: 표시 시점 기준이라 그 사이 자리가 차면 문구와 결과가 어긋날 수 있다. 드물어서 둔다.
+  const isFull = status === GAME_STATUS.confirmed;
+  const joinLabel = isFull ? "대기 신청하기" : "참여하기";
+  const joinSuccessMessage = isFull ? "대기로 접수했습니다" : "참여했습니다";
+  const anonMessage = isFull
+    ? "정원이 찼지만 대기 신청은 가능합니다. 로그인 후 신청하세요."
+    : "참여하려면 로그인이 필요합니다.";
+  // leaveGame과 같은 규칙: 확정자는 정원 충족·기한 경과 후 자가 취소 불가.
+  const canLeave = !isFull && !isClosed;
 
   if (actionView === "confirmed") {
     return (
@@ -90,7 +102,7 @@ export function GameActionZone({
     return (
       <VStack gap={3} className="items-center text-center">
         <Text typography="body2" foreground="muted">
-          참여하려면 로그인이 필요합니다.
+          {anonMessage}
         </Text>
         <LoginButton className="w-full" />
       </VStack>
@@ -99,6 +111,7 @@ export function GameActionZone({
 
   if (actionView === "joined") {
     // 참여 완료 → 주 CTA를 일정 조율로 전환, 참여 취소는 보조로 강등.
+    // 마감 후엔 취소가 서버에서 막히므로 버튼 대신 안내만 둔다.
     return (
       <VStack gap={2}>
         {canSchedule && (
@@ -108,18 +121,29 @@ export function GameActionZone({
             </Link>
           </Button>
         )}
-        <JoinButton
-          gameId={game.id}
-          action={leaveGame}
-          label="참여 취소"
-          variant="outline"
-          successMessage="참여를 취소했습니다"
-        />
+        {canLeave ? (
+          <JoinButton
+            gameId={game.id}
+            action={leaveGame}
+            label="참여 취소"
+            variant="outline"
+            successMessage="참여를 취소했습니다"
+          />
+        ) : (
+          <StatusNotice tone="muted">
+            참여가 확정되었습니다 · 모집이 마감되어 취소는 GM에게 문의하세요
+          </StatusNotice>
+        )}
       </VStack>
     );
   }
 
   return (
-    <JoinButton gameId={game.id} action={joinGame} label="참여하기" successMessage="참여했습니다" />
+    <JoinButton
+      gameId={game.id}
+      action={joinGame}
+      label={joinLabel}
+      successMessage={joinSuccessMessage}
+    />
   );
 }
