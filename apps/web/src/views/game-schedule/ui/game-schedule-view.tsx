@@ -1,16 +1,10 @@
 import { Container, Text, VStack } from "@trpg/ui";
 import { notFound } from "next/navigation";
-import { aggregateAvailability, rankSlots } from "@/entities/availability";
 import { ConfirmedSessionNotice, hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
-import { ConfirmSessionForm } from "@/features/confirm-session";
-import { buildDayColumns, buildTimeRows, formatDateTime } from "@/shared/lib";
-import {
-  getCurrentUser,
-  getGameAvailabilities,
-  getGameById,
-  getUserConfirmedSlots,
-} from "@/shared/server";
+import { buildDayColumns, buildTimeRows } from "@/shared/lib";
+import { getCurrentUser, getGameById } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
+import { getScheduleAvailability } from "../api/load-availability";
 import { ScheduleBody } from "./schedule-body";
 
 export async function GameScheduleView({ id }: { id: string }) {
@@ -41,17 +35,8 @@ export async function GameScheduleView({ id }: { id: string }) {
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
   const involved = isGm || hasUserJoined({ participants: game.participants, userId: viewerId });
 
-  const [avails, blocked] = await Promise.all([
-    getGameAvailabilities(id),
-    user ? getUserConfirmedSlots(user.id, id) : [],
-  ]);
-  const aggregate = aggregateAvailability({ avails, userId: viewerId });
-
-  const confirmOptions = rankSlots({ counts: aggregate.counts }).map(({ iso, count }) => ({
-    iso,
-    label: `${formatDateTime(iso)} · ${count}명 가능`,
-  }));
-  const canConfirm = isGm && !game.confirmedAt;
+  // 첫 렌더 값만 서버가 채운다. 이후 갱신은 ScheduleBody의 쿼리 캐시가 맡는다.
+  const initialAvailability = await getScheduleAvailability(id, viewerId);
 
   return (
     <>
@@ -63,12 +48,11 @@ export async function GameScheduleView({ id }: { id: string }) {
             gameId={id}
             days={buildDayColumns(game.rangeStart!, game.rangeEnd!)}
             timeRows={buildTimeRows()}
-            aggregate={aggregate}
-            blocked={blocked}
+            initialAvailability={initialAvailability}
             confirmedAt={game.confirmedAt}
             involved={involved}
+            isGm={isGm}
           />
-          {canConfirm && <ConfirmSessionForm gameId={id} options={confirmOptions} />}
         </VStack>
       </Container>
     </>

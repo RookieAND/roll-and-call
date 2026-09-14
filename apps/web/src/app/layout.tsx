@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { BottomNav, Toaster } from "@/shared/ui";
 import "./globals.css";
+import { QueryProvider } from "./query-provider";
 
 export const metadata: Metadata = {
   title: "롤앤콜",
@@ -26,10 +27,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body className="bg-canvas font-sans text-gray-900 antialiased">
-        <div className="mx-auto flex min-h-screen w-full min-w-screen-min max-w-screen-max flex-col border-x border-gray-200 bg-surface">
-          <div className="flex-1">{children}</div>
-          <BottomNav />
-        </div>
+        <QueryProvider>
+          <div className="mx-auto flex min-h-screen w-full min-w-screen-min max-w-screen-max flex-col border-x border-gray-200 bg-surface">
+            <div className="flex-1">{children}</div>
+            <BottomNav />
+          </div>
+        </QueryProvider>
         <Toaster />
       </body>
     </html>

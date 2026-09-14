@@ -1,7 +1,8 @@
 "use client";
 
 import { Button, Text } from "@trpg/ui";
-import { useTransition } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { availabilityQuery } from "@/entities/availability";
 import type { DayColumn, TimeRow } from "@/shared/lib";
 import { SlotGrid, toast } from "@/shared/ui";
 import { saveAvailability } from "../api/save-availability";
@@ -28,19 +29,24 @@ export function AvailabilityGrid({
   readOnly = false,
 }: Props) {
   const painter = useSlotPainter({ initial: initialMine, blocked, readOnly });
-  const [pending, startTransition] = useTransition();
-
-  function save() {
-    const keys = [...painter.selected];
-    startTransition(async () => {
-      const result = await saveAvailability(gameId, keys);
+  const queryClient = useQueryClient();
+  const { mutate, isPending: pending } = useMutation({
+    mutationFn: (keys: string[]) => saveAvailability(gameId, keys),
+    onSuccess: (result, keys) => {
       if (result.error) {
         toast.error(result.error);
         return;
       }
       painter.markSaved(keys);
       toast.success("가능 시간을 저장했습니다");
-    });
+      // 전체 겹침·확정 후보가 같은 캐시를 읽으므로 저장 결과를 다시 받아 반영한다.
+      return queryClient.invalidateQueries({ queryKey: availabilityQuery(gameId).queryKey });
+    },
+    onError: () => toast.error("가능 시간을 저장하지 못했습니다"),
+  });
+
+  function save() {
+    mutate([...painter.selected]);
   }
 
   function renderCell(key: string) {
