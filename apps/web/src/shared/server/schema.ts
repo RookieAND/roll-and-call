@@ -50,6 +50,12 @@ export const games = pgTable("games", {
   confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
   // set when the 1h-before reminder has been sent (dedupe)
   notifiedAt: timestamp("notified_at", { withTimezone: true }),
+  // 모집 공지 메시지에서 연 Discord 스레드 (= 공지 메시지 id). 참여/이탈 알림이 여기로 간다.
+  discordThreadId: text("discord_thread_id"),
+  // GM이 연 세션 채널 묶음(Discord 카테고리). "opening"은 생성 중 선점 표시.
+  discordCategoryId: text("discord_category_id"),
+  // GM이 세션을 종료해 채널을 아카이브한 시각
+  sessionEndedAt: timestamp("session_ended_at", { withTimezone: true }),
   // 2회차 승계: 이 게임을 만든 원본(직전 회차). null이면 1회차.
   parentGameId: uuid("parent_game_id").references((): AnyPgColumn => games.id, {
     onDelete: "set null",

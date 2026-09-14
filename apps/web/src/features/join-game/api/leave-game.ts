@@ -3,7 +3,7 @@
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { countConfirmed, isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
-import { db, participants, getCurrentUser } from "@/shared/server";
+import { db, participants, getCurrentUser, notifyGameLeft, refreshRecruitPost } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 export async function leaveGame(gameId: string): Promise<ActionResult> {
   const user = await getCurrentUser();
@@ -34,6 +34,8 @@ export async function leaveGame(gameId: string): Promise<ActionResult> {
   await db
     .delete(participants)
     .where(and(eq(participants.gameId, gameId), eq(participants.userId, user.id)));
+  await notifyGameLeft(gameId, user.id, false);
+  await refreshRecruitPost(gameId);
 
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/participants`);

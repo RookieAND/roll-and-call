@@ -7,11 +7,15 @@ export function GameDetailHeader({
   title,
   status,
   isGm,
+  roomsOpened,
+  sessionEnded,
 }: {
   gameId: string;
   title: string;
   status: GameStatus;
   isGm: boolean;
+  roomsOpened: boolean;
+  sessionEnded: boolean;
 }) {
   return (
     <HStack justify="between" align="start" gap={2}>
@@ -20,7 +24,9 @@ export function GameDetailHeader({
       </Text>
       <HStack align="center" gap={1} className="mt-0.5 shrink-0">
         <GameStatusBadge status={status} />
-        {isGm && <GameGmMenu gameId={gameId} />}
+        {isGm && (
+          <GameGmMenu gameId={gameId} roomsOpened={roomsOpened} sessionEnded={sessionEnded} />
+        )}
       </HStack>
     </HStack>
   );

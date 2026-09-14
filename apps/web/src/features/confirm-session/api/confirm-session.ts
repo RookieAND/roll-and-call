@@ -2,7 +2,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { db, games, getCurrentUser } from "@/shared/server";
+import { db, games, getCurrentUser, refreshRecruitPost } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 export async function confirmSession(gameId: string, slotIso: string): Promise<ActionResult> {
   const user = await getCurrentUser();
@@ -19,6 +19,7 @@ export async function confirmSession(gameId: string, slotIso: string): Promise<A
     .returning({ id: games.id });
 
   if (updated.length === 0) return { error: "확정 권한이 없습니다." };
+  await refreshRecruitPost(gameId);
 
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/schedule`);

@@ -5,5 +5,9 @@ export * from "./games";
 export * from "./availabilities";
 export * from "./profiles";
 export * from "./discord-notify";
-export { sendDiscordAnnouncement, type DiscordEmbed } from "./discord-webhook";
+export {
+  archiveDiscordSessionRooms,
+  createDiscordSessionRooms,
+  DISCORD_ROOMS_OPENING,
+} from "./discord-bot";
 export { createSupabaseServerClient, getCurrentUser } from "./supabase";

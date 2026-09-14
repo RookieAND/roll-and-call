@@ -32,7 +32,14 @@ export function GameDetail({ game, viewerId }: { game: GameDetailData; viewerId:
           />
 
           <VStack gap={4} className="px-4">
-            <GameDetailHeader gameId={game.id} title={game.title} status={status} isGm={isGm} />
+            <GameDetailHeader
+              gameId={game.id}
+              title={game.title}
+              status={status}
+              isGm={isGm}
+              roomsOpened={game.discordCategoryId !== null}
+              sessionEnded={game.sessionEndedAt !== null}
+            />
 
             <GameInfoTable game={game} count={confirmed.length} />
 

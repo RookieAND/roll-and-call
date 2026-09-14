@@ -3,7 +3,7 @@
 import { and, asc, desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
-import { db, games, participants, getCurrentUser } from "@/shared/server";
+import { db, games, participants, getCurrentUser, notifyGameLeft, refreshRecruitPost } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 const { confirmed, waiting } = PARTICIPANT_STATUS;
 
@@ -61,8 +61,11 @@ export async function promoteParticipant(gameId: string, userId: string): Promis
         .where(and(eq(participants.gameId, gameId), eq(participants.userId, userId)));
       return {};
     })
-    .then((result) => {
-      if (!result.error) revalidate(gameId);
+    .then(async (result) => {
+      if (!result.error) {
+        revalidate(gameId);
+        await refreshRecruitPost(gameId);
+      }
       return result;
     });
 }
@@ -94,8 +97,11 @@ export async function demoteParticipant(gameId: string, userId: string): Promise
       await promoteWaitlistHead(tx, gameId, userId);
       return {};
     })
-    .then((result) => {
-      if (!result.error) revalidate(gameId);
+    .then(async (result) => {
+      if (!result.error) {
+        revalidate(gameId);
+        await refreshRecruitPost(gameId);
+      }
       return result;
     });
 }
@@ -123,8 +129,12 @@ export async function removeParticipant(gameId: string, userId: string): Promise
       }
       return {};
     })
-    .then((result) => {
-      if (!result.error) revalidate(gameId);
+    .then(async (result) => {
+      if (!result.error) {
+        revalidate(gameId);
+        await notifyGameLeft(gameId, userId, true);
+        await refreshRecruitPost(gameId);
+      }
       return result;
     });
 }

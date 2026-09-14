@@ -10,6 +10,7 @@ import {
   type Game,
   notifyGameJoined,
   notifyRecruitmentComplete,
+  refreshRecruitPost,
   getCurrentUser,
 } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
@@ -64,10 +65,10 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
 
   if (result.error) return result;
 
-  // 정원이 막 찼으면 구인 완료 알림(핑 포함)만, 아니면 참여 신청 알림.
+  // 참여·대기 등록은 항상 스레드에, 정원이 막 찼으면 마감 채널에도 알린다.
+  if (joinedGame) await announceNewApplication(joinedGame, user.id, joinedWaiting, confirmedAfter);
   if (becameFull) await announceRecruitmentComplete(gameId);
-  else if (joinedGame)
-    await announceNewApplication(joinedGame, user.id, joinedWaiting, confirmedAfter);
+  await refreshRecruitPost(gameId);
 
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/participants`);

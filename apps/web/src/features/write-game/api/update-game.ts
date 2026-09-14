@@ -2,7 +2,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { db, games, participants, getCurrentUser } from "@/shared/server";
+import { db, games, participants, getCurrentUser, refreshRecruitPost } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 import { fromKstDateTimeInput } from "@/shared/lib";
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
@@ -46,6 +46,7 @@ export async function updateGame(id: string, values: GameFormValues): Promise<Ac
     .returning({ id: games.id });
 
   if (updated.length === 0) return { error: "수정 권한이 없습니다." };
+  await refreshRecruitPost(id);
 
   return { redirect: `/games/${id}` };
 }

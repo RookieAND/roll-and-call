@@ -1,5 +1,6 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { db, games, notifyGameCreated, getCurrentUser } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 import { fromKstDateTimeInput } from "@/shared/lib";
@@ -38,7 +39,10 @@ export async function createGame(values: GameFormValues): Promise<ActionResult> 
     where: (g, { eq }) => eq(g.id, created!.id),
     with: { gm: { columns: { username: true } } },
   });
-  if (game) await notifyGameCreated(game, game.gm?.username ?? "?");
+  const threadId = game && (await notifyGameCreated(game, game.gm?.username ?? "?"));
+  if (threadId) {
+    await db.update(games).set({ discordThreadId: threadId }).where(eq(games.id, created!.id));
+  }
 
   return { redirect: `/games/${created!.id}` };
 }
