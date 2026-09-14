@@ -1,6 +1,6 @@
 import { Skeleton, VStack } from "@trpg/ui";
 
-// GameList Suspense 폴백이자 app/games/loading.tsx의 카드 셰이머.
+// GameList Suspense 폴백이자 app/games/(list)/loading.tsx의 카드 셰이머.
 // GameCard(썸네일 없는 경우)와 줄 높이를 맞춘다: 제목 heading3 22px · 룰 body2 21px · GM 아바타 24px.
 export function GameListSkeleton() {
   return (
