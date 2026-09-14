@@ -6,12 +6,12 @@ export const GAME_STATUS = {
   confirmed: "confirmed",
 } as const satisfies Record<GameStatus, GameStatus>;
 
-// 사용자 관점에선 정원 충족(confirmed)과 기한 경과(closed) 모두 "모집 마감".
-// 색만 다르게(초록=정원 충족 / 회색=기한 경과) 구분한다.
+// 정원 충족(confirmed)은 마감이 아니다: 대기 신청을 받아 2차 세션으로 나눌 수 있다.
+// 색으로도 구분한다(초록=정원 충족 / 회색=기한 경과).
 export const gameStatusLabel: Record<GameStatus, string> = {
   recruiting: "모집 중",
   closed: "모집 마감",
-  confirmed: "모집 마감",
+  confirmed: "대기 모집",
 };
 
 // Badge/Progress color token per status (shared by card, list item, detail).

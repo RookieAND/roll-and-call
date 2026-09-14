@@ -5,7 +5,7 @@ import { availabilities, db, games, participants } from "./db";
 
 export const GAMES_PAGE_SIZE = 12;
 
-// 목록에 노출되는 모집 중 게임만(기한 내 + 정원 여유 + 미완료). 이름이 곧 필터 규칙.
+// 목록에 노출되는 모집 중 게임만(기한 내 + 미완료). 정원이 차도 대기 신청 → 2차 세션 분리가 가능하므로 노출한다.
 export async function getRecruitingGamesPage(
   page: number,
   filter: GamesFilter = {},
@@ -18,11 +18,9 @@ export async function getRecruitingGamesPage(
   }
   // 플레이 완료(확정 세션이 지난 게임)는 목록에서 항상 제외한다.
   conds.push(or(isNull(games.confirmedAt), gt(games.confirmedAt, now))!);
-  // 목록에는 모집 중(기한 내 + 정원 여유)인 구인만 노출한다.
+  conds.push(gt(games.endDate, now));
+  const where = and(...conds);
   // ponytail: inner alias "p" + raw column, else RQB re-aliases participants.gameId to the outer games table → "games"."game_id" (does not exist).
-  const filled = sql`(select count(*) from ${participants} "p" where "p"."game_id" = ${games.id}) >= ${games.maxPlayers}`;
-  conds.push(and(gt(games.endDate, now), sql`not (${filled})`)!);
-  const where = conds.length > 0 ? and(...conds) : undefined;
   const remaining = sql`${games.maxPlayers} - (select count(*) from ${participants} "p" where "p"."game_id" = ${games.id})`;
   const orderBy =
     filter.sort === "deadline"
