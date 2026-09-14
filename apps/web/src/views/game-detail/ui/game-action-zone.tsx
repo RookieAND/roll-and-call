@@ -42,12 +42,13 @@ export function GameActionZone({
     // 일시 지정형은 등록 때부터 confirmedAt이 있지만 모집 중이면 참여하기를 보여야 한다.
     sessionConfirmed: isSessionLocked(game),
     isWaiting: viewerStatus === PARTICIPANT_STATUS.waiting,
-    isClosed: status === GAME_STATUS.closed, // 기한 경과만. 정원 충족은 대기 신청 가능이라 마감이 아니다.
+    // 기한 경과, 또는 대기 신청을 끈 게임의 정원 충족(full). 대기 받는 정원 충족(confirmed)은 마감이 아니다.
+    isClosed: status === GAME_STATUS.closed || status === GAME_STATUS.full,
     isSignedIn: Boolean(viewerId),
     viewerConfirmed: viewerStatus === PARTICIPANT_STATUS.confirmed,
   });
 
-  const isClosed = status === GAME_STATUS.closed;
+  const isClosed = status === GAME_STATUS.closed || status === GAME_STATUS.full;
   // 정원 충족이어도 신청은 받는다(초과분은 대기).
   const isFull = status === GAME_STATUS.confirmed;
   const joinLabel = isFull ? "대기 신청하기" : "참여하기";

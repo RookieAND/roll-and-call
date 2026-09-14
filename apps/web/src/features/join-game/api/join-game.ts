@@ -46,6 +46,10 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
     );
     const status =
       confirmedCount < game.maxPlayers ? PARTICIPANT_STATUS.confirmed : PARTICIPANT_STATUS.waiting;
+    // 대기 신청을 끈 게임은 정원이 차면 받지 않는다.
+    if (status === PARTICIPANT_STATUS.waiting && !game.waitlistEnabled) {
+      return { error: "정원이 가득 차 신청할 수 없습니다." };
+    }
 
     const inserted = await tx
       .insert(participants)

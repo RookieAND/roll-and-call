@@ -3,6 +3,8 @@ import { SCHEDULE_MODE, SCHEDULE_MODES } from "@/entities/game";
 
 // 세션 예정일 범위 상한(일). 스키마 검증과 달력 max가 같은 값을 본다.
 export const GAME_RANGE_MAX_DAYS = 14;
+// 진행 이미지 장수 상한. 스키마 검증과 업로드 칸 수가 같은 값을 본다.
+export const GAME_IMAGES_MAX = 5;
 // String-based (RHF-friendly: input type === output type). The server action
 // re-validates and converts strings to DB types (Number/Date).
 export const gameFormSchema = z
@@ -24,6 +26,10 @@ export const gameFormSchema = z
     rangeStart: z.string().optional(),
     rangeEnd: z.string().optional(),
     thumbnailUrl: z.string().optional(),
+    images: z
+      .array(z.url())
+      .max(GAME_IMAGES_MAX, `이미지는 최대 ${GAME_IMAGES_MAX}장까지 올릴 수 있습니다.`),
+    waitlistEnabled: z.boolean(),
   })
   .superRefine((v, ctx) => {
     if (v.scheduleMode === SCHEDULE_MODE.fixed && !v.confirmedAt) {

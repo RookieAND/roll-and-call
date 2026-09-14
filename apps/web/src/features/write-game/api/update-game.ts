@@ -2,7 +2,14 @@
 
 import { and, eq } from "drizzle-orm";
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { db, games, participants, getCurrentUser, refreshRecruitPost } from "@/shared/server";
+import {
+  db,
+  games,
+  participants,
+  getCurrentUser,
+  refreshRecruitPost,
+  removeUnusedGameFiles,
+} from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 import { fromKstDateTimeInput } from "@/shared/lib";
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
@@ -27,6 +34,12 @@ export async function updateGame(id: string, values: GameFormValues): Promise<Ac
     };
   }
 
+  // 저장 뒤 빠진 파일을 지우려고 이전 썸네일·이미지를 먼저 읽어 둔다.
+  const [before] = await db
+    .select({ thumbnailUrl: games.thumbnailUrl, images: games.images })
+    .from(games)
+    .where(and(eq(games.id, id), eq(games.gmId, user.id)));
+
   const updated = await db
     .update(games)
     .set({
@@ -34,8 +47,10 @@ export async function updateGame(id: string, values: GameFormValues): Promise<Ac
       rule: v.rule,
       synopsis: v.synopsis || null,
       thumbnailUrl: v.thumbnailUrl || null,
+      images: v.images,
       playTime: v.playTime || null,
       maxPlayers: Number(v.maxPlayers),
+      waitlistEnabled: v.waitlistEnabled,
       scheduleMode: v.scheduleMode,
       endDate: fromKstDateTimeInput(v.endDate),
       rangeStart: v.rangeStart || null,
@@ -47,6 +62,14 @@ export async function updateGame(id: string, values: GameFormValues): Promise<Ac
 
   if (updated.length === 0) return { error: "수정 권한이 없습니다." };
   await refreshRecruitPost(id);
+
+  // 교체·삭제된 썸네일과 진행 이미지 파일을 정리한다(다른 게임이 쓰는 파일은 남는다).
+  if (before) {
+    const kept = new Set<string>([v.thumbnailUrl ?? "", ...v.images]);
+    await removeUnusedGameFiles(
+      [before.thumbnailUrl, ...before.images].filter((url) => url !== null && !kept.has(url)),
+    );
+  }
 
   return { redirect: `/games/${id}` };
 }

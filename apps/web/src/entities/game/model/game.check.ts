@@ -11,14 +11,27 @@ const future = new Date(Date.now() + DAY);
 const past = new Date(Date.now() - DAY);
 
 // 기한 경과가 정원보다 우선
-assert.equal(deriveGameStatus({ maxPlayers: 4, endDate: past, participantCount: 4 }), "closed");
+const waitlistOn = { waitlistEnabled: true };
 assert.equal(
-  deriveGameStatus({ maxPlayers: 4, endDate: future, participantCount: 4 }),
+  deriveGameStatus({ maxPlayers: 4, endDate: past, participantCount: 4, ...waitlistOn }),
+  "closed",
+);
+assert.equal(
+  deriveGameStatus({ maxPlayers: 4, endDate: future, participantCount: 4, ...waitlistOn }),
   "confirmed",
 );
 assert.equal(
-  deriveGameStatus({ maxPlayers: 4, endDate: future, participantCount: 1 }),
+  deriveGameStatus({ maxPlayers: 4, endDate: future, participantCount: 1, ...waitlistOn }),
   "recruiting",
+);
+// 대기 신청을 끄면 정원이 찼을 때 "full"(신청 마감). 기한 경과는 여전히 closed가 우선.
+assert.equal(
+  deriveGameStatus({ maxPlayers: 4, endDate: future, participantCount: 4, waitlistEnabled: false }),
+  "full",
+);
+assert.equal(
+  deriveGameStatus({ maxPlayers: 4, endDate: past, participantCount: 4, waitlistEnabled: false }),
+  "closed",
 );
 
 // 정원은 확정자만 센다

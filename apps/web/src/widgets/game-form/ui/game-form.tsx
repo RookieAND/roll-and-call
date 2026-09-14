@@ -19,7 +19,7 @@ type Props = {
   defaultGame?: Game;
   submitLabel: string;
   successMessage?: string;
-  // 시안 3a: 등록은 2-Step 위저드, 수정(3b)은 단일 페이지.
+  // 시안 3a: 등록은 3-Step 위저드(기본 → 이미지 → 일정), 수정(3b)은 단일 페이지.
   wizard?: boolean;
 };
 
@@ -49,6 +49,8 @@ export function GameForm({
       rangeStart: defaultGame?.rangeStart ?? "",
       rangeEnd: defaultGame?.rangeEnd ?? "",
       thumbnailUrl: defaultGame?.thumbnailUrl ?? "",
+      images: defaultGame?.images ?? [],
+      waitlistEnabled: defaultGame?.waitlistEnabled ?? true,
     },
   });
 

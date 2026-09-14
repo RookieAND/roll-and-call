@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, TextInput } from "@trpg/ui";
+import { Field } from "@trpg/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
 import { SCHEDULE_MODE } from "@/entities/game";
 import type { GameFormValues } from "@/features/write-game";
@@ -10,13 +10,10 @@ import { CoordinationRangeFields } from "./coordination-range-fields";
 import { FixedSessionField } from "./fixed-session-field";
 import { ScheduleModeField } from "./schedule-mode-field";
 
-const MAX_PLAYERS = 20;
-
-// Step 2(모집 조건): 인원 · 일정 방식 · 세션 일정 · 모집 마감.
+// Step 3(일정): 일정 방식 · 세션 일정 · 모집 마감.
 // 일정 방식에 따라 가운데 블록만 통째로 바뀐다.
 export function GameScheduleFields({ form }: { form: UseFormReturn<GameFormValues> }) {
   const {
-    register,
     control,
     setValue,
     watch,
@@ -26,19 +23,6 @@ export function GameScheduleFields({ form }: { form: UseFormReturn<GameFormValue
 
   return (
     <>
-      <div className="w-1/2">
-        <Field label="최대 인원" htmlFor="maxPlayers" required error={errors.maxPlayers?.message}>
-          <TextInput
-            id="maxPlayers"
-            type="number"
-            min={1}
-            max={MAX_PLAYERS}
-            invalid={!!errors.maxPlayers}
-            {...register("maxPlayers")}
-          />
-        </Field>
-      </div>
-
       <ScheduleModeField
         value={mode}
         onChange={(next) => setValue("scheduleMode", next, { shouldDirty: true })}

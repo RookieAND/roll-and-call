@@ -21,6 +21,7 @@ export function GameCard({ game }: Props) {
     maxPlayers: game.maxPlayers,
     endDate: game.endDate,
     participantCount: count,
+    waitlistEnabled: game.waitlistEnabled,
   });
 
   return (

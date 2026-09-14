@@ -56,8 +56,10 @@ export async function createSecondRound(
         rule: parent.rule,
         synopsis: parent.synopsis,
         thumbnailUrl: parent.thumbnailUrl,
+        images: parent.images,
         playTime: parent.playTime,
         maxPlayers: parent.maxPlayers,
+        waitlistEnabled: parent.waitlistEnabled,
         scheduleMode: "coordinate",
         // KST 자정 기준. 서버 타임존에 따라 마감이 밀리지 않게 오프셋을 명시한다.
         endDate: new Date(`${rangeEnd}T23:59:59+09:00`),

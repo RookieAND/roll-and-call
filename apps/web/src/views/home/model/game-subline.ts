@@ -22,6 +22,7 @@ export function gameSubline({
 
   const gm = `GM ${game.gm?.username ?? "?"}`;
   if (game.confirmedAt) return `${gm} · ${formatDateTime(game.confirmedAt)}`;
-  if (status === GAME_STATUS.closed) return `${gm} · 마감`;
+  // 기한 경과, 또는 대기 신청을 끈 게임의 정원 충족(full) 모두 신청이 막힌 상태.
+  if (status === GAME_STATUS.closed || status === GAME_STATUS.full) return `${gm} · 마감`;
   return `${gm} · 조율 중`;
 }

@@ -4,6 +4,7 @@ import type { GameDetailData } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { GameDetailActions } from "./game-detail-actions";
 import { GameDetailHeader } from "./game-detail-header";
+import { GameImageGallery } from "./game-image-gallery";
 import { GameInfoTable } from "./game-info-table";
 import { GameRosterPreview } from "./game-roster-preview";
 
@@ -18,6 +19,7 @@ export function GameDetail({ game, viewerId }: { game: GameDetailData; viewerId:
     maxPlayers: game.maxPlayers,
     endDate: game.endDate,
     participantCount: confirmed.length,
+    waitlistEnabled: game.waitlistEnabled,
   });
 
   return (
@@ -51,6 +53,8 @@ export function GameDetail({ game, viewerId }: { game: GameDetailData; viewerId:
                 </Text>
               </VStack>
             )}
+
+            {game.images.length > 0 && <GameImageGallery images={game.images} />}
 
             <GameRosterPreview
               confirmed={confirmed}

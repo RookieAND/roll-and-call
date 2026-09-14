@@ -6,6 +6,7 @@ import type { GameFormValues } from "@/features/write-game";
 import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";
 import { GameBasicsFields } from "./game-basics-fields";
+import { GameMediaFields } from "./game-media-fields";
 import { GameScheduleFields } from "./game-schedule-fields";
 
 // 수정(시안 3b): 모든 필드를 한 페이지에 편다. 앱바·컨테이너는 뷰가 소유한다.
@@ -32,6 +33,7 @@ export function GameFormPage({
           className={cn("m-0 flex flex-col gap-4 border-0 p-0", pending && "opacity-45")}
         >
           <GameBasicsFields form={form} defaultPlayTime={defaultPlayTime} />
+          <GameMediaFields form={form} />
           <GameScheduleFields form={form} />
         </fieldset>
         {rootError && (

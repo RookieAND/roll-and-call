@@ -2,17 +2,21 @@
 
 import { Field, TextInput, Textarea } from "@trpg/ui";
 import type { UseFormReturn } from "react-hook-form";
-import { ThumbnailUpload } from "@/features/upload-thumbnail";
 import type { GameFormValues } from "@/features/write-game";
 import { PlayTimeField } from "./play-time-field";
+import { WaitlistField } from "./waitlist-field";
 
-// Step 1(게임 자체, 변하지 않는 정보) 필드. 위저드의 "다음"은 이 필드들만 검증한다.
+const MAX_PLAYERS = 20;
+
+// Step 1(게임 자체 + 모집 규모): 이름·룰·설명·플레이타임·최대 인원·대기 신청.
+// 위저드의 "다음"은 이 필드들만 검증한다.
 export const GAME_BASICS_FIELDS = [
   "title",
   "rule",
   "synopsis",
   "playTime",
-  "thumbnailUrl",
+  "maxPlayers",
+  "waitlistEnabled",
 ] as const satisfies readonly (keyof GameFormValues)[];
 
 export function GameBasicsFields({
@@ -57,9 +61,21 @@ export function GameBasicsFields({
         error={errors.playTime?.message}
         onChange={(value) => setValue("playTime", value, { shouldDirty: true })}
       />
-      <ThumbnailUpload
-        value={watch("thumbnailUrl")}
-        onChange={(url) => setValue("thumbnailUrl", url)}
+      <div className="w-1/2">
+        <Field label="최대 인원" htmlFor="maxPlayers" required error={errors.maxPlayers?.message}>
+          <TextInput
+            id="maxPlayers"
+            type="number"
+            min={1}
+            max={MAX_PLAYERS}
+            invalid={!!errors.maxPlayers}
+            {...register("maxPlayers")}
+          />
+        </Field>
+      </div>
+      <WaitlistField
+        value={watch("waitlistEnabled")}
+        onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
       />
     </>
   );

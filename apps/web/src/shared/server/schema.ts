@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
   type AnyPgColumn,
+  boolean,
   date,
   integer,
   pgEnum,
@@ -39,8 +40,12 @@ export const games = pgTable("games", {
   rule: text("rule").notNull(),
   synopsis: text("synopsis"),
   thumbnailUrl: text("thumbnail_url"),
+  // 시놉시스·진행용 이미지(최대 5장, 올린 순서). 상세 갤러리에 보인다.
+  images: text("images").array().notNull().default([]),
   playTime: text("play_time"),
   maxPlayers: integer("max_players").notNull(),
+  // false면 정원이 찼을 때 대기 신청을 받지 않는다(status "full").
+  waitlistEnabled: boolean("waitlist_enabled").notNull().default(true),
   scheduleMode: scheduleMode("schedule_mode").notNull(),
   endDate: timestamp("end_date", { withTimezone: true }).notNull(),
   // coordinate mode only: the When2Meet date range

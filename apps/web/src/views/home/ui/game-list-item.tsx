@@ -28,6 +28,7 @@ export function GameListItem({ game, role = "player" }: Props) {
     maxPlayers: game.maxPlayers,
     endDate: game.endDate,
     participantCount: confirmedCount,
+    waitlistEnabled: game.waitlistEnabled,
   });
   const subline = gameSubline({ game, role, status, confirmedCount });
 
