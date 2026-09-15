@@ -1,5 +1,5 @@
-import { discordBotApi } from "./discord-bot-api";
-import type { DiscordMessage } from "./discord-types";
+import { discordBotApi } from "../api/discord-bot-api";
+import type { DiscordMessage } from "../model/discord-types";
 
 // 메시지에서 연 스레드의 id는 그 메시지 id와 같다.
 export async function startDiscordThread(

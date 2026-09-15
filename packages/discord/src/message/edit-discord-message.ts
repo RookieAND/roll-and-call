@@ -1,6 +1,6 @@
-import { discordBotApi } from "./discord-bot-api";
-import { discordMessageBody } from "./discord-message-body";
-import type { DiscordMessageInput } from "./discord-types";
+import { discordBotApi } from "../api/discord-bot-api";
+import { discordMessageBody } from "../api/discord-message-body";
+import type { DiscordMessageInput } from "../model/discord-types";
 
 // 봇이 보낸 메시지만 고칠 수 있다. 빠진 필드(content 등)는 그대로 남는다.
 export async function editDiscordMessage(
