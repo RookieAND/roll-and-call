@@ -28,8 +28,6 @@ export const profiles = pgTable("profiles", {
   bio: text("bio"),
   // 기본 가능 시간대 preset keys (weekday_evening | weekend_day | weekend_evening)
   defaultSlots: text("default_slots").array(),
-  // GM 설정: 세션이 확정되면 디스코드 세션 채널을 자동으로 연다(모든 구인에 적용).
-  discordAutoOpen: boolean("discord_auto_open").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
@@ -59,14 +57,6 @@ export const games = pgTable("games", {
   notifiedAt: timestamp("notified_at", { withTimezone: true }),
   // 모집 공지 메시지에서 연 Discord 스레드 (= 공지 메시지 id). 참여/이탈 알림이 여기로 간다.
   discordThreadId: text("discord_thread_id"),
-  // GM이 연 세션 채널 묶음(Discord 카테고리). "opening"은 생성 중 선점 표시.
-  discordCategoryId: text("discord_category_id"),
-  // 세션 채널 바로가기 대상(PLAYER-CHAT 텍스트 채널 id)
-  discordChannelId: text("discord_channel_id"),
-  // 이 구인에서만 세션 채널을 쓰지 않는다(GM의 자동 개설 설정을 덮어쓴다).
-  discordRoomsDisabled: boolean("discord_rooms_disabled").notNull().default(false),
-  // GM이 세션을 종료해 채널을 아카이브한 시각
-  sessionEndedAt: timestamp("session_ended_at", { withTimezone: true }),
   // 2회차 승계: 이 게임을 만든 원본(직전 회차). null이면 1회차.
   parentGameId: uuid("parent_game_id").references((): AnyPgColumn => games.id, {
     onDelete: "set null",

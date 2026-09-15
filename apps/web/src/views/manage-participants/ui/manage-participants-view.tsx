@@ -3,12 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isSessionLocked, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { LoginRequired } from "@/features/auth";
-import {
-  discordChannelUrl,
-  getCurrentUser,
-  getGameParticipants,
-  isDiscordConfigured,
-} from "@/shared/server";
+import { getCurrentUser, getGameParticipants } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 import { summarizeRoster } from "../model/roster-summary";
 import { toManagedMember } from "../model/to-managed-member";
@@ -68,15 +63,6 @@ export async function ManageParticipantsView({ id }: { id: string }) {
       })}
       isCoordinate={isCoordinate}
       locked={isSessionLocked(game)}
-      discord={{
-        configured: isDiscordConfigured(),
-        opened: game.discordCategoryId !== null,
-        ended: game.sessionEndedAt !== null,
-        disabled: game.discordRoomsDisabled,
-        autoOpen: game.gm?.discordAutoOpen ?? false,
-        sessionConfirmed: isCoordinate ? game.confirmedAt !== null : true,
-        channelUrl: discordChannelUrl(game.discordChannelId),
-      }}
     />
   );
 }

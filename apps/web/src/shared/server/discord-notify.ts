@@ -67,7 +67,19 @@ export async function notifyGameCreated(game: Game, gmName: string): Promise<str
     content: "📢 새로운 구인 글이 올라왔어요!",
     embeds: [recruitEmbed(game, gmName, 0)],
   });
-  return message && startDiscordThread(message, game.title);
+  const threadId = message && (await startDiscordThread(message, game.title));
+  if (threadId) await sendGameImages(game, threadId);
+  return threadId;
+}
+
+// 진행용 이미지는 스레드에 한 메시지로 모은다. url이 같은 embed는 디스코드가 갤러리(4장씩)로 묶는다.
+// ponytail: 구인 수정으로 이미지가 바뀌어도 다시 보내지 않는다. 필요해지면 refreshRecruitPost에서 처리.
+export async function sendGameImages(game: Game, threadId: string) {
+  if (game.images.length === 0) return;
+  const url = gameUrl(game.id) ?? game.images[0];
+  await sendDiscordMessage(threadId, {
+    embeds: game.images.map((image) => ({ url, image: { url: image } })),
+  });
 }
 
 // 모집 공지의 인원·내용을 현재 DB 기준으로 고친다. 로스터나 구인 내용이 바뀐 뒤에 부른다.
@@ -160,8 +172,8 @@ export async function notifyGameLeft(gameId: string, userId: string, removedByGm
   await sendDiscordMessage(game.discordThreadId, { embeds: [embed] });
 }
 
-export async function notifyRecruitmentComplete(game: Game, gmName: string, mentionIds: string[]) {
-  const mentions = mentionIds.map((id) => `<@${id}>`).join(" ");
+// 구인 완료는 멘션 없이 알리기만 한다.
+export async function notifyRecruitmentComplete(game: Game, gmName: string) {
   const embed: DiscordEmbed = {
     title: `🎉 ${game.title} — 구인 완료!`,
     url: gameUrl(game.id),
@@ -175,12 +187,7 @@ export async function notifyRecruitmentComplete(game: Game, gmName: string, ment
     timestamp: new Date().toISOString(),
   };
 
-  // 멘션은 content에 있어야 실제 알림이 울린다 (embed 내부 멘션은 핑 안 감).
-  await sendDiscordMessage(closedChannelId(), {
-    content: mentions,
-    embeds: [embed],
-    userMentions: mentionIds,
-  });
+  await sendDiscordMessage(closedChannelId(), { embeds: [embed] });
 }
 
 // 세션 시작 1시간 전 리마인더. 멘션은 content에 있어야 핑이 간다.

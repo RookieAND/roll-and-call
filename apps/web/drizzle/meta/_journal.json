@@ -78,6 +78,13 @@
       "when": 1789600000000,
       "tag": "0010_discord_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1789483814091,
+      "tag": "0011_remarkable_lord_tyger",
+      "breakpoints": true
     }
   ]
 }

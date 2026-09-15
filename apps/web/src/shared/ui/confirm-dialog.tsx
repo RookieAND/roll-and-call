@@ -3,7 +3,7 @@
 import { Dialog } from "@base-ui-components/react/dialog";
 import { Button } from "@trpg/ui";
 
-// 확인은 되돌릴 수 없는 동작에만 쓴다(삭제·내보내기·세션 종료·세션 확정·채널 열기).
+// 확인은 되돌릴 수 없는 동작에만 쓴다(삭제·내보내기·세션 확정).
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;

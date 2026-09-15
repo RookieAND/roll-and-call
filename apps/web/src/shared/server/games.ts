@@ -121,7 +121,7 @@ export async function getGameParticipants(gameId: string) {
   const game = await db.query.games.findFirst({
     where: (g, { eq: eqOp }) => eqOp(g.id, gameId),
     with: {
-      gm: { columns: { id: true, username: true, avatarUrl: true, discordAutoOpen: true } },
+      gm: { columns: { id: true, username: true, avatarUrl: true } },
       participants: {
         columns: { userId: true, joinedAt: true, status: true },
         with: { user: { columns: { username: true, avatarUrl: true } } },

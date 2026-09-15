@@ -1,5 +1,5 @@
 // 봇 토큰으로 부르는 Discord REST. 상주 봇 프로세스(gateway)는 없다 — 전부 서버 액션에서 한 번씩 호출한다.
-// ponytail: 429(rate limit)는 재시도 없이 실패로 올린다. 세션 채널은 GM이 가끔 여는 거라 충분.
+// ponytail: 429(rate limit)는 재시도 없이 실패로 올린다. 알림은 가끔 가는 거라 충분.
 
 export type DiscordEmbedField = { name: string; value: string; inline?: boolean };
 
@@ -15,8 +15,6 @@ export type DiscordEmbed = {
 };
 
 type DiscordMessage = { id: string; channel_id: string };
-type DiscordChannel = { id: string; name: string; type: number; parent_id: string | null };
-type Overwrite = { id: string; type: 0 | 1; allow: string; deny: string };
 
 async function botApi<T>(path: string, { method = "GET", body }: { method?: string; body?: unknown } = {}) {
   const token = process.env.DISCORD_BOT_TOKEN;
@@ -27,7 +25,8 @@ async function botApi<T>(path: string, { method = "GET", body }: { method?: stri
       authorization: `Bot ${token}`,
       ...(body === undefined ? {} : { "content-type": "application/json" }),
     },
-    body: body === undefined ? undefined : JSON.stringify(body),
+    // 제목·개요 등 유저 입력에 섞인 @everyone/@here가 글자로도 보이지 않게 지운다 (핑은 allowed_mentions가 이미 막음).
+    body: body === undefined ? undefined : JSON.stringify(body).replace(/@(everyone|here)\b/g, ""),
     signal: AbortSignal.timeout(8000),
   });
   if (!res.ok) throw new Error(`Discord ${method} ${path} → ${res.status} ${await res.text()}`);
@@ -113,177 +112,5 @@ export async function renameDiscordThread(threadId: string, name: string) {
     await botApi(`/channels/${threadId}`, { method: "PATCH", body: { name: next } });
   } catch (err) {
     console.warn("Discord thread rename failed:", err);
-  }
-}
-
-// --- 세션 채널 ---
-
-const VIEW = 1n << 10n;
-const SEND = 1n << 11n;
-const HISTORY = 1n << 16n;
-const CONNECT = 1n << 20n;
-const SPEAK = 1n << 21n;
-const MANAGE_CHANNELS = 1n << 4n;
-
-const MEMBER = VIEW | SEND | HISTORY | CONNECT | SPEAK;
-const BOT = VIEW | MANAGE_CHANNELS; // @everyone 가림 뒤에서도 봇이 채널을 고칠 수 있게
-
-const TEXT = 0;
-const VOICE = 2;
-const CATEGORY = 4;
-
-// 생성 중 선점 표시. 두 번 눌러도 카테고리가 하나만 생기게 DB에 먼저 박는다.
-export const DISCORD_ROOMS_OPENING = "opening";
-
-const ACTIVE_NAME = /^세션 (\d+) · /;
-const ARCHIVED_PREFIX = "[종료] ";
-
-const member = (id: string, allow: bigint, deny = 0n): Overwrite => ({
-  id,
-  type: 1,
-  allow: allow.toString(),
-  deny: deny.toString(),
-});
-
-function guildId() {
-  const id = process.env.DISCORD_GUILD_ID;
-  if (!id) throw new Error("DISCORD_GUILD_ID not set");
-  return id;
-}
-
-// 봇 토큰과 서버가 설정돼 있어야 채널·공지·알림이 동작한다. 화면의 "연동 안 됨" 판단에 쓴다.
-export function isDiscordConfigured(): boolean {
-  return Boolean(process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID);
-}
-
-// 채널 바로가기 주소. 서버가 설정돼 있지 않으면 null.
-export function discordChannelUrl(channelId: string | null): string | null {
-  const guild = process.env.DISCORD_GUILD_ID;
-  return guild && channelId ? `https://discord.com/channels/${guild}/${channelId}` : null;
-}
-
-// GM 전용 채널(🔒GM-CHAT · 🎙️GM-VOICE). 텍스트 채널 이름은 디스코드가 소문자로 바꾸므로 대소문자를 가리지 않는다.
-const GM_ONLY_CHANNEL = /gm-(chat|voice)/i;
-
-// 서버에 없는 유저는 권한을 줄 수 없으니 뺀다.
-async function onlyGuildMembers(guild: string, ids: string[]) {
-  const found = await Promise.all(
-    ids.map((id) => botApi(`/guilds/${guild}/members/${id}`).then(() => id, () => null)),
-  );
-  return found.filter((id): id is string => id !== null);
-}
-
-// 카테고리 "세션 N · 제목" + 하위 채널 5개. N은 진행 중(아카이브 안 된) 세션의 빈 번호 중 가장 작은 것.
-export async function createDiscordSessionRooms({
-  title,
-  gmDiscordId,
-  playerDiscordIds,
-}: {
-  title: string;
-  gmDiscordId: string;
-  playerDiscordIds: string[];
-}): Promise<{ categoryId: string; channelId: string }> {
-  const guild = guildId();
-  const [me, channels, [gmId], playerIds] = await Promise.all([
-    botApi<{ id: string }>("/users/@me"),
-    botApi<DiscordChannel[]>(`/guilds/${guild}/channels`),
-    onlyGuildMembers(guild, [gmDiscordId]),
-    onlyGuildMembers(guild, playerDiscordIds),
-  ]);
-
-  const used = new Set(
-    channels
-      .filter((c) => c.type === CATEGORY)
-      .map((c) => Number(ACTIVE_NAME.exec(c.name)?.[1]))
-      .filter(Boolean),
-  );
-  let n = 1;
-  while (used.has(n)) n++;
-
-  const base: Overwrite[] = [
-    { id: guild, type: 0, allow: "0", deny: VIEW.toString() }, // @everyone 역할 id = 서버 id
-    member(me.id, BOT),
-  ];
-  const gm = gmId ? [member(gmId, MEMBER)] : [];
-  const everyone = [...gm, ...playerIds.map((id) => member(id, MEMBER))];
-
-  const create = (name: string, type: number, overwrites: Overwrite[], parentId?: string) =>
-    botApi<{ id: string }>(`/guilds/${guild}/channels`, {
-      method: "POST",
-      body: { name, type, parent_id: parentId, permission_overwrites: [...base, ...overwrites] },
-    });
-
-  const category = await create(`세션 ${n} · ${title}`.slice(0, 100), CATEGORY, everyone);
-  const created = [category.id];
-  let playerChatId = "";
-  try {
-    const rooms: [string, number, Overwrite[]][] = [
-      ["🔒GM-CHAT", TEXT, gm],
-      ["💬PLAYER-CHAT", TEXT, everyone],
-      ["📜INFO", TEXT, everyone],
-      ["🎙️GM-VOICE", VOICE, gm],
-      ["🔊PLAYER-VOICE", VOICE, everyone],
-    ];
-    for (const [name, type, overwrites] of rooms) {
-      const channel = await create(name, type, overwrites, category.id);
-      created.push(channel.id);
-      if (name === "💬PLAYER-CHAT") playerChatId = channel.id;
-    }
-  } catch (err) {
-    // 반쯤 만들어진 채널은 치운다 (카테고리를 지워도 하위 채널은 남는다).
-    await Promise.allSettled(created.map((id) => botApi(`/channels/${id}`, { method: "DELETE" })));
-    throw err;
-  }
-  // 앱의 "열기" 바로가기는 참여자가 모두 들어가는 PLAYER-CHAT으로 보낸다.
-  return { categoryId: category.id, channelId: playerChatId };
-}
-
-// 채널을 연 뒤에 확정된 참여자를 합류시킨다. 이미 권한이 있으면 같은 값을 다시 쓰므로 여러 번 불러도 된다.
-// GM 전용 채널은 건드리지 않는다. 서버에 없는 유저는 권한을 줄 수 없으니 뺀다.
-export async function grantDiscordSessionRooms(categoryId: string, discordIds: string[]) {
-  const guild = guildId();
-  const [channels, ids] = await Promise.all([
-    botApi<DiscordChannel[]>(`/guilds/${guild}/channels`),
-    onlyGuildMembers(guild, discordIds),
-  ]);
-  if (ids.length === 0) return;
-
-  const targets = channels.filter(
-    (c) => c.id === categoryId || (c.parent_id === categoryId && !GM_ONLY_CHANNEL.test(c.name)),
-  );
-  for (const channel of targets) {
-    for (const id of ids) {
-      await botApi(`/channels/${channel.id}/permissions/${id}`, {
-        method: "PUT",
-        body: { type: 1, allow: MEMBER.toString(), deny: "0" },
-      });
-    }
-  }
-}
-
-// 참여자 권한을 모두 걷어낸다. 기록은 남기고, GM만 읽기 전용으로 볼 수 있다.
-export async function archiveDiscordSessionRooms(categoryId: string, gmDiscordId: string) {
-  const guild = guildId();
-  const [me, channels] = await Promise.all([
-    botApi<{ id: string }>("/users/@me"),
-    botApi<DiscordChannel[]>(`/guilds/${guild}/channels`),
-  ]);
-
-  const permission_overwrites: Overwrite[] = [
-    { id: guild, type: 0, allow: "0", deny: VIEW.toString() },
-    member(me.id, BOT),
-    member(gmDiscordId, VIEW | HISTORY, SEND | CONNECT),
-  ];
-
-  for (const c of channels.filter((c) => c.id === categoryId || c.parent_id === categoryId)) {
-    // 카테고리 이름을 바꿔 "세션 N" 번호를 비운다.
-    const rename =
-      c.id === categoryId && !c.name.startsWith(ARCHIVED_PREFIX)
-        ? { name: `${ARCHIVED_PREFIX}${c.name}`.slice(0, 100) }
-        : {};
-    await botApi(`/channels/${c.id}`, {
-      method: "PATCH",
-      body: { ...rename, permission_overwrites },
-    });
   }
 }

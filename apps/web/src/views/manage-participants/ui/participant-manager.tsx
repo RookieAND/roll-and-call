@@ -3,7 +3,6 @@ import { AppBar, EmptyState } from "@/shared/ui";
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { CopyLinkButton } from "./copy-link-button";
-import { DiscordSessionActions, type DiscordRoomsStatus } from "./discord-session-actions";
 import { NextRoundBanner } from "./next-round-banner";
 import { RosterHeader } from "./roster-header";
 import { RosterList } from "./roster-list";
@@ -19,10 +18,9 @@ type Props = {
   isCoordinate: boolean;
   // 세션 확정 후에는 서버가 명단 조정을 막는다 → 조작 버튼을 숨긴다.
   locked: boolean;
-  discord: DiscordRoomsStatus;
 };
 
-// GM 전용 참여자 관리 화면. 한 문장 요약 → 신청 순서 명단 → 미제출·잠김 안내 → 다음 회차 → 디스코드 상태.
+// GM 전용 참여자 관리 화면. 한 문장 요약 → 신청 순서 명단 → 미제출·잠김 안내 → 다음 회차.
 // 각 블록이 자기 동작과 열림 상태를 들고 있어서, 여기서는 순서와 여백만 정한다.
 export function ParticipantManager({
   gameId,
@@ -34,7 +32,6 @@ export function ParticipantManager({
   summary,
   isCoordinate,
   locked,
-  discord,
 }: Props) {
   const isEmpty = confirmed.length + waiting.length === 0;
   const showFullNote = summary.isFull && waiting.length > 0 && !locked;
@@ -101,8 +98,6 @@ export function ParticipantManager({
               confirmedAt={confirmedAt}
             />
           )}
-
-          <DiscordSessionActions gameId={gameId} status={discord} confirmedCount={confirmed.length} />
         </VStack>
       </Container>
     </>

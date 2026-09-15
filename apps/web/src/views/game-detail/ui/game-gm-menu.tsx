@@ -8,7 +8,6 @@ import { ConfirmDialog, Sheet } from "@/shared/ui";
 import { useDeleteGame } from "@/features/delete-game";
 
 // GM 본인 시점의 ⋯ 메뉴. 상세에는 글 자신에 대한 것(수정 · 참여자 관리 · 삭제)만 둔다.
-// 디스코드 운영(세션 채널 열기·종료)은 참여자 관리 화면이 맡는다.
 export function GameGmMenu({
   gameId,
   confirmedCount,
@@ -31,8 +30,8 @@ export function GameGmMenu({
   const rosterSummary = `확정 ${confirmedCount} · 대기 ${waitingCount}`;
   const deleteDescription =
     confirmedCount > 0
-      ? `이 구인을 삭제할까요? 되돌릴 수 없습니다. 확정 참여자 ${confirmedCount}명에게 삭제 사실이 따로 전해지지 않습니다. 디스코드 공지·스레드·세션 채널은 그대로 남습니다.`
-      : "이 구인을 삭제할까요? 되돌릴 수 없습니다. 디스코드 공지·스레드·세션 채널은 그대로 남습니다.";
+      ? `이 구인을 삭제할까요? 되돌릴 수 없습니다. 확정 참여자 ${confirmedCount}명에게 삭제 사실이 따로 전해지지 않습니다. 디스코드 공지·스레드는 그대로 남습니다.`
+      : "이 구인을 삭제할까요? 되돌릴 수 없습니다. 디스코드 공지·스레드는 그대로 남습니다.";
 
   return (
     <>
@@ -66,7 +65,7 @@ export function GameGmMenu({
             >
               <span className="font-semibold text-danger-600">구인 삭제</span>
               <Text typography="body4" foreground="hint" render={<span />}>
-                삭제하면 앱에서만 사라집니다. 디스코드 공지·스레드·세션 채널은 남습니다.
+                삭제하면 앱에서만 사라집니다. 디스코드 공지·스레드는 남습니다.
               </Text>
             </Sheet.Item>
           </div>

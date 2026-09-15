@@ -10,7 +10,6 @@ import {
   getCurrentUser,
   notifyGameLeft,
   refreshRecruitPost,
-  syncSessionRoomMembers,
 } from "@/shared/server";
 import type { ActionResult } from "@/shared/api";
 const { confirmed, waiting } = PARTICIPANT_STATUS;
@@ -53,8 +52,7 @@ async function adjustRoster(
 
   revalidate(gameId);
   await after?.();
-  // 세션 채널이 열려 있으면 새로 확정된 사람을 합류시킨다(뒤에 확정되는 사람 자동 합류).
-  await Promise.all([refreshRecruitPost(gameId), syncSessionRoomMembers(gameId)]);
+  await refreshRecruitPost(gameId);
   return {};
 }
 
