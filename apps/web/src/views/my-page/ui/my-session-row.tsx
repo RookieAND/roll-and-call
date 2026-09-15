@@ -18,6 +18,8 @@ export function MySessionRow({
 }) {
   const detailClass = cn("mt-0.5 block", urgent && "text-warning-600");
   const detailForeground = urgent ? undefined : "muted";
+  // 0도 정보라 행은 남기되, 숫자는 한 단계 내려 "없음"으로 읽히게 한다.
+  const countForeground = count === 0 ? "hint" : "normal";
 
   return (
     <Link
@@ -34,7 +36,7 @@ export function MySessionRow({
           </Text>
         )}
       </div>
-      <Text typography="heading3" className="flex-none text-[17px] font-extrabold tabular-nums">
+      <Text typography="heading3" foreground={countForeground} className="flex-none text-[17px] font-extrabold tabular-nums">
         {count}
       </Text>
       <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />

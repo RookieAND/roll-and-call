@@ -50,7 +50,8 @@ export function GameCard({ game }: Props) {
         sizes="(max-width: 412px) 100vw, 412px"
         className={thumbnailClass}
       />
-      <VStack gap={2} className="p-4">
+      {/* 시안 05: 제목 16 · 룰/일정/GM 12 · 인원 12 bold. 제목만 크고 나머지는 한 단계 아래로 내려 위계를 만든다. */}
+      <VStack className="gap-1.5 px-3.5 py-[13px]">
         <HStack justify="between" align="start" gap={2}>
           <HStack align="center" gap={2} className="min-w-0">
             <GameRoundBadge round={game.round} />
@@ -61,25 +62,25 @@ export function GameCard({ game }: Props) {
           <GameStatusBadge status={status} />
         </HStack>
         {meta && (
-          <Text typography="body2" foreground="muted" className="truncate">
+          <Text typography="body4" foreground="muted" className="truncate">
             {meta}
           </Text>
         )}
         <HStack justify="between" align="center" gap={2}>
-          <Text typography="body2" className={scheduleClass}>
+          <Text typography="body4" className={scheduleClass}>
             {scheduleText}
           </Text>
           {line.deadlineShort && (
-            <Text typography="body2" className={deadlineClass}>
+            <Text typography="body4" className={deadlineClass}>
               {line.deadlineShort}
             </Text>
           )}
         </HStack>
-        <HStack justify="between" align="center" gap={2}>
+        <HStack justify="between" align="center" gap={2} className="mt-1">
           <GameGmLabel name={game.gm?.username} avatarUrl={game.gm?.avatarUrl} />
           <HStack gap={2} align="center" className="shrink-0">
             <Progress value={count} max={game.maxPlayers} color={barColor} className="w-[52px]" />
-            <Text typography="subtitle1" className="tabular-nums">
+            <Text typography="subtitle2" className="tabular-nums">
               {count}/{game.maxPlayers}
             </Text>
           </HStack>

@@ -11,11 +11,12 @@ export function summarizeMySessions(sessions: MySessions) {
   return {
     joined: {
       count: sessions.joined.length,
-      detail: detail([
-        ["확정", count(sessions.joined, "confirmed")],
-        ["조율 중", count(sessions.joined, "scheduling")],
-        ["대기", count(sessions.joined, "waiting")],
-      ]),
+      detail:
+        detail([
+          ["확정", count(sessions.joined, "confirmed")],
+          ["조율 중", count(sessions.joined, "scheduling")],
+          ["대기", count(sessions.joined, "waiting")],
+        ]) ?? (sessions.joined.length === 0 ? "신청한 구인이 없습니다" : null),
       href: "/me/sessions",
     },
     hosting: {
@@ -25,10 +26,10 @@ export function summarizeMySessions(sessions: MySessions) {
       detail:
         needsConfirm > 0
           ? `확정 필요 ${needsConfirm}`
-          : detail([
+          : (detail([
               ["모집 중", count(sessions.hosted, "recruiting")],
               ["확정", count(sessions.hosted, "confirmed")],
-            ]),
+            ]) ?? (sessions.hosted.length === 0 ? "아직 구인을 열지 않았습니다" : null)),
       href: "/me/sessions?tab=hosted",
     },
     past: {
