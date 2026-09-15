@@ -1,10 +1,12 @@
 import { Button, Container } from "@trpg/ui";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
 import { isSessionLocked, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { LoginRequired } from "@/features/auth";
 import { getCurrentUser, getGameParticipants } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
+
 import { summarizeRoster } from "../model/roster-summary";
 import { toManagedMember } from "../model/to-managed-member";
 import { ParticipantManager } from "./participant-manager";
@@ -15,7 +17,7 @@ export async function ManageParticipantsView({ id }: { id: string }) {
   const { game, availableUserIds } = data;
 
   const user = await getCurrentUser();
-  // 조용히 튕기지 않는다: 비로그인은 로그인 안내, GM이 아니면 권한 안내를 그 자리에서.
+  // 조용히 튕기지 않는다: 비로그인·비GM에게 그 자리에서 안내한다.
   if (!user || user.id !== game.gmId) {
     return (
       <>
@@ -42,7 +44,8 @@ export async function ManageParticipantsView({ id }: { id: string }) {
   }
 
   const roster = splitRoster(game.participants);
-  const toMember = (p: (typeof roster.confirmed)[number]) => toManagedMember(p, availableUserIds);
+  const toMember = (participant: (typeof roster.confirmed)[number]) =>
+    toManagedMember(participant, availableUserIds);
   const confirmed = roster.confirmed.map(toMember);
   const waiting = roster.waiting.map(toMember);
   const isCoordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;

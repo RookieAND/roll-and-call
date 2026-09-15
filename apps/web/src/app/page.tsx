@@ -4,6 +4,6 @@ export default async function Page({
 }: {
   searchParams: Promise<{ auth_error?: string }>;
 }) {
-  const { auth_error } = await searchParams;
-  return <HomeView authError={auth_error === "1"} />;
+  const { auth_error: authError } = await searchParams;
+  return <HomeView authError={authError === "1"} />;
 }

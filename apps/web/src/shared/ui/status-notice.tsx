@@ -1,7 +1,6 @@
 import { cn } from "@trpg/ui";
 import type { ReactNode } from "react";
 
-// 상태 안내 박스: 확정(success) / 마감·잠금(muted) 톤 하나로 통일.
 export function StatusNotice({
   tone = "muted",
   className,

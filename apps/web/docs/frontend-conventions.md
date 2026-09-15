@@ -4,14 +4,15 @@
 
 ## 1. 레이어 경계
 
-| 레이어        | 역할                                                            | 예                                                                                |
-| ------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `packages/ui` | 도메인 무관 순수 UI 키트                                        | Button, IconButton, Chip, Select, TextInput, Field, Card                          |
-| `shared/ui`   | 앱 공용(도메인 약함) 조합 컴포넌트                              | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                              |
-| `entities/*`  | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위        | game, profile, availability                                                       |
-| `features/*`  | **단일 사용자 동작**(server action·toggle 등 상태 변경)         | JoinGameButton, DeleteGameButton, GameStatusFilter, GameScheduleLink, ThumbnailUpload |
-| `widgets/*`   | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)          | game-form, session-list                                                           |
-| `views/*`     | 한 화면의 조합 전체 + 라우트 글루                               | GamesView, GameDetail, ParticipantManager                                         |
+| 레이어             | 역할                                                      | 예                                                                                    |
+| ------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `packages/ui`      | 도메인 무관 순수 UI 키트                                  | Button, IconButton, Chip, Select, TextInput, Field, Card                              |
+| `packages/discord` | Discord REST 클라이언트(도메인 무관)                      | sendDiscordMessage, editDiscordMessage, startDiscordThread, renameDiscordThread       |
+| `shared/ui`        | 앱 공용(도메인 약함) 조합 컴포넌트                        | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                                  |
+| `entities/*`       | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위 | game, profile, availability                                                           |
+| `features/*`       | **단일 사용자 동작**(server action·toggle 등 상태 변경)   | JoinGameButton, DeleteGameButton, GameStatusFilter, GameScheduleLink, ThumbnailUpload |
+| `widgets/*`        | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)    | game-form, session-list                                                               |
+| `views/*`          | 한 화면의 조합 전체 + 라우트 글루                         | GamesView, GameDetail, ParticipantManager                                             |
 
 **import 방향은 아래로만**: `shared ← entities ← features ← widgets ← views`. 상위 레이어를 import하지 않는다(예: feature는 widget을 import 금지).
 
@@ -21,22 +22,23 @@
 
 **shared 세그먼트는 런타임으로 나뉜다**: 배럴은 tree-shaking되지 않으므로 서버 전용 모듈이 섞이면 클라이언트 번들이 깨진다.
 
-| 세그먼트         | 내용                                                                          |
-| ---------------- | ----------------------------------------------------------------------------- |
-| `shared/api`     | 클라이언트 안전: `ActionResult`, Supabase 브라우저 클라이언트, 목록 정렬/필터 파라미터 |
-| `shared/server`  | 서버 전용(`server-only`): drizzle `db`·스키마, DB 읽기 쿼리, Supabase 서버 클라이언트·`getCurrentUser`, Discord 알림 |
-| `shared/lib`     | 순수 유틸: 날짜 포맷, 슬롯 계산                                                |
-| `shared/ui`      | 앱 공용 조합 컴포넌트 + `toast`                                                |
+| 세그먼트                | 내용                                                                                                                 |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `shared/api`            | 클라이언트 안전: `ActionResult`, Supabase 브라우저 클라이언트, 목록 정렬/필터 파라미터                               |
+| `shared/server`         | 서버 전용(`server-only`): drizzle `db`·스키마, DB 읽기 쿼리, Supabase 서버 클라이언트·`getCurrentUser`, Discord 알림 |
+| `shared/lib`            | 순수 유틸: 날짜 포맷, 슬롯 계산                                                                                      |
+| `shared/ui`             | 앱 공용 조합 컴포넌트 + `toast`, `useAction`, `BoundaryFallback`                                                     |
+| `shared/error-boundary` | 클라이언트: `ErrorBoundary`(`catchError`). check 스크립트가 로드하지 않도록 `shared/ui`와 분리 (§8)                  |
 
 DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 아니라 `shared/server`에 둔다(FSD 권장). 클라이언트 컴포넌트가 스키마 타입만 필요하면 `import type { Game } from "@/shared/server"`로 가져온다(타입 import는 번들에 남지 않는다). 세션 쿠키 갱신은 유일한 사용처인 `src/proxy.ts`가 소유한다.
 
 **레이어마다 나누는 축이 다르다.** 같은 `game`이라는 낱말이 여러 레이어에 나와도 기준은 다르다.
 
-| 레이어     | 나누는 축   | 답하는 질문           | 예                        |
-| ---------- | ----------- | --------------------- | ------------------------- |
-| `entities` | 명사        | 이것은 무엇인가       | game, profile, availability |
-| `features` | 동사        | 사용자가 무엇을 하는가 | join-game, delete-game    |
-| `views`    | 화면        | 이 라우트는 무엇인가   | games, game-detail        |
+| 레이어     | 나누는 축 | 답하는 질문            | 예                          |
+| ---------- | --------- | ---------------------- | --------------------------- |
+| `entities` | 명사      | 이것은 무엇인가        | game, profile, availability |
+| `features` | 동사      | 사용자가 무엇을 하는가 | join-game, delete-game      |
+| `views`    | 화면      | 이 라우트는 무엇인가   | games, game-detail          |
 
 **feature 슬라이스는 하나의 동작이다.** FSD 문서의 표현으로 "하나의 피처는 사용자에게 유용한 하나의 기능이며, 여러 기능이 한 피처에 구현되면 경계 위반"이다. `manage-game`처럼 아무 동작도 지칭하지 않는 포괄어로 묶으면 엔티티명만 피한 자루가 된다. 단, 엔티티와 같은 시험대를 적용한다. **쪼갰을 때 교차 import가 생기면 한 동작으로 본다.** 지금 남아 있는 두 예외는 그래서다.
 
@@ -55,11 +57,11 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 
 **엔티티는 실제 개념 단위로 나누되, 쪼개면 교차 import가 생기는 것은 합친다.** FSD는 "슬라이스는 같은 레이어의 다른 슬라이스를 쓸 수 없다"고 못박으므로, 이 규칙이 곧 분할 가능 여부의 시험대다. 현재 엔티티는 셋이다.
 
-| 엔티티 | 담는 개념 | 비고 |
-| ------ | --------- | ---- |
-| `game` | 구인글 + 참여자 로스터 + 세션 일정 | 셋은 한 aggregate다. `deriveGameStatus`가 참여자 수로 모집 상태를 정하고, 세션 일정은 games의 컬럼이다. 쪼개면 양방향 교차 import가 생긴다 |
-| `availability` | 가능 시간 집계·후보 슬롯 | game 쪽과 서로 참조가 없어 독립 슬라이스로 뗐다 |
-| `profile` | 사용자 표시 정보 | 특정 feature만 쓰는 값(기본 가능 시간대 프리셋)은 그 feature의 `model`에 둔다 |
+| 엔티티         | 담는 개념                          | 비고                                                                                                                                       |
+| -------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `game`         | 구인글 + 참여자 로스터 + 세션 일정 | 셋은 한 aggregate다. `deriveGameStatus`가 참여자 수로 모집 상태를 정하고, 세션 일정은 games의 컬럼이다. 쪼개면 양방향 교차 import가 생긴다 |
+| `availability` | 가능 시간 집계·후보 슬롯           | game 쪽과 서로 참조가 없어 독립 슬라이스로 뗐다                                                                                            |
+| `profile`      | 사용자 표시 정보                   | 특정 feature만 쓰는 값(기본 가능 시간대 프리셋)은 그 feature의 `model`에 둔다                                                              |
 
 **entity에는 도메인 규칙과 원자 표시만**: 상태 판정(`deriveGameStatus`, `deriveSessionState`), 정원·순번 계산, 작은 표시 단위. 특정 화면의 문구·탭·라우트를 만드는 뷰 모델(`toSessionCard`, `bucketHosted`)이나 액션 존 분기(`deriveActionView`), 목록 행 문구(`gameSubline`)는 그걸 그리는 view·widget의 `model/`에 둔다. 화면별 구분이 필요하면 새 타입을 만들지 말고 도메인에 이미 있는 `SessionRole`(`host` | `player`)을 쓴다.
 
@@ -113,3 +115,24 @@ return <Button variant={buttonVariant} />;
 - **읽는 글씨는 4.5:1, 아이콘·그래픽은 3:1**이 기준이다. `gray-400`은 이제 장식 전용(마감 진행바, 비활성 페이지네이션)이며 글씨에 쓰지 않는다.
 - 반전이 필요한 대비는 토큰 조합으로 표현한다. 선택된 칩의 `bg-gray-900 text-surface`는 라이트에서 검정 배경에 흰 글씨, 다크에서 밝은 배경에 어두운 글씨로 알아서 뒤집힌다.
 - 예외는 둘뿐이다. 토큰을 정의하는 `styles.css`, 그리고 테마와 무관한 고정 색인 아바타의 사람별 팔레트(`avatar.tsx`). 그 외에 불가피하면 해당 줄에 `tokens-check-ignore` 주석으로 이유를 남긴다.
+
+## 7. 코드 스타일
+
+- **주석은 꼭 필요할 때만.** 코드를 다시 설명하는 주석, 섹션 헤더, JSX 라벨 주석은 쓰지 않는다. 남기는 것은 `ponytail:`, `tokens-check-ignore`, 도구 지시자, 그리고 없으면 버그가 다시 생길 법한 "왜"뿐이다.
+- **줄임말 이름 금지.** `p`/`g`/`e`/`err`/`res`/`ctx`/`prev` 대신 `participant`/`game`/`event`/`error`/`response`/`context`/`previous`처럼 전체 단어를 쓴다.
+- **도메인 값은 상수로.** 문자열 리터럴 대신 `as const` 객체(`GAME_STATUS`, `PARTICIPANT_STATUS`, `SCHEDULE_MODE`, `SESSION_STATE`, `SESSION_ROLE`, `GAME_SORT`, `GAME_STATUS_FILTER` 등)를 쓴다. 새 유니온은 `export const FOO = {...} as const; export type Foo = (typeof FOO)[keyof typeof FOO];`로 정의한다.
+- **import 정렬**은 `oxfmt`(`.oxfmtrc.json`의 `sortImports`)가 맡고, 그룹(builtin · external · internal · 상대 경로) 사이에 빈 줄을 넣는다.
+- **1 파일 1 컴포넌트/함수.** 파일에 최상위 함수·컴포넌트가 둘 이상이면 각각 파일로 나눈다. 함수가 커지면 이름 붙인 작은 함수로 나눠 파일을 분리한다. 예외는 `*.check.ts`, `index.ts` 배럴, 함수 본문 안의 핸들러, 그리고 Next.js 라우트 파일이 요구하는 export뿐이다.
+
+## 8. 에러 처리
+
+에러마다 **어디에 보일지(`ERROR_DISPLAY`: `toast` | `page`)**를 정하고, 보여 주는 일은 공용 경로가 맡는다.
+
+- **서버 액션은 예상된 실패를 throw하지 않고 `ActionResult`로 돌려준다.** 기본은 토스트이고, 화면을 더 쓸 수 없는 실패(게임이 사라짐 등)는 `errorDisplay: ERROR_DISPLAY.page`(예: `GAME_NOT_FOUND_RESULT`)로 표시한다. 서버에서 throw한 에러는 프로덕션에서 메시지가 지워지므로 문구를 전하는 수단이 아니다.
+- **클라이언트는 `useAction()`(`@/shared/ui`)으로 액션을 부른다.** `run(action, { onSuccess, onError })`가 트랜지션·토스트·`redirect` 이동을 처리한다. 폼처럼 인라인으로 보일 곳만 `onError`를 넘긴다. page 에러와 예상 못 한 throw는 트랜지션을 타고 가장 가까운 ErrorBoundary로 올라간다.
+- **경계**
+  - `app/error.tsx`(라우트)·`app/global-error.tsx`(루트 레이아웃)는 `BoundaryFallback`으로 에러 화면을 그린다.
+  - 화면 일부만 감쌀 때는 `ErrorBoundary`(`@/shared/error-boundary`)를 쓴다. `display={ERROR_DISPLAY.toast}`로 감싼 영역은 토스트 + 재시도 버튼으로 끝나고, page 에러는 부모 경계로 다시 던진다(예: 상세 하단 액션 존).
+  - `ErrorBoundary`는 `next/error`의 `catchError`를 쓰는데, Node(tsx)에서 named import가 안 돼 `shared/ui` 배럴에 넣으면 `pnpm check`가 깨진다. 그래서 세그먼트를 따로 둔다.
+- **React Query**: 조회는 보여 줄 데이터가 없을 때만 경계로 던지고(재조회 실패로 편집 중 상태를 날리지 않는다), 뮤테이션 실패는 `MutationCache`가 토스트로 알린다. 문구는 `meta.errorMessage`로 바꾼다. `mutationFn`에서 `ActionResult.error`는 `AppError`로 바꿔 던진다.
+- **경계 밖**(토스트 콜백, 파일 업로드 같은 비트랜지션 async)은 `try/catch`에서 `reportError`(토스트) 또는 인라인 상태로 처리한다.

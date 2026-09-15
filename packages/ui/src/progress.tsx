@@ -14,10 +14,10 @@ export type ProgressProps = {
 };
 
 export function Progress({ value, max = 100, color = "recruiting", className }: ProgressProps) {
-  const pct = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
+  const percent = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
   return (
     <div className={cn("h-1 w-full overflow-hidden rounded-sm bg-gray-100", className)}>
-      <div className={cn("h-full rounded-sm", fills[color])} style={{ width: `${pct}%` }} />
+      <div className={cn("h-full rounded-sm", fills[color])} style={{ width: `${percent}%` }} />
     </div>
   );
 }

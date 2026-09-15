@@ -1,8 +1,9 @@
 import { HStack, Text, cn } from "@trpg/ui";
+
 import { GameStatusBadge, type GameStatus, type ScheduleLine } from "@/entities/game";
+
 import { GameGmMenu } from "./game-gm-menu";
 
-// 제목 + 모집 상태 배지 + 상태 한 줄(일정 · 마감 D-n). GM에게만 ⋯ 메뉴가 붙는다.
 export function GameDetailHeader({
   gameId,
   title,

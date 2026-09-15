@@ -2,15 +2,15 @@
 
 import { Button, Field, Text, TextInput, Textarea, VStack } from "@trpg/ui";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { ConfirmDialog, toast } from "@/shared/ui";
+import { useState } from "react";
+
+import { ConfirmDialog, toast, useAction } from "@/shared/ui";
+
 import { updateProfile } from "../api/update-profile";
+import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
 import { AvatarRefreshField } from "./avatar-refresh-field";
 import { SlotPresetField } from "./slot-preset-field";
 
-const BIO_MAX = 200;
-
-// 프로필 편집. 하단 바는 취소 · 저장 반반, 바꾼 채로 나가면 한 번 묻는다. 로그아웃은 마이페이지 설정 한 곳.
 export function EditProfileForm({
   defaultUsername,
   defaultBio = "",
@@ -28,7 +28,7 @@ export function EditProfileForm({
   const [slots, setSlots] = useState<string[]>(defaultSlots);
   const [failure, setFailure] = useState<{ error: string; field?: string } | null>(null);
   const [confirmingLeave, setConfirmingLeave] = useState(false);
-  const [pending, startTransition] = useTransition();
+  const { pending, run } = useAction();
 
   const dirty =
     username !== defaultUsername ||
@@ -38,14 +38,9 @@ export function EditProfileForm({
   function submit(event: React.FormEvent) {
     event.preventDefault();
     setFailure(null);
-    startTransition(async () => {
-      const result = await updateProfile({ username, bio, defaultSlots: slots });
-      if (result.error) {
-        setFailure({ error: result.error, field: result.field });
-        return;
-      }
-      toast.success("프로필을 저장했습니다");
-      if (result.redirect) router.push(result.redirect);
+    run(() => updateProfile({ username, bio, defaultSlots: slots }), {
+      onSuccess: () => toast.success("프로필을 저장했습니다"),
+      onError: (result) => setFailure({ error: result.error, field: result.field }),
     });
   }
 
@@ -54,9 +49,8 @@ export function EditProfileForm({
     else router.push("/me");
   }
 
-  // 서버가 지목한 필드 옆에 붙이고, 지목이 없으면 버튼 위에 둔다.
-  const usernameError = failure?.field === "username" ? failure.error : undefined;
-  const bioError = failure?.field === "bio" ? failure.error : undefined;
+  const usernameError = failure?.field === PROFILE_FIELD.username ? failure.error : undefined;
+  const bioError = failure?.field === PROFILE_FIELD.bio ? failure.error : undefined;
   const formError = failure && !failure.field ? failure.error : null;
 
   return (
@@ -73,9 +67,9 @@ export function EditProfileForm({
           <TextInput
             id="username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(event) => setUsername(event.target.value)}
             invalid={!!usernameError}
-            maxLength={30}
+            maxLength={USERNAME_MAX_LENGTH}
           />
         </Field>
 
@@ -84,9 +78,9 @@ export function EditProfileForm({
             <Textarea
               id="bio"
               value={bio}
-              onChange={(e) => setBio(e.target.value)}
+              onChange={(event) => setBio(event.target.value)}
               placeholder="주로 크툴루를 굴립니다. 평일 저녁 선호."
-              maxLength={BIO_MAX}
+              maxLength={BIO_MAX_LENGTH}
               invalid={!!bioError}
               className="min-h-[76px]"
             />
@@ -96,7 +90,7 @@ export function EditProfileForm({
               마이페이지와 참여자 명단에 함께 보입니다.
             </Text>
             <Text typography="body4" foreground="hint" className="shrink-0 tabular-nums">
-              {bio.length} / {BIO_MAX}
+              {bio.length} / {BIO_MAX_LENGTH}
             </Text>
           </div>
         </div>
@@ -111,7 +105,13 @@ export function EditProfileForm({
           </Text>
         )}
         <div className="flex gap-2 [&>*]:flex-1">
-          <Button type="button" variant="outline" size="lg" className="h-[50px]" onClick={requestLeave}>
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            className="h-[50px]"
+            onClick={requestLeave}
+          >
             취소
           </Button>
           <Button type="submit" size="lg" className="h-[50px]" loading={pending}>

@@ -1,16 +1,17 @@
-import { notFound } from "next/navigation";
-import Link from "next/link";
 import { Button, Container, VStack } from "@trpg/ui";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
 import { LoginRequired } from "@/features/auth";
 import { getGameById, getCurrentUser } from "@/shared/server";
-import { EditGameForm } from "@/widgets/game-form";
 import { AppBar, EmptyState } from "@/shared/ui";
+import { EditGameForm } from "@/widgets/game-form";
+
 export async function EditGameView({ id }: { id: string }) {
   const game = await getGameById(id);
   if (!game) notFound();
 
   const user = await getCurrentUser();
-  // GM이면 수정 폼이 앱바·하단 바까지 화면 셸을 소유한다.
   if (user?.id === game.gmId) return <EditGameForm game={game} />;
 
   return (
@@ -18,7 +19,6 @@ export async function EditGameView({ id }: { id: string }) {
       <AppBar back={`/games/${id}`} title="구인 수정" />
       <Container size="md">
         <VStack gap={6} className="py-6">
-          {/* 조용히 튕기지 않는다: 비로그인은 로그인 안내, GM이 아니면 권한 안내. */}
           {user ? (
             <EmptyState
               title="GM만 볼 수 있는 화면입니다"

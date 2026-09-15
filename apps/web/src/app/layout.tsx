@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+
 import { BottomNav, NavigationTracker, Toaster } from "@/shared/ui";
+
 import "./globals.css";
 import { QueryProvider } from "./query-provider";
 
@@ -21,7 +23,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           id="theme-init"
           strategy="beforeInteractive"
           // eslint-disable-next-line react/no-danger -- pre-paint theme to avoid FOUC
-          // theme: 'light' | 'dark' | 'system'(또는 없음) → system은 OS 설정을 따른다.
+          // shared/ui ThemeSetting과 같은 규칙: 'system'(또는 없음)은 OS 설정을 따른다.
           dangerouslySetInnerHTML={{
             __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}`,
           }}

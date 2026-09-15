@@ -1,7 +1,7 @@
 import { Badge, HStack, Text, VStack, cn } from "@trpg/ui";
+
 import type { RosterSummary } from "../model/roster-summary";
 
-// 화면 맨 위 한 문장: 게임명 → 확정 n/정원 + 대기 배지 → 마감 한 줄 → 기한이 무슨 뜻인지.
 // "신청(확정+대기 합)"을 정원 옆에 두면 잘못 읽히므로 확정만 정원과 나란히 둔다.
 export function RosterHeader({
   title,

@@ -1,7 +1,6 @@
 import { Avatar, Button, Text } from "@trpg/ui";
 import Link from "next/link";
 
-// 내 신원: 아바타 · 이름(h1) · 한 줄 소개 + 프로필 편집 진입.
 export function MyPageHeader({
   name,
   avatarUrl,
@@ -29,7 +28,11 @@ export function MyPageHeader({
           {bioText}
         </Text>
       </div>
-      <Button asChild variant="outline" className="h-9 flex-none rounded-[10px] px-3 text-[12.5px] font-bold">
+      <Button
+        asChild
+        variant="outline"
+        className="h-9 flex-none rounded-[10px] px-3 text-[12.5px] font-bold"
+      >
         <Link href="/me/edit">편집</Link>
       </Button>
     </div>

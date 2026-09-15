@@ -1,0 +1,17 @@
+{
+  "name": "@trpg/discord",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@trpg/typescript-config": "workspace:*",
+    "@types/node": "^26.2.0",
+    "typescript": "^5.9.3"
+  }
+}

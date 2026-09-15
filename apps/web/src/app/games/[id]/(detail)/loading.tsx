@@ -1,9 +1,8 @@
 import { Container, Skeleton, VStack } from "@trpg/ui";
+
 import { AppBar } from "@/shared/ui";
 
-// GameDetail과 같은 박스를 같은 순서로 그린다. 높이는 실제 줄 높이 기준:
-// 제목 heading1 28px · 뱃지 21px · 상태 줄 body3 20px · 정보표 행 py-3 + 20px(GM 행은 아바타 24px) ·
-// 참여자 헤더 + 진행바 + 아바타 34px · 하단 주 CTA 50px.
+// 높이는 GameDetail의 실제 줄 높이를 따른다. 한쪽만 바꾸면 로딩 후 레이아웃이 튄다.
 const INFO_ROWS = [
   { key: "룰", value: "h-5 w-24" },
   { key: "GM", value: "h-6 w-28" },
@@ -55,7 +54,6 @@ export default function Loading() {
             </VStack>
           </VStack>
 
-          {/* GameDetailActions의 하단 고정 바와 같은 박스(bottom-[58px] = BottomNav 높이). */}
           <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-4 pt-3.5 pb-4">
             <Skeleton className="h-[50px] w-full rounded-xl" />
           </div>

@@ -1,32 +1,15 @@
+import { Pagination, VStack } from "@trpg/ui";
 import Link from "next/link";
-import { Pagination, Text, VStack } from "@trpg/ui";
+
 import { GameCard } from "@/entities/game";
-import { getRecruitingGamesPage } from "@/shared/server";
-import type { GamesFilter } from "@/shared/api";
 import { filterParams, gamesHref } from "@/features/filter-games";
+import type { GamesFilter } from "@/shared/api";
+import type { getRecruitingGamesPage } from "@/shared/server";
+
 import { GamesEmpty } from "./games-empty";
 
 type GamesPage = Awaited<ReturnType<typeof getRecruitingGamesPage>>;
 
-// sticky 헤더의 총 건수. GameList와 같은 조회 프로미스를 await 하므로 쿼리는 한 번만 돈다.
-// 검색어가 있으면 "검색 결과 n건"으로 무엇을 센 숫자인지 말한다.
-export async function GamesCount({
-  promise,
-  searching,
-}: {
-  promise: Promise<GamesPage>;
-  searching: boolean;
-}) {
-  const { total } = await promise;
-  const label = searching ? `검색 결과 ${total}건` : `${total}건`;
-  return (
-    <Text typography="body2" foreground="muted">
-      {label}
-    </Text>
-  );
-}
-
-// 스트리밍 대상: 카드·페이지네이션. 검색/칩/건수/정렬 shell은 GameBoard가 sticky로 렌더한다.
 export async function GameList({
   promise,
   page,
@@ -55,7 +38,7 @@ export async function GameList({
       <Pagination
         page={page}
         totalPages={totalPages}
-        hrefFor={(p) => gamesHref(filterParams({ ...filter, page: p }))}
+        hrefFor={(pageNumber) => gamesHref(filterParams({ ...filter, page: pageNumber }))}
       />
     </>
   );

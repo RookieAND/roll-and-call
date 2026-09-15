@@ -1,10 +1,10 @@
 import { HStack, Text, VStack } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+
 import { GameRow } from "@/entities/game";
 import { getRecruitingGamesPage } from "@/shared/server";
 
-// 비로그인 상태에서도 실제 구인이 돌아간다는 걸 보여주는 맛보기. 조회는 이 블록이 직접 한다.
 const PREVIEW_COUNT = 2;
 
 export async function LandingRecruitingPreview() {

@@ -1,4 +1,5 @@
 import type { ComponentPropsWithRef } from "react";
+
 import { cn } from "./cn";
 
 export type SwitchProps = Omit<ComponentPropsWithRef<"button">, "onChange" | "value"> & {
@@ -6,7 +7,6 @@ export type SwitchProps = Omit<ComponentPropsWithRef<"button">, "onChange" | "va
   onCheckedChange: (checked: boolean) => void;
 };
 
-// 켜고 끄는 설정 한 칸(44×26). 라벨은 호출부가 <label htmlFor>로 붙인다.
 export function Switch({ checked, onCheckedChange, className, ...props }: SwitchProps) {
   return (
     <button

@@ -237,6 +237,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.101.4
         version: 5.101.4(react@19.2.8)
+      '@trpg/discord':
+        specifier: workspace:*
+        version: link:../../packages/discord
       '@trpg/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -305,6 +308,18 @@ importers:
   configs/oxlint-config: {}
 
   configs/typescript-config: {}
+
+  packages/discord:
+    devDependencies:
+      '@trpg/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/typescript-config
+      '@types/node':
+        specifier: ^26.2.0
+        version: 26.2.0
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   packages/ui:
     dependencies:

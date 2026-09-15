@@ -1,6 +1,7 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 import { isValidElement, type ComponentPropsWithRef, type ReactElement } from "react";
+
 import { cn } from "./cn";
 
 const chip = cva(
@@ -22,7 +23,6 @@ const chip = cva(
 
 export type ChipProps = ComponentPropsWithRef<"button"> &
   VariantProps<typeof chip> & {
-    /** Render the single child element (e.g. a Next Link) as the chip. */
     asChild?: boolean;
   };
 

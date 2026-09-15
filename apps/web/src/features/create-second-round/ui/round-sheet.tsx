@@ -1,18 +1,16 @@
 "use client";
 
 import { Button, Text, VStack } from "@trpg/ui";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
+
 import { toKstDateInput } from "@/shared/lib";
-import { ConfirmDialog, Sheet, toast } from "@/shared/ui";
+import { ConfirmDialog, Sheet, toast, useAction } from "@/shared/ui";
+
 import { createSecondRound } from "../api/create-second-round";
+import { DAY_MS } from "../model/second-round";
 import { RoundInheritedList } from "./round-inherited-list";
 import { RoundRangeFields } from "./round-range-fields";
 
-const ONE_DAY_MS = 86_400_000;
-
-// 대기자를 넘겨 다음 회차를 여는 시트. 조율 기간만 입력받는다.
-// 값을 고른 채로 닫으면 입력을 버릴지 한 번 묻는다.
 export function RoundSheet({
   open,
   onOpenChange,
@@ -30,15 +28,13 @@ export function RoundSheet({
   maxPlayers: number;
   confirmedAt: Date | null;
 }) {
-  const router = useRouter();
-  const [pending, startTransition] = useTransition();
+  const { pending, run } = useAction();
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");
   const [confirmingDiscard, setConfirmingDiscard] = useState(false);
 
-  // 1회차가 확정돼 있으면 그 세션 다음 날부터 고를 수 있다.
   const earliest = toKstDateInput(
-    confirmedAt ? new Date(confirmedAt.getTime() + ONE_DAY_MS) : new Date(),
+    confirmedAt ? new Date(confirmedAt.getTime() + DAY_MS) : new Date(),
   );
   const dirty = rangeStart !== "" || rangeEnd !== "";
 
@@ -56,15 +52,11 @@ export function RoundSheet({
   }
 
   function submit() {
-    startTransition(async () => {
-      const result = await createSecondRound(gameId, { rangeStart, rangeEnd });
-      if (result.error) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success("다음 회차를 열었습니다");
-      close();
-      if (result.redirect) router.push(result.redirect);
+    run(() => createSecondRound(gameId, { rangeStart, rangeEnd }), {
+      onSuccess: () => {
+        toast.success("다음 회차를 열었습니다");
+        close();
+      },
     });
   }
 

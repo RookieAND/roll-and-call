@@ -1,9 +1,9 @@
 "use client";
 
 import { Chip, Field, Text } from "@trpg/ui";
+
 import { SLOT_PRESETS } from "@/entities/profile";
 
-// 자주 되는 시간대를 미리 골라 두면 일정 조율 격자가 그 값으로 미리 칠해진다(저장 전 상태).
 export function SlotPresetField({
   value,
   onChange,
@@ -12,7 +12,9 @@ export function SlotPresetField({
   onChange: (next: string[]) => void;
 }) {
   function toggle(key: string) {
-    onChange(value.includes(key) ? value.filter((k) => k !== key) : [...value, key]);
+    onChange(
+      value.includes(key) ? value.filter((selectedKey) => selectedKey !== key) : [...value, key],
+    );
   }
 
   return (
@@ -32,8 +34,8 @@ export function SlotPresetField({
         </div>
       </Field>
       <Text typography="body4" foreground="hint" render={<p />}>
-        일정 조율 화면에 들어가면 이 시간대가 미리 칠해져 있습니다. 그 자리에서 고칠 수 있고, 저장하기
-        전까지는 반영되지 않습니다.
+        일정 조율 화면에 들어가면 이 시간대가 미리 칠해져 있습니다. 그 자리에서 고칠 수 있고,
+        저장하기 전까지는 반영되지 않습니다.
       </Text>
     </div>
   );

@@ -1,12 +1,14 @@
-import { Suspense } from "react";
 import { Container, VStack } from "@trpg/ui";
-import { getRecruitingGamesPage } from "@/shared/server";
+import { Suspense } from "react";
+
 import type { GamesFilter } from "@/shared/api";
-import { GameList, GamesCount } from "./game-list";
+import { getRecruitingGamesPage } from "@/shared/server";
+
+import { GameList } from "./game-list";
 import { GameListSkeleton } from "./game-list-skeleton";
+import { GamesCount } from "./games-count";
 import { GamesToolbar, gamesCountSkeleton } from "./games-toolbar";
 
-// 검색·상태 칩·건수·정렬은 스크롤 중에도 고정되고, 카드 목록만 아래로 흐른다.
 // 하나의 조회 프로미스를 건수와 목록이 공유해, sticky 건수 때문에 쿼리가 두 번 돌지 않게 한다.
 export function GameBoard({ page = 1, filter }: { page?: number; filter: GamesFilter }) {
   const gamesPage = getRecruitingGamesPage(page, filter);

@@ -14,8 +14,7 @@ import {
 
 export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
 
-// confirmed = 확정 로스터, waiting = 대기열. 정원(maxPlayers)만큼 confirmed로 채우고
-// 초과분은 waiting으로 받는다. 승격/강등/자동 승계는 이 값만 바꾼다.
+// 정원(maxPlayers)만큼 confirmed로 채우고 초과분은 waiting. 승격/강등/자동 승계는 이 값만 바꾼다.
 export const participantStatus = pgEnum("participant_status", ["confirmed", "waiting"]);
 
 // Mirror of auth.users, kept in sync by a trigger. `id` equals the Supabase auth uid.
@@ -24,9 +23,7 @@ export const profiles = pgTable("profiles", {
   discordId: text("discord_id").notNull().unique(),
   username: text("username").notNull(),
   avatarUrl: text("avatar_url"),
-  // 한 줄 소개
   bio: text("bio"),
-  // 기본 가능 시간대 preset keys (weekday_evening | weekend_day | weekend_evening)
   defaultSlots: text("default_slots").array(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
@@ -40,7 +37,6 @@ export const games = pgTable("games", {
   rule: text("rule").notNull(),
   synopsis: text("synopsis"),
   thumbnailUrl: text("thumbnail_url"),
-  // 시놉시스·진행용 이미지(최대 5장, 올린 순서). 상세 갤러리에 보인다.
   images: text("images").array().notNull().default([]),
   playTime: text("play_time"),
   maxPlayers: integer("max_players").notNull(),
@@ -48,16 +44,15 @@ export const games = pgTable("games", {
   waitlistEnabled: boolean("waitlist_enabled").notNull().default(true),
   scheduleMode: scheduleMode("schedule_mode").notNull(),
   endDate: timestamp("end_date", { withTimezone: true }).notNull(),
-  // coordinate mode only: the When2Meet date range
   rangeStart: date("range_start"),
   rangeEnd: date("range_end"),
-  // set once the session start is confirmed (both modes route through here)
+  // both schedule modes route through here once the start is confirmed
   confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
   // set when the 1h-before reminder has been sent (dedupe)
   notifiedAt: timestamp("notified_at", { withTimezone: true }),
-  // 모집 공지 메시지에서 연 Discord 스레드 (= 공지 메시지 id). 참여/이탈 알림이 여기로 간다.
+  // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.
   discordThreadId: text("discord_thread_id"),
-  // 2회차 승계: 이 게임을 만든 원본(직전 회차). null이면 1회차.
+  // 직전 회차. null이면 1회차.
   parentGameId: uuid("parent_game_id").references((): AnyPgColumn => games.id, {
     onDelete: "set null",
   }),
@@ -77,7 +72,7 @@ export const participants = pgTable(
     joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
     status: participantStatus("status").notNull().default("confirmed"),
   },
-  (t) => [primaryKey({ columns: [t.gameId, t.userId] })],
+  (table) => [primaryKey({ columns: [table.gameId, table.userId] })],
 );
 
 export const availabilities = pgTable(
@@ -89,10 +84,9 @@ export const availabilities = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade" }),
-    // one row per 30-min slot the user marked available (sparse)
     slotStart: timestamp("slot_start", { withTimezone: true }).notNull(),
   },
-  (t) => [primaryKey({ columns: [t.gameId, t.userId, t.slotStart] })],
+  (table) => [primaryKey({ columns: [table.gameId, table.userId, table.slotStart] })],
 );
 
 export const profilesRelations = relations(profiles, ({ many }) => ({

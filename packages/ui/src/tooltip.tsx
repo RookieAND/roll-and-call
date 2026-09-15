@@ -2,19 +2,18 @@
 
 import { Tooltip as BaseTooltip } from "@base-ui-components/react/tooltip";
 import type { ReactElement, ReactNode } from "react";
+
 import { cn } from "./cn";
 
 export type TooltipProps = {
   content: ReactNode;
-  /** Trigger element. Rendered as-is (no wrapper button), so it can sit inside links. */
+  // rendered as-is (no wrapper button) so it can sit inside links
   children: ReactElement<Record<string, unknown>>;
   side?: "top" | "bottom" | "left" | "right";
-  /** ms before opening on hover */
   delay?: number;
   className?: string;
 };
 
-// Hover/focus tooltip. The popup is an inverted chip: bg-gray-900 + text-surface flip together in dark mode.
 // ponytail: Base UI tooltips don't open on touch; move to Popover if mobile needs tap-to-reveal.
 export function Tooltip({ content, children, side = "top", delay = 300, className }: TooltipProps) {
   return (

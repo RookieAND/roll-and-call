@@ -3,7 +3,6 @@
 import { Dialog } from "@base-ui-components/react/dialog";
 import { Button } from "@trpg/ui";
 
-// 확인은 되돌릴 수 없는 동작에만 쓴다(삭제·내보내기·세션 확정).
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -28,8 +27,8 @@ export function ConfirmDialog({
   onConfirm,
 }: Props) {
   // 처리 중에는 닫히지 않는다. 결과를 모른 채 화면을 떠나지 않게.
-  const handleOpenChange = (next: boolean) => {
-    if (!pending) onOpenChange(next);
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!pending) onOpenChange(nextOpen);
   };
 
   return (

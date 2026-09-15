@@ -3,11 +3,13 @@
 import { Button, Text, cn } from "@trpg/ui";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { useRef, useState } from "react";
-import { uploadThumbnail } from "../api/upload-thumbnail";
-import { formatBytes, IMAGE_ACCEPT, imageFileError } from "./upload-rules";
 
-// 썸네일 업로더 = 목록 카드에서 보일 모양 그대로의 16:9 박스.
-// 제한을 미리 적고, 올린 뒤에는 미리보기 + 파일명·용량 + 교체/삭제, 실패는 그 자리에서 알린다.
+import { uploadThumbnail } from "../api/upload-thumbnail";
+import { formatBytes } from "./format-bytes";
+import { imageFileError } from "./image-file-error";
+import { uploadFailedMessage } from "./upload-failed-message";
+import { IMAGE_ACCEPT } from "./upload-rules";
+
 // ponytail: 스토리지 SDK가 진행률을 주지 않아 %가 아니라 "올리는 중" 스피너만 보인다.
 export function ThumbnailUpload({
   value,
@@ -20,7 +22,6 @@ export function ThumbnailUpload({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
-  // 이번에 고른 파일 정보. 저장돼 있던 썸네일은 파일명을 모른다.
   const [picked, setPicked] = useState<{ name: string; size: number } | null>(null);
 
   const pick = () => inputRef.current?.click();
@@ -36,11 +37,14 @@ export function ThumbnailUpload({
     try {
       const result = await uploadThumbnail(file);
       if ("error" in result) {
-        setError(`올리지 못했습니다. ${result.error}`);
+        setError(uploadFailedMessage(result.error));
         return;
       }
       onChange(result.url);
       setPicked({ name: file.name, size: file.size });
+    } catch (uploadError) {
+      console.error(uploadError);
+      setError(uploadFailedMessage());
     } finally {
       setUploading(false);
     }
@@ -85,7 +89,13 @@ export function ThumbnailUpload({
             <Button variant="outline" size="sm" className="h-9" loading={uploading} onClick={pick}>
               교체
             </Button>
-            <Button variant="danger" size="sm" className="h-9" disabled={uploading} onClick={remove}>
+            <Button
+              variant="danger"
+              size="sm"
+              className="h-9"
+              disabled={uploading}
+              onClick={remove}
+            >
               삭제
             </Button>
           </div>

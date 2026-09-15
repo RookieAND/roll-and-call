@@ -8,7 +8,7 @@ const ROOTS = [
   resolve(new URL(".", import.meta.url).pathname, "../../../packages/ui/src"),
 ];
 // 토큰 정의 자체와, 테마와 무관한 고정 색(사람별 아바타 팔레트)은 예외.
-const ALLOW = [/styles\.css$/, /packages\/ui\/src\/avatar\.tsx$/];
+const ALLOW = [/styles\.css$/, /packages\/ui\/src\/avatar(-color\.ts|\.tsx)$/];
 const HEX = /#[0-9A-Fa-f]{6}\b/g;
 // 프로젝트 토큰이 아닌 Tailwind 기본 팔레트
 const DEFAULT_PALETTE =

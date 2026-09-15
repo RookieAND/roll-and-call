@@ -1,16 +1,15 @@
-import { Button, Container, Text, VStack } from "@trpg/ui";
-import Link from "next/link";
-import { LoginRequired, SignOutButton } from "@/features/auth";
+import { Container, VStack } from "@trpg/ui";
+
 import { profileDisplay } from "@/entities/profile";
-import { ChevronRight } from "lucide-react";
+import { LoginRequired } from "@/features/auth";
 import { getCurrentUser, getProfile } from "@/shared/server";
+import { AppBar } from "@/shared/ui";
 import { loadMySessions } from "@/widgets/session-list";
-import { AppBar, ThemeSetting } from "@/shared/ui";
+
 import { summarizeMySessions } from "../model/my-page-summary";
 import { MyPageHeader } from "./my-page-header";
-import { MySessionRow } from "./my-session-row";
-
-const GROUP = "overflow-hidden rounded-[14px] border border-gray-200";
+import { MyPageSessions } from "./my-page-sessions";
+import { MyPageSettings } from "./my-page-settings";
 
 export async function MyPageView() {
   const user = await getCurrentUser();
@@ -39,78 +38,8 @@ export async function MyPageView() {
       <Container size="sm">
         <VStack gap={5} className="py-[18px]">
           <MyPageHeader name={name} avatarUrl={avatar} bio={profile?.bio ?? null} />
-
-          <section className="flex flex-col gap-2.5">
-            <div className="flex items-center">
-              <Text typography="heading3" render={<h2 />} className="flex-1">
-                내 세션
-              </Text>
-              <Link href={sessions.joined.href}>
-                <Text
-                  typography="body4"
-                  foreground="primary"
-                  className="inline-flex items-center gap-1 text-[12.5px] font-semibold"
-                >
-                  전체 보기 <ChevronRight size={14} aria-hidden />
-                </Text>
-              </Link>
-            </div>
-
-            {/* 시안 07: 세션이 없어도 세 행을 0으로 둔다. 점선 빈 상태는 목록 화면 몫이고, 여기선 다음 행동만 단다. */}
-            <div className={GROUP}>
-              <MySessionRow
-                label="참여 중"
-                count={sessions.joined.count}
-                detail={sessions.joined.detail}
-                href={sessions.joined.href}
-              />
-              <MySessionRow
-                label="내가 운영"
-                count={sessions.hosting.count}
-                detail={sessions.hosting.detail}
-                urgent={sessions.hosting.urgent}
-                href={sessions.hosting.href}
-              />
-              <MySessionRow
-                label="끝난 세션"
-                count={sessions.past.count}
-                detail="기록으로 남습니다"
-                href={sessions.past.href}
-              />
-            </div>
-            {sessions.isEmpty && (
-              <div className="flex gap-2">
-                <Button asChild variant="outline" className="h-11 flex-1">
-                  <Link href="/games">구인 목록</Link>
-                </Button>
-                <Button asChild className="h-11 flex-1">
-                  <Link href="/games/new">새 구인</Link>
-                </Button>
-              </div>
-            )}
-          </section>
-
-          <section className="flex flex-col gap-2.5">
-            <Text typography="heading3" render={<h2 />}>
-              설정
-            </Text>
-            <div className={GROUP}>
-              <div className="flex items-center gap-3 border-b border-gray-100 p-[13px]">
-                <Text typography="subtitle1" className="flex-1">
-                  화면 테마
-                </Text>
-                <ThemeSetting />
-              </div>
-              <SignOutButton className="h-[52px] w-full justify-between rounded-none border-0 px-[13px] text-[14px] font-bold text-gray-900">
-                로그아웃
-                {handleLabel && (
-                  <Text typography="body3" foreground="hint" render={<span />}>
-                    {handleLabel}
-                  </Text>
-                )}
-              </SignOutButton>
-            </div>
-          </section>
+          <MyPageSessions sessions={sessions} />
+          <MyPageSettings handleLabel={handleLabel} />
         </VStack>
       </Container>
     </>

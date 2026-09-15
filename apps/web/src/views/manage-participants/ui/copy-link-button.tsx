@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@trpg/ui";
+
 import { toast } from "@/shared/ui";
 
-// 신청 0명일 때 다음 행동: 구인글 링크를 복사해 디스코드에 공유한다.
 export function CopyLinkButton({ gameId }: { gameId: string }) {
   async function copy() {
     try {

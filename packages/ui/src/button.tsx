@@ -1,6 +1,7 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 import { isValidElement, type ComponentPropsWithRef, type ReactElement } from "react";
+
 import { cn } from "./cn";
 
 const button = cva(
@@ -30,7 +31,6 @@ const button = cva(
 export type ButtonProps = ComponentPropsWithRef<"button"> &
   VariantProps<typeof button> & {
     loading?: boolean;
-    /** Render the single child element (e.g. a Next Link) with button styling. */
     asChild?: boolean;
   };
 

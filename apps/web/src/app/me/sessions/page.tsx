@@ -6,6 +6,6 @@ export default async function Page({
 }: {
   searchParams: Promise<{ tab?: string; status?: string }>;
 }) {
-  const sp = await searchParams;
-  return <MySessionsView tab={sp.tab} status={sp.status} />;
+  const { tab, status } = await searchParams;
+  return <MySessionsView tab={tab} status={status} />;
 }

@@ -5,20 +5,10 @@ import { Calendar, Text, cn } from "@trpg/ui";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
-// TextInput과 같은 규격(h-11 · r10 · gray-200 · text-sm · px-3). 옆에 놓여도 모양이 어긋나지 않게.
+import { formatPickerDate } from "./format-picker-date";
+
 const triggerClass =
   "flex h-11 w-full items-center justify-between gap-2 rounded-[10px] border bg-surface px-3 text-left text-sm outline-none transition-colors focus:ring-2";
-
-const weekday = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", weekday: "short" });
-
-// "2026-09-30" → "9월 30일 (수)". 앱 전체 날짜 표기와 맞춘다.
-function displayDate(value: string) {
-  const [y, m, d] = value.split("-").map(Number);
-  if (!y || !m || !d) return value;
-  // KST 정오로 만들어 어느 타임존에서 포맷해도 요일이 밀리지 않게 한다.
-  const date = new Date(Date.UTC(y, m - 1, d, 3));
-  return `${m}월 ${d}일 (${weekday.format(date)})`;
-}
 
 export type DatePickerProps = {
   value?: string;
@@ -48,7 +38,7 @@ export function DatePicker({
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger id={id} className={cn(triggerClass, toneClass)}>
         {value ? (
-          <span className="truncate">{displayDate(value)}</span>
+          <span className="truncate">{formatPickerDate(value)}</span>
         ) : (
           <Text foreground="hint" className="truncate">
             {placeholder}
@@ -63,8 +53,8 @@ export function DatePicker({
               value={value || undefined}
               min={min}
               max={max}
-              onSelect={(d) => {
-                onChange(d);
+              onSelect={(date) => {
+                onChange(date);
                 setOpen(false);
               }}
             />

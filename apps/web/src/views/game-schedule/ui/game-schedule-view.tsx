@@ -1,6 +1,7 @@
 import { Button, Container, Text, VStack } from "@trpg/ui";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+
 import {
   ConfirmedSessionNotice,
   countConfirmed,
@@ -10,9 +11,11 @@ import {
   SCHEDULE_MODE,
 } from "@/entities/game";
 import { presetSlotPrefill } from "@/entities/profile";
+import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows, formatDate } from "@/shared/lib";
 import { getCurrentUser, getGameById, getProfile, getResponseCounts } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
+
 import { getScheduleAvailability } from "../api/load-availability";
 import { ScheduleBody } from "./schedule-body";
 
@@ -20,7 +23,7 @@ export async function GameScheduleView({ id }: { id: string }) {
   const game = await getGameById(id);
   if (!game) notFound();
 
-  // 일시 지정 글에는 조율 화면이 없다(진입 버튼도 없음). 주소로 들어오면 상세로 보낸다.
+  // 일시 지정 글에는 조율 화면이 없다. 주소로 들어오면 상세로 보낸다.
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) redirect(`/games/${id}`);
 
   const user = await getCurrentUser();
@@ -28,7 +31,6 @@ export async function GameScheduleView({ id }: { id: string }) {
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
   const appBar = <AppBar back={`/games/${id}`} title="일정 조율" />;
 
-  // 조율 기간이 비어 있는 범위 조율 글: GM에게는 먼저 기간을 정하라고 안내한다.
   if (!game.rangeStart || !game.rangeEnd) {
     if (!isGm) redirect(`/games/${id}`);
     return (
@@ -55,7 +57,6 @@ export async function GameScheduleView({ id }: { id: string }) {
   const days = buildDayColumns(game.rangeStart, game.rangeEnd);
   const timeRows = buildTimeRows();
 
-  // 첫 렌더 값만 서버가 채운다. 이후 갱신은 ScheduleBody의 쿼리 캐시가 맡는다.
   const [initialAvailability, profile, responseCounts] = await Promise.all([
     getScheduleAvailability(id, viewerId),
     involved && viewerId && !game.confirmedAt ? getProfile(viewerId) : null,
@@ -77,22 +78,24 @@ export async function GameScheduleView({ id }: { id: string }) {
             </Text>
           </div>
           {game.confirmedAt && <ConfirmedSessionNotice confirmedAt={game.confirmedAt} />}
-          <ScheduleBody
-            gameId={id}
-            days={days}
-            timeRows={timeRows}
-            initialAvailability={initialAvailability}
-            confirmedAt={game.confirmedAt}
-            involved={involved}
-            isGm={isGm}
-            isSignedIn={viewerId !== null}
-            capacity={game.maxPlayers}
-            gmName={game.gm?.username}
-            prefill={prefill}
-            deadlinePassed={isDeadlinePassed(game.endDate)}
-            confirmedCount={countConfirmed(game.participants)}
-            respondedCount={responseCounts.get(id) ?? 0}
-          />
+          <ErrorBoundary>
+            <ScheduleBody
+              gameId={id}
+              days={days}
+              timeRows={timeRows}
+              initialAvailability={initialAvailability}
+              confirmedAt={game.confirmedAt}
+              involved={involved}
+              isGm={isGm}
+              isSignedIn={viewerId !== null}
+              capacity={game.maxPlayers}
+              gmName={game.gm?.username}
+              prefill={prefill}
+              deadlinePassed={isDeadlinePassed(game.endDate)}
+              confirmedCount={countConfirmed(game.participants)}
+              respondedCount={responseCounts.get(id) ?? 0}
+            />
+          </ErrorBoundary>
         </VStack>
       </Container>
     </>

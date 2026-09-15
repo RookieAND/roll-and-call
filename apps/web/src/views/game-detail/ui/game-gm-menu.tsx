@@ -4,10 +4,10 @@ import { IconButton, Text } from "@trpg/ui";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { ConfirmDialog, Sheet } from "@/shared/ui";
-import { useDeleteGame } from "@/features/delete-game";
 
-// GM 본인 시점의 ⋯ 메뉴. 상세에는 글 자신에 대한 것(수정 · 참여자 관리 · 삭제)만 둔다.
+import { useDeleteGame } from "@/features/delete-game";
+import { ConfirmDialog, Sheet } from "@/shared/ui";
+
 export function GameGmMenu({
   gameId,
   confirmedCount,
@@ -17,7 +17,6 @@ export function GameGmMenu({
   gameId: string;
   confirmedCount: number;
   waitingCount: number;
-  // 조율형이고 이미 확정됐으면 확정 시간을 바꿀 수 있다(서버가 재확정을 받는다).
   canChangeTime: boolean;
 }) {
   const [open, setOpen] = useState(false);
@@ -35,7 +34,11 @@ export function GameGmMenu({
 
   return (
     <>
-      <IconButton aria-label="구인 관리 메뉴" className="h-11 w-11 -mr-2.5" onClick={() => setOpen(true)}>
+      <IconButton
+        aria-label="구인 관리 메뉴"
+        className="h-11 w-11 -mr-2.5"
+        onClick={() => setOpen(true)}
+      >
         <MoreHorizontal size={20} aria-hidden />
       </IconButton>
 

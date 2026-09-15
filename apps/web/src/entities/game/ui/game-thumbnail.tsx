@@ -4,8 +4,7 @@ import { Skeleton, cn } from "@trpg/ui";
 import Image from "next/image";
 import { useState } from "react";
 
-// 순수 표시: URL 없으면 그라데이션, 있으면 로드 완료까지 Skeleton 오버레이.
-// 크기는 호출부가 className(높이·너비)으로 지정 — next/image fill이 부모 박스를 채운다.
+// next/image fill이 부모 박스를 채우므로 크기는 호출부가 className으로 준다.
 export function GameThumbnail({
   url,
   alt = "",

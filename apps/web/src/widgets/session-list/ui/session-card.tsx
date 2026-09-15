@@ -1,23 +1,29 @@
 import { Badge, Button, HStack, Text, cn } from "@trpg/ui";
 import Link from "next/link";
+
 import { GameRoundBadge } from "@/entities/game";
-import type { SessionCardModel, SessionTone } from "../model/session-card";
+
+import {
+  SESSION_ACTION_KIND,
+  SESSION_BUCKET,
+  SESSION_TONE,
+  type SessionCardModel,
+  type SessionTone,
+} from "../model/session-card-model";
 
 const TONE_CLASS: Record<SessionTone, string> = {
-  normal: "text-gray-600",
-  success: "font-semibold text-success-700",
-  warning: "font-semibold text-warning-600",
-  hint: "text-hint",
+  [SESSION_TONE.normal]: "text-gray-600",
+  [SESSION_TONE.success]: "font-semibold text-success-700",
+  [SESSION_TONE.warning]: "font-semibold text-warning-600",
+  [SESSION_TONE.hint]: "text-hint",
 };
 
-// 세션 카드: 제목·배지 → 일정 한 줄 → 룰·GM·인원. 카드 목적지는 항상 구인 상세이고,
-// 할 일(일정 조율·세션 시간 확정)은 카드 안 버튼으로만 간다. eyebrow는 홈 할 일의 이유 한 줄.
 export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebrow?: string }) {
   const cardClass = model.urgent
     ? "border-[1.5px] border-danger-300 bg-danger-50"
     : "border border-gray-200";
-  const titleForeground = model.bucket === "past" ? "muted" : "normal";
-  const actionVariant = model.action?.kind === "confirm-time" ? "solid" : "tinted";
+  const titleForeground = model.bucket === SESSION_BUCKET.past ? "muted" : "normal";
+  const actionVariant = model.action?.kind === SESSION_ACTION_KIND.confirmTime ? "solid" : "tinted";
 
   return (
     <div className={cn("rounded-[14px] p-3.5", cardClass)}>
@@ -38,7 +44,10 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
             {model.badge}
           </Badge>
         </HStack>
-        <Text typography="body3" className={cn("mt-1 block truncate", TONE_CLASS[model.scheduleTone])}>
+        <Text
+          typography="body3"
+          className={cn("mt-1 block truncate", TONE_CLASS[model.scheduleTone])}
+        >
           {model.schedule}
         </Text>
         <Text typography="body4" foreground="hint" className="mt-0.5 block truncate">

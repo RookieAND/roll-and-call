@@ -1,5 +1,7 @@
 import { Text } from "@trpg/ui";
+
 import type { Game } from "@/shared/server";
+
 import { deriveGameStatus } from "../model/derive-game-status";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { scheduleLine } from "../model/schedule-line";
@@ -11,8 +13,6 @@ type GameRowData = Game & {
   participants: { userId: string; status: ParticipantStatus }[];
 };
 
-// 순수 표시: 썸네일 없는 가로형 요약 행(랜딩 "지금 모집 중"). 링크·동작 없음.
-// 목록 카드와 같은 문법: 제목·모집 배지 → 룰 · 일정 상태, 오른쪽에 인원.
 export function GameRow({ game }: { game: GameRowData }) {
   const count = countConfirmed(game.participants);
   const status = deriveGameStatus({

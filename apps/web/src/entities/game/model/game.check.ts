@@ -1,10 +1,13 @@
-// Runnable self-check for game domain rules (no test framework). Run: pnpm check
 import assert from "node:assert";
+
 import { canCoordinateSchedule } from "./can-coordinate-schedule";
-import { isDeadlinePassed, isDeadlineUrgent } from "./deadline";
 import { deriveGameStatus } from "./derive-game-status";
-import { countConfirmed } from "./participant";
+import { isDeadlinePassed } from "./is-deadline-passed";
+import { isDeadlineUrgent } from "./is-deadline-urgent";
+import { countConfirmed, PARTICIPANT_STATUS } from "./participant";
+import { SCHEDULE_MODE } from "./schedule-mode";
 import { splitRoster } from "./split-roster";
+import { GAME_STATUS } from "./status";
 
 const DAY = 86_400_000;
 const future = new Date(Date.now() + DAY);
@@ -14,72 +17,79 @@ const past = new Date(Date.now() - DAY);
 const waitlistOn = { waitlistEnabled: true };
 assert.equal(
   deriveGameStatus({ maxPlayers: 4, endDate: past, participantCount: 4, ...waitlistOn }),
-  "closed",
+  GAME_STATUS.closed,
 );
 assert.equal(
   deriveGameStatus({ maxPlayers: 4, endDate: future, participantCount: 4, ...waitlistOn }),
-  "confirmed",
+  GAME_STATUS.confirmed,
 );
 assert.equal(
   deriveGameStatus({ maxPlayers: 4, endDate: future, participantCount: 1, ...waitlistOn }),
-  "recruiting",
+  GAME_STATUS.recruiting,
 );
-// 대기 신청을 끄면 정원이 찼을 때 "full"(신청 마감). 기한 경과는 여전히 closed가 우선.
 assert.equal(
   deriveGameStatus({ maxPlayers: 4, endDate: future, participantCount: 4, waitlistEnabled: false }),
-  "full",
+  GAME_STATUS.full,
 );
 assert.equal(
   deriveGameStatus({ maxPlayers: 4, endDate: past, participantCount: 4, waitlistEnabled: false }),
-  "closed",
+  GAME_STATUS.closed,
 );
 
-// 정원은 확정자만 센다
 const roster = [
-  { userId: "b", status: "confirmed" as const, joinedAt: new Date(2) },
-  { userId: "a", status: "confirmed" as const, joinedAt: new Date(1) },
-  { userId: "c", status: "waiting" as const, joinedAt: new Date(3) },
-  { userId: "d", status: "waiting" as const, joinedAt: new Date(4) },
+  { userId: "b", status: PARTICIPANT_STATUS.confirmed, joinedAt: new Date(2) },
+  { userId: "a", status: PARTICIPANT_STATUS.confirmed, joinedAt: new Date(1) },
+  { userId: "c", status: PARTICIPANT_STATUS.waiting, joinedAt: new Date(3) },
+  { userId: "d", status: PARTICIPANT_STATUS.waiting, joinedAt: new Date(4) },
 ];
 assert.equal(countConfirmed(roster), 2);
 
-// 신청 순(joinedAt)으로 전체 순번, 대기자는 대기 순번까지
 const { confirmed, waiting } = splitRoster(roster);
 assert.deepEqual(
-  confirmed.map((p) => [p.userId, p.applicationRank]),
+  confirmed.map((member) => [member.userId, member.applicationRank]),
   [
     ["a", 1],
     ["b", 2],
   ],
 );
 assert.deepEqual(
-  waiting.map((p) => [p.userId, p.applicationRank, p.waitlistRank]),
+  waiting.map((member) => [member.userId, member.applicationRank, member.waitlistRank]),
   [
     ["c", 3, 1],
     ["d", 4, 2],
   ],
 );
 
-// 조율 진입: coordinate + 미확정 + 미마감
 assert.equal(
-  canCoordinateSchedule({ scheduleMode: "coordinate", confirmedAt: null, status: "recruiting" }),
+  canCoordinateSchedule({
+    scheduleMode: SCHEDULE_MODE.coordinate,
+    confirmedAt: null,
+    status: GAME_STATUS.recruiting,
+  }),
   true,
 );
 assert.equal(
-  canCoordinateSchedule({ scheduleMode: "coordinate", confirmedAt: future, status: "recruiting" }),
+  canCoordinateSchedule({
+    scheduleMode: SCHEDULE_MODE.coordinate,
+    confirmedAt: future,
+    status: GAME_STATUS.recruiting,
+  }),
   false,
 );
 assert.equal(
-  canCoordinateSchedule({ scheduleMode: "fixed", confirmedAt: null, status: "recruiting" }),
+  canCoordinateSchedule({
+    scheduleMode: SCHEDULE_MODE.fixed,
+    confirmedAt: null,
+    status: GAME_STATUS.recruiting,
+  }),
   false,
 );
 
-// 마감 임박: 지나지 않았고 24시간 이내일 때만
 const NOW = new Date("2026-09-11T12:00:00+09:00");
 const HOUR = 60 * 60 * 1000;
 assert.equal(isDeadlineUrgent(new Date(NOW.getTime() + 5 * HOUR), NOW), true);
 assert.equal(isDeadlineUrgent(new Date(NOW.getTime() + 30 * HOUR), NOW), false);
-assert.equal(isDeadlineUrgent(new Date(NOW.getTime() - HOUR), NOW), false); // 이미 지남
+assert.equal(isDeadlineUrgent(new Date(NOW.getTime() - HOUR), NOW), false);
 assert.equal(isDeadlinePassed(new Date(NOW.getTime() - HOUR), NOW), true);
 assert.equal(isDeadlinePassed(new Date(NOW.getTime() + HOUR), NOW), false);
 

@@ -1,7 +1,7 @@
 import { Container, Skeleton, VStack } from "@trpg/ui";
+
 import { AppBar } from "@/shared/ui";
 
-// GameScheduleView와 같은 배치: 제목·기간 → 탭 → 격자(헤더 40px + 26px × 9행).
 export default function Loading() {
   return (
     <>

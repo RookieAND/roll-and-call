@@ -1,7 +1,15 @@
-// Runnable self-check for session card classification (no test framework).
-// Run: pnpm check
 import assert from "node:assert";
-import { buildSessions, type SessionGame, toSessionCard } from "./session-card";
+
+import {
+  PARTICIPANT_STATUS,
+  type ParticipantStatus,
+  SCHEDULE_MODE,
+  SESSION_ROLE,
+} from "@/entities/game";
+
+import { buildSessions } from "./build-sessions";
+import { SESSION_BUCKET, SESSION_CHIP, type SessionGame } from "./session-card-model";
+import { toSessionCard } from "./to-session-card";
 
 const NOW = new Date("2026-09-15T12:00:00+09:00");
 const DAY = 24 * 60 * 60 * 1000;
@@ -15,7 +23,7 @@ function game(partial: Partial<SessionGame>): SessionGame {
     rule: "CoC",
     round: 1,
     maxPlayers: 4,
-    scheduleMode: "coordinate",
+    scheduleMode: SCHEDULE_MODE.coordinate,
     confirmedAt: null,
     endDate: at(3),
     rangeStart: "2026-09-20",
@@ -27,66 +35,83 @@ function game(partial: Partial<SessionGame>): SessionGame {
   } as unknown as SessionGame;
 }
 
-const me = (status: "confirmed" | "waiting") => ({ userId: "me", status, joinedAt: at(-1) });
-const other = { userId: "a", status: "confirmed" as const, joinedAt: at(-10) };
-const ctx = (responded: string[] = []) => ({
+const me = (status: ParticipantStatus) => ({ userId: "me", status, joinedAt: at(-1) });
+const other = { userId: "a", status: PARTICIPANT_STATUS.confirmed, joinedAt: at(-10) };
+const sessionContext = (responded: string[] = []) => ({
   viewerId: "me",
   respondedGameIds: new Set(responded),
   responseCounts: new Map<string, number>(),
   now: NOW,
 });
 
-// 조율 중 · 가능 시간 미제출 → "일정 조율" 할 일
-let card = toSessionCard(game({ participants: [me("confirmed")] }), "player", ctx());
-assert.equal(card.bucket, "joined");
-assert.equal(card.chip, "scheduling");
+const confirmedMe = me(PARTICIPANT_STATUS.confirmed);
+
+let card = toSessionCard(
+  game({ participants: [confirmedMe] }),
+  SESSION_ROLE.player,
+  sessionContext(),
+);
+assert.equal(card.bucket, SESSION_BUCKET.joined);
+assert.equal(card.chip, SESSION_CHIP.scheduling);
 assert.equal(card.action?.label, "일정 조율");
 assert.match(card.schedule, /^가능 시간 미제출 · 마감 D-3$/);
 
-// 이미 냈으면 할 일 없음
-card = toSessionCard(game({ participants: [me("confirmed")] }), "player", ctx(["g"]));
+card = toSessionCard(
+  game({ participants: [confirmedMe] }),
+  SESSION_ROLE.player,
+  sessionContext(["g"]),
+);
 assert.equal(card.action, null);
 
-// 확정된 세션: 확정 칩 + "모레"
 card = toSessionCard(
-  game({ confirmedAt: at(2), endDate: at(-1), participants: [me("confirmed")] }),
-  "player",
-  ctx(),
+  game({ confirmedAt: at(2), endDate: at(-1), participants: [confirmedMe] }),
+  SESSION_ROLE.player,
+  sessionContext(),
 );
-assert.equal(card.chip, "confirmed");
+assert.equal(card.chip, SESSION_CHIP.confirmed);
 assert.match(card.schedule, /모레$/);
 
-// 대기자: 대기 칩 + 순번 배지
-card = toSessionCard(game({ participants: [other, me("waiting")] }), "player", ctx());
-assert.equal(card.chip, "waiting");
+card = toSessionCard(
+  game({ participants: [other, me(PARTICIPANT_STATUS.waiting)] }),
+  SESSION_ROLE.player,
+  sessionContext(),
+);
+assert.equal(card.chip, SESSION_CHIP.waiting);
 assert.equal(card.badge, "대기 1번");
 
-// GM · 기한 지남 · 미확정 → "세션 시간 확정하기" 할 일
-card = toSessionCard(game({ endDate: at(-1), participants: [other] }), "host", ctx());
-assert.equal(card.bucket, "hosted");
+// 조율형 · 기한 지남 · 확정자 있음 · 미확정 → 무산이 아니라 GM 할 일
+card = toSessionCard(
+  game({ endDate: at(-1), participants: [other] }),
+  SESSION_ROLE.host,
+  sessionContext(),
+);
+assert.equal(card.bucket, SESSION_BUCKET.hosted);
 assert.equal(card.action?.label, "세션 시간 확정하기");
 
-// 세션이 지나면 끝남 탭
-card = toSessionCard(game({ confirmedAt: at(-1), participants: [me("confirmed")] }), "player", ctx());
-assert.equal(card.bucket, "past");
+card = toSessionCard(
+  game({ confirmedAt: at(-1), participants: [confirmedMe] }),
+  SESSION_ROLE.player,
+  sessionContext(),
+);
+assert.equal(card.bucket, SESSION_BUCKET.past);
 
 // 끝남은 최근 것부터, 진행 중은 가까운 것부터
 const sessions = buildSessions({
   hosted: [],
   joined: [
-    game({ id: "old", confirmedAt: at(-5), participants: [me("confirmed")] }),
-    game({ id: "recent", confirmedAt: at(-1), participants: [me("confirmed")] }),
-    game({ id: "later", endDate: at(6), participants: [me("confirmed")] }),
-    game({ id: "sooner", endDate: at(2), participants: [me("confirmed")] }),
+    game({ id: "old", confirmedAt: at(-5), participants: [confirmedMe] }),
+    game({ id: "recent", confirmedAt: at(-1), participants: [confirmedMe] }),
+    game({ id: "later", endDate: at(6), participants: [confirmedMe] }),
+    game({ id: "sooner", endDate: at(2), participants: [confirmedMe] }),
   ],
-  ...ctx(),
+  ...sessionContext(),
 });
 assert.deepEqual(
-  sessions.past.map((c) => c.id),
+  sessions.past.map((pastCard) => pastCard.id),
   ["recent", "old"],
 );
 assert.deepEqual(
-  sessions.joined.map((c) => c.id),
+  sessions.joined.map((joinedCard) => joinedCard.id),
   ["sooner", "later"],
 );
 

@@ -13,8 +13,7 @@ export type StepperProps = {
   className?: string;
 };
 
-// 작은 정수 입력: − 값 + (각 44×44). 직접 입력도 받되 범위를 벗어난 값은 막지 않고
-// 검증(필드 오류)이 알리게 둔다. ± 버튼만 min·max에서 멈춘다.
+// 범위를 벗어난 직접 입력은 막지 않고 필드 검증이 알리게 둔다. ± 버튼만 min·max에서 멈춘다.
 export function Stepper({
   value,
   onChange,
@@ -24,9 +23,9 @@ export function Stepper({
   invalid,
   disabled,
   className,
-  ...aria
+  ...ariaProps
 }: StepperProps) {
-  const safe = Number.isFinite(value) ? value : min;
+  const safeValue = Number.isFinite(value) ? value : min;
   const buttonClass =
     "flex size-11 items-center justify-center text-gray-700 transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:text-gray-300";
 
@@ -41,11 +40,13 @@ export function Stepper({
       <button
         type="button"
         aria-label="줄이기"
-        disabled={disabled || safe <= min}
-        onClick={() => onChange(Math.max(min, safe - 1))}
+        disabled={disabled || safeValue <= min}
+        onClick={() => onChange(Math.max(min, safeValue - 1))}
         className={buttonClass}
       >
-        <span aria-hidden className="text-lg leading-none">−</span>
+        <span aria-hidden className="text-lg leading-none">
+          −
+        </span>
       </button>
       <input
         id={id}
@@ -54,16 +55,18 @@ export function Stepper({
         value={Number.isFinite(value) ? String(value) : ""}
         onChange={(event) => onChange(Number(event.target.value.replace(/\D/g, "")))}
         className="w-12 border-x border-gray-200 bg-transparent text-center text-sm font-semibold tabular-nums outline-none"
-        {...aria}
+        {...ariaProps}
       />
       <button
         type="button"
         aria-label="늘리기"
-        disabled={disabled || safe >= max}
-        onClick={() => onChange(Math.min(max, safe + 1))}
+        disabled={disabled || safeValue >= max}
+        onClick={() => onChange(Math.min(max, safeValue + 1))}
         className={buttonClass}
       >
-        <span aria-hidden className="text-lg leading-none">+</span>
+        <span aria-hidden className="text-lg leading-none">
+          +
+        </span>
       </button>
     </div>
   );

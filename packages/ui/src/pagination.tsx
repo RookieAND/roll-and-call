@@ -23,7 +23,7 @@ export function Pagination({
 
   const start = Math.max(1, page - siblings);
   const end = Math.min(totalPages, page + siblings);
-  const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  const pages = Array.from({ length: end - start + 1 }, (_, index) => start + index);
 
   return (
     <nav
@@ -44,19 +44,19 @@ export function Pagination({
         </span>
       )}
 
-      {pages.map((p) => (
+      {pages.map((pageNumber) => (
         <a
-          key={p}
-          href={hrefFor(p)}
-          aria-current={p === page ? "page" : undefined}
+          key={pageNumber}
+          href={hrefFor(pageNumber)}
+          aria-current={pageNumber === page ? "page" : undefined}
           className={cn(
             cell,
-            p === page
+            pageNumber === page
               ? "bg-primary-600 font-bold text-white"
               : "border border-gray-200 text-gray-700 hover:bg-gray-50",
           )}
         >
-          {p}
+          {pageNumber}
         </a>
       ))}
 

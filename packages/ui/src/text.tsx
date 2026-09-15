@@ -1,6 +1,7 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentPropsWithRef, ReactElement } from "react";
+
 import { cn } from "./cn";
 
 const text = cva("", {
@@ -34,7 +35,6 @@ const text = cva("", {
 
 export type TextProps = ComponentPropsWithRef<"span"> &
   VariantProps<typeof text> & {
-    /** Render as a different element (e.g. <Text render={<h1 />} />). */
     render?: ReactElement<Record<string, unknown>>;
   };
 

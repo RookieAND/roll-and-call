@@ -3,11 +3,12 @@
 import { Button, Grid, IconButton, Text, cn } from "@trpg/ui";
 import { ImagePlus, X } from "lucide-react";
 import { useRef, useState } from "react";
-import { uploadThumbnail } from "../api/upload-thumbnail";
-import { IMAGE_ACCEPT, imageFileError } from "./upload-rules";
 
-// 추가 이미지(지도·NPC·핸드아웃 등) 최대 max장. 1:1 슬롯 3열, 끌어서 순서를 바꾼다.
-// 상세의 시놉시스 아래 가로 스크롤에 이 순서대로 보인다. 업로드 경로(스토리지 버킷)는 썸네일과 같다.
+import { uploadThumbnail } from "../api/upload-thumbnail";
+import { imageFileError } from "./image-file-error";
+import { uploadFailedMessage } from "./upload-failed-message";
+import { IMAGE_ACCEPT } from "./upload-rules";
+
 // ponytail: 순서 변경은 HTML5 드래그라 데스크톱 전용. 터치 정렬이 필요해지면 위·아래 이동 버튼을 붙인다.
 export function GameImagesUpload({
   value,
@@ -25,10 +26,10 @@ export function GameImagesUpload({
   const remaining = max - value.length;
   const canAdd = remaining > 0 && !uploading;
 
-  async function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files ?? []);
+  async function handleFiles(event: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(event.target.files ?? []);
     // 같은 파일을 지웠다가 다시 고를 수 있게 비운다.
-    e.target.value = "";
+    event.target.value = "";
     if (files.length === 0) return;
     setError(null);
 
@@ -42,24 +43,27 @@ export function GameImagesUpload({
     }
 
     setUploading(true);
+    const urls = [...value];
     try {
-      const urls = [...value];
       for (const file of files.slice(0, remaining)) {
         const result = await uploadThumbnail(file);
         if ("error" in result) {
-          setError(`올리지 못했습니다. ${result.error}`);
+          setError(uploadFailedMessage(result.error));
           break;
         }
         urls.push(result.url);
       }
-      onChange(urls);
+    } catch (uploadError) {
+      console.error(uploadError);
+      setError(uploadFailedMessage());
     } finally {
+      onChange(urls);
       setUploading(false);
     }
   }
 
   function remove(index: number) {
-    onChange(value.filter((_, i) => i !== index));
+    onChange(value.filter((_, currentIndex) => currentIndex !== index));
   }
 
   function move(from: number, to: number) {
@@ -82,27 +86,31 @@ export function GameImagesUpload({
       </div>
 
       <Grid cols={3} gap={2}>
-        {value.map((url, i) => (
+        {value.map((url, index) => (
           <div
             key={url}
             draggable={!uploading}
-            onDragStart={() => setDragIndex(i)}
+            onDragStart={() => setDragIndex(index)}
             onDragOver={(event) => event.preventDefault()}
             onDrop={(event) => {
               event.preventDefault();
-              if (dragIndex !== null) move(dragIndex, i);
+              if (dragIndex !== null) move(dragIndex, index);
               setDragIndex(null);
             }}
             onDragEnd={() => setDragIndex(null)}
             className={cn(
               "relative aspect-square cursor-grab overflow-hidden rounded-lg border border-gray-200",
-              dragIndex === i && "opacity-55",
+              dragIndex === index && "opacity-55",
             )}
           >
-            <img src={url} alt={`추가 이미지 ${i + 1}`} className="h-full w-full object-cover" />
+            <img
+              src={url}
+              alt={`추가 이미지 ${index + 1}`}
+              className="h-full w-full object-cover"
+            />
             <IconButton
-              aria-label={`추가 이미지 ${i + 1} 삭제`}
-              onClick={() => remove(i)}
+              aria-label={`추가 이미지 ${index + 1} 삭제`}
+              onClick={() => remove(index)}
               disabled={uploading}
               className="absolute top-0 right-0 h-11 w-11 bg-transparent hover:bg-transparent"
             >

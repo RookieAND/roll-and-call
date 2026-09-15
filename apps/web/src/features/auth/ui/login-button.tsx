@@ -1,9 +1,9 @@
 "use client";
 
 import { Button, cn } from "@trpg/ui";
+
 import { signInWithDiscord } from "../api/sign-in";
 
-// next를 주지 않으면 로그인을 누른 화면으로 돌아온다.
 export function LoginButton({ className, next }: { className?: string; next?: string }) {
   return (
     <Button

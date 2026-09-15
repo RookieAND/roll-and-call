@@ -2,9 +2,13 @@
 
 import { Text } from "@trpg/ui";
 import { useState } from "react";
+
 import { formatDateTime, type DayColumn, type TimeRow } from "@/shared/lib";
 import { SLOT_ROW_PX, SlotGrid } from "@/shared/ui";
-import { heatColor, heatStep, heatTextColor } from "../model/heat-scale";
+
+import { heatColor } from "../model/heat-color";
+import { heatStep } from "../model/heat-step";
+import { heatTextColor } from "../model/heat-text-color";
 
 type Props = {
   days: DayColumn[];

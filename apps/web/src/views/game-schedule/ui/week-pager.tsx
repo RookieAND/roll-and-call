@@ -1,8 +1,8 @@
 import { HStack, IconButton, Text } from "@trpg/ui";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import type { DayColumn } from "@/shared/lib";
 
-// 주 단위 이동. 그리드·히트맵이 같은 주를 보도록 상태는 호출부(ScheduleBody)가 소유한다.
 export function WeekPager({
   weeks,
   index,

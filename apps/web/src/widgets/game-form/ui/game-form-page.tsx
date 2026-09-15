@@ -4,17 +4,16 @@ import { Button, cn, Container, Text } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FieldErrors } from "react-hook-form";
+
 import type { GameFormValues } from "@/features/write-game";
 import { AppBar, ConfirmDialog } from "@/shared/ui";
+
 import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";
 import { GameBasicsFields } from "./game-basics-fields";
 import { GameMediaFields } from "./game-media-fields";
 import { GameScheduleFields } from "./game-schedule-fields";
 
-// 수정: 등록과 같은 순서를 한 페이지에 편다. 못 바꾸는 것은 미리 잠그고 이유를 붙인다.
-// 맨 위에 지금 몇 명이 신청했는지와 저장하면 무슨 일이 생기는지 쓰고, 하단 바는 취소 · 저장 반반.
-// 삭제는 여기 두지 않는다(상세 GM 메뉴 한 곳).
 export function GameFormPage({ form, pending, submitLabel, onValid, edit }: GameFormLayoutProps) {
   const router = useRouter();
   const [confirmingLeave, setConfirmingLeave] = useState(false);
@@ -22,7 +21,8 @@ export function GameFormPage({ form, pending, submitLabel, onValid, edit }: Game
   const leaveHref = edit ? `/games/${edit.gameId}` : "/games";
 
   const applicants = edit?.applicantCount ?? 0;
-  const noticeTitle = applicants > 0 ? `이미 ${applicants}명이 신청했습니다.` : "아직 신청자가 없습니다.";
+  const noticeTitle =
+    applicants > 0 ? `이미 ${applicants}명이 신청했습니다.` : "아직 신청자가 없습니다.";
   const noticeBody =
     applicants > 0
       ? "바꾼 내용은 저장하면 바로 상세에 반영되고, 디스코드 공지도 함께 고쳐집니다."
@@ -34,13 +34,11 @@ export function GameFormPage({ form, pending, submitLabel, onValid, edit }: Game
   const sessionNotice =
     applicants > 0 ? `바꾸면 참여자 ${applicants}명의 세션 일시도 함께 바뀝니다.` : null;
 
-  // 검증 실패 시 첫 오류 필드로 스크롤.
   function onInvalid(errors: FieldErrors<GameFormValues>) {
     const first = Object.keys(errors)[0];
     if (first) setTimeout(() => scrollToField(first), 0);
   }
 
-  // 값이 바뀐 채 나가면 한 번 묻는다.
   function requestLeave() {
     if (form.formState.isDirty) setConfirmingLeave(true);
     else router.push(leaveHref);
@@ -86,7 +84,13 @@ export function GameFormPage({ form, pending, submitLabel, onValid, edit }: Game
             </Text>
           )}
           <div className="flex gap-2 [&>*]:flex-1">
-            <Button type="button" variant="outline" size="lg" className="h-[50px]" onClick={requestLeave}>
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              className="h-[50px]"
+              onClick={requestLeave}
+            >
               취소
             </Button>
             <Button type="submit" loading={pending} size="lg" className="h-[50px]">

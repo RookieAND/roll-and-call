@@ -2,7 +2,6 @@ import { Text, cn } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-// 내 세션 한 행: 라벨 + 상태 내역 · 숫자 · 목록 진입.
 export function MySessionRow({
   label,
   count,
@@ -36,7 +35,11 @@ export function MySessionRow({
           </Text>
         )}
       </div>
-      <Text typography="heading3" foreground={countForeground} className="flex-none text-[17px] font-extrabold tabular-nums">
+      <Text
+        typography="heading3"
+        foreground={countForeground}
+        className="flex-none text-[17px] font-extrabold tabular-nums"
+      >
         {count}
       </Text>
       <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />

@@ -2,17 +2,16 @@
 
 import { Chip, Field, Stepper, Text, TextInput, Textarea } from "@trpg/ui";
 import type { UseFormReturn } from "react-hook-form";
+
 import type { GameFormValues } from "@/features/write-game";
+
 import { PlayTimeField } from "./play-time-field";
 import { WaitlistField } from "./waitlist-field";
 
 const MAX_PLAYERS = 20;
 const SYNOPSIS_MAX = 2000;
-// 자주 쓰는 룰. 누르면 룰 칸을 채운다(직접 입력도 그대로 된다).
 const RULE_PRESETS = ["CoC 7th", "피아스코", "던전월드"];
 
-// Step 1(게임 정보): 이름·룰·설명·최대 인원·대기 신청·플레이타임.
-// 위저드의 "다음"은 이 필드들만 검증한다.
 export const GAME_BASICS_FIELDS = [
   "title",
   "rule",
@@ -27,7 +26,6 @@ export function GameBasicsFields({
   minPlayers = 1,
 }: {
   form: UseFormReturn<GameFormValues>;
-  // 수정 화면: 확정 참여자 수 아래로는 줄일 수 없다.
   minPlayers?: number;
 }) {
   const {
@@ -95,7 +93,12 @@ export function GameBasicsFields({
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Field label="최대 참여 인원" htmlFor="maxPlayers" required error={errors.maxPlayers?.message}>
+        <Field
+          label="최대 참여 인원"
+          htmlFor="maxPlayers"
+          required
+          error={errors.maxPlayers?.message}
+        >
           <Stepper
             id="maxPlayers"
             value={maxPlayers}
@@ -103,8 +106,8 @@ export function GameBasicsFields({
             max={MAX_PLAYERS}
             invalid={!!errors.maxPlayers}
             aria-describedby="maxPlayers-hint"
-            onChange={(n) =>
-              setValue("maxPlayers", String(n), { shouldDirty: true, shouldValidate: true })
+            onChange={(count) =>
+              setValue("maxPlayers", String(count), { shouldDirty: true, shouldValidate: true })
             }
           />
         </Field>

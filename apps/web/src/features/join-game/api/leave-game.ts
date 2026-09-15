@@ -2,24 +2,31 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+
 import { countConfirmed, isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
-import { db, participants, getCurrentUser, notifyGameLeft, refreshRecruitPost } from "@/shared/server";
-import type { ActionResult } from "@/shared/api";
+import { AUTH_REQUIRED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import {
+  db,
+  getCurrentUser,
+  notifyGameLeft,
+  participants,
+  refreshRecruitPost,
+} from "@/shared/server";
+
 export async function leaveGame(gameId: string): Promise<ActionResult> {
   const user = await getCurrentUser();
-  if (!user) return { error: "로그인이 필요합니다." };
+  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
   const game = await db.query.games.findFirst({
-    where: (g, { eq: eqOp }) => eqOp(g.id, gameId),
+    where: (table, { eq: equals }) => equals(table.id, gameId),
     with: { participants: { columns: { userId: true, status: true } } },
   });
-  if (!game) return { error: "존재하지 않는 게임입니다." };
+  if (!game) return GAME_NOT_FOUND_RESULT;
 
-  const me = game.participants.find((p) => p.userId === user.id);
-  if (!me) return { error: "참여 중이 아닙니다." };
-  // 대기자는 언제든(세션 확정 후에도) 대기를 취소할 수 있다. 확정자만 세션 확정·마감(정원 충족·기한 경과) 후
-  // 자가 취소가 막히고 GM을 거친다.
-  if (me.status === PARTICIPANT_STATUS.confirmed) {
+  const membership = game.participants.find((participant) => participant.userId === user.id);
+  if (!membership) return { error: "참여 중이 아닙니다." };
+  // 대기자는 언제든(세션 확정 후에도) 취소할 수 있고, 확정자만 확정·마감 후 자가 취소가 막혀 GM을 거친다.
+  if (membership.status === PARTICIPANT_STATUS.confirmed) {
     if (isSessionLocked(game)) {
       return { error: "확정된 게임은 취소할 수 없습니다. GM에게 문의하세요." };
     }

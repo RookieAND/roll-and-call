@@ -1,9 +1,8 @@
 import type { Game } from "@/shared/server";
+
 import { GAME_STATUS, type GameStatus } from "./status";
 
-// 확정 = 정원이 다 찬 상태(사람이 다 모임), 세션 시간 확정(confirmedAt)과는 별개.
-// 마감 = 모집 기한이 지난 상태. 기한 경과가 정원보다 우선한다.
-// 가득 참 = 대기 신청을 끈 게임이 정원을 채운 상태. 신청은 막히지만 기한 전이라 목록·조율은 그대로다.
+// confirmed는 정원 충족이지 세션 시간 확정(confirmedAt)이 아니다. 기한 경과가 정원보다 우선하고, 대기 신청을 끈 게임의 정원 충족은 full.
 export function deriveGameStatus({
   maxPlayers,
   endDate,

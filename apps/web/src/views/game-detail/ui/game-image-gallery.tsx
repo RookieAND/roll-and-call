@@ -5,8 +5,6 @@ import { HStack, IconButton, Text, VStack } from "@trpg/ui";
 import { X } from "lucide-react";
 import { useState } from "react";
 
-// 시놉시스 바로 다음 첨부 이미지 가로 스크롤. 누르면 화면 가득 크게 띄운다.
-// 참여 여부를 판단하는 자리에서 도면·사전 정보·분위기를 바로 보게 한다.
 export function GameImageGallery({ images, isGm }: { images: string[]; isGm: boolean }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const openUrl = openIndex === null ? null : images[openIndex];
@@ -28,13 +26,13 @@ export function GameImageGallery({ images, isGm }: { images: string[]; isGm: boo
         </Text>
       </HStack>
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
-        {images.map((url, i) => (
+        {images.map((url, index) => (
           // ponytail: 이미지 자체가 버튼이라 Button 프리미티브(텍스트·패딩 룩)와 맞지 않아 손코딩.
           <button
             key={url}
             type="button"
-            onClick={() => setOpenIndex(i)}
-            aria-label={`첨부 이미지 ${i + 1} 크게 보기`}
+            onClick={() => setOpenIndex(index)}
+            aria-label={`첨부 이미지 ${index + 1} 크게 보기`}
             className="h-28 w-28 shrink-0 overflow-hidden rounded-xl border border-gray-200 focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:outline-none"
           >
             <img src={url} alt="" loading="lazy" className="h-full w-full object-cover" />
@@ -56,7 +54,10 @@ export function GameImageGallery({ images, isGm }: { images: string[]; isGm: boo
             )}
             <Dialog.Close
               render={
-                <IconButton aria-label="닫기" className="absolute top-4 right-4 h-11 w-11 bg-surface/85">
+                <IconButton
+                  aria-label="닫기"
+                  className="absolute top-4 right-4 h-11 w-11 bg-surface/85"
+                >
                   <X size={20} aria-hidden />
                 </IconButton>
               }

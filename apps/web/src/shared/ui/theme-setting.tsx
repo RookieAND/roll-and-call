@@ -3,40 +3,36 @@
 import { SegmentControl } from "@trpg/ui";
 import { useEffect, useState } from "react";
 
-type ThemeMode = "system" | "light" | "dark";
+import { isThemeMode, THEME_MODE, type ThemeMode } from "./theme-mode";
+
+const THEME_STORAGE_KEY = "theme";
 
 const OPTIONS = [
-  { value: "system", label: "시스템" },
-  { value: "light", label: "라이트" },
-  { value: "dark", label: "다크" },
+  { value: THEME_MODE.system, label: "시스템" },
+  { value: THEME_MODE.light, label: "라이트" },
+  { value: THEME_MODE.dark, label: "다크" },
 ] as const;
 
-const isThemeMode = (value: string | null): value is ThemeMode =>
-  value === "system" || value === "light" || value === "dark";
-
-// 시스템 · 라이트 · 다크 3단. 'system'도 저장하고, app/layout.tsx의 theme-init이 첫 페인트 전에 같은 규칙으로 적용한다.
+// 'system'도 저장한다. app/layout.tsx의 theme-init 인라인 스크립트가 첫 페인트 전에 같은 규칙으로 적용하므로 함께 바꾼다.
 export function ThemeSetting({ className }: { className?: string }) {
-  const [mode, setMode] = useState<ThemeMode>("system");
+  const [mode, setMode] = useState<ThemeMode>(THEME_MODE.system);
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("theme");
+      const saved = localStorage.getItem(THEME_STORAGE_KEY);
       if (isThemeMode(saved)) setMode(saved);
-    } catch {
-      /* ignore */
-    }
+    } catch {}
   }, []);
 
-  function select(next: ThemeMode) {
-    setMode(next);
+  function select(nextMode: ThemeMode) {
+    setMode(nextMode);
     try {
-      localStorage.setItem("theme", next);
-    } catch {
-      /* ignore */
-    }
+      localStorage.setItem(THEME_STORAGE_KEY, nextMode);
+    } catch {}
     const dark =
-      next === "dark" || (next === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
-    document.documentElement.classList.toggle("dark", dark);
+      nextMode === THEME_MODE.dark ||
+      (nextMode === THEME_MODE.system && matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.classList.toggle(THEME_MODE.dark, dark);
   }
 
   return (

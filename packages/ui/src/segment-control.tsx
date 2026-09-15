@@ -10,7 +10,6 @@ export type SegmentControlProps<Value extends string> = {
   className?: string;
 };
 
-// 한 가지를 고르는 세그먼트(라디오 그룹). 옵션이 적고 즉시 적용되는 설정에 쓴다.
 export function SegmentControl<Value extends string>({
   options,
   value,

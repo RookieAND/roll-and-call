@@ -1,29 +1,23 @@
 export { Box, type BoxProps } from "./box";
-export { Flex, VStack, HStack, type FlexProps, type StackProps } from "./flex";
+export { Flex, type FlexProps, type StackProps } from "./flex";
+export { VStack } from "./v-stack";
+export { HStack } from "./h-stack";
 export { Grid, type GridProps } from "./grid";
 export { Container, type ContainerProps } from "./container";
 export { Text, type TextProps } from "./text";
-export {
-  Avatar,
-  AvatarGroup,
-  type AvatarProps,
-  type AvatarPerson,
-  type AvatarGroupProps,
-} from "./avatar";
+export { Avatar, type AvatarProps } from "./avatar";
+export { AvatarGroup, type AvatarPerson, type AvatarGroupProps } from "./avatar-group";
 export { Badge, type BadgeProps } from "./badge";
 export { Button, type ButtonProps } from "./button";
 export { IconButton, type IconButtonProps } from "./icon-button";
 export { Chip, type ChipProps } from "./chip";
-export {
-  SegmentControl,
-  type SegmentControlProps,
-  type SegmentOption,
-} from "./segment-control";
+export { SegmentControl, type SegmentControlProps, type SegmentOption } from "./segment-control";
 export { Switch, type SwitchProps } from "./switch";
 export { Stepper, type StepperProps } from "./stepper";
 export { Card, type CardProps } from "./card";
 export { Field, type FieldProps } from "./field";
-export { TextInput, Textarea, type TextInputProps, type TextareaProps } from "./text-input";
+export { TextInput, type TextInputProps } from "./text-input";
+export { Textarea, type TextareaProps } from "./textarea";
 export { Select, type SelectRootProps, type SelectTriggerProps, type SelectOption } from "./select";
 export { Pagination, type PaginationProps } from "./pagination";
 export { Skeleton, type SkeletonProps } from "./skeleton";

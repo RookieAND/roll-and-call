@@ -1,0 +1,14 @@
+import { Text, VStack } from "@trpg/ui";
+
+export function GameSynopsis({ synopsis }: { synopsis: string }) {
+  return (
+    <VStack gap={2}>
+      <Text typography="heading3" render={<h2 />}>
+        시놉시스
+      </Text>
+      <Text typography="body3" foreground="muted" className="whitespace-pre-wrap">
+        {synopsis}
+      </Text>
+    </VStack>
+  );
+}

@@ -1,8 +1,5 @@
 import { Avatar, HStack, Text, type TextProps } from "@trpg/ui";
 
-// GM 아바타 + 이름 라벨. 이름이 없으면 "?"로 대체.
-// showRole: "GM " 접두 표기(카드 기본). 좌측 키가 이미 "GM"인 표에선 false.
-// typography/foreground: 이름 텍스트 타이포를 호출부가 소유(미지정 시 카드용 body4·muted).
 export function GameGmLabel({
   name,
   avatarUrl,

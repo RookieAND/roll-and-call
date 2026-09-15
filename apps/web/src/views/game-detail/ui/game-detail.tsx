@@ -1,4 +1,5 @@
-import { Container, Text, VStack } from "@trpg/ui";
+import { Container, VStack } from "@trpg/ui";
+
 import {
   deriveGameStatus,
   GameThumbnail,
@@ -9,11 +10,13 @@ import {
 } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
+
 import { GameDetailActions } from "./game-detail-actions";
 import { GameDetailHeader } from "./game-detail-header";
 import { GameImageGallery } from "./game-image-gallery";
 import { GameInfoTable } from "./game-info-table";
 import { GameRosterSection } from "./game-roster-section";
+import { GameSynopsis } from "./game-synopsis";
 
 export function GameDetail({
   game,
@@ -27,8 +30,9 @@ export function GameDetail({
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
   const { confirmed, waiting } = splitRoster(game.participants);
 
-  // 뷰어가 이 게임에 어떤 자격으로 들어와 있는지(확정·대기·무관).
-  const me = viewerId ? [...confirmed, ...waiting].find((p) => p.userId === viewerId) : undefined;
+  const viewerParticipant = viewerId
+    ? [...confirmed, ...waiting].find((participant) => participant.userId === viewerId)
+    : undefined;
 
   const status = deriveGameStatus({
     maxPlayers: game.maxPlayers,
@@ -36,7 +40,10 @@ export function GameDetail({
     participantCount: confirmed.length,
     waitlistEnabled: game.waitlistEnabled,
   });
-  const respondedConfirmed = confirmed.filter((p) => respondedIds.includes(p.userId)).length;
+  const respondedConfirmed = confirmed.filter((participant) =>
+    respondedIds.includes(participant.userId),
+  ).length;
+  const canChangeTime = game.scheduleMode === SCHEDULE_MODE.coordinate && game.confirmedAt !== null;
   const viewerResponded = viewerId !== null && respondedIds.includes(viewerId);
 
   return (
@@ -59,23 +66,12 @@ export function GameDetail({
               isGm={isGm}
               confirmedCount={confirmed.length}
               waitingCount={waiting.length}
-              canChangeTime={
-                game.scheduleMode === SCHEDULE_MODE.coordinate && game.confirmedAt !== null
-              }
+              canChangeTime={canChangeTime}
             />
 
             <GameInfoTable game={game} isGm={isGm} />
 
-            {game.synopsis && (
-              <VStack gap={2}>
-                <Text typography="heading3" render={<h2 />}>
-                  시놉시스
-                </Text>
-                <Text typography="body3" foreground="muted" className="whitespace-pre-wrap">
-                  {game.synopsis}
-                </Text>
-              </VStack>
-            )}
+            {game.synopsis && <GameSynopsis synopsis={game.synopsis} />}
 
             {game.images.length > 0 && <GameImageGallery images={game.images} isGm={isGm} />}
 
@@ -95,8 +91,8 @@ export function GameDetail({
             game={game}
             viewerId={viewerId}
             isGm={isGm}
-            viewerStatus={me?.status ?? null}
-            waitlistRank={me?.waitlistRank ?? null}
+            viewerStatus={viewerParticipant?.status ?? null}
+            waitlistRank={viewerParticipant?.waitlistRank ?? null}
             waitingCount={waiting.length}
             confirmedCount={confirmed.length}
             respondedConfirmed={respondedConfirmed}

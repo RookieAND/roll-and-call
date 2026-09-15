@@ -2,7 +2,6 @@ import { cn } from "./cn";
 
 export type SkeletonProps = { className?: string };
 
-// size it via className, e.g. <Skeleton className="h-4 w-32" />
 export function Skeleton({ className }: SkeletonProps) {
   return (
     <div

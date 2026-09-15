@@ -1,6 +1,8 @@
 import { Card, HStack, Progress, Text, VStack, cn } from "@trpg/ui";
+
 import { formatDate } from "@/shared/lib";
 import type { Game } from "@/shared/server";
+
 import { deriveGameStatus } from "../model/derive-game-status";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { scheduleLine } from "../model/schedule-line";
@@ -17,8 +19,6 @@ type Props = {
   };
 };
 
-// 목록 카드 한 가지 모양: 16:9 썸네일(없으면 같은 비율 그라데이션) → 제목·모집 배지 → 룰·플레이타임
-// → 일정 한 줄 + 마감 D-n → GM · 인원. 참여를 판단하는 "언제 하나 / 언제까지 신청하나"를 카드에 둔다.
 export function GameCard({ game }: Props) {
   const count = countConfirmed(game.participants);
   const status = deriveGameStatus({
@@ -32,14 +32,17 @@ export function GameCard({ game }: Props) {
 
   const meta = [game.rule, game.playTime].filter(Boolean).join(" · ");
   const scheduleText = expired ? `${formatDate(game.endDate)}에 모집 마감` : line.text;
-  const scheduleClass = cn("truncate", line.confirmed && !expired && "font-semibold text-success-700");
+  const scheduleClass = cn(
+    "truncate",
+    line.confirmed && !expired && "font-semibold text-success-700",
+  );
   const deadlineClass = cn(
     "shrink-0 font-semibold tabular-nums",
     line.deadlineWarn ? "text-warning-600" : "text-gray-600",
   );
-  // 꽉 찬 진행바는 "자리 없음"이라 좋은 상태 색을 주지 않는다. 초록은 배지 하나만.
+  // 꽉 찬 진행바는 "자리 없음"이라 초록을 주지 않는다.
   const barColor = status === GAME_STATUS.recruiting ? "recruiting" : "closed";
-  // 마감 글은 제목 색과 썸네일만 내린다. 카드 전체 opacity는 본문 대비를 4.5:1 아래로 떨어뜨린다.
+  // 카드 전체 opacity는 본문 대비를 4.5:1 아래로 떨어뜨려서 제목 색과 썸네일만 내린다.
   const titleForeground = expired ? "muted" : "normal";
   const thumbnailClass = cn("aspect-video w-full", expired && "opacity-55");
 
@@ -50,7 +53,6 @@ export function GameCard({ game }: Props) {
         sizes="(max-width: 412px) 100vw, 412px"
         className={thumbnailClass}
       />
-      {/* 시안 05: 제목 16 · 룰/일정/GM 12 · 인원 12 bold. 제목만 크고 나머지는 한 단계 아래로 내려 위계를 만든다. */}
       <VStack className="gap-1.5 px-3.5 py-[13px]">
         <HStack justify="between" align="start" gap={2}>
           <HStack align="center" gap={2} className="min-w-0">

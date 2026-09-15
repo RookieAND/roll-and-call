@@ -1,11 +1,12 @@
 "use client";
 
 import { Button, cn } from "@trpg/ui";
-import { type ReactNode, useTransition } from "react";
-import { toast } from "@/shared/ui";
+import type { ReactNode } from "react";
+
+import { toast, useAction } from "@/shared/ui";
+
 import { leaveGame } from "../api/leave-game";
 
-// 문구는 호출부가 children으로 정한다(대기 취소/참여 취소). 서버 동작은 같다(참여 행 삭제).
 export function LeaveGameButton({
   gameId,
   children,
@@ -15,13 +16,11 @@ export function LeaveGameButton({
   children: ReactNode;
   className?: string;
 }) {
-  const [pending, startTransition] = useTransition();
+  const { pending, run } = useAction();
 
   function leave() {
-    startTransition(async () => {
-      const result = await leaveGame(gameId);
-      if (result.error) toast.error(result.error);
-      else toast.success("신청을 취소했습니다");
+    run(() => leaveGame(gameId), {
+      onSuccess: () => toast.success("신청을 취소했습니다"),
     });
   }
 

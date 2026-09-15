@@ -1,34 +1,41 @@
-import type { MySessions, SessionCardModel, SessionChip } from "@/widgets/session-list";
+import {
+  type MySessions,
+  type SessionCardModel,
+  SESSION_ACTION_KIND,
+  SESSION_CHIP,
+  type SessionChip,
+} from "@/widgets/session-list";
 
-// 마이페이지 "내 세션" 세 행(참여 중 · 내가 운영 · 끝난 세션)의 숫자와 보조 줄.
-// 숫자는 이 화면 한 곳에서만 센다. 보조 줄은 0인 항목을 뺀 내역이고, 각 행은 내 세션의 해당 탭으로 간다.
+import { joinCountParts } from "./join-count-parts";
+
 export function summarizeMySessions(sessions: MySessions) {
-  const count = (list: SessionCardModel[], chip: SessionChip) =>
-    list.filter((c) => c.chip === chip).length;
-  const needsConfirm = sessions.hosted.filter((c) => c.action?.kind === "confirm-time").length;
+  const countByChip = (list: SessionCardModel[], chip: SessionChip) =>
+    list.filter((card) => card.chip === chip).length;
+  const needsConfirm = sessions.hosted.filter(
+    (card) => card.action?.kind === SESSION_ACTION_KIND.confirmTime,
+  ).length;
   const total = sessions.joined.length + sessions.hosted.length + sessions.past.length;
 
   return {
     joined: {
       count: sessions.joined.length,
       detail:
-        detail([
-          ["확정", count(sessions.joined, "confirmed")],
-          ["조율 중", count(sessions.joined, "scheduling")],
-          ["대기", count(sessions.joined, "waiting")],
+        joinCountParts([
+          ["확정", countByChip(sessions.joined, SESSION_CHIP.confirmed)],
+          ["조율 중", countByChip(sessions.joined, SESSION_CHIP.scheduling)],
+          ["대기", countByChip(sessions.joined, SESSION_CHIP.waiting)],
         ]) ?? (sessions.joined.length === 0 ? "신청한 구인이 없습니다" : null),
       href: "/me/sessions",
     },
     hosting: {
       count: sessions.hosted.length,
-      // 확정 필요가 있으면 그것만 경고색으로 말한다.
       urgent: needsConfirm > 0,
       detail:
         needsConfirm > 0
           ? `확정 필요 ${needsConfirm}`
-          : (detail([
-              ["모집 중", count(sessions.hosted, "recruiting")],
-              ["확정", count(sessions.hosted, "confirmed")],
+          : (joinCountParts([
+              ["모집 중", countByChip(sessions.hosted, SESSION_CHIP.recruiting)],
+              ["확정", countByChip(sessions.hosted, SESSION_CHIP.confirmed)],
             ]) ?? (sessions.hosted.length === 0 ? "아직 구인을 열지 않았습니다" : null)),
       href: "/me/sessions?tab=hosted",
     },
@@ -38,12 +45,4 @@ export function summarizeMySessions(sessions: MySessions) {
     },
     isEmpty: total === 0,
   };
-}
-
-function detail(parts: [string, number][]): string | null {
-  const text = parts
-    .filter(([, n]) => n > 0)
-    .map(([label, n]) => `${label} ${n}`)
-    .join(" · ");
-  return text || null;
 }

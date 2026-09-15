@@ -1,6 +1,7 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 import { isValidElement, type ComponentPropsWithRef, type ReactElement } from "react";
+
 import { cn } from "./cn";
 
 const iconButton = cva(
@@ -18,10 +19,8 @@ const iconButton = cva(
   },
 );
 
-// icon-only: pass an aria-label for accessibility
 export type IconButtonProps = ComponentPropsWithRef<"button"> &
   VariantProps<typeof iconButton> & {
-    /** Render the single child element (e.g. a Next Link) with icon-button styling. */
     asChild?: boolean;
   };
 

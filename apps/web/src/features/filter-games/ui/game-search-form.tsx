@@ -4,11 +4,12 @@ import { IconButton, TextInput } from "@trpg/ui";
 import { Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
+
 import type { GamesFilter } from "@/shared/api";
+
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
 
-// 게임명 검색. 제출하면 정렬·상태는 유지하고 1페이지로. 검색 중에는 스피너, 입력이 있으면 지우기(✕).
 export function GameSearchForm({ filter }: { filter: GamesFilter }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -17,9 +18,9 @@ export function GameSearchForm({ filter }: { filter: GamesFilter }) {
   // 뒤로가기·칩 이동 등으로 주소의 q가 바뀌면 입력값도 따라간다.
   useEffect(() => setValue(filter.q ?? ""), [filter.q]);
 
-  function search(q: string) {
+  function search(query: string) {
     startTransition(() => {
-      router.push(gamesHref(filterParams({ ...filter, q: q || undefined })));
+      router.push(gamesHref(filterParams({ ...filter, q: query || undefined })));
     });
   }
 
@@ -51,7 +52,12 @@ export function GameSearchForm({ filter }: { filter: GamesFilter }) {
           <Loader2 size={16} className="mr-3.5 animate-spin text-hint" aria-label="검색 중" />
         ) : (
           value && (
-            <IconButton variant="ghost" aria-label="검색어 지우기" className="h-11 w-11" onClick={clear}>
+            <IconButton
+              variant="ghost"
+              aria-label="검색어 지우기"
+              className="h-11 w-11"
+              onClick={clear}
+            >
               <X size={16} aria-hidden />
             </IconButton>
           )

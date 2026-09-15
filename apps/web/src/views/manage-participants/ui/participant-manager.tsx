@@ -1,5 +1,7 @@
 import { Container, Text, VStack } from "@trpg/ui";
+
 import { AppBar, EmptyState } from "@/shared/ui";
+
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { CopyLinkButton } from "./copy-link-button";
@@ -16,12 +18,9 @@ type Props = {
   waiting: ManagedMember[];
   summary: RosterSummary;
   isCoordinate: boolean;
-  // 세션 확정 후에는 서버가 명단 조정을 막는다 → 조작 버튼을 숨긴다.
   locked: boolean;
 };
 
-// GM 전용 참여자 관리 화면. 한 문장 요약 → 신청 순서 명단 → 미제출·잠김 안내 → 다음 회차.
-// 각 블록이 자기 동작과 열림 상태를 들고 있어서, 여기서는 순서와 여백만 정한다.
 export function ParticipantManager({
   gameId,
   title,

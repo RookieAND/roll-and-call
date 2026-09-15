@@ -1,20 +1,17 @@
 "use client";
 
 import { useState } from "react";
+
 import { cn } from "./cn";
+import { daysInMonth } from "./days-in-month";
+import { firstWeekday } from "./first-weekday";
+import { toDateKey } from "./to-date-key";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
-const pad = (n: number) => String(n).padStart(2, "0");
-const ymd = (y: number, m: number, d: number) => `${y}-${pad(m)}-${pad(d)}`;
-
-// m is 1-12
-const daysInMonth = (y: number, m: number) => new Date(Date.UTC(y, m, 0)).getUTCDate();
-const firstWeekday = (y: number, m: number) => new Date(Date.UTC(y, m - 1, 1)).getUTCDay();
 
 export type CalendarProps = {
   value?: string;
   onSelect: (date: string) => void;
-  // inclusive YYYY-MM-DD bounds; dates outside are shown disabled
   min?: string;
   max?: string;
 };
@@ -24,39 +21,49 @@ export function Calendar({ value, onSelect, min, max }: CalendarProps) {
   const [view, setView] = useState(() => {
     const anchor = value || min;
     if (anchor) {
-      const [y, m] = anchor.split("-").map(Number);
-      return { y: y!, m: m! };
+      const [year, month] = anchor.split("-").map(Number);
+      return { year: year!, month: month! };
     }
-    return { y: today.getFullYear(), m: today.getMonth() + 1 };
+    return { year: today.getFullYear(), month: today.getMonth() + 1 };
   });
 
-  const lead = firstWeekday(view.y, view.m);
-  const dim = daysInMonth(view.y, view.m);
+  const leadingBlanks = firstWeekday(view.year, view.month);
+  const dayCount = daysInMonth(view.year, view.month);
   const cells: (number | null)[] = [
-    ...Array.from({ length: lead }, () => null),
-    ...Array.from({ length: dim }, (_, i) => i + 1),
+    ...Array.from({ length: leadingBlanks }, () => null),
+    ...Array.from({ length: dayCount }, (_, index) => index + 1),
   ];
 
-  const prev = () => setView((v) => (v.m === 1 ? { y: v.y - 1, m: 12 } : { y: v.y, m: v.m - 1 }));
-  const next = () => setView((v) => (v.m === 12 ? { y: v.y + 1, m: 1 } : { y: v.y, m: v.m + 1 }));
+  const goToPreviousMonth = () =>
+    setView((current) =>
+      current.month === 1
+        ? { year: current.year - 1, month: 12 }
+        : { year: current.year, month: current.month - 1 },
+    );
+  const goToNextMonth = () =>
+    setView((current) =>
+      current.month === 12
+        ? { year: current.year + 1, month: 1 }
+        : { year: current.year, month: current.month + 1 },
+    );
 
   return (
     <div className="w-64 select-none">
       <div className="flex items-center justify-between px-1 py-1">
         <button
           type="button"
-          onClick={prev}
+          onClick={goToPreviousMonth}
           aria-label="이전 달"
           className="h-7 w-7 rounded-md text-gray-500 hover:bg-gray-100"
         >
           ‹
         </button>
         <span className="text-sm font-medium">
-          {view.y}년 {view.m}월
+          {view.year}년 {view.month}월
         </span>
         <button
           type="button"
-          onClick={next}
+          onClick={goToNextMonth}
           aria-label="다음 달"
           className="h-7 w-7 rounded-md text-gray-500 hover:bg-gray-100"
         >
@@ -64,21 +71,21 @@ export function Calendar({ value, onSelect, min, max }: CalendarProps) {
         </button>
       </div>
       <div className="grid grid-cols-7 text-center text-xs text-hint">
-        {WEEKDAYS.map((w) => (
-          <div key={w} className="py-1">
-            {w}
+        {WEEKDAYS.map((weekday) => (
+          <div key={weekday} className="py-1">
+            {weekday}
           </div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-0.5 text-center text-sm">
-        {cells.map((d, i) => {
-          if (d === null) return <div key={i} />;
-          const date = ymd(view.y, view.m, d);
+        {cells.map((day, index) => {
+          if (day === null) return <div key={index} />;
+          const date = toDateKey(view.year, view.month, day);
           const selected = value === date;
           const disabled = Boolean((min && date < min) || (max && date > max));
           return (
             <button
-              key={i}
+              key={index}
               type="button"
               disabled={disabled}
               onClick={() => onSelect(date)}
@@ -88,7 +95,7 @@ export function Calendar({ value, onSelect, min, max }: CalendarProps) {
                 disabled && "cursor-not-allowed text-gray-300 line-through hover:bg-transparent",
               )}
             >
-              {d}
+              {day}
             </button>
           );
         })}

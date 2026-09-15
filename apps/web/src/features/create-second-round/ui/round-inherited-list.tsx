@@ -1,7 +1,6 @@
 import { HStack, Text, VStack } from "@trpg/ui";
 import { Check } from "lucide-react";
 
-// 다음 회차가 이번 회차에서 그대로 가져오는 것들. 넘어가는 사람은 "확정 참여자" 한 말로만 부른다.
 export function RoundInheritedList({
   waitingCount,
   maxPlayers,
@@ -9,14 +8,14 @@ export function RoundInheritedList({
   waitingCount: number;
   maxPlayers: number;
 }) {
-  const carriedDesc =
+  const carriedDescription =
     waitingCount > maxPlayers
       ? `앞의 ${maxPlayers}명이 다음 회차의 확정 참여자가 되고, 나머지는 대기로 넘어갑니다`
       : "다음 회차의 확정 참여자가 됩니다";
   const items = [
-    { title: "게임 정보", desc: "룰 · 시놉시스 · 플레이타임" },
-    { title: `대기 ${waitingCount}명`, desc: carriedDesc },
-    { title: "이미 낸 가능 시간", desc: "조율을 처음부터 다시 하지 않습니다" },
+    { title: "게임 정보", description: "룰 · 시놉시스 · 플레이타임" },
+    { title: `대기 ${waitingCount}명`, description: carriedDescription },
+    { title: "이미 낸 가능 시간", description: "조율을 처음부터 다시 하지 않습니다" },
   ];
 
   return (
@@ -38,7 +37,7 @@ export function RoundInheritedList({
             <VStack gap={0}>
               <Text typography="subtitle2">{item.title}</Text>
               <Text typography="body4" foreground="hint">
-                {item.desc}
+                {item.description}
               </Text>
             </VStack>
           </HStack>

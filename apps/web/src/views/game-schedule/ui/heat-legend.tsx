@@ -1,7 +1,9 @@
 import { Text } from "@trpg/ui";
-import { heatColor, heatLegend, heatTextColor } from "../model/heat-scale";
 
-// 색 단계가 몇 명을 뜻하는지: 칸마다 숫자를 넣고, 오른쪽에 정원을 적는다.
+import { heatColor } from "../model/heat-color";
+import { heatLegend } from "../model/heat-legend";
+import { heatTextColor } from "../model/heat-text-color";
+
 export function HeatLegend({ capacity }: { capacity: number }) {
   return (
     <div className="flex items-center gap-1.5">

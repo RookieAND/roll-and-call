@@ -1,7 +1,8 @@
 export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./model/schedule-mode";
 export { gameStatusLabel, gameStatusColor, GAME_STATUS, type GameStatus } from "./model/status";
 export { deriveGameStatus } from "./model/derive-game-status";
-export { isDeadlineUrgent, isDeadlinePassed } from "./model/deadline";
+export { isDeadlineUrgent } from "./model/is-deadline-urgent";
+export { isDeadlinePassed } from "./model/is-deadline-passed";
 export { PARTICIPANT_STATUS, countConfirmed, type ParticipantStatus } from "./model/participant";
 export { splitRoster, type RosterMember } from "./model/split-roster";
 export { isGameGm } from "./model/is-game-gm";
@@ -17,5 +18,11 @@ export { GameSeatCount } from "./ui/game-seat-count";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
 export { GameGmLabel } from "./ui/game-gm-label";
 export { ConfirmedSessionNotice } from "./ui/confirmed-session-notice";
-export { deriveSessionState, type SessionState, type SessionRole } from "./model/session";
+export {
+  deriveSessionState,
+  SESSION_ROLE,
+  SESSION_STATE,
+  type SessionState,
+  type SessionRole,
+} from "./model/session";
 export { isSessionLocked } from "./model/session-lock";

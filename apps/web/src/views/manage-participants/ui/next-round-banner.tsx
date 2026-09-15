@@ -2,9 +2,9 @@
 
 import { Button, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
+
 import { RoundSheet } from "@/features/create-second-round";
-// 대기자가 남았을 때만 뜨는 권유 배너. 실제 생성 폼(시트)까지 이 블록이 들고 있다.
-// 넘어가는 사람은 시트와 같은 말("다음 회차의 확정 참여자")로 부른다.
+
 export function NextRoundBanner({
   gameId,
   title,

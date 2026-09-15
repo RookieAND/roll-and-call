@@ -2,7 +2,6 @@
 
 import { Switch, Text } from "@trpg/ui";
 
-// 대기 접수 토글. 목록의 "대기 접수 중" 배지가 이 값에서 나온다.
 export function WaitlistField({
   value,
   onChange,
@@ -20,7 +19,13 @@ export function WaitlistField({
         <Text typography="subtitle2" render={<label htmlFor="waitlistEnabled" />} className="block">
           정원이 차도 대기 신청 받기
         </Text>
-        <Text typography="body4" foreground="hint" render={<p />} id="waitlistEnabled-hint" className="mt-0.5">
+        <Text
+          typography="body4"
+          foreground="hint"
+          render={<p />}
+          id="waitlistEnabled-hint"
+          className="mt-0.5"
+        >
           {hint}
         </Text>
       </div>

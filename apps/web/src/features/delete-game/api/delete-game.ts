@@ -1,11 +1,12 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
+
+import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import { db, games, getCurrentUser, removeUnusedGameFiles } from "@/shared/server";
-import type { ActionResult } from "@/shared/api";
 export async function deleteGame(id: string): Promise<ActionResult> {
   const user = await getCurrentUser();
-  if (!user) return { error: "로그인이 필요합니다." };
+  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
   const [deleted] = await db
     .delete(games)

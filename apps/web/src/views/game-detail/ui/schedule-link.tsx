@@ -1,0 +1,6 @@
+import { GameScheduleLink } from "@/features/coordinate-session";
+
+// 조율 화면으로 가는 버튼은 라벨 "일정 조율", 모양 tinted 하나로 고정한다.
+export function ScheduleLink({ gameId, className }: { gameId: string; className: string }) {
+  return <GameScheduleLink gameId={gameId} label="일정 조율" className={className} />;
+}

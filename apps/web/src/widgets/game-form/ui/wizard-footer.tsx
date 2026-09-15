@@ -1,11 +1,9 @@
 "use client";
 
 import { Button, Container, Text, VStack } from "@trpg/ui";
+
 import { LAST_WIZARD_STEP, type WizardStep } from "./wizard-header";
 
-// CTA 하단 바. 위저드에서는 하단 탭을 내리므로 화면 맨 아래에 붙는다.
-// 첫 단계는 "다음"만, 중간은 "이전 + 다음", 마지막은 "이전 + 제출" — 두 버튼이면 폭 반반.
-// 화면 전체 실패(서버 오류)는 버튼 바로 위에 둔다.
 export function WizardFooter({
   step,
   pending,
@@ -17,7 +15,6 @@ export function WizardFooter({
   step: WizardStep;
   pending: boolean;
   submitLabel: string;
-  // 제출 실패 사유. 마지막 단계에서만 보여준다.
   error?: string;
   onNext: () => void;
   onBack: () => void;
@@ -41,7 +38,13 @@ export function WizardFooter({
             </Button>
           ) : (
             <div className="flex gap-2 [&>*]:flex-1">
-              <Button type="button" variant="outline" onClick={onBack} size="lg" className="h-[50px]">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onBack}
+                size="lg"
+                className="h-[50px]"
+              >
                 이전
               </Button>
               {isLastStep ? (

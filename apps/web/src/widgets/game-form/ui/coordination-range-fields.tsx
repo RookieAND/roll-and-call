@@ -2,13 +2,13 @@
 
 import { Field, Text } from "@trpg/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
+
 import { GAME_RANGE_MAX_DAYS, type GameFormValues } from "@/features/write-game";
 import { endDateBounds } from "@/shared/lib";
 import { DatePicker } from "@/shared/ui";
-import { defaultEndDateForRange } from "../model/schedule-defaults";
 
-// 범위 조율 모드: 참여자가 가능 시간을 낼 기간(조율 기간). 정확한 시각은 응답을 받아 GM이 확정한다.
-// 03 일정 조율과 같은 말("조율 기간")을 쓴다.
+import { defaultEndDateForRange } from "../model/default-end-date-for-range";
+
 export function CoordinationRangeFields({ form }: { form: UseFormReturn<GameFormValues> }) {
   const {
     control,
@@ -39,7 +39,6 @@ export function CoordinationRangeFields({ form }: { form: UseFormReturn<GameForm
                   max={rangeEnd || undefined}
                   onChange={(date) => {
                     field.onChange(date);
-                    // 모집 마감이 비어 있으면 조율 시작 하루 전으로 채워 둔다.
                     if (!getValues("endDate")) {
                       setValue("endDate", defaultEndDateForRange(date), { shouldDirty: true });
                     }
@@ -71,7 +70,8 @@ export function CoordinationRangeFields({ form }: { form: UseFormReturn<GameForm
         </div>
       </Field>
       <Text typography="body4" foreground="hint" render={<p />}>
-        참여자가 이 기간 안에서 가능 시간을 냅니다. 최대 {GAME_RANGE_MAX_DAYS}일까지 고를 수 있습니다.
+        참여자가 이 기간 안에서 가능 시간을 냅니다. 최대 {GAME_RANGE_MAX_DAYS}일까지 고를 수
+        있습니다.
       </Text>
     </div>
   );

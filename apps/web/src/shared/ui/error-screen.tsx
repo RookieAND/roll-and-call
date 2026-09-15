@@ -1,9 +1,8 @@
+import { Button, Text, VStack } from "@trpg/ui";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Button, Text, VStack } from "@trpg/ui";
 
-// 전역 에러/404 공용 화면: empty-error 에셋 + 안내 + 하단 "메인으로 돌아가기".
 export function ErrorScreen({
   title,
   description,

@@ -1,4 +1,5 @@
 import type { ComponentPropsWithRef } from "react";
+
 import { cn } from "./cn";
 import { gapMap, type GapToken } from "./tokens";
 
@@ -55,11 +56,3 @@ export function Flex({
 }
 
 export type StackProps = Omit<FlexProps, "direction">;
-
-export function VStack(props: StackProps) {
-  return <Flex direction="column" {...props} />;
-}
-
-export function HStack(props: StackProps) {
-  return <Flex direction="row" {...props} />;
-}

@@ -1,6 +1,5 @@
 import { parseGameSort, parseGameStatusFilter } from "@/shared/api";
 import { GamesView } from "@/views/games";
-// Live recruiting board — read at request time, never prerendered.
 export const dynamic = "force-dynamic";
 
 export default async function Page({
@@ -13,11 +12,11 @@ export default async function Page({
     status?: string;
   }>;
 }) {
-  const sp = await searchParams;
+  const { page, q, sort, status } = await searchParams;
   return (
     <GamesView
-      page={Number(sp.page) || 1}
-      filter={{ q: sp.q, sort: parseGameSort(sp.sort), status: parseGameStatusFilter(sp.status) }}
+      page={Number(page) || 1}
+      filter={{ q, sort: parseGameSort(sort), status: parseGameStatusFilter(status) }}
     />
   );
 }

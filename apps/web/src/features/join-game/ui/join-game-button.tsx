@@ -1,11 +1,12 @@
 "use client";
 
 import { Button, cn } from "@trpg/ui";
-import { type ReactNode, useTransition } from "react";
-import { toast } from "@/shared/ui";
+import type { ReactNode } from "react";
+
+import { toast, useAction } from "@/shared/ui";
+
 import { joinGame } from "../api/join-game";
 
-// 문구는 호출부가 children으로 정한다(참여/대기 신청). 토스트는 서버의 실제 결과를 따른다.
 export function JoinGameButton({
   gameId,
   children,
@@ -15,13 +16,11 @@ export function JoinGameButton({
   children: ReactNode;
   className?: string;
 }) {
-  const [pending, startTransition] = useTransition();
+  const { pending, run } = useAction();
 
   function join() {
-    startTransition(async () => {
-      const result = await joinGame(gameId);
-      if (result.error) toast.error(result.error);
-      else toast.success(result.waiting ? "대기로 접수했습니다" : "참여했습니다");
+    run(() => joinGame(gameId), {
+      onSuccess: (result) => toast.success(result.waiting ? "대기로 접수했습니다" : "참여했습니다"),
     });
   }
 

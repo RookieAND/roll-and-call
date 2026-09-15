@@ -1,11 +1,10 @@
-import Link from "next/link";
 import { Button } from "@trpg/ui";
-import { GAME_STATUS_FILTER_DEFAULT, GAME_STATUS_FILTERS, type GamesFilter } from "@/shared/api";
+import Link from "next/link";
+
 import { filterParams, gamesHref } from "@/features/filter-games";
+import { GAME_STATUS_FILTER_DEFAULT, GAME_STATUS_FILTERS, type GamesFilter } from "@/shared/api";
 import { EmptyState } from "@/shared/ui";
 
-// 구인 목록 0건. 원인에 따라 문구와 다음 행동을 나눈다:
-// 검색어 → 검색어를 제목에 되풀이하고 "검색 초기화" / 상태 필터 → "필터 해제" / 글 자체가 없음 → "새 구인 등록"만.
 export function GamesEmpty({ filter }: { filter: GamesFilter }) {
   const newGame = (
     <Button asChild className="h-11">
@@ -33,7 +32,7 @@ export function GamesEmpty({ filter }: { filter: GamesFilter }) {
 
   const status = filter.status ?? GAME_STATUS_FILTER_DEFAULT;
   if (status !== GAME_STATUS_FILTER_DEFAULT) {
-    const label = GAME_STATUS_FILTERS.find((o) => o.key === status)!.label;
+    const label = GAME_STATUS_FILTERS.find((option) => option.key === status)!.label;
     return (
       <EmptyState
         image="/empty-states/empty-search.png"

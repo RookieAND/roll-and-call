@@ -1,7 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-// Supabase 세션 쿠키 갱신. 유일한 사용처가 프록시라 여기서 소유한다.
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 

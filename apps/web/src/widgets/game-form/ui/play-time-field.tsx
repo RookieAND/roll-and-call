@@ -1,9 +1,9 @@
 "use client";
 
 import { Field, Select, Text } from "@trpg/ui";
-import { playTimeOptions } from "../model/play-time";
 
-// 플레이타임 한 칸: 30분 단위 선택. 시/분 두 칸으로 받던 것을 합쳤다.
+import { playTimeOptions } from "../model/play-time-options";
+
 export function PlayTimeField({
   value,
   onChange,
@@ -13,7 +13,7 @@ export function PlayTimeField({
   onChange: (value: string) => void;
   error?: string;
 }) {
-  const items = playTimeOptions(value).map((v) => ({ label: v, value: v }));
+  const items = playTimeOptions(value).map((option) => ({ label: option, value: option }));
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -21,9 +21,9 @@ export function PlayTimeField({
         <Select.Root items={items} value={value ?? ""} onValueChange={onChange}>
           <Select.Trigger aria-label="플레이타임" />
           <Select.Popup>
-            {items.map((o) => (
-              <Select.Item key={o.value} value={o.value}>
-                {o.label}
+            {items.map((item) => (
+              <Select.Item key={item.value} value={item.value}>
+                {item.label}
               </Select.Item>
             ))}
           </Select.Popup>

@@ -2,19 +2,23 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+
 import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
+import { AUTH_REQUIRED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
 import { availabilities, db, getCurrentUser } from "@/shared/server";
-import type { ActionResult } from "@/shared/api";
+
+const MAX_SLOT_COUNT = 2000;
+
 export async function saveAvailability(gameId: string, slotIsos: string[]): Promise<ActionResult> {
   const user = await getCurrentUser();
-  if (!user) return { error: "로그인이 필요합니다." };
+  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
   const game = await db.query.games.findFirst({
-    where: (g, { eq: eqOp }) => eqOp(g.id, gameId),
+    where: (table, { eq: equals }) => equals(table.id, gameId),
     columns: { gmId: true, scheduleMode: true, confirmedAt: true },
     with: { participants: { columns: { userId: true } } },
   });
-  if (!game) return { error: "존재하지 않는 게임입니다." };
+  if (!game) return GAME_NOT_FOUND_RESULT;
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) {
     return { error: "일시가 지정된 게임은 조율 대상이 아닙니다." };
   }
@@ -30,14 +34,14 @@ export async function saveAvailability(gameId: string, slotIsos: string[]): Prom
   // Trust boundary: drop anything that isn't a valid instant, and cap the count.
   const rows = slotIsos
     .filter((iso) => !Number.isNaN(new Date(iso).getTime()))
-    .slice(0, 2000)
+    .slice(0, MAX_SLOT_COUNT)
     .map((iso) => ({ gameId, userId: user.id, slotStart: new Date(iso) }));
 
-  await db.transaction(async (tx) => {
-    await tx
+  await db.transaction(async (transaction) => {
+    await transaction
       .delete(availabilities)
       .where(and(eq(availabilities.gameId, gameId), eq(availabilities.userId, user.id)));
-    if (rows.length > 0) await tx.insert(availabilities).values(rows);
+    if (rows.length > 0) await transaction.insert(availabilities).values(rows);
   });
 
   revalidatePath(`/games/${gameId}/schedule`);

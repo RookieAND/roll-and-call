@@ -1,6 +1,6 @@
 import type { Game } from "@/shared/server";
-// Values mirror the `schedule_mode` pgEnum (source of truth in the DB schema).
-// `satisfies` fails to compile if the app drifts from the DB enum.
+
+// Mirrors the `schedule_mode` pgEnum; `satisfies` fails to compile if the app drifts from it.
 export const SCHEDULE_MODES = [
   "fixed",
   "coordinate",
