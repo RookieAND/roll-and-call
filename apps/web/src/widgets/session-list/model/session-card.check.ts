@@ -7,6 +7,7 @@ import {
   SESSION_ROLE,
 } from "@/entities/game";
 
+import { buildProfileSessions } from "./build-profile-sessions";
 import { buildSessions } from "./build-sessions";
 import { SESSION_BUCKET, SESSION_CHIP, type SessionGame } from "./session-card-model";
 import { toSessionCard } from "./to-session-card";
@@ -114,5 +115,31 @@ assert.deepEqual(
   sessions.joined.map((joinedCard) => joinedCard.id),
   ["sooner", "later"],
 );
+
+// 남의 프로필: 대기 신청은 빼고, 할 일·미제출 문구 없이 기록만
+const profile = buildProfileSessions({
+  hosted: [game({ id: "hosted-done", confirmedAt: at(-2), participants: [other] })],
+  joined: [
+    game({ id: "waiting", participants: [other, me(PARTICIPANT_STATUS.waiting)] }),
+    game({ id: "upcoming", participants: [confirmedMe] }),
+    game({ id: "played", confirmedAt: at(-1), participants: [confirmedMe] }),
+  ],
+  userId: "me",
+  now: NOW,
+});
+assert.deepEqual(
+  profile.sessions.upcoming.map((upcomingCard) => upcomingCard.id),
+  ["upcoming"],
+);
+const upcomingCard = profile.sessions.upcoming[0];
+assert.ok(upcomingCard);
+assert.equal(upcomingCard.action, null);
+assert.equal(upcomingCard.urgent, false);
+assert.doesNotMatch(upcomingCard.schedule, /미제출/);
+assert.deepEqual(
+  profile.sessions.past.map((pastCard) => pastCard.id),
+  ["played"],
+);
+assert.deepEqual(profile.stance, { label: null, hosted: 1, played: 1 });
 
 console.log("session-card.check ok");

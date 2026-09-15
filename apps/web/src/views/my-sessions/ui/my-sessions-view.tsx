@@ -9,10 +9,10 @@ import {
   SESSION_CHIPS,
   SESSION_TABS,
   SessionList,
+  SessionTabs,
 } from "@/widgets/session-list";
 
-import { ALL_SESSION_CHIPS } from "../model/sessions-href";
-import { SessionRoleTabs } from "./session-role-tabs";
+import { ALL_SESSION_CHIPS, sessionsHref } from "../model/sessions-href";
 import { SessionStatusChips } from "./session-status-chips";
 import { SessionsEmpty } from "./sessions-empty";
 
@@ -43,12 +43,18 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
     activeChip === ALL_SESSION_CHIPS
       ? null
       : (chips.find((chip) => chip.key === activeChip)?.label ?? null);
+  const roleTabs = SESSION_TABS.map((tabItem) => ({
+    key: tabItem.key,
+    label: tabItem.label,
+    count: sessions[tabItem.key].length,
+    href: sessionsHref(tabItem.key),
+  }));
 
   return (
     <>
       <AppBar back="/me" title="내 세션" />
       <div className="sticky top-[52px] z-10 border-b border-gray-100 bg-surface">
-        <SessionRoleTabs sessions={sessions} activeTab={activeTab} />
+        <SessionTabs label="역할" tabs={roleTabs} activeKey={activeTab} />
         {chips.length > 0 && <SessionStatusChips activeTab={activeTab} activeChip={activeChip} />}
       </div>
 

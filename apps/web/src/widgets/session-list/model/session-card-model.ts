@@ -74,6 +74,8 @@ export type SessionContext = {
   respondedGameIds: ReadonlySet<string>;
   responseCounts: ReadonlyMap<string, number>;
   now?: Date;
+  // 남의 프로필: 할 일 버튼과 보는 사람 기준 문구(미제출·응답 수)를 빼고 기록만 남긴다.
+  readOnly?: boolean;
 };
 
 export type MySessions = Record<SessionBucket, SessionCardModel[]>;

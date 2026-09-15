@@ -35,11 +35,15 @@ export function toHostedSessionCard(
     waitlistEnabled: game.waitlistEnabled,
   });
   const responses = context.responseCounts.get(game.id) ?? 0;
-  const scheduleTone = awaitingTime
+  const gmTodo = awaitingTime && !context.readOnly;
+  const scheduleTone = gmTodo
     ? SESSION_TONE.warning
     : line.confirmed
       ? SESSION_TONE.success
       : SESSION_TONE.normal;
+  const awaitingTimeText = context.readOnly
+    ? "모집이 끝나 GM이 세션 시간을 정하는 중입니다"
+    : "기한이 지났는데 세션 시간이 없습니다";
 
   return {
     ...base,
@@ -48,15 +52,15 @@ export function toHostedSessionCard(
     badge: gameStatusLabel[status],
     badgeColor: gameStatusColor[status],
     schedule: awaitingTime
-      ? "기한이 지났는데 세션 시간이 없습니다"
+      ? awaitingTimeText
       : (sessionWhen ?? joinParts(line.text, line.deadline)),
     scheduleTone,
     meta: joinParts(
       game.rule,
-      coordinate && !timeSet && `응답 ${responses}/${confirmedCount}`,
+      !context.readOnly && coordinate && !timeSet && `응답 ${responses}/${confirmedCount}`,
       `확정 ${seats}`,
     ),
-    action: awaitingTime
+    action: gmTodo
       ? {
           kind: SESSION_ACTION_KIND.confirmTime,
           label: "세션 시간 확정하기",

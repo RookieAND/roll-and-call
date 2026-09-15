@@ -1,4 +1,6 @@
 import { Avatar, Text } from "@trpg/ui";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 import type { RosterMember } from "@/entities/game";
 
@@ -17,7 +19,10 @@ export function RosterMemberRow({
   note?: string;
 }) {
   return (
-    <div className="flex min-h-12 items-center gap-2.5 border-b border-gray-100 py-2 last:border-b-0">
+    <Link
+      href={`/u/${member.userId}`}
+      className="flex min-h-12 items-center gap-2.5 border-b border-gray-100 py-2 transition-colors last:border-b-0 hover:bg-gray-50"
+    >
       <Text typography="code2" foreground="hint" className="w-5 shrink-0 text-center tabular-nums">
         {rank}
       </Text>
@@ -32,6 +37,7 @@ export function RosterMemberRow({
           </Text>
         )}
       </div>
-    </div>
+      <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />
+    </Link>
   );
 }

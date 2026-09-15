@@ -3,7 +3,7 @@
 import { Text } from "@trpg/ui";
 import { useState } from "react";
 
-import { MemberActionSheet, SwapSheet } from "@/features/adjust-roster";
+import { MemberActionSheet, SwapSheet, WaitingMemberSheet } from "@/features/adjust-roster";
 
 import type { ManagedMember } from "../model/managed-member";
 import { CapacityDivider } from "./capacity-divider";
@@ -28,6 +28,7 @@ export function RosterList({
   locked: boolean;
 }) {
   const [menuMember, setMenuMember] = useState<ManagedMember | null>(null);
+  const [waitingMenuMember, setWaitingMenuMember] = useState<ManagedMember | null>(null);
   const [incoming, setIncoming] = useState<ManagedMember | null>(null);
 
   const total = confirmed.length + waiting.length;
@@ -75,11 +76,9 @@ export function RosterList({
               {waiting.map((member) => (
                 <WaitingRosterRow
                   key={member.userId}
-                  gameId={gameId}
                   member={member}
-                  isFull={isFull}
                   locked={locked}
-                  onSwap={setIncoming}
+                  onOpenMenu={setWaitingMenuMember}
                 />
               ))}
             </div>
@@ -93,6 +92,13 @@ export function RosterList({
         filler={filler}
         scheduleHref={scheduleHref}
         onClose={() => setMenuMember(null)}
+      />
+      <WaitingMemberSheet
+        gameId={gameId}
+        member={waitingMenuMember}
+        isFull={isFull}
+        onSwap={setIncoming}
+        onClose={() => setWaitingMenuMember(null)}
       />
       <SwapSheet
         gameId={gameId}

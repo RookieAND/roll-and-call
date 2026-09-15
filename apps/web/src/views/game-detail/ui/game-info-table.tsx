@@ -1,4 +1,5 @@
 import { Text } from "@trpg/ui";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { GameGmLabel } from "@/entities/game";
@@ -12,7 +13,7 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
     {
       label: "GM",
       value: (
-        <span className="inline-flex items-center gap-1.5">
+        <Link href={`/u/${game.gmId}`} className="inline-flex min-h-11 items-center gap-1.5">
           <GameGmLabel
             name={game.gm?.username}
             avatarUrl={game.gm?.avatarUrl}
@@ -25,7 +26,7 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
               나
             </Text>
           )}
-        </span>
+        </Link>
       ),
     },
     ...(game.playTime ? [{ label: "플레이타임", value: game.playTime }] : []),

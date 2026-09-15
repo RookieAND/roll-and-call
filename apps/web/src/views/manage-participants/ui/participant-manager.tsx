@@ -1,4 +1,5 @@
-import { Container, Text, VStack } from "@trpg/ui";
+import { Container, HStack, Text, VStack } from "@trpg/ui";
+import { CircleAlert } from "lucide-react";
 
 import { AppBar, EmptyState } from "@/shared/ui";
 
@@ -58,7 +59,7 @@ export function ParticipantManager({
               action={<CopyLinkButton gameId={gameId} />}
             />
           ) : (
-            <VStack gap={3}>
+            <VStack gap={2}>
               <RosterList
                 gameId={gameId}
                 confirmed={confirmed}
@@ -70,20 +71,20 @@ export function ParticipantManager({
               />
 
               {summary.unsubmittedCount > 0 && (
-                <Text typography="body3" render={<p />} className="font-semibold text-warning-600">
-                  {summary.unsubmittedCount}명이 아직 가능 시간을 내지 않았습니다.
-                </Text>
+                <HStack align="center" gap={2} className="text-warning-600">
+                  <CircleAlert size={14} strokeWidth={2.2} aria-hidden className="shrink-0" />
+                  <Text typography="body4" render={<p />}>
+                    {summary.unsubmittedCount}명이 아직 가능 시간을 내지 않았습니다.
+                  </Text>
+                </HStack>
               )}
 
               {showFullNote && (
-                <div className="rounded-xl bg-gray-50 px-3.5 py-3">
-                  <Text typography="body3" foreground="muted" render={<p />}>
-                    정원이 차서 대기자를 바로 올릴 수 없습니다.
-                  </Text>
-                  <Text typography="body3" foreground="hint" render={<p />}>
-                    &quot;교체&quot;를 누르면 내릴 사람을 고르고 한 번에 바꿉니다.
-                  </Text>
-                </div>
+                <Text typography="body4" foreground="hint" render={<p />}>
+                  정원이 차서 대기자를 바로 올릴 수 없습니다.
+                  <br />
+                  대기자 ⋯ 메뉴의 &quot;교체&quot;를 누르면 내릴 사람을 고르고 한 번에 바꿉니다.
+                </Text>
               )}
             </VStack>
           )}

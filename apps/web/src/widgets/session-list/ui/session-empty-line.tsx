@@ -1,0 +1,11 @@
+import { Text } from "@trpg/ui";
+
+export function SessionEmptyLine({ text }: { text: string }) {
+  return (
+    <div className="rounded-[14px] border border-dashed border-gray-300 p-3.5">
+      <Text typography="body3" foreground="hint" render={<p />} className="text-[13.5px]">
+        {text}
+      </Text>
+    </div>
+  );
+}

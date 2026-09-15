@@ -48,7 +48,8 @@ export function toJoinedSessionCard(
     };
   }
 
-  const needsResponse = !context.respondedGameIds.has(game.id) && !line.deadlinePassed;
+  const needsResponse =
+    !context.readOnly && !context.respondedGameIds.has(game.id) && !line.deadlinePassed;
   const schedule = needsResponse
     ? joinParts("가능 시간 미제출", line.deadline)
     : awaitingTime

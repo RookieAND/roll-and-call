@@ -1,7 +1,8 @@
-import { Avatar, IconButton, Text, cn } from "@trpg/ui";
-import { MoreHorizontal } from "lucide-react";
+import { Text, cn } from "@trpg/ui";
 
 import type { ManagedMember } from "../model/managed-member";
+import { MemberMenuButton } from "./member-menu-button";
+import { MemberProfileLink } from "./member-profile-link";
 import { ROSTER_ROW_CLASS } from "./roster-row-class";
 
 // "4번이 대기인데 5번이 확정"인 이유(GM이 건너뛰고 올림)가 행 옆에 바로 보이게 한다.
@@ -33,29 +34,18 @@ export function ConfirmedRosterRow({
 
   return (
     <div className={ROSTER_ROW_CLASS}>
-      <Text typography="code2" foreground="hint" className="w-5 shrink-0 text-center tabular-nums">
-        {member.applicationRank}
-      </Text>
-      <Avatar src={member.avatarUrl} name={member.username} size="stack" />
-      <div className="min-w-0 flex-1">
-        <Text typography="subtitle2" className="block truncate">
-          {member.username}
-        </Text>
-        {note && (
-          <Text typography="body4" foreground="muted" className={noteClass}>
-            {note}
-          </Text>
-        )}
-      </div>
+      <MemberProfileLink
+        member={member}
+        note={
+          note && (
+            <Text typography="body4" foreground="muted" className={noteClass}>
+              {note}
+            </Text>
+          )
+        }
+      />
       {!locked && (
-        <IconButton
-          variant="outline"
-          aria-label={`${member.username} 메뉴`}
-          onClick={() => onOpenMenu(member)}
-          className="h-11 w-11 shrink-0 rounded-[10px] border-gray-200 text-gray-600"
-        >
-          <MoreHorizontal size={16} aria-hidden />
-        </IconButton>
+        <MemberMenuButton username={member.username} onClick={() => onOpenMenu(member)} />
       )}
     </div>
   );
