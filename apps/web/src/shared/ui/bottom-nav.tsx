@@ -1,14 +1,14 @@
 "use client";
 
 import { cn, Text } from "@trpg/ui";
-import { House, List, User } from "lucide-react";
+import { CalendarDays, List, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { isInRouteGroup } from "./is-in-route-group";
 
 const tabs = [
-  { href: "/", label: "홈", Icon: House, isActive: (pathname: string) => pathname === "/" },
+  { href: "/", label: "홈", Icon: CalendarDays, isActive: (pathname: string) => pathname === "/" },
   {
     href: "/games",
     label: "구인 목록",

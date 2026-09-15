@@ -7,9 +7,11 @@ import { AppBar } from "@/shared/ui";
 import { loadMySessions } from "@/widgets/session-list";
 
 import { summarizeMySessions } from "../model/my-page-summary";
+import { sessionTodos } from "../model/session-todos";
 import { MyPageHeader } from "./my-page-header";
 import { MyPageSessions } from "./my-page-sessions";
 import { MyPageSettings } from "./my-page-settings";
+import { MyPageTodos } from "./my-page-todos";
 
 export async function MyPageView() {
   const user = await getCurrentUser();
@@ -30,6 +32,7 @@ export async function MyPageView() {
 
   const { name, avatar, handle } = profileDisplay({ profile, user });
   const sessions = summarizeMySessions(mySessions);
+  const todos = sessionTodos(mySessions);
   const handleLabel = handle ? `@${handle}` : null;
 
   return (
@@ -37,6 +40,7 @@ export async function MyPageView() {
       <AppBar title="마이페이지" />
       <Container size="sm">
         <VStack gap={5} className="py-[18px]">
+          {todos.length > 0 && <MyPageTodos todos={todos} />}
           <MyPageHeader name={name} avatarUrl={avatar} bio={profile?.bio ?? null} />
           <MyPageSessions sessions={sessions} />
           <MyPageSettings handleLabel={handleLabel} />

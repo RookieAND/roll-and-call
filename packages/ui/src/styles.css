@@ -71,6 +71,9 @@
   --color-tinted-bg-hover: #eeedfc;
   --color-tinted-border: #d5d3f7;
   --color-tinted-ink: #4338ca;
+
+  /* 달력 토요일 글씨. 일요일은 danger-600을 쓴다. */
+  --color-saturday: #2c6ba0;
 }
 
 /* 히트맵 단계는 유틸리티(bg-heat-3)가 아니라 인라인 style의 var()로만 쓴다.
@@ -131,6 +134,7 @@
   --color-tinted-bg-hover: #2f2f57;
   --color-tinted-border: #3a3a6b;
   --color-tinted-ink: #c7d2fe;
+  --color-saturday: #8fbbe0;
 
   --color-heat-0: #1e1e26;
   --color-heat-1: #262649;

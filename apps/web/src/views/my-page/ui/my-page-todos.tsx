@@ -2,9 +2,9 @@ import { Text } from "@trpg/ui";
 
 import { SessionCard } from "@/widgets/session-list";
 
-import type { AgendaItem } from "../model/home-agenda";
+import type { TodoItem } from "../model/session-todos";
 
-export function HomeTodos({ todos }: { todos: AgendaItem[] }) {
+export function MyPageTodos({ todos }: { todos: TodoItem[] }) {
   return (
     <section className="flex flex-col gap-2.5">
       <div>

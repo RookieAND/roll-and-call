@@ -24,6 +24,7 @@ export {
 export { getRecruitingGamesPage, GAMES_PAGE_SIZE } from "./get-recruiting-games-page";
 export { getGamesByGm } from "./get-games-by-gm";
 export { getJoinedGames } from "./get-joined-games";
+export { getMonthSessions, type MonthSessionRow } from "./get-month-sessions";
 export { getGameById, type GameDetailData } from "./get-game-by-id";
 export { getGameParticipants, type GameParticipantsData } from "./get-game-participants";
 export { getRespondedGameIds } from "./get-responded-game-ids";
