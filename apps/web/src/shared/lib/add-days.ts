@@ -1,7 +1,6 @@
-import { padTwoDigits } from "./pad-two-digits";
+import { dayjs } from "./dayjs";
 
+// 타임존과 무관하게 달력 날짜로만 센다.
 export function addDays(date: string, count: number): string {
-  const day = new Date(`${date}T00:00:00Z`);
-  day.setUTCDate(day.getUTCDate() + count);
-  return `${day.getUTCFullYear()}-${padTwoDigits(day.getUTCMonth() + 1)}-${padTwoDigits(day.getUTCDate())}`;
+  return dayjs.utc(date).add(count, "day").format("YYYY-MM-DD");
 }

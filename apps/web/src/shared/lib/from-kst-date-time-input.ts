@@ -1,3 +1,5 @@
+import { dayjs, KST } from "./dayjs";
+
 export function fromKstDateTimeInput(value: string): Date {
-  return new Date(`${value}:00+09:00`);
+  return dayjs.tz(value, KST).toDate();
 }

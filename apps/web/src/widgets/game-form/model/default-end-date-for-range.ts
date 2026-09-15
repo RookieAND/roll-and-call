@@ -1,5 +1,5 @@
-import { previousDay } from "./previous-day";
+import { addDays } from "@/shared/lib";
 
 export function defaultEndDateForRange(rangeStart: string): string {
-  return `${previousDay(rangeStart)}T19:00`;
+  return `${addDays(rangeStart, -1)}T19:00`;
 }

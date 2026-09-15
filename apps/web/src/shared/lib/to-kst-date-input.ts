@@ -1,5 +1,5 @@
-import { toKstDateTimeInput } from "./to-kst-date-time-input";
+import { toKst } from "./to-kst";
 
 export function toKstDateInput(value: Date | string): string {
-  return toKstDateTimeInput(value).slice(0, 10);
+  return toKst(value).format("YYYY-MM-DD");
 }
