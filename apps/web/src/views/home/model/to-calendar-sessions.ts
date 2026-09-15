@@ -3,7 +3,7 @@ import type { MonthSessionRow } from "@/shared/server";
 
 export type CalendarSession = ReturnType<typeof toCalendarSessions>[number];
 
-// 확정됐거나 끝난 세션만 달력에 오른다. 일시 지정형이라도 아직 모집 중이면 뺀다.
+// 시간이 정해진 세션은 모집 중이어도 달력에 오른다. 아무도 오지 않고 마감된 세션만 뺀다.
 export function toCalendarSessions(
   rows: MonthSessionRow[],
   viewerId: string | null,
@@ -15,7 +15,7 @@ export function toCalendarSessions(
       .filter((participant) => participant.status === PARTICIPANT_STATUS.confirmed)
       .map((participant) => participant.user);
     const state = deriveSessionState({ ...game, confirmedCount: players.length }, now);
-    if (state !== SESSION_STATE.confirmed && state !== SESSION_STATE.finished) return [];
+    if (state === SESSION_STATE.closed) return [];
 
     return [
       {
