@@ -4,7 +4,7 @@ import { and, eq, gt, ilike, isNull, lte, not, or, sql, type SQL } from "drizzle
 import { GAME_STATUS_FILTER, type GamesFilter } from "@/shared/api";
 
 import { confirmedCountSql } from "./confirmed-count-sql";
-import { games } from "./db";
+import { games } from "./schema";
 
 // 상태 필터는 모집 상태 배지(deriveGameStatus)와 같은 기준이다. 플레이가 끝난 게임은 늘 뺀다.
 export function recruitingGamesWhere(filter: GamesFilter, now: Date) {

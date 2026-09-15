@@ -1,7 +1,8 @@
 import "server-only";
 import { and, eq, inArray, sql } from "drizzle-orm";
 
-import { availabilities, db, participants } from "./db";
+import { db } from "./db";
+import { availabilities, participants } from "./schema";
 
 // 확정 참여자의 응답만 센다.
 export async function getResponseCounts(gameIds: string[]): Promise<Map<string, number>> {

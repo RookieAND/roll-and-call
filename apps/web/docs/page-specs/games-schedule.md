@@ -221,7 +221,7 @@ AppBar
 | 액션 | 트리거 | DB 변경 | 토스트 | redirect | revalidatePath | Discord |
 |---|---|---|---|---|---|---|
 | `saveAvailability(gameId, slotIsos)` | "가능 시간 저장" | 트랜잭션: `availabilities`에서 `(game_id, user_id)` 행 전체 DELETE 후 선택 슬롯 INSERT(전체 교체) | 성공 "가능 시간을 저장했습니다" / 실패 `result.error` | 없음 | `/games/{id}/schedule` | 없음 |
-| `confirmSession(gameId, slotIso)` | "이 시간으로 확정" | `games.confirmed_at = slot`, `games.notified_at = null`. 주석(`:16`)에 따르면 재확정할 때 1시간 전 알림을 다시 켜기 위한 것이다 | 성공 "세션이 확정되었습니다" / 실패는 인라인 텍스트 | 클라이언트 `router.push("/games/{id}")` | `/games/{id}`, `/games/{id}/schedule`, `/games` | 확정 즉시 보내는 알림은 없다. 이후 cron `src/app/api/cron/session-reminders/route.ts:29-35`가 `confirmed_at`이 1시간 이내이고 `notified_at IS NULL`인 게임에 "⏰ 곧 시작! **{title}** 세션이 {formatDateTime}에 시작해요." 알림을 보낸다(`src/shared/server/discord-notify.ts:153`). ❓ 확인 필요: cron 실행 주기(Vercel Hobby 제한) |
+| `confirmSession(gameId, slotIso)` | "이 시간으로 확정" | `games.confirmed_at = slot`, `games.notified_at = null`. 주석(`:16`)에 따르면 재확정할 때 1시간 전 알림을 다시 켜기 위한 것이다 | 성공 "세션이 확정되었습니다" / 실패는 인라인 텍스트 | 클라이언트 `router.push("/games/{id}")` | `/games/{id}`, `/games/{id}/schedule`, `/games` | 확정 직후 `notifySessionConfirmed(gameId, 이전 confirmed_at)`(`src/shared/server/notify-session-confirmed.ts`)가 모집 공지 **스레드**에 embed를 보낸다(2026-09-16): 제목 "🗓️ {title}", 설명 "세션 시간이 확정됐어요."(처음) / "세션 시간이 변경됐어요."(재확정), 필드 "🕒 시간"(`formatDateTime`), "👥 인원 {확정}/{정원}", 재확정이면 "이전 시간", footer "GM {name}", 초록. 같은 시간으로 다시 확정하거나 스레드가 없으면 보내지 않는다. 멘션 없음. 공지 메시지 인원·시간은 `refreshRecruitPost`로 함께 갱신한다. 이후 cron `src/app/api/cron/session-reminders/route.ts:29-35`가 `confirmed_at`이 1시간 이내이고 `notified_at IS NULL`인 게임에 "⏰ 곧 시작! **{title}** 세션이 {formatDateTime}에 시작해요." 알림을 보낸다(`src/shared/server/discord-notify.ts:153`). ❓ 확인 필요: cron 실행 주기(Vercel Hobby 제한) |
 
 - 확정 이후에는 `canConfirm`이 false라서 이 화면에서 다시 확정할 방법이 없다. 재확정에 대비한 `notified_at` 리셋은 이 UI 기준으로 닿지 않는 경로다.
 
@@ -254,6 +254,6 @@ AppBar
 11. 확정 슬롯 표시와 "누른 칸" 표시가 같은 초록 outline이라 구분되지 않는다.
 12. 세션 확정에 확인 단계가 없다. 후보가 상위 5개로 고정되어 GM이 다른 시각을 고를 수 없다. 에러는 인라인, 성공은 토스트로 표시 방식이 섞여 있다.
 13. 확정 후에는 재확정이나 확정 취소 UI가 없다. 서버의 `notified_at` 리셋 의도와 맞지 않는다.
-14. 세션을 확정해도 참여자에게 즉시 가는 Discord 알림이 없다. 1시간 전 cron 알림만 있다.
+14. ~~세션을 확정해도 참여자에게 즉시 가는 Discord 알림이 없다.~~ 해결(2026-09-16): 확정·변경 시 모집 공지 스레드에 안내를 보낸다. 멘션은 하지 않으므로 스레드를 팔로우하지 않은 참여자는 알림을 받지 못한다.
 15. 마감(`end_date`)이 지나도 입력과 확정이 계속 가능하다. 반면 홈 목록의 조율 CTA는 모집 마감이면 숨겨진다(`can-coordinate-schedule.ts:17`). 진입점과 화면의 기준이 다르다.
 16. 격자, 히트맵, 탭 모두 키보드와 스크린리더를 지원하지 않는다.

@@ -1,7 +1,8 @@
 import "server-only";
 import { desc } from "drizzle-orm";
 
-import { db, games } from "./db";
+import { db } from "./db";
+import { games } from "./schema";
 
 export async function getGamesByGm(userId: string) {
   return db.query.games.findMany({

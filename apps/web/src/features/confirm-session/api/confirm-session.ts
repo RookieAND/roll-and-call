@@ -4,7 +4,13 @@ import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { db, games, getCurrentUser, refreshRecruitPost } from "@/shared/server";
+import {
+  db,
+  games,
+  getCurrentUser,
+  notifySessionConfirmed,
+  refreshRecruitPost,
+} from "@/shared/server";
 
 export async function confirmSession(gameId: string, slotIso: string): Promise<ActionResult> {
   const user = await getCurrentUser();
@@ -12,6 +18,11 @@ export async function confirmSession(gameId: string, slotIso: string): Promise<A
 
   const confirmedAt = new Date(slotIso);
   if (Number.isNaN(confirmedAt.getTime())) return { error: "잘못된 시간입니다." };
+
+  const previous = await db.query.games.findFirst({
+    where: (gameRow, { eq: equals }) => equals(gameRow.id, gameId),
+    columns: { confirmedAt: true },
+  });
 
   const updated = await db
     .update(games)
@@ -21,7 +32,10 @@ export async function confirmSession(gameId: string, slotIso: string): Promise<A
     .returning({ id: games.id });
 
   if (updated.length === 0) return { error: "확정 권한이 없습니다." };
-  await refreshRecruitPost(gameId);
+  await Promise.all([
+    refreshRecruitPost(gameId),
+    notifySessionConfirmed(gameId, previous?.confirmedAt ?? null),
+  ]);
 
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/schedule`);

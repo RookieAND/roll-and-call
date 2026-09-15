@@ -114,7 +114,7 @@ GM 여부는 `isGameGm` (`src/entities/game/model/is-game-gm.ts:2-4`)으로 판�
 | `me` | 뷰어가 참여 목록에 있으면 해당 멤버 | `game-detail.tsx:15` |
 | `status` (`GameStatus`) | `deriveGameStatus({ maxPlayers, endDate, participantCount: confirmed.length, waitlistEnabled })`: 기한 경과 → `closed`, 확정 인원 < 정원 → `recruiting`, 정원 충족이면 `waitlist_enabled`가 true → `confirmed`, false → `full` | `game-detail.tsx:18-23`, `derive-game-status.ts:7-23` |
 | 상태 라벨 | `recruiting` "모집 중"(primary), `confirmed` "대기 모집"(success), `full` "모집 마감"(gray), `closed` "모집 마감"(gray) | `src/entities/game/model/status.ts:13-26` |
-| `canSchedule` | `scheduleMode === "coordinate"` (확정/마감 여부는 보지 않음) | `game-detail-actions.tsx:19` |
+| `canSchedule` | `scheduleMode === "coordinate"` (마감 여부는 보지 않음). 확정된 세션(A1)에서는 쓰지 않는다 | `game-detail-actions.tsx` |
 
 ### 캐시
 
@@ -226,8 +226,7 @@ GM 뷰에 `RoundSheet`(create-second-round), `ConfirmSessionForm`(confirm-sessio
 
 | # | actionView | 조건 | status | schedule_mode | 표시 | 근거 |
 |---|---|---|---|---|---|---|
-| A1 | `confirmed` | `confirmed_at` 있음 (뷰어 자격 무관, 비로그인·GM 포함) | any | coordinate | ConfirmedSessionNotice + "일정 조율 보기" | `:57-70` |
-| A1' | `confirmed` | 〃 | any | fixed | ConfirmedSessionNotice만 | `:61` |
+| A1 | `confirmed` | 세션 잠김 (뷰어 자격 무관, 비로그인·GM 포함) | any | any | ConfirmedSessionNotice만. 확정 후에는 [일정 조율] 버튼을 숨긴다(2026-09-16). GM은 ⋯ 메뉴 "확정 시간 변경"으로 조율 화면에 간다 | `confirmed-actions.tsx` |
 | A2 | `waiting` | 뷰어 = 대기자 | any (마감 포함) | coordinate | WaitlistNotice + "가능 시간 입력" + "대기 취소" | `:72-86` |
 | A2' | `waiting` | 〃 | any | fixed | WaitlistNotice + "대기 취소" | 〃 |
 | A3 | `joined` | 뷰어 = 확정 참여자 | recruiting | coordinate | "일정 조율하기"(primary) + "참여 취소"(outline) | `:103-116` |
@@ -245,7 +244,7 @@ GM 뷰에 `RoundSheet`(create-second-round), `ConfirmSessionForm`(confirm-sessio
 - 헤더 상태 배지는 `status`만 따른다. `confirmed_at`이 있어도 배지는 "모집 중"/"대기 모집"/"모집 마감" 중 하나다(`game-detail-header.tsx:22`).
 - GM이 `joinable`/`anon`에 도달하는 경로는 없다(GM이면 G1~G3에서 끝남).
 - `full`(대기 신청 끔 + 확정 인원 ≥ 정원, `derive-game-status.ts:20-22`)은 액션 존에서 `closed`와 같이 마감으로 취급된다(`game-action-zone.tsx:46, 51`). 미참여자는 로그인 여부와 무관하게 A5, 확정 참여자는 A4, 대기자는 A2다. 대기 신청 끔 게임에도 대기 행이 있을 수 있다(설정을 끄기 전의 대기자, GM "대기로 이동", 다음 회차 정원 초과분). GM 하단 바(G1 "일정 조율 현황")와 GM 메뉴 "참여자 관리"는 `full`에서도 그대로다(`game-detail-actions.tsx`는 `status`를 보지 않음).
-- `canSchedule`은 `canCoordinate`(모드만)라서, 마감(closed)된 coordinate 게임에서도 참여자·대기자·GM에게 조율 링크가 보인다. 주석상 의도다(`derive-action-view.ts:11`).
+- `canSchedule`은 `canCoordinate`(모드만)라서, 마감(closed)됐지만 확정 전인 coordinate 게임에서도 참여자·대기자·GM에게 조율 링크가 보인다. 주석상 의도다(`derive-action-view.ts`). 확정된 뒤에는 A1로 가서 링크가 없다.
 
 ## 7. 폼과 유효성 검사
 
@@ -265,10 +264,11 @@ GM 뷰에 `RoundSheet`(create-second-round), `ConfirmSessionForm`(confirm-sessio
 - Discord (트랜잭션 후, `await`, 전부 봇 REST):
   - 항상: `notifyGameJoined` — 모집 공지 **스레드에만** 보낸다(`game.discordThreadId`가 없으면 건너뜀)
     - embed "🙋 {title}" "**{신청자}**님이 참여했어요." (초록) / "⏳ {title}" "**{신청자}**님이 대기열에 등록했어요." (노랑), 상태, 현재 인원 `{확정}/{정원}`, footer "GM {name}"
+    - 대기열 등록일 때만 필드 "대기 인원 {n}명"을 더한다. n은 방금 등록한 사람을 포함한 대기자 수(`announce-new-application.ts`)
   - 이번 신청으로 확정 정원이 **막 찼을 때** 추가로: `notifyRecruitmentComplete`
     - 채널: `DISCORD_CLOSED_CHANNEL_ID`, 스레드 아님
-    - content: GM + 전체 참여자(대기자 포함) Discord 멘션, `allowed_mentions.users`로 실제 핑
-    - embed: "🎉 {title} — 구인 완료!", 사용 룰, 인원 `{max}/{max}`, 시간(`formatGameSchedule`), footer "GM {name}", 분홍색
+    - content 없음. **멘션하지 않는다**(2026-09-15)
+    - embed: "🎉 {title} — 구인 완료!", 사용 룰, 인원 `{max}/{max}`, 시간(`formatGameSchedule`), "🙋 참여자"(확정자 이름을 신청 순으로 쉼표로 이음, 1024자에서 자름), footer "GM {name}", 분홍색
   - 마지막으로 `refreshRecruitPost` — 모집 공지 메시지의 인원을 PATCH로 갱신
 - `revalidatePath`: `/games/${id}`, `/games/${id}/participants`, `/games` (`:71-73`)
 - 반환 `{ waiting }` → 토스트: 성공 "대기로 접수했습니다"(waiting) / "참여했습니다", 실패 `toast.error(error)` (`join-game-button.tsx:23-25`). 버튼 라벨은 렌더 시점 `isFull` 기준이지만 토스트는 서버 결과를 따른다.
@@ -292,10 +292,11 @@ GM 뷰에 `RoundSheet`(create-second-round), `ConfirmSessionForm`(confirm-sessio
 
 - 클라이언트 Supabase `signInWithOAuth({ provider: "discord", redirectTo: origin + "/auth/callback" })`. 토스트 없음.
 
-### 공통: Discord 전송 규칙 (`src/shared/server/discord-webhook.ts`)
+### 공통: Discord 전송 규칙 (`packages/discord`, `@trpg/discord`)
 
-- webhook 환경변수가 없으면 `console.warn` 후 건너뛴다. `?wait=true`, 스레드면 `thread_id`를 붙인다. 타임아웃 8초, 실패는 로그만 남기고 삼킨다(`:32-67`).
-- 스레드는 구인 등록 시 `notifyGameCreated` → `startDiscordThread`(봇 토큰 `DISCORD_BOT_TOKEN`)로 만든다. 그 id를 `games.discord_thread_id`에 저장한다(`create-game.ts`, `discord-webhook.ts:72-99`). 이 페이지는 스레드를 만들지 않는다.
+- webhook은 쓰지 않는다. 모든 메시지는 봇 토큰(`DISCORD_BOT_TOKEN`)으로 채널 id·스레드 id에 REST로 보낸다(`api/discord-bot-api.ts`). 채널 id가 없으면 `console.warn` 후 건너뛴다. 타임아웃 8초, 실패는 로그만 남기고 삼킨다(`message/send-discord-message.ts`).
+- 요청 본문의 `@everyone`/`@here` 문자열은 지우고, `allowed_mentions.parse`는 비워 역할·전체 멘션이 울리지 않는다.
+- 스레드는 구인 등록 시 `notifyGameCreated` → `startDiscordThread`로 만든다. 그 id를 `games.discord_thread_id`에 저장한다(`create-game.ts`). 이 페이지는 스레드를 만들지 않는다.
 - 알림은 `revalidatePath`와 서버 액션 반환보다 먼저 `await`된다. 버튼 pending 시간에 포함된다.
 
 ## 9. 반응형과 접근성 현황

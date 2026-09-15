@@ -266,11 +266,12 @@ BottomNav 탭 중 `/games` 탭이 `pathname.startsWith` 규칙으로 활성 표�
 
 ### Discord 모집 공지 (`notifyGameCreated`)
 
-`src/shared/server/discord-notify.ts` (`recruitEmbed`, `notifyGameCreated`), `src/shared/server/discord-bot.ts` (`sendDiscordMessage`, `startDiscordThread`)
+`src/shared/server/notify-game-created.ts`, `send-game-images.ts`, `@trpg/discord` (`sendDiscordMessage`, `startDiscordThread`)
 - 봇이 `POST /channels/{DISCORD_RECRUIT_CHANNEL_ID}/messages`로 보낸다. 채널 id가 없으면 경고 로그만 남기고 건너뛴다.
 - content: "📢 새로운 구인 글이 올라왔어요!"
 - embed(`recruitEmbed`): title "🎲 {title}", url = 상세 URL(`NEXT_PUBLIC_SITE_URL` 또는 `VERCEL_URL`이 있을 때만), description "**개요**\n{synopsis}" (4000자 넘으면 잘라서 "…"), color 0x5865f2, fields "📜 사용 룰" / "👥 인원"("{확정}/{정원}명") / "🕒 시간"(`formatGameSchedule`) / URL이 있으면 "**[▶ 참여하러 가기](url)**", image = 썸네일, footer "GM {gmName} · 마감 {formatMonthDay(endDate)}", timestamp = 게임 생성 시각.
 - 스레드: `POST /channels/{channel_id}/messages/{id}/threads` (name = 제목 앞 100자, auto_archive 10080분). 스레드 id = 공지 메시지 id. 실패하면 undefined.
+- 진행 이미지: 스레드가 열리고 `images`가 1장 이상이면 스레드에 메시지 하나로 보낸다(`sendGameImages`). embed마다 `image`만 넣고 `url`을 같게 맞춰 Discord가 갤러리(4장씩)로 묶는다. 구인 수정으로 이미지가 바뀌어도 다시 보내지 않는다.
 - 로스터(참여·취소·승격·강등·내보내기)나 구인 내용이 바뀌면 `refreshRecruitPost`가 같은 embed로 공지 메시지를 PATCH한다(인원 갱신).
 - 실패는 모두 삼킨다. 요청마다 `AbortSignal.timeout(8000)`이므로 최악의 경우 등록 응답이 약 16초 늦어질 수 있다.
 

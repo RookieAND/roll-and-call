@@ -1,7 +1,8 @@
 import "server-only";
 import type { GamesFilter } from "@/shared/api";
 
-import { db, games } from "./db";
+import { db } from "./db";
+import { games } from "./schema";
 import { recruitingGamesOrderBy } from "./recruiting-games-order-by";
 import { recruitingGamesWhere } from "./recruiting-games-where";
 
