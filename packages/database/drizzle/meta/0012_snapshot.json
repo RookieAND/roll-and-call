@@ -1,6 +1,6 @@
 {
-  "id": "0561c0d5-5a54-4920-b782-1f970d7025e5",
-  "prevId": "a8ae5a74-4da6-4c5e-a53a-14a64210fa95",
+  "id": "c98d4c1f-db4f-4d1e-be94-38343012e1e0",
+  "prevId": "0561c0d5-5a54-4920-b782-1f970d7025e5",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -33,12 +33,8 @@
           "name": "availabilities_game_id_games_id_fk",
           "tableFrom": "availabilities",
           "tableTo": "games",
-          "columnsFrom": [
-            "game_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["game_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -46,24 +42,16 @@
           "name": "availabilities_user_id_profiles_id_fk",
           "tableFrom": "availabilities",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {
         "availabilities_game_id_user_id_slot_start_pk": {
           "name": "availabilities_game_id_user_id_slot_start_pk",
-          "columns": [
-            "game_id",
-            "user_id",
-            "slot_start"
-          ]
+          "columns": ["game_id", "user_id", "slot_start"]
         }
       },
       "uniqueConstraints": {},
@@ -208,25 +196,17 @@
           "name": "games_gm_id_profiles_id_fk",
           "tableFrom": "games",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "gm_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gm_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "cascade"
         },
         "games_parent_game_id_games_id_fk": {
           "name": "games_parent_game_id_games_id_fk",
           "tableFrom": "games",
           "tableTo": "games",
-          "columnsFrom": [
-            "parent_game_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_game_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -275,12 +255,8 @@
           "name": "participants_game_id_games_id_fk",
           "tableFrom": "participants",
           "tableTo": "games",
-          "columnsFrom": [
-            "game_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["game_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -288,23 +264,16 @@
           "name": "participants_user_id_profiles_id_fk",
           "tableFrom": "participants",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {
         "participants_game_id_user_id_pk": {
           "name": "participants_game_id_user_id_pk",
-          "columns": [
-            "game_id",
-            "user_id"
-          ]
+          "columns": ["game_id", "user_id"]
         }
       },
       "uniqueConstraints": {},
@@ -367,9 +336,7 @@
         "profiles_discord_id_unique": {
           "name": "profiles_discord_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "discord_id"
-          ]
+          "columns": ["discord_id"]
         }
       },
       "policies": {},
@@ -381,18 +348,12 @@
     "public.participant_status": {
       "name": "participant_status",
       "schema": "public",
-      "values": [
-        "confirmed",
-        "waiting"
-      ]
+      "values": ["confirmed", "waiting"]
     },
     "public.schedule_mode": {
       "name": "schedule_mode",
       "schema": "public",
-      "values": [
-        "fixed",
-        "coordinate"
-      ]
+      "values": ["fixed", "coordinate"]
     }
   },
   "schemas": {},

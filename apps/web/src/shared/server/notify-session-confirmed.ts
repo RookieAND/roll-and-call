@@ -1,10 +1,10 @@
+import { db } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 import type { DiscordEmbed } from "@trpg/discord";
 
 import { formatDateTime } from "@/shared/lib";
 
 import { countConfirmedParticipants } from "./count-confirmed-participants";
-import { db } from "./db";
 import { gameUrl } from "./game-url";
 
 // 확정 뒤에 부른다. 같은 시간으로 다시 확정하면 보내지 않는다.

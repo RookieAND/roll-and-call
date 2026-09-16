@@ -1,7 +1,7 @@
 import "server-only";
 
-export { db } from "./db";
 export {
+  db,
   scheduleMode,
   participantStatus,
   profiles,
@@ -20,7 +20,7 @@ export {
   type NewParticipant,
   type Availability,
   type NewAvailability,
-} from "./schema";
+} from "@trpg/database";
 export { getRecruitingGamesPage, GAMES_PAGE_SIZE } from "./get-recruiting-games-page";
 export { getGamesByGm } from "./get-games-by-gm";
 export { getJoinedGames } from "./get-joined-games";

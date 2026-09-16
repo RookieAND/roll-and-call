@@ -10,11 +10,7 @@
     "typecheck": "tsc --noEmit",
     "lint:fsd": "node scripts/fsd-check.mjs",
     "lint:tokens": "node scripts/tokens-check.mjs",
-    "check": "tsx --tsconfig tsconfig.json src/entities/game/model/game.check.ts && tsx --tsconfig tsconfig.json src/entities/availability/model/availability.check.ts && tsx --tsconfig tsconfig.json src/features/write-game/model/game-form.check.ts && tsx --tsconfig tsconfig.json src/widgets/session-list/model/session-card.check.ts && tsx --tsconfig tsconfig.json src/entities/profile/model/play-stance.check.ts && tsx --tsconfig tsconfig.json src/views/game-detail/model/derive-action-view.check.ts && tsx --tsconfig tsconfig.json src/views/game-schedule/model/weeks.check.ts && tsx --tsconfig tsconfig.json src/shared/lib/date-input.check.ts && tsx --tsconfig tsconfig.json src/entities/game/model/session-lock.check.ts && tsx --tsconfig tsconfig.json src/shared/lib/storage-path.check.ts && tsx --tsconfig tsconfig.json src/views/home/model/rank-people.check.ts",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "check": "tsx --tsconfig tsconfig.json src/entities/game/model/game.check.ts && tsx --tsconfig tsconfig.json src/entities/availability/model/availability.check.ts && tsx --tsconfig tsconfig.json src/features/write-game/model/game-form.check.ts && tsx --tsconfig tsconfig.json src/widgets/session-list/model/session-card.check.ts && tsx --tsconfig tsconfig.json src/entities/profile/model/play-stance.check.ts && tsx --tsconfig tsconfig.json src/views/game-detail/model/derive-action-view.check.ts && tsx --tsconfig tsconfig.json src/views/game-schedule/model/weeks.check.ts && tsx --tsconfig tsconfig.json src/shared/lib/date-input.check.ts && tsx --tsconfig tsconfig.json src/entities/game/model/session-lock.check.ts && tsx --tsconfig tsconfig.json src/shared/lib/storage-path.check.ts && tsx --tsconfig tsconfig.json src/views/home/model/rank-people.check.ts"
   },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-rc.0",
@@ -22,13 +18,13 @@
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.2",
     "@tanstack/react-query": "^5.101.4",
+    "@trpg/database": "workspace:*",
     "@trpg/discord": "workspace:*",
     "@trpg/ui": "workspace:*",
     "dayjs": "^1.11.23",
     "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.32.0",
     "next": "^16.3.0",
-    "postgres": "^3.4.9",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.85.0",
@@ -42,8 +38,6 @@
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "dotenv": "^17.4.2",
-    "drizzle-kit": "^0.31.10",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.13",
     "typescript": "^5.9.3"

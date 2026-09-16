@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "./db";
+import { db } from "@trpg/database";
 
 export type GameDetailData = NonNullable<Awaited<ReturnType<typeof getGameById>>>;
 

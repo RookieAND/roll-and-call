@@ -1,8 +1,6 @@
 import "server-only";
+import { db, participants } from "@trpg/database";
 import { desc } from "drizzle-orm";
-
-import { db } from "./db";
-import { participants } from "./schema";
 
 export async function getJoinedGames(userId: string) {
   const rows = await db.query.participants.findMany({

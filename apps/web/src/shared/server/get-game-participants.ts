@@ -1,5 +1,6 @@
 import "server-only";
-import { db } from "./db";
+import { db } from "@trpg/database";
+
 import { getRespondedUserIds } from "./get-responded-user-ids";
 
 export type GameParticipantsData = NonNullable<Awaited<ReturnType<typeof getGameParticipants>>>;

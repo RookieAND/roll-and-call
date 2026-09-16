@@ -1,8 +1,6 @@
 import "server-only";
+import { db, games } from "@trpg/database";
 import { asc } from "drizzle-orm";
-
-import { db } from "./db";
-import { games } from "./schema";
 
 export async function getMonthSessions(from: Date, to: Date) {
   return db.query.games.findMany({

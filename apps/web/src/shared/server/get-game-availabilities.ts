@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "./db";
+import { db } from "@trpg/database";
 
 export async function getGameAvailabilities(gameId: string) {
   return db.query.availabilities.findMany({

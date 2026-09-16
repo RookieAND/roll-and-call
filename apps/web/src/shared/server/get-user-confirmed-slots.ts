@@ -1,8 +1,7 @@
 import "server-only";
+import { db, games, participants } from "@trpg/database";
 import { and, eq, isNotNull, ne, or } from "drizzle-orm";
 
-import { db } from "./db";
-import { games, participants } from "./schema";
 import { playMinutes } from "./play-minutes";
 
 const SLOT_MS = 30 * 60 * 1000;

@@ -1,8 +1,8 @@
+import { db } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 import type { DiscordEmbed } from "@trpg/discord";
 
 import { countConfirmedParticipants } from "./count-confirmed-participants";
-import { db } from "./db";
 import { gameUrl } from "./game-url";
 
 // 삭제 후에 불러야 현재 인원이 맞다.

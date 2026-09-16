@@ -1,8 +1,8 @@
+import type { Game } from "@trpg/database";
 import { sendDiscordMessage, startDiscordThread } from "@trpg/discord";
 
 import { discordChannelId } from "./discord-channel-id";
 import { recruitEmbed } from "./recruit-embed";
-import type { Game } from "./schema";
 import { sendGameImages } from "./send-game-images";
 
 // 반환값은 스레드 id(= 공지 메시지 id, 실패 시 undefined).

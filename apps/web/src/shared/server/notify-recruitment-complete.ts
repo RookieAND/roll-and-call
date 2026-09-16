@@ -1,3 +1,4 @@
+import type { Game } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 import type { DiscordEmbed } from "@trpg/discord";
 
@@ -5,13 +6,8 @@ import { formatGameSchedule } from "@/shared/lib";
 
 import { discordChannelId } from "./discord-channel-id";
 import { gameUrl } from "./game-url";
-import type { Game } from "./schema";
 
-export async function notifyRecruitmentComplete(
-  game: Game,
-  gmName: string,
-  playerNames: string[],
-) {
+export async function notifyRecruitmentComplete(game: Game, gmName: string, playerNames: string[]) {
   const embed: DiscordEmbed = {
     title: `🎉 ${game.title} — 구인 완료!`,
     url: gameUrl(game.id),

@@ -1,8 +1,6 @@
 import "server-only";
+import { availabilities, db } from "@trpg/database";
 import { eq } from "drizzle-orm";
-
-import { db } from "./db";
-import { availabilities } from "./schema";
 
 export async function getRespondedGameIds(userId: string): Promise<Set<string>> {
   const rows = await db

@@ -1,3 +1,4 @@
+import type { Game } from "@trpg/database";
 import { DISCORD_COLOR } from "@trpg/discord";
 import type { DiscordEmbed } from "@trpg/discord";
 
@@ -5,7 +6,6 @@ import { formatGameSchedule, formatMonthDay } from "@/shared/lib";
 
 import { discordOverview } from "./discord-overview";
 import { gameUrl } from "./game-url";
-import type { Game } from "./schema";
 
 export function recruitEmbed(game: Game, gmName: string, confirmedCount: number): DiscordEmbed {
   const url = gameUrl(game.id);

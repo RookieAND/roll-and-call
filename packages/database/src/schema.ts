@@ -32,7 +32,7 @@ export const games = pgTable("games", {
   id: uuid("id").primaryKey().defaultRandom(),
   gmId: uuid("gm_id")
     .notNull()
-    .references(() => profiles.id, { onDelete: "cascade" }),
+    .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
   title: text("title").notNull(),
   rule: text("rule").notNull(),
   synopsis: text("synopsis"),
@@ -68,7 +68,7 @@ export const participants = pgTable(
       .references(() => games.id, { onDelete: "cascade" }),
     userId: uuid("user_id")
       .notNull()
-      .references(() => profiles.id, { onDelete: "cascade" }),
+      .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
     joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
     status: participantStatus("status").notNull().default("confirmed"),
   },
@@ -83,7 +83,7 @@ export const availabilities = pgTable(
       .references(() => games.id, { onDelete: "cascade" }),
     userId: uuid("user_id")
       .notNull()
-      .references(() => profiles.id, { onDelete: "cascade" }),
+      .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
     slotStart: timestamp("slot_start", { withTimezone: true }).notNull(),
   },
   (table) => [primaryKey({ columns: [table.gameId, table.userId, table.slotStart] })],

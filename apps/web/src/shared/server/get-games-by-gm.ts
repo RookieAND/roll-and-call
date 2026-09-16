@@ -1,8 +1,6 @@
 import "server-only";
+import { db, games } from "@trpg/database";
 import { desc } from "drizzle-orm";
-
-import { db } from "./db";
-import { games } from "./schema";
 
 export async function getGamesByGm(userId: string) {
   return db.query.games.findMany({

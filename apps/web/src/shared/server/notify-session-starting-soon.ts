@@ -1,9 +1,9 @@
+import type { Game } from "@trpg/database";
 import { sendDiscordMessage } from "@trpg/discord";
 
 import { formatDateTime } from "@/shared/lib";
 
 import { discordChannelId } from "./discord-channel-id";
-import type { Game } from "./schema";
 
 export async function notifySessionStartingSoon(game: Game, gmName: string, mentionIds: string[]) {
   const mentions = mentionIds.map((discordId) => `<@${discordId}>`).join(" ");

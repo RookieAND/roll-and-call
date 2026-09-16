@@ -25,7 +25,7 @@
 | 세그먼트                | 내용                                                                                                                 |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `shared/api`            | 클라이언트 안전: `ActionResult`, Supabase 브라우저 클라이언트, 목록 정렬/필터 파라미터                               |
-| `shared/server`         | 서버 전용(`server-only`): drizzle `db`·스키마, DB 읽기 쿼리, Supabase 서버 클라이언트·`getCurrentUser`, Discord 알림 |
+| `shared/server`         | 서버 전용(`server-only`): drizzle `db`·스키마 재노출(원본은 `packages/database`), DB 읽기 쿼리, Supabase 서버 클라이언트·`getCurrentUser`, Discord 알림 |
 | `shared/lib`            | 순수 유틸: 날짜 포맷, 슬롯 계산                                                                                      |
 | `shared/ui`             | 앱 공용 조합 컴포넌트 + `toast`, `useAction`, `BoundaryFallback`                                                     |
 | `shared/error-boundary` | 클라이언트: `ErrorBoundary`(`catchError`). check 스크립트가 로드하지 않도록 `shared/ui`와 분리 (§8)                  |

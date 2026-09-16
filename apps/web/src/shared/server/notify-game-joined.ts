@@ -1,8 +1,8 @@
+import type { Game } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 import type { DiscordEmbed } from "@trpg/discord";
 
 import { gameUrl } from "./game-url";
-import type { Game } from "./schema";
 
 type JoinInfo = {
   applicantName: string;
