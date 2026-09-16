@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 
 import { gameImagePathOf } from "./storage-path";
 
-const base = "https://nrftzumkubhizerpvycl.supabase.co/storage/v1/object/public/game-thumbnails/";
+const base = "https://bnxtukraoqqdhzknuqqp.supabase.co/storage/v1/object/public/game-thumbnails/";
 
 assert.equal(gameImagePathOf(`${base}u1/a.png`), "u1/a.png");
 assert.equal(gameImagePathOf(`${base}u1/a.png?t=1`), "u1/a.png");
