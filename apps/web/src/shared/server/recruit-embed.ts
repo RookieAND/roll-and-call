@@ -23,7 +23,8 @@ export function recruitEmbed(game: Game, gmName: string, confirmedCount: number)
     description: discordOverview(game.synopsis),
     color: DISCORD_COLOR.recruit,
     fields,
-    image: game.thumbnailUrl ? { url: game.thumbnailUrl } : undefined,
+    // 디스코드 임베드 이미지는 가릴 수 없어서 스포일러 썸네일은 싣지 않는다.
+    image: game.thumbnailUrl && !game.thumbnailSpoiler ? { url: game.thumbnailUrl } : undefined,
     footer: { text: `GM ${gmName} · 마감 ${formatMonthDay(game.endDate)}` },
     timestamp: game.createdAt.toISOString(),
   };

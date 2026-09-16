@@ -8,6 +8,7 @@ export function toGameColumns(values: GameFormValues) {
     rule: values.rule,
     synopsis: values.synopsis || null,
     thumbnailUrl: values.thumbnailUrl || null,
+    thumbnailSpoiler: Boolean(values.thumbnailUrl) && values.thumbnailSpoiler,
     images: values.images,
     playTime: values.playTime || null,
     maxPlayers: Number(values.maxPlayers),

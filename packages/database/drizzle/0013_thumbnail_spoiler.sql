@@ -1,0 +1,1 @@
+ALTER TABLE "games" ADD COLUMN "thumbnail_spoiler" boolean DEFAULT false NOT NULL;

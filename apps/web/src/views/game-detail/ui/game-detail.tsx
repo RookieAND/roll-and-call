@@ -2,7 +2,6 @@ import { Container, VStack } from "@trpg/ui";
 
 import {
   deriveGameStatus,
-  GameThumbnail,
   isGameGm,
   SCHEDULE_MODE,
   scheduleLine,
@@ -13,6 +12,7 @@ import { AppBar } from "@/shared/ui";
 
 import { GameDetailActions } from "./game-detail-actions";
 import { GameDetailHeader } from "./game-detail-header";
+import { GameDetailThumbnail } from "./game-detail-thumbnail";
 import { GameImageGallery } from "./game-image-gallery";
 import { GameInfoTable } from "./game-info-table";
 import { GameRosterSection } from "./game-roster-section";
@@ -51,11 +51,7 @@ export function GameDetail({
       <AppBar back="/games" title="구인 상세" />
       <Container size="md" className="px-0">
         <VStack gap={4}>
-          <GameThumbnail
-            url={game.thumbnailUrl}
-            sizes="(max-width: 896px) 100vw, 896px"
-            className="h-42 w-full"
-          />
+          <GameDetailThumbnail url={game.thumbnailUrl} spoiler={game.thumbnailSpoiler} />
 
           <VStack gap={5} className="px-4 pb-2">
             <GameDetailHeader

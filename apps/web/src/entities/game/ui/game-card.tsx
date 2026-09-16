@@ -51,6 +51,7 @@ export function GameCard({ game }: Props) {
       <GameThumbnail
         url={game.thumbnailUrl}
         sizes="(max-width: 412px) 100vw, 412px"
+        spoilerLabel={game.thumbnailSpoiler ? "스포일러" : undefined}
         className={thumbnailClass}
       />
       <VStack className="gap-1.5 px-3.5 py-[13px]">

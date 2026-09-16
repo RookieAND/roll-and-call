@@ -48,6 +48,7 @@ export function GameForm({
       rangeStart: defaultGame?.rangeStart ?? "",
       rangeEnd: defaultGame?.rangeEnd ?? "",
       thumbnailUrl: defaultGame?.thumbnailUrl ?? "",
+      thumbnailSpoiler: defaultGame?.thumbnailSpoiler ?? false,
       images: defaultGame?.images ?? [],
       waitlistEnabled: defaultGame?.waitlistEnabled ?? true,
     },

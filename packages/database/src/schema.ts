@@ -37,6 +37,7 @@ export const games = pgTable("games", {
   rule: text("rule").notNull(),
   synopsis: text("synopsis"),
   thumbnailUrl: text("thumbnail_url"),
+  thumbnailSpoiler: boolean("thumbnail_spoiler").notNull().default(false),
   images: text("images").array().notNull().default([]),
   playTime: text("play_time"),
   maxPlayers: integer("max_players").notNull(),

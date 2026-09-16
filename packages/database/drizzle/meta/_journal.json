@@ -92,6 +92,13 @@
       "when": 1789800000000,
       "tag": "0012_placeholder_profiles",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1789900000000,
+      "tag": "0013_thumbnail_spoiler",
+      "breakpoints": true
     }
   ]
 }

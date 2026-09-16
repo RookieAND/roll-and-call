@@ -20,6 +20,7 @@ export async function openNextRound(
         rule: parent.rule,
         synopsis: parent.synopsis,
         thumbnailUrl: parent.thumbnailUrl,
+        thumbnailSpoiler: parent.thumbnailSpoiler,
         images: parent.images,
         playTime: parent.playTime,
         maxPlayers: parent.maxPlayers,

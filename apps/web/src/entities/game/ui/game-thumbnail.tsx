@@ -1,6 +1,7 @@
 "use client";
 
-import { Skeleton, cn } from "@trpg/ui";
+import { Skeleton, Text, cn } from "@trpg/ui";
+import { EyeOff } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -9,11 +10,13 @@ export function GameThumbnail({
   url,
   alt = "",
   sizes,
+  spoilerLabel,
   className,
 }: {
   url: string | null;
   alt?: string;
   sizes?: string;
+  spoilerLabel?: string;
   className?: string;
 }) {
   const [loaded, setLoaded] = useState(false);
@@ -38,11 +41,20 @@ export function GameThumbnail({
         fill
         sizes={sizes}
         className={cn(
-          "object-cover transition-opacity duration-300",
+          "object-cover transition-[opacity,filter] duration-300",
           loaded ? "opacity-100" : "opacity-0",
+          spoilerLabel && "scale-110 blur-xl",
         )}
         onLoad={() => setLoaded(true)}
       />
+      {spoilerLabel && (
+        <div className="absolute inset-0 flex items-center justify-center gap-1.5 bg-black/30 text-white">
+          <EyeOff size={16} aria-hidden />
+          <Text typography="subtitle2" foreground="white">
+            {spoilerLabel}
+          </Text>
+        </div>
+      )}
     </div>
   );
 }

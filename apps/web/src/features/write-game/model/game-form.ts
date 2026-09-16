@@ -30,6 +30,7 @@ export const gameFormSchema = z
     rangeStart: z.string().optional(),
     rangeEnd: z.string().optional(),
     thumbnailUrl: z.string().optional(),
+    thumbnailSpoiler: z.boolean(),
     images: z
       .array(z.url())
       .max(GAME_IMAGES_MAX, `이미지는 최대 ${GAME_IMAGES_MAX}장까지 올릴 수 있습니다.`),
