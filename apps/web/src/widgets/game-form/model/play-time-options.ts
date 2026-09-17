@@ -1,18 +1,15 @@
-import { formatPlayTimeMinutes } from "./format-play-time-minutes";
-
-const STEP_MINUTES = 30;
-const MAX_HOURS = 12;
-
 export const DEFAULT_PLAY_TIME = "3시간";
 
-export const PLAY_TIME_OPTIONS = Array.from(
-  { length: (MAX_HOURS * 60) / STEP_MINUTES },
-  (_, index) => formatPlayTimeMinutes((index + 1) * STEP_MINUTES),
-);
+export const MAX_PLAY_HOURS = 12;
 
-// DB에 문자열로 저장된 예전 값("2시간 15분" 등)도 고를 수 있게 앞에 끼워 둔다.
-export function playTimeOptions(current?: string | null): string[] {
-  return current && !PLAY_TIME_OPTIONS.includes(current)
-    ? [current, ...PLAY_TIME_OPTIONS]
-    : PLAY_TIME_OPTIONS;
+export const PLAY_HOUR_OPTIONS = Array.from({ length: MAX_PLAY_HOURS + 1 }, (_, index) => index);
+
+export const PLAY_MINUTE_OPTIONS = [0, 10, 20, 30, 40, 50] as const;
+
+// "3시간 30분" → { hours: 3, minutes: 30 }
+export function splitPlayTime(playTime?: string | null) {
+  return {
+    hours: Number(playTime?.match(/(\d+)\s*시간/)?.[1] ?? 0),
+    minutes: Number(playTime?.match(/(\d+)\s*분/)?.[1] ?? 0),
+  };
 }
