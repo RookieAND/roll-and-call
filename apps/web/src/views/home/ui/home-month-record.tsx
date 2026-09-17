@@ -15,9 +15,9 @@ export function HomeMonthRecord({
 }) {
   const monthLabel = monthStart.format("M월");
   const summary =
-    record.finishedCount > 0
-      ? `이 달에 끝난 세션 ${record.finishedCount}건을 셌습니다.`
-      : "아직 이 달에 끝난 세션이 없습니다.";
+    record.sessionCount > 0
+      ? `이 달에 열린 세션 ${record.sessionCount}건을 셌습니다.`
+      : "아직 이 달에 열린 세션이 없습니다.";
 
   return (
     <section className="border-t border-gray-200 px-4 pt-[18px] pb-5">
@@ -32,14 +32,14 @@ export function HomeMonthRecord({
       >
         {summary}
       </Text>
-      {record.finishedCount === 0 ? (
+      {record.sessionCount === 0 ? (
         <EmptyState
           size="section"
           className="p-5"
-          title={`${monthLabel}이 끝나면 여기에 세 명이 남습니다`}
+          title={`${monthLabel}에 세션이 열리면 여기에 세 명이 남습니다`}
           description={
             <>
-              세션이 완료될 때마다 집계합니다.
+              세션이 열릴 때마다 집계합니다.
               <br />
               무산된 세션은 세지 않습니다.
             </>
