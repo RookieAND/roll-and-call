@@ -54,7 +54,7 @@ export function Stepper({
         disabled={disabled}
         value={Number.isFinite(value) ? String(value) : ""}
         onChange={(event) => onChange(Number(event.target.value.replace(/\D/g, "")))}
-        className="w-12 border-x border-gray-200 bg-transparent text-center text-sm font-semibold tabular-nums outline-none"
+        className="w-12 border-x border-gray-200 grow bg-transparent text-center text-sm font-semibold tabular-nums outline-none"
         {...ariaProps}
       />
       <button

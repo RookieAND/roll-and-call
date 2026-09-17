@@ -69,7 +69,7 @@ export function GameBasicsFields({
             <Chip
               key={preset}
               selected={rule === preset}
-              className="h-[34px]"
+              className="h-8.5"
               onClick={() => setValue("rule", preset, { shouldDirty: true, shouldValidate: true })}
             >
               {preset}
