@@ -12,7 +12,7 @@ export function MyPageSettings({ handleLabel }: { handleLabel: string | null }) 
         설정
       </Text>
       <div className={MY_PAGE_GROUP_CLASS}>
-        <div className="flex items-center gap-3 border-b border-gray-100 p-[13px]">
+        <div className="flex h-[52px] items-center gap-3 border-b border-gray-100 px-[13px]">
           <Text typography="subtitle1" className="flex-1">
             화면 테마
           </Text>
