@@ -1,5 +1,8 @@
+"use client";
+
 import { cn } from "@trpg/ui";
 import Link from "next/link";
+import type { MouseEvent } from "react";
 
 import type { MonthCell } from "../model/build-month-cells";
 import type { CalendarSession } from "../model/to-calendar-sessions";
@@ -36,11 +39,21 @@ export function HomeCalendarCell({
       : "bg-gray-100 text-gray-700";
   const restTone = selected ? "text-white/80" : "text-hint";
   const todayTone = selected ? "text-white" : "text-primary-ink";
+  const href = `/?date=${cell.key}`;
+
+  // 같은 달은 이미 받은 세션으로 그리므로 서버를 다시 부르지 않는다. 다른 달 칸과 새 탭 열기는 원래대로 이동한다.
+  function selectDay(event: MouseEvent<HTMLAnchorElement>) {
+    if (!cell.inMonth || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    window.history.pushState(null, "", href);
+  }
 
   return (
     <Link
-      href={`/?date=${cell.key}`}
+      href={href}
       scroll={false}
+      prefetch={false}
+      onClick={selectDay}
       aria-label={ariaLabel}
       aria-current={selected ? "date" : undefined}
       className={cn("block h-[62px] rounded-lg px-[3px] py-1 transition-colors", cellTone)}

@@ -8,12 +8,11 @@ import { buildMonthRecord } from "../model/build-month-record";
 import { groupSessionsByDay } from "../model/group-sessions-by-day";
 import { resolveCalendarView } from "../model/resolve-calendar-view";
 import { toCalendarSessions } from "../model/to-calendar-sessions";
-import { HomeCalendar } from "./home-calendar";
-import { HomeDaySessions } from "./home-day-sessions";
+import { HomeCalendarSection } from "./home-calendar-section";
 import { HomeMonthRecord } from "./home-month-record";
 
 export async function HomeView({ date, authError }: { date?: string; authError: boolean }) {
-  const { selected, monthStart, selectedKey, todayKey } = resolveCalendarView(date);
+  const { monthStart, selectedKey, todayKey } = resolveCalendarView(date);
   const [user, rows] = await Promise.all([
     getCurrentUser(),
     getMonthSessions(monthStart.toDate(), monthStart.add(1, "month").toDate()),
@@ -41,13 +40,12 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
             </StatusNotice>
           </div>
         )}
-        <HomeCalendar
-          monthStart={monthStart}
+        <HomeCalendarSection
+          monthStart={monthStart.toDate()}
           sessionsByDay={sessionsByDay}
-          selectedKey={selectedKey}
+          initialSelectedKey={selectedKey}
           todayKey={todayKey}
         />
-        <HomeDaySessions date={selected.toDate()} sessions={sessionsByDay.get(selectedKey) ?? []} />
         <HomeMonthRecord monthStart={monthStart} record={buildMonthRecord(sessions)} />
       </Container>
     </>
