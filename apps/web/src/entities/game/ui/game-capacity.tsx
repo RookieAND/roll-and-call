@@ -1,10 +1,7 @@
-import { HStack, Text, cn } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 
 import { RECRUIT_METHOD, type RecruitMethod } from "../model/recruit-method";
 import { GAME_STATUS, type GameStatus } from "../model/status";
-
-// 칸이 많아지면 셀 수 없어서 숫자만 남긴다.
-const MAX_METER_SEATS = 8;
 
 export function GameCapacity({
   status,
@@ -19,51 +16,32 @@ export function GameCapacity({
   waiting: number;
   maxPlayers: number;
 }) {
-  const open = status === GAME_STATUS.recruiting;
-  const closed = status === GAME_STATUS.closed;
-  // 추첨은 마감 전까지 확정된 자리가 없어 채울 칸도 없다.
   const lottery = recruitMethod === RECRUIT_METHOD.lottery;
-  const drawPending = lottery && open;
+  // 마감된 글에서 몇 명이 찼는지는 이제 할 수 있는 일을 바꾸지 않아 방식과 정원만 남긴다.
+  const done = status === GAME_STATUS.closed || status === GAME_STATUS.full;
+  // 추첨은 마감 전까지 확정된 자리가 없어 신청자 수를 센다.
+  const drawPending = lottery && !done;
 
   return (
-    <HStack align="center" gap={2} className="shrink-0">
+    <HStack
+      align="center"
+      className="h-[26px] shrink-0 gap-[7px] rounded-lg border border-gray-200 bg-gray-50 px-[9px]"
+    >
       <Text typography="body4" foreground="muted" className="font-semibold">
-        {lottery ? "추첨순" : "선착순"}
+        {lottery ? "추첨" : "선착순"}
       </Text>
-      {!drawPending && maxPlayers <= MAX_METER_SEATS && (
-        <span aria-hidden className="flex shrink-0 gap-[3px]">
-          {Array.from({ length: maxPlayers }, (_, seat) => (
-            <span
-              key={seat}
-              className={cn(
-                "h-1.5 w-2 rounded-[2px]",
-                // 마감된 글만 무채색. 정원이 찼어도 채워진 칸은 채워 보여야 한다.
-                seat < confirmed ? (closed ? "bg-gray-600" : "bg-primary-600") : "bg-gray-200",
-              )}
-            />
-          ))}
-        </span>
+      {!done && (
+        <Text typography="subtitle2" className="tabular-nums">
+          {drawPending ? `신청 ${confirmed + waiting}` : `확정 ${confirmed}`}
+        </Text>
       )}
-      {drawPending ? (
-        <>
-          <Text typography="subtitle2" className="tabular-nums">
-            신청 {confirmed + waiting}
-          </Text>
-          <Text typography="body4" foreground="muted" className="tabular-nums">
-            정원 {maxPlayers}
-          </Text>
-        </>
-      ) : (
-        <>
-          <Text typography="subtitle2" className="tabular-nums">
-            {confirmed}/{maxPlayers}
-          </Text>
-          {waiting > 0 && (
-            <Text typography="body4" foreground="muted" className="font-semibold tabular-nums">
-              대기 {waiting}
-            </Text>
-          )}
-        </>
+      <Text typography="body4" foreground="muted" className="font-semibold tabular-nums">
+        정원 {maxPlayers}
+      </Text>
+      {!done && !drawPending && waiting > 0 && (
+        <Text typography="body4" foreground="muted" className="font-semibold tabular-nums">
+          대기 {waiting}
+        </Text>
       )}
     </HStack>
   );
