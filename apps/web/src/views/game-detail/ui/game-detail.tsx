@@ -20,6 +20,7 @@ import { GamePreflightSection } from "./game-preflight-section";
 import { GameRecruitMethodSection } from "./game-recruit-method-section";
 import { GameRosterSection } from "./game-roster-section";
 import { GameSynopsis } from "./game-synopsis";
+import { ShareButton } from "./share-button";
 
 export function GameDetail({
   game,
@@ -50,7 +51,7 @@ export function GameDetail({
 
   return (
     <>
-      <AppBar back="/games" title="구인 상세" />
+      <AppBar back="/games" title="구인 상세" action={<ShareButton gameId={game.id} />} />
       <Container size="md" className="px-0">
         <VStack gap={4}>
           <GameDetailThumbnail url={game.thumbnailUrl} spoiler={game.thumbnailSpoiler} />
