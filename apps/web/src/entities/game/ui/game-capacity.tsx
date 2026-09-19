@@ -20,6 +20,7 @@ export function GameCapacity({
   maxPlayers: number;
 }) {
   const open = status === GAME_STATUS.recruiting;
+  const closed = status === GAME_STATUS.closed;
   // 추첨은 마감 전까지 확정된 자리가 없어 채울 칸도 없다.
   const drawPending = recruitMethod === RECRUIT_METHOD.lottery && open;
   const lottery = recruitMethod === RECRUIT_METHOD.lottery;
@@ -40,8 +41,8 @@ export function GameCapacity({
               key={seat}
               className={cn(
                 "h-1.5 w-2 rounded-[2px]",
-                // 자리가 남은 글만 primary. 정원이 찼거나 마감된 글은 모두 무채색이다.
-                seat < confirmed ? (open ? "bg-primary-600" : "bg-gray-400") : "bg-gray-200",
+                // 마감된 글만 무채색. 정원이 찼어도 채워진 칸은 채워 보여야 한다.
+                seat < confirmed ? (closed ? "bg-gray-600" : "bg-primary-600") : "bg-gray-200",
               )}
             />
           ))}

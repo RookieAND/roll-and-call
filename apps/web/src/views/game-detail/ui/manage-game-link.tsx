@@ -4,10 +4,10 @@ import Link from "next/link";
 
 import { ACTION_PRIMARY_CLASS } from "./action-class-names";
 
-export function ManageParticipantsLink({ gameId }: { gameId: string }) {
+export function ManageGameLink({ gameId }: { gameId: string }) {
   return (
     <Button asChild variant="tinted" className={ACTION_PRIMARY_CLASS}>
-      <Link href={`/games/${gameId}/participants`}>
+      <Link href={`/games/${gameId}/manage`}>
         운영 관리
         <ChevronRight size={15} aria-hidden />
       </Link>

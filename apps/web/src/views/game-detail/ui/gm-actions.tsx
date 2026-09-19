@@ -5,7 +5,7 @@ import { ddayKst } from "@/shared/lib";
 import { StatusNotice } from "@/shared/ui";
 
 import { ActionHint } from "./action-hint";
-import { ManageParticipantsLink } from "./manage-participants-link";
+import { ManageGameLink } from "./manage-game-link";
 
 // GM에게도 상세는 읽는 화면이다. 시간 확정 · 참여자 관리 · 세션 준비는 운영 관리 한 곳으로 보낸다.
 export function GmActions({
@@ -39,7 +39,7 @@ export function GmActions({
           참여자 {confirmedCount}명 · 대기 {waitingCount}명 · {deadlineText}
         </StatusNotice>
       )}
-      <ManageParticipantsLink gameId={gameId} />
+      <ManageGameLink gameId={gameId} />
       <ActionHint>
         {confirmedAt
           ? "확정 뒤에도 같은 자리에서 준비 상황을 봅니다."
