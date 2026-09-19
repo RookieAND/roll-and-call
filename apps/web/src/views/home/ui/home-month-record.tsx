@@ -16,8 +16,8 @@ export function HomeMonthRecord({
   const monthLabel = monthStart.format("M월");
   const summary =
     record.sessionCount > 0
-      ? `이 달에 끝난 세션 ${record.sessionCount}건을 셌습니다.`
-      : "아직 이 달에 끝난 세션이 없습니다.";
+      ? `이 달에 개설된 세션 ${record.sessionCount}건을 셌습니다.`
+      : "아직 이 달에 개설된 세션이 없습니다.";
 
   return (
     <section className="border-t border-gray-200 px-4 pt-[18px] pb-5">
@@ -31,10 +31,10 @@ export function HomeMonthRecord({
         <EmptyState
           size="section"
           className="p-5"
-          title={`${monthLabel}이 끝나면 GM과 플레이어 1위가 여기 섭니다`}
+          title={`${monthLabel}에 세션이 열리면 GM과 플레이어 1위가 여기 섭니다`}
           description={
             <>
-              세션이 완료될 때마다 집계합니다.
+              세션이 개설될 때마다 집계합니다.
               <br />
               무산된 세션은 세지 않습니다.
             </>
