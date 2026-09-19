@@ -62,7 +62,7 @@ export function ThumbnailUpload({
   );
 
   return (
-    <div id="thumbnailUrl" className="flex flex-col gap-1.5">
+    <div id="thumbnailUrl" className="flex min-w-0 flex-col gap-1.5">
       <div className="flex items-baseline justify-between">
         <Text typography="subtitle2" className="text-[12.5px] text-gray-700">
           썸네일
