@@ -110,6 +110,7 @@ export function GameActionZone({
           canSchedule={canSchedule}
           canLeave={canLeave}
           expired={expired}
+          drawn={game.drawnAt !== null}
           viewerResponded={viewerResponded}
         />
       );
