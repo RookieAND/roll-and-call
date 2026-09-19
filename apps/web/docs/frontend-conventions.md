@@ -7,12 +7,15 @@
 | 레이어             | 역할                                                      | 예                                                                                    |
 | ------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | `packages/ui`      | 도메인 무관 순수 UI 키트                                  | Button, IconButton, Chip, Select, TextInput, Field, Card                              |
+| `packages/tiptap`  | 리치 텍스트(Tiptap) 에디터·뷰어·문서 모델                 | RichTextEditor, RichText, toRichTextDoc                                               |
 | `packages/discord` | Discord REST 클라이언트(도메인 무관)                      | sendDiscordMessage, editDiscordMessage, startDiscordThread, renameDiscordThread       |
 | `shared/ui`        | 앱 공용(도메인 약함) 조합 컴포넌트                        | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                                  |
 | `entities/*`       | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위 | game, profile, availability                                                           |
 | `features/*`       | **단일 사용자 동작**(server action·toggle 등 상태 변경)   | JoinGameButton, DeleteGameButton, GameStatusFilter, GameScheduleLink, ThumbnailUpload |
 | `widgets/*`        | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)    | game-form, session-list                                                               |
 | `views/*`          | 한 화면의 조합 전체 + 라우트 글루                         | GamesView, GameDetail, ParticipantManager                                             |
+
+`@trpg/tiptap`을 `@trpg/ui`에서 떼어 둔 이유는 하나다. UI 키트 배럴은 거의 모든 화면이 import하므로 여기에 tiptap이 섞이면 에디터를 안 쓰는 화면까지 번들이 무거워진다. 시놉시스 저장값은 Tiptap JSON 문자열이고, 서버(디스코드 문구)는 React 없이 `@trpg/tiptap/doc`의 문서 모델만 가져다 쓴다.
 
 **import 방향은 아래로만**: `shared ← entities ← features ← widgets ← views`. 상위 레이어를 import하지 않는다(예: feature는 widget을 import 금지).
 

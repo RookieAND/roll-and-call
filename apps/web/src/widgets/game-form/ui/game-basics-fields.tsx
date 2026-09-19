@@ -1,13 +1,14 @@
 "use client";
 
-import { Chip, Field, Text, TextInput, Textarea } from "@trpg/ui";
+import { RichTextEditor } from "@trpg/tiptap";
+import { Chip, Field, Text, TextInput } from "@trpg/ui";
 import type { UseFormReturn } from "react-hook-form";
 
-import type { GameFormValues } from "@/features/write-game";
+import { GAME_SYNOPSIS_MAX, type GameFormValues } from "@/features/write-game";
+import { richTextLength } from "@/shared/lib";
 
 import { PlayTimeField } from "./play-time-field";
 
-const SYNOPSIS_MAX = 2000;
 const RULE_PRESETS = ["CoC 7th", "피아스코", "던전월드"];
 
 export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues> }) {
@@ -18,7 +19,8 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
     formState: { errors },
   } = form;
   const rule = watch("rule");
-  const synopsisLength = (watch("synopsis") ?? "").length;
+  const synopsis = watch("synopsis") ?? "";
+  const synopsisLength = richTextLength(synopsis);
 
   return (
     <>
@@ -66,13 +68,20 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
         <Field
           label="시놉시스"
           htmlFor="synopsis"
-          counter={`${synopsisLength.toLocaleString()} / ${SYNOPSIS_MAX.toLocaleString()}`}
+          counter={`${synopsisLength.toLocaleString()} / ${GAME_SYNOPSIS_MAX.toLocaleString()}`}
           error={errors.synopsis?.message}
         >
-          <Textarea id="synopsis" rows={4} maxLength={SYNOPSIS_MAX} {...register("synopsis")} />
+          <RichTextEditor
+            id="synopsis"
+            value={synopsis}
+            limit={GAME_SYNOPSIS_MAX}
+            invalid={!!errors.synopsis}
+            onChange={(value) => setValue("synopsis", value, { shouldDirty: true })}
+          />
         </Field>
         <Text typography="body4" foreground="hint" render={<p />}>
-          어떤 이야기인지, 어떤 분위기인지 적어주세요.
+          어떤 이야기인지, 어떤 분위기인지 적어주세요. 글을 끌어서 고르면 굵게·기울임·목록·링크를 쓸
+          수 있습니다.
         </Text>
       </div>
     </>

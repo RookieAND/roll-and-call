@@ -1,0 +1,31 @@
+{
+  "name": "@trpg/tiptap",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./doc": "./src/rich-text-doc.ts",
+    "./styles.css": "./src/styles.css"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tiptap/core": "^3.31.3",
+    "@tiptap/extensions": "^3.31.3",
+    "@tiptap/pm": "^3.31.3",
+    "@tiptap/react": "^3.31.3",
+    "@tiptap/starter-kit": "^3.31.3",
+    "@trpg/ui": "workspace:*",
+    "lucide-react": "^1.32.0"
+  },
+  "devDependencies": {
+    "@trpg/typescript-config": "workspace:*",
+    "@types/react": "^19.2.18",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  }
+}

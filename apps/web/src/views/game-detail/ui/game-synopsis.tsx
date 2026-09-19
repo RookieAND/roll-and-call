@@ -1,3 +1,4 @@
+import { RichText } from "@trpg/tiptap";
 import { Text, VStack } from "@trpg/ui";
 
 export function GameSynopsis({ synopsis }: { synopsis: string }) {
@@ -6,9 +7,7 @@ export function GameSynopsis({ synopsis }: { synopsis: string }) {
       <Text typography="heading3" render={<h2 />}>
         시놉시스
       </Text>
-      <Text typography="body3" foreground="muted" className="whitespace-pre-wrap">
-        {synopsis}
-      </Text>
+      <Text typography="body3" foreground="muted" render={<RichText value={synopsis} />} />
     </VStack>
   );
 }

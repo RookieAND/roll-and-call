@@ -1,0 +1,28 @@
+/* Registers this package's component sources with the consuming app's Tailwind. */
+@source ".";
+
+/* 시놉시스 리치 텍스트. 에디터(ProseMirror)와 상세 화면이 같은 규칙을 쓴다. */
+.rich-text > * + * {
+  margin-top: 0.5rem;
+}
+.rich-text ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.rich-text ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+.rich-text li > p {
+  margin: 0;
+}
+.rich-text strong {
+  font-weight: 600;
+}
+.rich-text em {
+  font-style: italic;
+}
+.rich-text a {
+  color: var(--color-primary-ink);
+  text-decoration: underline;
+}

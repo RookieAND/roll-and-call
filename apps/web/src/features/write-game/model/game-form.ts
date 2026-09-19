@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { RECRUIT_METHODS, SCHEDULE_MODE, SCHEDULE_MODES } from "@/entities/game";
+import { richTextLength } from "@/shared/lib";
 
 export const GAME_RANGE_MAX_DAYS = 14;
 export const GAME_IMAGES_MAX = 5;
@@ -8,6 +9,7 @@ export const GAME_MAX_PLAYERS = 20;
 export const GAME_TAGS_MAX = 5;
 export const GAME_TAG_MAX_LENGTH = 20;
 export const GAME_NOTICE_MAX = 500;
+export const GAME_SYNOPSIS_MAX = 2000;
 export const INVALID_INPUT_MESSAGE = "입력값을 확인하세요.";
 
 const DAY_MS = 86_400_000;
@@ -23,7 +25,15 @@ export const gameFormSchema = z
   .object({
     title: z.string().trim().min(1, "게임명을 입력하세요.").max(100),
     rule: z.string().trim().min(1, "룰을 입력하세요.").max(100),
-    synopsis: z.string().max(2000).optional(),
+    // 저장값은 리치 텍스트 JSON이라 문자 수는 본문 길이로 센다.
+    synopsis: z
+      .string()
+      .max(GAME_SYNOPSIS_MAX * 20)
+      .refine(
+        (value) => richTextLength(value) <= GAME_SYNOPSIS_MAX,
+        `시놉시스는 ${GAME_SYNOPSIS_MAX}자까지 쓸 수 있습니다.`,
+      )
+      .optional(),
     genres: tagList("장르"),
     triggers: tagList("트리거"),
     platforms: tagList("사용 플랫폼"),
