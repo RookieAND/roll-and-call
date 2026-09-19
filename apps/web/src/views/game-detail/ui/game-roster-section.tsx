@@ -8,7 +8,7 @@ import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
 
 import { RosterGroupSection } from "./roster-group-section";
 import type { DetailRosterMember } from "./roster-member-row";
-import { RosterSheet } from "./roster-sheet";
+import { RosterSheet, type RosterSheetSection } from "./roster-sheet";
 
 export function GameRosterSection({
   gameId,
@@ -31,7 +31,7 @@ export function GameRosterSection({
   isGm: boolean;
   viewerId: string | null;
 }) {
-  const [open, setOpen] = useState(false);
+  const [openSection, setOpenSection] = useState<RosterSheetSection | null>(null);
   // 추첨은 뽑기 전까지 확정과 대기를 가르지 않는다 — 한 덩어리의 "신청"으로 본다.
   const isLottery = recruitMethod === RECRUIT_METHOD.lottery && !drawn;
   const hasMembers = confirmed.length + waiting.length > 0;
@@ -43,7 +43,12 @@ export function GameRosterSection({
     </Button>
   ) : (
     hasMembers && (
-      <Button variant="ghost" size="sm" className="text-primary-ink" onClick={() => setOpen(true)}>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="text-primary-ink"
+        onClick={() => setOpenSection("confirmed")}
+      >
         명단 보기
       </Button>
     )
@@ -78,7 +83,7 @@ export function GameRosterSection({
                     variant="ghost"
                     size="sm"
                     className="text-primary-ink"
-                    onClick={() => setOpen(true)}
+                    onClick={() => setOpenSection("waiting")}
                   >
                     명단 보기
                   </Button>
@@ -95,12 +100,12 @@ export function GameRosterSection({
       )}
 
       <RosterSheet
-        open={open}
-        onOpenChange={setOpen}
+        open={openSection !== null}
+        onOpenChange={(next) => !next && setOpenSection(null)}
+        section={openSection ?? "confirmed"}
         gm={gm}
         confirmed={confirmed}
         waiting={waiting}
-        maxPlayers={maxPlayers}
         isLottery={isLottery}
         viewerId={viewerId}
       />

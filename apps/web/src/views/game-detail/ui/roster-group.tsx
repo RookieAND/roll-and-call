@@ -5,14 +5,10 @@ import type { ReactNode } from "react";
 export function RosterGroup({
   label,
   count,
-  capacity,
-  hint,
   children,
 }: {
   label: string;
   count?: number;
-  capacity?: number;
-  hint?: string;
   children: ReactNode;
 }) {
   return (
@@ -24,16 +20,6 @@ export function RosterGroup({
         {count !== undefined && (
           <Text typography="body4" foreground="hint" className="tabular-nums">
             {count}명
-          </Text>
-        )}
-        {capacity !== undefined && (
-          <Text typography="body4" foreground="hint" className="tabular-nums">
-            정원 {capacity}명
-          </Text>
-        )}
-        {hint && (
-          <Text typography="body4" foreground="hint">
-            {hint}
           </Text>
         )}
       </HStack>
