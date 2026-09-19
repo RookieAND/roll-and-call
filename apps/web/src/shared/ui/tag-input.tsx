@@ -77,6 +77,7 @@ export function TagInput({
             value={draft}
             placeholder={placeholder}
             maxLength={maxLength}
+            enterKeyHint="done"
             onChange={(event) => setDraft(event.target.value)}
             onKeyDown={onKeyDown}
             onBlur={() => add(draft)}

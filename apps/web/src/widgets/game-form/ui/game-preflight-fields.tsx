@@ -12,10 +12,12 @@ import {
 } from "@/features/write-game";
 import { TagInput } from "@/shared/ui";
 
+const TAG_HINT = "작성하고 Enter 를 입력해주세요.";
+
 const TAG_PLACEHOLDER: Record<GameTagKey, string> = {
-  [GAME_TAG.genres]: "장르를 작성하고 Enter 를 입력해주세요.",
-  [GAME_TAG.triggers]: "주의가 필요한 소재를 작성하고 Enter 를 입력해주세요.",
-  [GAME_TAG.platforms]: "쓰는 플랫폼을 작성하고 Enter 를 입력해주세요.",
+  [GAME_TAG.genres]: "장르 입력",
+  [GAME_TAG.triggers]: "주의가 필요한 소재 입력",
+  [GAME_TAG.platforms]: "사용 플랫폼 입력",
 };
 
 const TAG_SUGGESTIONS: Record<GameTagKey, string[]> = {
@@ -49,6 +51,7 @@ export function GamePreflightFields({
               label={gameTagLabel[key]}
               htmlFor={key}
               counter={`${tags.length} / ${GAME_TAGS_MAX}`}
+              description={tags.length < GAME_TAGS_MAX ? TAG_HINT : undefined}
               error={errors[key]?.message}
             >
               <TagInput
