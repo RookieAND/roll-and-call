@@ -1,8 +1,8 @@
-import { Container, HStack } from "@trpg/ui";
+import { Container } from "@trpg/ui";
 
 import { LoginButton } from "@/features/auth";
 import { getCurrentUser, getMonthSessions } from "@/shared/server";
-import { AppBar, StatusNotice, ThemeSetting } from "@/shared/ui";
+import { AppBar, StatusNotice } from "@/shared/ui";
 
 import { buildMonthRecord } from "../model/build-month-record";
 import { groupSessionsByDay } from "../model/group-sessions-by-day";
@@ -25,12 +25,7 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
     <>
       <AppBar
         title="롤앤콜"
-        action={
-          <HStack gap={1} align="center">
-            <ThemeSetting />
-            {!user && <LoginButton next="/" className="h-[34px] px-3 text-[13px]" />}
-          </HStack>
-        }
+        action={!user && <LoginButton next="/" className="h-[34px] px-3 text-[13px]" />}
       />
       <Container size="sm" className="px-0">
         {authError && (
