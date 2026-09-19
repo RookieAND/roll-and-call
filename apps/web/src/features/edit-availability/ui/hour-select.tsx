@@ -11,12 +11,14 @@ export function HourSelect({
   value,
   min = 0,
   max = 24,
+  invalid = false,
   onChange,
 }: {
   label: string;
   value: number;
   min?: number;
   max?: number;
+  invalid?: boolean;
   onChange: (hour: number) => void;
 }) {
   const items = HOUR_OPTIONS.filter((hour) => hour >= min && hour <= max).map((hour) => ({
@@ -30,7 +32,11 @@ export function HourSelect({
       value={String(value)}
       onValueChange={(hour) => onChange(Number(hour))}
     >
-      <Select.Trigger aria-label={label} className="h-11 min-w-0 flex-1 tabular-nums" />
+      <Select.Trigger
+        aria-label={label}
+        invalid={invalid}
+        className="h-11 min-w-0 flex-1 tabular-nums"
+      />
       <Select.Popup>
         {items.map((item) => (
           <Select.Item key={item.value} value={item.value}>

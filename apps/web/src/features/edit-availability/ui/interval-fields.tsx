@@ -11,11 +11,13 @@ import { HourSelect } from "./hour-select";
 export function IntervalFields({
   label,
   row,
+  invalid = false,
   onHourChange,
   trailing,
 }: {
   label: string;
   row: DayIntervalRow;
+  invalid?: boolean;
   onHourChange: (index: number, edge: "from" | "to", hour: number) => void;
   trailing: ReactNode;
 }) {
@@ -26,6 +28,7 @@ export function IntervalFields({
         value={row.interval.from}
         min={AVAILABILITY_MIN_HOUR}
         max={AVAILABILITY_MAX_HOUR - 1}
+        invalid={invalid}
         onChange={(hour) => onHourChange(row.index, "from", hour)}
       />
       <Text typography="body3" foreground="hint" className="flex-none">
@@ -36,6 +39,7 @@ export function IntervalFields({
         value={row.interval.to}
         min={AVAILABILITY_MIN_HOUR + 1}
         max={AVAILABILITY_MAX_HOUR}
+        invalid={invalid}
         onChange={(hour) => onHourChange(row.index, "to", hour)}
       />
       {trailing}

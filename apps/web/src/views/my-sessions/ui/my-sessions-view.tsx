@@ -42,11 +42,10 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
     activeChip === ONGOING_CHIP
       ? list.filter((card) => card.chip !== SESSION_CHIP.ended)
       : list.filter((card) => card.chip === activeChip);
-  // 탭 숫자는 그 역할의 진행 중 건수다. 기록까지 합치면 할 일의 크기를 못 읽는다.
   const roleTabs = SESSION_TABS.map((item) => ({
     key: item.key,
     label: item.label,
-    count: sessions[item.key].filter((card) => card.chip !== SESSION_CHIP.ended).length,
+    count: sessions[item.key].length,
     href: sessionsHref(item.key),
   }));
   const endedCount = list.filter((card) => card.chip === SESSION_CHIP.ended).length;

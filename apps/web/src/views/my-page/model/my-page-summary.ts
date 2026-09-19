@@ -10,12 +10,10 @@ import {
 
 import { joinCountParts } from "./join-count-parts";
 
-// 역할이 1축이다. 숫자는 그 역할의 진행 중 건수이고, 종료은 보조 줄에서만 센다.
+// 역할이 1축이다. 숫자는 마감·종료까지 더한 그 역할의 총 건수이고, 내역은 보조 줄이 말한다.
 export function summarizeMySessions(sessions: MySessions) {
   const countByChip = (list: SessionCardModel[], chip: SessionChip) =>
     list.filter((card) => card.chip === chip).length;
-  const ongoing = (list: SessionCardModel[]) =>
-    list.filter((card) => card.chip !== SESSION_CHIP.ended).length;
 
   const joined = sessions[SESSION_ROLE.player];
   const hosted = sessions[SESSION_ROLE.host];
@@ -25,7 +23,7 @@ export function summarizeMySessions(sessions: MySessions) {
 
   return {
     joined: {
-      count: ongoing(joined),
+      count: joined.length,
       detail:
         joinCountParts([
           ["확정", countByChip(joined, SESSION_CHIP.confirmed)],
@@ -36,7 +34,7 @@ export function summarizeMySessions(sessions: MySessions) {
       href: sessionsHref(SESSION_ROLE.player),
     },
     hosting: {
-      count: ongoing(hosted),
+      count: hosted.length,
       urgent: needsConfirm > 0,
       detail:
         joinCountParts([
