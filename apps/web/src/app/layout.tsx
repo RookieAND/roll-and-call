@@ -1,14 +1,30 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 
+import { OG_IMAGE } from "@/shared/lib";
+import { siteOrigin } from "@/shared/server";
 import { BottomNav, NavigationTracker, Toaster } from "@/shared/ui";
 
 import "./globals.css";
 import { QueryProvider } from "./query-provider";
 
+const origin = siteOrigin();
+const description = "TRPG 세션 모집부터 일정 확정까지";
+
 export const metadata: Metadata = {
+  // 절대 URL이 없으면 Next가 상대 OG 이미지를 만들지 못한다.
+  metadataBase: origin ? new URL(origin) : null,
   title: { default: "Roll & Call", template: "%s | Roll & Call" },
-  description: "TRPG 세션 모집부터 일정 확정까지",
+  description,
+  openGraph: {
+    type: "website",
+    siteName: "Roll & Call",
+    locale: "ko_KR",
+    title: "Roll & Call",
+    description,
+    images: [OG_IMAGE],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -49,6 +49,7 @@ export { notifyRecruitmentComplete } from "./notify-recruitment-complete";
 export { notifyDrawResult } from "./notify-draw-result";
 export { notifySessionStartingSoon } from "./notify-session-starting-soon";
 export { notifySessionConfirmed } from "./notify-session-confirmed";
+export { siteOrigin } from "./site-origin";
 export { removeUnusedGameFiles } from "./game-files";
 export { createSupabaseServerClient } from "./create-supabase-server-client";
 export { getCurrentUser } from "./get-current-user";

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { OG_IMAGE } from "@/shared/lib";
 import { getGameById } from "@/shared/server";
 import { GameDetailView } from "@/views/game-detail";
 
@@ -16,7 +17,8 @@ export async function generateMetadata({
     title: game.title,
     openGraph: {
       title: game.title,
-      ...(game.thumbnailUrl && !game.thumbnailSpoiler && { images: [game.thumbnailUrl] }),
+      // 부모 openGraph는 통째로 덮이므로 기본 이미지를 여기서도 깐다.
+      images: [game.thumbnailSpoiler ? OG_IMAGE : (game.thumbnailUrl ?? OG_IMAGE)],
     },
   };
 }
