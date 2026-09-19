@@ -1,8 +1,9 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   type AnyPgColumn,
   boolean,
   date,
+  index,
   integer,
   jsonb,
   pgEnum,
@@ -59,46 +60,57 @@ export const profileMemos = pgTable(
   (table) => [primaryKey({ columns: [table.ownerId, table.targetId] })],
 );
 
-export const games = pgTable("games", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  gmId: uuid("gm_id")
-    .notNull()
-    .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
-  title: text("title").notNull(),
-  rule: text("rule").notNull(),
-  synopsis: text("synopsis"),
-  thumbnailUrl: text("thumbnail_url"),
-  thumbnailSpoiler: boolean("thumbnail_spoiler").notNull().default(false),
-  images: text("images").array().notNull().default([]),
-  playTime: text("play_time"),
-  // 신청 전에 알아야 할 것들. 각각 최대 5개이고 순서를 그대로 보여준다.
-  genres: text("genres").array().notNull().default([]),
-  triggers: text("triggers").array().notNull().default([]),
-  platforms: text("platforms").array().notNull().default([]),
-  notice: text("notice"),
-  maxPlayers: integer("max_players").notNull(),
-  recruitMethod: recruitMethod("recruit_method").notNull().default("first_come"),
-  // false면 정원이 찼을 때 대기 신청을 받지 않는다(status "full"). 선착순에서만 쓴다.
-  waitlistEnabled: boolean("waitlist_enabled").notNull().default(true),
-  scheduleMode: scheduleMode("schedule_mode").notNull(),
-  endDate: timestamp("end_date", { withTimezone: true }).notNull(),
-  rangeStart: date("range_start"),
-  rangeEnd: date("range_end"),
-  // both schedule modes route through here once the start is confirmed
-  confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
-  // set when the 1h-before reminder has been sent (dedupe)
-  notifiedAt: timestamp("notified_at", { withTimezone: true }),
-  // 추첨을 돌린 시각. 값이 있으면 신청을 받지 않고, 확정·대기 명단은 이미 정해진 뒤다.
-  drawnAt: timestamp("drawn_at", { withTimezone: true }),
-  // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.
-  discordThreadId: text("discord_thread_id"),
-  // 직전 회차. null이면 1회차.
-  parentGameId: uuid("parent_game_id").references((): AnyPgColumn => games.id, {
-    onDelete: "set null",
-  }),
-  round: integer("round").notNull().default(1),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+export const games = pgTable(
+  "games",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    gmId: uuid("gm_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    title: text("title").notNull(),
+    rule: text("rule").notNull(),
+    synopsis: text("synopsis"),
+    thumbnailUrl: text("thumbnail_url"),
+    thumbnailSpoiler: boolean("thumbnail_spoiler").notNull().default(false),
+    images: text("images").array().notNull().default([]),
+    playTime: text("play_time"),
+    // 신청 전에 알아야 할 것들. 각각 최대 5개이고 순서를 그대로 보여준다.
+    genres: text("genres").array().notNull().default([]),
+    triggers: text("triggers").array().notNull().default([]),
+    platforms: text("platforms").array().notNull().default([]),
+    notice: text("notice"),
+    maxPlayers: integer("max_players").notNull(),
+    recruitMethod: recruitMethod("recruit_method").notNull().default("first_come"),
+    // false면 정원이 찼을 때 대기 신청을 받지 않는다(status "full"). 선착순에서만 쓴다.
+    waitlistEnabled: boolean("waitlist_enabled").notNull().default(true),
+    scheduleMode: scheduleMode("schedule_mode").notNull(),
+    endDate: timestamp("end_date", { withTimezone: true }).notNull(),
+    rangeStart: date("range_start"),
+    rangeEnd: date("range_end"),
+    // both schedule modes route through here once the start is confirmed
+    confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
+    // set when the 1h-before reminder has been sent (dedupe)
+    notifiedAt: timestamp("notified_at", { withTimezone: true }),
+    // 추첨을 돌린 시각. 값이 있으면 신청을 받지 않고, 확정·대기 명단은 이미 정해진 뒤다.
+    drawnAt: timestamp("drawn_at", { withTimezone: true }),
+    // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.
+    discordThreadId: text("discord_thread_id"),
+    // 직전 회차. null이면 1회차.
+    parentGameId: uuid("parent_game_id").references((): AnyPgColumn => games.id, {
+      onDelete: "set null",
+    }),
+    round: integer("round").notNull().default(1),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("games_gm_id_idx").on(table.gmId),
+    index("games_end_date_idx").on(table.endDate),
+    // 확정된 세션만 본다(달력·리마인더·시간 겹침 검사). null은 전체의 대부분이라 부분 인덱스로 뺀다.
+    index("games_confirmed_at_idx")
+      .on(table.confirmedAt)
+      .where(sql`confirmed_at is not null`),
+  ],
+);
 
 export const participants = pgTable(
   "participants",
@@ -114,7 +126,11 @@ export const participants = pgTable(
     // 추첨이 정한 순서. 선착순이거나 뽑기 전이면 null이고, 그때는 joinedAt이 순서다.
     drawRank: integer("draw_rank"),
   },
-  (table) => [primaryKey({ columns: [table.gameId, table.userId] })],
+  (table) => [
+    primaryKey({ columns: [table.gameId, table.userId] }),
+    // PK가 game_id로 시작해 user_id 단독 조회(내가 신청한 게임)는 못 탄다.
+    index("participants_user_id_idx").on(table.userId),
+  ],
 );
 
 export const availabilities = pgTable(

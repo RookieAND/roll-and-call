@@ -120,6 +120,13 @@
       "when": 1790200000000,
       "tag": "0016_lottery_draw",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1789835223594,
+      "tag": "0017_mute_micromax",
+      "breakpoints": true
     }
   ]
 }
