@@ -22,17 +22,13 @@ export function GameCapacity({
   const open = status === GAME_STATUS.recruiting;
   const closed = status === GAME_STATUS.closed;
   // 추첨은 마감 전까지 확정된 자리가 없어 채울 칸도 없다.
-  const drawPending = recruitMethod === RECRUIT_METHOD.lottery && open;
   const lottery = recruitMethod === RECRUIT_METHOD.lottery;
+  const drawPending = lottery && open;
 
   return (
     <HStack align="center" gap={2} className="shrink-0">
-      <Text
-        typography="body4"
-        foreground={lottery ? "primary" : "muted"}
-        className={lottery ? "font-bold" : "font-semibold"}
-      >
-        {lottery ? "추첨" : "선착순"}
+      <Text typography="body4" foreground="muted" className="font-semibold">
+        {lottery ? "추첨순" : "선착순"}
       </Text>
       {!drawPending && maxPlayers <= MAX_METER_SEATS && (
         <span aria-hidden className="flex shrink-0 gap-[3px]">
