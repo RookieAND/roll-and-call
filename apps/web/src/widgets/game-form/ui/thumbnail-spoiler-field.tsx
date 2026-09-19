@@ -1,6 +1,6 @@
 "use client";
 
-import { Switch, Text } from "@trpg/ui";
+import { Switch, Text, cn } from "@trpg/ui";
 
 export function ThumbnailSpoilerField({
   value,
@@ -10,14 +10,19 @@ export function ThumbnailSpoilerField({
   onChange: (spoiler: boolean) => void;
 }) {
   return (
-    <div className="flex min-h-11 items-start justify-between gap-3">
-      <div className="min-w-0">
+    <div
+      className={cn(
+        "flex min-h-11 items-center gap-3 rounded-[10px] border px-3 py-[11px]",
+        value ? "border-tinted-border bg-tinted-bg" : "border-gray-200",
+      )}
+    >
+      <div className="min-w-0 flex-1">
         <Text
           typography="subtitle2"
           render={<label htmlFor="thumbnailSpoiler" />}
           className="block"
         >
-          썸네일 가리기
+          썸네일 스포일러 설정
         </Text>
         <Text
           typography="body4"
@@ -26,7 +31,7 @@ export function ThumbnailSpoilerField({
           id="thumbnailSpoiler-hint"
           className="mt-0.5"
         >
-          고어·잔혹 묘사가 있으면 켜 주세요. 목록에서는 흐리게, 상세에서는 눌러야 보입니다.
+          목록과 상세 페이지에서 이미지를 흐리게 덮습니다
         </Text>
       </div>
       <Switch
@@ -34,7 +39,7 @@ export function ThumbnailSpoilerField({
         checked={value}
         onCheckedChange={onChange}
         aria-describedby="thumbnailSpoiler-hint"
-        className="mt-0.5"
+        className="shrink-0"
       />
     </div>
   );

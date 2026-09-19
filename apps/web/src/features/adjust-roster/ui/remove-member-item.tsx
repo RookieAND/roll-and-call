@@ -10,12 +10,12 @@ import type { MemberSummary } from "../model/member-summary";
 export function RemoveMemberItem({
   gameId,
   member,
-  fillerName,
+  leavesEmptySeat,
   onDone,
 }: {
   gameId: string;
   member: MemberSummary;
-  fillerName?: string;
+  leavesEmptySeat: boolean;
   onDone: () => void;
 }) {
   const [confirming, setConfirming] = useState(false);
@@ -23,10 +23,10 @@ export function RemoveMemberItem({
 
   const description = [
     `${member.username}님을 내보내면 신청이 취소됩니다. 되돌릴 수 없습니다.`,
-    fillerName ? `빈 자리는 대기 1번 ${fillerName}님이 바로 채웁니다.` : null,
+    leavesEmptySeat ? "빈 자리는 저절로 차지 않습니다. 대기에서 직접 확정시키세요." : null,
   ]
     .filter(Boolean)
-    .join(" ");
+    .join("\n");
 
   function remove() {
     run(() => removeParticipant(gameId, member.userId), {

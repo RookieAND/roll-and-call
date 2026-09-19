@@ -9,7 +9,7 @@ export async function getGameById(id: string) {
     with: {
       gm: { columns: { username: true, avatarUrl: true, bio: true } },
       participants: {
-        columns: { userId: true, joinedAt: true, status: true },
+        columns: { userId: true, joinedAt: true, status: true, drawRank: true },
         with: { user: { columns: { username: true, avatarUrl: true, bio: true } } },
       },
     },

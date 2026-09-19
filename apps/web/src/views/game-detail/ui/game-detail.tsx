@@ -1,12 +1,6 @@
 import { Container, VStack } from "@trpg/ui";
 
-import {
-  deriveGameStatus,
-  isGameGm,
-  isSessionLocked,
-  scheduleLine,
-  splitRoster,
-} from "@/entities/game";
+import { deriveGameStatus, isGameGm, scheduleLine, splitRoster } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -71,7 +65,7 @@ export function GameDetail({
               waiting={waiting}
               maxPlayers={game.maxPlayers}
               recruitMethod={game.recruitMethod}
-              sessionConfirmed={isSessionLocked(game)}
+              drawn={game.drawnAt !== null}
               isGm={isGm}
               viewerId={viewerId}
             />

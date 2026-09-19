@@ -9,7 +9,7 @@ import { findParticipantStatus } from "./find-participant-status";
 import { RosterError } from "./roster-error";
 import { setParticipantStatus } from "./set-participant-status";
 
-// 되돌리기 전용: 상태만 그대로 되돌리고 "대기 맨 앞이 채운다" 연쇄는 다시 적용하지 않는다.
+// 되돌리기 전용: 상태만 그대로 되돌린다.
 export async function restoreRoster(gameId: string, entries: RosterEntry[]): Promise<ActionResult> {
   const valid = entries.every(
     (entry) =>

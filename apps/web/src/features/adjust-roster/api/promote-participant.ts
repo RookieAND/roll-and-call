@@ -1,6 +1,6 @@
 "use server";
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
@@ -11,9 +11,9 @@ import { findParticipantStatus } from "./find-participant-status";
 import { PARTICIPANT_NOT_FOUND_MESSAGE, RosterError } from "./roster-error";
 import { setParticipantStatus } from "./set-participant-status";
 
-const { confirmed, waiting } = PARTICIPANT_STATUS;
+const { confirmed } = PARTICIPANT_STATUS;
 
-// 정원이 찼으면 가장 늦게 신청한 확정자를 대기로 민다. 화면은 정원이 차면 "교체"를 쓰므로 경합 때만 일어난다.
+// 정원을 넘겨 확정하지 않는다. 자리를 비우는 일은 GM이 대기로 이동으로 직접 한다.
 export async function promoteParticipant(gameId: string, userId: string): Promise<ActionResult> {
   return adjustRoster(gameId, async (transaction, game) => {
     const status = await findParticipantStatus(transaction, gameId, userId);
@@ -25,13 +25,9 @@ export async function promoteParticipant(gameId: string, userId: string): Promis
       and(eq(participants.gameId, gameId), eq(participants.status, confirmed)),
     );
     if (confirmedCount >= game.maxPlayers) {
-      const [latest] = await transaction
-        .select({ userId: participants.userId })
-        .from(participants)
-        .where(and(eq(participants.gameId, gameId), eq(participants.status, confirmed)))
-        .orderBy(desc(participants.joinedAt))
-        .limit(1);
-      if (latest) await setParticipantStatus(transaction, gameId, latest.userId, waiting);
+      throw new RosterError(
+        `정원 ${game.maxPlayers}명이 차 있습니다. 확정에서 한 명을 대기로 옮기세요.`,
+      );
     }
     await setParticipantStatus(transaction, gameId, userId, confirmed);
   });

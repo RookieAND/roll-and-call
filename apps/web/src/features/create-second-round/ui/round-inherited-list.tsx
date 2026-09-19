@@ -31,9 +31,7 @@ export function RoundInheritedList({
             gap={3}
             className="min-h-13 border-b border-gray-100 px-3 py-2.5 last:border-b-0"
           >
-            <span className="flex size-5 shrink-0 items-center justify-center rounded-md bg-primary-600 text-white">
-              <Check size={12} aria-hidden />
-            </span>
+            <Check size={16} aria-hidden className="shrink-0 text-gray-600" />
             <VStack gap={0}>
               <Text typography="subtitle2">{item.title}</Text>
               <Text typography="body4" foreground="hint">

@@ -60,6 +60,20 @@ assert.deepEqual(
   ],
 );
 
+// 추첨을 돌린 뒤에는 신청 순서가 아니라 drawRank가 대기 순번을 정한다.
+const drawnRoster = [
+  { userId: "a", status: PARTICIPANT_STATUS.waiting, joinedAt: new Date(1), drawRank: 4 },
+  { userId: "b", status: PARTICIPANT_STATUS.confirmed, joinedAt: new Date(2), drawRank: 1 },
+  { userId: "c", status: PARTICIPANT_STATUS.waiting, joinedAt: new Date(3), drawRank: 3 },
+];
+assert.deepEqual(
+  splitRoster(drawnRoster).waiting.map((member) => [member.userId, member.waitlistRank]),
+  [
+    ["c", 1],
+    ["a", 2],
+  ],
+);
+
 assert.equal(
   canCoordinateSchedule({
     scheduleMode: SCHEDULE_MODE.coordinate,

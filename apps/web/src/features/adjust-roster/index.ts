@@ -1,10 +1,9 @@
 export { promoteParticipant } from "./api/promote-participant";
 export { demoteParticipant } from "./api/demote-participant";
 export { removeParticipant } from "./api/remove-participant";
-export { swapParticipants } from "./api/swap-participants";
 export { restoreRoster } from "./api/restore-roster";
-export { MemberActionSheet } from "./ui/member-action-sheet";
-export { WaitingMemberSheet } from "./ui/waiting-member-sheet";
-export { SwapSheet } from "./ui/swap-sheet";
+export { drawLottery } from "./api/draw-lottery";
+export { MemberSheet } from "./ui/member-sheet";
+export { DrawLotteryCard } from "./ui/draw-lottery-card";
 export type { MemberSummary } from "./model/member-summary";
 export type { RosterEntry } from "./model/roster-entry";

@@ -17,7 +17,7 @@ export function GameRosterSection({
   waiting,
   maxPlayers,
   recruitMethod,
-  sessionConfirmed,
+  drawn,
   isGm,
   viewerId,
 }: {
@@ -27,13 +27,13 @@ export function GameRosterSection({
   waiting: DetailRosterMember[];
   maxPlayers: number;
   recruitMethod: RecruitMethod;
-  sessionConfirmed: boolean;
+  drawn: boolean;
   isGm: boolean;
   viewerId: string | null;
 }) {
   const [open, setOpen] = useState(false);
   // 추첨은 뽑기 전까지 확정과 대기를 가르지 않는다 — 한 덩어리의 "신청"으로 본다.
-  const isLottery = recruitMethod === RECRUIT_METHOD.lottery && !sessionConfirmed;
+  const isLottery = recruitMethod === RECRUIT_METHOD.lottery && !drawn;
   const hasMembers = confirmed.length + waiting.length > 0;
   const viewerWaiting = waiting.find((member) => member.userId === viewerId);
 

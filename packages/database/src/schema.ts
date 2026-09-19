@@ -88,6 +88,8 @@ export const games = pgTable("games", {
   confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
   // set when the 1h-before reminder has been sent (dedupe)
   notifiedAt: timestamp("notified_at", { withTimezone: true }),
+  // 추첨을 돌린 시각. 값이 있으면 신청을 받지 않고, 확정·대기 명단은 이미 정해진 뒤다.
+  drawnAt: timestamp("drawn_at", { withTimezone: true }),
   // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.
   discordThreadId: text("discord_thread_id"),
   // 직전 회차. null이면 1회차.
@@ -109,6 +111,8 @@ export const participants = pgTable(
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
     joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
     status: participantStatus("status").notNull().default("confirmed"),
+    // 추첨이 정한 순서. 선착순이거나 뽑기 전이면 null이고, 그때는 joinedAt이 순서다.
+    drawRank: integer("draw_rank"),
   },
   (table) => [primaryKey({ columns: [table.gameId, table.userId] })],
 );

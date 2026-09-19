@@ -60,8 +60,11 @@ export async function ManageParticipantsView({ id }: { id: string }) {
       waiting={waiting}
       summary={summarizeRoster({
         confirmed,
+        waiting,
         maxPlayers: game.maxPlayers,
         endDate: game.endDate,
+        recruitMethod: game.recruitMethod,
+        drawnAt: game.drawnAt,
         isCoordinate,
       })}
       isCoordinate={isCoordinate}

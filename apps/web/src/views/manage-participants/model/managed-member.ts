@@ -1,6 +1,3 @@
 import type { MemberSummary } from "@/features/adjust-roster";
 
-export type ManagedMember = MemberSummary & {
-  waitlistRank: number | null;
-  hasAvailability: boolean;
-};
+export type ManagedMember = MemberSummary & { joinedAt: Date };
