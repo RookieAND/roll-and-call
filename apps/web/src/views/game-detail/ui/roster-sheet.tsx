@@ -2,7 +2,6 @@ import { Text, VStack } from "@trpg/ui";
 
 import { Sheet } from "@/shared/ui";
 
-import { CollapsibleRows } from "./collapsible-rows";
 import { RosterGroup } from "./roster-group";
 import { type DetailRosterMember, RosterMemberRow } from "./roster-member-row";
 
@@ -57,18 +56,16 @@ export function RosterSheet({
 
             {isLottery ? (
               <RosterGroup label="신청" count={applicants.length} capacity={maxPlayers}>
-                <CollapsibleRows>
-                  {applicants.map((member) => (
-                    <RosterMemberRow
-                      key={member.userId}
-                      userId={member.userId}
-                      name={member.user?.username}
-                      avatarUrl={member.user?.avatarUrl}
-                      bio={member.user?.bio}
-                      note={noteOf(member)}
-                    />
-                  ))}
-                </CollapsibleRows>
+                {applicants.map((member) => (
+                  <RosterMemberRow
+                    key={member.userId}
+                    userId={member.userId}
+                    name={member.user?.username}
+                    avatarUrl={member.user?.avatarUrl}
+                    bio={member.user?.bio}
+                    note={noteOf(member)}
+                  />
+                ))}
                 <Text typography="body4" foreground="hint" render={<p />} className="pt-1">
                   추첨 전에는 순번이 없습니다. 신청 순서로만 보여줍니다.
                 </Text>
@@ -77,34 +74,30 @@ export function RosterSheet({
               <>
                 {confirmed.length > 0 && (
                   <RosterGroup label="참여자" count={confirmed.length} capacity={maxPlayers}>
-                    <CollapsibleRows>
-                      {confirmed.map((member) => (
-                        <RosterMemberRow
-                          key={member.userId}
-                          userId={member.userId}
-                          name={member.user?.username}
-                          avatarUrl={member.user?.avatarUrl}
-                          bio={member.user?.bio}
-                          note={noteOf(member)}
-                        />
-                      ))}
-                    </CollapsibleRows>
+                    {confirmed.map((member) => (
+                      <RosterMemberRow
+                        key={member.userId}
+                        userId={member.userId}
+                        name={member.user?.username}
+                        avatarUrl={member.user?.avatarUrl}
+                        bio={member.user?.bio}
+                        note={noteOf(member)}
+                      />
+                    ))}
                   </RosterGroup>
                 )}
                 {waiting.length > 0 && (
                   <RosterGroup label="대기" count={waiting.length}>
-                    <CollapsibleRows>
-                      {waiting.map((member) => (
-                        <RosterMemberRow
-                          key={member.userId}
-                          userId={member.userId}
-                          name={member.user?.username}
-                          avatarUrl={member.user?.avatarUrl}
-                          bio={member.user?.bio}
-                          note={noteOf(member, `대기 ${member.waitlistRank}번`)}
-                        />
-                      ))}
-                    </CollapsibleRows>
+                    {waiting.map((member) => (
+                      <RosterMemberRow
+                        key={member.userId}
+                        userId={member.userId}
+                        name={member.user?.username}
+                        avatarUrl={member.user?.avatarUrl}
+                        bio={member.user?.bio}
+                        note={noteOf(member, `대기 ${member.waitlistRank}번`)}
+                      />
+                    ))}
                   </RosterGroup>
                 )}
               </>

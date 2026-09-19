@@ -6,8 +6,8 @@ import { useState } from "react";
 
 import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
 
-import type { DetailRosterMember } from "./roster-member-row";
 import { RosterGroupSection } from "./roster-group-section";
+import type { DetailRosterMember } from "./roster-member-row";
 import { RosterSheet } from "./roster-sheet";
 
 export function GameRosterSection({

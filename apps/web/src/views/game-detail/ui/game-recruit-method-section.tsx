@@ -6,10 +6,7 @@ import type { GameDetailData } from "@/shared/server";
 export function GameRecruitMethodSection({ game }: { game: GameDetailData }) {
   const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
   const lines = isLottery
-    ? [
-        "정원과 관계없이 신청을 받습니다.",
-        `마감 뒤 GM이 추첨으로 ${game.maxPlayers}명을 정합니다.`,
-      ]
+    ? ["정원과 관계없이 신청을 받습니다.", `마감 뒤 GM이 추첨으로 ${game.maxPlayers}명을 정합니다.`]
     : [
         "신청한 순서대로 정원까지 확정됩니다.",
         game.waitlistEnabled

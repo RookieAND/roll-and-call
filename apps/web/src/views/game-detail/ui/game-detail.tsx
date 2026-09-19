@@ -52,11 +52,7 @@ export function GameDetail({
           <GameDetailThumbnail url={game.thumbnailUrl} spoiler={game.thumbnailSpoiler} />
 
           <VStack gap={5} className="px-4 pb-2">
-            <GameDetailHeader
-              title={game.title}
-              status={status}
-              statusLine={scheduleLine(game)}
-            />
+            <GameDetailHeader title={game.title} status={status} statusLine={scheduleLine(game)} />
 
             <GameInfoTable game={game} isGm={isGm} />
 
