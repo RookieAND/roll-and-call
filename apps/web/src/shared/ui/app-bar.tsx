@@ -1,5 +1,6 @@
 import { IconButton, Text } from "@trpg/ui";
 import { ChevronLeft, X } from "lucide-react";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { BackButton } from "./back-button";
@@ -37,7 +38,9 @@ export function AppBar({ title, brand, back, onBack, backIcon = "back", action }
         back && <BackButton fallback={back} />
       )}
       {brand ? (
-        <BrandLogo label={title} />
+        <Link href="/">
+          <BrandLogo label={title} />
+        </Link>
       ) : (
         <Text
           typography={hasBack ? "heading3" : "heading2"}
