@@ -10,7 +10,7 @@ export default async function Page({
 }) {
   const { auth_error: authError, date } = await searchParams;
   return (
-    <Suspense key={date?.slice(0, 7)} fallback={<HomeSkeleton />}>
+    <Suspense key={date?.slice(0, 7)} fallback={<HomeSkeleton date={date} />}>
       <HomeView date={date} authError={authError === "1"} />
     </Suspense>
   );

@@ -1,8 +1,6 @@
 import { Text } from "@trpg/ui";
 import type { Dayjs } from "dayjs";
 
-import { EmptyState } from "@/shared/ui";
-
 import type { MonthRecord } from "../model/build-month-record";
 import { HomeRecordGroup } from "./home-record-group";
 
@@ -27,29 +25,19 @@ export function HomeMonthRecord({
       <Text typography="body4" foreground="hint" render={<p />} className="mt-1 mb-4 text-[12.5px]">
         {summary}
       </Text>
-      {record.sessionCount === 0 ? (
-        <EmptyState
-          size="section"
-          className="p-5"
-          title={`${monthLabel}에 세션이 열리면 GM과 플레이어 1위가 여기 섭니다`}
-          description={
-            <>
-              세션이 개설될 때마다 집계합니다.
-              <br />
-              무산된 세션은 세지 않습니다.
-            </>
-          }
-        />
-      ) : (
-        <>
-          <HomeRecordGroup label="GM · 연 세션" rows={record.gms} />
-          <HomeRecordGroup
-            label="플레이어 · 참여한 세션"
-            rows={record.players}
-            className="mt-4 border-t border-gray-100 pt-[15px]"
-          />
-        </>
-      )}
+      <HomeRecordGroup
+        label="GM으로 운영한 세션 수"
+        ranking={record.gms}
+        emptyTitle="아직 세션을 연 GM이 없습니다"
+        emptyDescription="세션이 개설될 때마다 집계합니다."
+      />
+      <HomeRecordGroup
+        label="플레이어로 참여한 세션 수"
+        ranking={record.players}
+        emptyTitle="아직 참여가 확정된 사람이 없습니다"
+        emptyDescription="무산된 세션은 세지 않습니다."
+        className="mt-4 border-t border-gray-100 pt-[15px]"
+      />
     </section>
   );
 }

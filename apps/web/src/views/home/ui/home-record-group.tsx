@@ -1,19 +1,27 @@
 import { Text } from "@trpg/ui";
+import type { ReactNode } from "react";
 
-import type { RecordRow } from "../model/rank-people";
+import { EmptyState } from "@/shared/ui";
+
+import type { RecordRanking } from "../model/rank-people";
 import { HomeRecordLeader } from "./home-record-leader";
 import { HomeRecordRow } from "./home-record-row";
 
 export function HomeRecordGroup({
   label,
-  rows,
+  ranking,
+  emptyTitle,
+  emptyDescription,
   className,
 }: {
   label: string;
-  rows: (RecordRow | null)[];
+  ranking: RecordRanking;
+  emptyTitle: string;
+  emptyDescription: ReactNode;
   className?: string;
 }) {
-  const [leader, ...runnersUp] = rows;
+  const { leaders, leaderCount, runnersUp } = ranking;
+  const [first, ...rest] = leaders;
 
   return (
     <div className={className}>
@@ -25,12 +33,27 @@ export function HomeRecordGroup({
       >
         {label}
       </Text>
-      {leader ? <HomeRecordLeader row={leader} /> : <HomeRecordRow row={null} position={1} />}
-      <div className="divide-y divide-gray-100 px-0.5">
-        {runnersUp.map((row, index) => (
-          <HomeRecordRow key={row?.person.id ?? `empty-${index}`} row={row} position={index + 2} />
-        ))}
-      </div>
+      {!first ? (
+        <EmptyState
+          size="section"
+          className="p-4"
+          title={emptyTitle}
+          description={emptyDescription}
+        />
+      ) : (
+        <>
+          <HomeRecordLeader people={[first, ...rest]} count={leaderCount} />
+          <div className="divide-y divide-gray-100 px-0.5">
+            {runnersUp.map((row, index) => (
+              <HomeRecordRow
+                key={row?.person.id ?? `empty-${index}`}
+                row={row}
+                position={index + 2}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

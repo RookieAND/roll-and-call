@@ -1,10 +1,15 @@
 export type RecordPerson = { id: string; username: string; avatarUrl: string | null };
 export type RecordRow = { rank: number; person: RecordPerson; count: number };
+export type RecordRanking = {
+  leaders: RecordPerson[];
+  leaderCount: number;
+  runnersUp: (RecordRow | null)[];
+};
 
-const PODIUM_SIZE = 3;
+const RUNNER_UP_SIZE = 2;
 
-// 동점은 같은 순위, 다음 순위는 건너뛴다(1, 2, 2). 세 자리를 못 채우면 null로 빈 줄을 남긴다.
-export function rankPeople(appearances: RecordPerson[]): (RecordRow | null)[] {
+// 1위는 동점자를 한 장으로 묶고, 아래 두 줄은 다음 점수대부터 2·3위로 잇는다. 못 채운 자리는 null로 남긴다.
+export function rankPeople(appearances: RecordPerson[]): RecordRanking {
   const counts = new Map<string, RecordRow>();
   for (const person of appearances) {
     const row = counts.get(person.id) ?? { rank: 0, person, count: 0 };
@@ -12,9 +17,14 @@ export function rankPeople(appearances: RecordPerson[]): (RecordRow | null)[] {
     counts.set(person.id, row);
   }
   const sorted = [...counts.values()].toSorted((left, right) => right.count - left.count);
-  const ranked = sorted.map((row) => ({
-    ...row,
-    rank: sorted.findIndex((other) => other.count === row.count) + 1,
-  }));
-  return Array.from({ length: PODIUM_SIZE }, (_, index) => ranked[index] ?? null);
+  const scores = [...new Set(sorted.map((row) => row.count))];
+  const ranked = sorted.map((row) => ({ ...row, rank: scores.indexOf(row.count) + 1 }));
+  const leaders = ranked.filter((row) => row.rank === 1);
+  const runnersUp = ranked.filter((row) => row.rank !== 1);
+
+  return {
+    leaders: leaders.map((row) => row.person),
+    leaderCount: leaders[0]?.count ?? 0,
+    runnersUp: Array.from({ length: RUNNER_UP_SIZE }, (_, index) => runnersUp[index] ?? null),
+  };
 }

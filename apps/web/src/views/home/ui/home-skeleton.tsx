@@ -1,45 +1,51 @@
-import { Container, Skeleton } from "@trpg/ui";
+import { Container, Skeleton, Text } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
-// 달력은 대부분의 달이 5주라 35칸으로 잡는다. 6주인 달만 로딩 후 한 줄 늘어난다.
-const CALENDAR_CELL_COUNT = 35;
+import { resolveCalendarView } from "../model/resolve-calendar-view";
+import { HomeCalendar } from "./home-calendar";
 
-export function HomeSkeleton() {
+const RECORD_GROUPS = ["gm", "player"] as const;
+
+// 주소만으로 정해지는 글자(달 이름·선택한 날짜·요일)는 로딩 중에도 그대로 보여 준다.
+export function HomeSkeleton({ date }: { date?: string }) {
+  const { monthStart, selected } = resolveCalendarView(date);
+
   return (
     <>
       <AppBar title="롤앤콜" brand />
       <Container size="sm" className="px-0">
-        <section>
-          <div className="flex items-center gap-2 pt-3.5 pr-2.5 pb-2.5 pl-4">
-            <div className="flex-1">
-              <Skeleton className="h-[25px] w-32" />
-            </div>
-            <Skeleton className="h-10 w-[124px]" />
-          </div>
-          <div className="px-3 pb-1">
-            <Skeleton className="h-4 w-full" />
-          </div>
-          <div className="grid grid-cols-7 gap-px px-3 pb-3">
-            {Array.from({ length: CALENDAR_CELL_COUNT }).map((_, index) => (
-              <Skeleton key={index} className="h-[62px] rounded-lg" />
-            ))}
-          </div>
-          <div className="px-4 pb-3">
-            <Skeleton className="h-4 w-40" />
-          </div>
-        </section>
+        <HomeCalendar monthStart={monthStart} />
 
         <section className="border-t border-gray-200 p-4">
-          <Skeleton className="mb-[11px] h-[22px] w-32" />
-          <Skeleton className="h-[74px] w-full rounded-[13px]" />
+          <div className="mb-[11px] flex items-baseline gap-2">
+            <Text typography="heading3" render={<h3 />} className="font-extrabold">
+              {selected.format("M월 D일 (dd)")}
+            </Text>
+            <Skeleton className="h-[15px] w-8" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-[78px] w-full rounded-[13px]" />
+            <Skeleton className="h-[78px] w-full rounded-[13px]" />
+          </div>
         </section>
 
         <section className="border-t border-gray-200 px-4 pt-[18px] pb-5">
-          <Skeleton className="h-[23px] w-24" />
+          <Text typography="heading2" render={<h3 />} className="font-extrabold">
+            {monthStart.format("M월")}의 기록
+          </Text>
           <Skeleton className="mt-1 mb-4 h-[17px] w-48" />
-          <Skeleton className="h-[130px] rounded-[14px]" />
-          <Skeleton className="mt-4 h-[130px] rounded-[14px]" />
+          {RECORD_GROUPS.map((group, index) => (
+            <div
+              key={group}
+              className={index > 0 ? "mt-4 border-t border-gray-100 pt-[15px]" : undefined}
+            >
+              <Skeleton className="mb-[9px] h-[15px] w-32" />
+              <Skeleton className="h-[74px] rounded-[14px]" />
+              <Skeleton className="mt-1 h-[44px]" />
+              <Skeleton className="mt-px h-[44px]" />
+            </div>
+          ))}
         </section>
       </Container>
     </>

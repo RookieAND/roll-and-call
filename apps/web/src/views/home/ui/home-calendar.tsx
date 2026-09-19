@@ -1,4 +1,4 @@
-import { Button, cn, IconButton, Text } from "@trpg/ui";
+import { Button, cn, IconButton, Skeleton, Text } from "@trpg/ui";
 import type { Dayjs } from "dayjs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import { HomeCalendarCell } from "./home-calendar-cell";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"] as const;
 
+// sessionsByDay 없이 부르면 달 이름·요일·칸 수는 그대로 두고 칸만 스켈레톤으로 깐다.
 export function HomeCalendar({
   monthStart,
   sessionsByDay,
@@ -18,9 +19,9 @@ export function HomeCalendar({
   todayKey,
 }: {
   monthStart: Dayjs;
-  sessionsByDay: Map<string, CalendarSession[]>;
-  selectedKey: string;
-  todayKey: string;
+  sessionsByDay?: Map<string, CalendarSession[]>;
+  selectedKey?: string;
+  todayKey?: string;
 }) {
   const cells = buildMonthCells(monthStart);
   const previousHref = `/?date=${monthStart.subtract(1, "month").format(DATE_KEY_FORMAT)}`;
@@ -63,15 +64,19 @@ export function HomeCalendar({
       </div>
 
       <div className="grid grid-cols-7 gap-px px-3 pb-3">
-        {cells.map((cell) => (
-          <HomeCalendarCell
-            key={cell.key}
-            cell={cell}
-            sessions={sessionsByDay.get(cell.key) ?? []}
-            selected={cell.key === selectedKey}
-            today={cell.key === todayKey}
-          />
-        ))}
+        {cells.map((cell) =>
+          sessionsByDay ? (
+            <HomeCalendarCell
+              key={cell.key}
+              cell={cell}
+              sessions={sessionsByDay.get(cell.key) ?? []}
+              selected={cell.key === selectedKey}
+              today={cell.key === todayKey}
+            />
+          ) : (
+            <Skeleton key={cell.key} className="h-[62px] rounded-lg" />
+          ),
+        )}
       </div>
 
       <div className="flex items-center gap-3 px-4 pb-3 text-[11.5px] text-hint">
