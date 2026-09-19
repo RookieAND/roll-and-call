@@ -2,7 +2,7 @@ import { Container, VStack } from "@trpg/ui";
 
 import { profileDisplay } from "@/entities/profile";
 import { LoginRequired } from "@/features/auth";
-import { getCurrentUser, getProfile } from "@/shared/server";
+import { getCurrentSessionUser, getProfile } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { loadMySessions } from "@/widgets/session-list";
 
@@ -15,7 +15,7 @@ import { MyPageSettings } from "./my-page-settings";
 import { MyPageTodos } from "./my-page-todos";
 
 export async function MyPageView() {
-  const user = await getCurrentUser();
+  const user = await getCurrentSessionUser();
   if (!user) {
     return (
       <>

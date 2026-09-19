@@ -1,7 +1,7 @@
 import { Container } from "@trpg/ui";
 
 import { LoginButton } from "@/features/auth";
-import { getCurrentUser, getMonthSessions } from "@/shared/server";
+import { getCurrentSessionUser, getMonthSessions } from "@/shared/server";
 import { AppBar, StatusNotice } from "@/shared/ui";
 
 import { buildMonthRecord } from "../model/build-month-record";
@@ -14,7 +14,7 @@ import { HomeMonthRecord } from "./home-month-record";
 export async function HomeView({ date, authError }: { date?: string; authError: boolean }) {
   const { monthStart, selectedKey, todayKey } = resolveCalendarView(date);
   const [user, rows] = await Promise.all([
-    getCurrentUser(),
+    getCurrentSessionUser(),
     getMonthSessions(monthStart.toDate(), monthStart.add(1, "month").toDate()),
   ]);
 

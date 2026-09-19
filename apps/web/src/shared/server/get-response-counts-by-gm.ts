@@ -1,0 +1,24 @@
+import "server-only";
+import { availabilities, db, games, participants } from "@trpg/database";
+import { and, eq, sql } from "drizzle-orm";
+
+export async function getResponseCountsByGm(gmId: string): Promise<Map<string, number>> {
+  const rows = await db
+    .select({
+      gameId: availabilities.gameId,
+      count: sql<number>`count(distinct ${availabilities.userId})::int`,
+    })
+    .from(availabilities)
+    .innerJoin(
+      participants,
+      and(
+        eq(participants.gameId, availabilities.gameId),
+        eq(participants.userId, availabilities.userId),
+        eq(participants.status, "confirmed"),
+      ),
+    )
+    .innerJoin(games, eq(games.id, availabilities.gameId))
+    .where(eq(games.gmId, gmId))
+    .groupBy(availabilities.gameId);
+  return new Map(rows.map((row) => [row.gameId, Number(row.count)]));
+}
