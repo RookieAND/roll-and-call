@@ -2,6 +2,7 @@ import { VStack } from "@trpg/ui";
 
 import { ConfirmedSessionNotice } from "@/entities/game";
 import { ddayKst } from "@/shared/lib";
+import { StatusNotice } from "@/shared/ui";
 
 import { ActionHint } from "./action-hint";
 import { ManageParticipantsLink } from "./manage-participants-link";
@@ -34,9 +35,9 @@ export function GmActions({
       {confirmedAt ? (
         <ConfirmedSessionNotice confirmedAt={confirmedAt} />
       ) : (
-        <ActionHint>
+        <StatusNotice tone="muted">
           참여자 {confirmedCount}명 · 대기 {waitingCount}명 · {deadlineText}
-        </ActionHint>
+        </StatusNotice>
       )}
       <ManageParticipantsLink gameId={gameId} />
       <ActionHint>

@@ -2,6 +2,7 @@ import { cn } from "./cn";
 
 const fills = {
   recruiting: "bg-primary-500",
+  waiting: "bg-primary-300",
   confirmed: "bg-success-600",
   closed: "bg-gray-400",
 } as const;

@@ -1,4 +1,4 @@
-import { AvatarGroup, HStack, Progress, Text, VStack } from "@trpg/ui";
+import { AvatarGroup, HStack, Progress, Text } from "@trpg/ui";
 import type { ReactNode } from "react";
 
 import type { DetailRosterMember } from "./roster-member-row";
@@ -21,6 +21,9 @@ export function RosterGroupSection({
   emptyText?: string;
   note?: string;
 }) {
+  // 정원이 없는 묶음(대기)도 같은 자리에 같은 굵기의 줄을 둔다 — 색으로만 구분한다.
+  const full = capacity !== undefined && members.length >= capacity;
+
   return (
     <section className="flex flex-col gap-2.5">
       <HStack align="center" gap={2}>
@@ -39,18 +42,23 @@ export function RosterGroupSection({
         {action}
       </HStack>
 
-      {capacity !== undefined && (
+      {members.length > 0 && (
         <Progress
-          value={Math.min(members.length, capacity)}
-          max={capacity}
-          color={members.length >= capacity ? "closed" : "recruiting"}
+          value={capacity === undefined ? 1 : Math.min(members.length, capacity)}
+          max={capacity ?? 1}
+          color={capacity === undefined ? "waiting" : full ? "confirmed" : "recruiting"}
           className="w-full"
         />
       )}
 
       {members.length === 0 ? (
         emptyText && (
-          <Text typography="body3" foreground="muted" render={<p />}>
+          <Text
+            typography="body3"
+            foreground="muted"
+            render={<p />}
+            className="rounded-xl border border-dashed border-gray-300 p-4 text-center"
+          >
             {emptyText}
           </Text>
         )

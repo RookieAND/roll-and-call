@@ -1,11 +1,10 @@
-import { VStack } from "@trpg/ui";
+import { Text, VStack } from "@trpg/ui";
 
 import { LeaveGameButton } from "@/features/join-game";
 import { formatDateTime } from "@/shared/lib";
 import { StatusNotice } from "@/shared/ui";
 
-import { ACTION_SECONDARY_CLASS } from "./action-class-names";
-import { ActionHint } from "./action-hint";
+import { ACTION_PAIR_CLASS, ACTION_SECONDARY_CLASS } from "./action-class-names";
 import { ActionPair } from "./action-pair";
 import { ScheduleLink } from "./schedule-link";
 
@@ -22,27 +21,30 @@ export function WaitingActions({
   waitingCount: number;
   endDate: Date;
 }) {
-  const leaveButton = (
-    <LeaveGameButton gameId={gameId} className={ACTION_SECONDARY_CLASS}>
-      대기 취소
-    </LeaveGameButton>
-  );
-
   return (
     <VStack gap={2}>
-      <StatusNotice tone="muted">
-        대기로 접수됐습니다 · 자리가 나면 순서대로 확정됩니다.
+      <StatusNotice tone="muted" className="text-left">
+        <Text typography="subtitle2" render={<p />}>
+          대기로 접수됐습니다
+        </Text>
+        <Text typography="body3" foreground="muted" render={<p />} className="mt-1.5">
+          자리가 나면 순서대로 확정됩니다.
+        </Text>
+        <Text typography="body3" foreground="muted" render={<p />} className="mt-2 tabular-nums">
+          대기 {waitlistRank}번 · 총 {waitingCount}명 · 마감 {formatDateTime(endDate)}
+        </Text>
       </StatusNotice>
-      <ActionHint>
-        대기 {waitlistRank}번 · 총 {waitingCount}명 · 마감 {formatDateTime(endDate)}
-      </ActionHint>
       {canSchedule ? (
         <ActionPair>
-          {leaveButton}
-          <ScheduleLink gameId={gameId} className={ACTION_SECONDARY_CLASS} />
+          <LeaveGameButton gameId={gameId} className={ACTION_PAIR_CLASS}>
+            대기 취소
+          </LeaveGameButton>
+          <ScheduleLink gameId={gameId} className={ACTION_PAIR_CLASS} />
         </ActionPair>
       ) : (
-        leaveButton
+        <LeaveGameButton gameId={gameId} className={ACTION_SECONDARY_CLASS}>
+          대기 취소
+        </LeaveGameButton>
       )}
     </VStack>
   );

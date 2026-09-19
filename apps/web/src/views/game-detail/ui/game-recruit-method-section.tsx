@@ -19,12 +19,12 @@ export function GameRecruitMethodSection({ game }: { game: GameDetailData }) {
       <Text typography="heading3" render={<h2 />}>
         모집 방식
       </Text>
-      <Text typography="subtitle2" render={<p />}>
-        {isLottery ? "추첨" : "선착순"}
-      </Text>
-      <VStack gap={1}>
+      <VStack gap={1} className="rounded-xl border border-gray-200 px-3.5 py-3">
+        <Text typography="subtitle1" render={<p />}>
+          {isLottery ? "추첨" : "선착순"}
+        </Text>
         {lines.map((line) => (
-          <Text key={line} typography="body3" foreground="muted" render={<p />}>
+          <Text key={line} typography="body4" foreground="muted" render={<p />}>
             {line}
           </Text>
         ))}

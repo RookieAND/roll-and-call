@@ -1,4 +1,4 @@
-import { Avatar, Text } from "@trpg/ui";
+import { Avatar, Badge, Text } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -36,9 +36,9 @@ export function RosterMemberRow({
             {name ?? "?"}
           </Text>
           {note && (
-            <Text typography="body4" foreground="hint" className="shrink-0">
+            <Badge color="primary" className="shrink-0">
               {note}
-            </Text>
+            </Badge>
           )}
         </div>
         <Text typography="body4" foreground={bio ? "muted" : "hint"} className="block truncate">

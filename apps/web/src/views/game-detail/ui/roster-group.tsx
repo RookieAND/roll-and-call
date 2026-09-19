@@ -6,11 +6,13 @@ export function RosterGroup({
   label,
   count,
   capacity,
+  hint,
   children,
 }: {
   label: string;
   count?: number;
   capacity?: number;
+  hint?: string;
   children: ReactNode;
 }) {
   return (
@@ -29,8 +31,13 @@ export function RosterGroup({
             정원 {capacity}명
           </Text>
         )}
+        {hint && (
+          <Text typography="body4" foreground="hint">
+            {hint}
+          </Text>
+        )}
       </HStack>
-      {children}
+      <div className="divide-y divide-gray-200">{children}</div>
     </section>
   );
 }

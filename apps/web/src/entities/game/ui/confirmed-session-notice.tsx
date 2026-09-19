@@ -1,8 +1,15 @@
 import { Text } from "@trpg/ui";
+import type { ReactNode } from "react";
 
 import { formatDateTime } from "@/shared/lib";
 import { StatusNotice } from "@/shared/ui";
-export function ConfirmedSessionNotice({ confirmedAt }: { confirmedAt: Date }) {
+export function ConfirmedSessionNotice({
+  confirmedAt,
+  note,
+}: {
+  confirmedAt: Date;
+  note?: ReactNode;
+}) {
   return (
     <StatusNotice tone="success">
       <Text typography="subtitle2" foreground="success" render={<div />}>
@@ -11,6 +18,11 @@ export function ConfirmedSessionNotice({ confirmedAt }: { confirmedAt: Date }) {
       <Text typography="heading3" foreground="success" render={<div />} className="mt-0.5">
         {formatDateTime(confirmedAt)}
       </Text>
+      {note && (
+        <Text typography="body4" foreground="success" render={<p />} className="mt-1.5">
+          {note}
+        </Text>
+      )}
     </StatusNotice>
   );
 }

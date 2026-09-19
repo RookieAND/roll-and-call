@@ -26,6 +26,7 @@ const text = cva("", {
       hint: "text-hint",
       primary: "text-primary-ink",
       success: "text-success-700",
+      warning: "text-warning-600",
       danger: "text-danger-600",
       white: "text-white",
     },
