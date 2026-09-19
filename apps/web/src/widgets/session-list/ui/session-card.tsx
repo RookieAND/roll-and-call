@@ -1,8 +1,6 @@
 import { Badge, HStack, Text, cn } from "@trpg/ui";
 import Link from "next/link";
 
-import { GameRoundBadge } from "@/entities/game";
-
 import {
   SESSION_CHIP,
   SESSION_TONE,
@@ -33,12 +31,9 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
           </Text>
         )}
         <HStack justify="between" align="center" gap={2}>
-          <HStack align="center" gap={2} className="min-w-0">
-            <GameRoundBadge round={model.round} />
-            <Text typography="subtitle1" foreground={titleForeground} className="truncate">
-              {model.title}
-            </Text>
-          </HStack>
+          <Text typography="subtitle1" foreground={titleForeground} className="min-w-0 truncate">
+            {model.title}
+          </Text>
           <Badge color={model.badgeColor} className="shrink-0">
             {model.badge}
           </Badge>

@@ -30,8 +30,6 @@ export async function openNextRound(
         endDate: new Date(`${rangeEnd}T23:59:59+09:00`),
         rangeStart,
         rangeEnd,
-        parentGameId: parent.id,
-        round: parent.round + 1,
       })
       .returning({ id: games.id });
     const roundId = created!.id;

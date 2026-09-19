@@ -22,7 +22,6 @@ function game(partial: Partial<SessionGame>): SessionGame {
     gmId: "gm",
     title: "제목",
     rule: "CoC",
-    round: 1,
     maxPlayers: 4,
     scheduleMode: SCHEDULE_MODE.coordinate,
     confirmedAt: null,

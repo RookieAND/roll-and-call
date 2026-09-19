@@ -40,7 +40,6 @@ export type SessionAction = {
 export type SessionCardModel = {
   id: string;
   title: string;
-  round: number;
   role: SessionRole;
   chip: SessionChip;
   badge: string;

@@ -1,6 +1,5 @@
 import { relations, sql } from "drizzle-orm";
 import {
-  type AnyPgColumn,
   boolean,
   date,
   index,
@@ -95,11 +94,6 @@ export const games = pgTable(
     drawnAt: timestamp("drawn_at", { withTimezone: true }),
     // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.
     discordThreadId: text("discord_thread_id"),
-    // 직전 회차. null이면 1회차.
-    parentGameId: uuid("parent_game_id").references((): AnyPgColumn => games.id, {
-      onDelete: "set null",
-    }),
-    round: integer("round").notNull().default(1),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
@@ -155,12 +149,6 @@ export const profilesRelations = relations(profiles, ({ many }) => ({
 
 export const gamesRelations = relations(games, ({ one, many }) => ({
   gm: one(profiles, { fields: [games.gmId], references: [profiles.id] }),
-  parent: one(games, {
-    fields: [games.parentGameId],
-    references: [games.id],
-    relationName: "gameRounds",
-  }),
-  rounds: many(games, { relationName: "gameRounds" }),
   participants: many(participants),
   availabilities: many(availabilities),
 }));
