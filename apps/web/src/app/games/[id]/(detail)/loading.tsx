@@ -3,12 +3,7 @@ import { Container, Skeleton, VStack } from "@trpg/ui";
 import { AppBar } from "@/shared/ui";
 
 // 높이는 GameDetail의 실제 줄 높이를 따른다. 한쪽만 바꾸면 로딩 후 레이아웃이 튄다.
-const INFO_ROWS = [
-  { key: "룰", value: "h-5 w-24" },
-  { key: "GM", value: "h-6 w-28" },
-  { key: "모집 마감일", value: "h-5 w-32" },
-  { key: "세션 일정", value: "h-5 w-32" },
-];
+const INFO_ROWS = ["w-24", "w-28", "w-32", "w-32"];
 
 export default function Loading() {
   return (
@@ -18,39 +13,47 @@ export default function Loading() {
         <VStack gap={4}>
           <Skeleton className="h-42 w-full rounded-none" />
 
-          <VStack gap={4} className="px-4">
-            <VStack gap={2}>
+          <VStack gap={5} className="px-4 pb-2">
+            <div>
               <div className="flex items-start justify-between gap-2">
-                <Skeleton className="h-7 w-2/3" />
+                <Skeleton className="h-8 w-2/3" />
                 <Skeleton className="mt-0.5 h-[21px] w-14 rounded-[7px]" />
               </div>
-              <Skeleton className="h-5 w-48" />
-            </VStack>
+              <Skeleton className="mt-1 h-5 w-44" />
+            </div>
 
             <div className="overflow-hidden rounded-[14px] border border-gray-200">
-              {INFO_ROWS.map((row) => (
+              {INFO_ROWS.map((width) => (
                 <div
-                  key={row.key}
-                  className="flex items-center gap-3 border-b border-gray-100 px-4 py-3 last:border-b-0"
+                  key={width}
+                  className="flex min-h-12 items-center gap-3 border-b border-gray-100 px-4 py-2 last:border-b-0"
                 >
-                  <div className="w-[82px] shrink-0">
-                    <Skeleton className="h-5 w-12" />
-                  </div>
-                  <Skeleton className={row.value} />
+                  <Skeleton className="h-5 w-12 shrink-0" />
+                  <Skeleton className={`h-5 ${width}`} />
                 </div>
               ))}
             </div>
 
             <VStack gap={2}>
               <Skeleton className="h-[22px] w-16" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-4/5" />
+              <Skeleton className="h-5 w-full" />
+              <Skeleton className="h-5 w-4/5" />
             </VStack>
 
             <VStack gap={2}>
-              <Skeleton className="h-[22px] w-24" />
+              <Skeleton className="h-[22px] w-20" />
+              <Skeleton className="h-[74px] w-full rounded-xl" />
+            </VStack>
+
+            <VStack className="gap-2.5">
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-[22px] w-16" />
+                <Skeleton className="h-5 w-10" />
+                <span className="flex-1" />
+                <Skeleton className="h-8 w-16" />
+              </div>
               <Skeleton className="h-1.5 w-full" />
-              <Skeleton className="h-[34px] w-32 rounded-full" />
+              <Skeleton className="h-7 w-32 rounded-full" />
             </VStack>
           </VStack>
 

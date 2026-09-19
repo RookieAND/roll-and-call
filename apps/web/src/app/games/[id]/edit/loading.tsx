@@ -1,25 +1,42 @@
-import { Container, Skeleton, VStack } from "@trpg/ui";
+import { Container, Skeleton, Text, VStack } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
+// 수정 위저드는 EDIT_STEPS 2단계다. 1단계에는 단계 제목 대신 신청자 안내 박스가 온다.
 export default function Loading() {
   return (
     <div className="flex min-h-dvh flex-col">
-      <AppBar back="/games" title="구인 수정" />
+      <AppBar
+        back="/games"
+        backIcon="close"
+        title="구인 수정"
+        action={
+          <Text typography="code2" foreground="hint" className="tabular-nums">
+            1 / 2
+          </Text>
+        }
+      />
+      <div className="h-[3px] bg-gray-100">
+        <div className="h-full w-1/2 bg-primary-600" />
+      </div>
       <Container size="md" className="flex-1">
         <VStack gap={5} className="py-6">
-          <Skeleton className="h-[58px] w-full rounded-xl" />
+          <Skeleton className="h-[70px] w-full rounded-xl" />
           <VStack gap={2}>
-            <Skeleton className="h-5 w-12" />
+            <Skeleton className="h-5 w-16" />
             <Skeleton className="h-11 w-full rounded-[10px]" />
           </VStack>
           <VStack gap={2}>
-            <Skeleton className="h-5 w-12" />
+            <Skeleton className="h-5 w-8" />
+            <Skeleton className="h-11 w-full rounded-[10px]" />
+          </VStack>
+          <VStack gap={2}>
+            <Skeleton className="h-5 w-24" />
             <Skeleton className="h-11 w-full rounded-[10px]" />
           </VStack>
           <VStack gap={2}>
             <Skeleton className="h-5 w-16" />
-            <Skeleton className="h-24 w-full rounded-[10px]" />
+            <Skeleton className="h-[104px] w-full rounded-[10px]" />
           </VStack>
         </VStack>
       </Container>

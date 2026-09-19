@@ -3,7 +3,6 @@ import { Container, Grid, Skeleton, VStack } from "@trpg/ui";
 import { AppBar } from "@/shared/ui";
 
 const ROSTER_ROW_COUNT = 3;
-const STAT_COUNT = 2;
 
 export default function Loading() {
   return (
@@ -12,20 +11,25 @@ export default function Loading() {
       <Container size="md">
         <VStack gap={5} className="py-4">
           <VStack gap={3}>
-            <Skeleton className="h-6 w-52" />
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-7 min-w-0 flex-1" />
+              <Skeleton className="h-[21px] w-14 rounded-[7px]" />
+              <Skeleton className="h-[21px] w-16 rounded-[7px]" />
+            </div>
             <Grid cols={2} gap={2}>
-              {Array.from({ length: STAT_COUNT }).map((_, index) => (
-                <Skeleton key={index} className="h-[66px] rounded-xl" />
-              ))}
+              <Skeleton className="h-[73px] rounded-xl" />
+              <Skeleton className="h-[73px] rounded-xl" />
             </Grid>
-            <Skeleton className="h-[46px] rounded-xl" />
-            <Skeleton className="h-[17px] w-60" />
+            <VStack gap={2}>
+              <Skeleton className="h-[45px] rounded-xl" />
+              <Skeleton className="h-[17px] w-64" />
+            </VStack>
           </VStack>
 
           <VStack gap={2}>
-            <div className="flex items-center justify-between">
-              <Skeleton className="h-5 w-28" />
-              <Skeleton className="h-5 w-14" />
+            <div className="flex items-baseline gap-2">
+              <Skeleton className="h-[21px] w-14" />
+              <Skeleton className="h-[21px] w-10" />
             </div>
             <div className="overflow-hidden rounded-xl border border-gray-200">
               {Array.from({ length: ROSTER_ROW_COUNT }).map((_, index) => (
@@ -35,6 +39,8 @@ export default function Loading() {
                 >
                   <Skeleton className="h-[34px] w-[34px] rounded-full" />
                   <Skeleton className="h-[17px] w-24" />
+                  <span className="flex-1" />
+                  <Skeleton className="h-8 w-8 rounded-[10px]" />
                 </div>
               ))}
             </div>
