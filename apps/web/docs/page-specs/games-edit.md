@@ -15,14 +15,14 @@ GM이 자신의 구인글 내용을 고치거나 삭제하는 단일 페이지 �
 
 ## 2. 접근 조건
 
-| 조건 | 결과 | 근거 |
-|---|---|---|
-| `id`에 해당하는 게임 없음 | `notFound()` → `src/app/not-found.tsx` "페이지를 찾을 수 없습니다" / "주소가 바뀌었거나 삭제된 페이지예요." | `edit-game-view.tsx:7-8` |
-| 비로그인 | `user?.id !== game.gmId` → `redirect("/games/{id}")` | `edit-game-view.tsx:10-11` |
-| 로그인했지만 GM이 아님 (참여자·대기자 포함) | 같은 리다이렉트 | 同 |
-| GM 본인 | 폼 렌더 | `:13-22` |
-| 저장 시 GM이 아님 | UPDATE 조건 `id AND gm_id = user.id`가 0행이면 "수정 권한이 없습니다." | `update-game.ts:44-47` |
-| 저장 시 세션 만료 | "로그인이 필요합니다." | `update-game.ts:10-11` |
+| 조건                                        | 결과                                                                                                        | 근거                       |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `id`에 해당하는 게임 없음                   | `notFound()` → `src/app/not-found.tsx` "페이지를 찾을 수 없습니다" / "주소가 바뀌었거나 삭제된 페이지예요." | `edit-game-view.tsx:7-8`   |
+| 비로그인                                    | `user?.id !== game.gmId` → `redirect("/games/{id}")`                                                        | `edit-game-view.tsx:10-11` |
+| 로그인했지만 GM이 아님 (참여자·대기자 포함) | 같은 리다이렉트                                                                                             | 同                         |
+| GM 본인                                     | 폼 렌더                                                                                                     | `:13-22`                   |
+| 저장 시 GM이 아님                           | UPDATE 조건 `id AND gm_id = user.id`가 0행이면 "수정 권한이 없습니다."                                      | `update-game.ts:44-47`     |
+| 저장 시 세션 만료                           | "로그인이 필요합니다."                                                                                      | `update-game.ts:10-11`     |
 
 - 게임 상태(모집 중, 확정, 마감 지남, 2회차 등)에 따른 수정 제한은 **없다**.
 - ❓ 확인 필요: `id`가 UUID 형식이 아닐 때 `getGameById`의 uuid 비교가 DB 오류를 내서 notFound가 아닌 전역 에러 화면이 되는지.
@@ -31,27 +31,27 @@ GM이 자신의 구인글 내용을 고치거나 삭제하는 단일 페이지 �
 
 ### 진입
 
-| 출발 화면 | 요소 | 근거 |
-|---|---|---|
+| 출발 화면                                                                                        | 요소        | 근거                                                                                                 |
+| ------------------------------------------------------------------------------------------------ | ----------- | ---------------------------------------------------------------------------------------------------- |
 | 구인 상세 `/games/{id}` 헤더 ⋯ 메뉴 (GM에게만, `aria-label="구인 관리 메뉴"`) → 시트 "구인 관리" | "구인 수정" | `src/views/game-detail/ui/game-gm-menu.tsx:31`, `src/views/game-detail/ui/game-detail-header.tsx:23` |
-| 직접 URL | — | — |
+| 직접 URL                                                                                         | —           | —                                                                                                    |
 
 ### 이탈
 
-| 트리거 | 이동 | 근거 |
-|---|---|---|
-| 앱바 뒤로(‹) | `/games/{id}` | `edit-game-view.tsx:15` |
-| 저장 성공 | 토스트 "수정되었습니다" → `router.push("/games/{id}")` | `edit-game-form.tsx:16`, `update-game.ts:49`, `game-form.tsx:62-63` |
-| 삭제 성공 | 토스트 "삭제되었습니다" → `router.push("/games")` | `src/features/delete-game/model/use-delete-game.ts:21-22`, `src/features/delete-game/api/delete-game.ts` (`redirect: "/games"`) |
-| GM 아님 / 비로그인 | `redirect("/games/{id}")` | `edit-game-view.tsx:11` |
-| 게임 없음 | not-found 화면 | `edit-game-view.tsx:8` |
+| 트리거             | 이동                                                   | 근거                                                                                                                            |
+| ------------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| 앱바 뒤로(‹)       | `/games/{id}`                                          | `edit-game-view.tsx:15`                                                                                                         |
+| 저장 성공          | 토스트 "수정되었습니다" → `router.push("/games/{id}")` | `edit-game-form.tsx:16`, `update-game.ts:49`, `game-form.tsx:62-63`                                                             |
+| 삭제 성공          | 토스트 "삭제되었습니다" → `router.push("/games")`      | `src/features/delete-game/model/use-delete-game.ts:21-22`, `src/features/delete-game/api/delete-game.ts` (`redirect: "/games"`) |
+| GM 아님 / 비로그인 | `redirect("/games/{id}")`                              | `edit-game-view.tsx:11`                                                                                                         |
+| 게임 없음          | not-found 화면                                         | `edit-game-view.tsx:8`                                                                                                          |
 
 ## 4. 데이터
 
 ### params
 
-| 이름 | 출처 | 사용 |
-|---|---|---|
+| 이름 | 출처                              | 사용                                                                           |
+| ---- | --------------------------------- | ------------------------------------------------------------------------------ |
 | `id` | `params: Promise<{ id: string }>` | `getGameById(id)` 조회, 앱바 뒤로 링크, `updateGame.bind(null, id)`, 삭제 대상 |
 
 searchParams 없음.
@@ -65,16 +65,16 @@ searchParams 없음.
 
 매핑 표는 [games-new.md §4](./games-new.md#4-데이터)와 같다. 차이는 초기값과 저장 대상 컬럼이다.
 
-| 폼 필드 | 초기값 (수정) `game-form.tsx:40-54` | 비고 |
-|---|---|---|
-| `title`, `rule` | DB 값 | |
-| `synopsis`, `thumbnailUrl`, `rangeStart`, `rangeEnd` | DB 값, null이면 `""` | |
-| `playTime` | DB 문자열 그대로. null이면 `"3시간"` | 시/분 칸은 `parsePlayTime` 정규식 `(\d+)\s*시간`, `(\d+)\s*분`으로 채운다 (`src/widgets/game-form/model/play-time.ts:6-11`). "2시간"처럼 분이 없으면 분 칸이 **빈칸**이다(등록은 "0"). 형식이 맞지 않으면 두 칸 모두 빈칸이다 |
-| `maxPlayers` | `String(maxPlayers)` | |
-| `images` | DB 배열 그대로(`games.images`, 기본 `[]`) | 저장된 순서대로 진행 이미지 타일로 보인다 (`game-form.tsx:52`) |
-| `waitlistEnabled` | DB 값 (`games.waitlist_enabled`) | 마이그레이션 이전 행은 컬럼 기본값 true (`drizzle/0009_game_images_waitlist.sql`, `game-form.tsx:53`) |
-| `scheduleMode` | DB 값 | |
-| `endDate`, `confirmedAt` | `toLocalDateTimeInput(Date)` → 브라우저 로컬 `YYYY-MM-DDTHH:mm`, null이면 `""` | `src/shared/lib/date-input.ts:5-8` |
+| 폼 필드                                              | 초기값 (수정) `game-form.tsx:40-54`                                            | 비고                                                                                                                                                                                                                          |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`, `rule`                                      | DB 값                                                                          |                                                                                                                                                                                                                               |
+| `synopsis`, `thumbnailUrl`, `rangeStart`, `rangeEnd` | DB 값, null이면 `""`                                                           |                                                                                                                                                                                                                               |
+| `playTime`                                           | DB 문자열 그대로. null이면 `"3시간"`                                           | 시/분 칸은 `parsePlayTime` 정규식 `(\d+)\s*시간`, `(\d+)\s*분`으로 채운다 (`src/widgets/game-form/model/play-time.ts:6-11`). "2시간"처럼 분이 없으면 분 칸이 **빈칸**이다(등록은 "0"). 형식이 맞지 않으면 두 칸 모두 빈칸이다 |
+| `maxPlayers`                                         | `String(maxPlayers)`                                                           |                                                                                                                                                                                                                               |
+| `images`                                             | DB 배열 그대로(`games.images`, 기본 `[]`)                                      | 저장된 순서대로 진행 이미지 타일로 보인다 (`game-form.tsx:52`)                                                                                                                                                                |
+| `waitlistEnabled`                                    | DB 값 (`games.waitlist_enabled`)                                               | 마이그레이션 이전 행은 컬럼 기본값 true (`drizzle/0009_game_images_waitlist.sql`, `game-form.tsx:53`)                                                                                                                         |
+| `scheduleMode`                                       | DB 값                                                                          |                                                                                                                                                                                                                               |
+| `endDate`, `confirmedAt`                             | `toLocalDateTimeInput(Date)` → 브라우저 로컬 `YYYY-MM-DDTHH:mm`, null이면 `""` | `src/shared/lib/date-input.ts:5-8`                                                                                                                                                                                            |
 
 `updateGame`이 SET하는 컬럼 (`update-game.ts:43-62`): `title, rule, synopsis, thumbnail_url, images, play_time, max_players, waitlist_enabled, schedule_mode, end_date, range_start, range_end, confirmed_at`. 변환 규칙은 등록과 같다.
 SET하지 않는 컬럼: `gm_id, discord_thread_id, parent_game_id, round, notified_at, created_at`.
@@ -109,19 +109,19 @@ SET하지 않는 컬럼: `gm_id, discord_thread_id, parent_game_id, round, notif
 
 ## 6. 상태별 화면
 
-| 상태 | 화면 | 근거 |
-|---|---|---|
-| 라우트 로딩 | 로딩 표시 없음(상세 스켈레톤은 route group 안이라 적용되지 않음) | `src/app/games/[id]/(detail)/loading.tsx` |
-| 초기 | 기존 값이 채워진 단일 페이지 폼 | `game-form.tsx:40-52` |
-| 검증 실패 | 오류 문구 표시 + `Object.keys(errors)[0]` 필드로 스크롤 | `game-form-page.tsx:22-25` |
-| 제출 중 | fieldset disabled, "저장 중…". **삭제 버튼은 비활성화되지 않음** | `game-form-page.tsx:31`, `edit-game-form.tsx:18` |
-| 서버 오류 | 저장 버튼 위 danger 문구 (정원 오류, 권한 오류 등) | `game-form-page.tsx:37-41` |
-| 성공 | 토스트 "수정되었습니다" → 상세 화면 | `edit-game-form.tsx:16` |
-| 삭제 실패 | `toast.error(원문)` 예: "삭제 권한이 없습니다.", "로그인이 필요합니다." | `use-delete-game.ts:17-19` |
-| 게임 없음 | not-found 화면 | `edit-game-view.tsx:8` |
-| 권한 없음 | 상세로 리다이렉트 (안내 없음) | `edit-game-view.tsx:11` |
-| 도메인 상태 (확정, 마감 지남, 2회차) | 화면 차이 없음. 같은 폼 | — |
-| 빈 상태 | 해당 없음 | — |
+| 상태                                 | 화면                                                                    | 근거                                             |
+| ------------------------------------ | ----------------------------------------------------------------------- | ------------------------------------------------ |
+| 라우트 로딩                          | 로딩 표시 없음(상세 스켈레톤은 route group 안이라 적용되지 않음)        | `src/app/games/[id]/(detail)/loading.tsx`        |
+| 초기                                 | 기존 값이 채워진 단일 페이지 폼                                         | `game-form.tsx:40-52`                            |
+| 검증 실패                            | 오류 문구 표시 + `Object.keys(errors)[0]` 필드로 스크롤                 | `game-form-page.tsx:22-25`                       |
+| 제출 중                              | fieldset disabled, "저장 중…". **삭제 버튼은 비활성화되지 않음**        | `game-form-page.tsx:31`, `edit-game-form.tsx:18` |
+| 서버 오류                            | 저장 버튼 위 danger 문구 (정원 오류, 권한 오류 등)                      | `game-form-page.tsx:37-41`                       |
+| 성공                                 | 토스트 "수정되었습니다" → 상세 화면                                     | `edit-game-form.tsx:16`                          |
+| 삭제 실패                            | `toast.error(원문)` 예: "삭제 권한이 없습니다.", "로그인이 필요합니다." | `use-delete-game.ts:17-19`                       |
+| 게임 없음                            | not-found 화면                                                          | `edit-game-view.tsx:8`                           |
+| 권한 없음                            | 상세로 리다이렉트 (안내 없음)                                           | `edit-game-view.tsx:11`                          |
+| 도메인 상태 (확정, 마감 지남, 2회차) | 화면 차이 없음. 같은 폼                                                 | —                                                |
+| 빈 상태                              | 해당 없음                                                               | —                                                |
 
 ## 7. 폼과 유효성 검사
 
@@ -129,14 +129,14 @@ SET하지 않는 컬럼: `gm_id, discord_thread_id, parent_game_id, round, notif
 
 수정 화면만의 차이:
 
-| 항목 | 내용 | 근거 |
-|---|---|---|
-| 레이아웃 | 단계 없음. 제출 1회에 전체 검증 | `game-form-page.tsx:28` |
-| 오류 스크롤 | `Object.keys(errors)[0]`로 `setTimeout(scrollToField, 0)` | `game-form-page.tsx:22-25` |
-| 서버 전용 규칙: 정원 하한 | `Number(maxPlayers) < 확정 참여자 수`이면 오류. 필드 오류가 아니라 root 오류로 표시되고 스크롤도 없음 | `update-game.ts:19-27` |
-| 서버 오류 문구 원문 | "로그인이 필요합니다." / (첫 zod issue) 또는 "입력값을 확인하세요." / "이미 확정된 참여자가 {confirmedCount}명이라 정원을 그보다 줄일 수 없습니다." / "수정 권한이 없습니다." | `update-game.ts:11, 15, 25, 47` |
-| 모집 마감 달력 min | 오늘. 이미 지난 마감일을 가진 게임은 값은 보이지만 달력에서 과거 날짜를 다시 고를 수 없다. 스키마는 과거 값을 막지 않으므로 그대로 저장된다 | `game-schedule-fields.tsx:65` |
-| 플레이타임 dirty | 시/분 칸 입력 시 `shouldDirty: true`. 다만 dirty 상태를 쓰는 곳은 없다 | `game-basics-fields.tsx:58` |
+| 항목                      | 내용                                                                                                                                                                          | 근거                            |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| 레이아웃                  | 단계 없음. 제출 1회에 전체 검증                                                                                                                                               | `game-form-page.tsx:28`         |
+| 오류 스크롤               | `Object.keys(errors)[0]`로 `setTimeout(scrollToField, 0)`                                                                                                                     | `game-form-page.tsx:22-25`      |
+| 서버 전용 규칙: 정원 하한 | `Number(maxPlayers) < 확정 참여자 수`이면 오류. 필드 오류가 아니라 root 오류로 표시되고 스크롤도 없음                                                                         | `update-game.ts:19-27`          |
+| 서버 오류 문구 원문       | "로그인이 필요합니다." / (첫 zod issue) 또는 "입력값을 확인하세요." / "이미 확정된 참여자가 {confirmedCount}명이라 정원을 그보다 줄일 수 없습니다." / "수정 권한이 없습니다." | `update-game.ts:11, 15, 25, 47` |
+| 모집 마감 달력 min        | 오늘. 이미 지난 마감일을 가진 게임은 값은 보이지만 달력에서 과거 날짜를 다시 고를 수 없다. 스키마는 과거 값을 막지 않으므로 그대로 저장된다                                   | `game-schedule-fields.tsx:65`   |
+| 플레이타임 dirty          | 시/분 칸 입력 시 `shouldDirty: true`. 다만 dirty 상태를 쓰는 곳은 없다                                                                                                        | `game-basics-fields.tsx:58`     |
 
 ## 8. 액션과 부수효과
 
@@ -144,17 +144,17 @@ SET하지 않는 컬럼: `gm_id, discord_thread_id, parent_game_id, round, notif
 
 `src/features/write-game/api/update-game.ts:9-50`
 
-| 순서 | 동작 | 근거 |
-|---|---|---|
-| 1 | `getCurrentUser()`. 없으면 "로그인이 필요합니다." | `:18-19` |
-| 2 | `gameFormSchema.safeParse` | `:21-25` |
-| 3 | 확정 참여자 수 COUNT → 정원 하한 검사 | `:27-35` |
-| 4 | 이전 `thumbnail_url`·`images` 조회(`WHERE id AND gm_id`) | `:37-41` |
-| 5 | `games` UPDATE `WHERE id AND gm_id = user.id` | `:43-62` |
-| 6 | 0행이면 "수정 권한이 없습니다." | `:63` |
-| 7 | `refreshRecruitPost(id)`: Discord 모집 공지 메시지 embed 갱신 | `:64` |
-| 8 | 파일 정리: 이전 썸네일·진행 이미지 중 새 값(`thumbnailUrl`, `images`)에 없는 URL을 `removeUnusedGameFiles`에 넘긴다 | `:66-72` |
-| 9 | `{ redirect: "/games/{id}" }` | `:74` |
+| 순서 | 동작                                                                                                                | 근거     |
+| ---- | ------------------------------------------------------------------------------------------------------------------- | -------- |
+| 1    | `getCurrentUser()`. 없으면 "로그인이 필요합니다."                                                                   | `:18-19` |
+| 2    | `gameFormSchema.safeParse`                                                                                          | `:21-25` |
+| 3    | 확정 참여자 수 COUNT → 정원 하한 검사                                                                               | `:27-35` |
+| 4    | 이전 `thumbnail_url`·`images` 조회(`WHERE id AND gm_id`)                                                            | `:37-41` |
+| 5    | `games` UPDATE `WHERE id AND gm_id = user.id`                                                                       | `:43-62` |
+| 6    | 0행이면 "수정 권한이 없습니다."                                                                                     | `:63`    |
+| 7    | `refreshRecruitPost(id)`: Discord 모집 공지 메시지 embed 갱신                                                       | `:64`    |
+| 8    | 파일 정리: 이전 썸네일·진행 이미지 중 새 값(`thumbnailUrl`, `images`)에 없는 URL을 `removeUnusedGameFiles`에 넘긴다 | `:66-72` |
+| 9    | `{ redirect: "/games/{id}" }`                                                                                       | `:74`    |
 
 - 클라이언트: 성공하면 `toast.success("수정되었습니다")` → push. 실패하면 root 오류 (`game-form.tsx:57-67`).
 - Discord: 참여자나 스레드로 보내는 알림은 없다. `refreshRecruitPost`가 모집 공지 메시지의 embed만 갱신한다(`update-game.ts:64`).
@@ -170,6 +170,7 @@ SET하지 않는 컬럼: `gm_id, discord_thread_id, parent_game_id, round, notif
 ### 삭제 `deleteGame(id)` (Server Action)
 
 `src/features/delete-game/api/delete-game.ts`, 훅 `src/features/delete-game/model/use-delete-game.ts:9-27`
+
 - 비로그인이면 "로그인이 필요합니다.", `DELETE WHERE id AND gm_id`가 0행이면 "삭제 권한이 없습니다.", 성공하면 `{ redirect: "/games" }`.
 - 결과와 상관없이 다이얼로그를 닫고(`onSettled`), 오류는 `toast.error`, 성공은 `toast.success("삭제되었습니다")` → push.
 - 참여자와 조율 응답은 FK `onDelete: cascade`로 함께 지워진다 (`schema.ts:66-68, 81-83`).

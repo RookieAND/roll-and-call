@@ -15,11 +15,11 @@
 
 ## 2. 접근 조건
 
-| 사용자 | 결과 |
-|---|---|
-| 비로그인 | 같은 화면이 보입니다. 인증 확인 코드가 없습니다 (`page.tsx`, `games-view.tsx`에 `getCurrentUser` 없음) |
-| 로그인 | 같은 화면 |
-| GM(호스트) / 참여자 | 차이 없음. 카드에 "내 글"이나 "참여 중" 표시도 없습니다 |
+| 사용자              | 결과                                                                                                   |
+| ------------------- | ------------------------------------------------------------------------------------------------------ |
+| 비로그인            | 같은 화면이 보입니다. 인증 확인 코드가 없습니다 (`page.tsx`, `games-view.tsx`에 `getCurrentUser` 없음) |
+| 로그인              | 같은 화면                                                                                              |
+| GM(호스트) / 참여자 | 차이 없음. 카드에 "내 글"이나 "참여 중" 표시도 없습니다                                                |
 
 - 리다이렉트나 `notFound`는 없습니다.
 - AppBar의 "새 구인"은 비로그인에게도 보입니다. 이동한 `/games/new`는 비로그인이면 `redirect("/")`합니다 (`src/views/create-game/ui/create-game-view.tsx:6`).
@@ -28,39 +28,39 @@
 
 ### 진입
 
-| 출발 | 요소 | 근거 |
-|---|---|---|
-| 전역 | BottomNav "구인 목록" 탭 | `src/shared/ui/bottom-nav.tsx:9` |
-| 홈 랜딩 | "전체 보기" | `src/views/home/ui/landing-recruiting-preview.tsx:17` |
-| 홈 대시보드 | "구인 목록 보기" | `src/views/home/ui/home-dashboard.tsx:74` |
-| 홈 대시보드(빈 상태) | "구인 목록 둘러보기" | `src/views/home/ui/home-start-empty.tsx:15` |
-| 마이페이지 빈 상태 | "구인 목록 보기" | `src/views/my-page/ui/session-summary-empty.tsx:14` |
-| 구인 상세 | AppBar 뒤로가기 (`back="/games"`) | `src/views/game-detail/ui/game-detail.tsx:25`, `src/app/games/[id]/loading.tsx:6` |
-| 구인 작성 1단계 | 뒤로가기 (`backHref="/games"`) | `src/widgets/game-form/ui/game-form-wizard.tsx:57` |
-| 구인 삭제 후 | `{ redirect: "/games" }` 반환 | `src/features/delete-game/api/delete-game.ts:16` |
-| 목록 자체 | 검색 폼 제출, 정렬 적용, 페이지네이션, "검색 초기화" | 5장 |
+| 출발                 | 요소                                                 | 근거                                                                              |
+| -------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 전역                 | BottomNav "구인 목록" 탭                             | `src/shared/ui/bottom-nav.tsx:9`                                                  |
+| 홈 랜딩              | "전체 보기"                                          | `src/views/home/ui/landing-recruiting-preview.tsx:17`                             |
+| 홈 대시보드          | "구인 목록 보기"                                     | `src/views/home/ui/home-dashboard.tsx:74`                                         |
+| 홈 대시보드(빈 상태) | "구인 목록 둘러보기"                                 | `src/views/home/ui/home-start-empty.tsx:15`                                       |
+| 마이페이지 빈 상태   | "구인 목록 보기"                                     | `src/views/my-page/ui/session-summary-empty.tsx:14`                               |
+| 구인 상세            | AppBar 뒤로가기 (`back="/games"`)                    | `src/views/game-detail/ui/game-detail.tsx:25`, `src/app/games/[id]/loading.tsx:6` |
+| 구인 작성 1단계      | 뒤로가기 (`backHref="/games"`)                       | `src/widgets/game-form/ui/game-form-wizard.tsx:57`                                |
+| 구인 삭제 후         | `{ redirect: "/games" }` 반환                        | `src/features/delete-game/api/delete-game.ts:16`                                  |
+| 목록 자체            | 검색 폼 제출, 정렬 적용, 페이지네이션, "검색 초기화" | 5장                                                                               |
 
 ### 이탈
 
-| 요소 | 목적지 | 근거 |
-|---|---|---|
-| AppBar "새 구인" | `/games/new` | `src/views/games/ui/games-app-bar.tsx:12` |
-| 구인글 카드 | `/games/{id}` | `src/views/games/ui/game-list.tsx:41` |
-| 검색 제출 | `GET /games?q=…(&sort=…)` | `src/features/filter-games/ui/game-search-form.tsx:6-8` |
-| 정렬 "적용하기" | `router.push(gamesHref({ q, sort }))` → `/games?…` | `games-filter-sheet.tsx:20-23` |
-| 페이지네이션 | `/games?q&sort&page=n` (일반 `<a>`) | `game-list.tsx:46-50`, `packages/ui/src/pagination.tsx:34,48,64` |
-| 빈 상태 "검색 초기화" | `/games` | `src/views/games/ui/games-empty.tsx:27` |
-| 빈 상태 "새 구인 등록" | `/games/new` | `games-empty.tsx:30` |
+| 요소                   | 목적지                                             | 근거                                                             |
+| ---------------------- | -------------------------------------------------- | ---------------------------------------------------------------- |
+| AppBar "새 구인"       | `/games/new`                                       | `src/views/games/ui/games-app-bar.tsx:12`                        |
+| 구인글 카드            | `/games/{id}`                                      | `src/views/games/ui/game-list.tsx:41`                            |
+| 검색 제출              | `GET /games?q=…(&sort=…)`                          | `src/features/filter-games/ui/game-search-form.tsx:6-8`          |
+| 정렬 "적용하기"        | `router.push(gamesHref({ q, sort }))` → `/games?…` | `games-filter-sheet.tsx:20-23`                                   |
+| 페이지네이션           | `/games?q&sort&page=n` (일반 `<a>`)                | `game-list.tsx:46-50`, `packages/ui/src/pagination.tsx:34,48,64` |
+| 빈 상태 "검색 초기화"  | `/games`                                           | `src/views/games/ui/games-empty.tsx:27`                          |
+| 빈 상태 "새 구인 등록" | `/games/new`                                       | `games-empty.tsx:30`                                             |
 
 ## 4. 데이터
 
 ### searchParams (`page.tsx:6-17`)
 
-| 키 | 파싱 | 기본값 |
-|---|---|---|
-| `page` | `Number(sp.page) \|\| 1` | 1. 음수와 범위 초과 값은 거르지 않습니다. 쿼리 offset만 `Math.max(1, page)`로 보정합니다 (`games.ts:32`) |
-| `q` | 문자열 그대로 | `undefined` |
-| `sort` | `parseGameSort(sp.sort)` (`src/shared/api/game-sort.ts:11-13`). `latest`/`deadline`/`slots`가 아니면 기본값 | `"latest"` |
+| 키     | 파싱                                                                                                        | 기본값                                                                                                   |
+| ------ | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `page` | `Number(sp.page) \|\| 1`                                                                                    | 1. 음수와 범위 초과 값은 거르지 않습니다. 쿼리 offset만 `Math.max(1, page)`로 보정합니다 (`games.ts:32`) |
+| `q`    | 문자열 그대로                                                                                               | `undefined`                                                                                              |
+| `sort` | `parseGameSort(sp.sort)` (`src/shared/api/game-sort.ts:11-13`). `latest`/`deadline`/`slots`가 아니면 기본값 | `"latest"`                                                                                               |
 
 - 직렬화: `gamesHref`(`src/features/filter-games/lib/games-href.ts:2-9`)는 `undefined`와 `""` 값을 뺍니다. 파라미터가 없으면 `/games`를 돌려줍니다.
 - 정렬 적용 시 `latest`는 URL에서 뺍니다 (`games-filter-sheet.tsx:21`).
@@ -75,26 +75,26 @@
   - 정원으로 거르는 조건은 없습니다. 097e713에서 제거됐습니다.
 - **orderBy** (`:24-30`)
 
-  | sort | 라벨 | SQL |
-  |---|---|---|
-  | `latest` | "최신순" | `games.created_at desc` |
-  | `deadline` | "마감 임박순" | `games.end_date asc` |
-  | `slots` | "남은 자리순" | `games.max_players - (participants 전체 count)` desc. `status`를 구분하지 않고 대기자까지 셉니다 |
+  | sort       | 라벨          | SQL                                                                                              |
+  | ---------- | ------------- | ------------------------------------------------------------------------------------------------ |
+  | `latest`   | "최신순"      | `games.created_at desc`                                                                          |
+  | `deadline` | "마감 임박순" | `games.end_date asc`                                                                             |
+  | `slots`    | "남은 자리순" | `games.max_players - (participants 전체 count)` desc. `status`를 구분하지 않고 대기자까지 셉니다 |
 
 - **페이지 크기**: `GAMES_PAGE_SIZE = 12` (`:6`)
 - **total**: `db.$count(games, where)` (`:44`)
 - 반환값은 `{ rows, total, pageSize }`입니다. `GameBoard`가 promise 하나를 만들고 `GamesCount`와 `GameList`가 함께 await합니다 (`game-board.tsx:18,27,35`).
 
-| 표시 필드 | 테이블.컬럼 |
-|---|---|
-| 썸네일 | `games.thumbnail_url` |
-| 회차 | `games.round` |
-| 제목 | `games.title` |
-| 룰 | `games.rule` |
-| GM 이름/아바타 | `profiles.username`, `profiles.avatar_url` |
-| 확정 참여자 수 | `participants.status = 'confirmed'` 건수 |
-| 정원 | `games.max_players` |
-| 상태 | `games.end_date`, 정원, 확정 참여자 수, `games.waitlist_enabled`로 계산 (`deriveGameStatus`) |
+| 표시 필드      | 테이블.컬럼                                                                                  |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| 썸네일         | `games.thumbnail_url`                                                                        |
+| 회차           | `games.round`                                                                                |
+| 제목           | `games.title`                                                                                |
+| 룰             | `games.rule`                                                                                 |
+| GM 이름/아바타 | `profiles.username`, `profiles.avatar_url`                                                   |
+| 확정 참여자 수 | `participants.status = 'confirmed'` 건수                                                     |
+| 정원           | `games.max_players`                                                                          |
+| 상태           | `games.end_date`, 정원, 확정 참여자 수, `games.waitlist_enabled`로 계산 (`deriveGameStatus`) |
 
 ### 캐시
 
@@ -146,35 +146,35 @@
 
 ### 상태 뱃지 / 진행바 색 (`src/entities/game/model/status.ts:13-26`, `derive-game-status.ts:7-23`)
 
-| status | 조건 | 뱃지 라벨 | 색 | 진행바 `color` |
-|---|---|---|---|---|
-| `recruiting` | 기한 내, 확정 참여자 < 정원 | "모집 중" | primary | `recruiting` |
-| `confirmed` | 기한 내, 확정 참여자 ≥ 정원, `waitlist_enabled = true` | "대기 모집" | success | `confirmed` |
-| `full` | 기한 내, 확정 참여자 ≥ 정원, `waitlist_enabled = false` (커밋 `9f60a24`) | "모집 마감" | gray | `closed` |
-| `closed` | `end_date < now` (정원·대기 설정보다 우선) | "모집 마감" | gray | `closed` |
+| status       | 조건                                                                     | 뱃지 라벨   | 색      | 진행바 `color` |
+| ------------ | ------------------------------------------------------------------------ | ----------- | ------- | -------------- |
+| `recruiting` | 기한 내, 확정 참여자 < 정원                                              | "모집 중"   | primary | `recruiting`   |
+| `confirmed`  | 기한 내, 확정 참여자 ≥ 정원, `waitlist_enabled = true`                   | "대기 모집" | success | `confirmed`    |
+| `full`       | 기한 내, 확정 참여자 ≥ 정원, `waitlist_enabled = false` (커밋 `9f60a24`) | "모집 마감" | gray    | `closed`       |
+| `closed`     | `end_date < now` (정원·대기 설정보다 우선)                               | "모집 마감" | gray    | `closed`       |
 
 - `full` 구인글도 목록 조회 조건(`end_date > now`, 확정 세션 미경과, `src/shared/server/games.ts:19-21`)에 걸리지 않으므로 목록에 계속 나온다. 상세에서는 신청이 막히지만 일정 조율·참여자 관리는 그대로 열려 있다([game-detail.md](./game-detail.md) §6).
 
 ## 6. 상태별 화면
 
-| 상태 | 화면 |
-|---|---|
-| 라우트 로딩 (`loading.tsx`) | `GamesAppBar`, 빈 `GameSearchForm`(q/sort 없음), 건수 Skeleton, `GameListSkeleton`(카드 셰이머 4개, `game-list-skeleton.tsx:5-20`). 정렬 트리거는 없습니다 |
-| 스트리밍 로딩 (조건 변경) | sticky 헤더는 그대로 두고 건수 자리 Skeleton과 카드 Skeleton 4개를 보여줍니다 (`game-board.tsx:26,34`) |
-| 빈 상태 (rows 0건) | `GamesEmpty` (`games-empty.tsx:6-35`): 이미지 `/empty-states/empty-search.png` 140px(alt "조건에 맞는 구인이 없습니다"), 제목 "조건에 맞는 구인이 없습니다", 설명 "검색어를 바꾸거나 / 직접 구인을 올려보세요.", 버튼 "검색 초기화"(outline → `/games`), "새 구인 등록" → `/games/new`. 헤더 건수는 "전체 0건" |
-| 범위 초과 페이지 | rows가 0건이면 같은 `GamesEmpty`가 나옵니다 (`game-list.tsx:33-35`). 헤더에는 실제 total이 표시되고 페이지네이션은 렌더되지 않습니다 |
-| 에러 | 루트 `src/app/error.tsx`: "문제가 발생했습니다" / "잠시 후 다시 시도해 주세요." / "다시 시도" + "메인으로 돌아가기". "다시 시도"는 Next 16.3이 넘기는 `retry` prop을 호출한다 (`src/app/error.tsx:8,22`, `node_modules/next/dist/client/components/error-boundary.d.ts:6`) |
-| 도메인 상태 | 카드별 "모집 중" / "대기 모집" / "모집 마감" 뱃지. 목록의 "모집 마감"은 대부분 `full`(대기 신청을 끈 구인글의 정원 충족)입니다. `closed`는 where 조건(`end_date > now`) 때문에 조회 시점에는 나오지 않고, 렌더 사이에 기한이 지나는 경우에만 나올 수 있습니다 |
-| 확정 세션 | `confirmed_at`이 미래인 구인글은 목록에 남지만 카드에는 확정 일시가 표시되지 않습니다 |
-| 대기자 | 카드에는 확정 참여자 수만 표시되고 대기자 수는 없습니다 |
-| 권한별 | 차이 없음 |
+| 상태                        | 화면                                                                                                                                                                                                                                                                                                           |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 라우트 로딩 (`loading.tsx`) | `GamesAppBar`, 빈 `GameSearchForm`(q/sort 없음), 건수 Skeleton, `GameListSkeleton`(카드 셰이머 4개, `game-list-skeleton.tsx:5-20`). 정렬 트리거는 없습니다                                                                                                                                                     |
+| 스트리밍 로딩 (조건 변경)   | sticky 헤더는 그대로 두고 건수 자리 Skeleton과 카드 Skeleton 4개를 보여줍니다 (`game-board.tsx:26,34`)                                                                                                                                                                                                         |
+| 빈 상태 (rows 0건)          | `GamesEmpty` (`games-empty.tsx:6-35`): 이미지 `/empty-states/empty-search.png` 140px(alt "조건에 맞는 구인이 없습니다"), 제목 "조건에 맞는 구인이 없습니다", 설명 "검색어를 바꾸거나 / 직접 구인을 올려보세요.", 버튼 "검색 초기화"(outline → `/games`), "새 구인 등록" → `/games/new`. 헤더 건수는 "전체 0건" |
+| 범위 초과 페이지            | rows가 0건이면 같은 `GamesEmpty`가 나옵니다 (`game-list.tsx:33-35`). 헤더에는 실제 total이 표시되고 페이지네이션은 렌더되지 않습니다                                                                                                                                                                           |
+| 에러                        | 루트 `src/app/error.tsx`: "문제가 발생했습니다" / "잠시 후 다시 시도해 주세요." / "다시 시도" + "메인으로 돌아가기". "다시 시도"는 Next 16.3이 넘기는 `retry` prop을 호출한다 (`src/app/error.tsx:8,22`, `node_modules/next/dist/client/components/error-boundary.d.ts:6`)                                     |
+| 도메인 상태                 | 카드별 "모집 중" / "대기 모집" / "모집 마감" 뱃지. 목록의 "모집 마감"은 대부분 `full`(대기 신청을 끈 구인글의 정원 충족)입니다. `closed`는 where 조건(`end_date > now`) 때문에 조회 시점에는 나오지 않고, 렌더 사이에 기한이 지나는 경우에만 나올 수 있습니다                                                  |
+| 확정 세션                   | `confirmed_at`이 미래인 구인글은 목록에 남지만 카드에는 확정 일시가 표시되지 않습니다                                                                                                                                                                                                                          |
+| 대기자                      | 카드에는 확정 참여자 수만 표시되고 대기자 수는 없습니다                                                                                                                                                                                                                                                        |
+| 권한별                      | 차이 없음                                                                                                                                                                                                                                                                                                      |
 
 ## 7. 폼과 유효성 검사
 
-| 필드 | 필수 | 규칙 | 에러 메시지 |
-|---|---|---|---|
-| `q` (GameSearchForm) | 아님 | `type`, `maxLength`, `required` 속성이 없습니다. 빈 값으로 제출하면 `q=`가 붙고 `page.tsx`에서는 빈 문자열이 falsy라 검색 조건이 빠집니다 (`games.ts:16`). 입력한 `%`, `_`는 escape 없이 ILIKE 패턴에 들어갑니다 (`games.ts:17`) | 없음 |
-| 정렬 (시트) | - | 3개 중 1개 선택, 알 수 없는 값은 `latest` | 없음 |
+| 필드                 | 필수 | 규칙                                                                                                                                                                                                                             | 에러 메시지 |
+| -------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `q` (GameSearchForm) | 아님 | `type`, `maxLength`, `required` 속성이 없습니다. 빈 값으로 제출하면 `q=`가 붙고 `page.tsx`에서는 빈 문자열이 falsy라 검색 조건이 빠집니다 (`games.ts:16`). 입력한 `%`, `_`는 escape 없이 ILIKE 패턴에 들어갑니다 (`games.ts:17`) | 없음        |
+| 정렬 (시트)          | -    | 3개 중 1개 선택, 알 수 없는 값은 `latest`                                                                                                                                                                                        | 없음        |
 
 ## 8. 액션과 부수효과
 

@@ -22,13 +22,13 @@
 
 **shared 세그먼트는 런타임으로 나뉜다**: 배럴은 tree-shaking되지 않으므로 서버 전용 모듈이 섞이면 클라이언트 번들이 깨진다.
 
-| 세그먼트                | 내용                                                                                                                 |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `shared/api`            | 클라이언트 안전: `ActionResult`, Supabase 브라우저 클라이언트, 목록 정렬/필터 파라미터                               |
+| 세그먼트                | 내용                                                                                                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `shared/api`            | 클라이언트 안전: `ActionResult`, Supabase 브라우저 클라이언트, 목록 정렬/필터 파라미터                                                                  |
 | `shared/server`         | 서버 전용(`server-only`): drizzle `db`·스키마 재노출(원본은 `packages/database`), DB 읽기 쿼리, Supabase 서버 클라이언트·`getCurrentUser`, Discord 알림 |
-| `shared/lib`            | 순수 유틸: 날짜 포맷, 슬롯 계산                                                                                      |
-| `shared/ui`             | 앱 공용 조합 컴포넌트 + `toast`, `useAction`, `BoundaryFallback`                                                     |
-| `shared/error-boundary` | 클라이언트: `ErrorBoundary`(`catchError`). check 스크립트가 로드하지 않도록 `shared/ui`와 분리 (§8)                  |
+| `shared/lib`            | 순수 유틸: 날짜 포맷, 슬롯 계산                                                                                                                         |
+| `shared/ui`             | 앱 공용 조합 컴포넌트 + `toast`, `useAction`, `BoundaryFallback`                                                                                        |
+| `shared/error-boundary` | 클라이언트: `ErrorBoundary`(`catchError`). check 스크립트가 로드하지 않도록 `shared/ui`와 분리 (§8)                                                     |
 
 DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 아니라 `shared/server`에 둔다(FSD 권장). 클라이언트 컴포넌트가 스키마 타입만 필요하면 `import type { Game } from "@/shared/server"`로 가져온다(타입 import는 번들에 남지 않는다). 세션 쿠키 갱신은 유일한 사용처인 `src/proxy.ts`가 소유한다.
 
@@ -43,7 +43,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 **feature 슬라이스는 하나의 동작이다.** FSD 문서의 표현으로 "하나의 피처는 사용자에게 유용한 하나의 기능이며, 여러 기능이 한 피처에 구현되면 경계 위반"이다. `manage-game`처럼 아무 동작도 지칭하지 않는 포괄어로 묶으면 엔티티명만 피한 자루가 된다. 단, 엔티티와 같은 시험대를 적용한다. **쪼갰을 때 교차 import가 생기면 한 동작으로 본다.** 지금 남아 있는 두 예외는 그래서다.
 
 - `write-game`: 등록과 수정이 `gameFormSchema`를 공유한다
-- `adjust-roster`: 승격·강등·내보내기가 "빈 자리는 대기 맨 앞이 채운다"는 규칙을 공유한다
+- `adjust-roster`: 추첨·승격·강등·내보내기가 `adjustRoster` 한 트랜잭션 가드(게임 행 잠금 · GM 확인 · 세션 잠김 확인)를 공유한다
 
 사용처가 한 곳뿐이고 상태 변경이 없는 표시/탭 UI는 feature로 빼지 말고 그 view 안에 둔다(예: `ScheduleTabs`, `SessionTabFilter`, `Heatmap`). 서버 액션 반환은 `shared/api`의 `ActionResult` 하나를 쓴다.
 

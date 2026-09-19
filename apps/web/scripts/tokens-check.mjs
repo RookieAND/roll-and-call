@@ -40,7 +40,9 @@ for (const root of ROOTS) {
 
 if (errors.length > 0) {
   console.error(errors.join("\n"));
-  console.error(`\n색은 --color-* 토큰만 쓴다. 새 축이 필요하면 packages/ui/src/styles.css에 추가하고 .dark 값도 함께 넣는다.`);
+  console.error(
+    `\n색은 --color-* 토큰만 쓴다. 새 축이 필요하면 packages/ui/src/styles.css에 추가하고 .dark 값도 함께 넣는다.`,
+  );
   process.exit(1);
 }
 console.log("tokens-check: OK");

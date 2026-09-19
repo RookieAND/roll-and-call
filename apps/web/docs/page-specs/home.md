@@ -17,11 +17,11 @@
 
 ## 2. 접근 조건
 
-| 사용자 | 결과 | 근거 |
-|---|---|---|
-| 비로그인 | `HomeLanding` 렌더 | `home-view.tsx:7-8` (`getCurrentUser()` → null) |
-| 로그인 | `HomeDashboard` 렌더 | `home-view.tsx:8` |
-| GM(호스트) / 참여자 | 라우트 단위 차이는 없습니다. 대시보드의 각 행이 `role`("host"/"player")에 따라 서브라인과 조율 링크를 다르게 표시합니다 (5장) | `home-dashboard.tsx:18-21` |
+| 사용자              | 결과                                                                                                                          | 근거                                            |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| 비로그인            | `HomeLanding` 렌더                                                                                                            | `home-view.tsx:7-8` (`getCurrentUser()` → null) |
+| 로그인              | `HomeDashboard` 렌더                                                                                                          | `home-view.tsx:8`                               |
+| GM(호스트) / 참여자 | 라우트 단위 차이는 없습니다. 대시보드의 각 행이 `role`("host"/"player")에 따라 서브라인과 조율 링크를 다르게 표시합니다 (5장) | `home-dashboard.tsx:18-21`                      |
 
 - 리다이렉트나 `notFound` 호출은 없습니다.
 - `getCurrentUser()`는 `supabase.auth.getUser()`를 호출합니다 (`src/shared/server/supabase.ts:7-13`). 세션 쿠키는 `src/proxy.ts:5-33`이 모든 요청(정적 자원 제외, `proxy.ts:35-37`)에서 갱신합니다.
@@ -30,31 +30,31 @@
 
 ### 진입
 
-| 출발 | 요소 | 근거 |
-|---|---|---|
-| 에러/404 화면 | "메인으로 돌아가기" 버튼 | `src/shared/ui/error-screen.tsx:30` |
-| Discord OAuth 콜백 | 로그인 성공 시 `next`(기본값 `/`)로 redirect | `src/app/auth/callback/route.ts:6,18,20` |
-| Discord OAuth 콜백 | 실패 시 `/?auth_error=1`로 redirect | `route.ts:24` |
-| `/me` (비로그인) | `redirect("/")` | `src/views/my-page/ui/my-page-view.tsx:14` |
-| `/me/sessions` (비로그인) | `redirect("/")` | `src/views/my-sessions/ui/my-sessions-view.tsx:41` |
-| `/me/edit` (비로그인) | `redirect("/")` | `src/views/edit-profile/ui/edit-profile-view.tsx:10` |
-| `/games/new` (비로그인) | `redirect("/")` | `src/views/create-game/ui/create-game-view.tsx:6` |
-| 직접 URL 입력 | - | BottomNav에는 `/` 탭이 없습니다 (`src/shared/ui/bottom-nav.tsx:8-11`) |
+| 출발                      | 요소                                         | 근거                                                                  |
+| ------------------------- | -------------------------------------------- | --------------------------------------------------------------------- |
+| 에러/404 화면             | "메인으로 돌아가기" 버튼                     | `src/shared/ui/error-screen.tsx:30`                                   |
+| Discord OAuth 콜백        | 로그인 성공 시 `next`(기본값 `/`)로 redirect | `src/app/auth/callback/route.ts:6,18,20`                              |
+| Discord OAuth 콜백        | 실패 시 `/?auth_error=1`로 redirect          | `route.ts:24`                                                         |
+| `/me` (비로그인)          | `redirect("/")`                              | `src/views/my-page/ui/my-page-view.tsx:14`                            |
+| `/me/sessions` (비로그인) | `redirect("/")`                              | `src/views/my-sessions/ui/my-sessions-view.tsx:41`                    |
+| `/me/edit` (비로그인)     | `redirect("/")`                              | `src/views/edit-profile/ui/edit-profile-view.tsx:10`                  |
+| `/games/new` (비로그인)   | `redirect("/")`                              | `src/views/create-game/ui/create-game-view.tsx:6`                     |
+| 직접 URL 입력             | -                                            | BottomNav에는 `/` 탭이 없습니다 (`src/shared/ui/bottom-nav.tsx:8-11`) |
 
 ### 이탈
 
-| 화면 | 요소 | 목적지 | 근거 |
-|---|---|---|---|
-| 랜딩 | "Discord로 로그인" | Discord OAuth → `/auth/callback` → `/` | `src/features/auth/api/sign-in.ts:4-7` |
-| 랜딩 | "전체 보기" | `/games` | `landing-recruiting-preview.tsx:17` |
-| 랜딩 | 구인글 행(GameRow) | `/games/{id}` | `landing-recruiting-preview.tsx:28` |
-| 대시보드 | 게임 행(GameListItem) | `/games/{id}` | `game-list-item.tsx:44` |
-| 대시보드 | "일정 조율하기" | `/games/{id}/schedule` | `src/features/coordinate-session/ui/game-schedule-link.tsx:17` |
-| 대시보드 | "구인 목록 보기" | `/games` | `home-dashboard.tsx:74` |
-| 대시보드 | "로그아웃" | 같은 페이지 `router.refresh()`로 랜딩이 다시 렌더됩니다 | `src/features/auth/ui/sign-out-button.tsx:10-13` |
-| 대시보드(빈 상태) | "구인 목록 둘러보기" | `/games` | `home-start-empty.tsx:15` |
-| 대시보드(빈 상태) | "새 구인 등록" | `/games/new` | `home-start-empty.tsx:18` |
-| 대시보드(빈 상태) | "설정" | `/me/edit` | `home-dashboard.tsx:48` |
+| 화면              | 요소                  | 목적지                                                  | 근거                                                           |
+| ----------------- | --------------------- | ------------------------------------------------------- | -------------------------------------------------------------- |
+| 랜딩              | "Discord로 로그인"    | Discord OAuth → `/auth/callback` → `/`                  | `src/features/auth/api/sign-in.ts:4-7`                         |
+| 랜딩              | "전체 보기"           | `/games`                                                | `landing-recruiting-preview.tsx:17`                            |
+| 랜딩              | 구인글 행(GameRow)    | `/games/{id}`                                           | `landing-recruiting-preview.tsx:28`                            |
+| 대시보드          | 게임 행(GameListItem) | `/games/{id}`                                           | `game-list-item.tsx:44`                                        |
+| 대시보드          | "일정 조율하기"       | `/games/{id}/schedule`                                  | `src/features/coordinate-session/ui/game-schedule-link.tsx:17` |
+| 대시보드          | "구인 목록 보기"      | `/games`                                                | `home-dashboard.tsx:74`                                        |
+| 대시보드          | "로그아웃"            | 같은 페이지 `router.refresh()`로 랜딩이 다시 렌더됩니다 | `src/features/auth/ui/sign-out-button.tsx:10-13`               |
+| 대시보드(빈 상태) | "구인 목록 둘러보기"  | `/games`                                                | `home-start-empty.tsx:15`                                      |
+| 대시보드(빈 상태) | "새 구인 등록"        | `/games/new`                                            | `home-start-empty.tsx:18`                                      |
+| 대시보드(빈 상태) | "설정"                | `/me/edit`                                              | `home-dashboard.tsx:48`                                        |
 
 ## 4. 데이터
 
@@ -74,13 +74,13 @@
 - 정렬: 기본값 `games.created_at desc` (`games.ts:30`)
 - limit 2 (`landing-recruiting-preview.tsx:8,11`)
 
-| 표시 필드 | 테이블.컬럼 |
-|---|---|
-| 제목 | `games.title` |
-| 룰 | `games.rule` |
-| GM 이름/아바타 | `profiles.username`, `profiles.avatar_url` (`games.gm_id` 관계) |
+| 표시 필드      | 테이블.컬럼                                                                                                |
+| -------------- | ---------------------------------------------------------------------------------------------------------- |
+| 제목           | `games.title`                                                                                              |
+| 룰             | `games.rule`                                                                                               |
+| GM 이름/아바타 | `profiles.username`, `profiles.avatar_url` (`games.gm_id` 관계)                                            |
 | 확정 참여자 수 | `participants.status = 'confirmed'` 건수 (`countConfirmed`, `src/entities/game/model/participant.ts:9-11`) |
-| 정원 | `games.max_players` |
+| 정원           | `games.max_players`                                                                                        |
 
 ### 대시보드: `getGamesByGm(user.id)` + `getJoinedGames(user.id)` (`games.ts:49-76`)
 
@@ -88,15 +88,15 @@
 - `getJoinedGames`: `participants.user_id = userId`, `participants.joined_at desc`. `status`가 `confirmed`인 행과 `waiting`인 행을 모두 가져오고, 기간이나 완료 여부로 거르지 않습니다.
 - 병합 순서: hosted 전체 뒤에 joined를 붙이고 `.slice(0, 4)` (`home-dashboard.tsx:11,18-21`)
 
-| 표시 필드 | 테이블.컬럼 / 출처 |
-|---|---|
-| 사용자 이름 | `user.user_metadata.full_name` → `name` → `user.email` → `""` 순서로 대체 (`src/entities/profile/model/display.ts:8`). profiles 행은 넘기지 않습니다 |
-| 아바타 | `user.user_metadata.avatar_url` (`display.ts:9`) |
-| 게임 제목 / 회차 | `games.title`, `games.round` |
-| 상태 뱃지 | `games.max_players`, `games.end_date`, 확정 참여자 수, `games.waitlist_enabled`로 계산 (`deriveGameStatus`) |
-| 서브라인 | `games.rule`, `games.max_players`, `games.confirmed_at`, `profiles.username` |
-| 조율 링크 노출 | `games.schedule_mode`, `games.confirmed_at`, status |
-| 카운트 문구 | `joined.length`, `hosted.length` (slice 이전의 전체 길이) |
+| 표시 필드        | 테이블.컬럼 / 출처                                                                                                                                   |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 사용자 이름      | `user.user_metadata.full_name` → `name` → `user.email` → `""` 순서로 대체 (`src/entities/profile/model/display.ts:8`). profiles 행은 넘기지 않습니다 |
+| 아바타           | `user.user_metadata.avatar_url` (`display.ts:9`)                                                                                                     |
+| 게임 제목 / 회차 | `games.title`, `games.round`                                                                                                                         |
+| 상태 뱃지        | `games.max_players`, `games.end_date`, 확정 참여자 수, `games.waitlist_enabled`로 계산 (`deriveGameStatus`)                                          |
+| 서브라인         | `games.rule`, `games.max_players`, `games.confirmed_at`, `profiles.username`                                                                         |
+| 조율 링크 노출   | `games.schedule_mode`, `games.confirmed_at`, status                                                                                                  |
+| 카운트 문구      | `joined.length`, `hosted.length` (slice 이전의 전체 길이)                                                                                            |
 
 ## 5. UI 구성 요소
 
@@ -155,26 +155,26 @@
 
 ### 상태 뱃지 문구 (`src/entities/game/model/status.ts:13-26`, 판정은 `derive-game-status.ts:7-23`)
 
-| status | 조건 | 라벨 | 색 |
-|---|---|---|---|
-| `recruiting` | 기한 내, 확정 참여자 < 정원 | "모집 중" | primary |
-| `confirmed` | 기한 내, 확정 참여자 ≥ 정원, `waitlist_enabled = true` | "대기 모집" | success |
-| `full` | 기한 내, 확정 참여자 ≥ 정원, `waitlist_enabled = false` | "모집 마감" | gray |
-| `closed` | `end_date < now` (정원·대기 설정보다 우선) | "모집 마감" | gray |
+| status       | 조건                                                    | 라벨        | 색      |
+| ------------ | ------------------------------------------------------- | ----------- | ------- |
+| `recruiting` | 기한 내, 확정 참여자 < 정원                             | "모집 중"   | primary |
+| `confirmed`  | 기한 내, 확정 참여자 ≥ 정원, `waitlist_enabled = true`  | "대기 모집" | success |
+| `full`       | 기한 내, 확정 참여자 ≥ 정원, `waitlist_enabled = false` | "모집 마감" | gray    |
+| `closed`     | `end_date < now` (정원·대기 설정보다 우선)              | "모집 마감" | gray    |
 
 ## 6. 상태별 화면
 
-| 상태 | 화면 |
-|---|---|
-| 로딩 | `loading.tsx`와 `Suspense`가 없어 서버 렌더가 끝날 때까지 이전 화면이 유지됩니다. ❓ 확인 필요: 상위 레이아웃 수준의 로딩 UI 존재 여부(현재 `src/app/loading.tsx` 없음) |
-| 에러 | 루트 `src/app/error.tsx`: "문제가 발생했습니다" / "잠시 후 다시 시도해 주세요." / "다시 시도" + "메인으로 돌아가기" |
-| 랜딩, 모집 글 0건 | 헤더 "지금 모집 중 / 전체 보기"만 남고 행과 빈 상태 문구가 없습니다 (`landing-recruiting-preview.tsx:27` `rows.map`만 존재) |
-| 대시보드, 내 게임 0건 | 5-B의 "처음이시네요"와 HomeStartEmpty, 설정 행 |
-| 대시보드, 1건 이상 | 최대 4건 목록. 5건 이상이어도 "더 보기" 링크가 없습니다 |
-| 도메인 상태 | 행마다 "모집 중" / "대기 모집" / "모집 마감" 뱃지는 대시보드에만 표시되고 랜딩 `GameRow`에는 없습니다. "모집 마감"은 기한 경과(`closed`)와 대기 신청 끔 구인글의 정원 충족(`full`)이 같은 모양입니다 |
-| 대기자 | `getJoinedGames`가 `waiting` 행도 포함하지만 GameListItem에는 대기 여부 표시가 없습니다 |
-| 권한별 | host 행은 룰과 인원, player 행은 GM과 일정을 표시하며 조율 링크는 player에게만 보입니다 |
-| 로그인 실패 | `/?auth_error=1`로 오지만 화면 변화는 없습니다 (읽는 코드 없음) |
+| 상태                  | 화면                                                                                                                                                                                                 |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 로딩                  | `loading.tsx`와 `Suspense`가 없어 서버 렌더가 끝날 때까지 이전 화면이 유지됩니다. ❓ 확인 필요: 상위 레이아웃 수준의 로딩 UI 존재 여부(현재 `src/app/loading.tsx` 없음)                              |
+| 에러                  | 루트 `src/app/error.tsx`: "문제가 발생했습니다" / "잠시 후 다시 시도해 주세요." / "다시 시도" + "메인으로 돌아가기"                                                                                  |
+| 랜딩, 모집 글 0건     | 헤더 "지금 모집 중 / 전체 보기"만 남고 행과 빈 상태 문구가 없습니다 (`landing-recruiting-preview.tsx:27` `rows.map`만 존재)                                                                          |
+| 대시보드, 내 게임 0건 | 5-B의 "처음이시네요"와 HomeStartEmpty, 설정 행                                                                                                                                                       |
+| 대시보드, 1건 이상    | 최대 4건 목록. 5건 이상이어도 "더 보기" 링크가 없습니다                                                                                                                                              |
+| 도메인 상태           | 행마다 "모집 중" / "대기 모집" / "모집 마감" 뱃지는 대시보드에만 표시되고 랜딩 `GameRow`에는 없습니다. "모집 마감"은 기한 경과(`closed`)와 대기 신청 끔 구인글의 정원 충족(`full`)이 같은 모양입니다 |
+| 대기자                | `getJoinedGames`가 `waiting` 행도 포함하지만 GameListItem에는 대기 여부 표시가 없습니다                                                                                                              |
+| 권한별                | host 행은 룰과 인원, player 행은 GM과 일정을 표시하며 조율 링크는 player에게만 보입니다                                                                                                              |
+| 로그인 실패           | `/?auth_error=1`로 오지만 화면 변화는 없습니다 (읽는 코드 없음)                                                                                                                                      |
 
 ## 7. 폼과 유효성 검사
 
@@ -182,10 +182,10 @@
 
 ## 8. 액션과 부수효과
 
-| 액션 | 구현 | 성공 | 실패 |
-|---|---|---|---|
+| 액션           | 구현                                                                                                                                     | 성공                                                                                                                                                                         | 실패                                                                        |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | Discord 로그인 | 클라이언트 `signInWithOAuth` (`sign-in.ts:2-8`) → Discord → `GET /auth/callback` (`route.ts:3-25`)가 `exchangeCodeForSession(code)` 실행 | `x-forwarded-host`가 있고 development가 아니면 `https://{host}{next}`, 그 밖에는 `{origin}{next}`로 redirect. `next`가 `/`로 시작하지 않으면 `/`로 바꿉니다 (`route.ts:6-8`) | `code`가 없거나 교환 오류면 `/?auth_error=1`. 토스트나 안내 문구는 없습니다 |
-| 로그아웃 | 클라이언트 `supabase.auth.signOut()` (`sign-out.ts:3-6`) → `router.refresh()` | 같은 `/`가 랜딩으로 다시 렌더됩니다 | `signOut()` 결과를 확인하지 않습니다. 토스트 없음 |
+| 로그아웃       | 클라이언트 `supabase.auth.signOut()` (`sign-out.ts:3-6`) → `router.refresh()`                                                            | 같은 `/`가 랜딩으로 다시 렌더됩니다                                                                                                                                          | `signOut()` 결과를 확인하지 않습니다. 토스트 없음                           |
 
 - `signInWithDiscord`는 `redirectTo`에 `next` 파라미터를 붙이지 않으므로(`sign-in.ts:6`) 로그인 뒤에는 항상 `/`로 돌아옵니다.
 - Server Action, `revalidatePath`, Discord Webhook 알림은 없습니다.

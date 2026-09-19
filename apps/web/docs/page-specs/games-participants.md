@@ -15,12 +15,12 @@ GM(호스트) 전용 화면으로, 구인글 하나의 참여자 명단을 관�
 
 ## 2. 접근 조건
 
-| 조건 | 결과 | 근거 |
-|---|---|---|
-| `games.id = id`인 행이 없음 | `notFound()` → 전역 not-found("페이지를 찾을 수 없습니다") | `src/views/manage-participants/ui/manage-participants-view.tsx:8-9`, `src/app/not-found.tsx:4-7` |
-| 비로그인 | `redirect("/games/{id}")` (안내 토스트 없음) | `manage-participants-view.tsx:12-13` |
-| 로그인했지만 GM이 아님(`user.id !== games.gm_id`) | `redirect("/games/{id}")` (안내 토스트 없음) | `manage-participants-view.tsx:13` |
-| GM | 화면 표시 | — |
+| 조건                                              | 결과                                                       | 근거                                                                                             |
+| ------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `games.id = id`인 행이 없음                       | `notFound()` → 전역 not-found("페이지를 찾을 수 없습니다") | `src/views/manage-participants/ui/manage-participants-view.tsx:8-9`, `src/app/not-found.tsx:4-7` |
+| 비로그인                                          | `redirect("/games/{id}")` (안내 토스트 없음)               | `manage-participants-view.tsx:12-13`                                                             |
+| 로그인했지만 GM이 아님(`user.id !== games.gm_id`) | `redirect("/games/{id}")` (안내 토스트 없음)               | `manage-participants-view.tsx:13`                                                                |
+| GM                                                | 화면 표시                                                  | —                                                                                                |
 
 - 게임 존재 여부를 먼저 확인하고 로그인 여부는 그다음에 본다. 그래서 id가 없는 게임이면 비로그인이어도 404가 뜬다.
 - `confirmed_at`(확정 세션)이나 `end_date`(마감)가 지났다고 막지는 않는다. 어떤 상태든 같은 화면이 렌더링된다(6장 참고).
@@ -29,23 +29,26 @@ GM(호스트) 전용 화면으로, 구인글 하나의 참여자 명단을 관�
 ## 3. 진입 경로와 이탈 경로
 
 ### 진입
-| 출발 | 요소 | 근거 |
-|---|---|---|
-| 구인 상세 `/games/[id]` (GM) | 헤더 ⋯ "구인 관리" 시트의 "참여자 관리" 링크 | `src/views/game-detail/ui/game-gm-menu.tsx:33-35` (`game-detail-header.tsx:23`에서 `isGm`일 때만 렌더링) |
+
+| 출발                                | 요소                                                                                                  | 근거                                                                                                                                                                 |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 구인 상세 `/games/[id]` (GM)        | 헤더 ⋯ "구인 관리" 시트의 "참여자 관리" 링크                                                          | `src/views/game-detail/ui/game-gm-menu.tsx:33-35` (`game-detail-header.tsx:23`에서 `isGm`일 때만 렌더링)                                                             |
 | 마이페이지 세션 요약 / 내 세션 목록 | `SessionList` 카드. `role === "host" && !dim`(종료되지 않은 운영 세션)이면 상세 대신 이 화면으로 보냄 | `src/widgets/session-list/ui/session-list.tsx:6-8`, 사용처 `src/views/my-page/ui/session-summary-section.tsx:46`, `src/views/my-sessions/ui/my-sessions-view.tsx:68` |
-| 직접 URL 입력 | — | — |
+| 직접 URL 입력                       | —                                                                                                     | —                                                                                                                                                                    |
 
 ### 이탈
-| 요소 | 목적지 | 근거 |
-|---|---|---|
-| AppBar 뒤로(‹) | `/games/{id}` | `src/views/manage-participants/ui/participant-manager.tsx:43` |
-| 비GM/비로그인 진입 | `/games/{id}`로 redirect | `manage-participants-view.tsx:13` |
-| "회차 열기" 성공 | `router.push("/games/{새 게임 id}")` | `src/features/create-second-round/ui/round-sheet.tsx:48-49`, `api/create-second-round.ts:107` |
-| BottomNav | [_shared-layout.md](./_shared-layout.md) | — |
+
+| 요소               | 목적지                                   | 근거                                                                                          |
+| ------------------ | ---------------------------------------- | --------------------------------------------------------------------------------------------- |
+| AppBar 뒤로(‹)     | `/games/{id}`                            | `src/views/manage-participants/ui/participant-manager.tsx:43`                                 |
+| 비GM/비로그인 진입 | `/games/{id}`로 redirect                 | `manage-participants-view.tsx:13`                                                             |
+| "회차 열기" 성공   | `router.push("/games/{새 게임 id}")`     | `src/features/create-second-round/ui/round-sheet.tsx:48-49`, `api/create-second-round.ts:107` |
+| BottomNav          | [_shared-layout.md](./_shared-layout.md) | —                                                                                             |
 
 ## 4. 데이터
 
 ### 조회
+
 `getGameParticipants(gameId)`(`src/shared/server/games.ts:97-116`)가 쿼리 두 개를 실행한다.
 
 1. `db.query.games.findFirst`: `games` 전체 컬럼 + `gm { id, username, avatarUrl }` + `participants { userId, joinedAt, status }` + `participants.user { username, avatarUrl }`
@@ -53,26 +56,27 @@ GM(호스트) 전용 화면으로, 구인글 하나의 참여자 명단을 관�
 
 그 뒤 `getCurrentUser()`(`src/shared/server/supabase.ts:4-11`, `supabase.auth.getUser()`)로 GM인지 판정한다.
 
-| 화면 필드 | 출처 | 가공 |
-|---|---|---|
-| AppBar 제목 | 고정 문자열 "참여자 관리" | — |
-| 신청 | `participants` 행 수(확정+대기) | `summarizeRoster.total` (`src/views/manage-participants/model/roster-summary.ts:18`) |
-| 정원 | `games.max_players` | — |
-| 마감 | `games.end_date` | 지났으면 "마감", 아니면 `D-${dday(endDate)}` (`roster-summary.ts:22`). `dday`는 사용자 로컬 날짜 차이(`src/shared/lib/format.ts:47-52`) |
-| 마감 강조(빨강) | `games.end_date` | `isDeadlineUrgent`: 남은 시간이 0보다 크고 24시간 미만 (`src/entities/game/model/deadline.ts:4-7`) |
-| 마감일 문구 | `games.end_date` | `formatDateTime` → "8월 16일 (일) 20:00" 형식, Asia/Seoul, 24시간제 (`format.ts:2-17`) |
-| 확정/대기 분리 | `participants.status` (`confirmed`/`waiting`) | `splitRoster`: `joined_at` 오름차순 정렬 후 분리 (`src/entities/game/model/split-roster.ts:18-35`) |
-| n번째 신청 | `participants.joined_at` 순서 | `applicationRank`: 확정·대기를 합친 전체 기준 1부터 |
-| 대기 순번 | `participants.joined_at` 순서 | `waitlistRank`: 대기자 중 1부터 |
-| 이름 / 아바타 | `profiles.username`, `profiles.avatar_url` | 사용자 정보가 없으면 "익명" / `null` (`src/views/manage-participants/model/to-managed-member.ts:17-18`) |
-| 가능 시간 입력 여부 | `availabilities`에 해당 user 행이 있는지 | `hasAvailability` (`to-managed-member.ts:21`). 이 게임 id 기준이다. 조율 기간 밖 슬롯인지는 따지지 않는다 |
-| 다음 회차 시트 제목 보조 | `games.title`, 대기자 수 | — |
-| 다음 회차 선택 가능 최소일 | `games.confirmed_at` | 확정돼 있으면 `confirmedAt + 24h`, 아니면 오늘. 둘 다 로컬 기준 `YYYY-MM-DD` (`round-sheet.tsx:36-38`) |
+| 화면 필드                  | 출처                                          | 가공                                                                                                                                    |
+| -------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| AppBar 제목                | 고정 문자열 "참여자 관리"                     | —                                                                                                                                       |
+| 신청                       | `participants` 행 수(확정+대기)               | `summarizeRoster.total` (`src/views/manage-participants/model/roster-summary.ts:18`)                                                    |
+| 정원                       | `games.max_players`                           | —                                                                                                                                       |
+| 마감                       | `games.end_date`                              | 지났으면 "마감", 아니면 `D-${dday(endDate)}` (`roster-summary.ts:22`). `dday`는 사용자 로컬 날짜 차이(`src/shared/lib/format.ts:47-52`) |
+| 마감 강조(빨강)            | `games.end_date`                              | `isDeadlineUrgent`: 남은 시간이 0보다 크고 24시간 미만 (`src/entities/game/model/deadline.ts:4-7`)                                      |
+| 마감일 문구                | `games.end_date`                              | `formatDateTime` → "8월 16일 (일) 20:00" 형식, Asia/Seoul, 24시간제 (`format.ts:2-17`)                                                  |
+| 확정/대기 분리             | `participants.status` (`confirmed`/`waiting`) | `splitRoster`: `joined_at` 오름차순 정렬 후 분리 (`src/entities/game/model/split-roster.ts:18-35`)                                      |
+| n번째 신청                 | `participants.joined_at` 순서                 | `applicationRank`: 확정·대기를 합친 전체 기준 1부터                                                                                     |
+| 대기 순번                  | `participants.joined_at` 순서                 | `waitlistRank`: 대기자 중 1부터                                                                                                         |
+| 이름 / 아바타              | `profiles.username`, `profiles.avatar_url`    | 사용자 정보가 없으면 "익명" / `null` (`src/views/manage-participants/model/to-managed-member.ts:17-18`)                                 |
+| 가능 시간 입력 여부        | `availabilities`에 해당 user 행이 있는지      | `hasAvailability` (`to-managed-member.ts:21`). 이 게임 id 기준이다. 조율 기간 밖 슬롯인지는 따지지 않는다                               |
+| 다음 회차 시트 제목 보조   | `games.title`, 대기자 수                      | —                                                                                                                                       |
+| 다음 회차 선택 가능 최소일 | `games.confirmed_at`                          | 확정돼 있으면 `confirmedAt + 24h`, 아니면 오늘. 둘 다 로컬 기준 `YYYY-MM-DD` (`round-sheet.tsx:36-38`)                                  |
 
 - 조회는 했지만 화면에서 쓰지 않는 값: `gm { id, username, avatarUrl }`(`games.ts:101`), `games.round`, `games.schedule_mode` 등.
 - params: `id`(Promise로 받아 await). searchParams는 쓰지 않는다.
 
 ### 캐시
+
 - 라우트에 `dynamic`/`revalidate` export가 없다. `cookies()`를 쓰는 `getCurrentUser` 때문에 동적 렌더링이 된다. ❓ 확인 필요: 빌드 출력에서 실제로 동적(ƒ)으로 분류되는지.
 - 이 경로를 `revalidatePath`하는 곳:
   - `promoteParticipant` / `demoteParticipant` / `removeParticipant`: `/games/{id}/participants`, `/games/{id}`, `/games` (`src/features/adjust-roster/api/adjust-roster.ts:10-14`)
@@ -136,29 +140,29 @@ Container(size="md") > VStack(gap=5, py-4)
 
 ## 6. 상태별 화면
 
-| 상태 | 화면 |
-|---|---|
-| 로딩 | 전용 `loading.tsx`가 없다. 상위 `src/app/games/[id]/loading.tsx:3-34`가 적용되어 AppBar "구인 상세"(뒤로 `/games`)와 상세 페이지 모양 스켈레톤이 보인다. 실제 화면과 제목·뒤로 목적지·레이아웃이 모두 다르다 |
-| 에러 | 전용 `error.tsx`가 없다. 전역 `src/app/error.tsx`: "문제가 발생했습니다" / "잠시 후 다시 시도해 주세요." / "다시 시도" |
-| 404 | 전역 not-found: "페이지를 찾을 수 없습니다" / "주소가 바뀌었거나 삭제된 페이지예요." |
-| 참여자 0명 | 지표: 신청 0. 확정 섹션 "확정 0/{정원}"과 "아직 확정된 참여자가 없어요.". 대기 섹션과 다음 회차 배너는 없다 |
-| 대기자 0명 | 대기 섹션과 NextRoundBanner가 렌더링되지 않는다. ⋯ 시트의 자동 채움 안내도 없다 |
-| 정원 충족(`확정 수 ≥ max_players`) | 모든 "확정으로" 버튼 disabled. 대기 헤더 힌트는 "정원이 차서 승격하려면 먼저 자리를 비워야 해요" |
-| 마감 임박(24시간 이내) | 마감 StatCard 빨강 |
-| 마감 경과 | 마감 StatCard 값 "마감"(빨강 아님). 모든 조작은 그대로 가능하고, 서버도 `end_date`를 검사하지 않는다 |
-| 세션 확정(`confirmed_at` 있음) | 화면 구성은 같다. 승격·강등·내보내기는 서버에서 "이미 확정된 게임입니다." 에러 토스트로 거부된다(`adjust-roster.ts:30,80,113`). UI에는 잠금 표시가 없고, 시트 헤더는 여전히 "확정 예정"이다. 다음 회차 만들기는 가능하다(확정일 다음 날부터) |
-| 권한별 | GM만 볼 수 있다. 나머지는 2장처럼 redirect |
+| 상태                               | 화면                                                                                                                                                                                                                                         |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 로딩                               | 전용 `loading.tsx`가 없다. 상위 `src/app/games/[id]/loading.tsx:3-34`가 적용되어 AppBar "구인 상세"(뒤로 `/games`)와 상세 페이지 모양 스켈레톤이 보인다. 실제 화면과 제목·뒤로 목적지·레이아웃이 모두 다르다                                 |
+| 에러                               | 전용 `error.tsx`가 없다. 전역 `src/app/error.tsx`: "문제가 발생했습니다" / "잠시 후 다시 시도해 주세요." / "다시 시도"                                                                                                                       |
+| 404                                | 전역 not-found: "페이지를 찾을 수 없습니다" / "주소가 바뀌었거나 삭제된 페이지예요."                                                                                                                                                         |
+| 참여자 0명                         | 지표: 신청 0. 확정 섹션 "확정 0/{정원}"과 "아직 확정된 참여자가 없어요.". 대기 섹션과 다음 회차 배너는 없다                                                                                                                                  |
+| 대기자 0명                         | 대기 섹션과 NextRoundBanner가 렌더링되지 않는다. ⋯ 시트의 자동 채움 안내도 없다                                                                                                                                                              |
+| 정원 충족(`확정 수 ≥ max_players`) | 모든 "확정으로" 버튼 disabled. 대기 헤더 힌트는 "정원이 차서 승격하려면 먼저 자리를 비워야 해요"                                                                                                                                             |
+| 마감 임박(24시간 이내)             | 마감 StatCard 빨강                                                                                                                                                                                                                           |
+| 마감 경과                          | 마감 StatCard 값 "마감"(빨강 아님). 모든 조작은 그대로 가능하고, 서버도 `end_date`를 검사하지 않는다                                                                                                                                         |
+| 세션 확정(`confirmed_at` 있음)     | 화면 구성은 같다. 승격·강등·내보내기는 서버에서 "이미 확정된 게임입니다." 에러 토스트로 거부된다(`adjust-roster.ts:30,80,113`). UI에는 잠금 표시가 없고, 시트 헤더는 여전히 "확정 예정"이다. 다음 회차 만들기는 가능하다(확정일 다음 날부터) |
+| 권한별                             | GM만 볼 수 있다. 나머지는 2장처럼 redirect                                                                                                                                                                                                   |
 
 ## 7. 폼과 유효성 검사
 
 다음 회차 만들기(RoundSheet)가 이 화면의 유일한 입력 폼이다.
 
-| 필드 | 클라이언트 제약 | 서버 검증 (`create-second-round.ts`) | 에러 문구 |
-|---|---|---|---|
-| 조율 시작일 `rangeStart` (`YYYY-MM-DD`) | 최소 `earliest` = 확정 세션이 있으면 `confirmedAt + 24h`의 로컬 날짜, 없으면 오늘(`round-sheet.tsx:36-38`, `round-range-fields.tsx:31`) | 비어 있으면 거부(`:23`). 확정 세션이 있으면 `rangeStart <= confirmedAt의 UTC 날짜`일 때 거부(`:36-41`). 오늘 이전 날짜는 서버에서 막지 않는다 | "조율 기간을 입력하세요." / "1회차 확정 세션 이후 날짜만 고를 수 있습니다." |
-| 조율 종료일 `rangeEnd` | 시작일이 있으면 `start+1일`부터 `start+14일`까지. 시작일이 없으면 min=`earliest`만 건다(`src/shared/lib/date-input.ts:23-34`) | 비어 있으면 거부. `rangeEnd <= rangeStart`면 거부(`:24-26`). 차이가 14일 초과면 거부(`:27-29`, `SECOND_ROUND_MAX_DAYS = 14`, `model/second-round.ts:2`) | "종료일은 시작일보다 이후여야 합니다." / "조율 기간은 최대 14일까지 설정할 수 있습니다." |
-| (버튼) | 둘 중 하나라도 비어 있으면 "회차 열기" disabled | — | — |
-| (기타) | — | 비로그인 / 게임 없음 / GM 아님 / 대기자 0명 | "로그인이 필요합니다." / "존재하지 않는 게임입니다." / "권한이 없습니다." / "승계할 대기자가 없습니다." |
+| 필드                                    | 클라이언트 제약                                                                                                                         | 서버 검증 (`create-second-round.ts`)                                                                                                                    | 에러 문구                                                                                               |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| 조율 시작일 `rangeStart` (`YYYY-MM-DD`) | 최소 `earliest` = 확정 세션이 있으면 `confirmedAt + 24h`의 로컬 날짜, 없으면 오늘(`round-sheet.tsx:36-38`, `round-range-fields.tsx:31`) | 비어 있으면 거부(`:23`). 확정 세션이 있으면 `rangeStart <= confirmedAt의 UTC 날짜`일 때 거부(`:36-41`). 오늘 이전 날짜는 서버에서 막지 않는다           | "조율 기간을 입력하세요." / "1회차 확정 세션 이후 날짜만 고를 수 있습니다."                             |
+| 조율 종료일 `rangeEnd`                  | 시작일이 있으면 `start+1일`부터 `start+14일`까지. 시작일이 없으면 min=`earliest`만 건다(`src/shared/lib/date-input.ts:23-34`)           | 비어 있으면 거부. `rangeEnd <= rangeStart`면 거부(`:24-26`). 차이가 14일 초과면 거부(`:27-29`, `SECOND_ROUND_MAX_DAYS = 14`, `model/second-round.ts:2`) | "종료일은 시작일보다 이후여야 합니다." / "조율 기간은 최대 14일까지 설정할 수 있습니다."                |
+| (버튼)                                  | 둘 중 하나라도 비어 있으면 "회차 열기" disabled                                                                                         | —                                                                                                                                                       | —                                                                                                       |
+| (기타)                                  | —                                                                                                                                       | 비로그인 / 게임 없음 / GM 아님 / 대기자 0명                                                                                                             | "로그인이 필요합니다." / "존재하지 않는 게임입니다." / "권한이 없습니다." / "승계할 대기자가 없습니다." |
 
 - 시작일을 먼저 고른 뒤 종료일을 고르고 다시 시작일을 바꿔도 종료일은 자동으로 조정되지 않는다. 범위를 벗어난 종료일이 그대로 남을 수 있고, 이 경우 서버 검증에서 걸린다.
 - 에러는 모두 토스트로 표시된다. 필드 옆 인라인 에러는 없다(`ActionResult.field`를 쓰지 않음).
@@ -167,12 +171,12 @@ Container(size="md") > VStack(gap=5, py-4)
 
 ## 8. 액션과 부수효과
 
-| 액션 | 트리거 | DB 변경 | 성공 토스트 | redirect | revalidatePath | Discord |
-|---|---|---|---|---|---|---|
-| `promoteParticipant(gameId, userId)` `adjust-roster.ts:21-68` | 대기 행 "확정으로" | 트랜잭션 안에서 대상 `participants.status → confirmed`. 이미 confirmed면 아무것도 하지 않고 성공 반환. 확정 수 ≥ 정원이면 `joined_at`이 가장 늦은 확정자를 `waiting`으로 내린다(현재 UI는 정원이 차면 버튼을 막으므로 이 분기에 닿지 않음) | "{이름}님을 확정했습니다" | 없음 | `/games/{id}/participants`, `/games/{id}`, `/games` | 없음 |
-| `demoteParticipant` `:71-101` | 시트 "대기로 이동" | 대상 → `waiting`. 이어서 `promoteWaitlistHead`: `joined_at`이 가장 빠른 대기자(대상 제외)를 `confirmed`로 올린다 | "{이름}님을 대기로 옮겼습니다" | 없음 | 위와 같음 | 없음 |
-| `removeParticipant` `:104-133` | ConfirmDialog "내보내기" | `participants` 행 DELETE. 삭제한 사람이 확정자였으면 `promoteWaitlistHead` 실행. 이 사람의 `availabilities`는 삭제하지 않는다 | "내보냈습니다" | 없음 | 위와 같음 | `notifyGameLeft(gameId, userId, true)` (`src/shared/server/notify-game-left.ts`): 제목 "🚪 {게임 제목}", 설명 "**{이름}**님이 참여 목록에서 제외됐어요.", 필드 "현재 인원 {확정 수}/{정원}", 푸터 "GM {GM 이름}". 봇이 `games.discord_thread_id` 스레드로 전송. 스레드가 없는 게임은 건너뛴다 |
-| `createSecondRound(gameId, {rangeStart, rangeEnd})` `create-second-round.ts:15-108` | RoundSheet "회차 열기" | 트랜잭션: (1) `games` INSERT. 제목·룰·시놉시스·썸네일·플레이타임·정원을 복사하고 `schedule_mode = coordinate`, `end_date = rangeEnd 23:59:59 KST`, `range_start/range_end`, `parent_game_id = 원본`, `round = 원본+1`로 설정. (2) 대기자를 `joined_at` 순으로 새 게임 `participants`에 INSERT. 앞에서 정원 수만큼 `confirmed`, 나머지는 `waiting`. (3) 원본 게임에서 승계 대상자들의 `availabilities`를 새 게임으로 복사(조율 기간 밖 슬롯도 그대로 복사). (4) 원본 게임에서 승계 대상자의 `participants` 행 DELETE | "다음 회차를 열었습니다" | 클라이언트 `router.push("/games/{newId}")` | 원본 기준 `/games/{id}/participants`, `/games/{id}`, `/games` | 없음. 새 게임 모집 공지(`notifyGameCreated`)를 호출하지 않으므로 `discord_thread_id`는 null |
+| 액션                                                                                | 트리거                   | DB 변경                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | 성공 토스트                    | redirect                                   | revalidatePath                                                | Discord                                                                                                                                                                                                                                                                                       |
+| ----------------------------------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ | ------------------------------------------ | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `promoteParticipant(gameId, userId)` `adjust-roster.ts:21-68`                       | 대기 행 "확정으로"       | 트랜잭션 안에서 대상 `participants.status → confirmed`. 이미 confirmed면 아무것도 하지 않고 성공 반환. 확정 수 ≥ 정원이면 `joined_at`이 가장 늦은 확정자를 `waiting`으로 내린다(현재 UI는 정원이 차면 버튼을 막으므로 이 분기에 닿지 않음)                                                                                                                                                                                                                                                                          | "{이름}님을 확정했습니다"      | 없음                                       | `/games/{id}/participants`, `/games/{id}`, `/games`           | 없음                                                                                                                                                                                                                                                                                          |
+| `demoteParticipant` `:71-101`                                                       | 시트 "대기로 이동"       | 대상 → `waiting`. 이어서 `promoteWaitlistHead`: `joined_at`이 가장 빠른 대기자(대상 제외)를 `confirmed`로 올린다                                                                                                                                                                                                                                                                                                                                                                                                    | "{이름}님을 대기로 옮겼습니다" | 없음                                       | 위와 같음                                                     | 없음                                                                                                                                                                                                                                                                                          |
+| `removeParticipant` `:104-133`                                                      | ConfirmDialog "내보내기" | `participants` 행 DELETE. 삭제한 사람이 확정자였으면 `promoteWaitlistHead` 실행. 이 사람의 `availabilities`는 삭제하지 않는다                                                                                                                                                                                                                                                                                                                                                                                       | "내보냈습니다"                 | 없음                                       | 위와 같음                                                     | `notifyGameLeft(gameId, userId, true)` (`src/shared/server/notify-game-left.ts`): 제목 "🚪 {게임 제목}", 설명 "**{이름}**님이 참여 목록에서 제외됐어요.", 필드 "현재 인원 {확정 수}/{정원}", 푸터 "GM {GM 이름}". 봇이 `games.discord_thread_id` 스레드로 전송. 스레드가 없는 게임은 건너뛴다 |
+| `createSecondRound(gameId, {rangeStart, rangeEnd})` `create-second-round.ts:15-108` | RoundSheet "회차 열기"   | 트랜잭션: (1) `games` INSERT. 제목·룰·시놉시스·썸네일·플레이타임·정원을 복사하고 `schedule_mode = coordinate`, `end_date = rangeEnd 23:59:59 KST`, `range_start/range_end`, `parent_game_id = 원본`, `round = 원본+1`로 설정. (2) 대기자를 `joined_at` 순으로 새 게임 `participants`에 INSERT. 앞에서 정원 수만큼 `confirmed`, 나머지는 `waiting`. (3) 원본 게임에서 승계 대상자들의 `availabilities`를 새 게임으로 복사(조율 기간 밖 슬롯도 그대로 복사). (4) 원본 게임에서 승계 대상자의 `participants` 행 DELETE | "다음 회차를 열었습니다"       | 클라이언트 `router.push("/games/{newId}")` | 원본 기준 `/games/{id}/participants`, `/games/{id}`, `/games` | 없음. 새 게임 모집 공지(`notifyGameCreated`)를 호출하지 않으므로 `discord_thread_id`는 null                                                                                                                                                                                                   |
 
 - 실패하면 모든 액션이 `toast.error(result.error)`를 띄운다.
 - 승격과 강등에는 확인 절차가 없다. 누르는 즉시 실행된다.

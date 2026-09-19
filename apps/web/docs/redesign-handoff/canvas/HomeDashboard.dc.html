@@ -1,68 +1,346 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&amp;display=swap">
-  <style>
-    body { margin: 0; background: #ffffff; font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-    a { color: #4f46e5; } a:hover { color: #4338ca; }
-  </style>
-</helmet>
-<div style="width: 412px; height: 915px; box-sizing: border-box; border-left: 1px solid #eaeaef; border-right: 1px solid #eaeaef; background: #ffffff; color: #17171c; display: flex; flex-direction: column;">
-  <div style="flex: 1; min-height: 0; padding: 32px 16px; display: flex; flex-direction: column; gap: 24px;">
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <span style="width: 52px; height: 52px; flex-shrink: 0; border-radius: 9999px; background: #E0E7FF; color: #4338CA; font-size: 18px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">도</span>
-      <div style="display: flex; flex-direction: column;">
-        <span style="font-size: 18px; line-height: 1.3; font-weight: 700; color: #17171c;">도토리님, 반갑습니다</span>
-        <span style="font-size: 14px; line-height: 1.5; color: #5f5f6b;">참여 중 1 · 내가 만든 구인 1</span>
-      </div>
-    </div>
-    <div style="display: flex; flex-direction: column; gap: 12px;">
-      <span style="font-size: 14px; line-height: 1.4; font-weight: 700; color: #5f5f6b;">내 게임</span>
-      <div style="display: flex; flex-direction: column; gap: 8px;">
-        <div style="border-radius: 12px; border: 1px solid #eaeaef; padding: 14px; display: flex; flex-direction: column; gap: 4px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-            <span style="min-width: 0; font-size: 14px; line-height: 1.4; font-weight: 700; color: #17171c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">안개 속의 저택</span>
-            <span style="flex-shrink: 0; display: inline-flex; align-items: center; border-radius: 7px; padding: 5px 9px; font-size: 11px; font-weight: 700; line-height: 1; background: #eef0fe; color: #4338ca;">모집 중</span>
-          </div>
-          <span style="font-size: 12px; line-height: 1.4; color: #5f5f6b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">CoC 7th · 0/4</span>
-        </div>
-        <div style="border-radius: 12px; border: 1px solid #eaeaef; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
-          <div style="display: flex; flex-direction: column; gap: 4px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-              <span style="min-width: 0; font-size: 14px; line-height: 1.4; font-weight: 700; color: #17171c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">심해 연구소 7호</span>
-              <span style="flex-shrink: 0; display: inline-flex; align-items: center; border-radius: 7px; padding: 5px 9px; font-size: 11px; font-weight: 700; line-height: 1; background: #e3f5ec; color: #0b7a55;">대기 모집</span>
+  <head>
+    <meta charset="utf-8" />
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&amp;display=swap"
+        />
+        <style>
+          body {
+            margin: 0;
+            background: #ffffff;
+            font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+          }
+          a {
+            color: #4f46e5;
+          }
+          a:hover {
+            color: #4338ca;
+          }
+        </style>
+      </helmet>
+      <div
+        style="
+          width: 412px;
+          height: 915px;
+          box-sizing: border-box;
+          border-left: 1px solid #eaeaef;
+          border-right: 1px solid #eaeaef;
+          background: #ffffff;
+          color: #17171c;
+          display: flex;
+          flex-direction: column;
+        "
+      >
+        <div
+          style="
+            flex: 1;
+            min-height: 0;
+            padding: 32px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+          "
+        >
+          <div style="display: flex; align-items: center; gap: 12px">
+            <span
+              style="
+                width: 52px;
+                height: 52px;
+                flex-shrink: 0;
+                border-radius: 9999px;
+                background: #e0e7ff;
+                color: #4338ca;
+                font-size: 18px;
+                font-weight: 700;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+              "
+              >도</span
+            >
+            <div style="display: flex; flex-direction: column">
+              <span style="font-size: 18px; line-height: 1.3; font-weight: 700; color: #17171c"
+                >도토리님, 반갑습니다</span
+              >
+              <span style="font-size: 14px; line-height: 1.5; color: #5f5f6b"
+                >참여 중 1 · 내가 만든 구인 1</span
+              >
             </div>
-            <span style="font-size: 12px; line-height: 1.4; color: #5f5f6b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">GM 달빛여우 · 조율 중</span>
           </div>
-          <div style="height: 36px; box-sizing: border-box; border-radius: 8px; border: 1px solid #d5d3f7; background: #f5f4ff; color: #4338ca; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; line-height: 16px; font-weight: 700;">
-            <span>일정 조율하기</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <span style="font-size: 14px; line-height: 1.4; font-weight: 700; color: #5f5f6b"
+              >내 게임</span
+            >
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div
+                style="
+                  border-radius: 12px;
+                  border: 1px solid #eaeaef;
+                  padding: 14px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 4px;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 8px;
+                  "
+                >
+                  <span
+                    style="
+                      min-width: 0;
+                      font-size: 14px;
+                      line-height: 1.4;
+                      font-weight: 700;
+                      color: #17171c;
+                      white-space: nowrap;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                    "
+                    >안개 속의 저택</span
+                  >
+                  <span
+                    style="
+                      flex-shrink: 0;
+                      display: inline-flex;
+                      align-items: center;
+                      border-radius: 7px;
+                      padding: 5px 9px;
+                      font-size: 11px;
+                      font-weight: 700;
+                      line-height: 1;
+                      background: #eef0fe;
+                      color: #4338ca;
+                    "
+                    >모집 중</span
+                  >
+                </div>
+                <span
+                  style="
+                    font-size: 12px;
+                    line-height: 1.4;
+                    color: #5f5f6b;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  "
+                  >CoC 7th · 0/4</span
+                >
+              </div>
+              <div
+                style="
+                  border-radius: 12px;
+                  border: 1px solid #eaeaef;
+                  padding: 14px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+                "
+              >
+                <div style="display: flex; flex-direction: column; gap: 4px">
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      gap: 8px;
+                    "
+                  >
+                    <span
+                      style="
+                        min-width: 0;
+                        font-size: 14px;
+                        line-height: 1.4;
+                        font-weight: 700;
+                        color: #17171c;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                      "
+                      >심해 연구소 7호</span
+                    >
+                    <span
+                      style="
+                        flex-shrink: 0;
+                        display: inline-flex;
+                        align-items: center;
+                        border-radius: 7px;
+                        padding: 5px 9px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        line-height: 1;
+                        background: #e3f5ec;
+                        color: #0b7a55;
+                      "
+                      >대기 모집</span
+                    >
+                  </div>
+                  <span
+                    style="
+                      font-size: 12px;
+                      line-height: 1.4;
+                      color: #5f5f6b;
+                      white-space: nowrap;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                    "
+                    >GM 달빛여우 · 조율 중</span
+                  >
+                </div>
+                <div
+                  style="
+                    height: 36px;
+                    box-sizing: border-box;
+                    border-radius: 8px;
+                    border: 1px solid #d5d3f7;
+                    background: #f5f4ff;
+                    color: #4338ca;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    font-size: 12px;
+                    line-height: 16px;
+                    font-weight: 700;
+                  "
+                >
+                  <span>일정 조율하기</span>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px">
+            <div
+              style="
+                flex: 1;
+                height: 50px;
+                padding: 0 24px;
+                border-radius: 12px;
+                background: #4f46e5;
+                color: #ffffff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 15px;
+                font-weight: 600;
+              "
+            >
+              구인 목록 보기
+            </div>
+            <div
+              style="
+                width: 104px;
+                height: 50px;
+                box-sizing: border-box;
+                border-radius: 12px;
+                border: 1px solid #eaeaef;
+                color: #5f5f6b;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                font-weight: 600;
+              "
+            >
+              로그아웃
+            </div>
           </div>
         </div>
+        <nav
+          style="
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            height: 58px;
+            box-sizing: border-box;
+            border-top: 1px solid #eaeaef;
+            background: #ffffff;
+            flex-shrink: 0;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 6px;
+              color: #70707a;
+            "
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 5h.01"></path>
+              <path d="M3 12h.01"></path>
+              <path d="M3 19h.01"></path>
+              <path d="M8 5h13"></path>
+              <path d="M8 12h13"></path>
+              <path d="M8 19h13"></path>
+            </svg>
+            <span style="font-size: 12px; line-height: 1.4; font-weight: 700; color: #70707a"
+              >구인 목록</span
+            >
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 6px;
+              color: #70707a;
+            "
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span style="font-size: 12px; line-height: 1.4; font-weight: 700; color: #70707a"
+              >마이페이지</span
+            >
+          </div>
+        </nav>
       </div>
-    </div>
-    <div style="display: flex; gap: 8px;">
-      <div style="flex: 1; height: 50px; padding: 0 24px; border-radius: 12px; background: #4f46e5; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600;">구인 목록 보기</div>
-      <div style="width: 104px; height: 50px; box-sizing: border-box; border-radius: 12px; border: 1px solid #eaeaef; color: #5f5f6b; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600;">로그아웃</div>
-    </div>
-  </div>
-  <nav style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); height: 58px; box-sizing: border-box; border-top: 1px solid #eaeaef; background: #ffffff; flex-shrink: 0;">
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #70707a;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h.01"></path><path d="M3 12h.01"></path><path d="M3 19h.01"></path><path d="M8 5h13"></path><path d="M8 12h13"></path><path d="M8 19h13"></path></svg>
-      <span style="font-size: 12px; line-height: 1.4; font-weight: 700; color: #70707a;">구인 목록</span>
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #70707a;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-      <span style="font-size: 12px; line-height: 1.4; font-weight: 700; color: #70707a;">마이페이지</span>
-    </div>
-  </nav>
-</div>
-</x-dc>
-</body>
+    </x-dc>
+  </body>
 </html>

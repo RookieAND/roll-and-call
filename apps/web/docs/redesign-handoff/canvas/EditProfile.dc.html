@@ -1,77 +1,380 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&amp;display=swap">
-  <style>
-    body { margin: 0; background: #ffffff; font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-    a { color: #4f46e5; } a:hover { color: #4338ca; }
-  </style>
-</helmet>
-<div style="width: 412px; height: 915px; box-sizing: border-box; display: flex; flex-direction: column; background: #ffffff; border-left: 1px solid #eaeaef; border-right: 1px solid #eaeaef; color: #17171c; font-family: &quot;Pretendard Variable&quot;, Pretendard, &quot;Noto Sans KR&quot;, system-ui, sans-serif;">
-  <div style="flex: 1; min-height: 0;">
-    <header style="height: 52px; box-sizing: border-box; display: flex; align-items: center; gap: 4px; padding: 0 14px; border-bottom: 1px solid #eaeaef; background: #ffffff;">
-      <div style="width: 36px; height: 36px; margin-left: -6px; border-radius: 6px; color: #5f5f6b; display: flex; align-items: center; justify-content: center;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
-      </div>
-      <span style="font-size: 16px; line-height: 1.4; font-weight: 700; letter-spacing: -0.025em; color: #17171c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">프로필 편집</span>
-    </header>
-    <div style="padding: 24px 16px; display: flex; flex-direction: column; gap: 24px;">
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-          <div style="width: 84px; height: 84px; border-radius: 9999px; background: #E0E7FF; color: #4338CA; display: flex; align-items: center; justify-content: center; font-size: 24px; line-height: 1.33; font-weight: 700;">도</div>
-          <div style="height: 32px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; padding: 0 12px; border-radius: 12px; color: #3a3a45; font-size: 14px; line-height: 20px; font-weight: 600;">Discord 아바타 다시 불러오기</div>
-        </div>
+  <head>
+    <meta charset="utf-8" />
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&amp;display=swap"
+        />
+        <style>
+          body {
+            margin: 0;
+            background: #ffffff;
+            font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+          }
+          a {
+            color: #4f46e5;
+          }
+          a:hover {
+            color: #4338ca;
+          }
+        </style>
+      </helmet>
+      <div
+        style="
+          width: 412px;
+          height: 915px;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          background: #ffffff;
+          border-left: 1px solid #eaeaef;
+          border-right: 1px solid #eaeaef;
+          color: #17171c;
+          font-family:
+            &quot;Pretendard Variable&quot;, Pretendard, &quot;Noto Sans KR&quot;, system-ui,
+            sans-serif;
+        "
+      >
+        <div style="flex: 1; min-height: 0">
+          <header
+            style="
+              height: 52px;
+              box-sizing: border-box;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              padding: 0 14px;
+              border-bottom: 1px solid #eaeaef;
+              background: #ffffff;
+            "
+          >
+            <div
+              style="
+                width: 36px;
+                height: 36px;
+                margin-left: -6px;
+                border-radius: 6px;
+                color: #5f5f6b;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m15 18-6-6 6-6"></path>
+              </svg>
+            </div>
+            <span
+              style="
+                font-size: 16px;
+                line-height: 1.4;
+                font-weight: 700;
+                letter-spacing: -0.025em;
+                color: #17171c;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              "
+              >프로필 편집</span
+            >
+          </header>
+          <div style="padding: 24px 16px; display: flex; flex-direction: column; gap: 24px">
+            <div style="display: flex; flex-direction: column; gap: 16px">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+                <div
+                  style="
+                    width: 84px;
+                    height: 84px;
+                    border-radius: 9999px;
+                    background: #e0e7ff;
+                    color: #4338ca;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    line-height: 1.33;
+                    font-weight: 700;
+                  "
+                >
+                  도
+                </div>
+                <div
+                  style="
+                    height: 32px;
+                    box-sizing: border-box;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0 12px;
+                    border-radius: 12px;
+                    color: #3a3a45;
+                    font-size: 14px;
+                    line-height: 20px;
+                    font-weight: 600;
+                  "
+                >
+                  Discord 아바타 다시 불러오기
+                </div>
+              </div>
 
-        <div style="display: flex; flex-direction: column; gap: 6px;">
-          <label style="font-size: 12.5px; line-height: 1.5; font-weight: 700; color: #3a3a45;">표시 이름</label>
-          <div style="height: 44px; box-sizing: border-box; display: flex; align-items: center; padding: 0 12px; border: 1px solid #eaeaef; border-radius: 10px; background: #ffffff; font-size: 14px; line-height: 20px; color: #17171c;">도토리</div>
-          <p style="margin: 0; font-size: 12px; line-height: 16px; color: #5f5f6b;">구인 카드와 참여자 목록에 보이는 이름입니다.</p>
-        </div>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label style="font-size: 12.5px; line-height: 1.5; font-weight: 700; color: #3a3a45"
+                  >표시 이름</label
+                >
+                <div
+                  style="
+                    height: 44px;
+                    box-sizing: border-box;
+                    display: flex;
+                    align-items: center;
+                    padding: 0 12px;
+                    border: 1px solid #eaeaef;
+                    border-radius: 10px;
+                    background: #ffffff;
+                    font-size: 14px;
+                    line-height: 20px;
+                    color: #17171c;
+                  "
+                >
+                  도토리
+                </div>
+                <p style="margin: 0; font-size: 12px; line-height: 16px; color: #5f5f6b">
+                  구인 카드와 참여자 목록에 보이는 이름입니다.
+                </p>
+              </div>
 
-        <div style="display: flex; flex-direction: column; gap: 6px;">
-          <label style="font-size: 12.5px; line-height: 1.5; font-weight: 700; color: #3a3a45;">한 줄 소개</label>
-          <div style="position: relative; min-height: 76px; box-sizing: border-box; padding: 10px 12px; border: 1px solid #eaeaef; border-radius: 10px; background: #ffffff; font-size: 14px; line-height: 20px; color: #70707a;">
-            주로 크툴루를 굴립니다. 평일 저녁 선호.
-            <svg style="position: absolute; right: 2px; bottom: 2px;" width="9" height="9" viewBox="0 0 9 9" fill="none" stroke="#8a8a95" stroke-width="1"><path d="M8 1 1 8"></path><path d="M8 5 5 8"></path></svg>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label style="font-size: 12.5px; line-height: 1.5; font-weight: 700; color: #3a3a45"
+                  >한 줄 소개</label
+                >
+                <div
+                  style="
+                    position: relative;
+                    min-height: 76px;
+                    box-sizing: border-box;
+                    padding: 10px 12px;
+                    border: 1px solid #eaeaef;
+                    border-radius: 10px;
+                    background: #ffffff;
+                    font-size: 14px;
+                    line-height: 20px;
+                    color: #70707a;
+                  "
+                >
+                  주로 크툴루를 굴립니다. 평일 저녁 선호.
+                  <svg
+                    style="position: absolute; right: 2px; bottom: 2px"
+                    width="9"
+                    height="9"
+                    viewBox="0 0 9 9"
+                    fill="none"
+                    stroke="#8a8a95"
+                    stroke-width="1"
+                  >
+                    <path d="M8 1 1 8"></path>
+                    <path d="M8 5 5 8"></path>
+                  </svg>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label style="font-size: 12.5px; line-height: 1.5; font-weight: 700; color: #3a3a45"
+                  >기본 가능 시간대</label
+                >
+                <div style="display: flex; gap: 7px">
+                  <div
+                    style="
+                      flex: 1;
+                      height: 44px;
+                      box-sizing: border-box;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      border: 1px solid #eaeaef;
+                      border-radius: 10px;
+                      background: #ffffff;
+                      color: #5f5f6b;
+                      font-size: 14px;
+                      line-height: 20px;
+                      font-weight: 600;
+                    "
+                  >
+                    평일 저녁
+                  </div>
+                  <div
+                    style="
+                      flex: 1;
+                      height: 44px;
+                      box-sizing: border-box;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      border: 1px solid #eaeaef;
+                      border-radius: 10px;
+                      background: #ffffff;
+                      color: #5f5f6b;
+                      font-size: 14px;
+                      line-height: 20px;
+                      font-weight: 600;
+                    "
+                  >
+                    주말 낮
+                  </div>
+                  <div
+                    style="
+                      flex: 1;
+                      height: 44px;
+                      box-sizing: border-box;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      border: 1px solid #eaeaef;
+                      border-radius: 10px;
+                      background: #ffffff;
+                      color: #5f5f6b;
+                      font-size: 14px;
+                      line-height: 20px;
+                      font-weight: 600;
+                    "
+                  >
+                    주말 저녁
+                  </div>
+                </div>
+                <p style="margin: 0; font-size: 12px; line-height: 16px; color: #5f5f6b">
+                  일정 조율 그리드의 초기값으로 씁니다.
+                </p>
+              </div>
+
+              <div
+                style="
+                  height: 50px;
+                  box-sizing: border-box;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  padding: 0 24px;
+                  border-radius: 12px;
+                  background: #4f46e5;
+                  color: #ffffff;
+                  font-size: 15px;
+                  line-height: 22.5px;
+                  font-weight: 600;
+                "
+              >
+                저장
+              </div>
+            </div>
+
+            <div style="border-top: 1px solid #eaeaef; padding-top: 16px">
+              <div
+                style="
+                  height: 46px;
+                  box-sizing: border-box;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  padding: 0 16px;
+                  border: 1px solid #eaeaef;
+                  border-radius: 12px;
+                  color: #5f5f6b;
+                  font-size: 14px;
+                  line-height: 20px;
+                  font-weight: 600;
+                "
+              >
+                로그아웃
+              </div>
+            </div>
           </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 6px;">
-          <label style="font-size: 12.5px; line-height: 1.5; font-weight: 700; color: #3a3a45;">기본 가능 시간대</label>
-          <div style="display: flex; gap: 7px;">
-            <div style="flex: 1; height: 44px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 1px solid #eaeaef; border-radius: 10px; background: #ffffff; color: #5f5f6b; font-size: 14px; line-height: 20px; font-weight: 600;">평일 저녁</div>
-            <div style="flex: 1; height: 44px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 1px solid #eaeaef; border-radius: 10px; background: #ffffff; color: #5f5f6b; font-size: 14px; line-height: 20px; font-weight: 600;">주말 낮</div>
-            <div style="flex: 1; height: 44px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 1px solid #eaeaef; border-radius: 10px; background: #ffffff; color: #5f5f6b; font-size: 14px; line-height: 20px; font-weight: 600;">주말 저녁</div>
+        <nav
+          style="
+            height: 58px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            border-top: 1px solid #eaeaef;
+            background: #ffffff;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 6px;
+              color: #70707a;
+            "
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 5h.01"></path>
+              <path d="M3 12h.01"></path>
+              <path d="M3 19h.01"></path>
+              <path d="M8 5h13"></path>
+              <path d="M8 12h13"></path>
+              <path d="M8 19h13"></path>
+            </svg>
+            <span style="font-size: 12px; line-height: 1.4; font-weight: 700; color: #70707a"
+              >구인 목록</span
+            >
           </div>
-          <p style="margin: 0; font-size: 12px; line-height: 16px; color: #5f5f6b;">일정 조율 그리드의 초기값으로 씁니다.</p>
-        </div>
-
-        <div style="height: 50px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: 0 24px; border-radius: 12px; background: #4f46e5; color: #ffffff; font-size: 15px; line-height: 22.5px; font-weight: 600;">저장</div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 6px;
+              color: #4f46e5;
+            "
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span style="font-size: 12px; line-height: 1.4; font-weight: 700; color: #4f46e5"
+              >마이페이지</span
+            >
+          </div>
+        </nav>
       </div>
-
-      <div style="border-top: 1px solid #eaeaef; padding-top: 16px;">
-        <div style="height: 46px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: 0 16px; border: 1px solid #eaeaef; border-radius: 12px; color: #5f5f6b; font-size: 14px; line-height: 20px; font-weight: 600;">로그아웃</div>
-      </div>
-    </div>
-  </div>
-
-  <nav style="height: 58px; box-sizing: border-box; flex-shrink: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid #eaeaef; background: #ffffff;">
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #70707a;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h.01"></path><path d="M3 12h.01"></path><path d="M3 19h.01"></path><path d="M8 5h13"></path><path d="M8 12h13"></path><path d="M8 19h13"></path></svg>
-      <span style="font-size: 12px; line-height: 1.4; font-weight: 700; color: #70707a;">구인 목록</span>
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #4f46e5;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-      <span style="font-size: 12px; line-height: 1.4; font-weight: 700; color: #4f46e5;">마이페이지</span>
-    </div>
-  </nav>
-</div>
-</x-dc>
-</body>
+    </x-dc>
+  </body>
 </html>

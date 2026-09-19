@@ -10,12 +10,12 @@
 
 ## 2. 접근 조건
 
-| 조건 | 결과 | 근거 |
-| --- | --- | --- |
-| 비로그인 | `redirect("/")` (`next` 없음) | `src/views/edit-profile/ui/edit-profile-view.tsx:9-10` |
-| 로그인, `profiles` 행 있음 | 기존 값으로 폼 초기화 | 같은 파일 `:12, :20-25` |
-| 로그인, `profiles` 행 없음 | 이름·소개는 `""`, 슬롯은 `[]`로 시작. 아바타만 Discord 메타데이터로 대체. 저장하면 `UPDATE`가 0행에 적용되지만 성공 토스트와 redirect는 그대로 나간다 | `:21-24`, `src/features/edit-profile/api/update-profile.ts:28-34` |
-| Server Action 호출 시 비로그인 | `{ error: "로그인이 필요합니다." }` | `update-profile.ts:15-16`, `refresh-avatar.ts:10-11` |
+| 조건                           | 결과                                                                                                                                                  | 근거                                                              |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| 비로그인                       | `redirect("/")` (`next` 없음)                                                                                                                         | `src/views/edit-profile/ui/edit-profile-view.tsx:9-10`            |
+| 로그인, `profiles` 행 있음     | 기존 값으로 폼 초기화                                                                                                                                 | 같은 파일 `:12, :20-25`                                           |
+| 로그인, `profiles` 행 없음     | 이름·소개는 `""`, 슬롯은 `[]`로 시작. 아바타만 Discord 메타데이터로 대체. 저장하면 `UPDATE`가 0행에 적용되지만 성공 토스트와 redirect는 그대로 나간다 | `:21-24`, `src/features/edit-profile/api/update-profile.ts:28-34` |
+| Server Action 호출 시 비로그인 | `{ error: "로그인이 필요합니다." }`                                                                                                                   | `update-profile.ts:15-16`, `refresh-avatar.ts:10-11`              |
 
 - notFound 규칙 없음. 본인 외 프로필 편집 경로 없음.
 - `profiles` 행은 가입 시 `handle_new_user` 트리거가 `INSERT … ON CONFLICT DO NOTHING`으로 만든다(`drizzle/0001_auth_trigger_and_rls.sql:5-33`). 그래서 "행 없음"은 예외적인 경우다.
@@ -24,44 +24,44 @@
 
 ### 진입
 
-| 출발 | 요소 | 근거 |
-| --- | --- | --- |
-| `/me` | 헤더 연필 아이콘 "프로필 편집" | `src/views/my-page/ui/my-page-header.tsx:28` |
+| 출발                                    | 요소                                           | 근거                                         |
+| --------------------------------------- | ---------------------------------------------- | -------------------------------------------- |
+| `/me`                                   | 헤더 연필 아이콘 "프로필 편집"                 | `src/views/my-page/ui/my-page-header.tsx:28` |
 | `/` (로그인 대시보드, 내 게임 0건일 때) | "프로필과 기본 가능 시간대 설정" 행의 "설정 ›" | `src/views/home/ui/home-dashboard.tsx:44-57` |
 
 ### 이탈
 
-| 요소 | 목적지 | 근거 |
-| --- | --- | --- |
-| AppBar 뒤로 | `/me` | `src/views/edit-profile/ui/edit-profile-view.tsx:17` |
-| "저장" 성공 | `router.push("/me")` | `src/features/edit-profile/ui/edit-profile-form.tsx:39`, `update-profile.ts:34` |
-| "로그아웃" | 목적지 이동 없음. `router.refresh()` → 뷰 재렌더 시 비로그인이 되어 `redirect("/")` | `src/features/auth/ui/sign-out-button.tsx:10-13`, `edit-profile-view.tsx:10` |
-| 비로그인 접근 | `/` | `edit-profile-view.tsx:10` |
+| 요소          | 목적지                                                                              | 근거                                                                            |
+| ------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| AppBar 뒤로   | `/me`                                                                               | `src/views/edit-profile/ui/edit-profile-view.tsx:17`                            |
+| "저장" 성공   | `router.push("/me")`                                                                | `src/features/edit-profile/ui/edit-profile-form.tsx:39`, `update-profile.ts:34` |
+| "로그아웃"    | 목적지 이동 없음. `router.refresh()` → 뷰 재렌더 시 비로그인이 되어 `redirect("/")` | `src/features/auth/ui/sign-out-button.tsx:10-13`, `edit-profile-view.tsx:10`    |
+| 비로그인 접근 | `/`                                                                                 | `edit-profile-view.tsx:10`                                                      |
 
 ## 4. 데이터
 
 ### 조회
 
-| 호출 | 쿼리 | 근거 |
-| --- | --- | --- |
-| `getCurrentUser()` | Supabase `auth.getUser()` | `src/shared/server/supabase.ts:7-13` |
-| `getProfile(user.id)` | `profiles` where `id = user.id` (전체 컬럼) | `src/shared/server/profiles.ts:3-7` |
+| 호출                  | 쿼리                                        | 근거                                 |
+| --------------------- | ------------------------------------------- | ------------------------------------ |
+| `getCurrentUser()`    | Supabase `auth.getUser()`                   | `src/shared/server/supabase.ts:7-13` |
+| `getProfile(user.id)` | `profiles` where `id = user.id` (전체 컬럼) | `src/shared/server/profiles.ts:3-7`  |
 
 ### 필드
 
-| 폼 필드 | 컬럼 | 초기값 | 저장 시 변환 |
-| --- | --- | --- | --- |
-| 표시 이름 | `profiles.username` (text, not null) | `profile?.username ?? ""` | `trim()`. 1~30자 |
-| 한 줄 소개 | `profiles.bio` (text, null) | `profile?.bio ?? ""` | `trim()`. 200자 이하. 빈 문자열이면 `null` 저장 |
-| 기본 가능 시간대 | `profiles.default_slots` (text[], null) | `profile?.defaultSlots ?? []` | `SLOT_KEYS`에 포함된 값만 남긴다 |
-| 아바타 | `profiles.avatar_url` (text, null) | `profiles.avatar_url` ?? `user_metadata.avatar_url` ?? null | 별도 액션 `refreshAvatar`로 `user_metadata.avatar_url` 값을 덮어쓴다 |
+| 폼 필드          | 컬럼                                    | 초기값                                                      | 저장 시 변환                                                         |
+| ---------------- | --------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
+| 표시 이름        | `profiles.username` (text, not null)    | `profile?.username ?? ""`                                   | `trim()`. 1~30자                                                     |
+| 한 줄 소개       | `profiles.bio` (text, null)             | `profile?.bio ?? ""`                                        | `trim()`. 200자 이하. 빈 문자열이면 `null` 저장                      |
+| 기본 가능 시간대 | `profiles.default_slots` (text[], null) | `profile?.defaultSlots ?? []`                               | `SLOT_KEYS`에 포함된 값만 남긴다                                     |
+| 아바타           | `profiles.avatar_url` (text, null)      | `profiles.avatar_url` ?? `user_metadata.avatar_url` ?? null | 별도 액션 `refreshAvatar`로 `user_metadata.avatar_url` 값을 덮어쓴다 |
 
 - 슬롯 프리셋 (`src/features/edit-profile/model/slot-presets.ts:2-10`):
 
-  | key | label |
-  | --- | --- |
+  | key               | label       |
+  | ----------------- | ----------- |
   | `weekday_evening` | "평일 저녁" |
-  | `weekend_day` | "주말 낮" |
+  | `weekend_day`     | "주말 낮"   |
   | `weekend_evening` | "주말 저녁" |
 
 - `profiles.discord_id`, `created_at`은 이 화면에서 쓰지 않는다.
@@ -117,28 +117,28 @@ Container(size="md", py-6, gap 6)
 
 ## 6. 상태별 화면
 
-| 상태 | 화면 |
-| --- | --- |
-| 로딩(최초) | `loading.tsx` 없음 |
-| 저장 중 | "저장" 버튼 로딩. 입력 필드는 비활성화되지 않는다 |
-| 아바타 갱신 중 | 아바타 버튼 로딩 |
-| 필드 에러 | 해당 필드 아래 빨간 문구(설명 문구를 대체) |
-| 폼 에러 | 저장 버튼 위 빨간 문구 |
-| 새 제출 시작 | 기존 에러를 `setFailure(null)`로 먼저 지운다(`edit-profile-form.tsx:31`) |
-| 런타임 예외 | 전역 `src/app/error.tsx` ("문제가 발생했습니다"). Server Action 안의 DB 예외는 try/catch가 없다. ❓ 확인 필요: 클라이언트 transition 안의 액션 throw가 error boundary로 가는지, 조용히 실패하는지 |
-| 빈 상태 | 해당 없음(빈 값으로 폼 표시) |
-| 권한별 | 본인 전용. GM/참여자 차이 없음 |
+| 상태           | 화면                                                                                                                                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 로딩(최초)     | `loading.tsx` 없음                                                                                                                                                                                |
+| 저장 중        | "저장" 버튼 로딩. 입력 필드는 비활성화되지 않는다                                                                                                                                                 |
+| 아바타 갱신 중 | 아바타 버튼 로딩                                                                                                                                                                                  |
+| 필드 에러      | 해당 필드 아래 빨간 문구(설명 문구를 대체)                                                                                                                                                        |
+| 폼 에러        | 저장 버튼 위 빨간 문구                                                                                                                                                                            |
+| 새 제출 시작   | 기존 에러를 `setFailure(null)`로 먼저 지운다(`edit-profile-form.tsx:31`)                                                                                                                          |
+| 런타임 예외    | 전역 `src/app/error.tsx` ("문제가 발생했습니다"). Server Action 안의 DB 예외는 try/catch가 없다. ❓ 확인 필요: 클라이언트 transition 안의 액션 throw가 error boundary로 가는지, 조용히 실패하는지 |
+| 빈 상태        | 해당 없음(빈 값으로 폼 표시)                                                                                                                                                                      |
+| 권한별         | 본인 전용. GM/참여자 차이 없음                                                                                                                                                                    |
 
 ## 7. 폼과 유효성 검사
 
 제출 흐름: `onSubmit`에서 `preventDefault`한 뒤 `startTransition`으로 `updateProfile({ username, bio, defaultSlots })`를 호출한다(`edit-profile-form.tsx:29-41`). 네이티브 `required`는 없다.
 
-| 필드 | 클라이언트 | 서버 (`update-profile.ts`) | 에러 문구(원문) |
-| --- | --- | --- | --- |
-| username | `maxLength=30` (입력 제한만) | `trim()` 후 길이 `< 1` 또는 `> 30` (`:18-21`) | "닉네임은 1~30자로 입력하세요." (`field: "username"`) |
-| bio | `maxLength=200` | `trim()` 후 `> 200` (`:22-25`) | "한 줄 소개는 200자 이내로 입력하세요." (`field: "bio"`) |
-| defaultSlots | 프리셋 칩만 선택 가능 | `SLOT_KEYS.includes`로 필터. 알 수 없는 키는 조용히 버린다(`:26`) | 없음 |
-| 인증 | 없음 | `getCurrentUser()` null (`:15-16`) | "로그인이 필요합니다." (필드 없음 → 폼 에러) |
+| 필드         | 클라이언트                   | 서버 (`update-profile.ts`)                                        | 에러 문구(원문)                                          |
+| ------------ | ---------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------- |
+| username     | `maxLength=30` (입력 제한만) | `trim()` 후 길이 `< 1` 또는 `> 30` (`:18-21`)                     | "닉네임은 1~30자로 입력하세요." (`field: "username"`)    |
+| bio          | `maxLength=200`              | `trim()` 후 `> 200` (`:22-25`)                                    | "한 줄 소개는 200자 이내로 입력하세요." (`field: "bio"`) |
+| defaultSlots | 프리셋 칩만 선택 가능        | `SLOT_KEYS.includes`로 필터. 알 수 없는 키는 조용히 버린다(`:26`) | 없음                                                     |
+| 인증         | 없음                         | `getCurrentUser()` null (`:15-16`)                                | "로그인이 필요합니다." (필드 없음 → 폼 에러)             |
 
 - 필드 라벨은 "표시 이름"인데 에러 문구는 "닉네임"이라고 한다.
 - 이름 중복 검사는 없다(`profiles.username`에 unique 제약 없음, `src/shared/server/schema.ts:24`).

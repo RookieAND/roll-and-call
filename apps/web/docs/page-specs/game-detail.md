@@ -19,15 +19,15 @@
 
 페이지 자체에는 인증 가드가 없다. 비로그인 사용자도 볼 수 있다. `src/proxy.ts`는 세션 쿠키 갱신만 하고 리다이렉트는 하지 않는다.
 
-| 조건 | 결과 | 근거 |
-|---|---|---|
-| `getGameById(id)`가 `undefined` (없는 id) | `notFound()` → `src/app/not-found.tsx` "페이지를 찾을 수 없습니다" / "주소가 바뀌었거나 삭제된 페이지예요." | `src/views/game-detail/ui/game-detail-view.tsx:6` |
-| id가 uuid 형식이 아님 | ❓ 확인 필요: `games.id`(uuid) 비교에서 Postgres 캐스트 오류가 나 `src/app/error.tsx`로 가는지 | `src/shared/server/games.ts:80-91` |
-| 비로그인 | 모든 정보 표시. 액션 존은 로그인 유도(또는 확정/마감 안내) | `src/views/game-detail/ui/game-action-zone.tsx:92-101` |
-| 로그인, 무관한 사용자 | 참여하기 / 대기 신청하기 | `game-action-zone.tsx:126-128` |
-| 로그인, 참여자(확정) | 일정 조율하기(coordinate) + 참여 취소 또는 취소 불가 안내 | `game-action-zone.tsx:103-124` |
-| 로그인, 대기자 | 대기 안내 + 가능 시간 입력(coordinate) + 대기 취소 | `game-action-zone.tsx:72-86` |
-| GM (`games.gm_id === user.id`) | 헤더에 ⋯ 메뉴. 하단 바는 모드와 확정 여부에 따라 조율 현황 링크, 확정 안내, 또는 없음 | `game-detail-header.tsx:23`, `game-detail-actions.tsx:22-24` |
+| 조건                                      | 결과                                                                                                        | 근거                                                         |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `getGameById(id)`가 `undefined` (없는 id) | `notFound()` → `src/app/not-found.tsx` "페이지를 찾을 수 없습니다" / "주소가 바뀌었거나 삭제된 페이지예요." | `src/views/game-detail/ui/game-detail-view.tsx:6`            |
+| id가 uuid 형식이 아님                     | ❓ 확인 필요: `games.id`(uuid) 비교에서 Postgres 캐스트 오류가 나 `src/app/error.tsx`로 가는지              | `src/shared/server/games.ts:80-91`                           |
+| 비로그인                                  | 모든 정보 표시. 액션 존은 로그인 유도(또는 확정/마감 안내)                                                  | `src/views/game-detail/ui/game-action-zone.tsx:92-101`       |
+| 로그인, 무관한 사용자                     | 참여하기 / 대기 신청하기                                                                                    | `game-action-zone.tsx:126-128`                               |
+| 로그인, 참여자(확정)                      | 일정 조율하기(coordinate) + 참여 취소 또는 취소 불가 안내                                                   | `game-action-zone.tsx:103-124`                               |
+| 로그인, 대기자                            | 대기 안내 + 가능 시간 입력(coordinate) + 대기 취소                                                          | `game-action-zone.tsx:72-86`                                 |
+| GM (`games.gm_id === user.id`)            | 헤더에 ⋯ 메뉴. 하단 바는 모드와 확정 여부에 따라 조율 현황 링크, 확정 안내, 또는 없음                       | `game-detail-header.tsx:23`, `game-detail-actions.tsx:22-24` |
 
 GM 여부는 `isGameGm` (`src/entities/game/model/is-game-gm.ts:2-4`)으로 판단한다. 뷰어 id는 `getCurrentUser()` (`src/shared/server/supabase.ts:7-13`, `supabase.auth.getUser()`)에서 온다.
 
@@ -35,33 +35,33 @@ GM 여부는 `isGameGm` (`src/entities/game/model/is-game-gm.ts:2-4`)으로 판�
 
 ### 진입
 
-| 출발 | 방식 | 근거 |
-|---|---|---|
-| 구인 목록 `/games` 카드 | `Link href={/games/${game.id}}` | `src/views/games/ui/game-list.tsx:41` |
-| 홈 모집 미리보기 | `Link` | `src/views/home/ui/landing-recruiting-preview.tsx:28` |
-| 홈 게임 리스트 아이템 | `Link` | `src/views/home/ui/game-list-item.tsx:44` |
-| 내 세션 목록(`/me`, `/me/sessions/*`) 카드 | `sessionHref`: 참여자이거나 dim 상태면 `/games/${id}`, 호스트이면서 dim이 아니면 `/participants` | `src/widgets/session-list/ui/session-list.tsx:7,14` |
-| 구인 등록 완료 | `createGame` → `{ redirect: /games/${id} }` | `src/features/write-game/api/create-game.ts:46` |
-| 구인 수정 완료 | `updateGame` → `{ redirect: /games/${id} }` | `src/features/write-game/api/update-game.ts:49` |
-| 다음 회차 생성 완료 | `createSecondRound` → `{ redirect: /games/${newId} }` (새 회차 상세) | `src/features/create-second-round/api/create-second-round.ts:107` |
-| 세션 확정 완료 | `confirmSession` → `{ redirect: /games/${gameId} }`, 토스트 "세션이 확정되었습니다" | `src/features/confirm-session/api/confirm-session.ts:26`, `ui/confirm-session-form.tsx:33-34` |
-| 수정 페이지 권한 없음 | `redirect(/games/${id})` | `src/views/edit-game/ui/edit-game-view.tsx:11` |
-| 참여자 관리 권한 없음 | `redirect(/games/${id})` | `src/views/manage-participants/ui/manage-participants-view.tsx:13` |
-| 하위 페이지 AppBar 뒤로 | `back={/games/${id}}` (수정, 일정 조율, 참여자 관리) | `edit-game-view.tsx:15`, `game-schedule-view.tsx:20`, `participant-manager.tsx:43` |
-| Discord 알림 embed 링크 / "▶ 참여하러 가기" | `gameUrl(id)`, `NEXT_PUBLIC_SITE_URL` 또는 `VERCEL_URL`이 있을 때만 | `src/shared/server/discord-notify.ts:15-20,38` |
+| 출발                                        | 방식                                                                                             | 근거                                                                                          |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| 구인 목록 `/games` 카드                     | `Link href={/games/${game.id}}`                                                                  | `src/views/games/ui/game-list.tsx:41`                                                         |
+| 홈 모집 미리보기                            | `Link`                                                                                           | `src/views/home/ui/landing-recruiting-preview.tsx:28`                                         |
+| 홈 게임 리스트 아이템                       | `Link`                                                                                           | `src/views/home/ui/game-list-item.tsx:44`                                                     |
+| 내 세션 목록(`/me`, `/me/sessions/*`) 카드  | `sessionHref`: 참여자이거나 dim 상태면 `/games/${id}`, 호스트이면서 dim이 아니면 `/participants` | `src/widgets/session-list/ui/session-list.tsx:7,14`                                           |
+| 구인 등록 완료                              | `createGame` → `{ redirect: /games/${id} }`                                                      | `src/features/write-game/api/create-game.ts:46`                                               |
+| 구인 수정 완료                              | `updateGame` → `{ redirect: /games/${id} }`                                                      | `src/features/write-game/api/update-game.ts:49`                                               |
+| 다음 회차 생성 완료                         | `createSecondRound` → `{ redirect: /games/${newId} }` (새 회차 상세)                             | `src/features/create-second-round/api/create-second-round.ts:107`                             |
+| 세션 확정 완료                              | `confirmSession` → `{ redirect: /games/${gameId} }`, 토스트 "세션이 확정되었습니다"              | `src/features/confirm-session/api/confirm-session.ts:26`, `ui/confirm-session-form.tsx:33-34` |
+| 수정 페이지 권한 없음                       | `redirect(/games/${id})`                                                                         | `src/views/edit-game/ui/edit-game-view.tsx:11`                                                |
+| 참여자 관리 권한 없음                       | `redirect(/games/${id})`                                                                         | `src/views/manage-participants/ui/manage-participants-view.tsx:13`                            |
+| 하위 페이지 AppBar 뒤로                     | `back={/games/${id}}` (수정, 일정 조율, 참여자 관리)                                             | `edit-game-view.tsx:15`, `game-schedule-view.tsx:20`, `participant-manager.tsx:43`            |
+| Discord 알림 embed 링크 / "▶ 참여하러 가기" | `gameUrl(id)`, `NEXT_PUBLIC_SITE_URL` 또는 `VERCEL_URL`이 있을 때만                              | `src/shared/server/discord-notify.ts:15-20,38`                                                |
 
 ### 이탈
 
-| 요소 | 목적지 | 근거 |
-|---|---|---|
-| AppBar 뒤로 | `/games` (진입 경로와 관계없이 고정) | `game-detail.tsx:25` |
-| GM 메뉴 "구인 수정" | `/games/${id}/edit` | `game-gm-menu.tsx:31` |
-| GM 메뉴 "참여자 관리" | `/games/${id}/participants` | `game-gm-menu.tsx:34` |
-| GM 메뉴 "구인 삭제" 확인 | 성공 시 `router.push("/games")` | `use-delete-game.ts:22`, `delete-game.ts:16` |
-| "일정 조율 현황" / "일정 조율 보기" / "가능 시간 입력" (`GameScheduleLink`) | `/games/${id}/schedule` | `game-schedule-link.tsx:17` |
-| "일정 조율하기" (참여자) | `/games/${id}/schedule` | `game-action-zone.tsx:110` |
-| "Discord로 로그인" | Supabase OAuth → `${origin}/auth/callback` | `src/features/auth/api/sign-in.ts:4-7` |
-| BottomNav | [_shared-layout.md](./_shared-layout.md) | — |
+| 요소                                                                        | 목적지                                     | 근거                                         |
+| --------------------------------------------------------------------------- | ------------------------------------------ | -------------------------------------------- |
+| AppBar 뒤로                                                                 | `/games` (진입 경로와 관계없이 고정)       | `game-detail.tsx:25`                         |
+| GM 메뉴 "구인 수정"                                                         | `/games/${id}/edit`                        | `game-gm-menu.tsx:31`                        |
+| GM 메뉴 "참여자 관리"                                                       | `/games/${id}/participants`                | `game-gm-menu.tsx:34`                        |
+| GM 메뉴 "구인 삭제" 확인                                                    | 성공 시 `router.push("/games")`            | `use-delete-game.ts:22`, `delete-game.ts:16` |
+| "일정 조율 현황" / "일정 조율 보기" / "가능 시간 입력" (`GameScheduleLink`) | `/games/${id}/schedule`                    | `game-schedule-link.tsx:17`                  |
+| "일정 조율하기" (참여자)                                                    | `/games/${id}/schedule`                    | `game-action-zone.tsx:110`                   |
+| "Discord로 로그인"                                                          | Supabase OAuth → `${origin}/auth/callback` | `src/features/auth/api/sign-in.ts:4-7`       |
+| BottomNav                                                                   | [_shared-layout.md](./_shared-layout.md)   | —                                            |
 
 로그인 후 복귀: `signInWithDiscord`는 `next`를 넘기지 않는다(`sign-in.ts:6`). 콜백 기본값이 `next ?? "/"`라서(`src/app/auth/callback/route.ts:6`) 로그인하면 상세가 아니라 홈 `/`로 간다. 실패 시 `/?auth_error=1` (`route.ts:24`).
 
@@ -69,10 +69,10 @@ GM 여부는 `isGameGm` (`src/entities/game/model/is-game-gm.ts:2-4`)으로 판�
 
 ### params / searchParams
 
-| 이름 | 사용 |
-|---|---|
+| 이름                  | 사용                                                  |
+| --------------------- | ----------------------------------------------------- |
 | `params.id` (Promise) | `await params` → `GameDetailView id` (`page.tsx:2-4`) |
-| searchParams | 사용하지 않음 |
+| searchParams          | 사용하지 않음                                         |
 
 ### 조회
 
@@ -81,40 +81,40 @@ GM 여부는 `isGameGm` (`src/entities/game/model/is-game-gm.ts:2-4`)으로 판�
 
 ### 필드 표
 
-| 테이블.컬럼 | 화면 사용 | 위치 |
-|---|---|---|
-| `games.id` | 링크, 액션 인자 | 전반 |
-| `games.title` | h1 제목 | `game-detail-header.tsx:18-20` |
-| `games.thumbnail_url` | 상단 썸네일(없으면 그라데이션) | `game-detail.tsx:28-32` |
-| `games.rule` | 정보 표 "룰" | `game-info-table.tsx:11` |
-| `games.gm_id` | GM 판정 | `game-detail.tsx:11` |
-| `profiles.username`, `profiles.avatar_url` (gm) | 정보 표 "GM" | `game-info-table.tsx:13-22` |
-| `games.max_players` | "인원", "참여자 N/M", 상태 계산 | `game-info-table.tsx:24`, `game-roster-preview.tsx:20` |
-| `games.play_time` | "플레이타임" (값 있을 때만) | `game-info-table.tsx:25` |
-| `games.end_date` | "모집 마감일", 상태(마감), 대기 안내 마감 | `game-info-table.tsx:26`, `waitlist-notice.tsx:25` |
-| `games.schedule_mode` | `canCoordinate` → 조율 링크 노출, "세션 일정" 포맷 | `game-detail-actions.tsx:19`, `format.ts:56-72` |
-| `games.range_start`, `games.range_end` | "세션 일정" (`M월 D일 ~ M월 D일 조율`) | `format.ts:68-70` |
-| `games.confirmed_at` | "세션 일정", 확정 안내, 액션 분기 최우선 | `game-action-zone.tsx:41,57-70` |
-| `games.synopsis` | "시놉시스" 섹션 (값 있을 때만) | `game-detail.tsx:48-55` |
-| `games.images` (`drizzle/0009_game_images_waitlist.sql`, text[] 기본 `{}`) | "진행 이미지" 갤러리 (1장 이상일 때만, 배열 순서대로) | `game-detail.tsx:57` |
-| `games.waitlist_enabled` (0009, boolean 기본 true) | 모집 상태 `full` 판정 → 배지 "모집 마감", 액션 존 마감 처리. 화면에 설정값 자체는 표시하지 않음 | `game-detail.tsx:22`, `game-action-zone.tsx:46, 51` |
-| `participants.user_id` | 뷰어 자격 판정 | `game-detail.tsx:15` |
-| `participants.status` | 확정/대기 분리, 정원 계산 | `split-roster.ts:26-32` |
-| `participants.joined_at` | 신청 순 정렬 → 대기 순번 | `split-roster.ts:19-21` |
-| `profiles.username/avatar_url` (participant) | 아바타 그룹 | `game-roster-preview.tsx:30` |
-| `games.round`, `games.parent_game_id` | 이 페이지에서 표시하지 않음 (회차 배지 없음) | — |
-| `games.notified_at` | 사용하지 않음 | — |
-| `games.discord_thread_id` (신규, `drizzle/0008_discord_thread_id.sql`) | 화면 표시 없음. 참여/취소 알림의 스레드 대상 | `schema.ts:54`, `discord-notify.ts:87,122` |
+| 테이블.컬럼                                                                | 화면 사용                                                                                       | 위치                                                   |
+| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `games.id`                                                                 | 링크, 액션 인자                                                                                 | 전반                                                   |
+| `games.title`                                                              | h1 제목                                                                                         | `game-detail-header.tsx:18-20`                         |
+| `games.thumbnail_url`                                                      | 상단 썸네일(없으면 그라데이션)                                                                  | `game-detail.tsx:28-32`                                |
+| `games.rule`                                                               | 정보 표 "룰"                                                                                    | `game-info-table.tsx:11`                               |
+| `games.gm_id`                                                              | GM 판정                                                                                         | `game-detail.tsx:11`                                   |
+| `profiles.username`, `profiles.avatar_url` (gm)                            | 정보 표 "GM"                                                                                    | `game-info-table.tsx:13-22`                            |
+| `games.max_players`                                                        | "인원", "참여자 N/M", 상태 계산                                                                 | `game-info-table.tsx:24`, `game-roster-preview.tsx:20` |
+| `games.play_time`                                                          | "플레이타임" (값 있을 때만)                                                                     | `game-info-table.tsx:25`                               |
+| `games.end_date`                                                           | "모집 마감일", 상태(마감), 대기 안내 마감                                                       | `game-info-table.tsx:26`, `waitlist-notice.tsx:25`     |
+| `games.schedule_mode`                                                      | `canCoordinate` → 조율 링크 노출, "세션 일정" 포맷                                              | `game-detail-actions.tsx:19`, `format.ts:56-72`        |
+| `games.range_start`, `games.range_end`                                     | "세션 일정" (`M월 D일 ~ M월 D일 조율`)                                                          | `format.ts:68-70`                                      |
+| `games.confirmed_at`                                                       | "세션 일정", 확정 안내, 액션 분기 최우선                                                        | `game-action-zone.tsx:41,57-70`                        |
+| `games.synopsis`                                                           | "시놉시스" 섹션 (값 있을 때만)                                                                  | `game-detail.tsx:48-55`                                |
+| `games.images` (`drizzle/0009_game_images_waitlist.sql`, text[] 기본 `{}`) | "진행 이미지" 갤러리 (1장 이상일 때만, 배열 순서대로)                                           | `game-detail.tsx:57`                                   |
+| `games.waitlist_enabled` (0009, boolean 기본 true)                         | 모집 상태 `full` 판정 → 배지 "모집 마감", 액션 존 마감 처리. 화면에 설정값 자체는 표시하지 않음 | `game-detail.tsx:22`, `game-action-zone.tsx:46, 51`    |
+| `participants.user_id`                                                     | 뷰어 자격 판정                                                                                  | `game-detail.tsx:15`                                   |
+| `participants.status`                                                      | 확정/대기 분리, 정원 계산                                                                       | `split-roster.ts:26-32`                                |
+| `participants.joined_at`                                                   | 신청 순 정렬 → 대기 순번                                                                        | `split-roster.ts:19-21`                                |
+| `profiles.username/avatar_url` (participant)                               | 아바타 그룹                                                                                     | `game-roster-preview.tsx:30`                           |
+| `games.round`, `games.parent_game_id`                                      | 이 페이지에서 표시하지 않음 (회차 배지 없음)                                                    | —                                                      |
+| `games.notified_at`                                                        | 사용하지 않음                                                                                   | —                                                      |
+| `games.discord_thread_id` (신규, `drizzle/0008_discord_thread_id.sql`)     | 화면 표시 없음. 참여/취소 알림의 스레드 대상                                                    | `schema.ts:54`, `discord-notify.ts:87,122`             |
 
 ### 파생값
 
-| 값 | 계산 | 위치 |
-|---|---|---|
-| `confirmed`, `waiting` | `splitRoster(game.participants)`: joinedAt 오름차순, `applicationRank`, `waitlistRank` 부여 | `game-detail.tsx:12` |
-| `me` | 뷰어가 참여 목록에 있으면 해당 멤버 | `game-detail.tsx:15` |
+| 값                      | 계산                                                                                                                                                                                                                           | 위치                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| `confirmed`, `waiting`  | `splitRoster(game.participants)`: joinedAt 오름차순, `applicationRank`, `waitlistRank` 부여                                                                                                                                    | `game-detail.tsx:12`                                  |
+| `me`                    | 뷰어가 참여 목록에 있으면 해당 멤버                                                                                                                                                                                            | `game-detail.tsx:15`                                  |
 | `status` (`GameStatus`) | `deriveGameStatus({ maxPlayers, endDate, participantCount: confirmed.length, waitlistEnabled })`: 기한 경과 → `closed`, 확정 인원 < 정원 → `recruiting`, 정원 충족이면 `waitlist_enabled`가 true → `confirmed`, false → `full` | `game-detail.tsx:18-23`, `derive-game-status.ts:7-23` |
-| 상태 라벨 | `recruiting` "모집 중"(primary), `confirmed` "대기 모집"(success), `full` "모집 마감"(gray), `closed` "모집 마감"(gray) | `src/entities/game/model/status.ts:13-26` |
-| `canSchedule` | `scheduleMode === "coordinate"` (마감 여부는 보지 않음). 확정된 세션(A1)에서는 쓰지 않는다 | `game-detail-actions.tsx` |
+| 상태 라벨               | `recruiting` "모집 중"(primary), `confirmed` "대기 모집"(success), `full` "모집 마감"(gray), `closed` "모집 마감"(gray)                                                                                                        | `src/entities/game/model/status.ts:13-26`             |
+| `canSchedule`           | `scheduleMode === "coordinate"` (마감 여부는 보지 않음). 확정된 세션(A1)에서는 쓰지 않는다                                                                                                                                     | `game-detail-actions.tsx`                             |
 
 ### 캐시
 
@@ -215,31 +215,32 @@ GM 뷰에 `RoundSheet`(create-second-round), `ConfirmSessionForm`(confirm-sessio
 
 1단계 `GameDetailActions` (`game-detail-actions.tsx:19-33`):
 
-| # | GM | confirmed_at | schedule_mode | 결과 |
-|---|---|---|---|---|
-| G1 | ✔ | 없음 | coordinate | GameScheduleLink "일정 조율 현황" |
-| G2 | ✔ | 없음 | fixed | 하단 바 없음(`null`) |
-| G3 | ✔ | 있음 | any | GameActionZone → 아래 A1 |
-| — | ✘ | any | any | GameActionZone |
+| #   | GM  | confirmed_at | schedule_mode | 결과                              |
+| --- | --- | ------------ | ------------- | --------------------------------- |
+| G1  | ✔   | 없음         | coordinate    | GameScheduleLink "일정 조율 현황" |
+| G2  | ✔   | 없음         | fixed         | 하단 바 없음(`null`)              |
+| G3  | ✔   | 있음         | any           | GameActionZone → 아래 A1          |
+| —   | ✘   | any          | any           | GameActionZone                    |
 
 2단계 `deriveActionView` 우선순위: 확정 > 대기 > 참여중 > 마감 > 비로그인 > 참여가능 (`derive-action-view.ts:25-30`). 각 행의 결과 (`game-action-zone.tsx`):
 
-| # | actionView | 조건 | status | schedule_mode | 표시 | 근거 |
-|---|---|---|---|---|---|---|
-| A1 | `confirmed` | 세션 잠김 (뷰어 자격 무관, 비로그인·GM 포함) | any | any | ConfirmedSessionNotice만. 확정 후에는 [일정 조율] 버튼을 숨긴다(2026-09-16). GM은 ⋯ 메뉴 "확정 시간 변경"으로 조율 화면에 간다 | `confirmed-actions.tsx` |
-| A2 | `waiting` | 뷰어 = 대기자 | any (마감 포함) | coordinate | WaitlistNotice + "가능 시간 입력" + "대기 취소" | `:72-86` |
-| A2' | `waiting` | 〃 | any | fixed | WaitlistNotice + "대기 취소" | 〃 |
-| A3 | `joined` | 뷰어 = 확정 참여자 | recruiting | coordinate | "일정 조율하기"(primary) + "참여 취소"(outline) | `:103-116` |
-| A3' | `joined` | 〃 | recruiting | fixed | "참여 취소"만 | 〃 |
-| A4 | `joined` | 〃 | confirmed(정원 충족), full 또는 closed | coordinate | "일정 조율하기" + 안내 "참여가 확정되었습니다 · 모집이 마감되어 취소는 GM에게 문의하세요" | `:51-59, 107-128` |
-| A4' | `joined` | 〃 | confirmed, full 또는 closed | fixed | 위 안내만 | 〃 |
-| A5 | `closed` | 미참여(로그인/비로그인 무관) | closed 또는 full | any | StatusNotice "모집이 마감되었습니다". 비로그인에게도 로그인 버튼이 없다 | `:46, 92-94` |
-| A6 | `anon` | 비로그인 | recruiting | any | "참여하려면 로그인이 필요합니다." + "Discord로 로그인" | `:51-53,92-101` |
-| A6' | `anon` | 비로그인 | confirmed(정원 충족, 대기 신청 켬) | any | "정원이 찼지만 대기 신청은 가능합니다. 로그인 후 신청하세요." + "Discord로 로그인" | 〃 |
-| A7 | `joinable` | 로그인, 미참여, GM 아님 | recruiting | any | "참여하기" | `:126-128`, `join-game-button.tsx:19` |
-| A7' | `joinable` | 〃 | confirmed(정원 충족, 대기 신청 켬) | any | "대기 신청하기" | 〃 |
+| #   | actionView  | 조건                                         | status                                 | schedule_mode | 표시                                                                                                                           | 근거                                  |
+| --- | ----------- | -------------------------------------------- | -------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
+| A1  | `confirmed` | 세션 잠김 (뷰어 자격 무관, 비로그인·GM 포함) | any                                    | any           | ConfirmedSessionNotice만. 확정 후에는 [일정 조율] 버튼을 숨긴다(2026-09-16). GM은 ⋯ 메뉴 "확정 시간 변경"으로 조율 화면에 간다 | `confirmed-actions.tsx`               |
+| A2  | `waiting`   | 뷰어 = 대기자                                | any (마감 포함)                        | coordinate    | WaitlistNotice + "가능 시간 입력" + "대기 취소"                                                                                | `:72-86`                              |
+| A2' | `waiting`   | 〃                                           | any                                    | fixed         | WaitlistNotice + "대기 취소"                                                                                                   | 〃                                    |
+| A3  | `joined`    | 뷰어 = 확정 참여자                           | recruiting                             | coordinate    | "일정 조율하기"(primary) + "참여 취소"(outline)                                                                                | `:103-116`                            |
+| A3' | `joined`    | 〃                                           | recruiting                             | fixed         | "참여 취소"만                                                                                                                  | 〃                                    |
+| A4  | `joined`    | 〃                                           | confirmed(정원 충족), full 또는 closed | coordinate    | "일정 조율하기" + 안내 "참여가 확정되었습니다 · 모집이 마감되어 취소는 GM에게 문의하세요"                                      | `:51-59, 107-128`                     |
+| A4' | `joined`    | 〃                                           | confirmed, full 또는 closed            | fixed         | 위 안내만                                                                                                                      | 〃                                    |
+| A5  | `closed`    | 미참여(로그인/비로그인 무관)                 | closed 또는 full                       | any           | StatusNotice "모집이 마감되었습니다". 비로그인에게도 로그인 버튼이 없다                                                        | `:46, 92-94`                          |
+| A6  | `anon`      | 비로그인                                     | recruiting                             | any           | "참여하려면 로그인이 필요합니다." + "Discord로 로그인"                                                                         | `:51-53,92-101`                       |
+| A6' | `anon`      | 비로그인                                     | confirmed(정원 충족, 대기 신청 켬)     | any           | "정원이 찼지만 대기 신청은 가능합니다. 로그인 후 신청하세요." + "Discord로 로그인"                                             | 〃                                    |
+| A7  | `joinable`  | 로그인, 미참여, GM 아님                      | recruiting                             | any           | "참여하기"                                                                                                                     | `:126-128`, `join-game-button.tsx:19` |
+| A7' | `joinable`  | 〃                                           | confirmed(정원 충족, 대기 신청 켬)     | any           | "대기 신청하기"                                                                                                                | 〃                                    |
 
 참고:
+
 - **fixed 모드는 사실상 항상 A1'이다.** 구인 폼은 fixed 모드에서 `confirmedAt`을 필수로 요구하고(`src/features/write-game/model/game-form.ts:29-35`, "세션 일시를 입력하세요."), 등록과 수정 모두 그 값을 `games.confirmed_at`에 저장한다(`create-game.ts:33`, `update-game.ts:42`). 폼으로 만든 fixed 게임은 모든 뷰어(GM 포함)에게 ConfirmedSessionNotice만 보인다. 표의 G2, A2', A3', A4'와 fixed 조합의 A5~A7은 폼 밖에서 `confirmed_at`이 비워진 행에서만 도달한다. ❓ 확인 필요: 그런 행(시드, 이전 데이터)이 실제로 있는지.
 - 헤더 상태 배지는 `status`만 따른다. `confirmed_at`이 있어도 배지는 "모집 중"/"대기 모집"/"모집 마감" 중 하나다(`game-detail-header.tsx:22`).
 - GM이 `joinable`/`anon`에 도달하는 경로는 없다(GM이면 G1~G3에서 끝남).
@@ -250,11 +251,11 @@ GM 뷰에 `RoundSheet`(create-second-round), `ConfirmSessionForm`(confirm-sessio
 
 이 페이지에는 입력 폼이 없다. 클라이언트 검증도 없다. 서버 액션의 거부 조건은 다음과 같다.
 
-| 액션 | 거부 조건 → 에러 문구(토스트) | 근거 |
-|---|---|---|
-| `joinGame` | 비로그인 "로그인이 필요합니다." / 게임 없음 "존재하지 않는 게임입니다." / GM "GM은 참여자로 참여할 수 없습니다." / 세션 잠김(`isSessionLocked`) "이미 일정이 확정된 게임입니다." / 기한 경과 "모집이 마감되었습니다." / `waitlist_enabled = false`이고 확정 인원 ≥ 정원 "정원이 가득 차 신청할 수 없습니다." / 중복 "이미 참여 중입니다." | `join-game.ts:18-68` |
-| `leaveGame` | "로그인이 필요합니다." / "존재하지 않는 게임입니다." / "참여 중이 아닙니다." / 확정 세션 "확정된 게임은 취소할 수 없습니다. GM에게 문의하세요." / 확정자이면서 정원 충족 또는 기한 경과 "마감된 게임은 취소할 수 없습니다. GM에게 문의하세요." (대기자는 제한 없음) | `leave-game.ts:10-31` |
-| `deleteGame` | "로그인이 필요합니다." / GM이 아니거나 없는 게임 "삭제 권한이 없습니다." | `delete-game.ts:8-14` |
+| 액션         | 거부 조건 → 에러 문구(토스트)                                                                                                                                                                                                                                                                                                             | 근거                  |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `joinGame`   | 비로그인 "로그인이 필요합니다." / 게임 없음 "존재하지 않는 게임입니다." / GM "GM은 참여자로 참여할 수 없습니다." / 세션 잠김(`isSessionLocked`) "이미 일정이 확정된 게임입니다." / 기한 경과 "모집이 마감되었습니다." / `waitlist_enabled = false`이고 확정 인원 ≥ 정원 "정원이 가득 차 신청할 수 없습니다." / 중복 "이미 참여 중입니다." | `join-game.ts:18-68`  |
+| `leaveGame`  | "로그인이 필요합니다." / "존재하지 않는 게임입니다." / "참여 중이 아닙니다." / 확정 세션 "확정된 게임은 취소할 수 없습니다. GM에게 문의하세요." / 확정자이면서 정원 충족 또는 기한 경과 "마감된 게임은 취소할 수 없습니다. GM에게 문의하세요." (대기자는 제한 없음)                                                                       | `leave-game.ts:10-31` |
+| `deleteGame` | "로그인이 필요합니다." / GM이 아니거나 없는 게임 "삭제 권한이 없습니다."                                                                                                                                                                                                                                                                  | `delete-game.ts:8-14` |
 
 ## 8. 액션과 부수효과
 
@@ -302,6 +303,7 @@ GM 뷰에 `RoundSheet`(create-second-round), `ConfirmSessionForm`(confirm-sessio
 ## 9. 반응형과 접근성 현황
 
 **반응형 (구현된 것)**
+
 - `Container size="md" className="px-0"`, 본문 좌우 `px-4` (`game-detail.tsx:26,34`)
 - 썸네일 전체 폭, `sizes="(max-width: 896px) 100vw, 896px"` (`:30`)
 - 하단 액션 바 `sticky bottom-[58px]`로 BottomNav 위에 고정 (`game-detail-actions.tsx:28`)
@@ -310,6 +312,7 @@ GM 뷰에 `RoundSheet`(create-second-round), `ConfirmSessionForm`(confirm-sessio
 - breakpoint별 분기(`sm:`/`md:` 등)는 이 페이지 파일에 없다.
 
 **접근성 (구현된 것)**
+
 - 제목 `<h1>` (`game-detail-header.tsx:18`). "시놉시스"·"참여자" 소제목은 `Text typography="heading3"`인데 `render`를 지정하지 않아 `<span>`으로 렌더된다(`packages/ui/src/text.tsx:42`, `defaultTagName: "span"`). 제목 태그는 h1 하나뿐이다.
 - AppBar 뒤로 `aria-label="뒤로"` (`app-bar.tsx:31`), GM 메뉴 `aria-label="구인 관리 메뉴"` (`game-gm-menu.tsx:22`)
 - 장식 아이콘 `aria-hidden` (ChevronRight, MoreHorizontal)
@@ -326,7 +329,7 @@ GM 뷰에 `RoundSheet`(create-second-round), `ConfirmSessionForm`(confirm-sessio
 4. **확정 세션 시 자격 정보 사라짐**: A1 분기는 뷰어가 참여자인지, 대기자인지, 무관한지를 구분하지 않는다. 대기자는 대기 순번 안내와 "대기 취소"가 사라지고(서버도 확정 후 취소를 막음), 비로그인도 같은 화면을 본다.
 5. **fixed 모드 구인글은 참여할 수 없다**: fixed 게임은 `confirmed_at`이 항상 채워진다(6장 참고). 그래서 액션 존은 참여 버튼 없이 "세션 확정" 안내만 보여 주고(`game-action-zone.tsx:57-70`), 서버 `joinGame`도 "이미 일정이 확정된 게임입니다."로 거부한다(`join-game.ts:35`). 한편 목록 쿼리는 `confirmed_at`이 미래인 게임을 모집 중으로 노출한다(`games.ts:20`). fixed 게임은 목록에 보이지만 상세에서 신청할 방법이 없다.
    - 관련: GM·fixed·미확정 분기(G2)는 하단 바가 `null`이다(`game-detail-actions.tsx:22-24`). fixed 게임의 일정 조율 페이지는 "일시가 지정된 게임이라 조율이 필요 없어요."만 보여 주고 확정 폼이 없다(`src/views/game-schedule/ui/game-schedule-view.tsx:24-37`).
-6. **인원 중복 표기**: 정보 표 "인원 N  / M명"과 참여자 섹션 "참여자 N/M"이 같은 값을 두 번 보여 준다. 정보 표 문자열에는 공백이 두 칸 들어가 있다 (`game-info-table.tsx:24`).
+6. **인원 중복 표기**: 정보 표 "인원 N / M명"과 참여자 섹션 "참여자 N/M"이 같은 값을 두 번 보여 준다. 정보 표 문자열에는 공백이 두 칸 들어가 있다 (`game-info-table.tsx:24`).
 7. **대기 인원 위치**: 대기자 수는 참여자 섹션의 "대기 N명"에만 있고 정보 표에는 없다.
 8. **알림이 응답을 지연**: `joinGame`/`leaveGame`은 Discord 전송(각 최대 8초 타임아웃)을 기다린 뒤 반환한다. 그동안 버튼이 loading 상태로 남는다.
 9. **삭제 후 캐시**: `deleteGame`은 `revalidatePath("/games")`를 호출하지 않는다. `/games`는 `force-dynamic`(`src/app/games/page.tsx:4`)이라 목록에는 영향이 없을 수 있다. Discord 모집 공지와 스레드는 남는다.

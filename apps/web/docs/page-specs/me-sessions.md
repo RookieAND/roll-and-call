@@ -12,26 +12,26 @@
 
 ### 두 라우트의 차이
 
-| 항목 | `/me/sessions/hosted` | `/me/sessions/joined` | 근거 |
-| --- | --- | --- | --- |
-| role | `host` | `player` | page.tsx `:6` |
-| 데이터 | `getGamesByGm(user.id)` | `getJoinedGames(user.id)` | `my-sessions-view.tsx:44-47` |
-| AppBar 제목 | "운영 중인 세션 {N}" | "참여한 세션 {N}" | `:27, :33, :57` |
-| 제목 옆 N (headline) | `recruiting` + `confirmed` 탭 건수 합 | `confirmed` 탭 건수 | `my-sessions-view.tsx` `headlineTabs` |
-| 탭 (순서 = 기본값 우선) | "모집 중"(`recruiting`) / "확정"(`confirmed`) / "종료"(`closed`) | "확정"(`confirmed`) / "대기"(`waiting`) / "종료"(`closed`) | `session-card.ts:14-23` |
-| 기본 탭 | `recruiting` | `confirmed` | `my-sessions-view.tsx:51` |
-| 탭 분류 | confirmed → 확정, closed·finished → 종료, 나머지(recruiting·scheduling·pending_confirm) → 모집 중 | closed·finished → 종료, 배지가 세션 D-n(confirmed, 또는 일시 지정형 모집 중에 내가 대기자가 아님) → 확정, 나머지 → 대기 | `session-card.ts` `hostedTabOf` / `joinedTabOf` |
-| 카드 링크 | 진행 중(`dim=false`)이면 `/games/{id}/participants`, 종료면 `/games/{id}` | 항상 `/games/{id}` | `src/widgets/session-list/ui/session-list.tsx:6-8` |
-| 서브라인 | 상태 단어(굵게) + 인원 또는 일시 | 일시(세션 시각이 있으면)/"일정 미정"(조율형 미확정) + "GM {이름}" | `session-card.ts` `sessionSubline` |
-| 대기 순번 배지 | 없음 | 내가 대기자이고 상태가 `confirmed`가 아니면(조율형 확정 전, 또는 일시 지정형 정원 여유) "대기 {n}번". 상태가 `confirmed`면 대기자여도 초록 "D-{n}" | `session-card.ts:84-86, 127-141` |
+| 항목                    | `/me/sessions/hosted`                                                                             | `/me/sessions/joined`                                                                                                                              | 근거                                               |
+| ----------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| role                    | `host`                                                                                            | `player`                                                                                                                                           | page.tsx `:6`                                      |
+| 데이터                  | `getGamesByGm(user.id)`                                                                           | `getJoinedGames(user.id)`                                                                                                                          | `my-sessions-view.tsx:44-47`                       |
+| AppBar 제목             | "운영 중인 세션 {N}"                                                                              | "참여한 세션 {N}"                                                                                                                                  | `:27, :33, :57`                                    |
+| 제목 옆 N (headline)    | `recruiting` + `confirmed` 탭 건수 합                                                             | `confirmed` 탭 건수                                                                                                                                | `my-sessions-view.tsx` `headlineTabs`              |
+| 탭 (순서 = 기본값 우선) | "모집 중"(`recruiting`) / "확정"(`confirmed`) / "종료"(`closed`)                                  | "확정"(`confirmed`) / "대기"(`waiting`) / "종료"(`closed`)                                                                                         | `session-card.ts:14-23`                            |
+| 기본 탭                 | `recruiting`                                                                                      | `confirmed`                                                                                                                                        | `my-sessions-view.tsx:51`                          |
+| 탭 분류                 | confirmed → 확정, closed·finished → 종료, 나머지(recruiting·scheduling·pending_confirm) → 모집 중 | closed·finished → 종료, 배지가 세션 D-n(confirmed, 또는 일시 지정형 모집 중에 내가 대기자가 아님) → 확정, 나머지 → 대기                            | `session-card.ts` `hostedTabOf` / `joinedTabOf`    |
+| 카드 링크               | 진행 중(`dim=false`)이면 `/games/{id}/participants`, 종료면 `/games/{id}`                         | 항상 `/games/{id}`                                                                                                                                 | `src/widgets/session-list/ui/session-list.tsx:6-8` |
+| 서브라인                | 상태 단어(굵게) + 인원 또는 일시                                                                  | 일시(세션 시각이 있으면)/"일정 미정"(조율형 미확정) + "GM {이름}"                                                                                  | `session-card.ts` `sessionSubline`                 |
+| 대기 순번 배지          | 없음                                                                                              | 내가 대기자이고 상태가 `confirmed`가 아니면(조율형 확정 전, 또는 일시 지정형 정원 여유) "대기 {n}번". 상태가 `confirmed`면 대기자여도 초록 "D-{n}" | `session-card.ts:84-86, 127-141`                   |
 
 ## 2. 접근 조건
 
-| 조건 | 결과 | 근거 |
-| --- | --- | --- |
-| 비로그인 | `redirect("/")` (`next` 없음) | `my-sessions-view.tsx:40-41` |
-| 로그인 | 본인 데이터만. 타인 목록을 보는 경로 없음 | `:44-47` |
-| `?tab=`이 알 수 없는 값이거나 없음 | 에러 없이 역할별 첫 탭으로 대체. URL은 그대로 유지 | `:50-51` |
+| 조건                               | 결과                                               | 근거                         |
+| ---------------------------------- | -------------------------------------------------- | ---------------------------- |
+| 비로그인                           | `redirect("/")` (`next` 없음)                      | `my-sessions-view.tsx:40-41` |
+| 로그인                             | 본인 데이터만. 타인 목록을 보는 경로 없음          | `:44-47`                     |
+| `?tab=`이 알 수 없는 값이거나 없음 | 에러 없이 역할별 첫 탭으로 대체. URL은 그대로 유지 | `:50-51`                     |
 
 - notFound 없음. `src/proxy.ts`에는 경로 가드가 없다.
 - `/me/sessions` 자체에는 `page.tsx`가 없어 전역 not-found("페이지를 찾을 수 없습니다")가 뜬다(`src/app/me/sessions/`에는 `hosted`, `joined`만 있음).
@@ -40,54 +40,54 @@
 
 ### 진입
 
-| 출발 | 요소 | 목적지 | 근거 |
-| --- | --- | --- | --- |
-| `/me` | "참여 예정인 세션" 더 보기 | `/me/sessions/joined` | `src/views/my-page/ui/my-page-view.tsx:48` |
-| `/me` | "운영 중인 세션" 더 보기 | `/me/sessions/hosted` | `:55` |
-| `/me` | "지난 세션 N" | `/me/sessions/joined?tab=closed` 또는 `/me/sessions/hosted?tab=closed` | `src/views/my-page/model/my-page-summary.ts:24-27` |
-| 같은 페이지 | 탭 칩 | `{basePath}?tab={key}` | `my-sessions-view.tsx:61` |
+| 출발        | 요소                       | 목적지                                                                 | 근거                                               |
+| ----------- | -------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------- |
+| `/me`       | "참여 예정인 세션" 더 보기 | `/me/sessions/joined`                                                  | `src/views/my-page/ui/my-page-view.tsx:48`         |
+| `/me`       | "운영 중인 세션" 더 보기   | `/me/sessions/hosted`                                                  | `:55`                                              |
+| `/me`       | "지난 세션 N"              | `/me/sessions/joined?tab=closed` 또는 `/me/sessions/hosted?tab=closed` | `src/views/my-page/model/my-page-summary.ts:24-27` |
+| 같은 페이지 | 탭 칩                      | `{basePath}?tab={key}`                                                 | `my-sessions-view.tsx:61`                          |
 
 그 밖에 `src/` 안에서 `/me/sessions`로 가는 링크는 없다(BottomNav, 홈, 게임 상세 모두 없음).
 
 ### 이탈
 
-| 요소 | 목적지 | 근거 |
-| --- | --- | --- |
-| AppBar 뒤로 | `/me` | `my-sessions-view.tsx:57` |
-| 세션 카드 | §1 표 "카드 링크" | `session-list.tsx:6-8` |
-| BottomNav | `/games`, `/me` (현재 경로가 `/me`로 시작하므로 "마이페이지" 탭 활성) | `src/shared/ui/bottom-nav.tsx:19` |
-| 비로그인 | `/` | `my-sessions-view.tsx:41` |
+| 요소        | 목적지                                                                | 근거                              |
+| ----------- | --------------------------------------------------------------------- | --------------------------------- |
+| AppBar 뒤로 | `/me`                                                                 | `my-sessions-view.tsx:57`         |
+| 세션 카드   | §1 표 "카드 링크"                                                     | `session-list.tsx:6-8`            |
+| BottomNav   | `/games`, `/me` (현재 경로가 `/me`로 시작하므로 "마이페이지" 탭 활성) | `src/shared/ui/bottom-nav.tsx:19` |
+| 비로그인    | `/`                                                                   | `my-sessions-view.tsx:41`         |
 
 ## 4. 데이터
 
 ### params / searchParams
 
-| 이름 | 타입 | 파싱 | 기본값 |
-| --- | --- | --- | --- |
+| 이름  | 타입                                                        | 파싱                                                                        | 기본값                                  |
+| ----- | ----------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------- |
 | `tab` | `string \| undefined` (`Promise<{ tab?: string }>`를 await) | 역할 탭 key 목록에 있는지 `some`으로 확인. 대소문자 변환이나 배열 처리 없음 | host: `recruiting`, player: `confirmed` |
 
 ### 조회
 
-| 호출 | 쿼리 | 근거 |
-| --- | --- | --- |
-| `getGamesByGm` (host) | `games` where `gm_id = user.id`, `created_at desc`, with `gm(username, avatar_url)`, `participants(user_id, status, joined_at)` | `src/shared/server/games.ts:49-58` |
-| `getJoinedGames` (player) | `participants` where `user_id = user.id` (confirmed·waiting 모두), `joined_at desc` → `game` + gm + participants | `src/shared/server/games.ts:60-76` |
+| 호출                      | 쿼리                                                                                                                            | 근거                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `getGamesByGm` (host)     | `games` where `gm_id = user.id`, `created_at desc`, with `gm(username, avatar_url)`, `participants(user_id, status, joined_at)` | `src/shared/server/games.ts:49-58` |
+| `getJoinedGames` (player) | `participants` where `user_id = user.id` (confirmed·waiting 모두), `joined_at desc` → `game` + gm + participants                | `src/shared/server/games.ts:60-76` |
 
 필터 조건 없이 전체를 가져온 뒤 메모리에서 버킷으로 나눈다. 페이지네이션 없음.
 
 ### 카드 필드 (`toSessionCard`, `session-card.ts:59-110`)
 
-| 모델 필드 | 원천 |
-| --- | --- |
-| `id`, `title`, `round` | `games.id`, `games.title`, `games.round` |
-| `state` | `deriveSessionState({ games.confirmed_at, games.end_date, games.max_players, confirmedCount, games.schedule_mode })` (`src/entities/game/model/session.ts:18-41`) |
-| confirmedCount | `participants.status = confirmed` 수 (`countConfirmed`) |
-| `badge` | §5 SessionBadge |
-| `urgent` | 배지가 deadline이고 `games.end_date`까지 0~24시간 (`src/entities/game/model/deadline.ts:4-7`) |
-| `lead` / `rest` | 역할·상태별 서브라인 |
-| `dim` | state가 `closed` 또는 `finished` |
-| GM 이름 | `profiles.username` (gm 관계) ?? `"?"` |
-| 대기 순번 | `participants.joined_at` 오름차순 정렬 후 waiting 중 1부터 (`src/entities/game/model/split-roster.ts:18-35`) |
+| 모델 필드              | 원천                                                                                                                                                              |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`, `title`, `round` | `games.id`, `games.title`, `games.round`                                                                                                                          |
+| `state`                | `deriveSessionState({ games.confirmed_at, games.end_date, games.max_players, confirmedCount, games.schedule_mode })` (`src/entities/game/model/session.ts:18-41`) |
+| confirmedCount         | `participants.status = confirmed` 수 (`countConfirmed`)                                                                                                           |
+| `badge`                | §5 SessionBadge                                                                                                                                                   |
+| `urgent`               | 배지가 deadline이고 `games.end_date`까지 0~24시간 (`src/entities/game/model/deadline.ts:4-7`)                                                                     |
+| `lead` / `rest`        | 역할·상태별 서브라인                                                                                                                                              |
+| `dim`                  | state가 `closed` 또는 `finished`                                                                                                                                  |
+| GM 이름                | `profiles.username` (gm 관계) ?? `"?"`                                                                                                                            |
+| 대기 순번              | `participants.joined_at` 오름차순 정렬 후 waiting 중 1부터 (`src/entities/game/model/split-roster.ts:18-35`)                                                      |
 
 상태 판정 순서(`session.ts` `deriveSessionState`):
 
@@ -102,21 +102,21 @@
 
 ### 정렬 ("가까운 순", `session-card.ts:200-205, 230-235`)
 
-| 탭 | 키 | 방향 |
-| --- | --- | --- |
-| `confirmed` | `confirmed_at` | 오름차순 |
-| `closed` | `confirmed_at ?? end_date` | 내림차순(최근 것부터) |
-| 그 외(`recruiting`, `waiting`) | `end_date` | 오름차순 |
+| 탭                             | 키                         | 방향                  |
+| ------------------------------ | -------------------------- | --------------------- |
+| `confirmed`                    | `confirmed_at`             | 오름차순              |
+| `closed`                       | `confirmed_at ?? end_date` | 내림차순(최근 것부터) |
+| 그 외(`recruiting`, `waiting`) | `end_date`                 | 오름차순              |
 
 ### 대기열(대기 신청) 표시 — `/me/sessions/joined` "대기" 탭
 
 **어떤 카드가 "대기" 탭에 들어가는가.** `joinedTabOf`(`session-card.ts:205-209`)는 종료(`dim`)면 "종료", 배지가 세션 D-n이면 "확정", 나머지는 전부 "대기"다. 배지는 `sessionBadge`(`session-card.ts:127-141`) 순서로 정해진다: ① 종료 → 없음 ② 상태 `confirmed` + `confirmed_at` → 세션 D-n ③ 내가 대기자(`myWait != null`) → "대기 {n}번" ④ 참여자 + `confirmed_at` → 세션 D-n ⑤ 그 외 "마감 D-n". 그래서 "대기" 탭에는 두 종류가 섞인다.
 
-| 카드 | 조건 | 배지 | 서브라인 |
-| --- | --- | --- | --- |
-| 대기자 본인 · 조율형 | `participants.status = waiting`, `confirmed_at` 없음, 기한 전 | 회색 "대기 {n}번" | "일정 미정 · 마감 {M/D} · GM {이름}" |
-| 대기자 본인 · 일시 지정형 | `waiting`, 확정 인원 < 정원(정원을 늘렸거나 대기 행이 남은 경우), 기한 전 → 상태 `recruiting` | 회색 "대기 {n}번" | "{일시} · GM {이름}" (`session-card.ts:187-189`) |
-| 확정 참여자 · 조율형 일정 미정 | `status = confirmed`, `confirmed_at` 없음, 기한 전 | "마감 D-{n}"(24시간 이내면 빨강 + 카드 강조) | "일정 미정 · 마감 {M/D} · GM {이름}" |
+| 카드                           | 조건                                                                                          | 배지                                         | 서브라인                                         |
+| ------------------------------ | --------------------------------------------------------------------------------------------- | -------------------------------------------- | ------------------------------------------------ |
+| 대기자 본인 · 조율형           | `participants.status = waiting`, `confirmed_at` 없음, 기한 전                                 | 회색 "대기 {n}번"                            | "일정 미정 · 마감 {M/D} · GM {이름}"             |
+| 대기자 본인 · 일시 지정형      | `waiting`, 확정 인원 < 정원(정원을 늘렸거나 대기 행이 남은 경우), 기한 전 → 상태 `recruiting` | 회색 "대기 {n}번"                            | "{일시} · GM {이름}" (`session-card.ts:187-189`) |
+| 확정 참여자 · 조율형 일정 미정 | `status = confirmed`, `confirmed_at` 없음, 기한 전                                            | "마감 D-{n}"(24시간 이내면 빨강 + 카드 강조) | "일정 미정 · 마감 {M/D} · GM {이름}"             |
 
 - 대기자여도 "대기" 탭에 오지 않는 경우: 상태가 `confirmed`(GM이 세션을 확정했거나, 일시 지정형이 정원을 채움)면 ②가 먼저 걸려 초록 "D-{n}" + "{일시} · GM {이름}"으로 **"확정" 탭**에 간다. 일시 지정형 게임에서 대기자가 생기는 정상 경로(정원 초과 신청)는 곧 확정 인원 ≥ 정원이므로 대부분 이쪽이다(`src/entities/game/model/session.ts:38-44`).
 - 기한이 지났는데 확정 없음(`closed`)이거나 세션이 지나면(`finished`) 대기자 카드도 "종료" 탭, 배지 없음, 흐린 서브라인이다.
@@ -131,15 +131,15 @@
 
 **카드가 바뀌는 시점** (모두 서버 재렌더 시 반영, 이 경로를 `revalidatePath`하는 액션은 없고 페이지가 `force-dynamic`)
 
-| 사건 | 결과 | 근거 |
-| --- | --- | --- |
-| 앞 대기자가 취소·승격·다음 회차로 이동 | 같은 탭에서 번호만 당겨진다 | `splitRoster` 재계산 |
-| 내가 승격됨(GM "확정으로", 또는 GM이 확정자를 "대기로 이동"·"내보내기"해 대기 맨 앞이 자동 확정) | 조율형 일정 미정: "대기" 탭에 남고 배지가 "마감 D-{n}"으로 바뀜. 일시 지정형: 초록 "D-{n}"으로 "확정" 탭 이동(`/me` "참여 예정"에도 추가) | `adjust-roster.ts:21-71, 143-159` |
-| 내가 대기 취소 | 참여 행 삭제 → 세 탭 어디에도 없음 | `src/features/join-game/api/leave-game.ts:24-36` (대기자는 조건 없이 취소 가능, 세션 잠김 후 제외) |
-| GM이 세션 확정(조율형) | 여전히 `waiting`이지만 초록 "D-{n}"으로 "확정" 탭 이동 | `confirm-session.ts:14-19`(참여 행 미변경) |
-| 모집 기한 경과(확정 없음) | "종료" 탭, 배지 없음, "마감 {M/D} · GM {이름}" | `session.ts:46` |
-| GM이 다음 회차를 열어 대기자 승계 | 원본 게임 카드가 사라지고 새 회차 카드("{n}회차" 배지)가 생김. 새 회차 정원 안이면 확정 참여자, 초과면 다시 대기자 | `create-second-round.ts` (원본 참여 행 삭제 + 새 게임에 삽입) |
-| 게임 삭제 | FK cascade로 사라짐 | `schema.ts` |
+| 사건                                                                                             | 결과                                                                                                                                      | 근거                                                                                               |
+| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| 앞 대기자가 취소·승격·다음 회차로 이동                                                           | 같은 탭에서 번호만 당겨진다                                                                                                               | `splitRoster` 재계산                                                                               |
+| 내가 승격됨(GM "확정으로", 또는 GM이 확정자를 "대기로 이동"·"내보내기"해 대기 맨 앞이 자동 확정) | 조율형 일정 미정: "대기" 탭에 남고 배지가 "마감 D-{n}"으로 바뀜. 일시 지정형: 초록 "D-{n}"으로 "확정" 탭 이동(`/me` "참여 예정"에도 추가) | `adjust-roster.ts:21-71, 143-159`                                                                  |
+| 내가 대기 취소                                                                                   | 참여 행 삭제 → 세 탭 어디에도 없음                                                                                                        | `src/features/join-game/api/leave-game.ts:24-36` (대기자는 조건 없이 취소 가능, 세션 잠김 후 제외) |
+| GM이 세션 확정(조율형)                                                                           | 여전히 `waiting`이지만 초록 "D-{n}"으로 "확정" 탭 이동                                                                                    | `confirm-session.ts:14-19`(참여 행 미변경)                                                         |
+| 모집 기한 경과(확정 없음)                                                                        | "종료" 탭, 배지 없음, "마감 {M/D} · GM {이름}"                                                                                            | `session.ts:46`                                                                                    |
+| GM이 다음 회차를 열어 대기자 승계                                                                | 원본 게임 카드가 사라지고 새 회차 카드("{n}회차" 배지)가 생김. 새 회차 정원 안이면 확정 참여자, 초과면 다시 대기자                        | `create-second-round.ts` (원본 참여 행 삭제 + 새 게임에 삽입)                                      |
+| 게임 삭제                                                                                        | FK cascade로 사라짐                                                                                                                       | `schema.ts`                                                                                        |
 
 **대기 신청 끔 게임** (`games.waitlist_enabled = false`, 마이그레이션 `drizzle/0009_game_images_waitlist.sql`)
 
@@ -184,45 +184,44 @@ Container(size="sm") > div.py-3
   - 2행: `lead`(굵게, `text-gray-600`) + " · " + `rest`. `body4`이고 `dim`이면 hint 색, 아니면 muted. truncate.
 - **SessionBadge**: `src/widgets/session-list/ui/session-badge.tsx:15-25` (`"use client"`)
 
-  | kind | 조건 (`session-card.ts:112-136`) | 표시 | 색 |
-  | --- | --- | --- | --- |
-  | `none` | closed/finished | 렌더 안 함 | — |
-  | `session` | state `confirmed` | "D-{dday(confirmed_at)}" | 초록 `bg-success-100 text-success-700` |
-  | `waiting` | player이고 내가 waiting(확정 전) | "대기 {n}번" | 회색 |
-  | `session` | player이고 `confirmed_at`이 있음(일시 지정형 모집 중), 내가 대기자가 아님 | "D-{dday(confirmed_at)}" | 초록 |
-  | `deadline` | 그 외 | "마감 D-{dday(end_date)}" | 24시간 이내면 빨강 `bg-danger-100 text-danger-600`, 아니면 회색 |
-
+  | kind       | 조건 (`session-card.ts:112-136`)                                          | 표시                      | 색                                                              |
+  | ---------- | ------------------------------------------------------------------------- | ------------------------- | --------------------------------------------------------------- |
+  | `none`     | closed/finished                                                           | 렌더 안 함                | —                                                               |
+  | `session`  | state `confirmed`                                                         | "D-{dday(confirmed_at)}"  | 초록 `bg-success-100 text-success-700`                          |
+  | `waiting`  | player이고 내가 waiting(확정 전)                                          | "대기 {n}번"              | 회색                                                            |
+  | `session`  | player이고 `confirmed_at`이 있음(일시 지정형 모집 중), 내가 대기자가 아님 | "D-{dday(confirmed_at)}"  | 초록                                                            |
+  | `deadline` | 그 외                                                                     | "마감 D-{dday(end_date)}" | 24시간 이내면 빨강 `bg-danger-100 text-danger-600`, 아니면 회색 |
   - `dday`는 사용자 로컬 날짜 기준 일수 차이다. 당일이면 "D-0"(`src/shared/lib/format.ts:48-53`).
 
 - **서브라인 문구** (`session-card.ts:151-185`). 날짜 형식: 일시 "8월 16일 (일) 20:00"(KST 24h, `format.ts:2-17`), 마감 "8/17"(`format.ts:20-31`).
 
-  | 역할 | state | lead | rest |
-  | --- | --- | --- | --- |
-  | host | recruiting | "모집 중" | "{확정} / {정원}명" |
-  | host | scheduling | "조율 중" | "{확정} / {정원}명" |
-  | host | pending_confirm | "확정 대기" | "신청 {전체 참여자 수}명 · 정원 {정원}명" |
-  | host | confirmed, finished | — | "{일시}" |
-  | host | closed | — | "마감 {M/D}" |
-  | player | confirmed, finished | — | "{일시} · GM {이름}" |
-  | player | closed | — | "마감 {M/D} · GM {이름}" |
-  | player | recruiting (일시 지정형, `confirmed_at` 있음) | — | "{일시} · GM {이름}" |
-  | player | recruiting, scheduling, pending_confirm (`confirmed_at` 없음) | — | "일정 미정 · 마감 {M/D} · GM {이름}" |
+  | 역할   | state                                                         | lead        | rest                                      |
+  | ------ | ------------------------------------------------------------- | ----------- | ----------------------------------------- |
+  | host   | recruiting                                                    | "모집 중"   | "{확정} / {정원}명"                       |
+  | host   | scheduling                                                    | "조율 중"   | "{확정} / {정원}명"                       |
+  | host   | pending_confirm                                               | "확정 대기" | "신청 {전체 참여자 수}명 · 정원 {정원}명" |
+  | host   | confirmed, finished                                           | —           | "{일시}"                                  |
+  | host   | closed                                                        | —           | "마감 {M/D}"                              |
+  | player | confirmed, finished                                           | —           | "{일시} · GM {이름}"                      |
+  | player | closed                                                        | —           | "마감 {M/D} · GM {이름}"                  |
+  | player | recruiting (일시 지정형, `confirmed_at` 있음)                 | —           | "{일시} · GM {이름}"                      |
+  | player | recruiting, scheduling, pending_confirm (`confirmed_at` 없음) | —           | "일정 미정 · 마감 {M/D} · GM {이름}"      |
 
 ## 6. 상태별 화면
 
-| 상태 | 화면 |
-| --- | --- |
-| 로딩 | `src/app/me/**`에 `loading.tsx` 없음. 탭 전환도 서버 왕복이며 전환 중 표시가 없다 |
-| 빈 상태 | 활성 탭 0건이면 "해당하는 세션이 없습니다". 전체 0건이어도 같은 문구이고 CTA 없음 |
-| 에러 | 전역 `src/app/error.tsx`: "문제가 발생했습니다" / "잠시 후 다시 시도해 주세요." / "다시 시도" |
-| 잘못된 tab | 첫 탭으로 대체 표시 |
-| 도메인: 모집 중/조율 중/확정 대기 | host는 "모집 중" 탭, player는 "대기" 탭(단, 일시 지정형 모집 중에 확정 참여했으면 "확정" 탭). lead 문구로 구분(host만) |
-| 도메인: 확정 | 두 역할 모두 "확정" 탭, 초록 D-n |
-| 도메인: 무산(closed)·플레이 완료(finished) | "종료" 탭, 배지 없음, 흐린 서브라인. host 카드는 상세(`/games/{id}`)로 이동 |
-| 도메인: 마감 24시간 이내 | 빨강 카드 + 빨강 "마감 D-n" |
-| 도메인: 대기자 | player "대기" 탭에서 "대기 {n}번" 배지. 조율형에서 확정 참여자이지만 일정 미정인 카드도 같은 "대기" 탭에 "마감 D-n" 배지로 섞인다 |
-| 대기열(대기 신청) 표시 | 세션이 확정된(`confirmed`) 게임의 대기자는 "확정" 탭에 초록 D-n. 기한 경과·세션 종료면 "종료" 탭. 대기 신청 끔 게임도 표시 규칙이 같다. 상세는 §4 "대기열(대기 신청) 표시" |
-| 권한별 | host/player 라우트 분리(§1 표). GM은 자기 구인글에 참여할 수 없어서("GM은 참여자로 참여할 수 없습니다.", `src/features/join-game/api/join-game.ts:32-33`) 한 게임이 두 목록에 함께 나오지 않는다 |
+| 상태                                       | 화면                                                                                                                                                                                             |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 로딩                                       | `src/app/me/**`에 `loading.tsx` 없음. 탭 전환도 서버 왕복이며 전환 중 표시가 없다                                                                                                                |
+| 빈 상태                                    | 활성 탭 0건이면 "해당하는 세션이 없습니다". 전체 0건이어도 같은 문구이고 CTA 없음                                                                                                                |
+| 에러                                       | 전역 `src/app/error.tsx`: "문제가 발생했습니다" / "잠시 후 다시 시도해 주세요." / "다시 시도"                                                                                                    |
+| 잘못된 tab                                 | 첫 탭으로 대체 표시                                                                                                                                                                              |
+| 도메인: 모집 중/조율 중/확정 대기          | host는 "모집 중" 탭, player는 "대기" 탭(단, 일시 지정형 모집 중에 확정 참여했으면 "확정" 탭). lead 문구로 구분(host만)                                                                           |
+| 도메인: 확정                               | 두 역할 모두 "확정" 탭, 초록 D-n                                                                                                                                                                 |
+| 도메인: 무산(closed)·플레이 완료(finished) | "종료" 탭, 배지 없음, 흐린 서브라인. host 카드는 상세(`/games/{id}`)로 이동                                                                                                                      |
+| 도메인: 마감 24시간 이내                   | 빨강 카드 + 빨강 "마감 D-n"                                                                                                                                                                      |
+| 도메인: 대기자                             | player "대기" 탭에서 "대기 {n}번" 배지. 조율형에서 확정 참여자이지만 일정 미정인 카드도 같은 "대기" 탭에 "마감 D-n" 배지로 섞인다                                                                |
+| 대기열(대기 신청) 표시                     | 세션이 확정된(`confirmed`) 게임의 대기자는 "확정" 탭에 초록 D-n. 기한 경과·세션 종료면 "종료" 탭. 대기 신청 끔 게임도 표시 규칙이 같다. 상세는 §4 "대기열(대기 신청) 표시"                       |
+| 권한별                                     | host/player 라우트 분리(§1 표). GM은 자기 구인글에 참여할 수 없어서("GM은 참여자로 참여할 수 없습니다.", `src/features/join-game/api/join-game.ts:32-33`) 한 게임이 두 목록에 함께 나오지 않는다 |
 
 ## 7. 폼과 유효성 검사
 
