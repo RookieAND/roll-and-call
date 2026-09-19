@@ -25,9 +25,15 @@ export const setToken = (t: string) => localStorage.setItem(TOKEN_KEY, t);
 export const clearToken = () => localStorage.removeItem(TOKEN_KEY);
 
 // shared/auth/session.ts
-export interface Session { userId: string; email: string; role: "admin" | "user" }
+export interface Session {
+  userId: string;
+  email: string;
+  role: "admin" | "user";
+}
 // useSession depends on the auth provider (React Context, Zustand, etc.)
-export const useSession = (): Session | null => { /* ... */ };
+export const useSession = (): Session | null => {
+  /* ... */
+};
 ```
 
 The `shared/auth/index.ts` re-exports from these files following the
@@ -276,13 +282,13 @@ token into the client carries the failure back out.
 
 The location of type definitions follows the same rules as any other code:
 
-| Type scope | Location |
-| --- | --- |
-| API response/request shapes shared across the app | Domain-named files in `shared/api/` (e.g., `shared/api/product.ts`) |
-| Types for a specific entity's domain model | `entities/<name>/model/<name>.ts` |
-| Types used only within one page | `pages/<name>/model/<name>.ts` |
-| Types used only within one feature | `features/<name>/model/<name>.ts` |
-| Generic utility types (e.g., `Nullable<T>`) | Purpose-named files in `shared/lib/` (e.g., `shared/lib/nullable.ts`) |
+| Type scope                                        | Location                                                              |
+| ------------------------------------------------- | --------------------------------------------------------------------- |
+| API response/request shapes shared across the app | Domain-named files in `shared/api/` (e.g., `shared/api/product.ts`)   |
+| Types for a specific entity's domain model        | `entities/<name>/model/<name>.ts`                                     |
+| Types used only within one page                   | `pages/<name>/model/<name>.ts`                                        |
+| Types used only within one feature                | `features/<name>/model/<name>.ts`                                     |
+| Generic utility types (e.g., `Nullable<T>`)       | Purpose-named files in `shared/lib/` (e.g., `shared/lib/nullable.ts`) |
 
 Per Rule 4-4 (domain-based file naming), avoid grouping all types in
 `types.ts` or `utils.ts`. A file named `types.ts` cannot answer "types
@@ -324,8 +330,7 @@ export const fromProductDTO = (dto: ProductDTO): Product => ({
 });
 
 // a rule, not a stored flag: it follows the price rather than a snapshot
-export const isOnSale = (product: Product) =>
-  product.price < product.listPrice && product.inStock;
+export const isOnSale = (product: Product) => product.price < product.listPrice && product.inStock;
 ```
 
 **Key principle:** Raw API shapes go in `shared/api/`. A domain model stays
@@ -375,7 +380,8 @@ export const createCrudApi = <T>(resource: string) => ({
   getAll: () => apiClient.get<T[]>(`/${resource}`).then((r) => r.data),
   getById: (id: string) => apiClient.get<T>(`/${resource}/${id}`).then((r) => r.data),
   create: (data: Partial<T>) => apiClient.post<T>(`/${resource}`, data).then((r) => r.data),
-  update: (id: string, data: Partial<T>) => apiClient.put<T>(`/${resource}/${id}`, data).then((r) => r.data),
+  update: (id: string, data: Partial<T>) =>
+    apiClient.put<T>(`/${resource}/${id}`, data).then((r) => r.data),
   remove: (id: string) => apiClient.delete(`/${resource}/${id}`),
 });
 

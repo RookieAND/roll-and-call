@@ -124,10 +124,10 @@ my-nextjs-project/
 
 ```typescript
 // pages/example/index.tsx
-export { Example as default } from '@/_pages/example';
+export { Example as default } from "@/_pages/example";
 
 // pages/_app.tsx: re-export the custom App from src/_app/custom-app
-export { App as default } from '@/_app/custom-app';
+export { App as default } from "@/_app/custom-app";
 ```
 
 The custom App implementation lives in `src/_app/custom-app/` and exposes
@@ -165,7 +165,7 @@ become thin re-exports.
 
 ```typescript
 // src/_app/api-routes/get-example-data.ts
-import { getExamplesList } from '@/shared/db';
+import { getExamplesList } from "@/shared/db";
 
 export const getExampleData = () => {
   try {
@@ -174,32 +174,32 @@ export const getExampleData = () => {
   } catch {
     return Response.json(null, {
       status: 500,
-      statusText: 'Ouch, something went wrong',
+      statusText: "Ouch, something went wrong",
     });
   }
 };
 
 // src/_app/api-routes/index.ts
-export { getExampleData } from './get-example-data';
+export { getExampleData } from "./get-example-data";
 
 // app/api/example/route.ts
-export { getExampleData as GET } from '@/_app/api-routes';
+export { getExampleData as GET } from "@/_app/api-routes";
 ```
 
 **Pages Router:**
 
 ```typescript
 // src/_app/api-routes/get-example-data.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from "next";
 
-const config = { api: { bodyParser: { sizeLimit: '1mb' } }, maxDuration: 5 };
+const config = { api: { bodyParser: { sizeLimit: "1mb" } }, maxDuration: 5 };
 const handler = (req: NextApiRequest, res: NextApiResponse) =>
-  res.status(200).json({ message: 'Hello from FSD' });
+  res.status(200).json({ message: "Hello from FSD" });
 
 export const getExampleData = { config, handler } as const;
 
 // pages/api/example.ts
-import { getExampleData } from '@/_app/api-routes';
+import { getExampleData } from "@/_app/api-routes";
 export const config = getExampleData.config;
 export default getExampleData.handler;
 ```

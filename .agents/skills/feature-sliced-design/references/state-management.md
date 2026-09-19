@@ -37,10 +37,13 @@ when a business rule needs a shape the backend does not send.
 // shared/api/todo.ts
 import { apiClient } from "./client";
 
-export interface TodoDto { id: string; title: string; completed: boolean }
+export interface TodoDto {
+  id: string;
+  title: string;
+  completed: boolean;
+}
 
-export const getTodos = (): Promise<TodoDto[]> =>
-  apiClient.get("/todos").then((r) => r.data);
+export const getTodos = (): Promise<TodoDto[]> => apiClient.get("/todos").then((r) => r.data);
 ```
 
 ```typescript
@@ -48,7 +51,10 @@ export const getTodos = (): Promise<TodoDto[]> =>
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getTodos, type TodoDto } from "@/shared/api";
 
-interface TodoState { items: TodoDto[]; loading: boolean }
+interface TodoState {
+  items: TodoDto[];
+  loading: boolean;
+}
 
 export const fetchTodos = createAsyncThunk("todos/fetch", getTodos);
 
@@ -63,7 +69,9 @@ const todoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTodos.pending, (state) => { state.loading = true; })
+      .addCase(fetchTodos.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(fetchTodos.fulfilled, (state, action) => {
         state.items = action.payload;
         state.loading = false;
@@ -113,8 +121,7 @@ import { setCompleted } from "@/entities/todo";
 
 export const useToggleTodo = () => {
   const dispatch = useDispatch();
-  return (id: string, current: boolean) =>
-    dispatch(setCompleted({ id, completed: !current }));
+  return (id: string, current: boolean) => dispatch(setCompleted({ id, completed: !current }));
 };
 ```
 
@@ -201,8 +208,10 @@ accepted:
    export const useUpdateExample = () => {
      const queryClient = useQueryClient();
      return useMutation({
-       mutationFn: ({ id, newTitle }) => apiClient.patch(`/posts/${id}`, { title: newTitle }).then((r) => r.data),
-       onSuccess: (newPost, { id }) => queryClient.setQueryData(POST_QUERIES.detail({ id }).queryKey, newPost),
+       mutationFn: ({ id, newTitle }) =>
+         apiClient.patch(`/posts/${id}`, { title: newTitle }).then((r) => r.data),
+       onSuccess: (newPost, { id }) =>
+         queryClient.setQueryData(POST_QUERIES.detail({ id }).queryKey, newPost),
      });
    };
    ```
@@ -226,15 +235,17 @@ import { getPosts, getDetailPost, type DetailPostQuery } from "./get-posts";
 export const POST_QUERIES = {
   all: () => ["posts"],
   lists: () => [...POST_QUERIES.all(), "list"],
-  list: (page: number, limit: number) => queryOptions({
-    queryKey: [...POST_QUERIES.lists(), page, limit],
-    queryFn: () => getPosts(page, limit),
-    placeholderData: (prev) => prev,
-  }),
-  detail: (query?: DetailPostQuery) => queryOptions({
-    queryKey: [...POST_QUERIES.all(), "detail", query?.id],
-    queryFn: () => getDetailPost({ id: query?.id }),
-  }),
+  list: (page: number, limit: number) =>
+    queryOptions({
+      queryKey: [...POST_QUERIES.lists(), page, limit],
+      queryFn: () => getPosts(page, limit),
+      placeholderData: (prev) => prev,
+    }),
+  detail: (query?: DetailPostQuery) =>
+    queryOptions({
+      queryKey: [...POST_QUERIES.all(), "detail", query?.id],
+      queryFn: () => getDetailPost({ id: query?.id }),
+    }),
 };
 ```
 
@@ -315,10 +326,11 @@ import { useMutationState } from "@tanstack/react-query";
 import { POST_MUTATIONS } from "@/shared/api/post";
 
 export const SaveIndicator = () => {
-  const isPending = useMutationState({
-    filters: { mutationKey: POST_MUTATIONS.updateTitle(), status: "pending" },
-    select: (m) => m.state.status,
-  }).length > 0;
+  const isPending =
+    useMutationState({
+      filters: { mutationKey: POST_MUTATIONS.updateTitle(), status: "pending" },
+      select: (m) => m.state.status,
+    }).length > 0;
   return isPending && <span>Saving...</span>;
 };
 ```
@@ -365,7 +377,9 @@ Standardize base URL, headers, and JSON handling in a single class in
 // src/shared/api/api-client.ts
 export class ApiClient {
   #baseUrl: string;
-  constructor(url: string) { this.#baseUrl = url; }
+  constructor(url: string) {
+    this.#baseUrl = url;
+  }
 
   async #handle<T>(response: Response): Promise<T> {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);

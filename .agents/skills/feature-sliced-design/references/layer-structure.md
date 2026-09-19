@@ -386,7 +386,7 @@ Custom segments are allowed when needed (for example, `routes` and `i18n`
 in the Shared layer, or `auth` for token storage when split out from
 `shared/api`).
 
-### Group by what it is *for*, not by what it *is*
+### Group by what it is _for_, not by what it _is_
 
 Segment names describe **purpose**, not the kind of code they hold. This
 is the desegmentation principle:

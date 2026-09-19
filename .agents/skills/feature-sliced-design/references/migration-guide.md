@@ -147,7 +147,7 @@ work outward.
 
 ### Before you start
 
-The most important question to ask the team is: *do you really need it?*
+The most important question to ask the team is: _do you really need it?_
 Some projects are perfectly fine without FSD. Reasons to consider the
 switch:
 
