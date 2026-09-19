@@ -10,6 +10,9 @@ html {
   scrollbar-color: var(--color-gray-300) transparent;
 }
 
+/* Tailwind v4의 dark: 기본값은 미디어 쿼리다. 테마는 html.dark 클래스로 바꾸므로 변형을 다시 건다. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* 숫자 스피너·파일 선택 등 브라우저 기본 컨트롤이 테마를 따라오게 한다. */
 :root {
   color-scheme: light;
