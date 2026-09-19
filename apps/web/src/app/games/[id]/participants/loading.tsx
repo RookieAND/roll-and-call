@@ -1,8 +1,9 @@
-import { Container, Skeleton, VStack } from "@trpg/ui";
+import { Container, Grid, Skeleton, VStack } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
 const ROSTER_ROW_COUNT = 3;
+const STAT_COUNT = 2;
 
 export default function Loading() {
   return (
@@ -10,10 +11,14 @@ export default function Loading() {
       <AppBar back="/games" title="참여자 관리" />
       <Container size="md">
         <VStack gap={5} className="py-4">
-          <VStack gap={2}>
-            <Skeleton className="h-5 w-40" />
-            <Skeleton className="h-7 w-28" />
-            <Skeleton className="h-5 w-52" />
+          <VStack gap={3}>
+            <Skeleton className="h-6 w-52" />
+            <Grid cols={2} gap={2}>
+              {Array.from({ length: STAT_COUNT }).map((_, index) => (
+                <Skeleton key={index} className="h-[66px] rounded-xl" />
+              ))}
+            </Grid>
+            <Skeleton className="h-[46px] rounded-xl" />
             <Skeleton className="h-[17px] w-60" />
           </VStack>
 
@@ -28,7 +33,6 @@ export default function Loading() {
                   key={index}
                   className="flex min-h-14 items-center gap-3 border-t border-gray-100 px-3 py-2 first:border-t-0"
                 >
-                  <Skeleton className="h-4 w-5" />
                   <Skeleton className="h-[34px] w-[34px] rounded-full" />
                   <Skeleton className="h-[17px] w-24" />
                 </div>

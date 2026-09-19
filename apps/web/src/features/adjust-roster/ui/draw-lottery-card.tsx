@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Text, VStack } from "@trpg/ui";
+import { Button, Card, Text, VStack, cn } from "@trpg/ui";
 import { useState } from "react";
 
 import { ConfirmDialog, toast, useAction } from "@/shared/ui";
@@ -50,10 +50,11 @@ export function DrawLotteryCard({
 
   return (
     <>
-      <Card padding="md">
+      {/* 마감 뒤에는 남은 할 일이 이것뿐이라 카드째 강조하고, 마감 전에는 한 블록으로 둔다. */}
+      <Card padding="md" className={cn(deadlinePassed && "border-primary-600 bg-tinted-bg")}>
         <VStack gap={3}>
           <VStack gap={1}>
-            <Text typography="subtitle2">{title}</Text>
+            <Text typography="subtitle1">{title}</Text>
             <Text typography="body3" foreground="muted" render={<p />}>
               신청한 {applicantCount}명 중 {drawnCount}명이 확정, 나머지 {leftoverCount}명은 대기로
               남습니다.
@@ -62,7 +63,7 @@ export function DrawLotteryCard({
             </Text>
           </VStack>
           <Button
-            variant={deadlinePassed ? "solid" : "outline"}
+            variant={deadlinePassed ? "solid" : "tinted"}
             className="h-11 w-full"
             loading={pending}
             onClick={() => (deadlinePassed ? draw() : setConfirming(true))}

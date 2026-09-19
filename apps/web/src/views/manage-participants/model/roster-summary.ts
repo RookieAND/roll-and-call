@@ -3,8 +3,6 @@ import { ddayKst, formatDateTime } from "@/shared/lib";
 
 import type { ManagedMember } from "./managed-member";
 
-const DEADLINE_WARN_DAYS = 3;
-
 // 서버에서 계산해 날짜 경계에서 값이 갈리지 않게 한다.
 export function summarizeRoster({
   confirmed,
@@ -39,7 +37,6 @@ export function summarizeRoster({
     applicantCount: confirmed.length + waiting.length,
     deadlineAt: formatDateTime(endDate),
     deadlineLabel: passed ? "마감됨" : daysLeft === 0 ? "오늘" : `D-${daysLeft}`,
-    deadlineWarn: !passed && daysLeft <= DEADLINE_WARN_DAYS,
     deadlinePassed: passed,
     daysLeft: Math.max(daysLeft, 0),
     drawnAtLabel: drawnAt ? formatDateTime(drawnAt) : null,

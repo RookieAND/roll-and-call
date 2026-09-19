@@ -1,6 +1,6 @@
 "use client";
 
-import { Text } from "@trpg/ui";
+import { Text, cn } from "@trpg/ui";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { Sheet, useAction } from "@/shared/ui";
@@ -38,7 +38,11 @@ export function PromoteMemberItem({
   }
 
   return (
-    <Sheet.Item disabled={pending || isFull} onClick={promote}>
+    <Sheet.Item
+      disabled={pending || isFull}
+      onClick={promote}
+      className={cn("font-semibold", !isFull && "text-tinted-ink")}
+    >
       확정시키기
       <Text typography="body4" foreground="hint" render={<span />} className="text-right">
         {isFull ? (

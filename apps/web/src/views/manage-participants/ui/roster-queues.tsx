@@ -8,6 +8,7 @@ import { MemberSheet } from "@/features/adjust-roster";
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { availabilityNote } from "./availability-note";
+import { ExpandableRows } from "./expandable-rows";
 import { MemberMenuButton } from "./member-menu-button";
 import { RosterQueue } from "./roster-queue";
 import { RosterRow } from "./roster-row";
@@ -85,16 +86,18 @@ export function RosterQueues({
             )
           }
         >
-          {waiting.map((member) => (
-            <RosterRow
-              key={member.userId}
-              member={member}
-              rank={member.waitlistRank}
-              note={noteOf(member)}
-              warn={isCoordinate && !member.hasAvailability}
-              action={rowAction(member)}
-            />
-          ))}
+          <ExpandableRows>
+            {waiting.map((member) => (
+              <RosterRow
+                key={member.userId}
+                member={member}
+                rank={member.waitlistRank}
+                note={noteOf(member)}
+                warn={isCoordinate && !member.hasAvailability}
+                action={rowAction(member)}
+              />
+            ))}
+          </ExpandableRows>
         </RosterQueue>
       )}
 

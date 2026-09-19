@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { Card, Text } from "@trpg/ui";
 
 export function DrawResultNote({
   drawnAtLabel,
@@ -8,8 +8,10 @@ export function DrawResultNote({
   applicantCount: number;
 }) {
   return (
-    <Text typography="body3" foreground="muted" render={<p />}>
-      {drawnAtLabel}에 추첨했습니다. 결과는 신청자 {applicantCount}명 모두에게 갔습니다.
-    </Text>
+    <Card padding="none" className="rounded-xl px-3.5 py-3">
+      <Text typography="body4" foreground="muted" render={<p />}>
+        {drawnAtLabel}에 추첨했습니다. 결과는 신청자 {applicantCount}명 모두에게 갔습니다.
+      </Text>
+    </Card>
   );
 }

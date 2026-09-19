@@ -15,7 +15,7 @@ export function CopyLinkButton({ gameId }: { gameId: string }) {
   }
 
   return (
-    <Button variant="outline" className="h-11 w-full" onClick={copy}>
+    <Button className="h-11 w-full" onClick={copy}>
       링크 복사
     </Button>
   );

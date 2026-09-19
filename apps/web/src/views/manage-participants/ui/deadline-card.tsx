@@ -1,4 +1,5 @@
-import { Card, HStack, Text, VStack, cn } from "@trpg/ui";
+import { Badge, Card, HStack, Text, VStack } from "@trpg/ui";
+import { Clock } from "lucide-react";
 
 import type { RosterSummary } from "../model/roster-summary";
 
@@ -12,19 +13,19 @@ export function DeadlineCard({ summary, locked }: { summary: RosterSummary; lock
     <VStack gap={2}>
       <Card padding="none" className="rounded-xl px-3.5 py-3">
         <HStack align="center" gap={2}>
-          <Text typography="body4" foreground="muted" className="shrink-0">
+          <Clock size={15} strokeWidth={2.2} aria-hidden className="shrink-0 text-gray-600" />
+          <Text typography="body4" foreground="muted" className="min-w-0 flex-1">
             모집 마감
           </Text>
-          <Text typography="subtitle2" className="min-w-0 flex-1 truncate">
+          <Text typography="subtitle2" className="shrink-0 tabular-nums">
             {summary.deadlineAt}
           </Text>
-          <Text
-            typography="body4"
-            className={cn("shrink-0 font-bold", summary.deadlineWarn && "text-warning-600")}
-            foreground={summary.deadlineWarn ? undefined : "muted"}
+          <Badge
+            color={summary.deadlinePassed ? "gray" : "primary"}
+            className="shrink-0 tabular-nums"
           >
             {summary.deadlineLabel}
-          </Text>
+          </Badge>
         </HStack>
       </Card>
       <Text typography="body4" foreground="hint" render={<p />}>

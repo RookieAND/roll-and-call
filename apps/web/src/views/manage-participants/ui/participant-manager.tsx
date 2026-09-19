@@ -46,7 +46,12 @@ export function ParticipantManager({
       <Container size="md">
         <VStack gap={5} className="py-4">
           <VStack gap={3}>
-            <RosterHeader title={title} methodLabel={summary.methodLabel} maxPlayers={maxPlayers} />
+            <RosterHeader
+              title={title}
+              methodLabel={summary.methodLabel}
+              isLottery={summary.isLottery}
+              maxPlayers={maxPlayers}
+            />
             <RosterStats
               confirmedCount={confirmed.length}
               waitingCount={waiting.length}
