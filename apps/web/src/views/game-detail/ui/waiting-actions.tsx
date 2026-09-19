@@ -11,14 +11,20 @@ export function WaitingActions({
   gameId,
   canSchedule,
   waitlistRank,
+  pendingDraw,
 }: {
   gameId: string;
   canSchedule: boolean;
   waitlistRank: number | null;
+  pendingDraw: boolean;
 }) {
   return (
     <VStack gap={2}>
-      <WaitlistRankNotice rank={waitlistRank} note="자리가 나면 순서대로 확정됩니다." />
+      <WaitlistRankNotice
+        rank={waitlistRank}
+        pendingDraw={pendingDraw}
+        note={pendingDraw ? "추첨이 끝나면 결과를 알립니다." : "자리가 나면 순서대로 확정됩니다."}
+      />
       {canSchedule ? (
         <ActionPair>
           <LeaveGameButton gameId={gameId} className={ACTION_PAIR_CLASS}>

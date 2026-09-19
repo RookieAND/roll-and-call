@@ -84,7 +84,12 @@ export function GameActionZone({
       );
     case GAME_ACTION_VIEW.waiting:
       return (
-        <WaitingActions gameId={game.id} canSchedule={canSchedule} waitlistRank={waitlistRank} />
+        <WaitingActions
+          gameId={game.id}
+          canSchedule={canSchedule}
+          waitlistRank={waitlistRank}
+          pendingDraw={isLottery && game.drawnAt === null}
+        />
       );
     case GAME_ACTION_VIEW.joined:
       return (
