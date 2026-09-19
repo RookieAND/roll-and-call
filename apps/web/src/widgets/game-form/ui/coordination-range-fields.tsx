@@ -4,7 +4,7 @@ import { Field, Text } from "@trpg/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
 
 import { GAME_RANGE_MAX_DAYS, type GameFormValues } from "@/features/write-game";
-import { endDateBounds } from "@/shared/lib";
+import { endDateBounds, toKstDateInput } from "@/shared/lib";
 import { DatePicker } from "@/shared/ui";
 
 import { defaultEndDateForRange } from "../model/default-end-date-for-range";
@@ -19,7 +19,12 @@ export function CoordinationRangeFields({ form }: { form: UseFormReturn<GameForm
   } = form;
   const rangeStart = watch("rangeStart");
   const rangeEnd = watch("rangeEnd");
-  const endBounds = endDateBounds({ start: rangeStart, maxDays: GAME_RANGE_MAX_DAYS });
+  const today = toKstDateInput(new Date());
+  const endBounds = endDateBounds({
+    start: rangeStart,
+    earliest: today,
+    maxDays: GAME_RANGE_MAX_DAYS,
+  });
   const error = errors.rangeStart?.message ?? errors.rangeEnd?.message;
 
   return (
@@ -36,6 +41,7 @@ export function CoordinationRangeFields({ form }: { form: UseFormReturn<GameForm
                   placeholder="시작일"
                   value={field.value}
                   invalid={!!errors.rangeStart}
+                  min={today}
                   max={rangeEnd || undefined}
                   onChange={(date) => {
                     field.onChange(date);

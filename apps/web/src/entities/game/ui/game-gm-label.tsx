@@ -15,9 +15,9 @@ export function GameGmLabel({
 }) {
   const label = showRole ? `GM ${name ?? "?"}` : (name ?? "?");
   return (
-    <HStack gap={2} align="center">
+    <HStack gap={2} align="center" className="min-w-0">
       <Avatar src={avatarUrl} name={name} size="sm" />
-      <Text typography={typography} foreground={foreground}>
+      <Text typography={typography} foreground={foreground} className="truncate">
         {label}
       </Text>
     </HStack>

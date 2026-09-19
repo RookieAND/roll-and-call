@@ -17,6 +17,7 @@ export { GameRow } from "./ui/game-row";
 export { GameStatusBadge } from "./ui/game-status-badge";
 export { GameRoundBadge } from "./ui/game-round-badge";
 export { GameSeatCount } from "./ui/game-seat-count";
+export { GameCapacity } from "./ui/game-capacity";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
 export { GameGmLabel } from "./ui/game-gm-label";
 export { ConfirmedSessionNotice } from "./ui/confirmed-session-notice";

@@ -83,7 +83,8 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
         </Text>
       </VStack>
 
-      <div className="border-t border-gray-200 px-4 pt-3.5 pb-4">
+      {/* ponytail: bottom-[58px]는 BottomNav 높이(h-[58px])와 결합. nav 높이 바뀌면 같이 조정. */}
+      <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-4 pt-3.5 pb-4">
         <div className="flex gap-2">
           <Button
             variant="outline"

@@ -10,7 +10,7 @@ export function WaitlistField({
   onChange: (enabled: boolean) => void;
 }) {
   const hint = value
-    ? '켜두면 목록에 "대기 접수 중"으로 남고, 자리가 나면 GM이 순서대로 올릴 수 있습니다.'
+    ? "자리가 나면 GM이 순서대로 처리합니다."
     : "끄면 정원이 차는 순간 신청이 닫힙니다.";
 
   return (

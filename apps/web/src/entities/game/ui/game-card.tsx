@@ -1,4 +1,5 @@
-import { Card, HStack, Progress, Text, VStack, cn } from "@trpg/ui";
+import { Card, HStack, Text, VStack, cn } from "@trpg/ui";
+import { Check, Clock } from "lucide-react";
 
 import { formatDate } from "@/shared/lib";
 import type { Game } from "@/shared/server";
@@ -6,9 +7,8 @@ import type { Game } from "@/shared/server";
 import { deriveGameStatus } from "../model/derive-game-status";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { scheduleLine } from "../model/schedule-line";
-import { GAME_STATUS } from "../model/status";
+import { GameCapacity } from "./game-capacity";
 import { GameGmLabel } from "./game-gm-label";
-import { GameRoundBadge } from "./game-round-badge";
 import { GameStatusBadge } from "./game-status-badge";
 import { GameThumbnail } from "./game-thumbnail";
 
@@ -32,16 +32,18 @@ export function GameCard({ game }: Props) {
 
   const meta = [game.rule, game.playTime].filter(Boolean).join(" · ");
   const scheduleText = expired ? `${formatDate(game.endDate)}에 모집 마감` : line.text;
-  const scheduleClass = cn(
-    "truncate",
-    line.confirmed && !expired && "font-semibold text-success-700",
+  const confirmed = line.confirmed && !expired;
+  const ScheduleIcon = confirmed ? Check : Clock;
+  const scheduleClass = cn("truncate", confirmed && "font-semibold text-success-700");
+  // 아이콘은 확정이면 글자 색(success)을 따르고, 조율 중일 때만 primary로 눈에 띄게 한다.
+  const scheduleIconClass = cn(
+    "shrink-0",
+    !confirmed && (expired ? "text-gray-500" : "text-primary-ink"),
   );
   const deadlineClass = cn(
     "shrink-0 font-semibold tabular-nums",
     line.deadlineWarn ? "text-warning-600" : "text-gray-600",
   );
-  // 꽉 찬 진행바는 "자리 없음"이라 초록을 주지 않는다.
-  const barColor = status === GAME_STATUS.recruiting ? "recruiting" : "closed";
   // 카드 전체 opacity는 본문 대비를 4.5:1 아래로 떨어뜨려서 제목 색과 썸네일만 내린다.
   const titleForeground = expired ? "muted" : "normal";
   const thumbnailClass = cn("aspect-video w-full", expired && "opacity-55");
@@ -56,12 +58,9 @@ export function GameCard({ game }: Props) {
       />
       <VStack className="gap-1.5 px-3.5 py-[13px]">
         <HStack justify="between" align="start" gap={2}>
-          <HStack align="center" gap={2} className="min-w-0">
-            <GameRoundBadge round={game.round} />
-            <Text typography="heading3" foreground={titleForeground} className="truncate">
-              {game.title}
-            </Text>
-          </HStack>
+          <Text typography="heading3" foreground={titleForeground} className="min-w-0 truncate">
+            {game.title}
+          </Text>
           <GameStatusBadge status={status} />
         </HStack>
         {meta && (
@@ -69,8 +68,13 @@ export function GameCard({ game }: Props) {
             {meta}
           </Text>
         )}
-        <HStack justify="between" align="center" gap={2}>
-          <Text typography="body4" className={scheduleClass}>
+        <HStack justify="between" align="center" className="gap-1.5">
+          <ScheduleIcon size={13} strokeWidth={2.2} aria-hidden className={scheduleIconClass} />
+          <Text
+            typography="body4"
+            foreground={expired ? "muted" : "normal"}
+            className={cn("min-w-0 flex-1", scheduleClass)}
+          >
             {scheduleText}
           </Text>
           {line.deadlineShort && (
@@ -81,12 +85,13 @@ export function GameCard({ game }: Props) {
         </HStack>
         <HStack justify="between" align="center" gap={2} className="mt-1">
           <GameGmLabel name={game.gm?.username} avatarUrl={game.gm?.avatarUrl} />
-          <HStack gap={2} align="center" className="shrink-0">
-            <Progress value={count} max={game.maxPlayers} color={barColor} className="w-[52px]" />
-            <Text typography="subtitle2" className="tabular-nums">
-              {count}/{game.maxPlayers}
-            </Text>
-          </HStack>
+          <GameCapacity
+            status={status}
+            recruitMethod={game.recruitMethod}
+            confirmed={count}
+            waiting={game.participants.length - count}
+            maxPlayers={game.maxPlayers}
+          />
         </HStack>
       </VStack>
     </Card>
