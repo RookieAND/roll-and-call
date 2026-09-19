@@ -15,6 +15,7 @@ import { GameDetailHeader } from "./game-detail-header";
 import { GameDetailThumbnail } from "./game-detail-thumbnail";
 import { GameImageGallery } from "./game-image-gallery";
 import { GameInfoTable } from "./game-info-table";
+import { GamePreflightSection } from "./game-preflight-section";
 import { GameRosterSection } from "./game-roster-section";
 import { GameSynopsis } from "./game-synopsis";
 
@@ -70,6 +71,8 @@ export function GameDetail({
             {game.synopsis && <GameSynopsis synopsis={game.synopsis} />}
 
             {game.images.length > 0 && <GameImageGallery images={game.images} isGm={isGm} />}
+
+            <GamePreflightSection game={game} />
 
             <GameRosterSection
               gameId={game.id}

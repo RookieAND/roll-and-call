@@ -4,6 +4,7 @@ import { cn } from "./cn";
 
 export type FieldProps = {
   label?: string;
+  counter?: ReactNode;
   description?: string;
   error?: string;
   required?: boolean;
@@ -14,6 +15,7 @@ export type FieldProps = {
 
 export function Field({
   label,
+  counter,
   description,
   error,
   required,
@@ -23,11 +25,16 @@ export function Field({
 }: FieldProps) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      {label && (
-        <label htmlFor={htmlFor} className="text-[12.5px] font-bold text-gray-700">
-          {label}
-          {required && <span className="text-danger-600"> *</span>}
-        </label>
+      {(label || counter) && (
+        <div className="flex items-baseline justify-between gap-2">
+          <label htmlFor={htmlFor} className="text-[12.5px] font-bold text-gray-700">
+            {label}
+            {required && <span className="text-danger-600"> *</span>}
+          </label>
+          {counter && (
+            <span className="shrink-0 text-xs tabular-nums text-gray-600">{counter}</span>
+          )}
+        </div>
       )}
       {children}
       {description && !error && <p className="text-xs text-gray-600">{description}</p>}

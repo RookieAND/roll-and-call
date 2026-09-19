@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import "server-only";
 
-import { isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
+import { isSessionLocked, PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import { GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
 import { db, games, participants, type Game } from "@/shared/server";
 
@@ -37,8 +37,10 @@ export async function applyToGame(
       participants,
       and(eq(participants.gameId, gameId), eq(participants.status, PARTICIPANT_STATUS.confirmed)),
     );
-    const isConfirmed = confirmedCount < game.maxPlayers;
-    if (!isConfirmed && !game.waitlistEnabled) {
+    // 추첨은 정원과 무관하게 받고, GM이 참여자 관리에서 확정 인원을 정한다.
+    const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
+    const isConfirmed = !isLottery && confirmedCount < game.maxPlayers;
+    if (!isConfirmed && !isLottery && !game.waitlistEnabled) {
       return { error: "정원이 가득 차 신청할 수 없습니다." };
     }
     const status = isConfirmed ? PARTICIPANT_STATUS.confirmed : PARTICIPANT_STATUS.waiting;

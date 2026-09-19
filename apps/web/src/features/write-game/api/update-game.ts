@@ -33,6 +33,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       thumbnailUrl: games.thumbnailUrl,
       images: games.images,
       scheduleMode: games.scheduleMode,
+      recruitMethod: games.recruitMethod,
     })
     .from(games)
     .where(and(eq(games.id, id), eq(games.gmId, user.id)));
@@ -52,12 +53,19 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       field: "maxPlayers",
     };
   }
-  // 조율 응답·확정 명단이 일정 방식에 묶여 있어 신청자가 있으면 방식을 바꿀 수 없다.
+  // 조율 응답·확정 명단이 일정 방식에, 확정 순서가 모집 방식에 묶여 있어 신청자가 있으면 못 바꾼다.
   if (roster.length > 0 && values.scheduleMode !== before.scheduleMode) {
     return {
       error:
         "신청자가 있어 일정 방식은 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔주세요.",
       field: "scheduleMode",
+    };
+  }
+  if (roster.length > 0 && values.recruitMethod !== before.recruitMethod) {
+    return {
+      error:
+        "신청자가 있어 모집 방식은 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔주세요.",
+      field: "recruitMethod",
     };
   }
 

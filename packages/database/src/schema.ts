@@ -14,6 +14,9 @@ import {
 
 export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
 
+// first_come은 정원까지 신청 순서대로 확정하고, lottery는 정원과 무관하게 받아 GM이 확정 인원을 고른다.
+export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery"]);
+
 // 정원(maxPlayers)만큼 confirmed로 채우고 초과분은 waiting. 승격/강등/자동 승계는 이 값만 바꾼다.
 export const participantStatus = pgEnum("participant_status", ["confirmed", "waiting"]);
 
@@ -40,8 +43,14 @@ export const games = pgTable("games", {
   thumbnailSpoiler: boolean("thumbnail_spoiler").notNull().default(false),
   images: text("images").array().notNull().default([]),
   playTime: text("play_time"),
+  // 신청 전에 알아야 할 것들. 각각 최대 5개이고 순서를 그대로 보여준다.
+  genres: text("genres").array().notNull().default([]),
+  triggers: text("triggers").array().notNull().default([]),
+  platforms: text("platforms").array().notNull().default([]),
+  notice: text("notice"),
   maxPlayers: integer("max_players").notNull(),
-  // false면 정원이 찼을 때 대기 신청을 받지 않는다(status "full").
+  recruitMethod: recruitMethod("recruit_method").notNull().default("first_come"),
+  // false면 정원이 찼을 때 대기 신청을 받지 않는다(status "full"). 선착순에서만 쓴다.
   waitlistEnabled: boolean("waitlist_enabled").notNull().default(true),
   scheduleMode: scheduleMode("schedule_mode").notNull(),
   endDate: timestamp("end_date", { withTimezone: true }).notNull(),

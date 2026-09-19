@@ -1,6 +1,6 @@
 import assert from "node:assert";
 
-import { SCHEDULE_MODE } from "@/entities/game";
+import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 
 import { gameFormSchema } from "./game-form";
 import { toGameColumns } from "./to-game-columns";
@@ -9,7 +9,11 @@ const base = {
   title: "마지막 열차",
   rule: "CoC 7판",
   maxPlayers: "4",
+  recruitMethod: RECRUIT_METHOD.firstCome,
   scheduleMode: SCHEDULE_MODE.coordinate,
+  genres: ["호러"],
+  triggers: [] as string[],
+  platforms: [] as string[],
   endDate: "2026-09-10T20:00",
   rangeStart: "2026-09-12",
   rangeEnd: "2026-09-20",
@@ -39,6 +43,14 @@ const fixed = { ...base, scheduleMode: SCHEDULE_MODE.fixed, confirmedAt: "2026-0
 assert.equal(firstError(fixed), null);
 assert.equal(firstError({ ...fixed, confirmedAt: "" }), "confirmedAt");
 assert.equal(firstError({ ...fixed, endDate: "2026-09-12T20:00" }), "endDate"); // 마감 > 세션
+
+assert.equal(firstError({ ...base, genres: ["1", "2", "3", "4", "5", "6"] }), "genres");
+
+// 추첨은 대기 접수 설정을 쓰지 않아 항상 켜진 값으로 저장된다.
+const lottery = { ...base, recruitMethod: RECRUIT_METHOD.lottery, waitlistEnabled: false };
+assert.equal(firstError(lottery), null);
+assert.equal(toGameColumns(lottery).waitlistEnabled, true);
+assert.equal(toGameColumns({ ...base, waitlistEnabled: false }).waitlistEnabled, false);
 
 const spoiler = { ...base, thumbnailSpoiler: true };
 assert.equal(toGameColumns({ ...spoiler, thumbnailUrl: imageUrl(1) }).thumbnailSpoiler, true);

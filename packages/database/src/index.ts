@@ -1,6 +1,7 @@
 export { db } from "./client";
 export {
   scheduleMode,
+  recruitMethod,
   participantStatus,
   profiles,
   games,

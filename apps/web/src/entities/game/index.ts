@@ -1,4 +1,6 @@
 export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./model/schedule-mode";
+export { RECRUIT_METHOD, RECRUIT_METHODS, type RecruitMethod } from "./model/recruit-method";
+export { GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "./model/game-tag";
 export { gameStatusLabel, gameStatusColor, GAME_STATUS, type GameStatus } from "./model/status";
 export { deriveGameStatus } from "./model/derive-game-status";
 export { isDeadlineUrgent } from "./model/is-deadline-urgent";

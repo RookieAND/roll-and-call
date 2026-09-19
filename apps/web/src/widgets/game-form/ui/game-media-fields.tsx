@@ -7,12 +7,6 @@ import { GAME_IMAGES_MAX, type GameFormValues } from "@/features/write-game";
 
 import { ThumbnailSpoilerField } from "./thumbnail-spoiler-field";
 
-export const GAME_MEDIA_FIELDS = [
-  "thumbnailUrl",
-  "thumbnailSpoiler",
-  "images",
-] as const satisfies readonly (keyof GameFormValues)[];
-
 export function GameMediaFields({ form }: { form: UseFormReturn<GameFormValues> }) {
   const { setValue, watch } = form;
 

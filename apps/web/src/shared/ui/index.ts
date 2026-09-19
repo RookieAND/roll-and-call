@@ -11,6 +11,7 @@ export { DateTimePicker, type DateTimePickerProps } from "./date-time-picker";
 export { EmptyState } from "./empty-state";
 export { ErrorScreen } from "./error-screen";
 export { Sheet } from "./sheet";
+export { TagInput, type TagInputProps } from "./tag-input";
 export { StatusNotice } from "./status-notice";
 export { ThemeSetting } from "./theme-setting";
 export { Toaster } from "./toaster";

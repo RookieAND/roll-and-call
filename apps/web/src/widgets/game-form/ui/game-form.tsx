@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { SCHEDULE_MODE } from "@/entities/game";
+import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 import { gameFormSchema, type GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
 import { toKstDateTimeInput } from "@/shared/lib";
@@ -11,8 +11,8 @@ import type { Game } from "@/shared/server";
 import { toast, useAction } from "@/shared/ui";
 
 import type { GameEditContext } from "../model/game-form-layout";
+import { CREATE_STEPS, EDIT_STEPS } from "../model/game-form-steps";
 import { DEFAULT_PLAY_TIME } from "../model/play-time-options";
-import { GameFormPage } from "./game-form-page";
 import { GameFormWizard } from "./game-form-wizard";
 
 type Props = {
@@ -20,7 +20,6 @@ type Props = {
   defaultGame?: Game;
   submitLabel: string;
   successMessage?: string;
-  wizard?: boolean;
   edit?: GameEditContext;
 };
 
@@ -29,7 +28,6 @@ export function GameForm({
   defaultGame,
   submitLabel,
   successMessage = "저장되었습니다",
-  wizard = false,
   edit,
 }: Props) {
   const { pending, run } = useAction();
@@ -40,8 +38,13 @@ export function GameForm({
       title: defaultGame?.title ?? "",
       rule: defaultGame?.rule ?? "",
       synopsis: defaultGame?.synopsis ?? "",
+      genres: defaultGame?.genres ?? [],
+      triggers: defaultGame?.triggers ?? [],
+      platforms: defaultGame?.platforms ?? [],
+      notice: defaultGame?.notice ?? "",
       playTime: defaultGame ? (defaultGame.playTime ?? "") : DEFAULT_PLAY_TIME,
       maxPlayers: String(defaultGame?.maxPlayers ?? 4),
+      recruitMethod: defaultGame?.recruitMethod ?? RECRUIT_METHOD.firstCome,
       scheduleMode: defaultGame?.scheduleMode ?? SCHEDULE_MODE.coordinate,
       endDate: defaultGame?.endDate ? toKstDateTimeInput(defaultGame.endDate) : "",
       confirmedAt: defaultGame?.confirmedAt ? toKstDateTimeInput(defaultGame.confirmedAt) : "",
@@ -61,7 +64,14 @@ export function GameForm({
     });
   }
 
-  const layoutProps = { form, pending, submitLabel, onValid, edit };
-
-  return wizard ? <GameFormWizard {...layoutProps} /> : <GameFormPage {...layoutProps} />;
+  return (
+    <GameFormWizard
+      form={form}
+      pending={pending}
+      submitLabel={submitLabel}
+      onValid={onValid}
+      steps={edit ? EDIT_STEPS : CREATE_STEPS}
+      edit={edit}
+    />
+  );
 }

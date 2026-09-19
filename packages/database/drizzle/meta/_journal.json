@@ -99,6 +99,13 @@
       "when": 1789900000000,
       "tag": "0013_thumbnail_spoiler",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1790000000000,
+      "tag": "0014_game_recruit_tags",
+      "breakpoints": true
     }
   ]
 }

@@ -2,26 +2,28 @@
 
 import { Button, Container, Text, VStack } from "@trpg/ui";
 
-import { LAST_WIZARD_STEP, type WizardStep } from "./wizard-header";
-
 export function WizardFooter({
   step,
+  total,
   pending,
   submitLabel,
   error,
+  cancelLabel,
   onNext,
   onBack,
 }: {
-  step: WizardStep;
+  step: number;
+  total: number;
   pending: boolean;
   submitLabel: string;
   error?: string;
+  cancelLabel?: string;
   onNext: () => void;
   onBack: () => void;
 }) {
-  const isFirstStep = step === 1;
-  const isLastStep = step === LAST_WIZARD_STEP;
-  const submitText = pending ? "저장 중…" : submitLabel;
+  const isFirstStep = step === 0;
+  const isLastStep = step === total - 1;
+  const backLabel = isFirstStep ? cancelLabel : "이전";
 
   return (
     <div className="sticky bottom-0 z-10 border-t border-gray-200 bg-surface">
@@ -32,12 +34,8 @@ export function WizardFooter({
               {error}
             </Text>
           )}
-          {isFirstStep ? (
-            <Button type="button" onClick={onNext} size="lg" className="h-[50px] w-full">
-              다음
-            </Button>
-          ) : (
-            <div className="flex gap-2 [&>*]:flex-1">
+          <div className="flex gap-2 [&>*]:flex-1">
+            {backLabel && (
               <Button
                 type="button"
                 variant="outline"
@@ -45,19 +43,19 @@ export function WizardFooter({
                 size="lg"
                 className="h-[50px]"
               >
-                이전
+                {backLabel}
               </Button>
-              {isLastStep ? (
-                <Button type="submit" loading={pending} size="lg" className="h-[50px]">
-                  {submitText}
-                </Button>
-              ) : (
-                <Button type="button" onClick={onNext} size="lg" className="h-[50px]">
-                  다음
-                </Button>
-              )}
-            </div>
-          )}
+            )}
+            {isLastStep ? (
+              <Button type="submit" loading={pending} size="lg" className="h-[50px]">
+                {pending ? "저장 중…" : submitLabel}
+              </Button>
+            ) : (
+              <Button type="button" onClick={onNext} size="lg" className="h-[50px]">
+                다음
+              </Button>
+            )}
+          </div>
         </VStack>
       </Container>
     </div>

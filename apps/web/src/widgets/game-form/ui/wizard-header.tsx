@@ -4,21 +4,17 @@ import { Text } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
-export const WIZARD_STEPS = [1, 2, 3] as const;
-export type WizardStep = (typeof WIZARD_STEPS)[number];
-export const LAST_WIZARD_STEP = WIZARD_STEPS.length as WizardStep;
-
 export function WizardHeader({
   step,
+  total,
   title,
   onBack,
 }: {
-  step: WizardStep;
+  step: number;
+  total: number;
   title: string;
   onBack: () => void;
 }) {
-  const percent = Math.round((step / LAST_WIZARD_STEP) * 100);
-
   return (
     <>
       <AppBar
@@ -27,21 +23,21 @@ export function WizardHeader({
         backIcon={step === 1 ? "close" : "back"}
         action={
           <Text typography="code2" foreground="hint" className="tabular-nums">
-            {step} / {LAST_WIZARD_STEP}
+            {step} / {total}
           </Text>
         }
       />
       <div
         role="progressbar"
-        aria-label="구인 등록 진행"
+        aria-label={`${title} 진행`}
         aria-valuemin={1}
-        aria-valuemax={LAST_WIZARD_STEP}
+        aria-valuemax={total}
         aria-valuenow={step}
         className="h-[3px] bg-gray-100"
       >
         <div
           className="h-full bg-primary-600 transition-[width]"
-          style={{ width: `${percent}%` }}
+          style={{ width: `${Math.round((step / total) * 100)}%` }}
         />
       </div>
     </>
