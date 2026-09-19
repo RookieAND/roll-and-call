@@ -103,11 +103,6 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
             저장
           </Button>
         </div>
-        {conflicts.size > 0 && (
-          <Text typography="body4" foreground="danger" render={<p />} className="mt-2">
-            겹치는 구간 {conflicts.size}개를 고치면 저장할 수 있습니다.
-          </Text>
-        )}
       </div>
     </>
   );
