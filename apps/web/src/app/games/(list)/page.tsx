@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
+
 import { parseGameSort, parseGameStatusFilter } from "@/shared/api";
 import { GamesView } from "@/views/games";
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "구인 목록" };
 
 export default async function Page({
   searchParams,

@@ -7,8 +7,8 @@ import "./globals.css";
 import { QueryProvider } from "./query-provider";
 
 export const metadata: Metadata = {
-  title: "롤앤콜",
-  description: "TRPG 세션, 모집부터 일정 확정까지 한 곳에서",
+  title: { default: "Roll & Call", template: "%s | Roll & Call" },
+  description: "TRPG 세션 모집부터 일정 확정까지",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
