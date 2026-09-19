@@ -46,12 +46,14 @@ export function WizardFooter({
                 {backLabel}
               </Button>
             )}
+            {/* key가 없으면 같은 DOM 버튼의 type만 submit으로 바뀌어, 마지막 단계로 넘어간 그
+                클릭이 곧바로 제출로 이어진다. */}
             {isLastStep ? (
-              <Button type="submit" loading={pending} size="lg" className="h-[50px]">
+              <Button key="submit" type="submit" loading={pending} size="lg" className="h-[50px]">
                 {pending ? "저장 중…" : submitLabel}
               </Button>
             ) : (
-              <Button type="button" onClick={onNext} size="lg" className="h-[50px]">
+              <Button key="next" type="button" onClick={onNext} size="lg" className="h-[50px]">
                 다음
               </Button>
             )}
