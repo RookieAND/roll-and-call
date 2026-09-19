@@ -1,7 +1,6 @@
 import { Card, HStack, Text, VStack, cn } from "@trpg/ui";
 import { Check, Clock } from "lucide-react";
 
-import { formatDate } from "@/shared/lib";
 import type { Game } from "@/shared/server";
 
 import { deriveGameStatus } from "../model/derive-game-status";
@@ -31,7 +30,7 @@ export function GameCard({ game }: Props) {
   const expired = line.deadlinePassed;
 
   const meta = [game.rule, game.playTime].filter(Boolean).join(" · ");
-  const scheduleText = expired ? `${formatDate(game.endDate)}에 모집 마감` : line.text;
+  const scheduleText = line.text;
   const confirmed = line.confirmed && !expired;
   const ScheduleIcon = confirmed ? Check : Clock;
   const scheduleClass = cn("truncate", confirmed && "font-semibold text-success-700");
