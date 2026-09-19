@@ -1,6 +1,7 @@
 import { Container } from "@trpg/ui";
 import { notFound, redirect } from "next/navigation";
 
+import { SESSION_ROLE } from "@/entities/game";
 import { getCurrentUser } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import {
@@ -20,11 +21,12 @@ export async function UserSessionsView({ id, tab }: { id: string; tab?: string }
 
   const { profile, sessions } = loaded;
   const activeSection =
-    PROFILE_SESSION_SECTIONS.find((section) => section.key === tab) ?? PROFILE_SESSION_SECTIONS[0];
+    PROFILE_SESSION_SECTIONS.find((section) => section.key === tab) ??
+    PROFILE_SESSION_SECTIONS.find((section) => section.key === SESSION_ROLE.host)!;
   const items = sessions[activeSection.key];
   const tabs = PROFILE_SESSION_SECTIONS.map((section) => ({
     key: section.key,
-    label: section.tabLabel,
+    label: section.title,
     count: sessions[section.key].length,
     href: userSessionsHref(profile.id, section.key),
   }));

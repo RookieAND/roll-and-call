@@ -1,29 +1,30 @@
-import { Chip, Text, VStack } from "@trpg/ui";
+import { Text, VStack } from "@trpg/ui";
 
-import { GAME_TAG_KEYS, gameTagLabel } from "@/entities/game";
+import { GAME_TAG, gameTagLabel } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 
+import { GameTagBlock } from "./game-tag-block";
+
+const TRIGGER_NOTE = "신청 전에 확인해주세요. 불편한 소재가 있으면 GM에게 미리 말해도 됩니다.";
+
+// 06에서 받은 값을 신청 판단 순서대로 읽힌다 — 장르 · 트리거 · 주의 사항 · 사용 플랫폼.
 export function GamePreflightSection({ game }: { game: GameDetailData }) {
-  const filledKeys = GAME_TAG_KEYS.filter((key) => game[key].length > 0);
-  if (filledKeys.length === 0 && !game.notice) return null;
+  if (game.genres.length + game.triggers.length + game.platforms.length === 0 && !game.notice) {
+    return null;
+  }
 
   return (
-    <VStack gap={4}>
-      {filledKeys.map((key) => (
-        <VStack key={key} gap={2}>
-          <Text typography="heading3" render={<h2 />}>
-            {gameTagLabel[key]}
-          </Text>
-          <div className="flex flex-wrap gap-1.5">
-            {game[key].map((tag) => (
-              <Chip key={tag} asChild>
-                <span>{tag}</span>
-              </Chip>
-            ))}
-          </div>
-        </VStack>
-      ))}
-
+    <VStack gap={5}>
+      {game.genres.length > 0 && (
+        <GameTagBlock label={gameTagLabel[GAME_TAG.genres]} tags={game.genres} />
+      )}
+      {game.triggers.length > 0 && (
+        <GameTagBlock
+          label={gameTagLabel[GAME_TAG.triggers]}
+          tags={game.triggers}
+          note={TRIGGER_NOTE}
+        />
+      )}
       {game.notice && (
         <VStack gap={2}>
           <Text typography="heading3" render={<h2 />}>
@@ -33,6 +34,9 @@ export function GamePreflightSection({ game }: { game: GameDetailData }) {
             {game.notice}
           </Text>
         </VStack>
+      )}
+      {game.platforms.length > 0 && (
+        <GameTagBlock label={gameTagLabel[GAME_TAG.platforms]} tags={game.platforms} />
       )}
     </VStack>
   );

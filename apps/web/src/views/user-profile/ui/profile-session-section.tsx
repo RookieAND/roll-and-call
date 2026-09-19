@@ -1,23 +1,24 @@
 import { Button, Text } from "@trpg/ui";
 import Link from "next/link";
 
+import type { SessionRole } from "@/entities/game";
 import {
-  PROFILE_SESSION_SECTIONS,
   SessionEmptyLine,
   SessionList,
-  type SessionCardModel,
   userSessionsHref,
+  type SessionCardModel,
 } from "@/widgets/session-list";
 
 const PREVIEW_COUNT = 3;
 
+// 탭을 쓰지 않는다. 두 목록을 한 번에 훑는 화면이고, 세 건짜리 목록을 탭 뒤에 숨길 이유가 없다.
 export function ProfileSessionSection({
   userId,
   section,
   items,
 }: {
   userId: string;
-  section: (typeof PROFILE_SESSION_SECTIONS)[number];
+  section: { key: SessionRole; title: string; empty: string };
   items: SessionCardModel[];
 }) {
   const hasMore = items.length > PREVIEW_COUNT;
@@ -44,7 +45,7 @@ export function ProfileSessionSection({
           {hasMore && (
             <Button asChild variant="outline" className="h-11 w-full">
               <Link href={userSessionsHref(userId, section.key)}>
-                {section.title} {items.length}건 모두 보기
+                {section.title} 세션 {items.length}건 모두 보기
               </Link>
             </Button>
           )}

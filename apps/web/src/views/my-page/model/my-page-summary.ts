@@ -1,48 +1,52 @@
+import { SESSION_ROLE } from "@/entities/game";
 import {
-  type MySessions,
-  type SessionCardModel,
   SESSION_ACTION_KIND,
   SESSION_CHIP,
+  type MySessions,
+  type SessionCardModel,
+  sessionsHref,
   type SessionChip,
 } from "@/widgets/session-list";
 
 import { joinCountParts } from "./join-count-parts";
 
+// 역할이 1축이다. 숫자는 그 역할의 진행 중 건수이고, 종료은 보조 줄에서만 센다.
 export function summarizeMySessions(sessions: MySessions) {
   const countByChip = (list: SessionCardModel[], chip: SessionChip) =>
     list.filter((card) => card.chip === chip).length;
-  const needsConfirm = sessions.hosted.filter(
-    (card) => card.action?.kind === SESSION_ACTION_KIND.confirmTime,
+  const ongoing = (list: SessionCardModel[]) =>
+    list.filter((card) => card.chip !== SESSION_CHIP.ended).length;
+
+  const joined = sessions[SESSION_ROLE.player];
+  const hosted = sessions[SESSION_ROLE.host];
+  const needsConfirm = hosted.filter(
+    (card) => card.todo?.kind === SESSION_ACTION_KIND.confirmTime,
   ).length;
-  const total = sessions.joined.length + sessions.hosted.length + sessions.past.length;
 
   return {
     joined: {
-      count: sessions.joined.length,
+      count: ongoing(joined),
       detail:
         joinCountParts([
-          ["확정", countByChip(sessions.joined, SESSION_CHIP.confirmed)],
-          ["조율 중", countByChip(sessions.joined, SESSION_CHIP.scheduling)],
-          ["대기", countByChip(sessions.joined, SESSION_CHIP.waiting)],
-        ]) ?? (sessions.joined.length === 0 ? "신청한 구인이 없습니다" : null),
-      href: "/me/sessions",
+          ["확정", countByChip(joined, SESSION_CHIP.confirmed)],
+          ["조율 중", countByChip(joined, SESSION_CHIP.scheduling)],
+          ["대기", countByChip(joined, SESSION_CHIP.waiting)],
+          ["종료", countByChip(joined, SESSION_CHIP.ended)],
+        ]) ?? "신청한 구인이 없습니다",
+      href: sessionsHref(SESSION_ROLE.player),
     },
     hosting: {
-      count: sessions.hosted.length,
+      count: ongoing(hosted),
       urgent: needsConfirm > 0,
       detail:
-        needsConfirm > 0
-          ? `확정 필요 ${needsConfirm}`
-          : (joinCountParts([
-              ["모집 중", countByChip(sessions.hosted, SESSION_CHIP.recruiting)],
-              ["확정", countByChip(sessions.hosted, SESSION_CHIP.confirmed)],
-            ]) ?? (sessions.hosted.length === 0 ? "아직 구인을 열지 않았습니다" : null)),
-      href: "/me/sessions?tab=hosted",
+        joinCountParts([
+          ["확정 필요", needsConfirm],
+          ["모집 중", countByChip(hosted, SESSION_CHIP.recruiting) - needsConfirm],
+          ["확정", countByChip(hosted, SESSION_CHIP.confirmed)],
+          ["종료", countByChip(hosted, SESSION_CHIP.ended)],
+        ]) ?? "아직 구인을 열지 않았습니다",
+      href: sessionsHref(SESSION_ROLE.host),
     },
-    past: {
-      count: sessions.past.length,
-      href: "/me/sessions?tab=past",
-    },
-    isEmpty: total === 0,
+    isEmpty: joined.length + hosted.length === 0,
   };
 }

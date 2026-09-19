@@ -1,88 +1,109 @@
 "use client";
 
-import { AvatarGroup, Button, HStack, Progress, Text, VStack } from "@trpg/ui";
+import { Button, VStack } from "@trpg/ui";
 import Link from "next/link";
 import { useState } from "react";
 
-import { GAME_STATUS, type GameStatus } from "@/entities/game";
+import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
 
 import type { DetailRosterMember } from "./roster-member-row";
+import { RosterGroupSection } from "./roster-group-section";
 import { RosterSheet } from "./roster-sheet";
-import { WaitlistSection } from "./waitlist-section";
-
-const MAX_AVATARS = 5;
 
 export function GameRosterSection({
   gameId,
+  gm,
   confirmed,
   waiting,
   maxPlayers,
-  status,
+  recruitMethod,
+  sessionConfirmed,
   isGm,
   viewerId,
-  endDate,
 }: {
   gameId: string;
+  gm: { userId: string; username?: string; avatarUrl?: string | null; bio?: string | null };
   confirmed: DetailRosterMember[];
   waiting: DetailRosterMember[];
   maxPlayers: number;
-  status: GameStatus;
+  recruitMethod: RecruitMethod;
+  sessionConfirmed: boolean;
   isGm: boolean;
   viewerId: string | null;
-  endDate: Date;
 }) {
   const [open, setOpen] = useState(false);
-  // 꽉 찬 바는 "자리 없음"이라 좋은 상태 색을 주지 않는다. 초록은 배지 하나만.
-  const barColor = status === GAME_STATUS.recruiting ? "recruiting" : "closed";
+  // 추첨은 뽑기 전까지 확정과 대기를 가르지 않는다 — 한 덩어리의 "신청"으로 본다.
+  const isLottery = recruitMethod === RECRUIT_METHOD.lottery && !sessionConfirmed;
   const hasMembers = confirmed.length + waiting.length > 0;
-  const avatarPeople = confirmed.map((participant) => ({
-    src: participant.user?.avatarUrl,
-    name: participant.user?.username,
-  }));
+  const viewerWaiting = waiting.find((member) => member.userId === viewerId);
+
+  const rosterAction = isGm ? (
+    <Button asChild variant="ghost" size="sm" className="text-primary-ink">
+      <Link href={`/games/${gameId}/participants`}>관리</Link>
+    </Button>
+  ) : (
+    hasMembers && (
+      <Button variant="ghost" size="sm" className="text-primary-ink" onClick={() => setOpen(true)}>
+        명단 보기
+      </Button>
+    )
+  );
 
   return (
     <VStack gap={5}>
-      <section className="flex flex-col gap-2.5">
-        <HStack align="center" gap={2}>
-          <Text typography="heading3" render={<h2 />}>
-            참여자
-          </Text>
-          <Text typography="code2" foreground="hint" className="tabular-nums">
-            {confirmed.length}/{maxPlayers}
-          </Text>
-          <span className="flex-1" />
-          {isGm ? (
-            <Button asChild variant="ghost" size="sm" className="text-primary-ink">
-              <Link href={`/games/${gameId}/participants`}>관리</Link>
-            </Button>
-          ) : (
-            hasMembers && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-primary-ink"
-                onClick={() => setOpen(true)}
-              >
-                명단 보기
-              </Button>
-            )
+      {isLottery ? (
+        <RosterGroupSection
+          label="신청"
+          members={[...confirmed, ...waiting]}
+          capacity={maxPlayers}
+          action={rosterAction}
+          emptyText="아직 신청자가 없어요."
+        />
+      ) : (
+        <>
+          <RosterGroupSection
+            label="참여자"
+            members={confirmed}
+            capacity={maxPlayers}
+            action={rosterAction}
+            emptyText="아직 참여자가 없어요."
+          />
+          {waiting.length > 0 && (
+            <RosterGroupSection
+              label="대기"
+              members={waiting}
+              action={
+                !isGm && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-primary-ink"
+                    onClick={() => setOpen(true)}
+                  >
+                    명단 보기
+                  </Button>
+                )
+              }
+              note={
+                viewerWaiting
+                  ? `내 순번 ${viewerWaiting.waitlistRank}번 · 자리가 나면 순서대로 확정됩니다.`
+                  : undefined
+              }
+            />
           )}
-        </HStack>
-        <Progress value={confirmed.length} max={maxPlayers} color={barColor} className="w-full" />
-        {confirmed.length === 0 ? (
-          <Text typography="body3" foreground="muted" render={<p />}>
-            아직 참여자가 없어요.
-          </Text>
-        ) : (
-          <AvatarGroup max={MAX_AVATARS} size="stack" people={avatarPeople} />
-        )}
-      </section>
-
-      {waiting.length > 0 && (
-        <WaitlistSection waiting={waiting} viewerId={viewerId} endDate={endDate} />
+        </>
       )}
 
-      <RosterSheet open={open} onOpenChange={setOpen} confirmed={confirmed} waiting={waiting} />
+      <RosterSheet
+        open={open}
+        onOpenChange={setOpen}
+        gm={gm}
+        confirmed={confirmed}
+        waiting={waiting}
+        maxPlayers={maxPlayers}
+        isLottery={isLottery}
+        viewerId={viewerId}
+      />
     </VStack>
   );
 }

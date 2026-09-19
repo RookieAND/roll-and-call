@@ -1,30 +1,32 @@
-import {
-  SESSION_BUCKET,
-  SESSION_CHIP,
-  type SessionBucket,
-  type SessionChip,
-} from "./session-card-model";
+import { SESSION_ROLE, type SessionRole } from "@/entities/game";
+
+import { SESSION_CHIP, type SessionChip } from "./session-card-model";
+
+// 기본 칩은 전체가 아니라 "진행 중"이다. 전체로 두면 시간이 갈수록 목록이 기록으로 덮인다.
+export const ONGOING_CHIP = "ongoing";
+
+export type SessionChipKey = SessionChip | typeof ONGOING_CHIP;
 
 export const SESSION_TABS = [
-  { key: SESSION_BUCKET.joined, label: "참여 중" },
-  { key: SESSION_BUCKET.hosted, label: "내가 운영" },
-  { key: SESSION_BUCKET.past, label: "끝남" },
-] as const satisfies ReadonlyArray<{ key: SessionBucket; label: string }>;
+  { key: SESSION_ROLE.player, label: "참여" },
+  { key: SESSION_ROLE.host, label: "운영" },
+] as const satisfies ReadonlyArray<{ key: SessionRole; label: string }>;
 
 export const SESSION_CHIPS: Record<
-  SessionBucket,
-  ReadonlyArray<{ key: SessionChip | "all"; label: string }>
+  SessionRole,
+  ReadonlyArray<{ key: SessionChipKey; label: string }>
 > = {
-  [SESSION_BUCKET.joined]: [
-    { key: "all", label: "전체" },
+  [SESSION_ROLE.player]: [
+    { key: ONGOING_CHIP, label: "진행 중" },
     { key: SESSION_CHIP.scheduling, label: "조율 중" },
     { key: SESSION_CHIP.confirmed, label: "확정" },
     { key: SESSION_CHIP.waiting, label: "대기" },
+    { key: SESSION_CHIP.ended, label: "종료" },
   ],
-  [SESSION_BUCKET.hosted]: [
-    { key: "all", label: "전체" },
+  [SESSION_ROLE.host]: [
+    { key: ONGOING_CHIP, label: "진행 중" },
     { key: SESSION_CHIP.recruiting, label: "모집 중" },
     { key: SESSION_CHIP.confirmed, label: "확정" },
+    { key: SESSION_CHIP.ended, label: "종료" },
   ],
-  [SESSION_BUCKET.past]: [],
 };

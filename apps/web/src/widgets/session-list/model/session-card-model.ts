@@ -1,19 +1,13 @@
 import type { ParticipantStatus, SessionRole } from "@/entities/game";
 import type { Game } from "@/shared/server";
 
-export const SESSION_BUCKET = {
-  joined: "joined",
-  hosted: "hosted",
-  past: "past",
-} as const;
-
-export type SessionBucket = (typeof SESSION_BUCKET)[keyof typeof SESSION_BUCKET];
-
+// 탭은 역할만 가르고 진행·종료은 칩이 가른다. 세션이 끝나도 내가 GM이었는지는 바뀌지 않는다.
 export const SESSION_CHIP = {
   scheduling: "scheduling",
   confirmed: "confirmed",
   waiting: "waiting",
   recruiting: "recruiting",
+  ended: "ended",
 } as const;
 
 export type SessionChip = (typeof SESSION_CHIP)[keyof typeof SESSION_CHIP];
@@ -30,6 +24,9 @@ export type SessionTone = (typeof SESSION_TONE)[keyof typeof SESSION_TONE];
 export const SESSION_ACTION_KIND = {
   confirmTime: "confirm-time",
   submitAvailability: "submit-availability",
+  reviewApplicants: "review-applicants",
+  hostMenu: "host-menu",
+  cancelWaitlist: "cancel-waitlist",
 } as const;
 
 export type SessionActionKind = (typeof SESSION_ACTION_KIND)[keyof typeof SESSION_ACTION_KIND];
@@ -45,15 +42,18 @@ export type SessionCardModel = {
   title: string;
   round: number;
   role: SessionRole;
-  bucket: SessionBucket;
-  chip: SessionChip | null;
+  chip: SessionChip;
   badge: string;
   badgeColor: "primary" | "success" | "gray";
   schedule: string;
   scheduleTone: SessionTone;
   meta: string;
   urgent: boolean;
+  // 목록 카드가 다는 버튼. 운영은 언제나 "운영 관리" 하나다.
   action: SessionAction | null;
+  // 지금 막혀 있는 것. 마이페이지 할 일 카드가 이걸로 만들어진다.
+  todo: SessionAction | null;
+  waitingCount: number;
   startsAt: string | null;
   sortKey: number;
 };
@@ -78,4 +78,4 @@ export type SessionContext = {
   readOnly?: boolean;
 };
 
-export type MySessions = Record<SessionBucket, SessionCardModel[]>;
+export type MySessions = Record<SessionRole, SessionCardModel[]>;

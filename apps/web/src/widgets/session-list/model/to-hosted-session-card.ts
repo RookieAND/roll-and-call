@@ -4,9 +4,9 @@ import type { SessionFacts } from "./derive-session-facts";
 import { joinParts } from "./join-parts";
 import {
   SESSION_ACTION_KIND,
-  SESSION_BUCKET,
   SESSION_CHIP,
   SESSION_TONE,
+  type SessionAction,
   type SessionCardModel,
   type SessionContext,
   type SessionGame,
@@ -27,6 +27,7 @@ export function toHostedSessionCard(
     timeSet,
     sessionWhen,
     seats,
+    waitingCount,
   } = facts;
   const status = deriveGameStatus({
     maxPlayers: game.maxPlayers,
@@ -45,9 +46,18 @@ export function toHostedSessionCard(
     ? "모집이 끝나 GM이 세션 시간을 정하는 중입니다"
     : "기한이 지났는데 세션 시간이 없습니다";
 
+  // 목록 카드에 버튼을 늘리지 않는다. GM 도구는 "운영 관리" 한 곳으로 모은다.
+  const hostMenu: SessionAction = {
+    kind: SESSION_ACTION_KIND.hostMenu,
+    label: "운영 관리",
+    href: `/games/${game.id}/manage`,
+  };
+  const todo: SessionAction | null = gmTodo
+    ? { kind: SESSION_ACTION_KIND.confirmTime, label: "세션 시간 확정하기", href: facts.scheduleHref }
+    : null;
+
   return {
     ...base,
-    bucket: SESSION_BUCKET.hosted,
     chip: state === SESSION_STATE.confirmed ? SESSION_CHIP.confirmed : SESSION_CHIP.recruiting,
     badge: gameStatusLabel[status],
     badgeColor: gameStatusColor[status],
@@ -60,13 +70,9 @@ export function toHostedSessionCard(
       !context.readOnly && coordinate && !timeSet && `응답 ${responses}/${confirmedCount}`,
       `확정 ${seats}`,
     ),
-    action: gmTodo
-      ? {
-          kind: SESSION_ACTION_KIND.confirmTime,
-          label: "세션 시간 확정하기",
-          href: facts.scheduleHref,
-        }
-      : null,
+    action: context.readOnly ? null : hostMenu,
+    todo,
+    waitingCount,
     sortKey: facts.sortKey,
   };
 }

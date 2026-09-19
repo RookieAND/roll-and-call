@@ -1,0 +1,44 @@
+"use client";
+
+import { Text } from "@trpg/ui";
+import type { ReactNode } from "react";
+
+import { AVAILABILITY_MAX_HOUR, AVAILABILITY_MIN_HOUR } from "@/entities/profile";
+
+import type { DayIntervalRow } from "../model/day-interval-row";
+import { HourSelect } from "./hour-select";
+
+export function IntervalFields({
+  label,
+  row,
+  onHourChange,
+  trailing,
+}: {
+  label: string;
+  row: DayIntervalRow;
+  onHourChange: (index: number, edge: "from" | "to", hour: number) => void;
+  trailing: ReactNode;
+}) {
+  return (
+    <>
+      <HourSelect
+        label={`${label}요일 시작 시각`}
+        value={row.interval.from}
+        min={AVAILABILITY_MIN_HOUR}
+        max={AVAILABILITY_MAX_HOUR - 1}
+        onChange={(hour) => onHourChange(row.index, "from", hour)}
+      />
+      <Text typography="body3" foreground="hint" className="flex-none">
+        ~
+      </Text>
+      <HourSelect
+        label={`${label}요일 끝 시각`}
+        value={row.interval.to}
+        min={AVAILABILITY_MIN_HOUR + 1}
+        max={AVAILABILITY_MAX_HOUR}
+        onChange={(hour) => onHourChange(row.index, "to", hour)}
+      />
+      {trailing}
+    </>
+  );
+}

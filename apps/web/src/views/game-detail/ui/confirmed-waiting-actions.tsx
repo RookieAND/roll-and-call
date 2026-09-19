@@ -21,7 +21,8 @@ export function ConfirmedWaitingActions({
     <VStack gap={3}>
       <ConfirmedSessionNotice confirmedAt={confirmedAt} />
       <ActionHint>
-        대기 {waitlistRank}/{waitingCount} — 이번 회차는 자리가 나지 않습니다.
+        대기 {waitlistRank}번 · 총 {waitingCount}명 — 이번 회차는 자리가 없습니다. 다음 회차가
+        열리면 알립니다.
       </ActionHint>
       <LeaveGameButton gameId={gameId} className={ACTION_SECONDARY_CLASS}>
         대기 취소

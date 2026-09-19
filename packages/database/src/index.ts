@@ -4,6 +4,7 @@ export {
   recruitMethod,
   participantStatus,
   profiles,
+  profileMemos,
   games,
   participants,
   availabilities,
@@ -19,4 +20,8 @@ export {
   type NewParticipant,
   type Availability,
   type NewAvailability,
+  type ProfileMemo,
+  type ProfileKeyword,
+  type AvailabilityInterval,
+  type ProfileLink,
 } from "./schema";

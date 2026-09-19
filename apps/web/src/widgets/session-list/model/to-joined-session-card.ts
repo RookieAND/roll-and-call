@@ -4,7 +4,6 @@ import type { SessionFacts } from "./derive-session-facts";
 import { joinParts } from "./join-parts";
 import {
   SESSION_ACTION_KIND,
-  SESSION_BUCKET,
   SESSION_CHIP,
   SESSION_TONE,
   type SessionCardModel,
@@ -17,22 +16,28 @@ export function toJoinedSessionCard(
   facts: SessionFacts,
   context: SessionContext,
 ): SessionCardModel {
-  const { base, line, awaitingTime, timeSet, sessionWhen, seats, sortKey } = facts;
+  const { base, line, awaitingTime, timeSet, sessionWhen, seats, sortKey, waitingCount } = facts;
   const meta = joinParts(game.rule, `GM ${game.gm?.username ?? "?"}`, seats);
-  const common = { ...base, bucket: SESSION_BUCKET.joined, meta, sortKey };
+  const common = { ...base, meta, sortKey, waitingCount, todo: null };
   const { waiting } = splitRoster(game.participants);
   const waitlistRank =
     waiting.find((participant) => participant.userId === context.viewerId)?.waitlistRank ?? null;
 
   if (waitlistRank !== null) {
+    // 승인 대기(GM이 아직 보지 않음)와 정원 대기(순번)는 배지로만 갈리고 버튼은 하나다.
+    const seen = line.deadlinePassed || timeSet;
     return {
       ...common,
       chip: SESSION_CHIP.waiting,
-      badge: `대기 ${waitlistRank}번`,
+      badge: seen ? `대기 ${waitlistRank}번` : "승인 대기",
       badgeColor: "gray",
-      schedule: sessionWhen ?? joinParts(line.text, line.deadline),
+      schedule: seen
+        ? "정원이 차 순서를 기다립니다 · 자리가 나면 알립니다"
+        : joinParts(line.text, line.deadline),
       scheduleTone: SESSION_TONE.normal,
-      action: null,
+      action: context.readOnly
+        ? null
+        : { kind: SESSION_ACTION_KIND.cancelWaitlist, label: "대기 취소", href: `/games/${game.id}` },
     };
   }
 
@@ -55,6 +60,11 @@ export function toJoinedSessionCard(
     : awaitingTime
       ? "모집이 끝나 GM이 세션 시간을 정하는 중입니다"
       : joinParts(line.text, line.deadline);
+  const submit = {
+    kind: SESSION_ACTION_KIND.submitAvailability,
+    label: "일정 조율",
+    href: facts.scheduleHref,
+  };
 
   return {
     ...common,
@@ -63,12 +73,7 @@ export function toJoinedSessionCard(
     badgeColor: "primary",
     schedule,
     scheduleTone: needsResponse ? SESSION_TONE.warning : SESSION_TONE.normal,
-    action: needsResponse
-      ? {
-          kind: SESSION_ACTION_KIND.submitAvailability,
-          label: "일정 조율",
-          href: facts.scheduleHref,
-        }
-      : null,
+    action: needsResponse ? submit : null,
+    todo: needsResponse ? submit : null,
   };
 }

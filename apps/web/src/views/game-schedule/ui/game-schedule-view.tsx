@@ -10,7 +10,7 @@ import {
   isGameGm,
   SCHEDULE_MODE,
 } from "@/entities/game";
-import { presetSlotPrefill } from "@/entities/profile";
+import { availabilityPrefill } from "@/entities/profile";
 import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows, formatDate } from "@/shared/lib";
 import { getCurrentUser, getGameById, getProfile, getResponseCounts } from "@/shared/server";
@@ -62,7 +62,7 @@ export async function GameScheduleView({ id }: { id: string }) {
     involved && viewerId && !game.confirmedAt ? getProfile(viewerId) : null,
     isGm ? getResponseCounts([id]) : new Map<string, number>(),
   ]);
-  const prefill = profile ? presetSlotPrefill(profile.defaultSlots ?? [], days, timeRows) : null;
+  const prefill = profile ? availabilityPrefill(profile.availability, days, timeRows) : null;
 
   return (
     <>

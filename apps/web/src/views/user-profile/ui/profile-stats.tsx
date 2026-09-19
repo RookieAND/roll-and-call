@@ -1,22 +1,14 @@
 import { Text } from "@trpg/ui";
 
-export function ProfileStats({
-  hosted,
-  upcoming,
-  past,
-}: {
-  hosted: number;
-  upcoming: number;
-  past: number;
-}) {
+// 이 숫자는 어느 자리에 많이 앉았는지만 말한다. 어떤 사람인지는 성향이 말한다.
+export function ProfileStats({ hosted, played }: { hosted: number; played: number }) {
   const stats = [
-    { label: "진행한 세션", count: hosted },
-    { label: "참여 예정", count: upcoming },
-    { label: "마감된 세션", count: past },
+    { label: "운영한 세션", count: hosted },
+    { label: "참여한 세션", count: played },
   ];
 
   return (
-    <div className="grid grid-cols-3 border-t border-gray-200">
+    <div className="grid grid-cols-2 border-t border-gray-200">
       {stats.map((stat) => {
         const countForeground = stat.count === 0 ? "hint" : "normal";
         return (

@@ -13,7 +13,7 @@ export async function loadProfile(userId: string) {
     getJoinedGames(userId),
   ]);
   if (!profile) return null;
-  return { profile, ...buildProfileSessions({ hosted, joined, userId }) };
+  return { profile, sessions: buildProfileSessions({ hosted, joined, userId }) };
 }
 
 export type LoadedProfile = NonNullable<Awaited<ReturnType<typeof loadProfile>>>;

@@ -1,15 +1,16 @@
 import { redirect } from "next/navigation";
 
-import { SESSION_BUCKET, SESSION_CHIP } from "@/widgets/session-list";
+import { SESSION_ROLE } from "@/entities/game";
+import { SESSION_CHIP } from "@/widgets/session-list";
 
 const LEGACY_CLOSED_TAB = "closed";
 
-// 예전 주소: 내 세션 한 화면으로 합쳐졌으니 옛 탭 값을 새 탭·칩으로 옮겨 보낸다.
 export default async function Page({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const { tab } = await searchParams;
-  if (tab === LEGACY_CLOSED_TAB) redirect(`/me/sessions?tab=${SESSION_BUCKET.past}`);
+  const base = `/me/sessions?tab=${SESSION_ROLE.host}`;
+  if (tab === LEGACY_CLOSED_TAB) redirect(`${base}&status=${SESSION_CHIP.ended}`);
   if (tab === SESSION_CHIP.recruiting || tab === SESSION_CHIP.confirmed) {
-    redirect(`/me/sessions?tab=${SESSION_BUCKET.hosted}&status=${tab}`);
+    redirect(`${base}&status=${tab}`);
   }
-  redirect(`/me/sessions?tab=${SESSION_BUCKET.hosted}`);
+  redirect(base);
 }

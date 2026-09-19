@@ -24,26 +24,20 @@ export function MyPageSessions({ sessions }: { sessions: ReturnType<typeof summa
         </Link>
       </div>
 
-      {/* 세션이 없어도 세 행을 0으로 둔다. 점선 빈 상태는 목록 화면 몫이고, 여기선 다음 행동만 단다. */}
+      {/* 세션이 없어도 두 행을 그대로 두고 0으로 쓴다. 점선 빈 상태는 목록 화면 몫이다. */}
       <div className={MY_PAGE_GROUP_CLASS}>
         <MySessionRow
-          label="참여 중"
+          label="참여"
           count={sessions.joined.count}
           detail={sessions.joined.detail}
           href={sessions.joined.href}
         />
         <MySessionRow
-          label="내가 운영"
+          label="운영"
           count={sessions.hosting.count}
           detail={sessions.hosting.detail}
           urgent={sessions.hosting.urgent}
           href={sessions.hosting.href}
-        />
-        <MySessionRow
-          label="끝난 세션"
-          count={sessions.past.count}
-          detail="기록으로 남습니다"
-          href={sessions.past.href}
         />
       </div>
       {sessions.isEmpty && (

@@ -6,36 +6,44 @@ import type { RosterMember } from "@/entities/game";
 
 export type DetailRosterMember = RosterMember<{
   userId: string;
-  user: { username: string; avatarUrl: string | null } | null;
+  user: { username: string; avatarUrl: string | null; bio: string | null } | null;
 }>;
 
+const NO_BIO = "한 줄 소개 없음";
+
 export function RosterMemberRow({
-  rank,
-  member,
+  userId,
+  name,
+  avatarUrl,
+  bio,
   note,
 }: {
-  rank: number;
-  member: DetailRosterMember;
+  userId: string;
+  name: string | null | undefined;
+  avatarUrl: string | null | undefined;
+  bio: string | null | undefined;
   note?: string;
 }) {
   return (
     <Link
-      href={`/u/${member.userId}`}
-      className="flex min-h-12 items-center gap-2.5 border-b border-gray-100 py-2 transition-colors last:border-b-0 hover:bg-gray-50"
+      href={`/u/${userId}`}
+      className="flex min-h-14 items-center gap-2.5 py-2 transition-colors hover:bg-gray-50"
     >
-      <Text typography="code2" foreground="hint" className="w-5 shrink-0 text-center tabular-nums">
-        {rank}
-      </Text>
-      <Avatar src={member.user?.avatarUrl} name={member.user?.username} />
+      <Avatar src={avatarUrl} name={name} />
       <div className="min-w-0 flex-1">
-        <Text typography="subtitle1" className="block truncate">
-          {member.user?.username ?? "?"}
-        </Text>
-        {note && (
-          <Text typography="body4" foreground="hint" className="block truncate">
-            {note}
+        <div className="flex items-center gap-1.5">
+          <Text typography="subtitle1" className="truncate">
+            {name ?? "?"}
           </Text>
-        )}
+          {note && (
+            <Text typography="body4" foreground="hint" className="shrink-0">
+              {note}
+            </Text>
+          )}
+        </div>
+        <Text typography="body4" foreground={bio ? "muted" : "hint"} className="block truncate">
+          {bio || NO_BIO}
+        </Text>
       </div>
       <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />
     </Link>

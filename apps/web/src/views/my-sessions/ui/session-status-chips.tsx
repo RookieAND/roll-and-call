@@ -1,30 +1,38 @@
 import { Chip } from "@trpg/ui";
 import Link from "next/link";
 
-import { SESSION_CHIPS, type SessionBucket } from "@/widgets/session-list";
-
-import { sessionsHref } from "../model/sessions-href";
-
-type ChipKey = (typeof SESSION_CHIPS)[SessionBucket][number]["key"];
+import type { SessionRole } from "@/entities/game";
+import {
+  SESSION_CHIP,
+  SESSION_CHIPS,
+  sessionsHref,
+  type SessionChipKey,
+} from "@/widgets/session-list";
 
 export function SessionStatusChips({
   activeTab,
   activeChip,
+  endedCount,
 }: {
-  activeTab: SessionBucket;
-  activeChip: ChipKey;
+  activeTab: SessionRole;
+  activeChip: SessionChipKey;
+  endedCount: number;
 }) {
   return (
     <div className="flex gap-1.5 overflow-x-auto px-4 py-2.5">
       {SESSION_CHIPS[activeTab].map((chip) => {
         const selected = chip.key === activeChip;
+        const label =
+          chip.key === SESSION_CHIP.ended && endedCount > 0
+            ? `${chip.label} ${endedCount}`
+            : chip.label;
         return (
           <Chip key={chip.key} asChild selected={selected} className="h-[34px]">
             <Link
               href={sessionsHref(activeTab, chip.key)}
               aria-current={selected ? "page" : undefined}
             >
-              {chip.label}
+              {label}
             </Link>
           </Chip>
         );

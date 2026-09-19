@@ -20,7 +20,9 @@ export async function EditProfileView() {
             <EditProfileForm
               defaultUsername={profile?.username ?? ""}
               defaultBio={profile?.bio ?? ""}
-              defaultSlots={profile?.defaultSlots ?? []}
+              defaultKeywords={profile?.keywords ?? []}
+              defaultLinks={profile?.links ?? []}
+              availability={profile?.availability ?? []}
               avatarUrl={profileDisplay({ profile, user }).avatar}
             />
           ) : (

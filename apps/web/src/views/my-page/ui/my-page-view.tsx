@@ -8,7 +8,8 @@ import { loadMySessions } from "@/widgets/session-list";
 
 import { summarizeMySessions } from "../model/my-page-summary";
 import { sessionTodos } from "../model/session-todos";
-import { MyPageHeader } from "./my-page-header";
+import { MyPageLinks } from "./my-page-links";
+import { MyPageProfile } from "./my-page-profile";
 import { MyPageSessions } from "./my-page-sessions";
 import { MyPageSettings } from "./my-page-settings";
 import { MyPageTodos } from "./my-page-todos";
@@ -40,9 +41,16 @@ export async function MyPageView() {
       <AppBar title="마이페이지" />
       <Container size="sm">
         <VStack gap={5} className="py-[18px]">
+          <MyPageProfile
+            name={name}
+            avatarUrl={avatar}
+            bio={profile?.bio ?? null}
+            keywords={profile?.keywords ?? []}
+            availability={profile?.availability ?? []}
+          />
           {todos.length > 0 && <MyPageTodos todos={todos} />}
-          <MyPageHeader name={name} avatarUrl={avatar} bio={profile?.bio ?? null} />
           <MyPageSessions sessions={sessions} />
+          <MyPageLinks links={profile?.links ?? []} />
           <MyPageSettings handleLabel={handleLabel} />
         </VStack>
       </Container>

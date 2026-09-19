@@ -5,8 +5,6 @@ import { deriveActionView, GAME_ACTION_VIEW } from "./derive-action-view";
 const base = {
   sessionConfirmed: false,
   isGm: false,
-  isCoordinate: true,
-  deadlinePassed: false,
   isWaiting: false,
   isClosed: false,
   isSignedIn: true,
@@ -34,18 +32,12 @@ assert.equal(
   deriveActionView({ ...base, sessionConfirmed: true, isWaiting: true }),
   GAME_ACTION_VIEW.confirmedWaiting,
 );
-assert.equal(deriveActionView({ ...base, isGm: true }), GAME_ACTION_VIEW.gmCoordinate);
-assert.equal(
-  deriveActionView({ ...base, isGm: true, isCoordinate: false }),
-  GAME_ACTION_VIEW.gmFixed,
-);
-assert.equal(
-  deriveActionView({ ...base, isGm: true, deadlinePassed: true, isClosed: true }),
-  GAME_ACTION_VIEW.gmConfirm,
-);
+// GM은 모집 중이든 확정 뒤든 같은 운영 관리 바를 본다.
+assert.equal(deriveActionView({ ...base, isGm: true }), GAME_ACTION_VIEW.gm);
+assert.equal(deriveActionView({ ...base, isGm: true, isClosed: true }), GAME_ACTION_VIEW.gm);
 assert.equal(
   deriveActionView({ ...base, isGm: true, sessionConfirmed: true }),
-  GAME_ACTION_VIEW.confirmed,
+  GAME_ACTION_VIEW.gm,
 );
 
 console.log("derive-action-view.check ok");

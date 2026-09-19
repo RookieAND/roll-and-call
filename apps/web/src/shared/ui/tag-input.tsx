@@ -12,6 +12,8 @@ export type TagInputProps = {
   maxLength: number;
   placeholder: string;
   suggestions?: string[];
+  // 칩과 입력 칸 앞에 붙는 글자. 저장되는 값에는 들어가지 않는다.
+  prefix?: string;
 };
 
 export function TagInput({
@@ -22,6 +24,7 @@ export function TagInput({
   maxLength,
   placeholder,
   suggestions = [],
+  prefix = "",
 }: TagInputProps) {
   const [draft, setDraft] = useState("");
   const isFull = value.length >= max;
@@ -59,6 +62,7 @@ export function TagInput({
               aria-label={`${tag} 삭제`}
               onClick={() => onChange(value.filter((item) => item !== tag))}
             >
+              {prefix}
               {tag}
               <X size={13} aria-hidden />
             </Chip>

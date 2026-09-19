@@ -1,18 +1,20 @@
 import { Container } from "@trpg/ui";
 
+import { SESSION_ROLE } from "@/entities/game";
 import { LoginRequired } from "@/features/auth";
 import { getCurrentUser } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import {
   loadMySessions,
-  SESSION_BUCKET,
+  ONGOING_CHIP,
+  SESSION_CHIP,
   SESSION_CHIPS,
   SESSION_TABS,
   SessionList,
   SessionTabs,
+  sessionsHref,
 } from "@/widgets/session-list";
 
-import { ALL_SESSION_CHIPS, sessionsHref } from "../model/sessions-href";
 import { SessionStatusChips } from "./session-status-chips";
 import { SessionsEmpty } from "./sessions-empty";
 
@@ -32,30 +34,29 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
   }
 
   const sessions = await loadMySessions(user.id);
-  const activeTab =
-    SESSION_TABS.find((tabItem) => tabItem.key === tab)?.key ?? SESSION_BUCKET.joined;
+  const activeTab = SESSION_TABS.find((item) => item.key === tab)?.key ?? SESSION_ROLE.player;
   const chips = SESSION_CHIPS[activeTab];
-  const activeChip = chips.find((chip) => chip.key === status)?.key ?? ALL_SESSION_CHIPS;
+  const activeChip = chips.find((chip) => chip.key === status)?.key ?? ONGOING_CHIP;
   const list = sessions[activeTab];
   const items =
-    activeChip === ALL_SESSION_CHIPS ? list : list.filter((card) => card.chip === activeChip);
-  const filteredChipLabel =
-    activeChip === ALL_SESSION_CHIPS
-      ? null
-      : (chips.find((chip) => chip.key === activeChip)?.label ?? null);
-  const roleTabs = SESSION_TABS.map((tabItem) => ({
-    key: tabItem.key,
-    label: tabItem.label,
-    count: sessions[tabItem.key].length,
-    href: sessionsHref(tabItem.key),
+    activeChip === ONGOING_CHIP
+      ? list.filter((card) => card.chip !== SESSION_CHIP.ended)
+      : list.filter((card) => card.chip === activeChip);
+  // 탭 숫자는 그 역할의 진행 중 건수다. 기록까지 합치면 할 일의 크기를 못 읽는다.
+  const roleTabs = SESSION_TABS.map((item) => ({
+    key: item.key,
+    label: item.label,
+    count: sessions[item.key].filter((card) => card.chip !== SESSION_CHIP.ended).length,
+    href: sessionsHref(item.key),
   }));
+  const endedCount = list.filter((card) => card.chip === SESSION_CHIP.ended).length;
 
   return (
     <>
       <AppBar back="/me" title="내 세션" />
       <div className="sticky top-[52px] z-10 border-b border-gray-100 bg-surface">
         <SessionTabs label="역할" tabs={roleTabs} activeKey={activeTab} />
-        {chips.length > 0 && <SessionStatusChips activeTab={activeTab} activeChip={activeChip} />}
+        <SessionStatusChips activeTab={activeTab} activeChip={activeChip} endedCount={endedCount} />
       </div>
 
       <Container size="sm">
@@ -63,7 +64,7 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
           {items.length > 0 ? (
             <SessionList items={items} />
           ) : (
-            <SessionsEmpty activeTab={activeTab} chipLabel={filteredChipLabel} />
+            <SessionsEmpty activeTab={activeTab} activeChip={activeChip} />
           )}
         </div>
       </Container>

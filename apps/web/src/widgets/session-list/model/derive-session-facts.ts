@@ -1,6 +1,7 @@
 import {
   countConfirmed,
   deriveSessionState,
+  PARTICIPANT_STATUS,
   isDeadlineUrgent,
   SCHEDULE_MODE,
   scheduleLine,
@@ -40,9 +41,14 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
     ? joinParts(formatDateTime(startsAt), relativeDay(ddayKst(startsAt, now)))
     : null;
 
+  const waitingCount = game.participants.filter(
+    (participant) => participant.status === PARTICIPANT_STATUS.waiting,
+  ).length;
+
   return {
     state,
     line,
+    waitingCount,
     coordinate,
     confirmedCount,
     awaitingTime,

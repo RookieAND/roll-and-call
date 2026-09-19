@@ -3,7 +3,7 @@ import { Container, VStack } from "@trpg/ui";
 import {
   deriveGameStatus,
   isGameGm,
-  SCHEDULE_MODE,
+  isSessionLocked,
   scheduleLine,
   splitRoster,
 } from "@/entities/game";
@@ -16,6 +16,7 @@ import { GameDetailThumbnail } from "./game-detail-thumbnail";
 import { GameImageGallery } from "./game-image-gallery";
 import { GameInfoTable } from "./game-info-table";
 import { GamePreflightSection } from "./game-preflight-section";
+import { GameRecruitMethodSection } from "./game-recruit-method-section";
 import { GameRosterSection } from "./game-roster-section";
 import { GameSynopsis } from "./game-synopsis";
 
@@ -41,10 +42,6 @@ export function GameDetail({
     participantCount: confirmed.length,
     waitlistEnabled: game.waitlistEnabled,
   });
-  const respondedConfirmed = confirmed.filter((participant) =>
-    respondedIds.includes(participant.userId),
-  ).length;
-  const canChangeTime = game.scheduleMode === SCHEDULE_MODE.coordinate && game.confirmedAt !== null;
   const viewerResponded = viewerId !== null && respondedIds.includes(viewerId);
 
   return (
@@ -56,14 +53,9 @@ export function GameDetail({
 
           <VStack gap={5} className="px-4 pb-2">
             <GameDetailHeader
-              gameId={game.id}
               title={game.title}
               status={status}
               statusLine={scheduleLine(game)}
-              isGm={isGm}
-              confirmedCount={confirmed.length}
-              waitingCount={waiting.length}
-              canChangeTime={canChangeTime}
             />
 
             <GameInfoTable game={game} isGm={isGm} />
@@ -74,15 +66,18 @@ export function GameDetail({
 
             <GamePreflightSection game={game} />
 
+            <GameRecruitMethodSection game={game} />
+
             <GameRosterSection
               gameId={game.id}
+              gm={{ userId: game.gmId, ...game.gm }}
               confirmed={confirmed}
               waiting={waiting}
               maxPlayers={game.maxPlayers}
-              status={status}
+              recruitMethod={game.recruitMethod}
+              sessionConfirmed={isSessionLocked(game)}
               isGm={isGm}
               viewerId={viewerId}
-              endDate={game.endDate}
             />
           </VStack>
 
@@ -94,7 +89,6 @@ export function GameDetail({
             waitlistRank={viewerParticipant?.waitlistRank ?? null}
             waitingCount={waiting.length}
             confirmedCount={confirmed.length}
-            respondedConfirmed={respondedConfirmed}
             viewerResponded={viewerResponded}
             status={status}
           />

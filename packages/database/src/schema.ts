@@ -4,6 +4,7 @@ import {
   boolean,
   date,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   primaryKey,
@@ -20,6 +21,15 @@ export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery"])
 // 정원(maxPlayers)만큼 confirmed로 채우고 초과분은 waiting. 승격/강등/자동 승계는 이 값만 바꾼다.
 export const participantStatus = pgEnum("participant_status", ["confirmed", "waiting"]);
 
+// 본인이 적는 성향. 서버에서 정규화해 넣으므로 읽는 화면은 다시 다듬지 않는다.
+export type ProfileKeyword = string;
+
+// 요일 하나에 구간 목록. day는 0=월 … 6=일, from·to는 1시간 단위 시각(0~24).
+export type AvailabilityInterval = { day: number; from: number; to: number };
+
+// service는 link-services의 키, value는 핸들이나 주소 원문.
+export type ProfileLink = { service: string; value: string };
+
 // Mirror of auth.users, kept in sync by a trigger. `id` equals the Supabase auth uid.
 export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(),
@@ -27,9 +37,27 @@ export const profiles = pgTable("profiles", {
   username: text("username").notNull(),
   avatarUrl: text("avatar_url"),
   bio: text("bio"),
-  defaultSlots: text("default_slots").array(),
+  keywords: text("keywords").array().notNull().default([]),
+  availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
+  links: jsonb("links").$type<ProfileLink[]>().notNull().default([]),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+// 쓴 사람만 본다. 상대는 내용도, 메모가 있다는 사실도 볼 수 없다.
+export const profileMemos = pgTable(
+  "profile_memos",
+  {
+    ownerId: uuid("owner_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    targetId: uuid("target_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    body: text("body").notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.ownerId, table.targetId] })],
+);
 
 export const games = pgTable("games", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -144,3 +172,4 @@ export type Participant = typeof participants.$inferSelect;
 export type NewParticipant = typeof participants.$inferInsert;
 export type Availability = typeof availabilities.$inferSelect;
 export type NewAvailability = typeof availabilities.$inferInsert;
+export type ProfileMemo = typeof profileMemos.$inferSelect;

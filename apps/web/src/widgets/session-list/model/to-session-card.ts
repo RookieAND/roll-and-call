@@ -12,7 +12,7 @@ export function toSessionCard(
   context: SessionContext,
 ): SessionCardModel {
   const facts = deriveSessionFacts(game, role, context);
-  if (facts.past) return toPastSessionCard(game, facts);
+  if (facts.past) return toPastSessionCard(game, facts, context);
   if (role === SESSION_ROLE.host) return toHostedSessionCard(game, facts, context);
   return toJoinedSessionCard(game, facts, context);
 }

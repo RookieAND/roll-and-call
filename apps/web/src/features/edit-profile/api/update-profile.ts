@@ -3,7 +3,7 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-import { SLOT_KEYS } from "@/entities/profile";
+import { normalizeKeywords, normalizeLinks, type ProfileLink } from "@/entities/profile";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import { db, getCurrentUser, profiles } from "@/shared/server";
 
@@ -12,7 +12,8 @@ import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/pro
 export type UpdateProfileInput = {
   username: string;
   bio: string;
-  defaultSlots: string[];
+  keywords: string[];
+  links: ProfileLink[];
 };
 
 export async function updateProfile(input: UpdateProfileInput): Promise<ActionResult> {
@@ -33,11 +34,15 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
       field: PROFILE_FIELD.bio,
     };
   }
-  const defaultSlots = input.defaultSlots.filter((slot) => SLOT_KEYS.includes(slot));
 
   await db
     .update(profiles)
-    .set({ username, bio: bio || null, defaultSlots })
+    .set({
+      username,
+      bio: bio || null,
+      keywords: normalizeKeywords(input.keywords),
+      links: normalizeLinks(input.links),
+    })
     .where(eq(profiles.id, user.id));
 
   revalidatePath("/me");

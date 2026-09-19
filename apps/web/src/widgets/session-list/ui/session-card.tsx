@@ -1,15 +1,15 @@
-import { Badge, Button, HStack, Text, cn } from "@trpg/ui";
+import { Badge, HStack, Text, cn } from "@trpg/ui";
 import Link from "next/link";
 
 import { GameRoundBadge } from "@/entities/game";
 
 import {
-  SESSION_ACTION_KIND,
-  SESSION_BUCKET,
+  SESSION_CHIP,
   SESSION_TONE,
   type SessionCardModel,
   type SessionTone,
 } from "../model/session-card-model";
+import { SessionCardAction } from "./session-card-action";
 
 const TONE_CLASS: Record<SessionTone, string> = {
   [SESSION_TONE.normal]: "text-gray-600",
@@ -22,8 +22,7 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
   const cardClass = model.urgent
     ? "border-[1.5px] border-danger-300 bg-danger-50"
     : "border border-gray-200";
-  const titleForeground = model.bucket === SESSION_BUCKET.past ? "muted" : "normal";
-  const actionVariant = model.action?.kind === SESSION_ACTION_KIND.confirmTime ? "solid" : "tinted";
+  const titleForeground = model.chip === SESSION_CHIP.ended ? "muted" : "normal";
 
   return (
     <div className={cn("rounded-[14px] p-3.5", cardClass)}>
@@ -54,11 +53,7 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
           {model.meta}
         </Text>
       </Link>
-      {model.action && (
-        <Button asChild variant={actionVariant} className="mt-2.5 h-10 w-full">
-          <Link href={model.action.href}>{model.action.label}</Link>
-        </Button>
-      )}
+      <SessionCardAction model={model} />
     </div>
   );
 }
