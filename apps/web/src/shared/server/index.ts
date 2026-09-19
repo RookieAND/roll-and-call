@@ -5,6 +5,7 @@ export {
   scheduleMode,
   participantStatus,
   profiles,
+  profileMemos,
   games,
   participants,
   availabilities,
@@ -20,6 +21,9 @@ export {
   type NewParticipant,
   type Availability,
   type NewAvailability,
+  type ProfileMemo,
+  type AvailabilityInterval,
+  type ProfileLink,
 } from "@trpg/database";
 export { getRecruitingGamesPage, GAMES_PAGE_SIZE } from "./get-recruiting-games-page";
 export { getGamesByGm } from "./get-games-by-gm";
@@ -33,6 +37,7 @@ export { getRespondedUserIds } from "./get-responded-user-ids";
 export { getGameAvailabilities } from "./get-game-availabilities";
 export { getUserConfirmedSlots } from "./get-user-confirmed-slots";
 export { getProfile } from "./profiles";
+export { getProfileMemo } from "./get-profile-memo";
 export { notifyGameCreated } from "./notify-game-created";
 export { sendGameImages } from "./send-game-images";
 export { refreshRecruitPost } from "./refresh-recruit-post";
