@@ -8,6 +8,7 @@ export function richTextInline(nodes: RichTextNodeData[] = []): string {
       for (const mark of node.marks ?? []) {
         if (mark.type === "bold") text = `**${text}**`;
         if (mark.type === "italic") text = `*${text}*`;
+        if (mark.type === "spoiler") text = `||${text}||`;
         if (mark.type === "link" && mark.attrs?.href) text = `[${text}](${mark.attrs.href})`;
       }
       return text;

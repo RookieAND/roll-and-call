@@ -2,19 +2,28 @@
 
 import type { Editor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import { cn, IconButton } from "@trpg/ui";
-import { Bold, Italic, Link2, List, ListOrdered } from "lucide-react";
+import { cn, IconButton, TextInput } from "@trpg/ui";
+import { Bold, Check, EyeOff, Italic, Link2, List, ListOrdered } from "lucide-react";
+import { useState } from "react";
 
 import { safeHref } from "./safe-href";
 
 export function RichTextMenu({ editor }: { editor: Editor }) {
-  function toggleLink() {
+  const [linkDraft, setLinkDraft] = useState<string | null>(null);
+
+  function openLink() {
     if (editor.isActive("link")) {
       editor.chain().focus().unsetLink().run();
       return;
     }
-    const href = safeHref(window.prompt("링크 주소 (https://...)")?.trim());
+    setLinkDraft("https://");
+  }
+
+  function submitLink() {
+    const href = safeHref(linkDraft?.trim());
     if (href) editor.chain().focus().setLink({ href }).run();
+    else editor.chain().focus().run();
+    setLinkDraft(null);
   }
 
   const items = [
@@ -42,25 +51,55 @@ export function RichTextMenu({ editor }: { editor: Editor }) {
       Icon: ListOrdered,
       run: () => editor.chain().focus().toggleOrderedList().run(),
     },
-    { name: "link", label: "링크", Icon: Link2, run: toggleLink },
+    {
+      name: "spoiler",
+      label: "스포일러 가리기",
+      Icon: EyeOff,
+      run: () => editor.chain().focus().toggleSpoiler().run(),
+    },
+    { name: "link", label: "링크", Icon: Link2, run: openLink },
   ];
 
   return (
     <BubbleMenu
       editor={editor}
+      shouldShow={({ editor }) => linkDraft !== null || !editor.state.selection.empty}
       className="flex gap-0.5 rounded-lg border border-gray-200 bg-surface p-1 shadow-md"
     >
-      {items.map(({ name, label, Icon, run }) => (
-        <IconButton
-          key={name}
-          size="sm"
-          aria-label={label}
-          className={cn(editor.isActive(name) && "bg-gray-100 text-gray-900")}
-          onClick={run}
-        >
-          <Icon size={16} />
-        </IconButton>
-      ))}
+      {linkDraft === null ? (
+        items.map(({ name, label, Icon, run }) => (
+          <IconButton
+            key={name}
+            size="sm"
+            aria-label={label}
+            className={cn(editor.isActive(name) && "bg-gray-100 text-gray-900")}
+            onClick={run}
+          >
+            <Icon size={16} />
+          </IconButton>
+        ))
+      ) : (
+        <>
+          <TextInput
+            autoFocus
+            aria-label="링크 주소"
+            placeholder="https://..."
+            className="h-8 w-56 px-2 text-sm"
+            value={linkDraft}
+            onChange={(event) => setLinkDraft(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                submitLink();
+              }
+              if (event.key === "Escape") setLinkDraft(null);
+            }}
+          />
+          <IconButton size="sm" aria-label="링크 적용" onClick={submitLink}>
+            <Check size={16} />
+          </IconButton>
+        </>
+      )}
     </BubbleMenu>
   );
 }

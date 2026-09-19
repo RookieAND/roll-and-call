@@ -10,6 +10,15 @@ export function RichTextNode({ node }: { node: RichTextNodeData }) {
     for (const mark of node.marks ?? []) {
       if (mark.type === "bold") text = <strong>{text}</strong>;
       if (mark.type === "italic") text = <em>{text}</em>;
+      // 클릭해서 펼치는 스포일러. 체크박스 하나면 되는 일이라 클라이언트 컴포넌트를 만들지 않는다.
+      if (mark.type === "spoiler") {
+        text = (
+          <label className="spoiler">
+            <input type="checkbox" hidden />
+            {text}
+          </label>
+        );
+      }
       const href = mark.type === "link" ? safeHref(mark.attrs?.href) : undefined;
       if (href) {
         text = (

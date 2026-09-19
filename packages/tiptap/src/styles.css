@@ -26,3 +26,16 @@
   color: var(--color-primary-ink);
   text-decoration: underline;
 }
+.rich-text .spoiler {
+  border-radius: 0.25rem;
+  background: var(--color-gray-200);
+  padding: 0 0.125rem;
+}
+.rich-text label.spoiler {
+  cursor: pointer;
+  color: transparent;
+}
+.rich-text label.spoiler:has(:checked) {
+  color: inherit;
+  background: color-mix(in srgb, var(--color-gray-200) 50%, transparent);
+}

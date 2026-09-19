@@ -67,6 +67,21 @@ const ordered = {
 };
 assert.equal(richTextToMarkdown(JSON.stringify(ordered)), "1. 가\n2. 나");
 
+// 스포일러는 디스코드 문법 ||…||로 나간다.
+const spoiler = {
+  type: "doc",
+  content: [
+    {
+      type: "paragraph",
+      content: [
+        { type: "text", text: "범인은 " },
+        { type: "text", text: "집사", marks: [{ type: "spoiler" }] },
+      ],
+    },
+  ],
+};
+assert.equal(richTextToMarkdown(JSON.stringify(spoiler)), "범인은 ||집사||");
+
 // 리치 에디터 이전 평문은 그대로 남는다.
 assert.equal(richTextToMarkdown("옛날 시놉시스\n두 번째 줄"), "옛날 시놉시스\n\n두 번째 줄");
 

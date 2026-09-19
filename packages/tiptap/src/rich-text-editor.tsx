@@ -7,6 +7,7 @@ import { cn, textFieldVariants } from "@trpg/ui";
 
 import { toRichTextDoc } from "./rich-text-doc";
 import { RichTextMenu } from "./rich-text-menu";
+import { Spoiler } from "./spoiler";
 
 const EDITOR_CLASS = "rich-text min-h-24 py-2.5 outline-none";
 
@@ -41,6 +42,7 @@ export function RichTextEditor({
         underline: false,
         link: { openOnClick: false, protocols: ["http", "https"] },
       }),
+      Spoiler,
       CharacterCount.configure({ limit }),
     ],
     content: toRichTextDoc(value),

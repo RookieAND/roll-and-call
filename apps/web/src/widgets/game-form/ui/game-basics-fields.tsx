@@ -80,8 +80,8 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
           />
         </Field>
         <Text typography="body4" foreground="hint" render={<p />}>
-          어떤 이야기인지, 어떤 분위기인지 적어주세요. 글을 끌어서 고르면 굵게·기울임·목록·링크를 쓸
-          수 있습니다.
+          어떤 이야기인지, 어떤 분위기인지 적어주세요. 글을 끌어서 고르면
+          굵게·기울임·목록·링크·스포일러를 쓸 수 있습니다.
         </Text>
       </div>
     </>
