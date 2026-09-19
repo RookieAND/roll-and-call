@@ -6,9 +6,14 @@ import { useState } from "react";
 
 import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
 
+import { ConfirmedRosterSheet } from "./confirmed-roster-sheet";
+import { LotteryRosterSheet } from "./lottery-roster-sheet";
+import type { RosterSheetGm } from "./roster-gm-group";
 import { RosterGroupSection } from "./roster-group-section";
 import type { DetailRosterMember } from "./roster-member-row";
-import { RosterSheet, type RosterSheetSection } from "./roster-sheet";
+import { WaitingRosterSheet } from "./waiting-roster-sheet";
+
+type RosterSheetName = "lottery" | "confirmed" | "waiting";
 
 export function GameRosterSection({
   gameId,
@@ -22,7 +27,7 @@ export function GameRosterSection({
   viewerId,
 }: {
   gameId: string;
-  gm: { userId: string; username?: string; avatarUrl?: string | null; bio?: string | null };
+  gm: RosterSheetGm;
   confirmed: DetailRosterMember[];
   waiting: DetailRosterMember[];
   maxPlayers: number;
@@ -31,11 +36,15 @@ export function GameRosterSection({
   isGm: boolean;
   viewerId: string | null;
 }) {
-  const [openSection, setOpenSection] = useState<RosterSheetSection | null>(null);
+  const [openSheet, setOpenSheet] = useState<RosterSheetName | null>(null);
   // 추첨은 뽑기 전까지 확정과 대기를 가르지 않는다 — 한 덩어리의 "신청"으로 본다.
   const isLottery = recruitMethod === RECRUIT_METHOD.lottery && !drawn;
   const hasMembers = confirmed.length + waiting.length > 0;
   const viewerWaiting = waiting.find((member) => member.userId === viewerId);
+
+  function closeSheet(next: boolean) {
+    if (!next) setOpenSheet(null);
+  }
 
   const rosterAction = isGm ? (
     <Button asChild variant="ghost" size="sm" className="text-primary-ink">
@@ -47,7 +56,7 @@ export function GameRosterSection({
         variant="ghost"
         size="sm"
         className="text-primary-ink"
-        onClick={() => setOpenSection("confirmed")}
+        onClick={() => setOpenSheet(isLottery ? "lottery" : "confirmed")}
       >
         명단 보기
       </Button>
@@ -83,7 +92,7 @@ export function GameRosterSection({
                     variant="ghost"
                     size="sm"
                     className="text-primary-ink"
-                    onClick={() => setOpenSection("waiting")}
+                    onClick={() => setOpenSheet("waiting")}
                   >
                     명단 보기
                   </Button>
@@ -99,14 +108,24 @@ export function GameRosterSection({
         </>
       )}
 
-      <RosterSheet
-        open={openSection !== null}
-        onOpenChange={(next) => !next && setOpenSection(null)}
-        section={openSection ?? "confirmed"}
+      <LotteryRosterSheet
+        open={openSheet === "lottery"}
+        onOpenChange={closeSheet}
+        gm={gm}
+        applicants={[...confirmed, ...waiting]}
+        viewerId={viewerId}
+      />
+      <ConfirmedRosterSheet
+        open={openSheet === "confirmed"}
+        onOpenChange={closeSheet}
         gm={gm}
         confirmed={confirmed}
+        viewerId={viewerId}
+      />
+      <WaitingRosterSheet
+        open={openSheet === "waiting"}
+        onOpenChange={closeSheet}
         waiting={waiting}
-        isLottery={isLottery}
         viewerId={viewerId}
       />
     </VStack>
