@@ -23,19 +23,21 @@ export function JoinedActions({
   drawn: boolean;
   viewerResponded: boolean;
 }) {
-  const leaveLockedReason = drawn
-    ? "추첨이 끝나"
-    : expired
-      ? "모집이 마감되어"
-      : "정원이 차서";
-  const leaveLockedMessage = `참여가 확정되었습니다 · ${leaveLockedReason} 취소는 GM에게 문의해야 합니다`;
+  const leaveLockedReason = drawn ? "추첨이 끝나" : expired ? "모집이 마감되어" : "정원이 차서";
   const needsResponse = canSchedule && !viewerResponded;
 
   // 취소할 수 없으면 왜 취소가 없는지 먼저 알리고, 그 아래에 조율 버튼 하나만 둔다.
   if (!canLeave) {
     return (
       <VStack gap={2}>
-        <StatusNotice tone="muted">{leaveLockedMessage}</StatusNotice>
+        <StatusNotice tone="muted" className="text-left">
+          <Text typography="subtitle2" render={<p />}>
+            참여가 확정되었습니다
+          </Text>
+          <Text typography="body3" foreground="muted" render={<p />} className="mt-1.5">
+            {leaveLockedReason} 취소는 GM에게 문의해야 합니다.
+          </Text>
+        </StatusNotice>
         {canSchedule && <ScheduleLink gameId={gameId} className={ACTION_PRIMARY_CLASS} />}
       </VStack>
     );

@@ -1,7 +1,6 @@
 import {
   GAME_STATUS,
   type GameStatus,
-  isDeadlinePassed,
   isSessionLocked,
   PARTICIPANT_STATUS,
   type ParticipantStatus,
@@ -26,7 +25,6 @@ export type GameActionZoneProps = {
   viewerStatus: ParticipantStatus | null;
   waitlistRank: number | null;
   waitingCount: number;
-  confirmedCount: number;
   viewerResponded: boolean;
   status: GameStatus;
   canSchedule: boolean;
@@ -39,7 +37,6 @@ export function GameActionZone({
   viewerStatus,
   waitlistRank,
   waitingCount,
-  confirmedCount,
   viewerResponded,
   status,
   canSchedule,
@@ -47,7 +44,6 @@ export function GameActionZone({
   // 기한 경과, 또는 대기 신청을 끈 게임의 정원 충족(full). 대기 받는 정원 충족(confirmed)은 마감이 아니다.
   const isClosed = status === GAME_STATUS.closed || status === GAME_STATUS.full;
   const sessionConfirmed = isSessionLocked(game);
-  const deadlinePassed = isDeadlinePassed(game.endDate);
   const actionView = deriveActionView({
     // 일시 지정형은 등록 때부터 confirmedAt이 있지만 모집 중이면 참여하기를 보여야 한다.
     sessionConfirmed,
@@ -68,14 +64,7 @@ export function GameActionZone({
   switch (actionView) {
     case GAME_ACTION_VIEW.gm:
       return (
-        <GmActions
-          gameId={game.id}
-          confirmedAt={sessionConfirmed ? game.confirmedAt : null}
-          confirmedCount={confirmedCount}
-          waitingCount={waitingCount}
-          endDate={game.endDate}
-          deadlinePassed={deadlinePassed}
-        />
+        <GmActions gameId={game.id} confirmedAt={sessionConfirmed ? game.confirmedAt : null} />
       );
     case GAME_ACTION_VIEW.confirmed:
       return (
@@ -91,17 +80,11 @@ export function GameActionZone({
           gameId={game.id}
           confirmedAt={game.confirmedAt!}
           waitlistRank={waitlistRank}
-          waitingCount={waitingCount}
         />
       );
     case GAME_ACTION_VIEW.waiting:
       return (
-        <WaitingActions
-          gameId={game.id}
-          canSchedule={canSchedule}
-          waitlistRank={waitlistRank}
-          waitingCount={waitingCount}
-        />
+        <WaitingActions gameId={game.id} canSchedule={canSchedule} waitlistRank={waitlistRank} />
       );
     case GAME_ACTION_VIEW.joined:
       return (

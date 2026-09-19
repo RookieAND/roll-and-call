@@ -43,6 +43,7 @@ export { sendGameImages } from "./send-game-images";
 export { refreshRecruitPost } from "./refresh-recruit-post";
 export { notifyGameJoined } from "./notify-game-joined";
 export { notifyGameLeft } from "./notify-game-left";
+export { notifyGameCancelled } from "./notify-game-cancelled";
 export { notifyRecruitmentComplete } from "./notify-recruitment-complete";
 export { notifyDrawResult } from "./notify-draw-result";
 export { notifySessionStartingSoon } from "./notify-session-starting-soon";

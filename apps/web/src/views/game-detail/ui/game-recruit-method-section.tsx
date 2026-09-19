@@ -1,10 +1,12 @@
-import { Text, VStack } from "@trpg/ui";
+import { HStack, Text, VStack } from "@trpg/ui";
+import { ListOrdered, Trophy } from "lucide-react";
 
 import { RECRUIT_METHOD } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 
 export function GameRecruitMethodSection({ game }: { game: GameDetailData }) {
   const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
+  const Icon = isLottery ? Trophy : ListOrdered;
   const lines = isLottery
     ? ["정원과 관계없이 신청을 받습니다.", `마감 뒤 GM이 추첨으로 ${game.maxPlayers}명을 정합니다.`]
     : [
@@ -19,16 +21,21 @@ export function GameRecruitMethodSection({ game }: { game: GameDetailData }) {
       <Text typography="heading3" render={<h2 />}>
         모집 방식
       </Text>
-      <VStack gap={1} className="rounded-xl border border-gray-200 px-3.5 py-3">
-        <Text typography="subtitle1" render={<p />}>
-          {isLottery ? "추첨" : "선착순"}
-        </Text>
-        {lines.map((line) => (
-          <Text key={line} typography="body4" foreground="muted" render={<p />}>
-            {line}
+      <HStack gap={3} className="rounded-xl border border-gray-200 px-3.5 py-3">
+        <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[10px] bg-gray-100 text-gray-600">
+          <Icon size={18} aria-hidden />
+        </span>
+        <VStack gap={1} className="min-w-0 flex-1">
+          <Text typography="subtitle1" render={<p />}>
+            {isLottery ? "추첨" : "선착순"}
           </Text>
-        ))}
-      </VStack>
+          {lines.map((line) => (
+            <Text key={line} typography="body4" foreground="muted" render={<p />}>
+              {line}
+            </Text>
+          ))}
+        </VStack>
+      </HStack>
     </VStack>
   );
 }

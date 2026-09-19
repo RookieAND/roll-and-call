@@ -4,4 +4,5 @@ export const DISCORD_COLOR = {
   waiting: 0xfee75c,
   left: 0x99aab5,
   complete: 0xeb459e,
+  cancelled: 0xed4245,
 } as const;

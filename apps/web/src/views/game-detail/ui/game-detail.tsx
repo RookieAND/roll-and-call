@@ -1,6 +1,13 @@
 import { Container, VStack } from "@trpg/ui";
 
-import { deriveGameStatus, isGameGm, scheduleLine, splitRoster } from "@/entities/game";
+import {
+  deriveGameStatus,
+  GAME_STATUS,
+  isGameGm,
+  isSessionLocked,
+  scheduleLine,
+  splitRoster,
+} from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -37,6 +44,9 @@ export function GameDetail({
     waitlistEnabled: game.waitlistEnabled,
   });
   const viewerResponded = viewerId !== null && respondedIds.includes(viewerId);
+  // 세션이 잠겨 취소가 막혔거나 모집이 끝나면 순번이 바뀔 일이 없어 대기 명단을 감춘다.
+  const showWaiting =
+    !isSessionLocked(game) && status !== GAME_STATUS.closed && status !== GAME_STATUS.full;
 
   return (
     <>
@@ -59,14 +69,13 @@ export function GameDetail({
             <GameRecruitMethodSection game={game} />
 
             <GameRosterSection
-              gameId={game.id}
               gm={{ userId: game.gmId, ...game.gm }}
               confirmed={confirmed}
               waiting={waiting}
               maxPlayers={game.maxPlayers}
               recruitMethod={game.recruitMethod}
               drawn={game.drawnAt !== null}
-              isGm={isGm}
+              showWaiting={showWaiting}
               viewerId={viewerId}
             />
           </VStack>
@@ -78,7 +87,6 @@ export function GameDetail({
             viewerStatus={viewerParticipant?.status ?? null}
             waitlistRank={viewerParticipant?.waitlistRank ?? null}
             waitingCount={waiting.length}
-            confirmedCount={confirmed.length}
             viewerResponded={viewerResponded}
             status={status}
           />

@@ -7,8 +7,14 @@ import { formatGameSchedule, formatMonthDay } from "@/shared/lib";
 import { discordOverview } from "./discord-overview";
 import { gameUrl } from "./game-url";
 
-export function recruitEmbed(game: Game, gmName: string, confirmedCount: number): DiscordEmbed {
-  const url = gameUrl(game.id);
+// cancelled면 글은 그 자리에 남기고 빨갛게 바꾼다 — 들어갈 곳이 없어졌으니 링크와 CTA는 뺀다.
+export function recruitEmbed(
+  game: Game,
+  gmName: string,
+  confirmedCount: number,
+  cancelled = false,
+): DiscordEmbed {
+  const url = cancelled ? undefined : gameUrl(game.id);
   const fields = [
     { name: "📜 사용 룰", value: game.rule, inline: true },
     { name: "👥 인원", value: `${confirmedCount}/${game.maxPlayers}명`, inline: true },
@@ -18,10 +24,10 @@ export function recruitEmbed(game: Game, gmName: string, confirmedCount: number)
   if (url) fields.push({ name: "​", value: `**[▶ 참여하러 가기](${url})**`, inline: false });
 
   return {
-    title: `🎲 ${game.title}`,
+    title: cancelled ? `🚫 ${game.title} (취소됨)` : `🎲 ${game.title}`,
     url,
     description: discordOverview(game.synopsis),
-    color: DISCORD_COLOR.recruit,
+    color: cancelled ? DISCORD_COLOR.cancelled : DISCORD_COLOR.recruit,
     fields,
     // 디스코드 임베드 이미지는 가릴 수 없어서 스포일러 썸네일은 싣지 않는다.
     image: game.thumbnailUrl && !game.thumbnailSpoiler ? { url: game.thumbnailUrl } : undefined,

@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, VStack } from "@trpg/ui";
-import Link from "next/link";
 import { useState } from "react";
 
 import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
@@ -16,24 +15,22 @@ import { WaitingRosterSheet } from "./waiting-roster-sheet";
 type RosterSheetName = "lottery" | "confirmed" | "waiting";
 
 export function GameRosterSection({
-  gameId,
   gm,
   confirmed,
   waiting,
   maxPlayers,
   recruitMethod,
   drawn,
-  isGm,
+  showWaiting,
   viewerId,
 }: {
-  gameId: string;
   gm: RosterSheetGm;
   confirmed: DetailRosterMember[];
   waiting: DetailRosterMember[];
   maxPlayers: number;
   recruitMethod: RecruitMethod;
   drawn: boolean;
-  isGm: boolean;
+  showWaiting: boolean;
   viewerId: string | null;
 }) {
   const [openSheet, setOpenSheet] = useState<RosterSheetName | null>(null);
@@ -46,21 +43,16 @@ export function GameRosterSection({
     if (!next) setOpenSheet(null);
   }
 
-  const rosterAction = isGm ? (
-    <Button asChild variant="ghost" size="sm" className="text-primary-ink">
-      <Link href={`/games/${gameId}/participants`}>관리</Link>
+  // GM도 상세에서는 읽기만 한다. 승격·강등은 운영 관리가 맡는다.
+  const rosterAction = hasMembers && (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="text-primary-ink"
+      onClick={() => setOpenSheet(isLottery ? "lottery" : "confirmed")}
+    >
+      명단 보기
     </Button>
-  ) : (
-    hasMembers && (
-      <Button
-        variant="ghost"
-        size="sm"
-        className="text-primary-ink"
-        onClick={() => setOpenSheet(isLottery ? "lottery" : "confirmed")}
-      >
-        명단 보기
-      </Button>
-    )
   );
 
   return (
@@ -82,21 +74,19 @@ export function GameRosterSection({
             action={rosterAction}
             emptyText="아직 참여자가 없어요."
           />
-          {waiting.length > 0 && (
+          {showWaiting && waiting.length > 0 && (
             <RosterGroupSection
               label="대기"
               members={waiting}
               action={
-                !isGm && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-primary-ink"
-                    onClick={() => setOpenSheet("waiting")}
-                  >
-                    명단 보기
-                  </Button>
-                )
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary-ink"
+                  onClick={() => setOpenSheet("waiting")}
+                >
+                  명단 보기
+                </Button>
               }
               note={
                 viewerWaiting
