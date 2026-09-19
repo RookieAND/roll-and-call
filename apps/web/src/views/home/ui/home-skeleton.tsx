@@ -37,11 +37,9 @@ export function HomeSkeleton() {
 
         <section className="border-t border-gray-200 px-4 pt-[18px] pb-5">
           <Skeleton className="h-[23px] w-24" />
-          <Skeleton className="mt-1 mb-3.5 h-[17px] w-48" />
-          <div className="grid grid-cols-2 gap-2.5">
-            <Skeleton className="h-[185px] rounded-[14px]" />
-            <Skeleton className="h-[185px] rounded-[14px]" />
-          </div>
+          <Skeleton className="mt-1 mb-4 h-[17px] w-48" />
+          <Skeleton className="h-[130px] rounded-[14px]" />
+          <Skeleton className="mt-4 h-[130px] rounded-[14px]" />
         </section>
       </Container>
     </>

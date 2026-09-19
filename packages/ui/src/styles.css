@@ -72,6 +72,10 @@
   --color-tinted-border: #d5d3f7;
   --color-tinted-ink: #4338ca;
 
+  /* 순위 배지. 2위는 hint를 그대로 쓴다. */
+  --color-rank-gold: #8a6209;
+  --color-rank-bronze: #9a5b2e;
+
   /* 달력 토요일 글씨. 일요일은 danger-600을 쓴다. */
   --color-saturday: #2c6ba0;
 }
@@ -135,6 +139,9 @@
   --color-tinted-border: #3a3a6b;
   --color-tinted-ink: #c7d2fe;
   --color-saturday: #8fbbe0;
+
+  --color-rank-gold: #e5be6a;
+  --color-rank-bronze: #c9926a;
 
   --color-heat-0: #1e1e26;
   --color-heat-1: #262649;
