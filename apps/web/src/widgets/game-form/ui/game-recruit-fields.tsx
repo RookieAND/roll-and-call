@@ -1,12 +1,14 @@
 "use client";
 
 import { Field, Stepper, Text } from "@trpg/ui";
+import { Lock } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 
 import { RECRUIT_METHOD } from "@/entities/game";
 import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
 import { GameScheduleFields } from "./game-schedule-fields";
+import { HintBox } from "./hint-box";
 import { RecruitMethodField } from "./recruit-method-field";
 import { WaitlistField } from "./waitlist-field";
 
@@ -62,23 +64,28 @@ export function GameRecruitFields({
         </Text>
       </div>
 
-      <RecruitMethodField
-        value={method}
-        lockedReason={lockedReason}
-        onChange={(next) => setValue("recruitMethod", next, { shouldDirty: true })}
-      />
-
-      {isLottery ? (
-        <Text typography="body4" foreground="hint" render={<p />}>
-          추첨에서는 대기 접수 설정을 쓰지 않습니다. 뽑히지 않은 신청자는 대기 명단에 순서대로
-          남습니다.
-        </Text>
-      ) : (
-        <WaitlistField
-          value={watch("waitlistEnabled")}
-          onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
+      <div className="flex flex-col gap-2.5">
+        <RecruitMethodField
+          value={method}
+          lockedReason={lockedReason}
+          onChange={(next) => setValue("recruitMethod", next, { shouldDirty: true })}
         />
-      )}
+
+        {isLottery ? (
+          <HintBox
+            icon={<Lock size={14} strokeWidth={2.2} />}
+            lines={[
+              "추첨에서는 대기 접수 설정을 쓰지 않습니다.",
+              "뽑히지 않은 신청자는 대기 명단에 순서대로 남습니다.",
+            ]}
+          />
+        ) : (
+          <WaitlistField
+            value={watch("waitlistEnabled")}
+            onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
+          />
+        )}
+      </div>
 
       <GameScheduleFields
         form={form}
