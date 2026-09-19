@@ -61,7 +61,9 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
       <PlayTimeField
         value={watch("playTime")}
         error={errors.playTime?.message}
-        onChange={(value) => setValue("playTime", value, { shouldDirty: true })}
+        onChange={(value) =>
+          setValue("playTime", value, { shouldDirty: true, shouldValidate: true })
+        }
       />
 
       <div className="flex flex-col gap-1.5">
