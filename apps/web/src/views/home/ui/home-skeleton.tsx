@@ -8,7 +8,7 @@ const CALENDAR_CELL_COUNT = 35;
 export function HomeSkeleton() {
   return (
     <>
-      <AppBar title="롤앤콜" />
+      <AppBar title="롤앤콜" brand />
       <Container size="sm" className="px-0">
         <section>
           <div className="flex items-center gap-2 pt-3.5 pr-2.5 pb-2.5 pl-4">

@@ -25,6 +25,7 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
     <>
       <AppBar
         title="롤앤콜"
+        brand
         action={!user && <LoginButton next="/" className="h-[34px] px-3 text-[13px]" />}
       />
       <Container size="sm" className="px-0">

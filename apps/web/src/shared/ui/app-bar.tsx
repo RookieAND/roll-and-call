@@ -4,9 +4,12 @@ import type { ReactNode } from "react";
 
 import { BackButton } from "./back-button";
 import { BACK_BUTTON_CLASS } from "./back-button-class";
+import { BrandLogo } from "./brand-logo";
 
 type Props = {
   title: string;
+  // 워드마크로 제목을 대체한다. title은 스크린리더가 읽을 이름으로 남는다.
+  brand?: boolean;
   // 진입 경로가 없을 때(직접 URL·디스코드 링크)만 쓰는 폴백. 평소엔 히스토리 뒤로.
   back?: string;
   onBack?: () => void;
@@ -14,7 +17,7 @@ type Props = {
   action?: ReactNode;
 };
 
-export function AppBar({ title, back, onBack, backIcon = "back", action }: Props) {
+export function AppBar({ title, brand, back, onBack, backIcon = "back", action }: Props) {
   const hasBack = back !== undefined || onBack !== undefined;
   const BackIcon = backIcon === "close" ? X : ChevronLeft;
   const backLabel = backIcon === "close" ? "닫기" : "뒤로";
@@ -33,13 +36,17 @@ export function AppBar({ title, back, onBack, backIcon = "back", action }: Props
       ) : (
         back && <BackButton fallback={back} />
       )}
-      <Text
-        typography={hasBack ? "heading3" : "heading2"}
-        render={<span />}
-        className={hasBack ? "truncate tracking-tight" : "tracking-tight"}
-      >
-        {title}
-      </Text>
+      {brand ? (
+        <BrandLogo label={title} />
+      ) : (
+        <Text
+          typography={hasBack ? "heading3" : "heading2"}
+          render={<span />}
+          className={hasBack ? "truncate tracking-tight" : "tracking-tight"}
+        >
+          {title}
+        </Text>
+      )}
       <span className="flex-1" />
       {action}
     </header>

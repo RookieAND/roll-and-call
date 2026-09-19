@@ -1,4 +1,5 @@
 export { AppBar } from "./app-bar";
+export { BrandLogo } from "./brand-logo";
 export { BoundaryFallback } from "./boundary-fallback";
 export { handleActionResult, type ActionHandlers } from "./handle-action-result";
 export { reportError } from "./report-error";
