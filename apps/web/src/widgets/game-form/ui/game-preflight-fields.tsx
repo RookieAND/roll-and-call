@@ -13,9 +13,9 @@ import {
 import { TagInput } from "@/shared/ui";
 
 const TAG_PLACEHOLDER: Record<GameTagKey, string> = {
-  [GAME_TAG.genres]: "장르를 적고 엔터",
-  [GAME_TAG.triggers]: "주의가 필요한 소재를 적고 엔터",
-  [GAME_TAG.platforms]: "쓰는 플랫폼을 적고 엔터",
+  [GAME_TAG.genres]: "장르를 작성하고 Enter 를 입력해주세요.",
+  [GAME_TAG.triggers]: "주의가 필요한 소재를 작성하고 Enter 를 입력해주세요.",
+  [GAME_TAG.platforms]: "쓰는 플랫폼을 작성하고 Enter 를 입력해주세요.",
 };
 
 const TAG_SUGGESTIONS: Record<GameTagKey, string[]> = {
