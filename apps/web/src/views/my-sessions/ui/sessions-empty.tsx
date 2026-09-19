@@ -11,21 +11,23 @@ import {
 } from "@/widgets/session-list";
 
 // 빈 상태는 이 화면에 둔다. 마이페이지는 0으로 세기만 하고, 왜 비었는지와 다음 행동은 목록에서 말한다.
-const ONGOING_EMPTY: Record<SessionRole, { title: string; body: string; href: string; label: string }> =
-  {
-    [SESSION_ROLE.player]: {
-      title: "참여 중인 세션이 없습니다",
-      body: "구인에 참여하면 여기에서\n일정과 확정 여부를 볼 수 있습니다.",
-      href: "/games",
-      label: "구인 목록 보기",
-    },
-    [SESSION_ROLE.host]: {
-      title: "내가 연 세션이 없습니다",
-      body: "구인을 올리면 모집과 일정 조율을\n여기에서 관리합니다.",
-      href: "/games/new",
-      label: "새 구인 등록",
-    },
-  };
+const ONGOING_EMPTY: Record<
+  SessionRole,
+  { title: string; body: string; href: string; label: string }
+> = {
+  [SESSION_ROLE.player]: {
+    title: "참여 중인 세션이 없습니다",
+    body: "구인에 참여하면 여기에서\n일정과 확정 여부를 볼 수 있습니다.",
+    href: "/games",
+    label: "구인 목록 보기",
+  },
+  [SESSION_ROLE.host]: {
+    title: "내가 연 세션이 없습니다",
+    body: "구인을 올리면 모집과 일정 조율을\n여기에서 관리합니다.",
+    href: "/games/new",
+    label: "새 구인 등록",
+  },
+};
 
 export function SessionsEmpty({
   activeTab,

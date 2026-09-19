@@ -32,7 +32,12 @@ export const LINK_SERVICES = [
     handlePrefix: "https://bsky.app/profile/",
     placeholder: "handle.bsky.social",
   },
-  { key: "youtube", label: "유튜브", handlePrefix: "https://youtube.com/@", placeholder: "@handle" },
+  {
+    key: "youtube",
+    label: "유튜브",
+    handlePrefix: "https://youtube.com/@",
+    placeholder: "@handle",
+  },
   { key: "sheets", label: "스프레드시트", placeholder: "docs.google.com/…" },
   { key: "drive", label: "드라이브", placeholder: "drive.google.com/…" },
   { key: "notion", label: "노션", placeholder: "notion.so/…" },

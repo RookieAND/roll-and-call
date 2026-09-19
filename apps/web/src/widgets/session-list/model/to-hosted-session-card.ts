@@ -53,7 +53,11 @@ export function toHostedSessionCard(
     href: `/games/${game.id}/manage`,
   };
   const todo: SessionAction | null = gmTodo
-    ? { kind: SESSION_ACTION_KIND.confirmTime, label: "세션 시간 확정하기", href: facts.scheduleHref }
+    ? {
+        kind: SESSION_ACTION_KIND.confirmTime,
+        label: "세션 시간 확정하기",
+        href: facts.scheduleHref,
+      }
     : null;
 
   return {

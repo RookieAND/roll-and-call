@@ -15,9 +15,7 @@ const DETAIL_CLASS = {
 export function ManageRow({ row }: { row: Row }) {
   const Icon = ICONS[row.icon];
   const iconClass =
-    row.tone === "success"
-      ? "bg-success-50 text-success-700"
-      : "bg-primary-50 text-primary-ink";
+    row.tone === "success" ? "bg-success-50 text-success-700" : "bg-primary-50 text-primary-ink";
 
   return (
     <Link
@@ -25,7 +23,10 @@ export function ManageRow({ row }: { row: Row }) {
       className="flex min-h-[60px] items-center gap-3 border-gray-100 px-[13px] py-[11px] transition-colors not-first:border-t hover:bg-gray-50"
     >
       <span
-        className={cn("flex h-[34px] w-[34px] flex-none items-center justify-center rounded-[10px]", iconClass)}
+        className={cn(
+          "flex h-[34px] w-[34px] flex-none items-center justify-center rounded-[10px]",
+          iconClass,
+        )}
       >
         <Icon size={18} aria-hidden />
       </span>

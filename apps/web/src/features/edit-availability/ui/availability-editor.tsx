@@ -8,12 +8,7 @@ import { WEEKDAY_LABELS, type AvailabilityInterval } from "@/entities/profile";
 import { AppBar, toast, useAction } from "@/shared/ui";
 
 import { updateAvailability } from "../api/update-availability";
-import {
-  addInterval,
-  removeAt,
-  removeDay,
-  setHour,
-} from "../model/availability-draft";
+import { addInterval, removeAt, removeDay, setHour } from "../model/availability-draft";
 import { AvailabilityDayEditor } from "./availability-day-editor";
 
 export function AvailabilityEditor({ defaultValue }: { defaultValue: AvailabilityInterval[] }) {
@@ -76,7 +71,9 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
               }
               onAdd={() => setIntervals(addInterval(intervals, day))}
               onRemove={(index) => setIntervals(removeAt(intervals, index))}
-              onHourChange={(index, edge, hour) => setIntervals(setHour(intervals, index, edge, hour))}
+              onHourChange={(index, edge, hour) =>
+                setIntervals(setHour(intervals, index, edge, hour))
+              }
             />
           );
         })}

@@ -78,9 +78,7 @@ export function ProfileLinksField({
                 variant="outline"
                 aria-label={`${service.label} 링크 지우기`}
                 className="h-11 w-11 flex-none"
-                onClick={() =>
-                  onChange(value.filter((_, itemIndex) => itemIndex !== index))
-                }
+                onClick={() => onChange(value.filter((_, itemIndex) => itemIndex !== index))}
               >
                 <Trash2 size={15} aria-hidden />
               </IconButton>

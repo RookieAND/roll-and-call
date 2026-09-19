@@ -60,10 +60,7 @@ export function MyPageProfile({
             label: availability.length > 0 ? "편집" : "추가",
           }}
         />
-        <AvailabilityRows
-          intervals={availability}
-          note="조율 격자에 미리 칠해지는 기본값입니다."
-        />
+        <AvailabilityRows intervals={availability} note="조율 격자에 미리 칠해지는 기본값입니다." />
       </div>
     </section>
   );

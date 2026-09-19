@@ -48,7 +48,12 @@ export function ProfileLinks({ links }: { links: readonly ProfileLink[] }) {
             {mark}
           </a>
         ) : (
-          <span key={`${link.service}-${index}`} aria-label={label} title={label} className={ICON_CLASS}>
+          <span
+            key={`${link.service}-${index}`}
+            aria-label={label}
+            title={label}
+            className={ICON_CLASS}
+          >
             {mark}
           </span>
         );

@@ -25,7 +25,11 @@ export function HourSelect({
   }));
 
   return (
-    <Select.Root items={items} value={String(value)} onValueChange={(hour) => onChange(Number(hour))}>
+    <Select.Root
+      items={items}
+      value={String(value)}
+      onValueChange={(hour) => onChange(Number(hour))}
+    >
       <Select.Trigger aria-label={label} className="h-11 min-w-0 flex-1 tabular-nums" />
       <Select.Popup>
         {items.map((item) => (

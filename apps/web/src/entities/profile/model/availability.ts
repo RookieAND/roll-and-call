@@ -1,6 +1,5 @@
-import type { AvailabilityInterval } from "@/shared/server";
-
 import { padTwoDigits, slotIso, type DayColumn, type TimeRow } from "@/shared/lib";
+import type { AvailabilityInterval } from "@/shared/server";
 
 // 월요일이 0. 화면도 저장도 이 순서를 그대로 쓴다.
 export const WEEKDAY_LABELS = ["월", "화", "수", "목", "금", "토", "일"] as const;
@@ -57,7 +56,9 @@ export function normalizeAvailability(input: unknown): AvailabilityInterval[] {
 
 // 같은 요일에서 겹치거나 맞닿은 구간은 하나로 합쳐 격자에 칠할 때 풀어낼 것이 없게 한다.
 function mergeOverlaps(intervals: AvailabilityInterval[]): AvailabilityInterval[] {
-  const sorted = intervals.toSorted((left, right) => left.day - right.day || left.from - right.from);
+  const sorted = intervals.toSorted(
+    (left, right) => left.day - right.day || left.from - right.from,
+  );
   const merged: AvailabilityInterval[] = [];
   for (const interval of sorted) {
     const last = merged.at(-1);

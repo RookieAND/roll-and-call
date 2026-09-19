@@ -1,4 +1,5 @@
 import { SESSION_ROLE, type SessionRole } from "@/entities/game";
+
 import { ONGOING_CHIP, type SessionChipKey } from "./session-tabs";
 
 // 기본 탭(참여)·기본 칩(진행 중)은 주소에 남기지 않는다.

@@ -37,7 +37,11 @@ export function toJoinedSessionCard(
       scheduleTone: SESSION_TONE.normal,
       action: context.readOnly
         ? null
-        : { kind: SESSION_ACTION_KIND.cancelWaitlist, label: "대기 취소", href: `/games/${game.id}` },
+        : {
+            kind: SESSION_ACTION_KIND.cancelWaitlist,
+            label: "대기 취소",
+            href: `/games/${game.id}`,
+          },
     };
   }
 

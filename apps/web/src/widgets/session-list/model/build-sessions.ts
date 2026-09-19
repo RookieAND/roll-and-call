@@ -1,6 +1,11 @@
 import { SESSION_ROLE, type SessionRole } from "@/entities/game";
 
-import { SESSION_CHIP, type MySessions, type SessionContext, type SessionGame } from "./session-card-model";
+import {
+  SESSION_CHIP,
+  type MySessions,
+  type SessionContext,
+  type SessionGame,
+} from "./session-card-model";
 import { toSessionCard } from "./to-session-card";
 
 // 진행 중은 가까운 것부터, 종료은 그 뒤에 최근 것부터(종료 카드의 sortKey는 부호가 뒤집혀 있다).

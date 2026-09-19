@@ -7,9 +7,7 @@ import { normalizeAvailability, type AvailabilityInterval } from "@/entities/pro
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import { db, getCurrentUser, profiles } from "@/shared/server";
 
-export async function updateAvailability(
-  intervals: AvailabilityInterval[],
-): Promise<ActionResult> {
+export async function updateAvailability(intervals: AvailabilityInterval[]): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
