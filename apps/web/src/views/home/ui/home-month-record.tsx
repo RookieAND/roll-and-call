@@ -14,7 +14,7 @@ export function HomeMonthRecord({
   const monthLabel = monthStart.format("M월");
   const summary =
     record.sessionCount > 0
-      ? `이 달에 개설된 세션 ${record.sessionCount}건을 셌습니다.`
+      ? `이 달에 개설된 세션 ${record.sessionCount}건을 토대로 산정한 순위입니다.`
       : "아직 이 달에 개설된 세션이 없습니다.";
 
   return (
