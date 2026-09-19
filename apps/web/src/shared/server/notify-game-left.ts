@@ -23,6 +23,20 @@ export async function notifyGameLeft(gameId: string, userId: string, removedByGm
   if (!game?.discordThreadId) return;
 
   const name = user?.username ?? "?";
+  const waitingCount = game.participants.filter(
+    (participant) => participant.status === "waiting",
+  ).length;
+  const fields = [
+    {
+      name: "현재 인원",
+      value: `${countConfirmedParticipants(game.participants)}/${game.maxPlayers}`,
+      inline: true,
+    },
+  ];
+  if (waitingCount > 0) {
+    fields.push({ name: "대기 인원", value: `${waitingCount}명`, inline: true });
+  }
+
   const embed: DiscordEmbed = {
     title: `🚪 ${game.title}`,
     url: gameUrl(game.id),
@@ -30,13 +44,7 @@ export async function notifyGameLeft(gameId: string, userId: string, removedByGm
       ? `**${name}**님이 참여 목록에서 제외됐어요.`
       : `**${name}**님이 참여를 취소했어요.`,
     color: DISCORD_COLOR.left,
-    fields: [
-      {
-        name: "현재 인원",
-        value: `${countConfirmedParticipants(game.participants)}/${game.maxPlayers}`,
-        inline: true,
-      },
-    ],
+    fields,
     footer: { text: `GM ${game.gm?.username ?? "?"}` },
     timestamp: new Date().toISOString(),
   };

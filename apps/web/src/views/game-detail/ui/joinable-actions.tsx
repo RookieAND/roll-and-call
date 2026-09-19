@@ -32,10 +32,10 @@ export function JoinableActions({
 
   return (
     <VStack gap={2}>
+      {joinHint && <ActionHint>{joinHint}</ActionHint>}
       <JoinGameButton gameId={gameId} className={ACTION_PRIMARY_CLASS}>
         {joinLabel}
       </JoinGameButton>
-      {joinHint && <ActionHint>{joinHint}</ActionHint>}
     </VStack>
   );
 }
