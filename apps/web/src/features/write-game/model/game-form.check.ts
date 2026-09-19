@@ -19,6 +19,7 @@ const base = {
   rangeEnd: "2026-09-20",
   images: [] as string[],
   thumbnailSpoiler: false,
+  aiImage: false,
   waitlistEnabled: true,
 };
 
@@ -44,6 +45,7 @@ assert.equal(firstError(fixed), null);
 assert.equal(firstError({ ...fixed, confirmedAt: "" }), "confirmedAt");
 assert.equal(firstError({ ...fixed, endDate: "2026-09-12T20:00" }), "endDate"); // 마감 > 세션
 
+assert.equal(firstError({ ...base, aiImage: undefined }), "aiImage"); // 고르지 않고 넘어갈 수 없다
 assert.equal(firstError({ ...base, genres: ["1", "2", "3", "4", "5", "6"] }), "genres");
 
 // 추첨은 대기 접수 설정을 쓰지 않아 항상 켜진 값으로 저장된다.

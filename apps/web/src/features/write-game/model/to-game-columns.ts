@@ -16,6 +16,7 @@ export function toGameColumns(values: GameFormValues) {
     triggers: values.triggers,
     platforms: values.platforms,
     notice: values.notice || null,
+    aiImage: values.aiImage,
     maxPlayers: Number(values.maxPlayers),
     recruitMethod: values.recruitMethod,
     // 추첨은 정원과 무관하게 받으므로 대기 접수 설정을 쓰지 않는다.

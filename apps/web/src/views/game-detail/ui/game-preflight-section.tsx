@@ -6,13 +6,10 @@ import type { GameDetailData } from "@/shared/server";
 import { GameTagBlock } from "./game-tag-block";
 
 const TRIGGER_NOTE = "신청 전에 확인해주세요. 불편한 소재가 있으면 GM에게 미리 말해도 됩니다.";
+const AI_IMAGE_NOTE = "GM과 플레이어 모두에게 적용됩니다.";
 
-// 06에서 받은 값을 신청 판단 순서대로 읽힌다 — 장르 · 트리거 · 주의 사항 · 사용 플랫폼.
+// 06에서 받은 값을 신청 판단 순서대로 읽힌다 — 장르 · 트리거 · 주의 사항 · 사용 플랫폼 · AI 이미지.
 export function GamePreflightSection({ game }: { game: GameDetailData }) {
-  if (game.genres.length + game.triggers.length + game.platforms.length === 0 && !game.notice) {
-    return null;
-  }
-
   return (
     <VStack gap={5}>
       {game.genres.length > 0 && (
@@ -38,6 +35,11 @@ export function GamePreflightSection({ game }: { game: GameDetailData }) {
       {game.platforms.length > 0 && (
         <GameTagBlock label={gameTagLabel[GAME_TAG.platforms]} tags={game.platforms} />
       )}
+      <GameTagBlock
+        label="AI 이미지"
+        tags={[game.aiImage ? "사용" : "사용 안 함"]}
+        note={AI_IMAGE_NOTE}
+      />
     </VStack>
   );
 }

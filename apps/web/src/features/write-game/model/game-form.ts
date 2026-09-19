@@ -28,6 +28,7 @@ export const gameFormSchema = z
     triggers: tagList("트리거"),
     platforms: tagList("사용 플랫폼"),
     notice: z.string().max(GAME_NOTICE_MAX).optional(),
+    aiImage: z.boolean({ error: "AI 이미지 사용 여부를 골라주세요." }),
     playTime: z.string().max(100).optional(),
     maxPlayers: z
       .string()

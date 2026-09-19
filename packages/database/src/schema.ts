@@ -78,6 +78,8 @@ export const games = pgTable(
     triggers: text("triggers").array().notNull().default([]),
     platforms: text("platforms").array().notNull().default([]),
     notice: text("notice"),
+    // 세션 진행 중 AI 이미지를 쓸 수 있는지. 등록할 때 반드시 고르고, 목록에는 내보내지 않는다.
+    aiImage: boolean("ai_image").notNull().default(false),
     maxPlayers: integer("max_players").notNull(),
     recruitMethod: recruitMethod("recruit_method").notNull().default("first_come"),
     // false면 정원이 찼을 때 대기 신청을 받지 않는다(status "full"). 선착순에서만 쓴다.

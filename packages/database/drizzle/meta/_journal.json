@@ -134,6 +134,13 @@
       "when": 1790400000000,
       "tag": "0018_gifted_power_man",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1790500000000,
+      "tag": "0019_whole_naoko",
+      "breakpoints": true
     }
   ]
 }
