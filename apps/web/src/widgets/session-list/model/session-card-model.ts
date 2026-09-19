@@ -54,6 +54,7 @@ export type SessionCardModel = {
   todo: SessionAction | null;
   waitingCount: number;
   startsAt: string | null;
+  deadlinePassed: boolean;
   sortKey: number;
 };
 

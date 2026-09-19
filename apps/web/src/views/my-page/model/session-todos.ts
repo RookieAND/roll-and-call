@@ -13,8 +13,15 @@ export function sessionTodos({ host, player }: MySessions): TodoItem[] {
     .filter((card) => card.todo?.kind === SESSION_ACTION_KIND.confirmTime)
     .map((card) => ({ card, eyebrow: "기한이 지났습니다" }));
 
+  // 모집이 끝났거나 세션 시간이 정해졌으면(사전 지정·조율 확정 모두) 신청 검토가 세션을 막고 있지 않다.
   const unreviewed = host
-    .filter((card) => card.waitingCount > 0 && card.todo === null)
+    .filter(
+      (card) =>
+        card.waitingCount > 0 &&
+        card.todo === null &&
+        !card.deadlinePassed &&
+        card.startsAt === null,
+    )
     .map((card) => ({
       card: {
         ...card,

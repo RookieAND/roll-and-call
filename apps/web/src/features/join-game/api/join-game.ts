@@ -8,6 +8,7 @@ import { getCurrentUser, refreshRecruitPost } from "@/shared/server";
 import { announceNewApplication } from "./announce-new-application";
 import { announceRecruitmentComplete } from "./announce-recruitment-complete";
 import { applyToGame } from "./apply-to-game";
+import { seedAvailabilityFromProfile } from "./seed-availability-from-profile";
 
 // waiting은 화면 표시 시점이 아니라 실제 접수 결과라 토스트 문구가 이걸 따른다.
 export async function joinGame(gameId: string): Promise<ActionResult & { waiting?: boolean }> {
@@ -17,6 +18,7 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
   const application = await applyToGame(gameId, user.id);
   if ("error" in application) return application;
 
+  await seedAvailabilityFromProfile(application.game, user.id);
   await announceNewApplication(
     application.game,
     user.id,
@@ -28,6 +30,7 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
 
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/participants`);
+  revalidatePath(`/games/${gameId}/schedule`);
   revalidatePath("/games");
   return { waiting: application.waiting };
 }

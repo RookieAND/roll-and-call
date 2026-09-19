@@ -63,6 +63,7 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
       title: game.title,
       role,
       startsAt,
+      deadlinePassed: line.deadlinePassed,
       urgent: !context.readOnly && !past && !timeSet && isDeadlineUrgent(game.endDate, now),
     },
   };
