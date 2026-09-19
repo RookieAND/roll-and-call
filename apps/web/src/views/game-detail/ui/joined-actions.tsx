@@ -39,12 +39,17 @@ export function JoinedActions({
   return (
     <VStack gap={2}>
       {needsResponse && (
-        <HStack align="center" gap={2}>
-          <CircleAlert size={15} className="shrink-0 text-warning-600" aria-hidden />
-          <Text typography="body3" foreground="warning" className="font-semibold">
-            아직 가능 시간을 내지 않았습니다.
+        <StatusNotice tone="muted" className="text-left">
+          <HStack align="center" gap={2}>
+            <CircleAlert size={15} className="shrink-0 text-warning-600" aria-hidden />
+            <Text typography="subtitle2" foreground="warning">
+              아직 가능 시간을 내지 않았습니다
+            </Text>
+          </HStack>
+          <Text typography="body3" foreground="muted" render={<p />} className="mt-1.5">
+            일정 조율에서 가능한 시간을 입력하세요.
           </Text>
-        </HStack>
+        </StatusNotice>
       )}
       <ActionPair>
         <LeaveGameButton gameId={gameId} className={ACTION_PAIR_CLASS}>

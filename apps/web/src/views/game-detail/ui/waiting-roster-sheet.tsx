@@ -1,6 +1,6 @@
 import { Text } from "@trpg/ui";
 
-import { Sheet } from "@/shared/ui";
+import { ExpandableRows, Sheet } from "@/shared/ui";
 
 import type { DetailRosterMember } from "./roster-member-row";
 import { RosterSheetRow } from "./roster-sheet-row";
@@ -32,14 +32,16 @@ export function WaitingRosterSheet({
         </Sheet.Title>
 
         <div className="max-h-[60vh] divide-y divide-gray-200 overflow-y-auto">
-          {waiting.map((member) => (
-            <RosterSheetRow
-              key={member.userId}
-              member={member}
-              viewerId={viewerId}
-              rankNote={`대기 ${member.waitlistRank}번`}
-            />
-          ))}
+          <ExpandableRows>
+            {waiting.map((member) => (
+              <RosterSheetRow
+                key={member.userId}
+                member={member}
+                viewerId={viewerId}
+                rankNote={`대기 ${member.waitlistRank}번`}
+              />
+            ))}
+          </ExpandableRows>
         </div>
       </Sheet.Content>
     </Sheet.Root>

@@ -21,10 +21,15 @@ export function ConfirmedWaitingActions({
     <VStack gap={2}>
       <ConfirmedSessionNotice confirmedAt={confirmedAt} />
       <StatusNotice tone="muted" className="text-left">
-        <Text typography="subtitle1" render={<span />} className="tabular-nums">
+        <Text typography="subtitle2" render={<p />}>
+          이번 회차는 자리가 없습니다
+        </Text>
+        <Text typography="body3" foreground="muted" render={<p />} className="mt-1.5">
+          다음 회차가 열리면 알립니다.
+        </Text>
+        <Text typography="body3" foreground="muted" render={<p />} className="mt-2 tabular-nums">
           대기 {waitlistRank}번 · 총 {waitingCount}명
-        </Text>{" "}
-        — 이번 회차는 자리가 없습니다. 다음 회차가 열리면 알립니다.
+        </Text>
       </StatusNotice>
       <LeaveGameButton gameId={gameId} className={ACTION_SECONDARY_CLASS}>
         대기 취소

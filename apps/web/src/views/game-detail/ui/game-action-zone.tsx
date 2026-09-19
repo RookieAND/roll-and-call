@@ -101,7 +101,6 @@ export function GameActionZone({
           canSchedule={canSchedule}
           waitlistRank={waitlistRank}
           waitingCount={waitingCount}
-          endDate={game.endDate}
         />
       );
     case GAME_ACTION_VIEW.joined:

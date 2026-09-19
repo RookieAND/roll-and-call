@@ -1,10 +1,10 @@
 import { Text } from "@trpg/ui";
 
 import { formatDate } from "@/shared/lib";
+import { ExpandableRows } from "@/shared/ui";
 
 import type { ManagedMember } from "../model/managed-member";
 import { availabilityNote } from "./availability-note";
-import { ExpandableRows } from "./expandable-rows";
 import { RosterQueue } from "./roster-queue";
 import { RosterRow } from "./roster-row";
 

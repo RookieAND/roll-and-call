@@ -1,7 +1,6 @@
 import { Text, VStack } from "@trpg/ui";
 
 import { LeaveGameButton } from "@/features/join-game";
-import { formatDateTime } from "@/shared/lib";
 import { StatusNotice } from "@/shared/ui";
 
 import { ACTION_PAIR_CLASS, ACTION_SECONDARY_CLASS } from "./action-class-names";
@@ -13,13 +12,11 @@ export function WaitingActions({
   canSchedule,
   waitlistRank,
   waitingCount,
-  endDate,
 }: {
   gameId: string;
   canSchedule: boolean;
   waitlistRank: number | null;
   waitingCount: number;
-  endDate: Date;
 }) {
   return (
     <VStack gap={2}>
@@ -31,7 +28,7 @@ export function WaitingActions({
           자리가 나면 순서대로 확정됩니다.
         </Text>
         <Text typography="body3" foreground="muted" render={<p />} className="mt-2 tabular-nums">
-          대기 {waitlistRank}번 · 총 {waitingCount}명 · 마감 {formatDateTime(endDate)}
+          대기 {waitlistRank}번 · 총 {waitingCount}명
         </Text>
       </StatusNotice>
       {canSchedule ? (
