@@ -44,7 +44,7 @@ export function GameCard({ game }: GameCardProps) {
         className={thumbnailClass}
       />
       <VStack className="gap-075 px-175 py-175">
-        <HStack align="start" gap="100">
+        <HStack align="center" gap="100">
           <Text
             truncate
             typography="heading3"

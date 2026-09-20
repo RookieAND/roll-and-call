@@ -8,8 +8,9 @@ export function GameListSkeleton() {
         <Card key={index} radius={600} background="none" padding="none" className="overflow-hidden">
           <Skeleton width="100%" rounded="none" className="aspect-video" />
           <VStack className="gap-075 px-175 py-175">
-            <HStack align="start" justify="between" gap="100">
+            <HStack align="center" gap="100">
               <Skeleton width="50%" height={22} />
+              <span className="flex-1" />
               <Skeleton width={56} height={21} rounded={300} />
               <Skeleton width={28} height={21} />
             </HStack>
