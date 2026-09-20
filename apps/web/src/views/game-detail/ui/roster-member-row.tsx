@@ -4,12 +4,13 @@ import Link from "next/link";
 
 import type { RosterMember } from "@/entities/game";
 
+import { EmptyMemberBio } from "./empty-member-bio";
+import { MemberBio } from "./member-bio";
+
 export type DetailRosterMember = RosterMember<{
   userId: string;
   user: { username: string; avatarUrl: string | null; bio: string | null } | null;
 }>;
-
-const NO_BIO = "한 줄 소개 없음";
 
 export function RosterMemberRow({
   userId,
@@ -41,9 +42,7 @@ export function RosterMemberRow({
             </Badge>
           )}
         </HStack>
-        <Text truncate typography="body4" foreground={bio ? "muted" : "hint"}>
-          {bio || NO_BIO}
-        </Text>
+        {bio ? <MemberBio bio={bio} /> : <EmptyMemberBio />}
       </div>
       <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />
     </Link>

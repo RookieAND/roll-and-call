@@ -8,6 +8,7 @@ import {
   type AttendanceChoice,
 } from "../model/attendance-choice";
 import type { Attendee } from "../model/attendee";
+import { AbsentNotice } from "./absent-notice";
 
 export function AttendanceRow({
   attendee,
@@ -31,11 +32,7 @@ export function AttendanceRow({
         <Text truncate typography="subtitle2">
           {attendee.username}
         </Text>
-        {absent && (
-          <Text typography="body4" foreground="danger" className="block">
-            불참으로 기록됩니다
-          </Text>
-        )}
+        {absent && <AbsentNotice />}
       </div>
       <SegmentControl
         aria-label={`${attendee.username} 참석 여부`}

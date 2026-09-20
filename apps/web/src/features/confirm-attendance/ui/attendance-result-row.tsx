@@ -1,13 +1,10 @@
 import { Avatar, HStack, Text } from "@trpg/ui";
-import { Check, X } from "lucide-react";
 
 import type { Attendee } from "../model/attendee";
+import { AbsentMark } from "./absent-mark";
+import { PresentMark } from "./present-mark";
 
 export function AttendanceResultRow({ attendee }: { attendee: Attendee }) {
-  const Icon = attendee.absent ? X : Check;
-  const foreground = attendee.absent ? "danger" : "success";
-  const iconClass = attendee.absent ? "text-danger-600" : "text-success-700";
-
   return (
     <HStack
       align="center"
@@ -18,12 +15,7 @@ export function AttendanceResultRow({ attendee }: { attendee: Attendee }) {
       <Text truncate typography="subtitle2" className="min-w-0 flex-1">
         {attendee.username}
       </Text>
-      <HStack gap="050" align="center">
-        <Icon size={14} strokeWidth={2.6} className={iconClass} />
-        <Text typography="subtitle1" foreground={foreground}>
-          {attendee.absent ? "불참" : "참석"}
-        </Text>
-      </HStack>
+      {attendee.absent ? <AbsentMark /> : <PresentMark />}
     </HStack>
   );
 }

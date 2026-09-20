@@ -1,5 +1,8 @@
 import { HStack, Text } from "@trpg/ui";
 
+import { AbsentCount } from "./absent-count";
+import { NoAbsenceCount } from "./no-absence-count";
+
 export function AttendanceTally({
   presentCount,
   absentCount,
@@ -15,9 +18,7 @@ export function AttendanceTally({
       <Text typography="body3" foreground="hint">
         ·
       </Text>
-      <Text typography="subtitle1" foreground={absentCount > 0 ? "danger" : "muted"}>
-        불참 {absentCount}명
-      </Text>
+      {absentCount > 0 ? <AbsentCount count={absentCount} /> : <NoAbsenceCount />}
     </HStack>
   );
 }

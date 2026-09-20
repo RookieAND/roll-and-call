@@ -1,10 +1,10 @@
 "use client";
 
-import { cn, Text } from "@trpg/ui";
 import { CalendarDays, List, User } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { ActiveBottomNavTab } from "./active-bottom-nav-tab";
+import { BottomNavTab } from "./bottom-nav-tab";
 import { isInRouteGroup } from "./is-in-route-group";
 
 const tabs = [
@@ -32,24 +32,9 @@ export function BottomNav() {
 
   return (
     <nav className="sticky bottom-0 z-20 grid h-[58px] grid-cols-3 border-t border-gray-200 bg-surface">
-      {tabs.map((tab) => {
-        const active = tab.isActive(pathname);
-        return (
-          <Link
-            key={tab.href}
-            href={tab.href}
-            aria-current={active ? "page" : undefined}
-            className={cn(
-              "flex flex-col items-center justify-center gap-075 transition-colors",
-              active ? "text-primary-600" : "text-hint",
-            )}
-          >
-            <tab.Icon size={18} aria-hidden />
-            <Text typography="subtitle2" foreground={active ? "primary" : "hint"} render={<span />}>
-              {tab.label}
-            </Text>
-          </Link>
-        );
+      {tabs.map(({ href, label, Icon, isActive }) => {
+        const Tab = isActive(pathname) ? ActiveBottomNavTab : BottomNavTab;
+        return <Tab key={href} href={href} label={label} Icon={Icon} />;
       })}
     </nav>
   );

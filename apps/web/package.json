@@ -23,6 +23,7 @@
     "@trpg/discord": "workspace:*",
     "@trpg/tiptap": "workspace:*",
     "@trpg/ui": "workspace:*",
+    "class-variance-authority": "^0.7.1",
     "dayjs": "^1.11.23",
     "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.32.0",

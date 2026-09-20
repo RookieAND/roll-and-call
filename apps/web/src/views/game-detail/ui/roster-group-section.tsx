@@ -1,8 +1,9 @@
 import { Progress, Text } from "@trpg/ui";
 import type { ReactNode } from "react";
 
+import { RosterAvatars } from "./roster-avatars";
+import { RosterEmptyNote } from "./roster-empty-note";
 import { RosterGroupHeader } from "./roster-group-header";
-import { RosterGroupMembers } from "./roster-group-members";
 import type { DetailRosterMember } from "./roster-member-row";
 
 // 참여자 · 대기 · (추첨의) 신청이 같은 UI를 쓴다 — 헤더 · 진행바 · 아바타 줄.
@@ -35,7 +36,11 @@ export function RosterGroupSection({
     <section className="flex flex-col gap-125">
       <RosterGroupHeader label={label} count={members.length} capacity={capacity} action={action} />
       {members.length > 0 && <Progress {...progress} className="w-full" />}
-      <RosterGroupMembers members={members} emptyText={emptyText} />
+      {members.length > 0 ? (
+        <RosterAvatars members={members} />
+      ) : (
+        emptyText && <RosterEmptyNote text={emptyText} />
+      )}
       {note && (
         <Text typography="body4" foreground="hint" render={<p />}>
           {note}

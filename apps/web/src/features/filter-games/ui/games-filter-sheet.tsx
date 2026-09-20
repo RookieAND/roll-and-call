@@ -1,7 +1,7 @@
 "use client";
 
-import { Button, Text } from "@trpg/ui";
-import { Check, ChevronDown } from "lucide-react";
+import { Button } from "@trpg/ui";
+import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -10,6 +10,8 @@ import { Sheet } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
+import { SelectedSortOptionRow } from "./selected-sort-option-row";
+import { SortOptionRow } from "./sort-option-row";
 
 export function GamesFilterSheet({ filter }: { filter: GamesFilter }) {
   const router = useRouter();
@@ -40,21 +42,9 @@ export function GamesFilterSheet({ filter }: { filter: GamesFilter }) {
           {/* ponytail: single-select list w/ dividers + check — not a Chip/segment look, hand-rolled rows */}
           <div role="radiogroup" aria-label="정렬" className="divide-y divide-gray-100">
             {GAME_SORTS.map((option) => {
-              const selected = current === option.key;
+              const Row = current === option.key ? SelectedSortOptionRow : SortOptionRow;
               return (
-                <button
-                  key={option.key}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  onClick={() => select(option.key)}
-                  className="flex min-h-12 w-full items-center justify-between text-left"
-                >
-                  <Text typography={selected ? "subtitle1" : "body2"} render={<span />}>
-                    {option.label}
-                  </Text>
-                  {selected && <Check size={16} className="text-primary-600" aria-hidden />}
-                </button>
+                <Row key={option.key} label={option.label} onSelect={() => select(option.key)} />
               );
             })}
           </div>
