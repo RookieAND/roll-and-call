@@ -39,6 +39,12 @@ export function AttendanceForm({ gameId, attendees }: AttendanceFormProps) {
     });
   }
 
+  // 전원 참석이면 남는 기록이 없어 확인을 건너뛴다. 되돌리기는 토스트에 있다.
+  function requestConfirm() {
+    if (absentIds.size === 0) submit();
+    else setConfirming(true);
+  }
+
   function submit() {
     run(() => confirmAttendance(gameId, [...absentIds]), {
       onSuccess: () => {
@@ -79,11 +85,7 @@ export function AttendanceForm({ gameId, attendees }: AttendanceFormProps) {
           presentCount={attendees.length - absentIds.size}
           absentCount={absentIds.size}
         />
-        <Button
-          variant="confirm"
-          className="h-[50px] w-full rounded-500"
-          onClick={() => setConfirming(true)}
-        >
+        <Button className="h-12 w-full rounded-500" onClick={requestConfirm}>
           출석 확정
         </Button>
       </VStack>
@@ -91,7 +93,7 @@ export function AttendanceForm({ gameId, attendees }: AttendanceFormProps) {
       <ConfirmDialog
         open={confirming}
         onOpenChange={setConfirming}
-        title={absentIds.size === 0 ? "전원 참석으로 확정할까요?" : "출석을 확정할까요?"}
+        title="출석을 확정할까요?"
         description={confirmDescription(absentNames, attendees.length)}
         confirmLabel="확정하기"
         cancelLabel="다시 보기"

@@ -6,11 +6,9 @@ import { CancelWaitlistButton } from "@/features/join-game";
 
 import { SESSION_ACTION_KIND, type SessionCardModel } from "../model/session-card-model";
 
-// 세션을 여는 마지막 한 수는 초록이다 — 03 확정 버튼과 같은 색이어야 같은 일로 읽힌다.
-const CONFIRM_KINDS: string[] = [
-  SESSION_ACTION_KIND.confirmTime,
-  SESSION_ACTION_KIND.confirmAttendance,
-];
+// 세션 시간을 정하는 한 수만 초록이다 — 03 확정 버튼과 같은 일이라서다.
+// 출석 확인은 03이 아니라 11의 일이고, 시안에서 보라다.
+const CONFIRM_KINDS: string[] = [SESSION_ACTION_KIND.confirmTime];
 
 interface SessionCardActionProps {
   model: SessionCardModel;

@@ -25,7 +25,7 @@ export function AttendanceRow({ attendee, absent, onChange }: AttendanceRowProps
       gap="125"
       className="min-h-15 border-t border-gray-100 px-150 py-100 first:border-t-0"
     >
-      <Avatar src={attendee.avatarUrl} name={attendee.username} size="stack" />
+      <Avatar src={attendee.avatarUrl} name={attendee.username} size="md" />
       <div className="min-w-0 flex-1">
         <Text truncate typography="subtitle2">
           {attendee.username}
