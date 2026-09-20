@@ -119,7 +119,6 @@ export function GameActionZone({
           gameId={game.id}
           isFull={isFull}
           isLottery={isLottery}
-          canSchedule={canSchedule}
           waitingCount={waitingCount}
           maxPlayers={game.maxPlayers}
         />
