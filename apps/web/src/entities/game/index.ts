@@ -16,6 +16,7 @@ export { GameRow } from "./ui/game-row";
 export { GameStatusBadge } from "./ui/game-status-badge";
 export { GameSeatCount } from "./ui/game-seat-count";
 export { GameCapacity } from "./ui/game-capacity";
+export { GameRuleChip } from "./ui/game-rule-chip";
 export { capacityParts, type CapacityPart } from "./model/capacity-parts";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
 export { GameScheduleRow } from "./ui/game-schedule-row";

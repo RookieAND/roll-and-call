@@ -1,6 +1,7 @@
 import { cn, HStack, Text } from "@trpg/ui";
 import { User } from "lucide-react";
 
+import { GameRuleChip } from "@/entities/game";
 import { toKst } from "@/shared/lib";
 
 import type { CalendarSession } from "../model/to-calendar-sessions";
@@ -41,13 +42,7 @@ export function HomeSessionCard({ session }: HomeSessionCardProps) {
           )}
         </HStack>
         <HStack align="center" gap="100" className="mt-100">
-          <Text
-            weight="bold"
-            typography="body4"
-            className="flex h-5 flex-none items-center rounded-200 bg-gray-100 px-100 text-gray-700"
-          >
-            {session.rule}
-          </Text>
+          <GameRuleChip rule={session.rule} />
           <Text
             typography="body4"
             foreground="muted"

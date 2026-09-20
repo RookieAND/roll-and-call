@@ -78,7 +78,7 @@ export function toPastSessionCard(
       ? `${formatDateTime(game.confirmedAt!)} · 출석 확인이 남아 있습니다`
       : ending.schedule,
     scheduleTone: attendanceTodo ? SESSION_TONE.warning : SESSION_TONE.hint,
-    meta: joinParts(game.rule, gmPart, ending.tail),
+    meta: joinParts(gmPart, ending.tail),
     note,
     // 기록을 보는 자리라 여기서 할 일이 없다. 출석 확인만 예외다.
     action: attendanceTodo,

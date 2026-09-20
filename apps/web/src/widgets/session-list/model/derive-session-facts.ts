@@ -73,6 +73,7 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
     base: {
       id: game.id,
       title: game.title,
+      rule: game.rule,
       role,
       startsAt,
       deadlinePassed: line.deadlinePassed,

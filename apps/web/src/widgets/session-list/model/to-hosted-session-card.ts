@@ -70,7 +70,6 @@ export function toHostedSessionCard(
       : (sessionWhen ?? joinParts(line.text, line.deadline)),
     scheduleTone,
     meta: joinParts(
-      game.rule,
       !context.readOnly && coordinate && !timeSet && `응답 ${responses}/${confirmedCount}`,
       `확정 ${seats}`,
     ),

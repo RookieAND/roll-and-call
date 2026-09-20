@@ -2,6 +2,8 @@ import { Badge, HStack, Text, cn } from "@trpg/ui";
 import { Check, CircleAlert } from "lucide-react";
 import Link from "next/link";
 
+import { GameRuleChip } from "@/entities/game";
+
 import {
   SESSION_CHIP,
   SESSION_TONE,
@@ -59,9 +61,12 @@ export function SessionCard({ model, eyebrow }: SessionCardProps) {
             {model.schedule}
           </Text>
         </HStack>
-        <Text truncate typography="body4" foreground="muted" className="mt-075">
-          {model.meta}
-        </Text>
+        <HStack align="center" gap="100" className="mt-075">
+          <GameRuleChip rule={model.rule} />
+          <Text truncate typography="body4" foreground="muted" className="min-w-0 flex-1">
+            {model.meta}
+          </Text>
+        </HStack>
         {model.note && (
           <Text
             typography="body4"

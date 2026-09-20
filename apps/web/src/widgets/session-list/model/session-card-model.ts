@@ -47,6 +47,7 @@ export type SessionCardModel = {
   badgeColor: "primary" | "success" | "gray";
   schedule: string;
   scheduleTone: SessionTone;
+  rule: string;
   meta: string;
   // 카드 아래에 한 겹 더 붙는 설명. 지금은 불참 기록이 언제 사라지는지 뿐이다.
   note: string | null;

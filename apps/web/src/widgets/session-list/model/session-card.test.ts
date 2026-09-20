@@ -101,6 +101,13 @@ describe("대기 카드", () => {
     expect(card.meta).toMatch(/신청 2 · 정원 4$/);
     expect(card.action?.label).toBe("신청 취소");
   });
+
+  // 룰은 메타 줄이 아니라 칩으로 따로 나간다.
+  it("룰은 meta에 섞이지 않는다", () => {
+    const card = playerCard({});
+    expect(card.rule).toBe("CoC");
+    expect(card.meta).not.toContain("CoC");
+  });
 });
 
 describe("운영 카드", () => {
