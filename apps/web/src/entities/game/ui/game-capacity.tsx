@@ -1,48 +1,17 @@
-import { HStack, Text } from "@trpg/ui";
+import { HStack } from "@trpg/ui";
 
-import { RECRUIT_METHOD, type RecruitMethod } from "../model/recruit-method";
-import { GAME_STATUS, type GameStatus } from "../model/status";
+import { capacityParts } from "../model/capacity-parts";
+import { CapacityText } from "./capacity-text";
 
-export function GameCapacity({
-  status,
-  recruitMethod,
-  confirmed,
-  waiting,
-  maxPlayers,
-}: {
-  status: GameStatus;
-  recruitMethod: RecruitMethod;
-  confirmed: number;
-  waiting: number;
-  maxPlayers: number;
-}) {
-  const lottery = recruitMethod === RECRUIT_METHOD.lottery;
-  // 마감된 글에서 몇 명이 찼는지는 이제 할 수 있는 일을 바꾸지 않아 방식과 정원만 남긴다.
-  const done = status === GAME_STATUS.closed || status === GAME_STATUS.full;
-  // 추첨은 마감 전까지 확정된 자리가 없어 신청자 수를 센다.
-  const drawPending = lottery && !done;
-
+export function GameCapacity(input: Parameters<typeof capacityParts>[0]) {
   return (
     <HStack
       align="center"
       className="h-[26px] shrink-0 gap-[7px] rounded-lg border border-gray-200 bg-gray-50 px-[9px]"
     >
-      <Text weight="medium" typography="body4" foreground="muted">
-        {lottery ? "추첨" : "선착순"}
-      </Text>
-      {!done && (
-        <Text numeric typography="subtitle2">
-          {drawPending ? `신청 ${confirmed + waiting}` : `확정 ${confirmed}`}
-        </Text>
-      )}
-      <Text numeric weight="medium" typography="body4" foreground="muted">
-        정원 {maxPlayers}
-      </Text>
-      {!done && !drawPending && waiting > 0 && (
-        <Text numeric weight="medium" typography="body4" foreground="muted">
-          대기 {waiting}
-        </Text>
-      )}
+      {capacityParts(input).map((part) => (
+        <CapacityText key={part.text} part={part} />
+      ))}
     </HStack>
   );
 }
