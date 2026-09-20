@@ -6,6 +6,7 @@ import { joinParts } from "./join-parts";
 import {
   SESSION_ACTION_KIND,
   SESSION_CHIP,
+  SESSION_ICON,
   SESSION_TONE,
   type SessionCardModel,
   type SessionContext,
@@ -17,12 +18,23 @@ export function toJoinedSessionCard(
   facts: SessionFacts,
   context: SessionContext,
 ): SessionCardModel {
-  const { base, line, awaitingTime, timeSet, sessionWhen, seats, sortKey, waitingCount } = facts;
+  const {
+    base,
+    line,
+    awaitingTime,
+    timeSet,
+    sessionWhen,
+    sessionAgo,
+    seats,
+    sortKey,
+    waitingCount,
+  } = facts;
   const gm = game.gm ?? null;
   const common = {
     ...base,
     gm,
     counts: [{ label: null, value: seats }],
+    scheduleTail: null,
     sortKey,
     waitingCount,
     todo: null,
@@ -42,8 +54,7 @@ export function toJoinedSessionCard(
       return {
         ...common,
         counts: [
-          { label: "신청", value: String(game.participants.length) },
-          { label: "정원", value: String(game.maxPlayers) },
+          { label: null, value: `신청 ${game.participants.length} · 정원 ${game.maxPlayers}` },
         ],
         chip: SESSION_CHIP.waiting,
         badge: "추첨 전",
@@ -52,6 +63,7 @@ export function toJoinedSessionCard(
           ? "모집이 끝나 GM이 추첨하는 중입니다"
           : joinParts(`${formatDate(game.endDate)} 신청 마감`, "마감 뒤 GM이 뽑습니다"),
         scheduleTone: SESSION_TONE.normal,
+        scheduleIcon: SESSION_ICON.deadline,
         action: cancel("신청 취소"),
       };
     }
@@ -62,7 +74,7 @@ export function toJoinedSessionCard(
       ...common,
       chip: SESSION_CHIP.waiting,
       badge: seen ? `대기 ${mine.waitlistRank}번` : "승인 대기",
-      badgeColor: "gray",
+      badgeColor: "warning",
       schedule: seen
         ? "정원이 차 순서를 기다립니다 · 자리가 나면 알립니다"
         : joinParts(
@@ -70,6 +82,7 @@ export function toJoinedSessionCard(
             "GM이 아직 보지 않았습니다",
           ),
       scheduleTone: seen ? SESSION_TONE.normal : SESSION_TONE.warning,
+      scheduleIcon: seen ? SESSION_ICON.waitlist : SESSION_ICON.scheduling,
       action: cancel("대기 취소"),
     };
   }
@@ -81,7 +94,9 @@ export function toJoinedSessionCard(
       badge: "확정",
       badgeColor: "success",
       schedule: sessionWhen!,
+      scheduleTail: sessionAgo,
       scheduleTone: SESSION_TONE.success,
+      scheduleIcon: SESSION_ICON.confirmed,
       action: null,
     };
   }
@@ -106,6 +121,7 @@ export function toJoinedSessionCard(
     badgeColor: "primary",
     schedule,
     scheduleTone: needsResponse ? SESSION_TONE.warning : SESSION_TONE.normal,
+    scheduleIcon: needsResponse ? SESSION_ICON.alert : SESSION_ICON.scheduling,
     action: needsResponse ? submit : null,
     todo: needsResponse ? submit : null,
   };

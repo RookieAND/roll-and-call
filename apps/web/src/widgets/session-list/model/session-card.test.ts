@@ -79,7 +79,7 @@ describe("참여 카드", () => {
   it("시간이 정해지면 언제인지가 앞에 온다", () => {
     const card = playerCard({ confirmedAt: at(2), endDate: at(-1), participants: [confirmedMe] });
     expect(card.chip).toBe(SESSION_CHIP.confirmed);
-    expect(card.schedule).toMatch(/모레$/);
+    expect(card.scheduleTail).toBe("모레");
   });
 });
 
@@ -98,10 +98,7 @@ describe("대기 카드", () => {
       participants: [other, me(PARTICIPANT_STATUS.waiting)],
     });
     expect(card.badge).toBe("추첨 전");
-    expect(card.counts).toEqual([
-      { label: "신청", value: "2" },
-      { label: "정원", value: "4" },
-    ]);
+    expect(card.counts).toEqual([{ label: null, value: "신청 2 · 정원 4" }]);
     expect(card.action?.label).toBe("신청 취소");
   });
 

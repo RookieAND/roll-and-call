@@ -21,6 +21,17 @@ export const SESSION_TONE = {
 
 export type SessionTone = (typeof SESSION_TONE)[keyof typeof SESSION_TONE];
 
+// 일정 줄 앞 아이콘. 색은 tone이 맡고, 무슨 일이 걸려 있는지는 아이콘이 말한다.
+export const SESSION_ICON = {
+  confirmed: "confirmed",
+  alert: "alert",
+  scheduling: "scheduling",
+  deadline: "deadline",
+  waitlist: "waitlist",
+} as const;
+
+export type SessionIcon = (typeof SESSION_ICON)[keyof typeof SESSION_ICON];
+
 export const SESSION_ACTION_KIND = {
   confirmTime: "confirm-time",
   submitAvailability: "submit-availability",
@@ -33,7 +44,8 @@ export const SESSION_ACTION_KIND = {
 export type SessionActionKind = (typeof SESSION_ACTION_KIND)[keyof typeof SESSION_ACTION_KIND];
 
 // 카드 아래 줄의 숫자 칩. label이 없으면 값만 적는다(정원 3/4).
-export type SessionCount = { label: string | null; value: string };
+// 사람을 세는 칩만 인원 아이콘을 단다 — 대기 순번은 사람 수가 아니다.
+export type SessionCount = { label: string | null; value: string; icon?: boolean };
 
 export type SessionAction = {
   kind: SessionActionKind;
@@ -47,9 +59,12 @@ export type SessionCardModel = {
   role: SessionRole;
   chip: SessionChip;
   badge: string;
-  badgeColor: "primary" | "success" | "gray";
+  badgeColor: "primary" | "success" | "warning" | "danger" | "gray";
   schedule: string;
+  // 확정 시각 뒤에 붙는 "모레" — 강조에서 빠져 회색으로 남는다.
+  scheduleTail: string | null;
   scheduleTone: SessionTone;
+  scheduleIcon: SessionIcon | null;
   rule: string;
   // 운영 탭은 내가 GM이라 적지 않는다.
   gm: { username: string; avatarUrl: string | null } | null;

@@ -7,6 +7,7 @@ import { relativeDay } from "./relative-day";
 import {
   SESSION_ACTION_KIND,
   SESSION_CHIP,
+  SESSION_ICON,
   SESSION_TONE,
   type SessionAction,
   type SessionCardModel,
@@ -14,7 +15,7 @@ import {
   type SessionGame,
 } from "./session-card-model";
 
-// 종료은 한 칩 안에 여러 사정이 들어온다 — 완료 · 무산 · 대기 종료 · 불참. 배지는 모두 무채색이고 본문이 왜 끝났는지 말한다.
+// 종료은 한 칩 안에 여러 사정이 들어온다 — 완료 · 무산 · 대기 종료 · 불참. 배지는 불참만 붉고 나머지는 무채색이며, 본문이 왜 끝났는지 말한다.
 export function toPastSessionCard(
   game: SessionGame,
   facts: SessionFacts,
@@ -38,7 +39,7 @@ export function toPastSessionCard(
     ? {
         badge: "대기 종료",
         schedule: "자리가 나지 않은 채 세션이 끝났습니다",
-        counts: [{ label: "대기", value: `${waitlistRank}번` }],
+        counts: [{ label: "대기", value: `${waitlistRank}번`, icon: false }],
       }
     : absent
       ? {
@@ -77,11 +78,13 @@ export function toPastSessionCard(
     ...base,
     chip: SESSION_CHIP.ended,
     badge: ending.badge,
-    badgeColor: "gray",
+    badgeColor: absent ? "danger" : "gray",
     schedule: attendanceTodo
       ? `${formatDateTime(game.confirmedAt!)} · 출석 확인이 남아 있습니다`
       : ending.schedule,
+    scheduleTail: null,
     scheduleTone: attendanceTodo ? SESSION_TONE.warning : SESSION_TONE.hint,
+    scheduleIcon: attendanceTodo ? SESSION_ICON.alert : null,
     gm: player ? (game.gm ?? null) : null,
     counts: ending.counts,
     note,

@@ -18,7 +18,9 @@ export function SessionCountChip({ count, dim = false }: SessionCountChipProps) 
         dim ? "bg-gray-50 text-hint" : "bg-gray-100 text-gray-700",
       )}
     >
-      <Users size={12} strokeWidth={2.2} aria-hidden className="shrink-0" />
+      {count.icon !== false && (
+        <Users size={12} strokeWidth={2.2} aria-hidden className="shrink-0" />
+      )}
       <Text numeric tight weight="bold" typography="body4" foreground="inherit">
         {count.label ? `${count.label} ${count.value}` : count.value}
       </Text>

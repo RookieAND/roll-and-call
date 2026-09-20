@@ -12,6 +12,7 @@ const badge = cva(
         // primary-700은 다크에서 뒤집히지 않아 남색 위 남색이 된다. 틴트 배경 글씨는 tinted-ink가 맡는다.
         primary: "bg-primary-50 text-tinted-ink",
         success: "bg-success-100 text-success-700",
+        warning: "bg-warning-50 text-warning-600",
         danger: "bg-danger-100 text-danger-600",
         discord: "bg-discord text-white",
       },

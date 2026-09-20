@@ -5,6 +5,7 @@ import { joinParts } from "./join-parts";
 import {
   SESSION_ACTION_KIND,
   SESSION_CHIP,
+  SESSION_ICON,
   SESSION_TONE,
   type SessionAction,
   type SessionCardModel,
@@ -26,6 +27,7 @@ export function toHostedSessionCard(
     awaitingTime,
     timeSet,
     sessionWhen,
+    sessionAgo,
     seats,
     waitingCount,
   } = facts;
@@ -42,6 +44,11 @@ export function toHostedSessionCard(
     : line.confirmed
       ? SESSION_TONE.success
       : SESSION_TONE.normal;
+  const scheduleIcon = gmTodo
+    ? SESSION_ICON.alert
+    : line.confirmed
+      ? SESSION_ICON.confirmed
+      : SESSION_ICON.scheduling;
   const awaitingTimeText = context.readOnly
     ? "모집이 끝나 GM이 세션 시간을 정하는 중입니다"
     : "기한이 지났는데 세션 시간이 없습니다";
@@ -68,7 +75,9 @@ export function toHostedSessionCard(
     schedule: awaitingTime
       ? awaitingTimeText
       : (sessionWhen ?? joinParts(line.text, line.deadline)),
+    scheduleTail: awaitingTime ? null : sessionAgo,
     scheduleTone,
+    scheduleIcon,
     // 운영 탭은 내가 GM이라 GM 줄을 적지 않는다.
     gm: null,
     counts: [

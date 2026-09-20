@@ -11,7 +11,6 @@ import {
 } from "@/entities/game";
 import { ddayKst, formatDateTime } from "@/shared/lib";
 
-import { joinParts } from "./join-parts";
 import { relativeDay } from "./relative-day";
 import type { SessionContext, SessionGame } from "./session-card-model";
 
@@ -39,9 +38,8 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
     (state === SESSION_STATE.closed && !awaitingTime) || state === SESSION_STATE.finished;
   const timeSet = Boolean(game.confirmedAt) && (!coordinate || line.confirmed);
   const startsAt = timeSet ? new Date(game.confirmedAt!).toISOString() : null;
-  const sessionWhen = startsAt
-    ? joinParts(formatDateTime(startsAt), relativeDay(ddayKst(startsAt, now)))
-    : null;
+  const sessionWhen = startsAt ? formatDateTime(startsAt) : null;
+  const sessionAgo = startsAt ? relativeDay(ddayKst(startsAt, now)) : null;
 
   const waitingCount = game.participants.filter(
     (participant) => participant.status === PARTICIPANT_STATUS.waiting,
@@ -67,6 +65,7 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
     past,
     timeSet,
     sessionWhen,
+    sessionAgo,
     seats: `${confirmedCount}/${game.maxPlayers}`,
     scheduleHref: `/games/${game.id}/schedule`,
     sortKey: new Date(startsAt ?? game.endDate).getTime(),
