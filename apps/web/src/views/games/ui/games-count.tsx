@@ -14,7 +14,7 @@ export async function GamesCount({
   const { total } = await promise;
   const label = searching ? `검색 결과 ${total}건` : `${total}건`;
   return (
-    <Text typography="body2" foreground="muted">
+    <Text typography="body3" foreground="muted">
       {label}
     </Text>
   );

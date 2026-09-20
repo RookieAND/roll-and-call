@@ -6,6 +6,7 @@ import { deriveGameStatus } from "../model/derive-game-status";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { scheduleLine } from "../model/schedule-line";
 import { GameCapacity } from "./game-capacity";
+import { GameDeadlineCount } from "./game-deadline-count";
 import { GameGmLabel } from "./game-gm-label";
 import { GameScheduleRow } from "./game-schedule-row";
 import { GameStatusBadge } from "./game-status-badge";
@@ -48,6 +49,7 @@ export function GameCard({ game }: Props) {
             {game.title}
           </Text>
           <GameStatusBadge status={status} />
+          {line.deadlineShort && <GameDeadlineCount label={line.deadlineShort} />}
         </HStack>
         {meta && (
           <Text truncate typography="body4" foreground="muted">
