@@ -2,12 +2,13 @@
 
 import { Button, Container, Text, VStack, cn } from "@trpg/ui";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { type PointerEvent, useEffect, useRef, useState } from "react";
 
 import { BrandLogo } from "@/shared/ui";
 
 import { markOnboardingSeen } from "../model/onboarding-seen";
 import { ONBOARDING_SLIDES } from "../model/onboarding-slides";
+import { swipeDirection } from "../model/swipe-direction";
 import { OnboardingPreview } from "./onboarding-preview";
 
 const DONE_HREF = "/games";
@@ -15,6 +16,8 @@ const DONE_HREF = "/games";
 export function OnboardingView() {
   const router = useRouter();
   const [index, setIndex] = useState(0);
+  const [back, setBack] = useState(false);
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
 
   // 건너뛰기든 끝까지 보든 두 번 뜨지 않게, 들어온 순간 본 것으로 친다.
   useEffect(markOnboardingSeen, []);
@@ -24,7 +27,8 @@ export function OnboardingView() {
   const last = index === ONBOARDING_SLIDES.length - 1;
   const nextLabel = welcome ? "둘러보기" : last ? "구인 목록 보러 가기" : "다음";
   const slideClass = cn(
-    "flex flex-1 flex-col animate-slide-in",
+    "flex flex-1 flex-col touch-pan-y",
+    back ? "animate-slide-in-back" : "animate-slide-in",
     welcome && "items-center justify-center text-center",
   );
   const titleClass = cn("leading-[1.32]", welcome ? "text-[26px]" : "text-[24px]");
@@ -34,11 +38,29 @@ export function OnboardingView() {
       router.replace(DONE_HREF);
       return;
     }
+    setBack(false);
     setIndex(index + 1);
   };
 
+  const goPrevious = () => {
+    if (index === 0) return;
+    setBack(true);
+    setIndex(index - 1);
+  };
+
+  const onPointerEnd = (event: PointerEvent) => {
+    const start = pointerStart.current;
+    pointerStart.current = null;
+    if (!start) return;
+
+    const direction = swipeDirection(event.clientX - start.x, event.clientY - start.y);
+    // 마지막 장에서 더 밀어도 화면을 떠나지 않는다. 떠나는 것은 버튼으로만.
+    if (direction === "next" && !last) goNext();
+    if (direction === "previous") goPrevious();
+  };
+
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-dvh flex-col">
       <header className="flex h-[52px] items-center justify-end px-2.5">
         {!last && (
           <Button variant="ghost" onClick={() => router.replace(DONE_HREF)}>
@@ -47,7 +69,17 @@ export function OnboardingView() {
         )}
       </header>
       <Container size="sm" className="flex flex-1 flex-col">
-        <div key={slide.key} className={slideClass}>
+        <div
+          key={slide.key}
+          className={slideClass}
+          onPointerDown={(event) => {
+            pointerStart.current = { x: event.clientX, y: event.clientY };
+          }}
+          onPointerUp={onPointerEnd}
+          onPointerCancel={() => {
+            pointerStart.current = null;
+          }}
+        >
           {welcome ? (
             <BrandLogo label="롤앤콜" size="lg" />
           ) : (

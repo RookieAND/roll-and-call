@@ -34,7 +34,7 @@ html {
   max-width: var(--max-width-screen-max);
 }
 
-/* 온보딩 장 넘김. key가 바뀌며 새로 마운트될 때 한 번만 재생된다. */
+/* 온보딩 장 넘김. key가 바뀌며 새로 마운트될 때 한 번만 재생된다. 들어오는 방향은 넘긴 방향을 따른다. */
 @keyframes slide-in {
   from {
     opacity: 0;
@@ -46,12 +46,28 @@ html {
   }
 }
 
+@keyframes slide-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @utility animate-slide-in {
   animation: slide-in 260ms cubic-bezier(0.2, 0, 0, 1);
 }
 
+@utility animate-slide-in-back {
+  animation: slide-in-back 260ms cubic-bezier(0.2, 0, 0, 1);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-slide-in {
+  .animate-slide-in,
+  .animate-slide-in-back {
     animation: none;
   }
 }

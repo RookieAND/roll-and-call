@@ -48,7 +48,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="bg-canvas font-sans text-gray-900 antialiased">
         <QueryProvider>
           <NavigationTracker />
-          <div className="mx-auto flex min-h-screen w-full min-w-screen-min max-w-screen-max flex-col border-x border-gray-200 bg-surface">
+          <div className="mx-auto flex min-h-dvh w-full min-w-screen-min max-w-screen-max flex-col border-x border-gray-200 bg-surface">
             <div className="flex-1">{children}</div>
             <BottomNav />
           </div>
