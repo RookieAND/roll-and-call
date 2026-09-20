@@ -31,7 +31,12 @@ export function HomeRecordLeader({ people, count }: HomeRecordLeaderProps) {
       <div className="min-w-0 flex-1">
         <HStack align="center" gap="050" className="mb-025 text-rank-gold">
           <Crown size={13} aria-hidden />
-          <Text typography="body4" weight="extrabold" className="tracking-[0.08em]">
+          <Text
+            typography="body4"
+            weight="extrabold"
+            foreground="inherit"
+            className="tracking-[0.08em]"
+          >
             {people.length > 1 ? "공동 1위" : "1위"}
           </Text>
         </HStack>
@@ -46,10 +51,10 @@ export function HomeRecordLeader({ people, count }: HomeRecordLeaderProps) {
         </Text>
       </div>
       <HStack align="baseline" gap="025" className="flex-none text-tinted-ink">
-        <Text typography="heading1" numeric className="tracking-[-0.03em]">
+        <Text typography="heading1" numeric foreground="inherit" className="tracking-[-0.03em]">
           {count}
         </Text>
-        <Text weight="bold" typography="body4">
+        <Text weight="bold" typography="body4" foreground="inherit">
           번
         </Text>
       </HStack>

@@ -64,7 +64,7 @@ export function HomeSessionCard({ session }: HomeSessionCardProps) {
             )}
           >
             <User size={12} aria-hidden />
-            <Text weight="bold" typography="body4" numeric>
+            <Text weight="bold" typography="body4" numeric foreground="inherit">
               {session.players.length}/{session.maxPlayers}
             </Text>
           </span>
