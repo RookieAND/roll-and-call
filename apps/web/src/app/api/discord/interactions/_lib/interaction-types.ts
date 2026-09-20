@@ -1,3 +1,5 @@
+import type { DiscordEmbed } from "@trpg/discord";
+
 export type DiscordInteractionOption = { name: string; value?: string | number | boolean };
 
 export type DiscordInteractionUser = { username: string; global_name?: string | null };
@@ -11,5 +13,9 @@ export type DiscordInteraction = {
 
 export type DiscordInteractionResponse = {
   type: number;
-  data?: { content: string; allowed_mentions: { parse: [] } };
+  data?: {
+    content?: string;
+    embeds?: DiscordEmbed[];
+    allowed_mentions: { parse: [] };
+  };
 };

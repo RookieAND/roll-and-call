@@ -1,3 +1,4 @@
+import { embedResponse } from "./embed-response";
 import { formatAbilityScores } from "./format-ability-scores";
 import { formatDiceRoll } from "./format-dice-roll";
 import type { DiscordInteraction, DiscordInteractionResponse } from "./interaction-types";
@@ -24,12 +25,12 @@ export function buildInteractionResponse(
 
   switch (interaction.data?.name) {
     case "능력치":
-      return messageResponse(formatAbilityScores(playerName, rollAbilityScores()));
+      return embedResponse(formatAbilityScores(playerName, rollAbilityScores()));
     case "주사위": {
       const option = interaction.data.options?.find(({ name }) => name === DICE_OPTION_NAME);
       const roll = rollDiceNotation(String(option?.value ?? ""));
       if (!roll) return messageResponse("`1d10`, `3d6+2` 처럼 입력해 주세요.");
-      return messageResponse(formatDiceRoll(playerName, roll));
+      return embedResponse(formatDiceRoll(playerName, roll));
     }
     default:
       return messageResponse("모르는 커맨드입니다.");
