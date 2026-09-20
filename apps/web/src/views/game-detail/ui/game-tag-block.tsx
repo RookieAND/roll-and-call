@@ -1,13 +1,15 @@
-import { Chip, HStack, Text, VStack } from "@trpg/ui";
+import { Chip, HStack, Text, VStack, type ChipProps } from "@trpg/ui";
 
 export function GameTagBlock({
   label,
   tags,
   note,
+  tone = "outline",
 }: {
   label: string;
   tags: string[];
   note?: string;
+  tone?: ChipProps["tone"];
 }) {
   return (
     <VStack gap="100">
@@ -16,7 +18,7 @@ export function GameTagBlock({
       </Text>
       <HStack gap="075" wrap>
         {tags.map((tag) => (
-          <Chip key={tag} asChild>
+          <Chip key={tag} tone={tone} asChild>
             <span>{tag}</span>
           </Chip>
         ))}

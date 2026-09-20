@@ -14,7 +14,7 @@ export function GamePreflightSection({ game }: { game: GameDetailData }) {
   return (
     <VStack gap="250">
       {game.genres.length > 0 && (
-        <GameTagBlock label={gameTagLabel[GAME_TAG.genres]} tags={game.genres} />
+        <GameTagBlock label={gameTagLabel[GAME_TAG.genres]} tags={game.genres} tone="neutral" />
       )}
       {game.triggers.length > 0 && (
         <GameTagBlock
