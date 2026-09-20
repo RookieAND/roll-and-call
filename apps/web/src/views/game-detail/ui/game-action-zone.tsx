@@ -104,7 +104,13 @@ export function GameActionZone({
         />
       );
     case GAME_ACTION_VIEW.closed:
-      return <ClosedActions endDate={game.endDate} reason={closedReason} />;
+      return (
+        <ClosedActions
+          endDate={game.endDate}
+          confirmedAt={game.confirmedAt}
+          reason={closedReason}
+        />
+      );
     case GAME_ACTION_VIEW.anon:
       return <AnonActions isFull={isFull} isLottery={isLottery} />;
     case GAME_ACTION_VIEW.joinable:
