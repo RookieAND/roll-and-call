@@ -12,7 +12,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
   if (block.kind === HELP_BLOCK.note) {
     return (
       <div className="border-l-2 border-tinted-border pl-3">
-        <Text typography="body3" foreground="muted" render={<p />} className="whitespace-pre-line">
+        <Text typography="body3" foreground="muted" render={<p />}>
           {block.body}
         </Text>
       </div>
@@ -81,23 +81,13 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
             <Text typography="subtitle1" render={<h3 />}>
               {step.title}
             </Text>
-            <Text
-              typography="body3"
-              foreground="muted"
-              render={<p />}
-              className="whitespace-pre-line"
-            >
+            <Text typography="body3" foreground="muted" render={<p />}>
               {step.body}
             </Text>
             {step.figure && <HelpFigure figure={step.figure} />}
             {step.note && (
               <div className="border-l-2 border-tinted-border pl-3">
-                <Text
-                  typography="body3"
-                  foreground="muted"
-                  render={<p />}
-                  className="whitespace-pre-line"
-                >
+                <Text typography="body3" foreground="muted" render={<p />}>
                   {step.note}
                 </Text>
               </div>

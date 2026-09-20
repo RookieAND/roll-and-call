@@ -27,10 +27,7 @@ export function OnboardingView() {
     "flex flex-1 flex-col animate-slide-in",
     welcome && "items-center justify-center text-center",
   );
-  const titleClass = cn(
-    "leading-[1.32] whitespace-pre-line",
-    welcome ? "text-[26px]" : "text-[24px]",
-  );
+  const titleClass = cn("leading-[1.32]", welcome ? "text-[26px]" : "text-[24px]");
 
   const goNext = () => {
     if (last) {
@@ -72,12 +69,7 @@ export function OnboardingView() {
             <Text typography="heading1" render={<h1 />} className={titleClass}>
               {slide.title}
             </Text>
-            <Text
-              typography="body2"
-              foreground="muted"
-              render={<p />}
-              className="leading-[1.8] whitespace-pre-line"
-            >
+            <Text typography="body2" foreground="muted" render={<p />} className="leading-[1.8]">
               {slide.body}
             </Text>
           </VStack>

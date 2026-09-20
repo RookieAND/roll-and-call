@@ -28,12 +28,7 @@ export function HelpDocView({ slug }: { slug: string }) {
             <Text typography="heading1" render={<h1 />} className="mt-1.5">
               {doc.title}
             </Text>
-            <Text
-              typography="body2"
-              foreground="muted"
-              render={<p />}
-              className="mt-2.5 whitespace-pre-line"
-            >
+            <Text typography="body2" foreground="muted" render={<p />} className="mt-2.5">
               {doc.lead}
             </Text>
           </div>
