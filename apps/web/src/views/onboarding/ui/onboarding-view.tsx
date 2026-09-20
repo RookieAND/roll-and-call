@@ -63,7 +63,10 @@ export function OnboardingView() {
   };
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div
+      className="flex min-h-dvh flex-col"
+      style={{ backgroundImage: "var(--gradient-onboarding)" }}
+    >
       <span className="h-[52px] flex-none" />
       <Container size="sm" className="flex flex-1 flex-col">
         <div

@@ -92,6 +92,9 @@
   --color-heat-ink: #2b2d78;
   /* 진한 칸 위에 얹히는 글씨. 두 테마 모두 흰색이라 .dark 오버라이드가 없다. */
   --color-heat-ink-strong: #ffffff;
+
+  /* 온보딩 배경. 색이 아니라 그라디언트라 유틸리티가 없고 인라인 var()로만 쓴다. */
+  --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #eaecff 0%, #f6f6fb 44%, #ffffff 76%);
 }
 
 /* Dark mode: override the CSS variables that token utilities reference.
@@ -150,6 +153,8 @@
   --color-heat-4: #4b4bb5;
   --color-heat-5: #6a6fe8;
   --color-heat-ink: #c7d2fe;
+
+  --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #221f42 0%, #17161f 46%, #131318 80%);
 }
 
 /* Skeleton shimmer (mockup uses this instead of Tailwind's default pulse). */
