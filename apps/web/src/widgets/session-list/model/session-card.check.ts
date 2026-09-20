@@ -3,6 +3,7 @@ import assert from "node:assert";
 import {
   PARTICIPANT_STATUS,
   type ParticipantStatus,
+  RECRUIT_METHOD,
   SCHEDULE_MODE,
   SESSION_ROLE,
 } from "@/entities/game";
@@ -29,6 +30,8 @@ function game(partial: Partial<SessionGame>): SessionGame {
     rangeStart: "2026-09-20",
     rangeEnd: "2026-09-24",
     waitlistEnabled: true,
+    recruitMethod: RECRUIT_METHOD.firstCome,
+    drawnAt: null,
     gm: { username: "한랑아" },
     participants: [],
     ...partial,
@@ -79,6 +82,20 @@ card = toSessionCard(
 assert.equal(card.chip, SESSION_CHIP.waiting);
 assert.equal(card.badge, "승인 대기");
 assert.equal(card.action?.label, "대기 취소");
+assert.match(card.schedule, /^신청 2일째 · GM이 아직 보지 않았습니다$/);
+
+// 추첨은 뽑기 전까지 순번이 없다 — "신청"으로 세고 버튼도 신청 취소다.
+card = toSessionCard(
+  game({
+    recruitMethod: RECRUIT_METHOD.lottery,
+    participants: [other, me(PARTICIPANT_STATUS.waiting)],
+  }),
+  SESSION_ROLE.player,
+  sessionContext(),
+);
+assert.equal(card.badge, "추첨 전");
+assert.match(card.meta, /신청 2 · 정원 4$/);
+assert.equal(card.action?.label, "신청 취소");
 
 // 조율형 · 기한 지남 · 확정자 있음 · 미확정 → 무산이 아니라 GM 할 일
 card = toSessionCard(

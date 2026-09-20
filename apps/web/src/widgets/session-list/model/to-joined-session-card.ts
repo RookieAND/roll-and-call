@@ -1,4 +1,5 @@
-import { splitRoster } from "@/entities/game";
+import { RECRUIT_METHOD, splitRoster } from "@/entities/game";
+import { ddayKst, formatDate } from "@/shared/lib";
 
 import type { SessionFacts } from "./derive-session-facts";
 import { joinParts } from "./join-parts";
@@ -20,28 +21,50 @@ export function toJoinedSessionCard(
   const meta = joinParts(game.rule, `GM ${game.gm?.username ?? "?"}`, seats);
   const common = { ...base, meta, sortKey, waitingCount, todo: null };
   const { waiting } = splitRoster(game.participants);
-  const waitlistRank =
-    waiting.find((participant) => participant.userId === context.viewerId)?.waitlistRank ?? null;
+  const mine = waiting.find((participant) => participant.userId === context.viewerId) ?? null;
 
-  if (waitlistRank !== null) {
+  if (mine !== null) {
+    const cancel = (label: string) =>
+      context.readOnly
+        ? null
+        : { kind: SESSION_ACTION_KIND.cancelWaitlist, label, href: `/games/${game.id}` };
+
+    // 추첨은 뽑기 전까지 순번이 없다 — 대기가 아니라 "신청"이라 세는 것도 버튼도 다르다.
+    if (game.recruitMethod === RECRUIT_METHOD.lottery && game.drawnAt === null) {
+      return {
+        ...common,
+        meta: joinParts(
+          game.rule,
+          `GM ${game.gm?.username ?? "?"}`,
+          `신청 ${game.participants.length}`,
+          `정원 ${game.maxPlayers}`,
+        ),
+        chip: SESSION_CHIP.waiting,
+        badge: "추첨 전",
+        badgeColor: "primary",
+        schedule: line.deadlinePassed
+          ? "모집이 끝나 GM이 추첨하는 중입니다"
+          : joinParts(`${formatDate(game.endDate)} 신청 마감`, "마감 뒤 GM이 뽑습니다"),
+        scheduleTone: SESSION_TONE.normal,
+        action: cancel("신청 취소"),
+      };
+    }
+
     // 승인 대기(GM이 아직 보지 않음)와 정원 대기(순번)는 배지로만 갈리고 버튼은 하나다.
     const seen = line.deadlinePassed || timeSet;
     return {
       ...common,
       chip: SESSION_CHIP.waiting,
-      badge: seen ? `대기 ${waitlistRank}번` : "승인 대기",
+      badge: seen ? `대기 ${mine.waitlistRank}번` : "승인 대기",
       badgeColor: "gray",
       schedule: seen
         ? "정원이 차 순서를 기다립니다 · 자리가 나면 알립니다"
-        : joinParts(line.text, line.deadline),
-      scheduleTone: SESSION_TONE.normal,
-      action: context.readOnly
-        ? null
-        : {
-            kind: SESSION_ACTION_KIND.cancelWaitlist,
-            label: "대기 취소",
-            href: `/games/${game.id}`,
-          },
+        : joinParts(
+            `신청 ${1 - ddayKst(mine.joinedAt, context.now ?? new Date())}일째`,
+            "GM이 아직 보지 않았습니다",
+          ),
+      scheduleTone: seen ? SESSION_TONE.normal : SESSION_TONE.warning,
+      action: cancel("대기 취소"),
     };
   }
 
