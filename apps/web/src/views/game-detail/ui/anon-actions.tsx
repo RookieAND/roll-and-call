@@ -12,7 +12,7 @@ export function AnonActions({ isFull, isLottery }: { isFull: boolean; isLottery:
       : "참여하려면 로그인이 필요합니다.";
 
   return (
-    <VStack gap="100">
+    <VStack gap="125">
       <ActionHint>{anonMessage}</ActionHint>
       <LoginButton className={ACTION_PRIMARY_CLASS} />
     </VStack>

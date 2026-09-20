@@ -17,7 +17,7 @@ export function LockedJoinedActions({
   lock: LeaveLock;
 }) {
   return (
-    <VStack gap="100">
+    <VStack gap="125">
       <StatusNotice tone="muted" className="text-left">
         <Text typography="body4" weight="bold" render={<p />}>
           참여가 확정됐습니다

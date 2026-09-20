@@ -18,7 +18,7 @@ export function LeaveableJoinedActions({
   needsResponse: boolean;
 }) {
   return (
-    <VStack gap="100">
+    <VStack gap="125">
       {needsResponse && <UnrespondedNotice />}
       <ActionPair>
         <LeaveGameButton gameId={gameId} className={ACTION_PAIR_CLASS}>

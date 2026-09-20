@@ -19,7 +19,7 @@ export function WaitingActions({
   pendingDraw: boolean;
 }) {
   return (
-    <VStack gap="100">
+    <VStack gap="125">
       <WaitlistRankNotice
         rank={waitlistRank}
         pendingDraw={pendingDraw}

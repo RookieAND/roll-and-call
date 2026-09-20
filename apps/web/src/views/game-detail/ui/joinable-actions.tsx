@@ -3,7 +3,7 @@ import { VStack } from "@trpg/ui";
 import { JoinGameButton } from "@/features/join-game";
 
 import { ACTION_PRIMARY_CLASS } from "./action-class-names";
-import { ActionHint } from "./action-hint";
+import { JoinHint } from "./join-hint";
 
 export function JoinableActions({
   gameId,
@@ -20,7 +20,7 @@ export function JoinableActions({
   waitingCount: number;
   maxPlayers: number;
 }) {
-  const scheduleHint = canSchedule ? "참여하면 가능한 시간을 입력하게 됩니다." : null;
+  const scheduleHint = canSchedule ? "참여한 뒤 가능 시간을 냅니다." : null;
 
   // 추첨은 정원과 무관하게 받으므로 대기 순번 대신 뽑는 인원을 알린다.
   const joinLabel = isLottery ? "신청하기" : isFull ? "대기 신청하기" : "참여하기";
@@ -31,8 +31,8 @@ export function JoinableActions({
       : scheduleHint;
 
   return (
-    <VStack gap="100">
-      {joinHint && <ActionHint>{joinHint}</ActionHint>}
+    <VStack gap="125">
+      {joinHint && <JoinHint>{joinHint}</JoinHint>}
       <JoinGameButton gameId={gameId} className={ACTION_PRIMARY_CLASS}>
         {joinLabel}
       </JoinGameButton>
