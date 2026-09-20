@@ -7,18 +7,22 @@ import { DrawResultNote } from "./draw-result-note";
 export function RosterStatusCard({
   gameId,
   confirmedAt,
+  confirmedCount,
   summary,
   locked,
   attendanceDue,
 }: {
   gameId: string;
   confirmedAt: Date | null;
+  confirmedCount: number;
   summary: RosterSummary;
   locked: boolean;
   attendanceDue: boolean;
 }) {
   if (attendanceDue && confirmedAt) {
-    return <AttendanceCard gameId={gameId} confirmedAt={confirmedAt} />;
+    return (
+      <AttendanceCard gameId={gameId} confirmedAt={confirmedAt} confirmedCount={confirmedCount} />
+    );
   }
   if (summary.drawnAtLabel) {
     return (

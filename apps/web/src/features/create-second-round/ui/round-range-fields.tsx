@@ -43,6 +43,8 @@ export function RoundRangeFields({
       </HStack>
       <Text typography="body4" foreground="hint" render={<p />}>
         {from}, 최대 {SECOND_ROUND_MAX_DAYS}일까지 고를 수 있습니다.
+        <br />
+        종료일을 고르면 회차를 열 수 있습니다.
       </Text>
     </VStack>
   );

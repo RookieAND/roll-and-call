@@ -58,6 +58,7 @@ export function ParticipantManager({
             <RosterStatusCard
               gameId={gameId}
               confirmedAt={confirmedAt}
+              confirmedCount={confirmed.length}
               summary={summary}
               locked={locked}
               attendanceDue={attendanceDue}

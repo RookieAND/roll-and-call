@@ -29,6 +29,7 @@ export function DrawLotteryCard({
   const title = deadlinePassed
     ? `추첨으로 ${maxPlayers}명 정하기`
     : `지금 추첨으로 ${maxPlayers}명 정하기`;
+  const titleTypography = deadlinePassed ? "subtitle1" : "subtitle2";
   const closing = deadlinePassed
     ? "뽑은 뒤에도 명단은 고칠 수 있습니다."
     : "지금 뽑으면 모집이 바로 닫힙니다.";
@@ -54,8 +55,10 @@ export function DrawLotteryCard({
       <Card padding="md" className={cn(deadlinePassed && "border-primary-600 bg-tinted-bg")}>
         <VStack gap="150">
           <VStack gap="050">
-            <Text typography="subtitle1">{title}</Text>
-            <Text typography="body3" foreground="muted" render={<p />}>
+            <Text typography={titleTypography} weight="extrabold">
+              {title}
+            </Text>
+            <Text typography="body4" foreground="muted" render={<p />}>
               신청한 {applicantCount}명 중 {drawnCount}명이 확정, 나머지 {leftoverCount}명은 대기로
               남습니다.
               <br />
@@ -64,7 +67,7 @@ export function DrawLotteryCard({
           </VStack>
           <Button
             variant={deadlinePassed ? "solid" : "tinted"}
-            className="h-11 w-full"
+            className="h-[46px] w-full rounded-500"
             loading={pending}
             onClick={() => (deadlinePassed ? draw() : setConfirming(true))}
           >

@@ -7,7 +7,7 @@ export function RosterStat({ label, count }: { label: string; count: number }) {
         <Text typography="body4" foreground="muted">
           {label}
         </Text>
-        <Text numeric typography="heading1">
+        <Text numeric typography="heading2">
           {count}명
         </Text>
       </VStack>

@@ -9,6 +9,7 @@ import { ExpandableRows } from "@/shared/ui";
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { availabilityNote } from "./availability-note";
+import { LockedRosterNote } from "./locked-roster-note";
 import { MemberMenuButton } from "./member-menu-button";
 import { RosterQueue } from "./roster-queue";
 import { RosterRow } from "./roster-row";
@@ -41,16 +42,15 @@ export function RosterQueues({
   const noteOf = (member: ManagedMember) =>
     isCoordinate ? availabilityNote(member.hasAvailability) : undefined;
   const waitingCaption = summary.drawnAtLabel ? "추첨으로 정해진 순서" : "신청 순서";
+  const confirmedFootnote = locked ? (
+    <LockedRosterNote />
+  ) : (
+    summary.unsubmittedCount > 0 && <UnsubmittedNote count={summary.unsubmittedCount} />
+  );
 
   return (
     <VStack gap="250">
-      <RosterQueue
-        label="확정"
-        count={confirmed.length}
-        footnote={
-          summary.unsubmittedCount > 0 && <UnsubmittedNote count={summary.unsubmittedCount} />
-        }
-      >
+      <RosterQueue label="확정" count={confirmed.length} footnote={confirmedFootnote}>
         {confirmed.length === 0 ? (
           <div className="px-150 py-200">
             <Text typography="body3" foreground="muted">

@@ -17,10 +17,10 @@ export function RosterQueue({
   return (
     <VStack gap="100">
       <HStack align="baseline" gap="100">
-        <Text typography="subtitle1" render={<h2 />}>
+        <Text typography="subtitle2" weight="extrabold" render={<h2 />}>
           {label}
         </Text>
-        <Text numeric typography="subtitle1" foreground="muted" className="flex-1">
+        <Text numeric typography="subtitle2" foreground="muted" className="flex-1">
           {count}명
         </Text>
         {caption && (

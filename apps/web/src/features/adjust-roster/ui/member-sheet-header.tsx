@@ -17,7 +17,7 @@ export function MemberSheetHeader({
     <HStack align="center" gap="150" className="border-b border-gray-100 pb-175">
       <Avatar src={member.avatarUrl} name={member.username} size="lg" />
       <VStack gap={0}>
-        <Text typography="subtitle1">{member.username}</Text>
+        <Text typography="heading3">{member.username}</Text>
         <Text
           typography="body4"
           foreground="muted"
