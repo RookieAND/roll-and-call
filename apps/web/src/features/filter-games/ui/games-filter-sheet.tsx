@@ -28,7 +28,7 @@ export function GamesFilterSheet({ filter }: { filter: GamesFilter }) {
         variant="ghost"
         onClick={() => setOpen(true)}
         aria-label={`정렬: ${currentLabel}`}
-        className="-mr-3 h-10 shrink-0 gap-0.5 px-3 text-[13px] text-gray-700"
+        className="-mr-3 h-10 shrink-0 gap-0.5 px-3 text-body3 text-gray-700"
       >
         {currentLabel}
         <ChevronDown size={14} aria-hidden />

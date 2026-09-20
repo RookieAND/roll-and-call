@@ -17,12 +17,12 @@ export default function Loading() {
             <div>
               <div className="flex items-start justify-between gap-2">
                 <Skeleton className="h-8 w-2/3" />
-                <Skeleton className="mt-0.5 h-[21px] w-14 rounded-[7px]" />
+                <Skeleton className="mt-0.5 h-[21px] w-14 rounded-300" />
               </div>
               <Skeleton className="mt-1 h-5 w-44" />
             </div>
 
-            <div className="overflow-hidden rounded-[14px] border border-gray-200">
+            <div className="overflow-hidden rounded-600 border border-gray-200">
               {INFO_ROWS.map((width) => (
                 <div
                   key={width}
@@ -42,7 +42,7 @@ export default function Loading() {
 
             <VStack gap={2}>
               <Skeleton className="h-[22px] w-20" />
-              <Skeleton className="h-[74px] w-full rounded-xl" />
+              <Skeleton className="h-[74px] w-full rounded-500" />
             </VStack>
 
             <VStack className="gap-2.5">
@@ -58,7 +58,7 @@ export default function Loading() {
           </VStack>
 
           <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-4 pt-3.5 pb-4">
-            <Skeleton className="h-[50px] w-full rounded-xl" />
+            <Skeleton className="h-[50px] w-full rounded-500" />
           </div>
         </VStack>
       </Container>

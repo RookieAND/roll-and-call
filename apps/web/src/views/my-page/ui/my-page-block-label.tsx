@@ -10,7 +10,7 @@ export function MyPageBlockLabel({
 }) {
   return (
     <div className="mb-2 flex items-center">
-      <Text typography="subtitle3" foreground="muted" render={<h2 />} className="flex-1">
+      <Text weight="bold" typography="body4" foreground="muted" render={<h2 />} className="flex-1">
         {label}
       </Text>
       {action && (

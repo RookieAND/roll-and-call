@@ -5,16 +5,16 @@ export function GameListSkeleton() {
   return (
     <VStack className="gap-2.5">
       {Array.from({ length: 3 }).map((_, index) => (
-        <div key={index} className="overflow-hidden rounded-[14px] border border-gray-200">
+        <div key={index} className="overflow-hidden rounded-600 border border-gray-200">
           <Skeleton className="aspect-video w-full rounded-none" />
-          <VStack className="gap-1.5 px-3.5 py-[13px]">
+          <VStack className="gap-1.5 px-3.5 py-3.5">
             <div className="flex items-start justify-between gap-2">
               <Skeleton className="h-[22px] w-1/2" />
-              <Skeleton className="h-[21px] w-14 rounded-[7px]" />
+              <Skeleton className="h-[21px] w-14 rounded-300" />
             </div>
             <Skeleton className="h-[21px] w-1/3" />
             <div className="flex items-center gap-1.5">
-              <Skeleton className="h-[13px] w-[13px] rounded-[3px]" />
+              <Skeleton className="h-[13px] w-[13px] rounded-100" />
               <Skeleton className="h-[21px] flex-1" />
               <Skeleton className="h-[21px] w-9" />
             </div>

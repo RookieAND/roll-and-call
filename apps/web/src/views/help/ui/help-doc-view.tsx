@@ -20,7 +20,7 @@ export function HelpDocView({ slug }: { slug: string }) {
     <>
       <AppBar back="/help" title={doc.title} />
       <Container size="sm">
-        <VStack gap={5} className="py-[18px]">
+        <VStack gap={5} className="py-4.5">
           <div>
             <Text typography="subtitle2" foreground="primary" render={<p />}>
               {doc.category}
@@ -41,7 +41,7 @@ export function HelpDocView({ slug }: { slug: string }) {
             <Text typography="subtitle2" foreground="muted" render={<h2 />} className="mb-2">
               이어 읽기
             </Text>
-            <div className="overflow-hidden rounded-[14px] border border-gray-200">
+            <div className="overflow-hidden rounded-600 border border-gray-200">
               {related.map((target) => (
                 <HelpDocRow key={target.slug} slug={target.slug} title={target.title} />
               ))}

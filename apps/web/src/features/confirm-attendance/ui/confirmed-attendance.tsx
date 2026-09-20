@@ -13,7 +13,7 @@ export function ConfirmedAttendance({
 }) {
   return (
     <VStack gap={3}>
-      <div className="overflow-hidden rounded-xl border border-gray-200">
+      <div className="overflow-hidden rounded-500 border border-gray-200">
         {attendees.map((attendee) => (
           <AttendanceResultRow key={attendee.userId} attendee={attendee} />
         ))}

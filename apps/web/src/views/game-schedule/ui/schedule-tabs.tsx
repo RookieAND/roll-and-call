@@ -24,7 +24,7 @@ export function ScheduleTabs({
 
   return (
     <div className="flex flex-col gap-3">
-      <div role="tablist" className="flex gap-1 rounded-[11px] bg-gray-100 p-1">
+      <div role="tablist" className="flex gap-1 rounded-400 bg-gray-100 p-1">
         {tabs.map((tabItem) => {
           const active = tab === tabItem.key;
           return (
@@ -35,7 +35,7 @@ export function ScheduleTabs({
               aria-selected={active}
               onClick={() => setTab(tabItem.key)}
               className={cn(
-                "h-9 flex-1 rounded-lg text-sm font-bold tabular-nums transition-colors",
+                "h-9 flex-1 rounded-300 text-sm font-bold tabular-nums transition-colors",
                 active ? "bg-surface text-gray-900 shadow-sm" : "text-gray-600",
               )}
             >

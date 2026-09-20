@@ -27,7 +27,7 @@ export function SegmentControl<Value extends string>({
     <div
       role="radiogroup"
       aria-label={ariaLabel}
-      className={cn("inline-flex gap-[3px] rounded-[10px] bg-gray-100 p-[3px]", className)}
+      className={cn("inline-flex gap-1 rounded-400 bg-gray-100 p-1", className)}
     >
       {options.map((option) => {
         const selected = option.value === value;
@@ -43,8 +43,8 @@ export function SegmentControl<Value extends string>({
             className={cn(
               option.icon
                 ? "flex h-[34px] w-11 items-center justify-center"
-                : "h-8 px-[11px] text-[12px]",
-              "rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200",
+                : "h-8 px-3 text-body4",
+              "rounded-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200",
               selected
                 ? "bg-surface font-bold text-gray-900 shadow-sm"
                 : "font-semibold text-gray-600 hover:text-gray-900",

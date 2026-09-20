@@ -23,7 +23,7 @@ export function GameRow({ game }: { game: GameRowData }) {
   });
 
   return (
-    <div className="flex items-center gap-3 rounded-[14px] border border-gray-200 p-3">
+    <div className="flex items-center gap-3 rounded-600 border border-gray-200 p-3">
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <Text truncate typography="subtitle1">

@@ -9,8 +9,8 @@ const chip = cva(
   {
     variants: {
       shape: {
-        pill: "shrink-0 rounded-full px-[11px] py-1.5 text-[12px]",
-        block: "flex-1 h-11 rounded-[10px] text-sm",
+        pill: "shrink-0 rounded-full px-3 py-1.5 text-body4",
+        block: "flex-1 h-11 rounded-400 text-sm",
       },
       selected: {
         true: "border-tinted-border bg-tinted-bg text-tinted-ink",

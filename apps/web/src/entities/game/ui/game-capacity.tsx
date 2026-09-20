@@ -7,7 +7,7 @@ export function GameCapacity(input: Parameters<typeof capacityParts>[0]) {
   return (
     <HStack
       align="center"
-      className="h-[26px] shrink-0 gap-[7px] rounded-lg border border-gray-200 bg-gray-50 px-[9px]"
+      className="h-[26px] shrink-0 gap-2 rounded-300 border border-gray-200 bg-gray-50 px-2.5"
     >
       {capacityParts(input).map((part) => (
         <CapacityText key={part.text} part={part} />

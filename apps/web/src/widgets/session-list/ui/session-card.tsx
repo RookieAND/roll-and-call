@@ -23,7 +23,7 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
   const titleForeground = model.chip === SESSION_CHIP.ended ? "muted" : "normal";
 
   return (
-    <div className={cn("rounded-[14px] p-3.5", cardClass)}>
+    <div className={cn("rounded-600 p-3.5", cardClass)}>
       <Link href={`/games/${model.id}`} className="block">
         {eyebrow && (
           <Text weight="bold" typography="body4" className="mb-1 block text-warning-600">

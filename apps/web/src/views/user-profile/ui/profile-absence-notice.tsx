@@ -18,7 +18,7 @@ export function ProfileAbsenceNotice({ absences }: { absences: Absence[] }) {
 
   return (
     <VStack gap={2}>
-      <div className="flex items-start gap-2.5 rounded-xl border border-danger-200 bg-danger-50 px-3.5 py-3">
+      <div className="flex items-start gap-2.5 rounded-500 border border-danger-200 bg-danger-50 px-3.5 py-3">
         <AlertCircle
           size={15}
           strokeWidth={2.2}

@@ -12,15 +12,15 @@ export function ProfileMemoBlock({
   memo: { body: string; updatedAt: Date } | null;
 }) {
   const boxClass = memo
-    ? "rounded-xl border border-gray-200 bg-gray-50 p-3.5"
-    : "rounded-xl border border-dashed border-gray-300 p-3.5";
+    ? "rounded-500 border border-gray-200 bg-gray-50 p-3.5"
+    : "rounded-500 border border-dashed border-gray-300 p-3.5";
 
   return (
     <div className="px-4 pb-4">
       <div className={boxClass}>
-        <div className="flex items-center gap-[7px]">
+        <div className="flex items-center gap-2">
           <Lock size={14} className="flex-none text-gray-600" aria-hidden />
-          <Text typography="subtitle3" foreground="muted" className="flex-1">
+          <Text weight="bold" typography="body4" foreground="muted" className="flex-1">
             내가 쓴 메모
           </Text>
           {memo && (
@@ -37,11 +37,11 @@ export function ProfileMemoBlock({
             <Text
               typography="body3"
               render={<p />}
-              className="mt-[9px] leading-[1.7] whitespace-pre-line text-gray-700"
+              className="mt-2.5 leading-[1.7] whitespace-pre-line text-gray-700"
             >
               {memo.body}
             </Text>
-            <Text typography="body4" foreground="hint" render={<p />} className="mt-[9px]">
+            <Text typography="body4" foreground="hint" render={<p />} className="mt-2.5">
               {formatDate(memo.updatedAt)}에 마지막으로 고쳤습니다.
             </Text>
           </>
@@ -50,7 +50,7 @@ export function ProfileMemoBlock({
             <Text typography="body3" foreground="hint" render={<p />} className="mt-2">
               이 사람에 대해 남긴 것이 없습니다.
             </Text>
-            <Button asChild variant="outline" className="mt-[11px] h-11 w-full">
+            <Button asChild variant="outline" className="mt-3 h-11 w-full">
               <Link href={`/u/${targetId}/memo`}>메모 쓰기</Link>
             </Button>
           </>

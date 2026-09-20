@@ -64,7 +64,7 @@ export function RichTextMenu({ editor }: { editor: Editor }) {
     <BubbleMenu
       editor={editor}
       shouldShow={({ editor }) => linkDraft !== null || !editor.state.selection.empty}
-      className="flex gap-0.5 rounded-lg border border-gray-200 bg-surface p-1 shadow-md"
+      className="flex gap-0.5 rounded-300 border border-gray-200 bg-surface p-1 shadow-md"
     >
       {linkDraft === null ? (
         items.map(({ name, label, Icon, run }) => (

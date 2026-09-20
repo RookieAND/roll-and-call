@@ -8,7 +8,7 @@ export function HomeRecordRow({ row, position }: { row: RecordRow | null; positi
   const rankTone = rank === 3 ? "text-rank-bronze" : "text-hint";
   const rankNumber = (
     <Text
-      typography="subtitle3"
+      typography="body4"
       weight="extrabold"
       numeric
       className={cn("w-[13px] flex-none", rankTone)}
@@ -19,7 +19,7 @@ export function HomeRecordRow({ row, position }: { row: RecordRow | null; positi
 
   if (!row) {
     return (
-      <div className="flex items-center gap-2.5 px-3 py-[9px]">
+      <div className="flex items-center gap-2.5 px-3 py-2.5">
         {rankNumber}
         <Text typography="body4" foreground="hint">
           아직 비어 있습니다
@@ -31,14 +31,14 @@ export function HomeRecordRow({ row, position }: { row: RecordRow | null; positi
   return (
     <Link
       href={`/u/${row.person.id}`}
-      className="flex items-center gap-2.5 px-3 py-[9px] transition-colors hover:bg-gray-50"
+      className="flex items-center gap-2.5 px-3 py-2.5 transition-colors hover:bg-gray-50"
     >
       {rankNumber}
       <Avatar src={row.person.avatarUrl} name={row.person.username} size="sm" />
-      <Text typography="subtitle3" truncate className="min-w-0 flex-1">
+      <Text weight="bold" typography="body4" truncate className="min-w-0 flex-1">
         {row.person.username}
       </Text>
-      <Text typography="subtitle3" weight="extrabold" numeric className="flex-none">
+      <Text typography="body4" weight="extrabold" numeric className="flex-none">
         {row.count}
       </Text>
     </Link>

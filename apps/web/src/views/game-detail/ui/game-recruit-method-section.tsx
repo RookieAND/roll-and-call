@@ -21,8 +21,8 @@ export function GameRecruitMethodSection({ game }: { game: GameDetailData }) {
       <Text typography="heading3" render={<h2 />}>
         모집 방식
       </Text>
-      <HStack gap={3} className="rounded-xl border border-gray-200 px-3.5 py-3">
-        <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[10px] bg-gray-100 text-gray-600">
+      <HStack gap={3} className="rounded-500 border border-gray-200 px-3.5 py-3">
+        <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-400 bg-gray-100 text-gray-600">
           <Icon size={18} aria-hidden />
         </span>
         <VStack gap={1} className="min-w-0 flex-1">

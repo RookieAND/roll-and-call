@@ -23,7 +23,7 @@ export function EmptyState({
     <VStack
       gap={3}
       className={cn(
-        "items-center rounded-2xl border border-dashed border-gray-300 p-6 text-center",
+        "items-center rounded-700 border border-dashed border-gray-300 p-6 text-center",
         className,
       )}
     >

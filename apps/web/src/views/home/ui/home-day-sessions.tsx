@@ -13,7 +13,7 @@ export function HomeDaySessions({ date, sessions }: { date: Date; sessions: Cale
 
   return (
     <section className="border-t border-gray-200 p-4">
-      <div className="mb-[11px] flex items-baseline gap-2">
+      <div className="mb-3 flex items-baseline gap-2">
         <Text typography="heading3" render={<h3 />} className="font-extrabold">
           {title}
         </Text>

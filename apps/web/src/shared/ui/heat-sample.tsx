@@ -10,7 +10,7 @@ export function HeatSample() {
         {STEPS.map((step, index) => (
           <span
             key={index}
-            className="h-6 rounded-[5px] border border-gray-100"
+            className="h-6 rounded-200 border border-gray-100"
             style={{ backgroundColor: `var(--color-heat-${step})` }}
           />
         ))}
@@ -20,7 +20,7 @@ export function HeatSample() {
           적음
         </Text>
         <span
-          className="h-[7px] flex-1 rounded"
+          className="h-[7px] flex-1 rounded-100"
           style={{
             backgroundImage:
               "linear-gradient(90deg, var(--color-heat-1), var(--color-heat-3), var(--color-heat-5))",

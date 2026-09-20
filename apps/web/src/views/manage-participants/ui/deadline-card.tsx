@@ -11,7 +11,7 @@ export function DeadlineCard({ summary, locked }: { summary: RosterSummary; lock
 
   return (
     <VStack gap={2}>
-      <Card padding="none" className="rounded-xl px-3.5 py-3">
+      <Card padding="none" className="rounded-500 px-3.5 py-3">
         <HStack align="center" gap={2}>
           <Clock size={15} strokeWidth={2.2} aria-hidden className="shrink-0 text-gray-600" />
           <Text typography="body4" foreground="muted" className="min-w-0 flex-1">

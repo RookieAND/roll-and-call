@@ -29,10 +29,10 @@ export function DeleteGameRow({
     <>
       <Button
         variant="ghost"
-        className="flex min-h-[60px] w-full justify-start gap-3 rounded-none border-t border-gray-100 px-[13px] py-[11px] hover:bg-danger-50"
+        className="flex min-h-[60px] w-full justify-start gap-3 rounded-none border-t border-gray-100 px-3.5 py-3 hover:bg-danger-50"
         onClick={() => setConfirming(true)}
       >
-        <span className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-[10px] bg-danger-50 text-danger-600">
+        <span className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-400 bg-danger-50 text-danger-600">
           <Trash2 size={18} aria-hidden />
         </span>
         <span className="min-w-0 flex-1 text-left">

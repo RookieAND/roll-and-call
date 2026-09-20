@@ -20,7 +20,7 @@ export function OnboardingPreview({
 }) {
   if (slideKey === "find") {
     return (
-      <div className="w-[262px] overflow-hidden rounded-[13px] border border-gray-200 bg-surface">
+      <div className="w-[262px] overflow-hidden rounded-600 border border-gray-200 bg-surface">
         <div className="flex h-[70px] items-end bg-tinted-bg p-2">
           <GameStatusBadge status={GAME_STATUS.recruiting} />
         </div>
@@ -31,7 +31,7 @@ export function OnboardingPreview({
           <Text typography="body4" foreground="muted" render={<span />}>
             GM 라온 · 크툴루의 부름 · 3시간
           </Text>
-          <span className="flex h-9 items-center justify-center rounded-[10px] bg-primary-600">
+          <span className="flex h-9 items-center justify-center rounded-400 bg-primary-600">
             <Text typography="subtitle1" render={<span />} className="text-white">
               신청하기
             </Text>
@@ -43,7 +43,7 @@ export function OnboardingPreview({
 
   if (slideKey === "schedule") {
     return (
-      <div className="w-[262px] rounded-[13px] border border-gray-200 bg-surface p-3">
+      <div className="w-[262px] rounded-600 border border-gray-200 bg-surface p-3">
         <HeatSample />
       </div>
     );
@@ -51,7 +51,7 @@ export function OnboardingPreview({
 
   if (slideKey === "host") {
     return (
-      <div className="flex w-[262px] flex-col gap-3 rounded-[13px] border border-gray-200 bg-surface p-3.5">
+      <div className="flex w-[262px] flex-col gap-3 rounded-600 border border-gray-200 bg-surface p-3.5">
         <div className="flex items-center">
           {WIZARD_STEPS.map((step) => {
             const done = step <= 3;
@@ -62,8 +62,8 @@ export function OnboardingPreview({
                   render={<span />}
                   className={
                     done
-                      ? "flex size-[22px] flex-none items-center justify-center rounded-[7px] bg-primary-600 text-white tabular-nums"
-                      : "flex size-[22px] flex-none items-center justify-center rounded-[7px] bg-gray-100 text-hint tabular-nums"
+                      ? "flex size-[22px] flex-none items-center justify-center rounded-300 bg-primary-600 text-white tabular-nums"
+                      : "flex size-[22px] flex-none items-center justify-center rounded-300 bg-gray-100 text-hint tabular-nums"
                   }
                 >
                   {step}
@@ -81,16 +81,16 @@ export function OnboardingPreview({
           이미지
         </Text>
         <div className="grid grid-cols-3 gap-2">
-          <span className="aspect-square rounded-[9px] bg-tinted-bg" />
-          <span className="aspect-square rounded-[9px] bg-gray-100" />
-          <span className="aspect-square rounded-[9px] border border-dashed border-gray-300" />
+          <span className="aspect-square rounded-400 bg-tinted-bg" />
+          <span className="aspect-square rounded-400 bg-gray-100" />
+          <span className="aspect-square rounded-400 border border-dashed border-gray-300" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex w-[262px] flex-col gap-3 rounded-[13px] border border-gray-200 bg-surface p-3.5">
+    <div className="flex w-[262px] flex-col gap-3 rounded-600 border border-gray-200 bg-surface p-3.5">
       <div className="flex items-center gap-2.5">
         <span className="size-11 flex-none rounded-full bg-tinted-bg" />
         <div className="min-w-0">

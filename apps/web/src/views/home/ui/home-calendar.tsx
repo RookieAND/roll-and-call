@@ -53,8 +53,9 @@ export function HomeCalendar({
       <div className="grid grid-cols-7 px-3 pb-1">
         {WEEKDAYS.map((weekday, index) => (
           <Text
+            weight="bold"
             key={weekday}
-            typography="subtitle3"
+            typography="body4"
             foreground="hint"
             className={cn("text-center", WEEKDAY_TONE[index])}
           >
@@ -74,18 +75,18 @@ export function HomeCalendar({
               today={cell.key === todayKey}
             />
           ) : (
-            <Skeleton key={cell.key} className="h-[62px] rounded-lg" />
+            <Skeleton key={cell.key} className="h-[62px] rounded-300" />
           ),
         )}
       </div>
 
-      <div className="flex items-center gap-3 px-4 pb-3 text-[12px] text-hint">
-        <span className="flex items-center gap-[5px]">
-          <span className="h-2.5 w-2.5 rounded-[3px] border border-tinted-border bg-primary-50" />
+      <div className="flex items-center gap-3 px-4 pb-3 text-body4 text-hint">
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-100 border border-tinted-border bg-primary-50" />
           내가 참여
         </span>
-        <span className="flex items-center gap-[5px]">
-          <span className="h-2.5 w-2.5 rounded-[3px] border border-gray-300 bg-gray-100" />
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-100 border border-gray-300 bg-gray-100" />
           다른 세션
         </span>
       </div>

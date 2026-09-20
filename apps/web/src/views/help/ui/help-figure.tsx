@@ -20,7 +20,7 @@ const SAMPLE_ROSTER = [
 export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
   if (figure === HELP_FIGURE.heatGrid) {
     return (
-      <div className="rounded-[11px] border border-gray-200 bg-gray-50 p-3">
+      <div className="rounded-400 border border-gray-200 bg-gray-50 p-3">
         <HeatSample />
       </div>
     );
@@ -28,14 +28,14 @@ export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
 
   if (figure === HELP_FIGURE.gameList) {
     return (
-      <div className="flex flex-col gap-2.5 rounded-[11px] border border-gray-200 bg-gray-50 p-2.5">
+      <div className="flex flex-col gap-2.5 rounded-400 border border-gray-200 bg-gray-50 p-2.5">
         <div className="flex flex-wrap gap-1.5">
           <GameStatusBadge status={GAME_STATUS.recruiting} />
           <GameStatusBadge status={GAME_STATUS.confirmed} />
           <GameStatusBadge status={GAME_STATUS.closed} />
         </div>
-        <div className="flex items-center gap-2.5 rounded-[9px] border border-gray-200 bg-surface px-2.5 py-2">
-          <span className="size-[34px] flex-none rounded-lg bg-tinted-bg" />
+        <div className="flex items-center gap-2.5 rounded-400 border border-gray-200 bg-surface px-2.5 py-2">
+          <span className="size-[34px] flex-none rounded-300 bg-tinted-bg" />
           <span className="min-w-0 flex-1">
             <Text typography="subtitle1" render={<span />} className="block truncate">
               물벼락 — 1부
@@ -51,13 +51,13 @@ export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
 
   if (figure === HELP_FIGURE.formFields) {
     return (
-      <div className="flex flex-col gap-2.5 rounded-[11px] border border-gray-200 bg-gray-50 p-2.5">
+      <div className="flex flex-col gap-2.5 rounded-400 border border-gray-200 bg-gray-50 p-2.5">
         {SAMPLE_FIELDS.map((field) => (
           <div key={field.label}>
             <Text typography="body4" foreground="muted" render={<span />} className="block">
               {field.label}
             </Text>
-            <div className="mt-1 flex h-[38px] items-center rounded-[10px] border border-gray-200 bg-surface px-2.5">
+            <div className="mt-1 flex h-[38px] items-center rounded-400 border border-gray-200 bg-surface px-2.5">
               <Text typography="body3" render={<span />} className="truncate">
                 {field.value}
               </Text>
@@ -70,11 +70,11 @@ export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
 
   if (figure === HELP_FIGURE.rosterRows) {
     return (
-      <div className="flex flex-col gap-1.5 rounded-[11px] border border-gray-200 bg-gray-50 p-2.5">
+      <div className="flex flex-col gap-1.5 rounded-400 border border-gray-200 bg-gray-50 p-2.5">
         {SAMPLE_ROSTER.map((member) => (
           <div
             key={member.name}
-            className="flex items-center gap-2.5 rounded-[9px] border border-gray-200 bg-surface px-2.5 py-2"
+            className="flex items-center gap-2.5 rounded-400 border border-gray-200 bg-surface px-2.5 py-2"
           >
             <span className="size-[30px] flex-none rounded-full bg-tinted-bg" />
             <Text typography="subtitle1" render={<span />} className="flex-1">
@@ -95,7 +95,7 @@ export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
         <span
           key={service.key}
           title={service.label}
-          className="flex size-[34px] items-center justify-center rounded-[10px] border border-gray-200 text-gray-700"
+          className="flex size-[34px] items-center justify-center rounded-400 border border-gray-200 text-gray-700"
         >
           <BrandMark service={service.key} size={16} />
         </span>

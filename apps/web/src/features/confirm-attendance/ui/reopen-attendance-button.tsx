@@ -12,7 +12,7 @@ export function ReopenAttendanceButton({ gameId }: { gameId: string }) {
   return (
     <Button
       variant="outline"
-      className="h-[46px] w-full rounded-xl"
+      className="h-[46px] w-full rounded-500"
       loading={pending}
       onClick={() =>
         run(() => reopenAttendance(gameId), {

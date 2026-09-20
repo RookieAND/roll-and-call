@@ -54,7 +54,7 @@ export function Calendar({ value, onSelect, min, max }: CalendarProps) {
           type="button"
           onClick={goToPreviousMonth}
           aria-label="이전 달"
-          className="h-7 w-7 rounded-md text-gray-500 hover:bg-gray-100"
+          className="h-7 w-7 rounded-200 text-gray-500 hover:bg-gray-100"
         >
           ‹
         </button>
@@ -65,7 +65,7 @@ export function Calendar({ value, onSelect, min, max }: CalendarProps) {
           type="button"
           onClick={goToNextMonth}
           aria-label="다음 달"
-          className="h-7 w-7 rounded-md text-gray-500 hover:bg-gray-100"
+          className="h-7 w-7 rounded-200 text-gray-500 hover:bg-gray-100"
         >
           ›
         </button>
@@ -90,7 +90,7 @@ export function Calendar({ value, onSelect, min, max }: CalendarProps) {
               disabled={disabled}
               onClick={() => onSelect(date)}
               className={cn(
-                "h-8 rounded-md hover:bg-primary-50",
+                "h-8 rounded-200 hover:bg-primary-50",
                 selected && "bg-primary-600 text-white hover:bg-primary-700",
                 disabled && "cursor-not-allowed text-gray-300 line-through hover:bg-transparent",
               )}

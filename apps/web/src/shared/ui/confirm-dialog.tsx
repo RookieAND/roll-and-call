@@ -35,7 +35,7 @@ export function ConfirmDialog({
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-40 bg-black/40" />
-        <Dialog.Popup className="fixed top-1/2 left-1/2 z-50 w-[calc(100%-3rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-gray-200 bg-surface p-5 shadow-xl outline-none">
+        <Dialog.Popup className="fixed top-1/2 left-1/2 z-50 w-[calc(100%-3rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-700 border border-gray-200 bg-surface p-5 shadow-xl outline-none">
           <Dialog.Title className="text-base font-bold text-gray-900">{title}</Dialog.Title>
           {description && (
             <Dialog.Description className="mt-1.5 text-sm whitespace-pre-line text-gray-600">

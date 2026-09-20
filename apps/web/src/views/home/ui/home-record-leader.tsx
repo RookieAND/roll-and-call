@@ -4,8 +4,7 @@ import Link from "next/link";
 
 import type { RecordPerson } from "../model/rank-people";
 
-const CARD =
-  "flex items-center gap-3 rounded-[14px] bg-tinted-bg px-3.5 py-[13px] transition-colors";
+const CARD = "flex items-center gap-3 rounded-600 bg-tinted-bg px-3.5 py-3.5 transition-colors";
 
 // 공동 1위는 갈 곳이 하나가 아니라 링크를 걸지 않고 카드만 둔다.
 export function HomeRecordLeader({
@@ -33,7 +32,7 @@ export function HomeRecordLeader({
       <div className="min-w-0 flex-1">
         <div className="mb-0.5 flex items-center gap-1 text-rank-gold">
           <Crown size={13} aria-hidden />
-          <Text typography="subtitle3" weight="extrabold" className="tracking-[0.08em]">
+          <Text typography="body4" weight="extrabold" className="tracking-[0.08em]">
             {people.length > 1 ? "공동 1위" : "1위"}
           </Text>
         </div>
@@ -51,7 +50,9 @@ export function HomeRecordLeader({
         <Text typography="heading1" numeric className="tracking-[-0.03em]">
           {count}
         </Text>
-        <Text typography="subtitle3">번</Text>
+        <Text weight="bold" typography="body4">
+          번
+        </Text>
       </div>
     </>
   );

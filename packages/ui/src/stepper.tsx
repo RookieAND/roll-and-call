@@ -32,7 +32,7 @@ export function Stepper({
   return (
     <div
       className={cn(
-        "inline-flex h-11 items-stretch overflow-hidden rounded-[10px] border bg-surface",
+        "inline-flex h-11 items-stretch overflow-hidden rounded-400 border bg-surface",
         invalid ? "border-[1.5px] border-danger-400 bg-danger-50" : "border-gray-200",
         className,
       )}

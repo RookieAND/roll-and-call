@@ -29,7 +29,7 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
       <AppBar back="/me/edit" title="가능 시간대" />
 
       <div className="border-b border-gray-200 px-4 py-3.5">
-        <div className="rounded-[11px] border border-gray-200 bg-gray-50 px-3 py-[11px]">
+        <div className="rounded-400 border border-gray-200 bg-gray-50 px-3 py-3">
           <Text typography="body4" foreground="muted" render={<p />} className="leading-[1.65]">
             되는 요일만 켜고 시간을 정합니다.
             <br />
@@ -40,7 +40,7 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
 
       <VStack gap={2} className="px-4 py-4">
         <div className="flex items-baseline gap-2">
-          <Text typography="subtitle3" className="flex-none">
+          <Text weight="bold" typography="body4" className="flex-none">
             요일마다
           </Text>
           <Text typography="body4" foreground="hint" className="flex-1">

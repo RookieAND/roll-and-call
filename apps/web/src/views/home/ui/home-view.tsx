@@ -27,7 +27,7 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
         title="롤앤콜"
         brand
         action={
-          user ? <HelpButton /> : <LoginButton next="/" className="h-[34px] px-3 text-[13px]" />
+          user ? <HelpButton /> : <LoginButton next="/" className="h-[34px] px-3 text-body3" />
         }
       />
       <Container size="sm" className="px-0">

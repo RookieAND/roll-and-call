@@ -13,15 +13,15 @@ export default function Loading() {
           <VStack gap={3}>
             <div className="flex items-center gap-2">
               <Skeleton className="h-7 min-w-0 flex-1" />
-              <Skeleton className="h-[21px] w-14 rounded-[7px]" />
-              <Skeleton className="h-[21px] w-16 rounded-[7px]" />
+              <Skeleton className="h-[21px] w-14 rounded-300" />
+              <Skeleton className="h-[21px] w-16 rounded-300" />
             </div>
             <Grid cols={2} gap={2}>
-              <Skeleton className="h-[73px] rounded-xl" />
-              <Skeleton className="h-[73px] rounded-xl" />
+              <Skeleton className="h-[73px] rounded-500" />
+              <Skeleton className="h-[73px] rounded-500" />
             </Grid>
             <VStack gap={2}>
-              <Skeleton className="h-[45px] rounded-xl" />
+              <Skeleton className="h-[45px] rounded-500" />
               <Skeleton className="h-[17px] w-64" />
             </VStack>
           </VStack>
@@ -31,7 +31,7 @@ export default function Loading() {
               <Skeleton className="h-[21px] w-14" />
               <Skeleton className="h-[21px] w-10" />
             </div>
-            <div className="overflow-hidden rounded-xl border border-gray-200">
+            <div className="overflow-hidden rounded-500 border border-gray-200">
               {Array.from({ length: ROSTER_ROW_COUNT }).map((_, index) => (
                 <div
                   key={index}
@@ -40,7 +40,7 @@ export default function Loading() {
                   <Skeleton className="h-[34px] w-[34px] rounded-full" />
                   <Skeleton className="h-[17px] w-24" />
                   <span className="flex-1" />
-                  <Skeleton className="h-8 w-8 rounded-[10px]" />
+                  <Skeleton className="h-8 w-8 rounded-400" />
                 </div>
               ))}
             </div>

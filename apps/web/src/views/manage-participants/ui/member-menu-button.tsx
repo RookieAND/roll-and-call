@@ -7,7 +7,7 @@ export function MemberMenuButton({ username, onClick }: { username: string; onCl
     <IconButton
       aria-label={`${username} 메뉴`}
       onClick={onClick}
-      className="h-11 w-11 shrink-0 rounded-[11px]"
+      className="h-11 w-11 shrink-0 rounded-400"
     >
       <MoreHorizontal size={18} aria-hidden />
     </IconButton>

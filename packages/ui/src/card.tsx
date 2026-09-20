@@ -3,7 +3,7 @@ import type { ComponentPropsWithRef } from "react";
 
 import { cn } from "./cn";
 
-const card = cva("rounded-[14px] border border-gray-200 bg-surface", {
+const card = cva("rounded-600 border border-gray-200 bg-surface", {
   variants: {
     padding: { none: "", sm: "p-3", md: "p-4", lg: "p-6" },
     interactive: { true: "transition-colors hover:bg-gray-50", false: "" },

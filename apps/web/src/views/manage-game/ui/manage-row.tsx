@@ -20,11 +20,11 @@ export function ManageRow({ row }: { row: Row }) {
   return (
     <Link
       href={row.href}
-      className="flex min-h-[60px] items-center gap-3 border-gray-100 px-[13px] py-[11px] transition-colors not-first:border-t hover:bg-gray-50"
+      className="flex min-h-[60px] items-center gap-3 border-gray-100 px-3.5 py-3 transition-colors not-first:border-t hover:bg-gray-50"
     >
       <span
         className={cn(
-          "flex h-[34px] w-[34px] flex-none items-center justify-center rounded-[10px]",
+          "flex h-[34px] w-[34px] flex-none items-center justify-center rounded-400",
           iconClass,
         )}
       >

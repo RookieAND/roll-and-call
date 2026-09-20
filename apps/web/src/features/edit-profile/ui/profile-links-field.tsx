@@ -30,7 +30,7 @@ export function ProfileLinksField({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline gap-2">
-        <Text typography="subtitle3" className="flex-1">
+        <Text weight="bold" typography="body4" className="flex-1">
           링크
         </Text>
         <Text numeric typography="body4" foreground="hint">
@@ -91,7 +91,7 @@ export function ProfileLinksField({
         <Button
           type="button"
           variant="ghost"
-          className="h-11 w-full gap-1.5 rounded-[11px] border border-dashed border-gray-300 text-[13px] font-bold text-primary-ink"
+          className="h-11 w-full gap-1.5 rounded-400 border border-dashed border-gray-300 text-subtitle2 font-bold text-primary-ink"
           onClick={() => onChange([...value, { service: LINK_SERVICES[0].key, value: "" }])}
         >
           <Plus size={14} aria-hidden />

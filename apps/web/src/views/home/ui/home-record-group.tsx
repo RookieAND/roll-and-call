@@ -30,7 +30,7 @@ export function HomeRecordGroup({
         weight="extrabold"
         foreground="hint"
         render={<div />}
-        className="mb-[9px] tracking-[0.06em]"
+        className="mb-2.5 tracking-[0.06em]"
       >
         {label}
       </Text>

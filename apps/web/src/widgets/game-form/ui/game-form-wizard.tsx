@@ -138,7 +138,7 @@ export function GameFormWizard({
           )}
 
           {edit && step === 0 && (
-            <div className="rounded-xl bg-gray-50 px-3.5 py-3">
+            <div className="rounded-500 bg-gray-50 px-3.5 py-3">
               <Text typography="subtitle2" render={<p />}>
                 {applicants > 0
                   ? `이미 ${applicants}명이 신청했습니다.`
@@ -153,7 +153,7 @@ export function GameFormWizard({
           )}
 
           {!edit && step > 0 && (
-            <div className="rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-3">
+            <div className="rounded-500 border border-gray-200 bg-gray-50 px-3.5 py-3">
               <Text truncate typography="subtitle1">
                 {watch("title") || "제목 미입력"}
               </Text>

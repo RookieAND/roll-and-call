@@ -24,7 +24,7 @@ export function MyPageProfile({
 
   return (
     <section className="flex flex-col gap-3.5">
-      <div className="flex items-center gap-[13px]">
+      <div className="flex items-center gap-3.5">
         <Avatar src={avatarUrl} name={name} size="2xl" />
         <div className="min-w-0 flex-1">
           <Text
@@ -35,14 +35,14 @@ export function MyPageProfile({
           >
             {name}
           </Text>
-          <Text truncate typography="body3" foreground={bioForeground} className="mt-[3px]">
+          <Text truncate typography="body3" foreground={bioForeground} className="mt-1">
             {bioText}
           </Text>
         </div>
         <Button
           asChild
           variant="outline"
-          className="h-9 flex-none rounded-[10px] px-3 text-xs font-bold"
+          className="h-9 flex-none rounded-400 px-3 text-xs font-bold"
         >
           <Link href="/me/edit">편집</Link>
         </Button>

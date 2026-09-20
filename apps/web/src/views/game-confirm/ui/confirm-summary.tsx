@@ -16,7 +16,7 @@ export function ConfirmSummary({
     <div>
       <div className="flex gap-2">
         {items.map((item) => (
-          <div key={item.label} className="flex-1 rounded-xl border border-gray-200 px-3.5 py-3">
+          <div key={item.label} className="flex-1 rounded-500 border border-gray-200 px-3.5 py-3">
             <Text typography="body4" foreground="hint" render={<p />}>
               {item.label}
             </Text>

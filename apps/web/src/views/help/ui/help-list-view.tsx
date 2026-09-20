@@ -15,12 +15,12 @@ export function HelpListView() {
     <>
       <AppBar back="/" title="도움말" />
       <Container size="sm">
-        <VStack gap={5} className="py-[18px]">
+        <VStack gap={5} className="py-4.5">
           <Link
             href="/onboarding"
-            className="flex items-center gap-3 rounded-[14px] border border-tinted-border bg-tinted-bg px-[15px] py-3.5 transition-colors hover:bg-tinted-bg-hover"
+            className="flex items-center gap-3 rounded-600 border border-tinted-border bg-tinted-bg px-4 py-3.5 transition-colors hover:bg-tinted-bg-hover"
           >
-            <span className="flex size-[38px] flex-none items-center justify-center rounded-[11px] bg-primary-600 text-white">
+            <span className="flex size-[38px] flex-none items-center justify-center rounded-400 bg-primary-600 text-white">
               <PlayCircle size={19} aria-hidden />
             </span>
             <span className="min-w-0 flex-1">
@@ -44,7 +44,7 @@ export function HelpListView() {
               <Text typography="subtitle2" foreground="muted" render={<h2 />} className="mb-2">
                 {category}
               </Text>
-              <div className="overflow-hidden rounded-[14px] border border-gray-200">
+              <div className="overflow-hidden rounded-600 border border-gray-200">
                 {HELP_DOCS.filter((doc) => doc.category === category).map((doc) => (
                   <HelpDocRow key={doc.slug} slug={doc.slug} title={doc.title} />
                 ))}
@@ -52,7 +52,7 @@ export function HelpListView() {
             </section>
           ))}
 
-          <section className="rounded-[14px] border border-gray-200 bg-gray-50 p-[15px]">
+          <section className="rounded-600 border border-gray-200 bg-gray-50 p-4">
             <div className="flex items-center gap-2.5">
               <span className="flex-none text-discord">
                 <BrandMark service="discord" size={17} />

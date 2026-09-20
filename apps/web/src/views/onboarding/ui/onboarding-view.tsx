@@ -32,7 +32,7 @@ export function OnboardingView() {
     back ? "animate-slide-in-back" : "animate-slide-in",
     welcome && "items-center text-center",
   );
-  const titleClass = cn("leading-[1.32]", welcome ? "text-[22px]" : "text-[22px]");
+  const titleClass = cn("leading-[1.32]", welcome ? "text-heading1" : "text-heading1");
 
   const skip = () => router.replace(DONE_HREF);
 
@@ -83,7 +83,7 @@ export function OnboardingView() {
           {welcome ? (
             <BrandLogo label="롤앤콜" size="lg" />
           ) : (
-            <div className="flex h-[242px] items-center justify-center rounded-[14px] border border-gray-100 bg-gray-50">
+            <div className="flex h-[242px] items-center justify-center rounded-600 border border-gray-100 bg-gray-50">
               <OnboardingPreview slideKey={slide.key} />
             </div>
           )}

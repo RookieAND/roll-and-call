@@ -37,7 +37,7 @@ export function SlotGrid({
   return (
     <div
       ref={scrollRef}
-      className="overflow-auto overscroll-contain rounded-xl border border-gray-200"
+      className="overflow-auto overscroll-contain rounded-500 border border-gray-200"
       style={{ maxHeight: HEADER_PX + SLOT_ROW_PX * VISIBLE_ROWS }}
     >
       <div
@@ -53,7 +53,7 @@ export function SlotGrid({
             className="sticky top-0 z-10 flex flex-col items-center justify-center border-b border-gray-200 bg-surface"
             style={{ height: HEADER_PX }}
           >
-            <Text typography="body4" foreground="hint" render={<span />} className="leading-none">
+            <Text typography="body5" foreground="hint" render={<span />} className="leading-none">
               {day.dow}
             </Text>
             <Text typography="subtitle2" render={<span />} className="mt-0.5 leading-none">
@@ -68,7 +68,7 @@ export function SlotGrid({
             typography="body4"
             foreground="hint"
             render={<span />}
-            className="sticky left-0 z-10 bg-surface pr-1.5 text-right text-[12px] leading-none tabular-nums"
+            className="sticky left-0 z-10 bg-surface pr-1.5 text-right text-body5 leading-none tabular-nums"
             style={{ height: SLOT_ROW_PX }}
           >
             {row.minute === 0 ? row.label : ""}

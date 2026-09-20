@@ -21,7 +21,7 @@ export function SelectItem({
       value={value}
       disabled={disabled}
       className={cn(
-        "flex cursor-pointer items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm text-gray-700 outline-none select-none data-[disabled]:opacity-40 data-[highlighted]:bg-primary-50 data-[highlighted]:text-primary-700",
+        "flex cursor-pointer items-center justify-between gap-2 rounded-300 px-3 py-2 text-sm text-gray-700 outline-none select-none data-[disabled]:opacity-40 data-[highlighted]:bg-primary-50 data-[highlighted]:text-primary-700",
         className,
       )}
     >

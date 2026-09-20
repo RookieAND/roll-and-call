@@ -26,7 +26,7 @@ export function AvailabilityDayEditor({
 }) {
   const on = rows.length > 0;
   const chipClass = cn(
-    "h-11 w-11 flex-none rounded-[11px] text-sm",
+    "h-11 w-11 flex-none rounded-400 text-sm",
     on
       ? "bg-primary-600 font-bold text-white hover:bg-primary-700"
       : "border border-dashed border-gray-300 font-semibold text-hint",
@@ -61,7 +61,7 @@ export function AvailabilityDayEditor({
             }
           />
         ) : (
-          <div className="flex h-11 min-w-0 flex-1 items-center justify-center rounded-[10px] border border-dashed border-gray-300">
+          <div className="flex h-11 min-w-0 flex-1 items-center justify-center rounded-400 border border-dashed border-gray-300">
             <Text typography="body4" foreground="hint">
               안 되는 날
             </Text>

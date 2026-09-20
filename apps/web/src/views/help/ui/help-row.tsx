@@ -6,7 +6,7 @@ import type { HelpRow as Row } from "../model/help-docs";
 
 export function HelpRow({ row }: { row: Row }) {
   return (
-    <div className="flex gap-3 border-gray-100 px-[13px] py-2.5 not-first:border-t">
+    <div className="flex gap-3 border-gray-100 px-3.5 py-2.5 not-first:border-t">
       <span className="flex w-[92px] flex-none items-start">
         {row.status ? (
           <GameStatusBadge status={row.status} />
@@ -15,7 +15,7 @@ export function HelpRow({ row }: { row: Row }) {
             typography="body4"
             foreground="muted"
             render={<span />}
-            className="rounded-[7px] bg-gray-100 px-2 py-1 font-bold"
+            className="rounded-300 bg-gray-100 px-2 py-1 font-bold"
           >
             {row.term}
           </Text>

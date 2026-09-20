@@ -4,21 +4,21 @@ import type { ComponentPropsWithRef, ReactElement } from "react";
 
 import { cn } from "./cn";
 
-// 리디자인 12 타입 스케일. 11.5px을 12px으로 합쳐 크기 6종 · 변형 10개이고,
-// 굵기는 변형의 기본값을 weight로 덮는다.
+// Roll & Call 디자인 시스템 §A. 배지·칩은 body4에 weight·tight를 얹어 쓰고,
+// body5는 달력 칸·히트맵처럼 12px이 넘치는 격자에만 쓴다.
 const text = cva("", {
   variants: {
     typography: {
-      heading1: "text-[22px] leading-[1.3] font-extrabold tracking-tight",
-      heading2: "text-[18px] leading-[1.35] font-extrabold",
-      heading3: "text-[16px] leading-[1.4] font-bold",
-      subtitle1: "text-[14px] leading-[1.45] font-bold",
-      subtitle2: "text-[13px] leading-[1.45] font-bold",
-      subtitle3: "text-[12px] leading-[1.3] font-bold",
-      body2: "text-[14px] leading-[1.65] font-normal",
-      body3: "text-[13px] leading-[1.6] font-normal",
-      body4: "text-[12px] leading-[1.55] font-normal",
-      code2: "font-mono text-[12px] leading-[1.4] font-normal",
+      heading1: "text-heading1 font-extrabold tracking-tight",
+      heading2: "text-heading2 font-extrabold",
+      heading3: "text-heading3 font-bold",
+      subtitle1: "text-subtitle1 font-bold",
+      subtitle2: "text-subtitle2 font-bold",
+      body2: "text-body2 font-normal",
+      body3: "text-body3 font-normal",
+      body4: "text-body4 font-normal",
+      body5: "text-body5 font-normal",
+      code2: "font-mono text-body4 leading-[1.4] font-normal",
     },
     foreground: {
       normal: "text-gray-900",

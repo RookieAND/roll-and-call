@@ -5,7 +5,7 @@ import type { CapacityPart } from "../model/capacity-parts";
 export function CapacityText({ part }: { part: CapacityPart }) {
   if (part.emphasis) {
     return (
-      <Text typography="subtitle3" numeric>
+      <Text weight="bold" typography="body4" numeric>
         {part.text}
       </Text>
     );

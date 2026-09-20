@@ -3,7 +3,7 @@ import { TriangleAlert } from "lucide-react";
 
 export function UnavailableWarning({ names }: { names: string[] }) {
   return (
-    <div className="flex gap-2 rounded-xl bg-warning-50 px-3.5 py-3">
+    <div className="flex gap-2 rounded-500 bg-warning-50 px-3.5 py-3">
       <TriangleAlert size={15} className="mt-0.5 shrink-0 text-warning-600" aria-hidden />
       <div className="min-w-0">
         <Text typography="body3" render={<p />} className="font-semibold text-warning-600">

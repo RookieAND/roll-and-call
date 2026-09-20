@@ -23,7 +23,7 @@ export function RoundInheritedList({
       <Text weight="bold" typography="body4" foreground="muted">
         그대로 넘어가는 것
       </Text>
-      <div className="overflow-hidden rounded-xl border border-gray-200">
+      <div className="overflow-hidden rounded-500 border border-gray-200">
         {items.map((item) => (
           <HStack
             key={item.title}

@@ -46,7 +46,7 @@ export async function ManageGameView({ id }: { id: string }) {
         }
       />
       <Container size="sm" className="px-0">
-        <div className="border-b border-gray-100 px-4 pt-[18px] pb-3.5">
+        <div className="border-b border-gray-100 px-4 pt-4.5 pb-3.5">
           <div className="flex items-start gap-2.5">
             <Text
               typography="heading2"
@@ -59,7 +59,7 @@ export async function ManageGameView({ id }: { id: string }) {
               {gameStatusLabel[status]}
             </Badge>
           </div>
-          <Text typography="body3" foreground="muted" render={<p />} className="mt-[7px]">
+          <Text typography="body3" foreground="muted" render={<p />} className="mt-2">
             {[game.rule, line.text, `확정 ${confirmedCount}/${game.maxPlayers}`]
               .filter(Boolean)
               .join(" · ")}
@@ -67,7 +67,7 @@ export async function ManageGameView({ id }: { id: string }) {
         </div>
 
         <div className="p-4">
-          <div className="overflow-hidden rounded-xl border border-gray-200">
+          <div className="overflow-hidden rounded-500 border border-gray-200">
             {rows.map((row) => (
               <ManageRow key={row.key} row={row} />
             ))}

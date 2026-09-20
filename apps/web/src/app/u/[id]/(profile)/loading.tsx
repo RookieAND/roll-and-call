@@ -14,7 +14,7 @@ export default function Loading() {
             <Skeleton className="h-16 w-16 rounded-full" />
             <div className="min-w-0 flex-1">
               <Skeleton className="h-[27px] w-32" />
-              <Skeleton className="mt-[3px] h-5 w-28" />
+              <Skeleton className="mt-1 h-5 w-28" />
             </div>
           </div>
           <Skeleton className="mt-3.5 h-6 w-3/4" />
@@ -29,12 +29,12 @@ export default function Loading() {
 
         <section className="p-4">
           <Skeleton className="mb-2 h-[17px] w-10" />
-          <Skeleton className="h-[52px] w-full rounded-xl" />
+          <Skeleton className="h-[52px] w-full rounded-500" />
         </section>
 
         <section className="px-4 pb-4">
           <Skeleton className="mb-2 h-[17px] w-20" />
-          <Skeleton className="h-[52px] w-full rounded-xl" />
+          <Skeleton className="h-[52px] w-full rounded-500" />
         </section>
 
         <div className="grid grid-cols-2 border-t border-gray-200">

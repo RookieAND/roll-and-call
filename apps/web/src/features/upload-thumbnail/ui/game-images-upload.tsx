@@ -77,7 +77,7 @@ export function GameImagesUpload({
   return (
     <div id="images" className="flex flex-col gap-1.5">
       <div className="flex items-baseline justify-between">
-        <Text typography="subtitle3" className="text-gray-700">
+        <Text weight="bold" typography="body4" className="text-gray-700">
           추가 이미지 <span className="font-normal text-hint">선택</span>
         </Text>
         <Text numeric typography="body4" foreground="hint">
@@ -99,7 +99,7 @@ export function GameImagesUpload({
             }}
             onDragEnd={() => setDragIndex(null)}
             className={cn(
-              "relative aspect-square cursor-grab overflow-hidden rounded-lg border border-gray-200",
+              "relative aspect-square cursor-grab overflow-hidden rounded-300 border border-gray-200",
               dragIndex === index && "opacity-55",
             )}
           >

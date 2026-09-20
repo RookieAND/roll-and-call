@@ -7,7 +7,7 @@ import { formatDateTime } from "@/shared/lib";
 // 세션이 끝나면 명단 관리 대신 이 한 가지만 남는다.
 export function AttendanceCard({ gameId, confirmedAt }: { gameId: string; confirmedAt: Date }) {
   return (
-    <Card padding="none" className="rounded-xl px-3.5 py-3">
+    <Card padding="none" className="rounded-500 px-3.5 py-3">
       <VStack gap={3}>
         <HStack align="center" gap={2}>
           <Clock size={15} strokeWidth={2.2} aria-hidden className="shrink-0 text-gray-600" />
@@ -26,7 +26,7 @@ export function AttendanceCard({ gameId, confirmedAt }: { gameId: string; confir
           <br />
           확정 전까지는 참여자의 기록에 들어가지 않습니다.
         </Text>
-        <Button asChild variant="tinted" className="h-[46px] w-full rounded-xl">
+        <Button asChild variant="tinted" className="h-[46px] w-full rounded-500">
           <Link href={`/games/${gameId}/attendance`}>출석 확인하기</Link>
         </Button>
       </VStack>

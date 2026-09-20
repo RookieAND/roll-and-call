@@ -35,14 +35,14 @@ export function GameCard({ game }: Props) {
   const thumbnailClass = cn("aspect-video w-full", expired && "opacity-55");
 
   return (
-    <Card interactive padding="none" className="h-full overflow-hidden rounded-[14px]">
+    <Card interactive padding="none" className="h-full overflow-hidden rounded-600">
       <GameThumbnail
         url={game.thumbnailUrl}
         sizes="(max-width: 412px) 100vw, 412px"
         spoilerLabel={game.thumbnailSpoiler ? "스포일러" : undefined}
         className={thumbnailClass}
       />
-      <VStack className="gap-1.5 px-3.5 py-[13px]">
+      <VStack className="gap-1.5 px-3.5 py-3.5">
         <HStack justify="between" align="start" gap={2}>
           <Text truncate typography="heading3" foreground={titleForeground} className="min-w-0">
             {game.title}

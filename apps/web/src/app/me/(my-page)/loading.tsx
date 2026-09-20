@@ -8,15 +8,15 @@ export default function Loading() {
     <>
       <AppBar title="마이페이지" />
       <Container size="sm">
-        <VStack gap={5} className="py-[18px]">
+        <VStack gap={5} className="py-4.5">
           <section className="flex flex-col gap-3.5">
-            <div className="flex items-center gap-[13px]">
+            <div className="flex items-center gap-3.5">
               <Skeleton className="h-[60px] w-[60px] rounded-full" />
               <div className="min-w-0 flex-1">
                 <Skeleton className="h-[25px] w-28" />
-                <Skeleton className="mt-[3px] h-5 w-44" />
+                <Skeleton className="mt-1 h-5 w-44" />
               </div>
-              <Skeleton className="h-9 w-[52px] flex-none rounded-[10px]" />
+              <Skeleton className="h-9 w-[52px] flex-none rounded-400" />
             </div>
             <div>
               <Skeleton className="mb-2 h-[17px] w-10" />
@@ -27,23 +27,23 @@ export default function Loading() {
             </div>
             <div>
               <Skeleton className="mb-2 h-[17px] w-20" />
-              <Skeleton className="h-[52px] w-full rounded-xl" />
+              <Skeleton className="h-[52px] w-full rounded-500" />
             </div>
           </section>
 
           <section className="flex flex-col gap-2.5">
             <Skeleton className="h-[22px] w-16" />
-            <Skeleton className="h-[120px] w-full rounded-[14px]" />
+            <Skeleton className="h-[120px] w-full rounded-600" />
           </section>
 
           <section>
             <Skeleton className="mb-2.5 h-[22px] w-10" />
-            <Skeleton className="h-[52px] w-full rounded-xl" />
+            <Skeleton className="h-[52px] w-full rounded-500" />
           </section>
 
           <section className="flex flex-col gap-2.5">
             <Skeleton className="h-[22px] w-10" />
-            <Skeleton className="h-[104px] w-full rounded-[14px]" />
+            <Skeleton className="h-[104px] w-full rounded-600" />
           </section>
         </VStack>
       </Container>

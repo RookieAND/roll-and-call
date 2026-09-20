@@ -2,7 +2,7 @@ import { Text } from "@trpg/ui";
 
 export function SessionEmptyLine({ text }: { text: string }) {
   return (
-    <div className="rounded-[14px] border border-dashed border-gray-300 p-3.5">
+    <div className="rounded-600 border border-dashed border-gray-300 p-3.5">
       <Text typography="body3" foreground="hint" render={<p />}>
         {text}
       </Text>

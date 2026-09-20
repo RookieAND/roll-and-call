@@ -21,7 +21,7 @@ type Props = {
 };
 
 const CELL =
-  "flex cursor-pointer items-center justify-center border-b border-l border-b-gray-100 border-l-gray-100 text-[12px] font-bold tabular-nums";
+  "flex cursor-pointer items-center justify-center border-b border-l border-b-gray-100 border-l-gray-100 text-body5 font-bold tabular-nums";
 // 누른 칸은 primary, 확정 칸은 success 테두리 — 서로 헷갈리지 않게 색을 나눈다.
 const PICKED = "2px solid var(--color-primary-600)";
 const CONFIRMED = "2px solid var(--color-success-600)";
@@ -60,7 +60,7 @@ export function Heatmap({ days, timeRows, counts, names, confirmedAt, capacity, 
     <div className="flex flex-col gap-2">
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
       {picked ? (
-        <div className="rounded-xl border border-gray-200 px-3.5 py-3" aria-live="polite">
+        <div className="rounded-500 border border-gray-200 px-3.5 py-3" aria-live="polite">
           <Text typography="subtitle2" render={<p />}>
             {formatDateTime(picked)} · {pickedNames.length}명
           </Text>

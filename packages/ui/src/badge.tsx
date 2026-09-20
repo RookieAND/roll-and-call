@@ -4,7 +4,7 @@ import type { ComponentPropsWithRef } from "react";
 import { cn } from "./cn";
 
 const badge = cva(
-  "inline-flex items-center rounded-[7px] px-[9px] py-[5px] text-[12px] font-bold leading-none",
+  "inline-flex items-center rounded-300 px-2.5 py-1.5 text-body4 font-bold leading-none",
   {
     variants: {
       color: {

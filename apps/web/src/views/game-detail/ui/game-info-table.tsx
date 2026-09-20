@@ -35,7 +35,7 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
   ];
 
   return (
-    <div className="overflow-hidden rounded-[14px] border border-gray-200">
+    <div className="overflow-hidden rounded-600 border border-gray-200">
       {rows.map((row) => (
         <div
           key={row.label}

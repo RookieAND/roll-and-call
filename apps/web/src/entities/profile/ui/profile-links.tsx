@@ -11,13 +11,13 @@ import {
 import { BrandMark } from "./brand-mark";
 
 const ICON_CLASS =
-  "flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 text-gray-700";
+  "flex h-11 w-11 items-center justify-center rounded-500 border border-gray-200 text-gray-700";
 
 // 내 화면이든 남의 화면이든 44px 아이콘 한 줄. 이름과 주소는 aria-label과 누름으로 나온다.
 export function ProfileLinks({ links }: { links: readonly ProfileLink[] }) {
   if (links.length === 0) {
     return (
-      <div className="flex min-h-[46px] items-center gap-2.5 rounded-[11px] border border-dashed border-gray-300 px-3">
+      <div className="flex min-h-[46px] items-center gap-2.5 rounded-400 border border-dashed border-gray-300 px-3">
         <Link2 size={16} className="flex-none text-hint" aria-hidden />
         <Text typography="body4" foreground="hint" className="min-w-0 flex-1">
           등록한 링크가 없습니다

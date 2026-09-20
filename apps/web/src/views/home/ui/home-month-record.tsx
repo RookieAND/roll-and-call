@@ -18,7 +18,7 @@ export function HomeMonthRecord({
       : "아직 이 달에 개설된 세션이 없습니다.";
 
   return (
-    <section className="border-t border-gray-200 px-4 pt-[18px] pb-5">
+    <section className="border-t border-gray-200 px-4 pt-4.5 pb-5">
       <Text typography="heading2" render={<h3 />} className="font-extrabold">
         {monthLabel}의 기록
       </Text>
@@ -36,7 +36,7 @@ export function HomeMonthRecord({
         ranking={record.players}
         emptyTitle="아직 참여가 확정된 사람이 없습니다"
         emptyDescription="무산된 세션은 세지 않습니다."
-        className="mt-4 border-t border-gray-100 pt-[15px]"
+        className="mt-4 border-t border-gray-100 pt-4"
       />
     </section>
   );

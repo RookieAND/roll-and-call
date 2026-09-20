@@ -25,7 +25,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
         <Text typography="subtitle2" foreground="muted" render={<h3 />} className="mb-2">
           {block.label}
         </Text>
-        <div className="overflow-hidden rounded-[14px] border border-gray-200">
+        <div className="overflow-hidden rounded-600 border border-gray-200">
           {block.rows.map((row) => (
             <HelpRow key={row.term} row={row} />
           ))}
@@ -38,7 +38,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
     return (
       <div className="grid grid-cols-2 gap-2.5">
         {block.columns.map((column) => (
-          <div key={column.title} className="rounded-[14px] border border-gray-200 p-3.5">
+          <div key={column.title} className="rounded-600 border border-gray-200 p-3.5">
             <Text typography="subtitle1" render={<h3 />}>
               {column.title}
             </Text>
@@ -71,7 +71,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
             <Text
               typography="subtitle2"
               render={<span />}
-              className="flex size-[26px] items-center justify-center rounded-[9px] bg-primary-600 text-white tabular-nums"
+              className="flex size-[26px] items-center justify-center rounded-400 bg-primary-600 text-white tabular-nums"
             >
               {index + 1}
             </Text>

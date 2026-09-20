@@ -31,7 +31,7 @@ export function AttendanceHeader({
         </Text>
       </VStack>
       {attendanceConfirmedAt ? (
-        <div className="rounded-xl border border-gray-200 px-3.5 py-3">
+        <div className="rounded-500 border border-gray-200 px-3.5 py-3">
           <Text typography="body4" foreground="muted" render={<p />} className="leading-relaxed">
             {formatDateTime(attendanceConfirmedAt)}에 확정했습니다.
             <br />

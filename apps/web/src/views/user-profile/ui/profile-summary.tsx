@@ -20,13 +20,13 @@ export function ProfileSummary({ profile }: { profile: Profile }) {
           src={profile.avatarUrl}
           name={profile.username}
           size="2xl"
-          className="h-16 w-16 text-[22px]"
+          className="h-16 w-16 text-heading1"
         />
         <div className="min-w-0 flex-1">
           <Text typography="heading2" truncate render={<h1 />} className="tracking-[-0.02em]">
             {profile.username}
           </Text>
-          <Text typography="body3" foreground="hint" className="mt-[3px] block">
+          <Text typography="body3" foreground="hint" className="mt-1 block">
             {joinedLabel}
           </Text>
         </div>

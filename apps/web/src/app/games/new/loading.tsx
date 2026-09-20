@@ -27,11 +27,11 @@ export default function Loading() {
           </div>
           <VStack gap={2}>
             <Skeleton className="h-5 w-16" />
-            <Skeleton className="h-11 w-full rounded-[10px]" />
+            <Skeleton className="h-11 w-full rounded-400" />
           </VStack>
           <VStack gap={2}>
             <Skeleton className="h-5 w-8" />
-            <Skeleton className="h-11 w-full rounded-[10px]" />
+            <Skeleton className="h-11 w-full rounded-400" />
             <div className="flex gap-1.5">
               <Skeleton className="h-8.5 w-20 rounded-full" />
               <Skeleton className="h-8.5 w-16 rounded-full" />
@@ -40,17 +40,17 @@ export default function Loading() {
           </VStack>
           <VStack gap={2}>
             <Skeleton className="h-5 w-24" />
-            <Skeleton className="h-11 w-full rounded-[10px]" />
+            <Skeleton className="h-11 w-full rounded-400" />
           </VStack>
           <VStack gap={2}>
             <Skeleton className="h-5 w-16" />
-            <Skeleton className="h-[104px] w-full rounded-[10px]" />
+            <Skeleton className="h-[104px] w-full rounded-400" />
           </VStack>
         </VStack>
       </Container>
       <div className="sticky bottom-0 z-10 border-t border-gray-200 bg-surface">
         <Container size="md" className="py-3">
-          <Skeleton className="h-[50px] w-full rounded-xl" />
+          <Skeleton className="h-[50px] w-full rounded-500" />
         </Container>
       </div>
     </div>

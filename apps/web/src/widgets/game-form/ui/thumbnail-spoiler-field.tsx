@@ -12,7 +12,7 @@ export function ThumbnailSpoilerField({
   return (
     <div
       className={cn(
-        "flex min-h-11 items-center gap-3 rounded-[10px] border px-3 py-[11px]",
+        "flex min-h-11 items-center gap-3 rounded-400 border px-3 py-3",
         value ? "border-tinted-border bg-tinted-bg" : "border-gray-200",
       )}
     >

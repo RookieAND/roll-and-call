@@ -11,14 +11,14 @@ export default function Loading() {
       <Container size="sm">
         <VStack gap={5} className="pt-4 pb-4">
           <div className="flex gap-2">
-            <Skeleton className="h-[70px] flex-1 rounded-xl" />
-            <Skeleton className="h-[70px] flex-1 rounded-xl" />
+            <Skeleton className="h-[70px] flex-1 rounded-500" />
+            <Skeleton className="h-[70px] flex-1 rounded-500" />
           </div>
           <div className="flex gap-2">
-            <Skeleton className="h-11 min-w-0 flex-1 rounded-[10px]" />
-            <Skeleton className="h-11 w-[152px] shrink-0 rounded-[10px]" />
+            <Skeleton className="h-11 min-w-0 flex-1 rounded-400" />
+            <Skeleton className="h-11 w-[152px] shrink-0 rounded-400" />
           </div>
-          <div className="overflow-hidden rounded-xl border border-gray-200">
+          <div className="overflow-hidden rounded-500 border border-gray-200">
             {Array.from({ length: CANDIDATE_COUNT }).map((_, index) => (
               <div
                 key={index}
@@ -28,7 +28,7 @@ export default function Loading() {
                   <Skeleton className="h-[21px] w-44" />
                   <Skeleton className="mt-0.5 h-5 w-28" />
                 </div>
-                <Skeleton className="h-8 w-8 shrink-0 rounded-md" />
+                <Skeleton className="h-8 w-8 shrink-0 rounded-200" />
               </div>
             ))}
           </div>

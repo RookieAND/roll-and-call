@@ -58,7 +58,7 @@ export function AttendanceForm({ gameId, attendees }: { gameId: string; attendee
 
   return (
     <VStack gap={4}>
-      <div className="overflow-hidden rounded-xl border border-gray-200">
+      <div className="overflow-hidden rounded-500 border border-gray-200">
         {attendees.map((attendee) => (
           <AttendanceRow
             key={attendee.userId}
@@ -76,7 +76,7 @@ export function AttendanceForm({ gameId, attendees }: { gameId: string; attendee
         />
         <Button
           variant="confirm"
-          className="h-[50px] w-full rounded-xl"
+          className="h-[50px] w-full rounded-500"
           onClick={() => setConfirming(true)}
         >
           출석 확정

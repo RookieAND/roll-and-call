@@ -29,7 +29,7 @@ export function RosterQueue({
           </Text>
         )}
       </HStack>
-      <div className="overflow-hidden rounded-xl border border-gray-200">{children}</div>
+      <div className="overflow-hidden rounded-500 border border-gray-200">{children}</div>
       {footnote}
     </VStack>
   );

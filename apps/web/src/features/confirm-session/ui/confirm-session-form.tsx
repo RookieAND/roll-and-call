@@ -110,7 +110,7 @@ export function ConfirmSessionForm({
           />
         ) : (
           <>
-            <div className="overflow-hidden rounded-xl border border-gray-200">
+            <div className="overflow-hidden rounded-500 border border-gray-200">
               {candidates.map((candidate) => (
                 <SessionCandidateRow
                   key={candidate.iso}
@@ -137,7 +137,7 @@ export function ConfirmSessionForm({
       <div className="sticky bottom-0 -mx-4 border-t border-gray-200 bg-surface px-4 py-3">
         <Button
           variant="confirm"
-          className="h-[50px] w-full rounded-xl"
+          className="h-[50px] w-full rounded-500"
           onClick={() => setConfirming(true)}
         >
           {startLabel}

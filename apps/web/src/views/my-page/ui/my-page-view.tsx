@@ -40,7 +40,7 @@ export async function MyPageView() {
     <>
       <AppBar title="마이페이지" action={<HelpButton />} />
       <Container size="sm">
-        <VStack gap={5} className="py-[18px]">
+        <VStack gap={5} className="py-4.5">
           <MyPageProfile
             name={name}
             avatarUrl={avatar}
