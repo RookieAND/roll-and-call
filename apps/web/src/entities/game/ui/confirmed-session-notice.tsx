@@ -12,10 +12,16 @@ export function ConfirmedSessionNotice({
 }) {
   return (
     <StatusNotice tone="success">
-      <Text typography="subtitle2" foreground="success" render={<div />}>
+      <Text typography="body4" weight="bold" foreground="success" render={<div />}>
         세션 확정
       </Text>
-      <Text typography="heading3" foreground="success" render={<div />} className="mt-025">
+      <Text
+        typography="heading3"
+        weight="extrabold"
+        foreground="success"
+        render={<div />}
+        className="mt-050"
+      >
         {formatDateTime(confirmedAt)}
       </Text>
       {note && (

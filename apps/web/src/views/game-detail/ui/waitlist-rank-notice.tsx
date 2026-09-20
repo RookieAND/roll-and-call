@@ -14,7 +14,7 @@ export function WaitlistRankNotice({
 }) {
   return (
     <StatusNotice tone="muted" className="text-left">
-      <Text typography="subtitle2" render={<p />} className="tabular-nums">
+      <Text typography="body4" weight="bold" numeric render={<p />}>
         {pendingDraw
           ? "아직 GM이 추첨을 진행하지 않았습니다"
           : rank === null
