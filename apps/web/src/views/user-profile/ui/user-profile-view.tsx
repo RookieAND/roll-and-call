@@ -55,7 +55,9 @@ export async function UserProfileView({ id }: { id: string }) {
           <ProfileAbsenceNotice absences={absences} />
         </section>
 
-        {viewer && <ProfileMemoBlock targetId={profile.id} memo={memo} />}
+        {viewer && (
+          <ProfileMemoBlock targetId={profile.id} targetName={profile.username} memo={memo} />
+        )}
 
         <ProfileStats
           hosted={sessions[SESSION_ROLE.host].length}
