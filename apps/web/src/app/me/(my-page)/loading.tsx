@@ -1,12 +1,12 @@
 import { Container, HStack, Skeleton, VStack } from "@trpg/ui";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar, HelpButton } from "@/shared/ui";
 
 // 할 일 카드는 있을 때만 그려지므로 뼈대에서는 뺀다.
 export default function Loading() {
   return (
     <>
-      <AppBar title="마이페이지" />
+      <AppBar title="마이페이지" action={<HelpButton />} />
       <Container size="sm">
         <VStack gap="250" className="py-225">
           <VStack gap="175" render={<section />}>

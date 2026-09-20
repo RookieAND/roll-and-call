@@ -1,6 +1,6 @@
 import { Container, HStack, Skeleton, Text, VStack } from "@trpg/ui";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar, HelpButton } from "@/shared/ui";
 
 import { resolveCalendarView } from "../model/resolve-calendar-view";
 import { HomeCalendar } from "./home-calendar";
@@ -17,7 +17,7 @@ export function HomeSkeleton({ date }: HomeSkeletonProps) {
 
   return (
     <>
-      <AppBar title="롤앤콜" brand />
+      <AppBar title="롤앤콜" brand action={<HelpButton />} />
       <Container size="sm" className="px-0">
         <HomeCalendar monthStart={monthStart} />
 
