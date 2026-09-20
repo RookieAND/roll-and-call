@@ -126,6 +126,12 @@
   --color-tinted-border: #d5d3f7;
   --color-tinted-ink: #4338ca;
 
+  /* 읽고 판단할 것(트리거 칩). 지금 말하는 일(마감 임박 = warning)과 색을 나눈다.
+     한 카드에 둘이 같이 뜨므로 amber 램프에서 한 단 옅게 꺼내 쓴다. */
+  --color-notice-bg: #fdf6ec;
+  --color-notice-border: #f4d7a8;
+  --color-notice-ink: #8a5a1b;
+
   /* 순위 배지. 2위는 hint를 그대로 쓴다. */
   --color-rank-gold: #8a6209;
   --color-rank-bronze: #9a5b2e;
@@ -197,6 +203,10 @@
   --color-tinted-bg-hover: #2f2f57;
   --color-tinted-border: #3a3a6b;
   --color-tinted-ink: #c7d2fe;
+
+  --color-notice-bg: #2e2318;
+  --color-notice-border: #8a5a1b;
+  --color-notice-ink: #fbbf24;
   --color-saturday: #8fbbe0;
 
   --color-rank-gold: #e5be6a;

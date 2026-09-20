@@ -21,6 +21,7 @@ export function GamePreflightSection({ game }: { game: GameDetailData }) {
           label={gameTagLabel[GAME_TAG.triggers]}
           tags={game.triggers}
           note={TRIGGER_NOTE}
+          tone="notice"
         />
       )}
       {game.notice && <GameNoticeBlock notice={game.notice} />}
