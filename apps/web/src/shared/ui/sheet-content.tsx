@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 export function SheetContent({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <Dialog.Portal>
-      <Dialog.Backdrop className="fixed inset-0 z-40 bg-black/30" />
+      <Dialog.Backdrop className="fixed inset-0 z-40 bg-dim" />
       <Dialog.Popup
         className={cn(
           // scrollbar-width는 상속되니 시트 안의 스크롤 영역은 막대 없이 넘긴다. 끝이 잘린 줄이 스크롤을 대신 알린다.

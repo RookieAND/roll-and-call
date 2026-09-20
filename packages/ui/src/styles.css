@@ -99,7 +99,7 @@
   /* 위험·오류(danger) — 없어서 Tailwind 기본 red로 새던 축 */
   --color-danger-50: #fef5f5;
   --color-danger-100: #fbebeb;
-  --color-danger-200: #f0dada;
+  --color-danger-200: #e9c9c9;
   --color-danger-300: #e9c9c9;
   --color-danger-400: #e5a0a0;
   --color-danger-600: #c33b3b;
@@ -110,7 +110,7 @@
   --color-success-solid-hover: #0a5c41;
 
   /* 주의(warning) — 아직 하지 않은 일 */
-  --color-warning-50: #fdf6ec;
+  --color-warning-50: #ffe7d6;
   --color-warning-600: #b45309;
 
   /* 배경·글씨가 한 세트로 움직이는 역할 토큰.
@@ -118,6 +118,8 @@
   /* 보조 문구(요일·순번·핸들·placeholder). gray 램프에는 surface 위에서 4.5:1을 넘는
      단계가 없어서(400=2.06, 500=3.41) 역할 토큰으로 따로 둔다. */
   --color-hint: #70707a;
+  /* 시트·다이얼로그 뒤 딤. 라이트는 잉크를 옅게 깔고 다크는 검정을 쓴다. */
+  --color-dim: rgb(23 23 28 / 0.35);
   --color-primary-ink: #4f46e5;
   --color-tinted-bg: #f5f4ff;
   --color-tinted-bg-hover: #eeedfc;
@@ -168,7 +170,7 @@
   --color-gray-900: #f2f2f5;
 
   /* 틴트 배경만 어둡게 내린다. 솔리드(600 이상)는 흰 글씨가 그대로 읽힌다. */
-  --color-primary-50: #1e1e3a;
+  --color-primary-50: #262647;
   --color-primary-100: #26264d;
   --color-primary-200: #313166;
 
@@ -185,10 +187,11 @@
   --color-danger-400: #8a5252;
   --color-danger-600: #f08a8a;
 
-  --color-warning-50: #2d2410;
+  --color-warning-50: #2e2318;
   --color-warning-600: #fbbf24;
 
   --color-hint: #8f8f9a;
+  --color-dim: rgb(0 0 0 / 0.5);
   --color-primary-ink: #a5b4fc;
   --color-tinted-bg: #262647;
   --color-tinted-bg-hover: #2f2f57;
@@ -200,11 +203,11 @@
   --color-rank-bronze: #c9926a;
 
   --color-heat-0: #1e1e26;
-  --color-heat-1: #262649;
-  --color-heat-2: #2f2f66;
+  --color-heat-1: #221f42;
+  --color-heat-2: #2f2f57;
   --color-heat-3: #3c3c8c;
   --color-heat-4: #4b4bb5;
-  --color-heat-5: #6a6fe8;
+  --color-heat-5: #5b60e4;
   --color-heat-ink: #c7d2fe;
 
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #221f42 0%, #17161f 46%, #131318 80%);
