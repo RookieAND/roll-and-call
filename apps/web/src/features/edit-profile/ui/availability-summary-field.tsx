@@ -1,4 +1,4 @@
-import { Button, HStack, Text, VStack } from "@trpg/ui";
+import { Button, Card, HStack, Text, VStack } from "@trpg/ui";
 import Link from "next/link";
 
 import { type AvailabilityInterval, filledDays, formatInterval } from "@/entities/profile";
@@ -12,7 +12,7 @@ export function AvailabilitySummaryField({
   const days = filledDays(intervals);
 
   return (
-    <div className="rounded-500 border border-gray-200 p-175">
+    <Card radius={500} background="none" padding="none" className="p-175">
       <HStack align="baseline" gap="100" className="mb-125">
         <Text weight="bold" typography="body4" className="flex-1">
           가능 시간대
@@ -61,6 +61,6 @@ export function AvailabilitySummaryField({
       <Button asChild variant="outline" className="mt-150 h-11 w-full text-primary-ink">
         <Link href="/me/availability">{days.length > 0 ? "수정하기" : "시간대 설정하기"}</Link>
       </Button>
-    </div>
+    </Card>
   );
 }

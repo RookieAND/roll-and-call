@@ -1,8 +1,11 @@
 "use client";
 
-import { Chip, HStack, Text, TextInput, VStack } from "@trpg/ui";
+import { Chip, HStack, VStack } from "@trpg/ui";
 import { X } from "lucide-react";
 import { useState, type KeyboardEvent } from "react";
+
+import { TagInputEditor } from "./tag-input-editor";
+import { TagInputFullNote } from "./tag-input-full-note";
 
 export type TagInputProps = {
   id?: string;
@@ -71,31 +74,19 @@ export function TagInput({
       )}
 
       {isFull ? (
-        <Text typography="body4" foreground="hint" render={<p />}>
-          {max}개를 모두 채웠습니다. 지우면 더 넣을 수 있습니다.
-        </Text>
+        <TagInputFullNote max={max} />
       ) : (
-        <>
-          <TextInput
-            id={id}
-            value={draft}
-            placeholder={placeholder}
-            maxLength={maxLength}
-            enterKeyHint="done"
-            onChange={(event) => setDraft(event.target.value)}
-            onKeyDown={onKeyDown}
-            onBlur={() => add(draft)}
-          />
-          {unusedSuggestions.length > 0 && (
-            <HStack gap="075" wrap>
-              {unusedSuggestions.map((suggestion) => (
-                <Chip key={suggestion} className="h-9.5" onClick={() => add(suggestion)}>
-                  {suggestion}
-                </Chip>
-              ))}
-            </HStack>
-          )}
-        </>
+        <TagInputEditor
+          id={id}
+          draft={draft}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          suggestions={unusedSuggestions}
+          onDraftChange={setDraft}
+          onKeyDown={onKeyDown}
+          onCommit={() => add(draft)}
+          onAdd={add}
+        />
       )}
     </VStack>
   );

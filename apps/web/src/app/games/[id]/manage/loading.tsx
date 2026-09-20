@@ -1,4 +1,4 @@
-import { Badge, Container, HStack, Skeleton } from "@trpg/ui";
+import { Badge, Card, Container, HStack, Skeleton } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
@@ -27,7 +27,7 @@ export default function Loading() {
         </div>
 
         <div className="p-200">
-          <div className="overflow-hidden rounded-500 border border-gray-200">
+          <Card radius={500} background="none" padding="none" className="overflow-hidden">
             {Array.from({ length: ROW_COUNT }).map((_, index) => (
               <HStack
                 key={index}
@@ -43,7 +43,7 @@ export default function Loading() {
                 <Skeleton width={16} height={16} rounded={100} className="flex-none" />
               </HStack>
             ))}
-          </div>
+          </Card>
         </div>
       </Container>
     </>

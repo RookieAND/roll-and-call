@@ -1,4 +1,4 @@
-import { Container, Text, VStack } from "@trpg/ui";
+import { Card, Container, Text, VStack } from "@trpg/ui";
 import { notFound } from "next/navigation";
 
 import { AppBar } from "@/shared/ui";
@@ -41,11 +41,11 @@ export function HelpDocView({ slug }: { slug: string }) {
             <Text typography="subtitle2" foreground="muted" render={<h2 />} className="mb-100">
               이어 읽기
             </Text>
-            <div className="overflow-hidden rounded-600 border border-gray-200">
+            <Card radius={600} background="none" padding="none" className="overflow-hidden">
               {related.map((target) => (
                 <HelpDocRow key={target.slug} slug={target.slug} title={target.title} />
               ))}
-            </div>
+            </Card>
           </section>
         </VStack>
       </Container>

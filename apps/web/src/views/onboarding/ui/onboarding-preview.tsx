@@ -1,4 +1,4 @@
-import { Grid, HStack, Text, VStack } from "@trpg/ui";
+import { Card, Grid, HStack, Text, VStack } from "@trpg/ui";
 
 import { GAME_STATUS, GameStatusBadge } from "@/entities/game";
 import { ProfileLinks } from "@/entities/profile";
@@ -20,7 +20,7 @@ export function OnboardingPreview({
 }) {
   if (slideKey === "find") {
     return (
-      <div className="w-[262px] overflow-hidden rounded-600 border border-gray-200 bg-surface">
+      <Card radius={600} background="surface" padding="none" className="w-[262px] overflow-hidden">
         <HStack align="end" className="h-[70px] bg-tinted-bg p-100">
           <GameStatusBadge status={GAME_STATUS.recruiting} />
         </HStack>
@@ -37,15 +37,15 @@ export function OnboardingPreview({
             </Text>
           </span>
         </VStack>
-      </div>
+      </Card>
     );
   }
 
   if (slideKey === "schedule") {
     return (
-      <div className="w-[262px] rounded-600 border border-gray-200 bg-surface p-150">
+      <Card radius={600} background="surface" padding="none" className="w-[262px] p-150">
         <HeatSample />
-      </div>
+      </Card>
     );
   }
 

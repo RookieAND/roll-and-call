@@ -1,4 +1,4 @@
-import { HStack, Text } from "@trpg/ui";
+import { Card, HStack, Text } from "@trpg/ui";
 
 export function ConfirmSummary({
   playLabel,
@@ -16,14 +16,20 @@ export function ConfirmSummary({
     <div>
       <HStack gap="100">
         {items.map((item) => (
-          <div key={item.label} className="flex-1 rounded-500 border border-gray-200 px-175 py-150">
+          <Card
+            key={item.label}
+            radius={500}
+            background="none"
+            padding="none"
+            className="flex-1 px-175 py-150"
+          >
             <Text typography="body4" foreground="hint" render={<p />}>
               {item.label}
             </Text>
             <Text typography="subtitle1" render={<p />} className="mt-025">
               {item.value}
             </Text>
-          </div>
+          </Card>
         ))}
       </HStack>
       <Text typography="body4" foreground="hint" render={<p />} className="mt-100">

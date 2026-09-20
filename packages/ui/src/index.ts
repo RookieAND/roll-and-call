@@ -1,4 +1,3 @@
-export { Box, type BoxProps } from "./box";
 export { Flex, type FlexProps, type StackProps } from "./flex";
 export { VStack } from "./v-stack";
 export { HStack } from "./h-stack";

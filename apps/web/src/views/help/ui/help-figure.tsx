@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@trpg/ui";
+import { Card, HStack, Text, VStack } from "@trpg/ui";
 
 import { GAME_STATUS, GameStatusBadge } from "@/entities/game";
 import { BrandMark, LINK_SERVICES } from "@/entities/profile";
@@ -20,9 +20,9 @@ const SAMPLE_ROSTER = [
 export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
   if (figure === HELP_FIGURE.heatGrid) {
     return (
-      <div className="rounded-400 border border-gray-200 bg-gray-50 p-150">
+      <Card radius={400} background="subtle" padding="none" className="p-150">
         <HeatSample />
-      </div>
+      </Card>
     );
   }
 

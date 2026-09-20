@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, VStack } from "@trpg/ui";
+import { Button, Card, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { ConfirmDialog, handleActionResult, reportError, toast, useAction } from "@/shared/ui";
@@ -58,7 +58,7 @@ export function AttendanceForm({ gameId, attendees }: { gameId: string; attendee
 
   return (
     <VStack gap="200">
-      <div className="overflow-hidden rounded-500 border border-gray-200">
+      <Card radius={500} background="none" padding="none" className="overflow-hidden">
         {attendees.map((attendee) => (
           <AttendanceRow
             key={attendee.userId}
@@ -67,7 +67,7 @@ export function AttendanceForm({ gameId, attendees }: { gameId: string; attendee
             onChange={(absent) => toggle(attendee.userId, absent)}
           />
         ))}
-      </div>
+      </Card>
 
       <VStack gap="150">
         <AttendanceTally

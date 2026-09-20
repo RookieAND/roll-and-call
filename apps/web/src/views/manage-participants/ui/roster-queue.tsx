@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@trpg/ui";
+import { Card, HStack, Text, VStack } from "@trpg/ui";
 import type { ReactNode } from "react";
 
 export function RosterQueue({
@@ -29,7 +29,9 @@ export function RosterQueue({
           </Text>
         )}
       </HStack>
-      <div className="overflow-hidden rounded-500 border border-gray-200">{children}</div>
+      <Card radius={500} background="none" padding="none" className="overflow-hidden">
+        {children}
+      </Card>
       {footnote}
     </VStack>
   );

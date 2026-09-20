@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, Text, VStack } from "@trpg/ui";
+import { Button, Card, HStack, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { rankWindows, windowMembers } from "@/entities/availability";
@@ -110,7 +110,7 @@ export function ConfirmSessionForm({
           />
         ) : (
           <>
-            <div className="overflow-hidden rounded-500 border border-gray-200">
+            <Card radius={500} background="none" padding="none" className="overflow-hidden">
               {candidates.map((candidate) => (
                 <SessionCandidateRow
                   key={candidate.iso}
@@ -120,7 +120,7 @@ export function ConfirmSessionForm({
                   onPick={(iso) => setStart(toSessionStart(iso))}
                 />
               ))}
-            </div>
+            </Card>
             <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
               체크를 누르면 위 세션 시간 칸이 그 시간으로 채워집니다.
             </Text>

@@ -1,4 +1,4 @@
-import { Container, HStack, Skeleton, VStack } from "@trpg/ui";
+import { Card, Container, HStack, Skeleton, VStack } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
@@ -18,7 +18,7 @@ export default function Loading() {
             <Skeleton height={44} rounded={400} className="min-w-0 flex-1" />
             <Skeleton width={152} height={44} rounded={400} className="shrink-0" />
           </HStack>
-          <div className="overflow-hidden rounded-500 border border-gray-200">
+          <Card radius={500} background="none" padding="none" className="overflow-hidden">
             {Array.from({ length: CANDIDATE_COUNT }).map((_, index) => (
               <HStack
                 key={index}
@@ -33,7 +33,7 @@ export default function Loading() {
                 <Skeleton width={32} height={32} className="shrink-0" />
               </HStack>
             ))}
-          </div>
+          </Card>
         </VStack>
       </Container>
     </>

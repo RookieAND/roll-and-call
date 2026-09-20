@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, Container, Text, VStack } from "@trpg/ui";
+import { cn, Container, VStack } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FieldErrors } from "react-hook-form";
@@ -12,13 +12,17 @@ import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";
 import { FORM_SECTION, SECTION_FIELDS, type SectionKey } from "../model/game-form-steps";
 import { stepOfField } from "../model/step-of-field";
+import { EditWithApplicantsNotice } from "./edit-with-applicants-notice";
+import { EditWithoutApplicantsNotice } from "./edit-without-applicants-notice";
 import { GameBasicsFields } from "./game-basics-fields";
 import { GameMediaFields } from "./game-media-fields";
 import { GamePreflightFields } from "./game-preflight-fields";
 import { GamePreflightNotice } from "./game-preflight-notice";
 import { GameRecruitFields } from "./game-recruit-fields";
+import { WizardDraftSummary } from "./wizard-draft-summary";
 import { WizardFooter } from "./wizard-footer";
 import { WizardHeader } from "./wizard-header";
+import { WizardIntro } from "./wizard-intro";
 
 export function GameFormWizard({
   form,
@@ -126,41 +130,15 @@ export function GameFormWizard({
 
       <Container size="md" className="flex-1">
         <VStack gap="250" className="py-300">
-          {intro?.title && (
-            <div>
-              <Text typography="heading2" render={<h1 />} className="block">
-                {intro.title}
-              </Text>
-              <Text typography="body3" foreground="muted" render={<p />} className="mt-050">
-                {intro.description}
-              </Text>
-            </div>
-          )}
+          {intro?.title && <WizardIntro title={intro.title} description={intro.description} />}
 
-          {edit && step === 0 && (
-            <div className="rounded-500 bg-gray-50 px-175 py-150">
-              <Text typography="subtitle2" render={<p />}>
-                {applicants > 0
-                  ? `이미 ${applicants}명이 신청했습니다.`
-                  : "아직 신청자가 없습니다."}
-              </Text>
-              <Text typography="body4" foreground="muted" render={<p />} className="mt-025">
-                {applicants > 0
-                  ? "바꾼 내용은 저장하면 바로 상세에 반영되고, 디스코드 공지도 다시 올라갑니다."
-                  : "모든 항목을 바꿀 수 있고, 저장하면 디스코드 공지도 다시 올라갑니다."}
-              </Text>
-            </div>
+          {edit && step === 0 && applicants > 0 && (
+            <EditWithApplicantsNotice applicants={applicants} />
           )}
+          {edit && step === 0 && applicants === 0 && <EditWithoutApplicantsNotice />}
 
           {!edit && step > 0 && (
-            <div className="rounded-500 border border-gray-200 bg-gray-50 px-175 py-150">
-              <Text truncate typography="subtitle1">
-                {watch("title") || "제목 미입력"}
-              </Text>
-              <Text truncate typography="body4" foreground="muted" className="mt-025">
-                {summaryLine}
-              </Text>
-            </div>
+            <WizardDraftSummary title={watch("title") || "제목 미입력"} line={summaryLine} />
           )}
 
           <fieldset

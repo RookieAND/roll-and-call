@@ -1,4 +1,4 @@
-import { Button, Container, HStack, Text, VStack } from "@trpg/ui";
+import { Button, Card, Container, HStack, Text, VStack } from "@trpg/ui";
 import { ChevronRight, ExternalLink, PlayCircle } from "lucide-react";
 import Link from "next/link";
 
@@ -44,11 +44,11 @@ export function HelpListView() {
               <Text typography="subtitle2" foreground="muted" render={<h2 />} className="mb-100">
                 {category}
               </Text>
-              <div className="overflow-hidden rounded-600 border border-gray-200">
+              <Card radius={600} background="none" padding="none" className="overflow-hidden">
                 {HELP_DOCS.filter((doc) => doc.category === category).map((doc) => (
                   <HelpDocRow key={doc.slug} slug={doc.slug} title={doc.title} />
                 ))}
-              </div>
+              </Card>
             </section>
           ))}
 

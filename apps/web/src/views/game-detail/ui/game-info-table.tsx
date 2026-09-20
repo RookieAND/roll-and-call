@@ -1,4 +1,4 @@
-import { HStack, Text } from "@trpg/ui";
+import { Card, HStack, Text } from "@trpg/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -35,7 +35,7 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
   ];
 
   return (
-    <div className="overflow-hidden rounded-600 border border-gray-200">
+    <Card radius={600} background="none" padding="none" className="overflow-hidden">
       {rows.map((row) => (
         <HStack
           key={row.label}
@@ -51,6 +51,6 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
           </Text>
         </HStack>
       ))}
-    </div>
+    </Card>
   );
 }

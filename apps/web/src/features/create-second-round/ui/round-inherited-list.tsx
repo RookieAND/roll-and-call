@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@trpg/ui";
+import { Card, HStack, Text, VStack } from "@trpg/ui";
 import { Check } from "lucide-react";
 
 export function RoundInheritedList({
@@ -23,7 +23,7 @@ export function RoundInheritedList({
       <Text weight="bold" typography="body4" foreground="muted">
         그대로 넘어가는 것
       </Text>
-      <div className="overflow-hidden rounded-500 border border-gray-200">
+      <Card radius={500} background="none" padding="none" className="overflow-hidden">
         {items.map((item) => (
           <HStack
             key={item.title}
@@ -40,7 +40,7 @@ export function RoundInheritedList({
             </VStack>
           </HStack>
         ))}
-      </div>
+      </Card>
     </VStack>
   );
 }

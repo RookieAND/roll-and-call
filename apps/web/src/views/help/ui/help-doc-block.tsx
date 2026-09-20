@@ -1,4 +1,4 @@
-import { Grid, HStack, Text, VStack } from "@trpg/ui";
+import { Card, Grid, HStack, Text, VStack } from "@trpg/ui";
 
 import { HELP_BLOCK, type HelpBlock } from "../model/help-docs";
 import { HelpFigure } from "./help-figure";
@@ -25,11 +25,11 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
         <Text typography="subtitle2" foreground="muted" render={<h3 />} className="mb-100">
           {block.label}
         </Text>
-        <div className="overflow-hidden rounded-600 border border-gray-200">
+        <Card radius={600} background="none" padding="none" className="overflow-hidden">
           {block.rows.map((row) => (
             <HelpRow key={row.term} row={row} />
           ))}
-        </div>
+        </Card>
       </section>
     );
   }
@@ -38,7 +38,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
     return (
       <Grid cols={2} gap="125">
         {block.columns.map((column) => (
-          <div key={column.title} className="rounded-600 border border-gray-200 p-175">
+          <Card key={column.title} radius={600} background="none" padding="none" className="p-175">
             <Text typography="subtitle1" render={<h3 />}>
               {column.title}
             </Text>
@@ -57,7 +57,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
                 </div>
               ))}
             </VStack>
-          </div>
+          </Card>
         ))}
       </Grid>
     );

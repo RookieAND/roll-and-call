@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, Text, VStack } from "@trpg/ui";
+import { Card, cn, Text, VStack } from "@trpg/ui";
 import { type ReactNode, useEffect, useRef } from "react";
 
 import { DAY_START_HOUR, type DayColumn, slotIso, type TimeRow } from "@/shared/lib";
@@ -35,9 +35,12 @@ export function SlotGrid({
   }, []);
 
   return (
-    <div
+    <Card
       ref={scrollRef}
-      className="overflow-auto overscroll-contain rounded-500 border border-gray-200"
+      radius={500}
+      background="none"
+      padding="none"
+      className="overflow-auto overscroll-contain"
       style={{ maxHeight: HEADER_PX + SLOT_ROW_PX * VISIBLE_ROWS }}
     >
       <div
@@ -78,6 +81,6 @@ export function SlotGrid({
           ...days.map((day) => renderCell(slotIso(day.date, row.hour, row.minute))),
         ])}
       </div>
-    </div>
+    </Card>
   );
 }

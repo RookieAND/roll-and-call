@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, Text } from "@trpg/ui";
+import { Button, Card, HStack, Text } from "@trpg/ui";
 
 import { formatBytes } from "./format-bytes";
 
@@ -18,7 +18,7 @@ export function ThumbnailPreview({
   onRemove: () => void;
 }) {
   return (
-    <div className="overflow-hidden rounded-500 border border-gray-200">
+    <Card radius={500} background="none" padding="none" className="overflow-hidden">
       <img src={url} alt="썸네일 미리보기" className="aspect-video w-full object-cover" />
       <HStack align="center" gap="100" className="px-150 py-100">
         <div className="min-w-0 flex-1">
@@ -38,6 +38,6 @@ export function ThumbnailPreview({
           삭제
         </Button>
       </HStack>
-    </div>
+    </Card>
   );
 }

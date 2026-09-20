@@ -1,4 +1,4 @@
-import { Badge, Container, HStack, Text } from "@trpg/ui";
+import { Badge, Card, Container, HStack, Text } from "@trpg/ui";
 import { notFound, redirect } from "next/navigation";
 
 import {
@@ -67,12 +67,12 @@ export async function ManageGameView({ id }: { id: string }) {
         </div>
 
         <div className="p-200">
-          <div className="overflow-hidden rounded-500 border border-gray-200">
+          <Card radius={500} background="none" padding="none" className="overflow-hidden">
             {rows.map((row) => (
               <ManageRow key={row.key} row={row} />
             ))}
             <DeleteGameRow gameId={id} confirmedCount={confirmedCount} />
-          </div>
+          </Card>
         </div>
       </Container>
     </>

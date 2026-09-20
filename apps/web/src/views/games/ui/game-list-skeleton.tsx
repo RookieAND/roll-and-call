@@ -1,11 +1,11 @@
-import { HStack, Skeleton, VStack } from "@trpg/ui";
+import { Card, HStack, Skeleton, VStack } from "@trpg/ui";
 
 // GameCard와 같은 치수: 16:9 썸네일 · 제목 heading3 22px + 배지 21px · 룰 21px · 일정 줄 21px(아이콘 13px) · GM 아바타 24px + 정원 칸 줄.
 export function GameListSkeleton() {
   return (
     <VStack className="gap-125">
       {Array.from({ length: 3 }).map((_, index) => (
-        <div key={index} className="overflow-hidden rounded-600 border border-gray-200">
+        <Card key={index} radius={600} background="none" padding="none" className="overflow-hidden">
           <Skeleton width="100%" rounded="none" className="aspect-video" />
           <VStack className="gap-075 px-175 py-175">
             <HStack align="start" justify="between" gap="100">
@@ -23,7 +23,7 @@ export function GameListSkeleton() {
               <Skeleton width={112} height={21} />
             </HStack>
           </VStack>
-        </div>
+        </Card>
       ))}
     </VStack>
   );

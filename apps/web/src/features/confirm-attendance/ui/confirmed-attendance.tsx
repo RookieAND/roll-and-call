@@ -1,4 +1,4 @@
-import { VStack } from "@trpg/ui";
+import { Card, VStack } from "@trpg/ui";
 
 import type { Attendee } from "../model/attendee";
 import { AttendanceResultRow } from "./attendance-result-row";
@@ -13,11 +13,11 @@ export function ConfirmedAttendance({
 }) {
   return (
     <VStack gap="150">
-      <div className="overflow-hidden rounded-500 border border-gray-200">
+      <Card radius={500} background="none" padding="none" className="overflow-hidden">
         {attendees.map((attendee) => (
           <AttendanceResultRow key={attendee.userId} attendee={attendee} />
         ))}
-      </div>
+      </Card>
       <ReopenAttendanceButton gameId={gameId} />
     </VStack>
   );

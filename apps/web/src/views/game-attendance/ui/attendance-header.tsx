@@ -1,4 +1,4 @@
-import { Badge, HStack, Text, VStack } from "@trpg/ui";
+import { Badge, Card, HStack, Text, VStack } from "@trpg/ui";
 
 import { formatDateTime } from "@/shared/lib";
 
@@ -31,13 +31,13 @@ export function AttendanceHeader({
         </Text>
       </VStack>
       {attendanceConfirmedAt ? (
-        <div className="rounded-500 border border-gray-200 px-175 py-150">
+        <Card radius={500} background="none" padding="none" className="px-175 py-150">
           <Text typography="body4" foreground="muted" render={<p />} className="leading-relaxed">
             {formatDateTime(attendanceConfirmedAt)}에 확정했습니다.
             <br />
             잘못 정했다면 아래에서 다시 여세요.
           </Text>
-        </div>
+        </Card>
       ) : (
         <Text typography="body4" foreground="muted" render={<p />} className="leading-relaxed">
           오지 않은 사람만 <b>불참</b>으로 바꾸세요.
