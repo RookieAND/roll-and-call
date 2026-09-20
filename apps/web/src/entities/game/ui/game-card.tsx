@@ -44,8 +44,13 @@ export function GameCard({ game }: GameCardProps) {
         className={thumbnailClass}
       />
       <VStack className="gap-075 px-175 py-175">
-        <HStack justify="between" align="start" gap="100">
-          <Text truncate typography="heading3" foreground={titleForeground} className="min-w-0">
+        <HStack align="start" gap="100">
+          <Text
+            truncate
+            typography="heading3"
+            foreground={titleForeground}
+            className="min-w-0 flex-1"
+          >
             {game.title}
           </Text>
           <GameStatusBadge status={status} />
