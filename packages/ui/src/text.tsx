@@ -29,6 +29,8 @@ const text = cva("", {
       warning: "text-warning-600",
       danger: "text-danger-600",
       white: "text-white",
+      // 부모가 색을 정하는 자리(탭·칩 안쪽 라벨).
+      inherit: "text-current",
     },
     // 디자인 토큰 이름을 따른다. medium은 600이라 Tailwind로는 font-semibold다.
     weight: {

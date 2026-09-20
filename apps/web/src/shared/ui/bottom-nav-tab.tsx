@@ -12,7 +12,7 @@ export function BottomNavTab({ href, label, Icon }: BottomNavTabProps) {
   return (
     <Link href={href} className={`${BOTTOM_NAV_TAB_CLASS} text-hint`}>
       <Icon size={18} aria-hidden />
-      <Text typography="subtitle2" foreground="hint" render={<span />}>
+      <Text typography="subtitle2" foreground="inherit" render={<span />}>
         {label}
       </Text>
     </Link>
