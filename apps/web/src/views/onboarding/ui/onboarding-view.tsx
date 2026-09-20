@@ -34,6 +34,8 @@ export function OnboardingView() {
   );
   const titleClass = cn("leading-[1.32]", welcome ? "text-[26px]" : "text-[24px]");
 
+  const skip = () => router.replace(DONE_HREF);
+
   const goNext = () => {
     if (last) {
       router.replace(DONE_HREF);
@@ -62,13 +64,7 @@ export function OnboardingView() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="flex h-[52px] items-center justify-end px-2.5">
-        {!last && (
-          <Button variant="ghost" onClick={() => router.replace(DONE_HREF)}>
-            건너뛰기
-          </Button>
-        )}
-      </header>
+      <span className="h-[52px] flex-none" />
       <Container size="sm" className="flex flex-1 flex-col">
         <div
           key={slide.key}
@@ -118,9 +114,16 @@ export function OnboardingView() {
             />
           ))}
         </div>
-        <Button size="lg" className="mb-6 w-full" onClick={goNext}>
-          {nextLabel}
-        </Button>
+        <VStack gap={1} className="mb-6">
+          <Button size="lg" className="w-full" onClick={goNext}>
+            {nextLabel}
+          </Button>
+          {!last && (
+            <Button variant="ghost" className="h-11 w-full text-gray-600" onClick={skip}>
+              건너뛰기
+            </Button>
+          )}
+        </VStack>
       </Container>
     </div>
   );
