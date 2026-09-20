@@ -34,7 +34,7 @@ export function ManageRow({ row }: { row: Row }) {
         <Text typography="subtitle1" className="block">
           {row.label}
         </Text>
-        <Text typography="body3" className={cn("mt-025 block", DETAIL_CLASS[row.tone])}>
+        <Text typography="body4" className={cn("mt-025 block", DETAIL_CLASS[row.tone])}>
           {row.detail}
         </Text>
       </div>

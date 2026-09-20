@@ -6,7 +6,8 @@ import { CancelWaitlistButton } from "@/features/join-game";
 
 import { SESSION_ACTION_KIND, type SessionCardModel } from "../model/session-card-model";
 
-const SOLID_KINDS: string[] = [
+// 세션을 여는 마지막 한 수는 초록이다 — 03 확정 버튼과 같은 색이어야 같은 일로 읽힌다.
+const CONFIRM_KINDS: string[] = [
   SESSION_ACTION_KIND.confirmTime,
   SESSION_ACTION_KIND.confirmAttendance,
 ];
@@ -19,7 +20,7 @@ export function SessionCardAction({ model }: { model: SessionCardModel }) {
     return <CancelWaitlistButton gameId={model.id} title={model.title} className="mt-125 h-11" />;
   }
 
-  const variant = SOLID_KINDS.includes(action.kind) ? "solid" : "tinted";
+  const variant = CONFIRM_KINDS.includes(action.kind) ? "confirm" : "tinted";
   const isHostMenu = action.kind === SESSION_ACTION_KIND.hostMenu;
 
   return (

@@ -21,8 +21,10 @@ export function SessionTabs({
             href={tab.href}
             aria-current={selected ? "page" : undefined}
             className={cn(
-              "flex h-11 flex-1 items-center justify-center border-b-2 text-sm font-bold tabular-nums",
-              selected ? "border-primary-600 text-primary-ink" : "border-transparent text-hint",
+              "flex h-[46px] flex-1 items-center justify-center border-b-2 text-sm tabular-nums",
+              selected
+                ? "border-primary-600 font-bold text-primary-ink"
+                : "border-transparent font-semibold text-gray-600",
             )}
           >
             {tab.label} {tab.count}
