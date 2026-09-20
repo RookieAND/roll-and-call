@@ -12,12 +12,10 @@ import {
 } from "@/features/write-game";
 import { TagInput } from "@/shared/ui";
 
-const TAG_HINT = "작성하고 Enter 를 입력해주세요.";
-
 const TAG_PLACEHOLDER: Record<GameTagKey, string> = {
-  [GAME_TAG.genres]: "장르 입력",
-  [GAME_TAG.triggers]: "주의가 필요한 소재 입력",
-  [GAME_TAG.platforms]: "사용 플랫폼 입력",
+  [GAME_TAG.genres]: "장르를 적고 엔터",
+  [GAME_TAG.triggers]: "주의가 필요한 소재를 적고 엔터",
+  [GAME_TAG.platforms]: "쓰는 플랫폼을 적고 엔터",
 };
 
 const AI_IMAGE_OPTIONS = [
@@ -34,9 +32,11 @@ const TAG_SUGGESTIONS: Record<GameTagKey, string[]> = {
 export function GamePreflightFields({
   form,
   triggerNotice,
+  aiImageNotice,
 }: {
   form: UseFormReturn<GameFormValues>;
   triggerNotice?: string | null;
+  aiImageNotice?: string | null;
 }) {
   const {
     register,
@@ -51,13 +51,13 @@ export function GamePreflightFields({
     <>
       {GAME_TAG_KEYS.map((key) => {
         const tags = watch(key);
+        const isTrigger = key === GAME_TAG.triggers;
         return (
           <VStack key={key} gap="075">
             <Field
               label={gameTagLabel[key]}
               htmlFor={key}
               counter={`${tags.length} / ${GAME_TAGS_MAX}`}
-              description={tags.length < GAME_TAGS_MAX ? TAG_HINT : undefined}
               error={errors[key]?.message}
             >
               <TagInput
@@ -67,11 +67,12 @@ export function GamePreflightFields({
                 maxLength={GAME_TAG_MAX_LENGTH}
                 placeholder={TAG_PLACEHOLDER[key]}
                 suggestions={TAG_SUGGESTIONS[key]}
+                tone={isTrigger ? "notice" : "primary"}
                 onChange={(next) => setValue(key, next, { shouldDirty: true })}
               />
             </Field>
-            {key === GAME_TAG.triggers && triggerNotice && (
-              <Text typography="body4" render={<p />} className="font-semibold text-warning-600">
+            {isTrigger && triggerNotice && (
+              <Text typography="body4" foreground="warning" render={<p />}>
                 {triggerNotice}
               </Text>
             )}
@@ -79,26 +80,33 @@ export function GamePreflightFields({
         );
       })}
 
-      <Field
-        label="AI 이미지"
-        required
-        counter="목록에는 나오지 않음"
-        description="세션을 진행하는 동안 GM과 플레이어가 AI로 만든 이미지를 쓸 수 있는지 정합니다."
-        error={errors.aiImage?.message}
-      >
-        <Grid cols={2} gap="100">
-          {AI_IMAGE_OPTIONS.map((option) => (
-            <Chip
-              key={option.label}
-              shape="block"
-              selected={aiImage === option.value}
-              onClick={() => setValue("aiImage", option.value, { shouldDirty: true })}
-            >
-              {option.label}
-            </Chip>
-          ))}
-        </Grid>
-      </Field>
+      <VStack gap="075">
+        <Field
+          label="AI 이미지"
+          required
+          counter="목록에는 나오지 않음"
+          description="세션에서 GM과 플레이어가 AI 이미지를 쓸 수 있는지 정합니다."
+          error={errors.aiImage?.message}
+        >
+          <Grid cols={2} gap="100">
+            {AI_IMAGE_OPTIONS.map((option) => (
+              <Chip
+                key={option.label}
+                shape="block"
+                selected={aiImage === option.value}
+                onClick={() => setValue("aiImage", option.value, { shouldDirty: true })}
+              >
+                {option.label}
+              </Chip>
+            ))}
+          </Grid>
+        </Field>
+        {aiImageNotice && (
+          <Text typography="body4" foreground="warning" render={<p />}>
+            {aiImageNotice}
+          </Text>
+        )}
+      </VStack>
 
       <VStack gap="075">
         <Field

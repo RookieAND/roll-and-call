@@ -10,7 +10,7 @@ export function WaitlistField({
   onChange: (enabled: boolean) => void;
 }) {
   const hint = value
-    ? "자리가 나면 GM이 순서대로 처리합니다."
+    ? "자리가 나면 GM이 순서대로 올립니다."
     : "끄면 정원이 차는 순간 신청이 닫힙니다.";
 
   return (
@@ -21,7 +21,12 @@ export function WaitlistField({
       className="min-h-11 rounded-400 border border-gray-200 px-150 py-150"
     >
       <div className="min-w-0">
-        <Text typography="subtitle2" render={<label htmlFor="waitlistEnabled" />} className="block">
+        <Text
+          typography="body4"
+          weight="bold"
+          render={<label htmlFor="waitlistEnabled" />}
+          className="block"
+        >
           정원이 차도 대기 신청 받기
         </Text>
         <Text

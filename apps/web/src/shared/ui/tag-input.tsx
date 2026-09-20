@@ -1,9 +1,10 @@
 "use client";
 
-import { Chip, HStack, VStack } from "@trpg/ui";
-import { X } from "lucide-react";
+import { HStack, VStack } from "@trpg/ui";
 import { useState, type KeyboardEvent } from "react";
 
+import { NoticeTagChip } from "./notice-tag-chip";
+import { TagChip } from "./tag-chip";
 import { TagInputEditor } from "./tag-input-editor";
 import { TagInputFullNote } from "./tag-input-full-note";
 
@@ -17,6 +18,7 @@ export type TagInputProps = {
   suggestions?: string[];
   // 칩과 입력 칸 앞에 붙는 글자. 저장되는 값에는 들어가지 않는다.
   prefix?: string;
+  tone?: "primary" | "notice";
 };
 
 export function TagInput({
@@ -28,6 +30,7 @@ export function TagInput({
   placeholder,
   suggestions = [],
   prefix = "",
+  tone = "primary",
 }: TagInputProps) {
   const [draft, setDraft] = useState("");
   const isFull = value.length >= max;
@@ -52,23 +55,21 @@ export function TagInput({
   }
 
   const unusedSuggestions = suggestions.filter((suggestion) => !value.includes(suggestion));
+  const TagChipOf = tone === "notice" ? NoticeTagChip : TagChip;
 
   return (
     <VStack gap="100">
       {value.length > 0 && (
         <HStack gap="075" wrap>
           {value.map((tag) => (
-            <Chip
+            <TagChipOf
               key={tag}
-              selected
-              className="h-8.5 gap-050"
-              aria-label={`${tag} 삭제`}
-              onClick={() => onChange(value.filter((item) => item !== tag))}
+              label={tag}
+              onRemove={() => onChange(value.filter((item) => item !== tag))}
             >
               {prefix}
               {tag}
-              <X size={13} aria-hidden />
-            </Chip>
+            </TagChipOf>
           ))}
         </HStack>
       )}

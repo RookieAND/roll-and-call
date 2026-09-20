@@ -101,6 +101,9 @@ export function GameFormWizard({
             triggerNotice={
               applicants > 0 ? `트리거를 바꾸면 참여자 ${applicants}명에게 알립니다.` : null
             }
+            aiImageNotice={
+              applicants > 0 ? `AI 이미지 사용을 바꾸면 참여자 ${applicants}명에게 알립니다.` : null
+            }
           />
         );
       case FORM_SECTION.media:

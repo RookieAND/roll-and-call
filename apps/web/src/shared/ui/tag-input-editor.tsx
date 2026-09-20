@@ -39,7 +39,7 @@ export function TagInputEditor({
       {suggestions.length > 0 && (
         <HStack gap="075" wrap>
           {suggestions.map((suggestion) => (
-            <Chip key={suggestion} className="h-9.5" onClick={() => onAdd(suggestion)}>
+            <Chip key={suggestion} className="h-8" onClick={() => onAdd(suggestion)}>
               {suggestion}
             </Chip>
           ))}

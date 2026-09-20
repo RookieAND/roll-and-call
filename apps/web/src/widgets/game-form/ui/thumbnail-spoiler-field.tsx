@@ -18,7 +18,8 @@ export function ThumbnailSpoilerField({
     >
       <div className="min-w-0 flex-1">
         <Text
-          typography="subtitle2"
+          typography="body4"
+          weight="bold"
           render={<label htmlFor="thumbnailSpoiler" />}
           className="block"
         >
@@ -29,7 +30,7 @@ export function ThumbnailSpoilerField({
           foreground="hint"
           render={<p />}
           id="thumbnailSpoiler-hint"
-          className="mt-025"
+          className="mt-050"
         >
           목록과 상세 페이지에서 이미지를 흐리게 덮습니다
         </Text>
