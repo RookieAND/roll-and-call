@@ -51,7 +51,8 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
       <Text
         typography="body4"
         weight={tone.day ? "extrabold" : "medium"}
-        className={cn("block text-center", dayTone)}
+        tight
+        className={cn("block py-025 text-center", dayTone)}
       >
         {cell.day}
       </Text>
@@ -70,6 +71,7 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
         <Text
           weight="bold"
           typography="body5"
+          tight
           className={cn("mt-025 block text-center", tone.rest)}
         >
           외 {restCount}
@@ -79,6 +81,7 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
         <Text
           weight="bold"
           typography="body5"
+          tight
           className={cn("mt-050 block text-center", tone.today)}
         >
           오늘
