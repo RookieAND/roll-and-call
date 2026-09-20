@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, HStack, Select } from "@trpg/ui";
+import { Field, HStack, Select, VStack } from "@trpg/ui";
 
 import { DAY_END_HOUR, DAY_START_HOUR, type DayColumn } from "@/shared/lib";
 
@@ -27,8 +27,8 @@ export function SessionTimeFields({
   const dateItems = days.map((day) => ({ value: day.date, label: day.label }));
 
   return (
-    <HStack gap="100">
-      <Field label="날짜" className="min-w-0 flex-1">
+    <VStack gap="175" className="p-175">
+      <Field label="날짜">
         <Select.Root
           items={dateItems}
           value={start.date}
@@ -44,14 +44,14 @@ export function SessionTimeFields({
           </Select.Popup>
         </Select.Root>
       </Field>
-      <Field label="시작 시각" className="w-[152px] shrink-0">
+      <Field label="시작 시각">
         <HStack gap="100">
           <Select.Root
             items={HOURS}
             value={String(start.hour)}
             onValueChange={(hour: string) => onChange({ ...start, hour: Number(hour) })}
           >
-            <Select.Trigger aria-label="시" />
+            <Select.Trigger aria-label="시" className="min-w-0 flex-1" />
             <Select.Popup>
               {HOURS.map((option) => (
                 <Select.Item key={option.value} value={option.value}>
@@ -65,7 +65,7 @@ export function SessionTimeFields({
             value={String(start.minute)}
             onValueChange={(minute: string) => onChange({ ...start, minute: Number(minute) })}
           >
-            <Select.Trigger aria-label="분" />
+            <Select.Trigger aria-label="분" className="min-w-0 flex-1" />
             <Select.Popup>
               {MINUTES.map((option) => (
                 <Select.Item key={option.value} value={option.value}>
@@ -76,6 +76,6 @@ export function SessionTimeFields({
           </Select.Root>
         </HStack>
       </Field>
-    </HStack>
+    </VStack>
   );
 }

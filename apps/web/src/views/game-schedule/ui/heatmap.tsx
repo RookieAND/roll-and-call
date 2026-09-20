@@ -8,7 +8,7 @@ import { SlotGrid } from "@/shared/ui";
 
 import { heatStep } from "../model/heat-step";
 import { HeatCell } from "./heat-cell";
-import { PickSlotHint } from "./pick-slot-hint";
+import { HeatLegend } from "./heat-legend";
 import { PickedSlotCard } from "./picked-slot-card";
 
 type Props = {
@@ -44,11 +44,8 @@ export function Heatmap({ days, timeRows, counts, names, confirmedAt, capacity, 
   return (
     <VStack gap="100">
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
-      {picked ? (
-        <PickedSlotCard slotIso={picked} names={names[picked] ?? []} gmName={gmName} />
-      ) : (
-        <PickSlotHint />
-      )}
+      <HeatLegend capacity={capacity} />
+      {picked && <PickedSlotCard slotIso={picked} names={names[picked] ?? []} gmName={gmName} />}
     </VStack>
   );
 }

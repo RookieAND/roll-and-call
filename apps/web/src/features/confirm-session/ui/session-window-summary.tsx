@@ -1,30 +1,34 @@
-import { HStack, Text } from "@trpg/ui";
+import { Text } from "@trpg/ui";
+
+import { SummaryRow } from "./summary-row";
 
 export function SessionWindowSummary({
   windowLabel,
   memberCount,
+  everyone,
 }: {
   windowLabel: string;
   memberCount: number;
+  everyone: boolean;
 }) {
   return (
-    <div className="rounded-500 bg-gray-50 px-175 py-125">
-      <HStack align="baseline" justify="between" gap="100">
-        <Text typography="body4" foreground="muted" render={<span />}>
-          세션 시간
-        </Text>
-        <Text typography="subtitle2" render={<span />} className="tabular-nums">
+    <>
+      <SummaryRow label="세션 시간">
+        <Text numeric typography="heading3" weight="extrabold" render={<span />}>
           {windowLabel}
         </Text>
-      </HStack>
-      <HStack align="baseline" justify="between" gap="100" className="mt-050">
-        <Text typography="body4" foreground="muted" render={<span />}>
-          가능 인원
-        </Text>
-        <Text typography="subtitle2" render={<span />} className="tabular-nums">
+      </SummaryRow>
+      <SummaryRow label="가능 인원">
+        <Text
+          numeric
+          typography="heading3"
+          weight="extrabold"
+          foreground={everyone ? "normal" : "warning"}
+          render={<span />}
+        >
           {memberCount}명
         </Text>
-      </HStack>
-    </div>
+      </SummaryRow>
+    </>
   );
 }

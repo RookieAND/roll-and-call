@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, Text, VStack } from "@trpg/ui";
+import { Button, Card, HStack, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { rankWindows, windowMembers } from "@/entities/availability";
@@ -76,25 +76,31 @@ export function ConfirmSessionForm({
   return (
     <VStack gap="250">
       <section>
-        <Text typography="subtitle1" render={<h2 />} className="mb-100">
+        <Text typography="subtitle2" weight="extrabold" render={<h2 />} className="mb-100">
           세션 시간
         </Text>
-        <VStack gap="150">
+        <Card
+          radius={500}
+          background="none"
+          padding="none"
+          className="overflow-hidden border-primary-200"
+        >
           <SessionTimeFields days={days} start={start} onChange={setStart} />
           <SessionWindowSummary
             windowLabel={sessionWindowLabel(startIso, playMinutes)}
             memberCount={members.length}
+            everyone={absentNames.length === 0}
           />
           {absentNames.length > 0 && <UnavailableWarning names={absentNames} />}
-        </VStack>
+        </Card>
       </section>
 
       <section>
         <HStack align="baseline" gap="100" className="mb-100">
-          <Text typography="subtitle1" render={<h2 />}>
+          <Text typography="subtitle2" weight="extrabold" render={<h2 />}>
             추천 후보
           </Text>
-          <Text typography="body4" foreground="hint" render={<span />} className="tabular-nums">
+          <Text numeric typography="subtitle2" foreground="muted" render={<span />}>
             {candidates.length}개
           </Text>
           <span className="flex-1" />

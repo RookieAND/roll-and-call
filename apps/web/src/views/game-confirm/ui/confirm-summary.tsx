@@ -26,7 +26,7 @@ export function ConfirmSummary({
             <Text typography="body4" foreground="hint" render={<p />}>
               {item.label}
             </Text>
-            <Text typography="subtitle1" render={<p />} className="mt-025">
+            <Text numeric typography="heading2" render={<p />} className="mt-050">
               {item.value}
             </Text>
           </Card>

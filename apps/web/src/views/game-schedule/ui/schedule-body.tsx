@@ -63,7 +63,9 @@ export function ScheduleBody({
   const overlapProps = { days: weekDays, timeRows, aggregate, confirmedAt, capacity, gmName };
   const overlap = hasResponses ? (
     <ScheduleOverlap
-      hint="색이 진할수록 많은 인원이 가능합니다. 칸을 누르면 그 시간에 가능한 사람이 보입니다."
+      hint={
+        "색이 진할수록 그 시간에 가능한 사람이 많습니다.\n칸을 누르면 그 시간에 가능한 사람이 보입니다."
+      }
       {...overlapProps}
     />
   ) : (

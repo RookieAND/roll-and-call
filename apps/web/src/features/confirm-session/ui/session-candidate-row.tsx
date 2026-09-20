@@ -38,9 +38,8 @@ export function SessionCandidateRow({
       </span>
       <IconButton
         variant="outline"
-        size="sm"
         aria-label="이 시간으로 채우기"
-        className="shrink-0 text-primary-ink"
+        className="shrink-0 rounded-500 border-primary-200 bg-primary-50 text-primary-ink hover:bg-primary-100"
         onClick={() => onPick(candidate.iso)}
       >
         <Check size={18} />

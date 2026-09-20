@@ -3,7 +3,6 @@ import { Text, VStack } from "@trpg/ui";
 import type { AvailabilityAggregate } from "@/entities/availability";
 import type { DayColumn, TimeRow } from "@/shared/lib";
 
-import { HeatLegend } from "./heat-legend";
 import { Heatmap } from "./heatmap";
 
 export function ScheduleOverlap({
@@ -25,10 +24,9 @@ export function ScheduleOverlap({
 }) {
   return (
     <VStack gap="150">
-      <Text typography="body4" foreground="hint" render={<p />}>
+      <Text typography="body4" foreground="hint" render={<p />} className="whitespace-pre-line">
         {hint}
       </Text>
-      <HeatLegend capacity={capacity} />
       <Heatmap
         days={days}
         timeRows={timeRows}
