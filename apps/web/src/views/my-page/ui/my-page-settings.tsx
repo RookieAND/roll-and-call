@@ -1,4 +1,4 @@
-import { HStack, Text } from "@trpg/ui";
+import { HStack, Text, VStack } from "@trpg/ui";
 
 import { SignOutButton } from "@/features/auth";
 import { ThemeSetting } from "@/shared/ui";
@@ -11,7 +11,7 @@ interface MyPageSettingsProps {
 
 export function MyPageSettings({ handleLabel }: MyPageSettingsProps) {
   return (
-    <section className="flex flex-col gap-125">
+    <VStack gap="125" render={<section />}>
       <Text typography="heading3" render={<h2 />}>
         설정
       </Text>
@@ -31,6 +31,6 @@ export function MyPageSettings({ handleLabel }: MyPageSettingsProps) {
           )}
         </SignOutButton>
       </div>
-    </section>
+    </VStack>
   );
 }

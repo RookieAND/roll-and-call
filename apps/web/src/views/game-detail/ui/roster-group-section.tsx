@@ -1,4 +1,4 @@
-import { Progress, Text } from "@trpg/ui";
+import { Progress, Text, VStack } from "@trpg/ui";
 import type { ReactNode } from "react";
 
 import { RosterAvatars } from "./roster-avatars";
@@ -35,7 +35,7 @@ export function RosterGroupSection({
         };
 
   return (
-    <section className="flex flex-col gap-125">
+    <VStack gap="125" render={<section />}>
       <RosterGroupHeader label={label} count={members.length} capacity={capacity} action={action} />
       {members.length > 0 && <Progress {...progress} className="w-full" />}
       {members.length > 0 ? (
@@ -48,6 +48,6 @@ export function RosterGroupSection({
           {note}
         </Text>
       )}
-    </section>
+    </VStack>
   );
 }

@@ -1,4 +1,4 @@
-import { Button, HStack, Text } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -12,7 +12,7 @@ interface MyPageSessionsProps {
 
 export function MyPageSessions({ sessions }: MyPageSessionsProps) {
   return (
-    <section className="flex flex-col gap-125">
+    <VStack gap="125" render={<section />}>
       <HStack align="center">
         <Text typography="heading3" render={<h2 />} className="flex-1">
           내 세션
@@ -55,6 +55,6 @@ export function MyPageSessions({ sessions }: MyPageSessionsProps) {
           </Button>
         </HStack>
       )}
-    </section>
+    </VStack>
   );
 }

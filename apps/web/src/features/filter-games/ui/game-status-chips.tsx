@@ -1,4 +1,4 @@
-import { Chip } from "@trpg/ui";
+import { Chip, HStack } from "@trpg/ui";
 import Link from "next/link";
 
 import { GAME_STATUS_FILTERS, GAME_STATUS_FILTER_DEFAULT, type GamesFilter } from "@/shared/api";
@@ -14,7 +14,11 @@ export function GameStatusChips({ filter }: GameStatusChipsProps) {
   const current = filter.status ?? GAME_STATUS_FILTER_DEFAULT;
 
   return (
-    <nav aria-label="모집 상태" className="-mx-200 flex gap-075 overflow-x-auto px-200">
+    <HStack
+      gap="075"
+      render={<nav aria-label="모집 상태" />}
+      className="-mx-200 overflow-x-auto px-200"
+    >
       {GAME_STATUS_FILTERS.map((option) => {
         const selected = option.key === current;
         return (
@@ -28,6 +32,6 @@ export function GameStatusChips({ filter }: GameStatusChipsProps) {
           </Chip>
         );
       })}
-    </nav>
+    </HStack>
   );
 }

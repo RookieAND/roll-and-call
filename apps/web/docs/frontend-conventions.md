@@ -74,6 +74,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 
 - 버튼·셀렉트·칩·아이콘버튼은 **오직 `@trpg/ui`**에서 가져온다. raw `<button>`, `<Link>`/`<div>`를 버튼처럼 스타일링한 손코딩 금지.
 - **링크처럼 보이는 버튼**은 `<Button asChild><Link/></Button>` (또는 `IconButton asChild`). `asChild`는 자식 엘리먼트에 버튼 스타일을 입혀 실제 `<a href>`로 렌더한다.
+- **의미 있는 태그가 필요하면 껍데기를 덧대지 말고 `render`를 준다.** `Text`·`HStack`·`VStack`·`Grid`가 모두 같은 문법이다: `<VStack gap="125" render={<section />}>`. `<section className="flex flex-col gap-125">`처럼 프리미티브를 손으로 다시 그리거나, 레이아웃만을 위해 `div`를 한 겹 더 두지 않는다.
 - **선택 가능한 pill/토글**은 `<Chip>` (`shape="pill" | "block"`, `selected`, `asChild`).
 - **바텀시트 메뉴 행**은 `<Sheet.Item>` (Button ghost 기반, `asChild`로 Link 렌더).
 - **즉시 적용되는 단일 선택 세그먼트**(테마 시스템/라이트/다크 등)는 `<SegmentControl>` (`options`, `value`, `onChange`).

@@ -1,5 +1,6 @@
+import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ComponentPropsWithRef } from "react";
+import type { ComponentPropsWithRef, ReactElement } from "react";
 
 import { cn } from "./cn";
 import { gapMap, type GapToken } from "./tokens";
@@ -20,10 +21,16 @@ const grid = cva("grid", {
 
 export interface GridProps extends ComponentPropsWithRef<"div">, VariantProps<typeof grid> {
   gap?: GapToken;
+  render?: ReactElement<Record<string, unknown>>;
 }
 
-export function Grid({ className, cols, gap, ...props }: GridProps) {
-  return (
-    <div className={cn(grid({ cols }), gap !== undefined && gapMap[gap], className)} {...props} />
-  );
+export function Grid({ className, cols, gap, render, ...props }: GridProps) {
+  return useRender({
+    defaultTagName: "div",
+    render,
+    props: {
+      className: cn(grid({ cols }), gap !== undefined && gapMap[gap], className),
+      ...props,
+    },
+  });
 }

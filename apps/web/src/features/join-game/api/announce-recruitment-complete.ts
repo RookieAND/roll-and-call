@@ -13,14 +13,15 @@ export async function announceRecruitmentComplete(gameId: string) {
         where: (participant, { eq: equals }) =>
           equals(participant.status, PARTICIPANT_STATUS.confirmed),
         orderBy: (participant, { asc }) => asc(participant.joinedAt),
-        with: { user: { columns: { username: true } } },
+        with: { user: { columns: { username: true, discordId: true } } },
       },
     },
   });
   if (!game) return;
 
-  const playerNames = game.participants.map(
-    (participant) => participant.user?.username ?? UNKNOWN_USERNAME,
-  );
-  await notifyRecruitmentComplete(game, game.gm?.username ?? UNKNOWN_USERNAME, playerNames);
+  const players = game.participants.map((participant) => ({
+    username: participant.user?.username ?? UNKNOWN_USERNAME,
+    discordId: participant.user?.discordId ?? null,
+  }));
+  await notifyRecruitmentComplete(game, game.gm?.username ?? UNKNOWN_USERNAME, players);
 }

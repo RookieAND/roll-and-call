@@ -1,5 +1,6 @@
+import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ComponentPropsWithRef } from "react";
+import type { ComponentPropsWithRef, ReactElement } from "react";
 
 import { cn } from "./cn";
 import { gapMap, type GapToken } from "./tokens";
@@ -33,6 +34,8 @@ export interface FlexProps
   inline?: boolean;
   // 간격만 레시피 밖이다. 토큰 이름을 그대로 클래스에 얹는 정적 맵이라 스캐너가 본다.
   gap?: GapToken;
+  // Text와 같은 문법. 의미 있는 태그가 필요할 때 껍데기 div를 덧대지 않는다.
+  render?: ReactElement<Record<string, unknown>>;
 }
 
 export function Flex({
@@ -43,18 +46,21 @@ export function Flex({
   gap,
   wrap,
   inline,
+  render,
   ...props
 }: FlexProps) {
-  return (
-    <div
-      className={cn(
+  return useRender({
+    defaultTagName: "div",
+    render,
+    props: {
+      className: cn(
         flex({ direction, align, justify, wrap, inline: inline ?? false }),
         gap !== undefined && gapMap[gap],
         className,
-      )}
-      {...props}
-    />
-  );
+      ),
+      ...props,
+    },
+  });
 }
 
 export interface StackProps extends Omit<FlexProps, "direction"> {}

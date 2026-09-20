@@ -10,7 +10,7 @@ interface MyPageTodosProps {
 
 export function MyPageTodos({ todos }: MyPageTodosProps) {
   return (
-    <section className="flex flex-col gap-125">
+    <VStack gap="125" render={<section />}>
       <Text typography="heading3" render={<h2 />}>
         할 일 {todos.length}건
       </Text>
@@ -19,6 +19,6 @@ export function MyPageTodos({ todos }: MyPageTodosProps) {
           <SessionCard key={card.id} model={card} eyebrow={eyebrow} />
         ))}
       </VStack>
-    </section>
+    </VStack>
   );
 }

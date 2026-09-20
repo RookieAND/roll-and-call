@@ -1,4 +1,4 @@
-import { Avatar, Button, HStack, Text } from "@trpg/ui";
+import { Avatar, Button, HStack, Text, VStack } from "@trpg/ui";
 import Link from "next/link";
 
 import { AvailabilityRows, KeywordChips, type AvailabilityInterval } from "@/entities/profile";
@@ -25,7 +25,7 @@ export function MyPageProfile({
   const bioForeground = bio ? "muted" : "hint";
 
   return (
-    <section className="flex flex-col gap-175">
+    <VStack gap="175" render={<section />}>
       <HStack align="center" gap="175">
         <Avatar src={avatarUrl} name={name} size="2xl" />
         <div className="min-w-0 flex-1">
@@ -65,6 +65,6 @@ export function MyPageProfile({
         />
         <AvailabilityRows intervals={availability} note="조율 격자에 미리 칠해지는 기본값입니다." />
       </div>
-    </section>
+    </VStack>
   );
 }

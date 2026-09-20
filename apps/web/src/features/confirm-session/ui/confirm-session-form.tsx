@@ -77,8 +77,8 @@ export function ConfirmSessionForm({
 
   return (
     <VStack gap="250">
-      <section>
-        <Text typography="subtitle2" weight="extrabold" render={<h2 />} className="mb-100">
+      <VStack gap="100" render={<section />}>
+        <Text typography="subtitle2" weight="extrabold" render={<h2 />}>
           세션 시간
         </Text>
         <Card
@@ -95,10 +95,10 @@ export function ConfirmSessionForm({
           />
           {absentNames.length > 0 && <UnavailableWarning names={absentNames} />}
         </Card>
-      </section>
+      </VStack>
 
-      <section>
-        <HStack align="baseline" gap="100" className="mb-100">
+      <VStack gap="100" render={<section />}>
+        <HStack align="baseline" gap="100">
           <Text typography="subtitle2" weight="extrabold" render={<h2 />}>
             추천 후보
           </Text>
@@ -120,7 +120,7 @@ export function ConfirmSessionForm({
             onPick={(iso) => setStart(toSessionStart(iso))}
           />
         )}
-      </section>
+      </VStack>
 
       {error && (
         <Text typography="body2" foreground="danger" render={<p />}>
