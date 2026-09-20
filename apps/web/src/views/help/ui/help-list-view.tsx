@@ -24,7 +24,7 @@ export function HelpListView() {
               <PlayCircle size={19} aria-hidden />
             </span>
             <span className="min-w-0 flex-1">
-              <Text typography="subtitle1" render={<span />} className="block">
+              <Text typography="subtitle1" weight="extrabold" render={<span />} className="block">
                 서비스 둘러보기
               </Text>
               <Text
@@ -33,7 +33,7 @@ export function HelpListView() {
                 render={<span />}
                 className="mt-025 block"
               >
-                처음 봤던 소개 4장을 다시 봅니다
+                처음 봤던 소개 5장을 다시 봅니다
               </Text>
             </span>
             <ChevronRight size={18} className="flex-none text-gray-400" aria-hidden />
@@ -41,7 +41,13 @@ export function HelpListView() {
 
           {HELP_CATEGORIES.map((category) => (
             <section key={category}>
-              <Text typography="subtitle2" foreground="muted" render={<h2 />} className="mb-100">
+              <Text
+                typography="body4"
+                weight="extrabold"
+                foreground="muted"
+                render={<h2 />}
+                className="mb-125"
+              >
                 {category}
               </Text>
               <Card radius={600} background="none" padding="none" className="overflow-hidden">

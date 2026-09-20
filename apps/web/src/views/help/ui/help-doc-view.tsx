@@ -5,7 +5,7 @@ import { AppBar } from "@/shared/ui";
 
 import { HELP_DOCS } from "../model/help-docs";
 import { HelpDocBlock } from "./help-doc-block";
-import { HelpDocRow } from "./help-doc-row";
+import { HelpRelatedRow } from "./help-related-row";
 
 interface HelpDocViewProps {
   slug: string;
@@ -53,7 +53,7 @@ export function HelpDocView({ slug }: HelpDocViewProps) {
             </Text>
             <VStack gap="100">
               {related.map((target) => (
-                <HelpDocRow key={target.slug} slug={target.slug} title={target.title} />
+                <HelpRelatedRow key={target.slug} slug={target.slug} title={target.title} />
               ))}
             </VStack>
           </section>
