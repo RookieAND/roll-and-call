@@ -18,7 +18,7 @@ export function ConfirmedSessionNotice({
       <Text
         typography="heading3"
         weight="extrabold"
-        foreground="success"
+        foreground="successStrong"
         render={<div />}
         className="mt-050"
       >

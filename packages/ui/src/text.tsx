@@ -26,6 +26,8 @@ const text = cva("", {
       hint: "text-hint",
       primary: "text-tinted-ink",
       success: "text-success-700",
+      // 확정 시각처럼 같은 카드 안에서 한 단 더 세울 때. 램프는 이미 두 값을 갖고 있다.
+      successStrong: "text-success-800",
       warning: "text-warning-600",
       danger: "text-danger-600",
       white: "text-white",
