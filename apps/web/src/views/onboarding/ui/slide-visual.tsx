@@ -1,0 +1,20 @@
+import { HStack } from "@trpg/ui";
+
+import type { OnboardingSlide } from "../model/onboarding-slides";
+import { OnboardingPreview } from "./onboarding-preview";
+
+export function SlideVisual({
+  slideKey,
+}: {
+  slideKey: Exclude<OnboardingSlide["key"], "welcome">;
+}) {
+  return (
+    <HStack
+      align="center"
+      justify="center"
+      className="h-[242px] rounded-600 border border-gray-100 bg-gray-50"
+    >
+      <OnboardingPreview slideKey={slideKey} />
+    </HStack>
+  );
+}

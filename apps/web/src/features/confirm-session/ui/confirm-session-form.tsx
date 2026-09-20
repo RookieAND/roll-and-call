@@ -1,16 +1,17 @@
 "use client";
 
-import { Button, Card, HStack, Text, VStack } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { rankWindows, windowMembers } from "@/entities/availability";
 import { slotIso, toKst, type DayColumn } from "@/shared/lib";
-import { ConfirmDialog, EmptyState, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { confirmSession } from "../api/confirm-session";
 import { toSessionStart } from "../model/session-start";
 import { sessionWindowLabel } from "../model/session-window-label";
-import { SessionCandidateRow } from "./session-candidate-row";
+import { NoCandidatesNotice } from "./no-candidates-notice";
+import { SessionCandidateList } from "./session-candidate-list";
 import { SessionTimeFields } from "./session-time-fields";
 import { SessionWindowSummary } from "./session-window-summary";
 import { UnavailableWarning } from "./unavailable-warning";
@@ -102,29 +103,14 @@ export function ConfirmSessionForm({
           </Text>
         </HStack>
         {candidates.length === 0 ? (
-          <EmptyState
-            size="section"
-            image="/empty-states/empty-schedule.png"
-            title={`${playLabel}이 연속으로 비는 시간이 없습니다`}
-            description={`응답 ${respondents.length}명 기준으로 추천할 후보가 없습니다. 위 세션 시간 칸에서 직접 정하거나, 조율 기간을 늘려 보세요.`}
-          />
+          <NoCandidatesNotice playLabel={playLabel} respondentCount={respondents.length} />
         ) : (
-          <>
-            <Card radius={500} background="none" padding="none" className="overflow-hidden">
-              {candidates.map((candidate) => (
-                <SessionCandidateRow
-                  key={candidate.iso}
-                  candidate={candidate}
-                  playMinutes={playMinutes}
-                  absentNames={respondents.filter((name) => !candidate.members.includes(name))}
-                  onPick={(iso) => setStart(toSessionStart(iso))}
-                />
-              ))}
-            </Card>
-            <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
-              체크를 누르면 위 세션 시간 칸이 그 시간으로 채워집니다.
-            </Text>
-          </>
+          <SessionCandidateList
+            candidates={candidates}
+            playMinutes={playMinutes}
+            respondents={respondents}
+            onPick={(iso) => setStart(toSessionStart(iso))}
+          />
         )}
       </section>
 

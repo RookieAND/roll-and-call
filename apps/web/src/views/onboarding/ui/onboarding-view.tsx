@@ -4,12 +4,13 @@ import { Button, cn, Container, HStack, Text, VStack } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { type PointerEvent, useEffect, useRef, useState } from "react";
 
-import { BrandLogo } from "@/shared/ui";
-
 import { markOnboardingSeen } from "../model/onboarding-seen";
 import { ONBOARDING_SLIDES } from "../model/onboarding-slides";
 import { swipeDirection } from "../model/swipe-direction";
-import { OnboardingPreview } from "./onboarding-preview";
+import { ActiveSlideDot } from "./active-slide-dot";
+import { SlideDot } from "./slide-dot";
+import { SlideVisual } from "./slide-visual";
+import { WelcomeVisual } from "./welcome-visual";
 
 const DONE_HREF = "/games";
 
@@ -32,7 +33,6 @@ export function OnboardingView() {
     back ? "animate-slide-in-back" : "animate-slide-in",
     welcome && "items-center text-center",
   );
-  const titleClass = cn("leading-[1.32]", welcome ? "text-heading1" : "text-heading1");
 
   const skip = () => router.replace(DONE_HREF);
 
@@ -77,17 +77,7 @@ export function OnboardingView() {
             pointerStart.current = null;
           }}
         >
-          {welcome ? (
-            <BrandLogo label="롤앤콜" size="lg" />
-          ) : (
-            <HStack
-              align="center"
-              justify="center"
-              className="h-[242px] rounded-600 border border-gray-100 bg-gray-50"
-            >
-              <OnboardingPreview slideKey={slide.key} />
-            </HStack>
-          )}
+          {slide.eyebrow === null ? <WelcomeVisual /> : <SlideVisual slideKey={slide.key} />}
           <VStack gap="150" className={welcome ? "mt-400" : "mt-300"}>
             {slide.eyebrow && (
               <Text
@@ -99,7 +89,7 @@ export function OnboardingView() {
                 {slide.eyebrow}
               </Text>
             )}
-            <Text typography="heading1" render={<h1 />} className={titleClass}>
+            <Text typography="heading1" render={<h1 />} className="leading-[1.32]">
               {slide.title}
             </Text>
             <Text typography="body2" foreground="muted" render={<p />} className="leading-[1.8]">
@@ -108,15 +98,9 @@ export function OnboardingView() {
           </VStack>
         </div>
         <HStack justify="center" gap="075" className="py-200">
-          {ONBOARDING_SLIDES.map((item, itemIndex) => (
-            <span
-              key={item.key}
-              className={cn(
-                "h-1.5 rounded-full transition-all duration-200",
-                itemIndex === index ? "w-5 bg-primary-600" : "w-1.5 bg-gray-200",
-              )}
-            />
-          ))}
+          {ONBOARDING_SLIDES.map((item, itemIndex) =>
+            itemIndex === index ? <ActiveSlideDot key={item.key} /> : <SlideDot key={item.key} />,
+          )}
         </HStack>
         <VStack gap="050" className="mb-300">
           <Button size="lg" className="w-full" onClick={goNext}>
