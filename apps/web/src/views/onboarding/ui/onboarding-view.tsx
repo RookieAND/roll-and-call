@@ -4,6 +4,8 @@ import { Button, Container, Text, VStack, cn } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { BrandLogo } from "@/shared/ui";
+
 import { markOnboardingSeen } from "../model/onboarding-seen";
 import { ONBOARDING_SLIDES } from "../model/onboarding-slides";
 import { OnboardingPreview } from "./onboarding-preview";
@@ -18,8 +20,17 @@ export function OnboardingView() {
   useEffect(markOnboardingSeen, []);
 
   const slide = ONBOARDING_SLIDES[index]!;
+  const welcome = slide.eyebrow === null;
   const last = index === ONBOARDING_SLIDES.length - 1;
-  const nextLabel = last ? "구인 목록 보러 가기" : "다음";
+  const nextLabel = welcome ? "둘러보기" : last ? "구인 목록 보러 가기" : "다음";
+  const slideClass = cn(
+    "flex flex-1 flex-col animate-slide-in",
+    welcome && "items-center justify-center text-center",
+  );
+  const titleClass = cn(
+    "leading-[1.32] whitespace-pre-line",
+    welcome ? "text-[26px]" : "text-[24px]",
+  );
 
   const goNext = () => {
     if (last) {
@@ -39,24 +50,26 @@ export function OnboardingView() {
         )}
       </header>
       <Container size="sm" className="flex flex-1 flex-col">
-        <div key={slide.key} className="flex flex-col animate-slide-in">
-          <div className="flex h-[242px] items-center justify-center rounded-[14px] border border-gray-100 bg-gray-50">
-            <OnboardingPreview slideKey={slide.key} />
-          </div>
-          <VStack gap={3} className="mt-6">
-            <Text
-              typography="code2"
-              foreground="primary"
-              render={<p />}
-              className="tracking-widest"
-            >
-              {slide.eyebrow}
-            </Text>
-            <Text
-              typography="heading1"
-              render={<h1 />}
-              className="text-[24px] leading-[1.32] whitespace-pre-line"
-            >
+        <div key={slide.key} className={slideClass}>
+          {welcome ? (
+            <BrandLogo label="롤앤콜" size="lg" />
+          ) : (
+            <div className="flex h-[242px] items-center justify-center rounded-[14px] border border-gray-100 bg-gray-50">
+              <OnboardingPreview slideKey={slide.key} />
+            </div>
+          )}
+          <VStack gap={3} className={welcome ? "mt-[34px]" : "mt-6"}>
+            {slide.eyebrow && (
+              <Text
+                typography="code2"
+                foreground="primary"
+                render={<p />}
+                className="tracking-widest"
+              >
+                {slide.eyebrow}
+              </Text>
+            )}
+            <Text typography="heading1" render={<h1 />} className={titleClass}>
               {slide.title}
             </Text>
             <Text
@@ -69,7 +82,6 @@ export function OnboardingView() {
             </Text>
           </VStack>
         </div>
-        <span className="flex-1" />
         <div className="flex justify-center gap-1.5 py-4">
           {ONBOARDING_SLIDES.map((item, itemIndex) => (
             <span

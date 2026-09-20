@@ -13,7 +13,11 @@ const SAMPLE_LINKS = [
 ];
 
 // ponytail: 온보딩 그림 자리는 실제 화면을 축소한 장식이라 상호작용이 없다. 누를 수 있는 것처럼 보이는 조각도 span이다.
-export function OnboardingPreview({ slideKey }: { slideKey: OnboardingSlide["key"] }) {
+export function OnboardingPreview({
+  slideKey,
+}: {
+  slideKey: Exclude<OnboardingSlide["key"], "welcome">;
+}) {
   if (slideKey === "find") {
     return (
       <div className="w-[262px] overflow-hidden rounded-[13px] border border-gray-200 bg-surface">

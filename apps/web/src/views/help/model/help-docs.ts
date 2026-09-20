@@ -12,13 +12,14 @@ export const HELP_CATEGORIES = [
   HELP_CATEGORY.account,
 ] as const;
 
+import { GAME_STATUS, type GameStatus } from "@/entities/game";
+
 export const HELP_FIGURE = {
   gameList: "gameList",
   heatGrid: "heatGrid",
   formFields: "formFields",
   rosterRows: "rosterRows",
   linkMarks: "linkMarks",
-  statusBadges: "statusBadges",
 } as const;
 
 export type HelpFigureKey = (typeof HELP_FIGURE)[keyof typeof HELP_FIGURE];
@@ -26,6 +27,7 @@ export type HelpFigureKey = (typeof HELP_FIGURE)[keyof typeof HELP_FIGURE];
 export const HELP_BLOCK = {
   steps: "steps",
   rows: "rows",
+  compare: "compare",
   note: "note",
   figure: "figure",
 } as const;
@@ -37,10 +39,22 @@ export type HelpStep = {
   figure?: HelpFigureKey;
 };
 
+export type HelpRow = {
+  term: string;
+  description: string;
+  // 시안이 실물 배지·칩으로 그린 자리. 글씨만 두면 무엇을 가리키는 말인지 흐려진다.
+  status?: GameStatus;
+  chip?: boolean;
+};
+
 export type HelpBlock =
   | { kind: typeof HELP_BLOCK.steps; steps: HelpStep[] }
   | { kind: typeof HELP_BLOCK.figure; figure: HelpFigureKey }
-  | { kind: typeof HELP_BLOCK.rows; label: string; rows: { term: string; description: string }[] }
+  | { kind: typeof HELP_BLOCK.rows; label: string; rows: HelpRow[] }
+  | {
+      kind: typeof HELP_BLOCK.compare;
+      columns: { title: string; summary: string; rows: HelpRow[] }[];
+    }
   | { kind: typeof HELP_BLOCK.note; body: string };
 
 export type HelpDoc = {
@@ -88,27 +102,32 @@ export const HELP_DOCS: HelpDoc[] = [
     lead: "GM이 구인을 열 때 둘 중 하나를 고릅니다.\n다른 점은 자리가 언제 정해지느냐 하나입니다.",
     blocks: [
       {
-        kind: HELP_BLOCK.rows,
-        label: "선착순",
-        rows: [
-          { term: "신청 직후", description: "자리가 남았으면 즉시 확정" },
-          { term: "정원이 찬 뒤", description: "대기 접수를 열어둔 글에만 신청 가능" },
-        ],
-      },
-      {
-        kind: HELP_BLOCK.rows,
-        label: "추첨",
-        rows: [
-          { term: "신청 직후", description: "접수만 되고 자리는 비어 있음" },
-          { term: "기한이 지난 뒤", description: "추첨 후 결과 개별 안내" },
+        kind: HELP_BLOCK.compare,
+        columns: [
+          {
+            title: "선착순",
+            summary: "누른 순서대로 자리가 찹니다.",
+            rows: [
+              { term: "신청 직후", description: "자리가 남았으면 즉시 확정" },
+              { term: "정원이 찬 뒤", description: "대기 접수를 열어둔 글에만 신청 가능" },
+            ],
+          },
+          {
+            title: "추첨",
+            summary: "기한까지 모아 GM이 뽑습니다.",
+            rows: [
+              { term: "신청 직후", description: "접수만 되고 자리는 비어 있음" },
+              { term: "기한이 지난 뒤", description: "추첨 후 결과 개별 안내" },
+            ],
+          },
         ],
       },
       {
         kind: HELP_BLOCK.rows,
         label: "카드에 붙는 칩",
         rows: [
-          { term: "확정 2 · 정원 4", description: "선착순 — 이미 자리를 받은 사람 수" },
-          { term: "신청 7 · 정원 4", description: "추첨 — 뽑기를 기다리는 사람 수" },
+          { term: "확정 2 · 정원 4", description: "선착순 — 이미 자리를 받은 사람 수", chip: true },
+          { term: "신청 7 · 정원 4", description: "추첨 — 뽑기를 기다리는 사람 수", chip: true },
         ],
       },
       {
@@ -240,14 +259,25 @@ export const HELP_DOCS: HelpDoc[] = [
     title: "상태 용어 사전",
     lead: "배지는 글의 모집 상태만 말합니다.\n일정에 관한 것은 배지가 아니라 문장으로 적습니다.",
     blocks: [
-      { kind: HELP_BLOCK.figure, figure: HELP_FIGURE.statusBadges },
       {
         kind: HELP_BLOCK.rows,
         label: "글에 붙는 배지",
         rows: [
-          { term: "모집 중", description: "자리가 남았거나 추첨 진행을 하기 전" },
-          { term: "대기 접수 중", description: "정원은 찼지만 대기 신청은 받는 중" },
-          { term: "모집 마감", description: "정원이 찼거나 GM이 닫아 더 받지 않음" },
+          {
+            term: "모집 중",
+            description: "자리가 남았거나 추첨 진행을 하기 전",
+            status: GAME_STATUS.recruiting,
+          },
+          {
+            term: "대기 접수 중",
+            description: "정원은 찼지만 대기 신청은 받는 중",
+            status: GAME_STATUS.confirmed,
+          },
+          {
+            term: "모집 마감",
+            description: "정원이 찼거나 GM이 닫아 더 받지 않음",
+            status: GAME_STATUS.closed,
+          },
         ],
       },
       {

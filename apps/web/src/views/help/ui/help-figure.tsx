@@ -26,16 +26,6 @@ export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
     );
   }
 
-  if (figure === HELP_FIGURE.statusBadges) {
-    return (
-      <div className="flex flex-wrap gap-1.5">
-        <GameStatusBadge status={GAME_STATUS.recruiting} />
-        <GameStatusBadge status={GAME_STATUS.confirmed} />
-        <GameStatusBadge status={GAME_STATUS.closed} />
-      </div>
-    );
-  }
-
   if (figure === HELP_FIGURE.gameList) {
     return (
       <div className="flex flex-col gap-2.5 rounded-[11px] border border-gray-200 bg-gray-50 p-2.5">

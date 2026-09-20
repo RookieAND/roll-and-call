@@ -1,6 +1,12 @@
 // 줄바꿈은 시안이 정한 자리다. 문장 단위로 끊어야 412px에서 어절이 어정쩡하게 남지 않는다.
 export const ONBOARDING_SLIDES = [
   {
+    key: "welcome",
+    eyebrow: null,
+    title: "“안녕하세요,\n롤앤콜입니다”",
+    body: "세션을 여는 사람과 찾는 사람이 만나는 곳입니다.\n네 장에 걸쳐 무엇을 할 수 있는지 보여드릴게요.",
+  },
+  {
     key: "find",
     eyebrow: "01 · 구인 찾기",
     title: "열려 있는 세션을 찾아\n신청합니다",

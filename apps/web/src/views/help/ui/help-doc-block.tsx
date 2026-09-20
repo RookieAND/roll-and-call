@@ -2,6 +2,7 @@ import { Text, VStack } from "@trpg/ui";
 
 import { HELP_BLOCK, type HelpBlock } from "../model/help-docs";
 import { HelpFigure } from "./help-figure";
+import { HelpRow } from "./help-row";
 
 export function HelpDocBlock({ block }: { block: HelpBlock }) {
   if (block.kind === HELP_BLOCK.figure) {
@@ -26,20 +27,39 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
         </Text>
         <div className="overflow-hidden rounded-[14px] border border-gray-200">
           {block.rows.map((row) => (
-            <div
-              key={row.term}
-              className="flex gap-3 border-gray-100 px-[13px] py-2.5 not-first:border-t"
-            >
-              <Text typography="subtitle1" className="w-[92px] flex-none">
-                {row.term}
-              </Text>
-              <Text typography="body3" foreground="muted" className="min-w-0 flex-1">
-                {row.description}
-              </Text>
-            </div>
+            <HelpRow key={row.term} row={row} />
           ))}
         </div>
       </section>
+    );
+  }
+
+  if (block.kind === HELP_BLOCK.compare) {
+    return (
+      <div className="grid grid-cols-2 gap-2.5">
+        {block.columns.map((column) => (
+          <div key={column.title} className="rounded-[14px] border border-gray-200 p-3.5">
+            <Text typography="subtitle1" render={<h3 />}>
+              {column.title}
+            </Text>
+            <Text typography="body3" foreground="muted" render={<p />} className="mt-1.5">
+              {column.summary}
+            </Text>
+            <VStack gap={3} className="mt-3">
+              {column.rows.map((row) => (
+                <div key={row.term}>
+                  <Text typography="body4" foreground="hint" render={<span />} className="block">
+                    {row.term}
+                  </Text>
+                  <Text typography="body3" render={<p />} className="mt-1">
+                    {row.description}
+                  </Text>
+                </div>
+              ))}
+            </VStack>
+          </div>
+        ))}
+      </div>
     );
   }
 
