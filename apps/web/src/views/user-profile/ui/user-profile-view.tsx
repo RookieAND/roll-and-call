@@ -50,7 +50,7 @@ export async function UserProfileView({ id }: { id: string }) {
         </section>
 
         {viewer && (
-          <ProfileMemoBlock targetId={profile.id} targetName={profile.username} memo={memo} />
+          <ProfileMemoBlock targetId={profile.id} memo={memo} />
         )}
 
         <ProfileStats

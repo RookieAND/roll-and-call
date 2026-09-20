@@ -4,14 +4,11 @@ import Link from "next/link";
 
 import { formatDate } from "@/shared/lib";
 
-// 상대가 못 본다는 말을 화면에 그대로 적어야 사람이 마음 놓고 적는다.
 export function ProfileMemoBlock({
   targetId,
-  targetName,
   memo,
 }: {
   targetId: string;
-  targetName: string;
   memo: { body: string; updatedAt: Date } | null;
 }) {
   const boxClass = memo
@@ -58,10 +55,6 @@ export function ProfileMemoBlock({
             </Button>
           </>
         )}
-
-        <Text typography="body4" foreground="hint" render={<p />} className="mt-[9px]">
-          {targetName}는 이 메모를 보지 못합니다.
-        </Text>
       </div>
     </div>
   );
