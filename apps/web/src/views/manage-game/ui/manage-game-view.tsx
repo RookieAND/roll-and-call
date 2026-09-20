@@ -1,16 +1,14 @@
 import { Badge, Card, Container, Grid, HStack, Text } from "@trpg/ui";
-import { notFound, redirect } from "next/navigation";
 
 import {
   countConfirmed,
   deriveGameStatus,
   gameStatusColor,
   gameStatusLabel,
-  isGameGm,
   scheduleLine,
 } from "@/entities/game";
 import { DeleteGameRow } from "@/features/delete-game";
-import { getCurrentUser, getGameById, getResponseCounts } from "@/shared/server";
+import { getResponseCounts, requireGmGame } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { manageRows } from "../model/manage-rows";
@@ -19,10 +17,7 @@ import { ManageRow } from "./manage-row";
 
 // GM 도구는 모두가 읽는 02 상세가 아니라 이 화면에 모은다.
 export async function ManageGameView({ id }: { id: string }) {
-  const [user, game] = await Promise.all([getCurrentUser(), getGameById(id)]);
-  if (!game) notFound();
-  if (!user) redirect(`/?next=/games/${id}/manage`);
-  if (!isGameGm({ gmId: game.gmId, userId: user.id })) redirect(`/games/${id}`);
+  const game = await requireGmGame(id, { next: `/games/${id}/manage` });
 
   const responseCounts = await getResponseCounts([id]);
   const confirmedCount = countConfirmed(game.participants);

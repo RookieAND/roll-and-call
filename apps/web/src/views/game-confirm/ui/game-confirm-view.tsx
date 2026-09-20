@@ -1,21 +1,18 @@
 import { Container, VStack } from "@trpg/ui";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { aggregateAvailability } from "@/entities/availability";
-import { countConfirmed, isGameGm, SCHEDULE_MODE } from "@/entities/game";
+import { countConfirmed, SCHEDULE_MODE } from "@/entities/game";
 import { ConfirmSessionForm } from "@/features/confirm-session";
 import { buildDayColumns, playMinutes, SLOT_MINUTES } from "@/shared/lib";
-import { getCurrentUser, getGameAvailabilities, getGameById } from "@/shared/server";
+import { getGameAvailabilities, requireGmGame } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { ConfirmSummary } from "./confirm-summary";
 
 // 가능 시간을 내는 일(일정 조율)과 시간을 정하는 일은 다른 행동이라 화면을 나눈다.
 export async function GameConfirmView({ id }: { id: string }) {
-  const [user, game] = await Promise.all([getCurrentUser(), getGameById(id)]);
-  if (!game) notFound();
-  if (!user) redirect(`/?next=/games/${id}/confirm`);
-  if (!isGameGm({ gmId: game.gmId, userId: user.id })) redirect(`/games/${id}`);
+  const game = await requireGmGame(id, { next: `/games/${id}/confirm` });
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) redirect(`/games/${id}`);
   if (!game.rangeStart || !game.rangeEnd) redirect(`/games/${id}/schedule`);
 
