@@ -11,7 +11,7 @@ export default function Loading() {
     <>
       <AppBar back="/me" title="내 세션" />
       <div className="sticky top-[52px] z-10 border-b border-gray-100 bg-surface">
-        <div className="flex px-4">
+        <div className="flex px-200">
           <div className="flex h-11 flex-1 items-center justify-center">
             <Skeleton className="h-5 w-16" />
           </div>
@@ -19,14 +19,14 @@ export default function Loading() {
             <Skeleton className="h-5 w-16" />
           </div>
         </div>
-        <div className="flex gap-1.5 px-4 py-2.5">
+        <div className="flex gap-075 px-200 py-125">
           {CHIP_WIDTHS.map((width, index) => (
             <Skeleton key={index} className={`h-[34px] rounded-full ${width}`} />
           ))}
         </div>
       </div>
       <Container size="sm">
-        <div className="py-3">
+        <div className="py-150">
           <SessionListSkeleton />
         </div>
       </Container>

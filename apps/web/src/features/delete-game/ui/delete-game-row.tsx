@@ -29,7 +29,7 @@ export function DeleteGameRow({
     <>
       <Button
         variant="ghost"
-        className="flex min-h-[60px] w-full justify-start gap-3 rounded-none border-t border-gray-100 px-3.5 py-3 hover:bg-danger-50"
+        className="flex min-h-[60px] w-full justify-start gap-150 rounded-none border-t border-gray-100 px-175 py-150 hover:bg-danger-50"
         onClick={() => setConfirming(true)}
       >
         <span className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-400 bg-danger-50 text-danger-600">
@@ -39,7 +39,7 @@ export function DeleteGameRow({
           <Text typography="subtitle1" foreground="danger" className="block">
             구인 삭제
           </Text>
-          <Text weight="regular" typography="body3" foreground="hint" className="mt-0.5 block">
+          <Text weight="regular" typography="body3" foreground="hint" className="mt-025 block">
             디스코드 공지·채널은 남습니다
           </Text>
         </span>

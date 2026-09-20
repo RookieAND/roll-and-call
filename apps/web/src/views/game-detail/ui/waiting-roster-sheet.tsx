@@ -19,13 +19,13 @@ export function WaitingRosterSheet({
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Content>
-        <Sheet.Title className="mb-3">
+        <Sheet.Title className="mb-150">
           대기자 명단
           <Text
             typography="body4"
             foreground="hint"
             render={<span />}
-            className="ml-2 tabular-nums"
+            className="ml-100 tabular-nums"
           >
             {waiting.length}명
           </Text>

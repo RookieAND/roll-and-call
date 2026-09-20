@@ -10,23 +10,23 @@ export default function Loading() {
     <>
       <AppBar back="/games" title="구인 상세" />
       <Container size="md" className="px-0">
-        <VStack gap={4}>
+        <VStack gap="200">
           <Skeleton className="h-42 w-full rounded-none" />
 
-          <VStack gap={5} className="px-4 pb-2">
+          <VStack gap="250" className="px-200 pb-100">
             <div>
-              <div className="flex items-start justify-between gap-2">
+              <div className="flex items-start justify-between gap-100">
                 <Skeleton className="h-8 w-2/3" />
-                <Skeleton className="mt-0.5 h-[21px] w-14 rounded-300" />
+                <Skeleton className="mt-025 h-[21px] w-14 rounded-300" />
               </div>
-              <Skeleton className="mt-1 h-5 w-44" />
+              <Skeleton className="mt-050 h-5 w-44" />
             </div>
 
             <div className="overflow-hidden rounded-600 border border-gray-200">
               {INFO_ROWS.map((width) => (
                 <div
                   key={width}
-                  className="flex min-h-12 items-center gap-3 border-b border-gray-100 px-4 py-2 last:border-b-0"
+                  className="flex min-h-12 items-center gap-150 border-b border-gray-100 px-200 py-100 last:border-b-0"
                 >
                   <Skeleton className="h-5 w-12 shrink-0" />
                   <Skeleton className={`h-5 ${width}`} />
@@ -34,19 +34,19 @@ export default function Loading() {
               ))}
             </div>
 
-            <VStack gap={2}>
+            <VStack gap="100">
               <Skeleton className="h-[22px] w-16" />
               <Skeleton className="h-5 w-full" />
               <Skeleton className="h-5 w-4/5" />
             </VStack>
 
-            <VStack gap={2}>
+            <VStack gap="100">
               <Skeleton className="h-[22px] w-20" />
               <Skeleton className="h-[74px] w-full rounded-500" />
             </VStack>
 
-            <VStack className="gap-2.5">
-              <div className="flex items-center gap-2">
+            <VStack className="gap-125">
+              <div className="flex items-center gap-100">
                 <Skeleton className="h-[22px] w-16" />
                 <Skeleton className="h-5 w-10" />
                 <span className="flex-1" />
@@ -57,7 +57,7 @@ export default function Loading() {
             </VStack>
           </VStack>
 
-          <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-4 pt-3.5 pb-4">
+          <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-200 pt-175 pb-200">
             <Skeleton className="h-[50px] w-full rounded-500" />
           </div>
         </VStack>

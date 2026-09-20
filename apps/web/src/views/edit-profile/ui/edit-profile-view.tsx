@@ -15,7 +15,7 @@ export async function EditProfileView() {
     <>
       <AppBar back="/me" title="프로필 편집" />
       <Container size="md">
-        <VStack gap={6} className="py-6">
+        <VStack gap="300" className="py-300">
           {user ? (
             <EditProfileForm
               defaultUsername={profile?.username ?? ""}

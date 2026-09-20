@@ -7,9 +7,9 @@ import { formatDateTime } from "@/shared/lib";
 // 세션이 끝나면 명단 관리 대신 이 한 가지만 남는다.
 export function AttendanceCard({ gameId, confirmedAt }: { gameId: string; confirmedAt: Date }) {
   return (
-    <Card padding="none" className="rounded-500 px-3.5 py-3">
-      <VStack gap={3}>
-        <HStack align="center" gap={2}>
+    <Card padding="none" className="rounded-500 px-175 py-150">
+      <VStack gap="150">
+        <HStack align="center" gap="100">
           <Clock size={15} strokeWidth={2.2} aria-hidden className="shrink-0 text-gray-600" />
           <Text typography="body4" foreground="muted" className="min-w-0 flex-1">
             세션

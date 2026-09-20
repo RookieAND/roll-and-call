@@ -34,7 +34,7 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
         />
       </Field>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-100">
         <Field label="룰" htmlFor="rule" required error={errors.rule?.message}>
           <TextInput
             id="rule"
@@ -44,7 +44,7 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
             {...register("rule")}
           />
         </Field>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-075">
           {RULE_PRESETS.map((preset) => (
             <Chip
               key={preset}
@@ -66,7 +66,7 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
         }
       />
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-075">
         <Field
           label="시놉시스"
           htmlFor="synopsis"

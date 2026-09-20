@@ -40,7 +40,7 @@ export function GameRecruitFields({
 
   return (
     <>
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-075">
         <Field
           label="최대 참여 인원"
           htmlFor="maxPlayers"
@@ -64,7 +64,7 @@ export function GameRecruitFields({
         </Text>
       </div>
 
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-125">
         <RecruitMethodField
           value={method}
           lockedReason={lockedReason}

@@ -38,7 +38,7 @@ export function DateTimePicker({
   const emit = (date: string, timeValue: string) => onChange(date ? `${date}T${timeValue}` : "");
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-100">
       <div className="min-w-0 flex-1">
         <DatePicker
           id={id}

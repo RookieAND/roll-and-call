@@ -49,7 +49,7 @@ export function HomeCalendarCell({
       onClick={selectDay}
       aria-label={ariaLabel}
       aria-current={selected ? "date" : undefined}
-      className={cn("block h-[62px] rounded-300 px-1 py-1 transition-colors", tone.cell)}
+      className={cn("block h-[62px] rounded-300 px-050 py-050 transition-colors", tone.cell)}
     >
       <Text
         typography="body5"
@@ -64,7 +64,7 @@ export function HomeCalendarCell({
           typography="body5"
           tight
           truncate
-          className={cn("mt-1 rounded-100 px-1 py-1", previewTone)}
+          className={cn("mt-050 rounded-100 px-050 py-050", previewTone)}
         >
           {preview.title}
         </Text>
@@ -73,13 +73,17 @@ export function HomeCalendarCell({
         <Text
           weight="bold"
           typography="body5"
-          className={cn("mt-0.5 block text-center", tone.rest)}
+          className={cn("mt-025 block text-center", tone.rest)}
         >
           외 {restCount}
         </Text>
       )}
       {today && !preview && (
-        <Text weight="bold" typography="body5" className={cn("mt-1 block text-center", tone.today)}>
+        <Text
+          weight="bold"
+          typography="body5"
+          className={cn("mt-050 block text-center", tone.today)}
+        >
           오늘
         </Text>
       )}

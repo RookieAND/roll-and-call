@@ -16,7 +16,7 @@ export function RosterStats({
   summary: RosterSummary;
 }) {
   return (
-    <Grid cols={2} gap={2}>
+    <Grid cols={2} gap="100">
       {summary.beforeDraw ? (
         <>
           <RosterStat label="신청" count={summary.applicantCount} />

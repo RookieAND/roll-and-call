@@ -24,7 +24,7 @@ export function ScheduleOverlap({
   gmName?: string;
 }) {
   return (
-    <VStack gap={3}>
+    <VStack gap="150">
       <Text typography="body4" foreground="hint" render={<p />}>
         {hint}
       </Text>

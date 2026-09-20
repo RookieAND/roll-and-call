@@ -17,32 +17,32 @@ export function HomeSkeleton({ date }: { date?: string }) {
       <Container size="sm" className="px-0">
         <HomeCalendar monthStart={monthStart} />
 
-        <section className="border-t border-gray-200 p-4">
-          <div className="mb-3 flex items-baseline gap-2">
+        <section className="border-t border-gray-200 p-200">
+          <div className="mb-150 flex items-baseline gap-100">
             <Text typography="heading3" render={<h3 />} className="font-extrabold">
               {selected.format("M월 D일 (dd)")}
             </Text>
             <Skeleton className="h-[15px] w-8" />
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-100">
             <Skeleton className="h-[78px] w-full rounded-600" />
             <Skeleton className="h-[78px] w-full rounded-600" />
           </div>
         </section>
 
-        <section className="border-t border-gray-200 px-4 pt-4.5 pb-5">
+        <section className="border-t border-gray-200 px-200 pt-225 pb-250">
           <Text typography="heading2" render={<h3 />} className="font-extrabold">
             {monthStart.format("M월")}의 기록
           </Text>
-          <Skeleton className="mt-1 mb-4 h-[17px] w-48" />
+          <Skeleton className="mt-050 mb-200 h-[17px] w-48" />
           {RECORD_GROUPS.map((group, index) => (
             <div
               key={group}
-              className={index > 0 ? "mt-4 border-t border-gray-100 pt-4" : undefined}
+              className={index > 0 ? "mt-200 border-t border-gray-100 pt-200" : undefined}
             >
-              <Skeleton className="mb-2.5 h-[15px] w-32" />
+              <Skeleton className="mb-125 h-[15px] w-32" />
               <Skeleton className="h-[74px] rounded-600" />
-              <Skeleton className="mt-1 h-[44px]" />
+              <Skeleton className="mt-050 h-[44px]" />
               <Skeleton className="mt-px h-[44px]" />
             </div>
           ))}

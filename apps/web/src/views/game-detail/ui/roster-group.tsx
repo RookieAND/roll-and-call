@@ -13,7 +13,7 @@ export function RosterGroup({
 }) {
   return (
     <section>
-      <HStack align="baseline" gap={2} className="mb-1">
+      <HStack align="baseline" gap="100" className="mb-050">
         <Text typography="subtitle2" foreground="muted">
           {label}
         </Text>

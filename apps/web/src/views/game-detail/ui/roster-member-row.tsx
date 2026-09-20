@@ -27,11 +27,11 @@ export function RosterMemberRow({
   return (
     <Link
       href={`/u/${userId}`}
-      className="flex min-h-14 items-center gap-2.5 py-2 transition-colors hover:bg-gray-50"
+      className="flex min-h-14 items-center gap-125 py-100 transition-colors hover:bg-gray-50"
     >
       <Avatar src={avatarUrl} name={name} />
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-075">
           <Text truncate typography="subtitle1">
             {name ?? "?"}
           </Text>

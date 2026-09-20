@@ -24,8 +24,8 @@ export function ProfileSessionSection({
   const hasMore = items.length > PREVIEW_COUNT;
 
   return (
-    <section className="px-4 py-5">
-      <div className="mb-2.5 flex items-baseline gap-2.5">
+    <section className="px-200 py-250">
+      <div className="mb-125 flex items-baseline gap-125">
         <Text
           typography="heading3"
           weight="extrabold"
@@ -41,7 +41,7 @@ export function ProfileSessionSection({
       {items.length === 0 ? (
         <SessionEmptyLine text={section.empty} />
       ) : (
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-125">
           <SessionList items={items.slice(0, PREVIEW_COUNT)} />
           {hasMore && (
             <Button asChild variant="outline" className="h-11 w-full">

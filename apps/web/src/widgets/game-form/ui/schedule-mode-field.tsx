@@ -33,9 +33,9 @@ export function ScheduleModeField({
   const lines = lockedReason ? [lockedReason] : HINT[value];
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-100">
       <Field label="일정 방식">
-        <Grid cols={2} gap={2}>
+        <Grid cols={2} gap="100">
           {OPTIONS.map((option) => (
             <Chip
               key={option.value}

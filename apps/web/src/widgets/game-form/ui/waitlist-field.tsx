@@ -14,7 +14,7 @@ export function WaitlistField({
     : "끄면 정원이 차는 순간 신청이 닫힙니다.";
 
   return (
-    <div className="flex min-h-11 items-center justify-between gap-3 rounded-400 border border-gray-200 px-3 py-3">
+    <div className="flex min-h-11 items-center justify-between gap-150 rounded-400 border border-gray-200 px-150 py-150">
       <div className="min-w-0">
         <Text typography="subtitle2" render={<label htmlFor="waitlistEnabled" />} className="block">
           정원이 차도 대기 신청 받기
@@ -24,7 +24,7 @@ export function WaitlistField({
           foreground="hint"
           render={<p />}
           id="waitlistEnabled-hint"
-          className="mt-1 leading-[1.55]"
+          className="mt-050 leading-[1.55]"
         >
           {hint}
         </Text>

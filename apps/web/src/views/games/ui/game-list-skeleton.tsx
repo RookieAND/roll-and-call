@@ -3,22 +3,22 @@ import { Skeleton, VStack } from "@trpg/ui";
 // GameCard와 같은 치수: 16:9 썸네일 · 제목 heading3 22px + 배지 21px · 룰 21px · 일정 줄 21px(아이콘 13px) · GM 아바타 24px + 정원 칸 줄.
 export function GameListSkeleton() {
   return (
-    <VStack className="gap-2.5">
+    <VStack className="gap-125">
       {Array.from({ length: 3 }).map((_, index) => (
         <div key={index} className="overflow-hidden rounded-600 border border-gray-200">
           <Skeleton className="aspect-video w-full rounded-none" />
-          <VStack className="gap-1.5 px-3.5 py-3.5">
-            <div className="flex items-start justify-between gap-2">
+          <VStack className="gap-075 px-175 py-175">
+            <div className="flex items-start justify-between gap-100">
               <Skeleton className="h-[22px] w-1/2" />
               <Skeleton className="h-[21px] w-14 rounded-300" />
             </div>
             <Skeleton className="h-[21px] w-1/3" />
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-075">
               <Skeleton className="h-[13px] w-[13px] rounded-100" />
               <Skeleton className="h-[21px] flex-1" />
               <Skeleton className="h-[21px] w-9" />
             </div>
-            <div className="mt-1 flex items-center justify-between gap-2">
+            <div className="mt-050 flex items-center justify-between gap-100">
               <Skeleton className="h-6 w-24" />
               <Skeleton className="h-[21px] w-28" />
             </div>

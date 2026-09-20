@@ -18,7 +18,7 @@ export async function EditGameView({ id }: { id: string }) {
     <>
       <AppBar back={`/games/${id}`} title="구인 수정" />
       <Container size="md">
-        <VStack gap={6} className="py-6">
+        <VStack gap="300" className="py-300">
           {user ? (
             <EmptyState
               title="GM만 볼 수 있는 화면입니다"

@@ -8,7 +8,7 @@ export function AttendanceTally({
   absentCount: number;
 }) {
   return (
-    <HStack gap={2} align="center" className="px-0.5">
+    <HStack gap="100" align="center" className="px-025">
       <Text typography="subtitle1" foreground="muted">
         참석 {presentCount}명
       </Text>

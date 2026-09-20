@@ -15,11 +15,11 @@ export function ConfirmedSessionNotice({
       <Text typography="subtitle2" foreground="success" render={<div />}>
         세션 확정
       </Text>
-      <Text typography="heading3" foreground="success" render={<div />} className="mt-0.5">
+      <Text typography="heading3" foreground="success" render={<div />} className="mt-025">
         {formatDateTime(confirmedAt)}
       </Text>
       {note && (
-        <Text typography="body4" foreground="success" render={<p />} className="mt-1.5">
+        <Text typography="body4" foreground="success" render={<p />} className="mt-075">
           {note}
         </Text>
       )}

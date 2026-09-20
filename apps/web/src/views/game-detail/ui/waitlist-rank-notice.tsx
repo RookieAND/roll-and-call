@@ -21,7 +21,7 @@ export function WaitlistRankNotice({
             ? "대기로 접수됐습니다"
             : `대기 ${rank}번입니다`}
       </Text>
-      <Text typography="body3" foreground="muted" render={<p />} className="mt-1.5">
+      <Text typography="body3" foreground="muted" render={<p />} className="mt-075">
         {note}
       </Text>
     </StatusNotice>

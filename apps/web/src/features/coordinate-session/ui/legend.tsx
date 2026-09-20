@@ -10,7 +10,7 @@ export function Legend({
   swatchStyle?: React.CSSProperties;
 }) {
   return (
-    <span className="inline-flex items-center gap-1.5">
+    <span className="inline-flex items-center gap-075">
       <span
         aria-hidden
         className={cn("inline-block size-3.5 rounded-100 border border-gray-200", swatchClass)}

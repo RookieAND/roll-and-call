@@ -125,26 +125,26 @@ export function GameFormWizard({
       />
 
       <Container size="md" className="flex-1">
-        <VStack gap={5} className="py-6">
+        <VStack gap="250" className="py-300">
           {intro?.title && (
             <div>
               <Text typography="heading2" render={<h1 />} className="block">
                 {intro.title}
               </Text>
-              <Text typography="body3" foreground="muted" render={<p />} className="mt-1">
+              <Text typography="body3" foreground="muted" render={<p />} className="mt-050">
                 {intro.description}
               </Text>
             </div>
           )}
 
           {edit && step === 0 && (
-            <div className="rounded-500 bg-gray-50 px-3.5 py-3">
+            <div className="rounded-500 bg-gray-50 px-175 py-150">
               <Text typography="subtitle2" render={<p />}>
                 {applicants > 0
                   ? `이미 ${applicants}명이 신청했습니다.`
                   : "아직 신청자가 없습니다."}
               </Text>
-              <Text typography="body4" foreground="muted" render={<p />} className="mt-0.5">
+              <Text typography="body4" foreground="muted" render={<p />} className="mt-025">
                 {applicants > 0
                   ? "바꾼 내용은 저장하면 바로 상세에 반영되고, 디스코드 공지도 다시 올라갑니다."
                   : "모든 항목을 바꿀 수 있고, 저장하면 디스코드 공지도 다시 올라갑니다."}
@@ -153,11 +153,11 @@ export function GameFormWizard({
           )}
 
           {!edit && step > 0 && (
-            <div className="rounded-500 border border-gray-200 bg-gray-50 px-3.5 py-3">
+            <div className="rounded-500 border border-gray-200 bg-gray-50 px-175 py-150">
               <Text truncate typography="subtitle1">
                 {watch("title") || "제목 미입력"}
               </Text>
-              <Text truncate typography="body4" foreground="muted" className="mt-0.5">
+              <Text truncate typography="body4" foreground="muted" className="mt-025">
                 {summaryLine}
               </Text>
             </div>
@@ -165,16 +165,16 @@ export function GameFormWizard({
 
           <fieldset
             disabled={pending}
-            className={cn("m-0 flex flex-col gap-5 border-0 p-0", pending && "opacity-45")}
+            className={cn("m-0 flex flex-col gap-250 border-0 p-0", pending && "opacity-45")}
           >
             {/* 언마운트하면 입력·업로드 상태가 날아가서 지나간 단계도 숨긴 채 마운트해 둔다. */}
             {steps.map((config, index) => (
               <div
                 key={config.sections.join()}
-                className={index === step ? "flex flex-col gap-5" : "hidden"}
+                className={index === step ? "flex flex-col gap-250" : "hidden"}
               >
                 {config.sections.map((section) => (
-                  <div key={section} className="flex flex-col gap-5">
+                  <div key={section} className="flex flex-col gap-250">
                     {renderSection(section)}
                   </div>
                 ))}

@@ -21,7 +21,7 @@ export async function GameAttendanceView({ id }: { id: string }) {
       <>
         <AppBar back={`/games/${id}`} title="출석 확인" />
         <Container size="sm">
-          <div className="py-6">
+          <div className="py-300">
             <LoginRequired />
           </div>
         </Container>
@@ -46,7 +46,7 @@ export async function GameAttendanceView({ id }: { id: string }) {
     <>
       <AppBar back={`/games/${id}/participants`} title="출석 확인" />
       <Container size="sm">
-        <VStack gap={4} className="py-4">
+        <VStack gap="200" className="py-200">
           <AttendanceHeader
             title={game.title}
             rule={game.rule}

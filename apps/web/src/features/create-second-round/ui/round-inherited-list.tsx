@@ -19,7 +19,7 @@ export function RoundInheritedList({
   ];
 
   return (
-    <VStack gap={2}>
+    <VStack gap="100">
       <Text weight="bold" typography="body4" foreground="muted">
         그대로 넘어가는 것
       </Text>
@@ -28,8 +28,8 @@ export function RoundInheritedList({
           <HStack
             key={item.title}
             align="center"
-            gap={3}
-            className="min-h-13 border-b border-gray-100 px-3 py-2.5 last:border-b-0"
+            gap="150"
+            className="min-h-13 border-b border-gray-100 px-150 py-125 last:border-b-0"
           >
             <Check size={16} aria-hidden className="shrink-0 text-gray-600" />
             <VStack gap={0}>

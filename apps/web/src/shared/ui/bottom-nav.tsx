@@ -40,7 +40,7 @@ export function BottomNav() {
             href={tab.href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex flex-col items-center justify-center gap-1.5 transition-colors",
+              "flex flex-col items-center justify-center gap-075 transition-colors",
               active ? "text-primary-600" : "text-hint",
             )}
           >

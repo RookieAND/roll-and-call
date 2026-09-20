@@ -64,7 +64,7 @@ export function RichTextMenu({ editor }: { editor: Editor }) {
     <BubbleMenu
       editor={editor}
       shouldShow={({ editor }) => linkDraft !== null || !editor.state.selection.empty}
-      className="flex gap-0.5 rounded-300 border border-gray-200 bg-surface p-1 shadow-md"
+      className="flex gap-025 rounded-300 border border-gray-200 bg-surface p-050 shadow-md"
     >
       {linkDraft === null ? (
         items.map(({ name, label, Icon, run }) => (
@@ -84,7 +84,7 @@ export function RichTextMenu({ editor }: { editor: Editor }) {
             autoFocus
             aria-label="링크 주소"
             placeholder="https://..."
-            className="h-8 w-56 px-2 text-sm"
+            className="h-8 w-56 px-100 text-sm"
             value={linkDraft}
             onChange={(event) => setLinkDraft(event.target.value)}
             onKeyDown={(event) => {

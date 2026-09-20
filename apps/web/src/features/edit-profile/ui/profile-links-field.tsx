@@ -28,8 +28,8 @@ export function ProfileLinksField({
     onChange(value.map((item, itemIndex) => (itemIndex === index ? link : item)));
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-baseline gap-2">
+    <div className="flex flex-col gap-100">
+      <div className="flex items-baseline gap-100">
         <Text weight="bold" typography="body4" className="flex-1">
           링크
         </Text>
@@ -38,11 +38,11 @@ export function ProfileLinksField({
         </Text>
       </div>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-075">
         {value.map((link, index) => {
           const service = linkServiceOf(link.service);
           return (
-            <div key={index} className="flex gap-1.5">
+            <div key={index} className="flex gap-075">
               <Select.Root
                 items={SERVICE_OPTIONS}
                 value={link.service}
@@ -50,7 +50,7 @@ export function ProfileLinksField({
               >
                 <Select.Trigger
                   aria-label={`${index + 1}번째 링크 서비스`}
-                  className="h-11 w-[132px] flex-none gap-1.5"
+                  className="h-11 w-[132px] flex-none gap-075"
                 />
                 <Select.Popup>
                   {SERVICE_OPTIONS.map((option) => (
@@ -91,7 +91,7 @@ export function ProfileLinksField({
         <Button
           type="button"
           variant="ghost"
-          className="h-11 w-full gap-1.5 rounded-400 border border-dashed border-gray-300 text-subtitle2 font-bold text-primary-ink"
+          className="h-11 w-full gap-075 rounded-400 border border-dashed border-gray-300 text-subtitle2 font-bold text-primary-ink"
           onClick={() => onChange([...value, { service: LINK_SERVICES[0].key, value: "" }])}
         >
           <Plus size={14} aria-hidden />

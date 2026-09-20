@@ -52,7 +52,7 @@ export function GamePreflightFields({
       {GAME_TAG_KEYS.map((key) => {
         const tags = watch(key);
         return (
-          <div key={key} className="flex flex-col gap-1.5">
+          <div key={key} className="flex flex-col gap-075">
             <Field
               label={gameTagLabel[key]}
               htmlFor={key}
@@ -86,7 +86,7 @@ export function GamePreflightFields({
         description="세션을 진행하는 동안 GM과 플레이어가 AI로 만든 이미지를 쓸 수 있는지 정합니다."
         error={errors.aiImage?.message}
       >
-        <Grid cols={2} gap={2}>
+        <Grid cols={2} gap="100">
           {AI_IMAGE_OPTIONS.map((option) => (
             <Chip
               key={option.label}
@@ -100,7 +100,7 @@ export function GamePreflightFields({
         </Grid>
       </Field>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-075">
         <Field
           label="주의 사항"
           htmlFor="notice"

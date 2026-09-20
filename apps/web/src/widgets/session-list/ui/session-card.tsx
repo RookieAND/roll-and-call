@@ -23,14 +23,14 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
   const titleForeground = model.chip === SESSION_CHIP.ended ? "muted" : "normal";
 
   return (
-    <div className={cn("rounded-600 p-3.5", cardClass)}>
+    <div className={cn("rounded-600 p-175", cardClass)}>
       <Link href={`/games/${model.id}`} className="block">
         {eyebrow && (
-          <Text weight="bold" typography="body4" className="mb-1 block text-warning-600">
+          <Text weight="bold" typography="body4" className="mb-050 block text-warning-600">
             {eyebrow}
           </Text>
         )}
-        <HStack justify="between" align="center" gap={2}>
+        <HStack justify="between" align="center" gap="100">
           <Text truncate typography="subtitle1" foreground={titleForeground} className="min-w-0">
             {model.title}
           </Text>
@@ -40,11 +40,11 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
         </HStack>
         <Text
           typography="body3"
-          className={cn("mt-1 block truncate", TONE_CLASS[model.scheduleTone])}
+          className={cn("mt-050 block truncate", TONE_CLASS[model.scheduleTone])}
         >
           {model.schedule}
         </Text>
-        <Text truncate typography="body4" foreground="hint" className="mt-0.5">
+        <Text truncate typography="body4" foreground="hint" className="mt-025">
           {model.meta}
         </Text>
         {model.note && (
@@ -52,7 +52,7 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
             typography="body4"
             foreground="hint"
             render={<p />}
-            className="mt-2.5 border-t border-gray-100 pt-2.5 leading-relaxed whitespace-pre-line"
+            className="mt-125 border-t border-gray-100 pt-125 leading-relaxed whitespace-pre-line"
           >
             {model.note}
           </Text>

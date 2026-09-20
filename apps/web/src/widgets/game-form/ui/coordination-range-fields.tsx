@@ -28,9 +28,9 @@ export function CoordinationRangeFields({ form }: { form: UseFormReturn<GameForm
   const error = errors.rangeStart?.message ?? errors.rangeEnd?.message;
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-075">
       <Field label="조율 기간" htmlFor="rangeStart" required error={error}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-100">
           <div className="min-w-0 flex-1">
             <Controller
               name="rangeStart"

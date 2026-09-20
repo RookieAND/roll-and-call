@@ -17,8 +17,8 @@ export function ProfileAbsenceNotice({ absences }: { absences: Absence[] }) {
   }
 
   return (
-    <VStack gap={2}>
-      <div className="flex items-start gap-2.5 rounded-500 border border-danger-200 bg-danger-50 px-3.5 py-3">
+    <VStack gap="100">
+      <div className="flex items-start gap-125 rounded-500 border border-danger-200 bg-danger-50 px-175 py-150">
         <AlertCircle
           size={15}
           strokeWidth={2.2}
@@ -33,7 +33,7 @@ export function ProfileAbsenceNotice({ absences }: { absences: Absence[] }) {
             typography="body4"
             foreground="muted"
             render={<p />}
-            className="mt-1 leading-relaxed"
+            className="mt-050 leading-relaxed"
           >
             {formatDate(latest.sessionAt)} {latest.title}.
             <br />

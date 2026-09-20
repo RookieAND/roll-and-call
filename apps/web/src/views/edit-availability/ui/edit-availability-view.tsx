@@ -12,7 +12,7 @@ export async function EditAvailabilityView() {
       <>
         <AppBar back="/me" title="가능 시간대" />
         <Container size="sm">
-          <div className="py-6">
+          <div className="py-300">
             <LoginRequired />
           </div>
         </Container>

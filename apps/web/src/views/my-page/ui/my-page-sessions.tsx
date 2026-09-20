@@ -8,7 +8,7 @@ import { MySessionRow } from "./my-session-row";
 
 export function MyPageSessions({ sessions }: { sessions: ReturnType<typeof summarizeMySessions> }) {
   return (
-    <section className="flex flex-col gap-2.5">
+    <section className="flex flex-col gap-125">
       <div className="flex items-center">
         <Text typography="heading3" render={<h2 />} className="flex-1">
           내 세션
@@ -18,7 +18,7 @@ export function MyPageSessions({ sessions }: { sessions: ReturnType<typeof summa
             weight="medium"
             typography="body4"
             foreground="primary"
-            className="inline-flex items-center gap-1"
+            className="inline-flex items-center gap-050"
           >
             전체 보기 <ChevronRight size={14} aria-hidden />
           </Text>
@@ -42,7 +42,7 @@ export function MyPageSessions({ sessions }: { sessions: ReturnType<typeof summa
         />
       </div>
       {sessions.isEmpty && (
-        <div className="flex gap-2">
+        <div className="flex gap-100">
           <Button asChild variant="outline" className="h-11 flex-1">
             <Link href="/games">구인 목록</Link>
           </Button>

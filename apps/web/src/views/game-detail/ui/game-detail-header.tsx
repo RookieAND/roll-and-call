@@ -14,11 +14,11 @@ export function GameDetailHeader({
 }) {
   return (
     <div>
-      <HStack justify="between" align="start" gap={2}>
+      <HStack justify="between" align="start" gap="100">
         <Text typography="heading1" render={<h1 />}>
           {title}
         </Text>
-        <HStack align="center" gap={1} className="mt-0.5 shrink-0">
+        <HStack align="center" gap="050" className="mt-025 shrink-0">
           {statusLine.deadlineShort && (
             <Badge className="tabular-nums">{statusLine.deadlineShort}</Badge>
           )}
@@ -29,7 +29,7 @@ export function GameDetailHeader({
         typography="body3"
         foreground="hint"
         render={<p />}
-        className={cn("mt-1 font-semibold", statusLine.confirmed && "text-success-700")}
+        className={cn("mt-050 font-semibold", statusLine.confirmed && "text-success-700")}
       >
         {statusLine.text}
       </Text>

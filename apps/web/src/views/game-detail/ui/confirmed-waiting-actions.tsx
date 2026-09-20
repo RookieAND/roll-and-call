@@ -17,7 +17,7 @@ export function ConfirmedWaitingActions({
   waitlistRank: number | null;
 }) {
   return (
-    <VStack gap={2}>
+    <VStack gap="100">
       <WaitlistRankNotice
         rank={waitlistRank}
         note="이번 회차는 자리가 없습니다. 다음 회차가 열리면 알립니다."

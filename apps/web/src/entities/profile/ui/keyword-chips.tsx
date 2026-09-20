@@ -4,7 +4,7 @@ import { Text } from "@trpg/ui";
 export function KeywordChips({ keywords }: { keywords: readonly string[] }) {
   if (keywords.length === 0) {
     return (
-      <div className="flex min-h-11 items-center gap-2 rounded-400 border border-dashed border-gray-300 px-3">
+      <div className="flex min-h-11 items-center gap-100 rounded-400 border border-dashed border-gray-300 px-150">
         <Text weight="bold" typography="body3" foreground="hint" className="flex-none">
           #
         </Text>
@@ -16,11 +16,11 @@ export function KeywordChips({ keywords }: { keywords: readonly string[] }) {
   }
 
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <div className="flex flex-wrap gap-075">
       {keywords.map((keyword) => (
         <span
           key={keyword}
-          className="flex h-8 items-center rounded-full border border-primary-200 bg-primary-50 px-3 text-subtitle2 font-bold text-primary-ink"
+          className="flex h-8 items-center rounded-full border border-primary-200 bg-primary-50 px-150 text-subtitle2 font-bold text-primary-ink"
         >
           #{keyword}
         </span>

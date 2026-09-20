@@ -73,12 +73,12 @@ export function ConfirmSessionForm({
   }
 
   return (
-    <VStack gap={5}>
+    <VStack gap="250">
       <section>
-        <Text typography="subtitle1" render={<h2 />} className="mb-2">
+        <Text typography="subtitle1" render={<h2 />} className="mb-100">
           세션 시간
         </Text>
-        <VStack gap={3}>
+        <VStack gap="150">
           <SessionTimeFields days={days} start={start} onChange={setStart} />
           <SessionWindowSummary
             windowLabel={sessionWindowLabel(startIso, playMinutes)}
@@ -89,7 +89,7 @@ export function ConfirmSessionForm({
       </section>
 
       <section>
-        <div className="mb-2 flex items-baseline gap-2">
+        <div className="mb-100 flex items-baseline gap-100">
           <Text typography="subtitle1" render={<h2 />}>
             추천 후보
           </Text>
@@ -121,7 +121,7 @@ export function ConfirmSessionForm({
                 />
               ))}
             </div>
-            <Text typography="body4" foreground="hint" render={<p />} className="mt-2">
+            <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
               체크를 누르면 위 세션 시간 칸이 그 시간으로 채워집니다.
             </Text>
           </>
@@ -134,7 +134,7 @@ export function ConfirmSessionForm({
         </Text>
       )}
 
-      <div className="sticky bottom-0 -mx-4 border-t border-gray-200 bg-surface px-4 py-3">
+      <div className="sticky bottom-0 -mx-200 border-t border-gray-200 bg-surface px-200 py-150">
         <Button
           variant="confirm"
           className="h-[50px] w-full rounded-500"

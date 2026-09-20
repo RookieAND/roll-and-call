@@ -21,14 +21,14 @@ export function EmptyState({
   const imagePx = size === "full" ? 140 : 104;
   return (
     <VStack
-      gap={3}
+      gap="150"
       className={cn(
-        "items-center rounded-700 border border-dashed border-gray-300 p-6 text-center",
+        "items-center rounded-700 border border-dashed border-gray-300 p-300 text-center",
         className,
       )}
     >
       {image && <Image src={image} alt="" width={imagePx} height={imagePx} />}
-      <VStack gap={1} className="items-center">
+      <VStack gap="050" className="items-center">
         <Text typography="subtitle1">{title}</Text>
         {description && (
           <Text typography="body2" foreground="muted" className="whitespace-pre-line">

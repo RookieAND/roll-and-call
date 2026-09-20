@@ -21,10 +21,10 @@ export function OnboardingPreview({
   if (slideKey === "find") {
     return (
       <div className="w-[262px] overflow-hidden rounded-600 border border-gray-200 bg-surface">
-        <div className="flex h-[70px] items-end bg-tinted-bg p-2">
+        <div className="flex h-[70px] items-end bg-tinted-bg p-100">
           <GameStatusBadge status={GAME_STATUS.recruiting} />
         </div>
-        <div className="flex flex-col gap-2 p-3">
+        <div className="flex flex-col gap-100 p-150">
           <Text typography="heading3" render={<span />}>
             물벼락 — 1부
           </Text>
@@ -43,7 +43,7 @@ export function OnboardingPreview({
 
   if (slideKey === "schedule") {
     return (
-      <div className="w-[262px] rounded-600 border border-gray-200 bg-surface p-3">
+      <div className="w-[262px] rounded-600 border border-gray-200 bg-surface p-150">
         <HeatSample />
       </div>
     );
@@ -51,7 +51,7 @@ export function OnboardingPreview({
 
   if (slideKey === "host") {
     return (
-      <div className="flex w-[262px] flex-col gap-3 rounded-600 border border-gray-200 bg-surface p-3.5">
+      <div className="flex w-[262px] flex-col gap-150 rounded-600 border border-gray-200 bg-surface p-175">
         <div className="flex items-center">
           {WIZARD_STEPS.map((step) => {
             const done = step <= 3;
@@ -80,7 +80,7 @@ export function OnboardingPreview({
         <Text typography="subtitle1" render={<span />}>
           이미지
         </Text>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-100">
           <span className="aspect-square rounded-400 bg-tinted-bg" />
           <span className="aspect-square rounded-400 bg-gray-100" />
           <span className="aspect-square rounded-400 border border-dashed border-gray-300" />
@@ -90,14 +90,14 @@ export function OnboardingPreview({
   }
 
   return (
-    <div className="flex w-[262px] flex-col gap-3 rounded-600 border border-gray-200 bg-surface p-3.5">
-      <div className="flex items-center gap-2.5">
+    <div className="flex w-[262px] flex-col gap-150 rounded-600 border border-gray-200 bg-surface p-175">
+      <div className="flex items-center gap-125">
         <span className="size-11 flex-none rounded-full bg-tinted-bg" />
         <div className="min-w-0">
           <Text typography="subtitle1" render={<span />} className="block">
             라온
           </Text>
-          <Text typography="body4" foreground="muted" render={<span />} className="mt-0.5 block">
+          <Text typography="body4" foreground="muted" render={<span />} className="mt-025 block">
             호러와 조사물을 주로 굴립니다
           </Text>
         </div>

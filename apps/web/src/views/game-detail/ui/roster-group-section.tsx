@@ -32,7 +32,7 @@ export function RosterGroupSection({
         };
 
   return (
-    <section className="flex flex-col gap-2.5">
+    <section className="flex flex-col gap-125">
       <RosterGroupHeader label={label} count={members.length} capacity={capacity} action={action} />
       {members.length > 0 && <Progress {...progress} className="w-full" />}
       <RosterGroupMembers members={members} emptyText={emptyText} />

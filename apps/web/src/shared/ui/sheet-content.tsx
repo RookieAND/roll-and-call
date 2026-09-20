@@ -11,11 +11,11 @@ export function SheetContent({ children, className }: { children: ReactNode; cla
       <Dialog.Popup
         className={cn(
           // scrollbar-width는 상속되니 시트 안의 스크롤 영역은 막대 없이 넘긴다. 끝이 잘린 줄이 스크롤을 대신 알린다.
-          "fixed inset-x-0 bottom-0 z-50 mx-auto max-w-[412px] rounded-t-800 border-t border-gray-200 bg-surface p-5 shadow-[0_-8px_28px_rgba(23,23,28,0.1)] outline-none [scrollbar-width:none]",
+          "fixed inset-x-0 bottom-0 z-50 mx-auto max-w-[412px] rounded-t-800 border-t border-gray-200 bg-surface p-250 shadow-[0_-8px_28px_rgba(23,23,28,0.1)] outline-none [scrollbar-width:none]",
           className,
         )}
       >
-        <div className="mx-auto mb-4 h-1 w-[38px] rounded-full bg-gray-300" />
+        <div className="mx-auto mb-200 h-1 w-[38px] rounded-full bg-gray-300" />
         {children}
       </Dialog.Popup>
     </Dialog.Portal>

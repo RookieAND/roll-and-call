@@ -27,14 +27,14 @@ export function WizardFooter({
 
   return (
     <div className="sticky bottom-0 z-10 border-t border-gray-200 bg-surface">
-      <Container size="md" className="py-3">
-        <VStack gap={3}>
+      <Container size="md" className="py-150">
+        <VStack gap="150">
           {isLastStep && error && (
             <Text typography="body2" foreground="danger" render={<p />}>
               {error}
             </Text>
           )}
-          <div className="flex gap-2 [&>*]:flex-1">
+          <div className="flex gap-100 [&>*]:flex-1">
             {backLabel && (
               <Button
                 type="button"

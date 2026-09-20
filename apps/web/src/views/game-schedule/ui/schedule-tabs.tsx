@@ -23,8 +23,8 @@ export function ScheduleTabs({
   ] as const;
 
   return (
-    <div className="flex flex-col gap-3">
-      <div role="tablist" className="flex gap-1 rounded-400 bg-gray-100 p-1">
+    <div className="flex flex-col gap-150">
+      <div role="tablist" className="flex gap-050 rounded-400 bg-gray-100 p-050">
         {tabs.map((tabItem) => {
           const active = tab === tabItem.key;
           return (

@@ -20,7 +20,7 @@ export function FixedSessionField({
   const error = formState.errors.confirmedAt;
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-075">
       <Field label="세션 일시" htmlFor="confirmedAt" required error={error?.message}>
         <Controller
           name="confirmedAt"

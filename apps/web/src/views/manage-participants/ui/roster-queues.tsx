@@ -43,7 +43,7 @@ export function RosterQueues({
   const waitingCaption = summary.drawnAtLabel ? "추첨으로 정해진 순서" : "신청 순서";
 
   return (
-    <VStack gap={5}>
+    <VStack gap="250">
       <RosterQueue
         label="확정"
         count={confirmed.length}
@@ -52,7 +52,7 @@ export function RosterQueues({
         }
       >
         {confirmed.length === 0 ? (
-          <div className="px-3 py-4">
+          <div className="px-150 py-200">
             <Text typography="body3" foreground="muted">
               아직 확정된 참여자가 없습니다.
             </Text>

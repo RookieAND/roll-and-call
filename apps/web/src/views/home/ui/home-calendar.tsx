@@ -29,7 +29,7 @@ export function HomeCalendar({
 
   return (
     <section>
-      <div className="flex items-center gap-0.5 pt-3.5 pr-2.5 pb-2.5 pl-4">
+      <div className="flex items-center gap-025 pt-175 pr-125 pb-125 pl-200">
         <Text typography="heading2" render={<h2 />} className="flex-1">
           {monthStart.format("YYYY년 M월")}
         </Text>
@@ -50,7 +50,7 @@ export function HomeCalendar({
         </IconButton>
       </div>
 
-      <div className="grid grid-cols-7 px-3 pb-1">
+      <div className="grid grid-cols-7 px-150 pb-050">
         {WEEKDAYS.map((weekday, index) => (
           <Text
             weight="bold"
@@ -64,7 +64,7 @@ export function HomeCalendar({
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-px px-3 pb-3">
+      <div className="grid grid-cols-7 gap-px px-150 pb-150">
         {cells.map((cell) =>
           sessionsByDay ? (
             <HomeCalendarCell
@@ -80,12 +80,12 @@ export function HomeCalendar({
         )}
       </div>
 
-      <div className="flex items-center gap-3 px-4 pb-3 text-body4 text-hint">
-        <span className="flex items-center gap-1.5">
+      <div className="flex items-center gap-150 px-200 pb-150 text-body4 text-hint">
+        <span className="flex items-center gap-075">
           <span className="h-2.5 w-2.5 rounded-100 border border-tinted-border bg-primary-50" />
           내가 참여
         </span>
-        <span className="flex items-center gap-1.5">
+        <span className="flex items-center gap-075">
           <span className="h-2.5 w-2.5 rounded-100 border border-gray-300 bg-gray-100" />
           다른 세션
         </span>

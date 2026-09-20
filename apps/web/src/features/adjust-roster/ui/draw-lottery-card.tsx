@@ -52,8 +52,8 @@ export function DrawLotteryCard({
     <>
       {/* 마감 뒤에는 남은 할 일이 이것뿐이라 카드째 강조하고, 마감 전에는 한 블록으로 둔다. */}
       <Card padding="md" className={cn(deadlinePassed && "border-primary-600 bg-tinted-bg")}>
-        <VStack gap={3}>
-          <VStack gap={1}>
+        <VStack gap="150">
+          <VStack gap="050">
             <Text typography="subtitle1">{title}</Text>
             <Text typography="body3" foreground="muted" render={<p />}>
               신청한 {applicantCount}명 중 {drawnCount}명이 확정, 나머지 {leftoverCount}명은 대기로

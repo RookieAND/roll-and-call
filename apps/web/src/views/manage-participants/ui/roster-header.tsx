@@ -12,7 +12,7 @@ export function RosterHeader({
   maxPlayers: number;
 }) {
   return (
-    <HStack align="center" gap={2}>
+    <HStack align="center" gap="100">
       <Text typography="heading2" render={<h1 />} className="min-w-0 flex-1 truncate">
         {title}
       </Text>

@@ -52,7 +52,7 @@ export async function GameScheduleView({ id }: { id: string }) {
       <>
         {appBar}
         <Container size="sm">
-          <div className="py-6">
+          <div className="py-300">
             <EmptyState
               title="조율 기간을 먼저 정해주세요"
               description="조율 기간이 있어야 참여자가 가능 시간을 낼 수 있습니다."
@@ -82,12 +82,12 @@ export async function GameScheduleView({ id }: { id: string }) {
     <>
       {appBar}
       <Container>
-        <VStack gap={5} className="pt-5 pb-4">
+        <VStack gap="250" className="pt-250 pb-200">
           <div>
             <Text typography="heading3" render={<h1 />} className="block truncate">
               {game.title}
             </Text>
-            <Text typography="body4" foreground="hint" render={<p />} className="mt-0.5">
+            <Text typography="body4" foreground="hint" render={<p />} className="mt-025">
               {formatDate(game.rangeStart)} ~ {formatDate(game.rangeEnd)} 조율
             </Text>
           </div>

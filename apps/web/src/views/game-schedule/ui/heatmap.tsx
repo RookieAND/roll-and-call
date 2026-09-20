@@ -57,14 +57,14 @@ export function Heatmap({ days, timeRows, counts, names, confirmedAt, capacity, 
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-100">
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
       {picked ? (
-        <div className="rounded-500 border border-gray-200 px-3.5 py-3" aria-live="polite">
+        <div className="rounded-500 border border-gray-200 px-175 py-150" aria-live="polite">
           <Text typography="subtitle2" render={<p />}>
             {formatDateTime(picked)} · {pickedNames.length}명
           </Text>
-          <Text typography="body4" foreground="muted" render={<p />} className="mt-0.5">
+          <Text typography="body4" foreground="muted" render={<p />} className="mt-025">
             {pickedNames.map((name) => (name === gmName ? `${name}(GM)` : name)).join(", ")}
           </Text>
         </div>

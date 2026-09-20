@@ -23,8 +23,8 @@ export function MyPageProfile({
   const bioForeground = bio ? "muted" : "hint";
 
   return (
-    <section className="flex flex-col gap-3.5">
-      <div className="flex items-center gap-3.5">
+    <section className="flex flex-col gap-175">
+      <div className="flex items-center gap-175">
         <Avatar src={avatarUrl} name={name} size="2xl" />
         <div className="min-w-0 flex-1">
           <Text
@@ -35,14 +35,14 @@ export function MyPageProfile({
           >
             {name}
           </Text>
-          <Text truncate typography="body3" foreground={bioForeground} className="mt-1">
+          <Text truncate typography="body3" foreground={bioForeground} className="mt-050">
             {bioText}
           </Text>
         </div>
         <Button
           asChild
           variant="outline"
-          className="h-9 flex-none rounded-400 px-3 text-xs font-bold"
+          className="h-9 flex-none rounded-400 px-150 text-xs font-bold"
         >
           <Link href="/me/edit">편집</Link>
         </Button>

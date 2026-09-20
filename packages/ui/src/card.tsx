@@ -5,7 +5,7 @@ import { cn } from "./cn";
 
 const card = cva("rounded-600 border border-gray-200 bg-surface", {
   variants: {
-    padding: { none: "", sm: "p-3", md: "p-4", lg: "p-6" },
+    padding: { none: "", sm: "p-150", md: "p-200", lg: "p-300" },
     interactive: { true: "transition-colors hover:bg-gray-50", false: "" },
   },
   defaultVariants: { padding: "md", interactive: false },

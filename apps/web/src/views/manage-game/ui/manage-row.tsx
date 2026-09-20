@@ -20,7 +20,7 @@ export function ManageRow({ row }: { row: Row }) {
   return (
     <Link
       href={row.href}
-      className="flex min-h-[60px] items-center gap-3 border-gray-100 px-3.5 py-3 transition-colors not-first:border-t hover:bg-gray-50"
+      className="flex min-h-[60px] items-center gap-150 border-gray-100 px-175 py-150 transition-colors not-first:border-t hover:bg-gray-50"
     >
       <span
         className={cn(
@@ -34,7 +34,7 @@ export function ManageRow({ row }: { row: Row }) {
         <Text typography="subtitle1" className="block">
           {row.label}
         </Text>
-        <Text typography="body3" className={cn("mt-0.5 block", DETAIL_CLASS[row.tone])}>
+        <Text typography="body3" className={cn("mt-025 block", DETAIL_CLASS[row.tone])}>
           {row.detail}
         </Text>
       </div>

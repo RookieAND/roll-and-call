@@ -57,7 +57,7 @@ export function AttendanceForm({ gameId, attendees }: { gameId: string; attendee
   }
 
   return (
-    <VStack gap={4}>
+    <VStack gap="200">
       <div className="overflow-hidden rounded-500 border border-gray-200">
         {attendees.map((attendee) => (
           <AttendanceRow
@@ -69,7 +69,7 @@ export function AttendanceForm({ gameId, attendees }: { gameId: string; attendee
         ))}
       </div>
 
-      <VStack gap={3}>
+      <VStack gap="150">
         <AttendanceTally
           presentCount={attendees.length - absentIds.size}
           absentCount={absentIds.size}

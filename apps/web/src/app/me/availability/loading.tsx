@@ -8,12 +8,12 @@ export default function Loading() {
     <Container size="sm" className="px-0">
       <AppBar back="/me/edit" title="가능 시간대" />
 
-      <div className="border-b border-gray-200 px-4 py-3.5">
+      <div className="border-b border-gray-200 px-200 py-175">
         <Skeleton className="h-[62px] w-full rounded-400" />
       </div>
 
-      <VStack gap={2} className="px-4 py-4">
-        <div className="flex items-baseline gap-2">
+      <VStack gap="100" className="px-200 py-200">
+        <div className="flex items-baseline gap-100">
           <Skeleton className="h-[19px] w-16 flex-none" />
           <Skeleton className="h-[17px] flex-1" />
         </div>
@@ -24,8 +24,8 @@ export default function Loading() {
       </VStack>
 
       {/* ponytail: bottom-[58px]는 BottomNav 높이(h-[58px])와 결합. nav 높이 바뀌면 같이 조정. */}
-      <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-4 pt-3.5 pb-4">
-        <div className="flex gap-2">
+      <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-200 pt-175 pb-200">
+        <div className="flex gap-100">
           <Skeleton className="h-[50px] flex-1 rounded-500" />
           <Skeleton className="h-[50px] flex-1 rounded-500" />
         </div>

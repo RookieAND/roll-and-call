@@ -37,9 +37,9 @@ export function PlayTimeField({
   }
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-075">
       <Field label="플레이타임" error={error}>
-        <div className="flex gap-2">
+        <div className="flex gap-100">
           <Select.Root
             items={hourItems}
             value={String(hours)}

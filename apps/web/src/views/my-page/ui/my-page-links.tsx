@@ -6,7 +6,7 @@ import { LINK_MAX_COUNT, ProfileLinks, type ProfileLink } from "@/entities/profi
 export function MyPageLinks({ links }: { links: ProfileLink[] }) {
   return (
     <section>
-      <div className="mb-2.5 flex items-center">
+      <div className="mb-125 flex items-center">
         <Text typography="heading3" render={<h2 />} className="flex-1">
           링크
         </Text>

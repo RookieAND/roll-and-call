@@ -12,7 +12,7 @@ export function SessionTabs({
   activeKey: string;
 }) {
   return (
-    <nav aria-label={label} className="flex px-4">
+    <nav aria-label={label} className="flex px-200">
       {tabs.map((tab) => {
         const selected = tab.key === activeKey;
         return (

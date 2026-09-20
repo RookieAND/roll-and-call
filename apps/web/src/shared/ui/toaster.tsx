@@ -19,11 +19,11 @@ export function Toaster() {
         classNames: {
           // inset-x-0 + mx-auto centers the absolute toast without touching transform (keeps sonner's animation)
           toast:
-            "inset-x-0 mx-auto flex w-fit items-center justify-center gap-2 rounded-300 px-4 py-2.5 text-sm font-semibold text-white shadow-lg",
+            "inset-x-0 mx-auto flex w-fit items-center justify-center gap-100 rounded-300 px-200 py-125 text-sm font-semibold text-white shadow-lg",
           default: "bg-toast",
           success: "bg-toast",
           error: "bg-danger-solid",
-          actionButton: "ml-2 shrink-0 font-bold underline underline-offset-2",
+          actionButton: "ml-100 shrink-0 font-bold underline underline-offset-2",
         },
       }}
     />

@@ -15,7 +15,7 @@ export function MySessionRow({
   urgent?: boolean;
   href: string;
 }) {
-  const detailClass = cn("mt-0.5 block", urgent && "text-warning-600");
+  const detailClass = cn("mt-025 block", urgent && "text-warning-600");
   const detailForeground = urgent ? undefined : "muted";
   // 0도 정보라 행은 남기되, 숫자는 한 단계 내려 "없음"으로 읽히게 한다.
   const countForeground = count === 0 ? "hint" : "normal";
@@ -23,7 +23,7 @@ export function MySessionRow({
   return (
     <Link
       href={href}
-      className="flex min-h-14 items-center gap-3 border-gray-100 px-3.5 py-2.5 transition-colors not-first:border-t hover:bg-gray-50"
+      className="flex min-h-14 items-center gap-150 border-gray-100 px-175 py-125 transition-colors not-first:border-t hover:bg-gray-50"
     >
       <div className="min-w-0 flex-1">
         <Text typography="subtitle1" className="block">

@@ -9,7 +9,7 @@ export default function Loading() {
     <>
       <AppBar back="/games" title="" />
       <div className="sticky top-[52px] z-10 border-b border-gray-100 bg-surface">
-        <div className="flex px-4">
+        <div className="flex px-200">
           <div className="flex h-11 flex-1 items-center justify-center">
             <Skeleton className="h-5 w-16" />
           </div>
@@ -19,7 +19,7 @@ export default function Loading() {
         </div>
       </div>
       <Container size="sm">
-        <div className="py-5">
+        <div className="py-250">
           <SessionListSkeleton />
         </div>
       </Container>

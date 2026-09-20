@@ -12,7 +12,7 @@ export async function CreateGameView() {
       <>
         <AppBar back="/games" title="구인 등록" />
         <Container size="sm">
-          <div className="py-6">
+          <div className="py-300">
             <LoginRequired description="구인을 올리려면 로그인이 필요합니다. 로그인하면 이 화면으로 돌아옵니다." />
           </div>
         </Container>

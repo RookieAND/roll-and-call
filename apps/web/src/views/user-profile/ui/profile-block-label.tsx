@@ -7,7 +7,7 @@ export function ProfileBlockLabel({ label }: { label: string }) {
       typography="body4"
       foreground="muted"
       render={<h2 />}
-      className="mb-2 block"
+      className="mb-100 block"
     >
       {label}
     </Text>

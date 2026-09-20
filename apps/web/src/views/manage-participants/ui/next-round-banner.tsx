@@ -22,8 +22,8 @@ export function NextRoundBanner({
 
   return (
     <>
-      <VStack gap={3} className="rounded-700 border border-tinted-border bg-tinted-bg p-4">
-        <VStack gap={1}>
+      <VStack gap="150" className="rounded-700 border border-tinted-border bg-tinted-bg p-200">
+        <VStack gap="050">
           <Text typography="subtitle1">대기 {waitingCount}명으로 다음 회차 열기</Text>
           <Text typography="body3" foreground="muted" render={<p />}>
             같은 게임을 새 일정으로 한 번 더 엽니다.

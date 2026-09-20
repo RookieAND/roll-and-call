@@ -56,7 +56,7 @@ export function GameRosterSection({
   );
 
   return (
-    <VStack gap={5}>
+    <VStack gap="250">
       {isLottery ? (
         <RosterGroupSection
           label="신청"

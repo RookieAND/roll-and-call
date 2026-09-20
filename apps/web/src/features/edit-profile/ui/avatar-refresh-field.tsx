@@ -27,7 +27,7 @@ export function AvatarRefreshField({
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-150">
       <Avatar src={url} name={name} size="2xl" />
       <Text typography="body3" foreground="muted" className="min-w-0 flex-1">
         아바타는 디스코드에서 가져옵니다.

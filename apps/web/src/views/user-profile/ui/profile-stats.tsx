@@ -14,7 +14,7 @@ export function ProfileStats({ hosted, played }: { hosted: number; played: numbe
         return (
           <div
             key={stat.label}
-            className="flex flex-col items-center gap-1 border-gray-200 py-3.5 not-first:border-l"
+            className="flex flex-col items-center gap-050 border-gray-200 py-175 not-first:border-l"
           >
             <Text
               numeric

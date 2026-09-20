@@ -8,7 +8,7 @@ import { useState } from "react";
 import { formatPickerDate } from "./format-picker-date";
 
 const triggerClass =
-  "flex h-11 w-full items-center justify-between gap-2 rounded-400 border bg-surface px-3 text-left text-sm outline-none transition-colors focus:ring-2";
+  "flex h-11 w-full items-center justify-between gap-100 rounded-400 border bg-surface px-150 text-left text-sm outline-none transition-colors focus:ring-2";
 
 export type DatePickerProps = {
   value?: string;
@@ -48,7 +48,7 @@ export function DatePicker({
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Positioner sideOffset={4} className="z-50">
-          <Popover.Popup className="rounded-300 border border-gray-200 bg-surface p-2 shadow-lg outline-none">
+          <Popover.Popup className="rounded-300 border border-gray-200 bg-surface p-100 shadow-lg outline-none">
             <Calendar
               value={value || undefined}
               min={min}

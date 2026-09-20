@@ -12,8 +12,8 @@ export function GameImageGallery({ images, isGm }: { images: string[]; isGm: boo
   const hint = isGm ? "구인 수정에서 관리 · 최대 5장" : "탭하면 크게 보기";
 
   return (
-    <VStack gap={2}>
-      <HStack align="baseline" gap={2}>
+    <VStack gap="100">
+      <HStack align="baseline" gap="100">
         <Text typography="heading3" render={<h2 />}>
           첨부 이미지
         </Text>
@@ -25,7 +25,7 @@ export function GameImageGallery({ images, isGm }: { images: string[]; isGm: boo
           {hint}
         </Text>
       </HStack>
-      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+      <div className="-mx-200 flex gap-100 overflow-x-auto px-200 pb-050">
         {images.map((url, index) => (
           // ponytail: 이미지 자체가 버튼이라 Button 프리미티브(텍스트·패딩 룩)와 맞지 않아 손코딩.
           <button
@@ -43,7 +43,7 @@ export function GameImageGallery({ images, isGm }: { images: string[]; isGm: boo
       <Dialog.Root open={openUrl !== null} onOpenChange={(open) => !open && setOpenIndex(null)}>
         <Dialog.Portal>
           <Dialog.Backdrop className="fixed inset-0 z-40 bg-black/80" />
-          <Dialog.Popup className="fixed inset-0 z-50 flex items-center justify-center p-4 outline-none">
+          <Dialog.Popup className="fixed inset-0 z-50 flex items-center justify-center p-200 outline-none">
             <Dialog.Title className="sr-only">{openLabel}</Dialog.Title>
             {openUrl && (
               <img

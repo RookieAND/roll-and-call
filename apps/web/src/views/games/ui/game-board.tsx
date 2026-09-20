@@ -25,7 +25,7 @@ export function GameBoard({ page = 1, filter }: { page?: number; filter: GamesFi
         }
       />
 
-      <VStack gap={4} className="pt-3 pb-4">
+      <VStack gap="200" className="pt-150 pb-200">
         <Suspense key={key} fallback={<GameListSkeleton />}>
           <GameList promise={gamesPage} page={page} filter={filter} />
         </Suspense>

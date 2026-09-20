@@ -13,7 +13,7 @@ export function RosterGroupHeader({
   action?: ReactNode;
 }) {
   return (
-    <HStack align="center" gap={2}>
+    <HStack align="center" gap="100">
       <Text typography="heading3" render={<h2 />}>
         {label}
       </Text>

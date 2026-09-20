@@ -11,7 +11,7 @@ const AI_IMAGE_NOTE = "GM과 플레이어 모두에게 적용됩니다.";
 // 06에서 받은 값을 신청 판단 순서대로 읽힌다 — 장르 · 트리거 · 주의 사항 · 사용 플랫폼 · AI 이미지.
 export function GamePreflightSection({ game }: { game: GameDetailData }) {
   return (
-    <VStack gap={5}>
+    <VStack gap="250">
       {game.genres.length > 0 && (
         <GameTagBlock label={gameTagLabel[GAME_TAG.genres]} tags={game.genres} />
       )}
@@ -23,7 +23,7 @@ export function GamePreflightSection({ game }: { game: GameDetailData }) {
         />
       )}
       {game.notice && (
-        <VStack gap={2}>
+        <VStack gap="100">
           <Text typography="heading3" render={<h2 />}>
             주의 사항
           </Text>

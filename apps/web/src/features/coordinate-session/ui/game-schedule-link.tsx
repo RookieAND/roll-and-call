@@ -12,7 +12,7 @@ export function GameScheduleLink({
   className?: string;
 }) {
   return (
-    <Button asChild variant="tinted" className={cn("gap-1.5 font-bold", className)}>
+    <Button asChild variant="tinted" className={cn("gap-075 font-bold", className)}>
       <Link href={`/games/${gameId}/schedule`}>
         {label} <ChevronRight size={16} aria-hidden />
       </Link>

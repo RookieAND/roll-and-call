@@ -75,7 +75,7 @@ export function GameImagesUpload({
   }
 
   return (
-    <div id="images" className="flex flex-col gap-1.5">
+    <div id="images" className="flex flex-col gap-075">
       <div className="flex items-baseline justify-between">
         <Text weight="bold" typography="body4" className="text-gray-700">
           추가 이미지 <span className="font-normal text-hint">선택</span>
@@ -85,7 +85,7 @@ export function GameImagesUpload({
         </Text>
       </div>
 
-      <Grid cols={3} gap={2}>
+      <Grid cols={3} gap="100">
         {value.map((url, index) => (
           <div
             key={url}
@@ -127,7 +127,7 @@ export function GameImagesUpload({
             onClick={() => inputRef.current?.click()}
             disabled={!canAdd}
             loading={uploading}
-            className="aspect-square h-auto flex-col gap-1 border-dashed text-xs"
+            className="aspect-square h-auto flex-col gap-050 border-dashed text-xs"
           >
             <ImagePlus size={20} aria-hidden />+ 추가
           </Button>

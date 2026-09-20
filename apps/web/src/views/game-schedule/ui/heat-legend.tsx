@@ -6,7 +6,7 @@ import { heatTextColor } from "../model/heat-text-color";
 
 export function HeatLegend({ capacity }: { capacity: number }) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-075">
       <Text typography="body4" foreground="muted" render={<span />}>
         겹침
       </Text>

@@ -33,8 +33,8 @@ export function AvailabilityDayEditor({
   );
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-center gap-1.5">
+    <div className="flex flex-col gap-075">
+      <div className="flex items-center gap-075">
         <IconButton
           aria-label={`${label}요일 ${on ? "끄기" : "켜기"}`}
           aria-pressed={on}
@@ -71,8 +71,8 @@ export function AvailabilityDayEditor({
       {on && <ConflictNote message={conflicts.get(rows[0]!.index)} />}
 
       {rows.slice(1).map((row) => (
-        <div key={row.index} className="flex flex-col gap-1.5">
-          <div className="flex items-center gap-1.5">
+        <div key={row.index} className="flex flex-col gap-075">
+          <div className="flex items-center gap-075">
             <span className="h-11 w-11 flex-none" />
             <IntervalFields
               label={label}

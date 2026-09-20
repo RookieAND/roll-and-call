@@ -10,7 +10,7 @@ export function GameStatusChips({ filter }: { filter: GamesFilter }) {
   const current = filter.status ?? GAME_STATUS_FILTER_DEFAULT;
 
   return (
-    <nav aria-label="모집 상태" className="-mx-4 flex gap-1.5 overflow-x-auto px-4">
+    <nav aria-label="모집 상태" className="-mx-200 flex gap-075 overflow-x-auto px-200">
       {GAME_STATUS_FILTERS.map((option) => {
         const selected = option.key === current;
         return (

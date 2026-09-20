@@ -19,7 +19,7 @@ export function RosterRow({
   action: ReactNode;
 }) {
   return (
-    <div className="flex min-h-14 items-center gap-3 border-t border-gray-100 px-3 py-2 first:border-t-0">
+    <div className="flex min-h-14 items-center gap-150 border-t border-gray-100 px-150 py-100 first:border-t-0">
       <MemberProfileLink
         member={member}
         rank={rank}

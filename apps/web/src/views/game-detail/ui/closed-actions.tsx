@@ -11,7 +11,7 @@ export function ClosedActions({ endDate, expired }: { endDate: Date; expired: bo
   // "마감"은 기한 경과 한 뜻. 대기를 끈 게임의 정원 충족은 "정원이 차서"라고 쓴다.
   // 기한이 지난 건 막다른 길이라 카드로 세우지 않고 버튼 위에 한 줄만 써붙인다.
   return (
-    <VStack gap={expired ? 2 : 3}>
+    <VStack gap={expired ? "100" : "150"}>
       {expired ? (
         <ActionHint>{formatDate(endDate)}에 모집이 마감되었습니다.</ActionHint>
       ) : (

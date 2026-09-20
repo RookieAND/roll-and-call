@@ -85,7 +85,7 @@ export function AvailabilityGrid({ gameId, days, timeRows, savedMine, prefill, b
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-150">
       {prefillNotice && painter.dirty && (
         <PrefillNotice label={prefill!.label} onClear={clearPrefill} />
       )}
@@ -96,7 +96,7 @@ export function AvailabilityGrid({ gameId, days, timeRows, savedMine, prefill, b
 
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
 
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+      <div className="flex flex-wrap items-center gap-x-150 gap-y-050">
         <Legend swatchClass="bg-primary-600" label="선택" />
         <Legend swatchClass={UNSAVED_SELECTED_TONE} label="미저장" />
         <Legend swatchStyle={{ backgroundImage: STRIPES }} label="다른 확정 세션" />

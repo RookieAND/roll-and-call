@@ -20,7 +20,7 @@ export function AvailabilityRows({
 
   if (days.length === 0) {
     return (
-      <div className="flex min-h-11 items-center gap-2 rounded-400 border border-dashed border-gray-300 px-3">
+      <div className="flex min-h-11 items-center gap-100 rounded-400 border border-dashed border-gray-300 px-150">
         <Clock size={15} className="flex-none text-hint" aria-hidden />
         <Text typography="body4" foreground="hint" className="min-w-0 flex-1">
           {emptyText}
@@ -33,16 +33,16 @@ export function AvailabilityRows({
 
   return (
     <>
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-075">
         {days.slice(0, PREVIEW_ROWS).map((day) => (
           <AvailabilityDayRow key={day.day} label={day.label} intervals={day.intervals} />
         ))}
         {rest.length > 0 && (
-          <details className="group flex flex-col gap-1.5">
+          <details className="group flex flex-col gap-075">
             <summary className="flex min-h-10 cursor-pointer list-none items-center justify-center rounded-400 border border-gray-200 text-body4 font-bold text-primary-ink hover:bg-gray-50 group-open:hidden">
               {rest.length}줄 더 보기
             </summary>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-075">
               {rest.map((day) => (
                 <AvailabilityDayRow key={day.day} label={day.label} intervals={day.intervals} />
               ))}
@@ -51,7 +51,7 @@ export function AvailabilityRows({
         )}
       </div>
       {note && (
-        <Text typography="body4" foreground="hint" render={<p />} className="mt-2">
+        <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
           {note}
         </Text>
       )}

@@ -12,7 +12,7 @@ export function ThumbnailSpoilerField({
   return (
     <div
       className={cn(
-        "flex min-h-11 items-center gap-3 rounded-400 border px-3 py-3",
+        "flex min-h-11 items-center gap-150 rounded-400 border px-150 py-150",
         value ? "border-tinted-border bg-tinted-bg" : "border-gray-200",
       )}
     >
@@ -29,7 +29,7 @@ export function ThumbnailSpoilerField({
           foreground="hint"
           render={<p />}
           id="thumbnailSpoiler-hint"
-          className="mt-0.5"
+          className="mt-025"
         >
           목록과 상세 페이지에서 이미지를 흐리게 덮습니다
         </Text>

@@ -48,7 +48,7 @@ export function GameThumbnail({
         onLoad={() => setLoaded(true)}
       />
       {spoilerLabel && (
-        <div className="absolute inset-0 flex items-center justify-center gap-1.5 bg-black/30 text-white">
+        <div className="absolute inset-0 flex items-center justify-center gap-075 bg-black/30 text-white">
           <EyeOff size={16} aria-hidden />
           <Text typography="subtitle2" foreground="white">
             {spoilerLabel}

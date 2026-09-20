@@ -13,7 +13,7 @@ export function StatusNotice({
   return (
     <div
       className={cn(
-        "rounded-500 p-4 text-center",
+        "rounded-500 p-200 text-center",
         tone === "success"
           ? "border border-success-200 bg-success-50"
           : "bg-gray-50 text-sm text-gray-600",

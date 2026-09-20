@@ -20,15 +20,15 @@ export function HelpDocView({ slug }: { slug: string }) {
     <>
       <AppBar back="/help" title={doc.title} />
       <Container size="sm">
-        <VStack gap={5} className="py-4.5">
+        <VStack gap="250" className="py-225">
           <div>
             <Text typography="subtitle2" foreground="primary" render={<p />}>
               {doc.category}
             </Text>
-            <Text typography="heading1" render={<h1 />} className="mt-1.5">
+            <Text typography="heading1" render={<h1 />} className="mt-075">
               {doc.title}
             </Text>
-            <Text typography="body2" foreground="muted" render={<p />} className="mt-2.5">
+            <Text typography="body2" foreground="muted" render={<p />} className="mt-125">
               {doc.lead}
             </Text>
           </div>
@@ -37,8 +37,8 @@ export function HelpDocView({ slug }: { slug: string }) {
             <HelpDocBlock key={index} block={block} />
           ))}
 
-          <section className="border-t border-gray-100 pt-4">
-            <Text typography="subtitle2" foreground="muted" render={<h2 />} className="mb-2">
+          <section className="border-t border-gray-100 pt-200">
+            <Text typography="subtitle2" foreground="muted" render={<h2 />} className="mb-100">
               이어 읽기
             </Text>
             <div className="overflow-hidden rounded-600 border border-gray-200">

@@ -9,7 +9,7 @@ import { toRichTextDoc } from "./rich-text-doc";
 import { RichTextMenu } from "./rich-text-menu";
 import { Spoiler } from "./spoiler";
 
-const EDITOR_CLASS = "rich-text min-h-24 py-2.5 outline-none";
+const EDITOR_CLASS = "rich-text min-h-24 py-125 outline-none";
 
 export type RichTextEditorProps = {
   value: string;
@@ -57,7 +57,7 @@ export function RichTextEditor({
       <RichTextMenu editor={editor} />
       <EditorContent
         editor={editor}
-        className={cn(textFieldVariants({ invalid }), "px-3", className)}
+        className={cn(textFieldVariants({ invalid }), "px-150", className)}
       />
     </>
   );

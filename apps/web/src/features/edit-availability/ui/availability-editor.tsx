@@ -28,8 +28,8 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
     <>
       <AppBar back="/me/edit" title="가능 시간대" />
 
-      <div className="border-b border-gray-200 px-4 py-3.5">
-        <div className="rounded-400 border border-gray-200 bg-gray-50 px-3 py-3">
+      <div className="border-b border-gray-200 px-200 py-175">
+        <div className="rounded-400 border border-gray-200 bg-gray-50 px-150 py-150">
           <Text typography="body4" foreground="muted" render={<p />} className="leading-[1.65]">
             되는 요일만 켜고 시간을 정합니다.
             <br />
@@ -38,8 +38,8 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
         </div>
       </div>
 
-      <VStack gap={2} className="px-4 py-4">
-        <div className="flex items-baseline gap-2">
+      <VStack gap="100" className="px-200 py-200">
+        <div className="flex items-baseline gap-100">
           <Text weight="bold" typography="body4" className="flex-none">
             요일마다
           </Text>
@@ -84,8 +84,8 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
       </VStack>
 
       {/* ponytail: bottom-[58px]는 BottomNav 높이(h-[58px])와 결합. nav 높이 바뀌면 같이 조정. */}
-      <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-4 pt-3.5 pb-4">
-        <div className="flex gap-2">
+      <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-200 pt-175 pb-200">
+        <div className="flex gap-100">
           <Button
             variant="outline"
             size="lg"

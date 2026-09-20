@@ -23,7 +23,7 @@ export async function ManageParticipantsView({ id }: { id: string }) {
       <>
         <AppBar back={`/games/${id}`} title="참여자 관리" />
         <Container size="sm">
-          <div className="py-6">
+          <div className="py-300">
             {user ? (
               <EmptyState
                 title="GM만 볼 수 있는 화면입니다"

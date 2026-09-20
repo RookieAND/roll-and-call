@@ -11,11 +11,11 @@ export function ProfileSummary({ profile }: { profile: Profile }) {
   const joinedLabel = toKst(profile.createdAt).format("YYYY년 M월부터");
   const bioText = profile.bio || "한 줄 소개가 없습니다.";
   const bioForeground = profile.bio ? undefined : "hint";
-  const bioClass = profile.bio ? "mt-3.5 leading-[1.7] text-gray-700" : "mt-3.5 leading-[1.7]";
+  const bioClass = profile.bio ? "mt-175 leading-[1.7] text-gray-700" : "mt-175 leading-[1.7]";
 
   return (
-    <div className="px-4 pt-5 pb-1">
-      <div className="flex items-center gap-3.5">
+    <div className="px-200 pt-250 pb-050">
+      <div className="flex items-center gap-175">
         <Avatar
           src={profile.avatarUrl}
           name={profile.username}
@@ -26,7 +26,7 @@ export function ProfileSummary({ profile }: { profile: Profile }) {
           <Text typography="heading2" truncate render={<h1 />} className="tracking-[-0.02em]">
             {profile.username}
           </Text>
-          <Text typography="body3" foreground="hint" className="mt-1 block">
+          <Text typography="body3" foreground="hint" className="mt-050 block">
             {joinedLabel}
           </Text>
         </div>
@@ -34,7 +34,7 @@ export function ProfileSummary({ profile }: { profile: Profile }) {
       <Text typography="body2" foreground={bioForeground} render={<p />} className={bioClass}>
         {bioText}
       </Text>
-      <div className="mt-3.5">
+      <div className="mt-175">
         <ProfileBlockLabel label="성향" />
         <KeywordChips keywords={profile.keywords} />
       </div>

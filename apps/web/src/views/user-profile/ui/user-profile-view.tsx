@@ -40,17 +40,17 @@ export async function UserProfileView({ id }: { id: string }) {
       <Container size="sm" className="px-0">
         <ProfileSummary profile={profile} />
 
-        <section className="p-4">
+        <section className="p-200">
           <ProfileBlockLabel label="링크" />
           <ProfileLinks links={profile.links} />
         </section>
 
-        <section className="px-4 pb-4">
+        <section className="px-200 pb-200">
           <ProfileBlockLabel label="가능 시간대" />
           <AvailabilityRows intervals={profile.availability} note="프로필 기본값입니다." />
         </section>
 
-        <section className="px-4 pb-4">
+        <section className="px-200 pb-200">
           <ProfileBlockLabel label="참석 기록" />
           <ProfileAbsenceNotice absences={absences} />
         </section>

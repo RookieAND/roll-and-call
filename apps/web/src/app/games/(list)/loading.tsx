@@ -9,7 +9,7 @@ export default function Loading() {
       <GamesAppBar />
       <Container>
         <GamesToolbar />
-        <VStack gap={4} className="pt-3 pb-4">
+        <VStack gap="200" className="pt-150 pb-200">
           <GameListSkeleton />
         </VStack>
       </Container>

@@ -25,7 +25,7 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
       <>
         <AppBar back="/me" title="내 세션" />
         <Container size="sm">
-          <div className="py-6">
+          <div className="py-300">
             <LoginRequired />
           </div>
         </Container>
@@ -59,7 +59,7 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
       </div>
 
       <Container size="sm">
-        <div className="py-3">
+        <div className="py-150">
           {items.length > 0 ? (
             <SessionList items={items} />
           ) : (

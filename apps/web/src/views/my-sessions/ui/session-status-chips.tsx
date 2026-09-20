@@ -19,7 +19,7 @@ export function SessionStatusChips({
   endedCount: number;
 }) {
   return (
-    <div className="flex gap-1.5 overflow-x-auto px-4 py-2.5">
+    <div className="flex gap-075 overflow-x-auto px-200 py-125">
       {SESSION_CHIPS[activeTab].map((chip) => {
         const selected = chip.key === activeChip;
         const label =

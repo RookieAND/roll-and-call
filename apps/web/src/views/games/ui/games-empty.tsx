@@ -19,7 +19,7 @@ export function GamesEmpty({ filter }: { filter: GamesFilter }) {
         title={`'${filter.q}'에 맞는 구인이 없습니다`}
         description="검색어를 바꾸거나 직접 구인을 올려보세요."
         action={
-          <div className="flex w-full gap-2 [&>*]:flex-1">
+          <div className="flex w-full gap-100 [&>*]:flex-1">
             <Button asChild variant="outline" className="h-11">
               <Link href={gamesHref(filterParams({ ...filter, q: undefined }))}>검색 초기화</Link>
             </Button>

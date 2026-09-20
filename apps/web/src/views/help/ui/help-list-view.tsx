@@ -15,10 +15,10 @@ export function HelpListView() {
     <>
       <AppBar back="/" title="도움말" />
       <Container size="sm">
-        <VStack gap={5} className="py-4.5">
+        <VStack gap="250" className="py-225">
           <Link
             href="/onboarding"
-            className="flex items-center gap-3 rounded-600 border border-tinted-border bg-tinted-bg px-4 py-3.5 transition-colors hover:bg-tinted-bg-hover"
+            className="flex items-center gap-150 rounded-600 border border-tinted-border bg-tinted-bg px-200 py-175 transition-colors hover:bg-tinted-bg-hover"
           >
             <span className="flex size-[38px] flex-none items-center justify-center rounded-400 bg-primary-600 text-white">
               <PlayCircle size={19} aria-hidden />
@@ -31,7 +31,7 @@ export function HelpListView() {
                 typography="body4"
                 foreground="muted"
                 render={<span />}
-                className="mt-0.5 block"
+                className="mt-025 block"
               >
                 처음 봤던 소개 4장을 다시 봅니다
               </Text>
@@ -41,7 +41,7 @@ export function HelpListView() {
 
           {HELP_CATEGORIES.map((category) => (
             <section key={category}>
-              <Text typography="subtitle2" foreground="muted" render={<h2 />} className="mb-2">
+              <Text typography="subtitle2" foreground="muted" render={<h2 />} className="mb-100">
                 {category}
               </Text>
               <div className="overflow-hidden rounded-600 border border-gray-200">
@@ -52,8 +52,8 @@ export function HelpListView() {
             </section>
           ))}
 
-          <section className="rounded-600 border border-gray-200 bg-gray-50 p-4">
-            <div className="flex items-center gap-2.5">
+          <section className="rounded-600 border border-gray-200 bg-gray-50 p-200">
+            <div className="flex items-center gap-125">
               <span className="flex-none text-discord">
                 <BrandMark service="discord" size={17} />
               </span>
@@ -61,12 +61,12 @@ export function HelpListView() {
                 여기에 없는 게 궁금하면
               </Text>
             </div>
-            <Text typography="body3" foreground="muted" render={<p />} className="mt-1.5">
+            <Text typography="body3" foreground="muted" render={<p />} className="mt-075">
               디스코드 서버에서 물어보세요.
               <br />
               운영자와 다른 GM들이 같이 봅니다.
             </Text>
-            <Button asChild variant="outline" className="mt-3 h-11 w-full">
+            <Button asChild variant="outline" className="mt-150 h-11 w-full">
               <a href={DISCORD_INVITE_URL} target="_blank" rel="noreferrer">
                 디스코드 서버 열기
                 <ExternalLink size={15} aria-hidden />

@@ -10,7 +10,7 @@ export type TextareaProps = ComponentPropsWithRef<"textarea"> &
 export function Textarea({ invalid, className, ...props }: TextareaProps) {
   return (
     <textarea
-      className={cn(textFieldVariants({ invalid }), "min-h-24 py-2.5", className)}
+      className={cn(textFieldVariants({ invalid }), "min-h-24 py-125", className)}
       {...props}
     />
   );

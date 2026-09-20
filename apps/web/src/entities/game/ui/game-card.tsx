@@ -42,8 +42,8 @@ export function GameCard({ game }: Props) {
         spoilerLabel={game.thumbnailSpoiler ? "스포일러" : undefined}
         className={thumbnailClass}
       />
-      <VStack className="gap-1.5 px-3.5 py-3.5">
-        <HStack justify="between" align="start" gap={2}>
+      <VStack className="gap-075 px-175 py-175">
+        <HStack justify="between" align="start" gap="100">
           <Text truncate typography="heading3" foreground={titleForeground} className="min-w-0">
             {game.title}
           </Text>
@@ -55,7 +55,7 @@ export function GameCard({ game }: Props) {
           </Text>
         )}
         <GameScheduleRow line={line} />
-        <HStack justify="between" align="center" gap={2} className="mt-1">
+        <HStack justify="between" align="center" gap="100" className="mt-050">
           <GameGmLabel name={game.gm?.username} avatarUrl={game.gm?.avatarUrl} />
           <GameCapacity
             status={status}

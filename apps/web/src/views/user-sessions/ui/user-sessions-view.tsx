@@ -38,7 +38,7 @@ export async function UserSessionsView({ id, tab }: { id: string; tab?: string }
         <SessionTabs label="세션 기록" tabs={tabs} activeKey={activeSection.key} />
       </div>
       <Container size="sm">
-        <div className="py-5">
+        <div className="py-250">
           {items.length > 0 ? (
             <SessionList items={items} />
           ) : (

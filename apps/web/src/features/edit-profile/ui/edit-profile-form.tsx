@@ -68,7 +68,7 @@ export function EditProfileForm({
 
   return (
     <form onSubmit={submit} className="flex flex-col">
-      <VStack gap={5} className="pb-4">
+      <VStack gap="250" className="pb-200">
         <AvatarRefreshField defaultUrl={avatarUrl} name={username} />
 
         <Field
@@ -86,7 +86,7 @@ export function EditProfileForm({
           />
         </Field>
 
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-075">
           <Field label="한 줄 소개" htmlFor="bio" error={bioError}>
             <Textarea
               id="bio"
@@ -98,7 +98,7 @@ export function EditProfileForm({
               className="min-h-[76px]"
             />
           </Field>
-          <div className="flex justify-between gap-2">
+          <div className="flex justify-between gap-100">
             <Text typography="body4" foreground="hint">
               마이페이지와 참여자 명단에 함께 보입니다.
             </Text>
@@ -108,7 +108,7 @@ export function EditProfileForm({
           </div>
         </div>
 
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-075">
           <Field label="성향" htmlFor="keywords">
             <TagInput
               id="keywords"
@@ -132,13 +132,13 @@ export function EditProfileForm({
         <AvailabilitySummaryField intervals={availability} />
       </VStack>
 
-      <div className="sticky bottom-[58px] z-10 -mx-4 flex flex-col gap-3 border-t border-gray-200 bg-surface px-4 py-3">
+      <div className="sticky bottom-[58px] z-10 -mx-200 flex flex-col gap-150 border-t border-gray-200 bg-surface px-200 py-150">
         {formError && (
           <Text typography="body2" foreground="danger" render={<p />}>
             {formError}
           </Text>
         )}
-        <div className="flex gap-2 [&>*]:flex-1">
+        <div className="flex gap-100 [&>*]:flex-1">
           <Button
             type="button"
             variant="outline"

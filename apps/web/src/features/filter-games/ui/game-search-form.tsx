@@ -49,7 +49,7 @@ export function GameSearchForm({ filter }: { filter: GamesFilter }) {
       />
       <div className="absolute inset-y-0 right-0 flex items-center">
         {pending ? (
-          <Loader2 size={16} className="mr-3.5 animate-spin text-hint" aria-label="검색 중" />
+          <Loader2 size={16} className="mr-175 animate-spin text-hint" aria-label="검색 중" />
         ) : (
           value && (
             <IconButton

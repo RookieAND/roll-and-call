@@ -14,7 +14,7 @@ export function MemberSheetHeader({
   const unsubmitted = isCoordinate && !member.hasAvailability;
 
   return (
-    <HStack align="center" gap={3} className="border-b border-gray-100 pb-3.5">
+    <HStack align="center" gap="150" className="border-b border-gray-100 pb-175">
       <Avatar src={member.avatarUrl} name={member.username} size="lg" />
       <VStack gap={0}>
         <Text typography="subtitle1">{member.username}</Text>

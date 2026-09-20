@@ -47,8 +47,8 @@ export function ParticipantManager({
     <>
       <AppBar back={`/games/${gameId}`} title="참여자 관리" />
       <Container size="md">
-        <VStack gap={5} className="py-4">
-          <VStack gap={3}>
+        <VStack gap="250" className="py-200">
+          <VStack gap="150">
             <RosterHeader
               title={title}
               methodLabel={summary.methodLabel}

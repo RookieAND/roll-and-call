@@ -51,14 +51,14 @@ export function TagInput({
   const unusedSuggestions = suggestions.filter((suggestion) => !value.includes(suggestion));
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-100">
       {value.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-075">
           {value.map((tag) => (
             <Chip
               key={tag}
               selected
-              className="h-8.5 gap-1"
+              className="h-8.5 gap-050"
               aria-label={`${tag} 삭제`}
               onClick={() => onChange(value.filter((item) => item !== tag))}
             >
@@ -87,7 +87,7 @@ export function TagInput({
             onBlur={() => add(draft)}
           />
           {unusedSuggestions.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-075">
               {unusedSuggestions.map((suggestion) => (
                 <Chip key={suggestion} className="h-9.5" onClick={() => add(suggestion)}>
                   {suggestion}

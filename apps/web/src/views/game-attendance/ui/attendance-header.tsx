@@ -16,9 +16,9 @@ export function AttendanceHeader({
   attendanceConfirmedAt: Date | null;
 }) {
   return (
-    <VStack gap={3}>
-      <VStack gap={2}>
-        <HStack gap={2} align="center">
+    <VStack gap="150">
+      <VStack gap="100">
+        <HStack gap="100" align="center">
           <Text truncate typography="heading1" className="min-w-0 flex-1">
             {title}
           </Text>
@@ -31,7 +31,7 @@ export function AttendanceHeader({
         </Text>
       </VStack>
       {attendanceConfirmedAt ? (
-        <div className="rounded-500 border border-gray-200 px-3.5 py-3">
+        <div className="rounded-500 border border-gray-200 px-175 py-150">
           <Text typography="body4" foreground="muted" render={<p />} className="leading-relaxed">
             {formatDateTime(attendanceConfirmedAt)}에 확정했습니다.
             <br />

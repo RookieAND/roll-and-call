@@ -7,6 +7,26 @@
     "Pretendard Variable", Pretendard, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
 
+  /* 디자인 시스템 §B. padding · margin · gap은 이 토큰만 쓴다.
+     이름은 rem 값을 100배한 수다(8px = 0.5rem = 100). 값이 Tailwind 기본 스케일과
+     같더라도 우리 이름으로 부른다 — 스케일이 바뀌면 여기 한 곳만 고친다. */
+  --spacing-025: 2px;
+  --spacing-050: 4px;
+  --spacing-075: 6px;
+  --spacing-100: 8px;
+  --spacing-125: 10px;
+  --spacing-150: 12px;
+  --spacing-175: 14px;
+  --spacing-200: 16px;
+  --spacing-225: 18px;
+  --spacing-250: 20px;
+  --spacing-300: 24px;
+  --spacing-400: 32px;
+  --spacing-500: 40px;
+  --spacing-600: 48px;
+  --spacing-700: 56px;
+  --spacing-800: 64px;
+
   /* 디자인 시스템 §A. 글씨 크기는 이 토큰만 쓴다 — Text의 typography와 프리미티브가 같은 값을 본다. */
   --text-heading1: 22px;
   --text-heading1--line-height: 1.3;

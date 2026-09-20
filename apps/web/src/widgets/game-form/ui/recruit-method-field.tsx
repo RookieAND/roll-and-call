@@ -32,9 +32,9 @@ export function RecruitMethodField({
   lockedReason?: string | null;
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-100">
       <Field label="모집 방식" required>
-        <Grid cols={2} gap={2}>
+        <Grid cols={2} gap="100">
           {OPTIONS.map((option) => (
             <Chip
               key={option.value}

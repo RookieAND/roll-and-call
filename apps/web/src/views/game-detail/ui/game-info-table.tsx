@@ -13,7 +13,7 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
     {
       label: "GM",
       value: (
-        <Link href={`/u/${game.gmId}`} className="inline-flex items-center gap-1.5">
+        <Link href={`/u/${game.gmId}`} className="inline-flex items-center gap-075">
           <GameGmLabel
             name={game.gm?.username}
             avatarUrl={game.gm?.avatarUrl}
@@ -39,7 +39,7 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
       {rows.map((row) => (
         <div
           key={row.label}
-          className="flex min-h-12 items-center gap-3 border-b border-gray-100 px-4 py-2 last:border-b-0"
+          className="flex min-h-12 items-center gap-150 border-b border-gray-100 px-200 py-100 last:border-b-0"
         >
           <Text typography="body3" foreground="muted" className="w-[82px] shrink-0">
             {row.label}

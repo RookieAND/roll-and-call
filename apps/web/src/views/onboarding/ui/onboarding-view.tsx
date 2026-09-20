@@ -87,7 +87,7 @@ export function OnboardingView() {
               <OnboardingPreview slideKey={slide.key} />
             </div>
           )}
-          <VStack gap={3} className={welcome ? "mt-[34px]" : "mt-6"}>
+          <VStack gap="150" className={welcome ? "mt-400" : "mt-300"}>
             {slide.eyebrow && (
               <Text
                 typography="code2"
@@ -106,7 +106,7 @@ export function OnboardingView() {
             </Text>
           </VStack>
         </div>
-        <div className="flex justify-center gap-1.5 py-4">
+        <div className="flex justify-center gap-075 py-200">
           {ONBOARDING_SLIDES.map((item, itemIndex) => (
             <span
               key={item.key}
@@ -117,7 +117,7 @@ export function OnboardingView() {
             />
           ))}
         </div>
-        <VStack gap={1} className="mb-6">
+        <VStack gap="050" className="mb-300">
           <Button size="lg" className="w-full" onClick={goNext}>
             {nextLabel}
           </Button>

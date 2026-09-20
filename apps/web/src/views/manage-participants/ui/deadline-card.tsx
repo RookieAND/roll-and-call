@@ -10,9 +10,9 @@ export function DeadlineCard({ summary, locked }: { summary: RosterSummary; lock
     : "기한이 지나도 명단은 계속 고칠 수 있습니다.";
 
   return (
-    <VStack gap={2}>
-      <Card padding="none" className="rounded-500 px-3.5 py-3">
-        <HStack align="center" gap={2}>
+    <VStack gap="100">
+      <Card padding="none" className="rounded-500 px-175 py-150">
+        <HStack align="center" gap="100">
           <Clock size={15} strokeWidth={2.2} aria-hidden className="shrink-0 text-gray-600" />
           <Text typography="body4" foreground="muted" className="min-w-0 flex-1">
             모집 마감

@@ -12,8 +12,8 @@ export function HomeDaySessions({ date, sessions }: { date: Date; sessions: Cale
   const countLabel = sessions.length > 0 ? `${sessions.length}건` : "세션 없음";
 
   return (
-    <section className="border-t border-gray-200 p-4">
-      <div className="mb-3 flex items-baseline gap-2">
+    <section className="border-t border-gray-200 p-200">
+      <div className="mb-150 flex items-baseline gap-100">
         <Text typography="heading3" render={<h3 />} className="font-extrabold">
           {title}
         </Text>
@@ -24,7 +24,7 @@ export function HomeDaySessions({ date, sessions }: { date: Date; sessions: Cale
       {sessions.length === 0 ? (
         <EmptyState
           size="section"
-          className="p-4"
+          className="p-200"
           title="이 날 잡힌 세션이 없습니다"
           description={
             <>
@@ -40,7 +40,7 @@ export function HomeDaySessions({ date, sessions }: { date: Date; sessions: Cale
           }
         />
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-100">
           {sessions.map((session) => (
             <Link key={session.id} href={`/games/${session.id}`} className="block">
               <HomeSessionCard session={session} />

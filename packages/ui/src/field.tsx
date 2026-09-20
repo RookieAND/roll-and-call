@@ -24,9 +24,9 @@ export function Field({
   children,
 }: FieldProps) {
   return (
-    <div className={cn("flex flex-col gap-1.5", className)}>
+    <div className={cn("flex flex-col gap-075", className)}>
       {(label || counter) && (
-        <div className="flex items-baseline justify-between gap-2">
+        <div className="flex items-baseline justify-between gap-100">
           <label htmlFor={htmlFor} className="text-body4 font-bold text-gray-700">
             {label}
             {required && <span className="text-danger-600"> *</span>}

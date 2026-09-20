@@ -21,9 +21,9 @@ export function ConfirmedRosterSheet({
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Content>
-        <Sheet.Title className="mb-3">참여자 명단</Sheet.Title>
+        <Sheet.Title className="mb-150">참여자 명단</Sheet.Title>
 
-        <div className="max-h-[60vh] divide-y divide-gray-200 overflow-y-auto [&>*+*]:mt-3 [&>*+*]:pt-3">
+        <div className="max-h-[60vh] divide-y divide-gray-200 overflow-y-auto [&>*+*]:mt-150 [&>*+*]:pt-150">
           <RosterGmGroup gm={gm} viewerId={viewerId} />
           <RosterGroup label="참여" count={confirmed.length}>
             {confirmed.map((member) => (

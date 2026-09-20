@@ -26,15 +26,15 @@ export function RoundRangeFields({
   const from = afterSession ? "1회차 세션 다음 날부터" : "오늘부터";
 
   return (
-    <VStack gap={2}>
-      <HStack gap={3} align="start">
-        <VStack gap={2} className="flex-1">
+    <VStack gap="100">
+      <HStack gap="150" align="start">
+        <VStack gap="100" className="flex-1">
           <Text weight="bold" typography="body4">
             조율 시작일
           </Text>
           <DatePicker value={start} onChange={onStartChange} min={earliest} />
         </VStack>
-        <VStack gap={2} className="flex-1">
+        <VStack gap="100" className="flex-1">
           <Text weight="bold" typography="body4">
             조율 종료일
           </Text>

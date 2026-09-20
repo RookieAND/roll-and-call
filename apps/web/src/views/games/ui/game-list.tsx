@@ -28,7 +28,7 @@ export async function GameList({
 
   return (
     <>
-      <VStack className="gap-2.5">
+      <VStack className="gap-125">
         {rows.map((game) => (
           <Link key={game.id} href={`/games/${game.id}`} className="block h-full">
             <GameCard game={game} />

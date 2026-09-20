@@ -24,7 +24,7 @@ export function AppBar({ title, brand, back, onBack, backIcon = "back", action }
   const backLabel = backIcon === "close" ? "닫기" : "뒤로";
 
   return (
-    <header className="sticky top-0 z-20 flex h-[52px] items-center gap-1 border-b border-gray-200 bg-surface/90 px-3.5 backdrop-blur">
+    <header className="sticky top-0 z-20 flex h-[52px] items-center gap-050 border-b border-gray-200 bg-surface/90 px-175 backdrop-blur">
       {onBack ? (
         <IconButton
           variant="ghost"

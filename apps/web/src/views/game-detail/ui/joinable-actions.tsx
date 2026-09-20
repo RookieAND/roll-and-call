@@ -31,7 +31,7 @@ export function JoinableActions({
       : scheduleHint;
 
   return (
-    <VStack gap={2}>
+    <VStack gap="100">
       {joinHint && <ActionHint>{joinHint}</ActionHint>}
       <JoinGameButton gameId={gameId} className={ACTION_PRIMARY_CLASS}>
         {joinLabel}

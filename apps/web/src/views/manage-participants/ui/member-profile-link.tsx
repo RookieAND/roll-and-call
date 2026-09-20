@@ -15,7 +15,10 @@ export function MemberProfileLink({
   note: ReactNode;
 }) {
   return (
-    <Link href={`/u/${member.userId}`} className="flex min-h-11 min-w-0 flex-1 items-center gap-3">
+    <Link
+      href={`/u/${member.userId}`}
+      className="flex min-h-11 min-w-0 flex-1 items-center gap-150"
+    >
       {rank != null && (
         <Text numeric typography="code2" foreground="hint" className="w-5 shrink-0 text-center">
           {rank}

@@ -27,7 +27,7 @@ export function SessionTimeFields({
   const dateItems = days.map((day) => ({ value: day.date, label: day.label }));
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-100">
       <Field label="날짜" className="min-w-0 flex-1">
         <Select.Root
           items={dateItems}
@@ -45,7 +45,7 @@ export function SessionTimeFields({
         </Select.Root>
       </Field>
       <Field label="시작 시각" className="w-[152px] shrink-0">
-        <div className="flex gap-2">
+        <div className="flex gap-100">
           <Select.Root
             items={HOURS}
             value={String(start.hour)}

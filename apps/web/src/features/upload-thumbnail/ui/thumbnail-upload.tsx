@@ -56,13 +56,13 @@ export function ThumbnailUpload({
   }
 
   const dropClass = cn(
-    "flex aspect-video w-full flex-col items-center justify-center gap-1.5 rounded-500 border-[1.5px] border-dashed px-4 text-center transition-colors",
+    "flex aspect-video w-full flex-col items-center justify-center gap-075 rounded-500 border-[1.5px] border-dashed px-200 text-center transition-colors",
     dragging ? "border-primary-500 bg-tinted-bg" : "border-gray-300 bg-gray-50 hover:bg-gray-100",
     error && !dragging && "border-danger-400",
   );
 
   return (
-    <div id="thumbnailUrl" className="flex min-w-0 flex-col gap-1.5">
+    <div id="thumbnailUrl" className="flex min-w-0 flex-col gap-075">
       <div className="flex items-baseline justify-between">
         <Text weight="bold" typography="body4" className="text-gray-700">
           썸네일
@@ -75,7 +75,7 @@ export function ThumbnailUpload({
       {value ? (
         <div className="overflow-hidden rounded-500 border border-gray-200">
           <img src={value} alt="썸네일 미리보기" className="aspect-video w-full object-cover" />
-          <div className="flex items-center gap-2 px-3 py-2">
+          <div className="flex items-center gap-100 px-150 py-100">
             <div className="min-w-0 flex-1">
               <Text truncate weight="medium" typography="body4">
                 {picked ? picked.name : "올린 이미지 · 16:9"}
@@ -143,7 +143,7 @@ export function ThumbnailUpload({
       )}
 
       {error ? (
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-100">
           <Text typography="body4" foreground="danger" render={<p />}>
             {error}
           </Text>

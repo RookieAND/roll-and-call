@@ -5,7 +5,7 @@ export function ConflictNote({ message }: { message?: string }) {
   if (!message) return null;
 
   return (
-    <div className="flex items-start gap-2 pr-1 pb-0.5 pl-[50px]">
+    <div className="flex items-start gap-100 pr-050 pb-025 pl-600">
       <CircleAlert size={14} className="mt-px flex-none text-danger-600" aria-hidden />
       <Text typography="body4" foreground="danger" render={<p />} className="flex-1 leading-[1.55]">
         {message}

@@ -15,8 +15,8 @@ export function RosterQueue({
   children: ReactNode;
 }) {
   return (
-    <VStack gap={2}>
-      <HStack align="baseline" gap={2}>
+    <VStack gap="100">
+      <HStack align="baseline" gap="100">
         <Text typography="subtitle1" render={<h2 />}>
           {label}
         </Text>

@@ -64,8 +64,8 @@ export function RoundSheet({
     <>
       <Sheet.Root open={open} onOpenChange={requestOpenChange}>
         <Sheet.Content>
-          <VStack gap={4}>
-            <VStack gap={1}>
+          <VStack gap="200">
+            <VStack gap="050">
               <Text typography="heading3">다음 회차 만들기</Text>
               <Text typography="body3" foreground="muted">
                 {title} · 대기 {waitingCount}명
@@ -83,7 +83,7 @@ export function RoundSheet({
               onEndChange={setRangeEnd}
             />
 
-            <div className="flex gap-2 [&>*]:flex-1">
+            <div className="flex gap-100 [&>*]:flex-1">
               <Button variant="outline" className="h-11" onClick={() => requestOpenChange(false)}>
                 취소
               </Button>

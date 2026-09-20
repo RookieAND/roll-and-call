@@ -28,7 +28,7 @@ export function GamesFilterSheet({ filter }: { filter: GamesFilter }) {
         variant="ghost"
         onClick={() => setOpen(true)}
         aria-label={`정렬: ${currentLabel}`}
-        className="-mr-3 h-10 shrink-0 gap-0.5 px-3 text-body3 text-gray-700"
+        className="-mr-150 h-10 shrink-0 gap-025 px-150 text-body3 text-gray-700"
       >
         {currentLabel}
         <ChevronDown size={14} aria-hidden />
@@ -36,7 +36,7 @@ export function GamesFilterSheet({ filter }: { filter: GamesFilter }) {
 
       <Sheet.Root open={open} onOpenChange={setOpen}>
         <Sheet.Content>
-          <Sheet.Title className="mb-2 text-base font-bold text-gray-900">정렬</Sheet.Title>
+          <Sheet.Title className="mb-100 text-base font-bold text-gray-900">정렬</Sheet.Title>
           {/* ponytail: single-select list w/ dividers + check — not a Chip/segment look, hand-rolled rows */}
           <div role="radiogroup" aria-label="정렬" className="divide-y divide-gray-100">
             {GAME_SORTS.map((option) => {

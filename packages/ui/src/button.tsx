@@ -5,7 +5,7 @@ import { isValidElement, type ComponentPropsWithRef, type ReactElement } from "r
 import { cn } from "./cn";
 
 const button = cva(
-  "inline-flex items-center justify-center gap-2 rounded-500 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-100 rounded-500 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -19,9 +19,9 @@ const button = cva(
         danger: "border border-danger-200 text-danger-600 hover:bg-danger-50",
       },
       size: {
-        sm: "h-8 px-3 text-sm",
-        md: "h-10 px-4 text-sm",
-        lg: "h-12 px-6 text-heading3",
+        sm: "h-8 px-150 text-sm",
+        md: "h-10 px-200 text-sm",
+        lg: "h-12 px-300 text-heading3",
       },
     },
     defaultVariants: { variant: "solid", size: "md" },

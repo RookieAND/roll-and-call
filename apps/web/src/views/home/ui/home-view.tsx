@@ -27,12 +27,12 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
         title="롤앤콜"
         brand
         action={
-          user ? <HelpButton /> : <LoginButton next="/" className="h-[34px] px-3 text-body3" />
+          user ? <HelpButton /> : <LoginButton next="/" className="h-[34px] px-150 text-body3" />
         }
       />
       <Container size="sm" className="px-0">
         {authError && (
-          <div className="px-4 pt-3">
+          <div className="px-200 pt-150">
             <StatusNotice tone="muted" className="text-left">
               로그인하지 못했습니다. 오른쪽 위 버튼으로 다시 시도해 주세요.
             </StatusNotice>

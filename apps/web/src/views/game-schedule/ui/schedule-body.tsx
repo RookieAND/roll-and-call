@@ -72,7 +72,7 @@ export function ScheduleBody({
 
   if (confirmedAt) {
     return (
-      <VStack gap={3}>
+      <VStack gap="150">
         {pager}
         <ScheduleOverlap hint="확정 칸은 초록 테두리입니다. 입력은 잠깁니다." {...overlapProps} />
       </VStack>
@@ -81,9 +81,9 @@ export function ScheduleBody({
 
   if (involved) {
     return (
-      <VStack gap={5}>
+      <VStack gap="250">
         {!isGm && deadlinePassed && <DeadlinePassedNotice />}
-        <VStack gap={3}>
+        <VStack gap="150">
           {pager}
           <ScheduleTabs
             respondentCount={respondentCount}
@@ -105,9 +105,9 @@ export function ScheduleBody({
   }
 
   return (
-    <VStack gap={4}>
+    <VStack gap="200">
       <ParticipantsOnlyNotice isSignedIn={isSignedIn} />
-      <VStack gap={3}>
+      <VStack gap="150">
         {pager}
         {overlap}
       </VStack>

@@ -12,8 +12,8 @@ export function AvailabilitySummaryField({
   const days = filledDays(intervals);
 
   return (
-    <div className="rounded-500 border border-gray-200 p-3.5">
-      <div className="mb-2.5 flex items-baseline gap-2">
+    <div className="rounded-500 border border-gray-200 p-175">
+      <div className="mb-125 flex items-baseline gap-100">
         <Text weight="bold" typography="body4" className="flex-1">
           가능 시간대
         </Text>
@@ -23,11 +23,11 @@ export function AvailabilitySummaryField({
       </div>
 
       {days.length > 0 ? (
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-075">
           {days.map((day) => (
             <div
               key={day.day}
-              className="flex min-h-[38px] items-center gap-2.5 rounded-400 bg-gray-50 px-3"
+              className="flex min-h-[38px] items-center gap-125 rounded-400 bg-gray-50 px-150"
             >
               <Text weight="bold" typography="body3" className="w-[34px] flex-none">
                 {day.label}
@@ -52,7 +52,7 @@ export function AvailabilitySummaryField({
         </div>
       )}
 
-      <Button asChild variant="outline" className="mt-3 h-11 w-full text-primary-ink">
+      <Button asChild variant="outline" className="mt-150 h-11 w-full text-primary-ink">
         <Link href="/me/availability">{days.length > 0 ? "수정하기" : "시간대 설정하기"}</Link>
       </Button>
     </div>

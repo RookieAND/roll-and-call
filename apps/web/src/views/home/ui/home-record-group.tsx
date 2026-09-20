@@ -30,21 +30,21 @@ export function HomeRecordGroup({
         weight="extrabold"
         foreground="hint"
         render={<div />}
-        className="mb-2.5 tracking-[0.06em]"
+        className="mb-125 tracking-[0.06em]"
       >
         {label}
       </Text>
       {!first ? (
         <EmptyState
           size="section"
-          className="p-4"
+          className="p-200"
           title={emptyTitle}
           description={emptyDescription}
         />
       ) : (
         <>
           <HomeRecordLeader people={[first, ...rest]} count={leaderCount} />
-          <div className="divide-y divide-gray-100 px-0.5">
+          <div className="divide-y divide-gray-100 px-025">
             {runnersUp.map((row, index) => (
               <HomeRecordRow
                 key={row?.person.id ?? `empty-${index}`}

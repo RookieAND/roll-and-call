@@ -24,7 +24,10 @@ export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupPro
   return (
     <div className={cn("flex items-center", className)}>
       {shown.map((person, index) => (
-        <span key={index} className="-ml-2 inline-flex rounded-full ring-2 ring-surface first:ml-0">
+        <span
+          key={index}
+          className="-ml-100 inline-flex rounded-full ring-2 ring-surface first:ml-0"
+        >
           <Avatar src={person.src} name={person.name} size={size} />
         </span>
       ))}
@@ -33,7 +36,7 @@ export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupPro
           <span
             className={cn(
               avatarVariants({ size }),
-              "-ml-2 bg-gray-100 text-gray-600 ring-2 ring-surface",
+              "-ml-100 bg-gray-100 text-gray-600 ring-2 ring-surface",
             )}
           >
             +{extra}

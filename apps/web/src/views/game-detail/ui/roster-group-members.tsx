@@ -30,7 +30,7 @@ export function RosterGroupMembers({
       typography="body3"
       foreground="muted"
       render={<p />}
-      className="rounded-500 border border-dashed border-gray-300 p-4 text-center"
+      className="rounded-500 border border-dashed border-gray-300 p-200 text-center"
     >
       {emptyText}
     </Text>

@@ -9,25 +9,25 @@ export default function Loading() {
     <>
       <AppBar back="/games" title="참여자 관리" />
       <Container size="md">
-        <VStack gap={5} className="py-4">
-          <VStack gap={3}>
-            <div className="flex items-center gap-2">
+        <VStack gap="250" className="py-200">
+          <VStack gap="150">
+            <div className="flex items-center gap-100">
               <Skeleton className="h-7 min-w-0 flex-1" />
               <Skeleton className="h-[21px] w-14 rounded-300" />
               <Skeleton className="h-[21px] w-16 rounded-300" />
             </div>
-            <Grid cols={2} gap={2}>
+            <Grid cols={2} gap="100">
               <Skeleton className="h-[73px] rounded-500" />
               <Skeleton className="h-[73px] rounded-500" />
             </Grid>
-            <VStack gap={2}>
+            <VStack gap="100">
               <Skeleton className="h-[45px] rounded-500" />
               <Skeleton className="h-[17px] w-64" />
             </VStack>
           </VStack>
 
-          <VStack gap={2}>
-            <div className="flex items-baseline gap-2">
+          <VStack gap="100">
+            <div className="flex items-baseline gap-100">
               <Skeleton className="h-[21px] w-14" />
               <Skeleton className="h-[21px] w-10" />
             </div>
@@ -35,7 +35,7 @@ export default function Loading() {
               {Array.from({ length: ROSTER_ROW_COUNT }).map((_, index) => (
                 <div
                   key={index}
-                  className="flex min-h-14 items-center gap-3 border-t border-gray-100 px-3 py-2 first:border-t-0"
+                  className="flex min-h-14 items-center gap-150 border-t border-gray-100 px-150 py-100 first:border-t-0"
                 >
                   <Skeleton className="h-[34px] w-[34px] rounded-full" />
                   <Skeleton className="h-[17px] w-24" />

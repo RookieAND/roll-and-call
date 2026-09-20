@@ -49,7 +49,7 @@ export function GameScheduleFields({
         <CoordinationRangeFields form={form} />
       )}
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-075">
         <Field label="모집 마감" htmlFor="endDate" required error={errors.endDate?.message}>
           <Controller
             name="endDate"

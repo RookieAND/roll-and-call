@@ -20,36 +20,36 @@ export default function Loading() {
         <div className="h-full w-1/4 bg-primary-600" />
       </div>
       <Container size="md" className="flex-1">
-        <VStack gap={5} className="py-6">
+        <VStack gap="250" className="py-300">
           <div>
             <Skeleton className="h-[26px] w-16" />
-            <Skeleton className="mt-1 h-5 w-56" />
+            <Skeleton className="mt-050 h-5 w-56" />
           </div>
-          <VStack gap={2}>
+          <VStack gap="100">
             <Skeleton className="h-5 w-16" />
             <Skeleton className="h-11 w-full rounded-400" />
           </VStack>
-          <VStack gap={2}>
+          <VStack gap="100">
             <Skeleton className="h-5 w-8" />
             <Skeleton className="h-11 w-full rounded-400" />
-            <div className="flex gap-1.5">
+            <div className="flex gap-075">
               <Skeleton className="h-8.5 w-20 rounded-full" />
               <Skeleton className="h-8.5 w-16 rounded-full" />
               <Skeleton className="h-8.5 w-20 rounded-full" />
             </div>
           </VStack>
-          <VStack gap={2}>
+          <VStack gap="100">
             <Skeleton className="h-5 w-24" />
             <Skeleton className="h-11 w-full rounded-400" />
           </VStack>
-          <VStack gap={2}>
+          <VStack gap="100">
             <Skeleton className="h-5 w-16" />
             <Skeleton className="h-[104px] w-full rounded-400" />
           </VStack>
         </VStack>
       </Container>
       <div className="sticky bottom-0 z-10 border-t border-gray-200 bg-surface">
-        <Container size="md" className="py-3">
+        <Container size="md" className="py-150">
           <Skeleton className="h-[50px] w-full rounded-500" />
         </Container>
       </div>

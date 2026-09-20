@@ -11,7 +11,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
 
   if (block.kind === HELP_BLOCK.note) {
     return (
-      <div className="border-l-2 border-tinted-border pl-3">
+      <div className="border-l-2 border-tinted-border pl-150">
         <Text typography="body3" foreground="muted" render={<p />}>
           {block.body}
         </Text>
@@ -22,7 +22,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
   if (block.kind === HELP_BLOCK.rows) {
     return (
       <section>
-        <Text typography="subtitle2" foreground="muted" render={<h3 />} className="mb-2">
+        <Text typography="subtitle2" foreground="muted" render={<h3 />} className="mb-100">
           {block.label}
         </Text>
         <div className="overflow-hidden rounded-600 border border-gray-200">
@@ -36,22 +36,22 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
 
   if (block.kind === HELP_BLOCK.compare) {
     return (
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-2 gap-125">
         {block.columns.map((column) => (
-          <div key={column.title} className="rounded-600 border border-gray-200 p-3.5">
+          <div key={column.title} className="rounded-600 border border-gray-200 p-175">
             <Text typography="subtitle1" render={<h3 />}>
               {column.title}
             </Text>
-            <Text typography="body3" foreground="muted" render={<p />} className="mt-1.5">
+            <Text typography="body3" foreground="muted" render={<p />} className="mt-075">
               {column.summary}
             </Text>
-            <VStack gap={3} className="mt-3">
+            <VStack gap="150" className="mt-150">
               {column.rows.map((row) => (
                 <div key={row.term}>
                   <Text typography="body4" foreground="hint" render={<span />} className="block">
                     {row.term}
                   </Text>
-                  <Text typography="body3" render={<p />} className="mt-1">
+                  <Text typography="body3" render={<p />} className="mt-050">
                     {row.description}
                   </Text>
                 </div>
@@ -64,9 +64,9 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
   }
 
   return (
-    <VStack gap={4}>
+    <VStack gap="200">
       {block.steps.map((step, index) => (
-        <div key={step.title} className="flex gap-3">
+        <div key={step.title} className="flex gap-150">
           <div className="flex flex-none flex-col items-center">
             <Text
               typography="subtitle2"
@@ -75,9 +75,9 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
             >
               {index + 1}
             </Text>
-            {index < block.steps.length - 1 && <span className="mt-1.5 w-0.5 flex-1 bg-gray-100" />}
+            {index < block.steps.length - 1 && <span className="mt-075 w-0.5 flex-1 bg-gray-100" />}
           </div>
-          <VStack gap={2} className="min-w-0 flex-1 pb-1">
+          <VStack gap="100" className="min-w-0 flex-1 pb-050">
             <Text typography="subtitle1" render={<h3 />}>
               {step.title}
             </Text>
@@ -86,7 +86,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
             </Text>
             {step.figure && <HelpFigure figure={step.figure} />}
             {step.note && (
-              <div className="border-l-2 border-tinted-border pl-3">
+              <div className="border-l-2 border-tinted-border pl-150">
                 <Text typography="body3" foreground="muted" render={<p />}>
                   {step.note}
                 </Text>

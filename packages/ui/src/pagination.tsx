@@ -8,7 +8,7 @@ export type PaginationProps = {
   className?: string;
 };
 
-const cell = "inline-flex h-10 min-w-10 items-center justify-center rounded-400 px-2 text-body3";
+const cell = "inline-flex h-10 min-w-10 items-center justify-center rounded-400 px-100 text-body3";
 
 // framework-agnostic: renders plain anchors so @trpg/ui stays free of next/link
 export function Pagination({
@@ -27,7 +27,7 @@ export function Pagination({
   return (
     <nav
       aria-label="페이지네이션"
-      className={cn("flex items-center justify-center gap-1", className)}
+      className={cn("flex items-center justify-center gap-050", className)}
     >
       {page > 1 ? (
         <a

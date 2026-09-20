@@ -53,10 +53,10 @@ export function GameDetail({
     <>
       <AppBar back="/games" title="구인 상세" action={<ShareButton gameId={game.id} />} />
       <Container size="md" className="px-0">
-        <VStack gap={4}>
+        <VStack gap="200">
           <GameDetailThumbnail url={game.thumbnailUrl} spoiler={game.thumbnailSpoiler} />
 
-          <VStack gap={5} className="px-4 pb-2">
+          <VStack gap="250" className="px-200 pb-100">
             <GameDetailHeader title={game.title} status={status} statusLine={scheduleLine(game)} />
 
             <GameInfoTable game={game} isGm={isGm} />

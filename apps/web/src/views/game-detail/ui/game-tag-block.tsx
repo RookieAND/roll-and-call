@@ -10,11 +10,11 @@ export function GameTagBlock({
   note?: string;
 }) {
   return (
-    <VStack gap={2}>
+    <VStack gap="100">
       <Text typography="heading3" render={<h2 />}>
         {label}
       </Text>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-075">
         {tags.map((tag) => (
           <Chip key={tag} asChild>
             <span>{tag}</span>

@@ -8,8 +8,8 @@ export function SessionWindowSummary({
   memberCount: number;
 }) {
   return (
-    <div className="rounded-500 bg-gray-50 px-3.5 py-2.5">
-      <div className="flex items-baseline justify-between gap-2">
+    <div className="rounded-500 bg-gray-50 px-175 py-125">
+      <div className="flex items-baseline justify-between gap-100">
         <Text typography="body4" foreground="muted" render={<span />}>
           세션 시간
         </Text>
@@ -17,7 +17,7 @@ export function SessionWindowSummary({
           {windowLabel}
         </Text>
       </div>
-      <div className="mt-1 flex items-baseline justify-between gap-2">
+      <div className="mt-050 flex items-baseline justify-between gap-100">
         <Text typography="body4" foreground="muted" render={<span />}>
           가능 인원
         </Text>

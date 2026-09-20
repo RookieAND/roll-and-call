@@ -24,16 +24,16 @@ export function LotteryRosterSheet({
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Content>
-        <Sheet.Title className="mb-3">명단</Sheet.Title>
+        <Sheet.Title className="mb-150">명단</Sheet.Title>
 
-        <div className="max-h-[60vh] divide-y divide-gray-200 overflow-y-auto [&>*+*]:mt-3 [&>*+*]:pt-3">
+        <div className="max-h-[60vh] divide-y divide-gray-200 overflow-y-auto [&>*+*]:mt-150 [&>*+*]:pt-150">
           <RosterGmGroup gm={gm} viewerId={viewerId} />
           <RosterGroup label="신청" count={applicants.length}>
             {applicants.map((member) => (
               <RosterSheetRow key={member.userId} member={member} viewerId={viewerId} />
             ))}
           </RosterGroup>
-          <Text typography="body4" foreground="hint" render={<p />} className="pt-2">
+          <Text typography="body4" foreground="hint" render={<p />} className="pt-100">
             추첨 전에는 순번이 없습니다. 신청 순서로만 보여줍니다.
           </Text>
         </div>

@@ -50,13 +50,13 @@ export function MemoForm({
         }
       />
 
-      <div className="flex items-center gap-3 border-b border-gray-100 px-4 py-3.5">
+      <div className="flex items-center gap-150 border-b border-gray-100 px-200 py-175">
         <Avatar src={targetAvatarUrl} name={targetName} size="lg" />
         <div className="min-w-0 flex-1">
           <Text truncate typography="subtitle1">
             {targetName}
           </Text>
-          <div className="mt-0.5 flex items-center gap-1.5">
+          <div className="mt-025 flex items-center gap-075">
             <Lock size={12} className="flex-none text-hint" aria-hidden />
             <Text typography="body4" foreground="hint">
               나만 봅니다
@@ -65,7 +65,7 @@ export function MemoForm({
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-200">
         <Textarea
           value={body}
           onChange={(event) => setBody(event.target.value)}
@@ -74,7 +74,7 @@ export function MemoForm({
           aria-label="메모 내용"
           className="min-h-[150px] leading-[1.7]"
         />
-        <div className="mt-2 flex items-baseline gap-2">
+        <div className="mt-100 flex items-baseline gap-100">
           <Text typography="body4" foreground="hint" className="flex-1 leading-[1.6]">
             상대는 이 메모를 볼 수 없고, 알림도 가지 않습니다.
           </Text>
@@ -85,7 +85,7 @@ export function MemoForm({
       </div>
 
       {defaultBody && (
-        <div className="border-t border-gray-200 px-4 pt-3 pb-4">
+        <div className="border-t border-gray-200 px-200 pt-150 pb-200">
           <Button
             variant="outline"
             className="h-12 w-full border-danger-300 text-danger-600"
@@ -99,7 +99,7 @@ export function MemoForm({
             메모 삭제
           </Button>
           {updatedAt && (
-            <Text typography="body4" foreground="hint" render={<p />} className="mt-2">
+            <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
               {formatDate(updatedAt)}에 마지막으로 고쳤습니다.
             </Text>
           )}

@@ -29,7 +29,7 @@ export async function GameConfirmView({ id }: { id: string }) {
     <>
       <AppBar back={`/games/${id}/manage`} title="세션 시간 결정" />
       <Container size="sm">
-        <VStack gap={5} className="pt-4 pb-4">
+        <VStack gap="250" className="pt-200 pb-200">
           <ConfirmSummary playLabel={playLabel} respondedCount={respondedCount} />
           <ConfirmSessionForm
             gameId={id}

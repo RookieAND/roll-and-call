@@ -19,7 +19,7 @@ export function AvailabilitySaveBar({
   const statusClass = dirty ? "font-semibold text-warning-600" : "text-hint";
 
   return (
-    <div className="sticky bottom-0 z-10 -mx-4 flex items-center gap-2 border-t border-gray-200 bg-surface px-4 py-3">
+    <div className="sticky bottom-0 z-10 -mx-200 flex items-center gap-100 border-t border-gray-200 bg-surface px-200 py-150">
       <Text typography="body3" render={<p />} className="min-w-0 flex-1 tabular-nums">
         선택 {selectedCount}칸 · <span className={statusClass}>{status}</span>
       </Text>
@@ -30,7 +30,7 @@ export function AvailabilitySaveBar({
       )}
       <Button
         type="button"
-        className="h-11 shrink-0 px-6"
+        className="h-11 shrink-0 px-300"
         loading={pending}
         disabled={!dirty}
         onClick={onSave}

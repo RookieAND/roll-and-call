@@ -10,7 +10,7 @@ export function ProfileIdentity({
   handle?: string | null;
 }) {
   return (
-    <HStack gap={3} align="center">
+    <HStack gap="150" align="center">
       <Avatar src={avatarUrl} name={name} size="2xl" />
       <div>
         <Text typography="heading2" className="block leading-tight">

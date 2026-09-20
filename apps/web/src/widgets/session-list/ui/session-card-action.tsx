@@ -16,14 +16,14 @@ export function SessionCardAction({ model }: { model: SessionCardModel }) {
   if (!action) return null;
 
   if (action.kind === SESSION_ACTION_KIND.cancelWaitlist) {
-    return <CancelWaitlistButton gameId={model.id} title={model.title} className="mt-2.5 h-11" />;
+    return <CancelWaitlistButton gameId={model.id} title={model.title} className="mt-125 h-11" />;
   }
 
   const variant = SOLID_KINDS.includes(action.kind) ? "solid" : "tinted";
   const isHostMenu = action.kind === SESSION_ACTION_KIND.hostMenu;
 
   return (
-    <Button asChild variant={variant} className="mt-2.5 h-11 w-full gap-1.5">
+    <Button asChild variant={variant} className="mt-125 h-11 w-full gap-075">
       <Link href={action.href}>
         {action.label}
         {isHostMenu && <ChevronRight size={14} aria-hidden />}

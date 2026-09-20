@@ -14,19 +14,19 @@ export function ConfirmSummary({
 
   return (
     <div>
-      <div className="flex gap-2">
+      <div className="flex gap-100">
         {items.map((item) => (
-          <div key={item.label} className="flex-1 rounded-500 border border-gray-200 px-3.5 py-3">
+          <div key={item.label} className="flex-1 rounded-500 border border-gray-200 px-175 py-150">
             <Text typography="body4" foreground="hint" render={<p />}>
               {item.label}
             </Text>
-            <Text typography="subtitle1" render={<p />} className="mt-0.5">
+            <Text typography="subtitle1" render={<p />} className="mt-025">
               {item.value}
             </Text>
           </div>
         ))}
       </div>
-      <Text typography="body4" foreground="hint" render={<p />} className="mt-2">
+      <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
         시작 시각부터 {playLabel}이 끊기지 않고 비는 시간만 셉니다.
       </Text>
     </div>

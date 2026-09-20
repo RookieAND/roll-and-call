@@ -49,7 +49,7 @@ export function Calendar({ value, onSelect, min, max }: CalendarProps) {
 
   return (
     <div className="w-64 select-none">
-      <div className="flex items-center justify-between px-1 py-1">
+      <div className="flex items-center justify-between px-050 py-050">
         <button
           type="button"
           onClick={goToPreviousMonth}
@@ -72,12 +72,12 @@ export function Calendar({ value, onSelect, min, max }: CalendarProps) {
       </div>
       <div className="grid grid-cols-7 text-center text-xs text-hint">
         {WEEKDAYS.map((weekday) => (
-          <div key={weekday} className="py-1">
+          <div key={weekday} className="py-050">
             {weekday}
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-0.5 text-center text-sm">
+      <div className="grid grid-cols-7 gap-025 text-center text-sm">
         {cells.map((day, index) => {
           if (day === null) return <div key={index} />;
           const date = toDateKey(view.year, view.month, day);

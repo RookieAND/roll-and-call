@@ -13,12 +13,14 @@ export function HomeSessionCard({ session }: { session: CalendarSession }) {
     : "border-gray-200 hover:bg-gray-50";
 
   return (
-    <div className={cn("flex gap-3 rounded-600 border px-3.5 py-3 transition-colors", cardTone)}>
+    <div
+      className={cn("flex gap-150 rounded-600 border px-175 py-150 transition-colors", cardTone)}
+    >
       <Text typography="subtitle2" weight="extrabold" numeric className="w-11 flex-none pt-px">
         {time}
       </Text>
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-100">
           <Text truncate typography="subtitle1" className="min-w-0 flex-1">
             {session.title}
           </Text>
@@ -28,17 +30,17 @@ export function HomeSessionCard({ session }: { session: CalendarSession }) {
               typography="body4"
               foreground="primary"
               tight
-              className="flex-none rounded-200 bg-primary-50 px-2 py-1"
+              className="flex-none rounded-200 bg-primary-50 px-100 py-050"
             >
               내가 참여
             </Text>
           )}
         </div>
-        <div className="mt-2 flex items-center gap-2">
+        <div className="mt-100 flex items-center gap-100">
           <Text
             weight="bold"
             typography="body4"
-            className="flex h-5 flex-none items-center rounded-200 bg-gray-100 px-2 text-gray-700"
+            className="flex h-5 flex-none items-center rounded-200 bg-gray-100 px-100 text-gray-700"
           >
             {session.rule}
           </Text>
@@ -53,7 +55,7 @@ export function HomeSessionCard({ session }: { session: CalendarSession }) {
           <span
             aria-label={`참여 인원 ${session.players.length}/${session.maxPlayers}`}
             className={cn(
-              "flex flex-none items-center gap-1",
+              "flex flex-none items-center gap-050",
               full ? "text-hint" : "text-tinted-ink",
             )}
           >

@@ -12,13 +12,13 @@ export function ProfileMemoBlock({
   memo: { body: string; updatedAt: Date } | null;
 }) {
   const boxClass = memo
-    ? "rounded-500 border border-gray-200 bg-gray-50 p-3.5"
-    : "rounded-500 border border-dashed border-gray-300 p-3.5";
+    ? "rounded-500 border border-gray-200 bg-gray-50 p-175"
+    : "rounded-500 border border-dashed border-gray-300 p-175";
 
   return (
-    <div className="px-4 pb-4">
+    <div className="px-200 pb-200">
       <div className={boxClass}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-100">
           <Lock size={14} className="flex-none text-gray-600" aria-hidden />
           <Text weight="bold" typography="body4" foreground="muted" className="flex-1">
             내가 쓴 메모
@@ -37,20 +37,20 @@ export function ProfileMemoBlock({
             <Text
               typography="body3"
               render={<p />}
-              className="mt-2.5 leading-[1.7] whitespace-pre-line text-gray-700"
+              className="mt-125 leading-[1.7] whitespace-pre-line text-gray-700"
             >
               {memo.body}
             </Text>
-            <Text typography="body4" foreground="hint" render={<p />} className="mt-2.5">
+            <Text typography="body4" foreground="hint" render={<p />} className="mt-125">
               {formatDate(memo.updatedAt)}에 마지막으로 고쳤습니다.
             </Text>
           </>
         ) : (
           <>
-            <Text typography="body3" foreground="hint" render={<p />} className="mt-2">
+            <Text typography="body3" foreground="hint" render={<p />} className="mt-100">
               이 사람에 대해 남긴 것이 없습니다.
             </Text>
-            <Button asChild variant="outline" className="mt-3 h-11 w-full">
+            <Button asChild variant="outline" className="mt-150 h-11 w-full">
               <Link href={`/u/${targetId}/memo`}>메모 쓰기</Link>
             </Button>
           </>

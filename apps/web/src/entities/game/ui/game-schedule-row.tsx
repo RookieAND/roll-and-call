@@ -18,7 +18,7 @@ export function GameScheduleRow({ line }: { line: ScheduleLine }) {
   const { Icon, iconClass, foreground, weight } = scheduleRowTone(line);
 
   return (
-    <HStack justify="between" align="center" className="gap-1.5">
+    <HStack justify="between" align="center" className="gap-075">
       <Icon size={13} strokeWidth={2.2} aria-hidden className={`shrink-0 ${iconClass}`} />
       <Text
         truncate

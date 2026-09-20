@@ -9,7 +9,7 @@ export function MyPageBlockLabel({
   action?: { href: string; label: string };
 }) {
   return (
-    <div className="mb-2 flex items-center">
+    <div className="mb-100 flex items-center">
       <Text weight="bold" typography="body4" foreground="muted" render={<h2 />} className="flex-1">
         {label}
       </Text>
