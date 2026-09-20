@@ -22,7 +22,7 @@ export async function GameConfirmView({ id }: { id: string }) {
   const availabilities = await getGameAvailabilities(id);
   const { names } = aggregateAvailability({ avails: availabilities, userId: null });
   const respondedCount = new Set(Object.values(names).flat()).size;
-  const minutes = playMinutes(game.playTime);
+  const minutes = playMinutes(game.playMinutes);
   const playLabel = game.playTime ?? `${minutes / 60}시간`;
 
   return (

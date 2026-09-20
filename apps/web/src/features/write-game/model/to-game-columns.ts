@@ -1,9 +1,11 @@
 import { RECRUIT_METHOD } from "@/entities/game";
-import { fromKstDateTimeInput } from "@/shared/lib";
+import { fromKstDateTimeInput, splitPlayTime } from "@/shared/lib";
 
 import type { GameFormValues } from "./game-form";
 
 export function toGameColumns(values: GameFormValues) {
+  const { hours, minutes } = splitPlayTime(values.playTime);
+
   return {
     title: values.title,
     rule: values.rule,
@@ -12,6 +14,7 @@ export function toGameColumns(values: GameFormValues) {
     thumbnailSpoiler: Boolean(values.thumbnailUrl) && values.thumbnailSpoiler,
     images: values.images,
     playTime: values.playTime || null,
+    playMinutes: hours * 60 + minutes || null,
     genres: values.genres,
     triggers: values.triggers,
     platforms: values.platforms,

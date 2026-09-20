@@ -73,6 +73,8 @@ export const games = pgTable(
     thumbnailSpoiler: boolean("thumbnail_spoiler").notNull().default(false),
     images: text("images").array().notNull().default([]),
     playTime: text("play_time"),
+    // 종료 시각 판별용 길이(분). playTime 원문은 사람이 읽는 값이라 파싱이 어긋나면 여기를 손으로 고친다.
+    playMinutes: integer("play_minutes"),
     // 신청 전에 알아야 할 것들. 각각 최대 5개이고 순서를 그대로 보여준다.
     genres: text("genres").array().notNull().default([]),
     triggers: text("triggers").array().notNull().default([]),

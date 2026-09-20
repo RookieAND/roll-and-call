@@ -2,13 +2,10 @@
 
 import { Field, Select, Text } from "@trpg/ui";
 
+import { splitPlayTime } from "@/shared/lib";
+
 import { formatPlayTimeMinutes } from "../model/format-play-time-minutes";
-import {
-  MAX_PLAY_HOURS,
-  PLAY_HOUR_OPTIONS,
-  PLAY_MINUTE_OPTIONS,
-  splitPlayTime,
-} from "../model/play-time-options";
+import { MAX_PLAY_HOURS, PLAY_HOUR_OPTIONS, PLAY_MINUTE_OPTIONS } from "../model/play-time-options";
 
 export function PlayTimeField({
   value,

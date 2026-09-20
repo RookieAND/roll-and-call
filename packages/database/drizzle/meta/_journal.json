@@ -141,6 +141,13 @@
       "when": 1790500000000,
       "tag": "0019_whole_naoko",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1790600000000,
+      "tag": "0020_cloudy_forgotten_one",
+      "breakpoints": true
     }
   ]
 }

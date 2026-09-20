@@ -23,6 +23,7 @@ export async function openNextRound(
         thumbnailSpoiler: parent.thumbnailSpoiler,
         images: parent.images,
         playTime: parent.playTime,
+        playMinutes: parent.playMinutes,
         maxPlayers: parent.maxPlayers,
         waitlistEnabled: parent.waitlistEnabled,
         scheduleMode: SCHEDULE_MODE.coordinate,

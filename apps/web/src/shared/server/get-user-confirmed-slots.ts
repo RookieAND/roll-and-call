@@ -12,7 +12,7 @@ export async function getUserConfirmedSlots(
   excludeGameId: string,
 ): Promise<string[]> {
   const rows = await db
-    .selectDistinct({ confirmedAt: games.confirmedAt, playTime: games.playTime })
+    .selectDistinct({ confirmedAt: games.confirmedAt, playMinutes: games.playMinutes })
     .from(games)
     .leftJoin(participants, and(eq(participants.gameId, games.id), eq(participants.userId, userId)))
     .where(
@@ -27,7 +27,7 @@ export async function getUserConfirmedSlots(
   for (const row of rows) {
     // KST +9h도 30분의 배수라 UTC에서 30분 경계로 내려도 같은 칸이다.
     const start = Math.floor(row.confirmedAt!.getTime() / SLOT_MS) * SLOT_MS;
-    const end = row.confirmedAt!.getTime() + playMinutes(row.playTime) * 60 * 1000;
+    const end = row.confirmedAt!.getTime() + playMinutes(row.playMinutes) * 60 * 1000;
     for (let slotTime = start; slotTime < end; slotTime += SLOT_MS) {
       slots.add(new Date(slotTime).toISOString());
     }
