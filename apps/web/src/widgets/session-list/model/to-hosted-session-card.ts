@@ -69,10 +69,14 @@ export function toHostedSessionCard(
       ? awaitingTimeText
       : (sessionWhen ?? joinParts(line.text, line.deadline)),
     scheduleTone,
-    meta: joinParts(
-      !context.readOnly && coordinate && !timeSet && `응답 ${responses}/${confirmedCount}`,
-      `확정 ${seats}`,
-    ),
+    // 운영 탭은 내가 GM이라 GM 줄을 적지 않는다.
+    gm: null,
+    counts: [
+      ...(!context.readOnly && coordinate && !timeSet
+        ? [{ label: "응답", value: `${responses}/${confirmedCount}` }]
+        : []),
+      { label: "확정", value: seats },
+    ],
     note: null,
     action: context.readOnly ? null : hostMenu,
     todo,

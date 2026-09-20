@@ -34,7 +34,7 @@ function game(partial: Partial<SessionGame>): SessionGame {
     drawnAt: null,
     playMinutes: 180,
     attendanceConfirmedAt: null,
-    gm: { username: "한랑아" },
+    gm: { username: "한랑아", avatarUrl: null },
     participants: [],
     ...partial,
   } as unknown as SessionGame;
@@ -98,15 +98,19 @@ describe("대기 카드", () => {
       participants: [other, me(PARTICIPANT_STATUS.waiting)],
     });
     expect(card.badge).toBe("추첨 전");
-    expect(card.meta).toMatch(/신청 2 · 정원 4$/);
+    expect(card.counts).toEqual([
+      { label: "신청", value: "2" },
+      { label: "정원", value: "4" },
+    ]);
     expect(card.action?.label).toBe("신청 취소");
   });
 
-  // 룰은 메타 줄이 아니라 칩으로 따로 나간다.
-  it("룰은 meta에 섞이지 않는다", () => {
+  // 룰·GM·숫자는 아래 줄에서 각자 다른 모양으로 나간다.
+  it("아래 줄은 룰·GM·숫자로 나뉜다", () => {
     const card = playerCard({});
     expect(card.rule).toBe("CoC");
-    expect(card.meta).not.toContain("CoC");
+    expect(card.gm?.username).toBe("한랑아");
+    expect(card.counts).toEqual([{ label: null, value: "0/4" }]);
   });
 });
 

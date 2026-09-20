@@ -1,8 +1,9 @@
 import { absenceExpiresAt, SESSION_ROLE, SESSION_STATE, splitRoster } from "@/entities/game";
-import { formatDate, formatDateTime } from "@/shared/lib";
+import { ddayKst, formatDate, formatDateTime } from "@/shared/lib";
 
 import type { SessionFacts } from "./derive-session-facts";
 import { joinParts } from "./join-parts";
+import { relativeDay } from "./relative-day";
 import {
   SESSION_ACTION_KIND,
   SESSION_CHIP,
@@ -22,7 +23,6 @@ export function toPastSessionCard(
   const { base, seats, state, viewerAbsent } = facts;
   const finished = state === SESSION_STATE.finished && game.confirmedAt;
   const player = base.role === SESSION_ROLE.player;
-  const gmPart = player && `GM ${game.gm?.username ?? "?"}`;
   const waitlistRank = player
     ? (splitRoster(game.participants).waiting.find(
         (participant) => participant.userId === context.viewerId,
@@ -30,28 +30,32 @@ export function toPastSessionCard(
     : null;
   const absent = player && viewerAbsent && Boolean(game.confirmedAt);
 
+  // 끝난 카드는 "언제였는지"가 제일 먼저 궁금하다 — 상대 날짜를 일정 줄 끝에 붙인다.
+  const ago = game.confirmedAt
+    ? relativeDay(ddayKst(game.confirmedAt, context.now ?? new Date()))
+    : null;
   const ending = waitlistRank
     ? {
         badge: "대기 종료",
         schedule: "자리가 나지 않은 채 세션이 끝났습니다",
-        tail: `대기 ${waitlistRank}번`,
+        counts: [{ label: "대기", value: `${waitlistRank}번` }],
       }
     : absent
       ? {
           badge: "불참",
-          schedule: `${formatDateTime(game.confirmedAt!)} · 참석하지 않았습니다`,
-          tail: seats,
+          schedule: joinParts(formatDateTime(game.confirmedAt!), "참석하지 않았습니다", ago),
+          counts: [{ label: null, value: seats }],
         }
       : finished
         ? {
             badge: "완료",
-            schedule: `${formatDateTime(game.confirmedAt!)} · 세션 완료`,
-            tail: seats,
+            schedule: joinParts(formatDateTime(game.confirmedAt!), "세션 완료", ago),
+            counts: [{ label: null, value: seats }],
           }
         : {
             badge: "무산",
             schedule: `${formatDate(game.endDate)}에 일정을 정하지 못했습니다`,
-            tail: seats,
+            counts: [{ label: null, value: seats }],
           };
 
   // 기간보다 언제 없어지는지가 알고 싶은 것이다. 남의 프로필에는 적지 않는다.
@@ -78,7 +82,8 @@ export function toPastSessionCard(
       ? `${formatDateTime(game.confirmedAt!)} · 출석 확인이 남아 있습니다`
       : ending.schedule,
     scheduleTone: attendanceTodo ? SESSION_TONE.warning : SESSION_TONE.hint,
-    meta: joinParts(gmPart, ending.tail),
+    gm: player ? (game.gm ?? null) : null,
+    counts: ending.counts,
     note,
     // 기록을 보는 자리라 여기서 할 일이 없다. 출석 확인만 예외다.
     action: attendanceTodo,

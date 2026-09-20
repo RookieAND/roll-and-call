@@ -18,8 +18,16 @@ export function toJoinedSessionCard(
   context: SessionContext,
 ): SessionCardModel {
   const { base, line, awaitingTime, timeSet, sessionWhen, seats, sortKey, waitingCount } = facts;
-  const meta = joinParts(`GM ${game.gm?.username ?? "?"}`, seats);
-  const common = { ...base, meta, sortKey, waitingCount, todo: null, note: null };
+  const gm = game.gm ?? null;
+  const common = {
+    ...base,
+    gm,
+    counts: [{ label: null, value: seats }],
+    sortKey,
+    waitingCount,
+    todo: null,
+    note: null,
+  };
   const { waiting } = splitRoster(game.participants);
   const mine = waiting.find((participant) => participant.userId === context.viewerId) ?? null;
 
@@ -33,11 +41,10 @@ export function toJoinedSessionCard(
     if (game.recruitMethod === RECRUIT_METHOD.lottery && game.drawnAt === null) {
       return {
         ...common,
-        meta: joinParts(
-          `GM ${game.gm?.username ?? "?"}`,
-          `신청 ${game.participants.length}`,
-          `정원 ${game.maxPlayers}`,
-        ),
+        counts: [
+          { label: "신청", value: String(game.participants.length) },
+          { label: "정원", value: String(game.maxPlayers) },
+        ],
         chip: SESSION_CHIP.waiting,
         badge: "추첨 전",
         badgeColor: "primary",

@@ -32,6 +32,9 @@ export const SESSION_ACTION_KIND = {
 
 export type SessionActionKind = (typeof SESSION_ACTION_KIND)[keyof typeof SESSION_ACTION_KIND];
 
+// 카드 아래 줄의 숫자 칩. label이 없으면 값만 적는다(정원 3/4).
+export type SessionCount = { label: string | null; value: string };
+
 export type SessionAction = {
   kind: SessionActionKind;
   label: string;
@@ -48,7 +51,9 @@ export type SessionCardModel = {
   schedule: string;
   scheduleTone: SessionTone;
   rule: string;
-  meta: string;
+  // 운영 탭은 내가 GM이라 적지 않는다.
+  gm: { username: string; avatarUrl: string | null } | null;
+  counts: SessionCount[];
   // 카드 아래에 한 겹 더 붙는 설명. 지금은 불참 기록이 언제 사라지는지 뿐이다.
   note: string | null;
   urgent: boolean;
@@ -70,7 +75,7 @@ type SessionParticipant = {
 };
 
 export type SessionGame = Game & {
-  gm: { username: string } | null;
+  gm: { username: string; avatarUrl: string | null } | null;
   participants: SessionParticipant[];
 };
 
