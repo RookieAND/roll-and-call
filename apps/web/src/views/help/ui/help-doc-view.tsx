@@ -1,4 +1,4 @@
-import { Card, Container, Text, VStack } from "@trpg/ui";
+import { Container, Text, VStack } from "@trpg/ui";
 import { notFound } from "next/navigation";
 
 import { AppBar } from "@/shared/ui";
@@ -26,7 +26,7 @@ export function HelpDocView({ slug }: HelpDocViewProps) {
       <Container size="sm">
         <VStack gap="250" className="py-225">
           <div>
-            <Text typography="subtitle2" foreground="primary" render={<p />}>
+            <Text typography="body4" weight="extrabold" foreground="primary" render={<p />}>
               {doc.category}
             </Text>
             <Text typography="heading1" render={<h1 />} className="mt-075">
@@ -42,14 +42,20 @@ export function HelpDocView({ slug }: HelpDocViewProps) {
           ))}
 
           <section className="border-t border-gray-100 pt-200">
-            <Text typography="subtitle2" foreground="muted" render={<h2 />} className="mb-100">
+            <Text
+              typography="body4"
+              weight="extrabold"
+              foreground="muted"
+              render={<h2 />}
+              className="mb-125"
+            >
               이어 읽기
             </Text>
-            <Card radius={600} background="none" padding="none" className="overflow-hidden">
+            <VStack gap="100">
               {related.map((target) => (
                 <HelpDocRow key={target.slug} slug={target.slug} title={target.title} />
               ))}
-            </Card>
+            </VStack>
           </section>
         </VStack>
       </Container>

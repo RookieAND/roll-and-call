@@ -9,6 +9,7 @@ import { ONBOARDING_SLIDES } from "../model/onboarding-slides";
 import { swipeDirection } from "../model/swipe-direction";
 import { ActiveSlideDot } from "./active-slide-dot";
 import { SlideDot } from "./slide-dot";
+import { SlideEyebrow } from "./slide-eyebrow";
 import { SlideVisual } from "./slide-visual";
 import { WelcomeVisual } from "./welcome-visual";
 
@@ -80,19 +81,12 @@ export function OnboardingView() {
           {slide.eyebrow === null ? <WelcomeVisual /> : <SlideVisual slideKey={slide.key} />}
           <VStack gap="150" className={welcome ? "mt-400" : "mt-300"}>
             {slide.eyebrow && (
-              <Text
-                typography="code2"
-                foreground="primary"
-                render={<p />}
-                className="tracking-widest"
-              >
-                {slide.eyebrow}
-              </Text>
+              <SlideEyebrow number={slide.eyebrow.number} label={slide.eyebrow.label} />
             )}
             <Text typography="heading1" render={<h1 />} className="leading-[1.32]">
               {slide.title}
             </Text>
-            <Text typography="body2" foreground="muted" render={<p />} className="leading-[1.8]">
+            <Text typography="body2" foreground="muted" render={<p />}>
               {slide.body}
             </Text>
           </VStack>
@@ -107,7 +101,11 @@ export function OnboardingView() {
             {nextLabel}
           </Button>
           {!last && (
-            <Button variant="ghost" className="h-11 w-full text-gray-600" onClick={skip}>
+            <Button
+              variant="ghost"
+              className="h-11 w-full text-body3 font-bold text-gray-600"
+              onClick={skip}
+            >
               건너뛰기
             </Button>
           )}

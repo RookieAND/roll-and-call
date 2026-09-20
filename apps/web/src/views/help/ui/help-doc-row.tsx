@@ -11,12 +11,12 @@ export function HelpDocRow({ slug, title }: HelpDocRowProps) {
   return (
     <Link
       href={`/help/${slug}`}
-      className="flex min-h-[52px] items-center gap-150 border-gray-100 px-175 py-125 transition-colors not-first:border-t hover:bg-gray-50"
+      className="flex min-h-[48px] items-center gap-125 rounded-400 border border-gray-200 px-150 py-125 transition-colors hover:bg-gray-50"
     >
-      <Text typography="subtitle1" className="min-w-0 flex-1">
+      <Text typography="subtitle2" className="min-w-0 flex-1">
         {title}
       </Text>
-      <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />
+      <ChevronRight size={16} className="flex-none text-gray-400" aria-hidden />
     </Link>
   );
 }

@@ -20,7 +20,7 @@ export const ONBOARDING_SLIDES = [
   },
   {
     key: "find",
-    eyebrow: "01 · 구인 찾기",
+    eyebrow: { number: "01", label: "구인 찾기" },
     title: (
       <>
         열려 있는 세션을 찾아
@@ -40,7 +40,7 @@ export const ONBOARDING_SLIDES = [
   },
   {
     key: "schedule",
-    eyebrow: "02 · 일정 조율",
+    eyebrow: { number: "02", label: "일정 조율" },
     title: (
       <>
         되는 시간을 칠하면
@@ -60,7 +60,7 @@ export const ONBOARDING_SLIDES = [
   },
   {
     key: "host",
-    eyebrow: "03 · GM 시작하기",
+    eyebrow: { number: "03", label: "GM 시작하기" },
     title: (
       <>
         네 단계면
@@ -80,7 +80,7 @@ export const ONBOARDING_SLIDES = [
   },
   {
     key: "profile",
-    eyebrow: "04 · 프로필",
+    eyebrow: { number: "04", label: "프로필" },
     title: (
       <>
         소개와 링크를

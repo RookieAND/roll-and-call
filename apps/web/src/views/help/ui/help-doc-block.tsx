@@ -26,7 +26,13 @@ export function HelpDocBlock({ block }: HelpDocBlockProps) {
   if (block.kind === HELP_BLOCK.rows) {
     return (
       <section>
-        <Text typography="subtitle2" foreground="muted" render={<h3 />} className="mb-100">
+        <Text
+          typography="body4"
+          weight="extrabold"
+          foreground="muted"
+          render={<h3 />}
+          className="mb-125"
+        >
           {block.label}
         </Text>
         <Card radius={600} background="none" padding="none" className="overflow-hidden">
@@ -43,7 +49,7 @@ export function HelpDocBlock({ block }: HelpDocBlockProps) {
       <Grid cols={2} gap="125">
         {block.columns.map((column) => (
           <Card key={column.title} radius={600} background="none" padding="none" className="p-175">
-            <Text typography="subtitle1" render={<h3 />}>
+            <Text typography="subtitle1" weight="extrabold" render={<h3 />}>
               {column.title}
             </Text>
             <Text typography="body3" foreground="muted" render={<p />} className="mt-075">
@@ -52,7 +58,13 @@ export function HelpDocBlock({ block }: HelpDocBlockProps) {
             <VStack gap="150" className="mt-150">
               {column.rows.map((row) => (
                 <div key={row.term}>
-                  <Text typography="body4" foreground="hint" render={<span />} className="block">
+                  <Text
+                    typography="body4"
+                    weight="extrabold"
+                    foreground="muted"
+                    render={<span />}
+                    className="block"
+                  >
                     {row.term}
                   </Text>
                   <Text typography="body3" render={<p />} className="mt-050">
@@ -73,7 +85,8 @@ export function HelpDocBlock({ block }: HelpDocBlockProps) {
         <HStack key={step.title} gap="150">
           <VStack align="center" className="flex-none">
             <Text
-              typography="subtitle2"
+              typography="body4"
+              weight="extrabold"
               render={<span />}
               className="flex size-[26px] items-center justify-center rounded-400 bg-primary-600 text-white tabular-nums"
             >
@@ -82,7 +95,7 @@ export function HelpDocBlock({ block }: HelpDocBlockProps) {
             {index < block.steps.length - 1 && <span className="mt-075 w-0.5 flex-1 bg-gray-100" />}
           </VStack>
           <VStack gap="100" className="min-w-0 flex-1 pb-050">
-            <Text typography="subtitle1" render={<h3 />}>
+            <Text typography="subtitle1" weight="extrabold" render={<h3 />}>
               {step.title}
             </Text>
             <Text typography="body3" foreground="muted" render={<p />}>
