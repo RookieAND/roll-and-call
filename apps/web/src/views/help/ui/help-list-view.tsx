@@ -1,11 +1,14 @@
-import { Container, Text, VStack } from "@trpg/ui";
-import { ChevronRight, PlayCircle } from "lucide-react";
+import { Button, Container, Text, VStack } from "@trpg/ui";
+import { ChevronRight, ExternalLink, PlayCircle } from "lucide-react";
 import Link from "next/link";
 
+import { BrandMark } from "@/entities/profile";
 import { AppBar } from "@/shared/ui";
 
 import { HELP_CATEGORIES, HELP_DOCS } from "../model/help-docs";
 import { HelpDocRow } from "./help-doc-row";
+
+const DISCORD_INVITE_URL = "https://discord.gg/22q39AUyXc";
 
 export function HelpListView() {
   return (
@@ -48,6 +51,28 @@ export function HelpListView() {
               </div>
             </section>
           ))}
+
+          <section className="rounded-[14px] border border-gray-200 bg-gray-50 p-[15px]">
+            <div className="flex items-center gap-2.5">
+              <span className="flex-none text-discord">
+                <BrandMark service="discord" size={17} />
+              </span>
+              <Text typography="subtitle1" render={<h2 />}>
+                여기에 없는 게 궁금하면
+              </Text>
+            </div>
+            <Text typography="body3" foreground="muted" render={<p />} className="mt-1.5">
+              디스코드 서버에서 물어보세요.
+              <br />
+              운영자와 다른 GM들이 같이 봅니다.
+            </Text>
+            <Button asChild variant="outline" className="mt-3 h-11 w-full">
+              <a href={DISCORD_INVITE_URL} target="_blank" rel="noreferrer">
+                디스코드 서버 열기
+                <ExternalLink size={15} aria-hidden />
+              </a>
+            </Button>
+          </section>
         </VStack>
       </Container>
     </>
