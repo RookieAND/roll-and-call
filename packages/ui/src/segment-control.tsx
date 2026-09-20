@@ -43,7 +43,7 @@ export function SegmentControl<Value extends string>({
             className={cn(
               option.icon
                 ? "flex h-[34px] w-11 items-center justify-center"
-                : "h-8 px-[11px] text-[12.5px]",
+                : "h-8 px-[11px] text-[12px]",
               "rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200",
               selected
                 ? "bg-surface font-bold text-gray-900 shadow-sm"

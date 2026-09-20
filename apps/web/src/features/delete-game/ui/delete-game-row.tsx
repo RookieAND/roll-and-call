@@ -39,7 +39,7 @@ export function DeleteGameRow({
           <Text typography="subtitle1" foreground="danger" className="block">
             구인 삭제
           </Text>
-          <Text typography="body3" foreground="hint" className="mt-0.5 block font-normal">
+          <Text weight="regular" typography="body3" foreground="hint" className="mt-0.5 block">
             디스코드 공지·채널은 남습니다
           </Text>
         </span>

@@ -36,9 +36,11 @@ export function MySessionRow({
         )}
       </div>
       <Text
+        numeric
+        weight="extrabold"
         typography="heading3"
         foreground={countForeground}
-        className="flex-none text-[17px] font-extrabold tabular-nums"
+        className="flex-none"
       >
         {count}
       </Text>

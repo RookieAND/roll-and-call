@@ -20,7 +20,7 @@ export function RosterQueue({
         <Text typography="subtitle1" render={<h2 />}>
           {label}
         </Text>
-        <Text typography="subtitle1" foreground="muted" className="flex-1 tabular-nums">
+        <Text numeric typography="subtitle1" foreground="muted" className="flex-1">
           {count}명
         </Text>
         {caption && (

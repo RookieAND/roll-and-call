@@ -23,11 +23,7 @@ export function ProfileSummary({ profile }: { profile: Profile }) {
           className="h-16 w-16 text-[22px]"
         />
         <div className="min-w-0 flex-1">
-          <Text
-            typography="heading2"
-            render={<h1 />}
-            className="truncate text-[19px] font-extrabold tracking-[-0.02em]"
-          >
+          <Text typography="heading2" truncate render={<h1 />} className="tracking-[-0.02em]">
             {profile.username}
           </Text>
           <Text typography="body3" foreground="hint" className="mt-[3px] block">

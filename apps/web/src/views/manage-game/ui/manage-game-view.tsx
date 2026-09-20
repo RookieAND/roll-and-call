@@ -49,9 +49,9 @@ export async function ManageGameView({ id }: { id: string }) {
         <div className="border-b border-gray-100 px-4 pt-[18px] pb-3.5">
           <div className="flex items-start gap-2.5">
             <Text
-              typography="heading1"
+              typography="heading2"
               render={<h1 />}
-              className="min-w-0 flex-1 text-[19px] font-extrabold tracking-[-0.02em]"
+              className="min-w-0 flex-1 tracking-[-0.02em]"
             >
               {game.title}
             </Text>

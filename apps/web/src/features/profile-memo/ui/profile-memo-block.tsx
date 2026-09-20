@@ -20,12 +20,12 @@ export function ProfileMemoBlock({
       <div className={boxClass}>
         <div className="flex items-center gap-[7px]">
           <Lock size={14} className="flex-none text-gray-600" aria-hidden />
-          <Text typography="subtitle2" foreground="muted" className="flex-1 text-[12.5px]">
+          <Text typography="subtitle3" foreground="muted" className="flex-1">
             내가 쓴 메모
           </Text>
           {memo && (
             <Link href={`/u/${targetId}/memo`}>
-              <Text typography="body4" foreground="primary" className="text-[12.5px] font-bold">
+              <Text weight="bold" typography="body4" foreground="primary">
                 수정
               </Text>
             </Link>

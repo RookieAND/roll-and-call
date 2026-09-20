@@ -28,12 +28,13 @@ export function ProfileSessionSection({
       <div className="mb-2.5 flex items-baseline gap-2.5">
         <Text
           typography="heading3"
+          weight="extrabold"
           render={<h2 />}
-          className="text-[15px] font-extrabold tracking-[-0.015em]"
+          className="tracking-[-0.015em]"
         >
           {section.title}
         </Text>
-        <Text typography="body3" foreground="hint" className="font-bold tabular-nums">
+        <Text numeric weight="bold" typography="body3" foreground="hint">
           {items.length}
         </Text>
       </div>

@@ -28,20 +28,21 @@ export function MyPageProfile({
         <Avatar src={avatarUrl} name={name} size="2xl" />
         <div className="min-w-0 flex-1">
           <Text
-            typography="heading2"
+            typography="heading3"
+            weight="extrabold"
             render={<h1 />}
-            className="text-[17px] font-extrabold tracking-[-0.015em]"
+            className="tracking-[-0.015em]"
           >
             {name}
           </Text>
-          <Text typography="body3" foreground={bioForeground} className="mt-[3px] block truncate">
+          <Text truncate typography="body3" foreground={bioForeground} className="mt-[3px]">
             {bioText}
           </Text>
         </div>
         <Button
           asChild
           variant="outline"
-          className="h-9 flex-none rounded-[10px] px-3 text-[12.5px] font-bold"
+          className="h-9 flex-none rounded-[10px] px-3 text-xs font-bold"
         >
           <Link href="/me/edit">편집</Link>
         </Button>

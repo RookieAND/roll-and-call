@@ -10,7 +10,7 @@ export function MyPageLinks({ links }: { links: ProfileLink[] }) {
         <Text typography="heading3" render={<h2 />} className="flex-1">
           링크
         </Text>
-        <Text typography="body4" foreground="hint" className="tabular-nums">
+        <Text numeric typography="body4" foreground="hint">
           {links.length} / {LINK_MAX_COUNT}
         </Text>
       </div>

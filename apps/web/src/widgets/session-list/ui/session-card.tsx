@@ -26,12 +26,12 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
     <div className={cn("rounded-[14px] p-3.5", cardClass)}>
       <Link href={`/games/${model.id}`} className="block">
         {eyebrow && (
-          <Text typography="body4" className="mb-1 block font-bold text-warning-600">
+          <Text weight="bold" typography="body4" className="mb-1 block text-warning-600">
             {eyebrow}
           </Text>
         )}
         <HStack justify="between" align="center" gap={2}>
-          <Text typography="subtitle1" foreground={titleForeground} className="min-w-0 truncate">
+          <Text truncate typography="subtitle1" foreground={titleForeground} className="min-w-0">
             {model.title}
           </Text>
           <Badge color={model.badgeColor} className="shrink-0">
@@ -44,7 +44,7 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
         >
           {model.schedule}
         </Text>
-        <Text typography="body4" foreground="hint" className="mt-0.5 block truncate">
+        <Text truncate typography="body4" foreground="hint" className="mt-0.5">
           {model.meta}
         </Text>
         {model.note && (

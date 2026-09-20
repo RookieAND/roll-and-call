@@ -24,7 +24,7 @@ export function AttendanceRow({
     <div className="flex min-h-15 items-center gap-2.5 border-t border-gray-100 px-3 py-2 first:border-t-0">
       <Avatar src={attendee.avatarUrl} name={attendee.username} size="stack" />
       <div className="min-w-0 flex-1">
-        <Text typography="subtitle2" className="block truncate">
+        <Text truncate typography="subtitle2">
           {attendee.username}
         </Text>
         {absent && (

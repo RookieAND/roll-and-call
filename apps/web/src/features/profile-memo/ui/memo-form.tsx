@@ -53,7 +53,7 @@ export function MemoForm({
       <div className="flex items-center gap-[11px] border-b border-gray-100 px-4 py-3.5">
         <Avatar src={targetAvatarUrl} name={targetName} size="lg" />
         <div className="min-w-0 flex-1">
-          <Text typography="subtitle1" className="block truncate">
+          <Text truncate typography="subtitle1">
             {targetName}
           </Text>
           <div className="mt-0.5 flex items-center gap-[5px]">
@@ -78,7 +78,7 @@ export function MemoForm({
           <Text typography="body4" foreground="hint" className="flex-1 leading-[1.6]">
             상대는 이 메모를 볼 수 없고, 알림도 가지 않습니다.
           </Text>
-          <Text typography="body4" foreground="hint" className="flex-none tabular-nums">
+          <Text numeric typography="body4" foreground="hint" className="flex-none">
             {body.length} / {MEMO_MAX_LENGTH}
           </Text>
         </div>

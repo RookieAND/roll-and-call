@@ -68,7 +68,7 @@ export function SlotGrid({
             typography="body4"
             foreground="hint"
             render={<span />}
-            className="sticky left-0 z-10 bg-surface pr-1.5 text-right text-[11px] leading-none tabular-nums"
+            className="sticky left-0 z-10 bg-surface pr-1.5 text-right text-[12px] leading-none tabular-nums"
             style={{ height: SLOT_ROW_PX }}
           >
             {row.minute === 0 ? row.label : ""}

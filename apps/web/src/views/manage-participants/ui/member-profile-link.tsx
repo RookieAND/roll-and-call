@@ -17,17 +17,13 @@ export function MemberProfileLink({
   return (
     <Link href={`/u/${member.userId}`} className="flex min-h-11 min-w-0 flex-1 items-center gap-3">
       {rank != null && (
-        <Text
-          typography="code2"
-          foreground="hint"
-          className="w-5 shrink-0 text-center tabular-nums"
-        >
+        <Text numeric typography="code2" foreground="hint" className="w-5 shrink-0 text-center">
           {rank}
         </Text>
       )}
       <Avatar src={member.avatarUrl} name={member.username} size="stack" />
       <div className="min-w-0 flex-1">
-        <Text typography="subtitle2" className="block truncate">
+        <Text truncate typography="subtitle2">
           {member.username}
         </Text>
         {note}

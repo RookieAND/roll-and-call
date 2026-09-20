@@ -40,7 +40,7 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
 
       <VStack gap={2} className="px-4 py-4">
         <div className="flex items-baseline gap-2">
-          <Text typography="subtitle2" className="flex-none text-[12.5px]">
+          <Text typography="subtitle3" className="flex-none">
             요일마다
           </Text>
           <Text typography="body4" foreground="hint" className="flex-1">

@@ -19,7 +19,7 @@ export function AttendanceHeader({
     <VStack gap={3}>
       <VStack gap={2}>
         <HStack gap={2} align="center">
-          <Text typography="heading1" className="min-w-0 flex-1 truncate">
+          <Text truncate typography="heading1" className="min-w-0 flex-1">
             {title}
           </Text>
           <Badge color="gray">

@@ -77,10 +77,10 @@ export function GameImagesUpload({
   return (
     <div id="images" className="flex flex-col gap-1.5">
       <div className="flex items-baseline justify-between">
-        <Text typography="subtitle2" className="text-[12.5px] text-gray-700">
+        <Text typography="subtitle3" className="text-gray-700">
           추가 이미지 <span className="font-normal text-hint">선택</span>
         </Text>
-        <Text typography="body4" foreground="hint" className="tabular-nums">
+        <Text numeric typography="body4" foreground="hint">
           {value.length} / {max}
         </Text>
       </div>

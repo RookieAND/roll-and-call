@@ -102,7 +102,7 @@ export function EditProfileForm({
             <Text typography="body4" foreground="hint">
               마이페이지와 참여자 명단에 함께 보입니다.
             </Text>
-            <Text typography="body4" foreground="hint" className="shrink-0 tabular-nums">
+            <Text numeric typography="body4" foreground="hint" className="shrink-0">
               {bio.length} / {BIO_MAX_LENGTH}
             </Text>
           </div>

@@ -26,12 +26,12 @@ export function GameRow({ game }: { game: GameRowData }) {
     <div className="flex items-center gap-3 rounded-[14px] border border-gray-200 p-3">
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <Text typography="subtitle1" className="truncate">
+          <Text truncate typography="subtitle1">
             {game.title}
           </Text>
           <GameStatusBadge status={status} />
         </div>
-        <Text typography="body4" foreground="muted" className="mt-0.5 block truncate">
+        <Text truncate typography="body4" foreground="muted" className="mt-0.5">
           {game.rule} · {scheduleLine(game).text}
         </Text>
       </div>

@@ -11,7 +11,7 @@ export function AttendanceResultRow({ attendee }: { attendee: Attendee }) {
   return (
     <div className="flex min-h-14 items-center gap-2.5 border-t border-gray-100 px-3 py-2 first:border-t-0">
       <Avatar src={attendee.avatarUrl} name={attendee.username} size="stack" />
-      <Text typography="subtitle2" className="min-w-0 flex-1 truncate">
+      <Text truncate typography="subtitle2" className="min-w-0 flex-1">
         {attendee.username}
       </Text>
       <HStack gap={1} align="center">

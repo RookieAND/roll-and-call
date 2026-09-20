@@ -19,7 +19,7 @@ export function ProfileLinks({ links }: { links: readonly ProfileLink[] }) {
     return (
       <div className="flex min-h-[46px] items-center gap-2.5 rounded-[11px] border border-dashed border-gray-300 px-3">
         <Link2 size={16} className="flex-none text-hint" aria-hidden />
-        <Text typography="body4" foreground="hint" className="min-w-0 flex-1 text-[12.5px]">
+        <Text typography="body4" foreground="hint" className="min-w-0 flex-1">
           등록한 링크가 없습니다
         </Text>
       </div>

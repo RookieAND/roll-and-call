@@ -40,7 +40,7 @@ export function DatePicker({
         {value ? (
           <span className="truncate">{formatPickerDate(value)}</span>
         ) : (
-          <Text foreground="hint" className="truncate">
+          <Text truncate foreground="hint">
             {placeholder}
           </Text>
         )}

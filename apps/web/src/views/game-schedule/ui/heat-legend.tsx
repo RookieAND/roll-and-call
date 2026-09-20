@@ -13,7 +13,7 @@ export function HeatLegend({ capacity }: { capacity: number }) {
       {heatLegend(capacity).map(({ count, step }) => (
         <span
           key={`${step}-${count}`}
-          className="inline-flex size-5 items-center justify-center rounded-[4px] border border-gray-200 text-[10px] font-bold tabular-nums"
+          className="inline-flex size-5 items-center justify-center rounded-[4px] border border-gray-200 text-[12px] font-bold tabular-nums"
           style={{ backgroundColor: heatColor(step), color: heatTextColor(step) }}
         >
           {count}

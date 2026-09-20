@@ -14,7 +14,7 @@ export function AttendanceCard({ gameId, confirmedAt }: { gameId: string; confir
           <Text typography="body4" foreground="muted" className="min-w-0 flex-1">
             세션
           </Text>
-          <Text typography="subtitle2" className="shrink-0 tabular-nums">
+          <Text numeric typography="subtitle2" className="shrink-0">
             {formatDateTime(confirmedAt)}
           </Text>
           <Badge color="gray" className="shrink-0">

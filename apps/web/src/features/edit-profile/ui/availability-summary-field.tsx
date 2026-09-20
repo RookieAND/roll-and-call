@@ -14,10 +14,10 @@ export function AvailabilitySummaryField({
   return (
     <div className="rounded-xl border border-gray-200 p-[13px]">
       <div className="mb-[9px] flex items-baseline gap-2">
-        <Text typography="subtitle2" className="flex-1 text-[12.5px]">
+        <Text typography="subtitle3" className="flex-1">
           가능 시간대
         </Text>
-        <Text typography="body4" foreground="hint" className="tabular-nums">
+        <Text numeric typography="body4" foreground="hint">
           {days.length}일
         </Text>
       </div>
@@ -29,13 +29,15 @@ export function AvailabilitySummaryField({
               key={day.day}
               className="flex min-h-[38px] items-center gap-2.5 rounded-[9px] bg-gray-50 px-[11px]"
             >
-              <Text typography="body3" className="w-[34px] flex-none font-bold">
+              <Text weight="bold" typography="body3" className="w-[34px] flex-none">
                 {day.label}
               </Text>
               <Text
+                truncate
+                numeric
                 typography="body3"
                 foreground="muted"
-                className="min-w-0 flex-1 truncate tabular-nums"
+                className="min-w-0 flex-1"
               >
                 {day.intervals.map(formatInterval).join(" · ")}
               </Text>
@@ -44,7 +46,7 @@ export function AvailabilitySummaryField({
         </div>
       ) : (
         <div className="flex min-h-11 items-center justify-center rounded-[10px] border border-dashed border-gray-300">
-          <Text typography="body4" foreground="hint" className="text-[12.5px]">
+          <Text typography="body4" foreground="hint">
             적어둔 시간대가 없습니다
           </Text>
         </div>

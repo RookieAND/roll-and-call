@@ -32,7 +32,7 @@ export function RosterMemberRow({
       <Avatar src={avatarUrl} name={name} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5">
-          <Text typography="subtitle1" className="truncate">
+          <Text truncate typography="subtitle1">
             {name ?? "?"}
           </Text>
           {note && (
@@ -41,7 +41,7 @@ export function RosterMemberRow({
             </Badge>
           )}
         </div>
-        <Text typography="body4" foreground={bio ? "muted" : "hint"} className="block truncate">
+        <Text truncate typography="body4" foreground={bio ? "muted" : "hint"}>
           {bio || NO_BIO}
         </Text>
       </div>

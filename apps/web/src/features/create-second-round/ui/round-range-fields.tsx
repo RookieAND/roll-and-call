@@ -29,13 +29,13 @@ export function RoundRangeFields({
     <VStack gap={2}>
       <HStack gap={3} align="start">
         <VStack gap={2} className="flex-1">
-          <Text typography="body4" className="font-bold">
+          <Text weight="bold" typography="body4">
             조율 시작일
           </Text>
           <DatePicker value={start} onChange={onStartChange} min={earliest} />
         </VStack>
         <VStack gap={2} className="flex-1">
-          <Text typography="body4" className="font-bold">
+          <Text weight="bold" typography="body4">
             조율 종료일
           </Text>
           <DatePicker value={end} onChange={onEndChange} min={endBounds.min} max={endBounds.max} />

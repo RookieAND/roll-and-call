@@ -14,11 +14,11 @@ export function AvailabilityDayRow({
       <Text
         typography="body4"
         render={<span />}
-        className="inline-block w-[30px] flex-none rounded-[7px] bg-primary-50 py-[5px] text-center text-[12.5px] leading-none font-bold text-primary-ink"
+        className="inline-block w-[30px] flex-none rounded-[7px] bg-primary-50 py-[5px] text-center text-[12px] leading-none font-bold text-primary-ink"
       >
         {label}
       </Text>
-      <Text typography="body3" className="min-w-0 flex-1 font-semibold tabular-nums">
+      <Text numeric weight="medium" typography="body3" className="min-w-0 flex-1">
         {intervals.map(formatInterval).join(" · ")}
       </Text>
     </div>

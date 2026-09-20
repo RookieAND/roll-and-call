@@ -57,13 +57,13 @@ export function GameCard({ game }: Props) {
       />
       <VStack className="gap-1.5 px-3.5 py-[13px]">
         <HStack justify="between" align="start" gap={2}>
-          <Text typography="heading3" foreground={titleForeground} className="min-w-0 truncate">
+          <Text truncate typography="heading3" foreground={titleForeground} className="min-w-0">
             {game.title}
           </Text>
           <GameStatusBadge status={status} />
         </HStack>
         {meta && (
-          <Text typography="body4" foreground="muted" className="truncate">
+          <Text truncate typography="body4" foreground="muted">
             {meta}
           </Text>
         )}

@@ -17,7 +17,7 @@ export function GameGmLabel({
   return (
     <HStack gap={2} align="center" className="min-w-0">
       <Avatar src={avatarUrl} name={name} size="sm" />
-      <Text typography={typography} foreground={foreground} className="truncate">
+      <Text truncate typography={typography} foreground={foreground}>
         {label}
       </Text>
     </HStack>

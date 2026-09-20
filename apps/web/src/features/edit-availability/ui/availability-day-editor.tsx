@@ -62,7 +62,7 @@ export function AvailabilityDayEditor({
           />
         ) : (
           <div className="flex h-11 min-w-0 flex-1 items-center justify-center rounded-[10px] border border-dashed border-gray-300">
-            <Text typography="body4" foreground="hint" className="text-[12.5px]">
+            <Text typography="body4" foreground="hint">
               안 되는 날
             </Text>
           </div>

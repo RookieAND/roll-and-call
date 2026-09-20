@@ -30,7 +30,7 @@ export function HomeCalendar({
   return (
     <section>
       <div className="flex items-center gap-0.5 pt-3.5 pr-2.5 pb-2.5 pl-4">
-        <Text typography="heading1" render={<h2 />} className="flex-1 text-[20px]">
+        <Text typography="heading2" render={<h2 />} className="flex-1">
           {monthStart.format("YYYY년 M월")}
         </Text>
         <Button asChild variant="outline" size="sm">
@@ -54,9 +54,9 @@ export function HomeCalendar({
         {WEEKDAYS.map((weekday, index) => (
           <Text
             key={weekday}
-            typography="subtitle2"
+            typography="subtitle3"
             foreground="hint"
-            className={cn("text-center text-[11.5px]", WEEKDAY_TONE[index])}
+            className={cn("text-center", WEEKDAY_TONE[index])}
           >
             {weekday}
           </Text>
@@ -79,7 +79,7 @@ export function HomeCalendar({
         )}
       </div>
 
-      <div className="flex items-center gap-3 px-4 pb-3 text-[11.5px] text-hint">
+      <div className="flex items-center gap-3 px-4 pb-3 text-[12px] text-hint">
         <span className="flex items-center gap-[5px]">
           <span className="h-2.5 w-2.5 rounded-[3px] border border-tinted-border bg-primary-50" />
           내가 참여

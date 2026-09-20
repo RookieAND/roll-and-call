@@ -19,27 +19,37 @@ export function HomeSessionCard({ session }: { session: CalendarSession }) {
         cardTone,
       )}
     >
-      <span className="w-11 flex-none pt-px text-[13px] font-extrabold tabular-nums">{time}</span>
+      <Text typography="subtitle2" weight="extrabold" numeric className="w-11 flex-none pt-px">
+        {time}
+      </Text>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-[7px]">
-          <Text typography="subtitle1" className="min-w-0 flex-1 truncate text-[14.5px]">
+          <Text truncate typography="subtitle1" className="min-w-0 flex-1">
             {session.title}
           </Text>
           {session.mine && (
-            <span className="flex-none rounded-md bg-primary-50 px-[7px] py-[3px] text-[10.5px] leading-none font-bold text-tinted-ink">
+            <Text
+              typography="subtitle3"
+              foreground="primary"
+              tight
+              className="flex-none rounded-md bg-primary-50 px-[7px] py-[3px]"
+            >
               내가 참여
-            </span>
+            </Text>
           )}
         </div>
         <div className="mt-[7px] flex items-center gap-[7px]">
-          <span className="flex h-5 flex-none items-center rounded-md bg-gray-100 px-[7px] text-[11px] font-bold text-gray-700">
+          <Text
+            typography="subtitle3"
+            className="flex h-5 flex-none items-center rounded-md bg-gray-100 px-[7px] text-gray-700"
+          >
             {session.rule}
-          </span>
+          </Text>
           <Text
             typography="body4"
             foreground="muted"
             render={<span />}
-            className="min-w-0 flex-1 truncate text-[11.5px]"
+            className="min-w-0 flex-1 truncate"
           >
             GM {session.gm.username}
           </Text>
@@ -51,9 +61,9 @@ export function HomeSessionCard({ session }: { session: CalendarSession }) {
             )}
           >
             <User size={12} aria-hidden />
-            <span className="text-[11.5px] font-bold tabular-nums">
+            <Text typography="subtitle3" numeric>
               {session.players.length}/{session.maxPlayers}
-            </span>
+            </Text>
           </span>
         </div>
       </div>

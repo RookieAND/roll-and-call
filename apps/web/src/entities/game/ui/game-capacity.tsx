@@ -27,19 +27,19 @@ export function GameCapacity({
       align="center"
       className="h-[26px] shrink-0 gap-[7px] rounded-lg border border-gray-200 bg-gray-50 px-[9px]"
     >
-      <Text typography="body4" foreground="muted" className="font-semibold">
+      <Text weight="medium" typography="body4" foreground="muted">
         {lottery ? "추첨" : "선착순"}
       </Text>
       {!done && (
-        <Text typography="subtitle2" className="tabular-nums">
+        <Text numeric typography="subtitle2">
           {drawPending ? `신청 ${confirmed + waiting}` : `확정 ${confirmed}`}
         </Text>
       )}
-      <Text typography="body4" foreground="muted" className="font-semibold tabular-nums">
+      <Text numeric weight="medium" typography="body4" foreground="muted">
         정원 {maxPlayers}
       </Text>
       {!done && !drawPending && waiting > 0 && (
-        <Text typography="body4" foreground="muted" className="font-semibold tabular-nums">
+        <Text numeric weight="medium" typography="body4" foreground="muted">
           대기 {waiting}
         </Text>
       )}

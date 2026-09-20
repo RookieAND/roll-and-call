@@ -22,7 +22,7 @@ export function WizardHeader({
         onBack={onBack}
         backIcon={step === 1 ? "close" : "back"}
         action={
-          <Text typography="code2" foreground="hint" className="tabular-nums">
+          <Text numeric typography="code2" foreground="hint">
             {step} / {total}
           </Text>
         }

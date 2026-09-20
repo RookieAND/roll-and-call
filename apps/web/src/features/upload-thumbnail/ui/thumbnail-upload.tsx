@@ -64,7 +64,7 @@ export function ThumbnailUpload({
   return (
     <div id="thumbnailUrl" className="flex min-w-0 flex-col gap-1.5">
       <div className="flex items-baseline justify-between">
-        <Text typography="subtitle2" className="text-[12.5px] text-gray-700">
+        <Text typography="subtitle3" className="text-gray-700">
           썸네일
         </Text>
         <Text typography="body4" foreground="hint">
@@ -77,7 +77,7 @@ export function ThumbnailUpload({
           <img src={value} alt="썸네일 미리보기" className="aspect-video w-full object-cover" />
           <div className="flex items-center gap-2 px-3 py-2">
             <div className="min-w-0 flex-1">
-              <Text typography="body4" className="block truncate font-semibold">
+              <Text truncate weight="medium" typography="body4">
                 {picked ? picked.name : "올린 이미지 · 16:9"}
               </Text>
               {picked && (

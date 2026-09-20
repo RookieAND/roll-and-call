@@ -11,7 +11,7 @@ export default function Loading() {
         backIcon="close"
         title="구인 수정"
         action={
-          <Text typography="code2" foreground="hint" className="tabular-nums">
+          <Text numeric typography="code2" foreground="hint">
             1 / 2
           </Text>
         }

@@ -18,7 +18,7 @@ export function RosterGroup({
           {label}
         </Text>
         {count !== undefined && (
-          <Text typography="body4" foreground="hint" className="tabular-nums">
+          <Text numeric typography="body4" foreground="hint">
             {count}명
           </Text>
         )}

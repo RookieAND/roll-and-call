@@ -20,7 +20,7 @@ export function RoundInheritedList({
 
   return (
     <VStack gap={2}>
-      <Text typography="body4" foreground="muted" className="font-bold">
+      <Text weight="bold" typography="body4" foreground="muted">
         그대로 넘어가는 것
       </Text>
       <div className="overflow-hidden rounded-xl border border-gray-200">

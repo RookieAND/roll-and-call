@@ -13,7 +13,7 @@ export function ProfileIdentity({
     <HStack gap={3} align="center">
       <Avatar src={avatarUrl} name={name} size="2xl" />
       <div>
-        <Text typography="heading1" className="block text-[19px] leading-tight">
+        <Text typography="heading2" className="block leading-tight">
           {name}
         </Text>
         {handle && (

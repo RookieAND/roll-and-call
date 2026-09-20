@@ -154,10 +154,10 @@ export function GameFormWizard({
 
           {!edit && step > 0 && (
             <div className="rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-3">
-              <Text typography="subtitle1" className="block truncate">
+              <Text truncate typography="subtitle1">
                 {watch("title") || "제목 미입력"}
               </Text>
-              <Text typography="body4" foreground="muted" className="mt-0.5 block truncate">
+              <Text truncate typography="body4" foreground="muted" className="mt-0.5">
                 {summaryLine}
               </Text>
             </div>

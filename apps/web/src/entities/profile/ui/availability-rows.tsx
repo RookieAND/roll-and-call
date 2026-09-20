@@ -22,7 +22,7 @@ export function AvailabilityRows({
     return (
       <div className="flex min-h-11 items-center gap-2 rounded-[11px] border border-dashed border-gray-300 px-3">
         <Clock size={15} className="flex-none text-hint" aria-hidden />
-        <Text typography="body4" foreground="hint" className="min-w-0 flex-1 text-[12.5px]">
+        <Text typography="body4" foreground="hint" className="min-w-0 flex-1">
           {emptyText}
         </Text>
       </div>
@@ -39,7 +39,7 @@ export function AvailabilityRows({
         ))}
         {rest.length > 0 && (
           <details className="group flex flex-col gap-1.5">
-            <summary className="flex min-h-10 cursor-pointer list-none items-center justify-center rounded-[11px] border border-gray-200 text-[12.5px] font-bold text-primary-ink hover:bg-gray-50 group-open:hidden">
+            <summary className="flex min-h-10 cursor-pointer list-none items-center justify-center rounded-[11px] border border-gray-200 text-[12px] font-bold text-primary-ink hover:bg-gray-50 group-open:hidden">
               {rest.length}줄 더 보기
             </summary>
             <div className="flex flex-col gap-1.5">

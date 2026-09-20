@@ -17,7 +17,7 @@ export function HomeDaySessions({ date, sessions }: { date: Date; sessions: Cale
         <Text typography="heading3" render={<h3 />} className="font-extrabold">
           {title}
         </Text>
-        <Text typography="body3" foreground="hint" className="tabular-nums">
+        <Text numeric typography="body3" foreground="hint">
           {countLabel}
         </Text>
       </div>

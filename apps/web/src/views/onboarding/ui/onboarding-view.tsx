@@ -32,7 +32,7 @@ export function OnboardingView() {
     back ? "animate-slide-in-back" : "animate-slide-in",
     welcome && "items-center text-center",
   );
-  const titleClass = cn("leading-[1.32]", welcome ? "text-[26px]" : "text-[24px]");
+  const titleClass = cn("leading-[1.32]", welcome ? "text-[22px]" : "text-[22px]");
 
   const skip = () => router.replace(DONE_HREF);
 

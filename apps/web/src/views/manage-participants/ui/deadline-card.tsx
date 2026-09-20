@@ -17,7 +17,7 @@ export function DeadlineCard({ summary, locked }: { summary: RosterSummary; lock
           <Text typography="body4" foreground="muted" className="min-w-0 flex-1">
             모집 마감
           </Text>
-          <Text typography="subtitle2" className="shrink-0 tabular-nums">
+          <Text numeric typography="subtitle2" className="shrink-0">
             {summary.deadlineAt}
           </Text>
           <Badge

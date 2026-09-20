@@ -22,7 +22,7 @@ export function HomeMonthRecord({
       <Text typography="heading2" render={<h3 />} className="font-extrabold">
         {monthLabel}의 기록
       </Text>
-      <Text typography="body4" foreground="hint" render={<p />} className="mt-1 mb-4 text-[12.5px]">
+      <Text typography="body4" foreground="hint" render={<p />} className="mt-1 mb-4">
         {summary}
       </Text>
       <HomeRecordGroup

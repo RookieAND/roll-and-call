@@ -15,9 +15,10 @@ export function MyPageSessions({ sessions }: { sessions: ReturnType<typeof summa
         </Text>
         <Link href={sessions.joined.href}>
           <Text
+            weight="medium"
             typography="body4"
             foreground="primary"
-            className="inline-flex items-center gap-1 text-[12.5px] font-semibold"
+            className="inline-flex items-center gap-1"
           >
             전체 보기 <ChevronRight size={14} aria-hidden />
           </Text>

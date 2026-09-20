@@ -5,10 +5,10 @@ export function KeywordChips({ keywords }: { keywords: readonly string[] }) {
   if (keywords.length === 0) {
     return (
       <div className="flex min-h-11 items-center gap-2 rounded-[11px] border border-dashed border-gray-300 px-3">
-        <Text typography="body3" foreground="hint" className="flex-none font-bold">
+        <Text weight="bold" typography="body3" foreground="hint" className="flex-none">
           #
         </Text>
-        <Text typography="body4" foreground="hint" className="min-w-0 flex-1 text-[12.5px]">
+        <Text typography="body4" foreground="hint" className="min-w-0 flex-1">
           적어둔 성향이 없습니다
         </Text>
       </div>

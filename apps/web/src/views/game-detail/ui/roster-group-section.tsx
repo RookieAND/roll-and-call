@@ -30,11 +30,11 @@ export function RosterGroupSection({
         <Text typography="heading3" render={<h2 />}>
           {label}
         </Text>
-        <Text typography="subtitle2" className="tabular-nums">
+        <Text numeric typography="subtitle2">
           {members.length}명
         </Text>
         {capacity !== undefined && (
-          <Text typography="body4" foreground="hint" className="tabular-nums">
+          <Text numeric typography="body4" foreground="hint">
             정원 {capacity}명
           </Text>
         )}
