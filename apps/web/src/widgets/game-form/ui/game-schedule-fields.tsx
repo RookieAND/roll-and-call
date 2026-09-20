@@ -20,7 +20,7 @@ const END_DATE_HINT = {
 
 interface GameScheduleFieldsProps {
   form: UseFormReturn<GameFormValues>;
-  modeLockedReason?: string | null;
+  modeLockedReason?: readonly string[] | null;
   sessionNotice?: string | null;
 }
 

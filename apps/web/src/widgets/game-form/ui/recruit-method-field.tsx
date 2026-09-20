@@ -25,7 +25,7 @@ const HINT = {
 interface RecruitMethodFieldProps {
   value: RecruitMethod;
   onChange: (method: RecruitMethod) => void;
-  lockedReason?: string | null;
+  lockedReason?: readonly string[] | null;
 }
 
 export function RecruitMethodField({ value, onChange, lockedReason }: RecruitMethodFieldProps) {
@@ -46,7 +46,7 @@ export function RecruitMethodField({ value, onChange, lockedReason }: RecruitMet
           ))}
         </Grid>
       </Field>
-      <HintBox lines={lockedReason ? [lockedReason] : HINT[value]} />
+      <HintBox lines={lockedReason ?? HINT[value]} />
     </VStack>
   );
 }

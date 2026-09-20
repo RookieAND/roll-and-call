@@ -43,7 +43,10 @@ export function GameFormWizard({
   const applicants = edit?.applicantCount ?? 0;
   const lockedReason =
     applicants > 0
-      ? "신청자가 있어 일정 방식과 모집 방식은 바꿀 수 없습니다. 바꾸려면 참여자 관리에서 명단을 비워주세요."
+      ? ([
+          "신청자가 있어 일정 방식과 모집 방식은 바꿀 수 없습니다.",
+          "바꾸려면 참여자 관리에서 명단을 비워주세요.",
+        ] as const)
       : null;
 
   // 숨겨진 단계의 필드로는 스크롤할 수 없어서 그 단계로 먼저 돌린다.

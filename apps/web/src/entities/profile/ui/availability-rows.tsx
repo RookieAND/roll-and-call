@@ -9,15 +9,10 @@ const PREVIEW_ROWS = 3;
 interface AvailabilityRowsProps {
   intervals: readonly AvailabilityInterval[];
   note?: string;
-  emptyText?: string;
 }
 
 // 08 타인 프로필과 같은 행 모양. 3줄을 넘으면 접고 나머지는 펼쳐서 본다.
-export function AvailabilityRows({
-  intervals,
-  note,
-  emptyText = "적어두지 않았습니다",
-}: AvailabilityRowsProps) {
+export function AvailabilityRows({ intervals, note }: AvailabilityRowsProps) {
   const days = filledDays(intervals);
 
   if (days.length === 0) {
@@ -29,7 +24,7 @@ export function AvailabilityRows({
       >
         <Clock size={15} className="flex-none text-hint" aria-hidden />
         <Text typography="body4" foreground="hint" className="min-w-0 flex-1">
-          {emptyText}
+          적어두지 않았습니다
         </Text>
       </HStack>
     );

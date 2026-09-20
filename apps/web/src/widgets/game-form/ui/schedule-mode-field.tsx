@@ -24,11 +24,11 @@ const HINT = {
 interface ScheduleModeFieldProps {
   value: ScheduleMode;
   onChange: (mode: ScheduleMode) => void;
-  lockedReason?: string | null;
+  lockedReason?: readonly string[] | null;
 }
 
 export function ScheduleModeField({ value, onChange, lockedReason }: ScheduleModeFieldProps) {
-  const lines = lockedReason ? [lockedReason] : HINT[value];
+  const lines = lockedReason ?? HINT[value];
 
   return (
     <VStack gap="100">

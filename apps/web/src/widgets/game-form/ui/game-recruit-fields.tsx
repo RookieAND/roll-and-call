@@ -15,7 +15,7 @@ import { WaitlistField } from "./waitlist-field";
 interface GameRecruitFieldsProps {
   form: UseFormReturn<GameFormValues>;
   minPlayers?: number;
-  lockedReason?: string | null;
+  lockedReason?: readonly string[] | null;
   sessionNotice?: string | null;
 }
 
