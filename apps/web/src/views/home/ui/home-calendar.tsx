@@ -35,7 +35,12 @@ export function HomeCalendar({
         <Text typography="heading2" render={<h2 />} className="flex-1">
           {monthStart.format("YYYY년 M월")}
         </Text>
-        <Button asChild variant="outline" size="sm">
+        <Button
+          asChild
+          variant="outline"
+          size="sm"
+          className="h-9 rounded-400 text-body4 font-bold"
+        >
           <Link href="/" scroll={false}>
             오늘
           </Link>
@@ -58,7 +63,7 @@ export function HomeCalendar({
             weight="bold"
             key={weekday}
             typography="body4"
-            foreground="hint"
+            foreground="muted"
             className={cn("text-center", WEEKDAY_TONE[index])}
           >
             {weekday}
@@ -66,7 +71,7 @@ export function HomeCalendar({
         ))}
       </Grid>
 
-      <Grid className="grid-cols-7 gap-px px-150 pb-150">
+      <Grid className="grid-cols-7 gap-025 px-150 pb-150">
         {cells.map((cell) =>
           sessionsByDay ? (
             <HomeCalendarCell

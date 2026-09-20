@@ -49,7 +49,7 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
       className={cn("block h-[62px] rounded-300 px-050 py-050 transition-colors", tone.cell)}
     >
       <Text
-        typography="body5"
+        typography="body4"
         weight={tone.day ? "extrabold" : "medium"}
         className={cn("block text-center", dayTone)}
       >
