@@ -49,19 +49,24 @@ export function SlotGrid({
           gridTemplateColumns: `${TIME_COL_PX}px repeat(${days.length}, ${dayColumnWidth})`,
         }}
       >
-        <span className="sticky top-0 left-0 z-20 border-b border-gray-200 bg-surface" />
+        <span className="sticky top-0 left-0 z-20 border-b border-gray-200 bg-gray-50" />
         {days.map((day) => (
           <VStack
             key={day.date}
             align="center"
             justify="center"
-            className="sticky top-0 z-10 border-b border-gray-200 bg-surface"
+            className="sticky top-0 z-10 border-b border-gray-200 bg-gray-50"
             style={{ height: HEADER_PX }}
           >
             <Text typography="body5" foreground="hint" render={<span />} className="leading-none">
               {day.dow}
             </Text>
-            <Text typography="subtitle2" render={<span />} className="mt-025 leading-none">
+            <Text
+              typography="body5"
+              weight="bold"
+              render={<span />}
+              className="mt-025 leading-none"
+            >
               {day.md}
             </Text>
           </VStack>
@@ -70,10 +75,12 @@ export function SlotGrid({
         {timeRows.map((row) => [
           <Text
             key={`${row.label}-t`}
-            typography="body4"
+            typography="body5"
+            weight="bold"
             foreground="hint"
+            numeric
             render={<span />}
-            className="sticky left-0 z-10 bg-surface pr-075 text-right text-body5 leading-none tabular-nums"
+            className="sticky left-0 z-10 bg-surface pr-075 text-right leading-none"
             style={{ height: SLOT_ROW_PX }}
           >
             {row.minute === 0 ? row.label : ""}

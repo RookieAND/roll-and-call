@@ -28,7 +28,7 @@ type Props = {
 
 const CELL = "touch-none border-b border-l border-b-gray-100 border-l-gray-100";
 const STRIPES =
-  "repeating-linear-gradient(45deg, var(--color-gray-300) 0 4px, var(--color-gray-200) 4px 8px)";
+  "repeating-linear-gradient(45deg, var(--color-gray-300) 0 3px, var(--color-gray-200) 3px 6px)";
 
 export function AvailabilityGrid({ gameId, days, timeRows, savedMine, prefill, blocked }: Props) {
   const usePrefill = savedMine.length === 0 && Boolean(prefill?.keys.length);

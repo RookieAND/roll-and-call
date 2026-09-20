@@ -1,4 +1,6 @@
-import { Button, HStack, Text } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@trpg/ui";
+
+import { UnsavedCount } from "./unsaved-count";
 
 export function AvailabilitySaveBar({
   selectedCount,
@@ -15,32 +17,38 @@ export function AvailabilitySaveBar({
   onReset: () => void;
   onSave: () => void;
 }) {
-  const status = dirty ? `저장하지 않음 ${unsavedCount}칸` : "모두 저장됨";
-  const statusClass = dirty ? "font-semibold text-warning-600" : "text-hint";
-
   return (
-    <HStack
-      align="center"
-      gap="100"
-      className="sticky bottom-0 z-10 -mx-200 border-t border-gray-200 bg-surface px-200 py-150"
+    <VStack
+      gap="125"
+      className="sticky bottom-0 z-10 -mx-200 border-t border-gray-200 bg-surface px-200 pt-150 pb-200"
     >
-      <Text typography="body3" render={<p />} className="min-w-0 flex-1 tabular-nums">
-        선택 {selectedCount}칸 · <span className={statusClass}>{status}</span>
-      </Text>
-      {dirty && (
-        <Button variant="ghost" size="sm" className="h-10 shrink-0" onClick={onReset}>
-          되돌리기
+      <HStack align="center" gap="075">
+        <Text typography="subtitle2" numeric render={<span />}>
+          선택 {selectedCount}칸
+        </Text>
+        {dirty ? <UnsavedCount count={unsavedCount} /> : null}
+      </HStack>
+      <HStack gap="100" className="[&>*]:flex-1">
+        {dirty && (
+          <Button
+            type="button"
+            variant="outline"
+            className="h-[50px] rounded-500"
+            onClick={onReset}
+          >
+            되돌리기
+          </Button>
+        )}
+        <Button
+          type="button"
+          className="h-[50px] rounded-500 font-bold"
+          loading={pending}
+          disabled={!dirty}
+          onClick={onSave}
+        >
+          저장
         </Button>
-      )}
-      <Button
-        type="button"
-        className="h-11 shrink-0 px-300"
-        loading={pending}
-        disabled={!dirty}
-        onClick={onSave}
-      >
-        저장
-      </Button>
-    </HStack>
+      </HStack>
+    </VStack>
   );
 }
