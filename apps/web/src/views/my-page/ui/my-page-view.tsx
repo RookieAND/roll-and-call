@@ -3,7 +3,7 @@ import { Container, VStack } from "@trpg/ui";
 import { profileDisplay } from "@/entities/profile";
 import { LoginRequired } from "@/features/auth";
 import { getCurrentSessionUser, getProfile } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, HelpButton } from "@/shared/ui";
 import { loadMySessions } from "@/widgets/session-list";
 
 import { summarizeMySessions } from "../model/my-page-summary";
@@ -19,7 +19,7 @@ export async function MyPageView() {
   if (!user) {
     return (
       <>
-        <AppBar title="마이페이지" />
+        <AppBar title="마이페이지" action={<HelpButton />} />
         <Container size="sm">
           <div className="py-6">
             <LoginRequired />
@@ -38,7 +38,7 @@ export async function MyPageView() {
 
   return (
     <>
-      <AppBar title="마이페이지" />
+      <AppBar title="마이페이지" action={<HelpButton />} />
       <Container size="sm">
         <VStack gap={5} className="py-[18px]">
           <MyPageProfile

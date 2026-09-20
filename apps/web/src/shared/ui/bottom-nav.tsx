@@ -24,7 +24,7 @@ const tabs = [
 ];
 
 // 몰입 화면(등록·수정 위저드, 일정 조율)은 탭을 내리고 그 화면의 하단 CTA만 남긴다.
-const IMMERSIVE = /^\/games\/(new|[^/]+\/(edit|schedule))$/;
+const IMMERSIVE = /^\/onboarding$|^\/games\/(new|[^/]+\/(edit|schedule))$/;
 
 export function BottomNav() {
   const pathname = usePathname();

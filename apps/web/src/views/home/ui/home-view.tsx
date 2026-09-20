@@ -2,7 +2,7 @@ import { Container } from "@trpg/ui";
 
 import { LoginButton } from "@/features/auth";
 import { getCurrentSessionUser, getMonthSessions } from "@/shared/server";
-import { AppBar, StatusNotice } from "@/shared/ui";
+import { AppBar, HelpButton, StatusNotice } from "@/shared/ui";
 
 import { buildMonthRecord } from "../model/build-month-record";
 import { groupSessionsByDay } from "../model/group-sessions-by-day";
@@ -26,7 +26,9 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
       <AppBar
         title="롤앤콜"
         brand
-        action={!user && <LoginButton next="/" className="h-[34px] px-3 text-[13px]" />}
+        action={
+          user ? <HelpButton /> : <LoginButton next="/" className="h-[34px] px-3 text-[13px]" />
+        }
       />
       <Container size="sm" className="px-0">
         {authError && (
