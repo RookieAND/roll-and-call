@@ -1,11 +1,9 @@
 import assert from "node:assert";
 
-import { canCoordinateSchedule } from "./can-coordinate-schedule";
 import { deriveGameStatus } from "./derive-game-status";
 import { isDeadlinePassed } from "./is-deadline-passed";
 import { isDeadlineUrgent } from "./is-deadline-urgent";
 import { countConfirmed, PARTICIPANT_STATUS } from "./participant";
-import { SCHEDULE_MODE } from "./schedule-mode";
 import { splitRoster } from "./split-roster";
 import { GAME_STATUS } from "./status";
 
@@ -72,31 +70,6 @@ assert.deepEqual(
     ["c", 1],
     ["a", 2],
   ],
-);
-
-assert.equal(
-  canCoordinateSchedule({
-    scheduleMode: SCHEDULE_MODE.coordinate,
-    confirmedAt: null,
-    status: GAME_STATUS.recruiting,
-  }),
-  true,
-);
-assert.equal(
-  canCoordinateSchedule({
-    scheduleMode: SCHEDULE_MODE.coordinate,
-    confirmedAt: future,
-    status: GAME_STATUS.recruiting,
-  }),
-  false,
-);
-assert.equal(
-  canCoordinateSchedule({
-    scheduleMode: SCHEDULE_MODE.fixed,
-    confirmedAt: null,
-    status: GAME_STATUS.recruiting,
-  }),
-  false,
 );
 
 const NOW = new Date("2026-09-11T12:00:00+09:00");

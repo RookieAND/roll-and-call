@@ -10,7 +10,6 @@ export { splitRoster, type RosterMember } from "./model/split-roster";
 export { isGameGm } from "./model/is-game-gm";
 export { hasUserJoined } from "./model/has-user-joined";
 export { canCoordinate } from "./model/can-coordinate";
-export { canCoordinateSchedule } from "./model/can-coordinate-schedule";
 export { GameCard } from "./ui/game-card";
 export { GameThumbnail } from "./ui/game-thumbnail";
 export { GameRow } from "./ui/game-row";

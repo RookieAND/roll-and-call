@@ -1,26 +1,11 @@
-import { VStack } from "@trpg/ui";
-
 import { ConfirmedSessionNotice } from "@/entities/game";
 
-import { ACTION_SECONDARY_CLASS } from "./action-class-names";
-import { ScheduleLink } from "./schedule-link";
-
-export function ConfirmedActions({
-  gameId,
-  confirmedAt,
-  canSchedule,
-}: {
-  gameId: string;
-  confirmedAt: Date;
-  canSchedule: boolean;
-}) {
+// 세션 시간이 잡힌 뒤엔 조율이 끝났다. 일정 조율로 가는 길을 여기서 닫는다.
+export function ConfirmedActions({ confirmedAt }: { confirmedAt: Date }) {
   return (
-    <VStack gap={2}>
-      <ConfirmedSessionNotice
-        confirmedAt={confirmedAt}
-        note="시작 1시간 전 디스코드로 알려드립니다."
-      />
-      {canSchedule && <ScheduleLink gameId={gameId} className={ACTION_SECONDARY_CLASS} />}
-    </VStack>
+    <ConfirmedSessionNotice
+      confirmedAt={confirmedAt}
+      note="시작 1시간 전 디스코드로 알려드립니다."
+    />
   );
 }

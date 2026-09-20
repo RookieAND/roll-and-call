@@ -67,13 +67,7 @@ export function GameActionZone({
         <GmActions gameId={game.id} confirmedAt={sessionConfirmed ? game.confirmedAt : null} />
       );
     case GAME_ACTION_VIEW.confirmed:
-      return (
-        <ConfirmedActions
-          gameId={game.id}
-          confirmedAt={game.confirmedAt!}
-          canSchedule={canSchedule}
-        />
-      );
+      return <ConfirmedActions confirmedAt={game.confirmedAt!} />;
     case GAME_ACTION_VIEW.confirmedWaiting:
       return (
         <ConfirmedWaitingActions
