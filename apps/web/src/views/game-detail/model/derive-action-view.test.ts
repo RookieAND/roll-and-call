@@ -33,6 +33,14 @@ describe("deriveActionView", () => {
     );
   });
 
+  // 확정 안내는 그 세션에 낀 사람의 것이다.
+  it("확정된 세션이라도 안 낀 사람에게는 닫힌 글이다", () => {
+    expect(deriveActionView({ ...base, sessionConfirmed: true })).toBe(GAME_ACTION_VIEW.closed);
+    expect(deriveActionView({ ...base, sessionConfirmed: true, isSignedIn: false })).toBe(
+      GAME_ACTION_VIEW.closed,
+    );
+  });
+
   it("확정 뒤에도 대기자는 순번과 대기 취소를 유지한다", () => {
     expect(deriveActionView({ ...base, sessionConfirmed: true, viewerConfirmed: true })).toBe(
       GAME_ACTION_VIEW.confirmed,
