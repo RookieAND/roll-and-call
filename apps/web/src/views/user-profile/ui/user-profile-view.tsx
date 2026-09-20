@@ -49,9 +49,7 @@ export async function UserProfileView({ id }: { id: string }) {
           <AvailabilityRows intervals={profile.availability} note="프로필 기본값입니다." />
         </section>
 
-        {viewer && (
-          <ProfileMemoBlock targetId={profile.id} memo={memo} />
-        )}
+        {viewer && <ProfileMemoBlock targetId={profile.id} memo={memo} />}
 
         <ProfileStats
           hosted={sessions[SESSION_ROLE.host].length}

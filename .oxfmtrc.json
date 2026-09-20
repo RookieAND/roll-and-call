@@ -10,5 +10,6 @@
       "unknown"
     ],
     "newlinesBetween": true
-  }
+  },
+  "ignorePatterns": ["apps/web/docs/**"]
 }

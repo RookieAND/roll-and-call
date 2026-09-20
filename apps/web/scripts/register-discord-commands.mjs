@@ -29,7 +29,7 @@ async function discord(path, method = "GET", body) {
       authorization: `Bot ${token}`,
       ...(body === undefined ? {} : { "content-type": "application/json" }),
     },
-    body: body === undefined ? undefined : JSON.stringify(body),
+    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
   });
   if (!response.ok) {
     throw new Error(`Discord ${method} ${path} → ${response.status} ${await response.text()}`);
