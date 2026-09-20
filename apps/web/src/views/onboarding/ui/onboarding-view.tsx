@@ -26,10 +26,11 @@ export function OnboardingView() {
   const welcome = slide.eyebrow === null;
   const last = index === ONBOARDING_SLIDES.length - 1;
   const nextLabel = welcome ? "둘러보기" : last ? "구인 목록 보러 가기" : "다음";
+  // 남는 높이를 위아래로 나눠 갖는다. 내용이 더 길면 flex-1이 늘어나므로 위가 잘리지 않는다.
   const slideClass = cn(
-    "flex flex-1 flex-col touch-pan-y",
+    "flex flex-1 flex-col justify-center touch-pan-y",
     back ? "animate-slide-in-back" : "animate-slide-in",
-    welcome && "items-center justify-center text-center",
+    welcome && "items-center text-center",
   );
   const titleClass = cn("leading-[1.32]", welcome ? "text-[26px]" : "text-[24px]");
 
