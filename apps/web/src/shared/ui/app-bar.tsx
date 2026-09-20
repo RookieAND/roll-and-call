@@ -1,4 +1,4 @@
-import { cn, IconButton, Text } from "@trpg/ui";
+import { cn, HStack, IconButton, Text } from "@trpg/ui";
 import { ChevronLeft, X } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -24,10 +24,13 @@ export function AppBar({ title, brand, back, onBack, backIcon = "back", action }
   const backLabel = backIcon === "close" ? "닫기" : "뒤로";
 
   return (
-    <header
+    <HStack
+      align="center"
+      gap={hasBack ? "050" : "075"}
+      render={<header />}
       className={cn(
-        "sticky top-0 z-20 flex h-[52px] items-center border-b border-gray-200 bg-surface/90 backdrop-blur",
-        hasBack ? "gap-050 px-125" : "gap-075 px-175",
+        "sticky top-0 z-20 h-[52px] border-b border-gray-200 bg-surface/90 backdrop-blur",
+        hasBack ? "px-125" : "px-175",
       )}
     >
       {onBack ? (
@@ -57,6 +60,6 @@ export function AppBar({ title, brand, back, onBack, backIcon = "back", action }
       )}
       <span className="flex-1" />
       {action}
-    </header>
+    </HStack>
   );
 }

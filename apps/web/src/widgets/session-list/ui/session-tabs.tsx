@@ -1,4 +1,4 @@
-import { cn } from "@trpg/ui";
+import { cn, HStack } from "@trpg/ui";
 import Link from "next/link";
 
 interface SessionTabsProps {
@@ -10,7 +10,7 @@ interface SessionTabsProps {
 // ponytail: 밑줄 탭은 Chip·SegmentControl과 룩이 달라 링크로 손코딩.
 export function SessionTabs({ label, tabs, activeKey }: SessionTabsProps) {
   return (
-    <nav aria-label={label} className="flex px-200">
+    <HStack render={<nav aria-label={label} />} className="px-200">
       {tabs.map((tab) => {
         const selected = tab.key === activeKey;
         return (
@@ -29,6 +29,6 @@ export function SessionTabs({ label, tabs, activeKey }: SessionTabsProps) {
           </Link>
         );
       })}
-    </nav>
+    </HStack>
   );
 }

@@ -9,7 +9,7 @@ export default function Loading() {
       <AppBar title="마이페이지" />
       <Container size="sm">
         <VStack gap="250" className="py-225">
-          <section className="flex flex-col gap-175">
+          <VStack gap="175" render={<section />}>
             <HStack align="center" gap="175">
               <Skeleton width={60} height={60} rounded="full" />
               <div className="min-w-0 flex-1">
@@ -29,22 +29,22 @@ export default function Loading() {
               <Skeleton width={80} height={17} className="mb-100" />
               <Skeleton width="100%" height={52} rounded={500} />
             </div>
-          </section>
+          </VStack>
 
-          <section className="flex flex-col gap-125">
+          <VStack gap="125" render={<section />}>
             <Skeleton width={64} height={22} />
             <Skeleton width="100%" height={120} rounded={600} />
-          </section>
+          </VStack>
 
           <section>
             <Skeleton width={40} height={22} className="mb-125" />
             <Skeleton width="100%" height={52} rounded={500} />
           </section>
 
-          <section className="flex flex-col gap-125">
+          <VStack gap="125" render={<section />}>
             <Skeleton width={40} height={22} />
             <Skeleton width="100%" height={104} rounded={600} />
-          </section>
+          </VStack>
         </VStack>
       </Container>
     </>

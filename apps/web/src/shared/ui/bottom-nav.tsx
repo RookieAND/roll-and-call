@@ -1,5 +1,6 @@
 "use client";
 
+import { Grid } from "@trpg/ui";
 import { CalendarDays, List, User } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -31,11 +32,15 @@ export function BottomNav() {
   if (IMMERSIVE.test(pathname)) return null;
 
   return (
-    <nav className="sticky bottom-0 z-20 grid h-[58px] grid-cols-3 border-t border-gray-200 bg-surface">
+    <Grid
+      cols={3}
+      render={<nav />}
+      className="sticky bottom-0 z-20 h-[58px] border-t border-gray-200 bg-surface"
+    >
       {tabs.map(({ href, label, Icon, isActive }) => {
         const Tab = isActive(pathname) ? ActiveBottomNavTab : BottomNavTab;
         return <Tab key={href} href={href} label={label} Icon={Icon} />;
       })}
-    </nav>
+    </Grid>
   );
 }
