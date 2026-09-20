@@ -1,6 +1,6 @@
 "use client";
 
-import { Text } from "@trpg/ui";
+import { Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { formatDateTime, type DayColumn, type TimeRow } from "@/shared/lib";
@@ -57,7 +57,7 @@ export function Heatmap({ days, timeRows, counts, names, confirmedAt, capacity, 
   }
 
   return (
-    <div className="flex flex-col gap-100">
+    <VStack gap="100">
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
       {picked ? (
         <div className="rounded-500 border border-gray-200 px-175 py-150" aria-live="polite">
@@ -73,6 +73,6 @@ export function Heatmap({ days, timeRows, counts, names, confirmedAt, capacity, 
           칸을 누르면 그 시간에 가능한 사람이 보입니다.
         </Text>
       )}
-    </div>
+    </VStack>
   );
 }

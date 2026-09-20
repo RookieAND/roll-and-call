@@ -1,4 +1,4 @@
-import { Chip } from "@trpg/ui";
+import { Chip, HStack } from "@trpg/ui";
 import Link from "next/link";
 
 import type { SessionRole } from "@/entities/game";
@@ -19,7 +19,7 @@ export function SessionStatusChips({
   endedCount: number;
 }) {
   return (
-    <div className="flex gap-075 overflow-x-auto px-200 py-125">
+    <HStack gap="075" className="overflow-x-auto px-200 py-125">
       {SESSION_CHIPS[activeTab].map((chip) => {
         const selected = chip.key === activeChip;
         const label =
@@ -37,6 +37,6 @@ export function SessionStatusChips({
           </Chip>
         );
       })}
-    </div>
+    </HStack>
   );
 }

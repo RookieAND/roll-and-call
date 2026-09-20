@@ -1,6 +1,6 @@
 "use client";
 
-import { Skeleton, Text, cn } from "@trpg/ui";
+import { cn, HStack, Skeleton, Text } from "@trpg/ui";
 import { EyeOff } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -34,7 +34,7 @@ export function GameThumbnail({
 
   return (
     <div className={cn("relative overflow-hidden", className)}>
-      {!loaded && <Skeleton className="absolute inset-0 rounded-none" />}
+      {!loaded && <Skeleton rounded="none" className="absolute inset-0" />}
       <Image
         src={url}
         alt={alt}
@@ -48,12 +48,17 @@ export function GameThumbnail({
         onLoad={() => setLoaded(true)}
       />
       {spoilerLabel && (
-        <div className="absolute inset-0 flex items-center justify-center gap-075 bg-black/30 text-white">
+        <HStack
+          align="center"
+          justify="center"
+          gap="075"
+          className="absolute inset-0 bg-black/30 text-white"
+        >
           <EyeOff size={16} aria-hidden />
           <Text typography="subtitle2" foreground="white">
             {spoilerLabel}
           </Text>
-        </div>
+        </HStack>
       )}
     </div>
   );

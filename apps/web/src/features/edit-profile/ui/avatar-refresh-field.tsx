@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, Text } from "@trpg/ui";
+import { Avatar, Button, HStack, Text } from "@trpg/ui";
 import { useState } from "react";
 
 import { toast, useAction } from "@/shared/ui";
@@ -27,7 +27,7 @@ export function AvatarRefreshField({
   }
 
   return (
-    <div className="flex items-center gap-150">
+    <HStack align="center" gap="150">
       <Avatar src={url} name={name} size="2xl" />
       <Text typography="body3" foreground="muted" className="min-w-0 flex-1">
         아바타는 디스코드에서 가져옵니다.
@@ -41,6 +41,6 @@ export function AvatarRefreshField({
       >
         다시 불러오기
       </Button>
-    </div>
+    </HStack>
   );
 }

@@ -1,4 +1,4 @@
-import { Button, Text, VStack } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@trpg/ui";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -23,12 +23,12 @@ export function ErrorScreen({
           </Text>
         )}
       </VStack>
-      <div className="flex gap-100">
+      <HStack gap="100">
         {action}
         <Button asChild>
           <Link href="/">메인으로 돌아가기</Link>
         </Button>
-      </div>
+      </HStack>
     </VStack>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, Text } from "@trpg/ui";
+import { cn, Text, VStack } from "@trpg/ui";
 import { type ReactNode, useEffect, useRef } from "react";
 
 import { DAY_START_HOUR, type DayColumn, slotIso, type TimeRow } from "@/shared/lib";
@@ -48,9 +48,11 @@ export function SlotGrid({
       >
         <span className="sticky top-0 left-0 z-20 border-b border-gray-200 bg-surface" />
         {days.map((day) => (
-          <div
+          <VStack
             key={day.date}
-            className="sticky top-0 z-10 flex flex-col items-center justify-center border-b border-gray-200 bg-surface"
+            align="center"
+            justify="center"
+            className="sticky top-0 z-10 border-b border-gray-200 bg-surface"
             style={{ height: HEADER_PX }}
           >
             <Text typography="body5" foreground="hint" render={<span />} className="leading-none">
@@ -59,7 +61,7 @@ export function SlotGrid({
             <Text typography="subtitle2" render={<span />} className="mt-025 leading-none">
               {day.md}
             </Text>
-          </div>
+          </VStack>
         ))}
 
         {timeRows.map((row) => [

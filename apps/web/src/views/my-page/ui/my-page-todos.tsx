@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { Text, VStack } from "@trpg/ui";
 
 import { SessionCard } from "@/widgets/session-list";
 
@@ -15,11 +15,11 @@ export function MyPageTodos({ todos }: { todos: TodoItem[] }) {
           먼저 처리하면 좋은 것부터 보여줍니다.
         </Text>
       </div>
-      <div className="flex flex-col gap-125">
+      <VStack gap="125">
         {todos.map(({ card, eyebrow }) => (
           <SessionCard key={card.id} model={card} eyebrow={eyebrow} />
         ))}
-      </div>
+      </VStack>
     </section>
   );
 }

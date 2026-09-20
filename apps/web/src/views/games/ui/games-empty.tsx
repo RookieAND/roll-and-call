@@ -1,4 +1,4 @@
-import { Button } from "@trpg/ui";
+import { Button, HStack } from "@trpg/ui";
 import Link from "next/link";
 
 import { filterParams, gamesHref } from "@/features/filter-games";
@@ -19,12 +19,12 @@ export function GamesEmpty({ filter }: { filter: GamesFilter }) {
         title={`'${filter.q}'에 맞는 구인이 없습니다`}
         description="검색어를 바꾸거나 직접 구인을 올려보세요."
         action={
-          <div className="flex w-full gap-100 [&>*]:flex-1">
+          <HStack gap="100" className="w-full [&>*]:flex-1">
             <Button asChild variant="outline" className="h-11">
               <Link href={gamesHref(filterParams({ ...filter, q: undefined }))}>검색 초기화</Link>
             </Button>
             {newGame}
-          </div>
+          </HStack>
         }
       />
     );
@@ -53,7 +53,7 @@ export function GamesEmpty({ filter }: { filter: GamesFilter }) {
       image="/empty-states/empty-search.png"
       title="아직 올라온 구인이 없습니다"
       description="첫 구인을 올리면 이 자리에 보입니다."
-      action={<div className="flex w-full [&>*]:flex-1">{newGame}</div>}
+      action={<HStack className="w-full [&>*]:flex-1">{newGame}</HStack>}
     />
   );
 }

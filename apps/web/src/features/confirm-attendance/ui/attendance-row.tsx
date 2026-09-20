@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, SegmentControl, Text } from "@trpg/ui";
+import { Avatar, HStack, SegmentControl, Text } from "@trpg/ui";
 
 import {
   ATTENDANCE_CHOICE,
@@ -21,7 +21,11 @@ export function AttendanceRow({
   const choice = absent ? ATTENDANCE_CHOICE.absent : ATTENDANCE_CHOICE.present;
 
   return (
-    <div className="flex min-h-15 items-center gap-125 border-t border-gray-100 px-150 py-100 first:border-t-0">
+    <HStack
+      align="center"
+      gap="125"
+      className="min-h-15 border-t border-gray-100 px-150 py-100 first:border-t-0"
+    >
       <Avatar src={attendee.avatarUrl} name={attendee.username} size="stack" />
       <div className="min-w-0 flex-1">
         <Text truncate typography="subtitle2">
@@ -39,6 +43,6 @@ export function AttendanceRow({
         value={choice}
         onChange={(next: AttendanceChoice) => onChange(next === ATTENDANCE_CHOICE.absent)}
       />
-    </div>
+    </HStack>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, Text, TextInput } from "@trpg/ui";
+import { Chip, HStack, Text, TextInput, VStack } from "@trpg/ui";
 import { X } from "lucide-react";
 import { useState, type KeyboardEvent } from "react";
 
@@ -51,9 +51,9 @@ export function TagInput({
   const unusedSuggestions = suggestions.filter((suggestion) => !value.includes(suggestion));
 
   return (
-    <div className="flex flex-col gap-100">
+    <VStack gap="100">
       {value.length > 0 && (
-        <div className="flex flex-wrap gap-075">
+        <HStack gap="075" wrap>
           {value.map((tag) => (
             <Chip
               key={tag}
@@ -67,7 +67,7 @@ export function TagInput({
               <X size={13} aria-hidden />
             </Chip>
           ))}
-        </div>
+        </HStack>
       )}
 
       {isFull ? (
@@ -87,16 +87,16 @@ export function TagInput({
             onBlur={() => add(draft)}
           />
           {unusedSuggestions.length > 0 && (
-            <div className="flex flex-wrap gap-075">
+            <HStack gap="075" wrap>
               {unusedSuggestions.map((suggestion) => (
                 <Chip key={suggestion} className="h-9.5" onClick={() => add(suggestion)}>
                   {suggestion}
                 </Chip>
               ))}
-            </div>
+            </HStack>
           )}
         </>
       )}
-    </div>
+    </VStack>
   );
 }

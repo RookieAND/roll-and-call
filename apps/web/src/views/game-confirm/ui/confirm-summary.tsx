@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 
 export function ConfirmSummary({
   playLabel,
@@ -14,7 +14,7 @@ export function ConfirmSummary({
 
   return (
     <div>
-      <div className="flex gap-100">
+      <HStack gap="100">
         {items.map((item) => (
           <div key={item.label} className="flex-1 rounded-500 border border-gray-200 px-175 py-150">
             <Text typography="body4" foreground="hint" render={<p />}>
@@ -25,7 +25,7 @@ export function ConfirmSummary({
             </Text>
           </div>
         ))}
-      </div>
+      </HStack>
       <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
         시작 시각부터 {playLabel}이 끊기지 않고 비는 시간만 셉니다.
       </Text>

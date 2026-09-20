@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "@trpg/ui";
+import { Button, HStack } from "@trpg/ui";
 
 export function InlineRetry({ onRetry }: { onRetry: () => void }) {
   return (
-    <div className="flex justify-center py-150">
+    <HStack justify="center" className="py-150">
       <Button variant="outline" size="sm" onClick={onRetry}>
         다시 시도
       </Button>
-    </div>
+    </HStack>
   );
 }

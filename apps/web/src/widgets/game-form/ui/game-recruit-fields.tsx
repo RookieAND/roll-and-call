@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, Stepper, Text } from "@trpg/ui";
+import { Field, Stepper, Text, VStack } from "@trpg/ui";
 import { Lock } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 
@@ -40,7 +40,7 @@ export function GameRecruitFields({
 
   return (
     <>
-      <div className="flex flex-col gap-075">
+      <VStack gap="075">
         <Field
           label="최대 참여 인원"
           htmlFor="maxPlayers"
@@ -62,9 +62,9 @@ export function GameRecruitFields({
         <Text typography="body4" foreground="hint" render={<p />} id="maxPlayers-hint">
           {playersHint}
         </Text>
-      </div>
+      </VStack>
 
-      <div className="flex flex-col gap-125">
+      <VStack gap="125">
         <RecruitMethodField
           value={method}
           lockedReason={lockedReason}
@@ -85,7 +85,7 @@ export function GameRecruitFields({
             onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
           />
         )}
-      </div>
+      </VStack>
 
       <GameScheduleFields
         form={form}

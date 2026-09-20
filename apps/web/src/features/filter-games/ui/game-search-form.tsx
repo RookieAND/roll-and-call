@@ -1,6 +1,6 @@
 "use client";
 
-import { IconButton, TextInput } from "@trpg/ui";
+import { HStack, IconButton, TextInput } from "@trpg/ui";
 import { Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
@@ -47,7 +47,7 @@ export function GameSearchForm({ filter }: { filter: GamesFilter }) {
         enterKeyHint="search"
         className="pr-11"
       />
-      <div className="absolute inset-y-0 right-0 flex items-center">
+      <HStack align="center" className="absolute inset-y-0 right-0">
         {pending ? (
           <Loader2 size={16} className="mr-175 animate-spin text-hint" aria-label="검색 중" />
         ) : (
@@ -62,7 +62,7 @@ export function GameSearchForm({ filter }: { filter: GamesFilter }) {
             </IconButton>
           )
         )}
-      </div>
+      </HStack>
     </form>
   );
 }

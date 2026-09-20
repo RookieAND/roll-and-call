@@ -9,7 +9,11 @@ export function AttendanceResultRow({ attendee }: { attendee: Attendee }) {
   const iconClass = attendee.absent ? "text-danger-600" : "text-success-700";
 
   return (
-    <div className="flex min-h-14 items-center gap-125 border-t border-gray-100 px-150 py-100 first:border-t-0">
+    <HStack
+      align="center"
+      gap="125"
+      className="min-h-14 border-t border-gray-100 px-150 py-100 first:border-t-0"
+    >
       <Avatar src={attendee.avatarUrl} name={attendee.username} size="stack" />
       <Text truncate typography="subtitle2" className="min-w-0 flex-1">
         {attendee.username}
@@ -20,6 +24,6 @@ export function AttendanceResultRow({ attendee }: { attendee: Attendee }) {
           {attendee.absent ? "불참" : "참석"}
         </Text>
       </HStack>
-    </div>
+    </HStack>
   );
 }

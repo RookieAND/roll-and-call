@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, Field, Grid } from "@trpg/ui";
+import { Chip, Field, Grid, VStack } from "@trpg/ui";
 
 import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
 
@@ -32,7 +32,7 @@ export function RecruitMethodField({
   lockedReason?: string | null;
 }) {
   return (
-    <div className="flex flex-col gap-100">
+    <VStack gap="100">
       <Field label="모집 방식" required>
         <Grid cols={2} gap="100">
           {OPTIONS.map((option) => (
@@ -49,6 +49,6 @@ export function RecruitMethodField({
         </Grid>
       </Field>
       <HintBox lines={lockedReason ? [lockedReason] : HINT[value]} />
-    </div>
+    </VStack>
   );
 }

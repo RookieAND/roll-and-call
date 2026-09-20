@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, Text } from "@trpg/ui";
+import { Field, Text, VStack } from "@trpg/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
 
 import { SCHEDULE_MODE } from "@/entities/game";
@@ -49,7 +49,7 @@ export function GameScheduleFields({
         <CoordinationRangeFields form={form} />
       )}
 
-      <div className="flex flex-col gap-075">
+      <VStack gap="075">
         <Field label="모집 마감" htmlFor="endDate" required error={errors.endDate?.message}>
           <Controller
             name="endDate"
@@ -68,7 +68,7 @@ export function GameScheduleFields({
         <Text typography="body4" foreground="hint" render={<p />}>
           {END_DATE_HINT[mode]}
         </Text>
-      </div>
+      </VStack>
     </>
   );
 }

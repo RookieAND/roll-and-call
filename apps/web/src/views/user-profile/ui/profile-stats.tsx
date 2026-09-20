@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { Grid, Text, VStack } from "@trpg/ui";
 
 // 이 숫자는 어느 자리에 많이 앉았는지만 말한다. 어떤 사람인지는 성향이 말한다.
 export function ProfileStats({ hosted, played }: { hosted: number; played: number }) {
@@ -8,13 +8,15 @@ export function ProfileStats({ hosted, played }: { hosted: number; played: numbe
   ];
 
   return (
-    <div className="grid grid-cols-2 border-t border-gray-200">
+    <Grid cols={2} className="border-t border-gray-200">
       {stats.map((stat) => {
         const countForeground = stat.count === 0 ? "hint" : "normal";
         return (
-          <div
+          <VStack
             key={stat.label}
-            className="flex flex-col items-center gap-050 border-gray-200 py-175 not-first:border-l"
+            align="center"
+            gap="050"
+            className="border-gray-200 py-175 not-first:border-l"
           >
             <Text
               numeric
@@ -28,9 +30,9 @@ export function ProfileStats({ hosted, played }: { hosted: number; played: numbe
             <Text typography="body4" foreground="hint">
               {stat.label}
             </Text>
-          </div>
+          </VStack>
         );
       })}
-    </div>
+    </Grid>
   );
 }

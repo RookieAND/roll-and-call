@@ -1,4 +1,4 @@
-import { Avatar, Text } from "@trpg/ui";
+import { Avatar, HStack, Text } from "@trpg/ui";
 
 import { KeywordChips } from "@/entities/profile";
 import { toKst } from "@/shared/lib";
@@ -15,7 +15,7 @@ export function ProfileSummary({ profile }: { profile: Profile }) {
 
   return (
     <div className="px-200 pt-250 pb-050">
-      <div className="flex items-center gap-175">
+      <HStack align="center" gap="175">
         <Avatar
           src={profile.avatarUrl}
           name={profile.username}
@@ -30,7 +30,7 @@ export function ProfileSummary({ profile }: { profile: Profile }) {
             {joinedLabel}
           </Text>
         </div>
-      </div>
+      </HStack>
       <Text typography="body2" foreground={bioForeground} render={<p />} className={bioClass}>
         {bioText}
       </Text>

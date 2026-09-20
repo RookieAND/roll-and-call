@@ -1,4 +1,4 @@
-import { Container, Skeleton } from "@trpg/ui";
+import { Container, HStack, Skeleton } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 import { SessionListSkeleton } from "@/widgets/session-list";
@@ -11,19 +11,19 @@ export default function Loading() {
     <>
       <AppBar back="/me" title="내 세션" />
       <div className="sticky top-[52px] z-10 border-b border-gray-100 bg-surface">
-        <div className="flex px-200">
-          <div className="flex h-11 flex-1 items-center justify-center">
-            <Skeleton className="h-5 w-16" />
-          </div>
-          <div className="flex h-11 flex-1 items-center justify-center">
-            <Skeleton className="h-5 w-16" />
-          </div>
-        </div>
-        <div className="flex gap-075 px-200 py-125">
+        <HStack className="px-200">
+          <HStack align="center" justify="center" className="h-11 flex-1">
+            <Skeleton width={64} height={20} />
+          </HStack>
+          <HStack align="center" justify="center" className="h-11 flex-1">
+            <Skeleton width={64} height={20} />
+          </HStack>
+        </HStack>
+        <HStack gap="075" className="px-200 py-125">
           {CHIP_WIDTHS.map((width, index) => (
-            <Skeleton key={index} className={`h-[34px] rounded-full ${width}`} />
+            <Skeleton key={index} height={34} rounded="full" className={width} />
           ))}
-        </div>
+        </HStack>
       </div>
       <Container size="sm">
         <div className="py-150">

@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, Field, Grid, Text, Textarea } from "@trpg/ui";
+import { Chip, Field, Grid, Text, Textarea, VStack } from "@trpg/ui";
 import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "@/entities/game";
@@ -52,7 +52,7 @@ export function GamePreflightFields({
       {GAME_TAG_KEYS.map((key) => {
         const tags = watch(key);
         return (
-          <div key={key} className="flex flex-col gap-075">
+          <VStack key={key} gap="075">
             <Field
               label={gameTagLabel[key]}
               htmlFor={key}
@@ -75,7 +75,7 @@ export function GamePreflightFields({
                 {triggerNotice}
               </Text>
             )}
-          </div>
+          </VStack>
         );
       })}
 
@@ -100,7 +100,7 @@ export function GamePreflightFields({
         </Grid>
       </Field>
 
-      <div className="flex flex-col gap-075">
+      <VStack gap="075">
         <Field
           label="주의 사항"
           htmlFor="notice"
@@ -118,7 +118,7 @@ export function GamePreflightFields({
         <Text typography="body4" foreground="hint" render={<p />}>
           상세 페이지의 트리거 아래에 그대로 보입니다.
         </Text>
-      </div>
+      </VStack>
     </>
   );
 }

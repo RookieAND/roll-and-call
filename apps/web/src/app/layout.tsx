@@ -1,11 +1,13 @@
+import { VStack } from "@trpg/ui";
 import type { Metadata } from "next";
 import Script from "next/script";
 
 import { OG_IMAGE } from "@/shared/lib";
 import { siteOrigin } from "@/shared/server";
-import { BottomNav, NavigationTracker, Toaster } from "@/shared/ui";
 
 import "./globals.css";
+import { BottomNav, NavigationTracker, Toaster } from "@/shared/ui";
+
 import { QueryProvider } from "./query-provider";
 
 const origin = siteOrigin();
@@ -48,10 +50,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="bg-canvas font-sans text-gray-900 antialiased">
         <QueryProvider>
           <NavigationTracker />
-          <div className="mx-auto flex min-h-dvh w-full min-w-screen-min max-w-screen-max flex-col border-x border-gray-200 bg-surface">
+          <VStack className="mx-auto min-h-dvh w-full min-w-screen-min max-w-screen-max border-x border-gray-200 bg-surface">
             <div className="flex-1">{children}</div>
             <BottomNav />
-          </div>
+          </VStack>
         </QueryProvider>
         <Toaster />
       </body>

@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 
 import { heatColor } from "../model/heat-color";
 import { heatLegend } from "../model/heat-legend";
@@ -6,7 +6,7 @@ import { heatTextColor } from "../model/heat-text-color";
 
 export function HeatLegend({ capacity }: { capacity: number }) {
   return (
-    <div className="flex items-center gap-075">
+    <HStack align="center" gap="075">
       <Text typography="body4" foreground="muted" render={<span />}>
         겹침
       </Text>
@@ -23,6 +23,6 @@ export function HeatLegend({ capacity }: { capacity: number }) {
       <Text typography="body4" foreground="hint" render={<span />}>
         정원 {capacity}명
       </Text>
-    </div>
+    </HStack>
   );
 }

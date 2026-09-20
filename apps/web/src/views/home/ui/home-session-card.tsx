@@ -1,4 +1,4 @@
-import { cn, Text } from "@trpg/ui";
+import { cn, HStack, Text } from "@trpg/ui";
 import { User } from "lucide-react";
 
 import { toKst } from "@/shared/lib";
@@ -20,7 +20,7 @@ export function HomeSessionCard({ session }: { session: CalendarSession }) {
         {time}
       </Text>
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-100">
+        <HStack align="center" gap="100">
           <Text truncate typography="subtitle1" className="min-w-0 flex-1">
             {session.title}
           </Text>
@@ -35,8 +35,8 @@ export function HomeSessionCard({ session }: { session: CalendarSession }) {
               내가 참여
             </Text>
           )}
-        </div>
-        <div className="mt-100 flex items-center gap-100">
+        </HStack>
+        <HStack align="center" gap="100" className="mt-100">
           <Text
             weight="bold"
             typography="body4"
@@ -64,7 +64,7 @@ export function HomeSessionCard({ session }: { session: CalendarSession }) {
               {session.players.length}/{session.maxPlayers}
             </Text>
           </span>
-        </div>
+        </HStack>
       </div>
     </div>
   );

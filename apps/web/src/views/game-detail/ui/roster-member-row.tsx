@@ -1,4 +1,4 @@
-import { Avatar, Badge, Text } from "@trpg/ui";
+import { Avatar, Badge, HStack, Text } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -31,7 +31,7 @@ export function RosterMemberRow({
     >
       <Avatar src={avatarUrl} name={name} />
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-075">
+        <HStack align="center" gap="075">
           <Text truncate typography="subtitle1">
             {name ?? "?"}
           </Text>
@@ -40,7 +40,7 @@ export function RosterMemberRow({
               {note}
             </Badge>
           )}
-        </div>
+        </HStack>
         <Text truncate typography="body4" foreground={bio ? "muted" : "hint"}>
           {bio || NO_BIO}
         </Text>

@@ -1,4 +1,4 @@
-import { Button, Text } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@trpg/ui";
 import Link from "next/link";
 
 import { type AvailabilityInterval, filledDays, formatInterval } from "@/entities/profile";
@@ -13,21 +13,23 @@ export function AvailabilitySummaryField({
 
   return (
     <div className="rounded-500 border border-gray-200 p-175">
-      <div className="mb-125 flex items-baseline gap-100">
+      <HStack align="baseline" gap="100" className="mb-125">
         <Text weight="bold" typography="body4" className="flex-1">
           가능 시간대
         </Text>
         <Text numeric typography="body4" foreground="hint">
           {days.length}일
         </Text>
-      </div>
+      </HStack>
 
       {days.length > 0 ? (
-        <div className="flex flex-col gap-075">
+        <VStack gap="075">
           {days.map((day) => (
-            <div
+            <HStack
               key={day.day}
-              className="flex min-h-[38px] items-center gap-125 rounded-400 bg-gray-50 px-150"
+              align="center"
+              gap="125"
+              className="min-h-[38px] rounded-400 bg-gray-50 px-150"
             >
               <Text weight="bold" typography="body3" className="w-[34px] flex-none">
                 {day.label}
@@ -41,15 +43,19 @@ export function AvailabilitySummaryField({
               >
                 {day.intervals.map(formatInterval).join(" · ")}
               </Text>
-            </div>
+            </HStack>
           ))}
-        </div>
+        </VStack>
       ) : (
-        <div className="flex min-h-11 items-center justify-center rounded-400 border border-dashed border-gray-300">
+        <HStack
+          align="center"
+          justify="center"
+          className="min-h-11 rounded-400 border border-dashed border-gray-300"
+        >
           <Text typography="body4" foreground="hint">
             적어둔 시간대가 없습니다
           </Text>
-        </div>
+        </HStack>
       )}
 
       <Button asChild variant="outline" className="mt-150 h-11 w-full text-primary-ink">

@@ -1,4 +1,4 @@
-import { Avatar, Button, Text } from "@trpg/ui";
+import { Avatar, Button, HStack, Text } from "@trpg/ui";
 import Link from "next/link";
 
 import { AvailabilityRows, KeywordChips, type AvailabilityInterval } from "@/entities/profile";
@@ -24,7 +24,7 @@ export function MyPageProfile({
 
   return (
     <section className="flex flex-col gap-175">
-      <div className="flex items-center gap-175">
+      <HStack align="center" gap="175">
         <Avatar src={avatarUrl} name={name} size="2xl" />
         <div className="min-w-0 flex-1">
           <Text
@@ -46,7 +46,7 @@ export function MyPageProfile({
         >
           <Link href="/me/edit">편집</Link>
         </Button>
-      </div>
+      </HStack>
 
       <div>
         <MyPageBlockLabel label="성향" />

@@ -1,4 +1,4 @@
-import { Button, cn, IconButton, Skeleton, Text } from "@trpg/ui";
+import { Button, cn, Grid, HStack, IconButton, Skeleton, Text } from "@trpg/ui";
 import type { Dayjs } from "dayjs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -29,7 +29,7 @@ export function HomeCalendar({
 
   return (
     <section>
-      <div className="flex items-center gap-025 pt-175 pr-125 pb-125 pl-200">
+      <HStack align="center" gap="025" className="pt-175 pr-125 pb-125 pl-200">
         <Text typography="heading2" render={<h2 />} className="flex-1">
           {monthStart.format("YYYY년 M월")}
         </Text>
@@ -48,9 +48,9 @@ export function HomeCalendar({
             <ChevronRight size={20} />
           </Link>
         </IconButton>
-      </div>
+      </HStack>
 
-      <div className="grid grid-cols-7 px-150 pb-050">
+      <Grid className="grid-cols-7 px-150 pb-050">
         {WEEKDAYS.map((weekday, index) => (
           <Text
             weight="bold"
@@ -62,9 +62,9 @@ export function HomeCalendar({
             {weekday}
           </Text>
         ))}
-      </div>
+      </Grid>
 
-      <div className="grid grid-cols-7 gap-px px-150 pb-150">
+      <Grid className="grid-cols-7 gap-px px-150 pb-150">
         {cells.map((cell) =>
           sessionsByDay ? (
             <HomeCalendarCell
@@ -75,12 +75,12 @@ export function HomeCalendar({
               today={cell.key === todayKey}
             />
           ) : (
-            <Skeleton key={cell.key} className="h-[62px] rounded-300" />
+            <Skeleton key={cell.key} height={62} rounded={300} />
           ),
         )}
-      </div>
+      </Grid>
 
-      <div className="flex items-center gap-150 px-200 pb-150 text-body4 text-hint">
+      <HStack align="center" gap="150" className="px-200 pb-150 text-body4 text-hint">
         <span className="flex items-center gap-075">
           <span className="h-2.5 w-2.5 rounded-100 border border-tinted-border bg-primary-50" />
           내가 참여
@@ -89,7 +89,7 @@ export function HomeCalendar({
           <span className="h-2.5 w-2.5 rounded-100 border border-gray-300 bg-gray-100" />
           다른 세션
         </span>
-      </div>
+      </HStack>
     </section>
   );
 }

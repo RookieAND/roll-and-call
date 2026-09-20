@@ -174,9 +174,9 @@ export function GameFormWizard({
                 className={index === step ? "flex flex-col gap-250" : "hidden"}
               >
                 {config.sections.map((section) => (
-                  <div key={section} className="flex flex-col gap-250">
+                  <VStack key={section} gap="250">
                     {renderSection(section)}
-                  </div>
+                  </VStack>
                 ))}
                 {edit && index === 0 && <GamePreflightNotice />}
               </div>

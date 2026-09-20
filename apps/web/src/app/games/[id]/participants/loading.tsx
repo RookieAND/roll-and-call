@@ -1,4 +1,4 @@
-import { Container, Grid, Skeleton, VStack } from "@trpg/ui";
+import { Container, Grid, HStack, Skeleton, VStack } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
@@ -11,37 +11,39 @@ export default function Loading() {
       <Container size="md">
         <VStack gap="250" className="py-200">
           <VStack gap="150">
-            <div className="flex items-center gap-100">
-              <Skeleton className="h-7 min-w-0 flex-1" />
-              <Skeleton className="h-[21px] w-14 rounded-300" />
-              <Skeleton className="h-[21px] w-16 rounded-300" />
-            </div>
+            <HStack align="center" gap="100">
+              <Skeleton height={28} className="min-w-0 flex-1" />
+              <Skeleton width={56} height={21} rounded={300} />
+              <Skeleton width={64} height={21} rounded={300} />
+            </HStack>
             <Grid cols={2} gap="100">
-              <Skeleton className="h-[73px] rounded-500" />
-              <Skeleton className="h-[73px] rounded-500" />
+              <Skeleton height={73} rounded={500} />
+              <Skeleton height={73} rounded={500} />
             </Grid>
             <VStack gap="100">
-              <Skeleton className="h-[45px] rounded-500" />
-              <Skeleton className="h-[17px] w-64" />
+              <Skeleton height={45} rounded={500} />
+              <Skeleton width={256} height={17} />
             </VStack>
           </VStack>
 
           <VStack gap="100">
-            <div className="flex items-baseline gap-100">
-              <Skeleton className="h-[21px] w-14" />
-              <Skeleton className="h-[21px] w-10" />
-            </div>
+            <HStack align="baseline" gap="100">
+              <Skeleton width={56} height={21} />
+              <Skeleton width={40} height={21} />
+            </HStack>
             <div className="overflow-hidden rounded-500 border border-gray-200">
               {Array.from({ length: ROSTER_ROW_COUNT }).map((_, index) => (
-                <div
+                <HStack
                   key={index}
-                  className="flex min-h-14 items-center gap-150 border-t border-gray-100 px-150 py-100 first:border-t-0"
+                  align="center"
+                  gap="150"
+                  className="min-h-14 border-t border-gray-100 px-150 py-100 first:border-t-0"
                 >
-                  <Skeleton className="h-[34px] w-[34px] rounded-full" />
-                  <Skeleton className="h-[17px] w-24" />
+                  <Skeleton width={34} height={34} rounded="full" />
+                  <Skeleton width={96} height={17} />
                   <span className="flex-1" />
-                  <Skeleton className="h-8 w-8 rounded-400" />
-                </div>
+                  <Skeleton width={32} height={32} rounded={400} />
+                </HStack>
               ))}
             </div>
           </VStack>

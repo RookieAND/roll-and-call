@@ -1,4 +1,4 @@
-import { Button, Text } from "@trpg/ui";
+import { Button, HStack, Text } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -9,7 +9,7 @@ import { MySessionRow } from "./my-session-row";
 export function MyPageSessions({ sessions }: { sessions: ReturnType<typeof summarizeMySessions> }) {
   return (
     <section className="flex flex-col gap-125">
-      <div className="flex items-center">
+      <HStack align="center">
         <Text typography="heading3" render={<h2 />} className="flex-1">
           내 세션
         </Text>
@@ -23,7 +23,7 @@ export function MyPageSessions({ sessions }: { sessions: ReturnType<typeof summa
             전체 보기 <ChevronRight size={14} aria-hidden />
           </Text>
         </Link>
-      </div>
+      </HStack>
 
       {/* 세션이 없어도 두 행을 그대로 두고 0으로 쓴다. 점선 빈 상태는 목록 화면 몫이다. */}
       <div className={MY_PAGE_GROUP_CLASS}>
@@ -42,14 +42,14 @@ export function MyPageSessions({ sessions }: { sessions: ReturnType<typeof summa
         />
       </div>
       {sessions.isEmpty && (
-        <div className="flex gap-100">
+        <HStack gap="100">
           <Button asChild variant="outline" className="h-11 flex-1">
             <Link href="/games">구인 목록</Link>
           </Button>
           <Button asChild className="h-11 flex-1">
             <Link href="/games/new">새 구인</Link>
           </Button>
-        </div>
+        </HStack>
       )}
     </section>
   );

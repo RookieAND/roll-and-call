@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@trpg/ui";
+import { cn, HStack, VStack } from "@trpg/ui";
 import { useState, type ReactNode } from "react";
 
 export const SCHEDULE_TAB = { mine: "mine", overlap: "overlap" } as const;
@@ -23,8 +23,8 @@ export function ScheduleTabs({
   ] as const;
 
   return (
-    <div className="flex flex-col gap-150">
-      <div role="tablist" className="flex gap-050 rounded-400 bg-gray-100 p-050">
+    <VStack gap="150">
+      <HStack role="tablist" gap="050" className="rounded-400 bg-gray-100 p-050">
         {tabs.map((tabItem) => {
           const active = tab === tabItem.key;
           return (
@@ -43,9 +43,9 @@ export function ScheduleTabs({
             </button>
           );
         })}
-      </div>
+      </HStack>
       <div className={tab === SCHEDULE_TAB.mine ? "" : "hidden"}>{mine}</div>
       <div className={tab === SCHEDULE_TAB.overlap ? "" : "hidden"}>{overlap}</div>
-    </div>
+    </VStack>
   );
 }

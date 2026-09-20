@@ -1,4 +1,4 @@
-import { IconButton, Text } from "@trpg/ui";
+import { HStack, IconButton, Text } from "@trpg/ui";
 import { Check } from "lucide-react";
 
 import type { SessionWindow } from "@/entities/availability";
@@ -23,7 +23,11 @@ export function SessionCandidateRow({
   const detailForeground = everyone ? "success" : "muted";
 
   return (
-    <div className="flex items-center gap-150 border-b border-gray-100 px-150 py-125 last:border-b-0">
+    <HStack
+      align="center"
+      gap="150"
+      className="border-b border-gray-100 px-150 py-125 last:border-b-0"
+    >
       <span className="min-w-0 flex-1">
         <Text numeric typography="subtitle2" className="block">
           {sessionWindowLabel(candidate.iso, playMinutes)}
@@ -41,6 +45,6 @@ export function SessionCandidateRow({
       >
         <Check size={18} />
       </IconButton>
-    </div>
+    </HStack>
   );
 }

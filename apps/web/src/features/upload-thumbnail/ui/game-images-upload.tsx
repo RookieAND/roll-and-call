@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Grid, IconButton, Text, cn } from "@trpg/ui";
+import { Button, cn, Grid, HStack, IconButton, Text, VStack } from "@trpg/ui";
 import { ImagePlus, X } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -75,15 +75,15 @@ export function GameImagesUpload({
   }
 
   return (
-    <div id="images" className="flex flex-col gap-075">
-      <div className="flex items-baseline justify-between">
+    <VStack id="images" gap="075">
+      <HStack align="baseline" justify="between">
         <Text weight="bold" typography="body4" className="text-gray-700">
           추가 이미지 <span className="font-normal text-hint">선택</span>
         </Text>
         <Text numeric typography="body4" foreground="hint">
           {value.length} / {max}
         </Text>
-      </div>
+      </HStack>
 
       <Grid cols={3} gap="100">
         {value.map((url, index) => (
@@ -152,6 +152,6 @@ export function GameImagesUpload({
         onChange={handleFiles}
         className="hidden"
       />
-    </div>
+    </VStack>
   );
 }

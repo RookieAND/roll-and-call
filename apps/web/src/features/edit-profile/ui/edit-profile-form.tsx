@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, Text, TextInput, Textarea, VStack } from "@trpg/ui";
+import { Button, Field, HStack, Text, Textarea, TextInput, VStack } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -86,7 +86,7 @@ export function EditProfileForm({
           />
         </Field>
 
-        <div className="flex flex-col gap-075">
+        <VStack gap="075">
           <Field label="한 줄 소개" htmlFor="bio" error={bioError}>
             <Textarea
               id="bio"
@@ -98,17 +98,17 @@ export function EditProfileForm({
               className="min-h-[76px]"
             />
           </Field>
-          <div className="flex justify-between gap-100">
+          <HStack justify="between" gap="100">
             <Text typography="body4" foreground="hint">
               마이페이지와 참여자 명단에 함께 보입니다.
             </Text>
             <Text numeric typography="body4" foreground="hint" className="shrink-0">
               {bio.length} / {BIO_MAX_LENGTH}
             </Text>
-          </div>
-        </div>
+          </HStack>
+        </VStack>
 
-        <div className="flex flex-col gap-075">
+        <VStack gap="075">
           <Field label="성향" htmlFor="keywords">
             <TagInput
               id="keywords"
@@ -125,20 +125,23 @@ export function EditProfileForm({
             <br />
             마이페이지와 타인 프로필에 같이 보입니다.
           </Text>
-        </div>
+        </VStack>
 
         <ProfileLinksField value={links} onChange={setLinks} />
 
         <AvailabilitySummaryField intervals={availability} />
       </VStack>
 
-      <div className="sticky bottom-[58px] z-10 -mx-200 flex flex-col gap-150 border-t border-gray-200 bg-surface px-200 py-150">
+      <VStack
+        gap="150"
+        className="sticky bottom-[58px] z-10 -mx-200 border-t border-gray-200 bg-surface px-200 py-150"
+      >
         {formError && (
           <Text typography="body2" foreground="danger" render={<p />}>
             {formError}
           </Text>
         )}
-        <div className="flex gap-100 [&>*]:flex-1">
+        <HStack gap="100" className="[&>*]:flex-1">
           <Button
             type="button"
             variant="outline"
@@ -151,8 +154,8 @@ export function EditProfileForm({
           <Button type="submit" size="lg" className="h-[50px]" loading={pending}>
             저장
           </Button>
-        </div>
-      </div>
+        </HStack>
+      </VStack>
 
       <ConfirmDialog
         open={confirmingLeave}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, Text, Textarea } from "@trpg/ui";
+import { Avatar, Button, HStack, Text, Textarea } from "@trpg/ui";
 import { Lock } from "lucide-react";
 import { useState } from "react";
 
@@ -50,20 +50,20 @@ export function MemoForm({
         }
       />
 
-      <div className="flex items-center gap-150 border-b border-gray-100 px-200 py-175">
+      <HStack align="center" gap="150" className="border-b border-gray-100 px-200 py-175">
         <Avatar src={targetAvatarUrl} name={targetName} size="lg" />
         <div className="min-w-0 flex-1">
           <Text truncate typography="subtitle1">
             {targetName}
           </Text>
-          <div className="mt-025 flex items-center gap-075">
+          <HStack align="center" gap="075" className="mt-025">
             <Lock size={12} className="flex-none text-hint" aria-hidden />
             <Text typography="body4" foreground="hint">
               나만 봅니다
             </Text>
-          </div>
+          </HStack>
         </div>
-      </div>
+      </HStack>
 
       <div className="p-200">
         <Textarea
@@ -74,14 +74,14 @@ export function MemoForm({
           aria-label="메모 내용"
           className="min-h-[150px] leading-[1.7]"
         />
-        <div className="mt-100 flex items-baseline gap-100">
+        <HStack align="baseline" gap="100" className="mt-100">
           <Text typography="body4" foreground="hint" className="flex-1 leading-[1.6]">
             상대는 이 메모를 볼 수 없고, 알림도 가지 않습니다.
           </Text>
           <Text numeric typography="body4" foreground="hint" className="flex-none">
             {body.length} / {MEMO_MAX_LENGTH}
           </Text>
-        </div>
+        </HStack>
       </div>
 
       {defaultBody && (

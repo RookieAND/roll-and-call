@@ -1,4 +1,4 @@
-import { Button, Text } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@trpg/ui";
 import Link from "next/link";
 
 import { toKst } from "@/shared/lib";
@@ -13,14 +13,14 @@ export function HomeDaySessions({ date, sessions }: { date: Date; sessions: Cale
 
   return (
     <section className="border-t border-gray-200 p-200">
-      <div className="mb-150 flex items-baseline gap-100">
+      <HStack align="baseline" gap="100" className="mb-150">
         <Text typography="heading3" render={<h3 />} className="font-extrabold">
           {title}
         </Text>
         <Text numeric typography="body3" foreground="hint">
           {countLabel}
         </Text>
-      </div>
+      </HStack>
       {sessions.length === 0 ? (
         <EmptyState
           size="section"
@@ -40,13 +40,13 @@ export function HomeDaySessions({ date, sessions }: { date: Date; sessions: Cale
           }
         />
       ) : (
-        <div className="flex flex-col gap-100">
+        <VStack gap="100">
           {sessions.map((session) => (
             <Link key={session.id} href={`/games/${session.id}`} className="block">
               <HomeSessionCard session={session} />
             </Link>
           ))}
-        </div>
+        </VStack>
       )}
     </section>
   );

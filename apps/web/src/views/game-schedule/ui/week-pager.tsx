@@ -1,4 +1,4 @@
-import { HStack, IconButton, Text } from "@trpg/ui";
+import { HStack, IconButton, Text, VStack } from "@trpg/ui";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import type { DayColumn } from "@/shared/lib";
@@ -24,14 +24,14 @@ export function WeekPager({
       <IconButton aria-label="이전 주" disabled={isFirst} onClick={() => onChange(index - 1)}>
         <ChevronLeft size={20} aria-hidden />
       </IconButton>
-      <div className="flex flex-col items-center" aria-live="polite">
+      <VStack align="center" aria-live="polite">
         <Text typography="subtitle2" render={<span />}>
           {rangeLabel}
         </Text>
         <Text typography="body4" foreground="hint" render={<span />}>
           {index + 1} / {weeks.length}주
         </Text>
-      </div>
+      </VStack>
       <IconButton aria-label="다음 주" disabled={isLast} onClick={() => onChange(index + 1)}>
         <ChevronRight size={20} aria-hidden />
       </IconButton>

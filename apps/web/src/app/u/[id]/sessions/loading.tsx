@@ -1,4 +1,4 @@
-import { Container, Skeleton } from "@trpg/ui";
+import { Container, HStack, Skeleton } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 import { SessionListSkeleton } from "@/widgets/session-list";
@@ -9,14 +9,14 @@ export default function Loading() {
     <>
       <AppBar back="/games" title="" />
       <div className="sticky top-[52px] z-10 border-b border-gray-100 bg-surface">
-        <div className="flex px-200">
-          <div className="flex h-11 flex-1 items-center justify-center">
-            <Skeleton className="h-5 w-16" />
-          </div>
-          <div className="flex h-11 flex-1 items-center justify-center">
-            <Skeleton className="h-5 w-16" />
-          </div>
-        </div>
+        <HStack className="px-200">
+          <HStack align="center" justify="center" className="h-11 flex-1">
+            <Skeleton width={64} height={20} />
+          </HStack>
+          <HStack align="center" justify="center" className="h-11 flex-1">
+            <Skeleton width={64} height={20} />
+          </HStack>
+        </HStack>
       </div>
       <Container size="sm">
         <div className="py-250">

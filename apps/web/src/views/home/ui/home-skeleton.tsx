@@ -1,4 +1,4 @@
-import { Container, Skeleton, Text } from "@trpg/ui";
+import { Container, HStack, Skeleton, Text, VStack } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
@@ -18,32 +18,32 @@ export function HomeSkeleton({ date }: { date?: string }) {
         <HomeCalendar monthStart={monthStart} />
 
         <section className="border-t border-gray-200 p-200">
-          <div className="mb-150 flex items-baseline gap-100">
+          <HStack align="baseline" gap="100" className="mb-150">
             <Text typography="heading3" render={<h3 />} className="font-extrabold">
               {selected.format("M월 D일 (dd)")}
             </Text>
-            <Skeleton className="h-[15px] w-8" />
-          </div>
-          <div className="flex flex-col gap-100">
-            <Skeleton className="h-[78px] w-full rounded-600" />
-            <Skeleton className="h-[78px] w-full rounded-600" />
-          </div>
+            <Skeleton width={32} height={15} />
+          </HStack>
+          <VStack gap="100">
+            <Skeleton width="100%" height={78} rounded={600} />
+            <Skeleton width="100%" height={78} rounded={600} />
+          </VStack>
         </section>
 
         <section className="border-t border-gray-200 px-200 pt-225 pb-250">
           <Text typography="heading2" render={<h3 />} className="font-extrabold">
             {monthStart.format("M월")}의 기록
           </Text>
-          <Skeleton className="mt-050 mb-200 h-[17px] w-48" />
+          <Skeleton width={192} height={17} className="mt-050 mb-200" />
           {RECORD_GROUPS.map((group, index) => (
             <div
               key={group}
               className={index > 0 ? "mt-200 border-t border-gray-100 pt-200" : undefined}
             >
-              <Skeleton className="mb-125 h-[15px] w-32" />
-              <Skeleton className="h-[74px] rounded-600" />
-              <Skeleton className="mt-050 h-[44px]" />
-              <Skeleton className="mt-px h-[44px]" />
+              <Skeleton width={128} height={15} className="mb-125" />
+              <Skeleton height={74} rounded={600} />
+              <Skeleton height={44} className="mt-050" />
+              <Skeleton height={44} className="mt-px" />
             </div>
           ))}
         </section>

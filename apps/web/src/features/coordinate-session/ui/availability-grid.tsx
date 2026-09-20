@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Text, cn } from "@trpg/ui";
+import { cn, HStack, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { availabilityQuery } from "@/entities/availability";
@@ -85,7 +85,7 @@ export function AvailabilityGrid({ gameId, days, timeRows, savedMine, prefill, b
   }
 
   return (
-    <div className="flex flex-col gap-150">
+    <VStack gap="150">
       {prefillNotice && painter.dirty && (
         <PrefillNotice label={prefill!.label} onClear={clearPrefill} />
       )}
@@ -96,11 +96,11 @@ export function AvailabilityGrid({ gameId, days, timeRows, savedMine, prefill, b
 
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
 
-      <div className="flex flex-wrap items-center gap-x-150 gap-y-050">
+      <HStack align="center" wrap className="gap-x-150 gap-y-050">
         <Legend swatchClass="bg-primary-600" label="선택" />
         <Legend swatchClass={UNSAVED_SELECTED_TONE} label="미저장" />
         <Legend swatchStyle={{ backgroundImage: STRIPES }} label="다른 확정 세션" />
-      </div>
+      </HStack>
 
       <AvailabilitySaveBar
         selectedCount={painter.selected.size}
@@ -110,6 +110,6 @@ export function AvailabilityGrid({ gameId, days, timeRows, savedMine, prefill, b
         onReset={painter.reset}
         onSave={() => mutate([...painter.selected])}
       />
-    </div>
+    </VStack>
   );
 }

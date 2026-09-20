@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 
 import type { Game } from "@/shared/server";
 
@@ -23,19 +23,19 @@ export function GameRow({ game }: { game: GameRowData }) {
   });
 
   return (
-    <div className="flex items-center gap-150 rounded-600 border border-gray-200 p-150">
+    <HStack align="center" gap="150" className="rounded-600 border border-gray-200 p-150">
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-100">
+        <HStack align="center" gap="100">
           <Text truncate typography="subtitle1">
             {game.title}
           </Text>
           <GameStatusBadge status={status} />
-        </div>
+        </HStack>
         <Text truncate typography="body4" foreground="muted" className="mt-025">
           {game.rule} · {scheduleLine(game).text}
         </Text>
       </div>
       <GameSeatCount current={count} max={game.maxPlayers} />
-    </div>
+    </HStack>
   );
 }

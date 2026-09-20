@@ -1,4 +1,4 @@
-import { AvatarGroup, cn, Text } from "@trpg/ui";
+import { AvatarGroup, cn, HStack, Text } from "@trpg/ui";
 import { Crown } from "lucide-react";
 import Link from "next/link";
 
@@ -30,12 +30,12 @@ export function HomeRecordLeader({
         className="flex-none"
       />
       <div className="min-w-0 flex-1">
-        <div className="mb-025 flex items-center gap-050 text-rank-gold">
+        <HStack align="center" gap="050" className="mb-025 text-rank-gold">
           <Crown size={13} aria-hidden />
           <Text typography="body4" weight="extrabold" className="tracking-[0.08em]">
             {people.length > 1 ? "공동 1위" : "1위"}
           </Text>
-        </div>
+        </HStack>
         <Text
           typography="heading3"
           weight="extrabold"
@@ -46,14 +46,14 @@ export function HomeRecordLeader({
           {name}
         </Text>
       </div>
-      <div className="flex flex-none items-baseline gap-025 text-tinted-ink">
+      <HStack align="baseline" gap="025" className="flex-none text-tinted-ink">
         <Text typography="heading1" numeric className="tracking-[-0.03em]">
           {count}
         </Text>
         <Text weight="bold" typography="body4">
           번
         </Text>
-      </div>
+      </HStack>
     </>
   );
 

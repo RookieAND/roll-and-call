@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, IconButton, Select, Text, TextInput } from "@trpg/ui";
+import { Button, HStack, IconButton, Select, Text, TextInput, VStack } from "@trpg/ui";
 import { Plus, Trash2 } from "lucide-react";
 
 import {
@@ -28,21 +28,21 @@ export function ProfileLinksField({
     onChange(value.map((item, itemIndex) => (itemIndex === index ? link : item)));
 
   return (
-    <div className="flex flex-col gap-100">
-      <div className="flex items-baseline gap-100">
+    <VStack gap="100">
+      <HStack align="baseline" gap="100">
         <Text weight="bold" typography="body4" className="flex-1">
           링크
         </Text>
         <Text numeric typography="body4" foreground="hint">
           {value.length} / {LINK_MAX_COUNT}
         </Text>
-      </div>
+      </HStack>
 
-      <div className="flex flex-col gap-075">
+      <VStack gap="075">
         {value.map((link, index) => {
           const service = linkServiceOf(link.service);
           return (
-            <div key={index} className="flex gap-075">
+            <HStack key={index} gap="075">
               <Select.Root
                 items={SERVICE_OPTIONS}
                 value={link.service}
@@ -82,10 +82,10 @@ export function ProfileLinksField({
               >
                 <Trash2 size={15} aria-hidden />
               </IconButton>
-            </div>
+            </HStack>
           );
         })}
-      </div>
+      </VStack>
 
       {value.length < LINK_MAX_COUNT && (
         <Button
@@ -104,6 +104,6 @@ export function ProfileLinksField({
         <br />
         위에서부터 마이페이지와 타인 프로필에 그대로 나옵니다.
       </Text>
-    </div>
+    </VStack>
   );
 }

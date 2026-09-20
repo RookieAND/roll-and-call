@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, Select, Text } from "@trpg/ui";
+import { Field, HStack, Select, Text, VStack } from "@trpg/ui";
 
 import { splitPlayTime } from "@/shared/lib";
 
@@ -37,9 +37,9 @@ export function PlayTimeField({
   }
 
   return (
-    <div className="flex flex-col gap-075">
+    <VStack gap="075">
       <Field label="플레이타임" error={error}>
-        <div className="flex gap-100">
+        <HStack gap="100">
           <Select.Root
             items={hourItems}
             value={String(hours)}
@@ -68,11 +68,11 @@ export function PlayTimeField({
               ))}
             </Select.Popup>
           </Select.Root>
-        </div>
+        </HStack>
       </Field>
       <Text typography="body4" foreground="hint">
         시간과 분을 따로 고릅니다. 분은 10분 단위로, 합쳐서 최대 12시간.
       </Text>
-    </div>
+    </VStack>
   );
 }

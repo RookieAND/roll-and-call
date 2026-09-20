@@ -25,7 +25,7 @@ export function GameImageGallery({ images, isGm }: { images: string[]; isGm: boo
           {hint}
         </Text>
       </HStack>
-      <div className="-mx-200 flex gap-100 overflow-x-auto px-200 pb-050">
+      <HStack gap="100" className="-mx-200 overflow-x-auto px-200 pb-050">
         {images.map((url, index) => (
           // ponytail: 이미지 자체가 버튼이라 Button 프리미티브(텍스트·패딩 룩)와 맞지 않아 손코딩.
           <button
@@ -38,7 +38,7 @@ export function GameImageGallery({ images, isGm }: { images: string[]; isGm: boo
             <img src={url} alt="" loading="lazy" className="h-full w-full object-cover" />
           </button>
         ))}
-      </div>
+      </HStack>
 
       <Dialog.Root open={openUrl !== null} onOpenChange={(open) => !open && setOpenIndex(null)}>
         <Dialog.Portal>

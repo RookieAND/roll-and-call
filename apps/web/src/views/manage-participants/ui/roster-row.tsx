@@ -1,4 +1,4 @@
-import { Text, cn } from "@trpg/ui";
+import { cn, HStack, Text } from "@trpg/ui";
 import type { ReactNode } from "react";
 
 import type { ManagedMember } from "../model/managed-member";
@@ -19,7 +19,11 @@ export function RosterRow({
   action: ReactNode;
 }) {
   return (
-    <div className="flex min-h-14 items-center gap-150 border-t border-gray-100 px-150 py-100 first:border-t-0">
+    <HStack
+      align="center"
+      gap="150"
+      className="min-h-14 border-t border-gray-100 px-150 py-100 first:border-t-0"
+    >
       <MemberProfileLink
         member={member}
         rank={rank}
@@ -36,6 +40,6 @@ export function RosterRow({
         }
       />
       {action}
-    </div>
+    </HStack>
   );
 }

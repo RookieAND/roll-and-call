@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Text, cn } from "@trpg/ui";
+import { Button, cn, HStack, Text, VStack } from "@trpg/ui";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -62,20 +62,20 @@ export function ThumbnailUpload({
   );
 
   return (
-    <div id="thumbnailUrl" className="flex min-w-0 flex-col gap-075">
-      <div className="flex items-baseline justify-between">
+    <VStack id="thumbnailUrl" gap="075" className="min-w-0">
+      <HStack align="baseline" justify="between">
         <Text weight="bold" typography="body4" className="text-gray-700">
           썸네일
         </Text>
         <Text typography="body4" foreground="hint">
           선택
         </Text>
-      </div>
+      </HStack>
 
       {value ? (
         <div className="overflow-hidden rounded-500 border border-gray-200">
           <img src={value} alt="썸네일 미리보기" className="aspect-video w-full object-cover" />
-          <div className="flex items-center gap-100 px-150 py-100">
+          <HStack align="center" gap="100" className="px-150 py-100">
             <div className="min-w-0 flex-1">
               <Text truncate weight="medium" typography="body4">
                 {picked ? picked.name : "올린 이미지 · 16:9"}
@@ -98,7 +98,7 @@ export function ThumbnailUpload({
             >
               삭제
             </Button>
-          </div>
+          </HStack>
         </div>
       ) : (
         // ponytail: 드롭 영역 전체가 파일 선택 버튼이라 Button 룩(텍스트 한 줄)과 달라 손코딩.
@@ -143,14 +143,14 @@ export function ThumbnailUpload({
       )}
 
       {error ? (
-        <div className="flex items-center justify-between gap-100">
+        <HStack align="center" justify="between" gap="100">
           <Text typography="body4" foreground="danger" render={<p />}>
             {error}
           </Text>
           <Button variant="ghost" size="sm" className="h-9 shrink-0" onClick={pick}>
             다시 고르기
           </Button>
-        </div>
+        </HStack>
       ) : (
         <Text typography="body4" foreground="hint" render={<p />}>
           목록과 상세 맨 위에 쓰입니다. 없으면 기본 그라데이션이 들어갑니다.
@@ -169,6 +169,6 @@ export function ThumbnailUpload({
           if (file) void upload(file);
         }}
       />
-    </div>
+    </VStack>
   );
 }

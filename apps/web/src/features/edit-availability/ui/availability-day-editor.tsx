@@ -1,6 +1,6 @@
 "use client";
 
-import { IconButton, Text, cn } from "@trpg/ui";
+import { cn, HStack, IconButton, Text, VStack } from "@trpg/ui";
 import { Plus, X } from "lucide-react";
 
 import type { DayIntervalRow } from "../model/day-interval-row";
@@ -33,8 +33,8 @@ export function AvailabilityDayEditor({
   );
 
   return (
-    <div className="flex flex-col gap-075">
-      <div className="flex items-center gap-075">
+    <VStack gap="075">
+      <HStack align="center" gap="075">
         <IconButton
           aria-label={`${label}요일 ${on ? "끄기" : "켜기"}`}
           aria-pressed={on}
@@ -61,18 +61,22 @@ export function AvailabilityDayEditor({
             }
           />
         ) : (
-          <div className="flex h-11 min-w-0 flex-1 items-center justify-center rounded-400 border border-dashed border-gray-300">
+          <HStack
+            align="center"
+            justify="center"
+            className="h-11 min-w-0 flex-1 rounded-400 border border-dashed border-gray-300"
+          >
             <Text typography="body4" foreground="hint">
               안 되는 날
             </Text>
-          </div>
+          </HStack>
         )}
-      </div>
+      </HStack>
       {on && <ConflictNote message={conflicts.get(rows[0]!.index)} />}
 
       {rows.slice(1).map((row) => (
-        <div key={row.index} className="flex flex-col gap-075">
-          <div className="flex items-center gap-075">
+        <VStack key={row.index} gap="075">
+          <HStack align="center" gap="075">
             <span className="h-11 w-11 flex-none" />
             <IntervalFields
               label={label}
@@ -90,10 +94,10 @@ export function AvailabilityDayEditor({
                 </IconButton>
               }
             />
-          </div>
+          </HStack>
           <ConflictNote message={conflicts.get(row.index)} />
-        </div>
+        </VStack>
       ))}
-    </div>
+    </VStack>
   );
 }

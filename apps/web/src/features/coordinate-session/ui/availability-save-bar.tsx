@@ -1,4 +1,4 @@
-import { Button, Text } from "@trpg/ui";
+import { Button, HStack, Text } from "@trpg/ui";
 
 export function AvailabilitySaveBar({
   selectedCount,
@@ -19,7 +19,11 @@ export function AvailabilitySaveBar({
   const statusClass = dirty ? "font-semibold text-warning-600" : "text-hint";
 
   return (
-    <div className="sticky bottom-0 z-10 -mx-200 flex items-center gap-100 border-t border-gray-200 bg-surface px-200 py-150">
+    <HStack
+      align="center"
+      gap="100"
+      className="sticky bottom-0 z-10 -mx-200 border-t border-gray-200 bg-surface px-200 py-150"
+    >
       <Text typography="body3" render={<p />} className="min-w-0 flex-1 tabular-nums">
         선택 {selectedCount}칸 · <span className={statusClass}>{status}</span>
       </Text>
@@ -37,6 +41,6 @@ export function AvailabilitySaveBar({
       >
         저장
       </Button>
-    </div>
+    </HStack>
   );
 }

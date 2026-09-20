@@ -1,7 +1,7 @@
 "use client";
 
 import { RichTextEditor } from "@trpg/tiptap";
-import { Chip, Field, Text, TextInput } from "@trpg/ui";
+import { Chip, Field, HStack, Text, TextInput, VStack } from "@trpg/ui";
 import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_SYNOPSIS_MAX, type GameFormValues } from "@/features/write-game";
@@ -34,7 +34,7 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
         />
       </Field>
 
-      <div className="flex flex-col gap-100">
+      <VStack gap="100">
         <Field label="룰" htmlFor="rule" required error={errors.rule?.message}>
           <TextInput
             id="rule"
@@ -44,7 +44,7 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
             {...register("rule")}
           />
         </Field>
-        <div className="flex flex-wrap gap-075">
+        <HStack gap="075" wrap>
           {RULE_PRESETS.map((preset) => (
             <Chip
               key={preset}
@@ -55,8 +55,8 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
               {preset}
             </Chip>
           ))}
-        </div>
-      </div>
+        </HStack>
+      </VStack>
 
       <PlayTimeField
         value={watch("playTime")}
@@ -66,7 +66,7 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
         }
       />
 
-      <div className="flex flex-col gap-075">
+      <VStack gap="075">
         <Field
           label="시놉시스"
           htmlFor="synopsis"
@@ -86,7 +86,7 @@ export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues>
           <br />
           글을 끌어서 고르면 굵게·기울임·목록·링크·스포일러를 쓸 수 있습니다.
         </Text>
-      </div>
+      </VStack>
     </>
   );
 }

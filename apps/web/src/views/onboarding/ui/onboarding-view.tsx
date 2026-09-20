@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Container, Text, VStack, cn } from "@trpg/ui";
+import { Button, cn, Container, HStack, Text, VStack } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { type PointerEvent, useEffect, useRef, useState } from "react";
 
@@ -63,10 +63,7 @@ export function OnboardingView() {
   };
 
   return (
-    <div
-      className="flex min-h-dvh flex-col"
-      style={{ backgroundImage: "var(--gradient-onboarding)" }}
-    >
+    <VStack className="min-h-dvh" style={{ backgroundImage: "var(--gradient-onboarding)" }}>
       <span className="h-[52px] flex-none" />
       <Container size="sm" className="flex flex-1 flex-col">
         <div
@@ -83,9 +80,13 @@ export function OnboardingView() {
           {welcome ? (
             <BrandLogo label="롤앤콜" size="lg" />
           ) : (
-            <div className="flex h-[242px] items-center justify-center rounded-600 border border-gray-100 bg-gray-50">
+            <HStack
+              align="center"
+              justify="center"
+              className="h-[242px] rounded-600 border border-gray-100 bg-gray-50"
+            >
               <OnboardingPreview slideKey={slide.key} />
-            </div>
+            </HStack>
           )}
           <VStack gap="150" className={welcome ? "mt-400" : "mt-300"}>
             {slide.eyebrow && (
@@ -106,7 +107,7 @@ export function OnboardingView() {
             </Text>
           </VStack>
         </div>
-        <div className="flex justify-center gap-075 py-200">
+        <HStack justify="center" gap="075" className="py-200">
           {ONBOARDING_SLIDES.map((item, itemIndex) => (
             <span
               key={item.key}
@@ -116,7 +117,7 @@ export function OnboardingView() {
               )}
             />
           ))}
-        </div>
+        </HStack>
         <VStack gap="050" className="mb-300">
           <Button size="lg" className="w-full" onClick={goNext}>
             {nextLabel}
@@ -128,6 +129,6 @@ export function OnboardingView() {
           )}
         </VStack>
       </Container>
-    </div>
+    </VStack>
   );
 }

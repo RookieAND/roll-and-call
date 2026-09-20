@@ -1,4 +1,4 @@
-import { Text, VStack } from "@trpg/ui";
+import { Grid, HStack, Text, VStack } from "@trpg/ui";
 
 import { HELP_BLOCK, type HelpBlock } from "../model/help-docs";
 import { HelpFigure } from "./help-figure";
@@ -36,7 +36,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
 
   if (block.kind === HELP_BLOCK.compare) {
     return (
-      <div className="grid grid-cols-2 gap-125">
+      <Grid cols={2} gap="125">
         {block.columns.map((column) => (
           <div key={column.title} className="rounded-600 border border-gray-200 p-175">
             <Text typography="subtitle1" render={<h3 />}>
@@ -59,15 +59,15 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
             </VStack>
           </div>
         ))}
-      </div>
+      </Grid>
     );
   }
 
   return (
     <VStack gap="200">
       {block.steps.map((step, index) => (
-        <div key={step.title} className="flex gap-150">
-          <div className="flex flex-none flex-col items-center">
+        <HStack key={step.title} gap="150">
+          <VStack align="center" className="flex-none">
             <Text
               typography="subtitle2"
               render={<span />}
@@ -76,7 +76,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
               {index + 1}
             </Text>
             {index < block.steps.length - 1 && <span className="mt-075 w-0.5 flex-1 bg-gray-100" />}
-          </div>
+          </VStack>
           <VStack gap="100" className="min-w-0 flex-1 pb-050">
             <Text typography="subtitle1" render={<h3 />}>
               {step.title}
@@ -93,7 +93,7 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
               </div>
             )}
           </VStack>
-        </div>
+        </HStack>
       ))}
     </VStack>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, Text } from "@trpg/ui";
+import { Field, Text, VStack } from "@trpg/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
 
 import type { GameFormValues } from "@/features/write-game";
@@ -20,7 +20,7 @@ export function FixedSessionField({
   const error = formState.errors.confirmedAt;
 
   return (
-    <div className="flex flex-col gap-075">
+    <VStack gap="075">
       <Field label="세션 일시" htmlFor="confirmedAt" required error={error?.message}>
         <Controller
           name="confirmedAt"
@@ -46,6 +46,6 @@ export function FixedSessionField({
           {notice}
         </Text>
       )}
-    </div>
+    </VStack>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Text, VStack } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@trpg/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -39,7 +39,7 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
       </div>
 
       <VStack gap="100" className="px-200 py-200">
-        <div className="flex items-baseline gap-100">
+        <HStack align="baseline" gap="100">
           <Text weight="bold" typography="body4" className="flex-none">
             요일마다
           </Text>
@@ -49,7 +49,7 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
           <Text typography="body4" foreground="hint">
             1시간 단위
           </Text>
-        </div>
+        </HStack>
 
         {WEEKDAY_LABELS.map((label, day) => {
           const rows = intervals
@@ -85,7 +85,7 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
 
       {/* ponytail: bottom-[58px]는 BottomNav 높이(h-[58px])와 결합. nav 높이 바뀌면 같이 조정. */}
       <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-200 pt-175 pb-200">
-        <div className="flex gap-100">
+        <HStack gap="100">
           <Button
             variant="outline"
             size="lg"
@@ -103,7 +103,7 @@ export function AvailabilityEditor({ defaultValue }: { defaultValue: Availabilit
           >
             저장
           </Button>
-        </div>
+        </HStack>
       </div>
     </>
   );

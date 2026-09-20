@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, Text } from "@trpg/ui";
+import { Field, HStack, Text, VStack } from "@trpg/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
 
 import { GAME_RANGE_MAX_DAYS, type GameFormValues } from "@/features/write-game";
@@ -28,9 +28,9 @@ export function CoordinationRangeFields({ form }: { form: UseFormReturn<GameForm
   const error = errors.rangeStart?.message ?? errors.rangeEnd?.message;
 
   return (
-    <div className="flex flex-col gap-075">
+    <VStack gap="075">
       <Field label="조율 기간" htmlFor="rangeStart" required error={error}>
-        <div className="flex items-center gap-100">
+        <HStack align="center" gap="100">
           <div className="min-w-0 flex-1">
             <Controller
               name="rangeStart"
@@ -73,13 +73,13 @@ export function CoordinationRangeFields({ form }: { form: UseFormReturn<GameForm
               )}
             />
           </div>
-        </div>
+        </HStack>
       </Field>
       <Text typography="body4" foreground="hint" render={<p />} className="leading-[1.6]">
         참여자가 이 기간 안에서 가능 시간을 냅니다.
         <br />
         최대 {GAME_RANGE_MAX_DAYS}일까지 고를 수 있습니다.
       </Text>
-    </div>
+    </VStack>
   );
 }

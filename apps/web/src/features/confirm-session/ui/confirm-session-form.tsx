@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Text, VStack } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { rankWindows, windowMembers } from "@/entities/availability";
@@ -89,7 +89,7 @@ export function ConfirmSessionForm({
       </section>
 
       <section>
-        <div className="mb-100 flex items-baseline gap-100">
+        <HStack align="baseline" gap="100" className="mb-100">
           <Text typography="subtitle1" render={<h2 />}>
             추천 후보
           </Text>
@@ -100,7 +100,7 @@ export function ConfirmSessionForm({
           <Text typography="body4" foreground="hint" render={<span />}>
             겹치는 인원 순
           </Text>
-        </div>
+        </HStack>
         {candidates.length === 0 ? (
           <EmptyState
             size="section"

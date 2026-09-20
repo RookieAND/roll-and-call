@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog } from "@base-ui-components/react/dialog";
-import { Button } from "@trpg/ui";
+import { Button, HStack } from "@trpg/ui";
 
 type Props = {
   open: boolean;
@@ -42,7 +42,7 @@ export function ConfirmDialog({
               {description}
             </Dialog.Description>
           )}
-          <div className="mt-250 flex gap-100">
+          <HStack gap="100" className="mt-250">
             <Button
               type="button"
               variant="outline"
@@ -62,7 +62,7 @@ export function ConfirmDialog({
             >
               {confirmLabel}
             </Button>
-          </div>
+          </HStack>
         </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>

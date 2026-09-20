@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, Field, Grid } from "@trpg/ui";
+import { Chip, Field, Grid, VStack } from "@trpg/ui";
 
 import { SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
 
@@ -33,7 +33,7 @@ export function ScheduleModeField({
   const lines = lockedReason ? [lockedReason] : HINT[value];
 
   return (
-    <div className="flex flex-col gap-100">
+    <VStack gap="100">
       <Field label="일정 방식">
         <Grid cols={2} gap="100">
           {OPTIONS.map((option) => (
@@ -50,6 +50,6 @@ export function ScheduleModeField({
         </Grid>
       </Field>
       <HintBox lines={lines} />
-    </div>
+    </VStack>
   );
 }

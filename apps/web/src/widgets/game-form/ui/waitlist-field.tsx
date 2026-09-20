@@ -1,6 +1,6 @@
 "use client";
 
-import { Switch, Text } from "@trpg/ui";
+import { HStack, Switch, Text } from "@trpg/ui";
 
 export function WaitlistField({
   value,
@@ -14,7 +14,12 @@ export function WaitlistField({
     : "끄면 정원이 차는 순간 신청이 닫힙니다.";
 
   return (
-    <div className="flex min-h-11 items-center justify-between gap-150 rounded-400 border border-gray-200 px-150 py-150">
+    <HStack
+      align="center"
+      justify="between"
+      gap="150"
+      className="min-h-11 rounded-400 border border-gray-200 px-150 py-150"
+    >
       <div className="min-w-0">
         <Text typography="subtitle2" render={<label htmlFor="waitlistEnabled" />} className="block">
           정원이 차도 대기 신청 받기
@@ -36,6 +41,6 @@ export function WaitlistField({
         aria-describedby="waitlistEnabled-hint"
         className="flex-none"
       />
-    </div>
+    </HStack>
   );
 }

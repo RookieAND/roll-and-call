@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 import Link from "next/link";
 
 export function MyPageBlockLabel({
@@ -9,7 +9,7 @@ export function MyPageBlockLabel({
   action?: { href: string; label: string };
 }) {
   return (
-    <div className="mb-100 flex items-center">
+    <HStack align="center" className="mb-100">
       <Text weight="bold" typography="body4" foreground="muted" render={<h2 />} className="flex-1">
         {label}
       </Text>
@@ -20,6 +20,6 @@ export function MyPageBlockLabel({
           </Text>
         </Link>
       )}
-    </div>
+    </HStack>
   );
 }

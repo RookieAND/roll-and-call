@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 
 import { type AvailabilityInterval, formatInterval } from "../model/availability";
 
@@ -10,7 +10,11 @@ export function AvailabilityDayRow({
   intervals: readonly AvailabilityInterval[];
 }) {
   return (
-    <div className="flex min-h-10 items-center gap-125 rounded-400 border border-gray-200 px-150 py-100">
+    <HStack
+      align="center"
+      gap="125"
+      className="min-h-10 rounded-400 border border-gray-200 px-150 py-100"
+    >
       <Text
         typography="body4"
         render={<span />}
@@ -21,6 +25,6 @@ export function AvailabilityDayRow({
       <Text numeric weight="medium" typography="body3" className="min-w-0 flex-1">
         {intervals.map(formatInterval).join(" · ")}
       </Text>
-    </div>
+    </HStack>
   );
 }

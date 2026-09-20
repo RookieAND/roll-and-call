@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text, VStack } from "@trpg/ui";
 
 import { GAME_STATUS, GameStatusBadge } from "@/entities/game";
 import { BrandMark, LINK_SERVICES } from "@/entities/profile";
@@ -28,13 +28,17 @@ export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
 
   if (figure === HELP_FIGURE.gameList) {
     return (
-      <div className="flex flex-col gap-125 rounded-400 border border-gray-200 bg-gray-50 p-125">
-        <div className="flex flex-wrap gap-075">
+      <VStack gap="125" className="rounded-400 border border-gray-200 bg-gray-50 p-125">
+        <HStack gap="075" wrap>
           <GameStatusBadge status={GAME_STATUS.recruiting} />
           <GameStatusBadge status={GAME_STATUS.confirmed} />
           <GameStatusBadge status={GAME_STATUS.closed} />
-        </div>
-        <div className="flex items-center gap-125 rounded-400 border border-gray-200 bg-surface px-125 py-100">
+        </HStack>
+        <HStack
+          align="center"
+          gap="125"
+          className="rounded-400 border border-gray-200 bg-surface px-125 py-100"
+        >
           <span className="size-[34px] flex-none rounded-300 bg-tinted-bg" />
           <span className="min-w-0 flex-1">
             <Text typography="subtitle1" render={<span />} className="block truncate">
@@ -44,37 +48,42 @@ export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
               GM 라온 · 확정 2 · 정원 4
             </Text>
           </span>
-        </div>
-      </div>
+        </HStack>
+      </VStack>
     );
   }
 
   if (figure === HELP_FIGURE.formFields) {
     return (
-      <div className="flex flex-col gap-125 rounded-400 border border-gray-200 bg-gray-50 p-125">
+      <VStack gap="125" className="rounded-400 border border-gray-200 bg-gray-50 p-125">
         {SAMPLE_FIELDS.map((field) => (
           <div key={field.label}>
             <Text typography="body4" foreground="muted" render={<span />} className="block">
               {field.label}
             </Text>
-            <div className="mt-050 flex h-[38px] items-center rounded-400 border border-gray-200 bg-surface px-125">
+            <HStack
+              align="center"
+              className="mt-050 h-[38px] rounded-400 border border-gray-200 bg-surface px-125"
+            >
               <Text typography="body3" render={<span />} className="truncate">
                 {field.value}
               </Text>
-            </div>
+            </HStack>
           </div>
         ))}
-      </div>
+      </VStack>
     );
   }
 
   if (figure === HELP_FIGURE.rosterRows) {
     return (
-      <div className="flex flex-col gap-075 rounded-400 border border-gray-200 bg-gray-50 p-125">
+      <VStack gap="075" className="rounded-400 border border-gray-200 bg-gray-50 p-125">
         {SAMPLE_ROSTER.map((member) => (
-          <div
+          <HStack
             key={member.name}
-            className="flex items-center gap-125 rounded-400 border border-gray-200 bg-surface px-125 py-100"
+            align="center"
+            gap="125"
+            className="rounded-400 border border-gray-200 bg-surface px-125 py-100"
           >
             <span className="size-[30px] flex-none rounded-full bg-tinted-bg" />
             <Text typography="subtitle1" render={<span />} className="flex-1">
@@ -83,14 +92,14 @@ export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
             <Text typography="body4" foreground="muted" render={<span />}>
               {member.state}
             </Text>
-          </div>
+          </HStack>
         ))}
-      </div>
+      </VStack>
     );
   }
 
   return (
-    <div className="flex flex-wrap gap-100">
+    <HStack gap="100" wrap>
       {LINK_SERVICES.filter((service) => service.key !== "link").map((service) => (
         <span
           key={service.key}
@@ -100,6 +109,6 @@ export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
           <BrandMark service={service.key} size={16} />
         </span>
       ))}
-    </div>
+    </HStack>
   );
 }

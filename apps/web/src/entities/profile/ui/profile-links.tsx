@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 import { Link2 } from "lucide-react";
 
 import {
@@ -17,17 +17,21 @@ const ICON_CLASS =
 export function ProfileLinks({ links }: { links: readonly ProfileLink[] }) {
   if (links.length === 0) {
     return (
-      <div className="flex min-h-[46px] items-center gap-125 rounded-400 border border-dashed border-gray-300 px-150">
+      <HStack
+        align="center"
+        gap="125"
+        className="min-h-[46px] rounded-400 border border-dashed border-gray-300 px-150"
+      >
         <Link2 size={16} className="flex-none text-hint" aria-hidden />
         <Text typography="body4" foreground="hint" className="min-w-0 flex-1">
           등록한 링크가 없습니다
         </Text>
-      </div>
+      </HStack>
     );
   }
 
   return (
-    <div className="flex flex-wrap gap-100">
+    <HStack gap="100" wrap>
       {links.map((link, index) => {
         const label = linkLabel(link);
         const href = linkHref(link);
@@ -58,6 +62,6 @@ export function ProfileLinks({ links }: { links: readonly ProfileLink[] }) {
           </span>
         );
       })}
-    </div>
+    </HStack>
   );
 }

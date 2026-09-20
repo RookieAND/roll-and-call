@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 
 import { LINK_MAX_COUNT, ProfileLinks, type ProfileLink } from "@/entities/profile";
 
@@ -6,14 +6,14 @@ import { LINK_MAX_COUNT, ProfileLinks, type ProfileLink } from "@/entities/profi
 export function MyPageLinks({ links }: { links: ProfileLink[] }) {
   return (
     <section>
-      <div className="mb-125 flex items-center">
+      <HStack align="center" className="mb-125">
         <Text typography="heading3" render={<h2 />} className="flex-1">
           링크
         </Text>
         <Text numeric typography="body4" foreground="hint">
           {links.length} / {LINK_MAX_COUNT}
         </Text>
-      </div>
+      </HStack>
       <ProfileLinks links={links} />
     </section>
   );

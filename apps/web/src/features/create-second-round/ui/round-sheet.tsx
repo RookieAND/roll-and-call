@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Text, VStack } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { toKstDateInput } from "@/shared/lib";
@@ -83,7 +83,7 @@ export function RoundSheet({
               onEndChange={setRangeEnd}
             />
 
-            <div className="flex gap-100 [&>*]:flex-1">
+            <HStack gap="100" className="[&>*]:flex-1">
               <Button variant="outline" className="h-11" onClick={() => requestOpenChange(false)}>
                 취소
               </Button>
@@ -95,7 +95,7 @@ export function RoundSheet({
               >
                 회차 열기
               </Button>
-            </div>
+            </HStack>
           </VStack>
         </Sheet.Content>
       </Sheet.Root>

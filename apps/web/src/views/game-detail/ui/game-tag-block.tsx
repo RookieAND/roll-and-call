@@ -1,4 +1,4 @@
-import { Chip, Text, VStack } from "@trpg/ui";
+import { Chip, HStack, Text, VStack } from "@trpg/ui";
 
 export function GameTagBlock({
   label,
@@ -14,13 +14,13 @@ export function GameTagBlock({
       <Text typography="heading3" render={<h2 />}>
         {label}
       </Text>
-      <div className="flex flex-wrap gap-075">
+      <HStack gap="075" wrap>
         {tags.map((tag) => (
           <Chip key={tag} asChild>
             <span>{tag}</span>
           </Chip>
         ))}
-      </div>
+      </HStack>
       {note && (
         <Text typography="body4" foreground="hint" render={<p />}>
           {note}

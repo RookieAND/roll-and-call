@@ -1,4 +1,4 @@
-import { Button, Text } from "@trpg/ui";
+import { Button, HStack, Text } from "@trpg/ui";
 import { Lock } from "lucide-react";
 import Link from "next/link";
 
@@ -18,7 +18,7 @@ export function ProfileMemoBlock({
   return (
     <div className="px-200 pb-200">
       <div className={boxClass}>
-        <div className="flex items-center gap-100">
+        <HStack align="center" gap="100">
           <Lock size={14} className="flex-none text-gray-600" aria-hidden />
           <Text weight="bold" typography="body4" foreground="muted" className="flex-1">
             내가 쓴 메모
@@ -30,7 +30,7 @@ export function ProfileMemoBlock({
               </Text>
             </Link>
           )}
-        </div>
+        </HStack>
 
         {memo ? (
           <>

@@ -1,4 +1,4 @@
-import { Avatar, cn, Text } from "@trpg/ui";
+import { Avatar, cn, HStack, Text } from "@trpg/ui";
 import Link from "next/link";
 
 import type { RecordRow } from "../model/rank-people";
@@ -19,12 +19,12 @@ export function HomeRecordRow({ row, position }: { row: RecordRow | null; positi
 
   if (!row) {
     return (
-      <div className="flex items-center gap-125 px-150 py-125">
+      <HStack align="center" gap="125" className="px-150 py-125">
         {rankNumber}
         <Text typography="body4" foreground="hint">
           아직 비어 있습니다
         </Text>
-      </div>
+      </HStack>
     );
   }
 

@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -37,9 +37,11 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
   return (
     <div className="overflow-hidden rounded-600 border border-gray-200">
       {rows.map((row) => (
-        <div
+        <HStack
           key={row.label}
-          className="flex min-h-12 items-center gap-150 border-b border-gray-100 px-200 py-100 last:border-b-0"
+          align="center"
+          gap="150"
+          className="min-h-12 border-b border-gray-100 px-200 py-100 last:border-b-0"
         >
           <Text typography="body3" foreground="muted" className="w-[82px] shrink-0">
             {row.label}
@@ -47,7 +49,7 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
           <Text typography="subtitle2" render={<div />} className="flex-1 items-center">
             {row.value}
           </Text>
-        </div>
+        </HStack>
       ))}
     </div>
   );

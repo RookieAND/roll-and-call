@@ -5,7 +5,7 @@ export function SessionListSkeleton({ count = 3 }: { count?: number }) {
   return (
     <VStack className="gap-125">
       {Array.from({ length: count }).map((_, index) => (
-        <Skeleton key={index} className="h-[92px] w-full rounded-600" />
+        <Skeleton key={index} width="100%" height={92} rounded={600} />
       ))}
     </VStack>
   );

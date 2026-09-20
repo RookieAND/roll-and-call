@@ -1,4 +1,4 @@
-import { Container, Skeleton } from "@trpg/ui";
+import { Container, HStack, Skeleton } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
@@ -6,22 +6,26 @@ import { AppBar } from "@/shared/ui";
 export default function Loading() {
   return (
     <Container size="sm" className="px-0">
-      <AppBar back="/games" title="메모" action={<Skeleton className="mr-100 h-9 w-12" />} />
+      <AppBar
+        back="/games"
+        title="메모"
+        action={<Skeleton width={48} height={36} className="mr-100" />}
+      />
 
-      <div className="flex items-center gap-150 border-b border-gray-100 px-200 py-175">
-        <Skeleton className="h-12 w-12 rounded-full" />
+      <HStack align="center" gap="150" className="border-b border-gray-100 px-200 py-175">
+        <Skeleton width={48} height={48} rounded="full" />
         <div className="min-w-0 flex-1">
-          <Skeleton className="h-[21px] w-24" />
-          <Skeleton className="mt-025 h-[17px] w-20" />
+          <Skeleton width={96} height={21} />
+          <Skeleton width={80} height={17} className="mt-025" />
         </div>
-      </div>
+      </HStack>
 
       <div className="p-200">
-        <Skeleton className="h-[150px] w-full rounded-400" />
-        <div className="mt-100 flex items-baseline gap-100">
-          <Skeleton className="h-[17px] flex-1" />
-          <Skeleton className="h-[17px] w-16 flex-none" />
-        </div>
+        <Skeleton width="100%" height={150} rounded={400} />
+        <HStack align="baseline" gap="100" className="mt-100">
+          <Skeleton height={17} className="flex-1" />
+          <Skeleton width={64} height={17} className="flex-none" />
+        </HStack>
       </div>
     </Container>
   );

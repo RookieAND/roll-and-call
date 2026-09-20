@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 
 import { SignOutButton } from "@/features/auth";
 import { ThemeSetting } from "@/shared/ui";
@@ -12,12 +12,12 @@ export function MyPageSettings({ handleLabel }: { handleLabel: string | null }) 
         설정
       </Text>
       <div className={MY_PAGE_GROUP_CLASS}>
-        <div className="flex h-[52px] items-center gap-150 border-b border-gray-100 px-175">
+        <HStack align="center" gap="150" className="h-[52px] border-b border-gray-100 px-175">
           <Text typography="subtitle1" className="flex-1">
             화면 테마
           </Text>
           <ThemeSetting />
-        </div>
+        </HStack>
         <SignOutButton className="h-[52px] w-full justify-between rounded-none border-0 px-175 text-subtitle1 font-bold text-gray-900">
           로그아웃
           {handleLabel && (

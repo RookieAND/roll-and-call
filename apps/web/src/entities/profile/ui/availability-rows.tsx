@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text, VStack } from "@trpg/ui";
 import { Clock } from "lucide-react";
 
 import { type AvailabilityInterval, filledDays } from "../model/availability";
@@ -20,12 +20,16 @@ export function AvailabilityRows({
 
   if (days.length === 0) {
     return (
-      <div className="flex min-h-11 items-center gap-100 rounded-400 border border-dashed border-gray-300 px-150">
+      <HStack
+        align="center"
+        gap="100"
+        className="min-h-11 rounded-400 border border-dashed border-gray-300 px-150"
+      >
         <Clock size={15} className="flex-none text-hint" aria-hidden />
         <Text typography="body4" foreground="hint" className="min-w-0 flex-1">
           {emptyText}
         </Text>
-      </div>
+      </HStack>
     );
   }
 
@@ -33,7 +37,7 @@ export function AvailabilityRows({
 
   return (
     <>
-      <div className="flex flex-col gap-075">
+      <VStack gap="075">
         {days.slice(0, PREVIEW_ROWS).map((day) => (
           <AvailabilityDayRow key={day.day} label={day.label} intervals={day.intervals} />
         ))}
@@ -42,14 +46,14 @@ export function AvailabilityRows({
             <summary className="flex min-h-10 cursor-pointer list-none items-center justify-center rounded-400 border border-gray-200 text-body4 font-bold text-primary-ink hover:bg-gray-50 group-open:hidden">
               {rest.length}줄 더 보기
             </summary>
-            <div className="flex flex-col gap-075">
+            <VStack gap="075">
               {rest.map((day) => (
                 <AvailabilityDayRow key={day.day} label={day.label} intervals={day.intervals} />
               ))}
-            </div>
+            </VStack>
           </details>
         )}
-      </div>
+      </VStack>
       {note && (
         <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
           {note}

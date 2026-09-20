@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 
 import { GameStatusBadge } from "@/entities/game";
 
@@ -6,7 +6,7 @@ import type { HelpRow as Row } from "../model/help-docs";
 
 export function HelpRow({ row }: { row: Row }) {
   return (
-    <div className="flex gap-150 border-gray-100 px-175 py-125 not-first:border-t">
+    <HStack gap="150" className="border-gray-100 px-175 py-125 not-first:border-t">
       <span className="flex w-[92px] flex-none items-start">
         {row.status ? (
           <GameStatusBadge status={row.status} />
@@ -28,6 +28,6 @@ export function HelpRow({ row }: { row: Row }) {
       <Text typography="body3" foreground="muted" className="min-w-0 flex-1 self-center">
         {row.description}
       </Text>
-    </div>
+    </HStack>
   );
 }

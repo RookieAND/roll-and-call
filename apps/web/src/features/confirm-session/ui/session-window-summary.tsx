@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { HStack, Text } from "@trpg/ui";
 
 export function SessionWindowSummary({
   windowLabel,
@@ -9,22 +9,22 @@ export function SessionWindowSummary({
 }) {
   return (
     <div className="rounded-500 bg-gray-50 px-175 py-125">
-      <div className="flex items-baseline justify-between gap-100">
+      <HStack align="baseline" justify="between" gap="100">
         <Text typography="body4" foreground="muted" render={<span />}>
           세션 시간
         </Text>
         <Text typography="subtitle2" render={<span />} className="tabular-nums">
           {windowLabel}
         </Text>
-      </div>
-      <div className="mt-050 flex items-baseline justify-between gap-100">
+      </HStack>
+      <HStack align="baseline" justify="between" gap="100" className="mt-050">
         <Text typography="body4" foreground="muted" render={<span />}>
           가능 인원
         </Text>
         <Text typography="subtitle2" render={<span />} className="tabular-nums">
           {memberCount}명
         </Text>
-      </div>
+      </HStack>
     </div>
   );
 }

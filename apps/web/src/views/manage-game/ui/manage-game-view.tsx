@@ -1,4 +1,4 @@
-import { Badge, Container, Text } from "@trpg/ui";
+import { Badge, Container, HStack, Text } from "@trpg/ui";
 import { notFound, redirect } from "next/navigation";
 
 import {
@@ -47,7 +47,7 @@ export async function ManageGameView({ id }: { id: string }) {
       />
       <Container size="sm" className="px-0">
         <div className="border-b border-gray-100 px-200 pt-225 pb-175">
-          <div className="flex items-start gap-125">
+          <HStack align="start" gap="125">
             <Text
               typography="heading2"
               render={<h1 />}
@@ -58,7 +58,7 @@ export async function ManageGameView({ id }: { id: string }) {
             <Badge color={gameStatusColor[status]} className="shrink-0">
               {gameStatusLabel[status]}
             </Badge>
-          </div>
+          </HStack>
           <Text typography="body3" foreground="muted" render={<p />} className="mt-100">
             {[game.rule, line.text, `확정 ${confirmedCount}/${game.maxPlayers}`]
               .filter(Boolean)

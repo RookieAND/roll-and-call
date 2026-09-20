@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Container, Text, VStack } from "@trpg/ui";
+import { Button, Container, HStack, Text, VStack } from "@trpg/ui";
 
 export function WizardFooter({
   step,
@@ -34,7 +34,7 @@ export function WizardFooter({
               {error}
             </Text>
           )}
-          <div className="flex gap-100 [&>*]:flex-1">
+          <HStack gap="100" className="[&>*]:flex-1">
             {backLabel && (
               <Button
                 type="button"
@@ -57,7 +57,7 @@ export function WizardFooter({
                 다음
               </Button>
             )}
-          </div>
+          </HStack>
         </VStack>
       </Container>
     </div>

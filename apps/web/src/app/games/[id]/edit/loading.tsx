@@ -5,7 +5,7 @@ import { AppBar } from "@/shared/ui";
 // 수정 위저드는 EDIT_STEPS 2단계다. 1단계에는 단계 제목 대신 신청자 안내 박스가 온다.
 export default function Loading() {
   return (
-    <div className="flex min-h-dvh flex-col">
+    <VStack className="min-h-dvh">
       <AppBar
         back="/games"
         backIcon="close"
@@ -21,31 +21,31 @@ export default function Loading() {
       </div>
       <Container size="md" className="flex-1">
         <VStack gap="250" className="py-300">
-          <Skeleton className="h-[70px] w-full rounded-500" />
+          <Skeleton width="100%" height={70} rounded={500} />
           <VStack gap="100">
-            <Skeleton className="h-5 w-16" />
-            <Skeleton className="h-11 w-full rounded-400" />
+            <Skeleton width={64} height={20} />
+            <Skeleton width="100%" height={44} rounded={400} />
           </VStack>
           <VStack gap="100">
-            <Skeleton className="h-5 w-8" />
-            <Skeleton className="h-11 w-full rounded-400" />
+            <Skeleton width={32} height={20} />
+            <Skeleton width="100%" height={44} rounded={400} />
           </VStack>
           <VStack gap="100">
-            <Skeleton className="h-5 w-24" />
-            <Skeleton className="h-11 w-full rounded-400" />
+            <Skeleton width={96} height={20} />
+            <Skeleton width="100%" height={44} rounded={400} />
           </VStack>
           <VStack gap="100">
-            <Skeleton className="h-5 w-16" />
-            <Skeleton className="h-[104px] w-full rounded-400" />
+            <Skeleton width={64} height={20} />
+            <Skeleton width="100%" height={104} rounded={400} />
           </VStack>
         </VStack>
       </Container>
       <div className="sticky bottom-0 z-10 border-t border-gray-200 bg-surface">
         <Container size="md" className="flex gap-100 py-150">
-          <Skeleton className="h-[50px] flex-1 rounded-500" />
-          <Skeleton className="h-[50px] flex-1 rounded-500" />
+          <Skeleton height={50} rounded={500} className="flex-1" />
+          <Skeleton height={50} rounded={500} className="flex-1" />
         </Container>
       </div>
-    </div>
+    </VStack>
   );
 }

@@ -1,4 +1,4 @@
-import { Text, VStack } from "@trpg/ui";
+import { HStack, Text, VStack } from "@trpg/ui";
 import { AlertCircle } from "lucide-react";
 
 import { ABSENCE_RECORD_MONTHS } from "@/entities/game";
@@ -18,7 +18,11 @@ export function ProfileAbsenceNotice({ absences }: { absences: Absence[] }) {
 
   return (
     <VStack gap="100">
-      <div className="flex items-start gap-125 rounded-500 border border-danger-200 bg-danger-50 px-175 py-150">
+      <HStack
+        align="start"
+        gap="125"
+        className="rounded-500 border border-danger-200 bg-danger-50 px-175 py-150"
+      >
         <AlertCircle
           size={15}
           strokeWidth={2.2}
@@ -40,7 +44,7 @@ export function ProfileAbsenceNotice({ absences }: { absences: Absence[] }) {
             {formatDate(latest.expiresAt)}에 사라집니다.
           </Text>
         </div>
-      </div>
+      </HStack>
       <Text typography="body4" foreground="hint" render={<p />} className="leading-relaxed">
         신청을 막지는 않습니다. 받을지는 GM이 정합니다.
       </Text>

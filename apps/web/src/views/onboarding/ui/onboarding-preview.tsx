@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { Grid, HStack, Text, VStack } from "@trpg/ui";
 
 import { GAME_STATUS, GameStatusBadge } from "@/entities/game";
 import { ProfileLinks } from "@/entities/profile";
@@ -21,10 +21,10 @@ export function OnboardingPreview({
   if (slideKey === "find") {
     return (
       <div className="w-[262px] overflow-hidden rounded-600 border border-gray-200 bg-surface">
-        <div className="flex h-[70px] items-end bg-tinted-bg p-100">
+        <HStack align="end" className="h-[70px] bg-tinted-bg p-100">
           <GameStatusBadge status={GAME_STATUS.recruiting} />
-        </div>
-        <div className="flex flex-col gap-100 p-150">
+        </HStack>
+        <VStack gap="100" className="p-150">
           <Text typography="heading3" render={<span />}>
             물벼락 — 1부
           </Text>
@@ -36,7 +36,7 @@ export function OnboardingPreview({
               신청하기
             </Text>
           </span>
-        </div>
+        </VStack>
       </div>
     );
   }
@@ -51,8 +51,8 @@ export function OnboardingPreview({
 
   if (slideKey === "host") {
     return (
-      <div className="flex w-[262px] flex-col gap-150 rounded-600 border border-gray-200 bg-surface p-175">
-        <div className="flex items-center">
+      <VStack gap="150" className="w-[262px] rounded-600 border border-gray-200 bg-surface p-175">
+        <HStack align="center">
           {WIZARD_STEPS.map((step) => {
             const done = step <= 3;
             return (
@@ -76,22 +76,22 @@ export function OnboardingPreview({
               </span>
             );
           })}
-        </div>
+        </HStack>
         <Text typography="subtitle1" render={<span />}>
           이미지
         </Text>
-        <div className="grid grid-cols-3 gap-100">
+        <Grid cols={3} gap="100">
           <span className="aspect-square rounded-400 bg-tinted-bg" />
           <span className="aspect-square rounded-400 bg-gray-100" />
           <span className="aspect-square rounded-400 border border-dashed border-gray-300" />
-        </div>
-      </div>
+        </Grid>
+      </VStack>
     );
   }
 
   return (
-    <div className="flex w-[262px] flex-col gap-150 rounded-600 border border-gray-200 bg-surface p-175">
-      <div className="flex items-center gap-125">
+    <VStack gap="150" className="w-[262px] rounded-600 border border-gray-200 bg-surface p-175">
+      <HStack align="center" gap="125">
         <span className="size-11 flex-none rounded-full bg-tinted-bg" />
         <div className="min-w-0">
           <Text typography="subtitle1" render={<span />} className="block">
@@ -101,8 +101,8 @@ export function OnboardingPreview({
             호러와 조사물을 주로 굴립니다
           </Text>
         </div>
-      </div>
+      </HStack>
       <ProfileLinks links={SAMPLE_LINKS} />
-    </div>
+    </VStack>
   );
 }
