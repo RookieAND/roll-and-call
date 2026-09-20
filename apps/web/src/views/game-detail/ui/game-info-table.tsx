@@ -18,8 +18,9 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
             name={game.gm?.username}
             avatarUrl={game.gm?.avatarUrl}
             showRole={false}
-            typography="subtitle2"
+            typography="body4"
             foreground="normal"
+            weight="bold"
           />
           {isGm && (
             <Text typography="body4" foreground="hint" render={<span />}>
@@ -41,12 +42,12 @@ export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: bool
           key={row.label}
           align="center"
           gap="150"
-          className="min-h-12 border-b border-gray-100 px-200 py-100 last:border-b-0"
+          className="min-h-12 border-b border-gray-100 px-200 last:border-b-0"
         >
           <Text typography="body3" foreground="muted" className="w-[82px] shrink-0">
             {row.label}
           </Text>
-          <Text typography="subtitle2" render={<div />} className="flex-1 items-center">
+          <Text typography="body4" weight="bold" render={<div />} className="flex-1 items-center">
             {row.value}
           </Text>
         </HStack>
