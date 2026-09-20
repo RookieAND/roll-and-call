@@ -1,4 +1,16 @@
+import { cva } from "class-variance-authority";
+
 import { cn } from "./cn";
+
+const frame = cva("inline-flex h-11 items-stretch overflow-hidden rounded-400 border bg-surface", {
+  variants: {
+    invalid: { true: "border-[1.5px] border-danger-400 bg-danger-50", false: "border-gray-200" },
+  },
+  defaultVariants: { invalid: false },
+});
+
+const STEP_BUTTON =
+  "flex size-11 items-center justify-center text-gray-700 transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:text-gray-300";
 
 export type StepperProps = {
   value: number;
@@ -26,23 +38,15 @@ export function Stepper({
   ...ariaProps
 }: StepperProps) {
   const safeValue = Number.isFinite(value) ? value : min;
-  const buttonClass =
-    "flex size-11 items-center justify-center text-gray-700 transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:text-gray-300";
 
   return (
-    <div
-      className={cn(
-        "inline-flex h-11 items-stretch overflow-hidden rounded-400 border bg-surface",
-        invalid ? "border-[1.5px] border-danger-400 bg-danger-50" : "border-gray-200",
-        className,
-      )}
-    >
+    <div className={cn(frame({ invalid }), className)}>
       <button
         type="button"
         aria-label="줄이기"
         disabled={disabled || safeValue <= min}
         onClick={() => onChange(Math.max(min, safeValue - 1))}
-        className={buttonClass}
+        className={STEP_BUTTON}
       >
         <span aria-hidden className="text-lg leading-none">
           −
@@ -62,7 +66,7 @@ export function Stepper({
         aria-label="늘리기"
         disabled={disabled || safeValue >= max}
         onClick={() => onChange(Math.min(max, safeValue + 1))}
-        className={buttonClass}
+        className={STEP_BUTTON}
       >
         <span aria-hidden className="text-lg leading-none">
           +

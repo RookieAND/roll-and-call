@@ -1,3 +1,5 @@
+import { cva } from "class-variance-authority";
+
 import { cn } from "./cn";
 
 export type PaginationProps = {
@@ -8,7 +10,19 @@ export type PaginationProps = {
   className?: string;
 };
 
-const cell = "inline-flex h-10 min-w-10 items-center justify-center rounded-400 px-100 text-body3";
+const cell = cva(
+  "inline-flex h-10 min-w-10 items-center justify-center rounded-400 px-100 text-body3",
+  {
+    variants: {
+      tone: {
+        link: "border border-gray-200 text-gray-700 hover:bg-gray-50",
+        current: "bg-primary-600 font-bold text-white",
+        disabled: "border border-gray-200 text-gray-400",
+      },
+    },
+    defaultVariants: { tone: "link" },
+  },
+);
 
 // framework-agnostic: renders plain anchors so @trpg/ui stays free of next/link
 export function Pagination({
@@ -30,15 +44,11 @@ export function Pagination({
       className={cn("flex items-center justify-center gap-050", className)}
     >
       {page > 1 ? (
-        <a
-          href={hrefFor(page - 1)}
-          className={cn(cell, "border border-gray-200 text-gray-700 hover:bg-gray-50")}
-          aria-label="이전"
-        >
+        <a href={hrefFor(page - 1)} className={cell()} aria-label="이전">
           ‹
         </a>
       ) : (
-        <span className={cn(cell, "border border-gray-200 text-gray-400")} aria-hidden>
+        <span className={cell({ tone: "disabled" })} aria-hidden>
           ‹
         </span>
       )}
@@ -48,27 +58,18 @@ export function Pagination({
           key={pageNumber}
           href={hrefFor(pageNumber)}
           aria-current={pageNumber === page ? "page" : undefined}
-          className={cn(
-            cell,
-            pageNumber === page
-              ? "bg-primary-600 font-bold text-white"
-              : "border border-gray-200 text-gray-700 hover:bg-gray-50",
-          )}
+          className={cell({ tone: pageNumber === page ? "current" : "link" })}
         >
           {pageNumber}
         </a>
       ))}
 
       {page < totalPages ? (
-        <a
-          href={hrefFor(page + 1)}
-          className={cn(cell, "border border-gray-200 text-gray-700 hover:bg-gray-50")}
-          aria-label="다음"
-        >
+        <a href={hrefFor(page + 1)} className={cell()} aria-label="다음">
           ›
         </a>
       ) : (
-        <span className={cn(cell, "border border-gray-200 text-gray-400")} aria-hidden>
+        <span className={cell({ tone: "disabled" })} aria-hidden>
           ›
         </span>
       )}

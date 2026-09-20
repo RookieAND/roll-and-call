@@ -1,37 +1,43 @@
+import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentPropsWithRef } from "react";
 
 import { cn } from "./cn";
 import { gapMap, type GapToken } from "./tokens";
 
-const alignMap = {
-  start: "items-start",
-  center: "items-center",
-  end: "items-end",
-  stretch: "items-stretch",
-  baseline: "items-baseline",
-} as const;
+const flex = cva("", {
+  variants: {
+    direction: { row: "flex-row", column: "flex-col" },
+    align: {
+      start: "items-start",
+      center: "items-center",
+      end: "items-end",
+      stretch: "items-stretch",
+      baseline: "items-baseline",
+    },
+    justify: {
+      start: "justify-start",
+      center: "justify-center",
+      end: "justify-end",
+      between: "justify-between",
+      around: "justify-around",
+      evenly: "justify-evenly",
+    },
+    wrap: { true: "flex-wrap" },
+    inline: { true: "inline-flex", false: "flex" },
+  },
+  defaultVariants: { direction: "row", inline: false },
+});
 
-const justifyMap = {
-  start: "justify-start",
-  center: "justify-center",
-  end: "justify-end",
-  between: "justify-between",
-  around: "justify-around",
-  evenly: "justify-evenly",
-} as const;
-
-export type FlexProps = ComponentPropsWithRef<"div"> & {
-  direction?: "row" | "column";
-  align?: keyof typeof alignMap;
-  justify?: keyof typeof justifyMap;
-  gap?: GapToken;
-  wrap?: boolean;
-  inline?: boolean;
-};
+export type FlexProps = ComponentPropsWithRef<"div"> &
+  Omit<VariantProps<typeof flex>, "inline"> & {
+    inline?: boolean;
+    // 간격만 레시피 밖이다. 토큰 이름을 그대로 클래스에 얹는 정적 맵이라 스캐너가 본다.
+    gap?: GapToken;
+  };
 
 export function Flex({
   className,
-  direction = "row",
+  direction,
   align,
   justify,
   gap,
@@ -42,12 +48,8 @@ export function Flex({
   return (
     <div
       className={cn(
-        inline ? "inline-flex" : "flex",
-        direction === "column" ? "flex-col" : "flex-row",
-        align && alignMap[align],
-        justify && justifyMap[justify],
+        flex({ direction, align, justify, wrap, inline: inline ?? false }),
         gap !== undefined && gapMap[gap],
-        wrap && "flex-wrap",
         className,
       )}
       {...props}
