@@ -1,12 +1,17 @@
 import { Text, VStack } from "@trpg/ui";
 
 import { HELP_BLOCK, type HelpBlock } from "../model/help-docs";
+import { HelpFigure } from "./help-figure";
 
 export function HelpDocBlock({ block }: { block: HelpBlock }) {
+  if (block.kind === HELP_BLOCK.figure) {
+    return <HelpFigure figure={block.figure} />;
+  }
+
   if (block.kind === HELP_BLOCK.note) {
     return (
       <div className="border-l-2 border-tinted-border pl-3">
-        <Text typography="body3" foreground="muted" render={<p />}>
+        <Text typography="body3" foreground="muted" render={<p />} className="whitespace-pre-line">
           {block.body}
         </Text>
       </div>
@@ -56,12 +61,23 @@ export function HelpDocBlock({ block }: { block: HelpBlock }) {
             <Text typography="subtitle1" render={<h3 />}>
               {step.title}
             </Text>
-            <Text typography="body3" foreground="muted" render={<p />}>
+            <Text
+              typography="body3"
+              foreground="muted"
+              render={<p />}
+              className="whitespace-pre-line"
+            >
               {step.body}
             </Text>
+            {step.figure && <HelpFigure figure={step.figure} />}
             {step.note && (
               <div className="border-l-2 border-tinted-border pl-3">
-                <Text typography="body3" foreground="muted" render={<p />}>
+                <Text
+                  typography="body3"
+                  foreground="muted"
+                  render={<p />}
+                  className="whitespace-pre-line"
+                >
                   {step.note}
                 </Text>
               </div>

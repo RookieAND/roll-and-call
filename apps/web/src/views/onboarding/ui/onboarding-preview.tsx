@@ -2,10 +2,10 @@ import { Text } from "@trpg/ui";
 
 import { GAME_STATUS, GameStatusBadge } from "@/entities/game";
 import { ProfileLinks } from "@/entities/profile";
+import { HeatSample } from "@/shared/ui";
 
 import type { OnboardingSlide } from "../model/onboarding-slides";
 
-const HEAT_STEPS = [0, 1, 0, 2, 1, 1, 2, 1, 4, 2, 2, 4, 2, 5, 3, 0, 1, 0, 2, 1];
 const WIZARD_STEPS = [1, 2, 3, 4];
 const SAMPLE_LINKS = [
   { service: "discord", value: "raon" },
@@ -39,31 +39,8 @@ export function OnboardingPreview({ slideKey }: { slideKey: OnboardingSlide["key
 
   if (slideKey === "schedule") {
     return (
-      <div className="flex w-[262px] flex-col gap-2.5 rounded-[13px] border border-gray-200 bg-surface p-3">
-        <div className="grid grid-cols-5 gap-1">
-          {HEAT_STEPS.map((step, index) => (
-            <span
-              key={index}
-              className="h-6 rounded-[5px] border border-gray-100"
-              style={{ backgroundColor: `var(--color-heat-${step})` }}
-            />
-          ))}
-        </div>
-        <div className="flex items-center gap-2 border-t border-gray-100 pt-2.5">
-          <Text typography="body4" foreground="muted" render={<span />}>
-            적음
-          </Text>
-          <span
-            className="h-[7px] flex-1 rounded"
-            style={{
-              backgroundImage:
-                "linear-gradient(90deg, var(--color-heat-1), var(--color-heat-3), var(--color-heat-5))",
-            }}
-          />
-          <Text typography="body4" foreground="muted" render={<span />}>
-            모두 가능
-          </Text>
-        </div>
+      <div className="w-[262px] rounded-[13px] border border-gray-200 bg-surface p-3">
+        <HeatSample />
       </div>
     );
   }

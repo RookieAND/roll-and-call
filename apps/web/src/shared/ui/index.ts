@@ -11,6 +11,7 @@ export { DatePicker, type DatePickerProps } from "./date-picker";
 export { DateTimePicker, type DateTimePickerProps } from "./date-time-picker";
 export { EmptyState } from "./empty-state";
 export { ExpandableRows } from "./expandable-rows";
+export { HeatSample } from "./heat-sample";
 export { HelpButton } from "./help-button";
 export { ErrorScreen } from "./error-screen";
 export { Sheet } from "./sheet";
