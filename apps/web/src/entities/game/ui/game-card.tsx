@@ -77,8 +77,8 @@ export function GameCard({ game }: Props) {
             {scheduleText}
           </Text>
           {line.deadlineShort && (
-            <Text typography="body4" className={deadlineClass}>
-              {line.deadlineShort}
+            <Text typography="body4" className={cn("shrink-0", deadlineClass)}>
+              {line.deadlineShort === "오늘" ? "오늘 마감" : `마감까지 ${line.deadlineShort}`}
             </Text>
           )}
         </HStack>
