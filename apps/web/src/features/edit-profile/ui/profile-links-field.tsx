@@ -17,13 +17,12 @@ const SERVICE_OPTIONS = LINK_SERVICES.map((service) => ({
   label: service.label,
 }));
 
-export function ProfileLinksField({
-  value,
-  onChange,
-}: {
+interface ProfileLinksFieldProps {
   value: ProfileLink[];
   onChange: (links: ProfileLink[]) => void;
-}) {
+}
+
+export function ProfileLinksField({ value, onChange }: ProfileLinksFieldProps) {
   const replace = (index: number, link: ProfileLink) =>
     onChange(value.map((item, itemIndex) => (itemIndex === index ? link : item)));
 

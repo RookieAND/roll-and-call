@@ -1,12 +1,11 @@
 import { Card, Text } from "@trpg/ui";
 
-export function DrawResultNote({
-  drawnAtLabel,
-  applicantCount,
-}: {
+interface DrawResultNoteProps {
   drawnAtLabel: string;
   applicantCount: number;
-}) {
+}
+
+export function DrawResultNote({ drawnAtLabel, applicantCount }: DrawResultNoteProps) {
   return (
     <Card padding="none" className="rounded-500 px-175 py-150">
       <Text typography="body4" foreground="muted" render={<p />}>

@@ -2,13 +2,13 @@ import { cva } from "class-variance-authority";
 
 import { cn } from "./cn";
 
-export type PaginationProps = {
+export interface PaginationProps {
   page: number;
   totalPages: number;
   hrefFor: (page: number) => string;
   siblings?: number;
   className?: string;
-};
+}
 
 const cell = cva(
   "inline-flex h-10 min-w-10 items-center justify-center rounded-400 px-100 text-body3",

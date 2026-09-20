@@ -6,7 +6,11 @@ import { toast, useAction } from "@/shared/ui";
 
 import { reopenAttendance } from "../api/reopen-attendance";
 
-export function ReopenAttendanceButton({ gameId }: { gameId: string }) {
+interface ReopenAttendanceButtonProps {
+  gameId: string;
+}
+
+export function ReopenAttendanceButton({ gameId }: ReopenAttendanceButtonProps) {
   const { pending, run } = useAction();
 
   return (

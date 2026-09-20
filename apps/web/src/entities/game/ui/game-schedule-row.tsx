@@ -14,7 +14,11 @@ function scheduleRowTone(line: ScheduleLine) {
   return line.confirmed ? SCHEDULE_ROW_TONE.confirmed : SCHEDULE_ROW_TONE.open;
 }
 
-export function GameScheduleRow({ line }: { line: ScheduleLine }) {
+interface GameScheduleRowProps {
+  line: ScheduleLine;
+}
+
+export function GameScheduleRow({ line }: GameScheduleRowProps) {
   const { Icon, iconClass, foreground, weight } = scheduleRowTone(line);
 
   return (

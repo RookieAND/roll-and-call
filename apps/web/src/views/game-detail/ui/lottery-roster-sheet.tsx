@@ -7,6 +7,14 @@ import { RosterGroup } from "./roster-group";
 import type { DetailRosterMember } from "./roster-member-row";
 import { RosterSheetRow } from "./roster-sheet-row";
 
+interface LotteryRosterSheetProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  gm: RosterSheetGm;
+  applicants: DetailRosterMember[];
+  viewerId: string | null;
+}
+
 // 추첨은 뽑기 전까지 확정과 대기를 가르지 않는다 — 한 덩어리의 "신청"으로 본다.
 export function LotteryRosterSheet({
   open,
@@ -14,13 +22,7 @@ export function LotteryRosterSheet({
   gm,
   applicants,
   viewerId,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  gm: RosterSheetGm;
-  applicants: DetailRosterMember[];
-  viewerId: string | null;
-}) {
+}: LotteryRosterSheetProps) {
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Content>

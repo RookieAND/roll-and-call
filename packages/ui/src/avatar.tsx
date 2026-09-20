@@ -5,11 +5,11 @@ import { avatarVariants } from "./avatar-variants";
 import { cn } from "./cn";
 import { Tooltip } from "./tooltip";
 
-export type AvatarProps = VariantProps<typeof avatarVariants> & {
+export interface AvatarProps extends VariantProps<typeof avatarVariants> {
   src?: string | null;
   name?: string | null;
   className?: string;
-};
+}
 
 export function Avatar({ src, name, size, className }: AvatarProps) {
   const trimmed = (name ?? "").trim();

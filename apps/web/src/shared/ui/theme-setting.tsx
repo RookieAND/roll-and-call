@@ -14,8 +14,12 @@ const OPTIONS = [
   { value: THEME_MODE.dark, label: "다크", icon: <Moon size={16} /> },
 ] as const;
 
+interface ThemeSettingProps {
+  className?: string;
+}
+
 // 'system'도 저장한다. app/layout.tsx의 theme-init 인라인 스크립트가 첫 페인트 전에 같은 규칙으로 적용하므로 함께 바꾼다.
-export function ThemeSetting({ className }: { className?: string }) {
+export function ThemeSetting({ className }: ThemeSettingProps) {
   const [mode, setMode] = useState<ThemeMode>(THEME_MODE.system);
 
   useEffect(() => {

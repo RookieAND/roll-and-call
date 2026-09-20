@@ -1,15 +1,13 @@
 import { cn } from "@trpg/ui";
 import type { ReactNode } from "react";
 
-export function StatusNotice({
-  tone = "muted",
-  className,
-  children,
-}: {
+interface StatusNoticeProps {
   tone?: "success" | "muted";
   className?: string;
   children: ReactNode;
-}) {
+}
+
+export function StatusNotice({ tone = "muted", className, children }: StatusNoticeProps) {
   return (
     <div
       className={cn(

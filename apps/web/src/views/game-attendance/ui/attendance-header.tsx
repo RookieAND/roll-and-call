@@ -2,19 +2,21 @@ import { Badge, Card, HStack, Text, VStack } from "@trpg/ui";
 
 import { formatDateTime } from "@/shared/lib";
 
+interface AttendanceHeaderProps {
+  title: string;
+  rule: string;
+  confirmedAt: Date;
+  confirmedCount: number;
+  attendanceConfirmedAt: Date | null;
+}
+
 export function AttendanceHeader({
   title,
   rule,
   confirmedAt,
   confirmedCount,
   attendanceConfirmedAt,
-}: {
-  title: string;
-  rule: string;
-  confirmedAt: Date;
-  confirmedCount: number;
-  attendanceConfirmedAt: Date | null;
-}) {
+}: AttendanceHeaderProps) {
   return (
     <VStack gap="150">
       <VStack gap="100">

@@ -3,7 +3,7 @@
 import { Dialog } from "@base-ui-components/react/dialog";
 import { Button, HStack } from "@trpg/ui";
 
-type Props = {
+interface ConfirmDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
@@ -13,7 +13,7 @@ type Props = {
   danger?: boolean;
   pending?: boolean;
   onConfirm: () => void;
-};
+}
 
 export function ConfirmDialog({
   open,
@@ -25,7 +25,7 @@ export function ConfirmDialog({
   danger,
   pending,
   onConfirm,
-}: Props) {
+}: ConfirmDialogProps) {
   // 처리 중에는 닫히지 않는다. 결과를 모른 채 화면을 떠나지 않게.
   const handleOpenChange = (nextOpen: boolean) => {
     if (!pending) onOpenChange(nextOpen);

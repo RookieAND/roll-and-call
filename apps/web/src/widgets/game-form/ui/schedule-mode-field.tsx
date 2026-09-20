@@ -21,15 +21,13 @@ const HINT = {
   ],
 } as const;
 
-export function ScheduleModeField({
-  value,
-  onChange,
-  lockedReason,
-}: {
+interface ScheduleModeFieldProps {
   value: ScheduleMode;
   onChange: (mode: ScheduleMode) => void;
   lockedReason?: string | null;
-}) {
+}
+
+export function ScheduleModeField({ value, onChange, lockedReason }: ScheduleModeFieldProps) {
   const lines = lockedReason ? [lockedReason] : HINT[value];
 
   return (

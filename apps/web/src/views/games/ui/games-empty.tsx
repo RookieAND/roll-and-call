@@ -5,7 +5,11 @@ import { filterParams, gamesHref } from "@/features/filter-games";
 import { GAME_STATUS_FILTER_DEFAULT, GAME_STATUS_FILTERS, type GamesFilter } from "@/shared/api";
 import { EmptyState } from "@/shared/ui";
 
-export function GamesEmpty({ filter }: { filter: GamesFilter }) {
+interface GamesEmptyProps {
+  filter: GamesFilter;
+}
+
+export function GamesEmpty({ filter }: GamesEmptyProps) {
   const newGame = (
     <Button asChild className="h-11">
       <Link href="/games/new">새 구인 등록</Link>

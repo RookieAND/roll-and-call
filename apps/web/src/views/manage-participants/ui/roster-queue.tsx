@@ -1,19 +1,15 @@
 import { Card, HStack, Text, VStack } from "@trpg/ui";
 import type { ReactNode } from "react";
 
-export function RosterQueue({
-  label,
-  count,
-  caption,
-  footnote,
-  children,
-}: {
+interface RosterQueueProps {
   label: string;
   count: number;
   caption?: string;
   footnote?: ReactNode;
   children: ReactNode;
-}) {
+}
+
+export function RosterQueue({ label, count, caption, footnote, children }: RosterQueueProps) {
   return (
     <VStack gap="100">
       <HStack align="baseline" gap="100">

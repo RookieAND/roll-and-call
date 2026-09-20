@@ -17,11 +17,11 @@ const knob = cva(
   },
 );
 
-export type SwitchProps = Omit<ComponentPropsWithRef<"button">, "onChange" | "value"> &
-  VariantProps<typeof track> & {
-    checked: boolean;
-    onCheckedChange: (checked: boolean) => void;
-  };
+export interface SwitchProps
+  extends Omit<ComponentPropsWithRef<"button">, "onChange" | "value">, VariantProps<typeof track> {
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+}
 
 export function Switch({ checked, onCheckedChange, className, ...props }: SwitchProps) {
   return (

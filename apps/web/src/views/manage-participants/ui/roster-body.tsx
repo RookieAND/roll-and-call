@@ -4,6 +4,16 @@ import { DrawStage } from "./draw-stage";
 import { RosterEmptyState } from "./roster-empty-state";
 import { RosterQueues } from "./roster-queues";
 
+interface RosterBodyProps {
+  gameId: string;
+  confirmed: ManagedMember[];
+  waiting: ManagedMember[];
+  maxPlayers: number;
+  summary: RosterSummary;
+  isCoordinate: boolean;
+  locked: boolean;
+}
+
 export function RosterBody({
   gameId,
   confirmed,
@@ -12,15 +22,7 @@ export function RosterBody({
   summary,
   isCoordinate,
   locked,
-}: {
-  gameId: string;
-  confirmed: ManagedMember[];
-  waiting: ManagedMember[];
-  maxPlayers: number;
-  summary: RosterSummary;
-  isCoordinate: boolean;
-  locked: boolean;
-}) {
+}: RosterBodyProps) {
   if (summary.applicantCount === 0) return <RosterEmptyState gameId={gameId} />;
 
   if (summary.beforeDraw) {

@@ -9,17 +9,14 @@ import { demoteParticipant } from "../api/demote-participant";
 import type { MemberSummary } from "../model/member-summary";
 import { toastWithUndo } from "./toast-with-undo";
 
-export function DemoteMemberItem({
-  gameId,
-  member,
-  waitingCount,
-  onDone,
-}: {
+interface DemoteMemberItemProps {
   gameId: string;
   member: MemberSummary;
   waitingCount: number;
   onDone: () => void;
-}) {
+}
+
+export function DemoteMemberItem({ gameId, member, waitingCount, onDone }: DemoteMemberItemProps) {
   const { pending, run } = useAction();
 
   function demote() {

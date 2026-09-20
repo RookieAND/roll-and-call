@@ -3,7 +3,11 @@ import { VStack } from "@trpg/ui";
 import type { SessionCardModel } from "../model/session-card-model";
 import { SessionCard } from "./session-card";
 
-export function SessionList({ items }: { items: SessionCardModel[] }) {
+interface SessionListProps {
+  items: SessionCardModel[];
+}
+
+export function SessionList({ items }: SessionListProps) {
   return (
     <VStack gap="125">
       {items.map((model) => (

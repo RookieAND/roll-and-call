@@ -3,11 +3,11 @@ import { HStack } from "@trpg/ui";
 import type { OnboardingSlide } from "../model/onboarding-slides";
 import { OnboardingPreview } from "./onboarding-preview";
 
-export function SlideVisual({
-  slideKey,
-}: {
+interface SlideVisualProps {
   slideKey: Exclude<OnboardingSlide["key"], "welcome">;
-}) {
+}
+
+export function SlideVisual({ slideKey }: SlideVisualProps) {
   return (
     <HStack
       align="center"

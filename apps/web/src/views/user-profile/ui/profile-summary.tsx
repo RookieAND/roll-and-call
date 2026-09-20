@@ -6,8 +6,12 @@ import type { Profile } from "@/shared/server";
 
 import { ProfileBlockLabel } from "./profile-block-label";
 
+interface ProfileSummaryProps {
+  profile: Profile;
+}
+
 // 07 §C가 쓰는 bio·keywords·availability를 그대로 읽는다. 프로필을 위한 새 입력을 만들지 않는다.
-export function ProfileSummary({ profile }: { profile: Profile }) {
+export function ProfileSummary({ profile }: ProfileSummaryProps) {
   const joinedLabel = toKst(profile.createdAt).format("YYYY년 M월부터");
   const bioText = profile.bio || "한 줄 소개가 없습니다.";
   const bioForeground = profile.bio ? undefined : "hint";

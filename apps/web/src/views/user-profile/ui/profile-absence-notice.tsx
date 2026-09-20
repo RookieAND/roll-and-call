@@ -5,8 +5,12 @@ import { ABSENCE_RECORD_MONTHS } from "@/entities/game";
 import { formatDate } from "@/shared/lib";
 import type { Absence } from "@/widgets/session-list";
 
+interface ProfileAbsenceNoticeProps {
+  absences: Absence[];
+}
+
 // 판단에 필요한 만큼만 보인다 — 횟수와 가장 최근 한 건. 전체 목록을 펼치는 것은 낙인이다.
-export function ProfileAbsenceNotice({ absences }: { absences: Absence[] }) {
+export function ProfileAbsenceNotice({ absences }: ProfileAbsenceNoticeProps) {
   const latest = absences[0];
   if (!latest) {
     return (

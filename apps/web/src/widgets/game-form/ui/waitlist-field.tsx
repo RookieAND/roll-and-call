@@ -2,13 +2,12 @@
 
 import { HStack, Switch, Text } from "@trpg/ui";
 
-export function WaitlistField({
-  value,
-  onChange,
-}: {
+interface WaitlistFieldProps {
   value: boolean;
   onChange: (enabled: boolean) => void;
-}) {
+}
+
+export function WaitlistField({ value, onChange }: WaitlistFieldProps) {
   const hint = value
     ? "자리가 나면 GM이 순서대로 올립니다."
     : "끄면 정원이 차는 순간 신청이 닫힙니다.";

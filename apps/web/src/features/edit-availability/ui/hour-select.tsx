@@ -6,6 +6,15 @@ import { formatHour } from "@/entities/profile";
 
 import { HOUR_OPTIONS } from "../model/availability-draft";
 
+interface HourSelectProps {
+  label: string;
+  value: number;
+  min?: number;
+  max?: number;
+  invalid?: boolean;
+  onChange: (hour: number) => void;
+}
+
 export function HourSelect({
   label,
   value,
@@ -13,14 +22,7 @@ export function HourSelect({
   max = 24,
   invalid = false,
   onChange,
-}: {
-  label: string;
-  value: number;
-  min?: number;
-  max?: number;
-  invalid?: boolean;
-  onChange: (hour: number) => void;
-}) {
+}: HourSelectProps) {
   const items = HOUR_OPTIONS.filter((hour) => hour >= min && hour <= max).map((hour) => ({
     value: String(hour),
     label: formatHour(hour),

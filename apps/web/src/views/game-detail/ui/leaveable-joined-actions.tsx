@@ -8,15 +8,17 @@ import { PrimaryScheduleLink } from "./primary-schedule-link";
 import { ScheduleLink } from "./schedule-link";
 import { UnrespondedNotice } from "./unresponded-notice";
 
+interface LeaveableJoinedActionsProps {
+  gameId: string;
+  canSchedule: boolean;
+  needsResponse: boolean;
+}
+
 export function LeaveableJoinedActions({
   gameId,
   canSchedule,
   needsResponse,
-}: {
-  gameId: string;
-  canSchedule: boolean;
-  needsResponse: boolean;
-}) {
+}: LeaveableJoinedActionsProps) {
   return (
     <VStack gap="125">
       {needsResponse && <UnrespondedNotice />}

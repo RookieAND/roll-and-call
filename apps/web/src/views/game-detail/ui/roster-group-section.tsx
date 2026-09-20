@@ -6,6 +6,15 @@ import { RosterEmptyNote } from "./roster-empty-note";
 import { RosterGroupHeader } from "./roster-group-header";
 import type { DetailRosterMember } from "./roster-member-row";
 
+interface RosterGroupSectionProps {
+  label: string;
+  members: DetailRosterMember[];
+  capacity?: number;
+  action?: ReactNode;
+  emptyText?: string;
+  note?: string;
+}
+
 // 참여자 · 대기 · (추첨의) 신청이 같은 UI를 쓴다 — 헤더 · 진행바 · 아바타 줄.
 export function RosterGroupSection({
   label,
@@ -14,14 +23,7 @@ export function RosterGroupSection({
   action,
   emptyText,
   note,
-}: {
-  label: string;
-  members: DetailRosterMember[];
-  capacity?: number;
-  action?: ReactNode;
-  emptyText?: string;
-  note?: string;
-}) {
+}: RosterGroupSectionProps) {
   // 정원이 없는 묶음(대기)도 같은 자리에 같은 굵기의 줄을 둔다 — 색으로만 구분한다.
   const progress =
     capacity === undefined

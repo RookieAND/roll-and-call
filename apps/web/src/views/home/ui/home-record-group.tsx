@@ -7,19 +7,21 @@ import type { RecordRanking } from "../model/rank-people";
 import { HomeRecordLeader } from "./home-record-leader";
 import { HomeRecordRow } from "./home-record-row";
 
+interface HomeRecordGroupProps {
+  label: string;
+  ranking: RecordRanking;
+  emptyTitle: string;
+  emptyDescription: ReactNode;
+  className?: string;
+}
+
 export function HomeRecordGroup({
   label,
   ranking,
   emptyTitle,
   emptyDescription,
   className,
-}: {
-  label: string;
-  ranking: RecordRanking;
-  emptyTitle: string;
-  emptyDescription: ReactNode;
-  className?: string;
-}) {
+}: HomeRecordGroupProps) {
   const { leaders, leaderCount, runnersUp } = ranking;
   const [first, ...rest] = leaders;
 

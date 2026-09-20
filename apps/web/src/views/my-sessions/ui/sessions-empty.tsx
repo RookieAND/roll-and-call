@@ -29,13 +29,12 @@ const ONGOING_EMPTY: Record<
   },
 };
 
-export function SessionsEmpty({
-  activeTab,
-  activeChip,
-}: {
+interface SessionsEmptyProps {
   activeTab: SessionRole;
   activeChip: SessionChipKey;
-}) {
+}
+
+export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
   if (activeChip === ONGOING_CHIP) {
     const empty = ONGOING_EMPTY[activeTab];
     return (

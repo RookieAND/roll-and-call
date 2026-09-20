@@ -15,15 +15,13 @@ const MINUTES = [
   { value: "30", label: "30분" },
 ];
 
-export function SessionTimeFields({
-  days,
-  start,
-  onChange,
-}: {
+interface SessionTimeFieldsProps {
   days: DayColumn[];
   start: SessionStart;
   onChange: (start: SessionStart) => void;
-}) {
+}
+
+export function SessionTimeFields({ days, start, onChange }: SessionTimeFieldsProps) {
   const dateItems = days.map((day) => ({ value: day.date, label: day.label }));
 
   return (

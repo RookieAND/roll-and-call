@@ -4,7 +4,12 @@ import { Button, cn } from "@trpg/ui";
 
 import { signInWithDiscord } from "../api/sign-in";
 
-export function LoginButton({ className, next }: { className?: string; next?: string }) {
+interface LoginButtonProps {
+  className?: string;
+  next?: string;
+}
+
+export function LoginButton({ className, next }: LoginButtonProps) {
   return (
     <Button
       variant="discord"

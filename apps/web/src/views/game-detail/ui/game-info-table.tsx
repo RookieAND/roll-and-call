@@ -6,8 +6,13 @@ import { GameGmLabel } from "@/entities/game";
 import { formatDateTime, formatGameSchedule } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
+interface GameInfoTableProps {
+  game: GameDetailData;
+  isGm: boolean;
+}
+
 // 인원은 참여자 섹션 한 곳(진행바 포함)에서만 보여준다.
-export function GameInfoTable({ game, isGm }: { game: GameDetailData; isGm: boolean }) {
+export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
   const rows: { label: string; value: ReactNode }[] = [
     { label: "룰", value: game.rule },
     {

@@ -6,7 +6,11 @@ import type { GameDetailData } from "@/shared/server";
 
 import { GameForm } from "./game-form";
 
-export function EditGameForm({ game }: { game: GameDetailData }) {
+interface EditGameFormProps {
+  game: GameDetailData;
+}
+
+export function EditGameForm({ game }: EditGameFormProps) {
   return (
     <GameForm
       onSubmit={updateGame.bind(null, game.id)}

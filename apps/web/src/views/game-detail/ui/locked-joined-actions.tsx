@@ -6,16 +6,14 @@ import { LEAVE_LOCKED_REASON, type LeaveLock } from "../model/leave-locked-reaso
 import { ACTION_PRIMARY_CLASS } from "./action-class-names";
 import { ScheduleLink } from "./schedule-link";
 
-// 취소할 수 없으면 왜 취소가 없는지 먼저 알리고, 그 아래에 조율 버튼 하나만 둔다.
-export function LockedJoinedActions({
-  gameId,
-  canSchedule,
-  lock,
-}: {
+interface LockedJoinedActionsProps {
   gameId: string;
   canSchedule: boolean;
   lock: LeaveLock;
-}) {
+}
+
+// 취소할 수 없으면 왜 취소가 없는지 먼저 알리고, 그 아래에 조율 버튼 하나만 둔다.
+export function LockedJoinedActions({ gameId, canSchedule, lock }: LockedJoinedActionsProps) {
   return (
     <VStack gap="125">
       <StatusNotice tone="muted" className="text-left">

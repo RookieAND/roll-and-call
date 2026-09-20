@@ -15,13 +15,13 @@ import { CREATE_STEPS, EDIT_STEPS } from "../model/game-form-steps";
 import { DEFAULT_PLAY_TIME } from "../model/play-time-options";
 import { GameFormWizard } from "./game-form-wizard";
 
-type Props = {
+interface GameFormProps {
   onSubmit: (values: GameFormValues) => Promise<ActionResult | void>;
   defaultGame?: Game;
   submitLabel: string;
   successMessage?: string;
   edit?: GameEditContext;
-};
+}
 
 export function GameForm({
   onSubmit,
@@ -29,7 +29,7 @@ export function GameForm({
   submitLabel,
   successMessage = "저장되었습니다",
   edit,
-}: Props) {
+}: GameFormProps) {
   const { pending, run } = useAction();
 
   const form = useForm<GameFormValues>({

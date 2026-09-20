@@ -5,7 +5,12 @@ import { LoginButton } from "@/features/auth";
 import { ACTION_PRIMARY_CLASS } from "./action-class-names";
 import { ActionHint } from "./action-hint";
 
-export function AnonActions({ isFull, isLottery }: { isFull: boolean; isLottery: boolean }) {
+interface AnonActionsProps {
+  isFull: boolean;
+  isLottery: boolean;
+}
+
+export function AnonActions({ isFull, isLottery }: AnonActionsProps) {
   const anonMessage =
     isFull && !isLottery
       ? "정원이 찼지만 대기 신청은 가능합니다. 로그인 후 신청하세요."

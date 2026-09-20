@@ -1,6 +1,10 @@
 import { Avatar, HStack, Text } from "@trpg/ui";
 
-export function SlotMemberChip({ name }: { name: string }) {
+interface SlotMemberChipProps {
+  name: string;
+}
+
+export function SlotMemberChip({ name }: SlotMemberChipProps) {
   return (
     <HStack
       align="center"

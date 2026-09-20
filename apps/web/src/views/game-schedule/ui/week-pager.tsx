@@ -3,15 +3,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import type { DayColumn } from "@/shared/lib";
 
-export function WeekPager({
-  weeks,
-  index,
-  onChange,
-}: {
+interface WeekPagerProps {
   weeks: DayColumn[][];
   index: number;
   onChange: (index: number) => void;
-}) {
+}
+
+export function WeekPager({ weeks, index, onChange }: WeekPagerProps) {
   const week = weeks[index]!;
   const first = week[0]!;
   const last = week.at(-1)!;

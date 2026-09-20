@@ -10,7 +10,7 @@ import { RosterHeader } from "./roster-header";
 import { RosterStats } from "./roster-stats";
 import { RosterStatusCard } from "./roster-status-card";
 
-type Props = {
+interface ParticipantManagerProps {
   gameId: string;
   title: string;
   confirmedAt: Date | null;
@@ -21,7 +21,7 @@ type Props = {
   isCoordinate: boolean;
   locked: boolean;
   attendanceDue: boolean;
-};
+}
 
 export function ParticipantManager({
   gameId,
@@ -34,7 +34,7 @@ export function ParticipantManager({
   isCoordinate,
   locked,
   attendanceDue,
-}: Props) {
+}: ParticipantManagerProps) {
   const showNextRound = waiting.length > 0 && !summary.beforeDraw;
 
   return (

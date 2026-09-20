@@ -5,7 +5,12 @@ import { ACTION_SECONDARY_CLASS } from "./action-class-names";
 import { RecruitEndedHint } from "./recruit-ended-hint";
 import { RosterFullNotice } from "./roster-full-notice";
 
-export function ClosedActions({ endDate, expired }: { endDate: Date; expired: boolean }) {
+interface ClosedActionsProps {
+  endDate: Date;
+  expired: boolean;
+}
+
+export function ClosedActions({ endDate, expired }: ClosedActionsProps) {
   return (
     <VStack gap="125">
       {expired ? <RecruitEndedHint endDate={endDate} /> : <RosterFullNotice />}

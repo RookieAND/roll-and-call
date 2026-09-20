@@ -4,19 +4,21 @@ import { Button, Card, HStack, Text } from "@trpg/ui";
 
 import { formatBytes } from "./format-bytes";
 
+interface ThumbnailPreviewProps {
+  url: string;
+  picked: { name: string; size: number } | null;
+  uploading: boolean;
+  onReplace: () => void;
+  onRemove: () => void;
+}
+
 export function ThumbnailPreview({
   url,
   picked,
   uploading,
   onReplace,
   onRemove,
-}: {
-  url: string;
-  picked: { name: string; size: number } | null;
-  uploading: boolean;
-  onReplace: () => void;
-  onRemove: () => void;
-}) {
+}: ThumbnailPreviewProps) {
   return (
     <Card radius={500} background="none" padding="none" className="overflow-hidden">
       <img src={url} alt="썸네일 미리보기" className="aspect-video w-full object-cover" />

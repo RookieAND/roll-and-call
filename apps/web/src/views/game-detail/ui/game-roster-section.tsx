@@ -14,6 +14,17 @@ import { WaitingRosterSheet } from "./waiting-roster-sheet";
 
 type RosterSheetName = "lottery" | "confirmed" | "waiting";
 
+interface GameRosterSectionProps {
+  gm: RosterSheetGm;
+  confirmed: DetailRosterMember[];
+  waiting: DetailRosterMember[];
+  maxPlayers: number;
+  recruitMethod: RecruitMethod;
+  drawn: boolean;
+  showWaiting: boolean;
+  viewerId: string | null;
+}
+
 export function GameRosterSection({
   gm,
   confirmed,
@@ -23,16 +34,7 @@ export function GameRosterSection({
   drawn,
   showWaiting,
   viewerId,
-}: {
-  gm: RosterSheetGm;
-  confirmed: DetailRosterMember[];
-  waiting: DetailRosterMember[];
-  maxPlayers: number;
-  recruitMethod: RecruitMethod;
-  drawn: boolean;
-  showWaiting: boolean;
-  viewerId: string | null;
-}) {
+}: GameRosterSectionProps) {
   const [openSheet, setOpenSheet] = useState<RosterSheetName | null>(null);
   // 추첨은 뽑기 전까지 확정과 대기를 가르지 않는다 — 한 덩어리의 "신청"으로 본다.
   const isLottery = recruitMethod === RECRUIT_METHOD.lottery && !drawn;

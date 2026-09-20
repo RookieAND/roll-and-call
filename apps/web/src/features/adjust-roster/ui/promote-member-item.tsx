@@ -9,6 +9,14 @@ import { promoteParticipant } from "../api/promote-participant";
 import type { MemberSummary } from "../model/member-summary";
 import { toastWithUndo } from "./toast-with-undo";
 
+interface PromoteMemberItemProps {
+  gameId: string;
+  member: MemberSummary;
+  confirmedCount: number;
+  maxPlayers: number;
+  onDone: () => void;
+}
+
 // 정원이 차 있으면 누를 수 없게 두되 이유를 숨기지 않는다. 교체 대신 대기로 이동 → 확정시키기 두 번으로 나눈다.
 export function PromoteMemberItem({
   gameId,
@@ -16,13 +24,7 @@ export function PromoteMemberItem({
   confirmedCount,
   maxPlayers,
   onDone,
-}: {
-  gameId: string;
-  member: MemberSummary;
-  confirmedCount: number;
-  maxPlayers: number;
-  onDone: () => void;
-}) {
+}: PromoteMemberItemProps) {
   const { pending, run } = useAction();
   const isFull = confirmedCount >= maxPlayers;
 

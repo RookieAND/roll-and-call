@@ -1,6 +1,10 @@
 import { Text } from "@trpg/ui";
 
-export function EditWithApplicantsNotice({ applicants }: { applicants: number }) {
+interface EditWithApplicantsNoticeProps {
+  applicants: number;
+}
+
+export function EditWithApplicantsNotice({ applicants }: EditWithApplicantsNoticeProps) {
   return (
     <div className="rounded-500 bg-gray-50 px-175 py-150">
       <Text typography="body4" foreground="muted" render={<p />}>

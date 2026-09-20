@@ -7,7 +7,11 @@ import { HELP_DOCS } from "../model/help-docs";
 import { HelpDocBlock } from "./help-doc-block";
 import { HelpDocRow } from "./help-doc-row";
 
-export function HelpDocView({ slug }: { slug: string }) {
+interface HelpDocViewProps {
+  slug: string;
+}
+
+export function HelpDocView({ slug }: HelpDocViewProps) {
   const doc = HELP_DOCS.find((candidate) => candidate.slug === slug);
   if (!doc) notFound();
 

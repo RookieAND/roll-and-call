@@ -7,15 +7,13 @@ import { toast, useAction } from "@/shared/ui";
 
 import { joinGame } from "../api/join-game";
 
-export function JoinGameButton({
-  gameId,
-  children,
-  className,
-}: {
+interface JoinGameButtonProps {
   gameId: string;
   children: ReactNode;
   className?: string;
-}) {
+}
+
+export function JoinGameButton({ gameId, children, className }: JoinGameButtonProps) {
   const { pending, run } = useAction();
 
   function join() {

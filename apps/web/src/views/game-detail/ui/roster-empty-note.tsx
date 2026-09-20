@@ -1,6 +1,10 @@
 import { Text } from "@trpg/ui";
 
-export function RosterEmptyNote({ text }: { text: string }) {
+interface RosterEmptyNoteProps {
+  text: string;
+}
+
+export function RosterEmptyNote({ text }: RosterEmptyNoteProps) {
   return (
     <Text
       typography="body3"

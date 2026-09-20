@@ -1,14 +1,12 @@
 import { Avatar, HStack, Text } from "@trpg/ui";
 
-export function ProfileIdentity({
-  name,
-  avatarUrl,
-  handle,
-}: {
+interface ProfileIdentityProps {
   name: string;
   avatarUrl: string | null;
   handle?: string | null;
-}) {
+}
+
+export function ProfileIdentity({ name, avatarUrl, handle }: ProfileIdentityProps) {
   return (
     <HStack gap="150" align="center">
       <Avatar src={avatarUrl} name={name} size="2xl" />

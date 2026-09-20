@@ -2,7 +2,12 @@
 
 import { Button, HStack, Text } from "@trpg/ui";
 
-export function ThumbnailError({ message, onRetry }: { message: string; onRetry: () => void }) {
+interface ThumbnailErrorProps {
+  message: string;
+  onRetry: () => void;
+}
+
+export function ThumbnailError({ message, onRetry }: ThumbnailErrorProps) {
   return (
     <HStack align="center" justify="between" gap="100">
       <Text typography="body4" foreground="danger" render={<p />}>

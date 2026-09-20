@@ -7,6 +7,16 @@ import type { DayIntervalRow } from "../model/day-interval-row";
 import { ConflictNote } from "./conflict-note";
 import { IntervalFields } from "./interval-fields";
 
+interface AvailabilityDayEditorProps {
+  label: string;
+  rows: DayIntervalRow[];
+  conflicts: Map<number, string>;
+  onToggle: () => void;
+  onAdd: () => void;
+  onRemove: (index: number) => void;
+  onHourChange: (index: number, edge: "from" | "to", hour: number) => void;
+}
+
 export function AvailabilityDayEditor({
   label,
   rows,
@@ -15,15 +25,7 @@ export function AvailabilityDayEditor({
   onAdd,
   onRemove,
   onHourChange,
-}: {
-  label: string;
-  rows: DayIntervalRow[];
-  conflicts: Map<number, string>;
-  onToggle: () => void;
-  onAdd: () => void;
-  onRemove: (index: number) => void;
-  onHourChange: (index: number, edge: "from" | "to", hour: number) => void;
-}) {
+}: AvailabilityDayEditorProps) {
   const on = rows.length > 0;
   const chipClass = cn(
     "h-11 w-11 flex-none rounded-400 text-sm",

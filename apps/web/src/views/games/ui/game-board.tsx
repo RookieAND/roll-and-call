@@ -9,8 +9,13 @@ import { GameListSkeleton } from "./game-list-skeleton";
 import { GamesCount } from "./games-count";
 import { GamesToolbar, gamesCountSkeleton } from "./games-toolbar";
 
+interface GameBoardProps {
+  page?: number;
+  filter: GamesFilter;
+}
+
 // 하나의 조회 프로미스를 건수와 목록이 공유해, sticky 건수 때문에 쿼리가 두 번 돌지 않게 한다.
-export function GameBoard({ page = 1, filter }: { page?: number; filter: GamesFilter }) {
+export function GameBoard({ page = 1, filter }: GameBoardProps) {
   const gamesPage = getRecruitingGamesPage(page, filter);
   const key = `${filter.q ?? ""}|${filter.sort ?? ""}|${filter.status ?? ""}|${page}`;
 

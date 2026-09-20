@@ -5,7 +5,11 @@ import { Share2 } from "lucide-react";
 
 import { toast } from "@/shared/ui";
 
-export function ShareButton({ gameId }: { gameId: string }) {
+interface ShareButtonProps {
+  gameId: string;
+}
+
+export function ShareButton({ gameId }: ShareButtonProps) {
   async function share() {
     try {
       await navigator.clipboard.writeText(`${window.location.origin}/games/${gameId}`);

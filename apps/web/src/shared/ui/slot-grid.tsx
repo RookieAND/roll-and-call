@@ -13,18 +13,15 @@ export const SLOT_ROW_PX = 26;
 const VISIBLE_ROWS = 9;
 const INITIAL_HOUR = 18;
 
-export function SlotGrid({
-  days,
-  timeRows,
-  renderCell,
-  className,
-}: {
+interface SlotGridProps {
   days: DayColumn[];
   timeRows: TimeRow[];
   // slotKey는 칸 시작 시각(ISO). 반환 엘리먼트에 key를 달고 높이는 SLOT_ROW_PX로 맞춘다.
   renderCell: (slotKey: string) => ReactNode;
   className?: string;
-}) {
+}
+
+export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const fit = days.length <= FIT_DAYS;
   const dayColumnWidth = fit ? "minmax(0, 1fr)" : `${DAY_COL_PX}px`;

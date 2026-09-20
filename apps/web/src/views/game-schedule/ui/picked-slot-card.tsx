@@ -5,16 +5,14 @@ import { formatDateTime } from "@/shared/lib";
 import { GmSlotMemberChip } from "./gm-slot-member-chip";
 import { SlotMemberChip } from "./slot-member-chip";
 
-// 터치에는 hover 툴팁이 없어서, 누른 칸의 명단을 격자 아래 카드로 보여준다.
-export function PickedSlotCard({
-  slotIso,
-  names,
-  gmName,
-}: {
+interface PickedSlotCardProps {
   slotIso: string;
   names: string[];
   gmName?: string;
-}) {
+}
+
+// 터치에는 hover 툴팁이 없어서, 누른 칸의 명단을 격자 아래 카드로 보여준다.
+export function PickedSlotCard({ slotIso, names, gmName }: PickedSlotCardProps) {
   return (
     <Card
       radius={500}

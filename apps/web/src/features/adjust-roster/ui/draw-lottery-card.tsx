@@ -7,6 +7,14 @@ import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { drawLottery } from "../api/draw-lottery";
 
+interface DrawLotteryCardProps {
+  gameId: string;
+  applicantCount: number;
+  maxPlayers: number;
+  deadlinePassed: boolean;
+  daysLeft: number;
+}
+
 // 마감 전후로 버튼의 무게가 다르다. 기한이 남았으면 뽑는 순간 모집이 닫히므로 한 번 더 묻는다.
 export function DrawLotteryCard({
   gameId,
@@ -14,13 +22,7 @@ export function DrawLotteryCard({
   maxPlayers,
   deadlinePassed,
   daysLeft,
-}: {
-  gameId: string;
-  applicantCount: number;
-  maxPlayers: number;
-  deadlinePassed: boolean;
-  daysLeft: number;
-}) {
+}: DrawLotteryCardProps) {
   const [confirming, setConfirming] = useState(false);
   const { pending, run } = useAction();
 

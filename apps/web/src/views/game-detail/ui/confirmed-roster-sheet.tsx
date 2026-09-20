@@ -5,19 +5,21 @@ import { RosterGroup } from "./roster-group";
 import type { DetailRosterMember } from "./roster-member-row";
 import { RosterSheetRow } from "./roster-sheet-row";
 
+interface ConfirmedRosterSheetProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  gm: RosterSheetGm;
+  confirmed: DetailRosterMember[];
+  viewerId: string | null;
+}
+
 export function ConfirmedRosterSheet({
   open,
   onOpenChange,
   gm,
   confirmed,
   viewerId,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  gm: RosterSheetGm;
-  confirmed: DetailRosterMember[];
-  viewerId: string | null;
-}) {
+}: ConfirmedRosterSheetProps) {
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Content>

@@ -5,17 +5,19 @@ import { ExpandableRows, Sheet } from "@/shared/ui";
 import type { DetailRosterMember } from "./roster-member-row";
 import { RosterSheetRow } from "./roster-sheet-row";
 
+interface WaitingRosterSheetProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  waiting: DetailRosterMember[];
+  viewerId: string | null;
+}
+
 export function WaitingRosterSheet({
   open,
   onOpenChange,
   waiting,
   viewerId,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  waiting: DetailRosterMember[];
-  viewerId: string | null;
-}) {
+}: WaitingRosterSheetProps) {
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Content>

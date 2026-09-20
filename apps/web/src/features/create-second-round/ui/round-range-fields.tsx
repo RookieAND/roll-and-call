@@ -7,6 +7,15 @@ import { DatePicker } from "@/shared/ui";
 
 import { SECOND_ROUND_MAX_DAYS } from "../model/second-round";
 
+interface RoundRangeFieldsProps {
+  start: string;
+  end: string;
+  earliest: string;
+  afterSession: boolean;
+  onStartChange: (value: string) => void;
+  onEndChange: (value: string) => void;
+}
+
 export function RoundRangeFields({
   start,
   end,
@@ -14,14 +23,7 @@ export function RoundRangeFields({
   afterSession,
   onStartChange,
   onEndChange,
-}: {
-  start: string;
-  end: string;
-  earliest: string;
-  afterSession: boolean;
-  onStartChange: (value: string) => void;
-  onEndChange: (value: string) => void;
-}) {
+}: RoundRangeFieldsProps) {
   const endBounds = endDateBounds({ start, earliest, maxDays: SECOND_ROUND_MAX_DAYS });
   const from = afterSession ? "1회차 세션 다음 날부터" : "오늘부터";
 

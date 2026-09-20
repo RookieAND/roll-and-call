@@ -6,6 +6,17 @@ import { WizardNextButton } from "./wizard-next-button";
 import { WizardSavingButton } from "./wizard-saving-button";
 import { WizardSubmitButton } from "./wizard-submit-button";
 
+interface WizardFooterProps {
+  step: number;
+  total: number;
+  pending: boolean;
+  submitLabel: string;
+  error?: string;
+  cancelLabel?: string;
+  onNext: () => void;
+  onBack: () => void;
+}
+
 export function WizardFooter({
   step,
   total,
@@ -15,16 +26,7 @@ export function WizardFooter({
   cancelLabel,
   onNext,
   onBack,
-}: {
-  step: number;
-  total: number;
-  pending: boolean;
-  submitLabel: string;
-  error?: string;
-  cancelLabel?: string;
-  onNext: () => void;
-  onBack: () => void;
-}) {
+}: WizardFooterProps) {
   const isFirstStep = step === 0;
   const isLastStep = step === total - 1;
   const backLabel = isFirstStep ? cancelLabel : "이전";

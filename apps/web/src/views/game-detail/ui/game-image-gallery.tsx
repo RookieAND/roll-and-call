@@ -5,7 +5,12 @@ import { HStack, IconButton, Text, VStack } from "@trpg/ui";
 import { X } from "lucide-react";
 import { useState } from "react";
 
-export function GameImageGallery({ images, isGm }: { images: string[]; isGm: boolean }) {
+interface GameImageGalleryProps {
+  images: string[];
+  isGm: boolean;
+}
+
+export function GameImageGallery({ images, isGm }: GameImageGalleryProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const openUrl = openIndex === null ? null : images[openIndex];
   const openLabel = `첨부 이미지 ${(openIndex ?? 0) + 1}`;

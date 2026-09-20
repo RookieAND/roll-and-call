@@ -1,6 +1,10 @@
 import { Text } from "@trpg/ui";
 
-export function MemberBio({ bio }: { bio: string }) {
+interface MemberBioProps {
+  bio: string;
+}
+
+export function MemberBio({ bio }: MemberBioProps) {
   return (
     <Text truncate typography="body4" foreground="muted">
       {bio}

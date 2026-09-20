@@ -1,6 +1,10 @@
 import { Text } from "@trpg/ui";
 
-export function AbsentCount({ count }: { count: number }) {
+interface AbsentCountProps {
+  count: number;
+}
+
+export function AbsentCount({ count }: AbsentCountProps) {
   return (
     <Text typography="subtitle1" foreground="danger">
       불참 {count}명

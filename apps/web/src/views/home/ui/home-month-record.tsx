@@ -4,13 +4,12 @@ import type { Dayjs } from "dayjs";
 import type { MonthRecord } from "../model/build-month-record";
 import { HomeRecordGroup } from "./home-record-group";
 
-export function HomeMonthRecord({
-  monthStart,
-  record,
-}: {
+interface HomeMonthRecordProps {
   monthStart: Dayjs;
   record: MonthRecord;
-}) {
+}
+
+export function HomeMonthRecord({ monthStart, record }: HomeMonthRecordProps) {
   const monthLabel = monthStart.format("M월");
   const summary =
     record.sessionCount > 0

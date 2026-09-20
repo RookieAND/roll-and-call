@@ -16,8 +16,12 @@ const SAMPLE_ROSTER = [
   { name: "모래", state: "대기 1번" },
 ];
 
+interface HelpFigureProps {
+  figure: HelpFigureKey;
+}
+
 // ponytail: 시안의 "실제 화면 조각"을 설명용으로 축소한 그림이다. 장식이라 누를 수 있는 것은 하나도 없다.
-export function HelpFigure({ figure }: { figure: HelpFigureKey }) {
+export function HelpFigure({ figure }: HelpFigureProps) {
   if (figure === HELP_FIGURE.heatGrid) {
     return (
       <Card radius={400} background="subtle" padding="none" className="p-150">

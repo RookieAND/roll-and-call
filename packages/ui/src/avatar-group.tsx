@@ -7,11 +7,11 @@ import { Tooltip } from "./tooltip";
 
 export type AvatarPerson = { src?: string | null; name?: string | null };
 
-export type AvatarGroupProps = VariantProps<typeof avatarVariants> & {
+export interface AvatarGroupProps extends VariantProps<typeof avatarVariants> {
   people: AvatarPerson[];
   max?: number;
   className?: string;
-};
+}
 
 export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupProps) {
   const shown = people.slice(0, max);

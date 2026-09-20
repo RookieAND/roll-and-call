@@ -1,6 +1,11 @@
 import { Card, Text, VStack } from "@trpg/ui";
 
-export function ManageGameStat({ label, value }: { label: string; value: string }) {
+interface ManageGameStatProps {
+  label: string;
+  value: string;
+}
+
+export function ManageGameStat({ label, value }: ManageGameStatProps) {
   return (
     <Card padding="none" className="rounded-500 px-150 py-125">
       <VStack gap="050">

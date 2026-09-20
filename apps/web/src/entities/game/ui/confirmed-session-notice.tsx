@@ -3,13 +3,12 @@ import type { ReactNode } from "react";
 
 import { formatDateTime } from "@/shared/lib";
 import { StatusNotice } from "@/shared/ui";
-export function ConfirmedSessionNotice({
-  confirmedAt,
-  note,
-}: {
+interface ConfirmedSessionNoticeProps {
   confirmedAt: Date;
   note?: ReactNode;
-}) {
+}
+
+export function ConfirmedSessionNotice({ confirmedAt, note }: ConfirmedSessionNoticeProps) {
   return (
     <StatusNotice tone="success">
       <Text typography="body4" weight="bold" foreground="success" render={<div />}>

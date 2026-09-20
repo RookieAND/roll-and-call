@@ -15,19 +15,15 @@ const OUTLINE = {
 const CELL =
   "flex cursor-pointer items-center justify-center border-b border-l border-b-gray-100 border-l-gray-100 text-body5 font-bold tabular-nums";
 
-export function HeatCell({
-  count,
-  step,
-  outline,
-  title,
-  onPick,
-}: {
+interface HeatCellProps {
   count: number;
   step: number;
   outline: keyof typeof OUTLINE;
   title?: string;
   onPick: () => void;
-}) {
+}
+
+export function HeatCell({ count, step, outline, title, onPick }: HeatCellProps) {
   const border = OUTLINE[outline];
 
   return (

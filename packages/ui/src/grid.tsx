@@ -18,8 +18,9 @@ const grid = cva("grid", {
   },
 });
 
-export type GridProps = ComponentPropsWithRef<"div"> &
-  VariantProps<typeof grid> & { gap?: GapToken };
+export interface GridProps extends ComponentPropsWithRef<"div">, VariantProps<typeof grid> {
+  gap?: GapToken;
+}
 
 export function Grid({ className, cols, gap, ...props }: GridProps) {
   return (

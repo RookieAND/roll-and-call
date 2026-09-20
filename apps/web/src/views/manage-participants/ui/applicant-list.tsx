@@ -8,16 +8,14 @@ import { availabilityNote } from "./availability-note";
 import { RosterQueue } from "./roster-queue";
 import { RosterRow } from "./roster-row";
 
-// 뽑기 전에는 모두 같은 신청자다. 순번을 붙이면 먼저 신청한 사람이 유리해 보인다.
-export function ApplicantList({
-  applicants,
-  unsubmittedCount,
-  isCoordinate,
-}: {
+interface ApplicantListProps {
   applicants: ManagedMember[];
   unsubmittedCount: number;
   isCoordinate: boolean;
-}) {
+}
+
+// 뽑기 전에는 모두 같은 신청자다. 순번을 붙이면 먼저 신청한 사람이 유리해 보인다.
+export function ApplicantList({ applicants, unsubmittedCount, isCoordinate }: ApplicantListProps) {
   return (
     <RosterQueue
       label="신청자"

@@ -7,17 +7,19 @@ import { ConfirmDialog, Sheet, toast, useAction } from "@/shared/ui";
 import { removeParticipant } from "../api/remove-participant";
 import type { MemberSummary } from "../model/member-summary";
 
+interface RemoveMemberItemProps {
+  gameId: string;
+  member: MemberSummary;
+  leavesEmptySeat: boolean;
+  onDone: () => void;
+}
+
 export function RemoveMemberItem({
   gameId,
   member,
   leavesEmptySeat,
   onDone,
-}: {
-  gameId: string;
-  member: MemberSummary;
-  leavesEmptySeat: boolean;
-  onDone: () => void;
-}) {
+}: RemoveMemberItemProps) {
   const [confirming, setConfirming] = useState(false);
   const { pending, run } = useAction();
 

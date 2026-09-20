@@ -9,16 +9,14 @@ import { imageFileError } from "./image-file-error";
 import { uploadFailedMessage } from "./upload-failed-message";
 import { IMAGE_ACCEPT } from "./upload-rules";
 
-// ponytail: 순서 변경은 HTML5 드래그라 데스크톱 전용. 터치 정렬이 필요해지면 위·아래 이동 버튼을 붙인다.
-export function GameImagesUpload({
-  value,
-  onChange,
-  max,
-}: {
+interface GameImagesUploadProps {
   value: string[];
   onChange: (urls: string[]) => void;
   max: number;
-}) {
+}
+
+// ponytail: 순서 변경은 HTML5 드래그라 데스크톱 전용. 터치 정렬이 필요해지면 위·아래 이동 버튼을 붙인다.
+export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -10,6 +10,16 @@ import { MemberSheetHeader } from "./member-sheet-header";
 import { PromoteMemberItem } from "./promote-member-item";
 import { RemoveMemberItem } from "./remove-member-item";
 
+interface MemberSheetProps {
+  gameId: string;
+  member: MemberSummary | null;
+  confirmedCount: number;
+  waitingCount: number;
+  maxPlayers: number;
+  isCoordinate: boolean;
+  onClose: () => void;
+}
+
 // 큐가 다르면 첫 줄만 다르다. 할 수 있는 일은 언제나 둘 — 반대 큐로 옮기기와 내보내기.
 export function MemberSheet({
   gameId,
@@ -19,15 +29,7 @@ export function MemberSheet({
   maxPlayers,
   isCoordinate,
   onClose,
-}: {
-  gameId: string;
-  member: MemberSummary | null;
-  confirmedCount: number;
-  waitingCount: number;
-  maxPlayers: number;
-  isCoordinate: boolean;
-  onClose: () => void;
-}) {
+}: MemberSheetProps) {
   const isConfirmed = member?.waitlistRank === null;
 
   return (

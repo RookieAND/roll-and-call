@@ -29,15 +29,17 @@ const TAG_SUGGESTIONS: Record<GameTagKey, string[]> = {
   [GAME_TAG.platforms]: ["디스코드", "구글 스프레드시트", "코코포리아", "Roll20"],
 };
 
+interface GamePreflightFieldsProps {
+  form: UseFormReturn<GameFormValues>;
+  triggerNotice?: string | null;
+  aiImageNotice?: string | null;
+}
+
 export function GamePreflightFields({
   form,
   triggerNotice,
   aiImageNotice,
-}: {
-  form: UseFormReturn<GameFormValues>;
-  triggerNotice?: string | null;
-  aiImageNotice?: string | null;
-}) {
+}: GamePreflightFieldsProps) {
   const {
     register,
     setValue,

@@ -2,6 +2,15 @@ import { Button, HStack, Text, VStack } from "@trpg/ui";
 
 import { UnsavedCount } from "./unsaved-count";
 
+interface AvailabilitySaveBarProps {
+  selectedCount: number;
+  unsavedCount: number;
+  dirty: boolean;
+  pending: boolean;
+  onReset: () => void;
+  onSave: () => void;
+}
+
 export function AvailabilitySaveBar({
   selectedCount,
   unsavedCount,
@@ -9,14 +18,7 @@ export function AvailabilitySaveBar({
   pending,
   onReset,
   onSave,
-}: {
-  selectedCount: number;
-  unsavedCount: number;
-  dirty: boolean;
-  pending: boolean;
-  onReset: () => void;
-  onSave: () => void;
-}) {
+}: AvailabilitySaveBarProps) {
   return (
     <VStack
       gap="125"

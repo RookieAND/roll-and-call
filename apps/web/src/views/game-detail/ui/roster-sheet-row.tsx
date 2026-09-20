@@ -1,14 +1,12 @@
 import { type DetailRosterMember, RosterMemberRow } from "./roster-member-row";
 
-export function RosterSheetRow({
-  member,
-  viewerId,
-  rankNote,
-}: {
+interface RosterSheetRowProps {
   member: DetailRosterMember;
   viewerId: string | null;
   rankNote?: string;
-}) {
+}
+
+export function RosterSheetRow({ member, viewerId, rankNote }: RosterSheetRowProps) {
   const mine = member.userId === viewerId ? "나" : null;
   return (
     <RosterMemberRow

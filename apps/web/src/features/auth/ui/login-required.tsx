@@ -2,7 +2,11 @@ import { EmptyState } from "@/shared/ui";
 
 import { LoginButton } from "./login-button";
 
-export function LoginRequired({ description }: { description?: string }) {
+interface LoginRequiredProps {
+  description?: string;
+}
+
+export function LoginRequired({ description }: LoginRequiredProps) {
   return (
     <EmptyState
       title="로그인이 필요한 화면입니다"

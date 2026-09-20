@@ -3,7 +3,11 @@ import { Clock } from "lucide-react";
 
 import { formatDateTime } from "@/shared/lib";
 
-export function SessionEndedCard({ confirmedAt }: { confirmedAt: Date }) {
+interface SessionEndedCardProps {
+  confirmedAt: Date;
+}
+
+export function SessionEndedCard({ confirmedAt }: SessionEndedCardProps) {
   return (
     <Card padding="none" className="rounded-500 px-175 py-150">
       <HStack align="center" gap="100">

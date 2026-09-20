@@ -13,7 +13,11 @@ type GameRowData = Game & {
   participants: { userId: string; status: ParticipantStatus }[];
 };
 
-export function GameRow({ game }: { game: GameRowData }) {
+interface GameRowProps {
+  game: GameRowData;
+}
+
+export function GameRow({ game }: GameRowProps) {
   const count = countConfirmed(game.participants);
   const status = deriveGameStatus({
     maxPlayers: game.maxPlayers,

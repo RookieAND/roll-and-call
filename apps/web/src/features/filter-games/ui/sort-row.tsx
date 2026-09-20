@@ -2,16 +2,14 @@
 
 import type { ReactNode } from "react";
 
-// 고른 줄과 안 고른 줄이 같은 껍데기를 쓴다. 다른 것은 안에 든 글씨와 체크뿐이다.
-export function SortRow({
-  selected,
-  onSelect,
-  children,
-}: {
+interface SortRowProps {
   selected: boolean;
   onSelect: () => void;
   children: ReactNode;
-}) {
+}
+
+// 고른 줄과 안 고른 줄이 같은 껍데기를 쓴다. 다른 것은 안에 든 글씨와 체크뿐이다.
+export function SortRow({ selected, onSelect, children }: SortRowProps) {
   return (
     <button
       type="button"

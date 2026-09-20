@@ -7,7 +7,7 @@ import { BackButton } from "./back-button";
 import { BACK_BUTTON_CLASS } from "./back-button-class";
 import { BrandLogo } from "./brand-logo";
 
-type Props = {
+interface AppBarProps {
   title: string;
   // 워드마크로 제목을 대체한다. title은 스크린리더가 읽을 이름으로 남는다.
   brand?: boolean;
@@ -16,9 +16,9 @@ type Props = {
   onBack?: () => void;
   backIcon?: "back" | "close";
   action?: ReactNode;
-};
+}
 
-export function AppBar({ title, brand, back, onBack, backIcon = "back", action }: Props) {
+export function AppBar({ title, brand, back, onBack, backIcon = "back", action }: AppBarProps) {
   const hasBack = back !== undefined || onBack !== undefined;
   const BackIcon = backIcon === "close" ? X : ChevronLeft;
   const backLabel = backIcon === "close" ? "닫기" : "뒤로";

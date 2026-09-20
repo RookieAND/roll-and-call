@@ -12,17 +12,19 @@ import { HintBox } from "./hint-box";
 import { RecruitMethodField } from "./recruit-method-field";
 import { WaitlistField } from "./waitlist-field";
 
+interface GameRecruitFieldsProps {
+  form: UseFormReturn<GameFormValues>;
+  minPlayers?: number;
+  lockedReason?: string | null;
+  sessionNotice?: string | null;
+}
+
 export function GameRecruitFields({
   form,
   minPlayers = 1,
   lockedReason,
   sessionNotice,
-}: {
-  form: UseFormReturn<GameFormValues>;
-  minPlayers?: number;
-  lockedReason?: string | null;
-  sessionNotice?: string | null;
-}) {
+}: GameRecruitFieldsProps) {
   const {
     setValue,
     watch,

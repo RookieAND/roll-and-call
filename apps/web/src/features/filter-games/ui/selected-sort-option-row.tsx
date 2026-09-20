@@ -5,13 +5,12 @@ import { Check } from "lucide-react";
 
 import { SortRow } from "./sort-row";
 
-export function SelectedSortOptionRow({
-  label,
-  onSelect,
-}: {
+interface SelectedSortOptionRowProps {
   label: string;
   onSelect: () => void;
-}) {
+}
+
+export function SelectedSortOptionRow({ label, onSelect }: SelectedSortOptionRowProps) {
   return (
     <SortRow selected onSelect={onSelect}>
       <Text typography="subtitle1" render={<span />}>

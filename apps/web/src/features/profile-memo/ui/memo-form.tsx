@@ -11,19 +11,21 @@ import { deleteMemo } from "../api/delete-memo";
 import { saveMemo } from "../api/save-memo";
 import { MEMO_MAX_LENGTH } from "../model/memo-form";
 
+interface MemoFormProps {
+  targetId: string;
+  targetName: string;
+  targetAvatarUrl: string | null;
+  defaultBody?: string;
+  updatedAt?: Date | null;
+}
+
 export function MemoForm({
   targetId,
   targetName,
   targetAvatarUrl,
   defaultBody = "",
   updatedAt,
-}: {
-  targetId: string;
-  targetName: string;
-  targetAvatarUrl: string | null;
-  defaultBody?: string;
-  updatedAt?: Date | null;
-}) {
+}: MemoFormProps) {
   const [body, setBody] = useState(defaultBody);
   const { pending, run } = useAction();
   const canSave = body.trim().length > 0;

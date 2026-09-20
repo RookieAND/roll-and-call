@@ -6,16 +6,18 @@ import { LeaveGameButton } from "@/features/join-game";
 import { ACTION_SECONDARY_CLASS } from "./action-class-names";
 import { WaitlistRankNotice } from "./waitlist-rank-notice";
 
+interface ConfirmedWaitingActionsProps {
+  gameId: string;
+  confirmedAt: Date;
+  waitlistRank: number | null;
+}
+
 // 순번을 먼저 알리고, 그 아래에 확정된 세션 시간을 읽는 정보로 둔다.
 export function ConfirmedWaitingActions({
   gameId,
   confirmedAt,
   waitlistRank,
-}: {
-  gameId: string;
-  confirmedAt: Date;
-  waitlistRank: number | null;
-}) {
+}: ConfirmedWaitingActionsProps) {
   return (
     <VStack gap="100">
       <WaitlistRankNotice

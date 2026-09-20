@@ -2,7 +2,11 @@ import { EmptyState } from "@/shared/ui";
 
 import { CopyLinkButton } from "./copy-link-button";
 
-export function RosterEmptyState({ gameId }: { gameId: string }) {
+interface RosterEmptyStateProps {
+  gameId: string;
+}
+
+export function RosterEmptyState({ gameId }: RosterEmptyStateProps) {
   return (
     <EmptyState
       image="/empty-states/empty-hosted.png"

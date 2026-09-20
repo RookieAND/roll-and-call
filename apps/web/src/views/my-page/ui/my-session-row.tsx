@@ -2,19 +2,15 @@ import { Text, cn } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export function MySessionRow({
-  label,
-  count,
-  detail,
-  urgent = false,
-  href,
-}: {
+interface MySessionRowProps {
   label: string;
   count: number;
   detail: string | null;
   urgent?: boolean;
   href: string;
-}) {
+}
+
+export function MySessionRow({ label, count, detail, urgent = false, href }: MySessionRowProps) {
   const detailClass = cn("mt-025 block", urgent && "text-warning-600");
   const detailForeground = urgent ? undefined : "muted";
   // 0도 정보라 행은 남기되, 숫자는 한 단계 내려 "없음"으로 읽히게 한다.

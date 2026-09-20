@@ -1,7 +1,12 @@
 import { Grid, Text, VStack } from "@trpg/ui";
 
+interface ProfileStatsProps {
+  hosted: number;
+  played: number;
+}
+
 // 이 숫자는 어느 자리에 많이 앉았는지만 말한다. 어떤 사람인지는 성향이 말한다.
-export function ProfileStats({ hosted, played }: { hosted: number; played: number }) {
+export function ProfileStats({ hosted, played }: ProfileStatsProps) {
   const stats = [
     { label: "운영한 세션", count: hosted },
     { label: "참여한 세션", count: played },

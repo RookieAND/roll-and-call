@@ -1,12 +1,11 @@
 import { EmptyState } from "@/shared/ui";
 
-export function NoCandidatesNotice({
-  playLabel,
-  respondentCount,
-}: {
+interface NoCandidatesNoticeProps {
   playLabel: string;
   respondentCount: number;
-}) {
+}
+
+export function NoCandidatesNotice({ playLabel, respondentCount }: NoCandidatesNoticeProps) {
   return (
     <EmptyState
       size="section"

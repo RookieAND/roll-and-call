@@ -22,15 +22,13 @@ const HINT = {
   ],
 } as const;
 
-export function RecruitMethodField({
-  value,
-  onChange,
-  lockedReason,
-}: {
+interface RecruitMethodFieldProps {
   value: RecruitMethod;
   onChange: (method: RecruitMethod) => void;
   lockedReason?: string | null;
-}) {
+}
+
+export function RecruitMethodField({ value, onChange, lockedReason }: RecruitMethodFieldProps) {
   return (
     <VStack gap="100">
       <Field label="모집 방식" required>

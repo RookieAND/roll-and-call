@@ -1,6 +1,10 @@
 import { Badge } from "@trpg/ui";
 
-export function FirstComeMethodBadge({ label }: { label: string }) {
+interface FirstComeMethodBadgeProps {
+  label: string;
+}
+
+export function FirstComeMethodBadge({ label }: FirstComeMethodBadgeProps) {
   return (
     <Badge color="gray" className="shrink-0">
       {label}

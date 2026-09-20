@@ -3,6 +3,18 @@
 import { Chip, HStack, TextInput } from "@trpg/ui";
 import type { KeyboardEvent } from "react";
 
+interface TagInputEditorProps {
+  id?: string;
+  draft: string;
+  placeholder?: string;
+  maxLength?: number;
+  suggestions: string[];
+  onDraftChange: (value: string) => void;
+  onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
+  onCommit: () => void;
+  onAdd: (value: string) => void;
+}
+
 export function TagInputEditor({
   id,
   draft,
@@ -13,17 +25,7 @@ export function TagInputEditor({
   onKeyDown,
   onCommit,
   onAdd,
-}: {
-  id?: string;
-  draft: string;
-  placeholder?: string;
-  maxLength?: number;
-  suggestions: string[];
-  onDraftChange: (value: string) => void;
-  onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
-  onCommit: () => void;
-  onAdd: (value: string) => void;
-}) {
+}: TagInputEditorProps) {
   return (
     <>
       <TextInput

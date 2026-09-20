@@ -11,16 +11,14 @@ import {
 
 const PREVIEW_COUNT = 3;
 
-// 탭을 쓰지 않는다. 두 목록을 한 번에 훑는 화면이고, 세 건짜리 목록을 탭 뒤에 숨길 이유가 없다.
-export function ProfileSessionSection({
-  userId,
-  section,
-  items,
-}: {
+interface ProfileSessionSectionProps {
   userId: string;
   section: { key: SessionRole; title: string; empty: string };
   items: SessionCardModel[];
-}) {
+}
+
+// 탭을 쓰지 않는다. 두 목록을 한 번에 훑는 화면이고, 세 건짜리 목록을 탭 뒤에 숨길 이유가 없다.
+export function ProfileSessionSection({ userId, section, items }: ProfileSessionSectionProps) {
   const hasMore = items.length > PREVIEW_COUNT;
 
   return (

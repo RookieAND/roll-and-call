@@ -22,15 +22,13 @@ import { GameRosterSection } from "./game-roster-section";
 import { GameSynopsis } from "./game-synopsis";
 import { ShareButton } from "./share-button";
 
-export function GameDetail({
-  game,
-  viewerId,
-  respondedIds,
-}: {
+interface GameDetailProps {
   game: GameDetailData;
   viewerId: string | null;
   respondedIds: string[];
-}) {
+}
+
+export function GameDetail({ game, viewerId, respondedIds }: GameDetailProps) {
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
   const { confirmed, waiting } = splitRoster(game.participants);
 

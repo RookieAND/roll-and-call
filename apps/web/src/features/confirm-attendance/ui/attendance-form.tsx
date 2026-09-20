@@ -12,8 +12,13 @@ import { confirmDescription } from "../model/confirm-description";
 import { AttendanceRow } from "./attendance-row";
 import { AttendanceTally } from "./attendance-tally";
 
+interface AttendanceFormProps {
+  gameId: string;
+  attendees: Attendee[];
+}
+
 // 기본값은 전원 참석이다. GM이 하는 일은 오지 않은 사람을 고르는 것 하나뿐이다.
-export function AttendanceForm({ gameId, attendees }: { gameId: string; attendees: Attendee[] }) {
+export function AttendanceForm({ gameId, attendees }: AttendanceFormProps) {
   const [absentIds, setAbsentIds] = useState(
     () =>
       new Set(attendees.filter((attendee) => attendee.absent).map((attendee) => attendee.userId)),

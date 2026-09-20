@@ -2,16 +2,14 @@ import { Text } from "@trpg/ui";
 
 import { StatusNotice } from "@/shared/ui";
 
-// 추첨제는 뽑기 전까지 순번이 없다 — 숫자 대신 왜 아직 순번이 없는지 말한다.
-export function WaitlistRankNotice({
-  rank,
-  note,
-  pendingDraw = false,
-}: {
+interface WaitlistRankNoticeProps {
   rank: number | null;
   note: string;
   pendingDraw?: boolean;
-}) {
+}
+
+// 추첨제는 뽑기 전까지 순번이 없다 — 숫자 대신 왜 아직 순번이 없는지 말한다.
+export function WaitlistRankNotice({ rank, note, pendingDraw = false }: WaitlistRankNoticeProps) {
   return (
     <StatusNotice tone="muted" className="text-left">
       <Text typography="body4" weight="bold" numeric render={<p />}>

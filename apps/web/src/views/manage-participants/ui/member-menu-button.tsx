@@ -1,8 +1,13 @@
 import { IconButton } from "@trpg/ui";
 import { MoreHorizontal } from "lucide-react";
 
+interface MemberMenuButtonProps {
+  username: string;
+  onClick: () => void;
+}
+
 // ponytail: 시안의 40px 대신 44px — 행 안에서 보이는 차이는 없고 터치 타깃만 지킨다.
-export function MemberMenuButton({ username, onClick }: { username: string; onClick: () => void }) {
+export function MemberMenuButton({ username, onClick }: MemberMenuButtonProps) {
   return (
     <IconButton
       aria-label={`${username} 메뉴`}

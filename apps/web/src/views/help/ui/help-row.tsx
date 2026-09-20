@@ -4,7 +4,11 @@ import { GameStatusBadge } from "@/entities/game";
 
 import type { HelpRow as Row } from "../model/help-docs";
 
-export function HelpRow({ row }: { row: Row }) {
+interface HelpRowProps {
+  row: Row;
+}
+
+export function HelpRow({ row }: HelpRowProps) {
   return (
     <HStack gap="150" className="border-gray-100 px-175 py-125 not-first:border-t">
       <span className="flex w-[92px] flex-none items-start">

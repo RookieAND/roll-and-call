@@ -5,6 +5,14 @@ import { EyeOff } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
+interface GameThumbnailProps {
+  url: string | null;
+  alt?: string;
+  sizes?: string;
+  spoilerLabel?: string;
+  className?: string;
+}
+
 // next/image fill이 부모 박스를 채우므로 크기는 호출부가 className으로 준다.
 export function GameThumbnail({
   url,
@@ -12,13 +20,7 @@ export function GameThumbnail({
   sizes,
   spoilerLabel,
   className,
-}: {
-  url: string | null;
-  alt?: string;
-  sizes?: string;
-  spoilerLabel?: string;
-  className?: string;
-}) {
+}: GameThumbnailProps) {
   const [loaded, setLoaded] = useState(false);
 
   if (!url) {

@@ -6,16 +6,18 @@ import { AvailabilityDayRow } from "./availability-day-row";
 
 const PREVIEW_ROWS = 3;
 
+interface AvailabilityRowsProps {
+  intervals: readonly AvailabilityInterval[];
+  note?: string;
+  emptyText?: string;
+}
+
 // 08 타인 프로필과 같은 행 모양. 3줄을 넘으면 접고 나머지는 펼쳐서 본다.
 export function AvailabilityRows({
   intervals,
   note,
   emptyText = "적어두지 않았습니다",
-}: {
-  intervals: readonly AvailabilityInterval[];
-  note?: string;
-  emptyText?: string;
-}) {
+}: AvailabilityRowsProps) {
   const days = filledDays(intervals);
 
   if (days.length === 0) {

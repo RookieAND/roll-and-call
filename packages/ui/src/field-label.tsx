@@ -1,16 +1,13 @@
 import type { ReactNode } from "react";
 
-export function FieldLabel({
-  label,
-  counter,
-  required,
-  htmlFor,
-}: {
+interface FieldLabelProps {
   label?: string;
   counter?: ReactNode;
   required?: boolean;
   htmlFor?: string;
-}) {
+}
+
+export function FieldLabel({ label, counter, required, htmlFor }: FieldLabelProps) {
   return (
     <div className="flex items-baseline justify-between gap-100">
       <label htmlFor={htmlFor} className="text-body4 font-bold text-gray-700">

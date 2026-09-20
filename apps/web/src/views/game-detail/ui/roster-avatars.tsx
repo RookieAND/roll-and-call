@@ -4,7 +4,11 @@ import type { DetailRosterMember } from "./roster-member-row";
 
 const MAX_AVATARS = 5;
 
-export function RosterAvatars({ members }: { members: DetailRosterMember[] }) {
+interface RosterAvatarsProps {
+  members: DetailRosterMember[];
+}
+
+export function RosterAvatars({ members }: RosterAvatarsProps) {
   return (
     <AvatarGroup
       max={MAX_AVATARS}

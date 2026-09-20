@@ -17,20 +17,27 @@ import { cellTone, UNSAVED_SELECTED_TONE } from "./cell-tone";
 import { Legend } from "./legend";
 import { PrefillNotice } from "./prefill-notice";
 
-type Props = {
+interface AvailabilityGridProps {
   gameId: string;
   days: DayColumn[];
   timeRows: TimeRow[];
   savedMine: string[];
   prefill?: { keys: string[]; label: string } | null;
   blocked: string[];
-};
+}
 
 const CELL = "touch-none border-b border-l border-b-gray-100 border-l-gray-100";
 const STRIPES =
   "repeating-linear-gradient(45deg, var(--color-gray-300) 0 3px, var(--color-gray-200) 3px 6px)";
 
-export function AvailabilityGrid({ gameId, days, timeRows, savedMine, prefill, blocked }: Props) {
+export function AvailabilityGrid({
+  gameId,
+  days,
+  timeRows,
+  savedMine,
+  prefill,
+  blocked,
+}: AvailabilityGridProps) {
   const usePrefill = savedMine.length === 0 && Boolean(prefill?.keys.length);
   const painter = useSlotPainter({
     initial: usePrefill ? prefill!.keys : savedMine,

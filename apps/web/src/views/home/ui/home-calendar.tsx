@@ -11,18 +11,20 @@ import { HomeCalendarCell } from "./home-calendar-cell";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"] as const;
 
+interface HomeCalendarProps {
+  monthStart: Dayjs;
+  sessionsByDay?: Map<string, CalendarSession[]>;
+  selectedKey?: string;
+  todayKey?: string;
+}
+
 // sessionsByDay 없이 부르면 달 이름·요일·칸 수는 그대로 두고 칸만 스켈레톤으로 깐다.
 export function HomeCalendar({
   monthStart,
   sessionsByDay,
   selectedKey,
   todayKey,
-}: {
-  monthStart: Dayjs;
-  sessionsByDay?: Map<string, CalendarSession[]>;
-  selectedKey?: string;
-  todayKey?: string;
-}) {
+}: HomeCalendarProps) {
   const cells = buildMonthCells(monthStart);
   const previousHref = `/?date=${monthStart.subtract(1, "month").format(DATE_KEY_FORMAT)}`;
   const nextHref = `/?date=${monthStart.add(1, "month").format(DATE_KEY_FORMAT)}`;

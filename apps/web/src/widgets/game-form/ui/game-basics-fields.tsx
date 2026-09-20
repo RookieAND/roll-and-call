@@ -11,7 +11,11 @@ import { PlayTimeField } from "./play-time-field";
 
 const RULE_PRESETS = ["CoC 7th", "피아스코", "던전월드"];
 
-export function GameBasicsFields({ form }: { form: UseFormReturn<GameFormValues> }) {
+interface GameBasicsFieldsProps {
+  form: UseFormReturn<GameFormValues>;
+}
+
+export function GameBasicsFields({ form }: GameBasicsFieldsProps) {
   const {
     register,
     setValue,

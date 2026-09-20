@@ -20,7 +20,9 @@ const badge = cva(
   },
 );
 
-export type BadgeProps = ComponentPropsWithRef<"span"> & VariantProps<typeof badge>;
+// color는 span의 옛 HTML 속성과 이름이 겹친다. 뱃지에서 색은 variant 쪽이 맡는다.
+export interface BadgeProps
+  extends Omit<ComponentPropsWithRef<"span">, "color">, VariantProps<typeof badge> {}
 
 export function Badge({ color, className, ...props }: BadgeProps) {
   return <span className={cn(badge({ color }), className)} {...props} />;

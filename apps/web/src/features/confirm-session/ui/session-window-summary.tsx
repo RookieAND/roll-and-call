@@ -2,15 +2,17 @@ import { Text } from "@trpg/ui";
 
 import { SummaryRow } from "./summary-row";
 
+interface SessionWindowSummaryProps {
+  windowLabel: string;
+  memberCount: number;
+  everyone: boolean;
+}
+
 export function SessionWindowSummary({
   windowLabel,
   memberCount,
   everyone,
-}: {
-  windowLabel: string;
-  memberCount: number;
-  everyone: boolean;
-}) {
+}: SessionWindowSummaryProps) {
   return (
     <>
       <SummaryRow label="세션 시간">

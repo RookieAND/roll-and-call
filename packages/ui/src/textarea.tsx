@@ -4,8 +4,8 @@ import type { ComponentPropsWithRef } from "react";
 import { cn } from "./cn";
 import { textFieldVariants } from "./text-field-variants";
 
-export type TextareaProps = ComponentPropsWithRef<"textarea"> &
-  VariantProps<typeof textFieldVariants>;
+export interface TextareaProps
+  extends ComponentPropsWithRef<"textarea">, VariantProps<typeof textFieldVariants> {}
 
 export function Textarea({ invalid, className, ...props }: TextareaProps) {
   return (

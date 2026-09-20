@@ -10,9 +10,9 @@ const maxWidthMap = {
   full: "max-w-full",
 } as const;
 
-export type ContainerProps = ComponentPropsWithRef<"div"> & {
+export interface ContainerProps extends ComponentPropsWithRef<"div"> {
   size?: keyof typeof maxWidthMap;
-};
+}
 
 export function Container({ className, size = "lg", ...props }: ContainerProps) {
   return <div className={cn("mx-auto w-full px-200", maxWidthMap[size], className)} {...props} />;

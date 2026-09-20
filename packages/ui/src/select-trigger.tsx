@@ -6,13 +6,13 @@ import { useContext, type ReactNode } from "react";
 import { cn } from "./cn";
 import { SelectItemsContext } from "./select-items-context";
 
-export type SelectTriggerProps = {
+export interface SelectTriggerProps {
   placeholder?: string;
   invalid?: boolean;
   id?: string;
   className?: string;
   children?: ReactNode;
-};
+}
 
 export function SelectTrigger({
   placeholder = "선택",

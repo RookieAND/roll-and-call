@@ -1,12 +1,11 @@
 import { Card, HStack, Text } from "@trpg/ui";
 
-export function ConfirmSummary({
-  playLabel,
-  respondedCount,
-}: {
+interface ConfirmSummaryProps {
   playLabel: string;
   respondedCount: number;
-}) {
+}
+
+export function ConfirmSummary({ playLabel, respondedCount }: ConfirmSummaryProps) {
   const items = [
     { label: "플레이타임", value: playLabel },
     { label: "가능 시간 제출", value: `${respondedCount}명` },

@@ -12,7 +12,11 @@ const DETAIL_CLASS = {
   success: "text-success-700",
 };
 
-export function ManageRow({ row }: { row: Row }) {
+interface ManageRowProps {
+  row: Row;
+}
+
+export function ManageRow({ row }: ManageRowProps) {
   const Icon = ICONS[row.icon];
   const iconClass =
     row.tone === "success" ? "bg-success-50 text-success-700" : "bg-primary-50 text-primary-ink";

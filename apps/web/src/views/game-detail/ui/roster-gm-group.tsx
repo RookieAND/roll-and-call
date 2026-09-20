@@ -8,7 +8,12 @@ export type RosterSheetGm = {
   bio?: string | null;
 };
 
-export function RosterGmGroup({ gm, viewerId }: { gm: RosterSheetGm; viewerId: string | null }) {
+interface RosterGmGroupProps {
+  gm: RosterSheetGm;
+  viewerId: string | null;
+}
+
+export function RosterGmGroup({ gm, viewerId }: RosterGmGroupProps) {
   return (
     <RosterGroup label="GM">
       <RosterMemberRow

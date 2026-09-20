@@ -22,6 +22,15 @@ const dropzone = cva(
   },
 );
 
+interface ThumbnailDropzoneProps {
+  uploading: boolean;
+  dragging: boolean;
+  invalid: boolean;
+  onPick: () => void;
+  onDraggingChange: (dragging: boolean) => void;
+  onDrop: (file: File) => void;
+}
+
 // ponytail: 드롭 영역 전체가 파일 선택 버튼이라 Button 룩(텍스트 한 줄)과 달라 손코딩.
 export function ThumbnailDropzone({
   uploading,
@@ -30,14 +39,7 @@ export function ThumbnailDropzone({
   onPick,
   onDraggingChange,
   onDrop,
-}: {
-  uploading: boolean;
-  dragging: boolean;
-  invalid: boolean;
-  onPick: () => void;
-  onDraggingChange: (dragging: boolean) => void;
-  onDrop: (file: File) => void;
-}) {
+}: ThumbnailDropzoneProps) {
   return (
     <button
       type="button"

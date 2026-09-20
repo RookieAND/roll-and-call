@@ -1,7 +1,11 @@
 import { RichText } from "@trpg/tiptap";
 import { Text, VStack } from "@trpg/ui";
 
-export function GameSynopsis({ synopsis }: { synopsis: string }) {
+interface GameSynopsisProps {
+  synopsis: string;
+}
+
+export function GameSynopsis({ synopsis }: GameSynopsisProps) {
   return (
     <VStack gap="100">
       <Text typography="heading3" render={<h2 />}>

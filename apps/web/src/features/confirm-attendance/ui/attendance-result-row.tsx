@@ -4,7 +4,11 @@ import type { Attendee } from "../model/attendee";
 import { AbsentMark } from "./absent-mark";
 import { PresentMark } from "./present-mark";
 
-export function AttendanceResultRow({ attendee }: { attendee: Attendee }) {
+interface AttendanceResultRowProps {
+  attendee: Attendee;
+}
+
+export function AttendanceResultRow({ attendee }: AttendanceResultRowProps) {
   return (
     <HStack
       align="center"

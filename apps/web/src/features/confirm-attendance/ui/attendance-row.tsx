@@ -10,15 +10,13 @@ import {
 import type { Attendee } from "../model/attendee";
 import { AbsentNotice } from "./absent-notice";
 
-export function AttendanceRow({
-  attendee,
-  absent,
-  onChange,
-}: {
+interface AttendanceRowProps {
   attendee: Attendee;
   absent: boolean;
   onChange: (absent: boolean) => void;
-}) {
+}
+
+export function AttendanceRow({ attendee, absent, onChange }: AttendanceRowProps) {
   const choice = absent ? ATTENDANCE_CHOICE.absent : ATTENDANCE_CHOICE.present;
 
   return (

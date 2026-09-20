@@ -15,6 +15,16 @@ import { RosterQueue } from "./roster-queue";
 import { RosterRow } from "./roster-row";
 import { UnsubmittedNote } from "./unsubmitted-note";
 
+interface RosterQueuesProps {
+  gameId: string;
+  confirmed: ManagedMember[];
+  waiting: ManagedMember[];
+  maxPlayers: number;
+  summary: RosterSummary;
+  isCoordinate: boolean;
+  locked: boolean;
+}
+
 // 확정과 대기는 제목 붙은 두 목록이다. 한 사람이 어느 쪽인지는 배지가 아니라 위치가 말한다.
 export function RosterQueues({
   gameId,
@@ -24,15 +34,7 @@ export function RosterQueues({
   summary,
   isCoordinate,
   locked,
-}: {
-  gameId: string;
-  confirmed: ManagedMember[];
-  waiting: ManagedMember[];
-  maxPlayers: number;
-  summary: RosterSummary;
-  isCoordinate: boolean;
-  locked: boolean;
-}) {
+}: RosterQueuesProps) {
   const [menuMember, setMenuMember] = useState<ManagedMember | null>(null);
 
   const rowAction = (member: ManagedMember) =>

@@ -8,19 +8,21 @@ import { AVAILABILITY_MAX_HOUR, AVAILABILITY_MIN_HOUR } from "@/entities/profile
 import type { DayIntervalRow } from "../model/day-interval-row";
 import { HourSelect } from "./hour-select";
 
+interface IntervalFieldsProps {
+  label: string;
+  row: DayIntervalRow;
+  invalid?: boolean;
+  onHourChange: (index: number, edge: "from" | "to", hour: number) => void;
+  trailing: ReactNode;
+}
+
 export function IntervalFields({
   label,
   row,
   invalid = false,
   onHourChange,
   trailing,
-}: {
-  label: string;
-  row: DayIntervalRow;
-  invalid?: boolean;
-  onHourChange: (index: number, edge: "from" | "to", hour: number) => void;
-  trailing: ReactNode;
-}) {
+}: IntervalFieldsProps) {
   return (
     <>
       <HourSelect

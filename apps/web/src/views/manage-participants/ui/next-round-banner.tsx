@@ -5,19 +5,21 @@ import { useState } from "react";
 
 import { RoundSheet } from "@/features/create-second-round";
 
+interface NextRoundBannerProps {
+  gameId: string;
+  title: string;
+  waitingCount: number;
+  maxPlayers: number;
+  confirmedAt: Date | null;
+}
+
 export function NextRoundBanner({
   gameId,
   title,
   waitingCount,
   maxPlayers,
   confirmedAt,
-}: {
-  gameId: string;
-  title: string;
-  waitingCount: number;
-  maxPlayers: number;
-  confirmedAt: Date | null;
-}) {
+}: NextRoundBannerProps) {
   const [open, setOpen] = useState(false);
 
   return (

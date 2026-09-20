@@ -1,7 +1,11 @@
 import { HStack } from "@trpg/ui";
 import type { ReactNode } from "react";
 
-export function ActionPair({ children }: { children: ReactNode }) {
+interface ActionPairProps {
+  children: ReactNode;
+}
+
+export function ActionPair({ children }: ActionPairProps) {
   return (
     <HStack gap="100" className="[&>*]:flex-1">
       {children}

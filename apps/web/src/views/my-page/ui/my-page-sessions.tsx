@@ -6,7 +6,11 @@ import type { summarizeMySessions } from "../model/my-page-summary";
 import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 import { MySessionRow } from "./my-session-row";
 
-export function MyPageSessions({ sessions }: { sessions: ReturnType<typeof summarizeMySessions> }) {
+interface MyPageSessionsProps {
+  sessions: ReturnType<typeof summarizeMySessions>;
+}
+
+export function MyPageSessions({ sessions }: MyPageSessionsProps) {
   return (
     <section className="flex flex-col gap-125">
       <HStack align="center">

@@ -5,7 +5,12 @@ import type { ReactNode } from "react";
 
 import { cn } from "./cn";
 
-export function SelectPopup({ children, className }: { children: ReactNode; className?: string }) {
+interface SelectPopupProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function SelectPopup({ children, className }: SelectPopupProps) {
   return (
     <BaseSelect.Portal>
       <BaseSelect.Positioner

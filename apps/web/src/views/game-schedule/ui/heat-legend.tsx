@@ -4,7 +4,11 @@ import { heatColor } from "../model/heat-color";
 import { heatLegend } from "../model/heat-legend";
 import { heatTextColor } from "../model/heat-text-color";
 
-export function HeatLegend({ capacity }: { capacity: number }) {
+interface HeatLegendProps {
+  capacity: number;
+}
+
+export function HeatLegend({ capacity }: HeatLegendProps) {
   return (
     <HStack align="center" gap="100">
       <Text typography="body4" foreground="hint" render={<span />}>

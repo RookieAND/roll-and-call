@@ -8,7 +8,7 @@ import { TagChip } from "./tag-chip";
 import { TagInputEditor } from "./tag-input-editor";
 import { TagInputFullNote } from "./tag-input-full-note";
 
-export type TagInputProps = {
+export interface TagInputProps {
   id?: string;
   value: string[];
   onChange: (tags: string[]) => void;
@@ -19,7 +19,7 @@ export type TagInputProps = {
   // 칩과 입력 칸 앞에 붙는 글자. 저장되는 값에는 들어가지 않는다.
   prefix?: string;
   tone?: "primary" | "notice";
-};
+}
 
 export function TagInput({
   id,

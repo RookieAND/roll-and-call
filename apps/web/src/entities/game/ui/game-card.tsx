@@ -12,14 +12,14 @@ import { GameScheduleRow } from "./game-schedule-row";
 import { GameStatusBadge } from "./game-status-badge";
 import { GameThumbnail } from "./game-thumbnail";
 
-type Props = {
+interface GameCardProps {
   game: Game & {
     gm: { username: string; avatarUrl: string | null } | null;
     participants: { userId: string; status: ParticipantStatus }[];
   };
-};
+}
 
-export function GameCard({ game }: Props) {
+export function GameCard({ game }: GameCardProps) {
   const count = countConfirmed(game.participants);
   const status = deriveGameStatus({
     maxPlayers: game.maxPlayers,

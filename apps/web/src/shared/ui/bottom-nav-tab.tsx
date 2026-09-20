@@ -6,7 +6,11 @@ import Link from "next/link";
 
 import { BOTTOM_NAV_TAB_CLASS } from "./bottom-nav-tab-class";
 
-export type BottomNavTabProps = { href: string; label: string; Icon: LucideIcon };
+export interface BottomNavTabProps {
+  href: string;
+  label: string;
+  Icon: LucideIcon;
+}
 
 export function BottomNavTab({ href, label, Icon }: BottomNavTabProps) {
   return (

@@ -1,16 +1,14 @@
 import { cn } from "@trpg/ui";
 import Link from "next/link";
 
-// ponytail: 밑줄 탭은 Chip·SegmentControl과 룩이 달라 링크로 손코딩.
-export function SessionTabs({
-  label,
-  tabs,
-  activeKey,
-}: {
+interface SessionTabsProps {
   label: string;
   tabs: ReadonlyArray<{ key: string; label: string; count: number; href: string }>;
   activeKey: string;
-}) {
+}
+
+// ponytail: 밑줄 탭은 Chip·SegmentControl과 룩이 달라 링크로 손코딩.
+export function SessionTabs({ label, tabs, activeKey }: SessionTabsProps) {
   return (
     <nav aria-label={label} className="flex px-200">
       {tabs.map((tab) => {

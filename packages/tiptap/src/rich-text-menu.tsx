@@ -8,7 +8,11 @@ import { useState } from "react";
 
 import { safeHref } from "./safe-href";
 
-export function RichTextMenu({ editor }: { editor: Editor }) {
+interface RichTextMenuProps {
+  editor: Editor;
+}
+
+export function RichTextMenu({ editor }: RichTextMenuProps) {
   const [linkDraft, setLinkDraft] = useState<string | null>(null);
 
   function openLink() {

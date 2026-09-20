@@ -1,13 +1,12 @@
 import { Card, HStack, Text, VStack } from "@trpg/ui";
 import { Check } from "lucide-react";
 
-export function RoundInheritedList({
-  waitingCount,
-  maxPlayers,
-}: {
+interface RoundInheritedListProps {
   waitingCount: number;
   maxPlayers: number;
-}) {
+}
+
+export function RoundInheritedList({ waitingCount, maxPlayers }: RoundInheritedListProps) {
   const carriedDescription =
     waitingCount > maxPlayers
       ? `앞의 ${maxPlayers}명이 다음 회차의 확정 참여자가 되고, 나머지는 대기로 넘어갑니다`

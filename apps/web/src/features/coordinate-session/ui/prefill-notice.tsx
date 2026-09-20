@@ -1,6 +1,11 @@
 import { Button, HStack, Text } from "@trpg/ui";
 
-export function PrefillNotice({ label, onClear }: { label: string; onClear: () => void }) {
+interface PrefillNoticeProps {
+  label: string;
+  onClear: () => void;
+}
+
+export function PrefillNotice({ label, onClear }: PrefillNoticeProps) {
   return (
     <HStack align="start" gap="100" className="rounded-500 bg-tinted-bg px-175 py-150">
       <Text typography="body4" render={<p />} className="flex-1 text-tinted-ink">

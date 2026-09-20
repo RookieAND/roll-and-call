@@ -3,7 +3,12 @@ import Link from "next/link";
 
 import type { RecordRow } from "../model/rank-people";
 
-export function HomeRecordRow({ row, position }: { row: RecordRow | null; position: number }) {
+interface HomeRecordRowProps {
+  row: RecordRow | null;
+  position: number;
+}
+
+export function HomeRecordRow({ row, position }: HomeRecordRowProps) {
   const rank = row?.rank ?? position;
   const rankTone = rank === 3 ? "text-rank-bronze" : "text-hint";
   const rankNumber = (

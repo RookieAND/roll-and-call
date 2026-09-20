@@ -18,15 +18,17 @@ const END_DATE_HINT = {
   [SCHEDULE_MODE.fixed]: "세션 일시보다 앞이어야 합니다. 기본값은 세션 하루 전.",
 } as const;
 
+interface GameScheduleFieldsProps {
+  form: UseFormReturn<GameFormValues>;
+  modeLockedReason?: string | null;
+  sessionNotice?: string | null;
+}
+
 export function GameScheduleFields({
   form,
   modeLockedReason,
   sessionNotice,
-}: {
-  form: UseFormReturn<GameFormValues>;
-  modeLockedReason?: string | null;
-  sessionNotice?: string | null;
-}) {
+}: GameScheduleFieldsProps) {
   const {
     control,
     setValue,

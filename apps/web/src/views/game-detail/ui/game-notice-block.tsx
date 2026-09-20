@@ -1,6 +1,10 @@
 import { Text, VStack } from "@trpg/ui";
 
-export function GameNoticeBlock({ notice }: { notice: string }) {
+interface GameNoticeBlockProps {
+  notice: string;
+}
+
+export function GameNoticeBlock({ notice }: GameNoticeBlockProps) {
   return (
     <VStack gap="100">
       <Text typography="heading3" render={<h2 />}>

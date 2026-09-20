@@ -7,7 +7,12 @@ import { EmptyState } from "@/shared/ui";
 import type { CalendarSession } from "../model/to-calendar-sessions";
 import { HomeSessionCard } from "./home-session-card";
 
-export function HomeDaySessions({ date, sessions }: { date: Date; sessions: CalendarSession[] }) {
+interface HomeDaySessionsProps {
+  date: Date;
+  sessions: CalendarSession[];
+}
+
+export function HomeDaySessions({ date, sessions }: HomeDaySessionsProps) {
   const title = toKst(date).format("M월 D일 (dd)");
   const countLabel = sessions.length > 0 ? `${sessions.length}건` : "세션 없음";
 

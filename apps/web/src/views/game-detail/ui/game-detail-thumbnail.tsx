@@ -7,7 +7,12 @@ import { GameThumbnail } from "@/entities/game";
 const THUMBNAIL_SIZES = "(max-width: 896px) 100vw, 896px";
 const THUMBNAIL_CLASS = "h-42 w-full";
 
-export function GameDetailThumbnail({ url, spoiler }: { url: string | null; spoiler: boolean }) {
+interface GameDetailThumbnailProps {
+  url: string | null;
+  spoiler: boolean;
+}
+
+export function GameDetailThumbnail({ url, spoiler }: GameDetailThumbnailProps) {
   const [revealed, setRevealed] = useState(false);
 
   if (!url || !spoiler || revealed) {

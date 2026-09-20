@@ -1,6 +1,11 @@
 import { Card, Text, VStack } from "@trpg/ui";
 
-export function RosterStat({ label, count }: { label: string; count: number }) {
+interface RosterStatProps {
+  label: string;
+  count: number;
+}
+
+export function RosterStat({ label, count }: RosterStatProps) {
   return (
     <Card padding="none" className="rounded-500 px-175 py-150">
       <VStack gap="050">

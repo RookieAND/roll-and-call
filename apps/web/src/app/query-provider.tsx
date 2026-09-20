@@ -5,7 +5,11 @@ import { type ReactNode, useState } from "react";
 
 import { createQueryClient } from "./create-query-client";
 
-export function QueryProvider({ children }: { children: ReactNode }) {
+interface QueryProviderProps {
+  children: ReactNode;
+}
+
+export function QueryProvider({ children }: QueryProviderProps) {
   const [client] = useState(createQueryClient);
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 }

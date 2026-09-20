@@ -7,8 +7,12 @@ import { HomeCalendar } from "./home-calendar";
 
 const RECORD_GROUPS = ["gm", "player"] as const;
 
+interface HomeSkeletonProps {
+  date?: string;
+}
+
 // 주소만으로 정해지는 글자(달 이름·선택한 날짜·요일)는 로딩 중에도 그대로 보여 준다.
-export function HomeSkeleton({ date }: { date?: string }) {
+export function HomeSkeleton({ date }: HomeSkeletonProps) {
   const { monthStart, selected } = resolveCalendarView(date);
 
   return (

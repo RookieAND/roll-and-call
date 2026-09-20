@@ -9,7 +9,11 @@ import { DatePicker } from "@/shared/ui";
 
 import { defaultEndDateForRange } from "../model/default-end-date-for-range";
 
-export function CoordinationRangeFields({ form }: { form: UseFormReturn<GameFormValues> }) {
+interface CoordinationRangeFieldsProps {
+  form: UseFormReturn<GameFormValues>;
+}
+
+export function CoordinationRangeFields({ form }: CoordinationRangeFieldsProps) {
   const {
     control,
     watch,

@@ -12,7 +12,11 @@ const CONFIRM_KINDS: string[] = [
   SESSION_ACTION_KIND.confirmAttendance,
 ];
 
-export function SessionCardAction({ model }: { model: SessionCardModel }) {
+interface SessionCardActionProps {
+  model: SessionCardModel;
+}
+
+export function SessionCardAction({ model }: SessionCardActionProps) {
   const { action } = model;
   if (!action) return null;
 

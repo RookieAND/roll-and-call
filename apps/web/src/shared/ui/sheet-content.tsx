@@ -4,7 +4,12 @@ import { Dialog } from "@base-ui-components/react/dialog";
 import { cn } from "@trpg/ui";
 import type { ReactNode } from "react";
 
-export function SheetContent({ children, className }: { children: ReactNode; className?: string }) {
+interface SheetContentProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function SheetContent({ children, className }: SheetContentProps) {
   return (
     <Dialog.Portal>
       <Dialog.Backdrop className="fixed inset-0 z-40 bg-dim" />

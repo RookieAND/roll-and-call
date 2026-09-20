@@ -26,7 +26,12 @@ const TONE_ICON: Record<SessionTone, typeof Check | null> = {
   [SESSION_TONE.hint]: null,
 };
 
-export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebrow?: string }) {
+interface SessionCardProps {
+  model: SessionCardModel;
+  eyebrow?: string;
+}
+
+export function SessionCard({ model, eyebrow }: SessionCardProps) {
   const cardClass = model.urgent
     ? "border-[1.5px] border-danger-300 bg-danger-50"
     : "border border-gray-200";

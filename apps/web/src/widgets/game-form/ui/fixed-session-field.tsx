@@ -9,13 +9,12 @@ import { DateTimePicker } from "@/shared/ui";
 
 import { defaultEndDateForSession } from "../model/default-end-date-for-session";
 
-export function FixedSessionField({
-  form,
-  notice,
-}: {
+interface FixedSessionFieldProps {
   form: UseFormReturn<GameFormValues>;
   notice?: string | null;
-}) {
+}
+
+export function FixedSessionField({ form, notice }: FixedSessionFieldProps) {
   const { control, getValues, setValue, formState } = form;
   const error = formState.errors.confirmedAt;
 

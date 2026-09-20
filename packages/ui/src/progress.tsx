@@ -14,11 +14,11 @@ const fill = cva("h-full rounded-100", {
   defaultVariants: { color: "recruiting" },
 });
 
-export type ProgressProps = VariantProps<typeof fill> & {
+export interface ProgressProps extends VariantProps<typeof fill> {
   value: number;
   max?: number;
   className?: string;
-};
+}
 
 export function Progress({ value, max = 100, color, className }: ProgressProps) {
   const percent = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;

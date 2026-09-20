@@ -6,13 +6,12 @@ import type { ReactNode } from "react";
 
 import { signOut } from "../api/sign-out";
 
-export function SignOutButton({
-  className,
-  children = "로그아웃",
-}: {
+interface SignOutButtonProps {
   className?: string;
   children?: ReactNode;
-}) {
+}
+
+export function SignOutButton({ className, children = "로그아웃" }: SignOutButtonProps) {
   const router = useRouter();
 
   async function handleSignOut() {

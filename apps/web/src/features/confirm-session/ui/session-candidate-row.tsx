@@ -5,17 +5,19 @@ import type { SessionWindow } from "@/entities/availability";
 
 import { sessionWindowLabel } from "../model/session-window-label";
 
+interface SessionCandidateRowProps {
+  candidate: SessionWindow;
+  playMinutes: number;
+  absentNames: string[];
+  onPick: (iso: string) => void;
+}
+
 export function SessionCandidateRow({
   candidate,
   playMinutes,
   absentNames,
   onPick,
-}: {
-  candidate: SessionWindow;
-  playMinutes: number;
-  absentNames: string[];
-  onPick: (iso: string) => void;
-}) {
+}: SessionCandidateRowProps) {
   const everyone = absentNames.length === 0;
   const detail = everyone
     ? `${candidate.members.length}명 전원 가능`

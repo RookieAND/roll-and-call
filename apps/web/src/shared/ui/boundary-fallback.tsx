@@ -9,16 +9,18 @@ import { ErrorScreen } from "./error-screen";
 import { InlineRetry } from "./inline-retry";
 import { reportError } from "./report-error";
 
+interface BoundaryFallbackProps {
+  error: unknown;
+  retry: () => void;
+  display?: ErrorDisplay;
+}
+
 // toast 경계는 자동 reset 대신 재시도 버튼을 둔다. 렌더 중 매번 나는 에러면 reset이 무한 반복되기 때문이다.
 export function BoundaryFallback({
   error,
   retry,
   display = ERROR_DISPLAY.page,
-}: {
-  error: unknown;
-  retry: () => void;
-  display?: ErrorDisplay;
-}) {
+}: BoundaryFallbackProps) {
   const errorDisplay = error instanceof AppError ? error.display : display;
   const showsToast = errorDisplay === ERROR_DISPLAY.toast;
   const escalates = display === ERROR_DISPLAY.toast && errorDisplay === ERROR_DISPLAY.page;

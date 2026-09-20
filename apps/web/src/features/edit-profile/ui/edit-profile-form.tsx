@@ -18,6 +18,15 @@ import { AvailabilitySummaryField } from "./availability-summary-field";
 import { AvatarRefreshField } from "./avatar-refresh-field";
 import { ProfileLinksField } from "./profile-links-field";
 
+interface EditProfileFormProps {
+  defaultUsername: string;
+  defaultBio?: string;
+  defaultKeywords?: string[];
+  defaultLinks?: ProfileLink[];
+  availability?: AvailabilityInterval[];
+  avatarUrl?: string | null;
+}
+
 export function EditProfileForm({
   defaultUsername,
   defaultBio = "",
@@ -25,14 +34,7 @@ export function EditProfileForm({
   defaultLinks = [],
   availability = [],
   avatarUrl,
-}: {
-  defaultUsername: string;
-  defaultBio?: string;
-  defaultKeywords?: string[];
-  defaultLinks?: ProfileLink[];
-  availability?: AvailabilityInterval[];
-  avatarUrl?: string | null;
-}) {
+}: EditProfileFormProps) {
   const router = useRouter();
   const [username, setUsername] = useState(defaultUsername);
   const [bio, setBio] = useState(defaultBio);

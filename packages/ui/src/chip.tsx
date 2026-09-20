@@ -28,10 +28,9 @@ const chip = cva(
   },
 );
 
-export type ChipProps = ComponentPropsWithRef<"button"> &
-  VariantProps<typeof chip> & {
-    asChild?: boolean;
-  };
+export interface ChipProps extends ComponentPropsWithRef<"button">, VariantProps<typeof chip> {
+  asChild?: boolean;
+}
 
 export function Chip({
   shape,

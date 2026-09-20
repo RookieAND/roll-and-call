@@ -28,11 +28,10 @@ const button = cva(
   },
 );
 
-export type ButtonProps = ComponentPropsWithRef<"button"> &
-  VariantProps<typeof button> & {
-    loading?: boolean;
-    asChild?: boolean;
-  };
+export interface ButtonProps extends ComponentPropsWithRef<"button">, VariantProps<typeof button> {
+  loading?: boolean;
+  asChild?: boolean;
+}
 
 export function Button({
   variant,

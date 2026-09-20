@@ -14,7 +14,7 @@ const card = cva("border border-gray-200", {
   defaultVariants: { radius: 600, background: "surface", padding: "md", interactive: false },
 });
 
-export type CardProps = ComponentPropsWithRef<"div"> & VariantProps<typeof card>;
+export interface CardProps extends ComponentPropsWithRef<"div">, VariantProps<typeof card> {}
 
 export function Card({ radius, background, padding, interactive, className, ...props }: CardProps) {
   return (

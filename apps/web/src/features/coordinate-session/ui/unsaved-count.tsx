@@ -1,6 +1,10 @@
 import { Text } from "@trpg/ui";
 
-export function UnsavedCount({ count }: { count: number }) {
+interface UnsavedCountProps {
+  count: number;
+}
+
+export function UnsavedCount({ count }: UnsavedCountProps) {
   return (
     <Text typography="subtitle2" weight="medium" foreground="warning" numeric render={<span />}>
       · 저장하지 않음 {count}칸

@@ -5,8 +5,12 @@ import { Children, useState, type ReactNode } from "react";
 
 const PREVIEW_COUNT = 3;
 
+interface ExpandableRowsProps {
+  children: ReactNode;
+}
+
 // 긴 명단은 세 줄만 펴 둔다. 목록 테두리 안에서 열리므로 더 보기도 행처럼 그린다.
-export function ExpandableRows({ children }: { children: ReactNode }) {
+export function ExpandableRows({ children }: ExpandableRowsProps) {
   const [expanded, setExpanded] = useState(false);
   const rows = Children.toArray(children);
   const shown = expanded ? rows : rows.slice(0, PREVIEW_COUNT);

@@ -13,8 +13,12 @@ import { BrandMark } from "./brand-mark";
 const ICON_CLASS =
   "flex h-11 w-11 items-center justify-center rounded-500 border border-gray-200 text-gray-700";
 
+interface ProfileLinksProps {
+  links: readonly ProfileLink[];
+}
+
 // 내 화면이든 남의 화면이든 44px 아이콘 한 줄. 이름과 주소는 aria-label과 누름으로 나온다.
-export function ProfileLinks({ links }: { links: readonly ProfileLink[] }) {
+export function ProfileLinks({ links }: ProfileLinksProps) {
   if (links.length === 0) {
     return (
       <HStack

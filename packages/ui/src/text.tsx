@@ -49,10 +49,9 @@ const text = cva("", {
   defaultVariants: { typography: "body2", foreground: "normal" },
 });
 
-export type TextProps = ComponentPropsWithRef<"span"> &
-  VariantProps<typeof text> & {
-    render?: ReactElement<Record<string, unknown>>;
-  };
+export interface TextProps extends ComponentPropsWithRef<"span">, VariantProps<typeof text> {
+  render?: ReactElement<Record<string, unknown>>;
+}
 
 export function Text({
   typography,

@@ -4,16 +4,14 @@ import type { ReactNode } from "react";
 
 import type { ManagedMember } from "../model/managed-member";
 
-// 행을 누르면 언제나 프로필이다. 명단 조작은 오른쪽 ⋯ 한 곳에만 둔다.
-export function MemberProfileLink({
-  member,
-  rank,
-  note,
-}: {
+interface MemberProfileLinkProps {
   member: ManagedMember;
   rank?: number | null;
   note: ReactNode;
-}) {
+}
+
+// 행을 누르면 언제나 프로필이다. 명단 조작은 오른쪽 ⋯ 한 곳에만 둔다.
+export function MemberProfileLink({ member, rank, note }: MemberProfileLinkProps) {
   return (
     <Link
       href={`/u/${member.userId}`}

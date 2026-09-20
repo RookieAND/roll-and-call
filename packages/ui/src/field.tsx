@@ -5,7 +5,7 @@ import { FieldDescription } from "./field-description";
 import { FieldError } from "./field-error";
 import { FieldLabel } from "./field-label";
 
-export type FieldProps = {
+export interface FieldProps {
   label?: string;
   counter?: ReactNode;
   description?: string;
@@ -14,7 +14,7 @@ export type FieldProps = {
   htmlFor?: string;
   className?: string;
   children: ReactNode;
-};
+}
 
 export function Field({
   label,

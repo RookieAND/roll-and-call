@@ -4,17 +4,14 @@ import { Text } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
-export function WizardHeader({
-  step,
-  total,
-  title,
-  onBack,
-}: {
+interface WizardHeaderProps {
   step: number;
   total: number;
   title: string;
   onBack: () => void;
-}) {
+}
+
+export function WizardHeader({ step, total, title, onBack }: WizardHeaderProps) {
   return (
     <>
       <AppBar

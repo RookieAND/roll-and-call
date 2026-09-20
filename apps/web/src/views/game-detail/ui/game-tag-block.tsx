@@ -1,16 +1,13 @@
 import { Chip, HStack, Text, VStack, type ChipProps } from "@trpg/ui";
 
-export function GameTagBlock({
-  label,
-  tags,
-  note,
-  tone = "outline",
-}: {
+interface GameTagBlockProps {
   label: string;
   tags: string[];
   note?: string;
   tone?: ChipProps["tone"];
-}) {
+}
+
+export function GameTagBlock({ label, tags, note, tone = "outline" }: GameTagBlockProps) {
   return (
     <VStack gap="100">
       <Text typography="heading3" render={<h2 />}>

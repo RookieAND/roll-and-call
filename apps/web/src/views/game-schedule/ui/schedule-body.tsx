@@ -17,7 +17,7 @@ import { ScheduleOverlapEmpty } from "./schedule-overlap-empty";
 import { ScheduleTabs } from "./schedule-tabs";
 import { WeekPager } from "./week-pager";
 
-type Props = {
+interface ScheduleBodyProps {
   gameId: string;
   days: DayColumn[];
   timeRows: TimeRow[];
@@ -31,7 +31,7 @@ type Props = {
   gmName?: string;
   prefill: { keys: string[]; label: string } | null;
   deadlinePassed: boolean;
-};
+}
 
 export function ScheduleBody({
   gameId,
@@ -46,7 +46,7 @@ export function ScheduleBody({
   gmName,
   prefill,
   deadlinePassed,
-}: Props) {
+}: ScheduleBodyProps) {
   const { data } = useQuery({ ...availabilityQuery(gameId), initialData: initialAvailability });
   const { aggregate, blocked } = data;
 

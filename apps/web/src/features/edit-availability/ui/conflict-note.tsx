@@ -1,7 +1,11 @@
 import { HStack, Text } from "@trpg/ui";
 import { CircleAlert } from "lucide-react";
 
-export function ConflictNote({ message }: { message?: string }) {
+interface ConflictNoteProps {
+  message?: string;
+}
+
+export function ConflictNote({ message }: ConflictNoteProps) {
   if (!message) return null;
 
   return (

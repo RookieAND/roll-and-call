@@ -5,14 +5,14 @@ import type { ReactElement, ReactNode } from "react";
 
 import { cn } from "./cn";
 
-export type TooltipProps = {
+export interface TooltipProps {
   content: ReactNode;
   // rendered as-is (no wrapper button) so it can sit inside links
   children: ReactElement<Record<string, unknown>>;
   side?: "top" | "bottom" | "left" | "right";
   delay?: number;
   className?: string;
-};
+}
 
 // ponytail: Base UI tooltips don't open on touch; move to Popover if mobile needs tap-to-reveal.
 export function Tooltip({ content, children, side = "top", delay = 300, className }: TooltipProps) {

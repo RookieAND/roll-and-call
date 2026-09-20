@@ -3,7 +3,11 @@ import { Text } from "@trpg/ui";
 import { LoginButton } from "@/features/auth";
 import { StatusNotice } from "@/shared/ui";
 
-export function ParticipantsOnlyNotice({ isSignedIn }: { isSignedIn: boolean }) {
+interface ParticipantsOnlyNoticeProps {
+  isSignedIn: boolean;
+}
+
+export function ParticipantsOnlyNotice({ isSignedIn }: ParticipantsOnlyNoticeProps) {
   return (
     <StatusNotice tone="muted">
       <Text typography="subtitle2" render={<p />}>

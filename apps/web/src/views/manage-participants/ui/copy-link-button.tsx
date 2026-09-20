@@ -4,7 +4,11 @@ import { Button } from "@trpg/ui";
 
 import { toast } from "@/shared/ui";
 
-export function CopyLinkButton({ gameId }: { gameId: string }) {
+interface CopyLinkButtonProps {
+  gameId: string;
+}
+
+export function CopyLinkButton({ gameId }: CopyLinkButtonProps) {
   async function copy() {
     try {
       await navigator.clipboard.writeText(`${window.location.origin}/games/${gameId}`);

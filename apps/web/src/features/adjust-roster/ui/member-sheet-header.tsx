@@ -2,13 +2,12 @@ import { Avatar, HStack, Text, VStack, cn } from "@trpg/ui";
 
 import type { MemberSummary } from "../model/member-summary";
 
-export function MemberSheetHeader({
-  member,
-  isCoordinate,
-}: {
+interface MemberSheetHeaderProps {
   member: MemberSummary;
   isCoordinate: boolean;
-}) {
+}
+
+export function MemberSheetHeader({ member, isCoordinate }: MemberSheetHeaderProps) {
   const queue = member.waitlistRank === null ? "확정" : `대기 ${member.waitlistRank}번`;
   const availability = member.hasAvailability ? "가능 시간 제출" : "가능 시간 미제출";
   const unsubmitted = isCoordinate && !member.hasAvailability;

@@ -9,12 +9,12 @@ import { toDateKey } from "./to-date-key";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
-export type CalendarProps = {
+export interface CalendarProps {
   value?: string;
   onSelect: (date: string) => void;
   min?: string;
   max?: string;
-};
+}
 
 export function Calendar({ value, onSelect, min, max }: CalendarProps) {
   const today = new Date();

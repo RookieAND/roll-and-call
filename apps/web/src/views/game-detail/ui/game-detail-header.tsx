@@ -2,16 +2,14 @@ import { Badge, HStack, Text, cn } from "@trpg/ui";
 
 import { GameStatusBadge, type GameStatus, type ScheduleLine } from "@/entities/game";
 
-// 마감은 배지가 맡고, 상태 줄은 일정만 말한다.
-export function GameDetailHeader({
-  title,
-  status,
-  statusLine,
-}: {
+interface GameDetailHeaderProps {
   title: string;
   status: GameStatus;
   statusLine: ScheduleLine;
-}) {
+}
+
+// 마감은 배지가 맡고, 상태 줄은 일정만 말한다.
+export function GameDetailHeader({ title, status, statusLine }: GameDetailHeaderProps) {
   return (
     <div>
       <HStack justify="between" align="start" gap="100">

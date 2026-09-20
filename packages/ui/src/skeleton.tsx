@@ -24,12 +24,12 @@ const skeleton = cva("animate-[shimmer_1.3s_ease-in-out_infinite] bg-gray-100", 
 // 연속값이라 레시피로 못 묶으므로 숫자는 px, 문자열은 CSS 길이로 그대로 쓴다.
 type Size = number | string;
 
-export type SkeletonProps = VariantProps<typeof skeleton> & {
+export interface SkeletonProps extends VariantProps<typeof skeleton> {
   width?: Size;
   height?: Size;
   className?: string;
   style?: CSSProperties;
-};
+}
 
 const length = (value: Size | undefined) => (typeof value === "number" ? `${value}px` : value);
 

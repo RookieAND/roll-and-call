@@ -4,7 +4,11 @@ import { SessionCard } from "@/widgets/session-list";
 
 import type { TodoItem } from "../model/session-todos";
 
-export function MyPageTodos({ todos }: { todos: TodoItem[] }) {
+interface MyPageTodosProps {
+  todos: TodoItem[];
+}
+
+export function MyPageTodos({ todos }: MyPageTodosProps) {
   return (
     <section className="flex flex-col gap-125">
       <Text typography="heading3" render={<h2 />}>

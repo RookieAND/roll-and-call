@@ -18,7 +18,7 @@ import { JoinableActions } from "./joinable-actions";
 import { JoinedActions } from "./joined-actions";
 import { WaitingActions } from "./waiting-actions";
 
-export type GameActionZoneProps = {
+export interface GameActionZoneProps {
   game: GameDetailData;
   viewerId: string | null;
   isGm: boolean;
@@ -28,7 +28,7 @@ export type GameActionZoneProps = {
   viewerResponded: boolean;
   status: GameStatus;
   canSchedule: boolean;
-};
+}
 
 export function GameActionZone({
   game,

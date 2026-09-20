@@ -8,7 +8,11 @@ import { useRouter } from "next/navigation";
 import { BACK_BUTTON_CLASS } from "./back-button-class";
 import { navigationHistory } from "./navigation-history";
 
-export function BackButton({ fallback }: { fallback: string }) {
+interface BackButtonProps {
+  fallback: string;
+}
+
+export function BackButton({ fallback }: BackButtonProps) {
   const router = useRouter();
 
   return (

@@ -10,11 +10,11 @@ export type GameEditContext = {
   confirmedCount: number;
 };
 
-export type GameFormLayoutProps = {
+export interface GameFormLayoutProps {
   form: UseFormReturn<GameFormValues>;
   pending: boolean;
   submitLabel: string;
   onValid: (values: GameFormValues) => void;
   steps: readonly WizardStepConfig[];
   edit?: GameEditContext;
-};
+}

@@ -3,15 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-export function ErrorScreen({
-  title,
-  description,
-  action,
-}: {
+interface ErrorScreenProps {
   title: ReactNode;
   description?: ReactNode;
   action?: ReactNode;
-}) {
+}
+
+export function ErrorScreen({ title, description, action }: ErrorScreenProps) {
   return (
     <VStack gap="250" className="min-h-[70vh] items-center justify-center px-250 text-center">
       <Image src="/empty-states/empty-error.png" alt="" width={140} height={140} aria-hidden />

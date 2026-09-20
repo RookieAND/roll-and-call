@@ -1,7 +1,11 @@
 import { HStack, Text } from "@trpg/ui";
 
+interface KeywordChipsProps {
+  keywords: readonly string[];
+}
+
 // 지금은 누르지 않는다. 같은 성향으로 사람을 찾는 화면이 없고, 구인 태그와 섞이면 같은 모양이 둘을 뜻한다.
-export function KeywordChips({ keywords }: { keywords: readonly string[] }) {
+export function KeywordChips({ keywords }: KeywordChipsProps) {
   if (keywords.length === 0) {
     return (
       <HStack

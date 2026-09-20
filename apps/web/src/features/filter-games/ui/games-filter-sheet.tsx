@@ -13,7 +13,11 @@ import { gamesHref } from "../lib/games-href";
 import { SelectedSortOptionRow } from "./selected-sort-option-row";
 import { SortOptionRow } from "./sort-option-row";
 
-export function GamesFilterSheet({ filter }: { filter: GamesFilter }) {
+interface GamesFilterSheetProps {
+  filter: GamesFilter;
+}
+
+export function GamesFilterSheet({ filter }: GamesFilterSheetProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const current = parseGameSort(filter.sort);

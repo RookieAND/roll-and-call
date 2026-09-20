@@ -11,14 +11,14 @@ import { Spoiler } from "./spoiler";
 
 const EDITOR_CLASS = "rich-text min-h-24 py-125 outline-none";
 
-export type RichTextEditorProps = {
+export interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
   limit?: number;
   invalid?: boolean;
   id?: string;
   className?: string;
-};
+}
 
 export function RichTextEditor({
   value,

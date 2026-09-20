@@ -4,13 +4,12 @@ import type { Attendee } from "../model/attendee";
 import { AttendanceResultRow } from "./attendance-result-row";
 import { ReopenAttendanceButton } from "./reopen-attendance-button";
 
-export function ConfirmedAttendance({
-  gameId,
-  attendees,
-}: {
+interface ConfirmedAttendanceProps {
   gameId: string;
   attendees: Attendee[];
-}) {
+}
+
+export function ConfirmedAttendance({ gameId, attendees }: ConfirmedAttendanceProps) {
   return (
     <VStack gap="150">
       <Card radius={500} background="none" padding="none" className="overflow-hidden">

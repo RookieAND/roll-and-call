@@ -1,7 +1,11 @@
 import { HStack, Text } from "@trpg/ui";
 import { CircleAlert } from "lucide-react";
 
-export function UnavailableWarning({ names }: { names: string[] }) {
+interface UnavailableWarningProps {
+  names: string[];
+}
+
+export function UnavailableWarning({ names }: UnavailableWarningProps) {
   return (
     <HStack gap="100" className="border-t border-notice-border bg-notice-bg px-175 py-150">
       <CircleAlert size={14} className="mt-025 shrink-0 text-notice-ink" aria-hidden />

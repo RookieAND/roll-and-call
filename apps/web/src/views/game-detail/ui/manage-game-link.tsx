@@ -4,7 +4,11 @@ import Link from "next/link";
 
 import { ACTION_PRIMARY_CLASS } from "./action-class-names";
 
-export function ManageGameLink({ gameId }: { gameId: string }) {
+interface ManageGameLinkProps {
+  gameId: string;
+}
+
+export function ManageGameLink({ gameId }: ManageGameLinkProps) {
   return (
     <Button asChild variant="tinted" className={ACTION_PRIMARY_CLASS}>
       <Link href={`/games/${gameId}/manage`}>

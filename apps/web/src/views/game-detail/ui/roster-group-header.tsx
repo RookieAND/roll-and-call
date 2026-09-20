@@ -1,17 +1,14 @@
 import { HStack, Text } from "@trpg/ui";
 import type { ReactNode } from "react";
 
-export function RosterGroupHeader({
-  label,
-  count,
-  capacity,
-  action,
-}: {
+interface RosterGroupHeaderProps {
   label: string;
   count: number;
   capacity?: number;
   action?: ReactNode;
-}) {
+}
+
+export function RosterGroupHeader({ label, count, capacity, action }: RosterGroupHeaderProps) {
   return (
     <HStack align="center" gap="100">
       <Text typography="heading3" render={<h2 />}>

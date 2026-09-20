@@ -4,7 +4,11 @@ import { HELP_BLOCK, type HelpBlock } from "../model/help-docs";
 import { HelpFigure } from "./help-figure";
 import { HelpRow } from "./help-row";
 
-export function HelpDocBlock({ block }: { block: HelpBlock }) {
+interface HelpDocBlockProps {
+  block: HelpBlock;
+}
+
+export function HelpDocBlock({ block }: HelpDocBlockProps) {
   if (block.kind === HELP_BLOCK.figure) {
     return <HelpFigure figure={block.figure} />;
   }

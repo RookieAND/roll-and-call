@@ -5,7 +5,11 @@ import { toKst } from "@/shared/lib";
 
 import type { CalendarSession } from "../model/to-calendar-sessions";
 
-export function HomeSessionCard({ session }: { session: CalendarSession }) {
+interface HomeSessionCardProps {
+  session: CalendarSession;
+}
+
+export function HomeSessionCard({ session }: HomeSessionCardProps) {
   const time = toKst(session.startsAt).format("HH:mm");
   const full = session.players.length >= session.maxPlayers;
   const cardTone = session.mine

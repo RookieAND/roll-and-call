@@ -1,6 +1,10 @@
 import { Text } from "@trpg/ui";
 
-export function CapacityLabel({ text }: { text: string }) {
+interface CapacityLabelProps {
+  text: string;
+}
+
+export function CapacityLabel({ text }: CapacityLabelProps) {
   return (
     <Text typography="body4" weight="medium" foreground="muted" numeric>
       {text}

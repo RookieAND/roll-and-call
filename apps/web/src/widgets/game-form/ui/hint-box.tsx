@@ -1,7 +1,12 @@
 import { HStack, Text } from "@trpg/ui";
 import { Fragment, type ReactNode } from "react";
 
-export function HintBox({ icon, lines }: { icon?: ReactNode; lines: readonly string[] }) {
+interface HintBoxProps {
+  icon?: ReactNode;
+  lines: readonly string[];
+}
+
+export function HintBox({ icon, lines }: HintBoxProps) {
   return (
     <HStack
       align="start"

@@ -2,13 +2,12 @@ import { HStack, Text } from "@trpg/ui";
 
 import { type AvailabilityInterval, formatInterval } from "../model/availability";
 
-export function AvailabilityDayRow({
-  label,
-  intervals,
-}: {
+interface AvailabilityDayRowProps {
   label: string;
   intervals: readonly AvailabilityInterval[];
-}) {
+}
+
+export function AvailabilityDayRow({ label, intervals }: AvailabilityDayRowProps) {
   return (
     <HStack
       align="center"

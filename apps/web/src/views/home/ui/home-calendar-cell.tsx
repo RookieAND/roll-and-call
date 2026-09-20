@@ -9,18 +9,15 @@ import { CALENDAR_CELL_TONE, calendarCellState } from "../model/calendar-cell-to
 import type { CalendarSession } from "../model/to-calendar-sessions";
 import { WEEKDAY_TONE } from "../model/weekday-tone";
 
-// ponytail: 달력 칸은 버튼·칩 프리미티브와 모양이 달라 Link를 직접 칠한다.
-export function HomeCalendarCell({
-  cell,
-  sessions,
-  selected,
-  today,
-}: {
+interface HomeCalendarCellProps {
   cell: MonthCell;
   sessions: CalendarSession[];
   selected: boolean;
   today: boolean;
-}) {
+}
+
+// ponytail: 달력 칸은 버튼·칩 프리미티브와 모양이 달라 Link를 직접 칠한다.
+export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalendarCellProps) {
   const preview = sessions.find((session) => session.mine) ?? sessions[0];
   const restCount = sessions.length - 1;
   const ariaLabel = sessions.length > 0 ? `${cell.label} 세션 ${sessions.length}건` : cell.label;

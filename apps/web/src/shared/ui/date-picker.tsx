@@ -10,7 +10,7 @@ import { formatPickerDate } from "./format-picker-date";
 const triggerClass =
   "flex h-11 w-full items-center justify-between gap-100 rounded-400 border bg-surface px-150 text-left text-sm outline-none transition-colors focus:ring-2";
 
-export type DatePickerProps = {
+export interface DatePickerProps {
   value?: string;
   onChange: (date: string) => void;
   placeholder?: string;
@@ -18,7 +18,7 @@ export type DatePickerProps = {
   invalid?: boolean;
   min?: string;
   max?: string;
-};
+}
 
 export function DatePicker({
   value,

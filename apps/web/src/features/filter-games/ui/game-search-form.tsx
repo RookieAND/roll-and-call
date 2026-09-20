@@ -10,7 +10,11 @@ import type { GamesFilter } from "@/shared/api";
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
 
-export function GameSearchForm({ filter }: { filter: GamesFilter }) {
+interface GameSearchFormProps {
+  filter: GamesFilter;
+}
+
+export function GameSearchForm({ filter }: GameSearchFormProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [value, setValue] = useState(filter.q ?? "");

@@ -28,12 +28,12 @@ const flex = cva("", {
   defaultVariants: { direction: "row", inline: false },
 });
 
-export type FlexProps = ComponentPropsWithRef<"div"> &
-  Omit<VariantProps<typeof flex>, "inline"> & {
-    inline?: boolean;
-    // 간격만 레시피 밖이다. 토큰 이름을 그대로 클래스에 얹는 정적 맵이라 스캐너가 본다.
-    gap?: GapToken;
-  };
+export interface FlexProps
+  extends ComponentPropsWithRef<"div">, Omit<VariantProps<typeof flex>, "inline"> {
+  inline?: boolean;
+  // 간격만 레시피 밖이다. 토큰 이름을 그대로 클래스에 얹는 정적 맵이라 스캐너가 본다.
+  gap?: GapToken;
+}
 
 export function Flex({
   className,
@@ -57,4 +57,4 @@ export function Flex({
   );
 }
 
-export type StackProps = Omit<FlexProps, "direction">;
+export interface StackProps extends Omit<FlexProps, "direction"> {}

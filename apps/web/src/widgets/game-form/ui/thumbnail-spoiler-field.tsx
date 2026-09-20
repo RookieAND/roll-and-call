@@ -2,13 +2,12 @@
 
 import { Switch, Text, cn } from "@trpg/ui";
 
-export function ThumbnailSpoilerField({
-  value,
-  onChange,
-}: {
+interface ThumbnailSpoilerFieldProps {
   value: boolean;
   onChange: (spoiler: boolean) => void;
-}) {
+}
+
+export function ThumbnailSpoilerField({ value, onChange }: ThumbnailSpoilerFieldProps) {
   return (
     <div
       className={cn(

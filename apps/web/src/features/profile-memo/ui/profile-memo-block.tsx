@@ -4,13 +4,12 @@ import Link from "next/link";
 
 import { formatDate } from "@/shared/lib";
 
-export function ProfileMemoBlock({
-  targetId,
-  memo,
-}: {
+interface ProfileMemoBlockProps {
   targetId: string;
   memo: { body: string; updatedAt: Date } | null;
-}) {
+}
+
+export function ProfileMemoBlock({ targetId, memo }: ProfileMemoBlockProps) {
   const boxClass = memo
     ? "rounded-500 border border-gray-200 bg-gray-50 p-175"
     : "rounded-500 border border-dashed border-gray-300 p-175";

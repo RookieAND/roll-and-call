@@ -3,12 +3,12 @@ import Link from "next/link";
 
 import { type AvailabilityInterval, filledDays, formatInterval } from "@/entities/profile";
 
-// 조율 격자에 들어가는 값이라 전용 화면에서 고친다. 폼에는 지금 값과 "수정하기" 한 줄만 둔다.
-export function AvailabilitySummaryField({
-  intervals,
-}: {
+interface AvailabilitySummaryFieldProps {
   intervals: readonly AvailabilityInterval[];
-}) {
+}
+
+// 조율 격자에 들어가는 값이라 전용 화면에서 고친다. 폼에는 지금 값과 "수정하기" 한 줄만 둔다.
+export function AvailabilitySummaryField({ intervals }: AvailabilitySummaryFieldProps) {
   const days = filledDays(intervals);
 
   return (

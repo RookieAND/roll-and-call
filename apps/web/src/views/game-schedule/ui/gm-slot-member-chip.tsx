@@ -1,6 +1,10 @@
 import { Avatar, Badge, HStack, Text } from "@trpg/ui";
 
-export function GmSlotMemberChip({ name }: { name: string }) {
+interface GmSlotMemberChipProps {
+  name: string;
+}
+
+export function GmSlotMemberChip({ name }: GmSlotMemberChipProps) {
   return (
     <HStack
       align="center"

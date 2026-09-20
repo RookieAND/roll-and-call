@@ -7,13 +7,12 @@ import { toast, useAction } from "@/shared/ui";
 
 import { refreshAvatar } from "../api/refresh-avatar";
 
-export function AvatarRefreshField({
-  defaultUrl,
-  name,
-}: {
+interface AvatarRefreshFieldProps {
   defaultUrl?: string | null;
   name: string;
-}) {
+}
+
+export function AvatarRefreshField({ defaultUrl, name }: AvatarRefreshFieldProps) {
   const [url, setUrl] = useState(defaultUrl ?? null);
   const { pending, run } = useAction();
 

@@ -4,7 +4,11 @@ import { ListOrdered, Trophy } from "lucide-react";
 import { RECRUIT_METHOD } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 
-export function GameRecruitMethodSection({ game }: { game: GameDetailData }) {
+interface GameRecruitMethodSectionProps {
+  game: GameDetailData;
+}
+
+export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps) {
   const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
   const Icon = isLottery ? Trophy : ListOrdered;
   const lines = isLottery

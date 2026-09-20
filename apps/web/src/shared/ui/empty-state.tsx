@@ -2,6 +2,15 @@ import { Text, VStack, cn } from "@trpg/ui";
 import Image from "next/image";
 import type { ReactNode } from "react";
 
+interface EmptyStateProps {
+  image?: string;
+  size?: "full" | "section";
+  title: ReactNode;
+  description?: ReactNode;
+  action?: ReactNode;
+  className?: string;
+}
+
 // 일러스트는 장식이라 alt="": 제목이 이미 같은 말을 한다.
 export function EmptyState({
   image,
@@ -10,14 +19,7 @@ export function EmptyState({
   description,
   action,
   className,
-}: {
-  image?: string;
-  size?: "full" | "section";
-  title: ReactNode;
-  description?: ReactNode;
-  action?: ReactNode;
-  className?: string;
-}) {
+}: EmptyStateProps) {
   const imagePx = size === "full" ? 140 : 104;
   return (
     <VStack

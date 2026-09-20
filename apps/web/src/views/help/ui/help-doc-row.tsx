@@ -2,7 +2,12 @@ import { Text } from "@trpg/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export function HelpDocRow({ slug, title }: { slug: string; title: string }) {
+interface HelpDocRowProps {
+  slug: string;
+  title: string;
+}
+
+export function HelpDocRow({ slug, title }: HelpDocRowProps) {
   return (
     <Link
       href={`/help/${slug}`}

@@ -12,7 +12,11 @@ import { addInterval, removeAt, removeDay, setHour } from "../model/availability
 import { overlappingIntervals } from "../model/overlapping-intervals";
 import { AvailabilityDayEditor } from "./availability-day-editor";
 
-export function AvailabilityEditor({ defaultValue }: { defaultValue: AvailabilityInterval[] }) {
+interface AvailabilityEditorProps {
+  defaultValue: AvailabilityInterval[];
+}
+
+export function AvailabilityEditor({ defaultValue }: AvailabilityEditorProps) {
   const router = useRouter();
   const [intervals, setIntervals] = useState(defaultValue);
   const { pending, run } = useAction();

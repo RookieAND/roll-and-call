@@ -20,6 +20,18 @@ import { UnavailableWarning } from "./unavailable-warning";
 const CANDIDATE_LIMIT = 3;
 const DEFAULT_HOUR = 19;
 
+interface ConfirmSessionFormProps {
+  gameId: string;
+  days: DayColumn[];
+  rangeStart: string;
+  names: Record<string, string[]>;
+  playMinutes: number;
+  playLabel: string;
+  slotCount: number;
+  confirmedCount: number;
+  currentIso?: string | null;
+}
+
 export function ConfirmSessionForm({
   gameId,
   days,
@@ -30,17 +42,7 @@ export function ConfirmSessionForm({
   slotCount,
   confirmedCount,
   currentIso = null,
-}: {
-  gameId: string;
-  days: DayColumn[];
-  rangeStart: string;
-  names: Record<string, string[]>;
-  playMinutes: number;
-  playLabel: string;
-  slotCount: number;
-  confirmedCount: number;
-  currentIso?: string | null;
-}) {
+}: ConfirmSessionFormProps) {
   const candidates = rankWindows({ names, slotCount, limit: CANDIDATE_LIMIT });
   const respondents = [...new Set(Object.values(names).flat())];
   const changing = currentIso !== null;

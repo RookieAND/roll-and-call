@@ -5,8 +5,13 @@ const SIZES = {
   lg: { light: { width: 248, height: 61 }, dark: { width: 248, height: 64 } },
 } as const;
 
+interface BrandLogoProps {
+  label: string;
+  size?: keyof typeof SIZES;
+}
+
 // 워드마크가 두 장이라 테마 전환을 CSS로 맡긴다. JS로 고르면 첫 페인트에 반대 색이 번쩍인다.
-export function BrandLogo({ label, size = "sm" }: { label: string; size?: keyof typeof SIZES }) {
+export function BrandLogo({ label, size = "sm" }: BrandLogoProps) {
   const { light, dark } = SIZES[size];
 
   return (

@@ -7,16 +7,14 @@ import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { leaveGame } from "../api/leave-game";
 
-// 지금은 대기를 물릴 방법이 앱 안에 없어 구인 상세로 되돌아가야 한다. 목록에서 바로 끝낸다.
-export function CancelWaitlistButton({
-  gameId,
-  title,
-  className,
-}: {
+interface CancelWaitlistButtonProps {
   gameId: string;
   title: string;
   className?: string;
-}) {
+}
+
+// 지금은 대기를 물릴 방법이 앱 안에 없어 구인 상세로 되돌아가야 한다. 목록에서 바로 끝낸다.
+export function CancelWaitlistButton({ gameId, title, className }: CancelWaitlistButtonProps) {
   const [confirming, setConfirming] = useState(false);
   const { pending, run } = useAction();
 

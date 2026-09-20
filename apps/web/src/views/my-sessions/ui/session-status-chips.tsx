@@ -9,15 +9,13 @@ import {
   type SessionChipKey,
 } from "@/widgets/session-list";
 
-export function SessionStatusChips({
-  activeTab,
-  activeChip,
-  endedCount,
-}: {
+interface SessionStatusChipsProps {
   activeTab: SessionRole;
   activeChip: SessionChipKey;
   endedCount: number;
-}) {
+}
+
+export function SessionStatusChips({ activeTab, activeChip, endedCount }: SessionStatusChipsProps) {
   return (
     <HStack gap="075" className="overflow-x-auto px-200 py-125">
       {SESSION_CHIPS[activeTab].map((chip) => {

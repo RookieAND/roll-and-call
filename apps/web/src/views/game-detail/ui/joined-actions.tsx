@@ -2,6 +2,15 @@ import { leaveLock } from "../model/leave-locked-reason";
 import { LeaveableJoinedActions } from "./leaveable-joined-actions";
 import { LockedJoinedActions } from "./locked-joined-actions";
 
+interface JoinedActionsProps {
+  gameId: string;
+  canSchedule: boolean;
+  canLeave: boolean;
+  expired: boolean;
+  drawn: boolean;
+  viewerResponded: boolean;
+}
+
 export function JoinedActions({
   gameId,
   canSchedule,
@@ -9,14 +18,7 @@ export function JoinedActions({
   expired,
   drawn,
   viewerResponded,
-}: {
-  gameId: string;
-  canSchedule: boolean;
-  canLeave: boolean;
-  expired: boolean;
-  drawn: boolean;
-  viewerResponded: boolean;
-}) {
+}: JoinedActionsProps) {
   if (!canLeave) {
     return (
       <LockedJoinedActions

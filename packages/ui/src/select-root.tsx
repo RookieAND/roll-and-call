@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 
 import { SelectItemsContext, type SelectOption } from "./select-items-context";
 
-export type SelectRootProps = {
+export interface SelectRootProps {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
@@ -13,7 +13,7 @@ export type SelectRootProps = {
   name?: string;
   disabled?: boolean;
   children: ReactNode;
-};
+}
 
 export function SelectRoot({
   value,

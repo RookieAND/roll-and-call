@@ -3,13 +3,12 @@ import { HStack, Text } from "@trpg/ui";
 import { AbsentCount } from "./absent-count";
 import { NoAbsenceCount } from "./no-absence-count";
 
-export function AttendanceTally({
-  presentCount,
-  absentCount,
-}: {
+interface AttendanceTallyProps {
   presentCount: number;
   absentCount: number;
-}) {
+}
+
+export function AttendanceTally({ presentCount, absentCount }: AttendanceTallyProps) {
   return (
     <HStack gap="100" align="center" className="px-025">
       <Text typography="subtitle1" foreground="muted">

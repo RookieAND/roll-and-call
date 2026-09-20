@@ -11,6 +11,16 @@ import { DAY_MS } from "../model/second-round";
 import { RoundInheritedList } from "./round-inherited-list";
 import { RoundRangeFields } from "./round-range-fields";
 
+interface RoundSheetProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  gameId: string;
+  title: string;
+  waitingCount: number;
+  maxPlayers: number;
+  confirmedAt: Date | null;
+}
+
 export function RoundSheet({
   open,
   onOpenChange,
@@ -19,15 +29,7 @@ export function RoundSheet({
   waitingCount,
   maxPlayers,
   confirmedAt,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  gameId: string;
-  title: string;
-  waitingCount: number;
-  maxPlayers: number;
-  confirmedAt: Date | null;
-}) {
+}: RoundSheetProps) {
   const { pending, run } = useAction();
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");

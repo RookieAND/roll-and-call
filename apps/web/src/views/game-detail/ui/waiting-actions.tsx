@@ -7,17 +7,19 @@ import { ActionPair } from "./action-pair";
 import { ScheduleLink } from "./schedule-link";
 import { WaitlistRankNotice } from "./waitlist-rank-notice";
 
+interface WaitingActionsProps {
+  gameId: string;
+  canSchedule: boolean;
+  waitlistRank: number | null;
+  pendingDraw: boolean;
+}
+
 export function WaitingActions({
   gameId,
   canSchedule,
   waitlistRank,
   pendingDraw,
-}: {
-  gameId: string;
-  canSchedule: boolean;
-  waitlistRank: number | null;
-  pendingDraw: boolean;
-}) {
+}: WaitingActionsProps) {
   return (
     <VStack gap="125">
       <WaitlistRankNotice

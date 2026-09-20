@@ -6,7 +6,11 @@ import { GAME_STATUS_FILTERS, GAME_STATUS_FILTER_DEFAULT, type GamesFilter } fro
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
 
-export function GameStatusChips({ filter }: { filter: GamesFilter }) {
+interface GameStatusChipsProps {
+  filter: GamesFilter;
+}
+
+export function GameStatusChips({ filter }: GameStatusChipsProps) {
   const current = filter.status ?? GAME_STATUS_FILTER_DEFAULT;
 
   return (

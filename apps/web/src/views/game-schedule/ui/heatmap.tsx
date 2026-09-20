@@ -11,7 +11,7 @@ import { HeatCell } from "./heat-cell";
 import { HeatLegend } from "./heat-legend";
 import { PickedSlotCard } from "./picked-slot-card";
 
-type Props = {
+interface HeatmapProps {
   days: DayColumn[];
   timeRows: TimeRow[];
   counts: Record<string, number>;
@@ -19,9 +19,17 @@ type Props = {
   confirmedAt?: Date | null;
   capacity: number;
   gmName?: string;
-};
+}
 
-export function Heatmap({ days, timeRows, counts, names, confirmedAt, capacity, gmName }: Props) {
+export function Heatmap({
+  days,
+  timeRows,
+  counts,
+  names,
+  confirmedAt,
+  capacity,
+  gmName,
+}: HeatmapProps) {
   const confirmedIso = confirmedAt ? new Date(confirmedAt).toISOString() : null;
   const [picked, setPicked] = useState<string | null>(null);
 

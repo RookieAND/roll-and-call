@@ -1,6 +1,11 @@
 import { Text } from "@trpg/ui";
 
-export function WizardIntro({ title, description }: { title: string; description?: string }) {
+interface WizardIntroProps {
+  title: string;
+  description?: string;
+}
+
+export function WizardIntro({ title, description }: WizardIntroProps) {
   return (
     <div>
       <Text typography="heading2" render={<h1 />} className="block">

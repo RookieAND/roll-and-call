@@ -7,15 +7,13 @@ import { splitPlayTime } from "@/shared/lib";
 import { formatPlayTimeMinutes } from "../model/format-play-time-minutes";
 import { MAX_PLAY_HOURS, PLAY_HOUR_OPTIONS, PLAY_MINUTE_OPTIONS } from "../model/play-time-options";
 
-export function PlayTimeField({
-  value,
-  onChange,
-  error,
-}: {
+interface PlayTimeFieldProps {
   value?: string;
   onChange: (value: string) => void;
   error?: string;
-}) {
+}
+
+export function PlayTimeField({ value, onChange, error }: PlayTimeFieldProps) {
   const { hours, minutes } = splitPlayTime(value);
   const hourItems = PLAY_HOUR_OPTIONS.map((hour) => ({
     label: `${hour}시간`,

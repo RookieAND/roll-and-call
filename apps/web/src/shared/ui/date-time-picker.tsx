@@ -12,14 +12,14 @@ const TIME_VALUES = Array.from(
 );
 const DEFAULT_TIME = "19:00";
 
-export type DateTimePickerProps = {
+export interface DateTimePickerProps {
   value?: string;
   onChange: (value: string) => void;
   id?: string;
   invalid?: boolean;
   min?: string;
   placeholder?: string;
-};
+}
 
 export function DateTimePicker({
   value,

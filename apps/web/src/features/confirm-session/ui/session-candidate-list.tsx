@@ -6,17 +6,19 @@ import type { SessionWindow } from "@/entities/availability";
 
 import { SessionCandidateRow } from "./session-candidate-row";
 
+interface SessionCandidateListProps {
+  candidates: SessionWindow[];
+  playMinutes: number;
+  respondents: string[];
+  onPick: (iso: string) => void;
+}
+
 export function SessionCandidateList({
   candidates,
   playMinutes,
   respondents,
   onPick,
-}: {
-  candidates: SessionWindow[];
-  playMinutes: number;
-  respondents: string[];
-  onPick: (iso: string) => void;
-}) {
+}: SessionCandidateListProps) {
   return (
     <>
       <Card radius={500} background="none" padding="none" className="overflow-hidden">

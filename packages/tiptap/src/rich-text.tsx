@@ -3,7 +3,12 @@ import { cn } from "@trpg/ui";
 import { toRichTextDoc } from "./rich-text-doc";
 import { RichTextNode } from "./rich-text-node";
 
-export function RichText({ value, className }: { value: string; className?: string }) {
+interface RichTextProps {
+  value: string;
+  className?: string;
+}
+
+export function RichText({ value, className }: RichTextProps) {
   const doc = toRichTextDoc(value);
 
   return (

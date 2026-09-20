@@ -125,6 +125,7 @@ return <Button variant={buttonVariant} />;
 - **줄임말 이름 금지.** `p`/`g`/`e`/`err`/`res`/`ctx`/`prev` 대신 `participant`/`game`/`event`/`error`/`response`/`context`/`previous`처럼 전체 단어를 쓴다.
 - **도메인 값은 상수로.** 문자열 리터럴 대신 `as const` 객체(`GAME_STATUS`, `PARTICIPANT_STATUS`, `SCHEDULE_MODE`, `SESSION_STATE`, `SESSION_ROLE`, `GAME_SORT`, `GAME_STATUS_FILTER` 등)를 쓴다. 새 유니온은 `export const FOO = {...} as const; export type Foo = (typeof FOO)[keyof typeof FOO];`로 정의한다.
 - **import 정렬**은 `oxfmt`(`.oxfmtrc.json`의 `sortImports`)가 맡고, 그룹(builtin · external · internal · 상대 경로) 사이에 빈 줄을 넣는다.
+- **컴포넌트 Props는 `interface <ComponentName>Props`로 뺀다.** 인라인 객체 타입(`({ a }: { a: string })`)을 쓰지 않는다. 다른 곳에서 쓰는 Props만 `export`한다. `packages/ui`의 프리미티브는 `extends ComponentPropsWithRef<"button">, VariantProps<typeof button>`처럼 상속으로 적는다. 이름이 겹치는 HTML 속성은 `Omit`으로 덜어낸다(교차 타입과 달리 interface는 충돌을 허용하지 않는다 — `BadgeProps`의 `color`가 그 예다). `Omit<FlexProps, "direction">` 같은 순수 별칭은 `interface StackProps extends Omit<...> {}`로 둔다.
 - **1 파일 1 컴포넌트/함수.** 파일에 최상위 함수·컴포넌트가 둘 이상이면 각각 파일로 나눈다. 함수가 커지면 이름 붙인 작은 함수로 나눠 파일을 분리한다. 예외는 `*.test.ts`, `index.ts` 배럴, 함수 본문 안의 핸들러, 그리고 Next.js 라우트 파일이 요구하는 export뿐이다.
 
 ## 8. 에러 처리

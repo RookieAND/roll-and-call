@@ -19,10 +19,10 @@ const iconButton = cva(
   },
 );
 
-export type IconButtonProps = ComponentPropsWithRef<"button"> &
-  VariantProps<typeof iconButton> & {
-    asChild?: boolean;
-  };
+export interface IconButtonProps
+  extends ComponentPropsWithRef<"button">, VariantProps<typeof iconButton> {
+  asChild?: boolean;
+}
 
 export function IconButton({
   variant,

@@ -1,13 +1,12 @@
 import { Button, Text, VStack } from "@trpg/ui";
 import Link from "next/link";
 
-export function AttendanceBanner({
-  gameId,
-  confirmedCount,
-}: {
+interface AttendanceBannerProps {
   gameId: string;
   confirmedCount: number;
-}) {
+}
+
+export function AttendanceBanner({ gameId, confirmedCount }: AttendanceBannerProps) {
   return (
     <VStack gap="150" className="rounded-700 border border-tinted-border bg-tinted-bg p-200">
       <VStack gap="050">

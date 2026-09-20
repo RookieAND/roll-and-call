@@ -6,14 +6,13 @@ import type { RecordPerson } from "../model/rank-people";
 
 const CARD = "flex items-center gap-150 rounded-600 bg-tinted-bg px-175 py-175 transition-colors";
 
-// 공동 1위는 갈 곳이 하나가 아니라 링크를 걸지 않고 카드만 둔다.
-export function HomeRecordLeader({
-  people,
-  count,
-}: {
+interface HomeRecordLeaderProps {
   people: [RecordPerson, ...RecordPerson[]];
   count: number;
-}) {
+}
+
+// 공동 1위는 갈 곳이 하나가 아니라 링크를 걸지 않고 카드만 둔다.
+export function HomeRecordLeader({ people, count }: HomeRecordLeaderProps) {
   const [first, ...rest] = people;
   const name =
     rest.length === 0

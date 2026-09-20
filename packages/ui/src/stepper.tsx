@@ -12,7 +12,7 @@ const frame = cva("inline-flex h-11 items-stretch overflow-hidden rounded-400 bo
 const STEP_BUTTON =
   "flex size-11 items-center justify-center text-gray-700 transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:text-gray-300";
 
-export type StepperProps = {
+export interface StepperProps {
   value: number;
   onChange: (value: number) => void;
   min: number;
@@ -23,7 +23,7 @@ export type StepperProps = {
   "aria-label"?: string;
   "aria-describedby"?: string;
   className?: string;
-};
+}
 
 // 범위를 벗어난 직접 입력은 막지 않고 필드 검증이 알리게 둔다. ± 버튼만 min·max에서 멈춘다.
 export function Stepper({

@@ -4,6 +4,15 @@ import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { ApplicantList } from "./applicant-list";
 
+interface DrawStageProps {
+  gameId: string;
+  applicants: ManagedMember[];
+  maxPlayers: number;
+  summary: RosterSummary;
+  isCoordinate: boolean;
+  locked: boolean;
+}
+
 // 뽑기 전에는 확정·대기가 갈리지 않아 한 목록으로 보여 준다.
 export function DrawStage({
   gameId,
@@ -12,14 +21,7 @@ export function DrawStage({
   summary,
   isCoordinate,
   locked,
-}: {
-  gameId: string;
-  applicants: ManagedMember[];
-  maxPlayers: number;
-  summary: RosterSummary;
-  isCoordinate: boolean;
-  locked: boolean;
-}) {
+}: DrawStageProps) {
   return (
     <>
       {!locked && (

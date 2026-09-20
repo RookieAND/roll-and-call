@@ -3,6 +3,15 @@ import { AttendanceCard } from "./attendance-card";
 import { DeadlineCard } from "./deadline-card";
 import { DrawResultNote } from "./draw-result-note";
 
+interface RosterStatusCardProps {
+  gameId: string;
+  confirmedAt: Date | null;
+  confirmedCount: number;
+  summary: RosterSummary;
+  locked: boolean;
+  attendanceDue: boolean;
+}
+
 // 헤더 아래 한 자리에 지금 가장 중요한 것 하나만 선다 — 출석 확인 · 추첨 결과 · 모집 마감.
 export function RosterStatusCard({
   gameId,
@@ -11,14 +20,7 @@ export function RosterStatusCard({
   summary,
   locked,
   attendanceDue,
-}: {
-  gameId: string;
-  confirmedAt: Date | null;
-  confirmedCount: number;
-  summary: RosterSummary;
-  locked: boolean;
-  attendanceDue: boolean;
-}) {
+}: RosterStatusCardProps) {
   if (attendanceDue && confirmedAt) {
     return (
       <AttendanceCard gameId={gameId} confirmedAt={confirmedAt} confirmedCount={confirmedCount} />

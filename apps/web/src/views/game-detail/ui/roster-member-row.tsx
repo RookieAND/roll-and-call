@@ -12,19 +12,15 @@ export type DetailRosterMember = RosterMember<{
   user: { username: string; avatarUrl: string | null; bio: string | null } | null;
 }>;
 
-export function RosterMemberRow({
-  userId,
-  name,
-  avatarUrl,
-  bio,
-  note,
-}: {
+interface RosterMemberRowProps {
   userId: string;
   name: string | null | undefined;
   avatarUrl: string | null | undefined;
   bio: string | null | undefined;
   note?: string;
-}) {
+}
+
+export function RosterMemberRow({ userId, name, avatarUrl, bio, note }: RosterMemberRowProps) {
   return (
     <Link
       href={`/u/${userId}`}

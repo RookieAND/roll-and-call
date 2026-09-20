@@ -5,17 +5,14 @@ import type { ReactNode } from "react";
 
 import { cn } from "./cn";
 
-export function SelectItem({
-  value,
-  disabled,
-  className,
-  children,
-}: {
+interface SelectItemProps {
   value: string;
   disabled?: boolean;
   className?: string;
   children: ReactNode;
-}) {
+}
+
+export function SelectItem({ value, disabled, className, children }: SelectItemProps) {
   return (
     <BaseSelect.Item
       value={value}

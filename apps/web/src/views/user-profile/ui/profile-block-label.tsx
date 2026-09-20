@@ -1,6 +1,10 @@
 import { Text } from "@trpg/ui";
 
-export function ProfileBlockLabel({ label }: { label: string }) {
+interface ProfileBlockLabelProps {
+  label: string;
+}
+
+export function ProfileBlockLabel({ label }: ProfileBlockLabelProps) {
   return (
     <Text
       weight="bold"

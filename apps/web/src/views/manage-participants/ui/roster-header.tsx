@@ -3,17 +3,14 @@ import { Badge, HStack, Text } from "@trpg/ui";
 import { FirstComeMethodBadge } from "./first-come-method-badge";
 import { LotteryMethodBadge } from "./lottery-method-badge";
 
-export function RosterHeader({
-  title,
-  methodLabel,
-  isLottery,
-  maxPlayers,
-}: {
+interface RosterHeaderProps {
   title: string;
   methodLabel: string;
   isLottery: boolean;
   maxPlayers: number;
-}) {
+}
+
+export function RosterHeader({ title, methodLabel, isLottery, maxPlayers }: RosterHeaderProps) {
   return (
     <HStack align="center" gap="100">
       <Text typography="heading2" render={<h1 />} className="min-w-0 flex-1 truncate">

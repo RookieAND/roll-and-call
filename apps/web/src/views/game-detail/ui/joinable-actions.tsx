@@ -5,6 +5,15 @@ import { JoinGameButton } from "@/features/join-game";
 import { ACTION_PRIMARY_CLASS } from "./action-class-names";
 import { JoinHint } from "./join-hint";
 
+interface JoinableActionsProps {
+  gameId: string;
+  isFull: boolean;
+  isLottery: boolean;
+  canSchedule: boolean;
+  waitingCount: number;
+  maxPlayers: number;
+}
+
 export function JoinableActions({
   gameId,
   isFull,
@@ -12,14 +21,7 @@ export function JoinableActions({
   canSchedule,
   waitingCount,
   maxPlayers,
-}: {
-  gameId: string;
-  isFull: boolean;
-  isLottery: boolean;
-  canSchedule: boolean;
-  waitingCount: number;
-  maxPlayers: number;
-}) {
+}: JoinableActionsProps) {
   const scheduleHint = canSchedule ? "참여한 뒤 가능 시간을 냅니다." : null;
 
   // 추첨은 정원과 무관하게 받으므로 대기 순번 대신 뽑는 인원을 알린다.

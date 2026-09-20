@@ -12,14 +12,13 @@ import { ThumbnailPreview } from "./thumbnail-preview";
 import { uploadFailedMessage } from "./upload-failed-message";
 import { IMAGE_ACCEPT } from "./upload-rules";
 
-// ponytail: 스토리지 SDK가 진행률을 주지 않아 %가 아니라 "올리는 중" 스피너만 보인다.
-export function ThumbnailUpload({
-  value,
-  onChange,
-}: {
+interface ThumbnailUploadProps {
   value?: string;
   onChange: (url: string) => void;
-}) {
+}
+
+// ponytail: 스토리지 SDK가 진행률을 주지 않아 %가 아니라 "올리는 중" 스피너만 보인다.
+export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);

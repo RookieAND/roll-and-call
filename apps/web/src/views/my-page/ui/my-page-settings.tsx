@@ -5,7 +5,11 @@ import { ThemeSetting } from "@/shared/ui";
 
 import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 
-export function MyPageSettings({ handleLabel }: { handleLabel: string | null }) {
+interface MyPageSettingsProps {
+  handleLabel: string | null;
+}
+
+export function MyPageSettings({ handleLabel }: MyPageSettingsProps) {
   return (
     <section className="flex flex-col gap-125">
       <Text typography="heading3" render={<h2 />}>
