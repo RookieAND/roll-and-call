@@ -19,11 +19,11 @@ export function LockedJoinedActions({
   return (
     <VStack gap="100">
       <StatusNotice tone="muted" className="text-left">
-        <Text typography="subtitle2" render={<p />}>
-          참여가 확정되었습니다
+        <Text typography="body4" weight="bold" render={<p />}>
+          참여가 확정됐습니다
         </Text>
         <Text typography="body3" foreground="muted" render={<p />} className="mt-075">
-          {LEAVE_LOCKED_REASON[lock]} 취소는 GM에게 문의해야 합니다.
+          {LEAVE_LOCKED_REASON[lock]} 혼자 취소할 수 없습니다. GM에게 말해주세요.
         </Text>
       </StatusNotice>
       {canSchedule && <ScheduleLink gameId={gameId} className={ACTION_PRIMARY_CLASS} />}

@@ -13,7 +13,7 @@ export function ClosedActions({ endDate, expired }: { endDate: Date; expired: bo
   return (
     <VStack gap={expired ? "100" : "150"}>
       {expired ? (
-        <ActionHint>{formatDate(endDate)}에 모집이 마감되었습니다.</ActionHint>
+        <ActionHint>{formatDate(endDate)}에 모집이 끝났습니다.</ActionHint>
       ) : (
         <StatusNotice tone="muted">정원이 차서 신청을 받지 않습니다</StatusNotice>
       )}
