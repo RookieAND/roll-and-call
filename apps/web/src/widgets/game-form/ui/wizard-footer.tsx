@@ -2,6 +2,10 @@
 
 import { Button, Container, HStack, Text, VStack } from "@trpg/ui";
 
+import { WizardNextButton } from "./wizard-next-button";
+import { WizardSavingButton } from "./wizard-saving-button";
+import { WizardSubmitButton } from "./wizard-submit-button";
+
 export function WizardFooter({
   step,
   total,
@@ -48,15 +52,9 @@ export function WizardFooter({
             )}
             {/* key가 없으면 같은 DOM 버튼의 type만 submit으로 바뀌어, 마지막 단계로 넘어간 그
                 클릭이 곧바로 제출로 이어진다. */}
-            {isLastStep ? (
-              <Button key="submit" type="submit" loading={pending} size="lg" className="h-[50px]">
-                {pending ? "저장 중…" : submitLabel}
-              </Button>
-            ) : (
-              <Button key="next" type="button" onClick={onNext} size="lg" className="h-[50px]">
-                다음
-              </Button>
-            )}
+            {!isLastStep && <WizardNextButton key="next" onClick={onNext} />}
+            {isLastStep && pending && <WizardSavingButton key="submit" />}
+            {isLastStep && !pending && <WizardSubmitButton key="submit" label={submitLabel} />}
           </HStack>
         </VStack>
       </Container>

@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 
 import { cn } from "./cn";
+import { FieldDescription } from "./field-description";
+import { FieldError } from "./field-error";
+import { FieldLabel } from "./field-label";
 
 export type FieldProps = {
   label?: string;
@@ -26,19 +29,14 @@ export function Field({
   return (
     <div className={cn("flex flex-col gap-075", className)}>
       {(label || counter) && (
-        <div className="flex items-baseline justify-between gap-100">
-          <label htmlFor={htmlFor} className="text-body4 font-bold text-gray-700">
-            {label}
-            {required && <span className="text-danger-600"> *</span>}
-          </label>
-          {counter && (
-            <span className="shrink-0 text-xs tabular-nums text-gray-600">{counter}</span>
-          )}
-        </div>
+        <FieldLabel label={label} counter={counter} required={required} htmlFor={htmlFor} />
       )}
       {children}
-      {description && !error && <p className="text-xs text-gray-600">{description}</p>}
-      {error && <p className="text-xs text-danger-600">{error}</p>}
+      {error ? (
+        <FieldError message={error} />
+      ) : (
+        description && <FieldDescription text={description} />
+      )}
     </div>
   );
 }

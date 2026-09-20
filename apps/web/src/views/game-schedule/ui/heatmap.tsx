@@ -1,14 +1,15 @@
 "use client";
 
-import { Text, VStack } from "@trpg/ui";
+import { VStack } from "@trpg/ui";
 import { useState } from "react";
 
-import { formatDateTime, type DayColumn, type TimeRow } from "@/shared/lib";
-import { SLOT_ROW_PX, SlotGrid } from "@/shared/ui";
+import type { DayColumn, TimeRow } from "@/shared/lib";
+import { SlotGrid } from "@/shared/ui";
 
-import { heatColor } from "../model/heat-color";
 import { heatStep } from "../model/heat-step";
-import { heatTextColor } from "../model/heat-text-color";
+import { HeatCell } from "./heat-cell";
+import { PickSlotHint } from "./pick-slot-hint";
+import { PickedSlotCard } from "./picked-slot-card";
 
 type Props = {
   days: DayColumn[];
@@ -20,39 +21,23 @@ type Props = {
   gmName?: string;
 };
 
-const CELL =
-  "flex cursor-pointer items-center justify-center border-b border-l border-b-gray-100 border-l-gray-100 text-body5 font-bold tabular-nums";
-// 누른 칸은 primary, 확정 칸은 success 테두리 — 서로 헷갈리지 않게 색을 나눈다.
-const PICKED = "2px solid var(--color-primary-600)";
-const CONFIRMED = "2px solid var(--color-success-600)";
-
 export function Heatmap({ days, timeRows, counts, names, confirmedAt, capacity, gmName }: Props) {
   const confirmedIso = confirmedAt ? new Date(confirmedAt).toISOString() : null;
-  // 터치에는 hover 툴팁이 없어서, 누른 칸의 명단을 격자 아래 카드로 보여준다.
   const [picked, setPicked] = useState<string | null>(null);
-  const pickedNames = picked ? (names[picked] ?? []) : [];
 
   function renderCell(key: string) {
     const count = counts[key] ?? 0;
-    const step = heatStep(count, capacity);
-    const outline = picked === key ? PICKED : confirmedIso === key ? CONFIRMED : undefined;
+    const outline = picked === key ? "picked" : confirmedIso === key ? "confirmed" : "none";
 
     return (
-      <div
+      <HeatCell
         key={key}
+        count={count}
+        step={heatStep(count, capacity)}
+        outline={outline}
         title={names[key]?.join(", ")}
-        onClick={() => setPicked(count > 0 ? key : null)}
-        className={CELL}
-        style={{
-          height: SLOT_ROW_PX,
-          backgroundColor: heatColor(step),
-          color: heatTextColor(step),
-          outline,
-          outlineOffset: outline ? "-2px" : undefined,
-        }}
-      >
-        {count > 0 ? count : ""}
-      </div>
+        onPick={() => setPicked(count > 0 ? key : null)}
+      />
     );
   }
 
@@ -60,18 +45,9 @@ export function Heatmap({ days, timeRows, counts, names, confirmedAt, capacity, 
     <VStack gap="100">
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
       {picked ? (
-        <div className="rounded-500 border border-gray-200 px-175 py-150" aria-live="polite">
-          <Text typography="subtitle2" render={<p />}>
-            {formatDateTime(picked)} · {pickedNames.length}명
-          </Text>
-          <Text typography="body4" foreground="muted" render={<p />} className="mt-025">
-            {pickedNames.map((name) => (name === gmName ? `${name}(GM)` : name)).join(", ")}
-          </Text>
-        </div>
+        <PickedSlotCard slotIso={picked} names={names[picked] ?? []} gmName={gmName} />
       ) : (
-        <Text typography="body4" foreground="hint" render={<p />}>
-          칸을 누르면 그 시간에 가능한 사람이 보입니다.
-        </Text>
+        <PickSlotHint />
       )}
     </VStack>
   );
