@@ -21,7 +21,7 @@
 
 **절대 경로는 2 depth까지만**: `@/레이어/슬라이스`(`@/features/join-game`) 또는 `@/shared/세그먼트`(`@/shared/ui`)까지. 슬라이스 내부 파일(`@/features/join-game/api/join-game`)이나 shared 세그먼트 내부(`@/shared/ui/app-bar`)를 직접 가리키지 않는다. 슬라이스/세그먼트마다 `index.ts` 배럴이 public API다. 같은 슬라이스 안에서는 상대 경로.
 
-`pnpm lint:fsd`(`scripts/fsd-check.mjs`)가 위 세 규칙(depth·방향·교차 슬라이스)을 검사한다. 도메인 규칙·폼 스키마의 자가 검증은 `pnpm check`.
+`pnpm lint:fsd`(`scripts/fsd-check.mjs`)가 위 세 규칙(depth·방향·교차 슬라이스)을 검사한다. 도메인 규칙·폼 스키마·상태 판정은 모듈 옆 `*.test.ts`(Vitest, `pnpm test`)가 맡는다. UI는 테스트하지 않는다.
 
 **shared 세그먼트는 런타임으로 나뉜다**: 배럴은 tree-shaking되지 않으므로 서버 전용 모듈이 섞이면 클라이언트 번들이 깨진다.
 
@@ -31,7 +31,7 @@
 | `shared/server`         | 서버 전용(`server-only`): drizzle `db`·스키마 재노출(원본은 `packages/database`), DB 읽기 쿼리, Supabase 서버 클라이언트·`getCurrentUser`, Discord 알림 |
 | `shared/lib`            | 순수 유틸: 날짜 포맷, 슬롯 계산                                                                                                                         |
 | `shared/ui`             | 앱 공용 조합 컴포넌트 + `toast`, `useAction`, `BoundaryFallback`                                                                                        |
-| `shared/error-boundary` | 클라이언트: `ErrorBoundary`(`catchError`). check 스크립트가 로드하지 않도록 `shared/ui`와 분리 (§8)                                                     |
+| `shared/error-boundary` | 클라이언트: `ErrorBoundary`(`catchError`). 테스트가 로드하지 않도록 `shared/ui`와 분리 (§8)                                                     |
 
 DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 아니라 `shared/server`에 둔다(FSD 권장). 클라이언트 컴포넌트가 스키마 타입만 필요하면 `import type { Game } from "@/shared/server"`로 가져온다(타입 import는 번들에 남지 않는다). 세션 쿠키 갱신은 유일한 사용처인 `src/proxy.ts`가 소유한다.
 
@@ -125,7 +125,7 @@ return <Button variant={buttonVariant} />;
 - **줄임말 이름 금지.** `p`/`g`/`e`/`err`/`res`/`ctx`/`prev` 대신 `participant`/`game`/`event`/`error`/`response`/`context`/`previous`처럼 전체 단어를 쓴다.
 - **도메인 값은 상수로.** 문자열 리터럴 대신 `as const` 객체(`GAME_STATUS`, `PARTICIPANT_STATUS`, `SCHEDULE_MODE`, `SESSION_STATE`, `SESSION_ROLE`, `GAME_SORT`, `GAME_STATUS_FILTER` 등)를 쓴다. 새 유니온은 `export const FOO = {...} as const; export type Foo = (typeof FOO)[keyof typeof FOO];`로 정의한다.
 - **import 정렬**은 `oxfmt`(`.oxfmtrc.json`의 `sortImports`)가 맡고, 그룹(builtin · external · internal · 상대 경로) 사이에 빈 줄을 넣는다.
-- **1 파일 1 컴포넌트/함수.** 파일에 최상위 함수·컴포넌트가 둘 이상이면 각각 파일로 나눈다. 함수가 커지면 이름 붙인 작은 함수로 나눠 파일을 분리한다. 예외는 `*.check.ts`, `index.ts` 배럴, 함수 본문 안의 핸들러, 그리고 Next.js 라우트 파일이 요구하는 export뿐이다.
+- **1 파일 1 컴포넌트/함수.** 파일에 최상위 함수·컴포넌트가 둘 이상이면 각각 파일로 나눈다. 함수가 커지면 이름 붙인 작은 함수로 나눠 파일을 분리한다. 예외는 `*.test.ts`, `index.ts` 배럴, 함수 본문 안의 핸들러, 그리고 Next.js 라우트 파일이 요구하는 export뿐이다.
 
 ## 8. 에러 처리
 
@@ -136,6 +136,6 @@ return <Button variant={buttonVariant} />;
 - **경계**
   - `app/error.tsx`(라우트)·`app/global-error.tsx`(루트 레이아웃)는 `BoundaryFallback`으로 에러 화면을 그린다.
   - 화면 일부만 감쌀 때는 `ErrorBoundary`(`@/shared/error-boundary`)를 쓴다. `display={ERROR_DISPLAY.toast}`로 감싼 영역은 토스트 + 재시도 버튼으로 끝나고, page 에러는 부모 경계로 다시 던진다(예: 상세 하단 액션 존).
-  - `ErrorBoundary`는 `next/error`의 `catchError`를 쓰는데, Node(tsx)에서 named import가 안 돼 `shared/ui` 배럴에 넣으면 `pnpm check`가 깨진다. 그래서 세그먼트를 따로 둔다.
+  - `ErrorBoundary`는 `next/error`의 `catchError`를 쓰는데, 번들러 밖에서 named import가 안 돼 `shared/ui` 배럴에 넣으면 테스트가 깨진다. 그래서 세그먼트를 따로 둔다.
 - **React Query**: 조회는 보여 줄 데이터가 없을 때만 경계로 던지고(재조회 실패로 편집 중 상태를 날리지 않는다), 뮤테이션 실패는 `MutationCache`가 토스트로 알린다. 문구는 `meta.errorMessage`로 바꾼다. `mutationFn`에서 `ActionResult.error`는 `AppError`로 바꿔 던진다.
 - **경계 밖**(토스트 콜백, 파일 업로드 같은 비트랜지션 async)은 `try/catch`에서 `reportError`(토스트) 또는 인라인 상태로 처리한다.

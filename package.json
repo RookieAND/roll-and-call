@@ -13,7 +13,8 @@
     "typecheck": "turbo typecheck",
     "lint": "oxlint",
     "format": "oxfmt",
-    "format:check": "oxfmt --check"
+    "format:check": "oxfmt --check",
+    "test": "turbo test"
   },
   "devDependencies": {
     "oxfmt": "^0.62.0",

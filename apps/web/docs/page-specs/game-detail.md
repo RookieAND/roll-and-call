@@ -12,7 +12,7 @@
   - `src/views/game-detail/ui/game-detail-view.tsx` — 서버 조회, notFound 처리
   - `src/views/game-detail/ui/game-detail.tsx` — 화면 조립, 파생값 계산
   - `src/views/game-detail/ui/game-detail-header.tsx`, `game-gm-menu.tsx`, `game-info-table.tsx`, `game-roster-preview.tsx`, `game-detail-actions.tsx`, `game-action-zone.tsx`
-  - `src/views/game-detail/model/derive-action-view.ts` (+ 자체 검사 `derive-action-view.check.ts`)
+  - `src/views/game-detail/model/derive-action-view.ts` (+ `derive-action-view.test.ts`)
 - **페이지 목적**: 구인글 하나의 정보(룰, GM, 인원, 마감, 세션 일정, 시놉시스, 참여자)를 보여 준다. 보는 사람의 자격에 따라 참여 신청, 대기 신청, 취소, 일정 조율 진입, 로그인을 제공한다. GM에게는 수정, 삭제, 참여자 관리 메뉴와 일정 조율 현황 진입을 준다.
 
 ## 2. 접근 조건

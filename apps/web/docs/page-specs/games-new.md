@@ -181,7 +181,7 @@ BottomNav 탭 중 `/games` 탭이 `pathname.startsWith` 규칙으로 활성 표�
 
 - 폼 라이브러리: `react-hook-form` `useForm` + `zodResolver(gameFormSchema)` (`src/widgets/game-form/ui/game-form.tsx:38-53`). `mode` 옵션이 없으므로 기본값(onSubmit, 첫 제출 뒤 onChange 재검증)을 따른다.
 - 스키마: `src/features/write-game/model/game-form.ts:8-86`. 서버 액션도 같은 스키마로 다시 검증한다 (`create-game.ts:13-16`). 서버 검증이 실패하면 첫 issue 메시지 하나를 root 오류로 돌려주고, 메시지가 없으면 "입력값을 확인하세요."를 쓴다.
-- 셀프체크: `src/features/write-game/model/game-form.check.ts` (`pnpm check`에 포함).
+- 테스트: `src/features/write-game/model/game-form.test.ts` (`pnpm test`).
 - 에러 스크롤: `scrollToField(id)` = `document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" })` (`src/widgets/game-form/lib/scroll-to-field.ts:2-4`). id는 Field `htmlFor`와 같다.
 - ❓ 확인 필요: 기본 필드 오류가 있을 때 `superRefine` 오류도 함께 나오는지(zod 버전별 동작). 이에 따라 `Object.keys(errors)[0]`로 정하는 "첫 오류 필드"가 달라진다.
 

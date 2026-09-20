@@ -1,5 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  // tsx(esbuild)는 jsx "preserve"를 그대로 두어 shared/ui를 거치는 check가 "React is not defined"로 죽는다.
-  "compilerOptions": { "jsx": "react-jsx" }
-}

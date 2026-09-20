@@ -54,7 +54,7 @@
 | `promoteParticipant` 정원 초과 시 자동 강등 (`src/features/adjust-roster/api/adjust-roster.ts:43-56`)                                                                 | **유지하되 재검토** | 정원이 차면 `PromoteButton`이 disabled라서(`src/views/manage-participants/ui/waiting-roster.tsx:24`) UI로는 도달하지 않는다. 서버 방어 코드로 볼 수는 있다. |
 | `confirmSession`의 재확정용 `notifiedAt` 초기화 (`src/features/confirm-session/api/confirm-session.ts:16`)                                                            | **유지하되 재검토** | 확정 후에는 확정 폼이 숨겨진다(`src/views/game-schedule/ui/game-schedule-view.tsx:54`).                                                                     |
 | 상세 GM·fixed·미확정 분기 (`src/views/game-detail/ui/game-detail-actions.tsx:22-24`), `WaitlistNotice`의 `rank: null` (`src/entities/game/ui/waitlist-notice.tsx:11`) | **삭제**            | 폼으로 만든 데이터에서는 나오지 않는다.                                                                                                                     |
-| `toSessionCard` (`src/widgets/session-list/model/session-card.ts`)                                                                                                    | **유지하되 재검토** | 프로덕션 호출부가 없고 `session-card.check.ts`에서만 쓴다.                                                                                                  |
+| `toSessionCard` (`src/widgets/session-list/model/session-card.ts`)                                                                                                    | **유지하되 재검토** | 프로덕션 호출부가 없고 `session-card.test.ts`에서만 쓴다.                                                                                                  |
 
 ## 5. 사용되지 않는 코드·export·에셋·의존성
 
