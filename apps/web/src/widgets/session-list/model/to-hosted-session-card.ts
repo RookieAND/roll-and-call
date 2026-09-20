@@ -74,6 +74,7 @@ export function toHostedSessionCard(
       !context.readOnly && coordinate && !timeSet && `응답 ${responses}/${confirmedCount}`,
       `확정 ${seats}`,
     ),
+    note: null,
     action: context.readOnly ? null : hostMenu,
     todo,
     waitingCount,

@@ -47,6 +47,16 @@ export function SessionCard({ model, eyebrow }: { model: SessionCardModel; eyebr
         <Text typography="body4" foreground="hint" className="mt-0.5 block truncate">
           {model.meta}
         </Text>
+        {model.note && (
+          <Text
+            typography="body4"
+            foreground="hint"
+            render={<p />}
+            className="mt-2.5 border-t border-gray-100 pt-2.5 leading-relaxed whitespace-pre-line"
+          >
+            {model.note}
+          </Text>
+        )}
       </Link>
       <SessionCardAction model={model} />
     </div>

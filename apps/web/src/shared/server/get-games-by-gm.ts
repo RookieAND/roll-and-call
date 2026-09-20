@@ -8,7 +8,7 @@ export async function getGamesByGm(userId: string) {
     orderBy: desc(games.createdAt),
     with: {
       gm: { columns: { username: true, avatarUrl: true } },
-      participants: { columns: { userId: true, status: true, joinedAt: true } },
+      participants: { columns: { userId: true, status: true, joinedAt: true, absent: true } },
     },
   });
 }

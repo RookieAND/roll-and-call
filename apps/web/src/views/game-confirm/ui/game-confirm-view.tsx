@@ -4,8 +4,8 @@ import { notFound, redirect } from "next/navigation";
 import { aggregateAvailability } from "@/entities/availability";
 import { countConfirmed, isGameGm, SCHEDULE_MODE } from "@/entities/game";
 import { ConfirmSessionForm } from "@/features/confirm-session";
-import { buildDayColumns, SLOT_MINUTES } from "@/shared/lib";
-import { getCurrentUser, getGameAvailabilities, getGameById, playMinutes } from "@/shared/server";
+import { buildDayColumns, playMinutes, SLOT_MINUTES } from "@/shared/lib";
+import { getCurrentUser, getGameAvailabilities, getGameById } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { ConfirmSummary } from "./confirm-summary";

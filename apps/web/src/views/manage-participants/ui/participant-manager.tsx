@@ -6,6 +6,7 @@ import { AppBar, EmptyState } from "@/shared/ui";
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { ApplicantList } from "./applicant-list";
+import { AttendanceCard } from "./attendance-card";
 import { CopyLinkButton } from "./copy-link-button";
 import { DeadlineCard } from "./deadline-card";
 import { DrawResultNote } from "./draw-result-note";
@@ -24,6 +25,7 @@ type Props = {
   summary: RosterSummary;
   isCoordinate: boolean;
   locked: boolean;
+  attendanceDue: boolean;
 };
 
 export function ParticipantManager({
@@ -36,6 +38,7 @@ export function ParticipantManager({
   summary,
   isCoordinate,
   locked,
+  attendanceDue,
 }: Props) {
   const isEmpty = summary.applicantCount === 0;
   const showNextRound = waiting.length > 0 && !summary.beforeDraw;
@@ -58,7 +61,9 @@ export function ParticipantManager({
               maxPlayers={maxPlayers}
               summary={summary}
             />
-            {summary.drawnAtLabel ? (
+            {attendanceDue ? (
+              <AttendanceCard gameId={gameId} confirmedAt={confirmedAt!} />
+            ) : summary.drawnAtLabel ? (
               <DrawResultNote
                 drawnAtLabel={summary.drawnAtLabel}
                 applicantCount={summary.applicantCount}

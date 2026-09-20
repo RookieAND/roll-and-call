@@ -1,6 +1,7 @@
 import type { Game } from "@/shared/server";
 
 import { SCHEDULE_MODE, type ScheduleMode } from "./schedule-mode";
+import { sessionEndsAt } from "./session-end";
 
 export const SESSION_STATE = {
   recruiting: "recruiting",
@@ -26,12 +27,14 @@ export type SessionRole = (typeof SESSION_ROLE)[keyof typeof SESSION_ROLE];
 export function deriveSessionState(
   {
     confirmedAt,
+    playMinutes,
     endDate,
     maxPlayers,
     confirmedCount,
     scheduleMode,
   }: {
     confirmedAt: Game["confirmedAt"];
+    playMinutes: Game["playMinutes"];
     endDate: Game["endDate"];
     maxPlayers: number;
     confirmedCount: number;
@@ -42,7 +45,10 @@ export function deriveSessionState(
   const nowTime = now.getTime();
   const deadlinePassed = new Date(endDate).getTime() < nowTime;
   if (confirmedAt) {
-    if (new Date(confirmedAt).getTime() < nowTime) return SESSION_STATE.finished;
+    // 시작이 아니라 플레이타임만큼 지나야 끝난 것이다. 진행 중인 세션은 아직 종료가 아니다.
+    if (sessionEndsAt({ confirmedAt, playMinutes })!.getTime() < nowTime) {
+      return SESSION_STATE.finished;
+    }
     if (scheduleMode === SCHEDULE_MODE.fixed) {
       if (!deadlinePassed && confirmedCount < maxPlayers) return SESSION_STATE.recruiting;
       if (deadlinePassed && confirmedCount === 0) return SESSION_STATE.closed;

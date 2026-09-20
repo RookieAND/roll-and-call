@@ -2,7 +2,7 @@ import { Button, Container } from "@trpg/ui";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { isSessionLocked, SCHEDULE_MODE, splitRoster } from "@/entities/game";
+import { isAttendanceDue, isSessionLocked, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { LoginRequired } from "@/features/auth";
 import { getCurrentUser, getGameParticipants } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
@@ -69,6 +69,7 @@ export async function ManageParticipantsView({ id }: { id: string }) {
       })}
       isCoordinate={isCoordinate}
       locked={isSessionLocked(game)}
+      attendanceDue={isAttendanceDue(game, confirmed.length)}
     />
   );
 }

@@ -1,6 +1,7 @@
 import {
   countConfirmed,
   deriveSessionState,
+  isAttendanceDue,
   PARTICIPANT_STATUS,
   isDeadlineUrgent,
   SCHEDULE_MODE,
@@ -22,6 +23,7 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
   const state = deriveSessionState(
     {
       confirmedAt: game.confirmedAt,
+      playMinutes: game.playMinutes,
       endDate: game.endDate,
       maxPlayers: game.maxPlayers,
       confirmedCount,
@@ -45,10 +47,20 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
     (participant) => participant.status === PARTICIPANT_STATUS.waiting,
   ).length;
 
+  const attendanceDue = isAttendanceDue(game, confirmedCount, now);
+  // 확정 전에는 아무것도 기록되지 않았으므로 불참도 아직 없다.
+  const viewerAbsent =
+    game.attendanceConfirmedAt !== null &&
+    game.participants.some(
+      (participant) => participant.userId === context.viewerId && participant.absent,
+    );
+
   return {
     state,
     line,
     waitingCount,
+    attendanceDue,
+    viewerAbsent,
     coordinate,
     confirmedCount,
     awaitingTime,

@@ -19,7 +19,7 @@ export function toJoinedSessionCard(
 ): SessionCardModel {
   const { base, line, awaitingTime, timeSet, sessionWhen, seats, sortKey, waitingCount } = facts;
   const meta = joinParts(game.rule, `GM ${game.gm?.username ?? "?"}`, seats);
-  const common = { ...base, meta, sortKey, waitingCount, todo: null };
+  const common = { ...base, meta, sortKey, waitingCount, todo: null, note: null };
   const { waiting } = splitRoster(game.participants);
   const mine = waiting.find((participant) => participant.userId === context.viewerId) ?? null;
 

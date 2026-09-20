@@ -96,6 +96,8 @@ export const games = pgTable(
     notifiedAt: timestamp("notified_at", { withTimezone: true }),
     // 추첨을 돌린 시각. 값이 있으면 신청을 받지 않고, 확정·대기 명단은 이미 정해진 뒤다.
     drawnAt: timestamp("drawn_at", { withTimezone: true }),
+    // GM이 참석 여부를 확정한 시각. null이면 세션이 끝났어도 아직 출석 확인이 남아 있다.
+    attendanceConfirmedAt: timestamp("attendance_confirmed_at", { withTimezone: true }),
     // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.
     discordThreadId: text("discord_thread_id"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -123,6 +125,8 @@ export const participants = pgTable(
     status: participantStatus("status").notNull().default("confirmed"),
     // 추첨이 정한 순서. 선착순이거나 뽑기 전이면 null이고, 그때는 joinedAt이 순서다.
     drawRank: integer("draw_rank"),
+    // 기본값이 전원 참석이라 GM이 출석을 확정할 때 예외만 true가 된다.
+    absent: boolean("absent").notNull().default(false),
   },
   (table) => [
     primaryKey({ columns: [table.gameId, table.userId] }),

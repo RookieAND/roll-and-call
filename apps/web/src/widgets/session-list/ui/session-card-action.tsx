@@ -6,7 +6,10 @@ import { CancelWaitlistButton } from "@/features/join-game";
 
 import { SESSION_ACTION_KIND, type SessionCardModel } from "../model/session-card-model";
 
-const SOLID_KINDS: string[] = [SESSION_ACTION_KIND.confirmTime];
+const SOLID_KINDS: string[] = [
+  SESSION_ACTION_KIND.confirmTime,
+  SESSION_ACTION_KIND.confirmAttendance,
+];
 
 export function SessionCardAction({ model }: { model: SessionCardModel }) {
   const { action } = model;

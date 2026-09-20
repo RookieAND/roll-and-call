@@ -27,6 +27,7 @@ export const SESSION_ACTION_KIND = {
   reviewApplicants: "review-applicants",
   hostMenu: "host-menu",
   cancelWaitlist: "cancel-waitlist",
+  confirmAttendance: "confirm-attendance",
 } as const;
 
 export type SessionActionKind = (typeof SESSION_ACTION_KIND)[keyof typeof SESSION_ACTION_KIND];
@@ -47,6 +48,8 @@ export type SessionCardModel = {
   schedule: string;
   scheduleTone: SessionTone;
   meta: string;
+  // 카드 아래에 한 겹 더 붙는 설명. 지금은 불참 기록이 언제 사라지는지 뿐이다.
+  note: string | null;
   urgent: boolean;
   // 목록 카드가 다는 버튼. 운영은 언제나 "운영 관리" 하나다.
   action: SessionAction | null;
@@ -62,6 +65,7 @@ type SessionParticipant = {
   userId: string;
   status: ParticipantStatus;
   joinedAt: Date | string;
+  absent: boolean;
 };
 
 export type SessionGame = Game & {

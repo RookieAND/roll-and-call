@@ -7,6 +7,7 @@ export { userSessionsHref } from "./model/user-sessions-href";
 export { sessionsHref } from "./model/sessions-href";
 export { loadMySessions } from "./api/load-sessions";
 export { loadProfile, type LoadedProfile } from "./api/load-profile";
+export type { Absence } from "./model/recent-absences";
 export { PROFILE_SESSION_SECTIONS } from "./model/build-profile-sessions";
 export {
   ONGOING_CHIP,

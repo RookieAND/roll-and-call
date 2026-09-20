@@ -11,7 +11,7 @@ export async function getJoinedGames(userId: string) {
         with: {
           gm: { columns: { username: true, avatarUrl: true } },
           participants: {
-            columns: { userId: true, status: true, joinedAt: true },
+            columns: { userId: true, status: true, joinedAt: true, absent: true },
           },
         },
       },

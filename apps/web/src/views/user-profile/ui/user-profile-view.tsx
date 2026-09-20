@@ -8,6 +8,7 @@ import { getCurrentUser, getProfileMemo } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { loadProfile, PROFILE_SESSION_SECTIONS } from "@/widgets/session-list";
 
+import { ProfileAbsenceNotice } from "./profile-absence-notice";
 import { ProfileBlockLabel } from "./profile-block-label";
 import { ProfileSectionDivider } from "./profile-section-divider";
 import { ProfileSessionSection } from "./profile-session-section";
@@ -30,7 +31,7 @@ export async function UserProfileView({ id }: { id: string }) {
     );
   }
 
-  const { profile, sessions } = loaded;
+  const { profile, sessions, absences } = loaded;
   const memo = viewer ? await getProfileMemo({ ownerId: viewer.id, targetId: id }) : null;
 
   return (
@@ -47,6 +48,11 @@ export async function UserProfileView({ id }: { id: string }) {
         <section className="px-4 pb-4">
           <ProfileBlockLabel label="가능 시간대" />
           <AvailabilityRows intervals={profile.availability} note="프로필 기본값입니다." />
+        </section>
+
+        <section className="px-4 pb-4">
+          <ProfileBlockLabel label="참석 기록" />
+          <ProfileAbsenceNotice absences={absences} />
         </section>
 
         {viewer && <ProfileMemoBlock targetId={profile.id} memo={memo} />}

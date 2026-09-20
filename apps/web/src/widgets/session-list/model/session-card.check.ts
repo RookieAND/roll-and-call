@@ -10,7 +10,7 @@ import {
 
 import { buildProfileSessions } from "./build-profile-sessions";
 import { buildSessions } from "./build-sessions";
-import { SESSION_CHIP, type SessionGame } from "./session-card-model";
+import { SESSION_ACTION_KIND, SESSION_CHIP, type SessionGame } from "./session-card-model";
 import { toSessionCard } from "./to-session-card";
 
 const NOW = new Date("2026-09-15T12:00:00+09:00");
@@ -32,14 +32,26 @@ function game(partial: Partial<SessionGame>): SessionGame {
     waitlistEnabled: true,
     recruitMethod: RECRUIT_METHOD.firstCome,
     drawnAt: null,
+    playMinutes: 180,
+    attendanceConfirmedAt: null,
     gm: { username: "한랑아" },
     participants: [],
     ...partial,
   } as unknown as SessionGame;
 }
 
-const me = (status: ParticipantStatus) => ({ userId: "me", status, joinedAt: at(-1) });
-const other = { userId: "a", status: PARTICIPANT_STATUS.confirmed, joinedAt: at(-10) };
+const me = (status: ParticipantStatus) => ({
+  userId: "me",
+  status,
+  joinedAt: at(-1),
+  absent: false,
+});
+const other = {
+  userId: "a",
+  status: PARTICIPANT_STATUS.confirmed,
+  joinedAt: at(-10),
+  absent: false,
+};
 const sessionContext = (responded: string[] = []) => ({
   viewerId: "me",
   respondedGameIds: new Set(responded),
@@ -172,5 +184,46 @@ assert.equal(upcomingCard.urgent, false);
 assert.doesNotMatch(upcomingCard.schedule, /미제출/);
 assert.equal(profile[SESSION_ROLE.host].length, 1);
 assert.equal(profile[SESSION_ROLE.host][0]?.action, null);
+
+// 출석 확인 전에는 끝난 세션이 GM에게 할 일로 남고, 플레이어 카드에는 아직 불참이 없다.
+const endedGame = game({
+  id: "ended",
+  confirmedAt: at(-1),
+  playMinutes: 180,
+  participants: [confirmedMe, other],
+});
+const hostCard = toSessionCard(endedGame, SESSION_ROLE.host, sessionContext());
+assert.equal(hostCard.todo?.kind, SESSION_ACTION_KIND.confirmAttendance);
+assert.equal(hostCard.action?.href, "/games/ended/attendance");
+assert.equal(toSessionCard(endedGame, SESSION_ROLE.player, sessionContext()).badge, "완료");
+
+// 확정한 뒤에야 불참이 기록으로 남고, 사라지는 날짜가 본인 카드에만 붙는다.
+const absentGame = game({
+  id: "absent",
+  confirmedAt: at(-1),
+  playMinutes: 180,
+  attendanceConfirmedAt: at(-1),
+  participants: [{ ...confirmedMe, absent: true }, other],
+});
+const absentCard = toSessionCard(absentGame, SESSION_ROLE.player, sessionContext());
+assert.equal(absentCard.badge, "불참");
+assert.match(absentCard.schedule, /참석하지 않았습니다$/);
+assert.match(absentCard.note ?? "", /에 사라집니다/);
+assert.equal(
+  toSessionCard(absentGame, SESSION_ROLE.player, { ...sessionContext(), readOnly: true }).note,
+  null,
+);
+
+// 아직 진행 중인 세션은 시작했어도 끝난 것이 아니다.
+const running = game({
+  id: "running",
+  confirmedAt: new Date(NOW.getTime() - 60 * 60 * 1000),
+  playMinutes: 360,
+  participants: [confirmedMe],
+});
+assert.notEqual(
+  toSessionCard(running, SESSION_ROLE.player, sessionContext()).chip,
+  SESSION_CHIP.ended,
+);
 
 console.log("session-card.check ok");
