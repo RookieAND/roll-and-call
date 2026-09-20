@@ -52,5 +52,6 @@ export { notifySessionConfirmed } from "./notify-session-confirmed";
 export { siteOrigin } from "./site-origin";
 export { removeUnusedGameFiles } from "./game-files";
 export { createSupabaseServerClient } from "./create-supabase-server-client";
+export { playMinutes } from "./play-minutes";
 export { getCurrentUser } from "./get-current-user";
 export { getCurrentSessionUser } from "./get-current-session-user";

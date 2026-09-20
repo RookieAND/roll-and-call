@@ -39,6 +39,8 @@ export async function confirmSession(gameId: string, slotIso: string): Promise<A
 
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/schedule`);
+  revalidatePath(`/games/${gameId}/confirm`);
+  revalidatePath(`/games/${gameId}/manage`);
   revalidatePath(`/games/${gameId}/participants`);
   revalidatePath("/games");
   return { redirect: `/games/${gameId}` };

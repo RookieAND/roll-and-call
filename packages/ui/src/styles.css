@@ -59,6 +59,7 @@
   --color-success-solid-hover: #0a5c41;
 
   /* 주의(warning) — 아직 하지 않은 일 */
+  --color-warning-50: #fdf6ec;
   --color-warning-600: #b45309;
 
   /* 배경·글씨가 한 세트로 움직이는 역할 토큰.
@@ -133,6 +134,7 @@
   --color-danger-400: #8a5252;
   --color-danger-600: #f08a8a;
 
+  --color-warning-50: #2d2410;
   --color-warning-600: #fbbf24;
 
   --color-hint: #8f8f9a;

@@ -26,18 +26,18 @@ export function manageRows(game: GameDetailData, responses: number, now = new Da
         icon: "check",
         label: "세션 시간",
         detail: "확정되었습니다",
-        href: `/games/${game.id}/schedule`,
+        href: `/games/${game.id}/confirm`,
         tone: "success",
         blocked: false,
       }
     : {
         key: "time",
         icon: "clock",
-        label: "세션 시간 확정",
+        label: "세션 시간 결정",
         detail: overdue
           ? `기한이 지났습니다 · 응답 ${responses}/${confirmedCount}`
-          : `응답 ${responses}/${confirmedCount} · 겹치는 시간에서 고릅니다`,
-        href: `/games/${game.id}/schedule`,
+          : `아직 정하지 않았습니다 · 응답 ${responses}/${confirmedCount}`,
+        href: `/games/${game.id}/confirm`,
         tone: overdue ? "warning" : "normal",
         blocked: overdue,
       };

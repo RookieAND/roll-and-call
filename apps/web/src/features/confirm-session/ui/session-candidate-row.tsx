@@ -1,0 +1,46 @@
+import { IconButton, Text } from "@trpg/ui";
+import { Check } from "lucide-react";
+
+import type { SessionWindow } from "@/entities/availability";
+
+import { sessionWindowLabel } from "../model/session-window-label";
+
+export function SessionCandidateRow({
+  candidate,
+  playMinutes,
+  absentNames,
+  onPick,
+}: {
+  candidate: SessionWindow;
+  playMinutes: number;
+  absentNames: string[];
+  onPick: (iso: string) => void;
+}) {
+  const everyone = absentNames.length === 0;
+  const detail = everyone
+    ? `${candidate.members.length}명 전원 가능`
+    : `${candidate.members.length}명 가능 · ${absentNames.join(", ")} 불가`;
+  const detailForeground = everyone ? "success" : "muted";
+
+  return (
+    <div className="flex items-center gap-3 border-b border-gray-100 px-3 py-2.5 last:border-b-0">
+      <span className="min-w-0 flex-1">
+        <Text typography="subtitle2" className="block tabular-nums">
+          {sessionWindowLabel(candidate.iso, playMinutes)}
+        </Text>
+        <Text typography="body4" foreground={detailForeground} className="block">
+          {detail}
+        </Text>
+      </span>
+      <IconButton
+        variant="outline"
+        size="sm"
+        aria-label="이 시간으로 채우기"
+        className="shrink-0 text-primary-ink"
+        onClick={() => onPick(candidate.iso)}
+      >
+        <Check size={18} />
+      </IconButton>
+    </div>
+  );
+}

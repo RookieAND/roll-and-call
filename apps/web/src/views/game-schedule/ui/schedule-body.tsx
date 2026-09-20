@@ -4,8 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { VStack } from "@trpg/ui";
 import { useState } from "react";
 
-import { availabilityQuery, rankSlots, type ScheduleAvailability } from "@/entities/availability";
-import { ConfirmSessionForm } from "@/features/confirm-session";
+import { availabilityQuery, type ScheduleAvailability } from "@/entities/availability";
 import { AvailabilityGrid } from "@/features/coordinate-session";
 import type { DayColumn, TimeRow } from "@/shared/lib";
 
@@ -17,9 +16,6 @@ import { ScheduleOverlap } from "./schedule-overlap";
 import { ScheduleOverlapEmpty } from "./schedule-overlap-empty";
 import { ScheduleTabs } from "./schedule-tabs";
 import { WeekPager } from "./week-pager";
-
-// 확정 후보는 상위 3개를 먼저 보이고 "후보 더 보기"로 이만큼까지 편다.
-const CANDIDATE_LIMIT = 10;
 
 type Props = {
   gameId: string;
@@ -35,8 +31,6 @@ type Props = {
   gmName?: string;
   prefill: { keys: string[]; label: string } | null;
   deadlinePassed: boolean;
-  confirmedCount: number;
-  respondedCount: number;
 };
 
 export function ScheduleBody({
@@ -52,8 +46,6 @@ export function ScheduleBody({
   gmName,
   prefill,
   deadlinePassed,
-  confirmedCount,
-  respondedCount,
 }: Props) {
   const { data } = useQuery({ ...availabilityQuery(gameId), initialData: initialAvailability });
   const { aggregate, blocked } = data;
@@ -67,8 +59,7 @@ export function ScheduleBody({
     weeks.length > 1 ? <WeekPager weeks={weeks} index={weekIndex} onChange={setWeekIndex} /> : null;
 
   const respondentCount = new Set(Object.values(aggregate.names).flat()).size;
-  const candidates = rankSlots({ counts: aggregate.counts, limit: CANDIDATE_LIMIT });
-  const hasResponses = candidates.length > 0;
+  const hasResponses = respondentCount > 0;
   const overlapProps = { days: weekDays, timeRows, aggregate, confirmedAt, capacity, gmName };
   const overlap = hasResponses ? (
     <ScheduleOverlap
@@ -81,20 +72,9 @@ export function ScheduleBody({
 
   if (confirmedAt) {
     return (
-      <VStack gap={5}>
-        <VStack gap={3}>
-          {pager}
-          <ScheduleOverlap hint="확정 칸은 초록 테두리입니다. 입력은 잠깁니다." {...overlapProps} />
-        </VStack>
-        {isGm && (
-          <ConfirmSessionForm
-            gameId={gameId}
-            candidates={candidates}
-            confirmedCount={confirmedCount}
-            respondedCount={respondedCount}
-            currentIso={new Date(confirmedAt).toISOString()}
-          />
-        )}
+      <VStack gap={3}>
+        {pager}
+        <ScheduleOverlap hint="확정 칸은 초록 테두리입니다. 입력은 잠깁니다." {...overlapProps} />
       </VStack>
     );
   }
@@ -103,14 +83,6 @@ export function ScheduleBody({
     return (
       <VStack gap={5}>
         {!isGm && deadlinePassed && <DeadlinePassedNotice />}
-        {isGm && (
-          <ConfirmSessionForm
-            gameId={gameId}
-            candidates={candidates}
-            confirmedCount={confirmedCount}
-            respondedCount={respondedCount}
-          />
-        )}
         <VStack gap={3}>
           {pager}
           <ScheduleTabs

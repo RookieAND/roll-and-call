@@ -1,10 +1,10 @@
-import { Button, Container, Text, VStack } from "@trpg/ui";
+import { Button, Container, IconButton, Text, VStack } from "@trpg/ui";
+import { MoreVertical } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import {
   ConfirmedSessionNotice,
-  countConfirmed,
   hasUserJoined,
   isDeadlinePassed,
   isGameGm,
@@ -13,7 +13,7 @@ import {
 import { availabilityPrefill } from "@/entities/profile";
 import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows, formatDate } from "@/shared/lib";
-import { getCurrentUser, getGameById, getProfile, getResponseCounts } from "@/shared/server";
+import { getCurrentUser, getGameById, getProfile } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
 import { getScheduleAvailability } from "../api/load-availability";
@@ -29,7 +29,22 @@ export async function GameScheduleView({ id }: { id: string }) {
   const user = await getCurrentUser();
   const viewerId = user?.id ?? null;
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
-  const appBar = <AppBar back={`/games/${id}`} title="일정 조율" />;
+  // GM도 자기 가능 시간을 내야 하므로 입력 화면은 참여자와 같다. 결정은 운영 관리 안에 둔다.
+  const appBar = (
+    <AppBar
+      back={`/games/${id}`}
+      title="일정 조율"
+      action={
+        isGm && (
+          <IconButton asChild aria-label="이 구인 관리">
+            <Link href={`/games/${id}/manage`}>
+              <MoreVertical size={20} />
+            </Link>
+          </IconButton>
+        )
+      }
+    />
+  );
 
   if (!game.rangeStart || !game.rangeEnd) {
     if (!isGm) redirect(`/games/${id}`);
@@ -57,10 +72,9 @@ export async function GameScheduleView({ id }: { id: string }) {
   const days = buildDayColumns(game.rangeStart, game.rangeEnd);
   const timeRows = buildTimeRows();
 
-  const [initialAvailability, profile, responseCounts] = await Promise.all([
+  const [initialAvailability, profile] = await Promise.all([
     getScheduleAvailability(id, viewerId),
     involved && viewerId && !game.confirmedAt ? getProfile(viewerId) : null,
-    isGm ? getResponseCounts([id]) : new Map<string, number>(),
   ]);
   const prefill = profile ? availabilityPrefill(profile.availability, days, timeRows) : null;
 
@@ -92,8 +106,6 @@ export async function GameScheduleView({ id }: { id: string }) {
               gmName={game.gm?.username}
               prefill={prefill}
               deadlinePassed={isDeadlinePassed(game.endDate)}
-              confirmedCount={countConfirmed(game.participants)}
-              respondedCount={responseCounts.get(id) ?? 0}
             />
           </ErrorBoundary>
         </VStack>
