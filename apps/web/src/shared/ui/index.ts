@@ -4,6 +4,7 @@ export { BoundaryFallback } from "./boundary-fallback";
 export { handleActionResult, type ActionHandlers } from "./handle-action-result";
 export { reportError } from "./report-error";
 export { useAction } from "./use-action";
+export { useDebouncedValue } from "./use-debounced-value";
 export { NavigationTracker } from "./navigation-tracker";
 export { BottomNav } from "./bottom-nav";
 export { ConfirmDialog } from "./confirm-dialog";

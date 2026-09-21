@@ -1,21 +1,23 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { Button, HStack, Text, VStack, cn } from "@trpg/ui";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Sheet, toast, useAction } from "@/shared/ui";
+import { Sheet, toast, useAction, useDebouncedValue } from "@/shared/ui";
 
 import { addParticipants } from "../api/add-participants";
-import { searchCandidates } from "../api/search-candidates";
-import { searchProfiles } from "../api/search-profiles";
 import type { Candidate } from "../model/candidate";
+import { candidateSearchQuery } from "../model/candidate-search-query";
 import { CandidateRow } from "./candidate-row";
+import { CandidateSearchEmpty } from "./candidate-search-empty";
 import { CandidateSearchInput } from "./candidate-search-input";
+import { CandidateSearchSkeleton } from "./candidate-search-skeleton";
 import { SeatsFullNotice } from "./seats-full-notice";
 import { SelectedCandidateChip } from "./selected-candidate-chip";
 
 const MIN_QUERY_LENGTH = 2;
-const SEARCH_DELAY_MS = 250;
+const SEARCH_DELAY_MS = 300;
 
 interface DirectConfirmSheetBaseProps {
   open: boolean;
@@ -42,7 +44,6 @@ export function DirectConfirmSheet({
   maxPlayers,
 }: DirectConfirmSheetProps) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Candidate[] | null>(null);
   const [selected, setSelected] = useState<Candidate[]>([]);
   const { pending, run } = useAction();
 
@@ -50,25 +51,21 @@ export function DirectConfirmSheet({
   const noSeats = openSeats === 0;
   const seatsFilled = selected.length >= openSeats;
   const keyword = query.trim();
-  const shown = results?.filter((candidate) => !excludeIds?.includes(candidate.userId)) ?? null;
-
-  useEffect(() => {
-    if (keyword.length < MIN_QUERY_LENGTH) {
-      setResults(null);
-      return;
-    }
-    let stale = false;
-    const timer = setTimeout(async () => {
-      const found = gameId
-        ? await searchCandidates(gameId, keyword)
-        : await searchProfiles(keyword);
-      if (!stale) setResults(found);
-    }, SEARCH_DELAY_MS);
-    return () => {
-      stale = true;
-      clearTimeout(timer);
-    };
-  }, [gameId, keyword]);
+  const debouncedKeyword = useDebouncedValue(keyword, SEARCH_DELAY_MS);
+  const typedEnough = keyword.length >= MIN_QUERY_LENGTH;
+  // 검색 실패로 시트 밖 화면까지 에러 경계로 넘기지 않고, 목록 자리에 한 줄로 알린다.
+  const {
+    data: results,
+    isPending,
+    isError,
+  } = useQuery({
+    ...candidateSearchQuery(gameId, debouncedKeyword),
+    enabled: debouncedKeyword.length >= MIN_QUERY_LENGTH,
+    throwOnError: false,
+  });
+  // 입력이 멈추길 기다리는 동안과 새 검색어의 결과가 오기 전까지는 뼈대를 보여 준다.
+  const searching = typedEnough && (debouncedKeyword !== keyword || isPending);
+  const shown = results?.filter((candidate) => !excludeIds?.includes(candidate.userId)) ?? [];
 
   function reset(nextOpen: boolean) {
     if (!nextOpen) {
@@ -157,7 +154,7 @@ export function DirectConfirmSheet({
             <CandidateSearchInput value={query} onChange={setQuery} />
           </div>
 
-          {shown === null ? (
+          {!typedEnough ? (
             <Text
               typography="body3"
               foreground="hint"
@@ -168,6 +165,19 @@ export function DirectConfirmSheet({
               <br />
               두 글자부터 찾기 시작합니다.
             </Text>
+          ) : searching ? (
+            <CandidateSearchSkeleton />
+          ) : isError ? (
+            <Text
+              typography="body3"
+              foreground="danger"
+              render={<p />}
+              className="px-400 pt-150 pb-500 text-center"
+            >
+              사람을 찾지 못했습니다. 잠시 뒤 다시 적어 주세요.
+            </Text>
+          ) : shown.length === 0 ? (
+            <CandidateSearchEmpty keyword={keyword} onClear={() => setQuery("")} />
           ) : (
             <VStack gap={0} className="pb-125">
               <Text typography="body4" weight="bold" foreground="hint" className="px-250 pb-100">
