@@ -2,7 +2,7 @@
 
 import { Button, HStack, Text, VStack } from "@trpg/ui";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 import { DirectConfirmSheet } from "@/features/adjust-roster";
 import type { PreConfirmedPlayer } from "@/features/write-game";
@@ -83,10 +83,11 @@ export function PreConfirmedField({
       </Button>
 
       <Text typography="body4" foreground="hint" render={<p />} className="leading-[1.55]">
-        {hint.map((line) => (
-          <span key={line} className="block">
+        {hint.map((line, index) => (
+          <Fragment key={line}>
+            {index > 0 && <br />}
             {line}
-          </span>
+          </Fragment>
         ))}
       </Text>
 

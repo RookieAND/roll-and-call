@@ -1,3 +1,4 @@
+import { Chip } from "@trpg/ui";
 import { X } from "lucide-react";
 
 import type { Candidate } from "../model/candidate";
@@ -9,14 +10,14 @@ interface SelectedCandidateChipProps {
 
 export function SelectedCandidateChip({ candidate, onRemove }: SelectedCandidateChipProps) {
   return (
-    <button
-      type="button"
+    <Chip
+      selected
       aria-label={`${candidate.username} 선택 해제`}
       onClick={onRemove}
-      className="inline-flex h-[30px] items-center gap-075 rounded-full bg-primary-50 pr-075 pl-125 text-body4 font-bold text-tinted-ink"
+      className="gap-075 pr-075 pl-125"
     >
       {candidate.username}
       <X size={14} aria-hidden />
-    </button>
+    </Chip>
   );
 }

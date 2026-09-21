@@ -1,4 +1,4 @@
-import { Avatar, Text, cn } from "@trpg/ui";
+import { Avatar, HStack, Text, cn } from "@trpg/ui";
 import { Check } from "lucide-react";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
@@ -22,6 +22,7 @@ export function CandidateRow({ candidate, picked, capped, onToggle }: CandidateR
       ? "남은 자리를 모두 채웠습니다"
       : (candidate.bio ?? "소개를 아직 쓰지 않았습니다");
 
+  // ponytail: 행 전체가 체크박스라 @trpg/ui에 맞는 프리미티브가 없다. 체크 표시만 손으로 그린다.
   return (
     <button
       type="button"
@@ -36,18 +37,18 @@ export function CandidateRow({ candidate, picked, capped, onToggle }: CandidateR
       )}
     >
       <Avatar src={candidate.avatarUrl} name={candidate.username} size="md" className="h-9 w-9" />
-      <div className={cn("min-w-0 flex-1", joined && "text-gray-400")}>
-        <span className="flex min-w-0 items-center gap-075">
+      <div className={cn("min-w-0 flex-1", joined && "text-hint")}>
+        <HStack align="center" gap="075" render={<span />} className="min-w-0">
           <Text truncate typography="subtitle2" foreground={joined ? "inherit" : "normal"}>
             {candidate.username}
           </Text>
           <CandidateStatusTag status={candidate.status} />
-        </span>
+        </HStack>
         <Text
           truncate
           typography="body4"
           foreground="muted"
-          className={cn("mt-025 block", (joined || (!candidate.bio && !capped)) && "text-gray-400")}
+          className={cn("mt-025 block", (joined || (!candidate.bio && !capped)) && "text-hint")}
         >
           {note}
         </Text>

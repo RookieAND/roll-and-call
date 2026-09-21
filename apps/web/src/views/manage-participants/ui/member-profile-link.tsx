@@ -1,4 +1,4 @@
-import { Avatar, Text } from "@trpg/ui";
+import { Avatar, HStack, Text } from "@trpg/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -26,12 +26,12 @@ export function MemberProfileLink({ member, rank, preConfirmed, note }: MemberPr
       )}
       <Avatar src={member.avatarUrl} name={member.username} size="stack" />
       <div className="min-w-0 flex-1">
-        <span className="flex min-w-0 items-center gap-075">
+        <HStack align="center" gap="075" render={<span />} className="min-w-0">
           <Text truncate typography="subtitle2">
             {member.username}
           </Text>
           {preConfirmed && <PreConfirmedTag />}
-        </span>
+        </HStack>
         {note}
       </div>
     </Link>
