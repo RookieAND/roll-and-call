@@ -16,7 +16,7 @@ export function recruitEmbed(
 ): DiscordEmbed {
   const url = cancelled ? undefined : gameUrl(game.id);
   const fields = [
-    { name: "📜 사용 룰", value: game.rule, inline: true },
+    { name: "📜 룰", value: game.rule, inline: true },
     { name: "👥 인원", value: `${confirmedCount}/${game.maxPlayers}명`, inline: true },
     { name: "🕒 시간", value: formatGameSchedule(game), inline: false },
   ];

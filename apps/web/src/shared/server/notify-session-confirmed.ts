@@ -1,11 +1,11 @@
 import { db } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
-import type { DiscordEmbed } from "@trpg/discord";
 
 import { formatDateTime } from "@/shared/lib";
 
 import { countConfirmedParticipants } from "./count-confirmed-participants";
-import { gameUrl } from "./game-url";
+import { gameNoticeEmbed } from "./game-notice-embed";
+import { headcountFields } from "./headcount-fields";
 
 // 확정 뒤에 부른다. 같은 시간으로 다시 확정하면 보내지 않는다.
 export async function notifySessionConfirmed(gameId: string, previousConfirmedAt: Date | null) {
@@ -20,26 +20,21 @@ export async function notifySessionConfirmed(gameId: string, previousConfirmedAt
   if (previousConfirmedAt?.getTime() === game.confirmedAt.getTime()) return;
 
   const fields = [
-    { name: "🕒 시간", value: formatDateTime(game.confirmedAt), inline: false },
-    {
-      name: "👥 인원",
-      value: `${countConfirmedParticipants(game.participants)}/${game.maxPlayers}`,
-      inline: true,
-    },
+    { name: "🕒 시간", value: formatDateTime(game.confirmedAt), inline: true },
+    ...headcountFields(countConfirmedParticipants(game.participants), game.maxPlayers),
   ];
   if (previousConfirmedAt) {
-    fields.push({ name: "이전 시간", value: formatDateTime(previousConfirmedAt), inline: true });
+    fields.push({ name: "🕒 이전 시간", value: formatDateTime(previousConfirmedAt), inline: true });
   }
 
-  const embed: DiscordEmbed = {
-    title: `🗓️ ${game.title}`,
-    url: gameUrl(game.id),
-    description: previousConfirmedAt ? "세션 시간이 변경됐어요." : "세션 시간이 확정됐어요.",
+  const embed = gameNoticeEmbed({
+    game,
+    gmName: game.gm?.username ?? "?",
+    emoji: "🗓️",
     color: DISCORD_COLOR.confirmed,
+    description: previousConfirmedAt ? "세션 시간이 변경됐어요." : "세션 시간이 확정됐어요.",
     fields,
-    footer: { text: `GM ${game.gm?.username ?? "?"}` },
-    timestamp: new Date().toISOString(),
-  };
+  });
 
   await sendDiscordMessage(game.discordThreadId, { embeds: [embed] });
 }
