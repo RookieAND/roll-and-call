@@ -2,9 +2,12 @@ import "server-only";
 import { db, games } from "@trpg/database";
 import { asc } from "drizzle-orm";
 
+import { hiddenGmWhere } from "./hidden-gm-where";
+
 export async function getMonthSessions(from: Date, to: Date) {
   return db.query.games.findMany({
-    where: (game, { and, gte, lt }) => and(gte(game.confirmedAt, from), lt(game.confirmedAt, to)),
+    where: (game, { and, gte, lt }) =>
+      and(gte(game.confirmedAt, from), lt(game.confirmedAt, to), hiddenGmWhere),
     orderBy: asc(games.confirmedAt),
     with: {
       gm: { columns: { id: true, username: true, avatarUrl: true } },

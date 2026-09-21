@@ -5,11 +5,12 @@ import { and, eq, gt, ilike, isNull, lte, not, or, sql, type SQL } from "drizzle
 import { GAME_STATUS_FILTER, type GamesFilter } from "@/shared/api";
 
 import { confirmedCountSql } from "./confirmed-count-sql";
+import { hiddenGmWhere } from "./hidden-gm-where";
 
 // 상태 필터는 모집 상태 배지(deriveGameStatus)와 같은 기준이다.
 // 세션 시간이 지난 게임은 어떤 필터에서도 보여주지 않는다.
 export function recruitingGamesWhere(filter: GamesFilter, now: Date) {
-  const conditions: SQL[] = [];
+  const conditions: SQL[] = [hiddenGmWhere];
   if (filter.q) {
     conditions.push(or(ilike(games.title, `%${filter.q}%`), ilike(games.rule, `%${filter.q}%`))!);
   }
