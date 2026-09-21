@@ -1,9 +1,19 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 
+import { PARTICIPANT_STATUS } from "@/entities/game";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { db, games, getCurrentUser, notifyGameCreated } from "@/shared/server";
+import {
+  announceRecruitmentComplete,
+  db,
+  games,
+  getCurrentUser,
+  notifyDirectConfirmed,
+  notifyGameCreated,
+  participants,
+  profiles,
+} from "@/shared/server";
 
 import { gameFormSchema, INVALID_INPUT_MESSAGE, type GameFormValues } from "../model/game-form";
 import { toGameColumns } from "../model/to-game-columns";
@@ -18,19 +28,45 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     return { error: parsed.error.issues[0]?.message ?? INVALID_INPUT_MESSAGE };
   }
 
-  const [created] = await db
-    .insert(games)
-    .values({ gmId: user.id, ...toGameColumns(parsed.data) })
-    .returning({ id: games.id });
-  const gameId = created!.id;
+  const invitedIds = [...new Set(parsed.data.preConfirmed.map((player) => player.userId))];
+  if (invitedIds.includes(user.id)) return { error: "GM은 참여자로 넣을 수 없습니다." };
+  if (invitedIds.length > 0) {
+    const found = await db.$count(profiles, inArray(profiles.id, invitedIds));
+    if (found !== invitedIds.length) {
+      return { error: "찾을 수 없는 사람이 있습니다. 직접 확정할 사람을 다시 골라 주세요." };
+    }
+  }
+
+  // 구인글과 직접 확정한 사람을 한 트랜잭션에 넣어, 글만 올라가고 확정이 빠지는 일이 없게 한다.
+  const gameId = await db.transaction(async (transaction) => {
+    const [created] = await transaction
+      .insert(games)
+      .values({ gmId: user.id, ...toGameColumns(parsed.data) })
+      .returning({ id: games.id });
+    if (invitedIds.length > 0) {
+      await transaction.insert(participants).values(
+        invitedIds.map((userId) => ({
+          gameId: created!.id,
+          userId,
+          status: PARTICIPANT_STATUS.confirmed,
+        })),
+      );
+    }
+    return created!.id;
+  });
 
   const game = await db.query.games.findFirst({
     where: (table, { eq: equals }) => equals(table.id, gameId),
     with: { gm: { columns: { username: true } } },
   });
-  const threadId = game && (await notifyGameCreated(game, game.gm?.username ?? "?"));
+  const threadId =
+    game && (await notifyGameCreated(game, game.gm?.username ?? "?", invitedIds.length));
   if (threadId) {
     await db.update(games).set({ discordThreadId: threadId }).where(eq(games.id, gameId));
+    await notifyDirectConfirmed(gameId, invitedIds);
+  }
+  if (invitedIds.length === Number(parsed.data.maxPlayers)) {
+    await announceRecruitmentComplete(gameId);
   }
 
   return { redirect: `/games/${gameId}` };

@@ -59,8 +59,26 @@ export const gameFormSchema = z
       .array(z.url())
       .max(GAME_IMAGES_MAX, `이미지는 최대 ${GAME_IMAGES_MAX}장까지 올릴 수 있습니다.`),
     waitlistEnabled: z.boolean(),
+    // 등록과 함께 확정으로 넣을 사람. 서버는 userId만 쓰고 나머지는 목록 표시용이다.
+    preConfirmed: z
+      .array(
+        z.object({
+          userId: z.uuid(),
+          username: z.string(),
+          avatarUrl: z.string().nullable(),
+          bio: z.string().nullable(),
+        }),
+      )
+      .max(GAME_MAX_PLAYERS),
   })
   .superRefine((values, context) => {
+    if (values.preConfirmed.length > Number(values.maxPlayers)) {
+      context.addIssue({
+        code: "custom",
+        message: `직접 확정한 ${values.preConfirmed.length}명보다 줄일 수 없습니다.`,
+        path: ["maxPlayers"],
+      });
+    }
     if (values.scheduleMode === SCHEDULE_MODE.fixed && !values.confirmedAt) {
       context.addIssue({
         code: "custom",
@@ -125,3 +143,5 @@ export const gameFormSchema = z
   });
 
 export type GameFormValues = z.infer<typeof gameFormSchema>;
+
+export type PreConfirmedPlayer = GameFormValues["preConfirmed"][number];

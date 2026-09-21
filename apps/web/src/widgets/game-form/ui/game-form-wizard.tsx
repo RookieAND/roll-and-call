@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FieldErrors } from "react-hook-form";
 
+import { RECRUIT_METHOD } from "@/entities/game";
 import type { GameFormValues } from "@/features/write-game";
 import { ConfirmDialog } from "@/shared/ui";
 
@@ -19,6 +20,7 @@ import { GameMediaFields } from "./game-media-fields";
 import { GamePreflightFields } from "./game-preflight-fields";
 import { GamePreflightNotice } from "./game-preflight-notice";
 import { GameRecruitFields } from "./game-recruit-fields";
+import { GameScheduleFields } from "./game-schedule-fields";
 import { WizardDraftSummary } from "./wizard-draft-summary";
 import { WizardFooter } from "./wizard-footer";
 import { WizardHeader } from "./wizard-header";
@@ -81,13 +83,25 @@ export function GameFormWizard({
   const images = watch("images");
   const thumbnail = watch("thumbnailUrl");
   const imageCount = images.length + (thumbnail ? 1 : 0);
-  const summaryLine = [
-    watch("rule"),
-    watch("playTime"),
-    isLastStep && imageCount > 0 ? `이미지 ${imageCount}장` : null,
+  const stepSections: readonly SectionKey[] = intro?.sections ?? [];
+  const preConfirmedCount = watch("preConfirmed").length;
+  const recruitLine = [
+    `${watch("recruitMethod") === RECRUIT_METHOD.lottery ? "추첨" : "선착순"} ${watch("maxPlayers")}명`,
+    preConfirmedCount > 0 ? `직접 확정 ${preConfirmedCount}명` : null,
   ]
     .filter(Boolean)
     .join(" · ");
+  const summaryLine = stepSections.includes(FORM_SECTION.schedule)
+    ? recruitLine
+    : [
+        watch("rule"),
+        watch("playTime"),
+        stepSections.includes(FORM_SECTION.recruit) && imageCount > 0
+          ? `이미지 ${imageCount}장`
+          : null,
+      ]
+        .filter(Boolean)
+        .join(" · ");
   const exitDescription =
     thumbnail || images.length > 0
       ? "지금까지 쓴 내용은 저장되지 않습니다. 올린 썸네일도 함께 사라집니다."
@@ -117,6 +131,14 @@ export function GameFormWizard({
             form={form}
             minPlayers={Math.max(1, edit?.confirmedCount ?? 1)}
             lockedReason={lockedReason}
+            preConfirmable={!edit}
+          />
+        );
+      case FORM_SECTION.schedule:
+        return (
+          <GameScheduleFields
+            form={form}
+            modeLockedReason={lockedReason}
             sessionNotice={
               applicants > 0 ? `바꾸면 참여자 ${applicants}명에게 디스코드로 알립니다.` : null
             }

@@ -7,8 +7,8 @@ import type { UseFormReturn } from "react-hook-form";
 import { RECRUIT_METHOD } from "@/entities/game";
 import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
-import { GameScheduleFields } from "./game-schedule-fields";
 import { HintBox } from "./hint-box";
+import { PreConfirmedField } from "./pre-confirmed-field";
 import { RecruitMethodField } from "./recruit-method-field";
 import { WaitlistField } from "./waitlist-field";
 
@@ -16,14 +16,14 @@ interface GameRecruitFieldsProps {
   form: UseFormReturn<GameFormValues>;
   minPlayers?: number;
   lockedReason?: readonly string[] | null;
-  sessionNotice?: string | null;
+  preConfirmable?: boolean;
 }
 
 export function GameRecruitFields({
   form,
   minPlayers = 1,
   lockedReason,
-  sessionNotice,
+  preConfirmable = false,
 }: GameRecruitFieldsProps) {
   const {
     setValue,
@@ -32,6 +32,9 @@ export function GameRecruitFields({
   } = form;
   const method = watch("recruitMethod");
   const isLottery = method === RECRUIT_METHOD.lottery;
+  const maxPlayers = Number(watch("maxPlayers"));
+  const preConfirmed = watch("preConfirmed");
+  const playersFloor = Math.max(minPlayers, preConfirmed.length);
 
   const playersHint =
     minPlayers > 1
@@ -51,8 +54,8 @@ export function GameRecruitFields({
         >
           <Stepper
             id="maxPlayers"
-            value={Number(watch("maxPlayers"))}
-            min={minPlayers}
+            value={maxPlayers}
+            min={playersFloor}
             max={GAME_MAX_PLAYERS}
             invalid={!!errors.maxPlayers}
             aria-describedby="maxPlayers-hint"
@@ -65,6 +68,27 @@ export function GameRecruitFields({
           {playersHint}
         </Text>
       </VStack>
+
+      {preConfirmable && (
+        <PreConfirmedField
+          players={preConfirmed}
+          maxPlayers={maxPlayers}
+          isLottery={isLottery}
+          onAdd={(players) =>
+            setValue("preConfirmed", [...preConfirmed, ...players], {
+              shouldDirty: true,
+              shouldValidate: true,
+            })
+          }
+          onRemove={(userId) =>
+            setValue(
+              "preConfirmed",
+              preConfirmed.filter((player) => player.userId !== userId),
+              { shouldDirty: true, shouldValidate: true },
+            )
+          }
+        />
+      )}
 
       <VStack gap="125">
         <RecruitMethodField
@@ -88,12 +112,6 @@ export function GameRecruitFields({
           />
         )}
       </VStack>
-
-      <GameScheduleFields
-        form={form}
-        modeLockedReason={lockedReason}
-        sessionNotice={sessionNotice}
-      />
     </>
   );
 }

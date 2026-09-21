@@ -21,6 +21,7 @@ const base = {
   thumbnailSpoiler: false,
   aiImage: false,
   waitlistEnabled: true,
+  preConfirmed: [],
   playTime: "3시간",
 };
 
@@ -39,6 +40,13 @@ describe("gameFormSchema", () => {
 
   it("정원은 20명을 넘길 수 없다", () => {
     expect(firstError({ ...base, maxPlayers: "21" })).toBe("maxPlayers");
+  });
+
+  it("정원을 직접 확정한 사람 수보다 줄일 수 없다", () => {
+    const player = { userId: crypto.randomUUID(), username: "하늘", avatarUrl: null, bio: null };
+    const twoPlayers = [player, { ...player, userId: crypto.randomUUID() }];
+    expect(firstError({ ...base, maxPlayers: "1", preConfirmed: twoPlayers })).toBe("maxPlayers");
+    expect(firstError({ ...base, maxPlayers: "2", preConfirmed: twoPlayers })).toBeNull();
   });
 
   it("조율 기간은 하루 이상 2주 이하다", () => {
