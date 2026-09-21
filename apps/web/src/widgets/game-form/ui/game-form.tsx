@@ -42,7 +42,7 @@ export function GameForm({
       triggers: defaultGame?.triggers ?? [],
       platforms: defaultGame?.platforms ?? [],
       notice: defaultGame?.notice ?? "",
-      aiImage: defaultGame?.aiImage,
+      aiImage: defaultGame?.aiImage ?? false,
       playTime: defaultGame ? (defaultGame.playTime ?? "") : DEFAULT_PLAY_TIME,
       maxPlayers: String(defaultGame?.maxPlayers ?? 4),
       recruitMethod: defaultGame?.recruitMethod ?? RECRUIT_METHOD.firstCome,

@@ -86,7 +86,6 @@ export function GamePreflightFields({
         <Field
           label="AI 이미지"
           required
-          counter="목록에는 나오지 않음"
           description="세션에서 GM과 플레이어가 AI 이미지를 쓸 수 있는지 정합니다."
           error={errors.aiImage?.message}
         >
