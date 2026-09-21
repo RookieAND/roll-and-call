@@ -4,9 +4,10 @@ import { Search, X } from "lucide-react";
 interface CandidateSearchInputProps {
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 }
 
-export function CandidateSearchInput({ value, onChange }: CandidateSearchInputProps) {
+export function CandidateSearchInput({ value, onChange, disabled }: CandidateSearchInputProps) {
   return (
     <div role="search" className="relative">
       <Search
@@ -15,7 +16,8 @@ export function CandidateSearchInput({ value, onChange }: CandidateSearchInputPr
         className="pointer-events-none absolute top-1/2 left-150 -translate-y-1/2 text-hint"
       />
       <TextInput
-        autoFocus
+        autoFocus={!disabled}
+        disabled={disabled}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder="닉네임 또는 디스코드 아이디"

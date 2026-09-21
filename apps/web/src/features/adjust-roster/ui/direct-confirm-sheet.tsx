@@ -110,10 +110,10 @@ export function DirectConfirmSheet({
   }
 
   const seatsLabel = noSeats
-    ? `${maxPlayers}자리 모두 찼음`
+    ? "자리 없음"
     : seatsFilled
       ? `${openSeats}자리 모두 채움`
-      : `${maxPlayers}자리 중 ${openSeats - selected.length}자리 남음`;
+      : `${openSeats - selected.length}자리 남음`;
 
   return (
     <Sheet.Root open={open} onOpenChange={reset}>
@@ -137,7 +137,7 @@ export function DirectConfirmSheet({
             </Text>
           </HStack>
 
-          {noSeats && gameId && <SeatsFullNotice gameId={gameId} onClose={() => reset(false)} />}
+          {noSeats && gameId && <SeatsFullNotice />}
 
           {selected.length > 0 && (
             <HStack gap="075" wrap className="px-250">
@@ -152,7 +152,7 @@ export function DirectConfirmSheet({
           )}
 
           <div className="px-250">
-            <CandidateSearchInput value={query} onChange={setQuery} />
+            <CandidateSearchInput value={query} onChange={setQuery} disabled={noSeats} />
           </div>
 
           {!typedEnough ? (
