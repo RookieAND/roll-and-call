@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Text, VStack } from "@trpg/ui";
+import { Button, Callout, Text, VStack } from "@trpg/ui";
 import { Ban } from "lucide-react";
 import { useState } from "react";
 
@@ -23,7 +23,7 @@ export function DeleteGameRow({ gameId, confirmedCount, lockedReason }: DeleteGa
     confirmedCount > 0
       ? `\n확정 참여자 ${confirmedCount}명에게 취소 사실이 디스코드로 전해집니다.`
       : "";
-  const description = `이 구인을 취소할까요? 되돌릴 수 없습니다.${participantLine}\n\n디스코드 모집 공지에 취소를 표시하고, 스레드와 세션 채널에 취소를 알립니다. 채널 자체는 남습니다.`;
+  const description = `이 구인을 취소할까요? 되돌릴 수 없습니다.${participantLine}`;
   const locked = Boolean(lockedReason);
   const labelForeground = locked ? "hint" : "danger";
 
@@ -41,7 +41,7 @@ export function DeleteGameRow({ gameId, confirmedCount, lockedReason }: DeleteGa
             구인 취소
           </Text>
           <Text weight="regular" typography="body3" foreground="hint">
-            {lockedReason ?? "디스코드로 취소를 알립니다"}
+            {lockedReason ?? "구인을 취소하고 참여자에게 디스코드로 알립니다"}
           </Text>
         </VStack>
       </Button>
@@ -56,7 +56,15 @@ export function DeleteGameRow({ gameId, confirmedCount, lockedReason }: DeleteGa
         danger
         pending={pending}
         onConfirm={remove}
-      />
+      >
+        <Callout size="sm" className="mt-150">
+          <ul className="flex list-disc flex-col gap-050 pl-200 text-body4">
+            <li>디스코드 모집 공지에 취소가 표시됩니다.</li>
+            <li>모집 스레드와 세션 채널에 취소를 알립니다.</li>
+            <li>채널은 지우지 않고 그대로 둡니다.</li>
+          </ul>
+        </Callout>
+      </ConfirmDialog>
     </>
   );
 }

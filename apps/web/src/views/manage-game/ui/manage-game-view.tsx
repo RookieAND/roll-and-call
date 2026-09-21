@@ -1,4 +1,4 @@
-import { Badge, Card, Container, Grid, HStack, Text } from "@trpg/ui";
+import { Badge, Card, Container, HStack, Text } from "@trpg/ui";
 
 import { countConfirmed, isSessionEnded } from "@/entities/game";
 import { DeleteGameRow } from "@/features/delete-game";
@@ -10,15 +10,15 @@ import { manageSummary } from "../model/manage-summary";
 import { ManageGameStat } from "./manage-game-stat";
 import { ManageRow } from "./manage-row";
 
-// GM 도구는 모두가 읽는 02 상세가 아니라 이 화면에 모은다.
+// GM 도구는 모두가 읽는 02 상세가 아니라 이 화면에 모은다. 다섯 줄은 항상 보이고, 못 하는 일은 흐리게 둔다.
 export async function ManageGameView({ id }: { id: string }) {
   const game = await requireGmGame(id, { next: `/games/${id}/manage` });
 
   const responseCounts = await getResponseCounts([id]);
   const responses = responseCounts.get(id) ?? 0;
   const confirmedCount = countConfirmed(game.participants);
-  const { stage, time } = manageSummary(game, responses);
-  const rows = manageRows(game, responses);
+  const { stage, stats } = manageSummary(game, responses);
+  const rows = manageRows(game);
 
   return (
     <>
@@ -41,14 +41,18 @@ export async function ManageGameView({ id }: { id: string }) {
             >
               {game.title}
             </Text>
-            <Badge color={stage.color} className="shrink-0">
-              {stage.label}
+            <Badge color="gray" className="shrink-0">
+              {stage}
             </Badge>
           </HStack>
-          <Grid cols={2} gap="100" className="mt-150">
-            <ManageGameStat label={time.label} value={time.value} />
-            <ManageGameStat label="확정" value={`${confirmedCount} / ${game.maxPlayers}명`} />
-          </Grid>
+          <HStack
+            align="stretch"
+            className="mt-150 overflow-hidden rounded-500 border border-gray-200 divide-x divide-gray-200"
+          >
+            {stats.map((stat, index) => (
+              <ManageGameStat key={stat.label} stat={stat} wide={index === 0} />
+            ))}
+          </HStack>
         </div>
 
         <div className="p-200">

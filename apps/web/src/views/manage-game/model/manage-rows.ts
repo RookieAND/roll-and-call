@@ -1,19 +1,13 @@
-import {
-  countConfirmed,
-  isDeadlinePassed,
-  isDeadlineUrgent,
-  isSessionEnded,
-  SCHEDULE_MODE,
-  splitRoster,
-} from "@/entities/game";
+import { countConfirmed, isDeadlinePassed, isSessionEnded, SCHEDULE_MODE } from "@/entities/game";
 import { formatDateTime } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
 export const MANAGE_ROW_STATE = {
   open: "open",
-  warning: "warning",
+  // 지금 막혀 있는 일이다. 줄 전체를 붉게 칠하고 무엇을 해야 하는지 적는다.
+  blocked: "blocked",
   done: "done",
-  // 지금 못 하는 일이다. 줄은 지우지 않고 흐리게 둔다.
+  // 지금 못 하는 일이다. 줄은 지우지 않고 흐리게 두고 이유를 적는다.
   locked: "locked",
 } as const;
 export type ManageRowState = (typeof MANAGE_ROW_STATE)[keyof typeof MANAGE_ROW_STATE];
@@ -25,63 +19,50 @@ export type ManageRow = {
   detail: string;
   href: string | null;
   state: ManageRowState;
-  blocked: boolean;
 };
 
 // 줄 순서는 고정이다. 상태에 따라 순서를 바꾸지 않고 같은 자리에서 찾게 한다.
-// 빨간 점은 지금 막혀 있는 줄에만, 둘 이상이면 위쪽 한 줄에만 단다.
-export function manageRows(game: GameDetailData, responses: number, now = new Date()): ManageRow[] {
-  const { confirmed, waiting } = splitRoster(game.participants);
+// 숫자는 헤더에서만 읽는다 — 줄에는 그 줄이 여는 화면이 무엇을 하는지만 적는다.
+export function manageRows(game: GameDetailData, now = new Date()): ManageRow[] {
   const confirmedCount = countConfirmed(game.participants);
   const ended = isSessionEnded(game, now);
   const coordinating = game.scheduleMode === SCHEDULE_MODE.coordinate && !game.confirmedAt;
   const overdue = coordinating && isDeadlinePassed(game.endDate, now);
-  const unsubmitted = coordinating ? Math.max(confirmedCount - responses, 0) : 0;
 
-  const open = { state: MANAGE_ROW_STATE.open, blocked: false } as const;
-  const locked = { state: MANAGE_ROW_STATE.locked, href: null, blocked: false } as const;
+  const open = { state: MANAGE_ROW_STATE.open } as const;
+  const locked = { state: MANAGE_ROW_STATE.locked, href: null } as const;
 
-  const attendanceBase = { key: "attendance", icon: "clipboard", label: "출석 확인" } as const;
+  const attendanceBase = {
+    key: "attendance",
+    icon: "clipboard",
+    label: "출석 확인",
+    href: `/games/${game.id}/attendance`,
+  } as const;
   const attendance: ManageRow = !ended
-    ? { ...attendanceBase, ...locked, detail: "아직 세션이 끝나지 않았습니다" }
+    ? { ...attendanceBase, ...locked, detail: "세션이 끝난 뒤에 쓸 수 있습니다" }
     : game.attendanceConfirmedAt
-      ? {
-          ...attendanceBase,
-          ...open,
-          detail: "출석을 정리했습니다",
-          href: `/games/${game.id}/attendance`,
-          state: MANAGE_ROW_STATE.done,
-        }
+      ? { ...attendanceBase, state: MANAGE_ROW_STATE.done, detail: "출석을 정리했습니다" }
       : confirmedCount === 0
         ? { ...attendanceBase, ...locked, detail: "확정 참여자가 없습니다" }
-        : {
-            ...attendanceBase,
-            ...open,
-            detail: `확정 참여자 ${confirmedCount}명의 참석 여부가 비어 있습니다`,
-            href: `/games/${game.id}/attendance`,
-            blocked: true,
-          };
+        : { ...attendanceBase, ...open, detail: "세션이 끝났습니다 · 참석·불참을 표시해주세요" };
 
+  const timeBase = { key: "time", label: "세션 시간 정하기" } as const;
   const time: ManageRow = game.confirmedAt
     ? {
-        ...open,
-        key: "time",
+        ...timeBase,
         icon: "check",
-        label: "세션 시간 확정",
         detail: `${formatDateTime(game.confirmedAt)}으로 정했습니다`,
         href: null,
         state: MANAGE_ROW_STATE.done,
       }
     : {
-        key: "time",
+        ...timeBase,
         icon: "clock",
-        label: "세션 시간 확정",
         detail: overdue
-          ? `기한이 지났습니다 · 응답 ${responses}/${confirmedCount}`
-          : `응답 ${responses}/${confirmedCount} · 겹치는 시간에서 고릅니다`,
+          ? "조율 기한이 지났습니다 · 세션 일시를 빨리 정해주세요"
+          : "받은 가능 시간을 겹쳐 보고 세션 일시를 정합니다",
         href: `/games/${game.id}/confirm`,
-        state: overdue ? MANAGE_ROW_STATE.warning : MANAGE_ROW_STATE.open,
-        blocked: overdue,
+        state: overdue ? MANAGE_ROW_STATE.blocked : MANAGE_ROW_STATE.open,
       };
 
   const rosterBase = { key: "roster", icon: "users", label: "참여자 관리" } as const;
@@ -90,13 +71,8 @@ export function manageRows(game: GameDetailData, responses: number, now = new Da
     : {
         ...rosterBase,
         ...open,
-        detail: [
-          `확정 ${confirmed.length}/${game.maxPlayers}`,
-          waiting.length > 0 ? `대기 ${waiting.length}명` : "대기 없음",
-          ...(unsubmitted > 0 ? [`${unsubmitted}명 미제출`] : []),
-        ].join(" · "),
+        detail: "신청 승인과 거절, 대기 순번, 내보내기를 합니다",
         href: `/games/${game.id}/participants`,
-        blocked: !overdue && unsubmitted > 0 && isDeadlineUrgent(game.endDate, now),
       };
 
   const editBase = { key: "edit", icon: "pencil", label: "세션 수정" } as const;
@@ -105,7 +81,7 @@ export function manageRows(game: GameDetailData, responses: number, now = new Da
     : {
         ...editBase,
         ...open,
-        detail: "게임 정보 · 이미지 · 모집 조건",
+        detail: "구인 글의 제목과 소개, 이미지, 모집 조건을 고칩니다",
         href: `/games/${game.id}/edit`,
       };
 

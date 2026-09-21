@@ -1,38 +1,45 @@
-import { countConfirmed, isDeadlinePassed, isSessionEnded } from "@/entities/game";
+import { isDeadlinePassed, isSessionEnded, splitRoster } from "@/entities/game";
 import { formatDate, formatDateTime } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
-const STAGE = {
-  coordinating: { label: "조율 중", color: "primary" },
-  overdue: { label: "기한 지남", color: "warning" },
-  confirmed: { label: "세션 확정", color: "success" },
-  ended: { label: "끝남", color: "gray" },
-} as const;
+export type ManageStat = { label: string; value: string; danger?: boolean };
 
-// 헤더는 운영 단계와 두 칸(시간 · 인원)만 읽는다. 시각이 정해지면 첫 칸이 세션 시간으로 바뀐다.
+// 숫자는 헤더에서만 읽는다. 시각이 정해지면 첫 칸이 세션 일시로 바뀌고, 셋째 칸은 대기·출석으로 바뀐다.
 export function manageSummary(game: GameDetailData, responses: number, now = new Date()) {
-  const confirmedCount = countConfirmed(game.participants);
+  const { confirmed, waiting } = splitRoster(game.participants);
+  const seats: ManageStat = {
+    label: "확정 인원",
+    value: `${confirmed.length} / ${game.maxPlayers}명`,
+  };
 
   if (game.confirmedAt) {
+    const ended = isSessionEnded(game, now);
+    const attended = game.attendanceConfirmedAt
+      ? confirmed.filter((participant) => !participant.absent).length
+      : 0;
     return {
-      stage: isSessionEnded(game, now) ? STAGE.ended : STAGE.confirmed,
-      time: { label: "세션 시간", value: formatDateTime(game.confirmedAt) },
+      stage: ended ? "끝남" : "세션 확정",
+      stats: [
+        { label: "세션 일시", value: formatDateTime(game.confirmedAt) },
+        seats,
+        ended
+          ? { label: "출석", value: `${attended} / ${confirmed.length}명` }
+          : { label: "대기", value: `${waiting.length}명` },
+      ],
     };
   }
-  if (isDeadlinePassed(game.endDate, now)) {
-    return {
-      stage: STAGE.overdue,
-      time: { label: "응답", value: `${responses} / ${confirmedCount}명` },
-    };
-  }
+
+  const overdue = isDeadlinePassed(game.endDate, now);
   return {
-    stage: STAGE.coordinating,
-    time: {
-      label: "조율 기간",
-      value:
-        game.rangeStart && game.rangeEnd
-          ? `${formatDate(game.rangeStart)} ~ ${formatDate(game.rangeEnd)}`
-          : "일정 미정",
-    },
+    stage: overdue ? "기한 지남" : "조율 중",
+    stats: [
+      {
+        label: "조율 마감",
+        value: `${formatDate(game.endDate)}${overdue ? " 지남" : ""}`,
+        danger: overdue,
+      },
+      { label: "가능 시간 제출", value: `${responses} / ${confirmed.length}명` },
+      seats,
+    ],
   };
 }
