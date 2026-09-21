@@ -11,7 +11,7 @@ import type { Game } from "@/shared/server";
 import { toast, useAction } from "@/shared/ui";
 
 import type { GameEditContext } from "../model/game-form-layout";
-import { CREATE_STEPS, EDIT_STEPS } from "../model/game-form-steps";
+import { GAME_FORM_STEPS } from "../model/game-form-steps";
 import { DEFAULT_PLAY_TIME } from "../model/play-time-options";
 import { GameFormWizard } from "./game-form-wizard";
 
@@ -72,7 +72,7 @@ export function GameForm({
       pending={pending}
       submitLabel={submitLabel}
       onValid={onValid}
-      steps={edit ? EDIT_STEPS : CREATE_STEPS}
+      steps={GAME_FORM_STEPS}
       edit={edit}
     />
   );

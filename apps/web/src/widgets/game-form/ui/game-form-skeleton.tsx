@@ -2,7 +2,7 @@ import { Container, HStack, Skeleton, Text, VStack } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
-import { CREATE_STEPS } from "../model/game-form-steps";
+import { GAME_FORM_STEPS } from "../model/game-form-steps";
 
 interface GameFormSkeletonProps {
   title: string;
@@ -11,7 +11,7 @@ interface GameFormSkeletonProps {
 
 // 위저드 1단계(게임)의 셸. 진행바는 5단계 중 1단계까지 칠한다.
 export function GameFormSkeleton({ title, edit = false }: GameFormSkeletonProps) {
-  const total = CREATE_STEPS.length;
+  const total = GAME_FORM_STEPS.length;
 
   return (
     <VStack className="min-h-dvh">
