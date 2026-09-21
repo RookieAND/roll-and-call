@@ -35,14 +35,14 @@ export function HomeSessionCard({ session }: HomeSessionCardProps) {
               typography="body4"
               foreground="primary"
               tight
-              className="flex-none rounded-200 bg-primary-50 px-100 py-050"
+              className="flex-none rounded-200 bg-primary-50 px-100 py-050 dark:bg-primary-200"
             >
               내가 참여
             </Text>
           )}
         </HStack>
         <HStack align="center" gap="100" className="mt-100">
-          <GameRuleChip rule={session.rule} />
+          <GameRuleChip rule={session.rule} className="dark:bg-gray-200 dark:text-gray-800" />
           <Text
             typography="body4"
             foreground="muted"
