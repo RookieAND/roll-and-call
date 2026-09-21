@@ -12,13 +12,12 @@ import {
 } from "../model/session-card-model";
 import { SessionCardAction } from "./session-card-action";
 import { SessionCardMeta } from "./session-card-meta";
-import { SessionEyebrow } from "./session-eyebrow";
-import { UrgentSessionEyebrow } from "./urgent-session-eyebrow";
 
 const TONE_CLASS: Record<SessionTone, string> = {
   [SESSION_TONE.normal]: "text-gray-600",
   [SESSION_TONE.success]: "font-bold text-success-700",
   [SESSION_TONE.warning]: "font-semibold text-warning-600",
+  [SESSION_TONE.danger]: "font-semibold text-danger-600",
   [SESSION_TONE.hint]: "text-hint",
 };
 
@@ -32,21 +31,18 @@ const SCHEDULE_ICON: Record<SessionIcon, typeof Check> = {
 
 interface SessionCardProps {
   model: SessionCardModel;
-  eyebrow?: string;
 }
 
-export function SessionCard({ model, eyebrow }: SessionCardProps) {
+export function SessionCard({ model }: SessionCardProps) {
   const cardClass = model.urgent
-    ? "border-[1.5px] border-danger-300 bg-danger-50"
+    ? "border border-danger-300 bg-danger-50"
     : "border border-gray-200";
   const titleForeground = model.chip === SESSION_CHIP.ended ? "muted" : "normal";
   const ScheduleIcon = model.scheduleIcon && SCHEDULE_ICON[model.scheduleIcon];
-  const Eyebrow = model.urgent ? UrgentSessionEyebrow : SessionEyebrow;
 
   return (
     <div className={cn("rounded-600 p-175", cardClass)}>
       <Link href={`/games/${model.id}`} className="block">
-        {eyebrow && <Eyebrow label={eyebrow} />}
         <HStack justify="between" align="center" gap="100">
           <Text truncate typography="heading3" foreground={titleForeground} className="min-w-0">
             {model.title}

@@ -21,4 +21,5 @@ export {
   type MySessions,
   type SessionCardModel,
   type SessionChip,
+  type SessionTodo,
 } from "./model/session-card-model";

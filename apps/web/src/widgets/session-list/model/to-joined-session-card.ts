@@ -123,6 +123,12 @@ export function toJoinedSessionCard(
     scheduleTone: needsResponse ? SESSION_TONE.warning : SESSION_TONE.normal,
     scheduleIcon: needsResponse ? SESSION_ICON.alert : SESSION_ICON.scheduling,
     action: needsResponse ? submit : null,
-    todo: needsResponse ? submit : null,
+    todo: needsResponse
+      ? {
+          ...submit,
+          blocked: false,
+          description: `아직 가능 시간을 내지 않았습니다.\n${formatDate(game.endDate)}까지 내면 됩니다.`,
+        }
+      : null,
   };
 }

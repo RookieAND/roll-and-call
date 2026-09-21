@@ -4,6 +4,7 @@ import {
   isAttendanceDue,
   PARTICIPANT_STATUS,
   isDeadlineUrgent,
+  RECRUIT_METHOD,
   SCHEDULE_MODE,
   scheduleLine,
   SESSION_STATE,
@@ -34,16 +35,22 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
   const coordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
   // 조율형이 기한을 넘겼는데 확정자가 있고 세션 시각이 없으면 무산이 아니라 GM이 시간을 정할 차례다(deriveSessionState는 closed로 본다).
   const awaitingTime = coordinate && !game.confirmedAt && line.deadlinePassed && confirmedCount > 0;
+  const waitingCount = game.participants.filter(
+    (participant) => participant.status === PARTICIPANT_STATUS.waiting,
+  ).length;
+  // 추첨은 마감 뒤에 뽑는다. 확정자가 없어도 뽑기 전이면 무산이 아니라 GM이 뽑을 차례다.
+  const drawPending =
+    game.recruitMethod === RECRUIT_METHOD.lottery &&
+    game.drawnAt === null &&
+    line.deadlinePassed &&
+    waitingCount > 0;
   const past =
-    (state === SESSION_STATE.closed && !awaitingTime) || state === SESSION_STATE.finished;
+    (state === SESSION_STATE.closed && !awaitingTime && !drawPending) ||
+    state === SESSION_STATE.finished;
   const timeSet = Boolean(game.confirmedAt) && (!coordinate || line.confirmed);
   const startsAt = timeSet ? new Date(game.confirmedAt!).toISOString() : null;
   const sessionWhen = startsAt ? formatDateTime(startsAt) : null;
   const sessionAgo = startsAt ? relativeDay(ddayKst(startsAt, now)) : null;
-
-  const waitingCount = game.participants.filter(
-    (participant) => participant.status === PARTICIPANT_STATUS.waiting,
-  ).length;
 
   const attendanceDue = isAttendanceDue(game, confirmedCount, now);
   // 확정 전에는 아무것도 기록되지 않았으므로 불참도 아직 없다.
@@ -62,6 +69,7 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
     coordinate,
     confirmedCount,
     awaitingTime,
+    drawPending,
     past,
     timeSet,
     sessionWhen,

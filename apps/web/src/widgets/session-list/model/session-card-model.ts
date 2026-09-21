@@ -16,6 +16,7 @@ export const SESSION_TONE = {
   normal: "normal",
   success: "success",
   warning: "warning",
+  danger: "danger",
   hint: "hint",
 } as const;
 
@@ -39,6 +40,8 @@ export const SESSION_ACTION_KIND = {
   hostMenu: "host-menu",
   cancelWaitlist: "cancel-waitlist",
   confirmAttendance: "confirm-attendance",
+  drawLottery: "draw-lottery",
+  fillVacancy: "fill-vacancy",
 } as const;
 
 export type SessionActionKind = (typeof SESSION_ACTION_KIND)[keyof typeof SESSION_ACTION_KIND];
@@ -52,6 +55,9 @@ export type SessionAction = {
   label: string;
   href: string;
 };
+
+// 할 일 카드. blocked는 지금 막혀 있는 일이라 카드를 붉게 칠하고 초록 버튼을 단다.
+export type SessionTodo = SessionAction & { description: string; blocked: boolean };
 
 export type SessionCardModel = {
   id: string;
@@ -75,7 +81,7 @@ export type SessionCardModel = {
   // 목록 카드가 다는 버튼. 운영은 언제나 "운영 관리" 하나다.
   action: SessionAction | null;
   // 지금 막혀 있는 것. 마이페이지 할 일 카드가 이걸로 만들어진다.
-  todo: SessionAction | null;
+  todo: SessionTodo | null;
   waitingCount: number;
   startsAt: string | null;
   deadlinePassed: boolean;

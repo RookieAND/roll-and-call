@@ -9,7 +9,7 @@ import {
   SESSION_CHIP,
   SESSION_ICON,
   SESSION_TONE,
-  type SessionAction,
+  type SessionTodo,
   type SessionCardModel,
   type SessionContext,
   type SessionGame,
@@ -65,12 +65,14 @@ export function toPastSessionCard(
       ? `이 기록은 ${formatDate(absenceExpiresAt(game.confirmedAt!))}에 사라집니다.\n완료 세션 수에는 세지 않습니다.`
       : null;
 
-  const attendanceTodo: SessionAction | null =
+  const attendanceTodo: SessionTodo | null =
     !player && facts.attendanceDue && !context.readOnly
       ? {
           kind: SESSION_ACTION_KIND.confirmAttendance,
-          label: "출석 확인하기",
+          label: "출석 확인",
           href: `/games/${game.id}/attendance`,
+          blocked: false,
+          description: `${formatDateTime(game.confirmedAt!)} 세션이 끝났습니다.\n확정 참여자 ${facts.confirmedCount}명이 왔는지 표시해주세요.`,
         }
       : null;
 
