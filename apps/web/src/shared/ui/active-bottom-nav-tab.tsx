@@ -5,11 +5,12 @@ import Link from "next/link";
 
 import type { BottomNavTabProps } from "./bottom-nav-tab";
 import { BOTTOM_NAV_TAB_CLASS } from "./bottom-nav-tab-class";
+import { NavIcon } from "./nav-icon";
 
-export function ActiveBottomNavTab({ href, label, Icon }: BottomNavTabProps) {
+export function ActiveBottomNavTab({ href, label, Icon, dot }: BottomNavTabProps) {
   return (
     <Link href={href} aria-current="page" className={`${BOTTOM_NAV_TAB_CLASS} text-primary-ink`}>
-      <Icon size={18} aria-hidden />
+      <NavIcon Icon={Icon} dot={dot} />
       <Text typography="subtitle2" foreground="inherit" render={<span />}>
         {label}
       </Text>

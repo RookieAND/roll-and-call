@@ -27,7 +27,11 @@ const tabs = [
 // 몰입 화면(등록·수정 위저드, 일정 조율)은 탭을 내리고 그 화면의 하단 CTA만 남긴다.
 const IMMERSIVE = /^\/onboarding$|^\/games\/(new|[^/]+\/(edit|schedule|confirm))$/;
 
-export function BottomNav() {
+interface BottomNavProps {
+  hasTodo: boolean;
+}
+
+export function BottomNav({ hasTodo }: BottomNavProps) {
   const pathname = usePathname();
   if (IMMERSIVE.test(pathname)) return null;
 
@@ -39,7 +43,9 @@ export function BottomNav() {
     >
       {tabs.map(({ href, label, Icon, isActive }) => {
         const Tab = isActive(pathname) ? ActiveBottomNavTab : BottomNavTab;
-        return <Tab key={href} href={href} label={label} Icon={Icon} />;
+        return (
+          <Tab key={href} href={href} label={label} Icon={Icon} dot={href === "/me" && hasTodo} />
+        );
       })}
     </Grid>
   );

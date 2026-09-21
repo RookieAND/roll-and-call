@@ -6,8 +6,10 @@ import { OG_IMAGE } from "@/shared/lib";
 import { siteOrigin } from "@/shared/server";
 
 import "./globals.css";
-import { BottomNav, NavigationTracker, Toaster } from "@/shared/ui";
+import { NavigationTracker, Toaster } from "@/shared/ui";
+import { hasSessionTodo } from "@/widgets/session-list";
 
+import { AppBottomNav } from "./app-bottom-nav";
 import { QueryProvider } from "./query-provider";
 
 const origin = siteOrigin();
@@ -52,7 +54,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <NavigationTracker />
           <VStack className="mx-auto min-h-dvh w-full min-w-screen-min max-w-screen-max border-x border-gray-200 bg-surface">
             <div className="flex-1">{children}</div>
-            <BottomNav />
+            <AppBottomNav loadHasTodo={hasSessionTodo} />
           </VStack>
         </QueryProvider>
         <Toaster />

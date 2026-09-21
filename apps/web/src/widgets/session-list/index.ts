@@ -6,6 +6,7 @@ export { SessionListSkeleton } from "./ui/session-list-skeleton";
 export { userSessionsHref } from "./model/user-sessions-href";
 export { sessionsHref } from "./model/sessions-href";
 export { loadMySessions } from "./api/load-sessions";
+export { hasSessionTodo } from "./api/has-session-todo";
 export { loadProfile, type LoadedProfile } from "./api/load-profile";
 export type { Absence } from "./model/recent-absences";
 export { PROFILE_SESSION_SECTIONS } from "./model/build-profile-sessions";
