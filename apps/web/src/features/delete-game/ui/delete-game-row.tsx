@@ -40,7 +40,7 @@ export function DeleteGameRow({ gameId, confirmedCount, lockedReason }: DeleteGa
           <Text typography="subtitle1" foreground={labelForeground}>
             구인 취소
           </Text>
-          <Text weight="regular" typography="body3" foreground="hint">
+          <Text typography="body4" foreground="hint">
             {lockedReason ?? "구인을 취소하고 참여자에게 디스코드로 알립니다"}
           </Text>
         </VStack>
