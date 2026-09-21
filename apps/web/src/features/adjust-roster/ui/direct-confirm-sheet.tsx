@@ -9,6 +9,7 @@ import { Sheet, toast, useAction, useDebouncedValue } from "@/shared/ui";
 import { addParticipants } from "../api/add-participants";
 import type { Candidate } from "../model/candidate";
 import { candidateSearchQuery } from "../model/candidate-search-query";
+import { searchKeyword } from "../model/search-keyword";
 import { CandidateRow } from "./candidate-row";
 import { CandidateSearchEmpty } from "./candidate-search-empty";
 import { CandidateSearchInput } from "./candidate-search-input";
@@ -50,7 +51,7 @@ export function DirectConfirmSheet({
   const openSeats = Math.max(maxPlayers - confirmedCount, 0);
   const noSeats = openSeats === 0;
   const seatsFilled = selected.length >= openSeats;
-  const keyword = query.trim();
+  const keyword = searchKeyword(query);
   const debouncedKeyword = useDebouncedValue(keyword, SEARCH_DELAY_MS);
   const typedEnough = keyword.length >= MIN_QUERY_LENGTH;
   // 검색 실패로 시트 밖 화면까지 에러 경계로 넘기지 않고, 목록 자리에 한 줄로 알린다.
