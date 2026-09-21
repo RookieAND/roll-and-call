@@ -49,7 +49,11 @@ export function GameRosterSection({
   // GM도 상세에서는 읽기만 한다. 승격·강등은 운영 관리가 맡는다.
   return (
     <>
-      <VStack gap="200" render={<section />} className="divide-y divide-gray-200 [&>*+*]:pt-200">
+      <VStack
+        gap="200"
+        render={<section />}
+        className="divide-y divide-gray-200 [&>*:not(:last-child)]:pb-200"
+      >
         <RosterGroupSection
           label="참여"
           members={confirmed}

@@ -61,7 +61,7 @@ export function GameDetail({ game, viewerId, respondedIds }: GameDetailProps) {
 
             {game.synopsis && <GameSynopsis synopsis={game.synopsis} />}
 
-            {game.images.length > 0 && <GameImageGallery images={game.images} isGm={isGm} />}
+            {game.images.length > 0 && <GameImageGallery images={game.images} />}
 
             <GamePreflightSection game={game} />
 

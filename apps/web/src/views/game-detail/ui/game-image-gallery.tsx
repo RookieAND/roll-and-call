@@ -7,14 +7,12 @@ import { useState } from "react";
 
 interface GameImageGalleryProps {
   images: string[];
-  isGm: boolean;
 }
 
-export function GameImageGallery({ images, isGm }: GameImageGalleryProps) {
+export function GameImageGallery({ images }: GameImageGalleryProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const openUrl = openIndex === null ? null : images[openIndex];
   const openLabel = `첨부 이미지 ${(openIndex ?? 0) + 1}`;
-  const hint = isGm ? "구인 수정에서 관리 · 최대 5장" : "탭하면 크게 보기";
 
   return (
     <VStack gap="100">
@@ -27,7 +25,7 @@ export function GameImageGallery({ images, isGm }: GameImageGalleryProps) {
         </Text>
         <span className="flex-1" />
         <Text typography="body4" foreground="hint">
-          {hint}
+          탭하면 크게 보기
         </Text>
       </HStack>
       <HStack gap="100" className="-mx-200 overflow-x-auto px-200 pb-050">
