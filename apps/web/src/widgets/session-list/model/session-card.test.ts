@@ -125,6 +125,17 @@ describe("운영 카드", () => {
     expect(card.todo?.kind).toBe(SESSION_ACTION_KIND.confirmAttendance);
     expect(card.action?.href).toBe("/games/ended/attendance");
   });
+
+  it("출석을 확정한 뒤에도 운영 관리로 들어가 고칠 수 있다", () => {
+    const card = hostCard({
+      id: "ended",
+      confirmedAt: at(-1),
+      attendanceConfirmedAt: at(-1),
+      participants: [confirmedMe, other],
+    });
+    expect(card.todo).toBeNull();
+    expect(card.action?.href).toBe("/games/ended/manage");
+  });
 });
 
 describe("종료 카드", () => {

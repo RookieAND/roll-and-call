@@ -1,14 +1,13 @@
 import { deriveGameStatus, gameStatusColor, gameStatusLabel, SESSION_STATE } from "@/entities/game";
 
 import type { SessionFacts } from "./derive-session-facts";
+import { hostMenuAction } from "./host-menu-action";
 import { hostTodo } from "./host-todo";
 import { joinParts } from "./join-parts";
 import {
-  SESSION_ACTION_KIND,
   SESSION_CHIP,
   SESSION_ICON,
   SESSION_TONE,
-  type SessionAction,
   type SessionCardModel,
   type SessionContext,
   type SessionGame,
@@ -60,13 +59,6 @@ export function toHostedSessionCard(
     ? "모집이 끝나 GM이 추첨하는 중입니다"
     : "신청이 마감됐습니다 · 참여자를 뽑아주세요";
 
-  // 목록 카드에 버튼을 늘리지 않는다. GM 도구는 "운영 관리" 한 곳으로 모은다.
-  const hostMenu: SessionAction = {
-    kind: SESSION_ACTION_KIND.hostMenu,
-    label: "운영 관리",
-    href: `/games/${game.id}/manage`,
-  };
-
   return {
     ...base,
     urgent: base.urgent || gmTodo,
@@ -90,7 +82,7 @@ export function toHostedSessionCard(
       { label: "확정", value: seats },
     ],
     note: null,
-    action: context.readOnly ? null : hostMenu,
+    action: context.readOnly ? null : hostMenuAction(game.id),
     todo,
     waitingCount,
     sortKey: facts.sortKey,

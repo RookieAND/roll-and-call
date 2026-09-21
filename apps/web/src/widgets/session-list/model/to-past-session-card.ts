@@ -2,6 +2,7 @@ import { absenceExpiresAt, SESSION_ROLE, SESSION_STATE, splitRoster } from "@/en
 import { ddayKst, formatDate, formatDateTime } from "@/shared/lib";
 
 import type { SessionFacts } from "./derive-session-facts";
+import { hostMenuAction } from "./host-menu-action";
 import { joinParts } from "./join-parts";
 import { relativeDay } from "./relative-day";
 import {
@@ -90,8 +91,8 @@ export function toPastSessionCard(
     gm: player ? (game.gm ?? null) : null,
     counts: ending.counts,
     note,
-    // 기록을 보는 자리라 여기서 할 일이 없다. 출석 확인만 예외다.
-    action: attendanceTodo,
+    // 출석은 확정한 뒤에도 고칠 수 있어서 GM에게는 운영 관리를 남긴다.
+    action: attendanceTodo ?? (player || context.readOnly ? null : hostMenuAction(game.id)),
     todo: attendanceTodo,
     waitingCount: facts.waitingCount,
     // 부호를 뒤집어 최근에 끝난 것부터 온다.
