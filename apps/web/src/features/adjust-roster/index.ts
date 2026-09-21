@@ -7,3 +7,6 @@ export { MemberSheet } from "./ui/member-sheet";
 export { DrawLotteryCard } from "./ui/draw-lottery-card";
 export type { MemberSummary } from "./model/member-summary";
 export type { RosterEntry } from "./model/roster-entry";
+export { DirectConfirmButton } from "./ui/direct-confirm-button";
+export { DirectConfirmSheet } from "./ui/direct-confirm-sheet";
+export type { Candidate } from "./model/candidate";

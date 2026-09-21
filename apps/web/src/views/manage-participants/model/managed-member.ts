@@ -1,3 +1,3 @@
 import type { MemberSummary } from "@/features/adjust-roster";
 
-export type ManagedMember = MemberSummary & { joinedAt: Date };
+export type ManagedMember = MemberSummary & { joinedAt: Date; absent: boolean };

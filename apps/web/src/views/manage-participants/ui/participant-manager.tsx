@@ -2,6 +2,7 @@ import { Container, VStack } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
+import type { AttendanceStage } from "../model/attendance-stage";
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { NextRoundBanner } from "./next-round-banner";
@@ -20,7 +21,7 @@ interface ParticipantManagerProps {
   summary: RosterSummary;
   isCoordinate: boolean;
   locked: boolean;
-  attendanceDue: boolean;
+  attendanceStage: AttendanceStage | null;
 }
 
 export function ParticipantManager({
@@ -33,7 +34,7 @@ export function ParticipantManager({
   summary,
   isCoordinate,
   locked,
-  attendanceDue,
+  attendanceStage,
 }: ParticipantManagerProps) {
   const showNextRound = waiting.length > 0 && !summary.beforeDraw;
 
@@ -50,10 +51,10 @@ export function ParticipantManager({
               maxPlayers={maxPlayers}
             />
             <RosterStats
-              confirmedCount={confirmed.length}
+              confirmed={confirmed}
               waitingCount={waiting.length}
-              maxPlayers={maxPlayers}
               summary={summary}
+              attendanceStage={attendanceStage}
             />
             <RosterStatusCard
               gameId={gameId}
@@ -61,7 +62,7 @@ export function ParticipantManager({
               confirmedCount={confirmed.length}
               summary={summary}
               locked={locked}
-              attendanceDue={attendanceDue}
+              attendanceStage={attendanceStage}
             />
           </VStack>
 
@@ -73,6 +74,7 @@ export function ParticipantManager({
             summary={summary}
             isCoordinate={isCoordinate}
             locked={locked}
+            attendanceStage={attendanceStage}
           />
 
           {showNextRound && (

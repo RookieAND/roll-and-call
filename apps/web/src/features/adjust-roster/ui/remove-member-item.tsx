@@ -24,8 +24,8 @@ export function RemoveMemberItem({
   const { pending, run } = useAction();
 
   const description = [
-    `${member.username}님을 내보내면 신청이 취소됩니다. 되돌릴 수 없습니다.`,
-    leavesEmptySeat ? "빈 자리는 저절로 차지 않습니다. 대기에서 직접 확정시키세요." : null,
+    `${member.username}님을 내보내면 신청이 취소되고 되돌릴 수 없습니다.`,
+    leavesEmptySeat ? "빈 자리는 저절로 차지 않으니 대기에서 직접 확정시켜 주세요." : null,
   ]
     .filter(Boolean)
     .join("\n");

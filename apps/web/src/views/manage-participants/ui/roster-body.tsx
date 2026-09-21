@@ -1,3 +1,4 @@
+import type { AttendanceStage } from "../model/attendance-stage";
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { DrawStage } from "./draw-stage";
@@ -12,6 +13,7 @@ interface RosterBodyProps {
   summary: RosterSummary;
   isCoordinate: boolean;
   locked: boolean;
+  attendanceStage: AttendanceStage | null;
 }
 
 export function RosterBody({
@@ -22,6 +24,7 @@ export function RosterBody({
   summary,
   isCoordinate,
   locked,
+  attendanceStage,
 }: RosterBodyProps) {
   if (summary.applicantCount === 0) return <RosterEmptyState gameId={gameId} />;
 
@@ -47,6 +50,7 @@ export function RosterBody({
       summary={summary}
       isCoordinate={isCoordinate}
       locked={locked}
+      attendanceStage={attendanceStage}
     />
   );
 }

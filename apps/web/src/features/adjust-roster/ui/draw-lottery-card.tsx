@@ -10,42 +10,58 @@ import { drawLottery } from "../api/draw-lottery";
 interface DrawLotteryCardProps {
   gameId: string;
   applicantCount: number;
-  maxPlayers: number;
+  preConfirmedCount: number;
+  drawCount: number;
   deadlinePassed: boolean;
-  daysLeft: number;
 }
 
 // 마감 전후로 버튼의 무게가 다르다. 기한이 남았으면 뽑는 순간 모집이 닫히므로 한 번 더 묻는다.
+// 직접 확정한 사람은 추첨에서 빠지므로 뽑는 풀과 인원에서 미리 뺀다.
 export function DrawLotteryCard({
   gameId,
   applicantCount,
-  maxPlayers,
+  preConfirmedCount,
+  drawCount,
   deadlinePassed,
-  daysLeft,
 }: DrawLotteryCardProps) {
   const [confirming, setConfirming] = useState(false);
   const { pending, run } = useAction();
 
-  const drawnCount = Math.min(applicantCount, maxPlayers);
-  const leftoverCount = applicantCount - drawnCount;
+  const poolCount = applicantCount - preConfirmedCount;
+  const drawnCount = Math.min(poolCount, drawCount);
+  const leftoverCount = poolCount - drawnCount;
   const title = deadlinePassed
-    ? `추첨으로 ${maxPlayers}명 정하기`
-    : `지금 추첨으로 ${maxPlayers}명 정하기`;
+    ? `추첨으로 ${drawCount}명 정하기`
+    : `지금 추첨으로 ${drawCount}명 정하기`;
   const titleTypography = deadlinePassed ? "subtitle1" : "subtitle2";
+  const poolPhrase =
+    preConfirmedCount > 0
+      ? `직접 확정한 ${preConfirmedCount}명을 ${deadlinePassed ? "미리 빼고" : "뺀"} ${poolCount}명`
+      : `신청한 ${poolCount}명`;
+  const summaryLine = deadlinePassed
+    ? `${poolPhrase} 중 ${drawnCount}명을 뽑습니다.`
+    : `${poolPhrase} 중 ${drawnCount}명이 확정됩니다.`;
   const closing = deadlinePassed
-    ? "뽑은 뒤에도 명단은 고칠 수 있습니다."
-    : "지금 뽑으면 모집이 바로 닫힙니다.";
-  // ponytail: 시안의 세 줄 확인 시트 대신 공용 ConfirmDialog. 문구는 그대로, 아이콘만 없다.
+    ? `나머지 ${leftoverCount}명은 대기로 남고, 뽑은 뒤에도 명단은 고칠 수 있습니다.`
+    : `나머지 ${leftoverCount}명은 대기로 남고, 모집은 바로 닫힙니다.`;
+  // ponytail: 시안의 확인 시트 대신 공용 ConfirmDialog. 문구는 그대로, 강조색만 없다.
+  const confirmPool =
+    preConfirmedCount > 0
+      ? `직접 확정한 ${preConfirmedCount}명을 뺀 ${poolCount}명`
+      : `신청한 ${poolCount}명`;
   const confirmDescription = [
-    `모집이 바로 닫히고, 남은 ${daysLeft}일 동안 새 신청을 받지 않습니다.`,
-    `뽑히지 않은 ${leftoverCount}명은 대기 명단에 남고, 결과를 함께 받습니다.`,
-    "다시 돌릴 수 없습니다. 이후엔 대기로 이동 · 확정시키기로 바꿉니다.",
+    `${confirmPool} 중 ${drawnCount}명을 무작위로 뽑습니다.`,
+    `나머지 ${leftoverCount}명은 대기로 남고, 결과를 함께 받습니다.`,
+    "",
+    "추첨이 완료되면 모집이 바로 닫히고 다시 돌릴 수 없습니다.",
   ].join("\n");
 
   function draw() {
     run(() => drawLottery(gameId), {
       onSuccess: () => {
-        toast.success(`추첨을 마쳤습니다 · 확정 ${drawnCount}명 · 대기 ${leftoverCount}명`);
+        toast.success(
+          `추첨을 마쳤습니다 · 확정 ${preConfirmedCount + drawnCount}명 · 대기 ${leftoverCount}명`,
+        );
         setConfirming(false);
       },
     });
@@ -61,8 +77,7 @@ export function DrawLotteryCard({
               {title}
             </Text>
             <Text typography="body4" foreground="muted" render={<p />}>
-              신청한 {applicantCount}명 중 {drawnCount}명이 확정, 나머지 {leftoverCount}명은 대기로
-              남습니다.
+              {summaryLine}
               <br />
               {closing}
             </Text>
@@ -82,7 +97,7 @@ export function DrawLotteryCard({
         open={confirming}
         onOpenChange={setConfirming}
         title="지금 추첨할까요?"
-        description={`지금까지 신청한 ${applicantCount}명 중 ${drawnCount}명을 무작위로 뽑습니다.\n\n${confirmDescription}`}
+        description={confirmDescription}
         cancelLabel="마감까지 기다리기"
         confirmLabel="추첨하기"
         pending={pending}

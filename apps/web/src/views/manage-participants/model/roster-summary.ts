@@ -35,6 +35,9 @@ export function summarizeRoster({
     methodLabel: !isLottery ? "선착순" : drawnAt ? "추첨 완료" : "추첨",
     isFull: confirmed.length >= maxPlayers,
     applicantCount: confirmed.length + waiting.length,
+    // 뽑기 전에 확정에 있는 사람은 GM이 직접 넣은 사람이다. 추첨은 남은 자리만 뽑는다.
+    preConfirmedCount: beforeDraw ? confirmed.length : 0,
+    drawCount: Math.max(maxPlayers - (beforeDraw ? confirmed.length : 0), 0),
     deadlineAt: formatDateTime(endDate),
     deadlineLabel: passed ? "마감됨" : daysLeft === 0 ? "오늘" : `D-${daysLeft}`,
     deadlinePassed: passed,

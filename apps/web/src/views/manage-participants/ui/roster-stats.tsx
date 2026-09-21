@@ -1,32 +1,57 @@
 import { Grid } from "@trpg/ui";
 
+import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stage";
+import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { RosterStat } from "./roster-stat";
 
 interface RosterStatsProps {
-  confirmedCount: number;
+  confirmed: ManagedMember[];
   waitingCount: number;
-  maxPlayers: number;
   summary: RosterSummary;
+  attendanceStage: AttendanceStage | null;
 }
 
-// 뽑기 전 추첨은 확정·대기가 없으므로 신청 수와 뽑을 인원을 대신 센다. 정원은 제목 옆 배지가 맡는다.
+// 뽑기 전 추첨은 신청 수와 뽑을 인원을, 세션이 끝난 뒤에는 완료·불참을 센다. 정원은 제목 옆 배지가 맡는다.
 export function RosterStats({
-  confirmedCount,
+  confirmed,
   waitingCount,
-  maxPlayers,
   summary,
+  attendanceStage,
 }: RosterStatsProps) {
+  if (attendanceStage) {
+    const checked = attendanceStage === ATTENDANCE_STAGE.done;
+    const absentCount = confirmed.filter((member) => member.absent).length;
+    return (
+      <Grid cols={2} gap="100">
+        <RosterStat label="완료" count={checked ? confirmed.length - absentCount : null} />
+        <RosterStat
+          label="불참"
+          count={checked ? absentCount : null}
+          danger={checked && absentCount > 0}
+        />
+      </Grid>
+    );
+  }
+
   return (
     <Grid cols={2} gap="100">
       {summary.beforeDraw ? (
         <>
           <RosterStat label="신청" count={summary.applicantCount} />
-          <RosterStat label="뽑을 인원" count={maxPlayers} />
+          <RosterStat
+            label="뽑을 인원"
+            count={summary.drawCount}
+            caption={
+              summary.preConfirmedCount > 0
+                ? `직접 확정 ${summary.preConfirmedCount}명 뺀 수`
+                : undefined
+            }
+          />
         </>
       ) : (
         <>
-          <RosterStat label="확정" count={confirmedCount} />
+          <RosterStat label="확정" count={confirmed.length} />
           <RosterStat label="대기" count={waitingCount} />
         </>
       )}

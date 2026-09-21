@@ -1,7 +1,12 @@
+import { VStack } from "@trpg/ui";
+
+import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stage";
 import type { RosterSummary } from "../model/roster-summary";
 import { AttendanceCard } from "./attendance-card";
+import { AttendanceDoneRow } from "./attendance-done-row";
 import { DeadlineCard } from "./deadline-card";
 import { DrawResultNote } from "./draw-result-note";
+import { SessionEndedCard } from "./session-ended-card";
 
 interface RosterStatusCardProps {
   gameId: string;
@@ -9,7 +14,7 @@ interface RosterStatusCardProps {
   confirmedCount: number;
   summary: RosterSummary;
   locked: boolean;
-  attendanceDue: boolean;
+  attendanceStage: AttendanceStage | null;
 }
 
 // 헤더 아래 한 자리에 지금 가장 중요한 것 하나만 선다 — 출석 확인 · 추첨 결과 · 모집 마감.
@@ -19,11 +24,19 @@ export function RosterStatusCard({
   confirmedCount,
   summary,
   locked,
-  attendanceDue,
+  attendanceStage,
 }: RosterStatusCardProps) {
-  if (attendanceDue && confirmedAt) {
+  if (attendanceStage === ATTENDANCE_STAGE.due && confirmedAt) {
     return (
       <AttendanceCard gameId={gameId} confirmedAt={confirmedAt} confirmedCount={confirmedCount} />
+    );
+  }
+  if (attendanceStage === ATTENDANCE_STAGE.done && confirmedAt) {
+    return (
+      <VStack gap="100">
+        <SessionEndedCard confirmedAt={confirmedAt} />
+        <AttendanceDoneRow />
+      </VStack>
     );
   }
   if (summary.drawnAtLabel) {

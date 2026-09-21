@@ -28,13 +28,17 @@ export function DrawStage({
         <DrawLotteryCard
           gameId={gameId}
           applicantCount={summary.applicantCount}
-          maxPlayers={maxPlayers}
+          preConfirmedCount={summary.preConfirmedCount}
+          drawCount={summary.drawCount}
           deadlinePassed={summary.deadlinePassed}
-          daysLeft={summary.daysLeft}
         />
       )}
       <ApplicantList
+        gameId={gameId}
         applicants={applicants}
+        preConfirmedCount={summary.preConfirmedCount}
+        maxPlayers={maxPlayers}
+        locked={locked}
         unsubmittedCount={summary.unsubmittedCount}
         isCoordinate={isCoordinate}
       />

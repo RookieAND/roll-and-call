@@ -9,7 +9,7 @@ import { games, notifyDrawResult, participants } from "@/shared/server";
 import { adjustRoster } from "./adjust-roster";
 import { RosterError } from "./roster-error";
 
-// 추첨은 한 번만 돈다. 정원까지 확정하고 나머지는 대기로 두되, 그 순서를 drawRank에 박아 다시 뽑히지 않게 한다.
+// 추첨은 한 번만 돈다. 직접 확정한 사람은 빼고 남은 자리만큼 뽑아, 나머지 순서를 drawRank에 박아 다시 뽑히지 않게 한다.
 export async function drawLottery(gameId: string): Promise<ActionResult> {
   return adjustRoster(
     gameId,
@@ -19,20 +19,26 @@ export async function drawLottery(gameId: string): Promise<ActionResult> {
       }
       if (game.drawnAt) throw new RosterError("이미 추첨을 마쳤습니다.");
 
+      const preConfirmedCount = await transaction.$count(
+        participants,
+        and(eq(participants.gameId, gameId), eq(participants.status, PARTICIPANT_STATUS.confirmed)),
+      );
       const applicants = await transaction
         .select({ userId: participants.userId })
         .from(participants)
-        .where(eq(participants.gameId, gameId))
+        .where(
+          and(eq(participants.gameId, gameId), eq(participants.status, PARTICIPANT_STATUS.waiting)),
+        )
         .orderBy(sql`random()`);
-      if (applicants.length === 0) throw new RosterError("아직 신청한 사람이 없습니다.");
+      if (applicants.length === 0) throw new RosterError("추첨할 신청자가 없습니다.");
+      const openSeats = Math.max(game.maxPlayers - preConfirmedCount, 0);
 
       for (const [index, applicant] of applicants.entries()) {
         await transaction
           .update(participants)
           .set({
             drawRank: index + 1,
-            status:
-              index < game.maxPlayers ? PARTICIPANT_STATUS.confirmed : PARTICIPANT_STATUS.waiting,
+            status: index < openSeats ? PARTICIPANT_STATUS.confirmed : PARTICIPANT_STATUS.waiting,
           })
           .where(and(eq(participants.gameId, gameId), eq(participants.userId, applicant.userId)));
       }

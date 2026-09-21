@@ -2,11 +2,18 @@ import { Button, Container } from "@trpg/ui";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { isAttendanceDue, isSessionLocked, SCHEDULE_MODE, splitRoster } from "@/entities/game";
+import {
+  isAttendanceDue,
+  isSessionLocked,
+  SCHEDULE_MODE,
+  sessionEndsAt,
+  splitRoster,
+} from "@/entities/game";
 import { LoginRequired } from "@/features/auth";
 import { getCurrentUser, getGameParticipants } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
+import { ATTENDANCE_STAGE } from "../model/attendance-stage";
 import { summarizeRoster } from "../model/roster-summary";
 import { toManagedMember } from "../model/to-managed-member";
 import { ParticipantManager } from "./participant-manager";
@@ -49,6 +56,12 @@ export async function ManageParticipantsView({ id }: { id: string }) {
   const confirmed = roster.confirmed.map(toMember);
   const waiting = roster.waiting.map(toMember);
   const isCoordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
+  const endsAt = sessionEndsAt(game);
+  const attendanceStage = isAttendanceDue(game, confirmed.length)
+    ? ATTENDANCE_STAGE.due
+    : game.attendanceConfirmedAt && endsAt && endsAt.getTime() <= Date.now()
+      ? ATTENDANCE_STAGE.done
+      : null;
 
   return (
     <ParticipantManager
@@ -69,7 +82,7 @@ export async function ManageParticipantsView({ id }: { id: string }) {
       })}
       isCoordinate={isCoordinate}
       locked={isSessionLocked(game)}
-      attendanceDue={isAttendanceDue(game, confirmed.length)}
+      attendanceStage={attendanceStage}
     />
   );
 }
