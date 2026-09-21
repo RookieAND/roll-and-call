@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, Field, Grid, Text, Textarea, VStack } from "@trpg/ui";
+import { Chip, Field, Grid, Textarea } from "@trpg/ui";
 import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "@/entities/game";
@@ -31,15 +31,9 @@ const TAG_SUGGESTIONS: Record<GameTagKey, string[]> = {
 
 interface GamePreflightFieldsProps {
   form: UseFormReturn<GameFormValues>;
-  triggerNotice?: string | null;
-  aiImageNotice?: string | null;
 }
 
-export function GamePreflightFields({
-  form,
-  triggerNotice,
-  aiImageNotice,
-}: GamePreflightFieldsProps) {
+export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
   const {
     register,
     setValue,
@@ -53,61 +47,47 @@ export function GamePreflightFields({
     <>
       {GAME_TAG_KEYS.map((key) => {
         const tags = watch(key);
-        const isTrigger = key === GAME_TAG.triggers;
         return (
-          <VStack key={key} gap="075">
-            <Field
-              label={gameTagLabel[key]}
-              htmlFor={key}
-              counter={`${tags.length} / ${GAME_TAGS_MAX}`}
-              error={errors[key]?.message}
-            >
-              <TagInput
-                id={key}
-                value={tags}
-                max={GAME_TAGS_MAX}
-                maxLength={GAME_TAG_MAX_LENGTH}
-                placeholder={TAG_PLACEHOLDER[key]}
-                suggestions={TAG_SUGGESTIONS[key]}
-                tone={isTrigger ? "notice" : "primary"}
-                onChange={(next) => setValue(key, next, { shouldDirty: true })}
-              />
-            </Field>
-            {isTrigger && triggerNotice && (
-              <Text typography="body4" foreground="warning" render={<p />}>
-                {triggerNotice}
-              </Text>
-            )}
-          </VStack>
+          <Field
+            key={key}
+            label={gameTagLabel[key]}
+            htmlFor={key}
+            counter={`${tags.length} / ${GAME_TAGS_MAX}`}
+            error={errors[key]?.message}
+          >
+            <TagInput
+              id={key}
+              value={tags}
+              max={GAME_TAGS_MAX}
+              maxLength={GAME_TAG_MAX_LENGTH}
+              placeholder={TAG_PLACEHOLDER[key]}
+              suggestions={TAG_SUGGESTIONS[key]}
+              tone={key === GAME_TAG.triggers ? "notice" : "primary"}
+              onChange={(next) => setValue(key, next, { shouldDirty: true })}
+            />
+          </Field>
         );
       })}
 
-      <VStack gap="075">
-        <Field
-          label="AI 이미지"
-          required
-          description="세션에서 GM과 플레이어가 AI 이미지를 쓸 수 있는지 정합니다."
-          error={errors.aiImage?.message}
-        >
-          <Grid cols={2} gap="100">
-            {AI_IMAGE_OPTIONS.map((option) => (
-              <Chip
-                key={option.label}
-                shape="block"
-                selected={aiImage === option.value}
-                onClick={() => setValue("aiImage", option.value, { shouldDirty: true })}
-              >
-                {option.label}
-              </Chip>
-            ))}
-          </Grid>
-        </Field>
-        {aiImageNotice && (
-          <Text typography="body4" foreground="warning" render={<p />}>
-            {aiImageNotice}
-          </Text>
-        )}
-      </VStack>
+      <Field
+        label="AI 이미지"
+        required
+        description="세션에서 GM과 플레이어가 AI 이미지를 쓸 수 있는지 정합니다."
+        error={errors.aiImage?.message}
+      >
+        <Grid cols={2} gap="100">
+          {AI_IMAGE_OPTIONS.map((option) => (
+            <Chip
+              key={option.label}
+              shape="block"
+              selected={aiImage === option.value}
+              onClick={() => setValue("aiImage", option.value, { shouldDirty: true })}
+            >
+              {option.label}
+            </Chip>
+          ))}
+        </Grid>
+      </Field>
 
       <Field
         label="주의 사항"
