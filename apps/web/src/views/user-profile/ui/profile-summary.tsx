@@ -3,15 +3,18 @@ import { Avatar, HStack, Text } from "@trpg/ui";
 import { KeywordChips } from "@/entities/profile";
 import { toKst } from "@/shared/lib";
 import type { Profile } from "@/shared/server";
+import type { Absence } from "@/widgets/session-list";
 
+import { ProfileAbsenceNotice } from "./profile-absence-notice";
 import { ProfileBlockLabel } from "./profile-block-label";
 
 interface ProfileSummaryProps {
   profile: Profile;
+  absences: Absence[];
 }
 
 // 07 §C가 쓰는 bio·keywords·availability를 그대로 읽는다. 프로필을 위한 새 입력을 만들지 않는다.
-export function ProfileSummary({ profile }: ProfileSummaryProps) {
+export function ProfileSummary({ profile, absences }: ProfileSummaryProps) {
   const joinedLabel = toKst(profile.createdAt).format("YYYY년 M월부터");
   const bioText = profile.bio || "한 줄 소개가 없습니다.";
   const bioForeground = profile.bio ? undefined : "hint";
@@ -38,6 +41,11 @@ export function ProfileSummary({ profile }: ProfileSummaryProps) {
       <Text typography="body2" foreground={bioForeground} render={<p />} className={bioClass}>
         {bioText}
       </Text>
+      {absences.length > 0 && (
+        <div className="mt-175">
+          <ProfileAbsenceNotice absences={absences} />
+        </div>
+      )}
       <div className="mt-175">
         <ProfileBlockLabel label="성향" />
         <KeywordChips keywords={profile.keywords} />

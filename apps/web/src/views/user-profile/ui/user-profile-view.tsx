@@ -8,7 +8,6 @@ import { getCurrentUser, getProfileMemo } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { loadProfile, PROFILE_SESSION_SECTIONS } from "@/widgets/session-list";
 
-import { ProfileAbsenceNotice } from "./profile-absence-notice";
 import { ProfileBlockLabel } from "./profile-block-label";
 import { ProfileSectionDivider } from "./profile-section-divider";
 import { ProfileSessionSection } from "./profile-session-section";
@@ -38,12 +37,7 @@ export async function UserProfileView({ id }: { id: string }) {
     <>
       <AppBar back="/games" title="프로필" />
       <Container size="sm" className="px-0">
-        <ProfileSummary profile={profile} />
-        {absences.length > 0 && (
-          <div className="px-200">
-            <ProfileAbsenceNotice absences={absences} />
-          </div>
-        )}
+        <ProfileSummary profile={profile} absences={absences} />
 
         <section className="p-200">
           <ProfileBlockLabel label="링크" />
