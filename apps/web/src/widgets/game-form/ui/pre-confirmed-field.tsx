@@ -79,7 +79,7 @@ export function PreConfirmedField({
         className="h-11 gap-075 rounded-400 border-dashed border-gray-300 text-subtitle2 font-bold text-primary-ink"
       >
         <Plus size={15} strokeWidth={2.6} aria-hidden />
-        직접 확정
+        참여자 추가
       </Button>
 
       <Text typography="body4" foreground="hint" render={<p />} className="leading-[1.55]">

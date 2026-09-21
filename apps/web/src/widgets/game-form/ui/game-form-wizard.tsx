@@ -171,7 +171,10 @@ export function GameFormWizard({
 
           <fieldset
             disabled={pending}
-            className={cn("m-0 flex flex-col gap-250 border-0 p-0", pending && "opacity-45")}
+            className={cn(
+              "m-0 flex min-w-0 flex-col gap-250 border-0 p-0",
+              pending && "opacity-45",
+            )}
           >
             {/* 언마운트하면 입력·업로드 상태가 날아가서 지나간 단계도 숨긴 채 마운트해 둔다. */}
             {steps.map((config, index) => (
