@@ -3,10 +3,9 @@
 import { revalidatePath } from "next/cache";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { getCurrentUser, refreshRecruitPost } from "@/shared/server";
+import { announceRecruitmentComplete, getCurrentUser, refreshRecruitPost } from "@/shared/server";
 
 import { announceNewApplication } from "./announce-new-application";
-import { announceRecruitmentComplete } from "./announce-recruitment-complete";
 import { applyToGame } from "./apply-to-game";
 import { seedAvailabilityFromProfile } from "./seed-availability-from-profile";
 
