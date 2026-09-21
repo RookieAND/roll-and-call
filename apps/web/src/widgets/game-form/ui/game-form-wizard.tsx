@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FieldErrors } from "react-hook-form";
 
-import { RECRUIT_METHOD } from "@/entities/game";
 import type { GameFormValues } from "@/features/write-game";
 import { ConfirmDialog } from "@/shared/ui";
 
@@ -82,26 +81,7 @@ export function GameFormWizard({
 
   const images = watch("images");
   const thumbnail = watch("thumbnailUrl");
-  const imageCount = images.length + (thumbnail ? 1 : 0);
-  const stepSections: readonly SectionKey[] = intro?.sections ?? [];
-  const preConfirmedCount = watch("preConfirmed").length;
-  const recruitLine = [
-    `${watch("recruitMethod") === RECRUIT_METHOD.lottery ? "추첨" : "선착순"} ${watch("maxPlayers")}명`,
-    preConfirmedCount > 0 ? `직접 확정 ${preConfirmedCount}명` : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
-  const summaryLine = stepSections.includes(FORM_SECTION.schedule)
-    ? recruitLine
-    : [
-        watch("rule"),
-        watch("playTime"),
-        stepSections.includes(FORM_SECTION.recruit) && imageCount > 0
-          ? `이미지 ${imageCount}장`
-          : null,
-      ]
-        .filter(Boolean)
-        .join(" · ");
+  const summaryLine = [watch("rule"), watch("playTime")].filter(Boolean).join(" · ");
   const exitDescription =
     thumbnail || images.length > 0
       ? "지금까지 쓴 내용은 저장되지 않습니다. 올린 썸네일도 함께 사라집니다."
