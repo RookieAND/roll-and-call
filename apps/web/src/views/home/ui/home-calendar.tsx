@@ -13,7 +13,7 @@ const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"] as const;
 
 interface HomeCalendarProps {
   monthStart: Dayjs;
-  sessionsByDay?: Map<string, CalendarSession[]>;
+  sessionsByDay?: Record<string, CalendarSession[]>;
   selectedKey?: string;
   todayKey?: string;
 }
@@ -77,7 +77,7 @@ export function HomeCalendar({
             <HomeCalendarCell
               key={cell.key}
               cell={cell}
-              sessions={sessionsByDay.get(cell.key) ?? []}
+              sessions={sessionsByDay[cell.key] ?? []}
               selected={cell.key === selectedKey}
               today={cell.key === todayKey}
             />

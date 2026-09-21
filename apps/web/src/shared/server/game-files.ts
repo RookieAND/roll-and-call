@@ -1,6 +1,7 @@
 import "server-only";
 import { db, games } from "@trpg/database";
 import { arrayOverlaps, inArray, or } from "drizzle-orm";
+import { compact, uniq } from "es-toolkit";
 
 import { GAME_IMAGE_BUCKET, gameImagePathOf } from "@/shared/lib";
 
@@ -11,7 +12,7 @@ import { createSupabaseServerClient } from "./create-supabase-server-client";
 // ponytail: best-effort. 실패하면 파일이 남을 뿐 저장·삭제는 막지 않는다.
 // 등록하다 그만둔 업로드는 여기서 못 잡는다 — service-role 키로 도는 주기 정리가 필요하다.
 export async function removeUnusedGameFiles(urls: (string | null)[]) {
-  const candidates = [...new Set(urls.filter((url): url is string => Boolean(url)))];
+  const candidates = uniq(compact(urls));
   if (candidates.length === 0) return;
 
   const stillUsed = await db
@@ -20,10 +21,7 @@ export async function removeUnusedGameFiles(urls: (string | null)[]) {
     .where(or(inArray(games.thumbnailUrl, candidates), arrayOverlaps(games.images, candidates)));
   const inUse = new Set(stillUsed.flatMap((game) => [game.thumbnailUrl, ...game.images]));
 
-  const paths = candidates
-    .filter((url) => !inUse.has(url))
-    .map(gameImagePathOf)
-    .filter((path): path is string => path !== null);
+  const paths = compact(candidates.filter((url) => !inUse.has(url)).map(gameImagePathOf));
   if (paths.length === 0) return;
 
   const supabase = await createSupabaseServerClient();

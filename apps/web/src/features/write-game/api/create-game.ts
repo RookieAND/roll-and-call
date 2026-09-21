@@ -1,6 +1,7 @@
 "use server";
 
 import { eq, inArray } from "drizzle-orm";
+import { uniq } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
@@ -28,7 +29,7 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     return { error: parsed.error.issues[0]?.message ?? INVALID_INPUT_MESSAGE };
   }
 
-  const invitedIds = [...new Set(parsed.data.preConfirmed.map((player) => player.userId))];
+  const invitedIds = uniq(parsed.data.preConfirmed.map((player) => player.userId));
   if (invitedIds.includes(user.id)) return { error: "GM은 참여자로 넣을 수 없습니다." };
   if (invitedIds.length > 0) {
     const found = await db.$count(profiles, inArray(profiles.id, invitedIds));

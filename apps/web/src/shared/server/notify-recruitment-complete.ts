@@ -1,5 +1,6 @@
 import type { Game } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
+import { compact } from "es-toolkit";
 
 import { formatGameSchedule } from "@/shared/lib";
 
@@ -15,7 +16,7 @@ export async function notifyRecruitmentComplete(
   players: RecruitmentPlayer[],
   waitingCount: number,
 ) {
-  const mentionIds = players.map((player) => player.discordId).filter((id) => id !== null);
+  const mentionIds = compact(players.map((player) => player.discordId));
   const playerLabels = players.map((player) =>
     player.discordId ? `<@${player.discordId}>` : `**${player.username}**`,
   );

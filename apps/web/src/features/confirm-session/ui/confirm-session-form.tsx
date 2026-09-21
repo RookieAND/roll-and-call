@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Card, HStack, Text, VStack } from "@trpg/ui";
+import { uniq } from "es-toolkit";
 import { useState } from "react";
 
 import { rankWindows, windowMembers } from "@/entities/availability";
@@ -44,7 +45,7 @@ export function ConfirmSessionForm({
   currentIso = null,
 }: ConfirmSessionFormProps) {
   const candidates = rankWindows({ names, slotCount, limit: CANDIDATE_LIMIT });
-  const respondents = [...new Set(Object.values(names).flat())];
+  const respondents = uniq(Object.values(names).flat());
   const changing = currentIso !== null;
 
   const [start, setStart] = useState(() => {

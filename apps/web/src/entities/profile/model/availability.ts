@@ -1,3 +1,5 @@
+import { isPlainObject } from "es-toolkit";
+
 import { padTwoDigits, slotIso, type DayColumn, type TimeRow } from "@/shared/lib";
 import type { AvailabilityInterval } from "@/shared/server";
 
@@ -37,8 +39,8 @@ export function filledDays(intervals: readonly AvailabilityInterval[]): Availabi
 export function normalizeAvailability(input: unknown): AvailabilityInterval[] {
   if (!Array.isArray(input)) return [];
   const valid = input.flatMap((raw) => {
-    if (!raw || typeof raw !== "object") return [];
-    const { day, from, to } = raw as Record<string, unknown>;
+    if (!isPlainObject(raw)) return [];
+    const { day, from, to } = raw;
     if (typeof day !== "number" || typeof from !== "number" || typeof to !== "number") return [];
     const hours = {
       day: Math.trunc(day),

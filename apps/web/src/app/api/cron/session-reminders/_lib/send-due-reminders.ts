@@ -1,4 +1,5 @@
 import { and, gt, isNotNull, isNull, lte } from "drizzle-orm";
+import { compact } from "es-toolkit";
 
 import { db, games, notifySessionStartingSoon } from "@/shared/server";
 
@@ -35,10 +36,10 @@ export async function sendDueReminders() {
     });
     if (!game?.confirmedAt) continue;
 
-    const mentionIds = [
+    const mentionIds = compact([
       game.gm?.discordId,
       ...game.participants.map((participant) => participant.user?.discordId),
-    ].filter((discordId): discordId is string => Boolean(discordId));
+    ]);
 
     await notifySessionStartingSoon(game, game.gm?.username ?? "?", mentionIds);
     sent++;

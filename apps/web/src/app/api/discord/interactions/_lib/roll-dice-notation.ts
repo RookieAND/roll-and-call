@@ -1,3 +1,5 @@
+import { sum } from "es-toolkit";
+
 import { rollDice } from "./roll-dice";
 
 const NOTATION_PATTERN = /^[+-]?(?:\d*d\d+|\d+)(?:[+-](?:\d*d\d+|\d+))*$/;
@@ -20,7 +22,7 @@ export function rollDiceNotation(notation: string) {
       const sides = Number(diceSides);
       if (count < 1 || count > MAX_DICE_COUNT || sides < 1 || sides > MAX_DICE_SIDES) return null;
       const rolls = rollDice(count, sides);
-      value = rolls.reduce((sum, roll) => sum + roll, 0);
+      value = sum(rolls);
       text = `[${rolls.join(", ")}]`;
     }
     total += sign === "-" ? -value : value;

@@ -1,3 +1,5 @@
+import { range, sum } from "es-toolkit";
+
 import { rollDice } from "./roll-dice";
 
 // 크툴루 7판: 3d6×5, 크기·지능·교육만 (2d6+6)×5.
@@ -18,9 +20,6 @@ const COLUMN_COUNT = 3;
 export function rollAbilityScores() {
   return ABILITIES.map(({ label, diceCount, bonus }) => ({
     label,
-    columns: Array.from({ length: COLUMN_COUNT }, () => {
-      const rolled = rollDice(diceCount, 6).reduce((sum, roll) => sum + roll, 0);
-      return (rolled + bonus) * 5;
-    }),
+    columns: range(COLUMN_COUNT).map(() => (sum(rollDice(diceCount, 6)) + bonus) * 5),
   }));
 }

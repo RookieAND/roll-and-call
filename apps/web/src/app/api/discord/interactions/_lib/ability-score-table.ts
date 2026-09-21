@@ -1,3 +1,5 @@
+import { range, sumBy } from "es-toolkit";
+
 type AbilityScore = { label: string; columns: number[] };
 
 // 디스코드 코드블록은 고정폭이고 한글 한 글자는 두 칸을 먹는다. 두 글자 라벨(근력·합계)이
@@ -10,11 +12,10 @@ export function abilityScoreTable(scores: AbilityScore[]) {
   const cells = (values: (string | number)[]) =>
     values.map((value) => String(value).padStart(VALUE_WIDTH)).join("");
 
-  const header =
-    " ".repeat(LABEL_WIDTH) + cells(Array.from({ length: columnCount }, (_, index) => index + 1));
+  const header = " ".repeat(LABEL_WIDTH) + cells(range(1, columnCount + 1));
   const rows = scores.map(({ label, columns }) => label + cells(columns));
-  const totals = Array.from({ length: columnCount }, (_, index) =>
-    scores.reduce((sum, score) => sum + (score.columns[index] ?? 0), 0),
+  const totals = range(columnCount).map((index) =>
+    sumBy(scores, (score) => score.columns[index] ?? 0),
   );
   const divider = "-".repeat(LABEL_WIDTH + VALUE_WIDTH * columnCount);
 

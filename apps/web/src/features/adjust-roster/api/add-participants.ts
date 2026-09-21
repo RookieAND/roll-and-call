@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
+import { uniq } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
@@ -16,7 +17,7 @@ const { confirmed } = PARTICIPANT_STATUS;
 // 신청하지 않은 사람도 GM이 바로 확정으로 넣는다. 대기 중이던 사람은 확정으로 올린다.
 export async function addParticipants(gameId: string, userIds: string[]): Promise<ActionResult> {
   if (userIds.length === 0) return { error: "넣을 사람을 골라 주세요." };
-  const invitedIds = [...new Set(userIds)];
+  const invitedIds = uniq(userIds);
   let becameFull = false;
 
   return adjustRoster(

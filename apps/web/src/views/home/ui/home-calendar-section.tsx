@@ -11,7 +11,7 @@ import { HomeDaySessions } from "./home-day-sessions";
 
 interface HomeCalendarSectionProps {
   monthStart: Date;
-  sessionsByDay: Map<string, CalendarSession[]>;
+  sessionsByDay: Record<string, CalendarSession[]>;
   initialSelectedKey: string;
   todayKey: string;
 }
@@ -36,7 +36,7 @@ export function HomeCalendarSection({
         selectedKey={selectedKey}
         todayKey={todayKey}
       />
-      <HomeDaySessions date={selected.toDate()} sessions={sessionsByDay.get(selectedKey) ?? []} />
+      <HomeDaySessions date={selected.toDate()} sessions={sessionsByDay[selectedKey] ?? []} />
     </>
   );
 }
