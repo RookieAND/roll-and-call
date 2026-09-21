@@ -2,7 +2,7 @@ import { AvatarGroup } from "@trpg/ui";
 
 import type { DetailRosterMember } from "./roster-member-row";
 
-const MAX_AVATARS = 5;
+const MAX_AVATARS = 3;
 
 interface RosterAvatarsProps {
   members: DetailRosterMember[];

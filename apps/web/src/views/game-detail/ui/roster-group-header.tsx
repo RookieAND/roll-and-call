@@ -1,4 +1,4 @@
-import { HStack, Text } from "@trpg/ui";
+import { Badge, HStack, Text } from "@trpg/ui";
 import type { ReactNode } from "react";
 
 interface RosterGroupHeaderProps {
@@ -14,14 +14,10 @@ export function RosterGroupHeader({ label, count, capacity, action }: RosterGrou
       <Text typography="heading3" render={<h2 />}>
         {label}
       </Text>
-      <Text numeric typography="subtitle2">
+      <Text numeric typography="heading3" weight="extrabold">
         {count}명
       </Text>
-      {capacity !== undefined && (
-        <Text numeric typography="body4" foreground="hint">
-          정원 {capacity}명
-        </Text>
-      )}
+      {capacity !== undefined && <Badge className="tabular-nums">정원 {capacity}명</Badge>}
       <span className="flex-1" />
       {action}
     </HStack>

@@ -25,7 +25,7 @@ export function JoinableActions({
   const joinHint = isLottery
     ? `마감 뒤 GM이 추첨으로 ${maxPlayers}명을 정합니다.`
     : isFull
-      ? `지금 신청하면 대기 ${waitingCount + 1}번입니다. 자리가 나면 순서대로 확정됩니다.`
+      ? `지금 신청하면 대기 ${waitingCount + 1}번입니다.`
       : null;
 
   return (

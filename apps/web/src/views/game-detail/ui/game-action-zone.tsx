@@ -14,9 +14,9 @@ import { AnonActions } from "./anon-actions";
 import { ClosedActions } from "./closed-actions";
 import { ConfirmedActions } from "./confirmed-actions";
 import { ConfirmedWaitingActions } from "./confirmed-waiting-actions";
-import { GmActions } from "./gm-actions";
 import { JoinableActions } from "./joinable-actions";
 import { JoinedActions } from "./joined-actions";
+import { ManageGameLink } from "./manage-game-link";
 import { WaitingActions } from "./waiting-actions";
 
 export interface GameActionZoneProps {
@@ -69,25 +69,17 @@ export function GameActionZone({
   const canLeave = !isFull && !isClosed;
 
   switch (actionView) {
+    // GM에게도 상세는 읽는 화면이다. 시간 확정 · 참여자 관리 · 세션 준비는 운영 관리 한 곳으로 보낸다.
     case GAME_ACTION_VIEW.gm:
-      return (
-        <GmActions gameId={game.id} confirmedAt={sessionConfirmed ? game.confirmedAt : null} />
-      );
+      return <ManageGameLink gameId={game.id} />;
     case GAME_ACTION_VIEW.confirmed:
       return <ConfirmedActions confirmedAt={game.confirmedAt!} />;
     case GAME_ACTION_VIEW.confirmedWaiting:
-      return (
-        <ConfirmedWaitingActions
-          gameId={game.id}
-          confirmedAt={game.confirmedAt!}
-          waitlistRank={waitlistRank}
-        />
-      );
+      return <ConfirmedWaitingActions gameId={game.id} waitlistRank={waitlistRank} />;
     case GAME_ACTION_VIEW.waiting:
       return (
         <WaitingActions
           gameId={game.id}
-          canSchedule={canSchedule}
           waitlistRank={waitlistRank}
           pendingDraw={isLottery && game.drawnAt === null}
         />
@@ -104,15 +96,9 @@ export function GameActionZone({
         />
       );
     case GAME_ACTION_VIEW.closed:
-      return (
-        <ClosedActions
-          endDate={game.endDate}
-          confirmedAt={game.confirmedAt}
-          reason={closedReason}
-        />
-      );
+      return <ClosedActions endDate={game.endDate} reason={closedReason} />;
     case GAME_ACTION_VIEW.anon:
-      return <AnonActions isFull={isFull} isLottery={isLottery} />;
+      return <AnonActions />;
     case GAME_ACTION_VIEW.joinable:
       return (
         <JoinableActions

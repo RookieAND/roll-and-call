@@ -15,7 +15,7 @@ interface LotteryRosterSheetProps {
   viewerId: string | null;
 }
 
-// 추첨은 뽑기 전까지 확정과 대기를 가르지 않는다 — 한 덩어리의 "신청"으로 본다.
+// 추첨 전 신청자에게는 순번이 없다 — 신청 순서로만 보여준다.
 export function LotteryRosterSheet({
   open,
   onOpenChange,

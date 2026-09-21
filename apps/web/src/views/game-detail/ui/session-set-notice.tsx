@@ -1,22 +1,12 @@
-import { Text } from "@trpg/ui";
+import { CircleAlert } from "lucide-react";
 
-import { formatDateTime } from "@/shared/lib";
-import { StatusNotice } from "@/shared/ui";
+import { ActionNotice } from "./action-notice";
 
-interface SessionSetNoticeProps {
-  confirmedAt: Date;
-}
-
-// 기한이 남았어도 시간이 정해지면 새 신청을 받지 않는다. 언제 하는지는 같이 알려준다.
-export function SessionSetNotice({ confirmedAt }: SessionSetNoticeProps) {
+// 기한이 남았어도 시간이 정해지면 새 신청을 받지 않는다. 막다른 길이라 다음 행동을 권한다.
+export function SessionSetNotice() {
   return (
-    <StatusNotice tone="muted" className="text-left">
-      <Text typography="body3" weight="bold" render={<p />}>
-        세션 시간이 정해져 신청을 받지 않습니다
-      </Text>
-      <Text typography="body3" foreground="muted" render={<p />} className="mt-050">
-        {formatDateTime(confirmedAt)}에 진행합니다.
-      </Text>
-    </StatusNotice>
+    <ActionNotice title="세션 시간이 정해져 신청을 받지 않습니다" tone="danger" icon={CircleAlert}>
+      비슷한 조건의 다른 구인글을 찾아보세요.
+    </ActionNotice>
   );
 }

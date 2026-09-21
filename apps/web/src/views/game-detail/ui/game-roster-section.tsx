@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, VStack } from "@trpg/ui";
+import { VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
@@ -10,6 +10,7 @@ import { LotteryRosterSheet } from "./lottery-roster-sheet";
 import type { RosterSheetGm } from "./roster-gm-group";
 import { RosterGroupSection } from "./roster-group-section";
 import type { DetailRosterMember } from "./roster-member-row";
+import { RosterSheetButton } from "./roster-sheet-button";
 import { WaitingRosterSheet } from "./waiting-roster-sheet";
 
 type RosterSheetName = "lottery" | "confirmed" | "waiting";
@@ -36,75 +37,52 @@ export function GameRosterSection({
   viewerId,
 }: GameRosterSectionProps) {
   const [openSheet, setOpenSheet] = useState<RosterSheetName | null>(null);
-  // 추첨은 뽑기 전까지 확정과 대기를 가르지 않는다 — 한 덩어리의 "신청"으로 본다.
+  // 추첨은 뽑기 전까지 대기에 순번이 없다 — 정원 밖 줄을 "신청"으로 부른다.
   const isLottery = recruitMethod === RECRUIT_METHOD.lottery && !drawn;
-  const hasMembers = confirmed.length + waiting.length > 0;
-  const viewerWaiting = waiting.find((member) => member.userId === viewerId);
+
+  const confirmedEmptyText = isLottery ? undefined : "아직 참여자가 없습니다.";
 
   function closeSheet(next: boolean) {
     if (!next) setOpenSheet(null);
   }
 
   // GM도 상세에서는 읽기만 한다. 승격·강등은 운영 관리가 맡는다.
-  const rosterAction = hasMembers && (
-    <Button
-      variant="ghost"
-      size="sm"
-      className="text-primary-ink"
-      onClick={() => setOpenSheet(isLottery ? "lottery" : "confirmed")}
-    >
-      명단 보기
-    </Button>
-  );
-
   return (
-    <VStack gap="250">
-      {isLottery ? (
+    <>
+      <VStack gap="200" render={<section />} className="divide-y divide-gray-200 [&>*+*]:pt-200">
         <RosterGroupSection
-          label="신청"
-          members={[...confirmed, ...waiting]}
+          label="참여"
+          members={confirmed}
           capacity={maxPlayers}
-          action={rosterAction}
-          emptyText="아직 신청자가 없어요."
+          action={
+            confirmed.length > 0 && <RosterSheetButton onClick={() => setOpenSheet("confirmed")} />
+          }
+          emptyText={confirmedEmptyText}
         />
-      ) : (
-        <>
+        {isLottery && (
           <RosterGroupSection
-            label="참여자"
-            members={confirmed}
-            capacity={maxPlayers}
-            action={rosterAction}
-            emptyText="아직 참여자가 없어요."
+            label="신청"
+            members={waiting}
+            action={
+              waiting.length > 0 && <RosterSheetButton onClick={() => setOpenSheet("lottery")} />
+            }
+            emptyText="아직 신청자가 없습니다."
           />
-          {showWaiting && waiting.length > 0 && (
-            <RosterGroupSection
-              label="대기"
-              members={waiting}
-              action={
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-primary-ink"
-                  onClick={() => setOpenSheet("waiting")}
-                >
-                  명단 보기
-                </Button>
-              }
-              note={
-                viewerWaiting
-                  ? `내 순번 ${viewerWaiting.waitlistRank}번 · 자리가 나면 순서대로 확정됩니다.`
-                  : undefined
-              }
-            />
-          )}
-        </>
-      )}
+        )}
+        {!isLottery && showWaiting && waiting.length > 0 && (
+          <RosterGroupSection
+            label="대기"
+            members={waiting}
+            action={<RosterSheetButton onClick={() => setOpenSheet("waiting")} />}
+          />
+        )}
+      </VStack>
 
       <LotteryRosterSheet
         open={openSheet === "lottery"}
         onOpenChange={closeSheet}
         gm={gm}
-        applicants={[...confirmed, ...waiting]}
+        applicants={waiting}
         viewerId={viewerId}
       />
       <ConfirmedRosterSheet
@@ -120,6 +98,6 @@ export function GameRosterSection({
         waiting={waiting}
         viewerId={viewerId}
       />
-    </VStack>
+    </>
   );
 }
