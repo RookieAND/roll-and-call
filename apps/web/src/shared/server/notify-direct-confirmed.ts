@@ -5,7 +5,7 @@ import { inArray } from "drizzle-orm";
 
 import { gameUrl } from "./game-url";
 
-// GM이 신청 없이 바로 확정한 사람을 스레드에 알린다. 본인이 알아야 하므로 멘션한다.
+// GM이 신청 없이 바로 확정한 사람을 스레드에 알린다. 임베드 안 멘션은 이름만 보이고 알림은 울리지 않는다.
 export async function notifyDirectConfirmed(gameId: string, userIds: readonly string[]) {
   if (userIds.length === 0) return;
 
@@ -27,8 +27,9 @@ export async function notifyDirectConfirmed(gameId: string, userIds: readonly st
   const confirmedCount = game.participants.filter(
     (participant) => participant.status === "confirmed",
   ).length;
-  const mentionIds = invited.map((player) => player.discordId).filter((id) => id !== null);
-  const names = invited.map((player) => `**${player.username}**`).join(", ");
+  const names = invited
+    .map((player) => (player.discordId ? `<@${player.discordId}>` : `**${player.username}**`))
+    .join(", ");
 
   const embed: DiscordEmbed = {
     title: `✅ ${game.title}`,
@@ -43,9 +44,5 @@ export async function notifyDirectConfirmed(gameId: string, userIds: readonly st
     timestamp: new Date().toISOString(),
   };
 
-  await sendDiscordMessage(game.discordThreadId, {
-    content: mentionIds.map((discordId) => `<@${discordId}>`).join(" ") || undefined,
-    embeds: [embed],
-    userMentions: mentionIds,
-  });
+  await sendDiscordMessage(game.discordThreadId, { embeds: [embed] });
 }
