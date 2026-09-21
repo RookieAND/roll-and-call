@@ -6,7 +6,7 @@ import { StatusNotice } from "@/shared/ui";
 
 interface ActionNoticeProps {
   title?: ReactNode;
-  tone?: "normal" | "success" | "warning" | "danger";
+  tone?: "normal" | "primary" | "success" | "warning" | "danger";
   icon?: LucideIcon;
   children: ReactNode;
 }

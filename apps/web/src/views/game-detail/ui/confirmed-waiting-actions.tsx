@@ -1,4 +1,5 @@
 import { VStack } from "@trpg/ui";
+import { CircleAlert } from "lucide-react";
 
 import { LeaveGameButton } from "@/features/join-game";
 
@@ -18,7 +19,7 @@ export function ConfirmedWaitingActions({ gameId, waitlistRank }: ConfirmedWaiti
 
   return (
     <VStack gap="125">
-      <ActionNotice>
+      <ActionNotice title="세션 시간이 정해져 신청이 닫혔습니다" tone="warning" icon={CircleAlert}>
         {rankLabel} 그대로 유지되고, 취소가 생기면 순서대로 연락드립니다.
         <br />
         하지만 자리가 나지 않을 수 있으니 다른 구인글도 함께 찾아보세요.

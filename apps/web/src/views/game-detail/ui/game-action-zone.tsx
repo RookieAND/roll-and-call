@@ -82,6 +82,8 @@ export function GameActionZone({
           gameId={game.id}
           waitlistRank={waitlistRank}
           pendingDraw={isLottery && game.drawnAt === null}
+          endDate={game.endDate}
+          expired={expired}
         />
       );
     case GAME_ACTION_VIEW.joined:

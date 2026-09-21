@@ -1,4 +1,5 @@
 import { VStack } from "@trpg/ui";
+import { Check } from "lucide-react";
 
 import { LEAVE_LOCKED_REASON, type LeaveLock } from "../model/leave-locked-reason";
 import { ACTION_PRIMARY_CLASS } from "./action-class-names";
@@ -15,7 +16,7 @@ interface LockedJoinedActionsProps {
 export function LockedJoinedActions({ gameId, canSchedule, lock }: LockedJoinedActionsProps) {
   return (
     <VStack gap="125">
-      <ActionNotice>
+      <ActionNotice title="참여가 확정됐습니다" tone="success" icon={Check}>
         {LEAVE_LOCKED_REASON[lock]} 신청을 취소할 수 없습니다.
         <br />
         참여를 취소하려면 GM에게 직접 문의해 주세요.
