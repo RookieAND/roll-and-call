@@ -7,7 +7,9 @@ import { AttendanceForm, ConfirmedAttendance, type Attendee } from "@/features/c
 import { getCurrentUser, getGameParticipants } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
+import { AttendanceGuide } from "./attendance-guide";
 import { AttendanceHeader } from "./attendance-header";
+import { AttendanceSessionTime } from "./attendance-session-time";
 
 // 왔는지 안 왔는지만 정하는 자리다. 명단을 고치는 일은 참여자 관리가 맡는다.
 export async function GameAttendanceView({ id }: { id: string }) {
@@ -42,22 +44,32 @@ export async function GameAttendanceView({ id }: { id: string }) {
     absent: participant.absent,
   }));
 
+  const sessionInfo = (
+    <>
+      <AttendanceSessionTime confirmedAt={game.confirmedAt!} />
+      <AttendanceGuide attendanceConfirmedAt={game.attendanceConfirmedAt} />
+    </>
+  );
+
   return (
     <>
       <AppBar back={`/games/${id}/participants`} title="출석 확인" />
       <Container size="sm">
-        <VStack gap="200" className="py-200">
+        <VStack gap="150" className="py-200">
           <AttendanceHeader
             title={game.title}
             rule={game.rule}
-            confirmedAt={game.confirmedAt!}
             confirmedCount={attendees.length}
-            attendanceConfirmedAt={game.attendanceConfirmedAt}
+            attendanceConfirmed={Boolean(game.attendanceConfirmedAt)}
           />
           {game.attendanceConfirmedAt ? (
-            <ConfirmedAttendance gameId={id} attendees={attendees} />
+            <ConfirmedAttendance gameId={id} attendees={attendees}>
+              {sessionInfo}
+            </ConfirmedAttendance>
           ) : (
-            <AttendanceForm gameId={id} attendees={attendees} />
+            <AttendanceForm gameId={id} attendees={attendees}>
+              {sessionInfo}
+            </AttendanceForm>
           )}
         </VStack>
       </Container>
