@@ -9,12 +9,11 @@ interface RosterRowProps {
   rank?: number | null;
   note?: string;
   warn?: boolean;
-  preConfirmed?: boolean;
   action: ReactNode;
 }
 
 // 행에서 읽는 것은 하나뿐이다. 어느 큐에 있는지는 위치가 이미 말해 준다.
-export function RosterRow({ member, rank, note, warn, preConfirmed, action }: RosterRowProps) {
+export function RosterRow({ member, rank, note, warn, action }: RosterRowProps) {
   return (
     <HStack
       align="center"
@@ -24,7 +23,6 @@ export function RosterRow({ member, rank, note, warn, preConfirmed, action }: Ro
       <MemberProfileLink
         member={member}
         rank={rank}
-        preConfirmed={preConfirmed}
         note={
           note && (
             <Text

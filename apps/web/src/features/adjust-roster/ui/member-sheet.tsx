@@ -17,6 +17,7 @@ interface MemberSheetProps {
   waitingCount: number;
   maxPlayers: number;
   isCoordinate: boolean;
+  beforeDraw: boolean;
   onClose: () => void;
 }
 
@@ -28,6 +29,7 @@ export function MemberSheet({
   waitingCount,
   maxPlayers,
   isCoordinate,
+  beforeDraw,
   onClose,
 }: MemberSheetProps) {
   const isConfirmed = member?.waitlistRank === null;
@@ -37,12 +39,17 @@ export function MemberSheet({
       <Sheet.Content>
         {member && (
           <VStack gap={0}>
-            <MemberSheetHeader member={member} isCoordinate={isCoordinate} />
+            <MemberSheetHeader
+              member={member}
+              isCoordinate={isCoordinate}
+              beforeDraw={beforeDraw}
+            />
             {isConfirmed ? (
               <DemoteMemberItem
                 gameId={gameId}
                 member={member}
                 waitingCount={waitingCount}
+                beforeDraw={beforeDraw}
                 onDone={onClose}
               />
             ) : (
@@ -57,7 +64,7 @@ export function MemberSheet({
             <RemoveMemberItem
               gameId={gameId}
               member={member}
-              leavesEmptySeat={isConfirmed && waitingCount > 0}
+              leavesEmptySeat={isConfirmed && waitingCount > 0 && !beforeDraw}
               onDone={onClose}
             />
           </VStack>

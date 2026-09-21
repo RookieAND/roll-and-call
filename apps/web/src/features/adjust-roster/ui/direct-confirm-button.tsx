@@ -27,7 +27,7 @@ export function DirectConfirmButton({
         onClick={() => setOpen(true)}
       >
         <Plus size={13} strokeWidth={2.8} aria-hidden className="text-primary-600" />
-        직접 확정
+        참여자 추가
       </Button>
       <DirectConfirmSheet
         gameId={gameId}

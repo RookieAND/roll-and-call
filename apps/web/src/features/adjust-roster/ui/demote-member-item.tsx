@@ -13,10 +13,17 @@ interface DemoteMemberItemProps {
   gameId: string;
   member: MemberSummary;
   waitingCount: number;
+  beforeDraw: boolean;
   onDone: () => void;
 }
 
-export function DemoteMemberItem({ gameId, member, waitingCount, onDone }: DemoteMemberItemProps) {
+export function DemoteMemberItem({
+  gameId,
+  member,
+  waitingCount,
+  beforeDraw,
+  onDone,
+}: DemoteMemberItemProps) {
   const { pending, run } = useAction();
 
   function demote() {
@@ -34,7 +41,7 @@ export function DemoteMemberItem({ gameId, member, waitingCount, onDone }: Demot
     <Sheet.Item disabled={pending} onClick={demote}>
       대기로 이동
       <Text typography="body4" foreground="hint" render={<span />}>
-        대기 {waitingCount + 1}번이 됩니다
+        {beforeDraw ? "추첨 대상으로 돌아갑니다" : `대기 ${waitingCount + 1}번이 됩니다`}
       </Text>
     </Sheet.Item>
   );

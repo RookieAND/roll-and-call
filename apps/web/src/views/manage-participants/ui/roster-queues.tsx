@@ -4,6 +4,7 @@ import { Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { DirectConfirmButton, MemberSheet } from "@/features/adjust-roster";
+import { toKst } from "@/shared/lib";
 import { ExpandableRows } from "@/shared/ui";
 
 import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stage";
@@ -31,6 +32,7 @@ interface RosterQueuesProps {
 }
 
 // 확정과 대기는 제목 붙은 두 목록이다. 한 사람이 어느 쪽인지는 배지가 아니라 위치가 말한다.
+// 뽑기 전에는 대기 자리에 순번 없는 신청자가 선다. 먼저 신청한 사람이 유리해 보이지 않게 한다.
 export function RosterQueues({
   gameId,
   confirmed,
@@ -50,11 +52,16 @@ export function RosterQueues({
     ) : locked ? null : (
       <MemberMenuButton username={member.username} onClick={() => setMenuMember(member)} />
     );
+  const { beforeDraw } = summary;
   const noteOf = (member: ManagedMember) =>
     isCoordinate && !attendanceStage ? availabilityNote(member.hasAvailability) : undefined;
   const warnOf = (member: ManagedMember) =>
     isCoordinate && !attendanceStage && !member.hasAvailability;
-  const waitingCaption = summary.drawnAtLabel ? "추첨으로 정해진 순서" : "신청 순서";
+  const waitingCaption = beforeDraw
+    ? "신청 순서 · 뽑기 전에는 순번이 없습니다"
+    : summary.drawnAtLabel
+      ? "추첨으로 정해진 순서"
+      : "신청 순서";
   const confirmedFootnote = locked ? (
     <LockedRosterNote attendanceChecked={attendanceStage === ATTENDANCE_STAGE.done} />
   ) : (
@@ -87,11 +94,16 @@ export function RosterQueues({
         footnote={confirmedFootnote}
       >
         {confirmed.length === 0 ? (
-          <div className="px-150 py-200">
+          <VStack gap="050" className="px-150 py-200">
             <Text typography="body3" foreground="muted">
-              아직 확정된 참여자가 없습니다.
+              아직 확정한 참여자가 없습니다.
             </Text>
-          </div>
+            {beforeDraw && (
+              <Text typography="body4" foreground="hint" render={<p />}>
+                {maxPlayers}자리 모두 추첨으로 정해집니다.
+              </Text>
+            )}
+          </VStack>
         ) : attendanceStage ? (
           <ExpandableRows previewCount={ENDED_PREVIEW_COUNT}>{confirmedRows}</ExpandableRows>
         ) : (
@@ -101,11 +113,12 @@ export function RosterQueues({
 
       {waiting.length > 0 && !attendanceStage && (
         <RosterQueue
-          label="대기"
+          label={beforeDraw ? "신청자" : "대기"}
           count={waiting.length}
           caption={waitingCaption}
           footnote={
             summary.isFull &&
+            !beforeDraw &&
             !locked && (
               <Text typography="body4" foreground="hint" render={<p />}>
                 정원이 차 있어 바로 확정할 수 없습니다.
@@ -120,9 +133,8 @@ export function RosterQueues({
               <RosterRow
                 key={member.userId}
                 member={member}
-                rank={member.waitlistRank}
-                note={noteOf(member)}
-                warn={warnOf(member)}
+                rank={beforeDraw ? null : member.waitlistRank}
+                note={`${toKst(member.joinedAt).format("M월 D일 HH:mm:ss")} 신청`}
                 action={rowAction(member)}
               />
             ))}
@@ -137,6 +149,7 @@ export function RosterQueues({
         waitingCount={waiting.length}
         maxPlayers={maxPlayers}
         isCoordinate={isCoordinate}
+        beforeDraw={beforeDraw}
         onClose={() => setMenuMember(null)}
       />
     </VStack>

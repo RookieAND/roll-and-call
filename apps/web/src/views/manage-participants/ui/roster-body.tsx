@@ -26,17 +26,19 @@ export function RosterBody({
   locked,
   attendanceStage,
 }: RosterBodyProps) {
-  if (summary.applicantCount === 0) return <RosterEmptyState gameId={gameId} />;
+  if (confirmed.length + waiting.length === 0) return <RosterEmptyState gameId={gameId} />;
 
   if (summary.beforeDraw) {
     return (
       <DrawStage
         gameId={gameId}
-        applicants={[...confirmed, ...waiting]}
+        confirmed={confirmed}
+        waiting={waiting}
         maxPlayers={maxPlayers}
         summary={summary}
         isCoordinate={isCoordinate}
         locked={locked}
+        attendanceStage={attendanceStage}
       />
     );
   }

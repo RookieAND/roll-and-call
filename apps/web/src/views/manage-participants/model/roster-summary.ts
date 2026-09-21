@@ -34,7 +34,8 @@ export function summarizeRoster({
     beforeDraw,
     methodLabel: !isLottery ? "선착순" : drawnAt ? "추첨 완료" : "추첨",
     isFull: confirmed.length >= maxPlayers,
-    applicantCount: confirmed.length + waiting.length,
+    // 뽑기 전에는 추첨에 들어갈 사람만 신청으로 센다. 직접 확정한 사람은 확정 목록에 따로 선다.
+    applicantCount: beforeDraw ? waiting.length : confirmed.length + waiting.length,
     // 뽑기 전에 확정에 있는 사람은 GM이 직접 넣은 사람이다. 추첨은 남은 자리만 뽑는다.
     preConfirmedCount: beforeDraw ? confirmed.length : 0,
     drawCount: Math.max(maxPlayers - (beforeDraw ? confirmed.length : 0), 0),
@@ -44,9 +45,7 @@ export function summarizeRoster({
     daysLeft: Math.max(daysLeft, 0),
     drawnAtLabel: drawnAt ? formatDateTime(drawnAt) : null,
     unsubmittedCount: isCoordinate
-      ? (beforeDraw ? [...confirmed, ...waiting] : confirmed).filter(
-          (member) => !member.hasAvailability,
-        ).length
+      ? confirmed.filter((member) => !member.hasAvailability).length
       : 0,
   };
 }

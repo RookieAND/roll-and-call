@@ -35,6 +35,7 @@ describe("summarizeRoster", () => {
     });
     expect(summary.preConfirmedCount).toBe(1);
     expect(summary.drawCount).toBe(3);
+    expect(summary.applicantCount).toBe(2);
   });
 
   it("뽑은 뒤나 선착순에서는 직접 확정을 따로 세지 않는다", () => {

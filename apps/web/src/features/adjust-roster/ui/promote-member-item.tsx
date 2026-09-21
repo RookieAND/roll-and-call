@@ -17,7 +17,7 @@ interface PromoteMemberItemProps {
   onDone: () => void;
 }
 
-// 정원이 차 있으면 누를 수 없게 두되 이유를 숨기지 않는다. 교체 대신 대기로 이동 → 확정시키기 두 번으로 나눈다.
+// 정원이 차 있으면 누를 수 없게 두되 이유를 숨기지 않는다. 교체 대신 대기로 이동 → 참여자로 등록 두 번으로 나눈다.
 export function PromoteMemberItem({
   gameId,
   member,
@@ -45,7 +45,7 @@ export function PromoteMemberItem({
       onClick={promote}
       className={cn("font-semibold", !isFull && "text-tinted-ink")}
     >
-      확정시키기
+      참여자로 등록
       <Text typography="body4" foreground="hint" render={<span />} className="text-right">
         {isFull ? (
           <>
@@ -54,7 +54,7 @@ export function PromoteMemberItem({
             확정에서 한 명을 대기로 옮기세요
           </>
         ) : (
-          `확정 ${confirmedCount + 1}명이 됩니다`
+          "해당 인원을 참여자로 지정합니다"
         )}
       </Text>
     </Sheet.Item>
