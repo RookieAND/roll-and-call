@@ -57,11 +57,7 @@ export function RosterQueues({
     isCoordinate && !attendanceStage ? availabilityNote(member.hasAvailability) : undefined;
   const warnOf = (member: ManagedMember) =>
     isCoordinate && !attendanceStage && !member.hasAvailability;
-  const waitingCaption = beforeDraw
-    ? "신청 순서 · 뽑기 전에는 순번이 없습니다"
-    : summary.drawnAtLabel
-      ? "추첨으로 정해진 순서"
-      : "신청 순서";
+  const waitingCaption = summary.drawnAtLabel ? "추첨으로 정해진 순서" : "신청 순서";
   const confirmedFootnote = locked ? (
     <LockedRosterNote attendanceChecked={attendanceStage === ATTENDANCE_STAGE.done} />
   ) : (
