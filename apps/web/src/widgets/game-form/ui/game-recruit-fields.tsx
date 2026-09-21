@@ -1,14 +1,12 @@
 "use client";
 
-import { Field, Stepper, VStack } from "@trpg/ui";
+import { Callout, Field, Stepper, VStack } from "@trpg/ui";
 import { CircleAlert, Lock } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 
 import { RECRUIT_METHOD } from "@/entities/game";
 import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
-import { DangerNotice } from "./danger-notice";
-import { HintBox } from "./hint-box";
 import { PreConfirmedField } from "./pre-confirmed-field";
 import { RecruitMethodField } from "./recruit-method-field";
 import { WaitlistField } from "./waitlist-field";
@@ -58,12 +56,14 @@ export function GameRecruitFields({
           />
         </Field>
         {minPlayers > 1 && (
-          <DangerNotice
+          <Callout
+            tone="danger"
+            size="sm"
             icon={<CircleAlert size={14} strokeWidth={2.2} />}
             title={`확정 참여자가 ${minPlayers}명이라 정원을 ${minPlayers}명보다 줄일 수 없습니다.`}
           >
             줄이려면 참여자 관리에서 확정을 먼저 풀어주세요.
-          </DangerNotice>
+          </Callout>
         )}
       </VStack>
 
@@ -96,13 +96,11 @@ export function GameRecruitFields({
         />
 
         {isLottery ? (
-          <HintBox
-            icon={<Lock size={14} strokeWidth={2.2} />}
-            lines={[
-              "추첨에서는 대기 접수 설정을 쓰지 않습니다.",
-              "뽑히지 않은 신청자는 대기 명단에 순서대로 남습니다.",
-            ]}
-          />
+          <Callout size="sm" icon={<Lock size={14} strokeWidth={2.2} />}>
+            추첨에서는 대기 접수 설정을 쓰지 않습니다.
+            <br />
+            뽑히지 않은 신청자는 대기 명단에 순서대로 남습니다.
+          </Callout>
         ) : (
           <WaitlistField
             value={watch("waitlistEnabled")}

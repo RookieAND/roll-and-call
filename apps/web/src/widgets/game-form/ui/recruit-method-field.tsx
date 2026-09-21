@@ -1,10 +1,9 @@
 "use client";
 
-import { Chip, Field, Grid, VStack } from "@trpg/ui";
+import { Callout, Chip, Field, Grid, VStack } from "@trpg/ui";
 
 import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
 
-import { HintBox } from "./hint-box";
 import { LockedModeNotice } from "./locked-mode-notice";
 
 const OPTIONS = [
@@ -13,14 +12,9 @@ const OPTIONS = [
 ] as const;
 
 const HINT = {
-  [RECRUIT_METHOD.firstCome]: [
-    "신청한 순서대로 정원까지 바로 확정됩니다.",
-    "정원이 찬 뒤의 신청은 대기가 됩니다.",
-  ],
-  [RECRUIT_METHOD.lottery]: [
-    "정원과 관계없이 신청을 받습니다.",
-    "GM이 추첨으로 확정 인원을 정합니다.",
-  ],
+  [RECRUIT_METHOD.firstCome]:
+    "신청한 순서대로 정원까지 바로 확정됩니다.\n정원이 찬 뒤의 신청은 대기가 됩니다.",
+  [RECRUIT_METHOD.lottery]: "정원과 관계없이 신청을 받습니다.\nGM이 추첨으로 확정 인원을 정합니다.",
 } as const;
 
 interface RecruitMethodFieldProps {
@@ -47,7 +41,13 @@ export function RecruitMethodField({ value, onChange, locked = false }: RecruitM
           ))}
         </Grid>
       </Field>
-      {locked ? <LockedModeNotice label="모집 방식" /> : <HintBox lines={HINT[value]} />}
+      {locked ? (
+        <LockedModeNotice label="모집 방식" />
+      ) : (
+        <Callout size="sm" className="whitespace-pre-line">
+          {HINT[value]}
+        </Callout>
+      )}
     </VStack>
   );
 }

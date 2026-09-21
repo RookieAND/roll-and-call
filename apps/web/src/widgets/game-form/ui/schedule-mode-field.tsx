@@ -1,10 +1,9 @@
 "use client";
 
-import { Chip, Field, Grid, VStack } from "@trpg/ui";
+import { Callout, Chip, Field, Grid, VStack } from "@trpg/ui";
 
 import { SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
 
-import { HintBox } from "./hint-box";
 import { LockedModeNotice } from "./locked-mode-notice";
 
 const OPTIONS = [
@@ -13,13 +12,9 @@ const OPTIONS = [
 ] as const;
 
 const HINT = {
-  [SCHEDULE_MODE.coordinate]: [
-    "참여자가 가능 시간을 내면 GM이 겹치는 시간대 중 하나를 확정합니다.",
-  ],
-  [SCHEDULE_MODE.fixed]: [
-    "정해진 일시로 바로 모집합니다.",
-    "참여자는 가능 시간을 내지 않고, 일정 조율 화면도 생기지 않습니다.",
-  ],
+  [SCHEDULE_MODE.coordinate]: "참여자가 가능 시간을 내면 GM이 겹치는 시간대 중 하나를 확정합니다.",
+  [SCHEDULE_MODE.fixed]:
+    "정해진 일시로 바로 모집합니다.\n참여자는 가능 시간을 내지 않고, 일정 조율 화면도 생기지 않습니다.",
 } as const;
 
 interface ScheduleModeFieldProps {
@@ -46,7 +41,13 @@ export function ScheduleModeField({ value, onChange, locked = false }: ScheduleM
           ))}
         </Grid>
       </Field>
-      {locked ? <LockedModeNotice label="일정 방식" /> : <HintBox lines={HINT[value]} />}
+      {locked ? (
+        <LockedModeNotice label="일정 방식" />
+      ) : (
+        <Callout size="sm" className="whitespace-pre-line">
+          {HINT[value]}
+        </Callout>
+      )}
     </VStack>
   );
 }

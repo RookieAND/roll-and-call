@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Container, HStack, Text, VStack } from "@trpg/ui";
+import { Button, Callout, Container, HStack, VStack } from "@trpg/ui";
 
 import { WizardNextButton } from "./wizard-next-button";
 import { WizardSavingButton } from "./wizard-saving-button";
@@ -36,14 +36,9 @@ export function WizardFooter({
       <Container size="md" className="py-150">
         <VStack gap="150">
           {isLastStep && error && (
-            <Text
-              typography="body4"
-              foreground="danger"
-              render={<p />}
-              className="whitespace-pre-line rounded-500 border border-danger-200 bg-danger-50 px-175 py-150 leading-[1.55]"
-            >
+            <Callout tone="danger" className="whitespace-pre-line">
               {error}
-            </Text>
+            </Callout>
           )}
           <HStack gap="100" className="[&>*]:flex-1">
             {backLabel && (

@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@trpg/ui";
+import { Callout, Text, VStack } from "@trpg/ui";
 import { AlertCircle } from "lucide-react";
 
 import { ABSENCE_RECORD_MONTHS } from "@/entities/game";
@@ -22,33 +22,15 @@ export function ProfileAbsenceNotice({ absences }: ProfileAbsenceNoticeProps) {
 
   return (
     <VStack gap="100">
-      <HStack
-        align="start"
-        gap="125"
-        className="rounded-500 border border-danger-200 bg-danger-50 px-175 py-150"
+      <Callout
+        tone="danger"
+        icon={<AlertCircle size={15} strokeWidth={2.2} />}
+        title={`최근 ${ABSENCE_RECORD_MONTHS}개월 불참 ${absences.length}회`}
       >
-        <AlertCircle
-          size={15}
-          strokeWidth={2.2}
-          aria-hidden
-          className="mt-px shrink-0 text-danger-600"
-        />
-        <div className="min-w-0 flex-1">
-          <Text typography="subtitle1" foreground="danger" render={<p />}>
-            최근 {ABSENCE_RECORD_MONTHS}개월 불참 {absences.length}회
-          </Text>
-          <Text
-            typography="body4"
-            foreground="muted"
-            render={<p />}
-            className="mt-050 leading-relaxed"
-          >
-            {formatDate(latest.sessionAt)} {latest.title}.
-            <br />
-            {formatDate(latest.expiresAt)}에 사라집니다.
-          </Text>
-        </div>
-      </HStack>
+        {formatDate(latest.sessionAt)} {latest.title}.
+        <br />
+        {formatDate(latest.expiresAt)}에 사라집니다.
+      </Callout>
       <Text typography="body4" foreground="hint" render={<p />} className="leading-relaxed">
         신청을 막지는 않습니다. 받을지는 GM이 정합니다.
       </Text>
