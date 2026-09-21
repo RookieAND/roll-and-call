@@ -7,15 +7,13 @@ import { GAME_STATUS_FILTER, type GamesFilter } from "@/shared/api";
 import { confirmedCountSql } from "./confirmed-count-sql";
 
 // 상태 필터는 모집 상태 배지(deriveGameStatus)와 같은 기준이다.
-// 플레이가 끝난 게임은 빼되, "전체"를 고른 사람에게는 지난 것까지 보여준다.
+// 세션 시간이 지난 게임은 어떤 필터에서도 보여주지 않는다.
 export function recruitingGamesWhere(filter: GamesFilter, now: Date) {
   const conditions: SQL[] = [];
   if (filter.q) {
     conditions.push(or(ilike(games.title, `%${filter.q}%`), ilike(games.rule, `%${filter.q}%`))!);
   }
-  if (filter.status !== GAME_STATUS_FILTER.all) {
-    conditions.push(or(isNull(games.confirmedAt), gt(games.confirmedAt, now))!);
-  }
+  conditions.push(or(isNull(games.confirmedAt), gt(games.confirmedAt, now))!);
 
   const full = sql`${confirmedCountSql} >= ${games.maxPlayers}`;
   const open = gt(games.endDate, now);
