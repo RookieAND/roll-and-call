@@ -15,14 +15,14 @@ import { WaitlistField } from "./waitlist-field";
 interface GameRecruitFieldsProps {
   form: UseFormReturn<GameFormValues>;
   minPlayers?: number;
-  lockedReason?: readonly string[] | null;
+  locked?: boolean;
   preConfirmable?: boolean;
 }
 
 export function GameRecruitFields({
   form,
   minPlayers = 1,
-  lockedReason,
+  locked = false,
   preConfirmable = false,
 }: GameRecruitFieldsProps) {
   const {
@@ -36,16 +36,9 @@ export function GameRecruitFields({
   const preConfirmed = watch("preConfirmed");
   const playersFloor = Math.max(minPlayers, preConfirmed.length);
 
-  const playersHint =
-    minPlayers > 1
-      ? `확정 참여자가 ${minPlayers}명이라 그보다 줄일 수 없습니다.`
-      : isLottery
-        ? `추첨으로 뽑을 확정 인원입니다. GM 제외 1~${GAME_MAX_PLAYERS}명.`
-        : `GM을 뺀 플레이어 수입니다. 1~${GAME_MAX_PLAYERS}명.`;
-
   return (
     <>
-      <VStack gap="075">
+      <VStack gap="100">
         <Field
           label="최대 참여 인원"
           htmlFor="maxPlayers"
@@ -58,15 +51,16 @@ export function GameRecruitFields({
             min={playersFloor}
             max={GAME_MAX_PLAYERS}
             invalid={!!errors.maxPlayers}
-            aria-describedby="maxPlayers-hint"
             onChange={(count) =>
               setValue("maxPlayers", String(count), { shouldDirty: true, shouldValidate: true })
             }
           />
         </Field>
-        <Text typography="body4" foreground="hint" render={<p />} id="maxPlayers-hint">
-          {playersHint}
-        </Text>
+        {minPlayers > 1 && (
+          <Text typography="body4" foreground="hint" render={<p />}>
+            확정 참여자가 {minPlayers}명이라 정원을 그보다 줄일 수 없습니다.
+          </Text>
+        )}
       </VStack>
 
       {preConfirmable && (
@@ -93,7 +87,7 @@ export function GameRecruitFields({
       <VStack gap="125">
         <RecruitMethodField
           value={method}
-          lockedReason={lockedReason}
+          locked={locked}
           onChange={(next) => setValue("recruitMethod", next, { shouldDirty: true })}
         />
 

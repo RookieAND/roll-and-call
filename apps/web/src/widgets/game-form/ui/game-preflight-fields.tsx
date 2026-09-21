@@ -13,9 +13,9 @@ import {
 import { TagInput } from "@/shared/ui";
 
 const TAG_PLACEHOLDER: Record<GameTagKey, string> = {
-  [GAME_TAG.genres]: "장르를 적고 엔터",
-  [GAME_TAG.triggers]: "주의가 필요한 소재를 적고 엔터",
-  [GAME_TAG.platforms]: "쓰는 플랫폼을 적고 엔터",
+  [GAME_TAG.genres]: "예: 호러, 미스터리",
+  [GAME_TAG.triggers]: "예: 유혈, 폐쇄 공간",
+  [GAME_TAG.platforms]: "예: 디스코드, 코코포리아",
 };
 
 const AI_IMAGE_OPTIONS = [
@@ -110,25 +110,20 @@ export function GamePreflightFields({
         )}
       </VStack>
 
-      <VStack gap="075">
-        <Field
-          label="주의 사항"
-          htmlFor="notice"
-          counter={`${noticeLength} / ${GAME_NOTICE_MAX}`}
-          error={errors.notice?.message}
-        >
-          <Textarea
-            id="notice"
-            rows={3}
-            maxLength={GAME_NOTICE_MAX}
-            placeholder="참여 전에 알아야 할 것을 적어주세요. 캐릭터 준비물, 지각 규칙, 중도 하차 처리 같은 것."
-            {...register("notice")}
-          />
-        </Field>
-        <Text typography="body4" foreground="hint" render={<p />}>
-          상세 페이지의 트리거 아래에 그대로 보입니다.
-        </Text>
-      </VStack>
+      <Field
+        label="주의 사항"
+        htmlFor="notice"
+        counter={`${noticeLength} / ${GAME_NOTICE_MAX}`}
+        error={errors.notice?.message}
+      >
+        <Textarea
+          id="notice"
+          rows={3}
+          maxLength={GAME_NOTICE_MAX}
+          placeholder="참여 전에 알아야 할 것을 적어주세요. 캐릭터 준비물, 지각 규칙, 중도 하차 처리 같은 것."
+          {...register("notice")}
+        />
+      </Field>
     </>
   );
 }

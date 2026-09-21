@@ -79,10 +79,8 @@ export function CoordinationRangeFields({ form }: CoordinationRangeFieldsProps) 
           </div>
         </HStack>
       </Field>
-      <Text typography="body4" foreground="hint" render={<p />} className="leading-[1.6]">
-        참여자가 이 기간 안에서 가능 시간을 냅니다.
-        <br />
-        최대 {GAME_RANGE_MAX_DAYS}일까지 고를 수 있습니다.
+      <Text typography="body4" foreground="hint" render={<p />}>
+        참여자가 참여 일자를 고를 수 있는 범위입니다. (최대 {GAME_RANGE_MAX_DAYS}일)
       </Text>
     </VStack>
   );

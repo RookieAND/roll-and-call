@@ -5,6 +5,7 @@ import { Chip, Field, Grid, VStack } from "@trpg/ui";
 import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
 
 import { HintBox } from "./hint-box";
+import { LockedModeNotice } from "./locked-mode-notice";
 
 const OPTIONS = [
   { value: RECRUIT_METHOD.firstCome, label: "선착순" },
@@ -25,20 +26,20 @@ const HINT = {
 interface RecruitMethodFieldProps {
   value: RecruitMethod;
   onChange: (method: RecruitMethod) => void;
-  lockedReason?: readonly string[] | null;
+  locked?: boolean;
 }
 
-export function RecruitMethodField({ value, onChange, lockedReason }: RecruitMethodFieldProps) {
+export function RecruitMethodField({ value, onChange, locked = false }: RecruitMethodFieldProps) {
   return (
     <VStack gap="100">
-      <Field label="모집 방식" required>
+      <Field label="모집 방식" required={!locked}>
         <Grid cols={2} gap="100">
           {OPTIONS.map((option) => (
             <Chip
               key={option.value}
               shape="block"
               selected={value === option.value}
-              disabled={Boolean(lockedReason) && value !== option.value}
+              disabled={locked && value !== option.value}
               onClick={() => onChange(option.value)}
             >
               {option.label}
@@ -46,7 +47,7 @@ export function RecruitMethodField({ value, onChange, lockedReason }: RecruitMet
           ))}
         </Grid>
       </Field>
-      <HintBox lines={lockedReason ?? HINT[value]} />
+      {locked ? <LockedModeNotice label="모집 방식" /> : <HintBox lines={HINT[value]} />}
     </VStack>
   );
 }

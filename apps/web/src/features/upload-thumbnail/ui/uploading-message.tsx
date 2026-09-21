@@ -1,12 +1,15 @@
-import { Text } from "@trpg/ui";
-import { Loader2 } from "lucide-react";
+import { Progress, Text } from "@trpg/ui";
 
-export function UploadingMessage() {
+interface UploadingMessageProps {
+  percent: number;
+}
+
+export function UploadingMessage({ percent }: UploadingMessageProps) {
   return (
     <>
-      <Loader2 size={22} className="animate-spin text-gray-400" aria-hidden />
-      <Text typography="body3" foreground="muted">
-        올리는 중
+      <Progress value={percent} className="h-[5px] w-3/5 bg-gray-200" />
+      <Text numeric typography="body4" foreground="muted">
+        올리는 중 {percent}%
       </Text>
     </>
   );

@@ -9,11 +9,15 @@ interface ThumbnailErrorProps {
 
 export function ThumbnailError({ message, onRetry }: ThumbnailErrorProps) {
   return (
-    <HStack align="center" justify="between" gap="100">
-      <Text typography="body4" foreground="danger" render={<p />}>
+    <HStack
+      align="center"
+      gap="125"
+      className="rounded-600 border border-danger-200 bg-danger-50 px-175 py-175"
+    >
+      <Text typography="body3" render={<p />} className="min-w-0 flex-1 text-danger-600">
         {message}
       </Text>
-      <Button variant="ghost" size="sm" className="h-9 shrink-0" onClick={onRetry}>
+      <Button variant="danger" size="sm" className="h-[34px] shrink-0 bg-surface" onClick={onRetry}>
         다시 고르기
       </Button>
     </HStack>

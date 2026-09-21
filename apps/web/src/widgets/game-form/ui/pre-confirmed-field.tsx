@@ -2,11 +2,12 @@
 
 import { Button, HStack, Text, VStack } from "@trpg/ui";
 import { Plus } from "lucide-react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
 import { DirectConfirmSheet } from "@/features/adjust-roster";
 import type { PreConfirmedPlayer } from "@/features/write-game";
 
+import { countPeople } from "../model/count-people";
 import { PreConfirmedRow } from "./pre-confirmed-row";
 
 interface PreConfirmedFieldProps {
@@ -30,16 +31,10 @@ export function PreConfirmedField({
   const openSeats = Math.max(maxPlayers - count, 0);
   const hint =
     count === 0
-      ? ["신청을 받지 않고 바로 함께할 사람이 있으면 넣어 주세요."]
+      ? "신청을 받지 않고 바로 함께할 사람이 있으면 넣어 주세요."
       : isLottery
-        ? [
-            `직접 확정한 ${count}명은 추첨에서 빠집니다.`,
-            `남은 ${openSeats}자리를 두고 추첨합니다.`,
-          ]
-        : [
-            `구인을 올리면 ${count}명이 바로 확정됩니다.`,
-            `공개 모집은 남은 ${openSeats}자리로 열립니다.`,
-          ];
+        ? `직접 확정한 ${countPeople(count)}은 추첨에서 빠지고, 남은 ${openSeats}자리를 두고 추첨합니다.`
+        : `구인을 올리면 ${countPeople(count)}이 바로 확정되고, 남은 ${openSeats}자리로 공개 모집합니다.`;
 
   return (
     <VStack gap="100">
@@ -82,13 +77,13 @@ export function PreConfirmedField({
         참여자 추가
       </Button>
 
-      <Text typography="body4" foreground="hint" render={<p />} className="leading-[1.55]">
-        {hint.map((line, index) => (
-          <Fragment key={line}>
-            {index > 0 && <br />}
-            {line}
-          </Fragment>
-        ))}
+      <Text
+        typography="body4"
+        foreground="hint"
+        render={<p />}
+        className="text-pretty leading-[1.55]"
+      >
+        {hint}
       </Text>
 
       <DirectConfirmSheet

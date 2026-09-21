@@ -39,3 +39,10 @@
   color: inherit;
   background: color-mix(in srgb, var(--color-gray-200) 50%, transparent);
 }
+.rich-text p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: var(--color-hint);
+}

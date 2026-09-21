@@ -1,7 +1,7 @@
 "use client";
 
 import { RichTextEditor } from "@trpg/tiptap";
-import { Chip, Field, HStack, Text, TextInput, VStack } from "@trpg/ui";
+import { Chip, Field, HStack, TextInput, VStack } from "@trpg/ui";
 import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_SYNOPSIS_MAX, type GameFormValues } from "@/features/write-game";
@@ -9,7 +9,7 @@ import { richTextLength } from "@/shared/lib";
 
 import { PlayTimeField } from "./play-time-field";
 
-const RULE_PRESETS = ["CoC 7th", "피아스코", "던전월드"];
+const RULE_PRESETS = ["CoC 7th", "피아스코", "DnD 5th"];
 
 interface GameBasicsFieldsProps {
   form: UseFormReturn<GameFormValues>;
@@ -54,7 +54,12 @@ export function GameBasicsFields({ form }: GameBasicsFieldsProps) {
               key={preset}
               selected={rule === preset}
               className="h-8.5"
-              onClick={() => setValue("rule", preset, { shouldDirty: true, shouldValidate: true })}
+              onClick={() =>
+                setValue("rule", preset, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
             >
               {preset}
             </Chip>
@@ -66,31 +71,28 @@ export function GameBasicsFields({ form }: GameBasicsFieldsProps) {
         value={watch("playTime")}
         error={errors.playTime?.message}
         onChange={(value) =>
-          setValue("playTime", value, { shouldDirty: true, shouldValidate: true })
+          setValue("playTime", value, {
+            shouldDirty: true,
+            shouldValidate: true,
+          })
         }
       />
 
-      <VStack gap="075">
-        <Field
-          label="시놉시스"
-          htmlFor="synopsis"
-          counter={`${synopsisLength.toLocaleString()} / ${GAME_SYNOPSIS_MAX.toLocaleString()}`}
-          error={errors.synopsis?.message}
-        >
-          <RichTextEditor
-            id="synopsis"
-            value={synopsis}
-            limit={GAME_SYNOPSIS_MAX}
-            invalid={!!errors.synopsis}
-            onChange={(value) => setValue("synopsis", value, { shouldDirty: true })}
-          />
-        </Field>
-        <Text typography="body4" foreground="hint" render={<p />}>
-          어떤 이야기인지, 어떤 분위기인지 적어주세요.
-          <br />
-          글을 끌어서 고르면 굵게·기울임·목록·링크·스포일러를 쓸 수 있습니다.
-        </Text>
-      </VStack>
+      <Field
+        label="시놉시스"
+        htmlFor="synopsis"
+        counter={`${synopsisLength.toLocaleString()} / ${GAME_SYNOPSIS_MAX.toLocaleString()}`}
+        error={errors.synopsis?.message}
+      >
+        <RichTextEditor
+          id="synopsis"
+          value={synopsis}
+          limit={GAME_SYNOPSIS_MAX}
+          invalid={!!errors.synopsis}
+          placeholder="어떤 이야기인지, 어떤 분위기인지 적어주세요."
+          onChange={(value) => setValue("synopsis", value, { shouldDirty: true })}
+        />
+      </Field>
     </>
   );
 }

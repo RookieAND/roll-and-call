@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Select } from "@trpg/ui";
+import { Select, VStack } from "@trpg/ui";
 
 import { padTwoDigits } from "@/shared/lib";
 
@@ -38,8 +38,8 @@ export function DateTimePicker({
   const emit = (date: string, timeValue: string) => onChange(date ? `${date}T${timeValue}` : "");
 
   return (
-    <HStack gap="100">
-      <div className="min-w-0 flex-1">
+    <VStack gap="100">
+      <div>
         <DatePicker
           id={id}
           value={datePart}
@@ -49,7 +49,7 @@ export function DateTimePicker({
           onChange={(date) => emit(date, time)}
         />
       </div>
-      <div className="w-[112px] shrink-0">
+      <div>
         <Select.Root
           items={items}
           value={time}
@@ -65,6 +65,6 @@ export function DateTimePicker({
           </Select.Popup>
         </Select.Root>
       </div>
-    </HStack>
+    </VStack>
   );
 }

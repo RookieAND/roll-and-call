@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Text, VStack } from "@trpg/ui";
+import { Text, VStack } from "@trpg/ui";
 import { useRef, useState } from "react";
 
 import { uploadThumbnail } from "../api/upload-thumbnail";
@@ -17,10 +17,10 @@ interface ThumbnailUploadProps {
   onChange: (url: string) => void;
 }
 
-// ponytail: 스토리지 SDK가 진행률을 주지 않아 %가 아니라 "올리는 중" 스피너만 보인다.
 export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [percent, setPercent] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const [picked, setPicked] = useState<{ name: string; size: number } | null>(null);
@@ -34,9 +34,10 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
       setError(invalid);
       return;
     }
+    setPercent(0);
     setUploading(true);
     try {
-      const result = await uploadThumbnail(file);
+      const result = await uploadThumbnail(file, (ratio) => setPercent(Math.round(ratio * 100)));
       if ("error" in result) {
         setError(uploadFailedMessage(result.error));
         return;
@@ -58,14 +59,9 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
 
   return (
     <VStack id="thumbnailUrl" gap="075" className="min-w-0">
-      <HStack align="baseline" justify="between">
-        <Text weight="bold" typography="body4" className="text-gray-700">
-          썸네일
-        </Text>
-        <Text typography="body4" foreground="hint">
-          선택
-        </Text>
-      </HStack>
+      <Text weight="bold" typography="body4" className="text-gray-700">
+        썸네일
+      </Text>
 
       {value ? (
         <ThumbnailPreview
@@ -78,6 +74,7 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
       ) : (
         <ThumbnailDropzone
           uploading={uploading}
+          percent={percent}
           dragging={dragging}
           invalid={error !== null}
           onPick={pick}

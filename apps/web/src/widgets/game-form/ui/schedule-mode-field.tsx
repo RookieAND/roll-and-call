@@ -5,6 +5,7 @@ import { Chip, Field, Grid, VStack } from "@trpg/ui";
 import { SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
 
 import { HintBox } from "./hint-box";
+import { LockedModeNotice } from "./locked-mode-notice";
 
 const OPTIONS = [
   { value: SCHEDULE_MODE.coordinate, label: "범위 조율" },
@@ -24,12 +25,10 @@ const HINT = {
 interface ScheduleModeFieldProps {
   value: ScheduleMode;
   onChange: (mode: ScheduleMode) => void;
-  lockedReason?: readonly string[] | null;
+  locked?: boolean;
 }
 
-export function ScheduleModeField({ value, onChange, lockedReason }: ScheduleModeFieldProps) {
-  const lines = lockedReason ?? HINT[value];
-
+export function ScheduleModeField({ value, onChange, locked = false }: ScheduleModeFieldProps) {
   return (
     <VStack gap="100">
       <Field label="일정 방식">
@@ -39,7 +38,7 @@ export function ScheduleModeField({ value, onChange, lockedReason }: ScheduleMod
               key={option.value}
               shape="block"
               selected={value === option.value}
-              disabled={Boolean(lockedReason) && value !== option.value}
+              disabled={locked && value !== option.value}
               onClick={() => onChange(option.value)}
             >
               {option.label}
@@ -47,7 +46,7 @@ export function ScheduleModeField({ value, onChange, lockedReason }: ScheduleMod
           ))}
         </Grid>
       </Field>
-      <HintBox lines={lines} />
+      {locked ? <LockedModeNotice label="일정 방식" /> : <HintBox lines={HINT[value]} />}
     </VStack>
   );
 }

@@ -15,15 +15,17 @@ const dropzone = cva(
         false: "border-gray-300 bg-gray-50 hover:bg-gray-100",
       },
       invalid: { true: "border-danger-400", false: "" },
+      uploading: { true: "border-solid border-gray-200 hover:bg-gray-50", false: "" },
     },
     // 끌고 있는 동안에는 테두리가 그 상태를 말해야 하므로 오류 색을 덮지 않는다.
     compoundVariants: [{ dragging: true, invalid: true, class: "border-primary-500" }],
-    defaultVariants: { dragging: false, invalid: false },
+    defaultVariants: { dragging: false, invalid: false, uploading: false },
   },
 );
 
 interface ThumbnailDropzoneProps {
   uploading: boolean;
+  percent: number;
   dragging: boolean;
   invalid: boolean;
   onPick: () => void;
@@ -34,6 +36,7 @@ interface ThumbnailDropzoneProps {
 // ponytail: 드롭 영역 전체가 파일 선택 버튼이라 Button 룩(텍스트 한 줄)과 달라 손코딩.
 export function ThumbnailDropzone({
   uploading,
+  percent,
   dragging,
   invalid,
   onPick,
@@ -56,9 +59,15 @@ export function ThumbnailDropzone({
         const file = event.dataTransfer.files[0];
         if (file) onDrop(file);
       }}
-      className={dropzone({ dragging, invalid })}
+      className={dropzone({ dragging, invalid, uploading })}
     >
-      {uploading ? <UploadingMessage /> : dragging ? <DraggingMessage /> : <PickImageMessage />}
+      {uploading ? (
+        <UploadingMessage percent={percent} />
+      ) : dragging ? (
+        <DraggingMessage />
+      ) : (
+        <PickImageMessage />
+      )}
     </button>
   );
 }

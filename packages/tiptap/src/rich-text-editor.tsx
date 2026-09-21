@@ -1,6 +1,6 @@
 "use client";
 
-import { CharacterCount } from "@tiptap/extensions";
+import { CharacterCount, Placeholder } from "@tiptap/extensions";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { cn, textFieldVariants } from "@trpg/ui";
@@ -16,6 +16,7 @@ export interface RichTextEditorProps {
   onChange: (value: string) => void;
   limit?: number;
   invalid?: boolean;
+  placeholder?: string;
   id?: string;
   className?: string;
 }
@@ -25,6 +26,7 @@ export function RichTextEditor({
   onChange,
   limit,
   invalid,
+  placeholder,
   id,
   className,
 }: RichTextEditorProps) {
@@ -44,6 +46,7 @@ export function RichTextEditor({
       }),
       Spoiler,
       CharacterCount.configure({ limit }),
+      Placeholder.configure({ placeholder: placeholder ?? "" }),
     ],
     content: toRichTextDoc(value),
     editorProps: { attributes: id ? { class: EDITOR_CLASS, id } : { class: EDITOR_CLASS } },

@@ -20,12 +20,10 @@ export function GameMediaFields({ form }: GameMediaFieldsProps) {
         value={watch("thumbnailUrl")}
         onChange={(url) => setValue("thumbnailUrl", url, { shouldDirty: true })}
       />
-      {watch("thumbnailUrl") && (
-        <ThumbnailSpoilerField
-          value={watch("thumbnailSpoiler")}
-          onChange={(spoiler) => setValue("thumbnailSpoiler", spoiler, { shouldDirty: true })}
-        />
-      )}
+      <ThumbnailSpoilerField
+        value={watch("thumbnailSpoiler")}
+        onChange={(spoiler) => setValue("thumbnailSpoiler", spoiler, { shouldDirty: true })}
+      />
       <GameImagesUpload
         value={watch("images")}
         max={GAME_IMAGES_MAX}

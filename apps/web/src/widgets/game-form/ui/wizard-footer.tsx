@@ -36,7 +36,12 @@ export function WizardFooter({
       <Container size="md" className="py-150">
         <VStack gap="150">
           {isLastStep && error && (
-            <Text typography="body2" foreground="danger" render={<p />}>
+            <Text
+              typography="body4"
+              foreground="danger"
+              render={<p />}
+              className="whitespace-pre-line rounded-500 border border-danger-200 bg-danger-50 px-175 py-150 leading-[1.55]"
+            >
               {error}
             </Text>
           )}

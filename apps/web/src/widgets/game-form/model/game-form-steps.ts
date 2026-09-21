@@ -60,8 +60,11 @@ export const CREATE_STEPS = [
   },
 ] as const satisfies readonly WizardStepConfig[];
 
-// 수정은 필드 순서를 등록과 같게 두되 두 단계로 묶는다.
+// 수정도 등록과 같은 5단계다. 이미지 단계만 "나중에 추가" 안내가 맞지 않아 설명을 바꾼다.
 export const EDIT_STEPS = [
-  { sections: [FORM_SECTION.basics, FORM_SECTION.preflight] },
-  { sections: [FORM_SECTION.media, FORM_SECTION.recruit, FORM_SECTION.schedule] },
+  CREATE_STEPS[0],
+  CREATE_STEPS[1],
+  { ...CREATE_STEPS[2], description: "목록과 상세에 보이는 그림입니다." },
+  CREATE_STEPS[3],
+  CREATE_STEPS[4],
 ] as const satisfies readonly WizardStepConfig[];

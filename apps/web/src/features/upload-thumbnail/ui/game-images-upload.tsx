@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, cn, Grid, HStack, IconButton, Text, VStack } from "@trpg/ui";
-import { ImagePlus, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useRef, useState } from "react";
 
 import { uploadThumbnail } from "../api/upload-thumbnail";
@@ -76,7 +76,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
     <VStack id="images" gap="075">
       <HStack align="baseline" justify="between">
         <Text weight="bold" typography="body4" className="text-gray-700">
-          추가 이미지 <span className="font-normal text-hint">선택</span>
+          추가 이미지
         </Text>
         <Text numeric typography="body4" foreground="hint">
           {value.length} / {max}
@@ -127,9 +127,16 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
             loading={uploading}
             className="aspect-square h-auto flex-col gap-050 border-dashed text-xs"
           >
-            <ImagePlus size={20} aria-hidden />+ 추가
+            + 추가
           </Button>
         )}
+        {Array.from({ length: Math.max(remaining - 1, 0) }, (_, index) => (
+          <div
+            key={index}
+            aria-hidden
+            className="aspect-square rounded-300 border border-dashed border-gray-300 bg-gray-50"
+          />
+        ))}
       </Grid>
 
       {error ? (
@@ -138,7 +145,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
         </Text>
       ) : (
         <Text typography="body4" foreground="hint" render={<p />}>
-          상세의 시놉시스 아래에 가로로 넘겨 봅니다. 끌어서 순서를 바꿀 수 있습니다. 장당 5MB 이하.
+          각 이미지 당 최대 5MB 까지 업로드 가능합니다.
         </Text>
       )}
 

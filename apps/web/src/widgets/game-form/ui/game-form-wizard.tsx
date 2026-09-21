@@ -17,7 +17,6 @@ import { EditWithoutApplicantsNotice } from "./edit-without-applicants-notice";
 import { GameBasicsFields } from "./game-basics-fields";
 import { GameMediaFields } from "./game-media-fields";
 import { GamePreflightFields } from "./game-preflight-fields";
-import { GamePreflightNotice } from "./game-preflight-notice";
 import { GameRecruitFields } from "./game-recruit-fields";
 import { GameScheduleFields } from "./game-schedule-fields";
 import { WizardDraftSummary } from "./wizard-draft-summary";
@@ -42,13 +41,7 @@ export function GameFormWizard({
   const isLastStep = step === steps.length - 1;
   const leaveHref = edit ? `/games/${edit.gameId}` : "/games";
   const applicants = edit?.applicantCount ?? 0;
-  const lockedReason =
-    applicants > 0
-      ? ([
-          "신청자가 있어 일정 방식과 모집 방식은 바꿀 수 없습니다.",
-          "바꾸려면 참여자 관리에서 명단을 비워주세요.",
-        ] as const)
-      : null;
+  const locked = applicants > 0;
 
   // 숨겨진 단계의 필드로는 스크롤할 수 없어서 그 단계로 먼저 돌린다.
   function onInvalid(errors: FieldErrors<GameFormValues>) {
@@ -110,7 +103,7 @@ export function GameFormWizard({
           <GameRecruitFields
             form={form}
             minPlayers={Math.max(1, edit?.confirmedCount ?? 1)}
-            lockedReason={lockedReason}
+            locked={locked}
             preConfirmable={!edit}
           />
         );
@@ -118,7 +111,7 @@ export function GameFormWizard({
         return (
           <GameScheduleFields
             form={form}
-            modeLockedReason={lockedReason}
+            modeLocked={locked}
             sessionNotice={
               applicants > 0 ? `바꾸면 참여자 ${applicants}명에게 디스코드로 알립니다.` : null
             }
@@ -140,9 +133,7 @@ export function GameFormWizard({
         <VStack gap="250" className="py-300">
           {intro?.title && <WizardIntro title={intro.title} description={intro.description} />}
 
-          {edit && step === 0 && applicants > 0 && (
-            <EditWithApplicantsNotice applicants={applicants} />
-          )}
+          {edit && step === 0 && applicants > 0 && <EditWithApplicantsNotice />}
           {edit && step === 0 && applicants === 0 && <EditWithoutApplicantsNotice />}
 
           {!edit && step > 0 && (
@@ -167,7 +158,6 @@ export function GameFormWizard({
                     {renderSection(section)}
                   </VStack>
                 ))}
-                {edit && index === 0 && <GamePreflightNotice />}
               </div>
             ))}
           </fieldset>
