@@ -1,8 +1,8 @@
 import { Card, HStack, Text, VStack, cn } from "@trpg/ui";
 
+import { deriveGameStatus } from "@/shared/lib";
 import type { Game } from "@/shared/server";
 
-import { deriveGameStatus } from "../model/derive-game-status";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { scheduleLine } from "../model/schedule-line";
 import { GameCapacity } from "./game-capacity";

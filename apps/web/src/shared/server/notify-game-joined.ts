@@ -26,7 +26,7 @@ export async function notifyGameJoined(
     description: isWaiting
       ? `**${applicantName}**님이 대기열에 등록했어요.`
       : `**${applicantName}**님이 참여했어요.`,
-    fields: headcountFields(confirmedCount, game.maxPlayers, waitingCount),
+    fields: headcountFields(game, confirmedCount, waitingCount),
   });
 
   await sendDiscordMessage(game.discordThreadId, { embeds: [embed] });

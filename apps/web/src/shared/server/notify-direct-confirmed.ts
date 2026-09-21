@@ -3,6 +3,7 @@ import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 import { inArray } from "drizzle-orm";
 
 import { countConfirmedParticipants } from "./count-confirmed-participants";
+import { countWaitingParticipants } from "./count-waiting-participants";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
@@ -33,7 +34,11 @@ export async function notifyDirectConfirmed(gameId: string, userIds: readonly st
     emoji: "✅",
     color: DISCORD_COLOR.confirmed,
     description: `GM이 ${names}님을 참여자로 확정했어요.`,
-    fields: headcountFields(countConfirmedParticipants(game.participants), game.maxPlayers),
+    fields: headcountFields(
+      game,
+      countConfirmedParticipants(game.participants),
+      countWaitingParticipants(game.participants),
+    ),
   });
 
   await sendDiscordMessage(game.discordThreadId, { embeds: [embed] });

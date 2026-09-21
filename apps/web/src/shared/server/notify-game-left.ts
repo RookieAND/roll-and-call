@@ -2,6 +2,7 @@ import { db } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 
 import { countConfirmedParticipants } from "./count-confirmed-participants";
+import { countWaitingParticipants } from "./count-waiting-participants";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
@@ -23,10 +24,6 @@ export async function notifyGameLeft(gameId: string, userId: string, removedByGm
   if (!game?.discordThreadId) return;
 
   const name = user?.username ?? "?";
-  const waitingCount = game.participants.filter(
-    (participant) => participant.status === "waiting",
-  ).length;
-
   const embed = gameNoticeEmbed({
     game,
     gmName: game.gm?.username ?? "?",
@@ -36,9 +33,9 @@ export async function notifyGameLeft(gameId: string, userId: string, removedByGm
       ? `**${name}**님이 참여 목록에서 제외됐어요.`
       : `**${name}**님이 참여를 취소했어요.`,
     fields: headcountFields(
+      game,
       countConfirmedParticipants(game.participants),
-      game.maxPlayers,
-      waitingCount,
+      countWaitingParticipants(game.participants),
     ),
   });
 

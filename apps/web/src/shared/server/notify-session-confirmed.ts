@@ -4,6 +4,7 @@ import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 import { formatDateTime } from "@/shared/lib";
 
 import { countConfirmedParticipants } from "./count-confirmed-participants";
+import { countWaitingParticipants } from "./count-waiting-participants";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
@@ -21,7 +22,11 @@ export async function notifySessionConfirmed(gameId: string, previousConfirmedAt
 
   const fields = [
     { name: "🕒 시간", value: formatDateTime(game.confirmedAt), inline: true },
-    ...headcountFields(countConfirmedParticipants(game.participants), game.maxPlayers),
+    ...headcountFields(
+      game,
+      countConfirmedParticipants(game.participants),
+      countWaitingParticipants(game.participants),
+    ),
   ];
   if (previousConfirmedAt) {
     fields.push({ name: "🕒 이전 시간", value: formatDateTime(previousConfirmedAt), inline: true });

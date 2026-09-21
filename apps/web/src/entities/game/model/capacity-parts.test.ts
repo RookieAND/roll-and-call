@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 
+import { GAME_STATUS } from "@/shared/lib";
+
 import { capacityParts } from "./capacity-parts";
 import { RECRUIT_METHOD } from "./recruit-method";
-import { GAME_STATUS } from "./status";
 
 const base = {
   status: GAME_STATUS.recruiting,

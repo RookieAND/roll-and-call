@@ -1,6 +1,6 @@
 import { Badge } from "@trpg/ui";
 
-import { gameStatusColor, gameStatusLabel, type GameStatus } from "../model/status";
+import { gameStatusColor, gameStatusLabel, type GameStatus } from "@/shared/lib";
 
 interface GameStatusBadgeProps {
   status: GameStatus;

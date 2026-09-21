@@ -1,11 +1,18 @@
+import type { Game } from "@trpg/database";
 import type { DiscordEmbedField } from "@trpg/discord";
 
+import { deriveGameStatus, gameStatusLabel } from "@/shared/lib";
+
+// 웹 배지와 같은 규칙으로 상태를 적는다. 대기가 0명이어도 칸을 남겨 알림마다 줄 모양이 같다.
 export function headcountFields(
+  game: Pick<Game, "maxPlayers" | "endDate" | "waitlistEnabled">,
   confirmedCount: number,
-  maxPlayers: number,
-  waitingCount = 0,
+  waitingCount: number,
 ): DiscordEmbedField[] {
-  const fields = [{ name: "👥 인원", value: `${confirmedCount}/${maxPlayers}명`, inline: true }];
-  if (waitingCount > 0) fields.push({ name: "⏳ 대기", value: `${waitingCount}명`, inline: true });
-  return fields;
+  const status = deriveGameStatus({ ...game, participantCount: confirmedCount });
+  return [
+    { name: "📌 상태", value: gameStatusLabel[status], inline: true },
+    { name: "👥 인원", value: `${confirmedCount}/${game.maxPlayers}명`, inline: true },
+    { name: "⏳ 대기", value: `${waitingCount}명`, inline: true },
+  ];
 }

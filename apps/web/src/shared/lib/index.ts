@@ -24,3 +24,5 @@ export { richTextToMarkdown } from "./rich-text-markdown";
 export { OG_IMAGE } from "./og-image";
 export { comitativeParticle } from "./comitative-particle";
 export { topicParticle } from "./topic-particle";
+export { GAME_STATUS, gameStatusLabel, gameStatusColor, type GameStatus } from "./game-status";
+export { deriveGameStatus } from "./derive-game-status";

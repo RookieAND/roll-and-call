@@ -1,5 +1,6 @@
+import { GAME_STATUS, type GameStatus } from "@/shared/lib";
+
 import { RECRUIT_METHOD, type RecruitMethod } from "./recruit-method";
-import { GAME_STATUS, type GameStatus } from "./status";
 
 export type CapacityPart = { text: string; emphasis: boolean };
 

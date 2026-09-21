@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { deriveGameStatus } from "./derive-game-status";
-import { GAME_STATUS } from "./status";
+import { GAME_STATUS } from "./game-status";
 
 const DAY = 86_400_000;
 const future = new Date(Date.now() + DAY);
