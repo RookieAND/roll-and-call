@@ -13,6 +13,7 @@ export { EmptyState } from "./empty-state";
 export { ExpandableRows } from "./expandable-rows";
 export { HeatSample } from "./heat-sample";
 export { HelpButton } from "./help-button";
+export { IconTile } from "./icon-tile";
 export { ErrorScreen } from "./error-screen";
 export { Sheet } from "./sheet";
 export { TagInput, type TagInputProps } from "./tag-input";

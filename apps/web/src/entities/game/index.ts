@@ -31,5 +31,6 @@ export {
 } from "./model/session";
 export { isSessionLocked } from "./model/session-lock";
 export { sessionEndsAt } from "./model/session-end";
+export { isSessionEnded } from "./model/is-session-ended";
 export { isAttendanceDue } from "./model/is-attendance-due";
 export { ABSENCE_RECORD_MONTHS, absenceExpiresAt } from "./model/absence-expiry";

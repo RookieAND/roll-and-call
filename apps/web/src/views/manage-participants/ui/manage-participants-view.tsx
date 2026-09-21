@@ -6,7 +6,7 @@ import {
   isAttendanceDue,
   isSessionLocked,
   SCHEDULE_MODE,
-  sessionEndsAt,
+  isSessionEnded,
   splitRoster,
 } from "@/entities/game";
 import { LoginRequired } from "@/features/auth";
@@ -56,10 +56,9 @@ export async function ManageParticipantsView({ id }: { id: string }) {
   const confirmed = roster.confirmed.map(toMember);
   const waiting = roster.waiting.map(toMember);
   const isCoordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
-  const endsAt = sessionEndsAt(game);
   const attendanceStage = isAttendanceDue(game, confirmed.length)
     ? ATTENDANCE_STAGE.due
-    : game.attendanceConfirmedAt && endsAt && endsAt.getTime() <= Date.now()
+    : game.attendanceConfirmedAt && isSessionEnded(game)
       ? ATTENDANCE_STAGE.done
       : null;
 

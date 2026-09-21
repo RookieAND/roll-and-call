@@ -3,6 +3,7 @@ import { ListOrdered, Trophy } from "lucide-react";
 
 import { RECRUIT_METHOD } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
+import { IconTile } from "@/shared/ui";
 
 interface GameRecruitMethodSectionProps {
   game: GameDetailData;
@@ -26,9 +27,7 @@ export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps
         모집 방식
       </Text>
       <HStack gap="150" className="rounded-500 border border-gray-200 px-175 py-150">
-        <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-400 bg-gray-100 text-gray-600">
-          <Icon size={18} aria-hidden />
-        </span>
+        <IconTile icon={Icon} tone="muted" />
         <VStack gap="050" className="min-w-0 flex-1">
           <Text typography="subtitle1" render={<p />}>
             {isLottery ? "추첨" : "선착순"}
