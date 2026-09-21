@@ -184,18 +184,21 @@ export function DirectConfirmSheet({
               <Text typography="body4" weight="bold" foreground="hint" className="px-250 pb-100">
                 검색 결과 {shown.length}명
               </Text>
-              {shown.map((candidate) => {
-                const picked = selected.some((choice) => choice.userId === candidate.userId);
-                return (
-                  <CandidateRow
-                    key={candidate.userId}
-                    candidate={candidate}
-                    picked={picked}
-                    capped={noSeats || (!picked && seatsFilled)}
-                    onToggle={() => toggle(candidate)}
-                  />
-                );
-              })}
+              {/* 줄 높이 62px × 4줄까지만 보이고 나머지는 목록 안에서 스크롤한다. */}
+              <VStack gap={0} className="max-h-[248px] overflow-y-auto overscroll-contain">
+                {shown.map((candidate) => {
+                  const picked = selected.some((choice) => choice.userId === candidate.userId);
+                  return (
+                    <CandidateRow
+                      key={candidate.userId}
+                      candidate={candidate}
+                      picked={picked}
+                      capped={noSeats || (!picked && seatsFilled)}
+                      onToggle={() => toggle(candidate)}
+                    />
+                  );
+                })}
+              </VStack>
             </VStack>
           )}
 
