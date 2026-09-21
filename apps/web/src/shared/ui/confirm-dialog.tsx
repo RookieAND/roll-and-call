@@ -2,6 +2,7 @@
 
 import { Dialog } from "@base-ui-components/react/dialog";
 import { Button, HStack } from "@trpg/ui";
+import type { ReactNode } from "react";
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -13,6 +14,8 @@ interface ConfirmDialogProps {
   danger?: boolean;
   pending?: boolean;
   onConfirm: () => void;
+  // 설명 아래에 붙는 부가 안내(목록 상자 등).
+  children?: ReactNode;
 }
 
 export function ConfirmDialog({
@@ -25,6 +28,7 @@ export function ConfirmDialog({
   danger,
   pending,
   onConfirm,
+  children,
 }: ConfirmDialogProps) {
   // 처리 중에는 닫히지 않는다. 결과를 모른 채 화면을 떠나지 않게.
   const handleOpenChange = (nextOpen: boolean) => {
@@ -42,6 +46,7 @@ export function ConfirmDialog({
               {description}
             </Dialog.Description>
           )}
+          {children}
           <HStack gap="100" className="mt-250">
             <Button
               type="button"
@@ -54,7 +59,7 @@ export function ConfirmDialog({
             </Button>
             <Button
               type="button"
-              variant={danger ? "danger" : "solid"}
+              variant={danger ? "destructive" : "solid"}
               className="h-11 flex-1"
               loading={pending}
               disabled={pending}

@@ -13,11 +13,19 @@ const segment = cva(
         label: "h-8 px-150 text-body4",
       },
       selected: {
-        true: "bg-surface font-bold text-gray-900 shadow-sm",
-        false: "font-semibold text-gray-600 hover:text-gray-900",
+        true: "font-bold shadow-sm",
+        false: "font-semibold text-gray-600 enabled:hover:text-gray-900 disabled:text-hint",
       },
+      // 고른 칸의 색. 참석·불참처럼 답 자체가 뜻을 가질 때만 준다.
+      tone: { neutral: "", success: "", danger: "" },
+      fill: { true: "flex-1", false: "" },
     },
-    defaultVariants: { shape: "label", selected: false },
+    compoundVariants: [
+      { selected: true, tone: "neutral", className: "bg-surface text-gray-900" },
+      { selected: true, tone: "success", className: "bg-success-100 text-success-700" },
+      { selected: true, tone: "danger", className: "bg-danger-100 text-danger-600" },
+    ],
+    defaultVariants: { shape: "label", selected: false, tone: "neutral", fill: false },
   },
 );
 
@@ -25,6 +33,7 @@ export type SegmentOption<Value extends string> = {
   value: Value;
   label: string;
   icon?: ReactNode;
+  tone?: "neutral" | "success" | "danger";
 };
 
 export type SegmentControlProps<Value extends string> = {
@@ -33,6 +42,10 @@ export type SegmentControlProps<Value extends string> = {
   onChange: (value: Value) => void;
   "aria-label": string;
   className?: string;
+  // 칸이 컨테이너 너비를 나눠 갖는다. 너비는 className으로 준다.
+  fill?: boolean;
+  // 확정된 값을 읽기만 할 때.
+  disabled?: boolean;
 };
 
 export function SegmentControl<Value extends string>({
@@ -41,6 +54,8 @@ export function SegmentControl<Value extends string>({
   onChange,
   "aria-label": ariaLabel,
   className,
+  fill = false,
+  disabled = false,
 }: SegmentControlProps<Value>) {
   return (
     <div
@@ -56,10 +71,13 @@ export function SegmentControl<Value extends string>({
           aria-checked={option.value === value}
           aria-label={option.icon ? option.label : undefined}
           title={option.icon ? option.label : undefined}
+          disabled={disabled}
           onClick={() => onChange(option.value)}
           className={segment({
             shape: option.icon ? "icon" : "label",
             selected: option.value === value,
+            tone: option.tone,
+            fill,
           })}
         >
           {option.icon ?? option.label}

@@ -17,6 +17,8 @@ const button = cva(
         tinted: "border border-tinted-border bg-tinted-bg text-tinted-ink hover:bg-tinted-bg-hover",
         ghost: "text-gray-700 hover:bg-gray-100",
         danger: "border border-danger-200 text-danger-600 hover:bg-danger-50",
+        // 되돌릴 수 없는 일을 확정하는 다이얼로그 버튼. 흰 글씨라 테마와 무관한 solid 토큰을 쓴다.
+        destructive: "bg-danger-solid text-white hover:bg-danger-solid-hover",
       },
       size: {
         sm: "h-8 px-150 text-sm",

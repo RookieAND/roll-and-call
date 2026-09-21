@@ -106,6 +106,7 @@
   /* 항상 흰 글씨가 얹히는 솔리드 배경. 테마가 바뀌어도 색이 그대로 남는다.
      숫자 램프(success-700 등)는 다크에서 글씨색으로 뒤집히므로 여기에 쓰면 안 된다. */
   --color-danger-solid: #c33b3b;
+  --color-danger-solid-hover: #a83232;
   --color-success-solid: #0b7a55;
   --color-success-solid-hover: #0a5c41;
 

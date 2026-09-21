@@ -19,6 +19,7 @@ export { Field, type FieldProps } from "./field";
 export { TextInput, type TextInputProps } from "./text-input";
 export { Textarea, type TextareaProps } from "./textarea";
 export { textFieldVariants } from "./text-field-variants";
+export { Collapsible, type CollapsiblePanelProps } from "./collapsible";
 export { Select, type SelectRootProps, type SelectTriggerProps, type SelectOption } from "./select";
 export { Pagination, type PaginationProps } from "./pagination";
 export { Skeleton, type SkeletonProps } from "./skeleton";
