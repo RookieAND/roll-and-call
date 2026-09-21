@@ -1,17 +1,12 @@
 import { Badge, Card, Container, Grid, HStack, Text } from "@trpg/ui";
 
-import {
-  countConfirmed,
-  deriveGameStatus,
-  gameStatusColor,
-  gameStatusLabel,
-  scheduleLine,
-} from "@/entities/game";
+import { countConfirmed, isSessionEnded } from "@/entities/game";
 import { DeleteGameRow } from "@/features/delete-game";
 import { getResponseCounts, requireGmGame } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { manageRows } from "../model/manage-rows";
+import { manageSummary } from "../model/manage-summary";
 import { ManageGameStat } from "./manage-game-stat";
 import { ManageRow } from "./manage-row";
 
@@ -20,15 +15,10 @@ export async function ManageGameView({ id }: { id: string }) {
   const game = await requireGmGame(id, { next: `/games/${id}/manage` });
 
   const responseCounts = await getResponseCounts([id]);
+  const responses = responseCounts.get(id) ?? 0;
   const confirmedCount = countConfirmed(game.participants);
-  const status = deriveGameStatus({
-    maxPlayers: game.maxPlayers,
-    endDate: game.endDate,
-    participantCount: confirmedCount,
-    waitlistEnabled: game.waitlistEnabled,
-  });
-  const line = scheduleLine(game);
-  const rows = manageRows(game, responseCounts.get(id) ?? 0);
+  const { stage, time } = manageSummary(game, responses);
+  const rows = manageRows(game, responses);
 
   return (
     <>
@@ -51,12 +41,12 @@ export async function ManageGameView({ id }: { id: string }) {
             >
               {game.title}
             </Text>
-            <Badge color={gameStatusColor[status]} className="shrink-0">
-              {gameStatusLabel[status]}
+            <Badge color={stage.color} className="shrink-0">
+              {stage.label}
             </Badge>
           </HStack>
           <Grid cols={2} gap="100" className="mt-150">
-            <ManageGameStat label="일정" value={line.text} />
+            <ManageGameStat label={time.label} value={time.value} />
             <ManageGameStat label="확정" value={`${confirmedCount} / ${game.maxPlayers}명`} />
           </Grid>
         </div>
@@ -66,7 +56,13 @@ export async function ManageGameView({ id }: { id: string }) {
             {rows.map((row) => (
               <ManageRow key={row.key} row={row} />
             ))}
-            <DeleteGameRow gameId={id} confirmedCount={confirmedCount} />
+            <DeleteGameRow
+              gameId={id}
+              confirmedCount={confirmedCount}
+              lockedReason={
+                isSessionEnded(game) ? "이미 치른 세션은 취소할 수 없습니다" : undefined
+              }
+            />
           </Card>
         </div>
       </Container>

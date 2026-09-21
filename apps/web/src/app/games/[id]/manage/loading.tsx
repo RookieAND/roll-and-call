@@ -2,8 +2,8 @@ import { Badge, Card, Container, HStack, Skeleton } from "@trpg/ui";
 
 import { AppBar } from "@/shared/ui";
 
-// manageRows 3행 + DeleteGameRow 1행.
-const ROW_COUNT = 4;
+// manageRows 4행 + DeleteGameRow 1행.
+const ROW_COUNT = 5;
 
 export default function Loading() {
   return (

@@ -14,7 +14,7 @@ export function useDeleteGame(gameId: string, onSettled?: () => void) {
         onSettled?.();
         return result;
       },
-      { onSuccess: () => toast.success("삭제되었습니다") },
+      { onSuccess: () => toast.success("구인을 취소했습니다") },
     );
   }
 

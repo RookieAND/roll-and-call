@@ -1,54 +1,78 @@
-import { Text, cn } from "@trpg/ui";
-import { Check, ChevronRight, Clock, Pencil, Users } from "lucide-react";
+import { Badge, HStack, Text, VStack } from "@trpg/ui";
+import { cva } from "class-variance-authority";
+import { Check, ChevronRight, ClipboardCheck, Clock, Pencil, Users } from "lucide-react";
 import Link from "next/link";
 
-import type { ManageRow as Row } from "../model/manage-rows";
+import { IconTile } from "@/shared/ui";
 
-const ICONS = { clock: Clock, check: Check, users: Users, pencil: Pencil };
+import { MANAGE_ROW_STATE, type ManageRow as Row } from "../model/manage-rows";
 
-const DETAIL_CLASS = {
-  normal: "text-gray-600",
-  warning: "text-warning-600",
-  success: "text-success-700",
+const ICONS = {
+  clipboard: ClipboardCheck,
+  clock: Clock,
+  check: Check,
+  users: Users,
+  pencil: Pencil,
 };
+
+const ICON_TONE = {
+  open: "primary",
+  warning: "primary",
+  done: "success",
+  locked: "locked",
+} as const;
+
+const DETAIL_FOREGROUND = {
+  open: "muted",
+  warning: "warning",
+  done: "muted",
+  locked: "hint",
+} as const;
+
+const manageRow = cva("min-h-[60px] border-gray-100 px-175 py-150 not-first:border-t", {
+  variants: {
+    interactive: { true: "transition-colors hover:bg-gray-50", false: "" },
+  },
+});
 
 interface ManageRowProps {
   row: Row;
 }
 
 export function ManageRow({ row }: ManageRowProps) {
-  const Icon = ICONS[row.icon];
-  const iconClass =
-    row.tone === "success" ? "bg-success-50 text-success-700" : "bg-primary-50 text-primary-ink";
+  const done = row.state === MANAGE_ROW_STATE.done;
+  const labelForeground = row.state === MANAGE_ROW_STATE.locked ? "hint" : undefined;
+  const container = row.href ? <Link href={row.href} /> : <div />;
 
   return (
-    <Link
-      href={row.href}
-      className="flex min-h-[60px] items-center gap-150 border-gray-100 px-175 py-150 transition-colors not-first:border-t hover:bg-gray-50"
+    <HStack
+      align="center"
+      gap="150"
+      render={container}
+      className={manageRow({ interactive: Boolean(row.href) })}
     >
-      <span
-        className={cn(
-          "flex h-[34px] w-[34px] flex-none items-center justify-center rounded-400",
-          iconClass,
-        )}
-      >
-        <Icon size={18} aria-hidden />
-      </span>
-      <div className="min-w-0 flex-1">
-        <Text typography="subtitle1" className="block">
+      <IconTile icon={ICONS[row.icon]} tone={ICON_TONE[row.state]} />
+      <VStack gap="025" className="min-w-0 flex-1">
+        <Text typography="subtitle1" foreground={labelForeground}>
           {row.label}
         </Text>
-        <Text typography="body4" className={cn("mt-025 block", DETAIL_CLASS[row.tone])}>
+        <Text typography="body4" foreground={DETAIL_FOREGROUND[row.state]}>
           {row.detail}
         </Text>
-      </div>
+      </VStack>
       {row.blocked && (
         <span
+          role="img"
           aria-label="지금 막혀 있습니다"
           className="h-[7px] w-[7px] flex-none rounded-full bg-danger-solid"
         />
       )}
-      <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />
-    </Link>
+      {done && (
+        <Badge color="success" className="flex-none">
+          마침
+        </Badge>
+      )}
+      {row.href && <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />}
+    </HStack>
   );
 }
