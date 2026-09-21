@@ -70,7 +70,25 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 
 **표시 컴포넌트의 체급**: 엔티티는 작고 반복되는 원자적 표시 단위(목록 카드·행 등)만 담는다. **순수 표시라도 덩치가 크면(복합 정보 블록·상세 표 등) entity가 아니라 widget에 둔다.** 표시 컴포넌트는 링크·동작을 갖지 않고, 네비게이션/상호작용은 상위(widget·view)가 감싸서 조합한다. (예: `GameCard`/`GameSummary`/`GameRow`는 링크 없는 entity, 상세 링크는 이를 감싸는 view가 소유. `GameInfoTable`은 순수 표시지만 커서 상세 화면에 둔다.)
 
-## 2. 상호작용 요소는 프리미티브만 사용
+## 2. 디자인 시스템(`@trpg/ui`)을 먼저 쓴다
+
+**새 UI를 그리기 전에 `packages/ui/src/index.ts`에서 맞는 컴포넌트를 먼저 찾는다.** 시안이 `<span style="font-size:11px; ...">`로 그려져 있어도 그대로 옮기지 않는다. 시안은 모양을 보여 줄 뿐이고, 코드는 가장 가까운 디자인 시스템 컴포넌트로 옮긴다.
+
+| 그리려는 것                     | 쓰는 것                                                   | 손으로 그리면 안 되는 모양                           |
+| ------------------------------- | --------------------------------------------------------- | ---------------------------------------------------- |
+| 글씨                            | `Text` (`typography`·`foreground`·`weight`·`render`)      | `<span className="text-body4 font-bold ...">`        |
+| 상태 태그·라벨                  | `Badge` (`color`)                                         | `<span className="rounded-100 bg-success-100 ...">`  |
+| 가로·세로 배치                  | `HStack`·`VStack`·`Grid` (`render`로 태그 지정)           | `<span className="flex items-center gap-075">`       |
+| 버튼·칩·아이콘 버튼             | `Button`·`Chip`·`IconButton`                              | raw `<button className="...">`                       |
+| 사람 얼굴                       | `Avatar` (`size`)                                         | `h-[30px] w-[30px]` 같은 임의 크기 덮어쓰기          |
+| 상태에 따라 갈리는 클래스 묶음  | `cva` variants                                            | JSX 안에서 `cn(a && "...", b && "...")`를 여러 겹    |
+
+- 시안 값이 디자인 시스템 단계와 조금 다르면(30px 아바타, 52px 행 등) **가까운 단계를 쓴다.** 새 단계가 정말 필요하면 `packages/ui`나 `styles.css`에 추가하고 거기서 가져온다.
+- 행·아이콘·설명처럼 여러 부분이 같은 상태를 따라 모양이 바뀌면 `cva`로 `state` 변형을 두거나, 부분을 작은 컴포넌트로 나눈다.
+- 글씨가 없는 장식(점·구분선)만 `span`으로 그린다. 의미가 있으면 `role="img"`와 `aria-label`을 같이 준다.
+- 끝나기 전에 바꾼 파일에서 `<span`·`<button`·`text-body`·`font-bold`를 한 번 훑어, 디자인 시스템으로 옮길 수 있는 것이 남았는지 본다.
+
+### 상호작용 요소는 프리미티브만 사용
 
 - 버튼·셀렉트·칩·아이콘버튼은 **오직 `@trpg/ui`**에서 가져온다. raw `<button>`, `<Link>`/`<div>`를 버튼처럼 스타일링한 손코딩 금지.
 - **링크처럼 보이는 버튼**은 `<Button asChild><Link/></Button>` (또는 `IconButton asChild`). `asChild`는 자식 엘리먼트에 버튼 스타일을 입혀 실제 `<a href>`로 렌더한다.
