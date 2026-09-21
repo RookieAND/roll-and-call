@@ -1,12 +1,13 @@
 "use client";
 
-import { Field, Stepper, Text, VStack } from "@trpg/ui";
-import { Lock } from "lucide-react";
+import { Field, Stepper, VStack } from "@trpg/ui";
+import { CircleAlert, Lock } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 
 import { RECRUIT_METHOD } from "@/entities/game";
 import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
+import { DangerNotice } from "./danger-notice";
 import { HintBox } from "./hint-box";
 import { PreConfirmedField } from "./pre-confirmed-field";
 import { RecruitMethodField } from "./recruit-method-field";
@@ -57,9 +58,12 @@ export function GameRecruitFields({
           />
         </Field>
         {minPlayers > 1 && (
-          <Text typography="body4" foreground="hint" render={<p />}>
-            확정 참여자가 {minPlayers}명이라 정원을 그보다 줄일 수 없습니다.
-          </Text>
+          <DangerNotice
+            icon={<CircleAlert size={14} strokeWidth={2.2} />}
+            title={`확정 참여자가 ${minPlayers}명이라 정원을 ${minPlayers}명보다 줄일 수 없습니다.`}
+          >
+            줄이려면 참여자 관리에서 확정을 먼저 풀어주세요.
+          </DangerNotice>
         )}
       </VStack>
 
