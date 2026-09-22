@@ -105,15 +105,17 @@ export function AttendanceForm({ gameId, attendees, children }: AttendanceFormPr
         pending={pending}
         onConfirm={submit}
       >
-        <Callout size="sm" className="mt-125">
-          <Text
-            typography="body4"
-            foreground="inherit"
-            className="leading-relaxed whitespace-pre-line"
-          >
-            {description.detail}
-          </Text>
-        </Callout>
+        <Callout.Root size="sm" className="mt-125">
+          <Callout.Description>
+            <Text
+              typography="body4"
+              foreground="inherit"
+              className="leading-relaxed whitespace-pre-line"
+            >
+              {description.detail}
+            </Text>
+          </Callout.Description>
+        </Callout.Root>
       </ConfirmDialog>
     </VStack>
   );

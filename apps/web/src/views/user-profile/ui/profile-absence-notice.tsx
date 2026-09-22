@@ -13,12 +13,12 @@ export function ProfileAbsenceNotice({ absences }: ProfileAbsenceNoticeProps) {
   if (absences.length === 0) return null;
 
   return (
-    <Callout
-      tone="danger"
-      icon={<AlertCircle size={15} strokeWidth={2.2} />}
-      title={`최근 ${ABSENCE_RECORD_MONTHS}개월 내 세션 불참 이력이 있습니다`}
-    >
-      구인 등록 및 세션 참여 신청 시 패널티가 부과됩니다.
-    </Callout>
+    <Callout.Root colorPalette="danger">
+      <Callout.Icon>
+        <AlertCircle size={15} strokeWidth={2.2} />
+      </Callout.Icon>
+      <Callout.Title>{`최근 ${ABSENCE_RECORD_MONTHS}개월 내 세션 불참 이력이 있습니다`}</Callout.Title>
+      <Callout.Description>구인 등록 및 세션 참여 신청 시 패널티가 부과됩니다.</Callout.Description>
+    </Callout.Root>
   );
 }

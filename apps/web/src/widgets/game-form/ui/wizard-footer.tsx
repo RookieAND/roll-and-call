@@ -36,9 +36,9 @@ export function WizardFooter({
       <Container size="md" className="py-150">
         <VStack gap="150">
           {isLastStep && error && (
-            <Callout tone="danger" className="whitespace-pre-line">
-              {error}
-            </Callout>
+            <Callout.Root colorPalette="danger" className="whitespace-pre-line">
+              <Callout.Description>{error}</Callout.Description>
+            </Callout.Root>
           )}
           <HStack gap="100" className="[&>*]:flex-1">
             {backLabel && (

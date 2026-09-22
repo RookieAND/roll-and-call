@@ -13,18 +13,24 @@ export function AttendanceGuide({ attendanceConfirmedAt }: AttendanceGuideProps)
 
   if (attendanceConfirmedAt) {
     return (
-      <Callout icon={icon} className="mt-050">
-        {formatDateTime(attendanceConfirmedAt)}에 출석을 확정했습니다.
-        <br />
-        아래 &lsquo;다시 고치기&rsquo;를 누르면 참석·불참을 다시 정할 수 있습니다.
-      </Callout>
+      <Callout.Root className="mt-050">
+        <Callout.Icon>icon</Callout.Icon>
+        <Callout.Description>
+          {formatDateTime(attendanceConfirmedAt)}에 출석을 확정했습니다.
+          <br />
+          아래 &lsquo;다시 고치기&rsquo;를 누르면 참석·불참을 다시 정할 수 있습니다.
+        </Callout.Description>
+      </Callout.Root>
     );
   }
   return (
-    <Callout tone="tinted" icon={icon} className="mt-050">
-      기본값은 전원 참석입니다.
-      <br />
-      오지 않은 사람만 <b>불참</b>으로 바꿔 주세요.
-    </Callout>
+    <Callout.Root colorPalette="primary" className="mt-050">
+      <Callout.Icon>icon</Callout.Icon>
+      <Callout.Description>
+        기본값은 전원 참석입니다.
+        <br />
+        오지 않은 사람만 <b>불참</b>으로 바꿔 주세요.
+      </Callout.Description>
+    </Callout.Root>
   );
 }

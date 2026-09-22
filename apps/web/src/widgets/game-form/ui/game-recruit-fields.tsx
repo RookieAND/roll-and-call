@@ -56,14 +56,15 @@ export function GameRecruitFields({
           />
         </Field>
         {minPlayers > 1 && (
-          <Callout
-            tone="danger"
-            size="sm"
-            icon={<CircleAlert size={14} strokeWidth={2.2} />}
-            title={`확정 참여자가 ${minPlayers}명이라 정원을 ${minPlayers}명보다 줄일 수 없습니다.`}
-          >
-            줄이려면 참여자 관리에서 확정을 먼저 풀어주세요.
-          </Callout>
+          <Callout.Root colorPalette="danger" size="sm">
+            <Callout.Icon>
+              <CircleAlert size={14} strokeWidth={2.2} />
+            </Callout.Icon>
+            <Callout.Title>{`확정 참여자가 ${minPlayers}명이라 정원을 ${minPlayers}명보다 줄일 수 없습니다.`}</Callout.Title>
+            <Callout.Description>
+              줄이려면 참여자 관리에서 확정을 먼저 풀어주세요.
+            </Callout.Description>
+          </Callout.Root>
         )}
       </VStack>
 
@@ -96,11 +97,16 @@ export function GameRecruitFields({
         />
 
         {isLottery ? (
-          <Callout size="sm" icon={<Lock size={14} strokeWidth={2.2} />}>
-            추첨에서는 대기 접수 설정을 쓰지 않습니다.
-            <br />
-            뽑히지 않은 신청자는 대기 명단에 순서대로 남습니다.
-          </Callout>
+          <Callout.Root size="sm">
+            <Callout.Icon>
+              <Lock size={14} strokeWidth={2.2} />
+            </Callout.Icon>
+            <Callout.Description>
+              추첨에서는 대기 접수 설정을 쓰지 않습니다.
+              <br />
+              뽑히지 않은 신청자는 대기 명단에 순서대로 남습니다.
+            </Callout.Description>
+          </Callout.Root>
         ) : (
           <WaitlistField
             value={watch("waitlistEnabled")}

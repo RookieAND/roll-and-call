@@ -44,9 +44,9 @@ export function RecruitMethodField({ value, onChange, locked = false }: RecruitM
       {locked ? (
         <LockedModeNotice label="모집 방식" />
       ) : (
-        <Callout size="sm" className="whitespace-pre-line">
-          {HINT[value]}
-        </Callout>
+        <Callout.Root size="sm" className="whitespace-pre-line">
+          <Callout.Description>{HINT[value]}</Callout.Description>
+        </Callout.Root>
       )}
     </VStack>
   );

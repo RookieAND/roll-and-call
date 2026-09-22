@@ -57,13 +57,15 @@ export function DeleteGameRow({ gameId, confirmedCount, lockedReason }: DeleteGa
         pending={pending}
         onConfirm={remove}
       >
-        <Callout size="sm" className="mt-150">
-          <ul className="flex list-disc flex-col gap-050 pl-200 text-body4">
-            <li>디스코드 모집 공지에 취소가 표시됩니다.</li>
-            <li>모집 스레드와 세션 채널에 취소를 알립니다.</li>
-            <li>채널은 지우지 않고 그대로 둡니다.</li>
-          </ul>
-        </Callout>
+        <Callout.Root size="sm" className="mt-150">
+          <Callout.Description>
+            <ul className="flex list-disc flex-col gap-050 pl-200 text-body4">
+              <li>디스코드 모집 공지에 취소가 표시됩니다.</li>
+              <li>모집 스레드와 세션 채널에 취소를 알립니다.</li>
+              <li>채널은 지우지 않고 그대로 둡니다.</li>
+            </ul>
+          </Callout.Description>
+        </Callout.Root>
       </ConfirmDialog>
     </>
   );

@@ -44,9 +44,9 @@ export function ScheduleModeField({ value, onChange, locked = false }: ScheduleM
       {locked ? (
         <LockedModeNotice label="일정 방식" />
       ) : (
-        <Callout size="sm" className="whitespace-pre-line">
-          {HINT[value]}
-        </Callout>
+        <Callout.Root size="sm" className="whitespace-pre-line">
+          <Callout.Description>{HINT[value]}</Callout.Description>
+        </Callout.Root>
       )}
     </VStack>
   );
