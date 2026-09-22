@@ -96,7 +96,10 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 - **의미 있는 태그가 필요하면 껍데기를 덧대지 말고 `render`를 준다.** `Text`·`HStack`·`VStack`·`Grid`가 모두 같은 문법이다: `<VStack gap="125" render={<section />}>`. `<section className="flex flex-col gap-125">`처럼 프리미티브를 손으로 다시 그리거나, 레이아웃만을 위해 `div`를 한 겹 더 두지 않는다.
 - **선택 가능한 pill/토글**은 `<Chip>` (`shape="pill" | "block"`, `selected`, `render`).
 - **바텀시트 메뉴 행**은 `<Sheet.Item>` (Button ghost 기반, `render`로 Link 렌더). 시트는 `@roll-and-call/ui`의 `Sheet`를 쓴다.
-- **즉시 적용되는 단일 선택 세그먼트**(테마 시스템/라이트/다크 등)는 `<SegmentControl>` (`options`, `value`, `onChange`).
+- **즉시 적용되는 단일 선택 세그먼트**(테마 시스템/라이트/다크 등)는 `<SegmentedControl.Root>` + `<SegmentedControl.Item>`. 칸이 5개를 넘거나 패널을 갈아끼우면 `<Tabs>`를 쓴다 — 세그먼트는 같은 목록의 **필터**, 탭은 **다른 콘텐츠**다.
+- **켜고 끄는 설정**은 `<Switch.Root><Switch.Control /><Switch.Label>…</Switch.Label></Switch.Root>`. 바로 적용되는 설정에만 쓰고, 저장 버튼이 있는 폼에는 `Checkbox`를 쓴다.
+- **여러 개 고르기**는 `Checkbox`(+`CheckboxGroup`), **하나 고르기**는 `RadioGroup` + `Radio`, 선택지에 설명·부가 정보가 붙으면 `RadioCard`를 쓴다.
+- **확인 받기**는 `ConfirmDialog`(되돌릴 수 없는 일) 또는 `Dialog`. 선택지가 3개를 넘거나 내용이 길면 `Sheet`를 쓴다.
 - 예외(프리미티브와 룩이 다른 1회성 UI)는 손코딩하되 `// ponytail:` 주석으로 이유를 남긴다.
 
 ## 3. 핸들러는 props로, 레이아웃은 호출부가

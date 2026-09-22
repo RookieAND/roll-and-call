@@ -1,6 +1,6 @@
 "use client";
 
-import { SegmentControl } from "@roll-and-call/ui";
+import { SegmentedControl } from "@roll-and-call/ui";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -41,12 +41,17 @@ export function ThemeSetting({ className }: ThemeSettingProps) {
   }
 
   return (
-    <SegmentControl
-      options={OPTIONS}
+    <SegmentedControl.Root
       value={mode}
-      onChange={select}
+      onValueChange={(next) => select(next as ThemeMode)}
       aria-label="화면 테마"
       className={className}
-    />
+    >
+      {OPTIONS.map((option) => (
+        <SegmentedControl.Item key={option.value} value={option.value} aria-label={option.label}>
+          {option.icon}
+        </SegmentedControl.Item>
+      ))}
+    </SegmentedControl.Root>
   );
 }

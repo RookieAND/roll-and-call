@@ -34,13 +34,15 @@ export function ThumbnailSpoilerField({ value, onChange }: ThumbnailSpoilerField
           목록과 상세 페이지에서 이미지를 흐리게 덮습니다
         </Text>
       </div>
-      <Switch
+      <Switch.Root
         id="thumbnailSpoiler"
         checked={value}
         onCheckedChange={onChange}
         aria-describedby="thumbnailSpoiler-hint"
         className="shrink-0"
-      />
+      >
+        <Switch.Control />
+      </Switch.Root>
     </div>
   );
 }

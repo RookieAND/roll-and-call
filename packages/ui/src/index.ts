@@ -10,8 +10,12 @@ export { Badge, type BadgeProps } from "./badge";
 export { Button, type ButtonProps } from "./button";
 export { IconButton, type IconButtonProps } from "./icon-button";
 export { Chip, type ChipProps } from "./chip";
-export { SegmentControl, type SegmentControlProps, type SegmentOption } from "./segment-control";
-export { Switch, type SwitchProps } from "./switch";
+export {
+  SegmentedControl,
+  type SegmentedControlRootProps,
+  type SegmentedControlItemProps,
+} from "./segmented-control";
+export { Switch, type SwitchRootProps } from "./switch";
 export { Stepper, type StepperProps } from "./stepper";
 export { Card, type CardRootProps } from "./card";
 export { Callout, type CalloutRootProps, type CalloutPalette } from "./callout";
@@ -54,3 +58,8 @@ export type { StateClassName, StateStyle, StateProps } from "./state-props";
 export { COLOR_PALETTE, type ColorPalette } from "./color-palette";
 export { Dialog, type DialogPopupProps, type DialogFooterProps } from "./dialog";
 export { AlertDialog } from "./alert-dialog";
+export { Tabs, type TabsListProps, type TabsTriggerProps, type TabsPanelProps } from "./tabs";
+export { Checkbox, CheckboxGroup, type CheckboxRootProps } from "./checkbox";
+export { Radio, type RadioRootProps } from "./radio";
+export { RadioGroup } from "@base-ui-components/react/radio-group";
+export { RadioCard, type RadioCardRootProps, type RadioCardIndicator } from "./radio-card";

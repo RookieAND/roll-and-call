@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, SegmentControl } from "@roll-and-call/ui";
+import { HStack, SegmentedControl } from "@roll-and-call/ui";
 
 import { ProfileRow } from "@/entities/profile";
 
@@ -40,15 +40,23 @@ export function AttendanceRow({
         subline={absentNotice}
         sublineForeground="danger"
       />
-      <SegmentControl
-        fill
+      <SegmentedControl.Root
         disabled={readOnly}
         aria-label={`${attendee.username} 참석 여부`}
-        options={ATTENDANCE_OPTIONS}
         value={choice}
-        onChange={(next: AttendanceChoice) => onChange?.(next === ATTENDANCE_CHOICE.absent)}
+        onValueChange={(next) => onChange?.(next === ATTENDANCE_CHOICE.absent)}
         className="w-[138px] flex-none"
-      />
+      >
+        {ATTENDANCE_OPTIONS.map((option) => (
+          <SegmentedControl.Item
+            key={option.value}
+            value={option.value}
+            colorPalette={option.colorPalette}
+          >
+            {option.label}
+          </SegmentedControl.Item>
+        ))}
+      </SegmentedControl.Root>
     </HStack>
   );
 }

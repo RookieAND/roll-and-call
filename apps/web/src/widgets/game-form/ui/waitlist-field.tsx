@@ -38,13 +38,15 @@ export function WaitlistField({ value, onChange }: WaitlistFieldProps) {
           {hint}
         </Text>
       </div>
-      <Switch
+      <Switch.Root
         id="waitlistEnabled"
         checked={value}
         onCheckedChange={onChange}
         aria-describedby="waitlistEnabled-hint"
         className="flex-none"
-      />
+      >
+        <Switch.Control />
+      </Switch.Root>
     </HStack>
   );
 }
