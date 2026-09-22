@@ -1,31 +1,28 @@
 /* Registers this package's component sources with the consuming app's Tailwind. */
 @source ".";
 
-/* Design tokens (Vapor-UI-inspired). Generates utilities like bg-primary-600, text-primary-500. */
+/* Tailwind 유틸리티 이름표(p-100, text-body4, rounded-500). 값은 아래 --rc-* 토큰이 갖는다. */
 @theme {
   --font-sans:
     "Pretendard Variable", Pretendard, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
 
-  /* 디자인 시스템 §B. padding · margin · gap은 이 토큰만 쓴다.
-     이름은 rem 값을 100배한 수다(8px = 0.5rem = 100). 값이 Tailwind 기본 스케일과
-     같더라도 우리 이름으로 부른다 — 스케일이 바뀌면 여기 한 곳만 고친다. */
-  --spacing-025: 2px;
-  --spacing-050: 4px;
-  --spacing-075: 6px;
-  --spacing-100: 8px;
-  --spacing-125: 10px;
-  --spacing-150: 12px;
-  --spacing-175: 14px;
-  --spacing-200: 16px;
-  --spacing-225: 18px;
-  --spacing-250: 20px;
-  --spacing-300: 24px;
-  --spacing-400: 32px;
-  --spacing-500: 40px;
-  --spacing-600: 48px;
-  --spacing-700: 56px;
-  --spacing-800: 64px;
+  --spacing-025: var(--rc-size-space-025);
+  --spacing-050: var(--rc-size-space-050);
+  --spacing-075: var(--rc-size-space-075);
+  --spacing-100: var(--rc-size-space-100);
+  --spacing-125: var(--rc-size-space-125);
+  --spacing-150: var(--rc-size-space-150);
+  --spacing-175: var(--rc-size-space-175);
+  --spacing-200: var(--rc-size-space-200);
+  --spacing-225: var(--rc-size-space-225);
+  --spacing-250: var(--rc-size-space-250);
+  --spacing-300: var(--rc-size-space-300);
+  --spacing-400: var(--rc-size-space-400);
+  --spacing-500: var(--rc-size-space-500);
+  --spacing-600: var(--rc-size-space-600);
+  --spacing-700: var(--rc-size-space-700);
+  --spacing-800: var(--rc-size-space-800);
 
   /* 디자인 시스템 §A. 글씨 크기는 이 토큰만 쓴다 — Text의 typography와 프리미티브가 같은 값을 본다. */
   --text-heading1: 22px;
@@ -47,206 +44,464 @@
   --text-body5: 10px;
   --text-body5--line-height: 1.3;
 
-  /* 디자인 시스템 §C. 라디우스는 크기가 아니라 상자 종류로 고른다.
-     Tailwind 기본 이름(rounded-lg 등)은 값이 달라 섞이므로 이 번호만 쓴다. */
-  --radius-100: 4px; /* 진행바, 작은 눈금 */
-  --radius-200: 6px; /* 작은 태그, 썸네일 안 */
-  --radius-300: 8px; /* 배지, 칩 */
-  --radius-400: 10px; /* 입력, 보조 버튼 */
-  --radius-500: 12px; /* 주 CTA, 토스트, 시트 안 상자 */
-  --radius-600: 14px; /* 목록 카드, 프레임 */
-  --radius-700: 16px; /* 점선 빈 상태 카드 */
-  --radius-800: 20px; /* 바텀 시트 상단 */
-
-  --color-primary-50: #eef0fe;
-  --color-primary-100: #e0e7ff;
-  --color-primary-200: #c7d2fe;
-  --color-primary-300: #a5b4fc;
-  --color-primary-400: #818cf8;
-  --color-primary-500: #6366f1;
-  --color-primary-600: #4f46e5;
-  --color-primary-700: #4338ca;
-  --color-primary-800: #3730a3;
-  --color-primary-900: #312e81;
-
-  /* 확정(success) — mockup green */
-  --color-success-50: #f1faf5;
-  --color-success-100: #e3f5ec;
-  --color-success-200: #cdebdd;
-  --color-success-600: #0b9c6c;
-  --color-success-700: #0b7a55;
-  --color-success-800: #0a5c41;
-
-  /* Warm neutral scale — matches mockup's neutrals (Tailwind's default gray is bluer). */
-  --color-gray-50: #fafafc;
-  --color-gray-100: #f2f2f6;
-  --color-gray-200: #eaeaef;
-  --color-gray-300: #dcdce4;
-  --color-gray-400: #b4b4be;
-  --color-gray-500: #8a8a95;
-  --color-gray-600: #5f5f6b;
-  --color-gray-700: #3a3a45;
-  --color-gray-800: #26262e;
-  --color-gray-900: #17171c;
-
-  /* brand + surface */
-  --color-discord: #5865f2;
-  --color-discord-dark: #4752c4;
-  --color-canvas: #e9e9ee;
-  --color-toast: #23232b;
-  --color-surface: #ffffff;
-
-  /* 위험·오류(danger) — 없어서 Tailwind 기본 red로 새던 축 */
-  --color-danger-50: #fef5f5;
-  --color-danger-100: #fbebeb;
-  --color-danger-200: #e9c9c9;
-  --color-danger-300: #e9c9c9;
-  --color-danger-400: #e5a0a0;
-  --color-danger-600: #c33b3b;
-  /* 항상 흰 글씨가 얹히는 솔리드 배경. 테마가 바뀌어도 색이 그대로 남는다.
-     숫자 램프(success-700 등)는 다크에서 글씨색으로 뒤집히므로 여기에 쓰면 안 된다. */
-  --color-danger-solid: #c33b3b;
-  --color-danger-solid-hover: #a83232;
-  --color-success-solid: #0b7a55;
-  --color-success-solid-hover: #0a5c41;
-
-  /* 주의(warning) — 아직 하지 않은 일 */
-  --color-warning-50: #ffe7d6;
-  --color-warning-600: #b45309;
-
-  /* 배경·글씨가 한 세트로 움직이는 역할 토큰.
-     숫자 램프를 배경과 글씨에 같이 쓰면 다크에서 한쪽이 반드시 깨진다. */
-  /* 보조 문구(요일·순번·핸들·placeholder). gray 램프에는 surface 위에서 4.5:1을 넘는
-     단계가 없어서(400=2.06, 500=3.41) 역할 토큰으로 따로 둔다. */
-  --color-hint: #70707a;
-  /* 시트·다이얼로그 뒤 딤. 라이트는 잉크를 옅게 깔고 다크는 검정을 쓴다. */
-  --color-dim: rgb(23 23 28 / 0.35);
-  --color-primary-ink: #4f46e5;
-  --color-tinted-bg: #f5f4ff;
-  --color-tinted-bg-hover: #eeedfc;
-  --color-tinted-border: #d5d3f7;
-  --color-tinted-ink: #4338ca;
-
-  /* 읽고 판단할 것(트리거 칩). 지금 말하는 일(마감 임박 = warning)과 색을 나눈다.
-     한 카드에 둘이 같이 뜨므로 amber 램프에서 한 단 옅게 꺼내 쓴다. */
-  --color-notice-bg: #fdf6ec;
-  --color-notice-border: #f4d7a8;
-  --color-notice-ink: #8a5a1b;
-
-  /* 순위 배지. 2위는 hint를 그대로 쓴다. */
-  --color-rank-gold: #8a6209;
-  --color-rank-bronze: #9a5b2e;
-
-  /* 추첨 1d100의 대성공(1)·극단적 성공(2~5). 라이트는 primary, 다크는 금색으로 띄운다. */
-  --color-critical-bg: #4f46e5;
-  --color-critical-ink: #ffffff;
-  --color-critical-sparkle: #4f46e5;
-  --color-critical-glow: rgb(79 70 229);
-  --color-extreme-bg: #eef0fe;
-  --color-extreme-border: #d5d3f7;
-  --color-extreme-ink: #4338ca;
-
-  /* 달력 토요일 글씨. 일요일은 danger-600을 쓴다. */
-  --color-saturday: #2c6ba0;
+  --radius-100: var(--rc-radius-100);
+  --radius-200: var(--rc-radius-200);
+  --radius-300: var(--rc-radius-300);
+  --radius-400: var(--rc-radius-400);
+  --radius-500: var(--rc-radius-500);
+  --radius-600: var(--rc-radius-600);
+  --radius-700: var(--rc-radius-700);
+  --radius-800: var(--rc-radius-800);
 }
 
-/* 히트맵 단계는 유틸리티(bg-heat-3)가 아니라 인라인 style의 var()로만 쓴다.
-   @theme에 두면 Tailwind가 "쓰이지 않는 토큰"으로 보고 걷어내므로 여기에 직접 둔다. */
-:root {
-  --color-heat-0: #ffffff;
-  --color-heat-1: #edeefc;
-  --color-heat-2: #d8dafa;
-  --color-heat-3: #b7baf5;
-  --color-heat-4: #8e92ef;
-  --color-heat-5: #5b60e4;
-  --color-heat-ink: #2b2d78;
-  /* 진한 칸 위에 얹히는 글씨. 두 테마 모두 흰색이라 .dark 오버라이드가 없다. */
-  --color-heat-ink-strong: #ffffff;
+/* 색 유틸리티 이름표(bg-surface, text-gray-600 …). 값은 역할 토큰을 가리킨다.
+   inline이라 유틸리티가 var(--rc-*)를 직접 읽어 [data-theme] 중첩 스코프에서도 뒤집히고,
+   static이라 앱이 var(--color-*)로 읽는 변수도 계속 나간다. */
+@theme inline static {
+  --color-primary-50: var(--rc-color-bg-primary-weak);
+  --color-primary-100: var(--rc-legacy-primary-100);
+  --color-primary-200: var(--rc-legacy-primary-200);
+  --color-primary-300: var(--rc-color-indigo-300);
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: var(--rc-color-bg-primary);
+  --color-primary-700: var(--rc-color-bg-primary-hover);
+  --color-primary-800: var(--rc-color-indigo-700);
+  --color-primary-900: #312e81;
 
-  /* 추첨 대성공 컨페티. 두 테마에서 같은 색으로 떨어져 .dark 오버라이드가 없다. */
+  --color-success-50: var(--rc-legacy-success-50);
+  --color-success-100: var(--rc-color-bg-success-weak);
+  --color-success-200: var(--rc-color-border-success);
+  --color-success-600: var(--rc-color-green-500);
+  --color-success-700: var(--rc-color-fg-success);
+  --color-success-800: var(--rc-color-fg-success-strong);
+
+  --color-gray-50: var(--rc-color-bg-canvas-raised);
+  --color-gray-100: var(--rc-color-bg-secondary);
+  --color-gray-200: var(--rc-color-border-normal);
+  --color-gray-300: var(--rc-color-border-strong);
+  --color-gray-400: var(--rc-legacy-gray-400);
+  --color-gray-500: var(--rc-legacy-gray-500);
+  --color-gray-600: var(--rc-color-fg-muted);
+  --color-gray-700: var(--rc-legacy-gray-700);
+  --color-gray-800: var(--rc-legacy-gray-800);
+  --color-gray-900: var(--rc-color-fg-normal);
+
+  --color-discord: var(--rc-color-bg-discord);
+  --color-discord-dark: var(--rc-color-bg-discord-hover);
+  --color-canvas: var(--rc-color-bg-canvas-sunken);
+  --color-toast: var(--rc-color-bg-toast);
+  --color-surface: var(--rc-color-bg-canvas-base);
+
+  --color-danger-50: var(--rc-color-bg-danger-weak);
+  --color-danger-100: var(--rc-legacy-danger-100);
+  --color-danger-200: var(--rc-color-border-danger);
+  --color-danger-300: var(--rc-legacy-danger-300);
+  --color-danger-400: var(--rc-legacy-danger-400);
+  --color-danger-600: var(--rc-color-fg-danger);
+  --color-danger-solid: var(--rc-color-bg-danger);
+  --color-danger-solid-hover: #a83232;
+  --color-success-solid: var(--rc-color-bg-success);
+  --color-success-solid-hover: var(--rc-color-green-700);
+
+  --color-warning-50: var(--rc-color-bg-warning-weak);
+  --color-warning-600: var(--rc-color-fg-warning);
+
+  --color-hint: var(--rc-color-fg-hint);
+  --color-dim: var(--rc-color-bg-canvas-dim);
+  --color-primary-ink: var(--rc-legacy-primary-ink);
+  --color-tinted-bg: var(--rc-color-bg-primary-weakest);
+  --color-tinted-bg-hover: var(--rc-legacy-tinted-bg-hover);
+  --color-tinted-border: var(--rc-color-border-primary);
+  --color-tinted-ink: var(--rc-color-fg-primary);
+
+  --color-notice-bg: var(--rc-color-bg-notice-weak);
+  --color-notice-border: var(--rc-color-border-notice);
+  --color-notice-ink: var(--rc-color-fg-notice);
+
+  --color-rank-gold: var(--rc-legacy-rank-gold);
+  --color-rank-bronze: var(--rc-legacy-rank-bronze);
+
+  --color-critical-bg: var(--rc-legacy-critical-bg);
+  --color-critical-ink: var(--rc-legacy-critical-ink);
+  --color-critical-sparkle: var(--rc-legacy-critical-sparkle);
+  --color-critical-glow: var(--rc-legacy-critical-glow);
+  --color-extreme-bg: var(--rc-legacy-extreme-bg);
+  --color-extreme-border: var(--rc-legacy-extreme-border);
+  --color-extreme-ink: var(--rc-legacy-extreme-ink);
+
+  --color-saturday: var(--rc-color-data-blue-ink);
+}
+
+/* 프리미티브·크기·모션. 테마와 무관하게 값이 고정된다. 화면 코드는 프리미티브를 직접 읽지 않는다. */
+:root {
+  --rc-color-gray-000: #ffffff;
+  --rc-color-gray-025: #fafafc;
+  --rc-color-gray-040: #f7f7fa;
+  --rc-color-gray-050: #f2f2f6;
+  --rc-color-gray-100: #eaeaef;
+  --rc-color-gray-200: #dcdce4;
+  --rc-color-gray-250: #d3d3db;
+  --rc-color-gray-300: #b4b4be;
+  --rc-color-gray-400: #8f8f9a;
+  --rc-color-gray-500: #70707a;
+  --rc-color-gray-600: #5f5f6b;
+  --rc-color-gray-700: #4a4a55;
+  --rc-color-gray-800: #3a3a45;
+  --rc-color-gray-850: #2e2e38;
+  --rc-color-gray-900: #26262e;
+  --rc-color-gray-950: #1e1e26;
+  --rc-color-gray-975: #17171c;
+  --rc-color-gray-1000: #131318;
+
+  --rc-color-indigo-050: #f5f4ff;
+  --rc-color-indigo-100: #eef0fe;
+  --rc-color-indigo-200: #d5d3f7;
+  --rc-color-indigo-250: #c7d2fe;
+  --rc-color-indigo-300: #a5b4fc;
+  --rc-color-indigo-400: #8e92ef;
+  --rc-color-indigo-450: #5b60e4;
+  --rc-color-indigo-500: #4f46e5;
+  --rc-color-indigo-600: #4338ca;
+  --rc-color-indigo-700: #3730a3;
+  --rc-color-indigo-800: #2b2d78;
+  --rc-color-indigo-900: #262647;
+  --rc-color-indigo-950: #1e1e3a;
+
+  --rc-color-green-050: #e3f5ec;
+  --rc-color-green-100: #cdebdd;
+  --rc-color-green-200: #a7f3d0;
+  --rc-color-green-300: #6ee7b7;
+  --rc-color-green-500: #0b9c6c;
+  --rc-color-green-600: #0b7a55;
+  --rc-color-green-700: #0a5c41;
+  --rc-color-green-800: #1f4a39;
+  --rc-color-green-900: #17352a;
+  --rc-color-green-950: #12291f;
+
+  --rc-color-amber-050: #fdf6ec;
+  --rc-color-amber-100: #ffe7d6;
+  --rc-color-amber-200: #f4d7a8;
+  --rc-color-amber-250: #e9b27a;
+  --rc-color-amber-300: #fbbf24;
+  --rc-color-amber-600: #b45309;
+  --rc-color-amber-700: #8a5a1b;
+  --rc-color-amber-900: #3f3018;
+  --rc-color-amber-950: #2e2318;
+
+  --rc-color-red-050: #fef5f5;
+  --rc-color-red-100: #f0d2d2;
+  --rc-color-red-200: #e9c9c9;
+  --rc-color-red-300: #f08a8a;
+  --rc-color-red-350: #e08585;
+  --rc-color-red-500: #c33b3b;
+  --rc-color-red-700: #8e2f2f;
+  --rc-color-red-900: #4f2e2e;
+  --rc-color-red-950: #2a1a1a;
+
+  --rc-color-gold-300: #f0c860;
+  --rc-color-gold-350: #e5be6a;
+  --rc-color-gold-400: #d9a83a;
+  --rc-color-gold-500: #b8860b;
+  --rc-color-gold-700: #8a6209;
+  --rc-color-gold-975: #2e2616;
+
+  --rc-color-discord-500: #5865f2;
+  --rc-color-discord-600: #4752c4;
+
+  --rc-size-space-025: 2px;
+  --rc-size-space-050: 4px;
+  --rc-size-space-075: 6px;
+  --rc-size-space-100: 8px;
+  --rc-size-space-125: 10px;
+  --rc-size-space-150: 12px;
+  --rc-size-space-175: 14px;
+  --rc-size-space-200: 16px;
+  --rc-size-space-225: 18px;
+  --rc-size-space-250: 20px;
+  --rc-size-space-300: 24px;
+  --rc-size-space-400: 32px;
+  --rc-size-space-500: 40px;
+  --rc-size-space-600: 48px;
+  --rc-size-space-700: 56px;
+  --rc-size-space-800: 64px;
+
+  /* 라디우스는 크기가 아니라 상자 종류로 고른다. */
+  --rc-radius-000: 0px;
+  --rc-radius-100: 4px;
+  --rc-radius-200: 6px;
+  --rc-radius-300: 8px;
+  --rc-radius-400: 10px;
+  --rc-radius-500: 12px;
+  --rc-radius-600: 14px;
+  --rc-radius-700: 16px;
+  --rc-radius-800: 20px;
+  --rc-radius-full: 9999px;
+  --rc-radius-circle: 50%;
+
+  /* 높이도 상자 종류로 고른다. 세로는 여기, 가로는 flex가 정한다. */
+  --rc-size-badge: 26px;
+  --rc-size-control-xs: 32px;
+  --rc-size-control-sm: 34px;
+  --rc-size-control-md: 40px;
+  --rc-size-control-lg: 44px;
+  --rc-size-control-xl: 50px;
+  --rc-size-appbar: 52px;
+  --rc-size-tabbar: 58px;
+  --rc-size-cell: 62px;
+  --rc-size-avatar-xs: 26px;
+  --rc-size-avatar-sm: 34px;
+  --rc-size-avatar-md: 44px;
+  --rc-size-avatar-lg: 64px;
+  --rc-size-icon-sm: 14px;
+  --rc-size-icon-md: 16px;
+  --rc-size-icon-lg: 18px;
+  --rc-size-icon-xl: 22px;
+  --rc-size-illust: 104px;
+
+  --rc-z-base: 0;
+  --rc-z-sticky: 10;
+  --rc-z-floating-bar: 20;
+  --rc-z-overlay: 30;
+  --rc-z-sheet: 40;
+  --rc-z-dialog: 50;
+  --rc-z-popover: 60;
+  --rc-z-toast: 70;
+
+  --rc-duration-fast: 120ms;
+  --rc-duration-base: 200ms;
+  --rc-duration-slow: 320ms;
+  --rc-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --rc-safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* 추첨 대성공 컨페티. 두 테마에서 같은 색으로 떨어진다. */
   --color-confetti-1: #4f46e5;
   --color-confetti-2: #a5b4fc;
   --color-confetti-3: #6ee7b7;
   --color-confetti-4: #0b9c6c;
   --color-confetti-5: #f0c860;
   --color-confetti-6: #c7d2fe;
+}
 
-  /* 온보딩 배경. 색이 아니라 그라디언트라 유틸리티가 없고 인라인 var()로만 쓴다. */
+/* 모션을 줄인 환경. Tailwind transition-* 기본 시간과 우리 시간 토큰을 한꺼번에 0으로 내린다. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --default-transition-duration: 0s;
+    --rc-duration-fast: 0s;
+    --rc-duration-base: 0s;
+    --rc-duration-slow: 0s;
+  }
+}
+
+/* 역할 토큰 — 라이트. 테마 스위치가 갈아끼우는 유일한 계층이다.
+   hex로 적힌 자리는 문서 값과 아직 다른 현행 값이다(PR 2에서 문서 값으로 맞춘다).
+   --rc-legacy-*는 역할이 정해지지 않은 옛 램프 단계로, 역시 PR 2에서 지운다. */
+:root,
+[data-theme="light"] {
+  --rc-color-bg-canvas-base: var(--rc-color-gray-000);
+  --rc-color-bg-canvas-sunken: #e9e9ee;
+  --rc-color-bg-canvas-raised: var(--rc-color-gray-025);
+  --rc-color-bg-canvas-dim: rgb(23 23 28 / 0.35);
+  --rc-color-bg-canvas-overlay: var(--rc-color-gray-000);
+  --rc-color-bg-secondary: var(--rc-color-gray-050);
+  --rc-color-bg-secondary-strong: var(--rc-color-gray-100);
+  --rc-color-bg-primary: var(--rc-color-indigo-500);
+  --rc-color-bg-primary-hover: var(--rc-color-indigo-600);
+  --rc-color-bg-primary-weak: var(--rc-color-indigo-100);
+  --rc-color-bg-primary-weakest: var(--rc-color-indigo-050);
+  --rc-color-bg-success: var(--rc-color-green-600);
+  --rc-color-bg-success-weak: var(--rc-color-green-050);
+  --rc-color-bg-warning-weak: var(--rc-color-amber-100);
+  --rc-color-bg-notice-weak: var(--rc-color-amber-050);
+  --rc-color-bg-danger: var(--rc-color-red-500);
+  --rc-color-bg-danger-weak: var(--rc-color-red-050);
+  --rc-color-bg-discord: var(--rc-color-discord-500);
+  --rc-color-bg-discord-hover: var(--rc-color-discord-600);
+  --rc-color-bg-spark: var(--rc-color-amber-300);
+  --rc-color-bg-toast: #23232b;
+
+  --rc-color-fg-normal: var(--rc-color-gray-975);
+  --rc-color-fg-muted: var(--rc-color-gray-600);
+  --rc-color-fg-hint: var(--rc-color-gray-500);
+  --rc-color-fg-primary: var(--rc-color-indigo-600);
+  --rc-color-fg-primary-strong: var(--rc-color-indigo-700);
+  --rc-color-fg-success: var(--rc-color-green-600);
+  --rc-color-fg-success-strong: var(--rc-color-green-700);
+  --rc-color-fg-warning: var(--rc-color-amber-600);
+  --rc-color-fg-notice: var(--rc-color-amber-700);
+  --rc-color-fg-danger: var(--rc-color-red-500);
+  --rc-color-fg-on-primary: var(--rc-color-gray-000);
+  --rc-color-fg-inverse: var(--rc-color-gray-000);
+  --rc-color-fg-gm: var(--rc-color-gold-500);
+  --rc-color-fg-on-spark: var(--rc-color-gold-975);
+
+  --rc-color-border-subtle: var(--rc-color-gray-050);
+  --rc-color-border-normal: var(--rc-color-gray-100);
+  --rc-color-border-strong: var(--rc-color-gray-200);
+  --rc-color-border-primary: var(--rc-color-indigo-200);
+  --rc-color-border-primary-strong: var(--rc-color-indigo-500);
+  --rc-color-border-success: var(--rc-color-green-100);
+  --rc-color-border-danger: var(--rc-color-red-200);
+  --rc-color-border-notice: var(--rc-color-amber-200);
+
+  --rc-color-heat-1: #edeefc;
+  --rc-color-heat-2: #d8dafa;
+  --rc-color-heat-3: #b7baf5;
+  --rc-color-heat-4: var(--rc-color-indigo-400);
+  --rc-color-heat-5: var(--rc-color-indigo-450);
+  --rc-color-heat-ink: var(--rc-color-indigo-800);
+  --rc-color-heat-ink-5: var(--rc-color-gray-000);
+
+  /* 아바타·일러스트 전용. 상태를 뜻하지 않는다. */
+  --rc-color-data-indigo-bg: #eef0fe;
+  --rc-color-data-indigo-ink: #4338ca;
+  --rc-color-data-green-bg: #ddf3e8;
+  --rc-color-data-green-ink: #0b7a55;
+  --rc-color-data-blue-bg: #e2f0fb;
+  --rc-color-data-blue-ink: #2c6ba0;
+  --rc-color-data-pink-bg: #fde8ef;
+  --rc-color-data-pink-ink: #b03a62;
+  --rc-color-data-purple-bg: #f3e8fb;
+  --rc-color-data-purple-ink: #7a3fa0;
+  --rc-color-data-lime-bg: #e6eedc;
+  --rc-color-data-lime-ink: #4f6b2e;
+  --rc-color-data-gray-bg: #f2f2f6;
+  --rc-color-data-gray-ink: #5f5f6b;
+
+  --rc-legacy-gray-400: var(--rc-color-gray-300);
+  --rc-legacy-gray-500: #8a8a95;
+  --rc-legacy-gray-700: var(--rc-color-gray-800);
+  --rc-legacy-gray-800: var(--rc-color-gray-900);
+  --rc-legacy-primary-100: #e0e7ff;
+  --rc-legacy-primary-200: var(--rc-color-indigo-250);
+  --rc-legacy-primary-ink: var(--rc-color-indigo-500);
+  --rc-legacy-tinted-bg-hover: #eeedfc;
+  --rc-legacy-success-50: #f1faf5;
+  --rc-legacy-danger-100: #fbebeb;
+  --rc-legacy-danger-300: var(--rc-color-red-200);
+  --rc-legacy-danger-400: #e5a0a0;
+  --rc-legacy-rank-gold: var(--rc-color-gold-700);
+  --rc-legacy-rank-bronze: #9a5b2e;
+  --rc-legacy-critical-bg: var(--rc-color-indigo-500);
+  --rc-legacy-critical-ink: var(--rc-color-gray-000);
+  --rc-legacy-critical-sparkle: var(--rc-color-indigo-500);
+  --rc-legacy-critical-glow: rgb(79 70 229);
+  --rc-legacy-extreme-bg: var(--rc-color-indigo-100);
+  --rc-legacy-extreme-border: var(--rc-color-indigo-200);
+  --rc-legacy-extreme-ink: var(--rc-color-indigo-600);
+
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #eaecff 0%, #f6f6fb 44%, #ffffff 76%);
 }
 
-/* Dark mode: override the CSS variables that token utilities reference.
-   No dark: utilities needed — bg-surface/text-gray-900/etc. flip automatically. */
-.dark {
-  --color-canvas: #131318;
-  --color-surface: #1e1e26;
-  --color-toast: #3a3a45;
+/* 역할 토큰 — 다크. .dark는 [data-theme="dark"]로 옮기는 동안 함께 받는다. */
+.dark,
+[data-theme="dark"] {
+  --rc-color-bg-canvas-base: var(--rc-color-gray-950);
+  --rc-color-bg-canvas-sunken: var(--rc-color-gray-1000);
+  --rc-color-bg-canvas-raised: var(--rc-color-gray-900);
+  --rc-color-bg-canvas-dim: rgb(0 0 0 / 0.5);
+  --rc-color-bg-canvas-overlay: var(--rc-color-gray-900);
+  --rc-color-bg-secondary: var(--rc-color-gray-850);
+  --rc-color-bg-secondary-strong: var(--rc-color-gray-800);
+  --rc-color-bg-primary: var(--rc-color-indigo-500);
+  --rc-color-bg-primary-hover: var(--rc-color-indigo-600);
+  --rc-color-bg-primary-weak: var(--rc-color-indigo-900);
+  --rc-color-bg-primary-weakest: var(--rc-color-indigo-900);
+  --rc-color-bg-success: var(--rc-color-green-600);
+  --rc-color-bg-success-weak: var(--rc-color-green-900);
+  --rc-color-bg-warning-weak: var(--rc-color-amber-950);
+  --rc-color-bg-notice-weak: var(--rc-color-amber-950);
+  --rc-color-bg-danger: var(--rc-color-red-500);
+  --rc-color-bg-danger-weak: var(--rc-color-red-950);
+  --rc-color-bg-discord: var(--rc-color-discord-500);
+  --rc-color-bg-discord-hover: var(--rc-color-discord-600);
+  --rc-color-bg-spark: var(--rc-color-amber-300);
+  --rc-color-bg-toast: var(--rc-color-gray-800);
 
-  --color-gray-50: #26262e;
-  --color-gray-100: #2e2e38;
-  --color-gray-200: #3a3a45;
-  --color-gray-300: #4a4a55;
-  --color-gray-400: #6a6a76;
-  --color-gray-500: #9a9aa5;
-  --color-gray-600: #b4b4be;
-  --color-gray-700: #cfcfd6;
-  --color-gray-800: #e6e6ea;
-  --color-gray-900: #f2f2f5;
+  --rc-color-fg-normal: #f2f2f5;
+  --rc-color-fg-muted: var(--rc-color-gray-300);
+  --rc-color-fg-hint: var(--rc-color-gray-400);
+  --rc-color-fg-primary: var(--rc-color-indigo-250);
+  --rc-color-fg-primary-strong: var(--rc-color-indigo-300);
+  --rc-color-fg-success: var(--rc-color-green-300);
+  --rc-color-fg-success-strong: var(--rc-color-green-200);
+  --rc-color-fg-warning: var(--rc-color-amber-300);
+  --rc-color-fg-notice: var(--rc-color-amber-300);
+  --rc-color-fg-danger: var(--rc-color-red-300);
+  --rc-color-fg-on-primary: var(--rc-color-gray-000);
+  --rc-color-fg-inverse: var(--rc-color-gray-975);
+  --rc-color-fg-gm: var(--rc-color-gold-400);
+  --rc-color-fg-on-spark: var(--rc-color-gold-975);
 
-  /* 틴트 배경만 어둡게 내린다. 솔리드(600 이상)는 흰 글씨가 그대로 읽힌다. */
-  --color-primary-50: #262647;
-  --color-primary-100: #26264d;
-  --color-primary-200: #313166;
+  --rc-color-border-subtle: var(--rc-color-gray-850);
+  --rc-color-border-normal: var(--rc-color-gray-800);
+  --rc-color-border-strong: var(--rc-color-gray-700);
+  --rc-color-border-primary: #3a3a6b;
+  --rc-color-border-primary-strong: var(--rc-color-indigo-500);
+  --rc-color-border-success: var(--rc-color-green-800);
+  --rc-color-border-danger: var(--rc-color-red-900);
+  --rc-color-border-notice: var(--rc-color-amber-700);
 
-  --color-success-50: #12291f;
-  --color-success-100: #17352a;
-  --color-success-200: #1f4a39;
-  --color-success-700: #6ee7b7;
-  --color-success-800: #a7f3d0;
+  --rc-color-heat-1: #221f42;
+  --rc-color-heat-2: #2f2f57;
+  --rc-color-heat-3: #3c3c8c;
+  --rc-color-heat-4: #4b4bb5;
+  --rc-color-heat-5: var(--rc-color-indigo-450);
+  --rc-color-heat-ink: var(--rc-color-indigo-250);
+  --rc-color-heat-ink-5: var(--rc-color-gray-000);
 
-  --color-danger-50: #2a1a1a;
-  --color-danger-100: #3a2222;
-  --color-danger-200: #4f2e2e;
-  --color-danger-300: #5f3838;
-  --color-danger-400: #8a5252;
-  --color-danger-600: #f08a8a;
+  --rc-color-data-indigo-bg: #262647;
+  --rc-color-data-indigo-ink: #c7d2fe;
+  --rc-color-data-green-bg: #0c3b2c;
+  --rc-color-data-green-ink: #6ee7b7;
+  --rc-color-data-blue-bg: #26323a;
+  --rc-color-data-blue-ink: #8fbbe0;
+  --rc-color-data-pink-bg: #3a2a32;
+  --rc-color-data-pink-ink: #f0a8c0;
+  --rc-color-data-purple-bg: #332a3a;
+  --rc-color-data-purple-ink: #d0a8f0;
+  --rc-color-data-lime-bg: #2a3226;
+  --rc-color-data-lime-ink: #a8c888;
+  --rc-color-data-gray-bg: #2e2e38;
+  --rc-color-data-gray-ink: #b4b4be;
 
-  --color-warning-50: #2e2318;
-  --color-warning-600: #fbbf24;
-
-  --color-hint: #8f8f9a;
-  --color-dim: rgb(0 0 0 / 0.5);
-  --color-primary-ink: #a5b4fc;
-  --color-tinted-bg: #262647;
-  --color-tinted-bg-hover: #2f2f57;
-  --color-tinted-border: #3a3a6b;
-  --color-tinted-ink: #c7d2fe;
-
-  --color-notice-bg: #2e2318;
-  --color-notice-border: #8a5a1b;
-  --color-notice-ink: #fbbf24;
-  --color-saturday: #8fbbe0;
-
-  --color-rank-gold: #e5be6a;
-  --color-rank-bronze: #c9926a;
-
-  --color-critical-bg: #fbbf24;
-  --color-critical-ink: #2e2616;
-  --color-critical-sparkle: #f0c860;
-  --color-critical-glow: rgb(251 191 36);
-  --color-extreme-bg: rgb(251 191 36 / 0.16);
-  --color-extreme-border: rgb(251 191 36 / 0.42);
-  --color-extreme-ink: #fbbf24;
-
-  --color-heat-0: #1e1e26;
-  --color-heat-1: #221f42;
-  --color-heat-2: #2f2f57;
-  --color-heat-3: #3c3c8c;
-  --color-heat-4: #4b4bb5;
-  --color-heat-5: #5b60e4;
-  --color-heat-ink: #c7d2fe;
+  --rc-legacy-gray-400: #6a6a76;
+  --rc-legacy-gray-500: #9a9aa5;
+  --rc-legacy-gray-700: #cfcfd6;
+  --rc-legacy-gray-800: #e6e6ea;
+  --rc-legacy-primary-100: #26264d;
+  --rc-legacy-primary-200: #313166;
+  --rc-legacy-primary-ink: var(--rc-color-indigo-300);
+  --rc-legacy-tinted-bg-hover: #2f2f57;
+  --rc-legacy-success-50: var(--rc-color-green-950);
+  --rc-legacy-danger-100: #3a2222;
+  --rc-legacy-danger-300: #5f3838;
+  --rc-legacy-danger-400: #8a5252;
+  --rc-legacy-rank-gold: var(--rc-color-gold-350);
+  --rc-legacy-rank-bronze: #c9926a;
+  --rc-legacy-critical-bg: var(--rc-color-amber-300);
+  --rc-legacy-critical-ink: var(--rc-color-gold-975);
+  --rc-legacy-critical-sparkle: var(--rc-color-gold-300);
+  --rc-legacy-critical-glow: rgb(251 191 36);
+  --rc-legacy-extreme-bg: rgb(251 191 36 / 0.16);
+  --rc-legacy-extreme-border: rgb(251 191 36 / 0.42);
+  --rc-legacy-extreme-ink: var(--rc-color-amber-300);
 
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #221f42 0%, #17161f 46%, #131318 80%);
+}
+
+/* 앱이 인라인 var()로 읽는 히트맵 이름. 스코프마다 다시 걸어야 중첩 테마에서도 뒤집힌다. */
+:root,
+[data-theme] {
+  --color-heat-0: var(--rc-color-bg-canvas-base);
+  --color-heat-1: var(--rc-color-heat-1);
+  --color-heat-2: var(--rc-color-heat-2);
+  --color-heat-3: var(--rc-color-heat-3);
+  --color-heat-4: var(--rc-color-heat-4);
+  --color-heat-5: var(--rc-color-heat-5);
+  --color-heat-ink: var(--rc-color-heat-ink);
+  --color-heat-ink-strong: var(--rc-color-heat-ink-5);
 }
 
 /* Skeleton shimmer (mockup uses this instead of Tailwind's default pulse). */
