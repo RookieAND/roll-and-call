@@ -4,8 +4,8 @@ import type { DiscordEmbed } from "@trpg/discord";
 
 import { formatGameSchedule, formatMonthDay } from "@/shared/lib";
 
+import { gameUrl } from "../game-url";
 import { discordOverview } from "./discord-overview";
-import { gameUrl } from "./game-url";
 
 // cancelled면 글은 그 자리에 남기고 빨갛게 바꾼다 — 들어갈 곳이 없어졌으니 링크는 뺀다. CTA는 recruitButtons.
 export function recruitEmbed(

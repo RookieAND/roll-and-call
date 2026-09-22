@@ -1,6 +1,6 @@
 import type { DiscordLinkButton } from "@trpg/discord";
 
-import { gameUrl } from "./game-url";
+import { gameUrl } from "../game-url";
 
 export function recruitButtons(gameId: string): DiscordLinkButton[] {
   const url = gameUrl(gameId);

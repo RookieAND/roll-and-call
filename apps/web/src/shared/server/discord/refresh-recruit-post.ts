@@ -1,7 +1,7 @@
 import { db } from "@trpg/database";
 import { editDiscordMessage, renameDiscordThread } from "@trpg/discord";
 
-import { countConfirmedParticipants } from "./count-confirmed-participants";
+import { countConfirmedParticipants } from "../db/count-confirmed-participants";
 import { discordChannelId } from "./discord-channel-id";
 import { recruitButtons } from "./recruit-buttons";
 import { recruitEmbed } from "./recruit-embed";

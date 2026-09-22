@@ -1,8 +1,8 @@
 import { db } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 
+import { gameUrl } from "../game-url";
 import { gameNoticeEmbed } from "./game-notice-embed";
-import { gameUrl } from "./game-url";
 
 // GM이 추첨 결과를 적용한 뒤에 부른다. 링크는 각자 자기 값을 보는 결과 페이지로 보낸다.
 // 떨어진 사람도 알아야 다른 판을 잡으므로 확정·대기를 한 글에 같이 적는다.

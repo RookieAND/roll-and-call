@@ -1,7 +1,7 @@
 import type { Game } from "@trpg/database";
 import type { DiscordEmbed, DiscordEmbedField } from "@trpg/discord";
 
-import { gameUrl } from "./game-url";
+import { gameUrl } from "../game-url";
 
 type GameNotice = {
   game: Pick<Game, "id" | "title">;

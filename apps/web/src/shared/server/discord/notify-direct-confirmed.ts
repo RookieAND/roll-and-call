@@ -2,8 +2,8 @@ import { db, profiles } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 import { inArray } from "drizzle-orm";
 
-import { countConfirmedParticipants } from "./count-confirmed-participants";
-import { countWaitingParticipants } from "./count-waiting-participants";
+import { countConfirmedParticipants } from "../db/count-confirmed-participants";
+import { countWaitingParticipants } from "../db/count-waiting-participants";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 

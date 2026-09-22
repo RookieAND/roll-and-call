@@ -1,6 +1,6 @@
 import { db } from "@trpg/database";
 
-import { countWaitingParticipants } from "./count-waiting-participants";
+import { countWaitingParticipants } from "../db/count-waiting-participants";
 import { notifyRecruitmentComplete } from "./notify-recruitment-complete";
 
 // 정원이 막 찬 순간에 부른다. 신청·직접 확정·등록 때 확정 어느 길로 차든 같은 공지를 낸다.

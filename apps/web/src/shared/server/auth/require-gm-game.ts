@@ -1,8 +1,8 @@
 import "server-only";
 import { notFound, redirect } from "next/navigation";
 
+import { getGameById } from "../db/get-game-by-id";
 import { getCurrentUser } from "./get-current-user";
-import { getGameById } from "./get-game-by-id";
 
 interface RequireGmGameOptions {
   // 로그인 뒤 돌아올 자리.

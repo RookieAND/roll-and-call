@@ -5,7 +5,7 @@ import { compact, uniq } from "es-toolkit";
 
 import { GAME_IMAGE_BUCKET, gameImagePathOf } from "@/shared/lib";
 
-import { createSupabaseServerClient } from "./create-supabase-server-client";
+import { createSupabaseServerClient } from "./auth/create-supabase-server-client";
 
 // 2회차는 이전 회차의 URL을 그대로 복사하므로, 아직 어느 게임이든 쓰는 URL은 남긴다.
 // 사용자 세션으로 지우므로 스토리지 정책(owner = auth.uid())상 본인이 올린 파일만 지워진다.
