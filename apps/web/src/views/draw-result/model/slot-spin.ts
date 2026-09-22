@@ -1,4 +1,4 @@
-export const SLOT_SPIN_MS = 1200;
+export const SLOT_SPIN_MS = 3000;
 
 export interface SlotSpin {
   durationMs: number;

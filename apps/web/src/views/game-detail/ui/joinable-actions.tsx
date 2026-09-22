@@ -22,7 +22,7 @@ export function JoinableActions({
   waitingCount,
   endDate,
 }: JoinableActionsProps) {
-  const joinLabel = isLottery ? "추첨 신청하기" : isFull ? "대기로 신청하기" : "신청하기";
+  const joinLabel = !isLottery && isFull ? "대기로 신청하기" : "신청하기";
   const joinHint = isLottery
     ? `${formatDate(endDate)} 마감 뒤 GM이 추첨합니다.`
     : isFull
