@@ -163,6 +163,14 @@
   /* 진한 칸 위에 얹히는 글씨. 두 테마 모두 흰색이라 .dark 오버라이드가 없다. */
   --color-heat-ink-strong: #ffffff;
 
+  /* 추첨 대성공 컨페티. 두 테마에서 같은 색으로 떨어져 .dark 오버라이드가 없다. */
+  --color-confetti-1: #4f46e5;
+  --color-confetti-2: #a5b4fc;
+  --color-confetti-3: #6ee7b7;
+  --color-confetti-4: #0b9c6c;
+  --color-confetti-5: #f0c860;
+  --color-confetti-6: #c7d2fe;
+
   /* 온보딩 배경. 색이 아니라 그라디언트라 유틸리티가 없고 인라인 var()로만 쓴다. */
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #eaecff 0%, #f6f6fb 44%, #ffffff 76%);
 }

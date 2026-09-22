@@ -37,7 +37,7 @@ export function MyDrawResult({
   const myRoll = outcome.rolled.find((entry) => entry.userId === meUserId)?.roll ?? null;
 
   return (
-    <VStack gap="250" className="relative">
+    <VStack gap="250">
       {toRollGrade(myRoll) && <DrawConfetti />}
       <VStack gap="100">
         <DrawSummary

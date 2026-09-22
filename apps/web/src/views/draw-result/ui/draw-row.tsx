@@ -3,9 +3,10 @@ import { cva } from "class-variance-authority";
 
 import type { DrawEntry } from "../model/draw-entry";
 import { DRAW_ROW_VARIANT, type DrawRowVariant } from "../model/draw-row-variant";
+import { toRollGrade } from "../model/roll-grade";
 import { DrawRollText } from "./draw-roll-text";
 
-const row = cva("border-t px-175 first:border-t-0", {
+const row = cva("border-t pl-175 first:border-t-0", {
   variants: {
     variant: {
       highlight: "min-h-16 border-primary-50 py-100",
@@ -13,6 +14,8 @@ const row = cva("border-t px-175 first:border-t-0", {
       compact: "min-h-14 border-gray-100 py-075",
     },
     isMe: { true: "bg-gray-50", false: "" },
+    // 대성공·극단적 성공 칩은 별이 바깥으로 삐져나와서 오른쪽을 덜 비운다.
+    graded: { true: "pr-125", false: "pr-175" },
   },
 });
 
@@ -50,7 +53,11 @@ export function DrawRow({ entry, variant, isMe }: DrawRowProps) {
   }
 
   return (
-    <HStack align="center" gap="125" className={row({ variant, isMe })}>
+    <HStack
+      align="center"
+      gap="125"
+      className={row({ variant, isMe, graded: toRollGrade(entry.roll) !== null })}
+    >
       <Avatar
         src={entry.avatarUrl}
         name={entry.username}
