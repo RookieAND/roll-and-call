@@ -25,10 +25,9 @@ import { ShareButton } from "./share-button";
 interface GameDetailProps {
   game: GameDetailData;
   viewerId: string | null;
-  respondedIds: string[];
 }
 
-export function GameDetail({ game, viewerId, respondedIds }: GameDetailProps) {
+export function GameDetail({ game, viewerId }: GameDetailProps) {
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
   const { confirmed, waiting } = splitRoster(game.participants);
 
@@ -42,7 +41,6 @@ export function GameDetail({ game, viewerId, respondedIds }: GameDetailProps) {
     participantCount: confirmed.length,
     waitlistEnabled: game.waitlistEnabled,
   });
-  const viewerResponded = viewerId !== null && respondedIds.includes(viewerId);
   // 세션이 잠겨 취소가 막혔거나 모집이 끝나면 순번이 바뀔 일이 없어 대기 명단을 감춘다.
   const showWaiting =
     !isSessionLocked(game) && status !== GAME_STATUS.closed && status !== GAME_STATUS.full;
@@ -86,7 +84,6 @@ export function GameDetail({ game, viewerId, respondedIds }: GameDetailProps) {
             viewerStatus={viewerParticipant?.status ?? null}
             waitlistRank={viewerParticipant?.waitlistRank ?? null}
             waitingCount={waiting.length}
-            viewerResponded={viewerResponded}
             status={status}
           />
         </VStack>

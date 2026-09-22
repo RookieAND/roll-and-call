@@ -46,7 +46,7 @@ describe("deriveActionView", () => {
       GAME_ACTION_VIEW.confirmed,
     );
     expect(deriveActionView({ ...base, sessionConfirmed: true, isWaiting: true })).toBe(
-      GAME_ACTION_VIEW.confirmedWaiting,
+      GAME_ACTION_VIEW.waiting,
     );
   });
 

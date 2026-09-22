@@ -8,12 +8,10 @@ import {
 } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 
-import { CLOSED_REASON } from "../model/closed-reason";
 import { deriveActionView, GAME_ACTION_VIEW } from "../model/derive-action-view";
 import { AnonActions } from "./anon-actions";
 import { ClosedActions } from "./closed-actions";
 import { ConfirmedActions } from "./confirmed-actions";
-import { ConfirmedWaitingActions } from "./confirmed-waiting-actions";
 import { JoinableActions } from "./joinable-actions";
 import { JoinedActions } from "./joined-actions";
 import { ManageGameLink } from "./manage-game-link";
@@ -26,7 +24,6 @@ export interface GameActionZoneProps {
   viewerStatus: ParticipantStatus | null;
   waitlistRank: number | null;
   waitingCount: number;
-  viewerResponded: boolean;
   status: GameStatus;
   canSchedule: boolean;
 }
@@ -38,7 +35,6 @@ export function GameActionZone({
   viewerStatus,
   waitlistRank,
   waitingCount,
-  viewerResponded,
   status,
   canSchedule,
 }: GameActionZoneProps) {
@@ -58,13 +54,8 @@ export function GameActionZone({
   // 정원 충족이어도 신청은 받는다(초과분은 대기).
   const isFull = status === GAME_STATUS.confirmed;
   const expired = status === GAME_STATUS.closed;
-  // 기한이 남았어도 시간이 정해졌으면 그게 닫힌 이유다.
-  const closedReason = sessionConfirmed
-    ? CLOSED_REASON.sessionSet
-    : expired
-      ? CLOSED_REASON.expired
-      : CLOSED_REASON.full;
   const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
+  const drawn = game.drawnAt !== null;
   // leaveGame과 같은 규칙: 확정자는 정원 충족·기한 경과 후 자가 취소 불가.
   const canLeave = !isFull && !isClosed;
 
@@ -73,15 +64,21 @@ export function GameActionZone({
     case GAME_ACTION_VIEW.gm:
       return <ManageGameLink gameId={game.id} />;
     case GAME_ACTION_VIEW.confirmed:
-      return <ConfirmedActions confirmedAt={game.confirmedAt!} />;
-    case GAME_ACTION_VIEW.confirmedWaiting:
-      return <ConfirmedWaitingActions gameId={game.id} waitlistRank={waitlistRank} />;
+      return (
+        <ConfirmedActions
+          gameId={game.id}
+          confirmedAt={game.confirmedAt!}
+          canSchedule={canSchedule}
+          drawn={drawn}
+        />
+      );
     case GAME_ACTION_VIEW.waiting:
       return (
         <WaitingActions
           gameId={game.id}
           waitlistRank={waitlistRank}
-          pendingDraw={isLottery && game.drawnAt === null}
+          isLottery={isLottery}
+          drawn={drawn}
           endDate={game.endDate}
           expired={expired}
         />
@@ -93,14 +90,13 @@ export function GameActionZone({
           canSchedule={canSchedule}
           canLeave={canLeave}
           expired={expired}
-          drawn={game.drawnAt !== null}
-          viewerResponded={viewerResponded}
+          drawn={drawn}
         />
       );
     case GAME_ACTION_VIEW.closed:
-      return <ClosedActions endDate={game.endDate} reason={closedReason} />;
+      return <ClosedActions />;
     case GAME_ACTION_VIEW.anon:
-      return <AnonActions />;
+      return <AnonActions isLottery={isLottery} />;
     case GAME_ACTION_VIEW.joinable:
       return (
         <JoinableActions
@@ -108,7 +104,7 @@ export function GameActionZone({
           isFull={isFull}
           isLottery={isLottery}
           waitingCount={waitingCount}
-          maxPlayers={game.maxPlayers}
+          endDate={game.endDate}
         />
       );
   }

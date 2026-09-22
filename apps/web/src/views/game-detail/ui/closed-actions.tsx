@@ -1,24 +1,18 @@
 import { VStack } from "@trpg/ui";
+import { LockKeyhole } from "lucide-react";
 
-import { CLOSED_REASON, type ClosedReason } from "../model/closed-reason";
-import { ACTION_SECONDARY_CLASS } from "./action-class-names";
-import { RecruitEndedHint } from "./recruit-ended-hint";
-import { RosterFullNotice } from "./roster-full-notice";
-import { SessionSetNotice } from "./session-set-notice";
+import { ACTION_PRIMARY_CLASS } from "./action-class-names";
+import { ActionNotice } from "./action-notice";
 import { SimilarGamesLink } from "./similar-games-link";
 
-interface ClosedActionsProps {
-  endDate: Date;
-  reason: ClosedReason;
-}
-
-export function ClosedActions({ endDate, reason }: ClosedActionsProps) {
+// 막다른 길에는 다음 행동을 붙인다. 신청하지 않은 사람에게 결과 페이지는 열지 않는다.
+export function ClosedActions() {
   return (
     <VStack gap="125">
-      {reason === CLOSED_REASON.expired && <RecruitEndedHint endDate={endDate} />}
-      {reason === CLOSED_REASON.full && <RosterFullNotice />}
-      {reason === CLOSED_REASON.sessionSet && <SessionSetNotice />}
-      <SimilarGamesLink className={ACTION_SECONDARY_CLASS} />
+      <ActionNotice title="모집이 끝났습니다" icon={LockKeyhole}>
+        비슷한 조건의 다른 구인글을 찾아보세요.
+      </ActionNotice>
+      <SimilarGamesLink className={ACTION_PRIMARY_CLASS} />
     </VStack>
   );
 }

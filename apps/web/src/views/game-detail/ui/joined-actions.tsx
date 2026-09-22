@@ -8,7 +8,6 @@ interface JoinedActionsProps {
   canLeave: boolean;
   expired: boolean;
   drawn: boolean;
-  viewerResponded: boolean;
 }
 
 export function JoinedActions({
@@ -17,23 +16,17 @@ export function JoinedActions({
   canLeave,
   expired,
   drawn,
-  viewerResponded,
 }: JoinedActionsProps) {
   if (!canLeave) {
     return (
       <LockedJoinedActions
         gameId={gameId}
         canSchedule={canSchedule}
+        drawn={drawn}
         lock={leaveLock(drawn, expired)}
       />
     );
   }
 
-  return (
-    <LeaveableJoinedActions
-      gameId={gameId}
-      canSchedule={canSchedule}
-      needsResponse={canSchedule && !viewerResponded}
-    />
-  );
+  return <LeaveableJoinedActions gameId={gameId} canSchedule={canSchedule} />;
 }

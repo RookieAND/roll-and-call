@@ -1,6 +1,7 @@
 import { VStack } from "@trpg/ui";
 
 import { JoinGameButton } from "@/features/join-game";
+import { formatDate } from "@/shared/lib";
 
 import { ACTION_PRIMARY_CLASS } from "./action-class-names";
 import { JoinHint } from "./join-hint";
@@ -10,27 +11,27 @@ interface JoinableActionsProps {
   isFull: boolean;
   isLottery: boolean;
   waitingCount: number;
-  maxPlayers: number;
+  endDate: Date;
 }
 
+// 선착순은 누르는 순간 확정, 추첨은 마감까지 결과를 모른다. 버튼 라벨로 그 차이를 먼저 말한다.
 export function JoinableActions({
   gameId,
   isFull,
   isLottery,
   waitingCount,
-  maxPlayers,
+  endDate,
 }: JoinableActionsProps) {
-  // 추첨은 정원과 무관하게 받으므로 대기 순번 대신 뽑는 인원을 알린다.
-  const joinLabel = isLottery ? "신청하기" : isFull ? "대기 신청하기" : "참여하기";
+  const joinLabel = isLottery ? "추첨 신청하기" : isFull ? "대기로 신청하기" : "신청하기";
   const joinHint = isLottery
-    ? `마감 뒤 GM이 추첨으로 ${maxPlayers}명을 정합니다.`
+    ? `${formatDate(endDate)} 마감 뒤 GM이 추첨합니다.`
     : isFull
       ? `지금 신청하면 대기 ${waitingCount + 1}번입니다.`
-      : null;
+      : "지금 신청하면 바로 확정됩니다.";
 
   return (
     <VStack gap="125">
-      {joinHint && <JoinHint>{joinHint}</JoinHint>}
+      <JoinHint>{joinHint}</JoinHint>
       <JoinGameButton gameId={gameId} className={ACTION_PRIMARY_CLASS}>
         {joinLabel}
       </JoinGameButton>
