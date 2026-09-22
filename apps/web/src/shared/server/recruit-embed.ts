@@ -7,7 +7,7 @@ import { formatGameSchedule, formatMonthDay } from "@/shared/lib";
 import { discordOverview } from "./discord-overview";
 import { gameUrl } from "./game-url";
 
-// cancelled면 글은 그 자리에 남기고 빨갛게 바꾼다 — 들어갈 곳이 없어졌으니 링크와 CTA는 뺀다.
+// cancelled면 글은 그 자리에 남기고 빨갛게 바꾼다 — 들어갈 곳이 없어졌으니 링크는 뺀다. CTA는 recruitButtons.
 export function recruitEmbed(
   game: Game,
   gmName: string,
@@ -20,8 +20,6 @@ export function recruitEmbed(
     { name: "👥 인원", value: `${confirmedCount}/${game.maxPlayers}명`, inline: true },
     { name: "🕒 시간", value: formatGameSchedule(game), inline: false },
   ];
-  // 메시지 버튼(component)은 인터랙션 엔드포인트가 필요해서 마스크드 링크를 CTA로 쓴다.
-  if (url) fields.push({ name: "​", value: `**[▶ 참여하러 가기](${url})**`, inline: false });
 
   return {
     title: cancelled ? `🚫 ${game.title} (취소됨)` : `🎲 ${game.title}`,

@@ -3,6 +3,7 @@ export { DISCORD_COLOR } from "./model/discord-color";
 export type {
   DiscordEmbed,
   DiscordEmbedField,
+  DiscordLinkButton,
   DiscordMessage,
   DiscordMessageInput,
 } from "./model/discord-types";

@@ -2,6 +2,7 @@ import type { Game } from "@trpg/database";
 import { sendDiscordMessage, startDiscordThread } from "@trpg/discord";
 
 import { discordChannelId } from "./discord-channel-id";
+import { recruitButtons } from "./recruit-buttons";
 import { recruitEmbed } from "./recruit-embed";
 import { sendGameImages } from "./send-game-images";
 
@@ -14,6 +15,7 @@ export async function notifyGameCreated(
   const message = await sendDiscordMessage(discordChannelId("recruit"), {
     content: "📢 새로운 구인 글이 올라왔어요!",
     embeds: [recruitEmbed(game, gmName, confirmedCount)],
+    buttons: recruitButtons(game.id),
   });
   const threadId = message && (await startDiscordThread(message, game.title));
   if (threadId) await sendGameImages(game, threadId);

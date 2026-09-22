@@ -23,6 +23,7 @@ export async function notifyGameCancelled(game: Game) {
   await Promise.all([
     editDiscordMessage(discordChannelId("recruit"), game.discordThreadId, {
       embeds: [recruitEmbed(game, gmName, 0, true)],
+      buttons: [],
     }),
     sendDiscordMessage(game.discordThreadId, {
       embeds: [

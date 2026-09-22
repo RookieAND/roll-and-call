@@ -31,10 +31,11 @@ export async function notifyDrawResult(gameId: string) {
     .map((participant, index) => nameOf(index + 1, participant.user?.username ?? "?"));
 
   const detailUrl = gameUrl(game.id);
+  const drawUrl = detailUrl && `${detailUrl}/draw`;
   const embed = gameNoticeEmbed({
     game,
     gmName: game.gm?.username ?? "?",
-    url: detailUrl && `${detailUrl}/draw`,
+    url: drawUrl,
     emoji: "🎲",
     color: DISCORD_COLOR.complete,
     description: `추첨이 끝났어요. 신청한 ${byRank.length}명 중 ${confirmed.length}명이 확정됐어요.\n자리가 나면 대기 순번대로 확정됩니다. 내 1d100 값은 링크에서 확인하세요.`,
@@ -45,5 +46,8 @@ export async function notifyDrawResult(gameId: string) {
     ],
   });
 
-  await sendDiscordMessage(game.discordThreadId, { embeds: [embed] });
+  await sendDiscordMessage(game.discordThreadId, {
+    embeds: [embed],
+    buttons: drawUrl ? [{ label: "🎲 추첨 결과 보기", url: drawUrl }] : [],
+  });
 }

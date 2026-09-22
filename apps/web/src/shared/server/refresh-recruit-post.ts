@@ -3,6 +3,7 @@ import { editDiscordMessage, renameDiscordThread } from "@trpg/discord";
 
 import { countConfirmedParticipants } from "./count-confirmed-participants";
 import { discordChannelId } from "./discord-channel-id";
+import { recruitButtons } from "./recruit-buttons";
 import { recruitEmbed } from "./recruit-embed";
 
 export async function refreshRecruitPost(gameId: string) {
@@ -20,6 +21,7 @@ export async function refreshRecruitPost(gameId: string) {
       embeds: [
         recruitEmbed(game, game.gm?.username ?? "?", countConfirmedParticipants(game.participants)),
       ],
+      buttons: recruitButtons(game.id),
     }),
     renameDiscordThread(game.discordThreadId, game.title),
   ]);
