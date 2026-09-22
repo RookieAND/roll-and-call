@@ -1,6 +1,7 @@
 import { relations, sql } from "drizzle-orm";
 import {
   boolean,
+  check,
   date,
   index,
   integer,
@@ -56,7 +57,11 @@ export const profileMemos = pgTable(
     body: text("body").notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [primaryKey({ columns: [table.ownerId, table.targetId] })],
+  (table) => [
+    primaryKey({ columns: [table.ownerId, table.targetId] }),
+    // 프로필 삭제 시 cascade가 target_id로 찾는다.
+    index("profile_memos_target_id_idx").on(table.targetId),
+  ],
 );
 
 export const games = pgTable(
@@ -109,6 +114,13 @@ export const games = pgTable(
     index("games_confirmed_at_idx")
       .on(table.confirmedAt)
       .where(sql`confirmed_at is not null`),
+    check("games_max_players_positive", sql`${table.maxPlayers} >= 1`),
+    check("games_play_minutes_positive", sql`${table.playMinutes} > 0`),
+    check("games_range_order", sql`${table.rangeEnd} >= ${table.rangeStart}`),
+    check(
+      "games_tag_limits",
+      sql`cardinality(${table.genres}) <= 5 and cardinality(${table.triggers}) <= 5 and cardinality(${table.platforms}) <= 5`,
+    ),
   ],
 );
 
@@ -134,6 +146,8 @@ export const participants = pgTable(
     primaryKey({ columns: [table.gameId, table.userId] }),
     // PK가 game_id로 시작해 user_id 단독 조회(내가 신청한 게임)는 못 탄다.
     index("participants_user_id_idx").on(table.userId),
+    check("participants_draw_roll_range", sql`${table.drawRoll} between 1 and 100`),
+    check("participants_draw_rank_positive", sql`${table.drawRank} >= 1`),
   ],
 );
 
@@ -148,7 +162,11 @@ export const availabilities = pgTable(
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
     slotStart: timestamp("slot_start", { withTimezone: true }).notNull(),
   },
-  (table) => [primaryKey({ columns: [table.gameId, table.userId, table.slotStart] })],
+  (table) => [
+    primaryKey({ columns: [table.gameId, table.userId, table.slotStart] }),
+    // 내가 응답한 게임(user_id → distinct game_id)을 인덱스만으로 끝낸다.
+    index("availabilities_user_id_game_id_idx").on(table.userId, table.gameId),
+  ],
 );
 
 export const profilesRelations = relations(profiles, ({ many }) => ({

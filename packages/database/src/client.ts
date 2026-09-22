@@ -16,7 +16,7 @@ import {
 } from "./schema";
 
 // prepare: false — required for Supabase's transaction-mode pooler.
-// max: 1 — each serverless instance keeps one pooled connection (Supabase's serverless guidance).
+// max: 6 — lets one request run its Promise.all queries in parallel over the transaction pooler.
 const client = postgres(process.env.DATABASE_URL!, { prepare: false, max: 6 });
 
 export const db = drizzle(client, {
