@@ -1,8 +1,10 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import { isValidElement, type ComponentPropsWithRef, type ReactElement } from "react";
+import { isValidElement, type ReactElement } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateComponentProps } from "./state-props";
 
 const button = cva(
   "inline-flex items-center justify-center gap-100 rounded-500 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:pointer-events-none disabled:opacity-50",
@@ -30,53 +32,64 @@ const button = cva(
   },
 );
 
-export interface ButtonProps extends ComponentPropsWithRef<"button">, VariantProps<typeof button> {
+type ButtonState = VariantProps<typeof button> & { loading: boolean; disabled: boolean };
+
+export interface ButtonProps
+  extends StateComponentProps<"button", ButtonState>, VariantProps<typeof button> {
   loading?: boolean;
   asChild?: boolean;
 }
 
 export function Button({
-  variant,
-  size,
+  variant = "solid",
+  size = "md",
   className,
+  style,
   type,
-  loading,
-  disabled,
+  loading = false,
+  disabled = false,
   asChild,
+  render,
   ref,
   children,
   ...props
 }: ButtonProps) {
   const useAsChild = asChild && isValidElement(children);
+  const state = { variant, size, loading, disabled: disabled || loading };
   const classes = cn(
     button({ variant, size }),
     // ponytail: loading always reads as the muted-primary state from the 시안
     loading && "bg-primary-300 text-white hover:bg-primary-300",
-    className,
+    resolveStateProp(className, state),
   );
 
   return useRender({
     ref,
     defaultTagName: "button",
-    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : undefined,
-    props: useAsChild
-      ? { className: classes, ...props }
-      : {
-          type: type ?? "button",
-          disabled: disabled || loading,
-          className: classes,
-          ...props,
-          children: (
-            <>
-              {loading && (
-                <span
-                  aria-hidden
-                  className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/45 border-t-white"
-                />
-              )}
-              {children}
-            </>
-          ),
-        },
+    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : render,
+    state,
+    props: {
+      "data-slot": "button",
+      className: classes,
+      style: resolveStateProp(style, state),
+      ...(useAsChild || render ? {} : { type: type ?? "button", disabled: disabled || loading }),
+      ...props,
+      ...(useAsChild
+        ? {}
+        : {
+            children: (
+              <>
+                {loading && (
+                  <span
+                    aria-hidden
+                    data-slot="button-spinner"
+                    className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/45 border-t-white"
+                  />
+                )}
+                {children}
+              </>
+            ),
+          }),
+    },
   });
 }

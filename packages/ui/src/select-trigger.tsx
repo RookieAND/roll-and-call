@@ -4,13 +4,15 @@ import { Select as BaseSelect } from "@base-ui-components/react/select";
 import { useContext, type ReactNode } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
 import { SelectItemsContext } from "./select-items-context";
+import type { StateClassName } from "./state-props";
 
 export interface SelectTriggerProps {
   placeholder?: string;
   invalid?: boolean;
   id?: string;
-  className?: string;
+  className?: StateClassName<BaseSelect.Trigger.State>;
   children?: ReactNode;
 }
 
@@ -25,13 +27,17 @@ export function SelectTrigger({
   return (
     <BaseSelect.Trigger
       id={id}
-      className={cn(
-        "flex h-11 w-full items-center justify-between gap-100 rounded-400 border bg-surface px-150 text-left text-sm outline-none transition-colors focus:ring-2 disabled:opacity-50",
-        invalid
-          ? "border-[1.5px] border-danger-400 bg-danger-50 focus:ring-danger-200"
-          : "border-gray-200 focus:border-primary-500 focus:ring-primary-100",
-        className,
-      )}
+      data-slot="select-trigger"
+      data-invalid={invalid ? "" : undefined}
+      className={(state) =>
+        cn(
+          "flex h-11 w-full items-center justify-between gap-100 rounded-400 border bg-surface px-150 text-left text-sm outline-none transition-colors focus:ring-2 disabled:opacity-50",
+          invalid
+            ? "border-[1.5px] border-danger-400 bg-danger-50 focus:ring-danger-200"
+            : "border-gray-200 focus:border-primary-500 focus:ring-primary-100",
+          resolveStateProp(className, state),
+        )
+      }
     >
       {children ?? (
         <>
@@ -42,7 +48,9 @@ export function SelectTrigger({
               )
             }
           </BaseSelect.Value>
-          <BaseSelect.Icon className="text-gray-500">▾</BaseSelect.Icon>
+          <BaseSelect.Icon data-slot="select-icon" className="text-gray-500">
+            ▾
+          </BaseSelect.Icon>
         </>
       )}
     </BaseSelect.Trigger>

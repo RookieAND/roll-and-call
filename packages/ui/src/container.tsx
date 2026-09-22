@@ -1,6 +1,8 @@
-import type { ComponentPropsWithRef } from "react";
+import { useRender } from "@base-ui-components/react/use-render";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateComponentProps } from "./state-props";
 
 const maxWidthMap = {
   sm: "max-w-2xl",
@@ -10,10 +12,31 @@ const maxWidthMap = {
   full: "max-w-full",
 } as const;
 
-export interface ContainerProps extends ComponentPropsWithRef<"div"> {
+type ContainerState = { size: keyof typeof maxWidthMap };
+
+export interface ContainerProps extends StateComponentProps<"div", ContainerState> {
   size?: keyof typeof maxWidthMap;
 }
 
-export function Container({ className, size = "lg", ...props }: ContainerProps) {
-  return <div className={cn("mx-auto w-full px-200", maxWidthMap[size], className)} {...props} />;
+export function Container({
+  className,
+  style,
+  size = "lg",
+  render,
+  ref,
+  ...props
+}: ContainerProps) {
+  const state = { size };
+  return useRender({
+    ref,
+    defaultTagName: "div",
+    render,
+    state,
+    props: {
+      "data-slot": "container",
+      className: cn("mx-auto w-full px-200", maxWidthMap[size], resolveStateProp(className, state)),
+      style: resolveStateProp(style, state),
+      ...props,
+    },
+  });
 }

@@ -1,8 +1,10 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import { isValidElement, type ComponentPropsWithRef, type ReactElement } from "react";
+import { isValidElement, type ReactElement } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateComponentProps } from "./state-props";
 
 const chip = cva(
   "inline-flex items-center justify-center border font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:pointer-events-none disabled:opacity-50",
@@ -28,30 +30,44 @@ const chip = cva(
   },
 );
 
-export interface ChipProps extends ComponentPropsWithRef<"button">, VariantProps<typeof chip> {
+type ChipState = VariantProps<typeof chip> & { disabled: boolean };
+
+export interface ChipProps
+  extends StateComponentProps<"button", ChipState>, VariantProps<typeof chip> {
   asChild?: boolean;
 }
 
 export function Chip({
-  shape,
-  tone,
-  selected,
+  shape = "pill",
+  tone = "interactive",
+  selected = false,
   className,
+  style,
   type,
+  disabled = false,
   asChild,
+  render,
   ref,
   children,
   ...props
 }: ChipProps) {
   const useAsChild = asChild && isValidElement(children);
-  const classes = cn(chip({ shape, tone, selected }), className);
+  const state = { shape, tone, selected, disabled };
 
   return useRender({
     ref,
     defaultTagName: "button",
-    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : undefined,
-    props: useAsChild
-      ? { className: classes, ...props }
-      : { type: type ?? "button", className: classes, children, ...props },
+    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : render,
+    state,
+    props: {
+      "data-slot": "chip",
+      className: cn(chip({ shape, tone, selected }), resolveStateProp(className, state)),
+      style: resolveStateProp(style, state),
+      ...(useAsChild || render
+        ? { disabled: disabled || undefined }
+        : { type: type ?? "button", disabled }),
+      ...props,
+      ...(useAsChild ? {} : { children }),
+    },
   });
 }

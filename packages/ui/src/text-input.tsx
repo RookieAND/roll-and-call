@@ -1,12 +1,37 @@
+import { useRender } from "@base-ui-components/react/use-render";
 import type { VariantProps } from "class-variance-authority";
-import type { ComponentPropsWithRef } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateComponentProps } from "./state-props";
 import { textFieldVariants } from "./text-field-variants";
 
-export interface TextInputProps
-  extends ComponentPropsWithRef<"input">, VariantProps<typeof textFieldVariants> {}
+type TextInputState = { invalid: boolean; disabled: boolean };
 
-export function TextInput({ invalid, className, ...props }: TextInputProps) {
-  return <input className={cn(textFieldVariants({ invalid }), "h-11", className)} {...props} />;
+export interface TextInputProps
+  extends StateComponentProps<"input", TextInputState>, VariantProps<typeof textFieldVariants> {}
+
+export function TextInput({
+  invalid = false,
+  disabled = false,
+  className,
+  style,
+  render,
+  ref,
+  ...props
+}: TextInputProps) {
+  const state = { invalid: Boolean(invalid), disabled };
+  return useRender({
+    ref,
+    defaultTagName: "input",
+    render,
+    state,
+    props: {
+      "data-slot": "text-input",
+      disabled,
+      className: cn(textFieldVariants({ invalid }), "h-11", resolveStateProp(className, state)),
+      style: resolveStateProp(style, state),
+      ...props,
+    },
+  });
 }

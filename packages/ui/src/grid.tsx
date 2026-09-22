@@ -1,8 +1,9 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ComponentPropsWithRef, ReactElement } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateComponentProps } from "./state-props";
 import { gapMap, type GapToken } from "./tokens";
 
 const grid = cva("grid", {
@@ -19,17 +20,27 @@ const grid = cva("grid", {
   },
 });
 
-export interface GridProps extends ComponentPropsWithRef<"div">, VariantProps<typeof grid> {
+type GridState = VariantProps<typeof grid>;
+
+export interface GridProps extends StateComponentProps<"div", GridState>, GridState {
   gap?: GapToken;
-  render?: ReactElement<Record<string, unknown>>;
 }
 
-export function Grid({ className, cols, gap, render, ...props }: GridProps) {
+export function Grid({ className, style, cols, gap, render, ref, ...props }: GridProps) {
+  const state = { cols };
   return useRender({
+    ref,
     defaultTagName: "div",
     render,
+    state,
     props: {
-      className: cn(grid({ cols }), gap !== undefined && gapMap[gap], className),
+      "data-slot": "grid",
+      className: cn(
+        grid({ cols }),
+        gap !== undefined && gapMap[gap],
+        resolveStateProp(className, state),
+      ),
+      style: resolveStateProp(style, state),
       ...props,
     },
   });

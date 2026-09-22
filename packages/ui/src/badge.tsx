@@ -1,7 +1,9 @@
+import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ComponentPropsWithRef } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateComponentProps } from "./state-props";
 
 const badge = cva(
   "inline-flex items-center rounded-300 px-125 py-075 text-body4 font-bold leading-none",
@@ -21,10 +23,24 @@ const badge = cva(
   },
 );
 
+type BadgeState = VariantProps<typeof badge>;
+
 // color는 span의 옛 HTML 속성과 이름이 겹친다. 뱃지에서 색은 variant 쪽이 맡는다.
 export interface BadgeProps
-  extends Omit<ComponentPropsWithRef<"span">, "color">, VariantProps<typeof badge> {}
+  extends Omit<StateComponentProps<"span", BadgeState>, "color">, BadgeState {}
 
-export function Badge({ color, className, ...props }: BadgeProps) {
-  return <span className={cn(badge({ color }), className)} {...props} />;
+export function Badge({ color = "gray", className, style, render, ref, ...props }: BadgeProps) {
+  const state = { color };
+  return useRender({
+    ref,
+    defaultTagName: "span",
+    render,
+    state,
+    props: {
+      "data-slot": "badge",
+      className: cn(badge({ color }), resolveStateProp(className, state)),
+      style: resolveStateProp(style, state),
+      ...props,
+    },
+  });
 }

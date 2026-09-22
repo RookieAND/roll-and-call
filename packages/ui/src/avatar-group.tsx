@@ -5,14 +5,18 @@ import type { VariantProps } from "class-variance-authority";
 import { Avatar } from "./avatar";
 import { avatarVariants } from "./avatar-variants";
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateClassName } from "./state-props";
 import { Tooltip } from "./tooltip";
 
 export type AvatarPerson = { src?: string | null; name?: string | null };
 
+type AvatarGroupState = VariantProps<typeof avatarVariants> & { count: number };
+
 export interface AvatarGroupProps extends VariantProps<typeof avatarVariants> {
   people: AvatarPerson[];
   max?: number;
-  className?: string;
+  className?: StateClassName<AvatarGroupState>;
 }
 
 export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupProps) {
@@ -24,7 +28,13 @@ export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupPro
     .filter(Boolean)
     .join(", ");
   return (
-    <div className={cn("flex items-center", className)}>
+    <div
+      data-slot="avatar-group"
+      className={cn(
+        "flex items-center",
+        resolveStateProp(className, { size, count: people.length }),
+      )}
+    >
       {shown.map((person, index) => (
         <span
           key={index}
@@ -36,6 +46,7 @@ export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupPro
       {extra > 0 && (
         <Tooltip content={hiddenNames || `${extra}명 더`}>
           <span
+            data-slot="avatar-group-overflow"
             className={cn(
               avatarVariants({ size }),
               "-ml-100 bg-gray-100 text-gray-600 ring-2 ring-surface",

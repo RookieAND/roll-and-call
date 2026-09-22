@@ -1,7 +1,9 @@
+import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ComponentPropsWithRef } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateComponentProps } from "./state-props";
 
 const card = cva("border border-gray-200", {
   variants: {
@@ -14,10 +16,35 @@ const card = cva("border border-gray-200", {
   defaultVariants: { radius: 600, background: "surface", padding: "md", interactive: false },
 });
 
-export interface CardProps extends ComponentPropsWithRef<"div">, VariantProps<typeof card> {}
+type CardState = VariantProps<typeof card>;
 
-export function Card({ radius, background, padding, interactive, className, ...props }: CardProps) {
-  return (
-    <div className={cn(card({ radius, background, padding, interactive }), className)} {...props} />
-  );
+export interface CardProps extends StateComponentProps<"div", CardState>, CardState {}
+
+export function Card({
+  radius = 600,
+  background = "surface",
+  padding = "md",
+  interactive = false,
+  className,
+  style,
+  render,
+  ref,
+  ...props
+}: CardProps) {
+  const state = { radius, background, padding, interactive };
+  return useRender({
+    ref,
+    defaultTagName: "div",
+    render,
+    state,
+    props: {
+      "data-slot": "card",
+      className: cn(
+        card({ radius, background, padding, interactive }),
+        resolveStateProp(className, state),
+      ),
+      style: resolveStateProp(style, state),
+      ...props,
+    },
+  });
 }

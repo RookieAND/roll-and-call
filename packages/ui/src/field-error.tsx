@@ -3,5 +3,9 @@ interface FieldErrorProps {
 }
 
 export function FieldError({ message }: FieldErrorProps) {
-  return <p className="text-xs text-danger-600">{message}</p>;
+  return (
+    <p data-slot="field-error" className="text-xs text-danger-600">
+      {message}
+    </p>
+  );
 }

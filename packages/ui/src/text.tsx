@@ -1,8 +1,9 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ComponentPropsWithRef, ReactElement } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateComponentProps } from "./state-props";
 
 // Roll & Call 디자인 시스템 §A. 배지·칩은 body4에 weight·tight를 얹어 쓰고,
 // body5는 달력 칸·히트맵처럼 12px이 넘치는 격자에만 쓴다.
@@ -49,26 +50,37 @@ const text = cva("", {
   defaultVariants: { typography: "body2", foreground: "normal" },
 });
 
-export interface TextProps extends ComponentPropsWithRef<"span">, VariantProps<typeof text> {
-  render?: ReactElement<Record<string, unknown>>;
-}
+type TextState = Pick<VariantProps<typeof text>, "typography" | "foreground" | "weight">;
+
+export interface TextProps
+  extends StateComponentProps<"span", TextState>, VariantProps<typeof text> {}
 
 export function Text({
-  typography,
-  foreground,
+  typography = "body2",
+  foreground = "normal",
   weight,
   tight,
   numeric,
   truncate,
   className,
+  style,
   render,
+  ref,
   ...props
 }: TextProps) {
+  const state = { typography, foreground, weight };
   return useRender({
+    ref,
     defaultTagName: "span",
     render,
+    state,
     props: {
-      className: cn(text({ typography, foreground, weight, tight, numeric, truncate }), className),
+      "data-slot": "text",
+      className: cn(
+        text({ typography, foreground, weight, tight, numeric, truncate }),
+        resolveStateProp(className, state),
+      ),
+      style: resolveStateProp(style, state),
       ...props,
     },
   });

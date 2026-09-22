@@ -1,8 +1,10 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import { isValidElement, type ComponentPropsWithRef, type ReactElement } from "react";
+import { isValidElement, type ReactElement } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateComponentProps } from "./state-props";
 
 const iconButton = cva(
   "inline-flex items-center justify-center rounded-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:pointer-events-none disabled:opacity-50",
@@ -19,30 +21,43 @@ const iconButton = cva(
   },
 );
 
+type IconButtonState = VariantProps<typeof iconButton> & { disabled: boolean };
+
 export interface IconButtonProps
-  extends ComponentPropsWithRef<"button">, VariantProps<typeof iconButton> {
+  extends StateComponentProps<"button", IconButtonState>, VariantProps<typeof iconButton> {
   asChild?: boolean;
 }
 
 export function IconButton({
-  variant,
-  size,
+  variant = "ghost",
+  size = "md",
   className,
+  style,
   type,
+  disabled = false,
   asChild,
+  render,
   ref,
   children,
   ...props
 }: IconButtonProps) {
   const useAsChild = asChild && isValidElement(children);
-  const classes = cn(iconButton({ variant, size }), className);
+  const state = { variant, size, disabled };
 
   return useRender({
     ref,
     defaultTagName: "button",
-    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : undefined,
-    props: useAsChild
-      ? { className: classes, ...props }
-      : { type: type ?? "button", className: classes, children, ...props },
+    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : render,
+    state,
+    props: {
+      "data-slot": "icon-button",
+      className: cn(iconButton({ variant, size }), resolveStateProp(className, state)),
+      style: resolveStateProp(style, state),
+      ...(useAsChild || render
+        ? { disabled: disabled || undefined }
+        : { type: type ?? "button", disabled }),
+      ...props,
+      ...(useAsChild ? {} : { children }),
+    },
   });
 }

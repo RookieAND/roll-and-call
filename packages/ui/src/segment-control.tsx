@@ -1,7 +1,10 @@
+import { useRender } from "@base-ui-components/react/use-render";
 import { cva } from "class-variance-authority";
 import type { ReactNode } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateProps } from "./state-props";
 
 const segment = cva(
   "rounded-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200",
@@ -36,12 +39,13 @@ export type SegmentOption<Value extends string> = {
   tone?: "neutral" | "success" | "danger";
 };
 
-export type SegmentControlProps<Value extends string> = {
+type SegmentControlState = { value: string; disabled: boolean };
+
+export type SegmentControlProps<Value extends string> = StateProps<SegmentControlState> & {
   options: readonly SegmentOption<Value>[];
   value: Value;
   onChange: (value: Value) => void;
   "aria-label": string;
-  className?: string;
   // 칸이 컨테이너 너비를 나눠 갖는다. 너비는 className으로 준다.
   fill?: boolean;
   // 확정된 값을 읽기만 할 때.
@@ -54,35 +58,51 @@ export function SegmentControl<Value extends string>({
   onChange,
   "aria-label": ariaLabel,
   className,
+  style,
+  render,
   fill = false,
   disabled = false,
 }: SegmentControlProps<Value>) {
-  return (
-    <div
-      role="radiogroup"
-      aria-label={ariaLabel}
-      className={cn("inline-flex gap-050 rounded-400 bg-gray-100 p-050", className)}
-    >
-      {options.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          role="radio"
-          aria-checked={option.value === value}
-          aria-label={option.icon ? option.label : undefined}
-          title={option.icon ? option.label : undefined}
-          disabled={disabled}
-          onClick={() => onChange(option.value)}
-          className={segment({
-            shape: option.icon ? "icon" : "label",
-            selected: option.value === value,
-            tone: option.tone,
-            fill,
-          })}
-        >
-          {option.icon ?? option.label}
-        </button>
-      ))}
-    </div>
-  );
+  const state = { value, disabled };
+  return useRender({
+    defaultTagName: "div",
+    render,
+    state,
+    props: {
+      "data-slot": "segment-control",
+      role: "radiogroup",
+      "aria-label": ariaLabel,
+      className: cn(
+        "inline-flex gap-050 rounded-400 bg-gray-100 p-050",
+        resolveStateProp(className, state),
+      ),
+      style: resolveStateProp(style, state),
+      children: options.map((option) => {
+        const selected = option.value === value;
+        return (
+          <button
+            key={option.value}
+            type="button"
+            role="radio"
+            data-slot="segment-control-item"
+            data-state={selected ? "checked" : "unchecked"}
+            data-disabled={disabled ? "" : undefined}
+            aria-checked={selected}
+            aria-label={option.icon ? option.label : undefined}
+            title={option.icon ? option.label : undefined}
+            disabled={disabled}
+            onClick={() => onChange(option.value)}
+            className={segment({
+              shape: option.icon ? "icon" : "label",
+              selected,
+              tone: option.tone,
+              fill,
+            })}
+          >
+            {option.icon ?? option.label}
+          </button>
+        );
+      }),
+    },
+  });
 }

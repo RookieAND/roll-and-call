@@ -4,11 +4,13 @@ import { Select as BaseSelect } from "@base-ui-components/react/select";
 import type { ReactNode } from "react";
 
 import { cn } from "./cn";
+import { resolveStateProp } from "./resolve-state-prop";
+import type { StateClassName } from "./state-props";
 
 interface SelectItemProps {
   value: string;
   disabled?: boolean;
-  className?: string;
+  className?: StateClassName<BaseSelect.Item.State>;
   children: ReactNode;
 }
 
@@ -17,13 +19,18 @@ export function SelectItem({ value, disabled, className, children }: SelectItemP
     <BaseSelect.Item
       value={value}
       disabled={disabled}
-      className={cn(
-        "flex cursor-pointer items-center justify-between gap-100 rounded-300 px-150 py-100 text-sm text-gray-700 outline-none select-none data-[disabled]:opacity-40 data-[highlighted]:bg-primary-50 data-[highlighted]:text-primary-700",
-        className,
-      )}
+      data-slot="select-item"
+      className={(state) =>
+        cn(
+          "flex cursor-pointer items-center justify-between gap-100 rounded-300 px-150 py-100 text-sm text-gray-700 outline-none select-none data-[disabled]:opacity-40 data-[highlighted]:bg-primary-50 data-[highlighted]:text-primary-700",
+          resolveStateProp(className, state),
+        )
+      }
     >
       <BaseSelect.ItemText>{children}</BaseSelect.ItemText>
-      <BaseSelect.ItemIndicator className="text-primary-600">✓</BaseSelect.ItemIndicator>
+      <BaseSelect.ItemIndicator data-slot="select-item-indicator" className="text-primary-600">
+        ✓
+      </BaseSelect.ItemIndicator>
     </BaseSelect.Item>
   );
 }
