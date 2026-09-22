@@ -12,6 +12,8 @@ export function DrawRollText({ value, typography, foreground }: DrawRollTextProp
   return (
     <Text
       numeric
+      tight
+      render={<p />}
       typography={typography}
       weight="extrabold"
       foreground={foreground}
