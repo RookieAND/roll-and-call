@@ -35,23 +35,6 @@ export function DrawRow({ entry, variant, isMe }: DrawRowProps) {
   const highlight = variant === DRAW_ROW_VARIANT.highlight;
   const strong = highlight || isMe;
 
-  let rollText = (
-    <Text typography="body4" foreground="hint">
-      직접 확정
-    </Text>
-  );
-  if (entry.roll !== null) {
-    let rollTypography: "heading2" | "heading3" = "heading3";
-    if (highlight || (variant === DRAW_ROW_VARIANT.compact && isMe)) rollTypography = "heading2";
-    rollText = (
-      <DrawRollText
-        value={entry.roll}
-        typography={rollTypography}
-        foreground={strong ? "normal" : "muted"}
-      />
-    );
-  }
-
   return (
     <HStack
       align="center"
@@ -78,7 +61,7 @@ export function DrawRow({ entry, variant, isMe }: DrawRowProps) {
         </Text>
       </VStack>
       {isMe && <Badge color="primary">나</Badge>}
-      {rollText}
+      <DrawRollText roll={entry.roll} variant={variant} isMe={isMe} />
     </HStack>
   );
 }

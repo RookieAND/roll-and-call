@@ -21,11 +21,6 @@ const pill = cva(
   },
 );
 
-const burstColor = {
-  critical: "border-critical-bg",
-  extreme: "border-extreme-ink",
-} as const satisfies Record<RollGrade, string>;
-
 const sparkleColor = {
   critical: "text-critical-sparkle",
   extreme: "text-extreme-ink",
@@ -37,19 +32,12 @@ interface GradedRollProps {
   typography: TextProps["typography"];
 }
 
-// 페이지를 열자마자 칩이 흐릿하게 커지며 들어오고, 테두리 물결이 한 번 퍼진다. 대성공은 빛줄기가 주기적으로 지나간다.
+// 페이지를 열자마자 칩이 흐릿하게 커지며 들어온다. 대성공은 빛줄기가 주기적으로 지나간다.
 export function GradedRoll({ value, grade, typography }: GradedRollProps) {
   const critical = grade === ROLL_GRADE.critical;
 
   return (
     <span className={cn("relative inline-flex flex-none animate-roll-in", critical && "ml-125")}>
-      <span
-        aria-hidden
-        className={cn(
-          "absolute inset-0 animate-roll-burst rounded-400 border",
-          burstColor[grade],
-        )}
-      />
       <span className={pill({ grade })}>
         {critical && (
           <span

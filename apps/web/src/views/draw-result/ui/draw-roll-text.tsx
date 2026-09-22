@@ -1,18 +1,32 @@
-import { Text, type TextProps } from "@trpg/ui";
+import { Text } from "@trpg/ui";
 
+import { DRAW_ROW_VARIANT, type DrawRowVariant } from "../model/draw-row-variant";
 import { toRollGrade } from "../model/roll-grade";
 import { GradedRoll } from "./graded-roll";
 import { SlotNumber } from "./slot-number";
 
 interface DrawRollTextProps {
-  value: number;
-  typography: TextProps["typography"];
-  foreground: TextProps["foreground"];
+  // 직접 확정해 추첨에 들어가지 않은 사람은 값이 없다.
+  roll: number | null;
+  variant: DrawRowVariant;
+  isMe: boolean;
 }
 
-export function DrawRollText({ value, typography, foreground }: DrawRollTextProps) {
-  const grade = toRollGrade(value);
-  if (grade) return <GradedRoll value={value} grade={grade} typography={typography} />;
+export function DrawRollText({ roll, variant, isMe }: DrawRollTextProps) {
+  if (roll === null) {
+    return (
+      <Text typography="body4" foreground="hint">
+        직접 확정
+      </Text>
+    );
+  }
+
+  const highlight = variant === DRAW_ROW_VARIANT.highlight;
+  const large = highlight || (variant === DRAW_ROW_VARIANT.compact && isMe);
+  const typography = large ? "heading2" : "heading3";
+
+  const grade = toRollGrade(roll);
+  if (grade) return <GradedRoll value={roll} grade={grade} typography={typography} />;
 
   return (
     <Text
@@ -21,10 +35,10 @@ export function DrawRollText({ value, typography, foreground }: DrawRollTextProp
       render={<p />}
       typography={typography}
       weight="extrabold"
-      foreground={foreground}
+      foreground={highlight || isMe ? "normal" : "muted"}
       className="min-w-8 text-right tracking-tight"
     >
-      <SlotNumber value={value} />
+      <SlotNumber value={roll} />
     </Text>
   );
 }

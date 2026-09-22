@@ -72,7 +72,7 @@ html {
   }
 }
 
-/* 추첨 대성공·극단적 성공. 페이지를 열면 칩이 흐릿하게 커지며 들어오고 물결이 퍼진다.
+/* 추첨 대성공·극단적 성공. 페이지를 열면 칩이 흐릿하게 커지며 들어온다.
    대성공은 빛이 번지고 빛줄기가 지나가며, 별이 반짝인다. */
 @keyframes roll-in {
   0% {
@@ -89,20 +89,6 @@ html {
     opacity: 1;
     transform: none;
     filter: none;
-  }
-}
-
-@keyframes roll-burst {
-  0% {
-    opacity: 0;
-    transform: scale(1);
-  }
-  10% {
-    opacity: 0.45;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.35, 1.6);
   }
 }
 
@@ -146,10 +132,6 @@ html {
   animation: roll-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-@utility animate-roll-burst {
-  animation: roll-burst 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 250ms both;
-}
-
 @utility animate-roll-sweep {
   animation: roll-sweep 3s ease-in-out 600ms infinite both;
 }
@@ -168,7 +150,6 @@ html {
   .animate-roll-twinkle {
     animation: none;
   }
-  .animate-roll-burst,
   .animate-roll-sweep {
     display: none;
   }
