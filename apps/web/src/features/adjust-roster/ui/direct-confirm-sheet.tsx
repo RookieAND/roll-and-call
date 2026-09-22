@@ -1,10 +1,10 @@
 "use client";
 
-import { Button, HStack, Text, VStack, cn } from "@roll-and-call/ui";
+import { Button, HStack, Text, VStack, cn, Sheet } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { Sheet, toast, useAction, useDebouncedValue } from "@/shared/ui";
+import { toast, useAction, useDebouncedValue } from "@/shared/ui";
 
 import { addParticipants } from "../api/add-participants";
 import type { Candidate } from "../model/candidate";
@@ -117,7 +117,8 @@ export function DirectConfirmSheet({
 
   return (
     <Sheet.Root open={open} onOpenChange={reset}>
-      <Sheet.Content className="max-h-[85dvh] overflow-y-auto px-0 pb-0">
+      <Sheet.Popup className="max-h-[85dvh] overflow-y-auto px-0 pb-0">
+        <Sheet.Handle />
         <VStack gap="150">
           <HStack align="baseline" gap="100" className="px-250">
             <Sheet.Title className="mb-0 flex-1 text-heading3 font-extrabold text-gray-900">
@@ -213,7 +214,7 @@ export function DirectConfirmSheet({
             </Button>
           </div>
         </VStack>
-      </Sheet.Content>
+      </Sheet.Popup>
     </Sheet.Root>
   );
 }

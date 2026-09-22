@@ -1,9 +1,9 @@
 "use client";
 
-import { Text } from "@roll-and-call/ui";
+import { Text, Sheet } from "@roll-and-call/ui";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { Sheet, useAction } from "@/shared/ui";
+import { useAction } from "@/shared/ui";
 
 import { demoteParticipant } from "../api/demote-participant";
 import type { MemberSummary } from "../model/member-summary";

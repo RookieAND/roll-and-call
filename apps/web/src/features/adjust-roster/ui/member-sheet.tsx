@@ -1,8 +1,6 @@
 "use client";
 
-import { VStack } from "@roll-and-call/ui";
-
-import { Sheet } from "@/shared/ui";
+import { VStack, Sheet } from "@roll-and-call/ui";
 
 import type { MemberSummary } from "../model/member-summary";
 import { DemoteMemberItem } from "./demote-member-item";
@@ -36,7 +34,8 @@ export function MemberSheet({
 
   return (
     <Sheet.Root open={member !== null} onOpenChange={(open) => !open && onClose()}>
-      <Sheet.Content>
+      <Sheet.Popup>
+        <Sheet.Handle />
         {member && (
           <VStack gap={0}>
             <MemberSheetHeader
@@ -69,7 +68,7 @@ export function MemberSheet({
             />
           </VStack>
         )}
-      </Sheet.Content>
+      </Sheet.Popup>
     </Sheet.Root>
   );
 }

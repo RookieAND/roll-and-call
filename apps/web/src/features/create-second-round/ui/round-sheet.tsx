@@ -1,10 +1,10 @@
 "use client";
 
-import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Text, VStack, Sheet } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { toKstDateInput } from "@/shared/lib";
-import { ConfirmDialog, Sheet, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { createSecondRound } from "../api/create-second-round";
 import { DAY_MS } from "../model/second-round";
@@ -65,7 +65,8 @@ export function RoundSheet({
   return (
     <>
       <Sheet.Root open={open} onOpenChange={requestOpenChange}>
-        <Sheet.Content>
+        <Sheet.Popup>
+          <Sheet.Handle />
           <VStack gap="200">
             <VStack gap="050">
               <Text typography="heading3">다음 회차 만들기</Text>
@@ -99,7 +100,7 @@ export function RoundSheet({
               </Button>
             </HStack>
           </VStack>
-        </Sheet.Content>
+        </Sheet.Popup>
       </Sheet.Root>
 
       <ConfirmDialog

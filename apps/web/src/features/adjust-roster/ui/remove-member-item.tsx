@@ -1,8 +1,9 @@
 "use client";
 
+import { Sheet } from "@roll-and-call/ui";
 import { useState } from "react";
 
-import { ConfirmDialog, Sheet, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { removeParticipant } from "../api/remove-participant";
 import type { MemberSummary } from "../model/member-summary";

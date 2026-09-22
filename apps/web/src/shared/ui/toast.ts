@@ -1,14 +1,16 @@
-import { toast as sonnerToast } from "sonner";
+import { toast as uiToast } from "@roll-and-call/ui";
 
+const DEFAULT_DURATION_MS = 2500;
 const UNDO_DURATION_MS = 6000;
 
 export const toast = {
   success: (message: string, options?: { undo?: () => void }) =>
-    sonnerToast.success(
+    uiToast.success(
       message,
       options?.undo
         ? { duration: UNDO_DURATION_MS, action: { label: "되돌리기", onClick: options.undo } }
-        : undefined,
+        : { duration: DEFAULT_DURATION_MS },
     ),
-  error: (message: string) => sonnerToast.error(message, { id: message }),
+  error: (message: string) =>
+    uiToast.danger(message, { id: message, duration: DEFAULT_DURATION_MS }),
 };

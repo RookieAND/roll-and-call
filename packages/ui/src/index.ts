@@ -28,3 +28,19 @@ export { Calendar, type CalendarProps } from "./calendar";
 export { Tooltip, type TooltipProps } from "./tooltip";
 export { cn } from "./cn";
 export { gapMap, type GapToken } from "./tokens";
+export {
+  Sheet,
+  type SheetRootProps,
+  type SheetPopupProps,
+  type SheetSide,
+  type SheetSize,
+} from "./sheet";
+export {
+  FloatingBar,
+  type FloatingBarRootProps,
+  type FloatingBarContentProps,
+} from "./floating-bar";
+export { Toast, type ToastViewportProps } from "./toast-parts";
+export { toast } from "./toast";
+export type { ToastOptions } from "./toast-options";
+export type { StateClassName, StateStyle, StateProps } from "./state-props";

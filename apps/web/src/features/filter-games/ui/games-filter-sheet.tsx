@@ -1,12 +1,11 @@
 "use client";
 
-import { Button } from "@roll-and-call/ui";
+import { Button, Sheet } from "@roll-and-call/ui";
 import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { GAME_SORTS, type GameSort, type GamesFilter, parseGameSort } from "@/shared/api";
-import { Sheet } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
@@ -41,7 +40,8 @@ export function GamesFilterSheet({ filter }: GamesFilterSheetProps) {
       </Button>
 
       <Sheet.Root open={open} onOpenChange={setOpen}>
-        <Sheet.Content>
+        <Sheet.Popup>
+          <Sheet.Handle />
           <Sheet.Title className="mb-100 text-base font-bold text-gray-900">정렬</Sheet.Title>
           {/* ponytail: single-select list w/ dividers + check — not a Chip/segment look, hand-rolled rows */}
           <div role="radiogroup" aria-label="정렬" className="divide-y divide-gray-100">
@@ -52,7 +52,7 @@ export function GamesFilterSheet({ filter }: GamesFilterSheetProps) {
               );
             })}
           </div>
-        </Sheet.Content>
+        </Sheet.Popup>
       </Sheet.Root>
     </>
   );

@@ -1,6 +1,4 @@
-import { Text } from "@roll-and-call/ui";
-
-import { Sheet } from "@/shared/ui";
+import { Text, Sheet } from "@roll-and-call/ui";
 
 import { RosterGmGroup, type RosterSheetGm } from "./roster-gm-group";
 import { RosterGroup } from "./roster-group";
@@ -25,7 +23,8 @@ export function LotteryRosterSheet({
 }: LotteryRosterSheetProps) {
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
-      <Sheet.Content>
+      <Sheet.Popup>
+        <Sheet.Handle />
         <Sheet.Title className="mb-150">명단</Sheet.Title>
 
         <div className="max-h-[60vh] divide-y divide-gray-200 overflow-y-auto [&>*:not(:last-child)]:pb-150 [&>*+*]:pt-150">
@@ -39,7 +38,7 @@ export function LotteryRosterSheet({
             추첨 전에는 순번이 없습니다. 신청 순서로만 보여줍니다.
           </Text>
         </div>
-      </Sheet.Content>
+      </Sheet.Popup>
     </Sheet.Root>
   );
 }

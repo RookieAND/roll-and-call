@@ -1,4 +1,4 @@
-import { VStack } from "@roll-and-call/ui";
+import { VStack, Toast } from "@roll-and-call/ui";
 import type { Metadata } from "next";
 import Script from "next/script";
 
@@ -6,7 +6,7 @@ import { OG_IMAGE } from "@/shared/lib";
 import { siteOrigin } from "@/shared/server";
 
 import "./globals.css";
-import { NavigationTracker, Toaster } from "@/shared/ui";
+import { NavigationTracker } from "@/shared/ui";
 import { hasSessionTodo } from "@/widgets/session-list";
 
 import { AppBottomNav } from "./app-bottom-nav";
@@ -57,7 +57,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <AppBottomNav loadHasTodo={hasSessionTodo} />
           </VStack>
         </QueryProvider>
-        <Toaster />
+        <Toast.Viewport offset={76} />
       </body>
     </html>
   );

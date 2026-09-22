@@ -1,6 +1,6 @@
-import { Text } from "@roll-and-call/ui";
+import { Text, Sheet } from "@roll-and-call/ui";
 
-import { ExpandableRows, Sheet } from "@/shared/ui";
+import { ExpandableRows } from "@/shared/ui";
 
 import type { DetailRosterMember } from "./roster-member-row";
 import { RosterSheetRow } from "./roster-sheet-row";
@@ -20,7 +20,8 @@ export function WaitingRosterSheet({
 }: WaitingRosterSheetProps) {
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
-      <Sheet.Content>
+      <Sheet.Popup>
+        <Sheet.Handle />
         <Sheet.Title className="mb-150">
           대기자 명단
           <Text
@@ -45,7 +46,7 @@ export function WaitingRosterSheet({
             ))}
           </ExpandableRows>
         </div>
-      </Sheet.Content>
+      </Sheet.Popup>
     </Sheet.Root>
   );
 }

@@ -1,4 +1,4 @@
-import { Sheet } from "@/shared/ui";
+import { Sheet } from "@roll-and-call/ui";
 
 import { RosterGmGroup, type RosterSheetGm } from "./roster-gm-group";
 import { RosterGroup } from "./roster-group";
@@ -22,7 +22,8 @@ export function ConfirmedRosterSheet({
 }: ConfirmedRosterSheetProps) {
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
-      <Sheet.Content>
+      <Sheet.Popup>
+        <Sheet.Handle />
         <Sheet.Title className="mb-150">참여자 명단</Sheet.Title>
 
         <div className="max-h-[60vh] divide-y divide-gray-200 overflow-y-auto [&>*:not(:last-child)]:pb-150 [&>*+*]:pt-150">
@@ -33,7 +34,7 @@ export function ConfirmedRosterSheet({
             ))}
           </RosterGroup>
         </div>
-      </Sheet.Content>
+      </Sheet.Popup>
     </Sheet.Root>
   );
 }

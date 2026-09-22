@@ -1,6 +1,8 @@
 "use client";
 
-import { BoundaryFallback, Toaster } from "@/shared/ui";
+import { Toast } from "@roll-and-call/ui";
+
+import { BoundaryFallback } from "@/shared/ui";
 
 import "./globals.css";
 
@@ -15,7 +17,7 @@ export default function GlobalError({
     <html lang="ko">
       <body className="bg-canvas font-sans text-gray-900 antialiased">
         <BoundaryFallback error={error} retry={retry} />
-        <Toaster />
+        <Toast.Viewport offset={76} />
       </body>
     </html>
   );
