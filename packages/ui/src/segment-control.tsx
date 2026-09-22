@@ -7,7 +7,7 @@ import { resolveStateProp } from "./resolve-state-prop";
 import type { StateProps } from "./state-props";
 
 const segment = cva(
-  "rounded-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200",
+  "rounded-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
   {
     variants: {
       // 아이콘은 정사각 터치 영역, 글자는 가로로 눕는 칸이라 치수가 다르다.

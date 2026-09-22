@@ -24,7 +24,7 @@ export function ToastViewport({ position = "bottom", max = 3, offset = 16 }: Toa
       offset={edge}
       mobileOffset={edge}
       icons={{
-        success: <CircleCheck size={16} className="text-success-700" aria-hidden />,
+        success: <CircleCheck size={16} className="text-success-600" aria-hidden />,
         error: <CircleAlert size={16} aria-hidden />,
       }}
       toastOptions={{
@@ -32,13 +32,13 @@ export function ToastViewport({ position = "bottom", max = 3, offset = 16 }: Toa
         classNames: {
           // inset-x-0 + mx-auto centers the absolute toast without touching transform (keeps sonner's animation)
           toast:
-            "inset-x-0 mx-auto flex w-fit items-center justify-center gap-100 rounded-300 px-200 py-125 text-sm font-semibold text-white shadow-lg",
+            "inset-x-0 mx-auto flex w-fit items-center justify-center gap-100 rounded-300 px-200 py-125 text-sm font-semibold text-inverse shadow-lg",
           default: "bg-toast",
           success: "bg-toast",
           info: "bg-toast",
           error: "bg-danger-solid",
           actionButton: "ml-100 shrink-0 font-bold underline underline-offset-2",
-          closeButton: "ml-100 shrink-0 rounded-full p-050 text-white/80 hover:text-white",
+          closeButton: "ml-100 shrink-0 rounded-full p-050 opacity-80 hover:opacity-100",
         },
       }}
     />

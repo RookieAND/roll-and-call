@@ -71,17 +71,17 @@
    static이라 앱이 var(--color-*)로 읽는 변수도 계속 나간다. */
 @theme inline static {
   --color-primary-50: var(--rc-color-bg-primary-weak);
-  --color-primary-100: var(--rc-legacy-primary-100);
-  --color-primary-200: var(--rc-legacy-primary-200);
+  --color-primary-100: var(--rc-color-bg-primary-weak);
+  --color-primary-200: var(--rc-color-border-primary);
   --color-primary-300: var(--rc-color-indigo-300);
-  --color-primary-400: #818cf8;
-  --color-primary-500: #6366f1;
+  --color-primary-400: var(--rc-color-indigo-400);
+  --color-primary-500: var(--rc-color-indigo-450);
   --color-primary-600: var(--rc-color-bg-primary);
   --color-primary-700: var(--rc-color-bg-primary-hover);
   --color-primary-800: var(--rc-color-indigo-700);
-  --color-primary-900: #312e81;
+  --color-primary-900: var(--rc-color-indigo-800);
 
-  --color-success-50: var(--rc-legacy-success-50);
+  --color-success-50: var(--rc-color-bg-success-weak);
   --color-success-100: var(--rc-color-bg-success-weak);
   --color-success-200: var(--rc-color-border-success);
   --color-success-600: var(--rc-color-green-500);
@@ -109,12 +109,10 @@
   --color-danger-100: var(--rc-legacy-danger-100);
   --color-danger-200: var(--rc-color-border-danger);
   --color-danger-300: var(--rc-legacy-danger-300);
-  --color-danger-400: var(--rc-legacy-danger-400);
+  --color-danger-400: var(--rc-color-border-danger);
   --color-danger-600: var(--rc-color-fg-danger);
   --color-danger-solid: var(--rc-color-bg-danger);
-  --color-danger-solid-hover: #a83232;
   --color-success-solid: var(--rc-color-bg-success);
-  --color-success-solid-hover: var(--rc-color-green-700);
 
   --color-warning-50: var(--rc-color-bg-warning-weak);
   --color-warning-600: var(--rc-color-fg-warning);
@@ -146,6 +144,8 @@
 
   --color-on-primary: var(--rc-color-fg-on-primary);
   --color-inverse: var(--rc-color-fg-inverse);
+  --color-focus: var(--rc-color-border-primary-strong);
+  --color-gm: var(--rc-color-fg-gm);
 }
 
 /* 프리미티브·크기·모션. 테마와 무관하게 값이 고정된다. 화면 코드는 프리미티브를 직접 읽지 않는다. */
@@ -310,12 +310,12 @@
 }
 
 /* 역할 토큰 — 라이트. 테마 스위치가 갈아끼우는 유일한 계층이다.
-   hex로 적힌 자리는 문서 값과 아직 다른 현행 값이다(PR 2에서 문서 값으로 맞춘다).
-   --rc-legacy-*는 역할이 정해지지 않은 옛 램프 단계로, 역시 PR 2에서 지운다. */
+   --rc-legacy-*는 역할 토큰이 아직 없는 옛 숫자 램프 유틸리티(text-gray-700 등)의 값이다.
+   값은 문서 프리미티브에서 가장 가까운 단계를 쓰고, 사용처가 역할 유틸리티로 옮겨 가면 지운다. */
 :root,
 [data-theme="light"] {
   --rc-color-bg-canvas-base: var(--rc-color-gray-000);
-  --rc-color-bg-canvas-sunken: #e9e9ee;
+  --rc-color-bg-canvas-sunken: var(--rc-color-gray-040);
   --rc-color-bg-canvas-raised: var(--rc-color-gray-025);
   --rc-color-bg-canvas-dim: rgb(23 23 28 / 0.35);
   --rc-color-bg-canvas-overlay: var(--rc-color-gray-000);
@@ -334,7 +334,7 @@
   --rc-color-bg-discord: var(--rc-color-discord-500);
   --rc-color-bg-discord-hover: var(--rc-color-discord-600);
   --rc-color-bg-spark: var(--rc-color-amber-300);
-  --rc-color-bg-toast: #23232b;
+  --rc-color-bg-toast: var(--rc-color-gray-900);
 
   --rc-color-fg-normal: var(--rc-color-gray-975);
   --rc-color-fg-muted: var(--rc-color-gray-600);
@@ -385,17 +385,13 @@
   --rc-color-data-gray-ink: #5f5f6b;
 
   --rc-legacy-gray-400: var(--rc-color-gray-300);
-  --rc-legacy-gray-500: #8a8a95;
+  --rc-legacy-gray-500: var(--rc-color-gray-400);
   --rc-legacy-gray-700: var(--rc-color-gray-800);
   --rc-legacy-gray-800: var(--rc-color-gray-900);
-  --rc-legacy-primary-100: #e0e7ff;
-  --rc-legacy-primary-200: var(--rc-color-indigo-250);
   --rc-legacy-primary-ink: var(--rc-color-indigo-500);
-  --rc-legacy-tinted-bg-hover: #eeedfc;
-  --rc-legacy-success-50: #f1faf5;
-  --rc-legacy-danger-100: #fbebeb;
+  --rc-legacy-tinted-bg-hover: var(--rc-color-indigo-100);
+  --rc-legacy-danger-100: var(--rc-color-red-100);
   --rc-legacy-danger-300: var(--rc-color-red-200);
-  --rc-legacy-danger-400: #e5a0a0;
   --rc-legacy-rank-gold: var(--rc-color-gold-700);
   --rc-legacy-rank-bronze: #9a5b2e;
   --rc-legacy-critical-bg: var(--rc-color-indigo-500);
@@ -421,19 +417,19 @@
   --rc-color-bg-primary: var(--rc-color-indigo-500);
   --rc-color-bg-primary-hover: var(--rc-color-indigo-600);
   --rc-color-bg-primary-weak: var(--rc-color-indigo-900);
-  --rc-color-bg-primary-weakest: var(--rc-color-indigo-900);
-  --rc-color-bg-success: var(--rc-color-green-600);
+  --rc-color-bg-primary-weakest: var(--rc-color-indigo-950);
+  --rc-color-bg-success: var(--rc-color-green-500);
   --rc-color-bg-success-weak: var(--rc-color-green-900);
-  --rc-color-bg-warning-weak: var(--rc-color-amber-950);
+  --rc-color-bg-warning-weak: var(--rc-color-amber-900);
   --rc-color-bg-notice-weak: var(--rc-color-amber-950);
-  --rc-color-bg-danger: var(--rc-color-red-500);
+  --rc-color-bg-danger: var(--rc-color-red-300);
   --rc-color-bg-danger-weak: var(--rc-color-red-950);
   --rc-color-bg-discord: var(--rc-color-discord-500);
   --rc-color-bg-discord-hover: var(--rc-color-discord-600);
   --rc-color-bg-spark: var(--rc-color-amber-300);
-  --rc-color-bg-toast: var(--rc-color-gray-800);
+  --rc-color-bg-toast: var(--rc-color-gray-050);
 
-  --rc-color-fg-normal: #f2f2f5;
+  --rc-color-fg-normal: var(--rc-color-gray-050);
   --rc-color-fg-muted: var(--rc-color-gray-300);
   --rc-color-fg-hint: var(--rc-color-gray-400);
   --rc-color-fg-primary: var(--rc-color-indigo-250);
@@ -441,7 +437,7 @@
   --rc-color-fg-success: var(--rc-color-green-300);
   --rc-color-fg-success-strong: var(--rc-color-green-200);
   --rc-color-fg-warning: var(--rc-color-amber-300);
-  --rc-color-fg-notice: var(--rc-color-amber-300);
+  --rc-color-fg-notice: var(--rc-color-amber-250);
   --rc-color-fg-danger: var(--rc-color-red-300);
   --rc-color-fg-on-primary: var(--rc-color-gray-000);
   --rc-color-fg-inverse: var(--rc-color-gray-975);
@@ -451,7 +447,7 @@
   --rc-color-border-subtle: var(--rc-color-gray-850);
   --rc-color-border-normal: var(--rc-color-gray-800);
   --rc-color-border-strong: var(--rc-color-gray-700);
-  --rc-color-border-primary: #3a3a6b;
+  --rc-color-border-primary: #3a3a6b; /* 문서 표에만 있고 램프에 없는 값 */
   --rc-color-border-primary-strong: var(--rc-color-indigo-500);
   --rc-color-border-success: var(--rc-color-green-800);
   --rc-color-border-danger: var(--rc-color-red-900);
@@ -480,18 +476,14 @@
   --rc-color-data-gray-bg: #2e2e38;
   --rc-color-data-gray-ink: #b4b4be;
 
-  --rc-legacy-gray-400: #6a6a76;
-  --rc-legacy-gray-500: #9a9aa5;
-  --rc-legacy-gray-700: #cfcfd6;
-  --rc-legacy-gray-800: #e6e6ea;
-  --rc-legacy-primary-100: #26264d;
-  --rc-legacy-primary-200: #313166;
+  --rc-legacy-gray-400: var(--rc-color-gray-700);
+  --rc-legacy-gray-500: var(--rc-color-gray-400);
+  --rc-legacy-gray-700: var(--rc-color-gray-250);
+  --rc-legacy-gray-800: var(--rc-color-gray-100);
   --rc-legacy-primary-ink: var(--rc-color-indigo-300);
-  --rc-legacy-tinted-bg-hover: #2f2f57;
-  --rc-legacy-success-50: var(--rc-color-green-950);
-  --rc-legacy-danger-100: #3a2222;
-  --rc-legacy-danger-300: #5f3838;
-  --rc-legacy-danger-400: #8a5252;
+  --rc-legacy-tinted-bg-hover: var(--rc-color-indigo-900);
+  --rc-legacy-danger-100: var(--rc-color-red-900);
+  --rc-legacy-danger-300: var(--rc-color-red-900);
   --rc-legacy-rank-gold: var(--rc-color-gold-350);
   --rc-legacy-rank-bronze: #c9926a;
   --rc-legacy-critical-bg: var(--rc-color-amber-300);

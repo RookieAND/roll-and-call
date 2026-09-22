@@ -2,7 +2,7 @@ import { cva } from "class-variance-authority";
 
 // variant는 모양, colorPalette는 색이다. 두 축을 곱해 한 벌씩 정한다.
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-100 rounded-500 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-100 rounded-500 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: { solid: "", outline: "border", tinted: "border", ghost: "" },
@@ -14,7 +14,7 @@ export const buttonVariants = cva(
       },
     },
     compoundVariants: [
-      // 흰 글씨가 얹히는 면은 테마와 무관한 solid 토큰을 쓴다.
+      // success·danger 면은 다크에서 밝아지므로 글씨는 inverse가 맡는다.
       {
         variant: "solid",
         colorPalette: "primary",
@@ -23,12 +23,12 @@ export const buttonVariants = cva(
       {
         variant: "solid",
         colorPalette: "success",
-        className: "bg-success-solid text-white hover:bg-success-solid-hover",
+        className: "bg-success-solid text-inverse hover:opacity-90",
       },
       {
         variant: "solid",
         colorPalette: "danger",
-        className: "bg-danger-solid text-white hover:bg-danger-solid-hover",
+        className: "bg-danger-solid text-inverse hover:opacity-90",
       },
       {
         variant: "solid",

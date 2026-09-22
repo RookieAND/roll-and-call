@@ -6,7 +6,7 @@ import { resolveStateProp } from "./resolve-state-prop";
 import type { StateComponentProps } from "./state-props";
 
 const track = cva(
-  "relative inline-flex h-[26px] w-11 shrink-0 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:pointer-events-none disabled:opacity-50",
+  "relative inline-flex h-[26px] w-11 shrink-0 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:pointer-events-none disabled:opacity-50",
   {
     variants: { checked: { true: "bg-primary-600", false: "bg-gray-300" } },
   },

@@ -8,8 +8,8 @@ const ROOTS = [
   resolve(new URL(".", import.meta.url).pathname, "../../../packages/ui/src"),
   resolve(new URL(".", import.meta.url).pathname, "../../../packages/tiptap/src"),
 ];
-// 토큰 정의 자체와, 테마와 무관한 고정 색(사람별 아바타 팔레트)은 예외.
-const ALLOW = [/styles\.css$/, /packages\/ui\/src\/avatar(-color\.ts|\.tsx)$/];
+// 토큰 정의 파일만 예외다.
+const ALLOW = [/styles\.css$/];
 // 스케일을 정의하는 파일은 값을 직접 적어야 한다.
 const SCALE_ALLOW = [/packages\/ui\/src\/text\.tsx$/, /packages\/ui\/src\/tokens\.ts$/];
 const HEX = /#[0-9A-Fa-f]{6}\b/g;

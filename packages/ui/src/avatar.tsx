@@ -20,7 +20,9 @@ export interface AvatarProps extends AvatarState {
 export function Avatar({ src, name, size = "md", className }: AvatarProps) {
   const trimmed = (name ?? "").trim();
   const initial = trimmed.charAt(0) || "?";
-  const [background, foreground] = trimmed ? avatarColorFor(trimmed) : ["#EAEAEF", "#8A8A95"];
+  const [background, foreground] = trimmed
+    ? avatarColorFor(trimmed)
+    : ["var(--rc-color-data-gray-bg)", "var(--rc-color-data-gray-ink)"];
   const face = (
     <span
       data-slot="avatar"

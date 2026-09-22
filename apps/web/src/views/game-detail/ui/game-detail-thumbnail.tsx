@@ -25,7 +25,7 @@ export function GameDetailThumbnail({ url, spoiler }: GameDetailThumbnailProps) 
       type="button"
       onClick={() => setRevealed(true)}
       aria-label="스포일러 썸네일 보기"
-      className="block w-full focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:outline-none"
+      className="block w-full focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none"
     >
       <GameThumbnail
         url={url}

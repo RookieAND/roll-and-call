@@ -36,7 +36,7 @@ export function GameImageGallery({ images }: GameImageGalleryProps) {
             type="button"
             onClick={() => setOpenIndex(index)}
             aria-label={`첨부 이미지 ${index + 1} 크게 보기`}
-            className="h-28 w-28 shrink-0 overflow-hidden rounded-500 border border-gray-200 focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:outline-none"
+            className="h-28 w-28 shrink-0 overflow-hidden rounded-500 border border-gray-200 focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none"
           >
             <img src={url} alt="" loading="lazy" className="h-full w-full object-cover" />
           </button>
