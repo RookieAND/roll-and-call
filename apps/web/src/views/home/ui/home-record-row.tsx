@@ -1,5 +1,7 @@
-import { Avatar, cn, HStack, Text } from "@trpg/ui";
+import { cn, HStack, Text } from "@trpg/ui";
 import Link from "next/link";
+
+import { ProfileRow } from "@/entities/profile";
 
 import type { RecordRow } from "../model/rank-people";
 
@@ -39,10 +41,7 @@ export function HomeRecordRow({ row, position }: HomeRecordRowProps) {
       className="flex items-center gap-125 px-150 py-125 transition-colors hover:bg-gray-50"
     >
       {rankNumber}
-      <Avatar src={row.person.avatarUrl} name={row.person.username} size="sm" />
-      <Text weight="bold" typography="body4" truncate className="min-w-0 flex-1">
-        {row.person.username}
-      </Text>
+      <ProfileRow size="sm" name={row.person.username} avatarUrl={row.person.avatarUrl} />
       <Text typography="body4" weight="extrabold" numeric className="flex-none">
         {row.count}
       </Text>

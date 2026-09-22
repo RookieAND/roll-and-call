@@ -2,14 +2,14 @@
 
 import { Callout, Chip, Field, Grid, VStack } from "@trpg/ui";
 
-import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
+import {
+  RECRUIT_METHOD,
+  RECRUIT_METHODS,
+  recruitMethodLabel,
+  type RecruitMethod,
+} from "@/entities/game";
 
 import { LockedModeNotice } from "./locked-mode-notice";
-
-const OPTIONS = [
-  { value: RECRUIT_METHOD.firstCome, label: "선착순" },
-  { value: RECRUIT_METHOD.lottery, label: "추첨" },
-] as const;
 
 const HINT = {
   [RECRUIT_METHOD.firstCome]:
@@ -28,15 +28,15 @@ export function RecruitMethodField({ value, onChange, locked = false }: RecruitM
     <VStack gap="100">
       <Field label="모집 방식" required={!locked}>
         <Grid cols={2} gap="100">
-          {OPTIONS.map((option) => (
+          {RECRUIT_METHODS.map((method) => (
             <Chip
-              key={option.value}
+              key={method}
               shape="block"
-              selected={value === option.value}
-              disabled={locked && value !== option.value}
-              onClick={() => onChange(option.value)}
+              selected={value === method}
+              disabled={locked && value !== method}
+              onClick={() => onChange(method)}
             >
-              {option.label}
+              {recruitMethodLabel(method)}
             </Chip>
           ))}
         </Grid>

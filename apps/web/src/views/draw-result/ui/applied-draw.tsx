@@ -1,9 +1,11 @@
 import { Button, VStack } from "@trpg/ui";
+import { Check } from "lucide-react";
 import Link from "next/link";
+
+import { SummaryLine } from "@/shared/ui";
 
 import { DRAW_ROW_VARIANT } from "../model/draw-row-variant";
 import type { DrawOutcome } from "../model/to-draw-outcome";
-import { DrawCompletedRow } from "./draw-completed-row";
 import { DrawQueue } from "./draw-queue";
 import { DrawSummary } from "./draw-summary";
 
@@ -26,7 +28,7 @@ export function AppliedDraw({ gameId, title, outcome, drawnAtLabel }: AppliedDra
           resultCount={outcome.confirmed.length}
           applied
         />
-        <DrawCompletedRow drawnAtLabel={drawnAtLabel} />
+        <SummaryLine icon={Check} tone="success" label="추첨 완료" value={drawnAtLabel} />
       </VStack>
       <DrawQueue
         label="확정"

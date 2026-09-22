@@ -19,6 +19,7 @@ export { ErrorScreen } from "./error-screen";
 export { Sheet } from "./sheet";
 export { TagInput, type TagInputProps } from "./tag-input";
 export { StatusNotice } from "./status-notice";
+export { SummaryLine } from "./summary-line";
 export { ThemeSetting } from "./theme-setting";
 export { Toaster } from "./toaster";
 export { toast } from "./toast";

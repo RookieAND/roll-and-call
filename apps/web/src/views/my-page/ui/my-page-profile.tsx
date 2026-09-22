@@ -1,7 +1,12 @@
-import { Avatar, Button, HStack, Text, VStack } from "@trpg/ui";
+import { Button, HStack, VStack } from "@trpg/ui";
 import Link from "next/link";
 
-import { AvailabilityRows, KeywordChips, type AvailabilityInterval } from "@/entities/profile";
+import {
+  AvailabilityRows,
+  KeywordChips,
+  ProfileRow,
+  type AvailabilityInterval,
+} from "@/entities/profile";
 
 import { MyPageBlockLabel } from "./my-page-block-label";
 
@@ -27,20 +32,14 @@ export function MyPageProfile({
   return (
     <VStack gap="175" render={<section />}>
       <HStack align="center" gap="175">
-        <Avatar src={avatarUrl} name={name} size="2xl" />
-        <div className="min-w-0 flex-1">
-          <Text
-            typography="heading3"
-            weight="extrabold"
-            render={<h1 />}
-            className="tracking-[-0.015em]"
-          >
-            {name}
-          </Text>
-          <Text truncate typography="body3" foreground={bioForeground} className="mt-050">
-            {bioText}
-          </Text>
-        </div>
+        <ProfileRow
+          size="xl"
+          name={name}
+          avatarUrl={avatarUrl}
+          nameRender={<h1 />}
+          subline={bioText}
+          sublineForeground={bioForeground}
+        />
         <Button
           asChild
           variant="outline"

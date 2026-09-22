@@ -1,9 +1,10 @@
 "use client";
 
-import { Avatar, Button, HStack, Text, Textarea } from "@trpg/ui";
+import { Button, HStack, Text, Textarea } from "@trpg/ui";
 import { Lock } from "lucide-react";
 import { useState } from "react";
 
+import { ProfileRow } from "@/entities/profile";
 import { formatDate } from "@/shared/lib";
 import { AppBar, toast, useAction } from "@/shared/ui";
 
@@ -52,20 +53,19 @@ export function MemoForm({
         }
       />
 
-      <HStack align="center" gap="150" className="border-b border-gray-100 px-200 py-175">
-        <Avatar src={targetAvatarUrl} name={targetName} size="lg" />
-        <div className="min-w-0 flex-1">
-          <Text truncate typography="subtitle1">
-            {targetName}
-          </Text>
-          <HStack align="center" gap="075" className="mt-025">
-            <Lock size={12} className="flex-none text-hint" aria-hidden />
-            <Text typography="body4" foreground="hint">
-              나만 봅니다
-            </Text>
-          </HStack>
-        </div>
-      </HStack>
+      <ProfileRow
+        size="lg"
+        name={targetName}
+        avatarUrl={targetAvatarUrl}
+        subline={
+          <>
+            <Lock size={12} className="mr-050 inline align-[-1px]" aria-hidden />
+            나만 봅니다
+          </>
+        }
+        sublineForeground="hint"
+        className="flex-none border-b border-gray-100 px-200 py-175"
+      />
 
       <div className="p-200">
         <Textarea

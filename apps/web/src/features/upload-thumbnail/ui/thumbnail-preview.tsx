@@ -2,7 +2,7 @@
 
 import { Button, Card, HStack, Text } from "@trpg/ui";
 
-import { formatBytes } from "./format-bytes";
+import { formatBytes } from "../model/format-bytes";
 
 interface ThumbnailPreviewProps {
   url: string;

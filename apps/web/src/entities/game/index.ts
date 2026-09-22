@@ -18,16 +18,10 @@ export { hasUserJoined } from "./model/has-user-joined";
 export { canCoordinate } from "./model/can-coordinate";
 export { GameCard } from "./ui/game-card";
 export { GameThumbnail } from "./ui/game-thumbnail";
-export { GameRow } from "./ui/game-row";
 export { GameStatusBadge } from "./ui/game-status-badge";
-export { GameSeatCount } from "./ui/game-seat-count";
-export { GameCapacity } from "./ui/game-capacity";
 export { GameRuleChip } from "./ui/game-rule-chip";
-export { capacityParts, type CapacityPart } from "./model/capacity-parts";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
-export { GameScheduleRow } from "./ui/game-schedule-row";
 export { GameGmLabel } from "./ui/game-gm-label";
-export { ConfirmedSessionNotice } from "./ui/confirmed-session-notice";
 export {
   deriveSessionState,
   SESSION_ROLE,
@@ -40,3 +34,6 @@ export { sessionEndsAt } from "./model/session-end";
 export { isSessionEnded } from "./model/is-session-ended";
 export { isAttendanceDue } from "./model/is-attendance-due";
 export { ABSENCE_RECORD_MONTHS, absenceExpiresAt } from "./model/absence-expiry";
+export { recruitMethodLabel } from "./model/recruit-method-label";
+export { RecruitMethodBadge } from "./ui/recruit-method-badge";
+export { availabilityNote } from "./model/availability-note";

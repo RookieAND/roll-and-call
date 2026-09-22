@@ -2,7 +2,6 @@ import { Card, HStack, Text } from "@trpg/ui";
 
 import { formatDateTime } from "@/shared/lib";
 
-import { GmSlotMemberChip } from "./gm-slot-member-chip";
 import { SlotMemberChip } from "./slot-member-chip";
 
 interface PickedSlotCardProps {
@@ -31,13 +30,9 @@ export function PickedSlotCard({ slotIso, names, gmName }: PickedSlotCardProps) 
         </Text>
       </HStack>
       <HStack wrap gap="075" className="mt-125">
-        {names.map((name) =>
-          name === gmName ? (
-            <GmSlotMemberChip key={name} name={name} />
-          ) : (
-            <SlotMemberChip key={name} name={name} />
-          ),
-        )}
+        {names.map((name) => (
+          <SlotMemberChip key={name} name={name} isGm={name === gmName} />
+        ))}
       </HStack>
     </Card>
   );

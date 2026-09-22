@@ -47,7 +47,7 @@ export function ParticipantManager({
             <RosterHeader
               title={title}
               methodLabel={summary.methodLabel}
-              isLottery={summary.isLottery}
+              recruitMethod={summary.recruitMethod}
               maxPlayers={maxPlayers}
             />
             <RosterStats

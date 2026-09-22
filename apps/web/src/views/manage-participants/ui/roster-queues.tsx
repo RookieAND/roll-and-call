@@ -3,6 +3,7 @@
 import { HStack, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
+import { availabilityNote } from "@/entities/game";
 import { DirectConfirmButton, MemberSheet } from "@/features/adjust-roster";
 import { toKst } from "@/shared/lib";
 import { ExpandableRows } from "@/shared/ui";
@@ -11,7 +12,6 @@ import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stag
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { AttendanceBadge } from "./attendance-badge";
-import { availabilityNote } from "./availability-note";
 import { DrawResultLink } from "./draw-result-link";
 import { LockedRosterNote } from "./locked-roster-note";
 import { MemberMenuButton } from "./member-menu-button";

@@ -3,13 +3,7 @@ import { MoreVertical } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import {
-  ConfirmedSessionNotice,
-  hasUserJoined,
-  isDeadlinePassed,
-  isGameGm,
-  SCHEDULE_MODE,
-} from "@/entities/game";
+import { hasUserJoined, isDeadlinePassed, isGameGm, SCHEDULE_MODE } from "@/entities/game";
 import { availabilityPrefill } from "@/entities/profile";
 import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows, formatDate } from "@/shared/lib";
@@ -17,6 +11,7 @@ import { getCurrentUser, getGameById, getProfile } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
 import { getScheduleAvailability } from "../api/load-availability";
+import { ConfirmedSessionNotice } from "./confirmed-session-notice";
 import { ScheduleBody } from "./schedule-body";
 
 export async function GameScheduleView({ id }: { id: string }) {

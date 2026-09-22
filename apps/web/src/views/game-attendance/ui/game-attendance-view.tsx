@@ -1,15 +1,16 @@
 import { Container, VStack } from "@trpg/ui";
+import { Clock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
 import { isAttendanceDue, splitRoster } from "@/entities/game";
 import { LoginRequired } from "@/features/auth";
 import { AttendanceForm, ConfirmedAttendance, type Attendee } from "@/features/confirm-attendance";
+import { formatDateTime } from "@/shared/lib";
 import { getCurrentUser, getGameParticipants } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, SummaryLine } from "@/shared/ui";
 
 import { AttendanceGuide } from "./attendance-guide";
 import { AttendanceHeader } from "./attendance-header";
-import { AttendanceSessionTime } from "./attendance-session-time";
 
 // 왔는지 안 왔는지만 정하는 자리다. 명단을 고치는 일은 참여자 관리가 맡는다.
 export async function GameAttendanceView({ id }: { id: string }) {
@@ -45,7 +46,13 @@ export async function GameAttendanceView({ id }: { id: string }) {
 
   const sessionInfo = (
     <>
-      <AttendanceSessionTime confirmedAt={game.confirmedAt!} />
+      <SummaryLine
+        icon={Clock}
+        tone="muted"
+        label="세션 시각"
+        value={formatDateTime(game.confirmedAt!)}
+        badge="끝남"
+      />
       <AttendanceGuide attendanceConfirmedAt={game.attendanceConfirmedAt} />
     </>
   );

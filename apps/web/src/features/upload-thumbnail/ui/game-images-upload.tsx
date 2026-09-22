@@ -5,9 +5,9 @@ import { X } from "lucide-react";
 import { useRef, useState } from "react";
 
 import { uploadThumbnail } from "../api/upload-thumbnail";
-import { imageFileError } from "./image-file-error";
-import { uploadFailedMessage } from "./upload-failed-message";
-import { IMAGE_ACCEPT } from "./upload-rules";
+import { imageFileError } from "../model/image-file-error";
+import { uploadFailedMessage } from "../model/upload-failed-message";
+import { IMAGE_ACCEPT } from "../model/upload-rules";
 
 interface GameImagesUploadProps {
   value: string[];

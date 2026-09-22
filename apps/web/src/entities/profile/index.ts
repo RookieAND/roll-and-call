@@ -1,5 +1,4 @@
 export { profileDisplay } from "./model/display";
-export { ProfileIdentity } from "./ui/profile-identity";
 export {
   availabilityPrefill,
   AVAILABILITY_MAX_HOUR,
@@ -37,3 +36,5 @@ export { AvailabilityRows } from "./ui/availability-rows";
 export { BrandMark } from "./ui/brand-mark";
 export { KeywordChips } from "./ui/keyword-chips";
 export { ProfileLinks } from "./ui/profile-links";
+export { EMPTY_BIO_TEXT } from "./model/empty-bio";
+export { ProfileRow } from "./ui/profile-row";

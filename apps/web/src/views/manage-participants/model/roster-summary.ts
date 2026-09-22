@@ -1,4 +1,9 @@
-import { isDeadlinePassed, RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
+import {
+  isDeadlinePassed,
+  RECRUIT_METHOD,
+  recruitMethodLabel,
+  type RecruitMethod,
+} from "@/entities/game";
 import { ddayKst, formatDateTime } from "@/shared/lib";
 
 import type { ManagedMember } from "./managed-member";
@@ -38,7 +43,8 @@ export function summarizeRoster({
     awaitingApply: beforeDraw && rolled,
     // 1d100 도입 전에 뽑은 글은 굴린 값이 없어 결과 페이지가 없다.
     hasDrawResult: drawnAt !== null && rolled,
-    methodLabel: !isLottery ? "선착순" : drawnAt ? "추첨 완료" : "추첨",
+    recruitMethod,
+    methodLabel: isLottery && drawnAt ? "추첨 완료" : recruitMethodLabel(recruitMethod),
     isFull: confirmed.length >= maxPlayers,
     // 뽑기 전에는 추첨에 들어갈 사람만 신청으로 센다. 직접 확정한 사람은 확정 목록에 따로 선다.
     applicantCount: beforeDraw ? waiting.length : confirmed.length + waiting.length,

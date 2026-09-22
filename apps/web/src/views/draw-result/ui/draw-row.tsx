@@ -1,6 +1,8 @@
-import { Avatar, Badge, HStack, Text, VStack } from "@trpg/ui";
+import { Badge, HStack } from "@trpg/ui";
 import { cva } from "class-variance-authority";
 import Link from "next/link";
+
+import { EMPTY_BIO_TEXT, ProfileRow } from "@/entities/profile";
 
 import type { DrawEntry } from "../model/draw-entry";
 import { DRAW_ROW_VARIANT, type DrawRowVariant } from "../model/draw-row-variant";
@@ -20,12 +22,6 @@ const row = cva("border-t pl-175 transition-colors first:border-t-0 hover:bg-gra
   },
 });
 
-const avatarSize = {
-  highlight: "",
-  plain: "h-7 w-7",
-  compact: "h-[26px] w-[26px]",
-} as const satisfies Record<DrawRowVariant, string>;
-
 interface DrawRowProps {
   entry: DrawEntry;
   variant: DrawRowVariant;
@@ -33,8 +29,7 @@ interface DrawRowProps {
 }
 
 export function DrawRow({ entry, variant, isMe }: DrawRowProps) {
-  const highlight = variant === DRAW_ROW_VARIANT.highlight;
-  const strong = highlight || isMe;
+  const profileSize = variant === DRAW_ROW_VARIANT.highlight ? "md" : "sm";
 
   return (
     <HStack
@@ -43,25 +38,13 @@ export function DrawRow({ entry, variant, isMe }: DrawRowProps) {
       render={<Link href={`/u/${entry.userId}`} />}
       className={row({ variant, isMe, graded: toRollGrade(entry.roll) !== null })}
     >
-      <Avatar
-        src={entry.avatarUrl}
+      <ProfileRow
+        size={profileSize}
         name={entry.username}
-        size={highlight ? "md" : "sm"}
-        className={avatarSize[variant]}
+        avatarUrl={entry.avatarUrl}
+        subline={entry.bio || EMPTY_BIO_TEXT}
+        sublineForeground="hint"
       />
-      <VStack gap="025" className="min-w-0 flex-1">
-        <Text
-          typography={highlight ? "body2" : "body3"}
-          weight={strong ? "bold" : "medium"}
-          truncate
-          className={strong ? "leading-[1.35]" : "leading-[1.35] text-gray-700"}
-        >
-          {entry.username}
-        </Text>
-        <Text typography="body4" foreground="hint" truncate className="leading-[1.35]">
-          {entry.bio || "한 줄 소개가 없습니다"}
-        </Text>
-      </VStack>
       {isMe && <Badge color="primary">나</Badge>}
       <DrawRollText roll={entry.roll} variant={variant} isMe={isMe} />
     </HStack>

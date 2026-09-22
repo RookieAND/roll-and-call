@@ -1,7 +1,7 @@
 import { HStack, Text, VStack } from "@trpg/ui";
 import { ListOrdered, Trophy } from "lucide-react";
 
-import { RECRUIT_METHOD } from "@/entities/game";
+import { RECRUIT_METHOD, recruitMethodLabel } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 import { IconTile } from "@/shared/ui";
 
@@ -30,7 +30,7 @@ export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps
         <IconTile icon={Icon} tone="muted" />
         <VStack gap="050" className="min-w-0 flex-1">
           <Text typography="subtitle1" render={<p />}>
-            {isLottery ? "추첨" : "선착순"}
+            {recruitMethodLabel(game.recruitMethod)}
           </Text>
           <VStack gap={0}>
             {lines.map((line) => (

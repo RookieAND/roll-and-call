@@ -11,7 +11,7 @@
 | `packages/discord` | Discord REST 클라이언트(도메인 무관)                      | sendDiscordMessage, editDiscordMessage, startDiscordThread, renameDiscordThread       |
 | `shared/ui`        | 앱 공용(도메인 약함) 조합 컴포넌트                        | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                                  |
 | `entities/*`       | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위 | game, profile, availability                                                           |
-| `features/*`       | **단일 사용자 동작**(server action·toggle 등 상태 변경)   | JoinGameButton, DeleteGameButton, GameStatusFilter, GameScheduleLink, ThumbnailUpload |
+| `features/*`       | **단일 사용자 동작**(server action·toggle 등 상태 변경)   | JoinGameButton, DeleteGameRow, GameStatusChips, ThumbnailUpload                       |
 | `widgets/*`        | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)    | game-form, session-list                                                               |
 | `views/*`          | 한 화면의 조합 전체 + 라우트 글루                         | GamesView, GameDetail, ParticipantManager                                             |
 
@@ -68,7 +68,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 
 **entity에는 도메인 규칙과 원자 표시만**: 상태 판정(`deriveGameStatus`, `deriveSessionState`), 정원·순번 계산, 작은 표시 단위. 특정 화면의 문구·탭·라우트를 만드는 뷰 모델(`toSessionCard`, `bucketHosted`)이나 액션 존 분기(`deriveActionView`), 목록 행 문구(`gameSubline`)는 그걸 그리는 view·widget의 `model/`에 둔다. 화면별 구분이 필요하면 새 타입을 만들지 말고 도메인에 이미 있는 `SessionRole`(`host` | `player`)을 쓴다.
 
-**표시 컴포넌트의 체급**: 엔티티는 작고 반복되는 원자적 표시 단위(목록 카드·행 등)만 담는다. **순수 표시라도 덩치가 크면(복합 정보 블록·상세 표 등) entity가 아니라 widget에 둔다.** 표시 컴포넌트는 링크·동작을 갖지 않고, 네비게이션/상호작용은 상위(widget·view)가 감싸서 조합한다. (예: `GameCard`/`GameSummary`/`GameRow`는 링크 없는 entity, 상세 링크는 이를 감싸는 view가 소유. `GameInfoTable`은 순수 표시지만 커서 상세 화면에 둔다.)
+**표시 컴포넌트의 체급**: 엔티티는 작고 반복되는 원자적 표시 단위(목록 카드·행 등)만 담는다. **순수 표시라도 덩치가 크면(복합 정보 블록·상세 표 등) entity가 아니라 widget에 둔다.** 표시 컴포넌트는 링크·동작을 갖지 않고, 네비게이션/상호작용은 상위(widget·view)가 감싸서 조합한다. (예: `GameCard`/`GameStatusBadge`/`ProfileRow`는 링크 없는 entity, 상세 링크는 이를 감싸는 view가 소유. `GameInfoTable`은 순수 표시지만 커서 상세 화면에 둔다.)
 
 ## 2. 디자인 시스템(`@trpg/ui`)을 먼저 쓴다
 

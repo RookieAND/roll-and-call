@@ -1,6 +1,8 @@
 "use client";
 
-import { Avatar, HStack, SegmentControl, Text, VStack } from "@trpg/ui";
+import { HStack, SegmentControl } from "@trpg/ui";
+
+import { ProfileRow } from "@/entities/profile";
 
 import {
   ATTENDANCE_CHOICE,
@@ -8,7 +10,6 @@ import {
   type AttendanceChoice,
 } from "../model/attendance-choice";
 import type { Attendee } from "../model/attendee";
-import { AbsentNotice } from "./absent-notice";
 
 interface AttendanceRowProps {
   attendee: Attendee;
@@ -25,7 +26,7 @@ export function AttendanceRow({
   onChange,
 }: AttendanceRowProps) {
   const choice = absent ? ATTENDANCE_CHOICE.absent : ATTENDANCE_CHOICE.present;
-  const showNotice = absent && !readOnly;
+  const absentNotice = absent && !readOnly ? "불참으로 기록됩니다" : undefined;
 
   return (
     <HStack
@@ -33,13 +34,12 @@ export function AttendanceRow({
       gap="125"
       className="min-h-15 border-t border-gray-100 px-150 py-125 first:border-t-0"
     >
-      <Avatar src={attendee.avatarUrl} name={attendee.username} size="md" />
-      <VStack gap="025" className="min-w-0 flex-1">
-        <Text truncate typography="subtitle2">
-          {attendee.username}
-        </Text>
-        {showNotice && <AbsentNotice />}
-      </VStack>
+      <ProfileRow
+        name={attendee.username}
+        avatarUrl={attendee.avatarUrl}
+        subline={absentNotice}
+        sublineForeground="danger"
+      />
       <SegmentControl
         fill
         disabled={readOnly}

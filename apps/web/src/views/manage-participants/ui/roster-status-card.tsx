@@ -1,14 +1,14 @@
 import { VStack } from "@trpg/ui";
+import { Check, CircleCheck } from "lucide-react";
 
 import { DrawLotteryCard } from "@/features/adjust-roster";
+import { SummaryLine } from "@/shared/ui";
 
 import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stage";
 import type { RosterSummary } from "../model/roster-summary";
 import { AttendanceCard } from "./attendance-card";
-import { AttendanceDoneRow } from "./attendance-done-row";
 import { DeadlineCard } from "./deadline-card";
 import { DrawPendingCard } from "./draw-pending-card";
-import { DrawnRow } from "./drawn-row";
 import { SessionEndedCard } from "./session-ended-card";
 
 interface RosterStatusCardProps {
@@ -38,14 +38,20 @@ export function RosterStatusCard({
     return (
       <VStack gap="100">
         <SessionEndedCard confirmedAt={confirmedAt} />
-        <AttendanceDoneRow />
+        <SummaryLine icon={CircleCheck} tone="success" label="출석 확인" value="마침" />
       </VStack>
     );
   }
   if (summary.drawnAtLabel) {
     return (
       <VStack gap="100">
-        <DrawnRow drawnAtLabel={summary.drawnAtLabel} />
+        <SummaryLine
+          icon={Check}
+          tone="success"
+          label="추첨"
+          value={summary.drawnAtLabel}
+          badge="완료"
+        />
         <DeadlineCard summary={summary} locked={locked} showNote={false} />
       </VStack>
     );

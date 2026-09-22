@@ -1,6 +1,7 @@
 import { GAME_STATUS, type GameStatus } from "@/shared/lib";
 
 import { RECRUIT_METHOD, type RecruitMethod } from "./recruit-method";
+import { recruitMethodLabel } from "./recruit-method-label";
 
 export type CapacityPart = { text: string; emphasis: boolean };
 
@@ -23,7 +24,7 @@ export function capacityParts({
   // 추첨은 마감 전까지 확정된 자리가 없어 신청자 수를 센다.
   const drawPending = lottery && !done;
 
-  const parts: CapacityPart[] = [{ text: lottery ? "추첨" : "선착순", emphasis: false }];
+  const parts: CapacityPart[] = [{ text: recruitMethodLabel(recruitMethod), emphasis: false }];
   if (!done) {
     parts.push({
       text: drawPending ? `신청 ${confirmed + waiting}` : `확정 ${confirmed}`,

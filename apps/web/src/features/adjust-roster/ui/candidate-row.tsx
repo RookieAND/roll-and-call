@@ -1,7 +1,8 @@
-import { Avatar, HStack, Text, cn } from "@trpg/ui";
+import { cn } from "@trpg/ui";
 import { Check } from "lucide-react";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
+import { EMPTY_BIO_TEXT, ProfileRow } from "@/entities/profile";
 
 import type { Candidate } from "../model/candidate";
 import { CandidateStatusTag } from "./candidate-status-tag";
@@ -18,9 +19,8 @@ export function CandidateRow({ candidate, picked, capped, onToggle }: CandidateR
   const joined = candidate.status === PARTICIPANT_STATUS.confirmed;
   const disabled = joined || capped;
   const note =
-    capped && !joined
-      ? "남은 자리를 모두 채웠습니다"
-      : (candidate.bio ?? "소개를 아직 쓰지 않았습니다");
+    capped && !joined ? "남은 자리를 모두 채웠습니다" : (candidate.bio ?? EMPTY_BIO_TEXT);
+  const noteForeground = joined || (!candidate.bio && !capped) ? "hint" : "muted";
 
   // ponytail: 행 전체가 체크박스라 @trpg/ui에 맞는 프리미티브가 없다. 체크 표시만 손으로 그린다.
   return (
@@ -36,23 +36,14 @@ export function CandidateRow({ candidate, picked, capped, onToggle }: CandidateR
         capped && !joined && "opacity-45",
       )}
     >
-      <Avatar src={candidate.avatarUrl} name={candidate.username} size="md" className="h-9 w-9" />
-      <div className={cn("min-w-0 flex-1", joined && "text-hint")}>
-        <HStack align="center" gap="075" render={<span />} className="min-w-0">
-          <Text truncate typography="subtitle2" foreground={joined ? "inherit" : "normal"}>
-            {candidate.username}
-          </Text>
-          <CandidateStatusTag status={candidate.status} />
-        </HStack>
-        <Text
-          truncate
-          typography="body4"
-          foreground="muted"
-          className={cn("mt-025 block", (joined || (!candidate.bio && !capped)) && "text-hint")}
-        >
-          {note}
-        </Text>
-      </div>
+      <ProfileRow
+        name={candidate.username}
+        avatarUrl={candidate.avatarUrl}
+        nameAddon={<CandidateStatusTag status={candidate.status} />}
+        subline={note}
+        sublineForeground={noteForeground}
+        dimmed={joined}
+      />
       <span
         aria-hidden
         className={cn(

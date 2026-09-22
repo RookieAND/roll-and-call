@@ -4,13 +4,13 @@ import { Text, VStack } from "@trpg/ui";
 import { useRef, useState } from "react";
 
 import { uploadThumbnail } from "../api/upload-thumbnail";
-import { imageFileError } from "./image-file-error";
+import { imageFileError } from "../model/image-file-error";
+import { uploadFailedMessage } from "../model/upload-failed-message";
+import { IMAGE_ACCEPT } from "../model/upload-rules";
 import { ThumbnailDropzone } from "./thumbnail-dropzone";
 import { ThumbnailError } from "./thumbnail-error";
 import { ThumbnailHint } from "./thumbnail-hint";
 import { ThumbnailPreview } from "./thumbnail-preview";
-import { uploadFailedMessage } from "./upload-failed-message";
-import { IMAGE_ACCEPT } from "./upload-rules";
 
 interface ThumbnailUploadProps {
   value?: string;
