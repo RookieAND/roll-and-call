@@ -293,7 +293,7 @@ GM 뷰에 `RoundSheet`(create-second-round), `ConfirmSessionForm`(confirm-sessio
 
 - 클라이언트 Supabase `signInWithOAuth({ provider: "discord", redirectTo: origin + "/auth/callback" })`. 토스트 없음.
 
-### 공통: Discord 전송 규칙 (`packages/discord`, `@trpg/discord`)
+### 공통: Discord 전송 규칙 (`packages/discord`, `@roll-and-call/discord`)
 
 - webhook은 쓰지 않는다. 모든 메시지는 봇 토큰(`DISCORD_BOT_TOKEN`)으로 채널 id·스레드 id에 REST로 보낸다(`api/discord-bot-api.ts`). 채널 id가 없으면 `console.warn` 후 건너뛴다. 타임아웃 8초, 실패는 로그만 남기고 삼킨다(`message/send-discord-message.ts`).
 - 요청 본문의 `@everyone`/`@here` 문자열은 지우고, `allowed_mentions.parse`는 비워 역할·전체 멘션이 울리지 않는다.

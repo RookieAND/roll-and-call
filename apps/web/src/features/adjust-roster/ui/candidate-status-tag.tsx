@@ -1,4 +1,4 @@
-import { Badge } from "@trpg/ui";
+import { Badge } from "@roll-and-call/ui";
 
 import { PARTICIPANT_STATUS, type ParticipantStatus } from "@/entities/game";
 

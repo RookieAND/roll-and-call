@@ -1,6 +1,6 @@
 "use client";
 
-import { Select } from "@trpg/ui";
+import { Select } from "@roll-and-call/ui";
 
 import { formatHour } from "@/entities/profile";
 

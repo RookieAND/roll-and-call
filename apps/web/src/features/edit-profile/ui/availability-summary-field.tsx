@@ -1,4 +1,4 @@
-import { Button, Card, HStack, Text, VStack } from "@trpg/ui";
+import { Button, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { type AvailabilityInterval, filledDays, formatInterval } from "@/entities/profile";

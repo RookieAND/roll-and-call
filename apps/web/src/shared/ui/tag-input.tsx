@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, VStack } from "@trpg/ui";
+import { HStack, VStack } from "@roll-and-call/ui";
 import { useState, type KeyboardEvent } from "react";
 
 import { NoticeTagChip } from "./notice-tag-chip";

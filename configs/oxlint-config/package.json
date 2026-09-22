@@ -1,5 +1,5 @@
 {
-  "name": "@trpg/oxlint-config",
+  "name": "@roll-and-call/oxlint-config",
   "version": "0.0.0",
   "private": true,
   "files": [

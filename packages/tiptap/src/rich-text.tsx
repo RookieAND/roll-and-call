@@ -1,4 +1,4 @@
-import { cn } from "@trpg/ui";
+import { cn } from "@roll-and-call/ui";
 
 import { toRichTextDoc } from "./rich-text-doc";
 import { RichTextNode } from "./rich-text-node";

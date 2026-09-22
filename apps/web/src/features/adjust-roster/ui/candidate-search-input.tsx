@@ -1,4 +1,4 @@
-import { HStack, IconButton, TextInput } from "@trpg/ui";
+import { HStack, IconButton, TextInput } from "@roll-and-call/ui";
 import { Search, X } from "lucide-react";
 
 interface CandidateSearchInputProps {

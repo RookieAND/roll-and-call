@@ -1,5 +1,5 @@
 import "server-only";
-import { db, profileMemos } from "@trpg/database";
+import { db, profileMemos } from "@roll-and-call/database";
 import { and, eq } from "drizzle-orm";
 
 // 쓴 사람만 본다. 상대는 내용도, 메모가 있다는 사실도 볼 수 없다.

@@ -1,4 +1,4 @@
-import { Badge, Card, HStack, Text, VStack } from "@trpg/ui";
+import { Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Clock } from "lucide-react";
 
 import type { RosterSummary } from "../model/roster-summary";

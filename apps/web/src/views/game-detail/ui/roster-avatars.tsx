@@ -1,4 +1,4 @@
-import { AvatarGroup } from "@trpg/ui";
+import { AvatarGroup } from "@roll-and-call/ui";
 
 import type { DetailRosterMember } from "./roster-member-row";
 

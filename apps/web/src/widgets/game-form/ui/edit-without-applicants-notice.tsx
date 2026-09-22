@@ -1,4 +1,4 @@
-import { Callout } from "@trpg/ui";
+import { Callout } from "@roll-and-call/ui";
 
 export function EditWithoutApplicantsNotice() {
   return (

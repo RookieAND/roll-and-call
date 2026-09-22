@@ -1,4 +1,4 @@
-import { HStack, Skeleton, VStack } from "@trpg/ui";
+import { HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import { GameSearchForm, GamesFilterSheet, GameStatusChips } from "@/features/filter-games";

@@ -1,4 +1,4 @@
-import { Skeleton, VStack } from "@trpg/ui";
+import { Skeleton, VStack } from "@roll-and-call/ui";
 
 import { CandidateRowSkeleton } from "./candidate-row-skeleton";
 

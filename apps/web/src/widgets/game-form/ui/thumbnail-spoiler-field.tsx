@@ -1,6 +1,6 @@
 "use client";
 
-import { Switch, Text, cn } from "@trpg/ui";
+import { Switch, Text, cn } from "@roll-and-call/ui";
 
 interface ThumbnailSpoilerFieldProps {
   value: boolean;

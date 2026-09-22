@@ -1,4 +1,4 @@
-import { Button, HStack } from "@trpg/ui";
+import { Button, HStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { filterParams, gamesHref } from "@/features/filter-games";

@@ -1,4 +1,4 @@
-import { Card, Text, VStack, cn } from "@trpg/ui";
+import { Card, Text, VStack, cn } from "@roll-and-call/ui";
 
 interface RosterStatProps {
   label: string;

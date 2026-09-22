@@ -1,4 +1,4 @@
-import { Callout } from "@trpg/ui";
+import { Callout } from "@roll-and-call/ui";
 import { AlertCircle } from "lucide-react";
 
 import { ABSENCE_RECORD_MONTHS } from "@/entities/game";

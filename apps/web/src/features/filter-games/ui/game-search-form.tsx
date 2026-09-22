@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, IconButton, TextInput } from "@trpg/ui";
+import { HStack, IconButton, TextInput } from "@roll-and-call/ui";
 import { Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";

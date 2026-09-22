@@ -1,4 +1,4 @@
-import { IconButton } from "@trpg/ui";
+import { IconButton } from "@roll-and-call/ui";
 import { CircleHelp } from "lucide-react";
 import Link from "next/link";
 

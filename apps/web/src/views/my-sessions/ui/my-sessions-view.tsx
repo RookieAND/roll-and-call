@@ -1,4 +1,4 @@
-import { Container } from "@trpg/ui";
+import { Container } from "@roll-and-call/ui";
 
 import { SESSION_ROLE } from "@/entities/game";
 import { LoginRequired } from "@/features/auth";

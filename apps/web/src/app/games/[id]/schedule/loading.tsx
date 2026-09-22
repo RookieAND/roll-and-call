@@ -1,4 +1,4 @@
-import { Container, Skeleton, VStack } from "@trpg/ui";
+import { Container, Skeleton, VStack } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 

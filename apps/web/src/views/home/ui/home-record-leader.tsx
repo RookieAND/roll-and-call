@@ -1,4 +1,4 @@
-import { AvatarGroup, cn, HStack, Text } from "@trpg/ui";
+import { AvatarGroup, cn, HStack, Text } from "@roll-and-call/ui";
 import { Crown } from "lucide-react";
 import Link from "next/link";
 

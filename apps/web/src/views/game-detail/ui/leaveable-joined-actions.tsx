@@ -1,4 +1,4 @@
-import { VStack } from "@trpg/ui";
+import { VStack } from "@roll-and-call/ui";
 import { Check } from "lucide-react";
 
 import { LeaveGameButton } from "@/features/join-game";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, IconButton, Select, Text, TextInput, VStack } from "@trpg/ui";
+import { Button, HStack, IconButton, Select, Text, TextInput, VStack } from "@roll-and-call/ui";
 import { Plus, Trash2 } from "lucide-react";
 
 import {

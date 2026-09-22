@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, Field, Grid, Textarea } from "@trpg/ui";
+import { Chip, Field, Grid, Textarea } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "@/entities/game";

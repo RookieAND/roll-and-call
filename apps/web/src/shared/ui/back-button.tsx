@@ -1,6 +1,6 @@
 "use client";
 
-import { IconButton } from "@trpg/ui";
+import { IconButton } from "@roll-and-call/ui";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

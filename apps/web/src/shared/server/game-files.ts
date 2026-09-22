@@ -1,5 +1,5 @@
 import "server-only";
-import { db, games } from "@trpg/database";
+import { db, games } from "@roll-and-call/database";
 import { arrayOverlaps, inArray, or } from "drizzle-orm";
 import { compact, uniq } from "es-toolkit";
 

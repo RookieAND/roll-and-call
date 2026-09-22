@@ -1,6 +1,6 @@
 "use client";
 
-import { Callout, Chip, Field, Grid, VStack } from "@trpg/ui";
+import { Callout, Chip, Field, Grid, VStack } from "@roll-and-call/ui";
 
 import {
   RECRUIT_METHOD,

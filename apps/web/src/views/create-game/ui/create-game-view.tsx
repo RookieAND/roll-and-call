@@ -1,4 +1,4 @@
-import { Container } from "@trpg/ui";
+import { Container } from "@roll-and-call/ui";
 
 import { LoginRequired } from "@/features/auth";
 import { getCurrentUser } from "@/shared/server";

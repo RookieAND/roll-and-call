@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, HStack, Text } from "@trpg/ui";
+import { Button, Card, HStack, Text } from "@roll-and-call/ui";
 
 import { formatBytes } from "../model/format-bytes";
 

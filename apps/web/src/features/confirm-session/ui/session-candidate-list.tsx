@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Text } from "@trpg/ui";
+import { Card, Text } from "@roll-and-call/ui";
 
 import type { SessionWindow } from "@/entities/availability";
 

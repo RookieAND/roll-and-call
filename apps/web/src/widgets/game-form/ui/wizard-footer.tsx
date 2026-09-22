@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Callout, Container, HStack, VStack } from "@trpg/ui";
+import { Button, Callout, Container, HStack, VStack } from "@roll-and-call/ui";
 
 import { WizardNextButton } from "./wizard-next-button";
 import { WizardSavingButton } from "./wizard-saving-button";

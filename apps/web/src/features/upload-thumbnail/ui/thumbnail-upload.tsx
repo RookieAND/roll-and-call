@@ -1,6 +1,6 @@
 "use client";
 
-import { Text, VStack } from "@trpg/ui";
+import { Text, VStack } from "@roll-and-call/ui";
 import { useRef, useState } from "react";
 
 import { uploadThumbnail } from "../api/upload-thumbnail";

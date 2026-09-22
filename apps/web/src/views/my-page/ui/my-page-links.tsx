@@ -1,4 +1,4 @@
-import { HStack, Text } from "@trpg/ui";
+import { HStack, Text } from "@roll-and-call/ui";
 
 import { LINK_MAX_COUNT, ProfileLinks, type ProfileLink } from "@/entities/profile";
 

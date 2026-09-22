@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from "@trpg/ui";
+import { Button, HStack, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import {

@@ -1,4 +1,4 @@
-import { HStack, Skeleton, VStack } from "@trpg/ui";
+import { HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 interface CandidateRowSkeletonProps {
   nameWidth: string;

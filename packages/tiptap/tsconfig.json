@@ -1,5 +1,5 @@
 {
-  "extends": "@trpg/typescript-config/react-library.json",
+  "extends": "@roll-and-call/typescript-config/react-library.json",
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]
 }

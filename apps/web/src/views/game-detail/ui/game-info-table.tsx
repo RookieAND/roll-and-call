@@ -1,4 +1,4 @@
-import { Card, HStack, Text } from "@trpg/ui";
+import { Card, HStack, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -52,7 +52,12 @@ export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
           <Text typography="body3" foreground="muted" className="w-20.5 shrink-0">
             {row.label}
           </Text>
-          <Text typography="body4" weight="bold" render={<div />} className="flex flex-1 items-center">
+          <Text
+            typography="body4"
+            weight="bold"
+            render={<div />}
+            className="flex flex-1 items-center"
+          >
             {row.value}
           </Text>
         </HStack>

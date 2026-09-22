@@ -1,4 +1,4 @@
-import { Grid, Text, VStack } from "@trpg/ui";
+import { Grid, Text, VStack } from "@roll-and-call/ui";
 
 interface ProfileStatsProps {
   hosted: number;

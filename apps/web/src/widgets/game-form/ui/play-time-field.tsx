@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, HStack, Select } from "@trpg/ui";
+import { Field, HStack, Select } from "@roll-and-call/ui";
 
 import { splitPlayTime } from "@/shared/lib";
 

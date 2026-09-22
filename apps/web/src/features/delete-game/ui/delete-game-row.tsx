@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Callout, Text, VStack } from "@trpg/ui";
+import { Button, Callout, Text, VStack } from "@roll-and-call/ui";
 import { Ban } from "lucide-react";
 import { useState } from "react";
 

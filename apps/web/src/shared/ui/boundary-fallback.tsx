@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@trpg/ui";
+import { Button } from "@roll-and-call/ui";
 import { useEffect } from "react";
 
 import { AppError, ERROR_DISPLAY, UNEXPECTED_ERROR_MESSAGE, type ErrorDisplay } from "@/shared/api";

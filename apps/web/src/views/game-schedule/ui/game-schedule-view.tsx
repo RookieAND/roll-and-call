@@ -1,4 +1,4 @@
-import { Button, Container, IconButton, Text, VStack } from "@trpg/ui";
+import { Button, Container, IconButton, Text, VStack } from "@roll-and-call/ui";
 import { MoreVertical } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";

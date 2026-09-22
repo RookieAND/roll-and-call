@@ -1,7 +1,7 @@
 "use client";
 
 import { Popover } from "@base-ui-components/react/popover";
-import { Calendar, Text, cn } from "@trpg/ui";
+import { Calendar, Text, cn } from "@roll-and-call/ui";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 

@@ -1,4 +1,4 @@
-import { Badge, HStack } from "@trpg/ui";
+import { Badge, HStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import Link from "next/link";
 

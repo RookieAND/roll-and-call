@@ -1,4 +1,4 @@
-import { Button, Card, HStack, Text } from "@trpg/ui";
+import { Button, Card, HStack, Text } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { CircleAlert, Clock, SquareCheck, UserCheck, UserPlus, Users } from "lucide-react";
 import Link from "next/link";

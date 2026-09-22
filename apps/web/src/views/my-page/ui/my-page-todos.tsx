@@ -1,4 +1,4 @@
-import { Text, VStack } from "@trpg/ui";
+import { Text, VStack } from "@roll-and-call/ui";
 
 import type { TodoItem } from "../model/session-todos";
 import { TodoCard } from "./todo-card";

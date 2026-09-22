@@ -1,4 +1,4 @@
-import { Badge, Grid, HStack, Text, VStack } from "@trpg/ui";
+import { Badge, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { DrawStat } from "./draw-stat";
 

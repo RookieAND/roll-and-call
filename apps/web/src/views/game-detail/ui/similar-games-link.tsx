@@ -1,4 +1,4 @@
-import { Button } from "@trpg/ui";
+import { Button } from "@roll-and-call/ui";
 import Link from "next/link";
 
 interface SimilarGamesLinkProps {

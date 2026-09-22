@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, Container, VStack } from "@trpg/ui";
+import { cn, Container, VStack } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FieldErrors } from "react-hook-form";

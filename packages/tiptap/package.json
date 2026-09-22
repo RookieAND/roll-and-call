@@ -1,5 +1,5 @@
 {
-  "name": "@trpg/tiptap",
+  "name": "@roll-and-call/tiptap",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,16 +12,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@roll-and-call/ui": "workspace:*",
     "@tiptap/core": "^3.31.3",
     "@tiptap/extensions": "^3.31.3",
     "@tiptap/pm": "^3.31.3",
     "@tiptap/react": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
-    "@trpg/ui": "workspace:*",
     "lucide-react": "^1.32.0"
   },
   "devDependencies": {
-    "@trpg/typescript-config": "workspace:*",
+    "@roll-and-call/typescript-config": "workspace:*",
     "@types/react": "^19.2.18",
     "typescript": "^5.9.3"
   },

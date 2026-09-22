@@ -1,4 +1,4 @@
-import { Text, VStack } from "@trpg/ui";
+import { Text, VStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
 import type { ManageStat } from "../model/manage-summary";

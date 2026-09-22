@@ -1,6 +1,6 @@
 "use client";
 
-import { Field } from "@trpg/ui";
+import { Field } from "@roll-and-call/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
 
 import { SCHEDULE_MODE } from "@/entities/game";

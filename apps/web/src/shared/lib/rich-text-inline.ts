@@ -1,4 +1,4 @@
-import type { RichTextNodeData } from "@trpg/tiptap/doc";
+import type { RichTextNodeData } from "@roll-and-call/tiptap/doc";
 
 export function richTextInline(nodes: RichTextNodeData[] = []): string {
   return nodes

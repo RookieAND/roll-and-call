@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@trpg/ui";
+import { Button } from "@roll-and-call/ui";
 
 interface WizardSubmitButtonProps {
   label: string;

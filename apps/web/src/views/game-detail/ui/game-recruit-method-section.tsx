@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@trpg/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { ListOrdered, Trophy } from "lucide-react";
 
 import { RECRUIT_METHOD, recruitMethodLabel } from "@/entities/game";

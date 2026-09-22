@@ -1,4 +1,4 @@
-import { HStack } from "@trpg/ui";
+import { HStack } from "@roll-and-call/ui";
 
 import { capacityParts } from "../model/capacity-parts";
 import { CapacityLabel } from "./capacity-label";

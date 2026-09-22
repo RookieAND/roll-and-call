@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, HStack, Select, VStack } from "@trpg/ui";
+import { Field, HStack, Select, VStack } from "@roll-and-call/ui";
 
 import { DAY_END_HOUR, DAY_START_HOUR, type DayColumn } from "@/shared/lib";
 

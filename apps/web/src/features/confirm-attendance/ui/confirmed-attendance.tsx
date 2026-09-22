@@ -1,4 +1,4 @@
-import { Card, VStack } from "@trpg/ui";
+import { Card, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import type { Attendee } from "../model/attendee";

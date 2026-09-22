@@ -1,4 +1,4 @@
-import { Text, cn, type TextProps } from "@trpg/ui";
+import { Text, cn, type TextProps } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
 import { ROLL_GRADE, type RollGrade } from "../model/roll-grade";

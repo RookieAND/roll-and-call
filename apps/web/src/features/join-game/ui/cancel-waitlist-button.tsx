@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, cn } from "@trpg/ui";
+import { Button, cn } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { ConfirmDialog, toast, useAction } from "@/shared/ui";

@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog } from "@base-ui-components/react/dialog";
-import { cn } from "@trpg/ui";
+import { cn } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 interface SheetTitleProps {

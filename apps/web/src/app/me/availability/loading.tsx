@@ -1,4 +1,4 @@
-import { Container, HStack, Skeleton, VStack } from "@trpg/ui";
+import { Container, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 import { WEEKDAY_LABELS } from "@/entities/profile";
 import { AppBar } from "@/shared/ui";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Collapsible, Text, VStack } from "@trpg/ui";
+import { Collapsible, Text, VStack } from "@roll-and-call/ui";
 import { ChevronDown } from "lucide-react";
 import type { ReactNode } from "react";
 

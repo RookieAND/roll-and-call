@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@trpg/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { Clock } from "lucide-react";
 
 import { type AvailabilityInterval, filledDays } from "../model/availability";

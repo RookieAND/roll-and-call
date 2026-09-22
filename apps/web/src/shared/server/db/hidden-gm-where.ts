@@ -1,5 +1,5 @@
 import "server-only";
-import { db, games, profiles } from "@trpg/database";
+import { db, games, profiles } from "@roll-and-call/database";
 import { and, like, ne, notInArray } from "drizzle-orm";
 
 // ponytail: 루키 계정과 테스트 계정(가짜 디스코드 ID 9000…)에 테스트 게임을 쌓아 두는 동안만 공개 목록에서 뺀다. 테스트가 끝나면 이 파일째 지운다.

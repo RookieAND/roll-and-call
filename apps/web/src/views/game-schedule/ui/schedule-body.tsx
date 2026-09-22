@@ -1,7 +1,7 @@
 "use client";
 
+import { VStack } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
-import { VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { availabilityQuery, type ScheduleAvailability } from "@/entities/availability";

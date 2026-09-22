@@ -1,10 +1,10 @@
-import { db, type Game } from "@trpg/database";
+import { db, type Game } from "@roll-and-call/database";
 import {
   sendDiscordMessage,
   editDiscordMessage,
   renameDiscordThread,
   DISCORD_COLOR,
-} from "@trpg/discord";
+} from "@roll-and-call/discord";
 
 import { discordChannelId } from "./discord-channel-id";
 import { gameNoticeEmbed } from "./game-notice-embed";

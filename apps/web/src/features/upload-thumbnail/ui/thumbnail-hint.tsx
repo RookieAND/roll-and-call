@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { Text } from "@roll-and-call/ui";
 
 export function ThumbnailHint() {
   return (

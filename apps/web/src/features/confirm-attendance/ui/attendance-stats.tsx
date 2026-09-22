@@ -1,4 +1,4 @@
-import { Grid } from "@trpg/ui";
+import { Grid } from "@roll-and-call/ui";
 
 import { AttendanceStat } from "./attendance-stat";
 

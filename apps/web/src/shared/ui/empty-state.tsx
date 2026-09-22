@@ -1,4 +1,4 @@
-import { Text, VStack, cn } from "@trpg/ui";
+import { Text, VStack, cn } from "@roll-and-call/ui";
 import Image from "next/image";
 import type { ReactNode } from "react";
 

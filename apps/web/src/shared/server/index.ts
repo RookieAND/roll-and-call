@@ -13,7 +13,7 @@ export {
   type Availability,
   type AvailabilityInterval,
   type ProfileLink,
-} from "@trpg/database";
+} from "@roll-and-call/database";
 export { getRecruitingGamesPage } from "./db/get-recruiting-games-page";
 export { getGamesByGm } from "./db/get-games-by-gm";
 export { getJoinedGames } from "./db/get-joined-games";

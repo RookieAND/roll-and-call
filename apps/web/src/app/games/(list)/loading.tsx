@@ -1,4 +1,4 @@
-import { Container, VStack } from "@trpg/ui";
+import { Container, VStack } from "@roll-and-call/ui";
 
 import { GameListSkeleton, GamesAppBar, GamesToolbar } from "@/views/games";
 

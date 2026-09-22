@@ -1,4 +1,4 @@
-import { Card, HStack, Text, VStack } from "@trpg/ui";
+import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { GAME_STATUS, GameStatusBadge } from "@/entities/game";
 import { BrandMark, LINK_SERVICES } from "@/entities/profile";

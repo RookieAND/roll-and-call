@@ -1,4 +1,4 @@
-import { Button, cn, Grid, HStack, IconButton, Skeleton, Text } from "@trpg/ui";
+import { Button, cn, Grid, HStack, IconButton, Skeleton, Text } from "@roll-and-call/ui";
 import type { Dayjs } from "dayjs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";

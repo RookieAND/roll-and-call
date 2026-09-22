@@ -1,7 +1,7 @@
 "use client";
 
+import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { cn, HStack, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { availabilityQuery } from "@/entities/availability";

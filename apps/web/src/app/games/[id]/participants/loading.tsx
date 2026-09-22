@@ -1,4 +1,4 @@
-import { Card, Container, Grid, HStack, Skeleton, VStack } from "@trpg/ui";
+import { Card, Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 

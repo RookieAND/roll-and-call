@@ -1,5 +1,5 @@
-import type { Game } from "@trpg/database";
-import { sendDiscordMessage } from "@trpg/discord";
+import type { Game } from "@roll-and-call/database";
+import { sendDiscordMessage } from "@roll-and-call/discord";
 
 import { gameUrl } from "../game-url";
 

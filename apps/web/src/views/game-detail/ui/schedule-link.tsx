@@ -1,4 +1,4 @@
-import { Button, cn } from "@trpg/ui";
+import { Button, cn } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 

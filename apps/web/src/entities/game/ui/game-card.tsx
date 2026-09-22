@@ -1,4 +1,4 @@
-import { Card, HStack, Text, VStack, cn } from "@trpg/ui";
+import { Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 
 import { deriveGameStatus } from "@/shared/lib";
 import type { Game } from "@/shared/server";

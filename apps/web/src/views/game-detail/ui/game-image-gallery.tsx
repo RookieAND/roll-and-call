@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog } from "@base-ui-components/react/dialog";
-import { HStack, IconButton, Text, VStack } from "@trpg/ui";
+import { HStack, IconButton, Text, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 import { useState } from "react";
 

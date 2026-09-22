@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, HStack, Skeleton, Text } from "@trpg/ui";
+import { cn, HStack, Skeleton, Text } from "@roll-and-call/ui";
 import { EyeOff } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";

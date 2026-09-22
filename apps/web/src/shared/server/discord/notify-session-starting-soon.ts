@@ -1,5 +1,5 @@
-import type { Game } from "@trpg/database";
-import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
+import type { Game } from "@roll-and-call/database";
+import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { formatDateTime } from "@/shared/lib";
 

@@ -1,9 +1,9 @@
 "use client";
 
+import { cn, textFieldVariants } from "@roll-and-call/ui";
 import { CharacterCount, Placeholder } from "@tiptap/extensions";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { cn, textFieldVariants } from "@trpg/ui";
 
 import { toRichTextDoc } from "./rich-text-doc";
 import { RichTextMenu } from "./rich-text-menu";

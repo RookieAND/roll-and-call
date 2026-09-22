@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@trpg/ui";
+import { Button } from "@roll-and-call/ui";
 
 import { toast } from "@/shared/ui";
 

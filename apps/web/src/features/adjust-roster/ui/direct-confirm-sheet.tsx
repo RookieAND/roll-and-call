@@ -1,7 +1,7 @@
 "use client";
 
+import { Button, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
-import { Button, HStack, Text, VStack, cn } from "@trpg/ui";
 import { useState } from "react";
 
 import { Sheet, toast, useAction, useDebouncedValue } from "@/shared/ui";

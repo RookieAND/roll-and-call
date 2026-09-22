@@ -1,4 +1,4 @@
-import { toRichTextDoc } from "@trpg/tiptap/doc";
+import { toRichTextDoc } from "@roll-and-call/tiptap/doc";
 
 import { richTextInline } from "./rich-text-inline";
 import { richTextListItem } from "./rich-text-list-item";

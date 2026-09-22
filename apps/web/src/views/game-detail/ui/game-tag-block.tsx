@@ -1,4 +1,4 @@
-import { Chip, HStack, Text, VStack, type ChipProps } from "@trpg/ui";
+import { Chip, HStack, Text, VStack, type ChipProps } from "@roll-and-call/ui";
 
 interface GameTagBlockProps {
   label: string;

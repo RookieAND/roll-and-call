@@ -1,4 +1,4 @@
-import { Badge, Card, HStack, Text } from "@trpg/ui";
+import { Badge, Card, HStack, Text } from "@roll-and-call/ui";
 import { cva, type VariantProps } from "class-variance-authority";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";

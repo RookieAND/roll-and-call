@@ -1,5 +1,5 @@
-import type { Game } from "@trpg/database";
-import type { DiscordEmbedField } from "@trpg/discord";
+import type { Game } from "@roll-and-call/database";
+import type { DiscordEmbedField } from "@roll-and-call/discord";
 
 import { deriveGameStatus, gameStatusLabel } from "@/shared/lib";
 

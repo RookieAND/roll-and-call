@@ -1,4 +1,4 @@
-import { Text, VStack } from "@trpg/ui";
+import { Text, VStack } from "@roll-and-call/ui";
 
 interface GameNoticeBlockProps {
   notice: string;

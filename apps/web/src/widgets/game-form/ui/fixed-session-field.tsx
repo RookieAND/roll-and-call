@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, Text, VStack } from "@trpg/ui";
+import { Field, Text, VStack } from "@roll-and-call/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
 
 import type { GameFormValues } from "@/features/write-game";

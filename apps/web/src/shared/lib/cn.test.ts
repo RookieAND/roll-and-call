@@ -1,4 +1,4 @@
-import { cn } from "@trpg/ui";
+import { cn } from "@roll-and-call/ui";
 import { describe, expect, it } from "vitest";
 
 // tailwind-merge가 text-body4를 글자색으로 오해하면 크기가 통째로 사라진다.

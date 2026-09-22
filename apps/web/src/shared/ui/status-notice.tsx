@@ -1,4 +1,4 @@
-import { cn } from "@trpg/ui";
+import { cn } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 interface StatusNoticeProps {

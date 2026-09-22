@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid } from "@trpg/ui";
+import { Grid } from "@roll-and-call/ui";
 import { CalendarDays, List, User } from "lucide-react";
 import { usePathname } from "next/navigation";
 

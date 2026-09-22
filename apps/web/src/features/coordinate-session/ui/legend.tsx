@@ -1,4 +1,4 @@
-import { Text, cn } from "@trpg/ui";
+import { Text, cn } from "@roll-and-call/ui";
 
 interface LegendProps {
   label: string;

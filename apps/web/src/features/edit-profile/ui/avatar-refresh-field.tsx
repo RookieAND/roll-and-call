@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, HStack, Text } from "@trpg/ui";
+import { Avatar, Button, HStack, Text } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { toast, useAction } from "@/shared/ui";

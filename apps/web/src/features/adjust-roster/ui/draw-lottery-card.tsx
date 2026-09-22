@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Text, VStack } from "@trpg/ui";
+import { Button, Card, Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { ConfirmDialog, useAction } from "@/shared/ui";

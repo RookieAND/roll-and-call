@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, SegmentControl } from "@trpg/ui";
+import { HStack, SegmentControl } from "@roll-and-call/ui";
 
 import { ProfileRow } from "@/entities/profile";
 

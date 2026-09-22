@@ -1,4 +1,4 @@
-import { Progress, VStack } from "@trpg/ui";
+import { Progress, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import { RosterAvatars } from "./roster-avatars";

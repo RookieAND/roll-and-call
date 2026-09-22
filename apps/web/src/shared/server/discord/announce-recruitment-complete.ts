@@ -1,4 +1,4 @@
-import { db } from "@trpg/database";
+import { db } from "@roll-and-call/database";
 
 import { countWaiting, PARTICIPANT_STATUS } from "@/shared/lib";
 

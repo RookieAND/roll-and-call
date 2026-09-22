@@ -1,4 +1,4 @@
-import { IconButton } from "@trpg/ui";
+import { IconButton } from "@roll-and-call/ui";
 import { MoreHorizontal } from "lucide-react";
 
 interface MemberMenuButtonProps {

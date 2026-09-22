@@ -1,5 +1,5 @@
 {
-  "extends": "@trpg/typescript-config/nextjs.json",
+  "extends": "@roll-and-call/typescript-config/nextjs.json",
   "compilerOptions": {
     "paths": { "@/*": ["./src/*"] }
   },

@@ -1,4 +1,4 @@
-import { Badge, HStack, Text } from "@trpg/ui";
+import { Badge, HStack, Text } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 interface RosterGroupHeaderProps {

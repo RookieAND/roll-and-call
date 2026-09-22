@@ -1,4 +1,4 @@
-import { Button, Text, VStack } from "@trpg/ui";
+import { Button, Text, VStack } from "@roll-and-call/ui";
 
 import { comitativeParticle } from "@/shared/lib";
 import { EmptyState } from "@/shared/ui";

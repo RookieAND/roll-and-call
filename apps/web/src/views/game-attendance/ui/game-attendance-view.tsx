@@ -1,4 +1,4 @@
-import { Container, VStack } from "@trpg/ui";
+import { Container, VStack } from "@roll-and-call/ui";
 import { Clock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 

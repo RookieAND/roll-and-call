@@ -1,4 +1,4 @@
-import type { DiscordLinkButton } from "@trpg/discord";
+import type { DiscordLinkButton } from "@roll-and-call/discord";
 
 import { gameUrl } from "../game-url";
 

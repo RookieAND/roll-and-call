@@ -1,4 +1,4 @@
-import { VStack } from "@trpg/ui";
+import { VStack } from "@roll-and-call/ui";
 import type { Metadata } from "next";
 import Script from "next/script";
 

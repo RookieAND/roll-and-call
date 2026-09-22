@@ -1,4 +1,4 @@
-import { Container } from "@trpg/ui";
+import { Container } from "@roll-and-call/ui";
 import { notFound, redirect } from "next/navigation";
 
 import { MemoForm } from "@/features/profile-memo";

@@ -1,4 +1,4 @@
-import { Card, HStack, Text } from "@trpg/ui";
+import { Card, HStack, Text } from "@roll-and-call/ui";
 
 import { formatDateTime } from "@/shared/lib";
 

@@ -153,7 +153,7 @@ BottomNav 탭 중 `/games` 탭이 `pathname.startsWith` 규칙으로 활성 표�
 
 ### 공용 입력 컴포넌트
 
-- **DatePicker** — `src/shared/ui/date-picker.tsx:21-57`. 트리거 버튼(`id`=필드 id)에 값 `YYYY-MM-DD`를 그대로 보여 주고, 비어 있으면 "날짜 선택"(hint 색)을 보여 준다. 달력 아이콘이 붙는다. 누르면 Popover 안에 `@trpg/ui` `Calendar`가 열린다. min/max 밖 날짜는 disabled(취소선) 처리되고 (`packages/ui/src/calendar.tsx:78-88`), 날짜를 고르면 값이 반영되고 팝오버가 닫힌다. invalid면 테두리가 danger-400이 된다.
+- **DatePicker** — `src/shared/ui/date-picker.tsx:21-57`. 트리거 버튼(`id`=필드 id)에 값 `YYYY-MM-DD`를 그대로 보여 주고, 비어 있으면 "날짜 선택"(hint 색)을 보여 준다. 달력 아이콘이 붙는다. 누르면 Popover 안에 `@roll-and-call/ui` `Calendar`가 열린다. min/max 밖 날짜는 disabled(취소선) 처리되고 (`packages/ui/src/calendar.tsx:78-88`), 날짜를 고르면 값이 반영되고 팝오버가 닫힌다. invalid면 테두리가 danger-400이 된다.
 - **DateTimePicker** — `src/shared/ui/date-time-picker.tsx:25-66`. DatePicker 아래에 Select 두 개(시 "00시"~~"23시", 분 "00분"~~"59분", 1분 단위)가 놓인다. 시각을 아직 고르지 않았으면 기본으로 "19시", "00분"을 보여 준다. 날짜가 비어 있으면 시/분을 바꿔도 값은 `""`로 남는다 (`:32`).
 - **Field** — `packages/ui/src/field.tsx:14-36`. `<label htmlFor>` + required일 때 " *" + 자식 + 오류 문구(`text-xs text-danger-600`)를 그린다.
 
@@ -269,7 +269,7 @@ BottomNav 탭 중 `/games` 탭이 `pathname.startsWith` 규칙으로 활성 표�
 
 ### Discord 모집 공지 (`notifyGameCreated`)
 
-`src/shared/server/notify-game-created.ts`, `send-game-images.ts`, `@trpg/discord` (`sendDiscordMessage`, `startDiscordThread`)
+`src/shared/server/notify-game-created.ts`, `send-game-images.ts`, `@roll-and-call/discord` (`sendDiscordMessage`, `startDiscordThread`)
 
 - 봇이 `POST /channels/{DISCORD_RECRUIT_CHANNEL_ID}/messages`로 보낸다. 채널 id가 없으면 경고 로그만 남기고 건너뛴다.
 - content: "📢 새로운 구인 글이 올라왔어요!"

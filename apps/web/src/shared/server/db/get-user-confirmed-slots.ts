@@ -1,5 +1,5 @@
 import "server-only";
-import { db, games, participants } from "@trpg/database";
+import { db, games, participants } from "@roll-and-call/database";
 import { and, eq, isNotNull, ne, or } from "drizzle-orm";
 
 import { playMinutes } from "@/shared/lib";

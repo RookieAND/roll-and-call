@@ -1,4 +1,4 @@
-import { Callout } from "@trpg/ui";
+import { Callout } from "@roll-and-call/ui";
 import { CircleAlert } from "lucide-react";
 
 // 자리를 비우는 일과 정원을 늘리는 일은 모두 참여자 관리 페이지에서 한다. 시트는 이유만 알린다.

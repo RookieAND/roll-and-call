@@ -1,4 +1,4 @@
-import { VStack } from "@trpg/ui";
+import { VStack } from "@roll-and-call/ui";
 import { LockKeyhole } from "lucide-react";
 
 import { ACTION_PRIMARY_CLASS } from "./action-class-names";

@@ -1,4 +1,4 @@
-import { Badge, HStack, Text, cn } from "@trpg/ui";
+import { Badge, HStack, Text, cn } from "@roll-and-call/ui";
 import { CalendarDays, Check, CircleAlert, Clock, UserRoundPlus } from "lucide-react";
 import Link from "next/link";
 

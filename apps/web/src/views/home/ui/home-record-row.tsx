@@ -1,4 +1,4 @@
-import { cn, HStack, Text } from "@trpg/ui";
+import { cn, HStack, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { ProfileRow } from "@/entities/profile";

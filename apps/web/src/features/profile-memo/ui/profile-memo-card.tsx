@@ -1,4 +1,4 @@
-import { HStack, Text } from "@trpg/ui";
+import { HStack, Text } from "@roll-and-call/ui";
 import { Lock } from "lucide-react";
 import Link from "next/link";
 

@@ -1,4 +1,4 @@
-import { VStack } from "@trpg/ui";
+import { VStack } from "@roll-and-call/ui";
 import { Check, CircleCheck } from "lucide-react";
 
 import { DrawLotteryCard } from "@/features/adjust-roster";

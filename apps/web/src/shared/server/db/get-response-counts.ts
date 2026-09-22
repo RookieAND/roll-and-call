@@ -1,5 +1,5 @@
 import "server-only";
-import { availabilities, db, participants } from "@trpg/database";
+import { availabilities, db, participants } from "@roll-and-call/database";
 import { and, eq, inArray, sql } from "drizzle-orm";
 
 import { PARTICIPANT_STATUS } from "@/shared/lib";

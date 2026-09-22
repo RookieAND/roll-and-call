@@ -1,4 +1,4 @@
-import { Badge, HStack, Text, cn } from "@trpg/ui";
+import { Badge, HStack, Text, cn } from "@roll-and-call/ui";
 
 import { GameStatusBadge, type GameStatus, type ScheduleLine } from "@/entities/game";
 

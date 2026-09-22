@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, cn, Text, VStack } from "@trpg/ui";
+import { Card, cn, Text, VStack } from "@roll-and-call/ui";
 import { type ReactNode, useEffect, useRef } from "react";
 
 import { DAY_START_HOUR, type DayColumn, slotIso, type TimeRow } from "@/shared/lib";

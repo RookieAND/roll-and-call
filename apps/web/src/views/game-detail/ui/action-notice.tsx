@@ -1,4 +1,4 @@
-import { HStack, Text } from "@trpg/ui";
+import { HStack, Text } from "@roll-and-call/ui";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, Text, VStack } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { toKstDateInput } from "@/shared/lib";

@@ -1,4 +1,4 @@
-import { Button, Card, Text, VStack } from "@trpg/ui";
+import { Button, Card, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 interface DrawPendingCardProps {

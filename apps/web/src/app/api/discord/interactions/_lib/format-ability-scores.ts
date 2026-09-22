@@ -1,4 +1,4 @@
-import { DISCORD_COLOR, type DiscordEmbed } from "@trpg/discord";
+import { DISCORD_COLOR, type DiscordEmbed } from "@roll-and-call/discord";
 
 import { abilityScoreTable } from "./ability-score-table";
 

@@ -3,7 +3,12 @@ import type { NextConfig } from "next";
 const supabaseHost = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).hostname;
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@trpg/database", "@trpg/discord", "@trpg/ui", "@trpg/tiptap"],
+  transpilePackages: [
+    "@roll-and-call/database",
+    "@roll-and-call/discord",
+    "@roll-and-call/ui",
+    "@roll-and-call/tiptap",
+  ],
   images: {
     remotePatterns: [
       {

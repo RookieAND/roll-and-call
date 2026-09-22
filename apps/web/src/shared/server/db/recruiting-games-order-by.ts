@@ -1,5 +1,5 @@
 import "server-only";
-import { games } from "@trpg/database";
+import { games } from "@roll-and-call/database";
 import { asc, desc, sql } from "drizzle-orm";
 
 import { GAME_SORT, type GameSort } from "@/shared/api";

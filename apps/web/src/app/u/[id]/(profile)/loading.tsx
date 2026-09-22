@@ -1,4 +1,4 @@
-import { Container, Grid, HStack, Skeleton, VStack } from "@trpg/ui";
+import { Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 import { SessionListSkeleton } from "@/widgets/session-list";

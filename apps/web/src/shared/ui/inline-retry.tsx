@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack } from "@trpg/ui";
+import { Button, HStack } from "@roll-and-call/ui";
 
 interface InlineRetryProps {
   onRetry: () => void;

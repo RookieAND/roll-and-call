@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog } from "@base-ui-components/react/dialog";
-import { Button, HStack } from "@trpg/ui";
+import { Button, HStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 interface ConfirmDialogProps {

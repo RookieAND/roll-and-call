@@ -1,4 +1,4 @@
-import { HStack } from "@trpg/ui";
+import { HStack } from "@roll-and-call/ui";
 
 import { GameGmLabel, GameRuleChip } from "@/entities/game";
 

@@ -1,4 +1,4 @@
-import { Avatar, Badge, HStack, Text } from "@trpg/ui";
+import { Avatar, Badge, HStack, Text } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
 const chip = cva("rounded-full border bg-surface py-050 pr-125 pl-050", {

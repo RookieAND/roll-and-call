@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, cn } from "@trpg/ui";
+import { Button, cn } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 

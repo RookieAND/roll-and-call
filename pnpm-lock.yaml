@@ -237,16 +237,16 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.101.4
         version: 5.101.4(react@19.2.8)
-      '@trpg/database':
+      '@roll-and-call/database':
         specifier: workspace:*
         version: link:../../packages/database
-      '@trpg/discord':
+      '@roll-and-call/discord':
         specifier: workspace:*
         version: link:../../packages/discord
-      '@trpg/tiptap':
+      '@roll-and-call/tiptap':
         specifier: workspace:*
         version: link:../../packages/tiptap
-      '@trpg/ui':
+      '@roll-and-call/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       canvas-confetti:
@@ -292,7 +292,7 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.3.3
         version: 4.3.3
-      '@trpg/typescript-config':
+      '@roll-and-call/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
       '@types/canvas-confetti':
@@ -336,7 +336,7 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
     devDependencies:
-      '@trpg/typescript-config':
+      '@roll-and-call/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
       '@types/node':
@@ -354,7 +354,7 @@ importers:
 
   packages/discord:
     devDependencies:
-      '@trpg/typescript-config':
+      '@roll-and-call/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
       '@types/node':
@@ -381,7 +381,7 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.31.3
         version: 3.31.3
-      '@trpg/ui':
+      '@roll-and-call/ui':
         specifier: workspace:*
         version: link:../ui
       lucide-react:
@@ -391,7 +391,7 @@ importers:
         specifier: ^19.0.0
         version: 19.2.8
     devDependencies:
-      '@trpg/typescript-config':
+      '@roll-and-call/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
       '@types/react':
@@ -419,7 +419,7 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0
     devDependencies:
-      '@trpg/typescript-config':
+      '@roll-and-call/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
       '@types/react':

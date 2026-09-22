@@ -1,6 +1,6 @@
 "use client";
 
-import { Text } from "@trpg/ui";
+import { Text } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import type { BottomNavTabProps } from "./bottom-nav-tab";

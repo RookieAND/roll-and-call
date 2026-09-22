@@ -1,4 +1,4 @@
-import { VStack } from "@trpg/ui";
+import { VStack } from "@roll-and-call/ui";
 import { Check } from "lucide-react";
 
 import { LEAVE_LOCKED_REASON, type LeaveLock } from "../model/leave-locked-reason";

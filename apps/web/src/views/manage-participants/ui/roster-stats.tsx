@@ -1,4 +1,4 @@
-import { Grid } from "@trpg/ui";
+import { Grid } from "@roll-and-call/ui";
 
 import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stage";
 import type { ManagedMember } from "../model/managed-member";

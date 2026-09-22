@@ -1,4 +1,4 @@
-import { Card, Text } from "@trpg/ui";
+import { Card, Text } from "@roll-and-call/ui";
 
 interface AttendanceStatProps {
   label: string;

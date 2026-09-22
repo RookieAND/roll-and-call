@@ -1,6 +1,6 @@
 "use client";
 
-import { Callout, Field, Stepper, VStack } from "@trpg/ui";
+import { Callout, Field, Stepper, VStack } from "@roll-and-call/ui";
 import { CircleAlert, Lock } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 

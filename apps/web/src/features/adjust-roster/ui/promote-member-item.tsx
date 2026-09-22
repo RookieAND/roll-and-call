@@ -1,6 +1,6 @@
 "use client";
 
-import { Text, cn } from "@trpg/ui";
+import { Text, cn } from "@roll-and-call/ui";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { Sheet, useAction } from "@/shared/ui";

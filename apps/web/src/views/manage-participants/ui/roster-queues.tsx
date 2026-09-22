@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Text, VStack } from "@trpg/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { availabilityNote } from "@/entities/game";

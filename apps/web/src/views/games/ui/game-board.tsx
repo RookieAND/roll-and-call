@@ -1,4 +1,4 @@
-import { Container, VStack } from "@trpg/ui";
+import { Container, VStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
 
 import type { GamesFilter } from "@/shared/api";

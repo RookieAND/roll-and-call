@@ -1,4 +1,4 @@
-import { Chip, HStack } from "@trpg/ui";
+import { Chip, HStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { GAME_STATUS_FILTERS, GAME_STATUS_FILTER_DEFAULT, type GamesFilter } from "@/shared/api";

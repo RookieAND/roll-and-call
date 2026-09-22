@@ -1,4 +1,4 @@
-import { Callout } from "@trpg/ui";
+import { Callout } from "@roll-and-call/ui";
 import { Info } from "lucide-react";
 
 import { formatDateTime } from "@/shared/lib";

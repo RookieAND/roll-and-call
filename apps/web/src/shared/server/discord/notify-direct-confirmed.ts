@@ -1,5 +1,5 @@
-import { db, profiles } from "@trpg/database";
-import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
+import { db, profiles } from "@roll-and-call/database";
+import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import { inArray } from "drizzle-orm";
 
 import { countConfirmed, countWaiting } from "@/shared/lib";

@@ -1,6 +1,6 @@
 # 프론트엔드 개발 규칙 (FSD · 컴포넌트)
 
-이 프로젝트의 UI는 **프리미티브 라이브러리(`packages/ui`, `@trpg/ui`)** + **FSD 레이어(`apps/web/src`)**로 구성한다. 아래 규칙을 지켜 구조 일관성을 유지한다.
+이 프로젝트의 UI는 **프리미티브 라이브러리(`packages/ui`, `@roll-and-call/ui`)** + **FSD 레이어(`apps/web/src`)**로 구성한다. 아래 규칙을 지켜 구조 일관성을 유지한다.
 
 ## 1. 레이어 경계
 
@@ -15,7 +15,7 @@
 | `widgets/*`        | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)    | game-form, session-list                                                               |
 | `views/*`          | 한 화면의 조합 전체 + 라우트 글루                         | GamesView, GameDetail, ParticipantManager                                             |
 
-`@trpg/tiptap`을 `@trpg/ui`에서 떼어 둔 이유는 하나다. UI 키트 배럴은 거의 모든 화면이 import하므로 여기에 tiptap이 섞이면 에디터를 안 쓰는 화면까지 번들이 무거워진다. 시놉시스 저장값은 Tiptap JSON 문자열이고, 서버(디스코드 문구)는 React 없이 `@trpg/tiptap/doc`의 문서 모델만 가져다 쓴다.
+`@roll-and-call/tiptap`을 `@roll-and-call/ui`에서 떼어 둔 이유는 하나다. UI 키트 배럴은 거의 모든 화면이 import하므로 여기에 tiptap이 섞이면 에디터를 안 쓰는 화면까지 번들이 무거워진다. 시놉시스 저장값은 Tiptap JSON 문자열이고, 서버(디스코드 문구)는 React 없이 `@roll-and-call/tiptap/doc`의 문서 모델만 가져다 쓴다.
 
 **import 방향은 아래로만**: `shared ← entities ← features ← widgets ← views`. 상위 레이어를 import하지 않는다(예: feature는 widget을 import 금지).
 
@@ -70,7 +70,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 
 **표시 컴포넌트의 체급**: 엔티티는 작고 반복되는 원자적 표시 단위(목록 카드·행 등)만 담는다. **순수 표시라도 덩치가 크면(복합 정보 블록·상세 표 등) entity가 아니라 widget에 둔다.** 표시 컴포넌트는 링크·동작을 갖지 않고, 네비게이션/상호작용은 상위(widget·view)가 감싸서 조합한다. (예: `GameCard`/`GameStatusBadge`/`ProfileRow`는 링크 없는 entity, 상세 링크는 이를 감싸는 view가 소유. `GameInfoTable`은 순수 표시지만 커서 상세 화면에 둔다.)
 
-## 2. 디자인 시스템(`@trpg/ui`)을 먼저 쓴다
+## 2. 디자인 시스템(`@roll-and-call/ui`)을 먼저 쓴다
 
 **새 UI를 그리기 전에 `packages/ui/src/index.ts`에서 맞는 컴포넌트를 먼저 찾는다.** 시안이 `<span style="font-size:11px; ...">`로 그려져 있어도 그대로 옮기지 않는다. 시안은 모양을 보여 줄 뿐이고, 코드는 가장 가까운 디자인 시스템 컴포넌트로 옮긴다.
 
@@ -90,7 +90,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 
 ### 상호작용 요소는 프리미티브만 사용
 
-- 버튼·셀렉트·칩·아이콘버튼은 **오직 `@trpg/ui`**에서 가져온다. raw `<button>`, `<Link>`/`<div>`를 버튼처럼 스타일링한 손코딩 금지.
+- 버튼·셀렉트·칩·아이콘버튼은 **오직 `@roll-and-call/ui`**에서 가져온다. raw `<button>`, `<Link>`/`<div>`를 버튼처럼 스타일링한 손코딩 금지.
 - **링크처럼 보이는 버튼**은 `<Button asChild><Link/></Button>` (또는 `IconButton asChild`). `asChild`는 자식 엘리먼트에 버튼 스타일을 입혀 실제 `<a href>`로 렌더한다.
 - **의미 있는 태그가 필요하면 껍데기를 덧대지 말고 `render`를 준다.** `Text`·`HStack`·`VStack`·`Grid`가 모두 같은 문법이다: `<VStack gap="125" render={<section />}>`. `<section className="flex flex-col gap-125">`처럼 프리미티브를 손으로 다시 그리거나, 레이아웃만을 위해 `div`를 한 겹 더 두지 않는다.
 - **선택 가능한 pill/토글**은 `<Chip>` (`shape="pill" | "block"`, `selected`, `asChild`).

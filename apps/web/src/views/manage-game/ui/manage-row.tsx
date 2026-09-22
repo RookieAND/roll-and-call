@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@trpg/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { Check, ChevronRight, ClipboardCheck, Clock, Pencil, Users } from "lucide-react";
 import Link from "next/link";

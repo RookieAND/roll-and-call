@@ -1,4 +1,4 @@
-import { HStack, IconButton } from "@trpg/ui";
+import { HStack, IconButton } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
 import { EMPTY_BIO_TEXT, ProfileRow } from "@/entities/profile";

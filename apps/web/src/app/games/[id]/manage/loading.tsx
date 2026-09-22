@@ -1,4 +1,4 @@
-import { Badge, Card, Container, HStack, Skeleton } from "@trpg/ui";
+import { Badge, Card, Container, HStack, Skeleton } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 

@@ -1,4 +1,4 @@
-import { Card, Text } from "@trpg/ui";
+import { Card, Text } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
 const box = cva("rounded-500 px-175 py-150", {

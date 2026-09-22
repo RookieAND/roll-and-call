@@ -178,7 +178,7 @@ AppBar
 - 후보 0개: 박스 없이 텍스트만 "아직 등록된 가능 시간이 없어 확정할 수 없어요." (`:17-23`)
 - 후보가 있을 때 테두리 박스 안의 구성
   - 제목 "세션 확정", 설명 "겹치는 인원이 많은 순으로 후보를 보여줍니다."
-  - **Select** (`@trpg/ui` Select, Base UI 기반): 항목은 최대 5개, 라벨 "8월 16일 (일) 20:00 · 3명 가능". 기본값은 1순위 후보다.
+  - **Select** (`@roll-and-call/ui` Select, Base UI 기반): 항목은 최대 5개, 라벨 "8월 16일 (일) 20:00 · 3명 가능". 기본값은 1순위 후보다.
   - **확정 버튼** "이 시간으로 확정": `variant="confirm"`(초록 solid), 높이 46px, 전체 폭, 진행 중 로딩 표시. 확인 다이얼로그는 없다.
   - **인라인 에러** `:68-72`: 빨간 body2 텍스트(토스트가 아님)
 - 성공하면 토스트 "세션이 확정되었습니다", `/games/{id}`로 push.
@@ -251,7 +251,7 @@ AppBar
   - 선택·잠금·확정 상태를 색으로만 구분한다(잠금은 회색, 선택은 primary, 확정은 초록 outline). 확정 outline과 누른 칸 outline이 같은 모양이다.
   - 히트맵은 숫자를 함께 보여 줘서 색만으로 판단하지 않아도 된다. 범례에는 숫자가 없다.
   - `select-none`이 적용되어 격자 텍스트를 선택할 수 없다.
-  - 저장·확정 버튼은 `@trpg/ui` Button의 `loading` 상태에서 disabled가 된다(`packages/ui/src/button.tsx:65`).
+  - 저장·확정 버튼은 `@roll-and-call/ui` Button의 `loading` 상태에서 disabled가 된다(`packages/ui/src/button.tsx:65`).
 
 ## 10. 현재 UX 문제점 메모
 

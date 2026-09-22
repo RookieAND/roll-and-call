@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, HStack, VStack } from "@trpg/ui";
+import { cn, HStack, VStack } from "@roll-and-call/ui";
 import { useState, type ReactNode } from "react";
 
 export const SCHEDULE_TAB = { mine: "mine", overlap: "overlap" } as const;

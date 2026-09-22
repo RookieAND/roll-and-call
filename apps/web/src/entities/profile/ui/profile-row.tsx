@@ -1,4 +1,4 @@
-import { Avatar, cn, HStack, Text, VStack, type TextProps } from "@trpg/ui";
+import { Avatar, cn, HStack, Text, VStack, type TextProps } from "@roll-and-call/ui";
 import type { ReactElement, ReactNode } from "react";
 
 import { PROFILE_ROW_SIZE, type ProfileRowSize } from "../model/profile-row-size";

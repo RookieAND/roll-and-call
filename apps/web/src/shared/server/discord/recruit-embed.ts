@@ -1,5 +1,5 @@
-import type { Game } from "@trpg/database";
-import { DISCORD_COLOR, type DiscordEmbed } from "@trpg/discord";
+import type { Game } from "@roll-and-call/database";
+import { DISCORD_COLOR, type DiscordEmbed } from "@roll-and-call/discord";
 
 import { formatGameSchedule, formatMonthDay } from "@/shared/lib";
 

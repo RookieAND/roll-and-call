@@ -1,4 +1,4 @@
-import { cn, HStack } from "@trpg/ui";
+import { cn, HStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 interface SessionTabsProps {

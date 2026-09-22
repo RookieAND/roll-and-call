@@ -1,4 +1,4 @@
-import { editDiscordMessage, renameDiscordThread } from "@trpg/discord";
+import { editDiscordMessage, renameDiscordThread } from "@roll-and-call/discord";
 
 import { countConfirmed } from "@/shared/lib";
 

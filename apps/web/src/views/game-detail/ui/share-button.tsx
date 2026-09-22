@@ -1,6 +1,6 @@
 "use client";
 
-import { IconButton } from "@trpg/ui";
+import { IconButton } from "@roll-and-call/ui";
 import { Share2 } from "lucide-react";
 
 import { toast } from "@/shared/ui";

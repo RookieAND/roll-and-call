@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { Text } from "@roll-and-call/ui";
 
 import { EMPTY_BIO_TEXT, KeywordChips, ProfileRow } from "@/entities/profile";
 import { toKst } from "@/shared/lib";

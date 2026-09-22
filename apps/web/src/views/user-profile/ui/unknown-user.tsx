@@ -1,4 +1,4 @@
-import { Avatar, HStack, Text } from "@trpg/ui";
+import { Avatar, HStack, Text } from "@roll-and-call/ui";
 
 export function UnknownUser() {
   return (

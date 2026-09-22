@@ -1,6 +1,6 @@
 "use client";
 
-import { SegmentControl } from "@trpg/ui";
+import { SegmentControl } from "@roll-and-call/ui";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 

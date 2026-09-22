@@ -1,4 +1,4 @@
-import { Card, HStack, Text, VStack, cn } from "@trpg/ui";
+import { Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 
 import { ExpandableRows } from "@/shared/ui";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, HStack, Text, VStack } from "@trpg/ui";
+import { Button, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

@@ -1,4 +1,4 @@
-import { Button, Container, VStack } from "@trpg/ui";
+import { Button, Container, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 

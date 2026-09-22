@@ -1,4 +1,4 @@
-import { cn } from "@trpg/ui";
+import { cn } from "@roll-and-call/ui";
 import { Check } from "lucide-react";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
@@ -22,7 +22,7 @@ export function CandidateRow({ candidate, picked, capped, onToggle }: CandidateR
     capped && !joined ? "남은 자리를 모두 채웠습니다" : (candidate.bio ?? EMPTY_BIO_TEXT);
   const noteForeground = joined || (!candidate.bio && !capped) ? "hint" : "muted";
 
-  // ponytail: 행 전체가 체크박스라 @trpg/ui에 맞는 프리미티브가 없다. 체크 표시만 손으로 그린다.
+  // ponytail: 행 전체가 체크박스라 @roll-and-call/ui에 맞는 프리미티브가 없다. 체크 표시만 손으로 그린다.
   return (
     <button
       type="button"

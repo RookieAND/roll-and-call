@@ -1,4 +1,4 @@
-import { Badge } from "@trpg/ui";
+import { Badge } from "@roll-and-call/ui";
 
 import { RECRUIT_METHOD, type RecruitMethod } from "../model/recruit-method";
 import { recruitMethodLabel } from "../model/recruit-method-label";

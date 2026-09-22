@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@trpg/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { SignOutButton } from "@/features/auth";
 import { ThemeSetting } from "@/shared/ui";

@@ -1,4 +1,4 @@
-import { Badge } from "@trpg/ui";
+import { Badge } from "@roll-and-call/ui";
 
 import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stage";
 

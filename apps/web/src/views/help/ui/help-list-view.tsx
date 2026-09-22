@@ -1,4 +1,4 @@
-import { Button, Card, Container, HStack, Text, VStack } from "@trpg/ui";
+import { Button, Card, Container, HStack, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight, ExternalLink, PlayCircle } from "lucide-react";
 import Link from "next/link";
 

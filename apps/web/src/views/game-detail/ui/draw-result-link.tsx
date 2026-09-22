@@ -1,4 +1,4 @@
-import { Button, type ButtonProps } from "@trpg/ui";
+import { Button, type ButtonProps } from "@roll-and-call/ui";
 import Link from "next/link";
 
 interface DrawResultLinkProps {

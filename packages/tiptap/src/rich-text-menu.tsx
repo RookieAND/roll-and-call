@@ -1,8 +1,8 @@
 "use client";
 
+import { cn, IconButton, TextInput } from "@roll-and-call/ui";
 import type { Editor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import { cn, IconButton, TextInput } from "@trpg/ui";
 import { Bold, Check, EyeOff, Italic, Link2, List, ListOrdered } from "lucide-react";
 import { useState } from "react";
 

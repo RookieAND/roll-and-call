@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { Text } from "@roll-and-call/ui";
 
 import { DRAW_ROW_VARIANT, type DrawRowVariant } from "../model/draw-row-variant";
 import { toRollGrade } from "../model/roll-grade";

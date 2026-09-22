@@ -1,5 +1,5 @@
 {
-  "name": "@trpg/web",
+  "name": "@roll-and-call/web",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,13 +16,13 @@
   "dependencies": {
     "@base-ui-components/react": "1.0.0-rc.0",
     "@hookform/resolvers": "^5.7.1",
+    "@roll-and-call/database": "workspace:*",
+    "@roll-and-call/discord": "workspace:*",
+    "@roll-and-call/tiptap": "workspace:*",
+    "@roll-and-call/ui": "workspace:*",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.2",
     "@tanstack/react-query": "^5.101.4",
-    "@trpg/database": "workspace:*",
-    "@trpg/discord": "workspace:*",
-    "@trpg/tiptap": "workspace:*",
-    "@trpg/ui": "workspace:*",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
     "dayjs": "^1.11.23",
@@ -38,8 +38,8 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@roll-and-call/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.3.3",
-    "@trpg/typescript-config": "workspace:*",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",

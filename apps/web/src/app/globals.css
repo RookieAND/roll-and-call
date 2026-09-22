@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@import "@trpg/ui/styles.css";
-@import "@trpg/tiptap/styles.css";
+@import "@roll-and-call/ui/styles.css";
+@import "@roll-and-call/tiptap/styles.css";
 
 /* 로딩 화면은 짧고 실제 화면은 길어 스크롤바가 생겼다 사라진다. 자리를 늘 비워 두면 폭이 튀지 않는다. */
 html {

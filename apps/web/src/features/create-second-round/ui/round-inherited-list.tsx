@@ -1,4 +1,4 @@
-import { Card, HStack, Text, VStack } from "@trpg/ui";
+import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Check } from "lucide-react";
 
 interface RoundInheritedListProps {

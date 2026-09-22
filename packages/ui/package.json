@@ -1,5 +1,5 @@
 {
-  "name": "@trpg/ui",
+  "name": "@roll-and-call/ui",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -17,7 +17,7 @@
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
-    "@trpg/typescript-config": "workspace:*",
+    "@roll-and-call/typescript-config": "workspace:*",
     "@types/react": "^19.2.18",
     "typescript": "^5.9.3"
   },

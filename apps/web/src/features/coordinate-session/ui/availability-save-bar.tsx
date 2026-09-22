@@ -1,4 +1,4 @@
-import { Button, HStack, Text, VStack } from "@trpg/ui";
+import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { UnsavedCount } from "./unsaved-count";
 

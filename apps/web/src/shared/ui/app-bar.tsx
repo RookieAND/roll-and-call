@@ -1,4 +1,4 @@
-import { cn, HStack, IconButton, Text } from "@trpg/ui";
+import { cn, HStack, IconButton, Text } from "@roll-and-call/ui";
 import { ChevronLeft, X } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";

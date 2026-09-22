@@ -1,4 +1,4 @@
-import { Badge, Card, Container, HStack, Text } from "@trpg/ui";
+import { Badge, Card, Container, HStack, Text } from "@roll-and-call/ui";
 
 import { countConfirmed, isSessionEnded } from "@/entities/game";
 import { DeleteGameRow } from "@/features/delete-game";

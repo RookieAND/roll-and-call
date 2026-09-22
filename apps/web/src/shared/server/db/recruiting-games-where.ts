@@ -1,5 +1,5 @@
 import "server-only";
-import { games } from "@trpg/database";
+import { games } from "@roll-and-call/database";
 import { and, eq, gt, ilike, isNull, lte, not, or, sql, type SQL } from "drizzle-orm";
 
 import { GAME_STATUS_FILTER, type GamesFilter } from "@/shared/api";

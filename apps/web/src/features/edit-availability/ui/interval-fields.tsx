@@ -1,6 +1,6 @@
 "use client";
 
-import { Text } from "@trpg/ui";
+import { Text } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import { AVAILABILITY_MAX_HOUR, AVAILABILITY_MIN_HOUR } from "@/entities/profile";

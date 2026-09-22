@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "@trpg/database";
+import { db } from "@roll-and-call/database";
 
 export async function getProfile(userId: string) {
   return db.query.profiles.findFirst({

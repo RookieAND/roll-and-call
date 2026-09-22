@@ -1,4 +1,4 @@
-import { toRichTextDoc } from "@trpg/tiptap/doc";
+import { toRichTextDoc } from "@roll-and-call/tiptap/doc";
 
 export function richTextLength(value: string): number {
   if (!value) return 0;

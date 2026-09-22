@@ -1,4 +1,4 @@
-import { VStack } from "@trpg/ui";
+import { VStack } from "@roll-and-call/ui";
 
 import { AttendanceBanner } from "./attendance-banner";
 import { SessionEndedCard } from "./session-ended-card";

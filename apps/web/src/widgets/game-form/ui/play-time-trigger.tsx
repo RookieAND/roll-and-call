@@ -1,4 +1,4 @@
-import { Select, Text } from "@trpg/ui";
+import { Select, Text } from "@roll-and-call/ui";
 
 interface PlayTimeTriggerProps {
   value: number;

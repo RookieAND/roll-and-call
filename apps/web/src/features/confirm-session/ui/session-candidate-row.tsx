@@ -1,4 +1,4 @@
-import { HStack, IconButton, Text } from "@trpg/ui";
+import { HStack, IconButton, Text } from "@roll-and-call/ui";
 import { Check } from "lucide-react";
 
 import type { SessionWindow } from "@/entities/availability";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, type ButtonProps, cn } from "@trpg/ui";
+import { Button, type ButtonProps, cn } from "@roll-and-call/ui";
 
 export function SheetItem({ className, ...props }: ButtonProps) {
   return (

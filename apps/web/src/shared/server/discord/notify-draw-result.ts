@@ -1,5 +1,5 @@
-import { db } from "@trpg/database";
-import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
+import { db } from "@roll-and-call/database";
+import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { PARTICIPANT_STATUS } from "@/shared/lib";
 

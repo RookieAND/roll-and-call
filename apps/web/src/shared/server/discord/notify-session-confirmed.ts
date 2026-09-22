@@ -1,4 +1,4 @@
-import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
+import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { countConfirmed, countWaiting, formatDateTime } from "@/shared/lib";
 

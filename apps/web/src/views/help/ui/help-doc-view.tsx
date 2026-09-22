@@ -1,4 +1,4 @@
-import { Container, Text, VStack } from "@trpg/ui";
+import { Container, Text, VStack } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
 import { AppBar } from "@/shared/ui";

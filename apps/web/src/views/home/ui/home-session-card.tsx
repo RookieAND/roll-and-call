@@ -1,4 +1,4 @@
-import { cn, HStack, Text } from "@trpg/ui";
+import { cn, HStack, Text } from "@roll-and-call/ui";
 import { User } from "lucide-react";
 
 import { GameRuleChip } from "@/entities/game";

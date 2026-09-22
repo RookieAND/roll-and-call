@@ -92,7 +92,7 @@ Container(size="md", py-6, gap 6)
 - **AvatarRefreshField**: `src/features/edit-profile/ui/avatar-refresh-field.tsx:9-40`
   - 표시: `Avatar size="3xl"`, 가운데 정렬. 이미지가 없으면 이니셜을 쓰는데, `name`에 폼의 현재 `username` 상태가 들어간다(`edit-profile-form.tsx:51`). 그래서 이름을 입력하는 동안 이니셜이 따라 바뀐다.
   - 버튼: "Discord 아바타 다시 불러오기"(ghost, sm). 실행 중에는 `loading`이라 disabled다.
-  - 버튼은 `type`을 지정하지 않았지만 `@trpg/ui` Button 기본값이 `type="button"`이라 폼을 제출하지 않는다(`packages/ui/src/button.tsx:64`).
+  - 버튼은 `type`을 지정하지 않았지만 `@roll-and-call/ui` Button 기본값이 `type="button"`이라 폼을 제출하지 않는다(`packages/ui/src/button.tsx:64`).
   - 클릭 결과는 §8.
 - **표시 이름**: `edit-profile-form.tsx:53-66`, `packages/ui/src/field.tsx:64-86`
   - 라벨 "표시 이름"(`<label htmlFor="username">`), 설명 "구인 카드와 참여자 목록에 보이는 이름입니다."

@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { Text } from "@roll-and-call/ui";
 import { Upload } from "lucide-react";
 
 import { IconTile } from "@/shared/ui";

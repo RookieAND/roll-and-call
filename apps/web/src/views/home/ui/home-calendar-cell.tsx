@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, Text } from "@trpg/ui";
+import { cn, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 import type { MouseEvent } from "react";
 

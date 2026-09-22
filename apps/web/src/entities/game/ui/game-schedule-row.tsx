@@ -1,4 +1,4 @@
-import { HStack, Text } from "@trpg/ui";
+import { HStack, Text } from "@roll-and-call/ui";
 import { Check, Clock } from "lucide-react";
 
 import type { ScheduleLine } from "../model/schedule-line";

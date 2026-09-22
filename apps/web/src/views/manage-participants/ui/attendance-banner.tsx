@@ -1,4 +1,4 @@
-import { Button, Text, VStack } from "@trpg/ui";
+import { Button, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 interface AttendanceBannerProps {

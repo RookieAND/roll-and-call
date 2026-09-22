@@ -1,4 +1,4 @@
-import { Badge } from "@trpg/ui";
+import { Badge } from "@roll-and-call/ui";
 
 import { gameStatusColor, gameStatusLabel, type GameStatus } from "@/shared/lib";
 

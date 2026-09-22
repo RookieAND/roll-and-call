@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Switch, Text } from "@trpg/ui";
+import { HStack, Switch, Text } from "@roll-and-call/ui";
 
 interface WaitlistFieldProps {
   value: boolean;

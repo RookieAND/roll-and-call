@@ -1,4 +1,4 @@
-import { Card, Grid, HStack, Text, VStack } from "@trpg/ui";
+import { Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { HELP_BLOCK, type HelpBlock } from "../model/help-docs";
 import { HelpFigure } from "./help-figure";

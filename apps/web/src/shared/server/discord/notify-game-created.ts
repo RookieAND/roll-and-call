@@ -1,5 +1,5 @@
-import type { Game } from "@trpg/database";
-import { sendDiscordMessage, startDiscordThread } from "@trpg/discord";
+import type { Game } from "@roll-and-call/database";
+import { sendDiscordMessage, startDiscordThread } from "@roll-and-call/discord";
 
 import { discordChannelId } from "./discord-channel-id";
 import { recruitButtons } from "./recruit-buttons";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Text, VStack } from "@trpg/ui";
+import { Button, Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { RoundSheet } from "@/features/create-second-round";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, HStack, TextInput } from "@trpg/ui";
+import { Chip, HStack, TextInput } from "@roll-and-call/ui";
 import type { KeyboardEvent } from "react";
 
 interface TagInputEditorProps {

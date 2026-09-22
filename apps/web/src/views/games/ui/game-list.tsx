@@ -1,4 +1,4 @@
-import { Pagination, VStack } from "@trpg/ui";
+import { Pagination, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { GameCard } from "@/entities/game";

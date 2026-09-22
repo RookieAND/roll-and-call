@@ -1,5 +1,5 @@
 import "server-only";
-import { db, games } from "@trpg/database";
+import { db, games } from "@roll-and-call/database";
 import { desc } from "drizzle-orm";
 
 export async function getGamesByGm(userId: string) {

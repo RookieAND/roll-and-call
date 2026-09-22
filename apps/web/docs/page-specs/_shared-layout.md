@@ -25,7 +25,7 @@
 | `viewport` export          | 없음(grep 결과 0건). Next 기본값을 쓴다                                                                                   | —                                |
 | `suppressHydrationWarning` | 없음. 테마 스크립트가 `<html>`에 `dark` 클래스를 붙이는데 이 속성이 없다                                                  | `src/app/layout.tsx:13`          |
 
-`globals.css`는 `@import "tailwindcss"` 다음에 `@import "@trpg/ui/styles.css"`를 불러온다(`src/app/globals.css:1-2`). `@trpg/ui` 소스는 `next.config.ts`의 `transpilePackages: ["@trpg/ui"]`로 트랜스파일한다.
+`globals.css`는 `@import "tailwindcss"` 다음에 `@import "@roll-and-call/ui/styles.css"`를 불러온다(`src/app/globals.css:1-2`). `@roll-and-call/ui` 소스는 `next.config.ts`의 `transpilePackages: ["@roll-and-call/ui"]`로 트랜스파일한다.
 
 **전역 헤더는 없다.** 루트 레이아웃에 header가 없고, 각 view가 `AppBar`를 직접 렌더한다(2.1 참고).
 
@@ -134,7 +134,7 @@
 
 ### 2.4 `DatePicker` — `src/shared/ui/date-picker.tsx`
 
-- `@base-ui-components/react/popover` + `@trpg/ui`의 `Calendar`(`:3-4`)
+- `@base-ui-components/react/popover` + `@roll-and-call/ui`의 `Calendar`(`:3-4`)
 - Props `DatePickerProps`(`:11-19`): `value?`(YYYY-MM-DD), `onChange`, `placeholder?`(기본 `"날짜 선택"`), `id?`, `invalid?`, `min?`, `max?`
 - 트리거: `invalid`이면 `border-danger-400`, 아니면 `border-gray-300`(`:36`). 아이콘 `Calendar size={16} aria-hidden`
 - 날짜를 고르면 `onChange` 후 팝오버를 닫는다(`:48-51`)
@@ -227,7 +227,7 @@
 
 ## 3. UI 라이브러리
 
-### 3.1 `@trpg/ui` (`packages/ui`)
+### 3.1 `@roll-and-call/ui` (`packages/ui`)
 
 - `package.json` exports: `"."` → `./src/index.ts`, `"./styles.css"` → `./src/styles.css`
 - 의존성: `@base-ui-components/react 1.0.0-rc.0`, `class-variance-authority`, `clsx`, `tailwind-merge`
@@ -257,7 +257,7 @@
 | `cn`                         | `packages/ui/src/cn.ts:4`              | —                                                                                                                                                      | —                  | 20                             |
 | `gapMap` / `GapToken`        | `packages/ui/src/tokens.ts:2,15`       | gap 0,1,2,3,4,5,6,8,10,12                                                                                                                              | —                  | 0(패키지 내부에서만 사용)      |
 
-"앱 사용" 수는 `import ... from "@trpg/ui"` 문에 해당 이름이 들어 있는 `apps/web/src` 파일 수다.
+"앱 사용" 수는 `import ... from "@roll-and-call/ui"` 문에 해당 이름이 들어 있는 `apps/web/src` 파일 수다.
 
 ### 3.2 `apps/web/package.json` 의 기타 라이브러리
 

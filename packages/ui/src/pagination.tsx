@@ -24,7 +24,7 @@ const cell = cva(
   },
 );
 
-// framework-agnostic: renders plain anchors so @trpg/ui stays free of next/link
+// framework-agnostic: renders plain anchors so @roll-and-call/ui stays free of next/link
 export function Pagination({
   page,
   totalPages,

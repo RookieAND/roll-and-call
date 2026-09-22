@@ -1,4 +1,4 @@
-import { Avatar, HStack, Text, type TextProps } from "@trpg/ui";
+import { Avatar, HStack, Text, type TextProps } from "@roll-and-call/ui";
 
 interface GameGmLabelProps {
   name: string | null | undefined;

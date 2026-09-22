@@ -1,4 +1,4 @@
-import { Card, HStack, Skeleton, VStack } from "@trpg/ui";
+import { Card, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 // GameCard와 같은 치수: 16:9 썸네일 · 제목 heading3 22px + 배지 21px + D-n 21px · 룰 21px · 일정 줄 21px(아이콘 13px) · GM 아바타 24px + 정원 칸 줄.
 export function GameListSkeleton() {

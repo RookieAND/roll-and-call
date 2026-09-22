@@ -1,4 +1,4 @@
-import { VStack } from "@trpg/ui";
+import { VStack } from "@roll-and-call/ui";
 
 import { GAME_TAG, gameTagLabel } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";

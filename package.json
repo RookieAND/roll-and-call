@@ -1,5 +1,5 @@
 {
-  "name": "trpg-reservation-check",
+  "name": "roll-and-call",
   "version": "1.0.0",
   "private": true,
   "keywords": [],
@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "start": "pnpm -F @trpg/web start",
+    "start": "pnpm -F @roll-and-call/web start",
     "typecheck": "turbo typecheck",
     "lint": "oxlint",
     "format": "oxfmt",

@@ -1,4 +1,4 @@
-import { Chip } from "@trpg/ui";
+import { Chip } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
 

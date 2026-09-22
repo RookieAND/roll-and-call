@@ -1,4 +1,4 @@
-import { HStack, IconButton, Text, VStack } from "@trpg/ui";
+import { HStack, IconButton, Text, VStack } from "@roll-and-call/ui";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import type { DayColumn } from "@/shared/lib";

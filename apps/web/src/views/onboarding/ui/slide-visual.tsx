@@ -1,4 +1,4 @@
-import { HStack } from "@trpg/ui";
+import { HStack } from "@roll-and-call/ui";
 
 import type { OnboardingSlide } from "../model/onboarding-slides";
 import { OnboardingPreview } from "./onboarding-preview";

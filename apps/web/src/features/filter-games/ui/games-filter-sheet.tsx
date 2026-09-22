@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@trpg/ui";
+import { Button } from "@roll-and-call/ui";
 import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

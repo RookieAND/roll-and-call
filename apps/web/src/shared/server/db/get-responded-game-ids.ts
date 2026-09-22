@@ -1,5 +1,5 @@
 import "server-only";
-import { availabilities, db } from "@trpg/database";
+import { availabilities, db } from "@roll-and-call/database";
 import { eq } from "drizzle-orm";
 
 export async function getRespondedGameIds(userId: string): Promise<Set<string>> {

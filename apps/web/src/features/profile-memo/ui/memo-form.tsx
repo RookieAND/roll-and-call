@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, Text, Textarea } from "@trpg/ui";
+import { Button, HStack, Text, Textarea } from "@roll-and-call/ui";
 import { Lock } from "lucide-react";
 import { useState } from "react";
 

@@ -1,4 +1,4 @@
-import { Progress, Text } from "@trpg/ui";
+import { Progress, Text } from "@roll-and-call/ui";
 
 interface UploadingMessageProps {
   percent: number;

@@ -1,4 +1,4 @@
-import { Text } from "@trpg/ui";
+import { Text } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 interface HomeRecordSectionProps {

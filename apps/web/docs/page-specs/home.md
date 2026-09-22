@@ -193,7 +193,7 @@
 ## 9. 반응형과 접근성 현황
 
 - **breakpoint 클래스**: 홈 컴포넌트에는 `sm:`/`md:`/`lg:`가 없습니다. 폭은 `Container size="sm"`(`max-w-2xl`, `packages/ui/src/container.tsx:5`)로 제한됩니다.
-- **시맨틱**: 랜딩 표제만 `<h1>`입니다 (`landing-hero.tsx:14`). 대시보드와 "지금 모집 중", "내 게임" 섹션 제목은 `Text`이며 heading 태그로 렌더되는지는 ❓ 확인 필요: `@trpg/ui` `Text` 기본 렌더 태그.
+- **시맨틱**: 랜딩 표제만 `<h1>`입니다 (`landing-hero.tsx:14`). 대시보드와 "지금 모집 중", "내 게임" 섹션 제목은 `Text`이며 heading 태그로 렌더되는지는 ❓ 확인 필요: `@roll-and-call/ui` `Text` 기본 렌더 태그.
 - **aria**: 장식 아이콘에 `aria-hidden`이 있습니다 (`ChevronRight` `landing-recruiting-preview.tsx:23`, `home-dashboard.tsx:54`, 로그인 버튼 흰 점 `login-button.tsx:9`, `game-schedule-link.tsx:18`).
 - **alt**
   - HomeStartEmpty 이미지 alt는 "아직 참여 중인 게임이 없습니다"로, 바로 위 부제 문구와 같습니다.

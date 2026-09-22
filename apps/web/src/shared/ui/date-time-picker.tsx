@@ -1,6 +1,6 @@
 "use client";
 
-import { Select, VStack } from "@trpg/ui";
+import { Select, VStack } from "@roll-and-call/ui";
 
 import { padTwoDigits } from "@/shared/lib";
 

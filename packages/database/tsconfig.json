@@ -1,5 +1,5 @@
 {
-  "extends": "@trpg/typescript-config/base.json",
+  "extends": "@roll-and-call/typescript-config/base.json",
   "compilerOptions": {
     "types": ["node"]
   },

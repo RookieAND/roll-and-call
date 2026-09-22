@@ -1,7 +1,7 @@
 "use client";
 
-import { RichTextEditor } from "@trpg/tiptap";
-import { Chip, Field, HStack, TextInput, VStack } from "@trpg/ui";
+import { RichTextEditor } from "@roll-and-call/tiptap";
+import { Chip, Field, HStack, TextInput, VStack } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_SYNOPSIS_MAX, type GameFormValues } from "@/features/write-game";

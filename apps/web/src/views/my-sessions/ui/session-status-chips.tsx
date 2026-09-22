@@ -1,4 +1,4 @@
-import { Chip, HStack } from "@trpg/ui";
+import { Chip, HStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import type { SessionRole } from "@/entities/game";

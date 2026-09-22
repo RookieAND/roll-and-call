@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, HStack, IconButton, Text, VStack } from "@trpg/ui";
+import { cn, HStack, IconButton, Text, VStack } from "@roll-and-call/ui";
 import { Plus, X } from "lucide-react";
 
 import type { DayIntervalRow } from "../model/day-interval-row";

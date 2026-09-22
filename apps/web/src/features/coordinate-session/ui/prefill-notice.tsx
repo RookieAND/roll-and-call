@@ -1,4 +1,4 @@
-import { Button, Callout } from "@trpg/ui";
+import { Button, Callout } from "@roll-and-call/ui";
 
 interface PrefillNoticeProps {
   label: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Callout } from "@trpg/ui";
+import { Button, Callout } from "@roll-and-call/ui";
 
 interface ThumbnailErrorProps {
   message: string;

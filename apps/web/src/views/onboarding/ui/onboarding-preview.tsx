@@ -1,4 +1,4 @@
-import { Card, Grid, HStack, Text, VStack } from "@trpg/ui";
+import { Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { GAME_STATUS, GameStatusBadge } from "@/entities/game";
 import { ProfileLinks } from "@/entities/profile";

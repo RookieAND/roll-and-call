@@ -1,4 +1,4 @@
-import { HStack, Text, cn } from "@trpg/ui";
+import { HStack, Text, cn } from "@roll-and-call/ui";
 import { Users } from "lucide-react";
 
 import type { SessionCount } from "../model/session-card-model";

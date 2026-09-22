@@ -1,4 +1,4 @@
-import { Button, VStack } from "@trpg/ui";
+import { Button, VStack } from "@roll-and-call/ui";
 import { Check } from "lucide-react";
 import Link from "next/link";
 

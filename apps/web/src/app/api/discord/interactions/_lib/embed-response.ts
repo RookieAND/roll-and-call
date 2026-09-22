@@ -1,4 +1,4 @@
-import type { DiscordEmbed } from "@trpg/discord";
+import type { DiscordEmbed } from "@roll-and-call/discord";
 
 import type { DiscordInteractionResponse } from "./interaction-types";
 

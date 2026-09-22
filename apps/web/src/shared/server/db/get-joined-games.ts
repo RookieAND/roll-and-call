@@ -1,5 +1,5 @@
 import "server-only";
-import { db, participants } from "@trpg/database";
+import { db, participants } from "@roll-and-call/database";
 import { desc } from "drizzle-orm";
 
 export async function getJoinedGames(userId: string) {
