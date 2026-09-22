@@ -127,10 +127,10 @@ return <Button variant={buttonVariant} />;
 
 ## 6. 색은 토큰만 쓴다
 
-다크 모드는 `packages/ui/src/styles.css`의 `.dark`가 `--color-*` 변수를 덮어쓰는 방식이다. 그래서 **생 hex(`bg-[#F3F3F7]`)와 Tailwind 기본 팔레트(`text-red-600`)는 테마가 바뀌어도 그대로 남아 화면을 반쯤 밝은 채로 만든다.** `pnpm lint:tokens`가 두 패키지를 훑어 이를 막는다.
+다크 모드는 `<html data-theme="dark">`가 켜고, `packages/ui/src/styles.css`의 `[data-theme="dark"]`가 역할 토큰(`--rc-color-*`)을 덮어쓰는 방식이다. 상자 하나에 `data-theme`를 주면 그 안만 뒤집힌다. 그래서 **생 hex(`bg-[#F3F3F7]`)와 Tailwind 기본 팔레트(`text-red-600`)는 테마가 바뀌어도 그대로 남아 화면을 반쯤 밝은 채로 만든다.** `pnpm lint:tokens`가 두 패키지를 훑어 이를 막는다.
 
-- 새 색이 필요하면 `styles.css`의 `@theme`에 추가하고 **`.dark` 값도 같이 넣는다.**
-- **유틸리티(`bg-*`) 없이 인라인 `var()`로만 쓰는 색은 `@theme`이 아니라 `:root`에 둔다.** Tailwind v4는 쓰이지 않는 `@theme` 토큰을 빌드에서 걷어내서, 손으로 쓴 `.dark` 값만 남고 라이트 값이 사라진다(히트맵이 실제로 이렇게 깨졌다).
+- 새 색이 필요하면 `styles.css`의 `@theme`에 추가하고 **`[data-theme="dark"]` 값도 같이 넣는다.**
+- **유틸리티(`bg-*`) 없이 인라인 `var()`로만 쓰는 색은 `@theme`이 아니라 `:root`에 둔다.** Tailwind v4는 쓰이지 않는 `@theme` 토큰을 빌드에서 걷어내서, 손으로 쓴 다크 값만 남고 라이트 값이 사라진다(히트맵이 실제로 이렇게 깨졌다).
 - **숫자 램프(`gray-*`, `primary-*`)는 한 역할에만 쓴다.** 같은 단계를 배경과 글씨 양쪽에 쓰면 다크에서 한쪽이 반드시 깨진다. 예를 들어 `primary-700`은 solid 버튼의 hover 배경이라 뒤집을 수 없어서, 틴트 배경 위의 글씨는 `--color-tinted-ink`가 따로 맡는다.
 - 배경·테두리·글씨가 한 세트로 움직이는 것은 **역할 토큰**으로 묶는다: `tinted-{bg,bg-hover,border,ink}`, `heat-{0..5,ink,ink-strong}`, `primary-ink`, `hint`.
 - **항상 흰 글씨가 얹히는 솔리드 배경은 `*-solid` 토큰을 쓴다**(`danger-solid`, `success-solid`). 숫자 램프의 진한 단계(`success-700` 등)는 다크에서 글씨색으로 뒤집히므로 배경으로 쓰면 대비가 무너진다.

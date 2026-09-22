@@ -37,7 +37,7 @@ export function ThemeSetting({ className }: ThemeSettingProps) {
     const dark =
       nextMode === THEME_MODE.dark ||
       (nextMode === THEME_MODE.system && matchMedia("(prefers-color-scheme: dark)").matches);
-    document.documentElement.classList.toggle(THEME_MODE.dark, dark);
+    document.documentElement.dataset.theme = dark ? THEME_MODE.dark : THEME_MODE.light;
   }
 
   return (

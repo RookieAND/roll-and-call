@@ -1,6 +1,18 @@
 /* Registers this package's component sources with the consuming app's Tailwind. */
 @source ".";
 
+/* Tailwind v4의 dark: 기본값은 미디어 쿼리다. 테마는 data-theme 속성으로 바꾸므로 변형을 다시 건다. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* 숫자 스피너·파일 선택 등 브라우저 기본 컨트롤이 테마를 따라오게 한다. */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
 /* Tailwind 유틸리티 이름표(p-100, text-body4, rounded-500). 값은 아래 --rc-* 토큰이 갖는다. */
 @theme {
   --font-sans:
@@ -397,8 +409,7 @@
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #eaecff 0%, #f6f6fb 44%, #ffffff 76%);
 }
 
-/* 역할 토큰 — 다크. .dark는 [data-theme="dark"]로 옮기는 동안 함께 받는다. */
-.dark,
+/* 역할 토큰 — 다크. 페이지 전체는 <html data-theme="dark">, 일부만 뒤집을 때는 그 상자에 준다. */
 [data-theme="dark"] {
   --rc-color-bg-canvas-base: var(--rc-color-gray-950);
   --rc-color-bg-canvas-sunken: var(--rc-color-gray-1000);
