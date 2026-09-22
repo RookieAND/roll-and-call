@@ -1,6 +1,7 @@
 import { Button, VStack } from "@trpg/ui";
 import Link from "next/link";
 
+import { DRAW_ROW_VARIANT } from "../model/draw-row-variant";
 import type { DrawOutcome } from "../model/to-draw-outcome";
 import { DrawCompletedRow } from "./draw-completed-row";
 import { DrawQueue } from "./draw-queue";
@@ -31,14 +32,14 @@ export function AppliedDraw({ gameId, title, outcome, drawnAtLabel }: AppliedDra
         label="확정"
         caption="값이 낮은 순"
         entries={outcome.confirmed}
-        emphasized
+        variant={DRAW_ROW_VARIANT.highlight}
         meUserId={null}
         previewCount={outcome.confirmed.length}
       />
       <DrawQueue
         label="대기"
         entries={outcome.waiting}
-        emphasized={false}
+        variant={DRAW_ROW_VARIANT.plain}
         meUserId={null}
         previewCount={2}
       />

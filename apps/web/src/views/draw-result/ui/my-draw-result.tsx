@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { LeaveGameButton } from "@/features/join-game";
 
+import { DRAW_ROW_VARIANT } from "../model/draw-row-variant";
 import type { DrawOutcome } from "../model/to-draw-outcome";
 import { DrawQueue } from "./draw-queue";
 import { DrawSummary } from "./draw-summary";
@@ -48,14 +49,14 @@ export function MyDrawResult({
         label="확정"
         caption="값이 낮은 순"
         entries={outcome.confirmed}
-        emphasized={confirmed}
+        variant={DRAW_ROW_VARIANT.compact}
         meUserId={meUserId}
         previewCount={outcome.confirmed.length}
       />
       <DrawQueue
         label="대기"
         entries={outcome.waiting}
-        emphasized={!confirmed}
+        variant={DRAW_ROW_VARIANT.compact}
         meUserId={meUserId}
         previewCount={waitingPreview}
       />

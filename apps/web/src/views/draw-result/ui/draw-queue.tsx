@@ -3,13 +3,14 @@ import { Card, HStack, Text, VStack, cn } from "@trpg/ui";
 import { ExpandableRows } from "@/shared/ui";
 
 import type { DrawEntry } from "../model/draw-entry";
+import { DRAW_ROW_VARIANT, type DrawRowVariant } from "../model/draw-row-variant";
 import { DrawRow } from "./draw-row";
 
 interface DrawQueueProps {
   label: string;
   caption?: string;
   entries: DrawEntry[];
-  emphasized: boolean;
+  variant: DrawRowVariant;
   meUserId: string | null;
   previewCount: number;
 }
@@ -19,7 +20,7 @@ export function DrawQueue({
   label,
   caption,
   entries,
-  emphasized,
+  variant,
   meUserId,
   previewCount,
 }: DrawQueueProps) {
@@ -43,15 +44,17 @@ export function DrawQueue({
           radius={500}
           background="none"
           padding="none"
-          className={cn("overflow-hidden", emphasized && "border-tinted-border")}
+          className={cn(
+            "overflow-hidden",
+            variant === DRAW_ROW_VARIANT.highlight && "border-tinted-border bg-gray-50",
+          )}
         >
-          <ExpandableRows previewCount={previewCount}>
+          <ExpandableRows previewCount={previewCount} noun={label} tone="muted">
             {entries.map((entry) => (
               <DrawRow
                 key={entry.userId}
                 entry={entry}
-                roll={entry.roll}
-                emphasized={emphasized}
+                variant={variant}
                 isMe={entry.userId === meUserId}
               />
             ))}

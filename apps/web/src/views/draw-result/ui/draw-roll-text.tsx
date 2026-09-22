@@ -1,17 +1,14 @@
-import { Text } from "@trpg/ui";
+import { Text, type TextProps } from "@trpg/ui";
 
 import { SlotNumber } from "./slot-number";
 
 interface DrawRollTextProps {
   value: number;
-  emphasized: boolean;
-  strong: boolean;
+  typography: TextProps["typography"];
+  foreground: TextProps["foreground"];
 }
 
-export function DrawRollText({ value, emphasized, strong }: DrawRollTextProps) {
-  const typography = emphasized ? "heading2" : "subtitle1";
-  const foreground = strong ? "normal" : "muted";
-
+export function DrawRollText({ value, typography, foreground }: DrawRollTextProps) {
   return (
     <Text
       numeric

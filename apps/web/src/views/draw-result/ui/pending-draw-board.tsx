@@ -1,5 +1,6 @@
 import { VStack } from "@trpg/ui";
 
+import { DRAW_ROW_VARIANT } from "../model/draw-row-variant";
 import type { DrawOutcome } from "../model/to-draw-outcome";
 import { DrawQueue } from "./draw-queue";
 
@@ -15,7 +16,7 @@ export function PendingDrawBoard({ outcome }: PendingDrawBoardProps) {
         label="확정"
         caption="값이 낮은 순"
         entries={outcome.confirmed}
-        emphasized
+        variant={DRAW_ROW_VARIANT.highlight}
         meUserId={null}
         previewCount={outcome.confirmed.length}
       />
@@ -23,7 +24,7 @@ export function PendingDrawBoard({ outcome }: PendingDrawBoardProps) {
         label="대기"
         caption="자리가 나면 순서대로"
         entries={outcome.waiting}
-        emphasized={false}
+        variant={DRAW_ROW_VARIANT.plain}
         meUserId={null}
         previewCount={5}
       />
