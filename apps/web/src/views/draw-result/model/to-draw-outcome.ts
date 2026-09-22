@@ -7,7 +7,7 @@ type DrawParticipant = {
   joinedAt: Date;
   status: ParticipantStatus;
   drawRoll: number | null;
-  user: { username: string; avatarUrl: string | null } | null;
+  user: { username: string; avatarUrl: string | null; bio: string | null } | null;
 };
 
 // 적용 전후 모두 굴린 값으로 두 통을 가른다. 적용 뒤 명단이 바뀌어도 이 페이지는 추첨 당시 기록으로 남는다.
@@ -17,6 +17,7 @@ export function toDrawOutcome(participants: DrawParticipant[], maxPlayers: numbe
     userId: participant.userId,
     username: participant.user?.username ?? "익명",
     avatarUrl: participant.user?.avatarUrl ?? null,
+    bio: participant.user?.bio ?? null,
     roll: participant.drawRoll,
   });
   const rolled = participants

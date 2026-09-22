@@ -7,7 +7,13 @@ const participant = (
   drawRoll: number | null,
   status: "confirmed" | "waiting" = "waiting",
   joinedAt = new Date("2026-09-01T00:00:00Z"),
-) => ({ userId, drawRoll, status, joinedAt, user: { username: userId, avatarUrl: null } });
+) => ({
+  userId,
+  drawRoll,
+  status,
+  joinedAt,
+  user: { username: userId, avatarUrl: null, bio: null },
+});
 
 const ids = (entries: { userId: string }[]) => entries.map((entry) => entry.userId);
 

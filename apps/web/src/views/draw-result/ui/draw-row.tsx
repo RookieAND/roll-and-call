@@ -1,4 +1,4 @@
-import { Avatar, Badge, HStack, Text } from "@trpg/ui";
+import { Avatar, Badge, HStack, Text, VStack } from "@trpg/ui";
 import { cva } from "class-variance-authority";
 
 import type { DrawEntry } from "../model/draw-entry";
@@ -33,16 +33,17 @@ export function DrawRow({ entry, roll, emphasized, isMe }: DrawRowProps) {
 
   return (
     <HStack align="center" gap="125" className={row({ emphasized })}>
-      {emphasized && <Avatar src={entry.avatarUrl} name={entry.username} size="md" />}
-      <Text
-        typography="body2"
-        weight={nameWeight}
-        foreground={nameForeground}
-        truncate
-        className="min-w-0 flex-1"
-      >
-        {entry.username}
-      </Text>
+      <Avatar src={entry.avatarUrl} name={entry.username} size={emphasized ? "md" : "sm"} />
+      <VStack gap="025" className="min-w-0 flex-1">
+        <Text typography="body2" weight={nameWeight} foreground={nameForeground} truncate>
+          {entry.username}
+        </Text>
+        {entry.bio && (
+          <Text typography="body4" foreground="hint" truncate>
+            {entry.bio}
+          </Text>
+        )}
+      </VStack>
       {isMe && <Badge color="primary">나</Badge>}
       {rollText}
     </HStack>

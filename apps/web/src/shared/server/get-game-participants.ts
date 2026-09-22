@@ -20,7 +20,7 @@ export async function getGameParticipants(gameId: string) {
             drawRoll: true,
             absent: true,
           },
-          with: { user: { columns: { username: true, avatarUrl: true } } },
+          with: { user: { columns: { username: true, avatarUrl: true, bio: true } } },
         },
       },
     }),
