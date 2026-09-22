@@ -10,13 +10,13 @@ interface AttendanceBadgeProps {
 export function AttendanceBadge({ stage, absent }: AttendanceBadgeProps) {
   if (stage === ATTENDANCE_STAGE.due) {
     return (
-      <Badge color="gray" className="shrink-0 text-hint">
+      <Badge colorPalette="gray" className="shrink-0 text-hint">
         미확인
       </Badge>
     );
   }
   return (
-    <Badge color={absent ? "danger" : "success"} className="shrink-0">
+    <Badge colorPalette={absent ? "danger" : "success"} className="shrink-0">
       {absent ? "불참" : "완료"}
     </Badge>
   );

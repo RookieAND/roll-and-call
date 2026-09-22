@@ -131,7 +131,8 @@ export function ConfirmSessionForm({
 
       <div className="sticky bottom-0 -mx-200 border-t border-gray-200 bg-surface px-200 py-150">
         <Button
-          variant="confirm"
+          variant="solid"
+          colorPalette="success"
           className="h-[50px] w-full rounded-500"
           onClick={() => setConfirming(true)}
         >

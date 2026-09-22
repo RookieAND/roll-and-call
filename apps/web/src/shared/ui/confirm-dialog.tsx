@@ -35,6 +35,8 @@ export function ConfirmDialog({
     if (!pending) onOpenChange(nextOpen);
   };
 
+  const confirmPalette = danger ? "danger" : "primary";
+
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
@@ -59,7 +61,7 @@ export function ConfirmDialog({
             </Button>
             <Button
               type="button"
-              variant={danger ? "destructive" : "solid"}
+              colorPalette={confirmPalette}
               className="h-11 flex-1"
               loading={pending}
               disabled={pending}

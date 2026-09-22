@@ -28,7 +28,7 @@ export function DeadlineCard({ summary, locked, showNote = true }: DeadlineCardP
             {summary.deadlineAt}
           </Text>
           <Badge
-            color={summary.deadlinePassed ? "gray" : "primary"}
+            colorPalette={summary.deadlinePassed ? "gray" : "primary"}
             className="shrink-0 tabular-nums"
           >
             {summary.deadlineLabel}

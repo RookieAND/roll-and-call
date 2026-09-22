@@ -44,8 +44,8 @@ export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
         title={empty.title}
         description={empty.body}
         action={
-          <Button asChild className="h-11 w-full">
-            <Link href={empty.href}>{empty.label}</Link>
+          <Button render={<Link href={empty.href} />} className="h-11 w-full">
+            {empty.label}
           </Button>
         }
       />
@@ -69,8 +69,12 @@ export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
       size="section"
       title="이 상태인 세션이 없습니다"
       action={
-        <Button asChild variant="outline" className="h-11 w-full">
-          <Link href={sessionsHref(activeTab)}>필터 해제</Link>
+        <Button
+          render={<Link href={sessionsHref(activeTab)} />}
+          variant="outline"
+          className="h-11 w-full"
+        >
+          필터 해제
         </Button>
       }
     />

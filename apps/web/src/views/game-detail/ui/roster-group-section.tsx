@@ -25,8 +25,12 @@ export function RosterGroupSection({
 }: RosterGroupSectionProps) {
   const progress =
     capacity === undefined
-      ? { value: 1, max: 1, color: "waiting" as const }
-      : { value: Math.min(members.length, capacity), max: capacity, color: "confirmed" as const };
+      ? { value: 1, max: 1, variant: "tinted" as const }
+      : {
+          value: Math.min(members.length, capacity),
+          max: capacity,
+          colorPalette: "success" as const,
+        };
 
   return (
     <VStack gap="125" render={<section />}>

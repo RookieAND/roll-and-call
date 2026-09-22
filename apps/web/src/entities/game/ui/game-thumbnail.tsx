@@ -57,7 +57,7 @@ export function GameThumbnail({
           className="absolute inset-0 bg-black/30 text-white"
         >
           <EyeOff size={16} aria-hidden />
-          <Text typography="subtitle2" foreground="white">
+          <Text typography="subtitle2" foreground="onPrimary">
             {spoilerLabel}
           </Text>
         </HStack>

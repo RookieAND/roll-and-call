@@ -8,7 +8,7 @@ interface GameStatusBadgeProps {
 
 export function GameStatusBadge({ status }: GameStatusBadgeProps) {
   return (
-    <Badge className="flex-shrink-0" color={gameStatusColor[status]}>
+    <Badge className="flex-shrink-0" colorPalette={gameStatusColor[status]}>
       {gameStatusLabel[status]}
     </Badge>
   );

@@ -36,24 +36,26 @@ export function HomeCalendar({
           {monthStart.format("YYYY년 M월")}
         </Text>
         <Button
-          asChild
+          render={<Link href="/" scroll={false} />}
           variant="outline"
           size="sm"
           className="h-9 rounded-400 text-body4 font-bold"
         >
-          <Link href="/" scroll={false}>
-            오늘
-          </Link>
+          오늘
         </Button>
-        <IconButton asChild variant="ghost" aria-label="이전 달">
-          <Link href={previousHref} scroll={false}>
-            <ChevronLeft size={20} />
-          </Link>
+        <IconButton
+          render={<Link href={previousHref} scroll={false} />}
+          variant="ghost"
+          aria-label="이전 달"
+        >
+          <ChevronLeft size={20} />
         </IconButton>
-        <IconButton asChild variant="ghost" aria-label="다음 달">
-          <Link href={nextHref} scroll={false}>
-            <ChevronRight size={20} />
-          </Link>
+        <IconButton
+          render={<Link href={nextHref} scroll={false} />}
+          variant="ghost"
+          aria-label="다음 달"
+        >
+          <ChevronRight size={20} />
         </IconButton>
       </HStack>
 

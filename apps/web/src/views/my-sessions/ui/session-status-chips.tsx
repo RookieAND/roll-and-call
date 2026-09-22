@@ -25,13 +25,18 @@ export function SessionStatusChips({ activeTab, activeChip, endedCount }: Sessio
             ? `${chip.label} ${endedCount}`
             : chip.label;
         return (
-          <Chip key={chip.key} asChild selected={selected} className="h-[34px]">
-            <Link
-              href={sessionsHref(activeTab, chip.key)}
-              aria-current={selected ? "page" : undefined}
-            >
-              {label}
-            </Link>
+          <Chip
+            key={chip.key}
+            render={
+              <Link
+                href={sessionsHref(activeTab, chip.key)}
+                aria-current={selected ? "page" : undefined}
+              />
+            }
+            selected={selected}
+            className="h-[34px]"
+          >
+            {label}
           </Chip>
         );
       })}

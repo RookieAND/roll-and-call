@@ -12,7 +12,7 @@ export default function Loading() {
         back="/games"
         title="운영 관리"
         action={
-          <Badge color="primary" className="mr-100">
+          <Badge colorPalette="primary" className="mr-100">
             GM
           </Badge>
         }

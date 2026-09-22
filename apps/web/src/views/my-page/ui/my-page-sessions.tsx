@@ -47,11 +47,11 @@ export function MyPageSessions({ sessions }: MyPageSessionsProps) {
       </div>
       {sessions.isEmpty && (
         <HStack gap="100">
-          <Button asChild variant="outline" className="h-11 flex-1">
-            <Link href="/games">구인 목록</Link>
+          <Button render={<Link href="/games" />} variant="outline" className="h-11 flex-1">
+            구인 목록
           </Button>
-          <Button asChild className="h-11 flex-1">
-            <Link href="/games/new">새 구인</Link>
+          <Button render={<Link href="/games/new" />} className="h-11 flex-1">
+            새 구인
           </Button>
         </HStack>
       )}

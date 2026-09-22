@@ -45,7 +45,7 @@ export function DrawRow({ entry, variant, isMe }: DrawRowProps) {
         subline={entry.bio || EMPTY_BIO_TEXT}
         sublineForeground="hint"
       />
-      {isMe && <Badge color="primary">나</Badge>}
+      {isMe && <Badge colorPalette="primary">나</Badge>}
       <DrawRollText roll={entry.roll} variant={variant} isMe={isMe} />
     </HStack>
   );

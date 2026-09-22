@@ -25,7 +25,7 @@ export function DrawSummary({
         <Text typography="heading3" weight="extrabold" truncate className="min-w-0 flex-1">
           {title}
         </Text>
-        <Badge color="primary" className="font-mono">
+        <Badge colorPalette="primary" className="font-mono">
           1d100
         </Badge>
       </HStack>

@@ -17,8 +17,11 @@ export function AttendanceBanner({ gameId, confirmedCount }: AttendanceBannerPro
           확인을 마쳐야 이 세션이 완료로 기록됩니다.
         </Text>
       </VStack>
-      <Button asChild className="h-[46px] w-full rounded-500">
-        <Link href={`/games/${gameId}/attendance`}>출석 확인하기</Link>
+      <Button
+        render={<Link href={`/games/${gameId}/attendance`} />}
+        className="h-[46px] w-full rounded-500"
+      >
+        출석 확인하기
       </Button>
     </VStack>
   );

@@ -13,7 +13,7 @@ export function CandidateStatusTag({ status }: CandidateStatusTagProps) {
   const label = joined ? "이미 참여 중" : "대기열 등록";
 
   return (
-    <Badge color={color} className="shrink-0 rounded-100 px-075 py-025 text-body5">
+    <Badge colorPalette={color} className="shrink-0 rounded-100 px-075 py-025 text-body5">
       {label}
     </Badge>
   );

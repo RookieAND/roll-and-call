@@ -19,8 +19,11 @@ export function DrawPendingCard({ gameId }: DrawPendingCardProps) {
             확정하기 전까지는 명단도 그대로이고 알림도 나가지 않습니다.
           </Text>
         </VStack>
-        <Button asChild className="h-[46px] w-full rounded-500">
-          <Link href={`/games/${gameId}/draw`}>추첨 결과 보기</Link>
+        <Button
+          render={<Link href={`/games/${gameId}/draw`} />}
+          className="h-[46px] w-full rounded-500"
+        >
+          추첨 결과 보기
         </Button>
       </VStack>
     </Card>

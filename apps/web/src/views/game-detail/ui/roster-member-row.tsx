@@ -21,7 +21,7 @@ interface RosterMemberRowProps {
 export function RosterMemberRow({ userId, name, avatarUrl, bio, note }: RosterMemberRowProps) {
   const bioForeground = bio ? "muted" : "hint";
   const noteBadge = note && (
-    <Badge color="primary" className="shrink-0">
+    <Badge colorPalette="primary" className="shrink-0">
       {note}
     </Badge>
   );

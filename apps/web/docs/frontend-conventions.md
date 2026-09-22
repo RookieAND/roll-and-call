@@ -77,7 +77,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 | 그리려는 것                     | 쓰는 것                                                   | 손으로 그리면 안 되는 모양                           |
 | ------------------------------- | --------------------------------------------------------- | ---------------------------------------------------- |
 | 글씨                            | `Text` (`typography`·`foreground`·`weight`·`render`)      | `<span className="text-body4 font-bold ...">`        |
-| 상태 태그·라벨                  | `Badge` (`color`)                                         | `<span className="rounded-100 bg-success-100 ...">`  |
+| 상태 태그·라벨                  | `Badge` (`colorPalette`)                                  | `<span className="rounded-100 bg-success-100 ...">`  |
 | 가로·세로 배치                  | `HStack`·`VStack`·`Grid` (`render`로 태그 지정)           | `<span className="flex items-center gap-075">`       |
 | 버튼·칩·아이콘 버튼             | `Button`·`Chip`·`IconButton`                              | raw `<button className="...">`                       |
 | 사람 얼굴                       | `Avatar` (`size`)                                         | `h-[30px] w-[30px]` 같은 임의 크기 덮어쓰기          |
@@ -91,10 +91,11 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 ### 상호작용 요소는 프리미티브만 사용
 
 - 버튼·셀렉트·칩·아이콘버튼은 **오직 `@roll-and-call/ui`**에서 가져온다. raw `<button>`, `<Link>`/`<div>`를 버튼처럼 스타일링한 손코딩 금지.
-- **링크처럼 보이는 버튼**은 `<Button asChild><Link/></Button>` (또는 `IconButton asChild`). `asChild`는 자식 엘리먼트에 버튼 스타일을 입혀 실제 `<a href>`로 렌더한다.
+- **링크처럼 보이는 버튼**은 `<Button render={<Link href="…" />}>라벨</Button>` (`IconButton`·`Chip`도 같다). 버튼 스타일을 입은 실제 `<a href>`로 렌더한다.
+- **버튼 색은 `variant`(모양: `solid`·`outline`·`tinted`·`ghost`)와 `colorPalette`(색: `primary`·`success`·`danger`·`warning`·`gray`·`discord`) 두 축**으로 고른다. 기본 색은 solid·tinted가 primary, outline·ghost가 gray다. 되돌릴 수 없는 확정은 `variant="solid" colorPalette="danger"`, 삭제 입구는 `variant="outline" colorPalette="danger"`.
 - **의미 있는 태그가 필요하면 껍데기를 덧대지 말고 `render`를 준다.** `Text`·`HStack`·`VStack`·`Grid`가 모두 같은 문법이다: `<VStack gap="125" render={<section />}>`. `<section className="flex flex-col gap-125">`처럼 프리미티브를 손으로 다시 그리거나, 레이아웃만을 위해 `div`를 한 겹 더 두지 않는다.
-- **선택 가능한 pill/토글**은 `<Chip>` (`shape="pill" | "block"`, `selected`, `asChild`).
-- **바텀시트 메뉴 행**은 `<Sheet.Item>` (Button ghost 기반, `asChild`로 Link 렌더).
+- **선택 가능한 pill/토글**은 `<Chip>` (`shape="pill" | "block"`, `selected`, `render`).
+- **바텀시트 메뉴 행**은 `<Sheet.Item>` (Button ghost 기반, `render`로 Link 렌더). 시트는 `@roll-and-call/ui`의 `Sheet`를 쓴다.
 - **즉시 적용되는 단일 선택 세그먼트**(테마 시스템/라이트/다크 등)는 `<SegmentControl>` (`options`, `value`, `onChange`).
 - 예외(프리미티브와 룩이 다른 1회성 UI)는 손코딩하되 `// ponytail:` 주석으로 이유를 남긴다.
 

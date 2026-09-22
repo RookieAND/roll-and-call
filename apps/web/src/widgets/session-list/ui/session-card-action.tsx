@@ -22,15 +22,20 @@ export function SessionCardAction({ model }: SessionCardActionProps) {
     return <CancelWaitlistButton gameId={model.id} title={model.title} className="mt-125 h-11" />;
   }
 
-  const variant = CONFIRM_KINDS.includes(action.kind) ? "confirm" : "tinted";
+  const confirmKind = CONFIRM_KINDS.includes(action.kind);
+  const variant = confirmKind ? "solid" : "tinted";
+  const colorPalette = confirmKind ? "success" : "primary";
   const isHostMenu = action.kind === SESSION_ACTION_KIND.hostMenu;
 
   return (
-    <Button asChild variant={variant} className="mt-125 h-11 w-full gap-075">
-      <Link href={action.href}>
-        {action.label}
-        {isHostMenu && <ChevronRight size={14} aria-hidden />}
-      </Link>
+    <Button
+      render={<Link href={action.href} />}
+      variant={variant}
+      colorPalette={colorPalette}
+      className="mt-125 h-11 w-full gap-075"
+    >
+      {action.label}
+      {isHostMenu && <ChevronRight size={14} aria-hidden />}
     </Button>
   );
 }

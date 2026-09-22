@@ -31,7 +31,10 @@ const text = cva("", {
       successStrong: "text-success-800",
       warning: "text-warning-600",
       danger: "text-danger-600",
-      white: "text-white",
+      // 테마와 무관하게 흰 글씨. 주 색·어두운 딤처럼 늘 진한 면 위에 얹는다.
+      onPrimary: "text-on-primary",
+      // 반대 면(토스트 등) 위 글씨. 다크에서 어둡게 뒤집힌다.
+      inverse: "text-inverse",
       // 부모가 색을 정하는 자리(탭·칩 안쪽 라벨).
       inherit: "text-current",
     },

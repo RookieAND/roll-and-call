@@ -46,11 +46,11 @@ export function AppliedDraw({ gameId, title, outcome, drawnAtLabel }: AppliedDra
         previewCount={2}
       />
       <Button
-        asChild
+        render={<Link href={`/games/${gameId}`} />}
         variant="outline"
         className="h-12 w-full rounded-500 text-subtitle1 font-bold"
       >
-        <Link href={`/games/${gameId}`}>구인 글로 돌아가기</Link>
+        구인 글로 돌아가기
       </Button>
     </VStack>
   );

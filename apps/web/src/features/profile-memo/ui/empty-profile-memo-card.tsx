@@ -21,8 +21,12 @@ export function EmptyProfileMemoCard({ targetId, targetName }: EmptyProfileMemoC
       <Text typography="body3" foreground="hint" render={<p />} className="mt-100">
         이 사람에 대해 남긴 것이 없습니다.
       </Text>
-      <Button asChild variant="outline" className="mt-150 h-11 w-full">
-        <Link href={`/u/${targetId}/memo`}>메모 쓰기</Link>
+      <Button
+        render={<Link href={`/u/${targetId}/memo`} />}
+        variant="outline"
+        className="mt-150 h-11 w-full"
+      >
+        메모 쓰기
       </Button>
       <Text typography="body4" foreground="hint" render={<p />} className="mt-125">
         {targetName}

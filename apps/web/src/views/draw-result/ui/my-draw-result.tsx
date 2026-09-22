@@ -63,12 +63,16 @@ export function MyDrawResult({
         previewCount={waitingPreview}
       />
       <HStack gap="100">
-        <Button asChild variant="outline" className={PAIR_CLASS}>
-          <Link href={`/games/${gameId}`}>구인 글 보기</Link>
+        <Button
+          render={<Link href={`/games/${gameId}`} />}
+          variant="outline"
+          className={PAIR_CLASS}
+        >
+          구인 글 보기
         </Button>
         {confirmed && needsAvailability && (
-          <Button asChild className={PAIR_CLASS}>
-            <Link href={`/games/${gameId}/schedule`}>가능 시간 제출</Link>
+          <Button render={<Link href={`/games/${gameId}/schedule`} />} className={PAIR_CLASS}>
+            가능 시간 제출
           </Button>
         )}
         {!confirmed && (

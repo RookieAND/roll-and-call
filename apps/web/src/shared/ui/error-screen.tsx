@@ -23,9 +23,7 @@ export function ErrorScreen({ title, description, action }: ErrorScreenProps) {
       </VStack>
       <HStack gap="100">
         {action}
-        <Button asChild>
-          <Link href="/">메인으로 돌아가기</Link>
-        </Button>
+        <Button render={<Link href="/" />}>메인으로 돌아가기</Button>
       </HStack>
     </VStack>
   );

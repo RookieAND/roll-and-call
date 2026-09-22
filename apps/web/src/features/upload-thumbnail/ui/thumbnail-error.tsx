@@ -12,7 +12,13 @@ export function ThumbnailError({ message, onRetry }: ThumbnailErrorProps) {
     <Callout
       tone="danger"
       action={
-        <Button variant="danger" size="sm" className="h-[34px] bg-surface" onClick={onRetry}>
+        <Button
+          variant="outline"
+          colorPalette="danger"
+          size="sm"
+          className="h-[34px] bg-surface"
+          onClick={onRetry}
+        >
           다시 고르기
         </Button>
       }

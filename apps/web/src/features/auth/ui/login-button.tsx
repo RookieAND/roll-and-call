@@ -12,7 +12,8 @@ interface LoginButtonProps {
 export function LoginButton({ className, next }: LoginButtonProps) {
   return (
     <Button
-      variant="discord"
+      variant="solid"
+      colorPalette="discord"
       size="lg"
       onClick={() => signInWithDiscord(next)}
       className={cn(className)}

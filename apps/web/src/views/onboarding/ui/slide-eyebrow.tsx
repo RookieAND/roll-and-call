@@ -11,7 +11,7 @@ export function SlideEyebrow({ number, label }: SlideEyebrowProps) {
       <Text
         typography="code2"
         weight="extrabold"
-        foreground="white"
+        foreground="onPrimary"
         render={<span />}
         className="flex h-7 w-7 flex-none items-center justify-center rounded-300 bg-primary-600"
       >

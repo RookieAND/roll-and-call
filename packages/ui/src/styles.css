@@ -131,6 +131,9 @@
   --color-extreme-ink: var(--rc-legacy-extreme-ink);
 
   --color-saturday: var(--rc-color-data-blue-ink);
+
+  --color-on-primary: var(--rc-color-fg-on-primary);
+  --color-inverse: var(--rc-color-fg-inverse);
 }
 
 /* 프리미티브·크기·모션. 테마와 무관하게 값이 고정된다. 화면 코드는 프리미티브를 직접 읽지 않는다. */

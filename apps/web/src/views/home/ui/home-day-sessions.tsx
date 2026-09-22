@@ -39,8 +39,8 @@ export function HomeDaySessions({ date, sessions }: HomeDaySessionsProps) {
             </>
           }
           action={
-            <Button asChild variant="outline" className="h-11 w-full">
-              <Link href="/games">구인 목록 보기</Link>
+            <Button render={<Link href="/games" />} variant="outline" className="h-11 w-full">
+              구인 목록 보기
             </Button>
           }
         />

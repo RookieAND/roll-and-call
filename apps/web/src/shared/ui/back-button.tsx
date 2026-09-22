@@ -16,17 +16,22 @@ export function BackButton({ fallback }: BackButtonProps) {
   const router = useRouter();
 
   return (
-    <IconButton asChild variant="ghost" aria-label="뒤로" className={BACK_BUTTON_CLASS}>
-      <Link
-        href={fallback}
-        onClick={(event) => {
-          if (!navigationHistory.navigatedInApp) return;
-          event.preventDefault();
-          router.back();
-        }}
-      >
-        <ChevronLeft size={22} />
-      </Link>
+    <IconButton
+      render={
+        <Link
+          href={fallback}
+          onClick={(event) => {
+            if (!navigationHistory.navigatedInApp) return;
+            event.preventDefault();
+            router.back();
+          }}
+        />
+      }
+      variant="ghost"
+      aria-label="뒤로"
+      className={BACK_BUTTON_CLASS}
+    >
+      <ChevronLeft size={22} />
     </IconButton>
   );
 }

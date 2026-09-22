@@ -31,7 +31,7 @@ export function SummaryLine({ icon: Icon, tone, label, value, badge }: SummaryLi
           {value}
         </Text>
         {badge && (
-          <Badge color="gray" className="shrink-0">
+          <Badge colorPalette="gray" className="shrink-0">
             {badge}
           </Badge>
         )}

@@ -26,10 +26,10 @@ export function AttendanceHeader({
       >
         {title}
       </Text>
-      <Badge color="gray" className="flex-none">
+      <Badge colorPalette="gray" className="flex-none">
         {rule}
       </Badge>
-      <Badge color="gray" className="flex-none">
+      <Badge colorPalette="gray" className="flex-none">
         {countLabel}
       </Badge>
     </HStack>

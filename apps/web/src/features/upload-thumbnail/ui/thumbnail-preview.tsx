@@ -36,7 +36,8 @@ export function ThumbnailPreview({
           교체
         </Button>
         <Button
-          variant="danger"
+          variant="outline"
+          colorPalette="danger"
           size="sm"
           className="h-[34px]"
           disabled={uploading}

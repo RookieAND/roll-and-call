@@ -10,11 +10,13 @@ interface ManageGameLinkProps {
 
 export function ManageGameLink({ gameId }: ManageGameLinkProps) {
   return (
-    <Button asChild variant="tinted" className={ACTION_PRIMARY_CLASS}>
-      <Link href={`/games/${gameId}/manage`}>
-        운영 관리
-        <ChevronRight size={15} aria-hidden />
-      </Link>
+    <Button
+      render={<Link href={`/games/${gameId}/manage`} />}
+      variant="tinted"
+      className={ACTION_PRIMARY_CLASS}
+    >
+      운영 관리
+      <ChevronRight size={15} aria-hidden />
     </Button>
   );
 }

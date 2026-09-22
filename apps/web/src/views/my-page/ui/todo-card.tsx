@@ -28,6 +28,9 @@ interface TodoCardProps {
 export function TodoCard({ item: { title, todo } }: TodoCardProps) {
   const { label, icon: Icon } = EYEBROW[todo.kind]!;
 
+  const buttonVariant = todo.blocked ? "solid" : "tinted";
+  const buttonPalette = todo.blocked ? "success" : "primary";
+
   return (
     <Card padding="none" className={todoCard({ blocked: todo.blocked })}>
       <HStack
@@ -51,8 +54,13 @@ export function TodoCard({ item: { title, todo } }: TodoCardProps) {
       >
         {todo.description}
       </Text>
-      <Button asChild variant={todo.blocked ? "confirm" : "tinted"} className="mt-150 h-11 w-full">
-        <Link href={todo.href}>{todo.label}</Link>
+      <Button
+        render={<Link href={todo.href} />}
+        variant={buttonVariant}
+        colorPalette={buttonPalette}
+        className="mt-150 h-11 w-full"
+      >
+        {todo.label}
       </Button>
     </Card>
   );

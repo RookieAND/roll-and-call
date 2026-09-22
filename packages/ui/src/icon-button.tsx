@@ -1,6 +1,5 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import { isValidElement, type ReactElement } from "react";
 
 import { cn } from "./cn";
 import { resolveStateProp } from "./resolve-state-prop";
@@ -24,9 +23,7 @@ const iconButton = cva(
 type IconButtonState = VariantProps<typeof iconButton> & { disabled: boolean };
 
 export interface IconButtonProps
-  extends StateComponentProps<"button", IconButtonState>, VariantProps<typeof iconButton> {
-  asChild?: boolean;
-}
+  extends StateComponentProps<"button", IconButtonState>, VariantProps<typeof iconButton> {}
 
 export function IconButton({
   variant = "ghost",
@@ -35,29 +32,25 @@ export function IconButton({
   style,
   type,
   disabled = false,
-  asChild,
   render,
   ref,
   children,
   ...props
 }: IconButtonProps) {
-  const useAsChild = asChild && isValidElement(children);
   const state = { variant, size, disabled };
 
   return useRender({
     ref,
     defaultTagName: "button",
-    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : render,
+    render,
     state,
     props: {
       "data-slot": "icon-button",
       className: cn(iconButton({ variant, size }), resolveStateProp(className, state)),
       style: resolveStateProp(style, state),
-      ...(useAsChild || render
-        ? { disabled: disabled || undefined }
-        : { type: type ?? "button", disabled }),
+      ...(render ? { disabled: disabled || undefined } : { type: type ?? "button", disabled }),
       ...props,
-      ...(useAsChild ? {} : { children }),
+      children,
     },
   });
 }

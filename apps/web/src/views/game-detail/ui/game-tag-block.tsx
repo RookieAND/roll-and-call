@@ -15,8 +15,8 @@ export function GameTagBlock({ label, tags, note, tone = "outline" }: GameTagBlo
       </Text>
       <HStack gap="075" wrap>
         {tags.map((tag) => (
-          <Chip key={tag} tone={tone} asChild>
-            <span>{tag}</span>
+          <Chip key={tag} tone={tone} render={<span />}>
+            {tag}
           </Chip>
         ))}
       </HStack>

@@ -41,11 +41,11 @@ export function MyPageProfile({
           sublineForeground={bioForeground}
         />
         <Button
-          asChild
+          render={<Link href="/me/edit" />}
           variant="outline"
           className="h-9 flex-none rounded-400 px-150 text-xs font-bold"
         >
-          <Link href="/me/edit">편집</Link>
+          편집
         </Button>
       </HStack>
 

@@ -15,7 +15,7 @@ export function RecruitMethodBadge({
 }: RecruitMethodBadgeProps) {
   const color = method === RECRUIT_METHOD.lottery ? "primary" : "gray";
   return (
-    <Badge color={color} className="shrink-0">
+    <Badge colorPalette={color} className="shrink-0">
       {label}
     </Badge>
   );

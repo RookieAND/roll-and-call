@@ -20,7 +20,7 @@ export function SlotMemberChip({ name, isGm }: SlotMemberChipProps) {
         {name}
       </Text>
       {isGm && (
-        <Badge color="primary" className="border border-primary-200 px-075 py-050">
+        <Badge colorPalette="primary" className="border border-primary-200 px-075 py-050">
           GM
         </Badge>
       )}

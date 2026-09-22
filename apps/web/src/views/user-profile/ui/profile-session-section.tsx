@@ -42,10 +42,12 @@ export function ProfileSessionSection({ userId, section, items }: ProfileSession
         <VStack gap="125">
           <SessionList items={items.slice(0, PREVIEW_COUNT)} />
           {hasMore && (
-            <Button asChild variant="outline" className="h-11 w-full">
-              <Link href={userSessionsHref(userId, section.key)}>
-                {section.title} 세션 {items.length}건 모두 보기
-              </Link>
+            <Button
+              render={<Link href={userSessionsHref(userId, section.key)} />}
+              variant="outline"
+              className="h-11 w-full"
+            >
+              {section.title} 세션 {items.length}건 모두 보기
             </Button>
           )}
         </VStack>

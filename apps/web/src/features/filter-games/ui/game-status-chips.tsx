@@ -22,13 +22,18 @@ export function GameStatusChips({ filter }: GameStatusChipsProps) {
       {GAME_STATUS_FILTERS.map((option) => {
         const selected = option.key === current;
         return (
-          <Chip key={option.key} asChild selected={selected} className="h-[34px]">
-            <Link
-              href={gamesHref(filterParams({ ...filter, status: option.key }))}
-              aria-current={selected ? "page" : undefined}
-            >
-              {option.label}
-            </Link>
+          <Chip
+            key={option.key}
+            render={
+              <Link
+                href={gamesHref(filterParams({ ...filter, status: option.key }))}
+                aria-current={selected ? "page" : undefined}
+              />
+            }
+            selected={selected}
+            className="h-[34px]"
+          >
+            {option.label}
           </Chip>
         );
       })}

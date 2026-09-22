@@ -72,11 +72,13 @@ export function HelpListView() {
               <br />
               운영자와 다른 GM들이 같이 봅니다.
             </Text>
-            <Button asChild variant="outline" className="mt-150 h-11 w-full">
-              <a href={DISCORD_INVITE_URL} target="_blank" rel="noreferrer">
-                디스코드 서버 열기
-                <ExternalLink size={15} aria-hidden />
-              </a>
+            <Button
+              render={<a href={DISCORD_INVITE_URL} target="_blank" rel="noreferrer" />}
+              variant="outline"
+              className="mt-150 h-11 w-full"
+            >
+              디스코드 서버 열기
+              <ExternalLink size={15} aria-hidden />
             </Button>
           </section>
         </VStack>

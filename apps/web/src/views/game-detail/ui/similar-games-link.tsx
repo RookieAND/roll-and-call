@@ -7,8 +7,8 @@ interface SimilarGamesLinkProps {
 
 export function SimilarGamesLink({ className }: SimilarGamesLinkProps) {
   return (
-    <Button asChild variant="outline" className={className}>
-      <Link href="/games">비슷한 글 찾기</Link>
+    <Button render={<Link href="/games" />} variant="outline" className={className}>
+      비슷한 글 찾기
     </Button>
   );
 }

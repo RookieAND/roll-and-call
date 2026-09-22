@@ -47,7 +47,7 @@ export function SessionCard({ model }: SessionCardProps) {
           <Text truncate typography="heading3" foreground={titleForeground} className="min-w-0">
             {model.title}
           </Text>
-          <Badge color={model.badgeColor} className="shrink-0">
+          <Badge colorPalette={model.badgeColor} className="shrink-0">
             {model.badge}
           </Badge>
         </HStack>

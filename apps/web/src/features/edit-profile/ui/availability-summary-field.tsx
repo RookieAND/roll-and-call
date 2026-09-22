@@ -58,8 +58,12 @@ export function AvailabilitySummaryField({ intervals }: AvailabilitySummaryField
         </HStack>
       )}
 
-      <Button asChild variant="outline" className="mt-150 h-11 w-full text-primary-ink">
-        <Link href="/me/availability">{days.length > 0 ? "수정하기" : "시간대 설정하기"}</Link>
+      <Button
+        render={<Link href="/me/availability" />}
+        variant="outline"
+        className="mt-150 h-11 w-full text-primary-ink"
+      >
+        {days.length > 0 ? "수정하기" : "시간대 설정하기"}
       </Button>
     </Card>
   );

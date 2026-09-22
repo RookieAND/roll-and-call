@@ -27,7 +27,7 @@ export async function ManageGameView({ id }: { id: string }) {
         back={`/games/${id}`}
         title="운영 관리"
         action={
-          <Badge color="primary" className="mr-100">
+          <Badge colorPalette="primary" className="mr-100">
             GM
           </Badge>
         }
@@ -42,7 +42,7 @@ export async function ManageGameView({ id }: { id: string }) {
             >
               {game.title}
             </Text>
-            <Badge color="gray" className="shrink-0">
+            <Badge colorPalette="gray" className="shrink-0">
               {stage}
             </Badge>
           </HStack>

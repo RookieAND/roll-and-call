@@ -1,6 +1,5 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-import { isValidElement, type ReactElement } from "react";
 
 import { cn } from "./cn";
 import { resolveStateProp } from "./resolve-state-prop";
@@ -33,9 +32,7 @@ const chip = cva(
 type ChipState = VariantProps<typeof chip> & { disabled: boolean };
 
 export interface ChipProps
-  extends StateComponentProps<"button", ChipState>, VariantProps<typeof chip> {
-  asChild?: boolean;
-}
+  extends StateComponentProps<"button", ChipState>, VariantProps<typeof chip> {}
 
 export function Chip({
   shape = "pill",
@@ -45,29 +42,25 @@ export function Chip({
   style,
   type,
   disabled = false,
-  asChild,
   render,
   ref,
   children,
   ...props
 }: ChipProps) {
-  const useAsChild = asChild && isValidElement(children);
   const state = { shape, tone, selected, disabled };
 
   return useRender({
     ref,
     defaultTagName: "button",
-    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : render,
+    render,
     state,
     props: {
       "data-slot": "chip",
       className: cn(chip({ shape, tone, selected }), resolveStateProp(className, state)),
       style: resolveStateProp(style, state),
-      ...(useAsChild || render
-        ? { disabled: disabled || undefined }
-        : { type: type ?? "button", disabled }),
+      ...(render ? { disabled: disabled || undefined } : { type: type ?? "button", disabled }),
       ...props,
-      ...(useAsChild ? {} : { children }),
+      children,
     },
   });
 }

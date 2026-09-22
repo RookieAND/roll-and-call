@@ -30,10 +30,8 @@ export async function GameScheduleView({ id }: { id: string }) {
       title="일정 조율"
       action={
         isGm && (
-          <IconButton asChild aria-label="이 구인 관리">
-            <Link href={`/games/${id}/manage`}>
-              <MoreVertical size={20} />
-            </Link>
+          <IconButton render={<Link href={`/games/${id}/manage`} />} aria-label="이 구인 관리">
+            <MoreVertical size={20} />
           </IconButton>
         )
       }
@@ -51,8 +49,8 @@ export async function GameScheduleView({ id }: { id: string }) {
               title="조율 기간을 먼저 정해주세요"
               description="조율 기간이 있어야 참여자가 가능 시간을 낼 수 있습니다."
               action={
-                <Button asChild className="h-11 w-full">
-                  <Link href={`/games/${id}/edit`}>구인 수정</Link>
+                <Button render={<Link href={`/games/${id}/edit`} />} className="h-11 w-full">
+                  구인 수정
                 </Button>
               }
             />

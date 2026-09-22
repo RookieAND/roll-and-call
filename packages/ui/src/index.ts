@@ -51,3 +51,4 @@ export {
   type TableCellProps,
 } from "./table";
 export type { StateClassName, StateStyle, StateProps } from "./state-props";
+export { COLOR_PALETTE, type ColorPalette } from "./color-palette";

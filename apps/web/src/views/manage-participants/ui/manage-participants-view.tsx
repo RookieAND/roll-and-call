@@ -35,8 +35,12 @@ export async function ManageParticipantsView({ id }: { id: string }) {
                 title="GM만 볼 수 있는 화면입니다"
                 description="이 구인글의 참여자 관리는 GM만 열 수 있습니다."
                 action={
-                  <Button asChild variant="outline" className="h-11 w-full">
-                    <Link href={`/games/${id}`}>구인 상세로 돌아가기</Link>
+                  <Button
+                    render={<Link href={`/games/${id}`} />}
+                    variant="outline"
+                    className="h-11 w-full"
+                  >
+                    구인 상세로 돌아가기
                   </Button>
                 }
               />

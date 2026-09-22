@@ -1,95 +1,75 @@
 import { useRender } from "@base-ui-components/react/use-render";
-import { cva, type VariantProps } from "class-variance-authority";
-import { isValidElement, type ReactElement } from "react";
+import type { VariantProps } from "class-variance-authority";
 
+import { buttonVariants } from "./button-variants";
 import { cn } from "./cn";
+import { defaultColorPalette } from "./default-color-palette";
 import { resolveStateProp } from "./resolve-state-prop";
 import type { StateComponentProps } from "./state-props";
 
-const button = cva(
-  "inline-flex items-center justify-center gap-100 rounded-500 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        solid: "bg-primary-600 text-white hover:bg-primary-700",
-        discord:
-          "bg-discord text-white shadow-[0_6px_18px_rgba(88,101,242,0.24)] hover:bg-discord-dark",
-        confirm: "bg-success-solid text-white hover:bg-success-solid-hover",
-        outline: "border border-gray-200 text-gray-600 hover:bg-gray-50",
-        tinted: "border border-tinted-border bg-tinted-bg text-tinted-ink hover:bg-tinted-bg-hover",
-        ghost: "text-gray-700 hover:bg-gray-100",
-        danger: "border border-danger-200 text-danger-600 hover:bg-danger-50",
-        // 되돌릴 수 없는 일을 확정하는 다이얼로그 버튼. 흰 글씨라 테마와 무관한 solid 토큰을 쓴다.
-        destructive: "bg-danger-solid text-white hover:bg-danger-solid-hover",
-      },
-      size: {
-        sm: "h-8 px-150 text-sm",
-        md: "h-10 px-200 text-sm",
-        lg: "h-12 px-300 text-heading3",
-      },
-    },
-    defaultVariants: { variant: "solid", size: "md" },
-  },
-);
+type ButtonVariantProps = VariantProps<typeof buttonVariants>;
 
-type ButtonState = VariantProps<typeof button> & { loading: boolean; disabled: boolean };
+type ButtonState = {
+  variant: NonNullable<ButtonVariantProps["variant"]>;
+  colorPalette: NonNullable<ButtonVariantProps["colorPalette"]>;
+  size: NonNullable<ButtonVariantProps["size"]>;
+  loading: boolean;
+  disabled: boolean;
+};
 
-export interface ButtonProps
-  extends StateComponentProps<"button", ButtonState>, VariantProps<typeof button> {
+export interface ButtonProps extends StateComponentProps<"button", ButtonState> {
+  variant?: ButtonState["variant"];
+  colorPalette?: ButtonState["colorPalette"];
+  // sm(32px)은 앱바 안처럼 좁은 자리 전용이다. 터치 주 액션에는 md 이상을 쓴다.
+  size?: ButtonState["size"];
   loading?: boolean;
-  asChild?: boolean;
 }
 
 export function Button({
   variant = "solid",
+  colorPalette,
   size = "md",
   className,
   style,
   type,
   loading = false,
   disabled = false,
-  asChild,
   render,
   ref,
   children,
   ...props
 }: ButtonProps) {
-  const useAsChild = asChild && isValidElement(children);
-  const state = { variant, size, loading, disabled: disabled || loading };
-  const classes = cn(
-    button({ variant, size }),
-    // ponytail: loading always reads as the muted-primary state from the 시안
-    loading && "bg-primary-300 text-white hover:bg-primary-300",
-    resolveStateProp(className, state),
-  );
-
+  const palette = colorPalette ?? defaultColorPalette(variant);
+  const state = { variant, colorPalette: palette, size, loading, disabled: disabled || loading };
   return useRender({
     ref,
     defaultTagName: "button",
-    render: useAsChild ? (children as ReactElement<Record<string, unknown>>) : render,
+    render,
     state,
+    stateAttributesMapping: { colorPalette: (value) => ({ "data-color-palette": String(value) }) },
     props: {
       "data-slot": "button",
-      className: classes,
+      className: cn(
+        buttonVariants({ variant, colorPalette: palette, size }),
+        // ponytail: loading always reads as the muted-primary state from the 시안
+        loading && "bg-primary-300 text-white hover:bg-primary-300",
+        resolveStateProp(className, state),
+      ),
       style: resolveStateProp(style, state),
-      ...(useAsChild || render ? {} : { type: type ?? "button", disabled: disabled || loading }),
+      ...(render ? {} : { type: type ?? "button", disabled: disabled || loading }),
       ...props,
-      ...(useAsChild
-        ? {}
-        : {
-            children: (
-              <>
-                {loading && (
-                  <span
-                    aria-hidden
-                    data-slot="button-spinner"
-                    className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/45 border-t-white"
-                  />
-                )}
-                {children}
-              </>
-            ),
-          }),
+      children: (
+        <>
+          {loading && (
+            <span
+              aria-hidden
+              data-slot="button-spinner"
+              className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/45 border-t-white"
+            />
+          )}
+          {children}
+        </>
+      ),
     },
   });
 }

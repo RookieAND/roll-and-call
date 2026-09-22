@@ -11,8 +11,8 @@ interface GamesEmptyProps {
 
 export function GamesEmpty({ filter }: GamesEmptyProps) {
   const newGame = (
-    <Button asChild className="h-11">
-      <Link href="/games/new">새 구인 등록</Link>
+    <Button render={<Link href="/games/new" />} className="h-11">
+      새 구인 등록
     </Button>
   );
 
@@ -24,8 +24,12 @@ export function GamesEmpty({ filter }: GamesEmptyProps) {
         description="검색어를 바꾸거나 직접 구인을 올려보세요."
         action={
           <HStack gap="100" className="w-full [&>*]:flex-1">
-            <Button asChild variant="outline" className="h-11">
-              <Link href={gamesHref(filterParams({ ...filter, q: undefined }))}>검색 초기화</Link>
+            <Button
+              render={<Link href={gamesHref(filterParams({ ...filter, q: undefined }))} />}
+              variant="outline"
+              className="h-11"
+            >
+              검색 초기화
             </Button>
             {newGame}
           </HStack>
@@ -42,10 +46,16 @@ export function GamesEmpty({ filter }: GamesEmptyProps) {
         image="/empty-states/empty-search.png"
         title={`'${label}'인 구인이 없습니다`}
         action={
-          <Button asChild variant="outline" className="h-11 w-full">
-            <Link href={gamesHref(filterParams({ ...filter, status: GAME_STATUS_FILTER_DEFAULT }))}>
-              필터 해제
-            </Link>
+          <Button
+            render={
+              <Link
+                href={gamesHref(filterParams({ ...filter, status: GAME_STATUS_FILTER_DEFAULT }))}
+              />
+            }
+            variant="outline"
+            className="h-11 w-full"
+          >
+            필터 해제
           </Button>
         }
       />
