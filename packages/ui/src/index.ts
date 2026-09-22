@@ -43,4 +43,11 @@ export {
 export { Toast, type ToastViewportProps } from "./toast-parts";
 export { toast } from "./toast";
 export type { ToastOptions } from "./toast-options";
+export {
+  Table,
+  type TableRootProps,
+  type TableRowProps,
+  type TableHeadProps,
+  type TableCellProps,
+} from "./table";
 export type { StateClassName, StateStyle, StateProps } from "./state-props";
