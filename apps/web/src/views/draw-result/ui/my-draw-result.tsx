@@ -31,7 +31,6 @@ export function MyDrawResult({
   const confirmed = waitlistRank === null;
   const myWaitingIndex = outcome.waiting.findIndex((entry) => entry.userId === meUserId);
   const waitingPreview = Math.max(2, myWaitingIndex + 1);
-  const rollingOnceKey = `draw-seen:${gameId}`;
 
   return (
     <VStack gap="250">
@@ -52,7 +51,6 @@ export function MyDrawResult({
         emphasized={confirmed}
         meUserId={meUserId}
         previewCount={outcome.confirmed.length}
-        rollingOnceKey={rollingOnceKey}
       />
       <DrawQueue
         label="대기"
@@ -60,7 +58,6 @@ export function MyDrawResult({
         emphasized={!confirmed}
         meUserId={meUserId}
         previewCount={waitingPreview}
-        rollingOnceKey={rollingOnceKey}
       />
       <HStack gap="100">
         <Button asChild variant="outline" className={PAIR_CLASS}>

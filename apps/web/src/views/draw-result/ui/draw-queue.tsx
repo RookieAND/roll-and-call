@@ -9,12 +9,9 @@ interface DrawQueueProps {
   label: string;
   caption?: string;
   entries: DrawEntry[];
-  // 들어올 때마다 모든 값을 한 번에 돌린다(확정 전 GM 롤 시트).
-  spinAll?: boolean;
   emphasized: boolean;
   meUserId: string | null;
   previewCount: number;
-  rollingOnceKey?: string;
 }
 
 // 확정선을 긋지 않고 목록을 두 통으로 나눈다. 어느 줄이든 지금 어느 통에 있는지 보이게 한다.
@@ -22,11 +19,9 @@ export function DrawQueue({
   label,
   caption,
   entries,
-  spinAll = false,
   emphasized,
   meUserId,
   previewCount,
-  rollingOnceKey,
 }: DrawQueueProps) {
   return (
     <VStack gap="100" render={<section />}>
@@ -58,8 +53,6 @@ export function DrawQueue({
                 roll={entry.roll}
                 emphasized={emphasized}
                 isMe={entry.userId === meUserId}
-                spinAll={spinAll}
-                rollingOnceKey={rollingOnceKey}
               />
             ))}
           </ExpandableRows>

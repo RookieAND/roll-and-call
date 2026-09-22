@@ -15,7 +15,6 @@ export function PendingDrawBoard({ outcome }: PendingDrawBoardProps) {
         label="확정"
         caption="값이 낮은 순"
         entries={outcome.confirmed}
-        spinAll
         emphasized
         meUserId={null}
         previewCount={outcome.confirmed.length}
@@ -24,7 +23,6 @@ export function PendingDrawBoard({ outcome }: PendingDrawBoardProps) {
         label="대기"
         caption="자리가 나면 순서대로"
         entries={outcome.waiting}
-        spinAll
         emphasized={false}
         meUserId={null}
         previewCount={5}
