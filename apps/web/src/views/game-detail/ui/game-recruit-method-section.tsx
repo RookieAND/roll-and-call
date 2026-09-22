@@ -32,11 +32,13 @@ export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps
           <Text typography="subtitle1" render={<p />}>
             {isLottery ? "추첨" : "선착순"}
           </Text>
-          {lines.map((line) => (
-            <Text key={line} typography="body4" foreground="muted" render={<p />}>
-              {line}
-            </Text>
-          ))}
+          <VStack gap={0}>
+            {lines.map((line) => (
+              <Text key={line} typography="body4" foreground="muted" render={<p />}>
+                {line}
+              </Text>
+            ))}
+          </VStack>
         </VStack>
       </HStack>
     </VStack>
