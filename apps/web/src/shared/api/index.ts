@@ -9,7 +9,6 @@ export {
   GAME_STATUS_FILTERS,
   GAME_STATUS_FILTER_DEFAULT,
   type GameSort,
-  type GameStatusFilter,
   type GamesFilter,
 } from "./game-sort";
 export { parseGameSort } from "./parse-game-sort";

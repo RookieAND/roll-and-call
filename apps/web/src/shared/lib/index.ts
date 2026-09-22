@@ -3,7 +3,6 @@ export { toKst } from "./to-kst";
 export { formatDateTime } from "./format-date-time";
 export { formatMonthDay } from "./format-month-day";
 export { formatDate } from "./format-date";
-export { dday } from "./dday";
 export { ddayKst } from "./dday-kst";
 export { formatGameSchedule } from "./format-game-schedule";
 export { SLOT_MINUTES, DAY_START_HOUR, DAY_END_HOUR } from "./slot-window";

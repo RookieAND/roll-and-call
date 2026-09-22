@@ -20,5 +20,3 @@ export async function loadProfile(userId: string) {
     absences: recentAbsences(joined, userId),
   };
 }
-
-export type LoadedProfile = NonNullable<Awaited<ReturnType<typeof loadProfile>>>;

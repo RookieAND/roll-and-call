@@ -3,8 +3,6 @@ import { db } from "@trpg/database";
 
 import { getRespondedUserIds } from "./get-responded-user-ids";
 
-export type GameParticipantsData = NonNullable<Awaited<ReturnType<typeof getGameParticipants>>>;
-
 export async function getGameParticipants(gameId: string) {
   const [game, respondedUserIds] = await Promise.all([
     db.query.games.findFirst({

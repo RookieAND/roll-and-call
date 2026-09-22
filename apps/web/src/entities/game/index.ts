@@ -22,15 +22,8 @@ export { GameStatusBadge } from "./ui/game-status-badge";
 export { GameRuleChip } from "./ui/game-rule-chip";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
 export { GameGmLabel } from "./ui/game-gm-label";
-export {
-  deriveSessionState,
-  SESSION_ROLE,
-  SESSION_STATE,
-  type SessionState,
-  type SessionRole,
-} from "./model/session";
+export { deriveSessionState, SESSION_ROLE, SESSION_STATE, type SessionRole } from "./model/session";
 export { isSessionLocked } from "./model/session-lock";
-export { sessionEndsAt } from "./model/session-end";
 export { isSessionEnded } from "./model/is-session-ended";
 export { isAttendanceDue } from "./model/is-attendance-due";
 export { ABSENCE_RECORD_MONTHS, absenceExpiresAt } from "./model/absence-expiry";

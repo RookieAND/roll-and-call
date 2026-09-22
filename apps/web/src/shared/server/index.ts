@@ -10,18 +10,17 @@ export {
   availabilities,
   type Profile,
   type Game,
-  type Participant,
   type Availability,
   type AvailabilityInterval,
   type ProfileLink,
 } from "@trpg/database";
-export { getRecruitingGamesPage, GAMES_PAGE_SIZE } from "./db/get-recruiting-games-page";
+export { getRecruitingGamesPage } from "./db/get-recruiting-games-page";
 export { getGamesByGm } from "./db/get-games-by-gm";
 export { getJoinedGames } from "./db/get-joined-games";
 export { getMonthSessions, type MonthSessionRow } from "./db/get-month-sessions";
 export { getGameById, type GameDetailData } from "./db/get-game-by-id";
 export { requireGmGame } from "./auth/require-gm-game";
-export { getGameParticipants, type GameParticipantsData } from "./db/get-game-participants";
+export { getGameParticipants } from "./db/get-game-participants";
 export { getRespondedGameIds } from "./db/get-responded-game-ids";
 export { getResponseCounts } from "./db/get-response-counts";
 export { getResponseCountsByGm } from "./db/get-response-counts-by-gm";

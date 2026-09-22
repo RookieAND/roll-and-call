@@ -12,8 +12,3 @@ export function normalizeKeywords(input: readonly string[]): string[] {
   }
   return keywords;
 }
-
-// 쉼표·띄어쓰기로도 끊긴다.
-export function splitKeywordInput(value: string): string[] {
-  return value.split(/[,\s]+/).filter(Boolean);
-}
