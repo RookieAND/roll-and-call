@@ -22,7 +22,7 @@ export function MyDrawStatus({ confirmed, waitlistRank }: MyDrawStatusProps) {
     : `아쉽지만 추첨 결과 대기 ${waitlistRank}번이에요`;
 
   return (
-    <Card padding="none" background="none" className={status({ confirmed })}>
+    <Card.Root padding="none" background="none" className={status({ confirmed })}>
       <HStack align="center" gap="100">
         <Text foreground={foreground} className="flex-none">
           <Icon aria-hidden size={15} strokeWidth={2.4} />
@@ -31,6 +31,6 @@ export function MyDrawStatus({ confirmed, waitlistRank }: MyDrawStatusProps) {
           {message}
         </Text>
       </HStack>
-    </Card>
+    </Card.Root>
   );
 }

@@ -41,7 +41,7 @@ export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
   ];
 
   return (
-    <Card radius={600} background="none" padding="none" className="overflow-hidden">
+    <Card.Root radius={600} background="none" padding="none" className="overflow-hidden">
       {rows.map((row) => (
         <HStack
           key={row.label}
@@ -62,6 +62,6 @@ export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
           </Text>
         </HStack>
       ))}
-    </Card>
+    </Card.Root>
   );
 }

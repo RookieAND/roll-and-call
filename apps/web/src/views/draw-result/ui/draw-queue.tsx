@@ -40,7 +40,7 @@ export function DrawQueue({
         )}
       </HStack>
       {entries.length > 0 && (
-        <Card
+        <Card.Root
           radius={500}
           background="none"
           padding="none"
@@ -59,7 +59,7 @@ export function DrawQueue({
               />
             ))}
           </ExpandableRows>
-        </Card>
+        </Card.Root>
       )}
     </VStack>
   );

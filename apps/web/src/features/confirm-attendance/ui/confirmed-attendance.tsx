@@ -23,7 +23,7 @@ export function ConfirmedAttendance({ gameId, attendees, children }: ConfirmedAt
         {children}
       </VStack>
       <VStack gap="150">
-        <Card radius={500} background="none" padding="none" className="overflow-hidden">
+        <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
           {attendees.map((attendee) => (
             <AttendanceRow
               key={attendee.userId}
@@ -32,7 +32,7 @@ export function ConfirmedAttendance({ gameId, attendees, children }: ConfirmedAt
               readOnly
             />
           ))}
-        </Card>
+        </Card.Root>
         <ReopenAttendanceButton gameId={gameId} />
       </VStack>
     </VStack>

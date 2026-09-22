@@ -21,7 +21,7 @@ interface SummaryLineProps extends Required<VariantProps<typeof summaryIcon>> {
 
 export function SummaryLine({ icon: Icon, tone, label, value, badge }: SummaryLineProps) {
   return (
-    <Card padding="none" className="rounded-500 px-175 py-150">
+    <Card.Root padding="none" className="rounded-500 px-175 py-150">
       <HStack align="center" gap="100">
         <Icon size={15} strokeWidth={2.2} aria-hidden className={summaryIcon({ tone })} />
         <Text typography="body4" foreground="muted" className="min-w-0 flex-1">
@@ -36,6 +36,6 @@ export function SummaryLine({ icon: Icon, tone, label, value, badge }: SummaryLi
           </Badge>
         )}
       </HStack>
-    </Card>
+    </Card.Root>
   );
 }

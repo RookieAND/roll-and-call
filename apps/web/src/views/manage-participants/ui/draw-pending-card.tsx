@@ -7,7 +7,7 @@ interface DrawPendingCardProps {
 
 export function DrawPendingCard({ gameId }: DrawPendingCardProps) {
   return (
-    <Card padding="md" className="border-primary-600 bg-tinted-bg">
+    <Card.Root padding="md" className="border-primary-600 bg-tinted-bg">
       <VStack gap="150">
         <VStack gap="050">
           <Text typography="subtitle1" weight="extrabold">
@@ -26,6 +26,6 @@ export function DrawPendingCard({ gameId }: DrawPendingCardProps) {
           추첨 결과 보기
         </Button>
       </VStack>
-    </Card>
+    </Card.Root>
   );
 }

@@ -32,7 +32,7 @@ export function TodoCard({ item: { title, todo } }: TodoCardProps) {
   const buttonPalette = todo.blocked ? "success" : "primary";
 
   return (
-    <Card padding="none" className={todoCard({ blocked: todo.blocked })}>
+    <Card.Root padding="none" className={todoCard({ blocked: todo.blocked })}>
       <HStack
         align="center"
         gap="100"
@@ -62,6 +62,6 @@ export function TodoCard({ item: { title, todo } }: TodoCardProps) {
       >
         {todo.label}
       </Button>
-    </Card>
+    </Card.Root>
   );
 }

@@ -13,7 +13,7 @@ export { Chip, type ChipProps } from "./chip";
 export { SegmentControl, type SegmentControlProps, type SegmentOption } from "./segment-control";
 export { Switch, type SwitchProps } from "./switch";
 export { Stepper, type StepperProps } from "./stepper";
-export { Card, type CardProps } from "./card";
+export { Card, type CardRootProps } from "./card";
 export { Callout, type CalloutProps } from "./callout";
 export { Field, type FieldProps } from "./field";
 export { TextInput, type TextInputProps } from "./text-input";

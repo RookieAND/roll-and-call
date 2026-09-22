@@ -36,7 +36,7 @@ export function GameCard({ game }: GameCardProps) {
   const thumbnailClass = cn("aspect-video w-full", expired && "opacity-55");
 
   return (
-    <Card interactive padding="none" className="h-full overflow-hidden rounded-600">
+    <Card.Root interactive padding="none" className="h-full overflow-hidden rounded-600">
       <GameThumbnail
         url={game.thumbnailUrl}
         sizes="(max-width: 412px) 100vw, 412px"
@@ -73,6 +73,6 @@ export function GameCard({ game }: GameCardProps) {
           />
         </HStack>
       </VStack>
-    </Card>
+    </Card.Root>
   );
 }

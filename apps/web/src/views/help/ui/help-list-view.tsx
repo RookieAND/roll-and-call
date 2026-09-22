@@ -50,11 +50,11 @@ export function HelpListView() {
               >
                 {category}
               </Text>
-              <Card radius={600} background="none" padding="none" className="overflow-hidden">
+              <Card.Root radius={600} background="none" padding="none" className="overflow-hidden">
                 {HELP_DOCS.filter((doc) => doc.category === category).map((doc) => (
                   <HelpDocRow key={doc.slug} slug={doc.slug} title={doc.title} />
                 ))}
-              </Card>
+              </Card.Root>
             </section>
           ))}
 

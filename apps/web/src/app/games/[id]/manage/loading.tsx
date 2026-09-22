@@ -27,7 +27,7 @@ export default function Loading() {
         </div>
 
         <div className="p-200">
-          <Card radius={500} background="none" padding="none" className="overflow-hidden">
+          <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
             {Array.from({ length: ROW_COUNT }).map((_, index) => (
               <HStack
                 key={index}
@@ -43,7 +43,7 @@ export default function Loading() {
                 <Skeleton width={16} height={16} rounded={100} className="flex-none" />
               </HStack>
             ))}
-          </Card>
+          </Card.Root>
         </div>
       </Container>
     </>

@@ -80,7 +80,7 @@ export function AttendanceForm({ gameId, attendees, children }: AttendanceFormPr
         {children}
       </VStack>
 
-      <Card radius={500} background="none" padding="none" className="overflow-hidden">
+      <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
         {attendees.map((attendee) => (
           <AttendanceRow
             key={attendee.userId}
@@ -89,7 +89,7 @@ export function AttendanceForm({ gameId, attendees, children }: AttendanceFormPr
             onChange={(absent) => toggle(attendee.userId, absent)}
           />
         ))}
-      </Card>
+      </Card.Root>
 
       <Button className="h-12 w-full rounded-500" onClick={requestConfirm}>
         출석 확정

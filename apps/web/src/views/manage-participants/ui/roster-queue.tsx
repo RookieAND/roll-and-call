@@ -43,18 +43,18 @@ export function RosterQueue({
         </Text>
       )}
       {emptyState ? (
-        <Card
+        <Card.Root
           radius={500}
           background="none"
           padding="none"
           className="border-dashed px-200 py-225 text-center"
         >
           {emptyState}
-        </Card>
+        </Card.Root>
       ) : (
-        <Card radius={500} background="none" padding="none" className="overflow-hidden">
+        <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
           {children}
-        </Card>
+        </Card.Root>
       )}
       {footnote}
     </VStack>

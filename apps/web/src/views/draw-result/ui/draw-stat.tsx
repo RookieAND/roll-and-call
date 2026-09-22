@@ -23,7 +23,7 @@ export function DrawStat({ label, count, tone }: DrawStatProps) {
   const labelForeground = tone === "plain" ? "hint" : ink[tone];
 
   return (
-    <Card padding="none" background="none" className={box({ tone })}>
+    <Card.Root padding="none" background="none" className={box({ tone })}>
       <Text typography="body4" foreground={labelForeground} render={<p />}>
         {label}
       </Text>
@@ -37,6 +37,6 @@ export function DrawStat({ label, count, tone }: DrawStatProps) {
       >
         {count}명
       </Text>
-    </Card>
+    </Card.Root>
   );
 }

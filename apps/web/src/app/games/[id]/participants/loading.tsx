@@ -31,7 +31,7 @@ export default function Loading() {
               <Skeleton width={56} height={21} />
               <Skeleton width={40} height={21} />
             </HStack>
-            <Card radius={500} background="none" padding="none" className="overflow-hidden">
+            <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
               {Array.from({ length: ROSTER_ROW_COUNT }).map((_, index) => (
                 <HStack
                   key={index}
@@ -45,7 +45,7 @@ export default function Loading() {
                   <Skeleton width={32} height={32} rounded={400} />
                 </HStack>
               ))}
-            </Card>
+            </Card.Root>
           </VStack>
         </VStack>
       </Container>

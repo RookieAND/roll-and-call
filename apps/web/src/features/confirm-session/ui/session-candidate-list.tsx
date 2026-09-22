@@ -21,7 +21,7 @@ export function SessionCandidateList({
 }: SessionCandidateListProps) {
   return (
     <>
-      <Card radius={500} background="none" padding="none" className="overflow-hidden">
+      <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
         {candidates.map((candidate) => (
           <SessionCandidateRow
             key={candidate.iso}
@@ -31,7 +31,7 @@ export function SessionCandidateList({
             onPick={onPick}
           />
         ))}
-      </Card>
+      </Card.Root>
       <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
         체크를 누르면 위 세션 시간 칸이 그 시간으로 채워집니다.
       </Text>

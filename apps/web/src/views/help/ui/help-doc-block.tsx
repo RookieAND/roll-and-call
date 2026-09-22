@@ -35,11 +35,11 @@ export function HelpDocBlock({ block }: HelpDocBlockProps) {
         >
           {block.label}
         </Text>
-        <Card radius={600} background="none" padding="none" className="overflow-hidden">
+        <Card.Root radius={600} background="none" padding="none" className="overflow-hidden">
           {block.rows.map((row) => (
             <HelpRow key={row.term} row={row} />
           ))}
-        </Card>
+        </Card.Root>
       </section>
     );
   }
@@ -48,7 +48,13 @@ export function HelpDocBlock({ block }: HelpDocBlockProps) {
     return (
       <Grid cols={2} gap="125">
         {block.columns.map((column) => (
-          <Card key={column.title} radius={600} background="none" padding="none" className="p-175">
+          <Card.Root
+            key={column.title}
+            radius={600}
+            background="none"
+            padding="none"
+            className="p-175"
+          >
             <Text typography="subtitle1" weight="extrabold" render={<h3 />}>
               {column.title}
             </Text>
@@ -73,7 +79,7 @@ export function HelpDocBlock({ block }: HelpDocBlockProps) {
                 </div>
               ))}
             </VStack>
-          </Card>
+          </Card.Root>
         ))}
       </Grid>
     );

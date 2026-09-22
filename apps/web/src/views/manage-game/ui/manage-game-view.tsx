@@ -57,7 +57,7 @@ export async function ManageGameView({ id }: { id: string }) {
         </div>
 
         <div className="p-200">
-          <Card radius={500} background="none" padding="none" className="overflow-hidden">
+          <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
             {rows.map((row) => (
               <ManageRow key={row.key} row={row} />
             ))}
@@ -68,7 +68,7 @@ export async function ManageGameView({ id }: { id: string }) {
                 isSessionEnded(game) ? "이미 치른 세션은 취소할 수 없습니다" : undefined
               }
             />
-          </Card>
+          </Card.Root>
         </div>
       </Container>
     </>

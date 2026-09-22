@@ -57,7 +57,7 @@ export function DrawLotteryCard({
 
   return (
     <>
-      <Card padding="md" className="border-tinted-border bg-tinted-bg">
+      <Card.Root padding="md" className="border-tinted-border bg-tinted-bg">
         <VStack gap="150">
           <VStack gap="050">
             <Text typography="subtitle1" weight="extrabold">
@@ -77,7 +77,7 @@ export function DrawLotteryCard({
             {deadlinePassed ? "추첨하기" : "지금 추첨하기"}
           </Button>
         </VStack>
-      </Card>
+      </Card.Root>
 
       <ConfirmDialog
         open={confirming}

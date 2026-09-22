@@ -22,7 +22,7 @@ export default function Loading() {
               <Skeleton width={176} height={20} className="mt-050" />
             </div>
 
-            <Card radius={600} background="none" padding="none" className="overflow-hidden">
+            <Card.Root radius={600} background="none" padding="none" className="overflow-hidden">
               {INFO_ROWS.map((width) => (
                 <HStack
                   key={width}
@@ -34,7 +34,7 @@ export default function Loading() {
                   <Skeleton height={20} className={width} />
                 </HStack>
               ))}
-            </Card>
+            </Card.Root>
 
             <VStack gap="100">
               <Skeleton width={64} height={22} />

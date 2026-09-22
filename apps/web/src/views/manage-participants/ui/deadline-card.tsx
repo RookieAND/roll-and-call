@@ -18,7 +18,7 @@ export function DeadlineCard({ summary, locked, showNote = true }: DeadlineCardP
 
   return (
     <VStack gap="100">
-      <Card padding="none" className="rounded-500 px-175 py-150">
+      <Card.Root padding="none" className="rounded-500 px-175 py-150">
         <HStack align="center" gap="100">
           <Clock size={15} strokeWidth={2.2} aria-hidden className="shrink-0 text-gray-600" />
           <Text typography="body4" foreground="muted" className="min-w-0 flex-1">
@@ -34,7 +34,7 @@ export function DeadlineCard({ summary, locked, showNote = true }: DeadlineCardP
             {summary.deadlineLabel}
           </Badge>
         </HStack>
-      </Card>
+      </Card.Root>
       {showNote && (
         <Text typography="body4" foreground="hint" render={<p />}>
           {note}

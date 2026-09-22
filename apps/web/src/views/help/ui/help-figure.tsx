@@ -24,9 +24,9 @@ interface HelpFigureProps {
 export function HelpFigure({ figure }: HelpFigureProps) {
   if (figure === HELP_FIGURE.heatGrid) {
     return (
-      <Card radius={400} background="subtle" padding="none" className="p-150">
+      <Card.Root radius={400} background="subtle" padding="none" className="p-150">
         <HeatSample />
-      </Card>
+      </Card.Root>
     );
   }
 

@@ -12,7 +12,7 @@ export function AvailabilitySummaryField({ intervals }: AvailabilitySummaryField
   const days = filledDays(intervals);
 
   return (
-    <Card radius={500} background="none" padding="none" className="p-175">
+    <Card.Root radius={500} background="none" padding="none" className="p-175">
       <HStack align="baseline" gap="100" className="mb-125">
         <Text weight="bold" typography="body4" className="flex-1">
           가능 시간대
@@ -65,6 +65,6 @@ export function AvailabilitySummaryField({ intervals }: AvailabilitySummaryField
       >
         {days.length > 0 ? "수정하기" : "시간대 설정하기"}
       </Button>
-    </Card>
+    </Card.Root>
   );
 }

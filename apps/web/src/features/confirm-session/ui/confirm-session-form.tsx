@@ -82,7 +82,7 @@ export function ConfirmSessionForm({
         <Text typography="subtitle2" weight="extrabold" render={<h2 />}>
           세션 시간
         </Text>
-        <Card
+        <Card.Root
           radius={500}
           background="none"
           padding="none"
@@ -95,7 +95,7 @@ export function ConfirmSessionForm({
             everyone={absentNames.length === 0}
           />
           {absentNames.length > 0 && <UnavailableWarning names={absentNames} />}
-        </Card>
+        </Card.Root>
       </VStack>
 
       <VStack gap="100" render={<section />}>

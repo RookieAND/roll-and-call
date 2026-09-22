@@ -5,7 +5,13 @@ export function GameListSkeleton() {
   return (
     <VStack className="gap-125">
       {Array.from({ length: 3 }).map((_, index) => (
-        <Card key={index} radius={600} background="none" padding="none" className="overflow-hidden">
+        <Card.Root
+          key={index}
+          radius={600}
+          background="none"
+          padding="none"
+          className="overflow-hidden"
+        >
           <Skeleton width="100%" rounded="none" className="aspect-video" />
           <VStack className="gap-075 px-175 py-175">
             <HStack align="center" gap="100">
@@ -24,7 +30,7 @@ export function GameListSkeleton() {
               <Skeleton width={112} height={21} />
             </HStack>
           </VStack>
-        </Card>
+        </Card.Root>
       ))}
     </VStack>
   );

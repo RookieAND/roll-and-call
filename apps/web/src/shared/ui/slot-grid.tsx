@@ -32,7 +32,7 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
   }, []);
 
   return (
-    <Card
+    <Card.Root
       ref={scrollRef}
       radius={500}
       background="none"
@@ -85,6 +85,6 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
           ...days.map((day) => renderCell(slotIso(day.date, row.hour, row.minute))),
         ])}
       </div>
-    </Card>
+    </Card.Root>
   );
 }

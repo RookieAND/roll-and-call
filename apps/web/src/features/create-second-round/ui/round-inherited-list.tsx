@@ -22,7 +22,7 @@ export function RoundInheritedList({ waitingCount, maxPlayers }: RoundInheritedL
       <Text weight="bold" typography="body4" foreground="muted">
         그대로 넘어가는 것
       </Text>
-      <Card radius={500} background="none" padding="none" className="overflow-hidden">
+      <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
         {items.map((item) => (
           <HStack
             key={item.title}
@@ -41,7 +41,7 @@ export function RoundInheritedList({ waitingCount, maxPlayers }: RoundInheritedL
             </VStack>
           </HStack>
         ))}
-      </Card>
+      </Card.Root>
     </VStack>
   );
 }

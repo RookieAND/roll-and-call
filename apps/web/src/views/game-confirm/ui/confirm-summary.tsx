@@ -15,7 +15,7 @@ export function ConfirmSummary({ playLabel, respondedCount }: ConfirmSummaryProp
     <div>
       <HStack gap="100">
         {items.map((item) => (
-          <Card
+          <Card.Root
             key={item.label}
             radius={500}
             background="none"
@@ -28,7 +28,7 @@ export function ConfirmSummary({ playLabel, respondedCount }: ConfirmSummaryProp
             <Text numeric typography="heading2" render={<p />} className="mt-050">
               {item.value}
             </Text>
-          </Card>
+          </Card.Root>
         ))}
       </HStack>
       <Text typography="body4" foreground="hint" render={<p />} className="mt-100">

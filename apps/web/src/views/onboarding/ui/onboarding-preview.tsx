@@ -20,7 +20,12 @@ interface OnboardingPreviewProps {
 export function OnboardingPreview({ slideKey }: OnboardingPreviewProps) {
   if (slideKey === "find") {
     return (
-      <Card radius={600} background="surface" padding="none" className="w-[262px] overflow-hidden">
+      <Card.Root
+        radius={600}
+        background="surface"
+        padding="none"
+        className="w-[262px] overflow-hidden"
+      >
         <HStack align="end" className="h-[70px] bg-tinted-bg p-100">
           <GameStatusBadge status={GAME_STATUS.recruiting} />
         </HStack>
@@ -37,15 +42,15 @@ export function OnboardingPreview({ slideKey }: OnboardingPreviewProps) {
             </Text>
           </span>
         </VStack>
-      </Card>
+      </Card.Root>
     );
   }
 
   if (slideKey === "schedule") {
     return (
-      <Card radius={600} background="surface" padding="none" className="w-[262px] p-150">
+      <Card.Root radius={600} background="surface" padding="none" className="w-[262px] p-150">
         <HeatSample />
-      </Card>
+      </Card.Root>
     );
   }
 

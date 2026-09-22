@@ -33,13 +33,13 @@ export function AvailabilityEditor({ defaultValue }: AvailabilityEditorProps) {
       <AppBar back="/me/edit" title="가능 시간대" />
 
       <div className="border-b border-gray-200 px-200 py-175">
-        <Card radius={400} background="subtle" padding="none" className="px-150 py-150">
+        <Card.Root radius={400} background="subtle" padding="none" className="px-150 py-150">
           <Text typography="body4" foreground="muted" render={<p />} className="leading-[1.65]">
             되는 요일만 켜고 시간을 정합니다.
             <br />
             여기서 정한 값이 일정 조율 격자에 미리 칠해집니다.
           </Text>
-        </Card>
+        </Card.Root>
       </div>
 
       <VStack gap="100" className="px-200 py-200">
