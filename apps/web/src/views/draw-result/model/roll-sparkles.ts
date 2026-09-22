@@ -1,13 +1,15 @@
+import type { CSSProperties } from "react";
+
 import { ROLL_GRADE, type RollGrade } from "./roll-grade";
 
 type Sparkle = {
   size: number;
-  position: { top?: number; right?: number; bottom?: number; left?: number };
+  position: Pick<CSSProperties, "top" | "right" | "bottom" | "left" | "marginLeft">;
   delay: number;
   duration: number;
 };
 
-// 시안 12 F의 별 자리. 대성공은 여섯, 극단적 성공은 넷을 두르고 박자를 어긋나게 반짝인다.
+// 시안 12 F의 별 자리. 둘 다 여섯을 두르고 박자를 어긋나게 반짝인다.
 export const ROLL_SPARKLES = {
   [ROLL_GRADE.critical]: [
     { size: 9, position: { right: -4, top: -4 }, delay: 0.1, duration: 1.5 },
@@ -22,5 +24,12 @@ export const ROLL_SPARKLES = {
     { size: 6, position: { left: -4, bottom: -4 }, delay: 0.8, duration: 1.8 },
     { size: 5, position: { left: -4, top: -3 }, delay: 1.2, duration: 1.6 },
     { size: 5, position: { right: -4, bottom: -3 }, delay: 0.5, duration: 1.7 },
+    { size: 6, position: { left: "50%", marginLeft: -3, top: -6 }, delay: 0.95, duration: 1.5 },
+    {
+      size: 5,
+      position: { left: "50%", marginLeft: -2.5, bottom: -6 },
+      delay: 1.45,
+      duration: 1.6,
+    },
   ],
 } as const satisfies Record<RollGrade, Sparkle[]>;
