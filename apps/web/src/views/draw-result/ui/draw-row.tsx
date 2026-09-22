@@ -1,12 +1,13 @@
 import { Avatar, Badge, HStack, Text, VStack } from "@trpg/ui";
 import { cva } from "class-variance-authority";
+import Link from "next/link";
 
 import type { DrawEntry } from "../model/draw-entry";
 import { DRAW_ROW_VARIANT, type DrawRowVariant } from "../model/draw-row-variant";
 import { toRollGrade } from "../model/roll-grade";
 import { DrawRollText } from "./draw-roll-text";
 
-const row = cva("border-t pl-175 first:border-t-0", {
+const row = cva("border-t pl-175 transition-colors first:border-t-0 hover:bg-gray-50", {
   variants: {
     variant: {
       highlight: "min-h-16 border-primary-50 py-100",
@@ -39,6 +40,7 @@ export function DrawRow({ entry, variant, isMe }: DrawRowProps) {
     <HStack
       align="center"
       gap="125"
+      render={<Link href={`/u/${entry.userId}`} />}
       className={row({ variant, isMe, graded: toRollGrade(entry.roll) !== null })}
     >
       <Avatar
