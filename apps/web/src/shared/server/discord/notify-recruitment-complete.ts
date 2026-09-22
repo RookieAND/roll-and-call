@@ -8,7 +8,7 @@ import { discordChannelId } from "./discord-channel-id";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
-export type RecruitmentPlayer = { username: string; discordId: string | null };
+type RecruitmentPlayer = { username: string; discordId: string | null };
 
 export async function notifyRecruitmentComplete(
   game: Game,

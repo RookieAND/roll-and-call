@@ -1,32 +1,20 @@
-import { db } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 
-import { formatDateTime } from "@/shared/lib";
+import { countConfirmed, countWaiting, formatDateTime } from "@/shared/lib";
 
-import { countConfirmedParticipants } from "../db/count-confirmed-participants";
-import { countWaitingParticipants } from "../db/count-waiting-participants";
+import { getGameForNotice } from "../db/get-game-for-notice";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
 // 확정 뒤에 부른다. 같은 시간으로 다시 확정하면 보내지 않는다.
 export async function notifySessionConfirmed(gameId: string, previousConfirmedAt: Date | null) {
-  const game = await db.query.games.findFirst({
-    where: (gameRow, { eq }) => eq(gameRow.id, gameId),
-    with: {
-      gm: { columns: { username: true } },
-      participants: { columns: { status: true } },
-    },
-  });
+  const game = await getGameForNotice(gameId);
   if (!game?.discordThreadId || !game.confirmedAt) return;
   if (previousConfirmedAt?.getTime() === game.confirmedAt.getTime()) return;
 
   const fields = [
     { name: "🕒 시간", value: formatDateTime(game.confirmedAt), inline: true },
-    ...headcountFields(
-      game,
-      countConfirmedParticipants(game.participants),
-      countWaitingParticipants(game.participants),
-    ),
+    ...headcountFields(game, countConfirmed(game.participants), countWaiting(game.participants)),
   ];
   if (previousConfirmedAt) {
     fields.push({ name: "🕒 이전 시간", value: formatDateTime(previousConfirmedAt), inline: true });

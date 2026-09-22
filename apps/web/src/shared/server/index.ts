@@ -3,25 +3,15 @@ import "server-only";
 export {
   db,
   scheduleMode,
-  participantStatus,
   profiles,
   profileMemos,
   games,
   participants,
   availabilities,
-  profilesRelations,
-  gamesRelations,
-  participantsRelations,
-  availabilitiesRelations,
   type Profile,
-  type NewProfile,
   type Game,
-  type NewGame,
   type Participant,
-  type NewParticipant,
   type Availability,
-  type NewAvailability,
-  type ProfileMemo,
   type AvailabilityInterval,
   type ProfileLink,
 } from "@trpg/database";
@@ -35,18 +25,15 @@ export { getGameParticipants, type GameParticipantsData } from "./db/get-game-pa
 export { getRespondedGameIds } from "./db/get-responded-game-ids";
 export { getResponseCounts } from "./db/get-response-counts";
 export { getResponseCountsByGm } from "./db/get-response-counts-by-gm";
-export { getRespondedUserIds } from "./db/get-responded-user-ids";
 export { getGameAvailabilities } from "./db/get-game-availabilities";
 export { getUserConfirmedSlots } from "./db/get-user-confirmed-slots";
-export { getProfile } from "./db/profiles";
+export { getProfile } from "./db/get-profile";
 export { getProfileMemo } from "./db/get-profile-memo";
 export { notifyGameCreated } from "./discord/notify-game-created";
-export { sendGameImages } from "./discord/send-game-images";
 export { refreshRecruitPost } from "./discord/refresh-recruit-post";
 export { notifyGameJoined } from "./discord/notify-game-joined";
 export { notifyGameLeft } from "./discord/notify-game-left";
 export { notifyGameCancelled } from "./discord/notify-game-cancelled";
-export { notifyRecruitmentComplete } from "./discord/notify-recruitment-complete";
 export { announceRecruitmentComplete } from "./discord/announce-recruitment-complete";
 export { notifyDrawResult } from "./discord/notify-draw-result";
 export { notifyDirectConfirmed } from "./discord/notify-direct-confirmed";

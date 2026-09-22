@@ -2,6 +2,8 @@ import "server-only";
 import { availabilities, db, games, participants } from "@trpg/database";
 import { and, eq, sql } from "drizzle-orm";
 
+import { PARTICIPANT_STATUS } from "@/shared/lib";
+
 export async function getResponseCountsByGm(gmId: string): Promise<Map<string, number>> {
   const rows = await db
     .select({
@@ -14,7 +16,7 @@ export async function getResponseCountsByGm(gmId: string): Promise<Map<string, n
       and(
         eq(participants.gameId, availabilities.gameId),
         eq(participants.userId, availabilities.userId),
-        eq(participants.status, "confirmed"),
+        eq(participants.status, PARTICIPANT_STATUS.confirmed),
       ),
     )
     .innerJoin(games, eq(games.id, availabilities.gameId))

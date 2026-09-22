@@ -2,6 +2,8 @@ import "server-only";
 import { availabilities, db, participants } from "@trpg/database";
 import { and, eq, inArray, sql } from "drizzle-orm";
 
+import { PARTICIPANT_STATUS } from "@/shared/lib";
+
 // 확정 참여자의 응답만 센다.
 export async function getResponseCounts(gameIds: string[]): Promise<Map<string, number>> {
   if (gameIds.length === 0) return new Map();
@@ -16,7 +18,7 @@ export async function getResponseCounts(gameIds: string[]): Promise<Map<string, 
       and(
         eq(participants.gameId, availabilities.gameId),
         eq(participants.userId, availabilities.userId),
-        eq(participants.status, "confirmed"),
+        eq(participants.status, PARTICIPANT_STATUS.confirmed),
       ),
     )
     .where(inArray(availabilities.gameId, gameIds))

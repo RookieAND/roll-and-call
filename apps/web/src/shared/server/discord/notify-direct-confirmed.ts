@@ -2,8 +2,9 @@ import { db, profiles } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 import { inArray } from "drizzle-orm";
 
-import { countConfirmedParticipants } from "../db/count-confirmed-participants";
-import { countWaitingParticipants } from "../db/count-waiting-participants";
+import { countConfirmed, countWaiting } from "@/shared/lib";
+
+import { getGameForNotice } from "../db/get-game-for-notice";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
@@ -12,13 +13,7 @@ export async function notifyDirectConfirmed(gameId: string, userIds: readonly st
   if (userIds.length === 0) return;
 
   const [game, invited] = await Promise.all([
-    db.query.games.findFirst({
-      where: (gameRow, { eq }) => eq(gameRow.id, gameId),
-      with: {
-        gm: { columns: { username: true } },
-        participants: { columns: { status: true } },
-      },
-    }),
+    getGameForNotice(gameId),
     db
       .select({ username: profiles.username })
       .from(profiles)
@@ -36,8 +31,8 @@ export async function notifyDirectConfirmed(gameId: string, userIds: readonly st
     description: `GM이 ${names}님을 참여자로 확정했어요.`,
     fields: headcountFields(
       game,
-      countConfirmedParticipants(game.participants),
-      countWaitingParticipants(game.participants),
+      countConfirmed(game.participants),
+      countWaiting(game.participants),
     ),
   });
 

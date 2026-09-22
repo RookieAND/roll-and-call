@@ -1,6 +1,8 @@
 import { db } from "@trpg/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@trpg/discord";
 
+import { PARTICIPANT_STATUS } from "@/shared/lib";
+
 import { gameUrl } from "../game-url";
 import { gameNoticeEmbed } from "./game-notice-embed";
 
@@ -24,10 +26,10 @@ export async function notifyDrawResult(gameId: string) {
   );
   const nameOf = (rank: number, username: string) => `${rank}. ${username}`;
   const confirmed = byRank
-    .filter((participant) => participant.status === "confirmed")
+    .filter((participant) => participant.status === PARTICIPANT_STATUS.confirmed)
     .map((participant, index) => nameOf(index + 1, participant.user?.username ?? "?"));
   const waiting = byRank
-    .filter((participant) => participant.status === "waiting")
+    .filter((participant) => participant.status === PARTICIPANT_STATUS.waiting)
     .map((participant, index) => nameOf(index + 1, participant.user?.username ?? "?"));
 
   const detailUrl = gameUrl(game.id);

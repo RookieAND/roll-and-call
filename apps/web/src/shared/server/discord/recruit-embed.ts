@@ -1,6 +1,5 @@
 import type { Game } from "@trpg/database";
-import { DISCORD_COLOR } from "@trpg/discord";
-import type { DiscordEmbed } from "@trpg/discord";
+import { DISCORD_COLOR, type DiscordEmbed } from "@trpg/discord";
 
 import { formatGameSchedule, formatMonthDay } from "@/shared/lib";
 
