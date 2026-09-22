@@ -2,8 +2,8 @@ import { Avatar, Badge, HStack, Text } from "@trpg/ui";
 import { cva } from "class-variance-authority";
 
 import type { DrawEntry } from "../model/draw-entry";
+import { SLOT_SPIN_MS, type SlotSpin } from "../model/slot-spin";
 import { DrawRollText } from "./draw-roll-text";
-import { RollingRollText } from "./rolling-roll-text";
 
 const row = cva("border-t border-gray-100 px-175 first:border-t-0", {
   variants: {
@@ -16,11 +16,13 @@ interface DrawRowProps {
   roll: number | null;
   emphasized: boolean;
   isMe: boolean;
-  // 주어지면 내 줄의 값이 처음 볼 때 한 번 굴러 멈춘다.
+  // 줄마다 값을 슬롯처럼 돌린다.
+  spinAll: boolean;
+  // 주어지면 내 줄의 값만 처음 볼 때 한 번 돌다 멈춘다.
   rollingOnceKey?: string;
 }
 
-export function DrawRow({ entry, roll, emphasized, isMe, rollingOnceKey }: DrawRowProps) {
+export function DrawRow({ entry, roll, emphasized, isMe, spinAll, rollingOnceKey }: DrawRowProps) {
   const nameWeight = emphasized || isMe ? "bold" : "medium";
   const nameForeground = isMe || emphasized ? "normal" : "muted";
   const strong = isMe || emphasized;
@@ -30,10 +32,11 @@ export function DrawRow({ entry, roll, emphasized, isMe, rollingOnceKey }: DrawR
       직접 확정
     </Text>
   );
-  if (roll !== null && isMe && rollingOnceKey) {
-    rollText = <RollingRollText roll={roll} onceKey={rollingOnceKey} emphasized={emphasized} />;
-  } else if (roll !== null) {
-    rollText = <DrawRollText value={roll} emphasized={emphasized} strong={strong} />;
+  let spin: SlotSpin | undefined;
+  if (spinAll) spin = { durationMs: SLOT_SPIN_MS };
+  else if (isMe && rollingOnceKey) spin = { durationMs: SLOT_SPIN_MS, onceKey: rollingOnceKey };
+  if (roll !== null) {
+    rollText = <DrawRollText value={roll} emphasized={emphasized} strong={strong} spin={spin} />;
   }
 
   return (

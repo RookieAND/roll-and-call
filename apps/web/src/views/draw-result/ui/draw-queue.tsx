@@ -9,8 +9,8 @@ interface DrawQueueProps {
   label: string;
   caption?: string;
   entries: DrawEntry[];
-  // 굴리는 중이면 행마다 지금 보여 줄 숫자. 없으면 굴린 값 그대로.
-  rolls?: number[];
+  // 들어올 때마다 모든 값을 한 번에 돌린다(확정 전 GM 롤 시트).
+  spinAll?: boolean;
   emphasized: boolean;
   meUserId: string | null;
   previewCount: number;
@@ -22,7 +22,7 @@ export function DrawQueue({
   label,
   caption,
   entries,
-  rolls,
+  spinAll = false,
   emphasized,
   meUserId,
   previewCount,
@@ -51,13 +51,14 @@ export function DrawQueue({
           className={cn("overflow-hidden", emphasized && "border-tinted-border")}
         >
           <ExpandableRows previewCount={previewCount}>
-            {entries.map((entry, index) => (
+            {entries.map((entry) => (
               <DrawRow
                 key={entry.userId}
                 entry={entry}
-                roll={entry.roll === null ? null : (rolls?.[index] ?? entry.roll)}
+                roll={entry.roll}
                 emphasized={emphasized}
                 isMe={entry.userId === meUserId}
+                spinAll={spinAll}
                 rollingOnceKey={rollingOnceKey}
               />
             ))}
