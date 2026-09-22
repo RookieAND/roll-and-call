@@ -1,0 +1,1 @@
+ALTER TABLE "participants" ADD COLUMN "draw_roll" integer;

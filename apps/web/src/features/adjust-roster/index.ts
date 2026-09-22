@@ -3,6 +3,7 @@ export { demoteParticipant } from "./api/demote-participant";
 export { removeParticipant } from "./api/remove-participant";
 export { restoreRoster } from "./api/restore-roster";
 export { drawLottery } from "./api/draw-lottery";
+export { ApplyDrawButton } from "./ui/apply-draw-button";
 export { MemberSheet } from "./ui/member-sheet";
 export { DrawLotteryCard } from "./ui/draw-lottery-card";
 export type { MemberSummary } from "./model/member-summary";

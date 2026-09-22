@@ -11,7 +11,14 @@ export async function getGameParticipants(gameId: string) {
     with: {
       gm: { columns: { id: true, username: true, avatarUrl: true } },
       participants: {
-        columns: { userId: true, joinedAt: true, status: true, drawRank: true, absent: true },
+        columns: {
+          userId: true,
+          joinedAt: true,
+          status: true,
+          drawRank: true,
+          drawRoll: true,
+          absent: true,
+        },
         with: { user: { columns: { username: true, avatarUrl: true } } },
       },
     },

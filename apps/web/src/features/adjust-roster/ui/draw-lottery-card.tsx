@@ -1,9 +1,9 @@
 "use client";
 
-import { Button, Card, Text, VStack, cn } from "@trpg/ui";
+import { Button, Card, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
-import { ConfirmDialog, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, useAction } from "@/shared/ui";
 
 import { drawLottery } from "../api/draw-lottery";
 
@@ -33,7 +33,6 @@ export function DrawLotteryCard({
   const title = deadlinePassed
     ? `추첨으로 ${drawCount}명 정하기`
     : `지금 추첨으로 ${drawCount}명 정하기`;
-  const titleTypography = deadlinePassed ? "subtitle1" : "subtitle2";
   const summaryLine = !deadlinePassed
     ? `신청한 ${poolCount}명 중 ${drawnCount}명이 확정됩니다.`
     : preConfirmedCount > 0
@@ -52,32 +51,25 @@ export function DrawLotteryCard({
 
   function draw() {
     run(() => drawLottery(gameId), {
-      onSuccess: () => {
-        toast.success(
-          `추첨을 마쳤습니다 · 확정 ${preConfirmedCount + drawnCount}명 · 대기 ${leftoverCount}명`,
-        );
-        setConfirming(false);
-      },
+      onSuccess: () => setConfirming(false),
     });
   }
 
   return (
     <>
-      {/* 마감 뒤에는 남은 할 일이 이것뿐이라 카드째 강조하고, 마감 전에는 한 블록으로 둔다. */}
-      <Card padding="md" className={cn(deadlinePassed && "border-primary-600 bg-tinted-bg")}>
+      <Card padding="md" className="border-tinted-border bg-tinted-bg">
         <VStack gap="150">
           <VStack gap="050">
-            <Text typography={titleTypography} weight="extrabold">
+            <Text typography="subtitle1" weight="extrabold">
               {title}
             </Text>
-            <Text typography="body4" foreground="muted" render={<p />}>
+            <Text typography="body4" foreground="primary" render={<p />}>
               {summaryLine}
               <br />
               {closing}
             </Text>
           </VStack>
           <Button
-            variant={deadlinePassed ? "solid" : "tinted"}
             className="h-[46px] w-full rounded-500"
             loading={pending}
             onClick={() => (deadlinePassed ? draw() : setConfirming(true))}

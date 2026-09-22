@@ -125,6 +125,8 @@ export const participants = pgTable(
     status: participantStatus("status").notNull().default("confirmed"),
     // 추첨이 정한 순서. 선착순이거나 뽑기 전이면 null이고, 그때는 joinedAt이 순서다.
     drawRank: integer("draw_rank"),
+    // 추첨에서 굴린 1d100. GM이 결과를 적용하기 전에는 이 값만 있고 drawRank·status는 그대로다.
+    drawRoll: integer("draw_roll"),
     // 기본값이 전원 참석이라 GM이 출석을 확정할 때 예외만 true가 된다.
     absent: boolean("absent").notNull().default(false),
   },

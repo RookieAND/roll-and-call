@@ -1,11 +1,14 @@
 import { VStack } from "@trpg/ui";
 
+import { DrawLotteryCard } from "@/features/adjust-roster";
+
 import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stage";
 import type { RosterSummary } from "../model/roster-summary";
 import { AttendanceCard } from "./attendance-card";
 import { AttendanceDoneRow } from "./attendance-done-row";
 import { DeadlineCard } from "./deadline-card";
-import { DrawResultNote } from "./draw-result-note";
+import { DrawPendingCard } from "./draw-pending-card";
+import { DrawnRow } from "./drawn-row";
 import { SessionEndedCard } from "./session-ended-card";
 
 interface RosterStatusCardProps {
@@ -17,7 +20,7 @@ interface RosterStatusCardProps {
   attendanceStage: AttendanceStage | null;
 }
 
-// 헤더 아래 한 자리에 지금 가장 중요한 것 하나만 선다 — 출석 확인 · 추첨 결과 · 모집 마감.
+// 헤더 아래 한 자리에 지금 가장 중요한 것만 선다 — 출석 확인 · 추첨 · 모집 마감.
 export function RosterStatusCard({
   gameId,
   confirmedAt,
@@ -41,7 +44,27 @@ export function RosterStatusCard({
   }
   if (summary.drawnAtLabel) {
     return (
-      <DrawResultNote drawnAtLabel={summary.drawnAtLabel} applicantCount={summary.applicantCount} />
+      <VStack gap="100">
+        <DrawnRow drawnAtLabel={summary.drawnAtLabel} />
+        <DeadlineCard summary={summary} locked={locked} showNote={false} />
+      </VStack>
+    );
+  }
+  if (summary.beforeDraw) {
+    return (
+      <VStack gap="175">
+        <DeadlineCard summary={summary} locked={locked} showNote={false} />
+        {!locked && summary.awaitingApply && <DrawPendingCard gameId={gameId} />}
+        {!locked && !summary.awaitingApply && (
+          <DrawLotteryCard
+            gameId={gameId}
+            applicantCount={summary.applicantCount}
+            preConfirmedCount={summary.preConfirmedCount}
+            drawCount={summary.drawCount}
+            deadlinePassed={summary.deadlinePassed}
+          />
+        )}
+      </VStack>
     );
   }
   return <DeadlineCard summary={summary} locked={locked} />;

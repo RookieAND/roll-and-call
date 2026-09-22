@@ -1,6 +1,6 @@
 "use client";
 
-import { Text, VStack } from "@trpg/ui";
+import { HStack, Text, VStack } from "@trpg/ui";
 import { useState } from "react";
 
 import { DirectConfirmButton, MemberSheet } from "@/features/adjust-roster";
@@ -12,6 +12,7 @@ import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { AttendanceBadge } from "./attendance-badge";
 import { availabilityNote } from "./availability-note";
+import { DrawResultLink } from "./draw-result-link";
 import { LockedRosterNote } from "./locked-roster-note";
 import { MemberMenuButton } from "./member-menu-button";
 import { RosterQueue } from "./roster-queue";
@@ -63,6 +64,19 @@ export function RosterQueues({
   ) : (
     summary.unsubmittedCount > 0 && <UnsubmittedNote count={summary.unsubmittedCount} />
   );
+  const drawResultLink = summary.hasDrawResult && <DrawResultLink gameId={gameId} />;
+  const confirmedAction = (drawResultLink || !locked) && (
+    <HStack align="center" gap="150">
+      {drawResultLink}
+      {!locked && (
+        <DirectConfirmButton
+          gameId={gameId}
+          confirmedCount={confirmed.length}
+          maxPlayers={maxPlayers}
+        />
+      )}
+    </HStack>
+  );
   const confirmedRows = confirmed.map((member) => (
     <RosterRow
       key={member.userId}
@@ -78,29 +92,24 @@ export function RosterQueues({
       <RosterQueue
         label="확정"
         count={confirmed.length}
-        action={
-          !locked && (
-            <DirectConfirmButton
-              gameId={gameId}
-              confirmedCount={confirmed.length}
-              maxPlayers={maxPlayers}
-            />
+        action={confirmedAction}
+        footnote={confirmedFootnote}
+        emptyState={
+          confirmed.length === 0 && (
+            <VStack gap="075">
+              <Text typography="subtitle2" weight="bold">
+                아직 확정한 참여자가 없습니다
+              </Text>
+              {beforeDraw && (
+                <Text typography="body4" foreground="muted" render={<p />}>
+                  {maxPlayers}자리 모두 추첨으로 정해집니다.
+                </Text>
+              )}
+            </VStack>
           )
         }
-        footnote={confirmedFootnote}
       >
-        {confirmed.length === 0 ? (
-          <VStack gap="050" className="px-150 py-200">
-            <Text typography="body3" foreground="muted">
-              아직 확정한 참여자가 없습니다.
-            </Text>
-            {beforeDraw && (
-              <Text typography="body4" foreground="hint" render={<p />}>
-                {maxPlayers}자리 모두 추첨으로 정해집니다.
-              </Text>
-            )}
-          </VStack>
-        ) : attendanceStage ? (
+        {attendanceStage ? (
           <ExpandableRows previewCount={ENDED_PREVIEW_COUNT}>{confirmedRows}</ExpandableRows>
         ) : (
           confirmedRows

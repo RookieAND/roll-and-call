@@ -11,6 +11,7 @@ export function summarizeRoster({
   endDate,
   recruitMethod,
   drawnAt,
+  rolled = false,
   isCoordinate,
   now = new Date(),
 }: {
@@ -20,6 +21,8 @@ export function summarizeRoster({
   endDate: Date;
   recruitMethod: RecruitMethod;
   drawnAt: Date | null;
+  // 굴렸지만 GM이 아직 결과를 적용하지 않았다. 명단은 뽑기 전 그대로다.
+  rolled?: boolean;
   isCoordinate: boolean;
   now?: Date;
 }) {
@@ -32,6 +35,9 @@ export function summarizeRoster({
   return {
     isLottery,
     beforeDraw,
+    awaitingApply: beforeDraw && rolled,
+    // 1d100 도입 전에 뽑은 글은 굴린 값이 없어 결과 페이지가 없다.
+    hasDrawResult: drawnAt !== null && rolled,
     methodLabel: !isLottery ? "선착순" : drawnAt ? "추첨 완료" : "추첨",
     isFull: confirmed.length >= maxPlayers,
     // 뽑기 전에는 추첨에 들어갈 사람만 신청으로 센다. 직접 확정한 사람은 확정 목록에 따로 선다.

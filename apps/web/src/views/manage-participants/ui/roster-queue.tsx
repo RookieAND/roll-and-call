@@ -7,7 +7,9 @@ interface RosterQueueProps {
   caption?: string;
   action?: ReactNode;
   footnote?: ReactNode;
-  children: ReactNode;
+  // 주어지면 목록 테두리 대신 점선 빈 상자를 그린다.
+  emptyState?: ReactNode;
+  children?: ReactNode;
 }
 
 export function RosterQueue({
@@ -16,6 +18,7 @@ export function RosterQueue({
   caption,
   action,
   footnote,
+  emptyState,
   children,
 }: RosterQueueProps) {
   return (
@@ -39,9 +42,20 @@ export function RosterQueue({
           {caption}
         </Text>
       )}
-      <Card radius={500} background="none" padding="none" className="overflow-hidden">
-        {children}
-      </Card>
+      {emptyState ? (
+        <Card
+          radius={500}
+          background="none"
+          padding="none"
+          className="border-dashed px-200 py-225 text-center"
+        >
+          {emptyState}
+        </Card>
+      ) : (
+        <Card radius={500} background="none" padding="none" className="overflow-hidden">
+          {children}
+        </Card>
+      )}
       {footnote}
     </VStack>
   );

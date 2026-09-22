@@ -1,0 +1,82 @@
+import { Button, HStack, VStack } from "@trpg/ui";
+import Link from "next/link";
+
+import { LeaveGameButton } from "@/features/join-game";
+
+import type { DrawOutcome } from "../model/to-draw-outcome";
+import { DrawQueue } from "./draw-queue";
+import { DrawSummary } from "./draw-summary";
+import { MyDrawStatus } from "./my-draw-status";
+
+const PAIR_CLASS = "h-[50px] flex-1 rounded-500 text-heading3 font-bold";
+
+interface MyDrawResultProps {
+  gameId: string;
+  title: string;
+  outcome: DrawOutcome;
+  meUserId: string;
+  // 지금 명단 기준. 추첨 뒤 자리가 나 올라왔으면 확정으로 보인다.
+  waitlistRank: number | null;
+  needsAvailability: boolean;
+}
+
+export function MyDrawResult({
+  gameId,
+  title,
+  outcome,
+  meUserId,
+  waitlistRank,
+  needsAvailability,
+}: MyDrawResultProps) {
+  const confirmed = waitlistRank === null;
+  const myWaitingIndex = outcome.waiting.findIndex((entry) => entry.userId === meUserId);
+  const waitingPreview = Math.max(2, myWaitingIndex + 1);
+  const rollingOnceKey = `draw-seen:${gameId}`;
+
+  return (
+    <VStack gap="250">
+      <VStack gap="100">
+        <DrawSummary
+          title={title}
+          applicantCount={outcome.rolled.length}
+          resultLabel="확정"
+          resultCount={outcome.confirmed.length}
+          applied
+        />
+        <MyDrawStatus confirmed={confirmed} waitlistRank={waitlistRank} />
+      </VStack>
+      <DrawQueue
+        label="확정"
+        caption="값이 낮은 순"
+        entries={outcome.confirmed}
+        emphasized={confirmed}
+        meUserId={meUserId}
+        previewCount={outcome.confirmed.length}
+        rollingOnceKey={rollingOnceKey}
+      />
+      <DrawQueue
+        label="대기"
+        entries={outcome.waiting}
+        emphasized={!confirmed}
+        meUserId={meUserId}
+        previewCount={waitingPreview}
+        rollingOnceKey={rollingOnceKey}
+      />
+      <HStack gap="100">
+        <Button asChild variant="outline" className={PAIR_CLASS}>
+          <Link href={`/games/${gameId}`}>구인 글 보기</Link>
+        </Button>
+        {confirmed && needsAvailability && (
+          <Button asChild className={PAIR_CLASS}>
+            <Link href={`/games/${gameId}/schedule`}>가능 시간 제출</Link>
+          </Button>
+        )}
+        {!confirmed && (
+          <LeaveGameButton gameId={gameId} className={PAIR_CLASS}>
+            대기 취소
+          </LeaveGameButton>
+        )}
+      </HStack>
+    </VStack>
+  );
+}

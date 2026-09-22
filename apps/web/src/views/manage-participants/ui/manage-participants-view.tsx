@@ -77,6 +77,7 @@ export async function ManageParticipantsView({ id }: { id: string }) {
         endDate: game.endDate,
         recruitMethod: game.recruitMethod,
         drawnAt: game.drawnAt,
+        rolled: game.participants.some((participant) => participant.drawRoll !== null),
         isCoordinate,
       })}
       isCoordinate={isCoordinate}
