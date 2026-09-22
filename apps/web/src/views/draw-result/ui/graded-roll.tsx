@@ -46,7 +46,7 @@ export function GradedRoll({ value, grade, typography }: GradedRollProps) {
       <span
         aria-hidden
         className={cn(
-          "absolute inset-0 animate-roll-burst rounded-400 border-2",
+          "absolute inset-0 animate-roll-burst rounded-400 border",
           burstColor[grade],
         )}
       />
