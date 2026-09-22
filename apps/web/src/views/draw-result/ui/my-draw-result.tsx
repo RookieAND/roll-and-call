@@ -4,7 +4,9 @@ import Link from "next/link";
 import { LeaveGameButton } from "@/features/join-game";
 
 import { DRAW_ROW_VARIANT } from "../model/draw-row-variant";
+import { toRollGrade } from "../model/roll-grade";
 import type { DrawOutcome } from "../model/to-draw-outcome";
+import { DrawConfetti } from "./draw-confetti";
 import { DrawQueue } from "./draw-queue";
 import { DrawSummary } from "./draw-summary";
 import { MyDrawStatus } from "./my-draw-status";
@@ -32,9 +34,11 @@ export function MyDrawResult({
   const confirmed = waitlistRank === null;
   const myWaitingIndex = outcome.waiting.findIndex((entry) => entry.userId === meUserId);
   const waitingPreview = Math.max(2, myWaitingIndex + 1);
+  const myRoll = outcome.rolled.find((entry) => entry.userId === meUserId)?.roll ?? null;
 
   return (
-    <VStack gap="250">
+    <VStack gap="250" className="relative">
+      {toRollGrade(myRoll) && <DrawConfetti />}
       <VStack gap="100">
         <DrawSummary
           title={title}

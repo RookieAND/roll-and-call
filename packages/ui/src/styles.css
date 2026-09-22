@@ -137,6 +137,15 @@
   --color-rank-gold: #8a6209;
   --color-rank-bronze: #9a5b2e;
 
+  /* 추첨 1d100의 대성공(1)·극단적 성공(2~5). 라이트는 primary, 다크는 금색으로 띄운다. */
+  --color-critical-bg: #4f46e5;
+  --color-critical-ink: #ffffff;
+  --color-critical-sparkle: #4f46e5;
+  --color-critical-glow: rgb(79 70 229);
+  --color-extreme-bg: #eef0fe;
+  --color-extreme-border: #d5d3f7;
+  --color-extreme-ink: #4338ca;
+
   /* 달력 토요일 글씨. 일요일은 danger-600을 쓴다. */
   --color-saturday: #2c6ba0;
 }
@@ -212,6 +221,14 @@
 
   --color-rank-gold: #e5be6a;
   --color-rank-bronze: #c9926a;
+
+  --color-critical-bg: #fbbf24;
+  --color-critical-ink: #2e2616;
+  --color-critical-sparkle: #f0c860;
+  --color-critical-glow: rgb(251 191 36);
+  --color-extreme-bg: rgb(251 191 36 / 0.16);
+  --color-extreme-border: rgb(251 191 36 / 0.42);
+  --color-extreme-ink: #fbbf24;
 
   --color-heat-0: #1e1e26;
   --color-heat-1: #221f42;
