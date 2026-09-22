@@ -14,7 +14,7 @@ export function TabsIndicator({ className, ...props }: TabsIndicatorProps) {
       data-slot="tabs-indicator"
       className={(state) =>
         cn(
-          "absolute bottom-0 left-0 h-[2px] w-(--active-tab-width) translate-x-(--active-tab-left) bg-primary-600 transition-[translate,width] duration-(--rc-duration-fast) ease-(--rc-ease-out)",
+          "absolute bottom-0 left-0 h-[2px] [[data-variant=solid]_&]:hidden w-(--active-tab-width) translate-x-(--active-tab-left) bg-primary-600 transition-[translate,width] duration-(--rc-duration-fast) ease-(--rc-ease-out)",
           resolveStateProp(className, state),
         )
       }

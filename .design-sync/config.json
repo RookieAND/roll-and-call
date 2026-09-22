@@ -1,0 +1,51 @@
+{
+  "projectId": "566422f9-d22c-4875-b33c-59b389938412",
+  "shape": "package",
+  "pkg": "@roll-and-call/ui",
+  "globalName": "RollAndCallUI",
+  "buildCmd": "pnpm -F @roll-and-call/ui exec tsc -p tsconfig.build.json && pnpm dlx @tailwindcss/cli@4.3.3 -i .design-sync/tailwind-entry.css -o packages/ui/dist/design-sync.css",
+  "srcDir": "src",
+  "tsconfig": "tsconfig.json",
+  "cssEntry": "dist/design-sync.css",
+  "tokensGlob": "src/styles.css",
+  "docsDir": "docs",
+  "extraFonts": [
+    "../../.design-sync/fonts/pretendard.css"
+  ],
+  "overrides": {
+    "Sheet": {
+      "cardMode": "single",
+      "viewport": "390x620"
+    },
+    "Dialog": {
+      "cardMode": "single",
+      "viewport": "390x520"
+    },
+    "AlertDialog": {
+      "cardMode": "single",
+      "viewport": "390x520"
+    },
+    "Toast": {
+      "cardMode": "single",
+      "viewport": "390x420"
+    },
+    "FloatingBar": {
+      "cardMode": "single",
+      "viewport": "390x420"
+    },
+    "Table": {
+      "cardMode": "column"
+    },
+    "Calendar": {
+      "cardMode": "column"
+    },
+    "SegmentedControl": {
+      "cardMode": "column"
+    },
+    "Tooltip": {
+      "cardMode": "single",
+      "viewport": "390x260"
+    }
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}

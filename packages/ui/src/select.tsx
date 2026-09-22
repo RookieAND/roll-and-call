@@ -11,7 +11,17 @@ export type { SelectOption } from "./select-items-context";
 export type { SelectRootProps } from "./select-root";
 export type { SelectTriggerProps } from "./select-trigger";
 
-export const Select = {
+export const Select: {
+  Root: typeof SelectRoot;
+  Trigger: typeof SelectTrigger;
+  Popup: typeof SelectPopup;
+  Item: typeof SelectItem;
+  Value: typeof BaseSelect.Value;
+  Icon: typeof BaseSelect.Icon;
+  Group: typeof BaseSelect.Group;
+  GroupLabel: typeof BaseSelect.GroupLabel;
+  Separator: typeof BaseSelect.Separator;
+} = {
   Root: SelectRoot,
   Trigger: SelectTrigger,
   Popup: SelectPopup,

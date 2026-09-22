@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url("./PretendardVariable.woff2") format("woff2-variations");
+}
+
+/* --font-sans의 두 번째 이름. 같은 가변 폰트를 가리킨다. */
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url("./PretendardVariable.woff2") format("woff2-variations");
+}

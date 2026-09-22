@@ -1,0 +1,14 @@
+/* design-sync 전용 진입점. 컴포넌트가 쓰는 유틸리티와, 디자인이 쓸 토큰 이름을 함께 컴파일한다. */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import "tailwindcss";
+@import "../packages/ui/src/styles.css";
+
+/* Tailwind는 소스에 쓰인 클래스만 컴파일한다. 디자인 쪽이 토큰 이름을 자유롭게 쓸 수 있도록
+   스케일 전체를 미리 넣어 둔다. 여기 없는 이름(bg-blue-500, p-4)은 여전히 무시된다. */
+@source inline("rounded-{100,200,300,400,500,600,700,800,full}");
+@source inline("rounded-{t,b,l,r}-{100,200,300,400,500,600,700,800}");
+@source inline("{p,px,py,pt,pb,pl,pr,m,mx,my,mt,mb,ml,mr,gap,gap-x,gap-y,space-x,space-y}-{025,050,075,100,125,150,175,200,225,250,300,400,500,600,700,800}");
+@source inline("text-{heading1,heading2,heading3,subtitle1,subtitle2,body2,body3,body4,body5}");
+@source inline("{bg,text,border}-{surface,canvas,hint,toast,dim,discord,on-primary,inverse,saturday}");
+@source inline("{bg,text,border}-{primary,gray,success,warning,danger}-{50,100,200,300,400,500,600,700,800,900}");
+@source inline("{bg,text,border}-{tinted-bg,tinted-bg-hover,tinted-border,tinted-ink,notice-bg,notice-border,notice-ink,primary-ink,danger-solid,success-solid}");

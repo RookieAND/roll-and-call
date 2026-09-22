@@ -31,8 +31,9 @@ export function ToastViewport({ position = "bottom", max = 3, offset = 16 }: Toa
         unstyled: true,
         classNames: {
           // inset-x-0 + mx-auto centers the absolute toast without touching transform (keeps sonner's animation)
+          // sonner가 자기 font-family를 박아 넣어 브랜드 폰트가 빠진다. font-sans로 되돌린다.
           toast:
-            "inset-x-0 mx-auto flex w-fit items-center justify-center gap-100 rounded-300 px-200 py-125 text-sm font-semibold text-inverse shadow-lg",
+            "inset-x-0 mx-auto flex w-fit items-center justify-center gap-100 rounded-300 px-200 py-125 font-sans text-sm font-semibold text-inverse shadow-lg",
           default: "bg-toast",
           success: "bg-toast",
           info: "bg-toast",

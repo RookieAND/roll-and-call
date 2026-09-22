@@ -9,6 +9,10 @@ import type { StateClassName } from "./state-props";
 
 export interface TooltipProps {
   content: ReactNode;
+  // 열린 모습을 그대로 보여 줘야 하는 자리(문서·미리보기)를 위해 열어 둔다.
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
   // rendered as-is (no wrapper button) so it can sit inside links
   children: ReactElement<Record<string, unknown>>;
   side?: "top" | "bottom" | "left" | "right";
@@ -17,9 +21,18 @@ export interface TooltipProps {
 }
 
 // ponytail: Base UI tooltips don't open on touch; move to Popover if mobile needs tap-to-reveal.
-export function Tooltip({ content, children, side = "top", delay = 300, className }: TooltipProps) {
+export function Tooltip({
+  content,
+  children,
+  side = "top",
+  delay = 300,
+  className,
+  open,
+  defaultOpen,
+  onOpenChange,
+}: TooltipProps) {
   return (
-    <BaseTooltip.Root>
+    <BaseTooltip.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
       <BaseTooltip.Trigger render={children} delay={delay} />
       <BaseTooltip.Portal>
         <BaseTooltip.Positioner side={side} sideOffset={6} className="z-50">
