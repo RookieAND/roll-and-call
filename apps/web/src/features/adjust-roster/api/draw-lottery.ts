@@ -4,11 +4,11 @@ import { randomInt } from "node:crypto";
 
 import { and, eq, isNotNull } from "drizzle-orm";
 
-import { PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
+import { DIE_FACES, PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
 import { games, participants } from "@/shared/server";
 
-import { DIE_FACES, rollDistinct } from "../model/roll-distinct";
+import { rollDistinct } from "../model/roll-distinct";
 import { adjustRoster } from "./adjust-roster";
 import { RosterError } from "./roster-error";
 
@@ -32,6 +32,9 @@ export async function drawLottery(gameId: string): Promise<ActionResult> {
         and(eq(participants.gameId, gameId), eq(participants.status, PARTICIPANT_STATUS.waiting)),
       );
     if (applicants.length === 0) throw new RosterError("추첨할 신청자가 없습니다.");
+    if (applicants.length > DIE_FACES) {
+      throw new RosterError(`추첨 신청자는 ${DIE_FACES}명까지만 굴릴 수 있습니다.`);
+    }
 
     const rolls = rollDistinct(applicants.length, () => randomInt(1, DIE_FACES + 1));
     for (const [index, applicant] of applicants.entries()) {

@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "participants_game_id_draw_roll_unique" ON "participants" USING btree ("game_id","draw_roll");

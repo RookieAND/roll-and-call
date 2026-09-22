@@ -11,6 +11,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
 
@@ -146,6 +147,8 @@ export const participants = pgTable(
     primaryKey({ columns: [table.gameId, table.userId] }),
     // PK가 game_id로 시작해 user_id 단독 조회(내가 신청한 게임)는 못 탄다.
     index("participants_user_id_idx").on(table.userId),
+    // 한 게임 안에서 1d100 값은 사람마다 다르다. null(굴리기 전)끼리는 겹쳐도 된다.
+    uniqueIndex("participants_game_id_draw_roll_unique").on(table.gameId, table.drawRoll),
     check("participants_draw_roll_range", sql`${table.drawRoll} between 1 and 100`),
     check("participants_draw_rank_positive", sql`${table.drawRank} >= 1`),
   ],

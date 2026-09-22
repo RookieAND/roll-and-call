@@ -2,7 +2,9 @@ import { randomInt } from "node:crypto";
 
 import { describe, expect, it } from "vitest";
 
-import { DIE_FACES, rollDistinct } from "./roll-distinct";
+import { DIE_FACES } from "@/entities/game";
+
+import { rollDistinct } from "./roll-distinct";
 
 function scripted(sequence: number[]) {
   let index = 0;
@@ -23,7 +25,7 @@ describe("rollDistinct", () => {
     expect(new Set(values).size).toBe(DIE_FACES);
   });
 
-  it("면 수보다 사람이 많으면 겹침을 허용한다", () => {
-    expect(rollDistinct(DIE_FACES + 1, () => 1)).toHaveLength(DIE_FACES + 1);
+  it("면 수보다 사람이 많으면 굴리지 않는다", () => {
+    expect(() => rollDistinct(DIE_FACES + 1, () => 1)).toThrow(RangeError);
   });
 });
