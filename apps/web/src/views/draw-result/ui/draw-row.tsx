@@ -35,11 +35,17 @@ export function DrawRow({ entry, roll, emphasized, isMe }: DrawRowProps) {
     <HStack align="center" gap="125" className={row({ emphasized })}>
       <Avatar src={entry.avatarUrl} name={entry.username} size={emphasized ? "md" : "sm"} />
       <VStack gap="025" className="min-w-0 flex-1">
-        <Text typography="body2" weight={nameWeight} foreground={nameForeground} truncate>
+        <Text
+          typography="body2"
+          weight={nameWeight}
+          foreground={nameForeground}
+          truncate
+          className="leading-[1.3]"
+        >
           {entry.username}
         </Text>
         {entry.bio && (
-          <Text typography="body4" foreground="hint" truncate>
+          <Text typography="body4" foreground="hint" truncate className="leading-[1.3]">
             {entry.bio}
           </Text>
         )}
