@@ -26,7 +26,7 @@ export function SessionTimeFields({ days, start, onChange }: SessionTimeFieldsPr
 
   return (
     <VStack gap="175" className="p-175">
-      <Field label="날짜">
+      <Field.Root label="날짜">
         <Select.Root
           items={dateItems}
           value={start.date}
@@ -41,8 +41,8 @@ export function SessionTimeFields({ days, start, onChange }: SessionTimeFieldsPr
             ))}
           </Select.Popup>
         </Select.Root>
-      </Field>
-      <Field label="시작 시각">
+      </Field.Root>
+      <Field.Root label="시작 시각">
         <HStack gap="100">
           <Select.Root
             items={HOURS}
@@ -73,7 +73,7 @@ export function SessionTimeFields({ days, start, onChange }: SessionTimeFieldsPr
             </Select.Popup>
           </Select.Root>
         </HStack>
-      </Field>
+      </Field.Root>
     </VStack>
   );
 }

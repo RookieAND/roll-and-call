@@ -20,7 +20,7 @@ export function FixedSessionField({ form, notice }: FixedSessionFieldProps) {
 
   return (
     <VStack gap="075">
-      <Field label="세션 일시" htmlFor="confirmedAt" required error={error?.message}>
+      <Field.Root label="세션 일시" htmlFor="confirmedAt" required error={error?.message}>
         <Controller
           name="confirmedAt"
           control={control}
@@ -39,7 +39,7 @@ export function FixedSessionField({ form, notice }: FixedSessionFieldProps) {
             />
           )}
         />
-      </Field>
+      </Field.Root>
       {notice && (
         <Text typography="body4" render={<p />} className="font-semibold text-warning-600">
           {notice}

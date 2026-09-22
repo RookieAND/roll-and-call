@@ -45,7 +45,7 @@ export function GameScheduleFields({
         <CoordinationRangeFields form={form} />
       )}
 
-      <Field label="모집 마감" htmlFor="endDate" required error={errors.endDate?.message}>
+      <Field.Root label="모집 마감" htmlFor="endDate" required error={errors.endDate?.message}>
         <Controller
           name="endDate"
           control={control}
@@ -59,7 +59,7 @@ export function GameScheduleFields({
             />
           )}
         />
-      </Field>
+      </Field.Root>
     </>
   );
 }

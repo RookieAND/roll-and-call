@@ -73,7 +73,7 @@ export function EditProfileForm({
       <VStack gap="250" className="pb-200">
         <AvatarRefreshField defaultUrl={avatarUrl} name={username} />
 
-        <Field
+        <Field.Root
           label="표시 이름"
           htmlFor="username"
           description="구인 카드와 참여자 명단에 보이는 이름입니다."
@@ -86,10 +86,10 @@ export function EditProfileForm({
             invalid={!!usernameError}
             maxLength={USERNAME_MAX_LENGTH}
           />
-        </Field>
+        </Field.Root>
 
         <VStack gap="075">
-          <Field label="한 줄 소개" htmlFor="bio" error={bioError}>
+          <Field.Root label="한 줄 소개" htmlFor="bio" error={bioError}>
             <Textarea
               id="bio"
               value={bio}
@@ -99,7 +99,7 @@ export function EditProfileForm({
               invalid={!!bioError}
               className="min-h-[76px]"
             />
-          </Field>
+          </Field.Root>
           <HStack justify="between" gap="100">
             <Text typography="body4" foreground="hint">
               마이페이지와 참여자 명단에 함께 보입니다.
@@ -111,7 +111,7 @@ export function EditProfileForm({
         </VStack>
 
         <VStack gap="075">
-          <Field label="성향" htmlFor="keywords">
+          <Field.Root label="성향" htmlFor="keywords">
             <TagInput
               id="keywords"
               value={keywords}
@@ -121,7 +121,7 @@ export function EditProfileForm({
               prefix="#"
               placeholder="수사중심"
             />
-          </Field>
+          </Field.Root>
           <Text typography="body4" foreground="hint" render={<p />}>
             한 개 {KEYWORD_MAX_LENGTH}자까지 · 입력하면 앞에 #가 붙습니다.
             <br />

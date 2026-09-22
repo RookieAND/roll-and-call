@@ -15,7 +15,7 @@ export { Switch, type SwitchProps } from "./switch";
 export { Stepper, type StepperProps } from "./stepper";
 export { Card, type CardRootProps } from "./card";
 export { Callout, type CalloutRootProps, type CalloutPalette } from "./callout";
-export { Field, type FieldProps } from "./field";
+export { Field, type FieldRootProps } from "./field";
 export { TextInput, type TextInputProps } from "./text-input";
 export { Textarea, type TextareaProps } from "./textarea";
 export { textFieldVariants } from "./text-field-variants";

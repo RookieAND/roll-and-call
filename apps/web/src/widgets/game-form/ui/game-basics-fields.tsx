@@ -28,7 +28,7 @@ export function GameBasicsFields({ form }: GameBasicsFieldsProps) {
 
   return (
     <>
-      <Field label="게임명" htmlFor="title" required error={errors.title?.message}>
+      <Field.Root label="게임명" htmlFor="title" required error={errors.title?.message}>
         <TextInput
           id="title"
           placeholder="예: 마지막 열차"
@@ -36,10 +36,10 @@ export function GameBasicsFields({ form }: GameBasicsFieldsProps) {
           invalid={!!errors.title}
           {...register("title")}
         />
-      </Field>
+      </Field.Root>
 
       <VStack gap="100">
-        <Field label="룰" htmlFor="rule" required error={errors.rule?.message}>
+        <Field.Root label="룰" htmlFor="rule" required error={errors.rule?.message}>
           <TextInput
             id="rule"
             placeholder="예: 크툴루의 부름 7판"
@@ -47,7 +47,7 @@ export function GameBasicsFields({ form }: GameBasicsFieldsProps) {
             invalid={!!errors.rule}
             {...register("rule")}
           />
-        </Field>
+        </Field.Root>
         <HStack gap="075" wrap>
           {RULE_PRESETS.map((preset) => (
             <Chip
@@ -78,7 +78,7 @@ export function GameBasicsFields({ form }: GameBasicsFieldsProps) {
         }
       />
 
-      <Field
+      <Field.Root
         label="시놉시스"
         htmlFor="synopsis"
         counter={`${synopsisLength.toLocaleString()} / ${GAME_SYNOPSIS_MAX.toLocaleString()}`}
@@ -92,7 +92,7 @@ export function GameBasicsFields({ form }: GameBasicsFieldsProps) {
           placeholder="어떤 이야기인지, 어떤 분위기인지 적어주세요."
           onChange={(value) => setValue("synopsis", value, { shouldDirty: true })}
         />
-      </Field>
+      </Field.Root>
     </>
   );
 }

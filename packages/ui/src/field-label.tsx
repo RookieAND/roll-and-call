@@ -1,21 +1,35 @@
 import type { ReactNode } from "react";
 
-interface FieldLabelProps {
-  label?: string;
+import { cn } from "./cn";
+
+export interface FieldLabelProps {
+  label?: ReactNode;
   counter?: ReactNode;
   required?: boolean;
   htmlFor?: string;
+  className?: string;
+  children?: ReactNode;
 }
 
-export function FieldLabel({ label, counter, required, htmlFor }: FieldLabelProps) {
+export function FieldLabel({
+  label,
+  counter,
+  required,
+  htmlFor,
+  className,
+  children,
+}: FieldLabelProps) {
   return (
-    <div data-slot="field-header" className="flex items-baseline justify-between gap-100">
+    <div
+      data-slot="field-header"
+      className={cn("flex items-baseline justify-between gap-100", className)}
+    >
       <label
         data-slot="field-label"
         htmlFor={htmlFor}
         className="text-body4 font-bold text-gray-700"
       >
-        {label}
+        {children ?? label}
         {required && <span className="text-danger-600"> *</span>}
       </label>
       {counter && (

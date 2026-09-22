@@ -26,7 +26,7 @@ interface ScheduleModeFieldProps {
 export function ScheduleModeField({ value, onChange, locked = false }: ScheduleModeFieldProps) {
   return (
     <VStack gap="100">
-      <Field label="일정 방식">
+      <Field.Root label="일정 방식">
         <Grid cols={2} gap="100">
           {OPTIONS.map((option) => (
             <Chip
@@ -40,7 +40,7 @@ export function ScheduleModeField({ value, onChange, locked = false }: ScheduleM
             </Chip>
           ))}
         </Grid>
-      </Field>
+      </Field.Root>
       {locked ? (
         <LockedModeNotice label="일정 방식" />
       ) : (

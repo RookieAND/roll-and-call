@@ -26,7 +26,7 @@ interface RecruitMethodFieldProps {
 export function RecruitMethodField({ value, onChange, locked = false }: RecruitMethodFieldProps) {
   return (
     <VStack gap="100">
-      <Field label="모집 방식" required={!locked}>
+      <Field.Root label="모집 방식" required={!locked}>
         <Grid cols={2} gap="100">
           {RECRUIT_METHODS.map((method) => (
             <Chip
@@ -40,7 +40,7 @@ export function RecruitMethodField({ value, onChange, locked = false }: RecruitM
             </Chip>
           ))}
         </Grid>
-      </Field>
+      </Field.Root>
       {locked ? (
         <LockedModeNotice label="모집 방식" />
       ) : (

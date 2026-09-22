@@ -33,7 +33,7 @@ export function CoordinationRangeFields({ form }: CoordinationRangeFieldsProps) 
 
   return (
     <VStack gap="075">
-      <Field label="조율 기간" htmlFor="rangeStart" required error={error}>
+      <Field.Root label="조율 기간" htmlFor="rangeStart" required error={error}>
         <HStack align="center" gap="100">
           <div className="min-w-0 flex-1">
             <Controller
@@ -78,7 +78,7 @@ export function CoordinationRangeFields({ form }: CoordinationRangeFieldsProps) 
             />
           </div>
         </HStack>
-      </Field>
+      </Field.Root>
       <Text typography="body4" foreground="hint" render={<p />}>
         참여자가 참여 일자를 고를 수 있는 범위입니다. (최대 {GAME_RANGE_MAX_DAYS}일)
       </Text>

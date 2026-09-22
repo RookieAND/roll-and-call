@@ -38,7 +38,7 @@ export function GameRecruitFields({
   return (
     <>
       <VStack gap="100">
-        <Field
+        <Field.Root
           label="최대 참여 인원"
           htmlFor="maxPlayers"
           required
@@ -54,7 +54,7 @@ export function GameRecruitFields({
               setValue("maxPlayers", String(count), { shouldDirty: true, shouldValidate: true })
             }
           />
-        </Field>
+        </Field.Root>
         {minPlayers > 1 && (
           <Callout.Root colorPalette="danger" size="sm">
             <Callout.Icon>

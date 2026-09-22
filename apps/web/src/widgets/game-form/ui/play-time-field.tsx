@@ -36,7 +36,7 @@ export function PlayTimeField({ value, onChange, error }: PlayTimeFieldProps) {
   }
 
   return (
-    <Field label="플레이타임" error={error}>
+    <Field.Root label="플레이타임" error={error}>
       <HStack gap="100">
         <Select.Root
           items={hourItems}
@@ -67,6 +67,6 @@ export function PlayTimeField({ value, onChange, error }: PlayTimeFieldProps) {
           </Select.Popup>
         </Select.Root>
       </HStack>
-    </Field>
+    </Field.Root>
   );
 }
