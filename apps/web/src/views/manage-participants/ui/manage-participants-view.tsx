@@ -19,11 +19,10 @@ import { toManagedMember } from "../model/to-managed-member";
 import { ParticipantManager } from "./participant-manager";
 
 export async function ManageParticipantsView({ id }: { id: string }) {
-  const data = await getGameParticipants(id);
+  const [data, user] = await Promise.all([getGameParticipants(id), getCurrentUser()]);
   if (!data) notFound();
   const { game, availableUserIds } = data;
 
-  const user = await getCurrentUser();
   // 조용히 튕기지 않는다: 비로그인·비GM에게 그 자리에서 안내한다.
   if (!user || user.id !== game.gmId) {
     return (

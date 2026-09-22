@@ -6,24 +6,27 @@ import { getRespondedUserIds } from "./get-responded-user-ids";
 export type GameParticipantsData = NonNullable<Awaited<ReturnType<typeof getGameParticipants>>>;
 
 export async function getGameParticipants(gameId: string) {
-  const game = await db.query.games.findFirst({
-    where: (gameRow, { eq }) => eq(gameRow.id, gameId),
-    with: {
-      gm: { columns: { id: true, username: true, avatarUrl: true } },
-      participants: {
-        columns: {
-          userId: true,
-          joinedAt: true,
-          status: true,
-          drawRank: true,
-          drawRoll: true,
-          absent: true,
+  const [game, respondedUserIds] = await Promise.all([
+    db.query.games.findFirst({
+      where: (gameRow, { eq }) => eq(gameRow.id, gameId),
+      with: {
+        gm: { columns: { id: true, username: true, avatarUrl: true } },
+        participants: {
+          columns: {
+            userId: true,
+            joinedAt: true,
+            status: true,
+            drawRank: true,
+            drawRoll: true,
+            absent: true,
+          },
+          with: { user: { columns: { username: true, avatarUrl: true } } },
         },
-        with: { user: { columns: { username: true, avatarUrl: true } } },
       },
-    },
-  });
+    }),
+    getRespondedUserIds(gameId),
+  ]);
   if (!game) return null;
 
-  return { game, availableUserIds: new Set(await getRespondedUserIds(gameId)) };
+  return { game, availableUserIds: new Set(respondedUserIds) };
 }

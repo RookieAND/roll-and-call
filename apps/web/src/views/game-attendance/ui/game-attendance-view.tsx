@@ -13,11 +13,10 @@ import { AttendanceSessionTime } from "./attendance-session-time";
 
 // 왔는지 안 왔는지만 정하는 자리다. 명단을 고치는 일은 참여자 관리가 맡는다.
 export async function GameAttendanceView({ id }: { id: string }) {
-  const data = await getGameParticipants(id);
+  const [data, user] = await Promise.all([getGameParticipants(id), getCurrentUser()]);
   if (!data) notFound();
   const { game } = data;
 
-  const user = await getCurrentUser();
   if (!user) {
     return (
       <>

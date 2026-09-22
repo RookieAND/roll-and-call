@@ -8,10 +8,8 @@ import { AppBar, EmptyState } from "@/shared/ui";
 import { EditGameForm } from "@/widgets/game-form";
 
 export async function EditGameView({ id }: { id: string }) {
-  const game = await getGameById(id);
+  const [game, user] = await Promise.all([getGameById(id), getCurrentUser()]);
   if (!game) notFound();
-
-  const user = await getCurrentUser();
   if (user?.id === game.gmId) return <EditGameForm game={game} />;
 
   return (

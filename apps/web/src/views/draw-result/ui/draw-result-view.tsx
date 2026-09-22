@@ -17,11 +17,10 @@ interface DrawResultViewProps {
 
 // 적용 전에는 GM만 본다. 적용한 순간부터 신청자 전원의 값이 공개된다.
 export async function DrawResultView({ id }: DrawResultViewProps) {
-  const data = await getGameParticipants(id);
+  const [data, user] = await Promise.all([getGameParticipants(id), getCurrentUser()]);
   if (!data) notFound();
   const { game } = data;
 
-  const user = await getCurrentUser();
   const isGm = user?.id === game.gmId;
   const applied = game.drawnAt !== null;
   const hasRolls = game.participants.some((participant) => participant.drawRoll !== null);

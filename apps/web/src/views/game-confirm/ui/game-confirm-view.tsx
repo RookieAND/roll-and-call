@@ -12,11 +12,13 @@ import { ConfirmSummary } from "./confirm-summary";
 
 // 가능 시간을 내는 일(일정 조율)과 시간을 정하는 일은 다른 행동이라 화면을 나눈다.
 export async function GameConfirmView({ id }: { id: string }) {
-  const game = await requireGmGame(id, { next: `/games/${id}/confirm` });
+  const [game, availabilities] = await Promise.all([
+    requireGmGame(id, { next: `/games/${id}/confirm` }),
+    getGameAvailabilities(id),
+  ]);
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) redirect(`/games/${id}`);
   if (!game.rangeStart || !game.rangeEnd) redirect(`/games/${id}/schedule`);
 
-  const availabilities = await getGameAvailabilities(id);
   const { names } = aggregateAvailability({ avails: availabilities, userId: null });
   const respondedCount = new Set(Object.values(names).flat()).size;
   const minutes = playMinutes(game.playMinutes);
