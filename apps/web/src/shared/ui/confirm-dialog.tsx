@@ -1,8 +1,7 @@
 "use client";
 
-import { Dialog } from "@base-ui-components/react/dialog";
-import { Button, HStack } from "@roll-and-call/ui";
-import type { ReactNode } from "react";
+import { AlertDialog, Button } from "@roll-and-call/ui";
+import { useRef, type ReactNode } from "react";
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -30,6 +29,8 @@ export function ConfirmDialog({
   onConfirm,
   children,
 }: ConfirmDialogProps) {
+  const cancelRef = useRef<HTMLButtonElement>(null);
+
   // 처리 중에는 닫히지 않는다. 결과를 모른 채 화면을 떠나지 않게.
   const handleOpenChange = (nextOpen: boolean) => {
     if (!pending) onOpenChange(nextOpen);
@@ -38,40 +39,34 @@ export function ConfirmDialog({
   const confirmPalette = danger ? "danger" : "primary";
 
   return (
-    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
-      <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 z-40 bg-dim" />
-        <Dialog.Popup className="fixed top-1/2 left-1/2 z-50 w-[calc(100%-3rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-700 border border-gray-200 bg-surface p-250 shadow-xl outline-none">
-          <Dialog.Title className="text-base font-bold text-gray-900">{title}</Dialog.Title>
-          {description && (
-            <Dialog.Description className="mt-075 text-sm whitespace-pre-line text-gray-600">
-              {description}
-            </Dialog.Description>
-          )}
-          {children}
-          <HStack gap="100" className="mt-250">
-            <Button
-              type="button"
-              variant="outline"
-              className="h-11 flex-1"
-              disabled={pending}
-              onClick={() => onOpenChange(false)}
-            >
-              {cancelLabel}
-            </Button>
-            <Button
-              type="button"
-              colorPalette={confirmPalette}
-              className="h-11 flex-1"
-              loading={pending}
-              disabled={pending}
-              onClick={onConfirm}
-            >
-              {confirmLabel}
-            </Button>
-          </HStack>
-        </Dialog.Popup>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <AlertDialog.Root open={open} onOpenChange={handleOpenChange}>
+      <AlertDialog.Popup initialFocus={danger ? cancelRef : undefined}>
+        <AlertDialog.Header>
+          <AlertDialog.Title>{title}</AlertDialog.Title>
+          {description && <AlertDialog.Description>{description}</AlertDialog.Description>}
+        </AlertDialog.Header>
+        {children}
+        <AlertDialog.Footer layout="row">
+          <Button
+            ref={cancelRef}
+            variant="outline"
+            className="h-11 flex-1"
+            disabled={pending}
+            onClick={() => onOpenChange(false)}
+          >
+            {cancelLabel}
+          </Button>
+          <Button
+            colorPalette={confirmPalette}
+            className="h-11 flex-1"
+            loading={pending}
+            disabled={pending}
+            onClick={onConfirm}
+          >
+            {confirmLabel}
+          </Button>
+        </AlertDialog.Footer>
+      </AlertDialog.Popup>
+    </AlertDialog.Root>
   );
 }

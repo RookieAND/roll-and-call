@@ -52,3 +52,5 @@ export {
 } from "./table";
 export type { StateClassName, StateStyle, StateProps } from "./state-props";
 export { COLOR_PALETTE, type ColorPalette } from "./color-palette";
+export { Dialog, type DialogPopupProps, type DialogFooterProps } from "./dialog";
+export { AlertDialog } from "./alert-dialog";
