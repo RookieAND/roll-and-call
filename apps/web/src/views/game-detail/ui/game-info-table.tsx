@@ -49,10 +49,10 @@ export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
           gap="150"
           className="min-h-12 border-b border-gray-100 px-200 last:border-b-0"
         >
-          <Text typography="body3" foreground="muted" className="w-[82px] shrink-0">
+          <Text typography="body3" foreground="muted" className="w-20.5 shrink-0">
             {row.label}
           </Text>
-          <Text typography="body4" weight="bold" render={<div />} className="flex-1 items-center">
+          <Text typography="body4" weight="bold" render={<div />} className="flex flex-1 items-center">
             {row.value}
           </Text>
         </HStack>
