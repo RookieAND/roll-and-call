@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, Callout, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
 import { uniq } from "es-toolkit";
 import { useState } from "react";
 
@@ -76,31 +76,30 @@ export function ConfirmSessionForm({
     });
   }
 
+  const windowLabel = sessionWindowLabel(startIso, playMinutes);
+  const pickedCandidate = candidates.find((candidate) => candidate.iso === startIso)?.iso ?? null;
+
   return (
     <VStack gap="250">
-      <VStack gap="100" render={<section />}>
-        <Text typography="subtitle2" weight="extrabold" render={<h2 />}>
+      <VStack gap="125" render={<section />}>
+        <Text typography="subtitle2" render={<h2 />}>
           세션 시간
         </Text>
-        <Card.Root
-          radius={500}
-          background="none"
-          padding="none"
-          className="overflow-hidden border-primary-200"
-        >
-          <SessionTimeFields days={days} start={start} onChange={setStart} />
-          <SessionWindowSummary
-            windowLabel={sessionWindowLabel(startIso, playMinutes)}
-            memberCount={members.length}
-            everyone={absentNames.length === 0}
-          />
-          {absentNames.length > 0 && <UnavailableWarning names={absentNames} />}
-        </Card.Root>
+        <SessionTimeFields days={days} start={start} onChange={setStart} />
+        <Text typography="body4" foreground="hint" render={<p />}>
+          시작 시각부터 {playLabel}이 끊기지 않고 비는 시간만 셉니다.
+        </Text>
+        <SessionWindowSummary
+          windowLabel={windowLabel}
+          memberCount={members.length}
+          everyone={absentNames.length === 0}
+        />
+        {absentNames.length > 0 && <UnavailableWarning names={absentNames} />}
       </VStack>
 
-      <VStack gap="100" render={<section />}>
-        <HStack align="baseline" gap="100">
-          <Text typography="subtitle2" weight="extrabold" render={<h2 />}>
+      <VStack gap="125" render={<section />}>
+        <HStack align="baseline" gap="075">
+          <Text typography="subtitle2" render={<h2 />}>
             추천 후보
           </Text>
           <Text numeric typography="subtitle2" foreground="muted" render={<span />}>
@@ -118,19 +117,20 @@ export function ConfirmSessionForm({
             candidates={candidates}
             playMinutes={playMinutes}
             respondents={respondents}
+            value={pickedCandidate}
             onPick={(iso) => setStart(toSessionStart(iso))}
           />
         )}
       </VStack>
 
-      {error && (
-        <Text typography="body2" foreground="danger" render={<p />}>
-          {error}
-        </Text>
-      )}
-
       <FloatingBar.Root elevated={false}>
         <FloatingBar.Content>
+          {error && (
+            <Callout.Root colorPalette="danger" size="sm" className="mb-125">
+              <Callout.Icon />
+              <Callout.Description>{error}</Callout.Description>
+            </Callout.Root>
+          )}
           <Button
             variant="solid"
             colorPalette="success"
@@ -149,11 +149,22 @@ export function ConfirmSessionForm({
         open={confirming}
         onOpenChange={setConfirming}
         title={changing ? "확정 시간을 바꿀까요?" : "이 시간으로 확정할까요?"}
-        description={`${sessionWindowLabel(startIso, playMinutes)}\n확정하면 새 신청을 받지 않고, 명단도 고칠 수 없습니다.\n참여자 ${confirmedCount}명에게 디스코드로 알립니다.`}
+        description={
+          <>
+            확정하면 새 신청을 받지 않고, 명단도 고칠 수 없습니다.
+            <br />
+            참여자 {confirmedCount}명에게 디스코드로 알립니다.
+          </>
+        }
         confirmLabel={changing ? "변경" : "확정"}
+        confirmColorPalette="success"
         pending={pending}
         onConfirm={submit}
-      />
+      >
+        <Text numeric typography="subtitle1" foreground="success" render={<p />}>
+          {windowLabel}
+        </Text>
+      </ConfirmDialog>
     </VStack>
   );
 }

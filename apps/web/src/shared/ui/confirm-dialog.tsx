@@ -7,10 +7,12 @@ interface ConfirmDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
-  description?: string;
+  description?: ReactNode;
   confirmLabel?: string;
   cancelLabel?: string;
   danger?: boolean;
+  // 되돌릴 수 없는 확정처럼 주 색이 아닌 확인(예: success)일 때.
+  confirmColorPalette?: "primary" | "success" | "danger";
   pending?: boolean;
   onConfirm: () => void;
   // 설명 아래에 붙는 부가 안내(목록 상자 등).
@@ -25,6 +27,7 @@ export function ConfirmDialog({
   confirmLabel = "확인",
   cancelLabel = "취소",
   danger,
+  confirmColorPalette,
   pending,
   onConfirm,
   children,
@@ -36,7 +39,7 @@ export function ConfirmDialog({
     if (!pending) onOpenChange(nextOpen);
   };
 
-  const confirmPalette = danger ? "danger" : "primary";
+  const confirmPalette = confirmColorPalette ?? (danger ? "danger" : "primary");
 
   return (
     <AlertDialog.Root open={open} onOpenChange={handleOpenChange}>

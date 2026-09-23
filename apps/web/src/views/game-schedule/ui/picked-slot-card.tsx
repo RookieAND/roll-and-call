@@ -1,8 +1,6 @@
-import { Card, HStack, Text } from "@roll-and-call/ui";
+import { Avatar, Badge, Card, HStack, Text } from "@roll-and-call/ui";
 
 import { formatDateTime } from "@/shared/lib";
-
-import { SlotMemberChip } from "./slot-member-chip";
 
 interface PickedSlotCardProps {
   slotIso: string;
@@ -16,22 +14,27 @@ export function PickedSlotCard({ slotIso, names, gmName }: PickedSlotCardProps) 
     <Card.Root
       radius={500}
       background="none"
-      padding="none"
-      className="border-primary-200 bg-primary-50 px-175 py-150"
+      padding="sm"
+      className="flex flex-col gap-100 border-tinted-border bg-tinted-bg"
       aria-live="polite"
     >
       <HStack align="baseline" gap="100">
-        <Text numeric typography="subtitle2" render={<span />}>
+        <Text numeric typography="subtitle1" render={<span />}>
           {formatDateTime(slotIso)}
         </Text>
-        <span className="flex-1" />
-        <Text numeric typography="body4" weight="bold" foreground="primary" render={<span />}>
+        <Text numeric typography="subtitle2" foreground="primary" render={<span />}>
           {names.length}명
         </Text>
       </HStack>
-      <HStack wrap gap="075" className="mt-125">
+      <HStack wrap className="gap-x-150 gap-y-100">
         {names.map((name) => (
-          <SlotMemberChip key={name} name={name} isGm={name === gmName} />
+          <HStack key={name} align="center" gap="075">
+            <Avatar size="sm" name={name} />
+            <Text typography="body4" weight="medium" render={<span />}>
+              {name}
+            </Text>
+            {name === gmName && <Badge colorPalette="primary">GM</Badge>}
+          </HStack>
         ))}
       </HStack>
     </Card.Root>

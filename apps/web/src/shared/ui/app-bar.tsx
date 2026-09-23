@@ -9,6 +9,8 @@ import { BrandLogo } from "./brand-logo";
 
 interface AppBarProps {
   title: string;
+  // 제목 옆에 작게 붙는 맥락(예: 게임 이름).
+  subtitle?: string;
   // 워드마크로 제목을 대체한다. title은 스크린리더가 읽을 이름으로 남는다.
   brand?: boolean;
   // 진입 경로가 없을 때(직접 URL·디스코드 링크)만 쓰는 폴백. 평소엔 히스토리 뒤로.
@@ -18,7 +20,15 @@ interface AppBarProps {
   action?: ReactNode;
 }
 
-export function AppBar({ title, brand, back, onBack, backIcon = "back", action }: AppBarProps) {
+export function AppBar({
+  title,
+  subtitle,
+  brand,
+  back,
+  onBack,
+  backIcon = "back",
+  action,
+}: AppBarProps) {
   const hasBack = back !== undefined || onBack !== undefined;
   const BackIcon = backIcon === "close" ? X : ChevronLeft;
   const backLabel = backIcon === "close" ? "닫기" : "뒤로";
@@ -58,7 +68,17 @@ export function AppBar({ title, brand, back, onBack, backIcon = "back", action }
           {title}
         </Text>
       )}
-      <span className="flex-1" />
+      {subtitle && (
+        <Text
+          typography="body4"
+          foreground="hint"
+          render={<span />}
+          className="ml-050 min-w-0 flex-1 truncate"
+        >
+          {subtitle}
+        </Text>
+      )}
+      {!subtitle && <span className="flex-1" />}
       {action}
     </HStack>
   );

@@ -1,4 +1,4 @@
-import { Text } from "@roll-and-call/ui";
+import { Card, Text } from "@roll-and-call/ui";
 
 import { SummaryRow } from "./summary-row";
 
@@ -14,23 +14,27 @@ export function SessionWindowSummary({
   everyone,
 }: SessionWindowSummaryProps) {
   return (
-    <>
+    <Card.Root
+      background="subtle"
+      padding="none"
+      radius={500}
+      className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
+    >
       <SummaryRow label="세션 시간">
-        <Text numeric typography="heading3" weight="extrabold" render={<span />}>
+        <Text numeric typography="body3" weight="bold" render={<span />}>
           {windowLabel}
         </Text>
       </SummaryRow>
       <SummaryRow label="가능 인원">
         <Text
           numeric
-          typography="heading3"
-          weight="extrabold"
-          foreground={everyone ? "normal" : "warning"}
+          typography="subtitle2"
+          foreground={everyone ? "success" : "warning"}
           render={<span />}
         >
           {memberCount}명
         </Text>
       </SummaryRow>
-    </>
+    </Card.Root>
   );
 }

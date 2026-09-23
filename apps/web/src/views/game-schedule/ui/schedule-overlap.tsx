@@ -26,7 +26,7 @@ export function ScheduleOverlap({
 }: ScheduleOverlapProps) {
   return (
     <VStack gap="150">
-      <Text typography="body4" foreground="hint" render={<p />} className="whitespace-pre-line">
+      <Text typography="body4" foreground="hint" render={<p />}>
         {hint}
       </Text>
       <Heatmap

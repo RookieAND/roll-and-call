@@ -22,7 +22,7 @@ export function AvailabilitySaveBar({
   return (
     <FloatingBar.Root elevated={false}>
       <FloatingBar.Content>
-        <HStack align="center" gap="075" className="mb-125">
+        <HStack align="center" justify="center" gap="075" className="mb-100">
           <Text typography="subtitle2" numeric render={<span />}>
             선택 {selectedCount}칸
           </Text>

@@ -4,18 +4,14 @@ import { formatDateTime } from "@/shared/lib";
 
 interface ConfirmedSessionNoticeProps {
   confirmedAt: Date;
-  note?: string;
 }
 
-export function ConfirmedSessionNotice({ confirmedAt, note }: ConfirmedSessionNoticeProps) {
-  const description = note
-    ? `세션 확정 · ${formatDateTime(confirmedAt)}\n${note}`
-    : `세션 확정 · ${formatDateTime(confirmedAt)}`;
-
+export function ConfirmedSessionNotice({ confirmedAt }: ConfirmedSessionNoticeProps) {
   return (
-    <Callout.Root colorPalette="success" size="sm">
+    <Callout.Root colorPalette="success">
       <Callout.Icon />
-      <Callout.Description>{description}</Callout.Description>
+      <Callout.Title>세션 확정 · {formatDateTime(confirmedAt)}</Callout.Title>
+      <Callout.Description>확정 칸은 초록 테두리입니다. 입력은 잠깁니다.</Callout.Description>
     </Callout.Root>
   );
 }

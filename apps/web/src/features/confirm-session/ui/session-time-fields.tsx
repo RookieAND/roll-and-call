@@ -1,19 +1,17 @@
 "use client";
 
-import { Field, HStack, Select, VStack } from "@roll-and-call/ui";
+import { Field, HStack, Select } from "@roll-and-call/ui";
 
 import { DAY_END_HOUR, DAY_START_HOUR, type DayColumn } from "@/shared/lib";
 
 import type { SessionStart } from "../model/session-start";
 
-const HOURS = Array.from({ length: DAY_END_HOUR - DAY_START_HOUR }, (_, index) => {
-  const hour = DAY_START_HOUR + index;
-  return { value: String(hour), label: `${hour}시` };
+// 30분 단위 "HH:MM". 값은 hour*60+minute 문자열로 들고 다닌다.
+const TIMES = Array.from({ length: (DAY_END_HOUR - DAY_START_HOUR) * 2 }, (_, index) => {
+  const minutes = DAY_START_HOUR * 60 + index * 30;
+  const label = `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
+  return { value: String(minutes), label };
 });
-const MINUTES = [
-  { value: "0", label: "00분" },
-  { value: "30", label: "30분" },
-];
 
 interface SessionTimeFieldsProps {
   days: DayColumn[];
@@ -23,10 +21,11 @@ interface SessionTimeFieldsProps {
 
 export function SessionTimeFields({ days, start, onChange }: SessionTimeFieldsProps) {
   const dateItems = days.map((day) => ({ value: day.date, label: day.label }));
+  const timeValue = String(start.hour * 60 + start.minute);
 
   return (
-    <VStack gap="175" className="p-175">
-      <Field.Root label="날짜">
+    <HStack gap="100" align="start">
+      <Field.Root label="날짜" className="min-w-0 flex-3">
         <Select.Root
           items={dateItems}
           value={start.date}
@@ -42,38 +41,24 @@ export function SessionTimeFields({ days, start, onChange }: SessionTimeFieldsPr
           </Select.Popup>
         </Select.Root>
       </Field.Root>
-      <Field.Root label="시작 시각">
-        <HStack gap="100">
-          <Select.Root
-            items={HOURS}
-            value={String(start.hour)}
-            onValueChange={(hour: string) => onChange({ ...start, hour: Number(hour) })}
-          >
-            <Select.Trigger aria-label="시" className="min-w-0 flex-1" />
-            <Select.Popup>
-              {HOURS.map((option) => (
-                <Select.Item key={option.value} value={option.value}>
-                  {option.label}
-                </Select.Item>
-              ))}
-            </Select.Popup>
-          </Select.Root>
-          <Select.Root
-            items={MINUTES}
-            value={String(start.minute)}
-            onValueChange={(minute: string) => onChange({ ...start, minute: Number(minute) })}
-          >
-            <Select.Trigger aria-label="분" className="min-w-0 flex-1" />
-            <Select.Popup>
-              {MINUTES.map((option) => (
-                <Select.Item key={option.value} value={option.value}>
-                  {option.label}
-                </Select.Item>
-              ))}
-            </Select.Popup>
-          </Select.Root>
-        </HStack>
+      <Field.Root label="시작 시각" className="min-w-0 flex-2">
+        <Select.Root
+          items={TIMES}
+          value={timeValue}
+          onValueChange={(value: string) =>
+            onChange({ ...start, hour: Math.floor(Number(value) / 60), minute: Number(value) % 60 })
+          }
+        >
+          <Select.Trigger aria-label="시작 시각" />
+          <Select.Popup>
+            {TIMES.map((option) => (
+              <Select.Item key={option.value} value={option.value}>
+                {option.label}
+              </Select.Item>
+            ))}
+          </Select.Popup>
+        </Select.Root>
       </Field.Root>
-    </VStack>
+    </HStack>
   );
 }

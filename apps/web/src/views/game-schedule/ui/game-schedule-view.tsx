@@ -1,17 +1,15 @@
-import { Button, Container, IconButton, Text, VStack } from "@roll-and-call/ui";
-import { MoreVertical } from "lucide-react";
+import { Badge, Button, Container, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { hasUserJoined, isDeadlinePassed, isGameGm, SCHEDULE_MODE } from "@/entities/game";
 import { availabilityPrefill } from "@/entities/profile";
 import { ErrorBoundary } from "@/shared/error-boundary";
-import { buildDayColumns, buildTimeRows, formatDate } from "@/shared/lib";
+import { buildDayColumns, buildTimeRows } from "@/shared/lib";
 import { getCurrentUser, getGameById, getProfile } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
 import { getScheduleAvailability } from "../api/load-availability";
-import { ConfirmedSessionNotice } from "./confirmed-session-notice";
 import { ScheduleBody } from "./schedule-body";
 
 export async function GameScheduleView({ id }: { id: string }) {
@@ -28,13 +26,8 @@ export async function GameScheduleView({ id }: { id: string }) {
     <AppBar
       back={`/games/${id}`}
       title="일정 조율"
-      action={
-        isGm && (
-          <IconButton render={<Link href={`/games/${id}/manage`} />} aria-label="이 구인 관리">
-            <MoreVertical size={20} />
-          </IconButton>
-        )
-      }
+      subtitle={game.title}
+      action={isGm && <Badge colorPalette="primary">GM</Badge>}
     />
   );
 
@@ -49,7 +42,7 @@ export async function GameScheduleView({ id }: { id: string }) {
               title="조율 기간을 먼저 정해주세요"
               description="조율 기간이 있어야 참여자가 가능 시간을 낼 수 있습니다."
               action={
-                <Button render={<Link href={`/games/${id}/edit`} />} className="h-11 w-full">
+                <Button render={<Link href={`/games/${id}/edit`} />} className="mt-100 w-full">
                   구인 수정
                 </Button>
               }
@@ -74,16 +67,7 @@ export async function GameScheduleView({ id }: { id: string }) {
     <>
       {appBar}
       <Container>
-        <VStack gap="250" className="pt-250 pb-200">
-          <div>
-            <Text typography="heading3" render={<h1 />} className="block truncate">
-              {game.title}
-            </Text>
-            <Text typography="body4" foreground="hint" render={<p />} className="mt-025">
-              {formatDate(game.rangeStart)} ~ {formatDate(game.rangeEnd)} 조율
-            </Text>
-          </div>
-          {game.confirmedAt && <ConfirmedSessionNotice confirmedAt={game.confirmedAt} />}
+        <VStack className="pt-175 pb-200">
           <ErrorBoundary>
             <ScheduleBody
               gameId={id}
@@ -94,7 +78,8 @@ export async function GameScheduleView({ id }: { id: string }) {
               involved={involved}
               isGm={isGm}
               isSignedIn={viewerId !== null}
-              capacity={game.maxPlayers}
+              // GM도 가능 시간을 내므로 겹침 단계는 정원 + GM 기준으로 나눈다.
+              capacity={game.maxPlayers + 1}
               gmName={game.gm?.username}
               prefill={prefill}
               deadlinePassed={isDeadlinePassed(game.endDate)}

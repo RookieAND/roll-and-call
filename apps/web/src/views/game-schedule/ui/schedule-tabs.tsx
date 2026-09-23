@@ -1,36 +1,42 @@
 "use client";
 
 import { SegmentedControl, VStack } from "@roll-and-call/ui";
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
-export const SCHEDULE_TAB = { mine: "mine", overlap: "overlap" } as const;
-export type ScheduleTab = (typeof SCHEDULE_TAB)[keyof typeof SCHEDULE_TAB];
+import { SCHEDULE_TAB, type ScheduleTab } from "../model/schedule-tab";
 
 interface ScheduleTabsProps {
+  value: ScheduleTab;
+  onValueChange: (tab: ScheduleTab) => void;
   mine: ReactNode;
   overlap: ReactNode;
   respondentCount: number;
   disabled?: boolean;
 }
 
-export function ScheduleTabs({ mine, overlap, respondentCount, disabled }: ScheduleTabsProps) {
-  const [tab, setTab] = useState<ScheduleTab>(SCHEDULE_TAB.mine);
-
+export function ScheduleTabs({
+  value,
+  onValueChange,
+  mine,
+  overlap,
+  respondentCount,
+  disabled,
+}: ScheduleTabsProps) {
   return (
     <VStack gap="150">
       <SegmentedControl.Root
-        value={tab}
-        onValueChange={(value) => setTab(value as ScheduleTab)}
+        value={value}
+        onValueChange={(next) => onValueChange(next as ScheduleTab)}
         aria-label="조율 탭"
         disabled={disabled}
       >
         <SegmentedControl.Item value={SCHEDULE_TAB.mine}>내 가능 시간</SegmentedControl.Item>
         <SegmentedControl.Item value={SCHEDULE_TAB.overlap}>
-          겹치는 시간 {respondentCount}
+          겹치는 시간<span className="ml-050 tabular-nums opacity-70">{respondentCount}</span>
         </SegmentedControl.Item>
       </SegmentedControl.Root>
-      <div className={tab === SCHEDULE_TAB.mine ? "" : "hidden"}>{mine}</div>
-      <div className={tab === SCHEDULE_TAB.overlap ? "" : "hidden"}>{overlap}</div>
+      <div hidden={value !== SCHEDULE_TAB.mine}>{mine}</div>
+      <div hidden={value !== SCHEDULE_TAB.overlap}>{overlap}</div>
     </VStack>
   );
 }

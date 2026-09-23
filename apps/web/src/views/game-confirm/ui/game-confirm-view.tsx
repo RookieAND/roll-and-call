@@ -1,4 +1,4 @@
-import { Container, VStack } from "@roll-and-call/ui";
+import { Badge, Container, VStack } from "@roll-and-call/ui";
 import { notFound, redirect } from "next/navigation";
 
 import { aggregateAvailability } from "@/entities/availability";
@@ -43,9 +43,13 @@ export async function GameConfirmView({ id }: { id: string }) {
 
   return (
     <>
-      <AppBar back={`/games/${id}/manage`} title="세션 시간 결정" />
+      <AppBar
+        back={`/games/${id}/manage`}
+        title="세션 시간 결정"
+        action={<Badge colorPalette="primary">GM</Badge>}
+      />
       <Container size="sm">
-        <VStack gap="250" className="pt-200 pb-200">
+        <VStack gap="200" className="pt-200 pb-200">
           <ConfirmSummary playLabel={playLabel} respondedCount={respondedCount} />
           <ConfirmSessionForm
             gameId={id}

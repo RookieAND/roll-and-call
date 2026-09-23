@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
 import { AUTH_REQUIRED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
-import { availabilities, db, getCurrentUser } from "@/shared/server";
+import { availabilities, db, getCurrentUser, getUserConfirmedSlots } from "@/shared/server";
 
 const MAX_SLOT_COUNT = 2000;
 
@@ -31,9 +31,13 @@ export async function saveAvailability(gameId: string, slotIsos: string[]): Prom
     return { error: "참여자만 가능 시간을 등록할 수 있습니다." };
   }
 
+  // 다른 확정 세션과 겹친 칸은 화면에서 막혀 있지만, 주소를 우회해 들어와도 저장하지 않는다.
+  const blocked = new Set(await getUserConfirmedSlots(user.id, gameId));
+
   // Trust boundary: drop anything that isn't a valid instant, and cap the count.
   const rows = slotIsos
     .filter((iso) => !Number.isNaN(new Date(iso).getTime()))
+    .filter((iso) => !blocked.has(new Date(iso).toISOString()))
     .slice(0, MAX_SLOT_COUNT)
     .map((iso) => ({ gameId, userId: user.id, slotStart: new Date(iso) }));
 

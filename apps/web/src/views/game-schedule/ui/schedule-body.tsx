@@ -9,7 +9,9 @@ import { AvailabilityGrid } from "@/features/coordinate-session";
 import type { DayColumn, TimeRow } from "@/shared/lib";
 
 import { groupDaysByWeek } from "../model/group-days-by-week";
+import { SCHEDULE_TAB, type ScheduleTab } from "../model/schedule-tab";
 import { weekIndexOf } from "../model/week-index-of";
+import { ConfirmedSessionNotice } from "./confirmed-session-notice";
 import { DeadlinePassedNotice } from "./deadline-passed-notice";
 import { ParticipantsOnlyNotice } from "./participants-only-notice";
 import { ScheduleOverlap } from "./schedule-overlap";
@@ -54,29 +56,36 @@ export function ScheduleBody({
   const confirmedDate =
     confirmedAt?.toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" }) ?? null;
   const [weekIndex, setWeekIndex] = useState(() => weekIndexOf(weeks, confirmedDate));
+  const [tab, setTab] = useState<ScheduleTab>(
+    confirmedAt ? SCHEDULE_TAB.overlap : SCHEDULE_TAB.mine,
+  );
   const weekDays = weeks[weekIndex] ?? days;
-  const pager =
-    weeks.length > 1 ? <WeekPager weeks={weeks} index={weekIndex} onChange={setWeekIndex} /> : null;
+  const pager = <WeekPager weeks={weeks} index={weekIndex} onChange={setWeekIndex} />;
 
   const respondentCount = new Set(Object.values(aggregate.names).flat()).size;
   const hasResponses = respondentCount > 0;
   const overlapProps = { days: weekDays, timeRows, aggregate, confirmedAt, capacity, gmName };
   const overlap = hasResponses ? (
-    <ScheduleOverlap
-      hint={
-        "색이 진할수록 그 시간에 가능한 사람이 많습니다.\n칸을 누르면 그 시간에 가능한 사람이 보입니다."
-      }
-      {...overlapProps}
-    />
+    <ScheduleOverlap hint="색이 진할수록 그 시간에 가능한 사람이 많습니다." {...overlapProps} />
   ) : (
-    <ScheduleOverlapEmpty />
+    <ScheduleOverlapEmpty
+      onPaint={involved && !confirmedAt ? () => setTab(SCHEDULE_TAB.mine) : undefined}
+    />
   );
 
   if (confirmedAt) {
     return (
       <VStack gap="150">
         {pager}
-        <ScheduleOverlap hint="확정 칸은 초록 테두리입니다. 입력은 잠깁니다." {...overlapProps} />
+        <ConfirmedSessionNotice confirmedAt={confirmedAt} />
+        <ScheduleTabs
+          value={SCHEDULE_TAB.overlap}
+          onValueChange={setTab}
+          respondentCount={respondentCount}
+          mine={null}
+          overlap={overlap}
+          disabled
+        />
       </VStack>
     );
   }
@@ -88,6 +97,8 @@ export function ScheduleBody({
         <VStack gap="150">
           {pager}
           <ScheduleTabs
+            value={tab}
+            onValueChange={setTab}
             respondentCount={respondentCount}
             mine={
               <AvailabilityGrid
@@ -108,7 +119,7 @@ export function ScheduleBody({
 
   return (
     <VStack gap="200">
-      <ParticipantsOnlyNotice isSignedIn={isSignedIn} />
+      <ParticipantsOnlyNotice gameId={gameId} isSignedIn={isSignedIn} />
       <VStack gap="150">
         {pager}
         {overlap}

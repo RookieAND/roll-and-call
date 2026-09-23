@@ -13,7 +13,7 @@ import { saveAvailability } from "../api/save-availability";
 import { useBeforeUnloadWarning } from "../model/use-before-unload-warning";
 import { useSlotPainter } from "../model/use-slot-painter";
 import { AvailabilitySaveBar } from "./availability-save-bar";
-import { cellTone, UNSAVED_SELECTED_TONE } from "./cell-tone";
+import { BLOCKED_STRIPES, cellTone, UNSAVED_SELECTED_TONE } from "./cell-tone";
 import { Legend } from "./legend";
 import { PrefillNotice } from "./prefill-notice";
 
@@ -26,9 +26,7 @@ interface AvailabilityGridProps {
   blocked: string[];
 }
 
-const CELL = "touch-none border-b border-l border-b-gray-100 border-l-gray-100";
-const STRIPES =
-  "repeating-linear-gradient(45deg, var(--color-gray-300) 0 3px, var(--color-gray-200) 3px 6px)";
+const CELL = "touch-none rounded-100";
 
 export function AvailabilityGrid({
   gameId,
@@ -71,7 +69,7 @@ export function AvailabilityGrid({
           key={key}
           aria-label="다른 확정 세션"
           className={cn(CELL, "cursor-not-allowed")}
-          style={{ height: SLOT_ROW_PX, backgroundImage: STRIPES }}
+          style={{ height: SLOT_ROW_PX, backgroundImage: BLOCKED_STRIPES }}
         />
       );
     }
@@ -103,10 +101,10 @@ export function AvailabilityGrid({
 
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
 
-      <HStack align="center" wrap className="gap-x-150 gap-y-050">
+      <HStack align="center" wrap className="gap-x-175 gap-y-050">
         <Legend swatchClass="bg-primary-600" label="선택" />
         <Legend swatchClass={UNSAVED_SELECTED_TONE} label="미저장" />
-        <Legend swatchStyle={{ backgroundImage: STRIPES }} label="다른 확정 세션" />
+        <Legend swatchStyle={{ backgroundImage: BLOCKED_STRIPES }} label="다른 확정 세션" />
       </HStack>
 
       <AvailabilitySaveBar

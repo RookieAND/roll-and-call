@@ -1,15 +1,17 @@
 "use client";
 
-import { Card, Text } from "@roll-and-call/ui";
+import { RadioCard, RadioGroup } from "@roll-and-call/ui";
 
 import type { SessionWindow } from "@/entities/availability";
 
-import { SessionCandidateRow } from "./session-candidate-row";
+import { sessionWindowLabel } from "../model/session-window-label";
 
 interface SessionCandidateListProps {
   candidates: SessionWindow[];
   playMinutes: number;
   respondents: string[];
+  // 위 입력 칸이 후보와 같은 시각이면 그 후보가 골라진 것으로 보인다.
+  value: string | null;
   onPick: (iso: string) => void;
 }
 
@@ -17,24 +19,31 @@ export function SessionCandidateList({
   candidates,
   playMinutes,
   respondents,
+  value,
   onPick,
 }: SessionCandidateListProps) {
   return (
-    <>
-      <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
-        {candidates.map((candidate) => (
-          <SessionCandidateRow
-            key={candidate.iso}
-            candidate={candidate}
-            playMinutes={playMinutes}
-            absentNames={respondents.filter((name) => !candidate.members.includes(name))}
-            onPick={onPick}
-          />
-        ))}
-      </Card.Root>
-      <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
-        체크를 누르면 위 세션 시간 칸이 그 시간으로 채워집니다.
-      </Text>
-    </>
+    <RadioGroup
+      value={value}
+      onValueChange={(iso) => onPick(iso as string)}
+      aria-label="추천 후보"
+      className="flex flex-col gap-100"
+    >
+      {candidates.map((candidate) => {
+        const absent = respondents.filter((name) => !candidate.members.includes(name));
+        const everyone = absent.length === 0;
+        return (
+          <RadioCard.Root key={candidate.iso} value={candidate.iso} indicator="radio">
+            <RadioCard.Title>{sessionWindowLabel(candidate.iso, playMinutes)}</RadioCard.Title>
+            <RadioCard.Description className={everyone ? "text-success-700" : undefined}>
+              {everyone
+                ? `${candidate.members.length}명 전원 가능`
+                : `${candidate.members.length}명 가능 · ${absent.join(", ")} 불가`}
+            </RadioCard.Description>
+            <RadioCard.Indicator />
+          </RadioCard.Root>
+        );
+      })}
+    </RadioGroup>
   );
 }
