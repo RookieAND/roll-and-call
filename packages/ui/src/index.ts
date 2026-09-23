@@ -63,3 +63,4 @@ export { Checkbox, CheckboxGroup, type CheckboxRootProps } from "./checkbox";
 export { Radio, type RadioRootProps } from "./radio";
 export { RadioGroup } from "@base-ui-components/react/radio-group";
 export { RadioCard, type RadioCardRootProps, type RadioCardIndicator } from "./radio-card";
+export { Popover, type PopoverPopupProps } from "./popover";

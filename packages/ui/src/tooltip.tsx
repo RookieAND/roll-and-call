@@ -6,6 +6,8 @@ import type { ReactElement, ReactNode } from "react";
 import { cn } from "./cn";
 import { resolveStateProp } from "./resolve-state-prop";
 import type { StateClassName } from "./state-props";
+import { TooltipPopoverFallback } from "./tooltip-popover-fallback";
+import { useHoverNone } from "./use-hover-none";
 
 export interface TooltipProps {
   content: ReactNode;
@@ -20,7 +22,7 @@ export interface TooltipProps {
   className?: StateClassName<BaseTooltip.Popup.State>;
 }
 
-// ponytail: Base UI tooltips don't open on touch; move to Popover if mobile needs tap-to-reveal.
+// 툴팁 내용은 aria-describedby로만 전해진다. 꼭 읽어야 하는 정보는 툴팁에 넣지 않는다.
 export function Tooltip({
   content,
   children,
@@ -31,11 +33,28 @@ export function Tooltip({
   defaultOpen,
   onOpenChange,
 }: TooltipProps) {
+  const hoverNone = useHoverNone();
+
+  if (hoverNone) {
+    return (
+      <TooltipPopoverFallback
+        content={content}
+        side={side}
+        open={open}
+        defaultOpen={defaultOpen}
+        onOpenChange={onOpenChange}
+        className={typeof className === "function" ? undefined : className}
+      >
+        {children}
+      </TooltipPopoverFallback>
+    );
+  }
+
   return (
     <BaseTooltip.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
       <BaseTooltip.Trigger render={children} delay={delay} />
       <BaseTooltip.Portal>
-        <BaseTooltip.Positioner side={side} sideOffset={6} className="z-50">
+        <BaseTooltip.Positioner side={side} sideOffset={6} className="z-(--rc-z-popover)">
           <BaseTooltip.Popup
             data-slot="tooltip-popup"
             className={(state) =>
