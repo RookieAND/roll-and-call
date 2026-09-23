@@ -5,6 +5,7 @@ import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
 import type { StateComponentProps } from "../../lib/state-props";
 import { defaultColorPalette } from "../../tokens/default-color-palette";
+import { ButtonLabel } from "./button-label";
 import { buttonVariants } from "./button-variants";
 
 type ButtonVariantProps = VariantProps<typeof buttonVariants>;
@@ -67,7 +68,7 @@ export function Button({
               className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/45 border-t-white"
             />
           )}
-          {children}
+          <ButtonLabel>{children}</ButtonLabel>
         </>
       ),
     },
