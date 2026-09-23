@@ -3,6 +3,7 @@ import { Grid } from "@roll-and-call/ui";
 import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stage";
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
+import { STAT_TONE } from "../model/stat-tone";
 import { RosterStat } from "./roster-stat";
 
 interface RosterStatsProps {
@@ -28,7 +29,7 @@ export function RosterStats({
         <RosterStat
           label="불참"
           count={checked ? absentCount : null}
-          danger={checked && absentCount > 0}
+          tone={checked && absentCount > 0 ? STAT_TONE.danger : STAT_TONE.neutral}
         />
       </Grid>
     );
@@ -39,11 +40,15 @@ export function RosterStats({
       {summary.beforeDraw ? (
         <>
           <RosterStat label="신청" count={summary.applicantCount} />
-          <RosterStat label="뽑을 인원" count={summary.drawCount} />
+          <RosterStat label="뽑을 인원" count={summary.drawCount} tone={STAT_TONE.primary} />
         </>
       ) : (
         <>
-          <RosterStat label="확정" count={confirmed.length} />
+          <RosterStat
+            label="확정"
+            count={confirmed.length}
+            tone={confirmed.length > 0 ? STAT_TONE.success : STAT_TONE.neutral}
+          />
           <RosterStat label="대기" count={waitingCount} />
         </>
       )}

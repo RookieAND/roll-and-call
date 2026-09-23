@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { availabilityNote } from "@/entities/game";
@@ -64,25 +64,12 @@ export function RosterQueues({
   ) : (
     summary.unsubmittedCount > 0 && <UnsubmittedNote count={summary.unsubmittedCount} />
   );
-  const drawResultLink = summary.hasDrawResult && <DrawResultLink gameId={gameId} />;
-  const confirmedAction = (drawResultLink || !locked) && (
-    <HStack align="center" gap="150">
-      {drawResultLink}
-      {!locked && (
-        <DirectConfirmButton
-          gameId={gameId}
-          confirmedCount={confirmed.length}
-          maxPlayers={maxPlayers}
-        />
-      )}
-    </HStack>
-  );
   const confirmedRows = confirmed.map((member) => (
     <RosterRow
       key={member.userId}
       member={member}
       note={noteOf(member)}
-      warn={warnOf(member)}
+      noteForeground={warnOf(member) ? "warning" : "muted"}
       action={rowAction(member)}
     />
   ));
@@ -92,7 +79,16 @@ export function RosterQueues({
       <RosterQueue
         label="확정"
         count={confirmed.length}
-        action={confirmedAction}
+        tag={summary.hasDrawResult && <DrawResultLink gameId={gameId} />}
+        trailing={
+          !locked && (
+            <DirectConfirmButton
+              gameId={gameId}
+              confirmedCount={confirmed.length}
+              maxPlayers={maxPlayers}
+            />
+          )
+        }
         footnote={confirmedFootnote}
         emptyState={
           confirmed.length === 0 && (
@@ -120,7 +116,11 @@ export function RosterQueues({
         <RosterQueue
           label={beforeDraw ? "신청자" : "대기"}
           count={waiting.length}
-          caption={waitingCaption}
+          trailing={
+            <Text typography="body4" foreground="hint">
+              {waitingCaption}
+            </Text>
+          }
           footnote={
             summary.isFull &&
             !beforeDraw &&
@@ -140,6 +140,7 @@ export function RosterQueues({
                 member={member}
                 rank={beforeDraw ? null : member.waitlistRank}
                 note={`${toKst(member.joinedAt).format("M월 D일 HH:mm:ss")} 신청`}
+                noteForeground="hint"
                 action={rowAction(member)}
               />
             ))}

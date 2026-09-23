@@ -1,21 +1,15 @@
-import { Text } from "@roll-and-call/ui";
-import { ChevronRight } from "lucide-react";
+import { Badge } from "@roll-and-call/ui";
 import Link from "next/link";
 
 interface DrawResultLinkProps {
   gameId: string;
 }
 
+// 확정 명단이 추첨으로 정해졌다는 표시이자 결과 화면(12)으로 가는 입구.
 export function DrawResultLink({ gameId }: DrawResultLinkProps) {
   return (
-    <Text
-      typography="body4"
-      weight="bold"
-      foreground="primary"
-      render={<Link href={`/games/${gameId}/draw`} className="inline-flex items-center gap-025" />}
-    >
+    <Badge colorPalette="primary" render={<Link href={`/games/${gameId}/draw`} />}>
       추첨 결과
-      <ChevronRight size={13} strokeWidth={2.4} aria-hidden />
-    </Text>
+    </Badge>
   );
 }

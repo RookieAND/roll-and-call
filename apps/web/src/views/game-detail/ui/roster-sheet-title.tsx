@@ -8,7 +8,7 @@ interface RosterSheetTitleProps {
 export function RosterSheetTitle({ title, count }: RosterSheetTitleProps) {
   return (
     <HStack align="baseline" gap="075" className="mb-150">
-      <Sheet.Title>{title}</Sheet.Title>
+      <Sheet.Title className="mb-0">{title}</Sheet.Title>
       {count !== undefined && (
         <Text numeric typography="subtitle2" foreground="hint">
           {count}명

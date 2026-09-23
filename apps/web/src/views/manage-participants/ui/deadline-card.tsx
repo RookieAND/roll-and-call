@@ -1,7 +1,8 @@
-import { Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
-import { Clock } from "lucide-react";
+import { Text, VStack } from "@roll-and-call/ui";
+import { Calendar } from "lucide-react";
 
 import type { RosterSummary } from "../model/roster-summary";
+import { RosterDateRow } from "./roster-date-row";
 
 interface DeadlineCardProps {
   summary: RosterSummary;
@@ -18,23 +19,13 @@ export function DeadlineCard({ summary, locked, showNote = true }: DeadlineCardP
 
   return (
     <VStack gap="100">
-      <Card.Root padding="none" className="rounded-500 px-175 py-150">
-        <HStack align="center" gap="100">
-          <Clock size={15} strokeWidth={2.2} aria-hidden className="shrink-0 text-gray-600" />
-          <Text typography="body4" foreground="muted" className="min-w-0 flex-1">
-            모집 마감
-          </Text>
-          <Text numeric typography="subtitle2" className="shrink-0">
-            {summary.deadlineAt}
-          </Text>
-          <Badge
-            colorPalette={summary.deadlinePassed ? "gray" : "primary"}
-            className="shrink-0 tabular-nums"
-          >
-            {summary.deadlineLabel}
-          </Badge>
-        </HStack>
-      </Card.Root>
+      <RosterDateRow
+        icon={Calendar}
+        label="모집 마감"
+        value={summary.deadlineAt}
+        badge={summary.deadlineLabel}
+        badgePalette={summary.deadlinePassed ? "gray" : "primary"}
+      />
       {showNote && (
         <Text typography="body4" foreground="hint" render={<p />}>
           {note}

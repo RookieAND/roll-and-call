@@ -69,7 +69,7 @@ export function RoundSheet({
           <Sheet.Handle />
           <VStack gap="200">
             <VStack gap="050">
-              <Text typography="heading3">다음 회차 만들기</Text>
+              <Sheet.Title className="mb-0">다음 회차 만들기</Sheet.Title>
               <Text typography="body3" foreground="muted">
                 {title} · 대기 {waitingCount}명
               </Text>
@@ -87,11 +87,11 @@ export function RoundSheet({
             />
 
             <HStack gap="100" className="[&>*]:flex-1">
-              <Button variant="outline" className="h-11" onClick={() => requestOpenChange(false)}>
+              <Button variant="outline" size="lg" onClick={() => requestOpenChange(false)}>
                 취소
               </Button>
               <Button
-                className="h-11"
+                size="lg"
                 disabled={!rangeStart || !rangeEnd}
                 loading={pending}
                 onClick={submit}

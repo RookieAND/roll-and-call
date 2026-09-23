@@ -1,12 +1,14 @@
 "use client";
 
-import { Text, cn, Sheet } from "@roll-and-call/ui";
+import { cn, Sheet, Text } from "@roll-and-call/ui";
+import { ArrowUp } from "lucide-react";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { useAction } from "@/shared/ui";
 
 import { promoteParticipant } from "../api/promote-participant";
 import type { MemberSummary } from "../model/member-summary";
+import { MENU_ITEM_CLASS } from "./menu-item-class";
 import { toastWithUndo } from "./toast-with-undo";
 
 interface PromoteMemberItemProps {
@@ -43,10 +45,16 @@ export function PromoteMemberItem({
     <Sheet.Item
       disabled={pending || isFull}
       onClick={promote}
-      className={cn("font-semibold", !isFull && "text-tinted-ink")}
+      className={cn(MENU_ITEM_CLASS, isFull ? "text-hint" : "text-tinted-ink")}
     >
-      참여자로 등록
-      <Text typography="body4" foreground="hint" render={<span />} className="text-right">
+      <ArrowUp size={18} aria-hidden className="shrink-0" />
+      <span className="shrink-0 font-bold">참여자로 등록</span>
+      <Text
+        typography="body4"
+        foreground="hint"
+        render={<span />}
+        className="flex-1 text-right [text-wrap:pretty]"
+      >
         {isFull ? (
           <>
             정원 {maxPlayers}명이 차 있습니다

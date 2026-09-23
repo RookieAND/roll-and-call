@@ -10,12 +10,7 @@ interface SelectedCandidateChipProps {
 
 export function SelectedCandidateChip({ candidate, onRemove }: SelectedCandidateChipProps) {
   return (
-    <Chip
-      selected
-      aria-label={`${candidate.username} 선택 해제`}
-      onClick={onRemove}
-      className="gap-075 pr-075 pl-125"
-    >
+    <Chip shape="pill" selected aria-label={`${candidate.username} 선택 해제`} onClick={onRemove}>
       {candidate.username}
       <X size={14} aria-hidden />
     </Chip>

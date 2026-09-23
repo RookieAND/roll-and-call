@@ -21,12 +21,8 @@ export function DirectConfirmButton({
 
   return (
     <>
-      <Button
-        variant="outline"
-        className="h-[30px] gap-050 rounded-400 px-125 text-body4 font-bold"
-        onClick={() => setOpen(true)}
-      >
-        <Plus size={13} strokeWidth={2.8} aria-hidden className="text-primary-600" />
+      <Button variant="ghost" size="sm" onClick={() => setOpen(true)}>
+        <Plus size={14} strokeWidth={2.6} aria-hidden />
         참여자 추가
       </Button>
       <DirectConfirmSheet

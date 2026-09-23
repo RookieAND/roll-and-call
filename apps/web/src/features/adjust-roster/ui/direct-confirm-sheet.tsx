@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, Text, VStack, cn, Sheet } from "@roll-and-call/ui";
+import { Button, Card, HStack, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -121,18 +121,12 @@ export function DirectConfirmSheet({
         <Sheet.Handle />
         <VStack gap="150">
           <HStack align="baseline" gap="100" className="px-250">
-            <Sheet.Title className="mb-0 flex-1 text-heading3 font-extrabold text-gray-900">
-              참여자 찾기
-            </Sheet.Title>
+            <Sheet.Title className="mb-0 flex-1">참여자 찾기</Sheet.Title>
             <Text
               numeric
               typography="body4"
               weight="bold"
-              className={cn(
-                "text-gray-600",
-                noSeats && "text-warning-600",
-                !noSeats && seatsFilled && "text-primary-ink",
-              )}
+              foreground={noSeats ? "warning" : seatsFilled ? "primary" : "muted"}
             >
               {seatsLabel}
             </Text>
@@ -185,8 +179,12 @@ export function DirectConfirmSheet({
               <Text typography="body4" weight="bold" foreground="hint" className="px-250 pb-100">
                 검색 결과 {shown.length}명
               </Text>
-              {/* 줄 높이 62px × 4줄까지만 보이고 나머지는 목록 안에서 스크롤한다. */}
-              <VStack gap={0} className="max-h-[248px] overflow-y-auto overscroll-contain">
+              {/* 줄 높이 60px × 4줄까지만 보이고 나머지는 목록 안에서 스크롤한다. */}
+              <Card.Root
+                padding="none"
+                radius={500}
+                className="mx-250 max-h-60 overflow-y-auto overscroll-contain [&>*+*]:border-t [&>*+*]:border-gray-200"
+              >
                 {shown.map((candidate) => {
                   const picked = selected.some((choice) => choice.userId === candidate.userId);
                   return (
@@ -199,7 +197,12 @@ export function DirectConfirmSheet({
                     />
                   );
                 })}
-              </VStack>
+              </Card.Root>
+              {seatsFilled && !noSeats && (
+                <Text typography="body4" foreground="hint" render={<p />} className="px-250 pt-100">
+                  남은 자리를 모두 채웠습니다.
+                </Text>
+              )}
             </VStack>
           )}
 

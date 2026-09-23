@@ -22,19 +22,16 @@ export function RoundInheritedList({ waitingCount, maxPlayers }: RoundInheritedL
       <Text weight="bold" typography="body4" foreground="muted">
         그대로 넘어가는 것
       </Text>
-      <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
+      <Card.Root
+        radius={500}
+        padding="none"
+        className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
+      >
         {items.map((item) => (
-          <HStack
-            key={item.title}
-            align="center"
-            gap="150"
-            className="min-h-13 border-b border-gray-100 px-150 py-125 last:border-b-0"
-          >
-            <Check size={16} strokeWidth={2.6} aria-hidden className="shrink-0 text-success-600" />
+          <HStack key={item.title} align="center" gap="150" className="min-h-13 px-175 py-125">
+            <Check size={16} strokeWidth={2.6} aria-hidden className="shrink-0 text-success-700" />
             <VStack gap={0}>
-              <Text typography="body4" weight="bold">
-                {item.title}
-              </Text>
+              <Text typography="subtitle2">{item.title}</Text>
               <Text typography="body4" foreground="hint">
                 {item.description}
               </Text>

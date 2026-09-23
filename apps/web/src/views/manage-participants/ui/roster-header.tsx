@@ -11,12 +11,19 @@ interface RosterHeaderProps {
 
 export function RosterHeader({ title, methodLabel, recruitMethod, maxPlayers }: RosterHeaderProps) {
   return (
-    <HStack align="center" gap="100">
-      <Text typography="heading2" render={<h1 />} className="min-w-0 flex-1 truncate">
+    <HStack align="center" gap="075">
+      <Text
+        typography="heading3"
+        weight="extrabold"
+        render={<h1 />}
+        className="min-w-0 flex-1 truncate"
+      >
         {title}
       </Text>
       <RecruitMethodBadge method={recruitMethod} label={methodLabel} />
-      <Badge className="shrink-0 tabular-nums">정원 {maxPlayers}명</Badge>
+      <Badge colorPalette="gray" className="tabular-nums">
+        정원 {maxPlayers}명
+      </Badge>
     </HStack>
   );
 }

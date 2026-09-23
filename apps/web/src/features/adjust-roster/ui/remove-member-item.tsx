@@ -1,12 +1,14 @@
 "use client";
 
-import { Sheet } from "@roll-and-call/ui";
+import { cn, Sheet } from "@roll-and-call/ui";
+import { LogOut } from "lucide-react";
 import { useState } from "react";
 
 import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { removeParticipant } from "../api/remove-participant";
 import type { MemberSummary } from "../model/member-summary";
+import { MENU_ITEM_CLASS } from "./menu-item-class";
 
 interface RemoveMemberItemProps {
   gameId: string;
@@ -24,12 +26,17 @@ export function RemoveMemberItem({
   const [confirming, setConfirming] = useState(false);
   const { pending, run } = useAction();
 
-  const description = [
-    `${member.username}님을 내보내면 신청이 취소되고 되돌릴 수 없습니다.`,
-    leavesEmptySeat ? "빈 자리는 저절로 차지 않으니 대기에서 직접 확정시켜 주세요." : null,
-  ]
-    .filter(Boolean)
-    .join("\n");
+  const description = (
+    <>
+      {member.username}님을 내보내면 신청이 취소되고 되돌릴 수 없습니다.
+      {leavesEmptySeat && (
+        <>
+          <br />
+          빈 자리는 저절로 차지 않으니 대기에서 직접 확정시켜 주세요.
+        </>
+      )}
+    </>
+  );
 
   function remove() {
     run(() => removeParticipant(gameId, member.userId), {
@@ -46,9 +53,10 @@ export function RemoveMemberItem({
       <Sheet.Item
         disabled={pending}
         onClick={() => setConfirming(true)}
-        className="font-semibold text-danger-600"
+        className={cn(MENU_ITEM_CLASS, "text-danger-600")}
       >
-        내보내기
+        <LogOut size={18} aria-hidden className="shrink-0" />
+        <span className="font-bold">내보내기</span>
       </Sheet.Item>
       <ConfirmDialog
         open={confirming}

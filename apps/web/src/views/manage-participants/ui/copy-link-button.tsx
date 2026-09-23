@@ -19,7 +19,7 @@ export function CopyLinkButton({ gameId }: CopyLinkButtonProps) {
   }
 
   return (
-    <Button className="h-11 w-full" onClick={copy}>
+    <Button className="mt-100" onClick={copy}>
       링크 복사
     </Button>
   );

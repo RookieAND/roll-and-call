@@ -1,5 +1,5 @@
 import { VStack } from "@roll-and-call/ui";
-import { Check, CircleCheck } from "lucide-react";
+import { CircleCheck } from "lucide-react";
 
 import { DrawLotteryCard } from "@/features/adjust-roster";
 import { SummaryLine } from "@/shared/ui";
@@ -9,6 +9,7 @@ import type { RosterSummary } from "../model/roster-summary";
 import { AttendanceCard } from "./attendance-card";
 import { DeadlineCard } from "./deadline-card";
 import { DrawPendingCard } from "./draw-pending-card";
+import { RosterDateRow } from "./roster-date-row";
 import { SessionEndedCard } from "./session-ended-card";
 
 interface RosterStatusCardProps {
@@ -45,12 +46,13 @@ export function RosterStatusCard({
   if (summary.drawnAtLabel) {
     return (
       <VStack gap="100">
-        <SummaryLine
-          icon={Check}
-          tone="success"
+        <RosterDateRow
+          icon={CircleCheck}
+          iconClass="text-success-700"
           label="추첨"
           value={summary.drawnAtLabel}
           badge="완료"
+          badgePalette="gray"
         />
         <DeadlineCard summary={summary} locked={locked} showNote={false} />
       </VStack>

@@ -10,27 +10,33 @@ interface RosterRowProps {
   member: ManagedMember;
   rank?: number | null;
   note?: string;
-  warn?: boolean;
+  noteForeground?: "muted" | "hint" | "warning";
   action: ReactNode;
 }
 
 // 행에서 읽는 것은 하나뿐이다. 어느 큐에 있는지는 위치가 이미 말해 준다.
-// 행을 누르면 언제나 프로필이다. 명단 조작은 오른쪽 ⋯ 한 곳에만 둔다.
-export function RosterRow({ member, rank, note, warn, action }: RosterRowProps) {
-  const noteForeground = warn ? "warning" : "muted";
-
+// 행을 누르면 언제나 프로필이다. 명단 조작은 오른쪽 ⋮ 한 곳에만 둔다.
+export function RosterRow({
+  member,
+  rank,
+  note,
+  noteForeground = "muted",
+  action,
+}: RosterRowProps) {
   return (
-    <HStack
-      align="center"
-      gap="150"
-      className="min-h-14 border-t border-gray-100 px-150 py-100 first:border-t-0"
-    >
+    <HStack align="center" gap="125" className="min-h-15 py-100 pr-075 pl-175">
       <Link
         href={`/u/${member.userId}`}
-        className="flex min-h-11 min-w-0 flex-1 items-center gap-150"
+        className="flex min-h-11 min-w-0 flex-1 items-center gap-125"
       >
         {rank != null && (
-          <Text numeric typography="code2" foreground="hint" className="w-5 shrink-0 text-center">
+          <Text
+            numeric
+            typography="body4"
+            weight="extrabold"
+            foreground="hint"
+            className="w-3.5 shrink-0"
+          >
             {rank}
           </Text>
         )}

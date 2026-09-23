@@ -11,7 +11,7 @@ export function SheetTitle({ className, ...props }: ComponentPropsWithRef<typeof
     <Dialog.Title
       data-slot="sheet-title"
       className={(state) =>
-        cn("mb-150 text-sm font-bold text-gray-600", resolveStateProp(className, state))
+        cn("mb-150 text-heading2 font-bold text-gray-900", resolveStateProp(className, state))
       }
       {...props}
     />

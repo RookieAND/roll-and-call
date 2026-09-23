@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Text, VStack } from "@roll-and-call/ui";
+import { Button, Callout } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { ConfirmDialog, useAction } from "@/shared/ui";
@@ -41,14 +41,6 @@ export function DrawLotteryCard({
   const closing = deadlinePassed
     ? `나머지 ${leftoverCount}명은 대기로 남고, 뽑은 뒤에도 명단은 고칠 수 있습니다.`
     : `나머지 ${leftoverCount}명은 대기로 남고, 모집은 바로 닫힙니다.`;
-  // ponytail: 시안의 확인 시트 대신 공용 ConfirmDialog. 문구는 그대로, 강조색만 없다.
-  const confirmDescription = [
-    `신청 ${poolCount}명 중 ${drawnCount}명을 무작위로 뽑습니다.`,
-    `나머지 ${leftoverCount}명은 대기로 남고, 결과를 함께 받습니다.`,
-    "",
-    "추첨이 완료되면 모집이 바로 닫히고 다시 돌릴 수 없습니다.",
-  ].join("\n");
-
   function draw() {
     run(() => drawLottery(gameId), {
       onSuccess: () => setConfirming(false),
@@ -57,38 +49,48 @@ export function DrawLotteryCard({
 
   return (
     <>
-      <Card.Root padding="md" className="border-tinted-border bg-tinted-bg">
-        <VStack gap="150">
-          <VStack gap="050">
-            <Text typography="subtitle1" weight="extrabold">
-              {title}
-            </Text>
-            <Text typography="body4" foreground="primary" render={<p />}>
-              {summaryLine}
-              <br />
-              {closing}
-            </Text>
-          </VStack>
+      <Callout.Root colorPalette="primary">
+        <Callout.Title className="text-subtitle1">{title}</Callout.Title>
+        <Callout.Description>
+          {summaryLine}
+          <br />
+          {closing}
+        </Callout.Description>
+        <div className="col-span-full mt-150">
           <Button
-            className="h-[46px] w-full rounded-500"
+            size="lg"
+            className="w-full"
             loading={pending}
             onClick={() => (deadlinePassed ? draw() : setConfirming(true))}
           >
             {deadlinePassed ? "추첨하기" : "지금 추첨하기"}
           </Button>
-        </VStack>
-      </Card.Root>
+        </div>
+      </Callout.Root>
 
       <ConfirmDialog
         open={confirming}
         onOpenChange={setConfirming}
         title="지금 추첨할까요?"
-        description={confirmDescription}
+        description={
+          <>
+            신청 {poolCount}명 중 {drawnCount}명을 무작위로 뽑습니다.
+            <br />
+            나머지 {leftoverCount}명은 대기로 남고, 결과를 함께 받습니다.
+          </>
+        }
         cancelLabel="마감까지 기다리기"
         confirmLabel="추첨하기"
         pending={pending}
         onConfirm={draw}
-      />
+      >
+        <Callout.Root colorPalette="danger" size="sm">
+          <Callout.Icon />
+          <Callout.Description>
+            추첨이 완료되면 모집이 바로 닫히고 다시 돌릴 수 없습니다.
+          </Callout.Description>
+        </Callout.Root>
+      </ConfirmDialog>
     </>
   );
 }
