@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, Card, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
 import { uniq } from "es-toolkit";
 import { useState } from "react";
 
@@ -129,17 +129,21 @@ export function ConfirmSessionForm({
         </Text>
       )}
 
-      <div className="sticky bottom-0 -mx-200 border-t border-gray-200 bg-surface px-200 py-150">
-        <Button
-          variant="solid"
-          colorPalette="success"
-          className="h-[50px] w-full rounded-500"
-          onClick={() => setConfirming(true)}
-        >
-          {startLabel}
-          {changing ? "으로 변경" : "으로 확정"}
-        </Button>
-      </div>
+      <FloatingBar.Root elevated={false}>
+        <FloatingBar.Content>
+          <Button
+            variant="solid"
+            colorPalette="success"
+            size="lg"
+            className="w-full"
+            onClick={() => setConfirming(true)}
+          >
+            {startLabel}
+            {changing ? "으로 변경" : "으로 확정"}
+          </Button>
+        </FloatingBar.Content>
+        <FloatingBar.Spacer />
+      </FloatingBar.Root>
 
       <ConfirmDialog
         open={confirming}

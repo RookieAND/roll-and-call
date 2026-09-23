@@ -1,4 +1,4 @@
-import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, FloatingBar, HStack, Text } from "@roll-and-call/ui";
 
 import { UnsavedCount } from "./unsaved-count";
 
@@ -20,37 +20,42 @@ export function AvailabilitySaveBar({
   onSave,
 }: AvailabilitySaveBarProps) {
   return (
-    <VStack
-      gap="125"
-      className="sticky bottom-0 z-10 -mx-200 border-t border-gray-200 bg-surface px-200 pt-150 pb-200"
-    >
-      <HStack align="center" gap="075">
-        <Text typography="subtitle2" numeric render={<span />}>
-          선택 {selectedCount}칸
-        </Text>
-        {dirty ? <UnsavedCount count={unsavedCount} /> : null}
-      </HStack>
-      <HStack gap="100" className="[&>*]:flex-1">
-        {dirty && (
+    <FloatingBar.Root elevated={false}>
+      <FloatingBar.Content>
+        <HStack align="center" gap="075" className="mb-125">
+          <Text typography="subtitle2" numeric render={<span />}>
+            선택 {selectedCount}칸
+          </Text>
+          {dirty ? (
+            <UnsavedCount count={unsavedCount} />
+          ) : (
+            <Text typography="body4" foreground="hint" render={<span />}>
+              · 모두 저장됨
+            </Text>
+          )}
+        </HStack>
+        <HStack gap="100" className="[&>*]:flex-1">
           <Button
             type="button"
             variant="outline"
-            className="h-[50px] rounded-500"
+            size="lg"
+            disabled={!dirty}
             onClick={onReset}
           >
             되돌리기
           </Button>
-        )}
-        <Button
-          type="button"
-          className="h-[50px] rounded-500 font-bold"
-          loading={pending}
-          disabled={!dirty}
-          onClick={onSave}
-        >
-          저장
-        </Button>
-      </HStack>
-    </VStack>
+          <Button
+            type="button"
+            size="lg"
+            loading={pending}
+            disabled={!dirty}
+            onClick={onSave}
+          >
+            저장
+          </Button>
+        </HStack>
+      </FloatingBar.Content>
+      <FloatingBar.Spacer />
+    </FloatingBar.Root>
   );
 }

@@ -1,5 +1,4 @@
-import { HStack, Text } from "@roll-and-call/ui";
-import { CircleAlert } from "lucide-react";
+import { Callout } from "@roll-and-call/ui";
 
 interface UnavailableWarningProps {
   names: string[];
@@ -7,18 +6,11 @@ interface UnavailableWarningProps {
 
 export function UnavailableWarning({ names }: UnavailableWarningProps) {
   return (
-    <HStack gap="100" className="border-t border-notice-border bg-notice-bg px-175 py-150">
-      <CircleAlert size={14} className="mt-025 shrink-0 text-notice-ink" aria-hidden />
-      <Text
-        typography="body4"
-        foreground="inherit"
-        render={<p />}
-        className="min-w-0 text-notice-ink"
-      >
-        {names.join(", ")}는 이 시간에 불가입니다.
-        <br />
-        확정 전에 이 날 진행이 가능한지 물어보세요.
-      </Text>
-    </HStack>
+    <Callout.Root colorPalette="warning" size="sm" className="rounded-none border-x-0 border-b-0">
+      <Callout.Icon />
+      <Callout.Description>
+        {`${names.join(", ")}는 이 시간에 불가입니다.\n확정 전에 이 날 진행이 가능한지 물어보세요.`}
+      </Callout.Description>
+    </Callout.Root>
   );
 }
