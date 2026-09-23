@@ -34,7 +34,7 @@ export async function UserSessionsView({ id, tab }: { id: string; tab?: string }
   return (
     <>
       <AppBar back={`/u/${profile.id}`} title={`${profile.username}의 세션`} />
-      <div className="sticky top-[52px] z-10 border-b border-gray-100 bg-surface">
+      <div className="sticky top-(--rc-size-appbar) z-10 border-b border-gray-100 bg-surface">
         <SessionTabs label="세션 기록" tabs={tabs} activeKey={activeSection.key} />
       </div>
       <Container size="sm">

@@ -11,7 +11,7 @@ import { FloatingBarContext } from "./floating-bar-context";
 import { useScrolledToBottom } from "./use-scrolled-to-bottom";
 
 const bar = cva(
-  "fixed inset-x-0 bottom-0 z-(--rc-z-floating-bar) border-t border-gray-200 bg-surface px-250 pt-150 transition-[translate,box-shadow] duration-(--rc-duration-base) ease-(--rc-ease-out)",
+  "fixed inset-x-0 bottom-0 z-(--rc-z-floating-bar) mx-auto max-w-[412px] border-t border-gray-200 bg-surface px-250 pt-150 transition-[translate,box-shadow] duration-(--rc-duration-base) ease-(--rc-ease-out)",
   {
     variants: {
       safeArea: { true: "pb-[calc(var(--spacing-150)+var(--rc-safe-bottom))]", false: "pb-150" },

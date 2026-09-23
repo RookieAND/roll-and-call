@@ -11,7 +11,7 @@ import { SheetContext } from "./sheet-context";
 import { SheetOverlay } from "./sheet-overlay";
 
 // 키보드가 올라와도 Footer가 보이도록 높이를 88dvh에서 끊고, 넘치는 내용은 Body가 스크롤한다.
-// scrollbar-width는 상속되니 시트 안의 스크롤 영역은 막대 없이 넘긴다. 끝이 잘린 줄이 스크롤을 대신 알린다.
+// 시트 자체는 막대 없이 넘긴다. 끝이 잘린 줄이 스크롤을 대신 알린다. 안쪽 목록은 전역 thin 막대를 쓴다.
 const popup = cva(
   "fixed z-(--rc-z-sheet) flex flex-col overflow-y-auto border-gray-200 bg-surface p-250 outline-none [scrollbar-width:none]",
   {

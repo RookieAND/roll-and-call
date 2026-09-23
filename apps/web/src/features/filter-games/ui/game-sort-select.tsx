@@ -26,7 +26,7 @@ export function GameSortSelect({ filter }: GameSortSelectProps) {
       }}
       items={SORT_ITEMS}
     >
-      <Select.Trigger className="h-[--rc-size-control-sm] w-auto shrink-0 border-none bg-transparent px-100 text-body3 text-gray-700" />
+      <Select.Trigger className="h-(--rc-size-control-sm) w-auto shrink-0 border-none bg-transparent px-100 text-body3 text-gray-700" />
       <Select.Popup>
         {SORT_ITEMS.map((item) => (
           <Select.Item key={item.value} value={item.value}>

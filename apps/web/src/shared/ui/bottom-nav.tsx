@@ -39,7 +39,7 @@ export function BottomNav({ hasTodo }: BottomNavProps) {
     <Grid
       cols={3}
       render={<nav />}
-      className="sticky bottom-0 z-(--rc-z-sticky) h-[--rc-size-tabbar] border-t border-gray-200 bg-surface"
+      className="sticky bottom-0 z-(--rc-z-sticky) h-(--rc-size-tabbar) border-t border-gray-200 bg-surface"
     >
       {tabs.map(({ href, label, Icon, isActive }) => {
         const Tab = isActive(pathname) ? ActiveBottomNavTab : BottomNavTab;

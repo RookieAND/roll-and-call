@@ -34,7 +34,7 @@ export function WaitingRosterSheet({
           </Text>
         </Sheet.Title>
 
-        <div className="max-h-[60vh] divide-y divide-gray-200 overflow-y-auto">
+        <div className="max-h-[23rem] divide-y divide-gray-200 overflow-y-auto">
           <ExpandableRows>
             {waiting.map((member) => (
               <RosterSheetRow

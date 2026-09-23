@@ -10,7 +10,7 @@ export default function Loading() {
   return (
     <>
       <AppBar back="/me" title="내 세션" />
-      <div className="sticky top-[52px] z-10 border-b border-gray-100 bg-surface">
+      <div className="sticky top-(--rc-size-appbar) z-10 border-b border-gray-100 bg-surface">
         <HStack className="px-200">
           <HStack align="center" justify="center" className="h-11 flex-1">
             <Skeleton width={64} height={20} />

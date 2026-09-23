@@ -22,7 +22,7 @@ export function SessionTabs({ label, tabs, activeKey }: SessionTabsProps) {
               "flex h-[46px] flex-1 items-center justify-center border-b-2 text-sm tabular-nums",
               selected
                 ? "border-primary-600 font-bold text-primary-ink"
-                : "border-transparent font-semibold text-gray-600",
+                : "border-gray-200 font-semibold text-gray-600",
             )}
           >
             {tab.label} {tab.count}

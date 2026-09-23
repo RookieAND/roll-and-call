@@ -5,9 +5,13 @@
 /* 로딩 화면은 짧고 실제 화면은 길어 스크롤바가 생겼다 사라진다. 자리를 늘 비워 두면 폭이 튀지 않는다. */
 html {
   scrollbar-gutter: stable;
-  /* 둘 다 상속되는 속성이라 시트·목록 같은 내부 스크롤 영역도 같은 막대를 쓴다. */
-  scrollbar-width: thin;
+  /* color는 상속되지만 width는 상속되지 않는다. 시트·목록 같은 내부 스크롤 영역도 가는 막대를 쓰도록 *에 건다. */
   scrollbar-color: var(--color-gray-300) transparent;
+}
+
+*,
+html {
+  scrollbar-width: thin;
 }
 
 :root {

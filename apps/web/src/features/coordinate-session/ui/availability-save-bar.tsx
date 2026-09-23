@@ -35,22 +35,10 @@ export function AvailabilitySaveBar({
           )}
         </HStack>
         <HStack gap="100" className="[&>*]:flex-1">
-          <Button
-            type="button"
-            variant="outline"
-            size="lg"
-            disabled={!dirty}
-            onClick={onReset}
-          >
+          <Button type="button" variant="outline" size="lg" disabled={!dirty} onClick={onReset}>
             되돌리기
           </Button>
-          <Button
-            type="button"
-            size="lg"
-            loading={pending}
-            disabled={!dirty}
-            onClick={onSave}
-          >
+          <Button type="button" size="lg" loading={pending} disabled={!dirty} onClick={onSave}>
             저장
           </Button>
         </HStack>

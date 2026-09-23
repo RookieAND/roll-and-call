@@ -26,7 +26,7 @@ export function ConfirmedRosterSheet({
         <Sheet.Handle />
         <Sheet.Title className="mb-150">참여자 명단</Sheet.Title>
 
-        <div className="max-h-[60vh] divide-y divide-gray-200 overflow-y-auto [&>*:not(:last-child)]:pb-150 [&>*+*]:pt-150">
+        <div className="max-h-[23rem] divide-y divide-gray-200 overflow-y-auto [&>*:not(:last-child)]:pb-150 [&>*+*]:pt-150">
           <RosterGmGroup gm={gm} viewerId={viewerId} />
           <RosterGroup label="참여" count={confirmed.length}>
             {confirmed.map((member) => (

@@ -10,7 +10,6 @@ import { DrawQueue } from "./draw-queue";
 import { DrawSummary } from "./draw-summary";
 import { MyDrawStatus } from "./my-draw-status";
 
-
 interface MyDrawResultProps {
   gameId: string;
   title: string;
@@ -62,11 +61,7 @@ export function MyDrawResult({
         previewCount={waitingPreview}
       />
       <HStack gap="100" className="[&>*]:flex-1">
-        <Button
-          render={<Link href={`/games/${gameId}`} />}
-          variant="outline"
-          size="lg"
-        >
+        <Button render={<Link href={`/games/${gameId}`} />} variant="outline" size="lg">
           구인 글 보기
         </Button>
         {confirmed && needsAvailability && (
