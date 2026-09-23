@@ -73,6 +73,7 @@ export function GameDetail({ game, viewerId }: GameDetailProps) {
             viewerStatus={viewerParticipant?.status ?? null}
             waitlistRank={viewerParticipant?.waitlistRank ?? null}
             waitingCount={waiting.length}
+            confirmedCount={confirmed.length}
             status={status}
           />
         </VStack>

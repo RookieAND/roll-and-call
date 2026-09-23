@@ -11,6 +11,7 @@ const base = {
   drawn: false,
   canLeave: true,
   sessionConfirmed: false,
+  sessionEnded: false,
   isClosed: false,
   isFull: false,
 };
@@ -74,5 +75,17 @@ describe("deriveActionView", () => {
     expect(deriveActionView({ ...base, isGm: true, sessionConfirmed: true })).toBe(
       GAME_ACTION_VIEW.gm,
     );
+  });
+
+  it("10·11·12 · 세션이 끝나면 참여자·미참여자·GM이 각자의 종료 바를 본다", () => {
+    const ended = { ...base, sessionConfirmed: true, sessionEnded: true, isClosed: true };
+    expect(deriveActionView({ ...ended, viewerConfirmed: true, canLeave: false })).toBe(
+      GAME_ACTION_VIEW.ended,
+    );
+    expect(deriveActionView({ ...ended, viewerWaiting: true })).toBe(
+      GAME_ACTION_VIEW.endedOutsider,
+    );
+    expect(deriveActionView({ ...ended, isSignedIn: false })).toBe(GAME_ACTION_VIEW.endedOutsider);
+    expect(deriveActionView({ ...ended, isGm: true })).toBe(GAME_ACTION_VIEW.endedGm);
   });
 });

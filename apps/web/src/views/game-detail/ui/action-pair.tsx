@@ -7,7 +7,7 @@ interface ActionPairProps {
 
 export function ActionPair({ children }: ActionPairProps) {
   return (
-    <HStack gap="100" className="[&>*]:flex-1">
+    <HStack gap="100" className="[&>*]:min-w-0 [&>*]:flex-1">
       {children}
     </HStack>
   );

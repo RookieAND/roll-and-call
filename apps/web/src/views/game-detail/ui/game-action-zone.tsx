@@ -1,6 +1,8 @@
 import {
   GAME_STATUS,
   type GameStatus,
+  isAttendanceDue,
+  isSessionEnded,
   isSessionLocked,
   PARTICIPANT_STATUS,
   type ParticipantStatus,
@@ -13,6 +15,8 @@ import { deriveActionView, GAME_ACTION_VIEW } from "../model/derive-action-view"
 import { leaveLock } from "../model/leave-locked-reason";
 import { ClosedActions } from "./closed-actions";
 import { ConfirmedActions } from "./confirmed-actions";
+import { EndedActions } from "./ended-actions";
+import { EndedGmActions } from "./ended-gm-actions";
 import { JoinHint } from "./join-hint";
 import { JoinableActions } from "./joinable-actions";
 import { LeaveableJoinedActions } from "./leaveable-joined-actions";
@@ -28,6 +32,7 @@ export interface GameActionZoneProps {
   viewerStatus: ParticipantStatus | null;
   waitlistRank: number | null;
   waitingCount: number;
+  confirmedCount: number;
   status: GameStatus;
   canSchedule: boolean;
 }
@@ -39,6 +44,7 @@ export function GameActionZone({
   viewerStatus,
   waitlistRank,
   waitingCount,
+  confirmedCount,
   status,
   canSchedule,
 }: GameActionZoneProps) {
@@ -59,6 +65,7 @@ export function GameActionZone({
     canLeave: !isFull && !isClosed && !drawn,
     // 일시 지정형은 등록 때부터 confirmedAt이 있지만 모집 중이면 참여하기를 보여야 한다.
     sessionConfirmed: isSessionLocked(game),
+    sessionEnded: isSessionEnded(game),
     isClosed,
     isFull,
   });
@@ -117,5 +124,17 @@ export function GameActionZone({
       );
     case GAME_ACTION_VIEW.outsider:
       return <ClosedActions />;
+    case GAME_ACTION_VIEW.ended:
+      return <EndedActions confirmedAt={game.confirmedAt!} />;
+    case GAME_ACTION_VIEW.endedOutsider:
+      return <ClosedActions title="종료된 세션입니다" />;
+    case GAME_ACTION_VIEW.endedGm:
+      return (
+        <EndedGmActions
+          gameId={game.id}
+          attendanceDue={isAttendanceDue(game, confirmedCount)}
+          attendanceConfirmed={game.attendanceConfirmedAt !== null}
+        />
+      );
   }
 }
