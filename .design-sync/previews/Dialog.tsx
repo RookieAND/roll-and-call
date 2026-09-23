@@ -5,7 +5,9 @@ export const SessionDetail = () => (
     <Dialog.Popup size="md">
       <Dialog.Header>
         <Dialog.Title>다음 세션 안내</Dialog.Title>
-        <Dialog.Description>{"9월 27일 토요일 오후 7시\n달빛 여관 · 4시간 예정"}</Dialog.Description>
+        <Dialog.Description>
+          {"9월 27일 토요일 오후 7시\n달빛 여관 · 4시간 예정"}
+        </Dialog.Description>
       </Dialog.Header>
       <Dialog.Body>
         <Text typography="body4" foreground="muted">

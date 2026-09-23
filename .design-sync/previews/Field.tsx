@@ -17,13 +17,13 @@ export const Required = () => (
 );
 
 export const Invalid = () => (
-  <Field.Root
-    label="룰"
-    htmlFor="field-invalid-rule"
-    required
-    error="룰 이름을 입력해 주세요."
-  >
-    <TextInput id="field-invalid-rule" invalid defaultValue="" placeholder="예: 크툴루의 부름 7판" />
+  <Field.Root label="룰" htmlFor="field-invalid-rule" required error="룰 이름을 입력해 주세요.">
+    <TextInput
+      id="field-invalid-rule"
+      invalid
+      defaultValue=""
+      placeholder="예: 크툴루의 부름 7판"
+    />
   </Field.Root>
 );
 

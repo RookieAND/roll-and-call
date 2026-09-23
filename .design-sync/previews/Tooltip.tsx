@@ -7,10 +7,7 @@ export const HelpTrigger = () => (
     <Text typography="body4" foreground="muted">
       추첨 방식
     </Text>
-    <Tooltip
-      defaultOpen
-      content="신청자 중 정원만큼 무작위로 뽑고, 나머지는 대기로 남습니다."
-    >
+    <Tooltip defaultOpen content="신청자 중 정원만큼 무작위로 뽑고, 나머지는 대기로 남습니다.">
       <IconButton aria-label="추첨 방식 안내">
         <Info size={16} aria-hidden />
       </IconButton>

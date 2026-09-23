@@ -2,15 +2,23 @@ import { Text, VStack } from "@roll-and-call/ui";
 
 export const TypeScale = () => (
   <VStack gap="100">
-    <Text typography="heading1" render={<h1 />}>일정 조율 현황</Text>
-    <Text typography="heading2" render={<h2 />}>크툴루의 부름 단편</Text>
-    <Text typography="heading3" render={<h3 />}>참여자 3명 · 대기 2명</Text>
+    <Text typography="heading1" render={<h1 />}>
+      일정 조율 현황
+    </Text>
+    <Text typography="heading2" render={<h2 />}>
+      크툴루의 부름 단편
+    </Text>
+    <Text typography="heading3" render={<h3 />}>
+      참여자 3명 · 대기 2명
+    </Text>
     <Text typography="subtitle1">토요일 오후 2시 확정</Text>
     <Text typography="subtitle2">GM 달빛</Text>
     <Text typography="body3">
       신청 순서대로 자리가 찹니다. 정원이 차면 이후 신청자는 대기 명단에 남습니다.
     </Text>
-    <Text typography="body4" foreground="hint">마감까지 2일 남았습니다</Text>
+    <Text typography="body4" foreground="hint">
+      마감까지 2일 남았습니다
+    </Text>
   </VStack>
 );
 

@@ -2,7 +2,9 @@ import { Badge, Button, Chip, Flex, Text } from "@roll-and-call/ui";
 
 export const SessionToolbar = () => (
   <Flex justify="between" align="center" gap="150">
-    <Text typography="subtitle1" weight="bold">크툴루의 부름 단편</Text>
+    <Text typography="subtitle1" weight="bold">
+      크툴루의 부름 단편
+    </Text>
     <Flex gap="100" align="center">
       <Badge colorPalette="primary">모집 중</Badge>
       <Button size="sm">신청하기</Button>
@@ -22,10 +24,20 @@ export const SystemFilterWrap = () => (
 
 export const InlineMetaFlex = () => (
   <Flex inline align="center" gap="075">
-    <Text typography="body4" foreground="muted">GM 달빛</Text>
-    <Text typography="body4" foreground="hint">·</Text>
-    <Text typography="body4" foreground="muted">정원 4/6</Text>
-    <Text typography="body4" foreground="hint">·</Text>
-    <Text typography="body4" foreground="success">확정</Text>
+    <Text typography="body4" foreground="muted">
+      GM 달빛
+    </Text>
+    <Text typography="body4" foreground="hint">
+      ·
+    </Text>
+    <Text typography="body4" foreground="muted">
+      정원 4/6
+    </Text>
+    <Text typography="body4" foreground="hint">
+      ·
+    </Text>
+    <Text typography="body4" foreground="success">
+      확정
+    </Text>
   </Flex>
 );

@@ -19,7 +19,9 @@ export const SelectedState = () => (
 
 export const BlockShape = () => (
   <HStack gap="075" className="w-80">
-    <Chip shape="block" selected>참석</Chip>
+    <Chip shape="block" selected>
+      참석
+    </Chip>
     <Chip shape="block">불참</Chip>
   </HStack>
 );
@@ -27,6 +29,8 @@ export const BlockShape = () => (
 export const Disabled = () => (
   <HStack gap="075">
     <Chip disabled>마감</Chip>
-    <Chip selected disabled>추첨 완료</Chip>
+    <Chip selected disabled>
+      추첨 완료
+    </Chip>
   </HStack>
 );

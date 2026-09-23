@@ -33,3 +33,4 @@
 ## 알려진 렌더 경고 (추가)
 
 - `[RENDER_THIN] ... rendered height is 0px`: Dialog·AlertDialog·Sheet는 포털로 body에 그려서 카드 루트 높이가 0이다. 스크린샷은 정상이다.
+- **컴파운드의 .d.ts는 조각 목록만 나온다.** `export const Sheet = {...}` 같은 네임스페이스 객체는 변환기가 각 조각의 props를 못 뽑아 `React.ComponentType<any>`로 적는다. 그래서 디자인 에이전트가 읽는 실제 계약은 `packages/ui/docs/<이름>.md`(→ prompt.md)의 Props 절이다. 컴파운드 API를 바꾸면 그 문서도 같이 고친다.

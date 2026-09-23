@@ -6,7 +6,9 @@ export const DeleteGame = () => (
       <AlertDialog.Header>
         <AlertDialog.Title>구인 취소</AlertDialog.Title>
         <AlertDialog.Description>
-          {"이 구인을 취소할까요? 되돌릴 수 없습니다.\n확정 참여자 4명에게 취소 사실이 디스코드로 전해집니다."}
+          {
+            "이 구인을 취소할까요? 되돌릴 수 없습니다.\n확정 참여자 4명에게 취소 사실이 디스코드로 전해집니다."
+          }
         </AlertDialog.Description>
       </AlertDialog.Header>
       <Callout.Root size="sm" className="mt-150">
@@ -35,7 +37,9 @@ export const RemoveMember = () => (
       <AlertDialog.Header>
         <AlertDialog.Title>참여자 내보내기</AlertDialog.Title>
         <AlertDialog.Description>
-          {"달빛님을 내보내면 신청이 취소되고 되돌릴 수 없습니다.\n빈 자리는 저절로 차지 않으니 대기에서 직접 확정시켜 주세요."}
+          {
+            "달빛님을 내보내면 신청이 취소되고 되돌릴 수 없습니다.\n빈 자리는 저절로 차지 않으니 대기에서 직접 확정시켜 주세요."
+          }
         </AlertDialog.Description>
       </AlertDialog.Header>
       <AlertDialog.Footer layout="row">

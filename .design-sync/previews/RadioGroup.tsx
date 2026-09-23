@@ -1,7 +1,12 @@
 import { Radio, RadioGroup } from "@roll-and-call/ui";
 
 export const TimeSlot = () => (
-  <RadioGroup name="time-slot" defaultValue="evening" aria-label="일정 조율" className="flex gap-200">
+  <RadioGroup
+    name="time-slot"
+    defaultValue="evening"
+    aria-label="일정 조율"
+    className="flex gap-200"
+  >
     <Radio.Field>
       <Radio.Root value="morning">
         <Radio.Indicator />
