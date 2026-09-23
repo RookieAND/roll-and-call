@@ -1,22 +1,25 @@
-import { HStack } from "@roll-and-call/ui";
+import { HStack, Text } from "@roll-and-call/ui";
 
-import { capacityParts } from "../model/capacity-parts";
-import { CapacityLabel } from "./capacity-label";
-import { CapacityValue } from "./capacity-value";
+import { seatCount } from "../model/seat-count";
+import { SEAT_CELL_CLASS } from "./seat-cell-class";
 
-export function GameCapacity(input: Parameters<typeof capacityParts>[0]) {
+export function GameCapacity(input: Parameters<typeof seatCount>[0]) {
   return (
     <HStack
-      align="center"
-      className="h-[26px] shrink-0 gap-100 rounded-300 border border-gray-200 bg-gray-50 px-125"
+      align="stretch"
+      className="h-6.5 shrink-0 overflow-hidden rounded-300 border border-gray-200 bg-gray-50"
     >
-      {capacityParts(input).map((part) =>
-        part.emphasis ? (
-          <CapacityValue key={part.text} text={part.text} />
-        ) : (
-          <CapacityLabel key={part.text} text={part.text} />
-        ),
-      )}
+      {seatCount(input).map((cell) => (
+        <Text
+          key={cell.text}
+          typography="body4"
+          numeric
+          render={<span />}
+          className={`flex items-center px-100 ${SEAT_CELL_CLASS[cell.tone]}`}
+        >
+          {cell.text}
+        </Text>
+      ))}
     </HStack>
   );
 }

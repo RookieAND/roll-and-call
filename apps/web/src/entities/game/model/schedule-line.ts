@@ -40,6 +40,7 @@ export function scheduleLine(game: ScheduleGame, now: Date = new Date()) {
     text,
     confirmed,
     undecided: !game.confirmedAt && !(game.rangeStart && game.rangeEnd),
+    finished: false,
     deadlinePassed,
     deadline: deadlinePassed ? null : days === 0 ? "오늘 마감" : `마감 D-${days}`,
     deadlineShort: deadlinePassed ? null : days === 0 ? "오늘" : `D-${days}`,

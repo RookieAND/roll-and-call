@@ -1,10 +1,14 @@
-import { Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
+import { Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 
 import { deriveGameStatus } from "@/shared/lib";
 import type { Game } from "@/shared/server";
 
+import { isLiveGame } from "../model/is-live-game";
+import { isSessionEnded } from "../model/is-session-ended";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
+import { pastScheduleLine } from "../model/past-schedule-line";
 import { scheduleLine } from "../model/schedule-line";
+import { sessionEndsAt } from "../model/session-end";
 import { GameCapacity } from "./game-capacity";
 import { GameDeadlineCount } from "./game-deadline-count";
 import { GameGmLabel } from "./game-gm-label";
@@ -27,34 +31,44 @@ export function GameCard({ game }: GameCardProps) {
     participantCount: count,
     waitlistEnabled: game.waitlistEnabled,
   });
-  const line = scheduleLine(game);
-  const expired = line.deadlinePassed;
+  const ended = isSessionEnded(game);
+  const live = isLiveGame({ status, ended });
+  const current = scheduleLine(game);
+  const line =
+    ended || (!live && !game.confirmedAt)
+      ? pastScheduleLine({
+          line: current,
+          endsAt: ended ? sessionEndsAt(game) : null,
+          endDate: game.endDate,
+        })
+      : current;
 
   const meta = [game.rule, game.playTime].filter(Boolean).join(" · ");
-  // 카드 전체 opacity는 본문 대비를 4.5:1 아래로 떨어뜨려서 제목 색과 썸네일만 내린다.
-  const titleForeground = expired ? "muted" : "normal";
-  const thumbnailClass = cn("aspect-video w-full", expired && "opacity-55");
 
   return (
-    <Card.Root interactive padding="none" className="h-full overflow-hidden rounded-600">
+    <Card.Root
+      interactive
+      padding="none"
+      className={cn("h-full overflow-hidden rounded-600", !live && "opacity-72")}
+    >
       <GameThumbnail
         url={game.thumbnailUrl}
         sizes="(max-width: 412px) 100vw, 412px"
         spoilerLabel={game.thumbnailSpoiler ? "스포일러" : undefined}
-        className={thumbnailClass}
+        className="aspect-video w-full"
       />
       <VStack className="gap-075 px-175 py-175">
         <HStack align="center" gap="100">
           <Text
             truncate
             typography="heading3"
-            foreground={titleForeground}
+            foreground={live ? "normal" : "muted"}
             className="min-w-0 flex-1"
           >
             {game.title}
           </Text>
-          <GameStatusBadge status={status} />
-          {line.deadlineShort && <GameDeadlineCount label={line.deadlineShort} />}
+          {ended ? <Badge colorPalette="gray">종료</Badge> : <GameStatusBadge status={status} />}
+          {live && line.deadlineShort && <GameDeadlineCount label={line.deadlineShort} />}
         </HStack>
         {meta && (
           <Text truncate typography="body4" foreground="muted">
@@ -70,6 +84,7 @@ export function GameCard({ game }: GameCardProps) {
             confirmed={count}
             waiting={game.participants.length - count}
             maxPlayers={game.maxPlayers}
+            ended={ended}
           />
         </HStack>
       </VStack>

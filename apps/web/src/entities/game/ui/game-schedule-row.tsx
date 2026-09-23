@@ -12,7 +12,7 @@ const SCHEDULE_ROW_TONE = {
 
 function scheduleRowTone(line: ScheduleLine) {
   if (line.confirmed) return SCHEDULE_ROW_TONE.confirmed;
-  if (line.undecided) return SCHEDULE_ROW_TONE.undecided;
+  if (line.undecided || line.finished) return SCHEDULE_ROW_TONE.undecided;
   return SCHEDULE_ROW_TONE.coordinating;
 }
 

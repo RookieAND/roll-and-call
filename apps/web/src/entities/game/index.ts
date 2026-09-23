@@ -25,6 +25,7 @@ export { GameGmLabel } from "./ui/game-gm-label";
 export { deriveSessionState, SESSION_ROLE, SESSION_STATE, type SessionRole } from "./model/session";
 export { isSessionLocked } from "./model/session-lock";
 export { isSessionEnded } from "./model/is-session-ended";
+export { sessionEndsAt } from "./model/session-end";
 export { isAttendanceDue } from "./model/is-attendance-due";
 export { ABSENCE_RECORD_MONTHS, absenceExpiresAt } from "./model/absence-expiry";
 export { recruitMethodLabel } from "./model/recruit-method-label";

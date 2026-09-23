@@ -25,12 +25,11 @@ export function GameThumbnail({
 
   if (!url) {
     return (
-      <div
-        className={cn(
-          "bg-gradient-to-br from-primary-200 via-primary-100 to-primary-50",
-          className,
-        )}
-      />
+      <HStack align="center" justify="center" className={cn("bg-tinted-bg", className)}>
+        <Text typography="body4" weight="bold" foreground="primary">
+          썸네일 없음
+        </Text>
+      </HStack>
     );
   }
 

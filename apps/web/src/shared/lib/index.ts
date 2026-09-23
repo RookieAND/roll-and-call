@@ -11,7 +11,7 @@ export { buildTimeRows, type TimeRow } from "./build-time-rows";
 export { slotIso } from "./slot-iso";
 export { padTwoDigits } from "./pad-two-digits";
 export { splitPlayTime } from "./split-play-time";
-export { playMinutes } from "./play-minutes";
+export { DEFAULT_PLAY_MINUTES, playMinutes } from "./play-minutes";
 export { toKstDateTimeInput } from "./to-kst-date-time-input";
 export { toKstDateInput } from "./to-kst-date-input";
 export { fromKstDateTimeInput } from "./from-kst-date-time-input";

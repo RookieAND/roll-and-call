@@ -6,7 +6,7 @@ interface GameDeadlineCountProps {
 
 export function GameDeadlineCount({ label }: GameDeadlineCountProps) {
   return (
-    <Text numeric typography="body4" weight="bold" foreground="muted" className="shrink-0">
+    <Text numeric typography="body4" weight="bold" foreground="hint" className="shrink-0">
       {label}
     </Text>
   );

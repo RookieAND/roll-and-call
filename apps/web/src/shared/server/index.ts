@@ -15,6 +15,7 @@ export {
   type ProfileLink,
 } from "@roll-and-call/database";
 export { getRecruitingGamesPage } from "./db/get-recruiting-games-page";
+export { getGamesCounts, type GamesCounts } from "./db/get-games-counts";
 export { getGamesByGm } from "./db/get-games-by-gm";
 export { getJoinedGames } from "./db/get-joined-games";
 export { getMonthSessions, type MonthSessionRow } from "./db/get-month-sessions";

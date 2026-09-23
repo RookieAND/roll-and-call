@@ -8,11 +8,16 @@ export {
   GAME_STATUS_FILTER,
   GAME_STATUS_FILTERS,
   GAME_STATUS_FILTER_DEFAULT,
+  GAME_TAB,
+  GAME_TAB_DEFAULT,
   type GameSort,
+  type GameStatusFilter,
+  type GameTab,
   type GamesFilter,
 } from "./game-sort";
 export { parseGameSort } from "./parse-game-sort";
 export { parseGameStatusFilter } from "./parse-game-status-filter";
+export { parseGameTab } from "./parse-game-tab";
 export { AUTH_REQUIRED_MESSAGE, GAME_NOT_FOUND_MESSAGE } from "./action-messages";
 export { AppError } from "./app-error";
 export { ERROR_DISPLAY, UNEXPECTED_ERROR_MESSAGE, type ErrorDisplay } from "./error-display";
