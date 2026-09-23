@@ -11,6 +11,7 @@ export { ConfirmDialog } from "./confirm-dialog";
 export { DatePicker } from "./date-picker";
 export { DateTimePicker } from "./date-time-picker";
 export { EmptyState } from "./empty-state";
+export { GoBackButton } from "./go-back-button";
 export { LineBreaks } from "./line-breaks";
 export { ExpandableRows } from "./expandable-rows";
 export { HeatSample } from "./heat-sample";

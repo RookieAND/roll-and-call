@@ -1,5 +1,5 @@
 import { Container } from "@roll-and-call/ui";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { SESSION_ROLE } from "@/entities/game";
 import { AvailabilityRows, ProfileLinks } from "@/entities/profile";
@@ -13,22 +13,12 @@ import { ProfileSectionDivider } from "./profile-section-divider";
 import { ProfileSessionSection } from "./profile-session-section";
 import { ProfileStats } from "./profile-stats";
 import { ProfileSummary } from "./profile-summary";
-import { UnknownUser } from "./unknown-user";
 
 export async function UserProfileView({ id }: { id: string }) {
   const [viewer, loaded] = await Promise.all([getCurrentUser(), loadProfile(id)]);
   if (viewer?.id === id) redirect("/me");
 
-  if (!loaded) {
-    return (
-      <>
-        <AppBar back="/games" title="프로필" />
-        <Container size="sm" className="px-0">
-          <UnknownUser />
-        </Container>
-      </>
-    );
-  }
+  if (!loaded) notFound();
 
   const { profile, sessions, absences } = loaded;
   const memo = viewer ? await getProfileMemo({ ownerId: viewer.id, targetId: id }) : null;

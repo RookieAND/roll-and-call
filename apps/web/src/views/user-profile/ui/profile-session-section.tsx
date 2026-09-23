@@ -45,7 +45,7 @@ export function ProfileSessionSection({ userId, section, items }: ProfileSession
             <Button
               render={<Link href={userSessionsHref(userId, section.key)} />}
               variant="outline"
-              className="h-11 w-full"
+              className="w-full"
             >
               {section.title} 세션 {items.length}건 모두 보기
             </Button>

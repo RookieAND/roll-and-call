@@ -17,11 +17,15 @@ interface ProfileSummaryProps {
 export function ProfileSummary({ profile, absences }: ProfileSummaryProps) {
   const joinedLabel = toKst(profile.createdAt).format("YYYY년 M월부터");
   const bioText = profile.bio || EMPTY_BIO_TEXT;
-  const bioForeground = profile.bio ? undefined : "hint";
-  const bioClass = profile.bio ? "mt-175 leading-[1.7] text-gray-700" : "mt-175 leading-[1.7]";
+  const bioForeground = profile.bio ? "normal" : "hint";
 
   return (
     <div className="px-200 pt-250 pb-050">
+      {absences.length > 0 && (
+        <div className="mb-200">
+          <ProfileAbsenceNotice absences={absences} />
+        </div>
+      )}
       <ProfileRow
         size="xl"
         name={profile.username}
@@ -30,14 +34,14 @@ export function ProfileSummary({ profile, absences }: ProfileSummaryProps) {
         subline={joinedLabel}
         sublineForeground="hint"
       />
-      <Text typography="body2" foreground={bioForeground} render={<p />} className={bioClass}>
+      <Text
+        typography="body2"
+        foreground={bioForeground}
+        render={<p />}
+        className="mt-175 [text-wrap:pretty]"
+      >
         {bioText}
       </Text>
-      {absences.length > 0 && (
-        <div className="mt-175">
-          <ProfileAbsenceNotice absences={absences} />
-        </div>
-      )}
       <div className="mt-175">
         <ProfileBlockLabel label="성향" />
         <KeywordChips keywords={profile.keywords} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, Text, Textarea } from "@roll-and-call/ui";
+import { Button, Field, Text, Textarea } from "@roll-and-call/ui";
 import { Lock } from "lucide-react";
 import { useState } from "react";
 
@@ -39,7 +39,8 @@ export function MemoForm({
         action={
           <Button
             variant="ghost"
-            className="h-9 text-primary-ink"
+            colorPalette="primary"
+            size="sm"
             disabled={!canSave}
             loading={pending}
             onClick={() =>
@@ -68,29 +69,30 @@ export function MemoForm({
       />
 
       <div className="p-200">
-        <Textarea
-          value={body}
-          onChange={(event) => setBody(event.target.value)}
-          placeholder="다음에 같이 할 때 기억할 것을 적어두세요."
-          maxLength={MEMO_MAX_LENGTH}
-          aria-label="메모 내용"
-          className="min-h-[150px] leading-[1.7]"
-        />
-        <HStack align="baseline" gap="100" className="mt-100">
-          <Text typography="body4" foreground="hint" className="flex-1 leading-[1.6]">
-            상대는 이 메모를 볼 수 없고, 알림도 가지 않습니다.
-          </Text>
-          <Text numeric typography="body4" foreground="hint" className="flex-none">
-            {body.length} / {MEMO_MAX_LENGTH}
-          </Text>
-        </HStack>
+        <Field.Root
+          label="메모"
+          htmlFor="memo"
+          counter={`${body.length} / ${MEMO_MAX_LENGTH}`}
+          description="상대는 이 메모를 볼 수 없고, 알림도 가지 않습니다."
+        >
+          <Textarea
+            id="memo"
+            value={body}
+            onChange={(event) => setBody(event.target.value)}
+            placeholder="다음에 같이 할 때 기억할 것을 적어두세요."
+            maxLength={MEMO_MAX_LENGTH}
+            rows={6}
+          />
+        </Field.Root>
       </div>
 
       {defaultBody && (
         <div className="border-t border-gray-200 px-200 pt-150 pb-200">
           <Button
             variant="outline"
-            className="h-12 w-full border-danger-300 text-danger-600"
+            colorPalette="danger"
+            size="lg"
+            className="w-full"
             loading={pending}
             onClick={() =>
               run(() => deleteMemo(targetId), {
