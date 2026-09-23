@@ -205,7 +205,8 @@ export function DirectConfirmSheet({
 
           <div className="sticky bottom-0 border-t border-gray-100 bg-surface px-250 pt-150 pb-250">
             <Button
-              className="h-12 w-full rounded-500"
+              size="lg"
+              className="w-full"
               disabled={selected.length === 0}
               loading={pending}
               onClick={confirm}
