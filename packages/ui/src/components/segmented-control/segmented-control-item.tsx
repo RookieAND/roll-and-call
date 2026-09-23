@@ -7,7 +7,7 @@ import { cn } from "../../lib/cn";
 import { SegmentedControlContext } from "./segmented-control-context";
 
 const item = cva(
-  "relative z-(--rc-z-base) rounded-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+  "relative z-(--rc-z-base) inline-flex items-center justify-center gap-075 rounded-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
   {
     variants: {
       size: { sm: "h-8 px-150 text-body4", md: "h-11 px-150 text-sm" },
