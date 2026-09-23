@@ -29,7 +29,7 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
     : "text-hint opacity-50";
   const dayTone = tone.day ?? weekdayTone;
   const previewTone =
-    tone.preview ?? (preview?.mine ? "bg-primary-50 text-tinted-ink" : "bg-gray-100 text-gray-700");
+    tone.preview ?? (preview?.mine ? "bg-primary-50 text-tinted-ink" : "bg-gray-100 text-gray-600");
 
   // 같은 달은 이미 받은 세션으로 그리므로 서버를 다시 부르지 않는다. 다른 달 칸과 새 탭 열기는 원래대로 이동한다.
   function selectDay(event: MouseEvent<HTMLAnchorElement>) {
@@ -46,13 +46,16 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
       onClick={selectDay}
       aria-label={ariaLabel}
       aria-current={selected ? "date" : undefined}
-      className={cn("block h-[62px] rounded-300 px-050 py-050 transition-colors", tone.cell)}
+      className={cn(
+        "flex h-(--rc-size-cell) flex-col gap-050 rounded-300 p-050 transition-colors",
+        tone.cell,
+      )}
     >
       <Text
         typography="body4"
         weight={tone.day ? "extrabold" : "medium"}
         tight
-        className={cn("block py-025 text-center", dayTone)}
+        className={cn("block text-center", dayTone)}
       >
         {cell.day}
       </Text>
@@ -62,18 +65,14 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
           typography="body5"
           tight
           truncate
-          className={cn("mt-050 rounded-100 px-050 py-050", previewTone)}
+          // 선택 칸에서도 글자가 세로 가운데 오도록 높이·행간을 16px로 고정한다.
+          className={cn("h-4 rounded-100 px-050 leading-4", previewTone)}
         >
           {preview.title}
         </Text>
       )}
       {restCount > 0 && (
-        <Text
-          weight="bold"
-          typography="body5"
-          tight
-          className={cn("mt-025 block text-center", tone.rest)}
-        >
+        <Text weight="bold" typography="body5" tight className={cn("block text-center", tone.rest)}>
           외 {restCount}
         </Text>
       )}
@@ -82,7 +81,7 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
           weight="bold"
           typography="body5"
           tight
-          className={cn("mt-050 block text-center", tone.today)}
+          className={cn("block text-center", tone.today)}
         >
           오늘
         </Text>

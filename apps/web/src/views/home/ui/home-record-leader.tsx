@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import type { RecordPerson } from "../model/rank-people";
 
-const CARD = "flex items-center gap-150 rounded-600 bg-tinted-bg px-175 py-175 transition-colors";
+const CARD = "flex items-center gap-150 rounded-600 bg-primary-50 p-175 transition-colors";
 
 interface HomeRecordLeaderProps {
   people: [RecordPerson, ...RecordPerson[]];
@@ -29,7 +29,7 @@ export function HomeRecordLeader({ people, count }: HomeRecordLeaderProps) {
         className="flex-none"
       />
       <div className="min-w-0 flex-1">
-        <HStack align="center" gap="050" className="mb-025 text-rank-gold">
+        <HStack align="center" gap="050" className="mb-025 text-gm">
           <Crown size={13} aria-hidden />
           <Text
             typography="body4"
@@ -64,7 +64,7 @@ export function HomeRecordLeader({ people, count }: HomeRecordLeaderProps) {
   if (people.length > 1) return <div className={CARD}>{body}</div>;
 
   return (
-    <Link href={`/u/${first.id}`} className={cn(CARD, "hover:bg-tinted-bg-hover")}>
+    <Link href={`/u/${first.id}`} className={cn(CARD, "hover:bg-primary-100")}>
       {body}
     </Link>
   );

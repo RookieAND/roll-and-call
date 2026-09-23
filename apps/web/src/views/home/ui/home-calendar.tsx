@@ -35,12 +35,7 @@ export function HomeCalendar({
         <Text typography="heading2" render={<h2 />} className="flex-1">
           {monthStart.format("YYYY년 M월")}
         </Text>
-        <Button
-          render={<Link href="/" scroll={false} />}
-          variant="outline"
-          size="sm"
-          className="h-9 rounded-400 text-body4 font-bold"
-        >
+        <Button render={<Link href="/" scroll={false} />} variant="outline" size="sm">
           오늘
         </Button>
         <IconButton
@@ -65,7 +60,7 @@ export function HomeCalendar({
             weight="bold"
             key={weekday}
             typography="body4"
-            foreground="muted"
+            foreground="hint"
             className={cn("text-center", WEEKDAY_TONE[index])}
           >
             {weekday}
@@ -84,21 +79,27 @@ export function HomeCalendar({
               today={cell.key === todayKey}
             />
           ) : (
-            <Skeleton key={cell.key} height={62} rounded={300} />
+            <Skeleton key={cell.key} rounded={300} className="h-(--rc-size-cell)" />
           ),
         )}
       </Grid>
 
-      <HStack align="center" gap="150" className="px-200 pb-150 text-body4 text-hint">
-        <span className="flex items-center gap-075">
-          <span className="h-2.5 w-2.5 rounded-100 border border-tinted-border bg-primary-50" />
-          내가 참여
-        </span>
-        <span className="flex items-center gap-075">
-          <span className="h-2.5 w-2.5 rounded-100 border border-gray-300 bg-gray-100" />
-          다른 세션
-        </span>
-      </HStack>
+      {sessionsByDay && Object.keys(sessionsByDay).length === 0 ? (
+        <Text typography="body3" foreground="hint" render={<p />} className="px-200 pb-150">
+          이 달에 잡힌 세션이 없습니다.
+        </Text>
+      ) : (
+        <HStack align="center" gap="150" className="px-200 pb-150 text-body4 text-hint">
+          <span className="flex items-center gap-075">
+            <span className="h-2.5 w-2.5 rounded-100 border border-tinted-border bg-primary-50" />
+            내가 참여
+          </span>
+          <span className="flex items-center gap-075">
+            <span className="h-2.5 w-2.5 rounded-100 border border-gray-300 bg-gray-100" />
+            다른 세션
+          </span>
+        </HStack>
+      )}
     </section>
   );
 }

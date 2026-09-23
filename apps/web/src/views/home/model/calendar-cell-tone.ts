@@ -19,24 +19,24 @@ type CalendarCellTone = {
 export const CALENDAR_CELL_TONE: Record<CalendarCellState, CalendarCellTone> = {
   [CALENDAR_CELL_STATE.selected]: {
     cell: "bg-primary-600",
-    day: "text-white",
-    preview: "bg-white/20 text-white",
-    rest: "text-white/80",
-    today: "text-white",
+    day: "text-on-primary",
+    preview: "bg-on-primary/20 text-on-primary",
+    rest: "text-on-primary/80",
+    today: "text-on-primary",
   },
   [CALENDAR_CELL_STATE.today]: {
     cell: "bg-tinted-bg",
-    day: "text-primary-ink",
+    day: "text-tinted-ink",
     preview: null,
     rest: "text-hint",
-    today: "text-primary-ink",
+    today: "text-tinted-ink",
   },
   [CALENDAR_CELL_STATE.plain]: {
     cell: "hover:bg-gray-50",
     day: null,
     preview: null,
     rest: "text-hint",
-    today: "text-primary-ink",
+    today: "text-tinted-ink",
   },
 };
 
