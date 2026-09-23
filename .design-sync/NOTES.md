@@ -34,3 +34,5 @@
 
 - `[RENDER_THIN] ... rendered height is 0px`: Dialog·AlertDialog·Sheet는 포털로 body에 그려서 카드 루트 높이가 0이다. 스크린샷은 정상이다.
 - **컴파운드의 .d.ts는 조각 목록만 나온다.** `export const Sheet = {...}` 같은 네임스페이스 객체는 변환기가 각 조각의 props를 못 뽑아 `React.ComponentType<any>`로 적는다. 그래서 디자인 에이전트가 읽는 실제 계약은 `packages/ui/docs/<이름>.md`(→ prompt.md)의 Props 절이다. 컴파운드 API를 바꾸면 그 문서도 같이 고친다.
+- 그룹을 바꾸면(components/<group>/<Name>) **옛 경로가 원격에 남는다.** diff의 `upload.deletePaths`는 앵커가 알던 경로만 담아서, 앵커에 없던 조합은 빠진다. 업로드 뒤 `list_files`로 `components/general/` 잔재를 꼭 확인하고 지운다.
+- 문서를 새로 붙이면 그 컴포넌트의 등급이 지워진다(prompt.md가 캡처 키에 들어간다). 문서 작업과 채점은 같은 회차에 몰아서 한다.
