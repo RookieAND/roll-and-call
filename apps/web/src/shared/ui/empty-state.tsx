@@ -35,11 +35,7 @@ export function EmptyState({
       <VStack gap="050" className="items-center">
         <Text typography="subtitle1">{title}</Text>
         {description && (
-          <Text
-            typography="body4"
-            foreground="muted"
-            className="whitespace-pre-line [text-wrap:pretty]"
-          >
+          <Text typography="body4" foreground="muted" className="[text-wrap:pretty]">
             {description}
           </Text>
         )}

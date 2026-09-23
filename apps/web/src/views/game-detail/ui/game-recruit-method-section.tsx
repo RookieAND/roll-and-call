@@ -26,8 +26,10 @@ export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps
         </Text>
         <RecruitMethodBadge method={game.recruitMethod} />
       </HStack>
-      <Text typography="body4" foreground="muted" render={<p />} className="whitespace-pre-line">
-        {lines.join("\n")}
+      <Text typography="body4" foreground="muted" render={<p />}>
+        {lines[0]}
+        <br />
+        {lines[1]}
       </Text>
     </VStack>
   );

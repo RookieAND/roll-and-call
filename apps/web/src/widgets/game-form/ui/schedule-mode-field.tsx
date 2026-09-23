@@ -13,8 +13,13 @@ const OPTIONS = [
 
 const HINT = {
   [SCHEDULE_MODE.coordinate]: "참여자가 가능 시간을 내면 GM이 겹치는 시간대 중 하나를 확정합니다.",
-  [SCHEDULE_MODE.fixed]:
-    "정해진 일시로 바로 모집합니다.\n참여자는 가능 시간을 내지 않고, 일정 조율 화면도 생기지 않습니다.",
+  [SCHEDULE_MODE.fixed]: (
+    <>
+      정해진 일시로 바로 모집합니다.
+      <br />
+      참여자는 가능 시간을 내지 않고, 일정 조율 화면도 생기지 않습니다.
+    </>
+  ),
 } as const;
 
 interface ScheduleModeFieldProps {

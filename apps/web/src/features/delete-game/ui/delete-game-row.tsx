@@ -19,11 +19,17 @@ export function DeleteGameRow({ gameId, confirmedCount, lockedReason }: DeleteGa
   const [confirming, setConfirming] = useState(false);
   const { pending, remove } = useDeleteGame(gameId, () => setConfirming(false));
 
-  const participantLine =
-    confirmedCount > 0
-      ? `\n확정 참여자 ${confirmedCount}명에게 취소 사실이 디스코드로 전해집니다.`
-      : "";
-  const description = `이 구인을 취소할까요? 되돌릴 수 없습니다.${participantLine}`;
+  const description = (
+    <>
+      이 구인을 취소할까요? 되돌릴 수 없습니다.
+      {confirmedCount > 0 && (
+        <>
+          <br />
+          확정 참여자 {confirmedCount}명에게 취소 사실이 디스코드로 전해집니다.
+        </>
+      )}
+    </>
+  );
   const locked = Boolean(lockedReason);
   const labelForeground = locked ? "hint" : "danger";
 

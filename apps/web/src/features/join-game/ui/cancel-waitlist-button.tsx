@@ -32,7 +32,13 @@ export function CancelWaitlistButton({ gameId, title, className }: CancelWaitlis
         open={confirming}
         onOpenChange={setConfirming}
         title="대기 취소"
-        description={`${title}의 대기를 취소할까요?\n대기 순번이 사라지고, 자리가 나도 더는 알리지 않습니다.`}
+        description={
+          <>
+            {title}의 대기를 취소할까요?
+            <br />
+            대기 순번이 사라지고, 자리가 나도 더는 알리지 않습니다.
+          </>
+        }
         cancelLabel="돌아가기"
         confirmLabel="대기 취소"
         danger

@@ -24,7 +24,13 @@ export function GamesEmpty({ filter }: GamesEmptyProps) {
       <EmptyState
         image="/empty-states/empty-search.png"
         title={`‘${filter.q}’에 맞는 구인이 없습니다`}
-        description={"검색어를 바꾸거나\n직접 구인을 올려보세요."}
+        description={
+          <>
+            검색어를 바꾸거나
+            <br />
+            직접 구인을 올려보세요.
+          </>
+        }
         action={
           <HStack gap="100" className="mt-100 w-full [&>*]:flex-1">
             <Button

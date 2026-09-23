@@ -17,8 +17,10 @@ export function LotteryAppliedActions({ gameId, endDate, expired }: LotteryAppli
     <VStack gap="125">
       <ActionNotice title="참여 신청이 접수되었습니다" colorPalette="primary">
         {expired
-          ? "모집이 끝나 GM이 추첨합니다.\n결과는 알림으로 알려드립니다."
-          : `${formatDate(endDate)} 모집이 끝나면 GM이 추첨하고,\n결과는 알림으로 알려드립니다.`}
+          ? "모집이 끝나 GM이 추첨합니다."
+          : `${formatDate(endDate)} 모집이 끝나면 GM이 추첨하고,`}
+        <br />
+        결과는 알림으로 알려드립니다.
       </ActionNotice>
       <LeaveGameButton gameId={gameId} className="w-full">
         신청 취소

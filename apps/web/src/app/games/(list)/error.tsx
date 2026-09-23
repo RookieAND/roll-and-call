@@ -13,7 +13,13 @@ export default function ErrorPage({ retry }: { error: Error; retry: () => void }
         <EmptyState
           image="/empty-states/empty-error.png"
           title="구인 목록을 불러오지 못했습니다"
-          description={"연결이 잠시 끊겼을 수 있습니다.\n잠시 뒤 다시 시도해주세요."}
+          description={
+            <>
+              연결이 잠시 끊겼을 수 있습니다.
+              <br />
+              잠시 뒤 다시 시도해주세요.
+            </>
+          }
           action={
             <Button variant="outline" onClick={retry} className="mt-100">
               다시 불러오기

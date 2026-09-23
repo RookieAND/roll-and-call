@@ -29,7 +29,9 @@ export function ConfirmedActions({
         title={`${formatDateTime(confirmedAt)}으로 확정됐습니다`}
         colorPalette="success"
       >
-        {"일정이 확정되어 신청을 취소할 수 없습니다.\n참여를 취소하려면 GM에게 직접 문의해 주세요."}
+        일정이 확정되어 신청을 취소할 수 없습니다.
+        <br />
+        참여를 취소하려면 GM에게 직접 문의해 주세요.
       </ActionNotice>
       {hasActions && (
         <ActionPair>
