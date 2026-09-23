@@ -29,7 +29,7 @@ export function AttendanceHeader({
       <Badge colorPalette="gray" className="flex-none">
         {rule}
       </Badge>
-      <Badge colorPalette="gray" className="flex-none">
+      <Badge colorPalette={attendanceConfirmed ? "success" : "gray"} className="flex-none">
         {countLabel}
       </Badge>
     </HStack>

@@ -1,9 +1,16 @@
 "use client";
 
-import { Button, Callout, Card, Text, VStack } from "@roll-and-call/ui";
+import { Button, Callout, Card, FloatingBar, VStack } from "@roll-and-call/ui";
 import { useState, type ReactNode } from "react";
 
-import { ConfirmDialog, handleActionResult, reportError, toast, useAction } from "@/shared/ui";
+import {
+  ConfirmDialog,
+  handleActionResult,
+  LineBreaks,
+  reportError,
+  toast,
+  useAction,
+} from "@/shared/ui";
 
 import { confirmAttendance } from "../api/confirm-attendance";
 import { reopenAttendance } from "../api/reopen-attendance";
@@ -80,7 +87,11 @@ export function AttendanceForm({ gameId, attendees, children }: AttendanceFormPr
         {children}
       </VStack>
 
-      <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
+      <Card.Root
+        radius={500}
+        padding="none"
+        className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
+      >
         {attendees.map((attendee) => (
           <AttendanceRow
             key={attendee.userId}
@@ -91,9 +102,14 @@ export function AttendanceForm({ gameId, attendees, children }: AttendanceFormPr
         ))}
       </Card.Root>
 
-      <Button className="h-12 w-full rounded-500" onClick={requestConfirm}>
-        출석 확정
-      </Button>
+      <FloatingBar.Root elevated={false}>
+        <FloatingBar.Content>
+          <Button size="lg" className="w-full" loading={pending} onClick={requestConfirm}>
+            출석 확정
+          </Button>
+        </FloatingBar.Content>
+        <FloatingBar.Spacer />
+      </FloatingBar.Root>
 
       <ConfirmDialog
         open={confirming}
@@ -105,15 +121,9 @@ export function AttendanceForm({ gameId, attendees, children }: AttendanceFormPr
         pending={pending}
         onConfirm={submit}
       >
-        <Callout.Root size="sm" className="mt-125">
+        <Callout.Root colorPalette="gray">
           <Callout.Description>
-            <Text
-              typography="body4"
-              foreground="inherit"
-              className="leading-relaxed whitespace-pre-line"
-            >
-              {description.detail}
-            </Text>
+            <LineBreaks lines={description.lines} />
           </Callout.Description>
         </Callout.Root>
       </ConfirmDialog>

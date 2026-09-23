@@ -5,6 +5,9 @@ export function confirmDescription(absentNames: string[]) {
 
   return {
     headline: `${names}님이 불참으로 기록됩니다.`,
-    detail: `불참 기록이 ${names}님의 프로필에 3개월 동안 남습니다.\n이 세션은 ${names}님의 완료 기록과 이 달의 기록에 들어가지 않습니다.`,
+    lines: [
+      `불참 기록이 ${names}님의 프로필에 3개월 동안 남습니다.`,
+      `이 세션은 ${names}님의 완료 기록과 이 달의 기록에 들어가지 않습니다.`,
+    ],
   };
 }

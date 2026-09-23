@@ -41,6 +41,7 @@ export async function GameAttendanceView({ id }: { id: string }) {
     userId: participant.userId,
     username: participant.user?.username ?? "익명",
     avatarUrl: participant.user?.avatarUrl ?? null,
+    bio: participant.user?.bio ?? null,
     absent: participant.absent,
   }));
 

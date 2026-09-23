@@ -10,7 +10,7 @@ export function AttendanceStat({ label, count, danger = false }: AttendanceStatP
   const countForeground = danger ? "danger" : "normal";
 
   return (
-    <Card.Root radius={500} background="none" padding="none" className="px-175 py-150">
+    <Card.Root radius={500} padding="sm">
       <Text typography="body4" foreground="hint" render={<p />}>
         {label}
       </Text>

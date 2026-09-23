@@ -16,7 +16,8 @@ export function ReopenAttendanceButton({ gameId }: ReopenAttendanceButtonProps) 
   return (
     <Button
       variant="outline"
-      className="h-[46px] w-full rounded-500"
+      size="lg"
+      className="w-full"
       loading={pending}
       onClick={() =>
         run(() => reopenAttendance(gameId), {

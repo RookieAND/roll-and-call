@@ -1,5 +1,4 @@
 import { Callout } from "@roll-and-call/ui";
-import { Info } from "lucide-react";
 
 import { formatDateTime } from "@/shared/lib";
 
@@ -9,12 +8,10 @@ interface AttendanceGuideProps {
 
 // 고르는 중에는 할 일을, 확정 뒤에는 언제 정했고 어떻게 되돌리는지를 말한다.
 export function AttendanceGuide({ attendanceConfirmedAt }: AttendanceGuideProps) {
-  const icon = <Info size={14} strokeWidth={2.2} />;
-
   if (attendanceConfirmedAt) {
     return (
-      <Callout.Root className="mt-050">
-        <Callout.Icon>icon</Callout.Icon>
+      <Callout.Root colorPalette="success">
+        <Callout.Icon />
         <Callout.Description>
           {formatDateTime(attendanceConfirmedAt)}에 출석을 확정했습니다.
           <br />
@@ -24,8 +21,8 @@ export function AttendanceGuide({ attendanceConfirmedAt }: AttendanceGuideProps)
     );
   }
   return (
-    <Callout.Root colorPalette="primary" className="mt-050">
-      <Callout.Icon>icon</Callout.Icon>
+    <Callout.Root colorPalette="primary">
+      <Callout.Icon />
       <Callout.Description>
         기본값은 전원 참석입니다.
         <br />

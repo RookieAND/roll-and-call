@@ -1,14 +1,10 @@
 "use client";
 
-import { HStack, SegmentedControl } from "@roll-and-call/ui";
+import { Avatar, HStack, SegmentedControl, Text, VStack } from "@roll-and-call/ui";
 
-import { ProfileRow } from "@/entities/profile";
+import { EMPTY_BIO_TEXT } from "@/entities/profile";
 
-import {
-  ATTENDANCE_CHOICE,
-  ATTENDANCE_OPTIONS,
-  type AttendanceChoice,
-} from "../model/attendance-choice";
+import { ATTENDANCE_CHOICE, ATTENDANCE_OPTIONS } from "../model/attendance-choice";
 import type { Attendee } from "../model/attendee";
 
 interface AttendanceRowProps {
@@ -19,6 +15,7 @@ interface AttendanceRowProps {
   onChange?: (absent: boolean) => void;
 }
 
+// 이름 + 한 줄 소개로 사람을 가린다. 불참을 고르면 아래에 무엇이 남는지 한 줄 더 붙는다.
 export function AttendanceRow({
   attendee,
   absent,
@@ -26,26 +23,30 @@ export function AttendanceRow({
   onChange,
 }: AttendanceRowProps) {
   const choice = absent ? ATTENDANCE_CHOICE.absent : ATTENDANCE_CHOICE.present;
-  const absentNotice = absent && !readOnly ? "불참으로 기록됩니다" : undefined;
 
   return (
-    <HStack
-      align="center"
-      gap="125"
-      className="min-h-15 border-t border-gray-100 px-150 py-125 first:border-t-0"
-    >
-      <ProfileRow
-        name={attendee.username}
-        avatarUrl={attendee.avatarUrl}
-        subline={absentNotice}
-        sublineForeground="danger"
-      />
+    <HStack align="center" gap="125" className="min-h-16 px-150 py-125">
+      <Avatar src={attendee.avatarUrl} name={attendee.username} size="md" />
+      <VStack className="min-w-0 flex-1">
+        <Text typography="subtitle2" truncate>
+          {attendee.username}
+        </Text>
+        <Text typography="body4" foreground="hint" truncate>
+          {attendee.bio || EMPTY_BIO_TEXT}
+        </Text>
+        {absent && !readOnly && (
+          <Text typography="body4" foreground="danger">
+            불참으로 기록됩니다
+          </Text>
+        )}
+      </VStack>
       <SegmentedControl.Root
+        size="sm"
         disabled={readOnly}
         aria-label={`${attendee.username} 참석 여부`}
         value={choice}
         onValueChange={(next) => onChange?.(next === ATTENDANCE_CHOICE.absent)}
-        className="w-[138px] flex-none"
+        className="w-32 flex-none"
       >
         {ATTENDANCE_OPTIONS.map((option) => (
           <SegmentedControl.Item
