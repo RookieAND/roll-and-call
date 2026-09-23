@@ -17,5 +17,6 @@ test("글자 색끼리는 뒤에 온 것만 남는다", () => {
 });
 
 test("거짓값은 떨어져 나간다", () => {
-  expect(cn("p-100", false && "hidden", undefined, ["gap-200"])).toBe("p-100 gap-200");
+  const hidden = false as boolean;
+  expect(cn("p-100", hidden && "hidden", undefined, ["gap-200"])).toBe("p-100 gap-200");
 });
