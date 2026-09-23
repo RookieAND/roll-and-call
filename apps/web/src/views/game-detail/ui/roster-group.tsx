@@ -1,27 +1,35 @@
-import { HStack, Text } from "@roll-and-call/ui";
+import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 interface RosterGroupProps {
-  label: string;
+  label?: string;
   count?: number;
   children: ReactNode;
 }
 
-// 명단 시트 안의 한 묶음 — 제목 줄 + 행들. 묶음끼리 선으로 가르지 않는다.
+// 명단 시트 안의 한 묶음 — 이름표 줄 + 행 카드.
 export function RosterGroup({ label, count, children }: RosterGroupProps) {
   return (
-    <section>
-      <HStack align="baseline" gap="100" className="mb-050">
-        <Text typography="subtitle2" foreground="muted">
-          {label}
-        </Text>
-        {count !== undefined && (
-          <Text numeric typography="body4" foreground="hint">
-            {count}명
+    <VStack gap="075" render={<section />}>
+      {label && (
+        <HStack align="baseline" gap="075">
+          <Text typography="body4" weight="bold" foreground="muted">
+            {label}
           </Text>
-        )}
-      </HStack>
-      <div className="divide-y divide-gray-200">{children}</div>
-    </section>
+          {count !== undefined && (
+            <Text numeric typography="body4" foreground="hint">
+              {count}명
+            </Text>
+          )}
+        </HStack>
+      )}
+      <Card.Root
+        padding="none"
+        radius={500}
+        className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
+      >
+        {children}
+      </Card.Root>
+    </VStack>
   );
 }

@@ -1,13 +1,6 @@
 import { Container, VStack } from "@roll-and-call/ui";
 
-import {
-  deriveGameStatus,
-  GAME_STATUS,
-  isGameGm,
-  isSessionLocked,
-  scheduleLine,
-  splitRoster,
-} from "@/entities/game";
+import { deriveGameStatus, isGameGm, scheduleLine, splitRoster } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -41,9 +34,6 @@ export function GameDetail({ game, viewerId }: GameDetailProps) {
     participantCount: confirmed.length,
     waitlistEnabled: game.waitlistEnabled,
   });
-  // 세션이 잠겨 취소가 막혔거나 모집이 끝나면 순번이 바뀔 일이 없어 대기 명단을 감춘다.
-  const showWaiting =
-    !isSessionLocked(game) && status !== GAME_STATUS.closed && status !== GAME_STATUS.full;
 
   return (
     <>
@@ -72,7 +62,6 @@ export function GameDetail({ game, viewerId }: GameDetailProps) {
               maxPlayers={game.maxPlayers}
               recruitMethod={game.recruitMethod}
               drawn={game.drawnAt !== null}
-              showWaiting={showWaiting}
               viewerId={viewerId}
             />
           </VStack>

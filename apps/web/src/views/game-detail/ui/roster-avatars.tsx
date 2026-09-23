@@ -12,7 +12,7 @@ export function RosterAvatars({ members }: RosterAvatarsProps) {
   return (
     <AvatarGroup
       max={MAX_AVATARS}
-      size="stack"
+      size="md"
       people={members.map((member) => ({
         src: member.user?.avatarUrl,
         name: member.user?.username,

@@ -15,30 +15,28 @@ interface RosterMemberRowProps {
   name: string | null | undefined;
   avatarUrl: string | null | undefined;
   bio: string | null | undefined;
-  note?: string;
+  tags?: string[];
 }
 
-export function RosterMemberRow({ userId, name, avatarUrl, bio, note }: RosterMemberRowProps) {
-  const bioForeground = bio ? "muted" : "hint";
-  const noteBadge = note && (
-    <Badge colorPalette="primary" className="shrink-0">
-      {note}
-    </Badge>
-  );
-
+// 행을 누르면 그 사람의 프로필(08)로 간다.
+export function RosterMemberRow({ userId, name, avatarUrl, bio, tags = [] }: RosterMemberRowProps) {
   return (
     <Link
       href={`/u/${userId}`}
-      className="flex min-h-14 items-center gap-125 py-100 transition-colors hover:bg-gray-50"
+      className="flex min-h-15 items-center gap-125 px-175 py-100 transition-colors hover:bg-gray-50"
     >
       <ProfileRow
         name={name}
         avatarUrl={avatarUrl}
-        nameAddon={noteBadge}
+        nameAddon={tags.map((tag) => (
+          <Badge key={tag} colorPalette="primary" className="shrink-0">
+            {tag}
+          </Badge>
+        ))}
         subline={bio || EMPTY_BIO_TEXT}
-        sublineForeground={bioForeground}
+        sublineForeground="hint"
       />
-      <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />
+      <ChevronRight size={17} className="flex-none text-hint" aria-hidden />
     </Link>
   );
 }

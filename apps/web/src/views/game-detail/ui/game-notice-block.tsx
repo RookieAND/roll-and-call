@@ -6,11 +6,15 @@ interface GameNoticeBlockProps {
 
 export function GameNoticeBlock({ notice }: GameNoticeBlockProps) {
   return (
-    <VStack gap="100">
-      <Text typography="heading3" render={<h2 />}>
+    <VStack gap="075">
+      <Text typography="subtitle2" render={<h2 />}>
         주의 사항
       </Text>
-      <Text typography="body3" foreground="muted" className="whitespace-pre-wrap">
+      <Text
+        typography="body3"
+        foreground="muted"
+        className="whitespace-pre-wrap [text-wrap:pretty]"
+      >
         {notice}
       </Text>
     </VStack>

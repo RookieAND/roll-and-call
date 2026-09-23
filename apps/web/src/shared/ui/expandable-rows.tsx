@@ -29,9 +29,10 @@ export function ExpandableRows({
       {restCount > 0 && (
         <Button
           variant="ghost"
+          colorPalette={tone === "primary" ? "primary" : "gray"}
           className={cn(
-            "w-full rounded-none border-t border-gray-100 font-bold",
-            tone === "primary" ? "h-12 text-primary-ink" : "h-11 text-body3 text-gray-600",
+            "h-11 w-full rounded-none border-t border-gray-200 font-bold",
+            tone === "muted" && "text-body3",
           )}
           onClick={() => setExpanded(true)}
         >

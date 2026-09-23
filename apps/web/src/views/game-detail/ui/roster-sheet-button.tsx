@@ -6,7 +6,7 @@ interface RosterSheetButtonProps {
 
 export function RosterSheetButton({ onClick }: RosterSheetButtonProps) {
   return (
-    <Button variant="ghost" size="sm" className="text-primary-ink" onClick={onClick}>
+    <Button variant="ghost" colorPalette="primary" size="sm" onClick={onClick}>
       명단 보기
     </Button>
   );

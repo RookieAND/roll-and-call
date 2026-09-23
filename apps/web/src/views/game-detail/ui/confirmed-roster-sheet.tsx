@@ -1,9 +1,10 @@
-import { Sheet } from "@roll-and-call/ui";
+import { Sheet, VStack } from "@roll-and-call/ui";
 
 import { RosterGmGroup, type RosterSheetGm } from "./roster-gm-group";
 import { RosterGroup } from "./roster-group";
 import type { DetailRosterMember } from "./roster-member-row";
 import { RosterSheetRow } from "./roster-sheet-row";
+import { RosterSheetTitle } from "./roster-sheet-title";
 
 interface ConfirmedRosterSheetProps {
   open: boolean;
@@ -24,16 +25,16 @@ export function ConfirmedRosterSheet({
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Popup>
         <Sheet.Handle />
-        <Sheet.Title className="mb-150">참여자 명단</Sheet.Title>
+        <RosterSheetTitle title="참여자 명단" />
 
-        <div className="max-h-[23rem] divide-y divide-gray-200 overflow-y-auto [&>*:not(:last-child)]:pb-150 [&>*+*]:pt-150">
+        <VStack gap="150" className="max-h-[23rem] overflow-y-auto">
           <RosterGmGroup gm={gm} viewerId={viewerId} />
           <RosterGroup label="참여" count={confirmed.length}>
             {confirmed.map((member) => (
               <RosterSheetRow key={member.userId} member={member} viewerId={viewerId} />
             ))}
           </RosterGroup>
-        </div>
+        </VStack>
       </Sheet.Popup>
     </Sheet.Root>
   );

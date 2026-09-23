@@ -1,9 +1,10 @@
-import { Text, Sheet } from "@roll-and-call/ui";
+import { Sheet, Text, VStack } from "@roll-and-call/ui";
 
 import { RosterGmGroup, type RosterSheetGm } from "./roster-gm-group";
 import { RosterGroup } from "./roster-group";
 import type { DetailRosterMember } from "./roster-member-row";
 import { RosterSheetRow } from "./roster-sheet-row";
+import { RosterSheetTitle } from "./roster-sheet-title";
 
 interface LotteryRosterSheetProps {
   open: boolean;
@@ -25,19 +26,19 @@ export function LotteryRosterSheet({
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Popup>
         <Sheet.Handle />
-        <Sheet.Title className="mb-150">명단</Sheet.Title>
+        <RosterSheetTitle title="명단" />
 
-        <div className="max-h-[23rem] divide-y divide-gray-200 overflow-y-auto [&>*:not(:last-child)]:pb-150 [&>*+*]:pt-150">
+        <VStack gap="150" className="max-h-[23rem] overflow-y-auto">
           <RosterGmGroup gm={gm} viewerId={viewerId} />
           <RosterGroup label="신청" count={applicants.length}>
             {applicants.map((member) => (
               <RosterSheetRow key={member.userId} member={member} viewerId={viewerId} />
             ))}
           </RosterGroup>
-          <Text typography="body4" foreground="hint" render={<p />} className="pt-100">
+          <Text typography="body4" foreground="hint" render={<p />}>
             추첨 전에는 순번이 없습니다. 신청 순서로만 보여줍니다.
           </Text>
-        </div>
+        </VStack>
       </Sheet.Popup>
     </Sheet.Root>
   );

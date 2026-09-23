@@ -22,7 +22,7 @@ export function CalloutDescription({ className, children }: CalloutDescriptionPr
       typography="body4"
       render={<p />}
       className={cn(
-        "col-start-2 min-w-0 text-pretty leading-[1.55]",
+        "col-start-2 min-w-0 whitespace-pre-line text-pretty leading-[1.55]",
         hasTitle && "mt-025",
         ink,
         className,

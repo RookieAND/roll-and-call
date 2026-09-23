@@ -33,7 +33,7 @@ export function LoginSheet({ open, onOpenChange, next }: LoginSheetProps) {
                 className="w-full"
                 onClick={() => signInWithDiscord(next)}
               >
-                Discord로 로그인
+                디스코드로 로그인
               </Button>
               <Button
                 variant="ghost"

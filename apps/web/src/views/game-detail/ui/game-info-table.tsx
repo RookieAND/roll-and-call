@@ -1,8 +1,7 @@
-import { Card, HStack, Text } from "@roll-and-call/ui";
+import { Avatar, Badge, Card, HStack, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { GameGmLabel } from "@/entities/game";
 import { formatDateTime, formatGameSchedule } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
@@ -18,20 +17,10 @@ export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
     {
       label: "GM",
       value: (
-        <Link href={`/u/${game.gmId}`} className="inline-flex items-center gap-075">
-          <GameGmLabel
-            name={game.gm?.username}
-            avatarUrl={game.gm?.avatarUrl}
-            showRole={false}
-            typography="body4"
-            foreground="normal"
-            weight="bold"
-          />
-          {isGm && (
-            <Text typography="body4" foreground="hint" render={<span />}>
-              나
-            </Text>
-          )}
+        <Link href={`/u/${game.gmId}`} className="inline-flex min-w-0 items-center gap-100">
+          <Avatar src={game.gm?.avatarUrl} name={game.gm?.username} size="sm" />
+          <span className="truncate">{game.gm?.username ?? "?"}</span>
+          {isGm && <Badge colorPalette="primary">나</Badge>}
         </Link>
       ),
     },
@@ -41,22 +30,23 @@ export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
   ];
 
   return (
-    <Card.Root radius={600} background="none" padding="none" className="overflow-hidden">
+    <Card.Root
+      radius={500}
+      background="subtle"
+      padding="none"
+      className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
+    >
       {rows.map((row) => (
-        <HStack
-          key={row.label}
-          align="center"
-          gap="150"
-          className="min-h-12 border-b border-gray-100 px-200 last:border-b-0"
-        >
-          <Text typography="body3" foreground="muted" className="w-20.5 shrink-0">
+        <HStack key={row.label} align="center" gap="150" className="min-h-10 px-175 py-100">
+          <Text typography="body4" foreground="hint" className="w-18.5 shrink-0">
             {row.label}
           </Text>
           <Text
-            typography="body4"
-            weight="bold"
+            typography="body3"
+            weight="medium"
+            numeric
             render={<div />}
-            className="flex flex-1 items-center"
+            className="flex min-w-0 flex-1 items-center"
           >
             {row.value}
           </Text>

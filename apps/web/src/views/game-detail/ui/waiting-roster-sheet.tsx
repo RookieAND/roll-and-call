@@ -1,9 +1,11 @@
-import { Text, Sheet } from "@roll-and-call/ui";
+import { Sheet } from "@roll-and-call/ui";
 
 import { ExpandableRows } from "@/shared/ui";
 
+import { RosterGroup } from "./roster-group";
 import type { DetailRosterMember } from "./roster-member-row";
 import { RosterSheetRow } from "./roster-sheet-row";
+import { RosterSheetTitle } from "./roster-sheet-title";
 
 interface WaitingRosterSheetProps {
   open: boolean;
@@ -22,29 +24,21 @@ export function WaitingRosterSheet({
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Popup>
         <Sheet.Handle />
-        <Sheet.Title className="mb-150">
-          대기자 명단
-          <Text
-            typography="body4"
-            foreground="hint"
-            render={<span />}
-            className="ml-100 tabular-nums"
-          >
-            {waiting.length}명
-          </Text>
-        </Sheet.Title>
+        <RosterSheetTitle title="대기자 명단" count={waiting.length} />
 
-        <div className="max-h-[23rem] divide-y divide-gray-200 overflow-y-auto">
-          <ExpandableRows>
-            {waiting.map((member) => (
-              <RosterSheetRow
-                key={member.userId}
-                member={member}
-                viewerId={viewerId}
-                rankNote={`대기 ${member.waitlistRank}번`}
-              />
-            ))}
-          </ExpandableRows>
+        <div className="max-h-[23rem] overflow-y-auto">
+          <RosterGroup>
+            <ExpandableRows>
+              {waiting.map((member) => (
+                <RosterSheetRow
+                  key={member.userId}
+                  member={member}
+                  viewerId={viewerId}
+                  rankTag={`대기 ${member.waitlistRank}번`}
+                />
+              ))}
+            </ExpandableRows>
+          </RosterGroup>
         </div>
       </Sheet.Popup>
     </Sheet.Root>

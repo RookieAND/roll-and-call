@@ -18,7 +18,7 @@ export function LoginButton({ className, next }: LoginButtonProps) {
       onClick={() => signInWithDiscord(next)}
       className={cn(className)}
     >
-      <span className="h-2 w-2 rounded-full bg-white" aria-hidden />
+      <span className="h-2 w-2 rounded-full bg-on-primary" aria-hidden />
       Discord로 로그인
     </Button>
   );

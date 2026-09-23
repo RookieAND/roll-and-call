@@ -4,33 +4,38 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 interface ErrorScreenProps {
+  image?: string;
   title: ReactNode;
   description?: ReactNode;
   action?: ReactNode;
+  homeLink?: boolean;
 }
 
-export function ErrorScreen({ title, description, action }: ErrorScreenProps) {
+export function ErrorScreen({
+  image = "/empty-states/empty-error.png",
+  title,
+  description,
+  action,
+  homeLink = true,
+}: ErrorScreenProps) {
   return (
     <VStack gap="250" className="min-h-[70vh] items-center justify-center px-250 text-center">
-      <Image
-        src="/empty-states/empty-error.png"
-        alt=""
-        width={140}
-        height={140}
-        aria-hidden
-        className="dark:opacity-80"
-      />
+      <Image src={image} alt="" width={140} height={140} aria-hidden className="dark:opacity-80" />
       <VStack gap="050" className="items-center">
         <Text typography="heading3">{title}</Text>
         {description && (
-          <Text typography="body4" foreground="muted" className="[text-wrap:pretty]">
+          <Text
+            typography="body4"
+            foreground="muted"
+            className="whitespace-pre-line [text-wrap:pretty]"
+          >
             {description}
           </Text>
         )}
       </VStack>
       <HStack gap="100">
         {action}
-        <Button render={<Link href="/" />}>메인으로 돌아가기</Button>
+        {homeLink && <Button render={<Link href="/" />}>메인으로 돌아가기</Button>}
       </HStack>
     </VStack>
   );

@@ -40,6 +40,8 @@ export function scheduleLine(game: ScheduleGame, now: Date = new Date()) {
     text,
     confirmed,
     undecided: !game.confirmedAt && !(game.rangeStart && game.rangeEnd),
+    // 일시 지정형은 등록 때부터 날짜가 정해져 있어 확정과 같은 색으로 보인다.
+    dated: Boolean(game.confirmedAt),
     finished: false,
     deadlinePassed,
     deadline: deadlinePassed ? null : days === 0 ? "오늘 마감" : `마감 D-${days}`,

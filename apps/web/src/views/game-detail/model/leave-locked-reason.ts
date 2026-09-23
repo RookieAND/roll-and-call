@@ -12,7 +12,7 @@ export const LEAVE_LOCKED_REASON: Record<LeaveLock, string> = {
   [LEAVE_LOCK.full]: "정원이 차서",
 };
 
-export function leaveLock(drawn: boolean, expired: boolean): LeaveLock {
+export function leaveLock({ drawn, expired }: { drawn: boolean; expired: boolean }): LeaveLock {
   if (drawn) return LEAVE_LOCK.drawn;
   return expired ? LEAVE_LOCK.expired : LEAVE_LOCK.full;
 }

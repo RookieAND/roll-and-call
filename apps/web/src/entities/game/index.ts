@@ -22,6 +22,7 @@ export { GameStatusBadge } from "./ui/game-status-badge";
 export { GameRuleChip } from "./ui/game-rule-chip";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
 export { GameGmLabel } from "./ui/game-gm-label";
+export { GameScheduleRow } from "./ui/game-schedule-row";
 export { deriveSessionState, SESSION_ROLE, SESSION_STATE, type SessionRole } from "./model/session";
 export { isSessionLocked } from "./model/session-lock";
 export { isSessionEnded } from "./model/is-session-ended";

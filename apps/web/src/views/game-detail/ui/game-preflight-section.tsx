@@ -1,4 +1,4 @@
-import { VStack } from "@roll-and-call/ui";
+import { Grid, VStack } from "@roll-and-call/ui";
 
 import { GAME_TAG, gameTagLabel } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
@@ -16,7 +16,7 @@ interface GamePreflightSectionProps {
 // 06에서 받은 값을 신청 판단 순서대로 읽힌다 — 장르 · 트리거 · 주의 사항 · 사용 플랫폼 · AI 이미지.
 export function GamePreflightSection({ game }: GamePreflightSectionProps) {
   return (
-    <VStack gap="250">
+    <VStack gap="175">
       {game.genres.length > 0 && (
         <GameTagBlock label={gameTagLabel[GAME_TAG.genres]} tags={game.genres} tone="neutral" />
       )}
@@ -29,10 +29,12 @@ export function GamePreflightSection({ game }: GamePreflightSectionProps) {
         />
       )}
       {game.notice && <GameNoticeBlock notice={game.notice} />}
-      {game.platforms.length > 0 && (
-        <GameTagBlock label={gameTagLabel[GAME_TAG.platforms]} tags={game.platforms} />
-      )}
-      {game.aiImage ? <AiImageBlock label="사용" /> : <AiImageBlock label="사용 안 함" />}
+      <Grid cols={2} gap="150">
+        {game.platforms.length > 0 && (
+          <GameTagBlock label={gameTagLabel[GAME_TAG.platforms]} tags={game.platforms} />
+        )}
+        <AiImageBlock label={game.aiImage ? "사용" : "사용 안 함"} />
+      </Grid>
     </VStack>
   );
 }

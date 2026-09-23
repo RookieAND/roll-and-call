@@ -7,10 +7,10 @@ interface RosterEmptyNoteProps {
 export function RosterEmptyNote({ text }: RosterEmptyNoteProps) {
   return (
     <Text
-      typography="body3"
-      foreground="muted"
+      typography="body4"
+      foreground="hint"
       render={<p />}
-      className="rounded-700 border border-dashed border-gray-300 p-200 text-center"
+      className="rounded-400 border border-dashed border-gray-300 p-150 text-center"
     >
       {text}
     </Text>

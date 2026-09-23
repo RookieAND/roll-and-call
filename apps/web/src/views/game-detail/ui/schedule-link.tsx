@@ -1,5 +1,4 @@
-import { Button, cn, type ButtonProps } from "@roll-and-call/ui";
-import { ChevronRight } from "lucide-react";
+import { Button, type ButtonProps } from "@roll-and-call/ui";
 import Link from "next/link";
 
 interface ScheduleLinkProps {
@@ -16,9 +15,9 @@ export function ScheduleLink({ gameId, label = "일정 조율", size, className 
       render={<Link href={`/games/${gameId}/schedule`} />}
       variant="tinted"
       size={size}
-      className={cn("gap-075 font-bold", className)}
+      className={className}
     >
-      {label} <ChevronRight size={16} aria-hidden />
+      {label}
     </Button>
   );
 }

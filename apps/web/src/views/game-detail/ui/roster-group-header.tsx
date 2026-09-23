@@ -10,11 +10,11 @@ interface RosterGroupHeaderProps {
 
 export function RosterGroupHeader({ label, count, capacity, action }: RosterGroupHeaderProps) {
   return (
-    <HStack align="center" gap="100">
-      <Text typography="heading3" render={<h2 />}>
+    <HStack align="baseline" gap="075">
+      <Text typography="subtitle2" foreground="muted" render={<h2 />}>
         {label}
       </Text>
-      <Text numeric typography="heading3" weight="extrabold">
+      <Text numeric typography="heading2">
         {count}명
       </Text>
       {capacity !== undefined && <Badge className="tabular-nums">정원 {capacity}명</Badge>}

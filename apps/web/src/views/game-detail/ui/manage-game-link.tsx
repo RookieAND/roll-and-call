@@ -1,5 +1,4 @@
 import { Button } from "@roll-and-call/ui";
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 interface ManageGameLinkProps {
@@ -15,7 +14,6 @@ export function ManageGameLink({ gameId }: ManageGameLinkProps) {
       className="w-full"
     >
       운영 관리
-      <ChevronRight size={15} aria-hidden />
     </Button>
   );
 }

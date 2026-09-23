@@ -1,6 +1,11 @@
-import { Badge, HStack, Text, cn } from "@roll-and-call/ui";
+import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { GameStatusBadge, type GameStatus, type ScheduleLine } from "@/entities/game";
+import {
+  GameScheduleRow,
+  GameStatusBadge,
+  type GameStatus,
+  type ScheduleLine,
+} from "@/entities/game";
 
 interface GameDetailHeaderProps {
   title: string;
@@ -11,26 +16,19 @@ interface GameDetailHeaderProps {
 // 마감은 배지가 맡고, 상태 줄은 일정만 말한다.
 export function GameDetailHeader({ title, status, statusLine }: GameDetailHeaderProps) {
   return (
-    <div>
+    <VStack gap="100">
       <HStack justify="between" align="start" gap="100">
-        <Text typography="heading1" render={<h1 />}>
+        <Text typography="heading1" render={<h1 />} className="min-w-0 flex-1">
           {title}
         </Text>
-        <HStack align="center" gap="050" className="mt-025 shrink-0">
-          {statusLine.deadlineShort && (
-            <Badge className="tabular-nums">{statusLine.deadlineShort}</Badge>
-          )}
+        {statusLine.deadlineShort && (
+          <Badge className="mt-025 tabular-nums">{statusLine.deadlineShort}</Badge>
+        )}
+        <span className="mt-025">
           <GameStatusBadge status={status} />
-        </HStack>
+        </span>
       </HStack>
-      <Text
-        typography="body3"
-        foreground="hint"
-        render={<p />}
-        className={cn("mt-050 font-semibold", statusLine.confirmed && "text-success-700")}
-      >
-        {statusLine.text}
-      </Text>
-    </div>
+      <GameScheduleRow line={statusLine} scale="header" />
+    </VStack>
   );
 }
