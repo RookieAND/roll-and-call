@@ -103,6 +103,7 @@
   --color-discord-dark: var(--rc-color-bg-discord-hover);
   --color-canvas: var(--rc-color-bg-canvas-sunken);
   --color-toast: var(--rc-color-bg-toast);
+  --color-toast-ink: var(--rc-color-fg-on-toast);
   --color-surface: var(--rc-color-bg-canvas-base);
 
   --color-danger-50: var(--rc-color-bg-danger-weak);
@@ -338,6 +339,7 @@
   --rc-color-bg-discord-hover: var(--rc-color-discord-600);
   --rc-color-bg-spark: var(--rc-color-amber-300);
   --rc-color-bg-toast: var(--rc-color-gray-900);
+  --rc-color-fg-on-toast: var(--rc-color-gray-000);
 
   --rc-color-fg-normal: var(--rc-color-gray-975);
   --rc-color-fg-muted: var(--rc-color-gray-600);
@@ -441,7 +443,9 @@
   --rc-color-bg-discord: var(--rc-color-discord-500);
   --rc-color-bg-discord-hover: var(--rc-color-discord-600);
   --rc-color-bg-spark: var(--rc-color-amber-300);
-  --rc-color-bg-toast: var(--rc-color-gray-050);
+  /* 다크에서 토스트를 뒤집으면 흰 덩어리가 튄다. 캔버스보다 한 단 밝은 면에 밝은 글씨로 띄운다. */
+  --rc-color-bg-toast: var(--rc-color-gray-800);
+  --rc-color-fg-on-toast: var(--rc-color-gray-050);
 
   --rc-color-fg-normal: var(--rc-color-gray-050);
   --rc-color-fg-muted: var(--rc-color-gray-300);
@@ -559,6 +563,7 @@
   --color-discord-dark: var(--rc-color-bg-discord-hover);
   --color-canvas: var(--rc-color-bg-canvas-sunken);
   --color-toast: var(--rc-color-bg-toast);
+  --color-toast-ink: var(--rc-color-fg-on-toast);
   --color-surface: var(--rc-color-bg-canvas-base);
 
   --color-danger-50: var(--rc-color-bg-danger-weak);
