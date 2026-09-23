@@ -1,8 +1,8 @@
-import { Callout, Container } from "@roll-and-call/ui";
+import { Callout, Container, HStack } from "@roll-and-call/ui";
 
 import { LoginButton } from "@/features/auth";
 import { getCurrentSessionUser, getMonthSessions } from "@/shared/server";
-import { AppBar, HelpButton } from "@/shared/ui";
+import { AppBar, HelpButton, ThemeToggleButton } from "@/shared/ui";
 
 import { buildMonthRecord } from "../model/build-month-record";
 import { groupSessionsByDay } from "../model/group-sessions-by-day";
@@ -27,7 +27,14 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
         title="롤앤콜"
         brand
         action={
-          user ? <HelpButton /> : <LoginButton next="/" className="h-[34px] px-150 text-body3" />
+          user ? (
+            <HelpButton />
+          ) : (
+            <HStack align="center" gap="050">
+              <ThemeToggleButton />
+              <LoginButton next="/" className="h-[34px] px-150 text-body3" />
+            </HStack>
+          )
         }
       />
       <Container size="sm" className="px-0">

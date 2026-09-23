@@ -1,5 +1,4 @@
-import { Button, Container } from "@roll-and-call/ui";
-import Link from "next/link";
+import { Container } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
 import {
@@ -9,9 +8,9 @@ import {
   isSessionEnded,
   splitRoster,
 } from "@/entities/game";
-import { LoginRequired } from "@/features/auth";
+import { GmOnlyNotice } from "@/features/auth";
 import { getCurrentUser, getGameParticipants } from "@/shared/server";
-import { AppBar, EmptyState } from "@/shared/ui";
+import { AppBar } from "@/shared/ui";
 
 import { ATTENDANCE_STAGE } from "../model/attendance-stage";
 import { summarizeRoster } from "../model/roster-summary";
@@ -23,30 +22,17 @@ export async function ManageParticipantsView({ id }: { id: string }) {
   if (!data) notFound();
   const { game, availableUserIds } = data;
 
-  // 조용히 튕기지 않는다: 비로그인·비GM에게 그 자리에서 안내한다.
   if (!user || user.id !== game.gmId) {
     return (
       <>
         <AppBar back={`/games/${id}`} title="참여자 관리" />
         <Container size="sm">
           <div className="py-300">
-            {user ? (
-              <EmptyState
-                title="GM만 볼 수 있는 화면입니다"
-                description="이 구인글의 참여자 관리는 GM만 열 수 있습니다."
-                action={
-                  <Button
-                    render={<Link href={`/games/${id}`} />}
-                    variant="outline"
-                    className="h-11 w-full"
-                  >
-                    구인 상세로 돌아가기
-                  </Button>
-                }
-              />
-            ) : (
-              <LoginRequired />
-            )}
+            <GmOnlyNotice
+              gameId={id}
+              signedIn={!!user}
+              description="이 구인글의 참여자 관리는 GM만 열 수 있습니다."
+            />
           </div>
         </Container>
       </>

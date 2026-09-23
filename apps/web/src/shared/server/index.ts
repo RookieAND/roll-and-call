@@ -19,7 +19,6 @@ export { getGamesByGm } from "./db/get-games-by-gm";
 export { getJoinedGames } from "./db/get-joined-games";
 export { getMonthSessions, type MonthSessionRow } from "./db/get-month-sessions";
 export { getGameById, type GameDetailData } from "./db/get-game-by-id";
-export { requireGmGame } from "./auth/require-gm-game";
 export { getGameParticipants } from "./db/get-game-participants";
 export { getRespondedGameIds } from "./db/get-responded-game-ids";
 export { getResponseCounts } from "./db/get-response-counts";

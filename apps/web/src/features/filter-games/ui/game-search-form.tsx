@@ -54,7 +54,7 @@ export function GameSearchForm({ filter }: GameSearchFormProps) {
         placeholder="게임명 검색"
         aria-label="게임명 검색"
         enterKeyHint="search"
-        className="pl-[36px] pr-11"
+        className="pl-9 pr-11"
       />
       <HStack align="center" className="absolute inset-y-0 right-0">
         {pending ? (
