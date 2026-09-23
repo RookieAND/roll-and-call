@@ -15,6 +15,7 @@ import { GameList } from "./game-list";
 import { GameListSkeleton } from "./game-list-skeleton";
 import { GamesResultRow } from "./games-result-row";
 import { GamesToolbar } from "./games-toolbar";
+import { PastGameListSkeleton } from "./past-game-list-skeleton";
 
 interface GameBoardProps {
   page?: number;
@@ -29,6 +30,7 @@ export async function GameBoard({ page = 1, filter }: GameBoardProps) {
   ]);
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
   const count = statusCounts({ counts, tab })[filter.status ?? GAME_STATUS_FILTER_DEFAULT];
+  const listSkeleton = tab === GAME_TAB.past ? <PastGameListSkeleton /> : <GameListSkeleton />;
   const key = `${filter.q ?? ""}|${filter.sort ?? ""}|${tab}|${filter.status ?? ""}|${page}`;
 
   return (
@@ -36,7 +38,7 @@ export async function GameBoard({ page = 1, filter }: GameBoardProps) {
       <GamesToolbar filter={filter} counts={counts} tabCounts={allCounts ?? counts} />
       <VStack gap="150" className="pt-150 pb-200">
         <GamesResultRow filter={filter} count={count} />
-        <Suspense key={key} fallback={<GameListSkeleton />}>
+        <Suspense key={key} fallback={listSkeleton}>
           <GameList promise={gamesPage} page={page} filter={filter} />
         </Suspense>
         <CrossTabHint
