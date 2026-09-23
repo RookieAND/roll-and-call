@@ -12,11 +12,11 @@ interface ErrorScreenProps {
 export function ErrorScreen({ title, description, action }: ErrorScreenProps) {
   return (
     <VStack gap="250" className="min-h-[70vh] items-center justify-center px-250 text-center">
-      <Image src="/empty-states/empty-error.png" alt="" width={140} height={140} aria-hidden />
+      <Image src="/empty-states/empty-error.png" alt="" width={140} height={140} aria-hidden className="dark:opacity-80" />
       <VStack gap="050" className="items-center">
         <Text typography="heading3">{title}</Text>
         {description && (
-          <Text typography="body2" foreground="muted">
+          <Text typography="body4" foreground="muted" className="[text-wrap:pretty]">
             {description}
           </Text>
         )}

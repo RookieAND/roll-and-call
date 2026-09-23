@@ -1,35 +1,21 @@
-import { HStack, Text } from "@roll-and-call/ui";
-import type { LucideIcon } from "lucide-react";
+import { Callout, type CalloutPalette } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
-
-import { StatusNotice } from "@/shared/ui";
 
 interface ActionNoticeProps {
   title?: ReactNode;
-  tone?: "normal" | "primary" | "success" | "warning" | "danger";
-  icon?: LucideIcon;
+  colorPalette?: CalloutPalette;
   children: ReactNode;
 }
 
-// 액션 바의 상태 카드 — 굵은 한 줄(선택)과 설명. 아이콘은 제목 색을 따른다.
-export function ActionNotice({ title, tone = "normal", icon: Icon, children }: ActionNoticeProps) {
+// 액션 바의 상태 카드. Callout sm으로 대체한다.
+export function ActionNotice({ title, colorPalette = "gray", children }: ActionNoticeProps) {
   return (
-    <StatusNotice tone="muted" className="text-left">
-      {title && (
-        <Text
-          typography="body2"
-          weight="bold"
-          foreground={tone}
-          numeric
-          render={<HStack align="center" gap="075" className="mb-075" />}
-        >
-          {Icon && <Icon size={15} strokeWidth={2.4} className="shrink-0" aria-hidden />}
-          {title}
-        </Text>
-      )}
-      <Text typography="body3" foreground="muted" render={<p />}>
-        {children}
-      </Text>
-    </StatusNotice>
+    <Callout.Root colorPalette={colorPalette} size="sm">
+      <Callout.Icon />
+      <div>
+        {title && <Callout.Title>{title}</Callout.Title>}
+        <Callout.Description>{children}</Callout.Description>
+      </div>
+    </Callout.Root>
   );
 }

@@ -15,6 +15,8 @@ export interface SelectRootProps {
   children: ReactNode;
 }
 
+// defaultValue가 첫 렌더 이후에 도착하면(비동기 데이터) base-ui가 무시한다.
+// 비제어 모드일 때 defaultValue가 바뀌면 key를 갈아 끼워 다시 마운트시킨다.
 export function SelectRoot({
   value,
   defaultValue,
@@ -24,9 +26,11 @@ export function SelectRoot({
   disabled,
   children,
 }: SelectRootProps) {
+  const isControlled = value !== undefined;
   return (
     <SelectItemsContext.Provider value={items}>
       <BaseSelect.Root
+        key={isControlled ? undefined : defaultValue}
         items={items}
         value={value}
         defaultValue={defaultValue}

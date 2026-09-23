@@ -50,7 +50,8 @@ export function ConfirmDialog({
           <Button
             ref={cancelRef}
             variant="outline"
-            className="h-11 flex-1"
+            size="lg"
+            className="flex-1"
             disabled={pending}
             onClick={() => onOpenChange(false)}
           >
@@ -58,7 +59,8 @@ export function ConfirmDialog({
           </Button>
           <Button
             colorPalette={confirmPalette}
-            className="h-11 flex-1"
+            size="lg"
+            className="flex-1"
             loading={pending}
             disabled={pending}
             onClick={onConfirm}

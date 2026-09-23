@@ -1,7 +1,7 @@
 "use client";
 
 import { HStack, IconButton, TextInput } from "@roll-and-call/ui";
-import { Loader2, X } from "lucide-react";
+import { Loader2, Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 
@@ -42,6 +42,11 @@ export function GameSearchForm({ filter }: GameSearchFormProps) {
         search(value.trim());
       }}
     >
+      <Search
+        size={16}
+        aria-hidden
+        className="pointer-events-none absolute top-1/2 left-150 z-10 -translate-y-1/2 text-hint"
+      />
       <TextInput
         name="q"
         value={value}
@@ -49,7 +54,7 @@ export function GameSearchForm({ filter }: GameSearchFormProps) {
         placeholder="게임명 검색"
         aria-label="게임명 검색"
         enterKeyHint="search"
-        className="pr-11"
+        className="pl-[36px] pr-11"
       />
       <HStack align="center" className="absolute inset-y-0 right-0">
         {pending ? (

@@ -1,7 +1,5 @@
 import { VStack } from "@roll-and-call/ui";
-import { LockKeyhole } from "lucide-react";
 
-import { ACTION_PRIMARY_CLASS } from "./action-class-names";
 import { ActionNotice } from "./action-notice";
 import { SimilarGamesLink } from "./similar-games-link";
 
@@ -9,10 +7,10 @@ import { SimilarGamesLink } from "./similar-games-link";
 export function ClosedActions() {
   return (
     <VStack gap="125">
-      <ActionNotice title="모집이 끝났습니다" icon={LockKeyhole}>
+      <ActionNotice title="모집이 끝났습니다" colorPalette="gray">
         비슷한 조건의 다른 구인글을 찾아보세요.
       </ActionNotice>
-      <SimilarGamesLink className={ACTION_PRIMARY_CLASS} />
+      <SimilarGamesLink size="lg" className="w-full" />
     </VStack>
   );
 }

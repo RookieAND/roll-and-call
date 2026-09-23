@@ -48,7 +48,6 @@ export function FloatingBarContent({
     observer.observe(node);
     return () => {
       observer.disconnect();
-      setHeight(0);
       root.style.removeProperty("--rc-floating-bar-height");
     };
   }, [setHeight]);

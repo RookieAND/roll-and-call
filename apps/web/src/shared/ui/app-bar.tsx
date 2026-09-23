@@ -29,7 +29,7 @@ export function AppBar({ title, brand, back, onBack, backIcon = "back", action }
       gap={hasBack ? "050" : "075"}
       render={<header />}
       className={cn(
-        "sticky top-0 z-20 h-[52px] border-b border-gray-200 bg-surface/90 backdrop-blur",
+        "sticky top-0 z-(--rc-z-sticky) h-[--rc-size-appbar] border-b border-gray-200 bg-surface/90 backdrop-blur",
         hasBack ? "px-125" : "px-175",
       )}
     >

@@ -2,7 +2,6 @@ import { VStack } from "@roll-and-call/ui";
 
 import { LoginButton } from "@/features/auth";
 
-import { ACTION_PRIMARY_CLASS } from "./action-class-names";
 import { ActionHint } from "./action-hint";
 
 interface AnonActionsProps {
@@ -17,7 +16,7 @@ export function AnonActions({ isLottery }: AnonActionsProps) {
   return (
     <VStack gap="125">
       <ActionHint>{hint}</ActionHint>
-      <LoginButton className={ACTION_PRIMARY_CLASS} />
+      <LoginButton className="w-full" />
     </VStack>
   );
 }

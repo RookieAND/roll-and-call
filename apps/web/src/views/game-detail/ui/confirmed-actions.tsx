@@ -1,9 +1,7 @@
 import { VStack } from "@roll-and-call/ui";
-import { Check } from "lucide-react";
 
 import { formatDateTime } from "@/shared/lib";
 
-import { ACTION_PAIR_CLASS } from "./action-class-names";
 import { ActionNotice } from "./action-notice";
 import { ActionPair } from "./action-pair";
 import { DrawResultLink } from "./draw-result-link";
@@ -29,20 +27,17 @@ export function ConfirmedActions({
     <VStack gap="125">
       <ActionNotice
         title={`${formatDateTime(confirmedAt)}으로 확정됐습니다`}
-        tone="success"
-        icon={Check}
+        colorPalette="success"
       >
-        일정이 확정되어 신청을 취소할 수 없습니다.
-        <br />
-        참여를 취소하려면 GM에게 직접 문의해 주세요.
+        {"일정이 확정되어 신청을 취소할 수 없습니다.\n참여를 취소하려면 GM에게 직접 문의해 주세요."}
       </ActionNotice>
       {hasActions && (
         <ActionPair>
           {drawn && (
-            <DrawResultLink gameId={gameId} variant="outline" className={ACTION_PAIR_CLASS} />
+            <DrawResultLink gameId={gameId} variant="outline" size="lg" className="flex-1" />
           )}
           {canSchedule && (
-            <ScheduleLink gameId={gameId} label="일정 보기" className={ACTION_PAIR_CLASS} />
+            <ScheduleLink gameId={gameId} label="일정 보기" size="lg" className="flex-1" />
           )}
         </ActionPair>
       )}

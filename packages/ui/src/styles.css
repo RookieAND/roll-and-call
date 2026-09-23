@@ -129,16 +129,16 @@
   --color-notice-border: var(--rc-color-border-notice);
   --color-notice-ink: var(--rc-color-fg-notice);
 
-  --color-rank-gold: var(--rc-legacy-rank-gold);
-  --color-rank-bronze: var(--rc-legacy-rank-bronze);
+  --color-rank-gold: var(--rc-color-fg-rank-gold);
+  --color-rank-bronze: var(--rc-color-fg-rank-bronze);
 
-  --color-critical-bg: var(--rc-legacy-critical-bg);
-  --color-critical-ink: var(--rc-legacy-critical-ink);
-  --color-critical-sparkle: var(--rc-legacy-critical-sparkle);
-  --color-critical-glow: var(--rc-legacy-critical-glow);
-  --color-extreme-bg: var(--rc-legacy-extreme-bg);
-  --color-extreme-border: var(--rc-legacy-extreme-border);
-  --color-extreme-ink: var(--rc-legacy-extreme-ink);
+  --color-critical-bg: var(--rc-color-bg-highlight-critical);
+  --color-critical-ink: var(--rc-color-fg-highlight-critical);
+  --color-critical-sparkle: var(--rc-color-fg-highlight-sparkle);
+  --color-critical-glow: var(--rc-color-shadow-highlight-glow);
+  --color-extreme-bg: var(--rc-color-bg-highlight-extreme);
+  --color-extreme-border: var(--rc-color-border-highlight-extreme);
+  --color-extreme-ink: var(--rc-color-fg-highlight-extreme);
 
   --color-saturday: var(--rc-color-data-blue-ink);
 
@@ -392,15 +392,26 @@
   --rc-legacy-tinted-bg-hover: var(--rc-color-indigo-100);
   --rc-legacy-danger-100: var(--rc-color-red-100);
   --rc-legacy-danger-300: var(--rc-color-red-200);
-  --rc-legacy-rank-gold: var(--rc-color-gold-700);
-  --rc-legacy-rank-bronze: #9a5b2e;
-  --rc-legacy-critical-bg: var(--rc-color-indigo-500);
-  --rc-legacy-critical-ink: var(--rc-color-gray-000);
-  --rc-legacy-critical-sparkle: var(--rc-color-indigo-500);
-  --rc-legacy-critical-glow: rgb(79 70 229);
-  --rc-legacy-extreme-bg: var(--rc-color-indigo-100);
-  --rc-legacy-extreme-border: var(--rc-color-indigo-200);
-  --rc-legacy-extreme-ink: var(--rc-color-indigo-600);
+  /* 역할 토큰 — 추첨 극단값·순위 (--rc-legacy-* 승격) */
+  --rc-color-bg-highlight-extreme: var(--rc-color-indigo-100);
+  --rc-color-border-highlight-extreme: var(--rc-color-indigo-200);
+  --rc-color-fg-highlight-extreme: var(--rc-color-indigo-600);
+  --rc-color-bg-highlight-critical: var(--rc-color-indigo-500);
+  --rc-color-fg-highlight-critical: var(--rc-color-gray-000);
+  --rc-color-fg-highlight-sparkle: var(--rc-color-indigo-500);
+  --rc-color-shadow-highlight-glow: rgb(79 70 229);
+  --rc-color-fg-rank-gold: var(--rc-color-gold-700);
+  --rc-color-fg-rank-bronze: #9a5b2e;
+
+  --rc-legacy-rank-gold: var(--rc-color-fg-rank-gold);
+  --rc-legacy-rank-bronze: var(--rc-color-fg-rank-bronze);
+  --rc-legacy-critical-bg: var(--rc-color-bg-highlight-critical);
+  --rc-legacy-critical-ink: var(--rc-color-fg-highlight-critical);
+  --rc-legacy-critical-sparkle: var(--rc-color-fg-highlight-sparkle);
+  --rc-legacy-critical-glow: var(--rc-color-shadow-highlight-glow);
+  --rc-legacy-extreme-bg: var(--rc-color-bg-highlight-extreme);
+  --rc-legacy-extreme-border: var(--rc-color-border-highlight-extreme);
+  --rc-legacy-extreme-ink: var(--rc-color-fg-highlight-extreme);
 
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #eaecff 0%, #f6f6fb 44%, #ffffff 76%);
 }
@@ -484,22 +495,110 @@
   --rc-legacy-tinted-bg-hover: var(--rc-color-indigo-900);
   --rc-legacy-danger-100: var(--rc-color-red-900);
   --rc-legacy-danger-300: var(--rc-color-red-900);
-  --rc-legacy-rank-gold: var(--rc-color-gold-350);
-  --rc-legacy-rank-bronze: #c9926a;
-  --rc-legacy-critical-bg: var(--rc-color-amber-300);
-  --rc-legacy-critical-ink: var(--rc-color-gold-975);
-  --rc-legacy-critical-sparkle: var(--rc-color-gold-300);
-  --rc-legacy-critical-glow: rgb(251 191 36);
-  --rc-legacy-extreme-bg: rgb(251 191 36 / 0.16);
-  --rc-legacy-extreme-border: rgb(251 191 36 / 0.42);
-  --rc-legacy-extreme-ink: var(--rc-color-amber-300);
+  --rc-color-bg-highlight-extreme: rgb(251 191 36 / 0.16);
+  --rc-color-border-highlight-extreme: rgb(251 191 36 / 0.42);
+  --rc-color-fg-highlight-extreme: var(--rc-color-amber-300);
+  --rc-color-bg-highlight-critical: var(--rc-color-amber-300);
+  --rc-color-fg-highlight-critical: var(--rc-color-gold-975);
+  --rc-color-fg-highlight-sparkle: var(--rc-color-gold-300);
+  --rc-color-shadow-highlight-glow: rgb(251 191 36);
+  --rc-color-fg-rank-gold: var(--rc-color-gold-350);
+  --rc-color-fg-rank-bronze: #c9926a;
+
+  --rc-legacy-rank-gold: var(--rc-color-fg-rank-gold);
+  --rc-legacy-rank-bronze: var(--rc-color-fg-rank-bronze);
+  --rc-legacy-critical-bg: var(--rc-color-bg-highlight-critical);
+  --rc-legacy-critical-ink: var(--rc-color-fg-highlight-critical);
+  --rc-legacy-critical-sparkle: var(--rc-color-fg-highlight-sparkle);
+  --rc-legacy-critical-glow: var(--rc-color-shadow-highlight-glow);
+  --rc-legacy-extreme-bg: var(--rc-color-bg-highlight-extreme);
+  --rc-legacy-extreme-border: var(--rc-color-border-highlight-extreme);
+  --rc-legacy-extreme-ink: var(--rc-color-fg-highlight-extreme);
 
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #221f42 0%, #17161f 46%, #131318 80%);
 }
 
-/* 앱이 인라인 var()로 읽는 히트맵 이름. 스코프마다 다시 걸어야 중첩 테마에서도 뒤집힌다. */
+/* 부분 테마 보정: @theme 별칭은 :root에서 한 번만 계산되므로, [data-theme] 상자에서
+   Tailwind 유틸리티(bg-surface, text-gray-600 등)가 뒤집히게 하려면 여기서 다시 선언한다.
+   --rc-color-heat-*는 처음부터 이렇게 되어 있었다. 나머지도 같은 패턴으로 넓힌다. */
 :root,
 [data-theme] {
+  --color-primary-50: var(--rc-color-bg-primary-weak);
+  --color-primary-100: var(--rc-color-bg-primary-weak);
+  --color-primary-200: var(--rc-color-border-primary);
+  --color-primary-300: var(--rc-color-indigo-300);
+  --color-primary-400: var(--rc-color-indigo-400);
+  --color-primary-500: var(--rc-color-indigo-450);
+  --color-primary-600: var(--rc-color-bg-primary);
+  --color-primary-700: var(--rc-color-bg-primary-hover);
+  --color-primary-800: var(--rc-color-indigo-700);
+  --color-primary-900: var(--rc-color-indigo-800);
+
+  --color-success-50: var(--rc-color-bg-success-weak);
+  --color-success-100: var(--rc-color-bg-success-weak);
+  --color-success-200: var(--rc-color-border-success);
+  --color-success-600: var(--rc-color-green-500);
+  --color-success-700: var(--rc-color-fg-success);
+  --color-success-800: var(--rc-color-fg-success-strong);
+
+  --color-gray-50: var(--rc-color-bg-canvas-raised);
+  --color-gray-100: var(--rc-color-bg-secondary);
+  --color-gray-200: var(--rc-color-border-normal);
+  --color-gray-300: var(--rc-color-border-strong);
+  --color-gray-400: var(--rc-legacy-gray-400);
+  --color-gray-500: var(--rc-legacy-gray-500);
+  --color-gray-600: var(--rc-color-fg-muted);
+  --color-gray-700: var(--rc-legacy-gray-700);
+  --color-gray-800: var(--rc-legacy-gray-800);
+  --color-gray-900: var(--rc-color-fg-normal);
+
+  --color-discord: var(--rc-color-bg-discord);
+  --color-discord-dark: var(--rc-color-bg-discord-hover);
+  --color-canvas: var(--rc-color-bg-canvas-sunken);
+  --color-toast: var(--rc-color-bg-toast);
+  --color-surface: var(--rc-color-bg-canvas-base);
+
+  --color-danger-50: var(--rc-color-bg-danger-weak);
+  --color-danger-100: var(--rc-legacy-danger-100);
+  --color-danger-200: var(--rc-color-border-danger);
+  --color-danger-300: var(--rc-legacy-danger-300);
+  --color-danger-400: var(--rc-color-border-danger);
+  --color-danger-600: var(--rc-color-fg-danger);
+  --color-danger-solid: var(--rc-color-bg-danger);
+  --color-success-solid: var(--rc-color-bg-success);
+
+  --color-warning-50: var(--rc-color-bg-warning-weak);
+  --color-warning-600: var(--rc-color-fg-warning);
+
+  --color-hint: var(--rc-color-fg-hint);
+  --color-dim: var(--rc-color-bg-canvas-dim);
+  --color-primary-ink: var(--rc-legacy-primary-ink);
+  --color-tinted-bg: var(--rc-color-bg-primary-weakest);
+  --color-tinted-bg-hover: var(--rc-legacy-tinted-bg-hover);
+  --color-tinted-border: var(--rc-color-border-primary);
+  --color-tinted-ink: var(--rc-color-fg-primary);
+
+  --color-notice-bg: var(--rc-color-bg-notice-weak);
+  --color-notice-border: var(--rc-color-border-notice);
+  --color-notice-ink: var(--rc-color-fg-notice);
+
+  --color-rank-gold: var(--rc-color-fg-rank-gold);
+  --color-rank-bronze: var(--rc-color-fg-rank-bronze);
+
+  --color-critical-bg: var(--rc-color-bg-highlight-critical);
+  --color-critical-ink: var(--rc-color-fg-highlight-critical);
+  --color-critical-sparkle: var(--rc-color-fg-highlight-sparkle);
+  --color-critical-glow: var(--rc-color-shadow-highlight-glow);
+  --color-extreme-bg: var(--rc-color-bg-highlight-extreme);
+  --color-extreme-border: var(--rc-color-border-highlight-extreme);
+  --color-extreme-ink: var(--rc-color-fg-highlight-extreme);
+
+  --color-saturday: var(--rc-color-data-blue-ink);
+  --color-on-primary: var(--rc-color-fg-on-primary);
+  --color-inverse: var(--rc-color-fg-inverse);
+  --color-focus: var(--rc-color-border-primary-strong);
+  --color-gm: var(--rc-color-fg-gm);
+
   --color-heat-0: var(--rc-color-bg-canvas-base);
   --color-heat-1: var(--rc-color-heat-1);
   --color-heat-2: var(--rc-color-heat-2);

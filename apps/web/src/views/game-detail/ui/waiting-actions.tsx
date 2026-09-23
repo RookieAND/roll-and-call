@@ -1,10 +1,8 @@
 import { VStack } from "@roll-and-call/ui";
-import { Clock, Dices, Users } from "lucide-react";
 
 import { LeaveGameButton } from "@/features/join-game";
 import { formatDate } from "@/shared/lib";
 
-import { ACTION_PAIR_CLASS, ACTION_PRIMARY_CLASS } from "./action-class-names";
 import { ActionNotice } from "./action-notice";
 import { ActionPair } from "./action-pair";
 import { DrawResultLink } from "./draw-result-link";
@@ -30,12 +28,12 @@ export function WaitingActions({
   if (isLottery && !drawn) {
     return (
       <VStack gap="125">
-        <ActionNotice title="참여 신청이 접수되었습니다" tone="primary" icon={Clock}>
+        <ActionNotice title="참여 신청이 접수되었습니다" colorPalette="primary">
           {expired
             ? "모집이 끝나 GM이 추첨하면 결과는 알림으로 알려드립니다."
             : `${formatDate(endDate)} 모집이 끝나면 GM이 추첨하고, 결과는 알림으로 알려드립니다.`}
         </ActionNotice>
-        <LeaveGameButton gameId={gameId} className={ACTION_PRIMARY_CLASS}>
+        <LeaveGameButton gameId={gameId} className="w-full">
           신청 취소
         </LeaveGameButton>
       </VStack>
@@ -43,19 +41,18 @@ export function WaitingActions({
   }
 
   const title = waitlistRank === null ? "대기로 접수됐습니다" : `현재 대기 ${waitlistRank}번입니다`;
-  const icon = isLottery ? Dices : Users;
 
   return (
     <VStack gap="125">
-      <ActionNotice title={title} icon={icon}>
+      <ActionNotice title={title} colorPalette="gray">
         자리가 나면 순서대로 확정되고 알림이 갑니다.
       </ActionNotice>
       <ActionPair>
-        <LeaveGameButton gameId={gameId} className={ACTION_PAIR_CLASS}>
+        <LeaveGameButton gameId={gameId} className="flex-1">
           대기 취소
         </LeaveGameButton>
         {isLottery && (
-          <DrawResultLink gameId={gameId} variant="tinted" className={ACTION_PAIR_CLASS} />
+          <DrawResultLink gameId={gameId} variant="tinted" size="lg" className="flex-1" />
         )}
       </ActionPair>
     </VStack>

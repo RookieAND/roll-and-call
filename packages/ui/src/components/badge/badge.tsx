@@ -6,7 +6,7 @@ import { resolveStateProp } from "../../lib/resolve-state-prop";
 import type { StateComponentProps } from "../../lib/state-props";
 
 const badge = cva(
-  "inline-flex items-center rounded-300 px-125 py-075 text-body4 font-bold leading-none",
+  "inline-flex shrink-0 items-center whitespace-nowrap rounded-300 px-125 py-075 text-body4 font-bold leading-none",
   {
     variants: {
       colorPalette: {

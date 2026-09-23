@@ -18,7 +18,7 @@ export function BottomNavTab({ href, label, Icon, dot }: BottomNavTabProps) {
   return (
     <Link href={href} className={`${BOTTOM_NAV_TAB_CLASS} text-hint`}>
       <NavIcon Icon={Icon} dot={dot} />
-      <Text typography="subtitle2" foreground="inherit" render={<span />}>
+      <Text typography="body4" weight="bold" foreground="inherit" render={<span />}>
         {label}
       </Text>
     </Link>

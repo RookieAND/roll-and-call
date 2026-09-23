@@ -2,7 +2,7 @@ import { cva } from "class-variance-authority";
 
 // variant는 모양, colorPalette는 색이다. 두 축을 곱해 한 벌씩 정한다.
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-100 rounded-500 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex shrink-0 items-center justify-center gap-100 whitespace-nowrap rounded-500 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: { solid: "", outline: "border", tinted: "border", ghost: "" },

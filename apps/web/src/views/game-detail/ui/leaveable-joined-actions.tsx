@@ -1,9 +1,7 @@
 import { VStack } from "@roll-and-call/ui";
-import { Check } from "lucide-react";
 
 import { LeaveGameButton } from "@/features/join-game";
 
-import { ACTION_PAIR_CLASS } from "./action-class-names";
 import { ActionNotice } from "./action-notice";
 import { ActionPair } from "./action-pair";
 import { ScheduleLink } from "./schedule-link";
@@ -20,14 +18,14 @@ export function LeaveableJoinedActions({ gameId, canSchedule }: LeaveableJoinedA
 
   return (
     <VStack gap="125">
-      <ActionNotice title="참여가 확정됐습니다" tone="success" icon={Check}>
+      <ActionNotice title="참여가 확정됐습니다" colorPalette="success">
         {description}
       </ActionNotice>
       <ActionPair>
-        <LeaveGameButton gameId={gameId} className={ACTION_PAIR_CLASS}>
+        <LeaveGameButton gameId={gameId} className="flex-1">
           신청 취소
         </LeaveGameButton>
-        {canSchedule && <ScheduleLink gameId={gameId} className={ACTION_PAIR_CLASS} />}
+        {canSchedule && <ScheduleLink gameId={gameId} size="lg" className="flex-1" />}
       </ActionPair>
     </VStack>
   );

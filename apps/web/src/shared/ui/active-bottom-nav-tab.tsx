@@ -9,9 +9,9 @@ import { NavIcon } from "./nav-icon";
 
 export function ActiveBottomNavTab({ href, label, Icon, dot }: BottomNavTabProps) {
   return (
-    <Link href={href} aria-current="page" className={`${BOTTOM_NAV_TAB_CLASS} text-primary-ink`}>
+    <Link href={href} aria-current="page" className={`${BOTTOM_NAV_TAB_CLASS} text-tinted-ink`}>
       <NavIcon Icon={Icon} dot={dot} />
-      <Text typography="subtitle2" foreground="inherit" render={<span />}>
+      <Text typography="body4" weight="bold" foreground="inherit" render={<span />}>
         {label}
       </Text>
     </Link>

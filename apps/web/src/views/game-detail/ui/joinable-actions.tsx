@@ -3,7 +3,6 @@ import { VStack } from "@roll-and-call/ui";
 import { JoinGameButton } from "@/features/join-game";
 import { formatDate } from "@/shared/lib";
 
-import { ACTION_PRIMARY_CLASS } from "./action-class-names";
 import { JoinHint } from "./join-hint";
 
 interface JoinableActionsProps {
@@ -32,7 +31,7 @@ export function JoinableActions({
   return (
     <VStack gap="125">
       <JoinHint>{joinHint}</JoinHint>
-      <JoinGameButton gameId={gameId} className={ACTION_PRIMARY_CLASS}>
+      <JoinGameButton gameId={gameId} className="w-full">
         {joinLabel}
       </JoinGameButton>
     </VStack>
