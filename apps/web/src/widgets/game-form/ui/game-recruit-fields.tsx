@@ -1,7 +1,6 @@
 "use client";
 
 import { Callout, Field, Stepper, VStack } from "@roll-and-call/ui";
-import { CircleAlert, Lock } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 
 import { RECRUIT_METHOD } from "@/entities/game";
@@ -57,9 +56,7 @@ export function GameRecruitFields({
         </Field.Root>
         {minPlayers > 1 && (
           <Callout.Root colorPalette="danger" size="sm">
-            <Callout.Icon>
-              <CircleAlert size={14} strokeWidth={2.2} />
-            </Callout.Icon>
+            <Callout.Icon />
             <Callout.Title>{`확정 참여자가 ${minPlayers}명이라 정원을 ${minPlayers}명보다 줄일 수 없습니다.`}</Callout.Title>
             <Callout.Description>
               줄이려면 참여자 관리에서 확정을 먼저 풀어주세요.
@@ -89,29 +86,32 @@ export function GameRecruitFields({
         />
       )}
 
-      <VStack gap="125">
+      <VStack gap="100">
         <RecruitMethodField
           value={method}
           locked={locked}
           onChange={(next) => setValue("recruitMethod", next, { shouldDirty: true })}
         />
 
-        {isLottery ? (
-          <Callout.Root size="sm">
-            <Callout.Icon>
-              <Lock size={14} strokeWidth={2.2} />
-            </Callout.Icon>
+        {!locked && isLottery && (
+          <Callout.Root colorPalette="gray" size="sm">
             <Callout.Description>
-              추첨에서는 대기 접수 설정을 쓰지 않습니다.
+              정원과 관계없이 신청을 받고, 마감 뒤 GM이 뽑습니다.
               <br />
               뽑히지 않은 신청자는 대기 명단에 순서대로 남습니다.
             </Callout.Description>
           </Callout.Root>
-        ) : (
-          <WaitlistField
-            value={watch("waitlistEnabled")}
-            onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
-          />
+        )}
+        {!locked && !isLottery && (
+          <>
+            <Callout.Root colorPalette="gray" size="sm">
+              <Callout.Description>신청한 순서대로 정원까지 바로 확정됩니다.</Callout.Description>
+            </Callout.Root>
+            <WaitlistField
+              value={watch("waitlistEnabled")}
+              onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
+            />
+          </>
         )}
       </VStack>
     </>

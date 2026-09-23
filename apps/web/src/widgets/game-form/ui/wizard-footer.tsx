@@ -37,20 +37,27 @@ export function WizardFooter({
         <Container size="md">
           <VStack gap="150">
             {isLastStep && error && (
-              <Callout.Root colorPalette="danger" className="whitespace-pre-line">
+              <Callout.Root colorPalette="danger" size="sm">
+                <Callout.Icon />
                 <Callout.Description>{error}</Callout.Description>
               </Callout.Root>
             )}
             <HStack gap="100" className="[&>*]:flex-1">
               {backLabel && (
-                <Button type="button" variant="outline" onClick={onBack} size="lg">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onBack}
+                  size="lg"
+                  disabled={pending}
+                >
                   {backLabel}
                 </Button>
               )}
               {/* key가 없으면 같은 DOM 버튼의 type만 submit으로 바뀌어, 마지막 단계로 넘어간 그
                   클릭이 곧바로 제출로 이어진다. */}
               {!isLastStep && <WizardNextButton key="next" onClick={onNext} />}
-              {isLastStep && pending && <WizardSavingButton key="submit" />}
+              {isLastStep && pending && <WizardSavingButton key="submit" label={submitLabel} />}
               {isLastStep && !pending && <WizardSubmitButton key="submit" label={submitLabel} />}
             </HStack>
           </VStack>

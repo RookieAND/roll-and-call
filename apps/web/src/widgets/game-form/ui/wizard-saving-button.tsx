@@ -2,10 +2,14 @@
 
 import { Button } from "@roll-and-call/ui";
 
-export function WizardSavingButton() {
+interface WizardSavingButtonProps {
+  label: string;
+}
+
+export function WizardSavingButton({ label }: WizardSavingButtonProps) {
   return (
     <Button type="submit" loading size="lg">
-      저장 중…
+      {label}
     </Button>
   );
 }

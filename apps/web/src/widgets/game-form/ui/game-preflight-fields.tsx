@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, Field, Grid, Textarea } from "@roll-and-call/ui";
+import { Field, SegmentedControl, Textarea } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "@/entities/game";
@@ -18,10 +18,7 @@ const TAG_PLACEHOLDER: Record<GameTagKey, string> = {
   [GAME_TAG.platforms]: "예: 디스코드, 코코포리아",
 };
 
-const AI_IMAGE_OPTIONS = [
-  { value: false, label: "사용 안 함" },
-  { value: true, label: "사용" },
-] as const;
+const AI_IMAGE = { off: "off", on: "on" } as const;
 
 const TAG_SUGGESTIONS: Record<GameTagKey, string[]> = {
   [GAME_TAG.genres]: ["호러", "미스터리", "판타지", "코미디"],
@@ -72,21 +69,18 @@ export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
       <Field.Root
         label="AI 이미지"
         required
+        counter="목록에는 나오지 않음"
         description="세션에서 GM과 플레이어가 AI 이미지를 쓸 수 있는지 정합니다."
         error={errors.aiImage?.message}
       >
-        <Grid cols={2} gap="100">
-          {AI_IMAGE_OPTIONS.map((option) => (
-            <Chip
-              key={option.label}
-              shape="block"
-              selected={aiImage === option.value}
-              onClick={() => setValue("aiImage", option.value, { shouldDirty: true })}
-            >
-              {option.label}
-            </Chip>
-          ))}
-        </Grid>
+        <SegmentedControl.Root
+          value={aiImage ? AI_IMAGE.on : AI_IMAGE.off}
+          onValueChange={(next) => setValue("aiImage", next === AI_IMAGE.on, { shouldDirty: true })}
+          aria-label="AI 이미지"
+        >
+          <SegmentedControl.Item value={AI_IMAGE.off}>사용 안 함</SegmentedControl.Item>
+          <SegmentedControl.Item value={AI_IMAGE.on}>사용</SegmentedControl.Item>
+        </SegmentedControl.Root>
       </Field.Root>
 
       <Field.Root

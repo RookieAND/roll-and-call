@@ -41,7 +41,7 @@ export function FixedSessionField({ form, notice }: FixedSessionFieldProps) {
         />
       </Field.Root>
       {notice && (
-        <Text typography="body4" render={<p />} className="font-semibold text-warning-600">
+        <Text typography="body4" weight="medium" foreground="warning" render={<p />}>
           {notice}
         </Text>
       )}

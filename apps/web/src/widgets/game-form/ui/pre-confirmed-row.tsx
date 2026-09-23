@@ -11,16 +11,17 @@ interface PreConfirmedRowProps {
 
 export function PreConfirmedRow({ player, onRemove }: PreConfirmedRowProps) {
   return (
-    <HStack align="center" gap="125" render={<li />} className="min-h-13 px-150 py-100">
+    <HStack align="center" gap="125" render={<li />} className="min-h-14 py-100 pr-100 pl-150">
       <ProfileRow
         name={player.username}
         avatarUrl={player.avatarUrl}
         subline={player.bio ?? EMPTY_BIO_TEXT}
+        sublineForeground="hint"
       />
       <IconButton
         variant="ghost"
         aria-label={`${player.username} 빼기`}
-        className="h-8 w-8 text-hint"
+        className="h-11 w-11 text-hint"
         onClick={onRemove}
       >
         <X size={15} strokeWidth={2.6} aria-hidden />

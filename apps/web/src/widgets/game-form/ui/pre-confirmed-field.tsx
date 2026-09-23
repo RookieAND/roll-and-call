@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
@@ -43,17 +43,18 @@ export function PreConfirmedField({
           직접 확정한 참여자
         </Text>
         {count > 0 && (
-          <Text numeric typography="body4" weight="bold" foreground="muted">
+          <Text numeric typography="body4" foreground="hint">
             {count}명
           </Text>
         )}
       </HStack>
 
       {count > 0 && (
-        <VStack
-          gap={0}
+        <Card.Root
+          padding="none"
+          radius={500}
           render={<ul />}
-          className="m-0 list-none divide-y divide-gray-100 overflow-hidden rounded-400 border border-gray-200 p-0"
+          className="m-0 list-none overflow-hidden p-0 [&>*+*]:border-t [&>*+*]:border-gray-200"
         >
           {players.map((player) => (
             <PreConfirmedRow
@@ -62,27 +63,21 @@ export function PreConfirmedField({
               onRemove={() => onRemove(player.userId)}
             />
           ))}
-        </VStack>
+        </Card.Root>
       )}
 
-      {/* ponytail: 시안의 점선 추가 버튼. Button에 dashed 변형이 없어 outline에 덧칠한다. */}
       <Button
         type="button"
-        variant="outline"
+        variant="tinted"
         onClick={() => setPicking(true)}
         disabled={openSeats === 0}
-        className="h-11 gap-075 rounded-400 border-dashed border-gray-300 text-subtitle2 font-bold text-primary-ink"
+        className="h-11 w-full"
       >
         <Plus size={15} strokeWidth={2.6} aria-hidden />
         참여자 추가
       </Button>
 
-      <Text
-        typography="body4"
-        foreground="hint"
-        render={<p />}
-        className="text-pretty leading-[1.55]"
-      >
+      <Text typography="body4" foreground="hint" render={<p />} className="text-pretty">
         {hint}
       </Text>
 

@@ -159,7 +159,13 @@ export function GameFormWizard({
         total={steps.length}
         pending={pending}
         submitLabel={submitLabel}
-        error={form.formState.errors.root?.message}
+        error={
+          form.formState.errors.root?.message ??
+          // 마감이 세션·조율 기간보다 늦은 교차 검증은 한 칸의 잘못이 아니라 제출 버튼 위에서 알린다.
+          (form.formState.errors.endDate?.type === "custom"
+            ? form.formState.errors.endDate.message
+            : undefined)
+        }
         cancelLabel={edit ? "취소" : undefined}
         onNext={goNext}
         onBack={goBack}

@@ -62,7 +62,13 @@ export function GameForm({
   function onValid(values: GameFormValues) {
     run(async (): Promise<ActionResult> => (await onSubmit(values)) ?? {}, {
       onSuccess: () => toast.success(successMessage),
-      onError: (result) => form.setError("root", { message: result.error }),
+      onError: (result) => {
+        // 서버가 막은 칸이 있으면 그 칸도 붉게 하고, 이유는 제출 버튼 위 한 곳에서 읽는다.
+        if (result.field && result.field in values) {
+          form.setError(result.field as keyof GameFormValues, { message: result.error });
+        }
+        form.setError("root", { message: result.error });
+      },
     });
   }
 

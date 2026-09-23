@@ -9,16 +9,11 @@ interface ThumbnailErrorProps {
 
 export function ThumbnailError({ message, onRetry }: ThumbnailErrorProps) {
   return (
-    <Callout.Root colorPalette="danger">
+    <Callout.Root colorPalette="danger" size="sm">
+      <Callout.Icon />
       <Callout.Description>{message}</Callout.Description>
       <Callout.Action>
-        <Button
-          variant="outline"
-          colorPalette="danger"
-          size="sm"
-          className="h-[34px] bg-surface"
-          onClick={onRetry}
-        >
+        <Button variant="ghost" colorPalette="danger" size="sm" onClick={onRetry}>
           다시 고르기
         </Button>
       </Callout.Action>

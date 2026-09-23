@@ -1,4 +1,4 @@
-import { Container, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { Container, FloatingBar, HStack, Progress, Skeleton, VStack } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 
@@ -9,25 +9,20 @@ interface GameFormSkeletonProps {
   edit?: boolean;
 }
 
-// 위저드 1단계(게임)의 셸. 진행바는 5단계 중 1단계까지 칠한다.
+// 위저드 1단계(게임)의 셸. 어느 단계인지 모르는 동안 진행바는 비워 둔다.
 export function GameFormSkeleton({ title, edit = false }: GameFormSkeletonProps) {
   const total = GAME_FORM_STEPS.length;
 
   return (
     <VStack className="min-h-dvh">
-      <AppBar
-        back="/games"
-        backIcon="close"
-        title={title}
-        action={
-          <Text numeric typography="subtitle2" foreground="muted">
-            1 / {total}
-          </Text>
-        }
+      <AppBar back="/games" backIcon="close" title={title} />
+      <Progress
+        value={0}
+        max={total}
+        colorPalette="gray"
+        aria-label={`${title} 불러오는 중`}
+        className="h-[3px] rounded-none"
       />
-      <div className="h-[3px] bg-gray-100">
-        <div className="h-full bg-primary-600" style={{ width: `${100 / total}%` }} />
-      </div>
       <Container size="md" className="flex-1">
         <VStack gap="250" className="py-300">
           <div>
@@ -61,12 +56,15 @@ export function GameFormSkeleton({ title, edit = false }: GameFormSkeletonProps)
           </VStack>
         </VStack>
       </Container>
-      <div className="sticky bottom-0 z-10 border-t border-gray-200 bg-surface">
-        <Container size="md" className="flex gap-100 py-150">
-          {edit && <Skeleton height={50} rounded={500} className="flex-1" />}
-          <Skeleton height={50} rounded={500} className="flex-1" />
-        </Container>
-      </div>
+      <FloatingBar.Root elevated={false}>
+        <FloatingBar.Content>
+          <HStack gap="100" className="[&>*]:flex-1">
+            {edit && <Skeleton height={48} rounded={500} />}
+            <Skeleton height={48} rounded={500} />
+          </HStack>
+        </FloatingBar.Content>
+        <FloatingBar.Spacer />
+      </FloatingBar.Root>
     </VStack>
   );
 }

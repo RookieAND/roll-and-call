@@ -1,14 +1,14 @@
 "use client";
 
-import { Callout, Chip, Field, Grid, VStack } from "@roll-and-call/ui";
+import { Callout, Field, RadioCard, RadioGroup, VStack } from "@roll-and-call/ui";
 
 import { SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
 
 import { LockedModeNotice } from "./locked-mode-notice";
 
 const OPTIONS = [
-  { value: SCHEDULE_MODE.coordinate, label: "범위 조율" },
-  { value: SCHEDULE_MODE.fixed, label: "일시 지정" },
+  { value: SCHEDULE_MODE.coordinate, label: "범위 조율", description: "가능 시간을 모아 정함" },
+  { value: SCHEDULE_MODE.fixed, label: "일시 지정", description: "정한 일시로 바로 모집" },
 ] as const;
 
 const HINT = {
@@ -32,24 +32,26 @@ export function ScheduleModeField({ value, onChange, locked = false }: ScheduleM
   return (
     <VStack gap="100">
       <Field.Root label="일정 방식">
-        <Grid cols={2} gap="100">
+        <RadioGroup
+          value={value}
+          onValueChange={(next) => onChange(next as ScheduleMode)}
+          disabled={locked}
+          aria-label="일정 방식"
+          className="grid grid-cols-2 gap-100"
+        >
           {OPTIONS.map((option) => (
-            <Chip
-              key={option.value}
-              shape="block"
-              selected={value === option.value}
-              disabled={locked && value !== option.value}
-              onClick={() => onChange(option.value)}
-            >
-              {option.label}
-            </Chip>
+            <RadioCard.Root key={option.value} value={option.value} indicator="radio">
+              <RadioCard.Title>{option.label}</RadioCard.Title>
+              <RadioCard.Description>{option.description}</RadioCard.Description>
+              <RadioCard.Indicator />
+            </RadioCard.Root>
           ))}
-        </Grid>
+        </RadioGroup>
       </Field.Root>
       {locked ? (
         <LockedModeNotice label="일정 방식" />
       ) : (
-        <Callout.Root size="sm" className="whitespace-pre-line">
+        <Callout.Root colorPalette="gray" size="sm">
           <Callout.Description>{HINT[value]}</Callout.Description>
         </Callout.Root>
       )}

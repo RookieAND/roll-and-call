@@ -14,7 +14,7 @@ export function PlayTimeTrigger({ value, unit }: PlayTimeTriggerProps) {
       <Text typography="body4" foreground="hint">
         {unit}
       </Text>
-      <span aria-hidden className="text-gray-500">
+      <span aria-hidden className="text-hint">
         ▾
       </span>
     </Select.Trigger>

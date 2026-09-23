@@ -11,6 +11,7 @@ import { ThumbnailDropzone } from "./thumbnail-dropzone";
 import { ThumbnailError } from "./thumbnail-error";
 import { ThumbnailHint } from "./thumbnail-hint";
 import { ThumbnailPreview } from "./thumbnail-preview";
+import { UploadingMessage } from "./uploading-message";
 
 interface ThumbnailUploadProps {
   value?: string;
@@ -59,7 +60,7 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
 
   return (
     <VStack id="thumbnailUrl" gap="075" className="min-w-0">
-      <Text weight="bold" typography="body4" className="text-gray-700">
+      <Text weight="bold" typography="body4">
         썸네일
       </Text>
 
@@ -74,7 +75,6 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
       ) : (
         <ThumbnailDropzone
           uploading={uploading}
-          percent={percent}
           dragging={dragging}
           invalid={error !== null}
           onPick={pick}
@@ -83,6 +83,7 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
         />
       )}
 
+      {uploading && <UploadingMessage percent={percent} />}
       {error ? <ThumbnailError message={error} onRetry={pick} /> : <ThumbnailHint />}
 
       <input

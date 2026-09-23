@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Switch, Text } from "@roll-and-call/ui";
+import { Card, HStack, Switch, Text, VStack } from "@roll-and-call/ui";
 
 interface WaitlistFieldProps {
   value: boolean;
@@ -13,40 +13,25 @@ export function WaitlistField({ value, onChange }: WaitlistFieldProps) {
     : "끄면 정원이 차는 순간 신청이 닫힙니다.";
 
   return (
-    <HStack
-      align="center"
-      justify="between"
-      gap="150"
-      className="min-h-11 rounded-400 border border-gray-200 px-150 py-150"
-    >
-      <div className="min-w-0">
-        <Text
-          typography="body4"
-          weight="bold"
-          render={<label htmlFor="waitlistEnabled" />}
-          className="block"
+    <Card.Root padding="sm" radius={500}>
+      <HStack align="center" gap="150" className="px-025">
+        <VStack gap="025" className="min-w-0 flex-1">
+          <Text typography="subtitle2" render={<label htmlFor="waitlistEnabled" />}>
+            정원이 차도 대기 신청 받기
+          </Text>
+          <Text typography="body4" foreground="muted" render={<p />} id="waitlistEnabled-hint">
+            {hint}
+          </Text>
+        </VStack>
+        <Switch.Root
+          id="waitlistEnabled"
+          checked={value}
+          onCheckedChange={onChange}
+          aria-describedby="waitlistEnabled-hint"
         >
-          정원이 차도 대기 신청 받기
-        </Text>
-        <Text
-          typography="body4"
-          foreground="hint"
-          render={<p />}
-          id="waitlistEnabled-hint"
-          className="mt-050 leading-[1.55]"
-        >
-          {hint}
-        </Text>
-      </div>
-      <Switch.Root
-        id="waitlistEnabled"
-        checked={value}
-        onCheckedChange={onChange}
-        aria-describedby="waitlistEnabled-hint"
-        className="flex-none"
-      >
-        <Switch.Control />
-      </Switch.Root>
-    </HStack>
+          <Switch.Control />
+        </Switch.Root>
+      </HStack>
+    </Card.Root>
   );
 }

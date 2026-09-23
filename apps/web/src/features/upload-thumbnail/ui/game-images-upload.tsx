@@ -75,7 +75,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
   return (
     <VStack id="images" gap="075">
       <HStack align="baseline" justify="between">
-        <Text weight="bold" typography="body4" className="text-gray-700">
+        <Text weight="bold" typography="body4">
           추가 이미지
         </Text>
         <Text numeric typography="body4" foreground="hint">
@@ -83,7 +83,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
         </Text>
       </HStack>
 
-      <Grid cols={3} gap="100">
+      <Grid cols={5} gap="075">
         {value.map((url, index) => (
           <div
             key={url}
@@ -97,7 +97,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
             }}
             onDragEnd={() => setDragIndex(null)}
             className={cn(
-              "relative aspect-square cursor-grab overflow-hidden rounded-300 border border-gray-200",
+              "relative aspect-square cursor-grab overflow-hidden rounded-400",
               dragIndex === index && "opacity-55",
             )}
           >
@@ -125,7 +125,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
             onClick={() => inputRef.current?.click()}
             disabled={!canAdd}
             loading={uploading}
-            className="aspect-square h-auto flex-col gap-050 border-dashed text-xs"
+            className="aspect-square h-auto min-h-0 rounded-400 border-dashed px-0 text-body4"
           >
             + 추가
           </Button>
@@ -134,7 +134,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
           <div
             key={index}
             aria-hidden
-            className="aspect-square rounded-300 border border-dashed border-gray-300 bg-gray-50"
+            className="aspect-square rounded-400 border border-dashed border-gray-300 bg-gray-50"
           />
         ))}
       </Grid>
