@@ -28,7 +28,7 @@ export function WaitingRosterSheet({
 
         <div className="max-h-[23rem] overflow-y-auto">
           <RosterGroup>
-            <ExpandableRows>
+            <ExpandableRows previewCount={2}>
               {waiting.map((member) => (
                 <RosterSheetRow
                   key={member.userId}

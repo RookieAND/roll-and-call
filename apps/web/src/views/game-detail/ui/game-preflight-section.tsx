@@ -1,4 +1,4 @@
-import { Grid, VStack } from "@roll-and-call/ui";
+import { VStack } from "@roll-and-call/ui";
 
 import { GAME_TAG, gameTagLabel } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
@@ -29,12 +29,10 @@ export function GamePreflightSection({ game }: GamePreflightSectionProps) {
         />
       )}
       {game.notice && <GameNoticeBlock notice={game.notice} />}
-      <Grid cols={2} gap="150">
-        {game.platforms.length > 0 && (
-          <GameTagBlock label={gameTagLabel[GAME_TAG.platforms]} tags={game.platforms} />
-        )}
-        <AiImageBlock label={game.aiImage ? "사용" : "사용 안 함"} />
-      </Grid>
+      {game.platforms.length > 0 && (
+        <GameTagBlock label={gameTagLabel[GAME_TAG.platforms]} tags={game.platforms} />
+      )}
+      <AiImageBlock label={game.aiImage ? "사용" : "사용 안 함"} />
     </VStack>
   );
 }

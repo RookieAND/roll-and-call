@@ -49,11 +49,11 @@ export function GameDetail({ game, viewerId }: GameDetailProps) {
 
             {game.synopsis && <GameSynopsis synopsis={game.synopsis} />}
 
-            {game.images.length > 0 && <GameImageGallery images={game.images} />}
-
             <GamePreflightSection game={game} />
 
             <GameRecruitMethodSection game={game} />
+
+            {game.images.length > 0 && <GameImageGallery images={game.images} />}
 
             <GameRosterSection
               gm={{ userId: game.gmId, ...game.gm }}
