@@ -48,14 +48,18 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
     count: sessions[item.key].length,
     href: sessionsHref(item.key),
   }));
-  const endedCount = list.filter((card) => card.chip === SESSION_CHIP.ended).length;
+  // 대기·종료 칩만 건수를 단다. 둘 다 "몇 건이 걸려 있는지"가 칩을 누를 이유라서다.
+  const chipCounts = {
+    [SESSION_CHIP.waiting]: list.filter((card) => card.chip === SESSION_CHIP.waiting).length,
+    [SESSION_CHIP.ended]: list.filter((card) => card.chip === SESSION_CHIP.ended).length,
+  };
 
   return (
     <>
       <AppBar back="/me" title="내 세션" />
       <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) border-b border-gray-200 bg-surface pb-150">
         <SessionTabs label="역할" tabs={roleTabs} activeKey={activeTab} />
-        <SessionStatusChips activeTab={activeTab} activeChip={activeChip} endedCount={endedCount} />
+        <SessionStatusChips activeTab={activeTab} activeChip={activeChip} counts={chipCounts} />
       </div>
 
       <Container size="sm">
