@@ -27,7 +27,7 @@ export function GmPendingDraw({ gameId, title, outcome }: GmPendingDrawProps) {
       />
       <PendingDrawBoard outcome={outcome} />
       <VStack gap="125">
-        <ApplyDrawButton gameId={gameId} className="h-[50px] w-full rounded-500 text-heading3" />
+        <ApplyDrawButton gameId={gameId} className="w-full" />
         <Text typography="body4" foreground="hint" render={<p />}>
           확정하면 확정·대기 알림이 {applicantCount}명에게 나갑니다.
           <br />

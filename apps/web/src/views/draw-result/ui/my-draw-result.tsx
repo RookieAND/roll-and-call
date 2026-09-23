@@ -10,7 +10,6 @@ import { DrawQueue } from "./draw-queue";
 import { DrawSummary } from "./draw-summary";
 import { MyDrawStatus } from "./my-draw-status";
 
-const PAIR_CLASS = "h-[50px] flex-1 rounded-500 text-heading3 font-bold";
 
 interface MyDrawResultProps {
   gameId: string;
@@ -62,21 +61,21 @@ export function MyDrawResult({
         meUserId={meUserId}
         previewCount={waitingPreview}
       />
-      <HStack gap="100">
+      <HStack gap="100" className="[&>*]:flex-1">
         <Button
           render={<Link href={`/games/${gameId}`} />}
           variant="outline"
-          className={PAIR_CLASS}
+          size="lg"
         >
           구인 글 보기
         </Button>
         {confirmed && needsAvailability && (
-          <Button render={<Link href={`/games/${gameId}/schedule`} />} className={PAIR_CLASS}>
+          <Button render={<Link href={`/games/${gameId}/schedule`} />} size="lg">
             가능 시간 제출
           </Button>
         )}
         {!confirmed && (
-          <LeaveGameButton gameId={gameId} className={PAIR_CLASS}>
+          <LeaveGameButton gameId={gameId} className="flex-1">
             대기 취소
           </LeaveGameButton>
         )}

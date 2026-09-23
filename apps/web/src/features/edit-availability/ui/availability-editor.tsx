@@ -93,14 +93,14 @@ export function AvailabilityEditor({ defaultValue }: AvailabilityEditorProps) {
           <Button
             variant="outline"
             size="lg"
-            className="h-[50px] flex-1"
+            className="flex-1"
             onClick={() => router.push("/me/edit")}
           >
             취소
           </Button>
           <Button
             size="lg"
-            className="h-[50px] flex-1"
+            className="flex-1"
             loading={pending}
             disabled={conflicts.size > 0}
             onClick={save}

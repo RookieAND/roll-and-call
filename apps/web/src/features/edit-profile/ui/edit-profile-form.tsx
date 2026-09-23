@@ -148,12 +148,12 @@ export function EditProfileForm({
             type="button"
             variant="outline"
             size="lg"
-            className="h-[50px]"
+            className=""
             onClick={requestLeave}
           >
             취소
           </Button>
-          <Button type="submit" size="lg" className="h-[50px]" loading={pending}>
+          <Button type="submit" size="lg" className="" loading={pending}>
             저장
           </Button>
         </HStack>
