@@ -1,9 +1,8 @@
 import { Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 
-import { ExpandableRows } from "@/shared/ui";
-
 import type { DrawEntry } from "../model/draw-entry";
 import { DRAW_ROW_VARIANT, type DrawRowVariant } from "../model/draw-row-variant";
+import { DrawQueueMore } from "./draw-queue-more";
 import { DrawRow } from "./draw-row";
 
 interface DrawQueueProps {
@@ -24,6 +23,15 @@ export function DrawQueue({
   meUserId,
   previewCount,
 }: DrawQueueProps) {
+  const rows = entries.map((entry) => (
+    <DrawRow key={entry.userId} entry={entry} variant={variant} isMe={entry.userId === meUserId} />
+  ));
+  const hiddenRows = rows.slice(previewCount);
+  const cardClass = cn(
+    "overflow-hidden",
+    variant === DRAW_ROW_VARIANT.highlight && "border-tinted-border",
+  );
+
   return (
     <VStack gap="100" render={<section />}>
       <HStack align="baseline" gap="100">
@@ -40,25 +48,13 @@ export function DrawQueue({
         )}
       </HStack>
       {entries.length > 0 && (
-        <Card.Root
-          radius={500}
-          background="none"
-          padding="none"
-          className={cn(
-            "overflow-hidden",
-            variant === DRAW_ROW_VARIANT.highlight && "border-tinted-border bg-gray-50",
+        <Card.Root radius={500} padding="none" className={cardClass}>
+          {rows.slice(0, previewCount)}
+          {hiddenRows.length > 0 && (
+            <DrawQueueMore noun={label} count={hiddenRows.length}>
+              {hiddenRows}
+            </DrawQueueMore>
           )}
-        >
-          <ExpandableRows previewCount={previewCount} noun={label} tone="muted">
-            {entries.map((entry) => (
-              <DrawRow
-                key={entry.userId}
-                entry={entry}
-                variant={variant}
-                isMe={entry.userId === meUserId}
-              />
-            ))}
-          </ExpandableRows>
         </Card.Root>
       )}
     </VStack>

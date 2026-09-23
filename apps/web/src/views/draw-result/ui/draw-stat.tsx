@@ -6,7 +6,7 @@ const box = cva("rounded-500 px-175 py-150", {
     tone: {
       plain: "",
       tinted: "border-tinted-border bg-tinted-bg",
-      success: "border-success-200 bg-success-50",
+      success: "border-success-200 bg-success-100",
     },
   },
 });

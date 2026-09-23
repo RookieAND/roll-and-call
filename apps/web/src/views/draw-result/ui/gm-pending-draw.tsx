@@ -1,4 +1,4 @@
-import { Text, VStack } from "@roll-and-call/ui";
+import { FloatingBar, Text, VStack } from "@roll-and-call/ui";
 
 import { ApplyDrawButton } from "@/features/adjust-roster";
 
@@ -17,23 +17,26 @@ export function GmPendingDraw({ gameId, title, outcome }: GmPendingDrawProps) {
   const applicantCount = outcome.rolled.length;
 
   return (
-    <VStack gap="250">
-      <DrawSummary
-        title={title}
-        applicantCount={applicantCount}
-        resultLabel="뽑을 인원"
-        resultCount={outcome.drawCount}
-        applied={false}
-      />
-      <PendingDrawBoard outcome={outcome} />
-      <VStack gap="125">
-        <ApplyDrawButton gameId={gameId} className="w-full" />
-        <Text typography="body4" foreground="hint" render={<p />}>
-          확정하면 확정·대기 알림이 {applicantCount}명에게 나갑니다.
-          <br />
-          값은 이미 정해져 있어서 바뀌지 않습니다.
-        </Text>
+    <FloatingBar.Root elevated={false}>
+      <VStack gap="250">
+        <DrawSummary
+          title={title}
+          applicantCount={applicantCount}
+          resultLabel="뽑을 인원"
+          resultCount={outcome.drawCount}
+          applied={false}
+        />
+        <PendingDrawBoard outcome={outcome} />
       </VStack>
-    </VStack>
+      <FloatingBar.Spacer />
+      <FloatingBar.Content>
+        <VStack gap="100">
+          <ApplyDrawButton gameId={gameId} className="w-full" />
+          <Text typography="body4" foreground="hint" render={<p />}>
+            확정하면 확정·대기 알림이 {applicantCount}명에게 나갑니다.
+          </Text>
+        </VStack>
+      </FloatingBar.Content>
+    </FloatingBar.Root>
   );
 }

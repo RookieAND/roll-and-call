@@ -1,5 +1,5 @@
-import { Button, VStack } from "@roll-and-call/ui";
-import { Check } from "lucide-react";
+import { Button, FloatingBar, VStack } from "@roll-and-call/ui";
+import { CircleCheck } from "lucide-react";
 import Link from "next/link";
 
 import { SummaryLine } from "@/shared/ui";
@@ -19,39 +19,51 @@ interface AppliedDrawProps {
 // 적용 뒤에는 읽기 전용 기록이다. 명단을 고치는 일은 참여자 관리에서 한다.
 export function AppliedDraw({ gameId, title, outcome, drawnAtLabel }: AppliedDrawProps) {
   return (
-    <VStack gap="250">
-      <VStack gap="100">
-        <DrawSummary
-          title={title}
-          applicantCount={outcome.rolled.length}
-          resultLabel="확정"
-          resultCount={outcome.confirmed.length}
-          applied
+    <FloatingBar.Root elevated={false}>
+      <VStack gap="250">
+        <VStack gap="100">
+          <DrawSummary
+            title={title}
+            applicantCount={outcome.rolled.length}
+            resultLabel="확정"
+            resultCount={outcome.confirmed.length}
+            applied
+          />
+          <SummaryLine
+            icon={CircleCheck}
+            tone="success"
+            label="추첨"
+            value={drawnAtLabel}
+            badge="완료"
+          />
+        </VStack>
+        <DrawQueue
+          label="확정"
+          caption="값이 낮은 순"
+          entries={outcome.confirmed}
+          variant={DRAW_ROW_VARIANT.highlight}
+          meUserId={null}
+          previewCount={outcome.confirmed.length}
         />
-        <SummaryLine icon={Check} tone="success" label="추첨 완료" value={drawnAtLabel} />
+        <DrawQueue
+          label="대기"
+          entries={outcome.waiting}
+          variant={DRAW_ROW_VARIANT.plain}
+          meUserId={null}
+          previewCount={2}
+        />
       </VStack>
-      <DrawQueue
-        label="확정"
-        caption="값이 낮은 순"
-        entries={outcome.confirmed}
-        variant={DRAW_ROW_VARIANT.highlight}
-        meUserId={null}
-        previewCount={outcome.confirmed.length}
-      />
-      <DrawQueue
-        label="대기"
-        entries={outcome.waiting}
-        variant={DRAW_ROW_VARIANT.plain}
-        meUserId={null}
-        previewCount={2}
-      />
-      <Button
-        render={<Link href={`/games/${gameId}`} />}
-        variant="outline"
-        className="h-12 w-full rounded-500 text-subtitle1 font-bold"
-      >
-        구인 글로 돌아가기
-      </Button>
-    </VStack>
+      <FloatingBar.Spacer />
+      <FloatingBar.Content>
+        <Button
+          render={<Link href={`/games/${gameId}`} />}
+          variant="outline"
+          size="lg"
+          className="w-full"
+        >
+          구인 글로 돌아가기
+        </Button>
+      </FloatingBar.Content>
+    </FloatingBar.Root>
   );
 }

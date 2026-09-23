@@ -12,9 +12,9 @@ import { DrawRollText } from "./draw-roll-text";
 const row = cva("border-t pl-175 transition-colors first:border-t-0 hover:bg-gray-50", {
   variants: {
     variant: {
-      highlight: "min-h-16 border-primary-50 py-100",
-      plain: "min-h-[60px] border-gray-100 py-100",
-      compact: "min-h-14 border-gray-100 py-075",
+      highlight: "min-h-[60px] border-tinted-border py-100",
+      plain: "min-h-14 border-gray-200 py-100",
+      compact: "min-h-14 border-gray-200 py-100",
     },
     isMe: { true: "bg-gray-50", false: "" },
     // 대성공·극단적 성공 칩은 별이 바깥으로 삐져나와서 오른쪽을 덜 비운다.

@@ -1,5 +1,6 @@
 import { Badge, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
+import { DrawRulesPopover } from "./draw-rules-popover";
 import { DrawStat } from "./draw-stat";
 
 interface DrawSummaryProps {
@@ -28,6 +29,7 @@ export function DrawSummary({
         <Badge colorPalette="primary" className="font-mono">
           1d100
         </Badge>
+        <DrawRulesPopover />
       </HStack>
       <Grid cols={2} gap="100">
         <DrawStat label="신청" count={applicantCount} tone="plain" />
