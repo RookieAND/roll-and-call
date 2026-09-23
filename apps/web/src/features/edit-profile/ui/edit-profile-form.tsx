@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, HStack, Text, Textarea, TextInput, VStack } from "@roll-and-call/ui";
+import { Button, Field, FloatingBar, HStack, Text, Textarea, TextInput, VStack } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -134,30 +134,26 @@ export function EditProfileForm({
         <AvailabilitySummaryField intervals={availability} />
       </VStack>
 
-      <VStack
-        gap="150"
-        className="sticky bottom-[58px] z-10 -mx-200 border-t border-gray-200 bg-surface px-200 py-150"
-      >
-        {formError && (
-          <Text typography="body2" foreground="danger" render={<p />}>
-            {formError}
-          </Text>
-        )}
-        <HStack gap="100" className="[&>*]:flex-1">
-          <Button
-            type="button"
-            variant="outline"
-            size="lg"
-            className=""
-            onClick={requestLeave}
-          >
-            취소
-          </Button>
-          <Button type="submit" size="lg" className="" loading={pending}>
-            저장
-          </Button>
-        </HStack>
-      </VStack>
+      <FloatingBar.Root elevated={false}>
+        <FloatingBar.Content>
+          <VStack gap="150">
+            {formError && (
+              <Text typography="body2" foreground="danger" render={<p />}>
+                {formError}
+              </Text>
+            )}
+            <HStack gap="100" className="[&>*]:flex-1">
+              <Button type="button" variant="outline" size="lg" onClick={requestLeave}>
+                취소
+              </Button>
+              <Button type="submit" size="lg" loading={pending}>
+                저장
+              </Button>
+            </HStack>
+          </VStack>
+        </FloatingBar.Content>
+        <FloatingBar.Spacer />
+      </FloatingBar.Root>
 
       <ConfirmDialog
         open={confirmingLeave}

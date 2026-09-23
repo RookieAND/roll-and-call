@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, Card, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -87,28 +87,19 @@ export function AvailabilityEditor({ defaultValue }: AvailabilityEditorProps) {
         </Text>
       </VStack>
 
-      {/* ponytail: bottom-[58px]는 BottomNav 높이(h-[58px])와 결합. nav 높이 바뀌면 같이 조정. */}
-      <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-200 pt-175 pb-200">
-        <HStack gap="100">
-          <Button
-            variant="outline"
-            size="lg"
-            className="flex-1"
-            onClick={() => router.push("/me/edit")}
-          >
-            취소
-          </Button>
-          <Button
-            size="lg"
-            className="flex-1"
-            loading={pending}
-            disabled={conflicts.size > 0}
-            onClick={save}
-          >
-            저장
-          </Button>
-        </HStack>
-      </div>
+      <FloatingBar.Root elevated={false}>
+        <FloatingBar.Content>
+          <HStack gap="100" className="[&>*]:flex-1">
+            <Button variant="outline" size="lg" onClick={() => router.push("/me/edit")}>
+              취소
+            </Button>
+            <Button size="lg" loading={pending} disabled={conflicts.size > 0} onClick={save}>
+              저장
+            </Button>
+          </HStack>
+        </FloatingBar.Content>
+        <FloatingBar.Spacer />
+      </FloatingBar.Root>
     </>
   );
 }
