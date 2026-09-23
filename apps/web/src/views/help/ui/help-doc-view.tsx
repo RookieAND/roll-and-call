@@ -24,39 +24,33 @@ export function HelpDocView({ slug }: HelpDocViewProps) {
     <>
       <AppBar back="/help" title={doc.title} />
       <Container size="sm">
-        <VStack gap="250" className="py-225">
-          <div>
+        <VStack gap="250" className="py-250">
+          <VStack gap="100">
             <Text typography="body4" weight="extrabold" foreground="primary" render={<p />}>
               {doc.category}
             </Text>
-            <Text typography="heading1" render={<h1 />} className="mt-075">
+            <Text typography="heading1" render={<h1 />}>
               {doc.title}
             </Text>
-            <Text typography="body2" foreground="muted" render={<p />} className="mt-125">
-              {doc.lead}
-            </Text>
-          </div>
+            {doc.lead && (
+              <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
+                {doc.lead}
+              </Text>
+            )}
+          </VStack>
 
           {doc.blocks.map((block, index) => (
             <HelpDocBlock key={index} block={block} />
           ))}
 
-          <section className="border-t border-gray-100 pt-200">
-            <Text
-              typography="body4"
-              weight="extrabold"
-              foreground="muted"
-              render={<h2 />}
-              className="mb-125"
-            >
+          <VStack gap="125" render={<section />} className="border-t border-gray-200 pt-225">
+            <Text typography="body4" weight="extrabold" foreground="hint" render={<h2 />}>
               이어 읽기
             </Text>
-            <VStack gap="100">
-              {related.map((target) => (
-                <HelpRelatedRow key={target.slug} slug={target.slug} title={target.title} />
-              ))}
-            </VStack>
-          </section>
+            {related.map((target) => (
+              <HelpRelatedRow key={target.slug} slug={target.slug} title={target.title} />
+            ))}
+          </VStack>
         </VStack>
       </Container>
     </>

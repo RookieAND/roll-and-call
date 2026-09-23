@@ -12,7 +12,8 @@ export function SlideVisual({ slideKey }: SlideVisualProps) {
     <HStack
       align="center"
       justify="center"
-      className="h-[242px] rounded-600 border border-gray-100 bg-gray-50"
+      inert
+      className="h-[242px] rounded-600 border border-gray-100 bg-surface/60 p-225"
     >
       <OnboardingPreview slideKey={slideKey} />
     </HStack>

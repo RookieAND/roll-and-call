@@ -15,72 +15,68 @@ export function HelpListView() {
     <>
       <AppBar back="/" title="도움말" />
       <Container size="sm">
-        <VStack gap="250" className="py-225">
-          <Link
-            href="/onboarding"
-            className="flex items-center gap-150 rounded-600 border border-tinted-border bg-tinted-bg px-200 py-175 transition-colors hover:bg-tinted-bg-hover"
+        <VStack gap="250" className="py-200">
+          <Card.Root
+            padding="sm"
+            interactive
+            render={<Link href="/onboarding" />}
+            className="border-tinted-border bg-tinted-bg hover:bg-tinted-bg-hover"
           >
-            <span className="flex size-[38px] flex-none items-center justify-center rounded-400 bg-primary-600 text-white">
-              <PlayCircle size={19} aria-hidden />
-            </span>
-            <span className="min-w-0 flex-1">
-              <Text typography="subtitle1" weight="extrabold" render={<span />} className="block">
-                서비스 둘러보기
-              </Text>
-              <Text
-                typography="body4"
-                foreground="muted"
-                render={<span />}
-                className="mt-025 block"
-              >
-                처음 봤던 소개 5장을 다시 봅니다
-              </Text>
-            </span>
-            <ChevronRight size={18} className="flex-none text-gray-400" aria-hidden />
-          </Link>
+            <HStack align="center" gap="150" className="px-050 py-025">
+              <span className="flex size-[38px] flex-none items-center justify-center rounded-500 bg-primary-600 text-white">
+                <PlayCircle size={19} aria-hidden />
+              </span>
+              <VStack gap="025" className="min-w-0 flex-1">
+                <Text typography="subtitle1" weight="extrabold" render={<span />}>
+                  서비스 둘러보기
+                </Text>
+                <Text typography="body4" foreground="muted" render={<span />}>
+                  처음 봤던 소개 5장을 다시 봅니다
+                </Text>
+              </VStack>
+              <ChevronRight size={18} className="flex-none text-hint" aria-hidden />
+            </HStack>
+          </Card.Root>
 
           {HELP_CATEGORIES.map((category) => (
-            <section key={category}>
-              <Text
-                typography="body4"
-                weight="extrabold"
-                foreground="muted"
-                render={<h2 />}
-                className="mb-125"
-              >
+            <VStack key={category} gap="125" render={<section />}>
+              <Text typography="body4" weight="extrabold" foreground="hint" render={<h2 />}>
                 {category}
               </Text>
-              <Card.Root radius={600} background="none" padding="none" className="overflow-hidden">
+              <Card.Root padding="none" className="overflow-hidden">
                 {HELP_DOCS.filter((doc) => doc.category === category).map((doc) => (
                   <HelpDocRow key={doc.slug} slug={doc.slug} title={doc.title} />
                 ))}
               </Card.Root>
-            </section>
+            </VStack>
           ))}
 
-          <section className="rounded-600 border border-gray-200 bg-gray-50 p-200">
-            <HStack align="center" gap="125">
-              <span className="flex-none text-discord">
-                <BrandMark service="discord" size={17} />
-              </span>
-              <Text typography="subtitle1" render={<h2 />}>
-                여기에 없는 게 궁금하면
+          <Card.Root background="subtle" render={<section />}>
+            <VStack gap="100">
+              <HStack align="center" gap="125">
+                <span className="flex-none text-discord">
+                  <BrandMark service="discord" size={17} />
+                </span>
+                <Text typography="subtitle1" weight="extrabold" render={<h2 />}>
+                  여기에 없는 게 궁금하면
+                </Text>
+              </HStack>
+              <Text typography="body3" foreground="muted" render={<p />} className="text-pretty">
+                디스코드 서버에서 물어보세요.
+                <br />
+                운영자와 다른 GM들이 같이 봅니다.
               </Text>
-            </HStack>
-            <Text typography="body3" foreground="muted" render={<p />} className="mt-075">
-              디스코드 서버에서 물어보세요.
-              <br />
-              운영자와 다른 GM들이 같이 봅니다.
-            </Text>
-            <Button
-              render={<a href={DISCORD_INVITE_URL} target="_blank" rel="noreferrer" />}
-              variant="outline"
-              className="mt-150 h-11 w-full"
-            >
-              디스코드 서버 열기
-              <ExternalLink size={15} aria-hidden />
-            </Button>
-          </section>
+              <Button
+                render={<a href={DISCORD_INVITE_URL} target="_blank" rel="noreferrer" />}
+                variant="outline"
+                size="lg"
+                className="mt-050 w-full"
+              >
+                디스코드 서버 열기
+                <ExternalLink size={15} aria-hidden />
+              </Button>
+            </VStack>
+          </Card.Root>
         </VStack>
       </Container>
     </>

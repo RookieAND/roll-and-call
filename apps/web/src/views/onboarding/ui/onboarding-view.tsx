@@ -79,14 +79,14 @@ export function OnboardingView() {
           }}
         >
           {slide.eyebrow === null ? <WelcomeVisual /> : <SlideVisual slideKey={slide.key} />}
-          <VStack gap="150" className={welcome ? "mt-400" : "mt-300"}>
+          <VStack gap="125" className={welcome ? "mt-400" : "mt-300"}>
             {slide.eyebrow && (
               <SlideEyebrow number={slide.eyebrow.number} label={slide.eyebrow.label} />
             )}
             <Text typography="heading1" render={<h1 />} className="leading-[1.32]">
               {slide.title}
             </Text>
-            <Text typography="body2" foreground="muted" render={<p />}>
+            <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
               {slide.body}
             </Text>
           </VStack>
@@ -96,16 +96,12 @@ export function OnboardingView() {
             itemIndex === index ? <ActiveSlideDot key={item.key} /> : <SlideDot key={item.key} />,
           )}
         </HStack>
-        <VStack gap="050" className="mb-300">
+        <VStack gap="050" className="mb-[calc(var(--spacing-300)+var(--rc-safe-bottom))]">
           <Button size="lg" className="w-full" onClick={goNext}>
             {nextLabel}
           </Button>
           {!last && (
-            <Button
-              variant="ghost"
-              className="h-11 w-full text-body3 font-bold text-gray-600"
-              onClick={skip}
-            >
+            <Button variant="ghost" size="lg" className="w-full" onClick={skip}>
               건너뛰기
             </Button>
           )}
