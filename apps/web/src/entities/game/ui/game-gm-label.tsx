@@ -1,29 +1,22 @@
-import { Avatar, HStack, Text, type TextProps } from "@roll-and-call/ui";
+import { Avatar, HStack, Text } from "@roll-and-call/ui";
 
 interface GameGmLabelProps {
   name: string | null | undefined;
   avatarUrl: string | null | undefined;
-  showRole?: boolean;
-  typography?: TextProps["typography"];
-  foreground?: TextProps["foreground"];
-  weight?: TextProps["weight"];
 }
 
-export function GameGmLabel({
-  name,
-  avatarUrl,
-  showRole = true,
-  typography = "body4",
-  foreground = "muted",
-  weight,
-}: GameGmLabelProps) {
-  const label = showRole ? `GM ${name ?? "?"}` : (name ?? "?");
+export function GameGmLabel({ name, avatarUrl }: GameGmLabelProps) {
   return (
-    <HStack gap="100" align="center" className="min-w-0">
+    <HStack gap="100" align="center" className="min-w-0 flex-1">
       <Avatar src={avatarUrl} name={name} size="sm" />
-      <Text truncate typography={typography} foreground={foreground} weight={weight}>
-        {label}
-      </Text>
+      <HStack align="baseline" gap="075" className="min-w-0">
+        <Text typography="body4" weight="bold" foreground="hint" className="shrink-0">
+          GM
+        </Text>
+        <Text truncate typography="subtitle2">
+          {name ?? "?"}
+        </Text>
+      </HStack>
     </HStack>
   );
 }
