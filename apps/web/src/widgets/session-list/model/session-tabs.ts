@@ -7,6 +7,13 @@ export const ONGOING_CHIP = "ongoing";
 
 export type SessionChipKey = SessionChip | typeof ONGOING_CHIP;
 
+// 진행 중은 따로 칩이 있는 조율 중·확정·종료를 뺀 나머지다. 같은 카드가 두 칩에 겹쳐 보이지 않게 한다.
+export const ONGOING_EXCLUDED_CHIPS: ReadonlySet<SessionChip> = new Set([
+  SESSION_CHIP.scheduling,
+  SESSION_CHIP.confirmed,
+  SESSION_CHIP.ended,
+]);
+
 export const SESSION_TABS = [
   { key: SESSION_ROLE.player, label: "참여" },
   { key: SESSION_ROLE.host, label: "운영" },
@@ -26,6 +33,7 @@ export const SESSION_CHIPS: Record<
   [SESSION_ROLE.host]: [
     { key: ONGOING_CHIP, label: "진행 중" },
     { key: SESSION_CHIP.recruiting, label: "모집 중" },
+    { key: SESSION_CHIP.scheduling, label: "조율 중" },
     { key: SESSION_CHIP.confirmed, label: "확정" },
     { key: SESSION_CHIP.ended, label: "종료" },
   ],

@@ -36,6 +36,13 @@ export function toHostedSessionCard(
     participantCount: confirmedCount,
     waitlistEnabled: game.waitlistEnabled,
   });
+  // 사람은 모였고 시간만 남은 구인이 조율 중이다. 추첨을 기다리는 구인은 아직 사람을 고르는 중이라 모집 중에 둔다.
+  const hostChip =
+    state === SESSION_STATE.confirmed
+      ? SESSION_CHIP.confirmed
+      : state === SESSION_STATE.scheduling || state === SESSION_STATE.pendingConfirm || awaitingTime
+        ? SESSION_CHIP.scheduling
+        : SESSION_CHIP.recruiting;
   const responses = context.responseCounts.get(game.id) ?? 0;
   const todo = context.readOnly ? null : hostTodo(game, facts, responses);
   // 막혀 있는 일은 목록 카드도 붉게 칠한다 — 할 일 카드와 같은 신호다.
@@ -60,7 +67,7 @@ export function toHostedSessionCard(
   return {
     ...base,
     urgent: gmTodo,
-    chip: state === SESSION_STATE.confirmed ? SESSION_CHIP.confirmed : SESSION_CHIP.recruiting,
+    chip: hostChip,
     badge: gameStatusLabel[status],
     badgeColor: gameStatusColor[status],
     schedule: drawPending

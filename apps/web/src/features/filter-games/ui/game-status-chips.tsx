@@ -8,10 +8,10 @@ import {
   type GamesFilter,
   type GameStatusFilter,
 } from "@/shared/api";
+import { TabCount } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
-import { TabCount } from "./tab-count";
 
 interface GameStatusChipsProps {
   filter: GamesFilter;

@@ -118,9 +118,9 @@ describe("대기 카드", () => {
 });
 
 describe("운영 카드", () => {
-  it("기한이 지났는데 시간이 없으면 무산이 아니라 GM 할 일이다", () => {
+  it("기한이 지났는데 시간이 없으면 무산이 아니라 조율 중인 GM 할 일이다", () => {
     const card = hostCard({ endDate: at(-1), participants: [other] });
-    expect(card.chip).toBe(SESSION_CHIP.recruiting);
+    expect(card.chip).toBe(SESSION_CHIP.scheduling);
     expect(card.todo?.label).toBe("세션 시간 정하기");
     expect(card.urgent).toBe(true);
     expect(card.action?.label).toBe("운영 관리");

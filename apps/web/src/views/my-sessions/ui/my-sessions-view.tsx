@@ -7,7 +7,7 @@ import { AppBar } from "@/shared/ui";
 import {
   loadMySessions,
   ONGOING_CHIP,
-  SESSION_CHIP,
+  ONGOING_EXCLUDED_CHIPS,
   SESSION_CHIPS,
   SESSION_TABS,
   SessionList,
@@ -40,7 +40,7 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
   const list = sessions[activeTab];
   const items =
     activeChip === ONGOING_CHIP
-      ? list.filter((card) => card.chip !== SESSION_CHIP.ended)
+      ? list.filter((card) => !ONGOING_EXCLUDED_CHIPS.has(card.chip))
       : list.filter((card) => card.chip === activeChip);
   const roleTabs = SESSION_TABS.map((item) => ({
     key: item.key,
@@ -48,11 +48,14 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
     count: sessions[item.key].length,
     href: sessionsHref(item.key),
   }));
-  // 대기·종료 칩만 건수를 단다. 둘 다 "몇 건이 걸려 있는지"가 칩을 누를 이유라서다.
-  const chipCounts = {
-    [SESSION_CHIP.waiting]: list.filter((card) => card.chip === SESSION_CHIP.waiting).length,
-    [SESSION_CHIP.ended]: list.filter((card) => card.chip === SESSION_CHIP.ended).length,
-  };
+  const chipCounts = Object.fromEntries(
+    chips.map((chip) => [
+      chip.key,
+      chip.key === ONGOING_CHIP
+        ? list.filter((card) => !ONGOING_EXCLUDED_CHIPS.has(card.chip)).length
+        : list.filter((card) => card.chip === chip.key).length,
+    ]),
+  );
 
   return (
     <>

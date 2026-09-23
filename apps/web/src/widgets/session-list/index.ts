@@ -11,6 +11,7 @@ export type { Absence } from "./model/recent-absences";
 export { PROFILE_SESSION_SECTIONS } from "./model/build-profile-sessions";
 export {
   ONGOING_CHIP,
+  ONGOING_EXCLUDED_CHIPS,
   SESSION_CHIPS,
   SESSION_TABS,
   type SessionChipKey,

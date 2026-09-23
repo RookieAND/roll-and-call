@@ -39,7 +39,8 @@ export function summarizeMySessions(sessions: MySessions) {
       detail:
         joinCountParts([
           ["확정 필요", needsConfirm],
-          ["모집 중", countByChip(hosted, SESSION_CHIP.recruiting) - needsConfirm],
+          ["모집 중", countByChip(hosted, SESSION_CHIP.recruiting)],
+          ["조율 중", Math.max(countByChip(hosted, SESSION_CHIP.scheduling) - needsConfirm, 0)],
           ["확정", countByChip(hosted, SESSION_CHIP.confirmed)],
           ["종료", countByChip(hosted, SESSION_CHIP.ended)],
         ]) ?? "아직 구인을 열지 않았습니다",

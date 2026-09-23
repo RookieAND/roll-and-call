@@ -4,10 +4,10 @@ import { Tabs } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
 import { GAME_TAB, GAME_TAB_DEFAULT, type GamesFilter, type GameTab } from "@/shared/api";
+import { TabCount } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
-import { TabCount } from "./tab-count";
 
 interface GameScopeTabsProps {
   filter: GamesFilter;
