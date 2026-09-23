@@ -17,6 +17,7 @@ export { isGameGm } from "./model/is-game-gm";
 export { hasUserJoined } from "./model/has-user-joined";
 export { canCoordinate } from "./model/can-coordinate";
 export { GameCard } from "./ui/game-card";
+export { PastGameCard } from "./ui/past-game-card";
 export { GameThumbnail } from "./ui/game-thumbnail";
 export { GameStatusBadge } from "./ui/game-status-badge";
 export { GameRuleChip } from "./ui/game-rule-chip";

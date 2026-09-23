@@ -1,7 +1,7 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { GameCard, sessionEndsAt } from "@/entities/game";
+import { PastGameCard, sessionEndsAt } from "@/entities/game";
 import { filterParams, gamesHref } from "@/features/filter-games";
 import type { GamesFilter } from "@/shared/api";
 
@@ -36,7 +36,7 @@ export function PastGameList({ gamesPage, page, filter }: PastGameListProps) {
           </HStack>
           {group.items.map((game) => (
             <Link key={game.id} href={`/games/${game.id}`} className="block h-full">
-              <GameCard game={game} />
+              <PastGameCard game={game} />
             </Link>
           ))}
         </VStack>
