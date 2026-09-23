@@ -8,7 +8,7 @@ export default function Loading() {
   return (
     <>
       <AppBar back="/games" title="" />
-      <div className="sticky top-(--rc-size-appbar) z-10 border-b border-gray-100 bg-surface">
+      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface">
         <HStack className="px-200">
           <HStack align="center" justify="center" className="h-11 flex-1">
             <Skeleton width={64} height={20} />

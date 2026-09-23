@@ -17,7 +17,7 @@ const ICONS = {
 
 const ICON_TONE = {
   open: "primary",
-  blocked: "danger",
+  blocked: "urgent",
   done: "success",
   locked: "locked",
 } as const;
@@ -36,9 +36,11 @@ const DETAIL_FOREGROUND = {
   locked: "hint",
 } as const;
 
-const manageRow = cva("min-h-[60px] border-gray-100 px-175 py-150 not-first:border-t", {
+// 막힌 줄은 줄 전체를 붉게 칠한다 — 목록 카드·할 일 카드와 같은 신호다.
+const manageRow = cva("min-h-16 px-175 py-150", {
   variants: {
     interactive: { true: "transition-colors hover:bg-gray-50", false: "" },
+    blocked: { true: "bg-danger-50 hover:bg-danger-50", false: "" },
   },
 });
 
@@ -54,7 +56,7 @@ export function ManageRow({ row }: ManageRowProps) {
       align="center"
       gap="150"
       render={container}
-      className={manageRow({ interactive: Boolean(row.href) })}
+      className={manageRow({ interactive: Boolean(row.href), blocked: row.state === "blocked" })}
     >
       <IconTile icon={ICONS[row.icon]} tone={ICON_TONE[row.state]} />
       <VStack gap="025" className="min-w-0 flex-1">
@@ -65,7 +67,7 @@ export function ManageRow({ row }: ManageRowProps) {
           {row.detail}
         </Text>
       </VStack>
-      {row.href && <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />}
+      {row.href && <ChevronRight size={17} className="flex-none text-hint" aria-hidden />}
     </HStack>
   );
 }

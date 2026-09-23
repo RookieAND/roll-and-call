@@ -1,5 +1,4 @@
 import { Button } from "@roll-and-call/ui";
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 import { CancelWaitlistButton } from "@/features/join-game";
@@ -7,7 +6,6 @@ import { CancelWaitlistButton } from "@/features/join-game";
 import { SESSION_ACTION_KIND, type SessionCardModel } from "../model/session-card-model";
 
 // 세션 시간을 정하는 한 수만 초록이다 — 03 확정 버튼과 같은 일이라서다.
-// 출석 확인은 03이 아니라 11의 일이고, 시안에서 보라다.
 const CONFIRM_KINDS: string[] = [SESSION_ACTION_KIND.confirmTime];
 
 interface SessionCardActionProps {
@@ -19,23 +17,26 @@ export function SessionCardAction({ model }: SessionCardActionProps) {
   if (!action) return null;
 
   if (action.kind === SESSION_ACTION_KIND.cancelWaitlist) {
-    return <CancelWaitlistButton gameId={model.id} title={model.title} className="mt-125 h-11" />;
+    return (
+      <CancelWaitlistButton
+        gameId={model.id}
+        title={model.title}
+        label={action.label}
+        waitlistRank={model.waitlistRank}
+        className="mt-050 w-full"
+      />
+    );
   }
 
   const confirmKind = CONFIRM_KINDS.includes(action.kind);
-  const variant = confirmKind ? "solid" : "tinted";
-  const colorPalette = confirmKind ? "success" : "primary";
-  const isHostMenu = action.kind === SESSION_ACTION_KIND.hostMenu;
-
   return (
     <Button
       render={<Link href={action.href} />}
-      variant={variant}
-      colorPalette={colorPalette}
-      className="mt-125 h-11 w-full gap-075"
+      variant={confirmKind ? "solid" : "tinted"}
+      colorPalette={confirmKind ? "success" : "primary"}
+      className="mt-050 w-full"
     >
       {action.label}
-      {isHostMenu && <ChevronRight size={14} aria-hidden />}
     </Button>
   );
 }

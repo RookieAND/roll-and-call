@@ -97,30 +97,30 @@ export function EditProfileForm({
           />
         </Field.Root>
 
-        <VStack gap="075">
-          <Field.Root label="한 줄 소개" htmlFor="bio" error={bioError}>
-            <Textarea
-              id="bio"
-              value={bio}
-              onChange={(event) => setBio(event.target.value)}
-              placeholder="어떤 판을 즐겨 하는지 한 줄로 적어주세요."
-              maxLength={BIO_MAX_LENGTH}
-              invalid={!!bioError}
-              className="min-h-[76px]"
-            />
-          </Field.Root>
-          <HStack justify="between" gap="100">
-            <Text typography="body4" foreground="hint">
-              마이페이지와 참여자 명단에 함께 보입니다.
-            </Text>
-            <Text numeric typography="body4" foreground="hint" className="shrink-0">
-              {bio.length} / {BIO_MAX_LENGTH}
-            </Text>
-          </HStack>
-        </VStack>
+        <Field.Root
+          label="한 줄 소개 (선택)"
+          htmlFor="bio"
+          counter={`${bio.length} / ${BIO_MAX_LENGTH}`}
+          description="마이페이지와 참여자 명단에 함께 보입니다."
+          error={bioError}
+        >
+          <Textarea
+            id="bio"
+            value={bio}
+            onChange={(event) => setBio(event.target.value)}
+            placeholder="어떤 판을 즐겨 하는지 한 줄로 적어주세요."
+            maxLength={BIO_MAX_LENGTH}
+            invalid={!!bioError}
+            rows={3}
+          />
+        </Field.Root>
 
         <VStack gap="075">
-          <Field.Root label="성향" htmlFor="keywords">
+          <Field.Root
+            label="성향"
+            htmlFor="keywords"
+            counter={`${keywords.length} / ${KEYWORD_MAX_COUNT}`}
+          >
             <TagInput
               id="keywords"
               value={keywords}
@@ -132,9 +132,7 @@ export function EditProfileForm({
             />
           </Field.Root>
           <Text typography="body4" foreground="hint" render={<p />}>
-            한 개 {KEYWORD_MAX_LENGTH}자까지 · 입력하면 앞에 #가 붙습니다.
-            <br />
-            마이페이지와 타인 프로필에 같이 보입니다.
+            {KEYWORD_MAX_LENGTH}자까지 · 앞에 #가 붙습니다.
           </Text>
         </VStack>
 

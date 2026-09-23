@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, Callout, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -33,13 +33,14 @@ export function AvailabilityEditor({ defaultValue }: AvailabilityEditorProps) {
       <AppBar back="/me/edit" title="가능 시간대" />
 
       <div className="border-b border-gray-200 px-200 py-175">
-        <Card.Root radius={400} background="subtle" padding="none" className="px-150 py-150">
-          <Text typography="body4" foreground="muted" render={<p />} className="leading-[1.65]">
+        <Callout.Root colorPalette="gray" size="sm">
+          <Callout.Icon />
+          <Callout.Description>
             되는 요일만 켜고 시간을 정합니다.
             <br />
             여기서 정한 값이 일정 조율 격자에 미리 칠해집니다.
-          </Text>
-        </Card.Root>
+          </Callout.Description>
+        </Callout.Root>
       </div>
 
       <VStack gap="100" className="px-200 py-200">

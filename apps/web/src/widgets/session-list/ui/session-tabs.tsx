@@ -1,5 +1,7 @@
-import { cn, HStack } from "@roll-and-call/ui";
-import Link from "next/link";
+"use client";
+
+import { Tabs } from "@roll-and-call/ui";
+import { useRouter } from "next/navigation";
 
 interface SessionTabsProps {
   label: string;
@@ -7,28 +9,27 @@ interface SessionTabsProps {
   activeKey: string;
 }
 
-// ponytail: 밑줄 탭은 Chip·SegmentControl과 룩이 달라 링크로 손코딩.
+// 탭은 주소(?tab=)를 따른다. 누르면 그 주소로 옮겨 서버가 목록을 다시 그린다.
 export function SessionTabs({ label, tabs, activeKey }: SessionTabsProps) {
+  const router = useRouter();
+
   return (
-    <HStack render={<nav aria-label={label} />} className="px-200">
-      {tabs.map((tab) => {
-        const selected = tab.key === activeKey;
-        return (
-          <Link
-            key={tab.key}
-            href={tab.href}
-            aria-current={selected ? "page" : undefined}
-            className={cn(
-              "flex h-[46px] flex-1 items-center justify-center border-b-2 text-sm tabular-nums",
-              selected
-                ? "border-primary-600 font-bold text-primary-ink"
-                : "border-gray-200 font-semibold text-gray-600",
-            )}
-          >
-            {tab.label} {tab.count}
-          </Link>
-        );
-      })}
-    </HStack>
+    <Tabs.Root
+      value={activeKey}
+      onValueChange={(key) => {
+        const next = tabs.find((tab) => tab.key === key);
+        if (next) router.push(next.href);
+      }}
+    >
+      <Tabs.List aria-label={label} scrollable={false} className="w-full">
+        {tabs.map((tab) => (
+          <Tabs.Trigger key={tab.key} value={tab.key} className="flex-1">
+            {tab.label}
+            <span className="ml-075 tabular-nums opacity-72">{tab.count}</span>
+          </Tabs.Trigger>
+        ))}
+        <Tabs.Indicator />
+      </Tabs.List>
+    </Tabs.Root>
   );
 }

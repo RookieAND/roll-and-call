@@ -1,4 +1,4 @@
-import { HStack, Text } from "@roll-and-call/ui";
+import { Button, HStack, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 
 interface MyPageBlockLabelProps {
@@ -8,16 +8,20 @@ interface MyPageBlockLabelProps {
 
 export function MyPageBlockLabel({ label, action }: MyPageBlockLabelProps) {
   return (
-    <HStack align="center" className="mb-100">
+    <HStack align="center" className="mb-100 min-h-8">
       <Text weight="bold" typography="body4" foreground="muted" render={<h2 />} className="flex-1">
         {label}
       </Text>
       {action && (
-        <Link href={action.href}>
-          <Text weight="medium" typography="body4" foreground="primary">
-            {action.label}
-          </Text>
-        </Link>
+        <Button
+          render={<Link href={action.href} />}
+          variant="ghost"
+          colorPalette="primary"
+          size="sm"
+          className="-mr-100"
+        >
+          {action.label}
+        </Button>
       )}
     </HStack>
   );

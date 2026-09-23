@@ -1,5 +1,4 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 import type { summarizeMySessions } from "../model/my-page-summary";
@@ -17,16 +16,15 @@ export function MyPageSessions({ sessions }: MyPageSessionsProps) {
         <Text typography="heading3" render={<h2 />} className="flex-1">
           내 세션
         </Text>
-        <Link href={sessions.joined.href}>
-          <Text
-            weight="medium"
-            typography="body4"
-            foreground="primary"
-            className="inline-flex items-center gap-050"
-          >
-            전체 보기 <ChevronRight size={14} aria-hidden />
-          </Text>
-        </Link>
+        <Button
+          render={<Link href={sessions.joined.href} />}
+          variant="ghost"
+          colorPalette="primary"
+          size="sm"
+          className="-mr-100"
+        >
+          전체 보기
+        </Button>
       </HStack>
 
       {/* 세션이 없어도 두 행을 그대로 두고 0으로 쓴다. 점선 빈 상태는 목록 화면 몫이다. */}
@@ -45,16 +43,6 @@ export function MyPageSessions({ sessions }: MyPageSessionsProps) {
           href={sessions.hosting.href}
         />
       </div>
-      {sessions.isEmpty && (
-        <HStack gap="100">
-          <Button render={<Link href="/games" />} variant="outline" className="h-11 flex-1">
-            구인 목록
-          </Button>
-          <Button render={<Link href="/games/new" />} className="h-11 flex-1">
-            새 구인
-          </Button>
-        </HStack>
-      )}
     </VStack>
   );
 }

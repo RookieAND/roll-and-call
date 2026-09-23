@@ -19,7 +19,10 @@ export function hostTodo(
       label: "참여자 뽑기",
       href: participantsHref,
       blocked: true,
-      description: `${formatDate(game.endDate)}에 신청이 마감됐습니다.\n신청한 ${waitingCount}명 가운데 ${Math.max(game.maxPlayers - confirmedCount, 0)}명을 뽑아주세요.`,
+      lines: [
+        `${formatDate(game.endDate)}에 신청이 마감됐습니다.`,
+        `신청한 ${waitingCount}명 가운데 ${Math.max(game.maxPlayers - confirmedCount, 0)}명을 뽑아주세요.`,
+      ],
     };
   }
   if (facts.awaitingTime) {
@@ -28,7 +31,10 @@ export function hostTodo(
       label: "세션 시간 정하기",
       href: facts.scheduleHref,
       blocked: true,
-      description: `조율 기한이 지났습니다.\n지금까지 ${responses}명이 낸 시간으로 일시를 정할 수 있습니다.`,
+      lines: [
+        "조율 기한이 지났습니다.",
+        `지금까지 ${responses}명이 낸 시간으로 일시를 정할 수 있습니다.`,
+      ],
     };
   }
 
@@ -43,7 +49,7 @@ export function hostTodo(
       label: `신청 ${waitingCount}건 보기`,
       href: participantsHref,
       blocked: false,
-      description: `신청 ${waitingCount}건이 들어와 있습니다.\n아직 아무것도 보지 않았습니다.`,
+      lines: [`신청 ${waitingCount}건이 들어와 있습니다.`, "아직 아무것도 보지 않았습니다."],
     };
   }
   return {
@@ -51,6 +57,9 @@ export function hostTodo(
     label: "참여자 관리",
     href: participantsHref,
     blocked: false,
-    description: `확정 자리가 ${openSeats}개 비었습니다.\n대기 중인 ${waitingCount}명 가운데 누구를 올릴지 정해주세요.`,
+    lines: [
+      `확정 자리가 ${openSeats}개 비었습니다.`,
+      `대기 중인 ${waitingCount}명 가운데 누구를 올릴지 정해주세요.`,
+    ],
   };
 }

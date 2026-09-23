@@ -4,11 +4,13 @@ import type { LucideIcon } from "lucide-react";
 const iconTile = cva("flex h-[34px] w-[34px] flex-none items-center justify-center rounded-400", {
   variants: {
     tone: {
-      primary: "bg-primary-50 text-primary-ink",
+      primary: "bg-primary-50 text-tinted-ink",
       success: "bg-success-50 text-success-700",
       danger: "bg-danger-50 text-danger-600",
       muted: "bg-gray-100 text-gray-600",
-      locked: "bg-gray-100 text-gray-400",
+      locked: "bg-gray-100 text-hint",
+      // 붉게 칠한 줄 위에서도 보이도록 바탕은 면 색, 아이콘만 붉게.
+      urgent: "bg-surface text-danger-600",
     },
   },
 });

@@ -40,11 +40,7 @@ export function MyPageProfile({
           subline={bioText}
           sublineForeground={bioForeground}
         />
-        <Button
-          render={<Link href="/me/edit" />}
-          variant="outline"
-          className="h-9 flex-none rounded-400 px-150 text-xs font-bold"
-        >
+        <Button render={<Link href="/me/edit" />} variant="outline" size="sm">
           편집
         </Button>
       </HStack>
@@ -62,7 +58,14 @@ export function MyPageProfile({
             label: availability.length > 0 ? "편집" : "추가",
           }}
         />
-        <AvailabilityRows intervals={availability} note="조율 격자에 미리 칠해지는 기본값입니다." />
+        <AvailabilityRows
+          intervals={availability}
+          note={
+            availability.length > 0
+              ? "일정 조율 화면을 열면 이 시간대가 미리 칠해져 있습니다."
+              : "적어두면 일정 조율 화면에 미리 칠해 둡니다."
+          }
+        />
       </div>
     </VStack>
   );

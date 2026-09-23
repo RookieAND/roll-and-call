@@ -17,7 +17,7 @@ interface SessionStatusChipsProps {
 
 export function SessionStatusChips({ activeTab, activeChip, endedCount }: SessionStatusChipsProps) {
   return (
-    <HStack gap="075" className="overflow-x-auto px-200 py-125">
+    <HStack gap="075" className="overflow-x-auto px-200 pt-175 [scrollbar-width:none]">
       {SESSION_CHIPS[activeTab].map((chip) => {
         const selected = chip.key === activeChip;
         const label =
@@ -34,7 +34,6 @@ export function SessionStatusChips({ activeTab, activeChip, endedCount }: Sessio
               />
             }
             selected={selected}
-            className="h-[34px]"
           >
             {label}
           </Chip>

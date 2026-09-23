@@ -40,7 +40,7 @@ export function MySessionRow({ label, count, detail, urgent = false, href }: MyS
       >
         {count}
       </Text>
-      <ChevronRight size={17} className="flex-none text-gray-400" aria-hidden />
+      <ChevronRight size={17} className="flex-none text-hint" aria-hidden />
     </Link>
   );
 }

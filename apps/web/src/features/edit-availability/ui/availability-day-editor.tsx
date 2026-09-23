@@ -30,7 +30,7 @@ export function AvailabilityDayEditor({
   const chipClass = cn(
     "h-11 w-11 flex-none rounded-400 text-sm",
     on
-      ? "bg-primary-600 font-bold text-white hover:bg-primary-700"
+      ? "bg-primary-600 font-bold text-on-primary hover:bg-primary-700"
       : "border border-dashed border-gray-300 font-semibold text-hint",
   );
 
@@ -55,7 +55,7 @@ export function AvailabilityDayEditor({
               <IconButton
                 variant="ghost"
                 aria-label={`${label}요일 구간 추가`}
-                className="h-11 w-10 flex-none text-primary-ink"
+                className="h-11 w-11 flex-none text-tinted-ink"
                 onClick={onAdd}
               >
                 <Plus size={16} aria-hidden />
@@ -89,7 +89,7 @@ export function AvailabilityDayEditor({
                 <IconButton
                   variant="ghost"
                   aria-label={`${label}요일 구간 지우기`}
-                  className="h-11 w-10 flex-none"
+                  className="h-11 w-11 flex-none"
                   onClick={() => onRemove(row.index)}
                 >
                   <X size={15} aria-hidden />

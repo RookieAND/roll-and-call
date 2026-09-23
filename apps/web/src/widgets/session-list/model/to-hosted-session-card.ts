@@ -22,14 +22,12 @@ export function toHostedSessionCard(
     base,
     state,
     line,
-    coordinate,
     confirmedCount,
     awaitingTime,
     drawPending,
     timeSet,
     sessionWhen,
     sessionAgo,
-    seats,
     waitingCount,
   } = facts;
   const status = deriveGameStatus({
@@ -44,14 +42,14 @@ export function toHostedSessionCard(
   const gmTodo = todo?.blocked ?? false;
   const scheduleTone = gmTodo
     ? SESSION_TONE.danger
-    : line.confirmed
-      ? SESSION_TONE.success
-      : SESSION_TONE.normal;
+    : timeSet
+      ? SESSION_TONE.strong
+      : SESSION_TONE.muted;
   const scheduleIcon = gmTodo
     ? SESSION_ICON.alert
-    : line.confirmed
-      ? SESSION_ICON.confirmed
-      : SESSION_ICON.scheduling;
+    : timeSet
+      ? SESSION_ICON.calendar
+      : SESSION_ICON.clock;
   const awaitingTimeText = context.readOnly
     ? "모집이 끝나 GM이 세션 시간을 정하는 중입니다"
     : "조율 기한이 지났습니다 · 세션 일시를 정해주세요";
@@ -61,7 +59,7 @@ export function toHostedSessionCard(
 
   return {
     ...base,
-    urgent: base.urgent || gmTodo,
+    urgent: gmTodo,
     chip: state === SESSION_STATE.confirmed ? SESSION_CHIP.confirmed : SESSION_CHIP.recruiting,
     badge: gameStatusLabel[status],
     badgeColor: gameStatusColor[status],
@@ -69,19 +67,13 @@ export function toHostedSessionCard(
       ? drawPendingText
       : awaitingTime
         ? awaitingTimeText
-        : (sessionWhen ?? joinParts(line.text, line.deadline)),
-    scheduleTail: awaitingTime || drawPending ? null : sessionAgo,
+        : sessionWhen
+          ? joinParts(sessionWhen, sessionAgo)
+          : joinParts(line.text, line.deadline),
     scheduleTone,
     scheduleIcon,
     // 운영 탭은 내가 GM이라 GM 줄을 적지 않는다.
     gm: null,
-    counts: [
-      ...(!context.readOnly && coordinate && !timeSet
-        ? [{ label: "응답", value: `${responses}/${confirmedCount}` }]
-        : []),
-      { label: "확정", value: seats },
-    ],
-    note: null,
     action: context.readOnly ? null : hostMenuAction(game.id),
     todo,
     waitingCount,

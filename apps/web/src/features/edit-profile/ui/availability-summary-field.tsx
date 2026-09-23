@@ -61,7 +61,8 @@ export function AvailabilitySummaryField({ intervals }: AvailabilitySummaryField
       <Button
         render={<Link href="/me/availability" />}
         variant="outline"
-        className="mt-150 h-11 w-full text-primary-ink"
+        colorPalette="primary"
+        className="mt-150 h-11 w-full"
       >
         {days.length > 0 ? "수정하기" : "시간대 설정하기"}
       </Button>

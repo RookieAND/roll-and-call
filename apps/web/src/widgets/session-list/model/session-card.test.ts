@@ -10,7 +10,12 @@ import {
 
 import { buildProfileSessions } from "./build-profile-sessions";
 import { buildSessions } from "./build-sessions";
-import { SESSION_ACTION_KIND, SESSION_CHIP, type SessionGame } from "./session-card-model";
+import {
+  SESSION_ACTION_KIND,
+  SESSION_CHIP,
+  SESSION_ICON,
+  type SessionGame,
+} from "./session-card-model";
 import { toSessionCard } from "./to-session-card";
 
 const NOW = new Date("2026-09-15T12:00:00+09:00");
@@ -65,11 +70,13 @@ const hostCard = (partial: Partial<SessionGame>) =>
   toSessionCard(game(partial), SESSION_ROLE.host, context());
 
 describe("참여 카드", () => {
-  it("가능 시간을 내지 않았으면 일정 조율이 할 일로 남는다", () => {
+  it("가능 시간을 내지 않았으면 막힌 카드로 칠하고 일정 조율이 할 일로 남는다", () => {
     const card = playerCard({ participants: [confirmedMe] });
     expect(card.chip).toBe(SESSION_CHIP.scheduling);
+    expect(card.urgent).toBe(true);
+    expect(card.scheduleIcon).toBe(SESSION_ICON.alert);
     expect(card.todo?.label).toBe("일정 조율");
-    expect(card.schedule).toBe("가능 시간 미제출 · 마감 D-3");
+    expect(card.schedule).toMatch(/까지 가능 시간을 내야 합니다$/);
   });
 
   it("가능 시간을 내면 할 일이 사라진다", () => {
@@ -79,7 +86,8 @@ describe("참여 카드", () => {
   it("시간이 정해지면 언제인지가 앞에 온다", () => {
     const card = playerCard({ confirmedAt: at(2), endDate: at(-1), participants: [confirmedMe] });
     expect(card.chip).toBe(SESSION_CHIP.confirmed);
-    expect(card.scheduleTail).toBe("모레");
+    expect(card.scheduleIcon).toBe(SESSION_ICON.calendar);
+    expect(card.schedule).toMatch(/ · 모레$/);
   });
 });
 
@@ -88,8 +96,9 @@ describe("대기 카드", () => {
     const card = playerCard({ participants: [other, me(PARTICIPANT_STATUS.waiting)] });
     expect(card.chip).toBe(SESSION_CHIP.waiting);
     expect(card.badge).toBe("승인 대기");
+    expect(card.badgeColor).toBe("gray");
     expect(card.action?.label).toBe("대기 취소");
-    expect(card.schedule).toBe("신청 2일째 · GM이 아직 보지 않았습니다");
+    expect(card.schedule).toBe("신청한 지 2일째입니다 · GM이 아직 보지 않았습니다");
   });
 
   it("추첨은 뽑기 전까지 순번이 없어 신청으로 센다", () => {
@@ -98,16 +107,13 @@ describe("대기 카드", () => {
       participants: [other, me(PARTICIPANT_STATUS.waiting)],
     });
     expect(card.badge).toBe("추첨 전");
-    expect(card.counts).toEqual([{ label: null, value: "신청 2 · 정원 4" }]);
+    expect(card.badgeColor).toBe("gray");
+    expect(card.waitlistRank).toBeNull();
     expect(card.action?.label).toBe("신청 취소");
   });
 
-  // 룰·GM·숫자는 아래 줄에서 각자 다른 모양으로 나간다.
-  it("아래 줄은 룰·GM·숫자로 나뉜다", () => {
-    const card = playerCard({});
-    expect(card.rule).toBe("CoC");
-    expect(card.gm?.username).toBe("한랑아");
-    expect(card.counts).toEqual([{ label: null, value: "0/4" }]);
+  it("참여 탭 카드에는 GM 줄이 붙는다", () => {
+    expect(playerCard({}).gm?.username).toBe("한랑아");
   });
 });
 
@@ -120,10 +126,11 @@ describe("운영 카드", () => {
     expect(card.action?.label).toBe("운영 관리");
   });
 
-  it("끝난 세션에는 출석 확인이 남는다", () => {
+  it("끝난 세션에는 출석 확인이 할 일로 남고, 카드 버튼은 운영 관리 하나다", () => {
     const card = hostCard({ id: "ended", confirmedAt: at(-1), participants: [confirmedMe, other] });
     expect(card.todo?.kind).toBe(SESSION_ACTION_KIND.confirmAttendance);
-    expect(card.action?.href).toBe("/games/ended/attendance");
+    expect(card.todo?.lines).toHaveLength(2);
+    expect(card.action?.href).toBe("/games/ended/manage");
   });
 
   it("출석을 확정한 뒤에도 운영 관리로 들어가 고칠 수 있다", () => {
@@ -163,19 +170,9 @@ describe("종료 카드", () => {
       participants: [{ ...confirmedMe, absent: true }, other],
     });
     expect(card.badge).toBe("불참");
-    expect(card.schedule).toMatch(/참석하지 않았습니다$/);
-    expect(card.note).toMatch(/에 사라집니다/);
-  });
-
-  it("사라지는 날짜는 본인 카드에만 붙는다", () => {
-    const absent = game({
-      confirmedAt: at(-1),
-      attendanceConfirmedAt: at(-1),
-      participants: [{ ...confirmedMe, absent: true }, other],
-    });
-    expect(
-      toSessionCard(absent, SESSION_ROLE.player, { ...context(), readOnly: true }).note,
-    ).toBeNull();
+    expect(card.titleDanger).toBe(true);
+    expect(card.scheduleIcon).toBe(SESSION_ICON.calendar);
+    expect(card.schedule).toMatch(/ · 참석하지 않았습니다/);
   });
 
   it("시작했어도 플레이타임이 남아 있으면 종료가 아니다", () => {

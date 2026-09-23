@@ -10,7 +10,7 @@ export default function Loading() {
   return (
     <>
       <AppBar back="/me" title="내 세션" />
-      <div className="sticky top-(--rc-size-appbar) z-10 border-b border-gray-100 bg-surface">
+      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) border-b border-gray-200 bg-surface pb-150">
         <HStack className="px-200">
           <HStack align="center" justify="center" className="h-11 flex-1">
             <Skeleton width={64} height={20} />
@@ -19,9 +19,9 @@ export default function Loading() {
             <Skeleton width={64} height={20} />
           </HStack>
         </HStack>
-        <HStack gap="075" className="px-200 py-125">
+        <HStack gap="075" className="px-200 pt-175">
           {CHIP_WIDTHS.map((width, index) => (
-            <Skeleton key={index} height={34} rounded="full" className={width} />
+            <Skeleton key={index} height={32} rounded="full" className={width} />
           ))}
         </HStack>
       </div>

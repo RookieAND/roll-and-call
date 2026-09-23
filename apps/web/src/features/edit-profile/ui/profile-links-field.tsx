@@ -89,8 +89,8 @@ export function ProfileLinksField({ value, onChange }: ProfileLinksFieldProps) {
       {value.length < LINK_MAX_COUNT && (
         <Button
           type="button"
-          variant="ghost"
-          className="h-11 w-full gap-075 rounded-400 border border-dashed border-gray-300 text-subtitle2 font-bold text-primary-ink"
+          variant="tinted"
+          className="h-11 w-full"
           onClick={() => onChange([...value, { service: LINK_SERVICES[0].key, value: "" }])}
         >
           <Plus size={14} aria-hidden />

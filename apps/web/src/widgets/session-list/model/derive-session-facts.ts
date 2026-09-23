@@ -3,7 +3,6 @@ import {
   deriveSessionState,
   isAttendanceDue,
   PARTICIPANT_STATUS,
-  isDeadlineUrgent,
   RECRUIT_METHOD,
   SCHEDULE_MODE,
   scheduleLine,
@@ -80,11 +79,12 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
     base: {
       id: game.id,
       title: game.title,
-      rule: game.rule,
       role,
       startsAt,
       deadlinePassed: line.deadlinePassed,
-      urgent: !context.readOnly && !past && !timeSet && isDeadlineUrgent(game.endDate, now),
+      urgent: false,
+      titleDanger: false,
+      waitlistRank: null,
     },
   };
 }

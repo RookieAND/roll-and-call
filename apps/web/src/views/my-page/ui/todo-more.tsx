@@ -1,6 +1,6 @@
 "use client";
 
-import { Collapsible, Text, VStack } from "@roll-and-call/ui";
+import { Button, Collapsible, Text, VStack } from "@roll-and-call/ui";
 import { ChevronDown } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -18,8 +18,12 @@ export function TodoMore({ count, children }: TodoMoreProps) {
           {children}
         </VStack>
       </Collapsible.Panel>
-      <Collapsible.Trigger className="group flex min-h-[46px] w-full cursor-pointer items-center gap-100 rounded-600 border border-gray-200 px-175 text-left transition-colors hover:bg-gray-50">
-        <Text typography="body3" weight="bold" className="flex-1 text-gray-700">
+      <Collapsible.Trigger
+        render={
+          <Button variant="outline" size="lg" className="group w-full justify-between px-175" />
+        }
+      >
+        <Text typography="body3" weight="bold" className="flex-1 text-left">
           <span className="group-data-panel-open:hidden">할 일 {count}건 더 보기</span>
           <span className="hidden group-data-panel-open:inline">접기</span>
         </Text>

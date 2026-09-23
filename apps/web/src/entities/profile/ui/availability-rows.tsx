@@ -3,6 +3,7 @@ import { Clock } from "lucide-react";
 
 import { type AvailabilityInterval, filledDays } from "../model/availability";
 import { AvailabilityDayRow } from "./availability-day-row";
+import { AvailabilityMore } from "./availability-more";
 
 const PREVIEW_ROWS = 3;
 
@@ -39,16 +40,11 @@ export function AvailabilityRows({ intervals, note }: AvailabilityRowsProps) {
           <AvailabilityDayRow key={day.day} label={day.label} intervals={day.intervals} />
         ))}
         {rest.length > 0 && (
-          <details className="group flex flex-col gap-075">
-            <summary className="flex min-h-10 cursor-pointer list-none items-center justify-center rounded-400 border border-gray-200 text-body4 font-bold text-primary-ink hover:bg-gray-50 group-open:hidden">
-              {rest.length}줄 더 보기
-            </summary>
-            <VStack gap="075">
-              {rest.map((day) => (
-                <AvailabilityDayRow key={day.day} label={day.label} intervals={day.intervals} />
-              ))}
-            </VStack>
-          </details>
+          <AvailabilityMore count={rest.length}>
+            {rest.map((day) => (
+              <AvailabilityDayRow key={day.day} label={day.label} intervals={day.intervals} />
+            ))}
+          </AvailabilityMore>
         )}
       </VStack>
       {note && (

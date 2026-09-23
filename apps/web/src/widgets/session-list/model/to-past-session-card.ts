@@ -1,4 +1,4 @@
-import { absenceExpiresAt, SESSION_ROLE, SESSION_STATE, splitRoster } from "@/entities/game";
+import { SESSION_ROLE, SESSION_STATE, splitRoster } from "@/entities/game";
 import { ddayKst, formatDate, formatDateTime } from "@/shared/lib";
 
 import type { SessionFacts } from "./derive-session-facts";
@@ -16,13 +16,13 @@ import {
   type SessionGame,
 } from "./session-card-model";
 
-// 종료은 한 칩 안에 여러 사정이 들어온다 — 완료 · 무산 · 대기 종료 · 불참. 배지는 불참만 붉고 나머지는 무채색이며, 본문이 왜 끝났는지 말한다.
+// 종료는 한 칩 안에 여러 사정이 들어온다 — 완료 · 무산 · 대기 종료 · 불참. 불참만 붉고 나머지는 무채색이며, 일정 줄이 왜 끝났는지 말한다.
 export function toPastSessionCard(
   game: SessionGame,
   facts: SessionFacts,
   context: SessionContext,
 ): SessionCardModel {
-  const { base, seats, state, viewerAbsent } = facts;
+  const { base, state, viewerAbsent } = facts;
   const finished = state === SESSION_STATE.finished && game.confirmedAt;
   const player = base.role === SESSION_ROLE.player;
   const waitlistRank = player
@@ -33,38 +33,20 @@ export function toPastSessionCard(
   const absent = player && viewerAbsent && Boolean(game.confirmedAt);
 
   // 끝난 카드는 "언제였는지"가 제일 먼저 궁금하다 — 상대 날짜를 일정 줄 끝에 붙인다.
+  const when = game.confirmedAt ? formatDateTime(game.confirmedAt) : null;
   const ago = game.confirmedAt
     ? relativeDay(ddayKst(game.confirmedAt, context.now ?? new Date()))
     : null;
   const ending = waitlistRank
-    ? {
-        badge: "대기 종료",
-        schedule: "자리가 나지 않은 채 세션이 끝났습니다",
-        counts: [{ label: "대기", value: `${waitlistRank}번`, icon: false }],
-      }
+    ? { badge: "대기 종료", schedule: joinParts(when, "자리가 나지 않은 채 끝났습니다") }
     : absent
-      ? {
-          badge: "불참",
-          schedule: joinParts(formatDateTime(game.confirmedAt!), "참석하지 않았습니다", ago),
-          counts: [{ label: null, value: seats }],
-        }
+      ? { badge: "불참", schedule: joinParts(when, "참석하지 않았습니다", ago) }
       : finished
-        ? {
-            badge: "완료",
-            schedule: joinParts(formatDateTime(game.confirmedAt!), "세션 완료", ago),
-            counts: [{ label: null, value: seats }],
-          }
+        ? { badge: "완료", schedule: joinParts(when, "세션을 마쳤습니다", ago) }
         : {
             badge: "무산",
-            schedule: `${formatDate(game.endDate)}에 일정을 정하지 못했습니다`,
-            counts: [{ label: null, value: seats }],
+            schedule: joinParts(formatDate(game.endDate), "일정을 정하지 못했습니다"),
           };
-
-  // 기간보다 언제 없어지는지가 알고 싶은 것이다. 남의 프로필에는 적지 않는다.
-  const note =
-    absent && !context.readOnly
-      ? `이 기록은 ${formatDate(absenceExpiresAt(game.confirmedAt!))}에 사라집니다.\n완료 세션 수에는 세지 않습니다.`
-      : null;
 
   const attendanceTodo: SessionTodo | null =
     !player && facts.attendanceDue && !context.readOnly
@@ -73,7 +55,10 @@ export function toPastSessionCard(
           label: "출석 확인",
           href: `/games/${game.id}/attendance`,
           blocked: false,
-          description: `${formatDateTime(game.confirmedAt!)} 세션이 끝났습니다.\n확정 참여자 ${facts.confirmedCount}명이 왔는지 표시해주세요.`,
+          lines: [
+            `${formatDateTime(game.confirmedAt!)} 세션이 끝났습니다.`,
+            `확정 참여자 ${facts.confirmedCount}명이 왔는지 표시해주세요.`,
+          ],
         }
       : null;
 
@@ -82,17 +67,17 @@ export function toPastSessionCard(
     chip: SESSION_CHIP.ended,
     badge: ending.badge,
     badgeColor: absent ? "danger" : "gray",
-    schedule: attendanceTodo
-      ? `${formatDateTime(game.confirmedAt!)} · 출석 확인이 남아 있습니다`
-      : ending.schedule,
-    scheduleTail: null,
-    scheduleTone: attendanceTodo ? SESSION_TONE.warning : SESSION_TONE.hint,
-    scheduleIcon: attendanceTodo ? SESSION_ICON.alert : null,
+    titleDanger: absent,
+    schedule: attendanceTodo ? joinParts(when, "출석 확인이 남아 있습니다") : ending.schedule,
+    scheduleTone: absent
+      ? SESSION_TONE.danger
+      : attendanceTodo
+        ? SESSION_TONE.warning
+        : SESSION_TONE.muted,
+    scheduleIcon: attendanceTodo ? SESSION_ICON.alert : SESSION_ICON.calendar,
     gm: player ? (game.gm ?? null) : null,
-    counts: ending.counts,
-    note,
-    // 출석은 확정한 뒤에도 고칠 수 있어서 GM에게는 운영 관리를 남긴다.
-    action: attendanceTodo ?? (player || context.readOnly ? null : hostMenuAction(game.id)),
+    // 운영 카드의 버튼은 언제나 "운영 관리" 하나다. 출석 확인은 그 안과 할 일 카드에서 한다.
+    action: player || context.readOnly ? null : hostMenuAction(game.id),
     todo: attendanceTodo,
     waitingCount: facts.waitingCount,
     // 부호를 뒤집어 최근에 끝난 것부터 온다.

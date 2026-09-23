@@ -4,6 +4,7 @@ import { Button, Callout, Text, VStack } from "@roll-and-call/ui";
 import { Ban } from "lucide-react";
 import { useState } from "react";
 
+import { BrandMark } from "@/entities/profile";
 import { ConfirmDialog, IconTile } from "@/shared/ui";
 
 import { useDeleteGame } from "../model/use-delete-game";
@@ -37,7 +38,7 @@ export function DeleteGameRow({ gameId, confirmedCount, lockedReason }: DeleteGa
     <>
       <Button
         variant="ghost"
-        className="flex min-h-[60px] w-full justify-start gap-150 rounded-none border-t border-gray-100 px-175 py-150 hover:bg-danger-50 disabled:opacity-100"
+        className="flex min-h-16 w-full justify-start gap-150 rounded-none px-175 py-150 hover:bg-danger-50 disabled:opacity-100"
         disabled={locked}
         onClick={() => setConfirming(true)}
       >
@@ -63,13 +64,16 @@ export function DeleteGameRow({ gameId, confirmedCount, lockedReason }: DeleteGa
         pending={pending}
         onConfirm={remove}
       >
-        <Callout.Root size="sm" className="mt-150">
+        <Callout.Root colorPalette="gray" size="sm">
+          <Callout.Icon>
+            <BrandMark service="discord" size={16} />
+          </Callout.Icon>
           <Callout.Description>
-            <ul className="flex list-disc flex-col gap-050 pl-200 text-body4">
-              <li>디스코드 모집 공지에 취소가 표시됩니다.</li>
-              <li>모집 스레드와 세션 채널에 취소를 알립니다.</li>
-              <li>채널은 지우지 않고 그대로 둡니다.</li>
-            </ul>
+            디스코드 모집 공지에 취소가 표시됩니다.
+            <br />
+            모집 스레드와 세션 채널에 취소를 알립니다.
+            <br />
+            채널은 지우지 않고 그대로 둡니다.
           </Callout.Description>
         </Callout.Root>
       </ConfirmDialog>

@@ -1,4 +1,4 @@
-import { HStack, Text } from "@roll-and-call/ui";
+import { Chip, HStack, Text } from "@roll-and-call/ui";
 
 interface KeywordChipsProps {
   keywords: readonly string[];
@@ -26,12 +26,9 @@ export function KeywordChips({ keywords }: KeywordChipsProps) {
   return (
     <HStack gap="075" wrap>
       {keywords.map((keyword) => (
-        <span
-          key={keyword}
-          className="flex h-8 items-center rounded-full border border-primary-200 bg-primary-50 px-150 text-subtitle2 font-bold text-primary-ink"
-        >
+        <Chip key={keyword} shape="pill" selected render={<span />}>
           #{keyword}
-        </span>
+        </Chip>
       ))}
     </HStack>
   );

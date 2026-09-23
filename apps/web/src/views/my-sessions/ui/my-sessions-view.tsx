@@ -53,7 +53,7 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
   return (
     <>
       <AppBar back="/me" title="내 세션" />
-      <div className="sticky top-(--rc-size-appbar) z-10 border-b border-gray-100 bg-surface">
+      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) border-b border-gray-200 bg-surface pb-150">
         <SessionTabs label="역할" tabs={roleTabs} activeKey={activeTab} />
         <SessionStatusChips activeTab={activeTab} activeChip={activeChip} endedCount={endedCount} />
       </div>

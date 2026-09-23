@@ -16,13 +16,13 @@ export function MyPageSettings({ handleLabel }: MyPageSettingsProps) {
         설정
       </Text>
       <div className={MY_PAGE_GROUP_CLASS}>
-        <HStack align="center" gap="150" className="h-[52px] border-b border-gray-100 px-175">
-          <Text typography="subtitle1" className="flex-1">
+        <HStack align="center" gap="150" className="min-h-15 border-b border-gray-200 px-175">
+          <Text typography="subtitle1" className="min-w-0 flex-1 whitespace-nowrap">
             화면 테마
           </Text>
-          <ThemeSetting />
+          <ThemeSetting className="w-39 flex-none" />
         </HStack>
-        <SignOutButton className="h-[52px] w-full justify-between rounded-none border-0 px-175 text-subtitle1 font-bold text-gray-900">
+        <SignOutButton className="min-h-13 w-full justify-between rounded-none border-0 px-175 text-subtitle1 font-bold text-gray-900">
           로그아웃
           {handleLabel && (
             <Text typography="body3" foreground="hint" render={<span />}>

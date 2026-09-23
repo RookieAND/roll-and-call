@@ -42,6 +42,19 @@ const ONGOING_EMPTY: Record<
   },
 };
 
+const ONGOING_IMAGE: Record<SessionRole, string> = {
+  [SESSION_ROLE.player]: "/empty-states/empty-my-games.png",
+  [SESSION_ROLE.host]: "/empty-states/empty-hosted.png",
+};
+
+// 칩으로 거른 결과가 비었을 때 칩마다 다른 말.
+const FILTERED_TITLE: Partial<Record<SessionChipKey, string>> = {
+  [SESSION_CHIP.scheduling]: "조율 중인 세션이 없습니다",
+  [SESSION_CHIP.confirmed]: "확정된 세션이 없습니다",
+  [SESSION_CHIP.waiting]: "대기 중인 세션이 없습니다",
+  [SESSION_CHIP.recruiting]: "모집 중인 세션이 없습니다",
+};
+
 interface SessionsEmptyProps {
   activeTab: SessionRole;
   activeChip: SessionChipKey;
@@ -53,11 +66,11 @@ export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
     return (
       <EmptyState
         size="section"
-        image="/empty-states/empty-my-games.png"
+        image={ONGOING_IMAGE[activeTab]}
         title={empty.title}
         description={empty.body}
         action={
-          <Button render={<Link href={empty.href} />} className="h-11 w-full">
+          <Button render={<Link href={empty.href} />} className="mt-100">
             {empty.label}
           </Button>
         }
@@ -80,12 +93,14 @@ export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
   return (
     <EmptyState
       size="section"
-      title="이 상태인 세션이 없습니다"
+      image="/empty-states/empty-search.png"
+      title={FILTERED_TITLE[activeChip] ?? "이 상태인 세션이 없습니다"}
+      description="필터를 풀면 진행 중인 세션을 모두 볼 수 있습니다."
       action={
         <Button
           render={<Link href={sessionsHref(activeTab)} />}
           variant="outline"
-          className="h-11 w-full"
+          className="mt-100"
         >
           필터 해제
         </Button>
