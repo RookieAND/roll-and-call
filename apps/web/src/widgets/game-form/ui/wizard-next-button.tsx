@@ -8,7 +8,7 @@ interface WizardNextButtonProps {
 
 export function WizardNextButton({ onClick }: WizardNextButtonProps) {
   return (
-    <Button type="button" onClick={onClick} size="lg" className="h-[50px]">
+    <Button type="button" onClick={onClick} size="lg">
       다음
     </Button>
   );

@@ -8,7 +8,7 @@ interface WizardSubmitButtonProps {
 
 export function WizardSubmitButton({ label }: WizardSubmitButtonProps) {
   return (
-    <Button type="submit" size="lg" className="h-[50px]">
+    <Button type="submit" size="lg">
       {label}
     </Button>
   );

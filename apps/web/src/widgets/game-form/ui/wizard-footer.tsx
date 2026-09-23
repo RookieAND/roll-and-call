@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Callout, Container, HStack, VStack } from "@roll-and-call/ui";
+import { Button, Callout, Container, FloatingBar, HStack, VStack } from "@roll-and-call/ui";
 
 import { WizardNextButton } from "./wizard-next-button";
 import { WizardSavingButton } from "./wizard-saving-button";
@@ -32,34 +32,31 @@ export function WizardFooter({
   const backLabel = isFirstStep ? cancelLabel : "이전";
 
   return (
-    <div className="sticky bottom-0 z-10 border-t border-gray-200 bg-surface">
-      <Container size="md" className="py-150">
-        <VStack gap="150">
-          {isLastStep && error && (
-            <Callout.Root colorPalette="danger" className="whitespace-pre-line">
-              <Callout.Description>{error}</Callout.Description>
-            </Callout.Root>
-          )}
-          <HStack gap="100" className="[&>*]:flex-1">
-            {backLabel && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onBack}
-                size="lg"
-                className="h-[50px]"
-              >
-                {backLabel}
-              </Button>
+    <FloatingBar.Root elevated={false}>
+      <FloatingBar.Content>
+        <Container size="md">
+          <VStack gap="150">
+            {isLastStep && error && (
+              <Callout.Root colorPalette="danger" className="whitespace-pre-line">
+                <Callout.Description>{error}</Callout.Description>
+              </Callout.Root>
             )}
-            {/* key가 없으면 같은 DOM 버튼의 type만 submit으로 바뀌어, 마지막 단계로 넘어간 그
-                클릭이 곧바로 제출로 이어진다. */}
-            {!isLastStep && <WizardNextButton key="next" onClick={onNext} />}
-            {isLastStep && pending && <WizardSavingButton key="submit" />}
-            {isLastStep && !pending && <WizardSubmitButton key="submit" label={submitLabel} />}
-          </HStack>
-        </VStack>
-      </Container>
-    </div>
+            <HStack gap="100" className="[&>*]:flex-1">
+              {backLabel && (
+                <Button type="button" variant="outline" onClick={onBack} size="lg">
+                  {backLabel}
+                </Button>
+              )}
+              {/* key가 없으면 같은 DOM 버튼의 type만 submit으로 바뀌어, 마지막 단계로 넘어간 그
+                  클릭이 곧바로 제출로 이어진다. */}
+              {!isLastStep && <WizardNextButton key="next" onClick={onNext} />}
+              {isLastStep && pending && <WizardSavingButton key="submit" />}
+              {isLastStep && !pending && <WizardSubmitButton key="submit" label={submitLabel} />}
+            </HStack>
+          </VStack>
+        </Container>
+      </FloatingBar.Content>
+      <FloatingBar.Spacer />
+    </FloatingBar.Root>
   );
 }
