@@ -26,8 +26,8 @@ export function HomeLoading() {
           </HStack>
         </HStack>
         <Grid className="grid-cols-[repeat(2,minmax(0,1fr))] gap-125">
-          <WeekCardLoading label="새 구인" icon={FileText} linkLabel="구인 보기" />
-          <WeekCardLoading label="진행된 세션" icon={CalendarDays} linkLabel="구인 보기" />
+          <WeekCardLoading label="새 구인" icon={FileText} />
+          <WeekCardLoading label="진행된 세션" icon={CalendarDays} />
         </Grid>
         <Panel
           title="처리 대기"

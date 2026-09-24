@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
 import type { LucideIcon } from "lucide-react";
 
 const BAR_HEIGHTS = [58, 66, 52, 72, 62, 80, 70, 92];
@@ -6,10 +6,9 @@ const BAR_HEIGHTS = [58, 66, 52, 72, 62, 80, 70, 92];
 interface WeekCardLoadingProps {
   label: string;
   icon: LucideIcon;
-  linkLabel: string;
 }
 
-export function WeekCardLoading({ label, icon: Icon, linkLabel }: WeekCardLoadingProps) {
+export function WeekCardLoading({ label, icon: Icon }: WeekCardLoadingProps) {
   return (
     <VStack
       gap="100"
@@ -21,9 +20,6 @@ export function WeekCardLoading({ label, icon: Icon, linkLabel }: WeekCardLoadin
         <Text typography="body4" weight="bold" foreground="muted" render={<h2 />}>
           {label}
         </Text>
-        <Button variant="outline" size="sm" disabled className="ml-auto">
-          {linkLabel}
-        </Button>
       </HStack>
       <HStack align="end" gap="150">
         <Skeleton width={88} height={44} rounded={300} />

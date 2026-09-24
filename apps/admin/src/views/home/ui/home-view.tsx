@@ -30,21 +30,12 @@ export function HomeView({ weekly, pendingItems }: HomeViewProps) {
           </Text>
         </HStack>
         <Grid className="grid-cols-[repeat(2,minmax(0,1fr))] gap-125">
-          <WeekCard
-            label="새 구인"
-            icon={FileText}
-            unit="건"
-            series={weekly.newPosts}
-            linkLabel="구인 보기"
-            href="/posts"
-          />
+          <WeekCard label="새 구인" icon={FileText} unit="건" series={weekly.newPosts} />
           <WeekCard
             label="진행된 세션"
             icon={CalendarDays}
             unit="건"
             series={weekly.finishedSessions}
-            linkLabel="구인 보기"
-            href="/posts"
           />
         </Grid>
         <Panel

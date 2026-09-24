@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import type { WeeklyPoint } from "@/shared/server";
 import { useChartTokens } from "@/shared/ui";
 
-const Column = dynamic(() => import("@ant-design/plots").then((module) => module.Column), {
+const Line = dynamic(() => import("@ant-design/plots").then((module) => module.Line), {
   ssr: false,
 });
 
@@ -21,39 +21,50 @@ interface WeekChartProps {
 export function WeekChart({ weeks, average, name, unit }: WeekChartProps) {
   const { ref, tokens } = useChartTokens();
   const currentLabel = weeks.at(-1)?.label;
+  const isCurrent = (point: WeeklyPoint) => point.label === currentLabel;
+  const axisLabels = new Map(weeks.map((week, index) => [week.label, axisLabel(weeks, index)]));
   const summary = `최근 8주 추이, 이번 주 ${weeks.at(-1)?.count ?? 0}${unit}, 평균 ${average}${unit}`;
   return (
     <div ref={ref} role="img" aria-label={summary} className="h-[150px] min-w-0">
       {tokens ? (
-        <Column
+        <Line
           data={weeks}
           xField="label"
           yField="count"
           height={CHART_HEIGHT}
           autoFit
           animate={false}
-          paddingTop={22}
-          paddingLeft={8}
-          paddingRight={8}
-          paddingBottom={24}
-          scale={{ y: { domainMin: 0, nice: true }, x: { padding: 0.45 } }}
-          style={{
-            fill: (point: WeeklyPoint) =>
-              point.label === currentLabel ? tokens.primary : tokens.primaryWeak,
-            fillOpacity: 1,
-            radiusTopLeft: 6,
-            radiusTopRight: 6,
+          paddingTop={24}
+          paddingLeft={28}
+          paddingRight={28}
+          paddingBottom={26}
+          scale={{ y: { domainMin: 0, nice: true } }}
+          style={{ stroke: tokens.primary, lineWidth: 2, lineJoin: "round", lineCap: "round" }}
+          area={{
+            style: {
+              fill: `linear-gradient(-90deg, transparent 0%, ${tokens.primary} 100%)`,
+              fillOpacity: 0.18,
+            },
+          }}
+          point={{
+            sizeField: (point: WeeklyPoint) => (isCurrent(point) ? 5 : 3),
+            style: {
+              fill: (point: WeeklyPoint) => (isCurrent(point) ? tokens.primary : tokens.base),
+              stroke: (point: WeeklyPoint) => (isCurrent(point) ? tokens.base : tokens.primary),
+              lineWidth: (point: WeeklyPoint) => (isCurrent(point) ? 2 : 1.5),
+              fillOpacity: 1,
+            },
           }}
           label={{
-            text: (point: WeeklyPoint) => (point.label === currentLabel ? String(point.count) : ""),
-            position: "top",
-            dy: -4,
+            text: (point: WeeklyPoint) => (isCurrent(point) ? String(point.count) : ""),
+            dy: -11,
             style: {
               fill: tokens.primary,
               fillOpacity: 1,
               fontWeight: 800,
               fontSize: 13,
               fontFamily: tokens.font,
+              textAlign: "end",
               textBaseline: "bottom",
             },
           }}
@@ -64,7 +75,9 @@ export function WeekChart({ weeks, average, name, unit }: WeekChartProps) {
               line: true,
               lineStroke: tokens.line,
               lineStrokeOpacity: 1,
-              labelFill: tokens.muted,
+              labelFormatter: (label: string) => axisLabels.get(label) ?? label,
+              labelFill: (label: string) => (label === currentLabel ? tokens.normal : tokens.hint),
+              labelFontWeight: (label: string) => (label === currentLabel ? 700 : 400),
               labelFillOpacity: 1,
               labelFontSize: 12,
               labelFontFamily: tokens.font,
@@ -90,6 +103,7 @@ export function WeekChart({ weeks, average, name, unit }: WeekChartProps) {
                 text: `평균 ${average}`,
                 position: "left",
                 textBaseline: "bottom",
+                dx: -28,
                 dy: -2,
                 style: {
                   fill: tokens.muted,
@@ -109,4 +123,12 @@ export function WeekChart({ weeks, average, name, unit }: WeekChartProps) {
       ) : null}
     </div>
   );
+}
+
+// "이번 주", 달이 바뀌는 주만 "9월 1주", 나머지는 "2주"
+function axisLabel(weeks: WeeklyPoint[], index: number) {
+  if (index === weeks.length - 1) return "이번 주";
+  const [month, week] = (weeks[index]?.label ?? "").replace("주차", "주").split(" ");
+  const previousMonth = weeks[index - 1]?.label.split(" ")[0];
+  return month === previousMonth ? week : `${month} ${week}`;
 }

@@ -1,6 +1,5 @@
-import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 import type { LucideIcon } from "lucide-react";
-import Link from "next/link";
 
 import type { WeeklySeries } from "@/shared/server";
 
@@ -11,11 +10,9 @@ interface WeekCardProps {
   icon: LucideIcon;
   unit: string;
   series: WeeklySeries;
-  linkLabel: string;
-  href: string;
 }
 
-export function WeekCard({ label, icon: Icon, unit, series, linkLabel, href }: WeekCardProps) {
+export function WeekCard({ label, icon: Icon, unit, series }: WeekCardProps) {
   const { current, previous, delta, deltaPercent } = series;
   const arrow = delta > 0 ? "▲" : delta < 0 ? "▼" : "–";
   const deltaForeground = delta < 0 ? "danger" : "normal";
@@ -31,9 +28,6 @@ export function WeekCard({ label, icon: Icon, unit, series, linkLabel, href }: W
         <Text typography="body4" weight="bold" foreground="muted" render={<h2 />}>
           {label}
         </Text>
-        <Button variant="outline" size="sm" render={<Link href={href} />} className="ml-auto">
-          {linkLabel}
-        </Button>
       </HStack>
       <HStack align="end" gap="150">
         <Text
