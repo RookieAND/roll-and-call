@@ -25,7 +25,7 @@ export function EmptyState({
     <VStack
       gap="150"
       className={cn(
-        "items-center rounded-700 border border-dashed border-gray-300 px-250 py-300 text-center",
+        "items-center rounded-600 border border-dashed border-gray-300 px-250 py-300 text-center",
         className,
       )}
     >

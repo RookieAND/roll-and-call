@@ -2,6 +2,8 @@
 
 import { Button, Sheet, Text, VStack } from "@roll-and-call/ui";
 
+import { BrandMark } from "@/entities/profile";
+
 import { signInWithDiscord } from "../api/sign-in";
 
 interface LoginSheetProps {
@@ -35,6 +37,7 @@ export function LoginSheet({ open, onOpenChange, next }: LoginSheetProps) {
                 className="w-full"
                 onClick={() => signInWithDiscord(next)}
               >
+                <BrandMark service="discord" size={18} />
                 디스코드로 로그인
               </Button>
               <Button
