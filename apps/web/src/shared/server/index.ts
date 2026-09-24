@@ -13,7 +13,13 @@ export {
   type Availability,
   type AvailabilityInterval,
   type ProfileLink,
+  rulebooks,
+  certifications,
+  certApplications,
+  rulebookRequests,
+  type CertApplication,
 } from "@roll-and-call/database";
+export { getRulebookRecords, type RulebookRecords } from "./db/get-rulebook-records";
 export { getRecruitingGamesPage } from "./db/get-recruiting-games-page";
 export { getGamesCounts, type GamesCounts } from "./db/get-games-counts";
 export { getGamesByGm } from "./db/get-games-by-gm";
@@ -43,3 +49,4 @@ export { removeUnusedGameFiles } from "./game-files";
 export { createSupabaseServerClient } from "./auth/create-supabase-server-client";
 export { getCurrentUser } from "./auth/get-current-user";
 export { getCurrentSessionUser } from "./auth/get-current-session-user";
+export { removeUnusedCertPhotos } from "./cert-files";

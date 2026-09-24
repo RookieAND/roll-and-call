@@ -1,7 +1,5 @@
-import { AUTH_REQUIRED_MESSAGE, createSupabaseBrowserClient } from "@/shared/api";
+import { AUTH_REQUIRED_MESSAGE, createSupabaseBrowserClient, putWithProgress } from "@/shared/api";
 import { GAME_IMAGE_BUCKET } from "@/shared/lib";
-
-import { putWithProgress } from "./put-with-progress";
 
 export type UploadResult = { url: string } | { error: string };
 

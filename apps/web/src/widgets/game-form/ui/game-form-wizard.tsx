@@ -31,6 +31,7 @@ export function GameFormWizard({
   onValid,
   steps,
   edit,
+  rulebooks,
 }: GameFormLayoutProps) {
   const router = useRouter();
   const [step, setStep] = useState(0);
@@ -83,7 +84,7 @@ export function GameFormWizard({
   function renderSection(section: SectionKey) {
     switch (section) {
       case FORM_SECTION.basics:
-        return <GameBasicsFields form={form} />;
+        return <GameBasicsFields form={form} rulebooks={rulebooks} />;
       case FORM_SECTION.preflight:
         return <GamePreflightFields form={form} />;
       case FORM_SECTION.media:

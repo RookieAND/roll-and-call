@@ -1,5 +1,6 @@
 import type { UseFormReturn } from "react-hook-form";
 
+import type { MyRulebooks } from "@/entities/rulebook";
 import type { GameFormValues } from "@/features/write-game";
 
 import type { WizardStepConfig } from "./game-form-steps";
@@ -17,4 +18,5 @@ export interface GameFormLayoutProps {
   onValid: (values: GameFormValues) => void;
   steps: readonly WizardStepConfig[];
   edit?: GameEditContext;
+  rulebooks?: MyRulebooks;
 }

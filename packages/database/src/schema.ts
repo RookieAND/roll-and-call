@@ -245,7 +245,8 @@ export const rulebookRequestOutcome = pgEnum("rulebook_request_outcome", [
   "rejected",
 ]);
 
-export type CertShot = "full" | "front" | "back" | "side";
+// 인증 사진은 앞면(닉네임 쪽지와 함께)·뒷면·옆면(책등) 세 장이다.
+export type CertShot = "front" | "back" | "side";
 
 // 추가 정보(before/after/related)는 활동 기록 상세에만 쓰므로 jsonb 한 칸에 담는다.
 export type AuditState = { label: string; sub?: string };
@@ -273,6 +274,8 @@ export const rulebookRequests = pgTable(
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
     name: text("name").notNull(),
+    edition: text("edition").notNull().default(""),
+    publisher: text("publisher"),
     note: text("note").notNull().default(""),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     outcome: rulebookRequestOutcome("outcome"),
@@ -326,6 +329,10 @@ export const certifications = pgTable(
       .references(() => rulebooks.id, { onDelete: "cascade" }),
     approvedBy: uuid("approved_by").references(() => profiles.id, { onDelete: "set null" }),
     approvedAt: timestamp("approved_at", { withTimezone: true }).notNull().defaultNow(),
+    // 운영진이 취소하면 지우지 않고 남긴다. 사용자 화면의 "인증 취소됨"과 사유가 여기서 나온다.
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+    revokedBy: uuid("revoked_by").references(() => profiles.id, { onDelete: "set null" }),
+    revokeReason: text("revoke_reason"),
   },
   (table) => [
     primaryKey({ columns: [table.userId, table.rulebookId] }),

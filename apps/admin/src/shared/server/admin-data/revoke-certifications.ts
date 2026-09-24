@@ -1,6 +1,6 @@
 import "server-only";
 import { certifications, db, profiles, rulebooks } from "@roll-and-call/database";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, isNull, sql } from "drizzle-orm";
 
 import { applyOngoingChoices, type OngoingChoice } from "./apply-ongoing-choices";
 import { recordAudit } from "./record-audit";
@@ -29,8 +29,15 @@ export async function revokeCertifications(userId: string, actor: Actor, input: 
 
   return db.transaction(async (tx) => {
     const revoked = await tx
-      .delete(certifications)
-      .where(and(eq(certifications.userId, userId), inArray(certifications.rulebookId, ids)))
+      .update(certifications)
+      .set({ revokedAt: sql`now()`, revokedBy: actor.id, revokeReason: input.userReason })
+      .where(
+        and(
+          eq(certifications.userId, userId),
+          inArray(certifications.rulebookId, ids),
+          isNull(certifications.revokedAt),
+        ),
+      )
       .returning({ rulebookId: certifications.rulebookId });
     if (revoked.length === 0) return { ok: false as const, alreadyRevoked: true as const };
     await applyOngoingChoices(tx, userId, input.ongoing);

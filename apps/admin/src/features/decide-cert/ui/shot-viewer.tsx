@@ -27,7 +27,7 @@ interface ShotViewerProps {
   onShotChange: (shot: ShotKey | null) => void;
 }
 
-// 사진 확대. 확대·축소·회전·원본 크기를 지원하고, 아래 썸네일과 좌우 화살표로 4장 사이를 옮긴다.
+// 사진 확대. 확대·축소·회전·원본 크기를 지원하고, 아래 썸네일과 좌우 화살표로 3장 사이를 옮긴다.
 export function ShotViewer({ shot, photoUrls, onShotChange }: ShotViewerProps) {
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);

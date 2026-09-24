@@ -29,3 +29,4 @@ export { PARTICIPANT_STATUS, type ParticipantStatus } from "./participant-status
 export { countConfirmed } from "./count-confirmed";
 export { countWaiting } from "./count-waiting";
 export { deriveGameStatus } from "./derive-game-status";
+export { CERT_PHOTO_BUCKET, certPhotoPathOf } from "./cert-photo-path";

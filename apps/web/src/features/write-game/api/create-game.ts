@@ -4,12 +4,14 @@ import { eq, inArray } from "drizzle-orm";
 import { uniq } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
+import { canPickRulebook, toMyRulebooks } from "@/entities/rulebook";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import {
   announceRecruitmentComplete,
   db,
   games,
   getCurrentUser,
+  getRulebookRecords,
   notifyDirectConfirmed,
   notifyGameCreated,
   participants,
@@ -29,6 +31,15 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     return { error: parsed.error.issues[0]?.message ?? INVALID_INPUT_MESSAGE };
   }
 
+  const records = await getRulebookRecords(user.id);
+  const rulebook = toMyRulebooks(records).rulebooks.find(
+    (candidate) => candidate.id === parsed.data.rulebookId,
+  );
+  if (!rulebook) return { error: "룰북을 다시 선택해 주세요.", field: "rule" };
+  if (!canPickRulebook(rulebook, records.enforcementDate)) {
+    return { error: "이 룰북은 인증을 받아야 구인을 열 수 있습니다.", field: "rule" };
+  }
+
   const invitedIds = uniq(parsed.data.preConfirmed.map((player) => player.userId));
   if (invitedIds.includes(user.id)) return { error: "GM은 참여자로 넣을 수 없습니다." };
   if (invitedIds.length > 0) {
@@ -42,7 +53,12 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
   const gameId = await db.transaction(async (transaction) => {
     const [created] = await transaction
       .insert(games)
-      .values({ gmId: user.id, ...toGameColumns(parsed.data) })
+      .values({
+        gmId: user.id,
+        rule: rulebook.label,
+        rulebookId: rulebook.id,
+        ...toGameColumns(parsed.data),
+      })
       .returning({ id: games.id });
     if (invitedIds.length > 0) {
       await transaction.insert(participants).values(

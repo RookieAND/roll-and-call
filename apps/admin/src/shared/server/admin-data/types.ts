@@ -52,7 +52,7 @@ export interface Certification {
   approvedBy: string;
 }
 
-export type ShotKey = "full" | "front" | "back" | "side";
+export type ShotKey = "front" | "back" | "side";
 
 export type CertStatus = "pending" | "approved" | "rejected";
 

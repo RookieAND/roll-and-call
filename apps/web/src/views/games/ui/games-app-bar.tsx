@@ -1,22 +1,25 @@
-import { Button } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 
+import { toMyRulebooks } from "@/entities/rulebook";
+import { NewGameButton, newGameGate } from "@/features/start-game";
+import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
-export function GamesAppBar() {
+export async function GamesAppBar() {
+  const user = await getCurrentSessionUser();
+  const gate = user ? newGameGate(toMyRulebooks(await getRulebookRecords(user.id))) : null;
   return (
     <AppBar
       title="구인 목록"
       brand
       action={
-        <Button
-          render={<Link href="/games/new" />}
+        <NewGameButton
+          gate={gate}
           size="sm"
           className="h-8 rounded-400 px-175 text-body3 font-bold"
         >
           <Plus size={16} strokeWidth={2.5} aria-hidden />새 구인
-        </Button>
+        </NewGameButton>
       }
     />
   );

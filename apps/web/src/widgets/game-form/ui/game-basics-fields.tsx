@@ -1,28 +1,28 @@
 "use client";
 
 import { RichTextEditor } from "@roll-and-call/tiptap";
-import { Chip, Field, HStack, TextInput, VStack } from "@roll-and-call/ui";
+import { Field, TextInput } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
+import type { MyRulebooks } from "@/entities/rulebook";
 import { GAME_SYNOPSIS_MAX, type GameFormValues } from "@/features/write-game";
 import { richTextLength } from "@/shared/lib";
 
+import { GameRulebookField } from "./game-rulebook-field";
 import { PlayTimeField } from "./play-time-field";
-
-const RULE_PRESETS = ["CoC 7th", "피아스코", "DnD 5th"];
 
 interface GameBasicsFieldsProps {
   form: UseFormReturn<GameFormValues>;
+  rulebooks?: MyRulebooks;
 }
 
-export function GameBasicsFields({ form }: GameBasicsFieldsProps) {
+export function GameBasicsFields({ form, rulebooks }: GameBasicsFieldsProps) {
   const {
     register,
     setValue,
     watch,
     formState: { errors },
   } = form;
-  const rule = watch("rule");
   const synopsis = watch("synopsis") ?? "";
   const synopsisLength = richTextLength(synopsis);
 
@@ -38,33 +38,7 @@ export function GameBasicsFields({ form }: GameBasicsFieldsProps) {
         />
       </Field.Root>
 
-      <VStack gap="100">
-        <Field.Root label="룰" htmlFor="rule" required error={errors.rule?.message}>
-          <TextInput
-            id="rule"
-            placeholder="예: 크툴루의 부름 7판"
-            maxLength={100}
-            invalid={!!errors.rule}
-            {...register("rule")}
-          />
-        </Field.Root>
-        <HStack gap="075" wrap>
-          {RULE_PRESETS.map((preset) => (
-            <Chip
-              key={preset}
-              selected={rule === preset}
-              onClick={() =>
-                setValue("rule", preset, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                })
-              }
-            >
-              {preset}
-            </Chip>
-          ))}
-        </HStack>
-      </VStack>
+      <GameRulebookField form={form} rulebooks={rulebooks} />
 
       <PlayTimeField
         value={watch("playTime")}

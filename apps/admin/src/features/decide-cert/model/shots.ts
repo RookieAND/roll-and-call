@@ -2,12 +2,6 @@ import type { ShotKey } from "@/shared/server";
 
 export const SHOTS: { key: ShotKey; label: string; note: string; question: string }[] = [
   {
-    key: "full",
-    label: "전체",
-    note: "책과 쪽지를 한 장에",
-    question: "앞·뒤·옆면이 같은 책, 같은 장소에서 찍혔는가",
-  },
-  {
     key: "front",
     label: "앞면",
     note: "표지와 닉네임 쪽지",

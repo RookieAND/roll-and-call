@@ -4,6 +4,7 @@ import { and, eq, isNull, sql } from "drizzle-orm";
 
 import type { Executor } from "./record-audit";
 import type { RulebookActionResult } from "./rulebook-action-result";
+import { rulebookLabel } from "./rulebook-label";
 import type { Actor } from "./types";
 
 const OUTCOME_ACTION = {
@@ -15,7 +16,7 @@ const OUTCOME_ACTION = {
 type Outcome = keyof typeof OUTCOME_ACTION;
 
 type ClaimResult =
-  | { ok: true; name: string; requester: string }
+  | { ok: true; name: string; edition: string; label: string; requester: string }
   | Extract<RulebookActionResult, { ok: false }>;
 
 // 대기 중인 요청만 처리됨으로 바꾼다. 다른 운영진이 먼저 처리했으면 그 처리를 충돌로 돌려준다.
@@ -29,13 +30,23 @@ export async function claimRulebookRequest(
     .update(rulebookRequests)
     .set({ outcome, processedBy: actor.id, processedAt: sql`now()` })
     .where(and(eq(rulebookRequests.id, id), isNull(rulebookRequests.outcome)))
-    .returning({ name: rulebookRequests.name, userId: rulebookRequests.userId });
+    .returning({
+      name: rulebookRequests.name,
+      edition: rulebookRequests.edition,
+      userId: rulebookRequests.userId,
+    });
   if (claimed) {
     const [requester] = await tx
       .select({ nickname: profiles.username })
       .from(profiles)
       .where(eq(profiles.id, claimed.userId));
-    return { ok: true, name: claimed.name, requester: requester?.nickname ?? "" };
+    return {
+      ok: true,
+      name: claimed.name,
+      edition: claimed.edition,
+      label: rulebookLabel(claimed),
+      requester: requester?.nickname ?? "",
+    };
   }
   const [current] = await tx
     .select({

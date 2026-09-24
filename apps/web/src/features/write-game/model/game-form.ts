@@ -24,7 +24,9 @@ const tagList = (label: string) =>
 export const gameFormSchema = z
   .object({
     title: z.string().trim().min(1, "게임명을 입력하세요.").max(100),
-    rule: z.string().trim().min(1, "룰을 입력하세요.").max(100),
+    // rule은 고른 룰북의 이름(표시용)이고, 등록할 때 서버는 rulebookId로 룰북을 다시 찾는다.
+    rule: z.string().trim().min(1, "룰북을 선택해 주세요.").max(100),
+    rulebookId: z.string(),
     // 저장값은 리치 텍스트 JSON이라 문자 수는 본문 길이로 센다.
     synopsis: z
       .string()

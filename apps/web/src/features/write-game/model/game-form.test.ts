@@ -8,6 +8,7 @@ import { toGameColumns } from "./to-game-columns";
 const base = {
   title: "마지막 열차",
   rule: "CoC 7판",
+  rulebookId: "",
   maxPlayers: "4",
   recruitMethod: RECRUIT_METHOD.firstCome,
   scheduleMode: SCHEDULE_MODE.coordinate,

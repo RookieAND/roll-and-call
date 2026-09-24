@@ -27,19 +27,19 @@ export async function linkRulebookRequest(
     if (!claim.ok) return claim;
     const label = rulebookLabel(rulebook);
     const aliasAdded =
-      input.addAlias && claim.name !== label && !rulebook.aliases.includes(claim.name);
+      input.addAlias && claim.label !== label && !rulebook.aliases.includes(claim.label);
     if (aliasAdded) {
       await tx
         .update(rulebooks)
-        .set({ aliases: sql`array_append(${rulebooks.aliases}, ${claim.name})` })
+        .set({ aliases: sql`array_append(${rulebooks.aliases}, ${claim.label})` })
         .where(eq(rulebooks.id, rulebook.id));
     }
     await relinkGames(tx);
     await recordAudit(tx, actor, {
       action: "룰북 연결",
-      target: `${claim.name} · ${label}`,
+      target: `${claim.label} · ${label}`,
       reason: `${claim.requester}의 추가 요청을 기존 룰북으로 처리`,
-      related: aliasAdded ? [`「${claim.name}」을 다른 이름에 추가`] : undefined,
+      related: aliasAdded ? [`「${claim.label}」을 다른 이름에 추가`] : undefined,
     });
     return { ok: true };
   });

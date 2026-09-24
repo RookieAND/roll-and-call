@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import type { MyRulebooks } from "@/entities/rulebook";
 import { gameFormSchema, type GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
 import { toKstDateTimeInput } from "@/shared/lib";
@@ -21,6 +22,9 @@ interface GameFormProps {
   submitLabel: string;
   successMessage?: string;
   edit?: GameEditContext;
+  // 등록에서만 쓴다. 수정은 룰북을 바꿀 수 없다.
+  rulebooks?: MyRulebooks;
+  initialRulebookId?: string;
 }
 
 export function GameForm({
@@ -29,14 +33,20 @@ export function GameForm({
   submitLabel,
   successMessage = "저장되었습니다",
   edit,
+  rulebooks,
+  initialRulebookId,
 }: GameFormProps) {
   const { pending, run } = useAction();
+  const initialRulebook = rulebooks?.rulebooks.find(
+    (rulebook) => rulebook.id === initialRulebookId,
+  );
 
   const form = useForm<GameFormValues>({
     resolver: zodResolver(gameFormSchema),
     defaultValues: {
       title: defaultGame?.title ?? "",
-      rule: defaultGame?.rule ?? "",
+      rule: defaultGame?.rule ?? initialRulebook?.label ?? "",
+      rulebookId: defaultGame?.rulebookId ?? initialRulebook?.id ?? "",
       synopsis: defaultGame?.synopsis ?? "",
       genres: defaultGame?.genres ?? [],
       triggers: defaultGame?.triggers ?? [],
@@ -80,6 +90,7 @@ export function GameForm({
       onValid={onValid}
       steps={GAME_FORM_STEPS}
       edit={edit}
+      rulebooks={rulebooks}
     />
   );
 }

@@ -16,11 +16,14 @@ export async function approveRulebookRequest(
   return db.transaction(async (tx) => {
     const claim = await claimRulebookRequest(tx, id, actor, "added");
     if (!claim.ok) return claim;
-    await tx.insert(rulebooks).values({ name: claim.name }).onConflictDoNothing();
+    await tx
+      .insert(rulebooks)
+      .values({ name: claim.name, edition: claim.edition })
+      .onConflictDoNothing();
     await relinkGames(tx);
     await recordAudit(tx, actor, {
       action: "룰북 추가",
-      target: claim.name,
+      target: claim.label,
       reason: `${claim.requester}의 추가 요청`,
       after: { label: certPolicyLabel(true) },
     });

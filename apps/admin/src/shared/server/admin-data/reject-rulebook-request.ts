@@ -16,7 +16,7 @@ export async function rejectRulebookRequest(
     if (!claim.ok) return claim;
     await recordAudit(tx, actor, {
       action: "추가 요청 반려",
-      target: `${claim.name} · ${claim.requester} 요청`,
+      target: `${claim.label} · ${claim.requester} 요청`,
       reason: input.userReason,
       staffMemo: input.staffMemo || undefined,
     });

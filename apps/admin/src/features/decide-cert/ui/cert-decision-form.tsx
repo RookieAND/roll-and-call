@@ -32,7 +32,7 @@ interface CertDecisionFormProps {
   children: ReactNode;
 }
 
-// 사진 4장 확인 → 승인 또는 반려. 반려 중인지와 확대한 사진은 주소(mode·photo)가 기억한다.
+// 사진 3장 확인 → 승인 또는 반려. 반려 중인지와 확대한 사진은 주소(mode·photo)가 기억한다.
 export function CertDecisionForm({
   applicationId,
   applicantLabel,
@@ -109,7 +109,7 @@ export function CertDecisionForm({
         {children}
         <Grid
           aria-disabled={disabled}
-          className={cn("grid-cols-2 gap-150", disabled && "pointer-events-none opacity-50")}
+          className={cn("grid-cols-3 gap-150", disabled && "pointer-events-none opacity-50")}
         >
           {SHOTS.map((shot) => (
             <ShotCard

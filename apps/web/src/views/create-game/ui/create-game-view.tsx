@@ -1,11 +1,16 @@
 import { Container } from "@roll-and-call/ui";
 
+import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import { getCurrentUser } from "@/shared/server";
+import { getCurrentUser, getRulebookRecords } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { CreateGameForm } from "@/widgets/game-form";
 
-export async function CreateGameView() {
+interface CreateGameViewProps {
+  rulebookId?: string;
+}
+
+export async function CreateGameView({ rulebookId }: CreateGameViewProps) {
   const user = await getCurrentUser();
   if (!user) {
     return (
@@ -21,5 +26,6 @@ export async function CreateGameView() {
   }
 
   // 위저드가 단계별로 앱바·진행바를 바꾸므로 폼이 페이지 셸을 소유한다.
-  return <CreateGameForm />;
+  const rulebooks = toMyRulebooks(await getRulebookRecords(user.id));
+  return <CreateGameForm rulebooks={rulebooks} initialRulebookId={rulebookId} />;
 }

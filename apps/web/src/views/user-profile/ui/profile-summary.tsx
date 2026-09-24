@@ -1,4 +1,4 @@
-import { Text } from "@roll-and-call/ui";
+import { Badge, Text } from "@roll-and-call/ui";
 
 import { EMPTY_BIO_TEXT, KeywordChips, ProfileRow } from "@/entities/profile";
 import { toKst } from "@/shared/lib";
@@ -11,10 +11,11 @@ import { ProfileBlockLabel } from "./profile-block-label";
 interface ProfileSummaryProps {
   profile: Profile;
   absences: Absence[];
+  isGm: boolean;
 }
 
 // 07 §C가 쓰는 bio·keywords·availability를 그대로 읽는다. 프로필을 위한 새 입력을 만들지 않는다.
-export function ProfileSummary({ profile, absences }: ProfileSummaryProps) {
+export function ProfileSummary({ profile, absences, isGm }: ProfileSummaryProps) {
   const joinedLabel = toKst(profile.createdAt).format("YYYY년 M월부터");
   const bioText = profile.bio || EMPTY_BIO_TEXT;
   const bioForeground = profile.bio ? "normal" : "hint";
@@ -31,6 +32,7 @@ export function ProfileSummary({ profile, absences }: ProfileSummaryProps) {
         name={profile.username}
         avatarUrl={profile.avatarUrl}
         nameRender={<h1 />}
+        nameAddon={isGm ? <Badge colorPalette="primary">GM</Badge> : undefined}
         subline={joinedLabel}
         sublineForeground="hint"
       />

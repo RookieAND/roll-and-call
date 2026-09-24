@@ -4,7 +4,7 @@ import { Check, RotateCcw, X } from "lucide-react";
 import { formatMonthDay } from "@/shared/lib";
 import type { PreviousRejection } from "@/shared/server";
 
-const SHOT_LABELS = { full: "전체", front: "앞면", back: "뒷면", side: "옆면" } as const;
+const SHOT_LABELS = { front: "앞면", back: "뒷면", side: "옆면" } as const;
 
 interface ReapplyNoticeProps {
   latest: PreviousRejection;
@@ -72,8 +72,7 @@ export function ReapplyNotice({ latest, attempt, replacedShots }: ReapplyNoticeP
             <HStack align="center" gap="075" className="text-hint">
               <X size={14} aria-hidden />
               <Text typography="body4" foreground="hint">
-                {unchanged.join("·")}
-                {unchanged.at(-1) === "전체" ? "는" : "은"} 그대로
+                {unchanged.join("·")}은 그대로
               </Text>
             </HStack>
           ) : null}

@@ -76,12 +76,21 @@ export async function decideCert(
       await tx
         .insert(certifications)
         .values({ userId: decided.userId, rulebookId: decided.rulebookId, approvedBy: actor.id })
-        .onConflictDoNothing();
+        .onConflictDoUpdate({
+          target: [certifications.userId, certifications.rulebookId],
+          set: {
+            approvedBy: actor.id,
+            approvedAt: sql`now()`,
+            revokedAt: null,
+            revokedBy: null,
+            revokeReason: null,
+          },
+        });
       await recordAudit(tx, actor, {
         action: "인증 승인",
         target,
         targetUserId: decided.userId,
-        reason: "사진 4장 확인 완료",
+        reason: "사진 3장 확인 완료",
         before: { label: "심사 대기" },
         after: { label: "인증됨" },
       });

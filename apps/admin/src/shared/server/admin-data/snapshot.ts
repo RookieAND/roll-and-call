@@ -182,12 +182,14 @@ export const loadSnapshot = cache(async () => {
       hidden: rulebook.hidden,
     }));
 
-  const certificationList: Certification[] = certificationRows.map((row) => ({
-    userId: row.userId,
-    rulebook: labels.get(row.rulebookId) ?? "",
-    approvedAt: row.approvedAt,
-    approvedBy: nicknameOf(row.approvedBy),
-  }));
+  const certificationList: Certification[] = certificationRows
+    .filter((row) => row.revokedAt === null)
+    .map((row) => ({
+      userId: row.userId,
+      rulebook: labels.get(row.rulebookId) ?? "",
+      approvedAt: row.approvedAt,
+      approvedBy: nicknameOf(row.approvedBy),
+    }));
 
   const certApplicationList: CertApplication[] = applicationRows.map((row) => ({
     id: row.id,
@@ -221,8 +223,8 @@ export const loadSnapshot = cache(async () => {
   const requestList: RulebookRequest[] = requestRows.map((row) => ({
     id: row.id,
     userId: row.userId,
-    name: row.name,
-    note: row.note,
+    name: rulebookLabel(row),
+    note: [row.publisher && `출판사 ${row.publisher}`, row.note].filter(Boolean).join(" · "),
     requestedAt: row.createdAt,
     similarTo: similarRulebook(row.name, rulebookList),
     processed:

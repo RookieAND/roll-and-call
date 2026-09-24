@@ -78,8 +78,8 @@ export function CertStatusView({ status, tab, allTime, unappliedOnly }: CertStat
           <>
             <UserPreview title="[안내 DM]으로 보내는 문구">
               {status.guideDm.rulebook} 등 인증이 필요한 룰북은 {enforcementFrom} 인증을 받아야
-              구인을 열 수 있어요. 앱의 [내 정보 → 룰북 인증]에서 사진 4장(전체·앞·뒤·옆)을 올려
-              신청해 주세요.
+              구인을 열 수 있어요. 앱의 [마이페이지 → GM 룰북]에서 사진 3장(앞·뒤·옆)을 올려 신청해
+              주세요.
             </UserPreview>
             <Text typography="body4" foreground="hint">
               제재 중인 사용자에게는 안내 DM을 보낼 수 없습니다.
