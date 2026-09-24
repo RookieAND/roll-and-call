@@ -2,20 +2,32 @@ import { Badge, Button, Table, Text, VStack } from "@roll-and-call/ui";
 import { Flag } from "lucide-react";
 import Link from "next/link";
 
-import { formatDate, formatSessionTime, withQuery } from "@/shared/lib";
+import { formatDate, formatSessionTime, paginate, withQuery } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, ItemCard, Panel, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, ItemCard, ListPager, Panel, TableEmptyRow } from "@/shared/ui";
 
 interface NoShowPanelProps {
   nickname: string;
   noShows: UserDetail["noShows"];
+  page?: string;
 }
 
-export function NoShowPanel({ nickname, noShows }: NoShowPanelProps) {
+export function NoShowPanel({ nickname, noShows, page }: NoShowPanelProps) {
+  const paged = paginate(noShows, page);
   const latestValid = noShows.find((noShow) => !noShow.cancelled);
   return (
     <VStack gap="150">
-      <Panel title="불참 기록">
+      <Panel
+        title="불참 기록"
+        footer={
+          <ListPager
+            page={paged.page}
+            totalPages={paged.totalPages}
+            total={noShows.length}
+            unit="건"
+          />
+        }
+      >
         <Table.Root className="table-fixed">
           <colgroup>
             <col className="w-[192px]" />
@@ -40,7 +52,7 @@ export function NoShowPanel({ nickname, noShows }: NoShowPanelProps) {
                 description="GM이 세션을 마친 뒤 불참을 처리하면 이곳에 기록됩니다."
               />
             ) : null}
-            {noShows.map((noShow) => (
+            {paged.rows.map((noShow) => (
               <Table.Row key={noShow.id} className={noShow.cancelled ? "opacity-50" : undefined}>
                 <Table.Cell>
                   <Text typography="body3" foreground="hint" numeric>

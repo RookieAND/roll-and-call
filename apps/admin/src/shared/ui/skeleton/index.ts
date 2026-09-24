@@ -4,6 +4,7 @@ export { SkeletonEntity } from "./skeleton-entity";
 export { SkeletonFacts } from "./skeleton-facts";
 export { SkeletonField } from "./skeleton-field";
 export { SkeletonItem } from "./skeleton-item";
+export { SkeletonPager } from "./skeleton-pager";
 export { SkeletonSelect } from "./skeleton-select";
 export { SkeletonTable, type SkeletonColumn } from "./skeleton-table";
 export { SkeletonTabs } from "./skeleton-tabs";

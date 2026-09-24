@@ -18,9 +18,10 @@ interface UserDetailViewProps {
   user: UserDetail;
   tab: UserDetailTab;
   role: ActivityRole;
+  page?: string;
 }
 
-export function UserDetailView({ user, tab, role }: UserDetailViewProps) {
+export function UserDetailView({ user, tab, role, page }: UserDetailViewProps) {
   return (
     <>
       <AdminHeader
@@ -33,9 +34,11 @@ export function UserDetailView({ user, tab, role }: UserDetailViewProps) {
           <UserStateCard user={user} />
           <UserDetailTabs
             tab={tab}
-            activityPanel={<ActivityPanel activities={user.activities} role={role} />}
-            certPanel={<CertPanel user={user} />}
-            noShowPanel={<NoShowPanel nickname={user.nickname} noShows={user.noShows} />}
+            activityPanel={<ActivityPanel activities={user.activities} role={role} page={page} />}
+            certPanel={<CertPanel user={user} page={page} />}
+            noShowPanel={
+              <NoShowPanel nickname={user.nickname} noShows={user.noShows} page={page} />
+            }
             memoPanel={<MemoPanel userId={user.id} memos={user.memos} />}
           />
         </VStack>

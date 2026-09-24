@@ -2,9 +2,9 @@ import { Callout, HStack, VStack } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import { POST_ACTION, PostActionDialog, type PostAction } from "@/features/moderate-post";
-import { withQuery } from "@/shared/lib";
+import { paginate, withQuery } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { AdminHeader, Panel } from "@/shared/ui";
+import { AdminHeader, ListPager, Panel } from "@/shared/ui";
 
 import { POST_DETAIL_TAB, type PostDetailTab } from "../model/post-detail-tab";
 import { ContentPanel } from "./content-panel";
@@ -20,9 +20,10 @@ interface PostDetailViewProps {
   tab: string | undefined;
   action: string | undefined;
   userAppUrl: string | undefined;
+  page?: string;
 }
 
-export function PostDetailView({ post, tab, action, userAppUrl }: PostDetailViewProps) {
+export function PostDetailView({ post, tab, action, page, userAppUrl }: PostDetailViewProps) {
   const pathname = `/posts/${post.id}`;
   const hasReports = post.reports.length > 0;
   const availableActions: PostAction[] = [
@@ -40,7 +41,23 @@ export function PostDetailView({ post, tab, action, userAppUrl }: PostDetailView
     post.unresolvedReportCount > 0 ? POST_DETAIL_TAB.reports : POST_DETAIL_TAB.content;
   const currentTab = availableTabs.find((candidate) => candidate === tab) ?? defaultTab;
   const openAction = availableActions.find((candidate) => candidate === action) ?? null;
-  const query = { tab: tab ? currentTab : undefined };
+  const query = { tab: tab ? currentTab : undefined, page };
+  const pagedMembers = paginate(post.members, page);
+  const pagedWaitlist = paginate(post.waitlist, page);
+  const pagedTab =
+    currentTab === POST_DETAIL_TAB.members
+      ? { paged: pagedMembers, total: post.members.length }
+      : currentTab === POST_DETAIL_TAB.waitlist
+        ? { paged: pagedWaitlist, total: post.waitlist.length }
+        : null;
+  const pager = pagedTab ? (
+    <ListPager
+      page={pagedTab.paged.page}
+      totalPages={pagedTab.paged.totalPages}
+      total={pagedTab.total}
+      unit="명"
+    />
+  ) : null;
   const logHref = `/log?target=${encodeURIComponent(post.title)}`;
   const userAppHref = userAppUrl ? `${userAppUrl}/games/${post.id}` : null;
   const direct = !hasReports && !post.hidden;
@@ -66,7 +83,7 @@ export function PostDetailView({ post, tab, action, userAppUrl }: PostDetailView
             </Callout.Root>
           ) : null}
           <PostSummary post={post} userAppHref={userAppHref} logHref={logHref} />
-          <Panel className="flex-1">
+          <Panel className="flex-1" footer={pager}>
             <PostDetailTabs
               tab={currentTab}
               unresolvedReportCount={post.unresolvedReportCount}
@@ -74,8 +91,8 @@ export function PostDetailView({ post, tab, action, userAppUrl }: PostDetailView
               waitlistCount={post.waitlist.length}
               reportPanel={hasReports ? <ReportPanel reports={post.reports} /> : null}
               contentPanel={<ContentPanel post={post} />}
-              memberPanel={<MemberPanel members={post.members} />}
-              waitlistPanel={<MemberPanel members={post.waitlist} waiting />}
+              memberPanel={<MemberPanel members={pagedMembers.rows} />}
+              waitlistPanel={<MemberPanel members={pagedWaitlist.rows} waiting />}
             />
           </Panel>
         </VStack>

@@ -2,7 +2,14 @@
 
 import { HStack, SegmentedControl, Skeleton, Tabs, Text, VStack } from "@roll-and-call/ui";
 
-import { AdminHeader, LoadingRegion, Panel, SkeletonEntity, SkeletonTable } from "@/shared/ui";
+import {
+  AdminHeader,
+  LoadingRegion,
+  Panel,
+  SkeletonEntity,
+  SkeletonPager,
+  SkeletonTable,
+} from "@/shared/ui";
 
 import { ACTIVITY_ROLE } from "../model/activity-role";
 import { USER_DETAIL_TAB } from "../model/user-detail-tab";
@@ -43,6 +50,7 @@ export function UserDetailLoading() {
             <Tabs.Panel value={USER_DETAIL_TAB.activity} className="p-200">
               <Panel
                 title="활동"
+                footer={<SkeletonPager />}
                 right={
                   <SegmentedControl.Root
                     size="sm"

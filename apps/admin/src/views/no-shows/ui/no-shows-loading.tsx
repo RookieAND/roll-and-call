@@ -1,7 +1,14 @@
 import { HStack, Skeleton, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
-import { AdminHeader, LoadingRegion, Panel, SkeletonSelect, SkeletonTable } from "@/shared/ui";
+import {
+  AdminHeader,
+  LoadingRegion,
+  Panel,
+  SkeletonPager,
+  SkeletonSelect,
+  SkeletonTable,
+} from "@/shared/ui";
 
 export function NoShowsLoading() {
   return (
@@ -33,7 +40,7 @@ export function NoShowsLoading() {
             <SkeletonSelect label="상태 전체" />
           </div>
         </HStack>
-        <Panel title="최신순" className="flex-1">
+        <Panel title="최신순" className="flex-1" footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
               { label: "불참 당사자", kind: "text", width: "w-[110px]" },

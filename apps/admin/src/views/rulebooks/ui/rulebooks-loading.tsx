@@ -1,7 +1,14 @@
 import { Button, HStack, Skeleton, TextInput, VStack } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
-import { AdminHeader, LoadingRegion, Panel, SkeletonItem, SkeletonTable } from "@/shared/ui";
+import {
+  AdminHeader,
+  LoadingRegion,
+  Panel,
+  SkeletonItem,
+  SkeletonPager,
+  SkeletonTable,
+} from "@/shared/ui";
 
 export function RulebooksLoading() {
   return (
@@ -29,6 +36,7 @@ export function RulebooksLoading() {
         </Panel>
         <Panel
           title="룰북"
+          footer={<SkeletonPager />}
           right={
             <>
               <HStack align="center" className="relative w-[180px]">

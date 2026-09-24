@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: PageProps<"/users/[id]">): Pr
 }
 
 export default async function UserDetailPage({ params, searchParams }: PageProps<"/users/[id]">) {
-  const [{ id }, { tab, role }] = await Promise.all([params, searchParams, requireStaff()]);
+  const [{ id }, { tab, role, page }] = await Promise.all([params, searchParams, requireStaff()]);
   const user = await getUserDetail(id);
   if (!user) notFound();
   return (
@@ -21,6 +21,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
       user={user}
       tab={TABS.find((candidate) => candidate === tab) ?? USER_DETAIL_TAB.activity}
       role={ROLES.find((candidate) => candidate === role) ?? ACTIVITY_ROLE.all}
+      page={typeof page === "string" ? page : undefined}
     />
   );
 }

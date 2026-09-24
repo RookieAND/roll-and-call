@@ -1,6 +1,6 @@
 import { Button } from "@roll-and-call/ui";
 
-import { LoadingRegion, Panel, SkeletonTable } from "@/shared/ui";
+import { LoadingRegion, Panel, SkeletonPager, SkeletonTable } from "@/shared/ui";
 
 import { PermissionTable } from "./permission-table";
 import { SettingsFrame } from "./settings-frame";
@@ -11,6 +11,7 @@ export function SettingsStaffLoading() {
       <LoadingRegion label="운영진 목록을 불러오는 중입니다" className="gap-150">
         <Panel
           title="운영진"
+          footer={<SkeletonPager />}
           right={
             <Button size="sm" disabled>
               운영진 추가

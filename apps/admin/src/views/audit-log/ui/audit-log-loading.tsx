@@ -1,7 +1,14 @@
 import { Button, HStack, Skeleton, Text, TextInput } from "@roll-and-call/ui";
 import { ChevronDown, Search } from "lucide-react";
 
-import { AdminHeader, LoadingRegion, Panel, SkeletonSelect, SkeletonTable } from "@/shared/ui";
+import {
+  AdminHeader,
+  LoadingRegion,
+  Panel,
+  SkeletonPager,
+  SkeletonSelect,
+  SkeletonTable,
+} from "@/shared/ui";
 
 export function AuditLogLoading() {
   return (
@@ -44,7 +51,7 @@ export function AuditLogLoading() {
             <SkeletonSelect label="전체 기간" />
           </div>
         </HStack>
-        <Panel title="최신순" className="flex-1">
+        <Panel title="최신순" className="flex-1" footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
               { label: "일시", kind: "date", width: "w-[192px]", sorted: true },

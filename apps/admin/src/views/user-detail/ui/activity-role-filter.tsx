@@ -20,6 +20,7 @@ export function ActivityRoleFilter({ role }: ActivityRoleFilterProps) {
       value={role}
       onValueChange={(value) => {
         const next = new URLSearchParams(searchParams);
+        next.delete("page");
         if (value === ACTIVITY_ROLE.all) next.delete("role");
         else next.set("role", value);
         router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });

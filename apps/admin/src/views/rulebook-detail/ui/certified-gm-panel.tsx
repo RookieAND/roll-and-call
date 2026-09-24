@@ -2,16 +2,18 @@ import { Badge, Button, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-import { formatDate } from "@/shared/lib";
+import { formatDate, paginate } from "@/shared/lib";
 import type { CertifiedGm } from "@/shared/server";
-import { EMPTY_IMAGE, Panel, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow } from "@/shared/ui";
 
 interface CertifiedGmPanelProps {
   gms: CertifiedGm[];
   certRequired: boolean;
+  page?: string;
 }
 
-export function CertifiedGmPanel({ gms, certRequired }: CertifiedGmPanelProps) {
+export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelProps) {
+  const paged = paginate(gms, page);
   const count = <Badge colorPalette="gray">{gms.length}명</Badge>;
   const right = certRequired ? (
     <>
@@ -34,7 +36,14 @@ export function CertifiedGmPanel({ gms, certRequired }: CertifiedGmPanelProps) {
     </>
   );
   return (
-    <Panel title="이 룰북으로 인증된 GM" right={right} className="flex-1">
+    <Panel
+      title="이 룰북으로 인증된 GM"
+      right={right}
+      className="flex-1"
+      footer={
+        <ListPager page={paged.page} totalPages={paged.totalPages} total={gms.length} unit="명" />
+      }
+    >
       <Table.Root className="table-fixed">
         <colgroup>
           <col className="w-[180px]" />
@@ -65,7 +74,7 @@ export function CertifiedGmPanel({ gms, certRequired }: CertifiedGmPanelProps) {
               }
             />
           ) : null}
-          {gms.map((gm) => (
+          {paged.rows.map((gm) => (
             <Table.Row key={gm.userId} interactive className="relative">
               <Table.Cell>
                 <Text

@@ -38,6 +38,7 @@ export function PostDetailTabs({
       value={tab}
       onValueChange={(value) => {
         const next = new URLSearchParams(searchParams);
+        next.delete("page");
         next.set("tab", value);
         router.replace(`${pathname}?${next}`, { scroll: false });
       }}

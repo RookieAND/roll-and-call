@@ -1,8 +1,8 @@
 import { Badge, Table, Text } from "@roll-and-call/ui";
 
-import { formatSessionTime } from "@/shared/lib";
+import { formatSessionTime, paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, Panel, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow } from "@/shared/ui";
 
 import { ACTIVITY_ROLE, type ActivityRole } from "../model/activity-role";
 import { ActivityRoleFilter } from "./activity-role-filter";
@@ -10,15 +10,23 @@ import { ActivityRoleFilter } from "./activity-role-filter";
 interface ActivityPanelProps {
   activities: UserDetail["activities"];
   role: ActivityRole;
+  page?: string;
 }
 
-export function ActivityPanel({ activities, role }: ActivityPanelProps) {
+export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
   const rows =
     role === ACTIVITY_ROLE.all
       ? activities
       : activities.filter((activity) => activity.hosted === (role === ACTIVITY_ROLE.hosted));
+  const paged = paginate(rows, page);
   return (
-    <Panel title="활동" right={<ActivityRoleFilter role={role} />}>
+    <Panel
+      title="활동"
+      right={<ActivityRoleFilter role={role} />}
+      footer={
+        <ListPager page={paged.page} totalPages={paged.totalPages} total={rows.length} unit="건" />
+      }
+    >
       <Table.Root className="table-fixed">
         <colgroup>
           <col className="w-[192px]" />
@@ -47,7 +55,7 @@ export function ActivityPanel({ activities, role }: ActivityPanelProps) {
               description="세션에 참여하거나 구인을 열면 이곳에 기록됩니다."
             />
           ) : null}
-          {rows.map((activity) => (
+          {paged.rows.map((activity) => (
             <Table.Row
               key={activity.sessionId}
               className={activity.noShow?.cancelled ? "opacity-50" : undefined}

@@ -1,9 +1,9 @@
 import { Chip, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { CERT_TABS, formatDate, withQuery } from "@/shared/lib";
+import { CERT_TABS, formatDate, paginate, withQuery } from "@/shared/lib";
 import type { CertStatusData } from "@/shared/server";
-import { AdminHeader, Panel, RouteTabs, UrlSelect, UserPreview } from "@/shared/ui";
+import { AdminHeader, ListPager, Panel, RouteTabs, UrlSelect, UserPreview } from "@/shared/ui";
 
 import { CERT_STATUS_TAB, type CertStatusTab } from "../model/cert-status-tab";
 import { CertStatusTabs } from "./cert-status-tabs";
@@ -17,9 +17,10 @@ interface CertStatusViewProps {
   tab: CertStatusTab;
   allTime: boolean;
   unappliedOnly: boolean;
+  page?: string;
 }
 
-export function CertStatusView({ status, tab, allTime, unappliedOnly }: CertStatusViewProps) {
+export function CertStatusView({ status, tab, allTime, unappliedOnly, page }: CertStatusViewProps) {
   const gmTab = tab === CERT_STATUS_TAB.gm;
   const { enforcementDate } = status.guideDm;
   const enforcementFrom = enforcementDate ? `${formatDate(enforcementDate)}부터` : "적용일부터";
@@ -27,6 +28,17 @@ export function CertStatusView({ status, tab, allTime, unappliedOnly }: CertStat
   const gmRows = unappliedOnly
     ? status.gmRows.filter((row) => row.state === "unapplied")
     : status.gmRows;
+  const pagedRulebooks = paginate(status.rulebookRows, page);
+  const pagedGms = paginate(gmRows, page);
+  const paged = gmTab ? pagedGms : pagedRulebooks;
+  const pager = (
+    <ListPager
+      page={paged.page}
+      totalPages={paged.totalPages}
+      total={gmTab ? gmRows.length : status.rulebookRows.length}
+      unit={gmTab ? "명" : "개"}
+    />
+  );
   const unappliedHref = withQuery(
     "/cert/status",
     { tab: CERT_STATUS_TAB.gm },
@@ -64,14 +76,14 @@ export function CertStatusView({ status, tab, allTime, unappliedOnly }: CertStat
       <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/status" />
       <VStack gap="150" className="flex-1 p-200">
         <CertSummary summary={status.summary} week={status.week} />
-        <Panel className="flex-1">
+        <Panel className="flex-1" footer={pager}>
           <CertStatusTabs
             tab={tab}
             toolbar={toolbar}
             rulebookPanel={
-              <RulebookCertTable rows={status.rulebookRows} sessionLabel={sessionLabel} />
+              <RulebookCertTable rows={pagedRulebooks.rows} sessionLabel={sessionLabel} />
             }
-            gmPanel={<GmCertTable rows={gmRows} />}
+            gmPanel={<GmCertTable rows={pagedGms.rows} />}
           />
         </Panel>
         {gmTab ? (

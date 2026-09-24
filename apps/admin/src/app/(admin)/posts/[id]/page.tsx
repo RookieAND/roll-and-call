@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: PageProps<"/posts/[id]">): Pr
 
 export default async function PostDetailPage({ params, searchParams }: PageProps<"/posts/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
-  const { tab, action } = query as Record<string, string | undefined>;
+  const { tab, action, page } = query as Record<string, string | undefined>;
   const post = await getPostDetail(id);
   if (!post) notFound();
   return (
@@ -19,6 +19,7 @@ export default async function PostDetailPage({ params, searchParams }: PageProps
       post={post}
       tab={tab}
       action={action}
+      page={page}
       userAppUrl={process.env.NEXT_PUBLIC_USER_APP_URL}
     />
   );

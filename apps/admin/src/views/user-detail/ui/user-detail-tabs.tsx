@@ -30,6 +30,7 @@ export function UserDetailTabs({
       value={tab}
       onValueChange={(value) => {
         const next = new URLSearchParams(searchParams);
+        next.delete("page");
         next.delete("role");
         if (value === USER_DETAIL_TAB.activity) next.delete("tab");
         else next.set("tab", value);

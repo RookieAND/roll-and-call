@@ -11,9 +11,10 @@ import { GrantDialogSlot } from "./grant-dialog-slot";
 interface RulebookDetailViewProps {
   rulebook: RulebookDetail;
   grantCandidates: GrantCandidate[];
+  page?: string;
 }
 
-export function RulebookDetailView({ rulebook, grantCandidates }: RulebookDetailViewProps) {
+export function RulebookDetailView({ rulebook, grantCandidates, page }: RulebookDetailViewProps) {
   const logHref = `/log?target=${encodeURIComponent(rulebook.name)}`;
   const sub = rulebook.hidden ? "숨김 · 룰북 상세" : "룰북 상세";
   return (
@@ -29,7 +30,11 @@ export function RulebookDetailView({ rulebook, grantCandidates }: RulebookDetail
         }
       />
       <RulebookEditForm key={rulebook.label} rulebook={rulebook}>
-        <CertifiedGmPanel gms={rulebook.certifiedGms} certRequired={rulebook.certRequired} />
+        <CertifiedGmPanel
+          gms={rulebook.certifiedGms}
+          certRequired={rulebook.certRequired}
+          page={page}
+        />
       </RulebookEditForm>
       {rulebook.certRequired ? (
         <GrantDialogSlot

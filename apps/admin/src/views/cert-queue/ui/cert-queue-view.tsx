@@ -1,12 +1,13 @@
 import { Chip, HStack, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { CERT_TABS, withQuery } from "@/shared/lib";
+import { CERT_TABS, paginate, withQuery } from "@/shared/lib";
 import type { listCertQueue } from "@/shared/server";
 import {
   AdminHeader,
   EMPTY_IMAGE,
   EmptyState,
+  ListPager,
   Panel,
   RouteTabs,
   UrlSearchInput,
@@ -17,10 +18,12 @@ import { CertQueueTable } from "./cert-queue-table";
 
 interface CertQueueViewProps {
   queue: Awaited<ReturnType<typeof listCertQueue>>;
+  page?: string;
   query: Record<string, string | undefined>;
 }
 
-export function CertQueueView({ queue, query }: CertQueueViewProps) {
+export function CertQueueView({ queue, page, query }: CertQueueViewProps) {
+  const paged = paginate(queue.rows, page);
   const reappliedOnly = query.reapplied === "1";
   const reappliedHref = withQuery("/cert", query, { reapplied: reappliedOnly ? undefined : "1" });
 
@@ -62,8 +65,16 @@ export function CertQueueView({ queue, query }: CertQueueViewProps) {
                 </Text>
               }
               className="flex-1"
+              footer={
+                <ListPager
+                  page={paged.page}
+                  totalPages={paged.totalPages}
+                  total={queue.rows.length}
+                  unit="건"
+                />
+              }
             >
-              <CertQueueTable rows={queue.rows} />
+              <CertQueueTable rows={paged.rows} />
             </Panel>
           </>
         )}

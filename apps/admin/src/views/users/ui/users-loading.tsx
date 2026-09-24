@@ -2,7 +2,7 @@ import { Chip, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import { USER_FILTERS } from "@/shared/server";
-import { AdminHeader, LoadingRegion, Panel, SkeletonTable } from "@/shared/ui";
+import { AdminHeader, LoadingRegion, Panel, SkeletonPager, SkeletonTable } from "@/shared/ui";
 
 export function UsersLoading() {
   return (
@@ -30,7 +30,7 @@ export function UsersLoading() {
             </Chip>
           ))}
         </HStack>
-        <Panel title="유저" className="flex-1">
+        <Panel title="유저" className="flex-1" footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
               { label: "닉네임", kind: "text", width: "w-[180px]" },

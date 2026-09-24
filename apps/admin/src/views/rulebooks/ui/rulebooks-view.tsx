@@ -27,15 +27,9 @@ export function RulebooksView({ rulebooks, linkTargets, requests, query }: Ruleb
   const listQuery = { q: query.q, hidden: query.hidden };
   const rows = hiddenOnly ? rulebooks.rows.filter((row) => row.hidden) : rulebooks.rows;
   const paged = paginate(rows, query.page);
-  const pager = rows.length ? (
-    <ListPager
-      page={paged.page}
-      totalPages={paged.totalPages}
-      total={rows.length}
-      unit="개"
-      hrefFor={(target) => withQuery("/rules", listQuery, { page: String(target) })}
-    />
-  ) : null;
+  const pager = (
+    <ListPager page={paged.page} totalPages={paged.totalPages} total={rows.length} unit="개" />
+  );
   const pageQuery = { ...listQuery, page: query.page };
   const closeHref = withQuery("/rules", pageQuery, {});
   const openedAction = Object.values(REQUEST_ACTION).find((action) => action === query.action);

@@ -1,14 +1,14 @@
 import { HStack, VStack } from "@roll-and-call/ui";
 
 import { CancelNoShowDialog, NoShowSummary } from "@/features/cancel-no-show";
-import { withQuery } from "@/shared/lib";
+import { paginate, withQuery } from "@/shared/lib";
 import {
   NO_SHOW_STATUSES,
   NO_SHOW_TIMINGS,
   type NoShowDetail,
   type NoShowRow,
 } from "@/shared/server";
-import { AdminHeader, EMPTY_IMAGE, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
+import { AdminHeader, EMPTY_IMAGE, ListPager, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
 
 import { NoShowsTable } from "./no-shows-table";
 
@@ -16,10 +16,13 @@ interface NoShowsViewProps {
   rows: NoShowRow[];
   record: NoShowDetail | null;
   query: Record<string, string | undefined>;
+  page?: string;
 }
 
-export function NoShowsView({ rows, record, query }: NoShowsViewProps) {
-  const hrefOf = (id: string | undefined) => withQuery("/noshow", query, { record: id });
+export function NoShowsView({ rows, record, page, query }: NoShowsViewProps) {
+  const paged = paginate(rows, page);
+  const hrefOf = (id: string | undefined) =>
+    withQuery("/noshow", { ...query, page }, { record: id });
   const filtered = Boolean(query.q || query.timing || query.status);
   const timingOptions = Object.entries(NO_SHOW_TIMINGS).map(([value, label]) => ({ label, value }));
   const statusOptions = Object.entries(NO_SHOW_STATUSES).map(([value, label]) => ({
@@ -50,9 +53,20 @@ export function NoShowsView({ rows, record, query }: NoShowsViewProps) {
             className="w-[124px]"
           />
         </HStack>
-        <Panel title="최신순" className="flex-1">
+        <Panel
+          title="최신순"
+          className="flex-1"
+          footer={
+            <ListPager
+              page={paged.page}
+              totalPages={paged.totalPages}
+              total={rows.length}
+              unit="건"
+            />
+          }
+        >
           <NoShowsTable
-            rows={rows}
+            rows={paged.rows}
             emptyTitle={filtered ? "조건에 맞는 불참 기록이 없어요" : "불참 기록이 없어요"}
             emptyImage={filtered ? EMPTY_IMAGE.search : EMPTY_IMAGE.schedule}
             selectedId={record?.id}

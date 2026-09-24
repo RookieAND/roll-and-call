@@ -4,8 +4,9 @@ import { CERT_TABS } from "@/shared/lib";
 import {
   AdminHeader,
   LoadingRegion,
-  RouteTabs,
   Panel,
+  RouteTabs,
+  SkeletonPager,
   SkeletonSelect,
   SkeletonTable,
   SkeletonTabs,
@@ -51,7 +52,7 @@ export function CertStatusLoading() {
             </Grid>
           </Panel>
         </Grid>
-        <Panel className="flex-1">
+        <Panel className="flex-1" footer={<SkeletonPager />}>
           <SkeletonTabs
             items={["룰북별 인증 현황", "GM별 인증 현황"]}
             right={

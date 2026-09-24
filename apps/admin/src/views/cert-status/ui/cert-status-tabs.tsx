@@ -23,6 +23,7 @@ export function CertStatusTabs({ tab, toolbar, rulebookPanel, gmPanel }: CertSta
       value={tab}
       onValueChange={(value) => {
         const next = new URLSearchParams(searchParams);
+        next.delete("page");
         next.delete("scope");
         next.delete("unapplied");
         if (value === CERT_STATUS_TAB.gm) next.set("tab", value);

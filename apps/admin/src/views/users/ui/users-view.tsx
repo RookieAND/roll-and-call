@@ -16,15 +16,9 @@ interface UsersViewProps {
 export function UsersView({ rows, page, query }: UsersViewProps) {
   const filters = Object.entries(USER_FILTERS) as [UserFilter, string][];
   const paged = paginate(rows, page);
-  const pager = rows.length ? (
-    <ListPager
-      page={paged.page}
-      totalPages={paged.totalPages}
-      total={rows.length}
-      unit="명"
-      hrefFor={(target) => withQuery("/users", query, { page: String(target) })}
-    />
-  ) : null;
+  const pager = (
+    <ListPager page={paged.page} totalPages={paged.totalPages} total={rows.length} unit="명" />
+  );
 
   return (
     <>

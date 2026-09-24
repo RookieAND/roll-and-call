@@ -13,10 +13,16 @@ export default async function RulebookDetailPage({
   params,
   searchParams,
 }: PageProps<"/rules/[id]">) {
-  const [{ id }, { action, q }] = await Promise.all([params, searchParams]);
+  const [{ id }, { action, q, page }] = await Promise.all([params, searchParams]);
   const rulebook = await getRulebookDetail(id);
   if (!rulebook) notFound();
   const grantCandidates =
     action === "grant" && typeof q === "string" ? await searchGrantCandidates(id, q) : [];
-  return <RulebookDetailView rulebook={rulebook} grantCandidates={grantCandidates} />;
+  return (
+    <RulebookDetailView
+      rulebook={rulebook}
+      grantCandidates={grantCandidates}
+      page={typeof page === "string" ? page : undefined}
+    />
+  );
 }

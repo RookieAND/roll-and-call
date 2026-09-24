@@ -5,8 +5,9 @@ import { CERT_TABS } from "@/shared/lib";
 import {
   AdminHeader,
   LoadingRegion,
-  RouteTabs,
   Panel,
+  RouteTabs,
+  SkeletonPager,
   SkeletonSelect,
   SkeletonTable,
 } from "@/shared/ui";
@@ -39,6 +40,7 @@ export function CertQueueLoading() {
         </HStack>
         <Panel
           title="심사 대기열"
+          footer={<SkeletonPager />}
           right={
             <Text typography="body4" foreground="hint">
               오래 기다린 순

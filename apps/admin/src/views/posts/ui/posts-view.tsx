@@ -30,13 +30,12 @@ export function PostsView({ posts, page, query }: PostsViewProps) {
   });
   const empty = posts.rows.length === 0;
   const paged = paginate(posts.rows, page);
-  const pager = empty ? null : (
+  const pager = (
     <ListPager
       page={paged.page}
       totalPages={paged.totalPages}
       total={posts.rows.length}
       unit="건"
-      hrefFor={(target) => withQuery("/posts", query, { page: String(target) })}
     />
   );
   const sub = empty ? "검색 결과 0건" : `${posts.rows.length}건`;

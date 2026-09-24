@@ -1,4 +1,7 @@
+"use client";
+
 import { HStack, Pagination, Text } from "@roll-and-call/ui";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { PAGE_SIZE } from "@/shared/lib";
 
@@ -7,13 +10,24 @@ interface ListPagerProps {
   totalPages: number;
   total: number;
   unit: string;
-  hrefFor: (page: number) => string;
 }
 
-// 목록 패널 바닥. 왼쪽에 지금 보는 범위, 오른쪽에 페이지 이동.
-export function ListPager({ page, totalPages, total, unit, hrefFor }: ListPagerProps) {
-  const from = total ? (page - 1) * PAGE_SIZE + 1 : 0;
+// 목록 패널 바닥. 왼쪽에 지금 보는 범위, 오른쪽에 페이지 이동. 행이 없으면 그리지 않는다.
+// 다른 쿼리(필터·탭)는 그대로 두고 page만 바꾼다.
+export function ListPager({ page, totalPages, total, unit }: ListPagerProps) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  if (!total) return null;
+
+  const from = (page - 1) * PAGE_SIZE + 1;
   const to = Math.min(total, page * PAGE_SIZE);
+  const hrefFor = (target: number) => {
+    const next = new URLSearchParams(searchParams);
+    if (target === 1) next.delete("page");
+    else next.set("page", String(target));
+    return next.size ? `${pathname}?${next}` : pathname;
+  };
+
   return (
     <HStack
       align="center"

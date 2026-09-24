@@ -1,6 +1,13 @@
 import { Button, Field, HStack, Skeleton, TextInput, VStack } from "@roll-and-call/ui";
 
-import { AdminHeader, LoadingRegion, Panel, SkeletonField, SkeletonTable } from "@/shared/ui";
+import {
+  AdminHeader,
+  LoadingRegion,
+  Panel,
+  SkeletonField,
+  SkeletonPager,
+  SkeletonTable,
+} from "@/shared/ui";
 
 export function RulebookDetailLoading() {
   return (
@@ -34,6 +41,7 @@ export function RulebookDetailLoading() {
           </Panel>
           <Panel
             title="이 룰북으로 인증된 GM"
+            footer={<SkeletonPager />}
             right={<Skeleton width={40} height={22} rounded="full" />}
             className="flex-1"
           >

@@ -24,15 +24,9 @@ interface AuditLogViewProps {
 export function AuditLogView({ log, query }: AuditLogViewProps) {
   const clearTargetHref = withQuery("/log", query, { target: undefined, page: undefined });
   const paged = paginate(log.rows, query.page);
-  const pager = log.rows.length ? (
-    <ListPager
-      page={paged.page}
-      totalPages={paged.totalPages}
-      total={log.rows.length}
-      unit="건"
-      hrefFor={(target) => withQuery("/log", query, { page: String(target) })}
-    />
-  ) : null;
+  const pager = (
+    <ListPager page={paged.page} totalPages={paged.totalPages} total={log.rows.length} unit="건" />
+  );
 
   return (
     <>

@@ -2,19 +2,21 @@ import { Badge, Button, Callout, Table, Text, VStack } from "@roll-and-call/ui";
 import { Ban } from "lucide-react";
 import Link from "next/link";
 
-import { formatDate } from "@/shared/lib";
+import { paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, Panel, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow } from "@/shared/ui";
 
-import { revokeHref } from "../model/revoke-href";
+import { CERT_STATE_VIEW } from "../model/cert-state-view";
+import { CERT_ROW_STATE, toCertRows } from "../model/to-cert-rows";
 
 interface CertPanelProps {
   user: UserDetail;
+  page?: string;
 }
 
-export function CertPanel({ user }: CertPanelProps) {
-  const pending = user.applications.filter((application) => application.status === "pending");
-  const rejected = user.applications.filter((application) => application.status === "rejected");
+export function CertPanel({ user, page }: CertPanelProps) {
+  const rows = toCertRows(user);
+  const paged = paginate(rows, page);
   return (
     <VStack gap="150">
       {user.sanction ? (
@@ -27,7 +29,17 @@ export function CertPanel({ user }: CertPanelProps) {
           </Callout.Description>
         </Callout.Root>
       ) : null}
-      <Panel title="룰북 인증">
+      <Panel
+        title="룰북 인증"
+        footer={
+          <ListPager
+            page={paged.page}
+            totalPages={paged.totalPages}
+            total={rows.length}
+            unit="개"
+          />
+        }
+      >
         <Table.Root className="table-fixed">
           <colgroup>
             <col className="w-[200px]" />
@@ -48,7 +60,7 @@ export function CertPanel({ user }: CertPanelProps) {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {user.certifications.length + pending.length + rejected.length === 0 ? (
+            {rows.length === 0 ? (
               <TableEmptyRow
                 colSpan={6}
                 image={EMPTY_IMAGE.myGames}
@@ -56,90 +68,49 @@ export function CertPanel({ user }: CertPanelProps) {
                 description="인증을 신청하면 심사 결과가 이곳에 쌓입니다. 인증을 받기 전에는 인증이 필요한 룰북으로 구인을 열 수 없습니다."
               />
             ) : null}
-            {user.certifications.map((certification) => (
-              <Table.Row key={certification.rulebook}>
-                <Table.Cell>
-                  <Text typography="body3" weight="bold" truncate>
-                    {certification.rulebook}
-                  </Text>
-                </Table.Cell>
-                <Table.Cell align="center">
-                  <Badge colorPalette="success">인증됨</Badge>
-                </Table.Cell>
-                <Table.Cell>
-                  <Text typography="body3" foreground="hint">
-                    {formatDate(certification.approvedAt)} 승인
-                  </Text>
-                </Table.Cell>
-                <Table.Cell>{certification.approvedBy}</Table.Cell>
-                <Table.Cell />
-                <Table.Cell>
-                  <Button
-                    variant="ghost"
-                    colorPalette="danger"
-                    size="sm"
-                    render={<Link href={revokeHref(user.id, certification.rulebook)} />}
-                  >
-                    인증 취소
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-            {pending.map((application) => (
-              <Table.Row key={application.id}>
-                <Table.Cell>
-                  <Text typography="body3" weight="bold" truncate>
-                    {application.rulebook}
-                  </Text>
-                </Table.Cell>
-                <Table.Cell align="center">
-                  <Badge colorPalette="warning">심사 대기</Badge>
-                </Table.Cell>
-                <Table.Cell>
-                  <Text typography="body3" foreground="hint">
-                    {formatDate(application.appliedAt)} 신청
-                  </Text>
-                </Table.Cell>
-                <Table.Cell>
-                  <Text typography="body3" foreground="hint">
-                    -
-                  </Text>
-                </Table.Cell>
-                <Table.Cell />
-                <Table.Cell>
-                  <Button
-                    variant="outline"
-                    colorPalette="gray"
-                    size="sm"
-                    render={<Link href={`/cert/${application.id}`} />}
-                  >
-                    심사 열기
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-            {rejected.map((application) => (
-              <Table.Row key={application.id} className="opacity-50">
-                <Table.Cell>
-                  <Text typography="body3" weight="bold" truncate>
-                    {application.rulebook}
-                  </Text>
-                </Table.Cell>
-                <Table.Cell align="center">
-                  <Badge colorPalette="danger">반려</Badge>
-                </Table.Cell>
-                <Table.Cell>
-                  <Text typography="body3" foreground="hint">
-                    {application.processedAt
-                      ? `${formatDate(application.processedAt)} 반려`
-                      : "반려"}
-                  </Text>
-                </Table.Cell>
-                <Table.Cell>{application.processedBy}</Table.Cell>
-                <Table.Cell />
-                <Table.Cell />
-              </Table.Row>
-            ))}
+            {paged.rows.map((row) => {
+              const state = CERT_STATE_VIEW[row.state];
+              return (
+                <Table.Row
+                  key={row.key}
+                  className={row.state === CERT_ROW_STATE.rejected ? "opacity-50" : undefined}
+                >
+                  <Table.Cell>
+                    <Text typography="body3" weight="bold" truncate>
+                      {row.rulebook}
+                    </Text>
+                  </Table.Cell>
+                  <Table.Cell align="center">
+                    <Badge colorPalette={state.tone}>{state.label}</Badge>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Text typography="body3" foreground="hint">
+                      {row.date}
+                    </Text>
+                  </Table.Cell>
+                  <Table.Cell>
+                    {row.staff ?? (
+                      <Text typography="body3" foreground="hint">
+                        -
+                      </Text>
+                    )}
+                  </Table.Cell>
+                  <Table.Cell />
+                  <Table.Cell>
+                    {row.href && state.action ? (
+                      <Button
+                        variant={state.action.variant}
+                        colorPalette={state.action.tone}
+                        size="sm"
+                        render={<Link href={row.href} />}
+                      >
+                        {state.action.label}
+                      </Button>
+                    ) : null}
+                  </Table.Cell>
+                </Table.Row>
+              );
+            })}
           </Table.Body>
         </Table.Root>
       </Panel>
