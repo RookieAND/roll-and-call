@@ -24,3 +24,4 @@ export {
   type SessionChip,
   type SessionTodo,
 } from "./model/session-card-model";
+export { SessionCountStats } from "./ui/session-count-stats";

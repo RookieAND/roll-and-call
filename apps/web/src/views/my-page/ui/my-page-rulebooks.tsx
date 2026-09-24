@@ -2,25 +2,21 @@ import { Button, Callout, HStack, Text, VStack } from "@roll-and-call/ui";
 import { CalendarDays, ChevronRight, Plus } from "lucide-react";
 import Link from "next/link";
 
-import {
-  CERT_STATE,
-  CertStateRow,
-  isCertEnforced,
-  rejectionSummary,
-  type MyRulebooks,
-} from "@/entities/rulebook";
+import { CERT_STATE, isCertEnforced, type MyRulebooks } from "@/entities/rulebook";
 import { formatDate } from "@/shared/lib";
 
 import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
+import { MyPageRulebookRow } from "./my-page-rulebook-row";
+import { RulebookRowsMore } from "./rulebook-rows-more";
 
 const SHOWN_STATES = [CERT_STATE.certified, CERT_STATE.pending, CERT_STATE.rejected] as const;
-const ROW_LIMIT = 4;
+const PREVIEW_ROWS = 3;
 
 interface MyPageRulebooksProps {
   rulebooks: MyRulebooks;
 }
 
-// 할 일과 내 세션 사이의 GM 룰북 블록. 안내 기간 띠는 다른 화면에선 앱 상단 몫이라 여기서는 블록 안에 한 번만 둔다.
+// 할 일과 링크 사이의 인증한 룰북 블록. 안내 기간 띠는 다른 화면에선 앱 상단 몫이라 여기서는 블록 안에 한 번만 둔다.
 export function MyPageRulebooks({
   rulebooks: { rulebooks, enforcementDate },
 }: MyPageRulebooksProps) {
@@ -34,7 +30,7 @@ export function MyPageRulebooks({
     <VStack gap="125" render={<section />}>
       <HStack align="center">
         <Text typography="heading3" render={<h2 />} className="flex-1">
-          GM 룰북
+          인증한 룰북
         </Text>
         {rows.length > 0 && (
           <Button
@@ -65,24 +61,17 @@ export function MyPageRulebooks({
 
       {rows.length > 0 ? (
         <>
-          <div className={MY_PAGE_GROUP_CLASS}>
-            {rows.slice(0, ROW_LIMIT).map((rulebook) => (
-              <Link
-                key={rulebook.id}
-                href={`/me/rulebooks/${rulebook.id}`}
-                className="block border-gray-100 transition-colors not-first:border-t hover:bg-gray-50"
-              >
-                <CertStateRow
-                  state={rulebook.state!}
-                  title={rulebook.label}
-                  meta={
-                    rulebook.state === CERT_STATE.rejected
-                      ? rejectionSummary(rulebook.latestApplication)
-                      : undefined
-                  }
-                />
-              </Link>
+          <div className={`${MY_PAGE_GROUP_CLASS} [&>a:first-child]:border-t-0`}>
+            {rows.slice(0, PREVIEW_ROWS).map((rulebook) => (
+              <MyPageRulebookRow key={rulebook.id} rulebook={rulebook} />
             ))}
+            {rows.length > PREVIEW_ROWS && (
+              <RulebookRowsMore count={rows.length - PREVIEW_ROWS}>
+                {rows.slice(PREVIEW_ROWS).map((rulebook) => (
+                  <MyPageRulebookRow key={rulebook.id} rulebook={rulebook} />
+                ))}
+              </RulebookRowsMore>
+            )}
           </div>
           <Button render={<Link href="/me/rulebooks/apply" />} variant="outline" className="w-full">
             <Plus size={15} strokeWidth={2.2} aria-hidden />

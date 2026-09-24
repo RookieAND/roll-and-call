@@ -1,4 +1,4 @@
-import { Container, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 import { AppBar, HelpButton } from "@/shared/ui";
 
@@ -18,6 +18,19 @@ export default function Loading() {
               </div>
               <Skeleton width={52} height={36} rounded={400} className="flex-none" />
             </HStack>
+            <Grid cols={2} className="-mx-200 border-y border-gray-200">
+              {Array.from({ length: 2 }).map((_, index) => (
+                <VStack
+                  key={index}
+                  align="center"
+                  gap="050"
+                  className="border-gray-200 py-175 not-first:border-l"
+                >
+                  <Skeleton width={24} height={27} />
+                  <Skeleton width={72} height={17} />
+                </VStack>
+              ))}
+            </Grid>
             <div>
               <Skeleton width={40} height={17} className="mb-100" />
               <HStack gap="075">

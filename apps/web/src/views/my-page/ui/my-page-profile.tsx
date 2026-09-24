@@ -7,6 +7,7 @@ import {
   ProfileRow,
   type AvailabilityInterval,
 } from "@/entities/profile";
+import { SessionCountStats } from "@/widgets/session-list";
 
 import { MyPageBlockLabel } from "./my-page-block-label";
 
@@ -16,6 +17,8 @@ interface MyPageProfileProps {
   bio: string | null;
   keywords: string[];
   availability: AvailabilityInterval[];
+  hosted: { count: number; href: string };
+  played: { count: number; href: string };
 }
 
 // 성향과 가능 시간대는 08 타인 프로필과 같은 문법이라 내 화면과 남의 화면이 같은 것을 같은 모양으로 보여준다.
@@ -25,6 +28,8 @@ export function MyPageProfile({
   bio,
   keywords,
   availability,
+  hosted,
+  played,
 }: MyPageProfileProps) {
   const bioText = bio || "한 줄 소개를 적어보세요.";
   const bioForeground = bio ? "muted" : "hint";
@@ -45,6 +50,8 @@ export function MyPageProfile({
         </Button>
       </HStack>
 
+      <SessionCountStats hosted={hosted} played={played} />
+
       <div>
         <MyPageBlockLabel label="성향" />
         <KeywordChips keywords={keywords} />
@@ -63,7 +70,7 @@ export function MyPageProfile({
           note={
             availability.length > 0
               ? "일정 조율 화면을 열면 이 시간대가 미리 칠해져 있습니다."
-              : "적어두면 일정 조율 화면에 미리 칠해 둡니다."
+              : "적어두면 일정 조율 화면에 미리 칠해져 있습니다."
           }
         />
       </div>

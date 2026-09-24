@@ -1,9 +1,10 @@
 import { Badge, Text } from "@roll-and-call/ui";
 
+import { SESSION_ROLE } from "@/entities/game";
 import { EMPTY_BIO_TEXT, KeywordChips, ProfileRow } from "@/entities/profile";
 import { toKst } from "@/shared/lib";
 import type { Profile } from "@/shared/server";
-import type { Absence } from "@/widgets/session-list";
+import { SessionCountStats, userSessionsHref, type Absence } from "@/widgets/session-list";
 
 import { ProfileAbsenceNotice } from "./profile-absence-notice";
 import { ProfileBlockLabel } from "./profile-block-label";
@@ -12,10 +13,12 @@ interface ProfileSummaryProps {
   profile: Profile;
   absences: Absence[];
   isGm: boolean;
+  hosted: number;
+  played: number;
 }
 
 // 07 §C가 쓰는 bio·keywords·availability를 그대로 읽는다. 프로필을 위한 새 입력을 만들지 않는다.
-export function ProfileSummary({ profile, absences, isGm }: ProfileSummaryProps) {
+export function ProfileSummary({ profile, absences, isGm, hosted, played }: ProfileSummaryProps) {
   const joinedLabel = toKst(profile.createdAt).format("YYYY년 M월부터");
   const bioText = profile.bio || EMPTY_BIO_TEXT;
   const bioForeground = profile.bio ? "normal" : "hint";
@@ -44,6 +47,12 @@ export function ProfileSummary({ profile, absences, isGm }: ProfileSummaryProps)
       >
         {bioText}
       </Text>
+      <div className="mt-175">
+        <SessionCountStats
+          hosted={{ count: hosted, href: userSessionsHref(profile.id, SESSION_ROLE.host) }}
+          played={{ count: played, href: userSessionsHref(profile.id, SESSION_ROLE.player) }}
+        />
+      </div>
       <div className="mt-175">
         <ProfileBlockLabel label="성향" />
         <KeywordChips keywords={profile.keywords} />

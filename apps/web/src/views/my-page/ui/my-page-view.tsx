@@ -1,18 +1,17 @@
 import { Container, VStack } from "@roll-and-call/ui";
 
+import { SESSION_ROLE } from "@/entities/game";
 import { profileDisplay } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
 import { getCurrentSessionUser, getProfile, getRulebookRecords } from "@/shared/server";
 import { AppBar, HelpButton } from "@/shared/ui";
-import { loadMySessions } from "@/widgets/session-list";
+import { loadMySessions, sessionsHref } from "@/widgets/session-list";
 
-import { summarizeMySessions } from "../model/my-page-summary";
 import { sessionTodos } from "../model/session-todos";
 import { MyPageLinks } from "./my-page-links";
 import { MyPageProfile } from "./my-page-profile";
 import { MyPageRulebooks } from "./my-page-rulebooks";
-import { MyPageSessions } from "./my-page-sessions";
 import { MyPageSettings } from "./my-page-settings";
 import { MyPageTodos } from "./my-page-todos";
 
@@ -42,7 +41,6 @@ export async function MyPageView() {
   );
 
   const { name, avatar, handle } = profileDisplay({ profile, user });
-  const sessions = summarizeMySessions(mySessions);
   const todos = sessionTodos(mySessions);
   const handleLabel = handle ? `@${handle}` : null;
 
@@ -57,10 +55,17 @@ export async function MyPageView() {
             bio={profile?.bio ?? null}
             keywords={profile?.keywords ?? []}
             availability={profile?.availability ?? []}
+            hosted={{
+              count: mySessions[SESSION_ROLE.host].length,
+              href: sessionsHref(SESSION_ROLE.host),
+            }}
+            played={{
+              count: mySessions[SESSION_ROLE.player].length,
+              href: sessionsHref(SESSION_ROLE.player),
+            }}
           />
           <MyPageTodos todos={todos} rejectedRulebooks={rejectedRulebooks} />
           <MyPageRulebooks rulebooks={rulebooks} />
-          <MyPageSessions sessions={sessions} />
           <MyPageLinks links={profile?.links ?? []} />
           <MyPageSettings handleLabel={handleLabel} />
         </VStack>

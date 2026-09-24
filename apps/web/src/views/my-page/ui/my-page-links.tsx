@@ -6,7 +6,7 @@ interface MyPageLinksProps {
   links: ProfileLink[];
 }
 
-// 매일 보는 것은 할 일과 세션이고 링크는 가끔 확인한다. 그래서 내 세션 아래 별도 섹션이다.
+// 매일 보는 것은 할 일과 룰북이고 링크는 가끔 확인한다. 그래서 룰북 아래 별도 섹션이다.
 export function MyPageLinks({ links }: MyPageLinksProps) {
   return (
     <section>

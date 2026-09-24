@@ -7,13 +7,10 @@ import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { ProfileMemoBlock } from "@/features/profile-memo";
 import { getCurrentUser, getProfileMemo, getRulebookRecords } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
-import { loadProfile, PROFILE_SESSION_SECTIONS } from "@/widgets/session-list";
+import { loadProfile } from "@/widgets/session-list";
 
 import { ProfileBlockLabel } from "./profile-block-label";
 import { ProfileRulebooks } from "./profile-rulebooks";
-import { ProfileSectionDivider } from "./profile-section-divider";
-import { ProfileSessionSection } from "./profile-session-section";
-import { ProfileStats } from "./profile-stats";
 import { ProfileSummary } from "./profile-summary";
 
 export async function UserProfileView({ id }: { id: string }) {
@@ -31,21 +28,22 @@ export async function UserProfileView({ id }: { id: string }) {
   const certified = toMyRulebooks(rulebookRecords)
     .rulebooks.filter((rulebook) => rulebook.state === CERT_STATE.certified)
     .toSorted((left, right) => right.stateAt!.getTime() - left.stateAt!.getTime())
-    .map((rulebook) => ({
-      id: rulebook.id,
-      label: rulebook.label,
-      approvedAt: rulebook.stateAt!,
-      gameCount: rulebook.gameCount,
-    }));
+    .map((rulebook) => ({ id: rulebook.id, label: rulebook.label }));
   const memo = viewer ? await getProfileMemo({ ownerId: viewer.id, targetId: id }) : null;
 
   return (
     <>
       <AppBar back="/games" title="프로필" />
       <Container size="sm" className="px-0">
-        <ProfileSummary profile={profile} absences={absences} isGm={certified.length > 0} />
+        <ProfileSummary
+          profile={profile}
+          absences={absences}
+          isGm={certified.length > 0}
+          hosted={sessions[SESSION_ROLE.host].length}
+          played={sessions[SESSION_ROLE.player].length}
+        />
 
-        {certified.length > 0 && <ProfileRulebooks userId={profile.id} rulebooks={certified} />}
+        {certified.length > 0 && <ProfileRulebooks rulebooks={certified} />}
 
         <section className="p-200">
           <ProfileBlockLabel label="링크" />
@@ -54,28 +52,12 @@ export async function UserProfileView({ id }: { id: string }) {
 
         <section className="px-200 pb-200">
           <ProfileBlockLabel label="가능 시간대" />
-          <AvailabilityRows intervals={profile.availability} note="프로필 기본값입니다." />
+          <AvailabilityRows intervals={profile.availability} />
         </section>
 
         {viewer && (
           <ProfileMemoBlock targetId={profile.id} targetName={profile.username} memo={memo} />
         )}
-
-        <ProfileStats
-          hosted={sessions[SESSION_ROLE.host].length}
-          played={sessions[SESSION_ROLE.player].length}
-        />
-
-        {PROFILE_SESSION_SECTIONS.map((section) => (
-          <div key={section.key}>
-            <ProfileSectionDivider />
-            <ProfileSessionSection
-              userId={profile.id}
-              section={section}
-              items={sessions[section.key]}
-            />
-          </div>
-        ))}
       </Container>
     </>
   );

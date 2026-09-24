@@ -1,10 +1,17 @@
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { ChevronRight } from "lucide-react";
 
 import { CERT_STATE, type CertState } from "../model/cert-state";
 import { CERT_STATE_META } from "../model/cert-state-meta";
 import { CertStateIcon } from "./cert-state-icon";
+
+const BADGE_PALETTE = {
+  success: "success",
+  muted: "gray",
+  warning: "warning",
+  hint: "gray",
+} as const;
 
 const row = cva("flex min-h-[52px] items-center gap-150 px-175 py-125", {
   variants: { rejected: { true: "bg-warning-50", false: "" } },
@@ -14,8 +21,8 @@ interface CertStateRowProps {
   state: CertState;
   title: string;
   meta?: string;
-  // 제목 옆(목록) 또는 오른쪽 끝(마이페이지 블록)에 상태 글자를 둔다. 없으면 아이콘만.
-  statusPlacement?: "inline" | "end" | "none";
+  // 제목 옆(목록)에 글자로, 오른쪽 끝에 글자나 배지(마이페이지 블록)로 둔다. 없으면 아이콘만.
+  statusPlacement?: "inline" | "end" | "badge" | "none";
   chevron?: boolean;
 }
 
@@ -53,6 +60,11 @@ export function CertStateRow({
         )}
       </VStack>
       {statusPlacement === "end" && status}
+      {statusPlacement === "badge" && (
+        <Badge colorPalette={BADGE_PALETTE[foreground]} className="flex-none">
+          {label}
+        </Badge>
+      )}
       {chevron && <ChevronRight size={16} aria-hidden className="flex-none text-hint" />}
     </div>
   );
