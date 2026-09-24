@@ -15,7 +15,7 @@ import {
   staff,
   staffMemos,
 } from "@roll-and-call/database";
-import { isNull } from "drizzle-orm";
+import { isNull, sql } from "drizzle-orm";
 import { cache } from "react";
 
 import type { AuditAction } from "./audit-actions";
@@ -67,6 +67,11 @@ export const loadSnapshot = cache(async () => {
   const memoRows = await db.select().from(staffMemos);
   const auditRows = await db.select().from(auditLog);
   const [settingsRow] = await db.select().from(adminSettings);
+  // 디스코드 아이디는 profiles에 없다(username은 사용자가 고치는 닉네임). 디스코드 로그인은 full_name에 아이디를 넣는다.
+  const handleRows = await db.execute<{ id: string; handle: string | null }>(
+    sql`select id, raw_user_meta_data->>'full_name' as handle from auth.users`,
+  );
+  const handles = new Map(handleRows.map((row) => [row.id, row.handle]));
 
   const nicknames = new Map(profileRows.map((profile) => [profile.id, profile.username]));
   const nicknameOf = (id: string | null) =>
@@ -82,7 +87,7 @@ export const loadSnapshot = cache(async () => {
       id: profile.id,
       nickname: profile.username,
       discordId: profile.discordId,
-      discordHandle: profile.username,
+      discordHandle: handles.get(profile.id) ?? profile.username,
       joinedAt: profile.createdAt,
       hostedCount: hosted.length,
       playedCount: participantRows.filter(
