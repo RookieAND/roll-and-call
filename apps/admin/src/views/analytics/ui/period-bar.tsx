@@ -1,6 +1,7 @@
 "use client";
 
 import { HStack, SegmentedControl, Text } from "@roll-and-call/ui";
+import type { ReactNode } from "react";
 
 const PERIODS = [
   { value: "4w", label: "최근 4주" },
@@ -10,7 +11,7 @@ const PERIODS = [
 ] as const;
 
 interface PeriodBarProps {
-  description: string;
+  description: ReactNode;
 }
 
 // ponytail: 집계가 목업이라 최근 4주만 연다. 실제 API가 기간을 받으면 ?period=로 넘긴다.
