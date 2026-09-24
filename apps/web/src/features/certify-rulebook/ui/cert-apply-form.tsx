@@ -142,6 +142,7 @@ export function CertApplyForm({ rulebooks, initialRulebookId, nickname }: CertAp
                   shot={shot}
                   slot={slots[shot]}
                   selected={shot === selectedShot}
+                  needed={Boolean(rulebook)}
                   onPick={() => pickShot(shot)}
                   onRemove={() => {
                     setSlot(shot, { status: PHOTO_SLOT.empty });

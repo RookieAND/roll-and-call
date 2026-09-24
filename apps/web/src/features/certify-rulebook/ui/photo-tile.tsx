@@ -1,4 +1,4 @@
-import { HStack, IconButton, Progress, Text, VStack } from "@roll-and-call/ui";
+import { cn, HStack, IconButton, Progress, Text, VStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { CircleAlert, Plus, X } from "lucide-react";
 
@@ -17,8 +17,17 @@ const frame = cva(
         error: "border-2 border-warning-600 bg-secondary-strong",
       },
       selected: { true: "border-2 border-primary-600", false: "" },
+      needed: { true: "", false: "" },
     },
-    compoundVariants: [{ status: "error", selected: true, className: "border-warning-600" }],
+    compoundVariants: [
+      { status: "error", selected: true, className: "border-warning-600" },
+      {
+        status: "empty",
+        selected: false,
+        needed: true,
+        className: "border-2 border-dashed border-tinted-border",
+      },
+    ],
   },
 );
 
@@ -35,12 +44,14 @@ interface PhotoTileProps {
   shot: CertShot;
   slot: PhotoSlot;
   selected: boolean;
+  // 룰북을 고른 뒤 아직 비어 있는 칸. 점선으로 남은 칸을 알린다.
+  needed: boolean;
   onPick: () => void;
   onRemove: () => void;
 }
 
 // 3:4 사진 칸. 빈 칸에는 무엇을 찍을지 예시 그림을 흐리게 깐다.
-export function PhotoTile({ shot, slot, selected, onPick, onRemove }: PhotoTileProps) {
+export function PhotoTile({ shot, slot, selected, needed, onPick, onRemove }: PhotoTileProps) {
   const label = CERT_SHOT_LABEL[shot];
   const labelForeground =
     slot.status === PHOTO_SLOT.error ? "warning" : selected ? "primary" : "muted";
@@ -54,7 +65,7 @@ export function PhotoTile({ shot, slot, selected, onPick, onRemove }: PhotoTileP
           aria-label={`${label} 사진 ${slot.status === PHOTO_SLOT.done ? "보기" : "올리기"}`}
           aria-pressed={selected}
           onClick={onPick}
-          className={frame({ status: slot.status, selected })}
+          className={cn(frame({ status: slot.status, selected, needed }))}
         >
           {slot.status === PHOTO_SLOT.done ? (
             // oxlint-disable-next-line nextjs/no-img-element -- 스토리지 원본 사진이라 최적화 경로를 타지 않는다.

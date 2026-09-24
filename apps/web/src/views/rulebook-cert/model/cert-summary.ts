@@ -34,7 +34,7 @@ export function certSummary({ state, stateAt, latestApplication, revokeReason }:
     ],
     sub: [
       "인증 취소 전에 연 구인은 그대로 진행됩니다.",
-      "이의가 있다면 디스코드 문의 채널로 알려 주세요.",
+      "이의가 있다면 디스코드 #문의 채널로 알려 주세요.",
     ],
   };
 }

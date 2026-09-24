@@ -4,11 +4,10 @@ import {
   certApplications,
   certifications,
   db,
-  games,
   rulebookRequests,
   rulebooks,
 } from "@roll-and-call/database";
-import { and, count, desc, eq, isNotNull, isNull } from "drizzle-orm";
+import { and, desc, eq, isNull } from "drizzle-orm";
 
 // 룰북 목록과 한 사람의 인증 기록을 한 번에 읽는다. userId가 없으면(비로그인) 목록과 적용일만.
 export async function getRulebookRecords(userId: string | null) {
@@ -34,11 +33,10 @@ export async function getRulebookRecords(userId: string | null) {
       certificationRows: [],
       applicationRows: [],
       requestRows: [],
-      gameCounts: [],
     };
   }
 
-  const [certificationRows, applicationRows, requestRows, gameCounts] = await Promise.all([
+  const [certificationRows, applicationRows, requestRows] = await Promise.all([
     db
       .select({
         rulebookId: certifications.rulebookId,
@@ -63,13 +61,8 @@ export async function getRulebookRecords(userId: string | null) {
       .from(rulebookRequests)
       .where(and(eq(rulebookRequests.userId, userId), isNull(rulebookRequests.outcome)))
       .orderBy(desc(rulebookRequests.createdAt)),
-    db
-      .select({ rulebookId: games.rulebookId, count: count() })
-      .from(games)
-      .where(and(eq(games.gmId, userId), isNotNull(games.rulebookId)))
-      .groupBy(games.rulebookId),
   ]);
-  return { catalog, enforcementDate, certificationRows, applicationRows, requestRows, gameCounts };
+  return { catalog, enforcementDate, certificationRows, applicationRows, requestRows };
 }
 
 export type RulebookRecords = Awaited<ReturnType<typeof getRulebookRecords>>;

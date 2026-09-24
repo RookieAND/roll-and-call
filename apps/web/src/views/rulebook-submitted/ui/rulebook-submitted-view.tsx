@@ -36,7 +36,7 @@ export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedVie
           <Text typography="body2" foreground="muted" render={<p />} className="[text-wrap:pretty]">
             운영진이 보통 2~3일 안에 확인합니다.
             <br />
-            결과는 마이페이지의 GM 룰북에서 볼 수 있습니다.
+            결과는 마이페이지의 인증한 룰북에서 볼 수 있습니다.
           </Text>
           <HStack align="center" gap="100" className="mt-125 rounded-400 bg-gray-50 px-150 py-100">
             <Clock size={15} strokeWidth={2.2} aria-hidden className="text-gray-600" />

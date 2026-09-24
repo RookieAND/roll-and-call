@@ -1,5 +1,4 @@
 import { Button, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -18,7 +17,6 @@ interface RulebookCertViewProps {
   rulebookId: string;
 }
 
-// 확인 중 · 인증됨 · 반려됨 · 인증 취소됨. 인증 취소됨에서는 사진을 보여 주지 않는다.
 export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {
@@ -41,7 +39,6 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
   const { state, latestApplication } = rulebook;
   const summary = certSummary(rulebook);
   const rejected = state === CERT_STATE.rejected;
-  const showPhotos = state !== CERT_STATE.revoked && latestApplication;
   const inquiry = inquiryUrl();
 
   return (
@@ -51,22 +48,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
         <VStack gap="250" className="pt-225 pb-250">
           <CertSummaryCard state={state} lines={summary.lines} sub={summary.sub} />
 
-          {state === CERT_STATE.certified && (
-            <Link
-              href="/me/sessions/hosted"
-              className="flex min-h-[52px] items-center gap-125 rounded-500 border border-gray-200 px-175 transition-colors hover:bg-gray-50"
-            >
-              <Text typography="body3" weight="medium" className="flex-1">
-                이 룰로 연 구인
-              </Text>
-              <Text typography="body2" weight="extrabold" numeric>
-                {rulebook.gameCount}개
-              </Text>
-              <ChevronRight size={16} aria-hidden className="text-hint" />
-            </Link>
-          )}
-
-          {showPhotos && (
+          {latestApplication && (
             <VStack gap="125" render={<section />}>
               <Text typography="subtitle1" render={<h2 />}>
                 제출한 사진

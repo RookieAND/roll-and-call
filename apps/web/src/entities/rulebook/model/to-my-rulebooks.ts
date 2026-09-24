@@ -13,7 +13,6 @@ export interface MyRulebook {
   certRequired: boolean;
   state: CertState | null;
   stateAt: Date | null;
-  gameCount: number;
   latestApplication: CertApplication | null;
   revokeReason: string | null;
 }
@@ -30,7 +29,6 @@ export function toMyRulebooks(records: RulebookRecords) {
       label: rulebookLabel(rulebook),
       state: derived?.state ?? null,
       stateAt: derived?.at ?? null,
-      gameCount: records.gameCounts.find((row) => row.rulebookId === rulebook.id)?.count ?? 0,
       latestApplication,
       revokeReason: certification?.revokeReason ?? null,
     };

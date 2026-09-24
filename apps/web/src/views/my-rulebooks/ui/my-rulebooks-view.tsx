@@ -18,7 +18,7 @@ export async function MyRulebooksView() {
   if (!user) {
     return (
       <>
-        <AppBar back="/me" title="GM 룰북" />
+        <AppBar back="/me" title="인증한 룰북" />
         <Container size="sm">
           <div className="py-300">
             <LoginRequired />
@@ -33,10 +33,10 @@ export async function MyRulebooksView() {
 
   return (
     <>
-      <AppBar back="/me" title="GM 룰북" />
+      <AppBar back="/me" title="인증한 룰북" />
       <Container size="sm">
         <VStack gap="300" className="pt-225 pb-250">
-          <RulebookListSection title="진행할 수 있는 룰" count={sections.usable.length}>
+          <RulebookListSection title="인증 완료된 룰" count={sections.usable.length}>
             {sections.usable.length === 0 && (
               <Text typography="body3" foreground="hint" render={<p />} className="px-175 py-200">
                 아직 인증된 룰북이 없습니다.
@@ -59,7 +59,7 @@ export async function MyRulebooksView() {
           </RulebookListSection>
 
           {inProgressCount > 0 && (
-            <RulebookListSection title="처리 중인 신청" count={inProgressCount}>
+            <RulebookListSection title="처리 중인 룰" count={inProgressCount}>
               {sections.rejected.map((rulebook) => (
                 <Link
                   key={rulebook.id}
@@ -70,7 +70,7 @@ export async function MyRulebooksView() {
                     state={CERT_STATE.rejected}
                     title={rulebook.label}
                     meta={certRowMeta(rulebook)}
-                    statusPlacement="inline"
+                    statusPlacement="badge"
                   />
                 </Link>
               ))}
@@ -85,7 +85,7 @@ export async function MyRulebooksView() {
                       state={CERT_STATE.pending}
                       title={item.rulebook.label}
                       meta={certRowMeta(item.rulebook)}
-                      statusPlacement="inline"
+                      statusPlacement="badge"
                     />
                   </Link>
                 ) : (
@@ -94,7 +94,7 @@ export async function MyRulebooksView() {
                     state={CERT_STATE.requested}
                     title={item.label}
                     meta="목록에 추가되면 인증을 신청할 수 있습니다"
-                    statusPlacement="inline"
+                    statusPlacement="badge"
                     chevron={false}
                   />
                 ),

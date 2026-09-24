@@ -45,7 +45,7 @@ export function NewGameGateSheet({ open, onOpenChange, pending }: NewGameGateShe
                 className="[text-wrap:pretty]"
               >
                 {pending ? (
-                  "결과는 마이페이지의 GM 룰북에서 볼 수 있습니다."
+                  "결과는 마이페이지의 인증한 룰북에서 볼 수 있습니다."
                 ) : (
                   <>
                     가지고 있는 실물 룰북 사진 3장으로 인증합니다.
