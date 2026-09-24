@@ -10,13 +10,14 @@ export function MyPageRulebookRow({ rulebook }: MyPageRulebookRowProps) {
   return (
     <Link
       href={`/me/rulebooks/${rulebook.id}`}
-      className="block border-t border-gray-100 transition-colors hover:bg-gray-50"
+      className="block border-t border-gray-200 transition-colors hover:bg-gray-50"
     >
       <CertStateRow
         state={rulebook.state!}
         title={rulebook.label}
         meta={certRowMeta(rulebook)}
         statusPlacement="badge"
+        size="sm"
       />
     </Link>
   );

@@ -22,7 +22,7 @@ export function MyPageSettings({ handleLabel }: MyPageSettingsProps) {
           </Text>
           <ThemeSetting className="w-39 flex-none" />
         </HStack>
-        <SignOutButton className="min-h-13 w-full justify-between rounded-none border-0 px-175 text-subtitle1 font-bold text-gray-900">
+        <SignOutButton className="min-h-15 w-full justify-between rounded-none border-0 px-175 text-subtitle1 font-bold text-gray-900">
           로그아웃
           {handleLabel && (
             <Text typography="body3" foreground="hint" render={<span />}>
