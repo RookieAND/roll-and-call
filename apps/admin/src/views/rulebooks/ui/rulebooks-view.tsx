@@ -6,9 +6,9 @@ import {
   RequestDialog,
   type RequestAction,
 } from "@/features/process-rulebook-request";
-import { withQuery } from "@/shared/lib";
+import { paginate, withQuery } from "@/shared/lib";
 import type { RulebookRequestRow, RulebookRow } from "@/shared/server";
-import { AdminHeader, Panel, UrlSearchInput } from "@/shared/ui";
+import { AdminHeader, ListPager, Panel, UrlSearchInput } from "@/shared/ui";
 
 import { AddRulebookRoute } from "./add-rulebook-route";
 import { RequestPanel } from "./request-panel";
@@ -26,13 +26,24 @@ export function RulebooksView({ rulebooks, linkTargets, requests, query }: Ruleb
   const hasHidden = linkTargets.length < rulebooks.total;
   const listQuery = { q: query.q, hidden: query.hidden };
   const rows = hiddenOnly ? rulebooks.rows.filter((row) => row.hidden) : rulebooks.rows;
-  const closeHref = withQuery("/rules", listQuery, {});
+  const paged = paginate(rows, query.page);
+  const pager = rows.length ? (
+    <ListPager
+      page={paged.page}
+      totalPages={paged.totalPages}
+      total={rows.length}
+      unit="개"
+      hrefFor={(target) => withQuery("/rules", listQuery, { page: String(target) })}
+    />
+  ) : null;
+  const pageQuery = { ...listQuery, page: query.page };
+  const closeHref = withQuery("/rules", pageQuery, {});
   const openedAction = Object.values(REQUEST_ACTION).find((action) => action === query.action);
   const openedRequest = requests.find((request) => request.id === query.request);
   const opened =
     openedAction && openedRequest ? { action: openedAction, request: openedRequest } : null;
   const actionHref = (action: RequestAction, requestId: string) =>
-    withQuery("/rules", listQuery, { action, request: requestId });
+    withQuery("/rules", pageQuery, { action, request: requestId });
 
   return (
     <>
@@ -63,15 +74,16 @@ export function RulebooksView({ rulebooks, linkTargets, requests, query }: Ruleb
               ) : null}
               <Button
                 size="sm"
-                render={<Link href={withQuery("/rules", listQuery, { add: "1" })} scroll={false} />}
+                render={<Link href={withQuery("/rules", pageQuery, { add: "1" })} scroll={false} />}
               >
                 룰북 추가
               </Button>
             </>
           }
           className="flex-1"
+          footer={pager}
         >
-          <RulebookTable rows={rows} />
+          <RulebookTable rows={paged.rows} />
         </Panel>
       </VStack>
       <RequestDialog opened={opened} rulebooks={linkTargets} closeHref={closeHref} />
