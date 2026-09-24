@@ -61,7 +61,6 @@ export {
   type PostModerationResult,
 } from "./moderate-post";
 export { POST_STATUS, type PostStatus } from "./post-status";
-export { getServerName } from "./server-info";
 export { getStaffRole } from "./staff";
 export { addStaff } from "./add-staff";
 export { AUDIT_PERIODS, type AuditPeriod } from "./audit-period";

@@ -54,7 +54,6 @@ export function NoShowsView({ rows, record, page, query }: NoShowsViewProps) {
           />
         </HStack>
         <Panel
-          title="최신순"
           className="flex-1"
           footer={
             <ListPager

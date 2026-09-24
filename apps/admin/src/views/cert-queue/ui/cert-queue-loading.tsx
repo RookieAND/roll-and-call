@@ -1,4 +1,4 @@
-import { Chip, HStack, Skeleton, Text, TextInput } from "@roll-and-call/ui";
+import { Chip, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import { CERT_TABS } from "@/shared/lib";
@@ -38,22 +38,19 @@ export function CertQueueLoading() {
           </div>
           <Chip disabled>재신청만</Chip>
         </HStack>
-        <Panel
-          title="심사 대기열"
-          footer={<SkeletonPager />}
-          right={
-            <Text typography="body4" foreground="hint">
-              오래 기다린 순
-            </Text>
-          }
-          className="flex-1"
-        >
+        <Panel footer={<SkeletonPager />} className="flex-1">
           <SkeletonTable
             columns={[
               { label: "닉네임", kind: "text", width: "w-[180px]" },
               { label: "룰북", kind: "text", width: "w-[200px]" },
               { label: "신청일", kind: "date", width: "w-[136px]" },
-              { label: "대기 일수", kind: "number", width: "w-[90px]", align: "center" },
+              {
+                label: "대기 일수",
+                kind: "number",
+                width: "w-[90px]",
+                align: "center",
+                sorted: true,
+              },
               { label: "신청 구분", kind: "badge", width: "w-[100px]", align: "center" },
               { label: "이전 반려", kind: "number", width: "w-[90px]", align: "center" },
               { label: "", kind: "empty" },

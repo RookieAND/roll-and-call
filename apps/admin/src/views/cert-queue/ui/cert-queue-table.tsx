@@ -1,5 +1,5 @@
-import { Badge, Table, Text, cn } from "@roll-and-call/ui";
-import { ChevronRight } from "lucide-react";
+import { Badge, HStack, Table, Text, cn } from "@roll-and-call/ui";
+import { ArrowDown, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 import { formatDate } from "@/shared/lib";
@@ -30,7 +30,12 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
           <Table.Head>닉네임</Table.Head>
           <Table.Head>룰북</Table.Head>
           <Table.Head>신청일</Table.Head>
-          <Table.Head align="center">대기 일수</Table.Head>
+          <Table.Head align="center" aria-sort="descending" className="text-gray-900">
+            <HStack inline align="center" gap="050">
+              대기 일수
+              <ArrowDown size={10} strokeWidth={2.4} aria-hidden />
+            </HStack>
+          </Table.Head>
           <Table.Head align="center">신청 구분</Table.Head>
           <Table.Head align="center">이전 반려</Table.Head>
           <Table.Head />

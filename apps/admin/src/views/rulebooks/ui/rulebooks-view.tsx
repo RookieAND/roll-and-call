@@ -45,7 +45,6 @@ export function RulebooksView({ rulebooks, linkTargets, requests, query }: Ruleb
       <VStack gap="150" className="flex-1 p-200">
         <RequestPanel requests={requests} actionHref={actionHref} />
         <Panel
-          title="룰북"
           right={
             <>
               <UrlSearchInput placeholder="룰북 검색" size="sm" className="w-[180px]" />

@@ -20,16 +20,18 @@ export function Panel({ title, right, children, footer, className, bodyClassName
         className,
       )}
     >
-      {title ? (
+      {title || right ? (
         <HStack
           align="center"
           gap="100"
           render={<header />}
           className="border-b border-(--rc-color-border-subtle) px-175 py-125 whitespace-nowrap"
         >
-          <Text typography="subtitle1" render={<h2 />}>
-            {title}
-          </Text>
+          {title ? (
+            <Text typography="subtitle1" render={<h2 />}>
+              {title}
+            </Text>
+          ) : null}
           {right ? (
             <HStack align="center" gap="075" className="ml-auto">
               {right}

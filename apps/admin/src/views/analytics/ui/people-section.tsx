@@ -22,7 +22,7 @@ export function PeopleSection({ analytics }: PeopleSectionProps) {
   const firstTimers = people.reduce((sum, week) => sum + week.first, 0);
   const firstShare = participants ? Math.round((firstTimers / participants) * 100) : 0;
   return (
-    <AnalyticsSection title="참여자 추이" sub="주차별 전체 참여와 첫 참여">
+    <AnalyticsSection title="참여자 추이">
       <HStack align="start" gap="300">
         <VStack gap="125" className="min-w-0 flex-1">
           <PeopleChart people={people} />

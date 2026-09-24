@@ -21,7 +21,6 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
   const paged = paginate(rows, page);
   return (
     <Panel
-      title="활동"
       right={<ActivityRoleFilter role={role} />}
       footer={
         <ListPager page={paged.page} totalPages={paged.totalPages} total={rows.length} unit="건" />

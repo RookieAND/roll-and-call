@@ -51,7 +51,7 @@ export function AuditLogLoading() {
             <SkeletonSelect label="전체 기간" />
           </div>
         </HStack>
-        <Panel title="최신순" className="flex-1" footer={<SkeletonPager />}>
+        <Panel className="flex-1" footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
               { label: "일시", kind: "date", width: "w-[192px]", sorted: true },

@@ -10,10 +10,9 @@ interface SidebarProps {
   nickname: string;
   role: keyof typeof ROLE_LABEL;
   countPromises: Partial<Record<NavKey, Promise<number | undefined>>>;
-  serverName: string;
 }
 
-export function Sidebar({ nickname, role, countPromises, serverName }: SidebarProps) {
+export function Sidebar({ nickname, role, countPromises }: SidebarProps) {
   return (
     <VStack className="sticky top-0 h-dvh w-[212px] shrink-0 border-r border-gray-200 bg-surface">
       <HStack
@@ -70,13 +69,6 @@ export function Sidebar({ nickname, role, countPromises, serverName }: SidebarPr
           />
         ))}
       </VStack>
-      <Text
-        typography="body4"
-        foreground="hint"
-        className="mt-auto border-t border-(--rc-color-border-subtle) p-150"
-      >
-        서버 · {serverName}
-      </Text>
     </VStack>
   );
 }

@@ -18,7 +18,6 @@ export function NoShowPanel({ nickname, noShows, page }: NoShowPanelProps) {
   return (
     <VStack gap="150">
       <Panel
-        title="불참 기록"
         footer={
           <ListPager
             page={paged.page}

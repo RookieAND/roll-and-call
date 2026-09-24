@@ -44,7 +44,7 @@ export function UsersView({ rows, page, query }: UsersViewProps) {
             );
           })}
         </HStack>
-        <Panel title="유저" className="flex-1" footer={pager}>
+        <Panel className="flex-1" footer={pager}>
           <UsersTable rows={paged.rows} />
         </Panel>
       </VStack>

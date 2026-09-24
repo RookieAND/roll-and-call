@@ -30,7 +30,6 @@ export function CertPanel({ user, page }: CertPanelProps) {
         </Callout.Root>
       ) : null}
       <Panel
-        title="룰북 인증"
         footer={
           <ListPager
             page={paged.page}

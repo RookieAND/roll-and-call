@@ -1,4 +1,4 @@
-import { Button, Grid, HStack, Skeleton, Text } from "@roll-and-call/ui";
+import { Button, Grid, HStack, Skeleton } from "@roll-and-call/ui";
 
 import { CERT_TABS } from "@/shared/lib";
 import {
@@ -21,30 +21,18 @@ export function CertStatusLoading() {
       <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/status" />
       <LoadingRegion label="인증 현황을 불러오는 중입니다" className="gap-150 p-200">
         <Grid className="grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-150">
-          <Panel
-            title="전체 진행률"
-            right={
-              <Text typography="body4" foreground="hint">
-                최근 90일 활동 GM 기준
-              </Text>
-            }
-            bodyClassName="p-175"
-          >
+          <Panel title="전체 진행률" bodyClassName="p-175">
             <HStack align="center" gap="150">
               <Skeleton width={72} height={32} />
               <Skeleton width="100%" height={10} rounded="full" className="flex-1" />
             </HStack>
             <Grid className="mt-150 grid-cols-4 gap-100">
-              {["최근 활동 GM", "인증 완료", "심사 대기", "미신청"].map((label) => (
+              {["최근 90일 활동 GM", "인증 완료", "심사 대기", "미신청"].map((label) => (
                 <StatTileLoading key={label} label={label} />
               ))}
             </Grid>
           </Panel>
-          <Panel
-            title="이번 주 처리"
-            right={<Skeleton width={88} height={12} />}
-            bodyClassName="p-175"
-          >
+          <Panel title="이번 주 처리" bodyClassName="p-175">
             <Grid className="grid-cols-3 gap-100">
               {["승인", "반려", "평균 심사 대기"].map((label) => (
                 <StatTileLoading key={label} label={label} />

@@ -69,7 +69,7 @@ export function PostsView({ posts, page, query }: PostsViewProps) {
             처리 안 된 신고 있음
           </Chip>
         </HStack>
-        <Panel title="최신순" className="flex-1" footer={pager}>
+        <Panel className="flex-1" footer={pager}>
           {empty ? (
             <EmptyState
               image={EMPTY_IMAGE.search}

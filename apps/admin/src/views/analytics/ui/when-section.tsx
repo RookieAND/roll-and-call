@@ -32,7 +32,6 @@ export function WhenSection({ analytics, mode }: WhenSectionProps) {
   return (
     <AnalyticsSection
       title="언제 열리고 있나"
-      sub="요일 × 시간대"
       right={
         early ? (
           <Text typography="body4" foreground="hint" className="whitespace-nowrap">

@@ -42,14 +42,14 @@ export function AnalyticsLoading() {
             </VStack>
           ))}
         </Grid>
-        <AnalyticsSection title="세션 추이" sub="주차별 · 세션 일시 기준">
+        <AnalyticsSection title="세션 추이">
           <SkeletonBars count={12} height={240} />
           <Skeleton width="56%" height={14} className="mt-150" />
         </AnalyticsSection>
-        <AnalyticsSection title="참여자 추이" sub="주차별 전체 참여와 첫 참여">
+        <AnalyticsSection title="참여자 추이">
           <SkeletonBars count={4} height={150} maxWidth={96} />
         </AnalyticsSection>
-        <AnalyticsSection title="언제 열리고 있나" sub="요일 × 시간대">
+        <AnalyticsSection title="언제 열리고 있나">
           <Grid className="grid-cols-7 gap-050">
             {Array.from({ length: HEAT_CELL_COUNT }, (_, index) => (
               <Skeleton key={index} width="100%" height={28} rounded={200} />

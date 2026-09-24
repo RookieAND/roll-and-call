@@ -17,7 +17,7 @@ export function TrendSection({ analytics }: TrendSectionProps) {
   return (
     <AnalyticsSection
       title="세션 추이"
-      sub={`주차별 · 세션 일시 기준 · ${currentWeek?.label ?? "이번 주"}(이번 주)부터 예정 포함`}
+      sub={`${currentWeek?.label ?? "이번 주"}(이번 주)부터 예정 포함`}
       right={<Legend items={TREND_SEGMENTS} />}
       insight={trendInsight(analytics.trend, analytics.early)}
     >

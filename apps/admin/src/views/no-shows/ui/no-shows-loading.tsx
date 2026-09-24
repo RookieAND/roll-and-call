@@ -40,7 +40,7 @@ export function NoShowsLoading() {
             <SkeletonSelect label="상태 전체" />
           </div>
         </HStack>
-        <Panel title="최신순" className="flex-1" footer={<SkeletonPager />}>
+        <Panel className="flex-1" footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
               { label: "불참 당사자", kind: "text", width: "w-[110px]" },

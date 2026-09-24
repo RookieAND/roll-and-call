@@ -58,7 +58,7 @@ export function AuditLogView({ log, query }: AuditLogViewProps) {
             className="w-[128px]"
           />
         </HStack>
-        <Panel title="최신순" className="flex-1" footer={pager}>
+        <Panel className="flex-1" footer={pager}>
           <AuditLogTable rows={paged.rows} />
         </Panel>
         <Text typography="body4" foreground="hint">

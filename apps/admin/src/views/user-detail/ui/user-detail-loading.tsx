@@ -49,7 +49,6 @@ export function UserDetailLoading() {
             </div>
             <Tabs.Panel value={USER_DETAIL_TAB.activity} className="p-200">
               <Panel
-                title="활동"
                 footer={<SkeletonPager />}
                 right={
                   <SegmentedControl.Root

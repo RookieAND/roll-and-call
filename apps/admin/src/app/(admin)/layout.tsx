@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { QuickSearchPalette } from "@/features/quick-search";
-import { getCurrentStaff, getPendingItems, getServerName, type PendingKind } from "@/shared/server";
+import { getCurrentStaff, getPendingItems, type PendingKind } from "@/shared/server";
 import { Sidebar } from "@/shared/ui";
 import { PhoneNotice } from "@/views/phone";
 
@@ -16,7 +16,6 @@ export default async function AdminLayout({ children }: LayoutProps<"/">) {
   const pendingItemsPromise = getPendingItems();
   const countOf = (kind: PendingKind) =>
     pendingItemsPromise.then((items) => items.find((item) => item.kind === kind)?.count);
-  const serverName = await getServerName();
 
   return (
     <>
@@ -29,7 +28,6 @@ export default async function AdminLayout({ children }: LayoutProps<"/">) {
         <Sidebar
           nickname={staff.nickname}
           role={staff.role}
-          serverName={serverName}
           countPromises={{
             cert: countOf("cert"),
             rules: countOf("rulebookRequest"),

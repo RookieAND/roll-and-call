@@ -35,7 +35,6 @@ export function RulebooksLoading() {
           </VStack>
         </Panel>
         <Panel
-          title="룰북"
           footer={<SkeletonPager />}
           right={
             <>

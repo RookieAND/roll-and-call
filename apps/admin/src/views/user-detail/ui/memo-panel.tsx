@@ -18,7 +18,6 @@ interface MemoPanelProps {
 export function MemoPanel({ userId, memos }: MemoPanelProps) {
   return (
     <Panel
-      title="운영진 메모"
       right={
         <Button
           variant="outline"

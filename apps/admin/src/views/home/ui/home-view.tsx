@@ -26,7 +26,7 @@ export function HomeView({ weekly, pendingItems }: HomeViewProps) {
             이번 주
           </Text>
           <Text typography="body4" foreground="hint">
-            {formatDayRange(weekly.from, weekly.to)} · 그래프는 최근 8주
+            {formatDayRange(weekly.from, weekly.to)}
           </Text>
         </HStack>
         <Grid className="grid-cols-[repeat(2,minmax(0,1fr))] gap-125">
@@ -38,14 +38,7 @@ export function HomeView({ weekly, pendingItems }: HomeViewProps) {
             series={weekly.finishedSessions}
           />
         </Grid>
-        <Panel
-          title="처리 대기"
-          right={
-            <Text typography="body4" foreground="hint">
-              오래 기다린 순
-            </Text>
-          }
-        >
+        <Panel title="처리 대기">
           {pendingItems.length ? (
             <ul>
               {pendingItems.map((item) => (

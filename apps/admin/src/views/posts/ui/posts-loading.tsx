@@ -44,7 +44,7 @@ export function PostsLoading() {
           </div>
           <Chip disabled>처리 안 된 신고 있음</Chip>
         </HStack>
-        <Panel title="최신순" className="flex-1" footer={<SkeletonPager />}>
+        <Panel className="flex-1" footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
               { label: "제목", kind: "text" },
