@@ -45,7 +45,7 @@ export function PostDetailTabs({
       <HStack align="center" className="border-b border-(--rc-color-border-subtle) px-150">
         <Tabs.List aria-label="구인 상세 보기" scrollable={false} className="border-b-0">
           {reportPanel ? (
-            <Tabs.Trigger value={POST_DETAIL_TAB.reports} className="gap-075">
+            <Tabs.Trigger value={POST_DETAIL_TAB.reports}>
               신고
               <TabCount
                 count={unresolvedReportCount}
@@ -55,11 +55,11 @@ export function PostDetailTabs({
             </Tabs.Trigger>
           ) : null}
           <Tabs.Trigger value={POST_DETAIL_TAB.content}>구인 내용</Tabs.Trigger>
-          <Tabs.Trigger value={POST_DETAIL_TAB.members} className="gap-075">
+          <Tabs.Trigger value={POST_DETAIL_TAB.members}>
             참여자
             <TabCount count={memberCount} selected={tab === POST_DETAIL_TAB.members} />
           </Tabs.Trigger>
-          <Tabs.Trigger value={POST_DETAIL_TAB.waitlist} className="gap-075">
+          <Tabs.Trigger value={POST_DETAIL_TAB.waitlist}>
             대기자
             <TabCount count={waitlistCount} selected={tab === POST_DETAIL_TAB.waitlist} />
           </Tabs.Trigger>

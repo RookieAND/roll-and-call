@@ -14,7 +14,7 @@ export function TabsTrigger({ className, ...props }: TabsTriggerProps) {
       data-slot="tabs-trigger"
       className={(state) =>
         cn(
-          "min-h-11 shrink-0 px-200 text-sm font-semibold whitespace-nowrap text-gray-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus data-selected:font-bold data-selected:text-gray-900",
+          "inline-flex min-h-11 shrink-0 items-center justify-center gap-075 px-200 text-sm font-semibold whitespace-nowrap text-gray-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus data-selected:font-bold data-selected:text-gray-900",
           "[[data-variant=line]_&]:border-b-2 [[data-variant=line]_&]:border-transparent",
           "[[data-variant=solid]_&]:rounded-300 [[data-variant=solid]_&]:data-selected:bg-surface [[data-variant=solid]_&]:data-selected:shadow-sm",
           resolveStateProp(className, state),

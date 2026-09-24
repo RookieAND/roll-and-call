@@ -4,5 +4,5 @@ interface TabCountProps {
 
 export function TabCount({ count }: TabCountProps) {
   if (count === undefined) return null;
-  return <span className="ml-075 tabular-nums opacity-72">{count}</span>;
+  return <span className="tabular-nums opacity-72">{count}</span>;
 }
