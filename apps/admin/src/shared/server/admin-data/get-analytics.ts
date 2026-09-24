@@ -20,7 +20,7 @@ const SEOUL_OFFSET = 9 * 3_600_000;
 export const ANALYTICS_EARLY_THRESHOLD = 50;
 // 참여자 추이·GM 분포는 진행된 세션 수와 따로, 각자 비교할 만큼 모였을 때 연다.
 export const PEOPLE_WEEKS_NEEDED = 4;
-export const GMS_NEEDED = 10;
+export const GMS_NEEDED = 8;
 
 export interface UpcomingWeek {
   finished: number;

@@ -18,12 +18,11 @@ export function UsersTable({ rows }: UsersTableProps) {
       <colgroup>
         <col className="w-[180px]" />
         <col className="w-[136px]" />
-        <col className="w-[74px]" />
-        <col className="w-[82px]" />
-        <col className="w-[120px]" />
-        <col className="w-[82px]" />
-        <col className="w-[96px]" />
-        <col className="w-[136px]" />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
         <col />
       </colgroup>
       <Table.Header>
@@ -36,12 +35,11 @@ export function UsersTable({ rows }: UsersTableProps) {
           <Table.Head align="end">인증 룰북</Table.Head>
           <Table.Head align="center">상태</Table.Head>
           <Table.Head>제재 종료</Table.Head>
-          <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {rows.length === 0 ? (
-          <TableEmptyRow colSpan={9} image={EMPTY_IMAGE.search} title="조건에 맞는 유저가 없어요" />
+          <TableEmptyRow colSpan={8} image={EMPTY_IMAGE.search} title="조건에 맞는 유저가 없어요" />
         ) : null}
         {rows.map((row) => {
           const frequentNoShow = row.recentNoShowCount >= NO_SHOW_WARNING_COUNT;
@@ -106,7 +104,6 @@ export function UsersTable({ rows }: UsersTableProps) {
                   </Text>
                 )}
               </Table.Cell>
-              <Table.Cell />
             </Table.Row>
           );
         })}
