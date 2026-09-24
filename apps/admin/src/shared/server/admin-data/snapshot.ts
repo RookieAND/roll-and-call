@@ -52,35 +52,21 @@ const OUTCOME_ACTION = {
 // ponytail: 요청마다 어드민이 보는 표를 통째로 읽어 목업과 같은 모양으로 바꾼다. 서버 규모(수백 건)에서는 충분하고, 수만 건이 되면 화면별 쿼리로 나눈다.
 export const loadSnapshot = cache(async () => {
   const now = Date.now();
-  const [
-    profileRows,
-    gameRows,
-    participantRows,
-    rulebookRows,
-    requestRows,
-    applicationRows,
-    certificationRows,
-    sanctionRows,
-    reportRows,
-    staffRows,
-    memoRows,
-    auditRows,
-    [settingsRow],
-  ] = await Promise.all([
-    db.select().from(profiles),
-    db.select().from(games),
-    db.select().from(participants),
-    db.select().from(rulebooks),
-    db.select().from(rulebookRequests),
-    db.select().from(certApplications),
-    db.select().from(certifications),
-    db.select().from(sanctions).where(isNull(sanctions.releasedAt)),
-    db.select().from(reports),
-    db.select().from(staff),
-    db.select().from(staffMemos),
-    db.select().from(auditLog),
-    db.select().from(adminSettings),
-  ]);
+  // 트랜잭션 풀러(:6543)에 13개를 Promise.all로 한꺼번에 보내면 응답이 멈춘다(2026-09-24 재현).
+  // 같은 리전이라 순서대로 읽어도 0.1초 남짓이다.
+  const profileRows = await db.select().from(profiles);
+  const gameRows = await db.select().from(games);
+  const participantRows = await db.select().from(participants);
+  const rulebookRows = await db.select().from(rulebooks);
+  const requestRows = await db.select().from(rulebookRequests);
+  const applicationRows = await db.select().from(certApplications);
+  const certificationRows = await db.select().from(certifications);
+  const sanctionRows = await db.select().from(sanctions).where(isNull(sanctions.releasedAt));
+  const reportRows = await db.select().from(reports);
+  const staffRows = await db.select().from(staff);
+  const memoRows = await db.select().from(staffMemos);
+  const auditRows = await db.select().from(auditLog);
+  const [settingsRow] = await db.select().from(adminSettings);
 
   const nicknames = new Map(profileRows.map((profile) => [profile.id, profile.username]));
   const nicknameOf = (id: string | null) =>
