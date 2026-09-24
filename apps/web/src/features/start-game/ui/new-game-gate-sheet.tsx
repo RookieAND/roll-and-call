@@ -38,22 +38,18 @@ export function NewGameGateSheet({ open, onOpenChange, pending }: NewGameGateShe
               <Text typography="heading2" render={<h2 />} className="[text-wrap:pretty]">
                 {title}
               </Text>
-              <Text
-                typography="body3"
-                foreground="muted"
-                render={<p />}
-                className="[text-wrap:pretty]"
-              >
-                {pending ? (
-                  "결과는 마이페이지의 인증한 룰북에서 볼 수 있습니다."
-                ) : (
-                  <>
-                    가지고 있는 실물 룰북 사진 3장으로 인증합니다.
-                    <br />
-                    무료 배포 룰은 인증 없이 열 수 있습니다.
-                  </>
-                )}
-              </Text>
+              {!pending && (
+                <Text
+                  typography="body3"
+                  foreground="muted"
+                  render={<p />}
+                  className="[text-wrap:pretty]"
+                >
+                  가지고 있는 실물 룰북 사진 3장으로 인증합니다.
+                  <br />
+                  무료 배포 룰은 인증 없이 열 수 있습니다.
+                </Text>
+              )}
             </VStack>
             {pending && (
               <div className="overflow-hidden rounded-500 border border-gray-200">
