@@ -106,7 +106,7 @@ export async function getAnalytics({
     const absent = validNoShows.filter((noShow) => ids.has(noShow.sessionId)).length;
     return {
       finishedSessions: sessions.length,
-      participants: seats,
+      participants: new Set(sessions.flatMap((session) => session.memberIds)).size,
       hostingGms: new Set(sessions.map((session) => session.gmId)).size,
       noShowRate: seats ? Math.round((absent / seats) * 1000) / 10 : null,
     };

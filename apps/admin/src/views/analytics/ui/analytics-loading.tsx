@@ -6,7 +6,12 @@ import { AnalyticsSection } from "./analytics-section";
 import { PeriodBar } from "./period-bar";
 import { SkeletonBars } from "./skeleton-bars";
 
-const SUMMARY_LABELS = ["진행된 세션", "참여 연인원", "구인을 연 GM", "불참률"] as const;
+const SUMMARY_LABELS = [
+  "진행된 세션",
+  "참여한 인원 (중복 제외)",
+  "구인을 연 GM",
+  "불참률",
+] as const;
 const HEAT_CELL_COUNT = 42;
 
 export function AnalyticsLoading() {
