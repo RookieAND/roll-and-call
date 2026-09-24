@@ -11,12 +11,13 @@ export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps
   return (
     <Table.Root className="table-fixed">
       <colgroup>
-        <col />
+        <col className="w-[220px]" />
         <col className="w-[96px]" />
         <col className="w-[88px]" />
         <col className="w-[80px]" />
         <col className="w-[220px]" />
         <col className="w-[120px]" />
+        <col />
       </colgroup>
       <Table.Header>
         <Table.Row>
@@ -26,6 +27,7 @@ export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps
           <Table.Head align="end">미신청</Table.Head>
           <Table.Head>진행률</Table.Head>
           <Table.Head align="end">{sessionLabel}</Table.Head>
+          <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -77,6 +79,7 @@ export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps
               <Table.Cell align="end" numeric>
                 {row.sessionCount}
               </Table.Cell>
+              <Table.Cell />
             </Table.Row>
           );
         })}

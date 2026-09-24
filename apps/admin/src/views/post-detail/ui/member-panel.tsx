@@ -16,9 +16,10 @@ export function MemberPanel({ members }: MemberPanelProps) {
   return (
     <Table.Root className="table-fixed">
       <colgroup>
-        <col />
+        <col className="w-[200px]" />
         <col className="w-[120px]" />
         <col className="w-[130px]" />
+        <col />
         <col className="w-[110px]" />
       </colgroup>
       <Table.Header>
@@ -26,6 +27,7 @@ export function MemberPanel({ members }: MemberPanelProps) {
           <Table.Head>닉네임</Table.Head>
           <Table.Head>참여 상태</Table.Head>
           <Table.Head align="end">최근 3개월 불참</Table.Head>
+          <Table.Head />
           <Table.Head>
             <span className="sr-only">유저 상세</span>
           </Table.Head>
@@ -58,6 +60,7 @@ export function MemberPanel({ members }: MemberPanelProps) {
                   {member.recentNoShowCount}회
                 </Text>
               </Table.Cell>
+              <Table.Cell />
               <Table.Cell align="end">
                 <Button
                   variant="outline"

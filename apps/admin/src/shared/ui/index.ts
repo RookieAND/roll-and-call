@@ -15,7 +15,7 @@ export { NAV_ITEMS, type NavKey } from "./nav-items";
 export { OngoingChoiceList, type OngoingChoiceRow } from "./ongoing-choice-list";
 export { OPEN_PALETTE_EVENT, openPalette } from "./open-palette";
 export { Panel } from "./panel";
-export { RouteSegments } from "./route-segments";
+export { RouteTabs } from "./route-tabs";
 export { Sidebar } from "./sidebar";
 export { UrlSearchInput } from "./url-search-input";
 export { UrlSelect } from "./url-select";

@@ -1,4 +1,4 @@
-import { Callout, HStack, VStack } from "@roll-and-call/ui";
+import { Callout, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { ANALYTICS_EARLY_THRESHOLD, type AnalyticsData } from "@/shared/server";
 
@@ -33,7 +33,15 @@ export function WhenSection({ analytics, mode }: WhenSectionProps) {
     <AnalyticsSection
       title="언제 열리고 있나"
       sub="요일 × 시간대"
-      right={<GridTabs mode={activeMode} openOnly={early} />}
+      right={
+        early ? (
+          <Text typography="body4" foreground="hint" className="whitespace-nowrap">
+            모집 중인 세션 기준
+          </Text>
+        ) : (
+          <GridTabs mode={activeMode} />
+        )
+      }
       insight={insight}
     >
       <HStack gap="300">

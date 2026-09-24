@@ -18,7 +18,7 @@ export function UsersTable({ rows }: UsersTableProps) {
   return (
     <Table.Root className="table-fixed">
       <colgroup>
-        <col />
+        <col className="w-[220px]" />
         <col className="w-[100px]" />
         <col className="w-[74px]" />
         <col className="w-[82px]" />
@@ -26,6 +26,7 @@ export function UsersTable({ rows }: UsersTableProps) {
         <col className="w-[82px]" />
         <col className="w-[96px]" />
         <col className="w-[92px]" />
+        <col />
       </colgroup>
       <Table.Header>
         <Table.Row>
@@ -37,6 +38,7 @@ export function UsersTable({ rows }: UsersTableProps) {
           <Table.Head align="end">인증 룰북</Table.Head>
           <Table.Head>상태</Table.Head>
           <Table.Head>제재 종료</Table.Head>
+          <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -103,6 +105,7 @@ export function UsersTable({ rows }: UsersTableProps) {
                   </Text>
                 )}
               </Table.Cell>
+              <Table.Cell />
             </Table.Row>
           );
         })}

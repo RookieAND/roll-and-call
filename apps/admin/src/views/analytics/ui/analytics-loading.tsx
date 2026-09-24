@@ -13,7 +13,10 @@ export function AnalyticsLoading() {
   return (
     <>
       <AdminHeader title="분석" />
-      <LoadingRegion label="분석 데이터를 불러오는 중입니다" className="gap-150 p-200">
+      <LoadingRegion
+        label="분석 데이터를 불러오는 중입니다"
+        className="mx-auto w-full max-w-content gap-150 p-200"
+      >
         <PeriodBar
           description={
             <Skeleton width={200} height={12} render={<span />} className="inline-block" />

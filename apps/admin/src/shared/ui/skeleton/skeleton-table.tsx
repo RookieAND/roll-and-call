@@ -6,7 +6,7 @@ import { SkeletonCell, type SkeletonCellKind } from "./skeleton-cell";
 export interface SkeletonColumn {
   label: string;
   kind: SkeletonCellKind;
-  // Tailwind 폭 클래스(w-[120px]). 비우면 남는 폭을 받는다.
+  // Tailwind 폭 클래스(w-[120px]). 비우면 남는 폭을 받는다. 짧은 값만 있는 표는 { label: "", kind: "empty" }로 빈 열을 둔다.
   width?: string;
   align?: "start" | "end" | "center";
   sorted?: boolean;
@@ -42,7 +42,7 @@ export function SkeletonTable({ columns, rows = 8 }: SkeletonTableProps) {
                   {column.label}
                   {column.sorted ? <ArrowDown size={10} strokeWidth={2.4} aria-hidden /> : null}
                 </HStack>
-              ) : (
+              ) : column.kind === "empty" ? null : (
                 <span className="sr-only">조치</span>
               )}
             </Table.Head>

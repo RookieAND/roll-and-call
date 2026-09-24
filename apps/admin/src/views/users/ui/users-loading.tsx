@@ -33,7 +33,7 @@ export function UsersLoading() {
         <Panel title="유저" right={<Skeleton width={72} height={12} />} className="flex-1">
           <SkeletonTable
             columns={[
-              { label: "닉네임", kind: "text" },
+              { label: "닉네임", kind: "text", width: "w-[220px]" },
               { label: "가입일", kind: "date", width: "w-[100px]" },
               { label: "연 세션", kind: "number", width: "w-[74px]", align: "end" },
               { label: "참여 세션", kind: "number", width: "w-[82px]", align: "end" },
@@ -41,6 +41,7 @@ export function UsersLoading() {
               { label: "인증 룰북", kind: "number", width: "w-[82px]", align: "end" },
               { label: "상태", kind: "badge", width: "w-[96px]" },
               { label: "제재 종료", kind: "date", width: "w-[92px]" },
+              { label: "", kind: "empty" },
             ]}
           />
         </Panel>

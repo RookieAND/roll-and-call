@@ -12,7 +12,7 @@ export function HomeLoading() {
       <AdminHeader title="홈" sub={<Skeleton width={80} height={12} render={<span />} />} />
       <LoadingRegion
         label="홈 화면을 불러오는 중입니다"
-        className="mx-auto w-full max-w-[920px] flex-none gap-150 p-200"
+        className="mx-auto w-full max-w-content flex-none gap-150 p-200"
       >
         <HStack align="baseline" gap="100">
           <Text typography="subtitle1" render={<h2 />}>

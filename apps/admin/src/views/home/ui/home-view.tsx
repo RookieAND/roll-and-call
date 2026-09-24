@@ -24,7 +24,7 @@ export function HomeView({ weekly, pendingItems }: HomeViewProps) {
   return (
     <>
       <AdminHeader title="홈" sub={today.format(weekly.to)} />
-      <VStack gap="150" className="mx-auto w-full max-w-[920px] p-200">
+      <VStack gap="150" className="mx-auto w-full max-w-content p-200">
         <HStack align="baseline" gap="100">
           <Text typography="subtitle1" render={<h2 />}>
             이번 주

@@ -39,10 +39,11 @@ export function CertPanel({ user }: CertPanelProps) {
       >
         <Table.Root className="table-fixed">
           <colgroup>
-            <col />
+            <col className="w-[220px]" />
             <col className="w-[96px]" />
             <col className="w-[170px]" />
             <col className="w-[120px]" />
+            <col />
             <col className="w-[104px]" />
           </colgroup>
           <Table.Header>
@@ -51,6 +52,7 @@ export function CertPanel({ user }: CertPanelProps) {
               <Table.Head>상태</Table.Head>
               <Table.Head>일자</Table.Head>
               <Table.Head>처리한 운영진</Table.Head>
+              <Table.Head />
               <Table.Head aria-label="조치" />
             </Table.Row>
           </Table.Header>
@@ -71,6 +73,7 @@ export function CertPanel({ user }: CertPanelProps) {
                   </Text>
                 </Table.Cell>
                 <Table.Cell>{certification.approvedBy}</Table.Cell>
+                <Table.Cell />
                 <Table.Cell>
                   <Button
                     variant="ghost"
@@ -112,6 +115,7 @@ export function CertPanel({ user }: CertPanelProps) {
                     -
                   </Text>
                 </Table.Cell>
+                <Table.Cell />
                 <Table.Cell>
                   <Button
                     variant="outline"
@@ -142,6 +146,7 @@ export function CertPanel({ user }: CertPanelProps) {
                   </Text>
                 </Table.Cell>
                 <Table.Cell>{application.processedBy}</Table.Cell>
+                <Table.Cell />
                 <Table.Cell />
               </Table.Row>
             ))}

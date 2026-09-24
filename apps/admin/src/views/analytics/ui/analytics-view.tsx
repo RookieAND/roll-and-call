@@ -28,7 +28,7 @@ export function AnalyticsView({ analytics, gridMode }: AnalyticsViewProps) {
   return (
     <>
       <AdminHeader title="분석" />
-      <VStack gap="150" className="p-200">
+      <VStack gap="150" className="mx-auto w-full max-w-content p-200">
         <PeriodBar description={periodDescription} />
         <AnalyticsSummary summary={analytics.summary} early={early} />
         <TrendSection analytics={analytics} />

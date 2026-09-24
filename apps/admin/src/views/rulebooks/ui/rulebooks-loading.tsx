@@ -55,7 +55,7 @@ export function RulebooksLoading() {
           <SkeletonTable
             rows={7}
             columns={[
-              { label: "룰북", kind: "text" },
+              { label: "룰북", kind: "text", width: "w-[200px]" },
               { label: "판본", kind: "number", width: "w-[78px]" },
               { label: "다른 이름", kind: "text" },
               { label: "인증", kind: "badge", width: "w-[120px]" },

@@ -1,9 +1,9 @@
 import { Chip, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { CERT_SEGMENTS, formatMonthDay, withQuery } from "@/shared/lib";
+import { CERT_TABS, formatMonthDay, withQuery } from "@/shared/lib";
 import type { CertStatusData } from "@/shared/server";
-import { AdminHeader, Panel, RouteSegments, UrlSelect, UserPreview } from "@/shared/ui";
+import { AdminHeader, Panel, RouteTabs, UrlSelect, UserPreview } from "@/shared/ui";
 
 import { CERT_STATUS_TAB, type CertStatusTab } from "../model/cert-status-tab";
 import { CertStatusTabs } from "./cert-status-tabs";
@@ -61,7 +61,7 @@ export function CertStatusView({ status, tab, allTime, unappliedOnly }: CertStat
   return (
     <>
       <AdminHeader title="룰북 인증" sub="인증 현황" />
-      <RouteSegments label="룰북 인증 화면" items={CERT_SEGMENTS} value="/cert/status" />
+      <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/status" />
       <VStack gap="150" className="flex-1 p-200">
         <CertSummary summary={status.summary} week={status.week} />
         <Panel className="flex-1">

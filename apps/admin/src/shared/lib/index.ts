@@ -1,4 +1,4 @@
-export { CERT_SEGMENTS } from "./cert-segments";
+export { CERT_TABS } from "./cert-tabs";
 export { formatDate } from "./format-date";
 export { formatDateTime } from "./format-date-time";
 export { formatDayRange } from "./format-day-range";

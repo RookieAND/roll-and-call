@@ -40,9 +40,10 @@ export function RulebookDetailLoading() {
             <SkeletonTable
               rows={3}
               columns={[
-                { label: "닉네임", kind: "text" },
+                { label: "닉네임", kind: "text", width: "w-[220px]" },
                 { label: "인증일", kind: "date", width: "w-[120px]" },
                 { label: "최근 90일 세션", kind: "number", width: "w-[130px]", align: "end" },
+                { label: "", kind: "empty" },
                 { label: "", kind: "button", width: "w-[110px]", align: "end" },
               ]}
             />

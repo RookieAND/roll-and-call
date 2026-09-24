@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "@roll-and-call/ui/styles.css";
 
+/* 홈·분석·인증 심사처럼 위에서 아래로 읽는 화면의 본문 최대 폭 (max-w-content). */
+@theme {
+  --container-content: 920px;
+}
+
 html {
   scrollbar-color: var(--rc-color-border-strong) transparent;
 }

@@ -14,10 +14,11 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
   return (
     <Table.Root className="table-fixed">
       <colgroup>
-        <col />
+        <col className="w-[200px]" />
         <col className="w-[120px]" />
         <col className="w-[150px]" />
         <col className="w-[130px]" />
+        <col />
         <col className="w-[190px]" />
       </colgroup>
       <Table.Header>
@@ -26,6 +27,7 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
           <Table.Head>역할</Table.Head>
           <Table.Head>추가한 날</Table.Head>
           <Table.Head>최근 활동</Table.Head>
+          <Table.Head />
           <Table.Head>
             <span className="sr-only">관리</span>
           </Table.Head>
@@ -64,6 +66,7 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
                   {row.lastActiveAt ? formatDateTime(row.lastActiveAt) : "—"}
                 </Text>
               </Table.Cell>
+              <Table.Cell />
               <Table.Cell align="end">
                 {owner ? (
                   <Text typography="body4" foreground="hint" truncate>

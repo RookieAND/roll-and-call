@@ -105,7 +105,7 @@ export function CertDecisionForm({
 
   return (
     <>
-      <VStack gap="175" className="mx-auto w-full max-w-[920px] flex-1 p-200">
+      <VStack gap="175" className="mx-auto w-full max-w-content flex-1 p-200">
         {children}
         <Grid
           aria-disabled={disabled}

@@ -40,9 +40,10 @@ export function CertifiedGmPanel({ gms, certRequired }: CertifiedGmPanelProps) {
       ) : (
         <Table.Root className="table-fixed">
           <colgroup>
-            <col />
+            <col className="w-[220px]" />
             <col className="w-[120px]" />
             <col className="w-[130px]" />
+            <col />
             <col className="w-[110px]" />
           </colgroup>
           <Table.Header>
@@ -50,6 +51,7 @@ export function CertifiedGmPanel({ gms, certRequired }: CertifiedGmPanelProps) {
               <Table.Head>닉네임</Table.Head>
               <Table.Head>인증일</Table.Head>
               <Table.Head align="end">최근 90일 세션</Table.Head>
+              <Table.Head />
               <Table.Head>
                 <span className="sr-only">유저 상세</span>
               </Table.Head>
@@ -71,6 +73,7 @@ export function CertifiedGmPanel({ gms, certRequired }: CertifiedGmPanelProps) {
                 <Table.Cell align="end" numeric>
                   {gm.recentSessionCount}
                 </Table.Cell>
+                <Table.Cell />
                 <Table.Cell align="end">
                   <Button
                     variant="outline"

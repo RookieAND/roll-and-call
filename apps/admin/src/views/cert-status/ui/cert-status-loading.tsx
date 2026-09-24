@@ -1,34 +1,23 @@
-"use client";
+import { Button, Grid, HStack, Skeleton, Text } from "@roll-and-call/ui";
 
-import { Button, Grid, HStack, SegmentedControl, Select, Skeleton, Text } from "@roll-and-call/ui";
-
-import { CERT_SEGMENTS } from "@/shared/lib";
-import { AdminHeader, LoadingRegion, Panel, SkeletonTable, SkeletonTabs } from "@/shared/ui";
+import { CERT_TABS } from "@/shared/lib";
+import {
+  AdminHeader,
+  LoadingRegion,
+  RouteTabs,
+  Panel,
+  SkeletonSelect,
+  SkeletonTable,
+  SkeletonTabs,
+} from "@/shared/ui";
 
 import { StatTileLoading } from "./stat-tile-loading";
 
-const SCOPE_RECENT = [{ label: "최근 90일 활동 GM", value: "all" }];
-
-// 세그먼트가 onValueChange를 요구해서 클라이언트에서 그린다. 불러오는 동안은 모두 비활성이다.
 export function CertStatusLoading() {
   return (
     <>
       <AdminHeader title="룰북 인증" sub="인증 현황" />
-      <div className="border-b border-gray-200 bg-surface px-225 py-100">
-        <SegmentedControl.Root
-          size="sm"
-          value="/cert/status"
-          onValueChange={() => {}}
-          disabled
-          aria-label="룰북 인증 화면"
-        >
-          {CERT_SEGMENTS.map((item) => (
-            <SegmentedControl.Item key={item.href} value={item.href} className="text-body3">
-              {item.label}
-            </SegmentedControl.Item>
-          ))}
-        </SegmentedControl.Root>
-      </div>
+      <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/status" />
       <LoadingRegion label="인증 현황을 불러오는 중입니다" className="gap-150 p-200">
         <Grid className="grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-150">
           <Panel
@@ -68,9 +57,7 @@ export function CertStatusLoading() {
             right={
               <>
                 <div className="w-[170px] [&_[data-slot=select-trigger]]:h-[34px]">
-                  <Select.Root items={SCOPE_RECENT} defaultValue="all" disabled>
-                    <Select.Trigger className="whitespace-nowrap" />
-                  </Select.Root>
+                  <SkeletonSelect label="최근 90일 활동 GM" />
                 </div>
                 <Button variant="outline" colorPalette="gray" size="sm" disabled>
                   CSV 내보내기
@@ -81,12 +68,13 @@ export function CertStatusLoading() {
           <SkeletonTable
             rows={6}
             columns={[
-              { label: "룰북", kind: "text" },
+              { label: "룰북", kind: "text", width: "w-[220px]" },
               { label: "인증된 GM", kind: "number", width: "w-[96px]", align: "end" },
               { label: "심사 대기", kind: "number", width: "w-[88px]", align: "end" },
               { label: "미신청", kind: "number", width: "w-[80px]", align: "end" },
               { label: "진행률", kind: "bar", width: "w-[220px]" },
               { label: "최근 90일 세션", kind: "number", width: "w-[120px]", align: "end" },
+              { label: "", kind: "empty" },
             ]}
           />
         </Panel>

@@ -15,11 +15,12 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
     <Table.Root className="table-fixed">
       <colgroup>
         <col className="w-[140px]" />
-        <col />
+        <col className="w-[220px]" />
         <col className="w-[136px]" />
         <col className="w-[90px]" />
         <col className="w-[100px]" />
         <col className="w-[90px]" />
+        <col />
         <col className="w-[110px]" />
       </colgroup>
       <Table.Header>
@@ -30,6 +31,7 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
           <Table.Head align="end">대기 일수</Table.Head>
           <Table.Head>신청 구분</Table.Head>
           <Table.Head align="end">이전 반려</Table.Head>
+          <Table.Head />
           <Table.Head>
             <span className="sr-only">심사</span>
           </Table.Head>
@@ -80,6 +82,7 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
                   </Text>
                 )}
               </Table.Cell>
+              <Table.Cell />
               <Table.Cell align="end">
                 <Button
                   variant="outline"

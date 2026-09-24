@@ -7,11 +7,10 @@ import { GRID_MODE, type GridMode } from "../model/grid-mode";
 
 interface GridTabsProps {
   mode: GridMode;
-  openOnly: boolean;
 }
 
 // 탭은 주소의 grid로 기억한다. 기본값(진행된 세션)이면 쿼리를 지운다.
-export function GridTabs({ mode, openOnly }: GridTabsProps) {
+export function GridTabs({ mode }: GridTabsProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -28,9 +27,7 @@ export function GridTabs({ mode, openOnly }: GridTabsProps) {
         router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });
       }}
     >
-      {openOnly ? null : (
-        <SegmentedControl.Item value={GRID_MODE.finished}>진행된 세션</SegmentedControl.Item>
-      )}
+      <SegmentedControl.Item value={GRID_MODE.finished}>진행된 세션</SegmentedControl.Item>
       <SegmentedControl.Item value={GRID_MODE.open}>모집 중</SegmentedControl.Item>
     </SegmentedControl.Root>
   );

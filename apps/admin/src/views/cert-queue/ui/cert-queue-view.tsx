@@ -2,16 +2,9 @@ import { Chip, HStack, Text, VStack } from "@roll-and-call/ui";
 import { SearchX } from "lucide-react";
 import Link from "next/link";
 
-import { CERT_SEGMENTS, withQuery } from "@/shared/lib";
+import { CERT_TABS, withQuery } from "@/shared/lib";
 import type { listCertQueue } from "@/shared/server";
-import {
-  AdminHeader,
-  EmptyState,
-  Panel,
-  RouteSegments,
-  UrlSearchInput,
-  UrlSelect,
-} from "@/shared/ui";
+import { AdminHeader, EmptyState, Panel, RouteTabs, UrlSearchInput, UrlSelect } from "@/shared/ui";
 
 import { CertQueueTable } from "./cert-queue-table";
 
@@ -27,7 +20,7 @@ export function CertQueueView({ queue, query }: CertQueueViewProps) {
   return (
     <>
       <AdminHeader title="룰북 인증" sub={`${queue.total}건 심사 대기`} />
-      <RouteSegments label="룰북 인증 화면" items={CERT_SEGMENTS} value="/cert" />
+      <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert" />
       <VStack gap="150" className="flex-1 p-200">
         {queue.total === 0 ? (
           <Panel title="심사 대기열" className="flex-1">

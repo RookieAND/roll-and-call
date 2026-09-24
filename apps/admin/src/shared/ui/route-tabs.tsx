@@ -1,31 +1,31 @@
 "use client";
 
-import { SegmentedControl } from "@roll-and-call/ui";
+import { Tabs } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
-interface RouteSegmentsProps {
+interface RouteTabsProps {
   label: string;
   items: { label: string; href: string }[];
   value: string;
 }
 
-// 머리말 아래의 세그먼트. 칸마다 다른 주소로 옮겨 간다.
-export function RouteSegments({ label, items, value }: RouteSegmentsProps) {
+// 머리말 아래의 탭. 탭마다 다른 주소로 옮겨 간다.
+export function RouteTabs({ label, items, value }: RouteTabsProps) {
   const router = useRouter();
   return (
-    <div className="border-b border-gray-200 bg-surface px-225 py-100">
-      <SegmentedControl.Root
-        size="sm"
-        value={value}
-        onValueChange={(href) => router.push(href)}
+    <Tabs.Root value={value} onValueChange={(href) => router.push(href)}>
+      <Tabs.List
         aria-label={label}
+        scrollable={false}
+        className="border-b border-gray-200 bg-surface px-225"
       >
         {items.map((item) => (
-          <SegmentedControl.Item key={item.href} value={item.href} className="text-body3">
+          <Tabs.Trigger key={item.href} value={item.href}>
             {item.label}
-          </SegmentedControl.Item>
+          </Tabs.Trigger>
         ))}
-      </SegmentedControl.Root>
-    </div>
+        <Tabs.Indicator />
+      </Tabs.List>
+    </Tabs.Root>
   );
 }

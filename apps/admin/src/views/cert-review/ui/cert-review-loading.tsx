@@ -17,7 +17,7 @@ export function CertReviewLoading() {
         sub={<Skeleton width={32} height={12} render={<span />} />}
       />
       <LoadingRegion label="심사할 신청을 불러오는 중입니다">
-        <VStack gap="175" className="mx-auto w-full max-w-[920px] flex-1 p-200">
+        <VStack gap="175" className="mx-auto w-full max-w-content flex-1 p-200">
           <SkeletonEntity
             facts={[
               "신청 룰북",
