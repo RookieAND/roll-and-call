@@ -8,10 +8,8 @@ interface CertOptionReasonProps {
   rulebook: MyRulebook;
 }
 
-// 인증 신청에서 고를 수 없는 판본은 이유를 오른쪽에 적는다. 반려됨은 다시 고를 수 있다.
+// 인증 신청에서 고를 수 없는 판본은 이유를 오른쪽에 적는다. 반려됨은 다시 고를 수 있다. 인증 없이 열 수 있는 룰은 시트에 안 나온다.
 export function CertOptionReason({ rulebook }: CertOptionReasonProps) {
-  if (!rulebook.certRequired)
-    return <OptionReason label="인증 없이 열 수 있음" foreground="hint" />;
   if (rulebook.state === CERT_STATE.certified) {
     return <OptionReason label="인증됨" icon={Check} foreground="success" />;
   }

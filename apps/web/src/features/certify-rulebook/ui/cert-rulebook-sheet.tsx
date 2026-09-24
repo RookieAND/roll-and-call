@@ -29,7 +29,10 @@ export function CertRulebookSheet({
   onRequest,
 }: CertRulebookSheetProps) {
   const [query, setQuery] = useState("");
-  const groups = groupRulebooks(rulebooks, query);
+  const groups = groupRulebooks(
+    rulebooks.filter((rulebook) => rulebook.certRequired),
+    query,
+  );
 
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
