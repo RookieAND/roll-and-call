@@ -1,12 +1,17 @@
 import Link from "next/link";
 
-import { CertStateRow, certRowMeta, type MyRulebook } from "@/entities/rulebook";
+import { CERT_STATE, CertStateRow, certRowMeta, type MyRulebook } from "@/entities/rulebook";
+import { toKst } from "@/shared/lib";
 
 interface MyPageRulebookRowProps {
   rulebook: MyRulebook;
 }
 
 export function MyPageRulebookRow({ rulebook }: MyPageRulebookRowProps) {
+  const meta =
+    rulebook.state === CERT_STATE.pending && rulebook.stateAt
+      ? `${toKst(rulebook.stateAt).format("MM.DD")} 신청 · 확인하고 있습니다`
+      : certRowMeta(rulebook);
   return (
     <Link
       href={`/me/rulebooks/${rulebook.id}`}
@@ -15,7 +20,7 @@ export function MyPageRulebookRow({ rulebook }: MyPageRulebookRowProps) {
       <CertStateRow
         state={rulebook.state!}
         title={rulebook.label}
-        meta={certRowMeta(rulebook)}
+        meta={meta}
         statusPlacement="badge"
         size="sm"
       />

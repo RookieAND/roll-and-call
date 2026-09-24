@@ -19,7 +19,6 @@ const row = cva("flex items-center px-175", {
       md: "min-h-[60px] gap-150 py-125",
       sm: "min-h-[48px] gap-125 py-100",
     },
-    rejected: { true: "bg-warning-50", false: "" },
   },
 });
 
@@ -55,7 +54,7 @@ export function CertStateRow({
   );
 
   return (
-    <div className={row({ size, rejected: state === CERT_STATE.rejected })}>
+    <div className={row({ size })}>
       <CertStateIcon state={state} size={ICON_SIZE[size]} />
       <VStack gap="025" className="min-w-0 flex-1">
         <HStack align="baseline" gap="075">

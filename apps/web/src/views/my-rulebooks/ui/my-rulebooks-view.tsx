@@ -92,7 +92,7 @@ export async function MyRulebooksView() {
                     key={item.id}
                     state={CERT_STATE.requested}
                     title={item.label}
-                    meta="운영진이 확인하고 있습니다"
+                    meta="운영진이 추가 요청을 확인하고 있습니다"
                     statusPlacement="badge"
                     chevron={false}
                   />

@@ -34,9 +34,9 @@ export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedVie
             인증 신청을 보냈습니다
           </Text>
           <Text typography="body2" foreground="muted" render={<p />} className="[text-wrap:pretty]">
-            운영진이 보통 2~3일 안에 확인합니다.
+            운영진은 보통 2~3일 안에 신청 내용을 확인합니다.
             <br />
-            결과는 마이페이지의 인증한 룰북에서 볼 수 있습니다.
+            확인 결과는 마이페이지의 "인증한 룰북"에서 볼 수 있습니다.
           </Text>
           <HStack align="center" gap="100" className="mt-125 rounded-400 bg-gray-50 px-150 py-100">
             <Clock size={15} strokeWidth={2.2} aria-hidden className="text-gray-600" />

@@ -16,7 +16,12 @@ export function ShotGuide({ shot, nickname }: ShotGuideProps) {
       <Text typography="body3" weight="extrabold">
         {CERT_SHOT_LABEL[shot]}
       </Text>
-      <Text typography="body3" foreground="muted" render={<p />} className="[text-wrap:pretty]">
+      <Text
+        typography="body3"
+        foreground="muted"
+        render={<p />}
+        className="break-keep [text-wrap:pretty]"
+      >
         <LineBreaks lines={guide.lines} />
       </Text>
       {guide.nickname && (

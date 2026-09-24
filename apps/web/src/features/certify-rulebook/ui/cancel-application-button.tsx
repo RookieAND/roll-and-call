@@ -9,9 +9,13 @@ import { cancelCertification } from "../api/cancel-certification";
 
 interface CancelApplicationButtonProps {
   rulebookId: string;
+  className?: string;
 }
 
-export function CancelApplicationButton({ rulebookId }: CancelApplicationButtonProps) {
+export function CancelApplicationButton({
+  rulebookId,
+  className = "w-full",
+}: CancelApplicationButtonProps) {
   const [open, setOpen] = useState(false);
   const { pending, run } = useAction();
 
@@ -29,7 +33,7 @@ export function CancelApplicationButton({ rulebookId }: CancelApplicationButtonP
         variant="outline"
         colorPalette="danger"
         size="lg"
-        className="w-full"
+        className={className}
         onClick={() => setOpen(true)}
       >
         신청 취소

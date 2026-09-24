@@ -21,7 +21,7 @@ interface NewGameGateSheetProps {
 // 적용일이 지났는데 인증된 룰북이 없을 때. 버튼 문구가 길어 위아래로 쌓고, 위가 주 행동이다.
 export function NewGameGateSheet({ open, onOpenChange, pending }: NewGameGateSheetProps) {
   const title = pending
-    ? "룰북 확인이 끝나면 구인을 열 수 있습니다."
+    ? "운영진이 룰북 확인을 마치면 구인을 열 수 있습니다."
     : "구인을 열려면 룰북 인증이 필요합니다.";
   const primaryHref = pending ? `/me/rulebooks/${pending.rulebookId}` : "/me/rulebooks/apply";
   const primaryVariant = pending ? "tinted" : "solid";
@@ -45,9 +45,9 @@ export function NewGameGateSheet({ open, onOpenChange, pending }: NewGameGateShe
                   render={<p />}
                   className="[text-wrap:pretty]"
                 >
-                  가지고 있는 실물 룰북 사진 3장으로 인증합니다.
+                  가지고 있는 실물 룰북을 찍은 사진 3장을 올리면 인증을 신청할 수 있습니다.
                   <br />
-                  무료 배포 룰은 인증 없이 열 수 있습니다.
+                  무료로 배포되는 룰은 인증을 받지 않아도 구인을 열 수 있습니다.
                 </Text>
               )}
             </VStack>

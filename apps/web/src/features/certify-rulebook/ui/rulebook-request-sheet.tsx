@@ -51,9 +51,9 @@ export function RulebookRequestSheet({ open, onOpenChange }: RulebookRequestShee
               render={<p />}
               className="[text-wrap:pretty]"
             >
-              목록에 없는 룰북을 알려 주시면 운영진이 추가합니다.
+              목록에 없는 룰북을 알려 주시면 운영진이 확인한 뒤 목록에 추가합니다.
               <br />
-              추가되면 인증을 신청할 수 있습니다.
+              룰북이 목록에 추가되면 그 룰북으로 인증을 신청할 수 있습니다.
             </Text>
             <Field.Root label="룰북 이름" htmlFor="rulebook-request-name" required>
               <TextInput maxLength={100} {...field("name")} />
@@ -65,7 +65,11 @@ export function RulebookRequestSheet({ open, onOpenChange }: RulebookRequestShee
               <TextInput maxLength={100} {...field("publisher")} />
             </Field.Root>
             <Field.Root label="메모" htmlFor="rulebook-request-note">
-              <TextInput maxLength={200} placeholder="같은 룰의 다른 이름 등" {...field("note")} />
+              <TextInput
+                maxLength={200}
+                placeholder="예: 같은 룰북을 부르는 다른 이름"
+                {...field("note")}
+              />
             </Field.Root>
             <Button
               size="lg"

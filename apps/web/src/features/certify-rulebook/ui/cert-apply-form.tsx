@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
+import { Button, Callout, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
 import { Info } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -30,8 +30,8 @@ import { ShotGuide } from "./shot-guide";
 import { StepHeading } from "./step-heading";
 
 const CHECKS = [
-  "인증되면 프로필에 룰북 배지로 공개됩니다.",
-  "인증이 유지되는 동안 사진을 보관합니다.",
+  "인증을 받으면 프로필에 이 룰북의 배지가 공개됩니다.",
+  "제출한 사진은 인증이 유지되는 동안 보관합니다.",
 ];
 
 interface CertApplyFormProps {
@@ -110,15 +110,16 @@ export function CertApplyForm({ rulebooks, initialRulebookId, nickname }: CertAp
     <>
       <Container size="sm">
         <VStack gap="300" className="pt-225 pb-250">
-          <Text typography="body2" foreground="muted" render={<p />} className="[text-wrap:pretty]">
-            실물 룰북 사진 3장으로 인증합니다.
-            <br />
-            운영진이 확인하면 그 룰북으로 구인을 열 수 있습니다.
-            <br />
-            <Text weight="bold" foreground="normal">
-              전자책과 PDF는 인증할 수 없습니다.
-            </Text>
-          </Text>
+          <Callout.Root>
+            <Callout.Icon />
+            <Callout.Description className="[text-wrap:pretty]">
+              실물 룰북을 찍은 사진 3장을 올리면 인증을 신청할 수 있습니다.
+              <br />
+              운영진이 인증하면 그 룰북으로 구인을 열 수 있습니다.
+              <br />
+              <Text weight="bold">전자책과 PDF 파일로는 인증할 수 없습니다.</Text>
+            </Callout.Description>
+          </Callout.Root>
 
           <VStack gap="125" render={<section />}>
             <StepHeading step={1} title="룰북" />
@@ -158,8 +159,9 @@ export function CertApplyForm({ rulebooks, initialRulebookId, nickname }: CertAp
             )}
             <ShotGuide shot={selectedShot} nickname={nickname} />
             <Text typography="body4" foreground="hint" render={<p />}>
-              JPG, PNG 사진만 올릴 수 있습니다.
-              <br />한 장에 10MB까지 올릴 수 있습니다.
+              사진은 JPG와 PNG 형식만 올릴 수 있습니다.
+              <br />
+              사진 한 장의 크기는 10MB를 넘을 수 없습니다.
             </Text>
             <input
               ref={fileInput}

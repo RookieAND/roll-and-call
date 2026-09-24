@@ -1,4 +1,4 @@
-import { Button, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
+import { Button, Container, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -71,7 +71,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
               </div>
               {state === CERT_STATE.certified && (
                 <Text typography="body4" foreground="hint">
-                  인증이 유지되는 동안 사진을 보관합니다.
+                  제출한 사진은 인증이 유지되는 동안 보관합니다.
                 </Text>
               )}
             </VStack>
@@ -93,13 +93,16 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
               </Button>
             )}
             {rejected && (
-              <Button
-                render={<Link href={`/me/rulebooks/apply?rulebook=${rulebookId}`} />}
-                size="lg"
-                className="w-full"
-              >
-                다시 신청하기
-              </Button>
+              <HStack gap="100">
+                <CancelApplicationButton rulebookId={rulebookId} className="flex-1" />
+                <Button
+                  render={<Link href={`/me/rulebooks/apply?rulebook=${rulebookId}`} />}
+                  size="lg"
+                  className="flex-1"
+                >
+                  다시 신청하기
+                </Button>
+              </HStack>
             )}
             {state === CERT_STATE.revoked && inquiry && (
               <Button

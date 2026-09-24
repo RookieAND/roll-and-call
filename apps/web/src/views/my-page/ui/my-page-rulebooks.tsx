@@ -9,7 +9,7 @@ import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 import { MyPageRulebookRow } from "./my-page-rulebook-row";
 import { RulebookRowsMore } from "./rulebook-rows-more";
 
-const SHOWN_STATES = [CERT_STATE.certified, CERT_STATE.pending, CERT_STATE.rejected] as const;
+const SHOWN_STATES = [CERT_STATE.rejected, CERT_STATE.pending, CERT_STATE.certified] as const;
 const PREVIEW_ROWS = 3;
 
 interface MyPageRulebooksProps {
