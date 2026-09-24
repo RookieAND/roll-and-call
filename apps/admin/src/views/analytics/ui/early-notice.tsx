@@ -1,27 +1,30 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { Hourglass } from "lucide-react";
 
-const PEOPLE_WEEKS_NEEDED = 4;
-const GMS_NEEDED = 10;
+import { GMS_NEEDED, PEOPLE_WEEKS_NEEDED, type AnalyticsData } from "@/shared/server";
 
 interface EarlyNoticeProps {
   serviceWeeks: number;
   hostingGms: number;
+  sections: AnalyticsData["sections"];
 }
 
-export function EarlyNotice({ serviceWeeks, hostingGms }: EarlyNoticeProps) {
+export function EarlyNotice({ serviceWeeks, hostingGms, sections }: EarlyNoticeProps) {
+  // 조건을 채운 지표는 이미 위에 그려져 있으니 아직 못 채운 것만 남긴다.
   const pending = [
     {
+      open: sections.people,
       title: "참여자 추이",
       condition: `${PEOPLE_WEEKS_NEEDED}주치 기록이 모이면`,
       progress: `${serviceWeeks} / ${PEOPLE_WEEKS_NEEDED}주`,
     },
     {
+      open: sections.gms,
       title: "GM 분포",
       condition: `GM ${GMS_NEEDED}명 이상이 세션을 진행하면`,
       progress: `${hostingGms} / ${GMS_NEEDED}명`,
     },
-  ];
+  ].filter((item) => !item.open);
   return (
     <HStack
       align="center"

@@ -18,6 +18,9 @@ const TOP_RULEBOOKS = 6;
 const SEOUL_OFFSET = 9 * 3_600_000;
 // 진행된 세션이 이만큼 쌓이기 전에는 불참률·참여자·GM 지표를 안내 카드로 대신한다.
 export const ANALYTICS_EARLY_THRESHOLD = 50;
+// 참여자 추이·GM 분포는 진행된 세션 수와 따로, 각자 비교할 만큼 모였을 때 연다.
+export const PEOPLE_WEEKS_NEEDED = 4;
+export const GMS_NEEDED = 10;
 
 export interface UpcomingWeek {
   finished: number;
@@ -39,6 +42,7 @@ export interface AnalyticsMetric {
 
 export interface AnalyticsData {
   early: boolean;
+  sections: { people: boolean; gms: boolean };
   today: Date;
   period: { from: Date; to: Date; serviceWeeks: number };
   summary: Record<
@@ -143,7 +147,11 @@ export async function getAnalytics({
       if (at < (firstPlayed.get(userId) ?? Infinity)) firstPlayed.set(userId, at);
     }
   }
-  const people = early
+  const sections = {
+    people: serviceWeeks >= PEOPLE_WEEKS_NEEDED,
+    gms: current.hostingGms >= GMS_NEEDED,
+  };
+  const people = !sections.people
     ? []
     : Array.from({ length: PAST_WEEKS }, (_, index) => {
         const from = weekStart + (index - PAST_WEEKS) * WEEK;
@@ -168,7 +176,7 @@ export async function getAnalytics({
   );
   const filled = closedRecruits.filter((session) => session.filledAt);
   const recruitment =
-    early || closedRecruits.length === 0
+    !sections.people || closedRecruits.length === 0
       ? null
       : {
           successRate: percent(filled.length, closedRecruits.length),
@@ -213,6 +221,7 @@ export async function getAnalytics({
 
   return {
     early,
+    sections,
     today: now,
     period: {
       from: new Date(periodFrom),
@@ -243,12 +252,12 @@ export async function getAnalytics({
       ),
     },
     firstComeShare: { finished: early ? 0 : firstComeShare(inPeriod), open: firstComeShare(open) },
-    gms: early
+    gms: !sections.gms
       ? []
       : ranked
           .slice(0, TOP_GMS)
           .map((row) => ({ nickname: nicknameOf(row.name), count: row.count })),
-    otherGms: early
+    otherGms: !sections.gms
       ? { count: 0, sessions: 0 }
       : { count: others.length, sessions: others.reduce((sum, row) => sum + row.count, 0) },
     previousTopShare: inPrevious.length

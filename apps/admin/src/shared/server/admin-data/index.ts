@@ -32,6 +32,8 @@ export {
 export { type NoShowRow, type NoShowTiming } from "./to-no-show-row";
 export {
   ANALYTICS_EARLY_THRESHOLD,
+  GMS_NEEDED,
+  PEOPLE_WEEKS_NEEDED,
   getAnalytics,
   type AnalyticsData,
   type AnalyticsMetric,

@@ -20,6 +20,7 @@ interface AnalyticsViewProps {
 
 export function AnalyticsView({ analytics, gridMode }: AnalyticsViewProps) {
   const { early, period } = analytics;
+  const showNotice = !analytics.sections.people || !analytics.sections.gms;
   const range = `${formatMonthDay(period.from)} ~ ${formatMonthDay(period.to)}`;
   const periodDescription = early
     ? `${range} · 서비스 시작 후 ${period.serviceWeeks}주`
@@ -31,21 +32,16 @@ export function AnalyticsView({ analytics, gridMode }: AnalyticsViewProps) {
         <PeriodBar description={periodDescription} />
         <AnalyticsSummary summary={analytics.summary} early={early} />
         <TrendSection analytics={analytics} />
-        {early ? (
-          <>
-            <WhenSection analytics={analytics} mode={gridMode} />
-            <EarlyNotice
-              serviceWeeks={period.serviceWeeks}
-              hostingGms={analytics.summary.hostingGms.value ?? 0}
-            />
-          </>
-        ) : (
-          <>
-            <PeopleSection analytics={analytics} />
-            <WhenSection analytics={analytics} mode={gridMode} />
-            <GmSection analytics={analytics} />
-          </>
-        )}
+        {analytics.sections.people ? <PeopleSection analytics={analytics} /> : null}
+        <WhenSection analytics={analytics} mode={gridMode} />
+        {analytics.sections.gms ? <GmSection analytics={analytics} /> : null}
+        {showNotice ? (
+          <EarlyNotice
+            serviceWeeks={period.serviceWeeks}
+            hostingGms={analytics.summary.hostingGms.value ?? 0}
+            sections={analytics.sections}
+          />
+        ) : null}
       </VStack>
     </>
   );
