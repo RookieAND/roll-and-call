@@ -53,6 +53,7 @@ export function AuditLogLoading() {
               { label: "대상", kind: "text", width: "w-[110px]" },
               { label: "세부", kind: "text", width: "w-[170px]" },
               { label: "사유", kind: "text" },
+              { label: "보관", kind: "text", width: "w-[96px]", align: "center" },
             ]}
           />
         </Panel>

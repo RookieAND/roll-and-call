@@ -3,7 +3,7 @@ import { ArrowRight, Check, Mail, Quote } from "lucide-react";
 import Link from "next/link";
 
 import { formatDateTime, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
-import type { AuditEntryDetail } from "@/shared/server";
+import { retentionDaysLeft, type AuditEntryDetail } from "@/shared/server";
 import { AdminHeader, Facts, ItemCard, Panel } from "@/shared/ui";
 
 import { USER_VISIBLE_REASON_ACTIONS } from "../model/user-visible-reason-actions";
@@ -24,6 +24,8 @@ export function AuditEntryView({ entry }: AuditEntryViewProps) {
   const actionLabel = entry.targetDetail ? `${entry.action} ${entry.targetDetail}` : entry.action;
   const sameTargetHref = withQuery("/log", {}, { target: entry.targetName });
   const related = entry.related ?? [];
+  const daysLeft = retentionDaysLeft(entry);
+  const retention = daysLeft === null ? "계속 보관" : `${daysLeft}일 남음`;
 
   return (
     <>
@@ -86,8 +88,10 @@ export function AuditEntryView({ entry }: AuditEntryViewProps) {
           bodyClassName="p-150"
         >
           <Facts
+            columns={5}
             items={[
               { label: "조치", value: actionLabel, danger: afterTone === "danger" },
+              { label: "보관", value: retention },
               { label: "대상", value: entry.targetName },
               {
                 label: "처리한 운영진",

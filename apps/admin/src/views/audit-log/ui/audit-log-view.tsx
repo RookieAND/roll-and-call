@@ -1,9 +1,15 @@
-import { Chip, HStack, VStack } from "@roll-and-call/ui";
+import { Chip, HStack, Text, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 import Link from "next/link";
 
 import { paginate, withQuery } from "@/shared/lib";
-import { AUDIT_ACTION_GROUPS, AUDIT_PERIODS, type listAuditLog } from "@/shared/server";
+import {
+  AUDIT_ACTION_GROUPS,
+  AUDIT_PERIODS,
+  AUDIT_RETENTION_DAYS,
+  EXPIRING_AUDIT_ACTIONS,
+  type listAuditLog,
+} from "@/shared/server";
 import { AdminHeader, ListPager, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
 
 import { ActionFilter } from "./action-filter";
@@ -61,6 +67,10 @@ export function AuditLogView({ log, query }: AuditLogViewProps) {
         <Panel title="최신순" className="flex-1" footer={pager}>
           <AuditLogTable rows={paged.rows} />
         </Panel>
+        <Text typography="body4" foreground="hint">
+          {EXPIRING_AUDIT_ACTIONS.join(", ")} 기록은 기록된 날부터 {AUDIT_RETENTION_DAYS}일이 지나면
+          삭제됩니다. 그 밖의 조치 기록은 계속 보관합니다.
+        </Text>
       </VStack>
     </>
   );

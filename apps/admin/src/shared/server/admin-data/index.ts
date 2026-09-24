@@ -6,7 +6,14 @@ export { getUserDetail, type OngoingActivity, type UserDetail } from "./get-user
 export { listUsers, USER_FILTERS, type UserFilter, type UserRow } from "./list-users";
 export { releaseSanction, type ReleaseResult } from "./release-sanction";
 export { revokeCertifications, type RevokeInput } from "./revoke-certifications";
-export { AUDIT_ACTION_GROUPS, AUDIT_ACTIONS, type AuditAction } from "./audit-actions";
+export {
+  AUDIT_ACTION_GROUPS,
+  AUDIT_ACTIONS,
+  AUDIT_RETENTION_DAYS,
+  EXPIRING_AUDIT_ACTIONS,
+  type AuditAction,
+} from "./audit-actions";
+export { retentionDaysLeft } from "./retention-days-left";
 export { decideCert, type CertDecision, type CertDecisionResult } from "./decide-cert";
 export { getCertReview, type CertReview } from "./get-cert-review";
 export {

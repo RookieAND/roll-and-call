@@ -17,7 +17,7 @@ export function PostsTable({ rows }: PostsTableProps) {
     <Table.Root className="table-fixed">
       <colgroup>
         <col />
-        <col className="w-[104px]" />
+        <col className="w-[156px]" />
         <col className="w-[140px]" />
         <col className="w-[192px]" />
         <col className="w-[76px]" />

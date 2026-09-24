@@ -32,7 +32,10 @@ export function AuditEntryLoading() {
           </VStack>
         </Panel>
         <Panel title="조치 정보" bodyClassName="p-150">
-          <SkeletonFacts labels={["조치", "대상", "처리한 운영진", "처리 시각"]} />
+          <SkeletonFacts
+            columns={5}
+            labels={["조치", "보관", "대상", "처리한 운영진", "처리 시각"]}
+          />
         </Panel>
       </LoadingRegion>
     </>

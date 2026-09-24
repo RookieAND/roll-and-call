@@ -41,7 +41,7 @@ export function PostsLoading() {
           <SkeletonTable
             columns={[
               { label: "제목", kind: "text" },
-              { label: "GM", kind: "text", width: "w-[104px]" },
+              { label: "GM", kind: "text", width: "w-[156px]" },
               { label: "룰북", kind: "text", width: "w-[140px]" },
               { label: "세션 일시", kind: "date", width: "w-[192px]", sorted: true },
               { label: "참여", kind: "number", width: "w-[76px]", align: "center" },

@@ -3,7 +3,7 @@ import { ArrowDown } from "lucide-react";
 import Link from "next/link";
 
 import { formatDateTime } from "@/shared/lib";
-import type { AuditEntry } from "@/shared/server";
+import { retentionDaysLeft, type AuditEntry } from "@/shared/server";
 import { EMPTY_IMAGE, TableEmptyRow } from "@/shared/ui";
 
 import { actionTone } from "../model/action-tone";
@@ -23,6 +23,7 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
         <col className="w-[110px]" />
         <col className="w-[170px]" />
         <col />
+        <col className="w-[96px]" />
       </colgroup>
       <Table.Header>
         <Table.Row>
@@ -37,18 +38,22 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
           <Table.Head>대상</Table.Head>
           <Table.Head>세부</Table.Head>
           <Table.Head>사유</Table.Head>
+          <Table.Head align="center">보관</Table.Head>
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {rows.length === 0 ? (
           <TableEmptyRow
-            colSpan={6}
+            colSpan={7}
             image={EMPTY_IMAGE.search}
             title="조건에 맞는 활동 기록이 없어요"
           />
         ) : null}
         {rows.map((row) => {
           const target = splitTarget(row.target);
+          const daysLeft = retentionDaysLeft(row);
+          const retention = daysLeft === null ? "계속 보관" : `${daysLeft}일 남음`;
+          const retentionTone = daysLeft === null ? "muted" : daysLeft <= 7 ? "danger" : "hint";
           return (
             <Table.Row key={row.id} interactive className="relative">
               <Table.Cell>
@@ -75,6 +80,11 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
               <Table.Cell>
                 <Text typography="body3" foreground="muted" truncate title={row.reason}>
                   {row.reason || "—"}
+                </Text>
+              </Table.Cell>
+              <Table.Cell align="center">
+                <Text typography="body3" foreground={retentionTone}>
+                  {retention}
                 </Text>
               </Table.Cell>
             </Table.Row>
