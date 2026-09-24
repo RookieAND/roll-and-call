@@ -1,4 +1,5 @@
 import { VStack, Toast } from "@roll-and-call/ui";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import Script from "next/script";
 
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </VStack>
         </QueryProvider>
         <Toast.Viewport offset={76} />
+        <Analytics />
       </body>
     </html>
   );
