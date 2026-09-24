@@ -1,9 +1,7 @@
-import { Chip, HStack, Select, Skeleton, TextInput } from "@roll-and-call/ui";
+import { Chip, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
-import { AdminHeader, LoadingRegion, Panel, SkeletonTable } from "@/shared/ui";
-
-const ALL = "all";
+import { AdminHeader, LoadingRegion, Panel, SkeletonSelect, SkeletonTable } from "@/shared/ui";
 
 export function PostsLoading() {
   return (
@@ -29,14 +27,10 @@ export function PostsLoading() {
             />
           </HStack>
           <div className="w-[126px]">
-            <Select.Root disabled value={ALL} items={[{ label: "상태 전체", value: ALL }]}>
-              <Select.Trigger className="whitespace-nowrap" />
-            </Select.Root>
+            <SkeletonSelect label="상태 전체" />
           </div>
           <div className="w-[160px]">
-            <Select.Root disabled value={ALL} items={[{ label: "룰북 전체", value: ALL }]}>
-              <Select.Trigger className="whitespace-nowrap" />
-            </Select.Root>
+            <SkeletonSelect label="룰북 전체" />
           </div>
           <Chip disabled>처리 안 된 신고 있음</Chip>
         </HStack>

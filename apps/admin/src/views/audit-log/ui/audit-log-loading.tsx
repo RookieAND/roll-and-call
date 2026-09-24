@@ -1,9 +1,7 @@
-import { Button, HStack, Select, Skeleton, Text, TextInput } from "@roll-and-call/ui";
+import { Button, HStack, Skeleton, Text, TextInput } from "@roll-and-call/ui";
 import { ChevronDown, Search } from "lucide-react";
 
-import { AdminHeader, LoadingRegion, Panel, SkeletonTable } from "@/shared/ui";
-
-const ALL = "all";
+import { AdminHeader, LoadingRegion, Panel, SkeletonSelect, SkeletonTable } from "@/shared/ui";
 
 export function AuditLogLoading() {
   return (
@@ -29,9 +27,7 @@ export function AuditLogLoading() {
             />
           </HStack>
           <div className="w-[146px]">
-            <Select.Root disabled value={ALL} items={[{ label: "전체 운영진", value: ALL }]}>
-              <Select.Trigger className="whitespace-nowrap" />
-            </Select.Root>
+            <SkeletonSelect label="전체 운영진" />
           </div>
           <Button
             variant="outline"
@@ -45,9 +41,7 @@ export function AuditLogLoading() {
             <ChevronDown size={14} aria-hidden />
           </Button>
           <div className="w-[128px]">
-            <Select.Root disabled value={ALL} items={[{ label: "전체 기간", value: ALL }]}>
-              <Select.Trigger className="whitespace-nowrap" />
-            </Select.Root>
+            <SkeletonSelect label="전체 기간" />
           </div>
         </HStack>
         <Panel title="최신순" className="flex-1">

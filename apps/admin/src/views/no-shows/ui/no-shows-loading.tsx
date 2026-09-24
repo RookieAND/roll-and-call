@@ -1,9 +1,7 @@
-import { HStack, Select, Skeleton, Text, TextInput } from "@roll-and-call/ui";
+import { HStack, Skeleton, Text, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
-import { AdminHeader, LoadingRegion, Panel, SkeletonTable } from "@/shared/ui";
-
-const ALL = "all";
+import { AdminHeader, LoadingRegion, Panel, SkeletonSelect, SkeletonTable } from "@/shared/ui";
 
 export function NoShowsLoading() {
   return (
@@ -29,14 +27,10 @@ export function NoShowsLoading() {
             />
           </HStack>
           <div className="w-[150px]">
-            <Select.Root disabled value={ALL} items={[{ label: "처리 시점 전체", value: ALL }]}>
-              <Select.Trigger className="whitespace-nowrap" />
-            </Select.Root>
+            <SkeletonSelect label="처리 시점 전체" />
           </div>
           <div className="w-[124px]">
-            <Select.Root disabled value={ALL} items={[{ label: "상태 전체", value: ALL }]}>
-              <Select.Trigger className="whitespace-nowrap" />
-            </Select.Root>
+            <SkeletonSelect label="상태 전체" />
           </div>
         </HStack>
         <Panel
