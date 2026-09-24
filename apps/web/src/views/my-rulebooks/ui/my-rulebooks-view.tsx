@@ -8,7 +8,6 @@ import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { rulebookSections } from "../model/rulebook-sections";
-import { FreeRulesSection } from "./free-rules-section";
 import { RulebookListSection } from "./rulebook-list-section";
 
 const ROW_LINK_CLASS = "block transition-colors hover:bg-gray-50";
@@ -93,33 +92,12 @@ export async function MyRulebooksView() {
                     key={item.id}
                     state={CERT_STATE.requested}
                     title={item.label}
-                    meta="목록에 추가되면 인증을 신청할 수 있습니다"
+                    meta="운영진이 확인하고 있습니다"
                     statusPlacement="badge"
                     chevron={false}
                   />
                 ),
               )}
-            </RulebookListSection>
-          )}
-
-          {sections.free.length > 0 && <FreeRulesSection rulebooks={sections.free} />}
-
-          {sections.past.length > 0 && (
-            <RulebookListSection title="지난 기록" muted>
-              {sections.past.map((rulebook) => (
-                <Link
-                  key={rulebook.id}
-                  href={`/me/rulebooks/${rulebook.id}`}
-                  className={ROW_LINK_CLASS}
-                >
-                  <CertStateRow
-                    state={CERT_STATE.revoked}
-                    title={rulebook.label}
-                    meta={certRowMeta(rulebook)}
-                    statusPlacement="inline"
-                  />
-                </Link>
-              ))}
             </RulebookListSection>
           )}
         </VStack>

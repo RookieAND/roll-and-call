@@ -53,7 +53,7 @@ export function RulebookRequestSheet({ open, onOpenChange }: RulebookRequestShee
             >
               목록에 없는 룰북을 알려 주시면 운영진이 추가합니다.
               <br />
-              추가되면 목록에서 골라 인증을 신청할 수 있습니다.
+              추가되면 인증을 신청할 수 있습니다.
             </Text>
             <Field.Root label="룰북 이름" htmlFor="rulebook-request-name" required>
               <TextInput maxLength={100} {...field("name")} />

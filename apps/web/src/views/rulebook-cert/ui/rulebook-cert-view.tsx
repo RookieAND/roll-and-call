@@ -17,6 +17,7 @@ interface RulebookCertViewProps {
   rulebookId: string;
 }
 
+// 인증 취소됨은 사진 없이 요약과 문의 버튼만 둔다. 사진 삭제 안내는 삭제 기능이 생기면 넣는다.
 export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {
@@ -39,6 +40,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
   const { state, latestApplication } = rulebook;
   const summary = certSummary(rulebook);
   const rejected = state === CERT_STATE.rejected;
+  const showPhotos = state !== CERT_STATE.revoked && latestApplication;
   const inquiry = inquiryUrl();
 
   return (
@@ -48,7 +50,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
         <VStack gap="250" className="pt-225 pb-250">
           <CertSummaryCard state={state} lines={summary.lines} sub={summary.sub} />
 
-          {latestApplication && (
+          {showPhotos && (
             <VStack gap="125" render={<section />}>
               <Text typography="subtitle1" render={<h2 />}>
                 제출한 사진

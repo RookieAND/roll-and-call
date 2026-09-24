@@ -23,7 +23,6 @@ export function MyPageRulebooks({
   const rows = SHOWN_STATES.flatMap((state) =>
     rulebooks.filter((rulebook) => rulebook.state === state),
   );
-  const freeCount = rulebooks.filter((rulebook) => !rulebook.certRequired).length;
   const showBand = enforcementDate !== null && !isCertEnforced(enforcementDate);
 
   return (
@@ -92,21 +91,6 @@ export function MyPageRulebooks({
             룰북 인증하기
           </Button>
         </VStack>
-      )}
-
-      {freeCount > 0 && (
-        <Link
-          href="/me/rulebooks#free"
-          className="flex min-h-11 items-center gap-100 px-025 text-gray-600 transition-colors hover:text-gray-900"
-        >
-          <Text typography="body3" foreground="inherit" className="flex-1">
-            인증 없이 열 수 있는 룰{" "}
-            <Text weight="bold" foreground="normal" numeric>
-              {freeCount}개
-            </Text>
-          </Text>
-          <ChevronRight size={16} aria-hidden className="text-hint" />
-        </Link>
       )}
     </VStack>
   );

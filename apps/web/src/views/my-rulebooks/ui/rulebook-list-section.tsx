@@ -4,21 +4,14 @@ import type { ReactNode } from "react";
 interface RulebookListSectionProps {
   title: string;
   count?: number;
-  muted?: boolean;
   children: ReactNode;
 }
 
-export function RulebookListSection({
-  title,
-  count,
-  muted = false,
-  children,
-}: RulebookListSectionProps) {
-  const titleForeground = muted ? "muted" : "normal";
+export function RulebookListSection({ title, count, children }: RulebookListSectionProps) {
   return (
     <VStack gap="125" render={<section />}>
       <HStack align="baseline" gap="100">
-        <Text typography="subtitle1" foreground={titleForeground} render={<h2 />}>
+        <Text typography="subtitle1" render={<h2 />}>
           {title}
         </Text>
         {count !== undefined && (

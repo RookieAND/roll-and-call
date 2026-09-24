@@ -23,10 +23,8 @@ describe("rulebookSections", () => {
     requests: [{ id: "r", label: "네크로니카", createdAt: day(4) }],
   });
 
-  it("인증일 최신순, 무료 배포는 가나다순", () => {
+  it("인증일 최신순", () => {
     expect(sections.usable.map((item) => item.label)).toEqual(["B", "A"]);
-    expect(sections.free.map((item) => item.label)).toEqual(["마녀의 차 모임", "사타스페"]);
-    expect(sections.past.map((item) => item.label)).toEqual(["E"]);
   });
 
   it("확인 중과 추가 요청은 신청일 최신순으로 섞는다", () => {

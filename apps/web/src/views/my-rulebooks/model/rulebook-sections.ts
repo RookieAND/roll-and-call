@@ -7,8 +7,7 @@ export type WaitingItem =
 const byNewest = (left: { at: Date }, right: { at: Date }) =>
   right.at.getTime() - left.at.getTime();
 
-// 진행할 수 있는 룰은 인증일 최신순, 처리 중인 신청은 반려됨을 맨 위에 두고 신청일 최신순,
-// 무료 배포 룰은 가나다순이다.
+// 인증 완료된 룰은 인증일 최신순, 처리 중인 룰은 반려됨을 맨 위에 두고 신청일 최신순이다.
 export function rulebookSections({ rulebooks, requests }: MyRulebooks) {
   const withState = (state: string) =>
     rulebooks
@@ -33,9 +32,5 @@ export function rulebookSections({ rulebooks, requests }: MyRulebooks) {
     usable: withState(CERT_STATE.certified),
     rejected: withState(CERT_STATE.rejected),
     waiting,
-    free: rulebooks
-      .filter((rulebook) => !rulebook.certRequired)
-      .toSorted((left, right) => left.label.localeCompare(right.label, "ko")),
-    past: withState(CERT_STATE.revoked),
   };
 }
