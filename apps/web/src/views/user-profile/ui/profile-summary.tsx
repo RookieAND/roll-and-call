@@ -35,7 +35,13 @@ export function ProfileSummary({ profile, absences, isGm, hosted, played }: Prof
         name={profile.username}
         avatarUrl={profile.avatarUrl}
         nameRender={<h1 />}
-        nameAddon={isGm ? <Badge colorPalette="primary">GM</Badge> : undefined}
+        nameAddon={
+          isGm ? (
+            <Badge colorPalette="primary" className="animate-gm-border">
+              GM
+            </Badge>
+          ) : undefined
+        }
         subline={joinedLabel}
         sublineForeground="hint"
       />

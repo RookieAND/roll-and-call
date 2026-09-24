@@ -147,3 +147,38 @@ html {
     display: none;
   }
 }
+
+/* 프로필 GM 뱃지. 테두리를 따라 빛이 한 바퀴씩 돈다. */
+@property --gm-border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes gm-border-spin {
+  to {
+    --gm-border-angle: 360deg;
+  }
+}
+
+@utility animate-gm-border {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--color-primary-50), var(--color-primary-50)) padding-box,
+    conic-gradient(
+        from var(--gm-border-angle),
+        var(--color-primary-200) 0deg 250deg,
+        var(--color-primary-400) 290deg,
+        var(--color-white) 320deg,
+        var(--color-primary-400) 340deg,
+        var(--color-primary-200) 360deg
+      )
+      border-box;
+  animation: gm-border-spin 2.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-gm-border {
+    animation: none;
+  }
+}
