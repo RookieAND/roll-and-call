@@ -6,7 +6,7 @@ import { resolveStateProp } from "../../lib/resolve-state-prop";
 import type { StateComponentProps } from "../../lib/state-props";
 
 const chip = cva(
-  "inline-flex items-center justify-center whitespace-nowrap border font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-075 whitespace-nowrap border font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       shape: {
