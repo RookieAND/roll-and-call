@@ -1,0 +1,52 @@
+import { VStack } from "@roll-and-call/ui";
+
+import { formatMonthDay } from "@/shared/lib";
+import type { AnalyticsData } from "@/shared/server";
+import { AdminHeader } from "@/shared/ui";
+
+import type { GridMode } from "../model/grid-mode";
+import { AnalyticsSummary } from "./analytics-summary";
+import { EarlyNotice } from "./early-notice";
+import { GmSection } from "./gm-section";
+import { PeopleSection } from "./people-section";
+import { PeriodBar } from "./period-bar";
+import { TrendSection } from "./trend-section";
+import { WhenSection } from "./when-section";
+
+interface AnalyticsViewProps {
+  analytics: AnalyticsData;
+  gridMode: GridMode;
+}
+
+export function AnalyticsView({ analytics, gridMode }: AnalyticsViewProps) {
+  const { early, period } = analytics;
+  const range = `${formatMonthDay(period.from)} ~ ${formatMonthDay(period.to)}`;
+  const periodDescription = early
+    ? `${range} · 서비스 시작 후 ${period.serviceWeeks}주`
+    : `${range} · 지난 4주와 비교`;
+  return (
+    <>
+      <AdminHeader title="분석" />
+      <VStack gap="150" className="p-200">
+        <PeriodBar description={periodDescription} />
+        <AnalyticsSummary summary={analytics.summary} early={early} />
+        <TrendSection analytics={analytics} />
+        {early ? (
+          <>
+            <WhenSection analytics={analytics} mode={gridMode} />
+            <EarlyNotice
+              serviceWeeks={period.serviceWeeks}
+              hostingGms={analytics.summary.hostingGms.value ?? 0}
+            />
+          </>
+        ) : (
+          <>
+            <PeopleSection analytics={analytics} />
+            <WhenSection analytics={analytics} mode={gridMode} />
+            <GmSection analytics={analytics} />
+          </>
+        )}
+      </VStack>
+    </>
+  );
+}

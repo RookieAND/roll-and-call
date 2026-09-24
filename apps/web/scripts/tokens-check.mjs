@@ -3,8 +3,11 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 
+// 인자로 다른 앱의 src를 넘기면 그 앱을 검사한다(apps/admin).
 const ROOTS = [
-  resolve(new URL(".", import.meta.url).pathname, "../src"),
+  process.argv[2]
+    ? resolve(process.argv[2])
+    : resolve(new URL(".", import.meta.url).pathname, "../src"),
   resolve(new URL(".", import.meta.url).pathname, "../../../packages/ui/src"),
   resolve(new URL(".", import.meta.url).pathname, "../../../packages/tiptap/src"),
 ];

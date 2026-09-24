@@ -5,7 +5,10 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 
-const SRC = resolve(new URL(".", import.meta.url).pathname, "../src");
+// 인자로 다른 앱의 src를 넘기면 그 앱을 검사한다(apps/admin).
+const SRC = process.argv[2]
+  ? resolve(process.argv[2])
+  : resolve(new URL(".", import.meta.url).pathname, "../src");
 const LAYERS = ["shared", "entities", "features", "widgets", "views", "app"];
 
 function* walk(dir) {

@@ -15,7 +15,7 @@ export function DialogBody({ className, style, render, ref, ...props }: DialogBo
     state,
     props: {
       "data-slot": "dialog-body",
-      className: cn("min-h-0 flex-1", resolveStateProp(className, state)),
+      className: cn("min-h-0 flex-1 overflow-y-auto", resolveStateProp(className, state)),
       style: resolveStateProp(style, state),
       ...props,
     },
