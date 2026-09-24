@@ -1,4 +1,4 @@
-import { HStack, Skeleton, Text, TextInput } from "@roll-and-call/ui";
+import { HStack, Skeleton, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import { AdminHeader, LoadingRegion, Panel, SkeletonSelect, SkeletonTable } from "@/shared/ui";
@@ -23,7 +23,7 @@ export function NoShowsLoading() {
               disabled
               placeholder="닉네임 · 세션 검색"
               aria-label="닉네임 · 세션 검색"
-              className="h-[36px] pl-400 text-body3"
+              className="pl-400 text-body3"
             />
           </HStack>
           <div className="w-[150px]">
@@ -33,24 +33,16 @@ export function NoShowsLoading() {
             <SkeletonSelect label="상태 전체" />
           </div>
         </HStack>
-        <Panel
-          title="최신순"
-          right={
-            <Text typography="body4" foreground="hint">
-              행을 누르면 불참 취소 창이 열립니다
-            </Text>
-          }
-          className="flex-1"
-        >
+        <Panel title="최신순" className="flex-1">
           <SkeletonTable
             columns={[
               { label: "불참 당사자", kind: "text", width: "w-[110px]" },
               { label: "세션", kind: "text" },
               { label: "룰북", kind: "text", width: "w-[140px]" },
-              { label: "일시", kind: "date", width: "w-[142px]" },
+              { label: "일시", kind: "date", width: "w-[148px]", sorted: true },
               { label: "처리한 GM", kind: "text", width: "w-[100px]" },
               { label: "처리 시점", kind: "text", width: "w-[86px]" },
-              { label: "상태", kind: "badge", width: "w-[84px]" },
+              { label: "상태", kind: "badge", width: "w-[84px]", align: "center" },
             ]}
           />
         </Panel>

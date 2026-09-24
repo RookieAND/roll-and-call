@@ -4,11 +4,9 @@ import Link from "next/link";
 
 import { formatDate, formatMonthDay } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { Panel } from "@/shared/ui";
+import { EMPTY_IMAGE, Panel, TableEmptyRow } from "@/shared/ui";
 
-import { USER_ACTION } from "../model/user-action";
-import { userActionHref } from "../model/user-action-href";
-import { USER_DETAIL_TAB } from "../model/user-detail-tab";
+import { revokeHref } from "../model/revoke-href";
 
 interface CertPanelProps {
   user: UserDetail;
@@ -29,27 +27,20 @@ export function CertPanel({ user }: CertPanelProps) {
           </Callout.Description>
         </Callout.Root>
       ) : null}
-      <Panel
-        title="룰북 인증"
-        right={
-          <Text typography="body4" foreground="hint">
-            구인 개설 가능 {user.certifications.length}개 · 심사 대기 {pending.length}개
-          </Text>
-        }
-      >
+      <Panel title="룰북 인증">
         <Table.Root className="table-fixed">
           <colgroup>
-            <col className="w-[220px]" />
+            <col className="w-[200px]" />
             <col className="w-[96px]" />
-            <col className="w-[170px]" />
+            <col className="w-[150px]" />
             <col className="w-[120px]" />
             <col />
-            <col className="w-[104px]" />
+            <col className="w-[96px]" />
           </colgroup>
           <Table.Header>
             <Table.Row>
               <Table.Head>룰북</Table.Head>
-              <Table.Head>상태</Table.Head>
+              <Table.Head align="center">상태</Table.Head>
               <Table.Head>일자</Table.Head>
               <Table.Head>처리한 운영진</Table.Head>
               <Table.Head />
@@ -57,6 +48,14 @@ export function CertPanel({ user }: CertPanelProps) {
             </Table.Row>
           </Table.Header>
           <Table.Body>
+            {user.certifications.length + pending.length + rejected.length === 0 ? (
+              <TableEmptyRow
+                colSpan={6}
+                image={EMPTY_IMAGE.myGames}
+                title="룰북 인증 기록이 없습니다"
+                description="인증을 신청하면 심사 결과가 이곳에 쌓입니다. 인증을 받기 전에는 인증이 필요한 룰북으로 구인을 열 수 없습니다."
+              />
+            ) : null}
             {user.certifications.map((certification) => (
               <Table.Row key={certification.rulebook}>
                 <Table.Cell>
@@ -64,7 +63,7 @@ export function CertPanel({ user }: CertPanelProps) {
                     {certification.rulebook}
                   </Text>
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell align="center">
                   <Badge colorPalette="success">인증됨</Badge>
                 </Table.Cell>
                 <Table.Cell>
@@ -79,16 +78,7 @@ export function CertPanel({ user }: CertPanelProps) {
                     variant="ghost"
                     colorPalette="danger"
                     size="sm"
-                    render={
-                      <Link
-                        href={userActionHref(user.id, {
-                          tab: USER_DETAIL_TAB.cert,
-                          action: USER_ACTION.revoke,
-                          rulebook: certification.rulebook,
-                        })}
-                        scroll={false}
-                      />
-                    }
+                    render={<Link href={revokeHref(user.id, certification.rulebook)} />}
                   >
                     인증 취소
                   </Button>
@@ -102,7 +92,7 @@ export function CertPanel({ user }: CertPanelProps) {
                     {application.rulebook}
                   </Text>
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell align="center">
                   <Badge colorPalette="warning">심사 대기</Badge>
                 </Table.Cell>
                 <Table.Cell>
@@ -135,7 +125,7 @@ export function CertPanel({ user }: CertPanelProps) {
                     {application.rulebook}
                   </Text>
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell align="center">
                   <Badge colorPalette="danger">반려</Badge>
                 </Table.Cell>
                 <Table.Cell>

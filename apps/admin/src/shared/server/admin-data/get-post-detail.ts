@@ -7,7 +7,7 @@ import { loadSnapshot, type Snapshot } from "./snapshot";
 const nicknameOf = (db: Snapshot, userId: string) =>
   db.users.find((user) => user.id === userId)!.nickname;
 
-// 구인 상세: 요약·신고·구인 내용·참여자와 오른쪽 GM 정보.
+// 구인 상세: 요약·신고·구인 내용·참여자·대기자와 오른쪽 GM 정보. 대기자는 대기 순번 순이다.
 export async function getPostDetail(id: string) {
   const db = await loadSnapshot();
   const session = db.sessions.find((candidate) => candidate.id === id);
@@ -51,13 +51,16 @@ export async function getPostDetail(id: string) {
       resolved: report.resolved,
     })),
     unresolvedReportCount: reports.filter((report) => !report.resolved).length,
-    members: [
-      ...session.memberIds.map((userId) => ({ userId, state: "확정" })),
-      ...waitingIds.map((userId, index) => ({ userId, state: `대기 ${index + 1}번` })),
-    ].map((member) => ({
-      ...member,
-      nickname: nicknameOf(db, member.userId),
-      recentNoShowCount: countRecentNoShows(db, member.userId, now),
+    members: session.memberIds.map((userId) => ({
+      userId,
+      nickname: nicknameOf(db, userId),
+      recentNoShowCount: countRecentNoShows(db, userId, now),
+    })),
+    waitlist: waitingIds.map((userId, index) => ({
+      userId,
+      queueOrder: index + 1,
+      nickname: nicknameOf(db, userId),
+      recentNoShowCount: countRecentNoShows(db, userId, now),
     })),
     gm: {
       id: gm.id,

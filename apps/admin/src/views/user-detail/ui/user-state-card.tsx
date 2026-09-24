@@ -32,7 +32,6 @@ export function UserStateCard({ user }: UserStateCardProps) {
             </IconBadge>
           )
         }
-        meta={`${formatDate(user.joinedAt)} 가입 · 디스코드 @${user.discordHandle}`}
         description={
           sanction ? (
             <Text typography="body4" foreground="danger" className="mt-025">
@@ -40,7 +39,10 @@ export function UserStateCard({ user }: UserStateCardProps) {
             </Text>
           ) : null
         }
+        columns={3}
         facts={[
+          { label: "가입일", value: formatDate(user.joinedAt) },
+          { label: "디스코드", value: `@${user.discordHandle}` },
           { label: "연 세션", value: `${user.hostedCount}회` },
           { label: "참여 세션", value: `${user.playedCount}회` },
           {

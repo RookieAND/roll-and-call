@@ -21,7 +21,7 @@ export function UsersLoading() {
               disabled
               placeholder="디스코드 닉네임 검색"
               aria-label="디스코드 닉네임 검색"
-              className="h-[36px] pl-400 text-body3"
+              className="pl-400 text-body3"
             />
           </HStack>
           {Object.values(USER_FILTERS).map((label) => (
@@ -30,16 +30,16 @@ export function UsersLoading() {
             </Chip>
           ))}
         </HStack>
-        <Panel title="유저" right={<Skeleton width={72} height={12} />} className="flex-1">
+        <Panel title="유저" className="flex-1">
           <SkeletonTable
             columns={[
-              { label: "닉네임", kind: "text", width: "w-[220px]" },
-              { label: "가입일", kind: "date", width: "w-[100px]" },
+              { label: "닉네임", kind: "text", width: "w-[180px]" },
+              { label: "가입일", kind: "date", width: "w-[104px]" },
               { label: "연 세션", kind: "number", width: "w-[74px]", align: "end" },
               { label: "참여 세션", kind: "number", width: "w-[82px]", align: "end" },
-              { label: "최근 3개월 불참", kind: "number", width: "w-[112px]", align: "end" },
+              { label: "최근 3개월 불참", kind: "number", width: "w-[120px]", align: "end" },
               { label: "인증 룰북", kind: "number", width: "w-[82px]", align: "end" },
-              { label: "상태", kind: "badge", width: "w-[96px]" },
+              { label: "상태", kind: "badge", width: "w-[96px]", align: "center" },
               { label: "제재 종료", kind: "date", width: "w-[92px]" },
               { label: "", kind: "empty" },
             ]}

@@ -60,7 +60,7 @@ export async function grantCertification(
       .returning({ id: certApplications.id });
 
     await recordAudit(tx, actor, {
-      action: "인증 승인",
+      action: "직접 인증",
       target: `${names.nickname} · ${rulebookLabel(names)}`,
       targetUserId: userId,
       reason: "운영진 직접 추가",

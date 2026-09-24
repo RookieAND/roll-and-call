@@ -1,10 +1,9 @@
-import { Chip, HStack, Text, VStack } from "@roll-and-call/ui";
-import { SearchX } from "lucide-react";
+import { Chip, HStack, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { withQuery } from "@/shared/lib";
 import { USER_FILTERS, type UserFilter, type UserRow } from "@/shared/server";
-import { AdminHeader, EmptyState, Panel, UrlSearchInput } from "@/shared/ui";
+import { AdminHeader, Panel, UrlSearchInput } from "@/shared/ui";
 
 import { UsersTable } from "./users-table";
 
@@ -14,7 +13,6 @@ interface UsersViewProps {
 }
 
 export function UsersView({ rows, query }: UsersViewProps) {
-  const filterLabel = query.filter ? USER_FILTERS[query.filter] : "전체";
   const filters = Object.entries(USER_FILTERS) as [UserFilter, string][];
 
   return (
@@ -41,20 +39,8 @@ export function UsersView({ rows, query }: UsersViewProps) {
             );
           })}
         </HStack>
-        <Panel
-          title="유저"
-          right={
-            <Text typography="body4" foreground="hint">
-              {filterLabel} · {rows.length}명
-            </Text>
-          }
-          className="flex-1"
-        >
-          {rows.length > 0 ? (
-            <UsersTable rows={rows} />
-          ) : (
-            <EmptyState icon={SearchX} title="조건에 맞는 유저가 없어요" />
-          )}
+        <Panel title="유저" className="flex-1">
+          <UsersTable rows={rows} />
         </Panel>
       </VStack>
     </>

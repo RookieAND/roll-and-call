@@ -4,7 +4,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { AddMemoDialog } from "@/features/add-staff-memo";
 import { ReleaseSanctionDialog } from "@/features/release-sanction";
-import { RevokeCertDialog } from "@/features/revoke-certification";
 import { SanctionDialog } from "@/features/sanction-user";
 import type { StaffRole, UserDetail } from "@/shared/server";
 
@@ -15,18 +14,16 @@ interface UserActionDialogsProps {
   viewer: { nickname: string; role: StaffRole };
 }
 
-// 조치 모달은 주소의 action으로 연다. 닫으면 action·rulebook만 지운다.
+// 조치 모달은 주소의 action으로 연다. 닫으면 action만 지운다.
 export function UserActionDialogs({ user, viewer }: UserActionDialogsProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const action = searchParams.get("action");
-  const rulebook = searchParams.get("rulebook") ?? undefined;
   const handleOpenChange = (open: boolean) => {
     if (open) return;
     const next = new URLSearchParams(searchParams);
     next.delete("action");
-    next.delete("rulebook");
     router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });
   };
 
@@ -48,19 +45,6 @@ export function UserActionDialogs({ user, viewer }: UserActionDialogsProps) {
         userId={user.id}
         nickname={user.nickname}
         sanction={user.sanction}
-        open
-        onOpenChange={handleOpenChange}
-      />
-    );
-  }
-  if (action === USER_ACTION.revoke) {
-    return (
-      <RevokeCertDialog
-        userId={user.id}
-        nickname={user.nickname}
-        certifications={user.certifications}
-        initialRulebook={rulebook}
-        ongoing={user.ongoing}
         open
         onOpenChange={handleOpenChange}
       />

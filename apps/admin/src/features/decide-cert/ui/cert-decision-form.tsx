@@ -9,11 +9,13 @@ import { KeyHint } from "@/shared/ui";
 
 import { approveCert } from "../api/approve-cert";
 import { rejectCert } from "../api/reject-cert";
+import { OTHER_REASON } from "../model/reject-reasons";
 import { SHOTS } from "../model/shots";
 import { DecisionFooter } from "./decision-footer";
 import { FlaggedStatus } from "./flagged-status";
 import { RejectPanel } from "./reject-panel";
 import { ShotCard } from "./shot-card";
+import { ShotSectionHeader } from "./shot-section-header";
 import { ShotViewer } from "./shot-viewer";
 import { SkipStatus } from "./skip-status";
 
@@ -49,12 +51,14 @@ export function CertDecisionForm({
   const [pending, startTransition] = useTransition();
   const [checkedShots, setCheckedShots] = useState<ShotKey[]>([]);
   const [flaggedShots, setFlaggedShots] = useState<ShotKey[]>([]);
-  const [reasonTag, setReasonTag] = useState("");
+  const [reasonChoice, setReasonChoice] = useState("");
+  const [otherReason, setOtherReason] = useState("");
   const [userReason, setUserReason] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
 
   const rejecting = searchParams.get("mode") === "reject" && !disabled;
   const viewedShot = searchParams.get("photo") as ShotKey | null;
+  const reasonTag = reasonChoice === OTHER_REASON ? otherReason.trim() : reasonChoice;
   const canReject = Boolean(reasonTag && userReason.trim()) && !pending;
   const nextHref = nextId ? `/cert/${nextId}` : "/cert";
 
@@ -107,38 +111,49 @@ export function CertDecisionForm({
     <>
       <VStack gap="175" className="mx-auto w-full max-w-content flex-1 p-200">
         {children}
-        <Grid
+        <VStack
+          gap="125"
+          render={<section aria-labelledby="shot-section-title" />}
           aria-disabled={disabled}
-          className={cn("grid-cols-3 gap-150", disabled && "pointer-events-none opacity-50")}
+          className={cn(disabled && "pointer-events-none opacity-50")}
         >
-          {SHOTS.map((shot) => (
-            <ShotCard
-              key={shot.key}
-              label={shot.label}
-              note={shot.note}
-              question={shot.question}
-              url={photoUrls[shot.key]}
-              checked={checkedShots.includes(shot.key)}
-              flagged={rejecting && flaggedShots.includes(shot.key)}
-              replaced={replacedShots.includes(shot.key)}
-              compact={compact || rejecting}
-              disabled={disabled}
-              onCheckedChange={() => setCheckedShots(toggle(checkedShots, shot.key))}
-              onPhotoClick={() =>
-                rejecting
-                  ? setFlaggedShots(toggle(flaggedShots, shot.key))
-                  : setParam("photo", shot.key)
-              }
-              onZoom={() => setParam("photo", shot.key)}
-            />
-          ))}
-        </Grid>
+          <ShotSectionHeader
+            checkedCount={checkedShots.length}
+            total={SHOTS.length}
+            rejecting={rejecting}
+          />
+          <Grid className="grid-cols-3 gap-150">
+            {SHOTS.map((shot) => (
+              <ShotCard
+                key={shot.key}
+                label={shot.label}
+                note={shot.note}
+                question={shot.question}
+                url={photoUrls[shot.key]}
+                checked={checkedShots.includes(shot.key)}
+                flagged={rejecting && flaggedShots.includes(shot.key)}
+                replaced={replacedShots.includes(shot.key)}
+                compact={compact || rejecting}
+                disabled={disabled}
+                onCheckedChange={() => setCheckedShots(toggle(checkedShots, shot.key))}
+                onPhotoClick={() =>
+                  rejecting
+                    ? setFlaggedShots(toggle(flaggedShots, shot.key))
+                    : setParam("photo", shot.key)
+                }
+                onZoom={() => setParam("photo", shot.key)}
+              />
+            ))}
+          </Grid>
+        </VStack>
         {rejecting ? (
           <RejectPanel
-            reasonTag={reasonTag}
+            reasonChoice={reasonChoice}
+            otherReason={otherReason}
             userReason={userReason}
             staffMemo={staffMemo}
-            onReasonTagChange={setReasonTag}
+            onReasonChoiceChange={setReasonChoice}
+            onOtherReasonChange={setOtherReason}
             onUserReasonChange={setUserReason}
             onStaffMemoChange={setStaffMemo}
           />

@@ -34,6 +34,7 @@ export function PostDetailView({ post, tab, action, userAppUrl }: PostDetailView
     ...(hasReports ? [POST_DETAIL_TAB.reports] : []),
     POST_DETAIL_TAB.content,
     POST_DETAIL_TAB.members,
+    POST_DETAIL_TAB.waitlist,
   ];
   const defaultTab =
     post.unresolvedReportCount > 0 ? POST_DETAIL_TAB.reports : POST_DETAIL_TAB.content;
@@ -69,10 +70,12 @@ export function PostDetailView({ post, tab, action, userAppUrl }: PostDetailView
             <PostDetailTabs
               tab={currentTab}
               unresolvedReportCount={post.unresolvedReportCount}
-              memberLabel={`${post.memberCount} · 대기 ${post.waitingCount}`}
+              memberCount={post.members.length}
+              waitlistCount={post.waitlist.length}
               reportPanel={hasReports ? <ReportPanel reports={post.reports} /> : null}
               contentPanel={<ContentPanel post={post} />}
               memberPanel={<MemberPanel members={post.members} />}
+              waitlistPanel={<MemberPanel members={post.waitlist} waiting />}
             />
           </Panel>
         </VStack>

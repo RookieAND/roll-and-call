@@ -42,7 +42,7 @@ export function RulebooksLoading() {
                   disabled
                   placeholder="룰북 검색"
                   aria-label="룰북 검색"
-                  className="h-[36px] pl-400 text-body3"
+                  className="h-[32px] pl-400 text-body3"
                 />
               </HStack>
               <Button size="sm" disabled>
@@ -56,12 +56,12 @@ export function RulebooksLoading() {
             rows={7}
             columns={[
               { label: "룰북", kind: "text", width: "w-[200px]" },
-              { label: "판본", kind: "number", width: "w-[78px]" },
+              { label: "판본", kind: "number", width: "w-[78px]", align: "center" },
               { label: "다른 이름", kind: "text" },
-              { label: "인증", kind: "badge", width: "w-[120px]" },
-              { label: "상태", kind: "badge", width: "w-[82px]" },
-              { label: "인증 GM", kind: "number", width: "w-[78px]", align: "end" },
-              { label: "", kind: "icon", width: "w-[52px]", align: "end" },
+              { label: "인증", kind: "badge", width: "w-[120px]", align: "center" },
+              { label: "상태", kind: "badge", width: "w-[82px]", align: "center" },
+              { label: "인증 GM", kind: "number", width: "w-[84px]", align: "center" },
+              { label: "", kind: "icon", width: "w-[44px]", align: "end" },
             ]}
           />
         </Panel>

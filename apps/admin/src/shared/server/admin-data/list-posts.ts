@@ -1,13 +1,17 @@
 import "server-only";
+import { POST_PERIODS } from "./post-period";
 import { POST_STATUS, type PostStatus } from "./post-status";
 import { postStatusOf } from "./post-status-of";
 import { loadSnapshot } from "./snapshot";
+
+const DAY = 86_400_000;
 
 export interface PostListFilter {
   query?: string;
   status?: string;
   rulebook?: string;
   reportedOnly?: boolean;
+  period?: string;
 }
 
 export type PostStaffAction = "숨김" | "수정 요청";
@@ -45,12 +49,15 @@ export async function listPosts(filter: PostListFilter) {
     }))
     .toSorted((a, b) => b.startsAt.getTime() - a.startsAt.getTime());
   const keyword = filter.query?.trim();
+  const days = POST_PERIODS.find((candidate) => candidate.value === filter.period)?.days;
+  const since = days ? Date.now() - days * DAY : null;
   const rows = all.filter(
     (row) =>
       (!keyword || row.title.includes(keyword) || row.gmNickname.includes(keyword)) &&
       (!filter.status || row.status === filter.status) &&
       (!filter.rulebook || row.rulebook === filter.rulebook) &&
-      (!filter.reportedOnly || row.unresolvedReportCount > 0),
+      (!filter.reportedOnly || row.unresolvedReportCount > 0) &&
+      (!since || row.startsAt.getTime() >= since),
   );
   return {
     total: all.length,

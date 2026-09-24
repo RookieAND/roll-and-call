@@ -1,5 +1,4 @@
-import { HStack, Text, VStack } from "@roll-and-call/ui";
-import { SearchX } from "lucide-react";
+import { HStack, VStack } from "@roll-and-call/ui";
 
 import { CancelNoShowDialog, NoShowSummary } from "@/features/cancel-no-show";
 import { withQuery } from "@/shared/lib";
@@ -9,7 +8,7 @@ import {
   type NoShowDetail,
   type NoShowRow,
 } from "@/shared/server";
-import { AdminHeader, EmptyState, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
+import { AdminHeader, EMPTY_IMAGE, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
 
 import { NoShowsTable } from "./no-shows-table";
 
@@ -21,10 +20,7 @@ interface NoShowsViewProps {
 
 export function NoShowsView({ rows, record, query }: NoShowsViewProps) {
   const hrefOf = (id: string | undefined) => withQuery("/noshow", query, { record: id });
-  const emptyTitle =
-    query.q || query.timing || query.status
-      ? "조건에 맞는 불참 기록이 없어요"
-      : "불참 기록이 없어요";
+  const filtered = Boolean(query.q || query.timing || query.status);
   const timingOptions = Object.entries(NO_SHOW_TIMINGS).map(([value, label]) => ({ label, value }));
   const statusOptions = Object.entries(NO_SHOW_STATUSES).map(([value, label]) => ({
     label,
@@ -54,20 +50,14 @@ export function NoShowsView({ rows, record, query }: NoShowsViewProps) {
             className="w-[124px]"
           />
         </HStack>
-        <Panel
-          title="최신순"
-          right={
-            <Text typography="body4" foreground="hint">
-              행을 누르면 불참 취소 창이 열립니다
-            </Text>
-          }
-          className="flex-1"
-        >
-          {rows.length > 0 ? (
-            <NoShowsTable rows={rows} selectedId={record?.id} hrefOf={hrefOf} />
-          ) : (
-            <EmptyState icon={SearchX} title={emptyTitle} />
-          )}
+        <Panel title="최신순" className="flex-1">
+          <NoShowsTable
+            rows={rows}
+            emptyTitle={filtered ? "조건에 맞는 불참 기록이 없어요" : "불참 기록이 없어요"}
+            emptyImage={filtered ? EMPTY_IMAGE.search : EMPTY_IMAGE.schedule}
+            selectedId={record?.id}
+            hrefOf={hrefOf}
+          />
         </Panel>
       </VStack>
       <CancelNoShowDialog

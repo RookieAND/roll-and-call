@@ -24,12 +24,12 @@ export function HideImpact({ memberCount, waitingCount, startsAt }: HideImpactPr
         <VStack
           key={item.label}
           gap="025"
-          className="min-w-0 border-l border-gray-200 px-150 py-125 first:border-l-0"
+          className="min-w-0 border-l border-gray-200 px-175 py-125 first:border-l-0"
         >
           <Text typography="body4" foreground="hint" truncate render={<dt />}>
             {item.label}
           </Text>
-          <Text typography="subtitle2" render={<dd />}>
+          <Text typography="subtitle1" render={<dd />}>
             {item.value}
           </Text>
           {item.sub ? (

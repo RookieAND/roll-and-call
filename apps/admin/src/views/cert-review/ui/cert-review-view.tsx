@@ -1,18 +1,11 @@
-import { Button } from "@roll-and-call/ui";
-import { Quote, RotateCcw } from "lucide-react";
+import { Badge, Button } from "@roll-and-call/ui";
+import { Quote } from "lucide-react";
 import Link from "next/link";
 
 import { CertDecisionForm } from "@/features/decide-cert";
 import { formatDate, formatDateTime, formatMonthDay } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
-import {
-  AdminHeader,
-  ConflictNotice,
-  EntityHead,
-  IconBadge,
-  ItemCard,
-  UserInitial,
-} from "@/shared/ui";
+import { AdminHeader, ConflictNotice, EntityHead, ItemCard, UserInitial } from "@/shared/ui";
 
 import { ReapplyNotice } from "./reapply-notice";
 
@@ -55,14 +48,7 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
         <EntityHead
           title={applicant.nickname}
           lead={<UserInitial nickname={applicant.nickname} />}
-          badges={
-            reapplied ? (
-              <IconBadge icon={RotateCcw} colorPalette="warning">
-                재신청
-              </IconBadge>
-            ) : null
-          }
-          meta={`${formatDate(applicant.joinedAt)} 가입 · 디스코드 @${applicant.discordHandle}`}
+          actions={reapplied ? <Badge colorPalette="warning">재신청</Badge> : null}
           facts={[
             { label: "신청 룰북", value: review.rulebook },
             {
@@ -79,9 +65,7 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
                 ? `${formatMonthDay(latestRejection.rejectedAt)} · ${latestRejection.tags[0]}`
                 : undefined,
             },
-            { label: "연 세션", value: `${applicant.hostedCount}회` },
-            { label: "참여 세션", value: `${applicant.playedCount}회` },
-            { label: "최근 3개월 불참", value: `${applicant.recentNoShowCount}회` },
+            { label: "디스코드", value: `@${applicant.discordHandle}` },
           ]}
         />
         {processed ? (

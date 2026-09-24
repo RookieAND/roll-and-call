@@ -15,12 +15,12 @@ interface PostActionsAsideProps {
 export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
   const reported = post.unresolvedReportCount > 0;
   const notice = reported
-    ? `셋 중 무엇을 확정하든 이 구인의 처리 안 된 신고 ${post.unresolvedReportCount}건이 모두 처리됨으로 바뀝니다. 신고자에게는 알리지 않습니다.`
+    ? `어떤 조치를 확정해도 신고 ${post.unresolvedReportCount}건이 처리됨으로 바뀝니다. 신고자에게는 알림이 가지 않습니다.`
     : "운영진은 GM이 쓴 글을 직접 고치지 않습니다. 두 조치 모두 사유가 필요하고, GM에게만 알림이 갑니다.";
   return (
     <VStack
       render={<aside />}
-      className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-[288px] shrink-0 overflow-y-auto border-l border-gray-200 bg-surface"
+      className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-[300px] shrink-0 overflow-y-auto border-l border-gray-200 bg-surface"
     >
       <Text
         typography="subtitle2"

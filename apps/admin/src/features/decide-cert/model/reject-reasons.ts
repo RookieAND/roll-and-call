@@ -4,5 +4,6 @@ export const REJECT_REASONS = [
   "신청한 룰북과 다른 책이에요",
   "사진이 흐리거나 일부가 잘렸어요",
   "인터넷 이미지로 보여요",
-  "직접 입력",
 ] as const;
+
+export const OTHER_REASON = "기타" as const;

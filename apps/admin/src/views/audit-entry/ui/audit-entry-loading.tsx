@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import { ArrowRight } from "lucide-react";
 
 import { AdminHeader, LoadingRegion, Panel, SkeletonFacts, SkeletonItem } from "@/shared/ui";
@@ -31,15 +31,7 @@ export function AuditEntryLoading() {
             <SkeletonItem lines={1} />
           </VStack>
         </Panel>
-        <Panel
-          title="조치 정보"
-          right={
-            <Button variant="outline" colorPalette="gray" size="sm" disabled>
-              같은 대상의 조치 보기
-            </Button>
-          }
-          bodyClassName="p-150"
-        >
+        <Panel title="조치 정보" bodyClassName="p-150">
           <SkeletonFacts labels={["조치", "대상", "처리한 운영진", "처리 시각"]} />
         </Panel>
       </LoadingRegion>

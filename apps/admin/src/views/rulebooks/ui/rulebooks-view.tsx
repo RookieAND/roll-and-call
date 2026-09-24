@@ -1,5 +1,4 @@
 import { Button, VStack } from "@roll-and-call/ui";
-import { SearchX } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -9,7 +8,7 @@ import {
 } from "@/features/process-rulebook-request";
 import { withQuery } from "@/shared/lib";
 import type { RulebookRequestRow, RulebookRow } from "@/shared/server";
-import { AdminHeader, EmptyState, Panel, UrlSearchInput } from "@/shared/ui";
+import { AdminHeader, Panel, UrlSearchInput } from "@/shared/ui";
 
 import { AddRulebookRoute } from "./add-rulebook-route";
 import { RequestPanel } from "./request-panel";
@@ -23,7 +22,10 @@ interface RulebooksViewProps {
 }
 
 export function RulebooksView({ rulebooks, linkTargets, requests, query }: RulebooksViewProps) {
-  const listQuery = { q: query.q };
+  const hiddenOnly = query.hidden === "1";
+  const hasHidden = linkTargets.length < rulebooks.total;
+  const listQuery = { q: query.q, hidden: query.hidden };
+  const rows = hiddenOnly ? rulebooks.rows.filter((row) => row.hidden) : rulebooks.rows;
   const closeHref = withQuery("/rules", listQuery, {});
   const openedAction = Object.values(REQUEST_ACTION).find((action) => action === query.action);
   const openedRequest = requests.find((request) => request.id === query.request);
@@ -41,7 +43,24 @@ export function RulebooksView({ rulebooks, linkTargets, requests, query }: Ruleb
           title="룰북"
           right={
             <>
-              <UrlSearchInput placeholder="룰북 검색" className="w-[180px]" />
+              <UrlSearchInput placeholder="룰북 검색" size="sm" className="w-[180px]" />
+              {hasHidden || hiddenOnly ? (
+                <Button
+                  variant="outline"
+                  colorPalette="gray"
+                  size="sm"
+                  render={
+                    <Link
+                      href={withQuery("/rules", listQuery, {
+                        hidden: hiddenOnly ? undefined : "1",
+                      })}
+                      scroll={false}
+                    />
+                  }
+                >
+                  {hiddenOnly ? "전체 룰북 보기" : "숨긴 룰북 보기"}
+                </Button>
+              ) : null}
               <Button
                 size="sm"
                 render={<Link href={withQuery("/rules", listQuery, { add: "1" })} scroll={false} />}
@@ -52,11 +71,7 @@ export function RulebooksView({ rulebooks, linkTargets, requests, query }: Ruleb
           }
           className="flex-1"
         >
-          {rulebooks.rows.length > 0 ? (
-            <RulebookTable rows={rulebooks.rows} />
-          ) : (
-            <EmptyState icon={SearchX} title="조건에 맞는 룰북이 없어요" />
-          )}
+          <RulebookTable rows={rows} />
         </Panel>
       </VStack>
       <RequestDialog opened={opened} rulebooks={linkTargets} closeHref={closeHref} />

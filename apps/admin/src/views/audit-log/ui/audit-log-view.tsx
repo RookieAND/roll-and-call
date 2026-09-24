@@ -1,10 +1,10 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
-import { SearchX, X } from "lucide-react";
+import { X } from "lucide-react";
 import Link from "next/link";
 
 import { withQuery } from "@/shared/lib";
 import { AUDIT_ACTION_GROUPS, AUDIT_PERIODS, type listAuditLog } from "@/shared/server";
-import { AdminHeader, EmptyState, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
+import { AdminHeader, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
 
 import { ActionFilter } from "./action-filter";
 import { AuditLogTable } from "./audit-log-table";
@@ -49,11 +49,7 @@ export function AuditLogView({ log, query }: AuditLogViewProps) {
           />
         </HStack>
         <Panel title="최신순" className="flex-1">
-          {log.rows.length > 0 ? (
-            <AuditLogTable rows={log.rows} />
-          ) : (
-            <EmptyState icon={SearchX} title="조건에 맞는 활동 기록이 없어요" />
-          )}
+          <AuditLogTable rows={log.rows} />
         </Panel>
       </VStack>
     </>

@@ -6,9 +6,8 @@ import type { UserDetailTab } from "./user-detail-tab";
 interface UserActionTarget {
   tab?: UserDetailTab;
   action: UserAction;
-  rulebook?: string;
 }
 
-export function userActionHref(userId: string, { tab, action, rulebook }: UserActionTarget) {
-  return withQuery(`/users/${userId}`, {}, { tab, action, rulebook });
+export function userActionHref(userId: string, { tab, action }: UserActionTarget) {
+  return withQuery(`/users/${userId}`, {}, { tab, action });
 }

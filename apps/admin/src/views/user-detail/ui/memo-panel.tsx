@@ -3,7 +3,7 @@ import { Quote } from "lucide-react";
 import Link from "next/link";
 
 import type { UserDetail } from "@/shared/server";
-import { EmptyState, ItemCard, Panel } from "@/shared/ui";
+import { EMPTY_IMAGE, EmptyState, ItemCard, Panel } from "@/shared/ui";
 
 import { formatMemoDate } from "../model/format-memo-date";
 import { USER_ACTION } from "../model/user-action";
@@ -34,7 +34,7 @@ export function MemoPanel({ userId, memos }: MemoPanelProps) {
           메모 추가
         </Button>
       }
-      bodyClassName="p-150"
+      bodyClassName={memos.length ? "p-150" : undefined}
     >
       {memos.length ? (
         <VStack gap="100">
@@ -51,7 +51,11 @@ export function MemoPanel({ userId, memos }: MemoPanelProps) {
           ))}
         </VStack>
       ) : (
-        <EmptyState title="아직 메모가 없어요" />
+        <EmptyState
+          image={EMPTY_IMAGE.hosted}
+          title="운영진 메모가 없습니다"
+          description="메모는 사용자에게 보이지 않습니다. 제재나 경고를 하기 전에 확인한 내용을 남겨 두면 다른 운영진이 함께 볼 수 있습니다."
+        />
       )}
     </Panel>
   );

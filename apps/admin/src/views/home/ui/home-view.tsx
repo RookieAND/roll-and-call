@@ -3,7 +3,7 @@ import { CalendarDays, FileText } from "lucide-react";
 
 import { formatDayRange } from "@/shared/lib";
 import type { PendingItem, WeeklySummary } from "@/shared/server";
-import { AdminHeader, EmptyState, Panel } from "@/shared/ui";
+import { AdminHeader, EMPTY_IMAGE, EmptyState, Panel } from "@/shared/ui";
 
 import { PendingRow } from "./pending-row";
 import { WeekCard } from "./week-card";
@@ -66,8 +66,9 @@ export function HomeView({ weekly, pendingItems }: HomeViewProps) {
               ))}
             </ul>
           ) : (
-            <div className="h-[220px]">
+            <div className="h-[260px]">
               <EmptyState
+                image={EMPTY_IMAGE.hosted}
                 title="처리할 일이 없어요"
                 description="새 인증 신청, 룰북 추가 요청, 구인 신고가 들어오면 디스코드로 알림이 갑니다."
               />

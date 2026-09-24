@@ -1,4 +1,4 @@
-import { Grid, Text, VStack } from "@roll-and-call/ui";
+import { Badge, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { PostDetail } from "@/shared/server";
 
@@ -12,45 +12,45 @@ interface ContentPanelProps {
 export function ContentPanel({ post }: ContentPanelProps) {
   return (
     <VStack gap="175" className="p-175">
-      <VStack gap="075" render={<section />}>
-        <Text typography="subtitle2" render={<h3 />}>
+      <VStack gap="100" render={<section />}>
+        <Text typography="heading3" render={<h3 />}>
           시놉시스
         </Text>
         <Text
-          typography="body3"
+          typography="body2"
           foreground={post.synopsis ? "normal" : "hint"}
-          className="max-w-[640px] leading-[1.75]"
+          className="max-w-[680px] leading-[1.75]"
         >
           {post.synopsis ?? "시놉시스가 없습니다"}
         </Text>
       </VStack>
       {post.notices.length ? (
-        <VStack gap="075" render={<section />}>
-          <Text typography="subtitle2" render={<h3 />}>
+        <VStack gap="100" render={<section />}>
+          <Text typography="heading3" render={<h3 />}>
             안내 사항
           </Text>
           <VStack gap="050" render={<ul />}>
             {post.notices.map((notice) => (
-              <Text
-                key={notice}
-                typography="body3"
-                render={<li />}
-                className="ml-150 list-disc marker:text-hint"
-              >
-                {notice}
-              </Text>
+              <HStack key={notice} gap="075" render={<li />}>
+                <Text typography="body2" foreground="hint" aria-hidden>
+                  ·
+                </Text>
+                <Text typography="body2" className="leading-[1.65]">
+                  {notice}
+                </Text>
+              </HStack>
             ))}
           </VStack>
         </VStack>
       ) : null}
       {post.imageUrls.length ? (
-        <VStack gap="075" render={<section />}>
-          <Text typography="subtitle2" render={<h3 />}>
-            본문 이미지{" "}
-            <Text typography="body3" foreground="hint" render={<span />}>
-              {post.imageUrls.length}장
+        <VStack gap="100" render={<section />}>
+          <HStack align="center" gap="075">
+            <Text typography="heading3" render={<h3 />}>
+              본문 이미지
             </Text>
-          </Text>
+            <Badge colorPalette="gray">{post.imageUrls.length}장</Badge>
+          </HStack>
           <Grid className="grid-cols-2 gap-100">
             {post.imageUrls.map((url, index) =>
               url ? (

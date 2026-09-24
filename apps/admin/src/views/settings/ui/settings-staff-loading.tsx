@@ -20,12 +20,12 @@ export function SettingsStaffLoading() {
           <SkeletonTable
             rows={4}
             columns={[
-              { label: "닉네임", kind: "text", width: "w-[200px]" },
-              { label: "역할", kind: "badge", width: "w-[120px]" },
-              { label: "추가한 날", kind: "date", width: "w-[150px]" },
-              { label: "최근 활동", kind: "date", width: "w-[130px]" },
+              { label: "닉네임", kind: "text", width: "w-[180px]" },
+              { label: "역할", kind: "badge", width: "w-[104px]", align: "center" },
+              { label: "추가한 날", kind: "date", width: "w-[104px]" },
+              { label: "최근 활동", kind: "date", width: "w-[104px]" },
               { label: "", kind: "empty" },
-              { label: "", kind: "button", width: "w-[190px]", align: "end" },
+              { label: "", kind: "button", width: "w-[188px]", align: "end" },
             ]}
           />
         </Panel>

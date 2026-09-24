@@ -1,10 +1,10 @@
 import { Badge, Button, Table, Text } from "@roll-and-call/ui";
-import { Users } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-import { formatDate } from "@/shared/lib";
+import { formatIsoDate } from "@/shared/lib";
 import type { CertifiedGm } from "@/shared/server";
-import { EmptyState, Panel } from "@/shared/ui";
+import { EMPTY_IMAGE, Panel, TableEmptyRow } from "@/shared/ui";
 
 interface CertifiedGmPanelProps {
   gms: CertifiedGm[];
@@ -35,60 +35,65 @@ export function CertifiedGmPanel({ gms, certRequired }: CertifiedGmPanelProps) {
   );
   return (
     <Panel title="이 룰북으로 인증된 GM" right={right} className="flex-1">
-      {gms.length === 0 ? (
-        <EmptyState icon={Users} title="인증된 GM이 없어요" />
-      ) : (
-        <Table.Root className="table-fixed">
-          <colgroup>
-            <col className="w-[220px]" />
-            <col className="w-[120px]" />
-            <col className="w-[130px]" />
-            <col />
-            <col className="w-[110px]" />
-          </colgroup>
-          <Table.Header>
-            <Table.Row>
-              <Table.Head>닉네임</Table.Head>
-              <Table.Head>인증일</Table.Head>
-              <Table.Head align="end">최근 90일 세션</Table.Head>
-              <Table.Head />
-              <Table.Head>
-                <span className="sr-only">유저 상세</span>
-              </Table.Head>
+      <Table.Root className="table-fixed">
+        <colgroup>
+          <col className="w-[180px]" />
+          <col className="w-[104px]" />
+          <col className="w-[112px]" />
+          <col />
+          <col className="w-[44px]" />
+        </colgroup>
+        <Table.Header>
+          <Table.Row>
+            <Table.Head>닉네임</Table.Head>
+            <Table.Head>인증일</Table.Head>
+            <Table.Head align="center">최근 90일 세션</Table.Head>
+            <Table.Head />
+            <Table.Head />
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {gms.length === 0 ? (
+            <TableEmptyRow
+              colSpan={5}
+              image={EMPTY_IMAGE.myGames}
+              title="이 룰북으로 인증된 GM이 없습니다"
+              description={
+                certRequired
+                  ? "GM의 인증 신청이 승인되거나 운영진이 GM을 직접 추가하면 이곳에 표시됩니다."
+                  : "인증이 필요 없는 룰북이므로 누구나 이 룰북으로 구인을 열 수 있습니다."
+              }
+            />
+          ) : null}
+          {gms.map((gm) => (
+            <Table.Row key={gm.userId} interactive className="relative">
+              <Table.Cell>
+                <Text
+                  typography="body3"
+                  weight="bold"
+                  truncate
+                  render={<Link href={`/users/${gm.userId}`} />}
+                  className="block after:absolute after:inset-0"
+                >
+                  {gm.nickname}
+                </Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text typography="body3" foreground="hint">
+                  {formatIsoDate(gm.approvedAt)}
+                </Text>
+              </Table.Cell>
+              <Table.Cell align="center" numeric>
+                {gm.recentSessionCount}회
+              </Table.Cell>
+              <Table.Cell />
+              <Table.Cell align="end">
+                <ChevronRight size={16} aria-hidden className="inline text-hint" />
+              </Table.Cell>
             </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {gms.map((gm) => (
-              <Table.Row key={gm.userId}>
-                <Table.Cell>
-                  <Text typography="body3" weight="bold" truncate>
-                    {gm.nickname}
-                  </Text>
-                </Table.Cell>
-                <Table.Cell>
-                  <Text typography="body3" foreground="hint">
-                    {formatDate(gm.approvedAt)}
-                  </Text>
-                </Table.Cell>
-                <Table.Cell align="end" numeric>
-                  {gm.recentSessionCount}
-                </Table.Cell>
-                <Table.Cell />
-                <Table.Cell align="end">
-                  <Button
-                    variant="outline"
-                    colorPalette="gray"
-                    size="sm"
-                    render={<Link href={`/users/${gm.userId}`} />}
-                  >
-                    유저 상세
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
-      )}
+          ))}
+        </Table.Body>
+      </Table.Root>
     </Panel>
   );
 }

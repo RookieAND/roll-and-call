@@ -76,7 +76,9 @@ export function GrantGmDialog({
                       <GrantCandidateRow
                         candidate={candidate}
                         selected={candidate.id === selected?.id}
-                        onSelect={() => setSelectedId(candidate.id)}
+                        onToggle={() =>
+                          setSelectedId(candidate.id === selectedId ? null : candidate.id)
+                        }
                       />
                     </li>
                   ))}

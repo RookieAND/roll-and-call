@@ -2,11 +2,9 @@ import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
 import { Ban, CircleCheck } from "lucide-react";
 import Link from "next/link";
 
-import { formatMonthDay } from "@/shared/lib";
+import { formatIsoDate, formatMonthDay } from "@/shared/lib";
 import type { UserRow } from "@/shared/server";
-import { IconBadge } from "@/shared/ui";
-
-import { formatIsoDate } from "../model/format-iso-date";
+import { EMPTY_IMAGE, IconBadge, TableEmptyRow } from "@/shared/ui";
 
 const NO_SHOW_WARNING_COUNT = 2;
 
@@ -18,11 +16,11 @@ export function UsersTable({ rows }: UsersTableProps) {
   return (
     <Table.Root className="table-fixed">
       <colgroup>
-        <col className="w-[220px]" />
-        <col className="w-[100px]" />
+        <col className="w-[180px]" />
+        <col className="w-[104px]" />
         <col className="w-[74px]" />
         <col className="w-[82px]" />
-        <col className="w-[112px]" />
+        <col className="w-[120px]" />
         <col className="w-[82px]" />
         <col className="w-[96px]" />
         <col className="w-[92px]" />
@@ -36,12 +34,15 @@ export function UsersTable({ rows }: UsersTableProps) {
           <Table.Head align="end">참여 세션</Table.Head>
           <Table.Head align="end">최근 3개월 불참</Table.Head>
           <Table.Head align="end">인증 룰북</Table.Head>
-          <Table.Head>상태</Table.Head>
+          <Table.Head align="center">상태</Table.Head>
           <Table.Head>제재 종료</Table.Head>
           <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
+        {rows.length === 0 ? (
+          <TableEmptyRow colSpan={9} image={EMPTY_IMAGE.search} title="조건에 맞는 유저가 없어요" />
+        ) : null}
         {rows.map((row) => {
           const frequentNoShow = row.recentNoShowCount >= NO_SHOW_WARNING_COUNT;
           return (
@@ -66,10 +67,10 @@ export function UsersTable({ rows }: UsersTableProps) {
                 </Text>
               </Table.Cell>
               <Table.Cell align="end" numeric>
-                {row.hostedCount}
+                {row.hostedCount}회
               </Table.Cell>
               <Table.Cell align="end" numeric>
-                {row.playedCount}
+                {row.playedCount}회
               </Table.Cell>
               <Table.Cell align="end" numeric>
                 <Text
@@ -77,13 +78,13 @@ export function UsersTable({ rows }: UsersTableProps) {
                   weight={frequentNoShow ? "bold" : undefined}
                   foreground={frequentNoShow ? "danger" : "normal"}
                 >
-                  {row.recentNoShowCount}
+                  {row.recentNoShowCount}회
                 </Text>
               </Table.Cell>
               <Table.Cell align="end" numeric>
-                {row.certifiedCount}
+                {row.certifiedCount}개
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell align="center">
                 {row.sanctioned ? (
                   <IconBadge icon={Ban} colorPalette="danger">
                     제재 중

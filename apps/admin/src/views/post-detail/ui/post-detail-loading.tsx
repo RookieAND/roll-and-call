@@ -25,7 +25,7 @@ export function PostDetailLoading() {
             actions={<Skeleton width={32} height={32} rounded={400} />}
           />
           <Panel className="flex-1">
-            <SkeletonTabs items={[null, null, null]} />
+            <SkeletonTabs items={[null, null, null, null]} />
             <VStack gap="125" className="p-150">
               <SkeletonItem />
               <SkeletonItem />
@@ -35,7 +35,7 @@ export function PostDetailLoading() {
         </LoadingRegion>
         <VStack
           render={<aside />}
-          className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-[288px] shrink-0 overflow-y-auto border-l border-gray-200 bg-surface"
+          className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-[300px] shrink-0 overflow-y-auto border-l border-gray-200 bg-surface"
         >
           <Text
             typography="subtitle2"

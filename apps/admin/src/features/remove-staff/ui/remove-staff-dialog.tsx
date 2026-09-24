@@ -71,11 +71,7 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
                 <Checkbox.Indicator />
               </Checkbox.Root>
               <VStack gap="025">
-                <Checkbox.Label>
-                  <Text typography="body3" weight="bold">
-                    당사자에게 디스코드 알림 보내기
-                  </Text>
-                </Checkbox.Label>
+                <Checkbox.Label>당사자에게 디스코드 알림 보내기</Checkbox.Label>
                 <Text typography="body4" foreground="hint">
                   운영진에서 해제됐다는 사실만 알리고, 사유는 보내지 않습니다
                 </Text>

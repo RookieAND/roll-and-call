@@ -19,15 +19,8 @@ export function CertReviewLoading() {
       <LoadingRegion label="심사할 신청을 불러오는 중입니다">
         <VStack gap="175" className="mx-auto w-full max-w-content flex-1 p-200">
           <SkeletonEntity
-            facts={[
-              "신청 룰북",
-              "대기",
-              "신청 일자",
-              "같은 룰북 반려",
-              "연 세션",
-              "참여 세션",
-              "최근 3개월 불참",
-            ]}
+            facts={["신청 룰북", "대기", "신청 일자", "같은 룰북 반려", "디스코드"]}
+            columns={5}
           />
           <SkeletonItem />
           <Grid className="grid-cols-3 gap-150">

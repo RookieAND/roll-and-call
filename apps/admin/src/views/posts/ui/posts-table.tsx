@@ -19,26 +19,26 @@ export function PostsTable({ rows }: PostsTableProps) {
         <col />
         <col className="w-[104px]" />
         <col className="w-[140px]" />
-        <col className="w-[142px]" />
-        <col className="w-[64px]" />
+        <col className="w-[152px]" />
+        <col className="w-[76px]" />
         <col className="w-[112px]" />
         <col className="w-[118px]" />
-        <col className="w-[110px]" />
+        <col className="w-[116px]" />
       </colgroup>
       <Table.Header>
         <Table.Row>
           <Table.Head>제목</Table.Head>
           <Table.Head>GM</Table.Head>
           <Table.Head>룰북</Table.Head>
-          <Table.Head aria-sort="descending">
+          <Table.Head aria-sort="descending" className="text-gray-900">
             <HStack align="center" gap="050" render={<span />}>
               세션 일시
-              <ArrowDown size={12} aria-hidden />
+              <ArrowDown size={10} strokeWidth={2.4} aria-hidden />
             </HStack>
           </Table.Head>
-          <Table.Head align="end">참여</Table.Head>
-          <Table.Head>상태</Table.Head>
-          <Table.Head align="end">처리 안 된 신고</Table.Head>
+          <Table.Head align="center">참여</Table.Head>
+          <Table.Head align="center">상태</Table.Head>
+          <Table.Head align="center">처리 안 된 신고</Table.Head>
           <Table.Head>운영진 조치</Table.Head>
         </Table.Row>
       </Table.Header>
@@ -74,15 +74,15 @@ export function PostsTable({ rows }: PostsTableProps) {
                   {formatSessionTime(row.startsAt)}
                 </Text>
               </Table.Cell>
-              <Table.Cell align="end" numeric>
-                {row.memberCount}/{row.capacity}
+              <Table.Cell align="center" numeric>
+                {row.memberCount}/{row.capacity}명
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell align="center">
                 <Text typography="body3" foreground="muted">
                   {row.status}
                 </Text>
               </Table.Cell>
-              <Table.Cell align="end" numeric>
+              <Table.Cell align="center" numeric>
                 {reported ? (
                   <Text typography="body3" weight="bold" foreground="danger">
                     {row.unresolvedReportCount}건

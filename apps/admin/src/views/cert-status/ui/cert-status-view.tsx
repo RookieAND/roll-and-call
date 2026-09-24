@@ -42,7 +42,7 @@ export function CertStatusView({ status, tab, allTime, unappliedOnly }: CertStat
         param="scope"
         allLabel="최근 90일 활동 GM"
         options={[{ label: "전체 기간", value: "all" }]}
-        className="w-[170px] [&_[data-slot=select-trigger]]:h-[34px]"
+        className="w-[162px] [&_[data-slot=select-trigger]]:h-[32px] [&_[data-slot=select-trigger]]:min-h-[32px]"
       />
       <CsvExportButton
         fileName="룰북별 인증 현황.csv"

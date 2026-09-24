@@ -119,7 +119,9 @@ export async function getCertStatus({ allTime }: { allTime: boolean }) {
     week: {
       from: new Date(now - WEEK + DAY),
       to: new Date(now),
-      approvedCount: thisWeek.filter((entry) => entry.action === "인증 승인").length,
+      approvedCount: thisWeek.filter(
+        (entry) => entry.action === "인증 승인" || entry.action === "직접 인증",
+      ).length,
       rejectedCount: rejections.length,
       topRejection: topTag ? { tag: topTag, count: topCount! } : null,
       averageWaitDays: averageWait,

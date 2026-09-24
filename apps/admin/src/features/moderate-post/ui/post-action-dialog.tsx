@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import type { PostDetail } from "@/shared/server";
 
+import { ACTION_COPY } from "../model/action-copy";
 import type { PostAction } from "../model/post-action";
 import { PostActionForm } from "./post-action-form";
 
@@ -24,7 +25,10 @@ export function PostActionDialog({ post, action, closeHref }: PostActionDialogPr
   const close = () => router.replace(closeHref, { scroll: false });
   return (
     <Dialog.Root open={action !== null} onOpenChange={(open) => open || close()}>
-      <Dialog.Popup size="lg" className="max-w-[600px]">
+      <Dialog.Popup
+        size="lg"
+        className={shownAction ? ACTION_COPY[shownAction].widthClassName : undefined}
+      >
         {shownAction ? (
           <PostActionForm key={shownAction} post={post} action={shownAction} onDone={close} />
         ) : null}

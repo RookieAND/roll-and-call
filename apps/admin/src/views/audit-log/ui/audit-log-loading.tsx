@@ -23,7 +23,7 @@ export function AuditLogLoading() {
               disabled
               placeholder="대상 닉네임 검색"
               aria-label="대상 닉네임 검색"
-              className="h-[36px] pl-400 text-body3"
+              className="pl-400 text-body3"
             />
           </HStack>
           <div className="w-[146px]">
@@ -33,7 +33,7 @@ export function AuditLogLoading() {
             variant="outline"
             colorPalette="gray"
             disabled
-            className="h-[36px] w-[140px] justify-between font-normal"
+            className="h-[44px] w-[140px] justify-between font-normal"
           >
             <Text typography="body3" truncate>
               모든 조치
@@ -47,10 +47,10 @@ export function AuditLogLoading() {
         <Panel title="최신순" className="flex-1">
           <SkeletonTable
             columns={[
-              { label: "일시", kind: "date", width: "w-[120px]", sorted: true },
+              { label: "일시", kind: "date", width: "w-[128px]", sorted: true },
               { label: "운영진", kind: "text", width: "w-[96px]" },
-              { label: "조치", kind: "badge", width: "w-[128px]" },
-              { label: "대상", kind: "text", width: "w-[120px]" },
+              { label: "조치", kind: "badge", width: "w-[124px]" },
+              { label: "대상", kind: "text", width: "w-[110px]" },
               { label: "세부", kind: "text", width: "w-[170px]" },
               { label: "사유", kind: "text" },
             ]}

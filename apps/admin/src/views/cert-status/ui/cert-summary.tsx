@@ -28,7 +28,12 @@ export function CertSummary({ summary, week }: CertSummaryProps) {
         bodyClassName="p-175"
       >
         <HStack align="center" gap="150">
-          <Text typography="heading1" numeric className="text-(--rc-color-fg-primary-strong)">
+          <Text
+            typography="heading1"
+            weight="extrabold"
+            numeric
+            className="text-(--rc-color-fg-primary-strong)"
+          >
             {percent}%
           </Text>
           <Progress value={summary.certifiedCount} max={summary.gmCount} className="flex-1" />

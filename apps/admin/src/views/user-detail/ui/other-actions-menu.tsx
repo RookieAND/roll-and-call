@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import type { UserDetail } from "@/shared/server";
 
+import { revokeHref } from "../model/revoke-href";
 import { USER_ACTION } from "../model/user-action";
 import { userActionHref } from "../model/user-action-href";
 import { USER_DETAIL_TAB } from "../model/user-detail-tab";
@@ -22,12 +23,7 @@ export function OtherActionsMenu({ user }: OtherActionsMenuProps) {
     {
       label: "룰북 인증 취소",
       icon: BookOpen,
-      link: (
-        <Link
-          href={userActionHref(user.id, { tab: USER_DETAIL_TAB.cert, action: USER_ACTION.revoke })}
-          scroll={false}
-        />
-      ),
+      link: <Link href={revokeHref(user.id)} />,
     },
     {
       label: "운영진 메모 추가",

@@ -29,7 +29,7 @@ export function CertQueueLoading() {
               disabled
               placeholder="닉네임 검색"
               aria-label="닉네임 검색"
-              className="h-[36px] pl-400 text-body3"
+              className="pl-400 text-body3"
             />
           </HStack>
           <div className="w-[150px]">
@@ -48,14 +48,14 @@ export function CertQueueLoading() {
         >
           <SkeletonTable
             columns={[
-              { label: "닉네임", kind: "text", width: "w-[140px]" },
-              { label: "룰북", kind: "text", width: "w-[220px]" },
+              { label: "닉네임", kind: "text", width: "w-[180px]" },
+              { label: "룰북", kind: "text", width: "w-[200px]" },
               { label: "신청일", kind: "date", width: "w-[136px]" },
-              { label: "대기 일수", kind: "number", width: "w-[90px]", align: "end" },
-              { label: "신청 구분", kind: "badge", width: "w-[100px]" },
-              { label: "이전 반려", kind: "number", width: "w-[90px]", align: "end" },
+              { label: "대기 일수", kind: "number", width: "w-[90px]", align: "center" },
+              { label: "신청 구분", kind: "badge", width: "w-[100px]", align: "center" },
+              { label: "이전 반려", kind: "number", width: "w-[90px]", align: "center" },
               { label: "", kind: "empty" },
-              { label: "", kind: "button", width: "w-[110px]", align: "end" },
+              { label: "", kind: "empty", width: "w-[44px]" },
             ]}
           />
         </Panel>

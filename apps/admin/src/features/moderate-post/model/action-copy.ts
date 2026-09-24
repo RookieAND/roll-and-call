@@ -6,6 +6,8 @@ import { POST_ACTION, type PostAction } from "./post-action";
 
 interface ActionCopy {
   title: string;
+  // 창 폭. 입력이 많은 조치일수록 넓다.
+  widthClassName: string;
   description: string;
   footerIcon: LucideIcon;
   footerNote: string;
@@ -15,6 +17,7 @@ interface ActionCopy {
 
 export const ACTION_COPY: Record<PostAction, ActionCopy> = {
   [POST_ACTION.edit]: {
+    widthClassName: "max-w-[600px]",
     title: "GM에게 수정 요청",
     description: "구인은 그대로 유지됩니다",
     footerIcon: Mail,
@@ -23,6 +26,7 @@ export const ACTION_COPY: Record<PostAction, ActionCopy> = {
     successMessage: (title) => `GM에게 수정을 요청했습니다 · ${title}`,
   },
   [POST_ACTION.hide]: {
+    widthClassName: "max-w-[620px]",
     title: "구인 숨김",
     description: "구인을 새로 보는 사람에게만 보이지 않게 됩니다",
     footerIcon: RotateCcw,
@@ -31,6 +35,7 @@ export const ACTION_COPY: Record<PostAction, ActionCopy> = {
     successMessage: (title) => `${withObjectParticle(title)} 숨겼습니다`,
   },
   [POST_ACTION.unhide]: {
+    widthClassName: "max-w-[560px]",
     title: "숨김 해제",
     description: "구인이 목록과 검색에 다시 나타납니다",
     footerIcon: Bell,
@@ -39,6 +44,7 @@ export const ACTION_COPY: Record<PostAction, ActionCopy> = {
     successMessage: (title) => `숨김을 해제했습니다 · ${title}`,
   },
   [POST_ACTION.resolve]: {
+    widthClassName: "max-w-[560px]",
     title: "신고 처리 완료",
     description: "조치 없이 이 구인의 처리 안 된 신고를 처리됨으로 바꿉니다",
     footerIcon: Bell,

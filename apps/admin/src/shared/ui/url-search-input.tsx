@@ -10,11 +10,18 @@ const DELAY = 250;
 interface UrlSearchInputProps {
   placeholder: string;
   param?: string;
+  size?: "md" | "sm";
   className?: string;
 }
 
 // 입력이 멈추면 검색어를 주소의 쿼리로 옮긴다. 목록은 주소만 보고 그린다.
-export function UrlSearchInput({ placeholder, param = "q", className }: UrlSearchInputProps) {
+// 필터 줄은 DS 입력란과 같은 44px(md), 패널 머리글은 옆의 sm 버튼과 같은 32px(sm)이다.
+export function UrlSearchInput({
+  placeholder,
+  param = "q",
+  size = "md",
+  className,
+}: UrlSearchInputProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -41,7 +48,7 @@ export function UrlSearchInput({ placeholder, param = "q", className }: UrlSearc
         onChange={(event) => setValue(event.target.value)}
         placeholder={placeholder}
         aria-label={placeholder}
-        className="h-[36px] pl-400 text-body3"
+        className={size === "sm" ? "h-[32px] pl-400 text-body3" : "pl-400 text-body3"}
       />
     </HStack>
   );

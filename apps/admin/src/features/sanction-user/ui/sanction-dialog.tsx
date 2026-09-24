@@ -58,10 +58,10 @@ export function SanctionDialog({
   const validDays = days === null || (Number.isInteger(days) && days > 0);
   const end = days && validDays ? formatMonthDay(new Date(now.getTime() + days * DAY)) : null;
   const periodHint = !validDays
-    ? "1일 이상의 일수를 입력해 주세요"
+    ? "1일 이상의 일수를 입력해 주세요."
     : end
-      ? `${formatMonthDay(now)}에 확정하면 ${end}까지 적용됩니다`
-      : "해제하기 전까지 적용됩니다";
+      ? `${formatMonthDay(now)}에 확정하면 ${end}까지 적용됩니다.`
+      : "해제하기 전까지 적용됩니다.";
   const hasReason = Boolean(draft.userReason.trim());
   const canPreview = hasReason && validDays;
 

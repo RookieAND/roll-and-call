@@ -1,10 +1,16 @@
-import { Chip, HStack, Text, VStack } from "@roll-and-call/ui";
-import { SearchX } from "lucide-react";
+import { Chip, HStack, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { withQuery } from "@/shared/lib";
-import type { listPosts } from "@/shared/server";
-import { AdminHeader, EmptyState, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
+import { POST_PERIODS, type listPosts } from "@/shared/server";
+import {
+  AdminHeader,
+  EMPTY_IMAGE,
+  EmptyState,
+  Panel,
+  UrlSearchInput,
+  UrlSelect,
+} from "@/shared/ui";
 
 import { PostsTable } from "./posts-table";
 
@@ -40,24 +46,22 @@ export function PostsView({ posts, query }: PostsViewProps) {
             param="rulebook"
             allLabel="룰북 전체"
             options={toOptions(posts.rulebookOptions)}
-            className="w-[160px]"
+            className="w-[126px]"
+          />
+          <UrlSelect
+            param="period"
+            allLabel="세션 일시 · 전체"
+            options={POST_PERIODS.map(({ label, value }) => ({ label, value }))}
+            className="w-[176px]"
           />
           <Chip selected={reportedOnly} render={<Link href={reportedHref} scroll={false} />}>
             처리 안 된 신고 있음
           </Chip>
         </HStack>
-        <Panel
-          title="최신순"
-          right={
-            <Text typography="body4" foreground="hint">
-              처리 안 된 신고 {posts.reportedCount}건 · 조치 {posts.actedCount}건
-            </Text>
-          }
-          className="flex-1"
-        >
+        <Panel title="최신순" className="flex-1">
           {empty ? (
             <EmptyState
-              icon={SearchX}
+              image={EMPTY_IMAGE.search}
               title="검색 결과가 없습니다"
               description="제목과 GM 닉네임으로 검색합니다. 적용한 필터를 하나씩 해제해 보세요."
             />

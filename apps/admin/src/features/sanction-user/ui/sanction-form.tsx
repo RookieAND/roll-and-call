@@ -1,4 +1,5 @@
 import {
+  Badge,
   Field,
   HStack,
   SegmentedControl,
@@ -8,7 +9,7 @@ import {
   VStack,
 } from "@roll-and-call/ui";
 
-import { OngoingChoiceList, type OngoingChoiceRow } from "@/shared/ui";
+import { FormSection, OngoingChoiceList, type OngoingChoiceRow } from "@/shared/ui";
 
 import type { SanctionDraft } from "../model/sanction-draft";
 import { SANCTION_PERIODS, type SanctionPeriod } from "../model/sanction-periods";
@@ -29,11 +30,8 @@ export function SanctionForm({
   onChoiceChange,
 }: SanctionFormProps) {
   return (
-    <VStack gap="150">
-      <VStack gap="075">
-        <Text typography="body4" weight="bold">
-          기간
-        </Text>
+    <VStack gap="250">
+      <FormSection title="1. 제재 기간" description={periodHint}>
         <SegmentedControl.Root
           value={draft.period}
           onValueChange={(period) => onDraftChange({ period: period as SanctionPeriod })}
@@ -59,42 +57,40 @@ export function SanctionForm({
             <Text typography="body3">일</Text>
           </HStack>
         ) : null}
-        <Text typography="body4" foreground="hint">
-          {periodHint}
-        </Text>
-      </VStack>
-      <Field.Root
-        label="사용자에게 보여줄 사유"
-        htmlFor="sanction-user-reason"
-        required
-        description="입력한 사유는 사용자 화면에서 ‘사유:’ 뒤에 그대로 표시됩니다. 명사형으로 짧게 적어 주세요."
+      </FormSection>
+      <FormSection
+        title="2. 제재 사유"
+        description="사용자에게 보이는 사유와 운영진끼리만 보는 메모를 나누어 적습니다."
       >
-        <Textarea
-          id="sanction-user-reason"
-          rows={2}
-          placeholder="예: 반복된 불참"
-          value={draft.userReason}
-          onChange={(event) => onDraftChange({ userReason: event.target.value })}
-        />
-      </Field.Root>
-      <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="sanction-staff-memo">
-        <Textarea
-          id="sanction-staff-memo"
-          rows={2}
-          placeholder="판단한 근거나 확인한 내용을 적어 주세요"
-          value={draft.staffMemo}
-          onChange={(event) => onDraftChange({ staffMemo: event.target.value })}
-        />
-      </Field.Root>
-      <VStack gap="075">
-        <HStack align="baseline" gap="100">
-          <Text typography="body4" weight="bold">
-            진행 중인 활동
-          </Text>
-          <Text typography="body4" foreground="hint">
-            기본값은 그대로 진행입니다. 필요한 항목만 골라서 처리해 주세요
-          </Text>
-        </HStack>
+        <Field.Root
+          label="사용자에게 보여줄 사유"
+          htmlFor="sanction-user-reason"
+          required
+          description="입력한 사유는 사용자 화면에서 ‘사유:’ 뒤에 그대로 표시됩니다. 명사형으로 짧게 적어 주세요."
+        >
+          <Textarea
+            id="sanction-user-reason"
+            rows={2}
+            placeholder="예: 반복된 불참"
+            value={draft.userReason}
+            onChange={(event) => onDraftChange({ userReason: event.target.value })}
+          />
+        </Field.Root>
+        <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="sanction-staff-memo">
+          <Textarea
+            id="sanction-staff-memo"
+            rows={2}
+            placeholder="판단한 근거나 확인한 내용을 적어 주세요"
+            value={draft.staffMemo}
+            onChange={(event) => onDraftChange({ staffMemo: event.target.value })}
+          />
+        </Field.Root>
+      </FormSection>
+      <FormSection
+        title="3. 진행 중인 활동"
+        description="기본값은 그대로 진행입니다. 필요한 항목만 골라서 처리해 주세요."
+        right={<Badge colorPalette="gray">{rows.length}건</Badge>}
+      >
         {rows.length > 0 ? (
           <OngoingChoiceList rows={rows} onChange={onChoiceChange} />
         ) : (
@@ -102,7 +98,7 @@ export function SanctionForm({
             진행 중인 활동이 없습니다
           </Text>
         )}
-      </VStack>
+      </FormSection>
     </VStack>
   );
 }

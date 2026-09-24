@@ -4,6 +4,7 @@ import {
   Button,
   Checkbox,
   Dialog,
+  HStack,
   RadioCard,
   RadioGroup,
   Text,
@@ -12,6 +13,7 @@ import {
   cn,
   toast,
 } from "@roll-and-call/ui";
+import { Search } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import { withObjectParticle, withSubjectParticle, withTopicParticle } from "@/shared/lib";
@@ -80,14 +82,21 @@ export function LinkRequestForm({ request, rulebooks, onDone }: LinkRequestFormP
               <Text typography="body4" weight="bold" id="link-rulebook-label">
                 연결할 룰북
               </Text>
-              <TextInput
-                type="search"
-                value={search}
-                placeholder="룰북 검색"
-                aria-label="룰북 검색"
-                onChange={(event) => setSearch(event.target.value)}
-                className="h-[36px] text-body3"
-              />
+              <HStack align="center" className="relative">
+                <Search
+                  size={14}
+                  aria-hidden
+                  className="pointer-events-none absolute left-125 text-hint"
+                />
+                <TextInput
+                  type="search"
+                  value={search}
+                  placeholder="룰북 검색"
+                  aria-label="룰북 검색"
+                  onChange={(event) => setSearch(event.target.value)}
+                  className="pl-400 text-body3"
+                />
+              </HStack>
               <RadioGroup
                 value={selectedId}
                 onValueChange={(value) => setSelectedId(value as string)}
@@ -116,13 +125,7 @@ export function LinkRequestForm({ request, rulebooks, onDone }: LinkRequestFormP
               </Checkbox.Root>
               <VStack gap="025">
                 <Checkbox.Label>
-                  <Text typography="body3">
-                    요청한 이름 {requestedName} 이 룰북의{" "}
-                    <Text typography="body3" weight="bold" render={<b />}>
-                      다른 이름
-                    </Text>
-                    에 추가
-                  </Text>
+                  요청한 이름 {requestedName} 이 룰북의 <b>다른 이름</b>에 추가
                 </Checkbox.Label>
                 <Text typography="body4" foreground="hint">
                   이미 다른 이름에 있으면 추가하지 않습니다

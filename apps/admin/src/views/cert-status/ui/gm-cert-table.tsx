@@ -1,10 +1,8 @@
-import { Button, HStack, Table, Text, cn } from "@roll-and-call/ui";
-import { Ban } from "lucide-react";
+import { Badge, Button, HStack, Table, Text, cn } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { GuideDmButton } from "@/features/send-cert-guide-dm";
 import type { GmCertRow } from "@/shared/server";
-import { IconBadge } from "@/shared/ui";
 
 import { GmCertStateBadge } from "./gm-cert-state-badge";
 
@@ -29,8 +27,8 @@ export function GmCertTable({ rows }: GmCertTableProps) {
   return (
     <Table.Root className="table-fixed">
       <colgroup>
-        <col className="w-[190px]" />
-        <col className="w-[120px]" />
+        <col className="w-[180px]" />
+        <col className="w-[112px]" />
         <col />
         <col className="w-[160px]" />
         <col className="w-[64px]" />
@@ -40,12 +38,12 @@ export function GmCertTable({ rows }: GmCertTableProps) {
       <Table.Header>
         <Table.Row>
           <Table.Head>GM</Table.Head>
-          <Table.Head align="end">최근 90일 세션</Table.Head>
+          <Table.Head align="center">최근 90일 세션</Table.Head>
           <Table.Head>인증 완료</Table.Head>
           <Table.Head>심사 대기 룰북</Table.Head>
-          <Table.Head align="end">대기</Table.Head>
-          <Table.Head>상태</Table.Head>
-          <Table.Head>
+          <Table.Head align="center">대기</Table.Head>
+          <Table.Head align="center">상태</Table.Head>
+          <Table.Head align="end">
             <span className="sr-only">조치</span>
           </Table.Head>
         </Table.Row>
@@ -58,15 +56,11 @@ export function GmCertTable({ rows }: GmCertTableProps) {
                 <Text typography="body3" weight="bold" truncate>
                   {row.nickname}
                 </Text>
-                {row.sanctioned ? (
-                  <IconBadge icon={Ban} colorPalette="danger">
-                    제재 중
-                  </IconBadge>
-                ) : null}
+                {row.sanctioned ? <Badge colorPalette="danger">제재 중</Badge> : null}
               </HStack>
             </Table.Cell>
-            <Table.Cell align="end" numeric>
-              {row.recentSessionCount}
+            <Table.Cell align="center" numeric>
+              {row.recentSessionCount}회
             </Table.Cell>
             <Table.Cell className="truncate">
               {row.certifiedRulebooks.length ? listRulebooks(row.certifiedRulebooks) : none}
@@ -74,7 +68,7 @@ export function GmCertTable({ rows }: GmCertTableProps) {
             <Table.Cell className="truncate">
               {row.pending ? row.pending.rulebook : none}
             </Table.Cell>
-            <Table.Cell align="end" numeric>
+            <Table.Cell align="center" numeric>
               {row.pending ? (
                 <Text typography="body3" weight={row.pending.waitedDays >= 5 ? "bold" : undefined}>
                   {row.pending.waitedDays}일
@@ -85,7 +79,7 @@ export function GmCertTable({ rows }: GmCertTableProps) {
                 </Text>
               )}
             </Table.Cell>
-            <Table.Cell>
+            <Table.Cell align="center">
               <GmCertStateBadge state={row.state} />
             </Table.Cell>
             <Table.Cell align="end">

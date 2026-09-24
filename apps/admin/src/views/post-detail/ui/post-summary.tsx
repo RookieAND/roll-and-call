@@ -1,6 +1,6 @@
 import { Badge } from "@roll-and-call/ui";
 
-import { formatDateTime, formatMonthDay, formatSessionTime } from "@/shared/lib";
+import { formatDateTime, formatSessionTime } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import { EntityHead } from "@/shared/ui";
 
@@ -15,13 +15,6 @@ interface PostSummaryProps {
 
 // 제목과 세션·모집 조건만. 나머지는 탭으로 나눈다.
 export function PostSummary({ post, userAppHref, logHref }: PostSummaryProps) {
-  const meta = [
-    post.status,
-    `GM ${post.gm.nickname}`,
-    post.createdAt ? `${formatMonthDay(post.createdAt)} 등록` : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
   return (
     <EntityHead
       title={post.title}
@@ -37,7 +30,6 @@ export function PostSummary({ post, userAppHref, logHref }: PostSummaryProps) {
         )
       }
       badges={<Badge colorPalette="primary">{post.rulebook}</Badge>}
-      meta={meta}
       actions={<PostMoreMenu userAppHref={userAppHref} gmId={post.gm.id} logHref={logHref} />}
       facts={[
         {

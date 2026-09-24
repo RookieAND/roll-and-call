@@ -11,22 +11,22 @@ export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps
   return (
     <Table.Root className="table-fixed">
       <colgroup>
-        <col className="w-[220px]" />
+        <col className="w-[200px]" />
         <col className="w-[96px]" />
         <col className="w-[88px]" />
         <col className="w-[80px]" />
         <col className="w-[220px]" />
-        <col className="w-[120px]" />
+        <col className="w-[112px]" />
         <col />
       </colgroup>
       <Table.Header>
         <Table.Row>
           <Table.Head>룰북</Table.Head>
-          <Table.Head align="end">인증된 GM</Table.Head>
-          <Table.Head align="end">심사 대기</Table.Head>
-          <Table.Head align="end">미신청</Table.Head>
+          <Table.Head align="center">인증된 GM</Table.Head>
+          <Table.Head align="center">심사 대기</Table.Head>
+          <Table.Head align="center">미신청</Table.Head>
           <Table.Head>진행률</Table.Head>
-          <Table.Head align="end">{sessionLabel}</Table.Head>
+          <Table.Head align="center">{sessionLabel}</Table.Head>
           <Table.Head />
         </Table.Row>
       </Table.Header>
@@ -41,26 +41,26 @@ export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps
                   {row.rulebook}
                 </Text>
               </Table.Cell>
-              <Table.Cell align="end" numeric>
-                {row.certifiedCount}
+              <Table.Cell align="center" numeric>
+                {row.certifiedCount}명
               </Table.Cell>
-              <Table.Cell align="end" numeric>
+              <Table.Cell align="center" numeric>
                 <Text
                   typography="body3"
                   weight={row.pendingCount ? "bold" : undefined}
                   foreground={row.pendingCount ? "inherit" : "hint"}
                   className={row.pendingCount ? "text-(--rc-color-fg-primary-strong)" : undefined}
                 >
-                  {row.pendingCount}
+                  {row.pendingCount}명
                 </Text>
               </Table.Cell>
-              <Table.Cell align="end" numeric>
+              <Table.Cell align="center" numeric>
                 <Text
                   typography="body3"
                   weight={row.unappliedCount ? "bold" : undefined}
                   foreground={row.unappliedCount ? "danger" : "hint"}
                 >
-                  {row.unappliedCount}
+                  {row.unappliedCount}명
                 </Text>
               </Table.Cell>
               <Table.Cell>
@@ -76,8 +76,8 @@ export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps
                   </Text>
                 </HStack>
               </Table.Cell>
-              <Table.Cell align="end" numeric>
-                {row.sessionCount}
+              <Table.Cell align="center" numeric>
+                {row.sessionCount}회
               </Table.Cell>
               <Table.Cell />
             </Table.Row>

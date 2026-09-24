@@ -1,10 +1,17 @@
 import { Chip, HStack, Text, VStack } from "@roll-and-call/ui";
-import { SearchX } from "lucide-react";
 import Link from "next/link";
 
 import { CERT_TABS, withQuery } from "@/shared/lib";
 import type { listCertQueue } from "@/shared/server";
-import { AdminHeader, EmptyState, Panel, RouteTabs, UrlSearchInput, UrlSelect } from "@/shared/ui";
+import {
+  AdminHeader,
+  EMPTY_IMAGE,
+  EmptyState,
+  Panel,
+  RouteTabs,
+  UrlSearchInput,
+  UrlSelect,
+} from "@/shared/ui";
 
 import { CertQueueTable } from "./cert-queue-table";
 
@@ -25,6 +32,7 @@ export function CertQueueView({ queue, query }: CertQueueViewProps) {
         {queue.total === 0 ? (
           <Panel title="심사 대기열" className="flex-1">
             <EmptyState
+              image={EMPTY_IMAGE.myGames}
               title="심사할 신청이 없어요"
               description="새 인증 신청이 들어오면 디스코드 #운영 채널로 알림이 갑니다."
             />
@@ -55,11 +63,7 @@ export function CertQueueView({ queue, query }: CertQueueViewProps) {
               }
               className="flex-1"
             >
-              {queue.rows.length > 0 ? (
-                <CertQueueTable rows={queue.rows} />
-              ) : (
-                <EmptyState icon={SearchX} title="조건에 맞는 신청이 없어요" />
-              )}
+              <CertQueueTable rows={queue.rows} />
             </Panel>
           </>
         )}

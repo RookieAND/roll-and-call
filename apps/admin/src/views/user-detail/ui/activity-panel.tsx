@@ -2,7 +2,7 @@ import { Badge, Table, Text } from "@roll-and-call/ui";
 
 import { formatSessionTime } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { Panel } from "@/shared/ui";
+import { EMPTY_IMAGE, Panel, TableEmptyRow } from "@/shared/ui";
 
 import { ACTIVITY_ROLE, type ActivityRole } from "../model/activity-role";
 import { ActivityRoleFilter } from "./activity-role-filter";
@@ -21,17 +21,17 @@ export function ActivityPanel({ activities, role }: ActivityPanelProps) {
     <Panel title="활동" right={<ActivityRoleFilter role={role} />}>
       <Table.Root className="table-fixed">
         <colgroup>
-          <col className="w-[150px]" />
+          <col className="w-[148px]" />
           <col className="w-[66px]" />
           <col />
-          <col className="w-[160px]" />
+          <col className="w-[140px]" />
           <col className="w-[100px]" />
-          <col className="w-[104px]" />
+          <col className="w-[96px]" />
         </colgroup>
         <Table.Header>
           <Table.Row>
             <Table.Head>일시</Table.Head>
-            <Table.Head>역할</Table.Head>
+            <Table.Head align="center">역할</Table.Head>
             <Table.Head>세션</Table.Head>
             <Table.Head>룰북</Table.Head>
             <Table.Head>GM</Table.Head>
@@ -39,6 +39,14 @@ export function ActivityPanel({ activities, role }: ActivityPanelProps) {
           </Table.Row>
         </Table.Header>
         <Table.Body>
+          {rows.length === 0 ? (
+            <TableEmptyRow
+              colSpan={6}
+              image={EMPTY_IMAGE.party}
+              title="아직 참여하거나 연 세션이 없습니다"
+              description="세션에 참여하거나 구인을 열면 이곳에 기록됩니다."
+            />
+          ) : null}
           {rows.map((activity) => (
             <Table.Row
               key={activity.sessionId}
@@ -49,7 +57,7 @@ export function ActivityPanel({ activities, role }: ActivityPanelProps) {
                   {formatSessionTime(activity.startsAt)}
                 </Text>
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell align="center">
                 {activity.hosted ? (
                   <Badge colorPalette="primary">GM</Badge>
                 ) : (

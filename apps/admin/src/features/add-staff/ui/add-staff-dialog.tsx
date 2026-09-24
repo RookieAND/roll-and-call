@@ -3,12 +3,12 @@
 import { Button, Dialog, RadioCard, RadioGroup, Text, VStack, toast } from "@roll-and-call/ui";
 import { useState, useTransition } from "react";
 
-import { formatDate } from "@/shared/lib";
 import type { StaffCandidate, StaffRole } from "@/shared/server";
 import { UrlSearchInput } from "@/shared/ui";
 
 import { addStaffMember } from "../api/add-staff-member";
 import { ROLE_OPTIONS } from "../model/role-options";
+import { StaffCandidateRow } from "./staff-candidate-row";
 
 interface AddStaffDialogProps {
   candidates: StaffCandidate[];
@@ -45,27 +45,22 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
           <VStack gap="150">
             <UrlSearchInput placeholder="디스코드 닉네임 검색" className="w-full" />
             {candidates.length > 0 ? (
-              <RadioGroup
-                value={selectedId ?? ""}
-                onValueChange={(value) => setSelectedId(value as string)}
-                aria-label="추가할 멤버"
-                className="flex flex-col gap-075"
+              <VStack
+                render={<ul aria-label="검색 결과" />}
+                className="overflow-hidden rounded-400 border border-gray-200 bg-surface"
               >
                 {candidates.map((candidate) => (
-                  <RadioCard.Root
-                    key={candidate.id}
-                    value={candidate.id}
-                    indicator="check"
-                    className="px-150 py-125"
-                  >
-                    <RadioCard.Title>{candidate.nickname}</RadioCard.Title>
-                    <RadioCard.Description>
-                      @{candidate.discordHandle} · {formatDate(candidate.joinedAt)} 가입
-                    </RadioCard.Description>
-                    <RadioCard.Indicator />
-                  </RadioCard.Root>
+                  <li key={candidate.id}>
+                    <StaffCandidateRow
+                      candidate={candidate}
+                      selected={candidate.id === selectedId}
+                      onToggle={() =>
+                        setSelectedId(candidate.id === selectedId ? null : candidate.id)
+                      }
+                    />
+                  </li>
                 ))}
-              </RadioGroup>
+              </VStack>
             ) : null}
             {emptyResult ? (
               <Text typography="body3" foreground="hint">

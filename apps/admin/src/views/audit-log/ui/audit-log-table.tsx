@@ -1,8 +1,10 @@
-import { Badge, Table, Text } from "@roll-and-call/ui";
+import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
+import { ArrowDown } from "lucide-react";
 import Link from "next/link";
 
 import { formatDateTime } from "@/shared/lib";
 import type { AuditEntry } from "@/shared/server";
+import { EMPTY_IMAGE, TableEmptyRow } from "@/shared/ui";
 
 import { actionTone } from "../model/action-tone";
 import { splitTarget } from "../model/split-target";
@@ -15,16 +17,21 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
   return (
     <Table.Root className="table-fixed">
       <colgroup>
-        <col className="w-[120px]" />
-        <col className="w-[96px]" />
         <col className="w-[128px]" />
-        <col className="w-[120px]" />
+        <col className="w-[96px]" />
+        <col className="w-[124px]" />
+        <col className="w-[110px]" />
         <col className="w-[170px]" />
         <col />
       </colgroup>
       <Table.Header>
         <Table.Row>
-          <Table.Head aria-sort="descending">일시 ↓</Table.Head>
+          <Table.Head aria-sort="descending" className="text-gray-900">
+            <HStack align="center" gap="050" render={<span />}>
+              일시
+              <ArrowDown size={10} strokeWidth={2.4} aria-hidden />
+            </HStack>
+          </Table.Head>
           <Table.Head>운영진</Table.Head>
           <Table.Head>조치</Table.Head>
           <Table.Head>대상</Table.Head>
@@ -33,6 +40,13 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
         </Table.Row>
       </Table.Header>
       <Table.Body>
+        {rows.length === 0 ? (
+          <TableEmptyRow
+            colSpan={6}
+            image={EMPTY_IMAGE.search}
+            title="조건에 맞는 활동 기록이 없어요"
+          />
+        ) : null}
         {rows.map((row) => {
           const target = splitTarget(row.target);
           return (

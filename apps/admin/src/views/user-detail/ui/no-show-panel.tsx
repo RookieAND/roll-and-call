@@ -1,10 +1,10 @@
-import { Button, Table, Text, VStack } from "@roll-and-call/ui";
-import { Check, Flag, X } from "lucide-react";
+import { Badge, Button, Table, Text, VStack } from "@roll-and-call/ui";
+import { Flag } from "lucide-react";
 import Link from "next/link";
 
 import { formatMonthDay, formatSessionTime, withQuery } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { IconBadge, ItemCard, Panel } from "@/shared/ui";
+import { EMPTY_IMAGE, ItemCard, Panel, TableEmptyRow } from "@/shared/ui";
 
 interface NoShowPanelProps {
   nickname: string;
@@ -12,34 +12,34 @@ interface NoShowPanelProps {
 }
 
 export function NoShowPanel({ nickname, noShows }: NoShowPanelProps) {
-  const validCount = noShows.filter((noShow) => !noShow.cancelled).length;
   const latestValid = noShows.find((noShow) => !noShow.cancelled);
   return (
     <VStack gap="150">
-      <Panel
-        title="불참 기록"
-        right={
-          <Text typography="body4" foreground="hint">
-            유효 {validCount}건 · 취소됨 {noShows.length - validCount}건
-          </Text>
-        }
-      >
+      <Panel title="불참 기록">
         <Table.Root className="table-fixed">
           <colgroup>
-            <col className="w-[150px]" />
+            <col className="w-[148px]" />
             <col />
             <col className="w-[100px]" />
-            <col className="w-[96px]" />
+            <col className="w-[88px]" />
           </colgroup>
           <Table.Header>
             <Table.Row>
               <Table.Head>일시</Table.Head>
               <Table.Head>세션</Table.Head>
               <Table.Head>처리한 GM</Table.Head>
-              <Table.Head>상태</Table.Head>
+              <Table.Head align="center">상태</Table.Head>
             </Table.Row>
           </Table.Header>
           <Table.Body>
+            {noShows.length === 0 ? (
+              <TableEmptyRow
+                colSpan={4}
+                image={EMPTY_IMAGE.schedule}
+                title="불참 기록이 없습니다"
+                description="GM이 세션을 마친 뒤 불참을 처리하면 이곳에 기록됩니다."
+              />
+            ) : null}
             {noShows.map((noShow) => (
               <Table.Row key={noShow.id} className={noShow.cancelled ? "opacity-50" : undefined}>
                 <Table.Cell>
@@ -53,15 +53,11 @@ export function NoShowPanel({ nickname, noShows }: NoShowPanelProps) {
                   </Text>
                 </Table.Cell>
                 <Table.Cell>{noShow.gmNickname}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell align="center">
                   {noShow.cancelled ? (
-                    <IconBadge icon={X} colorPalette="gray">
-                      취소됨
-                    </IconBadge>
+                    <Badge colorPalette="gray">취소됨</Badge>
                   ) : (
-                    <IconBadge icon={Check} colorPalette="gray">
-                      유효
-                    </IconBadge>
+                    <Badge colorPalette="danger">유효</Badge>
                   )}
                 </Table.Cell>
               </Table.Row>
@@ -72,7 +68,7 @@ export function NoShowPanel({ nickname, noShows }: NoShowPanelProps) {
       {latestValid ? (
         <ItemCard
           icon={Flag}
-          tone="danger"
+          tone="warning"
           title="최근 불참 기록"
           meta={`${latestValid.sessionTitle} · ${formatMonthDay(latestValid.startsAt)}`}
           right={

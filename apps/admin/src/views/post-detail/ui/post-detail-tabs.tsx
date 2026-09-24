@@ -4,30 +4,35 @@ import { HStack, Tabs, Text } from "@roll-and-call/ui";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { TabCount } from "@/shared/ui";
+
 import { POST_DETAIL_TAB, type PostDetailTab } from "../model/post-detail-tab";
 
 interface PostDetailTabsProps {
   tab: PostDetailTab;
   unresolvedReportCount: number;
-  memberLabel: string;
+  memberCount: number;
+  waitlistCount: number;
   reportPanel: ReactNode | null;
   contentPanel: ReactNode;
   memberPanel: ReactNode;
+  waitlistPanel: ReactNode;
 }
 
 // 탭은 주소의 tab으로 기억한다. 신고가 없는 구인에는 신고 탭을 두지 않는다.
 export function PostDetailTabs({
   tab,
   unresolvedReportCount,
-  memberLabel,
+  memberCount,
+  waitlistCount,
   reportPanel,
   contentPanel,
   memberPanel,
+  waitlistPanel,
 }: PostDetailTabsProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const reportCountForeground = unresolvedReportCount > 0 ? "danger" : "hint";
   return (
     <Tabs.Root
       value={tab}
@@ -42,17 +47,21 @@ export function PostDetailTabs({
           {reportPanel ? (
             <Tabs.Trigger value={POST_DETAIL_TAB.reports} className="gap-075">
               신고
-              <Text typography="body4" weight="bold" foreground={reportCountForeground} numeric>
-                {unresolvedReportCount}
-              </Text>
+              <TabCount
+                count={unresolvedReportCount}
+                selected={tab === POST_DETAIL_TAB.reports}
+                danger={unresolvedReportCount > 0}
+              />
             </Tabs.Trigger>
           ) : null}
           <Tabs.Trigger value={POST_DETAIL_TAB.content}>구인 내용</Tabs.Trigger>
           <Tabs.Trigger value={POST_DETAIL_TAB.members} className="gap-075">
             참여자
-            <Text typography="body4" weight="bold" foreground="hint" numeric>
-              {memberLabel}
-            </Text>
+            <TabCount count={memberCount} selected={tab === POST_DETAIL_TAB.members} />
+          </Tabs.Trigger>
+          <Tabs.Trigger value={POST_DETAIL_TAB.waitlist} className="gap-075">
+            대기자
+            <TabCount count={waitlistCount} selected={tab === POST_DETAIL_TAB.waitlist} />
           </Tabs.Trigger>
           <Tabs.Indicator />
         </Tabs.List>
@@ -72,6 +81,9 @@ export function PostDetailTabs({
       </Tabs.Panel>
       <Tabs.Panel value={POST_DETAIL_TAB.members} className="pt-0">
         {memberPanel}
+      </Tabs.Panel>
+      <Tabs.Panel value={POST_DETAIL_TAB.waitlist} className="pt-0">
+        {waitlistPanel}
       </Tabs.Panel>
     </Tabs.Root>
   );

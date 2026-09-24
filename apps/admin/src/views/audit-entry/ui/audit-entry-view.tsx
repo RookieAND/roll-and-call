@@ -7,6 +7,7 @@ import type { AuditEntryDetail } from "@/shared/server";
 import { AdminHeader, Facts, ItemCard, Panel } from "@/shared/ui";
 
 import { USER_VISIBLE_REASON_ACTIONS } from "../model/user-visible-reason-actions";
+import { EntryMoreMenu } from "./entry-more-menu";
 import { StateBox } from "./state-box";
 
 interface AuditEntryViewProps {
@@ -69,17 +70,9 @@ export function AuditEntryView({ entry }: AuditEntryViewProps) {
         <Panel
           title="조치 정보"
           right={
-            <>
-              {entry.targetUserId ? (
-                <Button
-                  variant="outline"
-                  colorPalette="gray"
-                  size="sm"
-                  render={<Link href={`/users/${entry.targetUserId}`} />}
-                >
-                  유저 상세 열기
-                </Button>
-              ) : null}
+            entry.targetUserId ? (
+              <EntryMoreMenu targetUserId={entry.targetUserId} sameTargetHref={sameTargetHref} />
+            ) : (
               <Button
                 variant="outline"
                 colorPalette="gray"
@@ -88,7 +81,7 @@ export function AuditEntryView({ entry }: AuditEntryViewProps) {
               >
                 같은 대상의 조치 보기
               </Button>
-            </>
+            )
           }
           bodyClassName="p-150"
         >

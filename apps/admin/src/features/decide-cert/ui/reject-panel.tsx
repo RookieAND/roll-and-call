@@ -1,21 +1,25 @@
-import { Chip, Field, HStack, Text, Textarea, VStack } from "@roll-and-call/ui";
+import { Field, Text, Textarea, VStack } from "@roll-and-call/ui";
 
-import { REJECT_REASONS } from "../model/reject-reasons";
+import { ReasonRadio } from "./reason-radio";
 
 interface RejectPanelProps {
-  reasonTag: string;
+  reasonChoice: string;
+  otherReason: string;
   userReason: string;
   staffMemo: string;
-  onReasonTagChange: (reasonTag: string) => void;
+  onReasonChoiceChange: (reasonChoice: string) => void;
+  onOtherReasonChange: (otherReason: string) => void;
   onUserReasonChange: (userReason: string) => void;
   onStaffMemoChange: (staffMemo: string) => void;
 }
 
 export function RejectPanel({
-  reasonTag,
+  reasonChoice,
+  otherReason,
   userReason,
   staffMemo,
-  onReasonTagChange,
+  onReasonChoiceChange,
+  onOtherReasonChange,
   onUserReasonChange,
   onStaffMemoChange,
 }: RejectPanelProps) {
@@ -33,28 +37,18 @@ export function RejectPanel({
         </Text>
       </VStack>
       <VStack gap="100" className="p-150">
-        <Text typography="body4" weight="bold" id="reject-reason-label">
-          사유 선택
-        </Text>
-        <HStack
-          gap="075"
-          wrap
-          role="radiogroup"
-          aria-labelledby="reject-reason-label"
-          className="mb-025"
-        >
-          {REJECT_REASONS.map((reason) => (
-            <Chip
-              key={reason}
-              role="radio"
-              aria-checked={reason === reasonTag}
-              selected={reason === reasonTag}
-              onClick={() => onReasonTagChange(reason)}
-            >
-              {reason}
-            </Chip>
-          ))}
-        </HStack>
+        <VStack gap="075" className="mb-050">
+          <Text typography="body4" weight="bold" id="reject-reason-label">
+            사유 선택
+          </Text>
+          <ReasonRadio
+            value={reasonChoice}
+            otherReason={otherReason}
+            onValueChange={onReasonChoiceChange}
+            onOtherReasonChange={onOtherReasonChange}
+            labelledBy="reject-reason-label"
+          />
+        </VStack>
         <Field.Root
           label="사용자에게 보이는 사유"
           htmlFor="reject-user-reason"

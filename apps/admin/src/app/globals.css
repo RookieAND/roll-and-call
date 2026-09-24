@@ -19,3 +19,23 @@ html {
 body {
   word-break: keep-all;
 }
+
+/* 어드민 모달은 제목(heading2) > 묶음 제목(heading3) > 선택지·필드 라벨 순으로 작아진다.
+   .text-heading3는 DS 기본값일 때만 붙어 있어서, 크기를 따로 준 제목(사진 확대 보기)은 건드리지 않는다. */
+[data-slot="dialog-title"].text-heading3 {
+  font-size: var(--text-heading2);
+  line-height: var(--text-heading2--line-height);
+}
+
+/* 체크박스·라디오 라벨은 묶음 제목보다 가볍게 둔다. 강조할 부분만 <b>로 굵힌다. */
+[data-slot="checkbox-label"],
+[data-slot="radio-label"] {
+  font-size: var(--text-body2);
+  line-height: var(--text-body2--line-height);
+  font-weight: 500;
+}
+
+[data-slot="checkbox-label"] b,
+[data-slot="radio-label"] b {
+  font-weight: 700;
+}

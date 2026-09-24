@@ -1,9 +1,9 @@
 import { Badge, HStack, Table, Text, cn } from "@roll-and-call/ui";
-import { CircleCheck, Users } from "lucide-react";
+import { ChevronRight, Users } from "lucide-react";
 import Link from "next/link";
 
 import type { RulebookRow } from "@/shared/server";
-import { IconBadge } from "@/shared/ui";
+import { EMPTY_IMAGE, TableEmptyRow } from "@/shared/ui";
 
 interface RulebookTableProps {
   rows: RulebookRow[];
@@ -18,23 +18,24 @@ export function RulebookTable({ rows }: RulebookTableProps) {
         <col />
         <col className="w-[120px]" />
         <col className="w-[82px]" />
-        <col className="w-[78px]" />
-        <col className="w-[52px]" />
+        <col className="w-[84px]" />
+        <col className="w-[44px]" />
       </colgroup>
       <Table.Header>
         <Table.Row>
           <Table.Head>룰북</Table.Head>
-          <Table.Head>판본</Table.Head>
+          <Table.Head align="center">판본</Table.Head>
           <Table.Head>다른 이름</Table.Head>
-          <Table.Head>인증</Table.Head>
-          <Table.Head>상태</Table.Head>
-          <Table.Head align="end">인증 GM</Table.Head>
-          <Table.Head>
-            <span className="sr-only">수정</span>
-          </Table.Head>
+          <Table.Head align="center">인증</Table.Head>
+          <Table.Head align="center">상태</Table.Head>
+          <Table.Head align="center">인증 GM</Table.Head>
+          <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
+        {rows.length === 0 ? (
+          <TableEmptyRow colSpan={7} image={EMPTY_IMAGE.search} title="조건에 맞는 룰북이 없어요" />
+        ) : null}
         {rows.map((row) => (
           <Table.Row
             key={row.id}
@@ -52,40 +53,34 @@ export function RulebookTable({ rows }: RulebookTableProps) {
                 {row.name}
               </Text>
             </Table.Cell>
-            <Table.Cell>{row.edition || "—"}</Table.Cell>
+            <Table.Cell align="center">{row.edition || "—"}</Table.Cell>
             <Table.Cell>
               <Text typography="body3" foreground="hint" truncate>
                 {row.aliases.join(", ") || "—"}
               </Text>
             </Table.Cell>
-            <Table.Cell>
+            <Table.Cell align="center">
               {row.certRequired ? (
-                <Text typography="body3" foreground="muted">
-                  인증 필요
-                </Text>
+                <Badge colorPalette="danger">인증 필요</Badge>
               ) : (
-                <IconBadge icon={CircleCheck} colorPalette="primary">
-                  인증 불필요
-                </IconBadge>
+                <Badge colorPalette="gray">인증 불필요</Badge>
               )}
             </Table.Cell>
-            <Table.Cell>
+            <Table.Cell align="center">
               {row.hidden ? (
                 <Badge colorPalette="gray">숨김</Badge>
               ) : (
                 <Badge colorPalette="primary">사용 중</Badge>
               )}
             </Table.Cell>
-            <Table.Cell align="end" numeric>
-              <HStack align="center" justify="end" gap="050">
+            <Table.Cell align="center" numeric>
+              <HStack align="center" justify="center" gap="050">
                 <Users size={14} aria-hidden className="text-hint" />
-                {row.certifiedCount}
+                {row.certifiedCount}명
               </HStack>
             </Table.Cell>
             <Table.Cell align="end">
-              <Text typography="body4" foreground="hint">
-                수정
-              </Text>
+              <ChevronRight size={16} aria-hidden className="inline text-hint" />
             </Table.Cell>
           </Table.Row>
         ))}

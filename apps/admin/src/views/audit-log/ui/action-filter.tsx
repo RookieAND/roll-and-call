@@ -38,7 +38,7 @@ export function ActionFilter({ groups }: ActionFilterProps) {
           <Button
             variant="outline"
             colorPalette="gray"
-            className="h-[36px] w-[140px] justify-between font-normal"
+            className="h-[44px] w-[140px] justify-between font-normal"
           />
         }
       >
@@ -61,11 +61,7 @@ export function ActionFilter({ groups }: ActionFilterProps) {
                       <Checkbox.Root name={action} value={action}>
                         <Checkbox.Indicator />
                       </Checkbox.Root>
-                      <Checkbox.Label>
-                        <Text typography="body3" weight="bold">
-                          {action}
-                        </Text>
-                      </Checkbox.Label>
+                      <Checkbox.Label>{action}</Checkbox.Label>
                     </Checkbox.Field>
                   ))}
                 </Grid>

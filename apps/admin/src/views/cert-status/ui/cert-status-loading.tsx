@@ -56,7 +56,7 @@ export function CertStatusLoading() {
             items={["룰북별 인증 현황", "GM별 인증 현황"]}
             right={
               <>
-                <div className="w-[170px] [&_[data-slot=select-trigger]]:h-[34px]">
+                <div className="w-[162px] [&_[data-slot=select-trigger]]:h-[32px] [&_[data-slot=select-trigger]]:min-h-[32px]">
                   <SkeletonSelect label="최근 90일 활동 GM" />
                 </div>
                 <Button variant="outline" colorPalette="gray" size="sm" disabled>
@@ -68,12 +68,12 @@ export function CertStatusLoading() {
           <SkeletonTable
             rows={6}
             columns={[
-              { label: "룰북", kind: "text", width: "w-[220px]" },
-              { label: "인증된 GM", kind: "number", width: "w-[96px]", align: "end" },
-              { label: "심사 대기", kind: "number", width: "w-[88px]", align: "end" },
-              { label: "미신청", kind: "number", width: "w-[80px]", align: "end" },
+              { label: "룰북", kind: "text", width: "w-[200px]" },
+              { label: "인증된 GM", kind: "number", width: "w-[96px]", align: "center" },
+              { label: "심사 대기", kind: "number", width: "w-[88px]", align: "center" },
+              { label: "미신청", kind: "number", width: "w-[80px]", align: "center" },
               { label: "진행률", kind: "bar", width: "w-[220px]" },
-              { label: "최근 90일 세션", kind: "number", width: "w-[120px]", align: "end" },
+              { label: "최근 90일 세션", kind: "number", width: "w-[112px]", align: "center" },
               { label: "", kind: "empty" },
             ]}
           />
