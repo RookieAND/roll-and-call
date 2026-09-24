@@ -14,7 +14,7 @@ export function RulebookTable({ rows }: RulebookTableProps) {
     <Table.Root className="table-fixed">
       <colgroup>
         <col className="w-[200px]" />
-        <col className="w-[78px]" />
+        <col className="w-[234px]" />
         <col />
         <col className="w-[120px]" />
         <col className="w-[82px]" />
