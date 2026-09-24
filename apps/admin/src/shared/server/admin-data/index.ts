@@ -73,11 +73,17 @@ export {
 export { addRulebook, type AddRulebookResult } from "./add-rulebook";
 export { approveRulebookRequest } from "./approve-rulebook-request";
 export { getRulebookDetail, type CertifiedGm, type RulebookDetail } from "./get-rulebook-detail";
+export { grantCertification, type GrantResult } from "./grant-certification";
 export { hideRulebook } from "./hide-rulebook";
 export { linkRulebookRequest, type RulebookLinkInput } from "./link-rulebook-request";
 export { listRulebookRequests, type RulebookRequestRow } from "./list-rulebook-requests";
 export { listRulebooks, type RulebookRow } from "./list-rulebooks";
 export { rejectRulebookRequest } from "./reject-rulebook-request";
+export {
+  searchGrantCandidates,
+  type GrantCandidate,
+  type GrantCandidateState,
+} from "./search-grant-candidates";
 export { type RulebookActionResult } from "./rulebook-action-result";
 export { type RulebookFields } from "./rulebook-fields";
 export { updateRulebook } from "./update-rulebook";
