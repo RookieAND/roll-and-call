@@ -47,7 +47,7 @@ export function AuditLogLoading() {
         <Panel title="최신순" className="flex-1">
           <SkeletonTable
             columns={[
-              { label: "일시", kind: "date", width: "w-[128px]", sorted: true },
+              { label: "일시", kind: "date", width: "w-[192px]", sorted: true },
               { label: "운영진", kind: "text", width: "w-[96px]" },
               { label: "조치", kind: "badge", width: "w-[124px]" },
               { label: "대상", kind: "text", width: "w-[110px]" },

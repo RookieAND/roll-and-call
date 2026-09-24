@@ -10,7 +10,7 @@ interface EntityHeadProps {
   meta?: ReactNode;
   description?: ReactNode;
   facts?: Fact[];
-  columns?: 3 | 4;
+  columns?: 3 | 4 | 5;
   actions?: ReactNode;
 }
 

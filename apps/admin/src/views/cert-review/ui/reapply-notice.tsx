@@ -1,7 +1,7 @@
 import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Check, RotateCcw, X } from "lucide-react";
 
-import { formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { PreviousRejection } from "@/shared/server";
 
 const SHOT_LABELS = { front: "앞면", back: "뒷면", side: "옆면" } as const;
@@ -28,7 +28,7 @@ export function ReapplyNotice({ latest, attempt, replacedShots }: ReapplyNoticeP
           {attempt}번째 신청
         </Text>
         <Text typography="body4" foreground="muted">
-          {formatMonthDay(latest.rejectedAt)} 반려
+          {formatDate(latest.rejectedAt)} 반려
         </Text>
         <HStack gap="075" className="ml-auto">
           {latest.tags.map((tag) => (

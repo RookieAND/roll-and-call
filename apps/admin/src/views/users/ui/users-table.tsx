@@ -2,7 +2,7 @@ import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
 import { Ban, CircleCheck } from "lucide-react";
 import Link from "next/link";
 
-import { formatIsoDate, formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { UserRow } from "@/shared/server";
 import { EMPTY_IMAGE, IconBadge, TableEmptyRow } from "@/shared/ui";
 
@@ -17,13 +17,13 @@ export function UsersTable({ rows }: UsersTableProps) {
     <Table.Root className="table-fixed">
       <colgroup>
         <col className="w-[180px]" />
-        <col className="w-[104px]" />
+        <col className="w-[136px]" />
         <col className="w-[74px]" />
         <col className="w-[82px]" />
         <col className="w-[120px]" />
         <col className="w-[82px]" />
         <col className="w-[96px]" />
-        <col className="w-[92px]" />
+        <col className="w-[136px]" />
         <col />
       </colgroup>
       <Table.Header>
@@ -63,7 +63,7 @@ export function UsersTable({ rows }: UsersTableProps) {
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
-                  {formatIsoDate(row.joinedAt)}
+                  {formatDate(row.joinedAt)}
                 </Text>
               </Table.Cell>
               <Table.Cell align="end" numeric>
@@ -98,7 +98,7 @@ export function UsersTable({ rows }: UsersTableProps) {
               <Table.Cell>
                 {row.sanctioned ? (
                   <Text typography="body3" foreground="danger">
-                    {row.sanctionUntil ? formatMonthDay(row.sanctionUntil) : "무기한"}
+                    {row.sanctionUntil ? formatDate(row.sanctionUntil) : "무기한"}
                   </Text>
                 ) : (
                   <Text typography="body3" foreground="hint">

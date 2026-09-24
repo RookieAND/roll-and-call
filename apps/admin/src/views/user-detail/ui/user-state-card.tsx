@@ -1,7 +1,7 @@
 import { Text } from "@roll-and-call/ui";
 import { Ban, CircleCheck } from "lucide-react";
 
-import { formatDate, formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import { EntityHead, IconBadge, UserInitial } from "@/shared/ui";
 
@@ -13,9 +13,7 @@ interface UserStateCardProps {
 
 export function UserStateCard({ user }: UserStateCardProps) {
   const { sanction } = user;
-  const sanctionPeriod = sanction?.until
-    ? `${formatMonthDay(sanction.until)}까지`
-    : "해제될 때까지";
+  const sanctionPeriod = sanction?.until ? `${formatDate(sanction.until)}까지` : "해제될 때까지";
   return (
     <div className="p-200 pb-150">
       <EntityHead

@@ -21,9 +21,9 @@ describe("formatRelativeTime", () => {
 });
 
 describe("formatDateTime", () => {
-  it("한국 시간으로 월·일·시각을 쓴다", async () => {
+  it("한국 시간으로 연·월·일·시각을 쓴다", async () => {
     const { formatDateTime } = await import("./format-date-time");
-    expect(formatDateTime(new Date("2026-09-22T05:36:00Z"))).toBe("9월 22일 14:36");
+    expect(formatDateTime(new Date("2026-09-22T05:36:00Z"))).toBe("2026년 9월 22일 14:36");
   });
 });
 
@@ -31,10 +31,10 @@ describe("formatDayRange", () => {
   it("같은 달이면 뒤쪽 달을 줄인다", async () => {
     const { formatDayRange } = await import("./format-day-range");
     expect(formatDayRange(new Date("2026-09-16T03:00:00Z"), new Date("2026-09-22T03:00:00Z"))).toBe(
-      "9월 16일~22일",
+      "2026년 9월 16일~22일",
     );
     expect(formatDayRange(new Date("2026-08-30T03:00:00Z"), new Date("2026-09-05T03:00:00Z"))).toBe(
-      "8월 30일~9월 5일",
+      "2026년 8월 30일~9월 5일",
     );
   });
 });
@@ -42,7 +42,7 @@ describe("formatDayRange", () => {
 describe("formatSessionTime", () => {
   it("요일을 괄호로 붙인다", async () => {
     const { formatSessionTime } = await import("./format-session-time");
-    expect(formatSessionTime(new Date("2026-09-20T11:00:00Z"))).toBe("9월 20일 (일) 20:00");
+    expect(formatSessionTime(new Date("2026-09-20T11:00:00Z"))).toBe("2026년 9월 20일 (일) 20:00");
   });
 });
 

@@ -30,7 +30,6 @@ export async function getPostDetail(id: string) {
     auditTarget: postAuditTarget(db, session),
     createdAt: session.createdAt,
     startsAt: session.startsAt,
-    expectedHours: session.expectedHours,
     memberCount: session.memberIds.length,
     waitingCount: waitingIds.length,
     capacity: session.capacity,

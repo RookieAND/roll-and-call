@@ -21,7 +21,7 @@ export function ActivityPanel({ activities, role }: ActivityPanelProps) {
     <Panel title="활동" right={<ActivityRoleFilter role={role} />}>
       <Table.Root className="table-fixed">
         <colgroup>
-          <col className="w-[148px]" />
+          <col className="w-[192px]" />
           <col className="w-[66px]" />
           <col />
           <col className="w-[140px]" />

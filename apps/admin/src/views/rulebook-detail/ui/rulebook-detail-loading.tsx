@@ -41,7 +41,7 @@ export function RulebookDetailLoading() {
               rows={3}
               columns={[
                 { label: "닉네임", kind: "text", width: "w-[180px]" },
-                { label: "인증일", kind: "date", width: "w-[104px]" },
+                { label: "인증일", kind: "date", width: "w-[136px]" },
                 { label: "최근 90일 세션", kind: "number", width: "w-[112px]", align: "center" },
                 { label: "", kind: "empty" },
                 { label: "", kind: "empty", width: "w-[44px]" },

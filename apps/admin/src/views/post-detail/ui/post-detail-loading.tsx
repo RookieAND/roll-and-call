@@ -21,7 +21,8 @@ export function PostDetailLoading() {
         <LoadingRegion label="구인 정보를 불러오는 중입니다" className="min-w-0 gap-150 p-200">
           <SkeletonEntity
             lead="thumbnail"
-            facts={["세션 일시", "참여 인원", "모집 방식", "모집 마감"]}
+            facts={["세션 일시", "참여 인원", "대기 인원", "모집 방식", "모집 마감"]}
+            columns={5}
             actions={<Skeleton width={32} height={32} rounded={400} />}
           />
           <Panel className="flex-1">

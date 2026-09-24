@@ -129,7 +129,6 @@ export const loadSnapshot = cache(async () => {
       filledAt: confirmedJoins[game.maxPlayers - 1],
       recruitMethod: game.recruitMethod === "lottery" ? "추첨" : "선착순",
       recruitDeadline: game.endDate,
-      expectedHours: game.playMinutes ? game.playMinutes / 60 : undefined,
       synopsis: game.synopsis ? plainText(game.synopsis) : undefined,
       notices: game.notice ? game.notice.split("\n").filter((line) => line.trim()) : [],
       imageUrls: game.images,

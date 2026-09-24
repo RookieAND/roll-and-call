@@ -1,6 +1,6 @@
 import { Grid, Text, VStack } from "@roll-and-call/ui";
 
-import { formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 
 interface HideImpactProps {
   memberCount: number;
@@ -13,7 +13,7 @@ export function HideImpact({ memberCount, waitingCount, startsAt }: HideImpactPr
   const items = [
     { label: "목록 · 검색", value: "빠짐", sub: "새로 보는 사람에게만" },
     { label: `참여자 ${memberCount}명 · 대기 ${waitingCount}명`, value: "그대로 접근" },
-    { label: `${formatMonthDay(startsAt)} 세션`, value: "그대로 진행" },
+    { label: `${formatDate(startsAt)} 세션`, value: "그대로 진행" },
   ];
   return (
     <Grid

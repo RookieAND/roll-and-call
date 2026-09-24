@@ -1,6 +1,6 @@
 import { Ban, BookOpen, Calendar, Flag, User } from "lucide-react";
 
-import { formatMonthDay, withSubjectParticle } from "@/shared/lib";
+import { formatDate, withSubjectParticle } from "@/shared/lib";
 import type { UserSearchResult } from "@/shared/server";
 import { NAV_ITEMS } from "@/shared/ui";
 
@@ -38,7 +38,7 @@ export function buildSearchGroups(query: string, users: UserSearchResult[]): Pal
           icon: Flag,
           tone: "primary" as const,
           title: "불참 취소",
-          meta: `${noShow.sessionTitle} · ${formatMonthDay(noShow.startsAt)}`,
+          meta: `${noShow.sessionTitle} · ${formatDate(noShow.startsAt)}`,
           href: `/noshow?q=${encodeURIComponent(first.nickname)}&record=${noShow.id}`,
         })),
         ...first.certApplications.map((application) => ({
@@ -53,7 +53,7 @@ export function buildSearchGroups(query: string, users: UserSearchResult[]): Pal
           icon: Ban,
           tone: "danger" as const,
           title: "제재 패널 열기",
-          href: `/users/${first.id}?action=sanction`,
+          href: `/users/${first.id}/sanction`,
         },
       ],
     },
@@ -65,7 +65,7 @@ export function buildSearchGroups(query: string, users: UserSearchResult[]): Pal
         id: `session-${session.id}`,
         icon: Calendar,
         title: session.title,
-        meta: `${session.rulebook} · ${formatMonthDay(session.startsAt)} · ${session.hosted ? "본인이 GM" : `GM ${session.gmNickname}`}`,
+        meta: `${session.rulebook} · ${formatDate(session.startsAt)} · ${session.hosted ? "본인이 GM" : `GM ${session.gmNickname}`}`,
         href: `/posts/${session.id}`,
       })),
     });

@@ -17,7 +17,7 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
   return (
     <Table.Root className="table-fixed">
       <colgroup>
-        <col className="w-[128px]" />
+        <col className="w-[192px]" />
         <col className="w-[96px]" />
         <col className="w-[124px]" />
         <col className="w-[110px]" />

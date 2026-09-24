@@ -36,7 +36,9 @@ export default async function AdminLayout({ children }: LayoutProps<"/">) {
             posts: countOf("report"),
           }}
         />
-        <VStack className="min-h-dvh min-w-0 flex-1 bg-gray-50">{children}</VStack>
+        <VStack data-slot="admin-main" className="min-h-dvh min-w-0 flex-1 bg-gray-50">
+          {children}
+        </VStack>
         <Suspense>
           <QuickSearchPalette pendingItemsPromise={pendingItemsPromise} />
         </Suspense>

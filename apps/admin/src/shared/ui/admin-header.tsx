@@ -17,8 +17,8 @@ export function AdminHeader({ title, sub, back, actions }: AdminHeaderProps) {
     <HStack
       align="center"
       gap="125"
-      render={<header />}
-      className="sticky top-0 z-(--rc-z-sticky) h-(--rc-size-appbar) shrink-0 border-b border-gray-200 bg-surface px-225 whitespace-nowrap"
+      render={<header data-full-bleed />}
+      className="sticky top-0 z-(--rc-z-sticky) h-(--rc-size-appbar) shrink-0 border-b border-gray-200 bg-surface px-page whitespace-nowrap"
     >
       {back ? (
         <Button

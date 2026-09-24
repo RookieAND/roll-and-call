@@ -2,7 +2,7 @@ import { Badge, Button, Table, Text, VStack } from "@roll-and-call/ui";
 import { Flag } from "lucide-react";
 import Link from "next/link";
 
-import { formatMonthDay, formatSessionTime, withQuery } from "@/shared/lib";
+import { formatDate, formatSessionTime, withQuery } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import { EMPTY_IMAGE, ItemCard, Panel, TableEmptyRow } from "@/shared/ui";
 
@@ -18,7 +18,7 @@ export function NoShowPanel({ nickname, noShows }: NoShowPanelProps) {
       <Panel title="불참 기록">
         <Table.Root className="table-fixed">
           <colgroup>
-            <col className="w-[148px]" />
+            <col className="w-[192px]" />
             <col />
             <col className="w-[100px]" />
             <col className="w-[88px]" />
@@ -70,7 +70,7 @@ export function NoShowPanel({ nickname, noShows }: NoShowPanelProps) {
           icon={Flag}
           tone="warning"
           title="최근 불참 기록"
-          meta={`${latestValid.sessionTitle} · ${formatMonthDay(latestValid.startsAt)}`}
+          meta={`${latestValid.sessionTitle} · ${formatDate(latestValid.startsAt)}`}
           right={
             <Button
               variant="outline"

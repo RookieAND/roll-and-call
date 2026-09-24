@@ -1,1 +1,1 @@
-export { SanctionDialog } from "./ui/sanction-dialog";
+export { SanctionUserForm } from "./ui/sanction-user-form";

@@ -2,7 +2,7 @@ import { Badge, Button, Callout, Table, Text, VStack } from "@roll-and-call/ui";
 import { Ban } from "lucide-react";
 import Link from "next/link";
 
-import { formatDate, formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import { EMPTY_IMAGE, Panel, TableEmptyRow } from "@/shared/ui";
 
@@ -32,7 +32,7 @@ export function CertPanel({ user }: CertPanelProps) {
           <colgroup>
             <col className="w-[200px]" />
             <col className="w-[96px]" />
-            <col className="w-[150px]" />
+            <col className="w-[164px]" />
             <col className="w-[120px]" />
             <col />
             <col className="w-[96px]" />
@@ -97,7 +97,7 @@ export function CertPanel({ user }: CertPanelProps) {
                 </Table.Cell>
                 <Table.Cell>
                   <Text typography="body3" foreground="hint">
-                    {formatMonthDay(application.appliedAt)} 신청
+                    {formatDate(application.appliedAt)} 신청
                   </Text>
                 </Table.Cell>
                 <Table.Cell>
@@ -131,7 +131,7 @@ export function CertPanel({ user }: CertPanelProps) {
                 <Table.Cell>
                   <Text typography="body3" foreground="hint">
                     {application.processedAt
-                      ? `${formatMonthDay(application.processedAt)} 반려`
+                      ? `${formatDate(application.processedAt)} 반려`
                       : "반려"}
                   </Text>
                 </Table.Cell>

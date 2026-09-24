@@ -19,7 +19,7 @@ export function PostsTable({ rows }: PostsTableProps) {
         <col />
         <col className="w-[104px]" />
         <col className="w-[140px]" />
-        <col className="w-[152px]" />
+        <col className="w-[192px]" />
         <col className="w-[76px]" />
         <col className="w-[112px]" />
         <col className="w-[118px]" />

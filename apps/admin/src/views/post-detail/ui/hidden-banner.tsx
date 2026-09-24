@@ -2,7 +2,7 @@ import { Button, HStack, Text } from "@roll-and-call/ui";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 
-import { formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import { IconBadge } from "@/shared/ui";
 
@@ -26,7 +26,7 @@ export function HiddenBanner({ hidden, logHref }: HiddenBannerProps) {
         {hidden.reason}
       </Text>
       <Text typography="body4" foreground="hint" className="whitespace-nowrap">
-        {formatMonthDay(hidden.at)} {hidden.by}
+        {formatDate(hidden.at)} {hidden.by}
       </Text>
       <Button variant="outline" colorPalette="gray" size="sm" render={<Link href={logHref} />}>
         활동 기록에서 보기

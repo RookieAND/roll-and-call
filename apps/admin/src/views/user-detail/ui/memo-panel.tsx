@@ -2,10 +2,10 @@ import { Badge, Button, VStack } from "@roll-and-call/ui";
 import { Quote } from "lucide-react";
 import Link from "next/link";
 
+import { formatDate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import { EMPTY_IMAGE, EmptyState, ItemCard, Panel } from "@/shared/ui";
 
-import { formatMemoDate } from "../model/format-memo-date";
 import { USER_ACTION } from "../model/user-action";
 import { userActionHref } from "../model/user-action-href";
 import { USER_DETAIL_TAB } from "../model/user-detail-tab";
@@ -43,7 +43,7 @@ export function MemoPanel({ userId, memos }: MemoPanelProps) {
               key={memo.id}
               icon={Quote}
               title={memo.author}
-              meta={formatMemoDate(memo.at)}
+              meta={formatDate(memo.at)}
               tags={<Badge colorPalette="gray">사용자에게 안 보이는 메모</Badge>}
             >
               {memo.body}

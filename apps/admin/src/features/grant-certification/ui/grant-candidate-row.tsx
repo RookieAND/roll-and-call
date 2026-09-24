@@ -1,6 +1,6 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { formatDate, formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { GrantCandidate } from "@/shared/server";
 import { PICK_STATE, PickButton } from "@/shared/ui";
 
@@ -15,7 +15,7 @@ const metaOf = (candidate: GrantCandidate) => {
     return `${formatDate(candidate.approvedAt)} 인증`;
   }
   if (candidate.state === "pending" && candidate.appliedAt) {
-    return `${formatMonthDay(candidate.appliedAt)}에 신청한 심사가 대기 중입니다`;
+    return `${formatDate(candidate.appliedAt)}에 신청한 심사가 대기 중입니다`;
   }
   const sessions = `최근 90일 세션 ${candidate.recentSessionCount}회`;
   return candidate.hasApplied ? sessions : `신청 기록이 없습니다 · ${sessions}`;

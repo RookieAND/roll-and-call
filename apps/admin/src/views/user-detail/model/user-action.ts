@@ -1,5 +1,4 @@
 export const USER_ACTION = {
-  sanction: "sanction",
   release: "release",
   memo: "memo",
 } as const;

@@ -1,6 +1,6 @@
 import { HStack, VStack } from "@roll-and-call/ui";
 
-import type { StaffRole, UserDetail } from "@/shared/server";
+import type { UserDetail } from "@/shared/server";
 import { AdminHeader } from "@/shared/ui";
 
 import type { ActivityRole } from "../model/activity-role";
@@ -18,10 +18,9 @@ interface UserDetailViewProps {
   user: UserDetail;
   tab: UserDetailTab;
   role: ActivityRole;
-  viewer: { nickname: string; role: StaffRole };
 }
 
-export function UserDetailView({ user, tab, role, viewer }: UserDetailViewProps) {
+export function UserDetailView({ user, tab, role }: UserDetailViewProps) {
   return (
     <>
       <AdminHeader
@@ -42,7 +41,7 @@ export function UserDetailView({ user, tab, role, viewer }: UserDetailViewProps)
         </VStack>
         <UserActionsAside user={user} tab={tab} />
       </HStack>
-      <UserActionDialogs user={user} viewer={viewer} />
+      <UserActionDialogs user={user} />
     </>
   );
 }

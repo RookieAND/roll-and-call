@@ -31,17 +31,11 @@ export function PostSummary({ post, userAppHref, logHref }: PostSummaryProps) {
       }
       badges={<Badge colorPalette="primary">{post.rulebook}</Badge>}
       actions={<PostMoreMenu userAppHref={userAppHref} gmId={post.gm.id} logHref={logHref} />}
+      columns={5}
       facts={[
-        {
-          label: "세션 일시",
-          value: formatSessionTime(post.startsAt),
-          sub: post.expectedHours ? `${post.expectedHours}시간 예상` : undefined,
-        },
-        {
-          label: "참여 인원",
-          value: `${post.memberCount} / ${post.capacity}`,
-          sub: post.waitingCount ? `대기 ${post.waitingCount}명` : undefined,
-        },
+        { label: "세션 일시", value: formatSessionTime(post.startsAt) },
+        { label: "참여 인원", value: `${post.memberCount} / ${post.capacity}명` },
+        { label: "대기 인원", value: `${post.waitingCount}명` },
         { label: "모집 방식", value: post.recruitMethod ?? "—" },
         {
           label: "모집 마감",

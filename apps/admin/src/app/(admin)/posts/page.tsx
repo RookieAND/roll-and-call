@@ -6,7 +6,7 @@ import { PostsView } from "@/views/posts";
 export const metadata: Metadata = { title: "구인" };
 
 export default async function PostsPage({ searchParams }: PageProps<"/posts">) {
-  const { q, status, rulebook, period, filter } = (await searchParams) as Record<
+  const { q, status, rulebook, period, filter, page } = (await searchParams) as Record<
     string,
     string | undefined
   >;
@@ -17,5 +17,5 @@ export default async function PostsPage({ searchParams }: PageProps<"/posts">) {
     period,
     reportedOnly: filter === "reported",
   });
-  return <PostsView posts={posts} query={{ q, status, rulebook, period, filter }} />;
+  return <PostsView posts={posts} page={page} query={{ q, status, rulebook, period, filter }} />;
 }

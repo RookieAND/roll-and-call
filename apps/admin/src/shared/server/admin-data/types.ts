@@ -105,7 +105,6 @@ export interface Session {
   filledAt?: Date;
   recruitMethod?: string;
   recruitDeadline?: Date;
-  expectedHours?: number;
   synopsis?: string;
   notices?: string[];
   imageUrls?: string[];

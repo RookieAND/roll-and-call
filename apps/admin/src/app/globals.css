@@ -1,9 +1,22 @@
 @import "tailwindcss";
 @import "@roll-and-call/ui/styles.css";
 
-/* 홈·분석·인증 심사처럼 위에서 아래로 읽는 화면의 본문 최대 폭 (max-w-content). */
+/* 홈·분석·인증 심사처럼 위에서 아래로 읽는 화면의 본문 최대 폭 (max-w-content).
+   page는 모든 화면의 최대 폭이다. 넓은 모니터에서 표 열이 지나치게 벌어지지 않게 한다. */
 @theme {
   --container-content: 920px;
+  --container-page: 1280px;
+}
+
+/* 본문은 page 폭 안에 가운데 둔다. 머리말·하위 탭은 배경을 끝까지 채우고, 내용만 px-page로 같은 폭에 맞춘다. */
+[data-slot="admin-main"] > :not([data-full-bleed]) {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+}
+
+@utility px-page {
+  padding-inline: calc(max(0px, (100% - var(--container-page)) / 2) + var(--spacing-225));
 }
 
 html {

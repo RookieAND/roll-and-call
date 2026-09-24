@@ -30,7 +30,7 @@ export function SanctionForm({
   onChoiceChange,
 }: SanctionFormProps) {
   return (
-    <VStack gap="250">
+    <VStack gap="250" className="rounded-600 border border-gray-200 bg-surface p-250">
       <FormSection title="1. 제재 기간" description={periodHint}>
         <SegmentedControl.Root
           value={draft.period}

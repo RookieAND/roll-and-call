@@ -1,4 +1,4 @@
-import { formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { AnalyticsData } from "@/shared/server";
 
 import { trendInsight } from "../model/trend-insight";
@@ -23,7 +23,7 @@ export function TrendSection({ analytics }: TrendSectionProps) {
     >
       <SessionTrendChart
         trend={analytics.trend}
-        todayLabel={formatMonthDay(analytics.today)}
+        todayLabel={formatDate(analytics.today)}
         height={chartHeight}
       />
     </AnalyticsSection>

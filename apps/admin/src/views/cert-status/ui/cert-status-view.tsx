@@ -1,7 +1,7 @@
 import { Chip, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { CERT_TABS, formatMonthDay, withQuery } from "@/shared/lib";
+import { CERT_TABS, formatDate, withQuery } from "@/shared/lib";
 import type { CertStatusData } from "@/shared/server";
 import { AdminHeader, Panel, RouteTabs, UrlSelect, UserPreview } from "@/shared/ui";
 
@@ -22,7 +22,7 @@ interface CertStatusViewProps {
 export function CertStatusView({ status, tab, allTime, unappliedOnly }: CertStatusViewProps) {
   const gmTab = tab === CERT_STATUS_TAB.gm;
   const { enforcementDate } = status.guideDm;
-  const enforcementFrom = enforcementDate ? `${formatMonthDay(enforcementDate)}부터` : "적용일부터";
+  const enforcementFrom = enforcementDate ? `${formatDate(enforcementDate)}부터` : "적용일부터";
   const sessionLabel = allTime ? "전체 세션" : "최근 90일 세션";
   const gmRows = unappliedOnly
     ? status.gmRows.filter((row) => row.state === "unapplied")

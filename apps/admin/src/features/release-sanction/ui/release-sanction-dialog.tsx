@@ -4,7 +4,7 @@ import { Button, Dialog, Field, HStack, Text, Textarea, VStack, toast } from "@r
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
-import { formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { Sanction } from "@/shared/server";
 import { UserPreview } from "@/shared/ui";
 
@@ -32,7 +32,7 @@ export function ReleaseSanctionDialog({
   const [userReason, setUserReason] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
 
-  const until = sanction.until ? formatMonthDay(sanction.until) : null;
+  const until = sanction.until ? formatDate(sanction.until) : null;
   const description = until
     ? `${until}까지 남은 제재를 지금 해제합니다`
     : "무기한 제재를 지금 해제합니다";

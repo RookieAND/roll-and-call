@@ -13,11 +13,11 @@ interface RouteTabsProps {
 export function RouteTabs({ label, items, value }: RouteTabsProps) {
   const router = useRouter();
   return (
-    <Tabs.Root value={value} onValueChange={(href) => router.push(href)}>
+    <Tabs.Root data-full-bleed value={value} onValueChange={(href) => router.push(href)}>
       <Tabs.List
         aria-label={label}
         scrollable={false}
-        className="border-b border-gray-200 bg-surface px-225"
+        className="border-b border-gray-200 bg-surface px-page"
       >
         {items.map((item) => (
           <Tabs.Trigger key={item.href} value={item.href}>

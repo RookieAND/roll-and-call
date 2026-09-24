@@ -3,7 +3,7 @@ import { Quote } from "lucide-react";
 import Link from "next/link";
 
 import { CertDecisionForm } from "@/features/decide-cert";
-import { formatDate, formatDateTime, formatMonthDay } from "@/shared/lib";
+import { formatDate, formatDateTime } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
 import { AdminHeader, ConflictNotice, EntityHead, ItemCard, UserInitial } from "@/shared/ui";
 
@@ -62,7 +62,7 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
               value: reapplied ? `${previousRejections.length}회` : "없음",
               danger: reapplied,
               sub: latestRejection
-                ? `${formatMonthDay(latestRejection.rejectedAt)} · ${latestRejection.tags[0]}`
+                ? `${formatDate(latestRejection.rejectedAt)} · ${latestRejection.tags[0]}`
                 : undefined,
             },
             { label: "디스코드", value: `@${applicant.discordHandle}` },

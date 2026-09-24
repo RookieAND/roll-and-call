@@ -5,12 +5,13 @@ interface PanelProps {
   title?: string;
   right?: ReactNode;
   children: ReactNode;
+  footer?: ReactNode;
   className?: string;
   bodyClassName?: string;
 }
 
 // 카드 한 장. 안에 든 표는 바깥 테두리를 지워 패널 테두리 하나만 남긴다.
-export function Panel({ title, right, children, className, bodyClassName }: PanelProps) {
+export function Panel({ title, right, children, footer, className, bodyClassName }: PanelProps) {
   return (
     <VStack
       render={<section />}
@@ -44,6 +45,7 @@ export function Panel({ title, right, children, className, bodyClassName }: Pane
       >
         {children}
       </div>
+      {footer}
     </VStack>
   );
 }

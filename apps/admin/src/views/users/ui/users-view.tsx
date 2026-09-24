@@ -1,19 +1,30 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { withQuery } from "@/shared/lib";
+import { paginate, withQuery } from "@/shared/lib";
 import { USER_FILTERS, type UserFilter, type UserRow } from "@/shared/server";
-import { AdminHeader, Panel, UrlSearchInput } from "@/shared/ui";
+import { AdminHeader, ListPager, Panel, UrlSearchInput } from "@/shared/ui";
 
 import { UsersTable } from "./users-table";
 
 interface UsersViewProps {
   rows: UserRow[];
+  page?: string;
   query: { q?: string; filter?: UserFilter };
 }
 
-export function UsersView({ rows, query }: UsersViewProps) {
+export function UsersView({ rows, page, query }: UsersViewProps) {
   const filters = Object.entries(USER_FILTERS) as [UserFilter, string][];
+  const paged = paginate(rows, page);
+  const pager = rows.length ? (
+    <ListPager
+      page={paged.page}
+      totalPages={paged.totalPages}
+      total={rows.length}
+      unit="명"
+      hrefFor={(target) => withQuery("/users", query, { page: String(target) })}
+    />
+  ) : null;
 
   return (
     <>
@@ -39,8 +50,8 @@ export function UsersView({ rows, query }: UsersViewProps) {
             );
           })}
         </HStack>
-        <Panel title="유저" className="flex-1">
-          <UsersTable rows={rows} />
+        <Panel title="유저" className="flex-1" footer={pager}>
+          <UsersTable rows={paged.rows} />
         </Panel>
       </VStack>
     </>

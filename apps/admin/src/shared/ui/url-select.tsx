@@ -26,6 +26,7 @@ export function UrlSelect({ param, allLabel, options, className }: UrlSelectProp
         value={searchParams.get(param) ?? ALL}
         onValueChange={(value) => {
           const next = new URLSearchParams(searchParams);
+          next.delete("page");
           if (value === ALL) next.delete(param);
           else next.set(param, value);
           router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });

@@ -1,12 +1,13 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { withQuery } from "@/shared/lib";
+import { paginate, withQuery } from "@/shared/lib";
 import { POST_PERIODS, type listPosts } from "@/shared/server";
 import {
   AdminHeader,
   EMPTY_IMAGE,
   EmptyState,
+  ListPager,
   Panel,
   UrlSearchInput,
   UrlSelect,
@@ -18,15 +19,26 @@ const REPORTED_FILTER = "reported";
 
 interface PostsViewProps {
   posts: Awaited<ReturnType<typeof listPosts>>;
+  page?: string;
   query: Record<string, string | undefined>;
 }
 
-export function PostsView({ posts, query }: PostsViewProps) {
+export function PostsView({ posts, page, query }: PostsViewProps) {
   const reportedOnly = query.filter === REPORTED_FILTER;
   const reportedHref = withQuery("/posts", query, {
     filter: reportedOnly ? undefined : REPORTED_FILTER,
   });
   const empty = posts.rows.length === 0;
+  const paged = paginate(posts.rows, page);
+  const pager = empty ? null : (
+    <ListPager
+      page={paged.page}
+      totalPages={paged.totalPages}
+      total={posts.rows.length}
+      unit="건"
+      hrefFor={(target) => withQuery("/posts", query, { page: String(target) })}
+    />
+  );
   const sub = empty ? "검색 결과 0건" : `${posts.rows.length}건`;
   const toOptions = (values: readonly string[]) => values.map((value) => ({ label: value, value }));
 
@@ -58,7 +70,7 @@ export function PostsView({ posts, query }: PostsViewProps) {
             처리 안 된 신고 있음
           </Chip>
         </HStack>
-        <Panel title="최신순" className="flex-1">
+        <Panel title="최신순" className="flex-1" footer={pager}>
           {empty ? (
             <EmptyState
               image={EMPTY_IMAGE.search}
@@ -66,7 +78,7 @@ export function PostsView({ posts, query }: PostsViewProps) {
               description="제목과 GM 닉네임으로 검색합니다. 적용한 필터를 하나씩 해제해 보세요."
             />
           ) : (
-            <PostsTable rows={posts.rows} />
+            <PostsTable rows={paged.rows} />
           )}
         </Panel>
       </VStack>

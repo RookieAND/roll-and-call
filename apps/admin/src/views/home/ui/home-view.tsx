@@ -1,19 +1,14 @@
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { CalendarDays, FileText } from "lucide-react";
 
-import { formatDayRange } from "@/shared/lib";
+import { formatDate, formatDayRange } from "@/shared/lib";
 import type { PendingItem, WeeklySummary } from "@/shared/server";
 import { AdminHeader, EMPTY_IMAGE, EmptyState, Panel } from "@/shared/ui";
 
 import { PendingRow } from "./pending-row";
 import { WeekCard } from "./week-card";
 
-const today = new Intl.DateTimeFormat("ko-KR", {
-  month: "long",
-  day: "numeric",
-  weekday: "short",
-  timeZone: "Asia/Seoul",
-});
+const weekday = new Intl.DateTimeFormat("ko-KR", { weekday: "short", timeZone: "Asia/Seoul" });
 
 interface HomeViewProps {
   weekly: WeeklySummary;
@@ -21,9 +16,10 @@ interface HomeViewProps {
 }
 
 export function HomeView({ weekly, pendingItems }: HomeViewProps) {
+  const today = `${formatDate(weekly.to)} (${weekday.format(weekly.to)})`;
   return (
     <>
-      <AdminHeader title="홈" sub={today.format(weekly.to)} />
+      <AdminHeader title="홈" sub={today} />
       <VStack gap="150" className="mx-auto w-full max-w-content p-200">
         <HStack align="baseline" gap="100">
           <Text typography="subtitle1" render={<h2 />}>

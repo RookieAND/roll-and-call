@@ -15,6 +15,8 @@ export { KeyHint } from "./key-hint";
 export { NAV_ITEMS, type NavKey } from "./nav-items";
 export { OngoingChoiceList, type OngoingChoiceRow } from "./ongoing-choice-list";
 export { OPEN_PALETTE_EVENT, openPalette } from "./open-palette";
+export { ListPager } from "./list-pager";
+export { OutcomePanel, type Outcome } from "./outcome-panel";
 export { Panel } from "./panel";
 export { PICK_STATE, PickButton, type PickState } from "./pick-button";
 export { RouteTabs } from "./route-tabs";

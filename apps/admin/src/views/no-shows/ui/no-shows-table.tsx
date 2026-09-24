@@ -27,7 +27,7 @@ export function NoShowsTable({
         <col className="w-[110px]" />
         <col />
         <col className="w-[140px]" />
-        <col className="w-[148px]" />
+        <col className="w-[192px]" />
         <col className="w-[100px]" />
         <col className="w-[86px]" />
         <col className="w-[84px]" />

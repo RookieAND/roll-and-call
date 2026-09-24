@@ -45,12 +45,7 @@ export function UserActionsAside({ user, tab }: UserActionsAsideProps) {
             variant="outline"
             colorPalette="danger"
             className="w-full"
-            render={
-              <Link
-                href={userActionHref(user.id, { tab, action: USER_ACTION.sanction })}
-                scroll={false}
-              />
-            }
+            render={<Link href={`/users/${user.id}/sanction`} />}
           >
             제재
           </Button>

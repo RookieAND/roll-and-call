@@ -13,7 +13,7 @@ import {
 } from "@roll-and-call/ui";
 import { useState, useTransition } from "react";
 
-import { formatDate, formatMonthDay, STAFF_ROLE_LABEL } from "@/shared/lib";
+import { formatDate, STAFF_ROLE_LABEL } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
 import { EntityHead, UserInitial } from "@/shared/ui";
 
@@ -30,7 +30,7 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
   const [reason, setReason] = useState("");
   const [notify, setNotify] = useState(true);
 
-  const lastActive = staff.lastActiveAt ? ` · 최근 활동 ${formatMonthDay(staff.lastActiveAt)}` : "";
+  const lastActive = staff.lastActiveAt ? ` · 최근 활동 ${formatDate(staff.lastActiveAt)}` : "";
   const canRemove = Boolean(reason.trim()) && !pending;
 
   const remove = () =>

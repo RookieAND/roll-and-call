@@ -2,7 +2,7 @@ import { Badge, Button, HStack, Table, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { ChangeRoleButton } from "@/features/change-staff-role";
-import { formatIsoDate, formatMonthDay, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
+import { formatDate, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
 
 interface StaffTableProps {
@@ -16,8 +16,8 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
       <colgroup>
         <col className="w-[180px]" />
         <col className="w-[104px]" />
-        <col className="w-[104px]" />
-        <col className="w-[104px]" />
+        <col className="w-[136px]" />
+        <col className="w-[136px]" />
         <col />
         <col className="w-[188px]" />
       </colgroup>
@@ -58,12 +58,12 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
-                  {formatIsoDate(row.since)}
+                  {formatDate(row.since)}
                 </Text>
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
-                  {row.lastActiveAt ? formatMonthDay(row.lastActiveAt) : "—"}
+                  {row.lastActiveAt ? formatDate(row.lastActiveAt) : "—"}
                 </Text>
               </Table.Cell>
               <Table.Cell />

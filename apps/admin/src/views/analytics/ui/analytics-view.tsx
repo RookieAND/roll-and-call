@@ -1,6 +1,6 @@
 import { VStack } from "@roll-and-call/ui";
 
-import { formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { AnalyticsData } from "@/shared/server";
 import { AdminHeader } from "@/shared/ui";
 
@@ -21,7 +21,7 @@ interface AnalyticsViewProps {
 export function AnalyticsView({ analytics, gridMode }: AnalyticsViewProps) {
   const { early, period } = analytics;
   const showNotice = !analytics.sections.people || !analytics.sections.gms;
-  const range = `${formatMonthDay(period.from)} ~ ${formatMonthDay(period.to)}`;
+  const range = `${formatDate(period.from)} ~ ${formatDate(period.to)}`;
   const periodDescription = early
     ? `${range} · 서비스 시작 후 ${period.serviceWeeks}주`
     : `${range} · 지난 4주와 비교`;

@@ -2,7 +2,7 @@ import { Badge, Button, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-import { formatIsoDate } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { CertifiedGm } from "@/shared/server";
 import { EMPTY_IMAGE, Panel, TableEmptyRow } from "@/shared/ui";
 
@@ -38,7 +38,7 @@ export function CertifiedGmPanel({ gms, certRequired }: CertifiedGmPanelProps) {
       <Table.Root className="table-fixed">
         <colgroup>
           <col className="w-[180px]" />
-          <col className="w-[104px]" />
+          <col className="w-[136px]" />
           <col className="w-[112px]" />
           <col />
           <col className="w-[44px]" />
@@ -80,7 +80,7 @@ export function CertifiedGmPanel({ gms, certRequired }: CertifiedGmPanelProps) {
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
-                  {formatIsoDate(gm.approvedAt)}
+                  {formatDate(gm.approvedAt)}
                 </Text>
               </Table.Cell>
               <Table.Cell align="center" numeric>

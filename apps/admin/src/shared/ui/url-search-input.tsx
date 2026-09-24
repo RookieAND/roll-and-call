@@ -32,6 +32,7 @@ export function UrlSearchInput({
     if (value.trim() === current) return;
     const timer = setTimeout(() => {
       const next = new URLSearchParams(searchParams);
+      next.delete("page");
       if (value.trim()) next.set(param, value.trim());
       else next.delete(param);
       router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });

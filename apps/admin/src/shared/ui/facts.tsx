@@ -1,6 +1,13 @@
 import { Grid, Text, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
+const COLUMNS = {
+  2: "grid-cols-2",
+  3: "grid-cols-3",
+  4: "grid-cols-4",
+  5: "grid-cols-5",
+} as const;
+
 export interface Fact {
   label: string;
   value: ReactNode;
@@ -10,10 +17,8 @@ export interface Fact {
 
 interface FactsProps {
   items: Fact[];
-  columns?: 2 | 3 | 4;
+  columns?: keyof typeof COLUMNS;
 }
-
-const COLUMNS = { 2: "grid-cols-2", 3: "grid-cols-3", 4: "grid-cols-4" } as const;
 
 export function Facts({ items, columns = 4 }: FactsProps) {
   return (
