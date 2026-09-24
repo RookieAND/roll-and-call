@@ -39,7 +39,7 @@ export function WeekCard({ label, icon: Icon, unit, series, linkLabel, href }: W
         <Text
           weight="extrabold"
           numeric
-          className="text-[calc(var(--text-heading1)*1.8)] leading-none tracking-[-0.02em] whitespace-nowrap"
+          className="text-[calc(var(--text-heading1)*1.4)] leading-none tracking-[-0.02em] whitespace-nowrap"
         >
           {current}
           <Text typography="subtitle1" className="ml-050 tracking-normal">

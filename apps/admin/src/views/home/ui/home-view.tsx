@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { CalendarDays, FileText } from "lucide-react";
 
 import { formatDayRange } from "@/shared/lib";
@@ -33,7 +33,7 @@ export function HomeView({ weekly, pendingItems }: HomeViewProps) {
             {formatDayRange(weekly.from, weekly.to)} · 그래프는 최근 8주
           </Text>
         </HStack>
-        <VStack gap="125">
+        <Grid className="grid-cols-[repeat(2,minmax(0,1fr))] gap-125">
           <WeekCard
             label="새 구인"
             icon={FileText}
@@ -50,7 +50,7 @@ export function HomeView({ weekly, pendingItems }: HomeViewProps) {
             linkLabel="구인 보기"
             href="/posts"
           />
-        </VStack>
+        </Grid>
         <Panel
           title="처리 대기"
           right={

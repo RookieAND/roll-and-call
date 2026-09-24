@@ -9,7 +9,7 @@ const Column = dynamic(() => import("@ant-design/plots").then((module) => module
   ssr: false,
 });
 
-const CHART_HEIGHT = 220;
+const CHART_HEIGHT = 150;
 
 interface WeekChartProps {
   weeks: WeeklyPoint[];
@@ -23,7 +23,7 @@ export function WeekChart({ weeks, average, name, unit }: WeekChartProps) {
   const currentLabel = weeks.at(-1)?.label;
   const summary = `최근 8주 추이, 이번 주 ${weeks.at(-1)?.count ?? 0}${unit}, 평균 ${average}${unit}`;
   return (
-    <div ref={ref} role="img" aria-label={summary} className="h-[220px] min-w-0">
+    <div ref={ref} role="img" aria-label={summary} className="h-[150px] min-w-0">
       {tokens ? (
         <Column
           data={weeks}
