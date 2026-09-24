@@ -26,8 +26,14 @@ import {
 } from "./schema";
 
 // prepare: false — required for Supabase's transaction-mode pooler.
-// max: 6 — lets one request run its Promise.all queries in parallel over the transaction pooler.
-const client = postgres(process.env.DATABASE_URL!, { prepare: false, max: 6 });
+// max — parallel queries per instance. The session pooler caps clients at pool_size (15) across
+// every instance, so the admin app (session pooler) sets DATABASE_POOL_MAX lower.
+// idle_timeout — release idle connections so pooler slots are not held forever.
+const client = postgres(process.env.DATABASE_URL!, {
+  prepare: false,
+  max: Number(process.env.DATABASE_POOL_MAX ?? 6),
+  idle_timeout: 20,
+});
 
 export const db = drizzle(client, {
   schema: {
