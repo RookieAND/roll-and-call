@@ -3,16 +3,18 @@
 import { HStack, Text, cn } from "@roll-and-call/ui";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
+
+import { SidebarCount } from "./sidebar-count";
 
 interface SidebarLinkProps {
   href: string;
   label: string;
   icon: ReactNode;
-  count?: number;
+  countPromise?: Promise<number | undefined>;
 }
 
-export function SidebarLink({ href, label, icon, count }: SidebarLinkProps) {
+export function SidebarLink({ href, label, icon, countPromise }: SidebarLinkProps) {
   const pathname = usePathname();
   const active =
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
@@ -37,19 +39,10 @@ export function SidebarLink({ href, label, icon, count }: SidebarLinkProps) {
       >
         {label}
       </Text>
-      {count ? (
-        <Text
-          typography="body4"
-          weight="bold"
-          foreground="inherit"
-          numeric
-          className={cn(
-            "min-w-[18px] rounded-400 px-075 py-025 text-center",
-            active ? "bg-primary-600 text-on-primary" : "bg-gray-200 text-gray-600",
-          )}
-        >
-          {count}
-        </Text>
+      {countPromise ? (
+        <Suspense fallback={null}>
+          <SidebarCount countPromise={countPromise} active={active} />
+        </Suspense>
       ) : null}
     </HStack>
   );

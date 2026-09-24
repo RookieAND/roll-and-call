@@ -9,11 +9,11 @@ const ROLE_LABEL = { owner: "소유자", staff: "운영진" } as const;
 interface SidebarProps {
   nickname: string;
   role: keyof typeof ROLE_LABEL;
-  counts: Partial<Record<NavKey, number>>;
+  countPromises: Partial<Record<NavKey, Promise<number | undefined>>>;
   serverName: string;
 }
 
-export function Sidebar({ nickname, role, counts, serverName }: SidebarProps) {
+export function Sidebar({ nickname, role, countPromises, serverName }: SidebarProps) {
   return (
     <VStack className="sticky top-0 h-dvh w-[212px] shrink-0 border-r border-gray-200 bg-surface">
       <HStack
@@ -66,7 +66,7 @@ export function Sidebar({ nickname, role, counts, serverName }: SidebarProps) {
             href={item.href}
             label={item.label}
             icon={<item.icon size={16} aria-hidden />}
-            count={counts[item.key]}
+            countPromise={countPromises[item.key]}
           />
         ))}
       </VStack>

@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { PaletteLauncher } from "./palette-launcher";
 
 interface AdminHeaderProps {
-  title: string;
+  title: ReactNode;
   sub?: ReactNode;
   back?: { href: string; label: string };
   actions?: ReactNode;

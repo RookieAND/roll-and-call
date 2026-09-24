@@ -5,11 +5,12 @@ import type { PendingItem } from "@/shared/server";
 import { BrandMark, IconTile } from "@/shared/ui";
 
 interface PhoneNoticeProps {
-  pendingItems: PendingItem[];
+  pendingItemsPromise: Promise<PendingItem[]>;
 }
 
 // 휴대폰에서는 안내와 건수만 보여 주고 조치할 길은 두지 않는다.
-export function PhoneNotice({ pendingItems }: PhoneNoticeProps) {
+export async function PhoneNotice({ pendingItemsPromise }: PhoneNoticeProps) {
+  const pendingItems = await pendingItemsPromise;
   return (
     <VStack className="min-h-dvh bg-canvas px-225 py-250">
       <VStack align="center" className="mt-800 text-center">

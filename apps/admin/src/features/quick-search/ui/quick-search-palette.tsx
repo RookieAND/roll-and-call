@@ -3,7 +3,7 @@
 import { Dialog, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState, type KeyboardEvent } from "react";
+import { use, useCallback, useEffect, useState, type KeyboardEvent } from "react";
 
 import type { PendingItem, UserSearchResult } from "@/shared/server";
 import { Kbd } from "@/shared/ui";
@@ -19,10 +19,11 @@ import { PaletteRow } from "./palette-row";
 const SEARCH_DELAY = 150;
 
 interface QuickSearchPaletteProps {
-  pendingItems: PendingItem[];
+  pendingItemsPromise: Promise<PendingItem[]>;
 }
 
-export function QuickSearchPalette({ pendingItems }: QuickSearchPaletteProps) {
+export function QuickSearchPalette({ pendingItemsPromise }: QuickSearchPaletteProps) {
+  const pendingItems = use(pendingItemsPromise);
   const router = useRouter();
   const recentScreens = useRecentScreens();
   const [open, setOpen] = useState(false);
