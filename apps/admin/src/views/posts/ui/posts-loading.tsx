@@ -52,7 +52,7 @@ export function PostsLoading() {
               { label: "룰북", kind: "text", width: "w-[140px]" },
               { label: "세션 일시", kind: "date", width: "w-[192px]", sorted: true },
               { label: "참여", kind: "number", width: "w-[76px]", align: "center" },
-              { label: "상태", kind: "text", width: "w-[112px]", align: "center" },
+              { label: "상태", kind: "text", width: "w-[104px]", align: "center" },
               { label: "처리 안 된 신고", kind: "number", width: "w-[118px]", align: "center" },
               { label: "운영진 조치", kind: "badge", width: "w-[116px]" },
             ]}

@@ -21,6 +21,7 @@ interface WeekChartProps {
 export function WeekChart({ weeks, average, name, unit }: WeekChartProps) {
   const { ref, tokens } = useChartTokens();
   const currentLabel = weeks.at(-1)?.label;
+  const lastIndex = weeks.length - 1;
   const isCurrent = (point: WeeklyPoint) => point.label === currentLabel;
   const axisLabels = new Map(weeks.map((week, index) => [week.label, axisLabel(weeks, index)]));
   const summary = `최근 8주 추이, 이번 주 ${weeks.at(-1)?.count ?? 0}${unit}, 평균 ${average}${unit}`;
@@ -48,6 +49,7 @@ export function WeekChart({ weeks, average, name, unit }: WeekChartProps) {
           }}
           point={{
             sizeField: (point: WeeklyPoint) => (isCurrent(point) ? 5 : 3),
+            scale: { size: { type: "identity" } },
             style: {
               fill: (point: WeeklyPoint) => (isCurrent(point) ? tokens.primary : tokens.base),
               stroke: (point: WeeklyPoint) => (isCurrent(point) ? tokens.base : tokens.primary),
@@ -76,8 +78,9 @@ export function WeekChart({ weeks, average, name, unit }: WeekChartProps) {
               lineStroke: tokens.line,
               lineStrokeOpacity: 1,
               labelFormatter: (label: string) => axisLabels.get(label) ?? label,
-              labelFill: (label: string) => (label === currentLabel ? tokens.normal : tokens.hint),
-              labelFontWeight: (label: string) => (label === currentLabel ? 700 : 400),
+              labelFill: (_: unknown, index: number) =>
+                index === lastIndex ? tokens.normal : tokens.hint,
+              labelFontWeight: (_: unknown, index: number) => (index === lastIndex ? 700 : 400),
               labelFillOpacity: 1,
               labelFontSize: 12,
               labelFontFamily: tokens.font,
