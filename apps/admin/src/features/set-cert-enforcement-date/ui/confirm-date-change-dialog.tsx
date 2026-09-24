@@ -7,7 +7,7 @@ import { formatDate } from "@/shared/lib";
 
 interface ConfirmDateChangeDialogProps {
   change: { date: Date; kind: "set" | "postpone" } | null;
-  currentDate: Date;
+  currentDate: Date | null;
   pending: boolean;
   onCancel: () => void;
   onConfirm: () => void;
@@ -22,6 +22,7 @@ export function ConfirmDateChangeDialog({
   onConfirm,
 }: ConfirmDateChangeDialogProps) {
   const cancelRef = useRef<HTMLButtonElement>(null);
+  const from = currentDate ? `${formatDate(currentDate)}에서 ` : "";
   const title = change?.kind === "postpone" ? "룰북 인증 적용일 연기" : "룰북 인증 적용일 지정";
   return (
     <AlertDialog.Root open={Boolean(change)} onOpenChange={(open) => (open ? null : onCancel())}>
@@ -30,7 +31,7 @@ export function ConfirmDateChangeDialog({
           <AlertDialog.Title>{title}</AlertDialog.Title>
           <AlertDialog.Description>
             {change
-              ? `적용일을 ${formatDate(currentDate)}에서 ${formatDate(change.date)}로 바꿉니다. 이 날부터 인증이 필요한 룰북은 인증을 받아야 구인을 열 수 있습니다.`
+              ? `적용일을 ${from}${formatDate(change.date)}로 바꿉니다. 이 날부터 인증이 필요한 룰북은 인증을 받아야 구인을 열 수 있습니다.`
               : null}
           </AlertDialog.Description>
         </AlertDialog.Header>

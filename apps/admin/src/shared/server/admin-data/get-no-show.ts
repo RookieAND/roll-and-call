@@ -1,15 +1,16 @@
 import "server-only";
 import { countRecentNoShows } from "./count-recent-no-shows";
-import { db } from "./mock-db";
+import { loadSnapshot } from "./snapshot";
 import { toNoShowRow } from "./to-no-show-row";
 
 export async function getNoShow(id: string) {
+  const db = await loadSnapshot();
   const noShow = db.noShows.find((candidate) => candidate.id === id);
   if (!noShow) return null;
   return {
-    ...toNoShowRow(noShow),
+    ...toNoShowRow(db, noShow),
     recordedAt: noShow.recordedAt,
-    recentNoShowCount: countRecentNoShows(noShow.userId),
+    recentNoShowCount: countRecentNoShows(db, noShow.userId),
     cancellation: noShow.cancelled
       ? { by: noShow.cancelledBy!, at: noShow.cancelledAt!, reason: noShow.cancelReason! }
       : null,

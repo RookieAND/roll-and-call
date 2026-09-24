@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "./mock-db";
+import type { Snapshot } from "./snapshot";
 import type { NoShow } from "./types";
 
 export type NoShowTiming = "before" | "after";
@@ -16,7 +16,7 @@ export interface NoShowRow {
   cancelled: boolean;
 }
 
-export function toNoShowRow(noShow: NoShow): NoShowRow {
+export function toNoShowRow(db: Snapshot, noShow: NoShow): NoShowRow {
   const session = db.sessions.find((candidate) => candidate.id === noShow.sessionId)!;
   const nicknameOf = (id: string) => db.users.find((user) => user.id === id)!.nickname;
   return {

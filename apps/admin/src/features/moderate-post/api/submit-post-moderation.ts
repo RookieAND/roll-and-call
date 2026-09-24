@@ -16,7 +16,7 @@ export async function submitPostModeration(postId: string, moderation: PostModer
   };
   const requiredField = REQUIRED_FIELD[moderation.action];
   if (requiredField && !input[requiredField]) throw new Error("필수 칸을 채워 주세요");
-  const result = await moderatePost(postId, staff.nickname, input);
+  const result = await moderatePost(postId, staff, input);
   revalidatePath("/", "layout");
   return result;
 }

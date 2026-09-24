@@ -3,6 +3,16 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
 import {
+  adminSettings,
+  auditLog,
+  certApplications,
+  certifications,
+  reports,
+  rulebookRequests,
+  rulebooks,
+  sanctions,
+  staff,
+  staffMemos,
   availabilities,
   availabilitiesRelations,
   games,
@@ -31,5 +41,15 @@ export const db = drizzle(client, {
     gamesRelations,
     participantsRelations,
     availabilitiesRelations,
+    rulebooks,
+    rulebookRequests,
+    certApplications,
+    certifications,
+    sanctions,
+    reports,
+    staff,
+    staffMemos,
+    auditLog,
+    adminSettings,
   },
 });

@@ -1,19 +1,20 @@
 import "server-only";
 import { countRecentNoShows } from "./count-recent-no-shows";
 import { isSanctioned } from "./is-sanctioned";
-import { db } from "./mock-db";
+import { loadSnapshot, type Snapshot } from "./snapshot";
 import type { Session } from "./types";
 
-const nicknameOf = (userId: string) => db.users.find((user) => user.id === userId)?.nickname ?? "";
+const nicknameOf = (db: Snapshot, userId: string) =>
+  db.users.find((user) => user.id === userId)?.nickname ?? "";
 
 // 진행 중인 활동 한 줄. 제재·인증 취소 모달이 "그대로 진행 / 빼기·닫기"를 고르게 한다.
-const toOngoing = (session: Session, userId: string) => ({
+const toOngoing = (db: Snapshot, session: Session, userId: string) => ({
   sessionId: session.id,
   title: session.title,
   rulebook: session.rulebook,
   startsAt: session.startsAt,
   hosted: session.gmId === userId,
-  gmNickname: nicknameOf(session.gmId),
+  gmNickname: nicknameOf(db, session.gmId),
   memberCount: session.memberIds.length,
   capacity: session.capacity,
 });
@@ -21,6 +22,7 @@ const toOngoing = (session: Session, userId: string) => ({
 export type OngoingActivity = ReturnType<typeof toOngoing>;
 
 export async function getUserDetail(userId: string) {
+  const db = await loadSnapshot();
   const user = db.users.find((candidate) => candidate.id === userId);
   if (!user) return null;
   const now = Date.now();
@@ -54,7 +56,7 @@ export async function getUserDetail(userId: string) {
     joinedAt: user.joinedAt,
     hostedCount: user.hostedCount,
     playedCount: user.playedCount,
-    recentNoShowCount: countRecentNoShows(userId, now),
+    recentNoShowCount: countRecentNoShows(db, userId, now),
     sanction: isSanctioned(user, now) ? user.sanction! : null,
     certifications,
     applications,
@@ -69,7 +71,7 @@ export async function getUserDetail(userId: string) {
           hosted: session.gmId === userId,
           title: session.title,
           rulebook: session.rulebook,
-          gmNickname: nicknameOf(session.gmId),
+          gmNickname: nicknameOf(db, session.gmId),
           noShow: noShow ? { id: noShow.id, cancelled: noShow.cancelled } : null,
         };
       }),
@@ -81,7 +83,7 @@ export async function getUserDetail(userId: string) {
           id: noShow.id,
           sessionTitle: session.title,
           startsAt: session.startsAt,
-          gmNickname: nicknameOf(session.gmId),
+          gmNickname: nicknameOf(db, session.gmId),
           cancelled: noShow.cancelled,
         };
       })
@@ -92,7 +94,7 @@ export async function getUserDetail(userId: string) {
     ongoing: db.sessions
       .filter((session) => mine(session) && !session.closed && session.startsAt.getTime() >= now)
       .toSorted((a, b) => a.startsAt.getTime() - b.startsAt.getTime())
-      .map((session) => toOngoing(session, userId)),
+      .map((session) => toOngoing(db, session, userId)),
   };
 }
 

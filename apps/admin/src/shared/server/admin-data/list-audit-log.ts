@@ -1,6 +1,6 @@
 import "server-only";
 import { AUDIT_PERIODS } from "./audit-period";
-import { db } from "./mock-db";
+import { loadSnapshot } from "./snapshot";
 
 const DAY = 86_400_000;
 
@@ -13,6 +13,7 @@ interface AuditLogFilter {
 
 // 최신순 활동 기록. 대상은 부분 일치로 좁힌다(다른 화면의 [활동 기록에서 보기]가 ?target=으로 넘긴다).
 export async function listAuditLog({ actor, actions = [], period, target }: AuditLogFilter) {
+  const db = await loadSnapshot();
   const days = AUDIT_PERIODS.find((candidate) => candidate.value === period)?.days;
   const since = days ? Date.now() - days * DAY : null;
   const rows = db.auditLog

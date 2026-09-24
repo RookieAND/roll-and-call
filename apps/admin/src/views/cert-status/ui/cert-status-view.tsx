@@ -21,6 +21,8 @@ interface CertStatusViewProps {
 
 export function CertStatusView({ status, tab, allTime, unappliedOnly }: CertStatusViewProps) {
   const gmTab = tab === CERT_STATUS_TAB.gm;
+  const { enforcementDate } = status.guideDm;
+  const enforcementFrom = enforcementDate ? `${formatMonthDay(enforcementDate)}부터` : "적용일부터";
   const sessionLabel = allTime ? "전체 세션" : "최근 90일 세션";
   const gmRows = unappliedOnly
     ? status.gmRows.filter((row) => row.state === "unapplied")
@@ -75,9 +77,9 @@ export function CertStatusView({ status, tab, allTime, unappliedOnly }: CertStat
         {gmTab ? (
           <>
             <UserPreview title="[안내 DM]으로 보내는 문구">
-              {status.guideDm.rulebook} 등 인증이 필요한 룰북은{" "}
-              {formatMonthDay(status.guideDm.enforcementDate)}부터 인증을 받아야 구인을 열 수
-              있어요. 앱의 [내 정보 → 룰북 인증]에서 사진 4장(전체·앞·뒤·옆)을 올려 신청해 주세요.
+              {status.guideDm.rulebook} 등 인증이 필요한 룰북은 {enforcementFrom} 인증을 받아야
+              구인을 열 수 있어요. 앱의 [내 정보 → 룰북 인증]에서 사진 4장(전체·앞·뒤·옆)을 올려
+              신청해 주세요.
             </UserPreview>
             <Text typography="body4" foreground="hint">
               제재 중인 사용자에게는 안내 DM을 보낼 수 없습니다.

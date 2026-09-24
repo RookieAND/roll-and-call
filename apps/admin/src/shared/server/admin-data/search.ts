@@ -1,6 +1,6 @@
 import "server-only";
 import { countRecentNoShows } from "./count-recent-no-shows";
-import { db } from "./mock-db";
+import { loadSnapshot, type Snapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
 
 export interface UserSearchResult {
@@ -20,10 +20,12 @@ export interface UserSearchResult {
   }[];
 }
 
-const nicknameOf = (userId: string) => db.users.find((user) => user.id === userId)?.nickname ?? "";
+const nicknameOf = (db: Snapshot, userId: string) =>
+  db.users.find((user) => user.id === userId)?.nickname ?? "";
 
 // ⌘K 검색. 닉네임이 맞는 유저마다 할 수 있는 처리와 참여 세션을 묶는다.
 export async function searchUsers(query: string): Promise<UserSearchResult[]> {
+  const db = await loadSnapshot();
   const keyword = query.trim();
   if (!keyword) return [];
   return db.users
@@ -40,7 +42,7 @@ export async function searchUsers(query: string): Promise<UserSearchResult[]> {
         id: user.id,
         nickname: user.nickname,
         playedCount: user.playedCount,
-        recentNoShowCount: countRecentNoShows(user.id),
+        recentNoShowCount: countRecentNoShows(db, user.id),
         noShows: validNoShows.map(({ id, session }) => ({
           id,
           sessionTitle: session.title,
@@ -64,7 +66,7 @@ export async function searchUsers(query: string): Promise<UserSearchResult[]> {
             title: session.title,
             rulebook: session.rulebook,
             startsAt: session.startsAt,
-            gmNickname: nicknameOf(session.gmId),
+            gmNickname: nicknameOf(db, session.gmId),
             hosted: session.gmId === user.id,
           })),
       };

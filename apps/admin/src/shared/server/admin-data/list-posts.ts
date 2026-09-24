@@ -1,7 +1,7 @@
 import "server-only";
-import { db } from "./mock-db";
 import { POST_STATUS, type PostStatus } from "./post-status";
 import { postStatusOf } from "./post-status-of";
+import { loadSnapshot } from "./snapshot";
 
 export interface PostListFilter {
   query?: string;
@@ -27,6 +27,7 @@ export interface PostRow {
 
 // 운영진 목록에는 숨긴 구인도 남기고 조치 칸에 표시한다. 세션 일시 최신순.
 export async function listPosts(filter: PostListFilter) {
+  const db = await loadSnapshot();
   const all = db.sessions
     .map((session): PostRow => ({
       id: session.id,

@@ -1,6 +1,6 @@
 import "server-only";
-import { db } from "./mock-db";
 import { rulebookLabel } from "./rulebook-label";
+import { loadSnapshot } from "./snapshot";
 
 export interface RulebookRow {
   id: string;
@@ -15,6 +15,7 @@ export interface RulebookRow {
 
 // 검색어는 이름·판본·다른 이름에서 부분 일치로 찾는다.
 export async function listRulebooks({ query }: { query?: string } = {}) {
+  const db = await loadSnapshot();
   const rows: RulebookRow[] = db.rulebooks.map((rulebook) => {
     const label = rulebookLabel(rulebook);
     return {

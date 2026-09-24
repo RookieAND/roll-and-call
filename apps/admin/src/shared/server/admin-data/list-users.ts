@@ -1,7 +1,7 @@
 import "server-only";
 import { countRecentNoShows } from "./count-recent-no-shows";
 import { isSanctioned } from "./is-sanctioned";
-import { db } from "./mock-db";
+import { loadSnapshot } from "./snapshot";
 
 const WEEK = 7 * 86_400_000;
 
@@ -27,6 +27,7 @@ export interface UserRow {
 }
 
 export async function listUsers({ query, filter }: { query?: string; filter?: UserFilter }) {
+  const db = await loadSnapshot();
   const now = Date.now();
   const rows: UserRow[] = db.users.map((user) => ({
     id: user.id,
@@ -35,7 +36,7 @@ export async function listUsers({ query, filter }: { query?: string; filter?: Us
     isNew: now - user.joinedAt.getTime() < WEEK,
     hostedCount: user.hostedCount,
     playedCount: user.playedCount,
-    recentNoShowCount: countRecentNoShows(user.id, now),
+    recentNoShowCount: countRecentNoShows(db, user.id, now),
     certifiedCount: db.certifications.filter((item) => item.userId === user.id).length,
     sanctioned: isSanctioned(user, now),
     sanctionUntil: isSanctioned(user, now) ? (user.sanction?.until ?? null) : null,

@@ -1,6 +1,6 @@
 import "server-only";
-import { db } from "./mock-db";
 import { rulebookLabel } from "./rulebook-label";
+import { loadSnapshot } from "./snapshot";
 
 const NINETY_DAYS = 90 * 86_400_000;
 
@@ -12,6 +12,7 @@ export interface CertifiedGm {
 }
 
 export async function getRulebookDetail(id: string) {
+  const db = await loadSnapshot();
   const rulebook = db.rulebooks.find((candidate) => candidate.id === id);
   if (!rulebook) return null;
   const label = rulebookLabel(rulebook);

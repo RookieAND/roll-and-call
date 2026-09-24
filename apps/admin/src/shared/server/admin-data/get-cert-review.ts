@@ -1,10 +1,11 @@
 import "server-only";
 import { countRecentNoShows } from "./count-recent-no-shows";
-import { db } from "./mock-db";
+import { loadSnapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
 
 // 심사 상세 한 건. 이미 처리된 건이면 processed가 채워지고 대기열 위치는 없다.
 export async function getCertReview(id: string) {
+  const db = await loadSnapshot();
   const application = db.certApplications.find((candidate) => candidate.id === id);
   if (!application) return null;
   const user = db.users.find((candidate) => candidate.id === application.userId)!;
@@ -31,7 +32,7 @@ export async function getCertReview(id: string) {
       joinedAt: user.joinedAt,
       hostedCount: user.hostedCount,
       playedCount: user.playedCount,
-      recentNoShowCount: countRecentNoShows(user.id),
+      recentNoShowCount: countRecentNoShows(db, user.id),
     },
     position: index >= 0 ? { index: index + 1, total: queue.length } : null,
     nextId: next?.id ?? null,

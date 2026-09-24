@@ -3,7 +3,14 @@ import type { PostStatus } from "./post-status";
 
 export type StaffRole = "owner" | "staff";
 
+// 조치를 확정한 운영진. id로 기록하고 nickname은 문구에 쓴다.
+export interface Actor {
+  id: string;
+  nickname: string;
+}
+
 export interface Staff {
+  userId: string;
   nickname: string;
   role: StaffRole;
   discordId?: string;
@@ -86,12 +93,16 @@ export interface Session {
   rulebook: string;
   gmId: string;
   startsAt: Date;
+  // false면 아직 세션 일시가 없어 startsAt이 조율 범위의 끝이나 모집 마감일이다.
+  timeFixed?: boolean;
   memberIds: string[];
   capacity: number;
   closed: boolean;
   recruitStatus?: PostStatus;
   waitingIds?: string[];
   createdAt?: Date;
+  // 확정 인원이 정원에 닿은 시각. 모집 소요 기간을 잰다.
+  filledAt?: Date;
   recruitMethod?: string;
   recruitDeadline?: Date;
   expectedHours?: number;
@@ -133,6 +144,7 @@ export interface AuditEntry {
   actor: string;
   action: AuditAction;
   target: string;
+  targetUserId?: string;
   reason: string;
   reasonTag?: string;
   staffMemo?: string;

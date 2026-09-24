@@ -71,7 +71,7 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
                   </Text>
                 ) : (
                   <HStack gap="075" justify="end">
-                    <ChangeRoleButton nickname={row.nickname} />
+                    <ChangeRoleButton userId={row.userId} nickname={row.nickname} />
                     <Button
                       variant="outline"
                       colorPalette="danger"

@@ -6,7 +6,7 @@ import { requireStaff, sendCertGuideDm } from "@/shared/server";
 
 export async function sendGuideDm(userId: string) {
   const staff = await requireStaff();
-  const result = await sendCertGuideDm(userId, staff.nickname);
+  const result = await sendCertGuideDm(userId, staff);
   revalidatePath("/cert/status");
   return result;
 }

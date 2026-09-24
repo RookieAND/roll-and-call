@@ -24,7 +24,7 @@ import { ConfirmDateChangeDialog } from "./confirm-date-change-dialog";
 const DAY = 86_400_000;
 
 interface EnforcementDateFormProps {
-  enforcementDate: Date;
+  enforcementDate: Date | null;
 }
 
 export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProps) {
@@ -40,10 +40,13 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
   };
 
   const pickPostpone = () =>
+    enforcementDate &&
     setChange({
       date: new Date(enforcementDate.getTime() + Number(postponeDays) * DAY),
       kind: "postpone",
     });
+  const dateLabel = enforcementDate ? formatDate(enforcementDate) : "지정 전";
+  const dateKey = enforcementDate ? toSeoulDateKey(enforcementDate) : undefined;
 
   const confirm = () =>
     startTransition(async () => {
@@ -70,15 +73,11 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
               />
             }
           >
-            <Text typography="body2">{formatDate(enforcementDate)}</Text>
+            <Text typography="body2">{dateLabel}</Text>
             <CalendarDays size={16} aria-hidden />
           </Popover.Trigger>
           <Popover.Popup align="start">
-            <Calendar
-              value={toSeoulDateKey(enforcementDate)}
-              min={toSeoulDateKey(new Date())}
-              onSelect={pickDate}
-            />
+            <Calendar value={dateKey} min={toSeoulDateKey(new Date())} onSelect={pickDate} />
           </Popover.Popup>
         </Popover.Root>
       </Field.Root>
@@ -88,11 +87,7 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
         </Text>
         <HStack align="center" gap="100">
           <div className="w-[132px]">
-            <Select.Root
-              key={enforcementDate.getTime()}
-              items={POSTPONE_OPTIONS}
-              onValueChange={setPostponeDays}
-            >
+            <Select.Root key={dateKey} items={POSTPONE_OPTIONS} onValueChange={setPostponeDays}>
               <Select.Trigger placeholder="연기 기간 선택" />
               <Select.Popup>
                 {POSTPONE_OPTIONS.map((option) => (
@@ -107,7 +102,7 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
             variant="outline"
             colorPalette="gray"
             size="sm"
-            disabled={!postponeDays || pending}
+            disabled={!enforcementDate || !postponeDays || pending}
             onClick={pickPostpone}
           >
             연기

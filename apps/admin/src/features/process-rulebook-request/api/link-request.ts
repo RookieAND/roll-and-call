@@ -6,7 +6,7 @@ import { linkRulebookRequest, requireStaff, type RulebookLinkInput } from "@/sha
 
 export async function linkRequest(requestId: string, input: RulebookLinkInput) {
   const staff = await requireStaff();
-  const result = await linkRulebookRequest(requestId, staff.nickname, input);
+  const result = await linkRulebookRequest(requestId, staff, input);
   revalidatePath("/", "layout");
   return result;
 }

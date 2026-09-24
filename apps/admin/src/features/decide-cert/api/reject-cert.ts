@@ -16,7 +16,7 @@ export async function rejectCert(applicationId: string, input: RejectCertInput) 
   if (!input.reasonTag || !input.userReason.trim()) {
     throw new Error("사유를 고르고 사용자에게 보이는 사유를 입력해 주세요");
   }
-  const result = await decideCert(applicationId, staff.nickname, {
+  const result = await decideCert(applicationId, staff, {
     kind: "reject",
     ...input,
     userReason: input.userReason.trim(),

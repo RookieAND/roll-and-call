@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "./mock-db";
+import { loadSnapshot } from "./snapshot";
 import { toNoShowRow, type NoShowTiming } from "./to-no-show-row";
 
 export const NO_SHOW_TIMINGS = { before: "세션 전", after: "세션 후" } as const;
@@ -14,8 +14,9 @@ export interface NoShowFilter {
 
 // 최신 세션 순. 검색어는 닉네임과 세션 제목에 모두 맞춰 본다.
 export async function listNoShows({ query, timing, status }: NoShowFilter) {
+  const db = await loadSnapshot();
   return db.noShows
-    .map(toNoShowRow)
+    .map((noShow) => toNoShowRow(db, noShow))
     .filter(
       (row) =>
         (!query || row.nickname.includes(query) || row.sessionTitle.includes(query)) &&

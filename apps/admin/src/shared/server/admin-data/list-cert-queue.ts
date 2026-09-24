@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "./mock-db";
+import { loadSnapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
 
 export interface CertQueueFilter {
@@ -19,6 +19,7 @@ export interface CertQueueRow {
 
 // 오래 기다린 순. 필터와 무관한 전체 건수와 룰북 선택지도 함께 준다.
 export async function listCertQueue(filter: CertQueueFilter) {
+  const db = await loadSnapshot();
   const pending = db.certApplications
     .filter((application) => application.status === "pending")
     .toSorted((a, b) => a.appliedAt.getTime() - b.appliedAt.getTime())

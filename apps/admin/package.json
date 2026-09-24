@@ -14,10 +14,13 @@
   },
   "dependencies": {
     "@ant-design/plots": "^2.6.8",
+    "@roll-and-call/database": "workspace:*",
+    "@roll-and-call/tiptap": "workspace:*",
     "@roll-and-call/ui": "workspace:*",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.2",
     "class-variance-authority": "^0.7.1",
+    "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.32.0",
     "next": "^16.3.0",
     "react": "^19.2.0",

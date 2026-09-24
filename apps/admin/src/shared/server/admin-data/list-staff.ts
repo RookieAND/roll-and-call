@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "./mock-db";
+import { loadSnapshot } from "./snapshot";
 import type { Staff } from "./types";
 
 export interface StaffRow extends Staff {
@@ -8,6 +8,7 @@ export interface StaffRow extends Staff {
 
 // 소유자가 먼저, 그다음 추가한 순서. 최근 활동은 그 운영진이 남긴 마지막 활동 기록이다.
 export async function listStaff(): Promise<StaffRow[]> {
+  const db = await loadSnapshot();
   return db.staff
     .map((staff) => ({
       ...staff,

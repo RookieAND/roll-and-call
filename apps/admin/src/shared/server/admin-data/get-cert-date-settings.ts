@@ -1,8 +1,9 @@
 import "server-only";
 import { getCertStatus } from "./get-cert-status";
-import { db } from "./mock-db";
+import { loadSnapshot } from "./snapshot";
 
 export async function getCertDateSettings() {
+  const db = await loadSnapshot();
   const { summary } = await getCertStatus({ allTime: false });
   return {
     enforcementDate: db.settings.certEnforcementDate,

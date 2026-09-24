@@ -12,7 +12,7 @@ interface ReleaseUserSanctionInput {
 export async function releaseUserSanction(userId: string, input: ReleaseUserSanctionInput) {
   const staff = await requireStaff();
   if (!input.userReason.trim()) throw new Error("해제 사유를 입력해 주세요");
-  const result = await releaseSanction(userId, staff.nickname, {
+  const result = await releaseSanction(userId, staff, {
     userReason: input.userReason.trim(),
     staffMemo: input.staffMemo.trim(),
   });

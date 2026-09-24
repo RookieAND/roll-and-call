@@ -35,7 +35,7 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
 
   const remove = () =>
     startTransition(async () => {
-      await removeStaffMember(staff.nickname, { reason, notify });
+      await removeStaffMember(staff.userId, { reason, notify });
       toast.success(`${staff.nickname}님을 운영진에서 해제했습니다`);
       onOpenChange(false);
     });

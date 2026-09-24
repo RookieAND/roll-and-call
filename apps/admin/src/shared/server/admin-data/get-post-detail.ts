@@ -1,13 +1,15 @@
 import "server-only";
 import { countRecentNoShows } from "./count-recent-no-shows";
-import { db } from "./mock-db";
 import { postAuditTarget } from "./post-audit-target";
 import { postStatusOf } from "./post-status-of";
+import { loadSnapshot, type Snapshot } from "./snapshot";
 
-const nicknameOf = (userId: string) => db.users.find((user) => user.id === userId)!.nickname;
+const nicknameOf = (db: Snapshot, userId: string) =>
+  db.users.find((user) => user.id === userId)!.nickname;
 
 // 구인 상세: 요약·신고·구인 내용·참여자와 오른쪽 GM 정보.
 export async function getPostDetail(id: string) {
+  const db = await loadSnapshot();
   const session = db.sessions.find((candidate) => candidate.id === id);
   if (!session) return null;
   const now = Date.now();
@@ -25,7 +27,7 @@ export async function getPostDetail(id: string) {
     title: session.title,
     rulebook: session.rulebook,
     status: postStatusOf(session, now),
-    auditTarget: postAuditTarget(session),
+    auditTarget: postAuditTarget(db, session),
     createdAt: session.createdAt,
     startsAt: session.startsAt,
     expectedHours: session.expectedHours,
@@ -42,7 +44,7 @@ export async function getPostDetail(id: string) {
     gmEditSinceHidden: session.gmEditSinceHidden,
     reports: reports.map((report) => ({
       id: report.id,
-      reporterNickname: report.reporterId ? nicknameOf(report.reporterId) : "알 수 없음",
+      reporterNickname: report.reporterId ? nicknameOf(db, report.reporterId) : "알 수 없음",
       reportedAt: report.reportedAt,
       category: report.category ?? "기타",
       detail: report.detail ?? "",
@@ -54,8 +56,8 @@ export async function getPostDetail(id: string) {
       ...waitingIds.map((userId, index) => ({ userId, state: `대기 ${index + 1}번` })),
     ].map((member) => ({
       ...member,
-      nickname: nicknameOf(member.userId),
-      recentNoShowCount: countRecentNoShows(member.userId, now),
+      nickname: nicknameOf(db, member.userId),
+      recentNoShowCount: countRecentNoShows(db, member.userId, now),
     })),
     gm: {
       id: gm.id,

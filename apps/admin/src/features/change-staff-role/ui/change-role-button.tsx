@@ -6,17 +6,18 @@ import { useState, useTransition } from "react";
 import { promoteToOwner } from "../api/promote-to-owner";
 
 interface ChangeRoleButtonProps {
+  userId: string;
   nickname: string;
 }
 
 // ponytail: 소유자 역할은 되돌릴 수 없으므로(시안) 운영진 → 소유자 한 방향만 바꾼다.
-export function ChangeRoleButton({ nickname }: ChangeRoleButtonProps) {
+export function ChangeRoleButton({ userId, nickname }: ChangeRoleButtonProps) {
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const promote = () =>
     startTransition(async () => {
-      await promoteToOwner(nickname);
+      await promoteToOwner(userId);
       toast.success(`${nickname}님의 역할을 소유자로 바꿨습니다`);
       setOpen(false);
     });

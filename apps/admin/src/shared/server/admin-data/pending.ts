@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "./mock-db";
+import { loadSnapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
 
 export const PENDING_KINDS = ["cert", "rulebookRequest", "report"] as const;
@@ -13,6 +13,7 @@ export interface PendingItem {
 
 // 사이드바 건수·홈 처리 대기·폰 안내·⌘K가 모두 이 한 곳에서 읽는다.
 export async function getPendingItems(): Promise<PendingItem[]> {
+  const db = await loadSnapshot();
   const sources: Record<PendingKind, Date[]> = {
     cert: db.certApplications
       .filter((application) => application.status === "pending")

@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "./mock-db";
+import { loadSnapshot } from "./snapshot";
 
 export interface RulebookRequestRow {
   id: string;
@@ -12,6 +12,7 @@ export interface RulebookRequestRow {
 
 // 아직 처리하지 않은 추가 요청만, 오래 기다린 순으로.
 export async function listRulebookRequests(): Promise<RulebookRequestRow[]> {
+  const db = await loadSnapshot();
   return db.rulebookRequests
     .filter((request) => !request.processed)
     .toSorted((a, b) => a.requestedAt.getTime() - b.requestedAt.getTime())

@@ -6,7 +6,7 @@ import { decideCert, requireStaff } from "@/shared/server";
 
 export async function approveCert(applicationId: string) {
   const staff = await requireStaff();
-  const result = await decideCert(applicationId, staff.nickname, { kind: "approve" });
+  const result = await decideCert(applicationId, staff, { kind: "approve" });
   revalidatePath("/", "layout");
   return result;
 }

@@ -1,7 +1,7 @@
 import "server-only";
 import { isSanctioned } from "./is-sanctioned";
-import { db } from "./mock-db";
 import { rulebookLabel } from "./rulebook-label";
+import { loadSnapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
 
 const DAY = 86_400_000;
@@ -32,6 +32,7 @@ const STATE_ORDER: Record<GmCertState, number> = { unapplied: 0, pending: 1, cer
 
 // 인증 현황. allTime이면 룰북별 표의 세션·미신청을 전체 기간으로 센다.
 export async function getCertStatus({ allTime }: { allTime: boolean }) {
+  const db = await loadSnapshot();
   const now = Date.now();
   const pending = db.certApplications.filter((application) => application.status === "pending");
 

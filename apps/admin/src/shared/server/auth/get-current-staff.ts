@@ -7,7 +7,7 @@ import { createSupabaseServerClient } from "./create-supabase-server-client";
 export type CurrentStaff =
   | { status: "anonymous" }
   | { status: "denied"; nickname: string }
-  | { status: "staff"; nickname: string; role: StaffRole };
+  | { status: "staff"; id: string; nickname: string; role: StaffRole };
 
 // layout과 page가 같은 요청에서 여러 번 불러도 한 번만 확인한다.
 export const getCurrentStaff = cache(async (): Promise<CurrentStaff> => {
@@ -19,6 +19,6 @@ export const getCurrentStaff = cache(async (): Promise<CurrentStaff> => {
 
   const metadata = user.user_metadata as Record<string, string | undefined>;
   const nickname = metadata.full_name ?? metadata.name ?? user.email ?? "";
-  const role = metadata.provider_id ? await getStaffRole(metadata.provider_id) : null;
-  return role ? { status: "staff", nickname, role } : { status: "denied", nickname };
+  const role = metadata.provider_id ? await getStaffRole(user.id, metadata.provider_id) : null;
+  return role ? { status: "staff", id: user.id, nickname, role } : { status: "denied", nickname };
 });

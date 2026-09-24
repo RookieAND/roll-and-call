@@ -10,7 +10,7 @@ export async function sanctionUser(userId: string, input: SanctionInput) {
   if (!validDays || !input.userReason.trim()) {
     throw new Error("기간과 사용자에게 보여줄 사유를 확인해 주세요");
   }
-  const result = await applySanction(userId, staff.nickname, {
+  const result = await applySanction(userId, staff, {
     ...input,
     userReason: input.userReason.trim(),
     staffMemo: input.staffMemo.trim(),
