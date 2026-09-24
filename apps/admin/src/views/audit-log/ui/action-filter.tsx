@@ -26,6 +26,7 @@ export function ActionFilter({ groups }: ActionFilterProps) {
 
   const change = (actions: string[]) => {
     const next = new URLSearchParams(searchParams);
+    next.delete("page");
     if (actions.length) next.set(PARAM, actions.join(","));
     else next.delete(PARAM);
     router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });

@@ -2,9 +2,9 @@ import { Chip, HStack, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 import Link from "next/link";
 
-import { withQuery } from "@/shared/lib";
+import { paginate, withQuery } from "@/shared/lib";
 import { AUDIT_ACTION_GROUPS, AUDIT_PERIODS, type listAuditLog } from "@/shared/server";
-import { AdminHeader, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
+import { AdminHeader, ListPager, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
 
 import { ActionFilter } from "./action-filter";
 import { AuditLogTable } from "./audit-log-table";
@@ -16,7 +16,17 @@ interface AuditLogViewProps {
 
 // ?target=은 다른 화면의 [활동 기록에서 보기]가 넘기는 고정 대상, ?q=는 검색창 입력이다.
 export function AuditLogView({ log, query }: AuditLogViewProps) {
-  const clearTargetHref = withQuery("/log", query, { target: undefined });
+  const clearTargetHref = withQuery("/log", query, { target: undefined, page: undefined });
+  const paged = paginate(log.rows, query.page);
+  const pager = log.rows.length ? (
+    <ListPager
+      page={paged.page}
+      totalPages={paged.totalPages}
+      total={log.rows.length}
+      unit="건"
+      hrefFor={(target) => withQuery("/log", query, { page: String(target) })}
+    />
+  ) : null;
 
   return (
     <>
@@ -48,8 +58,8 @@ export function AuditLogView({ log, query }: AuditLogViewProps) {
             className="w-[128px]"
           />
         </HStack>
-        <Panel title="최신순" className="flex-1">
-          <AuditLogTable rows={log.rows} />
+        <Panel title="최신순" className="flex-1" footer={pager}>
+          <AuditLogTable rows={paged.rows} />
         </Panel>
       </VStack>
     </>
