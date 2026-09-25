@@ -1,6 +1,5 @@
 import type { Game } from "@roll-and-call/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-import { compact } from "es-toolkit";
 
 import { formatGameSchedule } from "@/shared/lib";
 
@@ -16,7 +15,6 @@ export async function notifyRecruitmentComplete(
   players: RecruitmentPlayer[],
   waitingCount: number,
 ) {
-  const mentionIds = compact(players.map((player) => player.discordId));
   const playerLabels = players.map((player) =>
     player.discordId ? `<@${player.discordId}>` : `**${player.username}**`,
   );
@@ -36,9 +34,5 @@ export async function notifyRecruitmentComplete(
     ],
   });
 
-  await sendDiscordMessage(discordChannelId("closed"), {
-    content: mentionIds.map((discordId) => `<@${discordId}>`).join(" ") || undefined,
-    embeds: [embed],
-    userMentions: mentionIds,
-  });
+  await sendDiscordMessage(discordChannelId("closed"), { embeds: [embed] });
 }
