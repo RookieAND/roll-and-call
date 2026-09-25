@@ -4,8 +4,8 @@ import { postAuditTarget } from "./post-audit-target";
 import { postStatusOf } from "./post-status-of";
 import { loadSnapshot, type Snapshot } from "./snapshot";
 
-const nicknameOf = (db: Snapshot, userId: string) =>
-  db.users.find((user) => user.id === userId)!.nickname;
+const userOf = (db: Snapshot, userId: string) => db.users.find((user) => user.id === userId)!;
+const nicknameOf = (db: Snapshot, userId: string) => userOf(db, userId).nickname;
 
 // 구인 상세: 요약·신고·구인 내용·참여자·대기자와 오른쪽 GM 정보. 대기자는 대기 순번 순이다.
 export async function getPostDetail(id: string) {
@@ -33,8 +33,12 @@ export async function getPostDetail(id: string) {
     memberCount: session.memberIds.length,
     waitingCount: waitingIds.length,
     capacity: session.capacity,
-    recruitMethod: session.recruitMethod,
     recruitDeadline: session.recruitDeadline,
+    playTime: session.playTime,
+    genres: session.genres ?? [],
+    triggers: session.triggers ?? [],
+    platforms: session.platforms ?? [],
+    aiImage: session.aiImage ?? false,
     synopsis: session.synopsis,
     notices: session.notices ?? [],
     imageUrls: session.imageUrls ?? [],
@@ -53,13 +57,16 @@ export async function getPostDetail(id: string) {
     members: session.memberIds.map((userId) => ({
       userId,
       nickname: nicknameOf(db, userId),
+      discordHandle: userOf(db, userId).discordHandle,
+      joinedAt: session.joinedAt?.get(userId),
       recentNoShowCount: countRecentNoShows(db, userId, now),
     })),
     waitlist: waitingIds.map((userId, index) => ({
       userId,
       queueOrder: index + 1,
       nickname: nicknameOf(db, userId),
-      recentNoShowCount: countRecentNoShows(db, userId, now),
+      discordHandle: userOf(db, userId).discordHandle,
+      joinedAt: session.joinedAt?.get(userId),
     })),
     gm: {
       id: gm.id,

@@ -1,20 +1,26 @@
 "use client";
 
-import { HStack, SegmentedControl, Skeleton, Tabs, Text, VStack } from "@roll-and-call/ui";
+import { Grid, HStack, Skeleton, Tabs, Text, VStack } from "@roll-and-call/ui";
 
 import {
   AdminHeader,
   LoadingRegion,
   Panel,
-  SkeletonEntity,
+  FactRows,
+  SkeletonItem,
   SkeletonPager,
+  SkeletonSelect,
   SkeletonTable,
 } from "@/shared/ui";
 
-import { ACTIVITY_ROLE } from "../model/activity-role";
 import { USER_DETAIL_TAB } from "../model/user-detail-tab";
 
-// 탭과 세그먼트는 실제 모양 그대로 두되 값을 바꿀 수 없게 고정한다.
+const skeletonFact = (label: string) => ({
+  label,
+  value: <Skeleton width={96} height={14} render={<span />} className="inline-block" />,
+});
+
+// 탭과 필터는 실제 모양 그대로 두되 값을 바꿀 수 없게 고정한다.
 export function UserDetailLoading() {
   return (
     <>
@@ -26,10 +32,20 @@ export function UserDetailLoading() {
       <HStack align="stretch" className="flex-1">
         <LoadingRegion label="유저 정보를 불러오는 중입니다" className="min-w-0 bg-gray-50">
           <div className="p-200 pb-150">
-            <SkeletonEntity
-              columns={3}
-              facts={["가입일", "디스코드", "연 세션", "참여 세션", "최근 3개월 불참", "인증 룰북"]}
-            />
+            <section className="rounded-600 border border-gray-200 bg-surface">
+              <HStack align="center" gap="150" className="px-200 py-175">
+                <Skeleton width={40} height={40} rounded="full" />
+                <Skeleton width={120} height={20} />
+              </HStack>
+              <Grid className="grid-cols-3 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
+                <FactRows labelWidth={72} items={["가입일", "디스코드 ID"].map(skeletonFact)} />
+                <FactRows labelWidth={72} items={["연 세션", "참여 세션"].map(skeletonFact)} />
+                <FactRows
+                  labelWidth={100}
+                  items={["최근 3개월 불참", "인증 룰북"].map(skeletonFact)}
+                />
+              </Grid>
+            </section>
           </div>
           <Tabs.Root value={USER_DETAIL_TAB.activity}>
             <div className="bleed-left border-b border-gray-200 bg-surface px-200">
@@ -49,24 +65,12 @@ export function UserDetailLoading() {
             </div>
             <Tabs.Panel value={USER_DETAIL_TAB.activity} className="p-200">
               <Panel
+                title="활동"
                 footer={<SkeletonPager />}
                 right={
-                  <SegmentedControl.Root
-                    size="sm"
-                    fullWidth={false}
-                    value={ACTIVITY_ROLE.all}
-                    onValueChange={() => {}}
-                    disabled
-                    aria-label="활동 역할"
-                  >
-                    <SegmentedControl.Item value={ACTIVITY_ROLE.all}>전체</SegmentedControl.Item>
-                    <SegmentedControl.Item value={ACTIVITY_ROLE.hosted}>
-                      연 세션
-                    </SegmentedControl.Item>
-                    <SegmentedControl.Item value={ACTIVITY_ROLE.played}>
-                      참여 세션
-                    </SegmentedControl.Item>
-                  </SegmentedControl.Root>
+                  <div className="w-[132px] [&_[data-slot=select-trigger]]:h-[32px] [&_[data-slot=select-trigger]]:min-h-[32px]">
+                    <SkeletonSelect label="전체" />
+                  </div>
                 }
               >
                 <SkeletonTable
@@ -96,9 +100,11 @@ export function UserDetailLoading() {
           >
             조치
           </Text>
-          <VStack gap="100" className="p-150">
-            <Skeleton width="100%" height={40} rounded={400} />
-            <Skeleton width={112} height={32} rounded={400} />
+          <VStack gap="075" className="p-150">
+            <SkeletonItem />
+            <SkeletonItem />
+            <SkeletonItem />
+            <SkeletonItem />
           </VStack>
         </VStack>
       </HStack>

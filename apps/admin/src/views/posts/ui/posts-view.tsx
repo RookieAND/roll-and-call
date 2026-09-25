@@ -1,10 +1,11 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { paginate, withQuery } from "@/shared/lib";
+import { formatSessionTime, paginate, withQuery } from "@/shared/lib";
 import { POST_PERIODS, type listPosts } from "@/shared/server";
 import {
   AdminHeader,
+  CsvExportButton,
   EMPTY_IMAGE,
   EmptyState,
   ListPager,
@@ -39,6 +40,22 @@ export function PostsView({ posts, page, query }: PostsViewProps) {
     />
   );
   const sub = empty ? "검색 결과 0건" : `${posts.rows.length}건`;
+  const csvButton = (
+    <CsvExportButton
+      fileName="구인 목록.csv"
+      header={["제목", "GM", "룰북", "세션 일시", "참여", "상태", "처리 안 된 신고", "운영진 조치"]}
+      rows={posts.rows.map((row) => [
+        row.title,
+        row.gmNickname,
+        row.rulebook,
+        formatSessionTime(row.startsAt),
+        `${row.memberCount}/${row.capacity}`,
+        row.status,
+        row.unresolvedReportCount,
+        row.staffAction ?? "",
+      ])}
+    />
+  );
   const toOptions = (values: readonly string[]) => values.map((value) => ({ label: value, value }));
 
   return (
@@ -69,7 +86,7 @@ export function PostsView({ posts, page, query }: PostsViewProps) {
             처리 안 된 신고 있음
           </Chip>
         </HStack>
-        <Panel className="flex-1" footer={pager}>
+        <Panel className="flex-1" right={csvButton} footer={empty ? null : pager}>
           {empty ? (
             <EmptyState
               image={EMPTY_IMAGE.search}

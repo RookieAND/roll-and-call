@@ -2,10 +2,9 @@ import { Badge, Table, Text } from "@roll-and-call/ui";
 
 import { formatSessionTime, paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow, UrlSelect } from "@/shared/ui";
 
 import { ACTIVITY_ROLE, type ActivityRole } from "../model/activity-role";
-import { ActivityRoleFilter } from "./activity-role-filter";
 
 interface ActivityPanelProps {
   activities: UserDetail["activities"];
@@ -21,7 +20,18 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
   const paged = paginate(rows, page);
   return (
     <Panel
-      right={<ActivityRoleFilter role={role} />}
+      title={`활동 ${rows.length}건`}
+      right={
+        <UrlSelect
+          param="role"
+          allLabel="전체"
+          options={[
+            { label: "연 세션", value: ACTIVITY_ROLE.hosted },
+            { label: "참여 세션", value: ACTIVITY_ROLE.played },
+          ]}
+          className="w-[132px] [&_[data-slot=select-trigger]]:h-[32px] [&_[data-slot=select-trigger]]:min-h-[32px]"
+        />
+      }
       footer={
         <ListPager page={paged.page} totalPages={paged.totalPages} total={rows.length} unit="건" />
       }

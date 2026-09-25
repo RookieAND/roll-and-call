@@ -1,4 +1,4 @@
-import { Chip, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
+import { Button, Chip, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import {
@@ -44,17 +44,25 @@ export function PostsLoading() {
           </div>
           <Chip disabled>처리 안 된 신고 있음</Chip>
         </HStack>
-        <Panel className="flex-1" footer={<SkeletonPager />}>
+        <Panel
+          className="flex-1"
+          right={
+            <Button variant="outline" colorPalette="gray" size="sm" disabled>
+              CSV 내보내기
+            </Button>
+          }
+          footer={<SkeletonPager />}
+        >
           <SkeletonTable
             columns={[
               { label: "제목", kind: "text" },
               { label: "GM", kind: "text", width: "w-[156px]" },
               { label: "룰북", kind: "text", width: "w-[140px]" },
               { label: "세션 일시", kind: "date", width: "w-[192px]", sorted: true },
-              { label: "참여", kind: "number", width: "w-[76px]", align: "center" },
+              { label: "참여", kind: "number", width: "w-[76px]", align: "end" },
               { label: "상태", kind: "text", width: "w-[104px]", align: "center" },
-              { label: "처리 안 된 신고", kind: "number", width: "w-[118px]", align: "center" },
-              { label: "운영진 조치", kind: "badge", width: "w-[116px]" },
+              { label: "처리 안 된 신고", kind: "number", width: "w-[118px]", align: "end" },
+              { label: "운영진 조치", kind: "badge", width: "w-[110px]" },
             ]}
           />
         </Panel>

@@ -9,6 +9,8 @@ import {
   SkeletonTabs,
 } from "@/shared/ui";
 
+import { PostSummarySkeleton } from "./post-summary-skeleton";
+
 export function PostDetailLoading() {
   return (
     <>
@@ -19,12 +21,7 @@ export function PostDetailLoading() {
       />
       <HStack align="stretch" className="flex-1">
         <LoadingRegion label="구인 정보를 불러오는 중입니다" className="min-w-0 gap-150 p-200">
-          <SkeletonEntity
-            lead="thumbnail"
-            facts={["세션 일시", "참여 인원", "대기 인원", "모집 방식", "모집 마감"]}
-            columns={5}
-            actions={<Skeleton width={32} height={32} rounded={400} />}
-          />
+          <PostSummarySkeleton />
           <Panel className="flex-1">
             <SkeletonTabs items={[null, null, null, null]} />
             <VStack gap="125" className="p-150">

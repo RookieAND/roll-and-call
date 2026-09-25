@@ -105,6 +105,13 @@ export interface Session {
   filledAt?: Date;
   recruitMethod?: string;
   recruitDeadline?: Date;
+  playTime?: string;
+  genres?: string[];
+  triggers?: string[];
+  platforms?: string[];
+  aiImage?: boolean;
+  // 참여자·대기자가 신청한 시각.
+  joinedAt?: Map<string, Date>;
   synopsis?: string;
   notices?: string[];
   imageUrls?: string[];

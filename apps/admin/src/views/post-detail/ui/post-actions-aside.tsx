@@ -1,10 +1,11 @@
 import { Callout, Text, VStack } from "@roll-and-call/ui";
 import { Check, Eye, FileText, Shield } from "lucide-react";
+import Link from "next/link";
 
 import { POST_ACTION, type PostAction } from "@/features/moderate-post";
 import type { PostDetail } from "@/shared/server";
+import { ActionCard } from "@/shared/ui";
 
-import { ActionCard } from "./action-card";
 import { GmInfo } from "./gm-info";
 
 interface PostActionsAsideProps {
@@ -35,22 +36,22 @@ export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
           icon={FileText}
           title="GM에게 수정 요청"
           description="구인은 그대로 두고 고쳐 달라고 알립니다"
-          href={actionHref(POST_ACTION.edit)}
+          link={<Link href={actionHref(POST_ACTION.edit)} scroll={false} />}
         />
         {post.hidden ? (
           <ActionCard
             icon={Eye}
             title="숨김 해제"
             description="목록과 검색에 다시 보이게 합니다"
-            href={actionHref(POST_ACTION.unhide)}
-            highlighted
+            link={<Link href={actionHref(POST_ACTION.unhide)} scroll={false} />}
+            tone="primary"
           />
         ) : (
           <ActionCard
             icon={Eye}
             title="숨김"
             description="목록과 검색에서만 빠집니다"
-            href={actionHref(POST_ACTION.hide)}
+            link={<Link href={actionHref(POST_ACTION.hide)} scroll={false} />}
           />
         )}
         {reported ? (
@@ -58,7 +59,7 @@ export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
             icon={Check}
             title="처리 완료 (조치 없음)"
             description="문제가 없다고 보고 신고만 닫습니다"
-            href={actionHref(POST_ACTION.resolve)}
+            link={<Link href={actionHref(POST_ACTION.resolve)} scroll={false} />}
           />
         ) : null}
         <Callout.Root colorPalette="gray" size="sm" className="mt-050">

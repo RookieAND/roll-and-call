@@ -1,57 +1,82 @@
-import { Badge, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, Grid, Text, VStack } from "@roll-and-call/ui";
 
 import type { PostDetail } from "@/shared/server";
+import { FactRows } from "@/shared/ui";
 
+import { ContentSection } from "./content-section";
 import { ImagePlaceholder } from "./image-placeholder";
 
 interface ContentPanelProps {
-  post: Pick<PostDetail, "synopsis" | "notices" | "imageUrls">;
+  post: Pick<
+    PostDetail,
+    "genres" | "triggers" | "platforms" | "aiImage" | "synopsis" | "notices" | "imageUrls"
+  >;
 }
 
-// 시놉시스 → 안내 사항 → 본문 이미지. 스포일러는 가리지 않는다.
+// 구인 설정 → 시놉시스 → 주의 사항 → 본문 이미지. 스포일러는 가리지 않는다.
 export function ContentPanel({ post }: ContentPanelProps) {
+  const tagsOf = (values: string[]) =>
+    values.length
+      ? values.map((value) => (
+          <Badge key={value} colorPalette="gray">
+            {value}
+          </Badge>
+        ))
+      : "—";
+  const aiImageBadge = post.aiImage ? (
+    <Badge colorPalette="warning">사용</Badge>
+  ) : (
+    <Badge colorPalette="gray">사용 안 함</Badge>
+  );
   return (
-    <VStack gap="175" className="p-175">
-      <VStack gap="100" render={<section />}>
-        <Text typography="heading3" render={<h3 />}>
-          시놉시스
-        </Text>
+    <VStack className="px-200">
+      <ContentSection title="구인 설정">
+        <FactRows
+          items={[
+            { label: "장르", value: tagsOf(post.genres) },
+            { label: "트리거", value: tagsOf(post.triggers) },
+            { label: "사용 플랫폼", value: tagsOf(post.platforms) },
+            { label: "AI 이미지", value: aiImageBadge },
+          ]}
+        />
+      </ContentSection>
+      <ContentSection
+        title="시놉시스"
+        right={
+          <Text typography="body4" foreground="hint">
+            운영진 화면에서는 스포일러를 가리지 않습니다
+          </Text>
+        }
+      >
         <Text
           typography="body2"
           foreground={post.synopsis ? "normal" : "hint"}
-          className="max-w-[680px] leading-[1.75]"
+          className="rounded-400 border border-gray-200 bg-gray-50 px-200 py-175 leading-[1.7] whitespace-pre-line"
         >
           {post.synopsis ?? "시놉시스가 없습니다"}
         </Text>
-      </VStack>
+      </ContentSection>
       {post.notices.length ? (
-        <VStack gap="100" render={<section />}>
-          <Text typography="heading3" render={<h3 />}>
-            안내 사항
-          </Text>
+        <ContentSection title="주의 사항">
           <VStack gap="050" render={<ul />}>
             {post.notices.map((notice) => (
-              <HStack key={notice} gap="075" render={<li />}>
-                <Text typography="body2" foreground="hint" aria-hidden>
-                  ·
-                </Text>
-                <Text typography="body2" className="leading-[1.65]">
-                  {notice}
-                </Text>
-              </HStack>
+              <Text key={notice} typography="body2" render={<li />} className="leading-[1.65]">
+                {notice}
+              </Text>
             ))}
           </VStack>
-        </VStack>
+        </ContentSection>
       ) : null}
       {post.imageUrls.length ? (
-        <VStack gap="100" render={<section />}>
-          <HStack align="center" gap="075">
-            <Text typography="heading3" render={<h3 />}>
-              본문 이미지
+        <ContentSection
+          title="본문 이미지"
+          right={
+            <Text typography="body4" foreground="hint">
+              {post.imageUrls.length}장
             </Text>
-            <Badge colorPalette="gray">{post.imageUrls.length}장</Badge>
-          </HStack>
-          <Grid className="grid-cols-2 gap-100">
+          }
+        >
+          <Grid className="grid-cols-2 gap-150">
             {post.imageUrls.map((url, index) =>
               url ? (
                 <img
@@ -69,7 +94,7 @@ export function ContentPanel({ post }: ContentPanelProps) {
               ),
             )}
           </Grid>
-        </VStack>
+        </ContentSection>
       ) : null}
     </VStack>
   );

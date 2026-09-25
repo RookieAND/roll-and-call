@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 interface PanelProps {
   title?: string;
+  description?: string;
   right?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
@@ -11,7 +12,15 @@ interface PanelProps {
 }
 
 // 카드 한 장. 안에 든 표는 바깥 테두리를 지워 패널 테두리 하나만 남긴다.
-export function Panel({ title, right, children, footer, className, bodyClassName }: PanelProps) {
+export function Panel({
+  title,
+  description,
+  right,
+  children,
+  footer,
+  className,
+  bodyClassName,
+}: PanelProps) {
   return (
     <VStack
       render={<section />}
@@ -20,7 +29,7 @@ export function Panel({ title, right, children, footer, className, bodyClassName
         className,
       )}
     >
-      {title || right ? (
+      {title || description || right ? (
         <HStack
           align="center"
           gap="100"
@@ -30,6 +39,11 @@ export function Panel({ title, right, children, footer, className, bodyClassName
           {title ? (
             <Text typography="subtitle1" render={<h2 />}>
               {title}
+            </Text>
+          ) : null}
+          {description ? (
+            <Text typography="body4" foreground="hint">
+              {description}
             </Text>
           ) : null}
           {right ? (

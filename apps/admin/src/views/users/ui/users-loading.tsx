@@ -30,7 +30,7 @@ export function UsersLoading() {
             </Chip>
           ))}
         </HStack>
-        <Panel className="flex-1" footer={<SkeletonPager />}>
+        <Panel footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
               { label: "닉네임", kind: "text", width: "w-[180px]" },

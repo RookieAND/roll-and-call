@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Tabs, Text } from "@roll-and-call/ui";
+import { HStack, Tabs } from "@roll-and-call/ui";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
 
@@ -66,11 +66,6 @@ export function PostDetailTabs({
           </Tabs.Trigger>
           <Tabs.Indicator />
         </Tabs.List>
-        {tab === POST_DETAIL_TAB.content ? (
-          <Text typography="body4" foreground="hint" className="ml-auto">
-            스포일러 가림 없이 보여줍니다
-          </Text>
-        ) : null}
       </HStack>
       {reportPanel ? (
         <Tabs.Panel value={POST_DETAIL_TAB.reports} className="pt-0">

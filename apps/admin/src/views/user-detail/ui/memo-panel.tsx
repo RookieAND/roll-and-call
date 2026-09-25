@@ -1,4 +1,4 @@
-import { Badge, Button, VStack } from "@roll-and-call/ui";
+import { Button, VStack } from "@roll-and-call/ui";
 import { Quote } from "lucide-react";
 import Link from "next/link";
 
@@ -18,6 +18,7 @@ interface MemoPanelProps {
 export function MemoPanel({ userId, memos }: MemoPanelProps) {
   return (
     <Panel
+      description={memos.length ? "사용자에게 보이지 않는 메모입니다" : undefined}
       right={
         <Button
           variant="outline"
@@ -38,13 +39,7 @@ export function MemoPanel({ userId, memos }: MemoPanelProps) {
       {memos.length ? (
         <VStack gap="100">
           {memos.map((memo) => (
-            <ItemCard
-              key={memo.id}
-              icon={Quote}
-              title={memo.author}
-              meta={formatDate(memo.at)}
-              tags={<Badge colorPalette="gray">사용자에게 안 보이는 메모</Badge>}
-            >
+            <ItemCard key={memo.id} icon={Quote} title={memo.author} meta={formatDate(memo.at)}>
               {memo.body}
             </ItemCard>
           ))}

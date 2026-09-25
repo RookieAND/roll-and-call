@@ -23,7 +23,7 @@ export function PostsTable({ rows }: PostsTableProps) {
         <col className="w-[76px]" />
         <col className="w-[104px]" />
         <col className="w-[118px]" />
-        <col className="w-[116px]" />
+        <col className="w-[110px]" />
       </colgroup>
       <Table.Header>
         <Table.Row>
@@ -36,9 +36,9 @@ export function PostsTable({ rows }: PostsTableProps) {
               <ArrowDown size={10} strokeWidth={2.4} aria-hidden />
             </HStack>
           </Table.Head>
-          <Table.Head align="center">참여</Table.Head>
+          <Table.Head align="end">참여</Table.Head>
           <Table.Head align="center">상태</Table.Head>
-          <Table.Head align="center">처리 안 된 신고</Table.Head>
+          <Table.Head align="end">처리 안 된 신고</Table.Head>
           <Table.Head>운영진 조치</Table.Head>
         </Table.Row>
       </Table.Header>
@@ -74,7 +74,7 @@ export function PostsTable({ rows }: PostsTableProps) {
                   {formatSessionTime(row.startsAt)}
                 </Text>
               </Table.Cell>
-              <Table.Cell align="center" numeric>
+              <Table.Cell align="end" numeric>
                 {row.memberCount}/{row.capacity}명
               </Table.Cell>
               <Table.Cell align="center">
@@ -82,7 +82,7 @@ export function PostsTable({ rows }: PostsTableProps) {
                   {row.status}
                 </Text>
               </Table.Cell>
-              <Table.Cell align="center" numeric>
+              <Table.Cell align="end" numeric>
                 {reported ? (
                   <Text typography="body3" weight="bold" foreground="danger">
                     {row.unresolvedReportCount}건
