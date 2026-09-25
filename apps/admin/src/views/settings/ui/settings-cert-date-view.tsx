@@ -1,10 +1,10 @@
-import { Button, Callout, VStack } from "@roll-and-call/ui";
+import { Callout, VStack } from "@roll-and-call/ui";
 import { BookOpen, ShieldCheck, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 
 import { EnforcementDateForm } from "@/features/set-cert-enforcement-date";
 import type { getCertDateSettings } from "@/shared/server";
-import { ItemCard, Panel } from "@/shared/ui";
+import { ActionCard, Panel } from "@/shared/ui";
 
 import { SettingsFrame } from "./settings-frame";
 
@@ -31,41 +31,18 @@ export function SettingsCertDateView({ settings }: SettingsCertDateViewProps) {
       </Panel>
       <Panel title="관련 화면" bodyClassName="p-150">
         <VStack gap="100">
-          <ItemCard
+          <ActionCard
             icon={ShieldCheck}
-            tone="primary"
             title="인증 현황"
-            meta={`최근 활동 GM ${settings.gmCount}명 중 ${settings.certifiedGmCount}명 인증`}
-            right={
-              <Button
-                variant="outline"
-                colorPalette="gray"
-                size="sm"
-                render={<Link href="/cert/status" />}
-              >
-                열기
-              </Button>
-            }
-          >
-            GM별 진행 상태를 확인하거나 미신청 GM에게 안내하는 작업은 룰북 인증 메뉴에서 합니다.
-          </ItemCard>
-          <ItemCard
+            description={`최근 활동 GM ${settings.gmCount}명 중 ${settings.certifiedGmCount}명이 인증을 마쳤습니다. 미신청 GM에게는 룰북 인증 메뉴에서 안내합니다.`}
+            link={<Link href="/cert/status" />}
+          />
+          <ActionCard
             icon={BookOpen}
             title="룰북별 인증 필요 여부"
-            meta={`등록된 룰북 ${settings.rulebookCount}개`}
-            right={
-              <Button
-                variant="outline"
-                colorPalette="gray"
-                size="sm"
-                render={<Link href="/rules" />}
-              >
-                열기
-              </Button>
-            }
-          >
-            룰북 추가와 인증 정책 변경은 룰북 메뉴에서 합니다.
-          </ItemCard>
+            description={`등록된 룰북 ${settings.rulebookCount}개의 인증 정책은 룰북 메뉴에서 변경합니다.`}
+            link={<Link href="/rules" />}
+          />
         </VStack>
       </Panel>
     </SettingsFrame>

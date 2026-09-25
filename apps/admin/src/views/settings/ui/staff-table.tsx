@@ -5,6 +5,8 @@ import { ChangeRoleButton } from "@/features/change-staff-role";
 import { formatDate, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
 
+import { formatLastActive } from "../model/format-last-active";
+
 interface StaffTableProps {
   rows: StaffRow[];
   viewer: string;
@@ -16,10 +18,10 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
       <colgroup>
         <col className="w-[180px]" />
         <col className="w-[104px]" />
-        <col className="w-[136px]" />
-        <col className="w-[136px]" />
+        <col className="w-[104px]" />
+        <col className="w-[104px]" />
         <col />
-        <col className="w-[188px]" />
+        <col className="w-[150px]" />
       </colgroup>
       <Table.Header>
         <Table.Row>
@@ -63,16 +65,12 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
-                  {row.lastActiveAt ? formatDate(row.lastActiveAt) : "—"}
+                  {row.lastActiveAt ? formatLastActive(row.lastActiveAt) : "—"}
                 </Text>
               </Table.Cell>
               <Table.Cell />
               <Table.Cell align="end">
-                {owner ? (
-                  <Text typography="body4" foreground="hint">
-                    소유자 역할은 변경할 수 없습니다
-                  </Text>
-                ) : (
+                {owner ? null : (
                   <HStack gap="075" justify="end">
                     <ChangeRoleButton userId={row.userId} nickname={row.nickname} />
                     <Button

@@ -1,5 +1,4 @@
 import { Callout, Text, VStack, cn } from "@roll-and-call/ui";
-import { Lock } from "lucide-react";
 import Link from "next/link";
 
 import { SETTINGS_NAV_ITEMS, type SettingsHref } from "../model/settings-nav-items";
@@ -15,8 +14,7 @@ export function SettingsNav({ active }: SettingsNavProps) {
       className="w-[220px] shrink-0 border-r border-gray-200 bg-surface"
     >
       <Text
-        typography="body4"
-        weight="bold"
+        typography="subtitle2"
         foreground="muted"
         className="border-b border-(--rc-color-border-subtle) bg-gray-50 px-175 py-125"
       >
@@ -44,9 +42,6 @@ export function SettingsNav({ active }: SettingsNavProps) {
       })}
       <div className="p-175">
         <Callout.Root colorPalette="gray" size="sm">
-          <Callout.Icon>
-            <Lock size={14} />
-          </Callout.Icon>
           <Callout.Description>소유자만 볼 수 있는 화면입니다.</Callout.Description>
         </Callout.Root>
       </div>

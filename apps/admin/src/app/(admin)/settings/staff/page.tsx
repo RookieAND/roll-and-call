@@ -21,7 +21,6 @@ export default async function SettingsStaffPage({ searchParams }: PageProps<"/se
       viewer={viewer.nickname}
       candidates={candidates}
       removing={removing}
-      page={query.page}
     />
   );
 }

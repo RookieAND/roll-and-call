@@ -1,22 +1,14 @@
 "use client";
 
-import {
-  Button,
-  Calendar,
-  Field,
-  HStack,
-  Popover,
-  Select,
-  Text,
-  VStack,
-  toast,
-} from "@roll-and-call/ui";
+import { Button, Calendar, HStack, Popover, Select, toast } from "@roll-and-call/ui";
 import { CalendarDays } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import { formatDate } from "@/shared/lib";
+import { FactRows, FactSub } from "@/shared/ui";
 
 import { changeEnforcementDate } from "../api/change-enforcement-date";
+import { formatEnforcementDate } from "../model/format-enforcement-date";
 import { POSTPONE_OPTIONS } from "../model/postpone-options";
 import { toSeoulDateKey } from "../model/to-seoul-date-key";
 import { ConfirmDateChangeDialog } from "./confirm-date-change-dialog";
@@ -45,7 +37,8 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
       date: new Date(enforcementDate.getTime() + Number(postponeDays) * DAY),
       kind: "postpone",
     });
-  const dateLabel = enforcementDate ? formatDate(enforcementDate) : "지정 전";
+  const current = enforcementDate ? formatEnforcementDate(enforcementDate) : null;
+  const pickLabel = enforcementDate ? "날짜 변경" : "날짜 지정";
   const dateKey = enforcementDate ? toSeoulDateKey(enforcementDate) : undefined;
 
   const confirm = () =>
@@ -58,57 +51,78 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
       setPostponeDays(undefined);
     });
 
+  // ponytail: 시안은 현재 적용일을 읽기 전용으로 둔다. 아직 지정 전인 서비스가 날짜를 고를 길이 필요해 달력 버튼을 남겼다.
   return (
-    <HStack align="start" gap="150">
-      <Field.Root label="적용일" htmlFor="enforcement-date" required className="flex-1">
-        <Popover.Root open={calendarOpen} onOpenChange={setCalendarOpen}>
-          <Popover.Trigger
-            id="enforcement-date"
-            disabled={pending}
-            render={
-              <Button
-                variant="outline"
-                colorPalette="gray"
-                className="h-11 w-full justify-between font-normal"
-              />
-            }
-          >
-            <Text typography="body2">{dateLabel}</Text>
-            <CalendarDays size={16} aria-hidden />
-          </Popover.Trigger>
-          <Popover.Popup align="start">
-            <Calendar value={dateKey} min={toSeoulDateKey(new Date())} onSelect={pickDate} />
-          </Popover.Popup>
-        </Popover.Root>
-      </Field.Root>
-      <VStack gap="075" className="flex-1">
-        <Text typography="body4" weight="bold" id="postpone-label">
-          적용일 연기
-        </Text>
-        <HStack align="center" gap="100">
-          <div className="w-[132px]">
-            <Select.Root key={dateKey} items={POSTPONE_OPTIONS} onValueChange={setPostponeDays}>
-              <Select.Trigger placeholder="연기 기간 선택" />
-              <Select.Popup>
-                {POSTPONE_OPTIONS.map((option) => (
-                  <Select.Item key={option.value} value={option.value}>
-                    {option.label}
-                  </Select.Item>
-                ))}
-              </Select.Popup>
-            </Select.Root>
-          </div>
-          <Button
-            variant="outline"
-            colorPalette="gray"
-            size="sm"
-            disabled={!enforcementDate || !postponeDays || pending}
-            onClick={pickPostpone}
-          >
-            연기
-          </Button>
-        </HStack>
-      </VStack>
+    <>
+      <FactRows
+        labelWidth={96}
+        items={[
+          {
+            label: "현재 적용일",
+            value: (
+              <>
+                {current ? current.label : "지정 전"}
+                {current ? <FactSub>{current.remaining}</FactSub> : null}
+                <Popover.Root open={calendarOpen} onOpenChange={setCalendarOpen}>
+                  <Popover.Trigger
+                    disabled={pending}
+                    render={
+                      <Button
+                        variant="outline"
+                        colorPalette="gray"
+                        size="sm"
+                        className="ml-auto gap-050"
+                      />
+                    }
+                  >
+                    <CalendarDays size={14} aria-hidden />
+                    {pickLabel}
+                  </Popover.Trigger>
+                  <Popover.Popup align="end">
+                    <Calendar
+                      value={dateKey}
+                      min={toSeoulDateKey(new Date())}
+                      onSelect={pickDate}
+                    />
+                  </Popover.Popup>
+                </Popover.Root>
+              </>
+            ),
+          },
+          {
+            label: "적용일 연기",
+            value: (
+              <HStack align="center" gap="100">
+                <div className="w-[148px] [&_[data-slot=select-trigger]]:h-[32px] [&_[data-slot=select-trigger]]:min-h-[32px]">
+                  <Select.Root
+                    key={dateKey}
+                    items={POSTPONE_OPTIONS}
+                    onValueChange={setPostponeDays}
+                  >
+                    <Select.Trigger placeholder="연기 기간 선택" aria-label="연기 기간" />
+                    <Select.Popup>
+                      {POSTPONE_OPTIONS.map((option) => (
+                        <Select.Item key={option.value} value={option.value}>
+                          {option.label}
+                        </Select.Item>
+                      ))}
+                    </Select.Popup>
+                  </Select.Root>
+                </div>
+                <Button
+                  variant="outline"
+                  colorPalette="gray"
+                  size="sm"
+                  disabled={!enforcementDate || !postponeDays || pending}
+                  onClick={pickPostpone}
+                >
+                  연기
+                </Button>
+              </HStack>
+            ),
+          },
+        ]}
+      />
       <ConfirmDateChangeDialog
         change={change}
         currentDate={enforcementDate}
@@ -116,6 +130,6 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
         onCancel={() => setChange(null)}
         onConfirm={confirm}
       />
-    </HStack>
+    </>
   );
 }
