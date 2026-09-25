@@ -63,7 +63,7 @@ export function RulebooksLoading() {
             rows={7}
             columns={[
               { label: "룰북", kind: "text", width: "w-[200px]" },
-              { label: "판본", kind: "number", width: "w-[78px]", align: "center" },
+              { label: "판본", kind: "number", width: "w-[234px]", align: "center" },
               { label: "다른 이름", kind: "text" },
               { label: "인증", kind: "badge", width: "w-[120px]", align: "center" },
               { label: "상태", kind: "badge", width: "w-[82px]", align: "center" },

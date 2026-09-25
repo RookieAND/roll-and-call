@@ -121,7 +121,7 @@ export function GrantGmDialog({
         </Dialog.Body>
         <Dialog.Footer layout="row" className="items-center">
           <Text typography="body4" foreground="hint" className="mr-auto">
-            확정하면 다른 운영진에게 디스코드 알림이 갑니다
+            확정하면 다른 운영진에게 디스코드 알림이 전송됩니다
           </Text>
           <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
             취소

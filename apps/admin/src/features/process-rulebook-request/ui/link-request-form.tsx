@@ -125,7 +125,7 @@ export function LinkRequestForm({ request, rulebooks, onDone }: LinkRequestFormP
               </Checkbox.Root>
               <VStack gap="025">
                 <Checkbox.Label>
-                  요청한 이름 {requestedName} 이 룰북의 <b>다른 이름</b>에 추가
+                  요청한 이름 {requestedName} 이 룰북의 <b>다른 이름</b>에 추가합니다
                 </Checkbox.Label>
                 <Text typography="body4" foreground="hint">
                   이미 다른 이름에 있으면 추가하지 않습니다

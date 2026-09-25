@@ -70,7 +70,7 @@ export function RulebookDetailLoading() {
             <TextInput
               id="rulebook-reason-loading"
               disabled
-              placeholder="기본 정보와 인증 변경을 함께 저장합니다. 사유는 활동 기록에 남습니다"
+              placeholder="기본 정보와 인증 설정을 함께 저장하며, 사유는 활동 기록에 남습니다"
             />
           </Field.Root>
           <Button variant="outline" colorPalette="gray" disabled>
