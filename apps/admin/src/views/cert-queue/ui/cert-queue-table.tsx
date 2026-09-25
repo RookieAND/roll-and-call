@@ -18,7 +18,7 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
       <colgroup>
         <col className="w-[180px]" />
         <col className="w-[200px]" />
-        <col className="w-[136px]" />
+        <col className="w-[132px]" />
         <col className="w-[90px]" />
         <col className="w-[100px]" />
         <col className="w-[90px]" />

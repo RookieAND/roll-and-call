@@ -43,7 +43,7 @@ export function CertQueueLoading() {
             columns={[
               { label: "닉네임", kind: "text", width: "w-[180px]" },
               { label: "룰북", kind: "text", width: "w-[200px]" },
-              { label: "신청일", kind: "date", width: "w-[136px]" },
+              { label: "신청일", kind: "date", width: "w-[132px]" },
               {
                 label: "대기 일수",
                 kind: "number",

@@ -31,7 +31,7 @@ export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
       <colgroup>
         <col className="w-[160px]" />
         <col className="w-[180px]" />
-        <col className="w-[180px]" />
+        <col className="w-[170px]" />
         <col className="w-[96px]" />
         <col />
       </colgroup>

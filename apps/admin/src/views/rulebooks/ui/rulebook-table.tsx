@@ -18,7 +18,7 @@ export function RulebookTable({ rows }: RulebookTableProps) {
         <col />
         <col className="w-[120px]" />
         <col className="w-[82px]" />
-        <col className="w-[84px]" />
+        <col className="w-[78px]" />
         <col className="w-[44px]" />
       </colgroup>
       <Table.Header>

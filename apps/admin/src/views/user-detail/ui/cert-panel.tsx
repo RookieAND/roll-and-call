@@ -43,10 +43,10 @@ export function CertPanel({ user, page }: CertPanelProps) {
           <colgroup>
             <col className="w-[200px]" />
             <col className="w-[96px]" />
-            <col className="w-[164px]" />
+            <col className="w-[156px]" />
             <col className="w-[120px]" />
             <col />
-            <col className="w-[96px]" />
+            <col className="w-[104px]" />
           </colgroup>
           <Table.Header>
             <Table.Row>

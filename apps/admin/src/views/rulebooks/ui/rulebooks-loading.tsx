@@ -67,7 +67,7 @@ export function RulebooksLoading() {
               { label: "다른 이름", kind: "text" },
               { label: "인증", kind: "badge", width: "w-[120px]", align: "center" },
               { label: "상태", kind: "badge", width: "w-[82px]", align: "center" },
-              { label: "인증 GM", kind: "number", width: "w-[84px]", align: "center" },
+              { label: "인증 GM", kind: "number", width: "w-[78px]", align: "center" },
               { label: "", kind: "icon", width: "w-[44px]", align: "end" },
             ]}
           />

@@ -46,7 +46,7 @@ export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelPr
       <Table.Root className="table-fixed">
         <colgroup>
           <col className="w-[180px]" />
-          <col className="w-[136px]" />
+          <col className="w-[132px]" />
           <col className="w-[112px]" />
           <col />
           <col className="w-[44px]" />
