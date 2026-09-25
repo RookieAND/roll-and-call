@@ -60,6 +60,7 @@ export async function GameConfirmView({ id }: { id: string }) {
             playLabel={playLabel}
             slotCount={Math.ceil(minutes / SLOT_MINUTES)}
             confirmedCount={countConfirmed(game.participants)}
+            maxPlayers={game.maxPlayers}
             currentIso={game.confirmedAt?.toISOString() ?? null}
           />
         </VStack>

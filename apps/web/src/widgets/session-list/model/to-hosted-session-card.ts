@@ -35,6 +35,8 @@ export function toHostedSessionCard(
     endDate: game.endDate,
     participantCount: confirmedCount,
     waitlistEnabled: game.waitlistEnabled,
+    scheduleMode: game.scheduleMode,
+    confirmedAt: game.confirmedAt,
   });
   // 사람은 모였고 시간만 남은 구인이 조율 중이다. 추첨을 기다리는 구인은 아직 사람을 고르는 중이라 모집 중에 둔다.
   const hostChip =

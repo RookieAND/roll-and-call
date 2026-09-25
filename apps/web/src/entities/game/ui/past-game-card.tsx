@@ -23,6 +23,8 @@ export function PastGameCard({ game }: PastGameCardProps) {
     endDate: game.endDate,
     participantCount: count,
     waitlistEnabled: game.waitlistEnabled,
+    scheduleMode: game.scheduleMode,
+    confirmedAt: game.confirmedAt,
   });
   // 달 머리글과 같은 날짜를 말한다. 세션 시간이 정해졌으면 세션 날, 아니면 마감일.
   const when = game.confirmedAt

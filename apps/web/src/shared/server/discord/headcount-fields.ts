@@ -5,7 +5,7 @@ import { deriveGameStatus, gameStatusLabel } from "@/shared/lib";
 
 // 웹 배지와 같은 규칙으로 상태를 적는다. 대기가 0명이어도 칸을 남겨 알림마다 줄 모양이 같다.
 export function headcountFields(
-  game: Pick<Game, "maxPlayers" | "endDate" | "waitlistEnabled">,
+  game: Pick<Game, "maxPlayers" | "endDate" | "waitlistEnabled" | "scheduleMode" | "confirmedAt">,
   confirmedCount: number,
   waitingCount: number,
 ): DiscordEmbedField[] {

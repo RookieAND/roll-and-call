@@ -9,6 +9,7 @@ import {
   RECRUIT_METHOD,
 } from "@/entities/game";
 import { LoginSheetButton } from "@/features/auth";
+import { formatDateTime } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
 import { deriveActionView, GAME_ACTION_VIEW } from "../model/derive-action-view";
@@ -48,8 +49,11 @@ export function GameActionZone({
   status,
   canSchedule,
 }: GameActionZoneProps) {
-  // 기한 경과, 또는 대기 신청을 끈 게임의 정원 충족(full). 대기 받는 정원 충족(confirmed)은 마감이 아니다.
-  const isClosed = status === GAME_STATUS.closed || status === GAME_STATUS.full;
+  // 기한 경과, 대기 신청을 끈 게임의 정원 충족(full), 조율형의 일정 확정(scheduled). 대기 받는 정원 충족(confirmed)은 마감이 아니다.
+  const isClosed =
+    status === GAME_STATUS.closed ||
+    status === GAME_STATUS.full ||
+    status === GAME_STATUS.scheduled;
   const isFull = status === GAME_STATUS.confirmed;
   const expired = status === GAME_STATUS.closed;
   const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
@@ -123,7 +127,13 @@ export function GameActionZone({
         />
       );
     case GAME_ACTION_VIEW.outsider:
-      return <ClosedActions />;
+      return status === GAME_STATUS.scheduled ? (
+        <ClosedActions
+          title={`일정이 ${formatDateTime(game.confirmedAt!)}로 확정되어 신청을 받지 않아요`}
+        />
+      ) : (
+        <ClosedActions />
+      );
     case GAME_ACTION_VIEW.ended:
       return <EndedActions confirmedAt={game.confirmedAt!} />;
     case GAME_ACTION_VIEW.endedOutsider:

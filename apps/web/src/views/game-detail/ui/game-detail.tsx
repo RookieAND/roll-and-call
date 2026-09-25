@@ -33,6 +33,8 @@ export function GameDetail({ game, viewerId }: GameDetailProps) {
     endDate: game.endDate,
     participantCount: confirmed.length,
     waitlistEnabled: game.waitlistEnabled,
+    scheduleMode: game.scheduleMode,
+    confirmedAt: game.confirmedAt,
   });
 
   return (

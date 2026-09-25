@@ -485,6 +485,11 @@ export const HELP_DOCS: HelpDoc[] = [
             ),
             status: GAME_STATUS.closed,
           },
+          {
+            term: "일정 확정",
+            description: "조율형 구인의 세션 시간이 정해져 더 이상 신청을 받지 않습니다.",
+            status: GAME_STATUS.scheduled,
+          },
         ],
       },
       {

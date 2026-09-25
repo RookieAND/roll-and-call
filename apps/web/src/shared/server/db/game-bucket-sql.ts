@@ -12,7 +12,8 @@ export function gameBucketSql({ now }: { now: Date }) {
   const full = sql`${confirmedCountSql} >= ${games.maxPlayers}`;
   const sessionEndsAt = sql`${games.confirmedAt} + coalesce(${games.playMinutes}, ${DEFAULT_PLAY_MINUTES}) * interval '1 minute'`;
   const ended = sql`(${games.confirmedAt} is not null and ${sessionEndsAt} <= ${at})`;
-  const live = sql`(${games.endDate} > ${at} and not ${ended} and (not ${full} or ${games.waitlistEnabled}))`;
+  const scheduled = sql`(${games.scheduleMode} = 'coordinate' and ${games.confirmedAt} is not null)`;
+  const live = sql`(${games.endDate} > ${at} and not ${ended} and not ${scheduled} and (not ${full} or ${games.waitlistEnabled}))`;
   // 지난 구인은 끝난 날짜순: 세션이 있으면 세션 끝, 없으면 모집 마감일.
   const finishedAt = sql`coalesce(${sessionEndsAt}, ${games.endDate})`;
   return { full, ended, live, finishedAt };

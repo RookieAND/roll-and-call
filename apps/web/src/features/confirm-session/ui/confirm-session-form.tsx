@@ -30,6 +30,7 @@ interface ConfirmSessionFormProps {
   playLabel: string;
   slotCount: number;
   confirmedCount: number;
+  maxPlayers: number;
   currentIso?: string | null;
 }
 
@@ -42,6 +43,7 @@ export function ConfirmSessionForm({
   playLabel,
   slotCount,
   confirmedCount,
+  maxPlayers,
   currentIso = null,
 }: ConfirmSessionFormProps) {
   const candidates = rankWindows({ names, slotCount, limit: CANDIDATE_LIMIT });
@@ -153,6 +155,12 @@ export function ConfirmSessionForm({
           <>
             확정하면 새 신청을 받지 않고, 명단도 고칠 수 없습니다.
             <br />
+            {!changing && confirmedCount < maxPlayers && (
+              <>
+                정원 {maxPlayers}명 중 {confirmedCount}명으로 확정하면 모집이 닫혀요.
+                <br />
+              </>
+            )}
             참여자 {confirmedCount}명에게 디스코드로 알립니다.
           </>
         }
