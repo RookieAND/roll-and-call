@@ -34,7 +34,10 @@ export default async function AdminLayout({ children }: LayoutProps<"/">) {
             posts: countOf("report"),
           }}
         />
-        <VStack data-slot="admin-main" className="min-h-dvh min-w-0 flex-1 bg-gray-50">
+        <VStack
+          data-slot="admin-main"
+          className="min-h-dvh min-w-0 flex-1 overflow-x-clip bg-gray-50"
+        >
           {children}
         </VStack>
         <Suspense>

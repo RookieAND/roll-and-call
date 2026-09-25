@@ -52,3 +52,10 @@ body {
 [data-slot="radio-label"] b {
   font-weight: 700;
 }
+
+/* 본문이 page 폭으로 좁아져도 탭 바의 배경과 하단 선을 본문 열의 왼쪽 끝까지 이어 그린다. 오른쪽에 aside가 있는 화면용.
+   넘친 부분은 admin-main의 overflow-x: clip이 자른다. */
+@utility bleed-left {
+  border-image: linear-gradient(to top, var(--color-gray-200) 1px, var(--color-surface) 1px) 0 fill
+    / 0 / 0 0 0 100vmax;
+}

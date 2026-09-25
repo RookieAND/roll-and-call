@@ -32,7 +32,7 @@ export function UserDetailLoading() {
             />
           </div>
           <Tabs.Root value={USER_DETAIL_TAB.activity}>
-            <div className="border-b border-gray-200 bg-surface px-200">
+            <div className="bleed-left border-b border-gray-200 bg-surface px-200">
               <Tabs.List aria-label="유저 상세 보기" scrollable={false} className="border-b-0">
                 <Tabs.Trigger value={USER_DETAIL_TAB.activity}>활동</Tabs.Trigger>
                 <Tabs.Trigger value={USER_DETAIL_TAB.cert} disabled>
