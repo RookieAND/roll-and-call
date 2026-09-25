@@ -225,6 +225,13 @@
       "when": 1791700000000,
       "tag": "0031_cert_application_purchase",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1791800000000,
+      "tag": "0032_cert_ebook",
+      "breakpoints": true
     }
   ]
 }

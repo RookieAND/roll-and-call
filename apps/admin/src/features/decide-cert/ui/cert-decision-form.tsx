@@ -4,13 +4,13 @@ import { Button, Grid, VStack, cn, toast } from "@roll-and-call/ui";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition, type ReactNode } from "react";
 
-import type { CertDecisionResult, ShotKey } from "@/shared/server";
+import type { CertDecisionResult, CertFormat, ShotKey } from "@/shared/server";
 import { KeyHint } from "@/shared/ui";
 
 import { approveCert } from "../api/approve-cert";
 import { rejectCert } from "../api/reject-cert";
 import { OTHER_REASON } from "../model/reject-reasons";
-import { SHOTS } from "../model/shots";
+import { EBOOK_SHOTS, SHOTS, type ReviewShot } from "../model/shots";
 import { DecisionFooter } from "./decision-footer";
 import { FlaggedStatus } from "./flagged-status";
 import { RejectPanel } from "./reject-panel";
@@ -19,6 +19,8 @@ import { ShotSectionHeader } from "./shot-section-header";
 import { ShotViewer } from "./shot-viewer";
 import { SkipStatus } from "./skip-status";
 
+const SHOT_KEYS: ShotKey[] = ["front", "back", "side"];
+
 const isTyping = (target: EventTarget | null) =>
   target instanceof HTMLElement &&
   (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
@@ -26,20 +28,26 @@ const isTyping = (target: EventTarget | null) =>
 interface CertDecisionFormProps {
   applicationId: string;
   applicantLabel: string;
-  photoUrls: Partial<Record<ShotKey, string>>;
+  format: CertFormat;
+  // 실물은 앞면·뒷면·책등, 전자책은 구매 내역(order)·영수증(receipt) 주소.
+  photoUrls: Partial<Record<ReviewShot["key"], string | null>>;
   replacedShots: ShotKey[];
+  // 승인만 막는 이유(주문번호 중복). 푸터에 붉게 적는다.
+  approveBlockedNote?: string;
   nextId: string | null;
   compact: boolean;
   disabled: boolean;
   children: ReactNode;
 }
 
-// 사진 3장 확인 → 승인 또는 반려. 반려 중인지와 확대한 사진은 주소(mode·photo)가 기억한다.
+// 사진(전자책은 구매 기록) 확인 → 승인 또는 반려. 반려 중인지와 확대한 사진은 주소(mode·photo)가 기억한다.
 export function CertDecisionForm({
   applicationId,
   applicantLabel,
+  format,
   photoUrls,
   replacedShots,
+  approveBlockedNote,
   nextId,
   compact,
   disabled,
@@ -49,7 +57,7 @@ export function CertDecisionForm({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
-  const [checkedShots, setCheckedShots] = useState<ShotKey[]>([]);
+  const [checkedShots, setCheckedShots] = useState<string[]>([]);
   const [flaggedShots, setFlaggedShots] = useState<ShotKey[]>([]);
   const [reasonChoice, setReasonChoice] = useState("");
   const [otherReason, setOtherReason] = useState("");
@@ -57,7 +65,12 @@ export function CertDecisionForm({
   const [staffMemo, setStaffMemo] = useState("");
 
   const rejecting = searchParams.get("mode") === "reject" && !disabled;
-  const viewedShot = searchParams.get("photo") as ShotKey | null;
+  const viewedShot = searchParams.get("photo");
+  const ebook = format === "ebook";
+  const shots = ebook ? EBOOK_SHOTS : SHOTS;
+  // 전자책 캡처는 문제 사진으로 지정하지 않는다. 사용자 앱이 사진 칸 이름으로 안내한다.
+  const flaggable = !ebook;
+  const approveDisabled = disabled || Boolean(approveBlockedNote);
   const reasonTag = reasonChoice === OTHER_REASON ? otherReason.trim() : reasonChoice;
   const canReject = Boolean(reasonTag && userReason.trim()) && !pending;
   const nextHref = nextId ? `/cert/${nextId}` : "/cert";
@@ -71,7 +84,7 @@ export function CertDecisionForm({
 
   const finish = (result: CertDecisionResult, message: string) => {
     if (!result.ok) {
-      toast.info("다른 운영진이 먼저 처리했습니다");
+      toast.info("blocked" in result ? result.blocked : "다른 운영진이 먼저 처리했습니다");
       router.refresh();
       return;
     }
@@ -92,8 +105,12 @@ export function CertDecisionForm({
       );
     });
 
-  const toggle = (list: ShotKey[], shot: ShotKey) =>
+  const toggle = <Key extends string>(list: Key[], shot: Key) =>
     list.includes(shot) ? list.filter((item) => item !== shot) : [...list, shot];
+  const flagShot = (key: ReviewShot["key"]) => {
+    const shot = SHOT_KEYS.find((candidate) => candidate === key);
+    if (flaggable && shot) setFlaggedShots(toggle(flaggedShots, shot));
+  };
 
   useEffect(() => {
     if (disabled) return;
@@ -101,7 +118,14 @@ export function CertDecisionForm({
       if (event.metaKey || event.ctrlKey || event.altKey || isTyping(event.target)) return;
       if (viewedShot || pending) return;
       if (event.key.toLowerCase() === "r" && !rejecting) setParam("mode", "reject");
-      if (event.key === "Enter" && !rejecting && event.target === document.body) approve();
+      if (
+        event.key === "Enter" &&
+        !rejecting &&
+        !approveDisabled &&
+        event.target === document.body
+      ) {
+        approve();
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -118,28 +142,28 @@ export function CertDecisionForm({
           className={cn(disabled && "pointer-events-none opacity-50")}
         >
           <ShotSectionHeader
+            title={ebook ? "구매 기록 확인" : "사진 확인"}
             checkedCount={checkedShots.length}
-            total={SHOTS.length}
-            rejecting={rejecting}
+            total={shots.length}
+            rejecting={rejecting && flaggable}
           />
-          <Grid className="grid-cols-3 gap-150">
-            {SHOTS.map((shot) => (
+          <Grid className={cn("gap-150", shots.length === 3 ? "grid-cols-3" : "grid-cols-2")}>
+            {shots.map((shot) => (
               <ShotCard
                 key={shot.key}
                 label={shot.label}
                 note={shot.note}
                 question={shot.question}
-                url={photoUrls[shot.key]}
+                url={photoUrls[shot.key] ?? undefined}
                 checked={checkedShots.includes(shot.key)}
-                flagged={rejecting && flaggedShots.includes(shot.key)}
-                replaced={replacedShots.includes(shot.key)}
+                flagged={rejecting && flaggedShots.some((flagged) => flagged === shot.key)}
+                replaced={replacedShots.some((replaced) => replaced === shot.key)}
+                tall={shots.length === 2}
                 compact={compact || rejecting}
                 disabled={disabled}
                 onCheckedChange={() => setCheckedShots(toggle(checkedShots, shot.key))}
                 onPhotoClick={() =>
-                  rejecting
-                    ? setFlaggedShots(toggle(flaggedShots, shot.key))
-                    : setParam("photo", shot.key)
+                  rejecting && flaggable ? flagShot(shot.key) : setParam("photo", shot.key)
                 }
                 onZoom={() => setParam("photo", shot.key)}
               />
@@ -160,6 +184,7 @@ export function CertDecisionForm({
         ) : null}
       </VStack>
       <ShotViewer
+        shots={shots}
         shot={viewedShot}
         photoUrls={photoUrls}
         onShotChange={(shot) => setParam("photo", shot)}
@@ -182,7 +207,9 @@ export function CertDecisionForm({
           </Button>
         </DecisionFooter>
       ) : (
-        <DecisionFooter status={<SkipStatus onSkip={() => router.push(nextHref)} />}>
+        <DecisionFooter
+          status={<SkipStatus note={approveBlockedNote} onSkip={() => router.push(nextHref)} />}
+        >
           <Button
             variant="outline"
             colorPalette="danger"
@@ -192,7 +219,12 @@ export function CertDecisionForm({
             반려
             <KeyHint keyLabel="R" />
           </Button>
-          <Button className="min-w-[112px]" disabled={disabled} loading={pending} onClick={approve}>
+          <Button
+            className="min-w-[112px]"
+            disabled={approveDisabled}
+            loading={pending}
+            onClick={approve}
+          >
             승인
             <KeyHint keyLabel="⏎" />
           </Button>

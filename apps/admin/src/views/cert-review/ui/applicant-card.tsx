@@ -4,6 +4,8 @@ import { formatDate } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
 import { FactRows, UserInitial } from "@/shared/ui";
 
+import { SiblingLinks } from "./sibling-links";
+
 const LONG_WAIT_DAYS = 5;
 
 interface ApplicantCardProps {
@@ -30,6 +32,7 @@ export function ApplicantCard({ review }: ApplicantCardProps) {
             {applicant.nickname}
           </Text>
           {latestRejection ? <Badge colorPalette="warning">재신청</Badge> : null}
+          {review.format === "ebook" ? <Badge colorPalette="primary">전자책</Badge> : null}
         </HStack>
       </HStack>
       <Grid className="grid-cols-3 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
@@ -69,6 +72,7 @@ export function ApplicantCard({ review }: ApplicantCardProps) {
           ]}
         />
       </Grid>
+      {review.siblings.length > 0 ? <SiblingLinks siblings={review.siblings} /> : null}
     </section>
   );
 }

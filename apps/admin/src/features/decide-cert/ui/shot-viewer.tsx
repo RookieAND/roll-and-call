@@ -13,32 +13,31 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import type { ShotKey } from "@/shared/server";
-
-import { SHOTS } from "../model/shots";
+import type { ReviewShot } from "../model/shots";
 import { PhotoSlot } from "./photo-slot";
 
 const ZOOM_STEP = 0.5;
 const ZOOM_MAX = 3;
 
 interface ShotViewerProps {
-  shot: ShotKey | null;
-  photoUrls: Partial<Record<ShotKey, string>>;
-  onShotChange: (shot: ShotKey | null) => void;
+  shots: ReviewShot[];
+  shot: string | null;
+  photoUrls: Partial<Record<string, string | null>>;
+  onShotChange: (shot: string | null) => void;
 }
 
-// 사진 확대. 확대·축소·회전·원본 크기를 지원하고, 아래 썸네일과 좌우 화살표로 3장 사이를 옮긴다.
-export function ShotViewer({ shot, photoUrls, onShotChange }: ShotViewerProps) {
+// 사진 확대. 확대·축소·회전·원본 크기를 지원하고, 아래 썸네일과 좌우 화살표로 사진 사이를 옮긴다.
+export function ShotViewer({ shots, shot, photoUrls, onShotChange }: ShotViewerProps) {
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [original, setOriginal] = useState(false);
-  const index = SHOTS.findIndex((candidate) => candidate.key === shot);
-  const current = SHOTS[index];
+  const index = shots.findIndex((candidate) => candidate.key === shot);
+  const current = shots[index];
 
   const move = (step: number) => {
     setZoom(1);
     setRotation(0);
-    onShotChange(SHOTS[(index + step + SHOTS.length) % SHOTS.length]!.key);
+    onShotChange(shots[(index + step + shots.length) % shots.length]!.key);
   };
 
   const tools: { label: string; icon: LucideIcon; onClick: () => void; disabled?: boolean }[] = [
@@ -78,7 +77,7 @@ export function ShotViewer({ shot, photoUrls, onShotChange }: ShotViewerProps) {
                 {current.label} · {current.note}
               </Dialog.Title>
               <Text typography="body4" foreground="muted" numeric>
-                {index + 1} / {SHOTS.length}
+                {index + 1} / {shots.length}
               </Text>
               <HStack gap="075" className="ml-auto">
                 {tools.map((tool) => (
@@ -123,8 +122,9 @@ export function ShotViewer({ shot, photoUrls, onShotChange }: ShotViewerProps) {
                 )}
               >
                 <PhotoSlot
-                  url={photoUrls[current.key]}
+                  url={photoUrls[current.key] ?? undefined}
                   placeholder={`${current.label} 확대`}
+                  pdfLink
                   className={cn("transition-transform", original ? "max-w-none" : "size-full")}
                   imageStyle={{ transform: `scale(${zoom}) rotate(${rotation}deg)` }}
                 />
@@ -134,7 +134,7 @@ export function ShotViewer({ shot, photoUrls, onShotChange }: ShotViewerProps) {
               </IconButton>
             </HStack>
             <HStack gap="100" justify="center">
-              {SHOTS.map((candidate, candidateIndex) => (
+              {shots.map((candidate, candidateIndex) => (
                 <Button
                   key={candidate.key}
                   variant="outline"

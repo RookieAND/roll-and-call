@@ -1,5 +1,9 @@
 import "server-only";
+import type { RulebookKind } from "@roll-and-call/database";
+
+import { certBlockers } from "./cert-blockers";
 import { loadSnapshot } from "./snapshot";
+import type { CertFormat } from "./types";
 import { waitedDays } from "./waited-days";
 
 export interface CertQueueFilter {
@@ -12,6 +16,10 @@ export interface CertQueueRow {
   id: string;
   nickname: string;
   rulebook: string;
+  kind: RulebookKind;
+  format: CertFormat;
+  // 기본 룰북 결정을 기다리는 서플리먼트. 목록에서 흐리게 둔다.
+  waiting: boolean;
   appliedAt: Date;
   waitedDays: number;
   previousRejectionCount: number;
@@ -27,6 +35,9 @@ export async function listCertQueue(filter: CertQueueFilter) {
       id: application.id,
       nickname: db.users.find((user) => user.id === application.userId)!.nickname,
       rulebook: application.rulebook,
+      kind: db.rulebooks.find((rulebook) => rulebook.id === application.rulebookId)?.kind ?? "core",
+      format: application.format,
+      waiting: certBlockers(application, db).waitingOn.length > 0,
       appliedAt: application.appliedAt,
       waitedDays: waitedDays(application.appliedAt),
       previousRejectionCount: application.previousRejections.length,

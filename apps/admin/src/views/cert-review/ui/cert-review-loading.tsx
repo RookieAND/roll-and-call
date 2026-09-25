@@ -5,7 +5,7 @@ import { AdminHeader, FactRows, KeyHint, LoadingRegion, SkeletonItem } from "@/s
 const SHOTS = [
   { label: "앞면", question: "룰북·판본이 일치하고 쪽지 닉네임이 신청자와 같은가" },
   { label: "뒷면", question: "같은 책의 뒤표지인가" },
-  { label: "옆면", question: "실물 책의 책등이 보이는가" },
+  { label: "책등", question: "실물로 제본된 책이고 제목이 보이는가" },
 ] as const;
 
 const skeletonFact = (label: string) => ({

@@ -1,4 +1,6 @@
 import "server-only";
+import { certBlockers } from "./cert-blockers";
+import { certSiblingStatus } from "./cert-sibling-status";
 import { countRecentNoShows } from "./count-recent-no-shows";
 import { loadSnapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
@@ -16,9 +18,26 @@ export async function getCertReview(id: string) {
   const others = queue.filter((candidate) => candidate.id !== id);
   const next = others[Math.max(0, index)] ?? others[0];
 
+  const siblings = application.groupId
+    ? db.certApplications
+        .filter(
+          (candidate) =>
+            candidate.groupId === application.groupId && candidate.id !== application.id,
+        )
+        .map((sibling) => ({
+          id: sibling.id,
+          rulebook: sibling.rulebook,
+          format: sibling.format === application.format ? null : sibling.format,
+          status: certSiblingStatus(sibling, certBlockers(sibling, db).waitingOn.length > 0),
+        }))
+    : [];
+
   return {
     id: application.id,
     rulebook: application.rulebook,
+    format: application.format,
+    blockers: application.status === "pending" ? certBlockers(application, db) : null,
+    siblings,
     appliedAt: application.appliedAt,
     waitedDays: waitedDays(application.appliedAt),
     memo: application.memo,

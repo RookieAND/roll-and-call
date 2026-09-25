@@ -2,8 +2,11 @@ import "server-only";
 import { certApplications, certifications, db, profiles, rulebooks } from "@roll-and-call/database";
 import { and, eq, sql } from "drizzle-orm";
 
+import { certBlockers } from "./cert-blockers";
 import { recordAudit } from "./record-audit";
+import { rejectWaitingSupplements } from "./reject-waiting-supplements";
 import { rulebookLabel } from "./rulebook-label";
+import { loadSnapshot } from "./snapshot";
 import type { Actor, ShotKey } from "./types";
 
 export type CertDecision =
@@ -18,16 +21,32 @@ export type CertDecision =
 
 export type CertDecisionResult =
   | { ok: true }
-  | { ok: false; conflict: { status: "approved" | "rejected"; by: string; at: Date } };
+  | { ok: false; conflict: { status: "approved" | "rejected"; by: string; at: Date } }
+  | { ok: false; blocked: string };
 
 // 승인·반려 확정. 이미 다른 운영진이 처리했으면 아무것도 바꾸지 않고 충돌을 알린다.
+// 기본 룰북이 결정되기 전의 서플리먼트, 주문번호가 겹치는 전자책은 막는다. 기본 룰북을 반려하면 기대는 서플리먼트도 반려한다.
 export async function decideCert(
   id: string,
   actor: Actor,
   decision: CertDecision,
 ): Promise<CertDecisionResult> {
+  // ponytail: 막는 조건은 트랜잭션 밖 스냅숏으로 본다. 두 운영진이 같은 순간 기본 룰북과 서플리먼트를 처리하는 경합은 막지 않는다.
+  const snapshot = await loadSnapshot();
   return db.transaction(async (tx) => {
     const approved = decision.kind === "approve";
+    const pendingApplication = snapshot.certApplications.find(
+      (application) => application.id === id && application.status === "pending",
+    );
+    if (pendingApplication) {
+      const blockers = certBlockers(pendingApplication, snapshot);
+      if (blockers.waitingOn.length > 0) {
+        return { ok: false, blocked: "기본 룰북이 결정된 뒤에 심사할 수 있습니다" };
+      }
+      if (approved && blockers.duplicate) {
+        return { ok: false, blocked: "주문번호가 겹쳐 승인할 수 없습니다" };
+      }
+    }
     const [decided] = await tx
       .update(certApplications)
       .set({
@@ -90,7 +109,7 @@ export async function decideCert(
         action: "인증 승인",
         target,
         targetUserId: decided.userId,
-        reason: "사진 3장 확인 완료",
+        reason: decided.format === "ebook" ? "구매 내역·영수증 확인 완료" : "사진 3장 확인 완료",
         before: { label: "심사 대기" },
         after: { label: "인증됨" },
       });
@@ -107,6 +126,7 @@ export async function decideCert(
       before: { label: "심사 대기" },
       after: { label: "반려됨" },
     });
+    await rejectWaitingSupplements(tx, actor, snapshot, decided);
     return { ok: true };
   });
 }

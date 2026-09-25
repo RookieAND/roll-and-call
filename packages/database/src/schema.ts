@@ -313,6 +313,9 @@ export const rulebookRequests = pgTable(
   (table) => [index("rulebook_requests_user_id_idx").on(table.userId)],
 ).enableRLS();
 
+// 실물은 사진 3장, 전자책은 구매 내역·영수증 캡처로 확인한다.
+export const certFormat = pgEnum("cert_format", ["physical", "ebook"]);
+
 // 한 사람이 같은 룰북을 여러 번 신청할 수 있다. 반려된 이전 신청이 재신청 이력이다.
 export const certApplications = pgTable(
   "cert_applications",
@@ -330,7 +333,11 @@ export const certApplications = pgTable(
     replacedShots: text("replaced_shots").array().$type<CertShot[]>().notNull().default([]),
     // 여러 권을 한 번에 신청하면 권마다 한 건씩 만들고 같은 사진·구매 기록을 나눠 쓴다.
     groupId: uuid("group_id"),
+    format: certFormat("format").notNull().default("physical"),
+    // 전자책은 구매 내역(purchaseCaptureUrl)·영수증(receiptUrl)·판매처·주문번호가 필수, 실물은 모두 선택이다.
+    seller: text("seller"),
     purchaseCaptureUrl: text("purchase_capture_url"),
+    receiptUrl: text("receipt_url"),
     orderNumber: text("order_number"),
     orderDate: text("order_date"),
     status: certApplicationStatus("status").notNull().default("pending"),

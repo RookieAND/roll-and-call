@@ -17,6 +17,8 @@ const photoArea = cva(
   {
     variants: {
       compact: { true: "h-[150px]", false: "h-[200px]" },
+      // 전자책 캡처 두 장은 넓은 칸이라 더 높게 둔다.
+      tall: { true: "h-[260px]", false: "" },
     },
   },
 );
@@ -36,6 +38,7 @@ interface ShotCardProps {
   flagged: boolean;
   replaced: boolean;
   compact: boolean;
+  tall: boolean;
   disabled: boolean;
   onCheckedChange: (checked: boolean) => void;
   onPhotoClick: () => void;
@@ -52,6 +55,7 @@ export function ShotCard({
   flagged,
   replaced,
   compact,
+  tall,
   disabled,
   onCheckedChange,
   onPhotoClick,
@@ -86,7 +90,7 @@ export function ShotCard({
           onClick={onPhotoClick}
           aria-pressed={flagged}
           aria-label={`${label} 사진`}
-          className={photoArea({ compact })}
+          className={photoArea({ compact: compact && !tall, tall })}
         >
           <PhotoSlot url={url} placeholder={`${label} 사진`} className="size-full border-0" />
         </button>

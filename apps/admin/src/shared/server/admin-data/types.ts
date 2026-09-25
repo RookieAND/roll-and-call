@@ -52,6 +52,7 @@ export interface Rulebook {
 
 export interface Certification {
   userId: string;
+  rulebookId: string;
   rulebook: string;
   approvedAt: Date;
   approvedBy: string;
@@ -67,16 +68,28 @@ export interface PreviousRejection {
   requests: string[];
 }
 
+export type CertFormat = "physical" | "ebook";
+
 export interface CertApplication {
   id: string;
   userId: string;
+  rulebookId: string;
   rulebook: string;
+  // 여러 권을 한 번에 낸 신청끼리 같은 값. 한 권이면 null.
+  groupId: string | null;
+  format: CertFormat;
   appliedAt: Date;
   memo: string;
   photoUrls: Partial<Record<ShotKey, string>>;
   replacedShots: ShotKey[];
-  // 신청자가 선택으로 낸 구매 기록. 여러 권을 함께 낸 신청은 같은 값을 나눠 쓴다.
-  purchase: { captureUrl: string | null; orderNumber: string | null; orderDate: string | null };
+  // 구매 기록. 실물은 선택, 전자책은 판매처·주문번호·구매 내역·영수증이 필수다.
+  purchase: {
+    seller: string | null;
+    captureUrl: string | null;
+    receiptUrl: string | null;
+    orderNumber: string | null;
+    orderDate: string | null;
+  };
   previousRejections: PreviousRejection[];
   status: CertStatus;
   flaggedShots?: ShotKey[];

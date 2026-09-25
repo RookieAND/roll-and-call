@@ -2,7 +2,7 @@ import { Badge, HStack, Table, Text, cn } from "@roll-and-call/ui";
 import { ArrowDown, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-import { formatDate } from "@/shared/lib";
+import { CERT_FORMAT_LABEL, formatDate, RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { CertQueueRow } from "@/shared/server";
 import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
 
@@ -15,20 +15,20 @@ interface CertQueueTableProps {
 export function CertQueueTable({ rows }: CertQueueTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[180, 200, 132, 90, 100, 90, { fixed: 44 }]} />
+      <TableColumns widths={[180, 240, 130, 110, 140, 100, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>닉네임</Table.Head>
-          <Table.Head>룰북</Table.Head>
+          <Table.Head>신청한 책</Table.Head>
+          <Table.Head align="center">종류</Table.Head>
+          <Table.Head align="center">형식</Table.Head>
           <Table.Head>신청일</Table.Head>
-          <Table.Head align="center" aria-sort="descending" className="text-gray-900">
+          <Table.Head align="end" aria-sort="descending" className="text-gray-900">
             <HStack inline align="center" gap="050">
               대기 일수
               <ArrowDown size={10} strokeWidth={2.4} aria-hidden />
             </HStack>
           </Table.Head>
-          <Table.Head align="center">신청 구분</Table.Head>
-          <Table.Head align="center">이전 반려</Table.Head>
           <Table.Head />
         </Table.Row>
       </Table.Header>
@@ -55,13 +55,32 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
                   {row.nickname}
                 </Text>
               </Table.Cell>
-              <Table.Cell className="truncate">{row.rulebook}</Table.Cell>
+              <Table.Cell>
+                <Text
+                  typography="body3"
+                  foreground={row.waiting ? "hint" : "normal"}
+                  truncate
+                  title={row.waiting ? "기본 룰북이 결정된 뒤에 심사할 수 있습니다" : undefined}
+                >
+                  {row.rulebook}
+                </Text>
+              </Table.Cell>
+              <Table.Cell align="center">
+                <Badge colorPalette={row.kind === "core" ? "primary" : "gray"}>
+                  {RULEBOOK_KIND_LABEL[row.kind]}
+                </Badge>
+              </Table.Cell>
+              <Table.Cell align="center">
+                <Badge colorPalette={row.format === "ebook" ? "primary" : "gray"}>
+                  {CERT_FORMAT_LABEL[row.format]}
+                </Badge>
+              </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
                   {formatDate(row.appliedAt)}
                 </Text>
               </Table.Cell>
-              <Table.Cell align="center" numeric>
+              <Table.Cell align="end" numeric>
                 <Text
                   typography="body3"
                   weight={longWait ? "bold" : undefined}
@@ -69,26 +88,6 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
                 >
                   {row.waitedDays}일
                 </Text>
-              </Table.Cell>
-              <Table.Cell align="center">
-                {row.previousRejectionCount > 0 ? (
-                  <Badge colorPalette="warning">재신청</Badge>
-                ) : (
-                  <Text typography="body3" foreground="hint">
-                    처음
-                  </Text>
-                )}
-              </Table.Cell>
-              <Table.Cell align="center" numeric>
-                {row.previousRejectionCount > 0 ? (
-                  <Text typography="body3" weight="bold">
-                    {row.previousRejectionCount}회
-                  </Text>
-                ) : (
-                  <Text typography="body3" foreground="hint">
-                    —
-                  </Text>
-                )}
               </Table.Cell>
               <Table.Cell align="end">
                 <ChevronRight size={16} aria-hidden className="inline text-hint" />

@@ -190,6 +190,7 @@ export const loadSnapshot = cache(async () => {
     .filter((row) => row.revokedAt === null)
     .map((row) => ({
       userId: row.userId,
+      rulebookId: row.rulebookId,
       rulebook: labels.get(row.rulebookId) ?? "",
       approvedAt: row.approvedAt,
       approvedBy: nicknameOf(row.approvedBy),
@@ -198,13 +199,18 @@ export const loadSnapshot = cache(async () => {
   const certApplicationList: CertApplication[] = applicationRows.map((row) => ({
     id: row.id,
     userId: row.userId,
+    rulebookId: row.rulebookId,
     rulebook: labels.get(row.rulebookId) ?? "",
+    groupId: row.groupId,
+    format: row.format,
     appliedAt: row.createdAt,
     memo: row.memo,
     photoUrls: row.photoUrls,
     replacedShots: row.replacedShots,
     purchase: {
+      seller: row.seller,
       captureUrl: row.purchaseCaptureUrl,
+      receiptUrl: row.receiptUrl,
       orderNumber: row.orderNumber,
       orderDate: row.orderDate,
     },

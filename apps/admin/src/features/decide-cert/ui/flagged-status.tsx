@@ -18,7 +18,9 @@ export function FlaggedStatus({ reasonTag, flaggedShots }: FlaggedStatusProps) {
       </Text>
     );
   }
-  const labels = SHOTS.filter((shot) => flaggedShots.includes(shot.key)).map((shot) => shot.label);
+  const labels = SHOTS.filter((shot) => flaggedShots.includes(shot.key as ShotKey)).map(
+    (shot) => shot.label,
+  );
   const flaggedText = labels.length ? ` · ${labels.join("·")} 사진 지정됨` : "";
   return (
     <Text typography="body4" weight="medium" foreground="danger">

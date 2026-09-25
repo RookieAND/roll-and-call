@@ -15,5 +15,6 @@ export { withObjectParticle } from "./with-object-particle";
 export { withSubjectParticle } from "./with-subject-particle";
 export { withTopicParticle } from "./with-topic-particle";
 export { RULEBOOK_KIND_DESCRIPTION } from "./rulebook-kind-description";
+export { CERT_FORMAT_LABEL } from "./cert-format-label";
 export { RULEBOOK_KIND_LABEL } from "./rulebook-kind-label";
 export { STAFF_ROLE_LABEL } from "./staff-role-label";
