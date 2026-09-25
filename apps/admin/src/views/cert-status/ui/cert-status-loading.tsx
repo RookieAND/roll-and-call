@@ -57,13 +57,12 @@ export function CertStatusLoading() {
           <SkeletonTable
             rows={6}
             columns={[
-              { label: "룰북", kind: "text", width: "w-[200px]" },
-              { label: "인증된 GM", kind: "number", width: "w-[96px]", align: "center" },
-              { label: "심사 대기", kind: "number", width: "w-[88px]", align: "center" },
-              { label: "미신청", kind: "number", width: "w-[80px]", align: "center" },
-              { label: "진행률", kind: "bar", width: "w-[220px]" },
-              { label: "최근 90일 세션", kind: "number", width: "w-[112px]", align: "center" },
-              { label: "", kind: "empty" },
+              { label: "룰북", kind: "text", width: 200 },
+              { label: "인증된 GM", kind: "number", width: 96, align: "center" },
+              { label: "심사 대기", kind: "number", width: 88, align: "center" },
+              { label: "미신청", kind: "number", width: 80, align: "center" },
+              { label: "진행률", kind: "bar", width: 220 },
+              { label: "최근 90일 세션", kind: "number", width: 112, align: "center" },
             ]}
           />
         </Panel>

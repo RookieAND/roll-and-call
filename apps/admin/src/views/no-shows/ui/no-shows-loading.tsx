@@ -43,13 +43,13 @@ export function NoShowsLoading() {
         <Panel className="flex-1" footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
-              { label: "불참 당사자", kind: "text", width: "w-[110px]" },
-              { label: "세션", kind: "text" },
-              { label: "룰북", kind: "text", width: "w-[140px]" },
-              { label: "일시", kind: "date", width: "w-[192px]", sorted: true },
-              { label: "처리한 GM", kind: "text", width: "w-[100px]" },
-              { label: "처리 시점", kind: "text", width: "w-[86px]" },
-              { label: "상태", kind: "badge", width: "w-[84px]", align: "center" },
+              { label: "불참 당사자", kind: "text", width: 110 },
+              { label: "세션", kind: "text", width: 200 },
+              { label: "룰북", kind: "text", width: 140 },
+              { label: "일시", kind: "date", width: 192, sorted: true },
+              { label: "처리한 GM", kind: "text", width: 100 },
+              { label: "처리 시점", kind: "text", width: 86 },
+              { label: "상태", kind: "badge", width: 84, align: "center" },
             ]}
           />
         </Panel>

@@ -3,7 +3,7 @@ import { ChevronRight, Users } from "lucide-react";
 import Link from "next/link";
 
 import type { RulebookRow } from "@/shared/server";
-import { EMPTY_IMAGE, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
 
 interface RulebookTableProps {
   rows: RulebookRow[];
@@ -11,16 +11,8 @@ interface RulebookTableProps {
 
 export function RulebookTable({ rows }: RulebookTableProps) {
   return (
-    <Table.Root className="table-fixed">
-      <colgroup>
-        <col className="w-[200px]" />
-        <col className="w-[234px]" />
-        <col />
-        <col className="w-[120px]" />
-        <col className="w-[82px]" />
-        <col className="w-[78px]" />
-        <col className="w-[44px]" />
-      </colgroup>
+    <Table.Root className="table-equal">
+      <TableColumns widths={[200, 234, 200, 120, 82, 78, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>룰북</Table.Head>

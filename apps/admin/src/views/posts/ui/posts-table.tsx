@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { formatSessionTime } from "@/shared/lib";
 import type { PostRow } from "@/shared/server";
+import { TableColumns } from "@/shared/ui";
 
 import { StaffActionBadge } from "./staff-action-badge";
 
@@ -14,17 +15,8 @@ interface PostsTableProps {
 // 처리 안 된 신고가 있는 행만 붉게, 종료된 구인은 흐리게.
 export function PostsTable({ rows }: PostsTableProps) {
   return (
-    <Table.Root className="table-fixed">
-      <colgroup>
-        <col />
-        <col className="w-[104px]" />
-        <col className="w-[140px]" />
-        <col className="w-[192px]" />
-        <col className="w-[76px]" />
-        <col className="w-[112px]" />
-        <col className="w-[118px]" />
-        <col className="w-[110px]" />
-      </colgroup>
+    <Table.Root className="table-equal">
+      <TableColumns widths={[240, 104, 140, 192, 76, 112, 118, 110]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>제목</Table.Head>

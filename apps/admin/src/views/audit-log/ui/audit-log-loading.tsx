@@ -63,13 +63,13 @@ export function AuditLogLoading() {
         >
           <SkeletonTable
             columns={[
-              { label: "일시", kind: "date", width: "w-[128px]", sorted: true },
-              { label: "조치", kind: "badge", width: "w-[124px]" },
-              { label: "대상", kind: "text", width: "w-[220px]" },
-              { label: "사유", kind: "text" },
-              { label: "운영진", kind: "text", width: "w-[96px]" },
-              { label: "보관", kind: "text", width: "w-[88px]", align: "center" },
-              { label: "", kind: "empty", width: "w-[44px]" },
+              { label: "일시", kind: "date", width: 128, sorted: true },
+              { label: "조치", kind: "badge", width: 124 },
+              { label: "대상", kind: "text", width: 220 },
+              { label: "사유", kind: "text", width: 240 },
+              { label: "운영진", kind: "text", width: 96 },
+              { label: "보관", kind: "text", width: 88, align: "center" },
+              { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />
         </Panel>

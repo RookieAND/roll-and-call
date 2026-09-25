@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { formatDate, paginate } from "@/shared/lib";
 import type { CertifiedGm } from "@/shared/server";
-import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow, TableColumns } from "@/shared/ui";
 
 interface CertifiedGmPanelProps {
   gms: CertifiedGm[];
@@ -43,27 +43,20 @@ export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelPr
         <ListPager page={paged.page} totalPages={paged.totalPages} total={gms.length} unit="명" />
       }
     >
-      <Table.Root className="table-fixed">
-        <colgroup>
-          <col className="w-[180px]" />
-          <col className="w-[132px]" />
-          <col className="w-[112px]" />
-          <col />
-          <col className="w-[44px]" />
-        </colgroup>
+      <Table.Root className="table-equal">
+        <TableColumns widths={[180, 132, 112, { fixed: 44 }]} />
         <Table.Header>
           <Table.Row>
             <Table.Head>닉네임</Table.Head>
             <Table.Head>인증일</Table.Head>
             <Table.Head align="center">최근 90일 세션</Table.Head>
             <Table.Head />
-            <Table.Head />
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {gms.length === 0 ? (
             <TableEmptyRow
-              colSpan={5}
+              colSpan={4}
               image={EMPTY_IMAGE.myGames}
               title="이 룰북으로 인증된 GM이 없습니다"
               description={
@@ -94,7 +87,6 @@ export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelPr
               <Table.Cell align="center" numeric>
                 {gm.recentSessionCount}회
               </Table.Cell>
-              <Table.Cell />
               <Table.Cell align="end">
                 <ChevronRight size={16} aria-hidden className="inline text-hint" />
               </Table.Cell>

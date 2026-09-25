@@ -1,6 +1,7 @@
 import { HStack, Progress, Table, Text } from "@roll-and-call/ui";
 
 import type { RulebookCertRow } from "@/shared/server";
+import { TableColumns } from "@/shared/ui";
 
 interface RulebookCertTableProps {
   rows: RulebookCertRow[];
@@ -9,16 +10,8 @@ interface RulebookCertTableProps {
 
 export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps) {
   return (
-    <Table.Root className="table-fixed">
-      <colgroup>
-        <col className="w-[200px]" />
-        <col className="w-[96px]" />
-        <col className="w-[88px]" />
-        <col className="w-[80px]" />
-        <col className="w-[220px]" />
-        <col className="w-[112px]" />
-        <col />
-      </colgroup>
+    <Table.Root className="table-equal">
+      <TableColumns widths={[200, 96, 88, 80, 220, 112]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>룰북</Table.Head>
@@ -27,7 +20,6 @@ export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps
           <Table.Head align="center">미신청</Table.Head>
           <Table.Head>진행률</Table.Head>
           <Table.Head align="center">{sessionLabel}</Table.Head>
-          <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -79,7 +71,6 @@ export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps
               <Table.Cell align="center" numeric>
                 {row.sessionCount}회
               </Table.Cell>
-              <Table.Cell />
             </Table.Row>
           );
         })}

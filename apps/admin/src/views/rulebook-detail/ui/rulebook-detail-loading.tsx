@@ -47,11 +47,10 @@ export function RulebookDetailLoading() {
             <SkeletonTable
               rows={3}
               columns={[
-                { label: "닉네임", kind: "text", width: "w-[180px]" },
-                { label: "인증일", kind: "date", width: "w-[132px]" },
-                { label: "최근 90일 세션", kind: "number", width: "w-[112px]", align: "center" },
-                { label: "", kind: "empty" },
-                { label: "", kind: "empty", width: "w-[44px]" },
+                { label: "닉네임", kind: "text", width: 180 },
+                { label: "인증일", kind: "date", width: 132 },
+                { label: "최근 90일 세션", kind: "number", width: 112, align: "center" },
+                { label: "", kind: "empty", width: 44, fixed: true },
               ]}
             />
           </Panel>

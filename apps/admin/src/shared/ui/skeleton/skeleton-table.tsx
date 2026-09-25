@@ -1,13 +1,15 @@
 import { HStack, Table } from "@roll-and-call/ui";
 import { ArrowDown } from "lucide-react";
 
+import { TableColumns } from "../table-columns";
 import { SkeletonCell, type SkeletonCellKind } from "./skeleton-cell";
 
 export interface SkeletonColumn {
   label: string;
   kind: SkeletonCellKind;
-  // Tailwind 폭 클래스(w-[120px]). 비우면 남는 폭을 받는다. 짧은 값만 있는 표는 { label: "", kind: "empty" }로 빈 열을 둔다.
-  width?: string;
+  // 최소 폭(px). 실제 표의 TableColumns와 같은 값을 준다. fixed면 아이콘 칸처럼 늘지 않는다.
+  width: number;
+  fixed?: boolean;
   align?: "start" | "end" | "center";
   sorted?: boolean;
 }
@@ -22,12 +24,10 @@ const JUSTIFY = { start: "justify-start", end: "justify-end", center: "justify-c
 // 표 머리글은 바로 그리고 행만 뼈대로 채운다.
 export function SkeletonTable({ columns, rows = 8 }: SkeletonTableProps) {
   return (
-    <Table.Root className="table-fixed">
-      <colgroup>
-        {columns.map((column, index) => (
-          <col key={index} className={column.width} />
-        ))}
-      </colgroup>
+    <Table.Root className="table-equal">
+      <TableColumns
+        widths={columns.map((column) => (column.fixed ? { fixed: column.width } : column.width))}
+      />
       <Table.Header>
         <Table.Row>
           {columns.map((column, index) => (

@@ -41,20 +41,19 @@ export function CertQueueLoading() {
         <Panel footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
-              { label: "닉네임", kind: "text", width: "w-[180px]" },
-              { label: "룰북", kind: "text", width: "w-[200px]" },
-              { label: "신청일", kind: "date", width: "w-[132px]" },
+              { label: "닉네임", kind: "text", width: 180 },
+              { label: "룰북", kind: "text", width: 200 },
+              { label: "신청일", kind: "date", width: 132 },
               {
                 label: "대기 일수",
                 kind: "number",
-                width: "w-[90px]",
+                width: 90,
                 align: "center",
                 sorted: true,
               },
-              { label: "신청 구분", kind: "badge", width: "w-[100px]", align: "center" },
-              { label: "이전 반려", kind: "number", width: "w-[90px]", align: "center" },
-              { label: "", kind: "empty" },
-              { label: "", kind: "empty", width: "w-[44px]" },
+              { label: "신청 구분", kind: "badge", width: 100, align: "center" },
+              { label: "이전 반려", kind: "number", width: 90, align: "center" },
+              { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />
         </Panel>

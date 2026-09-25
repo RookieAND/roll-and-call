@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { formatDate } from "@/shared/lib";
 import type { CertQueueRow } from "@/shared/server";
-import { EMPTY_IMAGE, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
 
 const LONG_WAIT_DAYS = 5;
 
@@ -14,17 +14,8 @@ interface CertQueueTableProps {
 
 export function CertQueueTable({ rows }: CertQueueTableProps) {
   return (
-    <Table.Root className="table-fixed">
-      <colgroup>
-        <col className="w-[180px]" />
-        <col className="w-[200px]" />
-        <col className="w-[132px]" />
-        <col className="w-[90px]" />
-        <col className="w-[100px]" />
-        <col className="w-[90px]" />
-        <col />
-        <col className="w-[44px]" />
-      </colgroup>
+    <Table.Root className="table-equal">
+      <TableColumns widths={[180, 200, 132, 90, 100, 90, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>닉네임</Table.Head>
@@ -39,12 +30,11 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
           <Table.Head align="center">신청 구분</Table.Head>
           <Table.Head align="center">이전 반려</Table.Head>
           <Table.Head />
-          <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {rows.length === 0 ? (
-          <TableEmptyRow colSpan={8} image={EMPTY_IMAGE.search} title="조건에 맞는 신청이 없어요" />
+          <TableEmptyRow colSpan={7} image={EMPTY_IMAGE.search} title="조건에 맞는 신청이 없어요" />
         ) : null}
         {rows.map((row) => {
           const longWait = row.waitedDays >= LONG_WAIT_DAYS;
@@ -100,7 +90,6 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
                   </Text>
                 )}
               </Table.Cell>
-              <Table.Cell />
               <Table.Cell align="end">
                 <ChevronRight size={16} aria-hidden className="inline text-hint" />
               </Table.Cell>

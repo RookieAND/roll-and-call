@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { actionTone, formatShortDateTime } from "@/shared/lib";
 import { retentionDaysLeft, type AuditEntry } from "@/shared/server";
-import { EMPTY_IMAGE, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
 
 import { splitTarget } from "../model/split-target";
 
@@ -14,16 +14,8 @@ interface AuditLogTableProps {
 
 export function AuditLogTable({ rows }: AuditLogTableProps) {
   return (
-    <Table.Root className="table-fixed">
-      <colgroup>
-        <col className="w-[128px]" />
-        <col className="w-[124px]" />
-        <col className="w-[220px]" />
-        <col />
-        <col className="w-[96px]" />
-        <col className="w-[88px]" />
-        <col className="w-[44px]" />
-      </colgroup>
+    <Table.Root className="table-equal">
+      <TableColumns widths={[128, 124, 220, 240, 96, 88, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head aria-sort="descending" className="text-gray-900">

@@ -62,13 +62,13 @@ export function RulebooksLoading() {
           <SkeletonTable
             rows={7}
             columns={[
-              { label: "룰북", kind: "text", width: "w-[200px]" },
-              { label: "판본", kind: "number", width: "w-[234px]", align: "center" },
-              { label: "다른 이름", kind: "text" },
-              { label: "인증", kind: "badge", width: "w-[120px]", align: "center" },
-              { label: "상태", kind: "badge", width: "w-[82px]", align: "center" },
-              { label: "인증 GM", kind: "number", width: "w-[78px]", align: "center" },
-              { label: "", kind: "icon", width: "w-[44px]", align: "end" },
+              { label: "룰북", kind: "text", width: 200 },
+              { label: "판본", kind: "number", width: 234, align: "center" },
+              { label: "다른 이름", kind: "text", width: 200 },
+              { label: "인증", kind: "badge", width: 120, align: "center" },
+              { label: "상태", kind: "badge", width: 82, align: "center" },
+              { label: "인증 GM", kind: "number", width: 78, align: "center" },
+              { label: "", kind: "icon", width: 44, fixed: true, align: "end" },
             ]}
           />
         </Panel>

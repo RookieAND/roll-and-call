@@ -31,12 +31,11 @@ export function SettingsStaffLoading() {
           <SkeletonTable
             rows={4}
             columns={[
-              { label: "닉네임", kind: "text", width: "w-[180px]" },
-              { label: "역할", kind: "badge", width: "w-[104px]", align: "center" },
-              { label: "추가한 날", kind: "date", width: "w-[104px]" },
-              { label: "최근 활동", kind: "date", width: "w-[104px]" },
-              { label: "", kind: "empty" },
-              { label: "", kind: "button", width: "w-[150px]", align: "end" },
+              { label: "닉네임", kind: "text", width: 180 },
+              { label: "역할", kind: "badge", width: 104, align: "center" },
+              { label: "추가한 날", kind: "date", width: 104 },
+              { label: "최근 활동", kind: "date", width: 104 },
+              { label: "", kind: "button", width: 150, align: "end" },
             ]}
           />
         </Panel>

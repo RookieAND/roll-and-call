@@ -3,10 +3,10 @@ import Link from "next/link";
 
 import { formatDateTime } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { EMPTY_IMAGE, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
 
 const NO_SHOW_WARNING_COUNT = 2;
-const COLUMN_COUNT = 5;
+const COLUMN_COUNT = 4;
 
 const EMPTY_COPY = {
   members: {
@@ -27,14 +27,8 @@ interface MemberPanelProps {
 // 참여자 탭과 대기자 탭이 같은 표를 쓴다. 마지막 열만 불참 횟수와 대기 순번으로 갈리고, 행을 누르면 유저 상세로 간다.
 export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
   return (
-    <Table.Root className="table-fixed">
-      <colgroup>
-        <col className="w-[160px]" />
-        <col className="w-[180px]" />
-        <col className="w-[170px]" />
-        <col className="w-[96px]" />
-        <col />
-      </colgroup>
+    <Table.Root className="table-equal">
+      <TableColumns widths={[160, 180, 170, 96]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>닉네임</Table.Head>
@@ -45,7 +39,6 @@ export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
           ) : (
             <Table.Head align="end">불참 횟수</Table.Head>
           )}
-          <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -97,7 +90,6 @@ export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
                   </Text>
                 </Table.Cell>
               )}
-              <Table.Cell />
             </Table.Row>
           );
         })}

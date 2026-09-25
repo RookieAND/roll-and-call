@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChangeRoleButton } from "@/features/change-staff-role";
 import { formatDate, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
+import { TableColumns } from "@/shared/ui";
 
 import { formatLastActive } from "../model/format-last-active";
 
@@ -14,22 +15,14 @@ interface StaffTableProps {
 
 export function StaffTable({ rows, viewer }: StaffTableProps) {
   return (
-    <Table.Root className="table-fixed">
-      <colgroup>
-        <col className="w-[180px]" />
-        <col className="w-[104px]" />
-        <col className="w-[104px]" />
-        <col className="w-[104px]" />
-        <col />
-        <col className="w-[150px]" />
-      </colgroup>
+    <Table.Root className="table-equal">
+      <TableColumns widths={[180, 104, 104, 104, 150]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>닉네임</Table.Head>
           <Table.Head align="center">역할</Table.Head>
           <Table.Head>추가한 날</Table.Head>
           <Table.Head>최근 활동</Table.Head>
-          <Table.Head />
           <Table.Head align="end">
             <span className="sr-only">관리</span>
           </Table.Head>
@@ -68,7 +61,6 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
                   {row.lastActiveAt ? formatLastActive(row.lastActiveAt) : "—"}
                 </Text>
               </Table.Cell>
-              <Table.Cell />
               <Table.Cell align="end">
                 {owner ? null : (
                   <HStack gap="075" justify="end">

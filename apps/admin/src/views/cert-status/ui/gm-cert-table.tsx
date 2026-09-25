@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { GuideDmButton } from "@/features/send-cert-guide-dm";
 import type { GmCertRow } from "@/shared/server";
+import { TableColumns } from "@/shared/ui";
 
 import { GmCertStateBadge } from "./gm-cert-state-badge";
 
@@ -25,16 +26,8 @@ export function GmCertTable({ rows }: GmCertTableProps) {
     </Text>
   );
   return (
-    <Table.Root className="table-fixed">
-      <colgroup>
-        <col className="w-[180px]" />
-        <col className="w-[112px]" />
-        <col />
-        <col className="w-[160px]" />
-        <col className="w-[64px]" />
-        <col className="w-[110px]" />
-        <col className="w-[110px]" />
-      </colgroup>
+    <Table.Root className="table-equal">
+      <TableColumns widths={[180, 112, 200, 160, 64, 110, 110]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>GM</Table.Head>

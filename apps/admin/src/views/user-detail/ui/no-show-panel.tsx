@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { formatDate, formatSessionTime, paginate, withQuery } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, ItemCard, ListPager, Panel, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, ItemCard, ListPager, Panel, TableEmptyRow, TableColumns } from "@/shared/ui";
 
 interface NoShowPanelProps {
   nickname: string;
@@ -27,13 +27,8 @@ export function NoShowPanel({ nickname, noShows, page }: NoShowPanelProps) {
           />
         }
       >
-        <Table.Root className="table-fixed">
-          <colgroup>
-            <col className="w-[192px]" />
-            <col />
-            <col className="w-[100px]" />
-            <col className="w-[88px]" />
-          </colgroup>
+        <Table.Root className="table-equal">
+          <TableColumns widths={[192, 200, 100, 88]} />
           <Table.Header>
             <Table.Row>
               <Table.Head>일시</Table.Head>

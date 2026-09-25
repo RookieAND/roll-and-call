@@ -33,15 +33,14 @@ export function UsersLoading() {
         <Panel footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
-              { label: "닉네임", kind: "text", width: "w-[180px]" },
-              { label: "가입일", kind: "date", width: "w-[132px]" },
-              { label: "연 세션", kind: "number", width: "w-[74px]", align: "end" },
-              { label: "참여 세션", kind: "number", width: "w-[82px]", align: "end" },
-              { label: "최근 3개월 불참", kind: "number", width: "w-[120px]", align: "end" },
-              { label: "인증 룰북", kind: "number", width: "w-[82px]", align: "end" },
-              { label: "상태", kind: "badge", width: "w-[98px]", align: "center" },
-              { label: "제재 종료", kind: "date", width: "w-[132px]" },
-              { label: "", kind: "empty" },
+              { label: "닉네임", kind: "text", width: 180 },
+              { label: "가입일", kind: "date", width: 132 },
+              { label: "연 세션", kind: "number", width: 74, align: "end" },
+              { label: "참여 세션", kind: "number", width: 82, align: "end" },
+              { label: "최근 3개월 불참", kind: "number", width: 120, align: "end" },
+              { label: "인증 룰북", kind: "number", width: 82, align: "end" },
+              { label: "상태", kind: "badge", width: 98, align: "center" },
+              { label: "제재 종료", kind: "date", width: 132 },
             ]}
           />
         </Panel>

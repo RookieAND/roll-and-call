@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow, TableColumns } from "@/shared/ui";
 
 import { CERT_STATE_VIEW } from "../model/cert-state-view";
 import { CERT_ROW_STATE, toCertRows } from "../model/to-cert-rows";
@@ -39,29 +39,21 @@ export function CertPanel({ user, page }: CertPanelProps) {
           />
         }
       >
-        <Table.Root className="table-fixed">
-          <colgroup>
-            <col className="w-[200px]" />
-            <col className="w-[96px]" />
-            <col className="w-[156px]" />
-            <col className="w-[120px]" />
-            <col />
-            <col className="w-[104px]" />
-          </colgroup>
+        <Table.Root className="table-equal">
+          <TableColumns widths={[200, 96, 156, 120, 104]} />
           <Table.Header>
             <Table.Row>
               <Table.Head>룰북</Table.Head>
               <Table.Head align="center">상태</Table.Head>
               <Table.Head>일자</Table.Head>
               <Table.Head>처리한 운영진</Table.Head>
-              <Table.Head />
               <Table.Head aria-label="조치" />
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {rows.length === 0 ? (
               <TableEmptyRow
-                colSpan={6}
+                colSpan={5}
                 image={EMPTY_IMAGE.myGames}
                 title="룰북 인증 기록이 없습니다"
                 description="인증을 신청하면 심사 결과가 이곳에 쌓입니다. 인증을 받기 전에는 인증이 필요한 룰북으로 구인을 열 수 없습니다."
@@ -94,7 +86,6 @@ export function CertPanel({ user, page }: CertPanelProps) {
                       </Text>
                     )}
                   </Table.Cell>
-                  <Table.Cell />
                   <Table.Cell>
                     {row.href && state.action ? (
                       <Button

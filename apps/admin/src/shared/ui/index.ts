@@ -26,6 +26,7 @@ export { Panel } from "./panel";
 export { PICK_STATE, PickButton, type PickState } from "./pick-button";
 export { RouteTabs } from "./route-tabs";
 export { Sidebar } from "./sidebar";
+export { TableColumns, type TableColumnWidth } from "./table-columns";
 export { TableEmptyRow } from "./table-empty-row";
 export { TabCount } from "./tab-count";
 export { UrlSearchInput } from "./url-search-input";

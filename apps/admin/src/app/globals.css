@@ -59,3 +59,12 @@ body {
   border-image: linear-gradient(to top, var(--color-gray-200) 1px, var(--color-surface) 1px) 0 fill
     / 0 / 0 0 0 100vmax;
 }
+
+/* 열이 TableColumns의 최소 폭을 지키며 남는 폭을 똑같이 나눠 받는다.
+   auto 배치라 칸의 max-width를 0으로 둬야 긴 글이 열을 밀어내지 않고 말줄임된다. */
+@utility table-equal {
+  table-layout: auto;
+  & :is(th, td) {
+    max-width: 0;
+  }
+}

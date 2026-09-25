@@ -76,12 +76,12 @@ export function UserDetailLoading() {
                 <SkeletonTable
                   rows={6}
                   columns={[
-                    { label: "일시", kind: "date", width: "w-[192px]" },
-                    { label: "역할", kind: "badge", width: "w-[66px]", align: "center" },
-                    { label: "세션", kind: "text" },
-                    { label: "룰북", kind: "text", width: "w-[140px]" },
-                    { label: "GM", kind: "text", width: "w-[100px]" },
-                    { label: "", kind: "empty", width: "w-[96px]" },
+                    { label: "일시", kind: "date", width: 192 },
+                    { label: "역할", kind: "badge", width: 66, align: "center" },
+                    { label: "세션", kind: "text", width: 200 },
+                    { label: "룰북", kind: "text", width: 140 },
+                    { label: "GM", kind: "text", width: 100 },
+                    { label: "", kind: "empty", width: 96 },
                   ]}
                 />
               </Panel>

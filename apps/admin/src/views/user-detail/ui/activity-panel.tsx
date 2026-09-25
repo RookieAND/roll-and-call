@@ -2,7 +2,7 @@ import { Badge, Table, Text } from "@roll-and-call/ui";
 
 import { formatSessionTime, paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow, UrlSelect } from "@/shared/ui";
+import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow, UrlSelect, TableColumns } from "@/shared/ui";
 
 import { ACTIVITY_ROLE, type ActivityRole } from "../model/activity-role";
 
@@ -36,15 +36,8 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
         <ListPager page={paged.page} totalPages={paged.totalPages} total={rows.length} unit="건" />
       }
     >
-      <Table.Root className="table-fixed">
-        <colgroup>
-          <col className="w-[192px]" />
-          <col className="w-[66px]" />
-          <col />
-          <col className="w-[140px]" />
-          <col className="w-[100px]" />
-          <col className="w-[96px]" />
-        </colgroup>
+      <Table.Root className="table-equal">
+        <TableColumns widths={[192, 66, 200, 140, 100, 96]} />
         <Table.Header>
           <Table.Row>
             <Table.Head>일시</Table.Head>
