@@ -136,7 +136,8 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
       <HStack
         align="center"
         gap="125"
-        className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-200 py-150"
+        data-full-bleed
+        className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-page py-150"
       >
         {hasReason || conflict ? (
           <Text typography="body4" foreground="hint">

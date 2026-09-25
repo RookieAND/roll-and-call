@@ -170,7 +170,8 @@ export function RevokeCertForm({
       <HStack
         align="center"
         gap="125"
-        className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-200 py-150"
+        data-full-bleed
+        className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-page py-150"
       >
         <Text typography="body4" foreground="hint">
           확정하면 다른 운영진에게 디스코드 알림이 갑니다. 취소한 인증은 활동 기록에 남습니다.

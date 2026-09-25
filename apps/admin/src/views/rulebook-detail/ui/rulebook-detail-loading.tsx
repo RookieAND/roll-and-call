@@ -22,8 +22,8 @@ export function RulebookDetailLoading() {
           </Button>
         }
       />
-      <LoadingRegion label="룰북 정보를 불러오는 중입니다">
-        <VStack gap="150" className="flex-1 p-200">
+      <LoadingRegion fullBleed label="룰북 정보를 불러오는 중입니다">
+        <VStack gap="150" className="mx-auto w-full max-w-page flex-1 p-200">
           <Panel title="기본 정보" bodyClassName="p-175">
             <VStack gap="125">
               <HStack align="start" gap="125">
@@ -60,7 +60,7 @@ export function RulebookDetailLoading() {
         <HStack
           align="end"
           gap="125"
-          className="sticky bottom-0 border-t border-gray-200 bg-canvas px-200 py-150"
+          className="sticky bottom-0 border-t border-gray-200 bg-canvas px-page py-150"
         >
           <Field.Root
             label="변경 사유"

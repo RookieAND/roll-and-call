@@ -69,8 +69,8 @@ export function RulebookEditForm({ rulebook, children }: RulebookEditFormProps) 
     });
 
   return (
-    <VStack className="min-h-0 flex-1">
-      <VStack gap="150" className="flex-1 p-200">
+    <VStack data-full-bleed className="min-h-0 flex-1">
+      <VStack gap="150" className="mx-auto w-full max-w-page flex-1 p-200">
         {conflict !== undefined ? (
           <ConflictNotice
             title={conflictTitle}
@@ -97,7 +97,7 @@ export function RulebookEditForm({ rulebook, children }: RulebookEditFormProps) 
       <HStack
         align="end"
         gap="125"
-        className="sticky bottom-0 border-t border-gray-200 bg-canvas px-200 py-150"
+        className="sticky bottom-0 border-t border-gray-200 bg-canvas px-page py-150"
       >
         <Field.Root label="변경 사유" htmlFor="rulebook-reason" required className="flex-1">
           <TextInput

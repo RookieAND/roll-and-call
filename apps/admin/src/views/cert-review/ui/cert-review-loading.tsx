@@ -16,7 +16,7 @@ export function CertReviewLoading() {
         back={{ href: "/cert", label: "심사 대기열" }}
         sub={<Skeleton width={32} height={12} render={<span />} />}
       />
-      <LoadingRegion label="심사할 신청을 불러오는 중입니다">
+      <LoadingRegion fullBleed label="심사할 신청을 불러오는 중입니다">
         <VStack gap="175" className="mx-auto w-full max-w-content flex-1 p-200">
           <SkeletonEntity
             facts={["신청 룰북", "대기", "신청 일자", "같은 룰북 반려", "디스코드"]}
@@ -45,7 +45,7 @@ export function CertReviewLoading() {
         <HStack
           align="center"
           gap="125"
-          className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-200 py-150"
+          className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-page py-150"
         >
           <Button variant="outline" colorPalette="gray" size="sm" disabled>
             건너뛰기

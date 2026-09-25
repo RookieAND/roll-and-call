@@ -11,7 +11,8 @@ export function DecisionFooter({ children, status }: DecisionFooterProps) {
     <HStack
       align="center"
       gap="125"
-      className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-200 py-150"
+      data-full-bleed
+      className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-page py-150"
     >
       {status}
       <HStack gap="100" className="ml-auto">

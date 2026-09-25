@@ -9,7 +9,7 @@ export function CertRevokeLoading() {
         title={<Skeleton width={180} height={22} render={<span />} />}
         sub="유저 상세 · 룰북 인증"
       />
-      <LoadingRegion label="룰북 인증 정보를 불러오는 중입니다">
+      <LoadingRegion fullBleed label="룰북 인증 정보를 불러오는 중입니다">
         <Grid className="mx-auto w-full max-w-[1000px] flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-200 p-200">
           <VStack gap="250" className="rounded-600 border border-gray-200 bg-surface p-250">
             <FormSection title="1. 취소할 룰북">
@@ -34,7 +34,7 @@ export function CertRevokeLoading() {
         <HStack
           align="center"
           gap="125"
-          className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-200 py-150"
+          className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-page py-150"
         >
           <Text typography="body4" foreground="hint">
             확정하면 다른 운영진에게 디스코드 알림이 갑니다. 취소한 인증은 활동 기록에 남습니다.
