@@ -41,7 +41,7 @@ export function ReapplyNotice({ latest, attempt, replacedShots }: ReapplyNoticeP
       <VStack gap="100" className="px-150 py-125">
         <VStack gap="050">
           <Text typography="body4" weight="bold" foreground="primary">
-            지난번에 요청한 것
+            지난번에 요청한 사항
           </Text>
           <VStack gap="050" render={<ul />}>
             {latest.requests.map((request) => (
@@ -58,7 +58,7 @@ export function ReapplyNotice({ latest, attempt, replacedShots }: ReapplyNoticeP
         </VStack>
         <HStack align="center" gap="175" className="border-t border-tinted-border pt-100">
           <Text typography="body4" weight="bold" foreground="primary">
-            이번에 바뀐 것
+            이번에 바뀐 사항
           </Text>
           {replacedShots.length ? (
             <HStack align="center" gap="075">

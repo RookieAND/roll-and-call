@@ -1,10 +1,10 @@
 "use client";
 
-import { Button, HStack, Popover, VStack, toast } from "@roll-and-call/ui";
-import { ChevronDown, Link2, X } from "lucide-react";
+import { Button, HStack, toast } from "@roll-and-call/ui";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 
 import type { RulebookRequestRow } from "@/shared/server";
 
@@ -21,11 +21,6 @@ interface RequestActionsProps {
 export function RequestActions({ request, linkHref, rejectHref }: RequestActionsProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const items = [
-    { label: "기존 룰북에 연결", icon: Link2, href: linkHref },
-    { label: "반려", icon: X, href: rejectHref },
-  ];
 
   const approve = () =>
     startTransition(async () => {
@@ -37,36 +32,28 @@ export function RequestActions({ request, linkHref, rejectHref }: RequestActions
 
   return (
     <HStack align="center" gap="075">
-      <Button size="sm" loading={pending} disabled={pending} onClick={approve}>
+      <Button size="sm" loading={pending} disabled={pending} onClick={approve} className="gap-050">
+        <Plus size={14} aria-hidden />
         추가
       </Button>
-      <Popover.Root open={menuOpen} onOpenChange={setMenuOpen}>
-        <Popover.Trigger
-          disabled={pending}
-          render={<Button variant="outline" colorPalette="gray" size="sm" className="gap-075" />}
-        >
-          다른 처리
-          <ChevronDown size={14} aria-hidden />
-        </Popover.Trigger>
-        <Popover.Popup align="end" className="w-[180px] p-075">
-          <VStack>
-            {items.map(({ label, icon: Icon, href }) => (
-              <Button
-                key={label}
-                variant="ghost"
-                colorPalette="gray"
-                size="sm"
-                render={<Link href={href} scroll={false} />}
-                onClick={() => setMenuOpen(false)}
-                className="justify-start gap-100"
-              >
-                <Icon size={16} aria-hidden />
-                {label}
-              </Button>
-            ))}
-          </VStack>
-        </Popover.Popup>
-      </Popover.Root>
+      <Button
+        variant="outline"
+        colorPalette="gray"
+        size="sm"
+        disabled={pending}
+        render={<Link href={linkHref} scroll={false} />}
+      >
+        기존 룰북에 연결
+      </Button>
+      <Button
+        variant="outline"
+        colorPalette="danger"
+        size="sm"
+        disabled={pending}
+        render={<Link href={rejectHref} scroll={false} />}
+      >
+        반려
+      </Button>
     </HStack>
   );
 }

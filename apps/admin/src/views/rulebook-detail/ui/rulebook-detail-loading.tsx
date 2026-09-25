@@ -43,7 +43,6 @@ export function RulebookDetailLoading() {
             title="이 룰북으로 인증된 GM"
             footer={<SkeletonPager />}
             right={<Skeleton width={40} height={22} rounded="full" />}
-            className="flex-1"
           >
             <SkeletonTable
               rows={3}
@@ -60,7 +59,7 @@ export function RulebookDetailLoading() {
         <HStack
           align="end"
           gap="125"
-          className="sticky bottom-0 border-t border-gray-200 bg-canvas px-page py-150"
+          className="sticky bottom-0 border-t border-gray-200 bg-surface px-page py-150"
         >
           <Field.Root
             label="변경 사유"

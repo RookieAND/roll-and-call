@@ -1,4 +1,5 @@
 import { Button, VStack } from "@roll-and-call/ui";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -68,12 +69,13 @@ export function RulebooksView({ rulebooks, linkTargets, requests, query }: Ruleb
               <Button
                 size="sm"
                 render={<Link href={withQuery("/rules", pageQuery, { add: "1" })} scroll={false} />}
+                className="gap-050"
               >
+                <Plus size={14} aria-hidden />
                 룰북 추가
               </Button>
             </>
           }
-          className="flex-1"
           footer={pager}
         >
           <RulebookTable rows={paged.rows} />

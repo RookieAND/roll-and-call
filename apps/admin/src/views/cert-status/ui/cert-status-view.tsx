@@ -83,7 +83,7 @@ export function CertStatusView({ status, tab, allTime, unappliedOnly, page }: Ce
       <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/status" />
       <VStack gap="150" className="flex-1 p-200">
         <CertSummary summary={status.summary} week={status.week} />
-        <Panel className="flex-1" footer={pager}>
+        <Panel footer={pager}>
           <CertStatusTabs
             tab={tab}
             toolbar={toolbar}

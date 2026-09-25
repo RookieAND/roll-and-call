@@ -97,7 +97,7 @@ export function RulebookEditForm({ rulebook, children }: RulebookEditFormProps) 
       <HStack
         align="end"
         gap="125"
-        className="sticky bottom-0 border-t border-gray-200 bg-canvas px-page py-150"
+        className="sticky bottom-0 border-t border-gray-200 bg-surface px-page py-150"
       >
         <Field.Root label="변경 사유" htmlFor="rulebook-reason" required className="flex-1">
           <TextInput

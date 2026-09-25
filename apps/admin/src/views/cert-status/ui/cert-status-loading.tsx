@@ -40,7 +40,7 @@ export function CertStatusLoading() {
             </Grid>
           </Panel>
         </Grid>
-        <Panel className="flex-1" footer={<SkeletonPager />}>
+        <Panel footer={<SkeletonPager />}>
           <SkeletonTabs
             items={["룰북별 인증 현황", "GM별 인증 현황"]}
             right={

@@ -33,7 +33,7 @@ export function CertQueueView({ queue, page, query }: CertQueueViewProps) {
       <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert" />
       <VStack gap="150" className="flex-1 p-200">
         {queue.total === 0 ? (
-          <Panel className="flex-1">
+          <Panel>
             <EmptyState
               image={EMPTY_IMAGE.myGames}
               title="심사할 신청이 없어요"
@@ -58,7 +58,6 @@ export function CertQueueView({ queue, page, query }: CertQueueViewProps) {
               </Chip>
             </HStack>
             <Panel
-              className="flex-1"
               footer={
                 <ListPager
                   page={paged.page}

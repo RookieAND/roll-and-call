@@ -33,7 +33,7 @@ export function RejectPanel({
           반려 사유
         </Text>
         <Text typography="body4" foreground="hint">
-          사유를 선택해 주세요. 특정 사진에 문제가 있으면 사진을 눌러 함께 지정할 수 있습니다(선택).
+          사유를 선택해 주세요. 특정 사진에 문제가 있으면 그 사진을 눌러 함께 지정할 수 있습니다.
         </Text>
       </VStack>
       <VStack gap="100" className="p-150">

@@ -1,5 +1,5 @@
 import { Button, HStack, Skeleton, TextInput, VStack } from "@roll-and-call/ui";
-import { Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 
 import {
   AdminHeader,
@@ -52,12 +52,12 @@ export function RulebooksLoading() {
                   className="h-[32px] pl-400 text-body3"
                 />
               </HStack>
-              <Button size="sm" disabled>
+              <Button size="sm" disabled className="gap-050">
+                <Plus size={14} aria-hidden />
                 룰북 추가
               </Button>
             </>
           }
-          className="flex-1"
         >
           <SkeletonTable
             rows={7}

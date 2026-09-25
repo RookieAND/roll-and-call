@@ -39,7 +39,6 @@ export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelPr
     <Panel
       title="이 룰북으로 인증된 GM"
       right={right}
-      className="flex-1"
       footer={
         <ListPager page={paged.page} totalPages={paged.totalPages} total={gms.length} unit="명" />
       }

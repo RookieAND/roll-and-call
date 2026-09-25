@@ -1,15 +1,15 @@
-import { Badge, Button } from "@roll-and-call/ui";
+import { Button } from "@roll-and-call/ui";
 import { Quote } from "lucide-react";
 import Link from "next/link";
 
 import { CertDecisionForm } from "@/features/decide-cert";
-import { formatDate, formatDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
-import { AdminHeader, ConflictNotice, EntityHead, ItemCard, UserInitial } from "@/shared/ui";
+import { AdminHeader, ConflictNotice, ItemCard } from "@/shared/ui";
 
+import { ApplicantCard } from "./applicant-card";
 import { ReapplyNotice } from "./reapply-notice";
 
-const LONG_WAIT_DAYS = 5;
 const DECISION_LABEL = { approved: "승인", rejected: "반려" } as const;
 
 interface CertReviewViewProps {
@@ -45,29 +45,7 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
         compact={reapplied || Boolean(processed)}
         disabled={Boolean(processed)}
       >
-        <EntityHead
-          title={applicant.nickname}
-          lead={<UserInitial nickname={applicant.nickname} />}
-          actions={reapplied ? <Badge colorPalette="warning">재신청</Badge> : null}
-          facts={[
-            { label: "신청 룰북", value: review.rulebook },
-            {
-              label: "대기",
-              value: `${review.waitedDays}일째`,
-              danger: review.waitedDays >= LONG_WAIT_DAYS,
-            },
-            { label: "신청 일자", value: formatDate(review.appliedAt) },
-            {
-              label: "같은 룰북 반려",
-              value: reapplied ? `${previousRejections.length}회` : "없음",
-              danger: reapplied,
-              sub: latestRejection
-                ? `${formatDate(latestRejection.rejectedAt)} · ${latestRejection.tags[0]}`
-                : undefined,
-            },
-            { label: "디스코드", value: `@${applicant.discordHandle}` },
-          ]}
-        />
+        <ApplicantCard review={review} />
         {processed ? (
           <ConflictNotice
             title={conflictTitle}

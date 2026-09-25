@@ -38,7 +38,7 @@ export function CertQueueLoading() {
           </div>
           <Chip disabled>재신청만</Chip>
         </HStack>
-        <Panel footer={<SkeletonPager />} className="flex-1">
+        <Panel footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
               { label: "닉네임", kind: "text", width: "w-[180px]" },
