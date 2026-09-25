@@ -202,6 +202,11 @@ export const loadSnapshot = cache(async () => {
     memo: row.memo,
     photoUrls: row.photoUrls,
     replacedShots: row.replacedShots,
+    purchase: {
+      captureUrl: row.purchaseCaptureUrl,
+      orderNumber: row.orderNumber,
+      orderDate: row.orderDate,
+    },
     // 같은 사람이 같은 룰북으로 먼저 냈다가 반려된 신청이 재신청 이력이다.
     previousRejections: applicationRows
       .filter(

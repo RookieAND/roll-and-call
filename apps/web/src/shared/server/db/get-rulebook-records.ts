@@ -4,6 +4,7 @@ import {
   certApplications,
   certifications,
   db,
+  rulebookCategories,
   rulebookRequests,
   rulebooks,
 } from "@roll-and-call/database";
@@ -19,10 +20,15 @@ export async function getRulebookRecords(userId: string | null) {
         edition: rulebooks.edition,
         aliases: rulebooks.aliases,
         certRequired: rulebooks.certRequired,
+        kind: rulebooks.kind,
+        supersedesId: rulebooks.supersedesId,
+        categoryId: rulebooks.categoryId,
+        categoryName: rulebookCategories.name,
       })
       .from(rulebooks)
+      .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
       .where(eq(rulebooks.hidden, false))
-      .orderBy(rulebooks.name, rulebooks.edition),
+      .orderBy(rulebookCategories.name, rulebooks.name, rulebooks.edition),
     db.select({ certEnforcementDate: adminSettings.certEnforcementDate }).from(adminSettings),
   ]);
   const enforcementDate = settings?.certEnforcementDate ?? null;
@@ -56,6 +62,7 @@ export async function getRulebookRecords(userId: string | null) {
         id: rulebookRequests.id,
         name: rulebookRequests.name,
         edition: rulebookRequests.edition,
+        kind: rulebookRequests.kind,
         createdAt: rulebookRequests.createdAt,
       })
       .from(rulebookRequests)

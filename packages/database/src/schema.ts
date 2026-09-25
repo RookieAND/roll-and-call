@@ -299,6 +299,12 @@ export const rulebookRequests = pgTable(
     edition: text("edition").notNull().default(""),
     publisher: text("publisher"),
     note: text("note").notNull().default(""),
+    // 비어 있으면 "잘 모르겠음". 서플리먼트·핸드북이면 어느 룰의 책인지 목록에서 고르거나(categoryId) 적는다(categoryName).
+    kind: rulebookKind("kind"),
+    categoryId: uuid("category_id").references(() => rulebookCategories.id, {
+      onDelete: "set null",
+    }),
+    categoryName: text("category_name"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     outcome: rulebookRequestOutcome("outcome"),
     processedBy: uuid("processed_by").references(() => profiles.id, { onDelete: "set null" }),
@@ -322,6 +328,11 @@ export const certApplications = pgTable(
     photoUrls: jsonb("photo_urls").$type<Partial<Record<CertShot, string>>>().notNull().default({}),
     // 재신청에서 이전 신청과 달라진 사진.
     replacedShots: text("replaced_shots").array().$type<CertShot[]>().notNull().default([]),
+    // 여러 권을 한 번에 신청하면 권마다 한 건씩 만들고 같은 사진·구매 기록을 나눠 쓴다.
+    groupId: uuid("group_id"),
+    purchaseCaptureUrl: text("purchase_capture_url"),
+    orderNumber: text("order_number"),
+    orderDate: text("order_date"),
     status: certApplicationStatus("status").notNull().default("pending"),
     rejectTag: text("reject_tag"),
     rejectReason: text("reject_reason"),

@@ -24,6 +24,7 @@ export async function getCertReview(id: string) {
     memo: application.memo,
     photoUrls: application.photoUrls,
     replacedShots: application.replacedShots,
+    purchase: application.purchase,
     previousRejections: application.previousRejections,
     applicant: {
       id: user.id,

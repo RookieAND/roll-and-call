@@ -19,12 +19,15 @@ export async function cancelCertification(rulebookId: string): Promise<ActionRes
         inArray(certApplications.status, ["pending", "rejected"]),
       ),
     )
-    .returning({ photoUrls: certApplications.photoUrls });
+    .returning({
+      photoUrls: certApplications.photoUrls,
+      captureUrl: certApplications.purchaseCaptureUrl,
+    });
   if (deleted.length === 0) return { error: "이미 처리된 신청입니다. 화면을 새로 고쳐 주세요." };
 
   await removeUnusedCertPhotos(
     user.id,
-    deleted.flatMap((row) => Object.values(row.photoUrls)),
+    deleted.flatMap((row) => [...Object.values(row.photoUrls), row.captureUrl ?? ""]),
   );
   return { redirect: "/me/rulebooks" };
 }

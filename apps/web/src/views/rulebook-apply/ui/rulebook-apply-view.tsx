@@ -8,10 +8,10 @@ import { getCurrentSessionUser, getProfile, getRulebookRecords } from "@/shared/
 import { AppBar } from "@/shared/ui";
 
 interface RulebookApplyViewProps {
-  rulebookId: string | null;
+  rulebookIds: string[];
 }
 
-export async function RulebookApplyView({ rulebookId }: RulebookApplyViewProps) {
+export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
@@ -34,7 +34,7 @@ export async function RulebookApplyView({ rulebookId }: RulebookApplyViewProps) 
       <AppBar back="/me/rulebooks" title="룰북 인증하기" />
       <CertApplyForm
         rulebooks={toMyRulebooks(records).rulebooks}
-        initialRulebookId={rulebookId}
+        initialRulebookIds={rulebookIds}
         nickname={handle ?? name}
       />
     </>

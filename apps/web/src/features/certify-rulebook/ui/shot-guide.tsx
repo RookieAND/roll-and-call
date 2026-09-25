@@ -1,20 +1,21 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { CERT_SHOT_GUIDE, CERT_SHOT_LABEL, type CertShot } from "@/entities/rulebook";
+import { certShotGuide, type CertShot } from "@/entities/rulebook";
 import { LineBreaks } from "@/shared/ui";
 
 interface ShotGuideProps {
   shot: CertShot;
+  bookCount: number;
   nickname: string;
 }
 
 // 누른 사진 칸의 안내. 앞면이면 쪽지에 적을 닉네임을 같이 보여 준다.
-export function ShotGuide({ shot, nickname }: ShotGuideProps) {
-  const guide = CERT_SHOT_GUIDE[shot];
+export function ShotGuide({ shot, bookCount, nickname }: ShotGuideProps) {
+  const guide = certShotGuide(shot, bookCount);
   return (
     <VStack gap="075" className="rounded-500 bg-gray-50 px-175 py-150">
       <Text typography="body3" weight="extrabold">
-        {CERT_SHOT_LABEL[shot]}
+        {guide.title}
       </Text>
       <Text
         typography="body3"

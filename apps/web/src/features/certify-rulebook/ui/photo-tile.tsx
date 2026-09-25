@@ -46,12 +46,22 @@ interface PhotoTileProps {
   selected: boolean;
   // 룰북을 고른 뒤 아직 비어 있는 칸. 점선으로 남은 칸을 알린다.
   needed: boolean;
+  // 여러 권을 함께 신청하면 예시 그림에 두 권을 그린다.
+  paired: boolean;
   onPick: () => void;
   onRemove: () => void;
 }
 
 // 3:4 사진 칸. 빈 칸에는 무엇을 찍을지 예시 그림을 흐리게 깐다.
-export function PhotoTile({ shot, slot, selected, needed, onPick, onRemove }: PhotoTileProps) {
+export function PhotoTile({
+  shot,
+  slot,
+  selected,
+  needed,
+  paired,
+  onPick,
+  onRemove,
+}: PhotoTileProps) {
   const label = CERT_SHOT_LABEL[shot];
   const labelForeground =
     slot.status === PHOTO_SLOT.error ? "warning" : selected ? "primary" : "muted";
@@ -72,7 +82,7 @@ export function PhotoTile({ shot, slot, selected, needed, onPick, onRemove }: Ph
             <img src={slot.url} alt="" className="absolute inset-0 size-full object-cover" />
           ) : (
             <span className={art({ status: slot.status })}>
-              <ShotArt shot={shot} />
+              <ShotArt shot={shot} paired={paired} />
             </span>
           )}
           {slot.status === PHOTO_SLOT.empty && (

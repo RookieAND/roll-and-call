@@ -1,5 +1,5 @@
 import { Button } from "@roll-and-call/ui";
-import { Quote } from "lucide-react";
+import { Quote, Receipt } from "lucide-react";
 import Link from "next/link";
 
 import { CertDecisionForm } from "@/features/decide-cert";
@@ -19,7 +19,8 @@ interface CertReviewViewProps {
 }
 
 export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProps) {
-  const { applicant, previousRejections, processed } = review;
+  const { applicant, previousRejections, processed, purchase } = review;
+  const purchaseLine = [purchase.orderNumber, purchase.orderDate].filter(Boolean).join(" · ");
   const latestRejection = previousRejections.at(-1);
   const reapplied = Boolean(latestRejection);
   const nextHref = review.nextId ? `/cert/${review.nextId}` : "/cert";
@@ -78,6 +79,29 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
           <div className={processed ? "opacity-50" : undefined}>
             <ItemCard icon={Quote} tone="primary" title="신청 메모" meta={applicant.nickname}>
               {review.memo}
+            </ItemCard>
+          </div>
+        ) : null}
+        {(purchaseLine || purchase.captureUrl) && !rejecting ? (
+          <div className={processed ? "opacity-50" : undefined}>
+            <ItemCard
+              icon={Receipt}
+              title="구매 기록"
+              meta="선택 입력"
+              right={
+                purchase.captureUrl ? (
+                  <Button
+                    variant="outline"
+                    colorPalette="gray"
+                    size="sm"
+                    render={<a href={purchase.captureUrl} target="_blank" rel="noreferrer" />}
+                  >
+                    캡처 보기
+                  </Button>
+                ) : null
+              }
+            >
+              {purchaseLine || "주문 번호·주문일 없음"}
             </ItemCard>
           </div>
         ) : null}

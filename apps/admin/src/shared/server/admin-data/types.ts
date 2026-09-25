@@ -75,6 +75,8 @@ export interface CertApplication {
   memo: string;
   photoUrls: Partial<Record<ShotKey, string>>;
   replacedShots: ShotKey[];
+  // 신청자가 선택으로 낸 구매 기록. 여러 권을 함께 낸 신청은 같은 값을 나눠 쓴다.
+  purchase: { captureUrl: string | null; orderNumber: string | null; orderDate: string | null };
   previousRejections: PreviousRejection[];
   status: CertStatus;
   flaggedShots?: ShotKey[];

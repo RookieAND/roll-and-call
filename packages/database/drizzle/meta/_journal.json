@@ -218,6 +218,13 @@
       "when": 1791600000000,
       "tag": "0030_drop_rulebook_version",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1791700000000,
+      "tag": "0031_cert_application_purchase",
+      "breakpoints": true
     }
   ]
 }

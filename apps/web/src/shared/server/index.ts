@@ -14,6 +14,7 @@ export {
   type AvailabilityInterval,
   type ProfileLink,
   rulebooks,
+  rulebookCategories,
   certifications,
   certApplications,
   rulebookRequests,
