@@ -63,6 +63,7 @@ export const loadSnapshot = cache(async () => {
     .from(rulebooks)
     .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId));
   const requestRows = await db.select().from(rulebookRequests);
+  const categoryRows = await db.select().from(rulebookCategories);
   const applicationRows = await db.select().from(certApplications);
   const certificationRows = await db.select().from(certifications);
   const sanctionRows = await db.select().from(sanctions).where(isNull(sanctions.releasedAt));
@@ -232,6 +233,11 @@ export const loadSnapshot = cache(async () => {
     id: row.id,
     userId: row.userId,
     name: rulebookLabel(row),
+    bookName: row.name,
+    edition: row.edition,
+    kind: row.kind,
+    category:
+      categoryRows.find((category) => category.id === row.categoryId)?.name ?? row.categoryName,
     note: [row.publisher && `출판사 ${row.publisher}`, row.note].filter(Boolean).join(" · "),
     requestedAt: row.createdAt,
     similarTo: similarRulebook(row.name, rulebookList),

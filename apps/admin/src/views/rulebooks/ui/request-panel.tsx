@@ -2,6 +2,7 @@ import { Badge, Text, VStack } from "@roll-and-call/ui";
 import { FileText } from "lucide-react";
 
 import { RequestActions, type RequestAction } from "@/features/process-rulebook-request";
+import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { RulebookRequestRow } from "@/shared/server";
 import { ItemCard, Panel } from "@/shared/ui";
 
@@ -30,7 +31,13 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
               icon={FileText}
               tone="primary"
               title={request.name}
-              meta={`${request.requesterNickname} 요청`}
+              meta={[
+                `${request.requesterNickname} 요청`,
+                request.kind ? RULEBOOK_KIND_LABEL[request.kind] : null,
+                request.category,
+              ]
+                .filter(Boolean)
+                .join(" · ")}
               right={<RequestActions actionHref={(action) => actionHref(action, request.id)} />}
             >
               {request.note || request.similarTo ? (

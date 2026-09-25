@@ -88,6 +88,10 @@ export interface RulebookRequest {
   id: string;
   userId: string;
   name: string;
+  bookName: string;
+  edition: string;
+  kind: RulebookKind | null;
+  category: string | null;
   note: string;
   requestedAt: Date;
   similarTo?: string;
