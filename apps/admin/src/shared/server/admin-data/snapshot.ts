@@ -10,12 +10,13 @@ import {
   profiles,
   reports,
   rulebookRequests,
+  rulebookCategories,
   rulebooks,
   sanctions,
   staff,
   staffMemos,
 } from "@roll-and-call/database";
-import { isNull, sql } from "drizzle-orm";
+import { eq, getTableColumns, isNull, sql } from "drizzle-orm";
 import { cache } from "react";
 
 import type { AuditAction } from "./audit-actions";
@@ -57,7 +58,10 @@ export const loadSnapshot = cache(async () => {
   const profileRows = await db.select().from(profiles);
   const gameRows = await db.select().from(games);
   const participantRows = await db.select().from(participants);
-  const rulebookRows = await db.select().from(rulebooks);
+  const rulebookRows = await db
+    .select({ ...getTableColumns(rulebooks), category: rulebookCategories.name })
+    .from(rulebooks)
+    .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId));
   const requestRows = await db.select().from(rulebookRequests);
   const applicationRows = await db.select().from(certApplications);
   const certificationRows = await db.select().from(certifications);
@@ -173,6 +177,9 @@ export const loadSnapshot = cache(async () => {
       id: rulebook.id,
       name: rulebook.name,
       edition: rulebook.edition,
+      category: rulebook.category,
+      kind: rulebook.kind,
+      supersedesId: rulebook.supersedesId,
       aliases: rulebook.aliases,
       certRequired: rulebook.certRequired,
       hidden: rulebook.hidden,

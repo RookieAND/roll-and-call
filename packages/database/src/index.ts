@@ -27,6 +27,8 @@ export {
   staffRole,
   certApplicationStatus,
   rulebookRequestOutcome,
+  rulebookKind,
+  rulebookCategories,
   rulebooks,
   rulebookRequests,
   certApplications,
@@ -40,6 +42,7 @@ export {
   type CertShot,
   type AuditState,
   type Rulebook,
+  type RulebookKind,
   type CertApplication,
   type AuditLogEntry,
 } from "./schema";

@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { withObjectParticle, withTopicParticle } from "@/shared/lib";
+import { quoteWithParticle, withObjectParticle, withTopicParticle } from "@/shared/lib";
 
-import { quoteWithParticle } from "./quote-with-particle";
 import { withDirectionParticle } from "./with-direction-particle";
 
 describe("quoteWithParticle", () => {

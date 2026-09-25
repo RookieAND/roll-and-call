@@ -4,30 +4,38 @@ import { Button, Field, HStack, TextInput, VStack, toast } from "@roll-and-call/
 import { useRouter } from "next/navigation";
 import { useState, useTransition, type ReactNode } from "react";
 
-import { formatDateTime } from "@/shared/lib";
+import { RULEBOOK_KIND_DESCRIPTION, formatDateTime } from "@/shared/lib";
 import type { RulebookActionResult, RulebookDetail } from "@/shared/server";
 import { ConflictNotice, Panel } from "@/shared/ui";
 
 import { submitRulebookHide } from "../api/submit-rulebook-hide";
 import { submitRulebookSave } from "../api/submit-rulebook-save";
+import { categoryHelp } from "../model/category-help";
+import { draftCategory } from "../model/draft-category";
 import type { RulebookDraft } from "../model/rulebook-draft";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
+import { KindSegmentField } from "./kind-segment-field";
+import { SupersedesField } from "./supersedes-field";
 
 type Conflict = Extract<RulebookActionResult, { ok: false }>["conflict"];
 
 interface RulebookEditFormProps {
   rulebook: RulebookDetail;
+  aside: ReactNode;
   children: ReactNode;
 }
 
 // 기본 정보와 인증 정책을 한 번에 저장한다. 변경 사유는 하단 한 칸이 저장과 숨김 모두에 쓰인다.
-export function RulebookEditForm({ rulebook, children }: RulebookEditFormProps) {
+export function RulebookEditForm({ rulebook, aside, children }: RulebookEditFormProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const saved: RulebookDraft = {
     name: rulebook.name,
     edition: rulebook.edition,
+    category: rulebook.category,
+    kind: rulebook.kind,
+    supersedesId: rulebook.supersedesId,
     aliasesText: rulebook.aliases.join(", "),
     certRequired: rulebook.certRequired,
   };
@@ -35,11 +43,19 @@ export function RulebookEditForm({ rulebook, children }: RulebookEditFormProps) 
   const [reason, setReason] = useState("");
   const [conflict, setConflict] = useState<Conflict | undefined>(undefined);
 
+  const category = draftCategory(draft, rulebook.allRulebooks, rulebook.id);
+  const next = { ...draft, supersedesId: category.supersedesId };
   const dirty = (Object.keys(saved) as (keyof RulebookDraft)[]).some(
-    (key) => saved[key] !== draft[key],
+    (key) => saved[key] !== next[key],
   );
+  const categories = [...new Set(rulebook.allRulebooks.map((row) => row.category))];
+  const certifiedCount = rulebook.certifiedGms.length;
+  const kindDescription =
+    certifiedCount > 0
+      ? `종류를 바꾸면 인증된 GM ${certifiedCount}명의 구인 자격도 함께 바뀝니다.`
+      : RULEBOOK_KIND_DESCRIPTION[draft.kind];
   const hasReason = Boolean(reason.trim());
-  const canSave = dirty && hasReason && Boolean(draft.name.trim()) && !pending;
+  const canSave = dirty && hasReason && Boolean(draft.name.trim()) && !category.error && !pending;
   const canHide = hasReason && !pending && !rulebook.hidden;
   const conflictTitle = conflict
     ? `다른 운영진(${conflict.by})이 먼저 숨김 처리했습니다`
@@ -51,7 +67,7 @@ export function RulebookEditForm({ rulebook, children }: RulebookEditFormProps) 
 
   const save = () =>
     startTransition(async () => {
-      await submitRulebookSave(rulebook.id, draft, reason);
+      await submitRulebookSave(rulebook.id, next, reason);
       toast.success(`「${draft.name.trim()}」 룰북을 저장했습니다`);
       setReason("");
     });
@@ -70,30 +86,57 @@ export function RulebookEditForm({ rulebook, children }: RulebookEditFormProps) 
 
   return (
     <VStack data-full-bleed className="min-h-0 flex-1">
-      <VStack gap="150" className="mx-auto w-full max-w-page flex-1 p-200">
-        {conflict !== undefined ? (
-          <ConflictNotice
-            title={conflictTitle}
-            description={conflictDescription}
-            actions={
-              <Button size="sm" onClick={() => setConflict(undefined)}>
-                확인
-              </Button>
-            }
-          />
-        ) : null}
-        <Panel title="기본 정보" bodyClassName="p-175">
-          <BasicInfoFields draft={draft} idPrefix="rulebook" disabled={pending} onChange={change} />
-        </Panel>
-        <Panel title="인증" bodyClassName="p-175">
-          <CertPolicyField
-            certRequired={draft.certRequired}
-            disabled={pending}
-            onChange={(certRequired) => change({ certRequired })}
-          />
-        </Panel>
-        {children}
-      </VStack>
+      <div className="mx-auto grid w-full max-w-page flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-150 p-200">
+        <VStack gap="150" className="min-w-0">
+          {conflict !== undefined ? (
+            <ConflictNotice
+              title={conflictTitle}
+              description={conflictDescription}
+              actions={
+                <Button size="sm" onClick={() => setConflict(undefined)}>
+                  확인
+                </Button>
+              }
+            />
+          ) : null}
+          <Panel title="기본 정보" bodyClassName="p-175">
+            <BasicInfoFields
+              draft={draft}
+              categories={categories}
+              idPrefix="rulebook"
+              categoryHelp={draft.category === saved.category ? undefined : categoryHelp(category)}
+              categoryError={category.error}
+              disabled={pending}
+              onChange={change}
+            >
+              <div className="grid grid-cols-2 items-start gap-150">
+                <KindSegmentField
+                  kind={draft.kind}
+                  description={kindDescription}
+                  disabled={pending}
+                  onChange={(kind) => change({ kind })}
+                />
+                <SupersedesField
+                  draft={draft}
+                  category={category}
+                  idPrefix="rulebook"
+                  disabled={pending}
+                  onChange={(supersedesId) => change({ supersedesId })}
+                />
+              </div>
+            </BasicInfoFields>
+          </Panel>
+          <Panel title="인증 정책" bodyClassName="p-175">
+            <CertPolicyField
+              certRequired={draft.certRequired}
+              disabled={pending}
+              onChange={(certRequired) => change({ certRequired })}
+            />
+          </Panel>
+          {children}
+        </VStack>
+        {aside}
+      </div>
       <HStack
         align="end"
         gap="125"
@@ -103,7 +146,7 @@ export function RulebookEditForm({ rulebook, children }: RulebookEditFormProps) 
           <TextInput
             id="rulebook-reason"
             value={reason}
-            placeholder="기본 정보와 인증 설정을 함께 저장하며, 사유는 활동 기록에 남습니다"
+            placeholder="기본 정보와 인증 정책을 함께 저장하며, 사유는 활동 기록에 남습니다"
             onChange={(event) => setReason(event.target.value)}
           />
         </Field.Root>

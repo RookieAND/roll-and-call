@@ -11,7 +11,7 @@ import { LinkRequestForm } from "./link-request-form";
 import { RejectRequestForm } from "./reject-request-form";
 
 interface RequestDialogProps {
-  opened: { action: RequestAction; request: RulebookRequestRow } | null;
+  opened: { action: Exclude<RequestAction, "add">; request: RulebookRequestRow } | null;
   rulebooks: RulebookRow[];
   closeHref: string;
 }

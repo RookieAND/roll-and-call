@@ -13,12 +13,16 @@ import {
 } from "@roll-and-call/ui";
 import { useState, useTransition } from "react";
 
-import { withObjectParticle, withSubjectParticle, withTopicParticle } from "@/shared/lib";
+import {
+  quoteWithParticle,
+  withObjectParticle,
+  withSubjectParticle,
+  withTopicParticle,
+} from "@/shared/lib";
 import type { RulebookActionResult, RulebookRequestRow } from "@/shared/server";
 import { UserPreview } from "@/shared/ui";
 
 import { rejectRequest } from "../api/reject-request";
-import { quoteWithParticle } from "../model/quote-with-particle";
 import { RequestConflict } from "./request-conflict";
 
 type Conflict = Extract<RulebookActionResult, { ok: false }>["conflict"];

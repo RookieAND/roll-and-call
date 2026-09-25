@@ -16,12 +16,17 @@ import {
 import { Search } from "lucide-react";
 import { useState, useTransition } from "react";
 
-import { withObjectParticle, withSubjectParticle, withTopicParticle } from "@/shared/lib";
+import {
+  RULEBOOK_KIND_LABEL,
+  quoteWithParticle,
+  withObjectParticle,
+  withSubjectParticle,
+  withTopicParticle,
+} from "@/shared/lib";
 import type { RulebookActionResult, RulebookRequestRow, RulebookRow } from "@/shared/server";
 import { UserPreview } from "@/shared/ui";
 
 import { linkRequest } from "../api/link-request";
-import { quoteWithParticle } from "../model/quote-with-particle";
 import { withDirectionParticle } from "../model/with-direction-particle";
 import { RequestConflict } from "./request-conflict";
 
@@ -45,7 +50,9 @@ export function LinkRequestForm({ request, rulebooks, onDone }: LinkRequestFormP
   const keyword = search.trim().toLowerCase();
   const candidates = keyword
     ? rulebooks.filter((rulebook) =>
-        [rulebook.label, ...rulebook.aliases].some((text) => text.toLowerCase().includes(keyword)),
+        [rulebook.label, rulebook.category, ...rulebook.aliases].some((text) =>
+          text.toLowerCase().includes(keyword),
+        ),
       )
     : rulebooks;
   const selected = rulebooks.find((rulebook) => rulebook.id === selectedId);
@@ -91,7 +98,7 @@ export function LinkRequestForm({ request, rulebooks, onDone }: LinkRequestFormP
                 <TextInput
                   type="search"
                   value={search}
-                  placeholder="룰북 검색"
+                  placeholder="이름, 판본, 카테고리, 다른 이름"
                   aria-label="룰북 검색"
                   onChange={(event) => setSearch(event.target.value)}
                   className="pl-400 text-body3"
@@ -107,7 +114,8 @@ export function LinkRequestForm({ request, rulebooks, onDone }: LinkRequestFormP
                   <RadioCard.Root key={rulebook.id} value={rulebook.id} className="px-150 py-125">
                     <RadioCard.Title>{rulebook.label}</RadioCard.Title>
                     <RadioCard.Description>
-                      다른 이름 · {rulebook.aliases.join(", ") || "—"}
+                      {rulebook.category} · {RULEBOOK_KIND_LABEL[rulebook.kind]} · 다른 이름{" "}
+                      {rulebook.aliases.join(", ") || "—"}
                     </RadioCard.Description>
                     <RadioCard.Indicator />
                   </RadioCard.Root>

@@ -6,6 +6,7 @@ import { recordAudit } from "./record-audit";
 import { relinkGames } from "./relink-games";
 import type { RulebookFields } from "./rulebook-fields";
 import { rulebookLabel } from "./rulebook-label";
+import { toRulebookValues } from "./rulebook-values";
 import type { Actor } from "./types";
 
 export type AddRulebookResult = { ok: true; id: string } | { ok: false; duplicate: true };
@@ -19,7 +20,7 @@ export async function addRulebook(
   return db.transaction(async (tx) => {
     const [row] = await tx
       .insert(rulebooks)
-      .values(fields)
+      .values(await toRulebookValues(tx, fields))
       .onConflictDoNothing()
       .returning({ id: rulebooks.id });
     if (!row) return { ok: false, duplicate: true };

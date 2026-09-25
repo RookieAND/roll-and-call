@@ -1,47 +1,29 @@
-"use client";
-
-import { Button, HStack, toast } from "@roll-and-call/ui";
+import { Button, HStack } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 
-import type { RulebookRequestRow } from "@/shared/server";
-
-import { approveRequest } from "../api/approve-request";
-import { conflictTitle } from "../model/conflict-title";
+import { REQUEST_ACTION, type RequestAction } from "../model/request-action";
 
 interface RequestActionsProps {
-  request: RulebookRequestRow;
-  linkHref: string;
-  rejectHref: string;
+  actionHref: (action: RequestAction) => string;
 }
 
-// [추가]는 확인 없이 바로 실행하고, 연결·반려는 주소의 action으로 창을 연다.
-export function RequestActions({ request, linkHref, rejectHref }: RequestActionsProps) {
-  const router = useRouter();
-  const [pending, startTransition] = useTransition();
-
-  const approve = () =>
-    startTransition(async () => {
-      const result = await approveRequest(request.id);
-      if (result.ok) toast.success(`「${request.name}」 룰북을 추가했습니다`);
-      else toast.info(conflictTitle(result.conflict));
-      router.refresh();
-    });
-
+// 세 처리 모두 주소의 action으로 창을 연다.
+export function RequestActions({ actionHref }: RequestActionsProps) {
   return (
     <HStack align="center" gap="075">
-      <Button size="sm" loading={pending} disabled={pending} onClick={approve} className="gap-050">
-        <Plus size={14} aria-hidden />
-        추가
+      <Button
+        size="sm"
+        render={<Link href={actionHref(REQUEST_ACTION.add)} scroll={false} />}
+        className="gap-050"
+      >
+        <Plus size={14} aria-hidden />새 룰북으로 추가
       </Button>
       <Button
         variant="outline"
         colorPalette="gray"
         size="sm"
-        disabled={pending}
-        render={<Link href={linkHref} scroll={false} />}
+        render={<Link href={actionHref(REQUEST_ACTION.link)} scroll={false} />}
       >
         기존 룰북에 연결
       </Button>
@@ -49,8 +31,7 @@ export function RequestActions({ request, linkHref, rejectHref }: RequestActions
         variant="outline"
         colorPalette="danger"
         size="sm"
-        disabled={pending}
-        render={<Link href={rejectHref} scroll={false} />}
+        render={<Link href={actionHref(REQUEST_ACTION.reject)} scroll={false} />}
       >
         반려
       </Button>

@@ -1,10 +1,8 @@
 import { Dialog, Button } from "@roll-and-call/ui";
 
-import { formatDateTime } from "@/shared/lib";
+import { conflictTitle, formatDateTime } from "@/shared/lib";
 import type { RulebookActionResult } from "@/shared/server";
 import { ConflictNotice } from "@/shared/ui";
-
-import { conflictTitle } from "../model/conflict-title";
 
 interface RequestConflictProps {
   conflict: Extract<RulebookActionResult, { ok: false }>["conflict"];

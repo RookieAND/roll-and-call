@@ -1,0 +1,1 @@
+ALTER TABLE "rulebooks" DROP COLUMN "version";

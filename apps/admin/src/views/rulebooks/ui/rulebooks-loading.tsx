@@ -13,7 +13,7 @@ import {
 export function RulebooksLoading() {
   return (
     <>
-      <AdminHeader title="룰북" sub={<Skeleton width={88} height={12} render={<span />} />} />
+      <AdminHeader title="룰북" sub={<Skeleton width={140} height={12} render={<span />} />} />
       <LoadingRegion label="룰북 목록을 불러오는 중입니다" className="gap-150 p-200">
         <Panel
           title="룰북 추가 요청"
@@ -26,8 +26,8 @@ export function RulebooksLoading() {
                 key={index}
                 right={
                   <HStack gap="075">
-                    <Skeleton width={48} height={28} rounded={400} />
-                    <Skeleton width={84} height={28} rounded={400} />
+                    <Skeleton width={112} height={28} rounded={400} />
+                    <Skeleton width={112} height={28} rounded={400} />
                   </HStack>
                 }
               />
@@ -38,7 +38,7 @@ export function RulebooksLoading() {
           footer={<SkeletonPager />}
           right={
             <>
-              <HStack align="center" className="relative w-[180px]">
+              <HStack align="center" className="relative w-[260px]">
                 <Search
                   size={14}
                   aria-hidden
@@ -47,7 +47,7 @@ export function RulebooksLoading() {
                 <TextInput
                   type="search"
                   disabled
-                  placeholder="룰북 검색"
+                  placeholder="이름, 판본, 카테고리, 다른 이름"
                   aria-label="룰북 검색"
                   className="h-[32px] pl-400 text-body3"
                 />
@@ -62,10 +62,11 @@ export function RulebooksLoading() {
           <SkeletonTable
             rows={7}
             columns={[
-              { label: "룰북", kind: "text", width: 200 },
-              { label: "판본", kind: "number", width: 234, align: "center" },
+              { label: "룰북", kind: "text", width: 220 },
+              { label: "판본", kind: "text", width: 132 },
+              { label: "종류", kind: "badge", width: 96, align: "center" },
               { label: "다른 이름", kind: "text", width: 200 },
-              { label: "인증", kind: "badge", width: 120, align: "center" },
+              { label: "인증", kind: "badge", width: 104, align: "center" },
               { label: "상태", kind: "badge", width: 82, align: "center" },
               { label: "인증 GM", kind: "number", width: 78, align: "center" },
               { label: "", kind: "icon", width: 44, fixed: true, align: "end" },

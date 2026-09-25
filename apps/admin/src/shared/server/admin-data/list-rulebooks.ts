@@ -1,4 +1,7 @@
 import "server-only";
+import { rulebookKind, type RulebookKind } from "@roll-and-call/database";
+
+import { categoryRequirements, type CategoryRequirement } from "./category-requirements";
 import { rulebookLabel } from "./rulebook-label";
 import { loadSnapshot } from "./snapshot";
 
@@ -7,30 +10,55 @@ export interface RulebookRow {
   name: string;
   label: string;
   edition: string;
+  category: string;
+  kind: RulebookKind;
+  supersedesEdition?: string;
   aliases: string[];
   certRequired: boolean;
   hidden: boolean;
   certifiedCount: number;
 }
 
-// 검색어는 이름·판본·다른 이름에서 부분 일치로 찾는다.
+export interface RulebookCategory {
+  name: string;
+  bookCount: number;
+  requirements: CategoryRequirement[];
+}
+
+// 카테고리끼리 모으고, 그 안에서는 기본 룰북 → 서플리먼트 → 핸드북 순이다. 검색어는 이름·판본·카테고리·다른 이름에서 부분 일치로 찾는다.
 export async function listRulebooks({ query }: { query?: string } = {}) {
   const db = await loadSnapshot();
-  const rows: RulebookRow[] = db.rulebooks.map((rulebook) => {
-    const label = rulebookLabel(rulebook);
-    return {
-      id: rulebook.id,
-      name: rulebook.name,
-      label,
-      edition: rulebook.edition,
-      aliases: rulebook.aliases,
-      certRequired: rulebook.certRequired,
-      hidden: rulebook.hidden,
-      certifiedCount: db.certifications.filter((item) => item.rulebook === label).length,
-    };
-  });
+  const rows: RulebookRow[] = db.rulebooks
+    .map((rulebook) => {
+      const label = rulebookLabel(rulebook);
+      return {
+        id: rulebook.id,
+        name: rulebook.name,
+        label,
+        edition: rulebook.edition,
+        category: rulebook.category,
+        kind: rulebook.kind,
+        supersedesEdition: db.rulebooks.find((old) => old.id === rulebook.supersedesId)?.edition,
+        aliases: rulebook.aliases,
+        certRequired: rulebook.certRequired,
+        hidden: rulebook.hidden,
+        certifiedCount: db.certifications.filter((item) => item.rulebook === label).length,
+      };
+    })
+    .toSorted(
+      (a, b) =>
+        a.category.localeCompare(b.category, "ko") ||
+        rulebookKind.enumValues.indexOf(a.kind) - rulebookKind.enumValues.indexOf(b.kind) ||
+        a.label.localeCompare(b.label, "ko"),
+    );
+  const categories: RulebookCategory[] = [...new Set(rows.map((row) => row.category))].map(
+    (name) => {
+      const books = db.rulebooks.filter((rulebook) => rulebook.category === name);
+      return { name, bookCount: books.length, requirements: categoryRequirements(books) };
+    },
+  );
   const keyword = query?.trim().toLowerCase();
   const matches = (row: RulebookRow) =>
-    [row.label, ...row.aliases].some((text) => text.toLowerCase().includes(keyword!));
-  return { total: rows.length, rows: keyword ? rows.filter(matches) : rows };
+    [row.label, row.category, ...row.aliases].some((text) => text.toLowerCase().includes(keyword!));
+  return { total: rows.length, rows: keyword ? rows.filter(matches) : rows, categories };
 }

@@ -1,22 +1,25 @@
-import { Badge, HStack, Table, Text, cn } from "@roll-and-call/ui";
-import { ChevronRight, Users } from "lucide-react";
-import Link from "next/link";
+import { Table } from "@roll-and-call/ui";
 
-import type { RulebookRow } from "@/shared/server";
-import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
+import type { RulebookCategory, RulebookRow } from "@/shared/server";
+import { EMPTY_IMAGE, TableColumns, TableEmptyRow } from "@/shared/ui";
+
+import { CategoryRow } from "./category-row";
+import { RulebookBookRow } from "./rulebook-book-row";
 
 interface RulebookTableProps {
-  rows: RulebookRow[];
+  groups: { category: RulebookCategory; rows: RulebookRow[] }[];
+  query?: string;
 }
 
-export function RulebookTable({ rows }: RulebookTableProps) {
+export function RulebookTable({ groups, query }: RulebookTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[200, 234, 200, 120, 82, 78, { fixed: 44 }]} />
+      <TableColumns widths={[220, 132, 96, 200, 104, 82, 78, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>룰북</Table.Head>
-          <Table.Head align="center">판본</Table.Head>
+          <Table.Head>판본</Table.Head>
+          <Table.Head align="center">종류</Table.Head>
           <Table.Head>다른 이름</Table.Head>
           <Table.Head align="center">인증</Table.Head>
           <Table.Head align="center">상태</Table.Head>
@@ -25,57 +28,18 @@ export function RulebookTable({ rows }: RulebookTableProps) {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {rows.length === 0 ? (
-          <TableEmptyRow colSpan={7} image={EMPTY_IMAGE.search} title="조건에 맞는 룰북이 없어요" />
+        {groups.length === 0 ? (
+          <TableEmptyRow
+            colSpan={8}
+            image={EMPTY_IMAGE.search}
+            title={query ? `「${query}」에 맞는 룰북이 없습니다` : "조건에 맞는 룰북이 없습니다"}
+            description="이름, 판본, 카테고리, 다른 이름에서 찾았습니다. 위의 추가 요청에 같은 이름이 있는지 확인하거나 룰북을 새로 추가해 주세요."
+          />
         ) : null}
-        {rows.map((row) => (
-          <Table.Row
-            key={row.id}
-            interactive
-            className={cn("relative", row.hidden && "opacity-50")}
-          >
-            <Table.Cell>
-              <Text
-                typography="body3"
-                weight="bold"
-                truncate
-                render={<Link href={`/rules/${row.id}`} />}
-                className="block after:absolute after:inset-0"
-              >
-                {row.name}
-              </Text>
-            </Table.Cell>
-            <Table.Cell align="center">{row.edition || "—"}</Table.Cell>
-            <Table.Cell>
-              <Text typography="body3" foreground="hint" truncate>
-                {row.aliases.join(", ") || "—"}
-              </Text>
-            </Table.Cell>
-            <Table.Cell align="center">
-              {row.certRequired ? (
-                <Badge colorPalette="danger">인증 필요</Badge>
-              ) : (
-                <Badge colorPalette="gray">인증 불필요</Badge>
-              )}
-            </Table.Cell>
-            <Table.Cell align="center">
-              {row.hidden ? (
-                <Badge colorPalette="gray">숨김</Badge>
-              ) : (
-                <Badge colorPalette="primary">사용 중</Badge>
-              )}
-            </Table.Cell>
-            <Table.Cell align="center" numeric>
-              <HStack align="center" justify="center" gap="050">
-                <Users size={14} aria-hidden className="text-hint" />
-                {row.certifiedCount}명
-              </HStack>
-            </Table.Cell>
-            <Table.Cell align="end">
-              <ChevronRight size={16} aria-hidden className="inline text-hint" />
-            </Table.Cell>
-          </Table.Row>
-        ))}
+        {groups.map(({ category, rows }) => [
+          <CategoryRow key={category.name} category={category} />,
+          ...rows.map((row) => <RulebookBookRow key={row.id} row={row} />),
+        ])}
       </Table.Body>
     </Table.Root>
   );

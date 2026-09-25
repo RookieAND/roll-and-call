@@ -12,11 +12,10 @@ export default async function RulebooksPage({ searchParams }: PageProps<"/rules"
     listRulebooks(),
     listRulebookRequests(),
   ]);
-  const linkTargets = all.rows.filter((rulebook) => !rulebook.hidden);
   return (
     <RulebooksView
       rulebooks={rulebooks}
-      linkTargets={linkTargets}
+      allRulebooks={all.rows}
       requests={requests}
       query={query}
     />

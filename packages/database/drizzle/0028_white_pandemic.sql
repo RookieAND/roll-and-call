@@ -1,0 +1,1 @@
+ALTER TABLE "rulebooks" ADD COLUMN "version" text DEFAULT '' NOT NULL;

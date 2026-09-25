@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Callout, Dialog, Field, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
-import { ShieldCheck } from "lucide-react";
+import { BookOpen, ShieldCheck } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import type { GrantCandidate } from "@/shared/server";
@@ -13,6 +13,7 @@ import { GrantCandidateRow } from "./grant-candidate-row";
 interface GrantGmDialogProps {
   rulebookId: string;
   rulebookLabel: string;
+  categoryEdition: string;
   candidates: GrantCandidate[];
   searched: boolean;
   open: boolean;
@@ -23,6 +24,7 @@ interface GrantGmDialogProps {
 export function GrantGmDialog({
   rulebookId,
   rulebookLabel,
+  categoryEdition,
   candidates,
   searched,
   open,
@@ -36,6 +38,7 @@ export function GrantGmDialog({
     (candidate) => candidate.id === selectedId && candidate.state !== "certified",
   );
   const canConfirm = Boolean(selected && evidence.trim()) && !pending;
+  const missingCores = selected?.missingCores.join(", ") ?? "";
 
   const confirm = () =>
     startTransition(async () => {
@@ -101,6 +104,17 @@ export function GrantGmDialog({
                 </Callout.Description>
               </Callout.Root>
             ) : null}
+            {selected && missingCores ? (
+              <Callout.Root>
+                <Callout.Icon>
+                  <BookOpen size={14} aria-hidden />
+                </Callout.Icon>
+                <Callout.Description>
+                  {categoryEdition} 구인을 열려면 {missingCores} 인증도 있어야 합니다.{" "}
+                  {selected.nickname}님은 아직 이 인증이 없습니다.
+                </Callout.Description>
+              </Callout.Root>
+            ) : null}
             <Field.Root
               label="인증 근거 (운영진 메모, 사용자에게 안 보임)"
               htmlFor="grant-evidence"
@@ -115,7 +129,10 @@ export function GrantGmDialog({
               />
             </Field.Root>
             <UserPreview>
-              「{rulebookLabel}」 룰북 인증이 완료됐어요. 이제 이 룰북으로 구인을 열 수 있어요.
+              「{rulebookLabel}」 룰북 인증이 완료됐어요.{" "}
+              {missingCores
+                ? `${missingCores}까지 인증되면 이 룰로 구인을 열 수 있어요.`
+                : "이제 이 룰북으로 구인을 열 수 있어요."}
             </UserPreview>
           </VStack>
         </Dialog.Body>

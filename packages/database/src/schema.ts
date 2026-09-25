@@ -13,6 +13,7 @@ import {
   timestamp,
   uniqueIndex,
   uuid,
+  type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 
 export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
@@ -251,19 +252,40 @@ export type CertShot = "front" | "back" | "side";
 // 추가 정보(before/after/related)는 활동 기록 상세에만 쓰므로 jsonb 한 칸에 담는다.
 export type AuditState = { label: string; sub?: string };
 
-// 구인·인증은 "이름 판본"으로 룰북을 부른다. aliases는 구인의 자유 입력 룰을 이 룰북으로 맞출 때도 쓴다.
+// core는 GM에 필요한 기본 룰북, supplement는 기본 룰북 위에 더하는 책, handbook은 플레이어용이라 GM 자격이 되지 않는다.
+export const rulebookKind = pgEnum("rulebook_kind", ["core", "supplement", "handbook"]);
+
+// 같은 TRPG의 책을 묶는다. 단권 룰도 카테고리 하나에 책 하나다.
+export const rulebookCategories = pgTable("rulebook_categories", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull().unique(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}).enableRLS();
+
+// 책 한 권이 한 행이다. 같은 카테고리·판본의 core를 모두 가져야 그 판본으로 GM을 설 수 있고,
+// supersedesId는 이 책이 대신하는 구판이다(7판 → 6판). 구인·인증은 "이름 판본"으로 부른다.
 export const rulebooks = pgTable(
   "rulebooks",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    categoryId: uuid("category_id")
+      .notNull()
+      .references(() => rulebookCategories.id, { onDelete: "restrict" }),
     name: text("name").notNull(),
     edition: text("edition").notNull().default(""),
+    kind: rulebookKind("kind").notNull().default("core"),
+    supersedesId: uuid("supersedes_id").references((): AnyPgColumn => rulebooks.id, {
+      onDelete: "set null",
+    }),
     aliases: text("aliases").array().notNull().default([]),
     certRequired: boolean("cert_required").notNull().default(true),
     hidden: boolean("hidden").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [uniqueIndex("rulebooks_name_edition_unique").on(table.name, table.edition)],
+  (table) => [
+    uniqueIndex("rulebooks_name_edition_unique").on(table.name, table.edition),
+    index("rulebooks_category_id_idx").on(table.categoryId),
+  ],
 ).enableRLS();
 
 export const rulebookRequests = pgTable(
@@ -438,5 +460,6 @@ export const adminSettings = pgTable(
 ).enableRLS();
 
 export type Rulebook = typeof rulebooks.$inferSelect;
+export type RulebookKind = (typeof rulebookKind.enumValues)[number];
 export type CertApplication = typeof certApplications.$inferSelect;
 export type AuditLogEntry = typeof auditLog.$inferSelect;

@@ -1,11 +1,7 @@
 import { Badge, Text, VStack } from "@roll-and-call/ui";
 import { FileText } from "lucide-react";
 
-import {
-  REQUEST_ACTION,
-  RequestActions,
-  type RequestAction,
-} from "@/features/process-rulebook-request";
+import { RequestActions, type RequestAction } from "@/features/process-rulebook-request";
 import type { RulebookRequestRow } from "@/shared/server";
 import { ItemCard, Panel } from "@/shared/ui";
 
@@ -35,13 +31,7 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
               tone="primary"
               title={request.name}
               meta={`${request.requesterNickname} 요청`}
-              right={
-                <RequestActions
-                  request={request}
-                  linkHref={actionHref(REQUEST_ACTION.link, request.id)}
-                  rejectHref={actionHref(REQUEST_ACTION.reject, request.id)}
-                />
-              }
+              right={<RequestActions actionHref={(action) => actionHref(action, request.id)} />}
             >
               {request.note || request.similarTo ? (
                 <>

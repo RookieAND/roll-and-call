@@ -14,9 +14,11 @@ export interface GrantCandidate {
   approvedAt: Date | null;
   recentSessionCount: number;
   hasApplied: boolean;
+  missingCores: string[];
 }
 
-// GM 직접 추가 검색. 닉네임 일부나 디스코드 ID로 찾고, 이 룰북 기준의 인증 상태를 붙인다.
+// GM 직접 추가 검색. 닉네임 일부나 디스코드 ID로 찾고, 이 룰북 기준의 인증 상태와
+// 같은 판본의 기본 룰북 가운데 아직 인증이 없는 책을 붙인다.
 export async function searchGrantCandidates(
   rulebookId: string,
   query: string,
@@ -28,6 +30,18 @@ export async function searchGrantCandidates(
   if (!rulebook) return [];
   const label = rulebookLabel(rulebook);
   const now = Date.now();
+  const otherCores =
+    rulebook.kind === "core"
+      ? db.rulebooks
+          .filter(
+            (candidate) =>
+              candidate.kind === "core" &&
+              candidate.id !== rulebook.id &&
+              candidate.category === rulebook.category &&
+              candidate.edition === rulebook.edition,
+          )
+          .map(rulebookLabel)
+      : [];
   return db.users
     .filter((user) => user.nickname.includes(keyword) || user.discordId === keyword)
     .map((user) => {
@@ -49,6 +63,10 @@ export async function searchGrantCandidates(
           (session) => session.gmId === user.id && now - session.startsAt.getTime() < NINETY_DAYS,
         ).length,
         hasApplied: applications.length > 0,
+        missingCores: otherCores.filter(
+          (core) =>
+            !db.certifications.some((item) => item.userId === user.id && item.rulebook === core),
+        ),
       };
     });
 }

@@ -1,3 +1,5 @@
+import type { RulebookKind } from "@roll-and-call/database";
+
 import type { AuditAction } from "./audit-actions";
 import type { PostStatus } from "./post-status";
 
@@ -40,6 +42,9 @@ export interface Rulebook {
   id: string;
   name: string;
   edition: string;
+  category: string;
+  kind: RulebookKind;
+  supersedesId: string | null;
   aliases: string[];
   certRequired: boolean;
   hidden: boolean;
