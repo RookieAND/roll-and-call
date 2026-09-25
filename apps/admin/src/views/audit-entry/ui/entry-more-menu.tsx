@@ -6,15 +6,17 @@ import Link from "next/link";
 import { useState } from "react";
 
 interface EntryMoreMenuProps {
-  targetUserId: string;
+  targetUserId?: string;
   sameTargetHref: string;
 }
 
-// 이동 버튼이 둘 이상이면 ⋯ 메뉴에 모은다.
+// 요약 카드의 이동 메뉴. 대상이 유저가 아니면 같은 대상의 조치 보기만 남는다.
 export function EntryMoreMenu({ targetUserId, sameTargetHref }: EntryMoreMenuProps) {
   const [open, setOpen] = useState(false);
   const items = [
-    { label: "유저 상세 열기", icon: User, href: `/users/${targetUserId}` },
+    ...(targetUserId
+      ? [{ label: "유저 상세 열기", icon: User, href: `/users/${targetUserId}` }]
+      : []),
     { label: "같은 대상의 조치 보기", icon: ScrollText, href: sameTargetHref },
   ];
   return (

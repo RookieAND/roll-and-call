@@ -1,12 +1,11 @@
 import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-import { formatDateTime } from "@/shared/lib";
+import { actionTone, formatShortDateTime } from "@/shared/lib";
 import { retentionDaysLeft, type AuditEntry } from "@/shared/server";
 import { EMPTY_IMAGE, TableEmptyRow } from "@/shared/ui";
 
-import { actionTone } from "../model/action-tone";
 import { splitTarget } from "../model/split-target";
 
 interface AuditLogTableProps {
@@ -17,13 +16,13 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
   return (
     <Table.Root className="table-fixed">
       <colgroup>
-        <col className="w-[192px]" />
-        <col className="w-[96px]" />
+        <col className="w-[128px]" />
         <col className="w-[124px]" />
-        <col className="w-[110px]" />
-        <col className="w-[170px]" />
+        <col className="w-[220px]" />
         <col />
         <col className="w-[96px]" />
+        <col className="w-[88px]" />
+        <col className="w-[44px]" />
       </colgroup>
       <Table.Header>
         <Table.Row>
@@ -33,12 +32,12 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
               <ArrowDown size={10} strokeWidth={2.4} aria-hidden />
             </HStack>
           </Table.Head>
-          <Table.Head>운영진</Table.Head>
           <Table.Head>조치</Table.Head>
           <Table.Head>대상</Table.Head>
-          <Table.Head>세부</Table.Head>
           <Table.Head>사유</Table.Head>
+          <Table.Head>운영진</Table.Head>
           <Table.Head align="center">보관</Table.Head>
+          <Table.Head aria-label="열기" />
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -64,28 +63,35 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
                   render={<Link href={`/log/${row.id}`} />}
                   className="after:absolute after:inset-0"
                 >
-                  {formatDateTime(row.at)}
+                  {formatShortDateTime(row.at)}
                 </Text>
               </Table.Cell>
-              <Table.Cell className="truncate">{row.actor}</Table.Cell>
               <Table.Cell>
                 <Badge colorPalette={actionTone(row.action)}>{row.action}</Badge>
               </Table.Cell>
-              <Table.Cell className="truncate">{target.name}</Table.Cell>
-              <Table.Cell>
-                <Text typography="body3" foreground="muted" truncate>
-                  {target.detail ?? "—"}
+              <Table.Cell className="truncate">
+                <Text typography="body3" weight="medium" render={<span />}>
+                  {target.name}
                 </Text>
+                {target.detail ? (
+                  <Text typography="body3" foreground="hint" render={<span />}>
+                    {` · ${target.detail}`}
+                  </Text>
+                ) : null}
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="muted" truncate title={row.reason}>
                   {row.reason || "—"}
                 </Text>
               </Table.Cell>
+              <Table.Cell className="truncate">{row.actor}</Table.Cell>
               <Table.Cell align="center">
                 <Text typography="body3" foreground={retentionTone}>
                   {retention}
                 </Text>
+              </Table.Cell>
+              <Table.Cell align="end">
+                <ChevronRight size={16} aria-hidden className="inline text-hint" />
               </Table.Cell>
             </Table.Row>
           );

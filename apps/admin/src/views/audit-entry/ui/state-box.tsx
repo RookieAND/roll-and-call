@@ -27,7 +27,7 @@ export function StateBox({ label, state, tone = "normal" }: StateBoxProps) {
       <Text typography="body4" foreground={foreground}>
         {label}
       </Text>
-      <Text typography="body3" weight="bold" foreground={tone === "danger" ? "inherit" : "normal"}>
+      <Text typography="subtitle1" foreground={tone === "danger" ? "inherit" : "normal"}>
         {state.label}
       </Text>
       {state.sub ? (

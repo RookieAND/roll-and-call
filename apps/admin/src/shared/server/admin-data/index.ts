@@ -63,7 +63,7 @@ export {
 export { POST_STATUS, type PostStatus } from "./post-status";
 export { getStaffRole } from "./staff";
 export { addStaff } from "./add-staff";
-export { AUDIT_PERIODS, type AuditPeriod } from "./audit-period";
+export { AUDIT_PERIODS, DEFAULT_AUDIT_PERIOD, type AuditPeriod } from "./audit-period";
 export { POST_PERIODS } from "./post-period";
 export { changeStaffRole } from "./change-staff-role";
 export { getAuditEntry, type AuditEntryDetail } from "./get-audit-entry";
