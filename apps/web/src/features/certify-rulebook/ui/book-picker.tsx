@@ -123,9 +123,6 @@ export function BookPicker({
                 <br />
                 목록에 없으면 추가를 요청해 주세요.
               </Text>
-              <Button variant="tinted" onClick={() => setRequestOpen(true)} className="mt-100">
-                목록에 없는 룰북 요청하기
-              </Button>
             </VStack>
           )}
 
@@ -186,24 +183,22 @@ export function BookPicker({
             </VStack>
           )}
         </VStack>
-        {(category || listed.length > 0) && (
-          <div className="sticky bottom-0 z-(--rc-z-sticky) -mx-200 bg-surface px-200 pt-100 pb-200">
-            <Callout.Root colorPalette="gray">
-              <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
-              <Callout.Description className="break-keep">
-                신규 룰북 등록을 신청해 주세요.
-                <br />
-                추가되면 내 룰북에서 확인할 수 있습니다.
-              </Callout.Description>
-              <Callout.Action>
-                <Button variant="outline" size="sm" onClick={() => setRequestOpen(true)}>
-                  <Plus size={14} strokeWidth={2.4} aria-hidden />
-                  등록 신청
-                </Button>
-              </Callout.Action>
-            </Callout.Root>
-          </div>
-        )}
+        <div className="sticky bottom-0 z-(--rc-z-sticky) -mx-200 bg-surface px-200 pt-100 pb-200">
+          <Callout.Root colorPalette="gray">
+            <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
+            <Callout.Description className="break-keep">
+              신규 룰북 등록을 신청해 주세요.
+              <br />
+              추가되면 내 룰북에서 확인할 수 있습니다.
+            </Callout.Description>
+            <Callout.Action>
+              <Button variant="outline" size="sm" onClick={() => setRequestOpen(true)}>
+                <Plus size={14} strokeWidth={2.4} aria-hidden />
+                등록 신청
+              </Button>
+            </Callout.Action>
+          </Callout.Root>
+        </div>
       </Container>
 
       <RulebookRequestSheet
