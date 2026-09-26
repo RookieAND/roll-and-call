@@ -72,7 +72,11 @@ export function BookPicker({
 
   return (
     <>
-      <Container size="sm">
+      {/* ponytail: 3px는 AppBar 아래 Progress 높이. 목록이 짧아도 Callout이 탭바 바로 위에 붙도록 화면 높이를 채운다. */}
+      <Container
+        size="sm"
+        className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-3px)] flex-col"
+      >
         <VStack gap="200" className="pt-250 pb-250">
           <VStack gap="050">
             <Text typography="heading1" render={<h1 />}>
@@ -183,7 +187,7 @@ export function BookPicker({
             </VStack>
           )}
         </VStack>
-        <div className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) -mx-200 bg-surface px-200 pt-100 pb-200">
+        <div className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) -mx-200 mt-auto bg-surface px-200 pt-100 pb-200">
           <Callout.Root colorPalette="gray">
             <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
             <Callout.Description className="break-keep">
