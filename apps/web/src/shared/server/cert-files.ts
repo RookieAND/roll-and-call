@@ -16,11 +16,12 @@ export async function removeUnusedCertPhotos(userId: string, urls: string[]) {
     .select({
       photoUrls: certApplications.photoUrls,
       captureUrl: certApplications.purchaseCaptureUrl,
+      receiptUrl: certApplications.receiptUrl,
     })
     .from(certApplications)
     .where(eq(certApplications.userId, userId));
   const inUse = new Set(
-    remaining.flatMap((row) => [...Object.values(row.photoUrls), row.captureUrl]),
+    remaining.flatMap((row) => [...Object.values(row.photoUrls), row.captureUrl, row.receiptUrl]),
   );
   const paths = compact(candidates.filter((url) => !inUse.has(url)).map(certPhotoPathOf));
   if (paths.length === 0) return;

@@ -23,6 +23,7 @@ export { richTextLength } from "./rich-text-length";
 export { richTextToMarkdown } from "./rich-text-markdown";
 export { OG_IMAGE } from "./og-image";
 export { comitativeParticle } from "./comitative-particle";
+export { subjectParticle } from "./subject-particle";
 export { topicParticle } from "./topic-particle";
 export { GAME_STATUS, gameStatusLabel, gameStatusColor, type GameStatus } from "./game-status";
 export { PARTICIPANT_STATUS, type ParticipantStatus } from "./participant-status";

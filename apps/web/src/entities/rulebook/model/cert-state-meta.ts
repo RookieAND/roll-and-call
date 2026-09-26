@@ -8,7 +8,7 @@ export const CERT_STATE_META: Record<
   { label: string; icon: LucideIcon; foreground: "success" | "muted" | "warning" | "hint" }
 > = {
   [CERT_STATE.certified]: { label: "인증됨", icon: CircleCheck, foreground: "success" },
-  [CERT_STATE.pending]: { label: "확인 중", icon: Clock, foreground: "muted" },
+  [CERT_STATE.pending]: { label: "심사 중", icon: Clock, foreground: "muted" },
   [CERT_STATE.rejected]: { label: "반려됨", icon: CircleAlert, foreground: "warning" },
   [CERT_STATE.revoked]: { label: "인증 취소됨", icon: Ban, foreground: "hint" },
   [CERT_STATE.requested]: { label: "추가 요청 중", icon: CirclePlus, foreground: "muted" },

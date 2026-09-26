@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./cert-sellers": "./src/cert-sellers.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

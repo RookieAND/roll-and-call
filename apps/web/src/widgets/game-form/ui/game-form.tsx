@@ -1,17 +1,17 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
-import type { MyRulebooks } from "@/entities/rulebook";
-import { gameFormSchema, type GameFormValues } from "@/features/write-game";
+import { ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
+import type { GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
 import { toKstDateTimeInput } from "@/shared/lib";
 import type { Game } from "@/shared/server";
 import { toast, useAction } from "@/shared/ui";
 
 import type { GameEditContext } from "../model/game-form-layout";
+import { gameFormResolver } from "../model/game-form-resolver";
 import { GAME_FORM_STEPS } from "../model/game-form-steps";
 import { DEFAULT_PLAY_TIME } from "../model/play-time-options";
 import { GameFormWizard } from "./game-form-wizard";
@@ -37,16 +37,16 @@ export function GameForm({
   initialRulebookId,
 }: GameFormProps) {
   const { pending, run } = useAction();
-  const initialRulebook = rulebooks?.rulebooks.find(
-    (rulebook) => rulebook.id === initialRulebookId,
-  );
+  // 주소로 넘어온 책(서플리먼트일 수도 있다)은 그 판본의 룰로 바꿔 채운다.
+  const initialSet =
+    rulebooks && initialRulebookId ? ruleSetOf(rulebooks, initialRulebookId) : null;
 
   const form = useForm<GameFormValues>({
-    resolver: zodResolver(gameFormSchema),
+    resolver: gameFormResolver(rulebooks),
     defaultValues: {
       title: defaultGame?.title ?? "",
-      rule: defaultGame?.rule ?? initialRulebook?.label ?? "",
-      rulebookId: defaultGame?.rulebookId ?? initialRulebook?.id ?? "",
+      rule: defaultGame?.rule ?? initialSet?.label ?? "",
+      rulebookId: defaultGame?.rulebookId ?? initialSet?.cores[0]?.id ?? "",
       synopsis: defaultGame?.synopsis ?? "",
       genres: defaultGame?.genres ?? [],
       triggers: defaultGame?.triggers ?? [],

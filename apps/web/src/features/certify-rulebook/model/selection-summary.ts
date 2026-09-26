@@ -1,10 +1,10 @@
-import { CERT_STATE, type MyRulebook } from "@/entities/rulebook";
+import type { MyRulebook } from "@/entities/rulebook";
 
-// 시트 아래 "더블크로스 3rd · 1권, 2권" 한 줄. 반려된 책 하나면 다시 신청이라고 적는다.
+// 다음 버튼 위 "2권 담음 · 더블크로스 3rd 1권, 2권" 한 줄.
 export function selectionSummary(selected: MyRulebook[]) {
   const [first] = selected;
-  if (!first) return "";
+  if (!first) return "담은 책이 없습니다";
   const set = `${first.categoryName} ${first.edition}`.trim();
-  if (selected.length === 1 && first.state === CERT_STATE.rejected) return `${set} · 다시 신청`;
-  return `${set} · ${selected.map((rulebook) => rulebook.shortName).join(", ")}`;
+  const names = selected.map((rulebook) => rulebook.shortName).join(", ");
+  return `${selected.length}권 담음 · ${set} ${names}`;
 }

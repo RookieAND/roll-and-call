@@ -1,39 +1,41 @@
 "use client";
 
-import { HStack, Text, VStack } from "@roll-and-call/ui";
-import { Check, ChevronRight, Lock } from "lucide-react";
+import { Button, Callout, HStack, Text, VStack } from "@roll-and-call/ui";
+import { BookOpen, CircleCheck, Lock } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
-import { CERT_STATE, type MyRulebooks } from "@/entities/rulebook";
+import { RULE_GATE, ruleGate, ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
 import type { GameFormValues } from "@/features/write-game";
+import { LineBreaks } from "@/shared/ui";
 
 import { GameRulebookSheet } from "./game-rulebook-sheet";
 
 interface GameRulebookFieldProps {
   form: UseFormReturn<GameFormValues>;
-  // 없으면 수정 화면이다. 룰북은 잠그고 시트를 열지 않는다.
+  // 없으면 수정 화면이다. 룰은 잠그고 시트를 열지 않는다.
   rulebooks?: MyRulebooks;
 }
 
+// 룰 칸. 고른 판본을 지금 열 수 있는지 바로 아래에 알려 준다. 적용일 뒤에 막힌 룰이면 다음 단계로 넘어가지 않는다.
 export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
   const [open, setOpen] = useState(false);
   const { setValue, watch, formState } = form;
   const rule = watch("rule");
   const rulebookId = watch("rulebookId");
-  const error = formState.errors.rule?.message;
-  const picked = rulebooks?.rulebooks.find((rulebook) => rulebook.id === rulebookId);
-  const pickedCertified = picked?.state === CERT_STATE.certified;
-  const pickedTag = picked?.certRequired ? "인증 전" : "무료 배포";
+  const set = rulebooks ? ruleSetOf(rulebooks, rulebookId) : null;
+  const gate = set && rulebooks ? ruleGate(set, rulebooks) : null;
+  const error = gate?.type === RULE_GATE.blocked ? null : formState.errors.rule?.message;
   const hint = rulebooks
-    ? "인증한 룰북과 무료 배포 룰 가운데서 고릅니다."
-    : "룰북을 잘못 골랐다면 구인을 지우고 새로 열어 주세요.";
+    ? "구인을 열 룰과 판본을 고릅니다."
+    : "룰을 잘못 골랐다면 구인을 지우고 새로 열어 주세요.";
 
   return (
     <VStack gap="100">
       <HStack gap="025">
         <Text typography="body4" weight="bold" id="rulebook-label">
-          룰북
+          룰
         </Text>
         <Text typography="body4" weight="bold" foreground="danger" aria-hidden>
           *
@@ -46,45 +48,30 @@ export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
           type="button"
           id="rule"
           aria-labelledby="rulebook-label"
-          aria-invalid={Boolean(error)}
+          aria-invalid={Boolean(error) || gate?.type === RULE_GATE.blocked}
           onClick={() => setOpen(true)}
-          className="flex min-h-14 w-full items-center gap-125 rounded-500 border border-gray-300 px-175 py-100 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus aria-invalid:border-danger-600"
+          className="flex min-h-14 w-full items-center gap-125 rounded-500 border border-gray-300 py-075 pr-075 pl-175 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus aria-invalid:border-danger-600"
         >
-          {picked ? (
-            <VStack className="min-w-0 flex-1">
+          <BookOpen size={18} strokeWidth={2.1} aria-hidden className="flex-none text-gray-600" />
+          {set ? (
+            <HStack align="baseline" gap="075" className="min-w-0 flex-1">
               <Text typography="body2" weight="bold">
-                {picked.name}
+                {set.categoryName}
               </Text>
-              <HStack align="center" gap="050">
-                <Text typography="body4" foreground="muted">
-                  {picked.edition || "기본판"} ·
+              {set.edition && (
+                <Text typography="body3" foreground="muted">
+                  {set.edition}
                 </Text>
-                {pickedCertified ? (
-                  <>
-                    <Check size={12} strokeWidth={3} aria-hidden className="text-success-700" />
-                    <Text typography="body4" weight="bold" foreground="success">
-                      인증한 룰북
-                    </Text>
-                  </>
-                ) : (
-                  <Text typography="body4" foreground="muted">
-                    {pickedTag}
-                  </Text>
-                )}
-              </HStack>
-            </VStack>
+              )}
+            </HStack>
           ) : (
             <Text typography="body2" foreground="hint" className="flex-1">
-              룰북을 선택해 주세요
+              룰을 골라 주세요
             </Text>
           )}
-          {picked ? (
-            <Text typography="body4" weight="bold" foreground="primary">
-              바꾸기
-            </Text>
-          ) : (
-            <ChevronRight size={16} aria-hidden className="text-hint" />
-          )}
+          <Text typography="body3" weight="bold" foreground="primary" className="px-100">
+            {set ? "바꾸기" : "고르기"}
+          </Text>
         </button>
       ) : (
         <HStack
@@ -100,14 +87,44 @@ export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
         </HStack>
       )}
 
+      {gate?.okText && (
+        <HStack align="center" gap="075">
+          <CircleCheck size={15} strokeWidth={2.2} aria-hidden className="text-success-700" />
+          <Text typography="body3" weight="bold" foreground="success">
+            {gate.okText}
+          </Text>
+        </HStack>
+      )}
+      {gate && gate.type !== RULE_GATE.open && (
+        <Callout.Root colorPalette={gate.type === RULE_GATE.blocked ? "danger" : "primary"}>
+          <Callout.Icon />
+          <Callout.Description className="break-keep">
+            <LineBreaks lines={gate.lines} />
+          </Callout.Description>
+          {gate.action && (
+            <Callout.Action>
+              <Button
+                render={<Link href={gate.action.href} />}
+                size="sm"
+                variant={gate.type === RULE_GATE.blocked ? "solid" : "tinted"}
+              >
+                {gate.action.label}
+              </Button>
+            </Callout.Action>
+          )}
+        </Callout.Root>
+      )}
+
       {error ? (
         <Text typography="body4" foreground="danger" role="alert">
           {error}
         </Text>
       ) : (
-        <Text typography="body4" foreground="hint">
-          {hint}
-        </Text>
+        !gate?.lines.length && (
+          <Text typography="body4" foreground="hint">
+            {hint}
+          </Text>
+        )
       )}
 
       {rulebooks && (
@@ -115,10 +132,10 @@ export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
           open={open}
           onOpenChange={setOpen}
           rulebooks={rulebooks}
-          selectedId={rulebookId}
-          onSelect={(rulebook) => {
-            setValue("rulebookId", rulebook.id, { shouldDirty: true });
-            setValue("rule", rulebook.label, { shouldDirty: true, shouldValidate: true });
+          selectedKey={set?.key ?? null}
+          onSelect={(picked) => {
+            setValue("rulebookId", picked.cores[0]!.id, { shouldDirty: true });
+            setValue("rule", picked.label, { shouldDirty: true, shouldValidate: true });
           }}
         />
       )}

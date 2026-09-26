@@ -11,9 +11,8 @@ export const CERT_OPTION = {
   certified: "certified",
   unlocked: "unlocked",
   pending: "pending",
-  // 서플리먼트인데 기본 룰북이 아직 없다. jump는 그 기본 룰북을 지금 고를 수 있을 때.
-  locked: "locked",
-  jump: "jump",
+  // 서플리먼트인데 같은 판본 기본 룰북이 아직 없다. 기본 룰북을 함께 담으면 고를 수 있다.
+  needsCore: "needsCore",
   pick: "pick",
 } as const;
 
@@ -45,14 +44,16 @@ export function certOption(
 
   if (rulebook.kind === RULEBOOK_KIND.supplement) {
     const missing = missingCores(rulebook, rulebooks);
-    const waiting = missing.find((core) => core.state === CERT_STATE.pending);
-    if (waiting) {
-      return result(CERT_OPTION.locked, `${waiting.shortName} 확인이 끝나면 신청할 수 있습니다`);
+    const notApplied = missing.filter((core) => core.state !== CERT_STATE.pending);
+    if (notApplied.length > 0) {
+      return result(
+        CERT_OPTION.needsCore,
+        "같은 판본 기본 룰북을 먼저(또는 함께) 인증해야 합니다",
+        notApplied,
+      );
     }
-    if (missing.length > 0) {
-      const names = missing.map((core) => core.shortName).join("·");
-      return result(CERT_OPTION.jump, `먼저 ${names} 인증이 필요합니다`, missing);
-    }
+    if (missing.length > 0)
+      return result(CERT_OPTION.pick, "기본 룰북 결과가 나온 뒤에 확인합니다");
   }
 
   if (rulebook.state === CERT_STATE.rejected && rulebook.stateAt) {
@@ -68,7 +69,7 @@ export function certOption(
     );
   }
   if (rulebook.kind === RULEBOOK_KIND.handbook) {
-    return result(CERT_OPTION.pick, "플레이어용이라 GM 자격은 되지 않습니다");
+    return result(CERT_OPTION.pick, "GM 자격에는 포함되지 않습니다");
   }
   return result(CERT_OPTION.pick, "");
 }

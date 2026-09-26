@@ -2,6 +2,7 @@ import type { CertApplication, RulebookRecords } from "@/shared/server";
 
 import { CERT_STATE, type CertState } from "./cert-state";
 import { deriveCertState } from "./derive-cert-state";
+import { editionSets } from "./edition-sets";
 import type { RulebookKind } from "./rulebook-kind";
 import { rulebookLabel } from "./rulebook-label";
 
@@ -59,8 +60,19 @@ export function toMyRulebooks(records: RulebookRecords) {
     label: rulebookLabel(request),
     kind: request.kind,
     createdAt: request.createdAt,
+    outcome: request.outcome,
+    processedAt: request.processedAt,
   }));
-  return { rulebooks, requests, enforcementDate: records.enforcementDate };
+  return {
+    rulebooks,
+    sets: editionSets(rulebooks),
+    requests,
+    enforcementDate: records.enforcementDate,
+    recentRulebookIds: records.recentRulebookIds,
+    pendingRequestNames: records.pendingRequestNames.map(rulebookLabel),
+    suspended: records.suspended,
+    suspendedUntil: records.suspendedUntil,
+  };
 }
 
 export type MyRulebooks = ReturnType<typeof toMyRulebooks>;

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { RulebookApplyView } from "@/views/rulebook-apply";
 
-export const metadata: Metadata = { title: "룰북 인증하기" };
+export const metadata: Metadata = { title: "인증 신청" };
 export default async function Page({
   searchParams,
 }: {

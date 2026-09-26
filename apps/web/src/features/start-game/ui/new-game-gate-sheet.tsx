@@ -25,7 +25,7 @@ export function NewGameGateSheet({ open, onOpenChange, pending }: NewGameGateShe
     : "구인을 열려면 룰북 인증이 필요합니다.";
   const primaryHref = pending ? `/me/rulebooks/${pending.rulebookId}` : "/me/rulebooks/apply";
   const primaryVariant = pending ? "tinted" : "solid";
-  const primaryLabel = pending ? "신청 내용 보기" : "룰북 인증하기";
+  const primaryLabel = pending ? "신청 내용 보기" : "인증 신청하기";
 
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
@@ -45,7 +45,7 @@ export function NewGameGateSheet({ open, onOpenChange, pending }: NewGameGateShe
                   render={<p />}
                   className="[text-wrap:pretty]"
                 >
-                  가지고 있는 실물 룰북을 찍은 사진 3장을 올리면 인증을 신청할 수 있습니다.
+                  실물 룰북 사진 3장이나 전자책 구매 내역을 올리면 인증을 신청할 수 있습니다.
                   <br />
                   무료로 배포되는 룰은 인증을 받지 않아도 구인을 열 수 있습니다.
                 </Text>

@@ -19,20 +19,20 @@ const book = (id: string, overrides: Partial<MyRulebook>) =>
   }) as MyRulebook;
 
 describe("certOption", () => {
-  it("기본 룰북이 확인 중이면 서플리먼트는 잠긴다", () => {
+  it("기본 룰북이 심사 중이면 서플리먼트를 함께 낼 수 있다", () => {
     const core = book("인세인", { state: CERT_STATE.pending, stateAt: new Date() });
     const supplement = book("인세인 2", { kind: "supplement" });
     expect(certOption(supplement, [core, supplement])).toMatchObject({
-      type: CERT_OPTION.locked,
-      note: "인세인 확인이 끝나면 신청할 수 있습니다",
+      type: CERT_OPTION.pick,
+      note: "기본 룰북 결과가 나온 뒤에 확인합니다",
     });
   });
 
-  it("기본 룰북을 아직 안 냈으면 그 기본 룰북으로 건너뛴다", () => {
+  it("기본 룰북을 아직 안 냈으면 그 기본 룰북이 먼저 필요하다", () => {
     const core = book("마기카로기아", {});
     const supplement = book("황혼선서", { kind: "supplement" });
     expect(certOption(supplement, [core, supplement])).toMatchObject({
-      type: CERT_OPTION.jump,
+      type: CERT_OPTION.needsCore,
       missing: [core],
     });
   });

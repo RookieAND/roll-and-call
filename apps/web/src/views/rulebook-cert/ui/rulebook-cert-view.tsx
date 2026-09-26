@@ -1,29 +1,28 @@
-import { Button, Container, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
+import { Callout, Container, Text, VStack } from "@roll-and-call/ui";
 import { redirect } from "next/navigation";
 
-import { CERT_SHOTS, CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
+import { CERT_STATE, certApplyHref, toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
 import { CancelApplicationButton } from "@/features/certify-rulebook";
+import { toKst } from "@/shared/lib";
 import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
-import { certSummary } from "../model/cert-summary";
-import { inquiryUrl } from "../model/inquiry-url";
-import { CertSummaryCard } from "./cert-summary-card";
-import { SubmittedPhoto } from "./submitted-photo";
+import { applicationGroup } from "../model/application-group";
+import { toBookResult } from "../model/to-book-result";
+import { BookResultCard } from "./book-result-card";
 
 interface RulebookCertViewProps {
   rulebookId: string;
 }
 
-// 인증 취소됨은 사진 없이 요약과 문의 버튼만 둔다. 사진 삭제 안내는 삭제 기능이 생기면 넣는다.
+// 신청 상세. 함께 낸 책을 한 화면에 모아 권마다 결과를 보여 주고, 심사 중인 신청은 거둘 수 있다.
 export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
       <>
-        <AppBar back="/me/rulebooks" title="룰북 인증" />
+        <AppBar back="/me/rulebooks" title="신청 상세" />
         <Container size="sm">
           <div className="py-300">
             <LoginRequired />
@@ -35,89 +34,37 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
 
   const { rulebooks } = toMyRulebooks(await getRulebookRecords(user.id));
   const rulebook = rulebooks.find((candidate) => candidate.id === rulebookId);
-  if (!rulebook?.state) redirect(`/me/rulebooks/apply?rulebook=${rulebookId}`);
+  if (!rulebook?.state) redirect(certApplyHref([rulebookId]));
 
-  const { state, latestApplication } = rulebook;
-  const summary = certSummary(rulebook);
-  const rejected = state === CERT_STATE.rejected;
-  const showPhotos = state !== CERT_STATE.revoked && latestApplication;
-  const inquiry = inquiryUrl();
+  const books = applicationGroup(rulebook, rulebooks);
+  const applied = rulebook.latestApplication?.createdAt;
+  const certifiedCount = books.filter((book) => book.state === CERT_STATE.certified).length;
+  const decided = books.some((book) => book.state !== CERT_STATE.pending);
+  const pending = books.some((book) => book.state === CERT_STATE.pending);
 
   return (
     <>
-      <AppBar back="/me/rulebooks" title={rulebook.label} />
+      <AppBar back="/me/rulebooks" title="신청 상세" />
       <Container size="sm">
-        <VStack gap="250" className="pt-225 pb-250">
-          <CertSummaryCard state={state} lines={summary.lines} sub={summary.sub} />
-
-          {showPhotos && (
-            <VStack gap="125" render={<section />}>
-              <Text typography="subtitle1" render={<h2 />}>
-                제출한 사진
-              </Text>
-              <div className="flex gap-100">
-                {CERT_SHOTS.map((shot) => {
-                  const flagged = latestApplication.flaggedShots.includes(shot);
-                  const verdict = rejected ? (flagged ? "flagged" : "ok") : null;
-                  return (
-                    <SubmittedPhoto
-                      key={shot}
-                      shot={shot}
-                      url={latestApplication.photoUrls[shot]}
-                      verdict={verdict}
-                    />
-                  );
-                })}
-              </div>
-              {state === CERT_STATE.certified && (
-                <Text typography="body4" foreground="hint">
-                  제출한 사진은 인증이 유지되는 동안 보관합니다.
-                </Text>
-              )}
-            </VStack>
+        <VStack gap="200" className="pt-225 pb-300">
+          {applied && (
+            <Text typography="body3" weight="bold" foreground="muted" numeric>
+              {toKst(applied).format("YYYY.MM.DD")} 신청 · {books.length}권
+            </Text>
           )}
+          {books.length > 1 && decided && (
+            <Callout.Root>
+              <Callout.Description className="font-semibold">
+                {books.length}권 중 {certifiedCount}권이 인증됐습니다.
+              </Callout.Description>
+            </Callout.Root>
+          )}
+          {books.map((book) => (
+            <BookResultCard key={book.id} result={toBookResult(book)} />
+          ))}
+          {pending && <CancelApplicationButton rulebookId={rulebookId} bookCount={books.length} />}
         </VStack>
       </Container>
-
-      <FloatingBar.Root elevated={false}>
-        <FloatingBar.Content>
-          <Container size="sm">
-            {state === CERT_STATE.pending && <CancelApplicationButton rulebookId={rulebookId} />}
-            {state === CERT_STATE.certified && (
-              <Button
-                render={<Link href={`/games/new?rulebook=${rulebookId}`} />}
-                size="lg"
-                className="w-full"
-              >
-                이 룰북으로 새 구인 열기
-              </Button>
-            )}
-            {rejected && (
-              <HStack gap="100">
-                <CancelApplicationButton rulebookId={rulebookId} className="flex-1" />
-                <Button
-                  render={<Link href={`/me/rulebooks/apply?rulebook=${rulebookId}`} />}
-                  size="lg"
-                  className="flex-1"
-                >
-                  다시 신청하기
-                </Button>
-              </HStack>
-            )}
-            {state === CERT_STATE.revoked && inquiry && (
-              <Button
-                render={<a href={inquiry} target="_blank" rel="noreferrer" />}
-                colorPalette="discord"
-                size="lg"
-                className="w-full"
-              >
-                디스코드 문의 채널 열기
-              </Button>
-            )}
-          </Container>
-        </FloatingBar.Content>
-        <FloatingBar.Spacer />
-      </FloatingBar.Root>
     </>
   );
 }

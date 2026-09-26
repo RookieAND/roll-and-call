@@ -4,7 +4,7 @@ import { eq, inArray } from "drizzle-orm";
 import { uniq } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { canPickRulebook, toMyRulebooks } from "@/entities/rulebook";
+import { RULE_GATE, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import {
   announceRecruitmentComplete,
@@ -31,13 +31,15 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     return { error: parsed.error.issues[0]?.message ?? INVALID_INPUT_MESSAGE };
   }
 
-  const records = await getRulebookRecords(user.id);
-  const rulebook = toMyRulebooks(records).rulebooks.find(
-    (candidate) => candidate.id === parsed.data.rulebookId,
-  );
-  if (!rulebook) return { error: "룰북을 다시 선택해 주세요.", field: "rule" };
-  if (!canPickRulebook(rulebook, records.enforcementDate)) {
-    return { error: "이 룰북은 인증을 받아야 구인을 열 수 있습니다.", field: "rule" };
+  // 룰은 카테고리·판본 단위다. 표시 이름은 "카테고리 판본", 구인은 그 판본의 첫 기본 룰북을 가리킨다.
+  const myRulebooks = toMyRulebooks(await getRulebookRecords(user.id));
+  const set = ruleSetOf(myRulebooks, parsed.data.rulebookId);
+  if (!set) return { error: "룰을 다시 골라 주세요.", field: "rule" };
+  if (ruleGate(set, myRulebooks).type === RULE_GATE.blocked) {
+    return {
+      error: "그사이 인증 상태가 바뀌어 등록하지 못했습니다. 작성한 내용은 그대로 있습니다.",
+      field: "rule",
+    };
   }
 
   const invitedIds = uniq(parsed.data.preConfirmed.map((player) => player.userId));
@@ -55,8 +57,8 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
       .insert(games)
       .values({
         gmId: user.id,
-        rule: rulebook.label,
-        rulebookId: rulebook.id,
+        rule: set.label,
+        rulebookId: set.cores[0]!.id,
         ...toGameColumns(parsed.data),
       })
       .returning({ id: games.id });

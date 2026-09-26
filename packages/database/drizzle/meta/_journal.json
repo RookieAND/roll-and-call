@@ -232,6 +232,13 @@
       "when": 1791800000000,
       "tag": "0032_cert_ebook",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1791900000000,
+      "tag": "0033_match_rulebook_edition_set",
+      "breakpoints": true
     }
   ]
 }

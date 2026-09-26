@@ -25,7 +25,7 @@ interface PurchaseRecordFieldsProps {
 
 const BYTES_PER_MEGABYTE = 1024 * 1024;
 
-// 구매 페이지 캡처 한 장과 주문 번호·주문일. 캡처는 인증 사진과 같은 곳에 올린다.
+// 구매 기록 캡처 한 장과 주문 번호·주문일. 캡처는 인증 사진과 같은 곳에 올린다.
 export function PurchaseRecordFields({ value, onChange }: PurchaseRecordFieldsProps) {
   const fileInput = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<{ name: string; size: number } | null>(null);
@@ -33,7 +33,7 @@ export function PurchaseRecordFields({ value, onChange }: PurchaseRecordFieldsPr
   const [error, setError] = useState<string | null>(null);
 
   const upload = async (picked: File) => {
-    const invalid = certPhotoError(picked);
+    const invalid = certPhotoError(picked, CERT_PHOTO_ACCEPT);
     if (invalid) return setError(invalid);
     setError(null);
     setProgress(0);
@@ -62,7 +62,7 @@ export function PurchaseRecordFields({ value, onChange }: PurchaseRecordFieldsPr
           />
           <VStack className="min-w-0 flex-1">
             <Text typography="body3" weight="bold">
-              구매 페이지 캡처
+              구매 기록 캡처
             </Text>
             {file && (
               <Text typography="body4" foreground="hint" truncate>
@@ -96,7 +96,7 @@ export function PurchaseRecordFields({ value, onChange }: PurchaseRecordFieldsPr
           className="w-full justify-start border-dashed"
         >
           <Plus size={16} strokeWidth={2.4} aria-hidden />
-          구매 페이지 캡처 추가
+          구매 기록 캡처 추가
         </Button>
       )}
       {error && (
@@ -116,7 +116,7 @@ export function PurchaseRecordFields({ value, onChange }: PurchaseRecordFieldsPr
         }}
       />
       <HStack gap="100" className="[&>*]:min-w-0 [&>*]:flex-1">
-        <Field.Root label="주문 번호" htmlFor="purchase-order-number">
+        <Field.Root label="주문번호" htmlFor="purchase-order-number">
           <TextInput
             id="purchase-order-number"
             maxLength={100}
