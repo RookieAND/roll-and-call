@@ -1,6 +1,7 @@
 "use client";
 
 import type { VariantProps } from "class-variance-authority";
+import { useState } from "react";
 
 import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
@@ -17,7 +18,10 @@ export interface AvatarProps extends AvatarState {
   className?: StateClassName<AvatarState>;
 }
 
+// 이미지가 깨지면 이름 첫 글자로 대신한다. 실패한 주소만 기억하므로 src가 바뀌면 다시 시도한다.
 export function Avatar({ src, name, size = "md", className }: AvatarProps) {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const image = src && src !== failedSrc ? src : null;
   const trimmed = (name ?? "").trim();
   const initial = trimmed.charAt(0) || "?";
   const [background, foreground] = trimmed
@@ -28,11 +32,20 @@ export function Avatar({ src, name, size = "md", className }: AvatarProps) {
       data-slot="avatar"
       data-size={size ?? undefined}
       className={cn(avatarVariants({ size }), resolveStateProp(className, { size }))}
-      style={src ? undefined : { backgroundColor: background, color: foreground }}
+      style={image ? undefined : { backgroundColor: background, color: foreground }}
     >
-      {src ? (
+      {image ? (
         // plain img: Discord CDN avatars, no next/image remote config needed
-        <img src={src} alt={name ?? ""} className="h-full w-full object-cover" />
+        <img
+          src={image}
+          alt={name ?? ""}
+          onError={() => setFailedSrc(image)}
+          // 서버 렌더 이미지는 하이드레이션 전에 실패하면 onError를 놓친다. 붙는 순간 한 번 더 본다.
+          ref={(element) => {
+            if (element?.complete && element.naturalWidth === 0) setFailedSrc(image);
+          }}
+          className="h-full w-full object-cover"
+        />
       ) : (
         initial
       )}
