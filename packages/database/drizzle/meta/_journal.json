@@ -239,6 +239,13 @@
       "when": 1791900000000,
       "tag": "0033_match_rulebook_edition_set",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1792000000000,
+      "tag": "0034_cert_quiz_sellers",
+      "breakpoints": true
     }
   ]
 }

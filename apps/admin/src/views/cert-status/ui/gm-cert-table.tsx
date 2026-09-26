@@ -1,23 +1,15 @@
 import { Badge, Button, HStack, Table, Text, cn } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { GuideDmButton } from "@/features/send-cert-guide-dm";
 import type { GmCertRow } from "@/shared/server";
 import { TableColumns } from "@/shared/ui";
 
+import { CertifiedEditions } from "./certified-editions";
 import { GmCertStateBadge } from "./gm-cert-state-badge";
-
-const LIST_LIMIT = 2;
 
 interface GmCertTableProps {
   rows: GmCertRow[];
 }
-
-// "크툴루의 부름 7판, 인세인 외 2개"
-const listRulebooks = (rulebooks: string[]) =>
-  rulebooks.length > LIST_LIMIT
-    ? `${rulebooks.slice(0, LIST_LIMIT).join(", ")} 외 ${rulebooks.length - LIST_LIMIT}개`
-    : rulebooks.join(", ");
 
 export function GmCertTable({ rows }: GmCertTableProps) {
   const none = (
@@ -55,8 +47,8 @@ export function GmCertTable({ rows }: GmCertTableProps) {
             <Table.Cell align="center" numeric>
               {row.recentSessionCount}회
             </Table.Cell>
-            <Table.Cell className="truncate">
-              {row.certifiedRulebooks.length ? listRulebooks(row.certifiedRulebooks) : none}
+            <Table.Cell>
+              <CertifiedEditions editions={row.certifiedEditions} />
             </Table.Cell>
             <Table.Cell className="truncate">
               {row.pending ? row.pending.rulebook : none}
@@ -76,13 +68,6 @@ export function GmCertTable({ rows }: GmCertTableProps) {
               <GmCertStateBadge state={row.state} />
             </Table.Cell>
             <Table.Cell align="end">
-              {row.state === "unapplied" ? (
-                <GuideDmButton
-                  userId={row.userId}
-                  nickname={row.nickname}
-                  disabled={row.sanctioned}
-                />
-              ) : null}
               {row.pending ? (
                 <Button
                   variant="outline"

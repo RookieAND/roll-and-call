@@ -4,7 +4,7 @@ import { loadSnapshot } from "./snapshot";
 
 export async function getCertDateSettings() {
   const db = await loadSnapshot();
-  const { summary } = await getCertStatus({ allTime: false });
+  const { summary } = await getCertStatus();
   return {
     enforcementDate: db.settings.certEnforcementDate,
     gmCount: summary.gmCount,

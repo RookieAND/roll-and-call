@@ -21,11 +21,11 @@ export type CertDecision =
 
 export type CertDecisionResult =
   | { ok: true }
-  | { ok: false; conflict: { status: "approved" | "rejected"; by: string; at: Date } }
+  | { ok: false; conflict: { status: "approved" | "rejected" | "withdrawn"; by: string; at: Date } }
   | { ok: false; blocked: string };
 
 // 승인·반려 확정. 이미 다른 운영진이 처리했으면 아무것도 바꾸지 않고 충돌을 알린다.
-// 기본 룰북이 결정되기 전의 서플리먼트, 주문번호가 겹치는 전자책은 막는다. 기본 룰북을 반려하면 기대는 서플리먼트도 반려한다.
+// 기본 룰북이 결정되기 전의 서플리먼트는 막는다. 기본 룰북을 반려하면 기대는 서플리먼트도 반려한다.
 export async function decideCert(
   id: string,
   actor: Actor,
@@ -39,12 +39,8 @@ export async function decideCert(
       (application) => application.id === id && application.status === "pending",
     );
     if (pendingApplication) {
-      const blockers = certBlockers(pendingApplication, snapshot);
-      if (blockers.waitingOn.length > 0) {
+      if (certBlockers(pendingApplication, snapshot).waitingOn.length > 0) {
         return { ok: false, blocked: "기본 룰북이 결정된 뒤에 심사할 수 있습니다" };
-      }
-      if (approved && blockers.duplicate) {
-        return { ok: false, blocked: "주문번호가 겹쳐 승인할 수 없습니다" };
       }
     }
     const [decided] = await tx
@@ -77,7 +73,7 @@ export async function decideCert(
       return {
         ok: false,
         conflict: {
-          status: current.status === "approved" ? "approved" : "rejected",
+          status: current.status === "pending" ? "rejected" : current.status,
           by: current.by ?? "알 수 없음",
           at: current.at ?? new Date(),
         },

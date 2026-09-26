@@ -2,7 +2,7 @@ import { Chip, HStack, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { CERT_TABS, paginate, withQuery } from "@/shared/lib";
-import type { listCertQueue } from "@/shared/server";
+import { CERT_QUEUE_FILTERS, type CertQueueFilterKey, type listCertQueue } from "@/shared/server";
 import {
   AdminHeader,
   EMPTY_IMAGE,
@@ -19,13 +19,19 @@ import { CertQueueTable } from "./cert-queue-table";
 interface CertQueueViewProps {
   queue: Awaited<ReturnType<typeof listCertQueue>>;
   page?: string;
-  query: Record<string, string | undefined>;
+  query: { q?: string; rulebook?: string; filter?: CertQueueFilterKey };
 }
+
+const FILTER_CHIPS = [
+  { key: undefined, label: "전체" },
+  ...(Object.entries(CERT_QUEUE_FILTERS) as [CertQueueFilterKey, string][]).map(([key, label]) => ({
+    key,
+    label,
+  })),
+];
 
 export function CertQueueView({ queue, page, query }: CertQueueViewProps) {
   const paged = paginate(queue.rows, page);
-  const reappliedOnly = query.reapplied === "1";
-  const reappliedHref = withQuery("/cert", query, { reapplied: reappliedOnly ? undefined : "1" });
 
   return (
     <>
@@ -53,9 +59,15 @@ export function CertQueueView({ queue, page, query }: CertQueueViewProps) {
                 }))}
                 className="w-[150px]"
               />
-              <Chip selected={reappliedOnly} render={<Link href={reappliedHref} scroll={false} />}>
-                재신청만
-              </Chip>
+              {FILTER_CHIPS.map(({ key, label }) => (
+                <Chip
+                  key={label}
+                  selected={query.filter === key}
+                  render={<Link href={withQuery("/cert", query, { filter: key })} scroll={false} />}
+                >
+                  {label}
+                </Chip>
+              ))}
             </HStack>
             <Panel
               footer={

@@ -4,7 +4,7 @@ import { Check, RotateCcw, X } from "lucide-react";
 import { formatDate } from "@/shared/lib";
 import type { PreviousRejection } from "@/shared/server";
 
-const SHOT_LABELS = { front: "앞면", back: "뒷면", side: "옆면" } as const;
+const SHOT_LABELS = { front: "앞면", back: "뒷면", side: "책등" } as const;
 
 interface ReapplyNoticeProps {
   latest: PreviousRejection;

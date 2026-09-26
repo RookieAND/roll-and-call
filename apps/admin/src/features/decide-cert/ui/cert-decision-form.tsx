@@ -32,26 +32,29 @@ interface CertDecisionFormProps {
   // 실물은 앞면·뒷면·책등, 전자책은 구매 내역(order)·영수증(receipt) 주소.
   photoUrls: Partial<Record<ReviewShot["key"], string | null>>;
   replacedShots: ShotKey[];
-  // 승인만 막는 이유(주문번호 중복). 푸터에 붉게 적는다.
-  approveBlockedNote?: string;
   nextId: string | null;
   compact: boolean;
   disabled: boolean;
+  // 신청자가 거둔 신청은 사진이 지워져 사진 칸을 두지 않는다.
+  hideShots?: boolean;
   children: ReactNode;
+  // 사진 아래에 두는 본문 퀴즈 결과.
+  quiz: ReactNode;
 }
 
-// 사진(전자책은 구매 기록) 확인 → 승인 또는 반려. 반려 중인지와 확대한 사진은 주소(mode·photo)가 기억한다.
+// 사진(전자책은 구매 기록) 확인 항목을 모두 체크해야 승인할 수 있다. 반려는 언제든. 반려 중인지와 확대한 사진은 주소(mode·photo)가 기억한다.
 export function CertDecisionForm({
   applicationId,
   applicantLabel,
   format,
   photoUrls,
   replacedShots,
-  approveBlockedNote,
   nextId,
   compact,
   disabled,
+  hideShots = false,
   children,
+  quiz,
 }: CertDecisionFormProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -70,7 +73,8 @@ export function CertDecisionForm({
   const shots = ebook ? EBOOK_SHOTS : SHOTS;
   // 전자책 캡처는 문제 사진으로 지정하지 않는다. 사용자 앱이 사진 칸 이름으로 안내한다.
   const flaggable = !ebook;
-  const approveDisabled = disabled || Boolean(approveBlockedNote);
+  const allChecked = checkedShots.length === shots.length;
+  const approveDisabled = disabled || !allChecked;
   const reasonTag = reasonChoice === OTHER_REASON ? otherReason.trim() : reasonChoice;
   const canReject = Boolean(reasonTag && userReason.trim()) && !pending;
   const nextHref = nextId ? `/cert/${nextId}` : "/cert";
@@ -84,7 +88,13 @@ export function CertDecisionForm({
 
   const finish = (result: CertDecisionResult, message: string) => {
     if (!result.ok) {
-      toast.info("blocked" in result ? result.blocked : "다른 운영진이 먼저 처리했습니다");
+      toast.info(
+        "blocked" in result
+          ? result.blocked
+          : result.conflict.status === "withdrawn"
+            ? "신청자가 신청을 거뒀습니다"
+            : "다른 운영진이 먼저 처리했습니다",
+      );
       router.refresh();
       return;
     }
@@ -135,43 +145,47 @@ export function CertDecisionForm({
     <>
       <VStack gap="175" className="mx-auto w-full max-w-content flex-1 p-200">
         {children}
-        <VStack
-          gap="125"
-          render={<section aria-labelledby="shot-section-title" />}
-          aria-disabled={disabled}
-          className={cn(disabled && "pointer-events-none opacity-50")}
-        >
-          <ShotSectionHeader
-            title={ebook ? "구매 기록 확인" : "사진 확인"}
-            checkedCount={checkedShots.length}
-            total={shots.length}
-            rejecting={rejecting && flaggable}
-          />
-          <Grid className={cn("gap-150", shots.length === 3 ? "grid-cols-3" : "grid-cols-2")}>
-            {shots.map((shot) => (
-              <ShotCard
-                key={shot.key}
-                label={shot.label}
-                note={shot.note}
-                question={shot.question}
-                url={photoUrls[shot.key] ?? undefined}
-                checked={checkedShots.includes(shot.key)}
-                flagged={rejecting && flaggedShots.some((flagged) => flagged === shot.key)}
-                replaced={replacedShots.some((replaced) => replaced === shot.key)}
-                tall={shots.length === 2}
-                compact={compact || rejecting}
-                disabled={disabled}
-                onCheckedChange={() => setCheckedShots(toggle(checkedShots, shot.key))}
-                onPhotoClick={() =>
-                  rejecting && flaggable ? flagShot(shot.key) : setParam("photo", shot.key)
-                }
-                onZoom={() => setParam("photo", shot.key)}
-              />
-            ))}
-          </Grid>
-        </VStack>
+        {hideShots ? null : (
+          <VStack
+            gap="125"
+            render={<section aria-labelledby="shot-section-title" />}
+            aria-disabled={disabled}
+            className={cn(disabled && "pointer-events-none opacity-50")}
+          >
+            <ShotSectionHeader
+              title={ebook ? "구매 기록 확인" : "사진 확인"}
+              checkedCount={checkedShots.length}
+              total={shots.length}
+              rejecting={rejecting && flaggable}
+            />
+            <Grid className={cn("gap-150", shots.length === 3 ? "grid-cols-3" : "grid-cols-2")}>
+              {shots.map((shot) => (
+                <ShotCard
+                  key={shot.key}
+                  label={shot.label}
+                  note={shot.note}
+                  question={shot.question}
+                  url={photoUrls[shot.key] ?? undefined}
+                  checked={checkedShots.includes(shot.key)}
+                  flagged={rejecting && flaggedShots.some((flagged) => flagged === shot.key)}
+                  replaced={replacedShots.some((replaced) => replaced === shot.key)}
+                  tall={shots.length === 2}
+                  compact={compact || rejecting}
+                  disabled={disabled}
+                  onCheckedChange={() => setCheckedShots(toggle(checkedShots, shot.key))}
+                  onPhotoClick={() =>
+                    rejecting && flaggable ? flagShot(shot.key) : setParam("photo", shot.key)
+                  }
+                  onZoom={() => setParam("photo", shot.key)}
+                />
+              ))}
+            </Grid>
+          </VStack>
+        )}
+        {quiz}
         {rejecting ? (
           <RejectPanel
+            ebook={ebook}
             reasonChoice={reasonChoice}
             otherReason={otherReason}
             userReason={userReason}
@@ -208,7 +222,14 @@ export function CertDecisionForm({
         </DecisionFooter>
       ) : (
         <DecisionFooter
-          status={<SkipStatus note={approveBlockedNote} onSkip={() => router.push(nextHref)} />}
+          status={
+            <SkipStatus
+              note={
+                disabled || allChecked ? undefined : "모든 확인 항목을 체크해야 승인할 수 있습니다"
+              }
+              onSkip={() => router.push(nextHref)}
+            />
+          }
         >
           <Button
             variant="outline"

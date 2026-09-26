@@ -1,8 +1,10 @@
 import { Field, Text, Textarea, VStack } from "@roll-and-call/ui";
 
+import { EBOOK_REJECT_REASONS, REJECT_REASONS } from "../model/reject-reasons";
 import { ReasonRadio } from "./reason-radio";
 
 interface RejectPanelProps {
+  ebook: boolean;
   reasonChoice: string;
   otherReason: string;
   userReason: string;
@@ -14,6 +16,7 @@ interface RejectPanelProps {
 }
 
 export function RejectPanel({
+  ebook,
   reasonChoice,
   otherReason,
   userReason,
@@ -33,7 +36,9 @@ export function RejectPanel({
           반려 사유
         </Text>
         <Text typography="body4" foreground="hint">
-          사유를 선택해 주세요. 특정 사진에 문제가 있으면 그 사진을 눌러 함께 지정할 수 있습니다.
+          {ebook
+            ? "판단하기 어려우면 [추가 확인이 필요해요]를 고르고, 요청할 내용을 사유에 적어 주세요."
+            : "사유를 선택해 주세요. 특정 사진에 문제가 있으면 그 사진을 눌러 함께 지정할 수 있습니다."}
         </Text>
       </VStack>
       <VStack gap="100" className="p-150">
@@ -42,6 +47,8 @@ export function RejectPanel({
             사유 선택
           </Text>
           <ReasonRadio
+            reasons={ebook ? EBOOK_REJECT_REASONS : REJECT_REASONS}
+            withOther={!ebook}
             value={reasonChoice}
             otherReason={otherReason}
             onValueChange={onReasonChoiceChange}
@@ -57,20 +64,22 @@ export function RejectPanel({
         >
           <Textarea
             id="reject-user-reason"
-            rows={3}
+            rows={ebook ? 2 : 3}
             value={userReason}
             onChange={(event) => onUserReasonChange(event.target.value)}
           />
         </Field.Root>
-        <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="reject-staff-memo">
-          <Textarea
-            id="reject-staff-memo"
-            rows={1}
-            value={staffMemo}
-            placeholder="예: 같은 사유로 두 번째 반려입니다"
-            onChange={(event) => onStaffMemoChange(event.target.value)}
-          />
-        </Field.Root>
+        {ebook ? null : (
+          <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="reject-staff-memo">
+            <Textarea
+              id="reject-staff-memo"
+              rows={1}
+              value={staffMemo}
+              placeholder="예: 같은 사유로 두 번째 반려입니다"
+              onChange={(event) => onStaffMemoChange(event.target.value)}
+            />
+          </Field.Root>
+        )}
       </VStack>
     </VStack>
   );

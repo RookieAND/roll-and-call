@@ -38,11 +38,15 @@ export async function getUserDetail(userId: string) {
       approvedBy: item.approvedBy,
     }));
   const applications = db.certApplications
-    .filter((item) => item.userId === userId && item.status !== "approved")
+    .flatMap((item) =>
+      item.userId === userId && (item.status === "pending" || item.status === "rejected")
+        ? [{ ...item, status: item.status }]
+        : [],
+    )
     .map((item) => ({
       id: item.id,
       rulebook: item.rulebook,
-      status: item.status as "pending" | "rejected",
+      status: item.status,
       appliedAt: item.appliedAt,
       processedAt: item.processedAt ?? null,
       processedBy: item.processedBy ?? null,

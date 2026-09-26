@@ -233,10 +233,12 @@ export type ProfileMemo = typeof profileMemos.$inferSelect;
 
 export const staffRole = pgEnum("staff_role", ["owner", "staff"]);
 
+// withdrawn은 신청자가 심사 전에 거둔 신청이다. 사진은 지우고 행만 남겨 어드민이 거둔 사실을 알린다.
 export const certApplicationStatus = pgEnum("cert_application_status", [
   "pending",
   "approved",
   "rejected",
+  "withdrawn",
 ]);
 
 // 룰북 추가 요청을 어떻게 끝냈는지. null이면 아직 대기 중이다.
@@ -313,6 +315,31 @@ export const rulebookRequests = pgTable(
   (table) => [index("rulebook_requests_user_id_idx").on(table.userId)],
 ).enableRLS();
 
+// 본문 퀴즈 문항. 인증 신청 때 사용 중인 문항 하나를 내고, 답은 answers 가운데 하나면 맞다(공백·대소문자 무시).
+// 출제된 문항은 지우지 않고 active를 끈다.
+export const rulebookQuizQuestions = pgTable(
+  "rulebook_quiz_questions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    rulebookId: uuid("rulebook_id")
+      .notNull()
+      .references(() => rulebooks.id, { onDelete: "cascade" }),
+    question: text("question").notNull(),
+    answers: text("answers").array().notNull().default([]),
+    page: text("page").notNull().default(""),
+    active: boolean("active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("rulebook_quiz_questions_rulebook_id_idx").on(table.rulebookId)],
+).enableRLS();
+
+// 전자책 인증에서 고르는 판매처. 목록에 없으면 신청자가 적은 이름이 그대로 들어간다.
+export const certSellers = pgTable("cert_sellers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull().unique(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}).enableRLS();
+
 // 실물은 사진 3장, 전자책은 구매 내역·영수증 캡처로 확인한다.
 export const certFormat = pgEnum("cert_format", ["physical", "ebook"]);
 
@@ -340,6 +367,11 @@ export const certApplications = pgTable(
     receiptUrl: text("receipt_url"),
     orderNumber: text("order_number"),
     orderDate: text("order_date"),
+    // 신청할 때 낸 본문 퀴즈 문항과 신청자의 답. 퀴즈 없이 낸 신청은 비어 있다.
+    quizQuestionId: uuid("quiz_question_id").references(() => rulebookQuizQuestions.id, {
+      onDelete: "set null",
+    }),
+    quizAnswer: text("quiz_answer"),
     status: certApplicationStatus("status").notNull().default("pending"),
     rejectTag: text("reject_tag"),
     rejectReason: text("reject_reason"),

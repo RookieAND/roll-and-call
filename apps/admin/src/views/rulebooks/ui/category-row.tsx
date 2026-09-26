@@ -11,7 +11,7 @@ interface CategoryRowProps {
 export function CategoryRow({ category }: CategoryRowProps) {
   return (
     <Table.Row className="bg-(--rc-color-bg-canvas-raised)">
-      <Table.Cell colSpan={8}>
+      <Table.Cell colSpan={4}>
         <HStack align="center" gap="075">
           <BookOpen size={16} aria-hidden className="shrink-0 text-gray-600" />
           <Text typography="body3" weight="bold" truncate>

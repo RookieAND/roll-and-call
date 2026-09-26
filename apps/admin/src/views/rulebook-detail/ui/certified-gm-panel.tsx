@@ -22,7 +22,7 @@ export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelPr
         variant="outline"
         colorPalette="gray"
         size="sm"
-        render={<Link href="?action=grant" scroll={false} />}
+        render={<Link href="?tab=gms&action=grant" scroll={false} />}
       >
         GM 직접 추가
       </Button>

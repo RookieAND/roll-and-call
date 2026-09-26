@@ -3,20 +3,16 @@ import { Quote, Receipt } from "lucide-react";
 import Link from "next/link";
 
 import { CertDecisionForm } from "@/features/decide-cert";
-import { formatDate, formatDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
 import { AdminHeader, ConflictNotice, ItemCard } from "@/shared/ui";
 
 import { ApplicantCard } from "./applicant-card";
 import { EbookInputPanel } from "./ebook-input-panel";
+import { QuizPanel } from "./quiz-panel";
 import { ReapplyNotice } from "./reapply-notice";
 
 const DECISION_LABEL = { approved: "승인", rejected: "반려" } as const;
-const DUPLICATE_STATUS_LABEL = {
-  pending: "심사 대기",
-  approved: "인증됨",
-  rejected: "반려",
-} as const;
 
 interface CertReviewViewProps {
   review: CertReview;
@@ -25,7 +21,8 @@ interface CertReviewViewProps {
 }
 
 export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProps) {
-  const { applicant, previousRejections, processed, purchase } = review;
+  const { applicant, previousRejections, processed, withdrawnAt, purchase } = review;
+  const closed = Boolean(processed || withdrawnAt);
   const purchaseLine = [purchase.orderNumber, purchase.orderDate].filter(Boolean).join(" · ");
   const ebook = review.format === "ebook";
   const photoUrls = ebook
@@ -55,10 +52,13 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
         format={review.format}
         photoUrls={photoUrls}
         replacedShots={review.replacedShots}
-        approveBlockedNote={duplicate ? "주문번호가 겹쳐 승인할 수 없습니다" : undefined}
         nextId={review.nextId}
-        compact={reapplied || Boolean(processed) || waitingOn.length > 0}
-        disabled={Boolean(processed) || waitingOn.length > 0}
+        compact={reapplied || closed || waitingOn.length > 0}
+        disabled={closed || waitingOn.length > 0}
+        hideShots={Boolean(withdrawnAt)}
+        quiz={
+          withdrawnAt ? null : <QuizPanel quiz={review.quiz} hasActiveQuiz={review.hasActiveQuiz} />
+        }
       >
         <ApplicantCard review={review} />
         {waitingOn.length > 0 ? (
@@ -71,14 +71,24 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
           </Callout.Root>
         ) : null}
         {duplicate ? (
-          <Callout.Root colorPalette="danger">
+          <Callout.Root colorPalette="warning">
             <Callout.Icon />
             <Callout.Description>
-              이미 다른 사용자의 신청에 쓰인 주문번호입니다. {duplicate.nickname} 님의{" "}
-              {DUPLICATE_STATUS_LABEL[duplicate.status]} 기록({formatDate(duplicate.at)})과
-              판매처·주문번호가 같습니다.
+              이미 다른 사용자({duplicate.nickname})의 신청에 쓰인 주문번호입니다. 이 경고를
+              참고해서 판단해 주세요.
             </Callout.Description>
           </Callout.Root>
+        ) : null}
+        {withdrawnAt ? (
+          <ConflictNotice
+            title="신청자가 신청을 거뒀습니다"
+            description={`${formatDateTime(withdrawnAt)}에 거둔 신청이며, 올린 사진도 함께 삭제되었습니다.`}
+            actions={
+              <Button size="sm" render={<Link href={nextHref} />}>
+                다음 건
+              </Button>
+            }
+          />
         ) : null}
         {processed ? (
           <ConflictNotice
@@ -109,16 +119,20 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
           />
         ) : null}
         {review.memo && !rejecting ? (
-          <div className={processed ? "opacity-50" : undefined}>
+          <div className={closed ? "opacity-50" : undefined}>
             <ItemCard icon={Quote} tone="primary" title="신청 메모" meta={applicant.nickname}>
               {review.memo}
             </ItemCard>
           </div>
         ) : null}
-        {ebook && !rejecting ? (
-          <EbookInputPanel purchase={purchase} duplicate={Boolean(duplicate)} />
+        {ebook && !rejecting && !withdrawnAt ? (
+          <EbookInputPanel
+            purchase={purchase}
+            sellerRegistered={review.sellerRegistered}
+            duplicate={Boolean(duplicate)}
+          />
         ) : null}
-        {!ebook && (purchaseLine || purchase.captureUrl) && !rejecting ? (
+        {!ebook && (purchaseLine || purchase.captureUrl) && !rejecting && !withdrawnAt ? (
           <div className={processed ? "opacity-50" : undefined}>
             <ItemCard
               icon={Receipt}

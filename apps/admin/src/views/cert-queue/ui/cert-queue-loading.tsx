@@ -36,7 +36,11 @@ export function CertQueueLoading() {
           <div className="w-[150px]">
             <SkeletonSelect label="룰북 전체" />
           </div>
-          <Chip disabled>재신청만</Chip>
+          {["전체", "재신청", "활성 GM", "적용일 전 접수"].map((label) => (
+            <Chip key={label} disabled>
+              {label}
+            </Chip>
+          ))}
         </HStack>
         <Panel footer={<SkeletonPager />}>
           <SkeletonTable

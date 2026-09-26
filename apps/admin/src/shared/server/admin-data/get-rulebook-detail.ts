@@ -13,7 +13,7 @@ export interface CertifiedGm {
   recentSessionCount: number;
 }
 
-// 폼은 카테고리를 고칠 때마다 대신하는 구판 후보를 다시 고르므로 모든 룰북을 함께 넘긴다.
+// 폼은 카테고리를 고칠 때마다 포함하는 구판 후보를 다시 고르므로 모든 룰북을 함께 넘긴다.
 export async function getRulebookDetail(id: string) {
   const db = await loadSnapshot();
   const rulebook = db.rulebooks.find((candidate) => candidate.id === id);
@@ -42,6 +42,7 @@ export async function getRulebookDetail(id: string) {
     aliases: [...rulebook.aliases],
     label,
     certifiedGms,
+    quizQuestions: db.quizQuestions.filter((question) => question.rulebookId === id),
     allRulebooks,
     categoryBooks,
     editions,

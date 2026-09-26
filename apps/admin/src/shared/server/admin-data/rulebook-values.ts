@@ -5,7 +5,7 @@ import { and, eq } from "drizzle-orm";
 import type { Executor } from "./record-audit";
 import type { RulebookFields } from "./rulebook-fields";
 
-// 카테고리는 이름으로 고르고, 새 카테고리는 기본 룰북만 만들 수 있다. 대신하는 구판은 같은 카테고리의 다른 기본 룰북만 된다.
+// 카테고리는 이름으로 고르고, 새 카테고리는 기본 룰북만 만들 수 있다. 포함하는 구판은 같은 카테고리의 다른 기본 룰북만 된다.
 export async function toRulebookValues(tx: Executor, fields: RulebookFields, selfId?: string) {
   const { category, supersedesId, ...rest } = fields;
   if (fields.kind === "core") {
@@ -29,6 +29,6 @@ export async function toRulebookValues(tx: Executor, fields: RulebookFields, sel
         eq(rulebooks.kind, "core"),
       ),
     );
-  if (!superseded) throw new Error("대신하는 구판은 같은 카테고리의 기본 룰북이어야 합니다");
+  if (!superseded) throw new Error("포함하는 구판은 같은 카테고리의 기본 룰북이어야 합니다");
   return { ...rest, categoryId: categoryRow.id, supersedesId: superseded.id };
 }

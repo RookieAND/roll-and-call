@@ -16,7 +16,7 @@ export function KindCards({ kind, disabled, onChange }: KindCardsProps) {
       disabled={disabled}
       onValueChange={(next) => onChange(next as RulebookKind)}
       aria-label="종류"
-      className="grid grid-cols-3 gap-100"
+      className="grid grid-cols-1 gap-100"
     >
       {Object.entries(RULEBOOK_KIND_LABEL).map(([value, label]) => (
         <RadioCard.Root key={value} value={value}>

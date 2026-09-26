@@ -60,7 +60,8 @@ export interface Certification {
 
 export type ShotKey = "front" | "back" | "side";
 
-export type CertStatus = "pending" | "approved" | "rejected";
+// withdrawn은 신청자가 심사 전에 거둔 신청이다.
+export type CertStatus = "pending" | "approved" | "rejected" | "withdrawn";
 
 export interface PreviousRejection {
   rejectedAt: Date;
@@ -91,10 +92,27 @@ export interface CertApplication {
     orderDate: string | null;
   };
   previousRejections: PreviousRejection[];
+  // 신청할 때 낸 본문 퀴즈. 퀴즈 없이 낸 신청은 비어 있다.
+  quiz?: { question: string; answer: string; page: string };
   status: CertStatus;
   flaggedShots?: ShotKey[];
   processedBy?: string;
   processedAt?: Date;
+}
+
+export interface QuizQuestion {
+  id: string;
+  rulebookId: string;
+  question: string;
+  answers: string[];
+  page: string;
+  active: boolean;
+  askedCount: number;
+}
+
+export interface CertSeller {
+  id: string;
+  name: string;
 }
 
 export interface RulebookRequest {
@@ -115,6 +133,7 @@ export interface Session {
   id: string;
   title: string;
   rulebook: string;
+  rulebookId: string | null;
   gmId: string;
   startsAt: Date;
   // false면 아직 세션 일시가 없어 startsAt이 조율 범위의 끝이나 모집 마감일이다.

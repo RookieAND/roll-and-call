@@ -7,7 +7,7 @@ const book = (id: string, edition: string, overrides: Partial<RulebookRow> = {})
   ({ id, edition, kind: "core", certRequired: true, ...overrides }) as RulebookRow;
 
 describe("categoryEditions", () => {
-  it("판본마다 필요한 기본 룰북과 대신하는 신판을 모은다", () => {
+  it("판본마다 필요한 기본 룰북과 포함하는 신판을 모은다", () => {
     const [sixth, seventh] = categoryEditions([
       book("6", "6판"),
       book("7", "7판", { supersedesEdition: "6판" }),

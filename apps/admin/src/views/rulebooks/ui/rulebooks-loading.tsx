@@ -1,39 +1,32 @@
-import { Button, HStack, Skeleton, TextInput, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
 import { Plus, Search } from "lucide-react";
 
 import {
   AdminHeader,
   LoadingRegion,
   Panel,
-  SkeletonItem,
+  RouteTabs,
   SkeletonPager,
   SkeletonTable,
 } from "@/shared/ui";
 
+import { RULEBOOKS_TAB } from "../model/rulebooks-tab";
+
+// loading은 주소의 탭을 모르므로 첫 탭(룰북 목록)의 뼈대를 그린다.
 export function RulebooksLoading() {
   return (
     <>
       <AdminHeader title="룰북" sub={<Skeleton width={140} height={12} render={<span />} />} />
+      <RouteTabs
+        label="룰북 화면"
+        value="/rules"
+        items={[
+          { label: "룰북 목록", href: "/rules" },
+          { label: "추가 요청", href: `/rules?tab=${RULEBOOKS_TAB.requests}` },
+          { label: "전자책 판매처", href: `/rules?tab=${RULEBOOKS_TAB.sellers}` },
+        ]}
+      />
       <LoadingRegion label="룰북 목록을 불러오는 중입니다" className="gap-150 p-200">
-        <Panel
-          title="룰북 추가 요청"
-          right={<Skeleton width={40} height={22} rounded="full" />}
-          bodyClassName="p-150"
-        >
-          <VStack gap="100">
-            {[0, 1].map((index) => (
-              <SkeletonItem
-                key={index}
-                right={
-                  <HStack gap="075">
-                    <Skeleton width={112} height={28} rounded={400} />
-                    <Skeleton width={112} height={28} rounded={400} />
-                  </HStack>
-                }
-              />
-            ))}
-          </VStack>
-        </Panel>
         <Panel
           footer={<SkeletonPager />}
           right={
@@ -60,15 +53,11 @@ export function RulebooksLoading() {
           }
         >
           <SkeletonTable
-            rows={7}
+            rows={10}
             columns={[
-              { label: "룰북", kind: "text", width: 220 },
-              { label: "판본", kind: "text", width: 132 },
-              { label: "종류", kind: "badge", width: 96, align: "center" },
-              { label: "다른 이름", kind: "text", width: 200 },
-              { label: "인증", kind: "badge", width: 104, align: "center" },
-              { label: "상태", kind: "badge", width: 82, align: "center" },
-              { label: "인증 GM", kind: "number", width: 78, align: "center" },
+              { label: "룰북", kind: "text", width: 320 },
+              { label: "판본", kind: "text", width: 120 },
+              { label: "종류", kind: "badge", width: 120, align: "center" },
               { label: "", kind: "icon", width: 44, fixed: true, align: "end" },
             ]}
           />

@@ -32,6 +32,8 @@ export {
   rulebookCategories,
   rulebooks,
   rulebookRequests,
+  rulebookQuizQuestions,
+  certSellers,
   certApplications,
   certifications,
   sanctions,
@@ -47,4 +49,3 @@ export {
   type CertApplication,
   type AuditLogEntry,
 } from "./schema";
-export { CERT_SELLERS } from "./cert-sellers";

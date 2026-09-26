@@ -4,7 +4,6 @@ import { Button, Dialog, Field, Text, TextInput, VStack, cn, toast } from "@roll
 import { useState, useTransition } from "react";
 
 import {
-  RULEBOOK_KIND_DESCRIPTION,
   conflictTitle,
   formatDateTime,
   quoteWithParticle,
@@ -20,7 +19,7 @@ import { draftCategory } from "../model/draft-category";
 import type { RulebookDraft } from "../model/rulebook-draft";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
-import { KindSegmentField } from "./kind-segment-field";
+import { KindCards } from "./kind-cards";
 
 type Conflict = Extract<RulebookActionResult, { ok: false }>["conflict"];
 
@@ -109,11 +108,9 @@ export function ApproveRequestForm({ request, rulebooks, onDone }: ApproveReques
               nameError={nameError}
               onChange={change}
             >
-              <KindSegmentField
-                kind={draft.kind}
-                description={RULEBOOK_KIND_DESCRIPTION[draft.kind]}
-                onChange={(kind) => change({ kind })}
-              />
+              <Field.Root label="종류">
+                <KindCards kind={draft.kind} onChange={(kind) => change({ kind })} />
+              </Field.Root>
             </BasicInfoFields>
             <Field.Root label="인증 정책">
               <CertPolicyField

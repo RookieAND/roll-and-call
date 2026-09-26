@@ -1,4 +1,3 @@
-import { CERT_SELLERS } from "@roll-and-call/database";
 import { HStack, Text } from "@roll-and-call/ui";
 import { CircleCheck, TriangleAlert } from "lucide-react";
 
@@ -7,14 +6,15 @@ import { FactRows, IconBadge, Panel } from "@/shared/ui";
 
 interface EbookInputPanelProps {
   purchase: CertReview["purchase"];
+  // 판매처 탭에 등록된 이름인지. 아니면 신청자가 기타로 적은 판매처다.
+  sellerRegistered: boolean;
   duplicate: boolean;
 }
 
 const NOT_ENTERED = "입력하지 않음";
 
 // 전자책 신청자가 적은 판매처·주문번호·주문일. 아래 캡처에 보이는 값과 나란히 비교한다.
-export function EbookInputPanel({ purchase, duplicate }: EbookInputPanelProps) {
-  const knownSeller = CERT_SELLERS.some((seller) => seller === purchase.seller);
+export function EbookInputPanel({ purchase, sellerRegistered, duplicate }: EbookInputPanelProps) {
   return (
     <Panel
       title="신청자가 입력한 값"
@@ -33,7 +33,7 @@ export function EbookInputPanel({ purchase, duplicate }: EbookInputPanelProps) {
             value: (
               <HStack align="center" gap="075">
                 {purchase.seller ?? NOT_ENTERED}
-                {knownSeller ? (
+                {sellerRegistered ? (
                   <IconBadge icon={CircleCheck} colorPalette="success">
                     등록된 판매처
                   </IconBadge>
@@ -47,7 +47,7 @@ export function EbookInputPanel({ purchase, duplicate }: EbookInputPanelProps) {
               <HStack align="center" gap="075" className="tabular-nums">
                 {purchase.orderNumber ?? NOT_ENTERED}
                 {duplicate ? (
-                  <IconBadge icon={TriangleAlert} colorPalette="danger">
+                  <IconBadge icon={TriangleAlert} colorPalette="warning">
                     중복
                   </IconBadge>
                 ) : null}

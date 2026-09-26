@@ -1,25 +1,24 @@
 import { HStack, Progress, Table, Text } from "@roll-and-call/ui";
 
-import type { RulebookCertRow } from "@/shared/server";
+import type { EditionCertRow } from "@/shared/server";
 import { TableColumns } from "@/shared/ui";
 
-interface RulebookCertTableProps {
-  rows: RulebookCertRow[];
-  sessionLabel: string;
+interface EditionCertTableProps {
+  rows: EditionCertRow[];
 }
 
-export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps) {
+export function EditionCertTable({ rows }: EditionCertTableProps) {
   return (
     <Table.Root className="table-equal">
       <TableColumns widths={[200, 96, 88, 80, 220, 112]} />
       <Table.Header>
         <Table.Row>
-          <Table.Head>룰북</Table.Head>
+          <Table.Head>판본</Table.Head>
           <Table.Head align="center">인증된 GM</Table.Head>
           <Table.Head align="center">심사 대기</Table.Head>
           <Table.Head align="center">미신청</Table.Head>
           <Table.Head>진행률</Table.Head>
-          <Table.Head align="center">{sessionLabel}</Table.Head>
+          <Table.Head align="center">최근 90일 세션</Table.Head>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -27,10 +26,10 @@ export function RulebookCertTable({ rows, sessionLabel }: RulebookCertTableProps
           const total = row.certifiedCount + row.pendingCount + row.unappliedCount;
           const percent = total ? Math.round((row.certifiedCount / total) * 100) : 0;
           return (
-            <Table.Row key={row.rulebook}>
+            <Table.Row key={row.edition}>
               <Table.Cell>
                 <Text typography="body3" weight="bold" truncate>
-                  {row.rulebook}
+                  {row.edition}
                 </Text>
               </Table.Cell>
               <Table.Cell align="center" numeric>

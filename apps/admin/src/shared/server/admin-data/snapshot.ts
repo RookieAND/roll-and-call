@@ -4,6 +4,7 @@ import {
   auditLog,
   certApplications,
   certifications,
+  certSellers,
   db,
   games,
   participants,
@@ -11,6 +12,7 @@ import {
   reports,
   rulebookRequests,
   rulebookCategories,
+  rulebookQuizQuestions,
   rulebooks,
   sanctions,
   staff,
@@ -30,8 +32,10 @@ import type {
   AdminUser,
   AuditEntry,
   CertApplication,
+  CertSeller,
   Certification,
   NoShow,
+  QuizQuestion,
   Report,
   Rulebook,
   RulebookRequest,
@@ -66,6 +70,8 @@ export const loadSnapshot = cache(async () => {
   const categoryRows = await db.select().from(rulebookCategories);
   const applicationRows = await db.select().from(certApplications);
   const certificationRows = await db.select().from(certifications);
+  const quizRows = await db.select().from(rulebookQuizQuestions);
+  const sellerRows = await db.select().from(certSellers).orderBy(certSellers.createdAt);
   const sanctionRows = await db.select().from(sanctions).where(isNull(sanctions.releasedAt));
   const reportRows = await db.select().from(reports);
   const staffRows = await db.select().from(staff);
@@ -127,6 +133,7 @@ export const loadSnapshot = cache(async () => {
       id: game.id,
       title: game.title,
       rulebook: gameRulebook(game),
+      rulebookId: game.rulebookId,
       gmId: game.gmId,
       startsAt: gameStartsAt(game),
       timeFixed: game.confirmedAt !== null,
@@ -196,44 +203,64 @@ export const loadSnapshot = cache(async () => {
       approvedBy: nicknameOf(row.approvedBy),
     }));
 
-  const certApplicationList: CertApplication[] = applicationRows.map((row) => ({
-    id: row.id,
-    userId: row.userId,
-    rulebookId: row.rulebookId,
-    rulebook: labels.get(row.rulebookId) ?? "",
-    groupId: row.groupId,
-    format: row.format,
-    appliedAt: row.createdAt,
-    memo: row.memo,
-    photoUrls: row.photoUrls,
-    replacedShots: row.replacedShots,
-    purchase: {
-      seller: row.seller,
-      captureUrl: row.purchaseCaptureUrl,
-      receiptUrl: row.receiptUrl,
-      orderNumber: row.orderNumber,
-      orderDate: row.orderDate,
-    },
-    // 같은 사람이 같은 룰북으로 먼저 냈다가 반려된 신청이 재신청 이력이다.
-    previousRejections: applicationRows
-      .filter(
-        (earlier) =>
-          earlier.userId === row.userId &&
-          earlier.rulebookId === row.rulebookId &&
-          earlier.status === "rejected" &&
-          earlier.createdAt < row.createdAt,
-      )
-      .toSorted((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
-      .map((earlier) => ({
-        rejectedAt: earlier.processedAt ?? earlier.createdAt,
-        tags: earlier.rejectTag ? [earlier.rejectTag] : [],
-        requests: earlier.rejectReason ? [earlier.rejectReason] : [],
-      })),
-    status: row.status,
-    flaggedShots: row.flaggedShots,
-    processedBy: row.processedBy ? nicknameOf(row.processedBy) : undefined,
-    processedAt: row.processedAt ?? undefined,
-  }));
+  const quizList: QuizQuestion[] = quizRows
+    .toSorted((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+    .map((row) => ({
+      id: row.id,
+      rulebookId: row.rulebookId,
+      question: row.question,
+      answers: row.answers,
+      page: row.page,
+      active: row.active,
+      askedCount: applicationRows.filter((application) => application.quizQuestionId === row.id)
+        .length,
+    }));
+  const sellerList: CertSeller[] = sellerRows.map((row) => ({ id: row.id, name: row.name }));
+
+  const certApplicationList: CertApplication[] = applicationRows.map((row) => {
+    const quiz = quizRows.find((question) => question.id === row.quizQuestionId);
+    return {
+      id: row.id,
+      userId: row.userId,
+      rulebookId: row.rulebookId,
+      rulebook: labels.get(row.rulebookId) ?? "",
+      groupId: row.groupId,
+      format: row.format,
+      appliedAt: row.createdAt,
+      memo: row.memo,
+      photoUrls: row.photoUrls,
+      replacedShots: row.replacedShots,
+      purchase: {
+        seller: row.seller,
+        captureUrl: row.purchaseCaptureUrl,
+        receiptUrl: row.receiptUrl,
+        orderNumber: row.orderNumber,
+        orderDate: row.orderDate,
+      },
+      // 같은 사람이 같은 룰북으로 먼저 냈다가 반려된 신청이 재신청 이력이다.
+      previousRejections: applicationRows
+        .filter(
+          (earlier) =>
+            earlier.userId === row.userId &&
+            earlier.rulebookId === row.rulebookId &&
+            earlier.status === "rejected" &&
+            earlier.createdAt < row.createdAt,
+        )
+        .toSorted((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+        .map((earlier) => ({
+          rejectedAt: earlier.processedAt ?? earlier.createdAt,
+          tags: earlier.rejectTag ? [earlier.rejectTag] : [],
+          requests: earlier.rejectReason ? [earlier.rejectReason] : [],
+        })),
+      quiz: quiz
+        ? { question: quiz.question, answer: row.quizAnswer ?? "", page: quiz.page }
+        : undefined,
+      status: row.status,
+      flaggedShots: row.flaggedShots,
+      processedBy: row.processedBy ? nicknameOf(row.processedBy) : undefined,
+      processedAt: row.processedAt ?? undefined,
+    };
+  });
 
   const requestList: RulebookRequest[] = requestRows.map((row) => ({
     id: row.id,
@@ -309,6 +336,8 @@ export const loadSnapshot = cache(async () => {
     rulebooks: rulebookList,
     certifications: certificationList,
     certApplications: certApplicationList,
+    quizQuestions: quizList,
+    sellers: sellerList,
     rulebookRequests: requestList,
     sessions,
     noShows,

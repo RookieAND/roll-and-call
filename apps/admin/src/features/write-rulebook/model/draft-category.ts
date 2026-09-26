@@ -6,7 +6,7 @@ import type { RulebookDraft } from "./rulebook-draft";
 type RulebookOption = Pick<RulebookRow, "id" | "label" | "category" | "kind">;
 
 // 카테고리 칸이 비면 기본 룰북은 룰북 이름을 쓴다. 서플리먼트·핸드북은 기존 카테고리에만 넣는다.
-// 대신하는 구판은 같은 카테고리의 다른 기본 룰북 가운데에서만 고르고, 후보에서 빠진 값은 버린다.
+// 포함하는 구판은 같은 카테고리의 다른 기본 룰북 가운데에서만 고르고, 후보에서 빠진 값은 버린다.
 export function draftCategory(draft: RulebookDraft, rulebooks: RulebookOption[], selfId?: string) {
   const core = draft.kind === "core";
   const typed = draft.category.trim();

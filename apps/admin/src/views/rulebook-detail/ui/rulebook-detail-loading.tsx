@@ -34,7 +34,7 @@ export function RulebookDetailLoading() {
                 </div>
                 <div className="grid grid-cols-2 gap-150">
                   <SkeletonField label="종류" />
-                  <SkeletonField label="대신하는 구판" />
+                  <SkeletonField label="포함하는 구판" />
                 </div>
                 <SkeletonField label="다른 이름" />
               </VStack>

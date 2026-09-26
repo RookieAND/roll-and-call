@@ -2,10 +2,11 @@
 
 import { Tabs } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
+import type { ReactNode } from "react";
 
 interface RouteTabsProps {
   label: string;
-  items: { label: string; href: string }[];
+  items: { label: ReactNode; href: string }[];
   value: string;
 }
 

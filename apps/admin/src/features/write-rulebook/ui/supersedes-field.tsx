@@ -28,7 +28,7 @@ function unavailable(draft: RulebookDraft, category: DraftCategory) {
   };
 }
 
-// 대신하는 구판: 이 책을 인증하면 고른 책의 구인도 열 수 있다. 고를 수 없을 때는 이유를 흐린 칸에 적는다.
+// 포함하는 구판: 이 책을 인증하면 고른 책의 구인도 열 수 있다. 고를 수 없을 때는 이유를 흐린 칸에 적는다.
 export function SupersedesField({
   draft,
   category,
@@ -40,7 +40,7 @@ export function SupersedesField({
   if (blocked) {
     return (
       <Field.Root
-        label="대신하는 구판"
+        label="포함하는 구판"
         htmlFor={`${idPrefix}-supersedes`}
         description={blocked.description}
       >
@@ -53,8 +53,8 @@ export function SupersedesField({
     ? `이 책을 인증한 GM은 ${selected.label} 구인도 열 수 있습니다.`
     : "판본이 다르고 연결이 없으면 서로 별개 룰로 봅니다.";
   return (
-    <Field.Root label="대신하는 구판" description={description}>
-      <HStack role="radiogroup" aria-label="대신하는 구판" wrap gap="075">
+    <Field.Root label="포함하는 구판" description={description}>
+      <HStack role="radiogroup" aria-label="포함하는 구판" wrap gap="075">
         {[NONE, ...category.supersedesOptions].map((option) => {
           const checked = option.id === category.supersedesId;
           return (

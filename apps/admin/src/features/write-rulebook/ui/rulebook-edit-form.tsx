@@ -4,7 +4,7 @@ import { Button, Field, HStack, TextInput, VStack, toast } from "@roll-and-call/
 import { useRouter } from "next/navigation";
 import { useState, useTransition, type ReactNode } from "react";
 
-import { RULEBOOK_KIND_DESCRIPTION, formatDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { RulebookActionResult, RulebookDetail } from "@/shared/server";
 import { ConflictNotice, Panel } from "@/shared/ui";
 
@@ -15,7 +15,7 @@ import { draftCategory } from "../model/draft-category";
 import type { RulebookDraft } from "../model/rulebook-draft";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
-import { KindSegmentField } from "./kind-segment-field";
+import { KindCards } from "./kind-cards";
 import { SupersedesField } from "./supersedes-field";
 
 type Conflict = Extract<RulebookActionResult, { ok: false }>["conflict"];
@@ -23,11 +23,10 @@ type Conflict = Extract<RulebookActionResult, { ok: false }>["conflict"];
 interface RulebookEditFormProps {
   rulebook: RulebookDetail;
   aside: ReactNode;
-  children: ReactNode;
 }
 
 // 기본 정보와 인증 정책을 한 번에 저장한다. 변경 사유는 하단 한 칸이 저장과 숨김 모두에 쓰인다.
-export function RulebookEditForm({ rulebook, aside, children }: RulebookEditFormProps) {
+export function RulebookEditForm({ rulebook, aside }: RulebookEditFormProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const saved: RulebookDraft = {
@@ -50,10 +49,7 @@ export function RulebookEditForm({ rulebook, aside, children }: RulebookEditForm
   );
   const categories = [...new Set(rulebook.allRulebooks.map((row) => row.category))];
   const certifiedCount = rulebook.certifiedGms.length;
-  const kindDescription =
-    certifiedCount > 0
-      ? `종류를 바꾸면 인증된 GM ${certifiedCount}명의 구인 자격도 함께 바뀝니다.`
-      : RULEBOOK_KIND_DESCRIPTION[draft.kind];
+  const kindDescription = `종류를 바꾸면 인증된 GM ${certifiedCount}명의 구인 자격도 함께 바뀝니다.`;
   const hasReason = Boolean(reason.trim());
   const canSave = dirty && hasReason && Boolean(draft.name.trim()) && !category.error && !pending;
   const canHide = hasReason && !pending && !rulebook.hidden;
@@ -109,21 +105,27 @@ export function RulebookEditForm({ rulebook, aside, children }: RulebookEditForm
               disabled={pending}
               onChange={change}
             >
-              <div className="grid grid-cols-2 items-start gap-150">
-                <KindSegmentField
-                  kind={draft.kind}
-                  description={kindDescription}
-                  disabled={pending}
-                  onChange={(kind) => change({ kind })}
-                />
-                <SupersedesField
-                  draft={draft}
-                  category={category}
-                  idPrefix="rulebook"
-                  disabled={pending}
-                  onChange={(supersedesId) => change({ supersedesId })}
-                />
-              </div>
+              <VStack gap="175" className="border-t border-(--rc-color-border-subtle) pt-175">
+                <Field.Root
+                  label="종류"
+                  description={certifiedCount > 0 ? kindDescription : undefined}
+                >
+                  <KindCards
+                    kind={draft.kind}
+                    disabled={pending}
+                    onChange={(kind) => change({ kind })}
+                  />
+                </Field.Root>
+                <div className="max-w-[420px]">
+                  <SupersedesField
+                    draft={draft}
+                    category={category}
+                    idPrefix="rulebook"
+                    disabled={pending}
+                    onChange={(supersedesId) => change({ supersedesId })}
+                  />
+                </div>
+              </VStack>
             </BasicInfoFields>
           </Panel>
           <Panel title="인증 정책" bodyClassName="p-175">
@@ -133,7 +135,6 @@ export function RulebookEditForm({ rulebook, aside, children }: RulebookEditForm
               onChange={(certRequired) => change({ certRequired })}
             />
           </Panel>
-          {children}
         </VStack>
         {aside}
       </div>

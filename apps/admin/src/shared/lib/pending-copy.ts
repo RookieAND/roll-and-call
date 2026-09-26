@@ -13,7 +13,7 @@ export const PENDING_COPY = {
   },
   rulebookRequest: {
     label: "룰북 추가 요청",
-    href: "/rules",
+    href: "/rules?tab=requests",
     icon: FileText,
     shortcut: "B",
     homeSub: (days: number) => `가장 오래된 요청이 ${days}일째 처리를 기다리고 있습니다`,

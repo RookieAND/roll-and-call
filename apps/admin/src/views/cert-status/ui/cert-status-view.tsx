@@ -1,7 +1,7 @@
 import { Chip, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { CERT_TABS, formatDate, paginate, withQuery } from "@/shared/lib";
+import { CERT_TABS, paginate, withQuery } from "@/shared/lib";
 import type { CertStatusData } from "@/shared/server";
 import {
   AdminHeader,
@@ -9,65 +9,95 @@ import {
   ListPager,
   Panel,
   RouteTabs,
-  UrlSelect,
-  UserPreview,
+  UrlSearchInput,
 } from "@/shared/ui";
 
 import { CERT_STATUS_TAB, type CertStatusTab } from "../model/cert-status-tab";
+import { GM_CERT_VIEW, type GmCertView } from "../model/gm-cert-view";
 import { CertStatusTabs } from "./cert-status-tabs";
 import { CertSummary } from "./cert-summary";
+import { EditionCertTable } from "./edition-cert-table";
 import { GmCertTable } from "./gm-cert-table";
-import { RulebookCertTable } from "./rulebook-cert-table";
+import { GmDoneTable } from "./gm-done-table";
 
 interface CertStatusViewProps {
   status: CertStatusData;
   tab: CertStatusTab;
-  allTime: boolean;
-  unappliedOnly: boolean;
+  // 판본별: 모든 GM이 인증을 마친 판본까지 볼지. GM별: 조치 필요·인증 완료·전체.
+  allEditions: boolean;
+  gmView: GmCertView;
+  query?: string;
   page?: string;
 }
 
-export function CertStatusView({ status, tab, allTime, unappliedOnly, page }: CertStatusViewProps) {
+export function CertStatusView({
+  status,
+  tab,
+  allEditions,
+  gmView,
+  query,
+  page,
+}: CertStatusViewProps) {
   const gmTab = tab === CERT_STATUS_TAB.gm;
-  const { enforcementDate } = status.guideDm;
-  const enforcementFrom = enforcementDate ? `${formatDate(enforcementDate)}부터` : "적용일부터";
-  const sessionLabel = allTime ? "전체 세션" : "최근 90일 세션";
-  const gmRows = unappliedOnly
-    ? status.gmRows.filter((row) => row.state === "unapplied")
-    : status.gmRows;
-  const pagedRulebooks = paginate(status.rulebookRows, page);
+  const openEditions = status.editionRows.filter((row) => row.pendingCount || row.unappliedCount);
+  const editionRows = allEditions ? status.editionRows : openEditions;
+  const searched = status.gmRows.filter((row) => !query || row.nickname.includes(query));
+  const gmGroups = {
+    todo: searched.filter((row) => row.state !== "certified"),
+    done: searched.filter((row) => row.state === "certified"),
+    all: searched,
+  };
+  const gmRows = gmGroups[gmView];
+  const pagedEditions = paginate(editionRows, page);
   const pagedGms = paginate(gmRows, page);
-  const paged = gmTab ? pagedGms : pagedRulebooks;
+  const paged = gmTab ? pagedGms : pagedEditions;
   const pager = (
     <ListPager
       page={paged.page}
       totalPages={paged.totalPages}
-      total={gmTab ? gmRows.length : status.rulebookRows.length}
+      total={gmTab ? gmRows.length : editionRows.length}
       unit={gmTab ? "명" : "개"}
     />
   );
-  const unappliedHref = withQuery(
-    "/cert/status",
-    { tab: CERT_STATUS_TAB.gm },
-    { unapplied: unappliedOnly ? undefined : "1" },
-  );
-  const toolbar = gmTab ? (
-    <Chip selected={unappliedOnly} render={<Link href={unappliedHref} scroll={false} />}>
-      미신청만
+  const filterChip = (label: string, selected: boolean, href: string) => (
+    <Chip key={label} selected={selected} render={<Link href={href} scroll={false} />}>
+      {label}
     </Chip>
+  );
+  const gmHref = (view: GmCertView) =>
+    withQuery(
+      "/cert/status",
+      { tab: CERT_STATUS_TAB.gm, q: query },
+      { view: view === GM_CERT_VIEW.todo ? undefined : view },
+    );
+  const toolbar = gmTab ? (
+    <>
+      <UrlSearchInput placeholder="닉네임 검색" size="sm" className="w-[180px]" />
+      {filterChip(
+        `조치 필요 ${gmGroups.todo.length}`,
+        gmView === GM_CERT_VIEW.todo,
+        gmHref(GM_CERT_VIEW.todo),
+      )}
+      {filterChip(
+        `인증 완료 ${gmGroups.done.length}`,
+        gmView === GM_CERT_VIEW.done,
+        gmHref(GM_CERT_VIEW.done),
+      )}
+      {filterChip(
+        `전체 ${gmGroups.all.length}`,
+        gmView === GM_CERT_VIEW.all,
+        gmHref(GM_CERT_VIEW.all),
+      )}
+    </>
   ) : (
     <>
-      <UrlSelect
-        param="scope"
-        allLabel="최근 90일 활동 GM"
-        options={[{ label: "전체 기간", value: "all" }]}
-        className="w-[162px] [&_[data-slot=select-trigger]]:h-[32px] [&_[data-slot=select-trigger]]:min-h-[32px]"
-      />
+      {filterChip(`미인증 GM 있음 ${openEditions.length}`, !allEditions, "/cert/status")}
+      {filterChip(`전체 ${status.editionRows.length}`, allEditions, "/cert/status?all=1")}
       <CsvExportButton
-        fileName="룰북별 인증 현황.csv"
-        header={["룰북", "인증된 GM", "심사 대기", "미신청", sessionLabel]}
-        rows={status.rulebookRows.map((row) => [
-          row.rulebook,
+        fileName="판본별 인증 현황.csv"
+        header={["판본", "인증된 GM", "심사 대기", "미신청", "최근 90일 세션"]}
+        rows={editionRows.map((row) => [
+          row.edition,
           row.certifiedCount,
           row.pendingCount,
           row.unappliedCount,
@@ -82,28 +112,25 @@ export function CertStatusView({ status, tab, allTime, unappliedOnly, page }: Ce
       <AdminHeader title="룰북 인증" sub="인증 현황" />
       <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/status" />
       <VStack gap="150" className="flex-1 p-200">
-        <CertSummary summary={status.summary} week={status.week} />
+        <CertSummary summary={status.summary} />
         <Panel footer={pager}>
           <CertStatusTabs
             tab={tab}
             toolbar={toolbar}
-            rulebookPanel={
-              <RulebookCertTable rows={pagedRulebooks.rows} sessionLabel={sessionLabel} />
+            rulebookPanel={<EditionCertTable rows={pagedEditions.rows} />}
+            gmPanel={
+              gmView === GM_CERT_VIEW.done ? (
+                <GmDoneTable rows={pagedGms.rows} />
+              ) : (
+                <GmCertTable rows={pagedGms.rows} />
+              )
             }
-            gmPanel={<GmCertTable rows={pagedGms.rows} />}
           />
         </Panel>
-        {gmTab ? (
-          <>
-            <UserPreview title="[안내 DM]으로 보내는 문구">
-              {status.guideDm.rulebook} 등 인증이 필요한 룰북은 {enforcementFrom} 인증을 받아야
-              구인을 열 수 있어요. 앱의 [마이페이지 → GM 룰북]에서 사진 3장(앞·뒤·옆)을 올려 신청해
-              주세요.
-            </UserPreview>
-            <Text typography="body4" foreground="hint">
-              제재 중인 사용자에게는 안내 DM을 보낼 수 없습니다.
-            </Text>
-          </>
+        {gmTab && gmView !== GM_CERT_VIEW.done ? (
+          <Text typography="body4" foreground="hint">
+            미신청 GM에게는 공지 채널에서 멘션하거나 개별로 연락합니다.
+          </Text>
         ) : null}
       </VStack>
     </>
