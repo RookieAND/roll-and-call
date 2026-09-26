@@ -51,7 +51,7 @@ export function GradedRoll({ value, grade, typography }: GradedRollProps) {
           typography={typography}
           weight="extrabold"
           foreground="inherit"
-          className="relative tracking-tight"
+          className="relative"
         >
           {value}
         </Text>
