@@ -27,8 +27,7 @@ export function DrawRulesPopover() {
             서버가 신청자마다 1d100을 굴립니다.
             <br />
             낮은 숫자부터 정원만큼 확정되고, 나머지는 대기로 남습니다.
-            <br />
-            1은 대성공, 2~5는 극단적 성공으로 표시합니다.
+            <br />5 이하는 대성공, 6~19는 극단적 성공으로 표시합니다.
           </Text>
         </VStack>
       </Popover.Popup>
