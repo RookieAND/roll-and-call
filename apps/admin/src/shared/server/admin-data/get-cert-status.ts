@@ -13,7 +13,7 @@ export interface GmCertRow {
   nickname: string;
   sanctioned: boolean;
   recentSessionCount: number;
-  // GM이 될 수 있는 판본("크툴루의 부름 7판").
+  // 직접 인증한 판본("크툴루의 부름 7판"). 신판 인증으로 함께 열린 구판은 세지 않는다.
   certifiedEditions: string[];
   pending: { applicationId: string; rulebook: string; waitedDays: number } | null;
   state: GmCertState;
@@ -58,7 +58,7 @@ export async function getCertStatus() {
         sanctioned: isSanctioned(user, now),
         recentSessionCount: user.recentHostedCount,
         certifiedEditions: groups
-          .filter((group) => group.eligible(certifiedIds))
+          .filter((group) => group.certified(certifiedIds))
           .map((group) => group.label),
         pending: application
           ? {

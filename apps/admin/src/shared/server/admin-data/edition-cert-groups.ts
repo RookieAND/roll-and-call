@@ -19,13 +19,16 @@ export function editionCertGroups(rulebooks: Rulebook[]) {
       const coverIds = cores
         .filter((core) => core.supersedesId !== null && bookIds.has(core.supersedesId))
         .map((core) => core.id);
+      const certified = (certifiedIds: Set<string>) =>
+        required.every((core) => certifiedIds.has(core.id));
       return {
         label: `${category} ${edition}`.trim(),
         bookIds,
         certRequired: required.some((core) => core.certRequired),
+        // 이 판본의 기본 룰북을 직접 모두 인증했는지. 신판 인증으로 열린 구판은 빠진다.
+        certified,
         eligible: (certifiedIds: Set<string>) =>
-          required.every((core) => certifiedIds.has(core.id)) ||
-          coverIds.some((id) => certifiedIds.has(id)),
+          certified(certifiedIds) || coverIds.some((id) => certifiedIds.has(id)),
       };
     })
     .filter((group) => group.certRequired);

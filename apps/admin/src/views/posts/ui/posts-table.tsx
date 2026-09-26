@@ -16,7 +16,7 @@ interface PostsTableProps {
 export function PostsTable({ rows }: PostsTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[240, 104, 140, 192, 76, 112, 118, 110]} />
+      <TableColumns widths={[360, 104, 210, 192, 76, 112, { fixed: 110 }, { fixed: 110 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>제목</Table.Head>

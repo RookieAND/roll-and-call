@@ -45,4 +45,9 @@ describe("editionCertGroups", () => {
     expect(group("크툴루의 부름 6판").eligible(new Set(["7판"]))).toBe(true);
     expect(group("크툴루의 부름 7판").eligible(new Set(["6판"]))).toBe(false);
   });
+
+  it("신판 인증으로 열린 구판은 직접 인증한 판본이 아니다", () => {
+    expect(group("크툴루의 부름 6판").certified(new Set(["7판"]))).toBe(false);
+    expect(group("크툴루의 부름 7판").certified(new Set(["7판"]))).toBe(true);
+  });
 });
