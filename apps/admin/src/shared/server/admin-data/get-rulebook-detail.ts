@@ -1,5 +1,5 @@
 import "server-only";
-import { categoryRequirements } from "./category-requirements";
+import { categoryEditions } from "./category-editions";
 import { listRulebooks } from "./list-rulebooks";
 import { rulebookLabel } from "./rulebook-label";
 import { loadSnapshot } from "./snapshot";
@@ -36,9 +36,7 @@ export async function getRulebookDetail(id: string) {
     .toSorted((a, b) => a.approvedAt.getTime() - b.approvedAt.getTime());
   const { rows: allRulebooks } = await listRulebooks();
   const categoryBooks = allRulebooks.filter((row) => row.category === rulebook.category);
-  const requirements = categoryRequirements(
-    db.rulebooks.filter((candidate) => candidate.category === rulebook.category),
-  );
+  const editions = categoryEditions(categoryBooks);
   return {
     ...rulebook,
     aliases: [...rulebook.aliases],
@@ -46,7 +44,7 @@ export async function getRulebookDetail(id: string) {
     certifiedGms,
     allRulebooks,
     categoryBooks,
-    requirements,
+    editions,
   };
 }
 

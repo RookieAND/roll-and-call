@@ -79,7 +79,7 @@ export {
 } from "./update-cert-enforcement-date";
 export { addRulebook, type AddRulebookResult } from "./add-rulebook";
 export { approveRulebookRequest, type ApproveRequestResult } from "./approve-rulebook-request";
-export { type CategoryRequirement } from "./category-requirements";
+export { type CategoryEdition } from "./category-editions";
 export { getRulebookDetail, type CertifiedGm, type RulebookDetail } from "./get-rulebook-detail";
 export { grantCertification, type GrantResult } from "./grant-certification";
 export { hideRulebook } from "./hide-rulebook";

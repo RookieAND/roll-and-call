@@ -1,4 +1,5 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
+import { BookOpen } from "lucide-react";
 
 import type { RulebookCategory } from "@/shared/server";
 
@@ -6,17 +7,13 @@ interface CategoryRowProps {
   category: RulebookCategory;
 }
 
-// 카테고리 머리 행. 책이 두 권 이상이면 판본별 GM 조건을 함께 적는다.
+// 카테고리 머리 행. 단권 룰도 머리 행을 두어 모든 책이 카테고리 아래에 놓인다. GM 조건은 상세의 카테고리 카드에서 본다.
 export function CategoryRow({ category }: CategoryRowProps) {
-  const hosting = category.requirements.filter((requirement) => requirement.hosting);
-  const condition =
-    category.bookCount > 1
-      ? `GM 조건 · ${hosting.map((requirement) => `${requirement.label}: ${requirement.requirement}`).join(" / ")}`
-      : "";
   return (
     <Table.Row className="bg-(--rc-color-bg-canvas-raised)">
-      <Table.Cell>
-        <HStack align="baseline" gap="100">
+      <Table.Cell colSpan={8}>
+        <HStack align="center" gap="075">
+          <BookOpen size={16} aria-hidden className="shrink-0 text-gray-600" />
           <Text typography="body3" weight="bold" truncate>
             {category.name}
           </Text>
@@ -24,12 +21,6 @@ export function CategoryRow({ category }: CategoryRowProps) {
             {category.bookCount}권
           </Text>
         </HStack>
-      </Table.Cell>
-      <Table.Cell colSpan={2} />
-      <Table.Cell colSpan={5}>
-        <Text typography="body4" foreground="hint" truncate title={condition || undefined}>
-          {condition}
-        </Text>
       </Table.Cell>
     </Table.Row>
   );

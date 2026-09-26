@@ -1,7 +1,6 @@
 import "server-only";
 import { rulebookKind, type RulebookKind } from "@roll-and-call/database";
 
-import { categoryRequirements, type CategoryRequirement } from "./category-requirements";
 import { rulebookLabel } from "./rulebook-label";
 import { loadSnapshot } from "./snapshot";
 
@@ -22,7 +21,6 @@ export interface RulebookRow {
 export interface RulebookCategory {
   name: string;
   bookCount: number;
-  requirements: CategoryRequirement[];
 }
 
 // 카테고리끼리 모으고, 그 안에서는 기본 룰북 → 서플리먼트 → 핸드북 순이다. 검색어는 이름·판본·카테고리·다른 이름에서 부분 일치로 찾는다.
@@ -52,10 +50,10 @@ export async function listRulebooks({ query }: { query?: string } = {}) {
         a.label.localeCompare(b.label, "ko"),
     );
   const categories: RulebookCategory[] = [...new Set(rows.map((row) => row.category))].map(
-    (name) => {
-      const books = db.rulebooks.filter((rulebook) => rulebook.category === name);
-      return { name, bookCount: books.length, requirements: categoryRequirements(books) };
-    },
+    (name) => ({
+      name,
+      bookCount: db.rulebooks.filter((rulebook) => rulebook.category === name).length,
+    }),
   );
   const keyword = query?.trim().toLowerCase();
   const matches = (row: RulebookRow) =>
