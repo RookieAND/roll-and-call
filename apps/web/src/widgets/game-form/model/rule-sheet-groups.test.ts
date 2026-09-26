@@ -46,16 +46,13 @@ const data = (enforcementDate: Date | null) => {
 };
 
 describe("ruleSheetGroups", () => {
-  it("인증한 룰, 무료 배포 룰, 인증이 필요한 룰로 나눈다", () => {
+  it("카테고리마다 묶고 이름 순으로 늘어놓는다", () => {
     const groups = ruleSheetGroups(data(new Date("2026-10-01T00:00:00+09:00")), "", NOW);
-    expect(groups.mine.map(({ set }) => set.label)).toEqual(["크툴루의 부름 7판"]);
-    expect(groups.free.map(({ set }) => set.label)).toEqual(["사타스페"]);
-    expect(groups.needed.map(({ set, gate }) => [set.label, gate.type])).toEqual([
-      ["인세인", RULE_GATE.blocked],
-    ]);
+    expect(groups.map((group) => group.name)).toEqual(["사타스페", "인세인", "크툴루의 부름"]);
+    expect(groups[1]!.options.map(({ gate }) => gate.type)).toEqual([RULE_GATE.blocked]);
   });
 
   it("다른 이름으로도 찾는다", () => {
-    expect(ruleSheetGroups(data(null), "coc", NOW).mine).toHaveLength(1);
+    expect(ruleSheetGroups(data(null), "coc", NOW)).toHaveLength(1);
   });
 });

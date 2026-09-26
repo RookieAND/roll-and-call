@@ -1,4 +1,4 @@
-import { Badge, HStack, Text } from "@roll-and-call/ui";
+import { HStack, Text } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { Lock } from "lucide-react";
 import type { ReactNode } from "react";
@@ -27,7 +27,8 @@ interface RulebookOptionProps {
   disabled?: boolean;
   // 고를 수 없는 이유 대신 자물쇠로 시작하는 줄(인증이 필요한 룰북).
   locked?: boolean;
-  free?: boolean;
+  // 잠긴 줄을 눌러 안내를 펼쳤는지.
+  expanded?: boolean;
   reason?: ReactNode;
   onClick?: () => void;
 }
@@ -39,18 +40,19 @@ export function RulebookOption({
   selected = false,
   disabled = false,
   locked = false,
-  free = false,
+  expanded = false,
   reason,
   onClick,
 }: RulebookOptionProps) {
-  const nameForeground = disabled ? "hint" : "normal";
+  const nameForeground = disabled || locked ? "hint" : "normal";
   const nameWeight = selected ? "bold" : "medium";
   return (
     // ponytail: 라디오처럼 읽히되 잠긴 줄도 눌러 안내를 펼쳐야 해서 네이티브 radio 대신 button + aria-checked.
     <button
       type="button"
-      role="radio"
-      aria-checked={selected}
+      role={locked ? "button" : "radio"}
+      aria-checked={locked ? undefined : selected}
+      aria-expanded={locked ? expanded : undefined}
       aria-disabled={disabled}
       onClick={disabled ? undefined : onClick}
       className={row({ selected, disabled })}
@@ -72,7 +74,6 @@ export function RulebookOption({
           </Text>
         )}
       </HStack>
-      {free && <Badge>무료 배포</Badge>}
       {reason}
     </button>
   );
