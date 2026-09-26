@@ -183,7 +183,7 @@ export function BookPicker({
             </VStack>
           )}
         </VStack>
-        <div className="sticky bottom-0 z-(--rc-z-sticky) -mx-200 bg-surface px-200 pt-100 pb-200">
+        <div className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) -mx-200 bg-surface px-200 pt-100 pb-200">
           <Callout.Root colorPalette="gray">
             <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
             <Callout.Description className="break-keep">
