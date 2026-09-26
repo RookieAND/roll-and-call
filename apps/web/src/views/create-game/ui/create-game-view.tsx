@@ -6,11 +6,14 @@ import { getCurrentUser, getRulebookRecords } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { CreateGameForm } from "@/widgets/game-form";
 
+import { loadPreviousRound } from "../api/load-previous-round";
+
 interface CreateGameViewProps {
   rulebookId?: string;
+  previousGameId?: string;
 }
 
-export async function CreateGameView({ rulebookId }: CreateGameViewProps) {
+export async function CreateGameView({ rulebookId, previousGameId }: CreateGameViewProps) {
   const user = await getCurrentUser();
   if (!user) {
     return (
@@ -26,6 +29,16 @@ export async function CreateGameView({ rulebookId }: CreateGameViewProps) {
   }
 
   // 위저드가 단계별로 앱바·진행바를 바꾸므로 폼이 페이지 셸을 소유한다.
-  const rulebooks = toMyRulebooks(await getRulebookRecords(user.id));
-  return <CreateGameForm rulebooks={rulebooks} initialRulebookId={rulebookId} />;
+  const [records, previousRound] = await Promise.all([
+    getRulebookRecords(user.id),
+    previousGameId ? loadPreviousRound(previousGameId, user.id) : null,
+  ]);
+  return (
+    <CreateGameForm
+      rulebooks={toMyRulebooks(records)}
+      initialRulebookId={rulebookId}
+      defaultGame={previousRound?.template}
+      defaultPreConfirmed={previousRound?.preConfirmed}
+    />
+  );
 }

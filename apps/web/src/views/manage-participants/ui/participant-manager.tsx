@@ -77,15 +77,7 @@ export function ParticipantManager({
             attendanceStage={attendanceStage}
           />
 
-          {showNextRound && (
-            <NextRoundBanner
-              gameId={gameId}
-              title={title}
-              waitingCount={waiting.length}
-              maxPlayers={maxPlayers}
-              confirmedAt={confirmedAt}
-            />
-          )}
+          {showNextRound && <NextRoundBanner gameId={gameId} waitingCount={waiting.length} />}
         </VStack>
       </Container>
     </>

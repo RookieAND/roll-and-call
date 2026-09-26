@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form";
 
 import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 import { ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
-import type { GameFormValues } from "@/features/write-game";
+import type { GameFormValues, PreConfirmedPlayer } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
 import { toKstDateTimeInput } from "@/shared/lib";
-import type { Game } from "@/shared/server";
 import { toast, useAction } from "@/shared/ui";
 
+import type { GameDefaults } from "../model/game-defaults";
 import type { GameEditContext } from "../model/game-form-layout";
 import { gameFormResolver } from "../model/game-form-resolver";
 import { GAME_FORM_STEPS } from "../model/game-form-steps";
@@ -18,7 +18,8 @@ import { GameFormWizard } from "./game-form-wizard";
 
 interface GameFormProps {
   onSubmit: (values: GameFormValues) => Promise<ActionResult | void>;
-  defaultGame?: Game;
+  defaultGame?: GameDefaults;
+  defaultPreConfirmed?: PreConfirmedPlayer[];
   submitLabel: string;
   successMessage?: string;
   edit?: GameEditContext;
@@ -35,6 +36,7 @@ export function GameForm({
   edit,
   rulebooks,
   initialRulebookId,
+  defaultPreConfirmed = [],
 }: GameFormProps) {
   const { pending, run } = useAction();
   // 주소로 넘어온 책(서플리먼트일 수도 있다)은 그 판본의 룰로 바꿔 채운다.
@@ -65,7 +67,7 @@ export function GameForm({
       thumbnailSpoiler: defaultGame?.thumbnailSpoiler ?? false,
       images: defaultGame?.images ?? [],
       waitlistEnabled: defaultGame?.waitlistEnabled ?? true,
-      preConfirmed: [],
+      preConfirmed: defaultPreConfirmed,
     },
   });
 
