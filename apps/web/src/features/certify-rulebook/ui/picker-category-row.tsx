@@ -14,7 +14,7 @@ export function PickerCategoryRow({ category, onPick }: PickerCategoryRowProps) 
     <button
       type="button"
       onClick={onPick}
-      className="group flex min-h-[60px] w-full items-center gap-150 border-b border-gray-200 py-100 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+      className="group flex min-h-[60px] w-full cursor-pointer items-center gap-150 border-b border-gray-200 py-100 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
     >
       <VStack gap="025" className="min-w-0 flex-1">
         <HStack align="center" gap="075" wrap>

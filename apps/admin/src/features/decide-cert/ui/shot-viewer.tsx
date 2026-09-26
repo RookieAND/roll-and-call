@@ -73,7 +73,7 @@ export function ShotViewer({ shots, shot, photoUrls, onShotChange }: ShotViewerP
         {current ? (
           <>
             <HStack align="center" gap="125">
-              <Dialog.Title className="text-body3 font-bold">
+              <Dialog.Title className="text-body3">
                 {current.label} · {current.note}
               </Dialog.Title>
               <Text typography="body4" foreground="muted" numeric>

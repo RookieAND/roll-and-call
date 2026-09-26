@@ -630,3 +630,21 @@
     opacity: 1;
   }
 }
+
+/* Tailwind preflight는 버튼 커서를 default로 둔다. 누를 수 있는 요소는 모두 손가락 커서, 막힌 요소는 뺀다. 클래스로 준 커서가 이긴다. */
+@layer base {
+  :is(
+    button,
+    summary,
+    label[for],
+    [role="button"],
+    [role="radio"],
+    [role="checkbox"],
+    [role="switch"],
+    [role="tab"],
+    [role="option"],
+    [role="menuitem"]
+  ):not(:disabled, [aria-disabled="true"], [data-disabled]) {
+    cursor: pointer;
+  }
+}

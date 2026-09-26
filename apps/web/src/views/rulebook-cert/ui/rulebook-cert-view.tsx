@@ -70,9 +70,9 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
           )}
           {books.length > 1 && decided && (
             <Callout.Root>
-              <Callout.Description className="font-semibold">
+              <Callout.Title>
                 {books.length}권 중 {certifiedCount}권이 인증됐습니다.
-              </Callout.Description>
+              </Callout.Title>
             </Callout.Root>
           )}
           {books.map((book) => (
