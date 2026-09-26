@@ -40,20 +40,30 @@ export function CertPanel({ user, page }: CertPanelProps) {
         }
       >
         <Table.Root className="table-equal">
-          <TableColumns widths={[200, 96, 156, 120, 104]} />
+          <TableColumns
+            widths={[
+              { fixed: 240 },
+              { fixed: 96 },
+              { fixed: 156 },
+              { fixed: 120 },
+              0,
+              { fixed: 112 },
+            ]}
+          />
           <Table.Header>
             <Table.Row>
               <Table.Head>룰북</Table.Head>
               <Table.Head align="center">상태</Table.Head>
               <Table.Head>일자</Table.Head>
               <Table.Head>처리한 운영진</Table.Head>
+              <Table.Head />
               <Table.Head aria-label="조치" />
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {rows.length === 0 ? (
               <TableEmptyRow
-                colSpan={5}
+                colSpan={6}
                 image={EMPTY_IMAGE.myGames}
                 title="룰북 인증 기록이 없습니다"
                 description="인증을 신청하면 심사 결과가 이곳에 쌓입니다. 인증을 받기 전에는 인증이 필요한 룰북으로 구인을 열 수 없습니다."
@@ -86,7 +96,8 @@ export function CertPanel({ user, page }: CertPanelProps) {
                       </Text>
                     )}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell />
+                  <Table.Cell align="end">
                     {row.href && state.action ? (
                       <Button
                         variant={state.action.variant}

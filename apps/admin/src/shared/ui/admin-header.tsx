@@ -1,4 +1,4 @@
-import { Button, HStack, Text } from "@roll-and-call/ui";
+import { Button, cn, HStack, Text } from "@roll-and-call/ui";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -10,15 +10,20 @@ interface AdminHeaderProps {
   sub?: ReactNode;
   back?: { href: string; label: string };
   actions?: ReactNode;
+  // 오른쪽 조치 패널이 있는 화면. 왼쪽 끝은 본문 카드에, 오른쪽 끝은 패널 안 카드에 맞춘다.
+  withAside?: boolean;
 }
 
-export function AdminHeader({ title, sub, back, actions }: AdminHeaderProps) {
+export function AdminHeader({ title, sub, back, actions, withAside }: AdminHeaderProps) {
   return (
     <HStack
       align="center"
       gap="125"
       render={<header data-full-bleed />}
-      className="sticky top-0 z-(--rc-z-sticky) h-(--rc-size-appbar) shrink-0 border-b border-gray-200 bg-surface px-page whitespace-nowrap"
+      className={cn(
+        "sticky top-0 z-(--rc-z-sticky) h-(--rc-size-appbar) shrink-0 border-b border-gray-200 bg-surface whitespace-nowrap",
+        withAside ? "pr-150 pl-center-200" : "px-page",
+      )}
     >
       {back ? (
         <Button

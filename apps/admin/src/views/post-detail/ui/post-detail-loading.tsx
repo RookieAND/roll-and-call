@@ -18,9 +18,13 @@ export function PostDetailLoading() {
         title={<Skeleton width={160} height={22} render={<span />} className="inline-block" />}
         sub="구인 상세"
         back={{ href: "/posts", label: "구인 목록" }}
+        withAside
       />
-      <HStack align="stretch" className="flex-1">
-        <LoadingRegion label="구인 정보를 불러오는 중입니다" className="min-w-0 gap-150 p-200">
+      <HStack data-full-bleed align="stretch" className="flex-1">
+        <LoadingRegion
+          label="구인 정보를 불러오는 중입니다"
+          className="min-w-0 gap-150 px-center-200 py-200"
+        >
           <PostSummarySkeleton />
           <Panel className="flex-1">
             <SkeletonTabs items={[null, null, null, null]} />

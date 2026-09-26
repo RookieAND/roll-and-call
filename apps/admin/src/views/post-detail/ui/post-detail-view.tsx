@@ -68,9 +68,10 @@ export function PostDetailView({ post, tab, action, page, userAppUrl }: PostDeta
         title={post.title}
         sub={post.hidden ? "숨김 중" : "구인 상세"}
         back={{ href: "/posts", label: "구인 목록" }}
+        withAside
       />
-      <HStack align="stretch" className="flex-1">
-        <VStack gap="150" className="min-w-0 flex-1 p-200">
+      <HStack data-full-bleed align="stretch" className="flex-1">
+        <VStack gap="150" className="min-w-0 flex-1 px-center-200 py-200">
           {post.hidden ? <HiddenBanner hidden={post.hidden} logHref={logHref} /> : null}
           {direct ? (
             <Callout.Root colorPalette="gray" size="sm">

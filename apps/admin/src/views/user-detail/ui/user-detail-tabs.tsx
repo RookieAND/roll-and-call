@@ -37,7 +37,7 @@ export function UserDetailTabs({
         router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });
       }}
     >
-      <div className="bleed-left border-b border-gray-200 bg-surface px-200">
+      <div className="bleed border-b border-gray-200 bg-surface px-200">
         <Tabs.List aria-label="유저 상세 보기" scrollable={false} className="border-b-0">
           <Tabs.Trigger value={USER_DETAIL_TAB.activity}>활동</Tabs.Trigger>
           <Tabs.Trigger value={USER_DETAIL_TAB.cert}>룰북 인증</Tabs.Trigger>

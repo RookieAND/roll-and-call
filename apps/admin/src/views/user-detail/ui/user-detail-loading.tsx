@@ -28,9 +28,10 @@ export function UserDetailLoading() {
         title={<Skeleton width={96} height={22} render={<span />} />}
         sub="유저 상세"
         back={{ href: "/users", label: "유저 목록" }}
+        withAside
       />
-      <HStack align="stretch" className="flex-1">
-        <LoadingRegion label="유저 정보를 불러오는 중입니다" className="min-w-0 bg-gray-50">
+      <HStack data-full-bleed align="stretch" className="flex-1">
+        <LoadingRegion label="유저 정보를 불러오는 중입니다" className="min-w-0 px-center">
           <div className="p-200 pb-150">
             <section className="rounded-600 border border-gray-200 bg-surface">
               <HStack align="center" gap="150" className="px-200 py-175">
@@ -48,7 +49,7 @@ export function UserDetailLoading() {
             </section>
           </div>
           <Tabs.Root value={USER_DETAIL_TAB.activity}>
-            <div className="bleed-left border-b border-gray-200 bg-surface px-200">
+            <div className="bleed border-b border-gray-200 bg-surface px-200">
               <Tabs.List aria-label="유저 상세 보기" scrollable={false} className="border-b-0">
                 <Tabs.Trigger value={USER_DETAIL_TAB.activity}>활동</Tabs.Trigger>
                 <Tabs.Trigger value={USER_DETAIL_TAB.cert} disabled>

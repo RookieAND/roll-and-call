@@ -19,6 +19,22 @@
   padding-inline: calc(max(0px, (100% - var(--container-page)) / 2) + var(--spacing-225));
 }
 
+/* 오른쪽 조치 패널(aside)이 있는 화면. 줄(data-full-bleed)은 창 폭을 다 쓰고, aside는 창 오른쪽 끝에 붙는다.
+   본문 열은 남은 폭을 다 받고, 내용은 page − aside 폭 상자로 가운데 둔다.
+   padding의 %는 부모(줄 전체) 폭 기준이라 aside 폭이 식에서 지워진다: (본문 − (page − aside)) / 2 = (줄 − page) / 2. */
+@utility px-center {
+  padding-inline: max(0px, (100% - var(--container-page)) / 2);
+}
+
+@utility px-center-* {
+  padding-inline: calc(max(0px, (100% - var(--container-page)) / 2) + --value(--spacing-*));
+}
+
+/* aside 화면의 머리줄 왼쪽 끝을 본문 카드 왼쪽 끝에 맞춘다. */
+@utility pl-center-* {
+  padding-left: calc(max(0px, (100% - var(--container-page)) / 2) + --value(--spacing-*));
+}
+
 html {
   scrollbar-color: var(--rc-color-border-strong) transparent;
 }
@@ -53,11 +69,11 @@ body {
   font-weight: 700;
 }
 
-/* 본문이 page 폭으로 좁아져도 탭 바의 배경과 하단 선을 본문 열의 왼쪽 끝까지 이어 그린다. 오른쪽에 aside가 있는 화면용.
-   넘친 부분은 admin-main의 overflow-x: clip이 자른다. */
-@utility bleed-left {
+/* 본문이 가운데 상자로 좁아져도 탭 바의 배경과 하단 선을 본문 열 양 끝까지 이어 그린다. aside 화면용.
+   왼쪽 넘침은 admin-main의 overflow-x: clip이 자르고, 오른쪽은 sticky aside가 위에 그려져 가린다. */
+@utility bleed {
   border-image: linear-gradient(to top, var(--color-gray-200) 1px, var(--color-surface) 1px) 0 fill
-    / 0 / 0 0 0 100vmax;
+    / 0 / 0 100vmax;
 }
 
 /* 열이 TableColumns의 최소 폭을 지키며 남는 폭을 똑같이 나눠 받는다.

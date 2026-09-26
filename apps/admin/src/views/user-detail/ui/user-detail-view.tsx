@@ -28,9 +28,10 @@ export function UserDetailView({ user, tab, role, page }: UserDetailViewProps) {
         title={user.nickname}
         sub="유저 상세"
         back={{ href: "/users", label: "유저 목록" }}
+        withAside
       />
-      <HStack align="stretch" className="flex-1">
-        <VStack className="min-w-0 flex-1 bg-gray-50">
+      <HStack data-full-bleed align="stretch" className="flex-1">
+        <VStack className="min-w-0 flex-1 px-center">
           <UserStateCard user={user} />
           <UserDetailTabs
             tab={tab}
