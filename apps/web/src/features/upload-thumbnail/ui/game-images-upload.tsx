@@ -83,7 +83,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
         </Text>
       </HStack>
 
-      <Grid cols={5} gap="075">
+      <Grid cols={3} gap="075">
         {value.map((url, index) => (
           <div
             key={url}
@@ -125,7 +125,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
             onClick={() => inputRef.current?.click()}
             disabled={!canAdd}
             loading={uploading}
-            className="aspect-square h-auto min-h-0 rounded-400 border-dashed px-0 text-body4"
+            className="aspect-square h-auto min-h-0 rounded-400 border-[1.5px] border-dashed border-gray-300 bg-gray-50 px-0 text-body4 font-bold text-hint"
           >
             + 추가
           </Button>
@@ -134,7 +134,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
           <div
             key={index}
             aria-hidden
-            className="aspect-square rounded-400 border border-dashed border-gray-300 bg-gray-50"
+            className="aspect-square rounded-400 border-[1.5px] border-dashed border-gray-300 bg-gray-50"
           />
         ))}
       </Grid>

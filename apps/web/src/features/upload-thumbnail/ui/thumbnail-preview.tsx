@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { HStack, IconButton, Text, VStack } from "@roll-and-call/ui";
+import { RefreshCw, Trash2 } from "lucide-react";
 
 import { formatBytes } from "../model/format-bytes";
 
@@ -30,18 +31,17 @@ export function ThumbnailPreview({
         <Text truncate typography="body4" foreground="muted" className="min-w-0 flex-1">
           {picked ? `${picked.name} · ${formatBytes(picked.size)}` : "올린 이미지 · 16:9"}
         </Text>
-        <Button variant="ghost" size="sm" loading={uploading} onClick={onReplace}>
-          교체
-        </Button>
-        <Button
-          variant="ghost"
-          colorPalette="danger"
-          size="sm"
+        <IconButton aria-label="이미지 교체" disabled={uploading} onClick={onReplace}>
+          <RefreshCw size={20} aria-hidden />
+        </IconButton>
+        <IconButton
+          aria-label="이미지 삭제"
           disabled={uploading}
           onClick={onRemove}
+          className="text-danger-600 hover:bg-danger-50"
         >
-          삭제
-        </Button>
+          <Trash2 size={20} aria-hidden />
+        </IconButton>
       </HStack>
     </VStack>
   );
