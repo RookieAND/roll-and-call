@@ -30,10 +30,10 @@ export interface BookResult {
 }
 
 const BADGE: Record<string, BookResult["badge"]> = {
-  [CERT_STATE.certified]: { label: "인증됨", palette: "success" },
+  [CERT_STATE.certified]: { label: "승인됨", palette: "success" },
   [CERT_STATE.pending]: { label: "심사 중", palette: "gray" },
-  [CERT_STATE.rejected]: { label: "다시 신청 필요", palette: "warning" },
-  [CERT_STATE.revoked]: { label: "인증이 취소됐습니다", palette: "danger" },
+  [CERT_STATE.rejected]: { label: "반려됨", palette: "danger" },
+  [CERT_STATE.revoked]: { label: "취소됨", palette: "danger" },
 };
 
 // 신청 상세의 책 한 장. 반려면 사유·문제 사진·운영진 메모와 다시 신청, 취소면 취소 사유와 다시 신청.
@@ -43,10 +43,10 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
   const day = (at: Date | null | undefined) => (at ? toKst(at).format("MM.DD") : "");
   const format = application ? CERT_FORMAT_LABEL[application.format] : "운영진 인증";
   const stateMeta = {
-    [CERT_STATE.certified]: `${day(rulebook.stateAt)} 인증`,
-    [CERT_STATE.pending]: "",
+    [CERT_STATE.certified]: `${day(rulebook.stateAt)} 승인`,
+    [CERT_STATE.pending]: "운영진이 확인하고 있습니다",
     [CERT_STATE.rejected]: `${day(rulebook.stateAt)} 반려`,
-    [CERT_STATE.revoked]: `${day(rulebook.stateAt)} 취소`,
+    [CERT_STATE.revoked]: `${day(rulebook.stateAt)} 인증 취소`,
     [CERT_STATE.requested]: "",
   }[state];
   const rejected = state === CERT_STATE.rejected;
@@ -78,11 +78,13 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
     meta: [format, stateMeta].filter(Boolean).join(" · "),
     badge: BADGE[state] ?? BADGE[CERT_STATE.pending]!,
     reason: rejected
-      ? { label: "반려 사유", text: rejectionSummary(application), tone: "warning" }
+      ? { label: "반려 사유", text: rejectionSummary(application), tone: "danger" }
       : revoked
         ? {
-            label: "취소 사유",
-            text: rulebook.revokeReason ?? "운영진이 인증을 취소했습니다",
+            label: "인증이 취소됐습니다",
+            text: rulebook.revokeReason
+              ? `사유: ${rulebook.revokeReason}`
+              : "운영진이 인증을 취소했습니다",
             tone: "danger",
           }
         : null,

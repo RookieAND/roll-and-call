@@ -1,37 +1,35 @@
 import {
+  CERT_STATE,
   certApplyHref,
   isCertEnforced,
-  RULEBOOK_KIND,
-  SET_STATUS,
   setStatus,
   type MyRulebooks,
 } from "@/entities/rulebook";
 import { ddayKst, formatDate } from "@/shared/lib";
 
-import { nextTodos } from "./next-todos";
 import { recentUnopenedSets } from "./recent-unopened-sets";
-import { toExtraRow } from "./to-extra-row";
+import { toOwnedCategory } from "./to-owned-category";
 import { toRequestRow } from "./to-request-row";
-import { toSetRow } from "./to-set-row";
+import { toStatusRow } from "./to-status-row";
 
-const ROW_ORDER = ["warning", "danger", "primary", "gray", "success"];
+const STATUS_ORDER = [CERT_STATE.rejected, CERT_STATE.revoked, CERT_STATE.pending] as const;
+const STATUS_WORD = { rejected: "반려", revoked: "취소", pending: "심사 중" } as const;
 
-// 내 룰북 화면 한 장. 판본별 GM 자격은 손볼 것(반려·취소) → 남은 책 → 심사 중 → GM 가능 순.
+// 내 룰북 화면 한 장. 인증 현황(반려 → 취소 → 심사 중) → 인증한 룰북(카테고리별) → 추가 요청.
 export function myRulebooksHome(data: MyRulebooks, now: Date) {
   const { rulebooks, sets, enforcementDate, suspended, suspendedUntil } = data;
-  const rows = sets
-    .flatMap((set) => toSetRow(set, rulebooks, now) ?? [])
-    .toSorted((left, right) => ROW_ORDER.indexOf(left.tone) - ROW_ORDER.indexOf(right.tone));
-  const extras = rulebooks
-    .filter((rulebook) => rulebook.kind !== RULEBOOK_KIND.core && rulebook.state)
-    .map((rulebook) => toExtraRow(rulebook, now));
+  const inStatus = STATUS_ORDER.map((state) =>
+    rulebooks.filter((rulebook) => rulebook.state === state && !rulebook.unlockedBy),
+  );
+  const statusRows = inStatus.flat().map((rulebook) => toStatusRow({ rulebook, now }));
+  const statusSummary = STATUS_ORDER.flatMap((state, index) =>
+    inStatus[index]!.length > 0 ? `${STATUS_WORD[state]} ${inStatus[index]!.length}` : [],
+  ).join(" · ");
+  const certified = rulebooks.filter((rulebook) => rulebook.state === CERT_STATE.certified);
+  const owned = [...new Set(certified.map((rulebook) => rulebook.categoryId))].map((categoryId) =>
+    toOwnedCategory({ categoryId, rulebooks, sets }),
+  );
   const requests = data.requests.map(toRequestRow);
-  const count = (status: string) => sets.filter((set) => setStatus(set).status === status).length;
-  const ready = sets.filter((set) => set.earned).length;
-  const pending = count(SET_STATUS.pending);
-  const summary = [ready && `GM 가능 ${ready}`, pending && `심사 중 ${pending}`]
-    .filter(Boolean)
-    .join(" · ");
   const dday =
     enforcementDate && !isCertEnforced(enforcementDate, now) ? ddayKst(enforcementDate, now) : null;
   const [suggested] = recentUnopenedSets(data);
@@ -39,21 +37,21 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
     banner:
       dday !== null && !suspended
         ? {
-            text: `${formatDate(enforcementDate!)}부터 인증한 GM만 구인을 열 수 있습니다.`,
+            title: `${formatDate(enforcementDate!)}부터 룰북 인증이 필요합니다`,
             dday: dday === 0 ? "D-DAY" : `D-${dday}`,
           }
         : null,
     suspension: suspended
       ? suspendedUntil
-        ? `정지는 ${formatDate(suspendedUntil)}에 풀립니다.`
+        ? `활동 정지는 ${formatDate(suspendedUntil)}에 해제됩니다.`
         : "정지가 풀리면 다시 신청할 수 있습니다."
       : null,
-    todos: suspended ? [] : nextTodos(data, now),
-    summary,
-    rows,
-    extras,
+    statusRows,
+    statusSummary,
+    owned,
+    ownedSummary: `${certified.length}권`,
     requests,
-    empty: rows.length === 0 && extras.length === 0 && requests.length === 0,
+    empty: statusRows.length === 0 && owned.length === 0 && requests.length === 0,
     suggestion: suggested
       ? {
           lines: [
@@ -62,7 +60,6 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
               ? `${formatDate(enforcementDate!)} 전에 인증해 두세요.`
               : "인증해 두면 계속 열 수 있습니다.",
           ],
-          button: `${suggested.edition || suggested.categoryName} 인증 신청하기`,
           href: certApplyHref(setStatus(suggested).missing.map((core) => core.id)),
         }
       : null,

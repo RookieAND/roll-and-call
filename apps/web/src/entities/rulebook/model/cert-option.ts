@@ -11,7 +11,7 @@ export const CERT_OPTION = {
   certified: "certified",
   unlocked: "unlocked",
   pending: "pending",
-  // 서플리먼트인데 같은 판본 기본 룰북이 아직 없다. 기본 룰북을 함께 담으면 고를 수 있다.
+  // 서플리먼트인데 같은 판본 기본 룰북을 아직 다 인증하지 않았다(심사 중 포함).
   needsCore: "needsCore",
   pick: "pick",
 } as const;
@@ -44,16 +44,9 @@ export function certOption(
 
   if (rulebook.kind === RULEBOOK_KIND.supplement) {
     const missing = missingCores(rulebook, rulebooks);
-    const notApplied = missing.filter((core) => core.state !== CERT_STATE.pending);
-    if (notApplied.length > 0) {
-      return result(
-        CERT_OPTION.needsCore,
-        "같은 판본 기본 룰북을 먼저(또는 함께) 인증해야 합니다",
-        notApplied,
-      );
+    if (missing.length > 0) {
+      return result(CERT_OPTION.needsCore, "같은 판본의 기본 룰북을 먼저 인증해야 합니다", missing);
     }
-    if (missing.length > 0)
-      return result(CERT_OPTION.pick, "기본 룰북 결과가 나온 뒤에 확인합니다");
   }
 
   if (rulebook.state === CERT_STATE.rejected && rulebook.stateAt) {

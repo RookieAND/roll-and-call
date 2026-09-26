@@ -1,7 +1,13 @@
 import { Callout, Container, Text, VStack } from "@roll-and-call/ui";
 import { redirect } from "next/navigation";
 
-import { CERT_STATE, certApplyHref, toMyRulebooks } from "@/entities/rulebook";
+import {
+  CERT_STATE,
+  certApplyHref,
+  RULEBOOK_KIND,
+  setOf,
+  toMyRulebooks,
+} from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
 import { CancelApplicationButton } from "@/features/certify-rulebook";
 import { toKst } from "@/shared/lib";
@@ -32,7 +38,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
     );
   }
 
-  const { rulebooks } = toMyRulebooks(await getRulebookRecords(user.id));
+  const { rulebooks, sets } = toMyRulebooks(await getRulebookRecords(user.id));
   const rulebook = rulebooks.find((candidate) => candidate.id === rulebookId);
   if (!rulebook?.state) redirect(certApplyHref([rulebookId]));
 
@@ -41,6 +47,11 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
   const certifiedCount = books.filter((book) => book.state === CERT_STATE.certified).length;
   const decided = books.some((book) => book.state !== CERT_STATE.pending);
   const pending = books.some((book) => book.state === CERT_STATE.pending);
+  const set = rulebook.kind === RULEBOOK_KIND.core ? setOf(rulebook, sets) : null;
+  const setGuide =
+    set && !set.opened && set.cores.length > 1
+      ? `기본 룰북 ${set.cores.length}권이 모두 승인되어야 ${set.label} GM이 될 수 있습니다.`
+      : null;
 
   return (
     <>
@@ -50,6 +61,11 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
           {applied && (
             <Text typography="body3" weight="bold" foreground="muted" numeric>
               {toKst(applied).format("YYYY.MM.DD")} 신청 · {books.length}권
+            </Text>
+          )}
+          {setGuide && (
+            <Text typography="body3" foreground="muted" render={<p />} className="break-keep">
+              {setGuide}
             </Text>
           )}
           {books.length > 1 && decided && (

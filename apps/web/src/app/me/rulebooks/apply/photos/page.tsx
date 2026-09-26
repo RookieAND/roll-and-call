@@ -10,5 +10,6 @@ export default async function Page({
   searchParams: Promise<{ rulebook?: string | string[] }>;
 }) {
   const { rulebook } = await searchParams;
-  return <RulebookPhotosView rulebookIds={[rulebook ?? []].flat()} />;
+  const [rulebookId = ""] = [rulebook ?? []].flat();
+  return <RulebookPhotosView rulebookId={rulebookId} />;
 }

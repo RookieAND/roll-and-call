@@ -1,98 +1,100 @@
-import { Badge, Checkbox, Text, VStack } from "@roll-and-call/ui";
+import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
-import { CircleCheck, Clock, Lock } from "lucide-react";
+import { BookOpen, ChevronRight, CircleCheck, CircleMinus, Clock, Lock } from "lucide-react";
+import Link from "next/link";
 
-import { PICKER_ROW, type PickerRowType } from "../model/picker-row";
+import { CERT_OPTION, type CertOptionType } from "@/entities/rulebook";
 
-const row = cva("-mx-125 flex min-h-14 items-center gap-150 rounded-400 px-125 py-100", {
-  variants: {
-    selected: { true: "bg-primary-50", false: "" },
-    pickable: { true: "cursor-pointer hover:bg-gray-50", false: "" },
+const row = cva(
+  "flex min-h-[60px] items-center gap-150 rounded-500 border border-gray-200 px-175 py-150",
+  {
+    variants: {
+      pickable: {
+        true: "bg-surface transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+        false: "bg-gray-50",
+      },
+    },
   },
-  compoundVariants: [{ selected: true, pickable: true, className: "hover:bg-primary-50" }],
-});
+);
 
-const STATIC_ICON = {
-  certified: { icon: CircleCheck, className: "text-success-700" },
-  pending: { icon: Clock, className: "text-gray-600" },
-  locked: { icon: Lock, className: "text-hint" },
-} as const;
-
-const STATUS_BADGE = {
-  certified: { label: "인증됨", palette: "success" },
-  pending: { label: "심사 중", palette: "gray" },
+const STATUS = {
+  [CERT_OPTION.certified]: {
+    icon: CircleCheck,
+    className: "text-success-700",
+    badge: { label: "인증됨", palette: "success" },
+  },
+  [CERT_OPTION.pending]: {
+    icon: Clock,
+    className: "text-gray-600",
+    badge: { label: "심사 중", palette: "gray" },
+  },
+  [CERT_OPTION.needsCore]: { icon: Lock, className: "text-hint", badge: null },
+  [CERT_OPTION.free]: { icon: CircleMinus, className: "text-hint", badge: null },
+  [CERT_OPTION.unlocked]: { icon: CircleMinus, className: "text-hint", badge: null },
 } as const;
 
 interface PickerBookRowProps {
   title: string;
-  type: PickerRowType;
+  edition: string;
+  type: CertOptionType;
   note: string;
-  selected: boolean;
   rejected: boolean;
-  onToggle: () => void;
+  href: string;
 }
 
-// 책 고르기의 한 권. 고를 수 있으면 체크박스, 아니면 이유 아이콘과 한 줄.
-export function PickerBookRow({
-  title,
-  type,
-  note,
-  selected,
-  rejected,
-  onToggle,
-}: PickerBookRowProps) {
-  const pickable = type === PICKER_ROW.pick;
-  const locked = type === PICKER_ROW.locked;
-  const noteForeground = rejected ? "warning" : locked ? "hint" : "muted";
-  const staticIcon = pickable ? null : STATIC_ICON[type];
-  const Icon = staticIcon?.icon;
-  const badge =
-    type === PICKER_ROW.certified || type === PICKER_ROW.pending ? STATUS_BADGE[type] : null;
-
+// 책 고르기의 한 권. 고를 수 있으면 눌러서 바로 사진 단계로, 아니면 이유 아이콘과 한 줄.
+export function PickerBookRow({ title, edition, type, note, rejected, href }: PickerBookRowProps) {
+  const status = type === CERT_OPTION.pick ? null : STATUS[type];
+  const Icon = status?.icon ?? BookOpen;
+  const dimmed = type === CERT_OPTION.needsCore || type === CERT_OPTION.free;
   const body = (
     <>
-      <span className="flex w-[22px] flex-none justify-center">
-        {Icon ? (
-          <Icon size={20} strokeWidth={2.1} aria-hidden className={staticIcon.className} />
-        ) : (
-          <Checkbox.Root checked={selected} onCheckedChange={onToggle} aria-label={title}>
-            <Checkbox.Indicator />
-          </Checkbox.Root>
-        )}
-      </span>
-      <VStack gap="025" className="min-w-0 flex-1">
-        <Text
-          typography="body2"
-          weight={selected ? "bold" : "medium"}
-          foreground={pickable ? "normal" : "muted"}
-        >
-          {title}
-        </Text>
+      <Icon
+        size={22}
+        strokeWidth={2.1}
+        aria-hidden
+        className={`flex-none ${status?.className ?? "text-tinted-ink"}`}
+      />
+      <VStack gap="050" className="min-w-0 flex-1">
+        <HStack align="baseline" gap="075" wrap>
+          <Text
+            typography="body2"
+            weight="medium"
+            foreground={status ? (dimmed ? "hint" : "muted") : "normal"}
+          >
+            {title}
+          </Text>
+          {edition && (
+            <Text typography="body4" weight="medium" foreground="hint">
+              {edition}
+            </Text>
+          )}
+        </HStack>
         {note && (
-          <Text typography="body4" foreground={noteForeground} className="break-keep">
+          <Text
+            typography="body4"
+            foreground={rejected ? "warning" : "muted"}
+            className="break-keep"
+          >
             {note}
           </Text>
         )}
       </VStack>
-      {badge && (
-        <Badge colorPalette={badge.palette} className="flex-none">
-          {badge.label}
+      {status?.badge && (
+        <Badge colorPalette={status.badge.palette} className="flex-none">
+          {status.badge.label}
         </Badge>
       )}
-      {pickable && rejected && (
-        <Badge colorPalette="warning" className="flex-none">
-          반려됨
-        </Badge>
-      )}
+      {!status && <ChevronRight size={16} aria-hidden className="flex-none text-hint" />}
     </>
   );
-
-  return pickable ? (
-    // ponytail: 줄 전체를 눌러도 체크되도록 label로 감싼다.
-    <label className={row({ selected, pickable })}>{body}</label>
-  ) : (
-    <div aria-disabled className={row({ selected: false, pickable: false })}>
+  return status ? (
+    <div aria-disabled className={row({ pickable: false })}>
       {body}
     </div>
+  ) : (
+    <Link href={href} className={row({ pickable: true })}>
+      {body}
+    </Link>
   );
 }

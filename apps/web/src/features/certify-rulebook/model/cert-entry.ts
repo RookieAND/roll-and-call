@@ -1,10 +1,10 @@
 import { CERT_FORMAT, type CertFormat, type CertShot } from "@/entities/rulebook";
 
 import type { BookDraft } from "./book-draft";
+import { OTHER_SELLER } from "./other-seller";
 import { slotUrl } from "./photo-slot";
-import { OTHER_SELLER } from "./purchase-record";
 
-// 서버로 보내는 책 한 권의 신청.
+// 서버로 보내는 책 한 권의 신청. 실물은 사진 세 장, 전자책은 구매 내역·영수증과 주문 정보만 채운다.
 export interface CertEntry {
   rulebookId: string;
   format: CertFormat;
@@ -16,9 +16,9 @@ export interface CertEntry {
   orderDate: string;
 }
 
-export function toCertEntry(rulebookId: string, draft: BookDraft): CertEntry {
+export function toCertEntry({ rulebookId, draft }: { rulebookId: string; draft: BookDraft }) {
   const ebook = draft.format === CERT_FORMAT.ebook;
-  return {
+  const entry: CertEntry = {
     rulebookId,
     format: draft.format,
     photos: {
@@ -27,9 +27,10 @@ export function toCertEntry(rulebookId: string, draft: BookDraft): CertEntry {
       side: ebook ? "" : slotUrl(draft.shots.side),
     },
     seller: ebook ? (draft.seller === OTHER_SELLER ? draft.sellerOther.trim() : draft.seller) : "",
-    captureUrl: ebook ? slotUrl(draft.proofs.order) : draft.purchase.captureUrl,
+    captureUrl: ebook ? slotUrl(draft.proofs.order) : "",
     receiptUrl: ebook ? slotUrl(draft.proofs.receipt) : "",
-    orderNumber: draft.purchase.orderNumber.trim(),
-    orderDate: draft.purchase.orderDate.trim(),
+    orderNumber: ebook ? draft.orderNumber.trim() : "",
+    orderDate: ebook ? draft.orderDate.trim() : "",
   };
+  return entry;
 }

@@ -23,14 +23,14 @@ export function CancelApplicationButton({
   const { pending, run } = useAction();
   const description =
     bookCount > 1
-      ? `함께 낸 ${bookCount}권의 신청을 모두 거둡니다. 올린 사진도 함께 지워집니다.`
-      : "신청을 거두면 올린 사진도 함께 지워집니다.";
+      ? `함께 낸 ${bookCount}권의 신청을 모두 취소합니다. 올린 사진도 함께 지워집니다.`
+      : "신청을 취소하면 올린 사진도 함께 지워집니다.";
 
   const withdraw = () =>
     run(() => withdrawApplication(rulebookId), {
       onSuccess: () => {
         setOpen(false);
-        toast.success("신청을 거뒀습니다");
+        toast.success("신청을 취소했습니다");
       },
     });
 
@@ -42,15 +42,15 @@ export function CancelApplicationButton({
         className={className}
         onClick={() => setOpen(true)}
       >
-        신청 거두기
+        신청 취소
       </Button>
       <ConfirmDialog
         open={open}
         onOpenChange={setOpen}
-        title="신청을 거둘까요?"
+        title="신청을 취소할까요?"
         description={description}
         cancelLabel="돌아가기"
-        confirmLabel="신청 거두기"
+        confirmLabel="신청 취소"
         danger
         pending={pending}
         onConfirm={withdraw}

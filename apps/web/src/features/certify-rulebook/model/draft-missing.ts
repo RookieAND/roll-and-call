@@ -7,8 +7,8 @@ import {
 } from "@/entities/rulebook";
 
 import type { BookDraft } from "./book-draft";
+import { OTHER_SELLER } from "./other-seller";
 import { PHOTO_SLOT, slotUrl, type PhotoSlot } from "./photo-slot";
-import { OTHER_SELLER } from "./purchase-record";
 
 // 책 한 권에서 아직 채우지 않은 것 한 줄. 다 채웠으면 null.
 export function draftMissing(draft: BookDraft): string | null {
@@ -29,6 +29,6 @@ export function draftMissing(draft: BookDraft): string | null {
   if (!ebook) return null;
   const seller = draft.seller === OTHER_SELLER ? draft.sellerOther.trim() : draft.seller;
   if (!seller) return "판매처를 골라 주세요";
-  if (!draft.purchase.orderNumber.trim()) return "주문번호를 적어 주세요";
+  if (!draft.orderDate.trim()) return "주문일을 적어 주세요";
   return null;
 }

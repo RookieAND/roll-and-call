@@ -1,4 +1,4 @@
-import { Button, Callout, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
+import { Button, Callout, Container, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
 import { BookOpen, Plus } from "lucide-react";
 import Link from "next/link";
 
@@ -9,8 +9,8 @@ import { AppBar, LineBreaks } from "@/shared/ui";
 
 import { myRulebooksHome } from "../model/my-rulebooks-home";
 import { EnforcementBanner } from "./enforcement-banner";
-import { ExtraBooks } from "./extra-books";
 import { ListSection } from "./list-section";
+import { OwnedCategoryCard } from "./owned-category-card";
 
 const TITLE = "내 룰북";
 
@@ -38,7 +38,7 @@ export async function MyRulebooksView() {
       <AppBar back="/me" title={TITLE} />
       <Container size="sm">
         <VStack gap="250" className="pt-200 pb-250">
-          {home.banner && <EnforcementBanner text={home.banner.text} dday={home.banner.dday} />}
+          {home.banner && <EnforcementBanner title={home.banner.title} dday={home.banner.dday} />}
           {home.suspension && (
             <Callout.Root colorPalette="danger">
               <Callout.Icon />
@@ -49,11 +49,27 @@ export async function MyRulebooksView() {
               </Callout.Description>
             </Callout.Root>
           )}
-          {home.todos.length > 0 && <ListSection title="다음 할 일" rows={home.todos} />}
-          {(home.rows.length > 0 || home.extras.length > 0) && (
-            <ListSection title="판본별 GM 자격" aside={home.summary} rows={home.rows}>
-              {home.extras.length > 0 && <ExtraBooks rows={home.extras} />}
-            </ListSection>
+          {home.statusRows.length > 0 && (
+            <ListSection title="인증 현황" aside={home.statusSummary} rows={home.statusRows} />
+          )}
+          {home.owned.length > 0 && (
+            <VStack gap="150" render={<section />}>
+              <HStack align="baseline" gap="100">
+                <Text typography="heading3" render={<h2 />}>
+                  인증한 룰북
+                </Text>
+                <Text typography="body3" weight="medium" foreground="muted">
+                  {home.ownedSummary}
+                </Text>
+              </HStack>
+              {home.owned.map((category, index) => (
+                <OwnedCategoryCard
+                  key={category.key}
+                  category={category}
+                  defaultOpen={index === 0}
+                />
+              ))}
+            </VStack>
           )}
           {home.requests.length > 0 && (
             <ListSection title="추가 요청한 룰북" rows={home.requests} />
@@ -68,7 +84,7 @@ export async function MyRulebooksView() {
                   아직 인증한 룰북이 없습니다
                 </Text>
                 <Text typography="body3" foreground="muted" render={<p />}>
-                  구인을 열 룰북을 인증해 보세요.
+                  구인에 사용할 룰북을 먼저 인증해 주세요.
                 </Text>
               </VStack>
               {home.suggestion && !applyDisabled && (
@@ -78,7 +94,7 @@ export async function MyRulebooksView() {
                   </Callout.Description>
                   <Callout.Action>
                     <Button render={<Link href={home.suggestion.href} />} size="sm">
-                      {home.suggestion.button}
+                      신청하기
                     </Button>
                   </Callout.Action>
                 </Callout.Root>

@@ -6,7 +6,7 @@ interface CertRecord {
 }
 
 interface ApplicationRecord {
-  status: "pending" | "approved" | "rejected";
+  status: "pending" | "approved" | "rejected" | "withdrawn";
   createdAt: Date;
   processedAt: Date | null;
 }

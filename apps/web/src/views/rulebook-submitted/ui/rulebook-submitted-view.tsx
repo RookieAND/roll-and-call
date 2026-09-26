@@ -11,7 +11,7 @@ interface RulebookSubmittedViewProps {
   rulebookId: string;
 }
 
-// 신청 완료. 함께 낸 책을 모두 보여 준다.
+// 신청 완료. 예전에 여러 권을 함께 낸 신청이면 묶음을 모두 보여 준다.
 export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedViewProps) {
   const user = await getCurrentSessionUser();
   const { rulebooks } = toMyRulebooks(await getRulebookRecords(user?.id ?? null));
@@ -36,7 +36,7 @@ export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedVie
               <Check size={30} strokeWidth={2.4} aria-hidden />
             </span>
             <Text typography="heading1" render={<h1 />}>
-              신청했습니다
+              신청이 완료되었습니다
             </Text>
             <Text typography="body2" foreground="muted" render={<p />} className="break-keep">
               운영진이 확인하면 내 룰북에서 결과를 볼 수 있습니다.

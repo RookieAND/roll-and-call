@@ -47,12 +47,7 @@ export function BookResultCard({ result }: BookResultCardProps) {
                 aria-hidden
                 className={`mt-025 flex-none ${reasonClass}`}
               />
-              <Text
-                typography="body2"
-                weight="bold"
-                foreground={result.reason.tone}
-                className="break-keep"
-              >
+              <Text typography="body2" weight="bold" foreground="normal" className="break-keep">
                 {result.reason.text}
               </Text>
             </HStack>

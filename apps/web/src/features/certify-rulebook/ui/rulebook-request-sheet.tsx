@@ -1,29 +1,35 @@
 "use client";
 
-import { Button, Callout, Field, Sheet, Text, TextInput, VStack } from "@roll-and-call/ui";
+import {
+  Button,
+  Callout,
+  Field,
+  RadioCard,
+  RadioGroup,
+  Sheet,
+  Text,
+  TextInput,
+  VStack,
+} from "@roll-and-call/ui";
 import { useState } from "react";
 
-import type { MyRulebook } from "@/entities/rulebook";
 import { toast, useAction } from "@/shared/ui";
 
 import { requestRulebook } from "../api/request-rulebook";
 import {
   NEW_CATEGORY,
-  REQUEST_KIND_LABEL,
-  REQUEST_KINDS,
+  REQUEST_KIND_CARDS,
   UNKNOWN,
   type RulebookRequestValues,
 } from "../model/rulebook-request-form";
 import { OptionSelect } from "./option-select";
 import { SheetTitleRow } from "./sheet-title-row";
 
-const KIND_ITEMS = REQUEST_KINDS.map((kind) => ({ value: kind, label: REQUEST_KIND_LABEL[kind] }));
 const UNKNOWN_ITEM = { value: UNKNOWN, label: "잘 모르겠음" };
 
 interface RulebookRequestSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  rulebooks: MyRulebook[];
   categoryNames: string[];
   pendingRequestNames: string[];
   initialName: string;
@@ -33,7 +39,6 @@ interface RulebookRequestSheetProps {
 export function RulebookRequestSheet({
   open,
   onOpenChange,
-  rulebooks,
   categoryNames,
   pendingRequestNames,
   initialName,
@@ -53,19 +58,7 @@ export function RulebookRequestSheet({
     { value: NEW_CATEGORY, label: "목록에 없음 (새 카테고리)" },
     UNKNOWN_ITEM,
   ];
-  const editionItems = [
-    ...[
-      ...new Set(
-        rulebooks
-          .filter((rulebook) => rulebook.categoryName === category)
-          .map((rulebook) => rulebook.edition),
-      ),
-    ]
-      .filter(Boolean)
-      .map((value) => ({ value, label: value })),
-    UNKNOWN_ITEM,
-  ];
-  const typedEdition = edition === UNKNOWN ? "" : edition.trim();
+  const typedEdition = edition.trim();
   const requested = `${name.trim()} ${typedEdition}`.trim().toLowerCase();
   const duplicate = pendingRequestNames.some(
     (pendingName) => pendingName.toLowerCase() === requested,
@@ -140,10 +133,7 @@ export function RulebookRequestSheet({
                 placeholder="카테고리를 골라 주세요"
                 items={categoryItems}
                 value={category}
-                onChange={(value) => {
-                  setCategory(value);
-                  setEdition("");
-                }}
+                onChange={setCategory}
               />
               {category === NEW_CATEGORY && (
                 <>
@@ -160,36 +150,37 @@ export function RulebookRequestSheet({
                 </>
               )}
             </Field.Root>
-            <div className="grid grid-cols-2 gap-100">
-              <Field.Root label="판본" htmlFor="rulebook-request-edition" className="min-w-0">
-                {knownCategory ? (
-                  <OptionSelect
-                    id="rulebook-request-edition"
-                    placeholder="판본"
-                    items={editionItems}
-                    value={edition}
-                    onChange={setEdition}
-                  />
-                ) : (
-                  <TextInput
-                    id="rulebook-request-edition"
-                    maxLength={50}
-                    placeholder="모르면 비워 두기"
-                    value={edition}
-                    onChange={(event) => setEdition(event.target.value)}
-                  />
-                )}
-              </Field.Root>
-              <Field.Root label="종류" htmlFor="rulebook-request-kind" className="min-w-0">
-                <OptionSelect
-                  id="rulebook-request-kind"
-                  placeholder="종류"
-                  items={KIND_ITEMS}
-                  value={kind}
-                  onChange={(value) => setKind(value as RulebookRequestValues["kind"])}
-                />
-              </Field.Root>
-            </div>
+            <Field.Root label="판본" htmlFor="rulebook-request-edition">
+              <TextInput
+                id="rulebook-request-edition"
+                maxLength={50}
+                placeholder="예: 7판, 3rd, 신판"
+                value={edition}
+                onChange={(event) => setEdition(event.target.value)}
+              />
+              <Text typography="body4" foreground="muted">
+                비워 두면 '잘 모르겠음'으로 전달됩니다.
+              </Text>
+            </Field.Root>
+            <VStack gap="100">
+              <Text typography="body2" weight="bold">
+                종류
+              </Text>
+              <RadioGroup
+                value={kind}
+                onValueChange={(value) => setKind(value as RulebookRequestValues["kind"])}
+                aria-label="종류"
+                className="flex flex-col gap-100"
+              >
+                {REQUEST_KIND_CARDS.map((card) => (
+                  <RadioCard.Root key={card.value} value={card.value} indicator="radio">
+                    <RadioCard.Title>{card.title}</RadioCard.Title>
+                    <RadioCard.Description>{card.description}</RadioCard.Description>
+                    <RadioCard.Indicator />
+                  </RadioCard.Root>
+                ))}
+              </RadioGroup>
+            </VStack>
             <Field.Root label="참고 링크 (선택)" htmlFor="rulebook-request-link">
               <TextInput
                 id="rulebook-request-link"

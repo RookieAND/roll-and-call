@@ -1,114 +1,164 @@
 "use client";
 
-import { Button, Chip, Container, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
-import { Circle, CircleCheck } from "lucide-react";
+import { Button, Callout, Container, FloatingBar, Progress, Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
-import type { MyRulebook } from "@/entities/rulebook";
-import { useAction } from "@/shared/ui";
+import { certApplyHref, type MyRulebook } from "@/entities/rulebook";
+import { AppBar, LineBreaks, toast, useAction } from "@/shared/ui";
 
 import { submitCertification } from "../api/submit-certification";
-import { applyHint } from "../model/apply-hint";
-import type { BookDraft } from "../model/book-draft";
 import { toCertEntry } from "../model/cert-entry";
 import { draftMissing } from "../model/draft-missing";
 import { initialDraft } from "../model/initial-draft";
+import { QUIZ_ANSWER_FIELD } from "../model/quiz-answer-field";
 import { BookDraftCard } from "./book-draft-card";
+import { QuizStep } from "./quiz-step";
 
 interface CertApplyFormProps {
-  rulebooks: MyRulebook[];
+  rulebook: MyRulebook;
   nickname: string;
-  // 반려된 책 한 권을 다시 낼 때. 버튼 문구와 빈 칸 표시가 바뀐다.
-  retry: boolean;
+  sellers: string[];
+  // 사용 중인 본문 퀴즈가 있으면 3단계로 한 문항을 낸다.
+  quiz: { id: string; question: string } | null;
+  // 반려된 책을 다시 낼 때 위에 고정하는 반려 사유. 있으면 재신청 화면이다.
+  rejection: { title: string; lines: string[] } | null;
 }
 
-// 신청 2단계. 책 한 권씩 탭으로 넘기며 채우고, 모두 채우면 한 번에 낸다.
-export function CertApplyForm({ rulebooks, nickname, retry }: CertApplyFormProps) {
-  const [drafts, setDrafts] = useState<Record<string, BookDraft>>(() =>
-    Object.fromEntries(rulebooks.map((rulebook) => [rulebook.id, initialDraft(rulebook)])),
-  );
-  const [currentId, setCurrentId] = useState(rulebooks[0]!.id);
+// 신청 2단계(사진)와 3단계(퀴즈). 퀴즈가 틀리면 신청되지 않고 같은 문항에 다시 답한다.
+export function CertApplyForm({
+  rulebook,
+  nickname,
+  sellers,
+  quiz,
+  rejection,
+}: CertApplyFormProps) {
+  const [draft, setDraft] = useState(() => initialDraft({ rulebook, sellers }));
+  const [onQuiz, setOnQuiz] = useState(false);
+  const [answer, setAnswer] = useState("");
+  const [quizError, setQuizError] = useState<string | null>(null);
   const { pending, run } = useAction();
-
-  const current = rulebooks.find((rulebook) => rulebook.id === currentId) ?? rulebooks[0]!;
-  const draftList = rulebooks.map((rulebook) => drafts[rulebook.id]!);
-  const { ready, hint } = applyHint(draftList);
-  const multiple = rulebooks.length > 1;
-  const cta = retry ? "다시 신청하기" : multiple ? `${rulebooks.length}권 신청하기` : "신청하기";
-
-  const update = (rulebookId: string) => (updater: (draft: BookDraft) => BookDraft) =>
-    setDrafts((previous) => ({ ...previous, [rulebookId]: updater(previous[rulebookId]!) }));
+  const retry = rejection !== null;
+  const missing = draftMissing(draft);
+  const totalSteps = quiz ? 3 : 2;
+  const step = onQuiz ? 3 : 2;
+  const submitLabel = retry ? "다시 신청하기" : "신청하기";
 
   const submit = () =>
-    run(() =>
-      submitCertification(
-        rulebooks.map((rulebook) => toCertEntry(rulebook.id, drafts[rulebook.id]!)),
-      ),
+    run(
+      () =>
+        submitCertification({
+          entry: toCertEntry({ rulebookId: rulebook.id, draft }),
+          quiz: quiz ? { questionId: quiz.id, answer } : null,
+        }),
+      {
+        onError: (result) =>
+          result.field === QUIZ_ANSWER_FIELD
+            ? setQuizError(result.error)
+            : toast.error(result.error),
+      },
     );
+
+  const photoHint = missing ?? "";
+  const quizHint = quizError
+    ? "답을 고친 뒤 다시 신청해 주세요"
+    : answer.trim()
+      ? ""
+      : "답을 적으면 신청할 수 있습니다";
 
   return (
     <>
+      <AppBar
+        title={retry ? "다시 신청" : "인증 신청"}
+        {...(onQuiz
+          ? { onBack: () => setOnQuiz(false) }
+          : {
+              back: retry ? `/me/rulebooks/${rulebook.id}` : certApplyHref([rulebook.id]),
+            })}
+        action={
+          retry ? undefined : (
+            <Text typography="body4" foreground="hint" numeric className="px-100">
+              {step} / {totalSteps}
+            </Text>
+          )
+        }
+      />
+      {!retry && (
+        <Progress
+          value={step}
+          max={totalSteps}
+          className="h-[3px] rounded-none"
+          aria-label="진행"
+        />
+      )}
+      {rejection && !onQuiz && (
+        <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) border-b border-gray-100 bg-surface px-200 py-150">
+          <Callout.Root colorPalette="danger">
+            <Callout.Icon />
+            <Callout.Title>{rejection.title}</Callout.Title>
+            {rejection.lines.length > 0 && (
+              <Callout.Description className="break-keep">
+                <LineBreaks lines={rejection.lines} />
+              </Callout.Description>
+            )}
+          </Callout.Root>
+        </div>
+      )}
+
       <Container size="sm">
-        <VStack gap="200" className="pt-200 pb-250">
-          {multiple && (
-            <HStack role="tablist" aria-label="신청할 책" gap="100">
-              {rulebooks.map((rulebook) => {
-                const done = draftMissing(drafts[rulebook.id]!) === null;
-                const Icon = done ? CircleCheck : Circle;
-                const selected = rulebook.id === current.id;
-                return (
-                  <Chip
-                    key={rulebook.id}
-                    role="tab"
-                    aria-selected={selected}
-                    shape="block"
-                    selected={selected}
-                    onClick={() => setCurrentId(rulebook.id)}
-                    className="min-w-0"
-                  >
-                    <Icon
-                      size={16}
-                      strokeWidth={2.2}
-                      aria-hidden
-                      className={done ? "text-success-700" : undefined}
-                    />
-                    <Text typography="body3" weight="bold" foreground="inherit" truncate>
-                      {rulebook.shortName}
-                    </Text>
-                  </Chip>
-                );
-              })}
-            </HStack>
+        <div className="pt-200 pb-250">
+          {onQuiz && quiz ? (
+            <QuizStep
+              bookLabel={rulebook.label}
+              question={quiz.question}
+              answer={answer}
+              error={quizError}
+              onAnswerChange={(value) => {
+                setAnswer(value);
+                setQuizError(null);
+              }}
+            />
+          ) : (
+            <BookDraftCard
+              rulebook={rulebook}
+              draft={draft}
+              nickname={nickname}
+              sellers={sellers}
+              highlightEmpty={retry}
+              update={setDraft}
+            />
           )}
-          <BookDraftCard
-            key={current.id}
-            rulebook={current}
-            draft={drafts[current.id]!}
-            nickname={nickname}
-            highlightEmpty={retry}
-            update={update(current.id)}
-          />
-        </VStack>
+        </div>
       </Container>
 
       <FloatingBar.Root elevated={false}>
         <FloatingBar.Content>
           <Container size="sm">
             <VStack gap="100">
-              {hint && (
+              {(onQuiz ? quizHint : photoHint) && (
                 <Text typography="body4" weight="medium" foreground="muted" className="text-center">
-                  {hint}
+                  {onQuiz ? quizHint : photoHint}
                 </Text>
               )}
-              <Button
-                size="lg"
-                className="w-full"
-                disabled={!ready}
-                loading={pending}
-                onClick={submit}
-              >
-                {cta}
-              </Button>
+              {onQuiz || !quiz ? (
+                <Button
+                  size="lg"
+                  className="w-full"
+                  disabled={missing !== null || (onQuiz && !answer.trim())}
+                  loading={pending}
+                  onClick={submit}
+                >
+                  {submitLabel}
+                </Button>
+              ) : (
+                <Button
+                  size="lg"
+                  className="w-full"
+                  disabled={missing !== null}
+                  onClick={() => setOnQuiz(true)}
+                >
+                  다음
+                </Button>
+              )}
             </VStack>
           </Container>
         </FloatingBar.Content>

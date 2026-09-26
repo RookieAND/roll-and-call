@@ -1,7 +1,6 @@
 "use client";
 
-import { Badge, HStack, SegmentedControl, Text, VStack } from "@roll-and-call/ui";
-import { Camera, CircleAlert } from "lucide-react";
+import { Badge, Callout, HStack, SegmentedControl, Text, VStack } from "@roll-and-call/ui";
 import { useRef, useState } from "react";
 
 import {
@@ -11,7 +10,6 @@ import {
   CERT_PROOF,
   CERT_PROOF_LABEL,
   CERT_PROOFS,
-  CERT_SHOT,
   CERT_SHOT_LABEL,
   CERT_SHOTS,
   ProofArt,
@@ -29,22 +27,23 @@ import { PHOTO_SLOT, slotUrl, type PhotoSlot } from "../model/photo-slot";
 import { isProofKey, slotOf, type SlotKey } from "../model/slot-of";
 import { EbookFields } from "./ebook-fields";
 import { PhotoTile } from "./photo-tile";
-import { PurchaseRecordRow } from "./purchase-record-row";
 
 interface BookDraftCardProps {
   rulebook: MyRulebook;
   draft: BookDraft;
   nickname: string;
+  sellers: string[];
   // 재신청 화면은 비운 칸을 점선으로 먼저 보여 준다.
   highlightEmpty: boolean;
   update: (updater: (draft: BookDraft) => BookDraft) => void;
 }
 
-// 책 한 권의 신청 칸. 실물은 사진 세 칸, 전자책은 구매 내역·영수증 두 칸과 주문 정보.
+// 책 한 권의 신청 칸. 실물은 사진 세 칸, 전자책은 구매 내역·영수증 두 칸과 판매처·주문 정보.
 export function BookDraftCard({
   rulebook,
   draft,
   nickname,
+  sellers,
   highlightEmpty,
   update,
 }: BookDraftCardProps) {
@@ -134,6 +133,41 @@ export function BookDraftCard({
       </SegmentedControl.Root>
 
       <VStack gap="125">
+        <VStack gap="075" render={<ol />}>
+          {CERT_GUIDE[draft.format].map((line, index) => (
+            <HStack key={line} align="start" gap="100" render={<li />}>
+              <Text
+                typography="body4"
+                weight="bold"
+                foreground="muted"
+                numeric
+                className="mt-025 flex size-5 flex-none items-center justify-center rounded-full bg-gray-100"
+              >
+                {index + 1}
+              </Text>
+              <Text typography="body3" foreground="muted" className="min-w-0 flex-1 break-keep">
+                {line}
+              </Text>
+            </HStack>
+          ))}
+        </VStack>
+        {!ebook && (
+          <HStack align="center" gap="100">
+            <Text typography="body4" foreground="muted">
+              쪽지에 적을 닉네임
+            </Text>
+            <Text
+              typography="body4"
+              weight="bold"
+              className="rounded-200 border border-gray-200 bg-surface px-100 py-025 font-mono"
+            >
+              {nickname}
+            </Text>
+          </HStack>
+        )}
+      </VStack>
+
+      <VStack gap="125">
         <div className="flex gap-100">
           {keys.map((key) => (
             <PhotoTile
@@ -153,57 +187,21 @@ export function BookDraftCard({
           ))}
         </div>
         {errorMessage && (
-          <HStack align="start" gap="075" role="alert">
-            <CircleAlert
-              size={16}
-              strokeWidth={2.1}
-              aria-hidden
-              className="mt-025 flex-none text-warning-600"
-            />
-            <Text typography="body4" weight="bold" foreground="warning">
-              {errorMessage}
-            </Text>
-          </HStack>
+          <Callout.Root colorPalette="warning" role="alert">
+            <Callout.Icon />
+            <Callout.Description className="break-keep">{errorMessage}</Callout.Description>
+          </Callout.Root>
         )}
-        <HStack align="start" gap="075">
-          <Camera
-            size={16}
-            strokeWidth={2.1}
-            aria-hidden
-            className="mt-025 flex-none text-gray-600"
-          />
-          <Text typography="body3" foreground="muted" className="break-keep">
-            {CERT_GUIDE[current]}
-          </Text>
-        </HStack>
-        {current === CERT_SHOT.front && (
-          <HStack align="center" gap="100">
-            <Text typography="body4" foreground="muted">
-              쪽지에 적을 닉네임
-            </Text>
-            <Text
-              typography="body4"
-              weight="bold"
-              className="rounded-200 border border-gray-200 bg-surface px-100 py-025 font-mono"
-            >
-              {nickname}
-            </Text>
-          </HStack>
-        )}
-        {fileInput(CERT_SHOT.front)}
+        {fileInput(CERT_PROOF.order)}
         {fileInput(CERT_PROOF.receipt)}
       </VStack>
 
-      {ebook ? (
+      {ebook && (
         <EbookFields
           idPrefix={`cert-${rulebook.id}`}
+          sellers={sellers}
           draft={draft}
           onChange={(changes) => update((previous) => ({ ...previous, ...changes }))}
-        />
-      ) : (
-        <PurchaseRecordRow
-          value={draft.purchase}
-          onChange={(purchase) => update((previous) => ({ ...previous, purchase }))}
         />
       )}
     </VStack>

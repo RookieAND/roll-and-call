@@ -1,4 +1,4 @@
-import { Container, Progress } from "@roll-and-call/ui";
+import { Container, Progress, Text } from "@roll-and-call/ui";
 import { redirect } from "next/navigation";
 
 import { toMyRulebooks } from "@/entities/rulebook";
@@ -6,8 +6,6 @@ import { LoginRequired } from "@/features/auth";
 import { BookPicker } from "@/features/certify-rulebook";
 import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
-
-import { StepCount } from "./step-count";
 
 interface RulebookApplyViewProps {
   rulebookIds: string[];
@@ -36,12 +34,17 @@ export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps)
         back="/me/rulebooks"
         backIcon="close"
         title="인증 신청"
-        action={<StepCount step={1} />}
+        action={
+          <Text typography="body4" foreground="hint" numeric className="px-100">
+            1 / 2
+          </Text>
+        }
       />
       <Progress value={1} max={2} className="h-[3px] rounded-none" aria-label="진행" />
       <BookPicker
         rulebooks={data.rulebooks}
         initialRulebookIds={rulebookIds}
+        recentRulebookIds={data.recentRulebookIds}
         pendingRequestNames={data.pendingRequestNames}
       />
     </>

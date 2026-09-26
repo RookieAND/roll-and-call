@@ -17,11 +17,14 @@ export {
   rulebookCategories,
   certifications,
   certApplications,
+  rulebookQuizQuestions,
   rulebookRequests,
   sanctions,
   type CertApplication,
 } from "@roll-and-call/database";
 export { getRulebookRecords, type RulebookRecords } from "./db/get-rulebook-records";
+export { getCertSellers } from "./db/get-cert-sellers";
+export { getQuizQuestion } from "./db/get-quiz-question";
 export { getRecruitingGamesPage } from "./db/get-recruiting-games-page";
 export { getGamesCounts, type GamesCounts } from "./db/get-games-counts";
 export { getGamesByGm } from "./db/get-games-by-gm";
