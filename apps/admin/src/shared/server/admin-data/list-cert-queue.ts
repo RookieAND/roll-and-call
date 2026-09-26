@@ -24,6 +24,7 @@ export interface CertQueueRow {
   id: string;
   nickname: string;
   rulebook: string;
+  category: string;
   kind: RulebookKind;
   format: CertFormat;
   // 기본 룰북 결정을 기다리는 서플리먼트. 목록에서 흐리게 둔다.
@@ -44,12 +45,13 @@ export async function listCertQueue(filter: CertQueueFilter) {
     .toSorted((a, b) => a.appliedAt.getTime() - b.appliedAt.getTime())
     .map((application): CertQueueRow => {
       const user = db.users.find((candidate) => candidate.id === application.userId)!;
+      const book = db.rulebooks.find((rulebook) => rulebook.id === application.rulebookId);
       return {
         id: application.id,
         nickname: user.nickname,
         rulebook: application.rulebook,
-        kind:
-          db.rulebooks.find((rulebook) => rulebook.id === application.rulebookId)?.kind ?? "core",
+        category: book?.category ?? "",
+        kind: book?.kind ?? "core",
         format: application.format,
         waiting: certBlockers(application, db).waitingOn.length > 0,
         appliedAt: application.appliedAt,

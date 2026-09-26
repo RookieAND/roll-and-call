@@ -15,7 +15,6 @@ export function RulebookDetailLoading() {
       <AdminHeader
         title={<Skeleton width={120} height={22} render={<span />} />}
         sub="룰북 상세"
-        back={{ href: "/rules", label: "룰북" }}
         actions={
           <Button variant="outline" colorPalette="gray" size="sm" disabled>
             활동 기록에서 보기

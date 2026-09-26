@@ -1,10 +1,8 @@
-import { Badge, Text, VStack } from "@roll-and-call/ui";
-import { FileText } from "lucide-react";
+import { Badge, Table, Text, VStack } from "@roll-and-call/ui";
 
 import { RequestActions, type RequestAction } from "@/features/process-rulebook-request";
-import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { RulebookRequestRow } from "@/shared/server";
-import { ItemCard, Panel } from "@/shared/ui";
+import { Panel, TableColumns } from "@/shared/ui";
 
 interface RequestPanelProps {
   requests: RulebookRequestRow[];
@@ -17,45 +15,58 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
     <Panel
       title="룰북 추가 요청"
       right={<Badge colorPalette={countPalette}>{requests.length}건</Badge>}
-      bodyClassName="p-150"
+      bodyClassName={requests.length === 0 ? "p-150" : undefined}
     >
       {requests.length === 0 ? (
         <Text typography="body4" foreground="hint">
           대기 중인 요청이 없습니다.
         </Text>
       ) : (
-        <VStack gap="100">
-          {requests.map((request) => (
-            <ItemCard
-              key={request.id}
-              icon={FileText}
-              tone="primary"
-              title={request.name}
-              meta={[
-                `${request.requesterNickname} 요청`,
-                request.kind ? RULEBOOK_KIND_LABEL[request.kind] : null,
-                request.category,
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-              right={<RequestActions actionHref={(action) => actionHref(action, request.id)} />}
-            >
-              {request.note || request.similarTo ? (
-                <>
-                  {request.note ? <div>{request.note}</div> : null}
-                  {request.similarTo ? (
-                    <Text typography="body3" foreground="hint" render={<div />}>
-                      비슷한 룰북{" "}
-                      <Text typography="body3" weight="bold" foreground="normal" render={<b />}>
-                        {request.similarTo}
-                      </Text>
+        <Table.Root className="table-equal">
+          <TableColumns widths={[320, 120, 260, { fixed: 220 }]} />
+          <Table.Header>
+            <Table.Row>
+              <Table.Head>요청한 룰북</Table.Head>
+              <Table.Head>요청자</Table.Head>
+              <Table.Head>요청 메모</Table.Head>
+              <Table.Head />
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {requests.map((request) => (
+              <Table.Row key={request.id}>
+                <Table.Cell>
+                  <VStack gap="025" className="min-w-0">
+                    <Text typography="body3" weight="bold" className="break-keep">
+                      {request.name}
                     </Text>
-                  ) : null}
-                </>
-              ) : null}
-            </ItemCard>
-          ))}
-        </VStack>
+                    {request.similarTo && (
+                      <Text typography="body4" foreground="hint" truncate>
+                        비슷한 룰북: {request.similarTo}
+                      </Text>
+                    )}
+                  </VStack>
+                </Table.Cell>
+                <Table.Cell>
+                  <Text typography="body3" truncate>
+                    {request.requesterNickname}
+                  </Text>
+                </Table.Cell>
+                <Table.Cell>
+                  <Text typography="body3" foreground={request.note ? "normal" : "hint"}>
+                    {request.note || "—"}
+                  </Text>
+                </Table.Cell>
+                <Table.Cell align="end">
+                  <RequestActions
+                    similar={Boolean(request.similarTo)}
+                    actionHref={(action) => actionHref(action, request.id)}
+                  />
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Root>
       )}
     </Panel>
   );

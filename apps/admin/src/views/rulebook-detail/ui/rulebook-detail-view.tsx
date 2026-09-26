@@ -58,7 +58,6 @@ export function RulebookDetailView({
       <AdminHeader
         title={rulebook.label}
         sub={sub}
-        back={{ href: "/rules", label: "룰북" }}
         actions={
           <Button variant="outline" colorPalette="gray" size="sm" render={<Link href={logHref} />}>
             활동 기록에서 보기
