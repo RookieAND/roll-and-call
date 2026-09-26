@@ -1,6 +1,16 @@
 "use client";
 
-import { Button, Container, HStack, IconButton, Text, TextInput, VStack } from "@roll-and-call/ui";
+import {
+  Badge,
+  Button,
+  Card,
+  Container,
+  HStack,
+  IconButton,
+  Text,
+  TextInput,
+  VStack,
+} from "@roll-and-call/ui";
 import { ArrowRightLeft, Search } from "lucide-react";
 import { useState } from "react";
 
@@ -126,23 +136,28 @@ export function BookPicker({
 
           {category && (
             <VStack gap="300">
-              <HStack align="center" gap="100">
-                <HStack align="baseline" gap="100" className="min-w-0 flex-1">
-                  <Text typography="subtitle1">{category.name}</Text>
-                  {category.alias && (
-                    <Text typography="body4" foreground="hint" truncate>
-                      {category.alias}
+              <Card.Root background="subtle" padding="sm">
+                <HStack align="center" gap="100" className="pl-050">
+                  <VStack gap="050" className="min-w-0 flex-1">
+                    <Text typography="body4" weight="bold" foreground="muted">
+                      선택한 룰
                     </Text>
-                  )}
+                    <HStack align="center" gap="075" wrap>
+                      <Text typography="subtitle1">{category.name}</Text>
+                      {category.aliases.map((alias) => (
+                        <Badge key={alias}>{alias}</Badge>
+                      ))}
+                    </HStack>
+                  </VStack>
+                  <IconButton
+                    variant="ghost"
+                    aria-label="카테고리 바꾸기"
+                    onClick={() => setCategoryId(null)}
+                  >
+                    <ArrowRightLeft size={20} />
+                  </IconButton>
                 </HStack>
-                <IconButton
-                  variant="ghost"
-                  aria-label="카테고리 바꾸기"
-                  onClick={() => setCategoryId(null)}
-                >
-                  <ArrowRightLeft size={20} />
-                </IconButton>
-              </HStack>
+              </Card.Root>
               {kinds.map((kind) => (
                 <VStack key={kind} gap="100">
                   <VStack gap="025">

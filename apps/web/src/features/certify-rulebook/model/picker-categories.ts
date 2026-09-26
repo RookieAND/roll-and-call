@@ -17,7 +17,7 @@ export function pickerCategories(rulebooks: MyRulebook[], query: string) {
       return {
         id: category.id,
         name: category.name,
-        alias: [...new Set(aliases)].slice(0, MAX_ALIASES).join(" · "),
+        aliases: [...new Set(aliases)].slice(0, MAX_ALIASES),
         meta: editions.join(" · "),
         free: category.rulebooks.every((rulebook) => !rulebook.certRequired),
         editions: category.editions,

@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight, Lock } from "lucide-react";
 
 import type { PickerCategory } from "../model/picker-categories";
@@ -14,15 +14,13 @@ export function PickerCategoryRow({ category, onPick }: PickerCategoryRowProps) 
   const body = (
     <>
       <VStack gap="025" className="min-w-0 flex-1">
-        <HStack align="baseline" gap="100">
+        <HStack align="center" gap="075" wrap>
           <Text typography="body2" weight="bold" foreground={category.free ? "muted" : "normal"}>
             {category.name}
           </Text>
-          {category.alias && (
-            <Text typography="body4" foreground="hint" truncate>
-              {category.alias}
-            </Text>
-          )}
+          {category.aliases.map((alias) => (
+            <Badge key={alias}>{alias}</Badge>
+          ))}
         </HStack>
         <Text typography="body4" foreground="muted">
           {meta}
@@ -31,7 +29,11 @@ export function PickerCategoryRow({ category, onPick }: PickerCategoryRowProps) 
       {category.free ? (
         <Lock size={16} aria-hidden className="flex-none text-hint" />
       ) : (
-        <ChevronRight size={16} aria-hidden className="flex-none text-hint" />
+        <ChevronRight
+          size={16}
+          aria-hidden
+          className="flex-none text-hint transition-colors group-hover:text-gray-600"
+        />
       )}
     </>
   );
@@ -46,7 +48,7 @@ export function PickerCategoryRow({ category, onPick }: PickerCategoryRowProps) 
     <button
       type="button"
       onClick={onPick}
-      className={`${rowClass} hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus`}
+      className={`${rowClass} group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus`}
     >
       {body}
     </button>
