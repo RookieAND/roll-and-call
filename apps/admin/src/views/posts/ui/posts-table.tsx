@@ -16,7 +16,7 @@ interface PostsTableProps {
 export function PostsTable({ rows }: PostsTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[360, 104, 210, 192, 76, 112, { fixed: 110 }, { fixed: 110 }]} />
+      <TableColumns widths={[360, 125, 210, 192, 76, 112, { fixed: 110 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>제목</Table.Head>
@@ -30,7 +30,6 @@ export function PostsTable({ rows }: PostsTableProps) {
           </Table.Head>
           <Table.Head align="end">참여</Table.Head>
           <Table.Head align="center">상태</Table.Head>
-          <Table.Head align="end">처리 안 된 신고</Table.Head>
           <Table.Head>운영진 조치</Table.Head>
         </Table.Row>
       </Table.Header>
@@ -73,17 +72,6 @@ export function PostsTable({ rows }: PostsTableProps) {
                 <Text typography="body3" foreground="muted">
                   {row.status}
                 </Text>
-              </Table.Cell>
-              <Table.Cell align="end" numeric>
-                {reported ? (
-                  <Text typography="body3" weight="bold" foreground="danger">
-                    {row.unresolvedReportCount}건
-                  </Text>
-                ) : (
-                  <Text typography="body3" foreground="hint">
-                    —
-                  </Text>
-                )}
               </Table.Cell>
               <Table.Cell>
                 {row.staffAction ? (
