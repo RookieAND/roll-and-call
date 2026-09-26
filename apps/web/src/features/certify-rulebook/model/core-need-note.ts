@@ -8,5 +8,5 @@ export function coreNeedNote(books: MyRulebook[]) {
   if (editions.size === 1) {
     return cores.length > 1 ? `GM이 되려면 기본 룰북 ${cores.length}권이 모두 필요합니다.` : "";
   }
-  return "한 판본의 기본 룰북만 모두 인증하면 됩니다.";
+  return "한 판본의 기본 룰북만 인증하면 됩니다.";
 }
