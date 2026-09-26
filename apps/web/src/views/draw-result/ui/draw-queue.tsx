@@ -14,6 +14,9 @@ interface DrawQueueProps {
   previewCount: number;
 }
 
+// 이만큼까지는 접을 만큼 길지 않아 다 보여준다.
+const UNFOLDED_MAX = 3;
+
 // 확정선을 긋지 않고 목록을 두 통으로 나눈다. 어느 줄이든 지금 어느 통에 있는지 보이게 한다.
 export function DrawQueue({
   label,
@@ -26,7 +29,8 @@ export function DrawQueue({
   const rows = entries.map((entry) => (
     <DrawRow key={entry.userId} entry={entry} variant={variant} isMe={entry.userId === meUserId} />
   ));
-  const hiddenRows = rows.slice(previewCount);
+  const shownCount = entries.length > UNFOLDED_MAX ? previewCount : entries.length;
+  const hiddenRows = rows.slice(shownCount);
   const cardClass = cn(
     "overflow-hidden",
     variant === DRAW_ROW_VARIANT.highlight && "border-tinted-border",
@@ -49,7 +53,7 @@ export function DrawQueue({
       </HStack>
       {entries.length > 0 && (
         <Card.Root radius={500} padding="none" className={cardClass}>
-          {rows.slice(0, previewCount)}
+          {rows.slice(0, shownCount)}
           {hiddenRows.length > 0 && (
             <DrawQueueMore noun={label} count={hiddenRows.length}>
               {hiddenRows}
