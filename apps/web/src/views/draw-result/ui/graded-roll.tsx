@@ -46,7 +46,6 @@ export function GradedRoll({ value, grade, typography }: GradedRollProps) {
           />
         )}
         <Text
-          numeric
           tight
           typography={typography}
           weight="extrabold"
