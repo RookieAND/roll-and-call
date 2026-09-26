@@ -9,7 +9,7 @@ const SPARKLE_START_S = 0.5;
 const SPARKLE_PATH = "M12 2.6l1.9 5.5 5.5 1.9-5.5 1.9L12 17.4l-1.9-5.5L4.6 10l5.5-1.9z";
 
 const pill = cva(
-  "relative inline-flex overflow-hidden items-center justify-center rounded-400 size-8",
+  "relative inline-flex overflow-hidden items-center justify-center rounded-400 size-9",
   {
     variants: {
       grade: {
