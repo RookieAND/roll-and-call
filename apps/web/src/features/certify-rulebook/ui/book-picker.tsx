@@ -82,12 +82,14 @@ export function BookPicker({
             </Text>
           </VStack>
           {!category && (
-            <TextInput
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="카테고리 찾기 (예: CoC, 더크)"
-              aria-label="카테고리 찾기"
-            />
+            <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 -my-100 bg-surface px-200 py-100">
+              <TextInput
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="카테고리 찾기 (예: CoC, 더크)"
+                aria-label="카테고리 찾기"
+              />
+            </div>
           )}
 
           {!category && listed.length > 0 && (
@@ -196,7 +198,7 @@ export function BookPicker({
       <RulebookRequestSheet
         open={requestOpen}
         onOpenChange={setRequestOpen}
-        categoryNames={allCategories.map((candidate) => candidate.name)}
+        categoryNames={[...new Set(rulebooks.map((rulebook) => rulebook.categoryName))]}
         pendingRequestNames={pendingRequestNames}
         initialName={query.trim()}
       />
