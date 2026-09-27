@@ -1,22 +1,20 @@
 "use client";
 
-import { Chip, HStack, Text } from "@roll-and-call/ui";
+import { Button, Chip, HStack, Sheet, Text } from "@roll-and-call/ui";
 import { Check } from "lucide-react";
-import { useState } from "react";
 
 import { ProfileBlockLabel } from "./profile-block-label";
 
-const FOLDED_COUNT = 4;
+const FOLDED_COUNT = 5;
 
 interface ProfileRulebooksProps {
   rulebooks: { id: string; label: string }[];
 }
 
-// 인증된 룰북 칩. 표시만 하고, 네 개를 넘으면 "+N"으로 접는다.
+// 인증된 룰북 칩. 다섯 개를 넘으면 "+N"으로 접고, 누르면 시트에서 가나다순 전체 목록을 보여 준다.
 export function ProfileRulebooks({ rulebooks }: ProfileRulebooksProps) {
-  const [expanded, setExpanded] = useState(false);
-  const shown = expanded ? rulebooks : rulebooks.slice(0, FOLDED_COUNT);
-  const hiddenCount = rulebooks.length - shown.length;
+  const hiddenCount = rulebooks.length - FOLDED_COUNT;
+  const sorted = rulebooks.toSorted((left, right) => left.label.localeCompare(right.label, "ko"));
 
   return (
     <section className="px-200 pt-200">
@@ -27,7 +25,7 @@ export function ProfileRulebooks({ rulebooks }: ProfileRulebooksProps) {
         </Text>
       </HStack>
       <HStack gap="075" wrap>
-        {shown.map((rulebook) => (
+        {rulebooks.slice(0, FOLDED_COUNT).map((rulebook) => (
           <Chip
             key={rulebook.id}
             tone="outline"
@@ -39,13 +37,43 @@ export function ProfileRulebooks({ rulebooks }: ProfileRulebooksProps) {
           </Chip>
         ))}
         {hiddenCount > 0 && (
-          <Chip
-            tone="outline"
-            aria-label={`인증 룰북 ${hiddenCount}개 더 보기`}
-            onClick={() => setExpanded(true)}
-          >
-            +{hiddenCount}
-          </Chip>
+          <Sheet.Root>
+            <Sheet.Trigger
+              render={<Chip tone="outline" />}
+              aria-label={`인증 룰북 ${rulebooks.length}개 모두 보기`}
+            >
+              +{hiddenCount}
+            </Sheet.Trigger>
+            <Sheet.Overlay />
+            <Sheet.Popup aria-label="인증한 룰북" className="max-h-[78dvh] px-0">
+              <Sheet.Handle />
+              <HStack align="center" gap="075" className="min-h-12 pr-100 pl-200">
+                <Text typography="heading3" render={<h2 />}>
+                  인증한 룰북
+                </Text>
+                <Text typography="heading3" foreground="hint" numeric className="flex-1">
+                  {rulebooks.length}
+                </Text>
+                <Sheet.Close render={<Button variant="ghost" />}>닫기</Sheet.Close>
+              </HStack>
+              <Text typography="body4" foreground="hint" render={<p />} className="px-200 pb-050">
+                가나다순
+              </Text>
+              <Sheet.Body className="border-t border-gray-200 px-200 pb-200">
+                {sorted.map((rulebook) => (
+                  <Text
+                    key={rulebook.id}
+                    typography="body2"
+                    weight="medium"
+                    render={<div />}
+                    className="flex min-h-11 items-center border-t border-gray-200 first:border-t-0"
+                  >
+                    {rulebook.label}
+                  </Text>
+                ))}
+              </Sheet.Body>
+            </Sheet.Popup>
+          </Sheet.Root>
         )}
       </HStack>
     </section>
