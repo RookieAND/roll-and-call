@@ -1,6 +1,7 @@
 "use client";
 
-import { Field, SegmentedControl, Textarea } from "@roll-and-call/ui";
+import { RichTextEditor } from "@roll-and-call/tiptap";
+import { Field, SegmentedControl } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "@/entities/game";
@@ -10,6 +11,7 @@ import {
   GAME_TAG_MAX_LENGTH,
   type GameFormValues,
 } from "@/features/write-game";
+import { richTextLength } from "@/shared/lib";
 import { TagInput } from "@/shared/ui";
 
 const TAG_PLACEHOLDER: Record<GameTagKey, string> = {
@@ -32,12 +34,12 @@ interface GamePreflightFieldsProps {
 
 export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
   const {
-    register,
     setValue,
     watch,
     formState: { errors },
   } = form;
-  const noticeLength = (watch("notice") ?? "").length;
+  const notice = watch("notice") ?? "";
+  const noticeLength = richTextLength(notice);
   const aiImage = watch("aiImage");
 
   return (
@@ -89,12 +91,13 @@ export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
         counter={`${noticeLength} / ${GAME_NOTICE_MAX}`}
         error={errors.notice?.message}
       >
-        <Textarea
+        <RichTextEditor
           id="notice"
-          rows={3}
-          maxLength={GAME_NOTICE_MAX}
+          value={notice}
+          limit={GAME_NOTICE_MAX}
+          invalid={!!errors.notice}
           placeholder="참여 전에 알아야 할 것을 적어주세요. 캐릭터 준비물, 지각 규칙, 중도 하차 처리 같은 것."
-          {...register("notice")}
+          onChange={(value) => setValue("notice", value, { shouldDirty: true })}
         />
       </Field.Root>
     </>

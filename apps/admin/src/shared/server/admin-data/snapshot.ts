@@ -153,7 +153,11 @@ export const loadSnapshot = cache(async () => {
       aiImage: game.aiImage,
       joinedAt: new Map(roster.map((row) => [row.userId, row.joinedAt])),
       synopsis: game.synopsis ? plainText(game.synopsis) : undefined,
-      notices: game.notice ? game.notice.split("\n").filter((line) => line.trim()) : [],
+      notices: game.notice
+        ? plainText(game.notice)
+            .split("\n")
+            .filter((line) => line.trim())
+        : [],
       imageUrls: game.images,
       thumbnailUrl: game.thumbnailUrl ?? undefined,
       editRequestedAt: game.editRequestedAt ?? undefined,

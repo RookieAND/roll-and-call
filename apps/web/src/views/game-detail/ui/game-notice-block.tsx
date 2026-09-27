@@ -1,3 +1,4 @@
+import { RichText } from "@roll-and-call/tiptap";
 import { Text, VStack } from "@roll-and-call/ui";
 
 interface GameNoticeBlockProps {
@@ -13,10 +14,9 @@ export function GameNoticeBlock({ notice }: GameNoticeBlockProps) {
       <Text
         typography="body3"
         foreground="muted"
-        className="whitespace-pre-wrap [text-wrap:pretty]"
-      >
-        {notice}
-      </Text>
+        render={<RichText value={notice} />}
+        className="[text-wrap:pretty]"
+      />
     </VStack>
   );
 }

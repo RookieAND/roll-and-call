@@ -39,7 +39,14 @@ export const gameFormSchema = z
     genres: tagList("장르"),
     triggers: tagList("트리거"),
     platforms: tagList("사용 플랫폼"),
-    notice: z.string().max(GAME_NOTICE_MAX).optional(),
+    notice: z
+      .string()
+      .max(GAME_NOTICE_MAX * 20)
+      .refine(
+        (value) => richTextLength(value) <= GAME_NOTICE_MAX,
+        `주의 사항은 ${GAME_NOTICE_MAX}자까지 쓸 수 있습니다.`,
+      )
+      .optional(),
     aiImage: z.boolean({ error: "AI 이미지 사용 여부를 골라주세요." }),
     playTime: z.string().min(1, "플레이타임을 0시간 0분으로 둘 수 없습니다.").max(100),
     maxPlayers: z
