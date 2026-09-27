@@ -39,6 +39,8 @@ export async function MyPageView() {
   const rejectedRulebooks = rulebooks.rulebooks.filter(
     (rulebook) => rulebook.state === CERT_STATE.rejected,
   );
+  const canHost = rulebooks.rulebooks.some((rulebook) => rulebook.state === CERT_STATE.certified);
+  const showGmBadge = profile?.showGmBadge ?? true;
 
   const { name, avatar, handle } = profileDisplay({ profile, user });
   const todos = sessionTodos(mySessions);
@@ -52,6 +54,7 @@ export async function MyPageView() {
           <MyPageProfile
             name={name}
             avatarUrl={avatar}
+            isGm={canHost && showGmBadge}
             bio={profile?.bio ?? null}
             keywords={profile?.keywords ?? []}
             availability={profile?.availability ?? []}
@@ -67,7 +70,10 @@ export async function MyPageView() {
           <MyPageTodos todos={todos} rejectedRulebooks={rejectedRulebooks} />
           <MyPageRulebooks rulebooks={rulebooks} />
           <MyPageLinks links={profile?.links ?? []} />
-          <MyPageSettings handleLabel={handleLabel} />
+          <MyPageSettings
+            handleLabel={handleLabel}
+            roleSetting={canHost ? { showGmBadge } : null}
+          />
         </VStack>
       </Container>
     </>

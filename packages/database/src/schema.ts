@@ -43,6 +43,8 @@ export const profiles = pgTable("profiles", {
   keywords: text("keywords").array().notNull().default([]),
   availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
   links: jsonb("links").$type<ProfileLink[]>().notNull().default([]),
+  // 인증된 룰북이 있어도 Player로 보이고 싶으면 끈다.
+  showGmBadge: boolean("show_gm_badge").notNull().default(true),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

@@ -1,0 +1,1 @@
+ALTER TABLE "profiles" ADD COLUMN "show_gm_badge" boolean DEFAULT true NOT NULL;

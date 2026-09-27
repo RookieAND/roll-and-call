@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from "@roll-and-call/ui";
+import { Badge, Button, HStack, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import {
@@ -14,6 +14,7 @@ import { MyPageBlockLabel } from "./my-page-block-label";
 interface MyPageProfileProps {
   name: string;
   avatarUrl: string | null;
+  isGm: boolean;
   bio: string | null;
   keywords: string[];
   availability: AvailabilityInterval[];
@@ -25,6 +26,7 @@ interface MyPageProfileProps {
 export function MyPageProfile({
   name,
   avatarUrl,
+  isGm,
   bio,
   keywords,
   availability,
@@ -42,6 +44,15 @@ export function MyPageProfile({
           name={name}
           avatarUrl={avatarUrl}
           nameRender={<h1 />}
+          nameAddon={
+            isGm ? (
+              <Badge colorPalette="primary" className="animate-gm-border">
+                GM
+              </Badge>
+            ) : (
+              <Badge colorPalette="gray">Player</Badge>
+            )
+          }
           subline={bioText}
           sublineForeground={bioForeground}
         />

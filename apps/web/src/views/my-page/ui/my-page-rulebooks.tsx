@@ -1,5 +1,5 @@
 import { Button, Callout, HStack, Text, VStack } from "@roll-and-call/ui";
-import { CalendarDays, ChevronRight, Plus } from "lucide-react";
+import { CalendarDays, Plus } from "lucide-react";
 import Link from "next/link";
 
 import { CERT_STATE, isCertEnforced, type MyRulebooks } from "@/entities/rulebook";
@@ -7,7 +7,7 @@ import { formatDate } from "@/shared/lib";
 
 import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 import { MyPageRulebookRow } from "./my-page-rulebook-row";
-import { RulebookRowsMore } from "./rulebook-rows-more";
+import { RulebookListSheet } from "./rulebook-list-sheet";
 
 const SHOWN_STATES = [CERT_STATE.rejected, CERT_STATE.pending, CERT_STATE.certified] as const;
 const PREVIEW_ROWS = 3;
@@ -31,18 +31,9 @@ export function MyPageRulebooks({
         <Text typography="heading3" render={<h2 />} className="flex-1">
           인증한 룰북
         </Text>
-        {rows.length > 0 && (
-          <Button
-            render={<Link href="/me/rulebooks" />}
-            variant="ghost"
-            colorPalette="primary"
-            size="sm"
-            className="-mr-100"
-          >
-            전체 보기
-            <ChevronRight size={14} aria-hidden />
-          </Button>
-        )}
+        <Text typography="body4" foreground="hint" numeric>
+          {rows.length}
+        </Text>
       </HStack>
 
       {showBand && (
@@ -65,11 +56,11 @@ export function MyPageRulebooks({
               <MyPageRulebookRow key={rulebook.id} rulebook={rulebook} />
             ))}
             {rows.length > PREVIEW_ROWS && (
-              <RulebookRowsMore count={rows.length - PREVIEW_ROWS}>
-                {rows.slice(PREVIEW_ROWS).map((rulebook) => (
+              <RulebookListSheet count={rows.length}>
+                {rows.map((rulebook) => (
                   <MyPageRulebookRow key={rulebook.id} rulebook={rulebook} />
                 ))}
-              </RulebookRowsMore>
+              </RulebookListSheet>
             )}
           </div>
           <Button render={<Link href="/me/rulebooks/apply" />} variant="outline" className="w-full">
