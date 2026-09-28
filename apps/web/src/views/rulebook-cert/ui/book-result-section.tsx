@@ -44,11 +44,6 @@ export function BookResultSection({ result, guide }: BookResultSectionProps) {
             </Fragment>
           ))}
         </Grid>
-        {result.statusNote && (
-          <Text typography="body3" foreground="muted">
-            {result.statusNote}
-          </Text>
-        )}
         {guide && (
           <Text typography="body3" foreground="muted" render={<p />} className="mt-050 break-keep">
             {guide}

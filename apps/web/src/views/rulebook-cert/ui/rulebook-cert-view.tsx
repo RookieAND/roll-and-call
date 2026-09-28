@@ -1,4 +1,4 @@
-import { Button, Container, VStack } from "@roll-and-call/ui";
+import { Button, Container, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -85,7 +85,10 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
               </VStack>
             )}
             {pending && (
-              <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
+              <VStack gap="100" className="border-t border-gray-200 px-200 pt-150 pb-200">
+                <Text typography="body4" foreground="muted" className="text-center">
+                  운영진이 확인하기 전까지 신청을 취소할 수 있어요.
+                </Text>
                 <CancelApplicationButton
                   rulebookId={rulebookId}
                   bookCount={books.length}

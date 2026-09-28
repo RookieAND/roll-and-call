@@ -22,8 +22,6 @@ export interface BookResult {
   // 실물 · 전자책 · 운영진 인증
   mode: string;
   dates: { label: string; value: string }[];
-  // 심사 중처럼 날짜로 적을 수 없는 상태 안내.
-  statusNote: string | null;
   badge: { label: string; palette: Palette } | null;
   reason: { label: string; text: string; tone: "warning" | "danger" } | null;
   thumbs: { label: string; url: string; flagged: boolean }[];
@@ -35,8 +33,8 @@ export interface BookResult {
   discardable: boolean;
 }
 
-// 심사 중은 안내 문구로 알리므로 배지를 두지 않는다.
 const BADGE: Record<string, NonNullable<BookResult["badge"]>> = {
+  [CERT_STATE.pending]: { label: "심사 중", palette: "gray" },
   [CERT_STATE.certified]: { label: "승인됨", palette: "success" },
   [CERT_STATE.rejected]: { label: "반려됨", palette: "danger" },
   [CERT_STATE.revoked]: { label: "취소됨", palette: "danger" },
@@ -67,10 +65,10 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
   const revoked = state === CERT_STATE.revoked;
   const ebook = application?.format === CERT_FORMAT.ebook;
   const flagged = (key: string) => application?.flaggedShots.includes(key as never) ?? false;
-  const certified = state === CERT_STATE.certified;
-  // 승인된 신청도 사진이 남아 있으므로 올린 사진을 보여 준다. 문제 표시는 반려에만 있다.
+  const photosKept = rejected || state === CERT_STATE.pending || state === CERT_STATE.certified;
+  // 심사 중·승인된 신청도 사진이 남아 있으므로 올린 사진을 보여 준다. 문제 표시는 반려에만 있다.
   const thumbs =
-    (rejected || certified) && application && !direct
+    photosKept && application && !direct
       ? ebook
         ? CERT_PROOFS.map((proof) => ({
             label: CERT_PROOF_LABEL[proof],
@@ -93,7 +91,6 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
     kind: rulebook.kind,
     mode: application && !direct ? CERT_FORMAT_LABEL[application.format] : "운영진 인증",
     dates,
-    statusNote: state === CERT_STATE.pending ? "운영진이 확인하고 있어요" : null,
     badge: BADGE[state] ?? null,
     reason: rejected
       ? { label: "반려 사유", text: rejectionSummary(application), tone: "danger" }
