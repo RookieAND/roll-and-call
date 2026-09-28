@@ -1,4 +1,5 @@
-import { VStack } from "@roll-and-call/ui";
+import { Button, HStack, VStack } from "@roll-and-call/ui";
+import Link from "next/link";
 
 import { formatDateWeekday } from "@/shared/lib";
 
@@ -6,11 +7,12 @@ import { ActionNotice } from "./action-notice";
 import { SimilarGamesLink } from "./similar-games-link";
 
 interface EndedActionsProps {
+  gameId: string;
   confirmedAt: Date;
 }
 
-// 끝난 세션에서 할 일은 다음 세션을 찾는 것뿐이다.
-export function EndedActions({ confirmedAt }: EndedActionsProps) {
+// 끝난 세션에서는 후기를 보거나 다음 세션을 찾는다.
+export function EndedActions({ gameId, confirmedAt }: EndedActionsProps) {
   return (
     <VStack gap="125">
       <ActionNotice
@@ -19,7 +21,17 @@ export function EndedActions({ confirmedAt }: EndedActionsProps) {
       >
         출석은 GM이 확인한 뒤 마이페이지 기록에 남습니다.
       </ActionNotice>
-      <SimilarGamesLink size="lg" className="w-full" />
+      <HStack gap="100">
+        <Button
+          render={<Link href={`/games/${gameId}/reviews`} />}
+          variant="outline"
+          size="lg"
+          className="min-w-0 flex-1"
+        >
+          후기 보기
+        </Button>
+        <SimilarGamesLink size="lg" className="min-w-0 flex-1" />
+      </HStack>
     </VStack>
   );
 }
