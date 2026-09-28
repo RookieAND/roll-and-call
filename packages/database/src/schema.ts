@@ -442,6 +442,8 @@ export const certApplications = pgTable(
     // 여러 권을 한 번에 신청하면 권마다 한 건씩 만들고 같은 사진·구매 기록을 나눠 쓴다.
     groupId: uuid("group_id"),
     format: certFormat("format").notNull().default("physical"),
+    // 운영진이 직접 준 인증을 반려로 돌리며 만든 기록. 사진·구매 기록 없이 사유만 있다.
+    direct: boolean("direct").notNull().default(false),
     // 전자책은 구매 내역(purchaseCaptureUrl)·영수증(receiptUrl)·판매처·주문번호가 필수, 실물은 모두 선택이다.
     seller: text("seller"),
     purchaseCaptureUrl: text("purchase_capture_url"),

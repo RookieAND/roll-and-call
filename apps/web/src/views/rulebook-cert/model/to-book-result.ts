@@ -54,8 +54,11 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
   const state = rulebook.state ?? CERT_STATE.pending;
   const day = (at: Date) => toKst(at).format("YYYY.MM.DD");
   const decidedLabel = DECIDED_LABEL[state];
+  const memo = application?.rejectReason?.trim() || null;
+  // 운영진이 직접 준 인증을 반려로 돌린 기록은 신청한 적이 없어 신청일·사진이 없다.
+  const direct = application?.direct ?? false;
   const dates = [
-    ...(application ? [{ label: "신청", value: day(application.createdAt) }] : []),
+    ...(application && !direct ? [{ label: "신청", value: day(application.createdAt) }] : []),
     ...(decidedLabel && rulebook.stateAt
       ? [{ label: decidedLabel, value: day(rulebook.stateAt) }]
       : []),
@@ -64,8 +67,10 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
   const revoked = state === CERT_STATE.revoked;
   const ebook = application?.format === CERT_FORMAT.ebook;
   const flagged = (key: string) => application?.flaggedShots.includes(key as never) ?? false;
+  const certified = state === CERT_STATE.certified;
+  // 승인된 신청도 사진이 남아 있으므로 올린 사진을 보여 준다. 문제 표시는 반려에만 있다.
   const thumbs =
-    rejected && application
+    (rejected || certified) && application && !direct
       ? ebook
         ? CERT_PROOFS.map((proof) => ({
             label: CERT_PROOF_LABEL[proof],
@@ -86,7 +91,7 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
     id: rulebook.id,
     title: rulebook.shortName,
     kind: rulebook.kind,
-    mode: application ? CERT_FORMAT_LABEL[application.format] : "운영진 인증",
+    mode: application && !direct ? CERT_FORMAT_LABEL[application.format] : "운영진 인증",
     dates,
     statusNote: state === CERT_STATE.pending ? "운영진이 확인하고 있어요" : null,
     badge: BADGE[state] ?? null,
@@ -103,7 +108,7 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
         : null,
     thumbs: kept.length > 0 ? thumbs : [],
     deleted: rejected && thumbs.length > 0 && kept.length === 0,
-    memo: rejected ? application?.rejectReason?.trim() || null : null,
+    memo: rejected && memo !== rejectionSummary(application) ? memo : null,
     retryHref: rejected || revoked ? certApplyHref([rulebook.id], "photos") : null,
     discardable: rejected || revoked,
   };

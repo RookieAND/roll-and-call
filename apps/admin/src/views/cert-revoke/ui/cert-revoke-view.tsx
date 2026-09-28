@@ -13,7 +13,7 @@ export function CertRevokeView({ user, initialRulebook }: CertRevokeViewProps) {
   return (
     <>
       <AdminHeader
-        title={`${user.nickname} 룰북 인증 취소`}
+        title={`${user.nickname} 룰북 인증 반려로 돌리기`}
         sub="유저 상세 · 룰북 인증"
         back={{ href: backHref, label: user.nickname }}
       />

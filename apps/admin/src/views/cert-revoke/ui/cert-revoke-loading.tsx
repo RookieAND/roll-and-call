@@ -12,7 +12,7 @@ export function CertRevokeLoading() {
       <LoadingRegion fullBleed label="룰북 인증 정보를 불러오는 중입니다">
         <Grid className="mx-auto w-full max-w-[1000px] flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-200 p-200">
           <VStack gap="250" className="rounded-600 border border-gray-200 bg-surface p-250">
-            <FormSection title="1. 취소할 룰북">
+            <FormSection title="1. 반려로 돌릴 룰북">
               <Skeleton width="100%" height={72} rounded={400} />
             </FormSection>
             <FormSection title="2. 취소 사유">
@@ -44,7 +44,7 @@ export function CertRevokeLoading() {
               취소
             </Button>
             <Button colorPalette="danger" disabled className="min-w-[128px]">
-              인증 취소 확정
+              반려로 돌리기
             </Button>
           </HStack>
         </HStack>

@@ -10,7 +10,7 @@ export const CERT_STATE_VIEW: Record<CertRowState, CertStateView> = {
   [CERT_ROW_STATE.certified]: {
     label: "인증됨",
     tone: "success",
-    action: { label: "인증 취소", variant: "ghost", tone: "danger" },
+    action: { label: "반려로 돌리기", variant: "ghost", tone: "danger" },
   },
   [CERT_ROW_STATE.pending]: {
     label: "심사 대기",

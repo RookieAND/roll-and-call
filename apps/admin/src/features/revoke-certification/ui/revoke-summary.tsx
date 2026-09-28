@@ -16,7 +16,7 @@ export function RevokeSummary({
   keptCount,
 }: RevokeSummaryProps) {
   const items = [
-    { label: "인증 취소", value: `${rulebooks.length}개`, sub: rulebooks.join(", ") },
+    { label: "반려로 돌림", value: `${rulebooks.length}개`, sub: rulebooks.join(", ") },
     {
       label: "닫는 구인",
       value: `${closedCount}건`,
@@ -29,8 +29,8 @@ export function RevokeSummary({
     <VStack gap="150">
       <OutcomePanel items={items} />
       <UserPreview>
-        「{rulebooks.join("」, 「")}」 룰북 인증이 취소됐어요. 사유: {userReason.trim()}. 다시
-        인증받기 전까지 이 룰북으로 구인을 열 수 없어요. 이의가 있다면 디스코드 #문의 채널로
+        「{rulebooks.join("」, 「")}」 룰북 인증이 반려됐어요. 사유: {userReason.trim()}. 다시
+        신청해 승인받기 전까지 이 룰북으로 구인을 열 수 없어요. 이의가 있다면 디스코드 #문의 채널로
         알려주세요.
       </UserPreview>
     </VStack>

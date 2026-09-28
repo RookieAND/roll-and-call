@@ -8,7 +8,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/users/[id]/revoke">): Promise<Metadata> {
   const user = await getUserDetail((await params).id);
-  return { title: user ? `${user.nickname} 룰북 인증 취소` : "룰북 인증 취소" };
+  return { title: user ? `${user.nickname} 룰북 인증 반려로 돌리기` : "룰북 인증 반려로 돌리기" };
 }
 
 export default async function CertRevokePage({

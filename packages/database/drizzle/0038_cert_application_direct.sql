@@ -1,0 +1,1 @@
+ALTER TABLE "cert_applications" ADD COLUMN "direct" boolean DEFAULT false NOT NULL;

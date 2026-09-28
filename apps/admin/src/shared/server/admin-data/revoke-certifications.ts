@@ -1,6 +1,6 @@
 import "server-only";
-import { certifications, db, profiles, rulebooks } from "@roll-and-call/database";
-import { and, eq, inArray, isNull, sql } from "drizzle-orm";
+import { certApplications, certifications, db, profiles, rulebooks } from "@roll-and-call/database";
+import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 
 import { applyOngoingChoices, type OngoingChoice } from "./apply-ongoing-choices";
 import { recordAudit } from "./record-audit";
@@ -14,7 +14,8 @@ export interface RevokeInput {
   ongoing: OngoingChoice[];
 }
 
-// 고른 룰북(이름 판본)의 인증을 한 번에 취소하고 활동 기록은 한 건만 남긴다.
+// 고른 룰북(이름 판본)의 인증을 한 번에 반려로 돌리고 활동 기록은 한 건만 남긴다.
+// 인증을 지우고, 마지막 승인 신청을 반려로 바꾼다(사진은 남긴다). 신청 없이 직접 준 인증이면 반려 기록을 새로 만든다.
 export async function revokeCertifications(userId: string, actor: Actor, input: RevokeInput) {
   const [user] = await db
     .select({ nickname: profiles.username })
@@ -29,8 +30,7 @@ export async function revokeCertifications(userId: string, actor: Actor, input: 
 
   return db.transaction(async (tx) => {
     const revoked = await tx
-      .update(certifications)
-      .set({ revokedAt: sql`now()`, revokedBy: actor.id, revokeReason: input.userReason })
+      .delete(certifications)
       .where(
         and(
           eq(certifications.userId, userId),
@@ -39,19 +39,50 @@ export async function revokeCertifications(userId: string, actor: Actor, input: 
         ),
       )
       .returning({ rulebookId: certifications.rulebookId });
+    for (const { rulebookId } of revoked) {
+      const rejection = {
+        status: "rejected" as const,
+        rejectReason: input.userReason,
+        flaggedShots: [],
+        processedBy: actor.id,
+        processedAt: sql`now()`,
+      };
+      const [approved] = await tx
+        .select({ id: certApplications.id })
+        .from(certApplications)
+        .where(
+          and(
+            eq(certApplications.userId, userId),
+            eq(certApplications.rulebookId, rulebookId),
+            eq(certApplications.status, "approved"),
+          ),
+        )
+        .orderBy(desc(certApplications.createdAt))
+        .limit(1);
+      if (approved) {
+        await tx
+          .update(certApplications)
+          .set(rejection)
+          .where(eq(certApplications.id, approved.id));
+      } else {
+        await tx
+          .insert(certApplications)
+          .values({ userId, rulebookId, direct: true, ...rejection });
+      }
+    }
     if (revoked.length === 0) return { ok: false as const, alreadyRevoked: true as const };
     await applyOngoingChoices(tx, userId, input.ongoing);
     const labels = allRulebooks
       .filter((rulebook) => revoked.some((row) => row.rulebookId === rulebook.id))
       .map(rulebookLabel);
     await recordAudit(tx, actor, {
-      action: "인증 취소",
+      action: "반려로 돌림",
       target: `${user.nickname} · ${labels.join(", ")}`,
       targetUserId: userId,
       reason: input.userReason,
       staffMemo: input.staffMemo || undefined,
       before: { label: "인증됨" },
-      after: { label: "인증 취소됨" },
+      after: { label: "반려됨" },
     });
     return { ok: true as const };
   });

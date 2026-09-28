@@ -56,8 +56,8 @@ export function UserActionsAside({ user, tab }: UserActionsAsideProps) {
         {user.certifications.length ? (
           <ActionCard
             icon={BookOpen}
-            title="룰북 인증 취소"
-            description="취소한 룰북으로는 구인을 열 수 없습니다"
+            title="룰북 인증 반려로 돌리기"
+            description="반려된 룰북으로는 구인을 열 수 없습니다"
             link={<Link href={revokeHref(user.id)} />}
           />
         ) : null}
@@ -92,7 +92,7 @@ export function UserActionsAside({ user, tab }: UserActionsAsideProps) {
             <Shield size={14} />
           </Callout.Icon>
           <Callout.Description>
-            제재와 인증 취소에는 사용자에게 보여줄 사유가 필요합니다.
+            제재와 반려로 돌리기에는 사용자에게 보여줄 사유가 필요합니다.
           </Callout.Description>
         </Callout.Root>
         <HStack justify="end">

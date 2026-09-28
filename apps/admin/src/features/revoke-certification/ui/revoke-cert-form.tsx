@@ -86,8 +86,8 @@ export function RevokeCertForm({
           .filter((row) => row.action === "close")
           .map((row) => ({ sessionId: row.id, action: "close" })),
       });
-      if (result.ok) toast.success(`${nickname}님의 룰북 인증을 취소했습니다`);
-      else toast.info("이미 취소된 인증입니다");
+      if (result.ok) toast.success(`${nickname}님의 룰북 인증을 반려로 돌렸습니다`);
+      else toast.info("이미 반려로 돌린 인증입니다");
       router.push(backHref);
     });
 
@@ -96,8 +96,8 @@ export function RevokeCertForm({
       <Grid className="mx-auto w-full max-w-[1000px] flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-200 p-200">
         <VStack gap="250" className="rounded-600 border border-gray-200 bg-surface p-250">
           <FormSection
-            title="1. 취소할 룰북"
-            description={`인증된 룰북 ${certifications.length}개 가운데 취소할 룰북을 고릅니다. 여러 개를 고를 수 있습니다.`}
+            title="1. 반려로 돌릴 룰북"
+            description={`인증된 룰북 ${certifications.length}개 가운데 반려로 돌릴 룰북을 고릅니다. 여러 개를 고를 수 있습니다.`}
           >
             <VStack gap="075" className="rounded-400 border border-gray-200 px-150 py-100">
               {certifications.map((certification) => (
@@ -116,7 +116,7 @@ export function RevokeCertForm({
             </VStack>
           </FormSection>
           <FormSection
-            title="2. 취소 사유"
+            title="2. 반려 사유"
             description="사용자에게 보이는 사유와 운영진끼리만 보는 메모를 나누어 적습니다."
           >
             <Field.Root
@@ -174,7 +174,8 @@ export function RevokeCertForm({
         className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-page py-150"
       >
         <Text typography="body4" foreground="hint">
-          확정하면 다른 운영진에게 디스코드 알림이 갑니다. 취소한 인증은 활동 기록에 남습니다.
+          확정하면 다른 운영진에게 디스코드 알림이 갑니다. 반려로 돌린 인증은 활동 기록에 남고, 올린
+          사진은 그대로 남습니다.
         </Text>
         <HStack gap="100" className="ml-auto">
           <Button
@@ -192,7 +193,7 @@ export function RevokeCertForm({
             onClick={revoke}
             className="min-w-[128px]"
           >
-            인증 취소 확정
+            반려로 돌리기
           </Button>
         </HStack>
       </HStack>
