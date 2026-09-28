@@ -1,9 +1,9 @@
-import { Button, HStack, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
+import { HStack, VStack } from "@roll-and-call/ui";
 
 import { formatDateWeekday } from "@/shared/lib";
 
 import { ActionNotice } from "./action-notice";
+import { ReviewsLink } from "./reviews-link";
 import { SimilarGamesLink } from "./similar-games-link";
 
 interface EndedActionsProps {
@@ -22,14 +22,7 @@ export function EndedActions({ gameId, confirmedAt }: EndedActionsProps) {
         출석은 GM이 확인한 뒤 마이페이지 기록에 남습니다.
       </ActionNotice>
       <HStack gap="100">
-        <Button
-          render={<Link href={`/games/${gameId}/reviews`} />}
-          variant="outline"
-          size="lg"
-          className="min-w-0 flex-1"
-        >
-          후기 보기
-        </Button>
+        <ReviewsLink gameId={gameId} />
         <SimilarGamesLink size="lg" className="min-w-0 flex-1" />
       </HStack>
     </VStack>

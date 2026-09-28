@@ -137,7 +137,7 @@ export function GameActionZone({
     case GAME_ACTION_VIEW.ended:
       return <EndedActions gameId={game.id} confirmedAt={game.confirmedAt!} />;
     case GAME_ACTION_VIEW.endedOutsider:
-      return <ClosedActions title="종료된 세션입니다" />;
+      return <ClosedActions title="종료된 세션입니다" reviewsGameId={game.id} />;
     case GAME_ACTION_VIEW.endedGm:
       return (
         <EndedGmActions
