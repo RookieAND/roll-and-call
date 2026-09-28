@@ -45,7 +45,7 @@ export function ReviewMenu({
         <Sheet.Overlay />
         <Sheet.Popup aria-label="후기 메뉴">
           <Sheet.Handle />
-          <Sheet.Body className="pb-200">
+          <Sheet.Body>
             {own && editHref && <Sheet.Item render={<Link href={editHref} />}>수정하기</Sheet.Item>}
             {own && (
               <Sheet.Item onClick={() => openAfterMenu(setDeleting)} className="text-danger-600">
