@@ -1,0 +1,1 @@
+ALTER TABLE "session_reviews" ADD COLUMN "discord_thread_id" text;

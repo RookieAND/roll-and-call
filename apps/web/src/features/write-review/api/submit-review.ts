@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq, isNull } from "drizzle-orm";
+import { after } from "next/server";
 
 import {
   REVIEW_BODY_MAX_LENGTH,
@@ -16,6 +17,8 @@ import {
   removeUnusedReviewPhotos,
   revalidateReviews,
   sessionReviews,
+  siteOrigin,
+  syncReviewForumPost,
 } from "@/shared/server";
 
 import { MY_REVIEWS_HREF, REVIEW_BLOCK, type ReviewBlock } from "../model/review-block";
@@ -53,6 +56,7 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
   if (block) return { error: REVIEW_BLOCK_ERROR, block };
 
   const values = { body, spoiler: input.spoiler, photoUrls: input.photoUrls };
+  let reviewId = target.review?.id;
   if (target.review) {
     await db
       .update(sessionReviews)
@@ -63,9 +67,11 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
     );
   } else {
     try {
-      await db
+      const [created] = await db
         .insert(sessionReviews)
-        .values({ ...values, gameId: input.gameId, authorId: user.id });
+        .values({ ...values, gameId: input.gameId, authorId: user.id })
+        .returning({ id: sessionReviews.id });
+      reviewId = created?.id;
     } catch (error) {
       if ((error as { code?: string }).code === UNIQUE_VIOLATION) {
         return { error: REVIEW_BLOCK_ERROR, block: REVIEW_BLOCK.alreadyWritten };
@@ -75,5 +81,9 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
   }
 
   revalidateReviews(input.gameId);
+  if (reviewId) {
+    const createdReviewId = reviewId;
+    after(() => syncReviewForumPost(createdReviewId, siteOrigin()));
+  }
   return { redirect: MY_REVIEWS_HREF };
 }

@@ -6,4 +6,5 @@ export const DISCORD_COLOR = {
   complete: 0xeb459e,
   cancelled: 0xed4245,
   roll: 0x5865f2,
+  review: 0xeb459e,
 } as const;

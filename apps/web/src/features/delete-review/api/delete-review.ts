@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq, isNull } from "drizzle-orm";
+import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import {
@@ -10,6 +11,8 @@ import {
   revalidateReviews,
   reviewReports,
   sessionReviews,
+  siteOrigin,
+  syncReviewForumPost,
 } from "@/shared/server";
 
 // 행은 남겨 같은 세션에 다시 쓰지 못하게 하고, 본문·사진은 비운다. 남은 신고는 대상이 없어 기각으로 닫는다.
@@ -46,5 +49,6 @@ export async function deleteReview(reviewId: string): Promise<ActionResult> {
 
   await removeUnusedReviewPhotos(deleted.photoUrls);
   revalidateReviews(deleted.gameId);
+  after(() => syncReviewForumPost(reviewId, siteOrigin()));
   return {};
 }

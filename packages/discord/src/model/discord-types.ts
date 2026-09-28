@@ -1,6 +1,7 @@
 export type DiscordEmbedField = { name: string; value: string; inline?: boolean };
 
 export type DiscordEmbed = {
+  author?: { name: string; icon_url?: string };
   title?: string;
   url?: string;
   description?: string;
@@ -22,4 +23,10 @@ export type DiscordMessageInput = {
   buttons?: DiscordLinkButton[];
   // allowed_mentions allowlist: 멘션은 content에도 있어야 울린다.
   userMentions?: string[];
+};
+
+export type DiscordForumPostInput = {
+  name: string;
+  appliedTags: string[];
+  message: DiscordMessageInput;
 };

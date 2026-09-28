@@ -228,6 +228,9 @@ importers:
       '@roll-and-call/database':
         specifier: workspace:*
         version: link:../../packages/database
+      '@roll-and-call/review-forum':
+        specifier: workspace:*
+        version: link:../../packages/review-forum
       '@roll-and-call/tiptap':
         specifier: workspace:*
         version: link:../../packages/tiptap
@@ -301,6 +304,9 @@ importers:
       '@roll-and-call/discord':
         specifier: workspace:*
         version: link:../../packages/discord
+      '@roll-and-call/review-forum':
+        specifier: workspace:*
+        version: link:../../packages/review-forum
       '@roll-and-call/tiptap':
         specifier: workspace:*
         version: link:../../packages/tiptap
@@ -430,6 +436,31 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
+
+  packages/review-forum:
+    dependencies:
+      '@roll-and-call/database':
+        specifier: workspace:*
+        version: link:../database
+      '@roll-and-call/discord':
+        specifier: workspace:*
+        version: link:../discord
+      drizzle-orm:
+        specifier: ^0.45.2
+        version: 0.45.2(postgres@3.4.9)
+    devDependencies:
+      '@roll-and-call/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/typescript-config
+      '@types/node':
+        specifier: ^26.2.0
+        version: 26.2.0
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^5.0.1
+        version: 5.0.1(@types/node@26.2.0)(vite@8.3.0(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13))
 
   packages/tiptap:
     dependencies:

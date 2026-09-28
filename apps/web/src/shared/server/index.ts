@@ -52,6 +52,11 @@ export { notifyDrawResult } from "./discord/notify-draw-result";
 export { notifyDirectConfirmed } from "./discord/notify-direct-confirmed";
 export { notifySessionStartingSoon } from "./discord/notify-session-starting-soon";
 export { notifySessionConfirmed } from "./discord/notify-session-confirmed";
+export {
+  deleteGameReviewForumPosts,
+  syncGameReviewForumPosts,
+  syncReviewForumPost,
+} from "@roll-and-call/review-forum";
 export { siteOrigin } from "./site-origin";
 export { removeUnusedGameFiles } from "./game-files";
 export { createSupabaseServerClient } from "./auth/create-supabase-server-client";

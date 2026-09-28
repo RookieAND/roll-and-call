@@ -3,6 +3,7 @@ export { DISCORD_COLOR } from "./model/discord-color";
 export type {
   DiscordEmbed,
   DiscordEmbedField,
+  DiscordForumPostInput,
   DiscordLinkButton,
   DiscordMessage,
   DiscordMessageInput,
@@ -11,3 +12,7 @@ export { sendDiscordMessage } from "./message/send-discord-message";
 export { editDiscordMessage } from "./message/edit-discord-message";
 export { startDiscordThread } from "./thread/start-discord-thread";
 export { renameDiscordThread } from "./thread/rename-discord-thread";
+export { createForumPost } from "./forum/create-forum-post";
+export { updateForumPost } from "./forum/update-forum-post";
+export { deleteDiscordThread } from "./forum/delete-discord-thread";
+export { getForumTags } from "./forum/get-forum-tags";

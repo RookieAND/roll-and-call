@@ -1,9 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 import { REVIEW_REASONS } from "@/shared/lib";
-import { moderateReview, requireStaff, type ReviewModeration } from "@/shared/server";
+import {
+  moderateReview,
+  requireStaff,
+  syncReviewForumPost,
+  type ReviewModeration,
+} from "@/shared/server";
 
 import { REASON_ACTIONS } from "../model/review-action";
 
@@ -19,5 +25,8 @@ export async function submitReviewModeration(reviewId: string, moderation: Revie
     staffMemo: moderation.staffMemo.trim(),
   });
   revalidatePath("/", "layout");
+  if (result.ok) {
+    after(() => syncReviewForumPost(reviewId, process.env.NEXT_PUBLIC_USER_APP_URL));
+  }
   return result;
 }

@@ -215,6 +215,8 @@ export const sessionReviews = pgTable(
     removedAt: timestamp("removed_at", { withTimezone: true }),
     removedBy: uuid("removed_by").references(() => profiles.id, { onDelete: "set null" }),
     removedReason: text("removed_reason"),
+    // 세션후기 포럼 게시글(스레드) id. 공개가 아니게 되면 게시글을 지우고 비운다.
+    discordThreadId: text("discord_thread_id"),
   },
   (table) => [
     uniqueIndex("session_reviews_game_id_author_id_unique").on(table.gameId, table.authorId),

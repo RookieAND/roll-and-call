@@ -1,9 +1,10 @@
 "use server";
 
 import { and, eq, inArray, notInArray } from "drizzle-orm";
+import { after } from "next/server";
 
 import type { ActionResult } from "@/shared/api";
-import { games, participants } from "@/shared/server";
+import { games, participants, siteOrigin, syncGameReviewForumPosts } from "@/shared/server";
 
 import { AttendanceError } from "./attendance-error";
 import { guardAttendance } from "./guard-attendance";
@@ -13,7 +14,7 @@ export async function confirmAttendance(
   gameId: string,
   absentUserIds: string[],
 ): Promise<ActionResult> {
-  return guardAttendance(gameId, async (transaction, confirmedUserIds) => {
+  const result = await guardAttendance(gameId, async (transaction, confirmedUserIds) => {
     const absent = absentUserIds.filter((userId) => confirmedUserIds.includes(userId));
     if (absent.length !== absentUserIds.length) {
       throw new AttendanceError("명단에 없는 참여자입니다.");
@@ -39,4 +40,6 @@ export async function confirmAttendance(
       .set({ attendanceConfirmedAt: new Date() })
       .where(eq(games.id, gameId));
   });
+  if (!result.error) after(() => syncGameReviewForumPosts(gameId, siteOrigin()));
+  return result;
 }
