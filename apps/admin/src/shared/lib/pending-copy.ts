@@ -1,4 +1,4 @@
-import { BookOpen, FileText, Flag } from "lucide-react";
+import { BookOpen, FileText, Flag, Quote } from "lucide-react";
 
 // 처리 대기 한 종류를 홈·폰 안내·⌘K가 같은 이름과 목적지로 부른다.
 export const PENDING_COPY = {
@@ -25,6 +25,15 @@ export const PENDING_COPY = {
     href: "/posts?filter=reported",
     icon: Flag,
     shortcut: "P",
+    homeSub: (days: number) => `가장 오래된 신고가 ${days}일째 처리되지 않았습니다`,
+    paletteMeta: (count: number, days: number) =>
+      `${count}건 · 가장 오래된 신고는 ${days}일째 처리되지 않았습니다`,
+  },
+  reviewReport: {
+    label: "신고된 후기",
+    href: "/posts/reviews",
+    icon: Quote,
+    shortcut: "R",
     homeSub: (days: number) => `가장 오래된 신고가 ${days}일째 처리되지 않았습니다`,
     paletteMeta: (count: number, days: number) =>
       `${count}건 · 가장 오래된 신고는 ${days}일째 처리되지 않았습니다`,

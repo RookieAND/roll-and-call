@@ -5,6 +5,8 @@ import {
   AdminHeader,
   LoadingRegion,
   Panel,
+  POST_ROUTE,
+  PostRouteTabs,
   SkeletonPager,
   SkeletonSelect,
   SkeletonTable,
@@ -17,6 +19,7 @@ export function PostsLoading() {
         title="구인"
         sub={<Skeleton width={40} height={12} render={<span />} className="inline-block" />}
       />
+      <PostRouteTabs value={POST_ROUTE.posts} />
       <LoadingRegion label="구인 목록을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100" wrap>
           <HStack align="center" className="relative w-[236px]">

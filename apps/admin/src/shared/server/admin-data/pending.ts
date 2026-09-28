@@ -1,8 +1,9 @@
 import "server-only";
+import { reportedReviews } from "./reported-reviews";
 import { loadSnapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
 
-export const PENDING_KINDS = ["cert", "rulebookRequest", "report"] as const;
+export const PENDING_KINDS = ["cert", "rulebookRequest", "report", "reviewReport"] as const;
 export type PendingKind = (typeof PENDING_KINDS)[number];
 
 export interface PendingItem {
@@ -33,6 +34,7 @@ export async function getPendingItems(): Promise<PendingItem[]> {
         }, new Map<string, Date>())
         .values(),
     ],
+    reviewReport: reportedReviews(db).map((row) => row.oldestReportedAt),
   };
   return PENDING_KINDS.map((kind) => ({
     kind,

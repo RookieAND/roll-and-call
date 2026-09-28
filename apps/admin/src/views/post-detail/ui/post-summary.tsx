@@ -1,6 +1,6 @@
 import { Badge, Grid, HStack, Text } from "@roll-and-call/ui";
 
-import { formatDateTime, formatSessionTime } from "@/shared/lib";
+import { formatDate, formatDateTime, formatSessionTime } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import { FactRows } from "@/shared/ui";
 
@@ -51,6 +51,15 @@ export function PostSummary({ post, userAppHref, logHref }: PostSummaryProps) {
               value: post.recruitDeadline ? formatDateTime(post.recruitDeadline) : "—",
             },
             { label: "GM", value: post.gm.nickname },
+            ...(post.attendance.confirmedAt && post.attendance.reviewDeadline
+              ? [
+                  { label: "출석 확인", value: formatDateTime(post.attendance.confirmedAt) },
+                  {
+                    label: "후기 작성 기한",
+                    value: `${formatDate(post.attendance.reviewDeadline)}까지`,
+                  },
+                ]
+              : []),
           ]}
         />
       </Grid>

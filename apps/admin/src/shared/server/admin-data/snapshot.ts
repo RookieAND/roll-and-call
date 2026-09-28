@@ -10,11 +10,13 @@ import {
   participants,
   profiles,
   reports,
+  reviewReports,
   rulebookRequests,
   rulebookCategories,
   rulebookQuizQuestions,
   rulebooks,
   sanctions,
+  sessionReviews,
   staff,
   staffMemos,
 } from "@roll-and-call/database";
@@ -37,6 +39,8 @@ import type {
   NoShow,
   QuizQuestion,
   Report,
+  Review,
+  ReviewReport,
   Rulebook,
   RulebookRequest,
   Session,
@@ -74,6 +78,8 @@ export const loadSnapshot = cache(async () => {
   const sellerRows = await db.select().from(certSellers).orderBy(certSellers.createdAt);
   const sanctionRows = await db.select().from(sanctions).where(isNull(sanctions.releasedAt));
   const reportRows = await db.select().from(reports);
+  const reviewRows = await db.select().from(sessionReviews);
+  const reviewReportRows = await db.select().from(reviewReports);
   const staffRows = await db.select().from(staff);
   const memoRows = await db.select().from(staffMemos);
   const auditRows = await db.select().from(auditLog);
@@ -161,6 +167,7 @@ export const loadSnapshot = cache(async () => {
       imageUrls: game.images,
       thumbnailUrl: game.thumbnailUrl ?? undefined,
       editRequestedAt: game.editRequestedAt ?? undefined,
+      attendanceConfirmedAt: game.attendanceConfirmedAt ?? undefined,
       hidden: game.hiddenAt
         ? { reason: game.hiddenReason ?? "", by: nicknameOf(game.hiddenBy), at: game.hiddenAt }
         : undefined,
@@ -300,6 +307,38 @@ export const loadSnapshot = cache(async () => {
     resolvedAt: row.resolvedAt ?? undefined,
   }));
 
+  const absentKeys = new Set(
+    participantRows
+      .filter((row) => row.absent && row.absenceCancelledAt === null)
+      .map((row) => `${row.gameId}:${row.userId}`),
+  );
+  const reviewList: Review[] = reviewRows.map((row) => ({
+    id: row.id,
+    sessionId: row.gameId,
+    authorId: row.authorId,
+    body: row.body,
+    spoiler: row.spoiler,
+    photoUrls: row.photoUrls,
+    createdAt: row.createdAt,
+    editedAt: row.updatedAt ?? undefined,
+    hidden: row.hiddenAt
+      ? { reason: row.hiddenReason ?? "", by: nicknameOf(row.hiddenBy), at: row.hiddenAt }
+      : undefined,
+    removed: row.removedAt
+      ? { reason: row.removedReason ?? "", by: nicknameOf(row.removedBy), at: row.removedAt }
+      : undefined,
+    held: absentKeys.has(`${row.gameId}:${row.authorId}`),
+  }));
+  const reviewReportList: ReviewReport[] = reviewReportRows.map((row) => ({
+    id: row.id,
+    reviewId: row.reviewId,
+    reporterId: row.reporterId ?? undefined,
+    category: row.category,
+    detail: row.detail,
+    reportedAt: row.createdAt,
+    open: row.outcome === null,
+  }));
+
   const discordIds = new Map(profileRows.map((profile) => [profile.id, profile.discordId]));
   const staffList: Staff[] = staffRows.map((row) => ({
     userId: row.userId,
@@ -346,6 +385,8 @@ export const loadSnapshot = cache(async () => {
     sessions,
     noShows,
     reports: reportList,
+    reviews: reviewList,
+    reviewReports: reviewReportList,
     auditLog: auditList,
     staffMemos: memoList,
     settings: { certEnforcementDate: settingsRow?.certEnforcementDate ?? null },

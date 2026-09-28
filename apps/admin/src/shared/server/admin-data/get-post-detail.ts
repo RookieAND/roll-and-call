@@ -4,6 +4,9 @@ import { postAuditTarget } from "./post-audit-target";
 import { postStatusOf } from "./post-status-of";
 import { loadSnapshot, type Snapshot } from "./snapshot";
 
+const REVIEW_WINDOW_DAYS = 14;
+const DAY = 86_400_000;
+
 const userOf = (db: Snapshot, userId: string) => db.users.find((user) => user.id === userId)!;
 const nicknameOf = (db: Snapshot, userId: string) => userOf(db, userId).nickname;
 
@@ -21,6 +24,16 @@ export async function getPostDetail(id: string) {
     .filter((report) => report.sessionId === id)
     .toSorted((a, b) => a.reportedAt.getTime() - b.reportedAt.getTime());
   const waitingIds = session.waitingIds ?? [];
+  const reviews = db.reviews
+    .filter((review) => review.sessionId === id && !review.removed)
+    .toSorted((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  const absentIds = new Set(
+    db.noShows
+      .filter((noShow) => noShow.sessionId === id && !noShow.cancelled)
+      .map((noShow) => noShow.userId),
+  );
+  // ponytail: 작성 기한은 출석 확인 + 14일로 어드민이 따로 계산한다. 사용자 앱(apps/web)의 계산과 같은 규칙이다.
+  const attendanceConfirmedAt = session.attendanceConfirmedAt;
 
   return {
     id: session.id,
@@ -60,6 +73,25 @@ export async function getPostDetail(id: string) {
       discordHandle: userOf(db, userId).discordHandle,
       joinedAt: session.joinedAt?.get(userId),
       recentNoShowCount: countRecentNoShows(db, userId, now),
+    })),
+    attendance: {
+      confirmedAt: attendanceConfirmedAt,
+      reviewDeadline: attendanceConfirmedAt
+        ? new Date(attendanceConfirmedAt.getTime() + REVIEW_WINDOW_DAYS * DAY)
+        : undefined,
+      attendedCount: session.memberIds.filter((userId) => !absentIds.has(userId)).length,
+    },
+    reviews: reviews.map((review) => ({
+      id: review.id,
+      authorNickname: nicknameOf(db, review.authorId),
+      createdAt: review.createdAt,
+      photoCount: review.photoUrls.length,
+      spoiler: review.spoiler,
+      openReportCount: db.reviewReports.filter(
+        (report) => report.reviewId === review.id && report.open,
+      ).length,
+      hidden: Boolean(review.hidden),
+      held: review.held,
     })),
     waitlist: waitingIds.map((userId, index) => ({
       userId,

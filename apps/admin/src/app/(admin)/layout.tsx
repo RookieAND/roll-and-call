@@ -31,7 +31,9 @@ export default async function AdminLayout({ children }: LayoutProps<"/">) {
           countPromises={{
             cert: countOf("cert"),
             rules: countOf("rulebookRequest"),
-            posts: countOf("report"),
+            posts: Promise.all([countOf("report"), countOf("reviewReport")]).then(
+              ([posts, reviews]) => (posts ?? 0) + (reviews ?? 0),
+            ),
           }}
         />
         <VStack

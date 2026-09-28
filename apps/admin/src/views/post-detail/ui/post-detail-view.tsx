@@ -1,5 +1,5 @@
 import { Callout, HStack, VStack } from "@roll-and-call/ui";
-import { Search } from "lucide-react";
+import { Hourglass, Search } from "lucide-react";
 
 import { POST_ACTION, PostActionDialog, type PostAction } from "@/features/moderate-post";
 import { paginate, withQuery } from "@/shared/lib";
@@ -14,6 +14,7 @@ import { PostActionsAside } from "./post-actions-aside";
 import { PostDetailTabs } from "./post-detail-tabs";
 import { PostSummary } from "./post-summary";
 import { ReportPanel } from "./report-panel";
+import { ReviewPanel } from "./review-panel";
 
 interface PostDetailViewProps {
   post: PostDetail;
@@ -36,6 +37,7 @@ export function PostDetailView({ post, tab, action, page, userAppUrl }: PostDeta
     POST_DETAIL_TAB.content,
     POST_DETAIL_TAB.members,
     POST_DETAIL_TAB.waitlist,
+    POST_DETAIL_TAB.reviews,
   ];
   const defaultTab =
     post.unresolvedReportCount > 0 ? POST_DETAIL_TAB.reports : POST_DETAIL_TAB.content;
@@ -61,6 +63,10 @@ export function PostDetailView({ post, tab, action, page, userAppUrl }: PostDeta
   const logHref = `/log?target=${encodeURIComponent(post.title)}`;
   const userAppHref = userAppUrl ? `${userAppUrl}/games/${post.id}` : null;
   const direct = !hasReports && !post.hidden;
+  const attendanceWaitDays =
+    currentTab === POST_DETAIL_TAB.reviews && !post.attendance.confirmedAt
+      ? Math.floor((Date.now() - post.startsAt.getTime()) / 86_400_000)
+      : null;
 
   return (
     <>
@@ -83,6 +89,16 @@ export function PostDetailView({ post, tab, action, page, userAppUrl }: PostDeta
               </Callout.Description>
             </Callout.Root>
           ) : null}
+          {attendanceWaitDays !== null && attendanceWaitDays > 0 ? (
+            <Callout.Root colorPalette="warning" size="sm">
+              <Callout.Icon>
+                <Hourglass size={14} />
+              </Callout.Icon>
+              <Callout.Description>
+                세션 시작 {attendanceWaitDays}일째입니다. GM의 출석 확인을 기다리고 있습니다.
+              </Callout.Description>
+            </Callout.Root>
+          ) : null}
           <PostSummary post={post} userAppHref={userAppHref} logHref={logHref} />
           <Panel className="flex-1" footer={pager}>
             <PostDetailTabs
@@ -90,10 +106,12 @@ export function PostDetailView({ post, tab, action, page, userAppUrl }: PostDeta
               unresolvedReportCount={post.unresolvedReportCount}
               memberCount={post.members.length}
               waitlistCount={post.waitlist.length}
+              reviewCount={post.reviews.length}
               reportPanel={hasReports ? <ReportPanel reports={post.reports} /> : null}
               contentPanel={<ContentPanel post={post} />}
               memberPanel={<MemberPanel members={pagedMembers.rows} />}
               waitlistPanel={<MemberPanel members={pagedWaitlist.rows} waiting />}
+              reviewPanel={<ReviewPanel post={post} />}
             />
           </Panel>
         </VStack>

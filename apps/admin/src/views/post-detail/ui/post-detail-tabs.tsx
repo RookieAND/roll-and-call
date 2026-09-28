@@ -13,10 +13,12 @@ interface PostDetailTabsProps {
   unresolvedReportCount: number;
   memberCount: number;
   waitlistCount: number;
+  reviewCount: number;
   reportPanel: ReactNode | null;
   contentPanel: ReactNode;
   memberPanel: ReactNode;
   waitlistPanel: ReactNode;
+  reviewPanel: ReactNode;
 }
 
 // 탭은 주소의 tab으로 기억한다. 신고가 없는 구인에는 신고 탭을 두지 않는다.
@@ -25,10 +27,12 @@ export function PostDetailTabs({
   unresolvedReportCount,
   memberCount,
   waitlistCount,
+  reviewCount,
   reportPanel,
   contentPanel,
   memberPanel,
   waitlistPanel,
+  reviewPanel,
 }: PostDetailTabsProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -64,6 +68,10 @@ export function PostDetailTabs({
             대기자
             <TabCount count={waitlistCount} selected={tab === POST_DETAIL_TAB.waitlist} />
           </Tabs.Trigger>
+          <Tabs.Trigger value={POST_DETAIL_TAB.reviews}>
+            후기
+            <TabCount count={reviewCount} selected={tab === POST_DETAIL_TAB.reviews} />
+          </Tabs.Trigger>
           <Tabs.Indicator />
         </Tabs.List>
       </HStack>
@@ -80,6 +88,9 @@ export function PostDetailTabs({
       </Tabs.Panel>
       <Tabs.Panel value={POST_DETAIL_TAB.waitlist} className="pt-0">
         {waitlistPanel}
+      </Tabs.Panel>
+      <Tabs.Panel value={POST_DETAIL_TAB.reviews} className="pt-0">
+        {reviewPanel}
       </Tabs.Panel>
     </Tabs.Root>
   );

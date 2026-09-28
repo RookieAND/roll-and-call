@@ -27,7 +27,7 @@ export function PostDetailLoading() {
         >
           <PostSummarySkeleton />
           <Panel className="flex-1">
-            <SkeletonTabs items={[null, null, null, null]} />
+            <SkeletonTabs items={[null, null, null, null, null]} />
             <VStack gap="125" className="p-150">
               <SkeletonItem />
               <SkeletonItem />

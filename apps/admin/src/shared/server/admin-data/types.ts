@@ -160,6 +160,7 @@ export interface Session {
   imageUrls?: string[];
   thumbnailUrl?: string;
   editRequestedAt?: Date;
+  attendanceConfirmedAt?: Date;
   hidden?: { reason: string; by: string; at: Date };
   gmEditSinceHidden?: { title: string; body: string; at: Date };
 }
@@ -174,6 +175,30 @@ export interface Report {
   detail?: string;
   resolvedBy?: string;
   resolvedAt?: Date;
+}
+
+export interface Review {
+  id: string;
+  sessionId: string;
+  authorId: string;
+  body: string;
+  spoiler: boolean;
+  photoUrls: string[];
+  createdAt: Date;
+  editedAt?: Date;
+  hidden?: { reason: string; by: string; at: Date };
+  removed?: { reason: string; by: string; at: Date };
+  held: boolean;
+}
+
+export interface ReviewReport {
+  id: string;
+  reviewId: string;
+  reporterId?: string;
+  category: string;
+  detail: string;
+  reportedAt: Date;
+  open: boolean;
 }
 
 export interface NoShow {
