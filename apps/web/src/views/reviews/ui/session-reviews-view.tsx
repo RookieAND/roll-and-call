@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { SessionHeading } from "@/entities/game";
 import { formatMonthDayTime } from "@/shared/lib";
 import { getCurrentUser, getGameById, getGameReviews } from "@/shared/server";
+import { EmptyState } from "@/shared/ui";
 
 import { REVIEW_PERSPECTIVE } from "../model/review-perspective";
 import { ReviewList } from "./review-list";
@@ -28,12 +29,21 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
         rule={game.rule}
         subline={`${when}후기 ${rows.length}개`}
       />
-      <ReviewList
-        rows={rows}
-        perspective={REVIEW_PERSPECTIVE.session}
-        viewerId={viewer?.id ?? null}
-        emptyText="아직 달린 후기가 없습니다"
-      />
+      {rows.length ? (
+        <ReviewList
+          rows={rows}
+          perspective={REVIEW_PERSPECTIVE.session}
+          viewerId={viewer?.id ?? null}
+          emptyText="아직 달린 후기가 없습니다"
+        />
+      ) : (
+        <EmptyState
+          image="/empty-states/empty-party.png"
+          title="아직 달린 후기가 없습니다"
+          description="참여자가 후기를 남기면 여기에 모입니다."
+          className="min-h-[60dvh] justify-center border-0"
+        />
+      )}
     </ReviewsPage>
   );
 }

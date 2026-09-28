@@ -28,7 +28,7 @@ export async function ReceivedReviewsView({ userId }: ReceivedReviewsViewProps) 
         rows={rows}
         perspective={REVIEW_PERSPECTIVE.received}
         viewerId={viewer?.id ?? null}
-        emptyText="아직 진행한 세션 후기가 없습니다"
+        emptyText="아직 진행한 세션에 후기가 없습니다"
       />
     </ReviewsPage>
   );
