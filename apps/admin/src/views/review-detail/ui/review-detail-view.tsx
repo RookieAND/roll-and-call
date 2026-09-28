@@ -64,7 +64,7 @@ export function ReviewDetailView({ review, action, from }: ReviewDetailViewProps
         action={openAction}
         fromReports={fromReports}
         closeHref={withQuery(pathname, query, {})}
-        actionHref={actionHref}
+        hideHref={actionHref(REVIEW_ACTION.hide)}
       />
     </>
   );

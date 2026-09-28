@@ -14,7 +14,8 @@ interface ReviewActionDialogProps {
   action: ReviewAction | null;
   fromReports: boolean;
   closeHref: string;
-  actionHref: (action: ReviewAction) => string;
+  // 제거 창의 "숨김으로 바꾸기"가 옮겨 갈 주소.
+  hideHref: string;
 }
 
 // 닫히는 동안에도 제목이 남도록 마지막 조치를 기억한다.
@@ -23,7 +24,7 @@ export function ReviewActionDialog({
   action,
   fromReports,
   closeHref,
-  actionHref,
+  hideHref,
 }: ReviewActionDialogProps) {
   const router = useRouter();
   const [shownAction, setShownAction] = useState(action);
@@ -39,7 +40,7 @@ export function ReviewActionDialog({
             action={shownAction}
             fromReports={fromReports}
             onDone={close}
-            onSwitchAction={(next) => router.replace(actionHref(next), { scroll: false })}
+            onSwitchToHide={() => router.replace(hideHref, { scroll: false })}
           />
         ) : null}
       </Dialog.Popup>

@@ -40,7 +40,7 @@ interface ReviewActionFormProps {
   action: ReviewAction;
   fromReports: boolean;
   onDone: () => void;
-  onSwitchAction: (action: ReviewAction) => void;
+  onSwitchToHide: () => void;
 }
 
 export function ReviewActionForm({
@@ -48,7 +48,7 @@ export function ReviewActionForm({
   action,
   fromReports,
   onDone,
-  onSwitchAction,
+  onSwitchToHide,
 }: ReviewActionFormProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -157,7 +157,7 @@ export function ReviewActionForm({
             {action === REVIEW_ACTION.dismiss ? (
               <StaffMemoField value={staffMemo} disabled={blocked} onValueChange={setStaffMemo} />
             ) : null}
-            {removing ? <SwitchToHide onSwitch={() => onSwitchAction(REVIEW_ACTION.hide)} /> : null}
+            {removing ? <SwitchToHide onSwitch={onSwitchToHide} /> : null}
           </VStack>
         </VStack>
       </Dialog.Body>
