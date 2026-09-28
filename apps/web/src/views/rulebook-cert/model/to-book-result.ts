@@ -27,6 +27,8 @@ export interface BookResult {
   deleted: boolean;
   memo: string | null;
   retryHref: string | null;
+  // 반려된 신청만 기록째 취소할 수 있다.
+  discardable: boolean;
 }
 
 const BADGE: Record<string, BookResult["badge"]> = {
@@ -92,5 +94,6 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
     deleted: rejected && thumbs.length > 0 && kept.length === 0,
     memo: rejected ? application?.rejectReason?.trim() || null : null,
     retryHref: rejected || revoked ? certApplyHref([rulebook.id], "photos") : null,
+    discardable: rejected,
   };
 }

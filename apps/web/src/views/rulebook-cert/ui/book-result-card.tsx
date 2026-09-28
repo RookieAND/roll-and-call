@@ -4,6 +4,7 @@ import { CircleAlert, ImageOff, MessageSquare } from "lucide-react";
 import Link from "next/link";
 
 import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
+import { DiscardRejectedButton } from "@/features/certify-rulebook";
 
 import type { BookResult } from "../model/to-book-result";
 
@@ -116,9 +117,14 @@ export function BookResultCard({ result }: BookResultCardProps) {
         )}
 
         {result.retryHref && (
-          <Button render={<Link href={result.retryHref} />} className="w-full">
-            다시 신청
-          </Button>
+          <HStack gap="100">
+            {result.discardable && (
+              <DiscardRejectedButton rulebookId={result.id} className="min-w-0 flex-1" />
+            )}
+            <Button render={<Link href={result.retryHref} />} className="min-w-0 flex-1">
+              다시 신청
+            </Button>
+          </HStack>
         )}
       </VStack>
     </Card.Root>
