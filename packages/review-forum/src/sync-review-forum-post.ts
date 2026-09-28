@@ -5,6 +5,7 @@ import {
   updateForumPost,
 } from "@roll-and-call/discord";
 
+import { fetchPhotoFiles } from "./fetch-photo-files";
 import { loadForumReview } from "./load-forum-review";
 import { reviewForumPost } from "./review-forum-post";
 import { saveThreadId } from "./save-thread-id";
@@ -29,8 +30,11 @@ export async function syncReviewForumPost(reviewId: string, siteOrigin: string |
     return;
   }
 
-  const post = reviewForumPost(review, await getForumTags(forumId), siteOrigin);
-  if (review.threadId && (await updateForumPost(review.threadId, post))) return;
-  const threadId = await createForumPost(forumId, post);
-  if (threadId) await saveThreadId(reviewId, threadId);
+  const { photos, ...post } = reviewForumPost(review, await getForumTags(forumId), siteOrigin);
+  const input = { ...post, files: await fetchPhotoFiles(photos) };
+  if (review.threadId && (await updateForumPost(review.threadId, input))) return;
+  // 고칠 수 없는 게시글(누가 지웠거나 첨부 수정이 막힘)은 지우고 새로 올린다.
+  if (review.threadId) await deleteDiscordThread(review.threadId);
+  const threadId = await createForumPost(forumId, input);
+  await saveThreadId(reviewId, threadId ?? null);
 }

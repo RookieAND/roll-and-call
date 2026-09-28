@@ -28,7 +28,7 @@ export async function loadForumReview(reviewId: string) {
       category: rulebookCategories.name,
       gmName: gm.username,
       authorName: profiles.username,
-      authorAvatar: profiles.avatarUrl,
+      authorDiscordId: profiles.discordId,
       absent: participants.absent,
       absenceCancelledAt: participants.absenceCancelledAt,
     })

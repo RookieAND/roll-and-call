@@ -16,7 +16,7 @@ const review = {
   gameId: "g1",
   body: "재미있었어요. 반전이 좋았습니다 || 정말로",
   spoiler: false,
-  photoUrls: ["p1", "p2", "p3", "p4", "p5"],
+  photoUrls: ["https://cdn.example/a/1.png", "https://cdn.example/a/2"],
   hiddenAt: null,
   removedAt: null,
   threadId: null,
@@ -25,28 +25,34 @@ const review = {
   category: "크툴루의 부름",
   gmName: "달빛토끼",
   authorName: "게굴",
-  authorAvatar: null,
+  authorDiscordId: "123",
   absent: false,
   absenceCancelledAt: null,
 } satisfies ForumReview;
 
 describe("reviewForumPost", () => {
-  it("스포일러가 없으면 스포X·TRPG·룰 태그와 사진 4장 묶음을 붙인다", () => {
+  it("본문은 평문으로 두고 아래에 작성자·룰·GM·링크 한 줄을 붙인다", () => {
     const post = reviewForumPost(review, tags, "https://roll-and-call.vercel.app");
     expect(post.name).toBe("붉은 여관의 밤 후기 · 게굴");
     expect(post.appliedTags).toEqual(["no-spoiler", "trpg", "coc"]);
-    expect(post.message.embeds).toHaveLength(4);
-    expect(post.message.embeds?.[0]?.footer?.text).toBe("사진 1장은 롤앤콜에서 볼 수 있어요");
+    expect(post.content).toBe(
+      "재미있었어요. 반전이 좋았습니다 || 정말로\n\n-# 작성자 <@123> · 룰 크툴루의 부름 · GM 달빛토끼 · [롤앤콜에서 보기](<https://roll-and-call.vercel.app/games/g1/reviews>)",
+    );
+    expect(post.photos.map((photo) => photo.name)).toEqual(["photo-1.png", "photo-2.jpg"]);
   });
 
-  it("스포일러면 제목에 [스포있음], 본문을 가리고 사진은 올리지 않는다", () => {
+  it("스포일러면 제목에 [스포있음], 본문과 사진을 가린다", () => {
     const post = reviewForumPost({ ...review, spoiler: true, category: null }, tags, undefined);
     expect(post.name.startsWith("[스포있음] ")).toBe(true);
     expect(post.appliedTags).toEqual(["spoiler", "trpg", "other"]);
-    expect(post.message.embeds).toHaveLength(1);
-    expect(post.message.embeds?.[0]?.description).toBe(
-      "||재미있었어요. 반전이 좋았습니다 | | 정말로||",
+    expect(post.content).toBe(
+      "||재미있었어요. 반전이 좋았습니다 | | 정말로||\n\n-# 작성자 <@123> · 룰 CoC 7th · GM 달빛토끼",
     );
-    expect(post.message.buttons).toEqual([]);
+    expect(post.photos.every((photo) => photo.name.startsWith("SPOILER_"))).toBe(true);
+  });
+
+  it("글자 수가 넘치면 아래 한 줄을 뺀다", () => {
+    const body = "가".repeat(1990);
+    expect(reviewForumPost({ ...review, body }, tags, undefined).content).toBe(body);
   });
 });
