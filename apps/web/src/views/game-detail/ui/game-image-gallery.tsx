@@ -1,9 +1,9 @@
 "use client";
 
-import { Dialog } from "@base-ui-components/react/dialog";
-import { Grid, HStack, IconButton, Text, VStack } from "@roll-and-call/ui";
-import { X } from "lucide-react";
+import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
+
+import { ImageLightbox } from "@/shared/ui";
 
 const GRID_SLOTS = 4;
 
@@ -58,31 +58,7 @@ export function GameImageGallery({ images }: GameImageGalleryProps) {
         )}
       </Grid>
 
-      <Dialog.Root open={openUrl !== null} onOpenChange={(open) => !open && setOpenIndex(null)}>
-        <Dialog.Portal>
-          <Dialog.Backdrop className="fixed inset-0 z-(--rc-z-overlay) bg-dim" />
-          <Dialog.Popup className="fixed inset-0 z-(--rc-z-dialog) flex items-center justify-center p-200 outline-none">
-            <Dialog.Title className="sr-only">{openLabel}</Dialog.Title>
-            {openUrl && (
-              <img
-                src={openUrl}
-                alt={openLabel}
-                className="max-h-full max-w-full rounded-300 object-contain"
-              />
-            )}
-            <Dialog.Close
-              render={
-                <IconButton
-                  aria-label="닫기"
-                  className="absolute top-4 right-4 h-11 w-11 bg-surface/85"
-                >
-                  <X size={20} aria-hidden />
-                </IconButton>
-              }
-            />
-          </Dialog.Popup>
-        </Dialog.Portal>
-      </Dialog.Root>
+      <ImageLightbox url={openUrl ?? null} label={openLabel} onClose={() => setOpenIndex(null)} />
     </VStack>
   );
 }

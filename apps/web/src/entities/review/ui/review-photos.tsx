@@ -1,25 +1,38 @@
+"use client";
+
 import { HStack } from "@roll-and-call/ui";
+import { useState } from "react";
+
+import { ImageLightbox } from "@/shared/ui";
 
 interface ReviewPhotosProps {
   urls: string[];
 }
 
-// ponytail: 크게 보기는 원본을 새 탭으로 연다. 사진 뷰어가 필요해지면 그때 시트로 바꾼다.
 export function ReviewPhotos({ urls }: ReviewPhotosProps) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   if (urls.length === 0) return null;
+  const openUrl = openIndex === null ? null : (urls[openIndex] ?? null);
+
   return (
     <HStack gap="075" wrap>
       {urls.map((url, index) => (
-        <a
+        // ponytail: 이미지 자체가 버튼이라 Button 프리미티브(텍스트·패딩 룩)와 맞지 않아 손코딩.
+        <button
           key={url}
-          href={url}
-          target="_blank"
-          rel="noreferrer"
-          className="size-14 overflow-hidden rounded-300 bg-gray-100"
+          type="button"
+          onClick={() => setOpenIndex(index)}
+          aria-label={`후기 사진 ${index + 1} 크게 보기`}
+          className="size-14 overflow-hidden rounded-300 bg-gray-100 focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none"
         >
-          <img src={url} alt={`후기 사진 ${index + 1}`} className="size-full object-cover" />
-        </a>
+          <img src={url} alt="" loading="lazy" className="size-full object-cover" />
+        </button>
       ))}
+      <ImageLightbox
+        url={openUrl}
+        label={`후기 사진 ${(openIndex ?? 0) + 1}`}
+        onClose={() => setOpenIndex(null)}
+      />
     </HStack>
   );
 }
