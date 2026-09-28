@@ -5,19 +5,26 @@ import { SESSION_ROLE } from "@/entities/game";
 import { AvailabilityRows, ProfileLinks } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { ProfileMemoBlock } from "@/features/profile-memo";
-import { getCurrentUser, getProfileMemo, getRulebookRecords } from "@/shared/server";
+import {
+  getCurrentUser,
+  getProfileMemo,
+  getReviewCounts,
+  getRulebookRecords,
+} from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { loadProfile } from "@/widgets/session-list";
 
 import { ProfileBlockLabel } from "./profile-block-label";
+import { ProfileReviews } from "./profile-reviews";
 import { ProfileRulebooks } from "./profile-rulebooks";
 import { ProfileSummary } from "./profile-summary";
 
 export async function UserProfileView({ id }: { id: string }) {
-  const [viewer, loaded, rulebookRecords] = await Promise.all([
+  const [viewer, loaded, rulebookRecords, reviewCounts] = await Promise.all([
     getCurrentUser(),
     loadProfile(id),
     getRulebookRecords(id),
+    getReviewCounts(id),
   ]);
   if (viewer?.id === id) redirect("/me");
 
@@ -29,6 +36,7 @@ export async function UserProfileView({ id }: { id: string }) {
     .rulebooks.filter((rulebook) => rulebook.state === CERT_STATE.certified)
     .toSorted((left, right) => right.stateAt!.getTime() - left.stateAt!.getTime())
     .map((rulebook) => ({ id: rulebook.id, label: rulebook.label }));
+  const isGm = certified.length > 0 && profile.showGmBadge;
   const memo = viewer ? await getProfileMemo({ ownerId: viewer.id, targetId: id }) : null;
 
   return (
@@ -38,12 +46,18 @@ export async function UserProfileView({ id }: { id: string }) {
         <ProfileSummary
           profile={profile}
           absences={absences}
-          isGm={certified.length > 0 && profile.showGmBadge}
+          isGm={isGm}
           hosted={sessions[SESSION_ROLE.host].length}
           played={sessions[SESSION_ROLE.player].length}
         />
 
         {certified.length > 0 && <ProfileRulebooks rulebooks={certified} />}
+
+        <ProfileReviews
+          userId={profile.id}
+          received={isGm ? reviewCounts.received : null}
+          written={reviewCounts.written}
+        />
 
         <section className="p-200">
           <ProfileBlockLabel label="링크" />

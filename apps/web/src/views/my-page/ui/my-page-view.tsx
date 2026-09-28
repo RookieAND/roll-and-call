@@ -4,13 +4,19 @@ import { SESSION_ROLE } from "@/entities/game";
 import { profileDisplay } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import { getCurrentSessionUser, getProfile, getRulebookRecords } from "@/shared/server";
+import {
+  getCurrentSessionUser,
+  getProfile,
+  getReviewCounts,
+  getRulebookRecords,
+} from "@/shared/server";
 import { AppBar, HelpButton } from "@/shared/ui";
 import { loadMySessions, sessionsHref } from "@/widgets/session-list";
 
 import { sessionTodos } from "../model/session-todos";
 import { MyPageLinks } from "./my-page-links";
 import { MyPageProfile } from "./my-page-profile";
+import { MyPageReviews } from "./my-page-reviews";
 import { MyPageRulebooks } from "./my-page-rulebooks";
 import { MyPageSettings } from "./my-page-settings";
 import { MyPageTodos } from "./my-page-todos";
@@ -30,10 +36,11 @@ export async function MyPageView() {
     );
   }
 
-  const [profile, mySessions, rulebookRecords] = await Promise.all([
+  const [profile, mySessions, rulebookRecords, reviewCounts] = await Promise.all([
     getProfile(user.id),
     loadMySessions(user.id),
     getRulebookRecords(user.id),
+    getReviewCounts(user.id, { own: true }),
   ]);
   const rulebooks = toMyRulebooks(rulebookRecords);
   const rejectedRulebooks = rulebooks.rulebooks.filter(
@@ -69,6 +76,7 @@ export async function MyPageView() {
           />
           <MyPageTodos todos={todos} rejectedRulebooks={rejectedRulebooks} />
           <MyPageRulebooks rulebooks={rulebooks} />
+          <MyPageReviews received={reviewCounts.received} written={reviewCounts.written} />
           <MyPageLinks links={profile?.links ?? []} />
           <MyPageSettings
             handleLabel={handleLabel}

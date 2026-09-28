@@ -1,6 +1,14 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
-import { Check, ChevronRight, ClipboardCheck, Clock, Pencil, Users } from "lucide-react";
+import {
+  Check,
+  ChevronRight,
+  ClipboardCheck,
+  Clock,
+  MessageSquareText,
+  Pencil,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 
 import { IconTile } from "@/shared/ui";
@@ -9,6 +17,7 @@ import type { ManageRow as Row } from "../model/manage-rows";
 
 const ICONS = {
   clipboard: ClipboardCheck,
+  message: MessageSquareText,
   clock: Clock,
   check: Check,
   users: Users,

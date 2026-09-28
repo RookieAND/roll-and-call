@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { countConfirmed, isSessionEnded } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { DeleteGameRow } from "@/features/delete-game";
-import { getCurrentUser, getGameById, getResponseCounts } from "@/shared/server";
+import { getCurrentUser, getGameById, getGameReviews, getResponseCounts } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { manageRows } from "../model/manage-rows";
@@ -12,12 +12,13 @@ import { manageSummary } from "../model/manage-summary";
 import { ManageGameStat } from "./manage-game-stat";
 import { ManageRow } from "./manage-row";
 
-// GM 도구는 모두가 읽는 02 상세가 아니라 이 화면에 모은다. 다섯 줄은 항상 보이고, 못 하는 일은 흐리게 둔다.
+// GM 도구는 모두가 읽는 02 상세가 아니라 이 화면에 모은다. 여섯 줄은 항상 보이고, 못 하는 일은 흐리게 둔다.
 export async function ManageGameView({ id }: { id: string }) {
-  const [game, user, responseCounts] = await Promise.all([
+  const [game, user, responseCounts, reviews] = await Promise.all([
     getGameById(id),
     getCurrentUser(),
     getResponseCounts([id]),
+    getGameReviews(id),
   ]);
   if (!game) notFound();
   if (user?.id !== game.gmId) {
@@ -37,7 +38,7 @@ export async function ManageGameView({ id }: { id: string }) {
   const responses = responseCounts.get(id) ?? 0;
   const confirmedCount = countConfirmed(game.participants);
   const { stage, stats } = manageSummary(game, responses);
-  const rows = manageRows(game);
+  const rows = manageRows(game, reviews.length);
 
   return (
     <>

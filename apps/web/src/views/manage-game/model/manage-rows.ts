@@ -1,5 +1,6 @@
 import { countConfirmed, isDeadlinePassed, isSessionEnded, SCHEDULE_MODE } from "@/entities/game";
-import { formatDateTime } from "@/shared/lib";
+import { reviewWriteDeadline } from "@/entities/review";
+import { formatDate, formatDateTime } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
 export const MANAGE_ROW_STATE = {
@@ -13,8 +14,8 @@ export const MANAGE_ROW_STATE = {
 export type ManageRowState = (typeof MANAGE_ROW_STATE)[keyof typeof MANAGE_ROW_STATE];
 
 export type ManageRow = {
-  key: "attendance" | "time" | "roster" | "edit";
-  icon: "clipboard" | "clock" | "check" | "users" | "pencil";
+  key: "attendance" | "review" | "time" | "roster" | "edit";
+  icon: "clipboard" | "message" | "clock" | "check" | "users" | "pencil";
   label: string;
   detail: string;
   href: string | null;
@@ -23,7 +24,11 @@ export type ManageRow = {
 
 // 줄 순서는 고정이다. 상태에 따라 순서를 바꾸지 않고 같은 자리에서 찾게 한다.
 // 숫자는 헤더에서만 읽는다 — 줄에는 그 줄이 여는 화면이 무엇을 하는지만 적는다.
-export function manageRows(game: GameDetailData, now = new Date()): ManageRow[] {
+export function manageRows(
+  game: GameDetailData,
+  reviewCount: number,
+  now = new Date(),
+): ManageRow[] {
   const confirmedCount = countConfirmed(game.participants);
   const ended = isSessionEnded(game, now);
   const coordinating = game.scheduleMode === SCHEDULE_MODE.coordinate && !game.confirmedAt;
@@ -45,6 +50,30 @@ export function manageRows(game: GameDetailData, now = new Date()): ManageRow[] 
       : confirmedCount === 0
         ? { ...attendanceBase, ...locked, detail: "확정 참여자가 없습니다" }
         : { ...attendanceBase, ...open, detail: "세션이 끝났습니다 · 참석·불참을 표시해주세요" };
+
+  const reviewBase = {
+    key: "review",
+    icon: "message",
+    label: "세션 후기",
+    href: `/games/${game.id}/reviews`,
+  } as const;
+  const reviewDeadline = game.attendanceConfirmedAt
+    ? reviewWriteDeadline(game.attendanceConfirmedAt)
+    : null;
+  const review: ManageRow = !reviewDeadline
+    ? {
+        ...reviewBase,
+        ...locked,
+        detail: ended ? "출석 확인 후 열립니다" : "세션이 끝나고 출석을 확인하면 열립니다",
+      }
+    : {
+        ...reviewBase,
+        ...open,
+        detail:
+          reviewDeadline.getTime() > now.getTime()
+            ? `후기 ${reviewCount}개가 달렸습니다 · ${formatDate(reviewDeadline)}까지 받습니다`
+            : `후기 ${reviewCount}개가 달렸습니다`,
+      };
 
   const timeBase = { key: "time", label: "세션 시간 정하기" } as const;
   const time: ManageRow = game.confirmedAt
@@ -85,5 +114,5 @@ export function manageRows(game: GameDetailData, now = new Date()): ManageRow[] 
         href: `/games/${game.id}/edit`,
       };
 
-  return [attendance, time, roster, edit];
+  return [attendance, review, time, roster, edit];
 }

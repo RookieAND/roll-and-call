@@ -33,3 +33,4 @@ export { ABSENCE_RECORD_MONTHS, absenceExpiresAt } from "./model/absence-expiry"
 export { recruitMethodLabel } from "./model/recruit-method-label";
 export { RecruitMethodBadge } from "./ui/recruit-method-badge";
 export { availabilityNote } from "./model/availability-note";
+export { SessionHeading } from "./ui/session-heading";

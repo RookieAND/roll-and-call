@@ -38,6 +38,9 @@ export function SessionCard({ model }: SessionCardProps) {
       ? "muted"
       : "normal";
 
+  const captionForeground = model.caption?.strong ? "primary" : "hint";
+  const captionWeight = model.caption?.strong ? "bold" : "regular";
+
   return (
     <Card.Root
       padding="sm"
@@ -74,6 +77,17 @@ export function SessionCard({ model }: SessionCardProps) {
                 GM {model.gm.username}
               </Text>
             </HStack>
+          )}
+          {model.caption && (
+            <Text
+              typography="body4"
+              foreground={captionForeground}
+              weight={captionWeight}
+              numeric
+              render={<p />}
+            >
+              {model.caption.text}
+            </Text>
           )}
         </Link>
         <SessionCardAction model={model} />

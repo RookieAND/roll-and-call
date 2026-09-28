@@ -85,6 +85,7 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
       urgent: false,
       titleDanger: false,
       waitlistRank: null,
+      caption: null,
     },
   };
 }

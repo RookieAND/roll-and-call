@@ -31,3 +31,5 @@ export { countConfirmed } from "./count-confirmed";
 export { countWaiting } from "./count-waiting";
 export { deriveGameStatus } from "./derive-game-status";
 export { CERT_PHOTO_BUCKET, certPhotoPathOf } from "./cert-photo-path";
+export { REVIEW_PHOTO_BUCKET, reviewPhotoPathOf } from "./review-photo-path";
+export { formatMonthDayTime } from "./format-month-day-time";

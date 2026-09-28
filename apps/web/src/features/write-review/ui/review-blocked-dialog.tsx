@@ -1,0 +1,34 @@
+"use client";
+
+import { AlertDialog, Button } from "@roll-and-call/ui";
+import { useRouter } from "next/navigation";
+
+import { MY_REVIEWS_HREF, REVIEW_BLOCK_DIALOG, type ReviewBlock } from "../model/review-block";
+
+interface ReviewBlockedDialogProps {
+  block: ReviewBlock | null;
+  fallbackHref: string;
+}
+
+// 닫으면 이 화면을 떠난다. 막힌 채로 폼에 머물 이유가 없다.
+export function ReviewBlockedDialog({ block, fallbackHref }: ReviewBlockedDialogProps) {
+  const router = useRouter();
+  const dialog = block ? REVIEW_BLOCK_DIALOG[block] : null;
+  const href = dialog?.toMyReviews ? MY_REVIEWS_HREF : fallbackHref;
+
+  return (
+    <AlertDialog.Root open={dialog !== null} onOpenChange={(open) => !open && router.push(href)}>
+      <AlertDialog.Popup>
+        <AlertDialog.Header>
+          <AlertDialog.Title>{dialog?.title}</AlertDialog.Title>
+          <AlertDialog.Description>{dialog?.description}</AlertDialog.Description>
+        </AlertDialog.Header>
+        <AlertDialog.Footer layout="row">
+          <Button size="lg" className="flex-1" onClick={() => router.push(href)}>
+            {dialog?.confirmLabel}
+          </Button>
+        </AlertDialog.Footer>
+      </AlertDialog.Popup>
+    </AlertDialog.Root>
+  );
+}

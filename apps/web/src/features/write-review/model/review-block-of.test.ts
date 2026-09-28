@@ -1,0 +1,58 @@
+import { describe, expect, it } from "vitest";
+
+import { PARTICIPANT_STATUS } from "@/entities/game";
+import type { ReviewDraftTarget } from "@/shared/server";
+
+import { REVIEW_BLOCK } from "./review-block";
+import { reviewBlockOf } from "./review-block-of";
+
+const NOW = new Date("2026-09-28T12:00:00+09:00");
+const DAY = 24 * 60 * 60 * 1000;
+
+const target = {
+  game: { attendanceConfirmedAt: new Date(NOW.getTime() - 3 * DAY) },
+  participant: { status: PARTICIPANT_STATUS.confirmed, absent: false, absenceCancelledAt: null },
+  review: null,
+} as unknown as ReviewDraftTarget;
+
+const review = { createdAt: new Date(NOW.getTime() - DAY), hiddenAt: null, removedAt: null };
+
+describe("reviewBlockOf", () => {
+  it("출석 확정 뒤 14일 안의 참석자는 쓸 수 있다", () => {
+    expect(reviewBlockOf(target, NOW)).toBeNull();
+  });
+
+  it("확정 참여자가 아니면 볼 수 없다", () => {
+    expect(reviewBlockOf({ ...target, participant: null }, NOW)).toBe(REVIEW_BLOCK.unavailable);
+  });
+
+  it("출석이 다시 열려 있으면 기다리게 한다", () => {
+    const reopened = { ...target, game: { attendanceConfirmedAt: null } } as ReviewDraftTarget;
+    expect(reviewBlockOf(reopened, NOW)).toBe(REVIEW_BLOCK.attendancePending);
+  });
+
+  it("불참이면 쓸 수 없고, 운영진이 취소한 불참은 쓸 수 있다", () => {
+    const absent = { ...target.participant!, absent: true };
+    expect(reviewBlockOf({ ...target, participant: absent }, NOW)).toBe(REVIEW_BLOCK.absent);
+    const cancelled = { ...absent, absenceCancelledAt: NOW };
+    expect(reviewBlockOf({ ...target, participant: cancelled }, NOW)).toBeNull();
+  });
+
+  it("출석 확정 14일이 지나면 작성 기간이 끝난다", () => {
+    const late = new Date(NOW.getTime() + 11 * DAY);
+    expect(reviewBlockOf(target, late)).toBe(REVIEW_BLOCK.writePeriodOver);
+  });
+
+  it("쓴 후기는 등록 14일 안에만 고치고, 지운 후기는 다시 열지 못한다", () => {
+    const written = { ...target, review } as unknown as ReviewDraftTarget;
+    expect(reviewBlockOf(written, NOW)).toBeNull();
+    expect(reviewBlockOf(written, new Date(NOW.getTime() + 14 * DAY))).toBe(
+      REVIEW_BLOCK.editPeriodOver,
+    );
+    const deleted = {
+      ...target,
+      review: { ...review, removedAt: NOW },
+    } as unknown as ReviewDraftTarget;
+    expect(reviewBlockOf(deleted, NOW)).toBe(REVIEW_BLOCK.unavailable);
+  });
+});

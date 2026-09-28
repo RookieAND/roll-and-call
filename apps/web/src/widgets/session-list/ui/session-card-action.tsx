@@ -3,10 +3,24 @@ import Link from "next/link";
 
 import { CancelWaitlistButton } from "@/features/join-game";
 
-import { SESSION_ACTION_KIND, type SessionCardModel } from "../model/session-card-model";
+import {
+  SESSION_ACTION_KIND,
+  type SessionActionKind,
+  type SessionCardModel,
+} from "../model/session-card-model";
 
-// 세션 시간을 정하는 한 수만 초록이다 — 03 확정 버튼과 같은 일이라서다.
-const CONFIRM_KINDS: string[] = [SESSION_ACTION_KIND.confirmTime];
+type ActionLook = {
+  variant: "solid" | "outline" | "tinted";
+  colorPalette: "primary" | "success" | "gray";
+};
+
+// 세션 시간을 정하는 한 수만 초록이다 — 03 확정 버튼과 같은 일이라서다. 후기 쓰기는 기한이 있어 채우고, 내 후기 보기는 옅게 둔다.
+const ACTION_LOOK: Partial<Record<SessionActionKind, ActionLook>> = {
+  [SESSION_ACTION_KIND.confirmTime]: { variant: "solid", colorPalette: "success" },
+  [SESSION_ACTION_KIND.writeReview]: { variant: "solid", colorPalette: "primary" },
+  [SESSION_ACTION_KIND.viewReview]: { variant: "outline", colorPalette: "gray" },
+};
+const DEFAULT_LOOK: ActionLook = { variant: "tinted", colorPalette: "primary" };
 
 interface SessionCardActionProps {
   model: SessionCardModel;
@@ -28,12 +42,12 @@ export function SessionCardAction({ model }: SessionCardActionProps) {
     );
   }
 
-  const confirmKind = CONFIRM_KINDS.includes(action.kind);
+  const look = ACTION_LOOK[action.kind] ?? DEFAULT_LOOK;
   return (
     <Button
       render={<Link href={action.href} />}
-      variant={confirmKind ? "solid" : "tinted"}
-      colorPalette={confirmKind ? "success" : "primary"}
+      variant={look.variant}
+      colorPalette={look.colorPalette}
       className="mt-050 w-full"
     >
       {action.label}

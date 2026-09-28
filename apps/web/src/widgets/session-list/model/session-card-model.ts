@@ -1,5 +1,5 @@
 import type { ParticipantStatus, SessionRole } from "@/entities/game";
-import type { Game } from "@/shared/server";
+import type { Game, ReviewedGames } from "@/shared/server";
 
 // 탭은 역할만 가르고 진행·종료은 칩이 가른다. 세션이 끝나도 내가 GM이었는지는 바뀌지 않는다.
 export const SESSION_CHIP = {
@@ -40,6 +40,8 @@ export const SESSION_ACTION_KIND = {
   confirmAttendance: "confirm-attendance",
   drawLottery: "draw-lottery",
   fillVacancy: "fill-vacancy",
+  writeReview: "write-review",
+  viewReview: "view-review",
 } as const;
 
 export type SessionActionKind = (typeof SESSION_ACTION_KIND)[keyof typeof SESSION_ACTION_KIND];
@@ -70,6 +72,8 @@ export type SessionCardModel = {
   urgent: boolean;
   // 목록 카드가 다는 버튼. 운영은 언제나 "운영 관리" 하나다.
   action: SessionAction | null;
+  // 버튼 위 한 줄. 끝난 세션의 후기 기한처럼 버튼과 붙어 읽히는 것만 적는다.
+  caption: { text: string; strong: boolean } | null;
   // 지금 막혀 있는 것. 마이페이지 할 일 카드가 이걸로 만들어진다.
   todo: SessionTodo | null;
   waitingCount: number;
@@ -99,6 +103,8 @@ export type SessionContext = {
   now?: Date;
   // 남의 프로필: 할 일 버튼과 보는 사람 기준 문구(미제출·응답 수)를 빼고 기록만 남긴다.
   readOnly?: boolean;
+  // 내가 쓴 후기(게임 id별). 참여 탭 종료 카드가 후기 쓰기·내 후기 보기를 가른다.
+  reviewedGames?: ReviewedGames;
 };
 
 export type MySessions = Record<SessionRole, SessionCardModel[]>;

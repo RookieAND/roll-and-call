@@ -20,7 +20,10 @@ export {
   rulebookQuizQuestions,
   rulebookRequests,
   sanctions,
+  sessionReviews,
+  reviewReports,
   type CertApplication,
+  type SessionReview,
 } from "@roll-and-call/database";
 export { getRulebookRecords, type RulebookRecords } from "./db/get-rulebook-records";
 export { getCertSellers } from "./db/get-cert-sellers";
@@ -55,3 +58,12 @@ export { createSupabaseServerClient } from "./auth/create-supabase-server-client
 export { getCurrentUser } from "./auth/get-current-user";
 export { getCurrentSessionUser } from "./auth/get-current-session-user";
 export { removeUnusedCertPhotos } from "./cert-files";
+export { getGameReviews, type ReviewCardRow } from "./db/get-game-reviews";
+export { getReceivedReviews } from "./db/get-received-reviews";
+export { getWrittenReviews } from "./db/get-written-reviews";
+export { getMyReviews, type MyReviewRow } from "./db/get-my-reviews";
+export { getReviewCounts } from "./db/get-review-counts";
+export { getReviewedGames, type ReviewedGames } from "./db/get-reviewed-games";
+export { getReviewDraftTarget, type ReviewDraftTarget } from "./db/get-review-draft-target";
+export { removeUnusedReviewPhotos } from "./review-files";
+export { revalidateReviews } from "./revalidate-reviews";

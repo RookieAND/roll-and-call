@@ -5,6 +5,7 @@ import type { SessionFacts } from "./derive-session-facts";
 import { hostMenuAction } from "./host-menu-action";
 import { joinParts } from "./join-parts";
 import { relativeDay } from "./relative-day";
+import { reviewNote } from "./review-note";
 import {
   SESSION_ACTION_KIND,
   SESSION_CHIP,
@@ -62,6 +63,13 @@ export function toPastSessionCard(
         }
       : null;
 
+  // 후기는 세션을 치르고 참석한 참여자만 쓴다.
+  const review =
+    player && finished && !absent && !waitlistRank
+      ? reviewNote(game, context)
+      : { caption: null, action: null };
+  const absentCaption = absent && !context.readOnly ? { text: "불참 처리됨", strong: false } : null;
+
   return {
     ...base,
     chip: SESSION_CHIP.ended,
@@ -77,7 +85,8 @@ export function toPastSessionCard(
     scheduleIcon: attendanceTodo ? SESSION_ICON.alert : SESSION_ICON.calendar,
     gm: player ? (game.gm ?? null) : null,
     // 운영 카드의 버튼은 언제나 "운영 관리" 하나다. 출석 확인은 그 안과 할 일 카드에서 한다.
-    action: player || context.readOnly ? null : hostMenuAction(game.id),
+    action: player ? review.action : context.readOnly ? null : hostMenuAction(game.id),
+    caption: review.caption ?? absentCaption,
     todo: attendanceTodo,
     waitingCount: facts.waitingCount,
     // 부호를 뒤집어 최근에 끝난 것부터 온다.

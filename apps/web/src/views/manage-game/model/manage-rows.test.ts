@@ -26,14 +26,15 @@ const coordinating = {
 } as unknown as GameDetailData;
 
 const byKey = (game: GameDetailData) => {
-  const [attendance, time, roster, edit] = manageRows(game, NOW);
+  const [attendance, , time, roster, edit] = manageRows(game, 0, NOW);
   return { attendance: attendance!, time: time!, roster: roster!, edit: edit! };
 };
 
 describe("manageRows", () => {
-  it("줄은 네 개이고 순서가 고정이다", () => {
-    expect(manageRows(coordinating, NOW).map((row) => row.key)).toEqual([
+  it("줄은 다섯 개이고 순서가 고정이다", () => {
+    expect(manageRows(coordinating, 0, NOW).map((row) => row.key)).toEqual([
       "attendance",
+      "review",
       "time",
       "roster",
       "edit",
@@ -59,5 +60,19 @@ describe("manageRows", () => {
     expect(rows.time.state).toBe(MANAGE_ROW_STATE.done);
     expect(rows.roster.state).toBe(MANAGE_ROW_STATE.locked);
     expect(rows.edit.state).toBe(MANAGE_ROW_STATE.locked);
+  });
+
+  it("세션 후기는 출석을 확인한 뒤에 열리고 받는 기한을 적는다", () => {
+    const [, lockedReview] = manageRows(coordinating, 0, NOW);
+    expect(lockedReview!.state).toBe(MANAGE_ROW_STATE.locked);
+
+    const confirmed = {
+      ...coordinating,
+      confirmedAt: new Date(NOW.getTime() - 2 * DAY),
+      attendanceConfirmedAt: new Date(NOW.getTime() - DAY),
+    } as unknown as GameDetailData;
+    const [, review] = manageRows(confirmed, 2, NOW);
+    expect(review!.state).toBe(MANAGE_ROW_STATE.open);
+    expect(review!.detail).toBe("후기 2개가 달렸습니다 · 10월 3일까지 받습니다");
   });
 });

@@ -2,8 +2,8 @@ import { Badge, Card, Container, HStack, Skeleton } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 
-// manageRows 4행 + DeleteGameRow 1행.
-const ROW_COUNT = 5;
+// manageRows 5행 + DeleteGameRow 1행.
+const ROW_COUNT = 6;
 
 export default function Loading() {
   return (
