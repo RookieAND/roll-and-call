@@ -1,88 +1,45 @@
 import { Container, VStack } from "@roll-and-call/ui";
+import { Suspense } from "react";
 
-import { SESSION_ROLE } from "@/entities/game";
-import { profileDisplay } from "@/entities/profile";
-import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import {
-  getCurrentSessionUser,
-  getProfile,
-  getReviewCounts,
-  getRulebookRecords,
-} from "@/shared/server";
+import { getCurrentSessionUser } from "@/shared/server";
 import { AppBar, HelpButton } from "@/shared/ui";
-import { loadMySessions, sessionsHref } from "@/widgets/session-list";
 
-import { sessionTodos } from "../model/session-todos";
-import { MyPageLinks } from "./my-page-links";
-import { MyPageProfile } from "./my-page-profile";
-import { MyPageReviews } from "./my-page-reviews";
-import { MyPageRulebooks } from "./my-page-rulebooks";
-import { MyPageSettings } from "./my-page-settings";
-import { MyPageTodos } from "./my-page-todos";
+import { MyPageAccount } from "./my-page-account";
+import { MyPageAccountSkeleton } from "./my-page-account-skeleton";
+import { MyPageBlockSkeleton } from "./my-page-block-skeleton";
+import { MyPageReviewsSection } from "./my-page-reviews-section";
+import { MyPageRulebooksSection } from "./my-page-rulebooks-section";
+import { MyPageSummary } from "./my-page-summary";
+import { MyPageSummarySkeleton } from "./my-page-summary-skeleton";
 
+// 구역마다 따로 읽어 먼저 끝난 구역부터 보인다. 구역이 늘어도 느린 구역만 늦게 뜬다.
 export async function MyPageView() {
   const user = await getCurrentSessionUser();
-  if (!user) {
-    return (
-      <>
-        <AppBar title="마이페이지" action={<HelpButton />} />
-        <Container size="sm">
-          <div className="py-300">
-            <LoginRequired />
-          </div>
-        </Container>
-      </>
-    );
-  }
-
-  const [profile, mySessions, rulebookRecords, reviewCounts] = await Promise.all([
-    getProfile(user.id),
-    loadMySessions(user.id),
-    getRulebookRecords(user.id),
-    getReviewCounts(user.id, { own: true }),
-  ]);
-  const rulebooks = toMyRulebooks(rulebookRecords);
-  const rejectedRulebooks = rulebooks.rulebooks.filter(
-    (rulebook) => rulebook.state === CERT_STATE.rejected,
-  );
-  const canHost = rulebooks.rulebooks.some((rulebook) => rulebook.state === CERT_STATE.certified);
-  const showGmBadge = profile?.showGmBadge ?? true;
-
-  const { name, avatar, handle } = profileDisplay({ profile, user });
-  const todos = sessionTodos(mySessions);
-  const handleLabel = handle ? `@${handle}` : null;
-
   return (
     <>
       <AppBar title="마이페이지" action={<HelpButton />} />
       <Container size="sm">
-        <VStack gap="250" className="py-225">
-          <MyPageProfile
-            name={name}
-            avatarUrl={avatar}
-            isGm={canHost && showGmBadge}
-            bio={profile?.bio ?? null}
-            keywords={profile?.keywords ?? []}
-            availability={profile?.availability ?? []}
-            hosted={{
-              count: mySessions[SESSION_ROLE.host].length,
-              href: sessionsHref(SESSION_ROLE.host),
-            }}
-            played={{
-              count: mySessions[SESSION_ROLE.player].length,
-              href: sessionsHref(SESSION_ROLE.player),
-            }}
-          />
-          <MyPageTodos todos={todos} rejectedRulebooks={rejectedRulebooks} />
-          <MyPageRulebooks rulebooks={rulebooks} />
-          <MyPageReviews received={reviewCounts.received} written={reviewCounts.written} />
-          <MyPageLinks links={profile?.links ?? []} />
-          <MyPageSettings
-            handleLabel={handleLabel}
-            roleSetting={canHost ? { showGmBadge } : null}
-          />
-        </VStack>
+        {user ? (
+          <VStack gap="250" className="py-225">
+            <Suspense fallback={<MyPageSummarySkeleton />}>
+              <MyPageSummary />
+            </Suspense>
+            <Suspense fallback={<MyPageBlockSkeleton titleWidth={64} height={120} />}>
+              <MyPageRulebooksSection />
+            </Suspense>
+            <Suspense fallback={<MyPageBlockSkeleton titleWidth={40} height={96} />}>
+              <MyPageReviewsSection />
+            </Suspense>
+            <Suspense fallback={<MyPageAccountSkeleton />}>
+              <MyPageAccount />
+            </Suspense>
+          </VStack>
+        ) : (
+          <VStack className="py-300">
+            <LoginRequired />
+          </VStack>
+        )}
       </Container>
     </>
   );

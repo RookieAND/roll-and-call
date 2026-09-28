@@ -25,10 +25,11 @@ import {
   scheduleMode,
 } from "./schema";
 
-// prepare: false — required for Supabase's transaction-mode pooler.
-// max — parallel queries per instance. The session pooler caps clients at pool_size (15) across
-// every instance, so the admin app (session pooler) sets DATABASE_POOL_MAX lower.
-// idle_timeout — release idle connections so pooler slots are not held forever.
+// 두 앱 모두 세션 풀러(:5432)를 쓴다. 트랜잭션 풀러(:6543)는 동시 쿼리가 max를 넘어 줄을 서면
+// 가끔 응답을 멈춘다(2026-09-28 재현, /me가 멈췄다).
+// max — 세션 풀러는 모든 인스턴스를 합쳐 15개까지 받으므로 DATABASE_POOL_MAX로 web 4, admin 3을 준다.
+// idle_timeout — 쉬는 연결을 닫아 풀러 자리를 오래 붙잡지 않는다.
+// prepare: false — 풀러를 거치므로 준비된 문장을 쓰지 않는다.
 const client = postgres(process.env.DATABASE_URL!, {
   prepare: false,
   max: Number(process.env.DATABASE_POOL_MAX ?? 6),
