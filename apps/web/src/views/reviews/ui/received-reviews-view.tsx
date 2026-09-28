@@ -21,14 +21,14 @@ export async function ReceivedReviewsView({ userId }: ReceivedReviewsViewProps) 
 
   return (
     <ReviewsPage
-      title={mine ? "받은 후기" : `${profile.username}님이 받은 후기`}
+      title={mine ? "진행한 세션 후기" : `${profile.username}님이 진행한 세션 후기`}
       back={mine ? "/me" : `/u/${targetId}`}
     >
       <ReviewList
         rows={rows}
         perspective={REVIEW_PERSPECTIVE.received}
         viewerId={viewer?.id ?? null}
-        emptyText="아직 받은 후기가 없습니다"
+        emptyText="아직 진행한 세션 후기가 없습니다"
       />
     </ReviewsPage>
   );

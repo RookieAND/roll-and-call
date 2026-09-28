@@ -17,7 +17,11 @@ export function ProfileReviews({ userId, received, written }: ProfileReviewsProp
       <ProfileBlockLabel label="후기" />
       <Card.Root padding="none" radius={500} className="overflow-hidden">
         {received !== null && (
-          <CountLinkRow label="받은 후기" count={received} href={`/u/${userId}/reviews/received`} />
+          <CountLinkRow
+            label="진행한 세션 후기"
+            count={received}
+            href={`/u/${userId}/reviews/received`}
+          />
         )}
         <CountLinkRow label="작성한 후기" count={written} href={`/u/${userId}/reviews/written`} />
       </Card.Root>

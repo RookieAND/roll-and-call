@@ -16,7 +16,7 @@ export function MyPageReviews({ received, written }: MyPageReviewsProps) {
         후기
       </Text>
       <div className={MY_PAGE_GROUP_CLASS}>
-        <CountLinkRow label="받은 후기" count={received} href="/me/reviews/received" />
+        <CountLinkRow label="진행한 세션 후기" count={received} href="/me/reviews/received" />
         <CountLinkRow label="내가 쓴 후기" count={written} href="/me/reviews" />
       </div>
     </VStack>
