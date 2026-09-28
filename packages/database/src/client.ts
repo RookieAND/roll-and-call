@@ -25,9 +25,10 @@ import {
   scheduleMode,
 } from "./schema";
 
-// 두 앱 모두 세션 풀러(:5432)를 쓴다. 트랜잭션 풀러(:6543)는 동시 쿼리가 max를 넘어 줄을 서면
-// 가끔 응답을 멈춘다(2026-09-28 재현, /me가 멈췄다).
-// max — 세션 풀러는 모든 인스턴스를 합쳐 15개까지 받으므로 DATABASE_POOL_MAX로 web 4, admin 3을 준다.
+// 사용자 앱은 트랜잭션 풀러(:6543), 어드민은 세션 풀러(:5432)를 쓴다.
+// max — 트랜잭션 풀러는 동시 쿼리가 max를 넘어 줄을 서면 가끔 응답을 멈추므로(2026-09-28 재현, /me)
+// 사용자 앱은 DATABASE_POOL_MAX=20으로 넉넉히 둔다. 세션 풀러는 모든 인스턴스·로컬 개발을 합쳐
+// 15개까지만 받아 web까지 옮기면 EMAXCONNSESSION이 났다. 어드민은 3이다.
 // idle_timeout — 쉬는 연결을 닫아 풀러 자리를 오래 붙잡지 않는다.
 // prepare: false — 풀러를 거치므로 준비된 문장을 쓰지 않는다.
 const client = postgres(process.env.DATABASE_URL!, {
