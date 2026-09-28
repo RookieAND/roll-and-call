@@ -1,4 +1,5 @@
-import { Container, VStack } from "@roll-and-call/ui";
+import { Button, Container, VStack } from "@roll-and-call/ui";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import {
@@ -45,6 +46,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
   const books = applicationGroup(rulebook, rulebooks);
   const results = books.map(toBookResult);
   const pending = books.some((book) => book.state === CERT_STATE.pending);
+  const allCertified = books.every((book) => book.state === CERT_STATE.certified);
   const set = rulebook.kind === RULEBOOK_KIND.core ? setOf(rulebook, sets) : null;
   const setGuide =
     set && !set.opened && set.cores.length > 1
@@ -73,6 +75,13 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
                 discardable={result.discardable}
               />
             ) : null,
+          )}
+          {allCertified && (
+            <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
+              <Button render={<Link href={certApplyHref([])} />} size="lg" className="w-full">
+                다른 룰북 인증하기
+              </Button>
+            </VStack>
           )}
           {pending && (
             <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
