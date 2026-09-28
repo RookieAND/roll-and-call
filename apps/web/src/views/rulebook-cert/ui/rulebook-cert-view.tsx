@@ -57,7 +57,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
     <>
       <AppBar back="/me/rulebooks" title="신청 상세" />
       <Container size="sm" className="px-0">
-        <VStack className="min-h-[calc(100dvh-var(--rc-size-appbar))]">
+        <VStack className="min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-3px)]">
           {results.map((result, index) => (
             <BookResultSection
               key={result.id}
@@ -66,28 +66,34 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
             />
           ))}
           <VStack className="flex-1" />
-          {results.map((result) =>
-            result.retryHref ? (
-              <RetryBar
-                key={result.id}
-                rulebookId={result.id}
-                retryHref={result.retryHref}
-                discardable={result.discardable}
-              />
-            ) : null,
-          )}
-          {allCertified && (
-            <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
-              <Button render={<Link href={certApplyHref([])} />} size="lg" className="w-full">
-                다른 룰북 인증하기
-              </Button>
-            </VStack>
-          )}
-          {pending && (
-            <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
-              <CancelApplicationButton rulebookId={rulebookId} bookCount={books.length} size="lg" />
-            </VStack>
-          )}
+          <VStack className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) bg-surface">
+            {results.map((result) =>
+              result.retryHref ? (
+                <RetryBar
+                  key={result.id}
+                  rulebookId={result.id}
+                  retryHref={result.retryHref}
+                  discardable={result.discardable}
+                />
+              ) : null,
+            )}
+            {allCertified && (
+              <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
+                <Button render={<Link href={certApplyHref([])} />} size="lg" className="w-full">
+                  다른 룰북 인증하기
+                </Button>
+              </VStack>
+            )}
+            {pending && (
+              <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
+                <CancelApplicationButton
+                  rulebookId={rulebookId}
+                  bookCount={books.length}
+                  size="lg"
+                />
+              </VStack>
+            )}
+          </VStack>
         </VStack>
       </Container>
     </>

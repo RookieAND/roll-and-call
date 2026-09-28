@@ -1,5 +1,4 @@
 import { Badge, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
-import { cva } from "class-variance-authority";
 import { CircleAlert, ImageOff } from "lucide-react";
 import { Fragment } from "react";
 
@@ -7,10 +6,7 @@ import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
 
 import type { BookResult } from "../model/to-book-result";
 import { ResultSection } from "./result-section";
-
-const thumbFrame = cva("aspect-[3/4] overflow-hidden rounded-400 bg-secondary-strong", {
-  variants: { flagged: { true: "border-2 border-danger-600", false: "border border-gray-200" } },
-});
+import { ResultThumbs } from "./result-thumbs";
 
 interface BookResultSectionProps {
   result: BookResult;
@@ -78,30 +74,7 @@ export function BookResultSection({ result, guide }: BookResultSectionProps) {
 
       {result.thumbs.length > 0 && (
         <ResultSection label="올린 사진">
-          <HStack gap="100">
-            {result.thumbs.map((thumb) => (
-              <VStack key={thumb.label} gap="075" className="min-w-0 flex-1">
-                <div className={thumbFrame({ flagged: thumb.flagged })}>
-                  {thumb.url && (
-                    // oxlint-disable-next-line nextjs/no-img-element -- 스토리지 원본 사진이라 최적화 경로를 타지 않는다.
-                    <img
-                      src={thumb.url}
-                      alt={`${thumb.label} 사진`}
-                      className="size-full object-cover"
-                    />
-                  )}
-                </div>
-                <Text
-                  typography="body4"
-                  weight="bold"
-                  foreground={thumb.flagged ? "danger" : "muted"}
-                  className="text-center"
-                >
-                  {thumb.flagged ? `${thumb.label} · 문제` : thumb.label}
-                </Text>
-              </VStack>
-            ))}
-          </HStack>
+          <ResultThumbs thumbs={result.thumbs} />
         </ResultSection>
       )}
 
