@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@roll-and-call/ui";
+import { Button, type ButtonProps } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { ConfirmDialog, toast, useAction } from "@/shared/ui";
@@ -11,12 +11,14 @@ interface CancelApplicationButtonProps {
   rulebookId: string;
   // 함께 낸 책 수. 두 권 이상이면 묶음 전체를 거둔다고 알린다.
   bookCount: number;
+  size?: ButtonProps["size"];
   className?: string;
 }
 
 export function CancelApplicationButton({
   rulebookId,
   bookCount,
+  size,
   className = "w-full",
 }: CancelApplicationButtonProps) {
   const [open, setOpen] = useState(false);
@@ -39,6 +41,7 @@ export function CancelApplicationButton({
       <Button
         variant="outline"
         colorPalette="danger"
+        size={size}
         className={className}
         onClick={() => setOpen(true)}
       >

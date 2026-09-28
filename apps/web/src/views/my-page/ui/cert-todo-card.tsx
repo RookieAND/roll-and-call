@@ -3,7 +3,7 @@ import { CircleAlert } from "lucide-react";
 import Link from "next/link";
 
 import { rejectionSummary, type MyRulebook } from "@/entities/rulebook";
-import { DiscardRejectedButton } from "@/features/certify-rulebook";
+import { DiscardApplicationButton } from "@/features/certify-rulebook";
 
 interface CertTodoCardProps {
   rulebook: MyRulebook;
@@ -31,7 +31,7 @@ export function CertTodoCard({ rulebook }: CertTodoCardProps) {
         {rulebook.label} · {rejectionSummary(rulebook.latestApplication)}
       </Text>
       <HStack gap="100" className="mt-150">
-        <DiscardRejectedButton rulebookId={rulebook.id} className="min-w-0 flex-1" />
+        <DiscardApplicationButton rulebookId={rulebook.id} className="min-w-0 flex-1" />
         <Button
           render={<Link href={`/me/rulebooks/apply?rulebook=${rulebook.id}`} />}
           variant="tinted"

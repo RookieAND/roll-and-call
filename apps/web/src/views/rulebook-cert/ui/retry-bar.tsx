@@ -1,0 +1,31 @@
+import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import Link from "next/link";
+
+import { DiscardApplicationButton } from "@/features/certify-rulebook";
+
+interface RetryBarProps {
+  rulebookId: string;
+  retryHref: string;
+  discardable: boolean;
+}
+
+// 반려·인증 취소된 책의 아래 행동. 신청 취소는 기록째 지우고, 다시 신청은 입력을 이어받는다.
+export function RetryBar({ rulebookId, retryHref, discardable }: RetryBarProps) {
+  return (
+    <VStack gap="100" className="border-t border-gray-200 px-200 pt-150 pb-200">
+      {discardable && (
+        <Text typography="body4" foreground="muted" className="text-center">
+          신청을 취소하면 이 신청 기록이 지워져요.
+        </Text>
+      )}
+      <HStack gap="100">
+        {discardable && (
+          <DiscardApplicationButton rulebookId={rulebookId} size="lg" className="min-w-0 flex-1" />
+        )}
+        <Button render={<Link href={retryHref} />} size="lg" className="min-w-0 flex-1">
+          다시 신청
+        </Button>
+      </HStack>
+    </VStack>
+  );
+}
