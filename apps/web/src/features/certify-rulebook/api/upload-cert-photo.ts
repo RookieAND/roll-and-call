@@ -1,5 +1,12 @@
-import { AUTH_REQUIRED_MESSAGE, createSupabaseBrowserClient, putWithProgress } from "@/shared/api";
+import {
+  AUTH_REQUIRED_MESSAGE,
+  createSupabaseBrowserClient,
+  putWithProgress,
+  shrinkImage,
+} from "@/shared/api";
 import { CERT_PHOTO_BUCKET } from "@/shared/lib";
+
+import { CERT_PHOTO_MAX_SIDE } from "../model/cert-photo-rules";
 
 // 경로 첫 칸이 내 id여야 스토리지 정책이 올리기를 허락한다.
 export async function uploadCertPhoto(
@@ -12,12 +19,13 @@ export async function uploadCertPhoto(
   } = await supabase.auth.getUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
-  const extension = file.name.split(".").pop() ?? "jpg";
+  const upload = await shrinkImage(file, CERT_PHOTO_MAX_SIDE);
+  const extension = upload.name.split(".").pop() ?? "jpg";
   const path = `${user.id}/${crypto.randomUUID()}.${extension}`;
   const bucket = supabase.storage.from(CERT_PHOTO_BUCKET);
   const { data: signed, error } = await bucket.createSignedUploadUrl(path);
   if (error) return { error: error.message };
-  const status = await putWithProgress(signed.signedUrl, file, onProgress);
+  const status = await putWithProgress(signed.signedUrl, upload, onProgress);
   if (status >= 400) return { error: `업로드 실패 (${status})` };
   return { url: bucket.getPublicUrl(path).data.publicUrl };
 }
