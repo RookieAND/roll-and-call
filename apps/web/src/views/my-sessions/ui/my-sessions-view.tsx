@@ -2,7 +2,7 @@ import { Container } from "@roll-and-call/ui";
 
 import { SESSION_ROLE } from "@/entities/game";
 import { LoginRequired } from "@/features/auth";
-import { getCurrentUser } from "@/shared/server";
+import { getCurrentSessionUser } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import {
   loadMySessions,
@@ -19,7 +19,7 @@ import { SessionStatusChips } from "./session-status-chips";
 import { SessionsEmpty } from "./sessions-empty";
 
 export async function MySessionsView({ tab, status }: { tab?: string; status?: string }) {
-  const user = await getCurrentUser();
+  const user = await getCurrentSessionUser();
   if (!user) {
     return (
       <>

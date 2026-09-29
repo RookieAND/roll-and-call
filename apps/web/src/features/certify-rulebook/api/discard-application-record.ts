@@ -2,6 +2,7 @@
 
 import { and, desc, eq, isNotNull, ne } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import {
@@ -67,5 +68,5 @@ export async function discardApplicationRecord(rulebookId: string): Promise<Acti
     ]),
   );
   revalidatePath("/me", "layout");
-  return { redirect: "/me/rulebooks" };
+  redirect("/me/rulebooks");
 }

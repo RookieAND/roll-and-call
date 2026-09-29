@@ -4,7 +4,12 @@ import { notFound } from "next/navigation";
 import { countConfirmed, isSessionEnded } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { DeleteGameRow } from "@/features/delete-game";
-import { getCurrentUser, getGameById, getGameReviews, getResponseCounts } from "@/shared/server";
+import {
+  getCurrentSessionUser,
+  getGameById,
+  getGameReviews,
+  getResponseCounts,
+} from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { manageRows } from "../model/manage-rows";
@@ -16,7 +21,7 @@ import { ManageRow } from "./manage-row";
 export async function ManageGameView({ id }: { id: string }) {
   const [game, user, responseCounts, reviews] = await Promise.all([
     getGameById(id),
-    getCurrentUser(),
+    getCurrentSessionUser(),
     getResponseCounts([id]),
     getGameReviews(id),
   ]);

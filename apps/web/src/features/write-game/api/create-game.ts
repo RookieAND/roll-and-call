@@ -2,6 +2,8 @@
 
 import { eq, inArray } from "drizzle-orm";
 import { uniq } from "es-toolkit";
+import { redirect } from "next/navigation";
+import { after } from "next/server";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { RULE_GATE, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
@@ -74,19 +76,20 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     return created!.id;
   });
 
-  const game = await db.query.games.findFirst({
-    where: (table, { eq: equals }) => equals(table.id, gameId),
-    with: { gm: { columns: { username: true } } },
+  const recruitmentComplete = invitedIds.length === Number(parsed.data.maxPlayers);
+  after(async () => {
+    const game = await db.query.games.findFirst({
+      where: (table, { eq: equals }) => equals(table.id, gameId),
+      with: { gm: { columns: { username: true } } },
+    });
+    const threadId =
+      game && (await notifyGameCreated(game, game.gm?.username ?? "?", invitedIds.length));
+    if (threadId) {
+      await db.update(games).set({ discordThreadId: threadId }).where(eq(games.id, gameId));
+      await notifyDirectConfirmed(gameId, invitedIds);
+    }
+    if (recruitmentComplete) await announceRecruitmentComplete(gameId);
   });
-  const threadId =
-    game && (await notifyGameCreated(game, game.gm?.username ?? "?", invitedIds.length));
-  if (threadId) {
-    await db.update(games).set({ discordThreadId: threadId }).where(eq(games.id, gameId));
-    await notifyDirectConfirmed(gameId, invitedIds);
-  }
-  if (invitedIds.length === Number(parsed.data.maxPlayers)) {
-    await announceRecruitmentComplete(gameId);
-  }
 
-  return { redirect: `/games/${gameId}` };
+  redirect(`/games/${gameId}`);
 }

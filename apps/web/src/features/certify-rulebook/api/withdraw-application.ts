@@ -1,6 +1,7 @@
 "use server";
 
 import { and, desc, eq, ne } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import { certApplications, db, getCurrentUser, removeUnusedCertPhotos } from "@/shared/server";
@@ -67,5 +68,5 @@ export async function withdrawApplication(rulebookId: string): Promise<ActionRes
       row.receiptUrl ?? "",
     ]),
   );
-  return { redirect: "/me/rulebooks" };
+  redirect("/me/rulebooks");
 }

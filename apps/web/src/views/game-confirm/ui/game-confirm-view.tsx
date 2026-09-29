@@ -6,7 +6,7 @@ import { countConfirmed, SCHEDULE_MODE } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { ConfirmSessionForm } from "@/features/confirm-session";
 import { buildDayColumns, playMinutes, SLOT_MINUTES } from "@/shared/lib";
-import { getCurrentUser, getGameAvailabilities, getGameById } from "@/shared/server";
+import { getCurrentSessionUser, getGameAvailabilities, getGameById } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { ConfirmSummary } from "./confirm-summary";
@@ -15,7 +15,7 @@ import { ConfirmSummary } from "./confirm-summary";
 export async function GameConfirmView({ id }: { id: string }) {
   const [game, user, availabilities] = await Promise.all([
     getGameById(id),
-    getCurrentUser(),
+    getCurrentSessionUser(),
     getGameAvailabilities(id),
   ]);
   if (!game) notFound();

@@ -10,9 +10,11 @@ export function useDeleteGame(gameId: string, onSettled?: () => void) {
   function remove() {
     run(
       async () => {
-        const result = await deleteGame(gameId);
-        onSettled?.();
-        return result;
+        try {
+          return await deleteGame(gameId);
+        } finally {
+          onSettled?.();
+        }
       },
       { onSuccess: () => toast.success("구인을 취소했습니다") },
     );

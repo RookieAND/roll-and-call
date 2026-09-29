@@ -1,5 +1,4 @@
-"use server";
-
+import "server-only";
 import { getCurrentSessionUser } from "@/shared/server";
 
 import { loadMySessions } from "./load-sessions";

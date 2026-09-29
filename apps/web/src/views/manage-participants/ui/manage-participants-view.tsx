@@ -9,7 +9,7 @@ import {
   splitRoster,
 } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
-import { getCurrentUser, getGameParticipants } from "@/shared/server";
+import { getCurrentSessionUser, getGameParticipants } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { ATTENDANCE_STAGE } from "../model/attendance-stage";
@@ -18,7 +18,7 @@ import { toManagedMember } from "../model/to-managed-member";
 import { ParticipantManager } from "./participant-manager";
 
 export async function ManageParticipantsView({ id }: { id: string }) {
-  const [data, user] = await Promise.all([getGameParticipants(id), getCurrentUser()]);
+  const [data, user] = await Promise.all([getGameParticipants(id), getCurrentSessionUser()]);
   if (!data) notFound();
   const { game, availableUserIds } = data;
 

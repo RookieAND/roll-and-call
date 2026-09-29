@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { GameThumbnail } from "@/entities/game";
 
-const THUMBNAIL_SIZES = "(max-width: 896px) 100vw, 896px";
+const THUMBNAIL_SIZES = "(max-width: 412px) 100vw, 412px";
 const THUMBNAIL_CLASS = "h-42 w-full";
 
 interface GameDetailThumbnailProps {
@@ -16,7 +16,14 @@ export function GameDetailThumbnail({ url, spoiler }: GameDetailThumbnailProps) 
   const [revealed, setRevealed] = useState(false);
 
   if (!url || !spoiler || revealed) {
-    return <GameThumbnail url={url} sizes={THUMBNAIL_SIZES} className={THUMBNAIL_CLASS} />;
+    return (
+      <GameThumbnail
+        url={url}
+        sizes={THUMBNAIL_SIZES}
+        fetchPriority="high"
+        className={THUMBNAIL_CLASS}
+      />
+    );
   }
 
   return (

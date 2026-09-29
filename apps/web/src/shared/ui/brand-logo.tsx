@@ -11,6 +11,7 @@ interface BrandLogoProps {
 }
 
 // 워드마크가 두 장이라 테마 전환을 CSS로 맡긴다. JS로 고르면 첫 페인트에 반대 색이 번쩍인다.
+// preload는 두 장을 다 받으므로 lazy + fetchPriority로 보이는 한 장만 서둘러 받는다.
 export function BrandLogo({ label, size = "sm" }: BrandLogoProps) {
   const { light, dark } = SIZES[size];
 
@@ -21,7 +22,7 @@ export function BrandLogo({ label, size = "sm" }: BrandLogoProps) {
         alt={label}
         width={light.width}
         height={light.height}
-        priority
+        fetchPriority="high"
         className="dark:hidden"
       />
       <Image
@@ -29,7 +30,7 @@ export function BrandLogo({ label, size = "sm" }: BrandLogoProps) {
         alt=""
         width={dark.width}
         height={dark.height}
-        priority
+        fetchPriority="high"
         aria-hidden
         className="hidden dark:block"
       />

@@ -2,11 +2,11 @@ import { Container } from "@roll-and-call/ui";
 
 import { LoginRequired } from "@/features/auth";
 import { AvailabilityEditor } from "@/features/edit-availability";
-import { getCurrentUser, getProfile } from "@/shared/server";
+import { getCurrentSessionUser, getProfile } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 export async function EditAvailabilityView() {
-  const user = await getCurrentUser();
+  const user = await getCurrentSessionUser();
   if (!user) {
     return (
       <>

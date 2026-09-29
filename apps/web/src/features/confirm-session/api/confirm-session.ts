@@ -2,6 +2,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
@@ -46,5 +47,5 @@ export async function confirmSession(gameId: string, slotIso: string): Promise<A
   revalidatePath(`/games/${gameId}/manage`);
   revalidatePath(`/games/${gameId}/participants`);
   revalidatePath("/games");
-  return { redirect: `/games/${gameId}` };
+  redirect(`/games/${gameId}`);
 }

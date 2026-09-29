@@ -2,6 +2,7 @@
 
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { normalizeKeywords, normalizeLinks, type ProfileLink } from "@/entities/profile";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
@@ -46,5 +47,5 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     .where(eq(profiles.id, user.id));
 
   revalidatePath("/me");
-  return { redirect: "/me" };
+  redirect("/me");
 }

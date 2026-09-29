@@ -2,6 +2,7 @@
 
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { normalizeAvailability, type AvailabilityInterval } from "@/entities/profile";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
@@ -17,5 +18,5 @@ export async function updateAvailability(intervals: AvailabilityInterval[]): Pro
     .where(eq(profiles.id, user.id));
 
   revalidatePath("/me");
-  return { redirect: "/me/edit" };
+  redirect("/me/edit");
 }

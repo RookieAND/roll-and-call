@@ -2,7 +2,7 @@ import { Container } from "@roll-and-call/ui";
 import { notFound, redirect } from "next/navigation";
 
 import { SESSION_ROLE } from "@/entities/game";
-import { getCurrentUser } from "@/shared/server";
+import { getCurrentSessionUser } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import {
   loadProfile,
@@ -15,7 +15,7 @@ import {
 
 // 07 "내 세션"과 같은 구조지만 남의 기록이라 필터 칩도, 카드 안 버튼도 없다.
 export async function UserSessionsView({ id, tab }: { id: string; tab?: string }) {
-  const [viewer, loaded] = await Promise.all([getCurrentUser(), loadProfile(id)]);
+  const [viewer, loaded] = await Promise.all([getCurrentSessionUser(), loadProfile(id)]);
   if (viewer?.id === id) redirect("/me/sessions");
   if (!loaded) notFound();
 

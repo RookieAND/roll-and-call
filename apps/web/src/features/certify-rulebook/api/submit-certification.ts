@@ -1,6 +1,7 @@
 "use server";
 
 import { and, desc, eq, isNull, ne, or, sql } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
 import { CERT_FORMAT, CERT_SHOTS, RULEBOOK_KIND } from "@/entities/rulebook";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
@@ -136,5 +137,5 @@ export async function submitCertification({
     quizQuestionId: question?.id ?? null,
     quizAnswer: question ? quiz!.answer.trim().slice(0, 200) : null,
   });
-  return { redirect: `/me/rulebooks/${book.id}/submitted` };
+  redirect(`/me/rulebooks/${book.id}/submitted`);
 }

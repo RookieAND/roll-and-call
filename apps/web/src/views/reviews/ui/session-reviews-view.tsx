@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { SessionHeading } from "@/entities/game";
 import { formatMonthDayTime } from "@/shared/lib";
-import { getCurrentUser, getGameById, getGameReviews } from "@/shared/server";
+import { getCurrentSessionUser, getGameById, getGameReviews } from "@/shared/server";
 import { EmptyState } from "@/shared/ui";
 
 import { REVIEW_PERSPECTIVE } from "../model/review-perspective";
@@ -16,7 +16,7 @@ interface SessionReviewsViewProps {
 export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
   const [game, viewer, rows] = await Promise.all([
     getGameById(gameId),
-    getCurrentUser(),
+    getCurrentSessionUser(),
     getGameReviews(gameId),
   ]);
   if (!game) notFound();

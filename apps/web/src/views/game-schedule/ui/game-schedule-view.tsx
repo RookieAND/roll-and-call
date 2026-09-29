@@ -6,14 +6,14 @@ import { hasUserJoined, isDeadlinePassed, isGameGm, SCHEDULE_MODE } from "@/enti
 import { availabilityPrefill } from "@/entities/profile";
 import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows } from "@/shared/lib";
-import { getCurrentUser, getGameById, getProfile } from "@/shared/server";
+import { getCurrentSessionUser, getGameById, getProfile } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
 import { getScheduleAvailability } from "../api/load-availability";
 import { ScheduleBody } from "./schedule-body";
 
 export async function GameScheduleView({ id }: { id: string }) {
-  const [game, user] = await Promise.all([getGameById(id), getCurrentUser()]);
+  const [game, user] = await Promise.all([getGameById(id), getCurrentSessionUser()]);
   if (!game) notFound();
 
   // 일시 지정 글에는 조율 화면이 없다. 주소로 들어오면 상세로 보낸다.

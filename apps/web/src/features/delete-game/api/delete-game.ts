@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
@@ -34,5 +35,5 @@ export async function deleteGame(id: string): Promise<ActionResult> {
   // 지운 게임의 썸네일·진행 이미지 파일도 정리한다. 2회차가 같은 파일을 쓰면 남는다.
   await removeUnusedGameFiles([deleted.thumbnailUrl, ...deleted.images]);
 
-  return { redirect: "/games" };
+  redirect("/games");
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
@@ -84,5 +85,5 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     [before.thumbnailUrl, ...before.images].filter((url) => url !== null && !kept.has(url)),
   );
 
-  return { redirect: `/games/${id}` };
+  redirect(`/games/${id}`);
 }

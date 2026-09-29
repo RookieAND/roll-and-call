@@ -3,6 +3,7 @@
 import { randomInt } from "node:crypto";
 
 import { and, eq, isNotNull } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
 import { DIE_FACES, PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
@@ -50,5 +51,6 @@ export async function drawLottery(gameId: string): Promise<ActionResult> {
       await transaction.update(games).set({ endDate: now }).where(eq(games.id, gameId));
     }
   });
-  return result.error ? result : { redirect: `/games/${gameId}/draw` };
+  if (result.error) return result;
+  redirect(`/games/${gameId}/draw`);
 }

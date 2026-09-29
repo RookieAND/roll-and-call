@@ -2,6 +2,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import { db, getCurrentUser, profileMemos } from "@/shared/server";
@@ -15,5 +16,5 @@ export async function deleteMemo(targetId: string): Promise<ActionResult> {
     .where(and(eq(profileMemos.ownerId, user.id), eq(profileMemos.targetId, targetId)));
 
   revalidatePath(`/u/${targetId}`);
-  return { redirect: `/u/${targetId}` };
+  redirect(`/u/${targetId}`);
 }

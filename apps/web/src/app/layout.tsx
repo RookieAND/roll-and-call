@@ -8,7 +8,6 @@ import { siteOrigin } from "@/shared/server";
 
 import "./globals.css";
 import { NavigationTracker } from "@/shared/ui";
-import { hasSessionTodo } from "@/widgets/session-list";
 
 import { AppBottomNav } from "./app-bottom-nav";
 import { QueryProvider } from "./query-provider";
@@ -39,7 +38,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
         <Script
           id="theme-init"
@@ -65,7 +64,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <main id="main" className="flex-1">
               {children}
             </main>
-            <AppBottomNav loadHasTodo={hasSessionTodo} />
+            <AppBottomNav />
           </VStack>
         </QueryProvider>
         <Toast.Viewport offset={76} />

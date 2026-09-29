@@ -5,5 +5,4 @@ export type ActionResult = {
   error?: string;
   errorDisplay?: ErrorDisplay;
   field?: string;
-  redirect?: string;
 };

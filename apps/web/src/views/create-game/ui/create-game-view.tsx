@@ -2,7 +2,7 @@ import { Container } from "@roll-and-call/ui";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import { getCurrentUser, getRulebookRecords } from "@/shared/server";
+import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { CreateGameForm } from "@/widgets/game-form";
 
@@ -14,7 +14,7 @@ interface CreateGameViewProps {
 }
 
 export async function CreateGameView({ rulebookId, previousGameId }: CreateGameViewProps) {
-  const user = await getCurrentUser();
+  const user = await getCurrentSessionUser();
   if (!user) {
     return (
       <>

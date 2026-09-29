@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { getCurrentUser, getProfile, getReceivedReviews } from "@/shared/server";
+import { getCurrentSessionUser, getProfile, getReceivedReviews } from "@/shared/server";
 
 import { REVIEW_PERSPECTIVE } from "../model/review-perspective";
 import { ReviewList } from "./review-list";
@@ -12,7 +12,7 @@ interface ReceivedReviewsViewProps {
 }
 
 export async function ReceivedReviewsView({ userId }: ReceivedReviewsViewProps) {
-  const viewer = await getCurrentUser();
+  const viewer = await getCurrentSessionUser();
   const targetId = userId ?? viewer?.id;
   if (!targetId) notFound();
   const [profile, rows] = await Promise.all([getProfile(targetId), getReceivedReviews(targetId)]);

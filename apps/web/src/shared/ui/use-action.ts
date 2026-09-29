@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { unstable_rethrow } from "next/navigation";
 import { useTransition } from "react";
 
 import type { ActionResult } from "@/shared/api";
@@ -8,7 +8,6 @@ import type { ActionResult } from "@/shared/api";
 import { handleActionResult, type ActionHandlers } from "./handle-action-result";
 
 export function useAction() {
-  const router = useRouter();
   const [pending, startTransition] = useTransition();
 
   function run<Result extends ActionResult>(
@@ -16,8 +15,19 @@ export function useAction() {
     handlers: ActionHandlers<Result> = {},
   ) {
     startTransition(async () => {
-      const result = await action();
-      if (handleActionResult(result, handlers) && result.redirect) router.push(result.redirect);
+      let result: Result;
+      try {
+        result = await action();
+      } catch (error) {
+        // 서버 redirect()로 끝난 액션도 성공이다. 토스트를 띄우고 이동은 Next에 맡긴다.
+        try {
+          unstable_rethrow(error);
+        } catch {
+          handlers.onSuccess?.({} as Result);
+        }
+        throw error;
+      }
+      handleActionResult(result, handlers);
     });
   }
 

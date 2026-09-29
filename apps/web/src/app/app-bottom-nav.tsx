@@ -5,16 +5,17 @@ import { usePathname } from "next/navigation";
 
 import { BottomNav } from "@/shared/ui";
 
-// ponytail: 화면을 옮길 때마다 다시 센다. 요청이 부담되면 staleTime을 주거나 할 일을 바꾸는 액션에서 무효화한다.
-interface AppBottomNavProps {
-  loadHasTodo: () => Promise<boolean>;
-}
+import { fetchHasSessionTodo } from "./fetch-has-session-todo";
 
-export function AppBottomNav({ loadHasTodo }: AppBottomNavProps) {
+const TODO_STALE_MILLISECONDS = 30_000;
+
+// ponytail: 화면마다 따로 캐시해 30초 안에 다시 오면 묻지 않는다. 할 일을 바꾸는 액션에서 무효화하면 더 정확해진다.
+export function AppBottomNav() {
   const pathname = usePathname();
   const { data: hasTodo = false } = useQuery({
     queryKey: ["has-session-todo", pathname],
-    queryFn: () => loadHasTodo(),
+    queryFn: fetchHasSessionTodo,
+    staleTime: TODO_STALE_MILLISECONDS,
     throwOnError: false,
   });
   return <BottomNav hasTodo={hasTodo} />;

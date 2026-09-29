@@ -6,7 +6,7 @@ import { AvailabilityRows, ProfileLinks } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { ProfileMemoBlock } from "@/features/profile-memo";
 import {
-  getCurrentUser,
+  getCurrentSessionUser,
   getProfileMemo,
   getReviewCounts,
   getRulebookRecords,
@@ -20,7 +20,7 @@ import { ProfileRulebooks } from "./profile-rulebooks";
 import { ProfileSummary } from "./profile-summary";
 
 export async function UserProfileView({ id }: { id: string }) {
-  const viewerPromise = getCurrentUser();
+  const viewerPromise = getCurrentSessionUser();
   const [viewer, loaded, rulebookRecords, reviewCounts, memo] = await Promise.all([
     viewerPromise,
     loadProfile(id),

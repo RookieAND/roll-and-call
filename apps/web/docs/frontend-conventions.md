@@ -157,7 +157,8 @@ return <Button variant={buttonVariant} />;
 에러마다 **어디에 보일지(`ERROR_DISPLAY`: `toast` | `page`)**를 정하고, 보여 주는 일은 공용 경로가 맡는다.
 
 - **서버 액션은 예상된 실패를 throw하지 않고 `ActionResult`로 돌려준다.** 기본은 토스트이고, 화면을 더 쓸 수 없는 실패(게임이 사라짐 등)는 `errorDisplay: ERROR_DISPLAY.page`(예: `GAME_NOT_FOUND_RESULT`)로 표시한다. 서버에서 throw한 에러는 프로덕션에서 메시지가 지워지므로 문구를 전하는 수단이 아니다.
-- **클라이언트는 `useAction()`(`@/shared/ui`)으로 액션을 부른다.** `run(action, { onSuccess, onError })`가 트랜지션·토스트·`redirect` 이동을 처리한다. 폼처럼 인라인으로 보일 곳만 `onError`를 넘긴다. page 에러와 예상 못 한 throw는 트랜지션을 타고 가장 가까운 ErrorBoundary로 올라간다.
+- **성공 후 이동은 액션 안에서 `redirect()`(`next/navigation`)로 한다.** `revalidatePath` 뒤에 부르면 변경·재검증·새 화면이 한 번의 왕복으로 끝난다. `redirect()`는 throw하므로 `try` 블록 밖에 두고, 오래 걸리는 알림은 `after()`로 넘긴다.
+- **클라이언트는 `useAction()`(`@/shared/ui`)으로 액션을 부른다.** `run(action, { onSuccess, onError })`가 트랜지션·토스트를 처리한다. 액션이 `redirect()`로 끝나도 `onSuccess`가 불리므로(인자는 빈 결과) 성공 토스트는 그대로 `onSuccess`에 둔다. 폼처럼 인라인으로 보일 곳만 `onError`를 넘긴다. page 에러와 예상 못 한 throw는 트랜지션을 타고 가장 가까운 ErrorBoundary로 올라간다.
 - **경계**
   - `app/error.tsx`(라우트)·`app/global-error.tsx`(루트 레이아웃)는 `BoundaryFallback`으로 에러 화면을 그린다.
   - 화면 일부만 감쌀 때는 `ErrorBoundary`(`@/shared/error-boundary`)를 쓴다. `display={ERROR_DISPLAY.toast}`로 감싼 영역은 토스트 + 재시도 버튼으로 끝나고, page 에러는 부모 경계로 다시 던진다(예: 상세 하단 액션 존).

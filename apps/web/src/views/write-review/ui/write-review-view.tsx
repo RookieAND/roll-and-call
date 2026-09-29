@@ -5,7 +5,7 @@ import { reviewEditDeadline } from "@/entities/review";
 import { LoginRequired } from "@/features/auth";
 import { ReviewForm, reviewBlockOf } from "@/features/write-review";
 import { formatMonthDayTime } from "@/shared/lib";
-import { getCurrentUser, getReviewDraftTarget } from "@/shared/server";
+import { getCurrentSessionUser, getReviewDraftTarget } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 interface WriteReviewViewProps {
@@ -14,7 +14,7 @@ interface WriteReviewViewProps {
 
 // 이미 쓴 후기가 있으면 고치기 화면이 된다. 막혀 있으면 폼 위에 까닭을 띄우고 닫으면 떠난다.
 export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
-  const user = await getCurrentUser();
+  const user = await getCurrentSessionUser();
   if (!user) {
     return (
       <>

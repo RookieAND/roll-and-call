@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq, isNull } from "drizzle-orm";
+import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import {
@@ -85,5 +86,5 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
     const createdReviewId = reviewId;
     after(() => syncReviewForumPost(createdReviewId, siteOrigin()));
   }
-  return { redirect: MY_REVIEWS_HREF };
+  redirect(MY_REVIEWS_HREF);
 }

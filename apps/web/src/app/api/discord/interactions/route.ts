@@ -4,8 +4,6 @@ import { buildInteractionResponse } from "./_lib/build-interaction-response";
 import type { DiscordInteraction } from "./_lib/interaction-types";
 import { verifyDiscordRequest } from "./_lib/verify-discord-request";
 
-export const dynamic = "force-dynamic";
-
 export async function POST(request: Request) {
   const body = await verifyDiscordRequest(request);
   if (body === null) {

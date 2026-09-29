@@ -10,15 +10,18 @@ interface GameThumbnailProps {
   alt?: string;
   sizes?: string;
   spoilerLabel?: string;
+  fetchPriority?: "high" | "low" | "auto";
   className?: string;
 }
 
 // next/image fill이 부모 박스를 채우므로 크기는 호출부가 className으로 준다.
+// 이미지는 처음부터 보이게 두고 뼈대를 그 뒤에 깐다. opacity로 숨기면 하이드레이션 전까지 LCP가 잡히지 않는다.
 export function GameThumbnail({
   url,
   alt = "",
   sizes,
   spoilerLabel,
+  fetchPriority,
   className,
 }: GameThumbnailProps) {
   const [loaded, setLoaded] = useState(false);
@@ -41,9 +44,9 @@ export function GameThumbnail({
         alt={alt}
         fill
         sizes={sizes}
+        fetchPriority={fetchPriority}
         className={cn(
-          "object-cover transition-[opacity,filter] duration-300",
-          loaded ? "opacity-100" : "opacity-0",
+          "object-cover transition-[filter] duration-300",
           spoilerLabel && "scale-110 blur-xl",
         )}
         onLoad={() => setLoaded(true)}

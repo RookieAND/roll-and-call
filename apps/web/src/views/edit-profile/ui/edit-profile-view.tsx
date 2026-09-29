@@ -3,12 +3,12 @@ import { Container, VStack } from "@roll-and-call/ui";
 import { profileDisplay } from "@/entities/profile";
 import { LoginRequired } from "@/features/auth";
 import { EditProfileForm } from "@/features/edit-profile";
-import { getProfile, getCurrentUser } from "@/shared/server";
+import { getProfile, getCurrentSessionUser } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 // 로그아웃은 마이페이지 설정 한 곳에만 둔다.
 export async function EditProfileView() {
-  const user = await getCurrentUser();
+  const user = await getCurrentSessionUser();
   const profile = user ? await getProfile(user.id) : null;
 
   return (
