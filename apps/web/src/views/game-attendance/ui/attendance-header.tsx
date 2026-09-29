@@ -21,7 +21,7 @@ export function AttendanceHeader({
         truncate
         typography="heading3"
         weight="extrabold"
-        render={<h1 />}
+        render={<h2 />}
         className="min-w-0 flex-1"
       >
         {title}

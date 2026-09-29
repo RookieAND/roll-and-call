@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type KeyboardEvent } from "react";
 
 import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
@@ -10,6 +10,14 @@ import { firstWeekday } from "./first-weekday";
 import { toDateKey } from "./to-date-key";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
+const NAVIGATION_BUTTON =
+  "h-7 w-7 rounded-200 text-gray-500 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus";
+const ARROW_OFFSETS: Record<string, number> = {
+  ArrowLeft: -1,
+  ArrowRight: 1,
+  ArrowUp: -7,
+  ArrowDown: 7,
+};
 
 type CalendarState = { value: string | undefined };
 
@@ -35,10 +43,24 @@ export function Calendar({ value, onSelect, min, max, className, style }: Calend
 
   const leadingBlanks = firstWeekday(view.year, view.month);
   const dayCount = daysInMonth(view.year, view.month);
-  const cells: (number | null)[] = [
-    ...Array.from({ length: leadingBlanks }, () => null),
-    ...Array.from({ length: dayCount }, (_, index) => index + 1),
-  ];
+  const days = Array.from({ length: dayCount }, (_, index) => index + 1);
+  const cells: (number | null)[] = [...Array.from({ length: leadingBlanks }, () => null), ...days];
+
+  const isDisabled = (date: string) => Boolean((min && date < min) || (max && date > max));
+  const enabledDays = days.filter((day) => !isDisabled(toDateKey(view.year, view.month, day)));
+  const selectedDay = enabledDays.find((day) => toDateKey(view.year, view.month, day) === value);
+  const tabStopDay = selectedDay ?? enabledDays[0];
+
+  // ponytail: 화살표는 이번 달 안에서만 옮긴다. 달을 넘기려면 이전·다음 달 버튼을 쓴다.
+  const moveFocus = (event: KeyboardEvent<HTMLDivElement>) => {
+    const offset = ARROW_OFFSETS[event.key];
+    const currentDay = Number((event.target as HTMLElement).dataset.day);
+    if (!offset || !currentDay) return;
+    event.preventDefault();
+    event.currentTarget
+      .querySelector<HTMLButtonElement>(`[data-day="${currentDay + offset}"]:not(:disabled)`)
+      ?.focus();
+  };
 
   const goToPreviousMonth = () =>
     setView((current) =>
@@ -65,11 +87,11 @@ export function Calendar({ value, onSelect, min, max, className, style }: Calend
           data-slot="calendar-previous"
           onClick={goToPreviousMonth}
           aria-label="이전 달"
-          className="h-7 w-7 rounded-200 text-gray-500 hover:bg-gray-100"
+          className={NAVIGATION_BUTTON}
         >
           ‹
         </button>
-        <span className="text-sm font-medium">
+        <span aria-live="polite" className="text-sm font-medium">
           {view.year}년 {view.month}월
         </span>
         <button
@@ -77,7 +99,7 @@ export function Calendar({ value, onSelect, min, max, className, style }: Calend
           data-slot="calendar-next"
           onClick={goToNextMonth}
           aria-label="다음 달"
-          className="h-7 w-7 rounded-200 text-gray-500 hover:bg-gray-100"
+          className={NAVIGATION_BUTTON}
         >
           ›
         </button>
@@ -89,23 +111,27 @@ export function Calendar({ value, onSelect, min, max, className, style }: Calend
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-025 text-center text-sm">
+      <div className="grid grid-cols-7 gap-025 text-center text-sm" onKeyDown={moveFocus}>
         {cells.map((day, index) => {
           if (day === null) return <div key={index} />;
           const date = toDateKey(view.year, view.month, day);
           const selected = value === date;
-          const disabled = Boolean((min && date < min) || (max && date > max));
+          const disabled = isDisabled(date);
           return (
             <button
               key={index}
               type="button"
               disabled={disabled}
+              tabIndex={day === tabStopDay ? 0 : -1}
+              aria-label={`${view.month}월 ${day}일`}
+              aria-pressed={selected}
+              data-day={day}
               data-slot="calendar-day"
               data-selected={selected ? "" : undefined}
               data-disabled={disabled ? "" : undefined}
               onClick={() => onSelect(date)}
               className={cn(
-                "h-8 rounded-200 hover:bg-primary-50",
+                "h-8 rounded-200 hover:bg-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
                 selected && "bg-primary-600 text-white hover:bg-primary-700",
                 disabled && "cursor-not-allowed text-gray-300 line-through hover:bg-transparent",
               )}

@@ -9,6 +9,7 @@
 | `packages/ui`      | 도메인 무관 순수 UI 키트                                  | Button, IconButton, Chip, Select, TextInput, Field, Card                              |
 | `packages/tiptap`  | 리치 텍스트(Tiptap) 에디터·뷰어·문서 모델                 | RichTextEditor, RichText, toRichTextDoc                                               |
 | `packages/discord` | Discord REST 클라이언트(도메인 무관)                      | sendDiscordMessage, editDiscordMessage, startDiscordThread, renameDiscordThread       |
+| `packages/database` | 스키마 + `/rules`의 순수 도메인 규칙(shared/server와 entities가 함께 쓴다) | GAME_STATUS, PARTICIPANT_STATUS, deriveGameStatus, countConfirmed |
 | `shared/ui`        | 앱 공용(도메인 약함) 조합 컴포넌트                        | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                                  |
 | `entities/*`       | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위 | game, profile, availability                                                           |
 | `features/*`       | **단일 사용자 동작**(server action·toggle 등 상태 변경)   | JoinGameButton, DeleteGameRow, GameStatusChips, ThumbnailUpload                       |
@@ -62,7 +63,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 
 | 엔티티         | 담는 개념                          | 비고                                                                                                                                       |
 | -------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `game`         | 구인글 + 참여자 로스터 + 세션 일정 | 셋은 한 aggregate다. `deriveGameStatus`가 참여자 수로 모집 상태를 정하고, 세션 일정은 games의 컬럼이다. 쪼개면 양방향 교차 import가 생긴다 |
+| `game`         | 구인글 + 참여자 로스터 + 세션 일정 | 셋은 한 aggregate다. `deriveGameStatus`(원본은 `@roll-and-call/database/rules`, entity가 다시 내보낸다)가 참여자 수로 모집 상태를 정하고, 세션 일정은 games의 컬럼이다. 쪼개면 양방향 교차 import가 생긴다 |
 | `availability` | 가능 시간 집계·후보 슬롯           | game 쪽과 서로 참조가 없어 독립 슬라이스로 뗐다                                                                                            |
 | `profile`      | 사용자 표시 정보                   | 특정 feature만 쓰는 값(기본 가능 시간대 프리셋)은 그 feature의 `model`에 둔다                                                              |
 

@@ -1,6 +1,5 @@
 import { db } from "@roll-and-call/database";
-
-import { countWaiting, PARTICIPANT_STATUS } from "@/shared/lib";
+import { countWaiting, PARTICIPANT_STATUS } from "@roll-and-call/database/rules";
 
 import { notifyRecruitmentComplete } from "./notify-recruitment-complete";
 

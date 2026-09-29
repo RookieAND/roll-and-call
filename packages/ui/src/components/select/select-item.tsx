@@ -22,7 +22,7 @@ export function SelectItem({ value, disabled, className, children }: SelectItemP
       data-slot="select-item"
       className={(state) =>
         cn(
-          "flex cursor-pointer items-center justify-between gap-100 rounded-300 px-150 py-100 text-sm text-gray-700 outline-none select-none data-[disabled]:opacity-40 data-[highlighted]:bg-primary-50 data-[highlighted]:text-primary-700",
+          "flex cursor-pointer items-center justify-between gap-100 rounded-300 px-150 py-100 text-sm text-gray-700 outline-none select-none data-[disabled]:opacity-40 data-[highlighted]:bg-primary-50 data-[highlighted]:text-tinted-ink",
           resolveStateProp(className, state),
         )
       }

@@ -2,6 +2,7 @@
 
 import { Button, HStack, IconButton, Select, Text, TextInput, VStack } from "@roll-and-call/ui";
 import { Plus, Trash2 } from "lucide-react";
+import { useRef, useState } from "react";
 
 import {
   detectLinkService,
@@ -23,6 +24,9 @@ interface ProfileLinksFieldProps {
 }
 
 export function ProfileLinksField({ value, onChange }: ProfileLinksFieldProps) {
+  // 줄을 지워도 아래 줄의 입력 상태가 한 칸씩 밀리지 않게 줄마다 고정 key를 둔다.
+  const nextKey = useRef(value.length);
+  const [keys, setKeys] = useState(() => value.map((_, index) => index));
   const replace = (index: number, link: ProfileLink) =>
     onChange(value.map((item, itemIndex) => (itemIndex === index ? link : item)));
 
@@ -41,7 +45,7 @@ export function ProfileLinksField({ value, onChange }: ProfileLinksFieldProps) {
         {value.map((link, index) => {
           const service = linkServiceOf(link.service);
           return (
-            <HStack key={index} gap="075">
+            <HStack key={keys[index] ?? `extra-${index}`} gap="075">
               <Select.Root
                 items={SERVICE_OPTIONS}
                 value={link.service}
@@ -77,7 +81,10 @@ export function ProfileLinksField({ value, onChange }: ProfileLinksFieldProps) {
                 variant="outline"
                 aria-label={`${service.label} 링크 지우기`}
                 className="h-11 w-11 flex-none"
-                onClick={() => onChange(value.filter((_, itemIndex) => itemIndex !== index))}
+                onClick={() => {
+                  setKeys(keys.filter((_, itemIndex) => itemIndex !== index));
+                  onChange(value.filter((_, itemIndex) => itemIndex !== index));
+                }}
               >
                 <Trash2 size={15} aria-hidden />
               </IconButton>
@@ -91,7 +98,10 @@ export function ProfileLinksField({ value, onChange }: ProfileLinksFieldProps) {
           type="button"
           variant="tinted"
           className="h-11 w-full"
-          onClick={() => onChange([...value, { service: LINK_SERVICES[0].key, value: "" }])}
+          onClick={() => {
+            setKeys([...keys, nextKey.current++]);
+            onChange([...value, { service: LINK_SERVICES[0].key, value: "" }]);
+          }}
         >
           <Plus size={14} aria-hidden />
           링크 추가

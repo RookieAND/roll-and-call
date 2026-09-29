@@ -43,7 +43,7 @@ export function MyPageProfile({
           size="xl"
           name={name}
           avatarUrl={avatarUrl}
-          nameRender={<h1 />}
+          nameRender={<h2 />}
           nameAddon={
             isGm ? (
               <Badge colorPalette="primary" className="animate-gm-border">

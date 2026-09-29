@@ -18,6 +18,7 @@
 - `Card`·`Grid`의 `radius`는 숫자 리터럴(`radius={500}`)이다. 문자열이 아니다.
 
 ## 2026-09-23 동기화에서 컴포넌트에 고친 것
+
 - `text-field-variants.ts`에 `disabled` 스타일이 없어 비활성 입력이 평소와 똑같이 보였다 → `disabled:bg-gray-50 disabled:opacity-50` 추가.
 - Tabs의 `data-[variant=…]` 규칙이 Trigger 자신을 보고 있어 한 번도 걸리지 않았다 → 조상 List를 보도록 `[[data-variant=…]_&]`로 바꾸고, solid에서 선택 탭에 배경을 준다(Indicator는 solid에서 숨긴다).
 
@@ -36,3 +37,9 @@
 - **컴파운드의 .d.ts는 조각 목록만 나온다.** `export const Sheet = {...}` 같은 네임스페이스 객체는 변환기가 각 조각의 props를 못 뽑아 `React.ComponentType<any>`로 적는다. 그래서 디자인 에이전트가 읽는 실제 계약은 `packages/ui/docs/<이름>.md`(→ prompt.md)의 Props 절이다. 컴파운드 API를 바꾸면 그 문서도 같이 고친다.
 - 그룹을 바꾸면(components/<group>/<Name>) **옛 경로가 원격에 남는다.** diff의 `upload.deletePaths`는 앵커가 알던 경로만 담아서, 앵커에 없던 조합은 빠진다. 업로드 뒤 `list_files`로 `components/general/` 잔재를 꼭 확인하고 지운다.
 - 문서를 새로 붙이면 그 컴포넌트의 등급이 지워진다(prompt.md가 캡처 키에 들어간다). 문서 작업과 채점은 같은 회차에 몰아서 한다.
+
+## 2026-09-30 재동기화
+
+- 드라이버는 `--entry ./packages/ui/dist/index.js`를 꼭 줘야 한다. 빼면 `packages/ui/node_modules/@roll-and-call/ui/package.json`을 찾다가 ENOENT로 죽는다(패키지가 자기 자신을 설치하지 않으므로).
+  `node .ds-sync/resync.mjs --config .design-sync/config.json --node-modules packages/ui/node_modules --entry ./packages/ui/dist/index.js --out ./ds-bundle --remote .design-sync/.cache/remote-sync.json`
+- 접근성 수정(입력칸 테두리 gray-500, 포커스 링 `ring-focus`, 경고 글씨 `text-notice-ink`)으로 Button의 VariantByColor가 그리드 칸보다 넓어져 `[GRID_OVERFLOW]`가 났다 → `cfg.overrides.Button: {"cardMode": "column"}`.

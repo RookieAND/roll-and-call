@@ -13,6 +13,8 @@ interface AppBarProps {
   subtitle?: string;
   // 워드마크로 제목을 대체한다. title은 스크린리더가 읽을 이름으로 남는다.
   brand?: boolean;
+  // 제목을 페이지의 h1로 그린다. 본문이 자기 h1을 가지면 false로 끈다.
+  heading?: boolean;
   // 진입 경로가 없을 때(직접 URL·디스코드 링크)만 쓰는 폴백. 평소엔 히스토리 뒤로.
   back?: string;
   onBack?: () => void;
@@ -24,6 +26,7 @@ export function AppBar({
   title,
   subtitle,
   brand,
+  heading = true,
   back,
   onBack,
   backIcon = "back",
@@ -32,6 +35,7 @@ export function AppBar({
   const hasBack = back !== undefined || onBack !== undefined;
   const BackIcon = backIcon === "close" ? X : ChevronLeft;
   const backLabel = backIcon === "close" ? "닫기" : "뒤로";
+  const titleElement = heading ? <h1 /> : <span />;
 
   return (
     <HStack
@@ -56,13 +60,15 @@ export function AppBar({
         back && <BackButton fallback={back} />
       )}
       {brand ? (
-        <Link href="/">
-          <BrandLogo label={title} />
-        </Link>
+        <HStack render={titleElement}>
+          <Link href="/">
+            <BrandLogo label={title} />
+          </Link>
+        </HStack>
       ) : (
         <Text
           typography={hasBack ? "heading3" : "heading2"}
-          render={<span />}
+          render={titleElement}
           className={hasBack ? "truncate tracking-tight" : "tracking-tight"}
         >
           {title}

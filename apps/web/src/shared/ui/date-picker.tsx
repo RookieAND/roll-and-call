@@ -1,7 +1,7 @@
 "use client";
 
 import { Popover } from "@base-ui-components/react/popover";
-import { Calendar, Text, cn } from "@roll-and-call/ui";
+import { Calendar, Text, cn, useFieldControlAria } from "@roll-and-call/ui";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -30,13 +30,14 @@ export function DatePicker({
   max,
 }: DatePickerProps) {
   const [open, setOpen] = useState(false);
+  const fieldAria = useFieldControlAria(invalid);
   const toneClass = invalid
-    ? "border-[1.5px] border-danger-400 bg-danger-50 focus:ring-danger-200"
-    : "border-gray-200 focus:border-primary-500 focus:ring-primary-100";
+    ? "border-[1.5px] border-danger-400 bg-danger-50 focus:ring-danger-600"
+    : "border-gray-500 focus:border-primary-500 focus:ring-focus";
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger id={id} className={cn(triggerClass, toneClass)}>
+      <Popover.Trigger id={id} {...fieldAria} className={cn(triggerClass, toneClass)}>
         {value ? (
           <span className="truncate">{formatPickerDate(value)}</span>
         ) : (

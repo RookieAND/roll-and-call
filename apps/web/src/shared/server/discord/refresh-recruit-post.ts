@@ -1,6 +1,5 @@
+import { countConfirmed } from "@roll-and-call/database/rules";
 import { editDiscordMessage, renameDiscordThread } from "@roll-and-call/discord";
-
-import { countConfirmed } from "@/shared/lib";
 
 import { getGameForNotice } from "../db/get-game-for-notice";
 import { discordChannelId } from "./discord-channel-id";

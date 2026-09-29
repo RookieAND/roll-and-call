@@ -1,5 +1,6 @@
 import "server-only";
 import { eq } from "drizzle-orm";
+import { after } from "next/server";
 
 import { isSessionLocked } from "@/entities/game";
 import {
@@ -18,7 +19,7 @@ import type { Transaction } from "./transaction";
 export async function adjustRoster(
   gameId: string,
   work: (transaction: Transaction, game: Game) => Promise<void>,
-  after?: () => Promise<void>,
+  notify?: () => Promise<void>,
 ): Promise<ActionResult> {
   const gmId = (await getCurrentUser())?.id;
   if (!gmId) return { error: AUTH_REQUIRED_MESSAGE };
@@ -41,7 +42,9 @@ export async function adjustRoster(
   }
 
   revalidateRoster(gameId);
-  await after?.();
-  await refreshRecruitPost(gameId);
+  after(async () => {
+    await notify?.();
+    await refreshRecruitPost(gameId);
+  });
   return {};
 }

@@ -1,13 +1,10 @@
 import { aggregateAvailability, type ScheduleAvailability } from "@/entities/availability";
-import { getGameAvailabilities, getUserConfirmedSlots } from "@/shared/server";
+import { getScheduleAvailabilityRows } from "@/shared/server";
 
 export async function getScheduleAvailability(
   gameId: string,
   userId: string | null,
 ): Promise<ScheduleAvailability> {
-  const [availabilities, blocked] = await Promise.all([
-    getGameAvailabilities(gameId),
-    userId ? getUserConfirmedSlots(userId, gameId) : [],
-  ]);
+  const { availabilities, blocked } = await getScheduleAvailabilityRows(gameId, userId);
   return { aggregate: aggregateAvailability({ avails: availabilities, userId }), blocked };
 }

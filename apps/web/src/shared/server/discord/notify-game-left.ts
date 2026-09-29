@@ -1,7 +1,6 @@
 import { db } from "@roll-and-call/database";
+import { countConfirmed, countWaiting } from "@roll-and-call/database/rules";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-
-import { countConfirmed, countWaiting } from "@/shared/lib";
 
 import { getGameForNotice } from "../db/get-game-for-notice";
 import { gameNoticeEmbed } from "./game-notice-embed";

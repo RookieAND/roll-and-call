@@ -1,8 +1,7 @@
 import "server-only";
 import { availabilities, db, games, participants } from "@roll-and-call/database";
+import { PARTICIPANT_STATUS } from "@roll-and-call/database/rules";
 import { and, eq, sql } from "drizzle-orm";
-
-import { PARTICIPANT_STATUS } from "@/shared/lib";
 
 export async function getResponseCountsByGm(gmId: string): Promise<Map<string, number>> {
   const rows = await db

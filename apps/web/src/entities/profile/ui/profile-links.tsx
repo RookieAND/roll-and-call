@@ -60,7 +60,7 @@ export function ProfileLinks({ links }: ProfileLinksProps) {
           </Tooltip>
         ) : (
           <Tooltip key={`${link.service}-${index}`} content={label}>
-            <span aria-label={label} tabIndex={0} className={ICON_CLASS}>
+            <span role="img" aria-label={label} tabIndex={0} className={ICON_CLASS}>
               {mark}
             </span>
           </Tooltip>

@@ -34,6 +34,7 @@ export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps)
         back="/me/rulebooks"
         backIcon="close"
         title="인증 신청"
+        heading={false}
         action={
           <Text typography="body4" foreground="hint" numeric className="px-100">
             1 / 2

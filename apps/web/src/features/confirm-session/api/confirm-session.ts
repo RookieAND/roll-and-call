@@ -2,6 +2,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import {
@@ -32,10 +33,12 @@ export async function confirmSession(gameId: string, slotIso: string): Promise<A
     .returning({ id: games.id });
 
   if (updated.length === 0) return { error: "확정 권한이 없습니다." };
-  await Promise.all([
-    refreshRecruitPost(gameId),
-    notifySessionConfirmed(gameId, previous?.confirmedAt ?? null),
-  ]);
+  after(() =>
+    Promise.all([
+      refreshRecruitPost(gameId),
+      notifySessionConfirmed(gameId, previous?.confirmedAt ?? null),
+    ]),
+  );
 
   revalidatePath(`/games/${gameId}`);
   revalidatePath(`/games/${gameId}/schedule`);

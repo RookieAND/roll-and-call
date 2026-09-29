@@ -1,1 +1,5 @@
-export { PARTICIPANT_STATUS, countConfirmed, type ParticipantStatus } from "@/shared/lib";
+export {
+  PARTICIPANT_STATUS,
+  countConfirmed,
+  type ParticipantStatus,
+} from "@roll-and-call/database/rules";

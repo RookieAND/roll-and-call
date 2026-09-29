@@ -9,9 +9,7 @@
   "cssEntry": "dist/design-sync.css",
   "tokensGlob": "src/styles.css",
   "docsDir": "docs",
-  "extraFonts": [
-    "../../.design-sync/fonts/pretendard.css"
-  ],
+  "extraFonts": ["../../.design-sync/fonts/pretendard.css"],
   "overrides": {
     "Sheet": {
       "cardMode": "single",
@@ -49,6 +47,9 @@
     "Popover": {
       "cardMode": "single",
       "viewport": "390x320"
+    },
+    "Button": {
+      "cardMode": "column"
     }
   },
   "readmeHeader": ".design-sync/conventions.md",

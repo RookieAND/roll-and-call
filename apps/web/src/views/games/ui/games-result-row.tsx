@@ -1,7 +1,8 @@
 import { HStack, Skeleton, Text } from "@roll-and-call/ui";
 
-import { GameSortSheet } from "@/features/filter-games";
 import { GAME_TAB, type GamesFilter } from "@/shared/api";
+
+import { GameSortSheet } from "./game-sort-sheet";
 
 interface GamesResultRowProps {
   filter: GamesFilter;

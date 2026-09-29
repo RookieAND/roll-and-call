@@ -1,7 +1,6 @@
 import { db } from "@roll-and-call/database";
+import { PARTICIPANT_STATUS } from "@roll-and-call/database/rules";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-
-import { PARTICIPANT_STATUS } from "@/shared/lib";
 
 import { gameUrl } from "../game-url";
 import { gameNoticeEmbed } from "./game-notice-embed";

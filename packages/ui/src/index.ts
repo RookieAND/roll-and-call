@@ -24,6 +24,7 @@ export { Stepper, type StepperProps } from "./components/stepper/stepper";
 export { Card, type CardRootProps } from "./components/card/card";
 export { Callout, type CalloutRootProps, type CalloutPalette } from "./components/callout/callout";
 export { Field, type FieldRootProps } from "./components/field/field";
+export { useFieldControlAria } from "./components/field/use-field-control-aria";
 export { TextInput, type TextInputProps } from "./components/text-field/text-input";
 export { Textarea, type TextareaProps } from "./components/text-field/textarea";
 export { textFieldVariants } from "./components/text-field/text-field-variants";

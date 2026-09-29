@@ -1,2 +1,2 @@
 export { GameScheduleView } from "./ui/game-schedule-view";
-export { getScheduleAvailability } from "./api/load-availability";
+export { GameScheduleSkeleton } from "./ui/game-schedule-skeleton";

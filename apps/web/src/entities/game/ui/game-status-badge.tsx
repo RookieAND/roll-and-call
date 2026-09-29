@@ -1,6 +1,7 @@
+import { gameStatusLabel, type GameStatus } from "@roll-and-call/database/rules";
 import { Badge } from "@roll-and-call/ui";
 
-import { gameStatusColor, gameStatusLabel, type GameStatus } from "@/shared/lib";
+import { gameStatusColor } from "../model/game-status-color";
 
 interface GameStatusBadgeProps {
   status: GameStatus;

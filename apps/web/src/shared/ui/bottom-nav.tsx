@@ -38,7 +38,7 @@ export function BottomNav({ hasTodo }: BottomNavProps) {
   return (
     <Grid
       cols={3}
-      render={<nav />}
+      render={<nav aria-label="주요 메뉴" />}
       className="sticky bottom-0 z-(--rc-z-sticky) h-(--rc-size-tabbar) border-t border-gray-200 bg-surface"
     >
       {tabs.map(({ href, label, Icon, isActive }) => {

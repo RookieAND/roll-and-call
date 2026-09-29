@@ -94,7 +94,7 @@ export const buttonVariants = cva(
       {
         variant: "tinted",
         colorPalette: "warning",
-        className: "border-notice-border bg-warning-50 text-warning-600",
+        className: "border-notice-border bg-warning-50 text-notice-ink",
       },
       {
         variant: "tinted",

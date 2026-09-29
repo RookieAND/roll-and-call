@@ -1,16 +1,25 @@
+"use client";
+
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva } from "class-variance-authority";
 
 import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
 import type { StateProps } from "../../lib/state-props";
+import { useFieldControlAria } from "../field/use-field-control-aria";
 
-const frame = cva("inline-flex h-11 items-stretch overflow-hidden rounded-400 border bg-surface", {
-  variants: {
-    invalid: { true: "border-[1.5px] border-danger-400 bg-danger-50", false: "border-gray-200" },
+const frame = cva(
+  "inline-flex h-11 items-stretch overflow-hidden rounded-400 border bg-surface focus-within:ring-2",
+  {
+    variants: {
+      invalid: {
+        true: "border-[1.5px] border-danger-400 bg-danger-50 focus-within:ring-danger-600",
+        false: "border-gray-500 focus-within:ring-focus",
+      },
+    },
+    defaultVariants: { invalid: false },
   },
-  defaultVariants: { invalid: false },
-});
+);
 
 const STEP_BUTTON =
   "flex size-11 items-center justify-center text-gray-700 transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:text-gray-300";
@@ -41,10 +50,12 @@ export function Stepper({
   className,
   style,
   render,
+  "aria-describedby": describedBy,
   ...ariaProps
 }: StepperProps) {
   const safeValue = Number.isFinite(value) ? value : min;
   const state = { invalid, disabled };
+  const fieldAria = useFieldControlAria(invalid, describedBy);
 
   return useRender({
     defaultTagName: "div",
@@ -76,6 +87,7 @@ export function Stepper({
             value={Number.isFinite(value) ? String(value) : ""}
             onChange={(event) => onChange(Number(event.target.value.replace(/\D/g, "")))}
             className="w-12 border-x border-gray-200 grow bg-transparent text-center text-sm font-semibold tabular-nums outline-none"
+            {...fieldAria}
             {...ariaProps}
           />
           <button

@@ -1,6 +1,5 @@
+import { GAME_STATUS } from "@roll-and-call/database/rules";
 import { describe, expect, it } from "vitest";
-
-import { GAME_STATUS } from "@/shared/lib";
 
 import { RECRUIT_METHOD } from "./recruit-method";
 import { seatCount } from "./seat-count";

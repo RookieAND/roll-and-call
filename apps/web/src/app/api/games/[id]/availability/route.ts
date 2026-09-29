@@ -1,5 +1,5 @@
-import { getCurrentUser } from "@/shared/server";
-import { getScheduleAvailability } from "@/views/game-schedule";
+import { aggregateAvailability, type ScheduleAvailability } from "@/entities/availability";
+import { getCurrentUser, getScheduleAvailabilityRows } from "@/shared/server";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +9,11 @@ export async function GET(
   context: RouteContext<"/api/games/[id]/availability">,
 ) {
   const { id } = await context.params;
-  const user = await getCurrentUser();
-  return Response.json(await getScheduleAvailability(id, user?.id ?? null));
+  const userId = (await getCurrentUser())?.id ?? null;
+  const { availabilities, blocked } = await getScheduleAvailabilityRows(id, userId);
+  const body: ScheduleAvailability = {
+    aggregate: aggregateAvailability({ avails: availabilities, userId }),
+    blocked,
+  };
+  return Response.json(body);
 }

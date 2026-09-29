@@ -1,6 +1,7 @@
+import { deriveGameStatus } from "@roll-and-call/database/rules";
 import { Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { deriveGameStatus, formatDate } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { Game } from "@/shared/server";
 
 import { isSessionEnded } from "../model/is-session-ended";

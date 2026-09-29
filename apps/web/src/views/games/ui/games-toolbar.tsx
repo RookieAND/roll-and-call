@@ -1,10 +1,12 @@
 import { HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
-import { GameScopeTabs, GameSearchForm, GameStatusChips } from "@/features/filter-games";
 import { GAME_TAB_DEFAULT, type GamesFilter } from "@/shared/api";
 import type { GamesCounts } from "@/shared/server";
 
 import { statusCounts } from "../model/status-counts";
+import { GameScopeTabs } from "./game-scope-tabs";
+import { GameSearchForm } from "./game-search-form";
+import { GameStatusChips } from "./game-status-chips";
 
 const CHIP_SKELETON_WIDTHS = [48, 64, 88] as const;
 
@@ -21,7 +23,7 @@ export function GamesToolbar({ filter = {}, counts, tabCounts }: GamesToolbarPro
     <VStack className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 border-b border-gray-200 bg-surface">
       <GameScopeTabs filter={filter} counts={tabCounts} />
       <VStack gap="125" className="px-200 py-150">
-        <GameSearchForm filter={filter} />
+        <GameSearchForm key={filter.q ?? ""} filter={filter} />
         {counts ? (
           <GameStatusChips
             filter={filter}

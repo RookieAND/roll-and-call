@@ -2,9 +2,10 @@ import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { PastGameCard, sessionEndsAt } from "@/entities/game";
-import { filterParams, gamesHref } from "@/features/filter-games";
 import type { GamesFilter } from "@/shared/api";
 
+import { filterParams } from "../lib/filter-params";
+import { gamesHref } from "../lib/games-href";
 import type { GamesPage } from "../model/games-page";
 import { groupByMonth } from "../model/group-by-month";
 

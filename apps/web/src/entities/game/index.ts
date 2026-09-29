@@ -4,11 +4,11 @@ export { RECRUIT_METHOD, RECRUIT_METHODS, type RecruitMethod } from "./model/rec
 export { GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "./model/game-tag";
 export {
   gameStatusLabel,
-  gameStatusColor,
   GAME_STATUS,
   deriveGameStatus,
   type GameStatus,
-} from "@/shared/lib";
+} from "@roll-and-call/database/rules";
+export { gameStatusColor } from "./model/game-status-color";
 export { isDeadlineUrgent } from "./model/is-deadline-urgent";
 export { isDeadlinePassed } from "./model/is-deadline-passed";
 export { PARTICIPANT_STATUS, countConfirmed, type ParticipantStatus } from "./model/participant";

@@ -20,11 +20,15 @@ import { ProfileRulebooks } from "./profile-rulebooks";
 import { ProfileSummary } from "./profile-summary";
 
 export async function UserProfileView({ id }: { id: string }) {
-  const [viewer, loaded, rulebookRecords, reviewCounts] = await Promise.all([
-    getCurrentUser(),
+  const viewerPromise = getCurrentUser();
+  const [viewer, loaded, rulebookRecords, reviewCounts, memo] = await Promise.all([
+    viewerPromise,
     loadProfile(id),
     getRulebookRecords(id),
     getReviewCounts(id),
+    viewerPromise.then((currentViewer) =>
+      currentViewer ? getProfileMemo({ ownerId: currentViewer.id, targetId: id }) : null,
+    ),
   ]);
   if (viewer?.id === id) redirect("/me");
 
@@ -37,7 +41,6 @@ export async function UserProfileView({ id }: { id: string }) {
     .toSorted((left, right) => right.stateAt!.getTime() - left.stateAt!.getTime())
     .map((rulebook) => ({ id: rulebook.id, label: rulebook.label }));
   const isGm = certified.length > 0 && profile.showGmBadge;
-  const memo = viewer ? await getProfileMemo({ ownerId: viewer.id, targetId: id }) : null;
 
   return (
     <>

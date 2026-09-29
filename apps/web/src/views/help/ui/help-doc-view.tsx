@@ -22,7 +22,7 @@ export function HelpDocView({ slug }: HelpDocViewProps) {
 
   return (
     <>
-      <AppBar back="/help" title={doc.title} />
+      <AppBar back="/help" title={doc.title} heading={false} />
       <Container size="sm">
         <VStack gap="250" className="py-250">
           <VStack gap="100">

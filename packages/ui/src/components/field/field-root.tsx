@@ -1,9 +1,12 @@
+"use client";
+
 import { useRender } from "@base-ui-components/react/use-render";
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 
 import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
 import type { StateProps } from "../../lib/state-props";
+import { FieldContext } from "./field-context";
 import { FieldDescription } from "./field-description";
 import { FieldError } from "./field-error";
 import { FieldLabel } from "./field-label";
@@ -33,6 +36,7 @@ export function FieldRoot({
   children,
 }: FieldRootProps) {
   const state = { invalid: Boolean(error), required };
+  const messageId = useId();
   return useRender({
     defaultTagName: "div",
     render,
@@ -42,17 +46,22 @@ export function FieldRoot({
       className: cn("flex flex-col gap-075", resolveStateProp(className, state)),
       style: resolveStateProp(style, state),
       children: (
-        <>
+        <FieldContext
+          value={{
+            messageId: error || description ? messageId : undefined,
+            invalid: Boolean(error),
+          }}
+        >
           {(label || counter) && (
             <FieldLabel label={label} counter={counter} required={required} htmlFor={htmlFor} />
           )}
           {children}
           {error ? (
-            <FieldError message={error} />
+            <FieldError id={messageId} message={error} />
           ) : (
-            description && <FieldDescription text={description} />
+            description && <FieldDescription id={messageId} text={description} />
           )}
-        </>
+        </FieldContext>
       ),
     },
   });

@@ -41,6 +41,7 @@ export { getResponseCounts } from "./db/get-response-counts";
 export { getResponseCountsByGm } from "./db/get-response-counts-by-gm";
 export { getGameAvailabilities } from "./db/get-game-availabilities";
 export { getUserConfirmedSlots } from "./db/get-user-confirmed-slots";
+export { getScheduleAvailabilityRows } from "./db/get-schedule-availability-rows";
 export { getProfile } from "./db/get-profile";
 export { getProfileMemo } from "./db/get-profile-memo";
 export { notifyGameCreated } from "./discord/notify-game-created";

@@ -1,9 +1,11 @@
 import { Plus } from "lucide-react";
 
 import { toMyRulebooks } from "@/entities/rulebook";
-import { NewGameButton, newGameGate } from "@/features/start-game";
 import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
+
+import { newGameGate } from "../model/new-game-gate";
+import { NewGameButton } from "./new-game-button";
 
 export async function GamesAppBar() {
   const user = await getCurrentSessionUser();

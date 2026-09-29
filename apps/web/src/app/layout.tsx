@@ -36,6 +36,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
@@ -51,10 +52,19 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body className="bg-canvas font-sans text-gray-900 antialiased">
+        {/* ponytail: 스킵 링크는 버튼·링크 프리미티브와 모양이 달라 손으로 둔다. */}
+        <a
+          href="#main"
+          className="sr-only rounded-300 bg-surface px-150 py-100 text-body3 font-bold focus:not-sr-only focus:fixed focus:top-100 focus:left-100 focus:z-(--rc-z-toast) focus:outline-none focus:ring-2 focus:ring-focus"
+        >
+          본문으로 건너뛰기
+        </a>
         <QueryProvider>
           <NavigationTracker />
           <VStack className="mx-auto min-h-dvh w-full min-w-screen-min max-w-screen-max border-x border-gray-200 bg-surface">
-            <div className="flex-1">{children}</div>
+            <main id="main" className="flex-1">
+              {children}
+            </main>
             <AppBottomNav loadHasTodo={hasSessionTodo} />
           </VStack>
         </QueryProvider>

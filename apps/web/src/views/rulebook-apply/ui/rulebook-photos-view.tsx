@@ -1,5 +1,6 @@
 import { Container } from "@roll-and-call/ui";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
 import { profileDisplay } from "@/entities/profile";
 import {
@@ -40,10 +41,12 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
       </>
     );
   }
-  const [records, profile, sellers] = await Promise.all([
+  const [records, profile, sellers, quiz] = await Promise.all([
     getRulebookRecords(user.id),
     getProfile(user.id),
     getCertSellers(),
+    // 주소의 rulebook 값은 아직 검증 전이라, uuid가 아니면 Postgres 캐스팅 에러 대신 아래 redirect로 보낸다.
+    z.uuid().safeParse(rulebookId).success ? getQuizQuestion(rulebookId) : null,
   ]);
   const data = toMyRulebooks(records);
   if (data.suspended) redirect("/me/rulebooks");
@@ -51,7 +54,6 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
   if (!rulebook || certOption(rulebook, data.rulebooks).type !== CERT_OPTION.pick) {
     redirect(certApplyHref([rulebookId]));
   }
-  const quiz = await getQuizQuestion(rulebook.id);
   const { name, handle } = profileDisplay({ profile, user });
   const rejected = rulebook.state === CERT_STATE.rejected ? rulebook.latestApplication : null;
 

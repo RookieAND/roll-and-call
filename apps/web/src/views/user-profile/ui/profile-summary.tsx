@@ -34,7 +34,7 @@ export function ProfileSummary({ profile, absences, isGm, hosted, played }: Prof
         size="xl"
         name={profile.username}
         avatarUrl={profile.avatarUrl}
-        nameRender={<h1 />}
+        nameRender={<h2 />}
         nameAddon={
           isGm ? (
             <Badge colorPalette="primary" className="animate-gm-border">

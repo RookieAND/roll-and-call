@@ -148,7 +148,7 @@
 
   --color-on-primary: var(--rc-color-fg-on-primary);
   --color-inverse: var(--rc-color-fg-inverse);
-  --color-focus: var(--rc-color-border-primary-strong);
+  --color-focus: var(--rc-color-border-focus);
   --color-gm: var(--rc-color-fg-gm);
 }
 
@@ -353,7 +353,7 @@
   --rc-color-fg-danger: var(--rc-color-red-500);
   --rc-color-fg-on-primary: var(--rc-color-gray-000);
   --rc-color-fg-inverse: var(--rc-color-gray-000);
-  --rc-color-fg-gm: var(--rc-color-gold-500);
+  --rc-color-fg-gm: var(--rc-color-gold-700);
   --rc-color-fg-on-spark: var(--rc-color-gold-975);
 
   --rc-color-border-subtle: var(--rc-color-gray-050);
@@ -361,6 +361,7 @@
   --rc-color-border-strong: var(--rc-color-gray-200);
   --rc-color-border-primary: var(--rc-color-indigo-200);
   --rc-color-border-primary-strong: var(--rc-color-indigo-500);
+  --rc-color-border-focus: var(--rc-color-indigo-500);
   --rc-color-border-success: var(--rc-color-green-100);
   --rc-color-border-danger: var(--rc-color-red-200);
   --rc-color-border-notice: var(--rc-color-amber-200);
@@ -467,6 +468,7 @@
   --rc-color-border-strong: var(--rc-color-gray-700);
   --rc-color-border-primary: #3a3a6b; /* 문서 표에만 있고 램프에 없는 값 */
   --rc-color-border-primary-strong: var(--rc-color-indigo-500);
+  --rc-color-border-focus: var(--rc-color-indigo-300);
   --rc-color-border-success: var(--rc-color-green-800);
   --rc-color-border-danger: var(--rc-color-red-900);
   --rc-color-border-notice: var(--rc-color-amber-700);
@@ -607,7 +609,7 @@
   --color-secondary-strong: var(--rc-color-bg-secondary-strong);
   --color-on-primary: var(--rc-color-fg-on-primary);
   --color-inverse: var(--rc-color-fg-inverse);
-  --color-focus: var(--rc-color-border-primary-strong);
+  --color-focus: var(--rc-color-border-focus);
   --color-gm: var(--rc-color-fg-gm);
 
   --color-heat-0: var(--rc-color-bg-canvas-base);

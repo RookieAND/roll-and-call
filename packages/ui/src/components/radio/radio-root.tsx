@@ -14,7 +14,7 @@ export function RadioRoot({ className, ...props }: RadioRootProps) {
       data-slot="radio"
       className={(state) =>
         cn(
-          "flex size-5 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-surface transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus data-checked:border-primary-600 data-disabled:opacity-50",
+          "flex size-5 shrink-0 items-center justify-center rounded-full border border-gray-500 bg-surface transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus data-checked:border-primary-600 data-disabled:opacity-50",
           resolveStateProp(className, state),
         )
       }

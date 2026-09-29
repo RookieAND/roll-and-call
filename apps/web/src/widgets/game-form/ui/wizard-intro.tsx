@@ -8,7 +8,7 @@ interface WizardIntroProps {
 export function WizardIntro({ title, description }: WizardIntroProps) {
   return (
     <div>
-      <Text typography="heading2" render={<h1 />} className="block">
+      <Text typography="heading2" render={<h2 />} className="block">
         {title}
       </Text>
       <Text typography="body3" foreground="muted" render={<p />} className="mt-050">

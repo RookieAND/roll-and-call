@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
+import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import {
@@ -28,7 +29,7 @@ export async function deleteGame(id: string): Promise<ActionResult> {
     .returning();
   if (!deleted) return { error: "삭제 권한이 없습니다." };
 
-  await notifyGameCancelled(deleted);
+  after(() => notifyGameCancelled(deleted));
 
   // 지운 게임의 썸네일·진행 이미지 파일도 정리한다. 2회차가 같은 파일을 쓰면 남는다.
   await removeUnusedGameFiles([deleted.thumbnailUrl, ...deleted.images]);

@@ -1,7 +1,6 @@
 import { Button, HStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import { filterParams, gamesHref } from "@/features/filter-games";
 import {
   GAME_STATUS_FILTER_DEFAULT,
   GAME_STATUS_FILTERS,
@@ -10,6 +9,9 @@ import {
   type GamesFilter,
 } from "@/shared/api";
 import { EmptyState } from "@/shared/ui";
+
+import { filterParams } from "../lib/filter-params";
+import { gamesHref } from "../lib/games-href";
 
 interface GamesEmptyProps {
   filter: GamesFilter;

@@ -39,7 +39,12 @@ export function GameDetail({ game, viewerId }: GameDetailProps) {
 
   return (
     <>
-      <AppBar back="/games" title="구인 상세" action={<ShareButton gameId={game.id} />} />
+      <AppBar
+        back="/games"
+        title="구인 상세"
+        heading={false}
+        action={<ShareButton gameId={game.id} />}
+      />
       <Container size="md" className="px-0">
         <VStack gap="200">
           <GameDetailThumbnail url={game.thumbnailUrl} spoiler={game.thumbnailSpoiler} />

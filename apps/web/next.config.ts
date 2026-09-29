@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     "@roll-and-call/ui",
     "@roll-and-call/tiptap",
   ],
+  experimental: {
+    optimizePackageImports: ["@roll-and-call/ui"],
+  },
   images: {
     remotePatterns: [
       {

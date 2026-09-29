@@ -5,8 +5,8 @@ export const textFieldVariants = cva(
   {
     variants: {
       invalid: {
-        true: "border-[1.5px] border-danger-400 bg-danger-50 focus:border-danger-400 focus:ring-danger-200",
-        false: "border-gray-200 focus:border-primary-500 focus:ring-primary-100",
+        true: "border-[1.5px] border-danger-400 bg-danger-50 focus:border-danger-400 focus:ring-danger-600",
+        false: "border-gray-500 focus:border-primary-500 focus:ring-focus",
       },
     },
     defaultVariants: { invalid: false },

@@ -1,6 +1,6 @@
+import { deriveGameStatus } from "@roll-and-call/database/rules";
 import { Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 
-import { deriveGameStatus } from "@/shared/lib";
 import type { Game } from "@/shared/server";
 
 import { isLiveGame } from "../model/is-live-game";

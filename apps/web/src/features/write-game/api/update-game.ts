@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
+import { after } from "next/server";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
@@ -76,7 +77,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     .returning({ id: games.id });
 
   if (updated.length === 0) return { error: FORBIDDEN_MESSAGE };
-  await refreshRecruitPost(id);
+  after(() => refreshRecruitPost(id));
 
   const kept = new Set<string>([values.thumbnailUrl ?? "", ...values.images]);
   await removeUnusedGameFiles(

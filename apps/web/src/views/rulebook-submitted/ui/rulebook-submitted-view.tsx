@@ -28,7 +28,7 @@ export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedVie
 
   return (
     <>
-      <AppBar back="/me/rulebooks" backIcon="close" title="인증 신청" />
+      <AppBar back="/me/rulebooks" backIcon="close" title="인증 신청" heading={false} />
       <Container size="sm">
         <VStack justify="center" gap="300" className="min-h-[70dvh] px-050 py-400">
           <VStack align="center" gap="125" className="text-center">
