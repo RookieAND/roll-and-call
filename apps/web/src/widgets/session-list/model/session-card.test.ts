@@ -205,6 +205,19 @@ describe("buildSessions", () => {
     ]);
     expect(sessions[SESSION_ROLE.host].map((item) => item.id)).toEqual(["hosted-done"]);
   });
+
+  it("세션이 시작된 뒤에도 대기로 남은 신청은 참여 이력에서 뺀다", () => {
+    const waitingMe = me(PARTICIPANT_STATUS.waiting);
+    const sessions = buildSessions({
+      hosted: [],
+      joined: [
+        game({ id: "missed", confirmedAt: at(-1), participants: [other, waitingMe] }),
+        game({ id: "upcoming", confirmedAt: at(2), participants: [other, waitingMe] }),
+      ],
+      ...context(),
+    });
+    expect(sessions[SESSION_ROLE.player].map((item) => item.id)).toEqual(["upcoming"]);
+  });
 });
 
 describe("buildProfileSessions", () => {

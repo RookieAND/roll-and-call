@@ -1,4 +1,4 @@
-import { SESSION_ROLE, type SessionRole } from "@/entities/game";
+import { PARTICIPANT_STATUS, SESSION_ROLE, type SessionRole } from "@/entities/game";
 
 import {
   SESSION_CHIP,
@@ -14,6 +14,16 @@ export function buildSessions({
   joined,
   ...context
 }: SessionContext & { hosted: SessionGame[]; joined: SessionGame[] }): MySessions {
+  const now = context.now ?? new Date();
+  // 세션이 시작됐는데 아직 대기라면 끝내 참여하지 못한 것이라 이력에 남기지 않는다.
+  const missed = (game: SessionGame) =>
+    game.confirmedAt !== null &&
+    new Date(game.confirmedAt) <= now &&
+    game.participants.some(
+      (participant) =>
+        participant.userId === context.viewerId &&
+        participant.status === PARTICIPANT_STATUS.waiting,
+    );
   const byRole = (games: SessionGame[], role: SessionRole) =>
     games
       .map((game) => toSessionCard(game, role, context))
@@ -24,7 +34,10 @@ export function buildSessions({
       );
 
   return {
-    [SESSION_ROLE.player]: byRole(joined, SESSION_ROLE.player),
+    [SESSION_ROLE.player]: byRole(
+      joined.filter((game) => !missed(game)),
+      SESSION_ROLE.player,
+    ),
     [SESSION_ROLE.host]: byRole(hosted, SESSION_ROLE.host),
   };
 }
