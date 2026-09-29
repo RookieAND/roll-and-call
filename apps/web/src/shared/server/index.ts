@@ -51,7 +51,6 @@ export { notifyGameCancelled } from "./discord/notify-game-cancelled";
 export { announceRecruitmentComplete } from "./discord/announce-recruitment-complete";
 export { notifyDrawResult } from "./discord/notify-draw-result";
 export { notifyDirectConfirmed } from "./discord/notify-direct-confirmed";
-export { notifySessionStartingSoon } from "./discord/notify-session-starting-soon";
 export { notifySessionConfirmed } from "./discord/notify-session-confirmed";
 export {
   deleteGameReviewForumPosts,

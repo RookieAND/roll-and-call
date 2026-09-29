@@ -281,6 +281,13 @@
       "when": 1792500000000,
       "tag": "0039_draw_results",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1792600000000,
+      "tag": "0040_session_reminder_cron",
+      "breakpoints": true
     }
   ]
 }
