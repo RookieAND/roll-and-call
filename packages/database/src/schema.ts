@@ -171,6 +171,26 @@ export const participants = pgTable(
   ],
 );
 
+// 추첨을 적용한 순간의 명단. 뒤에 누가 나가거나 순번이 바뀌어도 추첨 결과 페이지는 이 기록을 보여 준다.
+// roll이 null이면 추첨 전에 직접 확정한 사람이다.
+export const drawResults = pgTable(
+  "draw_results",
+  {
+    gameId: uuid("game_id")
+      .notNull()
+      .references(() => games.id, { onDelete: "cascade" }),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    roll: integer("roll"),
+    status: participantStatus("status").notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.gameId, table.userId] }),
+    check("draw_results_roll_range", sql`${table.roll} between 1 and 100`),
+  ],
+).enableRLS();
+
 export const availabilities = pgTable(
   "availabilities",
   {
@@ -276,6 +296,12 @@ export const gamesRelations = relations(games, ({ one, many }) => ({
   gm: one(profiles, { fields: [games.gmId], references: [profiles.id] }),
   participants: many(participants),
   availabilities: many(availabilities),
+  drawResults: many(drawResults),
+}));
+
+export const drawResultsRelations = relations(drawResults, ({ one }) => ({
+  game: one(games, { fields: [drawResults.gameId], references: [games.id] }),
+  user: one(profiles, { fields: [drawResults.userId], references: [profiles.id] }),
 }));
 
 export const participantsRelations = relations(participants, ({ one }) => ({

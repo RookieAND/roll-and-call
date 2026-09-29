@@ -1,10 +1,10 @@
 "use server";
 
-import { and, asc, eq, isNotNull } from "drizzle-orm";
+import { and, asc, eq, isNotNull, or } from "drizzle-orm";
 
 import { PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
-import { games, notifyDrawResult, participants } from "@/shared/server";
+import { drawResults, games, notifyDrawResult, participants } from "@/shared/server";
 
 import { adjustRoster } from "./adjust-roster";
 import { RosterError } from "./roster-error";
@@ -47,6 +47,25 @@ export async function applyDrawResult(gameId: string): Promise<ActionResult> {
           .where(and(eq(participants.gameId, gameId), eq(participants.userId, participant.userId)));
       }
       await transaction.update(games).set({ drawnAt: new Date() }).where(eq(games.id, gameId));
+
+      // 적용한 순간의 명단을 따로 남긴다. 뒤에 누가 나가도 추첨 결과는 그대로다.
+      const roster = await transaction
+        .select({
+          userId: participants.userId,
+          roll: participants.drawRoll,
+          status: participants.status,
+        })
+        .from(participants)
+        .where(
+          and(
+            eq(participants.gameId, gameId),
+            or(
+              isNotNull(participants.drawRoll),
+              eq(participants.status, PARTICIPANT_STATUS.confirmed),
+            ),
+          ),
+        );
+      await transaction.insert(drawResults).values(roster.map((row) => ({ gameId, ...row })));
     },
     () => notifyDrawResult(gameId),
   );

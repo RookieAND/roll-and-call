@@ -10,8 +10,7 @@ type DrawParticipant = {
   user: { username: string; avatarUrl: string | null; bio: string | null } | null;
 };
 
-// 적용 전후 모두 굴린 값으로 두 통을 가른다. 적용 뒤 명단이 바뀌어도 이 페이지는 추첨 당시 기록으로 남는다.
-// ponytail: 나간 사람은 행이 지워져 기록에서도 빠진다. 기록을 박제해야 하면 적용 시점 스냅샷을 저장한다.
+// 굴린 값으로 두 통을 가른다. 적용 뒤에는 명단 대신 적용 시점 기록(drawResults)을 넣는다.
 export function toDrawOutcome(participants: DrawParticipant[], maxPlayers: number) {
   const toEntry = (participant: DrawParticipant): DrawEntry => ({
     userId: participant.userId,

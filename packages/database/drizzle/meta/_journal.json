@@ -274,6 +274,13 @@
       "when": 1792400000000,
       "tag": "0038_cert_application_direct",
       "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1792500000000,
+      "tag": "0039_draw_results",
+      "breakpoints": true
     }
   ]
 }

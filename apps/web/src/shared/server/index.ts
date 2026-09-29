@@ -8,6 +8,7 @@ export {
   games,
   participants,
   availabilities,
+  drawResults,
   type Profile,
   type Game,
   type Availability,

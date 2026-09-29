@@ -20,6 +20,9 @@ export async function getGameParticipants(gameId: string) {
           },
           with: { user: { columns: { username: true, avatarUrl: true, bio: true } } },
         },
+        drawResults: {
+          with: { user: { columns: { username: true, avatarUrl: true, bio: true } } },
+        },
       },
     }),
     getRespondedUserIds(gameId),

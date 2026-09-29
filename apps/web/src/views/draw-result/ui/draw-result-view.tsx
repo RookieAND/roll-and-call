@@ -1,7 +1,7 @@
 import { Container } from "@roll-and-call/ui";
 import { notFound, redirect } from "next/navigation";
 
-import { SCHEDULE_MODE, splitRoster } from "@/entities/game";
+import { countConfirmed, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { formatDateTime } from "@/shared/lib";
 import { getCurrentUser, getGameParticipants } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
@@ -15,7 +15,7 @@ interface DrawResultViewProps {
   id: string;
 }
 
-// 적용 전에는 GM만 본다. 적용한 순간부터 신청자 전원의 값이 공개된다.
+// 적용 전에는 GM만 본다. 적용한 순간부터 신청자 전원의 값이 공개되고, 그때 남긴 기록(drawResults)을 보여 준다.
 export async function DrawResultView({ id }: DrawResultViewProps) {
   const [data, user] = await Promise.all([getGameParticipants(id), getCurrentUser()]);
   if (!data) notFound();
@@ -23,10 +23,18 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
 
   const isGm = user?.id === game.gmId;
   const applied = game.drawnAt !== null;
-  const hasRolls = game.participants.some((participant) => participant.drawRoll !== null);
+  const drawn = applied
+    ? game.drawResults.map((result) => ({
+        ...result,
+        drawRoll: result.roll,
+        joinedAt: game.drawnAt!,
+      }))
+    : game.participants;
+  const hasRolls = drawn.some((participant) => participant.drawRoll !== null);
   if (!hasRolls || (!applied && !isGm)) redirect(`/games/${id}`);
 
-  const outcome = toDrawOutcome(game.participants, game.maxPlayers);
+  // 적용한 뒤에는 기록에 남은 확정 수가 정원이다. 그 뒤 정원을 고쳐도 결과는 바뀌지 않는다.
+  const outcome = toDrawOutcome(drawn, applied ? countConfirmed(drawn) : game.maxPlayers);
   const roster = splitRoster(game.participants);
   const mine = [...roster.confirmed, ...roster.waiting].find(
     (participant) => participant.userId === user?.id && participant.drawRoll !== null,
