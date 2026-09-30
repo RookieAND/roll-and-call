@@ -25,9 +25,9 @@ export function badgeCondition(
     case BADGE_LADDER.gmReviews:
       return `받은 후기가 ${count}개 쌓이면 받습니다.\n운영진이 숨기거나 지운 후기는 세지 않습니다.`;
     case BADGE_LADDER.playerMonthly:
-      return "한 달 동안 세션에 가장 많이 참석한 PL이 다음 달 내내 답니다.";
+      return "한 달 동안 세션에 가장 많이 참석한 PL입니다.";
     case BADGE_LADDER.gmMonthly:
-      return "한 달 동안 세션을 가장 많이 연 GM이 다음 달 내내 답니다.";
+      return "한 달 동안 세션을 가장 많이 연 GM입니다.";
     case BADGE_LADDER.developer:
       return "롤앤콜을 만드는 개발자에게만 붙습니다.";
     case BADGE_LADDER.guildMaster:
