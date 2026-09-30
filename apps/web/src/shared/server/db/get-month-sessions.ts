@@ -12,7 +12,7 @@ export async function getMonthSessions(from: Date, to: Date) {
     with: {
       gm: { columns: { id: true, username: true, avatarUrl: true } },
       participants: {
-        columns: { userId: true, status: true },
+        columns: { userId: true, status: true, absent: true, absenceCancelledAt: true },
         with: { user: { columns: { id: true, username: true, avatarUrl: true } } },
       },
     },

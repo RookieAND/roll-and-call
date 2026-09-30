@@ -1,9 +1,12 @@
+import { heldBadges, pickFeaturedBadges } from "@/entities/badge";
 import { SESSION_ROLE } from "@/entities/game";
 import { profileDisplay } from "@/entities/profile";
 import { CERT_STATE } from "@/entities/rulebook";
-import { getCurrentSessionUser } from "@/shared/server";
+import { heldBadgeDetail } from "@/features/view-badge";
+import { getCurrentSessionUser, getUserBadges } from "@/shared/server";
 import { sessionsHref } from "@/widgets/session-list";
 
+import { loadMyBadgeFacts } from "../api/load-my-badge-facts";
 import { loadMyPageSessions } from "../api/load-my-page-sessions";
 import { loadMyProfile } from "../api/load-my-profile";
 import { loadMyRulebooks } from "../api/load-my-rulebooks";
@@ -13,11 +16,19 @@ import { MyPageTodos } from "./my-page-todos";
 
 export async function MyPageSummary() {
   const user = (await getCurrentSessionUser())!;
-  const [profile, mySessions, rulebooks] = await Promise.all([
+  const [profile, mySessions, rulebooks, badgeRecords, badgeFacts] = await Promise.all([
     loadMyProfile(user.id),
     loadMyPageSessions(user.id),
     loadMyRulebooks(user.id),
+    getUserBadges(user.id),
+    loadMyBadgeFacts(user.id),
   ]);
+  const now = new Date();
+  const held = heldBadges(badgeRecords, now);
+  const featuredBadges = pickFeaturedBadges(profile?.featuredBadges ?? [], held).map((badge) => ({
+    ...badge,
+    detail: heldBadgeDetail(badge, { records: badgeRecords, facts: badgeFacts, now }),
+  }));
   const { name, avatar } = profileDisplay({ profile, user });
   const canHost = rulebooks.rulebooks.some((rulebook) => rulebook.state === CERT_STATE.certified);
   const showGmBadge = profile?.showGmBadge ?? true;
@@ -32,6 +43,8 @@ export async function MyPageSummary() {
         avatarUrl={avatar}
         isGm={canHost && showGmBadge}
         bio={profile?.bio ?? null}
+        featuredBadges={featuredBadges}
+        heldBadgeCount={held.length}
         keywords={profile?.keywords ?? []}
         availability={profile?.availability ?? []}
         hosted={{

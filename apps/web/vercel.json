@@ -1,3 +1,4 @@
 {
-  "regions": ["icn1"]
+  "regions": ["icn1"],
+  "crons": [{ "path": "/api/cron/badges", "schedule": "5 15 * * *" }]
 }

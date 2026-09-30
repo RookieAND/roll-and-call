@@ -5,6 +5,7 @@ import { after } from "next/server";
 
 import {
   cancelNoShow,
+  evaluateGameBadges,
   parseNoShowId,
   requireStaff,
   syncGameReviewForumPosts,
@@ -17,5 +18,6 @@ export async function cancelNoShowRecord(noShowId: string, reason: string) {
   revalidatePath("/", "layout");
   const { gameId } = parseNoShowId(noShowId);
   after(() => syncGameReviewForumPosts(gameId, process.env.NEXT_PUBLIC_USER_APP_URL));
+  after(() => evaluateGameBadges(gameId));
   return result;
 }

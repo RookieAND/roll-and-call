@@ -1,6 +1,6 @@
 import { Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
-// 할 일 카드는 있을 때만 그려지므로 뼈대에서는 뺀다.
+// 할 일 카드는 있을 때만 그려지므로 뼈대에서는 뺀다. 대표 업적 줄은 뱃지가 없으면 빠지지만 뼈대에는 둔다.
 export function MyPageSummarySkeleton() {
   return (
     <VStack gap="175" render={<section />}>
@@ -12,6 +12,16 @@ export function MyPageSummarySkeleton() {
         </VStack>
         <Skeleton width={52} height={36} rounded={400} className="flex-none" />
       </HStack>
+      <VStack gap="075">
+        <HStack align="center" className="min-h-7">
+          <Skeleton width={52} height={17} />
+        </HStack>
+        <Grid cols={3} gap="075">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={index} width="100%" height={26} rounded="full" />
+          ))}
+        </Grid>
+      </VStack>
       <Grid cols={2} className="-mx-200 border-y border-gray-200">
         {Array.from({ length: 2 }).map((_, index) => (
           <VStack

@@ -10,12 +10,15 @@ import {
 import { SessionCountStats } from "@/widgets/session-list";
 
 import { MyPageBlockLabel } from "./my-page-block-label";
+import { MyPageFeaturedBadges, type FeaturedBadge } from "./my-page-featured-badges";
 
 interface MyPageProfileProps {
   name: string;
   avatarUrl: string | null;
   isGm: boolean;
   bio: string | null;
+  featuredBadges: FeaturedBadge[];
+  heldBadgeCount: number;
   keywords: string[];
   availability: AvailabilityInterval[];
   hosted: { count: number; href: string };
@@ -28,6 +31,8 @@ export function MyPageProfile({
   avatarUrl,
   isGm,
   bio,
+  featuredBadges,
+  heldBadgeCount,
   keywords,
   availability,
   hosted,
@@ -60,6 +65,10 @@ export function MyPageProfile({
           편집
         </Button>
       </HStack>
+
+      {featuredBadges.length > 0 && (
+        <MyPageFeaturedBadges badges={featuredBadges} heldCount={heldBadgeCount} />
+      )}
 
       <SessionCountStats hosted={hosted} played={played} />
 

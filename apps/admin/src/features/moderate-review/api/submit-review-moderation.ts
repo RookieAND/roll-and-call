@@ -5,6 +5,7 @@ import { after } from "next/server";
 
 import { REVIEW_REASONS } from "@/shared/lib";
 import {
+  evaluateReviewBadges,
   moderateReview,
   requireStaff,
   syncReviewForumPost,
@@ -27,6 +28,7 @@ export async function submitReviewModeration(reviewId: string, moderation: Revie
   revalidatePath("/", "layout");
   if (result.ok) {
     after(() => syncReviewForumPost(reviewId, process.env.NEXT_PUBLIC_USER_APP_URL));
+    after(() => evaluateReviewBadges(reviewId));
   }
   return result;
 }

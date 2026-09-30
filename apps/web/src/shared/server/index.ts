@@ -25,7 +25,16 @@ export {
   reviewReports,
   type CertApplication,
   type SessionReview,
+  userBadges,
 } from "@roll-and-call/database";
+export {
+  evaluateBadges,
+  evaluateGameBadges,
+  loadBadgeFacts as getBadgeFacts,
+  loadMonthlyAppearances as getMonthlyAppearances,
+} from "@roll-and-call/database/badges";
+export { getUserBadges, type BadgeRecord } from "./db/get-user-badges";
+export { markBadgesSeen } from "./db/mark-badges-seen";
 export { getRulebookRecords, type RulebookRecords } from "./db/get-rulebook-records";
 export { getCertSellers } from "./db/get-cert-sellers";
 export { getQuizQuestion } from "./db/get-quiz-question";

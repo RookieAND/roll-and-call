@@ -144,6 +144,7 @@
   --color-saturday: var(--rc-color-data-blue-ink);
   --color-sunday: var(--rc-color-data-pink-ink);
   --color-spark: var(--rc-color-bg-spark);
+  --color-on-spark: var(--rc-color-fg-on-spark);
   --color-secondary-strong: var(--rc-color-bg-secondary-strong);
 
   --color-on-primary: var(--rc-color-fg-on-primary);
@@ -606,6 +607,7 @@
   --color-saturday: var(--rc-color-data-blue-ink);
   --color-sunday: var(--rc-color-data-pink-ink);
   --color-spark: var(--rc-color-bg-spark);
+  --color-on-spark: var(--rc-color-fg-on-spark);
   --color-secondary-strong: var(--rc-color-bg-secondary-strong);
   --color-on-primary: var(--rc-color-fg-on-primary);
   --color-inverse: var(--rc-color-fg-inverse);

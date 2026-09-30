@@ -182,3 +182,103 @@ html {
     animation: none;
   }
 }
+
+/* 업적 메달: 4단계부터 빛이 지나가고 별이 반짝인다. 획득 시트는 뒤에서 빛살이 돈다. */
+@keyframes badge-shine {
+  0% {
+    background-position: 130% 0;
+  }
+  55%,
+  100% {
+    background-position: -130% 0;
+  }
+}
+
+@keyframes badge-twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1) rotate(40deg);
+  }
+  70% {
+    opacity: 0.2;
+    transform: scale(0.6) rotate(70deg);
+  }
+}
+
+@keyframes badge-rays-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@utility badge-highlight {
+  background-image: radial-gradient(circle at 32% 24%, rgb(255 255 255 / 0.5), transparent 56%);
+}
+
+@utility animate-badge-shine {
+  background: linear-gradient(
+    115deg,
+    transparent 38%,
+    rgb(255 255 255 / 0.72) 50%,
+    transparent 62%
+  );
+  background-size: 260% 100%;
+  animation: badge-shine 3.4s ease-in-out infinite;
+}
+
+@utility animate-badge-twinkle {
+  animation: badge-twinkle 2.6s ease-in-out infinite both;
+}
+
+@utility animate-badge-rays {
+  mask-image: radial-gradient(circle, #000 22%, transparent 66%);
+  animation: badge-rays-spin 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-badge-shine,
+  .animate-badge-rays {
+    animation: none;
+  }
+  .animate-badge-twinkle {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* 메달 지름과 가운데 이모지 크기. 이모지는 글자라 Text 스케일 밖의 크기를 여기서만 정한다. */
+@utility badge-size-xs {
+  width: 34px;
+  height: 34px;
+  font-size: 16px;
+}
+@utility badge-size-sm {
+  width: 44px;
+  height: 44px;
+  font-size: 22px;
+}
+@utility badge-size-md {
+  width: 52px;
+  height: 52px;
+  font-size: 25px;
+}
+@utility badge-size-lg {
+  width: 64px;
+  height: 64px;
+  font-size: 30px;
+}
+@utility badge-size-xl {
+  width: 104px;
+  height: 104px;
+  font-size: 50px;
+}
+@utility badge-size-2xl {
+  width: 128px;
+  height: 128px;
+  font-size: 62px;
+}

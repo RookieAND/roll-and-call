@@ -1,6 +1,7 @@
 import { Container } from "@roll-and-call/ui";
 import { notFound, redirect } from "next/navigation";
 
+import { heldBadges, pickFeaturedBadges } from "@/entities/badge";
 import { SESSION_ROLE } from "@/entities/game";
 import { AvailabilityRows, ProfileLinks } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
@@ -10,6 +11,7 @@ import {
   getProfileMemo,
   getReviewCounts,
   getRulebookRecords,
+  getUserBadges,
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { loadProfile } from "@/widgets/session-list";
@@ -21,11 +23,12 @@ import { ProfileSummary } from "./profile-summary";
 
 export async function UserProfileView({ id }: { id: string }) {
   const viewerPromise = getCurrentSessionUser();
-  const [viewer, loaded, rulebookRecords, reviewCounts, memo] = await Promise.all([
+  const [viewer, loaded, rulebookRecords, reviewCounts, badgeRecords, memo] = await Promise.all([
     viewerPromise,
     loadProfile(id),
     getRulebookRecords(id),
     getReviewCounts(id),
+    getUserBadges(id),
     viewerPromise.then((currentViewer) =>
       currentViewer ? getProfileMemo({ ownerId: currentViewer.id, targetId: id }) : null,
     ),
@@ -41,6 +44,7 @@ export async function UserProfileView({ id }: { id: string }) {
     .toSorted((left, right) => right.stateAt!.getTime() - left.stateAt!.getTime())
     .map((rulebook) => ({ id: rulebook.id, label: rulebook.label }));
   const isGm = certified.length > 0 && profile.showGmBadge;
+  const held = profile.showBadges ? heldBadges(badgeRecords) : [];
 
   return (
     <>
@@ -52,6 +56,8 @@ export async function UserProfileView({ id }: { id: string }) {
           isGm={isGm}
           hosted={sessions[SESSION_ROLE.host].length}
           played={sessions[SESSION_ROLE.player].length}
+          featuredBadges={pickFeaturedBadges(profile.featuredBadges, held)}
+          badgeTotal={held.length}
         />
 
         {certified.length > 0 && <ProfileRulebooks rulebooks={certified} />}

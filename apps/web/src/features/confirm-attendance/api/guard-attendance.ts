@@ -1,5 +1,6 @@
 import "server-only";
 import { and, eq } from "drizzle-orm";
+import { after } from "next/server";
 
 import { isAttendanceDue, PARTICIPANT_STATUS } from "@/entities/game";
 import {
@@ -8,7 +9,7 @@ import {
   GAME_NOT_FOUND_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
-import { db, games, getCurrentUser, participants } from "@/shared/server";
+import { db, evaluateGameBadges, games, getCurrentUser, participants } from "@/shared/server";
 
 import { AttendanceError } from "./attendance-error";
 import { revalidateAttendance } from "./revalidate-attendance";
@@ -60,5 +61,7 @@ export async function guardAttendance(
   }
 
   revalidateAttendance(gameId);
+  // 출석이 정해지거나 풀리면 인정 세션이 바뀐다.
+  after(() => evaluateGameBadges(gameId));
   return {};
 }

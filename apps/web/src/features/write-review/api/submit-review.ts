@@ -16,6 +16,7 @@ import {
   getCurrentUser,
   getReviewDraftTarget,
   removeUnusedReviewPhotos,
+  evaluateBadges,
   revalidateReviews,
   sessionReviews,
   siteOrigin,
@@ -86,5 +87,6 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
     const createdReviewId = reviewId;
     after(() => syncReviewForumPost(createdReviewId, siteOrigin()));
   }
+  if (!target.review) after(() => evaluateBadges([target.game.gmId]));
   redirect(MY_REVIEWS_HREF);
 }

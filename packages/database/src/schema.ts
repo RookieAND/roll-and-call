@@ -34,19 +34,29 @@ export type AvailabilityInterval = { day: number; from: number; to: number };
 export type ProfileLink = { service: string; value: string };
 
 // Mirror of auth.users, kept in sync by a trigger. `id` equals the Supabase auth uid.
-export const profiles = pgTable("profiles", {
-  id: uuid("id").primaryKey(),
-  discordId: text("discord_id").notNull().unique(),
-  username: text("username").notNull(),
-  avatarUrl: text("avatar_url"),
-  bio: text("bio"),
-  keywords: text("keywords").array().notNull().default([]),
-  availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
-  links: jsonb("links").$type<ProfileLink[]>().notNull().default([]),
-  // 인증된 룰북이 있어도 Player로 보이고 싶으면 끈다.
-  showGmBadge: boolean("show_gm_badge").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+export const profiles = pgTable(
+  "profiles",
+  {
+    id: uuid("id").primaryKey(),
+    discordId: text("discord_id").notNull().unique(),
+    username: text("username").notNull(),
+    avatarUrl: text("avatar_url"),
+    bio: text("bio"),
+    keywords: text("keywords").array().notNull().default([]),
+    availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
+    links: jsonb("links").$type<ProfileLink[]>().notNull().default([]),
+    // 인증된 룰북이 있어도 Player로 보이고 싶으면 끈다.
+    showGmBadge: boolean("show_gm_badge").notNull().default(true),
+    // 업적. 끄면 다른 사람에게 대표 뱃지·뱃지 목록이 보이지 않는다.
+    showBadges: boolean("show_badges").notNull().default(true),
+    // 이름 아래 고정할 뱃지 키. 누른 순서대로 최대 3개이고, 비어 있으면 최근에 받은 3개를 보인다.
+    featuredBadges: text("featured_badges").array().notNull().default([]),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    check("profiles_featured_badges_limit", sql`cardinality(${table.featuredBadges}) <= 3`),
+  ],
+);
 
 // 쓴 사람만 본다. 상대는 내용도, 메모가 있다는 사실도 볼 수 없다.
 export const profileMemos = pgTable(
@@ -286,6 +296,30 @@ export const reviewReports = pgTable(
   ],
 ).enableRLS();
 
+// 기록에서 매번 다시 계산해 이 표와 비교한다(evaluateBadges). 단계형은 키 하나에 지금 단계만 두고,
+// 이달의 GM·PL은 달마다 한 줄(gm.monthly.2026-09)이라 지난 기록이 남는다. 근거가 사라지면 지우지 않고 revokedAt을 채운다.
+export const userBadges = pgTable(
+  "user_badges",
+  {
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    badgeKey: text("badge_key").notNull(),
+    tier: integer("tier").notNull(),
+    earnedAt: timestamp("earned_at", { withTimezone: true }).notNull(),
+    sourceGameId: uuid("source_game_id").references(() => games.id, { onDelete: "set null" }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+    // 획득 시트를 닫은 시각. null이면 다음 방문 때 시트를 띄운다.
+    notifiedAt: timestamp("notified_at", { withTimezone: true }),
+    // 도감을 연 시각. null이면 새 뱃지 점을 찍는다.
+    seenAt: timestamp("seen_at", { withTimezone: true }),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.badgeKey] }),
+    check("user_badges_tier_positive", sql`${table.tier} >= 1`),
+  ],
+).enableRLS();
+
 export const profilesRelations = relations(profiles, ({ many }) => ({
   hostedGames: many(games),
   participations: many(participants),
@@ -334,6 +368,7 @@ export type NewAvailability = typeof availabilities.$inferInsert;
 export type ProfileMemo = typeof profileMemos.$inferSelect;
 export type SessionReview = typeof sessionReviews.$inferSelect;
 export type ReviewReport = typeof reviewReports.$inferSelect;
+export type UserBadge = typeof userBadges.$inferSelect;
 
 // ── 어드민 ──
 // 아래 테이블은 모두 RLS만 켜고 정책을 두지 않는다. 어드민 서버(DATABASE_URL)만 읽고 쓴다.

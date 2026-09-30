@@ -20,7 +20,11 @@ export async function MyPageAccount() {
   return (
     <>
       <MyPageLinks links={profile?.links ?? []} />
-      <MyPageSettings handleLabel={handle ? `@${handle}` : null} roleSetting={roleSetting} />
+      <MyPageSettings
+        handleLabel={handle ? `@${handle}` : null}
+        roleSetting={roleSetting}
+        showBadges={profile?.showBadges ?? true}
+      />
     </>
   );
 }

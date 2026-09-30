@@ -12,6 +12,8 @@ export {
   sessionReviews,
   reviewReports,
   reviewReportOutcome,
+  userBadges,
+  type UserBadge,
   profilesRelations,
   gamesRelations,
   participantsRelations,

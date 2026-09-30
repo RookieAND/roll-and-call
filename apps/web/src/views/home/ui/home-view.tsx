@@ -1,5 +1,7 @@
 import { Callout, Container, HStack } from "@roll-and-call/ui";
+import { Suspense } from "react";
 
+import { BadgeAwardGate } from "@/features/acknowledge-badges";
 import { LoginButton } from "@/features/auth";
 import { getCurrentSessionUser, getMonthSessions } from "@/shared/server";
 import { AppBar, HelpButton, ThemeToggleButton } from "@/shared/ui";
@@ -56,6 +58,11 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
         />
         <HomeMonthRecord monthStart={monthStart} record={buildMonthRecord(sessions)} />
       </Container>
+      {user && (
+        <Suspense fallback={null}>
+          <BadgeAwardGate userId={user.id} />
+        </Suspense>
+      )}
     </>
   );
 }

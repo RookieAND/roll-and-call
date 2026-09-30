@@ -7,6 +7,7 @@ import { AppBar, HelpButton } from "@/shared/ui";
 
 import { MyPageAccount } from "./my-page-account";
 import { MyPageAccountSkeleton } from "./my-page-account-skeleton";
+import { MyPageBadgesSection } from "./my-page-badges-section";
 import { MyPageBlockSkeleton } from "./my-page-block-skeleton";
 import { MyPageReviewsSection } from "./my-page-reviews-section";
 import { MyPageRulebooksSection } from "./my-page-rulebooks-section";
@@ -24,6 +25,9 @@ export async function MyPageView() {
           <VStack gap="250" className="py-225">
             <Suspense fallback={<MyPageSummarySkeleton />}>
               <MyPageSummary />
+            </Suspense>
+            <Suspense fallback={<MyPageBlockSkeleton titleWidth={40} height={124} />}>
+              <MyPageBadgesSection />
             </Suspense>
             <Suspense fallback={<MyPageBlockSkeleton titleWidth={64} height={120} />}>
               <MyPageRulebooksSection />

@@ -5,17 +5,20 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./rules": "./src/rules/index.ts"
+    "./rules": "./src/rules/index.ts",
+    "./badges": "./src/badges/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "test": "vitest run"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",
+    "es-toolkit": "^1.52.0",
     "postgres": "^3.4.9",
     "server-only": "^0.0.1"
   },
@@ -24,6 +27,7 @@
     "@types/node": "^26.2.0",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.1"
   }
 }
