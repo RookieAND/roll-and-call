@@ -16,16 +16,16 @@ export type BadgeLadderDefinition = {
 
 const RULE_PLAYER_STEPS: BadgeStep[] = [
   { threshold: 1, emoji: "🌱", name: "입문자", grade: 1 },
-  { threshold: 10, emoji: "💖", name: "애호가", grade: 2 },
-  { threshold: 30, emoji: "🎓", name: "전문가", grade: 3 },
-  { threshold: 100, emoji: "🏆", name: "달인", grade: 4 },
+  { threshold: 5, emoji: "💖", name: "애호가", grade: 2 },
+  { threshold: 20, emoji: "🎓", name: "전문가", grade: 3 },
+  { threshold: 50, emoji: "🏆", name: "달인", grade: 4 },
 ];
 
 const RULE_GM_STEPS: BadgeStep[] = [
   { threshold: 1, emoji: "🔰", name: "길잡이", grade: 1 },
-  { threshold: 10, emoji: "📖", name: "해설자", grade: 2 },
-  { threshold: 30, emoji: "🎩", name: "연출가", grade: 3 },
-  { threshold: 100, emoji: "👑", name: "거장", grade: 4 },
+  { threshold: 3, emoji: "📖", name: "해설자", grade: 2 },
+  { threshold: 10, emoji: "🎩", name: "연출가", grade: 3 },
+  { threshold: 25, emoji: "👑", name: "거장", grade: 4 },
 ];
 
 export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
@@ -36,9 +36,9 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     steps: [
       { threshold: 1, emoji: "🎲", name: "첫 주사위", grade: 1 },
       { threshold: 10, emoji: "🎒", name: "떠돌이", grade: 2 },
-      { threshold: 50, emoji: "⚔️", name: "용사", grade: 3 },
-      { threshold: 100, emoji: "🛡️", name: "수호자", grade: 4 },
-      { threshold: 200, emoji: "🐉", name: "용 사냥꾼", grade: 5 },
+      { threshold: 30, emoji: "⚔️", name: "용사", grade: 3 },
+      { threshold: 70, emoji: "🛡️", name: "수호자", grade: 4 },
+      { threshold: 150, emoji: "🐉", name: "용 사냥꾼", grade: 5 },
     ],
   },
   [BADGE_LADDER.playerRule]: {
@@ -59,10 +59,10 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     monthly: false,
     steps: [
       { threshold: 1, emoji: "🕯️", name: "첫 막", grade: 1 },
-      { threshold: 10, emoji: "📜", name: "이야기꾼", grade: 2 },
-      { threshold: 50, emoji: "🎭", name: "음유시인", grade: 3 },
-      { threshold: 100, emoji: "🧙", name: "대현자", grade: 4 },
-      { threshold: 200, emoji: "🌟", name: "창조주", grade: 5 },
+      { threshold: 5, emoji: "📜", name: "이야기꾼", grade: 2 },
+      { threshold: 20, emoji: "🎭", name: "음유시인", grade: 3 },
+      { threshold: 40, emoji: "🧙", name: "대현자", grade: 4 },
+      { threshold: 80, emoji: "🌟", name: "창조주", grade: 5 },
     ],
   },
   [BADGE_LADDER.gmRule]: {
@@ -88,6 +88,7 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     steps: [
       { threshold: 10, emoji: "💬", name: "입소문", grade: 2 },
       { threshold: 50, emoji: "📣", name: "화제작", grade: 3 },
+      { threshold: 100, emoji: "🎬", name: "명작", grade: 4 },
     ],
   },
   [BADGE_LADDER.gmMonthly]: {

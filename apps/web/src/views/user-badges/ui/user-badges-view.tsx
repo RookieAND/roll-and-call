@@ -3,12 +3,13 @@ import { Container, Text, VStack } from "@roll-and-call/ui";
 import { Lock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
-import { badgeRequirement, heldBadges } from "@/entities/badge";
+import { heldBadges } from "@/entities/badge";
 import { heldBadgeDetail } from "@/features/view-badge";
 import { toKst } from "@/shared/lib";
 import { getCurrentSessionUser, getProfile, getUserBadges } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
+import { badgeRowRequirement } from "../model/badge-row-requirement";
 import { UserBadgeGroup } from "./user-badge-group";
 
 const GROUPS = [
@@ -57,7 +58,7 @@ export async function UserBadgesView({ id }: UserBadgesViewProps) {
         emoji: badge.emoji,
         grade: badge.grade,
         name: badge.name,
-        requirement: badgeRequirement(badge.ladder, badge.step, badge.categoryName),
+        requirement: badgeRowRequirement(badge),
         dateLabel: toKst(badge.record.earnedAt).format("YY.MM.DD"),
         detail: heldBadgeDetail(badge, { records, facts: null, now }),
       })),

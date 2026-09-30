@@ -1,33 +1,39 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, exists, isNotNull, isNull, sql } from "drizzle-orm";
 
 import { db } from "../client";
-import { BADGE_ROLE, isRecognizedSession, type MonthlyAppearance } from "../rules";
+import { BADGE_ROLE, sessionEndsAt, type MonthlyAppearance } from "../rules";
 import { games, participants } from "../schema";
 import { attendedWhere } from "./attended-where";
-import { recognizedGamesWhere } from "./recognized-games-where";
 
-// ponytail: 전체 인정 세션을 한 번에 읽는다. 세션이 수만 건이 되면 달 단위 집계 쿼리로 바꾼다.
+// 홈의 이 달 기록과 같은 기준으로 센다. 끝난 세션이면 출석 확인 전이어도 넣고, 불참으로 적힌 사람만 뺀다.
+const monthlyGamesWhere = and(
+  isNotNull(games.confirmedAt),
+  isNull(games.hiddenAt),
+  exists(
+    sql`(select 1 from ${participants} where ${participants.gameId} = ${games.id} and ${participants.status} = 'confirmed')`,
+  ),
+)!;
+
+// ponytail: 끝난 세션을 한 번에 읽는다. 세션이 수만 건이 되면 달 단위 집계 쿼리로 바꾼다.
 export async function loadMonthlyAppearances(now: Date = new Date()): Promise<MonthlyAppearance[]> {
   const gameColumns = {
     confirmedAt: games.confirmedAt,
     playMinutes: games.playMinutes,
-    attendanceConfirmedAt: games.attendanceConfirmedAt,
-    hiddenAt: games.hiddenAt,
   };
   const [hosted, played] = await Promise.all([
     db
       .select({ userId: games.gmId, ...gameColumns })
       .from(games)
-      .where(recognizedGamesWhere),
+      .where(monthlyGamesWhere),
     db
       .select({ userId: participants.userId, ...gameColumns })
       .from(participants)
       .innerJoin(games, eq(games.id, participants.gameId))
-      .where(and(attendedWhere, recognizedGamesWhere)),
+      .where(and(attendedWhere, monthlyGamesWhere)),
   ]);
   const toAppearances = (rows: typeof hosted, role: MonthlyAppearance["role"]) =>
     rows
-      .filter((row) => isRecognizedSession(row, 1, now))
+      .filter((row) => sessionEndsAt(row.confirmedAt!, row.playMinutes).getTime() <= now.getTime())
       .map((row) => ({ userId: row.userId, role, startsAt: row.confirmedAt! }));
   return [...toAppearances(hosted, BADGE_ROLE.gm), ...toAppearances(played, BADGE_ROLE.player)];
 }

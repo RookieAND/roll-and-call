@@ -12,6 +12,7 @@ interface DexGmExtrasProps {
 
 // GM 탭에만 있는 다양한 룰 운영과 받은 후기.
 export function DexGmExtras({ variety, reviews }: DexGmExtrasProps) {
+  const nextReviewKey = reviews.medals.find((medal) => medal.locked)?.key;
   return (
     <>
       <DexSection title="다양한 룰 운영" hint={variety.hint}>
@@ -30,14 +31,16 @@ export function DexGmExtras({ variety, reviews }: DexGmExtrasProps) {
         />
       </DexSection>
       <DexSection title="받은 후기">
-        <Grid cols={2} gap="100">
+        <Grid cols={3} gap="100">
           {reviews.medals.map((medal) => {
-            const caption = medal.locked
+            // 진행 막대는 바로 다음 단계에만 둔다. 그 뒤 단계는 조건만 보인다.
+            const next = medal.key === nextReviewKey;
+            const caption = next
               ? `받은 후기 ${reviews.count} / ${medal.threshold}`
               : medal.caption;
             return (
               <DexMedalTile key={medal.key} medal={medal} bordered caption={caption}>
-                {medal.locked && (
+                {next && (
                   <Progress
                     value={reviews.count}
                     max={medal.threshold}
