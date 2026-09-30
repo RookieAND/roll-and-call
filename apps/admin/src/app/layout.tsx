@@ -16,6 +16,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
         />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/toss/tossface@v1.6.1/dist/tossface.css"
+        />
       </head>
       <body className="bg-surface font-sans text-gray-900 antialiased">
         {children}

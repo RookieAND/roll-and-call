@@ -16,8 +16,8 @@
 /* Tailwind 유틸리티 이름표(p-100, text-body4, rounded-500). 값은 아래 --rc-* 토큰이 갖는다. */
 @theme {
   --font-sans:
-    "Pretendard Variable", Pretendard, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    sans-serif;
+    "Pretendard Variable", Pretendard, Tossface, ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
 
   --spacing-025: var(--rc-size-space-025);
   --spacing-050: var(--rc-size-space-050);
