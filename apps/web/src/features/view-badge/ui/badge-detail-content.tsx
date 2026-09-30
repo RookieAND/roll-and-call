@@ -32,16 +32,18 @@ export function BadgeDetailContent({ detail }: BadgeDetailContentProps) {
         >
           {detail.tierLabel}
         </Text>
-        <Sheet.Title render={<Text typography="heading2" render={<h2 />} />}>
-          {detail.name}
-        </Sheet.Title>
-        <Text
-          typography="body2"
-          foreground="muted"
-          className="whitespace-pre-line [text-wrap:pretty]"
-        >
-          {detail.condition}
-        </Text>
+        <VStack align="center" gap="050">
+          <Sheet.Title render={<Text typography="heading2" render={<h2 />} />}>
+            {detail.name}
+          </Sheet.Title>
+          <Text
+            typography="body2"
+            foreground="muted"
+            className="whitespace-pre-line [text-wrap:pretty]"
+          >
+            {detail.condition}
+          </Text>
+        </VStack>
       </VStack>
 
       {earned && (
