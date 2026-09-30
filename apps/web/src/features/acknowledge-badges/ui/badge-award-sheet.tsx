@@ -43,29 +43,34 @@ export function BadgeAwardSheet({ sheet }: BadgeAwardSheetProps) {
 
   return (
     <Sheet.Root open={open} onOpenChange={(next) => !next && close()}>
-      <Sheet.Popup aria-label="새 업적" className="overflow-x-hidden">
-        <Sheet.Handle />
-        {sheet.kind === "single" && <AwardSingle sheet={sheet} onNavigate={close} />}
-        {sheet.kind === "multi" && <AwardMulti sheet={sheet} />}
-        {sheet.kind === "retro" && <AwardRetro sheet={sheet} />}
-        <HStack gap="100" className="relative mt-250">
-          <Button variant="outline" size="lg" className="flex-1" onClick={close}>
-            {dismissLabel}
-          </Button>
-          {pinnable ? (
-            <Button size="lg" className="flex-1" onClick={pin}>
-              대표 뱃지로 걸기
+      <Sheet.Popup aria-label="새 업적">
+        {/* 메달 뒤 빛살이 시트 가장자리까지 번지도록 Body를 패딩 밖으로 넓힌다. */}
+        <Sheet.Body className="-mx-250 -mt-250 px-250 pt-250 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <Sheet.Handle />
+          {sheet.kind === "single" && <AwardSingle sheet={sheet} onNavigate={close} />}
+          {sheet.kind === "multi" && <AwardMulti sheet={sheet} />}
+          {sheet.kind === "retro" && <AwardRetro sheet={sheet} />}
+        </Sheet.Body>
+        <Sheet.Footer className="pt-250">
+          <HStack gap="100">
+            <Button variant="outline" size="lg" className="flex-1" onClick={close}>
+              {dismissLabel}
             </Button>
-          ) : (
-            <Button
-              render={<Link href={primaryHref} onClick={close} />}
-              size="lg"
-              className="flex-1"
-            >
-              {primaryLabel}
-            </Button>
-          )}
-        </HStack>
+            {pinnable ? (
+              <Button size="lg" className="flex-1" onClick={pin}>
+                대표 뱃지로 걸기
+              </Button>
+            ) : (
+              <Button
+                render={<Link href={primaryHref} onClick={close} />}
+                size="lg"
+                className="flex-1"
+              >
+                {primaryLabel}
+              </Button>
+            )}
+          </HStack>
+        </Sheet.Footer>
       </Sheet.Popup>
     </Sheet.Root>
   );
