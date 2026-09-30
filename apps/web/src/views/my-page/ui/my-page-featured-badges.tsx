@@ -1,4 +1,4 @@
-import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -25,10 +25,16 @@ export function MyPageFeaturedBadges({ badges, heldCount }: MyPageFeaturedBadges
         >
           대표 업적
         </Text>
-        <Button render={<Link href="/me/badges" />} variant="ghost" size="sm" className="-mr-100">
+        <Text
+          typography="body4"
+          weight="bold"
+          foreground="muted"
+          render={<Link href="/me/badges" />}
+          className="inline-flex min-h-7 items-center gap-025"
+        >
           {heldCount}개 모두 보기
           <ChevronRight size={12} strokeWidth={2.2} aria-hidden />
-        </Button>
+        </Text>
       </HStack>
       <HStack wrap gap="075">
         {badges.map((badge) => (
