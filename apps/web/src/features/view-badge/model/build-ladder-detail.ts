@@ -52,7 +52,9 @@ export function buildLadderDetail({
   const last = tier === steps.length;
   const count = events?.length ?? null;
   const tierLabel = earned
-    ? `${tier} / ${steps.length}단계${last ? " · 마지막 단계" : ""}`
+    ? last
+      ? "마지막 단계"
+      : `${tier} / ${steps.length}단계`
     : `${meta.title} · ${last ? "마지막 단계" : `${tier}단계`}`;
 
   const earnedEvent = events?.[step.threshold - 1] ?? null;

@@ -40,7 +40,7 @@ export function buildMonthlyDetail({
     return count ? `${count}회 ${meta.verb} · 1위` : "1위";
   };
   const heldUntil = heldMonth
-    ? toKst(nextMonthStart(heldMonth)).endOf("month").format("M월 D일")
+    ? toKst(nextMonthStart(heldMonth)).endOf("month").format("YYYY년 M월 D일")
     : null;
 
   return {
@@ -51,7 +51,7 @@ export function buildMonthlyDetail({
       locked: !heldMonth,
       ribbon: shownMonth ? monthLabel(shownMonth) : null,
     },
-    tierLabel: heldUntil ? `기간제 · ${heldUntil}까지` : `${meta.title} · 한 달 기간제`,
+    tierLabel: heldUntil ? `${heldUntil}까지` : `${meta.title} · 한 달 기간제`,
     tierTone: heldMonth ? BADGE_TONE.gold : BADGE_TONE.hint,
     condition: badgeCondition(ladder, step, null),
     earned: heldMonth

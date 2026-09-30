@@ -1,4 +1,4 @@
-import { HStack, Progress, Sheet, Text, VStack, cn, Button } from "@roll-and-call/ui";
+import { HStack, Progress, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -28,14 +28,18 @@ export function BadgeDetailContent({ detail }: BadgeDetailContentProps) {
           typography="body4"
           weight="bold"
           foreground="inherit"
-          className={cn("tracking-widest", TONE_CLASS[detail.tierTone])}
+          className={TONE_CLASS[detail.tierTone]}
         >
           {detail.tierLabel}
         </Text>
         <Sheet.Title render={<Text typography="heading2" render={<h2 />} />}>
           {detail.name}
         </Sheet.Title>
-        <Text typography="body2" foreground="muted" className="[text-wrap:pretty]">
+        <Text
+          typography="body2"
+          foreground="muted"
+          className="whitespace-pre-line [text-wrap:pretty]"
+        >
           {detail.condition}
         </Text>
       </VStack>
@@ -52,22 +56,22 @@ export function BadgeDetailContent({ detail }: BadgeDetailContentProps) {
           </HStack>
           {earned.source && (
             <HStack align="center" gap="125" className="min-h-11 border-t border-gray-200 px-175">
-              <Text typography="body3" foreground="muted" className="flex-1">
+              <Text typography="body3" foreground="muted" className="flex-none">
                 {earned.source.heading}
               </Text>
               {earned.source.href ? (
-                <Button
+                <Text
+                  typography="body3"
+                  weight="bold"
+                  foreground="primary"
                   render={<Link href={earned.source.href} />}
-                  variant="ghost"
-                  colorPalette="primary"
-                  size="sm"
-                  className="-mr-100"
+                  className="ml-auto inline-flex min-w-0 items-center gap-025 hover:underline"
                 >
-                  {earned.source.label}
-                  <ChevronRight size={13} aria-hidden />
-                </Button>
+                  <span className="min-w-0 truncate">{earned.source.label}</span>
+                  <ChevronRight size={13} aria-hidden className="flex-none" />
+                </Text>
               ) : (
-                <Text typography="body3" weight="bold">
+                <Text typography="body3" weight="bold" truncate className="ml-auto min-w-0">
                   {earned.source.label}
                 </Text>
               )}

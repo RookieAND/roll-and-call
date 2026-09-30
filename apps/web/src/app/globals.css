@@ -148,49 +148,14 @@ html {
   }
 }
 
-/* 프로필 GM 뱃지. 테두리를 따라 빛이 한 바퀴씩 돈다. */
-@property --gm-border-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes gm-border-spin {
-  to {
-    --gm-border-angle: 360deg;
-  }
-}
-
-@utility animate-gm-border {
-  border: 1px solid transparent;
-  background:
-    linear-gradient(var(--color-primary-50), var(--color-primary-50)) padding-box,
-    conic-gradient(
-        from var(--gm-border-angle),
-        var(--color-primary-200) 0deg 250deg,
-        var(--color-primary-400) 290deg,
-        var(--color-white) 320deg,
-        var(--color-primary-400) 340deg,
-        var(--color-primary-200) 360deg
-      )
-      border-box;
-  animation: gm-border-spin 2.4s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-gm-border {
-    animation: none;
-  }
-}
-
 /* 업적 메달: 4단계부터 빛이 지나가고 별이 반짝인다. 획득 시트는 뒤에서 빛살이 돈다. */
 @keyframes badge-shine {
   0% {
-    background-position: 130% 0;
+    background-position: 100% 0;
   }
   55%,
   100% {
-    background-position: -130% 0;
+    background-position: 0% 0;
   }
 }
 
@@ -217,7 +182,7 @@ html {
 }
 
 @utility badge-highlight {
-  background-image: radial-gradient(circle at 32% 24%, rgb(255 255 255 / 0.5), transparent 56%);
+  background-image: radial-gradient(circle at 32% 24%, rgb(255 255 255 / 0.35), transparent 56%);
 }
 
 @utility animate-badge-shine {
@@ -227,7 +192,9 @@ html {
     rgb(255 255 255 / 0.72) 50%,
     transparent 62%
   );
-  background-size: 260% 100%;
+  background-size: 300% 100%;
+  /* 반복되면 끝 위치에서 옆 칸의 빛줄기가 메달 위에 멈춰 선다. */
+  background-repeat: no-repeat;
   animation: badge-shine 3.4s ease-in-out infinite;
 }
 

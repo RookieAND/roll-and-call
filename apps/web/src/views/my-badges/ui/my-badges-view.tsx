@@ -80,8 +80,10 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
     <>
       <AppBar back="/me" title="업적 도감" />
       <Container size="sm" className="px-0 pb-300">
-        <DexHeader earnedCount={held.length} featured={featured} />
-        <SessionTabs label="분류" tabs={tabs} activeKey={role} />
+        <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface">
+          <DexHeader earnedCount={held.length} featured={featured} />
+          <SessionTabs label="분류" tabs={tabs} activeKey={role} />
+        </div>
 
         <DexSection title={board.total.title} hint={board.total.hint}>
           <DexLadderTrack total={board.total} />

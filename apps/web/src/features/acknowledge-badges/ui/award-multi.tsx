@@ -16,7 +16,7 @@ export function AwardMulti({ sheet }: AwardMultiProps) {
           새 업적 {sheet.items.length}개
         </Sheet.Title>
         {sheet.subtitle && (
-          <Text typography="body2" foreground="muted">
+          <Text typography="body2" foreground="muted" className="[text-wrap:pretty]">
             {sheet.subtitle}
           </Text>
         )}

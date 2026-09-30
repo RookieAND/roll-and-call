@@ -6,6 +6,7 @@ import { SESSION_ROLE } from "@/entities/game";
 import { AvailabilityRows, ProfileLinks } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { ProfileMemoBlock } from "@/features/profile-memo";
+import { heldBadgeDetail } from "@/features/view-badge";
 import {
   getCurrentSessionUser,
   getProfileMemo,
@@ -43,8 +44,13 @@ export async function UserProfileView({ id }: { id: string }) {
     .rulebooks.filter((rulebook) => rulebook.state === CERT_STATE.certified)
     .toSorted((left, right) => right.stateAt!.getTime() - left.stateAt!.getTime())
     .map((rulebook) => ({ id: rulebook.id, label: rulebook.label }));
-  const isGm = certified.length > 0 && profile.showGmBadge;
-  const held = profile.showBadges ? heldBadges(badgeRecords) : [];
+  const isGm = certified.length > 0;
+  const now = new Date();
+  const held = profile.showBadges ? heldBadges(badgeRecords, now) : [];
+  const featuredBadges = pickFeaturedBadges(profile.featuredBadges, held).map((badge) => ({
+    ...badge,
+    detail: heldBadgeDetail(badge, { records: badgeRecords, facts: null, now }),
+  }));
 
   return (
     <>
@@ -53,10 +59,9 @@ export async function UserProfileView({ id }: { id: string }) {
         <ProfileSummary
           profile={profile}
           absences={absences}
-          isGm={isGm}
           hosted={sessions[SESSION_ROLE.host].length}
           played={sessions[SESSION_ROLE.player].length}
-          featuredBadges={pickFeaturedBadges(profile.featuredBadges, held)}
+          featuredBadges={featuredBadges}
           badgeTotal={held.length}
         />
 

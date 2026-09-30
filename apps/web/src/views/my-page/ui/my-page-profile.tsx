@@ -1,4 +1,4 @@
-import { Badge, Button, HStack, VStack } from "@roll-and-call/ui";
+import { Button, HStack, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import {
@@ -15,7 +15,6 @@ import { MyPageFeaturedBadges, type FeaturedBadge } from "./my-page-featured-bad
 interface MyPageProfileProps {
   name: string;
   avatarUrl: string | null;
-  isGm: boolean;
   bio: string | null;
   featuredBadges: FeaturedBadge[];
   heldBadgeCount: number;
@@ -29,7 +28,6 @@ interface MyPageProfileProps {
 export function MyPageProfile({
   name,
   avatarUrl,
-  isGm,
   bio,
   featuredBadges,
   heldBadgeCount,
@@ -49,15 +47,6 @@ export function MyPageProfile({
           name={name}
           avatarUrl={avatarUrl}
           nameRender={<h2 />}
-          nameAddon={
-            isGm ? (
-              <Badge colorPalette="primary" className="animate-gm-border">
-                GM
-              </Badge>
-            ) : (
-              <Badge colorPalette="gray">Player</Badge>
-            )
-          }
           subline={bioText}
           sublineForeground={bioForeground}
         />

@@ -45,7 +45,7 @@ export function MyPageBadges({ heldCount, hasNew, goal }: MyPageBadgesProps) {
                 max={goal.threshold}
                 aria-label={`${goal.name} 진행도`}
               />
-              <Text typography="body4" foreground="muted">
+              <Text typography="body4" foreground="muted" className="whitespace-pre-line">
                 {goal.condition}
               </Text>
             </VStack>

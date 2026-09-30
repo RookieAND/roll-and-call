@@ -3,12 +3,15 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 import { BadgePill, monthLabel, type BadgeView } from "@/entities/badge";
+import { BadgeDetailSheet, type BadgeDetail } from "@/features/view-badge";
 
 import { ProfileBlockLabel } from "./profile-block-label";
 
+export type ProfileFeaturedBadge = BadgeView & { detail: BadgeDetail };
+
 interface ProfileBadgesProps {
   userId: string;
-  featured: BadgeView[];
+  featured: ProfileFeaturedBadge[];
   total: number;
 }
 
@@ -30,14 +33,14 @@ export function ProfileBadges({ userId, featured, total }: ProfileBadgesProps) {
       </HStack>
       <HStack wrap gap="075">
         {featured.map((badge) => (
-          <BadgePill
-            key={badge.key}
-            emoji={badge.emoji}
-            name={badge.name}
-            grade={badge.grade}
-            tag={badge.monthKey ? monthLabel(badge.monthKey) : null}
-            className="h-8"
-          />
+          <BadgeDetailSheet key={badge.key} detail={badge.detail} className="max-w-full min-w-0">
+            <BadgePill
+              emoji={badge.emoji}
+              name={badge.name}
+              grade={badge.grade}
+              tag={badge.monthKey ? monthLabel(badge.monthKey) : null}
+            />
+          </BadgeDetailSheet>
         ))}
       </HStack>
     </div>

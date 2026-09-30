@@ -1,6 +1,6 @@
 import { BADGE_LADDER, type BadgeLadderKey, type BadgeStep } from "@roll-and-call/database/rules";
 
-// 상세 시트의 조건 문장.
+// 상세 시트의 조건 문장. 문장마다 줄을 바꾸므로 그리는 쪽은 whitespace-pre-line을 준다.
 export function badgeCondition(
   ladder: BadgeLadderKey,
   step: BadgeStep,
@@ -17,9 +17,9 @@ export function badgeCondition(
     case BADGE_LADDER.gmRule:
       return `${categoryName} 세션을 ${count}회 진행하면 받습니다.`;
     case BADGE_LADDER.gmVariety:
-      return `서로 다른 룰을 ${count}종 진행하면 받습니다. 판본만 다른 같은 룰은 1종으로 셉니다.`;
+      return `서로 다른 룰을 ${count}종 진행하면 받습니다.\n판본만 다른 같은 룰은 1종으로 셉니다.`;
     case BADGE_LADDER.gmReviews:
-      return `받은 후기가 ${count}개 쌓이면 받습니다. 운영진이 숨기거나 지운 후기는 세지 않습니다.`;
+      return `받은 후기가 ${count}개 쌓이면 받습니다.\n운영진이 숨기거나 지운 후기는 세지 않습니다.`;
     case BADGE_LADDER.playerMonthly:
       return "한 달 동안 세션에 가장 많이 참석한 PL이 다음 달 내내 답니다.";
     case BADGE_LADDER.gmMonthly:

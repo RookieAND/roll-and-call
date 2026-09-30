@@ -20,7 +20,9 @@ export function AwardRetro({ sheet }: AwardRetroProps) {
           지금까지의 업적 {sheet.items.length}개
         </Sheet.Title>
         <Text typography="body2" foreground="muted" className="[text-wrap:pretty]">
-          지난 세션 기록으로 뱃지를 모았습니다. 대표 뱃지를 골라 프로필에 걸어 두세요.
+          지난 세션 기록으로 뱃지를 모았습니다.
+          <br />
+          대표 뱃지를 골라 프로필에 걸어 두세요.
         </Text>
       </VStack>
       <Grid cols={4} gap="150" render={<ul />} className="max-h-[40dvh] overflow-y-auto py-075">

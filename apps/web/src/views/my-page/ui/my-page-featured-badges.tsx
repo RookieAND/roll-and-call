@@ -1,4 +1,4 @@
-import { Button, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -30,24 +30,18 @@ export function MyPageFeaturedBadges({ badges, heldCount }: MyPageFeaturedBadges
           <ChevronRight size={12} strokeWidth={2.2} aria-hidden />
         </Button>
       </HStack>
-      <Grid cols={3} gap="075">
+      <HStack wrap gap="075">
         {badges.map((badge) => (
-          <BadgeDetailSheet
-            key={badge.key}
-            detail={badge.detail}
-            className="min-w-0 cursor-pointer"
-          >
+          <BadgeDetailSheet key={badge.key} detail={badge.detail} className="max-w-full min-w-0">
             <BadgePill
               emoji={badge.emoji}
               name={badge.name}
               grade={badge.grade}
               tag={badge.monthKey && monthLabel(badge.monthKey)}
-              size="sm"
-              className="w-full min-w-0 justify-center"
             />
           </BadgeDetailSheet>
         ))}
-      </Grid>
+      </HStack>
     </VStack>
   );
 }

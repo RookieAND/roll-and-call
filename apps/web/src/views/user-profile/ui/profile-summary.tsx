@@ -1,6 +1,5 @@
-import { Badge, Text } from "@roll-and-call/ui";
+import { Text } from "@roll-and-call/ui";
 
-import type { BadgeView } from "@/entities/badge";
 import { SESSION_ROLE } from "@/entities/game";
 import { EMPTY_BIO_TEXT, KeywordChips, ProfileRow } from "@/entities/profile";
 import { toKst } from "@/shared/lib";
@@ -8,16 +7,15 @@ import type { Profile } from "@/shared/server";
 import { SessionCountStats, userSessionsHref, type Absence } from "@/widgets/session-list";
 
 import { ProfileAbsenceNotice } from "./profile-absence-notice";
-import { ProfileBadges } from "./profile-badges";
+import { ProfileBadges, type ProfileFeaturedBadge } from "./profile-badges";
 import { ProfileBlockLabel } from "./profile-block-label";
 
 interface ProfileSummaryProps {
   profile: Profile;
   absences: Absence[];
-  isGm: boolean;
   hosted: number;
   played: number;
-  featuredBadges: BadgeView[];
+  featuredBadges: ProfileFeaturedBadge[];
   badgeTotal: number;
 }
 
@@ -25,7 +23,6 @@ interface ProfileSummaryProps {
 export function ProfileSummary({
   profile,
   absences,
-  isGm,
   hosted,
   played,
   featuredBadges,
@@ -47,13 +44,6 @@ export function ProfileSummary({
         name={profile.username}
         avatarUrl={profile.avatarUrl}
         nameRender={<h2 />}
-        nameAddon={
-          isGm ? (
-            <Badge colorPalette="primary" className="animate-gm-border">
-              GM
-            </Badge>
-          ) : undefined
-        }
         subline={joinedLabel}
         sublineForeground="hint"
       />

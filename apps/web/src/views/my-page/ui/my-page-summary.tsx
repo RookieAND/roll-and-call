@@ -30,8 +30,6 @@ export async function MyPageSummary() {
     detail: heldBadgeDetail(badge, { records: badgeRecords, facts: badgeFacts, now }),
   }));
   const { name, avatar } = profileDisplay({ profile, user });
-  const canHost = rulebooks.rulebooks.some((rulebook) => rulebook.state === CERT_STATE.certified);
-  const showGmBadge = profile?.showGmBadge ?? true;
   const rejectedRulebooks = rulebooks.rulebooks.filter(
     (rulebook) => rulebook.state === CERT_STATE.rejected,
   );
@@ -41,7 +39,6 @@ export async function MyPageSummary() {
       <MyPageProfile
         name={name}
         avatarUrl={avatar}
-        isGm={canHost && showGmBadge}
         bio={profile?.bio ?? null}
         featuredBadges={featuredBadges}
         heldBadgeCount={held.length}

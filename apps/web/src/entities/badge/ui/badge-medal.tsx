@@ -35,12 +35,12 @@ const face = cva(
 );
 
 const ribbon = cva(
-  "absolute left-1/2 -translate-x-1/2 rounded-full bg-primary-600 font-extrabold whitespace-nowrap text-on-primary ring-surface",
+  "absolute left-1/2 flex -translate-x-1/2 items-center justify-center rounded-full bg-primary-600 font-extrabold whitespace-nowrap text-on-primary ring-surface",
   {
     variants: {
       large: {
-        false: "-bottom-[7px] h-[18px] px-075 text-body5 leading-[18px] ring-2",
-        true: "-bottom-[11px] h-6 px-125 text-body3 leading-6 ring-3",
+        false: "-bottom-[7px] h-5 px-100 text-body4 leading-none ring-2",
+        true: "-bottom-[11px] h-6 px-125 text-body3 leading-none ring-3",
       },
     },
   },
@@ -79,6 +79,8 @@ export function BadgeMedal({
 }: BadgeMedalProps) {
   const shines = !locked && grade >= 4;
   const large = size === "xl" || size === "2xl";
+  // 리본은 메달 아래로 삐져나오므로 그만큼 아래를 비워 이름과 겹치지 않게 한다.
+  const ribbonSpace = ribbonText ? (large ? "mb-175" : "mb-125") : undefined;
   // 못 받은 뱃지는 단계 색을 입히지 않는다. 두 배경 클래스가 같이 붙으면 CSS 순서에 따라 갈린다.
   const faceGrade = locked ? undefined : grade;
   const emojiClass = locked ? "opacity-40 grayscale" : undefined;
@@ -87,7 +89,7 @@ export function BadgeMedal({
     <span
       role={label ? "img" : undefined}
       aria-label={label}
-      className={cn("relative inline-flex flex-none", SIZE_CLASS[size], className)}
+      className={cn("relative inline-flex flex-none", SIZE_CLASS[size], className, ribbonSpace)}
     >
       <span className={face({ grade: faceGrade, locked, glow: grade === 5 })}>
         <span aria-hidden className={emojiClass}>
