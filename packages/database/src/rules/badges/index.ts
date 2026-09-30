@@ -19,4 +19,5 @@ export { computeBadges } from "./compute-badges";
 export { ladderEvents } from "./ladder-events";
 export type { BadgeEvent } from "./reached-tier";
 export { monthlyWinners, type MonthlyAppearance } from "./monthly-winners";
+export { isMonthSettled } from "./is-month-settled";
 export { diffBadges, type BadgeWrite } from "./diff-badges";
