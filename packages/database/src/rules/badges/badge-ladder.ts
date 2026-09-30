@@ -5,6 +5,7 @@ export type BadgeRole = (typeof BADGE_ROLE)[keyof typeof BADGE_ROLE];
 export const BADGE_LADDER = {
   playerTotal: "pl.total",
   playerRule: "pl.rule",
+  playerReviews: "pl.reviews",
   playerMonthly: "pl.monthly",
   gmTotal: "gm.total",
   gmRule: "gm.rule",

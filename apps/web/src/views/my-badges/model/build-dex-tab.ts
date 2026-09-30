@@ -3,6 +3,7 @@ import {
   BADGE_LADDERS,
   BADGE_ROLE,
   ladderEvents,
+  type BadgeLadderKey,
   type BadgeFacts,
   type BadgeRole,
   type MonthlyAppearance,
@@ -34,9 +35,9 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
   const totalLadder = gm ? BADGE_LADDER.gmTotal : BADGE_LADDER.playerTotal;
   const ruleLadder = gm ? BADGE_LADDER.gmRule : BADGE_LADDER.playerRule;
   const totalCount = gm ? counts.gmTotal : counts.playerTotal;
-  const events = (
-    ladder: typeof totalLadder | typeof BADGE_LADDER.gmVariety | typeof BADGE_LADDER.gmReviews,
-  ) => ladderEvents(facts, ladder);
+  const reviewLadder = gm ? BADGE_LADDER.gmReviews : BADGE_LADDER.playerReviews;
+  const reviewCount = gm ? counts.gmReviews : counts.playerReviews;
+  const events = (ladder: BadgeLadderKey) => ladderEvents(facts, ladder);
 
   return {
     total: {
@@ -52,7 +53,9 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
     },
     variety: gm
       ? {
+          title: "다양한 룰 운영",
           hint: `진행한 룰 ${counts.gmVariety}종`,
+          note: "판본만 다른 같은 룰은 1종으로 셉니다",
           medals: ladderMedals(
             BADGE_LADDER.gmVariety,
             events(BADGE_LADDER.gmVariety),
@@ -61,17 +64,13 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
           next: ladderNext(BADGE_LADDER.gmVariety, counts.gmVariety),
         }
       : null,
-    reviews: gm
-      ? {
-          hint: `받은 후기 ${counts.gmReviews}개`,
-          next: ladderNext(BADGE_LADDER.gmReviews, counts.gmReviews),
-          medals: ladderMedals(
-            BADGE_LADDER.gmReviews,
-            events(BADGE_LADDER.gmReviews),
-            recordsByKey.get(BADGE_LADDER.gmReviews),
-          ),
-        }
-      : null,
+    reviews: {
+      title: gm ? "받은 후기" : "작성한 후기",
+      hint: `${gm ? "받은" : "쓴"} 후기 ${reviewCount}개`,
+      note: "운영진이 숨기거나 제거한 후기는 세지 않습니다",
+      next: ladderNext(reviewLadder, reviewCount),
+      medals: ladderMedals(reviewLadder, events(reviewLadder), recordsByKey.get(reviewLadder)),
+    },
     monthly: monthlyCard({
       ladder: gm ? BADGE_LADDER.gmMonthly : BADGE_LADDER.playerMonthly,
       records,

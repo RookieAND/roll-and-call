@@ -11,6 +11,7 @@ type Candidate = { ladder: BadgeLadderKey; count: number; categoryName: string |
 export function nextBadgeGoal(counts: BadgeCounts) {
   const candidates: Candidate[] = [
     { ladder: BADGE_LADDER.playerTotal, count: counts.playerTotal, categoryName: null },
+    { ladder: BADGE_LADDER.playerReviews, count: counts.playerReviews, categoryName: null },
     ...counts.playerRules.map((rule) => ({
       ladder: BADGE_LADDER.playerRule,
       count: rule.count,

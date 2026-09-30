@@ -53,6 +53,19 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     granted: false,
     steps: RULE_PLAYER_STEPS,
   },
+  [BADGE_LADDER.playerReviews]: {
+    role: BADGE_ROLE.player,
+    perRule: false,
+    monthly: false,
+    granted: false,
+    steps: [
+      { threshold: 1, emoji: "✏️", name: "첫 기록", grade: 1 },
+      { threshold: 5, emoji: "📝", name: "기록꾼", grade: 2 },
+      { threshold: 15, emoji: "🖋️", name: "서기", grade: 3 },
+      { threshold: 30, emoji: "📔", name: "편찬자", grade: 4 },
+      { threshold: 50, emoji: "🏺", name: "전승자", grade: 5 },
+    ],
+  },
   [BADGE_LADDER.playerMonthly]: {
     role: BADGE_ROLE.player,
     perRule: false,

@@ -17,7 +17,7 @@ import { SessionTabs } from "@/widgets/session-list";
 
 import { buildDexTab } from "../model/build-dex-tab";
 import { dexTabKey } from "../model/dex-tab-key";
-import { DexGmExtras } from "./dex-gm-extras";
+import { DexGridSection } from "./dex-grid-section";
 import { DexHeader } from "./dex-header";
 import { DexLadderTrack } from "./dex-ladder-track";
 import { DexMonthlyCard } from "./dex-monthly-card";
@@ -94,9 +94,8 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
           <DexRuleList rows={board.rules.rows} emptyText={ruleEmpty} />
         </DexSection>
 
-        {board.variety && board.reviews && (
-          <DexGmExtras variety={board.variety} reviews={board.reviews} />
-        )}
+        {board.variety && <DexGridSection board={board.variety} />}
+        <DexGridSection board={board.reviews} />
 
         <DexSection title={board.monthly.title}>
           <DexMonthlyCard card={board.monthly} />

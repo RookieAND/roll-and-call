@@ -18,7 +18,13 @@ const reviewAuthorAbsent = sql<boolean>`exists (
 )`;
 
 export async function loadBadgeFacts(userId: string, now: Date = new Date()): Promise<BadgeFacts> {
-  const [played, hosted, reviews] = await Promise.all([
+  const visibleReview = and(
+    isNull(games.hiddenAt),
+    isNull(sessionReviews.removedAt),
+    isNull(sessionReviews.hiddenAt),
+    not(reviewAuthorAbsent),
+  );
+  const [played, hosted, reviews, written] = await Promise.all([
     db
       .select(sessionColumns)
       .from(participants)
@@ -36,19 +42,17 @@ export async function loadBadgeFacts(userId: string, now: Date = new Date()): Pr
       .select({ gameId: sessionReviews.gameId, createdAt: sessionReviews.createdAt })
       .from(sessionReviews)
       .innerJoin(games, eq(games.id, sessionReviews.gameId))
-      .where(
-        and(
-          eq(games.gmId, userId),
-          isNull(games.hiddenAt),
-          isNull(sessionReviews.removedAt),
-          isNull(sessionReviews.hiddenAt),
-          not(reviewAuthorAbsent),
-        ),
-      ),
+      .where(and(eq(games.gmId, userId), visibleReview)),
+    db
+      .select({ gameId: sessionReviews.gameId, createdAt: sessionReviews.createdAt })
+      .from(sessionReviews)
+      .innerJoin(games, eq(games.id, sessionReviews.gameId))
+      .where(and(eq(sessionReviews.authorId, userId), visibleReview)),
   ]);
   return {
     played: toBadgeSessions(played, now),
     hosted: toBadgeSessions(hosted, now),
     reviews,
+    written,
   };
 }

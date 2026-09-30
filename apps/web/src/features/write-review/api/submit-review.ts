@@ -87,6 +87,6 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
     const createdReviewId = reviewId;
     after(() => syncReviewForumPost(createdReviewId, siteOrigin()));
   }
-  if (!target.review) after(() => evaluateBadges([target.game.gmId]));
+  if (!target.review) after(() => evaluateBadges([target.game.gmId, user.id]));
   redirect(MY_REVIEWS_HREF);
 }

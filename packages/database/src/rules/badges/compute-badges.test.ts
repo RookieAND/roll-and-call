@@ -22,7 +22,7 @@ const sessions = (count: number, categoryId: string | null = "coc") =>
 
 describe("computeBadges", () => {
   it("단계는 기준을 넘긴 세션의 종료 시각을 획득 시각으로 쓴다", () => {
-    const badges = computeBadges({ played: sessions(12), hosted: [], reviews: [] });
+    const badges = computeBadges({ played: sessions(12), hosted: [], reviews: [], written: [] });
     const total = badges.find((badge) => badge.badgeKey === "pl.total")!;
     expect(total.tier).toBe(2);
     expect(total.sourceGameId).toBe("g9");
@@ -30,13 +30,18 @@ describe("computeBadges", () => {
   });
 
   it("룰북이 없는 세션은 누적에만 센다", () => {
-    const badges = computeBadges({ played: sessions(3, null), hosted: [], reviews: [] });
+    const badges = computeBadges({
+      played: sessions(3, null),
+      hosted: [],
+      reviews: [],
+      written: [],
+    });
     expect(badges.map((badge) => badge.badgeKey)).toEqual(["pl.total"]);
   });
 
   it("다양성은 서로 다른 룰 분류 수로 센다", () => {
     const hosted = ["a", "b", "b", "c"].map((category, index) => session(index, category));
-    const badges = computeBadges({ played: [], hosted, reviews: [] });
+    const badges = computeBadges({ played: [], hosted, reviews: [], written: [] });
     const variety = badges.find((badge) => badge.badgeKey === "gm.variety")!;
     expect(variety).toMatchObject({ tier: 1, sourceGameId: "g3" });
   });
@@ -94,5 +99,19 @@ describe("monthlyWinners", () => {
       new Date("2026-10-01T00:00:00Z"),
     );
     expect(winners[0]!.badgeKey).toBe("pl.monthly.2026-09");
+  });
+});
+
+describe("작성한 후기", () => {
+  it("쓴 후기 수로 단계를 매긴다", () => {
+    const written = Array.from({ length: 5 }, (_, index) => ({
+      gameId: `g${index}`,
+      createdAt: new Date(Date.UTC(2026, 0, 1 + index)),
+    }));
+    const badges = computeBadges({ played: [], hosted: [], reviews: [], written });
+    expect(badges.find((badge) => badge.badgeKey === "pl.reviews")).toMatchObject({
+      tier: 2,
+      sourceGameId: "g4",
+    });
   });
 });

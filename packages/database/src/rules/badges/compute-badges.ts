@@ -19,6 +19,7 @@ export function computeBadges(facts: BadgeFacts): EarnedBadge[] {
 
   add(BADGE_LADDER.playerTotal);
   add(BADGE_LADDER.gmTotal);
+  add(BADGE_LADDER.playerReviews);
   for (const categoryId of categoryIds(facts.played)) add(BADGE_LADDER.playerRule, categoryId);
   for (const categoryId of categoryIds(facts.hosted)) add(BADGE_LADDER.gmRule, categoryId);
   add(BADGE_LADDER.gmVariety);

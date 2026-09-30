@@ -18,6 +18,8 @@ export function badgeRequirement(
       return `${categoryName} 세션 ${count}회 진행`;
     case BADGE_LADDER.gmVariety:
       return `서로 다른 룰 ${count}종`;
+    case BADGE_LADDER.playerReviews:
+      return `쓴 후기 ${count}개`;
     case BADGE_LADDER.gmReviews:
       return `받은 후기 ${count}개`;
     case BADGE_LADDER.playerMonthly:
