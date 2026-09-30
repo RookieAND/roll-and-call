@@ -17,6 +17,7 @@ export function recruitEmbed(
   const fields = [
     { name: "📜 룰", value: game.rule, inline: true },
     { name: "👥 인원", value: `${confirmedCount}/${game.maxPlayers}명`, inline: true },
+    { name: "🎯 방식", value: game.recruitMethod === "lottery" ? "추첨" : "선착순", inline: true },
     { name: "🕒 시간", value: formatGameSchedule(game), inline: false },
   ];
 
