@@ -11,8 +11,8 @@ type CalendarCellTone = {
   // null이면 요일·이번 달 여부가 색을 정한다.
   day: string | null;
   // null이면 내가 참여하는 세션인지가 색을 정한다.
-  preview: string | null;
-  rest: string;
+  dot: string | null;
+  more: string;
   today: string;
 };
 
@@ -20,22 +20,22 @@ export const CALENDAR_CELL_TONE: Record<CalendarCellState, CalendarCellTone> = {
   [CALENDAR_CELL_STATE.selected]: {
     cell: "bg-primary-600",
     day: "text-on-primary",
-    preview: "bg-on-primary/20 text-on-primary",
-    rest: "text-on-primary/80",
+    dot: "bg-on-primary",
+    more: "text-on-primary",
     today: "text-on-primary",
   },
   [CALENDAR_CELL_STATE.today]: {
     cell: "bg-tinted-bg",
     day: "text-tinted-ink",
-    preview: null,
-    rest: "text-hint",
+    dot: null,
+    more: "text-hint",
     today: "text-tinted-ink",
   },
   [CALENDAR_CELL_STATE.plain]: {
     cell: "hover:bg-gray-50",
     day: null,
-    preview: null,
-    rest: "text-hint",
+    dot: null,
+    more: "text-hint",
     today: "text-tinted-ink",
   },
 };

@@ -79,7 +79,7 @@ export function HomeCalendar({
               today={cell.key === todayKey}
             />
           ) : (
-            <Skeleton key={cell.key} rounded={300} className="h-(--rc-size-cell)" />
+            <Skeleton key={cell.key} rounded={300} className="h-12" />
           ),
         )}
       </Grid>
@@ -91,12 +91,16 @@ export function HomeCalendar({
       ) : (
         <HStack align="center" gap="150" className="px-200 pb-150 text-body4 text-hint">
           <span className="flex items-center gap-075">
-            <span className="h-2.5 w-2.5 rounded-100 border border-tinted-border bg-primary-50" />
+            <span className="size-1.5 rounded-full bg-primary-600" />
             내가 참여
           </span>
           <span className="flex items-center gap-075">
-            <span className="h-2.5 w-2.5 rounded-100 border border-gray-300 bg-gray-100" />
+            <span className="size-1.5 rounded-full bg-hint" />
             다른 세션
+          </span>
+          <span className="flex items-center gap-075">
+            <span className="font-extrabold">+</span>
+            4건 이상
           </span>
         </HStack>
       )}

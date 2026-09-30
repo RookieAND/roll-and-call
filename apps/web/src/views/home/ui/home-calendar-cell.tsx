@@ -9,6 +9,8 @@ import { CALENDAR_CELL_TONE, calendarCellState } from "../model/calendar-cell-to
 import type { CalendarSession } from "../model/to-calendar-sessions";
 import { WEEKDAY_TONE } from "../model/weekday-tone";
 
+const MAX_DOTS = 3;
+
 interface HomeCalendarCellProps {
   cell: MonthCell;
   sessions: CalendarSession[];
@@ -18,8 +20,11 @@ interface HomeCalendarCellProps {
 
 // ponytail: 달력 칸은 버튼·칩 프리미티브와 모양이 달라 Link를 직접 칠한다.
 export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalendarCellProps) {
-  const preview = sessions.find((session) => session.mine) ?? sessions[0];
-  const restCount = sessions.length - 1;
+  const mine = sessions.find((session) => session.mine);
+  const dots = (mine ? [mine, ...sessions.filter((session) => session !== mine)] : sessions).slice(
+    0,
+    MAX_DOTS,
+  );
   const ariaLabel = sessions.length > 0 ? `${cell.label} 세션 ${sessions.length}건` : cell.label;
   const href = `/?date=${cell.key}`;
 
@@ -28,8 +33,6 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
     ? (WEEKDAY_TONE[cell.weekday] ?? "text-gray-600")
     : "text-hint opacity-50";
   const dayTone = tone.day ?? weekdayTone;
-  const previewTone =
-    tone.preview ?? (preview?.mine ? "bg-primary-50 text-tinted-ink" : "bg-gray-100 text-gray-600");
 
   // 같은 달은 이미 받은 세션으로 그리므로 서버를 다시 부르지 않는다. 다른 달 칸과 새 탭 열기는 원래대로 이동한다.
   function selectDay(event: MouseEvent<HTMLAnchorElement>) {
@@ -47,7 +50,7 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
       aria-label={ariaLabel}
       aria-current={selected ? "date" : undefined}
       className={cn(
-        "flex h-(--rc-size-cell) flex-col gap-050 rounded-300 p-050 transition-colors",
+        "flex h-12 flex-col gap-075 rounded-300 px-050 pt-100 pb-075 transition-colors",
         tone.cell,
       )}
     >
@@ -59,24 +62,30 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
       >
         {cell.day}
       </Text>
-      {preview && (
-        <Text
-          weight="bold"
-          typography="body5"
-          tight
-          truncate
-          // 선택 칸에서도 글자가 세로 가운데 오도록 높이·행간을 16px로 고정한다.
-          className={cn("h-4 rounded-100 px-050 leading-4", previewTone)}
-        >
-          {preview.title}
-        </Text>
+      {dots.length > 0 && (
+        <span aria-hidden className="flex h-2 items-center justify-center gap-050">
+          {dots.map((session) => (
+            <span
+              key={session.id}
+              className={cn(
+                "size-1.5 rounded-full",
+                tone.dot ?? (session.mine ? "bg-primary-600" : "bg-hint"),
+              )}
+            />
+          ))}
+          {sessions.length > MAX_DOTS && (
+            <Text
+              weight="extrabold"
+              typography="body5"
+              tight
+              className={cn("leading-2", tone.more)}
+            >
+              +
+            </Text>
+          )}
+        </span>
       )}
-      {restCount > 0 && (
-        <Text weight="bold" typography="body5" tight className={cn("block text-center", tone.rest)}>
-          외 {restCount}
-        </Text>
-      )}
-      {today && !preview && (
+      {today && sessions.length === 0 && (
         <Text
           weight="bold"
           typography="body5"

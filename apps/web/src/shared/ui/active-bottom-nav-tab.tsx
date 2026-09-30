@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import type { BottomNavTabProps } from "./bottom-nav-tab";
@@ -9,11 +8,13 @@ import { NavIcon } from "./nav-icon";
 
 export function ActiveBottomNavTab({ href, label, Icon, dot }: BottomNavTabProps) {
   return (
-    <Link href={href} aria-current="page" className={`${BOTTOM_NAV_TAB_CLASS} text-tinted-ink`}>
+    <Link
+      href={href}
+      aria-current="page"
+      aria-label={label}
+      className={`${BOTTOM_NAV_TAB_CLASS} text-tinted-ink`}
+    >
       <NavIcon Icon={Icon} dot={dot} />
-      <Text typography="body4" weight="bold" foreground="inherit" render={<span />}>
-        {label}
-      </Text>
     </Link>
   );
 }

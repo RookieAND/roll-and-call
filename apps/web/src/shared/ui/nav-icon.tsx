@@ -8,7 +8,7 @@ interface NavIconProps {
 export function NavIcon({ Icon, dot = false }: NavIconProps) {
   return (
     <span className="relative flex">
-      <Icon size={18} aria-hidden />
+      <Icon size={26} strokeWidth={1.9} aria-hidden />
       {dot && (
         <span
           role="img"
