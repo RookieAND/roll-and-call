@@ -11,8 +11,8 @@ const pill = cva(
         1: "border-gray-200 bg-gray-50 text-gray-900",
         2: "border-rank-bronze bg-warning-50 text-rank-bronze",
         3: "border-tinted-border bg-primary-50 text-tinted-ink",
-        4: "border-rank-gold bg-spark text-on-spark",
-        5: "border-rank-gold bg-spark text-on-spark",
+        4: "border-rank-gold bg-warning-50 text-rank-gold",
+        5: "border-rank-gold bg-warning-50 text-rank-gold",
       },
       size: {
         md: "h-8 pr-125 pl-100 text-body4",
@@ -34,7 +34,10 @@ interface BadgePillProps {
 export function BadgePill({ emoji, name, grade, tag, size = "md", className }: BadgePillProps) {
   return (
     <span title={name} className={cn(pill({ grade, size }), className)}>
-      <span aria-hidden className="flex-none text-subtitle1 leading-none">
+      <span
+        aria-hidden
+        className="flex size-[1em] flex-none items-center justify-center text-subtitle1 leading-none"
+      >
         {emoji}
       </span>
       <span className="min-w-0 truncate">{name}</span>

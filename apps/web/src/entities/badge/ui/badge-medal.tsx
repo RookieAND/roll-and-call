@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority";
 
 import { BadgeSparkles } from "./badge-sparkles";
 
-// 단계가 오를수록 테두리 색이 바뀌고, 4단계부터 빛이 지나가며 5는 후광이 더해진다. 못 받은 뱃지는 점선에 흐린 이모지.
+// 금색 이모지(🏆·👑·🎖️)가 묻히지 않게 4·5단계도 옅은 바탕을 쓴다. 단계가 오를수록 테두리 색이 바뀌고, 4단계부터 빛이 지나가며 5는 후광이 더해진다. 못 받은 뱃지는 점선에 흐린 이모지.
 const face = cva(
   "absolute inset-0 flex items-center justify-center overflow-hidden rounded-full leading-none",
   {
@@ -13,8 +13,8 @@ const face = cva(
         1: "border-2 border-gray-300 bg-gray-50",
         2: "border-2 border-rank-bronze bg-warning-50",
         3: "border-2 border-tinted-border bg-primary-50",
-        4: "border-2 border-rank-gold bg-spark",
-        5: "border-3 border-rank-gold bg-spark",
+        4: "border-2 border-rank-gold bg-warning-50",
+        5: "border-3 border-rank-gold bg-warning-50",
       },
       locked: {
         true: "border-2 border-dashed border-gray-300 bg-canvas",
@@ -92,7 +92,7 @@ export function BadgeMedal({
       className={cn("relative inline-flex flex-none", SIZE_CLASS[size], className, ribbonSpace)}
     >
       <span className={face({ grade: faceGrade, locked, glow: grade === 5 })}>
-        <span aria-hidden className={emojiClass}>
+        <span aria-hidden className={cn("flex size-[1em] items-center justify-center", emojiClass)}>
           {emoji}
         </span>
         {shines && (
