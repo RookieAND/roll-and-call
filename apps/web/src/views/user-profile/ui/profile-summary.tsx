@@ -47,11 +47,6 @@ export function ProfileSummary({
         subline={joinedLabel}
         sublineForeground="hint"
       />
-      {featuredBadges.length > 0 && (
-        <div className="mt-175">
-          <ProfileBadges userId={profile.id} featured={featuredBadges} total={badgeTotal} />
-        </div>
-      )}
       <Text
         typography="body2"
         foreground={bioForeground}
@@ -66,6 +61,11 @@ export function ProfileSummary({
           played={{ count: played, href: userSessionsHref(profile.id, SESSION_ROLE.player) }}
         />
       </div>
+      {featuredBadges.length > 0 && (
+        <div className="mt-175">
+          <ProfileBadges userId={profile.id} featured={featuredBadges} total={badgeTotal} />
+        </div>
+      )}
       <div className="mt-175">
         <ProfileBlockLabel label="성향" />
         <KeywordChips keywords={profile.keywords} />

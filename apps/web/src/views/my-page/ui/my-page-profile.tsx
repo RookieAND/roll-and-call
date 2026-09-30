@@ -55,11 +55,11 @@ export function MyPageProfile({
         </Button>
       </HStack>
 
+      <SessionCountStats hosted={hosted} played={played} />
+
       {featuredBadges.length > 0 && (
         <MyPageFeaturedBadges badges={featuredBadges} heldCount={heldBadgeCount} />
       )}
-
-      <SessionCountStats hosted={hosted} played={played} />
 
       <div>
         <MyPageBlockLabel label="성향" />
