@@ -21,10 +21,14 @@ export function BadgeDetailSheet({ detail, children, className }: BadgeDetailShe
       </Sheet.Trigger>
       <Sheet.Popup aria-label={detail.name}>
         <Sheet.Handle />
-        <BadgeDetailContent detail={detail} />
-        <Sheet.Close render={<Button variant="outline" size="lg" className="mt-200 w-full" />}>
-          닫기
-        </Sheet.Close>
+        <Sheet.Body className="[scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <BadgeDetailContent detail={detail} />
+        </Sheet.Body>
+        <Sheet.Footer className="pt-200">
+          <Sheet.Close render={<Button variant="outline" size="lg" className="w-full" />}>
+            닫기
+          </Sheet.Close>
+        </Sheet.Footer>
       </Sheet.Popup>
     </Sheet.Root>
   );

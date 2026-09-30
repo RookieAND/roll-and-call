@@ -9,9 +9,12 @@ html {
   scrollbar-color: var(--color-gray-300) transparent;
 }
 
-*,
-html {
-  scrollbar-width: thin;
+/* base 레이어에 둬야 시트의 [scrollbar-width:none] 같은 유틸리티가 이긴다. */
+@layer base {
+  *,
+  html {
+    scrollbar-width: thin;
+  }
 }
 
 :root {

@@ -39,9 +39,11 @@ html {
   scrollbar-color: var(--rc-color-border-strong) transparent;
 }
 
-*,
-html {
-  scrollbar-width: thin;
+@layer base {
+  *,
+  html {
+    scrollbar-width: thin;
+  }
 }
 
 /* 한국어 문구가 낱말 중간에서 끊기지 않게 한다. */
