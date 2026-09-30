@@ -27,7 +27,7 @@ export async function FeaturedBadgesView() {
     key: badge.key,
     emoji: badge.emoji,
     name: badge.name,
-    grade: badge.grade,
+    look: badge.look,
     tag: badge.monthKey ? monthLabel(badge.monthKey) : null,
   }));
   const heldKeys = new Set(choices.map((choice) => choice.key));

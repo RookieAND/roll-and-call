@@ -66,7 +66,7 @@ export function FeaturedBadgePicker({
                       key={choice.key}
                       emoji={choice.emoji}
                       name={choice.name}
-                      grade={choice.grade}
+                      look={choice.look}
                       tag={choice.tag}
                       size="sm"
                     />
@@ -94,7 +94,7 @@ export function FeaturedBadgePicker({
                   onClick={() => setPicked((current) => toggleFeatured(current, choice.key))}
                   className="relative h-auto flex-col gap-075 rounded-500 px-050 pt-125 pb-100 whitespace-normal"
                 >
-                  <BadgeMedal emoji={choice.emoji} grade={choice.grade} ribbon={choice.tag} />
+                  <BadgeMedal emoji={choice.emoji} look={choice.look} ribbon={choice.tag} />
                   <Text
                     typography="body4"
                     weight="extrabold"

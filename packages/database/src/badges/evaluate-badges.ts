@@ -4,7 +4,7 @@ import { db } from "../client";
 import { computeBadges, diffBadges } from "../rules";
 import { userBadges } from "../schema";
 import { applyBadgeWrites } from "./apply-badge-writes";
-import { isMonthlyBadgeKey } from "./is-monthly-badge-key";
+import { isRecomputedBadgeKey } from "./is-recomputed-badge-key";
 import { loadBadgeFacts } from "./load-badge-facts";
 import { syncMonthlyBadges } from "./sync-monthly-badges";
 
@@ -21,7 +21,7 @@ async function evaluateUser(userId: string, now: Date) {
       .where(eq(userBadges.userId, userId)),
   ]);
   const writes = diffBadges(
-    stored.filter((badge) => !isMonthlyBadgeKey(badge.badgeKey)),
+    stored.filter((badge) => isRecomputedBadgeKey(badge.badgeKey)),
     computeBadges(facts),
   );
   await applyBadgeWrites(userId, writes, now);

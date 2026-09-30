@@ -6,14 +6,14 @@ import {
   type BadgeLadderKey,
 } from "@roll-and-call/database/rules";
 
-import { gradeTone, type RuleCount } from "@/entities/badge";
+import { lookTone, stepLook, type RuleCount } from "@/entities/badge";
 import { buildLadderDetail, LADDER_META } from "@/features/view-badge";
 import type { BadgeRecord } from "@/shared/server";
 
 import { heldRecord } from "./held-record";
 import { ladderNext } from "./ladder-next";
 
-// 룰별 한 줄: 지금 단계 메달, 4칸 단계 점, 다음 단계까지 남은 횟수. 해 본 룰만 온다.
+// 룰별 한 줄: 지금 단계 메달, 5칸 단계 점, 다음 단계까지 남은 횟수. 해 본 룰만 온다.
 export function ruleRows(
   ladder: BadgeLadderKey,
   rules: RuleCount[],
@@ -27,17 +27,18 @@ export function ruleRows(
     const record = recordsByKey.get(key);
     const held = heldRecord(ladder, events, record);
     const tier = held?.tier ?? 1;
+    const next = ladderNext(ladder, rule.count, rule.categoryName);
     const step = steps[tier - 1]!;
     return {
       key,
       emoji: step.emoji,
-      grade: step.grade,
+      look: stepLook(step),
       isNew: record?.seenAt === null,
       tier,
-      tone: gradeTone(step.grade),
+      tone: lookTone(stepLook(step)),
       stepCount: steps.length,
       countLabel: `${rule.count}${LADDER_META[ladder].unit}`,
-      next: ladderNext(ladder, rule.count, rule.categoryName),
+      next: next.done ? null : next,
       name: `${rule.categoryName} ${step.name}`,
       detail: buildLadderDetail({
         ladder,

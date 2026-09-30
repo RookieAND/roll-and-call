@@ -2,6 +2,7 @@ export {
   BADGE_LADDER,
   BADGE_ROLE,
   type BadgeGrade,
+  type BadgeLook,
   type BadgeLadderKey,
   type BadgeRole,
   type BadgeStep,

@@ -10,4 +10,6 @@ export const LADDER_META: Record<BadgeLadderKey, { title: string; unit: string; 
   [BADGE_LADDER.gmVariety]: { title: "다양한 룰 운영", unit: "종", verb: "진행" },
   [BADGE_LADDER.gmReviews]: { title: "받은 후기", unit: "개", verb: "받음" },
   [BADGE_LADDER.gmMonthly]: { title: "이달의 GM", unit: "회", verb: "진행" },
+  [BADGE_LADDER.developer]: { title: "특별 칭호", unit: "", verb: "" },
+  [BADGE_LADDER.guildMaster]: { title: "특별 칭호", unit: "", verb: "" },
 };

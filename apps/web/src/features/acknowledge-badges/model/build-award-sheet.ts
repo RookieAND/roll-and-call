@@ -2,8 +2,10 @@ import { BADGE_ROLE, nextMonthStart } from "@roll-and-call/database/rules";
 
 import {
   BADGE_TONE,
+  badgeCondition,
   badgeRequirement,
-  gradeTone,
+  lookTone,
+  TIER_NAME,
   monthLabel,
   type BadgeView,
 } from "@/entities/badge";
@@ -19,18 +21,17 @@ function toItem(badge: HeldBadge): AwardItem {
   const tag = monthly
     ? `${monthLabel(badge.monthKey!)} ${badge.role === BADGE_ROLE.gm ? "운영" : "참여"} 1위`
     : badge.tier > 1
-      ? `${badge.tier}단계로 올랐습니다`
+      ? `${TIER_NAME[badge.grade]}${badge.grade === 5 ? "으로" : "로"} 올랐습니다`
       : "새 뱃지";
   return {
     key: badge.key,
     emoji: badge.emoji,
-    grade: badge.grade,
+    look: badge.look,
     name: badge.name,
     ribbon: monthly ? monthLabel(badge.monthKey!) : null,
     tag,
-    tagTone: badge.tier > 1 || monthly ? gradeTone(badge.grade) : BADGE_TONE.primary,
+    tagTone: badge.tier > 1 || monthly ? lookTone(badge.look) : BADGE_TONE.primary,
     requirement: badgeRequirement(badge.ladder, badge.step, badge.categoryName),
-    highlight: badge.grade >= 4,
   };
 }
 
@@ -59,6 +60,16 @@ export function buildAwardSheet(held: HeldBadge[]): AwardSheet | null {
         pinnable: true,
       };
     }
+    if (badge.role === BADGE_ROLE.special) {
+      return {
+        kind: "single",
+        item: { ...item, tag: "특별 칭호를 받았습니다" },
+        lines: [badgeCondition(badge.ladder, badge.step, null)],
+        source: null,
+        gold: true,
+        pinnable: true,
+      };
+    }
     const first = held.length === 1;
     return {
       kind: "single",
@@ -82,7 +93,7 @@ export function buildAwardSheet(held: HeldBadge[]): AwardSheet | null {
   const [title] = titles;
   return {
     kind: "multi",
-    items: items.toSorted((left, right) => right.grade - left.grade),
+    items: pending.toSorted((left, right) => right.grade - left.grade).map(toItem),
     subtitle: titles.size === 1 && title ? `${title} 출석 확인이 끝났습니다.` : null,
   };
 }

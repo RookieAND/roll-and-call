@@ -1,6 +1,7 @@
 import type {
   BadgeGrade,
   BadgeLadderKey,
+  BadgeLook,
   BadgeRole,
   BadgeStep,
 } from "@roll-and-call/database/rules";
@@ -13,6 +14,7 @@ export type BadgeView = {
   emoji: string;
   name: string;
   grade: BadgeGrade;
+  look: BadgeLook;
   tier: number;
   step: BadgeStep;
   stepCount: number;

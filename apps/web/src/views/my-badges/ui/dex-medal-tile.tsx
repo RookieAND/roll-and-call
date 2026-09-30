@@ -21,15 +21,10 @@ export function DexMedalTile({ medal, bordered = false, caption, children }: Dex
       detail={medal.detail}
       className={cn(
         "flex w-full min-w-0 flex-col items-center gap-075 text-center",
-        bordered && "rounded-600 border border-gray-200 px-075 pt-175 pb-150 hover:bg-gray-50",
+        bordered && "rounded-500 border border-gray-200 px-025 pt-150 pb-125 hover:bg-gray-50",
       )}
     >
-      <BadgeMedal
-        emoji={medal.emoji}
-        grade={medal.grade}
-        locked={medal.locked}
-        isNew={medal.isNew}
-      />
+      <BadgeMedal emoji={medal.emoji} look={medal.look} locked={medal.locked} isNew={medal.isNew} />
       <VStack align="center" gap="050" className="w-full">
         <Text
           typography="body4"

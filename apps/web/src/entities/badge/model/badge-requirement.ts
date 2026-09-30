@@ -24,5 +24,9 @@ export function badgeRequirement(
       return "한 달 참여 1위";
     case BADGE_LADDER.gmMonthly:
       return "한 달 운영 1위";
+    case BADGE_LADDER.developer:
+      return "롤앤콜 개발자";
+    case BADGE_LADDER.guildMaster:
+      return "디스코드 길드장";
   }
 }

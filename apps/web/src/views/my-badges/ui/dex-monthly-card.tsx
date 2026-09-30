@@ -23,7 +23,7 @@ export function DexMonthlyCard({ card }: DexMonthlyCardProps) {
       <HStack align="center" gap="175" className="px-175 pt-200 pb-225">
         <BadgeMedal
           emoji={card.emoji}
-          grade={card.grade}
+          look={card.look}
           locked={!card.held}
           ribbon={card.ribbon}
           isNew={card.isNew}

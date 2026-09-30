@@ -30,7 +30,7 @@ export function MyPageBadges({ heldCount, hasNew, goal }: MyPageBadgesProps) {
       <div className={MY_PAGE_GROUP_CLASS}>
         {goal && (
           <HStack align="center" gap="150" className="p-175">
-            <BadgeMedal emoji={goal.emoji} grade={1} size="sm" locked />
+            <BadgeMedal emoji={goal.emoji} look={1} size="sm" locked />
             <VStack gap="075" className="min-w-0 flex-1">
               <HStack align="baseline" gap="075">
                 <Text typography="subtitle2" weight="extrabold" className="min-w-0 flex-1">

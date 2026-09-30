@@ -1,4 +1,4 @@
-import type { BadgeGrade } from "@roll-and-call/database/rules";
+import type { BadgeLook } from "@roll-and-call/database/rules";
 import { Card, Text, VStack } from "@roll-and-call/ui";
 
 import { BadgeMedal } from "@/entities/badge";
@@ -9,7 +9,7 @@ interface UserBadgeGroupProps {
   rows: {
     key: string;
     emoji: string;
-    grade: BadgeGrade;
+    look: BadgeLook;
     name: string;
     requirement: string;
     dateLabel: string;
@@ -30,7 +30,7 @@ export function UserBadgeGroup({ title, rows }: UserBadgeGroupProps) {
             detail={row.detail}
             className="flex min-h-16 w-full items-center gap-150 border-t border-gray-200 px-175 py-125 text-left first:border-t-0 hover:bg-gray-50"
           >
-            <BadgeMedal emoji={row.emoji} grade={row.grade} size="sm" />
+            <BadgeMedal emoji={row.emoji} look={row.look} size="sm" />
             <VStack gap="025" className="min-w-0 flex-1">
               <Text typography="subtitle1" weight="extrabold" truncate>
                 {row.name}

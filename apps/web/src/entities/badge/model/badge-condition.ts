@@ -24,5 +24,9 @@ export function badgeCondition(
       return "한 달 동안 세션에 가장 많이 참석한 PL이 다음 달 내내 답니다.";
     case BADGE_LADDER.gmMonthly:
       return "한 달 동안 세션을 가장 많이 연 GM이 다음 달 내내 답니다.";
+    case BADGE_LADDER.developer:
+      return "롤앤콜을 만드는 개발자에게만 붙습니다.";
+    case BADGE_LADDER.guildMaster:
+      return "디스코드 길드를 이끄는 길드장에게 붙습니다.";
   }
 }

@@ -7,6 +7,9 @@ const DOT_CLASS: Record<BadgeTone, string> = {
   [BADGE_TONE.bronze]: "bg-rank-bronze",
   [BADGE_TONE.primary]: "bg-tinted-ink",
   [BADGE_TONE.gold]: "bg-rank-gold",
+  [BADGE_TONE.prism]: "bg-badge-prism",
+  [BADGE_TONE.developer]: "bg-badge-developer",
+  [BADGE_TONE.guild]: "bg-badge-guild",
   [BADGE_TONE.hint]: "bg-hint",
   [BADGE_TONE.success]: "bg-success-700",
 };

@@ -1,8 +1,17 @@
+import type { BadgeLook } from "@roll-and-call/database/rules";
 import { HStack, Sheet, Text, VStack, cn } from "@roll-and-call/ui";
 
 import { BadgeMedal, TONE_CLASS } from "@/entities/badge";
 
 import type { AwardSheet } from "../model/award-sheet";
+
+// 프리즘·이달의 뱃지·특별 칭호는 그 색 줄로 세운다.
+const HIGHLIGHT_CLASS: Partial<Record<BadgeLook, string>> = {
+  5: "border-badge-prism badge-frame-prism bg-(--badge-fill)",
+  monthly: "border-rank-gold bg-warning-50",
+  developer: "border-badge-developer badge-frame-developer bg-(--badge-fill)",
+  guildMaster: "border-badge-guild badge-frame-guild bg-(--badge-fill)",
+};
 
 interface AwardMultiProps {
   sheet: Extract<AwardSheet, { kind: "multi" }>;
@@ -30,10 +39,10 @@ export function AwardMulti({ sheet }: AwardMultiProps) {
             render={<li />}
             className={cn(
               "rounded-600 border px-175 py-150",
-              item.highlight ? "border-rank-gold bg-warning-50" : "border-gray-200",
+              HIGHLIGHT_CLASS[item.look] ?? "border-gray-200",
             )}
           >
-            <BadgeMedal emoji={item.emoji} grade={item.grade} ribbon={item.ribbon} size="md" />
+            <BadgeMedal emoji={item.emoji} look={item.look} ribbon={item.ribbon} size="md" />
             <VStack gap="025" className="min-w-0 flex-1">
               <Text
                 typography="body4"

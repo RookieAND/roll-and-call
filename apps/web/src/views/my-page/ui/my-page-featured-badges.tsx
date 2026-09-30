@@ -42,7 +42,7 @@ export function MyPageFeaturedBadges({ badges, heldCount }: MyPageFeaturedBadges
             <BadgePill
               emoji={badge.emoji}
               name={badge.name}
-              grade={badge.grade}
+              look={badge.look}
               tag={badge.monthKey && monthLabel(badge.monthKey)}
             />
           </BadgeDetailSheet>

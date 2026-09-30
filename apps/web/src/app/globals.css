@@ -188,6 +188,100 @@ html {
   background-image: radial-gradient(circle at 32% 24%, rgb(255 255 255 / 0.35), transparent 56%);
 }
 
+/* 프리즘·특별 칭호의 글씨와 별 색. 개발자의 청록은 초록과 파랑을 섞어 만든다. */
+@theme inline {
+  --color-badge-prism: var(--rc-color-data-purple-ink);
+  --color-badge-developer: color-mix(
+    in oklch,
+    var(--rc-color-data-green-ink) 55%,
+    var(--rc-color-data-blue-ink)
+  );
+  --color-badge-guild: var(--rc-color-data-pink-ink);
+  --color-badge-indigo: var(--rc-color-data-indigo-ink);
+  --color-badge-green: var(--rc-color-data-green-ink);
+  --color-badge-blue: var(--rc-color-data-blue-ink);
+}
+
+/* 골드부터는 그라데이션 테두리다. 두께는 border-*로 주고, 칠은 badge-frame-*가 고른다. */
+@utility badge-framed {
+  border-color: transparent;
+  background:
+    var(--badge-shade, linear-gradient(transparent, transparent)) padding-box,
+    linear-gradient(var(--badge-fill), var(--badge-fill)) padding-box,
+    var(--badge-frame) border-box;
+}
+
+@utility badge-shaded {
+  --badge-shade: radial-gradient(circle at 32% 24%, rgb(255 255 255 / 0.35), transparent 56%);
+}
+
+@utility badge-frame-gold {
+  --badge-glow-color: var(--rc-color-fg-rank-gold);
+  --badge-fill: var(--rc-color-bg-warning-weak);
+  --badge-frame: conic-gradient(
+    from 135deg,
+    var(--rc-color-fg-rank-gold),
+    var(--rc-color-bg-spark),
+    var(--rc-color-fg-rank-gold),
+    var(--rc-color-bg-spark),
+    var(--rc-color-fg-rank-gold)
+  );
+}
+
+@utility badge-frame-prism {
+  --badge-glow-color: var(--rc-color-data-purple-ink);
+  --badge-fill: var(--rc-color-data-indigo-bg);
+  --badge-frame: conic-gradient(
+    from 210deg,
+    var(--rc-color-data-pink-ink),
+    var(--rc-color-data-purple-ink),
+    var(--rc-color-data-indigo-ink),
+    var(--rc-color-data-blue-ink),
+    var(--rc-color-data-green-ink),
+    var(--rc-color-data-lime-ink),
+    var(--rc-color-fg-rank-gold),
+    var(--rc-color-data-pink-ink)
+  );
+}
+
+@utility badge-frame-developer {
+  --badge-glow-color: var(--color-badge-developer);
+  --badge-fill: color-mix(
+    in oklch,
+    var(--rc-color-data-green-bg) 55%,
+    var(--rc-color-data-blue-bg)
+  );
+  --badge-frame: conic-gradient(
+    from 90deg,
+    var(--rc-color-data-green-ink),
+    var(--color-badge-developer),
+    var(--rc-color-data-blue-ink),
+    var(--rc-color-bg-spark),
+    var(--rc-color-data-green-ink)
+  );
+}
+
+@utility badge-frame-guild {
+  --badge-glow-color: var(--rc-color-data-pink-ink);
+  --badge-fill: var(--rc-color-data-pink-bg);
+  --badge-frame: conic-gradient(
+    from 120deg,
+    var(--rc-color-data-pink-ink),
+    var(--rc-color-fg-rank-gold),
+    var(--rc-color-data-pink-ink),
+    var(--rc-color-bg-spark),
+    var(--rc-color-data-pink-ink)
+  );
+}
+
+/* 프리즘·이달의 뱃지·특별 칭호의 후광. 바깥 고리는 바탕색, 아래 그림자는 테두리색이다. */
+@utility badge-glow {
+  box-shadow:
+    inset 0 0 0 2px var(--color-surface),
+    0 0 0 4px var(--badge-fill),
+    0 8px 20px -6px var(--badge-glow-color);
+}
+
 @utility animate-badge-shine {
   background: linear-gradient(
     115deg,

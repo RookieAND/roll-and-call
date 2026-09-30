@@ -18,7 +18,7 @@ export function AwardSingle({ sheet, onNavigate }: AwardSingleProps) {
     <VStack align="center" gap="175" className="relative pt-225 text-center">
       <span className="relative">
         <AwardRays gold={sheet.gold} />
-        <BadgeMedal emoji={item.emoji} grade={item.grade} ribbon={item.ribbon} size="2xl" />
+        <BadgeMedal emoji={item.emoji} look={item.look} ribbon={item.ribbon} size="2xl" />
       </span>
       <VStack align="center" gap="075" className="relative mt-075">
         <Text

@@ -28,7 +28,7 @@ export function AwardRetro({ sheet }: AwardRetroProps) {
       <Grid cols={4} gap="150" render={<ul />} className="max-h-[40dvh] overflow-y-auto py-075">
         {sheet.items.map((item) => (
           <VStack key={item.key} align="center" gap="075" render={<li />} className="text-center">
-            <BadgeMedal emoji={item.emoji} grade={item.grade} ribbon={item.ribbon} />
+            <BadgeMedal emoji={item.emoji} look={item.look} ribbon={item.ribbon} />
             <Text
               typography="body4"
               weight="extrabold"

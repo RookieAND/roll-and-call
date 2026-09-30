@@ -9,8 +9,10 @@ import {
   BADGE_TONE,
   badgeCondition,
   badgeRequirement,
-  gradeTone,
+  lookTone,
+  stepLook,
   stepName,
+  TIER_NAME,
 } from "@/entities/badge";
 import { toKst } from "@/shared/lib";
 
@@ -43,19 +45,13 @@ export function buildLadderDetail({
   held,
   events,
 }: LadderDetailInput): BadgeDetail {
-  const steps = BADGE_LADDERS[ladder].steps;
+  const { steps, granted } = BADGE_LADDERS[ladder];
   const step = steps[stepIndex]!;
   const meta = LADDER_META[ladder];
   const heldTier = held?.tier ?? 0;
   const earned = stepIndex < heldTier;
   const tier = stepIndex + 1;
-  const last = tier === steps.length;
   const count = events?.length ?? null;
-  const tierLabel = earned
-    ? last
-      ? "마지막 단계"
-      : `${tier} / ${steps.length}단계`
-    : `${meta.title} · ${last ? "마지막 단계" : `${tier}단계`}`;
 
   const earnedEvent = events?.[step.threshold - 1] ?? null;
   const earnedAt = tier === heldTier ? held!.earnedAt : (earnedEvent?.at ?? null);
@@ -64,9 +60,9 @@ export function buildLadderDetail({
 
   return {
     name: stepName(step, categoryName),
-    medal: { emoji: step.emoji, grade: step.grade, locked: !earned, ribbon: null },
-    tierLabel,
-    tierTone: earned ? gradeTone(step.grade) : BADGE_TONE.hint,
+    medal: { emoji: step.emoji, look: stepLook(step), locked: !earned, ribbon: null },
+    tierLabel: granted ? meta.title : TIER_NAME[step.grade],
+    tierTone: earned ? lookTone(stepLook(step)) : BADGE_TONE.hint,
     condition: badgeCondition(ladder, step, categoryName),
     earned:
       earned && earnedAt
@@ -91,7 +87,8 @@ export function buildLadderDetail({
           }
         : null,
     stepsTitle: "단계",
-    steps: steps.map((candidate, index) => {
+    // 특별 칭호는 단계가 하나뿐이라 단계 목록을 내지 않는다.
+    steps: (granted ? [] : steps).map((candidate, index) => {
       const candidateEarned = index < heldTier;
       const candidateEvent = events?.[candidate.threshold - 1];
       const candidateDate = index + 1 === heldTier ? held!.earnedAt : (candidateEvent?.at ?? null);
@@ -112,7 +109,7 @@ export function buildLadderDetail({
         key: `${index}`,
         medal: {
           emoji: candidate.emoji,
-          grade: candidate.grade,
+          look: stepLook(candidate),
           locked: !candidateEarned,
           ribbon: null,
         },

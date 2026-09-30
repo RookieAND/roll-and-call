@@ -63,7 +63,8 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
       : null,
     reviews: gm
       ? {
-          count: counts.gmReviews,
+          hint: `받은 후기 ${counts.gmReviews}개`,
+          next: ladderNext(BADGE_LADDER.gmReviews, counts.gmReviews),
           medals: ladderMedals(
             BADGE_LADDER.gmReviews,
             events(BADGE_LADDER.gmReviews),

@@ -15,6 +15,7 @@ import { UserBadgeGroup } from "./user-badge-group";
 const GROUPS = [
   { role: BADGE_ROLE.player, title: "PL 참여" },
   { role: BADGE_ROLE.gm, title: "GM 운영" },
+  { role: BADGE_ROLE.special, title: "특별 칭호" },
 ] as const;
 
 interface UserBadgesViewProps {
@@ -56,7 +57,7 @@ export async function UserBadgesView({ id }: UserBadgesViewProps) {
       .map((badge) => ({
         key: badge.key,
         emoji: badge.emoji,
-        grade: badge.grade,
+        look: badge.look,
         name: badge.name,
         requirement: badgeRowRequirement(badge),
         dateLabel: toKst(badge.record.earnedAt).format("YY.MM.DD"),

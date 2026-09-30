@@ -8,7 +8,7 @@ import {
   type MonthlyAppearance,
 } from "@roll-and-call/database/rules";
 
-import { monthLabel, previousMonthKey } from "@/entities/badge";
+import { monthLabel, previousMonthKey, stepLook } from "@/entities/badge";
 import { buildMonthlyDetail } from "@/features/view-badge";
 import { toKst } from "@/shared/lib";
 import type { BadgeRecord } from "@/shared/server";
@@ -60,7 +60,7 @@ export function monthlyCard({
     title: step.name,
     held: heldMonth !== null,
     emoji: step.emoji,
-    grade: step.grade,
+    look: stepLook(step),
     ribbon: heldMonth ? monthLabel(heldMonth) : null,
     isNew: record?.seenAt === null,
     status: heldMonth

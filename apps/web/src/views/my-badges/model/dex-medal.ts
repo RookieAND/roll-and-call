@@ -1,4 +1,4 @@
-import type { BadgeGrade } from "@roll-and-call/database/rules";
+import type { BadgeLook } from "@roll-and-call/database/rules";
 
 import type { BadgeDetail } from "@/features/view-badge";
 
@@ -6,11 +6,10 @@ import type { BadgeDetail } from "@/features/view-badge";
 export type DexMedal = {
   key: string;
   emoji: string;
-  grade: BadgeGrade;
+  look: BadgeLook;
   locked: boolean;
   isNew: boolean;
   name: string;
   caption: string;
-  threshold: number;
   detail: BadgeDetail;
 };

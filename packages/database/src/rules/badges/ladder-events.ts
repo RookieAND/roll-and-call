@@ -21,7 +21,7 @@ function firstOfEachCategory(events: BadgeSession[]): BadgeSession[] {
 }
 
 // 사다리 하나를 채우는 사건(세션 종료·후기 작성)을 시각 순으로. n번째 사건이 n회 기준을 채운다.
-// 룰별 사다리는 subject(룰 분류 id)의 세션만, 이달의 뱃지는 여러 사람을 견줘야 해서 빈 목록이다.
+// 룰별 사다리는 subject(룰 분류 id)의 세션만, 이달의 뱃지는 여러 사람을 견줘야 하고 특별 칭호는 오너가 줘서 빈 목록이다.
 export function ladderEvents(
   { played, hosted, reviews }: BadgeFacts,
   ladder: BadgeLadderKey,
@@ -44,6 +44,8 @@ export function ladderEvents(
         .map((review) => ({ at: review.createdAt, gameId: review.gameId }));
     case BADGE_LADDER.playerMonthly:
     case BADGE_LADDER.gmMonthly:
+    case BADGE_LADDER.developer:
+    case BADGE_LADDER.guildMaster:
       return [];
   }
 }

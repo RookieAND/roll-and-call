@@ -15,7 +15,7 @@ export function BadgeDetailSteps({ title, steps }: BadgeDetailStepsProps) {
       <Text typography="body4" weight="bold" foreground="muted">
         {title}
       </Text>
-      <VStack render={<ol />}>
+      <VStack render={<ol />} className="overflow-hidden rounded-500 border border-gray-200">
         {steps.map((step) => {
           const nameForeground = step.medal.locked ? "hint" : "normal";
           return (
@@ -24,11 +24,14 @@ export function BadgeDetailSteps({ title, steps }: BadgeDetailStepsProps) {
               align="center"
               gap="150"
               render={<li />}
-              className={cn("min-h-12 rounded-400 px-125 py-075", step.current && "bg-gray-50")}
+              className={cn(
+                "min-h-13 border-t border-gray-200 px-175 py-100 first:border-t-0",
+                step.current && "bg-gray-50",
+              )}
             >
               <BadgeMedal
                 emoji={step.medal.emoji}
-                grade={step.medal.grade}
+                look={step.medal.look}
                 locked={step.medal.locked}
                 size="xs"
               />

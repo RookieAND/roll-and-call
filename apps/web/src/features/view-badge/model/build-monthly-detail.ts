@@ -5,7 +5,13 @@ import {
   type BadgeLadderKey,
 } from "@roll-and-call/database/rules";
 
-import { BADGE_TONE, badgeCondition, monthLabel, previousMonthKey } from "@/entities/badge";
+import {
+  BADGE_TONE,
+  badgeCondition,
+  monthLabel,
+  previousMonthKey,
+  stepLook,
+} from "@/entities/badge";
 import { toKst } from "@/shared/lib";
 
 import type { BadgeDetail } from "./badge-detail";
@@ -47,7 +53,7 @@ export function buildMonthlyDetail({
     name: step.name,
     medal: {
       emoji: step.emoji,
-      grade: step.grade,
+      look: stepLook(step),
       locked: !heldMonth,
       ribbon: shownMonth ? monthLabel(shownMonth) : null,
     },
@@ -71,7 +77,7 @@ export function buildMonthlyDetail({
       const wornMonth = toKst(nextMonthStart(month)).format("M월");
       return {
         key: month,
-        medal: { emoji: step.emoji, grade: step.grade, locked: false, ribbon: null },
+        medal: { emoji: step.emoji, look: stepLook(step), locked: false, ribbon: null },
         name: monthName(month),
         caption: recordOf(month),
         status: `${wornMonth} 내내`,

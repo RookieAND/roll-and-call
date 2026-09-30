@@ -14,5 +14,7 @@ export { nextBadgeGoal } from "./model/next-badge-goal";
 export { BadgeMedal, type BadgeMedalProps } from "./ui/badge-medal";
 export { BadgePill } from "./ui/badge-pill";
 export { BADGE_TONE, type BadgeTone } from "./model/badge-tone";
-export { gradeTone } from "./model/grade-tone";
+export { lookTone } from "./model/look-tone";
+export { stepLook } from "./model/step-look";
+export { TIER_NAME } from "./model/tier-name";
 export { TONE_CLASS } from "./model/tone-class";

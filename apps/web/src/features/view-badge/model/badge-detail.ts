@@ -1,10 +1,10 @@
-import type { BadgeGrade } from "@roll-and-call/database/rules";
+import type { BadgeLook } from "@roll-and-call/database/rules";
 
 import type { BadgeTone } from "@/entities/badge";
 
 export type BadgeDetailMedal = {
   emoji: string;
-  grade: BadgeGrade;
+  look: BadgeLook;
   locked: boolean;
   ribbon: string | null;
 };

@@ -18,7 +18,7 @@ export function BadgeDetailContent({ detail }: BadgeDetailContentProps) {
       <VStack align="center" gap="125" className="pt-100 text-center">
         <BadgeMedal
           emoji={detail.medal.emoji}
-          grade={detail.medal.grade}
+          look={detail.medal.look}
           locked={detail.medal.locked}
           ribbon={detail.medal.ribbon}
           size="xl"

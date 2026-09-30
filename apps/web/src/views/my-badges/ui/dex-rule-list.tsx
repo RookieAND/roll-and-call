@@ -34,7 +34,7 @@ export function DexRuleList({ rows, emptyText }: DexRuleListProps) {
             detail={row.detail}
             className="flex w-full items-center gap-150 border-t border-gray-200 px-175 py-150 text-left first:border-t-0 hover:bg-gray-50"
           >
-            <BadgeMedal emoji={row.emoji} grade={row.grade} isNew={row.isNew} size="sm" />
+            <BadgeMedal emoji={row.emoji} look={row.look} isNew={row.isNew} size="sm" />
             <VStack gap="075" className="min-w-0 flex-1">
               <HStack align="center" gap="100">
                 <Text typography="subtitle1" weight="extrabold" truncate className="min-w-0 flex-1">

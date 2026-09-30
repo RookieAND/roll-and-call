@@ -4,6 +4,9 @@ export const BADGE_TONE = {
   bronze: "bronze",
   primary: "primary",
   gold: "gold",
+  prism: "prism",
+  developer: "developer",
+  guild: "guild",
   hint: "hint",
   success: "success",
 } as const;
