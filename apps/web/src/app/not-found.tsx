@@ -6,7 +6,7 @@ import { ErrorScreen } from "@/shared/ui";
 import { AppFrame } from "./app-frame";
 
 // 없는 서버(/nope/…)도 여기로 온다. 그 주소의 [server] 값이 남아 있어 서버 홈 링크(ServerLink)는 같은 404로 돌아가므로,
-// 서버 밖 주소로만 보낸다. ?stay=1이면 서버가 하나여도 인덱스의 내 서버 목록에 머문다.
+// 서버 밖 주소(인덱스의 내 서버 목록, 도움말)로만 보낸다.
 export default function NotFound() {
   return (
     <AppFrame>
@@ -21,7 +21,7 @@ export default function NotFound() {
         }
         action={
           <>
-            <Button render={<Link href="/?stay=1" />}>내 서버 보기</Button>
+            <Button render={<Link href="/" />}>내 서버 보기</Button>
             <Button variant="outline" render={<Link href="/help" />}>
               도움말
             </Button>
