@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteOwnedGame, isGameOwner } from "@roll-and-call/database/web";
+import { deleteOwnedGame, isGameOwner } from "@roll-and-call/database/games";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 

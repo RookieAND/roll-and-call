@@ -1,5 +1,5 @@
-import type { WaitingSupplements } from "@roll-and-call/database/admin";
-import { rulebookLabel } from "@roll-and-call/database/admin/model";
+import type { WaitingSupplements } from "@roll-and-call/database/certifications";
+import { rulebookLabel } from "@roll-and-call/database/rulebooks/model";
 
 import type { Snapshot } from "./snapshot";
 import { supplementCores } from "./supplement-cores";

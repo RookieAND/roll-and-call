@@ -159,12 +159,8 @@
           "name": "audit_log_actor_id_profiles_id_fk",
           "tableFrom": "audit_log",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "actor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["actor_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -172,12 +168,8 @@
           "name": "audit_log_target_user_id_profiles_id_fk",
           "tableFrom": "audit_log",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "target_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["target_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -185,12 +177,8 @@
           "name": "audit_log_target_game_id_games_id_fk",
           "tableFrom": "audit_log",
           "tableTo": "games",
-          "columnsFrom": [
-            "target_game_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["target_game_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -252,12 +240,8 @@
           "name": "availabilities_game_id_games_id_fk",
           "tableFrom": "availabilities",
           "tableTo": "games",
-          "columnsFrom": [
-            "game_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["game_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -265,12 +249,8 @@
           "name": "availabilities_user_id_profiles_id_fk",
           "tableFrom": "availabilities",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -278,11 +258,7 @@
       "compositePrimaryKeys": {
         "availabilities_game_id_user_id_slot_start_pk": {
           "name": "availabilities_game_id_user_id_slot_start_pk",
-          "columns": [
-            "game_id",
-            "user_id",
-            "slot_start"
-          ]
+          "columns": ["game_id", "user_id", "slot_start"]
         }
       },
       "uniqueConstraints": {},
@@ -478,12 +454,8 @@
           "name": "cert_applications_user_id_profiles_id_fk",
           "tableFrom": "cert_applications",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -491,12 +463,8 @@
           "name": "cert_applications_rulebook_id_rulebooks_id_fk",
           "tableFrom": "cert_applications",
           "tableTo": "rulebooks",
-          "columnsFrom": [
-            "rulebook_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rulebook_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -504,12 +472,8 @@
           "name": "cert_applications_processed_by_profiles_id_fk",
           "tableFrom": "cert_applications",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "processed_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["processed_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -590,12 +554,8 @@
           "name": "certifications_user_id_profiles_id_fk",
           "tableFrom": "certifications",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -603,12 +563,8 @@
           "name": "certifications_rulebook_id_rulebooks_id_fk",
           "tableFrom": "certifications",
           "tableTo": "rulebooks",
-          "columnsFrom": [
-            "rulebook_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rulebook_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -616,12 +572,8 @@
           "name": "certifications_approved_by_profiles_id_fk",
           "tableFrom": "certifications",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "approved_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["approved_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -629,12 +581,8 @@
           "name": "certifications_revoked_by_profiles_id_fk",
           "tableFrom": "certifications",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "revoked_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["revoked_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -642,10 +590,7 @@
       "compositePrimaryKeys": {
         "certifications_user_id_rulebook_id_pk": {
           "name": "certifications_user_id_rulebook_id_pk",
-          "columns": [
-            "user_id",
-            "rulebook_id"
-          ]
+          "columns": ["user_id", "rulebook_id"]
         }
       },
       "uniqueConstraints": {},
@@ -936,12 +881,8 @@
           "name": "games_gm_id_profiles_id_fk",
           "tableFrom": "games",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "gm_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gm_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -949,12 +890,8 @@
           "name": "games_rulebook_id_rulebooks_id_fk",
           "tableFrom": "games",
           "tableTo": "rulebooks",
-          "columnsFrom": [
-            "rulebook_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rulebook_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -962,12 +899,8 @@
           "name": "games_hidden_by_profiles_id_fk",
           "tableFrom": "games",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "hidden_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["hidden_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1107,12 +1040,8 @@
           "name": "participants_game_id_games_id_fk",
           "tableFrom": "participants",
           "tableTo": "games",
-          "columnsFrom": [
-            "game_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["game_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1120,12 +1049,8 @@
           "name": "participants_user_id_profiles_id_fk",
           "tableFrom": "participants",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -1133,12 +1058,8 @@
           "name": "participants_absence_cancelled_by_profiles_id_fk",
           "tableFrom": "participants",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "absence_cancelled_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["absence_cancelled_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1146,10 +1067,7 @@
       "compositePrimaryKeys": {
         "participants_game_id_user_id_pk": {
           "name": "participants_game_id_user_id_pk",
-          "columns": [
-            "game_id",
-            "user_id"
-          ]
+          "columns": ["game_id", "user_id"]
         }
       },
       "uniqueConstraints": {},
@@ -1218,12 +1136,8 @@
           "name": "profile_memos_owner_id_profiles_id_fk",
           "tableFrom": "profile_memos",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["owner_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -1231,12 +1145,8 @@
           "name": "profile_memos_target_id_profiles_id_fk",
           "tableFrom": "profile_memos",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "target_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["target_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -1244,10 +1154,7 @@
       "compositePrimaryKeys": {
         "profile_memos_owner_id_target_id_pk": {
           "name": "profile_memos_owner_id_target_id_pk",
-          "columns": [
-            "owner_id",
-            "target_id"
-          ]
+          "columns": ["owner_id", "target_id"]
         }
       },
       "uniqueConstraints": {},
@@ -1325,9 +1232,7 @@
         "profiles_discord_id_unique": {
           "name": "profiles_discord_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "discord_id"
-          ]
+          "columns": ["discord_id"]
         }
       },
       "policies": {},
@@ -1412,12 +1317,8 @@
           "name": "reports_game_id_games_id_fk",
           "tableFrom": "reports",
           "tableTo": "games",
-          "columnsFrom": [
-            "game_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["game_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1425,12 +1326,8 @@
           "name": "reports_reporter_id_profiles_id_fk",
           "tableFrom": "reports",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "reporter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reporter_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1438,12 +1335,8 @@
           "name": "reports_resolved_by_profiles_id_fk",
           "tableFrom": "reports",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "resolved_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["resolved_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1486,9 +1379,7 @@
         "rulebook_categories_name_unique": {
           "name": "rulebook_categories_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -1606,12 +1497,8 @@
           "name": "rulebook_requests_user_id_profiles_id_fk",
           "tableFrom": "rulebook_requests",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -1619,12 +1506,8 @@
           "name": "rulebook_requests_category_id_rulebook_categories_id_fk",
           "tableFrom": "rulebook_requests",
           "tableTo": "rulebook_categories",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["category_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1632,12 +1515,8 @@
           "name": "rulebook_requests_processed_by_profiles_id_fk",
           "tableFrom": "rulebook_requests",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "processed_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["processed_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1764,12 +1643,8 @@
           "name": "rulebooks_category_id_rulebook_categories_id_fk",
           "tableFrom": "rulebooks",
           "tableTo": "rulebook_categories",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["category_id"],
+          "columnsTo": ["id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         },
@@ -1777,12 +1652,8 @@
           "name": "rulebooks_supersedes_id_rulebooks_id_fk",
           "tableFrom": "rulebooks",
           "tableTo": "rulebooks",
-          "columnsFrom": [
-            "supersedes_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["supersedes_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1871,12 +1742,8 @@
           "name": "sanctions_user_id_profiles_id_fk",
           "tableFrom": "sanctions",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -1884,12 +1751,8 @@
           "name": "sanctions_created_by_profiles_id_fk",
           "tableFrom": "sanctions",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "created_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1897,12 +1760,8 @@
           "name": "sanctions_released_by_profiles_id_fk",
           "tableFrom": "sanctions",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "released_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["released_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1945,12 +1804,8 @@
           "name": "staff_user_id_profiles_id_fk",
           "tableFrom": "staff",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -2020,12 +1875,8 @@
           "name": "staff_memos_user_id_profiles_id_fk",
           "tableFrom": "staff_memos",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -2033,12 +1884,8 @@
           "name": "staff_memos_author_id_profiles_id_fk",
           "tableFrom": "staff_memos",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2054,69 +1901,42 @@
     "public.cert_application_status": {
       "name": "cert_application_status",
       "schema": "public",
-      "values": [
-        "pending",
-        "approved",
-        "rejected"
-      ]
+      "values": ["pending", "approved", "rejected"]
     },
     "public.cert_format": {
       "name": "cert_format",
       "schema": "public",
-      "values": [
-        "physical",
-        "ebook"
-      ]
+      "values": ["physical", "ebook"]
     },
     "public.participant_status": {
       "name": "participant_status",
       "schema": "public",
-      "values": [
-        "confirmed",
-        "waiting"
-      ]
+      "values": ["confirmed", "waiting"]
     },
     "public.recruit_method": {
       "name": "recruit_method",
       "schema": "public",
-      "values": [
-        "first_come",
-        "lottery"
-      ]
+      "values": ["first_come", "lottery"]
     },
     "public.rulebook_kind": {
       "name": "rulebook_kind",
       "schema": "public",
-      "values": [
-        "core",
-        "supplement",
-        "handbook"
-      ]
+      "values": ["core", "supplement", "handbook"]
     },
     "public.rulebook_request_outcome": {
       "name": "rulebook_request_outcome",
       "schema": "public",
-      "values": [
-        "added",
-        "linked",
-        "rejected"
-      ]
+      "values": ["added", "linked", "rejected"]
     },
     "public.schedule_mode": {
       "name": "schedule_mode",
       "schema": "public",
-      "values": [
-        "fixed",
-        "coordinate"
-      ]
+      "values": ["fixed", "coordinate"]
     },
     "public.staff_role": {
       "name": "staff_role",
       "schema": "public",
-      "values": [
-        "owner",
-        "staff"
-      ]
+      "values": ["owner", "staff"]
     }
   },
   "schemas": {},

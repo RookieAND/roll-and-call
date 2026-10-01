@@ -4,7 +4,7 @@ import {
   createRulebookRequest,
   findRulebookCategoryId,
   hasPendingRulebookRequest,
-} from "@roll-and-call/database/web";
+} from "@roll-and-call/database/rulebooks";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import { getCurrentServer, getCurrentUser } from "@/shared/server";

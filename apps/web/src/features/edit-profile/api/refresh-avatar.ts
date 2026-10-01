@@ -1,6 +1,6 @@
 "use server";
 
-import { saveAvatarUrl } from "@roll-and-call/database/web";
+import { saveAvatarUrl } from "@roll-and-call/database/profiles";
 import { revalidatePath } from "next/cache";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";

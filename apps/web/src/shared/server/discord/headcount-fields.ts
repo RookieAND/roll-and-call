@@ -1,5 +1,5 @@
 import type { Game } from "@roll-and-call/database";
-import { deriveGameStatus, gameStatusLabel } from "@roll-and-call/database/rules";
+import { deriveGameStatus, gameStatusLabel } from "@roll-and-call/database/games/model";
 import type { DiscordEmbedField } from "@roll-and-call/discord";
 
 // 웹 배지와 같은 규칙으로 상태를 적는다. 대기가 0명이어도 칸을 남겨 알림마다 줄 모양이 같다.

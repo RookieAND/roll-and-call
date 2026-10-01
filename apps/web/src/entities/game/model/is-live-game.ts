@@ -1,4 +1,4 @@
-import { GAME_STATUS, type GameStatus } from "@roll-and-call/database/rules";
+import { GAME_STATUS, type GameStatus } from "@roll-and-call/database/games/model";
 
 // 서버 game-bucket-sql과 같은 기준이어야 한다.
 export function isLiveGame({ status, ended }: { status: GameStatus; ended: boolean }) {

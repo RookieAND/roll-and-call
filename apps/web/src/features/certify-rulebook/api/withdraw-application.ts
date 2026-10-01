@@ -3,7 +3,7 @@
 import {
   findLatestCertApplication,
   withdrawPendingApplications,
-} from "@roll-and-call/database/web";
+} from "@roll-and-call/database/certifications";
 import { redirect } from "next/navigation";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";

@@ -1,5 +1,5 @@
 import "server-only";
-import { findGameDetail } from "@roll-and-call/database/web";
+import { findGameDetail } from "@roll-and-call/database/games";
 import { cache } from "react";
 import { z } from "zod";
 

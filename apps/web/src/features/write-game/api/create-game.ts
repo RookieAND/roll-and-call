@@ -1,11 +1,11 @@
 "use server";
 
 import {
-  countServerMembers,
   createGameWithRoster,
   getGameWithGmName,
   saveDiscordThreadId,
-} from "@roll-and-call/database/web";
+} from "@roll-and-call/database/games";
+import { countServerMembers } from "@roll-and-call/database/profiles";
 import { uniq } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";

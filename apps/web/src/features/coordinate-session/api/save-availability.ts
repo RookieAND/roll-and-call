@@ -4,7 +4,7 @@ import {
   getGameWithRoster,
   getUserConfirmedSlots,
   replaceAvailability,
-} from "@roll-and-call/database/web";
+} from "@roll-and-call/database/games";
 import { revalidatePath } from "next/cache";
 
 import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";

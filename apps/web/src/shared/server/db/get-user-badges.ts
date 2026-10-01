@@ -1,5 +1,5 @@
 import "server-only";
-import { loadUserBadges } from "@roll-and-call/database/web";
+import { loadUserBadges } from "@roll-and-call/database/badges";
 import { cache } from "react";
 
 // cache는 인자를 Object.is로 견주므로 객체 대신 값 둘을 받는다.

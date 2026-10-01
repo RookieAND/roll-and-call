@@ -1,6 +1,6 @@
 "use server";
 
-import { setAttendanceConfirmedAt } from "@roll-and-call/database/web";
+import { setAttendanceConfirmedAt } from "@roll-and-call/database/games";
 
 import type { ActionResult } from "@/shared/api";
 import { getCurrentServer } from "@/shared/server";

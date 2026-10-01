@@ -1,4 +1,4 @@
-import type { BadgeLook } from "@roll-and-call/database/rules";
+import type { BadgeLook } from "@roll-and-call/database/badges/model";
 import { HStack, Sheet, Text, VStack, cn } from "@roll-and-call/ui";
 
 import { BadgeMedal, TONE_CLASS } from "@/entities/badge";

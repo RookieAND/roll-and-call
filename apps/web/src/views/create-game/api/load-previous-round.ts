@@ -1,4 +1,4 @@
-import { findPreviousRound } from "@roll-and-call/database/web";
+import { findPreviousRound } from "@roll-and-call/database/games";
 import { omit } from "es-toolkit";
 import { z } from "zod";
 

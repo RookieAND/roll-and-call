@@ -1,0 +1,5 @@
+import type { AuditAction } from "../../moderation/model/audit-actions";
+
+export type RulebookActionResult =
+  | { ok: true }
+  | { ok: false; conflict: { action: AuditAction; by: string; at: Date } | null };

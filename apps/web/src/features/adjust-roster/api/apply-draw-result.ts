@@ -6,7 +6,7 @@ import {
   markGameDrawn,
   saveDrawResults,
   setDrawRank,
-} from "@roll-and-call/database/web";
+} from "@roll-and-call/database/games";
 
 import { PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";

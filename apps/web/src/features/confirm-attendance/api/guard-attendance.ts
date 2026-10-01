@@ -1,10 +1,6 @@
 import "server-only";
-import {
-  listParticipantUserIds,
-  lockGame,
-  withTransaction,
-  type Transaction,
-} from "@roll-and-call/database/web";
+import { listParticipantUserIds, lockGame } from "@roll-and-call/database/games";
+import { withTransaction, type Transaction } from "@roll-and-call/database/transaction";
 import { after } from "next/server";
 
 import { isAttendanceDue, PARTICIPANT_STATUS } from "@/entities/game";

@@ -1,4 +1,8 @@
-import { BADGE_LADDERS, type BadgeEvent, type BadgeLadderKey } from "@roll-and-call/database/rules";
+import {
+  BADGE_LADDERS,
+  type BadgeEvent,
+  type BadgeLadderKey,
+} from "@roll-and-call/database/badges/model";
 
 import { stepLook } from "@/entities/badge";
 import { buildLadderDetail, LADDER_META } from "@/features/view-badge";

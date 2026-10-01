@@ -4,7 +4,7 @@ import {
   ladderEvents,
   type BadgeFacts,
   type BadgeLadderKey,
-} from "@roll-and-call/database/rules";
+} from "@roll-and-call/database/badges/model";
 
 import { lookTone, stepLook, type RuleCount } from "@/entities/badge";
 import { buildLadderDetail, LADDER_META } from "@/features/view-badge";

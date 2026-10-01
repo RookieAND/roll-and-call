@@ -1,7 +1,7 @@
 export { actionTone } from "./action-tone";
 export { conflictTitle } from "./conflict-title";
 export { CERT_TABS } from "./cert-tabs";
-export { formatDate, STAFF_ROLE_LABEL } from "@roll-and-call/database/admin/model";
+export { formatDate, STAFF_ROLE_LABEL } from "@roll-and-call/database/moderation/model";
 export { formatDateTime } from "./format-date-time";
 export { formatShortDateTime } from "./format-short-date-time";
 export { formatDayRange } from "./format-day-range";

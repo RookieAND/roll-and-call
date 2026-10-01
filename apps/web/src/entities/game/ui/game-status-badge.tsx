@@ -1,4 +1,4 @@
-import { gameStatusLabel, type GameStatus } from "@roll-and-call/database/rules";
+import { gameStatusLabel, type GameStatus } from "@roll-and-call/database/games/model";
 import { Badge } from "@roll-and-call/ui";
 
 import { gameStatusColor } from "../model/game-status-color";

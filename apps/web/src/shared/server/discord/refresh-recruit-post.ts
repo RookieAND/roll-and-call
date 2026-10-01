@@ -1,5 +1,6 @@
-import { countConfirmed } from "@roll-and-call/database/rules";
-import { getGameForNotice, type Server } from "@roll-and-call/database/web";
+import { type Server } from "@roll-and-call/database";
+import { getGameForNotice } from "@roll-and-call/database/games";
+import { countConfirmed } from "@roll-and-call/database/games/model";
 import { editDiscordMessage, renameDiscordThread } from "@roll-and-call/discord";
 
 import { recruitButtons } from "./recruit-buttons";

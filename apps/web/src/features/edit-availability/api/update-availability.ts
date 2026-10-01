@@ -1,6 +1,6 @@
 "use server";
 
-import { saveMemberAvailability } from "@roll-and-call/database/web";
+import { saveMemberAvailability } from "@roll-and-call/database/profiles";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 

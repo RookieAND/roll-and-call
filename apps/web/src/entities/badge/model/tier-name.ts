@@ -1,4 +1,4 @@
-import type { BadgeGrade } from "@roll-and-call/database/rules";
+import type { BadgeGrade } from "@roll-and-call/database/badges/model";
 
 export const TIER_NAME: Record<BadgeGrade, string> = {
   1: "베이직",

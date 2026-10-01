@@ -1,4 +1,4 @@
-import { rulebookLabel } from "@roll-and-call/database/admin/model";
+import { rulebookLabel } from "@roll-and-call/database/rulebooks/model";
 
 import type { Rulebook } from "./types";
 

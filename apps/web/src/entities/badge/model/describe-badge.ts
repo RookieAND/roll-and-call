@@ -1,4 +1,4 @@
-import { BADGE_LADDERS, parseBadgeKey } from "@roll-and-call/database/rules";
+import { BADGE_LADDERS, parseBadgeKey } from "@roll-and-call/database/badges/model";
 
 import type { BadgeView } from "./badge-view";
 import { stepLook } from "./step-look";

@@ -1,4 +1,4 @@
-import type { ForumReview } from "@roll-and-call/database/review-forum";
+import type { ForumReview } from "@roll-and-call/database/reviews";
 import { describe, expect, it } from "vitest";
 
 import { reviewForumPost } from "./review-forum-post";

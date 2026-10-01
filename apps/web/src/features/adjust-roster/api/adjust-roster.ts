@@ -1,5 +1,6 @@
 import "server-only";
-import { lockGame, withTransaction, type Transaction } from "@roll-and-call/database/web";
+import { lockGame } from "@roll-and-call/database/games";
+import { withTransaction, type Transaction } from "@roll-and-call/database/transaction";
 import { after } from "next/server";
 
 import { isSessionLocked } from "@/entities/game";

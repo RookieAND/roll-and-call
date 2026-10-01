@@ -1,4 +1,4 @@
-import { listGameReviewIds } from "@roll-and-call/database/review-forum";
+import { listGameReviewIds } from "@roll-and-call/database/reviews";
 
 import { syncReviewForumPost } from "./sync-review-forum-post";
 

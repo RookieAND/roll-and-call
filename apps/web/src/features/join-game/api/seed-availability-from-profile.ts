@@ -3,7 +3,7 @@ import {
   getUserConfirmedSlots,
   hasAnsweredAvailability,
   seedAvailabilities,
-} from "@roll-and-call/database/web";
+} from "@roll-and-call/database/games";
 
 import { SCHEDULE_MODE } from "@/entities/game";
 import { availabilityPrefill } from "@/entities/profile";

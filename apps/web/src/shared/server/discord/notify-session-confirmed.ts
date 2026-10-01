@@ -1,5 +1,6 @@
-import { countConfirmed, countWaiting } from "@roll-and-call/database/rules";
-import { getGameForNotice, type Server } from "@roll-and-call/database/web";
+import { type Server } from "@roll-and-call/database";
+import { getGameForNotice } from "@roll-and-call/database/games";
+import { countConfirmed, countWaiting } from "@roll-and-call/database/games/model";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { formatDateTime } from "@/shared/lib";

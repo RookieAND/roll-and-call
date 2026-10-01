@@ -1,4 +1,4 @@
-import { BADGE_ROLE, nextMonthStart } from "@roll-and-call/database/rules";
+import { BADGE_ROLE, nextMonthStart } from "@roll-and-call/database/badges/model";
 
 import { badgeCondition, monthLabel } from "@/entities/badge";
 import { toKst } from "@/shared/lib";

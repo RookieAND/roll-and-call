@@ -1,6 +1,6 @@
 "use server";
 
-import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/web";
+import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/games";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";

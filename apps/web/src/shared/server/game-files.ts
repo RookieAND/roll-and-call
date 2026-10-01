@@ -1,5 +1,5 @@
 import "server-only";
-import { findGameFileUrlsInUse } from "@roll-and-call/database/web";
+import { findGameFileUrlsInUse } from "@roll-and-call/database/games";
 import { compact, uniq } from "es-toolkit";
 
 import { GAME_IMAGE_BUCKET, gameImagePathOf } from "@/shared/lib";

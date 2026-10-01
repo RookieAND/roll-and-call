@@ -1,4 +1,4 @@
-import { deriveGameStatus } from "@roll-and-call/database/rules";
+import { deriveGameStatus } from "@roll-and-call/database/games/model";
 import { Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 
 import type { Game } from "@/shared/server";

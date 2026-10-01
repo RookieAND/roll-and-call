@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteParticipant, getGameWithRoster } from "@roll-and-call/database/web";
+import { deleteParticipant, getGameWithRoster } from "@roll-and-call/database/games";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 

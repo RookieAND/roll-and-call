@@ -1,6 +1,9 @@
 "use server";
 
-import { createCertApplication, loadCertificationContext } from "@roll-and-call/database/web";
+import {
+  createCertApplication,
+  loadCertificationContext,
+} from "@roll-and-call/database/certifications";
 import { redirect } from "next/navigation";
 
 import { CERT_FORMAT, CERT_SHOTS, RULEBOOK_KIND } from "@/entities/rulebook";

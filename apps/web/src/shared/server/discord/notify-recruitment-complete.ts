@@ -1,5 +1,5 @@
 import type { Game } from "@roll-and-call/database";
-import type { Server } from "@roll-and-call/database/web";
+import type { Server } from "@roll-and-call/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { formatGameSchedule } from "@/shared/lib";

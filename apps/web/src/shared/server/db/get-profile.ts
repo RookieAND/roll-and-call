@@ -1,5 +1,5 @@
 import "server-only";
-import { findMemberProfile } from "@roll-and-call/database/web";
+import { findMemberProfile } from "@roll-and-call/database/profiles";
 import { cache } from "react";
 import { z } from "zod";
 

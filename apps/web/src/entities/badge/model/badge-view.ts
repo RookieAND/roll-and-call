@@ -4,7 +4,7 @@ import type {
   BadgeLook,
   BadgeRole,
   BadgeStep,
-} from "@roll-and-call/database/rules";
+} from "@roll-and-call/database/badges/model";
 
 export type BadgeView = {
   key: string;

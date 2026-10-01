@@ -1,4 +1,4 @@
-import type { GameStatus } from "@roll-and-call/database/rules";
+import type { GameStatus } from "@roll-and-call/database/games/model";
 
 export const gameStatusColor: Record<GameStatus, "primary" | "gray" | "success"> = {
   recruiting: "primary",

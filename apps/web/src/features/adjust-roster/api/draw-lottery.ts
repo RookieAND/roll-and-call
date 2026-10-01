@@ -7,7 +7,7 @@ import {
   countRolledParticipants,
   listParticipantUserIds,
   setDrawRoll,
-} from "@roll-and-call/database/web";
+} from "@roll-and-call/database/games";
 import { redirect } from "next/navigation";
 
 import { DIE_FACES, PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";

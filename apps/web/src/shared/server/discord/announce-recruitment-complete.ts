@@ -1,5 +1,6 @@
-import { countWaiting, PARTICIPANT_STATUS } from "@roll-and-call/database/rules";
-import { getGameForRecruitmentNotice, type Server } from "@roll-and-call/database/web";
+import { type Server } from "@roll-and-call/database";
+import { getGameForRecruitmentNotice } from "@roll-and-call/database/games";
+import { countWaiting, PARTICIPANT_STATUS } from "@roll-and-call/database/games/model";
 
 import { notifyRecruitmentComplete } from "./notify-recruitment-complete";
 

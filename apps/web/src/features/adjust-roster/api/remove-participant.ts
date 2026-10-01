@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteParticipant } from "@roll-and-call/database/web";
+import { deleteParticipant } from "@roll-and-call/database/games";
 
 import type { ActionResult } from "@/shared/api";
 import { notifyGameLeft } from "@/shared/server";

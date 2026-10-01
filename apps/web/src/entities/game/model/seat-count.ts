@@ -1,4 +1,4 @@
-import { GAME_STATUS, type GameStatus } from "@roll-and-call/database/rules";
+import { GAME_STATUS, type GameStatus } from "@roll-and-call/database/games/model";
 
 import { RECRUIT_METHOD, type RecruitMethod } from "./recruit-method";
 import { recruitMethodLabel } from "./recruit-method-label";

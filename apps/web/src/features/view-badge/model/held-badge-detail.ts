@@ -4,7 +4,7 @@ import {
   ladderEvents,
   parseBadgeKey,
   type BadgeFacts,
-} from "@roll-and-call/database/rules";
+} from "@roll-and-call/database/badges/model";
 
 import type { BadgeView } from "@/entities/badge";
 import type { BadgeRecord } from "@/shared/server";

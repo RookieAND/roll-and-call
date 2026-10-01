@@ -1,10 +1,6 @@
 import "server-only";
-import {
-  countParticipants,
-  insertParticipant,
-  lockGame,
-  withTransaction,
-} from "@roll-and-call/database/web";
+import { countParticipants, insertParticipant, lockGame } from "@roll-and-call/database/games";
+import { withTransaction } from "@roll-and-call/database/transaction";
 
 import { DIE_FACES, isSessionLocked, PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import { GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";

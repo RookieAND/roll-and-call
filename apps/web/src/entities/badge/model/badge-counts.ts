@@ -1,4 +1,4 @@
-import type { BadgeFacts, BadgeSession } from "@roll-and-call/database/rules";
+import type { BadgeFacts, BadgeSession } from "@roll-and-call/database/badges/model";
 
 export type RuleCount = { categoryId: string; categoryName: string; count: number };
 

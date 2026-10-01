@@ -1,4 +1,4 @@
-import { kstMonthKey } from "@roll-and-call/database/rules";
+import { kstMonthKey } from "@roll-and-call/database/badges/model";
 
 // 이달의 GM·PL은 지난달 1위가 이번 달 내내 단다.
 export function previousMonthKey(now: Date): string {

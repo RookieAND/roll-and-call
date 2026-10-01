@@ -1,4 +1,8 @@
-import { BADGE_LADDER, BADGE_LADDERS, type BadgeLadderKey } from "@roll-and-call/database/rules";
+import {
+  BADGE_LADDER,
+  BADGE_LADDERS,
+  type BadgeLadderKey,
+} from "@roll-and-call/database/badges/model";
 
 import { badgeCondition } from "./badge-condition";
 import type { BadgeCounts } from "./badge-counts";

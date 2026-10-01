@@ -7,7 +7,7 @@ export {
   GAME_STATUS,
   deriveGameStatus,
   type GameStatus,
-} from "@roll-and-call/database/rules";
+} from "@roll-and-call/database/games/model";
 export { gameStatusColor } from "./model/game-status-color";
 export { isDeadlineUrgent } from "./model/is-deadline-urgent";
 export { isDeadlinePassed } from "./model/is-deadline-passed";

@@ -1,5 +1,5 @@
 import "server-only";
-import { rulebookLabel } from "@roll-and-call/database/admin";
+import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 
 import { categoryEditions } from "./category-editions";
 import { listRulebooks } from "./list-rulebooks";

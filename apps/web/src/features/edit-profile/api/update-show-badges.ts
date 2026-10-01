@@ -1,6 +1,6 @@
 "use server";
 
-import { saveMemberShowBadges } from "@roll-and-call/database/web";
+import { saveMemberShowBadges } from "@roll-and-call/database/profiles";
 import { revalidatePath } from "next/cache";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";

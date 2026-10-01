@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteProfileMemo } from "@roll-and-call/database/web";
+import { deleteProfileMemo } from "@roll-and-call/database/profiles";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 

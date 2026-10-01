@@ -9,7 +9,7 @@
 | `packages/ui`      | 도메인 무관 순수 UI 키트                                  | Button, IconButton, Chip, Select, TextInput, Field, Card                              |
 | `packages/tiptap`  | 리치 텍스트(Tiptap) 에디터·뷰어·문서 모델                 | RichTextEditor, RichText, toRichTextDoc                                               |
 | `packages/discord` | Discord REST 클라이언트(도메인 무관)                      | sendDiscordMessage, editDiscordMessage, startDiscordThread, renameDiscordThread       |
-| `packages/database` | 스키마, 모든 쿼리(`/web`·`/admin`, 서버별 표는 `serverId` 필수), `/server`의 `getCurrentServer`, `/rules`의 순수 도메인 규칙. 앱은 `.`에서 타입만 가져오고 `db`·표·drizzle-orm을 직접 쓰지 않는다 | GAME_STATUS, PARTICIPANT_STATUS, deriveGameStatus, countConfirmed |
+| `packages/database` | `src/schema/<도메인>.ts`와 `src/modules/<도메인>/{queries,commands,model}`. 도메인은 servers·profiles·games·reviews·badges·rulebooks·certifications·moderation. 서버 코드는 `@roll-and-call/database/<도메인>`, 클라이언트에서도 쓰는 순수 값·규칙은 `/<도메인>/model`(db를 읽지 않는다)에서 가져온다. 서버별 표를 쓰는 함수는 `serverId` 필수. 앱은 `.`에서 타입만 가져오고 `db`·표·drizzle-orm을 직접 쓰지 않는다 | GAME_STATUS, PARTICIPANT_STATUS, deriveGameStatus, countConfirmed |
 | `shared/ui`        | 앱 공용(도메인 약함) 조합 컴포넌트                        | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                                  |
 | `entities/*`       | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위 | game, profile, availability                                                           |
 | `features/*`       | **단일 사용자 동작**(server action·toggle 등 상태 변경)   | JoinGameButton, DeleteGameRow, GameStatusChips, ThumbnailUpload                       |
@@ -29,7 +29,7 @@
 | 세그먼트                | 내용                                                                                                                                                    |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `shared/api`            | 클라이언트 안전: `ActionResult`, Supabase 브라우저 클라이언트, 목록 정렬/필터 파라미터                                                                  |
-| `shared/server`         | 서버 전용(`server-only`): `@roll-and-call/database/web` 쿼리 재노출, 요청 캐시를 씌운 `getCurrentServer`, Supabase 서버 클라이언트·`getCurrentUser`, Discord 알림(채널은 servers 행) |
+| `shared/server`         | 서버 전용(`server-only`): `@roll-and-call/database/<도메인>` 쿼리 재노출, 요청 캐시를 씌운 `getCurrentServer`, Supabase 서버 클라이언트·`getCurrentUser`, Discord 알림(채널은 servers 행) |
 | `shared/lib`            | 순수 유틸: 날짜 포맷, 슬롯 계산                                                                                                                         |
 | `shared/ui`             | 앱 공용 조합 컴포넌트 + `toast`, `useAction`, `BoundaryFallback`                                                                                        |
 | `shared/error-boundary` | 클라이언트: `ErrorBoundary`(`catchError`). 테스트가 로드하지 않도록 `shared/ui`와 분리 (§8)                                                     |
@@ -63,7 +63,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 
 | 엔티티         | 담는 개념                          | 비고                                                                                                                                       |
 | -------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `game`         | 구인글 + 참여자 로스터 + 세션 일정 | 셋은 한 aggregate다. `deriveGameStatus`(원본은 `@roll-and-call/database/rules`, entity가 다시 내보낸다)가 참여자 수로 모집 상태를 정하고, 세션 일정은 games의 컬럼이다. 쪼개면 양방향 교차 import가 생긴다 |
+| `game`         | 구인글 + 참여자 로스터 + 세션 일정 | 셋은 한 aggregate다. `deriveGameStatus`(원본은 `@roll-and-call/database/games/model`, entity가 다시 내보낸다)가 참여자 수로 모집 상태를 정하고, 세션 일정은 games의 컬럼이다. 쪼개면 양방향 교차 import가 생긴다 |
 | `availability` | 가능 시간 집계·후보 슬롯           | game 쪽과 서로 참조가 없어 독립 슬라이스로 뗐다                                                                                            |
 | `profile`      | 사용자 표시 정보                   | 특정 feature만 쓰는 값(기본 가능 시간대 프리셋)은 그 feature의 `model`에 둔다                                                              |
 

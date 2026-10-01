@@ -1,6 +1,6 @@
 "use server";
 
-import { findLiveReviewAuthor, insertReviewReport } from "@roll-and-call/database/web";
+import { findLiveReviewAuthor, insertReviewReport } from "@roll-and-call/database/reviews";
 
 import { REPORT_DETAIL_MAX_LENGTH, REPORT_REASON } from "@/entities/review";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";

@@ -1,5 +1,5 @@
-import { loadForumReview, saveThreadId } from "@roll-and-call/database/review-forum";
-import { getServerById } from "@roll-and-call/database/server";
+import { loadForumReview, saveThreadId } from "@roll-and-call/database/reviews";
+import { getServerById } from "@roll-and-call/database/servers";
 import {
   createForumPost,
   deleteDiscordThread,

@@ -1,4 +1,4 @@
-import { GAME_STATUS } from "@roll-and-call/database/rules";
+import { GAME_STATUS } from "@roll-and-call/database/games/model";
 import { describe, expect, it } from "vitest";
 
 import { RECRUIT_METHOD } from "./recruit-method";

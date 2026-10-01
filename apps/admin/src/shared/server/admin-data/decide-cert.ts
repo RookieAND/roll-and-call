@@ -1,10 +1,10 @@
 import "server-only";
 import {
   decideCertApplication,
-  type Actor,
   type CertDecision,
   type CertDecisionResult,
-} from "@roll-and-call/database/admin";
+} from "@roll-and-call/database/certifications";
+import { type Actor } from "@roll-and-call/database/moderation";
 
 import { certBlockers } from "./cert-blockers";
 import { loadSnapshot } from "./snapshot";

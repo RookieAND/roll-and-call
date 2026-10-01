@@ -1,4 +1,4 @@
-import { listGameReviewThreadIds } from "@roll-and-call/database/review-forum";
+import { listGameReviewThreadIds } from "@roll-and-call/database/reviews";
 import { deleteDiscordThread } from "@roll-and-call/discord";
 
 // 구인을 지우면 후기 행이 cascade로 사라져 스레드 id를 잃는다. 지우기 전에 부른다.

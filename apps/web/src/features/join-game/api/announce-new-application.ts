@@ -1,5 +1,6 @@
 import "server-only";
-import { countParticipants, getUsername } from "@roll-and-call/database/web";
+import { countParticipants } from "@roll-and-call/database/games";
+import { getUsername } from "@roll-and-call/database/profiles";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { notifyGameJoined, type Game } from "@/shared/server";

@@ -1,6 +1,6 @@
 "use server";
 
-import { confirmGameSession, getGameConfirmedAt } from "@roll-and-call/database/web";
+import { confirmGameSession, getGameConfirmedAt } from "@roll-and-call/database/games";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";

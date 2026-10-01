@@ -1,4 +1,4 @@
-import { countsAsAttended } from "@roll-and-call/database/rules";
+import { countsAsAttended } from "@roll-and-call/database/badges/model";
 
 import { deriveSessionState, PARTICIPANT_STATUS, SESSION_STATE } from "@/entities/game";
 import type { MonthSessionRow } from "@/shared/server";

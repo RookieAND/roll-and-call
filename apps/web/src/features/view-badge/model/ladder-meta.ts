@@ -1,4 +1,4 @@
-import { BADGE_LADDER, type BadgeLadderKey } from "@roll-and-call/database/rules";
+import { BADGE_LADDER, type BadgeLadderKey } from "@roll-and-call/database/badges/model";
 
 export const LADDER_META: Record<BadgeLadderKey, { title: string; unit: string; verb: string }> = {
   [BADGE_LADDER.playerTotal]: { title: "누적 참여", unit: "회", verb: "참석" },

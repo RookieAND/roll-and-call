@@ -6,7 +6,7 @@ import {
   type BadgeFacts,
   type BadgeLadderKey,
   type MonthlyAppearance,
-} from "@roll-and-call/database/rules";
+} from "@roll-and-call/database/badges/model";
 
 import { monthLabel, previousMonthKey, stepLook } from "@/entities/badge";
 import { buildMonthlyDetail } from "@/features/view-badge";

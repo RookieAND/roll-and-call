@@ -1,6 +1,6 @@
 "use server";
 
-import { insertReview, updateReview } from "@roll-and-call/database/web";
+import { insertReview, updateReview } from "@roll-and-call/database/reviews";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 

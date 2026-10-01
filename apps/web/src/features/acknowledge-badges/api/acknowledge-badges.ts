@@ -1,6 +1,6 @@
 "use server";
 
-import { markBadgesNotified } from "@roll-and-call/database/web";
+import { markBadgesNotified } from "@roll-and-call/database/badges";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import { getCurrentServer, getCurrentUser } from "@/shared/server";

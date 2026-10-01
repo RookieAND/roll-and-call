@@ -1,4 +1,8 @@
-import { kstMonthKey, type BadgeRole, type MonthlyAppearance } from "@roll-and-call/database/rules";
+import {
+  kstMonthKey,
+  type BadgeRole,
+  type MonthlyAppearance,
+} from "@roll-and-call/database/badges/model";
 
 export function currentMonthStanding({
   appearances,

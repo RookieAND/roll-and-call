@@ -1,4 +1,4 @@
-import type { ForumReview } from "@roll-and-call/database/review-forum";
+import type { ForumReview } from "@roll-and-call/database/reviews";
 
 import { extensionOf } from "./extension-of";
 import { ruleTagName } from "./rule-tag-name";

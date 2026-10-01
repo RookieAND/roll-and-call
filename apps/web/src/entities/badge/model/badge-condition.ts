@@ -1,4 +1,8 @@
-import { BADGE_LADDER, type BadgeLadderKey, type BadgeStep } from "@roll-and-call/database/rules";
+import {
+  BADGE_LADDER,
+  type BadgeLadderKey,
+  type BadgeStep,
+} from "@roll-and-call/database/badges/model";
 
 // 상세 시트의 조건 문장. 문장마다 줄을 바꾸므로 그리는 쪽은 whitespace-pre-line을 준다.
 export function badgeCondition({

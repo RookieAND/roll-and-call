@@ -5,7 +5,7 @@ import type {
   Sanction,
   ShotKey,
   StaffRole,
-} from "@roll-and-call/database/admin";
+} from "@roll-and-call/database/moderation";
 
 import type { PostStatus } from "./post-status";
 
@@ -15,7 +15,7 @@ export type {
   Sanction,
   ShotKey,
   StaffRole,
-} from "@roll-and-call/database/admin";
+} from "@roll-and-call/database/moderation";
 
 export interface Staff {
   userId: string;

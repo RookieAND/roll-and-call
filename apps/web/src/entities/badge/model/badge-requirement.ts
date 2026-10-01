@@ -1,4 +1,8 @@
-import { BADGE_LADDER, type BadgeLadderKey, type BadgeStep } from "@roll-and-call/database/rules";
+import {
+  BADGE_LADDER,
+  type BadgeLadderKey,
+  type BadgeStep,
+} from "@roll-and-call/database/badges/model";
 
 export function badgeRequirement({
   ladder,

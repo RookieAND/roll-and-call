@@ -1,4 +1,4 @@
-import { BADGE_ROLE } from "@roll-and-call/database/rules";
+import { BADGE_ROLE } from "@roll-and-call/database/badges/model";
 import { Container, Text, VStack } from "@roll-and-call/ui";
 import { Lock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";

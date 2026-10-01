@@ -5,7 +5,7 @@ import {
   type GameSort,
   type GameStatusFilter,
   type GameTab,
-} from "@roll-and-call/database/rules";
+} from "@roll-and-call/database/games/model";
 
 export {
   GAME_SORT,
@@ -15,7 +15,7 @@ export {
   type GameStatusFilter,
   type GameTab,
   type GamesFilter,
-} from "@roll-and-call/database/rules";
+} from "@roll-and-call/database/games/model";
 
 export const GAME_SORTS = [
   { key: GAME_SORT.latest, label: "최신순" },

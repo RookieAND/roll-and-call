@@ -1,5 +1,5 @@
 import "server-only";
-import { getCurrentServer as loadCurrentServer } from "@roll-and-call/database/server";
+import { getCurrentServer as loadCurrentServer } from "@roll-and-call/database/servers";
 import { connection } from "next/server";
 import { cache } from "react";
 

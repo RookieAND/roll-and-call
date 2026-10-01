@@ -1,6 +1,6 @@
 import "server-only";
 import type { RulebookKind } from "@roll-and-call/database";
-import { RULEBOOK_KINDS, rulebookLabel } from "@roll-and-call/database/admin";
+import { RULEBOOK_KINDS, rulebookLabel } from "@roll-and-call/database/rulebooks";
 
 import { loadSnapshot } from "./snapshot";
 

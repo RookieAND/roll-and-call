@@ -1,6 +1,7 @@
 import "server-only";
 import type { Game } from "@roll-and-call/database";
-import { loadAdminTables, rulebookLabel, type AuditAction } from "@roll-and-call/database/admin";
+import { loadAdminTables, type AuditAction } from "@roll-and-call/database/moderation";
+import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { cache } from "react";
 
 import { getCurrentServer } from "../auth/get-current-server";

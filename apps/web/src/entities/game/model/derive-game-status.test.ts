@@ -1,4 +1,4 @@
-import { deriveGameStatus, GAME_STATUS } from "@roll-and-call/database/rules";
+import { deriveGameStatus, GAME_STATUS } from "@roll-and-call/database/games/model";
 import { describe, expect, it } from "vitest";
 
 const DAY = 86_400_000;

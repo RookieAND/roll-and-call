@@ -1,4 +1,4 @@
-import type { BadgeLook } from "@roll-and-call/database/rules";
+import type { BadgeLook } from "@roll-and-call/database/badges/model";
 
 import type { BadgeDetail } from "@/features/view-badge";
 

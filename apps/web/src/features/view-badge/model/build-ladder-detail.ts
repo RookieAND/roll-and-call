@@ -3,7 +3,7 @@ import {
   BADGE_LADDERS,
   type BadgeEvent,
   type BadgeLadderKey,
-} from "@roll-and-call/database/rules";
+} from "@roll-and-call/database/badges/model";
 
 import {
   BADGE_TONE,

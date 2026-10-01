@@ -1,5 +1,5 @@
 import "server-only";
-import { findCertFileUrlsInUse } from "@roll-and-call/database/web";
+import { findCertFileUrlsInUse } from "@roll-and-call/database/certifications";
 import { compact, uniq } from "es-toolkit";
 
 import { CERT_PHOTO_BUCKET, certPhotoPathOf } from "@/shared/lib";

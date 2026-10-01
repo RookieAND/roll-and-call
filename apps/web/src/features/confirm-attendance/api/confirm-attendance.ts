@@ -1,6 +1,6 @@
 "use server";
 
-import { saveAttendance, setAttendanceConfirmedAt } from "@roll-and-call/database/web";
+import { saveAttendance, setAttendanceConfirmedAt } from "@roll-and-call/database/games";
 import { after } from "next/server";
 
 import type { ActionResult } from "@/shared/api";

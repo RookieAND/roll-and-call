@@ -1,6 +1,6 @@
 "use server";
 
-import { removeOwnReview } from "@roll-and-call/database/web";
+import { removeOwnReview } from "@roll-and-call/database/reviews";
 import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";

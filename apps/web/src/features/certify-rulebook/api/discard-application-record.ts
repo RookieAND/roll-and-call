@@ -1,6 +1,6 @@
 "use server";
 
-import { discardRulebookRecord } from "@roll-and-call/database/web";
+import { discardRulebookRecord } from "@roll-and-call/database/certifications";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 

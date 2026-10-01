@@ -1,5 +1,6 @@
-import { PARTICIPANT_STATUS } from "@roll-and-call/database/rules";
-import { getGameForDrawNotice, type Server } from "@roll-and-call/database/web";
+import { type Server } from "@roll-and-call/database";
+import { getGameForDrawNotice } from "@roll-and-call/database/games";
+import { PARTICIPANT_STATUS } from "@roll-and-call/database/games/model";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { gameUrl } from "../game-url";

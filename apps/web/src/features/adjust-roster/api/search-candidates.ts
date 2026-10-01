@@ -1,6 +1,6 @@
 "use server";
 
-import { findGameGmId, searchGameCandidates } from "@roll-and-call/database/web";
+import { findGameGmId, searchGameCandidates } from "@roll-and-call/database/games";
 
 import { getCurrentServer, getCurrentUser } from "@/shared/server";
 

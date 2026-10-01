@@ -1,6 +1,6 @@
 "use server";
 
-import { saveMemberFeaturedBadges } from "@roll-and-call/database/web";
+import { saveMemberFeaturedBadges } from "@roll-and-call/database/badges";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 

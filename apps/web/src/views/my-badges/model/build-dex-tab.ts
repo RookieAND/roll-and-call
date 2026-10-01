@@ -7,7 +7,7 @@ import {
   type BadgeFacts,
   type BadgeRole,
   type MonthlyAppearance,
-} from "@roll-and-call/database/rules";
+} from "@roll-and-call/database/badges/model";
 
 import { badgeCounts } from "@/entities/badge";
 import type { BadgeRecord } from "@/shared/server";

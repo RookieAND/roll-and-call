@@ -1,4 +1,4 @@
-import { BADGE_ROLE } from "@roll-and-call/database/rules";
+import { BADGE_ROLE } from "@roll-and-call/database/badges/model";
 
 import { monthLabel, TIER_NAME } from "@/entities/badge";
 

@@ -5,7 +5,7 @@ import {
   findParticipantStatus,
   insertParticipant,
   setParticipantStatus,
-} from "@roll-and-call/database/web";
+} from "@roll-and-call/database/games";
 import { uniq } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";

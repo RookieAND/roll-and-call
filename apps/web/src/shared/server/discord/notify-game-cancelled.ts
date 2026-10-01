@@ -1,5 +1,6 @@
 import type { Game } from "@roll-and-call/database";
-import { getUsername, type Server } from "@roll-and-call/database/web";
+import { type Server } from "@roll-and-call/database";
+import { getUsername } from "@roll-and-call/database/profiles";
 import {
   sendDiscordMessage,
   editDiscordMessage,

@@ -1,6 +1,6 @@
 "use server";
 
-import { searchMembers } from "@roll-and-call/database/web";
+import { searchMembers } from "@roll-and-call/database/profiles";
 
 import { getCurrentServer, getCurrentUser } from "@/shared/server";
 

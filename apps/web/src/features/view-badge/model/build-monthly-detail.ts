@@ -3,7 +3,7 @@ import {
   BADGE_LADDERS,
   nextMonthStart,
   type BadgeLadderKey,
-} from "@roll-and-call/database/rules";
+} from "@roll-and-call/database/badges/model";
 
 import {
   BADGE_TONE,

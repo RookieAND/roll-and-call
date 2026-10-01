@@ -1,4 +1,4 @@
-import { ensureMembership } from "@roll-and-call/database/server";
+import { ensureMembership } from "@roll-and-call/database/servers";
 import { NextResponse } from "next/server";
 
 import { createSupabaseServerClient, getCurrentServer } from "@/shared/server";
