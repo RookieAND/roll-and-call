@@ -4,17 +4,17 @@ TRPG 세션 구인·예약 서비스. 구인글을 올리면 디스코드로 알
 
 ## 구성
 
-| 경로                    | 설명                                                |
-| ----------------------- | --------------------------------------------------- |
-| `apps/web`              | 사용자 앱 (Next.js App Router, FSD 구조)            |
-| `apps/admin`            | 운영진용 어드민 (데스크톱, 포트 3001)               |
-| `packages/database`     | Drizzle 스키마·마이그레이션, 공용 도메인 규칙       |
-| `packages/ui`           | 디자인 시스템 (`@roll-and-call/ui`)                 |
-| `packages/tiptap`       | 리치 텍스트 에디터·뷰어·문서 모델                   |
-| `packages/discord`      | Discord REST 클라이언트                             |
-| `packages/review-forum` | 공개 후기를 디스코드 포럼 글로 동기화               |
-| `functions/*`           | Supabase Edge Functions (세션 알림, 고아 파일 정리) |
-| `configs/*`             | 공용 TypeScript·oxlint 설정                         |
+| 경로                    | 설명                                                          |
+| ----------------------- | ------------------------------------------------------------- |
+| `apps/web`              | 사용자 앱 (Next.js App Router, FSD 구조)                      |
+| `apps/admin`            | 운영진용 어드민 (데스크톱, 포트 3001)                         |
+| `packages/database`     | Drizzle 스키마·마이그레이션, 서버 범위 쿼리, 공용 도메인 규칙 |
+| `packages/ui`           | 디자인 시스템 (`@roll-and-call/ui`)                           |
+| `packages/tiptap`       | 리치 텍스트 에디터·뷰어·문서 모델                             |
+| `packages/discord`      | Discord REST 클라이언트                                       |
+| `packages/review-forum` | 공개 후기를 디스코드 포럼 글로 동기화                         |
+| `functions/*`           | Supabase Edge Functions (세션 알림, 고아 파일 정리)           |
+| `configs/*`             | 공용 TypeScript·oxlint 설정                                   |
 
 스택: Next.js 16 · Supabase (Auth·Postgres·Storage·pg_cron) · Drizzle · Discord Bot(REST) · Turborepo · pnpm · Vercel
 
