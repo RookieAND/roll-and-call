@@ -1,4 +1,5 @@
 import { VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { LeaveGameButton } from "@/features/join-game";
 
@@ -13,7 +14,7 @@ interface WaitingActionsProps {
 }
 
 export function WaitingActions({ gameId, waitlistRank, isLottery }: WaitingActionsProps) {
-  const title = waitlistRank === null ? "대기로 접수됐습니다" : `현재 대기 ${waitlistRank}번입니다`;
+  const title = isNull(waitlistRank) ? "대기로 접수됐습니다" : `현재 대기 ${waitlistRank}번입니다`;
 
   return (
     <VStack gap="125">

@@ -1,5 +1,5 @@
 import { and, eq, like, or } from "drizzle-orm";
-import { groupBy } from "es-toolkit";
+import { groupBy, uniq } from "es-toolkit";
 
 import { db } from "../../../client";
 import { userBadges } from "../../../schema";
@@ -41,7 +41,7 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
   const open = stored.filter((badge) => !isFrozen(badge.badgeKey));
   const desiredByUser = groupBy(winners, (winner) => winner.userId);
   const storedByUser = groupBy(open, (badge) => badge.userId);
-  const userIds = new Set([...Object.keys(desiredByUser), ...Object.keys(storedByUser)]);
+  const userIds = uniq([...Object.keys(desiredByUser), ...Object.keys(storedByUser)]);
 
   for (const userId of userIds) {
     const writes = diffBadges({

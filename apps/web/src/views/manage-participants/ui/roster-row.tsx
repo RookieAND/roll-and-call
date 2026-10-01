@@ -1,4 +1,5 @@
 import { HStack, Text } from "@roll-and-call/ui";
+import { isNotNil } from "es-toolkit";
 import type { ReactNode } from "react";
 
 import { ProfileRow } from "@/entities/profile";
@@ -27,7 +28,7 @@ export function RosterRow({
         path={`/u/${member.userId}`}
         className="flex min-h-11 min-w-0 flex-1 items-center gap-125"
       >
-        {rank != null && (
+        {isNotNil(rank) && (
           <Text
             numeric
             typography="body4"

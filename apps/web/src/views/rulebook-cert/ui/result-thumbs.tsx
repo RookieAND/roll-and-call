@@ -2,6 +2,7 @@
 
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
+import { isNull } from "es-toolkit";
 import { useState } from "react";
 
 import { ImageLightbox } from "@/shared/ui";
@@ -23,7 +24,7 @@ interface ResultThumbsProps {
 
 export function ResultThumbs({ thumbs }: ResultThumbsProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const open = openIndex === null ? null : thumbs[openIndex];
+  const open = isNull(openIndex) ? null : thumbs[openIndex];
 
   return (
     <HStack gap="100">

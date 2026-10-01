@@ -5,7 +5,7 @@ import { formatDateTime } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import { ItemCard } from "@/shared/ui";
 
-const SPOILER = "스포일러";
+import { reportTone } from "../model/report-tone";
 
 interface ReportPanelProps {
   reports: PostDetail["reports"];
@@ -20,7 +20,7 @@ export function ReportPanel({ reports }: ReportPanelProps) {
   return (
     <VStack gap="125" className="p-150">
       {ordered.map((report) => {
-        const tone = report.resolved ? "gray" : report.category === SPOILER ? "warning" : "danger";
+        const tone = reportTone(report);
         return (
           <div key={report.id} className={report.resolved ? "opacity-60" : undefined}>
             <ItemCard

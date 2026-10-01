@@ -10,6 +10,7 @@ import {
   Text,
   VStack,
 } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import {
   ChevronLeft,
   ChevronRight,
@@ -56,7 +57,7 @@ export function PhotoViewer({
   const [photoState, setPhotoState] = useState<PhotoState>(PHOTO_STATE.loading);
   const [retryKey, setRetryKey] = useState(0);
   const total = photoUrls.length;
-  const current = index === null ? null : (photoUrls[index] ?? null);
+  const current = isNull(index) ? null : (photoUrls[index] ?? null);
   const loading = photoState === PHOTO_STATE.loading;
   const failed = photoState === PHOTO_STATE.failed;
   const loaded = photoState === PHOTO_STATE.loaded;
@@ -67,7 +68,7 @@ export function PhotoViewer({
     onIndexChange(next);
   };
   const move = (step: number) => {
-    if (index !== null) show((index + step + total) % total);
+    if (!isNull(index)) show((index + step + total) % total);
   };
   const close = () => {
     setZoom(1);
@@ -80,7 +81,7 @@ export function PhotoViewer({
   };
 
   return (
-    <Dialog.Root open={current !== null} onOpenChange={(open) => (open ? null : close())}>
+    <Dialog.Root open={!isNull(current)} onOpenChange={(open) => (open ? null : close())}>
       <Dialog.Popup
         data-theme="dark"
         onKeyDown={(event) => {
@@ -89,7 +90,7 @@ export function PhotoViewer({
         }}
         className="inset-0 top-0 left-0 h-dvh max-h-none w-full max-w-none translate-x-0 translate-y-0 gap-0 rounded-none border-0 bg-surface px-250 py-200"
       >
-        {current !== null && index !== null ? (
+        {!isNull(current) && !isNull(index) ? (
           <>
             <HStack align="center" gap="125">
               <Dialog.Title>{title}</Dialog.Title>

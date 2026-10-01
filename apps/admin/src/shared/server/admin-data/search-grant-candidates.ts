@@ -1,6 +1,8 @@
 import "server-only";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
+import { isUndefined } from "es-toolkit";
 
+import { grantCandidateState } from "./grant-candidate-state";
 import { loadSnapshot } from "./snapshot";
 
 const NINETY_DAYS = 90 * 86_400_000;
@@ -51,7 +53,10 @@ export async function searchGrantCandidates(
         (item) => item.userId === user.id && item.rulebook === label,
       );
       const pending = applications.find((item) => item.status === "pending");
-      const state: GrantCandidateState = certification ? "certified" : pending ? "pending" : "open";
+      const state = grantCandidateState({
+        certified: !isUndefined(certification),
+        pending: !isUndefined(pending),
+      });
       return {
         id: user.id,
         nickname: user.nickname,

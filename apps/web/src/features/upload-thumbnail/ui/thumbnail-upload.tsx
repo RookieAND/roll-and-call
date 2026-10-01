@@ -1,6 +1,7 @@
 "use client";
 
 import { Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useRef, useState } from "react";
 
 import { uploadThumbnail } from "../api/upload-thumbnail";
@@ -81,7 +82,7 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
         <ThumbnailDropzone
           uploading={uploading}
           dragging={dragging}
-          invalid={error !== null}
+          invalid={!isNull(error)}
           onPick={pick}
           onDraggingChange={setDragging}
           onDrop={(file) => void upload(file)}

@@ -1,4 +1,5 @@
 import { Button, Callout, Container, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { BookOpen, Plus } from "lucide-react";
 import Link from "next/link";
 
@@ -32,7 +33,7 @@ export async function MyRulebooksView() {
 
   const data = toMyRulebooks(await getRulebookRecords({ serverId: server.id, userId: user.id }));
   const home = myRulebooksHome(data, new Date());
-  const applyDisabled = home.suspension !== null;
+  const applyDisabled = !isNull(home.suspension);
 
   return (
     <>

@@ -1,4 +1,5 @@
 import { and, desc, eq, gt, isNull, ne, or, sql } from "drizzle-orm";
+import { compact, uniq } from "es-toolkit";
 
 import { db } from "../../../client";
 import {
@@ -134,9 +135,7 @@ export async function getRulebookRecords({
           ),
         ),
     ]);
-  const recentRulebookIds = [
-    ...new Set(recentGames.flatMap((game) => (game.rulebookId ? [game.rulebookId] : []))),
-  ];
+  const recentRulebookIds = uniq(compact(recentGames.map((game) => game.rulebookId)));
   return {
     catalog,
     enforcementDate,

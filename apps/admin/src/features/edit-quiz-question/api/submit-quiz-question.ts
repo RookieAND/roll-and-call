@@ -1,5 +1,6 @@
 "use server";
 
+import { compact, uniq } from "es-toolkit";
 import { revalidatePath } from "next/cache";
 
 import {
@@ -16,7 +17,7 @@ export async function submitQuizQuestion(
 ) {
   const staff = await requireStaff();
   const question = input.question.trim();
-  const answers = [...new Set(input.answers.map((answer) => answer.trim()).filter(Boolean))];
+  const answers = uniq(compact(input.answers.map((answer) => answer.trim())));
   if (!question || answers.length === 0) throw new Error("질문과 허용하는 답을 입력해 주세요");
   const server = await getCurrentServer();
   await saveQuizQuestion({

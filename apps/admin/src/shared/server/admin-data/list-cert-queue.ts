@@ -1,5 +1,6 @@
 import "server-only";
 import type { RulebookKind } from "@roll-and-call/database";
+import { isNull, uniq } from "es-toolkit";
 
 import { certBlockers } from "./cert-blockers";
 import { loadSnapshot } from "./snapshot";
@@ -56,7 +57,7 @@ export async function listCertQueue(filter: CertQueueFilter) {
         waitedDays: waitedDays(application.appliedAt),
         previousRejectionCount: application.previousRejections.length,
         activeGm: user.recentHostedCount > 0,
-        early: enforcementDate !== null && application.appliedAt < enforcementDate,
+        early: !isNull(enforcementDate) && application.appliedAt < enforcementDate,
       };
     });
   const rows = pending.filter(
@@ -70,6 +71,6 @@ export async function listCertQueue(filter: CertQueueFilter) {
   return {
     total: pending.length,
     rows,
-    rulebookOptions: [...new Set(pending.map((row) => row.rulebook))].toSorted(),
+    rulebookOptions: uniq(pending.map((row) => row.rulebook)).toSorted(),
   };
 }

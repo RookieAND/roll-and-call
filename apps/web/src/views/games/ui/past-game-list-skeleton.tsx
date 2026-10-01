@@ -1,10 +1,11 @@
 import { Card, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 export function PastGameListSkeleton() {
   return (
     <VStack className="gap-125">
       <Skeleton width={72} height={20} />
-      {Array.from({ length: 4 }).map((_, index) => (
+      {range(4).map((index) => (
         <Card.Root key={index} padding="sm" background="none">
           <HStack align="center" gap="150">
             <Skeleton width={56} height={56} rounded={400} />

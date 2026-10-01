@@ -1,4 +1,5 @@
 import { Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 import { AppBar } from "@/shared/ui";
 
@@ -18,7 +19,7 @@ export function UserProfileSkeleton() {
           <Skeleton width="75%" height={24} className="mt-175" />
           <div className="mt-175">
             <Grid cols={2} className="-mx-200 border-y border-gray-200">
-              {Array.from({ length: 2 }).map((_, index) => (
+              {range(2).map((index) => (
                 <VStack
                   key={index}
                   align="center"
@@ -43,7 +44,7 @@ export function UserProfileSkeleton() {
         <section className="p-200">
           <Skeleton width={40} height={17} className="mb-100" />
           <HStack gap="100">
-            {Array.from({ length: 3 }).map((_, index) => (
+            {range(3).map((index) => (
               <Skeleton key={index} width={44} height={44} rounded={500} />
             ))}
           </HStack>

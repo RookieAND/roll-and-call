@@ -1,6 +1,7 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import type { LucideIcon } from "lucide-react";
 
+import { deltaArrow } from "@/shared/lib";
 import type { WeeklySeries } from "@/shared/server";
 
 import { WeekChart } from "./week-chart";
@@ -14,7 +15,7 @@ interface WeekCardProps {
 
 export function WeekCard({ label, icon: Icon, unit, series }: WeekCardProps) {
   const { current, previous, delta, deltaPercent } = series;
-  const arrow = delta > 0 ? "▲" : delta < 0 ? "▼" : "–";
+  const arrow = deltaArrow(delta);
   const deltaForeground = delta < 0 ? "danger" : "normal";
   const percentText = `(${delta > 0 ? "+" : ""}${deltaPercent}%)`;
   return (

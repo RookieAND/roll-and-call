@@ -1,4 +1,5 @@
 import { and, desc, eq, inArray, isNull, like, sql } from "drizzle-orm";
+import { isNotNil } from "es-toolkit";
 
 import { db } from "../../../client";
 import { auditLog, games, profiles, reviewReports, sessionReviews } from "../../../schema";
@@ -73,8 +74,8 @@ export async function moderateReview({
       .select({ id: reviewReports.id })
       .from(reviewReports)
       .where(openReports);
-    const hidden = review.hiddenAt !== null;
-    const removed = review.removedAt !== null;
+    const hidden = isNotNil(review.hiddenAt);
+    const removed = isNotNil(review.removedAt);
     const stale =
       removed ||
       (moderation.action === "hide" && hidden) ||

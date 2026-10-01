@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import {
   countConfirmed,
   deriveSessionState,
@@ -48,7 +50,7 @@ export function deriveSessionFacts({
   // 추첨은 마감 뒤에 뽑는다. 확정자가 없어도 뽑기 전이면 무산이 아니라 GM이 뽑을 차례다.
   const drawPending =
     game.recruitMethod === RECRUIT_METHOD.lottery &&
-    game.drawnAt === null &&
+    isNull(game.drawnAt) &&
     line.deadlinePassed &&
     waitingCount > 0;
   const past =
@@ -61,7 +63,7 @@ export function deriveSessionFacts({
 
   const attendanceDue = isAttendanceDue({ game, confirmedCount, now });
   const viewerAbsent =
-    game.attendanceConfirmedAt !== null &&
+    !isNull(game.attendanceConfirmedAt) &&
     game.participants.some(
       (participant) => participant.userId === context.viewerId && participant.absent,
     );

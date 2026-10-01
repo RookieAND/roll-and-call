@@ -1,5 +1,6 @@
 "use client";
 
+import { isNull } from "es-toolkit";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { QuizQuestionDialog } from "@/features/edit-quiz-question";
@@ -15,7 +16,7 @@ export function QuizDialogSlot({ rulebookId, questions }: QuizDialogSlotProps) {
   const pathname = usePathname();
   const questionParam = useSearchParams().get("question");
   const question = questions.find((candidate) => candidate.id === questionParam) ?? null;
-  const open = questionParam === "new" || question !== null;
+  const open = questionParam === "new" || !isNull(question);
   return (
     <QuizQuestionDialog
       key={questionParam ?? "closed"}

@@ -1,4 +1,5 @@
 import { desc } from "drizzle-orm";
+import { isNull } from "es-toolkit";
 
 import { db } from "../../../client";
 import { participants } from "../../../schema";
@@ -31,7 +32,7 @@ export async function getJoinedGames({ serverId, userId }: { serverId: string; u
     ...game,
     participants: game.participants.map(({ absenceCancelledAt, ...participant }) => ({
       ...participant,
-      absent: participant.absent && absenceCancelledAt === null,
+      absent: participant.absent && isNull(absenceCancelledAt),
     })),
   }));
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Callout, Container, FloatingBar, Progress, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState } from "react";
 
 import { certApplyHref, type MyRulebook } from "@/entities/rulebook";
@@ -39,7 +40,7 @@ export function CertApplyForm({
   const [answer, setAnswer] = useState("");
   const [quizError, setQuizError] = useState<string | null>(null);
   const { pending, run } = useAction();
-  const retry = rejection !== null;
+  const retry = !isNull(rejection);
   const missing = draftMissing(draft);
   const totalSteps = quiz ? 3 : 2;
   const step = onQuiz ? 3 : 2;
@@ -146,7 +147,7 @@ export function CertApplyForm({
                 <Button
                   size="lg"
                   className="w-full"
-                  disabled={missing !== null || (onQuiz && !answer.trim())}
+                  disabled={!isNull(missing) || (onQuiz && !answer.trim())}
                   loading={pending}
                   onClick={submit}
                 >
@@ -156,7 +157,7 @@ export function CertApplyForm({
                 <Button
                   size="lg"
                   className="w-full"
-                  disabled={missing !== null}
+                  disabled={!isNull(missing)}
                   onClick={() => setOnQuiz(true)}
                 >
                   다음

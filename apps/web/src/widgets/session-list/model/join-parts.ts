@@ -1,3 +1,4 @@
+import { compact } from "es-toolkit";
 export function joinParts(...parts: (string | null | false)[]): string {
-  return parts.filter(Boolean).join(" · ");
+  return compact(parts).join(" · ");
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertDialog, Button } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 
 import { useServerPath } from "@/shared/lib";
@@ -19,7 +20,7 @@ export function ReviewBlockedDialog({ block, fallbackHref }: ReviewBlockedDialog
   const href = dialog?.toMyReviews ? toServerPath(MY_REVIEWS_HREF) : fallbackHref;
 
   return (
-    <AlertDialog.Root open={dialog !== null} onOpenChange={(open) => !open && router.push(href)}>
+    <AlertDialog.Root open={!isNull(dialog)} onOpenChange={(open) => !open && router.push(href)}>
       <AlertDialog.Popup>
         <AlertDialog.Header>
           <AlertDialog.Title>{dialog?.title}</AlertDialog.Title>

@@ -1,6 +1,7 @@
 import "server-only";
 import type { RulebookKind } from "@roll-and-call/database";
 import { RULEBOOK_KINDS, rulebookLabel } from "@roll-and-call/database/rulebooks";
+import { uniq } from "es-toolkit";
 
 import { loadSnapshot } from "./snapshot";
 
@@ -48,32 +49,28 @@ export async function listRulebooks({ query }: { query?: string } = {}) {
         RULEBOOK_KINDS.indexOf(a.kind) - RULEBOOK_KINDS.indexOf(b.kind) ||
         a.label.localeCompare(b.label, "ko"),
     );
-  const categories: RulebookCategory[] = [...new Set(rows.map((row) => row.category))].map(
-    (name) => ({
-      name,
-      bookCount: db.rulebooks.filter((rulebook) => rulebook.category === name).length,
-    }),
-  );
+  const categories: RulebookCategory[] = uniq(rows.map((row) => row.category)).map((name) => ({
+    name,
+    bookCount: db.rulebooks.filter((rulebook) => rulebook.category === name).length,
+  }));
   const keyword = query?.trim().toLowerCase();
   const matches = (row: RulebookRow) =>
     [row.label, row.category, ...row.aliases].some((text) => text.toLowerCase().includes(keyword!));
   // 숨기지 않은 책은 있는데 기본 룰북이 하나도 없는 판본. 사용자 앱은 이 판본의 구인을 누구나 열게 둔다.
   const visible = db.rulebooks.filter((rulebook) => !rulebook.hidden);
-  const editionsWithoutCore = [
-    ...new Set(
-      visible
-        .filter(
-          (book) =>
-            !visible.some(
-              (other) =>
-                other.kind === "core" &&
-                other.category === book.category &&
-                other.edition === book.edition,
-            ),
-        )
-        .map((book) => `${book.category} ${book.edition}`.trim()),
-    ),
-  ];
+  const editionsWithoutCore = uniq(
+    visible
+      .filter(
+        (book) =>
+          !visible.some(
+            (other) =>
+              other.kind === "core" &&
+              other.category === book.category &&
+              other.edition === book.edition,
+          ),
+      )
+      .map((book) => `${book.category} ${book.edition}`.trim()),
+  );
   return {
     total: rows.length,
     rows: keyword ? rows.filter(matches) : rows,

@@ -1,0 +1,4 @@
+{
+  "extends": ["./configs/oxlint-config/base.json"],
+  "ignorePatterns": [".design-sync/**"]
+}

@@ -1,4 +1,5 @@
 import { Card, Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 import { AppBar } from "@/shared/ui";
 
@@ -30,7 +31,7 @@ export function DrawResultSkeleton() {
             <VStack key={queue.key} gap="100">
               <Skeleton width={72} height={18} />
               <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
-                {Array.from({ length: queue.rows }).map((_, index) => (
+                {range(queue.rows).map((index) => (
                   <HStack
                     key={index}
                     align="center"

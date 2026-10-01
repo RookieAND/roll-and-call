@@ -1,5 +1,6 @@
 import { deriveGameStatus } from "@roll-and-call/database/games/model";
 import { Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
+import { compact } from "es-toolkit";
 
 import type { Game } from "@/shared/server";
 
@@ -45,7 +46,7 @@ export function GameCard({ game }: GameCardProps) {
         })
       : current;
 
-  const meta = [game.rule, game.playTime].filter(Boolean).join(" · ");
+  const meta = compact([game.rule, game.playTime]).join(" · ");
 
   return (
     <Card.Root

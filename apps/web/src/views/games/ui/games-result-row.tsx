@@ -1,4 +1,5 @@
 import { HStack, Skeleton, Text } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 
 import { GAME_TAB, type GamesFilter } from "@/shared/api";
 
@@ -13,7 +14,7 @@ export function GamesResultRow({ filter, count }: GamesResultRowProps) {
   const label = filter.q ? `검색 결과 ${count}건` : `${count}건`;
   return (
     <HStack align="center" justify="between" className="min-h-5">
-      {count === undefined ? (
+      {isUndefined(count) ? (
         <Skeleton width={48} height={18} />
       ) : (
         <Text typography="body4" foreground="muted">

@@ -1,13 +1,13 @@
 "use client";
 
 import { Dialog } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 
 import type { NoShowDetail } from "@/shared/server";
 
-import { CancelForm } from "./cancel-form";
-import { CancelledRecord } from "./cancelled-record";
+import { NoShowDialogContent } from "./no-show-dialog-content";
 
 interface CancelNoShowDialogProps {
   record: NoShowDetail | null;
@@ -32,21 +32,14 @@ export function CancelNoShowDialog({
   const recordConflict = record && conflict?.recordId === record.id ? conflict.detail : null;
 
   return (
-    <Dialog.Root open={record !== null} onOpenChange={(open) => open || close()}>
+    <Dialog.Root open={!isNull(record)} onOpenChange={(open) => open || close()}>
       <Dialog.Popup
         size="lg"
         className="max-w-[600px]"
         initialFocus={() => document.getElementById("no-show-cancel-reason")}
       >
-        {record?.cancellation && !recordConflict ? (
-          <CancelledRecord
-            gmNickname={record.gmNickname}
-            cancellation={record.cancellation}
-            summary={summary}
-          />
-        ) : record ? (
-          <CancelForm
-            key={record.id}
+        {record ? (
+          <NoShowDialogContent
             record={record}
             summary={summary}
             conflict={recordConflict}

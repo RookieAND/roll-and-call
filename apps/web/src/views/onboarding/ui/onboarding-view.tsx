@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, cn, Container, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { type PointerEvent, useEffect, useRef, useState } from "react";
 
@@ -29,7 +30,7 @@ export function OnboardingView({ doneHref }: OnboardingViewProps) {
   useEffect(markOnboardingSeen, []);
 
   const slide = ONBOARDING_SLIDES[index]!;
-  const welcome = slide.eyebrow === null;
+  const welcome = isNull(slide.eyebrow);
   const last = index === ONBOARDING_SLIDES.length - 1;
   // 남는 높이를 위아래로 나눠 갖는다. 내용이 더 길면 flex-1이 늘어나므로 위가 잘리지 않는다.
   const slideClass = cn(

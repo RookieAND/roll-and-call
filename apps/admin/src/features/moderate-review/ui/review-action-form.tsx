@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Callout, Dialog, HStack, Text, VStack, cn, toast } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { Check, Eye, RotateCcw, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -11,6 +12,7 @@ import type { ReviewDetail, ReviewModerationResult } from "@/shared/server";
 import { submitReviewModeration } from "../api/submit-review-moderation";
 import { ACTION_COPY } from "../model/action-copy";
 import { REASON_ACTIONS, REVIEW_ACTION, type ReviewAction } from "../model/review-action";
+import { reviewNextHref } from "../model/review-next-href";
 import { AuthorMessagePreview } from "./author-message-preview";
 import { ImpactLines } from "./impact-lines";
 import { ReportSummary } from "./report-summary";
@@ -65,8 +67,8 @@ export function ReviewActionForm({
   const reportCount = review.reports.length;
   const removing = action === REVIEW_ACTION.remove;
   const unhiding = action === REVIEW_ACTION.unhide;
-  const blocked = failure !== null;
-  const canConfirm = (!needsReason || reason !== null) && !pending && !blocked;
+  const blocked = !isNull(failure);
+  const canConfirm = (!needsReason || !isNull(reason)) && !pending && !blocked;
   const reasonLabel = reason ? REVIEW_REASON[reason] : null;
   const impactLines = IMPACT_LINES[action];
   const description =
@@ -79,11 +81,7 @@ export function ReviewActionForm({
   const confirmLabel = networkError ? "다시 시도" : copy.confirmLabel;
   const cancelLabel = blocked ? "닫기" : "취소";
   const confirmPalette = removing ? "danger" : "primary";
-  const nextHref = fromReports
-    ? review.nextReportedId
-      ? `/posts/reviews/${review.nextReportedId}?from=reports`
-      : "/posts/reviews"
-    : null;
+  const nextHref = reviewNextHref({ fromReports, nextReportedId: review.nextReportedId });
 
   const undoHide = async () => {
     const result = await submitReviewModeration(review.id, {

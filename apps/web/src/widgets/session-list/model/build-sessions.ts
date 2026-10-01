@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { PARTICIPANT_STATUS, SESSION_ROLE, type SessionRole } from "@/entities/game";
 
 import {
@@ -17,7 +19,7 @@ export function buildSessions({
   const now = context.now ?? new Date();
   // 세션이 시작됐는데 아직 대기라면 끝내 참여하지 못한 것이라 이력에 남기지 않는다.
   const missed = (game: SessionGame) =>
-    game.confirmedAt !== null &&
+    !isNull(game.confirmedAt) &&
     new Date(game.confirmedAt) <= now &&
     game.participants.some(
       (participant) =>

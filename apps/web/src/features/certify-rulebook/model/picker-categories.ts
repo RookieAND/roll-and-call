@@ -1,3 +1,5 @@
+import { uniq } from "es-toolkit";
+
 import { groupByCategory, RULEBOOK_KIND, type MyRulebook } from "@/entities/rulebook";
 
 import { filterRulebooks } from "./filter-rulebooks";
@@ -21,7 +23,7 @@ export function pickerCategories({ rulebooks, query }: { rulebooks: MyRulebook[]
       return {
         id: category.id,
         name: category.name,
-        aliases: [...new Set(aliases)].slice(0, MAX_ALIASES),
+        aliases: uniq(aliases).slice(0, MAX_ALIASES),
         meta: editions.join(" · "),
         editions: category.editions,
       };

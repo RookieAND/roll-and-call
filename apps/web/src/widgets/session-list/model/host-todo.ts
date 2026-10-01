@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { RECRUIT_METHOD } from "@/entities/game";
 import { formatDate } from "@/shared/lib";
 
@@ -42,7 +44,7 @@ export function hostTodo({
   }
 
   const openSeats = game.maxPlayers - confirmedCount;
-  const beforeDraw = game.recruitMethod === RECRUIT_METHOD.lottery && game.drawnAt === null;
+  const beforeDraw = game.recruitMethod === RECRUIT_METHOD.lottery && isNull(game.drawnAt);
   if (waitingCount === 0 || openSeats <= 0 || beforeDraw) return null;
 
   // 마감 전·시간 미정이면 아직 안 본 신청이고, 그 뒤에 남은 자리는 누군가 빠진 빈자리다.

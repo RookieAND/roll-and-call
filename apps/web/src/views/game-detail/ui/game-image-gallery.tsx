@@ -1,6 +1,7 @@
 "use client";
 
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState } from "react";
 
 import { ImageLightbox } from "@/shared/ui";
@@ -13,7 +14,7 @@ interface GameImageGalleryProps {
 
 export function GameImageGallery({ images }: GameImageGalleryProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const openUrl = openIndex === null ? null : images[openIndex];
+  const openUrl = isNull(openIndex) ? null : images[openIndex];
   const openLabel = `첨부 이미지 ${(openIndex ?? 0) + 1}`;
   const visible = images.length > GRID_SLOTS ? images.slice(0, GRID_SLOTS - 1) : images;
   const hiddenCount = images.length - visible.length;

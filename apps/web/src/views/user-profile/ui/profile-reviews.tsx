@@ -1,4 +1,5 @@
 import { Card, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { serverPath } from "@/shared/lib";
 import { getCurrentServer } from "@/shared/server";
@@ -18,7 +19,7 @@ export async function ProfileReviews({ userId, received, written }: ProfileRevie
     <VStack render={<section />} className="px-200 pt-200">
       <ProfileBlockLabel label="후기" />
       <Card.Root padding="none" radius={500} className="overflow-hidden">
-        {received !== null && (
+        {!isNull(received) && (
           <CountLinkRow
             label="진행한 세션 후기"
             count={received}

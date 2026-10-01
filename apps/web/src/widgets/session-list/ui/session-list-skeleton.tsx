@@ -1,4 +1,5 @@
 import { Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 interface SessionListSkeletonProps {
   count?: number;
@@ -8,7 +9,7 @@ interface SessionListSkeletonProps {
 export function SessionListSkeleton({ count = 3 }: SessionListSkeletonProps) {
   return (
     <VStack className="gap-125">
-      {Array.from({ length: count }).map((_, index) => (
+      {range(count).map((index) => (
         <Skeleton key={index} width="100%" height={118} rounded={600} />
       ))}
     </VStack>

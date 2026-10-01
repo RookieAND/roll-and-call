@@ -1,6 +1,7 @@
 "use client";
 
 import confetti from "canvas-confetti";
+import { range } from "es-toolkit";
 import { useEffect } from "react";
 
 const COLOR_COUNT = 6;
@@ -8,7 +9,7 @@ const COLOR_COUNT = 6;
 export function DrawConfetti() {
   useEffect(() => {
     const style = getComputedStyle(document.documentElement);
-    const colors = Array.from({ length: COLOR_COUNT }, (_, index) =>
+    const colors = range(COLOR_COUNT).map((index) =>
       style.getPropertyValue(`--color-confetti-${index + 1}`).trim(),
     );
     const shared = { colors, disableForReducedMotion: true, zIndex: 50 };

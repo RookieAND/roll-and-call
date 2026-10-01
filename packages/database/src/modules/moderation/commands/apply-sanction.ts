@@ -1,4 +1,5 @@
 import { and, eq, isNull, lte, sql } from "drizzle-orm";
+import { isNil } from "es-toolkit";
 
 import { db } from "../../../client";
 import { profiles, sanctions } from "../../../schema";
@@ -49,7 +50,7 @@ export async function applySanction({
         serverId,
         userId,
         reason: input.userReason,
-        until: input.days === null ? null : new Date(now.getTime() + input.days * DAY),
+        until: isNil(input.days) ? null : new Date(now.getTime() + input.days * DAY),
         createdBy: actor.id,
       })
       .onConflictDoNothing()
@@ -74,7 +75,7 @@ export async function applySanction({
       actor,
       entry: {
         action: "제재",
-        target: `${user.nickname} · ${input.days === null ? "무기한" : `${input.days}일`}`,
+        target: `${user.nickname} · ${isNil(input.days) ? "무기한" : `${input.days}일`}`,
         targetUserId: userId,
         reason: input.userReason,
         staffMemo: input.staffMemo || undefined,

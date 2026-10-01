@@ -1,6 +1,7 @@
 "use client";
 
 import { Select as BaseSelect } from "@base-ui-components/react/select";
+import { isUndefined } from "es-toolkit";
 import type { ReactNode } from "react";
 
 import { SelectItemsContext, type SelectOption } from "./select-items-context";
@@ -26,7 +27,7 @@ export function SelectRoot({
   disabled,
   children,
 }: SelectRootProps) {
-  const isControlled = value !== undefined;
+  const isControlled = !isUndefined(value);
   return (
     <SelectItemsContext.Provider value={items}>
       <BaseSelect.Root

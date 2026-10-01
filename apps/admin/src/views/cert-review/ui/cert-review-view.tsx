@@ -1,4 +1,5 @@
 import { Button, Callout } from "@roll-and-call/ui";
+import { compact } from "es-toolkit";
 import { Quote, Receipt } from "lucide-react";
 import Link from "next/link";
 
@@ -7,12 +8,11 @@ import { formatDateTime } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
 import { AdminHeader, ConflictNotice, ItemCard } from "@/shared/ui";
 
+import { processedConflictTitle } from "../model/processed-conflict-title";
 import { ApplicantCard } from "./applicant-card";
 import { EbookInputPanel } from "./ebook-input-panel";
 import { QuizPanel } from "./quiz-panel";
 import { ReapplyNotice } from "./reapply-notice";
-
-const DECISION_LABEL = { approved: "승인", rejected: "반려" } as const;
 
 interface CertReviewViewProps {
   review: CertReview;
@@ -23,7 +23,7 @@ interface CertReviewViewProps {
 export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProps) {
   const { applicant, previousRejections, processed, withdrawnAt, purchase } = review;
   const closed = Boolean(processed || withdrawnAt);
-  const purchaseLine = [purchase.orderNumber, purchase.orderDate].filter(Boolean).join(" · ");
+  const purchaseLine = compact([purchase.orderNumber, purchase.orderDate]).join(" · ");
   const ebook = review.format === "ebook";
   const photoUrls = ebook
     ? { order: purchase.captureUrl, receipt: purchase.receiptUrl }
@@ -33,11 +33,7 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
   const latestRejection = previousRejections.at(-1);
   const reapplied = Boolean(latestRejection);
   const nextHref = review.nextId ? `/cert/${review.nextId}` : "/cert";
-  const conflictTitle = processed
-    ? processed.by === viewer
-      ? `이미 ${DECISION_LABEL[processed.status]}한 신청입니다`
-      : `다른 운영진(${processed.by})이 이미 ${DECISION_LABEL[processed.status]}했습니다`
-    : "";
+  const conflictTitle = processedConflictTitle({ processed, viewer });
 
   return (
     <>

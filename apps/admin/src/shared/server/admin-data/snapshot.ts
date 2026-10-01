@@ -2,6 +2,7 @@ import "server-only";
 import type { Game } from "@roll-and-call/database";
 import { loadAdminTables, type AuditAction } from "@roll-and-call/database/moderation";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
+import { compact, isNull } from "es-toolkit";
 import { cache } from "react";
 
 import { getCurrentServer } from "../auth/get-current-server";
@@ -115,7 +116,7 @@ export const loadSnapshot = cache(async () => {
       rulebookId: game.rulebookId,
       gmId: game.gmId,
       startsAt: gameStartsAt(game),
-      timeFixed: game.confirmedAt !== null,
+      timeFixed: !isNull(game.confirmedAt),
       memberIds: roster.filter((row) => row.status === "confirmed").map((row) => row.userId),
       waitingIds: roster.filter((row) => row.status === "waiting").map((row) => row.userId),
       capacity: game.maxPlayers,
@@ -157,7 +158,7 @@ export const loadSnapshot = cache(async () => {
       userId: row.userId,
       sessionId: row.gameId,
       recordedAt: attendanceConfirmedAt.get(row.gameId)!,
-      cancelled: row.absenceCancelledAt !== null,
+      cancelled: !isNull(row.absenceCancelledAt),
       cancelledBy: row.absenceCancelledBy ? nicknameOf(row.absenceCancelledBy) : undefined,
       cancelledAt: row.absenceCancelledAt ?? undefined,
       cancelReason: row.absenceCancelReason ?? undefined,
@@ -178,7 +179,7 @@ export const loadSnapshot = cache(async () => {
     }));
 
   const certificationList: Certification[] = certificationRows
-    .filter((row) => row.revokedAt === null)
+    .filter((row) => isNull(row.revokedAt))
     .map((row) => ({
       userId: row.userId,
       rulebookId: row.rulebookId,
@@ -255,7 +256,7 @@ export const loadSnapshot = cache(async () => {
     kind: row.kind,
     category:
       categoryRows.find((category) => category.id === row.categoryId)?.name ?? row.categoryName,
-    note: [row.publisher && `출판사 ${row.publisher}`, row.note].filter(Boolean).join(" · "),
+    note: compact([row.publisher && `출판사 ${row.publisher}`, row.note]).join(" · "),
     requestedAt: row.createdAt,
     similarTo: similarRulebook(row.name, rulebookList),
     processed:
@@ -272,7 +273,7 @@ export const loadSnapshot = cache(async () => {
     id: row.id,
     sessionId: row.gameId,
     reportedAt: row.createdAt,
-    resolved: row.resolvedAt !== null,
+    resolved: !isNull(row.resolvedAt),
     reporterId: row.reporterId ?? undefined,
     category: row.category,
     detail: row.detail,
@@ -282,7 +283,7 @@ export const loadSnapshot = cache(async () => {
 
   const absentKeys = new Set(
     participantRows
-      .filter((row) => row.absent && row.absenceCancelledAt === null)
+      .filter((row) => row.absent && isNull(row.absenceCancelledAt))
       .map((row) => `${row.gameId}:${row.userId}`),
   );
   const reviewList: Review[] = reviewRows.map((row) => ({
@@ -309,7 +310,7 @@ export const loadSnapshot = cache(async () => {
     category: row.category,
     detail: row.detail,
     reportedAt: row.createdAt,
-    open: row.outcome === null,
+    open: isNull(row.outcome),
   }));
 
   const discordIds = new Map(profileRows.map((profile) => [profile.id, profile.discordId]));

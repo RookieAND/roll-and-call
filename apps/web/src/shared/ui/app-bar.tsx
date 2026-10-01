@@ -1,4 +1,5 @@
 import { cn, HStack, IconButton, Text } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import { ChevronLeft, X } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -31,7 +32,7 @@ export function AppBar({
   backIcon = "back",
   action,
 }: AppBarProps) {
-  const hasBack = back !== undefined || onBack !== undefined;
+  const hasBack = !isUndefined(back) || !isUndefined(onBack);
   const BackIcon = backIcon === "close" ? X : ChevronLeft;
   const backLabel = backIcon === "close" ? "닫기" : "뒤로";
   const titleElement = heading ? <h1 /> : <span />;

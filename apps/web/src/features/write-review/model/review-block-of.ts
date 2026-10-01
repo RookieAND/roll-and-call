@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import {
   canEditReview,
@@ -16,7 +18,7 @@ export function reviewBlockOf(
   if (!participant || participant.status !== PARTICIPANT_STATUS.confirmed) {
     return REVIEW_BLOCK.unavailable;
   }
-  const authorAbsent = participant.absent && participant.absenceCancelledAt === null;
+  const authorAbsent = participant.absent && isNull(participant.absenceCancelledAt);
 
   if (review) {
     const state = deriveReviewState({ ...review, authorAbsent }, now);

@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import {
   isDeadlinePassed,
   RECRUIT_METHOD,
@@ -35,14 +37,14 @@ export function summarizeRoster({
   const passed = isDeadlinePassed(endDate, now);
   const daysLeft = ddayKst(endDate, now);
   const isLottery = recruitMethod === RECRUIT_METHOD.lottery;
-  const beforeDraw = isLottery && drawnAt === null;
+  const beforeDraw = isLottery && isNull(drawnAt);
 
   return {
     isLottery,
     beforeDraw,
     awaitingApply: beforeDraw && rolled,
     // 1d100 도입 전에 뽑은 글은 굴린 값이 없어 결과 페이지가 없다.
-    hasDrawResult: drawnAt !== null && rolled,
+    hasDrawResult: !isNull(drawnAt) && rolled,
     recruitMethod,
     methodLabel: isLottery && drawnAt ? "추첨 완료" : recruitMethodLabel(recruitMethod),
     isFull: confirmed.length >= maxPlayers,

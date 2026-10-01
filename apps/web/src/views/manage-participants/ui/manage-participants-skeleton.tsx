@@ -1,4 +1,5 @@
 import { Card, Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 import { AppBar } from "@/shared/ui";
 
@@ -32,7 +33,7 @@ export function ManageParticipantsSkeleton() {
               <Skeleton width={40} height={21} />
             </HStack>
             <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
-              {Array.from({ length: ROSTER_ROW_COUNT }).map((_, index) => (
+              {range(ROSTER_ROW_COUNT).map((index) => (
                 <HStack
                   key={index}
                   align="center"

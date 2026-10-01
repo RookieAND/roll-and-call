@@ -12,6 +12,7 @@ import {
   TextInput,
   VStack,
 } from "@roll-and-call/ui";
+import { uniq } from "es-toolkit";
 import { ArrowRightLeft, Plus, Search } from "lucide-react";
 import { useState } from "react";
 
@@ -207,7 +208,7 @@ export function BookPicker({
       <RulebookRequestSheet
         open={requestOpen}
         onOpenChange={setRequestOpen}
-        categoryNames={[...new Set(rulebooks.map((rulebook) => rulebook.categoryName))]}
+        categoryNames={uniq(rulebooks.map((rulebook) => rulebook.categoryName))}
         pendingRequestNames={pendingRequestNames}
         initialName={query.trim()}
       />

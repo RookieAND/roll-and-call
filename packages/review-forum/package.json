@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@roll-and-call/database": "workspace:*",
-    "@roll-and-call/discord": "workspace:*"
+    "@roll-and-call/discord": "workspace:*",
+    "es-toolkit": "^1.52.0"
   },
   "devDependencies": {
     "@roll-and-call/typescript-config": "workspace:*",

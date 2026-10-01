@@ -1,5 +1,6 @@
 export { actionTone } from "./action-tone";
 export { conflictTitle } from "./conflict-title";
+export { deltaArrow } from "./delta-arrow";
 export { CERT_TABS } from "./cert-tabs";
 export { formatDate, STAFF_ROLE_LABEL } from "@roll-and-call/database/moderation/model";
 export { formatDateTime } from "./format-date-time";

@@ -1,4 +1,5 @@
 import { Container } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { countConfirmed, SCHEDULE_MODE, splitRoster } from "@/entities/game";
@@ -26,7 +27,7 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
   const { game } = data;
 
   const isGm = user?.id === game.gmId;
-  const applied = game.drawnAt !== null;
+  const applied = !isNull(game.drawnAt);
   const drawn = applied
     ? game.drawResults.map((result) => ({
         ...result,
@@ -34,7 +35,7 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
         joinedAt: game.drawnAt!,
       }))
     : game.participants;
-  const hasRolls = drawn.some((participant) => participant.drawRoll !== null);
+  const hasRolls = drawn.some((participant) => !isNull(participant.drawRoll));
   if (!hasRolls || (!applied && !isGm))
     redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
 
@@ -45,10 +46,10 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
   });
   const roster = splitRoster(game.participants);
   const mine = [...roster.confirmed, ...roster.waiting].find(
-    (participant) => participant.userId === user?.id && participant.drawRoll !== null,
+    (participant) => participant.userId === user?.id && !isNull(participant.drawRoll),
   );
   const needsAvailability =
-    game.scheduleMode === SCHEDULE_MODE.coordinate && game.confirmedAt === null;
+    game.scheduleMode === SCHEDULE_MODE.coordinate && isNull(game.confirmedAt);
 
   let content = <GmPendingDraw gameId={id} title={game.title} outcome={outcome} />;
   if (applied && mine && user) {

@@ -1,5 +1,8 @@
 import "server-only";
+import { isNull, isUndefined } from "es-toolkit";
+
 import { editionCertGroups } from "./edition-cert-groups";
+import { gmCertState } from "./gm-cert-state";
 import { isSanctioned } from "./is-sanctioned";
 import { loadSnapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
@@ -46,11 +49,10 @@ export async function getCertStatus() {
     .map((user) => {
       const certifiedIds = certifiedIdsOf(user.id);
       const application = pending.find((candidate) => candidate.userId === user.id);
-      const state: GmCertState = application
-        ? "pending"
-        : certifiedIds.size > 0
-          ? "certified"
-          : "unapplied";
+      const state = gmCertState({
+        applied: !isUndefined(application),
+        certifiedCount: certifiedIds.size,
+      });
       return {
         userId: user.id,
         nickname: user.nickname,
@@ -77,7 +79,7 @@ export async function getCertStatus() {
   const editionRows: EditionCertRow[] = groups
     .map((group) => {
       const inEdition = (rulebookId: string | null) =>
-        rulebookId !== null && group.bookIds.has(rulebookId);
+        !isNull(rulebookId) && group.bookIds.has(rulebookId);
       const certified = new Set(
         db.users.filter((user) => group.eligible(certifiedIdsOf(user.id))).map((user) => user.id),
       );

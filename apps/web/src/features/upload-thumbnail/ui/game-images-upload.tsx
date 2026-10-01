@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, cn, Grid, HStack, IconButton, Text, VStack } from "@roll-and-call/ui";
+import { isNull, range } from "es-toolkit";
 import { X } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -93,7 +94,7 @@ export function GameImagesUpload({ serverId, value, onChange, max }: GameImagesU
             onDragOver={(event) => event.preventDefault()}
             onDrop={(event) => {
               event.preventDefault();
-              if (dragIndex !== null) move(dragIndex, index);
+              if (!isNull(dragIndex)) move(dragIndex, index);
               setDragIndex(null);
             }}
             onDragEnd={() => setDragIndex(null)}
@@ -131,7 +132,7 @@ export function GameImagesUpload({ serverId, value, onChange, max }: GameImagesU
             + 추가
           </Button>
         )}
-        {Array.from({ length: Math.max(remaining - 1, 0) }, (_, index) => (
+        {range(Math.max(remaining - 1, 0)).map((index) => (
           <div
             key={index}
             aria-hidden

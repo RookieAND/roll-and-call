@@ -1,4 +1,5 @@
 import { Badge, Container, VStack } from "@roll-and-call/ui";
+import { uniq } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { aggregateAvailability } from "@/entities/availability";
@@ -44,7 +45,7 @@ export async function GameConfirmView({ id }: { id: string }) {
     redirect(serverPath({ slug: server.slug, path: `/games/${id}/schedule` }));
 
   const { names } = aggregateAvailability({ avails: availabilities, userId: null });
-  const respondedCount = new Set(Object.values(names).flat()).size;
+  const respondedCount = uniq(Object.values(names).flat()).length;
   const minutes = playMinutes(game.playMinutes);
   const playLabel = game.playTime ?? `${minutes / 60}시간`;
 

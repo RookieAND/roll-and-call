@@ -1,6 +1,7 @@
 "use client";
 
 import { Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState } from "react";
 
 import { formatDateTime, type DayColumn, type TimeRow } from "@/shared/lib";
@@ -32,7 +33,7 @@ export function Heatmap({
   gmName,
 }: HeatmapProps) {
   const confirmedIso = confirmedAt ? new Date(confirmedAt).toISOString() : null;
-  const interactive = confirmedIso === null;
+  const interactive = isNull(confirmedIso);
   const [picked, setPicked] = useState<string | null>(null);
 
   function renderCell(key: string) {

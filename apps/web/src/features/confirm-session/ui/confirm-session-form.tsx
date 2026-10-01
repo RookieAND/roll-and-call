@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Callout, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
-import { uniq } from "es-toolkit";
+import { isNull, uniq } from "es-toolkit";
 import { useState } from "react";
 
 import { rankWindows, windowMembers } from "@/entities/availability";
@@ -47,7 +47,7 @@ export function ConfirmSessionForm({
 }: ConfirmSessionFormProps) {
   const candidates = rankWindows({ names, slotCount, limit: CANDIDATE_LIMIT });
   const respondents = uniq(Object.values(names).flat());
-  const changing = currentIso !== null;
+  const changing = !isNull(currentIso);
 
   const [start, setStart] = useState(() => {
     const seed = currentIso ?? candidates[0]?.iso;

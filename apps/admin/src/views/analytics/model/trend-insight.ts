@@ -1,3 +1,5 @@
+import { sumBy } from "es-toolkit";
+
 import type { AnalyticsTrendWeek } from "@/shared/server";
 
 const scheduledCount = (week: AnalyticsTrendWeek) =>
@@ -6,8 +8,8 @@ const scheduledCount = (week: AnalyticsTrendWeek) =>
 export function trendInsight(trend: AnalyticsTrendWeek[], early: boolean) {
   const upcoming = trend.filter((week) => week.upcoming);
   if (early) {
-    const total = upcoming.reduce((sum, week) => sum + scheduledCount(week), 0);
-    const recruiting = upcoming.reduce((sum, week) => sum + week.recruiting, 0);
+    const total = sumBy(upcoming, scheduledCount);
+    const recruiting = sumBy(upcoming, (week) => week.recruiting);
     return `앞으로 ${upcoming.length}주 동안 ${total}건이 예정되어 있고, 그중 ${recruiting}건은 아직 모집 중입니다.`;
   }
   const nextWeek = upcoming[1];

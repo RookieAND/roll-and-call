@@ -1,4 +1,5 @@
 import { Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 export function MyPageSummarySkeleton() {
   return (
@@ -16,13 +17,13 @@ export function MyPageSummarySkeleton() {
           <Skeleton width={52} height={17} />
         </HStack>
         <Grid cols={3} gap="075">
-          {Array.from({ length: 3 }).map((_, index) => (
+          {range(3).map((index) => (
             <Skeleton key={index} width="100%" height={26} rounded="full" />
           ))}
         </Grid>
       </VStack>
       <Grid cols={2} className="-mx-200 border-y border-gray-200">
-        {Array.from({ length: 2 }).map((_, index) => (
+        {range(2).map((index) => (
           <VStack
             key={index}
             align="center"

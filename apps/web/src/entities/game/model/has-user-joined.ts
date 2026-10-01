@@ -1,3 +1,4 @@
+import { isNull } from "es-toolkit";
 export function hasUserJoined({
   participants,
   userId,
@@ -5,5 +6,5 @@ export function hasUserJoined({
   participants: { userId: string }[];
   userId: string | null;
 }): boolean {
-  return userId !== null && participants.some((participant) => participant.userId === userId);
+  return !isNull(userId) && participants.some((participant) => participant.userId === userId);
 }

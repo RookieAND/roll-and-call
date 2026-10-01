@@ -1,4 +1,6 @@
 import "server-only";
+import { mean } from "es-toolkit";
+
 import { POST_STATUS } from "./post-status";
 import { loadSnapshot } from "./snapshot";
 import { weekLabel } from "./week-label";
@@ -57,9 +59,7 @@ export async function getWeeklySummary(now: Date = new Date()): Promise<WeeklySu
       previous,
       delta: current - previous,
       deltaPercent: previous ? Math.round(((current - previous) / previous) * 100) : 0,
-      average: past.length
-        ? Math.round(past.reduce((sum, count) => sum + count, 0) / past.length)
-        : 0,
+      average: past.length ? Math.round(mean(past)) : 0,
     };
   };
   return {

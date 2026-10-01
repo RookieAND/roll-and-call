@@ -13,6 +13,7 @@ import {
   cn,
   toast,
 } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import { Search } from "lucide-react";
 import { useState, useTransition } from "react";
 
@@ -56,7 +57,7 @@ export function LinkRequestForm({ request, rulebooks, onDone }: LinkRequestFormP
       )
     : rulebooks;
   const selected = rulebooks.find((rulebook) => rulebook.id === selectedId);
-  const conflicted = conflict !== undefined;
+  const conflicted = !isUndefined(conflict);
   const canConfirm = Boolean(selected) && !pending && !conflicted;
   const requestedName = quoteWithParticle(request.name, withObjectParticle);
   const linkedName = selected ? quoteWithParticle(selected.label, withDirectionParticle) : "…";

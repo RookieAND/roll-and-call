@@ -2,6 +2,7 @@
 
 import { Dialog } from "@base-ui-components/react/dialog";
 import type { VariantProps } from "class-variance-authority";
+import { isFunction } from "es-toolkit";
 import { useEffect, useRef, type ComponentPropsWithRef } from "react";
 
 import { cn } from "../../lib/cn";
@@ -31,7 +32,7 @@ export function DialogPopup({ size = "md", className, children, ref, ...props }:
       <Dialog.Popup
         ref={(node) => {
           element.current = node;
-          if (typeof ref === "function") ref(node);
+          if (isFunction(ref)) ref(node);
           else if (ref) ref.current = node;
         }}
         data-slot="dialog-popup"

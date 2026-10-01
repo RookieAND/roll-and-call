@@ -1,9 +1,10 @@
 import { Card, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 export function GameListSkeleton() {
   return (
     <VStack className="gap-125">
-      {Array.from({ length: 3 }).map((_, index) => (
+      {range(3).map((index) => (
         <Card.Root
           key={index}
           radius={600}

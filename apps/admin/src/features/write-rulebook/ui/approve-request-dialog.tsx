@@ -1,6 +1,7 @@
 "use client";
 
 import { Dialog } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState } from "react";
 
 import type { RulebookRequestRow, RulebookRow } from "@/shared/server";
@@ -18,7 +19,7 @@ export function ApproveRequestDialog({ request, rulebooks, onClose }: ApproveReq
   const [shown, setShown] = useState(request);
   if (request && request.id !== shown?.id) setShown(request);
   return (
-    <Dialog.Root open={request !== null} onOpenChange={(open) => open || onClose()}>
+    <Dialog.Root open={!isNull(request)} onOpenChange={(open) => open || onClose()}>
       <Dialog.Popup size="lg" className="max-w-[640px]">
         {shown ? (
           <ApproveRequestForm

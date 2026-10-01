@@ -1,6 +1,7 @@
 "use server";
 
 import { saveMemberFeaturedBadges } from "@roll-and-call/database/badges";
+import { uniq } from "es-toolkit";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -17,7 +18,7 @@ export async function saveFeaturedBadges(keys: string[]): Promise<ActionResult> 
   const held = new Set(
     heldBadges(await getUserBadges(server.id, user.id)).map((badge) => badge.key),
   );
-  const featured = [...new Set(keys)].filter((key) => held.has(key));
+  const featured = uniq(keys).filter((key) => held.has(key));
   if (featured.length > FEATURED_BADGE_LIMIT || featured.length !== keys.length) {
     return { error: "고를 수 없는 뱃지가 섞여 있습니다. 다시 골라 주세요." };
   }

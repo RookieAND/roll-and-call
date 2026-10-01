@@ -1,4 +1,5 @@
 import { Container, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { deriveGameStatus, isGameGm, scheduleLine, splitRoster } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
@@ -68,7 +69,7 @@ export function GameDetail({ game, viewerId }: GameDetailProps) {
               waiting={waiting}
               maxPlayers={game.maxPlayers}
               recruitMethod={game.recruitMethod}
-              drawn={game.drawnAt !== null}
+              drawn={!isNull(game.drawnAt)}
               viewerId={viewerId}
             />
           </VStack>

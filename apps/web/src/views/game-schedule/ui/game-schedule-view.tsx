@@ -1,4 +1,5 @@
 import { Badge, Button, Container, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
@@ -84,7 +85,7 @@ export async function GameScheduleView({ id }: { id: string }) {
               confirmedAt={game.confirmedAt}
               involved={involved}
               isGm={isGm}
-              isSignedIn={viewerId !== null}
+              isSignedIn={!isNull(viewerId)}
               // GM도 가능 시간을 내므로 겹침 단계는 정원 + GM 기준으로 나눈다.
               capacity={game.maxPlayers + 1}
               gmName={game.gm?.username}

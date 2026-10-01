@@ -1,5 +1,7 @@
 import { randomInt } from "node:crypto";
 
+import { range } from "es-toolkit";
+
 export function rollDice({ count, sides }: { count: number; sides: number }) {
-  return Array.from({ length: count }, () => randomInt(1, sides + 1));
+  return range(count).map(() => randomInt(1, sides + 1));
 }

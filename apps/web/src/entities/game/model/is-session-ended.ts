@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { sessionEndsAt } from "./session-end";
 
 export function isSessionEnded(
@@ -5,5 +7,5 @@ export function isSessionEnded(
   now: Date = new Date(),
 ): boolean {
   const endsAt = sessionEndsAt(game);
-  return endsAt !== null && endsAt.getTime() <= now.getTime();
+  return !isNull(endsAt) && endsAt.getTime() <= now.getTime();
 }

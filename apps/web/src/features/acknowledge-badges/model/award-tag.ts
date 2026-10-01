@@ -1,11 +1,12 @@
 import { BADGE_ROLE } from "@roll-and-call/database/badges/model";
+import { isNull } from "es-toolkit";
 
 import { monthLabel, TIER_NAME } from "@/entities/badge";
 
 import type { HeldBadge } from "./held-badge";
 
 export function awardTag(badge: HeldBadge): string {
-  if (badge.monthKey !== null) {
+  if (!isNull(badge.monthKey)) {
     const rank = badge.role === BADGE_ROLE.gm ? "운영" : "참여";
     return `${monthLabel(badge.monthKey)} ${rank} 1위`;
   }

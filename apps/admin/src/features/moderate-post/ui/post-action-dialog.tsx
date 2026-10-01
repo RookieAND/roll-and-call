@@ -1,6 +1,7 @@
 "use client";
 
 import { Dialog } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -23,7 +24,7 @@ export function PostActionDialog({ post, action, closeHref }: PostActionDialogPr
   if (action && action !== shownAction) setShownAction(action);
   const close = () => router.replace(closeHref, { scroll: false });
   return (
-    <Dialog.Root open={action !== null} onOpenChange={(open) => open || close()}>
+    <Dialog.Root open={!isNull(action)} onOpenChange={(open) => open || close()}>
       <Dialog.Popup
         size="lg"
         className={shownAction ? ACTION_COPY[shownAction].widthClassName : undefined}

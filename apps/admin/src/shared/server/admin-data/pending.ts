@@ -1,4 +1,6 @@
 import "server-only";
+import { groupBy, minBy } from "es-toolkit";
+
 import { reportedReviews } from "./reported-reviews";
 import { loadSnapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
@@ -23,17 +25,12 @@ export async function getPendingItems(): Promise<PendingItem[]> {
       .filter((request) => !request.processed)
       .map((request) => request.requestedAt),
     // 신고 건수가 아니라 미처리 신고가 걸린 구인 수를 센다. 구인마다 가장 오래된 신고 시각을 쓴다.
-    report: [
-      ...db.reports
-        .filter((report) => !report.resolved)
-        .reduce((oldest, report) => {
-          const current = oldest.get(report.sessionId);
-          if (!current || report.reportedAt < current)
-            oldest.set(report.sessionId, report.reportedAt);
-          return oldest;
-        }, new Map<string, Date>())
-        .values(),
-    ],
+    report: Object.values(
+      groupBy(
+        db.reports.filter((report) => !report.resolved),
+        (report) => report.sessionId,
+      ),
+    ).map((reports) => minBy(reports, (report) => report.reportedAt.getTime())!.reportedAt),
     reviewReport: reportedReviews(db).map((row) => row.oldestReportedAt),
   };
   return PENDING_KINDS.map((kind) => ({

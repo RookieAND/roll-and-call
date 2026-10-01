@@ -2,6 +2,7 @@
 
 import { VStack } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
+import { uniq } from "es-toolkit";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -67,7 +68,7 @@ export function ScheduleBody({
   const weekDays = weeks[weekIndex] ?? days;
   const pager = <WeekPager weeks={weeks} index={weekIndex} onChange={setWeekIndex} />;
 
-  const respondentCount = new Set(Object.values(aggregate.names).flat()).size;
+  const respondentCount = uniq(Object.values(aggregate.names).flat()).length;
   const hasResponses = respondentCount > 0;
   const overlapProps = { days: weekDays, timeRows, aggregate, confirmedAt, capacity, gmName };
   const overlap = hasResponses ? (

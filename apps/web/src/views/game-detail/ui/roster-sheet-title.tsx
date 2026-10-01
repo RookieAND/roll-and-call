@@ -1,4 +1,5 @@
 import { HStack, Sheet, Text } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 
 interface RosterSheetTitleProps {
   title: string;
@@ -9,7 +10,7 @@ export function RosterSheetTitle({ title, count }: RosterSheetTitleProps) {
   return (
     <HStack align="baseline" gap="075" className="mb-150">
       <Sheet.Title className="mb-0">{title}</Sheet.Title>
-      {count !== undefined && (
+      {!isUndefined(count) && (
         <Text numeric typography="subtitle2" foreground="hint">
           {count}명
         </Text>

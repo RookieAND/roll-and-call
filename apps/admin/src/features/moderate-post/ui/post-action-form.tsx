@@ -12,6 +12,7 @@ import {
   cn,
   toast,
 } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import { ScrollText, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -58,7 +59,7 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
 
   const copy = ACTION_COPY[action];
   const FooterIcon = copy.footerIcon;
-  const conflicted = conflict !== undefined;
+  const conflicted = !isUndefined(conflict);
   const requiredField = REQUIRED_FIELD[action];
   const filled = { userReason: userReason.trim(), staffMemo: staffMemo.trim() };
   const canConfirm = (!requiredField || Boolean(filled[requiredField])) && !pending && !conflicted;

@@ -1,4 +1,5 @@
 import { Container } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { notFound } from "next/navigation";
 
 import { isSessionLocked, SCHEDULE_MODE, splitRoster } from "@/entities/game";
@@ -60,7 +61,7 @@ export async function ManageParticipantsView({ id }: { id: string }) {
         endDate: game.endDate,
         recruitMethod: game.recruitMethod,
         drawnAt: game.drawnAt,
-        rolled: game.participants.some((participant) => participant.drawRoll !== null),
+        rolled: game.participants.some((participant) => !isNull(participant.drawRoll)),
         isCoordinate,
       })}
       isCoordinate={isCoordinate}

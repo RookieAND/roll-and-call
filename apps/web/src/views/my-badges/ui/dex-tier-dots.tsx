@@ -1,4 +1,5 @@
 import { HStack, cn } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 import { BADGE_TONE, type BadgeTone } from "@/entities/badge";
 
@@ -23,7 +24,7 @@ interface DexTierDotsProps {
 export function DexTierDots({ tier, stepCount, tone }: DexTierDotsProps) {
   return (
     <HStack gap="025" role="img" aria-label={`${stepCount}단계 중 ${tier}단계`}>
-      {Array.from({ length: stepCount }, (_, index) => (
+      {range(stepCount).map((index) => (
         <span
           key={index}
           className={cn("size-1.5 rounded-full", index < tier ? DOT_CLASS[tone] : "bg-gray-200")}

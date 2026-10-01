@@ -1,4 +1,5 @@
 import { Container, Grid, Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 import { AppBar } from "@/shared/ui";
 
@@ -20,7 +21,7 @@ export function GameConfirmSkeleton() {
             <Skeleton width="100%" height={80} rounded={500} />
           </VStack>
           <VStack gap="100">
-            {Array.from({ length: CANDIDATE_COUNT }).map((_, index) => (
+            {range(CANDIDATE_COUNT).map((index) => (
               <Skeleton key={index} width="100%" height={72} rounded={600} />
             ))}
           </VStack>

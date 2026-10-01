@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Field, HStack, TextInput, VStack, toast } from "@roll-and-call/ui";
+import { isUndefined, uniq } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState, useTransition, type ReactNode } from "react";
 
@@ -46,7 +47,7 @@ export function RulebookEditForm({ rulebook, aside }: RulebookEditFormProps) {
   const dirty = (Object.keys(saved) as (keyof RulebookDraft)[]).some(
     (key) => saved[key] !== next[key],
   );
-  const categories = [...new Set(rulebook.allRulebooks.map((row) => row.category))];
+  const categories = uniq(rulebook.allRulebooks.map((row) => row.category));
   const certifiedCount = rulebook.certifiedGms.length;
   const kindDescription = `종류를 바꾸면 인증된 GM ${certifiedCount}명의 구인 자격도 함께 바뀝니다.`;
   const hasReason = Boolean(reason.trim());
@@ -83,7 +84,7 @@ export function RulebookEditForm({ rulebook, aside }: RulebookEditFormProps) {
     <VStack data-full-bleed className="min-h-0 flex-1">
       <div className="mx-auto grid w-full max-w-page flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-150 p-200">
         <VStack gap="150" className="min-w-0">
-          {conflict !== undefined ? (
+          {!isUndefined(conflict) ? (
             <ConflictNotice
               title={conflictTitle}
               description={conflictDescription}

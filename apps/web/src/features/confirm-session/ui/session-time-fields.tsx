@@ -1,13 +1,14 @@
 "use client";
 
 import { Field, HStack, Select } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 import { DAY_END_HOUR, DAY_START_HOUR, type DayColumn } from "@/shared/lib";
 
 import type { SessionStart } from "../model/session-start";
 
 // 30분 단위 "HH:MM". 값은 hour*60+minute 문자열로 들고 다닌다.
-const TIMES = Array.from({ length: (DAY_END_HOUR - DAY_START_HOUR) * 2 }, (_, index) => {
+const TIMES = range((DAY_END_HOUR - DAY_START_HOUR) * 2).map((index) => {
   const minutes = DAY_START_HOUR * 60 + index * 30;
   const label = `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
   return { value: String(minutes), label };

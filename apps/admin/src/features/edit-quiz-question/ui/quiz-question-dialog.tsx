@@ -13,6 +13,7 @@ import {
   VStack,
   toast,
 } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { X } from "lucide-react";
 import { useState, useTransition } from "react";
 
@@ -40,7 +41,7 @@ export function QuizQuestionDialog({
   const [answers, setAnswers] = useState(question?.answers ?? []);
   const [answerInput, setAnswerInput] = useState("");
   const [page, setPage] = useState(question?.page ?? "");
-  const editing = question !== null;
+  const editing = !isNull(question);
   const withPendingAnswer = addAnswer(answers, answerInput);
   const canSave = Boolean(text.trim()) && withPendingAnswer.length > 0 && !pending;
 

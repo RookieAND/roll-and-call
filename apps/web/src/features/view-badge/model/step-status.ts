@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { toKst } from "@/shared/lib";
 
 export function stepStatus({
@@ -14,6 +16,6 @@ export function stepStatus({
   unit: string;
 }) {
   if (earned) return earnedAt ? toKst(earnedAt).format("YY.MM.DD") : "받음";
-  if (count === null) return "–";
+  if (isNull(count)) return "–";
   return `${threshold - count}${unit} 남음`;
 }

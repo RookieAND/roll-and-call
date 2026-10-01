@@ -1,4 +1,5 @@
 import { Badge, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { ArrowRight } from "lucide-react";
 
 import { actionTone, formatDateTime, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
@@ -63,7 +64,7 @@ export function AuditEntryView({ entry }: AuditEntryViewProps) {
             <FactRows
               labelWidth={48}
               items={[
-                { label: "보관", value: daysLeft === null ? "계속 보관" : `${daysLeft}일 남음` },
+                { label: "보관", value: isNull(daysLeft) ? "계속 보관" : `${daysLeft}일 남음` },
               ]}
             />
             <FactRows labelWidth={48} items={[{ label: "대상", value: entry.targetName }]} />

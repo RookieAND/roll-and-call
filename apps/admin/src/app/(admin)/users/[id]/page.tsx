@@ -1,3 +1,4 @@
+import { isString } from "es-toolkit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -21,7 +22,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
       user={user}
       tab={TABS.find((candidate) => candidate === tab) ?? USER_DETAIL_TAB.activity}
       role={ROLES.find((candidate) => candidate === role) ?? ACTIVITY_ROLE.all}
-      page={typeof page === "string" ? page : undefined}
+      page={isString(page) ? page : undefined}
     />
   );
 }

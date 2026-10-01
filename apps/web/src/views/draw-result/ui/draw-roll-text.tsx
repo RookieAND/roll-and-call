@@ -1,4 +1,5 @@
 import { Text } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { DRAW_ROW_VARIANT, type DrawRowVariant } from "../model/draw-row-variant";
 import { toRollGrade } from "../model/roll-grade";
@@ -13,7 +14,7 @@ interface DrawRollTextProps {
 }
 
 export function DrawRollText({ roll, variant, isMe }: DrawRollTextProps) {
-  if (roll === null) {
+  if (isNull(roll)) {
     return (
       <Text typography="body4" foreground="hint">
         직접 확정

@@ -1,4 +1,4 @@
-import { sum } from "es-toolkit";
+import { isUndefined, sum } from "es-toolkit";
 
 import { rollDice } from "./roll-dice";
 
@@ -17,7 +17,7 @@ export function rollDiceNotation(notation: string) {
   for (const [, sign, diceCount, diceSides, constant] of expression.matchAll(TERM_PATTERN)) {
     let value = Number(constant);
     let text = constant;
-    if (constant === undefined) {
+    if (isUndefined(constant)) {
       const count = diceCount === "" ? 1 : Number(diceCount);
       const sides = Number(diceSides);
       if (count < 1 || count > MAX_DICE_COUNT || sides < 1 || sides > MAX_DICE_SIDES) return null;

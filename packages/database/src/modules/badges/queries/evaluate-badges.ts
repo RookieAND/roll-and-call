@@ -1,4 +1,5 @@
 import { and, eq } from "drizzle-orm";
+import { uniq } from "es-toolkit";
 
 import { db } from "../../../client";
 import { userBadges } from "../../../schema";
@@ -47,6 +48,6 @@ export async function evaluateBadges({
   userIds: string[];
   now?: Date;
 }) {
-  for (const userId of new Set(userIds)) await evaluateUser({ serverId, userId, now });
+  for (const userId of uniq(userIds)) await evaluateUser({ serverId, userId, now });
   await syncMonthlyBadges({ serverId, now });
 }

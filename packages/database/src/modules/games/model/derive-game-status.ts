@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { GAME_STATUS, type GameStatus } from "./game-status";
 
 // confirmed는 정원 충족이지 세션 시간 확정(confirmedAt)이 아니다. 조율형은 일정을 확정하면 정원·기한과 상관없이 신청을 막아(isSessionLocked) scheduled가 가장 앞선다.
@@ -17,7 +19,7 @@ export function deriveGameStatus({
   scheduleMode: "fixed" | "coordinate";
   confirmedAt: Date | string | null;
 }): GameStatus {
-  if (scheduleMode === "coordinate" && confirmedAt !== null) return GAME_STATUS.scheduled;
+  if (scheduleMode === "coordinate" && !isNull(confirmedAt)) return GAME_STATUS.scheduled;
   const expired = new Date(endDate).getTime() < Date.now();
   if (expired) return GAME_STATUS.closed;
   const full = participantCount >= maxPlayers;

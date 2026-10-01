@@ -1,4 +1,5 @@
 import { Callout, HStack, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { Hourglass, Search } from "lucide-react";
 
 import { POST_ACTION, PostActionDialog, type PostAction } from "@/features/moderate-post";
@@ -47,12 +48,13 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
   const query = { tab: tab ? currentTab : undefined, page };
   const pagedMembers = paginate(post.members, page);
   const pagedWaitlist = paginate(post.waitlist, page);
-  const pagedTab =
-    currentTab === POST_DETAIL_TAB.members
-      ? { paged: pagedMembers, total: post.members.length }
-      : currentTab === POST_DETAIL_TAB.waitlist
-        ? { paged: pagedWaitlist, total: post.waitlist.length }
-        : null;
+  const pagedTabs: Partial<
+    Record<PostDetailTab, { paged: { page: number; totalPages: number }; total: number }>
+  > = {
+    [POST_DETAIL_TAB.members]: { paged: pagedMembers, total: post.members.length },
+    [POST_DETAIL_TAB.waitlist]: { paged: pagedWaitlist, total: post.waitlist.length },
+  };
+  const pagedTab = pagedTabs[currentTab] ?? null;
   const pager = pagedTab ? (
     <ListPager
       page={pagedTab.paged.page}
@@ -90,7 +92,7 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
               </Callout.Description>
             </Callout.Root>
           ) : null}
-          {attendanceWaitDays !== null && attendanceWaitDays > 0 ? (
+          {!isNull(attendanceWaitDays) && attendanceWaitDays > 0 ? (
             <Callout.Root colorPalette="warning" size="sm">
               <Callout.Icon>
                 <Hourglass size={14} />

@@ -1,5 +1,6 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
+import { isUndefined } from "es-toolkit";
 
 import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
@@ -37,7 +38,7 @@ export function Grid({ className, style, cols, gap, render, ref, ...props }: Gri
       "data-slot": "grid",
       className: cn(
         grid({ cols }),
-        gap !== undefined && gapMap[gap],
+        !isUndefined(gap) && gapMap[gap],
         resolveStateProp({ prop: className, state }),
       ),
       style: resolveStateProp({ prop: style, state }),

@@ -1,3 +1,4 @@
+import { isNull } from "es-toolkit";
 import { NextResponse } from "next/server";
 
 import { buildInteractionResponse } from "./_lib/build-interaction-response";
@@ -6,7 +7,7 @@ import { verifyDiscordRequest } from "./_lib/verify-discord-request";
 
 export async function POST(request: Request) {
   const body = await verifyDiscordRequest(request);
-  if (body === null) {
+  if (isNull(body)) {
     return NextResponse.json({ error: "invalid request signature" }, { status: 401 });
   }
 

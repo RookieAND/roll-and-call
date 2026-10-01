@@ -1,4 +1,5 @@
 import { Badge, HStack, Text } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import type { ReactNode } from "react";
 
 interface RosterGroupHeaderProps {
@@ -17,7 +18,7 @@ export function RosterGroupHeader({ label, count, capacity, action }: RosterGrou
       <Text numeric typography="heading2">
         {count}명
       </Text>
-      {capacity !== undefined && <Badge className="tabular-nums">정원 {capacity}명</Badge>}
+      {!isUndefined(capacity) && <Badge className="tabular-nums">정원 {capacity}명</Badge>}
       <span className="flex-1" />
       {action}
     </HStack>

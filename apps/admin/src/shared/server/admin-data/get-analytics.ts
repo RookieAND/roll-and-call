@@ -1,4 +1,6 @@
 import "server-only";
+import { sumBy, uniq } from "es-toolkit";
+
 import { percent } from "./percent";
 import { POST_STATUS } from "./post-status";
 import { loadSnapshot } from "./snapshot";
@@ -101,13 +103,13 @@ export async function getAnalytics({
 
   const validNoShows = db.noShows.filter((noShow) => !noShow.cancelled);
   const metricsOf = (sessions: Session[]) => {
-    const seats = sessions.reduce((sum, session) => sum + session.memberIds.length, 0);
+    const seats = sumBy(sessions, (session) => session.memberIds.length);
     const ids = new Set(sessions.map((session) => session.id));
     const absent = validNoShows.filter((noShow) => ids.has(noShow.sessionId)).length;
     return {
       finishedSessions: sessions.length,
-      participants: new Set(sessions.flatMap((session) => session.memberIds)).size,
-      hostingGms: new Set(sessions.map((session) => session.gmId)).size,
+      participants: uniq(sessions.flatMap((session) => session.memberIds)).length,
+      hostingGms: uniq(sessions.map((session) => session.gmId)).length,
       noShowRate: seats ? Math.round((absent / seats) * 1000) / 10 : null,
     };
   };
@@ -160,12 +162,12 @@ export async function getAnalytics({
         return {
           label: weekLabel(new Date(from)),
           total: members.length,
-          first: new Set(
+          first: uniq(
             members.filter((userId) => {
               const at = firstPlayed.get(userId)!;
               return at >= from && at < from + WEEK;
             }),
-          ).size,
+          ).length,
         };
       });
 
@@ -184,10 +186,9 @@ export async function getAnalytics({
           filled: filled.length,
           averageDays: filled.length
             ? Math.round(
-                (filled.reduce(
-                  (sum, session) =>
-                    sum + (session.filledAt!.getTime() - session.createdAt!.getTime()),
-                  0,
+                (sumBy(
+                  filled,
+                  (session) => session.filledAt!.getTime() - session.createdAt!.getTime(),
                 ) /
                   filled.length /
                   DAY) *
@@ -214,7 +215,7 @@ export async function getAnalytics({
     db.users.find((user) => user.id === userId)?.nickname ?? "알 수 없음";
   const topShareOf = (rows: { count: number }[], total: number) =>
     percent(
-      rows.slice(0, TOP_SHARE_COUNT).reduce((sum, row) => sum + row.count, 0),
+      sumBy(rows.slice(0, TOP_SHARE_COUNT), (row) => row.count),
       total,
     );
   const others = ranked.slice(TOP_GMS);
@@ -259,7 +260,7 @@ export async function getAnalytics({
           .map((row) => ({ nickname: nicknameOf(row.name), count: row.count })),
     otherGms: !sections.gms
       ? { count: 0, sessions: 0 }
-      : { count: others.length, sessions: others.reduce((sum, row) => sum + row.count, 0) },
+      : { count: others.length, sessions: sumBy(others, (row) => row.count) },
     previousTopShare: inPrevious.length
       ? topShareOf(gmCounts(inPrevious), inPrevious.length)
       : null,

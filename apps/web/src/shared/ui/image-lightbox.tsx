@@ -2,6 +2,7 @@
 
 import { Dialog } from "@base-ui-components/react/dialog";
 import { IconButton } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { X } from "lucide-react";
 
 interface ImageLightboxProps {
@@ -12,7 +13,7 @@ interface ImageLightboxProps {
 
 export function ImageLightbox({ url, label, onClose }: ImageLightboxProps) {
   return (
-    <Dialog.Root open={url !== null} onOpenChange={(open) => !open && onClose()}>
+    <Dialog.Root open={!isNull(url)} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-(--rc-z-overlay) bg-dim" />
         <Dialog.Popup className="fixed inset-0 z-(--rc-z-dialog) flex items-center justify-center p-200 outline-none">

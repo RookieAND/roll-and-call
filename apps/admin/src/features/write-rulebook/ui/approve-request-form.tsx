@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Dialog, Field, Text, TextInput, VStack, cn, toast } from "@roll-and-call/ui";
+import { isUndefined, uniq } from "es-toolkit";
 import { useState, useTransition } from "react";
 
 import {
@@ -44,9 +45,9 @@ export function ApproveRequestForm({ request, rulebooks, onDone }: ApproveReques
   const [duplicate, setDuplicate] = useState(false);
   const [conflict, setConflict] = useState<Conflict | undefined>(undefined);
 
-  const categories = [...new Set(rulebooks.map((rulebook) => rulebook.category))];
+  const categories = uniq(rulebooks.map((rulebook) => rulebook.category));
   const category = draftCategory(draft, rulebooks);
-  const conflicted = conflict !== undefined;
+  const conflicted = !isUndefined(conflict);
   const nameError = duplicate ? "이미 등록된 룰북입니다" : undefined;
   const help =
     !category.exists && category.name === request.bookName

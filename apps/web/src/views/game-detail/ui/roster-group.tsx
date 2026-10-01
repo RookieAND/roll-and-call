@@ -1,4 +1,5 @@
 import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import type { ReactNode } from "react";
 
 interface RosterGroupProps {
@@ -15,7 +16,7 @@ export function RosterGroup({ label, count, children }: RosterGroupProps) {
           <Text typography="body4" weight="bold" foreground="muted">
             {label}
           </Text>
-          {count !== undefined && (
+          {!isUndefined(count) && (
             <Text numeric typography="body4" foreground="hint">
               {count}명
             </Text>

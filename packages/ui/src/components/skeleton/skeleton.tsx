@@ -1,5 +1,6 @@
 import { useRender } from "@base-ui-components/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
+import { isNumber } from "es-toolkit";
 
 import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
@@ -36,7 +37,7 @@ export interface SkeletonProps extends StateProps<SkeletonState>, SkeletonState 
   height?: Size;
 }
 
-const length = (value: Size | undefined) => (typeof value === "number" ? `${value}px` : value);
+const length = (value: Size | undefined) => (isNumber(value) ? `${value}px` : value);
 
 export function Skeleton({
   width,

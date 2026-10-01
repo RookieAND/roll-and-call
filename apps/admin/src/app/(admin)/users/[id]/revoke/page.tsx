@@ -1,3 +1,4 @@
+import { isString } from "es-toolkit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -18,10 +19,5 @@ export default async function CertRevokePage({
   const [{ id }, { rulebook }] = await Promise.all([params, searchParams, requireStaff()]);
   const user = await getUserDetail(id);
   if (!user) notFound();
-  return (
-    <CertRevokeView
-      user={user}
-      initialRulebook={typeof rulebook === "string" ? rulebook : undefined}
-    />
-  );
+  return <CertRevokeView user={user} initialRulebook={isString(rulebook) ? rulebook : undefined} />;
 }

@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { absenceExpiresAt } from "@/entities/game";
 
 import type { SessionGame } from "./session-card-model";
@@ -16,8 +18,8 @@ export function recentAbsences({
   return joined
     .filter(
       (game) =>
-        game.attendanceConfirmedAt !== null &&
-        game.confirmedAt !== null &&
+        !isNull(game.attendanceConfirmedAt) &&
+        !isNull(game.confirmedAt) &&
         game.participants.some(
           (participant) => participant.userId === userId && participant.absent,
         ),

@@ -1,6 +1,7 @@
 "use client";
 
 import { Dialog } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -25,7 +26,7 @@ export function RequestDialog({ opened, rulebooks, closeHref }: RequestDialogPro
   if (opened && openedKey !== formKey) setShown(opened);
   const close = () => router.replace(closeHref, { scroll: false });
   return (
-    <Dialog.Root open={opened !== null} onOpenChange={(open) => open || close()}>
+    <Dialog.Root open={!isNull(opened)} onOpenChange={(open) => open || close()}>
       <Dialog.Popup size="lg" className="max-w-[560px]">
         {shown?.action === REQUEST_ACTION.link ? (
           <LinkRequestForm

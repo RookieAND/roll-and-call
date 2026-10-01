@@ -4,6 +4,7 @@ import {
   type BadgeEvent,
   type BadgeLadderKey,
 } from "@roll-and-call/database/badges/model";
+import { isNull } from "es-toolkit";
 
 import {
   BADGE_TONE,
@@ -79,7 +80,7 @@ export function buildLadderDetail({
           }
         : null,
     progress:
-      !earned && count !== null
+      !earned && !isNull(count)
         ? {
             label: `${step.threshold - count}${meta.unit} 남았습니다`,
             countLabel: `${count} / ${step.threshold}`,

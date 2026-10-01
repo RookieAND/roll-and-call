@@ -3,6 +3,7 @@
 import { cn, IconButton, TextInput } from "@roll-and-call/ui";
 import type { Editor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
+import { isNull } from "es-toolkit";
 import { Bold, Check, EyeOff, Italic, Link2, List, ListOrdered } from "lucide-react";
 import { useState } from "react";
 
@@ -67,10 +68,10 @@ export function RichTextMenu({ editor }: RichTextMenuProps) {
   return (
     <BubbleMenu
       editor={editor}
-      shouldShow={({ editor }) => linkDraft !== null || !editor.state.selection.empty}
+      shouldShow={({ editor }) => !isNull(linkDraft) || !editor.state.selection.empty}
       className="flex gap-025 rounded-300 border border-gray-200 bg-surface p-050 shadow-md"
     >
-      {linkDraft === null ? (
+      {isNull(linkDraft) ? (
         items.map(({ name, label, Icon, run }) => (
           <IconButton
             key={name}

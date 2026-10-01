@@ -1,5 +1,6 @@
 import { deriveGameStatus } from "@roll-and-call/database/games/model";
 import { Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { compact } from "es-toolkit";
 
 import { formatDate } from "@/shared/lib";
 import type { Game } from "@/shared/server";
@@ -30,7 +31,7 @@ export function PastGameCard({ game }: PastGameCardProps) {
   const when = game.confirmedAt
     ? `${formatDate(game.confirmedAt)} 세션 · ${count}명`
     : `${formatDate(game.endDate)} 마감`;
-  const meta = [game.rule, when].filter(Boolean).join(" · ");
+  const meta = compact([game.rule, when]).join(" · ");
   const thumbnailUrl = game.thumbnailSpoiler ? null : game.thumbnailUrl;
 
   return (

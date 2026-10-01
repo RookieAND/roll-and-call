@@ -1,3 +1,4 @@
+import { isString } from "es-toolkit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -26,13 +27,13 @@ export default async function RulebookDetailPage({
         candidate === tab && (candidate !== RULEBOOK_DETAIL_TAB.quiz || rulebook.certRequired),
     ) ?? RULEBOOK_DETAIL_TAB.info;
   const grantCandidates =
-    action === "grant" && typeof q === "string" ? await searchGrantCandidates(id, q) : [];
+    action === "grant" && isString(q) ? await searchGrantCandidates(id, q) : [];
   return (
     <RulebookDetailView
       rulebook={rulebook}
       tab={detailTab}
       grantCandidates={grantCandidates}
-      page={typeof page === "string" ? page : undefined}
+      page={isString(page) ? page : undefined}
     />
   );
 }

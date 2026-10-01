@@ -1,4 +1,5 @@
 import { Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 import { AppBar } from "@/shared/ui";
 
@@ -22,7 +23,7 @@ export function GameAttendanceSkeleton() {
           <Skeleton width="100%" height={48} rounded={500} />
           <Skeleton width="100%" height={64} rounded={500} />
           <VStack gap="100">
-            {Array.from({ length: ROW_COUNT }).map((_, index) => (
+            {range(ROW_COUNT).map((index) => (
               <HStack key={index} align="center" gap="125" className="min-h-16">
                 <Skeleton width={36} height={36} rounded="full" />
                 <VStack gap="050" className="flex-1">

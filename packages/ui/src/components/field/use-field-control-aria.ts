@@ -1,5 +1,6 @@
 "use client";
 
+import { compact } from "es-toolkit";
 import { useContext } from "react";
 
 import { FieldContext } from "./field-context";
@@ -12,7 +13,7 @@ export function useFieldControlAria({
   describedBy?: string;
 }) {
   const field = useContext(FieldContext);
-  const describedByIds = [describedBy, field?.messageId].filter(Boolean).join(" ");
+  const describedByIds = compact([describedBy, field?.messageId]).join(" ");
   return {
     "aria-describedby": describedByIds || undefined,
     "aria-invalid": invalid || field?.invalid || undefined,

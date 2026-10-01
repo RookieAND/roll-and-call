@@ -1,4 +1,5 @@
 import { and, desc, eq, inArray, isNotNull, isNull, sql } from "drizzle-orm";
+import { isNotNil } from "es-toolkit";
 
 import { db } from "../../../client";
 import { auditLog, games, profiles, reports } from "../../../schema";
@@ -57,7 +58,7 @@ export async function moderatePost({
       .for("update", { of: games });
     if (!game) throw new Error("구인을 찾을 수 없습니다");
     const unresolved = await tx.select({ id: reports.id }).from(reports).where(openReports);
-    const hidden = game.hiddenAt !== null;
+    const hidden = isNotNil(game.hiddenAt);
     const stale =
       (moderation.action === "hide" && hidden) ||
       (moderation.action === "unhide" && !hidden) ||

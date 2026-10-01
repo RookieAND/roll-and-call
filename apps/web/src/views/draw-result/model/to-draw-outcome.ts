@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { PARTICIPANT_STATUS, type ParticipantStatus } from "@/entities/game";
 
 import type { DrawEntry } from "./draw-entry";
@@ -26,7 +28,7 @@ export function toDrawOutcome({
     roll: participant.drawRoll,
   });
   const rolled = participants
-    .filter((participant) => participant.drawRoll !== null)
+    .filter((participant) => !isNull(participant.drawRoll))
     .toSorted(
       (left, right) =>
         left.drawRoll! - right.drawRoll! || left.joinedAt.getTime() - right.joinedAt.getTime(),
@@ -35,7 +37,7 @@ export function toDrawOutcome({
   const preConfirmed = participants
     .filter(
       (participant) =>
-        participant.drawRoll === null && participant.status === PARTICIPANT_STATUS.confirmed,
+        isNull(participant.drawRoll) && participant.status === PARTICIPANT_STATUS.confirmed,
     )
     .map(toEntry);
   const drawCount = Math.max(maxPlayers - preConfirmed.length, 0);

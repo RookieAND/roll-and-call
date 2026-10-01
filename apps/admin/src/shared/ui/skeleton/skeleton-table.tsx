@@ -1,8 +1,8 @@
 import { HStack, Table } from "@roll-and-call/ui";
-import { ArrowDown } from "lucide-react";
 
 import { TableColumns } from "../table-columns";
 import { SkeletonCell, type SkeletonCellKind } from "./skeleton-cell";
+import { SkeletonHeadLabel } from "./skeleton-head-label";
 
 export interface SkeletonColumn {
   label: string;
@@ -35,14 +35,7 @@ export function SkeletonTable({ columns, rows = 8 }: SkeletonTableProps) {
               aria-sort={column.sorted ? "descending" : undefined}
               className={column.sorted ? "text-gray-900" : undefined}
             >
-              {column.label ? (
-                <HStack inline align="center" gap="050">
-                  {column.label}
-                  {column.sorted ? <ArrowDown size={10} strokeWidth={2.4} aria-hidden /> : null}
-                </HStack>
-              ) : column.kind === "empty" ? null : (
-                <span className="sr-only">조치</span>
-              )}
+              <SkeletonHeadLabel column={column} />
             </Table.Head>
           ))}
         </Table.Row>

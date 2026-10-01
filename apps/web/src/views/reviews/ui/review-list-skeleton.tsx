@@ -1,4 +1,5 @@
 import { Card, Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 interface ReviewListSkeletonProps {
   count?: number;
@@ -7,7 +8,7 @@ interface ReviewListSkeletonProps {
 export function ReviewListSkeleton({ count = 2 }: ReviewListSkeletonProps) {
   return (
     <VStack gap="150" aria-busy>
-      {Array.from({ length: count }, (_, index) => (
+      {range(count).map((index) => (
         <Card.Root key={index} radius={500}>
           <VStack gap="100">
             <Skeleton width={100 + index * 20} height={18} />

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Grid, HStack, Text, VStack, cn, toast } from "@roll-and-call/ui";
+import { compact, isNull, sumBy } from "es-toolkit";
 import { TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,13 +13,13 @@ import type { OngoingChoiceRow } from "@/shared/ui";
 
 import { sanctionUser } from "../api/sanction-user";
 import { EMPTY_SANCTION_DRAFT, type SanctionDraft } from "../model/sanction-draft";
+import { sanctionPeriodHint } from "../model/sanction-period-hint";
 import { SanctionConfirmDialog } from "./sanction-confirm-dialog";
 import { SanctionConflict } from "./sanction-conflict";
 import { SanctionForm } from "./sanction-form";
 import { SanctionSummary } from "./sanction-summary";
 
 const DAY = 86_400_000;
-const RESTRICTION = "제재 중에는 참가 신청과 대기 신청, 구인 개설을 모두 할 수 없습니다.";
 
 interface SanctionUserFormProps {
   userId: string;
@@ -39,13 +40,9 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
     draft.period === "indefinite"
       ? null
       : Number(draft.period === "custom" ? draft.customDays : draft.period);
-  const validDays = days === null || (Number.isInteger(days) && days > 0);
+  const validDays = isNull(days) || (Number.isInteger(days) && days > 0);
   const end = days && validDays ? formatDate(new Date(now.getTime() + days * DAY)) : null;
-  const periodHint = !validDays
-    ? "1일 이상의 일수를 입력해 주세요."
-    : end
-      ? `오늘(${formatDate(now)}) 확정하면 ${end}까지 적용됩니다. ${RESTRICTION}`
-      : `해제하기 전까지 적용됩니다. ${RESTRICTION}`;
+  const periodHint = sanctionPeriodHint({ validDays, end, now });
   const hasReason = Boolean(draft.userReason.trim());
   const canConfirm = hasReason && validDays && !pending;
 
@@ -64,19 +61,20 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
   });
   const closedCount = rows.filter((row) => row.action === "close").length;
   const keptCount = rows.filter((row) => row.action === "keep").length;
-  const closedMemberCount = ongoing
-    .filter((activity) => activity.hosted && draft.leftSessionIds.includes(activity.sessionId))
-    .reduce((total, activity) => total + activity.memberCount, 0);
-  const confirmDescription = [
+  const closedMemberCount = sumBy(
+    ongoing.filter(
+      (activity) => activity.hosted && draft.leftSessionIds.includes(activity.sessionId),
+    ),
+    (activity) => activity.memberCount,
+  );
+  const confirmDescription = compact([
     end
       ? `${days}일 동안, ${end}까지 모든 활동을 정지합니다.`
       : "해제하기 전까지 모든 활동을 정지합니다.",
     closedCount
       ? `구인 ${closedCount}건이 닫히고 참여자 ${closedMemberCount}명에게 알림이 갑니다.`
       : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  ]).join(" ");
 
   const changeDraft = (changes: Partial<SanctionDraft>) => setDraft({ ...draft, ...changes });
 

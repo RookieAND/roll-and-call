@@ -1,4 +1,5 @@
 import { HStack, VStack } from "@roll-and-call/ui";
+import { sumBy } from "es-toolkit";
 
 import type { AnalyticsData } from "@/shared/server";
 
@@ -19,7 +20,7 @@ interface PeopleSectionProps {
 export function PeopleSection({ analytics }: PeopleSectionProps) {
   const { people, recruitment } = analytics;
   const participants = analytics.summary.participants.value ?? 0;
-  const firstTimers = people.reduce((sum, week) => sum + week.first, 0);
+  const firstTimers = sumBy(people, (week) => week.first);
   const firstShare = participants ? Math.round((firstTimers / participants) * 100) : 0;
   return (
     <AnalyticsSection title="참여자 추이">

@@ -1,4 +1,5 @@
 import { Badge, Card, Container, HStack, Skeleton } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 import { AppBar } from "@/shared/ui";
 
@@ -28,7 +29,7 @@ export function ManageGameSkeleton() {
 
         <div className="p-200">
           <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
-            {Array.from({ length: ROW_COUNT }).map((_, index) => (
+            {range(ROW_COUNT).map((index) => (
               <HStack
                 key={index}
                 align="center"

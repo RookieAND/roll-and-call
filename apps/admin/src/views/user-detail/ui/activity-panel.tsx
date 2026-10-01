@@ -5,6 +5,7 @@ import type { UserDetail } from "@/shared/server";
 import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow, UrlSelect, TableColumns } from "@/shared/ui";
 
 import { ACTIVITY_ROLE, type ActivityRole } from "../model/activity-role";
+import { NoShowBadge } from "./no-show-badge";
 
 interface ActivityPanelProps {
   activities: UserDetail["activities"];
@@ -90,13 +91,7 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                {activity.noShow ? (
-                  activity.noShow.cancelled ? (
-                    <Badge colorPalette="gray">불참 취소됨</Badge>
-                  ) : (
-                    <Badge colorPalette="danger">불참</Badge>
-                  )
-                ) : null}
+                {activity.noShow ? <NoShowBadge cancelled={activity.noShow.cancelled} /> : null}
               </Table.Cell>
             </Table.Row>
           ))}

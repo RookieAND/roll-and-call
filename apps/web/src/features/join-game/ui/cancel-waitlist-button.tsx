@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState } from "react";
 
 import { ConfirmDialog, toast, useAction } from "@/shared/ui";
@@ -38,9 +39,9 @@ export function CancelWaitlistButton({
       <ConfirmDialog
         open={confirming}
         onOpenChange={setConfirming}
-        title={waitlistRank === null ? "신청을 취소할까요?" : "대기를 취소할까요?"}
+        title={isNull(waitlistRank) ? "신청을 취소할까요?" : "대기를 취소할까요?"}
         description={
-          waitlistRank === null ? (
+          isNull(waitlistRank) ? (
             <>‘{title}’ 신청이 취소됩니다.</>
           ) : (
             <>

@@ -1,4 +1,5 @@
 import { Container, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { range } from "es-toolkit";
 
 import { AppBar } from "@/shared/ui";
 
@@ -18,7 +19,7 @@ export function WriteReviewSkeleton() {
           <Skeleton width="100%" height={130} rounded={400} />
         </VStack>
         <HStack gap="100">
-          {Array.from({ length: 3 }).map((_, index) => (
+          {range(3).map((index) => (
             <Skeleton key={index} width={72} height={72} rounded={400} />
           ))}
         </HStack>

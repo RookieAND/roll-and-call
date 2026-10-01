@@ -1,3 +1,5 @@
+import { uniq } from "es-toolkit";
+
 import type { BadgeFacts, EarnedBadge } from "./badge-facts";
 import { badgeKey } from "./badge-key";
 import { BADGE_LADDER, type BadgeLadderKey } from "./badge-ladder";
@@ -6,7 +8,7 @@ import { ladderEvents } from "./ladder-events";
 import { reachedTier } from "./reached-tier";
 
 function categoryIds(sessions: BadgeFacts["played"]): string[] {
-  return [...new Set(sessions.flatMap((session) => session.categoryId ?? []))];
+  return uniq(sessions.flatMap((session) => session.categoryId ?? []));
 }
 
 // 이달의 GM·PL은 여러 사람을 견줘야 해서 monthlyWinners가 따로 판정한다.

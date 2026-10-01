@@ -1,8 +1,11 @@
 "use client";
 
 import { Button, Checkbox, CheckboxGroup, Grid, Popover, Text, VStack } from "@roll-and-call/ui";
+import { compact } from "es-toolkit";
 import { ChevronDown } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+import { actionTriggerLabel } from "../model/action-trigger-label";
 
 interface ActionFilterProps {
   groups: readonly { label: string; actions: readonly string[] }[];
@@ -14,14 +17,9 @@ export function ActionFilter({ groups }: ActionFilterProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const selected = searchParams.get(PARAM)?.split(",").filter(Boolean) ?? [];
+  const selected = compact(searchParams.get(PARAM)?.split(",") ?? []);
 
-  const triggerLabel =
-    selected.length === 0
-      ? "모든 조치"
-      : selected.length === 1
-        ? selected[0]
-        : `조치 ${selected.length}개`;
+  const triggerLabel = actionTriggerLabel(selected);
 
   const change = (actions: string[]) => {
     const next = new URLSearchParams(searchParams);

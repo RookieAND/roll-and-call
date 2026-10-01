@@ -1,4 +1,5 @@
 import { Button, Callout, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { CalendarDays, Plus } from "lucide-react";
 
 import { CERT_STATE, isCertEnforced, type MyRulebooks } from "@/entities/rulebook";
@@ -22,7 +23,7 @@ export function MyPageRulebooks({
   const rows = SHOWN_STATES.flatMap((state) =>
     rulebooks.filter((rulebook) => rulebook.state === state),
   );
-  const showBand = enforcementDate !== null && !isCertEnforced(enforcementDate);
+  const showBand = !isNull(enforcementDate) && !isCertEnforced(enforcementDate);
 
   return (
     <VStack gap="125" render={<section />}>

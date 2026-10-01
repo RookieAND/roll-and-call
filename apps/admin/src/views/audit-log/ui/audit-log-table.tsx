@@ -1,4 +1,5 @@
 import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { ArrowDown, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -6,6 +7,7 @@ import { actionTone, formatShortDateTime } from "@/shared/lib";
 import { retentionDaysLeft, type AuditEntry } from "@/shared/server";
 import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
 
+import { retentionTone } from "../model/retention-tone";
 import { splitTarget } from "../model/split-target";
 
 interface AuditLogTableProps {
@@ -43,8 +45,8 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
         {rows.map((row) => {
           const target = splitTarget(row.target);
           const daysLeft = retentionDaysLeft(row);
-          const retention = daysLeft === null ? "계속 보관" : `${daysLeft}일 남음`;
-          const retentionTone = daysLeft === null ? "muted" : daysLeft <= 7 ? "danger" : "hint";
+          const retention = isNull(daysLeft) ? "계속 보관" : `${daysLeft}일 남음`;
+          const tone = retentionTone(daysLeft);
           return (
             <Table.Row key={row.id} interactive className="relative">
               <Table.Cell>
@@ -78,7 +80,7 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
               </Table.Cell>
               <Table.Cell className="truncate">{row.actor}</Table.Cell>
               <Table.Cell align="center">
-                <Text typography="body3" foreground={retentionTone}>
+                <Text typography="body3" foreground={tone}>
                   {retention}
                 </Text>
               </Table.Cell>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Callout, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isNull, range } from "es-toolkit";
 import { useRef, useState } from "react";
 
 import { REVIEW_PHOTO_MAX_COUNT } from "@/entities/review";
@@ -47,7 +48,7 @@ export function ReviewPhotosField({ photos }: ReviewPhotosFieldProps) {
             onRetry={() => photos.retry(item.key)}
             onDragStart={() => setDragIndex(index)}
             onDrop={() => {
-              if (dragIndex !== null) photos.move(dragIndex, index);
+              if (!isNull(dragIndex)) photos.move(dragIndex, index);
               setDragIndex(null);
             }}
             onDragEnd={() => setDragIndex(null)}
@@ -64,7 +65,7 @@ export function ReviewPhotosField({ photos }: ReviewPhotosFieldProps) {
             + 추가
           </Button>
         )}
-        {Array.from({ length: emptySlots }, (_, index) => (
+        {range(emptySlots).map((index) => (
           <div
             key={index}
             aria-hidden

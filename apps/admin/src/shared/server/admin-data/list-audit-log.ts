@@ -1,4 +1,6 @@
 import "server-only";
+import { uniq } from "es-toolkit";
+
 import { AUDIT_PERIODS } from "./audit-period";
 import { loadSnapshot } from "./snapshot";
 
@@ -24,6 +26,6 @@ export async function listAuditLog({ actor, actions = [], period, target }: Audi
         (!target || entry.target.includes(target)),
     )
     .toSorted((a, b) => b.at.getTime() - a.at.getTime());
-  const actors = [...new Set(db.auditLog.map((entry) => entry.actor))];
+  const actors = uniq(db.auditLog.map((entry) => entry.actor));
   return { rows, actors };
 }

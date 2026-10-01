@@ -1,5 +1,6 @@
 "use client";
 
+import { isNull } from "es-toolkit";
 import { useState, type KeyboardEvent } from "react";
 
 import { cn } from "../../lib/cn";
@@ -117,7 +118,7 @@ export function Calendar({ value, onSelect, min, max, className, style }: Calend
       </div>
       <div className="grid grid-cols-7 gap-025 text-center text-sm" onKeyDown={moveFocus}>
         {cells.map((day, index) => {
-          if (day === null) return <div key={index} />;
+          if (isNull(day)) return <div key={index} />;
           const date = toDateKey({ year: view.year, month: view.month, day });
           const selected = value === date;
           const disabled = isDisabled(date);

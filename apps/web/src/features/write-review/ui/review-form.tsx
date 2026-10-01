@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Callout, Field, FloatingBar, Textarea, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -44,7 +45,7 @@ export function ReviewForm({
 }: ReviewFormProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
-  const editing = review !== null;
+  const editing = !isNull(review);
   const initialPhotoUrls = review?.photoUrls ?? [];
   const [body, setBody] = useState(review?.body ?? "");
   const [spoiler, setSpoiler] = useState(review?.spoiler ?? false);
@@ -170,7 +171,7 @@ export function ReviewForm({
             onChange={(event) => changeBody(event.target.value)}
             placeholder="20자 이상 적어 주세요"
             maxLength={REVIEW_BODY_MAX_LENGTH}
-            invalid={bodyError !== null}
+            invalid={!isNull(bodyError)}
             rows={5}
           />
         </Field.Root>

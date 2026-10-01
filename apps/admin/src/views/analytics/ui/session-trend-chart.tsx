@@ -1,6 +1,7 @@
 "use client";
 
 import { Text } from "@roll-and-call/ui";
+import { sumBy } from "es-toolkit";
 import dynamic from "next/dynamic";
 
 import type { AnalyticsTrendWeek } from "@/shared/server";
@@ -35,7 +36,7 @@ export function SessionTrendChart({ trend, todayLabel, height }: SessionTrendCha
   );
   const totals = trend.map((week) => ({
     week: week.label,
-    total: TREND_SEGMENTS.reduce((sum, segment) => sum + week[segment.key], 0),
+    total: sumBy(TREND_SEGMENTS, (segment) => week[segment.key]),
   }));
   const chartHeight = height + 40;
   const bandStyle = {

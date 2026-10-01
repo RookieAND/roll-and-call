@@ -1,3 +1,5 @@
+import { compact, uniq } from "es-toolkit";
+
 import {
   CERT_STATE,
   RULEBOOK_KIND_GROUP,
@@ -42,9 +44,7 @@ export function toOwnedCategory({
   const partial = categorySets
     .map((set) => ({ set, ...setStatus(set) }))
     .filter(({ status }) => status === SET_STATUS.partial);
-  const editions = [...new Set(earned.flatMap((set) => [set.edition, ...set.covers]))].filter(
-    Boolean,
-  );
+  const editions = compact(uniq(earned.flatMap((set) => [set.edition, ...set.covers])));
   const [nearest] = partial.toSorted((left, right) => left.missing.length - right.missing.length);
   const sub = ownedCategorySub({ hasEarned: earned.length > 0, editions, nearest });
   const remaining = new Set(partial.flatMap(({ missing }) => missing));

@@ -1,6 +1,7 @@
 "use client";
 
 import { HStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState } from "react";
 
 import { ImageLightbox } from "@/shared/ui";
@@ -12,7 +13,7 @@ interface ReviewPhotosProps {
 export function ReviewPhotos({ urls }: ReviewPhotosProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   if (urls.length === 0) return null;
-  const openUrl = openIndex === null ? null : (urls[openIndex] ?? null);
+  const openUrl = isNull(openIndex) ? null : (urls[openIndex] ?? null);
 
   return (
     <HStack gap="075" wrap>

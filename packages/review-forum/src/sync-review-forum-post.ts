@@ -6,6 +6,7 @@ import {
   getForumTags,
   updateForumPost,
 } from "@roll-and-call/discord";
+import { isNull } from "es-toolkit";
 
 import { fetchPhotoFiles } from "./fetch-photo-files";
 import { reviewForumPost } from "./review-forum-post";
@@ -26,7 +27,7 @@ export async function syncReviewForumPost({
   const review = await loadForumReview({ serverId, reviewId });
   if (!review) return;
 
-  const held = Boolean(review.absent) && review.absenceCancelledAt === null;
+  const held = Boolean(review.absent) && isNull(review.absenceCancelledAt);
   const visible = !review.removedAt && !review.hiddenAt && !held;
   if (!visible) {
     if (review.threadId) {

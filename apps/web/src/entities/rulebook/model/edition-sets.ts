@@ -1,3 +1,5 @@
+import { uniq } from "es-toolkit";
+
 import { isOpened } from "./is-opened";
 import { RULEBOOK_KIND } from "./rulebook-kind";
 import type { MyRulebook } from "./to-my-rulebooks";
@@ -24,9 +26,9 @@ export function editionSetKey(rulebook: Pick<MyRulebook, "categoryId" | "edition
 
 // 판본은 새것(큰 숫자)부터. 기본 룰북이 없는 판본(서플리먼트만 있는 판본)은 세트가 아니다.
 export function editionSets(rulebooks: MyRulebook[]): EditionSet[] {
-  const keys = [
-    ...new Set(rulebooks.filter((book) => book.kind === RULEBOOK_KIND.core).map(editionSetKey)),
-  ];
+  const keys = uniq(
+    rulebooks.filter((book) => book.kind === RULEBOOK_KIND.core).map(editionSetKey),
+  );
   const sets = keys.map((key) => {
     const cores = rulebooks.filter(
       (book) => book.kind === RULEBOOK_KIND.core && editionSetKey(book) === key,

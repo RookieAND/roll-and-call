@@ -5,6 +5,7 @@ import {
   listRosterStatuses,
   updateOwnedGame,
 } from "@roll-and-call/database/games";
+import { isNull } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
@@ -70,7 +71,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
   const kept = new Set<string>([values.thumbnailUrl ?? "", ...values.images]);
   await removeUnusedGameFiles({
     serverId: server.id,
-    urls: [before.thumbnailUrl, ...before.images].filter((url) => url !== null && !kept.has(url)),
+    urls: [before.thumbnailUrl, ...before.images].filter((url) => !isNull(url) && !kept.has(url)),
   });
 
   redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));

@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import {
   GAME_STATUS,
   type GameStatus,
@@ -59,7 +61,7 @@ export async function GameActionZone({
   const isFull = status === GAME_STATUS.confirmed;
   const expired = status === GAME_STATUS.closed;
   const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
-  const drawn = game.drawnAt !== null;
+  const drawn = !isNull(game.drawnAt);
 
   const actionView = deriveActionView({
     isGm,
@@ -147,7 +149,7 @@ export async function GameActionZone({
         <EndedGmActions
           gameId={game.id}
           attendanceDue={isAttendanceDue({ game, confirmedCount })}
-          attendanceConfirmed={game.attendanceConfirmedAt !== null}
+          attendanceConfirmed={!isNull(game.attendanceConfirmedAt)}
         />
       );
   }

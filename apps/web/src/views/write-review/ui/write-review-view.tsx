@@ -1,4 +1,5 @@
 import { Container } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { notFound } from "next/navigation";
 
 import { reviewEditDeadline } from "@/entities/review";
@@ -43,7 +44,7 @@ export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
           body: editable.body,
           spoiler: editable.spoiler,
           photoUrls: editable.photoUrls,
-          hidden: editable.hiddenAt !== null,
+          hidden: !isNull(editable.hiddenAt),
         }
       }
       editUntil={reviewEditDeadline(editable?.createdAt ?? new Date())}

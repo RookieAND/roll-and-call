@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Dialog, Field, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { uniq } from "es-toolkit";
 import { TriangleAlert } from "lucide-react";
 import { useState, useTransition } from "react";
 
@@ -42,7 +43,7 @@ export function AddRulebookDialog({
   const [reason, setReason] = useState("");
   const [duplicate, setDuplicate] = useState(false);
 
-  const categories = [...new Set(rulebooks.map((rulebook) => rulebook.category))];
+  const categories = uniq(rulebooks.map((rulebook) => rulebook.category));
   const category = draftCategory(draft, rulebooks);
   const nameError = duplicate ? "이미 등록된 룰북입니다" : undefined;
   const change = (changes: Partial<RulebookDraft>) => {

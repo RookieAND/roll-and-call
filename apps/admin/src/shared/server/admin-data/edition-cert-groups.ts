@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import type { Rulebook } from "./types";
 
 // 인증이 필요한 판본("카테고리 판본")마다 GM 자격 조건. 그 판본의 기본 룰북을 모두 인증했거나,
@@ -17,7 +19,7 @@ export function editionCertGroups(rulebooks: Rulebook[]) {
       const required = cores.filter((core) => books.includes(core));
       const bookIds = new Set(books.map((book) => book.id));
       const coverIds = cores
-        .filter((core) => core.supersedesId !== null && bookIds.has(core.supersedesId))
+        .filter((core) => !isNull(core.supersedesId) && bookIds.has(core.supersedesId))
         .map((core) => core.id);
       const certified = (certifiedIds: Set<string>) =>
         required.every((core) => certifiedIds.has(core.id));

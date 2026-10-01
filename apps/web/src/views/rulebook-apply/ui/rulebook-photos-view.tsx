@@ -1,4 +1,5 @@
 import { Container } from "@roll-and-call/ui";
+import { compact } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -69,7 +70,7 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
         rejected
           ? {
               title: `반려 사유 · ${rejectionSummary(rejected)}`,
-              lines: rejected.rejectReason?.split("\n").filter(Boolean) ?? [],
+              lines: compact(rejected.rejectReason?.split("\n") ?? []),
             }
           : null
       }

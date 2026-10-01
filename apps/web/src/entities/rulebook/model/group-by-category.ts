@@ -1,3 +1,5 @@
+import { uniq } from "es-toolkit";
+
 import { RULEBOOK_KIND } from "./rulebook-kind";
 import type { MyRulebook } from "./to-my-rulebooks";
 
@@ -14,7 +16,7 @@ export function groupByCategory(rulebooks: MyRulebook[]) {
     categories.set(rulebook.categoryId, category);
   }
   return [...categories.values()].map((category) => {
-    const editions = [...new Set(category.rulebooks.map((rulebook) => rulebook.edition))].toSorted(
+    const editions = uniq(category.rulebooks.map((rulebook) => rulebook.edition)).toSorted(
       (left, right) => right.localeCompare(left, "ko", { numeric: true }),
     );
     return {

@@ -1,3 +1,4 @@
+import { isUndefined } from "es-toolkit";
 const HANGUL_START = 0xac00;
 const HANGUL_END = 0xd7a3;
 const JONGSEONG_COUNT = 28;
@@ -6,6 +7,6 @@ const JONGSEONG_COUNT = 28;
 export function hasFinalConsonant(word: string) {
   const trimmed = word.trimEnd();
   const last = trimmed.codePointAt(trimmed.length - 1);
-  if (last === undefined || last < HANGUL_START || last > HANGUL_END) return false;
+  if (isUndefined(last) || last < HANGUL_START || last > HANGUL_END) return false;
   return (last - HANGUL_START) % JONGSEONG_COUNT !== 0;
 }

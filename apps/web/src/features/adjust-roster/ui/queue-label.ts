@@ -1,3 +1,4 @@
+import { isNull } from "es-toolkit";
 export function queueLabel({
   waitlistRank,
   beforeDraw,
@@ -5,7 +6,7 @@ export function queueLabel({
   waitlistRank: number | null;
   beforeDraw: boolean;
 }) {
-  if (waitlistRank === null) return "확정";
+  if (isNull(waitlistRank)) return "확정";
   if (beforeDraw) return "신청자";
   return `대기 ${waitlistRank}번`;
 }

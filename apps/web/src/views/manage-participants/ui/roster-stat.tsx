@@ -1,4 +1,5 @@
 import { Card, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { STAT_TONE, type StatTone } from "../model/stat-tone";
 
@@ -32,8 +33,8 @@ export function RosterStat({ label, count, tone = STAT_TONE.neutral }: RosterSta
         <Text typography="body4" foreground={style.label}>
           {label}
         </Text>
-        <Text numeric typography="heading2" foreground={count === null ? "hint" : style.value}>
-          {count === null ? "—" : `${count}명`}
+        <Text numeric typography="heading2" foreground={isNull(count) ? "hint" : style.value}>
+          {isNull(count) ? "—" : `${count}명`}
         </Text>
       </VStack>
     </Card.Root>

@@ -1,6 +1,7 @@
 "use client";
 
 import { VStack, Sheet } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import type { MemberSummary } from "../model/member-summary";
 import { DemoteMemberItem } from "./demote-member-item";
@@ -29,10 +30,10 @@ export function MemberSheet({
   beforeDraw,
   onClose,
 }: MemberSheetProps) {
-  const isConfirmed = member?.waitlistRank === null;
+  const isConfirmed = isNull(member?.waitlistRank);
 
   return (
-    <Sheet.Root open={member !== null} onOpenChange={(open) => !open && onClose()}>
+    <Sheet.Root open={!isNull(member)} onOpenChange={(open) => !open && onClose()}>
       <Sheet.Popup>
         <Sheet.Handle />
         {member && (

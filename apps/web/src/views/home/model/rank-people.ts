@@ -1,4 +1,4 @@
-import { groupBy, uniq } from "es-toolkit";
+import { groupBy, range, uniq } from "es-toolkit";
 
 export type RecordPerson = { id: string; username: string; avatarUrl: string | null };
 export type RecordRow = { rank: number; person: RecordPerson; count: number };
@@ -23,6 +23,6 @@ export function rankPeople(appearances: RecordPerson[]): RecordRanking {
   return {
     leaders: leaders.map((row) => row.person),
     leaderCount: leaders[0]?.count ?? 0,
-    runnersUp: Array.from({ length: RUNNER_UP_SIZE }, (_, index) => runnersUp[index] ?? null),
+    runnersUp: range(RUNNER_UP_SIZE).map((index) => runnersUp[index] ?? null),
   };
 }

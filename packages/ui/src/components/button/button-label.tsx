@@ -1,3 +1,4 @@
+import { isNumber, isString } from "es-toolkit";
 import { Children, type ReactNode } from "react";
 
 interface ButtonLabelProps {
@@ -22,7 +23,7 @@ export function ButtonLabel({ children }: ButtonLabelProps) {
   };
 
   Children.toArray(children).forEach((child) => {
-    if (typeof child === "string" || typeof child === "number") {
+    if (isString(child) || isNumber(child)) {
       text += child;
       return;
     }

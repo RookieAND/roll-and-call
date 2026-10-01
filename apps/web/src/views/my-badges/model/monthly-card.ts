@@ -7,6 +7,7 @@ import {
   type BadgeLadderKey,
   type MonthlyAppearance,
 } from "@roll-and-call/database/badges/model";
+import { isNull } from "es-toolkit";
 
 import { monthLabel, previousMonthKey, stepLook } from "@/entities/badge";
 import { buildMonthlyDetail } from "@/features/view-badge";
@@ -57,11 +58,11 @@ export function monthlyCard({
 
   return {
     title: step.name,
-    held: heldMonth !== null,
+    held: !isNull(heldMonth),
     emoji: step.emoji,
     look: stepLook(step),
     ribbon: heldMonth ? monthLabel(heldMonth) : null,
-    isNew: record?.seenAt === null,
+    isNew: isNull(record?.seenAt),
     status: heldMonth
       ? `${monthLabel(heldMonth)} ${roleLabel} 1위 · ${countOf(heldMonth)}회 ${verb}`
       : `${thisMonth} ${roleLabel} ${standing.count}회${standing.rank ? ` · 지금 ${standing.rank}위` : ""}`,

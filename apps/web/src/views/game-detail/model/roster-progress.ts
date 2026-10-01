@@ -1,3 +1,5 @@
+import { isUndefined } from "es-toolkit";
+
 import { capacityPalette } from "./capacity-palette";
 import { ROSTER_GAUGE, type RosterGauge } from "./roster-gauge";
 
@@ -10,7 +12,7 @@ export function rosterProgress({
   count: number;
   capacity?: number;
 }) {
-  if (gauge !== ROSTER_GAUGE.capacity || capacity === undefined) {
+  if (gauge !== ROSTER_GAUGE.capacity || isUndefined(capacity)) {
     const variant = gauge === ROSTER_GAUGE.waiting ? "tinted" : "solid";
     return { value: 1, max: 1, colorPalette: "primary", variant } as const;
   }

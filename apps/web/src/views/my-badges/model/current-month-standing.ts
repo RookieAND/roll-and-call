@@ -3,6 +3,7 @@ import {
   type BadgeRole,
   type MonthlyAppearance,
 } from "@roll-and-call/database/badges/model";
+import { uniq } from "es-toolkit";
 
 export function currentMonthStanding({
   appearances,
@@ -23,6 +24,6 @@ export function currentMonthStanding({
   }
   const count = counts.get(userId) ?? 0;
   const rank =
-    count > 0 ? new Set([...counts.values()].filter((other) => other > count)).size + 1 : null;
+    count > 0 ? uniq([...counts.values()].filter((other) => other > count)).length + 1 : null;
   return { count, rank };
 }

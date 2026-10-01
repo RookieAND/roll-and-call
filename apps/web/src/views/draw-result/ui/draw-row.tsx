@@ -1,5 +1,6 @@
 import { Badge, HStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
+import { isNull } from "es-toolkit";
 
 import { EMPTY_BIO_TEXT, ProfileRow } from "@/entities/profile";
 import { ServerLink } from "@/shared/ui";
@@ -36,7 +37,7 @@ export function DrawRow({ entry, variant, isMe }: DrawRowProps) {
       align="center"
       gap="125"
       render={<ServerLink path={`/u/${entry.userId}`} />}
-      className={row({ variant, isMe, graded: toRollGrade(entry.roll) !== null })}
+      className={row({ variant, isMe, graded: !isNull(toRollGrade(entry.roll)) })}
     >
       <ProfileRow
         size={profileSize}

@@ -1,4 +1,5 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { isNull, sumBy } from "es-toolkit";
 
 import type { AnalyticsData } from "@/shared/server";
 
@@ -15,9 +16,9 @@ interface GmSectionProps {
 
 export function GmSection({ analytics }: GmSectionProps) {
   const { gms, otherGms, previousTopShare } = analytics;
-  const listedSessions = gms.reduce((sum, gm) => sum + gm.count, 0);
+  const listedSessions = sumBy(gms, (gm) => gm.count);
   const totalSessions = listedSessions + otherGms.sessions;
-  const topSessions = gms.slice(0, TOP_COUNT).reduce((sum, gm) => sum + gm.count, 0);
+  const topSessions = sumBy(gms.slice(0, TOP_COUNT), (gm) => gm.count);
   const topShare = totalSessions ? Math.round((topSessions / totalSessions) * 100) : 0;
   const otherAverage = otherGms.count ? (otherGms.sessions / otherGms.count).toFixed(1) : "0";
   return (
@@ -46,7 +47,7 @@ export function GmSection({ analytics }: GmSectionProps) {
             <Text typography="heading1" numeric>
               {topShare}%
             </Text>
-            {previousTopShare === null ? null : (
+            {isNull(previousTopShare) ? null : (
               <Delta value={topShare - previousTopShare} unit="%p" />
             )}
           </HStack>

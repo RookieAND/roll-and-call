@@ -1,4 +1,5 @@
 import type { DiscordFile } from "@roll-and-call/discord";
+import { isNotNil } from "es-toolkit";
 
 // 받아지지 않은 사진은 빼고 올린다. 게시글 자체를 막지는 않는다.
 export async function fetchPhotoFiles(photos: { url: string; name: string }[]) {
@@ -12,5 +13,5 @@ export async function fetchPhotoFiles(photos: { url: string; name: string }[]) {
       }
     }),
   );
-  return files.filter((file) => file !== null);
+  return files.filter(isNotNil);
 }

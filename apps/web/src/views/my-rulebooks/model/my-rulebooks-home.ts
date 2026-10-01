@@ -1,3 +1,5 @@
+import { isNull, uniq } from "es-toolkit";
+
 import {
   CERT_STATE,
   certApplyHref,
@@ -26,7 +28,7 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
     inStatus[index]!.length > 0 ? `${STATUS_WORD[state]} ${inStatus[index]!.length}` : [],
   ).join(" · ");
   const certified = rulebooks.filter((rulebook) => rulebook.state === CERT_STATE.certified);
-  const owned = [...new Set(certified.map((rulebook) => rulebook.categoryId))].map((categoryId) =>
+  const owned = uniq(certified.map((rulebook) => rulebook.categoryId)).map((categoryId) =>
     toOwnedCategory({ categoryId, rulebooks, sets }),
   );
   const requests = data.requests.map(toRequestRow);
@@ -35,7 +37,7 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
   const [suggested] = recentUnopenedSets(data);
   return {
     banner:
-      dday !== null && !suspended
+      !isNull(dday) && !suspended
         ? {
             title: `${formatDate(enforcementDate!)}부터 룰북 인증이 필요합니다`,
             dday: dday === 0 ? "D-DAY" : `D-${dday}`,
@@ -52,7 +54,7 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
       ? {
           lines: [
             `최근에 ${suggested.label} 구인을 열었습니다.`,
-            dday !== null
+            !isNull(dday)
               ? `${formatDate(enforcementDate!)} 전에 인증해 두세요.`
               : "인증해 두면 계속 열 수 있습니다.",
           ],

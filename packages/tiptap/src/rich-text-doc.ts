@@ -1,3 +1,5 @@
+import { isPlainObject } from "es-toolkit";
+
 export type RichTextMark = { type: string; attrs?: { href?: string | null } };
 
 export type RichTextNodeData = {
@@ -14,8 +16,7 @@ export function toRichTextDoc(value: string): RichTextDoc {
   try {
     const parsed: unknown = JSON.parse(value);
     if (
-      typeof parsed === "object" &&
-      parsed !== null &&
+      isPlainObject(parsed) &&
       (parsed as RichTextDoc).type === "doc" &&
       Array.isArray((parsed as RichTextDoc).content)
     ) {

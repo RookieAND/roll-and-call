@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { RECRUIT_METHOD, splitRoster } from "@/entities/game";
 import { ddayKst, formatDate } from "@/shared/lib";
 
@@ -28,13 +30,13 @@ export function toJoinedSessionCard({
   const { waiting } = splitRoster(game.participants);
   const mine = waiting.find((participant) => participant.userId === context.viewerId) ?? null;
 
-  if (mine !== null) {
+  if (!isNull(mine)) {
     const cancel = (label: string) =>
       context.readOnly
         ? null
         : { kind: SESSION_ACTION_KIND.cancelWaitlist, label, href: `/games/${game.id}` };
 
-    if (game.recruitMethod === RECRUIT_METHOD.lottery && game.drawnAt === null) {
+    if (game.recruitMethod === RECRUIT_METHOD.lottery && isNull(game.drawnAt)) {
       return {
         ...common,
         chip: SESSION_CHIP.waiting,

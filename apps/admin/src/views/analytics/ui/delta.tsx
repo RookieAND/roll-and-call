@@ -1,5 +1,7 @@
 import { Text } from "@roll-and-call/ui";
 
+import { deltaArrow } from "@/shared/lib";
+
 interface DeltaProps {
   value: number;
   unit: string;
@@ -7,7 +9,7 @@ interface DeltaProps {
 }
 
 export function Delta({ value, unit, higherIsWorse = false }: DeltaProps) {
-  const arrow = value > 0 ? "▲" : value < 0 ? "▼" : "–";
+  const arrow = deltaArrow(value);
   const foreground = higherIsWorse && value > 0 ? "danger" : "muted";
   return (
     <Text

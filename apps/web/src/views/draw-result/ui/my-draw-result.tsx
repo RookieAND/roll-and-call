@@ -1,4 +1,5 @@
 import { Button, FloatingBar, HStack, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { LeaveGameButton } from "@/features/join-game";
 import { ServerLink } from "@/shared/ui";
@@ -28,7 +29,7 @@ export function MyDrawResult({
   waitlistRank,
   needsAvailability,
 }: MyDrawResultProps) {
-  const confirmed = waitlistRank === null;
+  const confirmed = isNull(waitlistRank);
   const myWaitingIndex = outcome.waiting.findIndex((entry) => entry.userId === meUserId);
   const waitingPreview = Math.max(2, myWaitingIndex + 1);
 

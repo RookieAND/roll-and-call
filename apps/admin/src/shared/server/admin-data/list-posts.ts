@@ -1,5 +1,8 @@
 import "server-only";
+import { uniq } from "es-toolkit";
+
 import { POST_PERIODS } from "./post-period";
+import { postStaffAction } from "./post-staff-action";
 import { POST_STATUS, type PostStatus } from "./post-status";
 import { postStatusOf } from "./post-status-of";
 import { reviewTabCounts } from "./review-tab-counts";
@@ -45,7 +48,7 @@ export async function listPosts(filter: PostListFilter) {
       unresolvedReportCount: db.reports.filter(
         (report) => report.sessionId === session.id && !report.resolved,
       ).length,
-      staffAction: session.hidden ? "숨김" : session.editRequestedAt ? "수정 요청" : null,
+      staffAction: postStaffAction(session),
     }))
     .toSorted((a, b) => b.startsAt.getTime() - a.startsAt.getTime());
   const keyword = filter.query?.trim();
@@ -65,7 +68,7 @@ export async function listPosts(filter: PostListFilter) {
     reportedCount: all.filter((row) => row.unresolvedReportCount > 0).length,
     actedCount: all.filter((row) => row.staffAction).length,
     statusOptions: Object.values(POST_STATUS),
-    rulebookOptions: [...new Set(all.map((row) => row.rulebook))].toSorted(),
+    rulebookOptions: uniq(all.map((row) => row.rulebook)).toSorted(),
     reviewCounts: reviewTabCounts(db),
   };
 }

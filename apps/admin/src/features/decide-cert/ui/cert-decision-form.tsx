@@ -9,6 +9,7 @@ import { KeyHint } from "@/shared/ui";
 
 import { approveCert } from "../api/approve-cert";
 import { rejectCert } from "../api/reject-cert";
+import { decisionFailureMessage } from "../model/decision-failure-message";
 import { OTHER_REASON } from "../model/reject-reasons";
 import { EBOOK_SHOTS, SHOTS, type ReviewShot } from "../model/shots";
 import { DecisionFooter } from "./decision-footer";
@@ -85,13 +86,7 @@ export function CertDecisionForm({
 
   const finish = (result: CertDecisionResult, message: string) => {
     if (!result.ok) {
-      toast.info(
-        "blocked" in result
-          ? result.blocked
-          : result.conflict.status === "withdrawn"
-            ? "신청자가 신청을 거뒀습니다"
-            : "다른 운영진이 먼저 처리했습니다",
-      );
+      toast.info(decisionFailureMessage(result));
       router.refresh();
       return;
     }

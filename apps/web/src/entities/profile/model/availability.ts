@@ -1,4 +1,4 @@
-import { isPlainObject } from "es-toolkit";
+import { isNumber, isPlainObject } from "es-toolkit";
 
 import { padTwoDigits, slotIso, type DayColumn, type TimeRow } from "@/shared/lib";
 import type { AvailabilityInterval } from "@/shared/server";
@@ -40,7 +40,7 @@ export function normalizeAvailability(input: unknown): AvailabilityInterval[] {
   const valid = input.flatMap((raw) => {
     if (!isPlainObject(raw)) return [];
     const { day, from, to } = raw;
-    if (typeof day !== "number" || typeof from !== "number" || typeof to !== "number") return [];
+    if (!isNumber(day) || !isNumber(from) || !isNumber(to)) return [];
     const hours = {
       day: Math.trunc(day),
       from: Math.trunc(from),

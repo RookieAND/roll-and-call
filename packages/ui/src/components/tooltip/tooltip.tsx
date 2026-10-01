@@ -1,6 +1,7 @@
 "use client";
 
 import { Tooltip as BaseTooltip } from "@base-ui-components/react/tooltip";
+import { isFunction } from "es-toolkit";
 import type { ReactElement, ReactNode } from "react";
 
 import { cn } from "../../lib/cn";
@@ -42,7 +43,7 @@ export function Tooltip({
         open={open}
         defaultOpen={defaultOpen}
         onOpenChange={onOpenChange}
-        className={typeof className === "function" ? undefined : className}
+        className={isFunction(className) ? undefined : className}
       >
         {children}
       </TooltipPopoverFallback>

@@ -1,4 +1,5 @@
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import type { ReactNode } from "react";
 
 import { ANALYTICS_EARLY_THRESHOLD, type AnalyticsData } from "@/shared/server";
@@ -21,7 +22,7 @@ export function AnalyticsSummary({ summary, early }: AnalyticsSummaryProps) {
   const { finishedSessions, participants, hostingGms, noShowRate } = summary;
   const noCompare = "비교할 지난 기간이 아직 없습니다";
   const percent = (metric: AnalyticsData["summary"]["participants"]) =>
-    metric.value !== null && metric.previous
+    !isNull(metric.value) && metric.previous
       ? Math.round(((metric.value - metric.previous) / metric.previous) * 100)
       : 0;
   const tiles: SummaryTile[] = [
@@ -45,7 +46,7 @@ export function AnalyticsSummary({ summary, early }: AnalyticsSummaryProps) {
     },
     {
       label: "불참률",
-      value: early || noShowRate.value === null ? "—" : `${noShowRate.value}%`,
+      value: early || isNull(noShowRate.value) ? "—" : `${noShowRate.value}%`,
       delta: (
         <Delta
           value={Math.round(((noShowRate.value ?? 0) - (noShowRate.previous ?? 0)) * 10) / 10}

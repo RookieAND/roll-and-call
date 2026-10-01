@@ -11,6 +11,7 @@ import {
   cn,
   toast,
 } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import { useState, useTransition } from "react";
 
 import {
@@ -38,7 +39,7 @@ export function RejectRequestForm({ request, onDone }: RejectRequestFormProps) {
   const [staffMemo, setStaffMemo] = useState("");
   const [conflict, setConflict] = useState<Conflict | undefined>(undefined);
 
-  const conflicted = conflict !== undefined;
+  const conflicted = !isUndefined(conflict);
   const canConfirm = Boolean(userReason.trim()) && !pending && !conflicted;
 
   const confirm = () =>

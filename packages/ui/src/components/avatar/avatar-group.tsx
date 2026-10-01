@@ -1,6 +1,7 @@
 "use client";
 
 import type { VariantProps } from "class-variance-authority";
+import { compact } from "es-toolkit";
 
 import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
@@ -22,11 +23,7 @@ export interface AvatarGroupProps extends VariantProps<typeof avatarVariants> {
 export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupProps) {
   const shown = people.slice(0, max);
   const extra = people.length - shown.length;
-  const hiddenNames = people
-    .slice(max)
-    .map((person) => person.name?.trim())
-    .filter(Boolean)
-    .join(", ");
+  const hiddenNames = compact(people.slice(max).map((person) => person.name?.trim())).join(", ");
   return (
     <div
       data-slot="avatar-group"

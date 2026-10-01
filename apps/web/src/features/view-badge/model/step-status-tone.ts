@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { BADGE_TONE } from "@/entities/badge";
 
 export function stepStatusTone({
@@ -10,6 +12,6 @@ export function stepStatusTone({
   count: number | null;
 }) {
   if (earned) return BADGE_TONE.success;
-  if (firstLocked && count !== null) return BADGE_TONE.primary;
+  if (firstLocked && !isNull(count)) return BADGE_TONE.primary;
   return BADGE_TONE.hint;
 }

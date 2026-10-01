@@ -1,4 +1,5 @@
 import { Badge, HStack, Text, VStack, cn } from "@roll-and-call/ui";
+import { compact } from "es-toolkit";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -17,13 +18,11 @@ interface CategoryBookItemProps {
 }
 
 export function CategoryBookItem({ book, current }: CategoryBookItemProps) {
-  const meta = [
+  const meta = compact([
     RULEBOOK_KIND_LABEL[book.kind],
     KIND_NOTE[book.kind],
     book.certRequired ? null : "인증 불필요",
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  ]).join(" · ");
   return (
     <HStack
       render={<li />}

@@ -1,4 +1,5 @@
 import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { Dice5, Zap } from "lucide-react";
 
 import { PARTICIPANT_STATUS, RECRUIT_METHOD, recruitMethodLabel } from "@/entities/game";
@@ -14,7 +15,7 @@ export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps
   // 등록 때 직접 확정한 사람은 추첨 순위가 없고, 그만큼 뽑을 자리가 줄어든다.
   const preConfirmedCount = game.participants.filter(
     (participant) =>
-      participant.status === PARTICIPANT_STATUS.confirmed && participant.drawRank === null,
+      participant.status === PARTICIPANT_STATUS.confirmed && isNull(participant.drawRank),
   ).length;
   const drawCount = Math.max(game.maxPlayers - preConfirmedCount, 0);
   const lines = isLottery
