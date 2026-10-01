@@ -149,11 +149,10 @@ html {
 }
 
 @keyframes badge-shine {
-  0% {
+  from {
     background-position: 100% 0;
   }
-  55%,
-  100% {
+  to {
     background-position: 0% 0;
   }
 }
@@ -161,16 +160,25 @@ html {
 @keyframes badge-twinkle {
   0%,
   100% {
-    opacity: 0;
-    transform: scale(0.3) rotate(0deg);
+    opacity: 0.15;
+    transform: scale(0.5) rotate(0deg);
   }
-  45% {
+  50% {
     opacity: 1;
-    transform: scale(1) rotate(40deg);
+    transform: scale(1) rotate(45deg);
   }
-  70% {
-    opacity: 0.2;
-    transform: scale(0.6) rotate(70deg);
+}
+
+/* 테두리 그라데이션의 시작 각도를 돌려 테두리 빛이 메달을 따라 돈다. */
+@property --badge-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@keyframes badge-ring {
+  to {
+    --badge-angle: 360deg;
   }
 }
 
@@ -203,6 +211,7 @@ html {
     var(--badge-shade, linear-gradient(transparent, transparent)) padding-box,
     linear-gradient(var(--badge-fill), var(--badge-fill)) padding-box,
     var(--badge-frame) border-box;
+  animation: badge-ring 6s linear infinite;
 }
 
 @utility badge-shaded {
@@ -212,12 +221,20 @@ html {
 @utility badge-frame-gold {
   --badge-glow-color: var(--rc-color-fg-rank-gold);
   --badge-fill: var(--rc-color-bg-warning-weak);
+  --badge-gold-deep: color-mix(in oklch, var(--rc-color-fg-rank-gold) 70%, black);
   --badge-frame: conic-gradient(
-    from 135deg,
+    from calc(135deg + var(--badge-angle)),
     var(--rc-color-fg-rank-gold),
-    var(--rc-color-bg-spark),
-    var(--rc-color-fg-rank-gold),
-    var(--rc-color-bg-spark),
+    var(--rc-color-bg-spark) 7%,
+    var(--rc-color-fg-rank-gold) 15%,
+    var(--badge-gold-deep) 26%,
+    var(--rc-color-fg-rank-gold) 36%,
+    var(--rc-color-bg-spark) 46%,
+    var(--rc-color-fg-rank-gold) 54%,
+    var(--badge-gold-deep) 64%,
+    var(--rc-color-fg-rank-gold) 72%,
+    var(--rc-color-bg-spark) 82%,
+    var(--badge-gold-deep) 92%,
     var(--rc-color-fg-rank-gold)
   );
 }
@@ -226,7 +243,7 @@ html {
   --badge-glow-color: var(--rc-color-data-purple-ink);
   --badge-fill: var(--rc-color-data-indigo-bg);
   --badge-frame: conic-gradient(
-    from 210deg,
+    from calc(210deg + var(--badge-angle)),
     var(--rc-color-data-pink-ink),
     var(--rc-color-data-purple-ink),
     var(--rc-color-data-indigo-ink),
@@ -246,7 +263,7 @@ html {
     var(--rc-color-data-blue-bg)
   );
   --badge-frame: conic-gradient(
-    from 90deg,
+    from calc(90deg + var(--badge-angle)),
     var(--rc-color-data-green-ink),
     var(--color-badge-developer),
     var(--rc-color-data-blue-ink),
@@ -259,7 +276,7 @@ html {
   --badge-glow-color: var(--rc-color-data-pink-ink);
   --badge-fill: var(--rc-color-data-pink-bg);
   --badge-frame: conic-gradient(
-    from 120deg,
+    from calc(120deg + var(--badge-angle)),
     var(--rc-color-data-pink-ink),
     var(--rc-color-fg-rank-gold),
     var(--rc-color-data-pink-ink),
@@ -285,11 +302,13 @@ html {
   background-size: 300% 100%;
   /* 반복되면 끝 위치에서 옆 칸의 빛줄기가 메달 위에 멈춰 선다. */
   background-repeat: no-repeat;
-  animation: badge-shine 3.4s ease-in-out infinite;
+  animation: badge-shine 2.6s linear infinite;
 }
 
 @utility animate-badge-twinkle {
-  animation: badge-twinkle 2.6s ease-in-out infinite both;
+  opacity: 0.15;
+  animation: badge-twinkle var(--badge-twinkle-duration, 2.6s) ease-in-out
+    var(--badge-twinkle-delay, 0s) infinite;
 }
 
 @utility animate-badge-rays {
@@ -298,6 +317,7 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .badge-framed,
   .animate-badge-shine,
   .animate-badge-rays {
     animation: none;
