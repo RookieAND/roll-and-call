@@ -3,6 +3,7 @@ import {
   boolean,
   check,
   date,
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -11,6 +12,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  unique,
   uniqueIndex,
   uuid,
   type AnyPgColumn,
@@ -33,14 +35,31 @@ export type AvailabilityInterval = { day: number; from: number; to: number };
 // service는 link-services의 키, value는 핸들이나 주소 원문.
 export type ProfileLink = { service: string; value: string };
 
-// Mirror of auth.users, kept in sync by a trigger. `id` equals the Supabase auth uid.
-export const profiles = pgTable(
-  "profiles",
+// 디스코드 서버 하나가 한 행이다. 서버 안의 데이터는 모두 server_id로 이 행에 묶인다.
+export const servers = pgTable("servers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  discordGuildId: text("discord_guild_id").notNull().unique(),
+  slug: text("slug").notNull().unique(),
+  name: text("name").notNull(),
+  icon: text("icon"),
+  recruitChannelId: text("recruit_channel_id"),
+  closedChannelId: text("closed_channel_id"),
+  reviewForumChannelId: text("review_forum_channel_id"),
+  gmRoleId: text("gm_role_id"),
+  certEnforcementDate: timestamp("cert_enforcement_date", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}).enableRLS();
+
+// 계정(profiles)은 전역이고, 서버 안에서 보이는 프로필은 여기 있다. 나가도 지우지 않고 deleted_at만 채워 재가입 때 되살린다.
+export const serverMembers = pgTable(
+  "server_members",
   {
-    id: uuid("id").primaryKey(),
-    discordId: text("discord_id").notNull().unique(),
-    username: text("username").notNull(),
-    avatarUrl: text("avatar_url"),
+    serverId: uuid("server_id")
+      .notNull()
+      .references(() => servers.id),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
     bio: text("bio"),
     keywords: text("keywords").array().notNull().default([]),
     availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
@@ -49,6 +68,37 @@ export const profiles = pgTable(
     showGmBadge: boolean("show_gm_badge").notNull().default(true),
     showBadges: boolean("show_badges").notNull().default(true),
     // 이름 아래 고정할 뱃지 키. 누른 순서대로 최대 3개이고, 비어 있으면 최근에 받은 3개를 보인다.
+    featuredBadges: text("featured_badges").array().notNull().default([]),
+    joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+  },
+  (table) => [
+    primaryKey({ columns: [table.serverId, table.userId] }),
+    index("server_members_user_id_idx").on(table.userId),
+    check("server_members_featured_badges_limit", sql`cardinality(${table.featuredBadges}) <= 3`),
+  ],
+).enableRLS();
+
+const serverId = () =>
+  uuid("server_id")
+    .notNull()
+    .references(() => servers.id);
+
+// Mirror of auth.users, kept in sync by a trigger. `id` equals the Supabase auth uid.
+export const profiles = pgTable(
+  "profiles",
+  {
+    id: uuid("id").primaryKey(),
+    discordId: text("discord_id").notNull().unique(),
+    username: text("username").notNull(),
+    avatarUrl: text("avatar_url"),
+    // bio부터 featuredBadges까지는 server_members로 옮겨 더 읽고 쓰지 않는다. 다음 단계에서 지운다.
+    bio: text("bio"),
+    keywords: text("keywords").array().notNull().default([]),
+    availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
+    links: jsonb("links").$type<ProfileLink[]>().notNull().default([]),
+    showGmBadge: boolean("show_gm_badge").notNull().default(true),
+    showBadges: boolean("show_badges").notNull().default(true),
     featuredBadges: text("featured_badges").array().notNull().default([]),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
@@ -61,6 +111,7 @@ export const profiles = pgTable(
 export const profileMemos = pgTable(
   "profile_memos",
   {
+    serverId: serverId(),
     ownerId: uuid("owner_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -71,8 +122,9 @@ export const profileMemos = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
-    primaryKey({ columns: [table.ownerId, table.targetId] }),
-    // 프로필 삭제 시 cascade가 target_id로 찾는다.
+    primaryKey({ columns: [table.serverId, table.ownerId, table.targetId] }),
+    // 프로필 삭제 시 cascade가 owner_id·target_id로 찾는다.
+    index("profile_memos_owner_id_idx").on(table.ownerId),
     index("profile_memos_target_id_idx").on(table.targetId),
   ],
 );
@@ -81,6 +133,7 @@ export const games = pgTable(
   "games",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     gmId: uuid("gm_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -128,12 +181,14 @@ export const games = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
+    // 게임에 딸린 표가 (game_id, server_id) 복합 FK로 같은 서버인지 확인한다.
+    unique("games_id_server_id_unique").on(table.id, table.serverId),
     index("games_gm_id_idx").on(table.gmId),
-    index("games_end_date_idx").on(table.endDate),
+    index("games_server_id_end_date_idx").on(table.serverId, table.endDate),
     index("games_rulebook_id_idx").on(table.rulebookId),
     // 확정된 세션만 본다(달력·리마인더·시간 겹침 검사). null은 전체의 대부분이라 부분 인덱스로 뺀다.
-    index("games_confirmed_at_idx")
-      .on(table.confirmedAt)
+    index("games_server_id_confirmed_at_idx")
+      .on(table.serverId, table.confirmedAt)
       .where(sql`confirmed_at is not null`),
     check("games_max_players_positive", sql`${table.maxPlayers} >= 1`),
     check("games_play_minutes_positive", sql`${table.playMinutes} > 0`),
@@ -148,6 +203,7 @@ export const games = pgTable(
 export const participants = pgTable(
   "participants",
   {
+    serverId: serverId(),
     gameId: uuid("game_id")
       .notNull()
       .references(() => games.id, { onDelete: "cascade" }),
@@ -171,6 +227,11 @@ export const participants = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.gameId, table.userId] }),
+    foreignKey({
+      columns: [table.gameId, table.serverId],
+      foreignColumns: [games.id, games.serverId],
+      name: "participants_game_server_fk",
+    }).onDelete("cascade"),
     // PK가 game_id로 시작해 user_id 단독 조회(내가 신청한 게임)는 못 탄다.
     index("participants_user_id_idx").on(table.userId),
     // 한 게임 안에서 1d100 값은 사람마다 다르다. null(굴리기 전)끼리는 겹쳐도 된다.
@@ -185,6 +246,7 @@ export const participants = pgTable(
 export const drawResults = pgTable(
   "draw_results",
   {
+    serverId: serverId(),
     gameId: uuid("game_id")
       .notNull()
       .references(() => games.id, { onDelete: "cascade" }),
@@ -196,6 +258,11 @@ export const drawResults = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.gameId, table.userId] }),
+    foreignKey({
+      columns: [table.gameId, table.serverId],
+      foreignColumns: [games.id, games.serverId],
+      name: "draw_results_game_server_fk",
+    }).onDelete("cascade"),
     check("draw_results_roll_range", sql`${table.roll} between 1 and 100`),
   ],
 ).enableRLS();
@@ -203,6 +270,7 @@ export const drawResults = pgTable(
 export const availabilities = pgTable(
   "availabilities",
   {
+    serverId: serverId(),
     gameId: uuid("game_id")
       .notNull()
       .references(() => games.id, { onDelete: "cascade" }),
@@ -213,6 +281,11 @@ export const availabilities = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.gameId, table.userId, table.slotStart] }),
+    foreignKey({
+      columns: [table.gameId, table.serverId],
+      foreignColumns: [games.id, games.serverId],
+      name: "availabilities_game_server_fk",
+    }).onDelete("cascade"),
     // 내가 응답한 게임(user_id → distinct game_id)을 인덱스만으로 끝낸다.
     index("availabilities_user_id_game_id_idx").on(table.userId, table.gameId),
   ],
@@ -225,6 +298,7 @@ export const sessionReviews = pgTable(
   "session_reviews",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     gameId: uuid("game_id")
       .notNull()
       .references(() => games.id, { onDelete: "cascade" }),
@@ -248,6 +322,12 @@ export const sessionReviews = pgTable(
   },
   (table) => [
     uniqueIndex("session_reviews_game_id_author_id_unique").on(table.gameId, table.authorId),
+    unique("session_reviews_id_server_id_unique").on(table.id, table.serverId),
+    foreignKey({
+      columns: [table.gameId, table.serverId],
+      foreignColumns: [games.id, games.serverId],
+      name: "session_reviews_game_server_fk",
+    }).onDelete("cascade"),
     index("session_reviews_author_id_idx").on(table.authorId),
     check(
       "session_reviews_body_length",
@@ -268,6 +348,7 @@ export const reviewReports = pgTable(
   "review_reports",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     reviewId: uuid("review_id")
       .notNull()
       .references(() => sessionReviews.id, { onDelete: "cascade" }),
@@ -282,6 +363,11 @@ export const reviewReports = pgTable(
   },
   (table) => [
     index("review_reports_review_id_idx").on(table.reviewId),
+    foreignKey({
+      columns: [table.reviewId, table.serverId],
+      foreignColumns: [sessionReviews.id, sessionReviews.serverId],
+      name: "review_reports_review_server_fk",
+    }).onDelete("cascade"),
     uniqueIndex("review_reports_open_reporter_unique")
       .on(table.reviewId, table.reporterId)
       .where(sql`outcome is null`),
@@ -298,6 +384,7 @@ export const reviewReports = pgTable(
 export const userBadges = pgTable(
   "user_badges",
   {
+    serverId: serverId(),
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -312,7 +399,8 @@ export const userBadges = pgTable(
     seenAt: timestamp("seen_at", { withTimezone: true }),
   },
   (table) => [
-    primaryKey({ columns: [table.userId, table.badgeKey] }),
+    primaryKey({ columns: [table.serverId, table.userId, table.badgeKey] }),
+    index("user_badges_user_id_idx").on(table.userId),
     check("user_badges_tier_positive", sql`${table.tier} >= 1`),
   ],
 ).enableRLS();
@@ -354,6 +442,8 @@ export const availabilitiesRelations = relations(availabilities, ({ one }) => ({
   }),
 }));
 
+export type Server = typeof servers.$inferSelect;
+export type ServerMember = typeof serverMembers.$inferSelect;
 export type Profile = typeof profiles.$inferSelect;
 export type NewProfile = typeof profiles.$inferInsert;
 export type Game = typeof games.$inferSelect;
@@ -432,6 +522,7 @@ export const rulebookRequests = pgTable(
   "rulebook_requests",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -486,6 +577,7 @@ export const certApplications = pgTable(
   "cert_applications",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -524,8 +616,8 @@ export const certApplications = pgTable(
     index("cert_applications_user_id_idx").on(table.userId),
     index("cert_applications_rulebook_id_idx").on(table.rulebookId),
     // 심사 대기열은 대기 중인 신청만 본다.
-    index("cert_applications_pending_idx")
-      .on(table.createdAt)
+    index("cert_applications_server_id_pending_idx")
+      .on(table.serverId, table.createdAt)
       .where(sql`status = 'pending'`),
   ],
 ).enableRLS();
@@ -533,6 +625,7 @@ export const certApplications = pgTable(
 export const certifications = pgTable(
   "certifications",
   {
+    serverId: serverId(),
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -547,7 +640,8 @@ export const certifications = pgTable(
     revokeReason: text("revoke_reason"),
   },
   (table) => [
-    primaryKey({ columns: [table.userId, table.rulebookId] }),
+    primaryKey({ columns: [table.serverId, table.userId, table.rulebookId] }),
+    index("certifications_user_id_idx").on(table.userId),
     index("certifications_rulebook_id_idx").on(table.rulebookId),
   ],
 ).enableRLS();
@@ -557,6 +651,7 @@ export const sanctions = pgTable(
   "sanctions",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -569,8 +664,8 @@ export const sanctions = pgTable(
   },
   (table) => [
     // 해제 안 된 제재는 한 사람에 하나뿐이다. 동시에 두 운영진이 제재해도 한 건만 들어간다.
-    uniqueIndex("sanctions_active_user_unique")
-      .on(table.userId)
+    uniqueIndex("sanctions_active_server_user_unique")
+      .on(table.serverId, table.userId)
       .where(sql`released_at is null`),
   ],
 ).enableRLS();
@@ -579,6 +674,7 @@ export const reports = pgTable(
   "reports",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     gameId: uuid("game_id")
       .notNull()
       .references(() => games.id, { onDelete: "cascade" }),
@@ -589,22 +685,38 @@ export const reports = pgTable(
     resolvedBy: uuid("resolved_by").references(() => profiles.id, { onDelete: "set null" }),
     resolvedAt: timestamp("resolved_at", { withTimezone: true }),
   },
-  (table) => [index("reports_game_id_idx").on(table.gameId)],
+  (table) => [
+    index("reports_game_id_idx").on(table.gameId),
+    foreignKey({
+      columns: [table.gameId, table.serverId],
+      foreignColumns: [games.id, games.serverId],
+      name: "reports_game_server_fk",
+    }).onDelete("cascade"),
+  ],
 ).enableRLS();
 
-// 역할은 이 표가 정한다. 환경변수 ADMIN_OWNER_DISCORD_IDS는 표가 비어 있을 때 첫 소유자를 들이는 입구다.
-export const staff = pgTable("staff", {
-  userId: uuid("user_id")
-    .primaryKey()
-    .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
-  role: staffRole("role").notNull().default("staff"),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-}).enableRLS();
+// 역할은 이 표가 서버마다 정한다. 환경변수 ADMIN_OWNER_DISCORD_IDS는 표가 비어 있을 때 첫 소유자를 들이는 입구다.
+export const staff = pgTable(
+  "staff",
+  {
+    serverId: serverId(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    role: staffRole("role").notNull().default("staff"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.serverId, table.userId] }),
+    index("staff_user_id_idx").on(table.userId),
+  ],
+).enableRLS();
 
 export const staffMemos = pgTable(
   "staff_memos",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -620,6 +732,7 @@ export const auditLog = pgTable(
   "audit_log",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     actorId: uuid("actor_id").references(() => profiles.id, { onDelete: "set null" }),
     action: text("action").notNull(),
     target: text("target").notNull(),
@@ -634,12 +747,12 @@ export const auditLog = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
-    index("audit_log_created_at_idx").on(table.createdAt),
+    index("audit_log_server_id_created_at_idx").on(table.serverId, table.createdAt),
     index("audit_log_target_game_id_idx").on(table.targetGameId),
   ],
 ).enableRLS();
 
-// 한 줄짜리 설정 표. id가 늘 true라 두 번째 줄이 생기지 않는다.
+// servers.cert_enforcement_date로 옮겨 더 읽고 쓰지 않는다. 다음 단계에서 지운다.
 export const adminSettings = pgTable(
   "admin_settings",
   {
