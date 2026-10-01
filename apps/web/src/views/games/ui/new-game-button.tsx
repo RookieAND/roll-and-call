@@ -7,7 +7,6 @@ import { useState } from "react";
 import { NewGameGateSheet, type PendingCertification } from "./new-game-gate-sheet";
 
 interface NewGameButtonProps extends Omit<ButtonProps, "render" | "onClick"> {
-  // null이면 바로 등록 화면으로 간다. 값이 있으면 안내 시트를 먼저 연다.
   gate: { pending: PendingCertification | null } | null;
 }
 

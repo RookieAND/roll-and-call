@@ -128,7 +128,6 @@ export function WeekChart({ weeks, average, name, unit }: WeekChartProps) {
   );
 }
 
-// "이번 주", 달이 바뀌는 주만 "9월 1주", 나머지는 "2주"
 function axisLabel(weeks: WeeklyPoint[], index: number) {
   if (index === weeks.length - 1) return "이번 주";
   const [month, week] = (weeks[index]?.label ?? "").replace("주차", "주").split(" ");

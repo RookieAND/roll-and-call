@@ -19,7 +19,6 @@ interface RulebookDetailViewProps {
   page?: string;
 }
 
-// 기본 정보·본문 퀴즈·인증 현황 세 탭. 인증이 필요 없는 룰북에는 본문 퀴즈 탭이 없고, 저장 영역은 기본 정보 탭에만 있다.
 export function RulebookDetailView({
   rulebook,
   tab,

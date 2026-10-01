@@ -5,13 +5,10 @@ import { Toaster } from "sonner";
 
 export interface ToastViewportProps {
   position?: "top" | "bottom";
-  // 한 번에 보이는 개수. 넘치면 오래된 것부터 걷힌다.
   max?: number;
-  // 화면 끝(하단이면 FloatingBar 위)에서 띄우는 거리(px).
   offset?: number;
 }
 
-// 앱 전체에 하나만 둔다.
 export function ToastViewport({ position = "bottom", max = 3, offset = 16 }: ToastViewportProps) {
   const edge =
     position === "bottom"

@@ -18,7 +18,6 @@ interface RosterMemberRowProps {
   tags?: string[];
 }
 
-// 행을 누르면 그 사람의 프로필(08)로 간다.
 export function RosterMemberRow({ userId, name, avatarUrl, bio, tags = [] }: RosterMemberRowProps) {
   return (
     <Link

@@ -10,7 +10,6 @@ interface RosterDateRowProps {
   badgePalette: "primary" | "gray";
 }
 
-// 모집 마감·추첨처럼 날짜 하나와 상태 배지 하나를 담는 줄.
 export function RosterDateRow({
   icon: Icon,
   iconClass = "text-hint",

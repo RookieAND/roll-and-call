@@ -1,7 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 // pg_cron이 5분마다 부른다(packages/database/drizzle/0040_session_reminder_cron.sql).
-// 1시간 안에 시작할 확정 세션을 구인글 스레드에 알린다. 임베드는 이 알림 전용 양식이다.
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
@@ -22,7 +21,6 @@ type DueGame = {
   participants: { status: string; user: { discord_id: string } | null }[];
 };
 
-// "10월 1일 (수) 20:00" — web의 formatDateTime과 같은 모양.
 function formatKst(value: string) {
   const parts = Object.fromEntries(
     new Intl.DateTimeFormat("ko-KR", {
@@ -85,7 +83,6 @@ Deno.serve(async () => {
   const now = new Date();
 
   // 먼저 notified_at을 채워 가져가므로 겹쳐 돌아도 두 번 보내지 않는다.
-  // 숨긴 게임과 스레드가 없는 게임은 건너뛴다(다른 스레드 알림과 같다).
   const { data, error } = await supabase
     .from("games")
     .update({ notified_at: now.toISOString() })

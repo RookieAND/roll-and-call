@@ -69,7 +69,6 @@ export function ProfileLinksField({ value, onChange }: ProfileLinksFieldProps) {
                 aria-label={`${service.label} 주소`}
                 className="h-11 min-w-0 flex-1"
                 onChange={(event) => replace(index, { ...link, value: event.target.value })}
-                // 주소를 붙여넣으면 서비스를 알아내 골라준다.
                 onBlur={(event) => {
                   const detected = detectLinkService(event.target.value);
                   if (detected !== link.service && detected !== OTHER_LINK_SERVICE) {

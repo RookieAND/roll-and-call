@@ -14,8 +14,6 @@ interface UrlSearchInputProps {
   className?: string;
 }
 
-// 입력이 멈추면 검색어를 주소의 쿼리로 옮긴다. 목록은 주소만 보고 그린다.
-// 필터 줄은 DS 입력란과 같은 44px(md), 패널 머리글은 옆의 sm 버튼과 같은 32px(sm)이다.
 export function UrlSearchInput({
   placeholder,
   param = "q",

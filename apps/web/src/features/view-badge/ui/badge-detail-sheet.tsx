@@ -12,7 +12,6 @@ interface BadgeDetailSheetProps {
   className?: string;
 }
 
-// 도감·목록의 뱃지를 누르면 상세를 연다. 누르는 자리의 모양은 children이 정한다.
 export function BadgeDetailSheet({ detail, children, className }: BadgeDetailSheetProps) {
   return (
     <Sheet.Root>

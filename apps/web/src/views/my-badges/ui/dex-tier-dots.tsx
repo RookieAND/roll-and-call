@@ -20,7 +20,6 @@ interface DexTierDotsProps {
   tone: BadgeTone;
 }
 
-// 룰별 뱃지의 단계 점. 받은 단계까지 그 단계 색으로 칠한다.
 export function DexTierDots({ tier, stepCount, tone }: DexTierDotsProps) {
   return (
     <HStack gap="025" role="img" aria-label={`${stepCount}단계 중 ${tier}단계`}>

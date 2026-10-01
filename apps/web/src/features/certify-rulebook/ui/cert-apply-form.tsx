@@ -18,13 +18,10 @@ interface CertApplyFormProps {
   rulebook: MyRulebook;
   nickname: string;
   sellers: string[];
-  // 사용 중인 본문 퀴즈가 있으면 3단계로 한 문항을 낸다.
   quiz: { id: string; question: string } | null;
-  // 반려된 책을 다시 낼 때 위에 고정하는 반려 사유. 있으면 재신청 화면이다.
   rejection: { title: string; lines: string[] } | null;
 }
 
-// 신청 2단계(사진)와 3단계(퀴즈). 퀴즈가 틀리면 신청되지 않고 같은 문항에 다시 답한다.
 export function CertApplyForm({
   rulebook,
   nickname,

@@ -10,7 +10,6 @@ interface RouteTabsProps {
   value: string;
 }
 
-// 머리말 아래의 탭. 탭마다 다른 주소로 옮겨 간다.
 export function RouteTabs({ label, items, value }: RouteTabsProps) {
   const router = useRouter();
   return (

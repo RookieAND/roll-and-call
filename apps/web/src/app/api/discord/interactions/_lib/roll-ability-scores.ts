@@ -2,7 +2,6 @@ import { range, sum } from "es-toolkit";
 
 import { rollDice } from "./roll-dice";
 
-// 크툴루 7판: 3d6×5, 크기·지능·교육만 (2d6+6)×5.
 const ABILITIES = [
   { label: "근력", diceCount: 3, bonus: 0 },
   { label: "건강", diceCount: 3, bonus: 0 },

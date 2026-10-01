@@ -7,7 +7,6 @@ import type { ComponentPropsWithRef } from "react";
 import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
 
-// 넘치면 가로로 스크롤하고 잘린 쪽을 페이드로 알린다.
 const list = cva("relative flex items-stretch", {
   variants: {
     variant: { line: "border-b border-gray-200", solid: "gap-050 rounded-400 bg-gray-100 p-050" },

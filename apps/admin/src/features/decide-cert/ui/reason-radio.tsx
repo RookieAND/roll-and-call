@@ -12,7 +12,6 @@ const reasonRow = cva("min-h-11 border-(--rc-color-border-subtle) px-150", {
 
 interface ReasonRadioProps {
   reasons: readonly string[];
-  // 기타(직접 입력) 줄을 둘지. 전자책 사유에는 없다.
   withOther: boolean;
   value: string;
   otherReason: string;
@@ -21,7 +20,6 @@ interface ReasonRadioProps {
   labelledBy: string;
 }
 
-// 사유 문장이 길어 칩 대신 세로 목록으로 둔다. 기타를 골랐을 때만 직접 입력란이 열린다.
 export function ReasonRadio({
   reasons,
   withOther,

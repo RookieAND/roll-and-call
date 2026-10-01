@@ -24,7 +24,6 @@ interface MemberPanelProps {
   waiting?: boolean;
 }
 
-// 참여자 탭과 대기자 탭이 같은 표를 쓴다. 마지막 열만 불참 횟수와 대기 순번으로 갈리고, 행을 누르면 유저 상세로 간다.
 export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
   return (
     <Table.Root className="table-equal">

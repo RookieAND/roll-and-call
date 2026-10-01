@@ -1,7 +1,6 @@
 import "server-only";
 import { loadSnapshot } from "./snapshot";
 
-// 조치 상세. 대상 문자열의 첫 조각이 유저 닉네임이면 유저 상세로 이어 준다.
 export async function getAuditEntry(id: string) {
   const db = await loadSnapshot();
   const entry = db.auditLog.find((candidate) => candidate.id === id);

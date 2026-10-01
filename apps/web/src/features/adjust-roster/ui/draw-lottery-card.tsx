@@ -15,7 +15,6 @@ interface DrawLotteryCardProps {
   deadlinePassed: boolean;
 }
 
-// 마감 전후로 버튼의 무게가 다르다. 기한이 남았으면 뽑는 순간 모집이 닫히므로 한 번 더 묻는다.
 // applicantCount는 직접 확정한 사람을 뺀 추첨 대상 수다. 직접 확정은 뽑을 자리에서만 뺀다.
 export function DrawLotteryCard({
   gameId,

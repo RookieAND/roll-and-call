@@ -16,7 +16,6 @@ interface GridExplorerProps {
   interactive: boolean;
 }
 
-// 처음에는 진행된 세션이 가장 많은 칸을 골라 둔다. 탭을 바꿔도 고른 칸은 유지한다.
 export function GridExplorer({ grids, mode, caption, interactive }: GridExplorerProps) {
   const [selected, setSelected] = useState<Pick<GridCell, "day" | "slot"> | null>(
     () => findTopCells(grids.finished)[0] ?? findTopCells(grids.open)[0] ?? null,

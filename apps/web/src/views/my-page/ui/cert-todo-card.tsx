@@ -9,7 +9,6 @@ interface CertTodoCardProps {
   rulebook: MyRulebook;
 }
 
-// 반려된 룰북 인증. 세션 할 일과 같은 카드 모양으로 둔다.
 export function CertTodoCard({ rulebook }: CertTodoCardProps) {
   return (
     <Card.Root padding="none" className="p-175">

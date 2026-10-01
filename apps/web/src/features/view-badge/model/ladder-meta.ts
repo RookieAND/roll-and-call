@@ -1,6 +1,5 @@
 import { BADGE_LADDER, type BadgeLadderKey } from "@roll-and-call/database/rules";
 
-// 사다리 이름과 횟수 단위. 상세 시트의 단계 표시와 남은 횟수 문구에 쓴다.
 export const LADDER_META: Record<BadgeLadderKey, { title: string; unit: string; verb: string }> = {
   [BADGE_LADDER.playerTotal]: { title: "누적 참여", unit: "회", verb: "참석" },
   [BADGE_LADDER.playerRule]: { title: "룰별 참여", unit: "회", verb: "참석" },

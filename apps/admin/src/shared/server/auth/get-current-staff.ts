@@ -9,7 +9,6 @@ export type CurrentStaff =
   | { status: "denied"; nickname: string }
   | { status: "staff"; id: string; nickname: string; role: StaffRole };
 
-// layout과 page가 같은 요청에서 여러 번 불러도 한 번만 확인한다.
 export const getCurrentStaff = cache(async (): Promise<CurrentStaff> => {
   const supabase = await createSupabaseServerClient();
   const {

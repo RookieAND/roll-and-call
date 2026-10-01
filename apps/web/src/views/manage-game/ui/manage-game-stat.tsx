@@ -6,7 +6,6 @@ interface ManageGameStatProps {
   stat: ManageStat;
 }
 
-// 세 칸은 폭을 똑같이 나누고 가운데 맞춘다. 값은 줄바꿈 없이 한 줄로 둔다.
 export function ManageGameStat({ stat }: ManageGameStatProps) {
   return (
     <VStack gap="025" align="center" className="min-w-0 flex-1 text-center">

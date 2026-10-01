@@ -42,7 +42,6 @@ export type HelpStep = {
 export type HelpTerm = {
   term: string;
   description: ReactNode;
-  // 시안이 실물 배지로 그린 자리. 글씨만 두면 무엇을 가리키는 말인지 흐려진다.
   status?: GameStatus;
   badge?: boolean;
 };

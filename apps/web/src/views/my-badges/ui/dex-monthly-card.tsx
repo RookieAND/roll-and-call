@@ -9,7 +9,6 @@ interface DexMonthlyCardProps {
   card: MonthlyCard;
 }
 
-// 지금 달고 있으면 금색 테두리 카드, 아니면 이번 달 순위만 보여 준다.
 export function DexMonthlyCard({ card }: DexMonthlyCardProps) {
   const frameClass = card.held ? "border-rank-gold bg-warning-50" : "border-gray-200";
   return (

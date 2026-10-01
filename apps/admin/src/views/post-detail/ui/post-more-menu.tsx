@@ -11,7 +11,6 @@ interface PostMoreMenuProps {
   logHref: string;
 }
 
-// 다른 화면으로 가는 길만 모았다. 조치는 오른쪽 조치 영역에 둔다.
 export function PostMoreMenu({ userAppHref, gmId, logHref }: PostMoreMenuProps) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);

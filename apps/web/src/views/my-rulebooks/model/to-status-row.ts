@@ -9,7 +9,6 @@ import { toKst } from "@/shared/lib";
 import { isFresh } from "./is-fresh";
 import type { ListRow } from "./list-row";
 
-// 인증 현황의 한 줄. 반려·인증 취소·심사 중인 책만 온다.
 export function toStatusRow({ rulebook, now }: { rulebook: MyRulebook; now: Date }): ListRow {
   const base = { key: rulebook.id, title: rulebook.label, href: `/me/rulebooks/${rulebook.id}` };
   if (rulebook.state === CERT_STATE.pending) {

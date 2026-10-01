@@ -11,7 +11,6 @@ export const CERT_OPTION = {
   certified: "certified",
   unlocked: "unlocked",
   pending: "pending",
-  // 서플리먼트인데 같은 판본 기본 룰북을 아직 다 인증하지 않았다(심사 중 포함).
   needsCore: "needsCore",
   pick: "pick",
 } as const;
@@ -20,7 +19,6 @@ export type CertOptionType = (typeof CERT_OPTION)[keyof typeof CERT_OPTION];
 
 const PICK_AGAIN = "다시 신청할 수 있습니다";
 
-// 인증 신청에서 책 한 권을 고를 수 있는지와 그 이유 한 줄.
 export function certOption(
   rulebook: MyRulebook,
   rulebooks: MyRulebook[],

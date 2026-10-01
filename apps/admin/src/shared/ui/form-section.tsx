@@ -8,7 +8,6 @@ interface FormSectionProps {
   children: ReactNode;
 }
 
-// 폼 안의 입력 묶음. 묶음 사이는 구분선으로 나눠 어느 입력이 어느 질문에 속하는지 드러낸다.
 export function FormSection({ title, description, right, children }: FormSectionProps) {
   return (
     <VStack

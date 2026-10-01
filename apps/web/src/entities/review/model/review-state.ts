@@ -1,4 +1,3 @@
-// 작성자가 보는 내 후기의 상태. 숨김·보류·제거는 공개 목록에서 빠진다.
 export const REVIEW_STATE = {
   editable: "editable",
   locked: "locked",

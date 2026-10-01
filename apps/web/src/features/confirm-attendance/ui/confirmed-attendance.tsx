@@ -9,7 +9,6 @@ import { ReopenAttendanceButton } from "./reopen-attendance-button";
 interface ConfirmedAttendanceProps {
   gameId: string;
   attendees: Attendee[];
-  // 집계 아래, 명단 위에 끼는 세션 정보·안내.
   children?: ReactNode;
 }
 

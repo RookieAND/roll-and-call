@@ -1,12 +1,10 @@
 import { z } from "zod";
 
-// 종류·카테고리·판본은 모두 "잘 모르겠음"으로 보낼 수 있다(판본은 비우면 모름). 목록에 없는 카테고리는 적은 이름 그대로 보낸다.
 export const UNKNOWN = "unknown" as const;
 export const NEW_CATEGORY = "new" as const;
 
 export const REQUEST_KINDS = ["core", "supplement", "handbook", UNKNOWN] as const;
 
-// 종류는 셋 가운데 고르고, 고르지 않으면 "잘 모르겠음"으로 보낸다.
 export const REQUEST_KIND_CARDS = [
   {
     value: "core",

@@ -17,7 +17,7 @@ export interface SanctionInput {
 
 export type SanctionResult = { ok: true } | { ok: false; conflict: Sanction };
 
-// 제재 확정. 그사이 다른 운영진이 먼저 제재했다면 아무것도 바꾸지 않는다.
+// 그사이 다른 운영진이 먼저 제재했다면 아무것도 바꾸지 않는다.
 export async function applySanction(
   userId: string,
   actor: Actor,

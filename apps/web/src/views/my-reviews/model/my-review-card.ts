@@ -25,7 +25,6 @@ export type MyReviewCardModel = {
   subject: string;
 };
 
-// 공개는 수정 기한 배지만, 막힌 상태는 배지와 까닭 상자를 단다. 버튼은 상태가 허락하는 것만 둔다.
 export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyReviewCardModel {
   const state = deriveReviewState(row, now);
   const sessionDate = row.sessionAt ? formatMonthDay(row.sessionAt) : formatMonthDay(row.createdAt);

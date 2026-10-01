@@ -1,6 +1,5 @@
 import type { ShotKey } from "@/shared/server";
 
-// 심사 화면에서 확인하는 자료 한 칸. 실물은 사진 3장, 전자책은 구매 내역·영수증 2장이다.
 export interface ReviewShot {
   key: ShotKey | EbookShotKey;
   label: string;

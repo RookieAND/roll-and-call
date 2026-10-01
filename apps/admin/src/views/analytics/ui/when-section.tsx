@@ -15,7 +15,6 @@ interface WhenSectionProps {
   mode: GridMode;
 }
 
-// 초기에는 진행된 세션이 적어 모집 중 격자만 보여 준다.
 export function WhenSection({ analytics, mode }: WhenSectionProps) {
   const { early, grid } = analytics;
   const activeMode = early ? GRID_MODE.open : mode;

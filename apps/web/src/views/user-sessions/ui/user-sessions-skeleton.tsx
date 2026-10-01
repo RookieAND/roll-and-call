@@ -3,7 +3,6 @@ import { Container, HStack, Skeleton } from "@roll-and-call/ui";
 import { AppBar } from "@/shared/ui";
 import { SessionListSkeleton } from "@/widgets/session-list";
 
-// 제목의 사용자 이름은 아직 모르므로 앱바 제목은 비운다. 칩 줄은 남의 기록이라 없다.
 export function UserSessionsSkeleton() {
   return (
     <>

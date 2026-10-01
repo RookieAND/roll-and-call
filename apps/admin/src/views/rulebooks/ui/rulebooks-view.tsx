@@ -37,7 +37,6 @@ interface RulebooksViewProps {
   query: Record<string, string | undefined>;
 }
 
-// 룰북 목록·추가 요청·전자책 판매처 세 탭. 표는 카테고리 단위로 쪽을 나누고, 검색에 걸린 책이 없는 카테고리는 빠진다.
 export function RulebooksView({
   tab,
   rulebooks,

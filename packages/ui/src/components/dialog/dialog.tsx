@@ -10,7 +10,6 @@ import { DialogTitle } from "./dialog-title";
 export type { DialogPopupProps } from "./dialog-popup";
 export type { DialogFooterProps } from "./dialog-footer";
 
-// 380px보다 좁은 화면에서는 선택지가 3개를 넘거나 내용이 길면 Sheet를 쓴다.
 export const Dialog = {
   Root: BaseDialog.Root,
   Trigger: BaseDialog.Trigger,

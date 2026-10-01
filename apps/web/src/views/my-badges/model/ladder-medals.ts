@@ -7,7 +7,6 @@ import type { BadgeRecord } from "@/shared/server";
 import type { DexMedal } from "./dex-medal";
 import { heldRecord } from "./held-record";
 
-// 사다리의 모든 단계를 메달로. 받은 단계는 색을 입히고, 방금 받은 단계에 새 뱃지 점을 찍는다.
 export function ladderMedals(
   ladder: BadgeLadderKey,
   events: BadgeEvent[],

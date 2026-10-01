@@ -16,7 +16,6 @@ interface GmBarChartProps {
   gms: AnalyticsData["gms"];
 }
 
-// 상위 3명만 주 색으로 칠해 집중도와 같이 읽히게 한다.
 export function GmBarChart({ gms }: GmBarChartProps) {
   const { ref, tokens } = useChartTokens();
   const data = gms.map((gm, index) => ({

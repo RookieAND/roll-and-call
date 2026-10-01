@@ -10,11 +10,9 @@ export interface PopoverPopupProps extends ComponentPropsWithRef<typeof BasePopo
   side?: "top" | "bottom" | "left" | "right";
   align?: "start" | "center" | "end";
   sideOffset?: number;
-  // 화면 가장자리에서 이만큼 띄우고, 모자라면 반대쪽으로 뒤집는다.
   collisionPadding?: number;
 }
 
-// Portal · Positioner를 알아서 감싸는 기본형.
 export function PopoverPopup({
   side = "bottom",
   align = "center",

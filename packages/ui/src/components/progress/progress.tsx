@@ -5,7 +5,6 @@ import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
 import type { StateComponentProps } from "../../lib/state-props";
 
-// tinted는 같은 색을 한 단 옅게 칠한다(모집 중 = solid, 대기 = tinted).
 const fill = cva("h-full rounded-100", {
   variants: {
     variant: { solid: "", tinted: "" },

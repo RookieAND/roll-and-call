@@ -13,8 +13,6 @@ interface ListPagerProps {
   pageSize?: number;
 }
 
-// 목록 패널 바닥. 왼쪽에 지금 보는 범위, 오른쪽에 페이지 이동. 행이 없으면 그리지 않는다.
-// 다른 쿼리(필터·탭)는 그대로 두고 page만 바꾼다.
 export function ListPager({ page, totalPages, total, unit, pageSize = PAGE_SIZE }: ListPagerProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();

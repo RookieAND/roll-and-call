@@ -6,7 +6,6 @@ const STEPS = [
   { unit: "minute", milliseconds: 60_000 },
 ] as const;
 
-// "방금", "10분 전", "어제"
 export function formatRelativeTime(date: Date, now: Date = new Date()) {
   const elapsed = now.getTime() - date.getTime();
   const step = STEPS.find((candidate) => elapsed >= candidate.milliseconds);

@@ -10,7 +10,6 @@ interface OwnedCategoryCardProps {
   defaultOpen: boolean;
 }
 
-// 인증한 룰북 카테고리 한 장. 펼치면 책마다 인증 여부가 나온다.
 export function OwnedCategoryCard({ category, defaultOpen }: OwnedCategoryCardProps) {
   return (
     <Card.Root padding="none" className="overflow-hidden">

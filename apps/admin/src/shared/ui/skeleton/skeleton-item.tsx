@@ -6,7 +6,6 @@ interface SkeletonItemProps {
   right?: ReactNode;
 }
 
-// ItemCard의 뼈대.
 export function SkeletonItem({ lines = 2, right }: SkeletonItemProps) {
   return (
     <HStack

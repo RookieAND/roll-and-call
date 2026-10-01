@@ -4,7 +4,6 @@ import { countRecentNoShows } from "./count-recent-no-shows";
 import { loadSnapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
 
-// 심사 상세 한 건. 이미 처리된 건이면 processed, 신청자가 거둔 건이면 withdrawnAt이 채워지고 대기열 위치는 없다.
 export async function getCertReview(id: string) {
   const db = await loadSnapshot();
   const application = db.certApplications.find((candidate) => candidate.id === id);

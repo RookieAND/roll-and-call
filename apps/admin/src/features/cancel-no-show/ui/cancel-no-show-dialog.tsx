@@ -16,7 +16,7 @@ interface CancelNoShowDialogProps {
   nextRecordHref: string | null;
 }
 
-// 주소의 record로 연다. 다른 운영진과 부딪힌 기록은 새로 받은 상태 대신 충돌 안내를 계속 보여 준다.
+// 다른 운영진과 부딪힌 기록은 새로 받은 상태 대신 충돌 안내를 계속 보여 준다.
 export function CancelNoShowDialog({
   record,
   summary,

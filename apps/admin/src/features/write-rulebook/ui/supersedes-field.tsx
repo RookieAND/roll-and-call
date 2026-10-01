@@ -28,7 +28,6 @@ function unavailable(draft: RulebookDraft, category: DraftCategory) {
   };
 }
 
-// 포함하는 구판: 이 책을 인증하면 고른 책의 구인도 열 수 있다. 고를 수 없을 때는 이유를 흐린 칸에 적는다.
 export function SupersedesField({
   draft,
   category,

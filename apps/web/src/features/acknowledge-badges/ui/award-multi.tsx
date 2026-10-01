@@ -5,7 +5,6 @@ import { BadgeMedal, TONE_CLASS } from "@/entities/badge";
 
 import type { AwardSheet } from "../model/award-sheet";
 
-// 프리즘·이달의 뱃지·특별 칭호는 그 색 줄로 세운다.
 const HIGHLIGHT_CLASS: Partial<Record<BadgeLook, string>> = {
   5: "border-badge-prism badge-frame-prism bg-(--badge-fill)",
   monthly: "border-rank-gold bg-warning-50",

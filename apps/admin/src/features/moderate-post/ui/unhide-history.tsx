@@ -9,7 +9,6 @@ interface UnhideHistoryProps {
   gmEdit: PostDetail["gmEditSinceHidden"];
 }
 
-// 언제 누가 왜 숨겼는지, 그 뒤 GM이 무엇을 고쳤는지.
 export function UnhideHistory({ hidden, gmEdit }: UnhideHistoryProps) {
   return (
     <>

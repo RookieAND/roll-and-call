@@ -39,7 +39,6 @@ export async function UserProfileView({ id }: { id: string }) {
   if (!loaded) notFound();
 
   const { profile, sessions, absences } = loaded;
-  // 인증된 룰북이 없으면 GM 표시와 블록을 통째로 숨긴다. 본인이 Player로 보이길 고르면 GM 표시만 숨긴다.
   const certified = toMyRulebooks(rulebookRecords)
     .rulebooks.filter((rulebook) => rulebook.state === CERT_STATE.certified)
     .toSorted((left, right) => right.stateAt!.getTime() - left.stateAt!.getTime())

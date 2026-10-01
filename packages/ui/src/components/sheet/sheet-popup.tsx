@@ -34,7 +34,7 @@ const popup = cva(
 
 export type SheetPopupProps = ComponentPropsWithRef<typeof Dialog.Popup>;
 
-// Portal · Overlay를 알아서 감싸는 기본형. 시트 안에 시트나 다이얼로그를 겹쳐 열지 않는다.
+// 시트 안에 시트나 다이얼로그를 겹쳐 열지 않는다.
 export function SheetPopup({ className, children, ...props }: SheetPopupProps) {
   const { side, size } = useContext(SheetContext);
   return (

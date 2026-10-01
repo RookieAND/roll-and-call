@@ -19,7 +19,6 @@ interface MemberSheetProps {
   onClose: () => void;
 }
 
-// 큐가 다르면 첫 줄만 다르다. 할 수 있는 일은 언제나 둘 — 반대 큐로 옮기기와 내보내기.
 export function MemberSheet({
   gameId,
   member,

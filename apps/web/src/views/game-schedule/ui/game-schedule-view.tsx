@@ -16,12 +16,10 @@ export async function GameScheduleView({ id }: { id: string }) {
   const [game, user] = await Promise.all([getGameById(id), getCurrentSessionUser()]);
   if (!game) notFound();
 
-  // 일시 지정 글에는 조율 화면이 없다. 주소로 들어오면 상세로 보낸다.
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) redirect(`/games/${id}`);
 
   const viewerId = user?.id ?? null;
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
-  // GM도 자기 가능 시간을 내야 하므로 입력 화면은 참여자와 같다. 결정은 운영 관리 안에 둔다.
   const appBar = (
     <AppBar
       back={`/games/${id}`}

@@ -11,7 +11,6 @@ export interface SheetRootProps extends Omit<
 > {
   side?: SheetSide;
   size?: SheetSize;
-  // 딤 탭 · 핸들 드래그 · ESC로 닫을 수 있는지. 끄면 Close 버튼으로만 닫힌다.
   dismissible?: boolean;
 }
 

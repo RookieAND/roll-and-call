@@ -9,7 +9,6 @@ export interface OngoingChoice {
   action: "keep" | "leave" | "close";
 }
 
-// "참여 빼기"는 명단에서 빼고, "구인 닫기"는 모집 마감일을 지금으로 당긴다. 닫힌 구인 참여자 수를 돌려준다.
 // ponytail: 빠진 자리에 대기자를 올리지 않는다. 사용자 앱의 승계 규칙을 어드민에 옮길 때 붙인다.
 export async function applyOngoingChoices(tx: Executor, userId: string, choices: OngoingChoice[]) {
   let notifiedMembers = 0;

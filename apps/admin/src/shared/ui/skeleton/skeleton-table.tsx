@@ -7,7 +7,6 @@ import { SkeletonCell, type SkeletonCellKind } from "./skeleton-cell";
 export interface SkeletonColumn {
   label: string;
   kind: SkeletonCellKind;
-  // 최소 폭(px). 실제 표의 TableColumns와 같은 값을 준다. fixed면 아이콘 칸처럼 늘지 않는다.
   width: number;
   fixed?: boolean;
   align?: "start" | "end" | "center";
@@ -21,7 +20,6 @@ interface SkeletonTableProps {
 
 const JUSTIFY = { start: "justify-start", end: "justify-end", center: "justify-center" } as const;
 
-// 표 머리글은 바로 그리고 행만 뼈대로 채운다.
 export function SkeletonTable({ columns, rows = 8 }: SkeletonTableProps) {
   return (
     <Table.Root className="table-equal">

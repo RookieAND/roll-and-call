@@ -12,7 +12,6 @@ import { saveThreadId } from "./save-thread-id";
 
 const FORUM_CHANNEL_ENV = "DISCORD_REVIEW_FORUM_CHANNEL_ID";
 
-// 후기가 바뀐 뒤 부른다. 공개 후기면 포럼 게시글을 만들거나 고치고, 숨김·제거·보류면 지운다.
 // ponytail: 같은 후기를 동시에 두 번 부르면 게시글이 둘 생길 수 있다. 작성·수정은 한 사람이 하므로 드물다.
 export async function syncReviewForumPost(reviewId: string, siteOrigin: string | undefined) {
   const forumId = process.env[FORUM_CHANNEL_ENV];

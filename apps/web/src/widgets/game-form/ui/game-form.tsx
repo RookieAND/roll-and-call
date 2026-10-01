@@ -23,7 +23,6 @@ interface GameFormProps {
   submitLabel: string;
   successMessage?: string;
   edit?: GameEditContext;
-  // 등록에서만 쓴다. 수정은 룰북을 바꿀 수 없다.
   rulebooks?: MyRulebooks;
   initialRulebookId?: string;
 }
@@ -75,7 +74,6 @@ export function GameForm({
     run(async (): Promise<ActionResult> => (await onSubmit(values)) ?? {}, {
       onSuccess: () => toast.success(successMessage),
       onError: (result) => {
-        // 서버가 막은 칸이 있으면 그 칸도 붉게 하고, 이유는 제출 버튼 위 한 곳에서 읽는다.
         if (result.field && result.field in values) {
           form.setError(result.field as keyof GameFormValues, { message: result.error });
         }

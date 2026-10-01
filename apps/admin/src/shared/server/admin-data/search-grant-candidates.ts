@@ -17,8 +17,6 @@ export interface GrantCandidate {
   missingCores: string[];
 }
 
-// GM 직접 추가 검색. 닉네임 일부나 디스코드 ID로 찾고, 이 룰북 기준의 인증 상태와
-// 같은 판본의 기본 룰북 가운데 아직 인증이 없는 책을 붙인다.
 export async function searchGrantCandidates(
   rulebookId: string,
   query: string,

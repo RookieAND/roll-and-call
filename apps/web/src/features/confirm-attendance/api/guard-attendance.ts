@@ -61,7 +61,6 @@ export async function guardAttendance(
   }
 
   revalidateAttendance(gameId);
-  // 출석이 정해지거나 풀리면 인정 세션이 바뀐다.
   after(() => evaluateGameBadges(gameId));
   return {};
 }

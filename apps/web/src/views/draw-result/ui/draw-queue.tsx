@@ -14,10 +14,8 @@ interface DrawQueueProps {
   previewCount: number;
 }
 
-// 이만큼까지는 접을 만큼 길지 않아 다 보여준다.
 const UNFOLDED_MAX = 3;
 
-// 확정선을 긋지 않고 목록을 두 통으로 나눈다. 어느 줄이든 지금 어느 통에 있는지 보이게 한다.
 export function DrawQueue({
   label,
   caption,

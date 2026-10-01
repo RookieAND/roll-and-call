@@ -10,7 +10,6 @@ const skeletonFact = (label: string) => ({
   value: <Skeleton width={96} height={14} render={<span />} className="inline-block" />,
 });
 
-// 구획 제목과 사실 라벨은 먼저 그리고 값만 스켈레톤으로 채운다.
 export function AuditEntryLoading() {
   return (
     <>

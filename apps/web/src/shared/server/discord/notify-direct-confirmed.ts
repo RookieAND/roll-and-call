@@ -7,7 +7,6 @@ import { getGameForNotice } from "../db/get-game-for-notice";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
-// GM이 신청 없이 바로 확정한 사람을 스레드에 알린다.
 export async function notifyDirectConfirmed(gameId: string, userIds: readonly string[]) {
   if (userIds.length === 0) return;
 

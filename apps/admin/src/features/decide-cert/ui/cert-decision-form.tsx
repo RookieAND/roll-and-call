@@ -29,7 +29,6 @@ interface CertDecisionFormProps {
   applicationId: string;
   applicantLabel: string;
   format: CertFormat;
-  // 실물은 앞면·뒷면·책등, 전자책은 구매 내역(order)·영수증(receipt) 주소.
   photoUrls: Partial<Record<ReviewShot["key"], string | null>>;
   replacedShots: ShotKey[];
   nextId: string | null;
@@ -38,11 +37,9 @@ interface CertDecisionFormProps {
   // 신청자가 거둔 신청은 사진이 지워져 사진 칸을 두지 않는다.
   hideShots?: boolean;
   children: ReactNode;
-  // 사진 아래에 두는 본문 퀴즈 결과.
   quiz: ReactNode;
 }
 
-// 사진(전자책은 구매 기록) 확인 항목을 모두 체크해야 승인할 수 있다. 반려는 언제든. 반려 중인지와 확대한 사진은 주소(mode·photo)가 기억한다.
 export function CertDecisionForm({
   applicationId,
   applicantLabel,

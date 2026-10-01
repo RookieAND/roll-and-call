@@ -5,10 +5,8 @@ import type { GameDetailData } from "@/shared/server";
 
 export const MANAGE_ROW_STATE = {
   open: "open",
-  // 지금 막혀 있는 일이다. 줄 전체를 붉게 칠하고 무엇을 해야 하는지 적는다.
   blocked: "blocked",
   done: "done",
-  // 지금 못 하는 일이다. 줄은 지우지 않고 흐리게 두고 이유를 적는다.
   locked: "locked",
 } as const;
 export type ManageRowState = (typeof MANAGE_ROW_STATE)[keyof typeof MANAGE_ROW_STATE];
@@ -23,7 +21,6 @@ export type ManageRow = {
 };
 
 // 줄 순서는 고정이다. 상태에 따라 순서를 바꾸지 않고 같은 자리에서 찾게 한다.
-// 숫자는 헤더에서만 읽는다 — 줄에는 그 줄이 여는 화면이 무엇을 하는지만 적는다.
 export function manageRows(
   game: GameDetailData,
   reviewCount: number,

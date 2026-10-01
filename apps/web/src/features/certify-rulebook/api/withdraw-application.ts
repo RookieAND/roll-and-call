@@ -8,7 +8,7 @@ import { certApplications, db, getCurrentUser, removeUnusedCertPhotos } from "@/
 
 const ALREADY_PROCESSED = "운영진이 이미 처리한 신청입니다. 화면을 새로 고쳐 주세요.";
 
-// 심사 중인 신청을 거둔다. 행은 withdrawn으로 남겨 운영진이 거둔 사실을 보게 하고, 올린 사진은 지운다.
+// 행은 withdrawn으로 남겨 운영진이 거둔 사실을 보게 한다.
 // 예전에 여러 권을 함께 낸 신청이면 같은 묶음의 심사 중인 신청을 모두 거둔다.
 export async function withdrawApplication(rulebookId: string): Promise<ActionResult> {
   const user = await getCurrentUser();

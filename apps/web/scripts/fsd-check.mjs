@@ -1,11 +1,7 @@
-// FSD 경계 검사 (의존성 없음). 규칙은 docs/frontend-conventions.md §1.
-//  - @/ 절대 경로는 2 depth(@/layer/slice, @/shared/segment)까지만
-//  - import는 아래 레이어로만: shared < entities < features < widgets < views < app
-//  - 같은 레이어의 다른 슬라이스(또는 shared의 다른 세그먼트)로 상대 경로 탈출 금지
+// FSD 경계 검사. 규칙은 docs/frontend-conventions.md §1.
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 
-// 인자로 다른 앱의 src를 넘기면 그 앱을 검사한다(apps/admin).
 const SRC = process.argv[2]
   ? resolve(process.argv[2])
   : resolve(new URL(".", import.meta.url).pathname, "../src");
@@ -19,7 +15,6 @@ function* walk(dir) {
   }
 }
 
-// "views/home/ui/x.tsx" → { layer: "views", slice: "home" }; 루트 파일(proxy.ts)은 app 취급
 function unit(relPath) {
   const [layer, slice] = relPath.split(sep);
   if (!LAYERS.includes(layer)) return { layer: "app", slice: "" };
@@ -40,7 +35,6 @@ for (const file of walk(SRC)) {
       if (LAYERS.indexOf(to.layer) > LAYERS.indexOf(from.layer)) {
         errors.push(`${rel}: upward import "${spec}" from ${from.layer}`);
       }
-      // shared 세그먼트끼리, app 내부끼리는 서로 import해도 된다.
       const sliced = from.layer !== "app" && from.layer !== "shared";
       if (sliced && to.layer === from.layer && to.slice !== from.slice) {
         errors.push(`${rel}: cross-slice import "${spec}"`);

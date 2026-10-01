@@ -14,7 +14,6 @@ export interface RevokeInput {
   ongoing: OngoingChoice[];
 }
 
-// 고른 룰북(이름 판본)의 인증을 한 번에 반려로 돌리고 활동 기록은 한 건만 남긴다.
 // 인증을 지우고, 마지막 승인 신청을 반려로 바꾼다(사진은 남긴다). 신청 없이 직접 준 인증이면 반려 기록을 새로 만든다.
 export async function revokeCertifications(userId: string, actor: Actor, input: RevokeInput) {
   const [user] = await db

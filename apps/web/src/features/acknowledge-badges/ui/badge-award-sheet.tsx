@@ -17,7 +17,7 @@ interface BadgeAwardSheetProps {
   sheet: AwardSheet;
 }
 
-// 홈에 들어오면 한 번 뜬다. 어떻게 닫든(닫기·딤·이동) 보여 준 뱃지를 알린 것으로 적는다.
+// 어떻게 닫든(닫기·딤·이동) 보여 준 뱃지를 알린 것으로 적는다.
 export function BadgeAwardSheet({ sheet }: BadgeAwardSheetProps) {
   const [open, setOpen] = useState(true);
   const { run } = useAction();

@@ -30,7 +30,6 @@ export interface PostRow {
   staffAction: PostStaffAction | null;
 }
 
-// 운영진 목록에는 숨긴 구인도 남기고 조치 칸에 표시한다. 세션 일시 최신순.
 export async function listPosts(filter: PostListFilter) {
   const db = await loadSnapshot();
   const all = db.sessions

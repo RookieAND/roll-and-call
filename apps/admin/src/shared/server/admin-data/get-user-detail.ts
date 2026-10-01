@@ -7,7 +7,6 @@ import type { Session } from "./types";
 const nicknameOf = (db: Snapshot, userId: string) =>
   db.users.find((user) => user.id === userId)?.nickname ?? "";
 
-// 진행 중인 활동 한 줄. 제재·인증 취소 모달이 "그대로 진행 / 빼기·닫기"를 고르게 한다.
 const toOngoing = (db: Snapshot, session: Session, userId: string) => ({
   sessionId: session.id,
   title: session.title,

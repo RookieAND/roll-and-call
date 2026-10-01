@@ -10,7 +10,6 @@ import type { BookDraft } from "./book-draft";
 import { OTHER_SELLER } from "./other-seller";
 import { PHOTO_SLOT, slotUrl, type PhotoSlot } from "./photo-slot";
 
-// 책 한 권에서 아직 채우지 않은 것 한 줄. 다 채웠으면 null.
 export function draftMissing(draft: BookDraft): string | null {
   const ebook = draft.format === CERT_FORMAT.ebook;
   const slots: [string, PhotoSlot][] = ebook

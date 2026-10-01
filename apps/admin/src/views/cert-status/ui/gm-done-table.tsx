@@ -10,7 +10,6 @@ interface GmDoneTableProps {
   rows: GmCertRow[];
 }
 
-// 인증을 마친 GM. 인증한 판본 전체는 행을 눌러 유저 상세의 룰북 인증 탭에서 본다.
 export function GmDoneTable({ rows }: GmDoneTableProps) {
   return (
     <Table.Root className="table-equal">

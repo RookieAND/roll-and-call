@@ -13,7 +13,6 @@ interface CategoryCardProps {
   rulebook: RulebookDetail;
 }
 
-// 같은 카테고리의 책을 판본별로 묶고, 판본마다 GM 조건을 책 배지 조합으로 보여 준다. 이 책은 강조한다.
 export function CategoryCard({ rulebook }: CategoryCardProps) {
   const addHref = withQuery("/rules", {}, { add: "1", category: rulebook.category });
   return (

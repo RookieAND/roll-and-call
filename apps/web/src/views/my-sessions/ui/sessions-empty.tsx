@@ -11,7 +11,6 @@ import {
   type SessionChipKey,
 } from "@/widgets/session-list";
 
-// 빈 상태는 이 화면에 둔다. 마이페이지는 0으로 세기만 하고, 왜 비었는지와 다음 행동은 목록에서 말한다.
 const ONGOING_EMPTY: Record<
   SessionRole,
   { title: string; body: ReactNode; href: string; label: string }
@@ -47,7 +46,6 @@ const ONGOING_IMAGE: Record<SessionRole, string> = {
   [SESSION_ROLE.host]: "/empty-states/empty-hosted.png",
 };
 
-// 칩으로 거른 결과가 비었을 때 칩마다 다른 말.
 const FILTERED_TITLE: Partial<Record<SessionChipKey, string>> = {
   [SESSION_CHIP.scheduling]: "조율 중인 세션이 없습니다",
   [SESSION_CHIP.confirmed]: "확정된 세션이 없습니다",
@@ -78,7 +76,6 @@ export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
     );
   }
 
-  // 종료 칩에는 다음 행동을 두지 않는다. 기록을 보는 자리다.
   if (activeChip === SESSION_CHIP.ended) {
     return (
       <EmptyState

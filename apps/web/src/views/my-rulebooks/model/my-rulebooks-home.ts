@@ -15,7 +15,6 @@ import { toStatusRow } from "./to-status-row";
 const STATUS_ORDER = [CERT_STATE.rejected, CERT_STATE.revoked, CERT_STATE.pending] as const;
 const STATUS_WORD = { rejected: "반려", revoked: "취소", pending: "심사 중" } as const;
 
-// 내 룰북 화면 한 장. 인증 현황(반려 → 취소 → 심사 중) → 인증한 룰북(카테고리별) → 추가 요청.
 export function myRulebooksHome(data: MyRulebooks, now: Date) {
   const { rulebooks, sets, enforcementDate, suspended, suspendedUntil } = data;
   const inStatus = STATUS_ORDER.map((state) =>

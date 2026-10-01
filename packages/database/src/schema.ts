@@ -47,7 +47,6 @@ export const profiles = pgTable(
     links: jsonb("links").$type<ProfileLink[]>().notNull().default([]),
     // 인증된 룰북이 있어도 Player로 보이고 싶으면 끈다.
     showGmBadge: boolean("show_gm_badge").notNull().default(true),
-    // 업적. 끄면 다른 사람에게 대표 뱃지·뱃지 목록이 보이지 않는다.
     showBadges: boolean("show_badges").notNull().default(true),
     // 이름 아래 고정할 뱃지 키. 누른 순서대로 최대 3개이고, 비어 있으면 최근에 받은 3개를 보인다.
     featuredBadges: text("featured_badges").array().notNull().default([]),
@@ -237,7 +236,6 @@ export const sessionReviews = pgTable(
     // review-photos 버킷의 공개 URL. 배열 순서가 보이는 순서다.
     photoUrls: text("photo_urls").array().notNull().default([]),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-    // 작성자가 마지막으로 고친 시각. null이면 고친 적 없다.
     updatedAt: timestamp("updated_at", { withTimezone: true }),
     hiddenAt: timestamp("hidden_at", { withTimezone: true }),
     hiddenBy: uuid("hidden_by").references(() => profiles.id, { onDelete: "set null" }),
@@ -284,7 +282,6 @@ export const reviewReports = pgTable(
   },
   (table) => [
     index("review_reports_review_id_idx").on(table.reviewId),
-    // 같은 사람이 같은 후기를 처리 전에 두 번 신고하지 못한다.
     uniqueIndex("review_reports_open_reporter_unique")
       .on(table.reviewId, table.reporterId)
       .where(sql`outcome is null`),
@@ -370,7 +367,6 @@ export type SessionReview = typeof sessionReviews.$inferSelect;
 export type ReviewReport = typeof reviewReports.$inferSelect;
 export type UserBadge = typeof userBadges.$inferSelect;
 
-// ── 어드민 ──
 // 아래 테이블은 모두 RLS만 켜고 정책을 두지 않는다. 어드민 서버(DATABASE_URL)만 읽고 쓴다.
 
 export const staffRole = pgEnum("staff_role", ["owner", "staff"]);

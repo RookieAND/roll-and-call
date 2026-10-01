@@ -14,12 +14,10 @@ const ACTION_LABEL = {
 } as const;
 
 interface RequestActionsProps {
-  // 비슷한 룰북이 있으면 연결을, 없으면 새로 추가를 앞에 둔다.
   similar: boolean;
   actionHref: (action: RequestAction) => string;
 }
 
-// 처리 하나를 버튼으로, 나머지는 ⋯ 메뉴에 둔다. 모두 주소의 action으로 창을 연다.
 export function RequestActions({ similar, actionHref }: RequestActionsProps) {
   const [open, setOpen] = useState(false);
   const primary = similar ? REQUEST_ACTION.link : REQUEST_ACTION.add;

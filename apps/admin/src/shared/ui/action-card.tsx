@@ -30,7 +30,6 @@ interface ActionCardProps {
   tone?: keyof typeof TONE;
 }
 
-// 오른쪽 조치 영역의 한 줄. 누르면 확인 창이나 조치 페이지로 간다.
 export function ActionCard({ icon, title, description, link, tone = "gray" }: ActionCardProps) {
   const style = TONE[tone];
   return (

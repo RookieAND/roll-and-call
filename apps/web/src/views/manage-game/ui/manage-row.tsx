@@ -45,7 +45,6 @@ const DETAIL_FOREGROUND = {
   locked: "hint",
 } as const;
 
-// 막힌 줄은 줄 전체를 붉게 칠한다 — 목록 카드·할 일 카드와 같은 신호다.
 const manageRow = cva("min-h-16 px-175 py-150", {
   variants: {
     interactive: { true: "transition-colors hover:bg-gray-50", false: "" },

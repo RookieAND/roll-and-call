@@ -22,7 +22,6 @@ interface UserBadgesViewProps {
   id: string;
 }
 
-// 남의 업적. 받은 뱃지만 분류별로 보이고, 본인이 업적 보이기를 끄면 잠긴 화면만 보인다.
 export async function UserBadgesView({ id }: UserBadgesViewProps) {
   const [viewer, profile] = await Promise.all([getCurrentSessionUser(), getProfile(id)]);
   if (viewer?.id === id) redirect("/me/badges");

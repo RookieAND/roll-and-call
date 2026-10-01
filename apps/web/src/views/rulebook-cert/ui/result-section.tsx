@@ -6,7 +6,6 @@ interface ResultSectionProps {
   children: ReactNode;
 }
 
-// 신청 상세의 한 구역. 위에 굵은 회색 띠를 두어 구역을 나눈다.
 export function ResultSection({ label, children }: ResultSectionProps) {
   return (
     <VStack render={<section />}>

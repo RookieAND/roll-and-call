@@ -13,7 +13,6 @@ interface GamePreflightSectionProps {
   game: GameDetailData;
 }
 
-// 06에서 받은 값을 신청 판단 순서대로 읽힌다 — 장르 · 트리거 · 주의 사항 · 사용 플랫폼 · AI 이미지.
 export function GamePreflightSection({ game }: GamePreflightSectionProps) {
   return (
     <VStack gap="175">

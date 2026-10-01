@@ -8,7 +8,7 @@ import type { Actor } from "./types";
 
 export type GrantResult = { ok: true } | { ok: false; alreadyCertified: true };
 
-// 사진 심사 없이 운영진이 직접 인증한다. 그 GM의 대기 중 신청은 같은 트랜잭션에서 함께 승인한다.
+// 그 GM의 대기 중 신청은 같은 트랜잭션에서 함께 승인한다.
 export async function grantCertification(
   rulebookId: string,
   userId: string,

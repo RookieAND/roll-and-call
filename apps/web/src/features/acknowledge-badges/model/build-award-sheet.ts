@@ -35,7 +35,6 @@ function toItem(badge: HeldBadge): AwardItem {
   };
 }
 
-// 다음 방문 때 한 번 뜨는 획득 시트. 알리지 않은 뱃지가 없으면 null.
 export function buildAwardSheet(held: HeldBadge[]): AwardSheet | null {
   const pending = held.filter((badge) => badge.record.notifiedAt === null);
   if (pending.length === 0) return null;

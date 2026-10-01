@@ -11,7 +11,6 @@ import { AppBar } from "@/shared/ui";
 
 import { ConfirmSummary } from "./confirm-summary";
 
-// 가능 시간을 내는 일(일정 조율)과 시간을 정하는 일은 다른 행동이라 화면을 나눈다.
 export async function GameConfirmView({ id }: { id: string }) {
   const [game, user, availabilities] = await Promise.all([
     getGameById(id),

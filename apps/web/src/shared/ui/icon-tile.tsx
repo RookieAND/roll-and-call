@@ -19,7 +19,6 @@ interface IconTileProps extends Required<VariantProps<typeof iconTile>> {
   icon: LucideIcon;
 }
 
-// 설정 줄·안내 블록 왼쪽에 붙는 34px 아이콘 칸.
 export function IconTile({ icon: Icon, tone }: IconTileProps) {
   return (
     <span className={iconTile({ tone })}>

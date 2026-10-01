@@ -8,7 +8,6 @@ interface HideImpactProps {
   startsAt: Date;
 }
 
-// 숨김은 목록과 검색에서만 빠진다는 점을 확정 전에 보여 준다.
 export function HideImpact({ memberCount, waitingCount, startsAt }: HideImpactProps) {
   const items = [
     { label: "목록 · 검색", value: "빠짐", sub: "새로 보는 사람에게만" },

@@ -9,7 +9,6 @@ type Sparkle = {
   duration: number;
 };
 
-// 시안 12 F의 별 자리. 둘 다 여섯을 두르고 박자를 어긋나게 반짝인다.
 export const ROLL_SPARKLES = {
   [ROLL_GRADE.critical]: [
     { size: 9, position: { right: -4, top: -4 }, delay: 0.1, duration: 1.5 },

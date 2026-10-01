@@ -4,7 +4,6 @@ import type { SessionGame } from "./session-card-model";
 
 export type Absence = { gameId: string; title: string; sessionAt: Date; expiresAt: Date };
 
-// 3개월이 지난 기록은 없는 것과 같다. 가장 최근 것이 앞에 온다.
 export function recentAbsences(
   joined: SessionGame[],
   userId: string,

@@ -17,7 +17,6 @@ interface SkeletonEntityProps {
   actions?: ReactNode;
 }
 
-// EntityHead의 뼈대. 이름·메타·사실 값만 비우고 사실 라벨은 그린다.
 export function SkeletonEntity({
   lead = "user",
   facts,

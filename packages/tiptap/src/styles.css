@@ -1,7 +1,6 @@
 /* Registers this package's component sources with the consuming app's Tailwind. */
 @source ".";
 
-/* 시놉시스 리치 텍스트. 에디터(ProseMirror)와 상세 화면이 같은 규칙을 쓴다. */
 .rich-text > * + * {
   margin-top: 0.5rem;
 }

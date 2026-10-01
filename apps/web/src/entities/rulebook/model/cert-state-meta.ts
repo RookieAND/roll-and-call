@@ -2,7 +2,6 @@ import { Ban, CircleAlert, CircleCheck, CirclePlus, Clock, type LucideIcon } fro
 
 import { CERT_STATE, type CertState } from "./cert-state";
 
-// 상태는 아이콘과 글자를 함께 쓴다. 인증됨 성공 색, 확인 중 중립, 반려됨 경고, 인증 취소됨 흐림.
 export const CERT_STATE_META: Record<
   CertState,
   { label: string; icon: LucideIcon; foreground: "success" | "muted" | "warning" | "hint" }

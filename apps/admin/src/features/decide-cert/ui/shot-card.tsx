@@ -17,7 +17,6 @@ const photoArea = cva(
   {
     variants: {
       compact: { true: "h-[150px]", false: "h-[200px]" },
-      // 전자책 캡처 두 장은 넓은 칸이라 더 높게 둔다.
       tall: { true: "h-[260px]", false: "" },
     },
   },
@@ -45,7 +44,6 @@ interface ShotCardProps {
   onZoom: () => void;
 }
 
-// 머리줄(사진 이름 · 찍어야 할 것 · 상태) > 사진 > 확인 항목 한 줄.
 export function ShotCard({
   label,
   note,

@@ -29,7 +29,6 @@ const REASONS = Object.values(REPORT_REASON);
 
 interface ReportReviewSheetProps {
   reviewId: string;
-  // "오세진님의 후기 · 물벼락"
   subject: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;

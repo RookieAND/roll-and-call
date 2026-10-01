@@ -8,7 +8,6 @@ interface SidebarCountProps {
   active: boolean;
 }
 
-// 처리 대기 건수는 값을 받은 뒤에만 그린다. 받는 동안은 자리를 비운다.
 export function SidebarCount({ countPromise, active }: SidebarCountProps) {
   const count = use(countPromise);
   if (!count) return null;

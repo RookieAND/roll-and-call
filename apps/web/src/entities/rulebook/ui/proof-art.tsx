@@ -1,6 +1,5 @@
 import type { CertProof } from "../model/cert-proof";
 
-// 전자책 구매 내역·영수증 예시. 사진 예시(ShotArt)와 같은 역할 토큰으로 칠한다.
 const COLOR = {
   cover: "var(--rc-color-bg-primary-weak)",
   edge: "var(--rc-color-border-primary)",

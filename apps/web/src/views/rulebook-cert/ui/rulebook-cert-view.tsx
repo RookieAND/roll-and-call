@@ -23,7 +23,6 @@ interface RulebookCertViewProps {
   rulebookId: string;
 }
 
-// 신청 상세. 함께 낸 책을 권마다 구역으로 나눠 결과를 보여 주고, 아래에 그 상태에서 할 일을 둔다.
 export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {

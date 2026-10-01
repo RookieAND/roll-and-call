@@ -7,7 +7,6 @@ import { ReviewList } from "./review-list";
 import { ReviewsPage } from "./reviews-page";
 
 interface ReceivedReviewsViewProps {
-  // 없으면 로그인한 본인(마이페이지에서 들어옴).
   userId?: string;
 }
 

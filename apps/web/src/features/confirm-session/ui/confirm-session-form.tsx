@@ -17,7 +17,6 @@ import { SessionTimeFields } from "./session-time-fields";
 import { SessionWindowSummary } from "./session-window-summary";
 import { UnavailableWarning } from "./unavailable-warning";
 
-// 후보를 더 늘리면 고르는 일이 다시 읽는 일이 된다. 나머지는 직접 입력 칸으로 간다.
 const CANDIDATE_LIMIT = 3;
 const DEFAULT_HOUR = 19;
 

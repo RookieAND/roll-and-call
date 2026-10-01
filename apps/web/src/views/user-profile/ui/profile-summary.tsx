@@ -19,7 +19,6 @@ interface ProfileSummaryProps {
   badgeTotal: number;
 }
 
-// 07 §C가 쓰는 bio·keywords·availability를 그대로 읽는다. 프로필을 위한 새 입력을 만들지 않는다.
 export function ProfileSummary({
   profile,
   absences,

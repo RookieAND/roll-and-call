@@ -2,7 +2,6 @@ import { Container, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 
-// 불러온 초안 안내는 쓰던 후기가 있을 때만 붙어서 뼈대에서 뺀다.
 export function WriteReviewSkeleton() {
   return (
     <Container size="sm" className="px-0">

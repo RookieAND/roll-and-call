@@ -15,7 +15,6 @@ import { and, desc, eq, gt, isNull, ne, or, sql } from "drizzle-orm";
 const RECENT_DAYS = 90;
 const REQUEST_RESULT_DAYS = 30;
 
-// 룰북 목록과 한 사람의 인증 기록을 한 번에 읽는다. userId가 없으면(비로그인) 목록과 적용일만.
 // 거둔 신청은 없던 것으로 본다. 최근 연 구인의 룰북은 신청 추천에, 이미 대기 중인 추가 요청 이름은 중복 요청을 막는 데 쓴다.
 export async function getRulebookRecords(userId: string | null) {
   const [catalog, [settings]] = await Promise.all([

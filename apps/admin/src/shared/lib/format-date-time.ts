@@ -8,7 +8,6 @@ const parts = new Intl.DateTimeFormat("ko-KR", {
   timeZone: "Asia/Seoul",
 });
 
-// "2026년 9월 22일 14:36"
 export function formatDateTime(date: Date) {
   const value = Object.fromEntries(
     parts.formatToParts(date).map((part) => [part.type, part.value]),

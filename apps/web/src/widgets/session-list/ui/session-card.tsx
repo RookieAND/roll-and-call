@@ -29,7 +29,6 @@ interface SessionCardProps {
   model: SessionCardModel;
 }
 
-// 카드에는 지금 필요한 것만 둔다: 제목 + 상태 배지 / 아이콘 + 일정 한 줄 / GM(참여 탭) / 버튼.
 export function SessionCard({ model }: SessionCardProps) {
   const ScheduleIcon = SCHEDULE_ICON[model.scheduleIcon];
   const titleForeground = model.titleDanger

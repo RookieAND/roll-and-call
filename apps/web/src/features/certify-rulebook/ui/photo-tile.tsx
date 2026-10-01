@@ -54,15 +54,12 @@ interface PhotoTileProps {
   example: ReactNode;
   slot: PhotoSlot;
   selected: boolean;
-  // 아직 비어 있어 채워야 하는 칸. 점선으로 남은 칸을 알린다.
   needed: boolean;
-  // 구매 내역·영수증은 정사각형이다.
   square?: boolean;
   onPick: () => void;
   onRemove: () => void;
 }
 
-// 사진 칸. 빈 칸에는 무엇을 찍을지 예시 그림을 흐리게 깐다. PDF는 그림 대신 문서 아이콘을 둔다.
 export function PhotoTile({
   label,
   example,

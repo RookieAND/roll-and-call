@@ -11,7 +11,6 @@ interface RulebookSubmittedViewProps {
   rulebookId: string;
 }
 
-// 신청 완료. 예전에 여러 권을 함께 낸 신청이면 묶음을 모두 보여 준다.
 export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedViewProps) {
   const user = await getCurrentSessionUser();
   const { rulebooks } = toMyRulebooks(await getRulebookRecords(user?.id ?? null));

@@ -16,7 +16,6 @@ interface CategoryBookItemProps {
   current: boolean;
 }
 
-// 카테고리 카드의 책 한 줄. 지금 보는 책은 강조하고, 다른 책은 그 상세로 간다.
 export function CategoryBookItem({ book, current }: CategoryBookItemProps) {
   const meta = [
     RULEBOOK_KIND_LABEL[book.kind],

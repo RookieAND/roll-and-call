@@ -13,11 +13,8 @@ export interface EditionSet {
   extras: MyRulebook[];
   free: boolean;
   opened: boolean;
-  // 무료 배포가 아니라 내가 인증해서 연 세트.
   earned: boolean;
-  // 신판 인증으로 열렸으면 그 신판의 판본.
   unlockedBy: string | null;
-  // 이 판본 인증으로 함께 열리는 구판들.
   covers: string[];
 }
 
@@ -67,7 +64,6 @@ export function editionSets(rulebooks: MyRulebook[]): EditionSet[] {
   );
 }
 
-// 책이 속한 세트. 서플리먼트·핸드북은 같은 판본의 세트, 없으면 null.
 export function setOf(rulebook: MyRulebook, sets: EditionSet[]) {
   return sets.find((set) => set.key === editionSetKey(rulebook)) ?? null;
 }

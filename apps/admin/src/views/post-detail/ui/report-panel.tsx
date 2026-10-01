@@ -11,7 +11,7 @@ interface ReportPanelProps {
   reports: PostDetail["reports"];
 }
 
-// 처리 안 된 신고를 먼저, 처리된 신고는 흐리게 뒤에 둔다. 어드민에서는 스포일러를 가리지 않는다.
+// 어드민에서는 스포일러를 가리지 않는다.
 export function ReportPanel({ reports }: ReportPanelProps) {
   const ordered = [
     ...reports.filter((report) => !report.resolved),

@@ -13,7 +13,6 @@ interface CertStatusTabsProps {
   gmPanel: ReactNode;
 }
 
-// 탭은 주소의 tab으로 기억한다. 탭을 바꾸면 그 탭 전용 필터는 지운다.
 export function CertStatusTabs({ tab, toolbar, rulebookPanel, gmPanel }: CertStatusTabsProps) {
   const router = useRouter();
   const pathname = usePathname();

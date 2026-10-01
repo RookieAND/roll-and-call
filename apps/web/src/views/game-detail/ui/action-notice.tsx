@@ -7,7 +7,6 @@ interface ActionNoticeProps {
   children: ReactNode;
 }
 
-// 액션 바의 상태 카드. Callout sm으로 대체한다.
 export function ActionNotice({ title, colorPalette = "gray", children }: ActionNoticeProps) {
   return (
     <Callout.Root colorPalette={colorPalette} size="sm">

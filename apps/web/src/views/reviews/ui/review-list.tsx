@@ -15,7 +15,6 @@ interface ReviewListProps {
   emptyText: string;
 }
 
-// 공개된 후기만 온다. 본인 후기의 숨김·보류 같은 상태는 내가 쓴 후기에서 본다.
 export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewListProps) {
   if (rows.length === 0) return <ReviewEmpty text={emptyText} />;
   const now = Date.now();

@@ -13,7 +13,6 @@ interface JoinableActionsProps {
   endDate: Date;
 }
 
-// 선착순은 누르는 순간 확정, 추첨은 마감까지 결과를 모른다. 버튼 라벨로 그 차이를 먼저 말한다.
 export function JoinableActions({
   gameId,
   isFull,

@@ -10,7 +10,6 @@ import type { Actor } from "./types";
 
 export const CORE_REJECTED_TAG = "기본 룰북 반려";
 
-// 기본 룰북을 반려하면 그 책에 기대는 같은 사람의 심사 대기 서플리먼트도 함께 반려한다.
 export async function rejectWaitingSupplements(
   executor: Executor,
   actor: Actor,

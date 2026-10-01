@@ -28,14 +28,11 @@ interface CertStateRowProps {
   state: CertState;
   title: string;
   meta?: string;
-  // 제목 옆(목록)에 글자로, 오른쪽 끝에 글자나 배지(마이페이지 블록)로 둔다. 없으면 아이콘만.
   statusPlacement?: "inline" | "end" | "badge" | "none";
   chevron?: boolean;
-  // 전체 목록은 md, 마이페이지 블록처럼 몇 줄만 미리 보이는 자리는 sm.
   size?: "md" | "sm";
 }
 
-// 룰북 하나와 내 인증 상태. 링크는 감싸는 쪽이 준다.
 export function CertStateRow({
   state,
   title,

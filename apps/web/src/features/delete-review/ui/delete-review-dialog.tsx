@@ -8,7 +8,6 @@ import { deleteReview } from "../api/delete-review";
 
 interface DeleteReviewDialogProps {
   reviewId: string;
-  // "물벼락 · 9/19 세션"처럼 무엇을 지우는지 한 줄로.
   subject: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;

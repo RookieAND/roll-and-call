@@ -24,7 +24,7 @@ export type CertDecisionResult =
   | { ok: false; conflict: { status: "approved" | "rejected" | "withdrawn"; by: string; at: Date } }
   | { ok: false; blocked: string };
 
-// 승인·반려 확정. 이미 다른 운영진이 처리했으면 아무것도 바꾸지 않고 충돌을 알린다.
+// 이미 다른 운영진이 처리했으면 아무것도 바꾸지 않고 충돌을 알린다.
 // 기본 룰북이 결정되기 전의 서플리먼트는 막는다. 기본 룰북을 반려하면 기대는 서플리먼트도 반려한다.
 export async function decideCert(
   id: string,

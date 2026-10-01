@@ -6,7 +6,6 @@ declare module "@tiptap/core" {
   }
 }
 
-// 디스코드의 ||스포일러||에 대응한다. 저장은 마크로, 디스코드로 나갈 땐 마크다운으로 바뀐다.
 export const Spoiler = Mark.create({
   name: "spoiler",
 

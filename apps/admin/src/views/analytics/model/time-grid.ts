@@ -1,6 +1,5 @@
 export const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"] as const;
 
-// start·end가 있는 칸만 이웃 칸과 "20–24시"처럼 합쳐 부를 수 있다.
 export const TIME_SLOTS = [
   { label: "오전" },
   { label: "12–15시", start: 12, end: 15 },

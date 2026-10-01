@@ -25,7 +25,6 @@ interface RulebookEditFormProps {
   aside: ReactNode;
 }
 
-// 기본 정보와 인증 정책을 한 번에 저장한다. 변경 사유는 하단 한 칸이 저장과 숨김 모두에 쓰인다.
 export function RulebookEditForm({ rulebook, aside }: RulebookEditFormProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();

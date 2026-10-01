@@ -1,6 +1,5 @@
 import type { CertFormat } from "./cert-format";
 
-// 신청 화면의 번호 붙은 안내. 형식마다 세 줄.
 export const CERT_GUIDE: Record<CertFormat, readonly string[]> = {
   physical: [
     "앞면은 디스코드 닉네임을 적은 쪽지와 함께 찍어 주세요.",

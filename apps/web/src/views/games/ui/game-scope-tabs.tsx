@@ -14,7 +14,6 @@ interface GameScopeTabsProps {
   counts?: Record<GameTab, number>;
 }
 
-// 탭을 바꾸면 칩·정렬·쪽은 처음으로 돌아가고 검색어만 남는다.
 export function GameScopeTabs({ filter, counts }: GameScopeTabsProps) {
   const router = useRouter();
 

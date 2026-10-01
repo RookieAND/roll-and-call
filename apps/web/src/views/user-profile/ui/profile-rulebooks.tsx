@@ -11,7 +11,6 @@ interface ProfileRulebooksProps {
   rulebooks: { id: string; label: string }[];
 }
 
-// 인증된 룰북 칩. 다섯 개를 넘으면 "+N"으로 접고, 누르면 시트에서 가나다순 전체 목록을 보여 준다.
 export function ProfileRulebooks({ rulebooks }: ProfileRulebooksProps) {
   const hiddenCount = rulebooks.length - FOLDED_COUNT;
   const sorted = rulebooks.toSorted((left, right) => left.label.localeCompare(right.label, "ko"));

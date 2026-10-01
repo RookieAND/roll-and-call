@@ -3,7 +3,6 @@ import { Button } from "@roll-and-call/ui";
 import { EmptyState } from "@/shared/ui";
 
 interface ScheduleOverlapEmptyProps {
-  // 칠할 수 있는 사람에게만 내 가능 시간 탭으로 가는 버튼을 준다.
   onPaint?: () => void;
 }
 

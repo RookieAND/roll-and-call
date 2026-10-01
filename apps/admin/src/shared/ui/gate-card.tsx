@@ -5,7 +5,6 @@ interface GateCardProps {
   children: ReactNode;
 }
 
-// 로그인·권한 없음처럼 앱 틀 바깥에서 한 장만 띄우는 카드.
 export function GateCard({ children }: GateCardProps) {
   return (
     <main className="grid min-h-dvh place-items-center bg-canvas p-200">

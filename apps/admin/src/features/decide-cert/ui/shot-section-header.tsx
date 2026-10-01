@@ -18,7 +18,6 @@ export function ShotSectionHeader({
 }: ShotSectionHeaderProps) {
   const progressLabel = `확인 ${checkedCount} / ${total}`;
   const allChecked = checkedCount === total;
-  // 반려 중에는 사진을 누르면 확대 대신 문제 사진으로 지정된다.
   const guide = rejecting
     ? "문제가 있는 사진을 누르면 반려 사유와 함께 지정됩니다. 크게 보려면 [확대]를 누릅니다."
     : "사진마다 확인 항목을 체크합니다. [확대]를 누르거나 사진을 누르면 크게 볼 수 있습니다.";

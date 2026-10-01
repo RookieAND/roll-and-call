@@ -12,7 +12,6 @@ const isTyping = (target: EventTarget | null) =>
   target instanceof HTMLElement &&
   (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
 
-// ⌘K·Ctrl+K로 팔레트를 열고, 입력 중이 아닐 때 G 다음 C·B·P로 처리 대기 화면에 간다.
 export function usePaletteShortcuts(open: () => void) {
   const router = useRouter();
 

@@ -31,7 +31,6 @@ export const SECTION_FIELDS = {
   [FORM_SECTION.schedule]: ["scheduleMode", "confirmedAt", "rangeStart", "rangeEnd", "endDate"],
 } as const satisfies Record<SectionKey, readonly (keyof GameFormValues)[]>;
 
-// 등록과 수정 모두 한 단계에서 한 종류의 결정만 한다.
 export const GAME_FORM_STEPS = [
   {
     title: "게임 정보",

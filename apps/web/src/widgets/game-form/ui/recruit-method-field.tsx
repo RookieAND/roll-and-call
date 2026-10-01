@@ -22,7 +22,6 @@ interface RecruitMethodFieldProps {
   locked?: boolean;
 }
 
-// 칸에는 한 줄 요약만 둔다. 방식별 자세한 설명은 아래 한 블록(GameRecruitFields)에서 한다.
 export function RecruitMethodField({ value, onChange, locked = false }: RecruitMethodFieldProps) {
   return (
     <VStack gap="100">

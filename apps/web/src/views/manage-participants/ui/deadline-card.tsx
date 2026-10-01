@@ -11,7 +11,6 @@ interface DeadlineCardProps {
   showNote?: boolean;
 }
 
-// 기한은 신청을 닫는 선이지 명단을 잠그는 선이 아니다. 그 사실을 카드 아래 한 줄로 못박는다.
 export function DeadlineCard({ summary, locked, showNote = true }: DeadlineCardProps) {
   const note = locked
     ? "세션이 확정되어 명단을 바꿀 수 없습니다."

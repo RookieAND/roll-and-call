@@ -5,7 +5,6 @@ import { and, eq } from "drizzle-orm";
 import type { Executor } from "./record-audit";
 import type { RulebookFields } from "./rulebook-fields";
 
-// 카테고리는 이름으로 고르고, 새 카테고리는 기본 룰북만 만들 수 있다. 포함하는 구판은 같은 카테고리의 다른 기본 룰북만 된다.
 export async function toRulebookValues(tx: Executor, fields: RulebookFields, selfId?: string) {
   const { category, supersedesId, ...rest } = fields;
   if (fields.kind === "core") {

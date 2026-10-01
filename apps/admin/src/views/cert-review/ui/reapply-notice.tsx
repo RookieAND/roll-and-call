@@ -12,7 +12,6 @@ interface ReapplyNoticeProps {
   replacedShots: (keyof typeof SHOT_LABELS)[];
 }
 
-// 재신청 건 위에 지난 반려 사유와 이번에 바뀐 사진을 붙인다.
 export function ReapplyNotice({ latest, attempt, replacedShots }: ReapplyNoticeProps) {
   const unchanged = (Object.keys(SHOT_LABELS) as (keyof typeof SHOT_LABELS)[])
     .filter((shot) => !replacedShots.includes(shot))

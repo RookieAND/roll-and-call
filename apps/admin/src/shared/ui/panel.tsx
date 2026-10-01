@@ -11,7 +11,6 @@ interface PanelProps {
   bodyClassName?: string;
 }
 
-// 카드 한 장. 안에 든 표는 바깥 테두리를 지워 패널 테두리 하나만 남긴다.
 export function Panel({
   title,
   description,

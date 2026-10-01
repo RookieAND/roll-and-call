@@ -2,7 +2,6 @@ import type { BadgeLook } from "@roll-and-call/database/rules";
 import { cn } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
-// 프로필 이름 아래에 붙는 이모지 + 짧은 이름 한 덩어리. 색은 메달과 같은 단계를 따른다.
 const pill = cva(
   "relative inline-flex max-w-full min-w-0 shrink-0 items-center gap-050 overflow-hidden rounded-full border font-extrabold tracking-tight whitespace-nowrap",
   {

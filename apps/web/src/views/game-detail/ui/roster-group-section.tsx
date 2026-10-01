@@ -17,7 +17,6 @@ interface RosterGroupSectionProps {
   emptyText?: string;
 }
 
-// 참여 · 대기 · (추첨의) 신청이 같은 UI를 쓴다 — 헤더 · 진행바 · 아바타 줄.
 export function RosterGroupSection({
   label,
   gauge,

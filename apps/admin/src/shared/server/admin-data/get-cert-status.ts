@@ -29,7 +29,6 @@ export interface EditionCertRow {
 
 const STATE_ORDER: Record<GmCertState, number> = { unapplied: 0, pending: 1, certified: 2 };
 
-// 인증 현황. 판본마다 GM 자격이 있는 사람·심사 대기·최근 90일에 인증 없이 구인을 연 사람을 센다.
 export async function getCertStatus() {
   const db = await loadSnapshot();
   const now = Date.now();

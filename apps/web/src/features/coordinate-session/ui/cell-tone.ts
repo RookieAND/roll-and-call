@@ -7,7 +7,6 @@ export const BLOCKED_STRIPES =
 export function cellTone({ selected, saved }: { selected: boolean; saved: boolean }) {
   if (selected && saved) return "bg-primary-600";
   if (selected) return UNSAVED_SELECTED_TONE;
-  // 저장돼 있었는데 방금 지운 칸. 저장을 누르기 전까지는 흔적을 남긴다.
   if (saved) return "bg-surface shadow-[inset_0_0_0_2px_var(--color-spark)]";
   return "cursor-pointer bg-surface shadow-[inset_0_0_0_1px_var(--color-gray-200)] hover:bg-primary-50";
 }

@@ -2,7 +2,6 @@ import type { CertApplication } from "@/shared/server";
 
 import { CERT_SHOT_LABEL } from "./cert-shot";
 
-// 반려 사유 한 줄. 운영진이 고른 사유가 먼저, 없으면 지적된 사진, 그다음 사유 첫 줄.
 export function rejectionSummary(application: CertApplication | null) {
   if (application?.rejectTag) return application.rejectTag;
   if (application?.flaggedShots.length) {

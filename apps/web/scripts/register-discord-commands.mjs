@@ -1,4 +1,3 @@
-// 슬래시 커맨드를 테스트 길드에 등록한다.
 //   node --env-file=.env.local scripts/register-discord-commands.mjs
 // ponytail: 길드 전용 등록이라 즉시 반영된다. 전역 등록이 필요해지면 경로만 바꾸면 된다.
 const CHAT_INPUT = 1;

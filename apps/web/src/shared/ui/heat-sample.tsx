@@ -7,7 +7,6 @@ const HOURS = ["19시", "20시", "21시", "22시"];
 const STEPS = [0, 1, 0, 2, 1, 1, 2, 1, 4, 2, 2, 4, 2, 5, 4, 0, 1, 0, 2, 1];
 const PICKED_DAY_INDEX = DAYS.length - 1;
 
-// 온보딩과 도움말이 같은 격자 그림을 쓴다. 실제 조율 화면이 아니라 설명용 축소판이다.
 export function HeatSample() {
   return (
     <VStack gap="125">

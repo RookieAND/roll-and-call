@@ -12,7 +12,6 @@ interface EbookFieldsProps {
   onChange: (changes: Partial<BookDraft>) => void;
 }
 
-// 전자책의 판매처와 주문 정보. 주문번호만 선택이다.
 export function EbookFields({ idPrefix, sellers, draft, onChange }: EbookFieldsProps) {
   const sellerItems = [
     ...sellers.map((seller) => ({ value: seller, label: seller })),

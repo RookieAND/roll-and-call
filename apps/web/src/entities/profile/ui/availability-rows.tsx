@@ -12,7 +12,6 @@ interface AvailabilityRowsProps {
   note?: string;
 }
 
-// 08 타인 프로필과 같은 행 모양. 3줄을 넘으면 접고 나머지는 펼쳐서 본다.
 export function AvailabilityRows({ intervals, note }: AvailabilityRowsProps) {
   const days = filledDays(intervals);
 

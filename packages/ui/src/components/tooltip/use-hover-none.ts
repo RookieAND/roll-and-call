@@ -8,7 +8,6 @@ function subscribe(onChange: () => void) {
   return () => media.removeEventListener("change", onChange);
 }
 
-// 손가락으로 쓰는 기기. hover가 없으니 hover로만 열리는 것은 도달할 수 없다.
 export function useHoverNone(): boolean {
   return useSyncExternalStore(
     subscribe,

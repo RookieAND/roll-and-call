@@ -21,7 +21,6 @@ type ButtonState = {
 export interface ButtonProps extends StateComponentProps<"button", ButtonState> {
   variant?: ButtonState["variant"];
   colorPalette?: ButtonState["colorPalette"];
-  // sm(32px)은 앱바 안처럼 좁은 자리 전용이다. 터치 주 액션에는 md 이상을 쓴다.
   size?: ButtonState["size"];
   loading?: boolean;
 }

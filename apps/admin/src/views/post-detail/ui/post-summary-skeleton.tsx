@@ -7,7 +7,6 @@ const valueOf = (label: string) => ({
   value: <Skeleton width={120} height={14} render={<span />} className="inline-block" />,
 });
 
-// PostSummary의 뼈대. 라벨은 그리고 제목·상태·값만 비운다.
 export function PostSummarySkeleton() {
   return (
     <section className="shrink-0 rounded-600 border border-gray-200 bg-surface">

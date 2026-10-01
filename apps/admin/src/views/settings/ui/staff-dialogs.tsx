@@ -11,7 +11,6 @@ interface StaffDialogsProps {
   removing?: StaffRow;
 }
 
-// 어떤 창이 열렸는지는 주소의 ?action=add|remove&staff= 로 정한다.
 export function StaffDialogs({ candidates, removing }: StaffDialogsProps) {
   const router = useRouter();
   const pathname = usePathname();

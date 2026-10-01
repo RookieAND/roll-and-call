@@ -29,8 +29,6 @@ interface ApproveRequestFormProps {
   onDone: () => void;
 }
 
-// 요청자가 고른 카테고리·종류가 기본값이고, 모르겠다고 했으면 요청한 이름으로 새 카테고리에 기본 룰북을 만든다.
-// 운영진은 카테고리·종류를 바꿔서 추가할 수 있다.
 export function ApproveRequestForm({ request, rulebooks, onDone }: ApproveRequestFormProps) {
   const [pending, startTransition] = useTransition();
   const [draft, setDraft] = useState<RulebookDraft>({

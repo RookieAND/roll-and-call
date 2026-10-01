@@ -30,7 +30,6 @@ html {
   max-width: var(--max-width-screen-max);
 }
 
-/* 온보딩 장 넘김. key가 바뀌며 새로 마운트될 때 한 번만 재생된다. 들어오는 방향은 넘긴 방향을 따른다. */
 @keyframes slide-in {
   from {
     opacity: 0;
@@ -68,8 +67,6 @@ html {
   }
 }
 
-/* 추첨 대성공·극단적 성공. 페이지를 열면 칩이 흐릿하게 커지며 들어온다.
-   대성공은 빛이 번지고 빛줄기가 지나가며, 별이 반짝인다. */
 @keyframes roll-in {
   0% {
     opacity: 0;
@@ -151,7 +148,6 @@ html {
   }
 }
 
-/* 업적 메달: 4단계부터 빛이 지나가고 별이 반짝인다. 획득 시트는 뒤에서 빛살이 돈다. */
 @keyframes badge-shine {
   0% {
     background-position: 100% 0;
@@ -188,7 +184,6 @@ html {
   background-image: radial-gradient(circle at 32% 24%, rgb(255 255 255 / 0.35), transparent 56%);
 }
 
-/* 프리즘·특별 칭호의 글씨와 별 색. 개발자의 청록은 초록과 파랑을 섞어 만든다. */
 @theme inline {
   --color-badge-prism: var(--rc-color-data-purple-ink);
   --color-badge-developer: color-mix(
@@ -202,7 +197,6 @@ html {
   --color-badge-blue: var(--rc-color-data-blue-ink);
 }
 
-/* 골드부터는 그라데이션 테두리다. 두께는 border-*로 주고, 칠은 badge-frame-*가 고른다. */
 @utility badge-framed {
   border-color: transparent;
   background:
@@ -274,7 +268,6 @@ html {
   );
 }
 
-/* 프리즘·이달의 뱃지·특별 칭호의 후광. 바깥 고리는 바탕색, 아래 그림자는 테두리색이다. */
 @utility badge-glow {
   box-shadow:
     inset 0 0 0 2px var(--color-surface),

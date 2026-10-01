@@ -1,6 +1,5 @@
 import { toKst } from "@/shared/lib";
 
-// 지난 구인을 끝난 달로 묶는다. 올해가 아니면 연도를 붙인다.
 export function groupByMonth<Item>({
   items,
   finishedAt,

@@ -12,7 +12,6 @@ import { toRulebookValues } from "./rulebook-values";
 import type { Actor } from "./types";
 
 // 인증·신청·구인은 룰북을 id로 가리키므로 이름이 바뀌어도 따라 고칠 곳이 없다. 다른 이름만 구인에 다시 맞춘다.
-// 이 책이 기본 룰북에서 빠지거나 카테고리를 옮기면, 이 책을 구판으로 가리키던 연결을 끊는다.
 export async function updateRulebook(
   id: string,
   fields: RulebookFields,

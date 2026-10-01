@@ -7,11 +7,9 @@ import type { StateComponentProps } from "../../lib/state-props";
 type TableState = { size: "sm" | "md" };
 
 export interface TableRootProps extends StateComponentProps<"table", TableState> {
-  // 행 높이. md 44px, sm 36px(관리 화면처럼 한 화면에 많이 보여야 할 때).
   size?: TableState["size"];
 }
 
-// 넘치면 표만 가로로 스크롤한다. 테두리·둥근 모서리는 바깥 상자가 맡는다.
 export function TableRoot({
   size = "md",
   className,

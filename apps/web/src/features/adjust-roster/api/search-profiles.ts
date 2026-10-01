@@ -9,7 +9,6 @@ import type { Candidate } from "../model/candidate";
 const MIN_QUERY_LENGTH = 2;
 const RESULT_LIMIT = 20;
 
-// 구인을 올리기 전이라 게임이 없다. 로그인한 사람만, 본인을 빼고 찾는다.
 export async function searchProfiles(query: string): Promise<Candidate[]> {
   const keyword = query.trim();
   if (keyword.length < MIN_QUERY_LENGTH) return [];

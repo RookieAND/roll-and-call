@@ -1,6 +1,5 @@
 import { BADGE_LADDER, type BadgeLadderKey, type BadgeStep } from "@roll-and-call/database/rules";
 
-// 목록 한 줄에 붙는 짧은 조건. "CoC 세션 100회 진행"
 export function badgeRequirement(
   ladder: BadgeLadderKey,
   step: BadgeStep,

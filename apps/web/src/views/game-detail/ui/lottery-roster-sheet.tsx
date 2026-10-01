@@ -14,7 +14,6 @@ interface LotteryRosterSheetProps {
   viewerId: string | null;
 }
 
-// 추첨 전 신청자에게는 순번이 없다 — 신청 순서로만 보여준다.
 export function LotteryRosterSheet({
   open,
   onOpenChange,

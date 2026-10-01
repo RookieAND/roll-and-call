@@ -19,7 +19,6 @@ interface ProfileLinksProps {
   links: readonly ProfileLink[];
 }
 
-// 내 화면이든 남의 화면이든 44px 아이콘 한 줄. 이름은 Tooltip으로 보인다.
 // 클라이언트 컴포넌트다: 서버에서 만든 요소를 Tooltip(render 복제)에 넘기면 lazy 참조라 undefined가 된다.
 export function ProfileLinks({ links }: ProfileLinksProps) {
   if (links.length === 0) {

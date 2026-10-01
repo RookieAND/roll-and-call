@@ -9,7 +9,6 @@ interface QuizQuestionPanelProps {
   questions: QuizQuestion[];
 }
 
-// 본문 퀴즈 문항. 행을 누르면 수정 창이 열린다(?question=id, 추가는 ?question=new).
 export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
   const activeCount = questions.filter((question) => question.active).length;
   return (

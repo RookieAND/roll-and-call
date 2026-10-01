@@ -4,7 +4,6 @@ interface KeyHintProps {
   keyLabel: string;
 }
 
-// 버튼 안에 붙는 단축키 표시. 글씨색은 버튼을 따른다.
 export function KeyHint({ keyLabel }: KeyHintProps) {
   return (
     <Text

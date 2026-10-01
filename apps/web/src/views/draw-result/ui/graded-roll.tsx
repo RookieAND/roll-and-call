@@ -4,7 +4,6 @@ import { cva } from "class-variance-authority";
 import { ROLL_GRADE, type RollGrade } from "../model/roll-grade";
 import { ROLL_SPARKLES } from "../model/roll-sparkles";
 
-// 칩이 다 들어온 뒤에 별이 뜨기 시작한다.
 const SPARKLE_START_S = 0.5;
 const SPARKLE_PATH = "M12 2.6l1.9 5.5 5.5 1.9-5.5 1.9L12 17.4l-1.9-5.5L4.6 10l5.5-1.9z";
 
@@ -32,7 +31,6 @@ interface GradedRollProps {
   typography: TextProps["typography"];
 }
 
-// 페이지를 열자마자 칩이 흐릿하게 커지며 들어온다. 대성공은 빛줄기가 주기적으로 지나간다.
 export function GradedRoll({ value, grade, typography }: GradedRollProps) {
   const critical = grade === ROLL_GRADE.critical;
 

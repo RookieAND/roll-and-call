@@ -30,7 +30,6 @@ export function toJoinedSessionCard(
         ? null
         : { kind: SESSION_ACTION_KIND.cancelWaitlist, label, href: `/games/${game.id}` };
 
-    // 추첨은 뽑기 전까지 순번이 없다 — 대기가 아니라 "신청"이라 버튼도 다르다.
     if (game.recruitMethod === RECRUIT_METHOD.lottery && game.drawnAt === null) {
       return {
         ...common,
@@ -46,7 +45,6 @@ export function toJoinedSessionCard(
       };
     }
 
-    // 승인 대기(GM이 아직 보지 않음)와 정원 대기(순번)는 배지로만 갈리고 버튼은 하나다.
     const seen = line.deadlinePassed || timeSet;
     return {
       ...common,
@@ -79,7 +77,6 @@ export function toJoinedSessionCard(
     };
   }
 
-  // 아직 가능 시간을 안 냈으면 기한과 상관없이 막힌 일이다 — 카드를 붉게 칠한다.
   const needsResponse =
     !context.readOnly && !context.respondedGameIds.has(game.id) && !line.deadlinePassed;
   const submit = {

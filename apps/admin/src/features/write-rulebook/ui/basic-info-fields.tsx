@@ -15,7 +15,6 @@ interface BasicInfoFieldsProps {
   children?: ReactNode;
 }
 
-// 카테고리·이름·판본을 한 줄에 두고, 사이에 끼울 입력(종류 등)은 children으로 받아 다른 이름 위에 놓는다.
 export function BasicInfoFields({
   draft,
   categories,

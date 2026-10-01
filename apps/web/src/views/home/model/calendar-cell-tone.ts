@@ -8,9 +8,7 @@ export type CalendarCellState = (typeof CALENDAR_CELL_STATE)[keyof typeof CALEND
 
 type CalendarCellTone = {
   cell: string;
-  // null이면 요일·이번 달 여부가 색을 정한다.
   day: string | null;
-  // null이면 내가 참여하는 세션인지가 색을 정한다.
   dot: string | null;
   more: string;
   today: string;

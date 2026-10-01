@@ -9,7 +9,6 @@ import { withdrawApplication } from "../api/withdraw-application";
 
 interface CancelApplicationButtonProps {
   rulebookId: string;
-  // 함께 낸 책 수. 두 권 이상이면 묶음 전체를 거둔다고 알린다.
   bookCount: number;
   size?: ButtonProps["size"];
   className?: string;

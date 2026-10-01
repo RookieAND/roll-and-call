@@ -1,6 +1,5 @@
 import { cva } from "class-variance-authority";
 
-// 제목과 아이콘은 톤 색을 받고, 본문은 제목이 있을 때 회색으로 한 단 내려간다.
 export const calloutInk = cva("", {
   variants: {
     colorPalette: {

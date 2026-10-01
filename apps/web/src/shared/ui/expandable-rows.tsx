@@ -5,13 +5,11 @@ import { Children, useState, type ReactNode } from "react";
 
 interface ExpandableRowsProps {
   previewCount?: number;
-  // "대기 7명 더 보기"처럼 무엇이 남았는지 앞에 붙인다.
   noun?: string;
   tone?: "primary" | "muted";
   children: ReactNode;
 }
 
-// 긴 명단은 몇 줄만 펴 둔다. 목록 테두리 안에서 열리므로 더 보기도 행처럼 그린다.
 export function ExpandableRows({
   previewCount = 3,
   noun,

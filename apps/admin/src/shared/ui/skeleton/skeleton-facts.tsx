@@ -7,7 +7,6 @@ interface SkeletonFactsProps {
   columns?: keyof typeof COLUMNS;
 }
 
-// 사실 격자의 라벨은 그대로 두고 값만 뼈대로 둔다.
 export function SkeletonFacts({ labels, columns = 4 }: SkeletonFactsProps) {
   return (
     <Grid render={<dl />} className={`${COLUMNS[columns]} gap-x-200 gap-y-150`}>

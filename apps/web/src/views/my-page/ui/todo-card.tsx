@@ -17,7 +17,6 @@ const EYEBROW: Record<string, string> = {
   [SESSION_ACTION_KIND.submitAvailability]: "가능 시간 미제출",
 };
 
-// 지금 막혀 있는 일은 카드 전체를 붉게 칠하고 초록 버튼을, 여유가 있는 일은 기본 카드에 보라 버튼을 단다.
 const todoCard = cva("p-175", {
   variants: { blocked: { true: "border-danger-200 bg-danger-50", false: "" } },
 });

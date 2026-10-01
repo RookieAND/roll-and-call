@@ -12,7 +12,6 @@ export type RuleGateType = (typeof RULE_GATE)[keyof typeof RULE_GATE];
 
 export interface RuleGate {
   type: RuleGateType;
-  // 열 수 있을 때 붙는 한 줄(신판 인증으로 열림).
   okText: string | null;
   lines: string[];
   action: { label: string; href: string } | null;

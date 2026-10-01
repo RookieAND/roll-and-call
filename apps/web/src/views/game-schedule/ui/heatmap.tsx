@@ -21,7 +21,6 @@ interface HeatmapProps {
   gmName?: string;
 }
 
-// 확정 뒤에는 읽기 전용: 칸을 눌러 명단을 펴지 않는다.
 export function Heatmap({
   days,
   timeRows,

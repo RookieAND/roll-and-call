@@ -20,7 +20,6 @@ export interface SwitchRootProps {
   children: ReactNode;
 }
 
-// 라벨까지가 하나의 히트 영역이다. 바로 적용되는 설정에만 쓰고, 저장 버튼이 있는 폼에는 체크박스를 쓴다.
 export function SwitchRoot({ size = "md", className, children, ...controlProps }: SwitchRootProps) {
   return (
     <SwitchContext.Provider value={{ size, controlProps }}>

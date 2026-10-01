@@ -23,7 +23,6 @@ export interface UserSearchResult {
 const nicknameOf = (db: Snapshot, userId: string) =>
   db.users.find((user) => user.id === userId)?.nickname ?? "";
 
-// ⌘K 검색. 닉네임이 맞는 유저마다 할 수 있는 처리와 참여 세션을 묶는다.
 export async function searchUsers(query: string): Promise<UserSearchResult[]> {
   const db = await loadSnapshot();
   const keyword = query.trim();

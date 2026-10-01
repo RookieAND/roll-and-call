@@ -25,8 +25,6 @@ export interface OwnedCategory {
 
 const bookTitle = (book: MyRulebook) => `${book.shortName} ${book.edition}`.trim();
 
-// 인증한 책이 있는 카테고리 한 장. 열 수 있는 판본이 있으면 완료, 아니면 남은 기본 룰북을 알려 준다.
-// 펼치면 인증한 책과, 일부만 인증한 판본의 남은 기본 룰북이 나온다.
 export function toOwnedCategory({
   categoryId,
   rulebooks,

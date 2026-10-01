@@ -8,7 +8,6 @@ interface PendingDrawBoardProps {
   outcome: DrawOutcome;
 }
 
-// 들어올 때마다 모든 숫자가 슬롯처럼 한 번에 돌다 제자리에 멈춘다.
 export function PendingDrawBoard({ outcome }: PendingDrawBoardProps) {
   return (
     <VStack gap="225">

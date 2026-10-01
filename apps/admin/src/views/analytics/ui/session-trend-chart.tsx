@@ -22,7 +22,6 @@ interface SessionTrendChartProps {
   height: number;
 }
 
-// 오늘이 든 주부터는 예정 구간이다. 차트 위에 배경·기준선·빗금을 겹쳐 지난 결과와 가른다.
 export function SessionTrendChart({ trend, todayLabel, height }: SessionTrendChartProps) {
   const { ref, tokens } = useChartTokens();
   const firstUpcoming = trend.findIndex((week) => week.upcoming);

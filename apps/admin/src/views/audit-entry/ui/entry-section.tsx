@@ -7,7 +7,6 @@ interface EntrySectionProps {
   children: ReactNode;
 }
 
-// 조치 상세 카드 안의 한 구획. 구획 사이 선은 감싸는 카드가 긋는다.
 export function EntrySection({ title, right, children }: EntrySectionProps) {
   return (
     <VStack gap="125" render={<section />} className="px-200 py-175">

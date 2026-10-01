@@ -25,7 +25,6 @@ const STARS = [
   "bottom-[16%] left-0 [animation-delay:1.95s]",
 ] as const;
 
-// 별은 순서대로 이 색을 돌려 입는다.
 const PALETTE: Partial<Record<BadgeLook, string[]>> = {
   5: [
     "text-badge-guild",

@@ -12,7 +12,6 @@ interface UserActionDialogsProps {
   user: UserDetail;
 }
 
-// 조치 모달은 주소의 action으로 연다. 닫으면 action만 지운다.
 export function UserActionDialogs({ user }: UserActionDialogsProps) {
   const router = useRouter();
   const pathname = usePathname();

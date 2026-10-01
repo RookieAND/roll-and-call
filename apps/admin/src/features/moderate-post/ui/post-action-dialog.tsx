@@ -16,7 +16,6 @@ interface PostActionDialogProps {
   closeHref: string;
 }
 
-// 주소의 action으로 연다. 지금 상태에서 할 수 없는 조치는 화면이 null로 넘긴다.
 // 닫히는 동안에도 제목이 남도록 마지막 조치를 기억한다.
 export function PostActionDialog({ post, action, closeHref }: PostActionDialogProps) {
   const router = useRouter();

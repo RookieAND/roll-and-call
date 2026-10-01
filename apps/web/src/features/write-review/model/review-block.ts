@@ -1,4 +1,3 @@
-// 후기를 쓰거나 고칠 수 없는 사정. 화면을 열 때와 제출할 때 같은 대화상자로 알린다.
 export const REVIEW_BLOCK = {
   writePeriodOver: "write-period-over",
   attendancePending: "attendance-pending",

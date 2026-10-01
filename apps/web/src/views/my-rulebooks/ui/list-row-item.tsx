@@ -26,7 +26,6 @@ interface ListRowItemProps {
   row: ListRow;
 }
 
-// 카드 안의 한 줄. 상세나 신청으로 가는 줄은 줄 전체가 링크다.
 export function ListRowItem({ row }: ListRowItemProps) {
   const Icon = row.icon ? ROW_ICON[row.icon] : null;
   const body = (

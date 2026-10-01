@@ -14,7 +14,6 @@ interface RulebookSheetOptionProps {
   onPick: () => void;
 }
 
-// 적용일이 지나 막힌 판본은 자물쇠로 시작하고, 누르면 그 자리에서 안내와 인증 버튼을 펼친다.
 export function RulebookSheetOption({ set, gate, selected, onPick }: RulebookSheetOptionProps) {
   const [expanded, setExpanded] = useState(false);
   const locked = gate.type === RULE_GATE.blocked;

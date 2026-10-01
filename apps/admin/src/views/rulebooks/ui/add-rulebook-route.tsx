@@ -12,7 +12,6 @@ interface AddRulebookRouteProps {
   closeHref: string;
 }
 
-// 주소의 ?add=1로 연다(⌘K의 '룰북 추가하기'가 이 주소로 온다). 룰북 상세의 [이 카테고리에 책 추가]는 &category=를 붙인다.
 export function AddRulebookRoute({
   open,
   rulebooks,

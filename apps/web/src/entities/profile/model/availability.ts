@@ -21,7 +21,6 @@ export function formatInterval({ from, to }: AvailabilityInterval): string {
   return `${formatHour(from)} – ${formatHour(to)}`;
 }
 
-// 요일 하나가 한 줄. 구간이 여럿이면 그 줄 안에서 " · "로 잇는다.
 export function groupByDay(intervals: readonly AvailabilityInterval[]): AvailabilityDay[] {
   return WEEKDAY_LABELS.map((label, day) => ({
     day,
@@ -56,7 +55,6 @@ export function normalizeAvailability(input: unknown): AvailabilityInterval[] {
   return mergeOverlaps(valid);
 }
 
-// 같은 요일에서 겹치거나 맞닿은 구간은 하나로 합쳐 격자에 칠할 때 풀어낼 것이 없게 한다.
 function mergeOverlaps(intervals: AvailabilityInterval[]): AvailabilityInterval[] {
   const sorted = intervals.toSorted(
     (left, right) => left.day - right.day || left.from - right.from,
@@ -73,7 +71,6 @@ function mergeOverlaps(intervals: AvailabilityInterval[]): AvailabilityInterval[
   return merged;
 }
 
-// 조율 격자에 미리 칠할 칸. 날짜 열의 요일을 프로필 요일과 맞춘다.
 export function availabilityPrefill(
   intervals: readonly AvailabilityInterval[],
   days: DayColumn[],

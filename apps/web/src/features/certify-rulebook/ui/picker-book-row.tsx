@@ -42,7 +42,6 @@ interface PickerBookRowProps {
   href: string;
 }
 
-// 책 고르기의 한 권. 고를 수 있으면 눌러서 바로 사진 단계로, 아니면 이유 아이콘과 한 줄.
 export function PickerBookRow({ title, edition, type, note, rejected, href }: PickerBookRowProps) {
   const status = type === CERT_OPTION.pick ? null : STATUS[type];
   const Icon = status?.icon ?? BookOpen;

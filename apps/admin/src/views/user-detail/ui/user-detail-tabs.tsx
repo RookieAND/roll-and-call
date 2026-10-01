@@ -14,7 +14,6 @@ interface UserDetailTabsProps {
   memoPanel: ReactNode;
 }
 
-// 탭은 주소의 tab으로 기억한다. 탭을 바꾸면 활동 탭 전용 role은 지운다.
 export function UserDetailTabs({
   tab,
   activityPanel,

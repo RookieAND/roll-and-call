@@ -21,7 +21,6 @@ interface PostDetailTabsProps {
   reviewPanel: ReactNode;
 }
 
-// 탭은 주소의 tab으로 기억한다. 신고가 없는 구인에는 신고 탭을 두지 않는다.
 export function PostDetailTabs({
   tab,
   unresolvedReportCount,

@@ -17,10 +17,8 @@ export const BADGE_LADDER = {
 } as const;
 export type BadgeLadderKey = (typeof BADGE_LADDER)[keyof typeof BADGE_LADDER];
 
-// 베이직·브론즈·실버·골드·프리즘. 골드부터 빛이 지나가고, 프리즘은 무지개 테두리와 후광이 붙는다.
 export type BadgeGrade = 1 | 2 | 3 | 4 | 5;
 
-// 단계 색 대신 따로 칠하는 뱃지. 이달의 GM·PL은 금색 후광, 특별 칭호는 저마다의 테두리.
 export type BadgeLook = BadgeGrade | "monthly" | "developer" | "guildMaster";
 
 export type BadgeStep = {

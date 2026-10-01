@@ -10,7 +10,6 @@ import { ResultThumbs } from "./result-thumbs";
 
 interface BookResultSectionProps {
   result: BookResult;
-  // 세트 안내처럼 책 머리 아래에 붙이는 문구.
   guide?: string | null;
 }
 

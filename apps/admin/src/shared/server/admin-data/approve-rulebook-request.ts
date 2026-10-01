@@ -15,7 +15,6 @@ import type { Actor } from "./types";
 
 export type ApproveRequestResult = RulebookActionResult | Extract<AddRulebookResult, { ok: false }>;
 
-// 운영진이 고친 이름·카테고리·종류로 새 룰북을 만든다. 이미 있는 룰북이면 요청을 처리하지 않고 돌려준다.
 export async function approveRulebookRequest(
   id: string,
   actor: Actor,

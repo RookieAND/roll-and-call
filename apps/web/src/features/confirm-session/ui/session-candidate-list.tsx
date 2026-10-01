@@ -10,7 +10,6 @@ interface SessionCandidateListProps {
   candidates: SessionWindow[];
   playMinutes: number;
   respondents: string[];
-  // 위 입력 칸이 후보와 같은 시각이면 그 후보가 골라진 것으로 보인다.
   value: string | null;
   onPick: (iso: string) => void;
 }

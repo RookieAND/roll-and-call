@@ -7,7 +7,6 @@ interface CertRevokeViewProps {
   initialRulebook?: string;
 }
 
-// 입력 묶음이 셋이라 모달 대신 별도 페이지로 둔다.
 export function CertRevokeView({ user, initialRulebook }: CertRevokeViewProps) {
   const backHref = `/users/${user.id}?tab=cert`;
   return (

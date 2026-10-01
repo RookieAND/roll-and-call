@@ -6,7 +6,6 @@ interface SkeletonFieldProps {
   className?: string;
 }
 
-// 입력란 라벨은 그리고 값 자리만 비운다.
 export function SkeletonField({ label, height = 40, className }: SkeletonFieldProps) {
   return (
     <VStack gap="075" className={className}>

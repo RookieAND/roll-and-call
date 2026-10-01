@@ -28,7 +28,6 @@ type HeldRecord = {
 interface LadderDetailInput {
   ladder: BadgeLadderKey;
   categoryName: string | null;
-  // 누른 단계(0부터).
   stepIndex: number;
   held: HeldRecord | null;
   // 본인 화면만 기록을 안다. 남의 뱃지는 null이라 남은 횟수·단계별 날짜를 내지 않는다.
@@ -37,7 +36,6 @@ interface LadderDetailInput {
 
 const shortDate = (date: Date) => toKst(date).format("YY.MM.DD");
 
-// 단계형 뱃지 한 단계의 상세. 받은 단계면 받은 날과 근거 세션, 못 받은 단계면 남은 횟수를 보여 준다.
 export function buildLadderDetail({
   ladder,
   categoryName,
@@ -90,7 +88,6 @@ export function buildLadderDetail({
           }
         : null,
     stepsTitle: "단계",
-    // 특별 칭호는 단계가 하나뿐이라 단계 목록을 내지 않는다.
     steps: (granted ? [] : steps).map((candidate, index) => {
       const candidateEarned = index < heldTier;
       const candidateEvent = events?.[candidate.threshold - 1];

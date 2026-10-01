@@ -44,7 +44,6 @@ export function TagInput({
 
   function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
-      // 엔터로 폼이 제출되지 않게 막고 태그만 넣는다.
       event.preventDefault();
       add(draft);
       return;

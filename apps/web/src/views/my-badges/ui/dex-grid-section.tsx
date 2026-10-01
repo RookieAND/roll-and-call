@@ -10,7 +10,6 @@ interface DexGridSectionProps {
   board: { title: string; hint: string; note: string; medals: DexMedal[]; next: LadderNext };
 }
 
-// 다양한 룰 운영·후기처럼 룰 구분 없는 사다리를 5칸 격자와 다음 단계 카드로.
 export function DexGridSection({ board }: DexGridSectionProps) {
   return (
     <DexSection title={board.title} hint={board.hint}>

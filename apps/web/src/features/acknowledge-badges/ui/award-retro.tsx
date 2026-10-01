@@ -8,7 +8,6 @@ interface AwardRetroProps {
   sheet: Extract<AwardSheet, { kind: "retro" }>;
 }
 
-// 출시 직후 지난 기록으로 채운 뱃지를 한 장에 모은다.
 export function AwardRetro({ sheet }: AwardRetroProps) {
   return (
     <VStack gap="225">

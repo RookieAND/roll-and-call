@@ -7,7 +7,6 @@ interface CategoryRowProps {
   category: RulebookCategory;
 }
 
-// 카테고리 머리 행. 단권 룰도 머리 행을 두어 모든 책이 카테고리 아래에 놓인다. GM 조건은 상세의 카테고리 카드에서 본다.
 export function CategoryRow({ category }: CategoryRowProps) {
   return (
     <Table.Row className="bg-(--rc-color-bg-canvas-raised)">

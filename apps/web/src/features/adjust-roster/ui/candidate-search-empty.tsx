@@ -8,7 +8,6 @@ interface CandidateSearchEmptyProps {
   onClear: () => void;
 }
 
-// 결과 영역만 바뀌고 검색 바는 그대로라, 머릿줄도 목록과 같은 자리에 "0명"으로 둔다.
 export function CandidateSearchEmpty({ keyword, onClear }: CandidateSearchEmptyProps) {
   return (
     <VStack gap={0}>

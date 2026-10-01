@@ -35,7 +35,6 @@ interface RulebookRequestSheetProps {
   initialName: string;
 }
 
-// 목록에 없는 룰북 추가 요청. 이미 대기 중인 요청과 이름이 같으면 보내지 않는다.
 export function RulebookRequestSheet({
   open,
   onOpenChange,

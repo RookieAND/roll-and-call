@@ -9,7 +9,6 @@ export interface CheckboxFieldProps {
   children: ReactNode;
 }
 
-// 체크 상자와 글씨를 한 히트 영역으로 묶는다. 최소 44px.
 export function CheckboxField({ className, children }: CheckboxFieldProps) {
   return (
     <label

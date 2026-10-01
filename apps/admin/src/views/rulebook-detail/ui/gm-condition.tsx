@@ -7,7 +7,6 @@ interface GmConditionProps {
   edition: CategoryEdition;
 }
 
-// 판본 하나의 GM 조건. 「+」는 모두 필요, 「또는」은 포함하는 신판으로도 된다는 뜻이다.
 export function GmCondition({ edition }: GmConditionProps) {
   if (edition.free) {
     return (

@@ -2,7 +2,6 @@ import { Container, HStack, Skeleton } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 
-// 메모 삭제 줄은 이미 쓴 메모가 있을 때만 붙어서 뼈대에서 뺀다.
 export function EditMemoSkeleton() {
   return (
     <Container size="sm" className="px-0">

@@ -5,8 +5,6 @@ import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
 import type { StateComponentProps } from "../../lib/state-props";
 
-// Roll & Call 디자인 시스템 §A. 배지·칩은 body4에 weight·tight를 얹어 쓰고,
-// body5는 달력 칸·히트맵처럼 12px이 넘치는 격자에만 쓴다.
 const text = cva("", {
   variants: {
     typography: {
@@ -27,15 +25,11 @@ const text = cva("", {
       hint: "text-hint",
       primary: "text-tinted-ink",
       success: "text-success-700",
-      // 확정 시각처럼 같은 카드 안에서 한 단 더 세울 때. 램프는 이미 두 값을 갖고 있다.
       successStrong: "text-success-800",
       warning: "text-warning-600",
       danger: "text-danger-600",
-      // 테마와 무관하게 흰 글씨. 주 색·어두운 딤처럼 늘 진한 면 위에 얹는다.
       onPrimary: "text-on-primary",
-      // 반대 면(토스트 등) 위 글씨. 다크에서 어둡게 뒤집힌다.
       inverse: "text-inverse",
-      // 부모가 색을 정하는 자리(탭·칩 안쪽 라벨).
       inherit: "text-current",
     },
     // 디자인 토큰 이름을 따른다. medium은 600이라 Tailwind로는 font-semibold다.
@@ -45,7 +39,6 @@ const text = cva("", {
       bold: "font-bold",
       extrabold: "font-extrabold",
     },
-    // 배지·칩처럼 상자 높이가 고정된 자리는 행간을 1로 내린다.
     tight: { true: "leading-none" },
     numeric: { true: "tabular-nums" },
     truncate: { true: "block truncate" },

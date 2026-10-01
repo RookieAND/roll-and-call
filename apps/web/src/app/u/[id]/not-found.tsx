@@ -1,6 +1,5 @@
 import { AppBar, ErrorScreen, GoBackButton } from "@/shared/ui";
 
-// 프로필·세션 기록·메모 어느 주소든 사용자가 없으면 여기로 온다.
 export default function NotFound() {
   return (
     <>

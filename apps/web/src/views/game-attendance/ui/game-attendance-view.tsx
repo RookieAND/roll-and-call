@@ -12,7 +12,6 @@ import { AppBar, SummaryLine } from "@/shared/ui";
 import { AttendanceGuide } from "./attendance-guide";
 import { AttendanceHeader } from "./attendance-header";
 
-// 왔는지 안 왔는지만 정하는 자리다. 명단을 고치는 일은 참여자 관리가 맡는다.
 export async function GameAttendanceView({ id }: { id: string }) {
   const [data, user] = await Promise.all([getGameParticipants(id), getCurrentSessionUser()]);
   if (!data) notFound();

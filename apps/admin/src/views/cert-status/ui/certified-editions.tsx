@@ -6,7 +6,6 @@ interface CertifiedEditionsProps {
   editions: string[];
 }
 
-// 판본은 두 개까지만 적고 나머지는 "외 n개"로 줄여 행 높이를 지킨다.
 export function CertifiedEditions({ editions }: CertifiedEditionsProps) {
   if (editions.length === 0) {
     return (

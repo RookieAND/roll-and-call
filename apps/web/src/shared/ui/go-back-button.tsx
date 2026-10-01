@@ -10,7 +10,6 @@ interface GoBackButtonProps {
   fallback: string;
 }
 
-// 글자 버튼 "돌아가기". 앱 안에서 들어왔으면 뒤로, 아니면 폴백 주소로 간다(BackButton과 같은 규칙).
 export function GoBackButton({ fallback }: GoBackButtonProps) {
   const router = useRouter();
 

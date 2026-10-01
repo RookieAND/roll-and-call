@@ -11,13 +11,11 @@ import { ReportReviewSheet } from "@/features/report-review";
 interface ReviewMenuProps {
   reviewId: string;
   own: boolean;
-  // 본인 후기를 아직 고칠 수 있을 때만 수정하기를 둔다.
   editHref: string | null;
   deleteSubject: string;
   reportSubject: string;
 }
 
-// 본인에게는 수정·삭제, 다른 사람에게는 신고만 보인다.
 export function ReviewMenu({
   reviewId,
   own,

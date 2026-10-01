@@ -16,7 +16,6 @@ export interface RulebookRequestRow {
   similarTo?: string;
 }
 
-// 아직 처리하지 않은 추가 요청만, 오래 기다린 순으로.
 export async function listRulebookRequests(): Promise<RulebookRequestRow[]> {
   const db = await loadSnapshot();
   return db.rulebookRequests

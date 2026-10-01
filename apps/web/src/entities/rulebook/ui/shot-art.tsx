@@ -1,6 +1,5 @@
 import type { CertShot } from "../model/cert-shot";
 
-// 역할 토큰으로만 칠한 선 그림이라 테마를 따라 바뀐다. 앞면의 노란 쪽지가 디스코드 닉네임 쪽지다.
 const COLOR = {
   cover: "var(--rc-color-bg-primary-weak)",
   edge: "var(--rc-color-border-primary)",
@@ -15,7 +14,6 @@ const COLOR = {
 
 const BACK_LINES = [22, 29, 36, 43] as const;
 const BARCODE = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const;
-// 두 권이면 책을 줄여 나란히 놓는다.
 const PAIR_TRANSFORMS = ["translate(-4 16) scale(.6)", "translate(38 16) scale(.6)"] as const;
 
 const COVER = (
@@ -104,7 +102,6 @@ const NICKNAME_NOTE = (
   </g>
 );
 
-// 책등 하나. x=0에 그려 두고 translate로 옮긴다.
 const SPINE = (
   <>
     <rect
@@ -143,7 +140,6 @@ const SHELF = {
 
 interface ShotArtProps {
   shot: CertShot;
-  // 여러 권을 함께 신청하면 두 권을 나란히 그린다.
   paired?: boolean;
 }
 

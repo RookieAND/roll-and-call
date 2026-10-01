@@ -12,7 +12,6 @@ interface WriteReviewViewProps {
   gameId: string;
 }
 
-// 이미 쓴 후기가 있으면 고치기 화면이 된다. 막혀 있으면 폼 위에 까닭을 띄우고 닫으면 떠난다.
 export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {

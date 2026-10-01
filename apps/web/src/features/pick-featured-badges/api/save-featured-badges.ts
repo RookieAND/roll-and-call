@@ -8,7 +8,6 @@ import { FEATURED_BADGE_LIMIT, heldBadges } from "@/entities/badge";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import { db, getCurrentUser, getUserBadges, profiles } from "@/shared/server";
 
-// 지금 달고 있는 뱃지만 고를 수 있다. 누른 순서를 그대로 저장한다.
 export async function saveFeaturedBadges(keys: string[]): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };

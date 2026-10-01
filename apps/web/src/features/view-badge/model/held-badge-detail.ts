@@ -20,7 +20,6 @@ interface HeldBadgeDetailContext {
   now: Date;
 }
 
-// 달고 있는 뱃지 하나의 상세. 대표 뱃지·남의 뱃지 목록처럼 받은 뱃지를 누르는 자리가 쓴다.
 export function heldBadgeDetail(
   badge: BadgeView & { record: BadgeRecord },
   { records, facts, now }: HeldBadgeDetailContext,

@@ -1,6 +1,5 @@
 import { kstMonthKey, type BadgeRole, type MonthlyAppearance } from "@roll-and-call/database/rules";
 
-// 이번 달 지금까지의 인정 세션 수와 순위. 한 번도 없으면 순위를 내지 않는다.
 export function currentMonthStanding(
   appearances: MonthlyAppearance[],
   userId: string,

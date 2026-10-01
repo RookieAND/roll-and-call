@@ -1,6 +1,5 @@
 import { BookOpen, FileText, Flag, Quote } from "lucide-react";
 
-// 처리 대기 한 종류를 홈·폰 안내·⌘K가 같은 이름과 목적지로 부른다.
 export const PENDING_COPY = {
   cert: {
     label: "룰북 인증 심사",

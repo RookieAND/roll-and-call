@@ -10,12 +10,10 @@ import type { Attendee } from "../model/attendee";
 interface AttendanceRowProps {
   attendee: Attendee;
   absent: boolean;
-  // 확정 뒤에는 같은 줄을 읽기만 한다. 고치려면 "다시 고치기"로 연다.
   readOnly?: boolean;
   onChange?: (absent: boolean) => void;
 }
 
-// 이름 + 한 줄 소개로 사람을 가린다. 불참을 고르면 아래에 무엇이 남는지 한 줄 더 붙는다.
 export function AttendanceRow({
   attendee,
   absent,

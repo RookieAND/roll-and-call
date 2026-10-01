@@ -2,7 +2,6 @@ import { SESSION_ACTION_KIND, type MySessions, type SessionTodo } from "@/widget
 
 export type TodoItem = { id: string; title: string; todo: SessionTodo };
 
-// 막혀 있는 일(추첨·일시)이 먼저, 그다음 GM이 치울 일, 참여자의 일은 맨 뒤다.
 const TODO_ORDER: string[] = [
   SESSION_ACTION_KIND.drawLottery,
   SESSION_ACTION_KIND.confirmTime,

@@ -10,7 +10,6 @@ interface LoginSheetButtonProps {
   className?: string;
 }
 
-// 참여 자리의 로그인은 바로 OAuth로 넘기지 않고, 무엇을 가져오는지 시트로 먼저 알린다.
 export function LoginSheetButton({ next, className }: LoginSheetButtonProps) {
   const [open, setOpen] = useState(false);
   return (

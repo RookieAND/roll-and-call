@@ -10,7 +10,6 @@ interface BrandMarkProps {
   size?: keyof typeof SIZES;
 }
 
-// 어드민은 라이트만 다루므로 밝은 워드마크 한 장만 쓴다.
 export function BrandMark({ size = "md" }: BrandMarkProps) {
   const { icon, wordmark } = SIZES[size];
   return (

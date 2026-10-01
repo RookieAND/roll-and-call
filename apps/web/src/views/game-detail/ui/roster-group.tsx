@@ -7,7 +7,6 @@ interface RosterGroupProps {
   children: ReactNode;
 }
 
-// 명단 시트 안의 한 묶음 — 이름표 줄 + 행 카드.
 export function RosterGroup({ label, count, children }: RosterGroupProps) {
   return (
     <VStack gap="075" render={<section />}>

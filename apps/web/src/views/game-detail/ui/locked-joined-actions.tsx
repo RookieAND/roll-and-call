@@ -13,7 +13,6 @@ interface LockedJoinedActionsProps {
   lock: LeaveLock;
 }
 
-// 취소할 수 없으면 왜 없는지 먼저 알린다. 추첨이면 취소 자리를 결과 보기가 차지한다.
 export function LockedJoinedActions({
   gameId,
   canSchedule,

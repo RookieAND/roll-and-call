@@ -14,8 +14,6 @@ interface RosterRowProps {
   action: ReactNode;
 }
 
-// 행에서 읽는 것은 하나뿐이다. 어느 큐에 있는지는 위치가 이미 말해 준다.
-// 행을 누르면 언제나 프로필이다. 명단 조작은 오른쪽 ⋮ 한 곳에만 둔다.
 export function RosterRow({
   member,
   rank,

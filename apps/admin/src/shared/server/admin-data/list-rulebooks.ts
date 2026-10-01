@@ -23,7 +23,6 @@ export interface RulebookCategory {
   bookCount: number;
 }
 
-// 카테고리끼리 모으고, 그 안에서는 기본 룰북 → 서플리먼트 → 핸드북 순이다. 검색어는 이름·판본·카테고리·다른 이름에서 부분 일치로 찾는다.
 export async function listRulebooks({ query }: { query?: string } = {}) {
   const db = await loadSnapshot();
   const rows: RulebookRow[] = db.rulebooks

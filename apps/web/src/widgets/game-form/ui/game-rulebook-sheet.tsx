@@ -17,7 +17,6 @@ interface GameRulebookSheetProps {
   onSelect: (set: EditionSet) => void;
 }
 
-// 룰은 카테고리·판본 단위로 고른다. 적용일 전에는 인증이 필요한 룰도 고를 수 있고, 열 수 있는지는 룰 칸 아래에서 알려 준다.
 export function GameRulebookSheet({
   open,
   onOpenChange,

@@ -12,7 +12,6 @@ export interface CalloutDescriptionProps {
   children: ReactNode;
 }
 
-// 제목이 있으면 본문은 회색, 없으면 본문이 톤 색을 받는다.
 export function CalloutDescription({ className, children }: CalloutDescriptionProps) {
   const { colorPalette, hasTitle } = useContext(CalloutContext);
   const ink = hasTitle || colorPalette === "gray" ? "text-gray-600" : calloutInk({ colorPalette });

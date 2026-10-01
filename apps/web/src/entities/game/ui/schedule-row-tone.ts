@@ -2,7 +2,6 @@ import { Check, Clock } from "lucide-react";
 
 import type { ScheduleLine } from "../model/schedule-line";
 
-// 아이콘은 글자색(currentColor)을 따른다. 확정 fg-success, 조율 중 fg-muted, 미정·지난 일 fg-hint.
 const SCHEDULE_ROW_TONE = {
   confirmed: { Icon: Check, foreground: "success", weight: "bold" },
   coordinating: { Icon: Clock, foreground: "muted", weight: "medium" },

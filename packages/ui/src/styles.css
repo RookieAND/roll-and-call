@@ -13,7 +13,6 @@
   color-scheme: dark;
 }
 
-/* Tailwind 유틸리티 이름표(p-100, text-body4, rounded-500). 값은 아래 --rc-* 토큰이 갖는다. */
 @theme {
   --font-sans:
     "Pretendard Variable", Pretendard, Tossface, ui-sans-serif, system-ui, -apple-system,
@@ -36,7 +35,6 @@
   --spacing-700: var(--rc-size-space-700);
   --spacing-800: var(--rc-size-space-800);
 
-  /* 디자인 시스템 §A. 글씨 크기는 이 토큰만 쓴다 — Text의 typography와 프리미티브가 같은 값을 본다. */
   --text-heading1: 22px;
   --text-heading1--line-height: 1.3;
   --text-heading2: 18px;
@@ -66,8 +64,7 @@
   --radius-800: var(--rc-radius-800);
 }
 
-/* 색 유틸리티 이름표(bg-surface, text-gray-600 …). 값은 역할 토큰을 가리킨다.
-   inline이라 유틸리티가 var(--rc-*)를 직접 읽어 [data-theme] 중첩 스코프에서도 뒤집히고,
+/* inline이라 유틸리티가 var(--rc-*)를 직접 읽어 [data-theme] 중첩 스코프에서도 뒤집히고,
    static이라 앱이 var(--color-*)로 읽는 변수도 계속 나간다. */
 @theme inline static {
   --color-primary-50: var(--rc-color-bg-primary-weak);
@@ -153,7 +150,6 @@
   --color-gm: var(--rc-color-fg-gm);
 }
 
-/* 프리미티브·크기·모션. 테마와 무관하게 값이 고정된다. 화면 코드는 프리미티브를 직접 읽지 않는다. */
 :root {
   --rc-color-gray-000: #ffffff;
   --rc-color-gray-025: #fafafc;
@@ -246,7 +242,6 @@
   --rc-size-space-700: 56px;
   --rc-size-space-800: 64px;
 
-  /* 라디우스는 크기가 아니라 상자 종류로 고른다. */
   --rc-radius-000: 0px;
   --rc-radius-100: 4px;
   --rc-radius-200: 6px;
@@ -259,7 +254,6 @@
   --rc-radius-full: 9999px;
   --rc-radius-circle: 50%;
 
-  /* 높이도 상자 종류로 고른다. 세로는 여기, 가로는 flex가 정한다. */
   --rc-size-badge: 26px;
   --rc-size-control-xs: 32px;
   --rc-size-control-sm: 34px;
@@ -295,7 +289,6 @@
 
   --rc-safe-bottom: env(safe-area-inset-bottom, 0px);
 
-  /* 추첨 대성공 컨페티. 두 테마에서 같은 색으로 떨어진다. */
   --color-confetti-1: #4f46e5;
   --color-confetti-2: #a5b4fc;
   --color-confetti-3: #6ee7b7;
@@ -314,8 +307,7 @@
   }
 }
 
-/* 역할 토큰 — 라이트. 테마 스위치가 갈아끼우는 유일한 계층이다.
-   --rc-legacy-*는 역할 토큰이 아직 없는 옛 숫자 램프 유틸리티(text-gray-700 등)의 값이다.
+/* --rc-legacy-*는 역할 토큰이 아직 없는 옛 숫자 램프 유틸리티(text-gray-700 등)의 값이다.
    값은 문서 프리미티브에서 가장 가까운 단계를 쓰고, 사용처가 역할 유틸리티로 옮겨 가면 지운다. */
 :root,
 [data-theme="light"] {
@@ -375,7 +367,6 @@
   --rc-color-heat-ink: var(--rc-color-indigo-800);
   --rc-color-heat-ink-5: var(--rc-color-gray-000);
 
-  /* 아바타·일러스트 전용. 상태를 뜻하지 않는다. */
   --rc-color-data-indigo-bg: #eef0fe;
   --rc-color-data-indigo-ink: #4338ca;
   --rc-color-data-green-bg: #ddf3e8;
@@ -399,7 +390,6 @@
   --rc-legacy-tinted-bg-hover: var(--rc-color-indigo-100);
   --rc-legacy-danger-100: var(--rc-color-red-100);
   --rc-legacy-danger-300: var(--rc-color-red-200);
-  /* 역할 토큰 — 추첨 극단값·순위 (--rc-legacy-* 승격) */
   --rc-color-bg-highlight-extreme: var(--rc-color-indigo-100);
   --rc-color-border-highlight-extreme: var(--rc-color-indigo-200);
   --rc-color-fg-highlight-extreme: var(--rc-color-indigo-600);
@@ -423,7 +413,6 @@
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #eaecff 0%, #f6f6fb 44%, #ffffff 76%);
 }
 
-/* 역할 토큰 — 다크. 페이지 전체는 <html data-theme="dark">, 일부만 뒤집을 때는 그 상자에 준다. */
 [data-theme="dark"] {
   --rc-color-bg-canvas-base: var(--rc-color-gray-950);
   --rc-color-bg-canvas-sunken: var(--rc-color-gray-1000);
@@ -529,8 +518,7 @@
 }
 
 /* 부분 테마 보정: @theme 별칭은 :root에서 한 번만 계산되므로, [data-theme] 상자에서
-   Tailwind 유틸리티(bg-surface, text-gray-600 등)가 뒤집히게 하려면 여기서 다시 선언한다.
-   --rc-color-heat-*는 처음부터 이렇게 되어 있었다. 나머지도 같은 패턴으로 넓힌다. */
+   Tailwind 유틸리티(bg-surface, text-gray-600 등)가 뒤집히게 하려면 여기서 다시 선언한다. */
 :root,
 [data-theme] {
   --color-primary-50: var(--rc-color-bg-primary-weak);
@@ -624,7 +612,6 @@
   --color-heat-ink-strong: var(--rc-color-heat-ink-5);
 }
 
-/* Skeleton shimmer (mockup uses this instead of Tailwind's default pulse). */
 @keyframes shimmer {
   0%,
   100% {

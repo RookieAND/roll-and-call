@@ -11,7 +11,6 @@ interface RulebookApplyViewProps {
   rulebookIds: string[];
 }
 
-// 신청 1단계(책 고르기). 활동 정지 중이면 내 룰북으로 돌려보낸다.
 export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {

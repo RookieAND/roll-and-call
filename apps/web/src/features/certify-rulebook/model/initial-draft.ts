@@ -15,7 +15,6 @@ import { PHOTO_SLOT, type PhotoSlot } from "./photo-slot";
 const kept = (url: string | null | undefined, flagged: boolean): PhotoSlot =>
   url && !flagged ? { status: PHOTO_SLOT.previous, url } : { status: PHOTO_SLOT.empty };
 
-// 반려된 책을 다시 신청하면 이전 형식과 입력을 이어받고, 지적된 사진과 지워진 사진만 비운다.
 export function initialDraft({
   rulebook,
   sellers,

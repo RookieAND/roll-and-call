@@ -20,7 +20,6 @@ interface PickButtonProps extends Omit<ComponentPropsWithRef<"button">, "childre
   doneLabel?: string;
 }
 
-// 검색 결과에서 한 명을 고르는 버튼. 세 상태 모두 같은 크기·폭에 아이콘과 글씨를 함께 둔다.
 export function PickButton({ state, doneLabel, ...props }: PickButtonProps) {
   const look = PICK_LOOK[state];
   const Icon = look.icon;

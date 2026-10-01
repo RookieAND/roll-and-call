@@ -18,7 +18,6 @@ export interface AvatarProps extends AvatarState {
   className?: StateClassName<AvatarState>;
 }
 
-// 이미지가 깨지면 이름 첫 글자로 대신한다. 실패한 주소만 기억하므로 src가 바뀌면 다시 시도한다.
 export function Avatar({ src, name, size = "md", className }: AvatarProps) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const image = src && src !== failedSrc ? src : null;

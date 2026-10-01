@@ -16,7 +16,6 @@ interface AppliedDrawProps {
   drawnAtLabel: string;
 }
 
-// 적용 뒤에는 읽기 전용 기록이다. 명단을 고치는 일은 참여자 관리에서 한다.
 export function AppliedDraw({ gameId, title, outcome, drawnAtLabel }: AppliedDrawProps) {
   return (
     <FloatingBar.Root elevated={false}>

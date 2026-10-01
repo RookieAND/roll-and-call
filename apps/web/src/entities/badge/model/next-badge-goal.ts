@@ -7,7 +7,6 @@ import { stepName } from "./step-name";
 
 type Candidate = { ladder: BadgeLadderKey; count: number; categoryName: string | null };
 
-// 마이페이지 업적 블록의 "다음 뱃지 1개". 남은 횟수가 가장 적은 것, 같으면 누적 참여부터.
 export function nextBadgeGoal(counts: BadgeCounts) {
   const candidates: Candidate[] = [
     { ladder: BADGE_LADDER.playerTotal, count: counts.playerTotal, categoryName: null },
@@ -23,7 +22,6 @@ export function nextBadgeGoal(counts: BadgeCounts) {
       categoryName: rule.categoryName,
     })),
   ];
-  // GM 쪽은 한 번이라도 운영했을 때만 권한다.
   if (counts.gmTotal > 0) {
     candidates.push(
       { ladder: BADGE_LADDER.gmTotal, count: counts.gmTotal, categoryName: null },

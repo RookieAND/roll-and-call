@@ -1,4 +1,3 @@
-// 디스코드 로고는 lucide에 없어 시안의 경로를 그대로 쓴다.
 export function DiscordIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden>

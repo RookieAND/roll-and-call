@@ -7,7 +7,6 @@ interface DexLadderTrackProps {
   total: DexTab["total"];
 }
 
-// 누적 사다리 5칸을 금색 줄로 잇는다. 줄은 지금 횟수만큼 차 있다.
 export function DexLadderTrack({ total }: DexLadderTrackProps) {
   return (
     <div className="relative">

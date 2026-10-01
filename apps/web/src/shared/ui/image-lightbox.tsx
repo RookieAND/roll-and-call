@@ -10,7 +10,6 @@ interface ImageLightboxProps {
   onClose: () => void;
 }
 
-// 이미지를 누르면 화면 가득 크게 본다. 구인 첨부 이미지와 후기 사진이 같이 쓴다.
 export function ImageLightbox({ url, label, onClose }: ImageLightboxProps) {
   return (
     <Dialog.Root open={url !== null} onOpenChange={(open) => !open && onClose()}>

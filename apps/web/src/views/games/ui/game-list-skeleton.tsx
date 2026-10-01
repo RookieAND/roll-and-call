@@ -1,6 +1,5 @@
 import { Card, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
-// GameCard와 같은 치수: 16:9 썸네일 · 제목 heading2 + D-n·상태 배지 · 룰 줄 · 일정 줄 · 구분선 아래 GM 아바타 24px + 정원 칸.
 export function GameListSkeleton() {
   return (
     <VStack className="gap-125">

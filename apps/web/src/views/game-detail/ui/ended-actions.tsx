@@ -11,7 +11,6 @@ interface EndedActionsProps {
   confirmedAt: Date;
 }
 
-// 끝난 세션에서는 후기를 보거나 다음 세션을 찾는다.
 export function EndedActions({ gameId, confirmedAt }: EndedActionsProps) {
   return (
     <VStack gap="125">

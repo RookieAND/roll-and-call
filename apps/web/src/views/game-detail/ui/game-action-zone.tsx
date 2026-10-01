@@ -75,7 +75,6 @@ export function GameActionZone({
   });
 
   switch (actionView) {
-    // GM에게도 상세는 읽는 화면이다. 시간 확정 · 참여자 관리 · 세션 준비는 운영 관리 한 곳으로 보낸다.
     case GAME_ACTION_VIEW.gm:
       return <ManageGameLink gameId={game.id} />;
     case GAME_ACTION_VIEW.anon:

@@ -38,7 +38,6 @@ interface BookPickerProps {
   pendingRequestNames: string[];
 }
 
-// 신청 1단계. 카테고리를 찾아 고르고, 판본을 한 목록에 모은 책 가운데 한 권을 누르면 2단계로 간다.
 export function BookPicker({
   rulebooks,
   initialRulebookIds,

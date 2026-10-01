@@ -14,7 +14,6 @@ interface ConfirmedActionsProps {
   drawn: boolean;
 }
 
-// 일정이 확정되면 취소 버튼이 사라진다. 조율 화면은 확정된 일정을 보는 곳으로 남는다.
 export function ConfirmedActions({
   gameId,
   confirmedAt,

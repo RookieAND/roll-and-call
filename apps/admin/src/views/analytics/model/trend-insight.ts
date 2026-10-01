@@ -3,7 +3,6 @@ import type { AnalyticsTrendWeek } from "@/shared/server";
 const scheduledCount = (week: AnalyticsTrendWeek) =>
   week.confirmed + week.coordinating + week.recruiting;
 
-// 초기에는 예정 구간 전체를, 평소에는 다음 주 한 주를 말한다.
 export function trendInsight(trend: AnalyticsTrendWeek[], early: boolean) {
   const upcoming = trend.filter((week) => week.upcoming);
   if (early) {

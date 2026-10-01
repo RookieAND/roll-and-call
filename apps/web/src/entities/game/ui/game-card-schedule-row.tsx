@@ -5,7 +5,6 @@ interface GameCardScheduleRowProps {
   text: string;
 }
 
-// 카드에서는 일정 상태를 색으로 가르지 않는다. 상태는 배지가 말한다.
 export function GameCardScheduleRow({ text }: GameCardScheduleRowProps) {
   return (
     <Text render={<div />} foreground="hint" className="flex items-center gap-075">

@@ -6,7 +6,6 @@ interface AttendanceGuideProps {
   attendanceConfirmedAt: Date | null;
 }
 
-// 고르는 중에는 할 일을, 확정 뒤에는 언제 정했고 어떻게 되돌리는지를 말한다.
 export function AttendanceGuide({ attendanceConfirmedAt }: AttendanceGuideProps) {
   if (attendanceConfirmedAt) {
     return (

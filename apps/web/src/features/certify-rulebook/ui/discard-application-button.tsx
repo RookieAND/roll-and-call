@@ -13,7 +13,6 @@ interface DiscardApplicationButtonProps {
   className?: string;
 }
 
-// 반려되거나 인증이 취소된 책의 기록을 지운다. 다시 신청하지 않을 책을 목록에서 치운다.
 export function DiscardApplicationButton({
   rulebookId,
   size,

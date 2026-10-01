@@ -11,11 +11,9 @@ interface ConfirmDialogProps {
   confirmLabel?: string;
   cancelLabel?: string;
   danger?: boolean;
-  // 되돌릴 수 없는 확정처럼 주 색이 아닌 확인(예: success)일 때.
   confirmColorPalette?: "primary" | "success" | "danger";
   pending?: boolean;
   onConfirm: () => void;
-  // 설명 아래에 붙는 부가 안내(목록 상자 등).
   children?: ReactNode;
 }
 

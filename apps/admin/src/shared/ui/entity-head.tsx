@@ -14,7 +14,6 @@ interface EntityHeadProps {
   actions?: ReactNode;
 }
 
-// 유저·세션·룰북 요약은 모두 이 모양 하나로 보여 준다.
 export function EntityHead({
   title,
   lead,

@@ -9,7 +9,6 @@ interface SessionTabsProps {
   activeKey: string;
 }
 
-// 탭은 주소(?tab=)를 따른다. 누르면 그 주소로 옮겨 서버가 목록을 다시 그린다.
 export function SessionTabs({ label, tabs, activeKey }: SessionTabsProps) {
   const router = useRouter();
 

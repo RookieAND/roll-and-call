@@ -4,7 +4,6 @@ import { sql } from "drizzle-orm";
 
 import type { Executor } from "./record-audit";
 
-// 책이 모두 다른 카테고리로 옮겨 간 카테고리를 지운다.
 export async function removeEmptyCategories(tx: Executor) {
   await tx
     .delete(rulebookCategories)

@@ -6,7 +6,6 @@ export interface StaffRow extends Staff {
   lastActiveAt?: Date;
 }
 
-// 소유자가 먼저, 그다음 추가한 순서. 최근 활동은 그 운영진이 남긴 마지막 활동 기록이다.
 export async function listStaff(): Promise<StaffRow[]> {
   const db = await loadSnapshot();
   return db.staff

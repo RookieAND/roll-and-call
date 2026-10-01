@@ -14,7 +14,6 @@ interface CandidateRowProps {
   onToggle: () => void;
 }
 
-// 사람은 닉네임과 한 줄 소개로만 가린다. 이미 확정된 사람은 고를 수 없다. 행 전체가 체크박스의 라벨이다.
 export function CandidateRow({ candidate, picked, capped, onToggle }: CandidateRowProps) {
   const joined = candidate.status === PARTICIPANT_STATUS.confirmed;
   const disabled = joined || capped;

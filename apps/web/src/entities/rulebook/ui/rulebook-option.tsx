@@ -25,15 +25,12 @@ interface RulebookOptionProps {
   edition: string;
   selected?: boolean;
   disabled?: boolean;
-  // 고를 수 없는 이유 대신 자물쇠로 시작하는 줄(인증이 필요한 룰북).
   locked?: boolean;
-  // 잠긴 줄을 눌러 안내를 펼쳤는지.
   expanded?: boolean;
   reason?: ReactNode;
   onClick?: () => void;
 }
 
-// 룰북 시트의 한 줄 = 한 판본. 이름 옆에 판본을 흐리게 붙인다.
 export function RulebookOption({
   name,
   edition,

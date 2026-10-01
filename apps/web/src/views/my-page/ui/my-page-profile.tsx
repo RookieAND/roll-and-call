@@ -24,7 +24,6 @@ interface MyPageProfileProps {
   played: { count: number; href: string };
 }
 
-// 성향과 가능 시간대는 08 타인 프로필과 같은 문법이라 내 화면과 남의 화면이 같은 것을 같은 모양으로 보여준다.
 export function MyPageProfile({
   name,
   avatarUrl,

@@ -42,7 +42,6 @@ export function GameRosterSection({
     if (!next) setOpenSheet(null);
   }
 
-  // GM도 상세에서는 읽기만 한다. 승격·강등은 운영 관리가 맡는다.
   return (
     <>
       <Card.Root

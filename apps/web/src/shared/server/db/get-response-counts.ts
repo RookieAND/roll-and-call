@@ -3,7 +3,6 @@ import { availabilities, db, participants } from "@roll-and-call/database";
 import { PARTICIPANT_STATUS } from "@roll-and-call/database/rules";
 import { and, eq, inArray, sql } from "drizzle-orm";
 
-// 확정 참여자의 응답만 센다.
 export async function getResponseCounts(gameIds: string[]): Promise<Map<string, number>> {
   if (gameIds.length === 0) return new Map();
   const rows = await db

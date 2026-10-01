@@ -8,7 +8,6 @@ interface PickedSlotCardProps {
   gmName?: string;
 }
 
-// 터치에는 hover 툴팁이 없어서, 누른 칸의 명단을 격자 아래 카드로 보여준다.
 export function PickedSlotCard({ slotIso, names, gmName }: PickedSlotCardProps) {
   return (
     <Card.Root

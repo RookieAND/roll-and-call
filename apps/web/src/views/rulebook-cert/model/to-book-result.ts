@@ -19,17 +19,14 @@ export interface BookResult {
   id: string;
   title: string;
   kind: MyRulebook["kind"];
-  // 실물 · 전자책 · 운영진 인증
   mode: string;
   dates: { label: string; value: string }[];
   badge: { label: string; palette: Palette } | null;
   reason: { label: string; text: string; tone: "warning" | "danger" } | null;
   thumbs: { label: string; url: string; flagged: boolean }[];
-  // 반려 사진을 보관 기간이 지나 지웠다.
   deleted: boolean;
   memo: string | null;
   retryHref: string | null;
-  // 반려되거나 인증이 취소된 책은 기록째 지울 수 있다.
   discardable: boolean;
 }
 
@@ -46,7 +43,6 @@ const DECIDED_LABEL: Record<string, string> = {
   [CERT_STATE.revoked]: "인증 취소",
 };
 
-// 신청 상세의 책 한 장. 반려면 사유·문제 사진·운영진 메모와 다시 신청, 취소면 취소 사유와 다시 신청.
 export function toBookResult(rulebook: MyRulebook): BookResult {
   const application = rulebook.latestApplication;
   const state = rulebook.state ?? CERT_STATE.pending;
@@ -66,7 +62,6 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
   const ebook = application?.format === CERT_FORMAT.ebook;
   const flagged = (key: string) => application?.flaggedShots.includes(key as never) ?? false;
   const photosKept = rejected || state === CERT_STATE.pending || state === CERT_STATE.certified;
-  // 심사 중·승인된 신청도 사진이 남아 있으므로 올린 사진을 보여 준다. 문제 표시는 반려에만 있다.
   const thumbs =
     photosKept && application && !direct
       ? ebook

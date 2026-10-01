@@ -13,7 +13,6 @@ interface GameDetailHeaderProps {
   statusLine: ScheduleLine;
 }
 
-// 마감은 배지가 맡고, 상태 줄은 일정만 말한다.
 export function GameDetailHeader({ title, status, statusLine }: GameDetailHeaderProps) {
   return (
     <VStack gap="100">

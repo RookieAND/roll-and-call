@@ -18,7 +18,6 @@ interface NewGameGateSheetProps {
   pending: PendingCertification | null;
 }
 
-// 적용일이 지났는데 인증된 룰북이 없을 때. 버튼 문구가 길어 위아래로 쌓고, 위가 주 행동이다.
 export function NewGameGateSheet({ open, onOpenChange, pending }: NewGameGateSheetProps) {
   const title = pending
     ? "운영진이 룰북 확인을 마치면 구인을 열 수 있습니다."

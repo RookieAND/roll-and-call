@@ -16,7 +16,6 @@ const item = cva(
         true: "font-bold",
         false: "font-semibold text-gray-600 enabled:hover:text-gray-900 disabled:text-hint",
       },
-      // 참석·불참처럼 답 자체가 뜻을 가질 때만 색을 준다.
       colorPalette: { gray: "", success: "", danger: "" },
     },
     compoundVariants: [
@@ -32,7 +31,6 @@ export interface SegmentedControlItemProps {
   value: string;
   disabled?: boolean;
   colorPalette?: "gray" | "success" | "danger";
-  // 아이콘만 둘 때는 무엇인지 읽어 줄 라벨을 함께 준다.
   "aria-label"?: string;
   className?: string;
   children: ReactNode;

@@ -7,7 +7,6 @@ import { SLOT_ROW_PX } from "@/shared/ui";
 import { heatColor } from "../model/heat-color";
 import { heatTextColor } from "../model/heat-text-color";
 
-// 확정 칸은 안쪽 success 링, 누른 칸은 바깥 primary-strong 링 — 서로 헷갈리지 않게 모양도 나눈다.
 const RING = {
   picked: "z-[1] shadow-[0_0_0_2px_var(--color-gray-50),0_0_0_4px_var(--color-focus)]",
   confirmed: "shadow-[inset_0_0_0_2px_var(--color-success-solid)]",

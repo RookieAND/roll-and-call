@@ -47,7 +47,6 @@ export function toHostedSessionCard(
         : SESSION_CHIP.recruiting;
   const responses = context.responseCounts.get(game.id) ?? 0;
   const todo = context.readOnly ? null : hostTodo(game, facts, responses);
-  // 막혀 있는 일은 목록 카드도 붉게 칠한다 — 할 일 카드와 같은 신호다.
   const gmTodo = todo?.blocked ?? false;
   const scheduleTone = gmTodo
     ? SESSION_TONE.danger
@@ -81,7 +80,6 @@ export function toHostedSessionCard(
           : joinParts(line.text, line.deadline),
     scheduleTone,
     scheduleIcon,
-    // 운영 탭은 내가 GM이라 GM 줄을 적지 않는다.
     gm: null,
     action: context.readOnly ? null : hostMenuAction(game.id),
     todo,

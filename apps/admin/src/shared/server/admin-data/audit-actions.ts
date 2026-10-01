@@ -1,4 +1,3 @@
-// 활동 기록의 조치 종류. 조치 모달의 확정 버튼 하나가 이 중 하나에 대응한다.
 export const AUDIT_ACTION_GROUPS = [
   {
     label: "룰북 인증",

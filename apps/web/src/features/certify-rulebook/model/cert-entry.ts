@@ -4,7 +4,6 @@ import type { BookDraft } from "./book-draft";
 import { OTHER_SELLER } from "./other-seller";
 import { slotUrl } from "./photo-slot";
 
-// 서버로 보내는 책 한 권의 신청. 실물은 사진 세 장, 전자책은 구매 내역·영수증과 주문 정보만 채운다.
 export interface CertEntry {
   rulebookId: string;
   format: CertFormat;

@@ -1,4 +1,3 @@
-// 단계 색. 뱃지 글씨·점이 받은 단계에 따라 이 색을 입는다.
 export const BADGE_TONE = {
   muted: "muted",
   bronze: "bronze",

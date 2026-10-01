@@ -12,7 +12,6 @@ interface PostsTableProps {
   rows: PostRow[];
 }
 
-// 처리 안 된 신고가 있는 행만 붉게, 종료된 구인은 흐리게.
 export function PostsTable({ rows }: PostsTableProps) {
   return (
     <Table.Root className="table-equal">

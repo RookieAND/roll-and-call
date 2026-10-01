@@ -1,14 +1,11 @@
 @import "tailwindcss";
 @import "@roll-and-call/ui/styles.css";
 
-/* 홈·분석·인증 심사처럼 위에서 아래로 읽는 화면의 본문 최대 폭 (max-w-content).
-   page는 모든 화면의 최대 폭이다. 넓은 모니터에서 표 열이 지나치게 벌어지지 않게 한다. */
 @theme {
   --container-content: 920px;
   --container-page: 1280px;
 }
 
-/* 본문은 page 폭 안에 가운데 둔다. 머리말·하위 탭은 배경을 끝까지 채우고, 내용만 px-page로 같은 폭에 맞춘다. */
 [data-slot="admin-main"] > :not([data-full-bleed]) {
   width: 100%;
   max-width: var(--container-page);
@@ -19,9 +16,7 @@
   padding-inline: calc(max(0px, (100% - var(--container-page)) / 2) + var(--spacing-225));
 }
 
-/* 오른쪽 조치 패널(aside)이 있는 화면. 줄(data-full-bleed)은 창 폭을 다 쓰고, aside는 창 오른쪽 끝에 붙는다.
-   본문 열은 남은 폭을 다 받고, 내용은 page − aside 폭 상자로 가운데 둔다.
-   padding의 %는 부모(줄 전체) 폭 기준이라 aside 폭이 식에서 지워진다: (본문 − (page − aside)) / 2 = (줄 − page) / 2. */
+/* padding의 %는 부모(줄 전체) 폭 기준이라 aside 폭이 식에서 지워진다: (본문 − (page − aside)) / 2 = (줄 − page) / 2. */
 @utility px-center {
   padding-inline: max(0px, (100% - var(--container-page)) / 2);
 }
@@ -30,7 +25,6 @@
   padding-inline: calc(max(0px, (100% - var(--container-page)) / 2) + --value(--spacing-*));
 }
 
-/* aside 화면의 머리줄 왼쪽 끝을 본문 카드 왼쪽 끝에 맞춘다. */
 @utility pl-center-* {
   padding-left: calc(max(0px, (100% - var(--container-page)) / 2) + --value(--spacing-*));
 }
@@ -46,19 +40,16 @@ html {
   }
 }
 
-/* 한국어 문구가 낱말 중간에서 끊기지 않게 한다. */
 body {
   word-break: keep-all;
 }
 
-/* 어드민 모달은 제목(heading2) > 묶음 제목(heading3) > 선택지·필드 라벨 순으로 작아진다.
-   .text-heading3는 DS 기본값일 때만 붙어 있어서, 크기를 따로 준 제목(사진 확대 보기)은 건드리지 않는다. */
+/* .text-heading3는 DS 기본값일 때만 붙어 있어서, 크기를 따로 준 제목(사진 확대 보기)은 건드리지 않는다. */
 [data-slot="dialog-title"].text-heading3 {
   font-size: var(--text-heading2);
   line-height: var(--text-heading2--line-height);
 }
 
-/* 체크박스·라디오 라벨은 묶음 제목보다 가볍게 둔다. 강조할 부분만 <b>로 굵힌다. */
 [data-slot="checkbox-label"],
 [data-slot="radio-label"] {
   font-size: var(--text-body2);
@@ -71,15 +62,13 @@ body {
   font-weight: 700;
 }
 
-/* 본문이 가운데 상자로 좁아져도 탭 바의 배경과 하단 선을 본문 열 양 끝까지 이어 그린다. aside 화면용.
-   왼쪽 넘침은 admin-main의 overflow-x: clip이 자르고, 오른쪽은 sticky aside가 위에 그려져 가린다. */
+/* 왼쪽 넘침은 admin-main의 overflow-x: clip이 자르고, 오른쪽은 sticky aside가 위에 그려져 가린다. */
 @utility bleed {
   border-image: linear-gradient(to top, var(--color-gray-200) 1px, var(--color-surface) 1px) 0 fill
     / 0 / 0 100vmax;
 }
 
-/* 열이 TableColumns의 최소 폭을 지키며 남는 폭을 똑같이 나눠 받는다.
-   auto 배치라 칸의 max-width를 0으로 둬야 긴 글이 열을 밀어내지 않고 말줄임된다. */
+/* auto 배치라 칸의 max-width를 0으로 둬야 긴 글이 열을 밀어내지 않고 말줄임된다. */
 @utility table-equal {
   table-layout: auto;
   & :is(th, td) {

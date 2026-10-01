@@ -14,7 +14,6 @@ import { MyPageRulebooksSection } from "./my-page-rulebooks-section";
 import { MyPageSummary } from "./my-page-summary";
 import { MyPageSummarySkeleton } from "./my-page-summary-skeleton";
 
-// 구역마다 따로 읽어 먼저 끝난 구역부터 보인다. 구역이 늘어도 느린 구역만 늦게 뜬다.
 export async function MyPageView() {
   const user = await getCurrentSessionUser();
   return (

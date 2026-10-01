@@ -9,7 +9,6 @@ import { uploadReviewPhoto } from "../api/upload-review-photo";
 import { photoFileError } from "./photo-file-error";
 import { PHOTO_STATUS, type PhotoItem } from "./photo-item";
 
-// 고르면 바로 올린다. 칸마다 진행률과 실패를 따로 들고, 실패한 칸은 파일을 쥐고 다시 시도한다.
 export function useReviewPhotos(initialUrls: string[]) {
   const [items, setItems] = useState<PhotoItem[]>(() =>
     initialUrls.map((url) => ({

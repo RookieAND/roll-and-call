@@ -33,12 +33,10 @@ interface BookDraftCardProps {
   draft: BookDraft;
   nickname: string;
   sellers: string[];
-  // 재신청 화면은 비운 칸을 점선으로 먼저 보여 준다.
   highlightEmpty: boolean;
   update: (updater: (draft: BookDraft) => BookDraft) => void;
 }
 
-// 책 한 권의 신청 칸. 실물은 사진 세 칸, 전자책은 구매 내역·영수증 두 칸과 판매처·주문 정보.
 export function BookDraftCard({
   rulebook,
   draft,

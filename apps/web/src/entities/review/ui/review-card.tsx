@@ -16,7 +16,6 @@ interface ReviewCardProps {
   menu?: ReactNode;
 }
 
-// 받은 후기·세션 후기·작성한 후기가 같은 카드를 쓴다. 스포일러는 누르면 그 카드만 펼친다.
 export function ReviewCard({ title, meta, body, photoUrls, spoiler, menu }: ReviewCardProps) {
   const [revealed, setRevealed] = useState(!spoiler);
   const content = (

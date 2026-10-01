@@ -1,7 +1,6 @@
 import { findTopCells } from "./find-top-cells";
 import { TIME_SLOTS, WEEKDAYS } from "./time-grid";
 
-// 가장 많은 칸에 같은 요일의 더 많은 이웃 시간대를 붙여 "목요일 20–24시"처럼 부른다.
 export function openGridInsight(grid: number[][], early: boolean) {
   const [top] = findTopCells(grid);
   if (!top) return null;

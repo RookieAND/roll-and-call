@@ -20,7 +20,7 @@ import type { CertEntry } from "../model/cert-entry";
 import { isQuizAnswer } from "../model/is-quiz-answer";
 import { QUIZ_ANSWER_FIELD } from "../model/quiz-answer-field";
 
-// 한 번에 한 권. 사용 중인 본문 퀴즈가 있는 책은 낸 문항의 답이 맞아야 받는다. 서플리먼트는 같은 판본 기본 룰북을 모두 가진(인증·신판 인증·무료 배포) 뒤에만 받는다.
+// 서플리먼트는 같은 판본 기본 룰북을 모두 가진(인증·신판 인증·무료 배포) 뒤에만 받는다.
 // ponytail: 같은 책을 두 번 눌러 동시에 내는 경우는 막지 않는다. 운영진이 한 건을 반려하면 된다.
 export async function submitCertification({
   entry,

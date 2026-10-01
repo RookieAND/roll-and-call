@@ -21,7 +21,6 @@ interface ResultThumbsProps {
   thumbs: BookResult["thumbs"];
 }
 
-// 올린 사진. 누르면 구인 첨부 이미지처럼 화면 가득 크게 본다.
 export function ResultThumbs({ thumbs }: ResultThumbsProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const open = openIndex === null ? null : thumbs[openIndex];

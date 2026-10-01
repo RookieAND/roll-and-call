@@ -5,7 +5,6 @@ import type { ListRow } from "./list-row";
 
 type Request = MyRulebooks["requests"][number];
 
-// 추가 요청 한 줄. 처리된 요청은 30일 동안 결과를 보여 준다.
 export function toRequestRow(request: Request): ListRow {
   const base = { key: request.id, icon: null, title: request.label };
   if (request.outcome === "added" || request.outcome === "linked") {

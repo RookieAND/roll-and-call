@@ -9,7 +9,6 @@ export type { TabsListProps } from "./tabs-list";
 export type { TabsTriggerProps } from "./tabs-trigger";
 export type { TabsPanelProps } from "./tabs-panel";
 
-// 다른 콘텐츠를 갈아끼울 때 쓴다. 같은 목록을 거르는 자리에는 SegmentedControl을 쓴다.
 export const Tabs = {
   Root: BaseTabs.Root,
   List: TabsList,

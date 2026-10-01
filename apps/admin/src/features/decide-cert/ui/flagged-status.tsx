@@ -9,7 +9,6 @@ interface FlaggedStatusProps {
   flaggedShots: ShotKey[];
 }
 
-// "사유 1개를 선택했습니다 · 앞면 사진 지정됨"
 export function FlaggedStatus({ reasonTag, flaggedShots }: FlaggedStatusProps) {
   if (!reasonTag) {
     return (

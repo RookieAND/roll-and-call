@@ -3,7 +3,6 @@ import { BADGE_LADDERS, type BadgeLadderKey } from "@roll-and-call/database/rule
 import { nextStep, stepName } from "@/entities/badge";
 import { LADDER_META } from "@/features/view-badge";
 
-// "수호자까지 36회" 카드. 끝 단계까지 받았으면 done이고 막대는 가득 찬다.
 export function ladderNext(
   ladder: BadgeLadderKey,
   count: number,

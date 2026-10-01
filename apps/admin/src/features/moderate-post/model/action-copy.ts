@@ -6,7 +6,6 @@ import { POST_ACTION, type PostAction } from "./post-action";
 
 interface ActionCopy {
   title: string;
-  // 창 폭. 입력이 많은 조치일수록 넓다.
   widthClassName: string;
   description: string;
   footerIcon: LucideIcon;

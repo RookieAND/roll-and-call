@@ -6,7 +6,6 @@ import { NAV_ITEMS } from "@/shared/ui";
 
 import type { PaletteGroup } from "./palette-item";
 
-// 닉네임이 맞으면 첫 번째 사람에게 할 수 있는 처리와 참여 세션을 묶는다.
 // 불참 취소는 가장 최근 기록 하나만 띄우고, 나머지는 불참 기록 화면에서 찾는다.
 export function buildSearchGroups(query: string, users: UserSearchResult[]): PaletteGroup[] {
   const screens = NAV_ITEMS.filter((item) => item.label.includes(query.trim())).map((item) => ({

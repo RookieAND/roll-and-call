@@ -3,7 +3,6 @@ import { Text } from "@roll-and-call/ui";
 interface DeltaProps {
   value: number;
   unit: string;
-  // 늘어나면 나쁜 지표(불참률 등)
   higherIsWorse?: boolean;
 }
 

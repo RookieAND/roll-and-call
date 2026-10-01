@@ -13,7 +13,6 @@ import {
   userSessionsHref,
 } from "@/widgets/session-list";
 
-// 07 "내 세션"과 같은 구조지만 남의 기록이라 필터 칩도, 카드 안 버튼도 없다.
 export async function UserSessionsView({ id, tab }: { id: string; tab?: string }) {
   const [viewer, loaded] = await Promise.all([getCurrentSessionUser(), loadProfile(id)]);
   if (viewer?.id === id) redirect("/me/sessions");

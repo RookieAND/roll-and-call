@@ -7,7 +7,6 @@ import { FeaturedBadgePicker } from "@/features/pick-featured-badges";
 import { getCurrentSessionUser, getProfile, getUserBadges } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
-// 대표 뱃지 고르기. 지금 달고 있는 뱃지만 후보로 낸다.
 export async function FeaturedBadgesView() {
   const user = await getCurrentSessionUser();
   if (!user) {

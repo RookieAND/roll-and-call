@@ -8,7 +8,6 @@ interface PhoneNoticeProps {
   pendingItemsPromise: Promise<PendingItem[]>;
 }
 
-// 휴대폰에서는 안내와 건수만 보여 주고 조치할 길은 두지 않는다.
 export async function PhoneNotice({ pendingItemsPromise }: PhoneNoticeProps) {
   const pendingItems = await pendingItemsPromise;
   return (

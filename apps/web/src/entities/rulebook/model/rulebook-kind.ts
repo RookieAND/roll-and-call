@@ -6,7 +6,6 @@ export const RULEBOOK_KIND = {
 
 export type RulebookKind = (typeof RULEBOOK_KIND)[keyof typeof RULEBOOK_KIND];
 
-// 배지에 쓰는 짧은 이름과 목록 머리글에 쓰는 이름.
 export const RULEBOOK_KIND_LABEL: Record<RulebookKind, string> = {
   core: "기본",
   supplement: "서플리먼트",

@@ -6,7 +6,6 @@ interface UserSanctionViewProps {
   user: UserDetail;
 }
 
-// 입력 묶음이 셋이고 확정 전에 볼 내용이 많아 룰북 인증 취소처럼 별도 페이지로 둔다.
 export function UserSanctionView({ user }: UserSanctionViewProps) {
   const backHref = `/users/${user.id}`;
   return (

@@ -14,11 +14,9 @@ import { GameRulebookSheet } from "./game-rulebook-sheet";
 
 interface GameRulebookFieldProps {
   form: UseFormReturn<GameFormValues>;
-  // 없으면 수정 화면이다. 룰은 잠그고 시트를 열지 않는다.
   rulebooks?: MyRulebooks;
 }
 
-// 룰 칸. 고른 판본을 지금 열 수 있는지 바로 아래에 알려 준다. 적용일 뒤에 막힌 룰이면 다음 단계로 넘어가지 않는다.
 export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
   const [open, setOpen] = useState(false);
   const { setValue, watch, formState } = form;

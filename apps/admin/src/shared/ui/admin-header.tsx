@@ -10,7 +10,6 @@ interface AdminHeaderProps {
   sub?: ReactNode;
   back?: { href: string; label: string };
   actions?: ReactNode;
-  // 오른쪽 조치 패널이 있는 화면. 왼쪽 끝은 본문 카드에, 오른쪽 끝은 패널 안 카드에 맞춘다.
   withAside?: boolean;
 }
 

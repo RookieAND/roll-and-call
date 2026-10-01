@@ -20,7 +20,6 @@ const skeletonFact = (label: string) => ({
   value: <Skeleton width={96} height={14} render={<span />} className="inline-block" />,
 });
 
-// 탭과 필터는 실제 모양 그대로 두되 값을 바꿀 수 없게 고정한다.
 export function UserDetailLoading() {
   return (
     <>

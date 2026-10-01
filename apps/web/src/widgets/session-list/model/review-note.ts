@@ -14,7 +14,6 @@ const NONE: ReviewNote = { caption: null, action: null };
 
 const dday = (days: number) => (days > 0 ? `D-${days}` : "D-day");
 
-// 참석한 종료 세션의 후기 상태: GM 확인 대기 → 후기 쓰기(마감 D-n) → 내 후기 보기(수정 D-n) / 작성 기간 지남.
 export function reviewNote(game: SessionGame, context: SessionContext): ReviewNote {
   if (context.readOnly || !context.reviewedGames) return NONE;
   if (!game.attendanceConfirmedAt) {

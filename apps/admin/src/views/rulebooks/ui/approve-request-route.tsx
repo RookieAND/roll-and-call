@@ -11,7 +11,6 @@ interface ApproveRequestRouteProps {
   closeHref: string;
 }
 
-// 주소의 ?action=add&request= 로 연다.
 export function ApproveRequestRoute({ request, rulebooks, closeHref }: ApproveRequestRouteProps) {
   const router = useRouter();
   return (

@@ -27,7 +27,6 @@ export interface CertQueueRow {
   category: string;
   kind: RulebookKind;
   format: CertFormat;
-  // 기본 룰북 결정을 기다리는 서플리먼트. 목록에서 흐리게 둔다.
   waiting: boolean;
   appliedAt: Date;
   waitedDays: number;
@@ -36,7 +35,6 @@ export interface CertQueueRow {
   early: boolean;
 }
 
-// 오래 기다린 순. 필터와 무관한 전체 건수와 룰북 선택지도 함께 준다.
 export async function listCertQueue(filter: CertQueueFilter) {
   const db = await loadSnapshot();
   const enforcementDate = db.settings.certEnforcementDate;

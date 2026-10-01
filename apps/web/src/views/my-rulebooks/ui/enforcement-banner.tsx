@@ -5,7 +5,6 @@ interface EnforcementBannerProps {
   dday: string;
 }
 
-// 적용일 전 안내. 적용일이 지나거나 없으면 그리지 않는다.
 export function EnforcementBanner({ title, dday }: EnforcementBannerProps) {
   return (
     <Callout.Root colorPalette="notice">

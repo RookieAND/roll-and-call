@@ -11,7 +11,6 @@ interface CrossTabHintProps {
   otherCount: number;
 }
 
-// 검색은 지금 탭 안에서만 찾는다. 다른 탭에도 결과가 있으면 끝에서 알린다.
 export function CrossTabHint({ filter, otherCount }: CrossTabHintProps) {
   if (!filter.q || otherCount === 0) return null;
   const otherTab = filter.tab === GAME_TAB.past ? GAME_TAB.live : GAME_TAB.past;

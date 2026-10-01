@@ -16,7 +16,6 @@ interface MyPageRulebooksProps {
   rulebooks: MyRulebooks;
 }
 
-// 할 일과 링크 사이의 인증한 룰북 블록. 안내 기간 띠는 다른 화면에선 앱 상단 몫이라 여기서는 블록 안에 한 번만 둔다.
 export function MyPageRulebooks({
   rulebooks: { rulebooks, enforcementDate },
 }: MyPageRulebooksProps) {

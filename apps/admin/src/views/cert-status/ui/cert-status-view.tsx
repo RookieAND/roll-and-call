@@ -23,7 +23,6 @@ import { GmDoneTable } from "./gm-done-table";
 interface CertStatusViewProps {
   status: CertStatusData;
   tab: CertStatusTab;
-  // 판본별: 모든 GM이 인증을 마친 판본까지 볼지. GM별: 조치 필요·인증 완료·전체.
   allEditions: boolean;
   gmView: GmCertView;
   query?: string;

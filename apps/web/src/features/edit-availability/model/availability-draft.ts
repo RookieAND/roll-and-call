@@ -26,7 +26,6 @@ export function removeDay(intervals: AvailabilityInterval[], day: number): Avail
   return intervals.filter((interval) => interval.day !== day);
 }
 
-// 끝이 시작보다 빨라지면 붙여서 빈 구간이 저장되지 않게 한다.
 export function setHour(
   intervals: AvailabilityInterval[],
   index: number,

@@ -28,8 +28,6 @@ interface AuditLogViewProps {
   query: Record<string, string | undefined>;
 }
 
-// ?target=은 다른 화면의 [활동 기록에서 보기]가 넘기는 고정 대상, ?q=는 검색창 입력이다.
-// 기간은 평소 최근 7일, 대상으로 좁혀 볼 때는 전체 기간이 기본이다.
 export function AuditLogView({ log, query }: AuditLogViewProps) {
   const clearTargetHref = withQuery("/log", query, { target: undefined, page: undefined });
   const paged = paginate(log.rows, query.page);

@@ -1,7 +1,6 @@
 import { Button, Text } from "@roll-and-call/ui";
 
 interface SkipStatusProps {
-  // 승인할 수 없는 이유. 있으면 안내 대신 붉게 적는다.
   note?: string;
   onSkip: () => void;
 }

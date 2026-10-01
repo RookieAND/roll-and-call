@@ -28,7 +28,6 @@ interface FeaturedBadgePickerProps {
   avatarUrl: string | null;
 }
 
-// 누른 순서대로 이름 아래에 놓인다. 미리보기가 바로 바뀌고 저장을 눌러야 반영된다.
 export function FeaturedBadgePicker({
   choices,
   initialKeys,

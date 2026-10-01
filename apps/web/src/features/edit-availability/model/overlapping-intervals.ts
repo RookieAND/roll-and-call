@@ -1,6 +1,5 @@
 import { formatInterval, type AvailabilityInterval } from "@/entities/profile";
 
-// 같은 요일에서 앞 구간과 겹치는 구간은 담기지 않는다. 뒤 구간만 짚어 고칠 자리를 하나로 둔다.
 export function overlappingIntervals(intervals: AvailabilityInterval[]): Map<number, string> {
   const messages = new Map<number, string>();
 

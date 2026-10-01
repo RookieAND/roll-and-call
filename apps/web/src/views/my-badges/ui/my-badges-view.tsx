@@ -29,7 +29,6 @@ interface MyBadgesViewProps {
   tab: string | string[] | undefined;
 }
 
-// 내 업적 도감. 받은 것과 진행 중인 것을 모두 보이고, 연 순간 새 뱃지 점을 끈다.
 export async function MyBadgesView({ tab }: MyBadgesViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {

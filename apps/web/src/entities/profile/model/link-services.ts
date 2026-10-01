@@ -8,7 +8,6 @@ export type { ProfileLink };
 export type LinkService = {
   key: string;
   label: string;
-  // 핸들만 받는 곳은 접두사로 주소를 만들고, 문서는 주소를 그대로 쓴다.
   handlePrefix?: string;
   placeholder: string;
 };
@@ -52,7 +51,6 @@ export function linkServiceOf(key: string): LinkService {
   return LINK_SERVICES.find((service) => service.key === key) ?? LINK_SERVICES.at(-1)!;
 }
 
-// 주소만 붙여넣어도 서비스를 알아낸다. 목록에 없는 곳은 기타 주소로 둔다.
 const HOST_SERVICES: ReadonlyArray<[RegExp, LinkServiceKey]> = [
   [/(^|\.)(x|twitter)\.com$/, "x"],
   [/(^|\.)discord\.(com|gg)$/, "discord"],
@@ -81,7 +79,6 @@ function toUrl(value: string): URL | null {
   }
 }
 
-// 누르면 열리는 주소. 디스코드 사용자명처럼 열 곳이 없으면 null.
 export function linkHref({ service, value }: ProfileLink): string | null {
   const trimmed = value.trim();
   if (!trimmed) return null;

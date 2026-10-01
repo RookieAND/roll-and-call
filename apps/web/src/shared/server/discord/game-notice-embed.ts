@@ -14,7 +14,6 @@ type GameNotice = {
   url?: string;
 };
 
-// 게임 알림 공통 양식: 제목은 "이모지 게임명", 무슨 일인지는 description 한 문장, 수치는 fields.
 export function gameNoticeEmbed({
   game,
   gmName,

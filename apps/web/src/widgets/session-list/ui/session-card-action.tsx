@@ -14,7 +14,6 @@ type ActionLook = {
   colorPalette: "primary" | "success" | "gray";
 };
 
-// 세션 시간을 정하는 한 수만 초록이다 — 03 확정 버튼과 같은 일이라서다. 후기 쓰기는 기한이 있어 채우고, 내 후기 보기는 옅게 둔다.
 const ACTION_LOOK: Partial<Record<SessionActionKind, ActionLook>> = {
   [SESSION_ACTION_KIND.confirmTime]: { variant: "solid", colorPalette: "success" },
   [SESSION_ACTION_KIND.writeReview]: { variant: "solid", colorPalette: "primary" },

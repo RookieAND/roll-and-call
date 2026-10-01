@@ -10,7 +10,6 @@ interface ReviewBlockedDialogProps {
   fallbackHref: string;
 }
 
-// 닫으면 이 화면을 떠난다. 막힌 채로 폼에 머물 이유가 없다.
 export function ReviewBlockedDialog({ block, fallbackHref }: ReviewBlockedDialogProps) {
   const router = useRouter();
   const dialog = block ? REVIEW_BLOCK_DIALOG[block] : null;

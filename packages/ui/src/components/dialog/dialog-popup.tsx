@@ -12,7 +12,6 @@ import { dialogPopupVariants } from "./dialog-popup-variants";
 export interface DialogPopupProps
   extends ComponentPropsWithRef<typeof Dialog.Popup>, VariantProps<typeof dialogPopupVariants> {}
 
-// Portal · Overlay를 알아서 감싸는 기본형. 선택지가 3개 이하이고 바로 답하는 물음만 다이얼로그로 띄운다.
 export function DialogPopup({ size = "md", className, children, ref, ...props }: DialogPopupProps) {
   const element = useRef<HTMLDivElement>(null);
 

@@ -10,7 +10,6 @@ interface ActionFilterProps {
 
 const PARAM = "actions";
 
-// 조치 종류 여러 개 고르기. 고른 값은 ?actions=a,b 로 주소에 둔다.
 export function ActionFilter({ groups }: ActionFilterProps) {
   const router = useRouter();
   const pathname = usePathname();

@@ -6,7 +6,6 @@ import { ProfileBlockLabel } from "./profile-block-label";
 
 interface ProfileReviewsProps {
   userId: string;
-  // 받은 후기는 GM으로 보이는 사람에게만 둔다.
   received: number | null;
   written: number;
 }

@@ -13,7 +13,6 @@ interface RosterStatsProps {
   attendanceStage: AttendanceStage | null;
 }
 
-// 뽑기 전 추첨은 추첨에 들어갈 신청 수와 뽑을 인원을, 세션이 끝난 뒤에는 완료·불참을 센다. 정원은 제목 옆 배지가 맡는다.
 export function RosterStats({
   confirmed,
   waitingCount,

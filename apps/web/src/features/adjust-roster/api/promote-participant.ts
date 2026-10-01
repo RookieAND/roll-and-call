@@ -13,7 +13,6 @@ import { setParticipantStatus } from "./set-participant-status";
 
 const { confirmed } = PARTICIPANT_STATUS;
 
-// 정원을 넘겨 확정하지 않는다. 자리를 비우는 일은 GM이 대기로 이동으로 직접 한다.
 export async function promoteParticipant(gameId: string, userId: string): Promise<ActionResult> {
   let promoted = false;
   let becameFull = false;

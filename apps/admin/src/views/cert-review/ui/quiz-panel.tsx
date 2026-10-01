@@ -12,7 +12,7 @@ interface QuizPanelProps {
   hasActiveQuiz: boolean;
 }
 
-// 본문 퀴즈 결과. 퀴즈를 맞혀야 제출할 수 있으므로 퀴즈가 있으면 늘 통과다. 펼치면 문항과 답을 본다.
+// 퀴즈를 맞혀야 제출할 수 있으므로 퀴즈가 있으면 늘 통과다.
 export function QuizPanel({ quiz, hasActiveQuiz }: QuizPanelProps) {
   if (!quiz) {
     return (

@@ -17,7 +17,6 @@ interface AddStaffDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-// 검색어는 주소의 ?q=로 옮기고, 후보는 서버가 찾아서 넘긴다.
 export function AddStaffDialog({ candidates, searched, open, onOpenChange }: AddStaffDialogProps) {
   const [pending, startTransition] = useTransition();
   const [selectedId, setSelectedId] = useState<string | null>(null);

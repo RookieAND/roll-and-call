@@ -10,7 +10,6 @@ interface EarlyNoticeProps {
 }
 
 export function EarlyNotice({ serviceWeeks, hostingGms, sections }: EarlyNoticeProps) {
-  // 조건을 채운 지표는 이미 위에 그려져 있으니 아직 못 채운 것만 남긴다.
   const pending = [
     {
       open: sections.people,

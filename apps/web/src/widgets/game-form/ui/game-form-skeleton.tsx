@@ -9,7 +9,6 @@ interface GameFormSkeletonProps {
   edit?: boolean;
 }
 
-// 위저드 1단계(게임)의 셸. 어느 단계인지 모르는 동안 진행바는 비워 둔다.
 export function GameFormSkeleton({ title, edit = false }: GameFormSkeletonProps) {
   const total = GAME_FORM_STEPS.length;
 

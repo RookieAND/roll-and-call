@@ -22,7 +22,6 @@ export interface SegmentedControlRootProps {
   value: string;
   onValueChange: (value: string) => void;
   "aria-label": string;
-  // 같은 목록을 거르는 자리에 쓴다. 칸이 5개를 넘거나 패널을 갈아끼우면 Tabs를 쓴다.
   size?: "sm" | "md";
   fullWidth?: boolean;
   disabled?: boolean;

@@ -12,7 +12,6 @@ interface SessionCountStatsProps {
   played: SessionCount;
 }
 
-// 07 마이페이지와 08 타인 프로필이 같이 쓴다. 숫자는 어느 자리에 많이 앉았는지만 말하고, 누르면 그 역할의 세션 기록으로 간다.
 export function SessionCountStats({ hosted, played }: SessionCountStatsProps) {
   const stats = [
     { label: "운영한 세션", ...hosted },

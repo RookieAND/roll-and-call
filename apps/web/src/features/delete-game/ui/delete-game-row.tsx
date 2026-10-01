@@ -15,7 +15,6 @@ interface DeleteGameRowProps {
   lockedReason?: string;
 }
 
-// 취소는 관리 화면에서 바로 부르고 확인 다이얼로그 하나만 거친다. 시트를 한 겹 더 두지 않는다.
 export function DeleteGameRow({ gameId, confirmedCount, lockedReason }: DeleteGameRowProps) {
   const [confirming, setConfirming] = useState(false);
   const { pending, remove } = useDeleteGame(gameId, () => setConfirming(false));

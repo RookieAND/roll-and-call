@@ -26,7 +26,6 @@ interface RulebookPhotosViewProps {
   rulebookId: string;
 }
 
-// 신청 2·3단계. 지금 낼 수 없는 책이면 1단계로 돌려보낸다. 반려된 책이면 재신청 화면이다.
 export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {

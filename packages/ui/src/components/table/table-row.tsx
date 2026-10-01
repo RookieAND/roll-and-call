@@ -8,7 +8,6 @@ type TableRowState = { selected: boolean; interactive: boolean };
 
 export interface TableRowProps extends StateComponentProps<"tr", TableRowState> {
   selected?: boolean;
-  // 행 전체를 눌러 상세로 가는 표. 호버 배경만 준다. 이동은 행 안의 링크가 맡는다.
   interactive?: boolean;
 }
 

@@ -6,7 +6,6 @@ import { availabilityPrefill } from "@/entities/profile";
 import { buildDayColumns, buildTimeRows } from "@/shared/lib";
 import { availabilities, db, getProfile, getUserConfirmedSlots, type Game } from "@/shared/server";
 
-// 참여 신청과 동시에 프로필의 가능 시간대를 조율표에 칠해 저장한다.
 // 이 게임에 이미 칸을 낸 적이 있으면(재참여 포함) 본인이 낸 답을 덮지 않는다.
 export async function seedAvailabilityFromProfile(game: Game, userId: string) {
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) return;

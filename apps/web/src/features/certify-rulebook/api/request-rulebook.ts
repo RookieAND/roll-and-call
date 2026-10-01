@@ -29,7 +29,6 @@ export async function requestRulebook(input: RulebookRequestValues): Promise<Act
     );
   if (duplicate) return { error: "이미 요청된 룰북입니다." };
 
-  // 목록에 있는 카테고리면 잇고, 없으면 적은 이름을 그대로 남긴다.
   const [known] = category
     ? await db
         .select({ id: rulebookCategories.id })

@@ -1,6 +1,5 @@
 import { Callout } from "@roll-and-call/ui";
 
-// 자리를 비우는 일과 정원을 늘리는 일은 모두 참여자 관리 페이지에서 한다. 시트는 이유만 알린다.
 export function SeatsFullNotice() {
   return (
     <Callout.Root colorPalette="warning" className="mx-250">

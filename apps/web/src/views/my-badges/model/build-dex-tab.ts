@@ -27,7 +27,6 @@ interface DexTabInput {
   now: Date;
 }
 
-// 도감 탭 하나(PL 참여 / GM 운영)의 모든 블록.
 export function buildDexTab({ role, records, facts, appearances, userId, now }: DexTabInput) {
   const gm = role === BADGE_ROLE.gm;
   const counts = badgeCounts(facts);

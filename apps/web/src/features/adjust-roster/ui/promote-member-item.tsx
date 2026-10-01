@@ -19,7 +19,6 @@ interface PromoteMemberItemProps {
   onDone: () => void;
 }
 
-// 정원이 차 있으면 누를 수 없게 두되 이유를 숨기지 않는다. 교체 대신 대기로 이동 → 참여자로 등록 두 번으로 나눈다.
 export function PromoteMemberItem({
   gameId,
   member,

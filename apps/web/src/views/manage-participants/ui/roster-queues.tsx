@@ -32,7 +32,6 @@ interface RosterQueuesProps {
   attendanceStage: AttendanceStage | null;
 }
 
-// 확정과 대기는 제목 붙은 두 목록이다. 한 사람이 어느 쪽인지는 배지가 아니라 위치가 말한다.
 // 뽑기 전에는 대기 자리에 순번 없는 신청자가 선다. 먼저 신청한 사람이 유리해 보이지 않게 한다.
 export function RosterQueues({
   gameId,
@@ -46,7 +45,6 @@ export function RosterQueues({
 }: RosterQueuesProps) {
   const [menuMember, setMenuMember] = useState<ManagedMember | null>(null);
 
-  // 세션이 끝난 뒤 행에서 읽는 것은 출석 하나다.
   const rowAction = (member: ManagedMember) =>
     attendanceStage ? (
       <AttendanceBadge stage={attendanceStage} absent={member.absent} />

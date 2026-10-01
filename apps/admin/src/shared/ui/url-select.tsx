@@ -9,12 +9,10 @@ interface UrlSelectProps {
   param: string;
   allLabel: string;
   options: { label: string; value: string }[];
-  // 쿼리가 없을 때 고른 것으로 보이는 값. 이때 첫 칸은 all을 쿼리에 남긴다.
   defaultValue?: string;
   className?: string;
 }
 
-// 첫 칸(allLabel)은 쿼리를 지운다.
 export function UrlSelect({ param, allLabel, options, defaultValue, className }: UrlSelectProps) {
   const router = useRouter();
   const pathname = usePathname();

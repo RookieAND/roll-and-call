@@ -34,7 +34,6 @@ export function summarizeRoster({
   const passed = isDeadlinePassed(endDate, now);
   const daysLeft = ddayKst(endDate, now);
   const isLottery = recruitMethod === RECRUIT_METHOD.lottery;
-  // 뽑기 전에는 확정도 대기도 없다 — 모두 같은 "신청자"다.
   const beforeDraw = isLottery && drawnAt === null;
 
   return {

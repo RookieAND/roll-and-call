@@ -4,7 +4,6 @@ import type { GameDetailData } from "@/shared/server";
 
 export type ManageStat = { label: string; value: string; danger?: boolean };
 
-// 숫자는 헤더에서만 읽는다. 시각이 정해지면 첫 칸이 세션 일시로 바뀌고, 셋째 칸은 대기·출석으로 바뀐다.
 export function manageSummary(game: GameDetailData, responses: number, now = new Date()) {
   const { confirmed, waiting } = splitRoster(game.participants);
   const seats: ManageStat = {

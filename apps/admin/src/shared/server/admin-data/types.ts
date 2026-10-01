@@ -5,7 +5,6 @@ import type { PostStatus } from "./post-status";
 
 export type StaffRole = "owner" | "staff";
 
-// 조치를 확정한 운영진. id로 기록하고 nickname은 문구에 쓴다.
 export interface Actor {
   id: string;
   nickname: string;
@@ -83,7 +82,6 @@ export interface CertApplication {
   memo: string;
   photoUrls: Partial<Record<ShotKey, string>>;
   replacedShots: ShotKey[];
-  // 구매 기록. 실물은 선택, 전자책은 판매처·주문번호·구매 내역·영수증이 필수다.
   purchase: {
     seller: string | null;
     captureUrl: string | null;
@@ -92,7 +90,6 @@ export interface CertApplication {
     orderDate: string | null;
   };
   previousRejections: PreviousRejection[];
-  // 신청할 때 낸 본문 퀴즈. 퀴즈 없이 낸 신청은 비어 있다.
   quiz?: { question: string; answer: string; page: string };
   status: CertStatus;
   flaggedShots?: ShotKey[];
@@ -144,7 +141,6 @@ export interface Session {
   recruitStatus?: PostStatus;
   waitingIds?: string[];
   createdAt?: Date;
-  // 확정 인원이 정원에 닿은 시각. 모집 소요 기간을 잰다.
   filledAt?: Date;
   recruitMethod?: string;
   recruitDeadline?: Date;
@@ -153,7 +149,6 @@ export interface Session {
   triggers?: string[];
   platforms?: string[];
   aiImage?: boolean;
-  // 참여자·대기자가 신청한 시각.
   joinedAt?: Map<string, Date>;
   synopsis?: string;
   notices?: string[];

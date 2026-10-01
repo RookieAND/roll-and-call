@@ -11,7 +11,6 @@ interface FactRowsProps {
   labelWidth?: number;
 }
 
-// 상세 화면의 정보는 '라벨 고정 폭 + 값' 한 줄로 보여 준다. 긴 날짜가 좁은 칸에서 줄바꿈되지 않는다.
 export function FactRows({ items, labelWidth = 88 }: FactRowsProps) {
   return (
     <VStack render={<dl />} className="divide-y divide-(--rc-color-border-subtle)">

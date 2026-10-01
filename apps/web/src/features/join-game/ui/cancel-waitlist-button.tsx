@@ -10,13 +10,11 @@ import { leaveGame } from "../api/leave-game";
 interface CancelWaitlistButtonProps {
   gameId: string;
   title: string;
-  // "대기 취소" 또는 추첨 발표 전의 "신청 취소".
   label: string;
   waitlistRank: number | null;
   className?: string;
 }
 
-// 목록에서 바로 끝낸다. 확인은 시트가 아니라 다이얼로그 한 번이다.
 export function CancelWaitlistButton({
   gameId,
   title,

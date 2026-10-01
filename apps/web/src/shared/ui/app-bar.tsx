@@ -9,7 +9,6 @@ import { BrandLogo } from "./brand-logo";
 
 interface AppBarProps {
   title: string;
-  // 제목 옆에 작게 붙는 맥락(예: 게임 이름).
   subtitle?: string;
   // 워드마크로 제목을 대체한다. title은 스크린리더가 읽을 이름으로 남는다.
   brand?: boolean;

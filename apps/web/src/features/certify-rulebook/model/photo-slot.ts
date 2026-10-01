@@ -2,7 +2,6 @@ export const PHOTO_SLOT = {
   empty: "empty",
   uploading: "uploading",
   done: "done",
-  // 재신청에서 이어받은 이전 사진.
   previous: "previous",
   error: "error",
 } as const;

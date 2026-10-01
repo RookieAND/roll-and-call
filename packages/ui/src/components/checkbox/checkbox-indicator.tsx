@@ -9,7 +9,6 @@ import { resolveStateProp } from "../../lib/resolve-state-prop";
 
 export type CheckboxIndicatorProps = ComponentPropsWithRef<typeof BaseCheckbox.Indicator>;
 
-// 부분 선택은 Root의 data-indeterminate를 보고 표시를 바꾼다.
 export function CheckboxIndicator({ className, ...props }: CheckboxIndicatorProps) {
   return (
     <BaseCheckbox.Indicator

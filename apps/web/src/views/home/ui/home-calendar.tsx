@@ -18,7 +18,6 @@ interface HomeCalendarProps {
   todayKey?: string;
 }
 
-// sessionsByDay 없이 부르면 달 이름·요일·칸 수는 그대로 두고 칸만 스켈레톤으로 깐다.
 export function HomeCalendar({
   monthStart,
   sessionsByDay,

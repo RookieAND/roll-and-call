@@ -31,7 +31,6 @@ export interface WeeklySummary {
 export async function getWeeklySummary(now: Date = new Date()): Promise<WeeklySummary> {
   const db = await loadSnapshot();
   const end = now.getTime();
-  // 8주 중 몇 번째 주(0이 가장 오래전)에 드는지. 범위 밖이면 -1.
   const weekIndex = (date: Date) => {
     const weeksAgo = Math.floor((end - date.getTime()) / WEEK);
     return date.getTime() > end || weeksAgo >= WEEKS ? -1 : WEEKS - 1 - weeksAgo;

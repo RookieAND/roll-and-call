@@ -9,7 +9,6 @@ const QUEUES = [
   { key: "waiting", rows: WAITING_ROW_COUNT },
 ] as const;
 
-// 결과 페이지(DrawSummary · DrawQueue 두 통)와 같은 치수. 숫자 굴림이 시작되기 전 자리를 잡아 둔다.
 export function DrawResultSkeleton() {
   return (
     <>

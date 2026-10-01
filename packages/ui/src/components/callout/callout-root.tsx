@@ -9,12 +9,10 @@ import { resolveStateProp } from "../../lib/resolve-state-prop";
 import type { StateComponentProps } from "../../lib/state-props";
 import { CalloutContext, type CalloutPalette } from "./callout-context";
 
-// 화면 흐름 안에 끼는 안내 상자.
 const callout = cva("grid grid-cols-[auto_1fr_auto] items-start border", {
   variants: {
     variant: { tinted: "", outline: "bg-transparent" },
     colorPalette: { gray: "", primary: "", success: "", warning: "", notice: "", danger: "" },
-    // sm은 필드 바로 아래에 붙는 상자, md는 단계·시트 안에 따로 서는 상자.
     size: { sm: "rounded-400 px-150 py-150", md: "rounded-500 px-175 py-150" },
   },
   compoundVariants: [

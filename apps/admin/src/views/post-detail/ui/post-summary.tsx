@@ -14,7 +14,6 @@ interface PostSummaryProps {
   logHref: string;
 }
 
-// 제목과 모집 상태, 세션·모집 조건만. 나머지는 탭으로 나눈다.
 export function PostSummary({ post, userAppHref, logHref }: PostSummaryProps) {
   return (
     <section className="shrink-0 rounded-600 border border-gray-200 bg-surface">

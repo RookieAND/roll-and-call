@@ -10,7 +10,6 @@ interface QuizDialogSlotProps {
   questions: QuizQuestion[];
 }
 
-// 주소의 ?question=new|id로 연다. 닫으면 본문 퀴즈 탭으로 돌아간다.
 export function QuizDialogSlot({ rulebookId, questions }: QuizDialogSlotProps) {
   const router = useRouter();
   const pathname = usePathname();

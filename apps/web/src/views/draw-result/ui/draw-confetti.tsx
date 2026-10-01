@@ -5,7 +5,6 @@ import { useEffect } from "react";
 
 const COLOR_COUNT = 6;
 
-// 접속하자마자 화면 양옆에서 한 번씩, 가운데 위에서 한 번 크게 터진다.
 export function DrawConfetti() {
   useEffect(() => {
     const style = getComputedStyle(document.documentElement);

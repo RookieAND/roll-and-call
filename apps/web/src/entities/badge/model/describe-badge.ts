@@ -4,7 +4,6 @@ import type { BadgeView } from "./badge-view";
 import { stepLook } from "./step-look";
 import { stepName } from "./step-name";
 
-// 정의에서 빠진 키나 이름을 알 수 없는 룰별 뱃지는 그리지 않는다.
 export function describeBadge(record: {
   badgeKey: string;
   tier: number;

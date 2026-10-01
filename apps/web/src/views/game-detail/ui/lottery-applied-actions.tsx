@@ -11,7 +11,6 @@ interface LotteryAppliedActionsProps {
   expired: boolean;
 }
 
-// 추첨은 발표 전이라 할 일이 없다. 조율 버튼 없이 취소 하나만 남긴다.
 export function LotteryAppliedActions({ gameId, endDate, expired }: LotteryAppliedActionsProps) {
   return (
     <VStack gap="125">

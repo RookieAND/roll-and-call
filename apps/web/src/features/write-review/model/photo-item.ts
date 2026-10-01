@@ -1,4 +1,3 @@
-// 올리는 중·실패한 사진도 칸을 차지한다. 실패하면 다시 시도하도록 파일을 쥐고 있는다.
 export const PHOTO_STATUS = {
   uploading: "uploading",
   failed: "failed",

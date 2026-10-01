@@ -8,7 +8,6 @@ interface DexNextCardProps {
   note?: ReactNode;
 }
 
-// 다음 단계까지 남은 횟수. 끝 단계까지 받았으면 막대가 가득 찬다.
 export function DexNextCard({ next, note }: DexNextCardProps) {
   return (
     <VStack gap="075" className="rounded-500 border border-gray-200 p-150">

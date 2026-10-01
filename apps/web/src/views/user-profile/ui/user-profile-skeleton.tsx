@@ -2,7 +2,6 @@ import { Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 
-// 메모 블록은 로그인한 뷰어에게만 붙어 뼈대에서 뺀다.
 export function UserProfileSkeleton() {
   return (
     <>

@@ -11,7 +11,6 @@ export interface RadioCardRootProps extends ComponentPropsWithRef<typeof BaseRad
   indicator?: RadioCardIndicator;
 }
 
-// 카드 전체가 라벨이자 히트 영역이다. 고른 것은 테두리·배경·표시가 함께 바뀐다(색 단독 의존 금지).
 export function RadioCardRoot({ indicator = "radio", className, ...props }: RadioCardRootProps) {
   return (
     <RadioCardContext.Provider value={indicator}>

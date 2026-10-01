@@ -11,7 +11,6 @@ import { useHoverNone } from "./use-hover-none";
 
 export interface TooltipProps {
   content: ReactNode;
-  // 열린 모습을 그대로 보여 줘야 하는 자리(문서·미리보기)를 위해 열어 둔다.
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;

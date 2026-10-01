@@ -14,7 +14,6 @@ interface ReviewActionDialogProps {
   action: ReviewAction | null;
   fromReports: boolean;
   closeHref: string;
-  // 제거 창의 "숨김으로 바꾸기"가 옮겨 갈 주소.
   hideHref: string;
 }
 

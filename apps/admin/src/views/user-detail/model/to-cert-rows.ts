@@ -19,7 +19,6 @@ export interface CertRow {
   href: string | null;
 }
 
-// 룰북 인증 탭의 행. 인증됨 → 심사 대기 → 반려 순으로 한 목록에 이어 붙여 페이지로 자른다.
 export function toCertRows(user: UserDetail): CertRow[] {
   const certified = user.certifications.map((certification) => ({
     key: certification.rulebook,

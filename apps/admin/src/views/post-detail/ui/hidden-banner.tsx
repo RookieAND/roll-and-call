@@ -11,7 +11,6 @@ interface HiddenBannerProps {
   logHref: string;
 }
 
-// 지금 숨김 중이라는 사실과 사유 한 줄. 이전 조치는 활동 기록에서 본다.
 export function HiddenBanner({ hidden, logHref }: HiddenBannerProps) {
   return (
     <HStack

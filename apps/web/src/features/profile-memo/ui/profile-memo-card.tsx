@@ -27,7 +27,6 @@ export function ProfileMemoCard({ targetId, targetName, body }: ProfileMemoCardP
           <Pencil size={16} aria-hidden />
         </IconButton>
       </HStack>
-      {/* 사용자가 쓴 글이라 줄바꿈을 그대로 살린다. */}
       <Text typography="body3" render={<p />} className="whitespace-pre-line">
         {body}
       </Text>

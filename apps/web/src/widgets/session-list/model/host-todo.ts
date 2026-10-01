@@ -4,7 +4,6 @@ import { formatDate } from "@/shared/lib";
 import type { SessionFacts } from "./derive-session-facts";
 import { SESSION_ACTION_KIND, type SessionGame, type SessionTodo } from "./session-card-model";
 
-// 한 구인에 걸린 GM의 일은 하나만 올린다. 막혀 있는 일(추첨·일시)이 먼저다.
 export function hostTodo(
   game: SessionGame,
   facts: SessionFacts,

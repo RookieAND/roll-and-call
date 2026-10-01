@@ -17,7 +17,6 @@ interface SkeletonCellProps {
   row: number;
 }
 
-// 표 한 칸의 뼈대. 행마다 글자 폭을 조금씩 달리해 실제 목록처럼 보이게 한다.
 export function SkeletonCell({ kind, row }: SkeletonCellProps) {
   if (kind === "empty") return null;
   if (kind === "badge") return <Skeleton width={56} height={22} rounded="full" />;

@@ -22,11 +22,9 @@ import { AttendanceStats } from "./attendance-stats";
 interface AttendanceFormProps {
   gameId: string;
   attendees: Attendee[];
-  // 집계 아래, 명단 위에 끼는 세션 정보·안내.
   children?: ReactNode;
 }
 
-// 기본값은 전원 참석이다. GM이 하는 일은 오지 않은 사람을 고르는 것 하나뿐이다.
 export function AttendanceForm({ gameId, attendees, children }: AttendanceFormProps) {
   const [absentIds, setAbsentIds] = useState(
     () =>
@@ -49,7 +47,6 @@ export function AttendanceForm({ gameId, attendees, children }: AttendanceFormPr
     });
   }
 
-  // 전원 참석이면 남는 기록이 없어 확인을 건너뛴다. 되돌리기는 토스트에 있다.
   function requestConfirm() {
     if (absentIds.size === 0) submit();
     else setConfirming(true);

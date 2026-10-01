@@ -1,7 +1,6 @@
 import { RULEBOOK_KIND } from "./rulebook-kind";
 import type { MyRulebook } from "./to-my-rulebooks";
 
-// 카테고리 → 판본 순으로 묶는다. 판본은 새것(큰 숫자)부터, 한 판본 안은 기본 → 서플리먼트 → 핸드북.
 export function groupByCategory(rulebooks: MyRulebook[]) {
   const kindOrder = Object.values(RULEBOOK_KIND);
   const categories = new Map<string, { id: string; name: string; rulebooks: MyRulebook[] }>();

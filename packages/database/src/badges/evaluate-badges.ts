@@ -27,7 +27,7 @@ async function evaluateUser(userId: string, now: Date) {
   await applyBadgeWrites(userId, writes, now);
 }
 
-// 기록이 바뀐 사람의 뱃지를 기록에서 다시 계산해 저장본과 맞춘다. 지난달 기록이 바뀌었을 수 있어 이달의 뱃지도 다시 맞춘다.
+// 지난달 기록이 바뀌었을 수 있어 이달의 뱃지도 다시 맞춘다.
 // 실패해도 원래 동작(출석 확인 등)을 되돌리지 않도록 after()에서 부르고, 매일 밤 크론이 전체를 다시 맞춘다.
 export async function evaluateBadges(userIds: string[], now: Date = new Date()) {
   for (const userId of new Set(userIds)) await evaluateUser(userId, now);

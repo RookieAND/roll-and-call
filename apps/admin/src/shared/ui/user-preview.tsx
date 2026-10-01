@@ -7,7 +7,6 @@ interface UserPreviewProps {
   children: ReactNode;
 }
 
-// 사용자에게 보일 문구를 확정 전에 그대로 보여 주는 상자.
 export function UserPreview({ title = "사용자에게 이렇게 보입니다", children }: UserPreviewProps) {
   return (
     <VStack gap="100" className="rounded-600 border border-tinted-border bg-tinted-bg p-150">

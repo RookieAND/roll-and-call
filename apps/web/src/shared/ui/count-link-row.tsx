@@ -8,7 +8,6 @@ interface CountLinkRowProps {
   href: string;
 }
 
-// 이름 · 개수 · 꺾쇠 한 줄짜리 이동 행. 테두리 상자 안에 여러 줄을 쌓는다.
 export function CountLinkRow({ label, count, href }: CountLinkRowProps) {
   return (
     <HStack

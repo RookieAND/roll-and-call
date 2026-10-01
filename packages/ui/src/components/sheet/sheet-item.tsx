@@ -4,7 +4,6 @@ import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
 import { Button, type ButtonProps } from "../button/button";
 
-// 시트 안 목록 한 줄. 누르면 무언가를 고르거나 다음 화면으로 넘어간다.
 export function SheetItem({ className, ...props }: ButtonProps) {
   return (
     <Button

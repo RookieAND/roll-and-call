@@ -10,7 +10,6 @@ const DAY = 86_400_000;
 const userOf = (db: Snapshot, userId: string) => db.users.find((user) => user.id === userId)!;
 const nicknameOf = (db: Snapshot, userId: string) => userOf(db, userId).nickname;
 
-// 구인 상세: 요약·신고·구인 내용·참여자·대기자와 오른쪽 GM 정보. 대기자는 대기 순번 순이다.
 export async function getPostDetail(id: string) {
   const db = await loadSnapshot();
   const session = db.sessions.find((candidate) => candidate.id === id);

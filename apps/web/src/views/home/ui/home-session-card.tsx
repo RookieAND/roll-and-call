@@ -9,7 +9,6 @@ interface HomeSessionCardProps {
   session: CalendarSession;
 }
 
-// 내가 참여한 세션은 tinted 카드 + "내가 참여" 배지로 다른 세션과 갈린다.
 export function HomeSessionCard({ session }: HomeSessionCardProps) {
   const time = toKst(session.startsAt).format("HH:mm");
 

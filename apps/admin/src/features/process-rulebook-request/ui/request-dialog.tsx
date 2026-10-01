@@ -16,7 +16,6 @@ interface RequestDialogProps {
   closeHref: string;
 }
 
-// 주소의 ?action=link|reject&request= 로 연다. 이미 처리된 요청이면 화면이 null로 넘긴다.
 // 닫히는 동안에도 내용이 남도록 마지막으로 연 창을 기억한다.
 export function RequestDialog({ opened, rulebooks, closeHref }: RequestDialogProps) {
   const router = useRouter();

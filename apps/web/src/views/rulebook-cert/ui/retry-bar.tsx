@@ -9,7 +9,6 @@ interface RetryBarProps {
   discardable: boolean;
 }
 
-// 반려·인증 취소된 책의 아래 행동. 신청 취소는 기록째 지우고, 다시 신청은 입력을 이어받는다.
 export function RetryBar({ rulebookId, retryHref, discardable }: RetryBarProps) {
   return (
     <VStack gap="100" className="border-t border-gray-200 px-200 pt-150 pb-200">

@@ -12,8 +12,6 @@ interface MyPageTodosProps {
   rejectedRulebooks: MyRulebook[];
 }
 
-// 제일 급한 한 장만 펼쳐 두고 나머지는 접는다. 펼치면 버튼이 아래로 밀려 "접기"가 된다.
-// 반려된 룰북 인증은 세션 할 일 뒤에 붙인다.
 export function MyPageTodos({ todos, rejectedRulebooks }: MyPageTodosProps) {
   const cards = [
     ...todos.map((item) => <TodoCard key={item.id} item={item} />),

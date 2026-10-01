@@ -3,7 +3,6 @@ import { PARTICIPANT_STATUS, SESSION_ROLE } from "@/entities/game";
 import { buildSessions } from "./build-sessions";
 import type { MySessions, SessionGame } from "./session-card-model";
 
-// 남의 프로필: 운영은 여는 구인 전부, 참여는 확정된 것만. 대기 중인 신청은 쓰지 않는다.
 export function buildProfileSessions({
   hosted,
   joined,

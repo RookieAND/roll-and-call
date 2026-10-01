@@ -14,7 +14,6 @@ export interface RulebookLinkInput {
   addAlias: boolean;
 }
 
-// 요청을 이미 있는 룰북으로 처리한다. 요청한 이름이 이미 그 룰북의 이름이면 다른 이름에 넣지 않는다.
 export async function linkRulebookRequest(
   id: string,
   actor: Actor,

@@ -21,7 +21,6 @@ interface RosterStatusCardProps {
   attendanceStage: AttendanceStage | null;
 }
 
-// 헤더 아래 한 자리에 지금 가장 중요한 것만 선다 — 출석 확인 · 추첨 · 모집 마감.
 export function RosterStatusCard({
   gameId,
   confirmedAt,

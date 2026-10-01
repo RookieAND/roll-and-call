@@ -15,7 +15,6 @@ export function GameImageGallery({ images }: GameImageGalleryProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const openUrl = openIndex === null ? null : images[openIndex];
   const openLabel = `첨부 이미지 ${(openIndex ?? 0) + 1}`;
-  // 4칸 격자. 넘치면 마지막 칸을 "+n"으로 바꾼다.
   const visible = images.length > GRID_SLOTS ? images.slice(0, GRID_SLOTS - 1) : images;
   const hiddenCount = images.length - visible.length;
 

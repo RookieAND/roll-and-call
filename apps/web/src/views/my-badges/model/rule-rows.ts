@@ -13,7 +13,6 @@ import type { BadgeRecord } from "@/shared/server";
 import { heldRecord } from "./held-record";
 import { ladderNext } from "./ladder-next";
 
-// 룰별 한 줄: 지금 단계 메달, 5칸 단계 점, 다음 단계까지 남은 횟수. 해 본 룰만 온다.
 export function ruleRows(
   ladder: BadgeLadderKey,
   rules: RuleCount[],

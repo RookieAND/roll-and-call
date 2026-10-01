@@ -21,8 +21,6 @@ interface EmptyStateProps {
   className?: string;
 }
 
-// 사용자 앱 EmptyState와 같은 구성을 PC에 맞춰 한 단계 키웠다. 패널 안에 놓이므로 점선 테두리는 뺐다.
-// 일러스트는 장식이라 alt="": 제목이 이미 같은 말을 한다.
 export function EmptyState({
   title,
   description,

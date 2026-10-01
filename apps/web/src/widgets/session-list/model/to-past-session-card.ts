@@ -17,7 +17,6 @@ import {
   type SessionGame,
 } from "./session-card-model";
 
-// 종료는 한 칩 안에 여러 사정이 들어온다 — 완료 · 무산 · 대기 종료 · 불참. 불참만 붉고 나머지는 무채색이며, 일정 줄이 왜 끝났는지 말한다.
 export function toPastSessionCard(
   game: SessionGame,
   facts: SessionFacts,
@@ -33,7 +32,6 @@ export function toPastSessionCard(
     : null;
   const absent = player && viewerAbsent && Boolean(game.confirmedAt);
 
-  // 끝난 카드는 "언제였는지"가 제일 먼저 궁금하다 — 상대 날짜를 일정 줄 끝에 붙인다.
   const when = game.confirmedAt ? formatDateTime(game.confirmedAt) : null;
   const ago = game.confirmedAt
     ? relativeDay(ddayKst(game.confirmedAt, context.now ?? new Date()))
@@ -63,7 +61,6 @@ export function toPastSessionCard(
         }
       : null;
 
-  // 후기는 세션을 치르고 참석한 참여자만 쓴다.
   const review =
     player && finished && !absent && !waitlistRank
       ? reviewNote(game, context)
@@ -84,7 +81,6 @@ export function toPastSessionCard(
         : SESSION_TONE.muted,
     scheduleIcon: attendanceTodo ? SESSION_ICON.alert : SESSION_ICON.calendar,
     gm: player ? (game.gm ?? null) : null,
-    // 운영 카드의 버튼은 언제나 "운영 관리" 하나다. 출석 확인은 그 안과 할 일 카드에서 한다.
     action: player ? review.action : context.readOnly ? null : hostMenuAction(game.id),
     caption: review.caption ?? absentCaption,
     todo: attendanceTodo,

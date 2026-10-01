@@ -1,7 +1,6 @@
 import { formatDate } from "./format-date";
 import { formatDateTime } from "./format-date-time";
 
-// UI와 Discord 알림이 같은 문구를 쓴다.
 export function formatGameSchedule({
   scheduleMode,
   confirmedAt,

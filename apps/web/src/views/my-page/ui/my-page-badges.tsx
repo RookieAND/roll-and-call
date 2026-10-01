@@ -12,7 +12,6 @@ interface MyPageBadgesProps {
   goal: ReturnType<typeof nextBadgeGoal>;
 }
 
-// 받은 뱃지 목록은 도감 몫이라 여기서는 다음 뱃지 하나만 보여준다.
 export function MyPageBadges({ heldCount, hasNew, goal }: MyPageBadgesProps) {
   return (
     <VStack gap="125" render={<section />}>

@@ -18,7 +18,6 @@ interface PreConfirmedFieldProps {
   onAdd: (players: PreConfirmedPlayer[]) => void;
 }
 
-// 구인을 올리는 순간 확정될 사람을 미리 고른다. 남은 자리로 공개 모집이 열린다.
 export function PreConfirmedField({
   players,
   maxPlayers,

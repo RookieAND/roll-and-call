@@ -15,7 +15,7 @@ interface PastGameCardProps {
   };
 }
 
-// 지난 구인은 다시 신청할 일이 없어 한 줄로 줄인다. 스포일러 썸네일은 작게라도 드러내지 않는다.
+// 스포일러 썸네일은 작게라도 드러내지 않는다.
 export function PastGameCard({ game }: PastGameCardProps) {
   const count = countConfirmed(game.participants);
   const ended = isSessionEnded(game);
@@ -27,7 +27,6 @@ export function PastGameCard({ game }: PastGameCardProps) {
     scheduleMode: game.scheduleMode,
     confirmedAt: game.confirmedAt,
   });
-  // 달 머리글과 같은 날짜를 말한다. 세션 시간이 정해졌으면 세션 날, 아니면 마감일.
   const when = game.confirmedAt
     ? `${formatDate(game.confirmedAt)} 세션 · ${count}명`
     : `${formatDate(game.endDate)} 마감`;

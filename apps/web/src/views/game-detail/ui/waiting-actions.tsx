@@ -12,7 +12,6 @@ interface WaitingActionsProps {
   isLottery: boolean;
 }
 
-// 선착순은 신청하는 순간부터 순번이 있고, 추첨은 발표 뒤에 순번이 생겨 결과 페이지 입구가 따라붙는다.
 export function WaitingActions({ gameId, waitlistRank, isLottery }: WaitingActionsProps) {
   const title = waitlistRank === null ? "대기로 접수됐습니다" : `현재 대기 ${waitlistRank}번입니다`;
 

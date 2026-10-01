@@ -4,7 +4,6 @@ import { cva } from "class-variance-authority";
 
 import { BadgeSparkles } from "./badge-sparkles";
 
-// 베이직·브론즈·실버는 테두리 색만 바뀌고, 골드부터 그라데이션 테두리에 빛이 지나간다. 프리즘·이달의 뱃지·특별 칭호는 후광이 더해진다. 못 받은 뱃지는 점선에 흐린 이모지.
 const face = cva(
   "absolute inset-0 flex items-center justify-center overflow-hidden rounded-full leading-none",
   {
@@ -60,7 +59,6 @@ export interface BadgeMedalProps {
   look: BadgeLook;
   size?: keyof typeof SIZE_CLASS;
   locked?: boolean;
-  // 이달의 뱃지에 붙는 달("9월").
   ribbon?: string | null;
   isNew?: boolean;
   label?: string;

@@ -6,7 +6,6 @@ interface MyDrawStatusProps {
   waitlistRank: number | null;
 }
 
-// 결과 자체가 주인공이다. 내 상태는 한 줄에 담고 바로 전체 결과로 넘어간다.
 export function MyDrawStatus({ confirmed, waitlistRank }: MyDrawStatusProps) {
   if (confirmed) {
     return (

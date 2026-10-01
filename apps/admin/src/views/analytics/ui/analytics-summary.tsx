@@ -17,7 +17,6 @@ interface SummaryTile {
   sub: string;
 }
 
-// 초기에는 비교할 지난 기간이 없어 증감을 숨기고, 불참률은 값 대신 계산 시작 조건을 적는다.
 export function AnalyticsSummary({ summary, early }: AnalyticsSummaryProps) {
   const { finishedSessions, participants, hostingGms, noShowRate } = summary;
   const noCompare = "비교할 지난 기간이 아직 없습니다";

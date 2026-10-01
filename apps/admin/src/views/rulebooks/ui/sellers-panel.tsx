@@ -8,7 +8,6 @@ interface SellersPanelProps {
   sellers: CertSellerRow[];
 }
 
-// 전자책 인증에서 고르는 판매처. 목록에 없는 판매처는 신청자가 「기타」를 고른 뒤 직접 적는다.
 export function SellersPanel({ sellers }: SellersPanelProps) {
   return (
     <>

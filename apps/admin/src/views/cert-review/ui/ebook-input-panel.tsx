@@ -6,14 +6,12 @@ import { FactRows, IconBadge, Panel } from "@/shared/ui";
 
 interface EbookInputPanelProps {
   purchase: CertReview["purchase"];
-  // 판매처 탭에 등록된 이름인지. 아니면 신청자가 기타로 적은 판매처다.
   sellerRegistered: boolean;
   duplicate: boolean;
 }
 
 const NOT_ENTERED = "입력하지 않음";
 
-// 전자책 신청자가 적은 판매처·주문번호·주문일. 아래 캡처에 보이는 값과 나란히 비교한다.
 export function EbookInputPanel({ purchase, sellerRegistered, duplicate }: EbookInputPanelProps) {
   return (
     <Panel

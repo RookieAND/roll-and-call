@@ -1,4 +1,3 @@
-// 룰북 카테고리 이름 → 세션후기 포럼의 룰 태그 이름. 없는 룰은 기타로 붙인다.
 const RULE_TAG_BY_CATEGORY: Record<string, string> = {
   "크툴루의 부름": "CoC",
   "너냐?!": "너냐?!",

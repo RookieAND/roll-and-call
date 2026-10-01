@@ -52,7 +52,6 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
   const sessionAgo = startsAt ? relativeDay(ddayKst(startsAt, now)) : null;
 
   const attendanceDue = isAttendanceDue(game, confirmedCount, now);
-  // 확정 전에는 아무것도 기록되지 않았으므로 불참도 아직 없다.
   const viewerAbsent =
     game.attendanceConfirmedAt !== null &&
     game.participants.some(

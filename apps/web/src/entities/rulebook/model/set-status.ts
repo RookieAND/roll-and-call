@@ -7,14 +7,12 @@ export const SET_STATUS = {
   ready: "ready",
   rejected: "rejected",
   pending: "pending",
-  // 기본 룰북 일부만 인증했다.
   partial: "partial",
   revoked: "revoked",
   none: "none",
 } as const;
 export type SetStatus = (typeof SET_STATUS)[keyof typeof SET_STATUS];
 
-// 세트 하나의 진행 상태. 남은 책 가운데 반려 → 심사 중 → 일부 인증 → 인증 취소 순으로 앞선 것을 보여 준다.
 export function setStatus(set: EditionSet): {
   status: SetStatus;
   book: MyRulebook | null;

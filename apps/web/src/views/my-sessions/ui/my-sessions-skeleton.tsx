@@ -3,7 +3,6 @@ import { Container, HStack, Skeleton } from "@roll-and-call/ui";
 import { AppBar } from "@/shared/ui";
 import { SessionListSkeleton } from "@/widgets/session-list";
 
-// 기본 탭(참여)의 칩 5개. 탭·칩 라벨은 건수를 알아야 해서 셰이머로 둔다.
 const CHIP_WIDTHS = ["w-16", "w-16", "w-12", "w-12", "w-12"];
 
 export function MySessionsSkeleton() {

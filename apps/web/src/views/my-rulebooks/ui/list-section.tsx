@@ -11,7 +11,6 @@ interface ListSectionProps {
   children?: ReactNode;
 }
 
-// 제목 + 한 장의 카드에 담긴 줄들. children은 카드 아래에 붙는다.
 export function ListSection({ title, aside, rows, children }: ListSectionProps) {
   return (
     <VStack gap="125" render={<section />}>

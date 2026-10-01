@@ -13,7 +13,6 @@ interface ConfirmDateChangeDialogProps {
   onConfirm: () => void;
 }
 
-// 적용일은 모든 GM의 구인 개설에 걸리므로 확정 전에 바뀌는 날짜를 한 번 더 보여 준다.
 export function ConfirmDateChangeDialog({
   change,
   currentDate,

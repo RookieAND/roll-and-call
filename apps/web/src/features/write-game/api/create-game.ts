@@ -27,7 +27,6 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
-  // re-validate server-side (never trust the client)
   const parsed = gameFormSchema.safeParse(input);
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? INVALID_INPUT_MESSAGE };
@@ -53,7 +52,6 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     }
   }
 
-  // 구인글과 직접 확정한 사람을 한 트랜잭션에 넣어, 글만 올라가고 확정이 빠지는 일이 없게 한다.
   const gameId = await db.transaction(async (transaction) => {
     const [created] = await transaction
       .insert(games)

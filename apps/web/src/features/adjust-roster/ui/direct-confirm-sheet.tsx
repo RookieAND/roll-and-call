@@ -27,14 +27,12 @@ interface DirectConfirmSheetBaseProps {
   maxPlayers: number;
 }
 
-// 게임이 있으면 바로 확정하고, 구인 등록처럼 게임이 없으면 고른 사람만 돌려준다.
 type DirectConfirmSheetProps = DirectConfirmSheetBaseProps &
   (
     | { gameId: string; onPick?: never; excludeIds?: never }
     | { gameId?: never; onPick: (candidates: Candidate[]) => void; excludeIds: readonly string[] }
   );
 
-// 열자마자 검색에 집중하도록 목록을 미리 채우지 않는다. 남은 자리만큼만 고를 수 있다.
 export function DirectConfirmSheet({
   gameId,
   onPick,
@@ -64,7 +62,6 @@ export function DirectConfirmSheet({
     enabled: debouncedKeyword.length >= MIN_QUERY_LENGTH,
     throwOnError: false,
   });
-  // 입력이 멈추길 기다리는 동안과 새 검색어의 결과가 오기 전까지는 뼈대를 보여 준다.
   const searching = typedEnough && (debouncedKeyword !== keyword || isPending);
   const shown = results?.filter((candidate) => !excludeIds?.includes(candidate.userId)) ?? [];
 

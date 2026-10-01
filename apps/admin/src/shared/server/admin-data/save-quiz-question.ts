@@ -13,7 +13,7 @@ export interface QuizQuestionInput {
   active: boolean;
 }
 
-// id가 없으면 새 문항을 넣고, 있으면 고친다. 출제된 문항은 지우지 않고 active만 끈다.
+// 출제된 문항은 지우지 않고 active만 끈다.
 export async function saveQuizQuestion(
   rulebookId: string,
   id: string | null,

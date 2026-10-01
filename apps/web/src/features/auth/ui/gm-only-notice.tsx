@@ -11,7 +11,6 @@ interface GmOnlyNoticeProps {
   description: string;
 }
 
-// 조용히 튕기지 않는다: 비로그인·비GM에게 그 자리에서 안내한다.
 export function GmOnlyNotice({ gameId, signedIn, description }: GmOnlyNoticeProps) {
   if (!signedIn) return <LoginRequired />;
   return (

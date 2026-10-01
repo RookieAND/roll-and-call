@@ -2,7 +2,6 @@ import { windowMembers } from "./window-members";
 
 export type SessionWindow = { iso: string; members: string[] };
 
-// 가능 인원 내림차순, 동률이면 이른 시각.
 export function rankWindows({
   names,
   slotCount,

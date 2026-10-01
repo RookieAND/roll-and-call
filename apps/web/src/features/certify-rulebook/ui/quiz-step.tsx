@@ -11,7 +11,6 @@ interface QuizStepProps {
 
 const ANSWER_ID = "cert-quiz-answer";
 
-// 신청 3단계. 책을 가진 사람이면 쉽게 답할 본문 퀴즈 한 문항.
 export function QuizStep({ bookLabel, question, answer, error, onAnswerChange }: QuizStepProps) {
   return (
     <VStack gap="200">

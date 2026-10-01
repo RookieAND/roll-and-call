@@ -15,7 +15,6 @@ interface ProfileRowProps {
   className?: string;
 }
 
-// 사람을 가리키는 한 줄. 링크·선택·조작은 호출부가 감싸서 붙인다.
 export function ProfileRow({
   name,
   avatarUrl,

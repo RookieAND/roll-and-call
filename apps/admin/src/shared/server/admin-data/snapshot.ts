@@ -51,7 +51,6 @@ import type {
 const DAY = 86_400_000;
 const NINETY_DAYS = 90 * DAY;
 
-// 룰북 추가 요청 결과를 활동 기록의 조치 이름으로 옮긴다.
 const OUTCOME_ACTION = {
   added: "룰북 추가",
   linked: "룰북 연결",

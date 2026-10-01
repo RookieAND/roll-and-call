@@ -24,7 +24,6 @@ interface MonthlyCardInput {
   now: Date;
 }
 
-// 이달의 PL·GM 카드. 지금 달고 있으면 금색 테두리, 아니면 이번 달 순위를 보여 준다.
 export function monthlyCard({
   ladder,
   records,

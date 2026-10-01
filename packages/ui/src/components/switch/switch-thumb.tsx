@@ -7,7 +7,6 @@ import { useContext } from "react";
 import { cn } from "../../lib/cn";
 import { SwitchContext } from "./switch-context";
 
-// 켜짐·꺼짐을 색만으로 가르지 않도록 손잡이를 끝까지 옮긴다.
 const knob = cva("inline-block rounded-full bg-surface shadow-sm transition-transform", {
   variants: {
     size: {

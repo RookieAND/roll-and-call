@@ -2,7 +2,6 @@ import "server-only";
 import { db, games, participants, profiles, sessionReviews } from "@roll-and-call/database";
 import { and, eq } from "drizzle-orm";
 
-// 후기 쓰기 화면이 막힘 여부를 가르는 데 필요한 것: 세션, 내 참여 기록, 이미 쓴 후기.
 export async function getReviewDraftTarget(gameId: string, userId: string) {
   const [game] = await db
     .select({

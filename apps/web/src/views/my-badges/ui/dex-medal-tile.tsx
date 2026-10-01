@@ -13,7 +13,6 @@ interface DexMedalTileProps {
   children?: ReactNode;
 }
 
-// 메달 + 이름 + 조건 한 칸. 누르면 그 단계의 상세 시트가 열린다.
 export function DexMedalTile({ medal, bordered = false, caption, children }: DexMedalTileProps) {
   const nameForeground = medal.locked ? "hint" : "normal";
   return (

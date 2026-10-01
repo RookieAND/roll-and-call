@@ -9,7 +9,6 @@ import type { ReviewDraftTarget } from "@/shared/server";
 
 import { REVIEW_BLOCK, type ReviewBlock } from "./review-block";
 
-// 이미 쓴 후기가 있으면 고치기, 없으면 새로 쓰기다. 막히면 그 사정을 돌려준다.
 export function reviewBlockOf(
   { game, participant, review }: Pick<ReviewDraftTarget, "game" | "participant" | "review">,
   now: Date = new Date(),

@@ -29,7 +29,6 @@ interface QuizQuestionDialogProps {
   onClose: () => void;
 }
 
-// 본문 퀴즈 문항 추가·수정. 수정 창에는 비활성화(또는 다시 사용)가 붙는다.
 export function QuizQuestionDialog({
   rulebookId,
   question,

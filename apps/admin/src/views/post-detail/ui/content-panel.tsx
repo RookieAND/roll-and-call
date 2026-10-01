@@ -13,7 +13,7 @@ interface ContentPanelProps {
   >;
 }
 
-// 구인 설정 → 시놉시스 → 주의 사항 → 본문 이미지. 스포일러는 가리지 않는다.
+// 어드민에서는 스포일러를 가리지 않는다.
 export function ContentPanel({ post }: ContentPanelProps) {
   const tagsOf = (values: string[]) =>
     values.length

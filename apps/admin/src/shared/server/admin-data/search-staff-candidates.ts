@@ -8,7 +8,6 @@ export interface StaffCandidate {
   joinedAt: Date;
 }
 
-// 운영진 추가 검색. 디스코드 닉네임이 맞고 아직 운영진이 아닌 멤버만 돌려준다.
 export async function searchStaffCandidates(query: string): Promise<StaffCandidate[]> {
   const db = await loadSnapshot();
   const keyword = query.trim();

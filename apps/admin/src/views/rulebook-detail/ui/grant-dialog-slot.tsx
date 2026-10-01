@@ -12,7 +12,6 @@ interface GrantDialogSlotProps {
   candidates: GrantCandidate[];
 }
 
-// 창이 열렸는지는 주소의 ?action=grant로 정하고, 닫으면 검색어를 지우고 인증 현황 탭으로 돌아간다.
 export function GrantDialogSlot({
   rulebookId,
   rulebookLabel,

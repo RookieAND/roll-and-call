@@ -1,6 +1,5 @@
 import { Card, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
-// PastGameCard와 같은 치수: 56px 썸네일 · 제목 subtitle1 + 배지 · 날짜 줄 body4.
 export function PastGameListSkeleton() {
   return (
     <VStack className="gap-125">

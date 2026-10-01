@@ -6,7 +6,6 @@ import { SEAT_TONE, type SeatTone } from "./seat-tone";
 
 export type SeatCell = { text: string; tone: SeatTone };
 
-// 정원 칸은 최대 3칸: 방식 | 핵심 수 | 보조 수. 지금 할 수 있는 일을 바꾸는 수만 진하게 쓴다.
 export function seatCount({
   status,
   recruitMethod,

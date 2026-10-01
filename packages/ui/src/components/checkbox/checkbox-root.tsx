@@ -8,7 +8,6 @@ import { resolveStateProp } from "../../lib/resolve-state-prop";
 
 export type CheckboxRootProps = ComponentPropsWithRef<typeof BaseCheckbox.Root>;
 
-// checked에 "indeterminate" 대신 indeterminate prop을 준다(부분 선택 1급 지원).
 export function CheckboxRoot({ className, ...props }: CheckboxRootProps) {
   return (
     <BaseCheckbox.Root

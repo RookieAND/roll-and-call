@@ -1,4 +1,3 @@
-// 불참은 사람에게 남는 기록이라 확정 전에 무엇이 남는지 그 자리에서 다 말한다.
 // 전원 참석이면 이 확인 자체가 뜨지 않는다(AttendanceForm이 바로 확정한다).
 export function confirmDescription(absentNames: string[]) {
   const names = absentNames.join(", ");

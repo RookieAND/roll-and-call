@@ -1,6 +1,5 @@
 import { BADGE_TONE, type BadgeTone } from "./badge-tone";
 
-// Text의 foreground에 없는 금·동 색까지 한 곳에서 고른다.
 export const TONE_CLASS: Record<BadgeTone, string> = {
   [BADGE_TONE.muted]: "text-gray-600",
   [BADGE_TONE.bronze]: "text-rank-bronze",

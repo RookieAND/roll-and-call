@@ -1,6 +1,5 @@
 import { Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
-// 할 일 카드는 있을 때만 그려지므로 뼈대에서는 뺀다. 대표 업적 줄은 뱃지가 없으면 빠지지만 뼈대에는 둔다.
 export function MyPageSummarySkeleton() {
   return (
     <VStack gap="175" render={<section />}>

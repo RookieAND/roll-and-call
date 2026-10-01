@@ -6,7 +6,7 @@ import { playMinutes } from "@/shared/lib";
 
 const SLOT_MS = 30 * 60 * 1000;
 
-// 사용자가 GM이거나 참여 중인 "다른" 확정 세션이 차지하는 30분 칸(ISO) 전부. 시작 칸만이 아니라 플레이타임 길이만큼 막는다.
+// 시작 칸만이 아니라 플레이타임 길이만큼 막는다.
 export async function getUserConfirmedSlots(
   userId: string,
   excludeGameId: string,

@@ -3,7 +3,6 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 
-// 인자로 다른 앱의 src를 넘기면 그 앱을 검사한다(apps/admin).
 const ROOTS = [
   process.argv[2]
     ? resolve(process.argv[2])
@@ -11,19 +10,14 @@ const ROOTS = [
   resolve(new URL(".", import.meta.url).pathname, "../../../packages/ui/src"),
   resolve(new URL(".", import.meta.url).pathname, "../../../packages/tiptap/src"),
 ];
-// 토큰 정의 파일만 예외다.
 const ALLOW = [/styles\.css$/];
-// 스케일을 정의하는 파일은 값을 직접 적어야 한다.
 const SCALE_ALLOW = [/packages\/ui\/src\/text\.tsx$/, /packages\/ui\/src\/tokens\.ts$/];
 const HEX = /#[0-9A-Fa-f]{6}\b/g;
-// 프로젝트 토큰이 아닌 Tailwind 기본 팔레트
 const DEFAULT_PALETTE =
   /\b(?:bg|text|border|from|via|to|ring|outline|fill|stroke|decoration|shadow)-(?:red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|zinc|neutral|stone)-\d{2,3}\b/g;
-// 글씨 크기는 Text의 typography가 정한다(정의 자체는 text.tsx 예외).
 const FONT_SIZE = /\btext-\[[0-9.]+px\]/g;
 // 라디우스는 --radius-* 번호 토큰만. Tailwind 기본 이름은 값이 달라 섞인다.
 const RADIUS = /\brounded(?:-[tblrse]{1,2})?-(?:\[[^\]]+\]|xs|sm|md|lg|xl|2xl|3xl|4xl)\b/g;
-// 간격은 --spacing-* 토큰만. 임의 px과, 토큰이 있는 값의 Tailwind 맨숫자를 막는다.
 const SPACE_PROPS = "p|px|py|pt|pb|pl|pr|m|mx|my|mt|mb|ml|mr|gap-x|gap-y|gap|space-x|space-y";
 const SPACING = new RegExp(String.raw`(?<![\w-])-?(?:${SPACE_PROPS})-\[-?[0-9.]+px\]`, "g");
 // 토큰이 있는 값만 막는다. pr-11(44px)처럼 표에 없는 값은 컴포넌트 규격이라 둔다.

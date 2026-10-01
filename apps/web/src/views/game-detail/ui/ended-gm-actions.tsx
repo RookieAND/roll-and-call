@@ -10,7 +10,6 @@ interface EndedGmActionsProps {
   attendanceConfirmed: boolean;
 }
 
-// 출석 확인 흐름은 11을 따른다. 확인을 마치면 기록 보기 하나로 바뀐다.
 export function EndedGmActions({
   gameId,
   attendanceDue,

@@ -9,7 +9,6 @@ interface RulebookBookRowProps {
   row: RulebookRow;
 }
 
-// 목록에는 이름·판본·종류만 둔다. 인증 정책·인증한 사람 수·포함하는 구판은 상세에서 본다.
 export function RulebookBookRow({ row }: RulebookBookRowProps) {
   return (
     <Table.Row interactive className={cn("relative", row.hidden && "opacity-50")}>

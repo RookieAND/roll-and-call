@@ -6,7 +6,6 @@ interface SessionHeadingProps {
   subline: string;
 }
 
-// 세션 하나를 다루는 화면(후기 쓰기·세션 후기) 맨 위의 제목 · 룰 배지 · 일시 한 줄.
 export function SessionHeading({ title, rule, subline }: SessionHeadingProps) {
   return (
     <VStack gap="050">

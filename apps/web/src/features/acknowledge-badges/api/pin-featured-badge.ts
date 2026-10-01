@@ -9,7 +9,6 @@ import { db, getCurrentUser, getProfile, getUserBadges, profiles } from "@/share
 
 import { acknowledgeBadges } from "./acknowledge-badges";
 
-// 이달의 뱃지 시트의 "대표 뱃지로 걸기". 맨 앞에 넣고, 넘치면 마지막 것을 뺀다.
 export async function pinFeaturedBadge(key: string): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };

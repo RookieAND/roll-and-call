@@ -12,7 +12,6 @@ export interface NoShowFilter {
   status?: NoShowStatus;
 }
 
-// 최신 세션 순. 검색어는 닉네임과 세션 제목에 모두 맞춰 본다.
 export async function listNoShows({ query, timing, status }: NoShowFilter) {
   const db = await loadSnapshot();
   return db.noShows

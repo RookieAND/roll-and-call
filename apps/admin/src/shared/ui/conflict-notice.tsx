@@ -8,7 +8,6 @@ interface ConflictNoticeProps {
   actions: ReactNode;
 }
 
-// 다른 운영진이 먼저 처리했을 때 심사·제재·불참 취소에 같은 모양으로 붙인다.
 export function ConflictNotice({ title, description, actions }: ConflictNoticeProps) {
   return (
     <HStack

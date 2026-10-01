@@ -13,7 +13,6 @@ interface OutcomePanelProps {
   items: Outcome[];
 }
 
-// 별도 페이지로 둔 조치(인증 취소·제재)의 오른쪽 요약.
 export function OutcomePanel({ items }: OutcomePanelProps) {
   return (
     <Panel title="확정하면 일어나는 일" bodyClassName="px-175 pt-050 pb-125">
