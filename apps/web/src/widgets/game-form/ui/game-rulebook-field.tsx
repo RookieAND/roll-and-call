@@ -2,13 +2,12 @@
 
 import { Button, Callout, HStack, Text, VStack } from "@roll-and-call/ui";
 import { BookOpen, CircleCheck, Lock } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
 import { RULE_GATE, ruleGate, ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
 import type { GameFormValues } from "@/features/write-game";
-import { LineBreaks } from "@/shared/ui";
+import { LineBreaks, ServerLink } from "@/shared/ui";
 
 import { GameRulebookSheet } from "./game-rulebook-sheet";
 
@@ -102,7 +101,7 @@ export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
           {gate.action && (
             <Callout.Action>
               <Button
-                render={<Link href={gate.action.href} />}
+                render={<ServerLink path={gate.action.href} />}
                 size="sm"
                 variant={gate.type === RULE_GATE.blocked ? "solid" : "tinted"}
               >

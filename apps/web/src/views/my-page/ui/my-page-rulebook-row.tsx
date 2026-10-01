@@ -1,7 +1,6 @@
-import Link from "next/link";
-
 import { CERT_STATE, CertStateRow, certRowMeta, type MyRulebook } from "@/entities/rulebook";
 import { toKst } from "@/shared/lib";
+import { ServerLink } from "@/shared/ui";
 
 interface MyPageRulebookRowProps {
   rulebook: MyRulebook;
@@ -13,8 +12,8 @@ export function MyPageRulebookRow({ rulebook }: MyPageRulebookRowProps) {
       ? `${toKst(rulebook.stateAt).format("MM.DD")} 신청 · 확인하고 있습니다`
       : certRowMeta(rulebook);
   return (
-    <Link
-      href={`/me/rulebooks/${rulebook.id}`}
+    <ServerLink
+      path={`/me/rulebooks/${rulebook.id}`}
       className="block border-t border-gray-200 transition-colors hover:bg-gray-50"
     >
       <CertStateRow
@@ -24,6 +23,6 @@ export function MyPageRulebookRow({ rulebook }: MyPageRulebookRowProps) {
         statusPlacement="badge"
         size="sm"
       />
-    </Link>
+    </ServerLink>
   );
 }

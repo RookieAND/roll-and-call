@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import type { GamesFilter } from "@/shared/api";
+import { useServerPath } from "@/shared/lib";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
@@ -15,13 +16,14 @@ interface GameSearchFormProps {
 }
 
 export function GameSearchForm({ filter }: GameSearchFormProps) {
+  const toServerPath = useServerPath();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [value, setValue] = useState(filter.q ?? "");
 
   function search(query: string) {
     startTransition(() => {
-      router.push(gamesHref(filterParams({ ...filter, q: query || undefined })));
+      router.push(toServerPath(gamesHref(filterParams({ ...filter, q: query || undefined }))));
     });
   }
 

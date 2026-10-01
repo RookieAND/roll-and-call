@@ -1,7 +1,7 @@
 import { cn, HStack, Text } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { ProfileRow } from "@/entities/profile";
+import { ServerLink } from "@/shared/ui";
 
 import type { RecordRow } from "../model/rank-people";
 
@@ -36,8 +36,8 @@ export function HomeRecordRow({ row, position }: HomeRecordRowProps) {
   }
 
   return (
-    <Link
-      href={`/u/${row.person.id}`}
+    <ServerLink
+      path={`/u/${row.person.id}`}
       className="flex items-center gap-125 px-150 py-125 transition-colors hover:bg-gray-50"
     >
       {rankNumber}
@@ -45,6 +45,6 @@ export function HomeRecordRow({ row, position }: HomeRecordRowProps) {
       <Text typography="body4" weight="extrabold" numeric className="flex-none">
         {row.count}
       </Text>
-    </Link>
+    </ServerLink>
   );
 }

@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 import { FEATURED_BADGE_LIMIT, heldBadges } from "@/entities/badge";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentUser, getUserBadges } from "@/shared/server";
 
 export async function saveFeaturedBadges(keys: string[]): Promise<ActionResult> {
@@ -26,7 +27,7 @@ export async function saveFeaturedBadges(keys: string[]): Promise<ActionResult> 
     userId: user.id,
     featuredBadges: featured,
   });
-  revalidatePath("/me", "layout");
-  revalidatePath(`/u/${user.id}`, "layout");
-  redirect("/me/badges");
+  revalidatePath(serverPath({ slug: server.slug, path: "/me" }), "layout");
+  revalidatePath(serverPath({ slug: server.slug, path: `/u/${user.id}` }), "layout");
+  redirect(serverPath({ slug: server.slug, path: "/me/badges" }));
 }

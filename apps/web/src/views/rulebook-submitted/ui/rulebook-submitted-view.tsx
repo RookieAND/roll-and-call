@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CERT_FORMAT_LABEL, CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
+import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -68,7 +69,11 @@ export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedVie
       <FloatingBar.Root elevated={false}>
         <FloatingBar.Content>
           <Container size="sm">
-            <Button render={<Link href="/me/rulebooks" />} size="lg" className="w-full">
+            <Button
+              render={<Link href={serverPath({ slug: server.slug, path: "/me/rulebooks" })} />}
+              size="lg"
+              className="w-full"
+            >
               내 룰북으로
             </Button>
           </Container>

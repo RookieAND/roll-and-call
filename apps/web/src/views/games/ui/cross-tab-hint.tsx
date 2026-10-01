@@ -1,7 +1,7 @@
 import { Button, Text, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { GAME_TAB, type GamesFilter } from "@/shared/api";
+import { ServerLink } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
@@ -22,7 +22,7 @@ export function CrossTabHint({ filter, otherCount }: CrossTabHintProps) {
         {otherLabel}에도 ‘{filter.q}’ {otherCount}건이 있습니다.
       </Text>
       <Button
-        render={<Link href={gamesHref(filterParams({ q: filter.q, tab: otherTab }))} />}
+        render={<ServerLink path={gamesHref(filterParams({ q: filter.q, tab: otherTab }))} />}
         variant="outline"
         className="w-full"
       >

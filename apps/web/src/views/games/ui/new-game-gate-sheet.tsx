@@ -4,7 +4,7 @@ import { Button, Sheet, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { CERT_REVIEW_TIME, CERT_STATE, CertStateRow } from "@/entities/rulebook";
-import { toKst } from "@/shared/lib";
+import { toKst, useServerPath } from "@/shared/lib";
 
 export interface PendingCertification {
   rulebookId: string;
@@ -19,10 +19,13 @@ interface NewGameGateSheetProps {
 }
 
 export function NewGameGateSheet({ open, onOpenChange, pending }: NewGameGateSheetProps) {
+  const toServerPath = useServerPath();
   const title = pending
     ? "운영진이 룰북 확인을 마치면 구인을 열 수 있습니다."
     : "구인을 열려면 룰북 인증이 필요합니다.";
-  const primaryHref = pending ? `/me/rulebooks/${pending.rulebookId}` : "/me/rulebooks/apply";
+  const primaryHref = toServerPath(
+    pending ? `/me/rulebooks/${pending.rulebookId}` : "/me/rulebooks/apply",
+  );
   const primaryVariant = pending ? "tinted" : "solid";
   const primaryLabel = pending ? "신청 내용 보기" : "인증 신청하기";
 
@@ -71,7 +74,7 @@ export function NewGameGateSheet({ open, onOpenChange, pending }: NewGameGateShe
                 {primaryLabel}
               </Button>
               <Button
-                render={<Link href="/games/new" />}
+                render={<Link href={toServerPath("/games/new")} />}
                 variant="outline"
                 size="lg"
                 className="w-full"

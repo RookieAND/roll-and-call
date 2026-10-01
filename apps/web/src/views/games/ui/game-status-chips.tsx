@@ -1,5 +1,4 @@
 import { Chip, HStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import {
   GAME_STATUS_FILTERS,
@@ -8,7 +7,7 @@ import {
   type GamesFilter,
   type GameStatusFilter,
 } from "@/shared/api";
-import { TabCount } from "@/shared/ui";
+import { TabCount, ServerLink } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
@@ -33,8 +32,8 @@ export function GameStatusChips({ filter, counts }: GameStatusChipsProps) {
           <Chip
             key={option.key}
             render={
-              <Link
-                href={gamesHref(filterParams({ ...filter, status: option.key, page: undefined }))}
+              <ServerLink
+                path={gamesHref(filterParams({ ...filter, status: option.key, page: undefined }))}
                 aria-current={selected ? "page" : undefined}
               />
             }

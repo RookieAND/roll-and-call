@@ -12,6 +12,8 @@ import { redirect } from "next/navigation";
 
 import { DIE_FACES, PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
+import { getCurrentServer } from "@/shared/server";
 
 import { rollDistinct } from "../model/roll-distinct";
 import { adjustRoster } from "./adjust-roster";
@@ -57,5 +59,6 @@ export async function drawLottery(gameId: string): Promise<ActionResult> {
     },
   });
   if (result.error) return result;
-  redirect(`/games/${gameId}/draw`);
+  const server = await getCurrentServer();
+  redirect(serverPath({ slug: server.slug, path: `/games/${gameId}/draw` }));
 }

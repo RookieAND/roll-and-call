@@ -1,8 +1,8 @@
 import { Card, HStack, IconButton, Text } from "@roll-and-call/ui";
 import { Lock, Pencil } from "lucide-react";
-import Link from "next/link";
 
 import { topicParticle } from "@/shared/lib";
+import { ServerLink } from "@/shared/ui";
 
 interface ProfileMemoCardProps {
   targetId: string;
@@ -19,7 +19,7 @@ export function ProfileMemoCard({ targetId, targetName, body }: ProfileMemoCardP
           내가 쓴 메모
         </Text>
         <IconButton
-          render={<Link href={`/u/${targetId}/memo`} />}
+          render={<ServerLink path={`/u/${targetId}/memo`} />}
           variant="ghost"
           aria-label="메모 수정"
           className="h-11 w-11"

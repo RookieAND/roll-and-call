@@ -29,7 +29,7 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
           <ReviewMenu
             reviewId={row.id}
             own={own}
-            editHref={editable ? `/games/${row.gameId}/review` : null}
+            editPath={editable ? `/games/${row.gameId}/review` : null}
             deleteSubject={`${row.gameTitle} · ${formatMonthDay(row.createdAt)} 후기`}
             reportSubject={`${row.authorName}님의 후기 · ${row.gameTitle}`}
           />

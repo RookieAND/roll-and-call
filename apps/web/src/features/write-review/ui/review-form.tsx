@@ -6,11 +6,12 @@ import { useState } from "react";
 
 import { SessionHeading } from "@/entities/game";
 import { REVIEW_BODY_MAX_LENGTH, REVIEW_BODY_MIN_LENGTH } from "@/entities/review";
+import { useServerPath } from "@/shared/lib";
 import { AppBar, ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { discardReviewPhotos } from "../api/discard-review-photos";
 import { submitReview } from "../api/submit-review";
-import type { ReviewBlock } from "../model/review-block";
+import { MY_REVIEWS_HREF, type ReviewBlock } from "../model/review-block";
 import { reviewFormNotice } from "../model/review-form-notice";
 import { useReviewDraft } from "../model/use-review-draft";
 import { useReviewPhotos } from "../model/use-review-photos";
@@ -42,6 +43,7 @@ export function ReviewForm({
   initialBlock,
 }: ReviewFormProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const editing = review !== null;
   const initialPhotoUrls = review?.photoUrls ?? [];
   const [body, setBody] = useState(review?.body ?? "");
@@ -61,7 +63,8 @@ export function ReviewForm({
   });
   const { pending, run } = useAction();
 
-  const leaveHref = editing ? "/me/reviews" : `/games/${gameId}`;
+  const gameHref = toServerPath(`/games/${gameId}`);
+  const leaveHref = editing ? toServerPath(MY_REVIEWS_HREF) : gameHref;
   const notice = reviewFormNotice({ review, editUntil });
   const newPhotoUrls = photos.urls.filter((url) => !initialPhotoUrls.includes(url));
   const dirty =
@@ -211,7 +214,7 @@ export function ReviewForm({
         confirmLabel="나가기"
         onConfirm={leave}
       />
-      <ReviewBlockedDialog block={block} fallbackHref={`/games/${gameId}`} />
+      <ReviewBlockedDialog block={block} fallbackHref={gameHref} />
     </VStack>
   );
 }

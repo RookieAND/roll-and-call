@@ -2,7 +2,8 @@ import { Container } from "@roll-and-call/ui";
 import { notFound, redirect } from "next/navigation";
 
 import { SESSION_ROLE } from "@/entities/game";
-import { getCurrentSessionUser } from "@/shared/server";
+import { serverPath } from "@/shared/lib";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import {
   loadProfile,
@@ -14,8 +15,9 @@ import {
 } from "@/widgets/session-list";
 
 export async function UserSessionsView({ id, tab }: { id: string; tab?: string }) {
+  const server = await getCurrentServer();
   const [viewer, loaded] = await Promise.all([getCurrentSessionUser(), loadProfile(id)]);
-  if (viewer?.id === id) redirect("/me/sessions");
+  if (viewer?.id === id) redirect(serverPath({ slug: server.slug, path: "/me/sessions" }));
   if (!loaded) notFound();
 
   const { profile, sessions } = loaded;
@@ -27,7 +29,10 @@ export async function UserSessionsView({ id, tab }: { id: string; tab?: string }
     key: section.key,
     label: section.title,
     count: sessions[section.key].length,
-    href: userSessionsHref({ userId: profile.id, role: section.key }),
+    href: serverPath({
+      slug: server.slug,
+      path: userSessionsHref({ userId: profile.id, role: section.key }),
+    }),
   }));
 
   return (

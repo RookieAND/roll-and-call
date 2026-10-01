@@ -1,11 +1,11 @@
 import { cn, HStack, IconButton, Text } from "@roll-and-call/ui";
 import { ChevronLeft, X } from "lucide-react";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { BackButton } from "./back-button";
 import { BACK_BUTTON_CLASS } from "./back-button-class";
 import { BrandLogo } from "./brand-logo";
+import { ServerLink } from "./server-link";
 
 interface AppBarProps {
   title: string;
@@ -60,9 +60,9 @@ export function AppBar({
       )}
       {brand ? (
         <HStack render={titleElement}>
-          <Link href="/">
+          <ServerLink path="/">
             <BrandLogo label={title} />
-          </Link>
+          </ServerLink>
         </HStack>
       ) : (
         <Text

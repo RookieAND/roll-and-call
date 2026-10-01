@@ -1,5 +1,4 @@
 import { Button, HStack, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import {
   AvailabilityRows,
@@ -7,6 +6,7 @@ import {
   ProfileRow,
   type AvailabilityInterval,
 } from "@/entities/profile";
+import { ServerLink } from "@/shared/ui";
 import { SessionCountStats } from "@/widgets/session-list";
 
 import { MyPageBlockLabel } from "./my-page-block-label";
@@ -49,7 +49,7 @@ export function MyPageProfile({
           subline={bioText}
           sublineForeground={bioForeground}
         />
-        <Button render={<Link href="/me/edit" />} variant="outline" size="sm">
+        <Button render={<ServerLink path={"/me/edit"} />} variant="outline" size="sm">
           편집
         </Button>
       </HStack>
@@ -69,7 +69,7 @@ export function MyPageProfile({
         <MyPageBlockLabel
           label="가능 시간대"
           action={{
-            href: "/me/availability",
+            path: "/me/availability",
             label: availability.length > 0 ? "편집" : "추가",
           }}
         />

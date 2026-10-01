@@ -27,6 +27,7 @@ export async function notifyGameLeft({
 
   const name = username ?? "?";
   const embed = gameNoticeEmbed({
+    slug: server.slug,
     game,
     gmName: game.gm?.username ?? "?",
     emoji: "🚪",

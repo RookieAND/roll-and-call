@@ -1,9 +1,9 @@
 import { Badge } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import type { RosterMember } from "@/entities/game";
 import { EMPTY_BIO_TEXT, ProfileRow } from "@/entities/profile";
+import { ServerLink } from "@/shared/ui";
 
 export type DetailRosterMember = RosterMember<{
   userId: string;
@@ -20,8 +20,8 @@ interface RosterMemberRowProps {
 
 export function RosterMemberRow({ userId, name, avatarUrl, bio, tags = [] }: RosterMemberRowProps) {
   return (
-    <Link
-      href={`/u/${userId}`}
+    <ServerLink
+      path={`/u/${userId}`}
       className="flex min-h-15 items-center gap-125 px-175 py-100 transition-colors hover:bg-gray-50"
     >
       <ProfileRow
@@ -36,6 +36,6 @@ export function RosterMemberRow({ userId, name, avatarUrl, bio, tags = [] }: Ros
         sublineForeground="hint"
       />
       <ChevronRight size={17} className="flex-none text-hint" aria-hidden />
-    </Link>
+    </ServerLink>
   );
 }

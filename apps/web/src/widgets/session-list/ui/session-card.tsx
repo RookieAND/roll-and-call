@@ -1,6 +1,7 @@
 import { Avatar, Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { CalendarDays, CircleAlert, Clock } from "lucide-react";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 import {
   SESSION_ICON,
@@ -44,7 +45,7 @@ export function SessionCard({ model }: SessionCardProps) {
       className={model.urgent ? "border-danger-200 bg-danger-50" : "bg-surface"}
     >
       <VStack gap="100" className="p-025">
-        <Link href={`/games/${model.id}`} className="flex flex-col gap-100">
+        <ServerLink path={`/games/${model.id}`} className="flex flex-col gap-100">
           <HStack align="start" gap="100">
             <Text
               truncate
@@ -84,7 +85,7 @@ export function SessionCard({ model }: SessionCardProps) {
               {model.caption.text}
             </Text>
           )}
-        </Link>
+        </ServerLink>
         <SessionCardAction model={model} />
       </VStack>
     </Card.Root>

@@ -4,6 +4,8 @@ import { cn, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 import type { MouseEvent } from "react";
 
+import { useServerPath } from "@/shared/lib";
+
 import type { MonthCell } from "../model/build-month-cells";
 import { CALENDAR_CELL_TONE, calendarCellState } from "../model/calendar-cell-tone";
 import type { CalendarSession } from "../model/to-calendar-sessions";
@@ -20,13 +22,14 @@ interface HomeCalendarCellProps {
 
 // ponytail: 달력 칸은 버튼·칩 프리미티브와 모양이 달라 Link를 직접 칠한다.
 export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalendarCellProps) {
+  const toServerPath = useServerPath();
   const mine = sessions.find((session) => session.mine);
   const dots = (mine ? [mine, ...sessions.filter((session) => session !== mine)] : sessions).slice(
     0,
     MAX_DOTS,
   );
   const ariaLabel = sessions.length > 0 ? `${cell.label} 세션 ${sessions.length}건` : cell.label;
-  const href = `/?date=${cell.key}`;
+  const href = `${toServerPath("/")}?date=${cell.key}`;
 
   const tone = CALENDAR_CELL_TONE[calendarCellState({ selected, today })];
   const weekdayTone = cell.inMonth

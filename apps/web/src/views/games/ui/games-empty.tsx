@@ -1,5 +1,4 @@
 import { Button, HStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import {
   GAME_STATUS_FILTER_DEFAULT,
@@ -8,7 +7,7 @@ import {
   GAME_TAB_DEFAULT,
   type GamesFilter,
 } from "@/shared/api";
-import { EmptyState } from "@/shared/ui";
+import { EmptyState, ServerLink } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
@@ -19,7 +18,7 @@ interface GamesEmptyProps {
 
 export function GamesEmpty({ filter }: GamesEmptyProps) {
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
-  const newGame = <Button render={<Link href="/games/new" />}>새 구인 등록</Button>;
+  const newGame = <Button render={<ServerLink path={"/games/new"} />}>새 구인 등록</Button>;
 
   if (filter.q) {
     return (
@@ -36,7 +35,7 @@ export function GamesEmpty({ filter }: GamesEmptyProps) {
         action={
           <HStack gap="100" className="mt-100 w-full [&>*]:flex-1">
             <Button
-              render={<Link href={gamesHref(filterParams({ ...filter, q: undefined }))} />}
+              render={<ServerLink path={gamesHref(filterParams({ ...filter, q: undefined }))} />}
               variant="outline"
             >
               검색 초기화
@@ -58,8 +57,8 @@ export function GamesEmpty({ filter }: GamesEmptyProps) {
         action={
           <Button
             render={
-              <Link
-                href={gamesHref(filterParams({ ...filter, status: GAME_STATUS_FILTER_DEFAULT }))}
+              <ServerLink
+                path={gamesHref(filterParams({ ...filter, status: GAME_STATUS_FILTER_DEFAULT }))}
               />
             }
             variant="outline"

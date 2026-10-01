@@ -22,11 +22,11 @@ export async function notifyGameCreated({
     channelId: server.recruitChannelId,
     input: {
       content: "📢 새로운 구인 글이 올라왔어요!",
-      embeds: [recruitEmbed({ game, gmName, confirmedCount })],
-      buttons: recruitButtons(game.id),
+      embeds: [recruitEmbed({ slug: server.slug, game, gmName, confirmedCount })],
+      buttons: recruitButtons({ slug: server.slug, gameId: game.id }),
     },
   });
   const threadId = message && (await startDiscordThread({ message, name: game.title }));
-  if (threadId) await sendGameImages({ game, threadId });
+  if (threadId) await sendGameImages({ slug: server.slug, game, threadId });
   return threadId;
 }

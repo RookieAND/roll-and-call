@@ -2,6 +2,7 @@
 
 import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 import { availabilityQuery } from "@/entities/availability";
@@ -44,6 +45,7 @@ export function AvailabilityGrid({
   });
   const [prefillNotice, setPrefillNotice] = useState(usePrefill);
   const queryClient = useQueryClient();
+  const { server } = useParams<{ server: string }>();
   const { mutate, isPending: pending } = useMutation({
     mutationFn: async (keys: string[]) => {
       const result = await saveAvailability({ gameId, slotIsos: keys });
@@ -56,7 +58,9 @@ export function AvailabilityGrid({
       setPrefillNotice(false);
       toast.success("가능 시간을 저장했습니다");
       // 전체 겹침·확정 후보가 같은 캐시를 읽으므로 저장 결과를 다시 받아 반영한다.
-      return queryClient.invalidateQueries({ queryKey: availabilityQuery(gameId).queryKey });
+      return queryClient.invalidateQueries({
+        queryKey: availabilityQuery({ slug: server, gameId }).queryKey,
+      });
     },
   });
 

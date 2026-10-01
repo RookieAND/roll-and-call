@@ -35,12 +35,12 @@ describe("reviewForumPost", () => {
     const post = reviewForumPost({
       review,
       tagIds: tags,
-      siteOrigin: "https://roll-and-call.vercel.app",
+      reviewsUrl: "https://roll-and-call.vercel.app/trpia/games/g1/reviews",
     });
     expect(post.name).toBe("붉은 여관의 밤 후기 · 게굴");
     expect(post.appliedTags).toEqual(["no-spoiler", "trpg", "coc"]);
     expect(post.content).toBe(
-      "재미있었어요. 반전이 좋았습니다 || 정말로\n\n-# 작성자 <@123> · 룰 크툴루의 부름 · GM 달빛토끼 · [롤앤콜에서 보기](<https://roll-and-call.vercel.app/games/g1/reviews>)",
+      "재미있었어요. 반전이 좋았습니다 || 정말로\n\n-# 작성자 <@123> · 룰 크툴루의 부름 · GM 달빛토끼 · [롤앤콜에서 보기](<https://roll-and-call.vercel.app/trpia/games/g1/reviews>)",
     );
     expect(post.photos.map((photo) => photo.name)).toEqual(["photo-1.png", "photo-2.jpg"]);
   });
@@ -49,7 +49,7 @@ describe("reviewForumPost", () => {
     const post = reviewForumPost({
       review: { ...review, spoiler: true, category: null },
       tagIds: tags,
-      siteOrigin: undefined,
+      reviewsUrl: undefined,
     });
     expect(post.name.startsWith("[스포있음] ")).toBe(true);
     expect(post.appliedTags).toEqual(["spoiler", "trpg", "other"]);
@@ -62,7 +62,7 @@ describe("reviewForumPost", () => {
   it("글자 수가 넘치면 아래 한 줄을 뺀다", () => {
     const body = "가".repeat(1990);
     expect(
-      reviewForumPost({ review: { ...review, body }, tagIds: tags, siteOrigin: undefined }).content,
+      reviewForumPost({ review: { ...review, body }, tagIds: tags, reviewsUrl: undefined }).content,
     ).toBe(body);
   });
 });

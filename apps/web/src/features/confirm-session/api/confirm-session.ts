@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import {
   getCurrentServer,
   getCurrentUser,
@@ -43,11 +44,12 @@ export async function confirmSession({
     ]),
   );
 
-  revalidatePath(`/games/${gameId}`);
-  revalidatePath(`/games/${gameId}/schedule`);
-  revalidatePath(`/games/${gameId}/confirm`);
-  revalidatePath(`/games/${gameId}/manage`);
-  revalidatePath(`/games/${gameId}/participants`);
-  revalidatePath("/games");
-  redirect(`/games/${gameId}`);
+  const gamePath = serverPath({ slug: server.slug, path: `/games/${gameId}` });
+  revalidatePath(gamePath);
+  revalidatePath(`${gamePath}/schedule`);
+  revalidatePath(`${gamePath}/confirm`);
+  revalidatePath(`${gamePath}/manage`);
+  revalidatePath(`${gamePath}/participants`);
+  revalidatePath(serverPath({ slug: server.slug, path: "/games" }));
+  redirect(gamePath);
 }

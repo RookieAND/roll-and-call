@@ -1,5 +1,6 @@
 import { Button } from "@roll-and-call/ui";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 interface ManageGameLinkProps {
   gameId: string;
@@ -8,7 +9,7 @@ interface ManageGameLinkProps {
 export function ManageGameLink({ gameId }: ManageGameLinkProps) {
   return (
     <Button
-      render={<Link href={`/games/${gameId}/manage`} />}
+      render={<ServerLink path={`/games/${gameId}/manage`} />}
       variant="tinted"
       size="lg"
       className="w-full"

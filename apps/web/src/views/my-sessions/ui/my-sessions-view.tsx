@@ -2,7 +2,8 @@ import { Container } from "@roll-and-call/ui";
 
 import { SESSION_ROLE } from "@/entities/game";
 import { LoginRequired } from "@/features/auth";
-import { getCurrentSessionUser } from "@/shared/server";
+import { serverPath } from "@/shared/lib";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import {
   loadMySessions,
@@ -19,6 +20,7 @@ import { SessionStatusChips } from "./session-status-chips";
 import { SessionsEmpty } from "./sessions-empty";
 
 export async function MySessionsView({ tab, status }: { tab?: string; status?: string }) {
+  const server = await getCurrentServer();
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
@@ -46,7 +48,7 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
     key: item.key,
     label: item.label,
     count: sessions[item.key].length,
-    href: sessionsHref({ role: item.key }),
+    href: serverPath({ slug: server.slug, path: sessionsHref({ role: item.key }) }),
   }));
   const chipCounts = Object.fromEntries(
     chips.map((chip) => [

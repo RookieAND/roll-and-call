@@ -3,6 +3,7 @@ import { Suspense } from "react";
 
 import { BadgeAwardGate } from "@/features/acknowledge-badges";
 import { LoginButton } from "@/features/auth";
+import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getMonthSessions, getCurrentServer } from "@/shared/server";
 import { AppBar, HelpButton, ThemeToggleButton } from "@/shared/ui";
 
@@ -39,7 +40,10 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
           ) : (
             <HStack align="center" gap="050">
               <ThemeToggleButton />
-              <LoginButton next="/" className="h-[34px] px-150 text-body3" />
+              <LoginButton
+                next={serverPath({ slug: server.slug, path: "/" })}
+                className="h-[34px] px-150 text-body3"
+              />
             </HStack>
           )
         }

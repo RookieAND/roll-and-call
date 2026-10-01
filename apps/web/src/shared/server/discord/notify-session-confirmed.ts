@@ -35,6 +35,7 @@ export async function notifySessionConfirmed({
   }
 
   const embed = gameNoticeEmbed({
+    slug: server.slug,
     game,
     gmName: game.gm?.username ?? "?",
     emoji: "🗓️",

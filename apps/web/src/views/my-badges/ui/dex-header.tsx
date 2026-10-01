@@ -1,7 +1,7 @@
 import { Button, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { BadgeMedal, monthLabel, type BadgeView } from "@/entities/badge";
+import { ServerLink } from "@/shared/ui";
 
 interface DexHeaderProps {
   earnedCount: number;
@@ -29,7 +29,7 @@ export function DexHeader({ earnedCount, featured }: DexHeaderProps) {
               프로필 이름 아래에 이 순서로 보입니다.
             </Text>
           </VStack>
-          <Button render={<Link href="/me/badges/featured" />} variant="outline" size="sm">
+          <Button render={<ServerLink path={"/me/badges/featured"} />} variant="outline" size="sm">
             바꾸기
           </Button>
         </HStack>

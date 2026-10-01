@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 import { normalizeKeywords, normalizeLinks, type ProfileLink } from "@/entities/profile";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
@@ -46,6 +47,7 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     links: normalizeLinks(input.links),
   });
 
-  revalidatePath("/me");
-  redirect("/me");
+  const myPagePath = serverPath({ slug: server.slug, path: "/me" });
+  revalidatePath(myPagePath);
+  redirect(myPagePath);
 }

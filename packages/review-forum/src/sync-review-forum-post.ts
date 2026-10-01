@@ -20,7 +20,8 @@ export async function syncReviewForumPost({
   reviewId: string;
   siteOrigin: string | undefined;
 }) {
-  const forumId = (await getServerById(serverId))?.reviewForumChannelId;
+  const server = await getServerById(serverId);
+  const forumId = server?.reviewForumChannelId;
   if (!forumId) return;
   const review = await loadForumReview({ serverId, reviewId });
   if (!review) return;
@@ -38,7 +39,7 @@ export async function syncReviewForumPost({
   const { photos, ...post } = reviewForumPost({
     review,
     tagIds: await getForumTags(forumId),
-    siteOrigin,
+    reviewsUrl: siteOrigin && `${siteOrigin}/${server.slug}/games/${review.gameId}/reviews`,
   });
   const input = { ...post, files: await fetchPhotoFiles(photos) };
   if (review.threadId && (await updateForumPost({ threadId: review.threadId, ...input }))) return;

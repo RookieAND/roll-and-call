@@ -11,6 +11,7 @@ import {
 } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
 import { CancelApplicationButton } from "@/features/certify-rulebook";
+import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -42,7 +43,8 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
     await getRulebookRecords({ serverId: server.id, userId: user.id }),
   );
   const rulebook = rulebooks.find((candidate) => candidate.id === rulebookId);
-  if (!rulebook?.state) redirect(certApplyHref({ rulebookIds: [rulebookId] }));
+  if (!rulebook?.state)
+    redirect(serverPath({ slug: server.slug, path: certApplyHref({ rulebookIds: [rulebookId] }) }));
 
   const books = applicationGroup({ rulebook, rulebooks });
   const results = books.map(toBookResult);
@@ -73,7 +75,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
                 <RetryBar
                   key={result.id}
                   rulebookId={result.id}
-                  retryHref={result.retryHref}
+                  retryHref={serverPath({ slug: server.slug, path: result.retryHref })}
                   discardable={result.discardable}
                 />
               ) : null,
@@ -81,7 +83,14 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
             {allCertified && (
               <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
                 <Button
-                  render={<Link href={certApplyHref({ rulebookIds: [] })} />}
+                  render={
+                    <Link
+                      href={serverPath({
+                        slug: server.slug,
+                        path: certApplyHref({ rulebookIds: [] }),
+                      })}
+                    />
+                  }
                   size="lg"
                   className="w-full"
                 >

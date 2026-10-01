@@ -1,5 +1,6 @@
 import { Button, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 import { ActionNotice } from "./action-notice";
 import { ManageGameLink } from "./manage-game-link";
@@ -15,7 +16,7 @@ export function EndedGmActions({
   attendanceDue,
   attendanceConfirmed,
 }: EndedGmActionsProps) {
-  const attendanceHref = `/games/${gameId}/attendance`;
+  const attendancePath = `/games/${gameId}/attendance`;
 
   if (attendanceDue) {
     return (
@@ -23,7 +24,7 @@ export function EndedGmActions({
         <ActionNotice title="출석을 확인해 주세요" colorPalette="primary">
           참석하지 않은 사람만 고르면 됩니다.
         </ActionNotice>
-        <Button render={<Link href={attendanceHref} />} size="lg" className="w-full">
+        <Button render={<ServerLink path={attendancePath} />} size="lg" className="w-full">
           출석 확인하기
         </Button>
       </VStack>
@@ -32,7 +33,12 @@ export function EndedGmActions({
 
   if (attendanceConfirmed) {
     return (
-      <Button render={<Link href={attendanceHref} />} variant="tinted" size="lg" className="w-full">
+      <Button
+        render={<ServerLink path={attendancePath} />}
+        variant="tinted"
+        size="lg"
+        className="w-full"
+      >
         출석 기록 보기
       </Button>
     );

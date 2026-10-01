@@ -1,11 +1,10 @@
 "use client";
 
 import { Button, Text, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 import { useState } from "react";
 
 import { RULE_GATE, RulebookOption, type EditionSet, type RuleGate } from "@/entities/rulebook";
-import { LineBreaks } from "@/shared/ui";
+import { LineBreaks, ServerLink } from "@/shared/ui";
 
 import { RulebookSetBadge } from "./rulebook-set-badge";
 
@@ -43,7 +42,11 @@ export function RulebookSheetOption({ set, gate, selected, onPick }: RulebookShe
             </Text>
           </VStack>
           {gate.action && (
-            <Button render={<Link href={gate.action.href} />} variant="tinted" className="w-full">
+            <Button
+              render={<ServerLink path={gate.action.href} />}
+              variant="tinted"
+              className="w-full"
+            >
               {gate.action.label}
             </Button>
           )}

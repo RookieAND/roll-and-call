@@ -1,6 +1,7 @@
 import { AvatarGroup, cn, HStack, Text } from "@roll-and-call/ui";
 import { Crown } from "lucide-react";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 import type { RecordPerson } from "../model/rank-people";
 import { leaderName } from "./leader-name";
@@ -60,8 +61,8 @@ export function HomeRecordLeader({ people, count }: HomeRecordLeaderProps) {
   if (people.length > 1) return <div className={CARD}>{body}</div>;
 
   return (
-    <Link href={`/u/${first.id}`} className={cn(CARD, "hover:bg-primary-100")}>
+    <ServerLink path={`/u/${first.id}`} className={cn(CARD, "hover:bg-primary-100")}>
       {body}
-    </Link>
+    </ServerLink>
   );
 }

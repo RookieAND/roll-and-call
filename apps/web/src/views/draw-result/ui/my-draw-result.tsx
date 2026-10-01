@@ -1,7 +1,7 @@
 import { Button, FloatingBar, HStack, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { LeaveGameButton } from "@/features/join-game";
+import { ServerLink } from "@/shared/ui";
 
 import { DRAW_ROW_VARIANT } from "../model/draw-row-variant";
 import type { DrawOutcome } from "../model/to-draw-outcome";
@@ -66,11 +66,11 @@ export function MyDrawResult({
       <FloatingBar.Content>
         <HStack gap="100" className="[&>*]:flex-1">
           {!confirmed && <LeaveGameButton gameId={gameId}>대기 취소</LeaveGameButton>}
-          <Button render={<Link href={`/games/${gameId}`} />} variant="outline" size="lg">
+          <Button render={<ServerLink path={`/games/${gameId}`} />} variant="outline" size="lg">
             구인 글 보기
           </Button>
           {confirmed && needsAvailability && (
-            <Button render={<Link href={`/games/${gameId}/schedule`} />} size="lg">
+            <Button render={<ServerLink path={`/games/${gameId}/schedule`} />} size="lg">
               가능 시간 제출
             </Button>
           )}

@@ -1,10 +1,9 @@
 "use client";
 
 import { Button, HStack, Sheet } from "@roll-and-call/ui";
-import Link from "next/link";
 import { useState } from "react";
 
-import { toast, useAction } from "@/shared/ui";
+import { ServerLink, toast, useAction } from "@/shared/ui";
 
 import { acknowledgeBadges } from "../api/acknowledge-badges";
 import { pinFeaturedBadge } from "../api/pin-featured-badge";
@@ -38,7 +37,7 @@ export function BadgeAwardSheet({ sheet }: BadgeAwardSheetProps) {
 
   const dismissLabel = sheet.kind === "retro" ? "나중에" : "닫기";
   const pinnable = sheet.kind === "single" && sheet.pinnable;
-  const primaryHref = sheet.kind === "retro" ? "/me/badges/featured" : "/me/badges";
+  const primaryPath = sheet.kind === "retro" ? "/me/badges/featured" : "/me/badges";
   const primaryLabel = sheet.kind === "retro" ? "대표 뱃지 고르기" : "업적 도감 보기";
 
   return (
@@ -62,7 +61,7 @@ export function BadgeAwardSheet({ sheet }: BadgeAwardSheetProps) {
               </Button>
             ) : (
               <Button
-                render={<Link href={primaryHref} onClick={close} />}
+                render={<ServerLink path={primaryPath} onClick={close} />}
                 size="lg"
                 className="flex-1"
               >

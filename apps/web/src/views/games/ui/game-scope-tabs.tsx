@@ -4,6 +4,7 @@ import { Tabs } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
 import { GAME_TAB, GAME_TAB_DEFAULT, type GamesFilter, type GameTab } from "@/shared/api";
+import { useServerPath } from "@/shared/lib";
 import { TabCount } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
@@ -15,13 +16,14 @@ interface GameScopeTabsProps {
 }
 
 export function GameScopeTabs({ filter, counts }: GameScopeTabsProps) {
+  const toServerPath = useServerPath();
   const router = useRouter();
 
   return (
     <Tabs.Root
       value={filter.tab ?? GAME_TAB_DEFAULT}
       onValueChange={(tab) =>
-        router.push(gamesHref(filterParams({ q: filter.q, tab: tab as GameTab })))
+        router.push(toServerPath(gamesHref(filterParams({ q: filter.q, tab: tab as GameTab }))))
       }
     >
       <Tabs.List aria-label="구인 범위" scrollable={false} className="w-full">

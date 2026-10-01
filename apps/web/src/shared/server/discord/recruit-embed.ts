@@ -8,17 +8,19 @@ import { discordOverview } from "./discord-overview";
 
 // cancelled면 글은 그 자리에 남기고 빨갛게 바꾼다 — 들어갈 곳이 없어졌으니 링크는 뺀다. CTA는 recruitButtons.
 export function recruitEmbed({
+  slug,
   game,
   gmName,
   confirmedCount,
   cancelled = false,
 }: {
+  slug: string;
   game: Game;
   gmName: string;
   confirmedCount: number;
   cancelled?: boolean;
 }): DiscordEmbed {
-  const url = cancelled ? undefined : gameUrl(game.id);
+  const url = cancelled ? undefined : gameUrl({ slug, gameId: game.id });
   const fields = [
     { name: "📜 룰", value: game.rule, inline: true },
     { name: "👥 인원", value: `${confirmedCount}/${game.maxPlayers}명`, inline: true },

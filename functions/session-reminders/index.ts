@@ -17,6 +17,7 @@ type DueGame = {
   rule: string;
   confirmed_at: string;
   discord_thread_id: string;
+  server: { slug: string };
   gm: { discord_id: string; username: string } | null;
   participants: { status: string; user: { discord_id: string } | null }[];
 };
@@ -56,7 +57,7 @@ async function sendReminder(game: DueGame) {
         embeds: [
           {
             title: `⏰ ${game.title}`,
-            url: `${SITE_URL}/games/${game.id}`,
+            url: `${SITE_URL}/${game.server.slug}/games/${game.id}`,
             description: "세션이 곧 시작해요!",
             color: RECRUIT_COLOR,
             fields: [
@@ -93,7 +94,7 @@ Deno.serve(async () => {
     .gt("confirmed_at", now.toISOString())
     .lte("confirmed_at", new Date(now.getTime() + ONE_HOUR_MS).toISOString())
     .select(
-      "id, title, rule, confirmed_at, discord_thread_id, gm:profiles!games_gm_id_profiles_id_fk(discord_id, username), participants(status, user:profiles!participants_user_id_profiles_id_fk(discord_id))",
+      "id, title, rule, confirmed_at, discord_thread_id, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(discord_id, username), participants(status, user:profiles!participants_user_id_profiles_id_fk(discord_id))",
     )
     .returns<DueGame[]>();
   if (error) return Response.json({ error: error.message }, { status: 500 });

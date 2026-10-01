@@ -14,19 +14,18 @@ const SPOILER_FILE_PREFIX = "SPOILER_";
 export function reviewForumPost({
   review,
   tagIds,
-  siteOrigin,
+  reviewsUrl,
 }: {
   review: ForumReview;
   tagIds: Map<string, string>;
-  siteOrigin: string | undefined;
+  reviewsUrl: string | undefined;
 }) {
-  const url = siteOrigin ? `${siteOrigin}/games/${review.gameId}/reviews` : undefined;
   const body = review.spoiler ? `||${review.body.replaceAll("||", "| |")}||` : review.body;
   const meta = [
     `작성자 <@${review.authorDiscordId}>`,
     `룰 ${review.category ?? review.rule}`,
     `GM ${review.gmName}`,
-    ...(url ? [`[롤앤콜에서 보기](<${url}>)`] : []),
+    ...(reviewsUrl ? [`[롤앤콜에서 보기](<${reviewsUrl}>)`] : []),
   ].join(" · ");
   const withMeta = `${body}\n\n-# ${meta}`;
   const tagNames = [

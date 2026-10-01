@@ -1,7 +1,7 @@
 import { Button, Card, HStack, Text, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { type AvailabilityInterval, filledDays, formatInterval } from "@/entities/profile";
+import { ServerLink } from "@/shared/ui";
 
 interface AvailabilitySummaryFieldProps {
   intervals: readonly AvailabilityInterval[];
@@ -58,7 +58,7 @@ export function AvailabilitySummaryField({ intervals }: AvailabilitySummaryField
       )}
 
       <Button
-        render={<Link href="/me/availability" />}
+        render={<ServerLink path="/me/availability" />}
         variant="outline"
         colorPalette="primary"
         className="mt-150 h-11 w-full"

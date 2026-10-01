@@ -1,3 +1,5 @@
+"use client";
+
 import { Container, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
 
 import { AppBar, HelpButton } from "@/shared/ui";

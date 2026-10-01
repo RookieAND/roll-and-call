@@ -1,5 +1,6 @@
 import { Button, Callout } from "@roll-and-call/ui";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 interface AttendanceBannerProps {
   gameId: string;
@@ -16,7 +17,11 @@ export function AttendanceBanner({ gameId, confirmedCount }: AttendanceBannerPro
         확인을 마쳐야 이 세션이 완료로 기록됩니다.
       </Callout.Description>
       <div className="col-span-full mt-150">
-        <Button render={<Link href={`/games/${gameId}/attendance`} />} size="lg" className="w-full">
+        <Button
+          render={<ServerLink path={`/games/${gameId}/attendance`} />}
+          size="lg"
+          className="w-full"
+        >
           출석 확인하기
         </Button>
       </div>

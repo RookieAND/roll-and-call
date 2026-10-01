@@ -19,6 +19,7 @@ import {
   type AvailabilityInterval,
   type ProfileLink,
 } from "@/entities/profile";
+import { useServerPath } from "@/shared/lib";
 import { ConfirmDialog, TagInput, toast, useAction } from "@/shared/ui";
 
 import { updateProfile } from "../api/update-profile";
@@ -45,6 +46,7 @@ export function EditProfileForm({
   avatarUrl,
 }: EditProfileFormProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [username, setUsername] = useState(defaultUsername);
   const [bio, setBio] = useState(defaultBio);
   const [keywords, setKeywords] = useState(defaultKeywords);
@@ -70,7 +72,7 @@ export function EditProfileForm({
 
   function requestLeave() {
     if (dirty) setConfirmingLeave(true);
-    else router.push("/me");
+    else router.push(toServerPath("/me"));
   }
 
   const usernameError = failure?.field === PROFILE_FIELD.username ? failure.error : undefined;
@@ -170,7 +172,7 @@ export function EditProfileForm({
         cancelLabel="이어서 고치기"
         confirmLabel="그만두기"
         danger
-        onConfirm={() => router.push("/me")}
+        onConfirm={() => router.push(toServerPath("/me"))}
       />
     </form>
   );

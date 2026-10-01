@@ -20,11 +20,12 @@ interface PostDetailViewProps {
   post: PostDetail;
   tab: string | undefined;
   action: string | undefined;
-  userAppUrl: string | undefined;
+  // 사용자 앱에서 이 서버 화면의 주소(…/{slug}).
+  serverAppUrl: string | undefined;
   page?: string;
 }
 
-export function PostDetailView({ post, tab, action, page, userAppUrl }: PostDetailViewProps) {
+export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDetailViewProps) {
   const pathname = `/posts/${post.id}`;
   const hasReports = post.reports.length > 0;
   const availableActions: PostAction[] = [
@@ -61,7 +62,7 @@ export function PostDetailView({ post, tab, action, page, userAppUrl }: PostDeta
     />
   ) : null;
   const logHref = `/log?target=${encodeURIComponent(post.title)}`;
-  const userAppHref = userAppUrl ? `${userAppUrl}/games/${post.id}` : null;
+  const userAppHref = serverAppUrl ? `${serverAppUrl}/games/${post.id}` : null;
   const direct = !hasReports && !post.hidden;
   const attendanceWaitDays =
     currentTab === POST_DETAIL_TAB.reviews && !post.attendance.confirmedAt

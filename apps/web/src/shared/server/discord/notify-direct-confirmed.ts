@@ -27,6 +27,7 @@ export async function notifyDirectConfirmed({
   const names = invitedNames.map((username) => `**${username}**`).join(", ");
 
   const embed = gameNoticeEmbed({
+    slug: server.slug,
     game,
     gmName: game.gm?.username ?? "?",
     emoji: "✅",

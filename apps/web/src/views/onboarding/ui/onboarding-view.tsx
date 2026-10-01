@@ -14,9 +14,12 @@ import { SlideEyebrow } from "./slide-eyebrow";
 import { SlideVisual } from "./slide-visual";
 import { WelcomeVisual } from "./welcome-visual";
 
-const DONE_HREF = "/games";
+interface OnboardingViewProps {
+  // 다 보거나 건너뛰면 갈 곳. 온보딩은 서버 밖 화면이라 들어온 서버 화면을 받아 둔다.
+  doneHref: string;
+}
 
-export function OnboardingView() {
+export function OnboardingView({ doneHref }: OnboardingViewProps) {
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [back, setBack] = useState(false);
@@ -35,11 +38,11 @@ export function OnboardingView() {
     welcome && "items-center text-center",
   );
 
-  const skip = () => router.replace(DONE_HREF);
+  const skip = () => router.replace(doneHref);
 
   const goNext = () => {
     if (last) {
-      router.replace(DONE_HREF);
+      router.replace(doneHref);
       return;
     }
     setBack(false);

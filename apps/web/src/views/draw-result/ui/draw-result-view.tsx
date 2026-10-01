@@ -2,7 +2,7 @@ import { Container } from "@roll-and-call/ui";
 import { notFound, redirect } from "next/navigation";
 
 import { countConfirmed, SCHEDULE_MODE, splitRoster } from "@/entities/game";
-import { formatDateTime } from "@/shared/lib";
+import { formatDateTime, serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -35,7 +35,8 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
       }))
     : game.participants;
   const hasRolls = drawn.some((participant) => participant.drawRoll !== null);
-  if (!hasRolls || (!applied && !isGm)) redirect(`/games/${id}`);
+  if (!hasRolls || (!applied && !isGm))
+    redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
 
   // 적용한 뒤에는 기록에 남은 확정 수가 정원이다. 그 뒤 정원을 고쳐도 결과는 바뀌지 않는다.
   const outcome = toDrawOutcome({

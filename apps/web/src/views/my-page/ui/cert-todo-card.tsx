@@ -1,9 +1,9 @@
 import { Button, Card, HStack, Text } from "@roll-and-call/ui";
 import { CircleAlert } from "lucide-react";
-import Link from "next/link";
 
 import { rejectionSummary, type MyRulebook } from "@/entities/rulebook";
 import { DiscardApplicationButton } from "@/features/certify-rulebook";
+import { ServerLink } from "@/shared/ui";
 
 interface CertTodoCardProps {
   rulebook: MyRulebook;
@@ -32,7 +32,7 @@ export function CertTodoCard({ rulebook }: CertTodoCardProps) {
       <HStack gap="100" className="mt-150">
         <DiscardApplicationButton rulebookId={rulebook.id} className="min-w-0 flex-1" />
         <Button
-          render={<Link href={`/me/rulebooks/apply?rulebook=${rulebook.id}`} />}
+          render={<ServerLink path={`/me/rulebooks/apply?rulebook=${rulebook.id}`} />}
           variant="tinted"
           className="min-w-0 flex-1"
         >

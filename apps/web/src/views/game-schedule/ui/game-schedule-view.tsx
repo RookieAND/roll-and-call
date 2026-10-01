@@ -5,7 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { hasUserJoined, isDeadlinePassed, isGameGm, SCHEDULE_MODE } from "@/entities/game";
 import { availabilityPrefill } from "@/entities/profile";
 import { ErrorBoundary } from "@/shared/error-boundary";
-import { buildDayColumns, buildTimeRows } from "@/shared/lib";
+import { buildDayColumns, buildTimeRows, serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getGameById, getProfile, getCurrentServer } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
@@ -17,7 +17,8 @@ export async function GameScheduleView({ id }: { id: string }) {
   const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();
 
-  if (game.scheduleMode !== SCHEDULE_MODE.coordinate) redirect(`/games/${id}`);
+  if (game.scheduleMode !== SCHEDULE_MODE.coordinate)
+    redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
 
   const viewerId = user?.id ?? null;
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
@@ -31,7 +32,7 @@ export async function GameScheduleView({ id }: { id: string }) {
   );
 
   if (!game.rangeStart || !game.rangeEnd) {
-    if (!isGm) redirect(`/games/${id}`);
+    if (!isGm) redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
     return (
       <>
         {appBar}
@@ -41,7 +42,12 @@ export async function GameScheduleView({ id }: { id: string }) {
               title="조율 기간을 먼저 정해주세요"
               description="조율 기간이 있어야 참여자가 가능 시간을 낼 수 있습니다."
               action={
-                <Button render={<Link href={`/games/${id}/edit`} />} className="mt-100 w-full">
+                <Button
+                  render={
+                    <Link href={serverPath({ slug: server.slug, path: `/games/${id}/edit` })} />
+                  }
+                  className="mt-100 w-full"
+                >
                   구인 수정
                 </Button>
               }

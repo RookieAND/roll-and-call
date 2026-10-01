@@ -3,16 +3,18 @@ import { countParticipants } from "@roll-and-call/database/games";
 import { getUsername } from "@roll-and-call/database/profiles";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { notifyGameJoined, type Game } from "@/shared/server";
+import { notifyGameJoined, type Game, type Server } from "@/shared/server";
 
 import { UNKNOWN_USERNAME } from "../model/unknown-username";
 
 export async function announceNewApplication({
+  server,
   game,
   applicantId,
   isWaiting,
   confirmedCount,
 }: {
+  server: Server;
   game: Game;
   applicantId: string;
   isWaiting: boolean;
@@ -28,6 +30,7 @@ export async function announceNewApplication({
     }),
   ]);
   await notifyGameJoined({
+    server,
     game,
     applicantName: applicantName ?? UNKNOWN_USERNAME,
     gmName: gmName ?? UNKNOWN_USERNAME,

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import {
   announceRecruitmentComplete,
   getCurrentServer,
@@ -27,6 +28,7 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
   await seedAvailabilityFromProfile({ game: application.game, userId: user.id });
   after(async () => {
     await announceNewApplication({
+      server,
       game: application.game,
       applicantId: user.id,
       isWaiting: application.waiting,
@@ -36,9 +38,10 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
     await refreshRecruitPost({ server, gameId });
   });
 
-  revalidatePath(`/games/${gameId}`);
-  revalidatePath(`/games/${gameId}/participants`);
-  revalidatePath(`/games/${gameId}/schedule`);
-  revalidatePath("/games");
+  const gamePath = serverPath({ slug: server.slug, path: `/games/${gameId}` });
+  revalidatePath(gamePath);
+  revalidatePath(`${gamePath}/participants`);
+  revalidatePath(`${gamePath}/schedule`);
+  revalidatePath(serverPath({ slug: server.slug, path: "/games" }));
   return { waiting: application.waiting };
 }

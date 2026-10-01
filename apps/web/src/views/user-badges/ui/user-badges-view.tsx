@@ -5,7 +5,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { heldBadges } from "@/entities/badge";
 import { heldBadgeDetail } from "@/features/view-badge";
-import { toKst } from "@/shared/lib";
+import { toKst, serverPath } from "@/shared/lib";
 import {
   getCurrentSessionUser,
   getProfile,
@@ -30,7 +30,7 @@ interface UserBadgesViewProps {
 export async function UserBadgesView({ id }: UserBadgesViewProps) {
   const server = await getCurrentServer();
   const [viewer, profile] = await Promise.all([getCurrentSessionUser(), getProfile(server.id, id)]);
-  if (viewer?.id === id) redirect("/me/badges");
+  if (viewer?.id === id) redirect(serverPath({ slug: server.slug, path: "/me/badges" }));
   if (!profile) notFound();
 
   const title = `${profile.username}의 업적`;

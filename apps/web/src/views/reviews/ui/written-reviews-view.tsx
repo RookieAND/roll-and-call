@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 
+import { serverPath } from "@/shared/lib";
 import {
   getCurrentSessionUser,
   getProfile,
@@ -22,7 +23,7 @@ export async function WrittenReviewsView({ userId }: WrittenReviewsViewProps) {
     getProfile(server.id, userId),
     getWrittenReviews({ serverId: server.id, authorId: userId }),
   ]);
-  if (viewer?.id === userId) redirect("/me/reviews");
+  if (viewer?.id === userId) redirect(serverPath({ slug: server.slug, path: "/me/reviews" }));
   if (!profile) notFound();
 
   return (

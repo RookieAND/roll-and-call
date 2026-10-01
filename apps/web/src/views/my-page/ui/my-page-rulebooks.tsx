@@ -1,9 +1,9 @@
 import { Button, Callout, HStack, Text, VStack } from "@roll-and-call/ui";
 import { CalendarDays, Plus } from "lucide-react";
-import Link from "next/link";
 
 import { CERT_STATE, isCertEnforced, type MyRulebooks } from "@/entities/rulebook";
 import { formatDate } from "@/shared/lib";
+import { ServerLink } from "@/shared/ui";
 
 import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 import { MyPageRulebookRow } from "./my-page-rulebook-row";
@@ -62,7 +62,11 @@ export function MyPageRulebooks({
               </RulebookListSheet>
             )}
           </div>
-          <Button render={<Link href="/me/rulebooks/apply" />} variant="outline" className="w-full">
+          <Button
+            render={<ServerLink path={"/me/rulebooks/apply"} />}
+            variant="outline"
+            className="w-full"
+          >
             <Plus size={15} strokeWidth={2.2} aria-hidden />
             룰북 인증하기
           </Button>
@@ -77,7 +81,11 @@ export function MyPageRulebooks({
             <br />
             인증된 룰북으로 구인을 열 수 있습니다.
           </Text>
-          <Button render={<Link href="/me/rulebooks/apply" />} variant="tinted" className="w-full">
+          <Button
+            render={<ServerLink path={"/me/rulebooks/apply"} />}
+            variant="tinted"
+            className="w-full"
+          >
             룰북 인증하기
           </Button>
         </VStack>

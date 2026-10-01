@@ -23,6 +23,7 @@ import {
   RULEBOOK_KIND_GROUP,
   type MyRulebook,
 } from "@/entities/rulebook";
+import { useServerPath } from "@/shared/lib";
 
 import { coreNeedNote } from "../model/core-need-note";
 import { pickerCategories } from "../model/picker-categories";
@@ -45,6 +46,7 @@ export function BookPicker({
   recentRulebookIds,
   pendingRequestNames,
 }: BookPickerProps) {
+  const toServerPath = useServerPath();
   const initial = rulebooks.find((rulebook) => rulebook.id === initialRulebookIds[0]);
   const [query, setQuery] = useState("");
   const [categoryId, setCategoryId] = useState(initial?.categoryId ?? null);
@@ -173,7 +175,9 @@ export function BookPicker({
                           type={option.type}
                           note={option.note}
                           rejected={book.state === CERT_STATE.rejected}
-                          href={certApplyHref({ rulebookIds: [book.id], step: "photos" })}
+                          href={toServerPath(
+                            certApplyHref({ rulebookIds: [book.id], step: "photos" }),
+                          )}
                         />
                       );
                     })}

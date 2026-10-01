@@ -18,6 +18,7 @@
     "./rulebooks": "./src/modules/rulebooks/index.ts",
     "./rulebooks/model": "./src/modules/rulebooks/model/index.ts",
     "./servers": "./src/modules/servers/index.ts",
+    "./servers/model": "./src/modules/servers/model/index.ts",
     "./transaction": "./src/modules/transaction/index.ts"
   },
   "scripts": {

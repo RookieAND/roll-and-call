@@ -25,7 +25,8 @@ export async function guardAttendance({
 }): Promise<ActionResult> {
   const gmId = (await getCurrentUser())?.id;
   if (!gmId) return { error: AUTH_REQUIRED_MESSAGE };
-  const serverId = (await getCurrentServer()).id;
+  const server = await getCurrentServer();
+  const serverId = server.id;
 
   try {
     await withTransaction(async (transaction) => {
@@ -59,7 +60,7 @@ export async function guardAttendance({
     throw error;
   }
 
-  revalidateAttendance(gameId);
+  revalidateAttendance({ slug: server.slug, gameId });
   after(() => evaluateGameBadges({ serverId, gameId }));
   return {};
 }

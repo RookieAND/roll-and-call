@@ -4,6 +4,7 @@ import type { DiscordEmbed, DiscordEmbedField } from "@roll-and-call/discord";
 import { gameUrl } from "../game-url";
 
 type GameNotice = {
+  slug: string;
   game: Pick<Game, "id" | "title">;
   gmName: string;
   emoji: string;
@@ -15,6 +16,7 @@ type GameNotice = {
 };
 
 export function gameNoticeEmbed({
+  slug,
   game,
   gmName,
   emoji,
@@ -22,7 +24,7 @@ export function gameNoticeEmbed({
   description,
   fields,
   linked = true,
-  url = gameUrl(game.id),
+  url = gameUrl({ slug, gameId: game.id }),
 }: GameNotice): DiscordEmbed {
   return {
     title: `${emoji} ${game.title}`,

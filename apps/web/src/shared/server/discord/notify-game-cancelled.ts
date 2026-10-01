@@ -22,7 +22,9 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
       channelId: server.recruitChannelId,
       messageId: game.discordThreadId,
       input: {
-        embeds: [recruitEmbed({ game, gmName, confirmedCount: 0, cancelled: true })],
+        embeds: [
+          recruitEmbed({ slug: server.slug, game, gmName, confirmedCount: 0, cancelled: true }),
+        ],
         buttons: [],
       },
     }),
@@ -31,6 +33,7 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
       input: {
         embeds: [
           gameNoticeEmbed({
+            slug: server.slug,
             game,
             gmName,
             emoji: "🚫",

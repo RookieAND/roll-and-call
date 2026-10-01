@@ -2,6 +2,7 @@
 
 import { VStack } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 import { availabilityQuery, type ScheduleAvailability } from "@/entities/availability";
@@ -49,7 +50,11 @@ export function ScheduleBody({
   prefill,
   deadlinePassed,
 }: ScheduleBodyProps) {
-  const { data } = useQuery({ ...availabilityQuery(gameId), initialData: initialAvailability });
+  const { server } = useParams<{ server: string }>();
+  const { data } = useQuery({
+    ...availabilityQuery({ slug: server, gameId }),
+    initialData: initialAvailability,
+  });
   const { aggregate, blocked } = data;
 
   const weeks = groupDaysByWeek(days);

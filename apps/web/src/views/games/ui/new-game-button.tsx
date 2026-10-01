@@ -4,6 +4,8 @@ import { Button, type ButtonProps } from "@roll-and-call/ui";
 import Link from "next/link";
 import { useState } from "react";
 
+import { useServerPath } from "@/shared/lib";
+
 import { NewGameGateSheet, type PendingCertification } from "./new-game-gate-sheet";
 
 interface NewGameButtonProps extends Omit<ButtonProps, "render" | "onClick"> {
@@ -11,10 +13,11 @@ interface NewGameButtonProps extends Omit<ButtonProps, "render" | "onClick"> {
 }
 
 export function NewGameButton({ gate, children, ...buttonProps }: NewGameButtonProps) {
+  const toServerPath = useServerPath();
   const [open, setOpen] = useState(false);
   if (!gate) {
     return (
-      <Button render={<Link href="/games/new" />} {...buttonProps}>
+      <Button render={<Link href={toServerPath("/games/new")} />} {...buttonProps}>
         {children}
       </Button>
     );

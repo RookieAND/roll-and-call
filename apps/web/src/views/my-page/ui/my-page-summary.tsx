@@ -3,6 +3,7 @@ import { SESSION_ROLE } from "@/entities/game";
 import { profileDisplay } from "@/entities/profile";
 import { CERT_STATE } from "@/entities/rulebook";
 import { heldBadgeDetail } from "@/features/view-badge";
+import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared/server";
 import { sessionsHref } from "@/widgets/session-list";
 
@@ -50,11 +51,14 @@ export async function MyPageSummary() {
         availability={profile?.availability ?? []}
         hosted={{
           count: mySessions[SESSION_ROLE.host].length,
-          href: sessionsHref({ role: SESSION_ROLE.host }),
+          href: serverPath({ slug: server.slug, path: sessionsHref({ role: SESSION_ROLE.host }) }),
         }}
         played={{
           count: mySessions[SESSION_ROLE.player].length,
-          href: sessionsHref({ role: SESSION_ROLE.player }),
+          href: serverPath({
+            slug: server.slug,
+            path: sessionsHref({ role: SESSION_ROLE.player }),
+          }),
         }}
       />
       <MyPageTodos todos={sessionTodos(mySessions)} rejectedRulebooks={rejectedRulebooks} />

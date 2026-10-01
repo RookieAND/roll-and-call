@@ -27,6 +27,7 @@ export async function notifyRecruitmentComplete({
   );
 
   const embed = gameNoticeEmbed({
+    slug: server.slug,
     game,
     gmName,
     emoji: "🎉",

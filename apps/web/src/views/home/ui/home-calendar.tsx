@@ -1,7 +1,11 @@
+"use client";
+
 import { Button, cn, Grid, HStack, IconButton, Skeleton, Text } from "@roll-and-call/ui";
 import type { Dayjs } from "dayjs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+
+import { useServerPath } from "@/shared/lib";
 
 import { buildMonthCells } from "../model/build-month-cells";
 import { DATE_KEY_FORMAT } from "../model/date-key-format";
@@ -24,9 +28,10 @@ export function HomeCalendar({
   selectedKey,
   todayKey,
 }: HomeCalendarProps) {
+  const toServerPath = useServerPath();
   const cells = buildMonthCells(monthStart);
-  const previousHref = `/?date=${monthStart.subtract(1, "month").format(DATE_KEY_FORMAT)}`;
-  const nextHref = `/?date=${monthStart.add(1, "month").format(DATE_KEY_FORMAT)}`;
+  const previousHref = `${toServerPath("/")}?date=${monthStart.subtract(1, "month").format(DATE_KEY_FORMAT)}`;
+  const nextHref = `${toServerPath("/")}?date=${monthStart.add(1, "month").format(DATE_KEY_FORMAT)}`;
 
   return (
     <section>
@@ -34,7 +39,11 @@ export function HomeCalendar({
         <Text typography="heading2" render={<h2 />} className="flex-1">
           {monthStart.format("YYYY년 M월")}
         </Text>
-        <Button render={<Link href="/" scroll={false} />} variant="outline" size="sm">
+        <Button
+          render={<Link href={toServerPath("/")} scroll={false} />}
+          variant="outline"
+          size="sm"
+        >
           오늘
         </Button>
         <IconButton

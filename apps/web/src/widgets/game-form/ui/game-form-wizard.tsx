@@ -6,6 +6,7 @@ import { useState } from "react";
 import type { FieldErrors } from "react-hook-form";
 
 import type { GameFormValues } from "@/features/write-game";
+import { useServerPath } from "@/shared/lib";
 import { ConfirmDialog } from "@/shared/ui";
 
 import { scrollToField } from "../lib/scroll-to-field";
@@ -35,13 +36,14 @@ export function GameFormWizard({
   rulebooks,
 }: GameFormLayoutProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [step, setStep] = useState(0);
   const [confirmingExit, setConfirmingExit] = useState(false);
   const { watch, trigger, handleSubmit } = form;
 
   const intro = steps[step];
   const isLastStep = step === steps.length - 1;
-  const leaveHref = edit ? `/games/${edit.gameId}` : "/games";
+  const leaveHref = toServerPath(edit ? `/games/${edit.gameId}` : "/games");
   const applicants = edit?.applicantCount ?? 0;
   const locked = applicants > 0;
 

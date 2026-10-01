@@ -1,8 +1,7 @@
 import { Button, FloatingBar, VStack } from "@roll-and-call/ui";
 import { CircleCheck } from "lucide-react";
-import Link from "next/link";
 
-import { SummaryLine } from "@/shared/ui";
+import { SummaryLine, ServerLink } from "@/shared/ui";
 
 import { DRAW_ROW_VARIANT } from "../model/draw-row-variant";
 import type { DrawOutcome } from "../model/to-draw-outcome";
@@ -55,7 +54,7 @@ export function AppliedDraw({ gameId, title, outcome, drawnAtLabel }: AppliedDra
       <FloatingBar.Spacer />
       <FloatingBar.Content>
         <Button
-          render={<Link href={`/games/${gameId}`} />}
+          render={<ServerLink path={`/games/${gameId}`} />}
           variant="outline"
           size="lg"
           className="w-full"

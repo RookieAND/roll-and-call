@@ -1,7 +1,6 @@
 import { Button } from "@roll-and-call/ui";
-import Link from "next/link";
 
-import { EmptyState } from "@/shared/ui";
+import { EmptyState, ServerLink } from "@/shared/ui";
 
 import { LoginRequired } from "./login-required";
 
@@ -20,7 +19,11 @@ export function GmOnlyNotice({ gameId, signedIn, description }: GmOnlyNoticeProp
       title="GM만 볼 수 있는 화면입니다"
       description={description}
       action={
-        <Button render={<Link href={`/games/${gameId}`} />} variant="outline" className="mt-100">
+        <Button
+          render={<ServerLink path={`/games/${gameId}`} />}
+          variant="outline"
+          className="mt-100"
+        >
           구인 상세로 돌아가기
         </Button>
       }

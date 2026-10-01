@@ -1,9 +1,10 @@
 import { Button, HStack, Text } from "@roll-and-call/ui";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 interface MyPageBlockLabelProps {
   label: string;
-  action?: { href: string; label: string };
+  action?: { path: string; label: string };
 }
 
 export function MyPageBlockLabel({ label, action }: MyPageBlockLabelProps) {
@@ -14,7 +15,7 @@ export function MyPageBlockLabel({ label, action }: MyPageBlockLabelProps) {
       </Text>
       {action && (
         <Button
-          render={<Link href={action.href} />}
+          render={<ServerLink path={action.path} />}
           variant="ghost"
           colorPalette="primary"
           size="sm"

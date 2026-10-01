@@ -17,12 +17,13 @@ export async function refreshRecruitPost({ server, gameId }: { server: Server; g
       input: {
         embeds: [
           recruitEmbed({
+            slug: server.slug,
             game,
             gmName: game.gm?.username ?? "?",
             confirmedCount: countConfirmed(game.participants),
           }),
         ],
-        buttons: recruitButtons(game.id),
+        buttons: recruitButtons({ slug: server.slug, gameId: game.id }),
       },
     }),
     renameDiscordThread({ threadId: game.discordThreadId, name: game.title }),

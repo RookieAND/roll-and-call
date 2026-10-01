@@ -48,7 +48,7 @@ export async function adjustRoster({
     throw error;
   }
 
-  revalidateRoster(gameId);
+  revalidateRoster({ slug: server.slug, gameId });
   after(async () => {
     await notify?.(server);
     await refreshRecruitPost({ server, gameId });

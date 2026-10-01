@@ -3,6 +3,8 @@
 import { AlertDialog, Button } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
+import { useServerPath } from "@/shared/lib";
+
 import { MY_REVIEWS_HREF, REVIEW_BLOCK_DIALOG, type ReviewBlock } from "../model/review-block";
 
 interface ReviewBlockedDialogProps {
@@ -12,8 +14,9 @@ interface ReviewBlockedDialogProps {
 
 export function ReviewBlockedDialog({ block, fallbackHref }: ReviewBlockedDialogProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const dialog = block ? REVIEW_BLOCK_DIALOG[block] : null;
-  const href = dialog?.toMyReviews ? MY_REVIEWS_HREF : fallbackHref;
+  const href = dialog?.toMyReviews ? toServerPath(MY_REVIEWS_HREF) : fallbackHref;
 
   return (
     <AlertDialog.Root open={dialog !== null} onOpenChange={(open) => !open && router.push(href)}>

@@ -152,6 +152,7 @@ return <Button variant={buttonVariant} />;
 - **컴포넌트 Props는 `interface <ComponentName>Props`로 뺀다.** 인라인 객체 타입(`({ a }: { a: string })`)을 쓰지 않는다. 다른 곳에서 쓰는 Props만 `export`한다. `packages/ui`의 프리미티브는 `extends ComponentPropsWithRef<"button">, VariantProps<typeof button>`처럼 상속으로 적는다. 이름이 겹치는 HTML 속성은 `Omit`으로 덜어낸다(교차 타입과 달리 interface는 충돌을 허용하지 않는다 — `BadgeProps`의 `color`가 그 예다). `Omit<FlexProps, "direction">` 같은 순수 별칭은 `interface StackProps extends Omit<...> {}`로 둔다.
 - **인자가 둘 이상이면 객체로 받는다.** `fn({ gameId, userId }: { gameId: string; userId: string })`처럼 구조 분해한다. 끝자리 `now`는 세지 않으므로 `isFresh(at, now)`처럼 진짜 인자가 하나면 그대로 둔다. 예외는 `.bind(null, id)`로 폼 액션에 넘기는 서버 액션(`updateGame`), 정렬 비교 함수처럼 시그니처가 정해진 콜백, Next.js 라우트 핸들러뿐이다.
 - **삼항은 한 단계까지만.** `a ? b : c ? d : e`처럼 이어지면 이름 붙인 함수로 빼서 `if`와 early return으로 적는다. JSX라면 분기를 맡는 작은 컴포넌트로 뺀다.
+- **서버 화면 주소는 헬퍼로만 만든다.** 서버 화면은 `app/[server]/` 아래(`/{slug}/…`)이고, `/help`·`/onboarding`·`/auth`·`/api`만 서버 밖이다. 서버 컴포넌트·액션은 `serverPath({ slug: server.slug, path })`(`server`는 `getCurrentServer()`), 클라이언트는 `useServerPath()`, 링크만 걸 때는 `<ServerLink path>`를 쓴다. AppBar `back`·`GoBackButton fallback`은 서버 안 경로(`"/games"`)를 받는다. model 함수는 서버 안 경로를 돌려주고 그리는 쪽이 감싼다.
 - **1 파일 1 컴포넌트/함수.** 파일에 최상위 함수·컴포넌트가 둘 이상이면 각각 파일로 나눈다. 함수가 커지면 이름 붙인 작은 함수로 나눠 파일을 분리한다. 예외는 `*.test.ts`, `index.ts` 배럴, 함수 본문 안의 핸들러, 그리고 Next.js 라우트 파일이 요구하는 export뿐이다.
 
 ## 8. 에러 처리

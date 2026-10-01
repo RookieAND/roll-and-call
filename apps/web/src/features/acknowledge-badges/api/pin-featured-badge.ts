@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { FEATURED_BADGE_LIMIT, heldBadges } from "@/entities/badge";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentUser, getProfile, getUserBadges } from "@/shared/server";
 
 import { acknowledgeBadges } from "./acknowledge-badges";
@@ -31,7 +32,7 @@ export async function pinFeaturedBadge(key: string): Promise<ActionResult> {
     featuredBadges: featured,
   });
   await acknowledgeBadges([key]);
-  revalidatePath("/me", "layout");
-  revalidatePath(`/u/${user.id}`, "layout");
+  revalidatePath(serverPath({ slug: server.slug, path: "/me" }), "layout");
+  revalidatePath(serverPath({ slug: server.slug, path: `/u/${user.id}` }), "layout");
   return {};
 }

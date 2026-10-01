@@ -10,6 +10,7 @@ import { after } from "next/server";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import {
   getCurrentServer,
   getCurrentUser,
@@ -72,5 +73,5 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     urls: [before.thumbnailUrl, ...before.images].filter((url) => url !== null && !kept.has(url)),
   });
 
-  redirect(`/games/${id}`);
+  redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
 }

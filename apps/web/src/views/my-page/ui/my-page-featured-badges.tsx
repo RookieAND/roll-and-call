@@ -1,9 +1,9 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { BadgePill, monthLabel, type BadgeView } from "@/entities/badge";
 import { BadgeDetailSheet, type BadgeDetail } from "@/features/view-badge";
+import { ServerLink } from "@/shared/ui";
 
 export type FeaturedBadge = BadgeView & { detail: BadgeDetail };
 
@@ -29,7 +29,7 @@ export function MyPageFeaturedBadges({ badges, heldCount }: MyPageFeaturedBadges
           typography="body4"
           weight="bold"
           foreground="muted"
-          render={<Link href="/me/badges" />}
+          render={<ServerLink path={"/me/badges"} />}
           className="inline-flex min-h-7 items-center gap-025"
         >
           {heldCount}개 모두 보기

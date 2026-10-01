@@ -5,7 +5,7 @@ import { aggregateAvailability } from "@/entities/availability";
 import { countConfirmed, SCHEDULE_MODE } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { ConfirmSessionForm } from "@/features/confirm-session";
-import { buildDayColumns, playMinutes, SLOT_MINUTES } from "@/shared/lib";
+import { buildDayColumns, playMinutes, SLOT_MINUTES, serverPath } from "@/shared/lib";
 import {
   getCurrentSessionUser,
   getGameAvailabilities,
@@ -38,8 +38,10 @@ export async function GameConfirmView({ id }: { id: string }) {
       </>
     );
   }
-  if (game.scheduleMode !== SCHEDULE_MODE.coordinate) redirect(`/games/${id}`);
-  if (!game.rangeStart || !game.rangeEnd) redirect(`/games/${id}/schedule`);
+  if (game.scheduleMode !== SCHEDULE_MODE.coordinate)
+    redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
+  if (!game.rangeStart || !game.rangeEnd)
+    redirect(serverPath({ slug: server.slug, path: `/games/${id}/schedule` }));
 
   const { names } = aggregateAvailability({ avails: availabilities, userId: null });
   const respondedCount = new Set(Object.values(names).flat()).size;

@@ -24,7 +24,7 @@ export async function deleteReview(reviewId: string): Promise<ActionResult> {
   if (!deleted) return { error: "이미 삭제된 후기입니다." };
 
   await removeUnusedReviewPhotos(deleted.photoUrls);
-  revalidateReviews(deleted.gameId);
+  revalidateReviews({ slug: server.slug, gameId: deleted.gameId });
   after(() => syncReviewForumPost({ serverId: server.id, reviewId, siteOrigin: siteOrigin() }));
   after(() => evaluateGameBadges({ serverId: server.id, gameId: deleted.gameId }));
   return {};

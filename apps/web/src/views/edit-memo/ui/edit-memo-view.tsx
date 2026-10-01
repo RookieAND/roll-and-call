@@ -2,6 +2,7 @@ import { Container } from "@roll-and-call/ui";
 import { notFound, redirect } from "next/navigation";
 
 import { MemoForm } from "@/features/profile-memo";
+import { serverPath } from "@/shared/lib";
 import {
   getCurrentSessionUser,
   getProfile,
@@ -10,11 +11,13 @@ import {
 } from "@/shared/server";
 
 export async function EditMemoView({ id }: { id: string }) {
-  const viewer = await getCurrentSessionUser();
-  if (!viewer) redirect(`/?next=/u/${id}/memo`);
-  if (viewer.id === id) redirect("/me");
+  const [server, viewer] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
+  if (!viewer) {
+    const memoPath = serverPath({ slug: server.slug, path: `/u/${id}/memo` });
+    redirect(`${serverPath({ slug: server.slug, path: "/" })}?next=${memoPath}`);
+  }
+  if (viewer.id === id) redirect(serverPath({ slug: server.slug, path: "/me" }));
 
-  const server = await getCurrentServer();
   const [target, memo] = await Promise.all([
     getProfile(server.id, id),
     getProfileMemo({ serverId: server.id, ownerId: viewer.id, targetId: id }),

@@ -7,6 +7,7 @@ import { AvailabilityRows, ProfileLinks } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { ProfileMemoBlock } from "@/features/profile-memo";
 import { heldBadgeDetail } from "@/features/view-badge";
+import { serverPath } from "@/shared/lib";
 import {
   getCurrentSessionUser,
   getProfileMemo,
@@ -38,7 +39,7 @@ export async function UserProfileView({ id }: { id: string }) {
         : null,
     ),
   ]);
-  if (viewer?.id === id) redirect("/me");
+  if (viewer?.id === id) redirect(serverPath({ slug: server.slug, path: "/me" }));
 
   if (!loaded) notFound();
 

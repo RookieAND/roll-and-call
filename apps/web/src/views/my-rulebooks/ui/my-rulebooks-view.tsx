@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
+import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
 import { AppBar, LineBreaks } from "@/shared/ui";
 
@@ -93,7 +94,14 @@ export async function MyRulebooksView() {
                     <LineBreaks lines={home.suggestion.lines} />
                   </Callout.Description>
                   <Callout.Action>
-                    <Button render={<Link href={home.suggestion.href} />} size="sm">
+                    <Button
+                      render={
+                        <Link
+                          href={serverPath({ slug: server.slug, path: home.suggestion.href })}
+                        />
+                      }
+                      size="sm"
+                    >
                       신청하기
                     </Button>
                   </Callout.Action>
@@ -112,7 +120,13 @@ export async function MyRulebooksView() {
                 인증 신청하기
               </Button>
             ) : (
-              <Button render={<Link href="/me/rulebooks/apply" />} size="lg" className="w-full">
+              <Button
+                render={
+                  <Link href={serverPath({ slug: server.slug, path: "/me/rulebooks/apply" })} />
+                }
+                size="lg"
+                className="w-full"
+              >
                 <Plus size={16} strokeWidth={2.2} aria-hidden />
                 인증 신청하기
               </Button>

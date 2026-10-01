@@ -14,6 +14,7 @@ export async function refreshAvatar(): Promise<ActionResult & { avatarUrl?: stri
   if (!avatarUrl) return { error: "Discord 아바타 정보를 찾을 수 없습니다." };
 
   await saveAvatarUrl({ userId: user.id, avatarUrl });
-  revalidatePath("/me");
+  // 아바타는 모든 서버 프로필에 같이 보인다.
+  revalidatePath("/[server]/me", "page");
   return { avatarUrl };
 }

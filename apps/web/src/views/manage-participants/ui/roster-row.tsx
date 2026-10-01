@@ -1,8 +1,8 @@
 import { HStack, Text } from "@roll-and-call/ui";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { ProfileRow } from "@/entities/profile";
+import { ServerLink } from "@/shared/ui";
 
 import type { ManagedMember } from "../model/managed-member";
 
@@ -23,8 +23,8 @@ export function RosterRow({
 }: RosterRowProps) {
   return (
     <HStack align="center" gap="125" className="min-h-15 py-100 pr-075 pl-175">
-      <Link
-        href={`/u/${member.userId}`}
+      <ServerLink
+        path={`/u/${member.userId}`}
         className="flex min-h-11 min-w-0 flex-1 items-center gap-125"
       >
         {rank != null && (
@@ -44,7 +44,7 @@ export function RosterRow({
           subline={note}
           sublineForeground={noteForeground}
         />
-      </Link>
+      </ServerLink>
       {action}
     </HStack>
   );

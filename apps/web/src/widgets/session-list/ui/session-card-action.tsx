@@ -1,7 +1,7 @@
 import { Button } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { CancelWaitlistButton } from "@/features/join-game";
+import { ServerLink } from "@/shared/ui";
 
 import {
   SESSION_ACTION_KIND,
@@ -44,7 +44,7 @@ export function SessionCardAction({ model }: SessionCardActionProps) {
   const look = ACTION_LOOK[action.kind] ?? DEFAULT_LOOK;
   return (
     <Button
-      render={<Link href={action.href} />}
+      render={<ServerLink path={action.href} />}
       variant={look.variant}
       colorPalette={look.colorPalette}
       className="mt-050 w-full"

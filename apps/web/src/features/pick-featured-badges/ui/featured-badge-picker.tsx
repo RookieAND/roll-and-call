@@ -11,11 +11,10 @@ import {
   Text,
   VStack,
 } from "@roll-and-call/ui";
-import Link from "next/link";
 import { useState } from "react";
 
 import { BadgeMedal, BadgePill, FEATURED_BADGE_LIMIT } from "@/entities/badge";
-import { toast, useAction } from "@/shared/ui";
+import { ServerLink, toast, useAction } from "@/shared/ui";
 
 import { saveFeaturedBadges } from "../api/save-featured-badges";
 import type { FeaturedChoice } from "../model/featured-choice";
@@ -124,7 +123,7 @@ export function FeaturedBadgePicker({
         <Container size="sm">
           <HStack gap="100">
             <Button
-              render={<Link href="/me/badges" />}
+              render={<ServerLink path="/me/badges" />}
               variant="outline"
               size="lg"
               className="flex-1"

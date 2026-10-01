@@ -4,6 +4,7 @@ import { after } from "next/server";
 
 import { heldBadges, pickFeaturedBadges } from "@/entities/badge";
 import { LoginRequired } from "@/features/auth";
+import { serverPath } from "@/shared/lib";
 import {
   getBadgeFacts,
   getCurrentSessionUser,
@@ -31,7 +32,7 @@ interface MyBadgesViewProps {
 }
 
 export async function MyBadgesView({ tab }: MyBadgesViewProps) {
-  const user = await getCurrentSessionUser();
+  const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
       <>
@@ -44,7 +45,6 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
   }
 
   const now = new Date();
-  const server = await getCurrentServer();
   const [profile, records, facts, appearances] = await Promise.all([
     getProfile(server.id, user.id),
     getUserBadges(server.id, user.id),
@@ -63,13 +63,13 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
       key: BADGE_ROLE.player,
       label: "PL 참여",
       count: countOf(BADGE_ROLE.player),
-      href: "/me/badges",
+      href: serverPath({ slug: server.slug, path: "/me/badges" }),
     },
     {
       key: BADGE_ROLE.gm,
       label: "GM 운영",
       count: countOf(BADGE_ROLE.gm),
-      href: "/me/badges?tab=gm",
+      href: serverPath({ slug: server.slug, path: "/me/badges?tab=gm" }),
     },
   ];
   const ruleEmpty =

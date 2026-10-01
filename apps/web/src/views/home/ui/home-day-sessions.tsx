@@ -1,8 +1,7 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { toKst } from "@/shared/lib";
-import { EmptyState } from "@/shared/ui";
+import { EmptyState, ServerLink } from "@/shared/ui";
 
 import type { CalendarSession } from "../model/to-calendar-sessions";
 import { HomeSessionCard } from "./home-session-card";
@@ -40,7 +39,7 @@ export function HomeDaySessions({ date, sessions }: HomeDaySessionsProps) {
           }
           action={
             <Button
-              render={<Link href="/games" />}
+              render={<ServerLink path="/games" />}
               variant="outline"
               size="lg"
               className="mt-100 w-full"
@@ -52,9 +51,9 @@ export function HomeDaySessions({ date, sessions }: HomeDaySessionsProps) {
       ) : (
         <VStack gap="100">
           {sessions.map((session) => (
-            <Link key={session.id} href={`/games/${session.id}`} className="block">
+            <ServerLink key={session.id} path={`/games/${session.id}`} className="block">
               <HomeSessionCard session={session} />
-            </Link>
+            </ServerLink>
           ))}
         </VStack>
       )}

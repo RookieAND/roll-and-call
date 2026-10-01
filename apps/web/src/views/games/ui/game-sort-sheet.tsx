@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { GAME_SORTS, type GameSort, type GamesFilter, parseGameSort } from "@/shared/api";
+import { useServerPath } from "@/shared/lib";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
@@ -16,6 +17,7 @@ interface GameSortSheetProps {
 
 // 건수 줄 높이를 늘리지 않도록 음수 여백으로 44px 터치 영역만 넓힌다.
 export function GameSortSheet({ filter }: GameSortSheetProps) {
+  const toServerPath = useServerPath();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const current = parseGameSort(filter.sort);
@@ -24,7 +26,7 @@ export function GameSortSheet({ filter }: GameSortSheetProps) {
   function select(sort: GameSort) {
     setOpen(false);
     if (sort !== current)
-      router.push(gamesHref(filterParams({ ...filter, sort, page: undefined })));
+      router.push(toServerPath(gamesHref(filterParams({ ...filter, sort, page: undefined }))));
   }
 
   return (

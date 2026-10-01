@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { WEEKDAY_LABELS, type AvailabilityInterval } from "@/entities/profile";
+import { useServerPath } from "@/shared/lib";
 import { AppBar, toast, useAction } from "@/shared/ui";
 
 import { updateAvailability } from "../api/update-availability";
@@ -18,6 +19,7 @@ interface AvailabilityEditorProps {
 
 export function AvailabilityEditor({ defaultValue }: AvailabilityEditorProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [intervals, setIntervals] = useState(defaultValue);
   const { pending, run } = useAction();
   const conflicts = overlappingIntervals(intervals);
@@ -91,7 +93,11 @@ export function AvailabilityEditor({ defaultValue }: AvailabilityEditorProps) {
       <FloatingBar.Root elevated={false}>
         <FloatingBar.Content>
           <HStack gap="100" className="[&>*]:flex-1">
-            <Button variant="outline" size="lg" onClick={() => router.push("/me/edit")}>
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => router.push(toServerPath("/me/edit"))}
+            >
               취소
             </Button>
             <Button size="lg" loading={pending} disabled={conflicts.size > 0} onClick={save}>

@@ -1,8 +1,8 @@
 import { Button, HStack, Progress, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { BadgeMedal, type nextBadgeGoal } from "@/entities/badge";
+import { ServerLink } from "@/shared/ui";
 
 import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 
@@ -51,7 +51,7 @@ export function MyPageBadges({ heldCount, hasNew, goal }: MyPageBadgesProps) {
           </HStack>
         )}
         <Button
-          render={<Link href="/me/badges" />}
+          render={<ServerLink path={"/me/badges"} />}
           variant="ghost"
           colorPalette="primary"
           className="min-h-[46px] w-full rounded-none border-gray-200 not-first:border-t"

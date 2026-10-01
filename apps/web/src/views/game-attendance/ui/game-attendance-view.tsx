@@ -5,7 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { isAttendanceDue, splitRoster } from "@/entities/game";
 import { GmOnlyNotice, LoginRequired } from "@/features/auth";
 import { AttendanceForm, ConfirmedAttendance, type Attendee } from "@/features/confirm-attendance";
-import { formatDateTime } from "@/shared/lib";
+import { formatDateTime, serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
 import { AppBar, SummaryLine } from "@/shared/ui";
 
@@ -54,7 +54,7 @@ export async function GameAttendanceView({ id }: { id: string }) {
   // 확정을 마친 뒤에도 읽기 전용으로 남아 있어야 "다시 고치기"로 돌아올 수 있다.
   const reachable =
     game.attendanceConfirmedAt || isAttendanceDue({ game, confirmedCount: confirmed.length });
-  if (!reachable) redirect(`/games/${id}/participants`);
+  if (!reachable) redirect(serverPath({ slug: server.slug, path: `/games/${id}/participants` }));
 
   const attendees: Attendee[] = confirmed.map((participant) => ({
     userId: participant.userId,

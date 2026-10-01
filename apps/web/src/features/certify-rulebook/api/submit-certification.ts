@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 
 import { CERT_FORMAT, CERT_SHOTS, RULEBOOK_KIND } from "@/entities/rulebook";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { certPhotoPathOf } from "@/shared/lib";
+import { certPhotoPathOf, serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 import type { CertEntry } from "../model/cert-entry";
@@ -99,5 +99,5 @@ export async function submitCertification({
       quizAnswer: question ? quiz!.answer.trim().slice(0, 200) : null,
     },
   });
-  redirect(`/me/rulebooks/${book.id}/submitted`);
+  redirect(serverPath({ slug: server.slug, path: `/me/rulebooks/${book.id}/submitted` }));
 }

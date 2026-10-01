@@ -2,16 +2,16 @@
 
 import { IconButton, Sheet } from "@roll-and-call/ui";
 import { EllipsisVertical } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
 import { DeleteReviewDialog } from "@/features/delete-review";
 import { ReportReviewSheet } from "@/features/report-review";
+import { ServerLink } from "@/shared/ui";
 
 interface ReviewMenuProps {
   reviewId: string;
   own: boolean;
-  editHref: string | null;
+  editPath: string | null;
   deleteSubject: string;
   reportSubject: string;
 }
@@ -19,7 +19,7 @@ interface ReviewMenuProps {
 export function ReviewMenu({
   reviewId,
   own,
-  editHref,
+  editPath,
   deleteSubject,
   reportSubject,
 }: ReviewMenuProps) {
@@ -44,7 +44,9 @@ export function ReviewMenu({
         <Sheet.Popup aria-label="후기 메뉴">
           <Sheet.Handle />
           <Sheet.Body>
-            {own && editHref && <Sheet.Item render={<Link href={editHref} />}>수정하기</Sheet.Item>}
+            {own && editPath && (
+              <Sheet.Item render={<ServerLink path={editPath} />}>수정하기</Sheet.Item>
+            )}
             {own && (
               <Sheet.Item onClick={() => openAfterMenu(setDeleting)} className="text-danger-600">
                 삭제하기

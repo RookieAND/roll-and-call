@@ -9,6 +9,7 @@ import { revalidatePath } from "next/cache";
 
 import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
 import { AUTH_REQUIRED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 const MAX_SLOT_COUNT = 2000;
@@ -52,6 +53,6 @@ export async function saveAvailability({
 
   await replaceAvailability({ serverId: server.id, gameId, userId: user.id, slotStarts });
 
-  revalidatePath(`/games/${gameId}/schedule`);
+  revalidatePath(serverPath({ slug: server.slug, path: `/games/${gameId}/schedule` }));
   return {};
 }

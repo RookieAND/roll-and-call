@@ -1,8 +1,8 @@
 import { HStack, Progress, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { BadgeMedal, TONE_CLASS } from "@/entities/badge";
+import { ServerLink } from "@/shared/ui";
 
 import type { BadgeDetail } from "../model/badge-detail";
 import { BadgeDetailSteps } from "./badge-detail-steps";
@@ -66,7 +66,7 @@ export function BadgeDetailContent({ detail }: BadgeDetailContentProps) {
                   typography="body3"
                   weight="bold"
                   foreground="primary"
-                  render={<Link href={earned.source.href} />}
+                  render={<ServerLink path={earned.source.href} />}
                   className="ml-auto inline-flex min-w-0 items-center gap-025 hover:underline"
                 >
                   <span className="min-w-0 truncate">{earned.source.label}</span>

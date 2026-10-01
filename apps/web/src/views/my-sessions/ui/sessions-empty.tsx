@@ -1,9 +1,8 @@
 import { Button } from "@roll-and-call/ui";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { SESSION_ROLE, type SessionRole } from "@/entities/game";
-import { EmptyState } from "@/shared/ui";
+import { EmptyState, ServerLink } from "@/shared/ui";
 import {
   ONGOING_CHIP,
   SESSION_CHIP,
@@ -68,7 +67,7 @@ export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
         title={empty.title}
         description={empty.body}
         action={
-          <Button render={<Link href={empty.href} />} className="mt-100">
+          <Button render={<ServerLink path={empty.href} />} className="mt-100">
             {empty.label}
           </Button>
         }
@@ -95,7 +94,7 @@ export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
       description="필터를 풀면 진행 중인 세션을 모두 볼 수 있습니다."
       action={
         <Button
-          render={<Link href={sessionsHref({ role: activeTab })} />}
+          render={<ServerLink path={sessionsHref({ role: activeTab })} />}
           variant="outline"
           className="mt-100"
         >

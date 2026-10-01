@@ -1,4 +1,4 @@
-import type { Game } from "@roll-and-call/database";
+import type { Game, Server } from "@roll-and-call/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { gameNoticeEmbed } from "./game-notice-embed";
@@ -13,16 +13,18 @@ type JoinInfo = {
 };
 
 export async function notifyGameJoined({
+  server,
   game,
   applicantName,
   gmName,
   confirmedCount,
   waitingCount,
   isWaiting,
-}: JoinInfo & { game: Game }) {
+}: JoinInfo & { server: Server; game: Game }) {
   if (!game.discordThreadId) return;
 
   const embed = gameNoticeEmbed({
+    slug: server.slug,
     game,
     gmName,
     emoji: isWaiting ? "⏳" : "🙋",

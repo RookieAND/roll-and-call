@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
 import { BookPicker } from "@/features/certify-rulebook";
+import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -26,7 +27,7 @@ export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps)
     );
   }
   const data = toMyRulebooks(await getRulebookRecords({ serverId: server.id, userId: user.id }));
-  if (data.suspended) redirect("/me/rulebooks");
+  if (data.suspended) redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
   return (
     <>
       <AppBar

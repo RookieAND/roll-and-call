@@ -1,5 +1,6 @@
 import { Button, Callout } from "@roll-and-call/ui";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 interface DrawPendingCardProps {
   gameId: string;
@@ -15,7 +16,7 @@ export function DrawPendingCard({ gameId }: DrawPendingCardProps) {
         확정하기 전까지는 명단도 그대로이고 알림도 나가지 않습니다.
       </Callout.Description>
       <div className="col-span-full mt-150">
-        <Button render={<Link href={`/games/${gameId}/draw`} />} size="lg" className="w-full">
+        <Button render={<ServerLink path={`/games/${gameId}/draw`} />} size="lg" className="w-full">
           추첨 결과 보기
         </Button>
       </div>

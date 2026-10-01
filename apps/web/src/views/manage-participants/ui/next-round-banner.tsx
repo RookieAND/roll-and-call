@@ -1,5 +1,6 @@
 import { Button, Callout } from "@roll-and-call/ui";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 interface NextRoundBannerProps {
   gameId: string;
@@ -16,7 +17,7 @@ export function NextRoundBanner({ gameId, waitingCount }: NextRoundBannerProps) 
         대기 순번대로 정원까지 직접 확정으로 채워 둡니다.
       </Callout.Description>
       <div className="col-span-full mt-150">
-        <Button render={<Link href={`/games/new?from=${gameId}`} />} className="w-full">
+        <Button render={<ServerLink path={`/games/new?from=${gameId}`} />} className="w-full">
           다음 회차 만들기
         </Button>
       </div>

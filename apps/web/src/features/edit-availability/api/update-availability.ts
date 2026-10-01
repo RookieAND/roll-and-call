@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 import { normalizeAvailability, type AvailabilityInterval } from "@/entities/profile";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 export async function updateAvailability(intervals: AvailabilityInterval[]): Promise<ActionResult> {
@@ -19,6 +20,6 @@ export async function updateAvailability(intervals: AvailabilityInterval[]): Pro
     availability: normalizeAvailability(intervals),
   });
 
-  revalidatePath("/me");
-  redirect("/me/edit");
+  revalidatePath(serverPath({ slug: server.slug, path: "/me" }));
+  redirect(serverPath({ slug: server.slug, path: "/me/edit" }));
 }

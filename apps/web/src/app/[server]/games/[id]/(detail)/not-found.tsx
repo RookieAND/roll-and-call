@@ -1,7 +1,6 @@
 import { Button } from "@roll-and-call/ui";
-import Link from "next/link";
 
-import { AppBar, ErrorScreen } from "@/shared/ui";
+import { AppBar, ErrorScreen, ServerLink } from "@/shared/ui";
 
 export default function NotFound() {
   return (
@@ -18,7 +17,7 @@ export default function NotFound() {
           </>
         }
         action={
-          <Button render={<Link href="/games" />} variant="outline">
+          <Button render={<ServerLink path="/games" />} variant="outline">
             구인 목록 보기
           </Button>
         }

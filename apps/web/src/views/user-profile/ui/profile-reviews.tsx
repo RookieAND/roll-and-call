@@ -1,5 +1,7 @@
 import { Card, VStack } from "@roll-and-call/ui";
 
+import { serverPath } from "@/shared/lib";
+import { getCurrentServer } from "@/shared/server";
 import { CountLinkRow } from "@/shared/ui";
 
 import { ProfileBlockLabel } from "./profile-block-label";
@@ -10,7 +12,8 @@ interface ProfileReviewsProps {
   written: number;
 }
 
-export function ProfileReviews({ userId, received, written }: ProfileReviewsProps) {
+export async function ProfileReviews({ userId, received, written }: ProfileReviewsProps) {
+  const server = await getCurrentServer();
   return (
     <VStack render={<section />} className="px-200 pt-200">
       <ProfileBlockLabel label="후기" />
@@ -19,10 +22,14 @@ export function ProfileReviews({ userId, received, written }: ProfileReviewsProp
           <CountLinkRow
             label="진행한 세션 후기"
             count={received}
-            href={`/u/${userId}/reviews/received`}
+            href={serverPath({ slug: server.slug, path: `/u/${userId}/reviews/received` })}
           />
         )}
-        <CountLinkRow label="작성한 후기" count={written} href={`/u/${userId}/reviews/written`} />
+        <CountLinkRow
+          label="작성한 후기"
+          count={written}
+          href={serverPath({ slug: server.slug, path: `/u/${userId}/reviews/written` })}
+        />
       </Card.Root>
     </VStack>
   );

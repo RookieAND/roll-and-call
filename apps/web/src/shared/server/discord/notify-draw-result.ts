@@ -23,9 +23,10 @@ export async function notifyDrawResult({ server, gameId }: { server: Server; gam
     .filter((participant) => participant.status === PARTICIPANT_STATUS.waiting)
     .map((participant, index) => nameOf(index + 1, participant.user?.username ?? "?"));
 
-  const detailUrl = gameUrl(game.id);
+  const detailUrl = gameUrl({ slug: server.slug, gameId: game.id });
   const drawUrl = detailUrl && `${detailUrl}/draw`;
   const embed = gameNoticeEmbed({
+    slug: server.slug,
     game,
     gmName: game.gm?.username ?? "?",
     url: drawUrl,

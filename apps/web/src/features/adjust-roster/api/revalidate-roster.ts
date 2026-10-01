@@ -1,8 +1,11 @@
 import { revalidatePath } from "next/cache";
 
-export function revalidateRoster(gameId: string) {
-  revalidatePath(`/games/${gameId}/participants`);
-  revalidatePath(`/games/${gameId}`);
-  revalidatePath(`/games/${gameId}/draw`);
-  revalidatePath("/games");
+import { serverPath } from "@/shared/lib";
+
+export function revalidateRoster({ slug, gameId }: { slug: string; gameId: string }) {
+  const gamePath = serverPath({ slug, path: `/games/${gameId}` });
+  revalidatePath(`${gamePath}/participants`);
+  revalidatePath(gamePath);
+  revalidatePath(`${gamePath}/draw`);
+  revalidatePath(serverPath({ slug, path: "/games" }));
 }

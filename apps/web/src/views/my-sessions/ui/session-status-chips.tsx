@@ -1,8 +1,7 @@
 import { Chip, HStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import type { SessionRole } from "@/entities/game";
-import { TabCount } from "@/shared/ui";
+import { TabCount, ServerLink } from "@/shared/ui";
 import { SESSION_CHIPS, sessionsHref, type SessionChipKey } from "@/widgets/session-list";
 
 interface SessionStatusChipsProps {
@@ -20,8 +19,8 @@ export function SessionStatusChips({ activeTab, activeChip, counts }: SessionSta
           <Chip
             key={chip.key}
             render={
-              <Link
-                href={sessionsHref({ role: activeTab, status: chip.key })}
+              <ServerLink
+                path={sessionsHref({ role: activeTab, status: chip.key })}
                 aria-current={selected ? "page" : undefined}
               />
             }

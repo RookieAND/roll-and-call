@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { DeleteReviewDialog } from "@/features/delete-review";
+import { useServerPath } from "@/shared/lib";
 
 import { MY_REVIEW_ACTIONS, type MyReviewCardModel } from "../model/my-review-card";
 
@@ -14,6 +15,7 @@ interface MyReviewActionsProps {
 
 export function MyReviewActions({ card }: MyReviewActionsProps) {
   const [deleting, setDeleting] = useState(false);
+  const toServerPath = useServerPath();
   if (card.actions === MY_REVIEW_ACTIONS.none) return null;
 
   return (
@@ -23,7 +25,7 @@ export function MyReviewActions({ card }: MyReviewActionsProps) {
           삭제하기
         </Button>
         {card.actions === MY_REVIEW_ACTIONS.editAndDelete && (
-          <Button variant="tinted" render={<Link href={card.editHref} />}>
+          <Button variant="tinted" render={<Link href={toServerPath(card.editHref)} />}>
             수정하기
           </Button>
         )}

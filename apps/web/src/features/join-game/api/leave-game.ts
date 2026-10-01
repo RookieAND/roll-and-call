@@ -6,6 +6,7 @@ import { after } from "next/server";
 
 import { countConfirmed, isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
 import { AUTH_REQUIRED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import {
   getCurrentServer,
   getCurrentUser,
@@ -44,8 +45,9 @@ export async function leaveGame(gameId: string): Promise<ActionResult> {
     await refreshRecruitPost({ server, gameId });
   });
 
-  revalidatePath(`/games/${gameId}`);
-  revalidatePath(`/games/${gameId}/participants`);
-  revalidatePath("/games");
+  const gamePath = serverPath({ slug: server.slug, path: `/games/${gameId}` });
+  revalidatePath(gamePath);
+  revalidatePath(`${gamePath}/participants`);
+  revalidatePath(serverPath({ slug: server.slug, path: "/games" }));
   return {};
 }

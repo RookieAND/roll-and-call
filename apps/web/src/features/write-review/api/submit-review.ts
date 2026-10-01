@@ -10,7 +10,7 @@ import {
   REVIEW_PHOTO_MAX_COUNT,
 } from "@/entities/review";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { reviewPhotoPathOf } from "@/shared/lib";
+import { reviewPhotoPathOf, serverPath } from "@/shared/lib";
 import {
   evaluateBadges,
   getCurrentServer,
@@ -87,7 +87,7 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
     }
   }
 
-  revalidateReviews(input.gameId);
+  revalidateReviews({ slug: server.slug, gameId: input.gameId });
   if (reviewId) {
     const createdReviewId = reviewId;
     after(() =>
@@ -100,5 +100,5 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
   }
   if (!target.review)
     after(() => evaluateBadges({ serverId: server.id, userIds: [target.game.gmId, user.id] }));
-  redirect(MY_REVIEWS_HREF);
+  redirect(serverPath({ slug: server.slug, path: MY_REVIEWS_HREF }));
 }

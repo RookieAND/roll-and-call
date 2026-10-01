@@ -1,8 +1,8 @@
 import { Badge, HStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
-import Link from "next/link";
 
 import { EMPTY_BIO_TEXT, ProfileRow } from "@/entities/profile";
+import { ServerLink } from "@/shared/ui";
 
 import type { DrawEntry } from "../model/draw-entry";
 import { DRAW_ROW_VARIANT, type DrawRowVariant } from "../model/draw-row-variant";
@@ -35,7 +35,7 @@ export function DrawRow({ entry, variant, isMe }: DrawRowProps) {
     <HStack
       align="center"
       gap="125"
-      render={<Link href={`/u/${entry.userId}`} />}
+      render={<ServerLink path={`/u/${entry.userId}`} />}
       className={row({ variant, isMe, graded: toRollGrade(entry.roll) !== null })}
     >
       <ProfileRow

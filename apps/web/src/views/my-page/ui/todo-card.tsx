@@ -1,9 +1,8 @@
 import { Button, Card, HStack, Text } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { CircleAlert, Clock } from "lucide-react";
-import Link from "next/link";
 
-import { LineBreaks } from "@/shared/ui";
+import { LineBreaks, ServerLink } from "@/shared/ui";
 import { SESSION_ACTION_KIND } from "@/widgets/session-list";
 
 import type { TodoItem } from "../model/session-todos";
@@ -56,7 +55,7 @@ export function TodoCard({ item: { title, todo } }: TodoCardProps) {
         <LineBreaks lines={todo.lines} />
       </Text>
       <Button
-        render={<Link href={todo.href} />}
+        render={<ServerLink path={todo.href} />}
         variant={buttonVariant}
         colorPalette={buttonPalette}
         className="mt-150 w-full"

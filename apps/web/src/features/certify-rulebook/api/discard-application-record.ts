@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentUser, removeUnusedCertPhotos } from "@/shared/server";
 
 const NOT_DISCARDABLE =
@@ -31,6 +32,6 @@ export async function discardApplicationRecord(rulebookId: string): Promise<Acti
       row.receiptUrl ?? "",
     ]),
   });
-  revalidatePath("/me", "layout");
-  redirect("/me/rulebooks");
+  revalidatePath(serverPath({ slug: server.slug, path: "/me" }), "layout");
+  redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
 }

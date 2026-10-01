@@ -2,8 +2,9 @@ import { Text } from "@roll-and-call/ui";
 
 import { SESSION_ROLE } from "@/entities/game";
 import { EMPTY_BIO_TEXT, KeywordChips, ProfileRow } from "@/entities/profile";
-import { toKst } from "@/shared/lib";
+import { toKst, serverPath } from "@/shared/lib";
 import type { Profile } from "@/shared/server";
+import { getCurrentServer } from "@/shared/server";
 import { SessionCountStats, userSessionsHref, type Absence } from "@/widgets/session-list";
 
 import { ProfileAbsenceNotice } from "./profile-absence-notice";
@@ -19,7 +20,7 @@ interface ProfileSummaryProps {
   badgeTotal: number;
 }
 
-export function ProfileSummary({
+export async function ProfileSummary({
   profile,
   absences,
   hosted,
@@ -27,6 +28,7 @@ export function ProfileSummary({
   featuredBadges,
   badgeTotal,
 }: ProfileSummaryProps) {
+  const server = await getCurrentServer();
   const joinedLabel = toKst(profile.createdAt).format("YYYY년 M월부터");
   const bioText = profile.bio || EMPTY_BIO_TEXT;
   const bioForeground = profile.bio ? "normal" : "hint";
@@ -58,11 +60,17 @@ export function ProfileSummary({
         <SessionCountStats
           hosted={{
             count: hosted,
-            href: userSessionsHref({ userId: profile.id, role: SESSION_ROLE.host }),
+            href: serverPath({
+              slug: server.slug,
+              path: userSessionsHref({ userId: profile.id, role: SESSION_ROLE.host }),
+            }),
           }}
           played={{
             count: played,
-            href: userSessionsHref({ userId: profile.id, role: SESSION_ROLE.player }),
+            href: serverPath({
+              slug: server.slug,
+              path: userSessionsHref({ userId: profile.id, role: SESSION_ROLE.player }),
+            }),
           }}
         />
       </div>

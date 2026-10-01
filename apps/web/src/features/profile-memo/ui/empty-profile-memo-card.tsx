@@ -1,8 +1,8 @@
 import { Button, HStack, Text } from "@roll-and-call/ui";
 import { Lock } from "lucide-react";
-import Link from "next/link";
 
 import { topicParticle } from "@/shared/lib";
+import { ServerLink } from "@/shared/ui";
 
 interface EmptyProfileMemoCardProps {
   targetId: string;
@@ -22,7 +22,7 @@ export function EmptyProfileMemoCard({ targetId, targetName }: EmptyProfileMemoC
         이 사람에 대해 남긴 것이 없습니다.
       </Text>
       <Button
-        render={<Link href={`/u/${targetId}/memo`} />}
+        render={<ServerLink path={`/u/${targetId}/memo`} />}
         variant="outline"
         className="mt-150 h-11 w-full"
       >

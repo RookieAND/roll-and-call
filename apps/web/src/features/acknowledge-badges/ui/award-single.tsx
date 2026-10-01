@@ -1,8 +1,8 @@
 import { Button, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { BadgeMedal, TONE_CLASS } from "@/entities/badge";
+import { ServerLink } from "@/shared/ui";
 
 import type { AwardSheet } from "../model/award-sheet";
 import { AwardRays } from "./award-rays";
@@ -42,7 +42,7 @@ export function AwardSingle({ sheet, onNavigate }: AwardSingleProps) {
       </VStack>
       {sheet.source && (
         <Button
-          render={<Link href={sheet.source.href} onClick={onNavigate} />}
+          render={<ServerLink path={sheet.source.href} onClick={onNavigate} />}
           variant="tinted"
           colorPalette="gray"
           size="sm"

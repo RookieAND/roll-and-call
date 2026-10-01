@@ -7,6 +7,7 @@ import {
 import { redirect } from "next/navigation";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentUser, removeUnusedCertPhotos } from "@/shared/server";
 
 const ALREADY_PROCESSED = "운영진이 이미 처리한 신청입니다. 화면을 새로 고쳐 주세요.";
@@ -36,5 +37,5 @@ export async function withdrawApplication(rulebookId: string): Promise<ActionRes
       row.receiptUrl ?? "",
     ]),
   });
-  redirect("/me/rulebooks");
+  redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
 }

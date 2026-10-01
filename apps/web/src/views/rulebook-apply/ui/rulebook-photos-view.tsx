@@ -13,6 +13,7 @@ import {
 } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
 import { CertApplyForm } from "@/features/certify-rulebook";
+import { serverPath } from "@/shared/lib";
 import {
   getCertSellers,
   getCurrentSessionUser,
@@ -49,10 +50,10 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
     z.uuid().safeParse(rulebookId).success ? getQuizQuestion(rulebookId) : null,
   ]);
   const data = toMyRulebooks(records);
-  if (data.suspended) redirect("/me/rulebooks");
+  if (data.suspended) redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
   const rulebook = data.rulebooks.find((candidate) => candidate.id === rulebookId);
   if (!rulebook || certOption({ rulebook, rulebooks: data.rulebooks }).type !== CERT_OPTION.pick) {
-    redirect(certApplyHref({ rulebookIds: [rulebookId] }));
+    redirect(serverPath({ slug: server.slug, path: certApplyHref({ rulebookIds: [rulebookId] }) }));
   }
   const { name, handle } = profileDisplay({ profile, user });
   const rejected = rulebook.state === CERT_STATE.rejected ? rulebook.latestApplication : null;

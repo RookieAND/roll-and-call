@@ -1,9 +1,9 @@
 import { HStack, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { BadgePill, monthLabel, type BadgeView } from "@/entities/badge";
 import { BadgeDetailSheet, type BadgeDetail } from "@/features/view-badge";
+import { ServerLink } from "@/shared/ui";
 
 import { ProfileBlockLabel } from "./profile-block-label";
 
@@ -24,7 +24,7 @@ export function ProfileBadges({ userId, featured, total }: ProfileBadgesProps) {
           weight="bold"
           typography="body4"
           foreground="muted"
-          render={<Link href={`/u/${userId}/badges`} />}
+          render={<ServerLink path={`/u/${userId}/badges`} />}
           className="mb-100 inline-flex min-h-7 items-center gap-025"
         >
           {total}개 모두 보기

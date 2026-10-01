@@ -12,6 +12,7 @@ import { after } from "next/server";
 
 import { RULE_GATE, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import {
   announceRecruitmentComplete,
   getCurrentServer,
@@ -85,5 +86,5 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     if (recruitmentComplete) await announceRecruitmentComplete({ server, gameId });
   });
 
-  redirect(`/games/${gameId}`);
+  redirect(serverPath({ slug: server.slug, path: `/games/${gameId}` }));
 }

@@ -1,7 +1,8 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 import Image from "next/image";
-import Link from "next/link";
 import type { ReactNode } from "react";
+
+import { ServerLink } from "./server-link";
 
 interface ErrorScreenProps {
   image?: string;
@@ -31,7 +32,7 @@ export function ErrorScreen({
       </VStack>
       <HStack gap="100">
         {action}
-        {homeLink && <Button render={<Link href="/" />}>메인으로 돌아가기</Button>}
+        {homeLink && <Button render={<ServerLink path="/" />}>메인으로 돌아가기</Button>}
       </HStack>
     </VStack>
   );

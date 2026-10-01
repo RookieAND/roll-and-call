@@ -9,8 +9,9 @@ import {
   RECRUIT_METHOD,
 } from "@/entities/game";
 import { LoginSheetButton } from "@/features/auth";
-import { formatDateTime } from "@/shared/lib";
+import { formatDateTime, serverPath } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
+import { getCurrentServer } from "@/shared/server";
 
 import { deriveActionView, GAME_ACTION_VIEW } from "../model/derive-action-view";
 import { leaveLock } from "../model/leave-locked-reason";
@@ -38,7 +39,7 @@ export interface GameActionZoneProps {
   canSchedule: boolean;
 }
 
-export function GameActionZone({
+export async function GameActionZone({
   game,
   viewerId,
   isGm,
@@ -49,6 +50,7 @@ export function GameActionZone({
   status,
   canSchedule,
 }: GameActionZoneProps) {
+  const server = await getCurrentServer();
   // 기한 경과, 대기 신청을 끈 게임의 정원 충족(full), 조율형의 일정 확정(scheduled). 대기 받는 정원 충족(confirmed)은 마감이 아니다.
   const isClosed =
     status === GAME_STATUS.closed ||
@@ -85,7 +87,10 @@ export function GameActionZone({
               ? "추첨에 참여하려면 로그인이 필요합니다."
               : "참여하려면 로그인이 필요합니다."}
           </JoinHint>
-          <LoginSheetButton next={`/games/${game.id}`} className="mt-125 w-full" />
+          <LoginSheetButton
+            next={serverPath({ slug: server.slug, path: `/games/${game.id}` })}
+            className="mt-125 w-full"
+          />
         </>
       );
     case GAME_ACTION_VIEW.joinable:

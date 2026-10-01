@@ -1,9 +1,9 @@
 import { Avatar, Badge, Card, HStack, Text } from "@roll-and-call/ui";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { formatDateTime, formatGameSchedule } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
+import { ServerLink } from "@/shared/ui";
 
 interface GameInfoTableProps {
   game: GameDetailData;
@@ -16,11 +16,11 @@ export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
     {
       label: "GM",
       value: (
-        <Link href={`/u/${game.gmId}`} className="inline-flex min-w-0 items-center gap-100">
+        <ServerLink path={`/u/${game.gmId}`} className="inline-flex min-w-0 items-center gap-100">
           <Avatar src={game.gm?.avatarUrl} name={game.gm?.username} size="sm" />
           <span className="truncate">{game.gm?.username ?? "?"}</span>
           {isGm && <Badge colorPalette="primary">나</Badge>}
-        </Link>
+        </ServerLink>
       ),
     },
     ...(game.playTime ? [{ label: "플레이타임", value: game.playTime }] : []),

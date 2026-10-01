@@ -1,7 +1,8 @@
 import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { BookOpen, ChevronRight, CircleAlert, CircleCheck, Clock } from "lucide-react";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 import type { ListRow } from "../model/list-row";
 
@@ -61,9 +62,9 @@ export function ListRowItem({ row }: ListRowItemProps) {
     </>
   );
   return row.href ? (
-    <Link href={row.href} className={`${ROW_CLASS} transition-colors hover:bg-gray-50`}>
+    <ServerLink path={row.href} className={`${ROW_CLASS} transition-colors hover:bg-gray-50`}>
       {body}
-    </Link>
+    </ServerLink>
   ) : (
     <div className={ROW_CLASS}>{body}</div>
   );

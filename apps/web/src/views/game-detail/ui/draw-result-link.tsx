@@ -1,5 +1,6 @@
 import { Button, type ButtonProps } from "@roll-and-call/ui";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 interface DrawResultLinkProps {
   gameId: string;
@@ -12,7 +13,7 @@ interface DrawResultLinkProps {
 export function DrawResultLink({ gameId, variant, size, className }: DrawResultLinkProps) {
   return (
     <Button
-      render={<Link href={`/games/${gameId}/draw`} />}
+      render={<ServerLink path={`/games/${gameId}/draw`} />}
       variant={variant}
       size={size}
       className={className}

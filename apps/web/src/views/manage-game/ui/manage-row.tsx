@@ -9,9 +9,8 @@ import {
   Pencil,
   Users,
 } from "lucide-react";
-import Link from "next/link";
 
-import { IconTile } from "@/shared/ui";
+import { IconTile, ServerLink } from "@/shared/ui";
 
 import type { ManageRow as Row } from "../model/manage-row-state";
 
@@ -57,7 +56,7 @@ interface ManageRowProps {
 }
 
 export function ManageRow({ row }: ManageRowProps) {
-  const container = row.href ? <Link href={row.href} /> : <div />;
+  const container = row.href ? <ServerLink path={row.href} /> : <div />;
 
   return (
     <HStack

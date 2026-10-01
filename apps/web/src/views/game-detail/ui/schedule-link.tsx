@@ -1,5 +1,6 @@
 import { Button, type ButtonProps } from "@roll-and-call/ui";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 interface ScheduleLinkProps {
   gameId: string;
@@ -11,7 +12,7 @@ interface ScheduleLinkProps {
 export function ScheduleLink({ gameId, label = "일정 조율", size, className }: ScheduleLinkProps) {
   return (
     <Button
-      render={<Link href={`/games/${gameId}/schedule`} />}
+      render={<ServerLink path={`/games/${gameId}/schedule`} />}
       variant="tinted"
       size={size}
       className={className}

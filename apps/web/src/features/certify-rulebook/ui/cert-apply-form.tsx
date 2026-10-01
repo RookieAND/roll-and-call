@@ -4,6 +4,7 @@ import { Button, Callout, Container, FloatingBar, Progress, Text, VStack } from 
 import { useState } from "react";
 
 import { certApplyHref, type MyRulebook } from "@/entities/rulebook";
+import { useServerPath } from "@/shared/lib";
 import { AppBar, LineBreaks, toast, useAction } from "@/shared/ui";
 
 import { submitCertification } from "../api/submit-certification";
@@ -32,6 +33,7 @@ export function CertApplyForm({
   quiz,
   rejection,
 }: CertApplyFormProps) {
+  const toServerPath = useServerPath();
   const [draft, setDraft] = useState(() => initialDraft({ rulebook, sellers }));
   const [onQuiz, setOnQuiz] = useState(false);
   const [answer, setAnswer] = useState("");
@@ -68,9 +70,11 @@ export function CertApplyForm({
         {...(onQuiz
           ? { onBack: () => setOnQuiz(false) }
           : {
-              back: retry
-                ? `/me/rulebooks/${rulebook.id}`
-                : certApplyHref({ rulebookIds: [rulebook.id] }),
+              back: toServerPath(
+                retry
+                  ? `/me/rulebooks/${rulebook.id}`
+                  : certApplyHref({ rulebookIds: [rulebook.id] }),
+              ),
             })}
         action={
           retry ? undefined : (

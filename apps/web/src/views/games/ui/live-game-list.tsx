@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import { GameCard } from "@/entities/game";
 import type { GamesFilter } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
+import { getCurrentServer } from "@/shared/server";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
@@ -14,13 +16,18 @@ interface LiveGameListProps {
   filter: GamesFilter;
 }
 
-export function LiveGameList({ gamesPage, page, filter }: LiveGameListProps) {
+export async function LiveGameList({ gamesPage, page, filter }: LiveGameListProps) {
+  const server = await getCurrentServer();
   const { rows, total, pageSize } = gamesPage;
   return (
     <>
       <VStack className="gap-125">
         {rows.map((game) => (
-          <Link key={game.id} href={`/games/${game.id}`} className="block h-full">
+          <Link
+            key={game.id}
+            href={serverPath({ slug: server.slug, path: `/games/${game.id}` })}
+            className="block h-full"
+          >
             <GameCard game={game} />
           </Link>
         ))}
@@ -28,7 +35,12 @@ export function LiveGameList({ gamesPage, page, filter }: LiveGameListProps) {
       <Pagination
         page={page}
         totalPages={Math.ceil(total / pageSize)}
-        hrefFor={(pageNumber) => gamesHref(filterParams({ ...filter, page: pageNumber }))}
+        hrefFor={(pageNumber) =>
+          serverPath({
+            slug: server.slug,
+            path: gamesHref(filterParams({ ...filter, page: pageNumber })),
+          })
+        }
       />
     </>
   );

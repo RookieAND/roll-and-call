@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import {
   deleteGameReviewForumPosts,
   getCurrentServer,
@@ -33,5 +34,5 @@ export async function deleteGame(id: string): Promise<ActionResult> {
     urls: [deleted.thumbnailUrl, ...deleted.images],
   });
 
-  redirect("/games");
+  redirect(serverPath({ slug: server.slug, path: "/games" }));
 }
