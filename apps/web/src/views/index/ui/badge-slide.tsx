@@ -1,30 +1,19 @@
 import { Avatar, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Award, Bell, UserRound } from "lucide-react";
 
-import { BadgeMedal, TIER_NAME } from "@/entities/badge";
+import { BadgeMedal } from "@/entities/badge";
 
-import { ACHIEVEMENT_MEDALS, FEATURED_MEDALS } from "../model/demo-medals";
+import { FEATURED_MEDALS } from "../model/demo-medals";
+import { BadgeLadder } from "./badge-ladder";
+import { MonthlyBadgeCard } from "./monthly-badge-card";
 import { PreviewCard } from "./preview-card";
 
 export function BadgeSlide() {
   return (
     <>
-      <PreviewCard icon={Award} title="업적" aside="6 / 24" wide>
-        <div className="grid grid-cols-3 gap-x-100 gap-y-175">
-          {ACHIEVEMENT_MEDALS.map((medal) => (
-            <VStack key={medal.name} align="center" gap="075" className="min-w-0 text-center">
-              <BadgeMedal emoji={medal.emoji} look={medal.grade} size="md" />
-              <VStack gap="025" className="max-w-full min-w-0">
-                <Text typography="body3" weight="extrabold" truncate>
-                  {medal.name}
-                </Text>
-                <Text typography="body5" weight="bold" foreground="hint">
-                  {TIER_NAME[medal.grade]}
-                </Text>
-              </VStack>
-            </VStack>
-          ))}
-        </div>
+      <PreviewCard icon={Award} title="업적" wide>
+        <BadgeLadder />
+        <MonthlyBadgeCard />
       </PreviewCard>
       <PreviewCard icon={UserRound} title="프로필">
         <HStack align="center" gap="100" className="min-w-0">
