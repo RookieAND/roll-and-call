@@ -2,6 +2,8 @@
 
 import { Button, cn } from "@roll-and-call/ui";
 
+import { BrandMark } from "@/entities/profile";
+
 import { signInWithDiscord } from "../api/sign-in";
 
 interface LoginButtonProps {
@@ -18,8 +20,8 @@ export function LoginButton({ className, next }: LoginButtonProps) {
       onClick={() => signInWithDiscord(next)}
       className={cn(className)}
     >
-      <span className="h-2 w-2 rounded-full bg-on-primary" aria-hidden />
-      Discord로 로그인
+      <BrandMark service="discord" size={18} />
+      디스코드로 로그인
     </Button>
   );
 }
