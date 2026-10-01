@@ -1,4 +1,4 @@
-import { VStack, Toast } from "@roll-and-call/ui";
+import { Toast } from "@roll-and-call/ui";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import Script from "next/script";
@@ -9,7 +9,6 @@ import { siteOrigin } from "@/shared/server";
 import "./globals.css";
 import { NavigationTracker } from "@/shared/ui";
 
-import { AppBottomNav } from "./app-bottom-nav";
 import { QueryProvider } from "./query-provider";
 
 const origin = siteOrigin();
@@ -64,12 +63,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </a>
         <QueryProvider>
           <NavigationTracker />
-          <VStack className="mx-auto min-h-dvh w-full min-w-screen-min max-w-screen-max border-x border-gray-200 bg-surface">
-            <main id="main" className="flex-1">
-              {children}
-            </main>
-            <AppBottomNav />
-          </VStack>
+          {children}
         </QueryProvider>
         <Toast.Viewport offset={76} />
         <Analytics />

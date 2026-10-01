@@ -20,7 +20,7 @@ export async function MyPageSummary() {
   const server = await getCurrentServer();
   const [profile, mySessions, rulebooks, badgeRecords, badgeFacts] = await Promise.all([
     loadMyProfile(user.id),
-    loadMyPageSessions(user.id),
+    loadMyPageSessions(server.id, user.id),
     loadMyRulebooks(user.id),
     getUserBadges(server.id, user.id),
     loadMyBadgeFacts(user.id),

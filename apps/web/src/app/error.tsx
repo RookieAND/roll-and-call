@@ -2,6 +2,8 @@
 
 import { BoundaryFallback } from "@/shared/ui";
 
+import { AppFrame } from "./app-frame";
+
 export default function ErrorPage({
   error,
   retry,
@@ -9,5 +11,9 @@ export default function ErrorPage({
   error: Error & { digest?: string };
   retry: () => void;
 }) {
-  return <BoundaryFallback error={error} retry={retry} />;
+  return (
+    <AppFrame>
+      <BoundaryFallback error={error} retry={retry} />
+    </AppFrame>
+  );
 }

@@ -35,7 +35,7 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
     );
   }
 
-  const sessions = await loadMySessions(user.id);
+  const sessions = await loadMySessions({ serverId: server.id, userId: user.id });
   const activeTab = SESSION_TABS.find((item) => item.key === tab)?.key ?? SESSION_ROLE.player;
   const chips = SESSION_CHIPS[activeTab];
   const activeChip = chips.find((chip) => chip.key === status)?.key ?? ONGOING_CHIP;

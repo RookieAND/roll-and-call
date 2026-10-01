@@ -14,12 +14,8 @@ describe("legacyServerRedirect", () => {
     expect(redirectOf("/u/abc")).toEqual({ path: "/trpia/u/abc", permanent: true });
   });
 
-  it("/는 임시로 기본 서버에 보낸다", () => {
-    expect(redirectOf("/")).toEqual({ path: "/trpia", permanent: false });
-  });
-
   it("서버 밖 화면과 이미 서버 주소인 경로는 그대로 둔다", () => {
-    for (const pathname of ["/help", "/onboarding", "/trpia/games", "/gamesx", "/api/me"]) {
+    for (const pathname of ["/", "/help", "/onboarding", "/trpia/games", "/gamesx", "/api/me"]) {
       expect(redirectOf(pathname)).toBeNull();
     }
   });

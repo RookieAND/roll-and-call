@@ -49,6 +49,8 @@ export const serverMembers = pgTable(
     featuredBadges: text("featured_badges").array().notNull().default([]),
     joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    // 인덱스의 내 서버 목록을 최근 방문 순으로 늘어놓는다. 서버 화면에 들어올 때 채운다.
+    lastVisitedAt: timestamp("last_visited_at", { withTimezone: true }),
   },
   (table) => [
     primaryKey({ columns: [table.serverId, table.userId] }),

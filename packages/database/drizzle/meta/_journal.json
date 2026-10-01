@@ -309,6 +309,13 @@
       "when": 1792900000000,
       "tag": "0043_servers",
       "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1793000000000,
+      "tag": "0044_member_last_visited",
+      "breakpoints": true
     }
   ]
 }
