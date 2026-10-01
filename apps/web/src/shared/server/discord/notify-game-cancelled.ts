@@ -1,4 +1,5 @@
-import { db, type Game } from "@roll-and-call/database";
+import type { Game } from "@roll-and-call/database";
+import { getUsername, type Server } from "@roll-and-call/database/web";
 import {
   sendDiscordMessage,
   editDiscordMessage,
@@ -6,23 +7,18 @@ import {
   DISCORD_COLOR,
 } from "@roll-and-call/discord";
 
-import { discordChannelId } from "./discord-channel-id";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { recruitEmbed } from "./recruit-embed";
 
 // 삭제 전에 받아둔 행으로 부른다. 모집 공지는 빨갛게 고쳐 남기고, 스레드에는 취소를 알린다.
-export async function notifyGameCancelled(game: Game) {
+export async function notifyGameCancelled({ server, game }: { server: Server; game: Game }) {
   if (!game.discordThreadId) return;
 
-  const gm = await db.query.profiles.findFirst({
-    where: (profile, { eq }) => eq(profile.id, game.gmId),
-    columns: { username: true },
-  });
-  const gmName = gm?.username ?? "?";
+  const gmName = (await getUsername(game.gmId)) ?? "?";
 
   await Promise.all([
     editDiscordMessage({
-      channelId: discordChannelId("recruit"),
+      channelId: server.recruitChannelId,
       messageId: game.discordThreadId,
       input: {
         embeds: [recruitEmbed({ game, gmName, confirmedCount: 0, cancelled: true })],

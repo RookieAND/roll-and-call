@@ -1,4 +1,4 @@
-import { formatDate } from "./format-date";
+import { formatDate } from "@roll-and-call/database/admin/model";
 
 export function formatDayRange(from: Date, to: Date) {
   const [, startMonth] = formatDate(from).split(" ");

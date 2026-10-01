@@ -1,31 +1,28 @@
-import { db, profiles } from "@roll-and-call/database";
 import { countConfirmed, countWaiting } from "@roll-and-call/database/rules";
+import { getGameForNotice, getUsernames, type Server } from "@roll-and-call/database/web";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-import { inArray } from "drizzle-orm";
 
-import { getGameForNotice } from "../db/get-game-for-notice";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
 export async function notifyDirectConfirmed({
+  server,
   gameId,
   userIds,
 }: {
+  server: Server;
   gameId: string;
   userIds: readonly string[];
 }) {
   if (userIds.length === 0) return;
 
-  const [game, invited] = await Promise.all([
-    getGameForNotice(gameId),
-    db
-      .select({ username: profiles.username })
-      .from(profiles)
-      .where(inArray(profiles.id, [...userIds])),
+  const [game, invitedNames] = await Promise.all([
+    getGameForNotice({ serverId: server.id, gameId }),
+    getUsernames(userIds),
   ]);
-  if (!game?.discordThreadId || invited.length === 0) return;
+  if (!game?.discordThreadId || invitedNames.length === 0) return;
 
-  const names = invited.map((player) => `**${player.username}**`).join(", ");
+  const names = invitedNames.map((username) => `**${username}**`).join(", ");
 
   const embed = gameNoticeEmbed({
     game,

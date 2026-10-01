@@ -2,14 +2,15 @@ import { Container, VStack } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
 import { GmOnlyNotice } from "@/features/auth";
-import { getGameById, getCurrentSessionUser } from "@/shared/server";
+import { getGameById, getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { EditGameForm } from "@/widgets/game-form";
 
 export async function EditGameView({ id }: { id: string }) {
-  const [game, user] = await Promise.all([getGameById(id), getCurrentSessionUser()]);
+  const server = await getCurrentServer();
+  const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();
-  if (user?.id === game.gmId) return <EditGameForm game={game} />;
+  if (user?.id === game.gmId) return <EditGameForm serverId={server.id} game={game} />;
 
   return (
     <>

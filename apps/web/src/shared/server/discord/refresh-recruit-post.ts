@@ -1,18 +1,17 @@
 import { countConfirmed } from "@roll-and-call/database/rules";
+import { getGameForNotice, type Server } from "@roll-and-call/database/web";
 import { editDiscordMessage, renameDiscordThread } from "@roll-and-call/discord";
 
-import { getGameForNotice } from "../db/get-game-for-notice";
-import { discordChannelId } from "./discord-channel-id";
 import { recruitButtons } from "./recruit-buttons";
 import { recruitEmbed } from "./recruit-embed";
 
-export async function refreshRecruitPost(gameId: string) {
-  const game = await getGameForNotice(gameId);
+export async function refreshRecruitPost({ server, gameId }: { server: Server; gameId: string }) {
+  const game = await getGameForNotice({ serverId: server.id, gameId });
   if (!game?.discordThreadId) return;
 
   await Promise.all([
     editDiscordMessage({
-      channelId: discordChannelId("recruit"),
+      channelId: server.recruitChannelId,
       messageId: game.discordThreadId,
       input: {
         embeds: [

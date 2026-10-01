@@ -5,7 +5,7 @@ import { reviewEditDeadline } from "@/entities/review";
 import { LoginRequired } from "@/features/auth";
 import { ReviewForm, reviewBlockOf } from "@/features/write-review";
 import { formatMonthDayTime } from "@/shared/lib";
-import { getCurrentSessionUser, getReviewDraftTarget } from "@/shared/server";
+import { getCurrentSessionUser, getReviewDraftTarget, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 interface WriteReviewViewProps {
@@ -25,7 +25,8 @@ export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
     );
   }
 
-  const target = await getReviewDraftTarget({ gameId, userId: user.id });
+  const server = await getCurrentServer();
+  const target = await getReviewDraftTarget({ serverId: server.id, gameId, userId: user.id });
   if (!target) notFound();
   const { game, review } = target;
   const when = game.confirmedAt ? `${formatMonthDayTime(game.confirmedAt)} · ` : "";
@@ -33,6 +34,7 @@ export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
 
   return (
     <ReviewForm
+      serverId={server.id}
       gameId={gameId}
       heading={{ title: game.title, rule: game.rule, subline: `${when}GM ${game.gmName}` }}
       review={

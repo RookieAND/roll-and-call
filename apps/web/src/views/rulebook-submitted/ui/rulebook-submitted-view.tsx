@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CERT_FORMAT_LABEL, CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
-import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
+import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 interface RulebookSubmittedViewProps {
@@ -12,8 +12,10 @@ interface RulebookSubmittedViewProps {
 }
 
 export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedViewProps) {
-  const user = await getCurrentSessionUser();
-  const { rulebooks } = toMyRulebooks(await getRulebookRecords(user?.id ?? null));
+  const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
+  const { rulebooks } = toMyRulebooks(
+    await getRulebookRecords({ serverId: server.id, userId: user?.id ?? null }),
+  );
   const rulebook = rulebooks.find((candidate) => candidate.id === rulebookId);
   if (!rulebook || rulebook.state !== CERT_STATE.pending) notFound();
   const groupId = rulebook.latestApplication?.groupId;

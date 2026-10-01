@@ -1,5 +1,5 @@
-import { db } from "@roll-and-call/database";
 import { PARTICIPANT_STATUS } from "@roll-and-call/database/rules";
+import { getGameForDrawNotice, type Server } from "@roll-and-call/database/web";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { gameUrl } from "../game-url";
@@ -7,17 +7,8 @@ import { gameNoticeEmbed } from "./game-notice-embed";
 
 // GM이 추첨 결과를 적용한 뒤에 부른다. 링크는 각자 자기 값을 보는 결과 페이지로 보낸다.
 // 떨어진 사람도 알아야 다른 판을 잡으므로 확정·대기를 한 글에 같이 적는다.
-export async function notifyDrawResult(gameId: string) {
-  const game = await db.query.games.findFirst({
-    where: (gameRow, { eq }) => eq(gameRow.id, gameId),
-    with: {
-      gm: { columns: { username: true } },
-      participants: {
-        columns: { status: true, drawRank: true },
-        with: { user: { columns: { username: true } } },
-      },
-    },
-  });
+export async function notifyDrawResult({ server, gameId }: { server: Server; gameId: string }) {
+  const game = await getGameForDrawNotice({ serverId: server.id, gameId });
   if (!game?.discordThreadId) return;
 
   const byRank = game.participants.toSorted(

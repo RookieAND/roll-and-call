@@ -2,7 +2,7 @@ import { Container } from "@roll-and-call/ui";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
+import { getCurrentServer, getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { CreateGameForm } from "@/widgets/game-form";
 
@@ -29,12 +29,16 @@ export async function CreateGameView({ rulebookId, previousGameId }: CreateGameV
   }
 
   // 위저드가 단계별로 앱바·진행바를 바꾸므로 폼이 페이지 셸을 소유한다.
+  const server = await getCurrentServer();
   const [records, previousRound] = await Promise.all([
-    getRulebookRecords(user.id),
-    previousGameId ? loadPreviousRound({ gameId: previousGameId, gmId: user.id }) : null,
+    getRulebookRecords({ serverId: server.id, userId: user.id }),
+    previousGameId
+      ? loadPreviousRound({ serverId: server.id, gameId: previousGameId, gmId: user.id })
+      : null,
   ]);
   return (
     <CreateGameForm
+      serverId={server.id}
       rulebooks={toMyRulebooks(records)}
       initialRulebookId={rulebookId}
       defaultGame={previousRound?.template}

@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { BadgeAwardGate } from "@/features/acknowledge-badges";
 import { LoginButton } from "@/features/auth";
-import { getCurrentSessionUser, getMonthSessions } from "@/shared/server";
+import { getCurrentSessionUser, getMonthSessions, getCurrentServer } from "@/shared/server";
 import { AppBar, HelpButton, ThemeToggleButton } from "@/shared/ui";
 
 import { buildMonthRecord } from "../model/build-month-record";
@@ -15,9 +15,14 @@ import { HomeMonthRecord } from "./home-month-record";
 
 export async function HomeView({ date, authError }: { date?: string; authError: boolean }) {
   const { monthStart, selectedKey, todayKey } = resolveCalendarView(date);
+  const server = await getCurrentServer();
   const [user, rows] = await Promise.all([
     getCurrentSessionUser(),
-    getMonthSessions({ from: monthStart.toDate(), to: monthStart.add(1, "month").toDate() }),
+    getMonthSessions({
+      serverId: server.id,
+      from: monthStart.toDate(),
+      to: monthStart.add(1, "month").toDate(),
+    }),
   ]);
 
   const sessions = toCalendarSessions({ rows, viewerId: user?.id ?? null });

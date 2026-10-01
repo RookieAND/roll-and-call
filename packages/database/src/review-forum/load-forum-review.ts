@@ -1,18 +1,25 @@
+import { and, eq } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
+
+import { db } from "../client";
 import {
-  db,
   games,
   participants,
   profiles,
   rulebookCategories,
   rulebooks,
   sessionReviews,
-} from "@roll-and-call/database";
-import { and, eq } from "drizzle-orm";
-import { alias } from "drizzle-orm/pg-core";
+} from "../schema";
 
 const gm = alias(profiles, "gm");
 
-export async function loadForumReview(reviewId: string) {
+export async function loadForumReview({
+  serverId,
+  reviewId,
+}: {
+  serverId: string;
+  reviewId: string;
+}) {
   const [row] = await db
     .select({
       id: sessionReviews.id,
@@ -45,7 +52,7 @@ export async function loadForumReview(reviewId: string) {
         eq(participants.userId, sessionReviews.authorId),
       ),
     )
-    .where(eq(sessionReviews.id, reviewId));
+    .where(and(eq(sessionReviews.serverId, serverId), eq(sessionReviews.id, reviewId)));
   return row;
 }
 

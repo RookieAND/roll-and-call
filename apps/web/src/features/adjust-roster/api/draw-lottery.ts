@@ -2,12 +2,16 @@
 
 import { randomInt } from "node:crypto";
 
-import { and, eq, isNotNull } from "drizzle-orm";
+import {
+  closeGameRecruitment,
+  countRolledParticipants,
+  listParticipantUserIds,
+  setDrawRoll,
+} from "@roll-and-call/database/web";
 import { redirect } from "next/navigation";
 
 import { DIE_FACES, PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
-import { games, participants } from "@/shared/server";
 
 import { rollDistinct } from "../model/roll-distinct";
 import { adjustRoster } from "./adjust-roster";
@@ -22,38 +26,33 @@ export async function drawLottery(gameId: string): Promise<ActionResult> {
       if (game.recruitMethod !== RECRUIT_METHOD.lottery) {
         throw new RosterError("추첨으로 모집하는 구인글이 아닙니다.");
       }
-      const alreadyRolled = await transaction.$count(
-        participants,
-        and(eq(participants.gameId, gameId), isNotNull(participants.drawRoll)),
-      );
+      const serverId = game.serverId;
+      const alreadyRolled = await countRolledParticipants({ transaction, serverId, gameId });
       if (game.drawnAt || alreadyRolled > 0) throw new RosterError("이미 추첨을 마쳤습니다.");
 
-      const applicants = await transaction
-        .select({ userId: participants.userId })
-        .from(participants)
-        .where(
-          and(eq(participants.gameId, gameId), eq(participants.status, PARTICIPANT_STATUS.waiting)),
-        );
-      if (applicants.length === 0) throw new RosterError("추첨할 신청자가 없습니다.");
-      if (applicants.length > DIE_FACES) {
+      const applicantIds = await listParticipantUserIds({
+        transaction,
+        serverId,
+        gameId,
+        status: PARTICIPANT_STATUS.waiting,
+      });
+      if (applicantIds.length === 0) throw new RosterError("추첨할 신청자가 없습니다.");
+      if (applicantIds.length > DIE_FACES) {
         throw new RosterError(`추첨 신청자는 ${DIE_FACES}명까지만 굴릴 수 있습니다.`);
       }
 
       const rolls = rollDistinct({
-        count: applicants.length,
+        count: applicantIds.length,
         roll: () => randomInt(1, DIE_FACES + 1),
       });
-      for (const [index, applicant] of applicants.entries()) {
-        await transaction
-          .update(participants)
-          .set({ drawRoll: rolls[index] })
-          .where(and(eq(participants.gameId, gameId), eq(participants.userId, applicant.userId)));
+      for (const [index, userId] of applicantIds.entries()) {
+        await setDrawRoll({ transaction, serverId, gameId, userId, drawRoll: rolls[index]! });
       }
 
       // endDate를 당겨 두면 목록 배지·신청 차단이 기존 기한 기준을 그대로 쓴다.
       const now = new Date();
       if (game.endDate > now) {
-        await transaction.update(games).set({ endDate: now }).where(eq(games.id, gameId));
+        await closeGameRecruitment({ transaction, serverId, gameId, endDate: now });
       }
     },
   });

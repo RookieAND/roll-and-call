@@ -1,8 +1,8 @@
 "use server";
 
-import { and, eq, ilike, ne, or } from "drizzle-orm";
+import { findGameGmId, searchGameCandidates } from "@roll-and-call/database/web";
 
-import { db, games, getCurrentUser, participants, profiles } from "@/shared/server";
+import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 import type { Candidate } from "../model/candidate";
 
@@ -19,33 +19,15 @@ export async function searchCandidates({
   const keyword = query.trim();
   if (keyword.length < MIN_QUERY_LENGTH) return [];
 
-  const user = await getCurrentUser();
-  const game = await db.query.games.findFirst({
-    where: eq(games.id, gameId),
-    columns: { gmId: true },
-  });
-  if (!user || game?.gmId !== user.id) return [];
+  const [user, server] = await Promise.all([getCurrentUser(), getCurrentServer()]);
+  const gmId = await findGameGmId({ serverId: server.id, gameId });
+  if (!user || gmId !== user.id) return [];
 
-  const pattern = `%${keyword.replace(/[\\%_]/g, "\\$&")}%`;
-  return db
-    .select({
-      userId: profiles.id,
-      username: profiles.username,
-      avatarUrl: profiles.avatarUrl,
-      bio: profiles.bio,
-      status: participants.status,
-    })
-    .from(profiles)
-    .leftJoin(
-      participants,
-      and(eq(participants.userId, profiles.id), eq(participants.gameId, gameId)),
-    )
-    .where(
-      and(
-        ne(profiles.id, user.id),
-        or(ilike(profiles.username, pattern), eq(profiles.discordId, keyword)),
-      ),
-    )
-    .orderBy(profiles.username)
-    .limit(RESULT_LIMIT);
+  return searchGameCandidates({
+    serverId: server.id,
+    gameId,
+    excludeUserId: user.id,
+    keyword,
+    limit: RESULT_LIMIT,
+  });
 }

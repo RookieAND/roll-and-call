@@ -2,7 +2,7 @@ import { Container } from "@roll-and-call/ui";
 
 import { LoginRequired } from "@/features/auth";
 import { AvailabilityEditor } from "@/features/edit-availability";
-import { getCurrentSessionUser, getProfile } from "@/shared/server";
+import { getCurrentSessionUser, getProfile, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 export async function EditAvailabilityView() {
@@ -20,7 +20,8 @@ export async function EditAvailabilityView() {
     );
   }
 
-  const profile = await getProfile(user.id);
+  const server = await getCurrentServer();
+  const profile = await getProfile(server.id, user.id);
 
   return (
     <Container size="sm" className="px-0">

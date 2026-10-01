@@ -11,6 +11,7 @@ import {
   getProfile,
   getUserBadges,
   markBadgesSeen,
+  getCurrentServer,
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { SessionTabs } from "@/widgets/session-list";
@@ -43,13 +44,14 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
   }
 
   const now = new Date();
+  const server = await getCurrentServer();
   const [profile, records, facts, appearances] = await Promise.all([
-    getProfile(user.id),
-    getUserBadges(user.id),
-    getBadgeFacts(user.id, now),
-    getMonthlyAppearances(now),
+    getProfile(server.id, user.id),
+    getUserBadges(server.id, user.id),
+    getBadgeFacts({ serverId: server.id, userId: user.id, now }),
+    getMonthlyAppearances({ serverId: server.id, now }),
   ]);
-  after(() => markBadgesSeen(user.id));
+  after(() => markBadgesSeen({ serverId: server.id, userId: user.id }));
 
   const held = heldBadges(records, now);
   const featured = pickFeaturedBadges({ featuredKeys: profile?.featuredBadges ?? [], held });

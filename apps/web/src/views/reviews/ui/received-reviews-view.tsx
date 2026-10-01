@@ -1,6 +1,11 @@
 import { notFound } from "next/navigation";
 
-import { getCurrentSessionUser, getProfile, getReceivedReviews } from "@/shared/server";
+import {
+  getCurrentSessionUser,
+  getProfile,
+  getReceivedReviews,
+  getCurrentServer,
+} from "@/shared/server";
 
 import { REVIEW_PERSPECTIVE } from "../model/review-perspective";
 import { ReviewList } from "./review-list";
@@ -14,7 +19,11 @@ export async function ReceivedReviewsView({ userId }: ReceivedReviewsViewProps) 
   const viewer = await getCurrentSessionUser();
   const targetId = userId ?? viewer?.id;
   if (!targetId) notFound();
-  const [profile, rows] = await Promise.all([getProfile(targetId), getReceivedReviews(targetId)]);
+  const server = await getCurrentServer();
+  const [profile, rows] = await Promise.all([
+    getProfile(server.id, targetId),
+    getReceivedReviews({ serverId: server.id, gmId: targetId }),
+  ]);
   if (!profile) notFound();
   const mine = targetId === viewer?.id;
 

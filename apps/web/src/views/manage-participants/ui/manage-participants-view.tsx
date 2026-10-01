@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { isSessionLocked, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
-import { getCurrentSessionUser, getGameParticipants } from "@/shared/server";
+import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { summarizeRoster } from "../model/roster-summary";
@@ -12,7 +12,11 @@ import { attendanceStageOf } from "./attendance-stage-of";
 import { ParticipantManager } from "./participant-manager";
 
 export async function ManageParticipantsView({ id }: { id: string }) {
-  const [data, user] = await Promise.all([getGameParticipants(id), getCurrentSessionUser()]);
+  const server = await getCurrentServer();
+  const [data, user] = await Promise.all([
+    getGameParticipants({ serverId: server.id, gameId: id }),
+    getCurrentSessionUser(),
+  ]);
   if (!data) notFound();
   const { game, availableUserIds } = data;
 

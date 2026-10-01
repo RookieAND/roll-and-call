@@ -1,34 +1,13 @@
 import "server-only";
-import {
-  adminSettings,
-  auditLog,
-  certApplications,
-  certifications,
-  certSellers,
-  db,
-  games,
-  participants,
-  profiles,
-  reports,
-  reviewReports,
-  rulebookRequests,
-  rulebookCategories,
-  rulebookQuizQuestions,
-  rulebooks,
-  sanctions,
-  sessionReviews,
-  staff,
-  staffMemos,
-} from "@roll-and-call/database";
-import { eq, getTableColumns, isNull, sql } from "drizzle-orm";
+import type { Game } from "@roll-and-call/database";
+import { loadAdminTables, rulebookLabel, type AuditAction } from "@roll-and-call/database/admin";
 import { cache } from "react";
 
-import type { AuditAction } from "./audit-actions";
+import { getCurrentServer } from "../auth/get-current-server";
 import { gameStartsAt } from "./game-starts-at";
 import { gameStatus } from "./game-status";
 import { noShowId } from "./no-show-id";
 import { plainText } from "./plain-text";
-import { rulebookLabel } from "./rulebook-label";
 import { similarRulebook } from "./similar-rulebook";
 import type {
   AdminUser,
@@ -57,43 +36,37 @@ const OUTCOME_ACTION = {
   rejected: "추가 요청 반려",
 } as const satisfies Record<string, AuditAction>;
 
-// ponytail: 요청마다 어드민이 보는 표를 통째로 읽어 목업과 같은 모양으로 바꾼다. 서버 규모(수백 건)에서는 충분하고, 수만 건이 되면 화면별 쿼리로 나눈다.
+// ponytail: 요청마다 현재 서버에서 어드민이 보는 표를 통째로 읽어 목업과 같은 모양으로 바꾼다. 서버 규모(수백 건)에서는 충분하고, 수만 건이 되면 화면별 쿼리로 나눈다.
 export const loadSnapshot = cache(async () => {
   const now = Date.now();
-  // 트랜잭션 풀러(:6543)에 13개를 Promise.all로 한꺼번에 보내면 응답이 멈춘다(2026-09-24 재현).
-  // 같은 리전이라 순서대로 읽어도 0.1초 남짓이다.
-  const profileRows = await db.select().from(profiles);
-  const gameRows = await db.select().from(games);
-  const participantRows = await db.select().from(participants);
-  const rulebookRows = await db
-    .select({ ...getTableColumns(rulebooks), category: rulebookCategories.name })
-    .from(rulebooks)
-    .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId));
-  const requestRows = await db.select().from(rulebookRequests);
-  const categoryRows = await db.select().from(rulebookCategories);
-  const applicationRows = await db.select().from(certApplications);
-  const certificationRows = await db.select().from(certifications);
-  const quizRows = await db.select().from(rulebookQuizQuestions);
-  const sellerRows = await db.select().from(certSellers).orderBy(certSellers.createdAt);
-  const sanctionRows = await db.select().from(sanctions).where(isNull(sanctions.releasedAt));
-  const reportRows = await db.select().from(reports);
-  const reviewRows = await db.select().from(sessionReviews);
-  const reviewReportRows = await db.select().from(reviewReports);
-  const staffRows = await db.select().from(staff);
-  const memoRows = await db.select().from(staffMemos);
-  const auditRows = await db.select().from(auditLog);
-  const [settingsRow] = await db.select().from(adminSettings);
-  // 디스코드 아이디는 profiles에 없다(username은 사용자가 고치는 닉네임). 디스코드 로그인은 full_name에 아이디를 넣는다.
-  const handleRows = await db.execute<{ id: string; handle: string | null }>(
-    sql`select id, raw_user_meta_data->>'full_name' as handle from auth.users`,
-  );
+  const server = await getCurrentServer();
+  const {
+    profileRows,
+    gameRows,
+    participantRows,
+    rulebookRows,
+    requestRows,
+    categoryRows,
+    applicationRows,
+    certificationRows,
+    quizRows,
+    sellerRows,
+    sanctionRows,
+    reportRows,
+    reviewRows,
+    reviewReportRows,
+    staffRows,
+    memoRows,
+    auditRows,
+    handleRows,
+  } = await loadAdminTables(server.id);
   const handles = new Map(handleRows.map((row) => [row.id, row.handle]));
 
   const nicknames = new Map(profileRows.map((profile) => [profile.id, profile.username]));
   const nicknameOf = (id: string | null) =>
     id ? (nicknames.get(id) ?? "알 수 없음") : "알 수 없음";
   const labels = new Map(rulebookRows.map((rulebook) => [rulebook.id, rulebookLabel(rulebook)]));
-  const gameRulebook = (game: typeof games.$inferSelect) =>
+  const gameRulebook = (game: Game) =>
     (game.rulebookId && labels.get(game.rulebookId)) || game.rule;
 
   const users: AdminUser[] = profileRows.map((profile) => {
@@ -388,7 +361,7 @@ export const loadSnapshot = cache(async () => {
     reviewReports: reviewReportList,
     auditLog: auditList,
     staffMemos: memoList,
-    settings: { certEnforcementDate: settingsRow?.certEnforcementDate ?? null },
+    settings: { certEnforcementDate: server.certEnforcementDate },
   };
 });
 

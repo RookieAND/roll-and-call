@@ -3,9 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
-import { REVIEW_REASONS } from "@/shared/lib";
+import { REVIEW_REASON, REVIEW_REASONS } from "@/shared/lib";
 import {
   evaluateReviewBadges,
+  getCurrentServer,
   moderateReview,
   requireStaff,
   syncReviewForumPost,
@@ -20,17 +21,27 @@ export async function submitReviewModeration(reviewId: string, moderation: Revie
   if (needsReason && !REVIEW_REASONS.includes(moderation.reason!)) {
     throw new Error("사유를 골라 주세요");
   }
-  const result = await moderateReview(reviewId, staff, {
-    action: moderation.action,
-    reason: needsReason ? moderation.reason : null,
-    staffMemo: moderation.staffMemo.trim(),
+  const server = await getCurrentServer();
+  const result = await moderateReview({
+    serverId: server.id,
+    id: reviewId,
+    actor: staff,
+    moderation: {
+      action: moderation.action,
+      reasonLabel: needsReason ? REVIEW_REASON[moderation.reason!] : "",
+      staffMemo: moderation.staffMemo.trim(),
+    },
   });
   revalidatePath("/", "layout");
   if (result.ok) {
     after(() =>
-      syncReviewForumPost({ reviewId, siteOrigin: process.env.NEXT_PUBLIC_USER_APP_URL }),
+      syncReviewForumPost({
+        serverId: server.id,
+        reviewId,
+        siteOrigin: process.env.NEXT_PUBLIC_USER_APP_URL,
+      }),
     );
-    after(() => evaluateReviewBadges(reviewId));
+    after(() => evaluateReviewBadges({ serverId: server.id, reviewId }));
   }
   return result;
 }

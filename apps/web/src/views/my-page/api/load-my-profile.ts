@@ -1,5 +1,8 @@
 import { cache } from "react";
 
-import { getProfile } from "@/shared/server";
+import { getCurrentServer, getProfile } from "@/shared/server";
 
-export const loadMyProfile = cache(getProfile);
+export const loadMyProfile = cache(async (userId: string) => {
+  const server = await getCurrentServer();
+  return getProfile(server.id, userId);
+});

@@ -1,23 +1,25 @@
 import type { Game } from "@roll-and-call/database";
+import type { Server } from "@roll-and-call/database/web";
 import { sendDiscordMessage, startDiscordThread } from "@roll-and-call/discord";
 
-import { discordChannelId } from "./discord-channel-id";
 import { recruitButtons } from "./recruit-buttons";
 import { recruitEmbed } from "./recruit-embed";
 import { sendGameImages } from "./send-game-images";
 
 // 반환값은 스레드 id(= 공지 메시지 id, 실패 시 undefined).
 export async function notifyGameCreated({
+  server,
   game,
   gmName,
   confirmedCount,
 }: {
+  server: Server;
   game: Game;
   gmName: string;
   confirmedCount: number;
 }): Promise<string | undefined> {
   const message = await sendDiscordMessage({
-    channelId: discordChannelId("recruit"),
+    channelId: server.recruitChannelId,
     input: {
       content: "📢 새로운 구인 글이 올라왔어요!",
       embeds: [recruitEmbed({ game, gmName, confirmedCount })],

@@ -17,6 +17,7 @@ import { DEFAULT_PLAY_TIME } from "../model/play-time-options";
 import { GameFormWizard } from "./game-form-wizard";
 
 interface GameFormProps {
+  serverId: string;
   onSubmit: (values: GameFormValues) => Promise<ActionResult | void>;
   defaultGame?: GameDefaults;
   defaultPreConfirmed?: PreConfirmedPlayer[];
@@ -28,6 +29,7 @@ interface GameFormProps {
 }
 
 export function GameForm({
+  serverId,
   onSubmit,
   defaultGame,
   submitLabel,
@@ -86,6 +88,7 @@ export function GameForm({
 
   return (
     <GameFormWizard
+      serverId={serverId}
       form={form}
       pending={pending}
       submitLabel={submitLabel}

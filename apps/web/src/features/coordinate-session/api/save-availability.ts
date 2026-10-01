@@ -1,11 +1,15 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import {
+  getGameWithRoster,
+  getUserConfirmedSlots,
+  replaceAvailability,
+} from "@roll-and-call/database/web";
 import { revalidatePath } from "next/cache";
 
 import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
 import { AUTH_REQUIRED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
-import { availabilities, db, getCurrentUser, getUserConfirmedSlots } from "@/shared/server";
+import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 const MAX_SLOT_COUNT = 2000;
 
@@ -19,11 +23,8 @@ export async function saveAvailability({
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
-  const game = await db.query.games.findFirst({
-    where: (table, { eq: equals }) => equals(table.id, gameId),
-    columns: { gmId: true, scheduleMode: true, confirmedAt: true },
-    with: { participants: { columns: { userId: true } } },
-  });
+  const server = await getCurrentServer();
+  const game = await getGameWithRoster({ serverId: server.id, gameId });
   if (!game) return GAME_NOT_FOUND_RESULT;
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) {
     return { error: "일시가 지정된 게임은 조율 대상이 아닙니다." };
@@ -38,21 +39,18 @@ export async function saveAvailability({
   }
 
   // 다른 확정 세션과 겹친 칸은 화면에서 막혀 있지만, 주소를 우회해 들어와도 저장하지 않는다.
-  const blocked = new Set(await getUserConfirmedSlots({ userId: user.id, excludeGameId: gameId }));
+  const blocked = new Set(
+    await getUserConfirmedSlots({ serverId: server.id, userId: user.id, excludeGameId: gameId }),
+  );
 
   // Trust boundary: drop anything that isn't a valid instant, and cap the count.
-  const rows = slotIsos
+  const slotStarts = slotIsos
     .filter((iso) => !Number.isNaN(new Date(iso).getTime()))
     .filter((iso) => !blocked.has(new Date(iso).toISOString()))
     .slice(0, MAX_SLOT_COUNT)
-    .map((iso) => ({ gameId, userId: user.id, slotStart: new Date(iso) }));
+    .map((iso) => new Date(iso));
 
-  await db.transaction(async (transaction) => {
-    await transaction
-      .delete(availabilities)
-      .where(and(eq(availabilities.gameId, gameId), eq(availabilities.userId, user.id)));
-    if (rows.length > 0) await transaction.insert(availabilities).values(rows);
-  });
+  await replaceAvailability({ serverId: server.id, gameId, userId: user.id, slotStarts });
 
   revalidatePath(`/games/${gameId}/schedule`);
   return {};

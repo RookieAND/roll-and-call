@@ -9,6 +9,7 @@ import {
   getGameById,
   getGameReviews,
   getResponseCounts,
+  getCurrentServer,
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -18,11 +19,12 @@ import { ManageGameStat } from "./manage-game-stat";
 import { ManageRow } from "./manage-row";
 
 export async function ManageGameView({ id }: { id: string }) {
+  const server = await getCurrentServer();
   const [game, user, responseCounts, reviews] = await Promise.all([
-    getGameById(id),
+    getGameById(server.id, id),
     getCurrentSessionUser(),
-    getResponseCounts([id]),
-    getGameReviews(id),
+    getResponseCounts({ serverId: server.id, gameIds: [id] }),
+    getGameReviews({ serverId: server.id, gameId: id }),
   ]);
   if (!game) notFound();
   if (user?.id !== game.gmId) {

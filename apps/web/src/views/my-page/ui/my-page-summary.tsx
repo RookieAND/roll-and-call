@@ -3,7 +3,7 @@ import { SESSION_ROLE } from "@/entities/game";
 import { profileDisplay } from "@/entities/profile";
 import { CERT_STATE } from "@/entities/rulebook";
 import { heldBadgeDetail } from "@/features/view-badge";
-import { getCurrentSessionUser, getUserBadges } from "@/shared/server";
+import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared/server";
 import { sessionsHref } from "@/widgets/session-list";
 
 import { loadMyBadgeFacts } from "../api/load-my-badge-facts";
@@ -16,11 +16,12 @@ import { MyPageTodos } from "./my-page-todos";
 
 export async function MyPageSummary() {
   const user = (await getCurrentSessionUser())!;
+  const server = await getCurrentServer();
   const [profile, mySessions, rulebooks, badgeRecords, badgeFacts] = await Promise.all([
     loadMyProfile(user.id),
     loadMyPageSessions(user.id),
     loadMyRulebooks(user.id),
-    getUserBadges(user.id),
+    getUserBadges(server.id, user.id),
     loadMyBadgeFacts(user.id),
   ]);
   const now = new Date();

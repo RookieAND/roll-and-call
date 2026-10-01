@@ -1,5 +1,6 @@
+import type { ForumReview } from "@roll-and-call/database/review-forum";
+
 import { extensionOf } from "./extension-of";
-import type { ForumReview } from "./load-forum-review";
 import { ruleTagName } from "./rule-tag-name";
 
 const SPOILER_TITLE = "[스포있음] ";

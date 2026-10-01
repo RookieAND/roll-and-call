@@ -1,14 +1,21 @@
 import type { RulebookKind } from "@roll-and-call/database";
+import type {
+  AuditAction,
+  AuditState,
+  Sanction,
+  ShotKey,
+  StaffRole,
+} from "@roll-and-call/database/admin";
 
-import type { AuditAction } from "./audit-actions";
 import type { PostStatus } from "./post-status";
 
-export type StaffRole = "owner" | "staff";
-
-export interface Actor {
-  id: string;
-  nickname: string;
-}
+export type {
+  Actor,
+  AuditState,
+  Sanction,
+  ShotKey,
+  StaffRole,
+} from "@roll-and-call/database/admin";
 
 export interface Staff {
   userId: string;
@@ -16,13 +23,6 @@ export interface Staff {
   role: StaffRole;
   discordId?: string;
   since: Date;
-}
-
-export interface Sanction {
-  until: Date | null;
-  by: string;
-  at: Date;
-  reason: string;
 }
 
 export interface AdminUser {
@@ -56,8 +56,6 @@ export interface Certification {
   approvedAt: Date;
   approvedBy: string;
 }
-
-export type ShotKey = "front" | "back" | "side";
 
 // withdrawn은 신청자가 심사 전에 거둔 신청이다.
 export type CertStatus = "pending" | "approved" | "rejected" | "withdrawn";
@@ -220,11 +218,6 @@ export interface AuditEntry {
   before?: AuditState;
   after?: AuditState;
   related?: string[];
-}
-
-export interface AuditState {
-  label: string;
-  sub?: string;
 }
 
 export interface StaffMemo {

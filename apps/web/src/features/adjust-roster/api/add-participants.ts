@@ -1,16 +1,19 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import {
+  countParticipants,
+  findParticipantStatus,
+  insertParticipant,
+  setParticipantStatus,
+} from "@roll-and-call/database/web";
 import { uniq } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
-import { announceRecruitmentComplete, notifyDirectConfirmed, participants } from "@/shared/server";
+import { announceRecruitmentComplete, notifyDirectConfirmed } from "@/shared/server";
 
 import { adjustRoster } from "./adjust-roster";
-import { findParticipantStatus } from "./find-participant-status";
 import { RosterError } from "./roster-error";
-import { setParticipantStatus } from "./set-participant-status";
 
 const { confirmed } = PARTICIPANT_STATUS;
 
@@ -30,28 +33,31 @@ export async function addParticipants({
     work: async (transaction, game) => {
       if (userIds.includes(game.gmId)) throw new RosterError("GM은 참여자로 넣을 수 없습니다.");
 
-      const confirmedCount = await transaction.$count(
-        participants,
-        and(eq(participants.gameId, gameId), eq(participants.status, confirmed)),
-      );
+      const serverId = game.serverId;
+      const confirmedCount = await countParticipants({
+        transaction,
+        serverId,
+        gameId,
+        status: confirmed,
+      });
       if (confirmedCount + invitedIds.length > game.maxPlayers) {
         throw new RosterError(`남은 자리가 ${game.maxPlayers - confirmedCount}자리뿐입니다.`);
       }
 
       for (const userId of invitedIds) {
-        const status = await findParticipantStatus({ transaction, gameId, userId });
+        const status = await findParticipantStatus({ transaction, serverId, gameId, userId });
         if (status === confirmed) throw new RosterError("이미 참여 중인 사람이 있습니다.");
         if (status) {
-          await setParticipantStatus({ transaction, gameId, userId, status: confirmed });
+          await setParticipantStatus({ transaction, serverId, gameId, userId, status: confirmed });
         } else {
-          await transaction.insert(participants).values({ gameId, userId, status: confirmed });
+          await insertParticipant({ transaction, serverId, gameId, userId, status: confirmed });
         }
       }
       becameFull = confirmedCount + invitedIds.length === game.maxPlayers;
     },
-    notify: async () => {
-      await notifyDirectConfirmed({ gameId, userIds: invitedIds });
-      if (becameFull) await announceRecruitmentComplete(gameId);
+    notify: async (server) => {
+      await notifyDirectConfirmed({ server, gameId, userIds: invitedIds });
+      if (becameFull) await announceRecruitmentComplete({ server, gameId });
     },
   });
 }

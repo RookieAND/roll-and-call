@@ -1,5 +1,5 @@
 import { heldBadges } from "@/entities/badge";
-import { getUserBadges } from "@/shared/server";
+import { getCurrentServer, getUserBadges } from "@/shared/server";
 
 import { buildAwardSheet } from "../model/build-award-sheet";
 import { BadgeAwardSheet } from "./badge-award-sheet";
@@ -9,6 +9,7 @@ interface BadgeAwardGateProps {
 }
 
 export async function BadgeAwardGate({ userId }: BadgeAwardGateProps) {
-  const sheet = buildAwardSheet(heldBadges(await getUserBadges(userId)));
+  const server = await getCurrentServer();
+  const sheet = buildAwardSheet(heldBadges(await getUserBadges(server.id, userId)));
   return sheet ? <BadgeAwardSheet sheet={sheet} /> : null;
 }

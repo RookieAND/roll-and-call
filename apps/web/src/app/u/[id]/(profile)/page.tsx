@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { getProfile } from "@/shared/server";
+import { getCurrentServer, getProfile } from "@/shared/server";
 import { UserProfileView } from "@/views/user-profile";
 
 export async function generateMetadata({
@@ -9,7 +9,8 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const profile = await getProfile(id);
+  const server = await getCurrentServer();
+  const profile = await getProfile(server.id, id);
   return { title: profile?.username ?? "프로필" };
 }
 

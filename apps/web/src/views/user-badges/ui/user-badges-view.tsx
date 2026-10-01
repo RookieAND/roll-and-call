@@ -6,7 +6,12 @@ import { notFound, redirect } from "next/navigation";
 import { heldBadges } from "@/entities/badge";
 import { heldBadgeDetail } from "@/features/view-badge";
 import { toKst } from "@/shared/lib";
-import { getCurrentSessionUser, getProfile, getUserBadges } from "@/shared/server";
+import {
+  getCurrentSessionUser,
+  getProfile,
+  getUserBadges,
+  getCurrentServer,
+} from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
 import { badgeRowRequirement } from "../model/badge-row-requirement";
@@ -23,7 +28,8 @@ interface UserBadgesViewProps {
 }
 
 export async function UserBadgesView({ id }: UserBadgesViewProps) {
-  const [viewer, profile] = await Promise.all([getCurrentSessionUser(), getProfile(id)]);
+  const server = await getCurrentServer();
+  const [viewer, profile] = await Promise.all([getCurrentSessionUser(), getProfile(server.id, id)]);
   if (viewer?.id === id) redirect("/me/badges");
   if (!profile) notFound();
 
@@ -47,7 +53,7 @@ export async function UserBadgesView({ id }: UserBadgesViewProps) {
   }
 
   const now = new Date();
-  const records = await getUserBadges(id);
+  const records = await getUserBadges(server.id, id);
   const held = heldBadges(records, now);
   const groups = GROUPS.map((group) => ({
     ...group,

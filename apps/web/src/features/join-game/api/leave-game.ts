@@ -1,16 +1,15 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { deleteParticipant, getGameWithRoster } from "@roll-and-call/database/web";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
 import { countConfirmed, isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
 import { AUTH_REQUIRED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
 import {
-  db,
+  getCurrentServer,
   getCurrentUser,
   notifyGameLeft,
-  participants,
   refreshRecruitPost,
 } from "@/shared/server";
 
@@ -18,10 +17,8 @@ export async function leaveGame(gameId: string): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
-  const game = await db.query.games.findFirst({
-    where: (table, { eq: equals }) => equals(table.id, gameId),
-    with: { participants: { columns: { userId: true, status: true } } },
-  });
+  const server = await getCurrentServer();
+  const game = await getGameWithRoster({ serverId: server.id, gameId });
   if (!game) return GAME_NOT_FOUND_RESULT;
 
   const membership = game.participants.find((participant) => participant.userId === user.id);
@@ -41,12 +38,10 @@ export async function leaveGame(gameId: string): Promise<ActionResult> {
     }
   }
 
-  await db
-    .delete(participants)
-    .where(and(eq(participants.gameId, gameId), eq(participants.userId, user.id)));
+  await deleteParticipant({ serverId: server.id, gameId, userId: user.id });
   after(async () => {
-    await notifyGameLeft({ gameId, userId: user.id, removedByGm: false });
-    await refreshRecruitPost(gameId);
+    await notifyGameLeft({ server, gameId, userId: user.id, removedByGm: false });
+    await refreshRecruitPost({ server, gameId });
   });
 
   revalidatePath(`/games/${gameId}`);

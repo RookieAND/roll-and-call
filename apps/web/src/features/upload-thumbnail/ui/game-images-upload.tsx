@@ -10,13 +10,14 @@ import { uploadFailedMessage } from "../model/upload-failed-message";
 import { IMAGE_ACCEPT } from "../model/upload-rules";
 
 interface GameImagesUploadProps {
+  serverId: string;
   value: string[];
   onChange: (urls: string[]) => void;
   max: number;
 }
 
 // ponytail: 순서 변경은 HTML5 드래그라 데스크톱 전용. 터치 정렬이 필요해지면 위·아래 이동 버튼을 붙인다.
-export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps) {
+export function GameImagesUpload({ serverId, value, onChange, max }: GameImagesUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +45,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
     const urls = [...value];
     try {
       for (const file of files.slice(0, remaining)) {
-        const result = await uploadThumbnail({ file });
+        const result = await uploadThumbnail({ serverId, file });
         if ("error" in result) {
           setError(uploadFailedMessage(result.error));
           break;

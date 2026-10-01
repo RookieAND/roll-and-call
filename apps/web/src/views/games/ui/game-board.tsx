@@ -7,7 +7,7 @@ import {
   GAME_TAB_DEFAULT,
   type GamesFilter,
 } from "@/shared/api";
-import { getGamesCounts, getRecruitingGamesPage } from "@/shared/server";
+import { getGamesCounts, getRecruitingGamesPage, getCurrentServer } from "@/shared/server";
 
 import { statusCounts } from "../model/status-counts";
 import { CrossTabHint } from "./cross-tab-hint";
@@ -23,10 +23,11 @@ interface GameBoardProps {
 }
 
 export async function GameBoard({ page = 1, filter }: GameBoardProps) {
-  const gamesPage = getRecruitingGamesPage({ page, filter });
+  const server = await getCurrentServer();
+  const gamesPage = getRecruitingGamesPage({ serverId: server.id, page, filter });
   const [counts, allCounts] = await Promise.all([
-    getGamesCounts({ q: filter.q }),
-    filter.q ? getGamesCounts({ q: undefined }) : null,
+    getGamesCounts({ serverId: server.id, q: filter.q }),
+    filter.q ? getGamesCounts({ serverId: server.id, q: undefined }) : null,
   ]);
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
   const count = statusCounts({ counts, tab })[filter.status ?? GAME_STATUS_FILTER_DEFAULT];

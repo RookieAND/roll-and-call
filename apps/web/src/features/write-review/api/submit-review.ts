@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq, isNull } from "drizzle-orm";
+import { insertReview, updateReview } from "@roll-and-call/database/web";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
@@ -12,13 +12,12 @@ import {
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import { reviewPhotoPathOf } from "@/shared/lib";
 import {
-  db,
+  evaluateBadges,
+  getCurrentServer,
   getCurrentUser,
   getReviewDraftTarget,
   removeUnusedReviewPhotos,
-  evaluateBadges,
   revalidateReviews,
-  sessionReviews,
   siteOrigin,
   syncReviewForumPost,
 } from "@/shared/server";
@@ -42,14 +41,22 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
     return { error: "20자 이상 적어 주세요", field: "body" };
   if (body.length > REVIEW_BODY_MAX_LENGTH)
     return { error: "2,000자까지 쓸 수 있습니다", field: "body" };
-  const ownPhotos = input.photoUrls.every((url) =>
-    reviewPhotoPathOf(url)?.startsWith(`${user.id}/`),
-  );
+  const server = await getCurrentServer();
+  // 옛 경로(내 id/…)와 서버별 경로(servers/서버 id/내 id/…) 둘 다 내 사진이다.
+  const ownPrefixes = [`${user.id}/`, `servers/${server.id}/${user.id}/`];
+  const ownPhotos = input.photoUrls.every((url) => {
+    const path = reviewPhotoPathOf(url);
+    return ownPrefixes.some((prefix) => path?.startsWith(prefix));
+  });
   if (!ownPhotos || input.photoUrls.length > REVIEW_PHOTO_MAX_COUNT) {
     return { error: "사진을 다시 올려 주세요." };
   }
 
-  const target = await getReviewDraftTarget({ gameId: input.gameId, userId: user.id });
+  const target = await getReviewDraftTarget({
+    serverId: server.id,
+    gameId: input.gameId,
+    userId: user.id,
+  });
   if (!target) return { error: REVIEW_BLOCK_ERROR, block: REVIEW_BLOCK.unavailable };
   if (target.review && target.review.id !== input.reviewId) {
     return { error: REVIEW_BLOCK_ERROR, block: REVIEW_BLOCK.alreadyWritten };
@@ -60,20 +67,18 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
   const values = { body, spoiler: input.spoiler, photoUrls: input.photoUrls };
   let reviewId = target.review?.id;
   if (target.review) {
-    await db
-      .update(sessionReviews)
-      .set({ ...values, updatedAt: new Date() })
-      .where(and(eq(sessionReviews.id, target.review.id), isNull(sessionReviews.removedAt)));
+    await updateReview({ serverId: server.id, reviewId: target.review.id, ...values });
     await removeUnusedReviewPhotos(
       target.review.photoUrls.filter((url) => !input.photoUrls.includes(url)),
     );
   } else {
     try {
-      const [created] = await db
-        .insert(sessionReviews)
-        .values({ ...values, gameId: input.gameId, authorId: user.id })
-        .returning({ id: sessionReviews.id });
-      reviewId = created?.id;
+      reviewId = await insertReview({
+        serverId: server.id,
+        gameId: input.gameId,
+        authorId: user.id,
+        ...values,
+      });
     } catch (error) {
       if ((error as { code?: string }).code === UNIQUE_VIOLATION) {
         return { error: REVIEW_BLOCK_ERROR, block: REVIEW_BLOCK.alreadyWritten };
@@ -85,8 +90,15 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
   revalidateReviews(input.gameId);
   if (reviewId) {
     const createdReviewId = reviewId;
-    after(() => syncReviewForumPost({ reviewId: createdReviewId, siteOrigin: siteOrigin() }));
+    after(() =>
+      syncReviewForumPost({
+        serverId: server.id,
+        reviewId: createdReviewId,
+        siteOrigin: siteOrigin(),
+      }),
+    );
   }
-  if (!target.review) after(() => evaluateBadges([target.game.gmId, user.id]));
+  if (!target.review)
+    after(() => evaluateBadges({ serverId: server.id, userIds: [target.game.gmId, user.id] }));
   redirect(MY_REVIEWS_HREF);
 }

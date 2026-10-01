@@ -4,7 +4,12 @@ import { heldBadges, monthLabel } from "@/entities/badge";
 import { profileDisplay } from "@/entities/profile";
 import { LoginRequired } from "@/features/auth";
 import { FeaturedBadgePicker } from "@/features/pick-featured-badges";
-import { getCurrentSessionUser, getProfile, getUserBadges } from "@/shared/server";
+import {
+  getCurrentSessionUser,
+  getProfile,
+  getUserBadges,
+  getCurrentServer,
+} from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
 export async function FeaturedBadgesView() {
@@ -20,7 +25,11 @@ export async function FeaturedBadgesView() {
     );
   }
 
-  const [profile, records] = await Promise.all([getProfile(user.id), getUserBadges(user.id)]);
+  const server = await getCurrentServer();
+  const [profile, records] = await Promise.all([
+    getProfile(server.id, user.id),
+    getUserBadges(server.id, user.id),
+  ]);
   const { name, avatar } = profileDisplay({ profile, user });
   const choices = heldBadges(records).map((badge) => ({
     key: badge.key,

@@ -1,6 +1,8 @@
+import { ensureMembership } from "@roll-and-call/database/server";
 import { NextResponse } from "next/server";
 
-import { createSupabaseServerClient } from "@/shared/server";
+import { createSupabaseServerClient, getCurrentServer } from "@/shared/server";
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
@@ -10,8 +12,10 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createSupabaseServerClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      const server = await getCurrentServer();
+      await ensureMembership({ serverId: server.id, userId: data.user.id });
       // behind Vercel's proxy the real host is in x-forwarded-host
       const forwardedHost = request.headers.get("x-forwarded-host");
       const isLocal = process.env.NODE_ENV === "development";

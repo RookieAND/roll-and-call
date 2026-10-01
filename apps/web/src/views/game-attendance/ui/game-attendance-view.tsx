@@ -6,14 +6,18 @@ import { isAttendanceDue, splitRoster } from "@/entities/game";
 import { GmOnlyNotice, LoginRequired } from "@/features/auth";
 import { AttendanceForm, ConfirmedAttendance, type Attendee } from "@/features/confirm-attendance";
 import { formatDateTime } from "@/shared/lib";
-import { getCurrentSessionUser, getGameParticipants } from "@/shared/server";
+import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
 import { AppBar, SummaryLine } from "@/shared/ui";
 
 import { AttendanceGuide } from "./attendance-guide";
 import { AttendanceHeader } from "./attendance-header";
 
 export async function GameAttendanceView({ id }: { id: string }) {
-  const [data, user] = await Promise.all([getGameParticipants(id), getCurrentSessionUser()]);
+  const server = await getCurrentServer();
+  const [data, user] = await Promise.all([
+    getGameParticipants({ serverId: server.id, gameId: id }),
+    getCurrentSessionUser(),
+  ]);
   if (!data) notFound();
   const { game } = data;
 

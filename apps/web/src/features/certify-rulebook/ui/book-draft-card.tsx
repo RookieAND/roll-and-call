@@ -29,6 +29,7 @@ import { EbookFields } from "./ebook-fields";
 import { PhotoTile } from "./photo-tile";
 
 interface BookDraftCardProps {
+  serverId: string;
   rulebook: MyRulebook;
   draft: BookDraft;
   nickname: string;
@@ -38,6 +39,7 @@ interface BookDraftCardProps {
 }
 
 export function BookDraftCard({
+  serverId,
   rulebook,
   draft,
   nickname,
@@ -73,6 +75,7 @@ export function BookDraftCard({
     if (invalid) return setSlot(key, { status: PHOTO_SLOT.error, message: invalid });
     setSlot(key, { status: PHOTO_SLOT.uploading, progress: 0 });
     const result = await uploadCertPhoto({
+      serverId,
       file,
       onProgress: (progress) => setSlot(key, { status: PHOTO_SLOT.uploading, progress }),
     }).catch(() => ({ error: "사진을 올리지 못했습니다. 다시 올려 주세요." }));

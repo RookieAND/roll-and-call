@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { countConfirmed, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { formatDateTime } from "@/shared/lib";
-import { getCurrentSessionUser, getGameParticipants } from "@/shared/server";
+import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { toDrawOutcome } from "../model/to-draw-outcome";
@@ -17,7 +17,11 @@ interface DrawResultViewProps {
 
 // 적용 전에는 GM만 본다. 적용한 순간부터 신청자 전원의 값이 공개되고, 그때 남긴 기록(drawResults)을 보여 준다.
 export async function DrawResultView({ id }: DrawResultViewProps) {
-  const [data, user] = await Promise.all([getGameParticipants(id), getCurrentSessionUser()]);
+  const server = await getCurrentServer();
+  const [data, user] = await Promise.all([
+    getGameParticipants({ serverId: server.id, gameId: id }),
+    getCurrentSessionUser(),
+  ]);
   if (!data) notFound();
   const { game } = data;
 

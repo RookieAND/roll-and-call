@@ -4,7 +4,12 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { announceRecruitmentComplete, getCurrentUser, refreshRecruitPost } from "@/shared/server";
+import {
+  announceRecruitmentComplete,
+  getCurrentServer,
+  getCurrentUser,
+  refreshRecruitPost,
+} from "@/shared/server";
 
 import { announceNewApplication } from "./announce-new-application";
 import { applyToGame } from "./apply-to-game";
@@ -15,7 +20,8 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
-  const application = await applyToGame({ gameId, userId: user.id });
+  const server = await getCurrentServer();
+  const application = await applyToGame({ serverId: server.id, gameId, userId: user.id });
   if ("error" in application) return application;
 
   await seedAvailabilityFromProfile({ game: application.game, userId: user.id });
@@ -26,8 +32,8 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
       isWaiting: application.waiting,
       confirmedCount: application.confirmedCount,
     });
-    if (application.becameFull) await announceRecruitmentComplete(gameId);
-    await refreshRecruitPost(gameId);
+    if (application.becameFull) await announceRecruitmentComplete({ server, gameId });
+    await refreshRecruitPost({ server, gameId });
   });
 
   revalidatePath(`/games/${gameId}`);

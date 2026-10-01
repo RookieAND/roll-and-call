@@ -1,20 +1,17 @@
-import { db } from "@roll-and-call/database";
 import { countWaiting, PARTICIPANT_STATUS } from "@roll-and-call/database/rules";
+import { getGameForRecruitmentNotice, type Server } from "@roll-and-call/database/web";
 
 import { notifyRecruitmentComplete } from "./notify-recruitment-complete";
 
 // 정원이 막 찬 순간에 부른다. 신청·직접 확정·등록 때 확정 어느 길로 차든 같은 공지를 낸다.
-export async function announceRecruitmentComplete(gameId: string) {
-  const game = await db.query.games.findFirst({
-    where: (gameRow, { eq }) => eq(gameRow.id, gameId),
-    with: {
-      gm: { columns: { username: true } },
-      participants: {
-        orderBy: (participant, { asc }) => asc(participant.joinedAt),
-        with: { user: { columns: { username: true, discordId: true } } },
-      },
-    },
-  });
+export async function announceRecruitmentComplete({
+  server,
+  gameId,
+}: {
+  server: Server;
+  gameId: string;
+}) {
+  const game = await getGameForRecruitmentNotice({ serverId: server.id, gameId });
   if (!game) return;
 
   const players = game.participants
@@ -24,6 +21,7 @@ export async function announceRecruitmentComplete(gameId: string) {
       discordId: participant.user?.discordId ?? null,
     }));
   await notifyRecruitmentComplete({
+    server,
     game,
     gmName: game.gm?.username ?? "?",
     players,

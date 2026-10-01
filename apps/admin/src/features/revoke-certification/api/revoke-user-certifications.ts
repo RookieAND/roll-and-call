@@ -2,17 +2,28 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireStaff, revokeCertifications, type RevokeInput } from "@/shared/server";
+import {
+  getCurrentServer,
+  requireStaff,
+  revokeCertifications,
+  type RevokeInput,
+} from "@/shared/server";
 
 export async function revokeUserCertifications(userId: string, input: RevokeInput) {
   const staff = await requireStaff();
   if (input.rulebooks.length === 0 || !input.userReason.trim()) {
     throw new Error("반려로 돌릴 룰북을 고르고 사유를 입력해 주세요");
   }
-  const result = await revokeCertifications(userId, staff, {
-    ...input,
-    userReason: input.userReason.trim(),
-    staffMemo: input.staffMemo.trim(),
+  const server = await getCurrentServer();
+  const result = await revokeCertifications({
+    serverId: server.id,
+    userId,
+    actor: staff,
+    input: {
+      ...input,
+      userReason: input.userReason.trim(),
+      staffMemo: input.staffMemo.trim(),
+    },
   });
   revalidatePath("/", "layout");
   return result;

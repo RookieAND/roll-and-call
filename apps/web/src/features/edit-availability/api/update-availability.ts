@@ -1,21 +1,23 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { saveMemberAvailability } from "@roll-and-call/database/web";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { normalizeAvailability, type AvailabilityInterval } from "@/entities/profile";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { db, getCurrentUser, profiles } from "@/shared/server";
+import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 export async function updateAvailability(intervals: AvailabilityInterval[]): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
-  await db
-    .update(profiles)
-    .set({ availability: normalizeAvailability(intervals) })
-    .where(eq(profiles.id, user.id));
+  const server = await getCurrentServer();
+  await saveMemberAvailability({
+    serverId: server.id,
+    userId: user.id,
+    availability: normalizeAvailability(intervals),
+  });
 
   revalidatePath("/me");
   redirect("/me/edit");

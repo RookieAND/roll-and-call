@@ -1,20 +1,22 @@
 import type { Game } from "@roll-and-call/database";
+import type { Server } from "@roll-and-call/database/web";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { formatGameSchedule } from "@/shared/lib";
 
-import { discordChannelId } from "./discord-channel-id";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
 type RecruitmentPlayer = { username: string; discordId: string | null };
 
 export async function notifyRecruitmentComplete({
+  server,
   game,
   gmName,
   players,
   waitingCount,
 }: {
+  server: Server;
   game: Game;
   gmName: string;
   players: RecruitmentPlayer[];
@@ -39,5 +41,5 @@ export async function notifyRecruitmentComplete({
     ],
   });
 
-  await sendDiscordMessage({ channelId: discordChannelId("closed"), input: { embeds: [embed] } });
+  await sendDiscordMessage({ channelId: server.closedChannelId, input: { embeds: [embed] } });
 }

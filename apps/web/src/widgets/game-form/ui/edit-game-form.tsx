@@ -7,12 +7,14 @@ import type { GameDetailData } from "@/shared/server";
 import { GameForm } from "./game-form";
 
 interface EditGameFormProps {
+  serverId: string;
   game: GameDetailData;
 }
 
-export function EditGameForm({ game }: EditGameFormProps) {
+export function EditGameForm({ serverId, game }: EditGameFormProps) {
   return (
     <GameForm
+      serverId={serverId}
       onSubmit={updateGame.bind(null, game.id)}
       defaultGame={game}
       submitLabel="수정 저장"

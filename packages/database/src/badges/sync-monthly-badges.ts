@@ -1,4 +1,4 @@
-import { like, or } from "drizzle-orm";
+import { and, eq, like, or } from "drizzle-orm";
 import { groupBy } from "es-toolkit";
 
 import { db } from "../client";
@@ -9,9 +9,9 @@ import { loadMonthlyAppearances } from "./load-monthly-appearances";
 
 // 이달의 GM·PL은 여러 사람을 견주므로 한 사람만 다시 계산할 수 없다. 전체 1위를 다시 정해 모두와 비교한다.
 // 이미 준 달이 굳었으면(isMonthSettled) 그 달은 건드리지 않는다. 한 번도 주지 않은 달은 굳었어도 새로 준다.
-export async function syncMonthlyBadges(now: Date = new Date()) {
+export async function syncMonthlyBadges({ serverId, now }: { serverId: string; now: Date }) {
   const [appearances, stored] = await Promise.all([
-    loadMonthlyAppearances(now),
+    loadMonthlyAppearances({ serverId, now }),
     db
       .select({
         userId: userBadges.userId,
@@ -21,9 +21,12 @@ export async function syncMonthlyBadges(now: Date = new Date()) {
       })
       .from(userBadges)
       .where(
-        or(
-          like(userBadges.badgeKey, `${BADGE_LADDER.gmMonthly}.%`),
-          like(userBadges.badgeKey, `${BADGE_LADDER.playerMonthly}.%`),
+        and(
+          eq(userBadges.serverId, serverId),
+          or(
+            like(userBadges.badgeKey, `${BADGE_LADDER.gmMonthly}.%`),
+            like(userBadges.badgeKey, `${BADGE_LADDER.playerMonthly}.%`),
+          ),
         ),
       ),
   ]);
@@ -41,6 +44,6 @@ export async function syncMonthlyBadges(now: Date = new Date()) {
       stored: storedByUser[userId] ?? [],
       desired: desiredByUser[userId] ?? [],
     });
-    await applyBadgeWrites({ userId, writes, now });
+    await applyBadgeWrites({ serverId, userId, writes, now });
   }
 }

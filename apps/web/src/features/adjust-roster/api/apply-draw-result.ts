@@ -1,10 +1,16 @@
 "use server";
 
-import { and, asc, eq, isNotNull, or } from "drizzle-orm";
+import {
+  countParticipants,
+  listRolledApplicantIds,
+  markGameDrawn,
+  saveDrawResults,
+  setDrawRank,
+} from "@roll-and-call/database/web";
 
 import { PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
-import { drawResults, games, notifyDrawResult, participants } from "@/shared/server";
+import { notifyDrawResult } from "@/shared/server";
 
 import { adjustRoster } from "./adjust-roster";
 import { RosterError } from "./roster-error";
@@ -19,54 +25,30 @@ export async function applyDrawResult(gameId: string): Promise<ActionResult> {
       }
       if (game.drawnAt) throw new RosterError("이미 확정한 추첨 결과입니다.");
 
-      const confirmedCount = await transaction.$count(
-        participants,
-        and(eq(participants.gameId, gameId), eq(participants.status, PARTICIPANT_STATUS.confirmed)),
-      );
-      const rolled = await transaction
-        .select({ userId: participants.userId })
-        .from(participants)
-        .where(
-          and(
-            eq(participants.gameId, gameId),
-            eq(participants.status, PARTICIPANT_STATUS.waiting),
-            isNotNull(participants.drawRoll),
-          ),
-        )
-        .orderBy(asc(participants.drawRoll), asc(participants.joinedAt));
-      if (rolled.length === 0) throw new RosterError("아직 추첨하지 않았습니다.");
+      const serverId = game.serverId;
+      const confirmedCount = await countParticipants({
+        transaction,
+        serverId,
+        gameId,
+        status: PARTICIPANT_STATUS.confirmed,
+      });
+      const rolledIds = await listRolledApplicantIds({ transaction, serverId, gameId });
+      if (rolledIds.length === 0) throw new RosterError("아직 추첨하지 않았습니다.");
       const openSeats = Math.max(game.maxPlayers - confirmedCount, 0);
 
-      for (const [index, participant] of rolled.entries()) {
-        await transaction
-          .update(participants)
-          .set({
-            drawRank: index + 1,
-            status: index < openSeats ? PARTICIPANT_STATUS.confirmed : PARTICIPANT_STATUS.waiting,
-          })
-          .where(and(eq(participants.gameId, gameId), eq(participants.userId, participant.userId)));
+      for (const [index, userId] of rolledIds.entries()) {
+        await setDrawRank({
+          transaction,
+          serverId,
+          gameId,
+          userId,
+          drawRank: index + 1,
+          status: index < openSeats ? PARTICIPANT_STATUS.confirmed : PARTICIPANT_STATUS.waiting,
+        });
       }
-      await transaction.update(games).set({ drawnAt: new Date() }).where(eq(games.id, gameId));
-
-      // 적용한 순간의 명단을 따로 남긴다. 뒤에 누가 나가도 추첨 결과는 그대로다.
-      const roster = await transaction
-        .select({
-          userId: participants.userId,
-          roll: participants.drawRoll,
-          status: participants.status,
-        })
-        .from(participants)
-        .where(
-          and(
-            eq(participants.gameId, gameId),
-            or(
-              isNotNull(participants.drawRoll),
-              eq(participants.status, PARTICIPANT_STATUS.confirmed),
-            ),
-          ),
-        );
-      await transaction.insert(drawResults).values(roster.map((row) => ({ gameId, ...row })));
+      await markGameDrawn({ transaction, serverId, gameId });
+      await saveDrawResults({ transaction, serverId, gameId });
     },
-    notify: () => notifyDrawResult(gameId),
+    notify: (server) => notifyDrawResult({ server, gameId }),
   });
 }

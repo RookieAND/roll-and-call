@@ -1,7 +1,7 @@
 import "server-only";
-import { rulebookKind, type RulebookKind } from "@roll-and-call/database";
+import type { RulebookKind } from "@roll-and-call/database";
+import { RULEBOOK_KINDS, rulebookLabel } from "@roll-and-call/database/admin";
 
-import { rulebookLabel } from "./rulebook-label";
 import { loadSnapshot } from "./snapshot";
 
 export interface RulebookRow {
@@ -45,7 +45,7 @@ export async function listRulebooks({ query }: { query?: string } = {}) {
     .toSorted(
       (a, b) =>
         a.category.localeCompare(b.category, "ko") ||
-        rulebookKind.enumValues.indexOf(a.kind) - rulebookKind.enumValues.indexOf(b.kind) ||
+        RULEBOOK_KINDS.indexOf(a.kind) - RULEBOOK_KINDS.indexOf(b.kind) ||
         a.label.localeCompare(b.label, "ko"),
     );
   const categories: RulebookCategory[] = [...new Set(rows.map((row) => row.category))].map(

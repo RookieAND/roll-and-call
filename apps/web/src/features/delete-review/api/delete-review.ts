@@ -1,17 +1,15 @@
 "use server";
 
-import { and, eq, isNull } from "drizzle-orm";
+import { removeOwnReview } from "@roll-and-call/database/web";
 import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import {
-  db,
   evaluateGameBadges,
+  getCurrentServer,
   getCurrentUser,
   removeUnusedReviewPhotos,
   revalidateReviews,
-  reviewReports,
-  sessionReviews,
   siteOrigin,
   syncReviewForumPost,
 } from "@/shared/server";
@@ -21,36 +19,13 @@ export async function deleteReview(reviewId: string): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
-  const now = new Date();
-  const deleted = await db.transaction(async (transaction) => {
-    const [review] = await transaction
-      .select({ gameId: sessionReviews.gameId, photoUrls: sessionReviews.photoUrls })
-      .from(sessionReviews)
-      .where(
-        and(
-          eq(sessionReviews.id, reviewId),
-          eq(sessionReviews.authorId, user.id),
-          isNull(sessionReviews.removedAt),
-        ),
-      )
-      .for("update");
-    if (!review) return null;
-
-    await transaction
-      .update(sessionReviews)
-      .set({ removedAt: now, body: "", photoUrls: [] })
-      .where(eq(sessionReviews.id, reviewId));
-    await transaction
-      .update(reviewReports)
-      .set({ outcome: "dismissed", resolvedAt: now })
-      .where(and(eq(reviewReports.reviewId, reviewId), isNull(reviewReports.outcome)));
-    return review;
-  });
+  const server = await getCurrentServer();
+  const deleted = await removeOwnReview({ serverId: server.id, reviewId, authorId: user.id });
   if (!deleted) return { error: "이미 삭제된 후기입니다." };
 
   await removeUnusedReviewPhotos(deleted.photoUrls);
   revalidateReviews(deleted.gameId);
-  after(() => syncReviewForumPost({ reviewId, siteOrigin: siteOrigin() }));
-  after(() => evaluateGameBadges(deleted.gameId));
+  after(() => syncReviewForumPost({ serverId: server.id, reviewId, siteOrigin: siteOrigin() }));
+  after(() => evaluateGameBadges({ serverId: server.id, gameId: deleted.gameId }));
   return {};
 }

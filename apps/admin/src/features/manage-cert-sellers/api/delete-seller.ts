@@ -2,10 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 
-import { removeCertSeller, requireStaff } from "@/shared/server";
+import { getCurrentServer, removeCertSeller, requireStaff } from "@/shared/server";
 
 export async function deleteSeller(id: string) {
   const staff = await requireStaff();
-  await removeCertSeller(id, staff);
+  const server = await getCurrentServer();
+  await removeCertSeller({ serverId: server.id, id, actor: staff });
   revalidatePath("/", "layout");
 }

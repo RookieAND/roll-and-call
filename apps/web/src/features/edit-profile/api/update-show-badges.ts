@@ -1,16 +1,17 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { saveMemberShowBadges } from "@roll-and-call/database/web";
 import { revalidatePath } from "next/cache";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { db, getCurrentUser, profiles } from "@/shared/server";
+import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 export async function updateShowBadges(showBadges: boolean): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
-  await db.update(profiles).set({ showBadges }).where(eq(profiles.id, user.id));
+  const server = await getCurrentServer();
+  await saveMemberShowBadges({ serverId: server.id, userId: user.id, showBadges });
 
   revalidatePath("/me");
   revalidatePath(`/u/${user.id}`, "layout");

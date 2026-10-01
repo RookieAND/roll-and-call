@@ -25,6 +25,7 @@ import { WizardHeader } from "./wizard-header";
 import { WizardIntro } from "./wizard-intro";
 
 export function GameFormWizard({
+  serverId,
   form,
   pending,
   submitLabel,
@@ -88,7 +89,7 @@ export function GameFormWizard({
       case FORM_SECTION.preflight:
         return <GamePreflightFields form={form} />;
       case FORM_SECTION.media:
-        return <GameMediaFields form={form} />;
+        return <GameMediaFields serverId={serverId} form={form} />;
       case FORM_SECTION.recruit:
         return (
           <GameRecruitFields

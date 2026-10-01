@@ -1,4 +1,4 @@
-import { getGamesByGm, getJoinedGames, getProfile } from "@/shared/server";
+import { getCurrentServer, getGamesByGm, getJoinedGames, getProfile } from "@/shared/server";
 
 import { buildProfileSessions } from "../model/build-profile-sessions";
 import { recentAbsences } from "../model/recent-absences";
@@ -8,10 +8,11 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
 
 export async function loadProfile(userId: string) {
   if (!UUID_PATTERN.test(userId)) return null;
+  const server = await getCurrentServer();
   const [profile, hosted, joined] = await Promise.all([
-    getProfile(userId),
-    getGamesByGm(userId),
-    getJoinedGames(userId),
+    getProfile(server.id, userId),
+    getGamesByGm({ serverId: server.id, userId }),
+    getJoinedGames({ serverId: server.id, userId }),
   ]);
   if (!profile) return null;
   return {

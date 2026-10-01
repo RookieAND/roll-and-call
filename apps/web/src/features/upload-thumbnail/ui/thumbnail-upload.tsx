@@ -14,11 +14,12 @@ import { ThumbnailPreview } from "./thumbnail-preview";
 import { UploadingMessage } from "./uploading-message";
 
 interface ThumbnailUploadProps {
+  serverId: string;
   value?: string;
   onChange: (url: string) => void;
 }
 
-export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
+export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [percent, setPercent] = useState(0);
@@ -39,6 +40,7 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
     setUploading(true);
     try {
       const result = await uploadThumbnail({
+        serverId,
         file,
         onProgress: (ratio) => setPercent(Math.round(ratio * 100)),
       });

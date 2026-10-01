@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { OG_IMAGE } from "@/shared/lib";
-import { getGameById } from "@/shared/server";
+import { getCurrentServer, getGameById } from "@/shared/server";
 import { DrawResultView } from "@/views/draw-result";
 
 const DESCRIPTION = "1d100 추첨으로 정한 확정·대기 명단";
@@ -12,7 +12,8 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const game = await getGameById(id);
+  const server = await getCurrentServer();
+  const game = await getGameById(server.id, id);
   if (!game) return { title: "추첨 결과" };
 
   const title = `${game.title} 추첨 결과`;

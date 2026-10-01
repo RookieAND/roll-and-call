@@ -11,9 +11,11 @@ import { IMAGE_MAX_SIDE } from "../model/upload-rules";
 export type UploadResult = { url: string } | { error: string };
 
 export async function uploadThumbnail({
+  serverId,
   file,
   onProgress = () => {},
 }: {
+  serverId: string;
   file: File;
   onProgress?: (ratio: number) => void;
 }): Promise<UploadResult> {
@@ -25,7 +27,7 @@ export async function uploadThumbnail({
 
   const upload = await shrinkImage({ file, maxSide: IMAGE_MAX_SIDE });
   const extension = upload.name.split(".").pop() ?? "png";
-  const path = `${user.id}/${crypto.randomUUID()}.${extension}`;
+  const path = `servers/${serverId}/${user.id}/${crypto.randomUUID()}.${extension}`;
   const bucket = supabase.storage.from(GAME_IMAGE_BUCKET);
   const { data: signed, error } = await bucket.createSignedUploadUrl(path);
   if (error) return { error: error.message };

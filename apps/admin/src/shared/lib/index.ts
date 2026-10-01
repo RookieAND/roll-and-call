@@ -1,7 +1,7 @@
 export { actionTone } from "./action-tone";
 export { conflictTitle } from "./conflict-title";
 export { CERT_TABS } from "./cert-tabs";
-export { formatDate } from "./format-date";
+export { formatDate, STAFF_ROLE_LABEL } from "@roll-and-call/database/admin/model";
 export { formatDateTime } from "./format-date-time";
 export { formatShortDateTime } from "./format-short-date-time";
 export { formatDayRange } from "./format-day-range";
@@ -17,7 +17,6 @@ export { withTopicParticle } from "./with-topic-particle";
 export { RULEBOOK_KIND_DESCRIPTION } from "./rulebook-kind-description";
 export { CERT_FORMAT_LABEL } from "./cert-format-label";
 export { RULEBOOK_KIND_LABEL } from "./rulebook-kind-label";
-export { STAFF_ROLE_LABEL } from "./staff-role-label";
 export {
   REVIEW_REASON,
   REVIEW_REASONS,

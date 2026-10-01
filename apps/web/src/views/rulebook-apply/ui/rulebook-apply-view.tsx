@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
 import { BookPicker } from "@/features/certify-rulebook";
-import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
+import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 interface RulebookApplyViewProps {
@@ -12,7 +12,7 @@ interface RulebookApplyViewProps {
 }
 
 export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps) {
-  const user = await getCurrentSessionUser();
+  const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
       <>
@@ -25,7 +25,7 @@ export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps)
       </>
     );
   }
-  const data = toMyRulebooks(await getRulebookRecords(user.id));
+  const data = toMyRulebooks(await getRulebookRecords({ serverId: server.id, userId: user.id }));
   if (data.suspended) redirect("/me/rulebooks");
   return (
     <>

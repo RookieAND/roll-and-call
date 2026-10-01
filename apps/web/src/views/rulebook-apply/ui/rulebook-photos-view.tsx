@@ -19,6 +19,7 @@ import {
   getProfile,
   getQuizQuestion,
   getRulebookRecords,
+  getCurrentServer,
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -27,7 +28,7 @@ interface RulebookPhotosViewProps {
 }
 
 export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps) {
-  const user = await getCurrentSessionUser();
+  const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
       <>
@@ -41,8 +42,8 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
     );
   }
   const [records, profile, sellers, quiz] = await Promise.all([
-    getRulebookRecords(user.id),
-    getProfile(user.id),
+    getRulebookRecords({ serverId: server.id, userId: user.id }),
+    getProfile(server.id, user.id),
     getCertSellers(),
     // 주소의 rulebook 값은 아직 검증 전이라, uuid가 아니면 Postgres 캐스팅 에러 대신 아래 redirect로 보낸다.
     z.uuid().safeParse(rulebookId).success ? getQuizQuestion(rulebookId) : null,
@@ -58,6 +59,7 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
 
   return (
     <CertApplyForm
+      serverId={server.id}
       rulebook={rulebook}
       nickname={handle ?? name}
       sellers={sellers}

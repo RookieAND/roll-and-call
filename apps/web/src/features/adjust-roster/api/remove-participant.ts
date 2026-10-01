@@ -1,9 +1,9 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { deleteParticipant } from "@roll-and-call/database/web";
 
 import type { ActionResult } from "@/shared/api";
-import { notifyGameLeft, participants } from "@/shared/server";
+import { notifyGameLeft } from "@/shared/server";
 
 import { adjustRoster } from "./adjust-roster";
 import { PARTICIPANT_NOT_FOUND_MESSAGE, RosterError } from "./roster-error";
@@ -17,13 +17,15 @@ export async function removeParticipant({
 }): Promise<ActionResult> {
   return adjustRoster({
     gameId,
-    work: async (transaction) => {
-      const [removed] = await transaction
-        .delete(participants)
-        .where(and(eq(participants.gameId, gameId), eq(participants.userId, userId)))
-        .returning({ status: participants.status });
+    work: async (transaction, game) => {
+      const removed = await deleteParticipant({
+        transaction,
+        serverId: game.serverId,
+        gameId,
+        userId,
+      });
       if (!removed) throw new RosterError(PARTICIPANT_NOT_FOUND_MESSAGE);
     },
-    notify: () => notifyGameLeft({ gameId, userId, removedByGm: true }),
+    notify: (server) => notifyGameLeft({ server, gameId, userId, removedByGm: true }),
   });
 }

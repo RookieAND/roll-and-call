@@ -1,6 +1,11 @@
 import { notFound, redirect } from "next/navigation";
 
-import { getCurrentSessionUser, getProfile, getWrittenReviews } from "@/shared/server";
+import {
+  getCurrentSessionUser,
+  getProfile,
+  getWrittenReviews,
+  getCurrentServer,
+} from "@/shared/server";
 
 import { REVIEW_PERSPECTIVE } from "../model/review-perspective";
 import { ReviewList } from "./review-list";
@@ -11,10 +16,11 @@ interface WrittenReviewsViewProps {
 }
 
 export async function WrittenReviewsView({ userId }: WrittenReviewsViewProps) {
+  const server = await getCurrentServer();
   const [viewer, profile, rows] = await Promise.all([
     getCurrentSessionUser(),
-    getProfile(userId),
-    getWrittenReviews(userId),
+    getProfile(server.id, userId),
+    getWrittenReviews({ serverId: server.id, authorId: userId }),
   ]);
   if (viewer?.id === userId) redirect("/me/reviews");
   if (!profile) notFound();

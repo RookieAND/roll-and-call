@@ -1,10 +1,21 @@
-export const GAME_SORT = {
-  latest: "latest",
-  deadline: "deadline",
-  slots: "slots",
-} as const;
+import {
+  GAME_SORT,
+  GAME_STATUS_FILTER,
+  GAME_TAB,
+  type GameSort,
+  type GameStatusFilter,
+  type GameTab,
+} from "@roll-and-call/database/rules";
 
-export type GameSort = (typeof GAME_SORT)[keyof typeof GAME_SORT];
+export {
+  GAME_SORT,
+  GAME_STATUS_FILTER,
+  GAME_TAB,
+  type GameSort,
+  type GameStatusFilter,
+  type GameTab,
+  type GamesFilter,
+} from "@roll-and-call/database/rules";
 
 export const GAME_SORTS = [
   { key: GAME_SORT.latest, label: "최신순" },
@@ -14,25 +25,7 @@ export const GAME_SORTS = [
 
 export const GAME_SORT_DEFAULT: GameSort = GAME_SORT.latest;
 
-// 진행 중 = 지금 신청할 수 있는 글(모집 중·대기 접수 중). 나머지는 지난 구인이다.
-export const GAME_TAB = {
-  live: "live",
-  past: "past",
-} as const;
-
-export type GameTab = (typeof GAME_TAB)[keyof typeof GAME_TAB];
-
 export const GAME_TAB_DEFAULT: GameTab = GAME_TAB.live;
-
-export const GAME_STATUS_FILTER = {
-  all: "all",
-  recruiting: "recruiting",
-  waitlist: "waitlist",
-  closed: "closed",
-  ended: "ended",
-} as const;
-
-export type GameStatusFilter = (typeof GAME_STATUS_FILTER)[keyof typeof GAME_STATUS_FILTER];
 
 export const GAME_STATUS_FILTERS = {
   live: [
@@ -48,10 +41,3 @@ export const GAME_STATUS_FILTERS = {
 } as const satisfies Record<GameTab, ReadonlyArray<{ key: GameStatusFilter; label: string }>>;
 
 export const GAME_STATUS_FILTER_DEFAULT: GameStatusFilter = GAME_STATUS_FILTER.all;
-
-export type GamesFilter = {
-  q?: string;
-  sort?: GameSort;
-  tab?: GameTab;
-  status?: GameStatusFilter;
-};

@@ -11,9 +11,11 @@ import { PHOTO_MAX_SIDE } from "../model/photo-rules";
 export type UploadResult = { url: string } | { error: string };
 
 export async function uploadReviewPhoto({
+  serverId,
   file,
   onProgress,
 }: {
+  serverId: string;
   file: File;
   onProgress: (ratio: number) => void;
 }): Promise<UploadResult> {
@@ -25,7 +27,7 @@ export async function uploadReviewPhoto({
 
   const upload = await shrinkImage({ file, maxSide: PHOTO_MAX_SIDE });
   const extension = upload.name.split(".").pop() ?? "jpg";
-  const path = `${user.id}/${crypto.randomUUID()}.${extension}`;
+  const path = `servers/${serverId}/${user.id}/${crypto.randomUUID()}.${extension}`;
   const bucket = supabase.storage.from(REVIEW_PHOTO_BUCKET);
   const { data: signed, error } = await bucket.createSignedUploadUrl(path);
   if (error) return { error: error.message };

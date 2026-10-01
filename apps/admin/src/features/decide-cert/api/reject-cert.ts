@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { decideCert, requireStaff, type ShotKey } from "@/shared/server";
+import { decideCert, getCurrentServer, requireStaff, type ShotKey } from "@/shared/server";
 
 interface RejectCertInput {
   reasonTag: string;
@@ -16,11 +16,17 @@ export async function rejectCert(applicationId: string, input: RejectCertInput) 
   if (!input.reasonTag || !input.userReason.trim()) {
     throw new Error("사유를 고르고 사용자에게 보이는 사유를 입력해 주세요");
   }
-  const result = await decideCert(applicationId, staff, {
-    kind: "reject",
-    ...input,
-    userReason: input.userReason.trim(),
-    staffMemo: input.staffMemo.trim(),
+  const server = await getCurrentServer();
+  const result = await decideCert({
+    serverId: server.id,
+    id: applicationId,
+    actor: staff,
+    decision: {
+      kind: "reject",
+      ...input,
+      userReason: input.userReason.trim(),
+      staffMemo: input.staffMemo.trim(),
+    },
   });
   revalidatePath("/", "layout");
   return result;

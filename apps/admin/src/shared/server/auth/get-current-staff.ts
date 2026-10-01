@@ -3,6 +3,7 @@ import { cache } from "react";
 
 import { getStaffRole, type StaffRole } from "../admin-data";
 import { createSupabaseServerClient } from "./create-supabase-server-client";
+import { getCurrentServer } from "./get-current-server";
 
 export type CurrentStaff =
   | { status: "anonymous" }
@@ -18,6 +19,10 @@ export const getCurrentStaff = cache(async (): Promise<CurrentStaff> => {
 
   const metadata = user.user_metadata as Record<string, string | undefined>;
   const nickname = metadata.full_name ?? metadata.name ?? user.email ?? "";
-  const role = metadata.provider_id ? await getStaffRole(user.id, metadata.provider_id) : null;
+  const discordId = metadata.provider_id;
+  const server = await getCurrentServer();
+  const role = discordId
+    ? await getStaffRole({ serverId: server.id, userId: user.id, discordId })
+    : null;
   return role ? { status: "staff", id: user.id, nickname, role } : { status: "denied", nickname };
 });

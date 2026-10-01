@@ -1,4 +1,5 @@
-import { rulebookLabel } from "./rulebook-label";
+import { rulebookLabel } from "@roll-and-call/database/admin/model";
+
 import type { Snapshot } from "./snapshot";
 import { supplementCores } from "./supplement-cores";
 import type { CertApplication } from "./types";

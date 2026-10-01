@@ -7,6 +7,7 @@ import type { GameDefaults } from "../model/game-defaults";
 import { GameForm } from "./game-form";
 
 interface CreateGameFormProps {
+  serverId: string;
   rulebooks: MyRulebooks;
   initialRulebookId?: string;
   defaultGame?: GameDefaults;
@@ -14,6 +15,7 @@ interface CreateGameFormProps {
 }
 
 export function CreateGameForm({
+  serverId,
   rulebooks,
   initialRulebookId,
   defaultGame,
@@ -21,6 +23,7 @@ export function CreateGameForm({
 }: CreateGameFormProps) {
   return (
     <GameForm
+      serverId={serverId}
       onSubmit={createGame}
       rulebooks={rulebooks}
       initialRulebookId={initialRulebookId}

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
+import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
 import { AppBar, LineBreaks } from "@/shared/ui";
 
 import { myRulebooksHome } from "../model/my-rulebooks-home";
@@ -15,7 +15,7 @@ import { OwnedCategoryCard } from "./owned-category-card";
 const TITLE = "내 룰북";
 
 export async function MyRulebooksView() {
-  const user = await getCurrentSessionUser();
+  const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
       <>
@@ -29,7 +29,7 @@ export async function MyRulebooksView() {
     );
   }
 
-  const data = toMyRulebooks(await getRulebookRecords(user.id));
+  const data = toMyRulebooks(await getRulebookRecords({ serverId: server.id, userId: user.id }));
   const home = myRulebooksHome(data, new Date());
   const applyDisabled = home.suspension !== null;
 

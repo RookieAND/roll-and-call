@@ -15,7 +15,14 @@ const monthlyGamesWhere = and(
 )!;
 
 // ponytail: 끝난 세션을 한 번에 읽는다. 세션이 수만 건이 되면 달 단위 집계 쿼리로 바꾼다.
-export async function loadMonthlyAppearances(now: Date = new Date()): Promise<MonthlyAppearance[]> {
+export async function loadMonthlyAppearances({
+  serverId,
+  now = new Date(),
+}: {
+  serverId: string;
+  now?: Date;
+}): Promise<MonthlyAppearance[]> {
+  const serverGamesWhere = and(eq(games.serverId, serverId), monthlyGamesWhere);
   const gameColumns = {
     confirmedAt: games.confirmedAt,
     playMinutes: games.playMinutes,
@@ -24,12 +31,12 @@ export async function loadMonthlyAppearances(now: Date = new Date()): Promise<Mo
     db
       .select({ userId: games.gmId, ...gameColumns })
       .from(games)
-      .where(monthlyGamesWhere),
+      .where(serverGamesWhere),
     db
       .select({ userId: participants.userId, ...gameColumns })
       .from(participants)
       .innerJoin(games, eq(games.id, participants.gameId))
-      .where(and(attendedWhere, monthlyGamesWhere)),
+      .where(and(attendedWhere, serverGamesWhere)),
   ]);
   const toAppearances = (rows: typeof hosted, role: MonthlyAppearance["role"]) =>
     rows

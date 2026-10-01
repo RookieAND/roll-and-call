@@ -3,12 +3,12 @@ import { Container, VStack } from "@roll-and-call/ui";
 import { profileDisplay } from "@/entities/profile";
 import { LoginRequired } from "@/features/auth";
 import { EditProfileForm } from "@/features/edit-profile";
-import { getProfile, getCurrentSessionUser } from "@/shared/server";
+import { getProfile, getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 export async function EditProfileView() {
-  const user = await getCurrentSessionUser();
-  const profile = user ? await getProfile(user.id) : null;
+  const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
+  const profile = user ? await getProfile(server.id, user.id) : null;
 
   return (
     <>

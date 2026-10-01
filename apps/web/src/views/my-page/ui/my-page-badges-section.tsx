@@ -1,12 +1,16 @@
 import { badgeCounts, heldBadges, nextBadgeGoal } from "@/entities/badge";
-import { getCurrentSessionUser, getUserBadges } from "@/shared/server";
+import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared/server";
 
 import { loadMyBadgeFacts } from "../api/load-my-badge-facts";
 import { MyPageBadges } from "./my-page-badges";
 
 export async function MyPageBadgesSection() {
   const user = (await getCurrentSessionUser())!;
-  const [records, facts] = await Promise.all([getUserBadges(user.id), loadMyBadgeFacts(user.id)]);
+  const server = await getCurrentServer();
+  const [records, facts] = await Promise.all([
+    getUserBadges(server.id, user.id),
+    loadMyBadgeFacts(user.id),
+  ]);
   const held = heldBadges(records);
   return (
     <MyPageBadges

@@ -1,4 +1,5 @@
-import { rulebookLabel } from "./rulebook-label";
+import { rulebookLabel } from "@roll-and-call/database/admin/model";
+
 import type { Rulebook } from "./types";
 
 export function similarRulebook(name: string, list: Rulebook[]) {

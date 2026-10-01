@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { OG_IMAGE } from "@/shared/lib";
-import { getGameById } from "@/shared/server";
+import { getCurrentServer, getGameById } from "@/shared/server";
 import { GameDetailView } from "@/views/game-detail";
 
 export async function generateMetadata({
@@ -10,7 +10,8 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const game = await getGameById(id);
+  const server = await getCurrentServer();
+  const game = await getGameById(server.id, id);
   if (!game) return { title: "구인글" };
 
   return {

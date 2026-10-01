@@ -5,10 +5,12 @@ import type { BadgeWrite } from "../rules";
 import { userBadges } from "../schema";
 
 export async function applyBadgeWrites({
+  serverId,
   userId,
   writes,
   now,
 }: {
+  serverId: string;
   userId: string;
   writes: BadgeWrite[];
   now: Date;
@@ -20,7 +22,13 @@ export async function applyBadgeWrites({
         await transaction
           .update(userBadges)
           .set({ revokedAt: now })
-          .where(and(eq(userBadges.userId, userId), eq(userBadges.badgeKey, write.badgeKey)));
+          .where(
+            and(
+              eq(userBadges.serverId, serverId),
+              eq(userBadges.userId, userId),
+              eq(userBadges.badgeKey, write.badgeKey),
+            ),
+          );
         continue;
       }
       const { badgeKey, tier, earnedAt, sourceGameId } = write.badge;
@@ -28,9 +36,9 @@ export async function applyBadgeWrites({
       const renotify = write.kind === "grant" ? { notifiedAt: null, seenAt: null } : {};
       await transaction
         .insert(userBadges)
-        .values({ userId, badgeKey, tier, earnedAt, sourceGameId })
+        .values({ serverId, userId, badgeKey, tier, earnedAt, sourceGameId })
         .onConflictDoUpdate({
-          target: [userBadges.userId, userBadges.badgeKey],
+          target: [userBadges.serverId, userBadges.userId, userBadges.badgeKey],
           set: { tier, earnedAt, sourceGameId, revokedAt: null, ...renotify },
         });
     }

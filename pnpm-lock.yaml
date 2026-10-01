@@ -246,9 +246,6 @@ importers:
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
-      drizzle-orm:
-        specifier: ^0.45.2
-        version: 0.45.2(postgres@3.4.9)
       lucide-react:
         specifier: ^1.32.0
         version: 1.32.0(react@19.2.8)
@@ -334,9 +331,6 @@ importers:
       dayjs:
         specifier: ^1.11.23
         version: 1.11.23
-      drizzle-orm:
-        specifier: ^0.45.2
-        version: 0.45.2(postgres@3.4.9)
       es-toolkit:
         specifier: ^1.52.0
         version: 1.52.0
@@ -451,9 +445,6 @@ importers:
       '@roll-and-call/discord':
         specifier: workspace:*
         version: link:../discord
-      drizzle-orm:
-        specifier: ^0.45.2
-        version: 0.45.2(postgres@3.4.9)
     devDependencies:
       '@roll-and-call/typescript-config':
         specifier: workspace:*

@@ -13,6 +13,7 @@ import {
   getReviewCounts,
   getRulebookRecords,
   getUserBadges,
+  getCurrentServer,
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { loadProfile } from "@/widgets/session-list";
@@ -23,15 +24,18 @@ import { ProfileRulebooks } from "./profile-rulebooks";
 import { ProfileSummary } from "./profile-summary";
 
 export async function UserProfileView({ id }: { id: string }) {
+  const server = await getCurrentServer();
   const viewerPromise = getCurrentSessionUser();
   const [viewer, loaded, rulebookRecords, reviewCounts, badgeRecords, memo] = await Promise.all([
     viewerPromise,
     loadProfile(id),
-    getRulebookRecords(id),
-    getReviewCounts({ userId: id }),
-    getUserBadges(id),
+    getRulebookRecords({ serverId: server.id, userId: id }),
+    getReviewCounts({ serverId: server.id, userId: id }),
+    getUserBadges(server.id, id),
     viewerPromise.then((currentViewer) =>
-      currentViewer ? getProfileMemo({ ownerId: currentViewer.id, targetId: id }) : null,
+      currentViewer
+        ? getProfileMemo({ serverId: server.id, ownerId: currentViewer.id, targetId: id })
+        : null,
     ),
   ]);
   if (viewer?.id === id) redirect("/me");

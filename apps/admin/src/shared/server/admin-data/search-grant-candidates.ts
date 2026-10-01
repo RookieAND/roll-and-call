@@ -1,5 +1,6 @@
 import "server-only";
-import { rulebookLabel } from "./rulebook-label";
+import { rulebookLabel } from "@roll-and-call/database/admin";
+
 import { loadSnapshot } from "./snapshot";
 
 const NINETY_DAYS = 90 * 86_400_000;

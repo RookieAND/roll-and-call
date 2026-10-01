@@ -1,20 +1,12 @@
 "use server";
 
-import { and, desc, eq, isNull, ne, or, sql } from "drizzle-orm";
+import { createCertApplication, loadCertificationContext } from "@roll-and-call/database/web";
 import { redirect } from "next/navigation";
 
 import { CERT_FORMAT, CERT_SHOTS, RULEBOOK_KIND } from "@/entities/rulebook";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import { certPhotoPathOf } from "@/shared/lib";
-import {
-  certApplications,
-  certifications,
-  db,
-  getCurrentUser,
-  rulebookQuizQuestions,
-  rulebooks,
-  sanctions,
-} from "@/shared/server";
+import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 import type { CertEntry } from "../model/cert-entry";
 import { isQuizAnswer } from "../model/is-quiz-answer";
@@ -31,7 +23,11 @@ export async function submitCertification({
 }): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
-  const ownFile = (url: string) => certPhotoPathOf(url)?.startsWith(`${user.id}/`) ?? false;
+  const server = await getCurrentServer();
+  // 옛 업로드는 `${user.id}/…`, 새 업로드는 `servers/${server.id}/${user.id}/…`에 있다.
+  const ownPrefixes = [`${user.id}/`, `servers/${server.id}/${user.id}/`];
+  const ownFile = (url: string) =>
+    ownPrefixes.some((prefix) => certPhotoPathOf(url)?.startsWith(prefix) ?? false);
   const physical = entry.format === CERT_FORMAT.physical;
   if (physical) {
     if (!CERT_SHOTS.every((shot) => ownFile(entry.photos[shot])))
@@ -43,51 +39,11 @@ export async function submitCertification({
       return { error: "판매처와 주문일을 적어 주세요." };
   }
 
-  const [books, certified, applications, [sanction], questions] = await Promise.all([
-    db
-      .select({
-        id: rulebooks.id,
-        categoryId: rulebooks.categoryId,
-        edition: rulebooks.edition,
-        kind: rulebooks.kind,
-        certRequired: rulebooks.certRequired,
-        supersedesId: rulebooks.supersedesId,
-      })
-      .from(rulebooks)
-      .where(eq(rulebooks.hidden, false)),
-    db
-      .select({ rulebookId: certifications.rulebookId })
-      .from(certifications)
-      .where(and(eq(certifications.userId, user.id), isNull(certifications.revokedAt))),
-    db
-      .select({
-        rulebookId: certApplications.rulebookId,
-        status: certApplications.status,
-        photoUrls: certApplications.photoUrls,
-      })
-      .from(certApplications)
-      .where(and(eq(certApplications.userId, user.id), ne(certApplications.status, "withdrawn")))
-      .orderBy(desc(certApplications.createdAt)),
-    db
-      .select({ id: sanctions.id })
-      .from(sanctions)
-      .where(
-        and(
-          eq(sanctions.userId, user.id),
-          isNull(sanctions.releasedAt),
-          or(isNull(sanctions.until), sql`${sanctions.until} > now()`),
-        ),
-      ),
-    db
-      .select({ id: rulebookQuizQuestions.id, answers: rulebookQuizQuestions.answers })
-      .from(rulebookQuizQuestions)
-      .where(
-        and(
-          eq(rulebookQuizQuestions.rulebookId, entry.rulebookId),
-          eq(rulebookQuizQuestions.active, true),
-        ),
-      ),
-  ]);
+  const { books, certified, applications, sanction, questions } = await loadCertificationContext({
+    serverId: server.id,
+    userId: user.id,
+    rulebookId: entry.rulebookId,
+  });
   if (sanction) return { error: "활동 정지 기간에는 인증을 신청할 수 없습니다." };
 
   const book = books.find((candidate) => candidate.id === entry.rulebookId);
@@ -120,22 +76,25 @@ export async function submitCertification({
   }
 
   const previous = latest?.status === "rejected" ? latest.photoUrls : null;
-  await db.insert(certApplications).values({
-    userId: user.id,
-    rulebookId: book.id,
-    format: entry.format,
-    photoUrls: physical ? entry.photos : {},
-    replacedShots:
-      previous && physical
-        ? CERT_SHOTS.filter((shot) => previous[shot] !== entry.photos[shot])
-        : [],
-    seller: physical ? null : entry.seller.trim().slice(0, 100),
-    purchaseCaptureUrl: physical ? null : entry.captureUrl,
-    receiptUrl: physical ? null : entry.receiptUrl,
-    orderNumber: physical ? null : entry.orderNumber.trim().slice(0, 100) || null,
-    orderDate: physical ? null : entry.orderDate.trim().slice(0, 20),
-    quizQuestionId: question?.id ?? null,
-    quizAnswer: question ? quiz!.answer.trim().slice(0, 200) : null,
+  await createCertApplication({
+    serverId: server.id,
+    application: {
+      userId: user.id,
+      rulebookId: book.id,
+      format: entry.format,
+      photoUrls: physical ? entry.photos : {},
+      replacedShots:
+        previous && physical
+          ? CERT_SHOTS.filter((shot) => previous[shot] !== entry.photos[shot])
+          : [],
+      seller: physical ? null : entry.seller.trim().slice(0, 100),
+      purchaseCaptureUrl: physical ? null : entry.captureUrl,
+      receiptUrl: physical ? null : entry.receiptUrl,
+      orderNumber: physical ? null : entry.orderNumber.trim().slice(0, 100) || null,
+      orderDate: physical ? null : entry.orderDate.trim().slice(0, 20),
+      quizQuestionId: question?.id ?? null,
+      quizAnswer: question ? quiz!.answer.trim().slice(0, 200) : null,
+    },
   });
   redirect(`/me/rulebooks/${book.id}/submitted`);
 }

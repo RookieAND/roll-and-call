@@ -2,11 +2,17 @@
 
 import { revalidatePath } from "next/cache";
 
-import { decideCert, requireStaff } from "@/shared/server";
+import { decideCert, getCurrentServer, requireStaff } from "@/shared/server";
 
 export async function approveCert(applicationId: string) {
   const staff = await requireStaff();
-  const result = await decideCert(applicationId, staff, { kind: "approve" });
+  const server = await getCurrentServer();
+  const result = await decideCert({
+    serverId: server.id,
+    id: applicationId,
+    actor: staff,
+    decision: { kind: "approve" },
+  });
   revalidatePath("/", "layout");
   return result;
 }

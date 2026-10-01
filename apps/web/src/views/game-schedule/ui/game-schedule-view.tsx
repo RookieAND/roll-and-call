@@ -6,14 +6,15 @@ import { hasUserJoined, isDeadlinePassed, isGameGm, SCHEDULE_MODE } from "@/enti
 import { availabilityPrefill } from "@/entities/profile";
 import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows } from "@/shared/lib";
-import { getCurrentSessionUser, getGameById, getProfile } from "@/shared/server";
+import { getCurrentSessionUser, getGameById, getProfile, getCurrentServer } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
 import { getScheduleAvailability } from "../api/load-availability";
 import { ScheduleBody } from "./schedule-body";
 
 export async function GameScheduleView({ id }: { id: string }) {
-  const [game, user] = await Promise.all([getGameById(id), getCurrentSessionUser()]);
+  const server = await getCurrentServer();
+  const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();
 
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) redirect(`/games/${id}`);
@@ -57,7 +58,7 @@ export async function GameScheduleView({ id }: { id: string }) {
 
   const [initialAvailability, profile] = await Promise.all([
     getScheduleAvailability({ gameId: id, userId: viewerId }),
-    involved && viewerId && !game.confirmedAt ? getProfile(viewerId) : null,
+    involved && viewerId && !game.confirmedAt ? getProfile(server.id, viewerId) : null,
   ]);
   const prefill = profile
     ? availabilityPrefill({ intervals: profile.availability, days, timeRows })

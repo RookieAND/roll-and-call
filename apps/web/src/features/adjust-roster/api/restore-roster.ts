@@ -1,13 +1,13 @@
 "use server";
 
+import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/web";
+
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
 
 import type { RosterEntry } from "../model/roster-entry";
 import { adjustRoster } from "./adjust-roster";
-import { findParticipantStatus } from "./find-participant-status";
 import { RosterError } from "./roster-error";
-import { setParticipantStatus } from "./set-participant-status";
 
 export async function restoreRoster({
   gameId,
@@ -24,15 +24,18 @@ export async function restoreRoster({
 
   return adjustRoster({
     gameId,
-    work: async (transaction) => {
+    work: async (transaction, { serverId }) => {
       for (const entry of entries) {
-        if (!(await findParticipantStatus({ transaction, gameId, userId: entry.userId }))) {
+        if (
+          !(await findParticipantStatus({ transaction, serverId, gameId, userId: entry.userId }))
+        ) {
           throw new RosterError("명단이 바뀌어 되돌릴 수 없습니다.");
         }
       }
       for (const entry of entries) {
         await setParticipantStatus({
           transaction,
+          serverId,
           gameId,
           userId: entry.userId,
           status: entry.status,

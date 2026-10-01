@@ -1,5 +1,8 @@
 import { cache } from "react";
 
-import { getBadgeFacts } from "@/shared/server";
+import { getBadgeFacts, getCurrentServer } from "@/shared/server";
 
-export const loadMyBadgeFacts = cache((userId: string) => getBadgeFacts(userId));
+export const loadMyBadgeFacts = cache(async (userId: string) => {
+  const server = await getCurrentServer();
+  return getBadgeFacts({ serverId: server.id, userId });
+});

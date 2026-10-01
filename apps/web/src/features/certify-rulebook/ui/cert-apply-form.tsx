@@ -16,6 +16,7 @@ import { quizHintText } from "./quiz-hint-text";
 import { QuizStep } from "./quiz-step";
 
 interface CertApplyFormProps {
+  serverId: string;
   rulebook: MyRulebook;
   nickname: string;
   sellers: string[];
@@ -24,6 +25,7 @@ interface CertApplyFormProps {
 }
 
 export function CertApplyForm({
+  serverId,
   rulebook,
   nickname,
   sellers,
@@ -115,6 +117,7 @@ export function CertApplyForm({
             />
           ) : (
             <BookDraftCard
+              serverId={serverId}
               rulebook={rulebook}
               draft={draft}
               nickname={nickname}

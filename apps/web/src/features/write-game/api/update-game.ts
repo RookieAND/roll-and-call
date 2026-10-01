@@ -1,16 +1,18 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import {
+  findOwnedGameSettings,
+  listRosterStatuses,
+  updateOwnedGame,
+} from "@roll-and-call/database/web";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import {
-  db,
-  games,
+  getCurrentServer,
   getCurrentUser,
-  participants,
   refreshRecruitPost,
   removeUnusedGameFiles,
 } from "@/shared/server";
@@ -30,24 +32,13 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
   }
   const values = parsed.data;
 
-  const [before] = await db
-    .select({
-      thumbnailUrl: games.thumbnailUrl,
-      images: games.images,
-      scheduleMode: games.scheduleMode,
-      recruitMethod: games.recruitMethod,
-    })
-    .from(games)
-    .where(and(eq(games.id, id), eq(games.gmId, user.id)));
+  const server = await getCurrentServer();
+  const owner = { serverId: server.id, gameId: id, gmId: user.id };
+  const before = await findOwnedGameSettings(owner);
   if (!before) return { error: FORBIDDEN_MESSAGE };
 
-  const roster = await db
-    .select({ status: participants.status })
-    .from(participants)
-    .where(eq(participants.gameId, id));
-  const confirmedCount = roster.filter(
-    (participant) => participant.status === PARTICIPANT_STATUS.confirmed,
-  ).length;
+  const roster = await listRosterStatuses({ serverId: server.id, gameId: id });
+  const confirmedCount = roster.filter((status) => status === PARTICIPANT_STATUS.confirmed).length;
 
   if (Number(values.maxPlayers) < confirmedCount) {
     return {
@@ -71,19 +62,15 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     };
   }
 
-  const updated = await db
-    .update(games)
-    .set(toGameColumns(values))
-    .where(and(eq(games.id, id), eq(games.gmId, user.id)))
-    .returning({ id: games.id });
-
-  if (updated.length === 0) return { error: FORBIDDEN_MESSAGE };
-  after(() => refreshRecruitPost(id));
+  const updated = await updateOwnedGame({ ...owner, columns: toGameColumns(values) });
+  if (!updated) return { error: FORBIDDEN_MESSAGE };
+  after(() => refreshRecruitPost({ server, gameId: id }));
 
   const kept = new Set<string>([values.thumbnailUrl ?? "", ...values.images]);
-  await removeUnusedGameFiles(
-    [before.thumbnailUrl, ...before.images].filter((url) => url !== null && !kept.has(url)),
-  );
+  await removeUnusedGameFiles({
+    serverId: server.id,
+    urls: [before.thumbnailUrl, ...before.images].filter((url) => url !== null && !kept.has(url)),
+  });
 
   redirect(`/games/${id}`);
 }

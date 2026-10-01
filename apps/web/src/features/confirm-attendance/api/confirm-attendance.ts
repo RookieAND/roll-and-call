@@ -1,10 +1,10 @@
 "use server";
 
-import { and, eq, inArray, notInArray } from "drizzle-orm";
+import { saveAttendance, setAttendanceConfirmedAt } from "@roll-and-call/database/web";
 import { after } from "next/server";
 
 import type { ActionResult } from "@/shared/api";
-import { games, participants, siteOrigin, syncGameReviewForumPosts } from "@/shared/server";
+import { getCurrentServer, siteOrigin, syncGameReviewForumPosts } from "@/shared/server";
 
 import { AttendanceError } from "./attendance-error";
 import { guardAttendance } from "./guard-attendance";
@@ -17,6 +17,7 @@ export async function confirmAttendance({
   gameId: string;
   absentUserIds: string[];
 }): Promise<ActionResult> {
+  const serverId = (await getCurrentServer()).id;
   const result = await guardAttendance({
     gameId,
     work: async (transaction, confirmedUserIds) => {
@@ -25,27 +26,23 @@ export async function confirmAttendance({
         throw new AttendanceError("명단에 없는 참여자입니다.");
       }
 
-      const scope = and(
-        eq(participants.gameId, gameId),
-        inArray(participants.userId, confirmedUserIds),
-      );
-      await transaction
-        .update(participants)
-        .set({ absent: false })
-        .where(absent.length === 0 ? scope : and(scope, notInArray(participants.userId, absent)));
-      if (absent.length > 0) {
-        await transaction
-          .update(participants)
-          .set({ absent: true })
-          .where(and(eq(participants.gameId, gameId), inArray(participants.userId, absent)));
-      }
-
-      await transaction
-        .update(games)
-        .set({ attendanceConfirmedAt: new Date() })
-        .where(eq(games.id, gameId));
+      await saveAttendance({
+        transaction,
+        serverId,
+        gameId,
+        confirmedUserIds,
+        absentUserIds: absent,
+      });
+      await setAttendanceConfirmedAt({
+        transaction,
+        serverId,
+        gameId,
+        attendanceConfirmedAt: new Date(),
+      });
     },
   });
-  if (!result.error) after(() => syncGameReviewForumPosts({ gameId, siteOrigin: siteOrigin() }));
+  if (!result.error) {
+    after(() => syncGameReviewForumPosts({ serverId, gameId, siteOrigin: siteOrigin() }));
+  }
   return result;
 }

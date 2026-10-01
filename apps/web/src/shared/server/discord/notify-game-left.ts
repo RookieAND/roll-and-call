@@ -1,31 +1,29 @@
-import { db } from "@roll-and-call/database";
 import { countConfirmed, countWaiting } from "@roll-and-call/database/rules";
+import { getGameForNotice, getUsername, type Server } from "@roll-and-call/database/web";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
-import { getGameForNotice } from "../db/get-game-for-notice";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
 // 삭제 후에 불러야 현재 인원이 맞다.
 export async function notifyGameLeft({
+  server,
   gameId,
   userId,
   removedByGm,
 }: {
+  server: Server;
   gameId: string;
   userId: string;
   removedByGm: boolean;
 }) {
-  const [game, user] = await Promise.all([
-    getGameForNotice(gameId),
-    db.query.profiles.findFirst({
-      where: (profile, { eq }) => eq(profile.id, userId),
-      columns: { username: true },
-    }),
+  const [game, username] = await Promise.all([
+    getGameForNotice({ serverId: server.id, gameId }),
+    getUsername(userId),
   ]);
   if (!game?.discordThreadId) return;
 
-  const name = user?.username ?? "?";
+  const name = username ?? "?";
   const embed = gameNoticeEmbed({
     game,
     gmName: game.gm?.username ?? "?",

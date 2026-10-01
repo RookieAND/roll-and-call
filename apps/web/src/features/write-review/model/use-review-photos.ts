@@ -9,7 +9,13 @@ import { uploadReviewPhoto } from "../api/upload-review-photo";
 import { photoFileError } from "./photo-file-error";
 import { PHOTO_STATUS, type PhotoItem } from "./photo-item";
 
-export function useReviewPhotos(initialUrls: string[]) {
+export function useReviewPhotos({
+  serverId,
+  initialUrls,
+}: {
+  serverId: string;
+  initialUrls: string[];
+}) {
   const [items, setItems] = useState<PhotoItem[]>(() =>
     initialUrls.map((url) => ({
       key: url,
@@ -28,6 +34,7 @@ export function useReviewPhotos(initialUrls: string[]) {
     patch(key, { status: PHOTO_STATUS.uploading, progress: 0 });
     try {
       const result = await uploadReviewPhoto({
+        serverId,
         file,
         onProgress: (progress) => patch(key, { progress }),
       });

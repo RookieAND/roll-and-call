@@ -17,8 +17,17 @@ const reviewAuthorAbsent = sql<boolean>`exists (
     and ${participants.absenceCancelledAt} is null
 )`;
 
-export async function loadBadgeFacts(userId: string, now: Date = new Date()): Promise<BadgeFacts> {
+export async function loadBadgeFacts({
+  serverId,
+  userId,
+  now = new Date(),
+}: {
+  serverId: string;
+  userId: string;
+  now?: Date;
+}): Promise<BadgeFacts> {
   const visibleReview = and(
+    eq(games.serverId, serverId),
     isNull(games.hiddenAt),
     isNull(sessionReviews.removedAt),
     isNull(sessionReviews.hiddenAt),
@@ -31,13 +40,20 @@ export async function loadBadgeFacts(userId: string, now: Date = new Date()): Pr
       .innerJoin(games, eq(games.id, participants.gameId))
       .leftJoin(rulebooks, eq(rulebooks.id, games.rulebookId))
       .leftJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
-      .where(and(eq(participants.userId, userId), attendedWhere, recognizedGamesWhere)),
+      .where(
+        and(
+          eq(games.serverId, serverId),
+          eq(participants.userId, userId),
+          attendedWhere,
+          recognizedGamesWhere,
+        ),
+      ),
     db
       .select(sessionColumns)
       .from(games)
       .leftJoin(rulebooks, eq(rulebooks.id, games.rulebookId))
       .leftJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
-      .where(and(eq(games.gmId, userId), recognizedGamesWhere)),
+      .where(and(eq(games.serverId, serverId), eq(games.gmId, userId), recognizedGamesWhere)),
     db
       .select({ gameId: sessionReviews.gameId, createdAt: sessionReviews.createdAt })
       .from(sessionReviews)

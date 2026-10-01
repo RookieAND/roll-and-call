@@ -1,12 +1,12 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { saveMemberProfile } from "@roll-and-call/database/web";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { normalizeKeywords, normalizeLinks, type ProfileLink } from "@/entities/profile";
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { db, getCurrentUser, profiles } from "@/shared/server";
+import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
 
@@ -36,15 +36,15 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     };
   }
 
-  await db
-    .update(profiles)
-    .set({
-      username,
-      bio: bio || null,
-      keywords: normalizeKeywords(input.keywords),
-      links: normalizeLinks(input.links),
-    })
-    .where(eq(profiles.id, user.id));
+  const server = await getCurrentServer();
+  await saveMemberProfile({
+    serverId: server.id,
+    userId: user.id,
+    username,
+    bio: bio || null,
+    keywords: normalizeKeywords(input.keywords),
+    links: normalizeLinks(input.links),
+  });
 
   revalidatePath("/me");
   redirect("/me");

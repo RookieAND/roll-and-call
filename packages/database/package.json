@@ -6,7 +6,12 @@
   "exports": {
     ".": "./src/index.ts",
     "./rules": "./src/rules/index.ts",
-    "./badges": "./src/badges/index.ts"
+    "./badges": "./src/badges/index.ts",
+    "./server": "./src/server/index.ts",
+    "./review-forum": "./src/review-forum/index.ts",
+    "./web": "./src/web/index.ts",
+    "./admin": "./src/admin/index.ts",
+    "./admin/model": "./src/admin/model.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

@@ -19,6 +19,7 @@ import { ReviewPhotosField } from "./review-photos-field";
 import { ReviewSpoilerField } from "./review-spoiler-field";
 
 interface ReviewFormProps {
+  serverId: string;
   gameId: string;
   heading: { title: string; rule: string; subline: string };
   review: {
@@ -32,7 +33,14 @@ interface ReviewFormProps {
   initialBlock: ReviewBlock | null;
 }
 
-export function ReviewForm({ gameId, heading, review, editUntil, initialBlock }: ReviewFormProps) {
+export function ReviewForm({
+  serverId,
+  gameId,
+  heading,
+  review,
+  editUntil,
+  initialBlock,
+}: ReviewFormProps) {
   const router = useRouter();
   const editing = review !== null;
   const initialPhotoUrls = review?.photoUrls ?? [];
@@ -42,7 +50,7 @@ export function ReviewForm({ gameId, heading, review, editUntil, initialBlock }:
   const [submitFailed, setSubmitFailed] = useState(false);
   const [block, setBlock] = useState(initialBlock);
   const [confirmingLeave, setConfirmingLeave] = useState(false);
-  const photos = useReviewPhotos(initialPhotoUrls);
+  const photos = useReviewPhotos({ serverId, initialUrls: initialPhotoUrls });
   const draft = useReviewDraft({
     gameId,
     enabled: !editing,

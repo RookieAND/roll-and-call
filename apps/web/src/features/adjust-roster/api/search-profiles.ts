@@ -1,8 +1,8 @@
 "use server";
 
-import { and, eq, ilike, ne, or } from "drizzle-orm";
+import { searchMembers } from "@roll-and-call/database/web";
 
-import { db, getCurrentUser, profiles } from "@/shared/server";
+import { getCurrentServer, getCurrentUser } from "@/shared/server";
 
 import type { Candidate } from "../model/candidate";
 
@@ -16,22 +16,12 @@ export async function searchProfiles(query: string): Promise<Candidate[]> {
   const user = await getCurrentUser();
   if (!user) return [];
 
-  const pattern = `%${keyword.replace(/[\\%_]/g, "\\$&")}%`;
-  const found = await db
-    .select({
-      userId: profiles.id,
-      username: profiles.username,
-      avatarUrl: profiles.avatarUrl,
-      bio: profiles.bio,
-    })
-    .from(profiles)
-    .where(
-      and(
-        ne(profiles.id, user.id),
-        or(ilike(profiles.username, pattern), eq(profiles.discordId, keyword)),
-      ),
-    )
-    .orderBy(profiles.username)
-    .limit(RESULT_LIMIT);
+  const server = await getCurrentServer();
+  const found = await searchMembers({
+    serverId: server.id,
+    excludeUserId: user.id,
+    keyword,
+    limit: RESULT_LIMIT,
+  });
   return found.map((profile) => ({ ...profile, status: null }));
 }

@@ -1,15 +1,19 @@
-import { db, sessionReviews } from "@roll-and-call/database";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+
+import { db } from "../client";
+import { sessionReviews } from "../schema";
 
 export async function saveThreadId({
+  serverId,
   reviewId,
   threadId,
 }: {
+  serverId: string;
   reviewId: string;
   threadId: string | null;
 }) {
   await db
     .update(sessionReviews)
     .set({ discordThreadId: threadId })
-    .where(eq(sessionReviews.id, reviewId));
+    .where(and(eq(sessionReviews.serverId, serverId), eq(sessionReviews.id, reviewId)));
 }

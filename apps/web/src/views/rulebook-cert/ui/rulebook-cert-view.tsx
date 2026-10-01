@@ -11,7 +11,7 @@ import {
 } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
 import { CancelApplicationButton } from "@/features/certify-rulebook";
-import { getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
+import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { applicationGroup } from "../model/application-group";
@@ -24,7 +24,7 @@ interface RulebookCertViewProps {
 }
 
 export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
-  const user = await getCurrentSessionUser();
+  const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
       <>
@@ -38,7 +38,9 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
     );
   }
 
-  const { rulebooks, sets } = toMyRulebooks(await getRulebookRecords(user.id));
+  const { rulebooks, sets } = toMyRulebooks(
+    await getRulebookRecords({ serverId: server.id, userId: user.id }),
+  );
   const rulebook = rulebooks.find((candidate) => candidate.id === rulebookId);
   if (!rulebook?.state) redirect(certApplyHref({ rulebookIds: [rulebookId] }));
 

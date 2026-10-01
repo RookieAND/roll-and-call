@@ -1,6 +1,6 @@
+import type { ForumReview } from "@roll-and-call/database/review-forum";
 import { describe, expect, it } from "vitest";
 
-import type { ForumReview } from "./load-forum-review";
 import { reviewForumPost } from "./review-forum-post";
 
 const tags = new Map([

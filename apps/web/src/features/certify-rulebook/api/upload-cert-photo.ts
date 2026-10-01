@@ -8,11 +8,13 @@ import { CERT_PHOTO_BUCKET } from "@/shared/lib";
 
 import { CERT_PHOTO_MAX_SIDE } from "../model/cert-photo-rules";
 
-// 경로 첫 칸이 내 id여야 스토리지 정책이 올리기를 허락한다.
+// 경로 셋째 칸(servers/서버 id/내 id)이 내 id여야 스토리지 정책이 올리기를 허락한다.
 export async function uploadCertPhoto({
+  serverId,
   file,
   onProgress,
 }: {
+  serverId: string;
   file: File;
   onProgress: (ratio: number) => void;
 }): Promise<{ url: string } | { error: string }> {
@@ -24,7 +26,7 @@ export async function uploadCertPhoto({
 
   const upload = await shrinkImage({ file, maxSide: CERT_PHOTO_MAX_SIDE });
   const extension = upload.name.split(".").pop() ?? "jpg";
-  const path = `${user.id}/${crypto.randomUUID()}.${extension}`;
+  const path = `servers/${serverId}/${user.id}/${crypto.randomUUID()}.${extension}`;
   const bucket = supabase.storage.from(CERT_PHOTO_BUCKET);
   const { data: signed, error } = await bucket.createSignedUploadUrl(path);
   if (error) return { error: error.message };

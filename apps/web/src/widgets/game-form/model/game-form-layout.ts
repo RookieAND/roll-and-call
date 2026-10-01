@@ -12,6 +12,7 @@ export type GameEditContext = {
 };
 
 export interface GameFormLayoutProps {
+  serverId: string;
   form: UseFormReturn<GameFormValues>;
   pending: boolean;
   submitLabel: string;

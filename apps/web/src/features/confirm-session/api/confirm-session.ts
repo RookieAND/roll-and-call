@@ -1,14 +1,13 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { confirmGameSession, getGameConfirmedAt } from "@roll-and-call/database/web";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
 import {
-  db,
-  games,
+  getCurrentServer,
   getCurrentUser,
   notifySessionConfirmed,
   refreshRecruitPost,
@@ -27,23 +26,20 @@ export async function confirmSession({
   const confirmedAt = new Date(slotIso);
   if (Number.isNaN(confirmedAt.getTime())) return { error: "잘못된 시간입니다." };
 
-  const previous = await db.query.games.findFirst({
-    where: (gameRow, { eq: equals }) => equals(gameRow.id, gameId),
-    columns: { confirmedAt: true },
+  const server = await getCurrentServer();
+  const previousConfirmedAt = await getGameConfirmedAt({ serverId: server.id, gameId });
+  const updated = await confirmGameSession({
+    serverId: server.id,
+    gameId,
+    gmId: user.id,
+    confirmedAt,
   });
 
-  const updated = await db
-    .update(games)
-    // reset notifiedAt so re-confirming a new time re-arms the 1h reminder
-    .set({ confirmedAt, notifiedAt: null })
-    .where(and(eq(games.id, gameId), eq(games.gmId, user.id)))
-    .returning({ id: games.id });
-
-  if (updated.length === 0) return { error: "확정 권한이 없습니다." };
+  if (!updated) return { error: "확정 권한이 없습니다." };
   after(() =>
     Promise.all([
-      refreshRecruitPost(gameId),
-      notifySessionConfirmed({ gameId, previousConfirmedAt: previous?.confirmedAt ?? null }),
+      refreshRecruitPost({ server, gameId }),
+      notifySessionConfirmed({ server, gameId, previousConfirmedAt }),
     ]),
   );
 
