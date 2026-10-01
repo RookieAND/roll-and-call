@@ -94,7 +94,7 @@ Deno.serve(async () => {
     .gt("confirmed_at", now.toISOString())
     .lte("confirmed_at", new Date(now.getTime() + ONE_HOUR_MS).toISOString())
     .select(
-      "id, title, rule, confirmed_at, discord_thread_id, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(discord_id, username), participants(status, user:profiles!participants_user_id_profiles_id_fk(discord_id))",
+      "id, title, rule, confirmed_at, discord_thread_id, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(discord_id, username), participants!participants_game_id_games_id_fk(status, user:profiles!participants_user_id_profiles_id_fk(discord_id))",
     )
     .returns<DueGame[]>();
   if (error) return Response.json({ error: error.message }, { status: 500 });
