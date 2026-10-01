@@ -3,7 +3,13 @@ import type { ReviewCardRow } from "@/shared/server";
 
 import { REVIEW_PERSPECTIVE, type ReviewPerspective } from "./review-perspective";
 
-export function reviewCardText(row: ReviewCardRow, perspective: ReviewPerspective) {
+export function reviewCardText({
+  row,
+  perspective,
+}: {
+  row: ReviewCardRow;
+  perspective: ReviewPerspective;
+}) {
   const tail = formatMonthDay(row.createdAt) + (row.updatedAt ? " · 수정됨" : "");
   switch (perspective) {
     case REVIEW_PERSPECTIVE.session:

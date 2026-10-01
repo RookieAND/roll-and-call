@@ -8,6 +8,7 @@ import {
 import { ddayKst, formatDate } from "@/shared/lib";
 
 import { recentUnopenedSets } from "./recent-unopened-sets";
+import { suspensionNotice } from "./suspension-notice";
 import { toOwnedCategory } from "./to-owned-category";
 import { toRequestRow } from "./to-request-row";
 import { toStatusRow } from "./to-status-row";
@@ -40,11 +41,7 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
             dday: dday === 0 ? "D-DAY" : `D-${dday}`,
           }
         : null,
-    suspension: suspended
-      ? suspendedUntil
-        ? `활동 정지는 ${formatDate(suspendedUntil)}에 해제됩니다.`
-        : "정지가 풀리면 다시 신청할 수 있습니다."
-      : null,
+    suspension: suspensionNotice({ suspended, suspendedUntil }),
     statusRows,
     statusSummary,
     owned,
@@ -59,7 +56,7 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
               ? `${formatDate(enforcementDate!)} 전에 인증해 두세요.`
               : "인증해 두면 계속 열 수 있습니다.",
           ],
-          href: certApplyHref(setStatus(suggested).missing.map((core) => core.id)),
+          href: certApplyHref({ rulebookIds: setStatus(suggested).missing.map((core) => core.id) }),
         }
       : null,
   };

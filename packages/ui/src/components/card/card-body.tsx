@@ -15,8 +15,8 @@ export function CardBody({ className, style, render, ref, ...props }: CardBodyPr
     state,
     props: {
       "data-slot": "card-body",
-      className: cn("", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn("", resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

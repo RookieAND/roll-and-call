@@ -6,12 +6,17 @@ import { db, notifyGameJoined, participants, type Game } from "@/shared/server";
 
 import { UNKNOWN_USERNAME } from "../model/unknown-username";
 
-export async function announceNewApplication(
-  game: Game,
-  applicantId: string,
-  isWaiting: boolean,
-  confirmedCount: number,
-) {
+export async function announceNewApplication({
+  game,
+  applicantId,
+  isWaiting,
+  confirmedCount,
+}: {
+  game: Game;
+  applicantId: string;
+  isWaiting: boolean;
+  confirmedCount: number;
+}) {
   const [applicant, gm, waitingCount] = await Promise.all([
     db.query.profiles.findFirst({
       where: (table, { eq: equals }) => equals(table.id, applicantId),
@@ -26,7 +31,8 @@ export async function announceNewApplication(
       and(eq(participants.gameId, game.id), eq(participants.status, PARTICIPANT_STATUS.waiting)),
     ),
   ]);
-  await notifyGameJoined(game, {
+  await notifyGameJoined({
+    game,
     applicantName: applicant?.username ?? UNKNOWN_USERNAME,
     gmName: gm?.username ?? UNKNOWN_USERNAME,
     confirmedCount,

@@ -17,7 +17,7 @@ interface DeleteGameRowProps {
 
 export function DeleteGameRow({ gameId, confirmedCount, lockedReason }: DeleteGameRowProps) {
   const [confirming, setConfirming] = useState(false);
-  const { pending, remove } = useDeleteGame(gameId, () => setConfirming(false));
+  const { pending, remove } = useDeleteGame({ gameId, onSettled: () => setConfirming(false) });
 
   const description = (
     <>

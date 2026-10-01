@@ -27,7 +27,10 @@ export function useReviewPhotos(initialUrls: string[]) {
   async function upload(key: string, file: File) {
     patch(key, { status: PHOTO_STATUS.uploading, progress: 0 });
     try {
-      const result = await uploadReviewPhoto(file, (progress) => patch(key, { progress }));
+      const result = await uploadReviewPhoto({
+        file,
+        onProgress: (progress) => patch(key, { progress }),
+      });
       if ("error" in result) {
         console.error(result.error);
         patch(key, { status: PHOTO_STATUS.failed });

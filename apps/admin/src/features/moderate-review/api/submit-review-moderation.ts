@@ -27,7 +27,9 @@ export async function submitReviewModeration(reviewId: string, moderation: Revie
   });
   revalidatePath("/", "layout");
   if (result.ok) {
-    after(() => syncReviewForumPost(reviewId, process.env.NEXT_PUBLIC_USER_APP_URL));
+    after(() =>
+      syncReviewForumPost({ reviewId, siteOrigin: process.env.NEXT_PUBLIC_USER_APP_URL }),
+    );
     after(() => evaluateReviewBadges(reviewId));
   }
   return result;

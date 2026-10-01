@@ -14,13 +14,13 @@ type SessionRow = {
 // 확정 참여자 수는 쿼리가 이미 1명 이상으로 걸렀다.
 export function toBadgeSessions(rows: SessionRow[], now: Date): BadgeSession[] {
   return rows.flatMap((row) => {
-    if (!isRecognizedSession(row, 1, now)) return [];
+    if (!isRecognizedSession({ game: row, confirmedCount: 1, now })) return [];
     return [
       {
         gameId: row.gameId,
         title: row.title,
         startsAt: row.confirmedAt!,
-        endsAt: sessionEndsAt(row.confirmedAt!, row.playMinutes),
+        endsAt: sessionEndsAt({ startsAt: row.confirmedAt!, playMinutes: row.playMinutes }),
         categoryId: row.categoryId,
         categoryName: row.categoryName,
       },

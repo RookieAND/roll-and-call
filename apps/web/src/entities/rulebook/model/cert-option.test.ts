@@ -22,7 +22,7 @@ describe("certOption", () => {
   it("기본 룰북이 심사 중이면 서플리먼트는 잠긴다", () => {
     const core = book("인세인", { state: CERT_STATE.pending, stateAt: new Date() });
     const supplement = book("인세인 2", { kind: "supplement" });
-    expect(certOption(supplement, [core, supplement])).toMatchObject({
+    expect(certOption({ rulebook: supplement, rulebooks: [core, supplement] })).toMatchObject({
       type: CERT_OPTION.needsCore,
       missing: [core],
     });
@@ -31,7 +31,7 @@ describe("certOption", () => {
   it("기본 룰북을 아직 안 냈으면 그 기본 룰북이 먼저 필요하다", () => {
     const core = book("마기카로기아", {});
     const supplement = book("황혼선서", { kind: "supplement" });
-    expect(certOption(supplement, [core, supplement])).toMatchObject({
+    expect(certOption({ rulebook: supplement, rulebooks: [core, supplement] })).toMatchObject({
       type: CERT_OPTION.needsCore,
       missing: [core],
     });
@@ -40,14 +40,18 @@ describe("certOption", () => {
   it("기본 룰북을 가졌으면 서플리먼트를 고른다", () => {
     const core = book("마기카로기아", { state: CERT_STATE.certified, stateAt: new Date() });
     const supplement = book("황혼선서", { kind: "supplement" });
-    expect(certOption(supplement, [core, supplement]).type).toBe(CERT_OPTION.pick);
+    expect(certOption({ rulebook: supplement, rulebooks: [core, supplement] }).type).toBe(
+      CERT_OPTION.pick,
+    );
   });
 
   it("무료 배포·신판으로 열린 책은 고를 수 없다", () => {
-    expect(certOption(book("F", { certRequired: false }), []).type).toBe(CERT_OPTION.free);
-    const newer = book("7", { edition: "7판", state: CERT_STATE.certified, stateAt: new Date() });
-    expect(certOption(book("6", { unlockedBy: newer }), [newer]).note).toBe(
-      "7판 인증으로 함께 열립니다",
+    expect(certOption({ rulebook: book("F", { certRequired: false }), rulebooks: [] }).type).toBe(
+      CERT_OPTION.free,
     );
+    const newer = book("7", { edition: "7판", state: CERT_STATE.certified, stateAt: new Date() });
+    expect(
+      certOption({ rulebook: book("6", { unlockedBy: newer }), rulebooks: [newer] }).note,
+    ).toBe("7판 인증으로 함께 열립니다");
   });
 });

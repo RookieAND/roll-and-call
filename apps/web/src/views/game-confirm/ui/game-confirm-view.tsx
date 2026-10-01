@@ -52,7 +52,7 @@ export async function GameConfirmView({ id }: { id: string }) {
           <ConfirmSummary playLabel={playLabel} respondedCount={respondedCount} />
           <ConfirmSessionForm
             gameId={id}
-            days={buildDayColumns(game.rangeStart, game.rangeEnd)}
+            days={buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd })}
             rangeStart={game.rangeStart}
             names={names}
             playMinutes={minutes}

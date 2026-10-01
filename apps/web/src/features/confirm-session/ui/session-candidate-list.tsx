@@ -33,7 +33,9 @@ export function SessionCandidateList({
         const everyone = absent.length === 0;
         return (
           <RadioCard.Root key={candidate.iso} value={candidate.iso} indicator="radio">
-            <RadioCard.Title>{sessionWindowLabel(candidate.iso, playMinutes)}</RadioCard.Title>
+            <RadioCard.Title>
+              {sessionWindowLabel({ iso: candidate.iso, playMinutes })}
+            </RadioCard.Title>
             <RadioCard.Description className={everyone ? "text-success-700" : undefined}>
               {everyone
                 ? `${candidate.members.length}명 전원 가능`

@@ -43,8 +43,8 @@ export function FieldRoot({
     state,
     props: {
       "data-slot": "field",
-      className: cn("flex flex-col gap-075", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn("flex flex-col gap-075", resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       children: (
         <FieldContext
           value={{

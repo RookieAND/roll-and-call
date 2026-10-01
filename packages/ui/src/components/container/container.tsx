@@ -34,8 +34,12 @@ export function Container({
     state,
     props: {
       "data-slot": "container",
-      className: cn("mx-auto w-full px-200", maxWidthMap[size], resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(
+        "mx-auto w-full px-200",
+        maxWidthMap[size],
+        resolveStateProp({ prop: className, state }),
+      ),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

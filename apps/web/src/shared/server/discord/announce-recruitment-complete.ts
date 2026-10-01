@@ -23,10 +23,10 @@ export async function announceRecruitmentComplete(gameId: string) {
       username: participant.user?.username ?? "?",
       discordId: participant.user?.discordId ?? null,
     }));
-  await notifyRecruitmentComplete(
+  await notifyRecruitmentComplete({
     game,
-    game.gm?.username ?? "?",
+    gmName: game.gm?.username ?? "?",
     players,
-    countWaiting(game.participants),
-  );
+    waitingCount: countWaiting(game.participants),
+  });
 }

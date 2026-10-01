@@ -13,7 +13,7 @@ export function RadioIndicator({ className, ...props }: RadioIndicatorProps) {
     <BaseRadio.Indicator
       data-slot="radio-indicator"
       className={(state) =>
-        cn("size-2.5 rounded-full bg-primary-600", resolveStateProp(className, state))
+        cn("size-2.5 rounded-full bg-primary-600", resolveStateProp({ prop: className, state }))
       }
       {...props}
     />

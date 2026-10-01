@@ -48,7 +48,7 @@ export function monthlyCard({
   const heldMonth = months.find((month) => month === previousMonthKey(now)) ?? null;
   const roleLabel = gm ? "운영" : "참여";
   const verb = gm ? "진행" : "참여";
-  const standing = currentMonthStanding(appearances, userId, definition.role, now);
+  const standing = currentMonthStanding({ appearances, userId, role: definition.role, now });
   const thisMonth = monthLabel(kstMonthKey(now));
   const monthKey = heldMonth ? `${ladder}.${heldMonth}` : null;
   const record = monthKey

@@ -1,9 +1,9 @@
-import { Badge, cn, HStack, Text } from "@roll-and-call/ui";
+import { cn, HStack, Text } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
-import { GameStatusBadge } from "@/entities/game";
-
 import type { HelpTerm } from "../model/help-docs";
+import { helpTermKind } from "./help-term-kind";
+import { HelpTermLabel } from "./help-term-label";
 
 const termCell = cva("flex flex-none items-start", {
   variants: {
@@ -16,21 +16,13 @@ interface HelpTermRowProps {
 }
 
 export function HelpTermRow({ row }: HelpTermRowProps) {
-  const kind = row.status ? "status" : row.badge ? "badge" : "text";
+  const kind = helpTermKind(row);
   const descriptionClass = cn("min-w-0 flex-1 text-pretty", kind === "badge" && "self-center");
 
   return (
     <HStack gap="150" className="border-gray-200 px-175 py-150 not-first:border-t">
       <span className={termCell({ kind })}>
-        {row.status ? (
-          <GameStatusBadge status={row.status} />
-        ) : row.badge ? (
-          <Badge>{row.term}</Badge>
-        ) : (
-          <Text typography="body3" weight="extrabold" render={<span />}>
-            {row.term}
-          </Text>
-        )}
+        <HelpTermLabel row={row} />
       </span>
       <Text typography="body3" foreground="muted" render={<p />} className={descriptionClass}>
         {row.description}

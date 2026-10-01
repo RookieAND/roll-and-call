@@ -46,7 +46,7 @@ export function AvailabilityGrid({
   const queryClient = useQueryClient();
   const { mutate, isPending: pending } = useMutation({
     mutationFn: async (keys: string[]) => {
-      const result = await saveAvailability(gameId, keys);
+      const result = await saveAvailability({ gameId, slotIsos: keys });
       if (result.error) throw new AppError(result.error, result.errorDisplay);
       return keys;
     },

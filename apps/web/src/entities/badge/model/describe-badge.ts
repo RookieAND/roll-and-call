@@ -21,7 +21,7 @@ export function describeBadge(record: {
     ladder: parsed.ladder,
     role: definition.role,
     emoji: step.emoji,
-    name: stepName(step, categoryName),
+    name: stepName({ step, categoryName }),
     grade: step.grade,
     look: stepLook(step),
     tier: record.tier,

@@ -59,7 +59,7 @@ export function Tooltip({
             className={(state) =>
               cn(
                 "max-w-64 rounded-200 bg-gray-900 px-100 py-050 text-xs font-medium text-surface shadow-md transition-opacity duration-150 motion-reduce:transition-none data-[ending-style]:opacity-0 data-[starting-style]:opacity-0",
-                resolveStateProp(className, state),
+                resolveStateProp({ prop: className, state }),
               )
             }
           >

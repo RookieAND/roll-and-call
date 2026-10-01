@@ -30,7 +30,10 @@ export function Avatar({ src, name, size = "md", className }: AvatarProps) {
     <span
       data-slot="avatar"
       data-size={size ?? undefined}
-      className={cn(avatarVariants({ size }), resolveStateProp(className, { size }))}
+      className={cn(
+        avatarVariants({ size }),
+        resolveStateProp({ prop: className, state: { size } }),
+      )}
       style={image ? undefined : { backgroundColor: background, color: foreground }}
     >
       {image ? (

@@ -60,13 +60,13 @@ export async function withdrawApplication(rulebookId: string): Promise<ActionRes
     return rows;
   });
   if (withdrawn.length === 0) return { error: ALREADY_PROCESSED };
-  await removeUnusedCertPhotos(
-    user.id,
-    withdrawn.flatMap((row) => [
+  await removeUnusedCertPhotos({
+    userId: user.id,
+    urls: withdrawn.flatMap((row) => [
       ...Object.values(row.photoUrls),
       row.captureUrl ?? "",
       row.receiptUrl ?? "",
     ]),
-  );
+  });
   redirect("/me/rulebooks");
 }

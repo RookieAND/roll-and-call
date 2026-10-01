@@ -9,7 +9,13 @@ export type BadgeWrite =
 
 // 새로 받거나 단계가 오르면 grant(다시 알린다), 기준 아래로 내려가면 lower(알리지 않는다),
 // 근거가 모두 사라지면 revoke. 다시 채우면 새 획득 시각으로 grant한다.
-export function diffBadges(stored: StoredBadge[], desired: EarnedBadge[]): BadgeWrite[] {
+export function diffBadges({
+  stored,
+  desired,
+}: {
+  stored: StoredBadge[];
+  desired: EarnedBadge[];
+}): BadgeWrite[] {
   const storedByKey = new Map(stored.map((badge) => [badge.badgeKey, badge]));
   const desiredKeys = new Set(desired.map((badge) => badge.badgeKey));
   const writes: BadgeWrite[] = [];

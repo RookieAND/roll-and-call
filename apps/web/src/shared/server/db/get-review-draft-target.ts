@@ -2,7 +2,7 @@ import "server-only";
 import { db, games, participants, profiles, sessionReviews } from "@roll-and-call/database";
 import { and, eq } from "drizzle-orm";
 
-export async function getReviewDraftTarget(gameId: string, userId: string) {
+export async function getReviewDraftTarget({ gameId, userId }: { gameId: string; userId: string }) {
   const [game] = await db
     .select({
       id: games.id,

@@ -54,9 +54,9 @@ export function Progress({
       "data-slot": "progress",
       className: cn(
         "h-1 w-full overflow-hidden rounded-100 bg-gray-100",
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
       children: (
         <div

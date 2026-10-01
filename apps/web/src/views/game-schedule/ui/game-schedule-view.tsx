@@ -52,14 +52,16 @@ export async function GameScheduleView({ id }: { id: string }) {
   }
 
   const involved = isGm || hasUserJoined({ participants: game.participants, userId: viewerId });
-  const days = buildDayColumns(game.rangeStart, game.rangeEnd);
+  const days = buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd });
   const timeRows = buildTimeRows();
 
   const [initialAvailability, profile] = await Promise.all([
-    getScheduleAvailability(id, viewerId),
+    getScheduleAvailability({ gameId: id, userId: viewerId }),
     involved && viewerId && !game.confirmedAt ? getProfile(viewerId) : null,
   ]);
-  const prefill = profile ? availabilityPrefill(profile.availability, days, timeRows) : null;
+  const prefill = profile
+    ? availabilityPrefill({ intervals: profile.availability, days, timeRows })
+    : null;
 
   return (
     <>

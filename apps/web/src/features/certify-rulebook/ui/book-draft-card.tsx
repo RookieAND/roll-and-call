@@ -47,7 +47,7 @@ export function BookDraftCard({
 }: BookDraftCardProps) {
   const ebook = draft.format === CERT_FORMAT.ebook;
   const keys: readonly SlotKey[] = ebook ? CERT_PROOFS : CERT_SHOTS;
-  const firstEmpty = keys.find((key) => !slotUrl(slotOf(draft, key)));
+  const firstEmpty = keys.find((key) => !slotUrl(slotOf({ draft, key })));
   const [selectedKey, setSelectedKey] = useState<SlotKey>(firstEmpty ?? keys[0]!);
   const current: SlotKey = keys.includes(selectedKey) ? selectedKey : keys[0]!;
   const photoInput = useRef<HTMLInputElement>(null);
@@ -62,30 +62,33 @@ export function BookDraftCard({
 
   const pick = (key: SlotKey) => {
     setSelectedKey(key);
-    const status = slotOf(draft, key).status;
-    if (status === PHOTO_SLOT.uploading || slotUrl(slotOf(draft, key))) return;
+    const status = slotOf({ draft, key }).status;
+    if (status === PHOTO_SLOT.uploading || slotUrl(slotOf({ draft, key }))) return;
     (key === CERT_PROOF.receipt ? receiptInput : photoInput).current?.click();
   };
 
   const upload = async (key: SlotKey, file: File) => {
     const accept = key === CERT_PROOF.receipt ? CERT_RECEIPT_ACCEPT : CERT_PHOTO_ACCEPT;
-    const invalid = certPhotoError(file, accept);
+    const invalid = certPhotoError({ file, accept });
     if (invalid) return setSlot(key, { status: PHOTO_SLOT.error, message: invalid });
     setSlot(key, { status: PHOTO_SLOT.uploading, progress: 0 });
-    const result = await uploadCertPhoto(file, (progress) =>
-      setSlot(key, { status: PHOTO_SLOT.uploading, progress }),
-    ).catch(() => ({ error: "사진을 올리지 못했습니다. 다시 올려 주세요." }));
+    const result = await uploadCertPhoto({
+      file,
+      onProgress: (progress) => setSlot(key, { status: PHOTO_SLOT.uploading, progress }),
+    }).catch(() => ({ error: "사진을 올리지 못했습니다. 다시 올려 주세요." }));
     setSlot(
       key,
       "url" in result
         ? { status: PHOTO_SLOT.done, url: result.url }
         : { status: PHOTO_SLOT.error, message: result.error },
     );
-    const next = keys.find((candidate) => candidate !== key && !slotUrl(slotOf(draft, candidate)));
+    const next = keys.find(
+      (candidate) => candidate !== key && !slotUrl(slotOf({ draft, key: candidate })),
+    );
     if ("url" in result && next) setSelectedKey(next);
   };
 
-  const selectedSlot = slotOf(draft, current);
+  const selectedSlot = slotOf({ draft, key: current });
   const errorMessage = selectedSlot.status === PHOTO_SLOT.error ? selectedSlot.message : null;
   const label = (key: SlotKey) => (isProofKey(key) ? CERT_PROOF_LABEL[key] : CERT_SHOT_LABEL[key]);
   const fileInput = (key: SlotKey) => (
@@ -172,7 +175,7 @@ export function BookDraftCard({
               key={key}
               label={label(key)}
               example={isProofKey(key) ? <ProofArt proof={key} /> : <ShotArt shot={key} />}
-              slot={slotOf(draft, key)}
+              slot={slotOf({ draft, key })}
               selected={key === current}
               needed={highlightEmpty}
               square={isProofKey(key)}

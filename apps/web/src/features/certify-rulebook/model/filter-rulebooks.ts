@@ -1,6 +1,6 @@
 import type { MyRulebook } from "@/entities/rulebook";
 
-export function filterRulebooks(rulebooks: MyRulebook[], query: string) {
+export function filterRulebooks({ rulebooks, query }: { rulebooks: MyRulebook[]; query: string }) {
   const keyword = query.trim().toLowerCase();
   if (!keyword) return rulebooks;
   const matches = (text: string) => text.toLowerCase().includes(keyword);

@@ -5,11 +5,15 @@ import { participants } from "@/shared/server";
 
 import type { Transaction } from "./transaction";
 
-export async function findParticipantStatus(
-  transaction: Transaction,
-  gameId: string,
-  userId: string,
-) {
+export async function findParticipantStatus({
+  transaction,
+  gameId,
+  userId,
+}: {
+  transaction: Transaction;
+  gameId: string;
+  userId: string;
+}) {
   const [row] = await transaction
     .select({ status: participants.status })
     .from(participants)

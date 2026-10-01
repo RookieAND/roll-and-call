@@ -50,8 +50,8 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
   const data = toMyRulebooks(records);
   if (data.suspended) redirect("/me/rulebooks");
   const rulebook = data.rulebooks.find((candidate) => candidate.id === rulebookId);
-  if (!rulebook || certOption(rulebook, data.rulebooks).type !== CERT_OPTION.pick) {
-    redirect(certApplyHref([rulebookId]));
+  if (!rulebook || certOption({ rulebook, rulebooks: data.rulebooks }).type !== CERT_OPTION.pick) {
+    redirect(certApplyHref({ rulebookIds: [rulebookId] }));
   }
   const { name, handle } = profileDisplay({ profile, user });
   const rejected = rulebook.state === CERT_STATE.rejected ? rulebook.latestApplication : null;

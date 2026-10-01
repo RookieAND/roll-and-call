@@ -15,17 +15,17 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
-  const application = await applyToGame(gameId, user.id);
+  const application = await applyToGame({ gameId, userId: user.id });
   if ("error" in application) return application;
 
-  await seedAvailabilityFromProfile(application.game, user.id);
+  await seedAvailabilityFromProfile({ game: application.game, userId: user.id });
   after(async () => {
-    await announceNewApplication(
-      application.game,
-      user.id,
-      application.waiting,
-      application.confirmedCount,
-    );
+    await announceNewApplication({
+      game: application.game,
+      applicantId: user.id,
+      isWaiting: application.waiting,
+      confirmedCount: application.confirmedCount,
+    });
     if (application.becameFull) await announceRecruitmentComplete(gameId);
     await refreshRecruitPost(gameId);
   });

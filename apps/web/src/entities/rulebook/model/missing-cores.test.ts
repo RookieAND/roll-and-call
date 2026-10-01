@@ -23,13 +23,15 @@ describe("missingCores", () => {
     const first = book("1", { state: CERT_STATE.certified });
     const second = book("2", {});
     const advanced = book("s", { kind: "supplement" });
-    expect(missingCores(advanced, [first, second, advanced])).toEqual([second]);
+    expect(missingCores({ rulebook: advanced, rulebooks: [first, second, advanced] })).toEqual([
+      second,
+    ]);
   });
 
   it("신판 인증으로 열린 구판은 빠진다", () => {
     const newer = book("7", { edition: "7판", state: CERT_STATE.certified });
     const older = book("6", { edition: "6판", unlockedBy: newer });
-    expect(missingCores(older, [newer, older])).toEqual([]);
+    expect(missingCores({ rulebook: older, rulebooks: [newer, older] })).toEqual([]);
   });
 });
 

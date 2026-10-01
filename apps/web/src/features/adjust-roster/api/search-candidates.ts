@@ -9,7 +9,13 @@ import type { Candidate } from "../model/candidate";
 const MIN_QUERY_LENGTH = 2;
 const RESULT_LIMIT = 20;
 
-export async function searchCandidates(gameId: string, query: string): Promise<Candidate[]> {
+export async function searchCandidates({
+  gameId,
+  query,
+}: {
+  gameId: string;
+  query: string;
+}): Promise<Candidate[]> {
   const keyword = query.trim();
   if (keyword.length < MIN_QUERY_LENGTH) return [];
 

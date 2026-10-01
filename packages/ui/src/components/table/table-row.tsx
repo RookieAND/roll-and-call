@@ -33,9 +33,9 @@ export function TableRow({
         "transition-colors",
         interactive && "hover:bg-gray-50",
         selected && "bg-tinted-bg hover:bg-tinted-bg",
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

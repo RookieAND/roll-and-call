@@ -28,7 +28,7 @@ export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalend
   const ariaLabel = sessions.length > 0 ? `${cell.label} 세션 ${sessions.length}건` : cell.label;
   const href = `/?date=${cell.key}`;
 
-  const tone = CALENDAR_CELL_TONE[calendarCellState(selected, today)];
+  const tone = CALENDAR_CELL_TONE[calendarCellState({ selected, today })];
   const weekdayTone = cell.inMonth
     ? (WEEKDAY_TONE[cell.weekday] ?? "text-gray-600")
     : "text-hint opacity-50";

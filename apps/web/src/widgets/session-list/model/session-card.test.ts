@@ -65,9 +65,9 @@ const context = (responded: string[] = []) => ({
   now: NOW,
 });
 const playerCard = (partial: Partial<SessionGame>, responded: string[] = []) =>
-  toSessionCard(game(partial), SESSION_ROLE.player, context(responded));
+  toSessionCard({ game: game(partial), role: SESSION_ROLE.player, context: context(responded) });
 const hostCard = (partial: Partial<SessionGame>) =>
-  toSessionCard(game(partial), SESSION_ROLE.host, context());
+  toSessionCard({ game: game(partial), role: SESSION_ROLE.host, context: context() });
 
 describe("참여 카드", () => {
   it("가능 시간을 내지 않았으면 막힌 카드로 칠하고 일정 조율이 할 일로 남는다", () => {

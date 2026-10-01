@@ -23,6 +23,7 @@ import {
   type RulebookRequestValues,
 } from "../model/rulebook-request-form";
 import { OptionSelect } from "./option-select";
+import { requestCategoryName } from "./request-category-name";
 import { SheetTitleRow } from "./sheet-title-row";
 
 const UNKNOWN_ITEM = { value: UNKNOWN, label: "잘 모르겠음" };
@@ -51,7 +52,6 @@ export function RulebookRequestSheet({
   const [tried, setTried] = useState(false);
   const { pending, run } = useAction();
 
-  const knownCategory = category !== "" && category !== NEW_CATEGORY && category !== UNKNOWN;
   const categoryItems = [
     ...categoryNames.map((categoryName) => ({ value: categoryName, label: categoryName })),
     { value: NEW_CATEGORY, label: "목록에 없음 (새 카테고리)" },
@@ -67,11 +67,7 @@ export function RulebookRequestSheet({
   const submit = () => {
     setTried(true);
     if (!name.trim()) return;
-    const categoryName = knownCategory
-      ? category
-      : category === NEW_CATEGORY
-        ? newCategory.trim()
-        : "";
+    const categoryName = requestCategoryName({ category, newCategory });
     run(
       () =>
         requestRulebook({

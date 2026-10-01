@@ -17,9 +17,9 @@ export function TableCaption({ className, style, render, ref, ...props }: TableC
       "data-slot": "table-caption",
       className: cn(
         "caption-bottom px-150 py-100 text-left text-body4 text-hint",
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

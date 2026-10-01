@@ -14,14 +14,20 @@ import { setParticipantStatus } from "./set-participant-status";
 
 const { confirmed } = PARTICIPANT_STATUS;
 
-export async function addParticipants(gameId: string, userIds: string[]): Promise<ActionResult> {
+export async function addParticipants({
+  gameId,
+  userIds,
+}: {
+  gameId: string;
+  userIds: string[];
+}): Promise<ActionResult> {
   if (userIds.length === 0) return { error: "넣을 사람을 골라 주세요." };
   const invitedIds = uniq(userIds);
   let becameFull = false;
 
-  return adjustRoster(
+  return adjustRoster({
     gameId,
-    async (transaction, game) => {
+    work: async (transaction, game) => {
       if (userIds.includes(game.gmId)) throw new RosterError("GM은 참여자로 넣을 수 없습니다.");
 
       const confirmedCount = await transaction.$count(
@@ -33,19 +39,19 @@ export async function addParticipants(gameId: string, userIds: string[]): Promis
       }
 
       for (const userId of invitedIds) {
-        const status = await findParticipantStatus(transaction, gameId, userId);
+        const status = await findParticipantStatus({ transaction, gameId, userId });
         if (status === confirmed) throw new RosterError("이미 참여 중인 사람이 있습니다.");
         if (status) {
-          await setParticipantStatus(transaction, gameId, userId, confirmed);
+          await setParticipantStatus({ transaction, gameId, userId, status: confirmed });
         } else {
           await transaction.insert(participants).values({ gameId, userId, status: confirmed });
         }
       }
       becameFull = confirmedCount + invitedIds.length === game.maxPlayers;
     },
-    async () => {
-      await notifyDirectConfirmed(gameId, invitedIds);
+    notify: async () => {
+      await notifyDirectConfirmed({ gameId, userIds: invitedIds });
       if (becameFull) await announceRecruitmentComplete(gameId);
     },
-  );
+  });
 }

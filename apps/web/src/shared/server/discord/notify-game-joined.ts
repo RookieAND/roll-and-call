@@ -12,10 +12,14 @@ type JoinInfo = {
   isWaiting: boolean;
 };
 
-export async function notifyGameJoined(
-  game: Game,
-  { applicantName, gmName, confirmedCount, waitingCount, isWaiting }: JoinInfo,
-) {
+export async function notifyGameJoined({
+  game,
+  applicantName,
+  gmName,
+  confirmedCount,
+  waitingCount,
+  isWaiting,
+}: JoinInfo & { game: Game }) {
   if (!game.discordThreadId) return;
 
   const embed = gameNoticeEmbed({
@@ -26,8 +30,8 @@ export async function notifyGameJoined(
     description: isWaiting
       ? `**${applicantName}**님이 대기열에 등록했어요.`
       : `**${applicantName}**님이 참여했어요.`,
-    fields: headcountFields(game, confirmedCount, waitingCount),
+    fields: headcountFields({ game, confirmedCount, waitingCount }),
   });
 
-  await sendDiscordMessage(game.discordThreadId, { embeds: [embed] });
+  await sendDiscordMessage({ channelId: game.discordThreadId, input: { embeds: [embed] } });
 }

@@ -16,11 +16,15 @@ import { RosterError } from "./roster-error";
 import type { Transaction } from "./transaction";
 
 // 모든 명단 조정이 거치는 한 길: 게임 행을 잠근 트랜잭션 안에서 GM 본인·세션 잠기기 전을 확인한다.
-export async function adjustRoster(
-  gameId: string,
-  work: (transaction: Transaction, game: Game) => Promise<void>,
-  notify?: () => Promise<void>,
-): Promise<ActionResult> {
+export async function adjustRoster({
+  gameId,
+  work,
+  notify,
+}: {
+  gameId: string;
+  work: (transaction: Transaction, game: Game) => Promise<void>;
+  notify?: () => Promise<void>;
+}): Promise<ActionResult> {
   const gmId = (await getCurrentUser())?.id;
   if (!gmId) return { error: AUTH_REQUIRED_MESSAGE };
 

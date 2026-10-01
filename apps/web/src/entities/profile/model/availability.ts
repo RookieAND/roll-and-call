@@ -71,11 +71,15 @@ function mergeOverlaps(intervals: AvailabilityInterval[]): AvailabilityInterval[
   return merged;
 }
 
-export function availabilityPrefill(
-  intervals: readonly AvailabilityInterval[],
-  days: DayColumn[],
-  timeRows: TimeRow[],
-): { keys: string[]; label: string } | null {
+export function availabilityPrefill({
+  intervals,
+  days,
+  timeRows,
+}: {
+  intervals: readonly AvailabilityInterval[];
+  days: DayColumn[];
+  timeRows: TimeRow[];
+}): { keys: string[]; label: string } | null {
   if (intervals.length === 0) return null;
   const slots = new Set<string>();
   for (const day of days) {
@@ -85,7 +89,7 @@ export function availabilityPrefill(
       if (interval.day !== index) continue;
       for (const row of timeRows) {
         if (row.hour >= interval.from && row.hour < interval.to) {
-          slots.add(slotIso(day.date, row.hour, row.minute));
+          slots.add(slotIso({ date: day.date, hour: row.hour, minute: row.minute }));
         }
       }
     }

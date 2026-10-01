@@ -7,7 +7,15 @@ import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
 // 삭제 후에 불러야 현재 인원이 맞다.
-export async function notifyGameLeft(gameId: string, userId: string, removedByGm: boolean) {
+export async function notifyGameLeft({
+  gameId,
+  userId,
+  removedByGm,
+}: {
+  gameId: string;
+  userId: string;
+  removedByGm: boolean;
+}) {
   const [game, user] = await Promise.all([
     getGameForNotice(gameId),
     db.query.profiles.findFirst({
@@ -26,12 +34,12 @@ export async function notifyGameLeft(gameId: string, userId: string, removedByGm
     description: removedByGm
       ? `**${name}**님이 참여 목록에서 제외됐어요.`
       : `**${name}**님이 참여를 취소했어요.`,
-    fields: headcountFields(
+    fields: headcountFields({
       game,
-      countConfirmed(game.participants),
-      countWaiting(game.participants),
-    ),
+      confirmedCount: countConfirmed(game.participants),
+      waitingCount: countWaiting(game.participants),
+    }),
   });
 
-  await sendDiscordMessage(game.discordThreadId, { embeds: [embed] });
+  await sendDiscordMessage({ channelId: game.discordThreadId, input: { embeds: [embed] } });
 }

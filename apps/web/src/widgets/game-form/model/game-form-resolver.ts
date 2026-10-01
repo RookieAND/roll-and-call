@@ -10,8 +10,8 @@ export function gameFormResolver(rulebooks: MyRulebooks | undefined): Resolver<G
   const schema = zodResolver(gameFormSchema);
   return async (values, context, options) => {
     const result = await schema(values, context, options);
-    const set = rulebooks && ruleSetOf(rulebooks, values.rulebookId);
-    if (!set || ruleGate(set, rulebooks).type !== RULE_GATE.blocked) return result;
+    const set = rulebooks && ruleSetOf({ myRulebooks: rulebooks, rulebookId: values.rulebookId });
+    if (!set || ruleGate({ set, myRulebooks: rulebooks }).type !== RULE_GATE.blocked) return result;
     return {
       values: {},
       errors: { ...result.errors, rule: { type: "blocked", message: BLOCKED_RULE_MESSAGE } },

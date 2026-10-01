@@ -8,10 +8,11 @@ export type ActionHandlers<Result extends ActionResult> = {
 };
 
 // page 에러는 throw한다. 트랜지션 안에서 부르면 가까운 ErrorBoundary가 받는다.
-export function handleActionResult<Result extends ActionResult>(
-  result: Result,
-  { onSuccess, onError }: ActionHandlers<Result>,
-): boolean {
+export function handleActionResult<Result extends ActionResult>({
+  result,
+  onSuccess,
+  onError,
+}: ActionHandlers<Result> & { result: Result }): boolean {
   if (!result.error) {
     onSuccess?.(result);
     return true;

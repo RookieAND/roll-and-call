@@ -27,7 +27,7 @@ export function SelectTrigger({
   children,
 }: SelectTriggerProps) {
   const items = useContext(SelectItemsContext);
-  const fieldAria = useFieldControlAria(invalid);
+  const fieldAria = useFieldControlAria({ invalid });
   return (
     <BaseSelect.Trigger
       id={id}
@@ -41,7 +41,7 @@ export function SelectTrigger({
           invalid
             ? "border-[1.5px] border-danger-400 bg-danger-50 focus:ring-danger-600"
             : "border-gray-500 focus:border-primary-500 focus:ring-focus",
-          resolveStateProp(className, state),
+          resolveStateProp({ prop: className, state }),
         )
       }
     >

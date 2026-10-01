@@ -10,11 +10,15 @@ const SPOILER_FILE_PREFIX = "SPOILER_";
 
 // 포럼의 다른 후기처럼 본문은 평문, 사진은 첨부로 올린다.
 // 포럼 규칙: 스포일러면 제목에 [스포있음], 스포 태그는 반드시 붙인다.
-export function reviewForumPost(
-  review: ForumReview,
-  tagIds: Map<string, string>,
-  siteOrigin: string | undefined,
-) {
+export function reviewForumPost({
+  review,
+  tagIds,
+  siteOrigin,
+}: {
+  review: ForumReview;
+  tagIds: Map<string, string>;
+  siteOrigin: string | undefined;
+}) {
   const url = siteOrigin ? `${siteOrigin}/games/${review.gameId}/reviews` : undefined;
   const body = review.spoiler ? `||${review.body.replaceAll("||", "| |")}||` : review.body;
   const meta = [

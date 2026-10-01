@@ -17,10 +17,10 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
   const { monthStart, selectedKey, todayKey } = resolveCalendarView(date);
   const [user, rows] = await Promise.all([
     getCurrentSessionUser(),
-    getMonthSessions(monthStart.toDate(), monthStart.add(1, "month").toDate()),
+    getMonthSessions({ from: monthStart.toDate(), to: monthStart.add(1, "month").toDate() }),
   ]);
 
-  const sessions = toCalendarSessions(rows, user?.id ?? null);
+  const sessions = toCalendarSessions({ rows, viewerId: user?.id ?? null });
   const sessionsByDay = groupSessionsByDay(sessions);
 
   return (

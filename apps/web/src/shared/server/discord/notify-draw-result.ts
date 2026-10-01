@@ -47,8 +47,11 @@ export async function notifyDrawResult(gameId: string) {
     ],
   });
 
-  await sendDiscordMessage(game.discordThreadId, {
-    embeds: [embed],
-    buttons: drawUrl ? [{ label: "🎲 추첨 결과 보기", url: drawUrl }] : [],
+  await sendDiscordMessage({
+    channelId: game.discordThreadId,
+    input: {
+      embeds: [embed],
+      buttons: drawUrl ? [{ label: "🎲 추첨 결과 보기", url: drawUrl }] : [],
+    },
   });
 }

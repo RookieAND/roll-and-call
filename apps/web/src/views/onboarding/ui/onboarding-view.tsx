@@ -4,6 +4,7 @@ import { Button, cn, Container, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { type PointerEvent, useEffect, useRef, useState } from "react";
 
+import { nextLabel } from "../model/next-label";
 import { markOnboardingSeen } from "../model/onboarding-seen";
 import { ONBOARDING_SLIDES } from "../model/onboarding-slides";
 import { swipeDirection } from "../model/swipe-direction";
@@ -27,7 +28,6 @@ export function OnboardingView() {
   const slide = ONBOARDING_SLIDES[index]!;
   const welcome = slide.eyebrow === null;
   const last = index === ONBOARDING_SLIDES.length - 1;
-  const nextLabel = welcome ? "둘러보기" : last ? "구인 목록 보러 가기" : "다음";
   // 남는 높이를 위아래로 나눠 갖는다. 내용이 더 길면 flex-1이 늘어나므로 위가 잘리지 않는다.
   const slideClass = cn(
     "flex flex-1 flex-col justify-center touch-pan-y",
@@ -57,7 +57,10 @@ export function OnboardingView() {
     pointerStart.current = null;
     if (!start) return;
 
-    const direction = swipeDirection(event.clientX - start.x, event.clientY - start.y);
+    const direction = swipeDirection({
+      deltaX: event.clientX - start.x,
+      deltaY: event.clientY - start.y,
+    });
     // 마지막 장에서 더 밀어도 화면을 떠나지 않는다. 떠나는 것은 버튼으로만.
     if (direction === "next" && !last) goNext();
     if (direction === "previous") goPrevious();
@@ -98,7 +101,7 @@ export function OnboardingView() {
         </HStack>
         <VStack gap="050" className="mb-[calc(var(--spacing-300)+var(--rc-safe-bottom))]">
           <Button size="lg" className="w-full" onClick={goNext}>
-            {nextLabel}
+            {nextLabel({ welcome, last })}
           </Button>
           {!last && (
             <Button variant="ghost" size="lg" className="w-full" onClick={skip}>

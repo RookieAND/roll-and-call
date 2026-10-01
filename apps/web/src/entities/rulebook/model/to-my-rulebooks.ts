@@ -25,7 +25,7 @@ export interface MyRulebook {
   unlockedBy: MyRulebook | null;
 }
 
-function shortNameOf(name: string, categoryName: string) {
+function shortNameOf({ name, categoryName }: { name: string; categoryName: string }) {
   return name.startsWith(`${categoryName} `) ? name.slice(categoryName.length + 1) : name;
 }
 
@@ -35,11 +35,14 @@ export function toMyRulebooks(records: RulebookRecords) {
     const certification = records.certificationRows.find((row) => row.rulebookId === rulebook.id);
     const latestApplication =
       records.applicationRows.find((row) => row.rulebookId === rulebook.id) ?? null;
-    const derived = deriveCertState(certification, latestApplication ?? undefined);
+    const derived = deriveCertState({
+      certification,
+      latestApplication: latestApplication ?? undefined,
+    });
     return {
       ...rulebook,
       label: rulebookLabel(rulebook),
-      shortName: shortNameOf(rulebook.name, rulebook.categoryName),
+      shortName: shortNameOf({ name: rulebook.name, categoryName: rulebook.categoryName }),
       state: derived?.state ?? null,
       stateAt: derived?.at ?? null,
       latestApplication,

@@ -7,7 +7,13 @@ import { getGameForNotice } from "../db/get-game-for-notice";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 
-export async function notifyDirectConfirmed(gameId: string, userIds: readonly string[]) {
+export async function notifyDirectConfirmed({
+  gameId,
+  userIds,
+}: {
+  gameId: string;
+  userIds: readonly string[];
+}) {
   if (userIds.length === 0) return;
 
   const [game, invited] = await Promise.all([
@@ -27,12 +33,12 @@ export async function notifyDirectConfirmed(gameId: string, userIds: readonly st
     emoji: "✅",
     color: DISCORD_COLOR.confirmed,
     description: `GM이 ${names}님을 참여자로 확정했어요.`,
-    fields: headcountFields(
+    fields: headcountFields({
       game,
-      countConfirmed(game.participants),
-      countWaiting(game.participants),
-    ),
+      confirmedCount: countConfirmed(game.participants),
+      waitingCount: countWaiting(game.participants),
+    }),
   });
 
-  await sendDiscordMessage(game.discordThreadId, { embeds: [embed] });
+  await sendDiscordMessage({ channelId: game.discordThreadId, input: { embeds: [embed] } });
 }

@@ -46,8 +46,8 @@ export function IconButton({
     state,
     props: {
       "data-slot": "icon-button",
-      className: cn(iconButton({ variant, size }), resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(iconButton({ variant, size }), resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...(render ? { disabled: disabled || undefined } : { type: type ?? "button", disabled }),
       ...props,
       children,

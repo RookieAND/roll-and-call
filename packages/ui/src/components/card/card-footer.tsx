@@ -15,8 +15,8 @@ export function CardFooter({ className, style, render, ref, ...props }: CardFoot
     state,
     props: {
       "data-slot": "card-footer",
-      className: cn("mt-150 flex gap-100", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn("mt-150 flex gap-100", resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

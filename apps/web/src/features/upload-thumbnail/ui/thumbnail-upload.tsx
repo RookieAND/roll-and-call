@@ -38,7 +38,10 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
     setPercent(0);
     setUploading(true);
     try {
-      const result = await uploadThumbnail(file, (ratio) => setPercent(Math.round(ratio * 100)));
+      const result = await uploadThumbnail({
+        file,
+        onProgress: (ratio) => setPercent(Math.round(ratio * 100)),
+      });
       if ("error" in result) {
         setError(uploadFailedMessage(result.error));
         return;

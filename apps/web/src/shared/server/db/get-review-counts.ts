@@ -6,7 +6,7 @@ import { ownReviewsWhere } from "./own-reviews-where";
 import { publicReviewsWhere } from "./public-reviews-where";
 
 // own이면 작성한 후기에 본인만 보는 후기(숨김·보류·운영진 삭제)까지 센다.
-export async function getReviewCounts(userId: string, { own = false } = {}) {
+export async function getReviewCounts({ userId, own = false }: { userId: string; own?: boolean }) {
   const [[received], [written]] = await Promise.all([
     db
       .select({ value: count() })

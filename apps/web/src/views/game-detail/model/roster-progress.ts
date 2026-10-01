@@ -1,3 +1,4 @@
+import { capacityPalette } from "./capacity-palette";
 import { ROSTER_GAUGE, type RosterGauge } from "./roster-gauge";
 
 export function rosterProgress({
@@ -13,7 +14,7 @@ export function rosterProgress({
     const variant = gauge === ROSTER_GAUGE.waiting ? "tinted" : "solid";
     return { value: 1, max: 1, colorPalette: "primary", variant } as const;
   }
-  const colorPalette = count === 0 ? "gray" : count >= capacity ? "success" : "primary";
+  const colorPalette = capacityPalette({ count, capacity });
   return {
     value: Math.min(count, capacity),
     max: capacity,

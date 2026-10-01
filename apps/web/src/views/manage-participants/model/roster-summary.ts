@@ -6,6 +6,7 @@ import {
 } from "@/entities/game";
 import { ddayKst, formatDateTime } from "@/shared/lib";
 
+import { deadlineLabel } from "./deadline-label";
 import type { ManagedMember } from "./managed-member";
 
 // 서버에서 계산해 날짜 경계에서 값이 갈리지 않게 한다.
@@ -51,7 +52,7 @@ export function summarizeRoster({
     preConfirmedCount: beforeDraw ? confirmed.length : 0,
     drawCount: Math.max(maxPlayers - (beforeDraw ? confirmed.length : 0), 0),
     deadlineAt: formatDateTime(endDate),
-    deadlineLabel: passed ? "마감됨" : daysLeft === 0 ? "오늘" : `D-${daysLeft}`,
+    deadlineLabel: deadlineLabel({ passed, daysLeft }),
     deadlinePassed: passed,
     daysLeft: Math.max(daysLeft, 0),
     drawnAtLabel: drawnAt ? formatDateTime(drawnAt) : null,

@@ -10,5 +10,5 @@ export function endDateBounds({
   maxDays: number;
 }): { min?: string; max?: string } {
   if (!start) return { min: earliest, max: undefined };
-  return { min: addDays(start, 1), max: addDays(start, maxDays) };
+  return { min: addDays({ date: start, count: 1 }), max: addDays({ date: start, count: maxDays }) };
 }

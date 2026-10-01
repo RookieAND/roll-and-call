@@ -14,7 +14,7 @@ export function TabsPanel({ className, ...props }: TabsPanelProps) {
     <BaseTabs.Panel
       data-slot="tabs-panel"
       tabIndex={0}
-      className={(state) => cn("pt-150 outline-none", resolveStateProp(className, state))}
+      className={(state) => cn("pt-150 outline-none", resolveStateProp({ prop: className, state }))}
       {...props}
     />
   );

@@ -48,7 +48,7 @@ export function GameFormWizard({
   function onInvalid(errors: FieldErrors<GameFormValues>) {
     const first = Object.keys(errors)[0];
     if (!first) return;
-    setStep(stepOfField(first, steps));
+    setStep(stepOfField({ field: first, steps }));
     setTimeout(() => scrollToField(first), 0);
   }
 

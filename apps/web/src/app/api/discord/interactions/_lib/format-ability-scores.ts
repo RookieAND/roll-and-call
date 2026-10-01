@@ -4,7 +4,13 @@ import { abilityScoreTable } from "./ability-score-table";
 
 type AbilityScore = { label: string; columns: number[] };
 
-export function formatAbilityScores(playerName: string, scores: AbilityScore[]): DiscordEmbed {
+export function formatAbilityScores({
+  playerName,
+  scores,
+}: {
+  playerName: string;
+  scores: AbilityScore[];
+}): DiscordEmbed {
   return {
     title: `🎲 능력치 · ${playerName}`,
     description: `\`\`\`\n${abilityScoreTable(scores)}\n\`\`\``,

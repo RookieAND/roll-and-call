@@ -48,7 +48,8 @@ export async function GameAttendanceView({ id }: { id: string }) {
 
   const confirmed = splitRoster(game.participants).confirmed;
   // 확정을 마친 뒤에도 읽기 전용으로 남아 있어야 "다시 고치기"로 돌아올 수 있다.
-  const reachable = game.attendanceConfirmedAt || isAttendanceDue(game, confirmed.length);
+  const reachable =
+    game.attendanceConfirmedAt || isAttendanceDue({ game, confirmedCount: confirmed.length });
   if (!reachable) redirect(`/games/${id}/participants`);
 
   const attendees: Attendee[] = confirmed.map((participant) => ({

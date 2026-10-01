@@ -12,6 +12,7 @@ import { draftMissing } from "../model/draft-missing";
 import { initialDraft } from "../model/initial-draft";
 import { QUIZ_ANSWER_FIELD } from "../model/quiz-answer-field";
 import { BookDraftCard } from "./book-draft-card";
+import { quizHintText } from "./quiz-hint-text";
 import { QuizStep } from "./quiz-step";
 
 interface CertApplyFormProps {
@@ -56,11 +57,7 @@ export function CertApplyForm({
     );
 
   const photoHint = missing ?? "";
-  const quizHint = quizError
-    ? "답을 고친 뒤 다시 신청해 주세요"
-    : answer.trim()
-      ? ""
-      : "답을 적으면 신청할 수 있습니다";
+  const quizHint = quizHintText({ quizError, answer });
 
   return (
     <>
@@ -69,7 +66,9 @@ export function CertApplyForm({
         {...(onQuiz
           ? { onBack: () => setOnQuiz(false) }
           : {
-              back: retry ? `/me/rulebooks/${rulebook.id}` : certApplyHref([rulebook.id]),
+              back: retry
+                ? `/me/rulebooks/${rulebook.id}`
+                : certApplyHref({ rulebookIds: [rulebook.id] }),
             })}
         action={
           retry ? undefined : (

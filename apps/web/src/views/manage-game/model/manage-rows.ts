@@ -3,29 +3,19 @@ import { reviewWriteDeadline } from "@/entities/review";
 import { formatDate, formatDateTime } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
-export const MANAGE_ROW_STATE = {
-  open: "open",
-  blocked: "blocked",
-  done: "done",
-  locked: "locked",
-} as const;
-export type ManageRowState = (typeof MANAGE_ROW_STATE)[keyof typeof MANAGE_ROW_STATE];
-
-export type ManageRow = {
-  key: "attendance" | "review" | "time" | "roster" | "edit";
-  icon: "clipboard" | "message" | "clock" | "check" | "users" | "pencil";
-  label: string;
-  detail: string;
-  href: string | null;
-  state: ManageRowState;
-};
+import { attendanceRow } from "./attendance-row";
+import { MANAGE_ROW_STATE, type ManageRow } from "./manage-row-state";
 
 // 줄 순서는 고정이다. 상태에 따라 순서를 바꾸지 않고 같은 자리에서 찾게 한다.
-export function manageRows(
-  game: GameDetailData,
-  reviewCount: number,
+export function manageRows({
+  game,
+  reviewCount,
   now = new Date(),
-): ManageRow[] {
+}: {
+  game: GameDetailData;
+  reviewCount: number;
+  now?: Date;
+}): ManageRow[] {
   const confirmedCount = countConfirmed(game.participants);
   const ended = isSessionEnded(game, now);
   const coordinating = game.scheduleMode === SCHEDULE_MODE.coordinate && !game.confirmedAt;
@@ -34,19 +24,7 @@ export function manageRows(
   const open = { state: MANAGE_ROW_STATE.open } as const;
   const locked = { state: MANAGE_ROW_STATE.locked, href: null } as const;
 
-  const attendanceBase = {
-    key: "attendance",
-    icon: "clipboard",
-    label: "출석 확인",
-    href: `/games/${game.id}/attendance`,
-  } as const;
-  const attendance: ManageRow = !ended
-    ? { ...attendanceBase, ...locked, detail: "세션이 끝난 뒤에 쓸 수 있습니다" }
-    : game.attendanceConfirmedAt
-      ? { ...attendanceBase, state: MANAGE_ROW_STATE.done, detail: "출석을 정리했습니다" }
-      : confirmedCount === 0
-        ? { ...attendanceBase, ...locked, detail: "확정 참여자가 없습니다" }
-        : { ...attendanceBase, ...open, detail: "세션이 끝났습니다 · 참석·불참을 표시해주세요" };
+  const attendance = attendanceRow({ game, ended, confirmedCount });
 
   const reviewBase = {
     key: "review",

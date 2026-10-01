@@ -11,10 +11,20 @@ export async function refreshRecruitPost(gameId: string) {
   if (!game?.discordThreadId) return;
 
   await Promise.all([
-    editDiscordMessage(discordChannelId("recruit"), game.discordThreadId, {
-      embeds: [recruitEmbed(game, game.gm?.username ?? "?", countConfirmed(game.participants))],
-      buttons: recruitButtons(game.id),
+    editDiscordMessage({
+      channelId: discordChannelId("recruit"),
+      messageId: game.discordThreadId,
+      input: {
+        embeds: [
+          recruitEmbed({
+            game,
+            gmName: game.gm?.username ?? "?",
+            confirmedCount: countConfirmed(game.participants),
+          }),
+        ],
+        buttons: recruitButtons(game.id),
+      },
     }),
-    renameDiscordThread(game.discordThreadId, game.title),
+    renameDiscordThread({ threadId: game.discordThreadId, name: game.title }),
   ]);
 }

@@ -8,7 +8,7 @@ export async function GET(
 ) {
   const { id } = await context.params;
   const userId = (await getCurrentSessionUser())?.id ?? null;
-  const { availabilities, blocked } = await getScheduleAvailabilityRows(id, userId);
+  const { availabilities, blocked } = await getScheduleAvailabilityRows({ gameId: id, userId });
   const body: ScheduleAvailability = {
     aggregate: aggregateAvailability({ avails: availabilities, userId }),
     blocked,

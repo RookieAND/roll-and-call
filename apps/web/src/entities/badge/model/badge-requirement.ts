@@ -1,10 +1,14 @@
 import { BADGE_LADDER, type BadgeLadderKey, type BadgeStep } from "@roll-and-call/database/rules";
 
-export function badgeRequirement(
-  ladder: BadgeLadderKey,
-  step: BadgeStep,
-  categoryName: string | null,
-): string {
+export function badgeRequirement({
+  ladder,
+  step,
+  categoryName,
+}: {
+  ladder: BadgeLadderKey;
+  step: BadgeStep;
+  categoryName: string | null;
+}): string {
   const count = step.threshold;
   switch (ladder) {
     case BADGE_LADDER.playerTotal:

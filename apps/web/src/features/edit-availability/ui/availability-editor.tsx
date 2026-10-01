@@ -69,13 +69,13 @@ export function AvailabilityEditor({ defaultValue }: AvailabilityEditorProps) {
               conflicts={conflicts}
               onToggle={() =>
                 setIntervals(
-                  rows.length > 0 ? removeDay(intervals, day) : addInterval(intervals, day),
+                  rows.length > 0 ? removeDay({ intervals, day }) : addInterval({ intervals, day }),
                 )
               }
-              onAdd={() => setIntervals(addInterval(intervals, day))}
-              onRemove={(index) => setIntervals(removeAt(intervals, index))}
+              onAdd={() => setIntervals(addInterval({ intervals, day }))}
+              onRemove={(index) => setIntervals(removeAt({ intervals, index }))}
               onHourChange={(index, edge, hour) =>
-                setIntervals(setHour(intervals, index, edge, hour))
+                setIntervals(setHour({ intervals, index, edge, hour }))
               }
             />
           );

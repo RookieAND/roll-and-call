@@ -13,7 +13,7 @@ import Link from "next/link";
 
 import { IconTile } from "@/shared/ui";
 
-import type { ManageRow as Row } from "../model/manage-rows";
+import type { ManageRow as Row } from "../model/manage-row-state";
 
 const ICONS = {
   clipboard: ClipboardCheck,

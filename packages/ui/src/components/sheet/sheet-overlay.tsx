@@ -14,7 +14,7 @@ export function SheetOverlay({
     <Dialog.Backdrop
       data-slot="sheet-overlay"
       className={(state) =>
-        cn("fixed inset-0 z-(--rc-z-overlay) bg-dim", resolveStateProp(className, state))
+        cn("fixed inset-0 z-(--rc-z-overlay) bg-dim", resolveStateProp({ prop: className, state }))
       }
       {...props}
     />

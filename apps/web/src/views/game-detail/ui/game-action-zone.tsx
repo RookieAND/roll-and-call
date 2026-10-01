@@ -141,7 +141,7 @@ export function GameActionZone({
       return (
         <EndedGmActions
           gameId={game.id}
-          attendanceDue={isAttendanceDue(game, confirmedCount)}
+          attendanceDue={isAttendanceDue({ game, confirmedCount })}
           attendanceConfirmed={game.attendanceConfirmedAt !== null}
         />
       );

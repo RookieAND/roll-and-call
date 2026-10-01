@@ -14,7 +14,13 @@ const NONE: ReviewNote = { caption: null, action: null };
 
 const dday = (days: number) => (days > 0 ? `D-${days}` : "D-day");
 
-export function reviewNote(game: SessionGame, context: SessionContext): ReviewNote {
+export function reviewNote({
+  game,
+  context,
+}: {
+  game: SessionGame;
+  context: SessionContext;
+}): ReviewNote {
   if (context.readOnly || !context.reviewedGames) return NONE;
   if (!game.attendanceConfirmedAt) {
     return { ...NONE, caption: { text: "GM 확인 대기", strong: false } };

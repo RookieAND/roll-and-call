@@ -59,14 +59,14 @@ export async function discardApplicationRecord(rulebookId: string): Promise<Acti
   });
   if (!discarded) return { error: NOT_DISCARDABLE };
 
-  await removeUnusedCertPhotos(
-    user.id,
-    discarded.flatMap((row) => [
+  await removeUnusedCertPhotos({
+    userId: user.id,
+    urls: discarded.flatMap((row) => [
       ...Object.values(row.photoUrls),
       row.captureUrl ?? "",
       row.receiptUrl ?? "",
     ]),
-  );
+  });
   revalidatePath("/me", "layout");
   redirect("/me/rulebooks");
 }

@@ -9,6 +9,7 @@ import { SlotGrid } from "@/shared/ui";
 import { heatStep } from "../model/heat-step";
 import { HeatCell } from "./heat-cell";
 import { HeatLegend } from "./heat-legend";
+import { heatRing } from "./heat-ring";
 import { PickedSlotCard } from "./picked-slot-card";
 
 interface HeatmapProps {
@@ -36,21 +37,14 @@ export function Heatmap({
 
   function renderCell(key: string) {
     const count = counts[key] ?? 0;
-    const ring =
-      picked === key
-        ? "picked"
-        : confirmedIso === key
-          ? "confirmed"
-          : count === 0
-            ? "empty"
-            : "none";
+    const ring = heatRing({ slotIso: key, picked, confirmedIso, count });
 
     return (
       <HeatCell
         key={key}
         label={`${formatDateTime(key)} ${count}명 가능`}
         count={count}
-        step={heatStep(count, capacity)}
+        step={heatStep({ count, capacity })}
         ring={ring}
         interactive={interactive}
         onPick={() => setPicked(count > 0 ? key : null)}

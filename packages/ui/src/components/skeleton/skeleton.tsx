@@ -54,8 +54,12 @@ export function Skeleton({
     props: {
       "data-slot": "skeleton",
       "aria-hidden": true,
-      style: { width: length(width), height: length(height), ...resolveStateProp(style, state) },
-      className: cn(skeleton({ rounded }), resolveStateProp(className, state)),
+      style: {
+        width: length(width),
+        height: length(height),
+        ...resolveStateProp({ prop: style, state }),
+      },
+      className: cn(skeleton({ rounded }), resolveStateProp({ prop: className, state })),
     },
   });
 }

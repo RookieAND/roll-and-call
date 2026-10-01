@@ -20,8 +20,8 @@ export function SheetFooter({ className, style, render, ref, ...props }: SheetFo
     state,
     props: {
       "data-slot": "sheet-footer",
-      className: cn("flex flex-col gap-100 pt-150", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn("flex flex-col gap-100 pt-150", resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

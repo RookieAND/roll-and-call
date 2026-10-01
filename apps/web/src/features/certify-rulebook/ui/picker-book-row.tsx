@@ -5,6 +5,8 @@ import Link from "next/link";
 
 import { CERT_OPTION, type CertOptionType } from "@/entities/rulebook";
 
+import { bookTitleForeground } from "./book-title-foreground";
+
 const row = cva(
   "flex min-h-[60px] items-center gap-150 rounded-500 border border-gray-200 px-175 py-150",
   {
@@ -45,7 +47,7 @@ interface PickerBookRowProps {
 export function PickerBookRow({ title, edition, type, note, rejected, href }: PickerBookRowProps) {
   const status = type === CERT_OPTION.pick ? null : STATUS[type];
   const Icon = status?.icon ?? BookOpen;
-  const dimmed = type === CERT_OPTION.needsCore || type === CERT_OPTION.free;
+  const titleForeground = bookTitleForeground(type);
   const body = (
     <>
       <Icon
@@ -56,11 +58,7 @@ export function PickerBookRow({ title, edition, type, note, rejected, href }: Pi
       />
       <VStack gap="050" className="min-w-0 flex-1">
         <HStack align="baseline" gap="075" wrap>
-          <Text
-            typography="body2"
-            weight="medium"
-            foreground={status ? (dimmed ? "hint" : "muted") : "normal"}
-          >
+          <Text typography="body2" weight="medium" foreground={titleForeground}>
             {title}
           </Text>
           {edition && (

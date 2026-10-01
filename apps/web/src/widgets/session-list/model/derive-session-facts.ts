@@ -16,7 +16,15 @@ import type { SessionContext, SessionGame } from "./session-card-model";
 
 export type SessionFacts = ReturnType<typeof deriveSessionFacts>;
 
-export function deriveSessionFacts(game: SessionGame, role: SessionRole, context: SessionContext) {
+export function deriveSessionFacts({
+  game,
+  role,
+  context,
+}: {
+  game: SessionGame;
+  role: SessionRole;
+  context: SessionContext;
+}) {
   const now = context.now ?? new Date();
   const confirmedCount = countConfirmed(game.participants);
   const state = deriveSessionState(
@@ -51,7 +59,7 @@ export function deriveSessionFacts(game: SessionGame, role: SessionRole, context
   const sessionWhen = startsAt ? formatDateTime(startsAt) : null;
   const sessionAgo = startsAt ? relativeDay(ddayKst(startsAt, now)) : null;
 
-  const attendanceDue = isAttendanceDue(game, confirmedCount, now);
+  const attendanceDue = isAttendanceDue({ game, confirmedCount, now });
   const viewerAbsent =
     game.attendanceConfirmedAt !== null &&
     game.participants.some(

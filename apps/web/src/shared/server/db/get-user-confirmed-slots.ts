@@ -7,10 +7,13 @@ import { playMinutes } from "@/shared/lib";
 const SLOT_MS = 30 * 60 * 1000;
 
 // 시작 칸만이 아니라 플레이타임 길이만큼 막는다.
-export async function getUserConfirmedSlots(
-  userId: string,
-  excludeGameId: string,
-): Promise<string[]> {
+export async function getUserConfirmedSlots({
+  userId,
+  excludeGameId,
+}: {
+  userId: string;
+  excludeGameId: string;
+}): Promise<string[]> {
   const rows = await db
     .selectDistinct({ confirmedAt: games.confirmedAt, playMinutes: games.playMinutes })
     .from(games)

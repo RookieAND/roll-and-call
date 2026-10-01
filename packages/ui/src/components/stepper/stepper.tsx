@@ -55,7 +55,7 @@ export function Stepper({
 }: StepperProps) {
   const safeValue = Number.isFinite(value) ? value : min;
   const state = { invalid, disabled };
-  const fieldAria = useFieldControlAria(invalid, describedBy);
+  const fieldAria = useFieldControlAria({ invalid, describedBy });
 
   return useRender({
     defaultTagName: "div",
@@ -63,8 +63,8 @@ export function Stepper({
     state,
     props: {
       "data-slot": "stepper",
-      className: cn(frame({ invalid }), resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(frame({ invalid }), resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       children: (
         <>
           <button

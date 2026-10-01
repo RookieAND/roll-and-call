@@ -60,7 +60,7 @@ export async function UserBadgesView({ id }: UserBadgesViewProps) {
         name: badge.name,
         requirement: badgeRowRequirement(badge),
         dateLabel: toKst(badge.record.earnedAt).format("YY.MM.DD"),
-        detail: heldBadgeDetail(badge, { records, facts: null, now }),
+        detail: heldBadgeDetail({ badge, records, facts: null, now }),
       })),
   })).filter((group) => group.rows.length > 0);
 

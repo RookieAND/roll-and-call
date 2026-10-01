@@ -15,8 +15,11 @@ export function TableBody({ className, style, render, ref, ...props }: TableBody
     state,
     props: {
       "data-slot": "table-body",
-      className: cn("[&>tr:last-child>td]:border-b-0", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(
+        "[&>tr:last-child>td]:border-b-0",
+        resolveStateProp({ prop: className, state }),
+      ),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

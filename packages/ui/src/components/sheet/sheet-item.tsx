@@ -12,7 +12,7 @@ export function SheetItem({ className, ...props }: ButtonProps) {
       className={(state) =>
         cn(
           "h-auto min-h-[52px] w-full justify-between rounded-none border-b border-gray-100 px-0 text-left text-body2 font-normal text-gray-800 last:border-b-0 hover:bg-transparent",
-          resolveStateProp(className, state),
+          resolveStateProp({ prop: className, state }),
         )
       }
       {...props}

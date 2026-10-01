@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, HStack, Sheet, Text, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -10,11 +10,10 @@ import { addParticipants } from "../api/add-participants";
 import type { Candidate } from "../model/candidate";
 import { candidateSearchQuery } from "../model/candidate-search-query";
 import { searchKeyword } from "../model/search-keyword";
-import { CandidateRow } from "./candidate-row";
-import { CandidateSearchEmpty } from "./candidate-search-empty";
 import { CandidateSearchInput } from "./candidate-search-input";
-import { CandidateSearchSkeleton } from "./candidate-search-skeleton";
+import { CandidateSearchResults } from "./candidate-search-results";
 import { SeatsFullNotice } from "./seats-full-notice";
+import { seatsStatus } from "./seats-status";
 import { SelectedCandidateChip } from "./selected-candidate-chip";
 
 const MIN_QUERY_LENGTH = 2;
@@ -50,7 +49,7 @@ export function DirectConfirmSheet({
   const noSeats = openSeats === 0;
   const seatsFilled = selected.length >= openSeats;
   const keyword = searchKeyword(query);
-  const debouncedKeyword = useDebouncedValue(keyword, SEARCH_DELAY_MS);
+  const debouncedKeyword = useDebouncedValue({ value: keyword, delay: SEARCH_DELAY_MS });
   const typedEnough = keyword.length >= MIN_QUERY_LENGTH;
   // 검색 실패로 시트 밖 화면까지 에러 경계로 넘기지 않고, 목록 자리에 한 줄로 알린다.
   const {
@@ -58,7 +57,7 @@ export function DirectConfirmSheet({
     isPending,
     isError,
   } = useQuery({
-    ...candidateSearchQuery(gameId, debouncedKeyword),
+    ...candidateSearchQuery({ gameId, keyword: debouncedKeyword }),
     enabled: debouncedKeyword.length >= MIN_QUERY_LENGTH,
     throwOnError: false,
   });
@@ -87,30 +86,19 @@ export function DirectConfirmSheet({
       reset(false);
       return;
     }
-    run(
-      () =>
-        addParticipants(
-          gameId,
-          selected.map((candidate) => candidate.userId),
-        ),
-      {
-        onSuccess: () => {
-          toast.success(
-            selected.length === 1
-              ? `${selected[0]!.username}님을 참여자로 넣었습니다`
-              : `${selected.length}명을 참여자로 넣었습니다`,
-          );
-          reset(false);
-        },
+    run(() => addParticipants({ gameId, userIds: selected.map((candidate) => candidate.userId) }), {
+      onSuccess: () => {
+        toast.success(
+          selected.length === 1
+            ? `${selected[0]!.username}님을 참여자로 넣었습니다`
+            : `${selected.length}명을 참여자로 넣었습니다`,
+        );
+        reset(false);
       },
-    );
+    });
   }
 
-  const seatsLabel = noSeats
-    ? "자리 없음"
-    : seatsFilled
-      ? `${openSeats}자리 모두 채움`
-      : `${openSeats - selected.length}자리 남음`;
+  const seats = seatsStatus({ openSeats, pickedCount: selected.length });
 
   return (
     <Sheet.Root open={open} onOpenChange={reset}>
@@ -119,13 +107,8 @@ export function DirectConfirmSheet({
         <VStack gap="150">
           <HStack align="baseline" gap="100" className="px-250">
             <Sheet.Title className="mb-0 flex-1">참여자 찾기</Sheet.Title>
-            <Text
-              numeric
-              typography="body4"
-              weight="bold"
-              foreground={noSeats ? "warning" : seatsFilled ? "primary" : "muted"}
-            >
-              {seatsLabel}
+            <Text numeric typography="body4" weight="bold" foreground={seats.foreground}>
+              {seats.label}
             </Text>
           </HStack>
 
@@ -147,61 +130,18 @@ export function DirectConfirmSheet({
             <CandidateSearchInput value={query} onChange={setQuery} disabled={noSeats} />
           </div>
 
-          {!typedEnough ? (
-            <Text
-              typography="body3"
-              foreground="hint"
-              render={<p />}
-              className="px-400 pt-150 pb-500 text-center"
-            >
-              함께할 사람의 닉네임이나 디스코드 아이디를 적어 주세요.
-              <br />
-              두 글자부터 찾기 시작합니다.
-            </Text>
-          ) : searching ? (
-            <CandidateSearchSkeleton />
-          ) : isError ? (
-            <Text
-              typography="body3"
-              foreground="danger"
-              render={<p />}
-              className="px-400 pt-150 pb-500 text-center"
-            >
-              사람을 찾지 못했습니다. 잠시 뒤 다시 적어 주세요.
-            </Text>
-          ) : shown.length === 0 ? (
-            <CandidateSearchEmpty keyword={keyword} onClear={() => setQuery("")} />
-          ) : (
-            <VStack gap={0} className="pb-125">
-              <Text typography="body4" weight="bold" foreground="hint" className="px-250 pb-100">
-                검색 결과 {shown.length}명
-              </Text>
-              {/* 줄 높이 60px × 4줄까지만 보이고 나머지는 목록 안에서 스크롤한다. */}
-              <Card.Root
-                padding="none"
-                radius={500}
-                className="mx-250 max-h-60 overflow-y-auto overscroll-contain [&>*+*]:border-t [&>*+*]:border-gray-200"
-              >
-                {shown.map((candidate) => {
-                  const picked = selected.some((choice) => choice.userId === candidate.userId);
-                  return (
-                    <CandidateRow
-                      key={candidate.userId}
-                      candidate={candidate}
-                      picked={picked}
-                      capped={noSeats || (!picked && seatsFilled)}
-                      onToggle={() => toggle(candidate)}
-                    />
-                  );
-                })}
-              </Card.Root>
-              {seatsFilled && !noSeats && (
-                <Text typography="body4" foreground="hint" render={<p />} className="px-250 pt-100">
-                  남은 자리를 모두 채웠습니다.
-                </Text>
-              )}
-            </VStack>
-          )}
+          <CandidateSearchResults
+            typedEnough={typedEnough}
+            searching={searching}
+            isError={isError}
+            keyword={keyword}
+            candidates={shown}
+            selected={selected}
+            noSeats={noSeats}
+            seatsFilled={seatsFilled}
+            onClear={() => setQuery("")}
+            onToggle={toggle}
+          />
 
           <div className="sticky bottom-0 border-t border-gray-100 bg-surface px-250 pt-150 pb-250">
             <Button

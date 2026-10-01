@@ -21,7 +21,7 @@ export function SessionStatusChips({ activeTab, activeChip, counts }: SessionSta
             key={chip.key}
             render={
               <Link
-                href={sessionsHref(activeTab, chip.key)}
+                href={sessionsHref({ role: activeTab, status: chip.key })}
                 aria-current={selected ? "page" : undefined}
               />
             }

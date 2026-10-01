@@ -1,9 +1,14 @@
 // 상주 봇(gateway) 없이 서버 액션에서 봇 토큰으로 REST만 부른다.
 // ponytail: 429(rate limit)는 재시도 없이 실패로 올린다. 알림은 가끔 가는 거라 충분.
-export async function discordBotApi<T>(
-  path: string,
-  { method = "GET", body }: { method?: string; body?: unknown } = {},
-) {
+export async function discordBotApi<T>({
+  path,
+  method = "GET",
+  body,
+}: {
+  path: string;
+  method?: string;
+  body?: unknown;
+}) {
   const token = process.env.DISCORD_BOT_TOKEN;
   if (!token) throw new Error("DISCORD_BOT_TOKEN not set");
   const response = await fetch(`https://discord.com/api/v10${path}`, {

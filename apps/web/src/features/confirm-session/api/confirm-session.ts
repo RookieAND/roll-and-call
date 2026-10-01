@@ -14,7 +14,13 @@ import {
   refreshRecruitPost,
 } from "@/shared/server";
 
-export async function confirmSession(gameId: string, slotIso: string): Promise<ActionResult> {
+export async function confirmSession({
+  gameId,
+  slotIso,
+}: {
+  gameId: string;
+  slotIso: string;
+}): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
@@ -37,7 +43,7 @@ export async function confirmSession(gameId: string, slotIso: string): Promise<A
   after(() =>
     Promise.all([
       refreshRecruitPost(gameId),
-      notifySessionConfirmed(gameId, previous?.confirmedAt ?? null),
+      notifySessionConfirmed({ gameId, previousConfirmedAt: previous?.confirmedAt ?? null }),
     ]),
   );
 

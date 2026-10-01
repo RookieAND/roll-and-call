@@ -21,7 +21,7 @@ export function rollDiceNotation(notation: string) {
       const count = diceCount === "" ? 1 : Number(diceCount);
       const sides = Number(diceSides);
       if (count < 1 || count > MAX_DICE_COUNT || sides < 1 || sides > MAX_DICE_SIDES) return null;
-      const rolls = rollDice(count, sides);
+      const rolls = rollDice({ count, sides });
       value = sum(rolls);
       text = `[${rolls.join(", ")}]`;
     }

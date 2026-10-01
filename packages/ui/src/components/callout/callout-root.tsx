@@ -63,8 +63,11 @@ export function CalloutRoot({
     props: {
       "data-slot": "callout",
       role: urgent ? "alert" : "note",
-      className: cn(callout({ variant, colorPalette, size }), resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(
+        callout({ variant, colorPalette, size }),
+        resolveStateProp({ prop: className, state }),
+      ),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
       children,
     },

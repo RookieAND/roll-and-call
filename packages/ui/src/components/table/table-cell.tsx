@@ -30,9 +30,9 @@ export function TableCell({
       "data-slot": "table-cell",
       className: cn(
         tableCellVariants({ header: false, align, numeric }),
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

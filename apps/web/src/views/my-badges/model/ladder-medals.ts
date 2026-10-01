@@ -7,12 +7,16 @@ import type { BadgeRecord } from "@/shared/server";
 import type { DexMedal } from "./dex-medal";
 import { heldRecord } from "./held-record";
 
-export function ladderMedals(
-  ladder: BadgeLadderKey,
-  events: BadgeEvent[],
-  record: BadgeRecord | undefined,
-): DexMedal[] {
-  const held = heldRecord(ladder, events, record);
+export function ladderMedals({
+  ladder,
+  events,
+  record,
+}: {
+  ladder: BadgeLadderKey;
+  events: BadgeEvent[];
+  record: BadgeRecord | undefined;
+}): DexMedal[] {
+  const held = heldRecord({ ladder, events, record });
   const heldTier = held?.tier ?? 0;
   const unit = LADDER_META[ladder].unit;
   return BADGE_LADDERS[ladder].steps.map((step, index) => ({

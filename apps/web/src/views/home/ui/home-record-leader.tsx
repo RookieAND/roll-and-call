@@ -3,6 +3,7 @@ import { Crown } from "lucide-react";
 import Link from "next/link";
 
 import type { RecordPerson } from "../model/rank-people";
+import { leaderName } from "./leader-name";
 
 const CARD = "flex items-center gap-150 rounded-600 bg-primary-50 p-175 transition-colors";
 
@@ -13,13 +14,8 @@ interface HomeRecordLeaderProps {
 
 // 공동 1위는 갈 곳이 하나가 아니라 링크를 걸지 않고 카드만 둔다.
 export function HomeRecordLeader({ people, count }: HomeRecordLeaderProps) {
-  const [first, ...rest] = people;
-  const name =
-    rest.length === 0
-      ? first.username
-      : rest.length === 1
-        ? people.map((person) => person.username).join(" · ")
-        : `${first.username} 외 ${rest.length}인`;
+  const [first] = people;
+  const name = leaderName(people);
 
   const body = (
     <>

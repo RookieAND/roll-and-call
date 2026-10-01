@@ -20,8 +20,8 @@ export function SheetBody({ className, style, render, ref, ...props }: SheetBody
     state,
     props: {
       "data-slot": "sheet-body",
-      className: cn("min-h-0 flex-1 overflow-y-auto", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn("min-h-0 flex-1 overflow-y-auto", resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

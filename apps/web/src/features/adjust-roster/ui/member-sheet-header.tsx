@@ -2,6 +2,7 @@ import { availabilityNote } from "@/entities/game";
 import { ProfileRow } from "@/entities/profile";
 
 import type { MemberSummary } from "../model/member-summary";
+import { queueLabel } from "./queue-label";
 
 interface MemberSheetHeaderProps {
   member: MemberSummary;
@@ -10,8 +11,7 @@ interface MemberSheetHeaderProps {
 }
 
 export function MemberSheetHeader({ member, isCoordinate, beforeDraw }: MemberSheetHeaderProps) {
-  const queue =
-    member.waitlistRank === null ? "확정" : beforeDraw ? "신청자" : `대기 ${member.waitlistRank}번`;
+  const queue = queueLabel({ waitlistRank: member.waitlistRank, beforeDraw });
   const subline = isCoordinate ? `${queue} · ${availabilityNote(member.hasAvailability)}` : queue;
   const sublineForeground = isCoordinate && !member.hasAvailability ? "warning" : "muted";
 

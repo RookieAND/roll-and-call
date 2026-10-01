@@ -31,26 +31,27 @@ describe("KST 입력과 저장값", () => {
   });
 
   it("칸 시각도 KST로 읽는다", () => {
-    expect(slotIso("2026-09-16", 23, 30)).toBe("2026-09-16T14:30:00.000Z");
+    expect(slotIso({ date: "2026-09-16", hour: 23, minute: 30 })).toBe("2026-09-16T14:30:00.000Z");
   });
 });
 
 describe("addDays", () => {
   it("달과 해를 넘어간다", () => {
-    expect(addDays("2026-03-01", -1)).toBe("2026-02-28");
-    expect(addDays("2026-12-31", 1)).toBe("2027-01-01");
+    expect(addDays({ date: "2026-03-01", count: -1 })).toBe("2026-02-28");
+    expect(addDays({ date: "2026-12-31", count: 1 })).toBe("2027-01-01");
   });
 });
 
 describe("buildDayColumns", () => {
   it("해를 넘겨도 이어 붙인다", () => {
-    expect(buildDayColumns("2026-12-31", "2027-01-01").map((column) => column.label)).toEqual([
-      "12/31(목)",
-      "1/1(금)",
-    ]);
+    expect(
+      buildDayColumns({ rangeStart: "2026-12-31", rangeEnd: "2027-01-01" }).map(
+        (column) => column.label,
+      ),
+    ).toEqual(["12/31(목)", "1/1(금)"]);
   });
 
   it("아무리 길어도 61칸에서 끊는다", () => {
-    expect(buildDayColumns("2026-01-01", "2026-12-31")).toHaveLength(61);
+    expect(buildDayColumns({ rangeStart: "2026-01-01", rangeEnd: "2026-12-31" })).toHaveLength(61);
   });
 });

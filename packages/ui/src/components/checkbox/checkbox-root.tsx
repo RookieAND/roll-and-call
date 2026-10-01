@@ -15,7 +15,7 @@ export function CheckboxRoot({ className, ...props }: CheckboxRootProps) {
       className={(state) =>
         cn(
           "flex size-5 shrink-0 items-center justify-center rounded-200 border border-gray-500 bg-surface text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus data-checked:border-primary-600 data-checked:bg-primary-600 data-indeterminate:border-primary-600 data-indeterminate:bg-primary-600 data-disabled:opacity-50",
-          resolveStateProp(className, state),
+          resolveStateProp({ prop: className, state }),
         )
       }
       {...props}

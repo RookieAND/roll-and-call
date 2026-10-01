@@ -9,7 +9,13 @@ import { availabilities, db, getCurrentUser, getUserConfirmedSlots } from "@/sha
 
 const MAX_SLOT_COUNT = 2000;
 
-export async function saveAvailability(gameId: string, slotIsos: string[]): Promise<ActionResult> {
+export async function saveAvailability({
+  gameId,
+  slotIsos,
+}: {
+  gameId: string;
+  slotIsos: string[];
+}): Promise<ActionResult> {
   const user = await getCurrentUser();
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
@@ -32,7 +38,7 @@ export async function saveAvailability(gameId: string, slotIsos: string[]): Prom
   }
 
   // 다른 확정 세션과 겹친 칸은 화면에서 막혀 있지만, 주소를 우회해 들어와도 저장하지 않는다.
-  const blocked = new Set(await getUserConfirmedSlots(user.id, gameId));
+  const blocked = new Set(await getUserConfirmedSlots({ userId: user.id, excludeGameId: gameId }));
 
   // Trust boundary: drop anything that isn't a valid instant, and cap the count.
   const rows = slotIsos

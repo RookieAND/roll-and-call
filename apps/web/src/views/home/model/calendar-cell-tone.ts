@@ -38,7 +38,13 @@ export const CALENDAR_CELL_TONE: Record<CalendarCellState, CalendarCellTone> = {
   },
 };
 
-export function calendarCellState(selected: boolean, today: boolean): CalendarCellState {
+export function calendarCellState({
+  selected,
+  today,
+}: {
+  selected: boolean;
+  today: boolean;
+}): CalendarCellState {
   if (selected) return CALENDAR_CELL_STATE.selected;
   return today ? CALENDAR_CELL_STATE.today : CALENDAR_CELL_STATE.plain;
 }

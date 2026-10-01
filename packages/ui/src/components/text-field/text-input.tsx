@@ -25,7 +25,7 @@ export function TextInput({
   ...props
 }: TextInputProps) {
   const state = { invalid: Boolean(invalid), disabled };
-  const fieldAria = useFieldControlAria(invalid, describedBy);
+  const fieldAria = useFieldControlAria({ invalid, describedBy });
   return useRender({
     ref,
     defaultTagName: "input",
@@ -35,8 +35,12 @@ export function TextInput({
       "data-slot": "text-input",
       ...fieldAria,
       disabled,
-      className: cn(textFieldVariants({ invalid }), "h-11", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(
+        textFieldVariants({ invalid }),
+        "h-11",
+        resolveStateProp({ prop: className, state }),
+      ),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

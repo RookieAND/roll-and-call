@@ -90,7 +90,9 @@ export function FeaturedBadgePicker({
                   selected={selected}
                   aria-pressed={selected}
                   disabled={full && !selected}
-                  onClick={() => setPicked((current) => toggleFeatured(current, choice.key))}
+                  onClick={() =>
+                    setPicked((current) => toggleFeatured({ picked: current, key: choice.key }))
+                  }
                   className="relative h-auto flex-col gap-075 rounded-500 px-050 pt-125 pb-100 whitespace-normal"
                 >
                   <BadgeMedal emoji={choice.emoji} look={choice.look} ribbon={choice.tag} />

@@ -14,10 +14,13 @@ export type Application = {
 
 type Rejection = ActionResult & { error: string };
 
-export async function applyToGame(
-  gameId: string,
-  userId: string,
-): Promise<Application | Rejection> {
+export async function applyToGame({
+  gameId,
+  userId,
+}: {
+  gameId: string;
+  userId: string;
+}): Promise<Application | Rejection> {
   // ponytail: lock the game row so concurrent joins to the same game serialize
   // and can't overfill the last slot. Per-game throughput is tiny, so a row lock is plenty.
   return db.transaction(async (transaction): Promise<Application | Rejection> => {

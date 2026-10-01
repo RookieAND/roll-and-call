@@ -4,11 +4,15 @@ import type { SessionGame } from "./session-card-model";
 
 export type Absence = { gameId: string; title: string; sessionAt: Date; expiresAt: Date };
 
-export function recentAbsences(
-  joined: SessionGame[],
-  userId: string,
-  now: Date = new Date(),
-): Absence[] {
+export function recentAbsences({
+  joined,
+  userId,
+  now = new Date(),
+}: {
+  joined: SessionGame[];
+  userId: string;
+  now?: Date;
+}): Absence[] {
   return joined
     .filter(
       (game) =>

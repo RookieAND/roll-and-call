@@ -5,7 +5,7 @@ export function heatLegend(capacity: number): { count: number; step: number }[] 
   if (safeCapacity <= HEAT_MAX_STEP) {
     return Array.from({ length: safeCapacity + 1 }, (_, count) => ({
       count,
-      step: heatStep(count, safeCapacity),
+      step: heatStep({ count, capacity: safeCapacity }),
     }));
   }
   return Array.from({ length: HEAT_MAX_STEP + 1 }, (_, step) => ({

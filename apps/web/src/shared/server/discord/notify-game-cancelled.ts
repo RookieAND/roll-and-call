@@ -21,22 +21,29 @@ export async function notifyGameCancelled(game: Game) {
   const gmName = gm?.username ?? "?";
 
   await Promise.all([
-    editDiscordMessage(discordChannelId("recruit"), game.discordThreadId, {
-      embeds: [recruitEmbed(game, gmName, 0, true)],
-      buttons: [],
+    editDiscordMessage({
+      channelId: discordChannelId("recruit"),
+      messageId: game.discordThreadId,
+      input: {
+        embeds: [recruitEmbed({ game, gmName, confirmedCount: 0, cancelled: true })],
+        buttons: [],
+      },
     }),
-    sendDiscordMessage(game.discordThreadId, {
-      embeds: [
-        gameNoticeEmbed({
-          game,
-          gmName,
-          emoji: "🚫",
-          color: DISCORD_COLOR.cancelled,
-          description: `GM이 세션을 취소했어요.\n신청은 모두 사라졌고, 다시 열리면 새 공지로 올라옵니다.`,
-          linked: false,
-        }),
-      ],
+    sendDiscordMessage({
+      channelId: game.discordThreadId,
+      input: {
+        embeds: [
+          gameNoticeEmbed({
+            game,
+            gmName,
+            emoji: "🚫",
+            color: DISCORD_COLOR.cancelled,
+            description: `GM이 세션을 취소했어요.\n신청은 모두 사라졌고, 다시 열리면 새 공지로 올라옵니다.`,
+            linked: false,
+          }),
+        ],
+      },
     }),
-    renameDiscordThread(game.discordThreadId, `${game.title} (취소됨)`),
+    renameDiscordThread({ threadId: game.discordThreadId, name: `${game.title} (취소됨)` }),
   ]);
 }

@@ -22,7 +22,7 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
   return (
     <VStack gap="150">
       {rows.map((row) => {
-        const { title, meta } = reviewCardText(row, perspective);
+        const { title, meta } = reviewCardText({ row, perspective });
         const own = row.authorId === viewerId;
         const editable = own && reviewEditDeadline(row.createdAt).getTime() > now;
         const menu = viewerId && (

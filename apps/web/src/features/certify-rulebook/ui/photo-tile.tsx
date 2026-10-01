@@ -4,6 +4,8 @@ import { CircleAlert, FileText, Plus, X } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { PHOTO_SLOT, slotUrl, type PhotoSlot } from "../model/photo-slot";
+import { photoLabelForeground } from "./photo-label-foreground";
+import { photoTag } from "./photo-tag";
 
 const frame = cva(
   "relative block w-full overflow-hidden rounded-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
@@ -73,16 +75,8 @@ export function PhotoTile({
   const url = slotUrl(slot);
   const pdf = url.toLowerCase().endsWith(".pdf");
   const filled = url !== "";
-  const labelForeground =
-    slot.status === PHOTO_SLOT.error ? "warning" : selected ? "primary" : "muted";
-  const tag =
-    slot.status === PHOTO_SLOT.empty
-      ? "예시"
-      : slot.status === PHOTO_SLOT.previous
-        ? "이전 사진"
-        : pdf
-          ? "PDF"
-          : null;
+  const labelForeground = photoLabelForeground({ status: slot.status, selected });
+  const tag = photoTag({ status: slot.status, pdf });
 
   return (
     <VStack gap="075" className="min-w-0 flex-1">

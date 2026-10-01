@@ -36,39 +36,52 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
   const totalCount = gm ? counts.gmTotal : counts.playerTotal;
   const reviewLadder = gm ? BADGE_LADDER.gmReviews : BADGE_LADDER.playerReviews;
   const reviewCount = gm ? counts.gmReviews : counts.playerReviews;
-  const events = (ladder: BadgeLadderKey) => ladderEvents(facts, ladder);
+  const events = (ladder: BadgeLadderKey) => ladderEvents({ facts, ladder });
 
   return {
     total: {
       title: gm ? "누적 운영" : "누적 참여",
       hint: `${totalCount}회 ${gm ? "진행" : "참석"}`,
-      medals: ladderMedals(totalLadder, events(totalLadder), recordsByKey.get(totalLadder)),
-      fillPercent: ladderFill(BADGE_LADDERS[totalLadder].steps, totalCount),
-      next: ladderNext(totalLadder, totalCount),
+      medals: ladderMedals({
+        ladder: totalLadder,
+        events: events(totalLadder),
+        record: recordsByKey.get(totalLadder),
+      }),
+      fillPercent: ladderFill({ steps: BADGE_LADDERS[totalLadder].steps, count: totalCount }),
+      next: ladderNext({ ladder: totalLadder, count: totalCount }),
     },
     rules: {
       title: gm ? "룰별 운영" : "룰별 참여",
-      rows: ruleRows(ruleLadder, gm ? counts.gmRules : counts.playerRules, facts, recordsByKey),
+      rows: ruleRows({
+        ladder: ruleLadder,
+        rules: gm ? counts.gmRules : counts.playerRules,
+        facts,
+        recordsByKey,
+      }),
     },
     variety: gm
       ? {
           title: "다양한 룰 운영",
           hint: `진행한 룰 ${counts.gmVariety}종`,
           note: "판본만 다른 같은 룰은 1종으로 셉니다",
-          medals: ladderMedals(
-            BADGE_LADDER.gmVariety,
-            events(BADGE_LADDER.gmVariety),
-            recordsByKey.get(BADGE_LADDER.gmVariety),
-          ),
-          next: ladderNext(BADGE_LADDER.gmVariety, counts.gmVariety),
+          medals: ladderMedals({
+            ladder: BADGE_LADDER.gmVariety,
+            events: events(BADGE_LADDER.gmVariety),
+            record: recordsByKey.get(BADGE_LADDER.gmVariety),
+          }),
+          next: ladderNext({ ladder: BADGE_LADDER.gmVariety, count: counts.gmVariety }),
         }
       : null,
     reviews: {
       title: gm ? "받은 후기" : "작성한 후기",
       hint: `${gm ? "받은" : "쓴"} 후기 ${reviewCount}개`,
       note: "운영진이 숨기거나 제거한 후기는 세지 않습니다",
-      next: ladderNext(reviewLadder, reviewCount),
-      medals: ladderMedals(reviewLadder, events(reviewLadder), recordsByKey.get(reviewLadder)),
+      next: ladderNext({ ladder: reviewLadder, count: reviewCount }),
+      medals: ladderMedals({
+        ladder: reviewLadder,
+        events: events(reviewLadder),
+        record: recordsByKey.get(reviewLadder),
+      }),
     },
     monthly: monthlyCard({
       ladder: gm ? BADGE_LADDER.gmMonthly : BADGE_LADDER.playerMonthly,

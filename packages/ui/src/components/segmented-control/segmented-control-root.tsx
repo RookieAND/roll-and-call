@@ -11,6 +11,7 @@ import {
 } from "react";
 
 import { cn } from "../../lib/cn";
+import { arrowStep } from "./arrow-step";
 import { SegmentedControlContext } from "./segmented-control-context";
 
 const root = cva("relative inline-flex gap-050 rounded-400 bg-gray-100 p-050", {
@@ -59,7 +60,7 @@ export function SegmentedControlRoot({
 
   // ←→로 옮기면 그 자리에서 바로 골라진다. 필터라서 고르는 즉시 결과가 바뀌는 게 자연스럽다.
   function move(event: KeyboardEvent<HTMLDivElement>) {
-    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    const step = arrowStep(event.key);
     if (!step || disabled) return;
     event.preventDefault();
     const values = [...items.current.entries()].filter(([, element]) => !element.disabled);

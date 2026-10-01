@@ -32,7 +32,7 @@ describe("ruleGate", () => {
   it("적용일 뒤에는 기본 룰북이 모자란 판본을 막고 남은 책을 알려 준다", () => {
     const rulebooks = [book("1권", { state: CERT_STATE.certified }), book("2권")];
     const records = data(rulebooks, PASSED);
-    expect(ruleGate(records.sets[0]!, records, NOW)).toMatchObject({
+    expect(ruleGate({ set: records.sets[0]!, myRulebooks: records, now: NOW })).toMatchObject({
       type: RULE_GATE.blocked,
       lines: ["기본 룰북 2권 중 1권이 남았습니다.", "남은 책을 인증하면 열 수 있습니다."],
       action: { label: "남은 책 인증하기", href: "/me/rulebooks/apply?rulebook=2%EA%B6%8C" },
@@ -41,7 +41,9 @@ describe("ruleGate", () => {
 
   it("적용일 전에는 알려만 준다", () => {
     const records = data([book("1권")], COMING);
-    expect(ruleGate(records.sets[0]!, records, NOW).type).toBe(RULE_GATE.notice);
+    expect(ruleGate({ set: records.sets[0]!, myRulebooks: records, now: NOW }).type).toBe(
+      RULE_GATE.notice,
+    );
   });
 
   it("신판 인증으로 구판을 연다", () => {
@@ -49,7 +51,7 @@ describe("ruleGate", () => {
     const older = book("6", { categoryId: "coc", edition: "6판", unlockedBy: newer });
     const records = data([newer, older], PASSED);
     const olderSet = records.sets.find((set) => set.edition === "6판")!;
-    expect(ruleGate(olderSet, records, NOW)).toMatchObject({
+    expect(ruleGate({ set: olderSet, myRulebooks: records, now: NOW })).toMatchObject({
       type: RULE_GATE.open,
       okText: "7판 인증으로 열 수 있습니다",
     });
@@ -60,6 +62,8 @@ describe("ruleGate", () => {
     const newer = book("7", { categoryId: "coc", edition: "7판" });
     const records = data([older, newer], PASSED);
     const newerSet = records.sets.find((set) => set.edition === "7판")!;
-    expect(ruleGate(newerSet, records, NOW).lines[0]).toBe("7판은 따로 인증이 필요합니다.");
+    expect(ruleGate({ set: newerSet, myRulebooks: records, now: NOW }).lines[0]).toBe(
+      "7판은 따로 인증이 필요합니다.",
+    );
   });
 });

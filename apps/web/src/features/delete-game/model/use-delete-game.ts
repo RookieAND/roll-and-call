@@ -4,7 +4,7 @@ import { toast, useAction } from "@/shared/ui";
 
 import { deleteGame } from "../api/delete-game";
 
-export function useDeleteGame(gameId: string, onSettled?: () => void) {
+export function useDeleteGame({ gameId, onSettled }: { gameId: string; onSettled?: () => void }) {
   const { pending, run } = useAction();
 
   function remove() {

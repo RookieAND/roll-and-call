@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ConfirmDialog, useAction } from "@/shared/ui";
 
 import { drawLottery } from "../api/draw-lottery";
+import { lotterySummaryLine } from "./lottery-summary-line";
 
 interface DrawLotteryCardProps {
   gameId: string;
@@ -32,11 +33,13 @@ export function DrawLotteryCard({
   const title = deadlinePassed
     ? `추첨으로 ${drawCount}명 정하기`
     : `지금 추첨으로 ${drawCount}명 정하기`;
-  const summaryLine = !deadlinePassed
-    ? `신청한 ${poolCount}명 중 ${drawnCount}명이 확정됩니다.`
-    : preConfirmedCount > 0
-      ? `확정 ${preConfirmedCount}명을 뺀 ${drawCount}자리를 신청 ${poolCount}명 중에서 뽑습니다.`
-      : `신청 ${poolCount}명 중 ${drawnCount}명을 뽑습니다.`;
+  const summaryLine = lotterySummaryLine({
+    deadlinePassed,
+    preConfirmedCount,
+    poolCount,
+    drawCount,
+    drawnCount,
+  });
   const closing = deadlinePassed
     ? `나머지 ${leftoverCount}명은 대기로 남고, 뽑은 뒤에도 명단은 고칠 수 있습니다.`
     : `나머지 ${leftoverCount}명은 대기로 남고, 모집은 바로 닫힙니다.`;

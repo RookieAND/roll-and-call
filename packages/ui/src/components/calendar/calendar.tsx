@@ -41,14 +41,18 @@ export function Calendar({ value, onSelect, min, max, className, style }: Calend
     return { year: today.getFullYear(), month: today.getMonth() + 1 };
   });
 
-  const leadingBlanks = firstWeekday(view.year, view.month);
-  const dayCount = daysInMonth(view.year, view.month);
+  const leadingBlanks = firstWeekday({ year: view.year, month: view.month });
+  const dayCount = daysInMonth({ year: view.year, month: view.month });
   const days = Array.from({ length: dayCount }, (_, index) => index + 1);
   const cells: (number | null)[] = [...Array.from({ length: leadingBlanks }, () => null), ...days];
 
   const isDisabled = (date: string) => Boolean((min && date < min) || (max && date > max));
-  const enabledDays = days.filter((day) => !isDisabled(toDateKey(view.year, view.month, day)));
-  const selectedDay = enabledDays.find((day) => toDateKey(view.year, view.month, day) === value);
+  const enabledDays = days.filter(
+    (day) => !isDisabled(toDateKey({ year: view.year, month: view.month, day })),
+  );
+  const selectedDay = enabledDays.find(
+    (day) => toDateKey({ year: view.year, month: view.month, day }) === value,
+  );
   const tabStopDay = selectedDay ?? enabledDays[0];
 
   // ponytail: 화살표는 이번 달 안에서만 옮긴다. 달을 넘기려면 이전·다음 달 버튼을 쓴다.
@@ -78,8 +82,8 @@ export function Calendar({ value, onSelect, min, max, className, style }: Calend
   return (
     <div
       data-slot="calendar"
-      className={cn("w-64 select-none", resolveStateProp(className, { value }))}
-      style={resolveStateProp(style, { value })}
+      className={cn("w-64 select-none", resolveStateProp({ prop: className, state: { value } }))}
+      style={resolveStateProp({ prop: style, state: { value } })}
     >
       <div data-slot="calendar-header" className="flex items-center justify-between px-050 py-050">
         <button
@@ -114,7 +118,7 @@ export function Calendar({ value, onSelect, min, max, className, style }: Calend
       <div className="grid grid-cols-7 gap-025 text-center text-sm" onKeyDown={moveFocus}>
         {cells.map((day, index) => {
           if (day === null) return <div key={index} />;
-          const date = toDateKey(view.year, view.month, day);
+          const date = toDateKey({ year: view.year, month: view.month, day });
           const selected = value === date;
           const disabled = isDisabled(date);
           return (

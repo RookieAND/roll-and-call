@@ -46,7 +46,7 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
     key: item.key,
     label: item.label,
     count: sessions[item.key].length,
-    href: sessionsHref(item.key),
+    href: sessionsHref({ role: item.key }),
   }));
   const chipCounts = Object.fromEntries(
     chips.map((chip) => [

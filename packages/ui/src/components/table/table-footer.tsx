@@ -17,9 +17,9 @@ export function TableFooter({ className, style, render, ref, ...props }: TableFo
       "data-slot": "table-footer",
       className: cn(
         "border-t border-gray-200 bg-gray-50 font-semibold",
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

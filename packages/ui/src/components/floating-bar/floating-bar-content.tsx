@@ -64,9 +64,9 @@ export function FloatingBarContent({
       inert: hidden || undefined,
       className: cn(
         bar({ safeArea, shadow: state.elevated, hidden }),
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

@@ -52,7 +52,7 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
   after(() => markBadgesSeen(user.id));
 
   const held = heldBadges(records, now);
-  const featured = pickFeaturedBadges(profile?.featuredBadges ?? [], held);
+  const featured = pickFeaturedBadges({ featuredKeys: profile?.featuredBadges ?? [], held });
   const role = dexTabKey(tab);
   const board = buildDexTab({ role, records, facts, appearances, userId: user.id, now });
   const countOf = (target: string) => held.filter((badge) => badge.role === target).length;

@@ -4,7 +4,13 @@ const MAX_COLUMNS = 60;
 
 export type DayColumn = { date: string; label: string; dow: string; md: string };
 
-export function buildDayColumns(rangeStart: string, rangeEnd: string): DayColumn[] {
+export function buildDayColumns({
+  rangeStart,
+  rangeEnd,
+}: {
+  rangeStart: string;
+  rangeEnd: string;
+}): DayColumn[] {
   const last = dayjs.utc(rangeEnd);
   const columns: DayColumn[] = [];
   for (

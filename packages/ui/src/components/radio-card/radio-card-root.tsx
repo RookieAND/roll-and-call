@@ -19,7 +19,7 @@ export function RadioCardRoot({ indicator = "radio", className, ...props }: Radi
         className={(state) =>
           cn(
             "grid w-full grid-cols-[1fr_auto] items-start gap-x-125 gap-y-050 rounded-600 border border-gray-200 bg-surface p-200 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus data-checked:border-tinted-border data-checked:bg-tinted-bg data-disabled:opacity-50",
-            resolveStateProp(className, state),
+            resolveStateProp({ prop: className, state }),
           )
         }
         {...props}

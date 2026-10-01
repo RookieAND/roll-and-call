@@ -35,6 +35,12 @@ export function scheduleLine(game: ScheduleGame, now: Date = new Date()) {
 
   const deadlinePassed = isDeadlinePassed(game.endDate, now);
   const days = ddayKst(game.endDate, now);
+  let deadline: string | null = null;
+  let deadlineShort: string | null = null;
+  if (!deadlinePassed) {
+    deadline = days === 0 ? "오늘 마감" : `마감 D-${days}`;
+    deadlineShort = days === 0 ? "오늘" : `D-${days}`;
+  }
 
   return {
     text,
@@ -44,8 +50,8 @@ export function scheduleLine(game: ScheduleGame, now: Date = new Date()) {
     dated: Boolean(game.confirmedAt),
     finished: false,
     deadlinePassed,
-    deadline: deadlinePassed ? null : days === 0 ? "오늘 마감" : `마감 D-${days}`,
-    deadlineShort: deadlinePassed ? null : days === 0 ? "오늘" : `D-${days}`,
+    deadline,
+    deadlineShort,
     deadlineWarn: !deadlinePassed && days <= DEADLINE_WARN_DAYS,
   };
 }

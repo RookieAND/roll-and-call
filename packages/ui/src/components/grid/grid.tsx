@@ -38,9 +38,9 @@ export function Grid({ className, style, cols, gap, render, ref, ...props }: Gri
       className: cn(
         grid({ cols }),
         gap !== undefined && gapMap[gap],
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

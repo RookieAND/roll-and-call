@@ -1,9 +1,13 @@
 // fetch는 업로드 진행률을 주지 않아 XHR로 올린다.
-export function putWithProgress(
-  url: string,
-  file: File,
-  onProgress: (ratio: number) => void,
-): Promise<number> {
+export function putWithProgress({
+  url,
+  file,
+  onProgress,
+}: {
+  url: string;
+  file: File;
+  onProgress: (ratio: number) => void;
+}): Promise<number> {
   return new Promise((resolve, reject) => {
     const request = new XMLHttpRequest();
     request.open("PUT", url);

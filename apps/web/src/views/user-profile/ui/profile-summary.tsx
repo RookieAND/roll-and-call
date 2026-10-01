@@ -56,8 +56,14 @@ export function ProfileSummary({
       </Text>
       <div className="mt-175">
         <SessionCountStats
-          hosted={{ count: hosted, href: userSessionsHref(profile.id, SESSION_ROLE.host) }}
-          played={{ count: played, href: userSessionsHref(profile.id, SESSION_ROLE.player) }}
+          hosted={{
+            count: hosted,
+            href: userSessionsHref({ userId: profile.id, role: SESSION_ROLE.host }),
+          }}
+          played={{
+            count: played,
+            href: userSessionsHref({ userId: profile.id, role: SESSION_ROLE.player }),
+          }}
         />
       </div>
       {featuredBadges.length > 0 && (

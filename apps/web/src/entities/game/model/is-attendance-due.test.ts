@@ -13,22 +13,30 @@ const ended = { ...startedTwoHoursAgo, playMinutes: 60 };
 
 describe("isAttendanceDue", () => {
   it("시작만으로는 생기지 않는다 — 플레이타임만큼 지나야 끝난 것이다", () => {
-    expect(isAttendanceDue(startedTwoHoursAgo, 3, NOW)).toBe(false);
+    expect(isAttendanceDue({ game: startedTwoHoursAgo, confirmedCount: 3, now: NOW })).toBe(false);
   });
 
   it("끝난 세션에는 출석 확인이 남는다", () => {
-    expect(isAttendanceDue(ended, 3, NOW)).toBe(true);
+    expect(isAttendanceDue({ game: ended, confirmedCount: 3, now: NOW })).toBe(true);
   });
 
   it("확정 참여자가 없으면 정할 것이 없다", () => {
-    expect(isAttendanceDue(ended, 0, NOW)).toBe(false);
+    expect(isAttendanceDue({ game: ended, confirmedCount: 0, now: NOW })).toBe(false);
   });
 
   it("이미 확정했으면 할 일이 아니다", () => {
-    expect(isAttendanceDue({ ...ended, attendanceConfirmedAt: NOW }, 3, NOW)).toBe(false);
+    expect(
+      isAttendanceDue({
+        game: { ...ended, attendanceConfirmedAt: NOW },
+        confirmedCount: 3,
+        now: NOW,
+      }),
+    ).toBe(false);
   });
 
   it("시간이 정해지지 않은 세션은 끝날 수도 없다", () => {
-    expect(isAttendanceDue({ ...ended, confirmedAt: null }, 3, NOW)).toBe(false);
+    expect(
+      isAttendanceDue({ game: { ...ended, confirmedAt: null }, confirmedCount: 3, now: NOW }),
+    ).toBe(false);
   });
 });

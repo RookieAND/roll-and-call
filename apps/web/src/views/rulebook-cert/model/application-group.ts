@@ -1,6 +1,12 @@
 import { RULEBOOK_KIND, type MyRulebook } from "@/entities/rulebook";
 
-export function applicationGroup(rulebook: MyRulebook, rulebooks: MyRulebook[]) {
+export function applicationGroup({
+  rulebook,
+  rulebooks,
+}: {
+  rulebook: MyRulebook;
+  rulebooks: MyRulebook[];
+}) {
   const groupId = rulebook.latestApplication?.groupId;
   const books = groupId
     ? rulebooks.filter((candidate) => candidate.latestApplication?.groupId === groupId)

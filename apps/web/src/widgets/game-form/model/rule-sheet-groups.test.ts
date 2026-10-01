@@ -47,12 +47,16 @@ const data = (enforcementDate: Date | null) => {
 
 describe("ruleSheetGroups", () => {
   it("카테고리마다 묶고 이름 순으로 늘어놓는다", () => {
-    const groups = ruleSheetGroups(data(new Date("2026-10-01T00:00:00+09:00")), "", NOW);
+    const groups = ruleSheetGroups({
+      data: data(new Date("2026-10-01T00:00:00+09:00")),
+      query: "",
+      now: NOW,
+    });
     expect(groups.map((group) => group.name)).toEqual(["사타스페", "인세인", "크툴루의 부름"]);
     expect(groups[1]!.options.map(({ gate }) => gate.type)).toEqual([RULE_GATE.blocked]);
   });
 
   it("다른 이름으로도 찾는다", () => {
-    expect(ruleSheetGroups(data(null), "coc", NOW)).toHaveLength(1);
+    expect(ruleSheetGroups({ data: data(null), query: "coc", now: NOW })).toHaveLength(1);
   });
 });

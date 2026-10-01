@@ -1,20 +1,14 @@
 import { Container } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
-import {
-  isAttendanceDue,
-  isSessionLocked,
-  SCHEDULE_MODE,
-  isSessionEnded,
-  splitRoster,
-} from "@/entities/game";
+import { isSessionLocked, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { getCurrentSessionUser, getGameParticipants } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
-import { ATTENDANCE_STAGE } from "../model/attendance-stage";
 import { summarizeRoster } from "../model/roster-summary";
 import { toManagedMember } from "../model/to-managed-member";
+import { attendanceStageOf } from "./attendance-stage-of";
 import { ParticipantManager } from "./participant-manager";
 
 export async function ManageParticipantsView({ id }: { id: string }) {
@@ -41,15 +35,11 @@ export async function ManageParticipantsView({ id }: { id: string }) {
 
   const roster = splitRoster(game.participants);
   const toMember = (participant: (typeof roster.confirmed)[number]) =>
-    toManagedMember(participant, availableUserIds);
+    toManagedMember({ participant, availableUserIds });
   const confirmed = roster.confirmed.map(toMember);
   const waiting = roster.waiting.map(toMember);
   const isCoordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
-  const attendanceStage = isAttendanceDue(game, confirmed.length)
-    ? ATTENDANCE_STAGE.due
-    : game.attendanceConfirmedAt && isSessionEnded(game)
-      ? ATTENDANCE_STAGE.done
-      : null;
+  const attendanceStage = attendanceStageOf({ game, confirmedCount: confirmed.length });
 
   return (
     <ParticipantManager

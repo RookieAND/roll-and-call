@@ -30,7 +30,7 @@ export function DatePicker({
   max,
 }: DatePickerProps) {
   const [open, setOpen] = useState(false);
-  const fieldAria = useFieldControlAria(invalid);
+  const fieldAria = useFieldControlAria({ invalid });
   const toneClass = invalid
     ? "border-[1.5px] border-danger-400 bg-danger-50 focus:ring-danger-600"
     : "border-gray-500 focus:border-primary-500 focus:ring-focus";

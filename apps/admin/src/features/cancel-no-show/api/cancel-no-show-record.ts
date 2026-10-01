@@ -17,7 +17,9 @@ export async function cancelNoShowRecord(noShowId: string, reason: string) {
   const result = await cancelNoShow(noShowId, staff, reason);
   revalidatePath("/", "layout");
   const { gameId } = parseNoShowId(noShowId);
-  after(() => syncGameReviewForumPosts(gameId, process.env.NEXT_PUBLIC_USER_APP_URL));
+  after(() =>
+    syncGameReviewForumPosts({ gameId, siteOrigin: process.env.NEXT_PUBLIC_USER_APP_URL }),
+  );
   after(() => evaluateGameBadges(gameId));
   return result;
 }

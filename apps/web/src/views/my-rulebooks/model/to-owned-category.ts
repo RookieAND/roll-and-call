@@ -8,6 +8,8 @@ import {
 } from "@/entities/rulebook";
 import { toKst } from "@/shared/lib";
 
+import { ownedCategorySub } from "./owned-category-sub";
+
 export interface OwnedBook {
   key: string;
   title: string;
@@ -44,14 +46,7 @@ export function toOwnedCategory({
     Boolean,
   );
   const [nearest] = partial.toSorted((left, right) => left.missing.length - right.missing.length);
-  const sub =
-    earned.length > 0
-      ? editions.length > 0
-        ? `${editions.join(" · ")} 구인을 열 수 있습니다`
-        : "구인을 열 수 있습니다"
-      : nearest
-        ? `${nearest.missing.length}권만 더 인증하면 ${nearest.set.edition || nearest.set.label} GM이 될 수 있습니다`
-        : "기본 룰북을 인증하면 GM이 될 수 있습니다";
+  const sub = ownedCategorySub({ hasEarned: earned.length > 0, editions, nearest });
   const remaining = new Set(partial.flatMap(({ missing }) => missing));
   return {
     key: categoryId,

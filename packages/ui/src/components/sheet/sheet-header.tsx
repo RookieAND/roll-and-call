@@ -20,8 +20,8 @@ export function SheetHeader({ className, style, render, ref, ...props }: SheetHe
     state,
     props: {
       "data-slot": "sheet-header",
-      className: cn("flex flex-col gap-050 pb-150", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn("flex flex-col gap-050 pb-150", resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

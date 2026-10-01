@@ -40,13 +40,13 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
 
   const { rulebooks, sets } = toMyRulebooks(await getRulebookRecords(user.id));
   const rulebook = rulebooks.find((candidate) => candidate.id === rulebookId);
-  if (!rulebook?.state) redirect(certApplyHref([rulebookId]));
+  if (!rulebook?.state) redirect(certApplyHref({ rulebookIds: [rulebookId] }));
 
-  const books = applicationGroup(rulebook, rulebooks);
+  const books = applicationGroup({ rulebook, rulebooks });
   const results = books.map(toBookResult);
   const pending = books.some((book) => book.state === CERT_STATE.pending);
   const allCertified = books.every((book) => book.state === CERT_STATE.certified);
-  const set = rulebook.kind === RULEBOOK_KIND.core ? setOf(rulebook, sets) : null;
+  const set = rulebook.kind === RULEBOOK_KIND.core ? setOf({ rulebook, sets }) : null;
   const setGuide =
     set && !set.opened && set.cores.length > 1
       ? `기본 룰북 ${set.cores.length}권이 모두 승인되어야 ${set.label} GM이 될 수 있습니다.`
@@ -78,7 +78,11 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
             )}
             {allCertified && (
               <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
-                <Button render={<Link href={certApplyHref([])} />} size="lg" className="w-full">
+                <Button
+                  render={<Link href={certApplyHref({ rulebookIds: [] })} />}
+                  size="lg"
+                  className="w-full"
+                >
                   다른 룰북 인증하기
                 </Button>
               </VStack>

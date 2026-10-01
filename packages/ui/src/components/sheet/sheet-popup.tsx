@@ -44,7 +44,9 @@ export function SheetPopup({ className, children, ...props }: SheetPopupProps) {
         data-slot="sheet-popup"
         data-side={side}
         data-size={size}
-        className={(state) => cn(popup({ side, size }), resolveStateProp(className, state))}
+        className={(state) =>
+          cn(popup({ side, size }), resolveStateProp({ prop: className, state }))
+        }
         {...props}
       >
         <OverlayPresence />

@@ -34,9 +34,9 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
 
   // 룰은 카테고리·판본 단위다. 표시 이름은 "카테고리 판본", 구인은 그 판본의 첫 기본 룰북을 가리킨다.
   const myRulebooks = toMyRulebooks(await getRulebookRecords(user.id));
-  const set = ruleSetOf(myRulebooks, parsed.data.rulebookId);
+  const set = ruleSetOf({ myRulebooks, rulebookId: parsed.data.rulebookId });
   if (!set) return { error: "룰을 다시 골라 주세요.", field: "rule" };
-  if (ruleGate(set, myRulebooks).type === RULE_GATE.blocked) {
+  if (ruleGate({ set, myRulebooks }).type === RULE_GATE.blocked) {
     return {
       error: "그사이 인증 상태가 바뀌어 등록하지 못했습니다. 작성한 내용은 그대로 있습니다.",
       field: "rule",
@@ -81,10 +81,15 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
       with: { gm: { columns: { username: true } } },
     });
     const threadId =
-      game && (await notifyGameCreated(game, game.gm?.username ?? "?", invitedIds.length));
+      game &&
+      (await notifyGameCreated({
+        game,
+        gmName: game.gm?.username ?? "?",
+        confirmedCount: invitedIds.length,
+      }));
     if (threadId) {
       await db.update(games).set({ discordThreadId: threadId }).where(eq(games.id, gameId));
-      await notifyDirectConfirmed(gameId, invitedIds);
+      await notifyDirectConfirmed({ gameId, userIds: invitedIds });
     }
     if (recruitmentComplete) await announceRecruitmentComplete(gameId);
   });

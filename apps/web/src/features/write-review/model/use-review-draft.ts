@@ -8,11 +8,15 @@ const storageKey = (gameId: string) => `review-draft:${gameId}`;
 
 // 새로 쓰는 글만 이 기기에 임시 저장한다. 사진은 저장하지 않는다(나가면 지운다).
 // 저장소를 못 쓰는 환경(사생활 보호 창 등)에서는 조용히 넘어간다.
-export function useReviewDraft(
-  gameId: string,
-  enabled: boolean,
-  onRestore: (draft: ReviewDraft) => void,
-) {
+export function useReviewDraft({
+  gameId,
+  enabled,
+  onRestore,
+}: {
+  gameId: string;
+  enabled: boolean;
+  onRestore: (draft: ReviewDraft) => void;
+}) {
   const [restored, setRestored] = useState(false);
   // 폼이 매 렌더 새로 만드는 콜백을 따라 다시 불러오면 쓰던 글을 덮으므로 처음 열 때 한 번만 부른다.
   const restore = useEffectEvent(onRestore);

@@ -12,7 +12,7 @@ import type { BookDraft } from "./book-draft";
 import { OTHER_SELLER } from "./other-seller";
 import { PHOTO_SLOT, type PhotoSlot } from "./photo-slot";
 
-const kept = (url: string | null | undefined, flagged: boolean): PhotoSlot =>
+const kept = ({ url, flagged }: { url: string | null | undefined; flagged: boolean }): PhotoSlot =>
   url && !flagged ? { status: PHOTO_SLOT.previous, url } : { status: PHOTO_SLOT.empty };
 
 export function initialDraft({
@@ -34,10 +34,13 @@ export function initialDraft({
   return {
     format: previous?.format ?? CERT_FORMAT.physical,
     shots: Object.fromEntries(
-      CERT_SHOTS.map((shot) => [shot, kept(previous?.photoUrls[shot], flagged(shot))]),
+      CERT_SHOTS.map((shot) => [
+        shot,
+        kept({ url: previous?.photoUrls[shot], flagged: flagged(shot) }),
+      ]),
     ) as Record<CertShot, PhotoSlot>,
     proofs: Object.fromEntries(
-      CERT_PROOFS.map((proof) => [proof, kept(proofUrl[proof], flagged(proof))]),
+      CERT_PROOFS.map((proof) => [proof, kept({ url: proofUrl[proof], flagged: flagged(proof) })]),
     ) as Record<CertProof, PhotoSlot>,
     seller: seller && !known ? OTHER_SELLER : seller,
     sellerOther: seller && !known ? seller : "",

@@ -13,8 +13,12 @@ function categoryIds(sessions: BadgeFacts["played"]): string[] {
 export function computeBadges(facts: BadgeFacts): EarnedBadge[] {
   const earned: EarnedBadge[] = [];
   const add = (ladder: BadgeLadderKey, subject: string | null = null) => {
-    const reached = reachedTier(BADGE_LADDERS[ladder].steps, ladderEvents(facts, ladder, subject));
-    if (reached) earned.push({ badgeKey: badgeKey(ladder, subject ?? undefined), ...reached });
+    const reached = reachedTier({
+      steps: BADGE_LADDERS[ladder].steps,
+      events: ladderEvents({ facts, ladder, subject }),
+    });
+    if (reached)
+      earned.push({ badgeKey: badgeKey({ ladder, subject: subject ?? undefined }), ...reached });
   };
 
   add(BADGE_LADDER.playerTotal);

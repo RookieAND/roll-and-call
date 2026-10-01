@@ -25,7 +25,7 @@ export function GameRulebookSheet({
   onSelect,
 }: GameRulebookSheetProps) {
   const [query, setQuery] = useState("");
-  const groups = ruleSheetGroups(rulebooks, query);
+  const groups = ruleSheetGroups({ data: rulebooks, query });
 
   const pick = (set: EditionSet) => {
     onSelect(set);

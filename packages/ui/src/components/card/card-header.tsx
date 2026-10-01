@@ -15,8 +15,11 @@ export function CardHeader({ className, style, render, ref, ...props }: CardHead
     state,
     props: {
       "data-slot": "card-header",
-      className: cn("flex items-start justify-between gap-100", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(
+        "flex items-start justify-between gap-100",
+        resolveStateProp({ prop: className, state }),
+      ),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

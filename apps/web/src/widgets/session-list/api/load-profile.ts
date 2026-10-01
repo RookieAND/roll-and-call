@@ -17,6 +17,6 @@ export async function loadProfile(userId: string) {
   return {
     profile,
     sessions: buildProfileSessions({ hosted, joined, userId }),
-    absences: recentAbsences(joined, userId),
+    absences: recentAbsences({ joined, userId }),
   };
 }

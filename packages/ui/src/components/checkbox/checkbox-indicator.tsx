@@ -13,7 +13,7 @@ export function CheckboxIndicator({ className, ...props }: CheckboxIndicatorProp
   return (
     <BaseCheckbox.Indicator
       data-slot="checkbox-indicator"
-      className={(state) => cn("flex text-current", resolveStateProp(className, state))}
+      className={(state) => cn("flex text-current", resolveStateProp({ prop: className, state }))}
       {...props}
     >
       <Check size={14} strokeWidth={3} aria-hidden className="[[data-indeterminate]_&]:hidden" />

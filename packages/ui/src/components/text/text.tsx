@@ -74,9 +74,9 @@ export function Text({
       "data-slot": "text",
       className: cn(
         text({ typography, foreground, weight, tight, numeric, truncate }),
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

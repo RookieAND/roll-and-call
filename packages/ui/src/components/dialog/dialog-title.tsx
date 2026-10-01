@@ -11,7 +11,7 @@ export function DialogTitle({ className, ...props }: ComponentPropsWithRef<typeo
     <Dialog.Title
       data-slot="dialog-title"
       className={(state) =>
-        cn("text-heading3 font-bold text-gray-900", resolveStateProp(className, state))
+        cn("text-heading3 font-bold text-gray-900", resolveStateProp({ prop: className, state }))
       }
       {...props}
     />

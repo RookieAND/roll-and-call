@@ -19,10 +19,13 @@ export type CertOptionType = (typeof CERT_OPTION)[keyof typeof CERT_OPTION];
 
 const PICK_AGAIN = "다시 신청할 수 있습니다";
 
-export function certOption(
-  rulebook: MyRulebook,
-  rulebooks: MyRulebook[],
-): { type: CertOptionType; note: string; missing: MyRulebook[] } {
+export function certOption({
+  rulebook,
+  rulebooks,
+}: {
+  rulebook: MyRulebook;
+  rulebooks: MyRulebook[];
+}): { type: CertOptionType; note: string; missing: MyRulebook[] } {
   const result = (type: CertOptionType, note: string, missing: MyRulebook[] = []) => ({
     type,
     note,
@@ -41,7 +44,7 @@ export function certOption(
     return result(CERT_OPTION.pending, certRowMeta(rulebook));
 
   if (rulebook.kind === RULEBOOK_KIND.supplement) {
-    const missing = missingCores(rulebook, rulebooks);
+    const missing = missingCores({ rulebook, rulebooks });
     if (missing.length > 0) {
       return result(CERT_OPTION.needsCore, "같은 판본의 기본 룰북을 먼저 인증해야 합니다", missing);
     }

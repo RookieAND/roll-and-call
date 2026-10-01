@@ -33,7 +33,11 @@ export async function loadMonthlyAppearances(now: Date = new Date()): Promise<Mo
   ]);
   const toAppearances = (rows: typeof hosted, role: MonthlyAppearance["role"]) =>
     rows
-      .filter((row) => sessionEndsAt(row.confirmedAt!, row.playMinutes).getTime() <= now.getTime())
+      .filter(
+        (row) =>
+          sessionEndsAt({ startsAt: row.confirmedAt!, playMinutes: row.playMinutes }).getTime() <=
+          now.getTime(),
+      )
       .map((row) => ({ userId: row.userId, role, startsAt: row.confirmedAt! }));
   return [...toAppearances(hosted, BADGE_ROLE.gm), ...toAppearances(played, BADGE_ROLE.player)];
 }

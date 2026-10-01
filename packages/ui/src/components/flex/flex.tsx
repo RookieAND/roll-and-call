@@ -63,9 +63,9 @@ export function Flex({
       className: cn(
         flex({ direction, align, justify, wrap, inline: inline ?? false }),
         gap !== undefined && gapMap[gap],
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

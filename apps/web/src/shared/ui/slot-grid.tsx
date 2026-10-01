@@ -83,7 +83,9 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
           >
             {row.minute === 0 ? row.label : ""}
           </Text>,
-          ...days.map((day) => renderCell(slotIso(day.date, row.hour, row.minute))),
+          ...days.map((day) =>
+            renderCell(slotIso({ date: day.date, hour: row.hour, minute: row.minute })),
+          ),
         ])}
       </div>
     </div>

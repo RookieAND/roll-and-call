@@ -1,11 +1,15 @@
 import { BADGE_LADDER, type BadgeLadderKey, type BadgeStep } from "@roll-and-call/database/rules";
 
 // 상세 시트의 조건 문장. 문장마다 줄을 바꾸므로 그리는 쪽은 whitespace-pre-line을 준다.
-export function badgeCondition(
-  ladder: BadgeLadderKey,
-  step: BadgeStep,
-  categoryName: string | null,
-): string {
+export function badgeCondition({
+  ladder,
+  step,
+  categoryName,
+}: {
+  ladder: BadgeLadderKey;
+  step: BadgeStep;
+  categoryName: string | null;
+}): string {
   const count = step.threshold;
   switch (ladder) {
     case BADGE_LADDER.playerTotal:

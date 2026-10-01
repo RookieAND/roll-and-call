@@ -12,10 +12,13 @@ interface ApplicationRecord {
 }
 
 // 룰북 하나에 대한 내 상태. 살아 있는 인증이 가장 앞서고, 그다음은 마지막 신청, 인증 취소는 그 뒤에 새 신청이 없을 때만.
-export function deriveCertState(
-  certification: CertRecord | undefined,
-  latestApplication: ApplicationRecord | undefined,
-): { state: CertState; at: Date } | null {
+export function deriveCertState({
+  certification,
+  latestApplication,
+}: {
+  certification?: CertRecord;
+  latestApplication?: ApplicationRecord;
+}): { state: CertState; at: Date } | null {
   if (certification && !certification.revokedAt) {
     return { state: CERT_STATE.certified, at: certification.approvedAt };
   }

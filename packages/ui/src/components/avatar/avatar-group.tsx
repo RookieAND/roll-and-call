@@ -32,7 +32,7 @@ export function AvatarGroup({ people, max = 3, size, className }: AvatarGroupPro
       data-slot="avatar-group"
       className={cn(
         "flex items-center",
-        resolveStateProp(className, { size, count: people.length }),
+        resolveStateProp({ prop: className, state: { size, count: people.length } }),
       )}
     >
       {shown.map((person, index) => (

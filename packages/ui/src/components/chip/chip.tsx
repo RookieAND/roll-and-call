@@ -56,8 +56,8 @@ export function Chip({
     state,
     props: {
       "data-slot": "chip",
-      className: cn(chip({ shape, tone, selected }), resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(chip({ shape, tone, selected }), resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...(render ? { disabled: disabled || undefined } : { type: type ?? "button", disabled }),
       ...props,
       children,

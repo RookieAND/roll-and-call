@@ -13,14 +13,20 @@ import { setParticipantStatus } from "./set-participant-status";
 
 const { confirmed } = PARTICIPANT_STATUS;
 
-export async function promoteParticipant(gameId: string, userId: string): Promise<ActionResult> {
+export async function promoteParticipant({
+  gameId,
+  userId,
+}: {
+  gameId: string;
+  userId: string;
+}): Promise<ActionResult> {
   let promoted = false;
   let becameFull = false;
 
-  return adjustRoster(
+  return adjustRoster({
     gameId,
-    async (transaction, game) => {
-      const status = await findParticipantStatus(transaction, gameId, userId);
+    work: async (transaction, game) => {
+      const status = await findParticipantStatus({ transaction, gameId, userId });
       if (!status) throw new RosterError(PARTICIPANT_NOT_FOUND_MESSAGE);
       if (status === confirmed) return;
 
@@ -33,14 +39,14 @@ export async function promoteParticipant(gameId: string, userId: string): Promis
           `정원 ${game.maxPlayers}명이 차 있습니다. 확정에서 한 명을 대기로 옮기세요.`,
         );
       }
-      await setParticipantStatus(transaction, gameId, userId, confirmed);
+      await setParticipantStatus({ transaction, gameId, userId, status: confirmed });
       promoted = true;
       becameFull = confirmedCount + 1 === game.maxPlayers;
     },
-    async () => {
+    notify: async () => {
       if (!promoted) return;
-      await notifyDirectConfirmed(gameId, [userId]);
+      await notifyDirectConfirmed({ gameId, userIds: [userId] });
       if (becameFull) await announceRecruitmentComplete(gameId);
     },
-  );
+  });
 }

@@ -64,6 +64,6 @@ export function editionSets(rulebooks: MyRulebook[]): EditionSet[] {
   );
 }
 
-export function setOf(rulebook: MyRulebook, sets: EditionSet[]) {
+export function setOf({ rulebook, sets }: { rulebook: MyRulebook; sets: EditionSet[] }) {
   return sets.find((set) => set.key === editionSetKey(rulebook)) ?? null;
 }

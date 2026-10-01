@@ -3,16 +3,21 @@ import { discordBotFormApi } from "../api/discord-bot-form-api";
 import type { DiscordForumPostInput } from "../model/discord-types";
 
 // 첨부는 통째로 새로 올린다. 게시글이 사라졌거나 고칠 수 없으면 false를 돌려 다시 만들게 한다.
-export async function updateForumPost(
-  threadId: string,
-  { name, appliedTags, content, files }: DiscordForumPostInput,
-): Promise<boolean> {
+export async function updateForumPost({
+  threadId,
+  name,
+  appliedTags,
+  content,
+  files,
+}: DiscordForumPostInput & { threadId: string }): Promise<boolean> {
   try {
-    await discordBotApi(`/channels/${threadId}`, {
+    await discordBotApi({
+      path: `/channels/${threadId}`,
       method: "PATCH",
       body: { name: name.slice(0, 100), applied_tags: appliedTags },
     });
-    await discordBotFormApi(`/channels/${threadId}/messages/${threadId}`, {
+    await discordBotFormApi({
+      path: `/channels/${threadId}/messages/${threadId}`,
       method: "PATCH",
       payload: { content, embeds: [], components: [] },
       files,

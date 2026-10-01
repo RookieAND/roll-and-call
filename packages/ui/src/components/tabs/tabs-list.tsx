@@ -31,7 +31,9 @@ export function TabsList({
     <BaseTabs.List
       data-slot="tabs-list"
       data-variant={variant ?? undefined}
-      className={(state) => cn(list({ variant, scrollable }), resolveStateProp(className, state))}
+      className={(state) =>
+        cn(list({ variant, scrollable }), resolveStateProp({ prop: className, state }))
+      }
       {...props}
     />
   );

@@ -1,27 +1,32 @@
 import { SESSION_ROLE, SESSION_STATE, splitRoster } from "@/entities/game";
-import { ddayKst, formatDate, formatDateTime } from "@/shared/lib";
+import { ddayKst, formatDateTime } from "@/shared/lib";
 
 import type { SessionFacts } from "./derive-session-facts";
 import { hostMenuAction } from "./host-menu-action";
 import { joinParts } from "./join-parts";
+import { pastEnding } from "./past-ending";
+import { pastScheduleTone } from "./past-schedule-tone";
 import { relativeDay } from "./relative-day";
 import { reviewNote } from "./review-note";
 import {
   SESSION_ACTION_KIND,
   SESSION_CHIP,
   SESSION_ICON,
-  SESSION_TONE,
   type SessionTodo,
   type SessionCardModel,
   type SessionContext,
   type SessionGame,
 } from "./session-card-model";
 
-export function toPastSessionCard(
-  game: SessionGame,
-  facts: SessionFacts,
-  context: SessionContext,
-): SessionCardModel {
+export function toPastSessionCard({
+  game,
+  facts,
+  context,
+}: {
+  game: SessionGame;
+  facts: SessionFacts;
+  context: SessionContext;
+}): SessionCardModel {
   const { base, state, viewerAbsent } = facts;
   const finished = state === SESSION_STATE.finished && game.confirmedAt;
   const player = base.role === SESSION_ROLE.player;
@@ -36,16 +41,14 @@ export function toPastSessionCard(
   const ago = game.confirmedAt
     ? relativeDay(ddayKst(game.confirmedAt, context.now ?? new Date()))
     : null;
-  const ending = waitlistRank
-    ? { badge: "대기 종료", schedule: joinParts(when, "자리가 나지 않은 채 끝났습니다") }
-    : absent
-      ? { badge: "불참", schedule: joinParts(when, "참석하지 않았습니다", ago) }
-      : finished
-        ? { badge: "완료", schedule: joinParts(when, "세션을 마쳤습니다", ago) }
-        : {
-            badge: "무산",
-            schedule: joinParts(formatDate(game.endDate), "일정을 정하지 못했습니다"),
-          };
+  const ending = pastEnding({
+    waitlistRank,
+    absent,
+    finished: Boolean(finished),
+    when,
+    ago,
+    endDate: game.endDate,
+  });
 
   const attendanceTodo: SessionTodo | null =
     !player && facts.attendanceDue && !context.readOnly
@@ -63,8 +66,9 @@ export function toPastSessionCard(
 
   const review =
     player && finished && !absent && !waitlistRank
-      ? reviewNote(game, context)
+      ? reviewNote({ game, context })
       : { caption: null, action: null };
+  const hostAction = context.readOnly ? null : hostMenuAction(game.id);
   const absentCaption = absent && !context.readOnly ? { text: "불참 처리됨", strong: false } : null;
 
   return {
@@ -74,14 +78,10 @@ export function toPastSessionCard(
     badgeColor: absent ? "danger" : "gray",
     titleDanger: absent,
     schedule: attendanceTodo ? joinParts(when, "출석 확인이 남아 있습니다") : ending.schedule,
-    scheduleTone: absent
-      ? SESSION_TONE.danger
-      : attendanceTodo
-        ? SESSION_TONE.warning
-        : SESSION_TONE.muted,
+    scheduleTone: pastScheduleTone({ absent, attendancePending: Boolean(attendanceTodo) }),
     scheduleIcon: attendanceTodo ? SESSION_ICON.alert : SESSION_ICON.calendar,
     gm: player ? (game.gm ?? null) : null,
-    action: player ? review.action : context.readOnly ? null : hostMenuAction(game.id),
+    action: player ? review.action : hostAction,
     caption: review.caption ?? absentCaption,
     todo: attendanceTodo,
     waitingCount: facts.waitingCount,

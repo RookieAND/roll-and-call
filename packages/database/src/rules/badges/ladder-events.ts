@@ -27,11 +27,16 @@ function firstOfEachCategory(events: BadgeSession[]): BadgeSession[] {
 }
 
 // 룰별 사다리는 subject(룰 분류 id)의 세션만, 이달의 뱃지는 여러 사람을 견줘야 하고 특별 칭호는 오너가 줘서 빈 목록이다.
-export function ladderEvents(
-  { played, hosted, reviews, written }: BadgeFacts,
-  ladder: BadgeLadderKey,
-  subject: string | null = null,
-): BadgeEvent[] {
+export function ladderEvents({
+  facts,
+  ladder,
+  subject = null,
+}: {
+  facts: BadgeFacts;
+  ladder: BadgeLadderKey;
+  subject?: string | null;
+}): BadgeEvent[] {
+  const { played, hosted, reviews, written } = facts;
   switch (ladder) {
     case BADGE_LADDER.playerTotal:
       return toEvents(played);

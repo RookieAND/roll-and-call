@@ -37,7 +37,10 @@ export async function syncMonthlyBadges(now: Date = new Date()) {
   const userIds = new Set([...Object.keys(desiredByUser), ...Object.keys(storedByUser)]);
 
   for (const userId of userIds) {
-    const writes = diffBadges(storedByUser[userId] ?? [], desiredByUser[userId] ?? []);
-    await applyBadgeWrites(userId, writes, now);
+    const writes = diffBadges({
+      stored: storedByUser[userId] ?? [],
+      desired: desiredByUser[userId] ?? [],
+    });
+    await applyBadgeWrites({ userId, writes, now });
   }
 }

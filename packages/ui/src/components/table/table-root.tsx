@@ -28,9 +28,9 @@ export function TableRoot({
       "data-slot": "table",
       className: cn(
         "w-full border-collapse text-left text-body3 text-gray-900",
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

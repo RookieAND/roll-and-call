@@ -14,7 +14,10 @@ export function DialogDescription({
     <Dialog.Description
       data-slot="dialog-description"
       className={(state) =>
-        cn("text-sm whitespace-pre-line text-gray-600", resolveStateProp(className, state))
+        cn(
+          "text-sm whitespace-pre-line text-gray-600",
+          resolveStateProp({ prop: className, state }),
+        )
       }
       {...props}
     />

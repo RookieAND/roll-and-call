@@ -40,9 +40,9 @@ export function CardRoot({
       "data-slot": "card",
       className: cn(
         card({ radius, background, padding, interactive }),
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

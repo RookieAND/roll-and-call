@@ -13,20 +13,25 @@ import type { BadgeRecord } from "@/shared/server";
 import { heldRecord } from "./held-record";
 import { ladderNext } from "./ladder-next";
 
-export function ruleRows(
-  ladder: BadgeLadderKey,
-  rules: RuleCount[],
-  facts: BadgeFacts,
-  recordsByKey: Map<string, BadgeRecord>,
-) {
+export function ruleRows({
+  ladder,
+  rules,
+  facts,
+  recordsByKey,
+}: {
+  ladder: BadgeLadderKey;
+  rules: RuleCount[];
+  facts: BadgeFacts;
+  recordsByKey: Map<string, BadgeRecord>;
+}) {
   const steps = BADGE_LADDERS[ladder].steps;
   return rules.map((rule) => {
-    const key = badgeKey(ladder, rule.categoryId);
-    const events = ladderEvents(facts, ladder, rule.categoryId);
+    const key = badgeKey({ ladder, subject: rule.categoryId });
+    const events = ladderEvents({ facts, ladder, subject: rule.categoryId });
     const record = recordsByKey.get(key);
-    const held = heldRecord(ladder, events, record);
+    const held = heldRecord({ ladder, events, record });
     const tier = held?.tier ?? 1;
-    const next = ladderNext(ladder, rule.count, rule.categoryName);
+    const next = ladderNext({ ladder, count: rule.count, categoryName: rule.categoryName });
     const step = steps[tier - 1]!;
     return {
       key,

@@ -53,7 +53,7 @@ export function AttendanceForm({ gameId, attendees, children }: AttendanceFormPr
   }
 
   function submit() {
-    run(() => confirmAttendance(gameId, [...absentIds]), {
+    run(() => confirmAttendance({ gameId, absentUserIds: [...absentIds] }), {
       onSuccess: () => {
         setConfirming(false);
         // 되돌리기는 토스트 콜백이라 ErrorBoundary 밖이다.
@@ -61,11 +61,12 @@ export function AttendanceForm({ gameId, attendees, children }: AttendanceFormPr
           undo: async () => {
             try {
               const result = await reopenAttendance(gameId);
-              handleActionResult(result, {
+              handleActionResult({
+                result,
                 onSuccess: () => toast.success("다시 고칠 수 있습니다"),
               });
             } catch (error) {
-              reportError(error);
+              reportError({ error });
             }
           },
         });

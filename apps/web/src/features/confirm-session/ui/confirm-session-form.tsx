@@ -58,14 +58,14 @@ export function ConfirmSessionForm({
   const [error, setError] = useState<string | null>(null);
   const { pending, run } = useAction();
 
-  const startIso = slotIso(start.date, start.hour, start.minute);
+  const startIso = slotIso({ date: start.date, hour: start.hour, minute: start.minute });
   const members = windowMembers({ names, startIso, slotCount });
   const absentNames = respondents.filter((name) => !members.includes(name));
   const startLabel = toKst(startIso).format("M/D (dd) HH:mm");
 
   function submit() {
     setError(null);
-    run(() => confirmSession(gameId, startIso), {
+    run(() => confirmSession({ gameId, slotIso: startIso }), {
       onSuccess: () => {
         setConfirming(false);
         toast.success(changing ? "확정 시간을 바꿨습니다" : "세션이 확정되었습니다");
@@ -77,7 +77,7 @@ export function ConfirmSessionForm({
     });
   }
 
-  const windowLabel = sessionWindowLabel(startIso, playMinutes);
+  const windowLabel = sessionWindowLabel({ iso: startIso, playMinutes });
   const pickedCandidate = candidates.find((candidate) => candidate.iso === startIso)?.iso ?? null;
 
   return (

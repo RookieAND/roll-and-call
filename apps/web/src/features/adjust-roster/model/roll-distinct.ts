@@ -1,7 +1,7 @@
 import { DIE_FACES } from "@/entities/game";
 
 // 면 수보다 사람이 많으면 모두 다른 값을 줄 수 없어 굴리지 않는다. 신청 단계에서 이미 막는다.
-export function rollDistinct(count: number, roll: () => number): number[] {
+export function rollDistinct({ count, roll }: { count: number; roll: () => number }): number[] {
   if (count > DIE_FACES) throw new RangeError(`rollDistinct: ${count} > ${DIE_FACES}`);
   const values = Array.from({ length: count }, () => roll());
 

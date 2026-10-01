@@ -9,10 +9,13 @@ type ParticipantRow = RosterMember<{
   user: { username: string; avatarUrl: string | null } | null;
 }>;
 
-export function toManagedMember(
-  participant: ParticipantRow,
-  availableUserIds: Set<string>,
-): ManagedMember {
+export function toManagedMember({
+  participant,
+  availableUserIds,
+}: {
+  participant: ParticipantRow;
+  availableUserIds: Set<string>;
+}): ManagedMember {
   return {
     userId: participant.userId,
     username: participant.user?.username ?? "익명",

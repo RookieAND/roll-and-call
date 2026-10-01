@@ -25,7 +25,7 @@ export function Textarea({
   ...props
 }: TextareaProps) {
   const state = { invalid: Boolean(invalid), disabled };
-  const fieldAria = useFieldControlAria(invalid, describedBy);
+  const fieldAria = useFieldControlAria({ invalid, describedBy });
   return useRender({
     ref,
     defaultTagName: "textarea",
@@ -38,9 +38,9 @@ export function Textarea({
       className: cn(
         textFieldVariants({ invalid }),
         "min-h-24 py-125",
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

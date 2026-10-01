@@ -28,7 +28,7 @@ export async function UserProfileView({ id }: { id: string }) {
     viewerPromise,
     loadProfile(id),
     getRulebookRecords(id),
-    getReviewCounts(id),
+    getReviewCounts({ userId: id }),
     getUserBadges(id),
     viewerPromise.then((currentViewer) =>
       currentViewer ? getProfileMemo({ ownerId: currentViewer.id, targetId: id }) : null,
@@ -46,10 +46,12 @@ export async function UserProfileView({ id }: { id: string }) {
   const isGm = certified.length > 0;
   const now = new Date();
   const held = profile.showBadges ? heldBadges(badgeRecords, now) : [];
-  const featuredBadges = pickFeaturedBadges(profile.featuredBadges, held).map((badge) => ({
-    ...badge,
-    detail: heldBadgeDetail(badge, { records: badgeRecords, facts: null, now }),
-  }));
+  const featuredBadges = pickFeaturedBadges({ featuredKeys: profile.featuredBadges, held }).map(
+    (badge) => ({
+      ...badge,
+      detail: heldBadgeDetail({ badge, records: badgeRecords, facts: null, now }),
+    }),
+  );
 
   return (
     <>

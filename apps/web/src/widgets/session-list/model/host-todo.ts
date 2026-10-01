@@ -4,11 +4,15 @@ import { formatDate } from "@/shared/lib";
 import type { SessionFacts } from "./derive-session-facts";
 import { SESSION_ACTION_KIND, type SessionGame, type SessionTodo } from "./session-card-model";
 
-export function hostTodo(
-  game: SessionGame,
-  facts: SessionFacts,
-  responses: number,
-): SessionTodo | null {
+export function hostTodo({
+  game,
+  facts,
+  responses,
+}: {
+  game: SessionGame;
+  facts: SessionFacts;
+  responses: number;
+}): SessionTodo | null {
   const { confirmedCount, waitingCount } = facts;
   const participantsHref = `/games/${game.id}/participants`;
 

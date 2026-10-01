@@ -31,9 +31,9 @@ export function nextBadgeGoal(counts: BadgeCounts) {
   }
 
   const goals = candidates.flatMap((candidate) => {
-    const step = nextStep(BADGE_LADDERS[candidate.ladder].steps, candidate.count);
+    const step = nextStep({ steps: BADGE_LADDERS[candidate.ladder].steps, count: candidate.count });
     if (!step) return [];
-    const name = stepName(step, candidate.categoryName);
+    const name = stepName({ step, categoryName: candidate.categoryName });
     return [
       {
         emoji: step.emoji,
@@ -41,7 +41,11 @@ export function nextBadgeGoal(counts: BadgeCounts) {
         remaining: step.threshold - candidate.count,
         count: candidate.count,
         threshold: step.threshold,
-        condition: badgeCondition(candidate.ladder, step, candidate.categoryName),
+        condition: badgeCondition({
+          ladder: candidate.ladder,
+          step,
+          categoryName: candidate.categoryName,
+        }),
       },
     ];
   });

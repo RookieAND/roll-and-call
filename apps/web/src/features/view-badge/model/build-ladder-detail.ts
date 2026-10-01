@@ -18,6 +18,8 @@ import { toKst } from "@/shared/lib";
 
 import type { BadgeDetail } from "./badge-detail";
 import { LADDER_META } from "./ladder-meta";
+import { stepStatus } from "./step-status";
+import { stepStatusTone } from "./step-status-tone";
 
 type HeldRecord = {
   tier: number;
@@ -33,8 +35,6 @@ interface LadderDetailInput {
   // 본인 화면만 기록을 안다. 남의 뱃지는 null이라 남은 횟수·단계별 날짜를 내지 않는다.
   events: BadgeEvent[] | null;
 }
-
-const shortDate = (date: Date) => toKst(date).format("YY.MM.DD");
 
 export function buildLadderDetail({
   ladder,
@@ -60,11 +60,11 @@ export function buildLadderDetail({
       : "채운 세션";
 
   return {
-    name: stepName(step, categoryName),
+    name: stepName({ step, categoryName }),
     medal: { emoji: step.emoji, look: stepLook(step), locked: !earned, ribbon: null },
     tierLabel: granted ? meta.title : TIER_NAME[step.grade],
     tierTone: earned ? lookTone(stepLook(step)) : BADGE_TONE.hint,
-    condition: badgeCondition(ladder, step, categoryName),
+    condition: badgeCondition({ ladder, step, categoryName }),
     earned:
       earned && earnedAt
         ? {
@@ -93,18 +93,14 @@ export function buildLadderDetail({
       const candidateEvent = events?.[candidate.threshold - 1];
       const candidateDate = index + 1 === heldTier ? held!.earnedAt : (candidateEvent?.at ?? null);
       const firstLocked = index === heldTier;
-      const status = candidateEarned
-        ? candidateDate
-          ? shortDate(candidateDate)
-          : "받음"
-        : count !== null
-          ? `${candidate.threshold - count}${meta.unit} 남음`
-          : "–";
-      const statusTone = candidateEarned
-        ? BADGE_TONE.success
-        : firstLocked && count !== null
-          ? BADGE_TONE.primary
-          : BADGE_TONE.hint;
+      const status = stepStatus({
+        earned: candidateEarned,
+        earnedAt: candidateDate,
+        threshold: candidate.threshold,
+        count,
+        unit: meta.unit,
+      });
+      const statusTone = stepStatusTone({ earned: candidateEarned, firstLocked, count });
       return {
         key: `${index}`,
         medal: {
@@ -113,8 +109,8 @@ export function buildLadderDetail({
           locked: !candidateEarned,
           ribbon: null,
         },
-        name: stepName(candidate, categoryName),
-        caption: badgeRequirement(ladder, candidate, categoryName),
+        name: stepName({ step: candidate, categoryName }),
+        caption: badgeRequirement({ ladder, step: candidate, categoryName }),
         status,
         statusTone,
         current: index === stepIndex,

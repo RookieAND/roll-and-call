@@ -78,7 +78,7 @@ export function BadgeMedal({
   const shines = !locked && !(look === 1 || look === 2 || look === 3);
   const large = size === "xl" || size === "2xl";
   // 리본은 메달 아래로 삐져나오므로 그만큼 아래를 비워 이름과 겹치지 않게 한다.
-  const ribbonSpace = ribbonText ? (large ? "mb-175" : "mb-125") : undefined;
+  const ribbonSpace = ribbonText && (large ? "mb-175" : "mb-125");
   // 못 받은 뱃지는 단계 색을 입히지 않는다. 두 배경 클래스가 같이 붙으면 CSS 순서에 따라 갈린다.
   const faceLook = locked ? undefined : look;
   const emojiClass = locked ? "opacity-40 grayscale" : undefined;

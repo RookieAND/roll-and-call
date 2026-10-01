@@ -30,7 +30,7 @@ export function monthlyWinners(
       .filter(([, count]) => count === top)
       .map(([userId]) => ({
         userId,
-        badgeKey: badgeKey(ladder, month),
+        badgeKey: badgeKey({ ladder, subject: month }),
         tier: 1,
         earnedAt: nextMonthStart(month),
         sourceGameId: null,

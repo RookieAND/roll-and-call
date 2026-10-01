@@ -29,11 +29,13 @@ export function DemoteMemberItem({
   const { pending, run } = useAction();
 
   function demote() {
-    run(() => demoteParticipant(gameId, member.userId), {
+    run(() => demoteParticipant({ gameId, userId: member.userId }), {
       onSuccess: () => {
-        toastWithUndo(`${member.username}님을 대기로 옮겼습니다`, gameId, [
-          { userId: member.userId, status: PARTICIPANT_STATUS.confirmed },
-        ]);
+        toastWithUndo({
+          message: `${member.username}님을 대기로 옮겼습니다`,
+          gameId,
+          before: [{ userId: member.userId, status: PARTICIPANT_STATUS.confirmed }],
+        });
         onDone();
       },
     });

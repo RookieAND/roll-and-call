@@ -31,9 +31,9 @@ export function TableHead({
       scope: "col",
       className: cn(
         tableCellVariants({ header: true, align, numeric }),
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

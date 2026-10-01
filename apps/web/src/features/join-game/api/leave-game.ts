@@ -45,7 +45,7 @@ export async function leaveGame(gameId: string): Promise<ActionResult> {
     .delete(participants)
     .where(and(eq(participants.gameId, gameId), eq(participants.userId, user.id)));
   after(async () => {
-    await notifyGameLeft(gameId, user.id, false);
+    await notifyGameLeft({ gameId, userId: user.id, removedByGm: false });
     await refreshRecruitPost(gameId);
   });
 

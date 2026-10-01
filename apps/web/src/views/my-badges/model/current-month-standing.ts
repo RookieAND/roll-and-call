@@ -1,11 +1,16 @@
 import { kstMonthKey, type BadgeRole, type MonthlyAppearance } from "@roll-and-call/database/rules";
 
-export function currentMonthStanding(
-  appearances: MonthlyAppearance[],
-  userId: string,
-  role: BadgeRole,
-  now: Date,
-) {
+export function currentMonthStanding({
+  appearances,
+  userId,
+  role,
+  now,
+}: {
+  appearances: MonthlyAppearance[];
+  userId: string;
+  role: BadgeRole;
+  now: Date;
+}) {
   const month = kstMonthKey(now);
   const counts = new Map<string, number>();
   for (const appearance of appearances) {

@@ -32,8 +32,8 @@ export function DialogFooter({
     state,
     props: {
       "data-slot": "dialog-footer",
-      className: cn(footer({ layout }), resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(footer({ layout }), resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

@@ -29,6 +29,7 @@ import { pickerCategories } from "../model/picker-categories";
 import { recentCategories } from "../model/recent-categories";
 import { PickerBookRow } from "./picker-book-row";
 import { PickerCategoryRow } from "./picker-category-row";
+import { pickerListing } from "./picker-listing";
 import { RulebookRequestSheet } from "./rulebook-request-sheet";
 
 interface BookPickerProps {
@@ -49,20 +50,15 @@ export function BookPicker({
   const [categoryId, setCategoryId] = useState(initial?.categoryId ?? null);
   const [requestOpen, setRequestOpen] = useState(false);
 
-  const allCategories = pickerCategories(rulebooks, "");
+  const allCategories = pickerCategories({ rulebooks, query: "" });
   const category = allCategories.find((candidate) => candidate.id === categoryId);
-  const searching = query.trim() !== "";
   const recent = recentCategories({ categories: allCategories, rulebooks, recentRulebookIds });
-  const listed = searching
-    ? pickerCategories(rulebooks, query)
-    : recent.length > 0
-      ? recent
-      : allCategories;
-  const listTitle = searching
-    ? `검색 결과 ${listed.length}개`
-    : recent.length > 0
-      ? "최근 구인을 연 룰"
-      : "";
+  const { categories: listed, title: listTitle } = pickerListing({
+    rulebooks,
+    query,
+    recent,
+    allCategories,
+  });
   const books = category?.editions.flatMap((edition) => edition.rulebooks) ?? [];
   const kinds = Object.values(RULEBOOK_KIND).filter((kind) =>
     books.some((book) => book.kind === kind),
@@ -168,7 +164,7 @@ export function BookPicker({
                   {books
                     .filter((book) => book.kind === kind)
                     .map((book) => {
-                      const option = certOption(book, rulebooks);
+                      const option = certOption({ rulebook: book, rulebooks });
                       return (
                         <PickerBookRow
                           key={book.id}
@@ -177,7 +173,7 @@ export function BookPicker({
                           type={option.type}
                           note={option.note}
                           rejected={book.state === CERT_STATE.rejected}
-                          href={certApplyHref([book.id], "photos")}
+                          href={certApplyHref({ rulebookIds: [book.id], step: "photos" })}
                         />
                       );
                     })}

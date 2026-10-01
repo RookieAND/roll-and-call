@@ -41,8 +41,8 @@ export async function ManageGameView({ id }: { id: string }) {
   }
   const responses = responseCounts.get(id) ?? 0;
   const confirmedCount = countConfirmed(game.participants);
-  const { stage, stats } = manageSummary(game, responses);
-  const rows = manageRows(game, reviews.length);
+  const { stage, stats } = manageSummary({ game, responses });
+  const rows = manageRows({ game, reviewCount: reviews.length });
 
   return (
     <>

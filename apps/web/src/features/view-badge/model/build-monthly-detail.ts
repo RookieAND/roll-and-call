@@ -59,7 +59,7 @@ export function buildMonthlyDetail({
     },
     tierLabel: heldUntil ? `${heldUntil}까지` : `${meta.title} · 한 달 기간제`,
     tierTone: heldMonth ? BADGE_TONE.gold : BADGE_TONE.hint,
-    condition: badgeCondition(ladder, step, null),
+    condition: badgeCondition({ ladder, step, categoryName: null }),
     earned: heldMonth
       ? {
           dateLabel: toKst(nextMonthStart(heldMonth)).format("YYYY년 M월 D일"),

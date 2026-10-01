@@ -3,13 +3,13 @@ import { CalendarDays, CircleAlert, Clock } from "lucide-react";
 import Link from "next/link";
 
 import {
-  SESSION_CHIP,
   SESSION_ICON,
   SESSION_TONE,
   type SessionCardModel,
   type SessionIcon,
   type SessionTone,
 } from "../model/session-card-model";
+import { sessionTitleForeground } from "../model/session-title-foreground";
 import { SessionCardAction } from "./session-card-action";
 
 const TONE_CLASS: Record<SessionTone, string> = {
@@ -31,11 +31,7 @@ interface SessionCardProps {
 
 export function SessionCard({ model }: SessionCardProps) {
   const ScheduleIcon = SCHEDULE_ICON[model.scheduleIcon];
-  const titleForeground = model.titleDanger
-    ? "danger"
-    : model.chip === SESSION_CHIP.ended
-      ? "muted"
-      : "normal";
+  const titleForeground = sessionTitleForeground(model);
 
   const captionForeground = model.caption?.strong ? "primary" : "hint";
   const captionWeight = model.caption?.strong ? "bold" : "regular";

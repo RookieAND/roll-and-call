@@ -6,11 +6,15 @@ import type { MonthSessionRow } from "@/shared/server";
 export type CalendarSession = ReturnType<typeof toCalendarSessions>[number];
 
 // 시간이 정해진 세션은 모집 중이어도 달력에 오른다. 아무도 오지 않고 마감된 세션만 뺀다.
-export function toCalendarSessions(
-  rows: MonthSessionRow[],
-  viewerId: string | null,
-  now: Date = new Date(),
-) {
+export function toCalendarSessions({
+  rows,
+  viewerId,
+  now = new Date(),
+}: {
+  rows: MonthSessionRow[];
+  viewerId: string | null;
+  now?: Date;
+}) {
   return rows.flatMap((game) => {
     if (!game.confirmedAt) return [];
     const confirmed = game.participants.filter(

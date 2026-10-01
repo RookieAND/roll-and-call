@@ -30,11 +30,13 @@ export function PromoteMemberItem({
   const isFull = confirmedCount >= maxPlayers;
 
   function promote() {
-    run(() => promoteParticipant(gameId, member.userId), {
+    run(() => promoteParticipant({ gameId, userId: member.userId }), {
       onSuccess: () => {
-        toastWithUndo(`${member.username}님을 확정했습니다`, gameId, [
-          { userId: member.userId, status: PARTICIPANT_STATUS.waiting },
-        ]);
+        toastWithUndo({
+          message: `${member.username}님을 확정했습니다`,
+          gameId,
+          before: [{ userId: member.userId, status: PARTICIPANT_STATUS.waiting }],
+        });
         onDone();
       },
     });

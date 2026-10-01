@@ -40,7 +40,9 @@ export function GameForm({
   const { pending, run } = useAction();
   // 주소로 넘어온 책(서플리먼트일 수도 있다)은 그 판본의 룰로 바꿔 채운다.
   const initialSet =
-    rulebooks && initialRulebookId ? ruleSetOf(rulebooks, initialRulebookId) : null;
+    rulebooks && initialRulebookId
+      ? ruleSetOf({ myRulebooks: rulebooks, rulebookId: initialRulebookId })
+      : null;
 
   const form = useForm<GameFormValues>({
     resolver: gameFormResolver(rulebooks),

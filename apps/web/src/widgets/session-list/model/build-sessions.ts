@@ -26,7 +26,7 @@ export function buildSessions({
     );
   const byRole = (games: SessionGame[], role: SessionRole) =>
     games
-      .map((game) => toSessionCard(game, role, context))
+      .map((game) => toSessionCard({ game, role, context }))
       .toSorted(
         (left, right) =>
           Number(left.chip === SESSION_CHIP.ended) - Number(right.chip === SESSION_CHIP.ended) ||

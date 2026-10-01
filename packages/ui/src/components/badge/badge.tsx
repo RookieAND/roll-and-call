@@ -44,8 +44,8 @@ export function Badge({
     stateAttributesMapping: { colorPalette: (value) => ({ "data-color-palette": String(value) }) },
     props: {
       "data-slot": "badge",
-      className: cn(badge({ colorPalette }), resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(badge({ colorPalette }), resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

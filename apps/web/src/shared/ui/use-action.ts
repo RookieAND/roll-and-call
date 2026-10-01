@@ -27,7 +27,7 @@ export function useAction() {
         }
         throw error;
       }
-      handleActionResult(result, handlers);
+      handleActionResult({ result, ...handlers });
     });
   }
 

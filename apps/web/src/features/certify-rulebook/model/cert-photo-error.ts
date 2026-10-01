@@ -1,6 +1,6 @@
 import { CERT_PHOTO_MAX_BYTES } from "./cert-photo-rules";
 
-export function certPhotoError(file: File, accept: string): string | null {
+export function certPhotoError({ file, accept }: { file: File; accept: string }): string | null {
   if (!accept.split(",").includes(file.type)) {
     return accept.includes("pdf")
       ? "JPG·PNG 사진이나 PDF만 올릴 수 있습니다."

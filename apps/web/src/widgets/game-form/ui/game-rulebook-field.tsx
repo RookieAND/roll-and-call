@@ -22,8 +22,8 @@ export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
   const { setValue, watch, formState } = form;
   const rule = watch("rule");
   const rulebookId = watch("rulebookId");
-  const set = rulebooks ? ruleSetOf(rulebooks, rulebookId) : null;
-  const gate = set && rulebooks ? ruleGate(set, rulebooks) : null;
+  const set = rulebooks ? ruleSetOf({ myRulebooks: rulebooks, rulebookId }) : null;
+  const gate = set && rulebooks ? ruleGate({ set, myRulebooks: rulebooks }) : null;
   const error = gate?.type === RULE_GATE.blocked ? null : formState.errors.rule?.message;
   const hint = rulebooks
     ? "구인을 열 룰과 판본을 고릅니다."

@@ -8,10 +8,12 @@ export function richTextToMarkdown(value: string): string {
     .content.map((node) => {
       switch (node.type) {
         case "bulletList":
-          return (node.content ?? []).map((item) => richTextListItem(item, "-")).join("\n");
+          return (node.content ?? [])
+            .map((item) => richTextListItem({ item, marker: "-" }))
+            .join("\n");
         case "orderedList":
           return (node.content ?? [])
-            .map((item, index) => richTextListItem(item, `${index + 1}.`))
+            .map((item, index) => richTextListItem({ item, marker: `${index + 1}.` }))
             .join("\n");
         default:
           return richTextInline(node.content);

@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 
-import { MANAGE_ROW_STATE, manageRows } from "./manage-rows";
+import { MANAGE_ROW_STATE } from "./manage-row-state";
+import { manageRows } from "./manage-rows";
 
 const NOW = new Date("2026-09-20T12:00:00+09:00");
 const DAY = 24 * 60 * 60 * 1000;
@@ -26,19 +27,15 @@ const coordinating = {
 } as unknown as GameDetailData;
 
 const byKey = (game: GameDetailData) => {
-  const [attendance, , time, roster, edit] = manageRows(game, 0, NOW);
+  const [attendance, , time, roster, edit] = manageRows({ game, reviewCount: 0, now: NOW });
   return { attendance: attendance!, time: time!, roster: roster!, edit: edit! };
 };
 
 describe("manageRows", () => {
   it("줄은 다섯 개이고 순서가 고정이다", () => {
-    expect(manageRows(coordinating, 0, NOW).map((row) => row.key)).toEqual([
-      "attendance",
-      "review",
-      "time",
-      "roster",
-      "edit",
-    ]);
+    expect(
+      manageRows({ game: coordinating, reviewCount: 0, now: NOW }).map((row) => row.key),
+    ).toEqual(["attendance", "review", "time", "roster", "edit"]);
   });
 
   it("조율 중에는 출석 확인을 흐리게 두고 시간 정하기로 보낸다", () => {
@@ -63,7 +60,7 @@ describe("manageRows", () => {
   });
 
   it("세션 후기는 출석을 확인한 뒤에 열리고 받는 기한을 적는다", () => {
-    const [, lockedReview] = manageRows(coordinating, 0, NOW);
+    const [, lockedReview] = manageRows({ game: coordinating, reviewCount: 0, now: NOW });
     expect(lockedReview!.state).toBe(MANAGE_ROW_STATE.locked);
 
     const confirmed = {
@@ -71,7 +68,7 @@ describe("manageRows", () => {
       confirmedAt: new Date(NOW.getTime() - 2 * DAY),
       attendanceConfirmedAt: new Date(NOW.getTime() - DAY),
     } as unknown as GameDetailData;
-    const [, review] = manageRows(confirmed, 2, NOW);
+    const [, review] = manageRows({ game: confirmed, reviewCount: 2, now: NOW });
     expect(review!.state).toBe(MANAGE_ROW_STATE.open);
     expect(review!.detail).toBe("후기 2개가 달렸습니다 · 10월 3일까지 받습니다");
   });

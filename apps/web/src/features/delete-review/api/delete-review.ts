@@ -50,7 +50,7 @@ export async function deleteReview(reviewId: string): Promise<ActionResult> {
 
   await removeUnusedReviewPhotos(deleted.photoUrls);
   revalidateReviews(deleted.gameId);
-  after(() => syncReviewForumPost(reviewId, siteOrigin()));
+  after(() => syncReviewForumPost({ reviewId, siteOrigin: siteOrigin() }));
   after(() => evaluateGameBadges(deleted.gameId));
   return {};
 }

@@ -11,9 +11,9 @@ import { RosterError } from "./roster-error";
 
 // 굴린 값은 이미 정해져 있다. 확정은 그 값으로 확정·대기를 가르고 알림을 보내는 시점일 뿐이다.
 export async function applyDrawResult(gameId: string): Promise<ActionResult> {
-  return adjustRoster(
+  return adjustRoster({
     gameId,
-    async (transaction, game) => {
+    work: async (transaction, game) => {
       if (game.recruitMethod !== RECRUIT_METHOD.lottery) {
         throw new RosterError("추첨으로 모집하는 구인글이 아닙니다.");
       }
@@ -67,6 +67,6 @@ export async function applyDrawResult(gameId: string): Promise<ActionResult> {
         );
       await transaction.insert(drawResults).values(roster.map((row) => ({ gameId, ...row })));
     },
-    () => notifyDrawResult(gameId),
-  );
+    notify: () => notifyDrawResult(gameId),
+  });
 }

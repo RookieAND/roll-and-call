@@ -53,9 +53,9 @@ export function Button({
         buttonVariants({ variant, colorPalette: palette, size }),
         // ponytail: loading always reads as the muted-primary state from the 시안
         loading && "bg-primary-300 text-white hover:bg-primary-300",
-        resolveStateProp(className, state),
+        resolveStateProp({ prop: className, state }),
       ),
-      style: resolveStateProp(style, state),
+      style: resolveStateProp({ prop: style, state }),
       ...(render ? {} : { type: type ?? "button", disabled: disabled || loading }),
       ...props,
       children: (

@@ -11,7 +11,13 @@ type DrawParticipant = {
 };
 
 // 굴린 값으로 두 통을 가른다. 적용 뒤에는 명단 대신 적용 시점 기록(drawResults)을 넣는다.
-export function toDrawOutcome(participants: DrawParticipant[], maxPlayers: number) {
+export function toDrawOutcome({
+  participants,
+  maxPlayers,
+}: {
+  participants: DrawParticipant[];
+  maxPlayers: number;
+}) {
   const toEntry = (participant: DrawParticipant): DrawEntry => ({
     userId: participant.userId,
     username: participant.user?.username ?? "익명",

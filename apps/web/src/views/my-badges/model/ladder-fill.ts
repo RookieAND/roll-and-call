@@ -1,7 +1,7 @@
 import type { BadgeStep } from "@roll-and-call/database/rules";
 
 // 누적 사다리 메달을 잇는 금색 줄의 길이(%). 줄은 첫 메달 중심(10%)에서 끝 메달 중심(90%)까지 80%다.
-export function ladderFill(steps: BadgeStep[], count: number): number {
+export function ladderFill({ steps, count }: { steps: BadgeStep[]; count: number }): number {
   const tier = steps.filter((step) => step.threshold <= count).length;
   if (tier === 0) return 0;
   const reached = steps[tier - 1]!;

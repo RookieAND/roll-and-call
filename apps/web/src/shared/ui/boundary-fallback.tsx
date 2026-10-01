@@ -28,7 +28,7 @@ export function BoundaryFallback({
 
   useEffect(() => {
     if (escalates) return;
-    if (showsToast) reportError(error);
+    if (showsToast) reportError({ error });
     else console.error(error);
   }, [error, escalates, showsToast]);
 

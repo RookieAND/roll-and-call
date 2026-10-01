@@ -39,7 +39,7 @@ export function RemoveMemberItem({
   );
 
   function remove() {
-    run(() => removeParticipant(gameId, member.userId), {
+    run(() => removeParticipant({ gameId, userId: member.userId }), {
       onSuccess: () => {
         toast.success(`${member.username}님을 내보냈습니다`);
         setConfirming(false);

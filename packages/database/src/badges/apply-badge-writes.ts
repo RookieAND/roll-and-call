@@ -4,7 +4,15 @@ import { db } from "../client";
 import type { BadgeWrite } from "../rules";
 import { userBadges } from "../schema";
 
-export async function applyBadgeWrites(userId: string, writes: BadgeWrite[], now: Date) {
+export async function applyBadgeWrites({
+  userId,
+  writes,
+  now,
+}: {
+  userId: string;
+  writes: BadgeWrite[];
+  now: Date;
+}) {
   if (writes.length === 0) return;
   await db.transaction(async (transaction) => {
     for (const write of writes) {

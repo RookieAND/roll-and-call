@@ -6,7 +6,7 @@ import type { PreConfirmedPlayer } from "@/features/write-game";
 import { db } from "@/shared/server";
 
 // 다음 회차는 별개의 새 구인글이다. 이전 회차 내용과 대기자를 폼에 채워 줄 뿐, 이전 회차는 건드리지 않는다.
-export async function loadPreviousRound(gameId: string, gmId: string) {
+export async function loadPreviousRound({ gameId, gmId }: { gameId: string; gmId: string }) {
   if (!z.uuid().safeParse(gameId).success) return null;
   const game = await db.query.games.findFirst({
     where: (table, { and, eq }) => and(eq(table.id, gameId), eq(table.gmId, gmId)),

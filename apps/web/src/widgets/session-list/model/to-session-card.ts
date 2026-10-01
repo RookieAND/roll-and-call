@@ -6,13 +6,17 @@ import { toHostedSessionCard } from "./to-hosted-session-card";
 import { toJoinedSessionCard } from "./to-joined-session-card";
 import { toPastSessionCard } from "./to-past-session-card";
 
-export function toSessionCard(
-  game: SessionGame,
-  role: SessionRole,
-  context: SessionContext,
-): SessionCardModel {
-  const facts = deriveSessionFacts(game, role, context);
-  if (facts.past) return toPastSessionCard(game, facts, context);
-  if (role === SESSION_ROLE.host) return toHostedSessionCard(game, facts, context);
-  return toJoinedSessionCard(game, facts, context);
+export function toSessionCard({
+  game,
+  role,
+  context,
+}: {
+  game: SessionGame;
+  role: SessionRole;
+  context: SessionContext;
+}): SessionCardModel {
+  const facts = deriveSessionFacts({ game, role, context });
+  if (facts.past) return toPastSessionCard({ game, facts, context });
+  if (role === SESSION_ROLE.host) return toHostedSessionCard({ game, facts, context });
+  return toJoinedSessionCard({ game, facts, context });
 }

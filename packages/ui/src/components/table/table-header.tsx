@@ -15,8 +15,8 @@ export function TableHeader({ className, style, render, ref, ...props }: TableHe
     state,
     props: {
       "data-slot": "table-header",
-      className: cn("bg-gray-50", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn("bg-gray-50", resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

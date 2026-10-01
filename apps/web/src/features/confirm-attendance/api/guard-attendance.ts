@@ -16,10 +16,13 @@ import { revalidateAttendance } from "./revalidate-attendance";
 import type { Transaction } from "./transaction";
 
 // 출석을 건드리는 모든 길이 거치는 곳: 게임 행을 잠그고 GM 본인·세션이 끝났는지를 확인한다.
-export async function guardAttendance(
-  gameId: string,
-  work: (transaction: Transaction, confirmedUserIds: string[]) => Promise<void>,
-): Promise<ActionResult> {
+export async function guardAttendance({
+  gameId,
+  work,
+}: {
+  gameId: string;
+  work: (transaction: Transaction, confirmedUserIds: string[]) => Promise<void>;
+}): Promise<ActionResult> {
   const gmId = (await getCurrentUser())?.id;
   if (!gmId) return { error: AUTH_REQUIRED_MESSAGE };
 
@@ -44,7 +47,12 @@ export async function guardAttendance(
         );
 
       // 다시 여는 길도 같은 가드를 타므로 확정 시각은 빼고 "세션이 끝났는가"만 본다.
-      if (!isAttendanceDue({ ...game, attendanceConfirmedAt: null }, confirmed.length)) {
+      if (
+        !isAttendanceDue({
+          game: { ...game, attendanceConfirmedAt: null },
+          confirmedCount: confirmed.length,
+        })
+      ) {
         throw new AttendanceError("아직 끝나지 않은 세션입니다.");
       }
 

@@ -31,7 +31,7 @@ export async function CreateGameView({ rulebookId, previousGameId }: CreateGameV
   // 위저드가 단계별로 앱바·진행바를 바꾸므로 폼이 페이지 셸을 소유한다.
   const [records, previousRound] = await Promise.all([
     getRulebookRecords(user.id),
-    previousGameId ? loadPreviousRound(previousGameId, user.id) : null,
+    previousGameId ? loadPreviousRound({ gameId: previousGameId, gmId: user.id }) : null,
   ]);
   return (
     <CreateGameForm

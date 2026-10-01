@@ -57,20 +57,33 @@ describe("diffBadges", () => {
 
   it("오르면 grant, 내려가면 lower, 사라지면 revoke", () => {
     expect(
-      diffBadges([{ badgeKey: "pl.total", tier: 1, revokedAt: null }], [earned(2)])[0]!.kind,
+      diffBadges({
+        stored: [{ badgeKey: "pl.total", tier: 1, revokedAt: null }],
+        desired: [earned(2)],
+      })[0]!.kind,
     ).toBe("grant");
     expect(
-      diffBadges([{ badgeKey: "pl.total", tier: 2, revokedAt: null }], [earned(1)])[0]!.kind,
+      diffBadges({
+        stored: [{ badgeKey: "pl.total", tier: 2, revokedAt: null }],
+        desired: [earned(1)],
+      })[0]!.kind,
     ).toBe("lower");
-    expect(diffBadges([{ badgeKey: "pl.total", tier: 1, revokedAt: null }], [])[0]!.kind).toBe(
-      "revoke",
-    );
     expect(
-      diffBadges([{ badgeKey: "pl.total", tier: 1, revokedAt: new Date() }], [earned(1)])[0]!.kind,
+      diffBadges({ stored: [{ badgeKey: "pl.total", tier: 1, revokedAt: null }], desired: [] })[0]!
+        .kind,
+    ).toBe("revoke");
+    expect(
+      diffBadges({
+        stored: [{ badgeKey: "pl.total", tier: 1, revokedAt: new Date() }],
+        desired: [earned(1)],
+      })[0]!.kind,
     ).toBe("grant");
-    expect(diffBadges([{ badgeKey: "pl.total", tier: 1, revokedAt: null }], [earned(1)])).toEqual(
-      [],
-    );
+    expect(
+      diffBadges({
+        stored: [{ badgeKey: "pl.total", tier: 1, revokedAt: null }],
+        desired: [earned(1)],
+      }),
+    ).toEqual([]);
   });
 });
 

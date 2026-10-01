@@ -34,7 +34,10 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
   if (!hasRolls || (!applied && !isGm)) redirect(`/games/${id}`);
 
   // 적용한 뒤에는 기록에 남은 확정 수가 정원이다. 그 뒤 정원을 고쳐도 결과는 바뀌지 않는다.
-  const outcome = toDrawOutcome(drawn, applied ? countConfirmed(drawn) : game.maxPlayers);
+  const outcome = toDrawOutcome({
+    participants: drawn,
+    maxPlayers: applied ? countConfirmed(drawn) : game.maxPlayers,
+  });
   const roster = splitRoster(game.participants);
   const mine = [...roster.confirmed, ...roster.waiting].find(
     (participant) => participant.userId === user?.id && participant.drawRoll !== null,

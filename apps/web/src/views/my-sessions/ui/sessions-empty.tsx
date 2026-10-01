@@ -95,7 +95,7 @@ export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
       description="필터를 풀면 진행 중인 세션을 모두 볼 수 있습니다."
       action={
         <Button
-          render={<Link href={sessionsHref(activeTab)} />}
+          render={<Link href={sessionsHref({ role: activeTab })} />}
           variant="outline"
           className="mt-100"
         >

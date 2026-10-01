@@ -19,6 +19,8 @@ const COLUMN_COUNT = 3;
 export function rollAbilityScores() {
   return ABILITIES.map(({ label, diceCount, bonus }) => ({
     label,
-    columns: range(COLUMN_COUNT).map(() => (sum(rollDice(diceCount, 6)) + bonus) * 5),
+    columns: range(COLUMN_COUNT).map(
+      () => (sum(rollDice({ count: diceCount, sides: 6 })) + bonus) * 5,
+    ),
   }));
 }

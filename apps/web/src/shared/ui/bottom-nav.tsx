@@ -14,13 +14,13 @@ const tabs = [
     href: "/games",
     label: "구인 목록",
     Icon: List,
-    isActive: (pathname: string) => isInRouteGroup(pathname, "/games"),
+    isActive: (pathname: string) => isInRouteGroup({ pathname, base: "/games" }),
   },
   {
     href: "/me",
     label: "마이페이지",
     Icon: User,
-    isActive: (pathname: string) => isInRouteGroup(pathname, "/me"),
+    isActive: (pathname: string) => isInRouteGroup({ pathname, base: "/me" }),
   },
 ];
 

@@ -2,7 +2,13 @@ import { formatMonthDay } from "@/shared/lib";
 
 type Notice = { palette: "primary" | "warning"; title: string; description: string };
 
-export function reviewFormNotice(review: { hidden: boolean } | null, editUntil: Date): Notice {
+export function reviewFormNotice({
+  review,
+  editUntil,
+}: {
+  review: { hidden: boolean } | null;
+  editUntil: Date;
+}): Notice {
   if (!review) {
     return {
       palette: "primary",

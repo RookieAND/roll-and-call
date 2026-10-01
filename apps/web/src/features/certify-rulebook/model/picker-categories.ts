@@ -4,8 +4,10 @@ import { filterRulebooks } from "./filter-rulebooks";
 
 const MAX_ALIASES = 2;
 
-export function pickerCategories(rulebooks: MyRulebook[], query: string) {
-  const matched = new Set(filterRulebooks(rulebooks, query).map((rulebook) => rulebook.categoryId));
+export function pickerCategories({ rulebooks, query }: { rulebooks: MyRulebook[]; query: string }) {
+  const matched = new Set(
+    filterRulebooks({ rulebooks, query }).map((rulebook) => rulebook.categoryId),
+  );
   return groupByCategory(rulebooks)
     .filter(
       (category) =>

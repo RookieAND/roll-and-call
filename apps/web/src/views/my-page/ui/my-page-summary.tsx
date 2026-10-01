@@ -25,9 +25,12 @@ export async function MyPageSummary() {
   ]);
   const now = new Date();
   const held = heldBadges(badgeRecords, now);
-  const featuredBadges = pickFeaturedBadges(profile?.featuredBadges ?? [], held).map((badge) => ({
+  const featuredBadges = pickFeaturedBadges({
+    featuredKeys: profile?.featuredBadges ?? [],
+    held,
+  }).map((badge) => ({
     ...badge,
-    detail: heldBadgeDetail(badge, { records: badgeRecords, facts: badgeFacts, now }),
+    detail: heldBadgeDetail({ badge, records: badgeRecords, facts: badgeFacts, now }),
   }));
   const { name, avatar } = profileDisplay({ profile, user });
   const rejectedRulebooks = rulebooks.rulebooks.filter(
@@ -46,11 +49,11 @@ export async function MyPageSummary() {
         availability={profile?.availability ?? []}
         hosted={{
           count: mySessions[SESSION_ROLE.host].length,
-          href: sessionsHref(SESSION_ROLE.host),
+          href: sessionsHref({ role: SESSION_ROLE.host }),
         }}
         played={{
           count: mySessions[SESSION_ROLE.player].length,
-          href: sessionsHref(SESSION_ROLE.player),
+          href: sessionsHref({ role: SESSION_ROLE.player }),
         }}
       />
       <MyPageTodos todos={sessionTodos(mySessions)} rejectedRulebooks={rejectedRulebooks} />

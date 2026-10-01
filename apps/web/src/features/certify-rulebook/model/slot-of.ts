@@ -8,6 +8,6 @@ export function isProofKey(key: SlotKey): key is CertProof {
   return key in CERT_PROOF;
 }
 
-export function slotOf(draft: BookDraft, key: SlotKey) {
+export function slotOf({ draft, key }: { draft: BookDraft; key: SlotKey }) {
   return isProofKey(key) ? draft.proofs[key] : draft.shots[key];
 }

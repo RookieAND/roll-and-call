@@ -36,7 +36,9 @@ export function DialogPopup({ size = "md", className, children, ref, ...props }:
         }}
         data-slot="dialog-popup"
         data-size={size ?? undefined}
-        className={(state) => cn(dialogPopupVariants({ size }), resolveStateProp(className, state))}
+        className={(state) =>
+          cn(dialogPopupVariants({ size }), resolveStateProp({ prop: className, state }))
+        }
         {...props}
       >
         <OverlayPresence />

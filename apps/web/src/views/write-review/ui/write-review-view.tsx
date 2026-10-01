@@ -25,7 +25,7 @@ export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
     );
   }
 
-  const target = await getReviewDraftTarget(gameId, user.id);
+  const target = await getReviewDraftTarget({ gameId, userId: user.id });
   if (!target) notFound();
   const { game, review } = target;
   const when = game.confirmedAt ? `${formatMonthDayTime(game.confirmedAt)} · ` : "";

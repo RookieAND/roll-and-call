@@ -6,12 +6,17 @@ import { participants } from "@/shared/server";
 
 import type { Transaction } from "./transaction";
 
-export async function setParticipantStatus(
-  transaction: Transaction,
-  gameId: string,
-  userId: string,
-  status: ParticipantStatus,
-) {
+export async function setParticipantStatus({
+  transaction,
+  gameId,
+  userId,
+  status,
+}: {
+  transaction: Transaction;
+  gameId: string;
+  userId: string;
+  status: ParticipantStatus;
+}) {
   await transaction
     .update(participants)
     .set({ status })

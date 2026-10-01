@@ -49,7 +49,7 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
     return { error: "사진을 다시 올려 주세요." };
   }
 
-  const target = await getReviewDraftTarget(input.gameId, user.id);
+  const target = await getReviewDraftTarget({ gameId: input.gameId, userId: user.id });
   if (!target) return { error: REVIEW_BLOCK_ERROR, block: REVIEW_BLOCK.unavailable };
   if (target.review && target.review.id !== input.reviewId) {
     return { error: REVIEW_BLOCK_ERROR, block: REVIEW_BLOCK.alreadyWritten };
@@ -85,7 +85,7 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
   revalidateReviews(input.gameId);
   if (reviewId) {
     const createdReviewId = reviewId;
-    after(() => syncReviewForumPost(createdReviewId, siteOrigin()));
+    after(() => syncReviewForumPost({ reviewId: createdReviewId, siteOrigin: siteOrigin() }));
   }
   if (!target.review) after(() => evaluateBadges([target.game.gmId, user.id]));
   redirect(MY_REVIEWS_HREF);

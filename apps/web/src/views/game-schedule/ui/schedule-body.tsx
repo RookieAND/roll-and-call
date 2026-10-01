@@ -55,7 +55,7 @@ export function ScheduleBody({
   const weeks = groupDaysByWeek(days);
   const confirmedDate =
     confirmedAt?.toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" }) ?? null;
-  const [weekIndex, setWeekIndex] = useState(() => weekIndexOf(weeks, confirmedDate));
+  const [weekIndex, setWeekIndex] = useState(() => weekIndexOf({ weeks, date: confirmedDate }));
   const [tab, setTab] = useState<ScheduleTab>(
     confirmedAt ? SCHEDULE_TAB.overlap : SCHEDULE_TAB.mine,
   );

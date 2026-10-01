@@ -13,17 +13,15 @@ import type { BadgeDetail } from "./badge-detail";
 import { buildLadderDetail } from "./build-ladder-detail";
 import { buildMonthlyDetail } from "./build-monthly-detail";
 
-interface HeldBadgeDetailContext {
+interface HeldBadgeDetailInput {
+  badge: BadgeView & { record: BadgeRecord };
   records: BadgeRecord[];
   // 본인 화면만 넘긴다. null이면 남은 횟수·단계별 날짜 없이 받은 것만 보인다.
   facts: BadgeFacts | null;
   now: Date;
 }
 
-export function heldBadgeDetail(
-  badge: BadgeView & { record: BadgeRecord },
-  { records, facts, now }: HeldBadgeDetailContext,
-): BadgeDetail {
+export function heldBadgeDetail({ badge, records, facts, now }: HeldBadgeDetailInput): BadgeDetail {
   if (badge.monthKey) {
     const months = records
       .flatMap((record) => {
@@ -45,6 +43,6 @@ export function heldBadgeDetail(
     categoryName: badge.categoryName,
     stepIndex: badge.tier - 1,
     held: { tier: badge.tier, earnedAt: badge.record.earnedAt, source: badge.record.source },
-    events: facts ? ladderEvents(facts, badge.ladder, subject) : null,
+    events: facts ? ladderEvents({ facts, ladder: badge.ladder, subject }) : null,
   });
 }

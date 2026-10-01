@@ -1,11 +1,13 @@
 "use client";
 
-import { Badge, Button, Text, VStack } from "@roll-and-call/ui";
+import { Button, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 import { useState } from "react";
 
 import { RULE_GATE, RulebookOption, type EditionSet, type RuleGate } from "@/entities/rulebook";
 import { LineBreaks } from "@/shared/ui";
+
+import { RulebookSetBadge } from "./rulebook-set-badge";
 
 interface RulebookSheetOptionProps {
   set: EditionSet;
@@ -18,13 +20,6 @@ export function RulebookSheetOption({ set, gate, selected, onPick }: RulebookShe
   const [expanded, setExpanded] = useState(false);
   const locked = gate.type === RULE_GATE.blocked;
   const [title, ...body] = gate.lines;
-  const badge = set.earned ? (
-    <Badge colorPalette="success">인증 완료</Badge>
-  ) : set.free ? (
-    <Badge colorPalette="primary">무료 배포</Badge>
-  ) : (
-    <Badge>미인증</Badge>
-  );
 
   return (
     <div className={expanded ? "rounded-400 bg-gray-50" : undefined}>
@@ -34,7 +29,7 @@ export function RulebookSheetOption({ set, gate, selected, onPick }: RulebookShe
         selected={selected}
         locked={locked}
         expanded={expanded}
-        reason={badge}
+        reason={<RulebookSetBadge set={set} />}
         onClick={locked ? () => setExpanded(!expanded) : onPick}
       />
       {expanded && (

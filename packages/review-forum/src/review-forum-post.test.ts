@@ -32,7 +32,11 @@ const review = {
 
 describe("reviewForumPost", () => {
   it("본문은 평문으로 두고 아래에 작성자·룰·GM·링크 한 줄을 붙인다", () => {
-    const post = reviewForumPost(review, tags, "https://roll-and-call.vercel.app");
+    const post = reviewForumPost({
+      review,
+      tagIds: tags,
+      siteOrigin: "https://roll-and-call.vercel.app",
+    });
     expect(post.name).toBe("붉은 여관의 밤 후기 · 게굴");
     expect(post.appliedTags).toEqual(["no-spoiler", "trpg", "coc"]);
     expect(post.content).toBe(
@@ -42,7 +46,11 @@ describe("reviewForumPost", () => {
   });
 
   it("스포일러면 제목에 [스포있음], 본문과 사진을 가린다", () => {
-    const post = reviewForumPost({ ...review, spoiler: true, category: null }, tags, undefined);
+    const post = reviewForumPost({
+      review: { ...review, spoiler: true, category: null },
+      tagIds: tags,
+      siteOrigin: undefined,
+    });
     expect(post.name.startsWith("[스포있음] ")).toBe(true);
     expect(post.appliedTags).toEqual(["spoiler", "trpg", "other"]);
     expect(post.content).toBe(
@@ -53,6 +61,8 @@ describe("reviewForumPost", () => {
 
   it("글자 수가 넘치면 아래 한 줄을 뺀다", () => {
     const body = "가".repeat(1990);
-    expect(reviewForumPost({ ...review, body }, tags, undefined).content).toBe(body);
+    expect(
+      reviewForumPost({ review: { ...review, body }, tagIds: tags, siteOrigin: undefined }).content,
+    ).toBe(body);
   });
 });

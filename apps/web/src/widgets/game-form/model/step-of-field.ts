@@ -1,6 +1,12 @@
 import { SECTION_FIELDS, type WizardStepConfig } from "./game-form-steps";
 
-export function stepOfField(field: string, steps: readonly WizardStepConfig[]) {
+export function stepOfField({
+  field,
+  steps,
+}: {
+  field: string;
+  steps: readonly WizardStepConfig[];
+}) {
   const index = steps.findIndex((step) =>
     step.sections.some((section) => (SECTION_FIELDS[section] as readonly string[]).includes(field)),
   );

@@ -1,10 +1,17 @@
 import type { DiscordFile } from "../model/discord-types";
 
 // 첨부가 있는 요청. JSON은 payload_json에, 파일은 files[n]에 담는다.
-export async function discordBotFormApi<T>(
-  path: string,
-  { method, payload, files }: { method: string; payload: object; files: DiscordFile[] },
-) {
+export async function discordBotFormApi<T>({
+  path,
+  method,
+  payload,
+  files,
+}: {
+  path: string;
+  method: string;
+  payload: object;
+  files: DiscordFile[];
+}) {
   const token = process.env.DISCORD_BOT_TOKEN;
   if (!token) throw new Error("DISCORD_BOT_TOKEN not set");
   const form = new FormData();

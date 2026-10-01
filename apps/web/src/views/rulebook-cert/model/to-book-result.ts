@@ -1,17 +1,14 @@
 import {
-  CERT_FORMAT,
   CERT_FORMAT_LABEL,
-  CERT_PROOF,
-  CERT_PROOF_LABEL,
-  CERT_PROOFS,
-  CERT_SHOT_LABEL,
-  CERT_SHOTS,
   CERT_STATE,
   certApplyHref,
   rejectionSummary,
   type MyRulebook,
 } from "@/entities/rulebook";
 import { toKst } from "@/shared/lib";
+
+import { bookReason } from "./book-reason";
+import { bookThumbs } from "./book-thumbs";
 
 type Palette = "success" | "gray" | "warning" | "danger";
 
@@ -59,26 +56,8 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
   ];
   const rejected = state === CERT_STATE.rejected;
   const revoked = state === CERT_STATE.revoked;
-  const ebook = application?.format === CERT_FORMAT.ebook;
-  const flagged = (key: string) => application?.flaggedShots.includes(key as never) ?? false;
   const photosKept = rejected || state === CERT_STATE.pending || state === CERT_STATE.certified;
-  const thumbs =
-    photosKept && application && !direct
-      ? ebook
-        ? CERT_PROOFS.map((proof) => ({
-            label: CERT_PROOF_LABEL[proof],
-            url:
-              (proof === CERT_PROOF.order
-                ? application.purchaseCaptureUrl
-                : application.receiptUrl) ?? "",
-            flagged: flagged(proof),
-          }))
-        : CERT_SHOTS.map((shot) => ({
-            label: CERT_SHOT_LABEL[shot],
-            url: application.photoUrls[shot] ?? "",
-            flagged: flagged(shot),
-          }))
-      : [];
+  const thumbs = photosKept && application && !direct ? bookThumbs(application) : [];
   const kept = thumbs.filter((thumb) => thumb.url);
   return {
     id: rulebook.id,
@@ -87,21 +66,12 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
     mode: application && !direct ? CERT_FORMAT_LABEL[application.format] : "운영진 인증",
     dates,
     badge: BADGE[state] ?? null,
-    reason: rejected
-      ? { label: "반려 사유", text: rejectionSummary(application), tone: "danger" }
-      : revoked
-        ? {
-            label: "인증이 취소됐어요",
-            text: rulebook.revokeReason
-              ? `사유: ${rulebook.revokeReason}`
-              : "운영진이 인증을 취소했습니다",
-            tone: "danger",
-          }
-        : null,
+    reason: bookReason(rulebook),
     thumbs: kept.length > 0 ? thumbs : [],
     deleted: rejected && thumbs.length > 0 && kept.length === 0,
     memo: rejected && memo !== rejectionSummary(application) ? memo : null,
-    retryHref: rejected || revoked ? certApplyHref([rulebook.id], "photos") : null,
+    retryHref:
+      rejected || revoked ? certApplyHref({ rulebookIds: [rulebook.id], step: "photos" }) : null,
     discardable: rejected || revoked,
   };
 }

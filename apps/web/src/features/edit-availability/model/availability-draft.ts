@@ -11,27 +11,47 @@ export const HOUR_OPTIONS = Array.from(
   (_, index) => AVAILABILITY_MIN_HOUR + index,
 );
 
-export function addInterval(
-  intervals: AvailabilityInterval[],
-  day: number,
-): AvailabilityInterval[] {
+export function addInterval({
+  intervals,
+  day,
+}: {
+  intervals: AvailabilityInterval[];
+  day: number;
+}): AvailabilityInterval[] {
   return [...intervals, { day, ...DEFAULT_INTERVAL }];
 }
 
-export function removeAt(intervals: AvailabilityInterval[], index: number): AvailabilityInterval[] {
+export function removeAt({
+  intervals,
+  index,
+}: {
+  intervals: AvailabilityInterval[];
+  index: number;
+}): AvailabilityInterval[] {
   return intervals.filter((_, itemIndex) => itemIndex !== index);
 }
 
-export function removeDay(intervals: AvailabilityInterval[], day: number): AvailabilityInterval[] {
+export function removeDay({
+  intervals,
+  day,
+}: {
+  intervals: AvailabilityInterval[];
+  day: number;
+}): AvailabilityInterval[] {
   return intervals.filter((interval) => interval.day !== day);
 }
 
-export function setHour(
-  intervals: AvailabilityInterval[],
-  index: number,
-  edge: "from" | "to",
-  hour: number,
-): AvailabilityInterval[] {
+export function setHour({
+  intervals,
+  index,
+  edge,
+  hour,
+}: {
+  intervals: AvailabilityInterval[];
+  index: number;
+  edge: "from" | "to";
+  hour: number;
+}): AvailabilityInterval[] {
   return intervals.map((interval, itemIndex) => {
     if (itemIndex !== index) return interval;
     if (edge === "from") return { ...interval, from: hour, to: Math.max(interval.to, hour + 1) };

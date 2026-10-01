@@ -4,7 +4,7 @@ import { asc } from "drizzle-orm";
 
 import { publicGamesWhere } from "./public-games-where";
 
-export async function getMonthSessions(from: Date, to: Date) {
+export async function getMonthSessions({ from, to }: { from: Date; to: Date }) {
   return db.query.games.findMany({
     where: (game, { and, gte, lt }) =>
       and(gte(game.confirmedAt, from), lt(game.confirmedAt, to), publicGamesWhere),

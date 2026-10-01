@@ -4,7 +4,15 @@ import type { GameDetailData } from "@/shared/server";
 
 export type ManageStat = { label: string; value: string; danger?: boolean };
 
-export function manageSummary(game: GameDetailData, responses: number, now = new Date()) {
+export function manageSummary({
+  game,
+  responses,
+  now = new Date(),
+}: {
+  game: GameDetailData;
+  responses: number;
+  now?: Date;
+}) {
   const { confirmed, waiting } = splitRoster(game.participants);
   const seats: ManageStat = {
     label: "확정 인원",

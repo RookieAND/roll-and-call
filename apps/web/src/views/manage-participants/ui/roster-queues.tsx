@@ -11,12 +11,11 @@ import { ExpandableRows } from "@/shared/ui";
 import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stage";
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
-import { AttendanceBadge } from "./attendance-badge";
 import { DrawResultLink } from "./draw-result-link";
 import { LockedRosterNote } from "./locked-roster-note";
-import { MemberMenuButton } from "./member-menu-button";
 import { RosterQueue } from "./roster-queue";
 import { RosterRow } from "./roster-row";
+import { RosterRowAction } from "./roster-row-action";
 import { UnsubmittedNote } from "./unsubmitted-note";
 
 const ENDED_PREVIEW_COUNT = 2;
@@ -45,12 +44,14 @@ export function RosterQueues({
 }: RosterQueuesProps) {
   const [menuMember, setMenuMember] = useState<ManagedMember | null>(null);
 
-  const rowAction = (member: ManagedMember) =>
-    attendanceStage ? (
-      <AttendanceBadge stage={attendanceStage} absent={member.absent} />
-    ) : locked ? null : (
-      <MemberMenuButton username={member.username} onClick={() => setMenuMember(member)} />
-    );
+  const rowAction = (member: ManagedMember) => (
+    <RosterRowAction
+      member={member}
+      attendanceStage={attendanceStage}
+      locked={locked}
+      onOpenMenu={setMenuMember}
+    />
+  );
   const { beforeDraw } = summary;
   const noteOf = (member: ManagedMember) =>
     isCoordinate && !attendanceStage ? availabilityNote(member.hasAvailability) : undefined;

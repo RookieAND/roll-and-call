@@ -15,8 +15,8 @@ export function DialogHeader({ className, style, render, ref, ...props }: Dialog
     state,
     props: {
       "data-slot": "dialog-header",
-      className: cn("flex flex-col gap-075", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn("flex flex-col gap-075", resolveStateProp({ prop: className, state })),
+      style: resolveStateProp({ prop: style, state }),
       ...props,
     },
   });

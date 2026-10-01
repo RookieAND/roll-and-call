@@ -32,8 +32,11 @@ export function Pagination({
     props: {
       "data-slot": "pagination",
       "aria-label": "페이지네이션",
-      className: cn("flex items-center justify-center gap-050", resolveStateProp(className, state)),
-      style: resolveStateProp(style, state),
+      className: cn(
+        "flex items-center justify-center gap-050",
+        resolveStateProp({ prop: className, state }),
+      ),
+      style: resolveStateProp({ prop: style, state }),
       children: (
         <PaginationItems
           page={page}

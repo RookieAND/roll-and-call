@@ -1,9 +1,9 @@
 import { VStack } from "@roll-and-call/ui";
 
 import { JoinGameButton } from "@/features/join-game";
-import { formatDate } from "@/shared/lib";
 
 import { JoinHint } from "./join-hint";
+import { joinHintText } from "./join-hint-text";
 
 interface JoinableActionsProps {
   gameId: string;
@@ -21,11 +21,7 @@ export function JoinableActions({
   endDate,
 }: JoinableActionsProps) {
   const joinLabel = !isLottery && isFull ? "대기로 신청하기" : "신청하기";
-  const joinHint = isLottery
-    ? `${formatDate(endDate)} 마감 뒤 GM이 추첨합니다.`
-    : isFull
-      ? `지금 신청하면 대기 ${waitingCount + 1}번입니다.`
-      : "지금 신청하면 바로 확정됩니다.";
+  const joinHint = joinHintText({ isFull, isLottery, waitingCount, endDate });
 
   return (
     <VStack gap="125">

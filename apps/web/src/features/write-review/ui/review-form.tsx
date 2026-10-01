@@ -43,14 +43,18 @@ export function ReviewForm({ gameId, heading, review, editUntil, initialBlock }:
   const [block, setBlock] = useState(initialBlock);
   const [confirmingLeave, setConfirmingLeave] = useState(false);
   const photos = useReviewPhotos(initialPhotoUrls);
-  const draft = useReviewDraft(gameId, !editing, (saved) => {
-    setBody(saved.body);
-    setSpoiler(saved.spoiler);
+  const draft = useReviewDraft({
+    gameId,
+    enabled: !editing,
+    onRestore: (saved) => {
+      setBody(saved.body);
+      setSpoiler(saved.spoiler);
+    },
   });
   const { pending, run } = useAction();
 
   const leaveHref = editing ? "/me/reviews" : `/games/${gameId}`;
-  const notice = reviewFormNotice(review, editUntil);
+  const notice = reviewFormNotice({ review, editUntil });
   const newPhotoUrls = photos.urls.filter((url) => !initialPhotoUrls.includes(url));
   const dirty =
     body !== (review?.body ?? "") ||

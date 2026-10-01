@@ -27,7 +27,7 @@ export async function UserSessionsView({ id, tab }: { id: string; tab?: string }
     key: section.key,
     label: section.title,
     count: sessions[section.key].length,
-    href: userSessionsHref(profile.id, section.key),
+    href: userSessionsHref({ userId: profile.id, role: section.key }),
   }));
 
   return (

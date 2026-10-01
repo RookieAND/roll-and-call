@@ -1,8 +1,8 @@
 import { CERT_FORMAT, type CertFormat, type CertShot } from "@/entities/rulebook";
 
 import type { BookDraft } from "./book-draft";
-import { OTHER_SELLER } from "./other-seller";
 import { slotUrl } from "./photo-slot";
+import { sellerName } from "./seller-name";
 
 export interface CertEntry {
   rulebookId: string;
@@ -25,7 +25,7 @@ export function toCertEntry({ rulebookId, draft }: { rulebookId: string; draft: 
       back: ebook ? "" : slotUrl(draft.shots.back),
       side: ebook ? "" : slotUrl(draft.shots.side),
     },
-    seller: ebook ? (draft.seller === OTHER_SELLER ? draft.sellerOther.trim() : draft.seller) : "",
+    seller: ebook ? sellerName(draft) : "",
     captureUrl: ebook ? slotUrl(draft.proofs.order) : "",
     receiptUrl: ebook ? slotUrl(draft.proofs.receipt) : "",
     orderNumber: ebook ? draft.orderNumber.trim() : "",

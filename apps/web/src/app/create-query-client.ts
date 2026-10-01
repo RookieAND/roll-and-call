@@ -11,7 +11,10 @@ export function createQueryClient() {
       onError: (error, _variables, _context, mutation) => {
         if (isPageError(error)) return;
         const errorMessage = mutation.meta?.errorMessage;
-        reportError(error, typeof errorMessage === "string" ? errorMessage : undefined);
+        reportError({
+          error,
+          fallbackMessage: typeof errorMessage === "string" ? errorMessage : undefined,
+        });
       },
     }),
     defaultOptions: {

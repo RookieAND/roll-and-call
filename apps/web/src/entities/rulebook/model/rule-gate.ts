@@ -18,16 +18,24 @@ export interface RuleGate {
 }
 
 // 구인을 이 판본으로 열 수 있는지. 적용일 전에는 알려만 주고, 지나면 막는다.
-export function ruleGate(
-  set: EditionSet,
-  { rulebooks, sets, enforcementDate }: MyRulebooks,
-  now: Date = new Date(),
-): RuleGate {
+export function ruleGate({
+  set,
+  myRulebooks,
+  now = new Date(),
+}: {
+  set: EditionSet;
+  myRulebooks: MyRulebooks;
+  now?: Date;
+}): RuleGate {
+  const { rulebooks, sets, enforcementDate } = myRulebooks;
   const { status, book, missing } = setStatus(set);
   const applicable = missing
-    .filter((core) => certOption(core, rulebooks).type === CERT_OPTION.pick)
+    .filter((core) => certOption({ rulebook: core, rulebooks }).type === CERT_OPTION.pick)
     .map((core) => core.id);
-  const applyAction = (label: string) => ({ label, href: certApplyHref(applicable) });
+  const applyAction = (label: string) => ({
+    label,
+    href: certApplyHref({ rulebookIds: applicable }),
+  });
   if (set.opened) {
     return {
       type: RULE_GATE.open,

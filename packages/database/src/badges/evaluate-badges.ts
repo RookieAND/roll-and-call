@@ -20,11 +20,11 @@ async function evaluateUser(userId: string, now: Date) {
       .from(userBadges)
       .where(eq(userBadges.userId, userId)),
   ]);
-  const writes = diffBadges(
-    stored.filter((badge) => isRecomputedBadgeKey(badge.badgeKey)),
-    computeBadges(facts),
-  );
-  await applyBadgeWrites(userId, writes, now);
+  const writes = diffBadges({
+    stored: stored.filter((badge) => isRecomputedBadgeKey(badge.badgeKey)),
+    desired: computeBadges(facts),
+  });
+  await applyBadgeWrites({ userId, writes, now });
 }
 
 // 지난달 기록이 바뀌었을 수 있어 이달의 뱃지도 다시 맞춘다.

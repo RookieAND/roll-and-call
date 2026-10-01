@@ -44,7 +44,7 @@ export function GameImagesUpload({ value, onChange, max }: GameImagesUploadProps
     const urls = [...value];
     try {
       for (const file of files.slice(0, remaining)) {
-        const result = await uploadThumbnail(file);
+        const result = await uploadThumbnail({ file });
         if ("error" in result) {
           setError(uploadFailedMessage(result.error));
           break;
