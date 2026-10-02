@@ -18,7 +18,7 @@ export function ReviewPanel({ post }: ReviewPanelProps) {
         <EmptyState
           image={EMPTY_IMAGE.schedule}
           title="아직 후기를 쓸 수 없는 세션입니다"
-          description="출석 확인이 끝나면 후기가 열립니다. 운영진이 할 일은 없습니다."
+          description="출석 확인이 끝나면 후기가 열립니다."
         />
       </VStack>
     );

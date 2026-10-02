@@ -18,7 +18,7 @@ export interface PostListFilter {
   period?: string;
 }
 
-export type PostStaffAction = "숨김" | "수정 요청";
+export type PostStaffAction = "숨김";
 
 export interface PostRow {
   id: string;

@@ -43,6 +43,7 @@ export function HiddenReviewsLoading() {
               { label: "숨긴 시각", kind: "date", width: 124 },
               { label: "작성자 수정", kind: "date", width: 124, sorted: true },
               { label: "상태", kind: "badge", width: 124, align: "center" },
+              { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />
         </Panel>

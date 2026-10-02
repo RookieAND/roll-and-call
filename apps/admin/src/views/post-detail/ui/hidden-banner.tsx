@@ -1,9 +1,8 @@
 import { Button, HStack, Text } from "@roll-and-call/ui";
-import { Eye } from "lucide-react";
 
 import { formatDate } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { IconBadge, ServerLink } from "@/shared/ui";
+import { ServerLink, Tag } from "@/shared/ui";
 
 interface HiddenBannerProps {
   hidden: NonNullable<PostDetail["hidden"]>;
@@ -17,9 +16,7 @@ export function HiddenBanner({ hidden, logHref }: HiddenBannerProps) {
       gap="125"
       className="rounded-500 border border-gray-200 bg-surface px-150 py-125"
     >
-      <IconBadge icon={Eye} colorPalette="danger">
-        숨김 중
-      </IconBadge>
+      <Tag>숨김 중</Tag>
       <Text typography="body3" truncate className="min-w-0 flex-1">
         {hidden.reason}
       </Text>

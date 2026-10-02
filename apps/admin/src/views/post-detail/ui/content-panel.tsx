@@ -1,7 +1,7 @@
-import { Badge, Grid, Text, VStack } from "@roll-and-call/ui";
+import { Grid, Text, VStack } from "@roll-and-call/ui";
 
 import type { PostDetail } from "@/shared/server";
-import { FactRows } from "@/shared/ui";
+import { FactRows, Tag } from "@/shared/ui";
 
 import { ContentSection } from "./content-section";
 import { ImagePlaceholder } from "./image-placeholder";
@@ -16,18 +16,8 @@ interface ContentPanelProps {
 // 어드민에서는 스포일러를 가리지 않는다.
 export function ContentPanel({ post }: ContentPanelProps) {
   const tagsOf = (values: string[]) =>
-    values.length
-      ? values.map((value) => (
-          <Badge key={value} colorPalette="gray">
-            {value}
-          </Badge>
-        ))
-      : "—";
-  const aiImageBadge = post.aiImage ? (
-    <Badge colorPalette="warning">사용</Badge>
-  ) : (
-    <Badge colorPalette="gray">사용 안 함</Badge>
-  );
+    values.length ? values.map((value) => <Tag key={value}>{value}</Tag>) : "—";
+  const aiImageBadge = post.aiImage ? <Tag>사용</Tag> : <Tag>사용 안 함</Tag>;
   return (
     <VStack className="px-200">
       <ContentSection title="구인 설정">

@@ -152,7 +152,6 @@ export interface Session {
   notices?: string[];
   imageUrls?: string[];
   thumbnailUrl?: string;
-  editRequestedAt?: Date;
   attendanceConfirmedAt?: Date;
   hidden?: { reason: string; by: string; at: Date };
   gmEditSinceHidden?: { title: string; body: string; at: Date };

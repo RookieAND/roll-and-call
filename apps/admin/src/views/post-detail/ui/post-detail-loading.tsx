@@ -1,4 +1,4 @@
-import { HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 import {
   AdminHeader,
@@ -9,6 +9,8 @@ import {
   SkeletonTabs,
 } from "@/shared/ui";
 
+import { AsideHeading } from "./aside-heading";
+import { DetailAside } from "./detail-aside";
 import { PostSummarySkeleton } from "./post-summary-skeleton";
 
 export function PostDetailLoading() {
@@ -25,7 +27,12 @@ export function PostDetailLoading() {
           label="구인 정보를 불러오는 중입니다"
           className="min-w-0 gap-150 px-center-200 py-200"
         >
-          <PostSummarySkeleton />
+          <PostSummarySkeleton
+            labels={[
+              ["세션 일정", "플레이타임", "룰"],
+              ["모집 마감일", "GM"],
+            ]}
+          />
           <Panel className="flex-1">
             <SkeletonTabs items={[null, null, null, null, null]} />
             <VStack gap="125" className="p-150">
@@ -35,30 +42,13 @@ export function PostDetailLoading() {
             </VStack>
           </Panel>
         </LoadingRegion>
-        <VStack
-          render={<aside />}
-          className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-[300px] shrink-0 overflow-y-auto border-l border-gray-200 bg-surface"
-        >
-          <Text
-            typography="subtitle2"
-            foreground="muted"
-            render={<h2 />}
-            className="border-b border-(--rc-color-border-subtle) bg-gray-50 px-175 py-125"
-          >
-            조치
-          </Text>
+        <DetailAside>
+          <AsideHeading>조치</AsideHeading>
           <VStack gap="075" className="p-150">
             <SkeletonItem />
             <SkeletonItem />
           </VStack>
-          <Text
-            typography="subtitle2"
-            foreground="muted"
-            render={<h2 />}
-            className="border-y border-(--rc-color-border-subtle) bg-gray-50 px-175 py-125"
-          >
-            GM 정보
-          </Text>
+          <AsideHeading>GM 정보</AsideHeading>
           <div className="p-175">
             <SkeletonEntity
               flat
@@ -66,7 +56,7 @@ export function PostDetailLoading() {
               columns={2}
             />
           </div>
-        </VStack>
+        </DetailAside>
       </HStack>
     </>
   );

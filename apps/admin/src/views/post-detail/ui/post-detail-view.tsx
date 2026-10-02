@@ -8,11 +8,13 @@ import type { PostDetail } from "@/shared/server";
 import { AdminHeader, ListPager, Panel } from "@/shared/ui";
 
 import { POST_DETAIL_TAB, type PostDetailTab } from "../model/post-detail-tab";
+import { summaryRows } from "../model/summary-rows";
 import { ContentPanel } from "./content-panel";
 import { HiddenBanner } from "./hidden-banner";
 import { MemberPanel } from "./member-panel";
 import { PostActionsAside } from "./post-actions-aside";
 import { PostDetailTabs } from "./post-detail-tabs";
+import { PostReviewsAside } from "./post-reviews-aside";
 import { PostSummary } from "./post-summary";
 import { ReportPanel } from "./report-panel";
 import { ReviewPanel } from "./review-panel";
@@ -30,9 +32,9 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
   const pathname = `/posts/${post.id}`;
   const hasReports = post.reports.length > 0;
   const availableActions: PostAction[] = [
-    POST_ACTION.edit,
     post.hidden ? POST_ACTION.unhide : POST_ACTION.hide,
     ...(post.unresolvedReportCount > 0 ? [POST_ACTION.resolve] : []),
+    POST_ACTION.remove,
   ];
   const availableTabs: PostDetailTab[] = [
     ...(hasReports ? [POST_DETAIL_TAB.reports] : []),
@@ -66,8 +68,10 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
   const logHref = `/log?target=${encodeURIComponent(post.title)}`;
   const userAppHref = serverAppUrl ? `${serverAppUrl}/games/${post.id}` : null;
   const direct = !hasReports && !post.hidden;
+  const reviewsTab = currentTab === POST_DETAIL_TAB.reviews;
+  const actionHref = (nextAction: PostAction) => withQuery(pathname, query, { action: nextAction });
   const attendanceWaitDays =
-    currentTab === POST_DETAIL_TAB.reviews && !post.attendance.confirmedAt
+    reviewsTab && !post.attendance.confirmedAt
       ? Math.floor((Date.now() - post.startsAt.getTime()) / 86_400_000)
       : null;
 
@@ -102,7 +106,13 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
               </Callout.Description>
             </Callout.Root>
           ) : null}
-          <PostSummary post={post} userAppHref={userAppHref} logHref={logHref} />
+          <PostSummary
+            post={post}
+            rows={summaryRows({ post, reviewsTab })}
+            userAppHref={userAppHref}
+            logHref={logHref}
+            removeHref={actionHref(POST_ACTION.remove)}
+          />
           <Panel className="flex-1" footer={pager}>
             <PostDetailTabs
               tab={currentTab}
@@ -110,6 +120,7 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
               memberCount={post.members.length}
               waitlistCount={post.waitlist.length}
               reviewCount={post.reviews.length}
+              reviewReported={post.reviews.some((review) => review.openReportCount > 0)}
               reportPanel={hasReports ? <ReportPanel reports={post.reports} /> : null}
               contentPanel={<ContentPanel post={post} />}
               memberPanel={<MemberPanel members={pagedMembers.rows} />}
@@ -118,10 +129,11 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
             />
           </Panel>
         </VStack>
-        <PostActionsAside
-          post={post}
-          actionHref={(nextAction) => withQuery(pathname, query, { action: nextAction })}
-        />
+        {reviewsTab ? (
+          <PostReviewsAside post={post} />
+        ) : (
+          <PostActionsAside post={post} actionHref={actionHref} />
+        )}
       </HStack>
       <PostActionDialog
         post={post}

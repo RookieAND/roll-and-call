@@ -1,9 +1,9 @@
-import { Badge, VStack } from "@roll-and-call/ui";
+import { VStack } from "@roll-and-call/ui";
 import { Quote } from "lucide-react";
 
 import { formatDateTime } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { ItemCard } from "@/shared/ui";
+import { ItemCard, Tag } from "@/shared/ui";
 
 import { reportTone } from "../model/report-tone";
 
@@ -30,8 +30,8 @@ export function ReportPanel({ reports }: ReportPanelProps) {
               meta={formatDateTime(report.reportedAt)}
               tags={
                 <>
-                  <Badge colorPalette={tone}>{report.category}</Badge>
-                  {report.resolved ? <Badge colorPalette="gray">처리됨</Badge> : null}
+                  <Tag tone={tone}>{report.category}</Tag>
+                  {report.resolved ? <Tag>처리됨</Tag> : null}
                 </>
               }
             >
