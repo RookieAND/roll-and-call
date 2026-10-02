@@ -335,7 +335,9 @@ export const loadSnapshot = cache(async () => {
     .map((row) => ({
       id: row.id,
       at: row.createdAt,
-      actor: nicknameOf(row.actorId),
+      actor: row.actorKind === "system" ? "시스템" : nicknameOf(row.actorId),
+      actorId: row.actorId ?? undefined,
+      actorKind: row.actorKind,
       action: row.action as AuditAction,
       target: row.target,
       targetUserId: row.targetUserId ?? undefined,

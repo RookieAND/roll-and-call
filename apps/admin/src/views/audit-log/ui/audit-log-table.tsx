@@ -1,10 +1,10 @@
-import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
+import { HStack, Table, Text } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { ArrowDown, ChevronRight } from "lucide-react";
 
 import { actionTone, formatShortDateTime } from "@/shared/lib";
 import { retentionDaysLeft, type AuditEntry } from "@/shared/server";
-import { EMPTY_IMAGE, TableEmptyRow, TableColumns, ServerLink } from "@/shared/ui";
+import { EMPTY_IMAGE, ServerLink, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
 
 import { retentionTone } from "../model/retention-tone";
 import { splitTarget } from "../model/split-target";
@@ -29,7 +29,7 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
           <Table.Head>대상</Table.Head>
           <Table.Head>사유</Table.Head>
           <Table.Head>운영진</Table.Head>
-          <Table.Head align="center">보관</Table.Head>
+          <Table.Head align="end">보관</Table.Head>
           <Table.Head aria-label="열기" />
         </Table.Row>
       </Table.Header>
@@ -60,10 +60,10 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                <Badge colorPalette={actionTone(row.action)}>{row.action}</Badge>
+                <Tag tone={actionTone(row.action)}>{row.action}</Tag>
               </Table.Cell>
-              <Table.Cell className="truncate">
-                <Text typography="body3" weight="medium" render={<span />}>
+              <Table.Cell className="truncate" title={row.target}>
+                <Text typography="body3" weight="bold" render={<span />}>
                   {target.name}
                 </Text>
                 {target.detail ? (
@@ -77,8 +77,17 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
                   {row.reason || "—"}
                 </Text>
               </Table.Cell>
-              <Table.Cell className="truncate">{row.actor}</Table.Cell>
-              <Table.Cell align="center">
+              <Table.Cell className="truncate">
+                {row.actorKind === "platform" ? (
+                  <HStack align="center" gap="075" render={<span />}>
+                    {row.actor}
+                    <Tag>플랫폼 관리자</Tag>
+                  </HStack>
+                ) : (
+                  row.actor
+                )}
+              </Table.Cell>
+              <Table.Cell align="end">
                 <Text typography="body3" foreground={tone}>
                   {retention}
                 </Text>

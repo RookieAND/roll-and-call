@@ -30,7 +30,7 @@ export const AUDIT_ACTION_GROUPS = [
   },
   {
     label: "운영 · 설정",
-    actions: ["운영진 추가", "운영진 해제", "역할 변경", "설정 변경", "소유권 자동 이전"],
+    actions: ["운영진 추가", "운영진 해제", "설정 변경", "소유권 자동 이전"],
   },
 ] as const;
 

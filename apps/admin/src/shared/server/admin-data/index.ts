@@ -25,7 +25,6 @@ export {
   AUDIT_ACTIONS,
   AUDIT_RETENTION_DAYS,
   cancelNoShow,
-  changeStaffRole,
   EXPIRING_AUDIT_ACTIONS,
   getStaffRole,
   moderatePost,
@@ -106,6 +105,7 @@ export { POST_PERIODS } from "./post-period";
 export { getAuditEntry, type AuditEntryDetail } from "./get-audit-entry";
 export { listAuditLog } from "./list-audit-log";
 export { listStaff, type StaffRow } from "./list-staff";
+export { listRulebookOptions, type RulebookOption } from "./list-rulebook-options";
 export { searchStaffCandidates, type StaffCandidate } from "./search-staff-candidates";
 export { type CategoryEdition } from "./category-editions";
 export { getRulebookDetail, type CertifiedGm, type RulebookDetail } from "./get-rulebook-detail";
@@ -128,3 +128,8 @@ export {
 } from "./list-reported-reviews";
 export { REVIEW_REASON, REVIEW_REASONS, type ReviewReason } from "@/shared/lib";
 export { parseNoShowId } from "./parse-no-show-id";
+export {
+  getServerOwnerProfile,
+  updateServerSettings,
+  type ServerSettings,
+} from "@roll-and-call/database/servers";

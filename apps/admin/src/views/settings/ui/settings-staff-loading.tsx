@@ -18,7 +18,8 @@ export function SettingsStaffLoading() {
               foreground="hint"
               className="border-t border-(--rc-color-border-subtle) px-175 py-125"
             >
-              소유자의 역할은 변경하거나 해제할 수 없습니다.
+              소유자는 디스코드 서버장으로 자동 지정되며, 소유권이 이전되면 이전 소유자는 운영진이
+              됩니다.
             </Text>
           }
           right={

@@ -10,6 +10,7 @@ export { STAFF_ROLE_LABEL } from "./staff-role-label";
 export {
   type StaffRole,
   type Actor,
+  type AuditActorKind,
   type Sanction,
   type ShotKey,
   type AuditState,

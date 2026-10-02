@@ -1,11 +1,13 @@
 export { ensureMembership } from "./commands/ensure-membership";
 export { markMemberVisit } from "./commands/mark-member-visit";
 export { syncServerGuild } from "./commands/sync-server-guild";
+export { updateServerSettings, type ServerSettings } from "./commands/update-server-settings";
 export { getActiveMembership } from "./queries/get-active-membership";
 export { getDefaultServer } from "./queries/get-default-server";
 export { getServerByGuildId } from "./queries/get-server-by-guild-id";
 export { getServerById } from "./queries/get-server-by-id";
 export { getServerBySlug } from "./queries/get-server-by-slug";
+export { getServerOwnerProfile } from "./queries/get-server-owner-profile";
 export { listJoinCandidateServers } from "./queries/list-join-candidate-servers";
 export { listMemberServers } from "./queries/list-member-servers";
 export { listServerQueueCounts, type ServerQueueCounts } from "./queries/list-server-queue-counts";
