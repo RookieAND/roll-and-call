@@ -4,6 +4,7 @@ import { formatDate, withSubjectParticle } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import { FactRows, UserInitial } from "@/shared/ui";
 
+import { rejoinedNotice } from "../model/rejoined-notice";
 import { UserStateTag } from "./user-state-tag";
 
 const NO_SHOW_WARNING_COUNT = 2;
@@ -33,6 +34,14 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
             {ban && !discordBanFailed ? (
               <Text typography="body4" foreground="danger">
                 {`${formatDate(ban.at)}에 ${withSubjectParticle(ban.by)} 서버에서 추방했습니다. 디스코드에서도 차단된 상태입니다.`}
+              </Text>
+            ) : null}
+            {user.rejoinedAt && !ban ? (
+              <Text typography="body4" foreground="hint">
+                {rejoinedNotice({
+                  at: user.rejoinedAt,
+                  certifiedCount: user.certifications.length,
+                })}
               </Text>
             ) : null}
             {previousNickname ? (

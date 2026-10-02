@@ -1,4 +1,4 @@
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 
 import { db } from "../../../client";
 import { serverMembers } from "../../../schema";
@@ -17,7 +17,7 @@ export async function ensureMembership({ serverId, userId }: { serverId: string;
     .values({ serverId, userId })
     .onConflictDoUpdate({
       target: [serverMembers.serverId, serverMembers.userId],
-      set: { deletedAt: null },
+      set: { deletedAt: null, rejoinedAt: sql`now()` },
       setWhere: isNull(serverMembers.bannedAt),
     })
     .returning({ userId: serverMembers.userId });

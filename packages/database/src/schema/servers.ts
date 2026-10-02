@@ -53,6 +53,8 @@ export const serverMembers = pgTable(
     featuredBadges: text("featured_badges").array().notNull().default([]),
     joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    // 나갔다가 다시 들어온 때. 어드민 유저 상세에 재가입 표시를 붙인다.
+    rejoinedAt: timestamp("rejoined_at", { withTimezone: true }),
     // 추방하면 디스코드에서 차단하고 이 칸을 채운다. 차단 해제 때 비운다.
     bannedAt: timestamp("banned_at", { withTimezone: true }),
     bannedBy: uuid("banned_by").references(() => profiles.id, { onDelete: "set null" }),

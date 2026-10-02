@@ -330,6 +330,13 @@
       "when": 1793200000000,
       "tag": "0046_admin_multi_server",
       "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1793300000000,
+      "tag": "0047_member_rejoined_at",
+      "breakpoints": true
     }
   ]
 }

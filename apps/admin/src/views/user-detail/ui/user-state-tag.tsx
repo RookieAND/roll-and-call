@@ -13,5 +13,10 @@ export function UserStateTag({ user, discordBanFailed }: UserStateTagProps) {
   }
   if (user.sanction) return <Tag>제재 중</Tag>;
   if (user.membership === MEMBERSHIP_STATUS.left) return <Tag>{MEMBERSHIP_LABEL.left}</Tag>;
-  return <Tag>정상</Tag>;
+  return (
+    <>
+      <Tag>정상</Tag>
+      {user.rejoinedAt ? <Tag>재가입</Tag> : null}
+    </>
+  );
 }

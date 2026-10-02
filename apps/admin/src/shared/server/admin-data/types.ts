@@ -40,6 +40,7 @@ export interface AdminUser {
   sanction?: Sanction;
   membership: MembershipStatus;
   ban?: { at: Date; by: string; reason: string };
+  rejoinedAt?: Date;
 }
 
 export interface Rulebook {

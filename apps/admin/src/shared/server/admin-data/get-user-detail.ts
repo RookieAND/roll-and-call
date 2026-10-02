@@ -77,6 +77,7 @@ export async function getUserDetail(userId: string) {
       nickname: user.nickname,
     }),
     joinedAt: user.joinedAt,
+    rejoinedAt: user.rejoinedAt ?? null,
     hostedCount: user.hostedCount,
     playedCount: user.playedCount,
     recentNoShowCount: countRecentNoShows(db, userId, now),

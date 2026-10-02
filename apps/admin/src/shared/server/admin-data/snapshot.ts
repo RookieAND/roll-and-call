@@ -97,6 +97,7 @@ export const loadSnapshot = cache(async () => {
           }
         : undefined,
       membership: membershipOf(profile),
+      rejoinedAt: profile.rejoinedAt ?? undefined,
       ban: profile.bannedAt
         ? {
             at: profile.bannedAt,
