@@ -2,10 +2,11 @@ import { Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { formatShortDateTime } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
-import { FactRows, ReviewStatusBadge } from "@/shared/ui";
+import { FactRows } from "@/shared/ui";
 
 import { ReviewMoreMenu } from "./review-more-menu";
 import { ReviewPhotos } from "./review-photos";
+import { ReviewStateTag } from "./review-state-tag";
 
 interface ReviewCardProps {
   review: ReviewDetail;
@@ -33,7 +34,7 @@ export function ReviewCard({ review, logHref, hideLink, removeHref }: ReviewCard
         <Text typography="heading3" render={<h2 />}>
           {review.author.nickname}
         </Text>
-        <ReviewStatusBadge
+        <ReviewStateTag
           openReportCount={review.reports.length}
           hidden={Boolean(review.hidden)}
           held={review.held}

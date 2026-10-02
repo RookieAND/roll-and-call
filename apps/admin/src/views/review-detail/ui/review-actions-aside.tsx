@@ -1,10 +1,11 @@
-import { Callout, Text, VStack } from "@roll-and-call/ui";
+import { Callout, VStack } from "@roll-and-call/ui";
 import { Check, Eye, Shield, X } from "lucide-react";
 
 import { REVIEW_ACTION, type ReviewAction } from "@/features/moderate-review";
 import type { ReviewDetail } from "@/shared/server";
 import { ActionCard, ServerLink } from "@/shared/ui";
 
+import { AsideHeading } from "./aside-heading";
 import { AuthorInfo } from "./author-info";
 
 interface ReviewActionsAsideProps {
@@ -18,14 +19,7 @@ export function ReviewActionsAside({ review, actionHref }: ReviewActionsAsidePro
       render={<aside />}
       className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-[300px] shrink-0 overflow-y-auto border-l border-gray-200 bg-surface"
     >
-      <Text
-        typography="subtitle2"
-        foreground="muted"
-        render={<h2 />}
-        className="border-b border-(--rc-color-border-subtle) bg-gray-50 px-175 py-125"
-      >
-        조치
-      </Text>
+      <AsideHeading>조치</AsideHeading>
       <VStack gap="075" className="p-150">
         {review.reports.length ? (
           <ActionCard
