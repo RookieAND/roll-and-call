@@ -1,9 +1,9 @@
-import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
-import { ArrowDown } from "lucide-react";
+import { HStack, Table, Text } from "@roll-and-call/ui";
+import { ArrowDown, ChevronRight } from "lucide-react";
 
 import { formatSessionTime } from "@/shared/lib";
 import { NO_SHOW_TIMINGS, type NoShowRow } from "@/shared/server";
-import { TableEmptyRow, type EmptyImage, TableColumns, ServerLink } from "@/shared/ui";
+import { TableEmptyRow, type EmptyImage, TableColumns, ServerLink, Tag } from "@/shared/ui";
 
 interface NoShowsTableProps {
   rows: NoShowRow[];
@@ -22,7 +22,7 @@ export function NoShowsTable({
 }: NoShowsTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[110, 200, 140, 192, 100, 86, 84]} />
+      <TableColumns widths={[110, 200, 140, 192, 100, 86, 84, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>불참 당사자</Table.Head>
@@ -37,11 +37,12 @@ export function NoShowsTable({
           <Table.Head>처리한 GM</Table.Head>
           <Table.Head>처리 시점</Table.Head>
           <Table.Head align="center">상태</Table.Head>
+          <Table.Head aria-label="열기" />
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {rows.length === 0 ? (
-          <TableEmptyRow colSpan={7} image={emptyImage} title={emptyTitle} />
+          <TableEmptyRow colSpan={8} image={emptyImage} title={emptyTitle} />
         ) : null}
         {rows.map((row) => (
           <Table.Row
@@ -83,11 +84,10 @@ export function NoShowsTable({
               </Text>
             </Table.Cell>
             <Table.Cell align="center">
-              {row.cancelled ? (
-                <Badge colorPalette="gray">취소됨</Badge>
-              ) : (
-                <Badge colorPalette="danger">유효</Badge>
-              )}
+              <Tag>{row.cancelled ? "취소됨" : "유효"}</Tag>
+            </Table.Cell>
+            <Table.Cell align="end">
+              <ChevronRight size={16} aria-hidden className="inline text-hint" />
             </Table.Cell>
           </Table.Row>
         ))}

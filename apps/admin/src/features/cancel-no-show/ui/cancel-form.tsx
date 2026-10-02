@@ -6,7 +6,7 @@ import { useState, useTransition, type ReactNode } from "react";
 
 import { formatDateTime } from "@/shared/lib";
 import type { NoShowDetail } from "@/shared/server";
-import { ConflictNotice, ServerLink } from "@/shared/ui";
+import { ConflictNotice, ModalServerLabel, ServerLink } from "@/shared/ui";
 
 import { cancelNoShowRecord } from "../api/cancel-no-show-record";
 import { FooterNote } from "./footer-note";
@@ -46,6 +46,7 @@ export function CancelForm({
   return (
     <>
       <Dialog.Header>
+        <ModalServerLabel />
         <Dialog.Title>불참 취소</Dialog.Title>
         <Dialog.Description>디스코드 DM으로 사정을 들은 뒤 기록을 취소합니다</Dialog.Description>
       </Dialog.Header>

@@ -33,7 +33,7 @@ export function CellDetail({ label, finishedCount, openCount }: CellDetailProps)
           <Text typography="body4" foreground="hint">
             {value.label}
           </Text>
-          <Text typography="body2" weight="extrabold" numeric>
+          <Text typography="body2" weight="bold" numeric>
             {value.count}건
           </Text>
         </VStack>
