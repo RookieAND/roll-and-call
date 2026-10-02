@@ -6,7 +6,6 @@ export const REJECT_REASONS = [
   "신청한 책과 달라요",
 ] as const;
 
-// 전자책은 판단하기 어려우면 "추가 확인이 필요해요"를 고르고 사유에 요청할 내용을 적으므로 기타가 없다.
 export const EBOOK_REJECT_REASONS = [
   "상품명이나 주문번호가 보이지 않아요",
   "취소·환불된 주문이에요",

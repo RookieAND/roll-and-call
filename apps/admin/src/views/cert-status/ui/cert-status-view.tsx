@@ -1,4 +1,4 @@
-import { Chip, Text, VStack } from "@roll-and-call/ui";
+import { Chip, VStack } from "@roll-and-call/ui";
 
 import { CERT_TABS, paginate, withQuery } from "@/shared/lib";
 import type { CertStatusData } from "@/shared/server";
@@ -126,11 +126,6 @@ export function CertStatusView({
             }
           />
         </Panel>
-        {gmTab && gmView !== GM_CERT_VIEW.done ? (
-          <Text typography="body4" foreground="hint">
-            미신청 GM에게는 공지 채널에서 멘션하거나 개별로 연락합니다.
-          </Text>
-        ) : null}
       </VStack>
     </>
   );

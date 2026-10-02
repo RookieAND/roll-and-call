@@ -1,4 +1,6 @@
-import { Badge, HStack, Text } from "@roll-and-call/ui";
+import { HStack, Text } from "@roll-and-call/ui";
+
+import { Tag } from "@/shared/ui";
 
 const LIST_LIMIT = 2;
 
@@ -20,7 +22,7 @@ export function CertifiedEditions({ editions }: CertifiedEditionsProps) {
       <Text typography="body3" truncate>
         {editions.slice(0, LIST_LIMIT).join(", ")}
       </Text>
-      {rest > 0 ? <Badge className="shrink-0">외 {rest}개</Badge> : null}
+      {rest > 0 ? <Tag>{`외 ${rest}개`}</Tag> : null}
     </HStack>
   );
 }

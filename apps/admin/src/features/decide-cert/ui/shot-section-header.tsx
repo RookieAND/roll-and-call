@@ -1,42 +1,23 @@
-import { Badge, HStack, Text } from "@roll-and-call/ui";
-import { CircleCheck } from "lucide-react";
+import { HStack, Text } from "@roll-and-call/ui";
 
-import { IconBadge } from "@/shared/ui";
+import { Tag } from "@/shared/ui";
 
 interface ShotSectionHeaderProps {
   title: string;
   checkedCount: number;
   total: number;
-  rejecting: boolean;
 }
 
-export function ShotSectionHeader({
-  title,
-  checkedCount,
-  total,
-  rejecting,
-}: ShotSectionHeaderProps) {
-  const progressLabel = `확인 ${checkedCount} / ${total}`;
-  const allChecked = checkedCount === total;
-  const guide = rejecting
-    ? "문제가 있는 사진을 누르면 반려 사유와 함께 지정됩니다. 크게 보려면 [확대]를 누릅니다."
-    : "사진마다 확인 항목을 체크합니다. [확대]를 누르거나 사진을 누르면 크게 볼 수 있습니다.";
+export function ShotSectionHeader({ title, checkedCount, total }: ShotSectionHeaderProps) {
   return (
     <HStack align="center" gap="100">
-      <Text typography="heading3" render={<h2 id="shot-section-title" />} className="shrink-0">
+      <Text typography="heading3" render={<h2 id="shot-section-title" />}>
         {title}
       </Text>
-      <Text typography="body4" foreground="hint" className="min-w-0">
-        {guide}
-      </Text>
       <HStack className="ml-auto shrink-0">
-        {allChecked ? (
-          <IconBadge icon={CircleCheck} colorPalette="success">
-            {progressLabel}
-          </IconBadge>
-        ) : (
-          <Badge colorPalette="gray">{progressLabel}</Badge>
-        )}
+        <Tag tone={checkedCount === total ? "success" : "gray"}>
+          {`확인 ${checkedCount} / ${total}`}
+        </Tag>
       </HStack>
     </HStack>
   );

@@ -1,6 +1,5 @@
 import { Button, Callout } from "@roll-and-call/ui";
-import { compact } from "es-toolkit";
-import { Quote, Receipt } from "lucide-react";
+import { Quote } from "lucide-react";
 
 import { CertDecisionForm } from "@/features/decide-cert";
 import { formatDateTime } from "@/shared/lib";
@@ -22,7 +21,6 @@ interface CertReviewViewProps {
 export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProps) {
   const { applicant, previousRejections, processed, withdrawnAt, purchase } = review;
   const closed = Boolean(processed || withdrawnAt);
-  const purchaseLine = compact([purchase.orderNumber, purchase.orderDate]).join(" · ");
   const ebook = review.format === "ebook";
   const photoUrls = ebook
     ? { order: purchase.captureUrl, receipt: purchase.receiptUrl }
@@ -38,7 +36,6 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
     <>
       <AdminHeader
         title="룰북 인증 심사"
-        back={{ href: "/cert", label: "심사 대기열" }}
         sub={review.position ? `${review.position.index} / ${review.position.total}` : undefined}
       />
       <CertDecisionForm
@@ -46,13 +43,14 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
         applicantLabel={`${applicant.nickname} · ${review.rulebook}`}
         format={review.format}
         photoUrls={photoUrls}
-        replacedShots={review.replacedShots}
         nextId={review.nextId}
         compact={reapplied || closed || waitingOn.length > 0}
         disabled={closed || waitingOn.length > 0}
         hideShots={Boolean(withdrawnAt)}
         quiz={
-          withdrawnAt ? null : <QuizPanel quiz={review.quiz} hasActiveQuiz={review.hasActiveQuiz} />
+          closed || (ebook && rejecting) ? null : (
+            <QuizPanel quiz={review.quiz} hasActiveQuiz={review.hasActiveQuiz} />
+          )
         }
       >
         <ApplicantCard review={review} />
@@ -65,7 +63,7 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
             </Callout.Description>
           </Callout.Root>
         ) : null}
-        {duplicate ? (
+        {duplicate && !rejecting ? (
           <Callout.Root colorPalette="warning">
             <Callout.Icon />
             <Callout.Description>
@@ -88,7 +86,7 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
         {processed ? (
           <ConflictNotice
             title={conflictTitle}
-            description={`${formatDateTime(processed.at)}에 처리됐습니다. 이 신청은 더 이상 심사할 수 없습니다.`}
+            description={`${formatDateTime(processed.at)}에 처리되었으므로 이 신청은 더 이상 심사할 수 없습니다.`}
             actions={
               <>
                 <Button
@@ -109,11 +107,7 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
           />
         ) : null}
         {latestRejection && !rejecting && !processed ? (
-          <ReapplyNotice
-            latest={latestRejection}
-            attempt={previousRejections.length + 1}
-            replacedShots={review.replacedShots}
-          />
+          <ReapplyNotice latest={latestRejection} attempt={previousRejections.length + 1} />
         ) : null}
         {review.memo && !rejecting ? (
           <div className={closed ? "opacity-50" : undefined}>
@@ -122,35 +116,12 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
             </ItemCard>
           </div>
         ) : null}
-        {ebook && !rejecting && !withdrawnAt ? (
+        {ebook && !withdrawnAt ? (
           <EbookInputPanel
             purchase={purchase}
             sellerRegistered={review.sellerRegistered}
             duplicate={Boolean(duplicate)}
           />
-        ) : null}
-        {!ebook && (purchaseLine || purchase.captureUrl) && !rejecting && !withdrawnAt ? (
-          <div className={processed ? "opacity-50" : undefined}>
-            <ItemCard
-              icon={Receipt}
-              title="구매 기록"
-              meta="선택 입력"
-              right={
-                purchase.captureUrl ? (
-                  <Button
-                    variant="outline"
-                    colorPalette="gray"
-                    size="sm"
-                    render={<a href={purchase.captureUrl} target="_blank" rel="noreferrer" />}
-                  >
-                    캡처 보기
-                  </Button>
-                ) : null
-              }
-            >
-              {purchaseLine || "주문 번호·주문일 없음"}
-            </ItemCard>
-          </div>
         ) : null}
       </CertDecisionForm>
     </>

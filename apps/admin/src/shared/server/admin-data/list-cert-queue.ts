@@ -2,7 +2,6 @@ import "server-only";
 import type { RulebookKind } from "@roll-and-call/database";
 import { uniq } from "es-toolkit";
 
-import { certBlockers } from "./cert-blockers";
 import { loadSnapshot } from "./snapshot";
 import type { CertFormat } from "./types";
 import { waitedDays } from "./waited-days";
@@ -27,7 +26,6 @@ export interface CertQueueRow {
   category: string;
   kind: RulebookKind;
   format: CertFormat;
-  waiting: boolean;
   appliedAt: Date;
   waitedDays: number;
   previousRejectionCount: number;
@@ -49,7 +47,6 @@ export async function listCertQueue(filter: CertQueueFilter) {
         category: book?.category ?? "",
         kind: book?.kind ?? "core",
         format: application.format,
-        waiting: certBlockers(application, db).waitingOn.length > 0,
         appliedAt: application.appliedAt,
         waitedDays: waitedDays(application.appliedAt),
         previousRejectionCount: application.previousRejections.length,
