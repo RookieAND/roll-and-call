@@ -12,5 +12,6 @@ export { getDiscordId } from "./queries/get-discord-id";
 export { getProfileMemo } from "./queries/get-profile-memo";
 export { getUsername } from "./queries/get-username";
 export { getUsernames } from "./queries/get-usernames";
+export { isUsernameTaken } from "./queries/is-username-taken";
 export { memberBioSql } from "./queries/member-bio-sql";
 export { searchMembers } from "./queries/search-members";

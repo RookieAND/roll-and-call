@@ -47,7 +47,7 @@ export function MemoPanel({ userId, memos }: MemoPanelProps) {
         <EmptyState
           image={EMPTY_IMAGE.hosted}
           title="운영진 메모가 없습니다"
-          description="메모는 사용자에게 보이지 않습니다. 제재나 경고를 하기 전에 확인한 내용을 남겨 두면 다른 운영진이 함께 볼 수 있습니다."
+          description="메모는 사용자에게 보이지 않습니다."
         />
       )}
     </Panel>

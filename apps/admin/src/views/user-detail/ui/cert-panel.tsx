@@ -1,15 +1,16 @@
-import { Badge, Button, Callout, Table, Text, VStack } from "@roll-and-call/ui";
+import { Button, Callout, Table, Text, VStack } from "@roll-and-call/ui";
 import { Ban } from "lucide-react";
 
-import { paginate } from "@/shared/lib";
+import { CERT_FORMAT_LABEL, paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import {
   EMPTY_IMAGE,
   ListPager,
   Panel,
-  TableEmptyRow,
-  TableColumns,
   ServerLink,
+  TableColumns,
+  TableEmptyRow,
+  Tag,
 } from "@/shared/ui";
 
 import { CERT_STATE_VIEW } from "../model/cert-state-view";
@@ -48,21 +49,21 @@ export function CertPanel({ user, page }: CertPanelProps) {
         <Table.Root className="table-equal">
           <TableColumns
             widths={[
-              { fixed: 240 },
-              { fixed: 96 },
-              { fixed: 156 },
-              { fixed: 120 },
               0,
-              { fixed: 112 },
+              { fixed: 96 },
+              { fixed: 88 },
+              { fixed: 124 },
+              { fixed: 104 },
+              { fixed: 128 },
             ]}
           />
           <Table.Header>
             <Table.Row>
               <Table.Head>룰북</Table.Head>
+              <Table.Head align="center">형식</Table.Head>
               <Table.Head align="center">상태</Table.Head>
-              <Table.Head>일자</Table.Head>
+              <Table.Head>처리 일자</Table.Head>
               <Table.Head>처리한 운영진</Table.Head>
-              <Table.Head />
               <Table.Head aria-label="조치" />
             </Table.Row>
           </Table.Header>
@@ -72,23 +73,34 @@ export function CertPanel({ user, page }: CertPanelProps) {
                 colSpan={6}
                 image={EMPTY_IMAGE.myGames}
                 title="룰북 인증 기록이 없습니다"
-                description="인증을 신청하면 심사 결과가 이곳에 쌓입니다. 인증을 받기 전에는 인증이 필요한 룰북으로 구인을 열 수 없습니다."
+                description="인증을 신청하면 심사 결과가 이곳에 기록됩니다. 인증을 받기 전에는 인증이 필요한 룰북으로 구인을 열 수 없습니다."
               />
             ) : null}
             {paged.rows.map((row) => {
               const state = CERT_STATE_VIEW[row.state];
+              const formatTone = row.format === CERT_FORMAT_LABEL.ebook ? "primary" : "gray";
               return (
                 <Table.Row
                   key={row.key}
                   className={row.state === CERT_ROW_STATE.rejected ? "opacity-50" : undefined}
                 >
                   <Table.Cell>
-                    <Text typography="body3" weight="bold" truncate>
-                      {row.rulebook}
-                    </Text>
+                    <VStack gap="025" className="min-w-0">
+                      <Text typography="body3" weight="bold" truncate>
+                        {row.rulebook}
+                      </Text>
+                      {row.reason ? (
+                        <Text typography="body4" foreground="hint" truncate title={row.reason}>
+                          {`사유: ${row.reason}`}
+                        </Text>
+                      ) : null}
+                    </VStack>
                   </Table.Cell>
                   <Table.Cell align="center">
-                    <Badge colorPalette={state.tone}>{state.label}</Badge>
+                    <Tag tone={formatTone}>{row.format}</Tag>
+                  </Table.Cell>
+                  <Table.Cell align="center">
+                    <Tag tone={state.tone}>{state.label}</Tag>
                   </Table.Cell>
                   <Table.Cell>
                     <Text typography="body3" foreground="hint">
@@ -102,7 +114,6 @@ export function CertPanel({ user, page }: CertPanelProps) {
                       </Text>
                     )}
                   </Table.Cell>
-                  <Table.Cell />
                   <Table.Cell align="end">
                     {row.href && state.action ? (
                       <Button

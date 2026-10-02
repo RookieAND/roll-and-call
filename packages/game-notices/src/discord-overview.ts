@@ -1,4 +1,4 @@
-import { richTextToMarkdown } from "@/shared/lib";
+import { richTextToMarkdown } from "./lib/rich-text-markdown";
 
 // Discord description 상한(4096)에 맞춰 자른다.
 export function discordOverview(synopsis: string | null): string | undefined {

@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     "@roll-and-call/ui",
     "@roll-and-call/database",
     "@roll-and-call/discord",
+    "@roll-and-call/game-notices",
     "@roll-and-call/review-forum",
     "@roll-and-call/tiptap",
   ],

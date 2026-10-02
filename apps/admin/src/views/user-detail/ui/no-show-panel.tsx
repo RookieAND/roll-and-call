@@ -1,4 +1,4 @@
-import { Badge, Button, Table, Text, VStack } from "@roll-and-call/ui";
+import { Button, Table, Text, VStack } from "@roll-and-call/ui";
 import { Flag } from "lucide-react";
 
 import { formatDate, formatSessionTime, paginate, withQuery } from "@/shared/lib";
@@ -11,6 +11,7 @@ import {
   TableEmptyRow,
   TableColumns,
   ServerLink,
+  Tag,
 } from "@/shared/ui";
 
 interface NoShowPanelProps {
@@ -67,11 +68,7 @@ export function NoShowPanel({ nickname, noShows, page }: NoShowPanelProps) {
                 </Table.Cell>
                 <Table.Cell>{noShow.gmNickname}</Table.Cell>
                 <Table.Cell align="center">
-                  {noShow.cancelled ? (
-                    <Badge colorPalette="gray">취소됨</Badge>
-                  ) : (
-                    <Badge colorPalette="danger">유효</Badge>
-                  )}
+                  {noShow.cancelled ? <Tag>취소됨</Tag> : <Tag tone="danger">유효</Tag>}
                 </Table.Cell>
               </Table.Row>
             ))}

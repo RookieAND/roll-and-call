@@ -8,6 +8,8 @@ import type {
   StaffRole,
 } from "@roll-and-call/database/moderation";
 
+import type { MembershipStatus } from "@/shared/lib";
+
 import type { PostStatus } from "./post-status";
 
 export type {
@@ -36,6 +38,8 @@ export interface AdminUser {
   playedCount: number;
   recentHostedCount: number;
   sanction?: Sanction;
+  membership: MembershipStatus;
+  ban?: { at: Date; by: string; reason: string };
 }
 
 export interface Rulebook {
@@ -77,6 +81,9 @@ export interface CertApplication {
   // 여러 권을 한 번에 낸 신청끼리 같은 값. 한 권이면 null.
   groupId: string | null;
   format: CertFormat;
+  // 신청 없이 운영진이 준 인증이거나, 그 인증을 반려로 돌린 기록이다.
+  direct: boolean;
+  rejectReason?: string;
   appliedAt: Date;
   memo: string;
   photoUrls: Partial<Record<ShotKey, string>>;

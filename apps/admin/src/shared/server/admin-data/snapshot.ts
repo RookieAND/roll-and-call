@@ -9,6 +9,7 @@ import { getCurrentServer } from "../auth/get-current-server";
 import { gameStartsAt } from "./game-starts-at";
 import { gameStatus } from "./game-status";
 import { loadSharedTables } from "./load-shared-tables";
+import { membershipOf } from "./membership-of";
 import { noShowId } from "./no-show-id";
 import { plainText } from "./plain-text";
 import { similarRulebook } from "./similar-rulebook";
@@ -93,6 +94,14 @@ export const loadSnapshot = cache(async () => {
             by: nicknameOf(sanction.createdBy),
             at: sanction.createdAt,
             reason: sanction.reason,
+          }
+        : undefined,
+      membership: membershipOf(profile),
+      ban: profile.bannedAt
+        ? {
+            at: profile.bannedAt,
+            by: nicknameOf(profile.bannedBy),
+            reason: profile.banReason ?? "",
           }
         : undefined,
     };
@@ -211,6 +220,8 @@ export const loadSnapshot = cache(async () => {
       rulebook: labels.get(row.rulebookId) ?? "",
       groupId: row.groupId,
       format: row.format,
+      direct: row.direct,
+      rejectReason: row.rejectReason ?? undefined,
       appliedAt: row.createdAt,
       memo: row.memo,
       photoUrls: row.photoUrls,

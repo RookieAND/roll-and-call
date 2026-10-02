@@ -17,7 +17,8 @@ export interface RevokeInput {
   ongoing: OngoingChoice[];
 }
 
-// 인증을 지우고, 마지막 승인 신청을 반려로 바꾼다(사진은 남긴다). 신청 없이 직접 준 인증이면 반려 기록을 새로 만든다.
+// 인증을 지우고, 마지막 승인 신청을 반려로 바꾼다. 신청 없이 직접 준 인증이면 반려 기록을 새로 만든다.
+// 증빙 이미지(사진·구매 캡처·영수증) URL을 비우면 어느 행도 가리키지 않게 되어 하루 한 번 도는 정리 작업(0041)이 파일을 지운다.
 export async function revokeCertifications({
   serverId,
   userId,
@@ -57,6 +58,9 @@ export async function revokeCertifications({
         status: "rejected" as const,
         rejectReason: input.userReason,
         flaggedShots: [],
+        photoUrls: {},
+        purchaseCaptureUrl: null,
+        receiptUrl: null,
         processedBy: actor.id,
         processedAt: sql`now()`,
       };

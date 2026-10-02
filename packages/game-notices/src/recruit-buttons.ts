@@ -1,6 +1,6 @@
 import type { DiscordLinkButton } from "@roll-and-call/discord";
 
-import { gameUrl } from "../game-url";
+import { gameUrl } from "./game-url";
 
 export function recruitButtons({
   slug,

@@ -23,12 +23,18 @@ import {
 } from "../../../schema";
 
 // 어드민 스냅숏이 읽는 표 전체. 룰북·카테고리·퀴즈 문항·판매처까지 모두 그 서버 것만 읽는다.
-// 사람(profiles)은 그 서버 멤버만 읽는다.
+// 사람(profiles)은 그 서버 멤버만 읽고, 멤버십 상태(탈퇴·차단)를 함께 붙인다.
 export async function loadAdminTables(serverId: string) {
   // 트랜잭션 풀러(:6543)에 13개를 Promise.all로 한꺼번에 보내면 응답이 멈춘다(2026-09-24 재현).
   // 같은 리전이라 순서대로 읽어도 0.1초 남짓이다.
   const profileRows = await db
-    .select(getTableColumns(profiles))
+    .select({
+      ...getTableColumns(profiles),
+      leftAt: serverMembers.deletedAt,
+      bannedAt: serverMembers.bannedAt,
+      bannedBy: serverMembers.bannedBy,
+      banReason: serverMembers.banReason,
+    })
     .from(profiles)
     .innerJoin(
       serverMembers,

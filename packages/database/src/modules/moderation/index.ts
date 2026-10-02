@@ -17,6 +17,10 @@ export {
 } from "./commands/moderate-review";
 export { releaseSanction, type ReleaseResult } from "./commands/release-sanction";
 export { removeStaff } from "./commands/remove-staff";
+export { kickMember, type KickResult } from "./commands/kick-member";
+export { unbanMember, type UnbanResult } from "./commands/unban-member";
+export { editNickname, type EditNicknameResult } from "./commands/edit-nickname";
+export { getKickImpact, type KickImpact } from "./queries/get-kick-impact";
 export { loadAdminTables, type AdminTables } from "./queries/load-admin-tables";
 export { getStaffRole, isPlatformAdmin } from "./queries/staff";
 export * from "./model";

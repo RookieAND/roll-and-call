@@ -35,7 +35,7 @@ export function SanctionSummary({
         ? `참여자 ${closedMemberCount}명에게 운영진 조치 알림`
         : "고른 구인이 없습니다",
     },
-    { label: "그대로 진행하는 활동", value: `${keptCount}건` },
+    { label: "계속 진행하는 활동", value: `${keptCount}건` },
   ];
   return (
     <VStack gap="150">

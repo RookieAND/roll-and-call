@@ -2,11 +2,10 @@ import { type Server } from "@roll-and-call/database";
 import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed, countWaiting } from "@roll-and-call/database/games/model";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
+import { gameNoticeEmbed } from "@roll-and-call/game-notices";
+import { headcountFields } from "@roll-and-call/game-notices";
 
 import { formatDateTime } from "@/shared/lib";
-
-import { gameNoticeEmbed } from "./game-notice-embed";
-import { headcountFields } from "./headcount-fields";
 
 // 확정 뒤에 부른다. 같은 시간으로 다시 확정하면 보내지 않는다.
 export async function notifySessionConfirmed({

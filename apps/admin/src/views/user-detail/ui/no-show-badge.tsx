@@ -1,6 +1,10 @@
-import { Badge } from "@roll-and-call/ui";
+import { Tag } from "@/shared/ui";
 
-export function NoShowBadge({ cancelled }: { cancelled: boolean }) {
-  if (cancelled) return <Badge colorPalette="gray">불참 취소됨</Badge>;
-  return <Badge colorPalette="danger">불참</Badge>;
+interface NoShowBadgeProps {
+  cancelled: boolean;
+}
+
+export function NoShowBadge({ cancelled }: NoShowBadgeProps) {
+  if (cancelled) return <Tag>불참 취소됨</Tag>;
+  return <Tag>불참</Tag>;
 }
