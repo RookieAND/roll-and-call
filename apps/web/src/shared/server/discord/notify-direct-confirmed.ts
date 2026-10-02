@@ -3,9 +3,8 @@ import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed, countWaiting } from "@roll-and-call/database/games/model";
 import { getUsernames } from "@roll-and-call/database/profiles";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-
-import { gameNoticeEmbed } from "./game-notice-embed";
-import { headcountFields } from "./headcount-fields";
+import { gameNoticeEmbed } from "@roll-and-call/game-notices";
+import { headcountFields } from "@roll-and-call/game-notices";
 
 export async function notifyDirectConfirmed({
   server,

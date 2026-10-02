@@ -32,6 +32,12 @@ export {
   moderateReview,
   releaseSanction,
   removeStaff,
+  kickMember,
+  unbanMember,
+  editNickname,
+  getKickImpact,
+  type KickImpact,
+  type EditNicknameResult,
   type AuditAction,
   type CancelNoShowResult,
   type OngoingChoice,
@@ -55,6 +61,7 @@ export {
 export { decideCert } from "./decide-cert";
 export { type ReviewModeration } from "./review-moderation";
 export { getUserDetail, type OngoingActivity, type UserDetail } from "./get-user-detail";
+export { checkDiscordBanFailed } from "./check-discord-ban-failed";
 export { listUsers, USER_FILTERS, type UserFilter, type UserRow } from "./list-users";
 export { retentionDaysLeft } from "./retention-days-left";
 export { getCertReview, type CertReview } from "./get-cert-review";

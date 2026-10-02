@@ -25,6 +25,7 @@ export { Kbd } from "./kbd";
 export { KeyHint } from "./key-hint";
 export { ModalServerLabel } from "./modal-server-label";
 export { NAV_ITEMS, type NavKey } from "./nav-items";
+export { ChoiceRowList, type ChoiceRow } from "./choice-row-list";
 export { OngoingChoiceList, type OngoingChoiceRow } from "./ongoing-choice-list";
 export { OPEN_PALETTE_EVENT, openPalette } from "./open-palette";
 export { ListPager } from "./list-pager";

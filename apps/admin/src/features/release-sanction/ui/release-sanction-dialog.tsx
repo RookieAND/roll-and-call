@@ -1,12 +1,12 @@
 "use client";
 
-import { Button, Dialog, Field, HStack, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Dialog, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { formatDate } from "@/shared/lib";
 import type { Sanction } from "@/shared/server";
-import { UserPreview } from "@/shared/ui";
+import { FactBox, FactSub, ModalServerLabel, Tag, UserPreview } from "@/shared/ui";
 
 import { releaseUserSanction } from "../api/release-user-sanction";
 
@@ -32,17 +32,10 @@ export function ReleaseSanctionDialog({
   const [userReason, setUserReason] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
 
-  const until = sanction.until ? formatDate(sanction.until) : null;
-  const description = until
-    ? `${until}까지 남은 제재를 지금 해제합니다`
-    : "무기한 제재를 지금 해제합니다";
+  const current = sanction.until ? `${formatDate(sanction.until)}까지` : "무기한";
   const remaining = sanction.until
-    ? `${Math.max(1, Math.ceil((sanction.until.getTime() - Date.now()) / DAY))}일`
-    : "무기한";
-  const stats = [
-    { label: "남은 기간", value: remaining, sub: until ? `${until}까지` : null },
-    { label: "해제한 시점부터", value: "활동 가능", sub: "참가·대기 신청 · 구인 개설" },
-  ];
+    ? `${Math.max(1, Math.ceil((sanction.until.getTime() - Date.now()) / DAY))}일 남음`
+    : null;
   const canRelease = Boolean(userReason.trim()) && !pending;
 
   const release = () =>
@@ -62,35 +55,26 @@ export function ReleaseSanctionDialog({
     <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
       <Dialog.Popup className="max-w-[540px]">
         <Dialog.Header>
+          <ModalServerLabel />
           <Dialog.Title>{nickname} 제재 해제</Dialog.Title>
-          <Dialog.Description>{description}</Dialog.Description>
+          <Dialog.Description>해제하는 즉시 모든 활동을 다시 할 수 있습니다.</Dialog.Description>
         </Dialog.Header>
         <Dialog.Body className="mt-200">
           <VStack gap="150">
-            <VStack render={<dl />}>
-              {stats.map((stat) => (
-                <HStack
-                  key={stat.label}
-                  align="baseline"
-                  gap="150"
-                  className="border-t border-(--rc-color-border-subtle) py-100"
-                >
-                  <VStack gap="025" className="min-w-0 flex-1">
-                    <Text typography="body4" foreground="muted" render={<dt />}>
-                      {stat.label}
-                    </Text>
-                    {stat.sub ? (
-                      <Text typography="body4" foreground="hint">
-                        {stat.sub}
-                      </Text>
-                    ) : null}
-                  </VStack>
-                  <Text typography="subtitle2" numeric render={<dd />}>
-                    {stat.value}
-                  </Text>
-                </HStack>
-              ))}
-            </VStack>
+            <FactBox
+              items={[
+                {
+                  label: "현재 제재",
+                  value: (
+                    <>
+                      {current}
+                      {remaining ? <FactSub>{remaining}</FactSub> : null}
+                    </>
+                  ),
+                },
+                { label: "해제 후", value: <Tag>활동 가능</Tag> },
+              ]}
+            />
             <Field.Root
               label="해제 사유 (사용자에게 보임)"
               htmlFor="release-user-reason"

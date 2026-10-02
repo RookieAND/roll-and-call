@@ -1,4 +1,5 @@
 import { Button, Grid, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { TriangleAlert } from "lucide-react";
 
 import { AdminHeader, FormSection, LoadingRegion, Panel, SkeletonField } from "@/shared/ui";
 
@@ -33,9 +34,12 @@ export function UserSanctionLoading() {
           gap="125"
           className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-page py-150"
         >
-          <Text typography="body4" foreground="hint">
-            확정하면 다른 운영진에게 디스코드 알림이 갑니다. 제재는 활동 기록에 남습니다.
-          </Text>
+          <HStack align="center" gap="075" className="text-hint">
+            <TriangleAlert size={14} aria-hidden />
+            <Text typography="body4" foreground="hint">
+              사유를 입력해야 확정할 수 있습니다
+            </Text>
+          </HStack>
           <HStack gap="100" className="ml-auto">
             <Button variant="ghost" colorPalette="gray" disabled>
               취소

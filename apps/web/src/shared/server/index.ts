@@ -51,10 +51,10 @@ export {
   loadMonthlyAppearances as getMonthlyAppearances,
 } from "@roll-and-call/database/badges";
 export { notifyGameCreated } from "./discord/notify-game-created";
-export { refreshRecruitPost } from "./discord/refresh-recruit-post";
+export { refreshRecruitPost } from "@roll-and-call/game-notices";
 export { notifyGameJoined } from "./discord/notify-game-joined";
-export { notifyGameLeft } from "./discord/notify-game-left";
-export { notifyGameCancelled } from "./discord/notify-game-cancelled";
+export { notifyGameLeft } from "@roll-and-call/game-notices";
+export { notifyGameCancelled } from "@roll-and-call/game-notices";
 export { announceRecruitmentComplete } from "./discord/announce-recruitment-complete";
 export { notifyDrawResult } from "./discord/notify-draw-result";
 export { notifyDirectConfirmed } from "./discord/notify-direct-confirmed";

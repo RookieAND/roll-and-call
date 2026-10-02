@@ -28,7 +28,9 @@ export async function joinServer({ next }: { next: string }): Promise<JoinServer
   }
   if (!guildMember) return { notGuildMember: true };
 
-  await ensureMembership({ serverId: server.id, userId: user.id });
+  // 추방된 사람은 디스코드 차단이 실패해 서버에 남아 있어도 들이지 않는다. 화면은 서버 멤버가 아닐 때와 같다.
+  const joined = await ensureMembership({ serverId: server.id, userId: user.id });
+  if (!joined) return { notGuildMember: true };
 
   const safeNext = serverNextPath({ slug: server.slug, value: next });
   redirect(

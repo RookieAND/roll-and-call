@@ -1,8 +1,12 @@
 import { Chip, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
+import { MEMBERSHIP_STATUS } from "@/shared/lib";
 import { USER_FILTERS } from "@/shared/server";
 import { AdminHeader, LoadingRegion, Panel, SkeletonPager, SkeletonTable } from "@/shared/ui";
+
+import { USER_COLUMNS } from "../model/user-columns";
+import { MembershipSegment } from "./membership-segment";
 
 export function UsersLoading() {
   return (
@@ -10,7 +14,8 @@ export function UsersLoading() {
       <AdminHeader title="유저" sub={<Skeleton width={48} height={12} render={<span />} />} />
       <LoadingRegion label="유저 목록을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="125">
-          <HStack align="center" className="relative w-[280px]">
+          <MembershipSegment value={MEMBERSHIP_STATUS.active} disabled />
+          <HStack align="center" className="relative w-[240px] shrink-0">
             <Search
               size={14}
               aria-hidden
@@ -24,23 +29,25 @@ export function UsersLoading() {
               className="pl-400 text-body3"
             />
           </HStack>
-          {Object.values(USER_FILTERS).map((label) => (
-            <Chip key={label} disabled>
-              {label}
-            </Chip>
-          ))}
+          <HStack gap="075" wrap>
+            {Object.values(USER_FILTERS).map((label) => (
+              <Chip key={label} disabled>
+                {label}
+              </Chip>
+            ))}
+          </HStack>
         </HStack>
-        <Panel footer={<SkeletonPager />}>
+        <Panel footer={<SkeletonPager />} className="flex-none">
           <SkeletonTable
             columns={[
-              { label: "닉네임", kind: "text", width: 180 },
-              { label: "가입일", kind: "date", width: 132 },
-              { label: "연 세션", kind: "number", width: 74, align: "end" },
-              { label: "참여 세션", kind: "number", width: 82, align: "end" },
-              { label: "최근 3개월 불참", kind: "number", width: 120, align: "end" },
-              { label: "인증 룰북", kind: "number", width: 82, align: "end" },
-              { label: "상태", kind: "badge", width: 98, align: "center" },
-              { label: "제재 종료", kind: "date", width: 132 },
+              ...USER_COLUMNS.map((column) => ({
+                label: column.label,
+                kind: column.kind,
+                width: column.width,
+                fixed: true,
+                align: "align" in column ? column.align : undefined,
+              })),
+              { label: "", kind: "empty", width: 0 },
             ]}
           />
         </Panel>

@@ -1,5 +1,4 @@
 import {
-  Badge,
   Field,
   HStack,
   SegmentedControl,
@@ -9,7 +8,7 @@ import {
   VStack,
 } from "@roll-and-call/ui";
 
-import { FormSection, OngoingChoiceList, type OngoingChoiceRow } from "@/shared/ui";
+import { ChoiceRowList, FormSection, Tag, type ChoiceRow } from "@/shared/ui";
 
 import type { SanctionDraft } from "../model/sanction-draft";
 import { SANCTION_PERIODS, type SanctionPeriod } from "../model/sanction-periods";
@@ -17,7 +16,7 @@ import { SANCTION_PERIODS, type SanctionPeriod } from "../model/sanction-periods
 interface SanctionFormProps {
   draft: SanctionDraft;
   periodHint: string;
-  rows: OngoingChoiceRow[];
+  rows: ChoiceRow[];
   onDraftChange: (changes: Partial<SanctionDraft>) => void;
   onChoiceChange: (sessionId: string, action: string) => void;
 }
@@ -58,10 +57,7 @@ export function SanctionForm({
           </HStack>
         ) : null}
       </FormSection>
-      <FormSection
-        title="2. 제재 사유"
-        description="사용자에게 보이는 사유와 운영진끼리만 보는 메모를 나누어 적습니다."
-      >
+      <FormSection title="2. 제재 사유">
         <Field.Root
           label="사용자에게 보여줄 사유"
           htmlFor="sanction-user-reason"
@@ -88,11 +84,11 @@ export function SanctionForm({
       </FormSection>
       <FormSection
         title="3. 진행 중인 활동"
-        description="기본값은 그대로 진행입니다. 필요한 항목만 골라서 처리해 주세요."
-        right={<Badge colorPalette="gray">{rows.length}건</Badge>}
+        description="기본값은 모두 진행입니다. 바꿀 항목만 골라 주세요."
+        right={<Tag>{`${rows.length}건`}</Tag>}
       >
         {rows.length > 0 ? (
-          <OngoingChoiceList rows={rows} onChange={onChoiceChange} />
+          <ChoiceRowList rows={rows} onChange={onChoiceChange} />
         ) : (
           <Text typography="body4" foreground="hint">
             진행 중인 활동이 없습니다

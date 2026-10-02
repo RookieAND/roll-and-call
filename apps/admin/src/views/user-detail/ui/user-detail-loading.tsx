@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid, HStack, Skeleton, Tabs, Text, VStack } from "@roll-and-call/ui";
+import { Button, Grid, HStack, Skeleton, Tabs, Text, VStack } from "@roll-and-call/ui";
 
 import {
   AdminHeader,
@@ -14,6 +14,7 @@ import {
 } from "@/shared/ui";
 
 import { USER_DETAIL_TAB } from "../model/user-detail-tab";
+import { UserActionsAsideFrame } from "./user-actions-aside-frame";
 
 const skeletonFact = (label: string) => ({
   label,
@@ -25,8 +26,12 @@ export function UserDetailLoading() {
     <>
       <AdminHeader
         title={<Skeleton width={96} height={22} render={<span />} />}
-        sub="유저 상세"
-        back={{ href: "/users", label: "유저 목록" }}
+        back={{ href: "/users", label: "유저" }}
+        actions={
+          <Button variant="outline" colorPalette="gray" size="sm" disabled>
+            활동 기록에서 보기
+          </Button>
+        }
         withAside
       />
       <HStack data-full-bleed align="stretch" className="flex-1">
@@ -88,25 +93,24 @@ export function UserDetailLoading() {
             </Tabs.Panel>
           </Tabs.Root>
         </LoadingRegion>
-        <VStack
-          render={<aside />}
-          className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-[288px] shrink-0 border-l border-gray-200 bg-surface"
-        >
-          <Text
-            typography="subtitle2"
-            foreground="muted"
-            render={<h2 />}
-            className="border-b border-(--rc-color-border-subtle) bg-gray-50 px-175 py-125"
-          >
-            조치
-          </Text>
+        <UserActionsAsideFrame>
           <VStack gap="075" className="p-150">
             <SkeletonItem />
             <SkeletonItem />
             <SkeletonItem />
+          </VStack>
+          <VStack gap="075" className="px-150 pb-150">
+            <Text
+              typography="body4"
+              weight="bold"
+              foreground="hint"
+              className="border-t border-(--rc-color-border-subtle) pt-100 pb-025"
+            >
+              서버 멤버십
+            </Text>
             <SkeletonItem />
           </VStack>
-        </VStack>
+        </UserActionsAsideFrame>
       </HStack>
     </>
   );

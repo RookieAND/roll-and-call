@@ -1,0 +1,25 @@
+{
+  "name": "@roll-and-call/game-notices",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@roll-and-call/database": "workspace:*",
+    "@roll-and-call/discord": "workspace:*",
+    "@roll-and-call/tiptap": "workspace:*",
+    "dayjs": "^1.11.23"
+  },
+  "devDependencies": {
+    "@roll-and-call/typescript-config": "workspace:*",
+    "@types/node": "^26.2.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.1"
+  }
+}

@@ -1,5 +1,3 @@
-import { withQuery } from "@/shared/lib";
-
-export function revokeHref(userId: string, rulebook?: string) {
-  return withQuery(`/users/${userId}/revoke`, {}, { rulebook });
+export function revokeHref({ userId, rulebookId }: { userId: string; rulebookId: string }) {
+  return `/users/${userId}/certs/${rulebookId}/revoke`;
 }

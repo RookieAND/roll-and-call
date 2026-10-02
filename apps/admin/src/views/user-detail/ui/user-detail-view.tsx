@@ -1,12 +1,13 @@
-import { HStack, VStack } from "@roll-and-call/ui";
+import { Button, HStack, VStack } from "@roll-and-call/ui";
 
-import type { UserDetail } from "@/shared/server";
-import { AdminHeader } from "@/shared/ui";
+import type { KickImpact, UserDetail } from "@/shared/server";
+import { AdminHeader, ServerLink } from "@/shared/ui";
 
 import type { ActivityRole } from "../model/activity-role";
 import type { UserDetailTab } from "../model/user-detail-tab";
 import { ActivityPanel } from "./activity-panel";
 import { CertPanel } from "./cert-panel";
+import { KickFailNotice } from "./kick-fail-notice";
 import { MemoPanel } from "./memo-panel";
 import { NoShowPanel } from "./no-show-panel";
 import { UserActionDialogs } from "./user-action-dialogs";
@@ -19,20 +20,48 @@ interface UserDetailViewProps {
   tab: UserDetailTab;
   role: ActivityRole;
   page?: string;
+  guildId: string;
+  serverOwner: boolean;
+  discordBanFailed: boolean;
+  kickImpact: KickImpact | null;
 }
 
-export function UserDetailView({ user, tab, role, page }: UserDetailViewProps) {
+export function UserDetailView({
+  user,
+  tab,
+  role,
+  page,
+  guildId,
+  serverOwner,
+  discordBanFailed,
+  kickImpact,
+}: UserDetailViewProps) {
+  const logHref = `/log?target=${encodeURIComponent(user.nickname)}`;
   return (
     <>
       <AdminHeader
         title={user.nickname}
-        sub="유저 상세"
-        back={{ href: "/users", label: "유저 목록" }}
+        back={{ href: "/users", label: "유저" }}
+        actions={
+          <Button
+            variant="outline"
+            colorPalette="gray"
+            size="sm"
+            render={<ServerLink path={logHref} />}
+          >
+            활동 기록에서 보기
+          </Button>
+        }
         withAside
       />
       <HStack data-full-bleed align="stretch" className="flex-1">
         <VStack className="min-w-0 flex-1 px-center">
-          <UserStateCard user={user} />
+          {discordBanFailed ? (
+            <div className="px-200 pt-200">
+              <KickFailNotice userId={user.id} nickname={user.nickname} guildId={guildId} />
+            </div>
+          ) : null}
+          <UserStateCard user={user} discordBanFailed={discordBanFailed} />
           <UserDetailTabs
             tab={tab}
             activityPanel={<ActivityPanel activities={user.activities} role={role} page={page} />}
@@ -43,9 +72,9 @@ export function UserDetailView({ user, tab, role, page }: UserDetailViewProps) {
             memoPanel={<MemoPanel userId={user.id} memos={user.memos} />}
           />
         </VStack>
-        <UserActionsAside user={user} tab={tab} />
+        <UserActionsAside user={user} tab={tab} serverOwner={serverOwner} />
       </HStack>
-      <UserActionDialogs user={user} />
+      <UserActionDialogs user={user} kickImpact={kickImpact} />
     </>
   );
 }

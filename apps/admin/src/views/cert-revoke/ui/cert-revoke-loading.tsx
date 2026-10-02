@@ -15,7 +15,7 @@ export function CertRevokeLoading() {
             <FormSection title="1. 반려로 돌릴 룰북">
               <Skeleton width="100%" height={72} rounded={400} />
             </FormSection>
-            <FormSection title="2. 취소 사유">
+            <FormSection title="2. 반려 사유">
               <SkeletonField label="사용자에게 보여줄 사유" />
               <SkeletonField label="운영진 메모 (사용자에게 안 보임)" height={64} />
             </FormSection>
@@ -37,7 +37,7 @@ export function CertRevokeLoading() {
           className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-page py-150"
         >
           <Text typography="body4" foreground="hint">
-            확정하면 다른 운영진에게 디스코드 알림이 갑니다. 취소한 인증은 활동 기록에 남습니다.
+            확정하면 다른 운영진에게 디스코드 알림이 전송되고, 처리 내역은 활동 기록에 남습니다.
           </Text>
           <HStack gap="100" className="ml-auto">
             <Button variant="ghost" colorPalette="gray" disabled>

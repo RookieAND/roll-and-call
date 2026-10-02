@@ -21,4 +21,6 @@ export { getGuildMember, type DiscordGuildMember } from "./guild/get-guild-membe
 export { getGuild, type DiscordGuild } from "./guild/get-guild";
 export { banGuildMember } from "./guild/ban-guild-member";
 export { unbanGuildMember } from "./guild/unban-guild-member";
+export { isGuildBanned } from "./guild/is-guild-banned";
+export { sendDirectMessage } from "./direct/send-direct-message";
 export { DiscordApiError } from "./api/discord-api-error";
