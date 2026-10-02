@@ -1,14 +1,7 @@
 import { Button, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
-import { Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 
-import {
-  AdminHeader,
-  LoadingRegion,
-  Panel,
-  RouteTabs,
-  SkeletonPager,
-  SkeletonTable,
-} from "@/shared/ui";
+import { AdminHeader, LoadingRegion, Panel, RouteTabs, SkeletonTable } from "@/shared/ui";
 
 import { RULEBOOKS_TAB } from "../model/rulebooks-tab";
 
@@ -16,7 +9,10 @@ import { RULEBOOKS_TAB } from "../model/rulebooks-tab";
 export function RulebooksLoading() {
   return (
     <>
-      <AdminHeader title="룰북" sub={<Skeleton width={140} height={12} render={<span />} />} />
+      <AdminHeader
+        title="룰북 카탈로그"
+        sub={<Skeleton width={140} height={12} render={<span />} />}
+      />
       <RouteTabs
         label="룰북 화면"
         value="/rules"
@@ -28,7 +24,6 @@ export function RulebooksLoading() {
       />
       <LoadingRegion label="룰북 목록을 불러오는 중입니다" className="gap-150 p-200">
         <Panel
-          footer={<SkeletonPager />}
           right={
             <>
               <HStack align="center" className="relative w-[260px]">
@@ -45,8 +40,7 @@ export function RulebooksLoading() {
                   className="h-[32px] pl-400 text-body3"
                 />
               </HStack>
-              <Button size="sm" disabled className="gap-050">
-                <Plus size={14} aria-hidden />
+              <Button size="sm" disabled>
                 룰북 추가
               </Button>
             </>

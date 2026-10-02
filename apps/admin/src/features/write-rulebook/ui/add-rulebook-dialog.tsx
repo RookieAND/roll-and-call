@@ -6,7 +6,7 @@ import { TriangleAlert } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import type { RulebookRow } from "@/shared/server";
-import { FormSection } from "@/shared/ui";
+import { FormSection, ModalServerLabel } from "@/shared/ui";
 
 import { submitRulebookAdd } from "../api/submit-rulebook-add";
 import { categoryHelp } from "../model/category-help";
@@ -71,6 +71,7 @@ export function AddRulebookDialog({
     <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
       <Dialog.Popup size="lg" className="max-w-[720px]">
         <Dialog.Header>
+          <ModalServerLabel />
           <Dialog.Title>룰북 추가</Dialog.Title>
           <Dialog.Description>
             책 한 권을 등록합니다. 같은 TRPG의 책은 한 카테고리로 묶습니다.

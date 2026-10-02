@@ -25,7 +25,7 @@ import {
   withTopicParticle,
 } from "@/shared/lib";
 import type { RulebookActionResult, RulebookRequestRow, RulebookRow } from "@/shared/server";
-import { UserPreview } from "@/shared/ui";
+import { ModalServerLabel, UserPreview } from "@/shared/ui";
 
 import { linkRequest } from "../api/link-request";
 import { withDirectionParticle } from "../model/with-direction-particle";
@@ -76,6 +76,7 @@ export function LinkRequestForm({ request, rulebooks, onDone }: LinkRequestFormP
   return (
     <>
       <Dialog.Header>
+        <ModalServerLabel />
         <Dialog.Title>기존 룰북에 연결</Dialog.Title>
         <Dialog.Description>
           {withSubjectParticle(request.requesterNickname)} 요청한 {requestedName} 이미 등록된
@@ -132,14 +133,9 @@ export function LinkRequestForm({ request, rulebooks, onDone }: LinkRequestFormP
               <Checkbox.Root checked={addAlias} onCheckedChange={setAddAlias} className="mt-025">
                 <Checkbox.Indicator />
               </Checkbox.Root>
-              <VStack gap="025">
-                <Checkbox.Label>
-                  요청한 이름 {requestedName} 이 룰북의 <b>다른 이름</b>에 추가합니다
-                </Checkbox.Label>
-                <Text typography="body4" foreground="hint">
-                  이미 다른 이름에 있으면 추가하지 않습니다
-                </Text>
-              </VStack>
+              <Checkbox.Label>
+                요청한 이름 {requestedName} 이 룰북의 <b>다른 이름</b>에 추가합니다
+              </Checkbox.Label>
             </Checkbox.Field>
             <UserPreview title="요청자에게 이렇게 보입니다">
               요청하신 {quoteWithParticle(request.name, withTopicParticle)} 이미 등록된 {linkedName}{" "}

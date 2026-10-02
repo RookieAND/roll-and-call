@@ -109,6 +109,7 @@ export { listStaff, type StaffRow } from "./list-staff";
 export { searchStaffCandidates, type StaffCandidate } from "./search-staff-candidates";
 export { type CategoryEdition } from "./category-editions";
 export { getRulebookDetail, type CertifiedGm, type RulebookDetail } from "./get-rulebook-detail";
+export { getRulebookImpact, type RulebookImpactCase } from "./get-rulebook-impact";
 export { listRulebookRequests, type RulebookRequestRow } from "./list-rulebook-requests";
 export { listRulebooks, type RulebookCategory, type RulebookRow } from "./list-rulebooks";
 export {

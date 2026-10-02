@@ -24,8 +24,10 @@ export function CertPolicyField({ certRequired, disabled, onChange }: CertPolicy
         <RadioCard.Indicator />
       </RadioCard.Root>
       <RadioCard.Root value={CERT_POLICY.free}>
-        <RadioCard.Title>인증 불필요</RadioCard.Title>
-        <RadioCard.Description>운영진이 지정한 무료 배포 룰에만 적용합니다</RadioCard.Description>
+        <RadioCard.Title>무료 배포</RadioCard.Title>
+        <RadioCard.Description>
+          누구나 인증 없이 이 룰북으로 구인을 열 수 있습니다
+        </RadioCard.Description>
         <RadioCard.Indicator />
       </RadioCard.Root>
     </RadioGroup>

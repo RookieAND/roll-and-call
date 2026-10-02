@@ -1,9 +1,9 @@
-import { Badge, Button, HStack, Table, Text } from "@roll-and-call/ui";
-import { Plus } from "lucide-react";
+import { Button, HStack, Table, Text } from "@roll-and-call/ui";
+import { ChevronRight, Plus } from "lucide-react";
 import Link from "next/link";
 
 import type { QuizQuestion } from "@/shared/server";
-import { EMPTY_IMAGE, Panel, TableColumns, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, Panel, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
 
 interface QuizQuestionPanelProps {
   questions: QuizQuestion[];
@@ -16,7 +16,7 @@ export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
       title="본문 퀴즈"
       right={
         <>
-          <Badge>사용 중 {activeCount}개</Badge>
+          <Tag>{`사용 중 ${activeCount}개`}</Tag>
           <Button
             variant="outline"
             colorPalette="gray"
@@ -39,20 +39,21 @@ export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
         사용 중인 문항 1개를 무작위로 출제하며, 답이 틀리면 제출할 수 없습니다.
       </Text>
       <Table.Root className="table-equal">
-        <TableColumns widths={[320, 200, 80, 64, 80]} />
+        <TableColumns widths={[320, 200, 80, 64, 80, { fixed: 44 }]} />
         <Table.Header>
           <Table.Row>
             <Table.Head>질문</Table.Head>
             <Table.Head>허용하는 답</Table.Head>
-            <Table.Head align="center">참고 쪽수</Table.Head>
+            <Table.Head align="end">참고 쪽수</Table.Head>
             <Table.Head align="end">출제</Table.Head>
             <Table.Head align="center">상태</Table.Head>
+            <Table.Head />
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {questions.length === 0 ? (
             <TableEmptyRow
-              colSpan={5}
+              colSpan={6}
               image={EMPTY_IMAGE.myGames}
               title="등록된 문항이 없습니다"
               description="문항이 없으면 신청할 때 퀴즈 단계를 건너뜁니다."
@@ -77,26 +78,25 @@ export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
               <Table.Cell>
                 <HStack gap="050" className="min-w-0 overflow-hidden">
                   {question.answers.map((answer) => (
-                    <Badge key={answer} className="shrink-0">
-                      {answer}
-                    </Badge>
+                    <Tag key={answer}>{answer}</Tag>
                   ))}
                 </HStack>
               </Table.Cell>
-              <Table.Cell align="center">
-                <Text typography="body3" foreground="hint">
-                  {question.page || "—"}
-                </Text>
+              <Table.Cell align="end" numeric>
+                {question.page || (
+                  <Text typography="body3" foreground="hint">
+                    —
+                  </Text>
+                )}
               </Table.Cell>
               <Table.Cell align="end" numeric>
                 {question.askedCount}회
               </Table.Cell>
               <Table.Cell align="center">
-                {question.active ? (
-                  <Badge colorPalette="primary">사용 중</Badge>
-                ) : (
-                  <Badge>비활성</Badge>
-                )}
+                <Tag>{question.active ? "사용 중" : "비활성"}</Tag>
+              </Table.Cell>
+              <Table.Cell align="end">
+                <ChevronRight size={16} aria-hidden className="inline text-hint" />
               </Table.Cell>
             </Table.Row>
           ))}

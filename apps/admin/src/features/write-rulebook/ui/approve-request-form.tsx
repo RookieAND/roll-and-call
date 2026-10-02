@@ -12,7 +12,7 @@ import {
   withSubjectParticle,
 } from "@/shared/lib";
 import type { RulebookActionResult, RulebookRequestRow, RulebookRow } from "@/shared/server";
-import { ConflictNotice, UserPreview } from "@/shared/ui";
+import { ConflictNotice, ModalServerLabel, UserPreview } from "@/shared/ui";
 
 import { submitRequestApproval } from "../api/submit-request-approval";
 import { categoryHelp } from "../model/category-help";
@@ -78,6 +78,7 @@ export function ApproveRequestForm({ request, rulebooks, onDone }: ApproveReques
   return (
     <>
       <Dialog.Header>
+        <ModalServerLabel />
         <Dialog.Title>새 룰북으로 추가</Dialog.Title>
         <Dialog.Description>
           {withSubjectParticle(request.requesterNickname)} 요청한{" "}
@@ -105,12 +106,12 @@ export function ApproveRequestForm({ request, rulebooks, onDone }: ApproveReques
               categoryHelp={help}
               categoryError={category.error}
               nameError={nameError}
+              withAliases={false}
               onChange={change}
-            >
-              <Field.Root label="종류">
-                <KindCards kind={draft.kind} onChange={(kind) => change({ kind })} />
-              </Field.Root>
-            </BasicInfoFields>
+            />
+            <Field.Root label="종류">
+              <KindCards kind={draft.kind} onChange={(kind) => change({ kind })} />
+            </Field.Root>
             <Field.Root label="인증 정책">
               <CertPolicyField
                 certRequired={draft.certRequired}

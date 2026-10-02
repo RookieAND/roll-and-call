@@ -1,19 +1,23 @@
-import { Badge, HStack, Table, Text, cn } from "@roll-and-call/ui";
+import { HStack, Table, Text, cn } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
 import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { RulebookRow } from "@/shared/server";
-import { ServerLink } from "@/shared/ui";
+import { ServerLink, Tag } from "@/shared/ui";
+
+import { TreeGuide } from "./tree-guide";
 
 interface RulebookBookRowProps {
   row: RulebookRow;
+  last: boolean;
 }
 
-export function RulebookBookRow({ row }: RulebookBookRowProps) {
+export function RulebookBookRow({ row, last }: RulebookBookRowProps) {
   return (
     <Table.Row interactive className={cn("relative", row.hidden && "opacity-50")}>
       <Table.Cell>
-        <HStack align="center" gap="075" className="min-w-0 pl-250">
+        <TreeGuide last={last} />
+        <HStack align="center" gap="075" className="min-w-0 pl-300">
           <Text
             typography="body3"
             weight="medium"
@@ -23,7 +27,7 @@ export function RulebookBookRow({ row }: RulebookBookRowProps) {
           >
             {row.name}
           </Text>
-          {row.hidden ? <Badge className="shrink-0">숨김</Badge> : null}
+          {row.hidden ? <Tag>숨김</Tag> : null}
         </HStack>
       </Table.Cell>
       <Table.Cell>
@@ -34,9 +38,7 @@ export function RulebookBookRow({ row }: RulebookBookRowProps) {
         )}
       </Table.Cell>
       <Table.Cell align="center">
-        <Badge colorPalette={row.kind === "core" ? "primary" : "gray"}>
-          {RULEBOOK_KIND_LABEL[row.kind]}
-        </Badge>
+        <Tag>{RULEBOOK_KIND_LABEL[row.kind]}</Tag>
       </Table.Cell>
       <Table.Cell align="end">
         <ChevronRight size={16} aria-hidden className="inline text-hint" />

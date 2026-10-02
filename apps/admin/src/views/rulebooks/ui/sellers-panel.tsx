@@ -1,8 +1,8 @@
-import { Badge, Table, Text } from "@roll-and-call/ui";
+import { Table, Text } from "@roll-and-call/ui";
 
 import { AddSellerButton, RemoveSellerButton } from "@/features/manage-cert-sellers";
 import type { CertSellerRow } from "@/shared/server";
-import { Panel, TableColumns } from "@/shared/ui";
+import { Panel, TableColumns, Tag } from "@/shared/ui";
 
 interface SellersPanelProps {
   sellers: CertSellerRow[];
@@ -15,7 +15,7 @@ export function SellersPanel({ sellers }: SellersPanelProps) {
         title="전자책 판매처"
         right={
           <>
-            <Badge>{sellers.length}곳</Badge>
+            <Tag>{sellers.length}곳</Tag>
             <AddSellerButton />
           </>
         }
