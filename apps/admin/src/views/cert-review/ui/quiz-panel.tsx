@@ -1,10 +1,10 @@
 "use client";
 
-import { Badge, Collapsible, HStack, Text } from "@roll-and-call/ui";
-import { ChevronDown, CircleCheck } from "lucide-react";
+import { Collapsible, HStack, Text } from "@roll-and-call/ui";
+import { ChevronDown } from "lucide-react";
 
 import type { CertReview } from "@/shared/server";
-import { FactRows, IconBadge } from "@/shared/ui";
+import { FactRows, Tag } from "@/shared/ui";
 
 interface QuizPanelProps {
   quiz: CertReview["quiz"];
@@ -23,7 +23,7 @@ export function QuizPanel({ quiz, hasActiveQuiz }: QuizPanelProps) {
         className="rounded-600 border border-gray-200 bg-surface px-175 py-125"
       >
         <Text typography="subtitle1">본문 퀴즈</Text>
-        <Badge>{hasActiveQuiz ? "퀴즈 없이 신청" : "등록된 퀴즈 없음"}</Badge>
+        <Tag>{hasActiveQuiz ? "퀴즈 없이 신청" : "등록된 퀴즈 없음"}</Tag>
         <Text typography="body4" foreground="hint" className="ml-auto">
           {hasActiveQuiz
             ? "문항을 등록하기 전에 낸 신청이어서 퀴즈 단계가 없었습니다"
@@ -39,9 +39,7 @@ export function QuizPanel({ quiz, hasActiveQuiz }: QuizPanelProps) {
     >
       <Collapsible.Trigger className="group flex w-full items-center gap-100 px-175 py-125 text-left">
         <Text typography="subtitle1">본문 퀴즈</Text>
-        <IconBadge icon={CircleCheck} colorPalette="success">
-          퀴즈 통과
-        </IconBadge>
+        <Tag tone="success">퀴즈 통과</Tag>
         <Text
           typography="body4"
           weight="bold"

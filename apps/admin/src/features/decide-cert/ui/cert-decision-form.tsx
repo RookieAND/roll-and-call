@@ -10,6 +10,7 @@ import { KeyHint, useServerPath } from "@/shared/ui";
 import { approveCert } from "../api/approve-cert";
 import { rejectCert } from "../api/reject-cert";
 import { decisionFailureMessage } from "../model/decision-failure-message";
+import { PHOTO_HEIGHT } from "../model/photo-height";
 import { OTHER_REASON } from "../model/reject-reasons";
 import { EBOOK_SHOTS, SHOTS, type ReviewShot } from "../model/shots";
 import { DecisionFooter } from "./decision-footer";
@@ -31,7 +32,6 @@ interface CertDecisionFormProps {
   applicantLabel: string;
   format: CertFormat;
   photoUrls: Partial<Record<ReviewShot["key"], string | null>>;
-  replacedShots: ShotKey[];
   nextId: string | null;
   compact: boolean;
   disabled: boolean;
@@ -46,7 +46,6 @@ export function CertDecisionForm({
   applicantLabel,
   format,
   photoUrls,
-  replacedShots,
   nextId,
   compact,
   disabled,
@@ -77,6 +76,9 @@ export function CertDecisionForm({
   const reasonTag = reasonChoice === OTHER_REASON ? otherReason.trim() : reasonChoice;
   const canReject = Boolean(reasonTag && userReason.trim()) && !pending;
   const nextHref = nextId ? `/cert/${nextId}` : "/cert";
+  const ebookHeight = rejecting ? PHOTO_HEIGHT.medium : PHOTO_HEIGHT.tall;
+  const physicalHeight = compact || rejecting ? PHOTO_HEIGHT.compact : PHOTO_HEIGHT.regular;
+  const photoHeight = ebook ? ebookHeight : physicalHeight;
 
   const setParam = (key: string, value: string | null) => {
     const next = new URLSearchParams(searchParams);
@@ -149,7 +151,6 @@ export function CertDecisionForm({
               title={ebook ? "구매 기록 확인" : "사진 확인"}
               checkedCount={checkedShots.length}
               total={shots.length}
-              rejecting={rejecting && flaggable}
             />
             <Grid className={cn("gap-150", shots.length === 3 ? "grid-cols-3" : "grid-cols-2")}>
               {shots.map((shot) => (
@@ -161,9 +162,7 @@ export function CertDecisionForm({
                   url={photoUrls[shot.key] ?? undefined}
                   checked={checkedShots.includes(shot.key)}
                   flagged={rejecting && flaggedShots.some((flagged) => flagged === shot.key)}
-                  replaced={replacedShots.some((replaced) => replaced === shot.key)}
-                  tall={shots.length === 2}
-                  compact={compact || rejecting}
+                  height={photoHeight}
                   disabled={disabled}
                   onCheckedChange={() => setCheckedShots(toggle(checkedShots, shot.key))}
                   onPhotoClick={() =>
@@ -198,7 +197,7 @@ export function CertDecisionForm({
       />
       {rejecting ? (
         <DecisionFooter
-          status={<FlaggedStatus reasonTag={reasonTag} flaggedShots={flaggedShots} />}
+          status={<FlaggedStatus ebook={ebook} reasonTag={reasonTag} flaggedShots={flaggedShots} />}
         >
           <Button variant="ghost" colorPalette="gray" onClick={() => setParam("mode", null)}>
             취소

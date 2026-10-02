@@ -43,17 +43,18 @@ export function RejectPanel({
       </VStack>
       <VStack gap="100" className="p-150">
         <VStack gap="075" className="mb-050">
-          <Text typography="body4" weight="bold" id="reject-reason-label">
-            사유 선택
-          </Text>
+          {ebook ? null : (
+            <Text typography="body4" weight="bold" id="reject-reason-label">
+              사유 선택
+            </Text>
+          )}
           <ReasonRadio
             reasons={ebook ? EBOOK_REJECT_REASONS : REJECT_REASONS}
-            withOther={!ebook}
             value={reasonChoice}
             otherReason={otherReason}
             onValueChange={onReasonChoiceChange}
             onOtherReasonChange={onOtherReasonChange}
-            labelledBy="reject-reason-label"
+            label={ebook ? "전자책 반려 사유" : "반려 사유"}
           />
         </VStack>
         <Field.Root

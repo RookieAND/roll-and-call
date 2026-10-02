@@ -1,8 +1,7 @@
 import { HStack, Text } from "@roll-and-call/ui";
-import { CircleCheck, TriangleAlert } from "lucide-react";
 
 import type { CertReview } from "@/shared/server";
-import { FactRows, IconBadge, Panel } from "@/shared/ui";
+import { FactRows, Panel, Tag } from "@/shared/ui";
 
 interface EbookInputPanelProps {
   purchase: CertReview["purchase"];
@@ -31,11 +30,7 @@ export function EbookInputPanel({ purchase, sellerRegistered, duplicate }: Ebook
             value: (
               <HStack align="center" gap="075">
                 {purchase.seller ?? NOT_ENTERED}
-                {sellerRegistered ? (
-                  <IconBadge icon={CircleCheck} colorPalette="success">
-                    등록된 판매처
-                  </IconBadge>
-                ) : null}
+                {sellerRegistered ? <Tag tone="success">등록된 판매처</Tag> : null}
               </HStack>
             ),
           },
@@ -44,11 +39,7 @@ export function EbookInputPanel({ purchase, sellerRegistered, duplicate }: Ebook
             value: (
               <HStack align="center" gap="075" className="tabular-nums">
                 {purchase.orderNumber ?? NOT_ENTERED}
-                {duplicate ? (
-                  <IconBadge icon={TriangleAlert} colorPalette="warning">
-                    중복
-                  </IconBadge>
-                ) : null}
+                {duplicate ? <Tag>중복</Tag> : null}
               </HStack>
             ),
           },

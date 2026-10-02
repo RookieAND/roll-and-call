@@ -36,7 +36,7 @@ export function CertQueueLoading() {
           <div className="w-[150px]">
             <SkeletonSelect label="룰북 전체" />
           </div>
-          {["전체", "재신청", "활성 GM", "적용일 전 접수"].map((label) => (
+          {["전체", "재신청", "활성 GM"].map((label) => (
             <Chip key={label} disabled>
               {label}
             </Chip>
@@ -47,8 +47,8 @@ export function CertQueueLoading() {
             columns={[
               { label: "닉네임", kind: "text", width: 150 },
               { label: "신청한 책", kind: "text", width: 320 },
-              { label: "종류", kind: "badge", width: 110, align: "center" },
-              { label: "형식", kind: "badge", width: 90, align: "center" },
+              { label: "종류", kind: "badge", width: 110 },
+              { label: "형식", kind: "badge", width: 90 },
               { label: "대기 일수", kind: "number", width: 90, align: "end", sorted: true },
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}
