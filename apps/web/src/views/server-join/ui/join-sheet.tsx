@@ -15,10 +15,9 @@ export function JoinSheet({ status, serverName, hasInvite, action }: JoinSheetPr
   const { badge, badgePalette, title, body } = JOIN_SHEET_COPY[status]({ serverName, hasInvite });
   return (
     <VStack
-      justify="between"
-      gap="300"
+      gap="250"
       aria-live="polite"
-      className="relative h-[calc(300px+var(--rc-safe-bottom))] flex-none rounded-t-800 bg-surface px-300 pt-400 pb-[calc(var(--spacing-300)+var(--rc-safe-bottom))] shadow-[0_-10px_30px_rgb(23_23_28/0.06)]"
+      className="relative flex-none rounded-t-800 bg-surface px-300 pt-400 pb-[calc(var(--spacing-300)+var(--rc-safe-bottom))] shadow-[0_-10px_30px_rgb(23_23_28/0.06)]"
     >
       <VStack align="center" gap="125" className="text-center">
         <Badge colorPalette={badgePalette}>{badge}</Badge>

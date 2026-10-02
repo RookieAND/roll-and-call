@@ -360,43 +360,21 @@ html {
   font-size: 62px;
 }
 
-/* 서버 가입 화면 배경. 점 무늬가 흐르고 색 덩어리가 천천히 떠다닌다. */
-@keyframes join-dots {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 22px 22px;
-  }
-}
-
-@keyframes join-dots-glow {
+/* 서버 가입 화면 배경. 점 무늬 위에서 별이 하나씩 반짝인다. */
+@keyframes join-spark {
   0%,
+  80%,
   100% {
-    opacity: 0.55;
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
   }
-  50% {
+  87% {
     opacity: 1;
+    transform: scale(1.1) rotate(45deg);
   }
-}
-
-@keyframes join-blob-a {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(36px, 28px) scale(1.12);
-  }
-}
-
-@keyframes join-blob-b {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1.05);
-  }
-  50% {
-    transform: translate(-30px, 40px) scale(0.94);
+  94% {
+    opacity: 0.4;
+    transform: scale(0.6) rotate(90deg);
   }
 }
 
@@ -411,18 +389,8 @@ html {
   }
 }
 
-@utility animate-join-dots {
-  animation:
-    join-dots 8s linear infinite,
-    join-dots-glow 5s ease-in-out infinite;
-}
-
-@utility animate-join-blob-a {
-  animation: join-blob-a 14s ease-in-out infinite;
-}
-
-@utility animate-join-blob-b {
-  animation: join-blob-b 17s ease-in-out infinite;
+@utility animate-join-spark {
+  animation: join-spark ease-in-out infinite;
 }
 
 @utility animate-join-pulse {
@@ -430,9 +398,7 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-join-dots,
-  .animate-join-blob-a,
-  .animate-join-blob-b,
+  .animate-join-spark,
   .animate-join-pulse {
     animation: none;
   }

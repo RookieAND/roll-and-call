@@ -27,7 +27,7 @@ export function MemberJoinCheck({ target, next }: MemberJoinCheckProps) {
     ),
     denied: isNull(target.inviteUrl) ? (
       <Button variant="outline" size="lg" disabled className="w-full">
-        서버 운영진에게 초대를 요청해 주세요
+        지금은 초대를 받지 않는 서버입니다
       </Button>
     ) : (
       <Button
