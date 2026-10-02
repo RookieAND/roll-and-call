@@ -11,12 +11,13 @@ import { IndexCta } from "./index-cta";
 
 interface IndexHeaderProps {
   servers: MenuServer[] | null;
+  joinable: MenuServer[];
 }
 
 const HEADER_HEIGHT = 64;
 
 // 히어로 위에 투명하게 겹쳐 있다가, 히어로의 주 버튼이 헤더 뒤로 넘어가면 불투명해지고 같은 버튼을 작게 단다.
-export function IndexHeader({ servers }: IndexHeaderProps) {
+export function IndexHeader({ servers, joinable }: IndexHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export function IndexHeader({ servers }: IndexHeaderProps) {
           <ThemeToggleButton />
           {scrolled && (
             <div className="ml-075 flex min-w-0">
-              <IndexCta servers={servers} compact />
+              <IndexCta servers={servers} joinable={joinable} compact />
             </div>
           )}
         </HStack>

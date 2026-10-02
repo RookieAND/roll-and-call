@@ -49,9 +49,9 @@ export function ClosingSection({ signedIn }: ClosingSectionProps) {
             title="서버 운영자이신가요?"
             description={
               <>
-                우리 서버에도 Roll &amp; Call을 쓰고 싶다면 문의해 주세요.
+                우리 서버에서도 쓰고 싶다면 문의해 주세요.
                 <br />
-                서버 등록은 Roll &amp; Call 운영팀이 직접 해 드립니다.
+                등록은 운영팀이 해 드립니다.
               </>
             }
             actionLabel="도입 문의하기"

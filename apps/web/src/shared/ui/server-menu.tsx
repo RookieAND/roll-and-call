@@ -18,6 +18,9 @@ interface ServerMenuProps {
   align?: "start" | "end";
   // 서버 홈 헤더의 전환 메뉴는 끝에 소개 페이지 링크를 단다.
   aboutLink?: boolean;
+  label?: string;
+  // join이면 항목을 누를 때 서버 홈 대신 가입 화면으로 간다.
+  destination?: "home" | "join";
 }
 
 // 소개 페이지 주 버튼의 ▾와 서버 홈 헤더의 서버 전환이 같이 쓴다.
@@ -28,6 +31,8 @@ export function ServerMenu({
   anchor,
   align = "start",
   aboutLink = false,
+  label = "최근 방문 순",
+  destination = "home",
 }: ServerMenuProps) {
   return (
     <Menu.Root>
@@ -41,7 +46,7 @@ export function ServerMenu({
           className="z-(--rc-z-popover) outline-none"
         >
           <Menu.Popup
-            aria-label="서버 고르기"
+            aria-label={label}
             className="flex w-[max(var(--anchor-width),260px)] max-w-[calc(100vw-32px)] flex-col rounded-600 border border-gray-200 bg-surface p-075 shadow-[0_16px_40px_rgba(23,23,28,0.16)] outline-none"
           >
             <Menu.RadioGroup value={checkedSlug}>
@@ -49,13 +54,14 @@ export function ServerMenu({
                 render={<Text typography="body5" weight="bold" foreground="hint" />}
                 className="block px-125 pt-100 pb-075"
               >
-                최근 방문 순
+                {label}
               </Menu.GroupLabel>
               {servers.map((server) => (
                 <ServerMenuItem
                   key={server.slug}
                   server={server}
                   checked={server.slug === checkedSlug}
+                  destination={destination}
                 />
               ))}
             </Menu.RadioGroup>
