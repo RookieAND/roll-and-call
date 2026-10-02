@@ -3,8 +3,8 @@
 import { findLiveReviewAuthor, insertReviewReport } from "@roll-and-call/database/reviews";
 
 import { REPORT_DETAIL_MAX_LENGTH, REPORT_REASON } from "@/entities/review";
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { getCurrentServer, getCurrentUser } from "@/shared/server";
+import { type ActionResult } from "@/shared/api";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 import type { ReportInput } from "../model/report-input";
 
@@ -15,11 +15,13 @@ export async function reportReview({
   reason,
   detail,
 }: ReportInput): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
   if (!Object.values(REPORT_REASON).includes(reason)) return { error: "신고 사유를 골라 주세요." };
 
-  const server = await getCurrentServer();
   const authorId = await findLiveReviewAuthor({ serverId: server.id, reviewId });
   if (!authorId) return { error: "삭제된 후기입니다." };
   if (authorId === user.id) return { error: "내가 쓴 후기는 신고할 수 없습니다." };

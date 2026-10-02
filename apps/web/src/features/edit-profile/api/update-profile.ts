@@ -5,9 +5,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { normalizeKeywords, normalizeLinks, type ProfileLink } from "@/entities/profile";
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import { getCurrentServer, getCurrentUser } from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
 
@@ -19,8 +19,11 @@ export type UpdateProfileInput = {
 };
 
 export async function updateProfile(input: UpdateProfileInput): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
 
   const username = input.username.trim();
   if (username.length < 1 || username.length > USERNAME_MAX_LENGTH) {
@@ -37,7 +40,6 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     };
   }
 
-  const server = await getCurrentServer();
   await saveMemberProfile({
     serverId: server.id,
     userId: user.id,

@@ -4,17 +4,19 @@ import { discardRulebookRecord } from "@roll-and-call/database/certifications";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import { getCurrentServer, getCurrentUser, removeUnusedCertPhotos } from "@/shared/server";
+import { getActingMember, removeUnusedCertPhotos, notMemberError } from "@/shared/server";
 
 const NOT_DISCARDABLE =
   "반려되거나 인증이 취소된 책만 기록을 지울 수 있습니다. 화면을 새로 고쳐 주세요.";
 
 export async function discardApplicationRecord(rulebookId: string): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
-  const server = await getCurrentServer();
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
 
   const discarded = await discardRulebookRecord({
     serverId: server.id,

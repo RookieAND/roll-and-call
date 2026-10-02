@@ -5,6 +5,7 @@ import { deriveActionView, GAME_ACTION_VIEW } from "./derive-action-view";
 const base = {
   isGm: false,
   isSignedIn: true,
+  isMember: true,
   viewerConfirmed: false,
   viewerWaiting: false,
   isLottery: false,
@@ -18,7 +19,16 @@ const base = {
 
 describe("deriveActionView", () => {
   it("1 anon · 비로그인은 로그인부터 한다", () => {
-    expect(deriveActionView({ ...base, isSignedIn: false })).toBe(GAME_ACTION_VIEW.anon);
+    expect(deriveActionView({ ...base, isSignedIn: false, isMember: false })).toBe(
+      GAME_ACTION_VIEW.anon,
+    );
+  });
+
+  it("1-1 nonMember · 로그인했지만 서버에 가입하지 않았으면 가입부터 한다", () => {
+    expect(deriveActionView({ ...base, isMember: false })).toBe(GAME_ACTION_VIEW.nonMember);
+    expect(deriveActionView({ ...base, isMember: false, isClosed: true })).toBe(
+      GAME_ACTION_VIEW.outsider,
+    );
   });
 
   it("2 joinable · 모집 중인 구인에는 신청 버튼이 선다", () => {

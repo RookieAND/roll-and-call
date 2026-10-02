@@ -5,6 +5,7 @@ export {
   updateCertEnforcementDate,
   type EnforcementChange,
 } from "./commands/update-cert-enforcement-date";
+export { getActiveMembership } from "./queries/get-active-membership";
 export { getDefaultServer } from "./queries/get-default-server";
 export { getServerByGuildId } from "./queries/get-server-by-guild-id";
 export { getServerById } from "./queries/get-server-by-id";

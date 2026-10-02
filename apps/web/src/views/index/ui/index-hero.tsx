@@ -1,19 +1,20 @@
 import { Badge, Container, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { LockKeyhole } from "lucide-react";
-import type { ReactNode } from "react";
 
-import { LoginButton } from "@/features/auth";
+import type { MenuServer } from "@/shared/ui";
 
+import { HERO_CTA_ID } from "../model/hero-cta-id";
 import { FeatureCarousel } from "./feature-carousel";
-import { IndexHeader } from "./index-header";
+import { IndexCta } from "./index-cta";
 
 interface IndexHeroProps {
-  signedIn: boolean;
-  children?: ReactNode;
+  // null이면 비로그인
+  servers: MenuServer[] | null;
 }
 
-// children은 헤더 바로 아래, 소개 문구 위에 놓인다(로그인했을 때의 내 서버 목록).
-export function IndexHero({ signedIn, children }: IndexHeroProps) {
+// 헤더(h-16)가 위에 겹쳐 있어 그만큼 위쪽 여백을 더 둔다.
+export function IndexHero({ servers }: IndexHeroProps) {
   return (
     <div
       className="relative overflow-hidden"
@@ -26,13 +27,11 @@ export function IndexHero({ signedIn, children }: IndexHeroProps) {
           backgroundImage: "radial-gradient(var(--rc-color-border-normal) 1px, transparent 1.2px)",
         }}
       />
-      <IndexHeader />
-      {children}
       <Container className="relative">
         <HStack
           wrap
           align="center"
-          className="gap-[clamp(40px,5cqw,64px)] pt-[clamp(28px,6cqw,80px)] pb-[clamp(48px,8cqw,104px)]"
+          className="gap-[clamp(40px,5cqw,64px)] pt-[calc(64px+clamp(28px,6cqw,80px))] pb-[clamp(48px,8cqw,104px)]"
         >
           <VStack gap="225" className="min-w-0 flex-[1_1_440px]">
             <HStack>
@@ -59,17 +58,17 @@ export function IndexHero({ signedIn, children }: IndexHeroProps) {
               <br />
               Roll &amp; Call 에서는 다양하고 편리한 기능을 제공합니다.
             </Text>
-            {!signedIn && (
-              <VStack gap="125" className="mt-100 w-full max-w-[340px]">
-                <LoginButton next="/" className="w-full" />
+            <VStack id={HERO_CTA_ID} gap="125" className="mt-100 w-full max-w-[360px]">
+              <IndexCta servers={servers} />
+              {isNull(servers) && (
                 <HStack align="center" justify="center" gap="075" className="text-gray-600">
                   <LockKeyhole size={14} aria-hidden />
                   <Text typography="body4" foreground="muted">
                     로그인하면 내 서버가 보여요
                   </Text>
                 </HStack>
-              </VStack>
-            )}
+              )}
+            </VStack>
           </VStack>
           <FeatureCarousel />
         </HStack>

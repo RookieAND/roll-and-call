@@ -5,20 +5,22 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
 import { countConfirmed, isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
-import { AUTH_REQUIRED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import { GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
-  getCurrentServer,
-  getCurrentUser,
+  getActingMember,
   notifyGameLeft,
   refreshRecruitPost,
+  notMemberError,
 } from "@/shared/server";
 
 export async function leaveGame(gameId: string): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
 
-  const server = await getCurrentServer();
   const game = await getGameWithRoster({ serverId: server.id, gameId });
   if (!game) return GAME_NOT_FOUND_RESULT;
 

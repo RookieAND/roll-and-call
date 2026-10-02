@@ -17,3 +17,4 @@ export { createForumPost } from "./forum/create-forum-post";
 export { updateForumPost } from "./forum/update-forum-post";
 export { deleteDiscordThread } from "./forum/delete-discord-thread";
 export { getForumTags } from "./forum/get-forum-tags";
+export { getGuildMember, type DiscordGuildMember } from "./guild/get-guild-member";

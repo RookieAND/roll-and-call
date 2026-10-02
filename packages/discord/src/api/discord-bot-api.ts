@@ -1,5 +1,8 @@
 import { isUndefined } from "es-toolkit";
 
+import { DiscordApiError } from "./discord-api-error";
+import { discordErrorCode } from "./discord-error-code";
+
 // 상주 봇(gateway) 없이 서버 액션에서 봇 토큰으로 REST만 부른다.
 // ponytail: 429(rate limit)는 재시도 없이 실패로 올린다. 알림은 가끔 가는 거라 충분.
 export async function discordBotApi<T>({
@@ -24,7 +27,12 @@ export async function discordBotApi<T>({
     signal: AbortSignal.timeout(8000),
   });
   if (!response.ok) {
-    throw new Error(`Discord ${method} ${path} → ${response.status} ${await response.text()}`);
+    const text = await response.text();
+    throw new DiscordApiError(
+      `Discord ${method} ${path} → ${response.status} ${text}`,
+      response.status,
+      discordErrorCode(text),
+    );
   }
   return (response.status === 204 ? undefined : await response.json()) as T;
 }

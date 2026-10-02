@@ -6,15 +6,17 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { FEATURED_BADGE_LIMIT, heldBadges } from "@/entities/badge";
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import { getCurrentServer, getCurrentUser, getUserBadges } from "@/shared/server";
+import { getActingMember, getUserBadges, notMemberError } from "@/shared/server";
 
 export async function saveFeaturedBadges(keys: string[]): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
 
-  const server = await getCurrentServer();
   const held = new Set(
     heldBadges(await getUserBadges(server.id, user.id)).map((badge) => badge.key),
   );

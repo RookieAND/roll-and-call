@@ -9,17 +9,17 @@ import {
   REVIEW_BODY_MIN_LENGTH,
   REVIEW_PHOTO_MAX_COUNT,
 } from "@/entities/review";
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { type ActionResult } from "@/shared/api";
 import { reviewPhotoPathOf, serverPath } from "@/shared/lib";
 import {
   evaluateBadges,
-  getCurrentServer,
-  getCurrentUser,
+  getActingMember,
   getReviewDraftTarget,
   removeUnusedReviewPhotos,
   revalidateReviews,
   siteOrigin,
   syncReviewForumPost,
+  notMemberError,
 } from "@/shared/server";
 
 import { MY_REVIEWS_HREF, REVIEW_BLOCK, type ReviewBlock } from "../model/review-block";
@@ -33,15 +33,17 @@ const UNIQUE_VIOLATION = "23505";
 const REVIEW_BLOCK_ERROR = "후기를 등록하지 못했습니다.";
 
 export async function submitReview(input: ReviewFormInput): Promise<SubmitReviewResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
 
   const body = input.body.trim();
   if (body.length < REVIEW_BODY_MIN_LENGTH)
     return { error: "20자 이상 적어 주세요", field: "body" };
   if (body.length > REVIEW_BODY_MAX_LENGTH)
     return { error: "2,000자까지 쓸 수 있습니다", field: "body" };
-  const server = await getCurrentServer();
   // 옛 경로(내 id/…)와 서버별 경로(servers/서버 id/내 id/…) 둘 다 내 사진이다.
   const ownPrefixes = [`${user.id}/`, `servers/${server.id}/${user.id}/`];
   const ownPhotos = input.photoUrls.every((url) => {

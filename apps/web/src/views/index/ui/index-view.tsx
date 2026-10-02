@@ -1,29 +1,28 @@
 import { isNull } from "es-toolkit";
 
-import type { MemberServer } from "../model/member-server";
+import type { MenuServer } from "@/shared/ui";
+
 import { ClosingSection } from "./closing-section";
 import { FeaturesSection } from "./features-section";
 import { FlowSection } from "./flow-section";
 import { IndexFooter } from "./index-footer";
+import { IndexHeader } from "./index-header";
 import { IndexHero } from "./index-hero";
-import { MyServersSection } from "./my-servers-section";
 
 interface IndexViewProps {
-  userId: string | null;
-  servers: MemberServer[];
+  // null이면 비로그인. 로그인했으면 최근 방문 순 내 서버
+  servers: MenuServer[] | null;
 }
 
 // 모바일 틀 밖의 전체 폭 화면이라 본문(main#main)을 스스로 둔다. 너비 기준은 컨테이너(cqw)다.
-export function IndexView({ userId, servers }: IndexViewProps) {
-  const signedIn = !isNull(userId);
+export function IndexView({ servers }: IndexViewProps) {
   return (
     <main id="main" className="@container min-h-dvh bg-surface text-gray-900">
-      <IndexHero signedIn={signedIn}>
-        {signedIn && <MyServersSection servers={servers} userId={userId} />}
-      </IndexHero>
+      <IndexHeader servers={servers} />
+      <IndexHero servers={servers} />
       <FeaturesSection />
       <FlowSection />
-      <ClosingSection signedIn={signedIn} />
+      <ClosingSection signedIn={!isNull(servers)} />
       <IndexFooter />
     </main>
   );

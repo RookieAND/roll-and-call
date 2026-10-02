@@ -7,9 +7,9 @@ import {
 import { redirect } from "next/navigation";
 
 import { CERT_FORMAT, CERT_SHOTS, RULEBOOK_KIND } from "@/entities/rulebook";
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { type ActionResult } from "@/shared/api";
 import { certPhotoPathOf, serverPath } from "@/shared/lib";
-import { getCurrentServer, getCurrentUser } from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 import type { CertEntry } from "../model/cert-entry";
 import { isQuizAnswer } from "../model/is-quiz-answer";
@@ -24,9 +24,11 @@ export async function submitCertification({
   entry: CertEntry;
   quiz: { questionId: string; answer: string } | null;
 }): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
-  const server = await getCurrentServer();
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
   // 옛 업로드는 `${user.id}/…`, 새 업로드는 `servers/${server.id}/${user.id}/…`에 있다.
   const ownPrefixes = [`${user.id}/`, `servers/${server.id}/${user.id}/`];
   const ownFile = (url: string) =>

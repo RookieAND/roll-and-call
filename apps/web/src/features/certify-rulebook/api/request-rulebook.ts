@@ -6,8 +6,8 @@ import {
   hasPendingRulebookRequest,
 } from "@roll-and-call/database/rulebooks";
 
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { getCurrentServer, getCurrentUser } from "@/shared/server";
+import { type ActionResult } from "@/shared/api";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 import {
   rulebookRequestSchema,
@@ -16,13 +16,14 @@ import {
 } from "../model/rulebook-request-form";
 
 export async function requestRulebook(input: RulebookRequestValues): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
   const parsed = rulebookRequestSchema.safeParse(input);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "입력을 확인해 주세요." };
   const { name, edition, kind, category, link } = parsed.data;
-
-  const server = await getCurrentServer();
 
   if (await hasPendingRulebookRequest({ serverId: server.id, name, edition })) {
     return { error: "이미 요청된 룰북입니다." };

@@ -4,20 +4,22 @@ import { deleteOwnedGame, isGameOwner } from "@roll-and-call/database/games";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   deleteGameReviewForumPosts,
-  getCurrentServer,
-  getCurrentUser,
+  getActingMember,
   notifyGameCancelled,
   removeUnusedGameFiles,
+  notMemberError,
 } from "@/shared/server";
 
 export async function deleteGame(id: string): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
-  const server = await getCurrentServer();
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
   const owner = { serverId: server.id, gameId: id, gmId: user.id };
 
   if (!(await isGameOwner(owner))) return { error: "삭제 권한이 없습니다." };

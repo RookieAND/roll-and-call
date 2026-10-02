@@ -2,7 +2,7 @@
 
 import { findGameGmId, searchGameCandidates } from "@roll-and-call/database/games";
 
-import { getCurrentServer, getCurrentUser } from "@/shared/server";
+import { getActingMember } from "@/shared/server";
 
 import type { Candidate } from "../model/candidate";
 
@@ -19,9 +19,11 @@ export async function searchCandidates({
   const keyword = query.trim();
   if (keyword.length < MIN_QUERY_LENGTH) return [];
 
-  const [user, server] = await Promise.all([getCurrentUser(), getCurrentServer()]);
+  const member = await getActingMember();
+  if (!member) return [];
+  const { server, user } = member;
   const gmId = await findGameGmId({ serverId: server.id, gameId });
-  if (!user || gmId !== user.id) return [];
+  if (gmId !== user.id) return [];
 
   return searchGameCandidates({
     serverId: server.id,

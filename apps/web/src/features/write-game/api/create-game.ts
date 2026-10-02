@@ -11,23 +11,26 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { RULE_GATE, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   announceRecruitmentComplete,
-  getCurrentServer,
-  getCurrentUser,
+  getActingMember,
   getRulebookRecords,
   notifyDirectConfirmed,
   notifyGameCreated,
+  notMemberError,
 } from "@/shared/server";
 
 import { gameFormSchema, INVALID_INPUT_MESSAGE, type GameFormValues } from "../model/game-form";
 import { toGameColumns } from "../model/to-game-columns";
 
 export async function createGame(input: GameFormValues): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
 
   const parsed = gameFormSchema.safeParse(input);
   if (!parsed.success) {
@@ -35,7 +38,6 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
   }
 
   // 룰은 카테고리·판본 단위다. 표시 이름은 "카테고리 판본", 구인은 그 판본의 첫 기본 룰북을 가리킨다.
-  const server = await getCurrentServer();
   const myRulebooks = toMyRulebooks(
     await getRulebookRecords({ serverId: server.id, userId: user.id }),
   );

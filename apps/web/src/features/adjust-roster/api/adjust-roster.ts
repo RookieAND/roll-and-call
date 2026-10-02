@@ -4,18 +4,13 @@ import { withTransaction, type Transaction } from "@roll-and-call/database/trans
 import { after } from "next/server";
 
 import { isSessionLocked } from "@/entities/game";
+import { ERROR_DISPLAY, GAME_NOT_FOUND_MESSAGE, type ActionResult } from "@/shared/api";
 import {
-  AUTH_REQUIRED_MESSAGE,
-  ERROR_DISPLAY,
-  GAME_NOT_FOUND_MESSAGE,
-  type ActionResult,
-} from "@/shared/api";
-import {
-  getCurrentServer,
-  getCurrentUser,
-  refreshRecruitPost,
   type Game,
+  getActingMember,
+  refreshRecruitPost,
   type Server,
+  notMemberError,
 } from "@/shared/server";
 
 import { revalidateRoster } from "./revalidate-roster";
@@ -31,9 +26,12 @@ export async function adjustRoster({
   work: (transaction: Transaction, game: Game) => Promise<void>;
   notify?: (server: Server) => Promise<void>;
 }): Promise<ActionResult> {
-  const gmId = (await getCurrentUser())?.id;
-  if (!gmId) return { error: AUTH_REQUIRED_MESSAGE };
-  const server = await getCurrentServer();
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server } = member;
+  const gmId = member.user.id;
 
   try {
     await withTransaction(async (transaction) => {

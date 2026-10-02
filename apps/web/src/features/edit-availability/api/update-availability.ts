@@ -5,15 +5,17 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { normalizeAvailability, type AvailabilityInterval } from "@/entities/profile";
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import { getCurrentServer, getCurrentUser } from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 export async function updateAvailability(intervals: AvailabilityInterval[]): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
 
-  const server = await getCurrentServer();
   await saveMemberAvailability({
     serverId: server.id,
     userId: user.id,

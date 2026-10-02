@@ -2,7 +2,7 @@ import { isServerSlug } from "@roll-and-call/database/servers/model";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { legacyServerRedirect, SERVER_SLUG_HEADER } from "@/shared/lib";
+import { legacyServerRedirect, REQUEST_PATH_HEADER, SERVER_SLUG_HEADER } from "@/shared/lib";
 
 // 서버 화면은 주소의 첫 칸, API는 ?server=로 서버를 정한다. 밖에서 같은 헤더를 보내도 여기서 덮어쓴다.
 function serverSlugOf(request: NextRequest) {
@@ -26,6 +26,7 @@ export async function proxy(request: NextRequest) {
   const slug = serverSlugOf(request);
   request.headers.delete(SERVER_SLUG_HEADER);
   if (slug) request.headers.set(SERVER_SLUG_HEADER, slug);
+  request.headers.set(REQUEST_PATH_HEADER, `${request.nextUrl.pathname}${request.nextUrl.search}`);
 
   let response = NextResponse.next({ request });
 

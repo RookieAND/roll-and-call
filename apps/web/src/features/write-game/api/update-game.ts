@@ -10,13 +10,13 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
-  getCurrentServer,
-  getCurrentUser,
+  getActingMember,
   refreshRecruitPost,
   removeUnusedGameFiles,
+  notMemberError,
 } from "@/shared/server";
 
 import { gameFormSchema, INVALID_INPUT_MESSAGE, type GameFormValues } from "../model/game-form";
@@ -25,8 +25,11 @@ import { toGameColumns } from "../model/to-game-columns";
 const FORBIDDEN_MESSAGE = "수정 권한이 없습니다.";
 
 export async function updateGame(id: string, input: GameFormValues): Promise<ActionResult> {
-  const user = await getCurrentUser();
-  if (!user) return { error: AUTH_REQUIRED_MESSAGE };
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
 
   const parsed = gameFormSchema.safeParse(input);
   if (!parsed.success) {
@@ -34,7 +37,6 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
   }
   const values = parsed.data;
 
-  const server = await getCurrentServer();
   const owner = { serverId: server.id, gameId: id, gmId: user.id };
   const before = await findOwnedGameSettings(owner);
   if (!before) return { error: FORBIDDEN_MESSAGE };

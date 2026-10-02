@@ -24,6 +24,8 @@ export const servers = pgTable("servers", {
   closedChannelId: text("closed_channel_id"),
   reviewForumChannelId: text("review_forum_channel_id"),
   gmRoleId: text("gm_role_id"),
+  // 디스코드 서버 멤버가 아니라 가입할 수 없을 때 보여 주는 초대 링크. 없으면 안내 문구만 보인다.
+  inviteUrl: text("invite_url"),
   certEnforcementDate: timestamp("cert_enforcement_date", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 }).enableRLS();

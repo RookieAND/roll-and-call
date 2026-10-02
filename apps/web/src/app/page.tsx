@@ -5,6 +5,6 @@ import { IndexView } from "@/views/index";
 
 export default async function IndexPage() {
   const user = await getCurrentSessionUser();
-  const servers = user ? await listMemberServers(user.id) : [];
-  return <IndexView userId={user?.id ?? null} servers={servers} />;
+  const servers = user ? await listMemberServers(user.id) : null;
+  return <IndexView servers={servers} />;
 }

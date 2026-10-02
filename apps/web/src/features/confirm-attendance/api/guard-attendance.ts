@@ -4,13 +4,8 @@ import { withTransaction, type Transaction } from "@roll-and-call/database/trans
 import { after } from "next/server";
 
 import { isAttendanceDue, PARTICIPANT_STATUS } from "@/entities/game";
-import {
-  AUTH_REQUIRED_MESSAGE,
-  ERROR_DISPLAY,
-  GAME_NOT_FOUND_MESSAGE,
-  type ActionResult,
-} from "@/shared/api";
-import { evaluateGameBadges, getCurrentServer, getCurrentUser } from "@/shared/server";
+import { ERROR_DISPLAY, GAME_NOT_FOUND_MESSAGE, type ActionResult } from "@/shared/api";
+import { evaluateGameBadges, getActingMember, notMemberError } from "@/shared/server";
 
 import { AttendanceError } from "./attendance-error";
 import { revalidateAttendance } from "./revalidate-attendance";
@@ -23,9 +18,12 @@ export async function guardAttendance({
   gameId: string;
   work: (transaction: Transaction, confirmedUserIds: string[]) => Promise<void>;
 }): Promise<ActionResult> {
-  const gmId = (await getCurrentUser())?.id;
-  if (!gmId) return { error: AUTH_REQUIRED_MESSAGE };
-  const server = await getCurrentServer();
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server } = member;
+  const gmId = member.user.id;
   const serverId = server.id;
 
   try {
