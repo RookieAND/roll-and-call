@@ -52,7 +52,12 @@ export function buildDefaultGroups(
         meta: "닉네임을 입력하면 제재 패널이 바로 열립니다",
         href: "/users",
       },
-      { id: "command-rulebook", icon: FileText, title: "룰북 추가하기", href: "/rules?add=1" },
+      {
+        id: "command-rulebook",
+        icon: FileText,
+        title: "룰북 추가하기",
+        href: "/platform/catalog?add=1",
+      },
     ],
   });
   return groups;
