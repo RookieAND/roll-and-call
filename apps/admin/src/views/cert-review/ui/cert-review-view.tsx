@@ -47,22 +47,9 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
         compact={reapplied || closed || waitingOn.length > 0}
         disabled={closed || waitingOn.length > 0}
         hideShots={Boolean(withdrawnAt)}
-        quiz={
-          closed || (ebook && rejecting) ? null : (
-            <QuizPanel quiz={review.quiz} hasActiveQuiz={review.hasActiveQuiz} />
-          )
-        }
+        quiz={closed || (ebook && rejecting) ? null : <QuizPanel quiz={review.quiz} />}
       >
         <ApplicantCard review={review} />
-        {waitingOn.length > 0 ? (
-          <Callout.Root colorPalette="warning">
-            <Callout.Icon />
-            <Callout.Description>
-              같은 판본의 기본 룰북({waitingOn.join(", ")})이 아직 결정되지 않아 이 서플리먼트는
-              심사할 수 없습니다. 기본 룰북이 반려되면 이 책은 자동으로 반려됩니다.
-            </Callout.Description>
-          </Callout.Root>
-        ) : null}
         {duplicate && !rejecting ? (
           <Callout.Root colorPalette="warning">
             <Callout.Icon />

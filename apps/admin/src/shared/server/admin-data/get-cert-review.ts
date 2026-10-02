@@ -22,10 +22,6 @@ export async function getCertReview(id: string) {
     format: application.format,
     blockers: application.status === "pending" ? certBlockers(application, db) : null,
     quiz: application.quiz ?? null,
-    // 퀴즈 없이 낸 신청에서 "등록된 퀴즈 없음"과 구분하려고 지금 사용 중인 문항이 있는지 함께 준다.
-    hasActiveQuiz: db.quizQuestions.some(
-      (question) => question.rulebookId === application.rulebookId && question.active,
-    ),
     appliedAt: application.appliedAt,
     waitedDays: waitedDays(application.appliedAt),
     memo: application.memo,

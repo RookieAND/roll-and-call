@@ -1,6 +1,6 @@
 import { Callout, HStack, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { Hourglass, Search } from "lucide-react";
+import { Hourglass } from "lucide-react";
 
 import { POST_ACTION, PostActionDialog, type PostAction } from "@/features/moderate-post";
 import { paginate, withQuery } from "@/shared/lib";
@@ -67,7 +67,6 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
   ) : null;
   const logHref = `/log?target=${encodeURIComponent(post.title)}`;
   const userAppHref = serverAppUrl ? `${serverAppUrl}/games/${post.id}` : null;
-  const direct = !hasReports && !post.hidden;
   const reviewsTab = currentTab === POST_DETAIL_TAB.reviews;
   const actionHref = (nextAction: PostAction) => withQuery(pathname, query, { action: nextAction });
   const attendanceWaitDays =
@@ -86,16 +85,6 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
       <HStack data-full-bleed align="stretch" className="flex-1">
         <VStack gap="150" className="min-w-0 flex-1 px-center-200 py-200">
           {post.hidden ? <HiddenBanner hidden={post.hidden} logHref={logHref} /> : null}
-          {direct ? (
-            <Callout.Root colorPalette="gray" size="sm">
-              <Callout.Icon>
-                <Search size={14} />
-              </Callout.Icon>
-              <Callout.Description>
-                신고 없이 직접 열어 본 구인입니다. 문제가 없으면 조치하지 않고 나가면 됩니다.
-              </Callout.Description>
-            </Callout.Root>
-          ) : null}
           {!isNull(attendanceWaitDays) && attendanceWaitDays > 0 ? (
             <Callout.Root colorPalette="warning" size="sm">
               <Callout.Icon>

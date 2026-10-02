@@ -3,7 +3,7 @@ import { ArrowDown, ChevronRight } from "lucide-react";
 
 import { CERT_FORMAT_LABEL, RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { CertQueueRow } from "@/shared/server";
-import { EMPTY_IMAGE, ServerLink, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
+import { ServerLink, TableColumns, Tag } from "@/shared/ui";
 
 const LONG_WAIT_DAYS = 5;
 
@@ -31,9 +31,6 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {rows.length === 0 ? (
-          <TableEmptyRow colSpan={6} image={EMPTY_IMAGE.search} title="조건에 맞는 신청이 없어요" />
-        ) : null}
         {rows.map((row) => {
           const longWait = row.waitedDays >= LONG_WAIT_DAYS;
           return (

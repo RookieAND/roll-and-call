@@ -78,7 +78,7 @@ export function ReviewActionForm({
     action === REVIEW_ACTION.dismiss
       ? `후기는 그대로 두고 신고 ${reportCount}건을 닫습니다`
       : copy.description;
-  const footerNote = copy.footerNote ?? (reportCount ? `신고 ${reportCount}건도 처리됩니다` : null);
+  const footerNote = copy.footerNote ?? null;
   const FooterIcon = copy.footerIcon;
   const ConfirmIcon = networkError ? RotateCcw : CONFIRM_ICON[action];
   const confirmLabel = networkError ? "다시 시도" : copy.confirmLabel;

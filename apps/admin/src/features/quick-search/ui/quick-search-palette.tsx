@@ -108,11 +108,6 @@ export function QuickSearchPalette({ pendingItemsPromise }: QuickSearchPalettePr
           aria-label="빠른 이동 결과"
           className="min-h-0 flex-1 overflow-y-auto px-075 py-050"
         >
-          {items.length === 0 ? (
-            <Text typography="body3" foreground="hint" className="px-125 py-300 text-center">
-              찾는 결과가 없습니다
-            </Text>
-          ) : null}
           {groups.map((group) => (
             <VStack
               key={group.label}
