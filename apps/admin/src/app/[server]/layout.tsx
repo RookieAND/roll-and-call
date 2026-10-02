@@ -10,7 +10,7 @@ import {
   listMyServers,
   type PendingKind,
 } from "@/shared/server";
-import { BotBanner, Sidebar } from "@/shared/ui";
+import { BotBanner, CurrentServerProvider, Sidebar } from "@/shared/ui";
 import { PhoneNotice } from "@/views/phone";
 
 export default async function AdminLayout({ children }: LayoutProps<"/[server]">) {
@@ -34,7 +34,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
     pendingItemsPromise.then((items) => items.find((item) => item.kind === kind)?.count);
 
   return (
-    <>
+    <CurrentServerProvider server={{ slug: server.slug, name: server.name, icon: server.icon }}>
       <div className="md:hidden">
         <Suspense>
           <PhoneNotice pendingItemsPromise={pendingItemsPromise} />
@@ -65,6 +65,6 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
           <QuickSearchPalette pendingItemsPromise={pendingItemsPromise} />
         </Suspense>
       </HStack>
-    </>
+    </CurrentServerProvider>
   );
 }

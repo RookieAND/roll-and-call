@@ -1,8 +1,8 @@
-import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
+import { HStack, Table, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import type { MyServer } from "@/shared/server";
-import { EMPTY_IMAGE, ServerIcon, TableColumns, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, ServerIcon, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
 
 interface PlatformServerTableProps {
   servers: MyServer[];
@@ -62,7 +62,7 @@ export function PlatformServerTable({ servers }: PlatformServerTableProps) {
                   정상
                 </Text>
               ) : (
-                <Badge colorPalette="gray">봇 연결 끊김</Badge>
+                <Tag>봇 연결 끊김</Tag>
               )}
             </Table.Cell>
           </Table.Row>

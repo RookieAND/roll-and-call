@@ -3,6 +3,11 @@ export { AdminHeader } from "./admin-header";
 export { BotBanner } from "./bot-banner";
 export { BrandMark } from "./brand-mark";
 export { ConflictNotice } from "./conflict-notice";
+export {
+  CurrentServerProvider,
+  useCurrentServer,
+  type CurrentServerSummary,
+} from "./current-server-context";
 export { CsvExportButton } from "./csv-export-button";
 export { DiscordIcon } from "./discord-icon";
 export { EMPTY_IMAGE, EmptyState, type EmptyImage } from "./empty-state";
@@ -18,6 +23,7 @@ export { IconTile } from "./icon-tile";
 export { ItemCard } from "./item-card";
 export { Kbd } from "./kbd";
 export { KeyHint } from "./key-hint";
+export { ModalServerLabel } from "./modal-server-label";
 export { NAV_ITEMS, PLATFORM_NAV_ITEMS, type NavKey } from "./nav-items";
 export { OngoingChoiceList, type OngoingChoiceRow } from "./ongoing-choice-list";
 export { OPEN_PALETTE_EVENT, openPalette } from "./open-palette";
@@ -36,6 +42,7 @@ export { Sidebar } from "./sidebar";
 export { TableColumns, type TableColumnWidth } from "./table-columns";
 export { TableEmptyRow } from "./table-empty-row";
 export { TabCount } from "./tab-count";
+export { Tag } from "./tag";
 export { UrlSearchInput } from "./url-search-input";
 export { UrlSelect } from "./url-select";
 export { useChartTokens, type ChartTokens } from "./use-chart-tokens";

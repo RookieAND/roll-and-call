@@ -36,7 +36,7 @@ export function Panel({
           className="border-b border-(--rc-color-border-subtle) px-175 py-125 whitespace-nowrap"
         >
           {title ? (
-            <Text typography="subtitle1" render={<h2 />}>
+            <Text typography="heading3" render={<h2 />}>
               {title}
             </Text>
           ) : null}

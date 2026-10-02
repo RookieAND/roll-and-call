@@ -1,9 +1,9 @@
-import { Badge, cn, HStack, Text, VStack } from "@roll-and-call/ui";
+import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { STAFF_ROLE_LABEL } from "@/shared/lib";
 import type { MyServer } from "@/shared/server";
-import { FactRows, ServerIcon } from "@/shared/ui";
+import { FactRows, ServerIcon, Tag } from "@/shared/ui";
 
 import { PendingValue } from "./pending-value";
 
@@ -32,7 +32,7 @@ export function ServerCard({ server }: ServerCardProps) {
             /{server.slug} · 멤버 {server.members}명
           </Text>
         </VStack>
-        <Badge colorPalette="gray">{STAFF_ROLE_LABEL[server.role]}</Badge>
+        <Tag>{STAFF_ROLE_LABEL[server.role]}</Tag>
       </HStack>
       <div className="border-t border-(--rc-color-border-subtle) pt-150">
         <FactRows
@@ -41,7 +41,7 @@ export function ServerCard({ server }: ServerCardProps) {
             {
               label: "서버 상태",
               value: botDisconnected ? (
-                <Badge colorPalette="gray">봇 연결 끊김</Badge>
+                <Tag>봇 연결 끊김</Tag>
               ) : (
                 <Text typography="body3" weight="bold" foreground="success">
                   정상

@@ -1,7 +1,8 @@
-import { Badge, HStack, Text } from "@roll-and-call/ui";
+import { HStack, Text } from "@roll-and-call/ui";
 import Image from "next/image";
 
 import { SignOutButton } from "@/features/auth";
+import { Tag } from "@/shared/ui";
 
 interface SelectTopProps {
   nickname: string;
@@ -26,7 +27,7 @@ export function SelectTop({ nickname, platformAdmin }: SelectTopProps) {
         ADMIN
       </Text>
       <HStack align="center" gap="100" className="ml-auto">
-        {platformAdmin ? <Badge colorPalette="gray">플랫폼 관리자</Badge> : null}
+        {platformAdmin ? <Tag>플랫폼 관리자</Tag> : null}
         <Text typography="subtitle2">{nickname}</Text>
         <SignOutButton />
       </HStack>

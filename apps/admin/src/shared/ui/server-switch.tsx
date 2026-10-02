@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, Button, cn, HStack, Popover, Text, VStack } from "@roll-and-call/ui";
+import { Button, cn, HStack, Popover, Text, VStack } from "@roll-and-call/ui";
 import { Check, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { useState } from "react";
 import { STAFF_ROLE_LABEL } from "@/shared/lib";
 
 import { ServerIcon } from "./server-icon";
+import { Tag } from "./tag";
 
 // 스위처 목록에 보일 서버. 플랫폼 관리자는 전체 서버 중 앞의 몇 개만 보이고 나머지는 서버 목록 화면에서 찾는다.
 export interface SwitchServer {
@@ -116,7 +117,7 @@ export function ServerSwitch({ current, servers, platformAdmin }: ServerSwitchPr
                       {meta} · 처리 대기 {server.pending}건
                     </Text>
                   </VStack>
-                  {server.botConnected ? null : <Badge colorPalette="danger">봇 연결 끊김</Badge>}
+                  {server.botConnected ? null : <Tag>봇 연결 끊김</Tag>}
                   {selected ? (
                     <Check size={16} aria-hidden className="text-(--rc-color-fg-primary)" />
                   ) : null}
