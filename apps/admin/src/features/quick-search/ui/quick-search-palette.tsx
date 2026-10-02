@@ -70,7 +70,7 @@ export function QuickSearchPalette({ pendingItemsPromise }: QuickSearchPalettePr
     }
     if (event.key !== "Enter" || !activeItem || event.nativeEvent.isComposing) return;
     event.preventDefault();
-    if (event.metaKey || event.ctrlKey) window.open(activeItem.href, "_blank");
+    if (event.metaKey || event.ctrlKey) window.open(toServerPath(activeItem.href), "_blank");
     else router.push(toServerPath(activeItem.href));
     close();
   };
