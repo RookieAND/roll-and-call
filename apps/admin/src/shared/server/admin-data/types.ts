@@ -1,6 +1,7 @@
 import type { RulebookKind } from "@roll-and-call/database";
 import type {
   AuditAction,
+  AuditActorKind,
   AuditState,
   Sanction,
   ShotKey,
@@ -209,6 +210,8 @@ export interface AuditEntry {
   id: string;
   at: Date;
   actor: string;
+  actorId?: string;
+  actorKind: AuditActorKind;
   action: AuditAction;
   target: string;
   targetUserId?: string;

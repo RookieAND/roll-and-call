@@ -1,13 +1,12 @@
 "use client";
 
-import { Button, Dialog, RadioCard, RadioGroup, Text, VStack, toast } from "@roll-and-call/ui";
+import { Button, Dialog, Text, VStack, toast } from "@roll-and-call/ui";
 import { useState, useTransition } from "react";
 
-import type { StaffCandidate, StaffRole } from "@/shared/server";
-import { UrlSearchInput } from "@/shared/ui";
+import type { StaffCandidate } from "@/shared/server";
+import { ModalServerLabel, UrlSearchInput } from "@/shared/ui";
 
 import { addStaffMember } from "../api/add-staff-member";
-import { ROLE_OPTIONS } from "../model/role-options";
 import { StaffCandidateRow } from "./staff-candidate-row";
 
 interface AddStaffDialogProps {
@@ -20,7 +19,6 @@ interface AddStaffDialogProps {
 export function AddStaffDialog({ candidates, searched, open, onOpenChange }: AddStaffDialogProps) {
   const [pending, startTransition] = useTransition();
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [role, setRole] = useState<StaffRole>("staff");
 
   const selected = candidates.find((candidate) => candidate.id === selectedId);
   const emptyResult = searched && candidates.length === 0;
@@ -28,7 +26,7 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
   const add = () =>
     startTransition(async () => {
       if (!selected) return;
-      await addStaffMember(selected.id, role);
+      await addStaffMember(selected.id);
       toast.success(`${selected.nickname}님을 운영진으로 추가했습니다`);
       onOpenChange(false);
     });
@@ -37,6 +35,7 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
     <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
       <Dialog.Popup className="max-w-[520px]">
         <Dialog.Header>
+          <ModalServerLabel />
           <Dialog.Title>운영진 추가</Dialog.Title>
           <Dialog.Description>디스코드 서버에 있는 멤버 중에서 찾습니다</Dialog.Description>
         </Dialog.Header>
@@ -67,23 +66,13 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
               </Text>
             ) : null}
             <VStack gap="075">
-              <Text typography="body4" weight="bold" id="add-staff-role-label">
+              <Text typography="body4" weight="bold">
                 역할
               </Text>
-              <RadioGroup
-                value={role}
-                onValueChange={(value) => setRole(value as StaffRole)}
-                aria-labelledby="add-staff-role-label"
-                className="flex flex-col gap-075"
-              >
-                {ROLE_OPTIONS.map((option) => (
-                  <RadioCard.Root key={option.value} value={option.value}>
-                    <RadioCard.Title>{option.label}</RadioCard.Title>
-                    <RadioCard.Description>{option.description}</RadioCard.Description>
-                    <RadioCard.Indicator />
-                  </RadioCard.Root>
-                ))}
-              </RadioGroup>
+              <Text typography="body3" foreground="muted">
+                운영진은 설정을 뺀 어드민 전체를 쓸 수 있습니다. 소유자는 디스코드 서버장으로 자동
+                지정됩니다.
+              </Text>
             </VStack>
           </VStack>
         </Dialog.Body>

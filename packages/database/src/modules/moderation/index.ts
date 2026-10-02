@@ -3,7 +3,6 @@ export { addStaff } from "./commands/add-staff";
 export { type OngoingChoice } from "./commands/apply-ongoing-choices";
 export { applySanction, type SanctionInput, type SanctionResult } from "./commands/apply-sanction";
 export { cancelNoShow, type CancelNoShowResult } from "./commands/cancel-no-show";
-export { changeStaffRole } from "./commands/change-staff-role";
 export {
   moderatePost,
   type PostModerationAction,

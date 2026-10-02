@@ -9,13 +9,14 @@ import { SettingsNav } from "./settings-nav";
 interface SettingsFrameProps {
   title: string;
   active: SettingsHref;
+  actions?: ReactNode;
   children: ReactNode;
 }
 
-export function SettingsFrame({ title, active, children }: SettingsFrameProps) {
+export function SettingsFrame({ title, active, actions, children }: SettingsFrameProps) {
   return (
     <>
-      <AdminHeader title={`설정 · ${title}`} />
+      <AdminHeader title={`설정 · ${title}`} actions={actions} />
       <HStack align="stretch" className="flex-1">
         <SettingsNav active={active} />
         <VStack gap="150" className="min-w-0 flex-1 p-200">
