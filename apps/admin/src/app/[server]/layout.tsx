@@ -7,6 +7,7 @@ import {
   getCurrentServer,
   getCurrentStaff,
   getPendingItems,
+  TODO_KINDS,
   listMyServers,
   type PendingKind,
 } from "@/shared/server";
@@ -32,12 +33,15 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
   const pendingItemsPromise = getPendingItems();
   const countOf = (kind: PendingKind) =>
     pendingItemsPromise.then((items) => items.find((item) => item.kind === kind)?.count);
+  const todoItemsPromise = pendingItemsPromise.then((items) =>
+    items.filter((item) => TODO_KINDS.includes(item.kind)),
+  );
 
   return (
     <CurrentServerProvider server={{ slug: server.slug, name: server.name, icon: server.icon }}>
       <div className="md:hidden">
         <Suspense>
-          <PhoneNotice pendingItemsPromise={pendingItemsPromise} />
+          <PhoneNotice pendingItemsPromise={todoItemsPromise} />
         </Suspense>
       </div>
       <HStack align="start" className="hidden min-h-dvh min-w-[1280px] md:flex">
@@ -63,7 +67,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
           {children}
         </VStack>
         <Suspense>
-          <QuickSearchPalette pendingItemsPromise={pendingItemsPromise} />
+          <QuickSearchPalette pendingItemsPromise={todoItemsPromise} />
         </Suspense>
       </HStack>
     </CurrentServerProvider>

@@ -71,7 +71,13 @@ export {
   type CertQueueFilterKey,
   type CertQueueRow,
 } from "./list-cert-queue";
-export { getPendingItems, PENDING_KINDS, type PendingItem, type PendingKind } from "./pending";
+export {
+  getPendingItems,
+  PENDING_KINDS,
+  TODO_KINDS,
+  type PendingItem,
+  type PendingKind,
+} from "./pending";
 export { searchUsers, type UserSearchResult } from "./search";
 export { getNoShow, type NoShowDetail } from "./get-no-show";
 export {
