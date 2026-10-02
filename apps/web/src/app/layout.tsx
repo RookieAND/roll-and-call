@@ -12,7 +12,7 @@ import { NavigationTracker } from "@/shared/ui";
 import { QueryProvider } from "./query-provider";
 
 const origin = siteOrigin();
-const description = "TRPG 세션 모집부터 일정 확정까지";
+const description = "ORPG 세션 모집부터 일정 확정까지";
 
 export const metadata: Metadata = {
   // 절대 URL이 없으면 Next가 상대 OG 이미지를 만들지 못한다.

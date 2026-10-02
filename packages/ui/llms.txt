@@ -1,6 +1,6 @@
 # @roll-and-call/ui
 
-Roll & Call(TRPG 세션 모집·일정 조율) 앱의 디자인 시스템. React + Tailwind CSS v4 + cva, 모바일 우선(320–412px 단일 컬럼), 한국어 UI. 소스는 `packages/ui/src/components/<이름>/`이고 한 파일에 한 컴포넌트다. 공용 유틸은 `src/lib`, 토큰 맵은 `src/tokens`, 토큰 정의는 `src/styles.css`.
+Roll & Call(ORPG 세션 모집·일정 조율) 앱의 디자인 시스템. React + Tailwind CSS v4 + cva, 모바일 우선(320–412px 단일 컬럼), 한국어 UI. 소스는 `packages/ui/src/components/<이름>/`이고 한 파일에 한 컴포넌트다. 공용 유틸은 `src/lib`, 토큰 맵은 `src/tokens`, 토큰 정의는 `src/styles.css`.
 
 ## 먼저 알아야 할 함정
 

@@ -31,7 +31,7 @@ export function IndexHero({ servers, joinable }: IndexHeroProps) {
         >
           <VStack gap="225" className="min-w-0 flex-[1_1_440px]">
             <HStack>
-              <Badge colorPalette="primary">TRPG 세션 운영 도구</Badge>
+              <Badge colorPalette="primary">ORPG 세션 운영 도구</Badge>
             </HStack>
             <Text
               typography="heading1"
@@ -50,7 +50,7 @@ export function IndexHero({ servers, joinable }: IndexHeroProps) {
               render={<p />}
               className="text-[length:clamp(15px,1.4cqw,17px)] leading-[1.7] [text-wrap:pretty]"
             >
-              TRPG 를 좋아하고 사랑하는 사람들을 위해
+              ORPG 를 좋아하고 사랑하는 사람들을 위해
               <br />
               Roll &amp; Call 에서는 다양하고 편리한 기능을 제공합니다.
             </Text>
