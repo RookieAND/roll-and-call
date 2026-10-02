@@ -161,7 +161,7 @@ export async function getAnalytics({
         const members = sessions.flatMap((session) => session.memberIds);
         return {
           label: weekLabel(new Date(from)),
-          total: members.length,
+          total: uniq(members).length,
           first: uniq(
             members.filter((userId) => {
               const at = firstPlayed.get(userId)!;

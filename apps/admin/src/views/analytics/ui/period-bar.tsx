@@ -11,11 +11,12 @@ const PERIODS = [
 ] as const;
 
 interface PeriodBarProps {
-  description: ReactNode;
+  description?: ReactNode;
+  disabled?: boolean;
 }
 
 // ponytail: 집계가 목업이라 최근 4주만 연다. 실제 API가 기간을 받으면 ?period=로 넘긴다.
-export function PeriodBar({ description }: PeriodBarProps) {
+export function PeriodBar({ description, disabled = false }: PeriodBarProps) {
   return (
     <HStack align="center" gap="125">
       <SegmentedControl.Root
@@ -28,15 +29,17 @@ export function PeriodBar({ description }: PeriodBarProps) {
           <SegmentedControl.Item
             key={period.value}
             value={period.value}
-            disabled={period.value !== "4w"}
+            disabled={disabled || period.value !== "4w"}
           >
             {period.label}
           </SegmentedControl.Item>
         ))}
       </SegmentedControl.Root>
-      <Text typography="body4" foreground="hint">
-        {description}
-      </Text>
+      {description ? (
+        <Text typography="body4" foreground="hint">
+          {description}
+        </Text>
+      ) : null}
     </HStack>
   );
 }
