@@ -5,6 +5,7 @@ export const NICKNAME_REASONS = [
   "부적절한 표현",
   "개인정보 노출",
   "본인 요청",
+  "디스코드 닉네임과 일치",
   OTHER_NICKNAME_REASON,
 ] as const;
 export type NicknameReason = (typeof NICKNAME_REASONS)[number];
