@@ -4,22 +4,23 @@ import { formatDate } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
 import { Facts, UserInitial } from "@/shared/ui";
 
+import { AsideHeading } from "./aside-heading";
+
 interface AuthorInfoProps {
   author: ReviewDetail["author"];
 }
 
 export function AuthorInfo({ author }: AuthorInfoProps) {
   const actionCount = author.hideCount + author.removeCount;
+  const actionSummary = [
+    author.hideCount ? `숨김 ${author.hideCount}` : null,
+    author.removeCount ? `제거 ${author.removeCount}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
   return (
     <VStack render={<section aria-label="작성자" />}>
-      <Text
-        typography="subtitle2"
-        foreground="muted"
-        render={<h2 />}
-        className="border-y border-(--rc-color-border-subtle) bg-gray-50 px-175 py-125"
-      >
-        작성자
-      </Text>
+      <AsideHeading className="border-t">작성자</AsideHeading>
       <VStack gap="125" className="p-175">
         <HStack align="center" gap="150">
           <UserInitial nickname={author.nickname} />
@@ -41,9 +42,7 @@ export function AuthorInfo({ author }: AuthorInfoProps) {
                 label: "받은 조치",
                 value: actionCount ? `${actionCount}회` : "없음",
                 danger: actionCount > 0,
-                sub: actionCount
-                  ? `숨김 ${author.hideCount} · 제거 ${author.removeCount}`
-                  : undefined,
+                sub: actionCount ? actionSummary : undefined,
               },
             ]}
           />

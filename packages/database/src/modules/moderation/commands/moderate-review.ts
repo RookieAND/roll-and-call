@@ -18,7 +18,11 @@ export interface ReviewModerationInput {
 
 export type ReviewModerationResult =
   | { ok: true }
-  | { ok: false; gone: true }
+  | {
+      ok: false;
+      gone: true;
+      deleted: { author: string; at: Date; closedReportCount: number } | null;
+    }
   | { ok: false; gone: false; conflict: { action: AuditAction; by: string; at: Date } | null };
 
 const AUDIT_ACTION = {
@@ -67,8 +71,26 @@ export async function moderateReview({
       .innerJoin(games, and(eq(games.serverId, serverId), eq(games.id, sessionReviews.gameId)))
       .where(thisReview)
       .for("update", { of: sessionReviews });
-    // 작성자가 지운 후기(removed_by 없음)도 찾을 수 없는 것으로 본다.
-    if (!review || (review.removedAt && !review.removedBy)) return { ok: false, gone: true };
+    if (!review) return { ok: false, gone: true, deleted: null };
+    // 작성자가 지운 후기(removed_by 없음)도 찾을 수 없는 것으로 본다. 그때 남은 신고는 같은 시각에 닫혔다.
+    if (review.removedAt && !review.removedBy) {
+      const closed = await tx
+        .select({ id: reviewReports.id })
+        .from(reviewReports)
+        .where(
+          and(
+            eq(reviewReports.serverId, serverId),
+            eq(reviewReports.reviewId, id),
+            isNull(reviewReports.resolvedBy),
+            eq(reviewReports.resolvedAt, review.removedAt),
+          ),
+        );
+      return {
+        ok: false,
+        gone: true,
+        deleted: { author: review.author, at: review.removedAt, closedReportCount: closed.length },
+      };
+    }
     const target = `${review.author}의 후기 · ${review.title}`;
     const unresolved = await tx
       .select({ id: reviewReports.id })
@@ -97,7 +119,7 @@ export async function moderateReview({
         )
         .orderBy(desc(auditLog.createdAt))
         .limit(1);
-      if (!latest) return { ok: false, gone: true };
+      if (!latest) return { ok: false, gone: true, deleted: null };
       return {
         ok: false,
         gone: false,

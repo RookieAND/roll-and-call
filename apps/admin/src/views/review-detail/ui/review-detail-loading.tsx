@@ -1,4 +1,4 @@
-import { Card, Grid, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { Card, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 import {
   AdminHeader,
@@ -8,6 +8,8 @@ import {
   SkeletonEntity,
   SkeletonItem,
 } from "@/shared/ui";
+
+import { AsideHeading } from "./aside-heading";
 
 export function ReviewDetailLoading() {
   return (
@@ -85,27 +87,13 @@ export function ReviewDetailLoading() {
           render={<aside />}
           className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-[300px] shrink-0 overflow-y-auto border-l border-gray-200 bg-surface"
         >
-          <Text
-            typography="subtitle2"
-            foreground="muted"
-            render={<h2 />}
-            className="border-b border-(--rc-color-border-subtle) bg-gray-50 px-175 py-125"
-          >
-            조치
-          </Text>
+          <AsideHeading>조치</AsideHeading>
           <VStack gap="075" className="p-150">
             <SkeletonItem />
             <SkeletonItem />
             <SkeletonItem />
           </VStack>
-          <Text
-            typography="subtitle2"
-            foreground="muted"
-            render={<h2 />}
-            className="border-y border-(--rc-color-border-subtle) bg-gray-50 px-175 py-125"
-          >
-            작성자
-          </Text>
+          <AsideHeading className="border-t">작성자</AsideHeading>
           <VStack className="p-175">
             <SkeletonEntity flat facts={["쓴 후기", "받은 조치"]} columns={2} />
           </VStack>

@@ -1,8 +1,8 @@
-import { Badge, Button, Card, HStack, Text } from "@roll-and-call/ui";
+import { Button, Card, HStack, Text } from "@roll-and-call/ui";
 
 import { formatShortDateTime } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
-import { ServerLink } from "@/shared/ui";
+import { ServerLink, Tag } from "@/shared/ui";
 
 interface ReviewHiddenBannerProps {
   hidden: NonNullable<ReviewDetail["hidden"]>;
@@ -16,7 +16,7 @@ export function ReviewHiddenBanner({ hidden, logHref }: ReviewHiddenBannerProps)
       render={<HStack align="center" gap="125" />}
       className="px-150 py-125"
     >
-      <Badge colorPalette="warning">숨김 중</Badge>
+      <Tag>숨김 중</Tag>
       <Text typography="body3" truncate className="min-w-0 flex-1">
         사유: {hidden.reasonLabel}
       </Text>
