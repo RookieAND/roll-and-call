@@ -44,10 +44,9 @@ export function UsersLoading() {
                 label: column.label,
                 kind: column.kind,
                 width: column.width,
-                fixed: true,
                 align: "align" in column ? column.align : undefined,
               })),
-              { label: "", kind: "empty", width: 0 },
+              { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />
         </Panel>

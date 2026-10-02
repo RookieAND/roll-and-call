@@ -1,4 +1,4 @@
-// 시안 UCOLS. 숫자 열은 오른쪽, 상태는 가운데에 두고 남는 폭은 마지막 빈 열이 받는다.
+// 시안 UCOLS. 숫자 열은 오른쪽, 상태는 가운데에 둔다. width는 최소 폭이고 남는 폭은 열마다 고르게 나눈다.
 export const USER_COLUMNS = [
   { label: "닉네임", width: 180, kind: "text" },
   { label: "가입일", width: 104, kind: "date" },

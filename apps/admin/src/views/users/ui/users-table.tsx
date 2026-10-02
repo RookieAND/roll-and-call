@@ -1,4 +1,5 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
+import { ChevronRight } from "lucide-react";
 
 import { formatDate } from "@/shared/lib";
 import type { UserRow } from "@/shared/server";
@@ -16,7 +17,7 @@ interface UsersTableProps {
 export function UsersTable({ rows }: UsersTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[...USER_COLUMNS.map((column) => ({ fixed: column.width })), 0]} />
+      <TableColumns widths={[...USER_COLUMNS.map((column) => column.width), { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           {USER_COLUMNS.map((column) => (
@@ -86,7 +87,9 @@ export function UsersTable({ rows }: UsersTableProps) {
                   </Text>
                 )}
               </Table.Cell>
-              <Table.Cell />
+              <Table.Cell align="end">
+                <ChevronRight size={16} aria-hidden className="inline text-hint" />
+              </Table.Cell>
             </Table.Row>
           );
         })}
