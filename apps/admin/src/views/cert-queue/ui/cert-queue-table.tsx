@@ -1,10 +1,9 @@
-import { Badge, HStack, Table, Text, cn } from "@roll-and-call/ui";
+import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ArrowDown, ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { CERT_FORMAT_LABEL, RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { CertQueueRow } from "@/shared/server";
-import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
+import { EMPTY_IMAGE, ServerLink, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
 
 const LONG_WAIT_DAYS = 5;
 
@@ -20,8 +19,8 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
         <Table.Row>
           <Table.Head>닉네임</Table.Head>
           <Table.Head>신청한 책</Table.Head>
-          <Table.Head align="center">종류</Table.Head>
-          <Table.Head align="center">형식</Table.Head>
+          <Table.Head>종류</Table.Head>
+          <Table.Head>형식</Table.Head>
           <Table.Head align="end" aria-sort="descending" className="text-gray-900">
             <HStack inline align="center" gap="050">
               대기 일수
@@ -38,34 +37,21 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
         {rows.map((row) => {
           const longWait = row.waitedDays >= LONG_WAIT_DAYS;
           return (
-            <Table.Row
-              key={row.id}
-              interactive
-              className={cn("relative", longWait && "bg-danger-50")}
-            >
+            <Table.Row key={row.id} interactive className="relative">
               <Table.Cell>
                 <Text
                   typography="body3"
                   weight="bold"
                   truncate
-                  render={<Link href={`/cert/${row.id}`} />}
+                  render={<ServerLink path={`/cert/${row.id}`} />}
                   className="block after:absolute after:inset-0"
                 >
                   {row.nickname}
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                <HStack
-                  align="baseline"
-                  gap="075"
-                  className="min-w-0"
-                  title={row.waiting ? "기본 룰북이 결정된 뒤에 심사할 수 있습니다" : undefined}
-                >
-                  <Text
-                    typography="body3"
-                    foreground={row.waiting ? "hint" : "normal"}
-                    className="flex-none"
-                  >
+                <HStack align="baseline" gap="075" className="min-w-0">
+                  <Text typography="body3" className="flex-none">
                     {row.rulebook}
                   </Text>
                   {row.category && (
@@ -75,15 +61,13 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
                   )}
                 </HStack>
               </Table.Cell>
-              <Table.Cell align="center">
-                <Badge colorPalette={row.kind === "core" ? "primary" : "gray"}>
-                  {RULEBOOK_KIND_LABEL[row.kind]}
-                </Badge>
+              <Table.Cell>
+                <Tag>{RULEBOOK_KIND_LABEL[row.kind]}</Tag>
               </Table.Cell>
-              <Table.Cell align="center">
-                <Badge colorPalette={row.format === "ebook" ? "primary" : "gray"}>
+              <Table.Cell>
+                <Tag tone={row.format === "ebook" ? "primary" : "gray"}>
                   {CERT_FORMAT_LABEL[row.format]}
-                </Badge>
+                </Tag>
               </Table.Cell>
               <Table.Cell align="end" numeric>
                 <Text

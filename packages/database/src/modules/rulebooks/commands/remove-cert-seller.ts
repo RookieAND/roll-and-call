@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { db } from "../../../client";
 import { certSellers } from "../../../schema";
@@ -18,7 +18,7 @@ export async function removeCertSeller({
   await db.transaction(async (tx) => {
     const [removed] = await tx
       .delete(certSellers)
-      .where(eq(certSellers.id, id))
+      .where(and(eq(certSellers.serverId, serverId), eq(certSellers.id, id)))
       .returning({ name: certSellers.name });
     if (!removed) return;
     await recordAudit({

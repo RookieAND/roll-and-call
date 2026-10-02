@@ -1,9 +1,8 @@
 import { Button, Text } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 
 import type { StaffCandidate, StaffRow } from "@/shared/server";
-import { Panel } from "@/shared/ui";
+import { Panel, ServerLink } from "@/shared/ui";
 
 import { PermissionTable } from "./permission-table";
 import { SettingsFrame } from "./settings-frame";
@@ -25,7 +24,7 @@ export function SettingsStaffView({ staff, viewer, candidates, removing }: Setti
         right={
           <Button
             size="sm"
-            render={<Link href="/settings/staff?action=add" scroll={false} />}
+            render={<ServerLink path="/settings/staff?action=add" scroll={false} />}
             className="gap-050"
           >
             <Plus size={14} aria-hidden />
@@ -38,7 +37,8 @@ export function SettingsStaffView({ staff, viewer, candidates, removing }: Setti
             foreground="hint"
             className="border-t border-(--rc-color-border-subtle) px-175 py-125"
           >
-            소유자의 역할은 변경하거나 해제할 수 없습니다.
+            소유자는 디스코드 서버장으로 자동 지정되며, 소유권이 이전되면 이전 소유자는 운영진이
+            됩니다.
           </Text>
         }
       >

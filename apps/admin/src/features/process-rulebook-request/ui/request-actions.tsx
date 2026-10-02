@@ -2,8 +2,9 @@
 
 import { Button, HStack, IconButton, Popover, VStack } from "@roll-and-call/ui";
 import { Ellipsis } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
+
+import { ServerLink } from "@/shared/ui";
 
 import { REQUEST_ACTION, type RequestAction } from "../model/request-action";
 
@@ -24,7 +25,7 @@ export function RequestActions({ similar, actionHref }: RequestActionsProps) {
   const others = Object.values(REQUEST_ACTION).filter((action) => action !== primary);
   return (
     <HStack align="center" justify="end" gap="075">
-      <Button size="sm" render={<Link href={actionHref(primary)} scroll={false} />}>
+      <Button size="sm" render={<ServerLink path={actionHref(primary)} scroll={false} />}>
         {ACTION_LABEL[primary]}
       </Button>
       <Popover.Root open={open} onOpenChange={setOpen}>
@@ -39,7 +40,7 @@ export function RequestActions({ similar, actionHref }: RequestActionsProps) {
                 variant="ghost"
                 colorPalette={action === REQUEST_ACTION.reject ? "danger" : "gray"}
                 size="sm"
-                render={<Link href={actionHref(action)} scroll={false} />}
+                render={<ServerLink path={actionHref(action)} scroll={false} />}
                 onClick={() => setOpen(false)}
                 className="justify-start"
               >

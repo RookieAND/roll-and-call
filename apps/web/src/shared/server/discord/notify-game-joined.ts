@@ -1,8 +1,7 @@
 import type { Game, Server } from "@roll-and-call/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-
-import { gameNoticeEmbed } from "./game-notice-embed";
-import { headcountFields } from "./headcount-fields";
+import { gameNoticeEmbed } from "@roll-and-call/game-notices";
+import { headcountFields } from "@roll-and-call/game-notices";
 
 type JoinInfo = {
   applicantName: string;

@@ -5,7 +5,7 @@ import { BookOpen, ShieldCheck } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import type { GrantCandidate } from "@/shared/server";
-import { UrlSearchInput, UserPreview } from "@/shared/ui";
+import { ModalServerLabel, UrlSearchInput, UserPreview } from "@/shared/ui";
 
 import { grantRulebookCertification } from "../api/grant-rulebook-certification";
 import { GrantCandidateRow } from "./grant-candidate-row";
@@ -56,6 +56,7 @@ export function GrantGmDialog({
     <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
       <Dialog.Popup className="max-w-[600px]">
         <Dialog.Header>
+          <ModalServerLabel />
           <Dialog.Title>{rulebookLabel}에 GM 직접 추가</Dialog.Title>
           <Dialog.Description>
             사진 심사 없이 운영진의 판단으로 이 룰북을 인증합니다

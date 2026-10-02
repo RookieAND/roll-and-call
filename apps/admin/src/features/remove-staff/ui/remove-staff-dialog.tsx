@@ -2,7 +2,6 @@
 
 import {
   AlertDialog,
-  Badge,
   Button,
   Checkbox,
   Field,
@@ -15,7 +14,7 @@ import { useState, useTransition } from "react";
 
 import { formatDate, STAFF_ROLE_LABEL, withObjectParticle } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
-import { FactRows } from "@/shared/ui";
+import { FactRows, ModalServerLabel, Tag } from "@/shared/ui";
 
 import { removeStaffMember } from "../api/remove-staff-member";
 
@@ -43,6 +42,7 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
     <AlertDialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
       <AlertDialog.Popup className="max-w-[520px]">
         <AlertDialog.Header>
+          <ModalServerLabel />
           <AlertDialog.Title>
             {withObjectParticle(staff.nickname)} 운영진에서 해제할까요?
           </AlertDialog.Title>
@@ -58,9 +58,9 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
                 items={[
                   {
                     label: "역할",
-                    value: <Badge colorPalette="gray">{STAFF_ROLE_LABEL[staff.role]}</Badge>,
+                    value: <Tag>{STAFF_ROLE_LABEL[staff.role]}</Tag>,
                   },
-                  { label: "추가한 날", value: formatDate(staff.since) },
+                  { label: "추가한 날", value: staff.since ? formatDate(staff.since) : "—" },
                   {
                     label: "최근 활동",
                     value: staff.lastActiveAt ? formatDate(staff.lastActiveAt) : "—",

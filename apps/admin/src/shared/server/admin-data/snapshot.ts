@@ -9,6 +9,7 @@ import { getCurrentServer } from "../auth/get-current-server";
 import { gameStartsAt } from "./game-starts-at";
 import { gameStatus } from "./game-status";
 import { loadSharedTables } from "./load-shared-tables";
+import { membershipOf } from "./membership-of";
 import { noShowId } from "./no-show-id";
 import { plainText } from "./plain-text";
 import { similarRulebook } from "./similar-rulebook";
@@ -95,6 +96,15 @@ export const loadSnapshot = cache(async () => {
             reason: sanction.reason,
           }
         : undefined,
+      membership: membershipOf(profile),
+      rejoinedAt: profile.rejoinedAt ?? undefined,
+      ban: profile.bannedAt
+        ? {
+            at: profile.bannedAt,
+            by: nicknameOf(profile.bannedBy),
+            reason: profile.banReason ?? "",
+          }
+        : undefined,
     };
   });
 
@@ -141,7 +151,6 @@ export const loadSnapshot = cache(async () => {
         : [],
       imageUrls: game.images,
       thumbnailUrl: game.thumbnailUrl ?? undefined,
-      editRequestedAt: game.editRequestedAt ?? undefined,
       attendanceConfirmedAt: game.attendanceConfirmedAt ?? undefined,
       hidden: game.hiddenAt
         ? { reason: game.hiddenReason ?? "", by: nicknameOf(game.hiddenBy), at: game.hiddenAt }
@@ -212,6 +221,8 @@ export const loadSnapshot = cache(async () => {
       rulebook: labels.get(row.rulebookId) ?? "",
       groupId: row.groupId,
       format: row.format,
+      direct: row.direct,
+      rejectReason: row.rejectReason ?? undefined,
       appliedAt: row.createdAt,
       memo: row.memo,
       photoUrls: row.photoUrls,
@@ -336,7 +347,9 @@ export const loadSnapshot = cache(async () => {
     .map((row) => ({
       id: row.id,
       at: row.createdAt,
-      actor: nicknameOf(row.actorId),
+      actor: row.actorKind === "system" ? "시스템" : nicknameOf(row.actorId),
+      actorId: row.actorId ?? undefined,
+      actorKind: row.actorKind,
       action: row.action as AuditAction,
       target: row.target,
       targetUserId: row.targetUserId ?? undefined,
@@ -364,7 +377,6 @@ export const loadSnapshot = cache(async () => {
     reviewReports: reviewReportList,
     auditLog: auditList,
     staffMemos: memoList,
-    settings: { certEnforcementDate: server.certEnforcementDate },
   };
 });
 

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { getCurrentServer, removeStaff, requireStaff } from "@/shared/server";
+import { getCurrentServer, removeStaff, requireOwner } from "@/shared/server";
 
 interface RemoveStaffMemberInput {
   reason: string;
@@ -10,8 +10,7 @@ interface RemoveStaffMemberInput {
 }
 
 export async function removeStaffMember(userId: string, input: RemoveStaffMemberInput) {
-  const staff = await requireStaff();
-  if (staff.role !== "owner") throw new Error("소유자만 운영진을 해제할 수 있습니다");
+  const staff = await requireOwner();
   if (!input.reason.trim()) throw new Error("해제 사유를 입력해 주세요");
   const server = await getCurrentServer();
   await removeStaff({

@@ -1,5 +1,4 @@
-import { Callout, Field, Textarea } from "@roll-and-call/ui";
-import { ScrollText } from "lucide-react";
+import { Field, Textarea } from "@roll-and-call/ui";
 
 interface ReasonFieldsProps {
   placeholder: string;
@@ -40,12 +39,6 @@ export function ReasonFields({
           onChange={(event) => onStaffMemoChange(event.target.value)}
         />
       </Field.Root>
-      <Callout.Root colorPalette="gray" size="sm">
-        <Callout.Icon>
-          <ScrollText size={14} />
-        </Callout.Icon>
-        <Callout.Description>확정하면 활동 기록에 남습니다.</Callout.Description>
-      </Callout.Root>
     </>
   );
 }

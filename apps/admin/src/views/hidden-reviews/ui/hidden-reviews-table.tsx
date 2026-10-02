@@ -1,10 +1,9 @@
-import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
-import { ArrowDown } from "lucide-react";
-import Link from "next/link";
+import { HStack, Table, Text } from "@roll-and-call/ui";
+import { ArrowDown, ChevronRight } from "lucide-react";
 
 import { formatShortDateTime } from "@/shared/lib";
 import type { HiddenReviewRow } from "@/shared/server";
-import { TableColumns } from "@/shared/ui";
+import { ServerLink, TableColumns, Tag } from "@/shared/ui";
 
 interface HiddenReviewsTableProps {
   rows: HiddenReviewRow[];
@@ -13,7 +12,7 @@ interface HiddenReviewsTableProps {
 export function HiddenReviewsTable({ rows }: HiddenReviewsTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[168, 300, 150, 124, 124, 124]} />
+      <TableColumns widths={[168, 300, 150, 124, 124, 124, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>작성자</Table.Head>
@@ -27,6 +26,7 @@ export function HiddenReviewsTable({ rows }: HiddenReviewsTableProps) {
             </HStack>
           </Table.Head>
           <Table.Head align="center">상태</Table.Head>
+          <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -38,7 +38,7 @@ export function HiddenReviewsTable({ rows }: HiddenReviewsTableProps) {
                 weight="bold"
                 truncate
                 title={row.authorNickname}
-                render={<Link href={`/posts/reviews/${row.id}`} />}
+                render={<ServerLink path={`/posts/reviews/${row.id}`} />}
                 className="block after:absolute after:inset-0"
               >
                 {row.authorNickname}
@@ -70,12 +70,15 @@ export function HiddenReviewsTable({ rows }: HiddenReviewsTableProps) {
             </Table.Cell>
             <Table.Cell align="center">
               {row.editedAfterHidden ? (
-                <Badge colorPalette="primary">숨긴 뒤 수정됨</Badge>
+                <Tag>숨긴 뒤 수정됨</Tag>
               ) : (
                 <Text typography="body3" foreground="hint">
                   —
                 </Text>
               )}
+            </Table.Cell>
+            <Table.Cell align="end">
+              <ChevronRight size={16} aria-hidden className="inline text-hint" />
             </Table.Cell>
           </Table.Row>
         ))}

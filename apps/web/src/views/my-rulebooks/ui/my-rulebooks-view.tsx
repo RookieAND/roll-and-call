@@ -10,7 +10,6 @@ import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/s
 import { AppBar, LineBreaks } from "@/shared/ui";
 
 import { myRulebooksHome } from "../model/my-rulebooks-home";
-import { EnforcementBanner } from "./enforcement-banner";
 import { ListSection } from "./list-section";
 import { OwnedCategoryCard } from "./owned-category-card";
 
@@ -40,7 +39,6 @@ export async function MyRulebooksView() {
       <AppBar back="/me" title={TITLE} />
       <Container size="sm">
         <VStack gap="250" className="pt-200 pb-250">
-          {home.banner && <EnforcementBanner title={home.banner.title} dday={home.banner.dday} />}
           {home.suspension && (
             <Callout.Root colorPalette="danger">
               <Callout.Icon />

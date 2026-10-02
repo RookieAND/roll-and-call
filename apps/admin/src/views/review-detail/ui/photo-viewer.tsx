@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  Badge,
   Button,
+  Card,
   Dialog,
   HStack,
   IconButton,
@@ -15,16 +15,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Eye,
-  ImageOff,
+  Image as ImageIcon,
   RotateCcw,
   X,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
-import { PhotoThumb } from "@/shared/ui";
+import { PhotoThumb, ServerLink, Tag } from "@/shared/ui";
 
 const ZOOM_STEP = 0.5;
 const ZOOM_MAX = 3;
@@ -93,14 +92,14 @@ export function PhotoViewer({
         {!isNull(current) && !isNull(index) ? (
           <>
             <HStack align="center" gap="125">
-              <Dialog.Title>{title}</Dialog.Title>
+              <Dialog.Title className="text-body3">{title}</Dialog.Title>
               <Text typography="body4" foreground="muted">
                 {meta}
               </Text>
               <Text typography="body4" weight="bold" numeric>
-                {index + 1} / {total}
+                {loading ? null : `${index + 1} / ${total}`}
               </Text>
-              {spoiler ? <Badge colorPalette="gray">스포일러 포함</Badge> : null}
+              {spoiler ? <Tag>스포일러 포함</Tag> : null}
               <HStack align="center" gap="075" className="ml-auto">
                 <IconButton
                   variant="outline"
@@ -128,7 +127,7 @@ export function PhotoViewer({
                   colorPalette="gray"
                   size="sm"
                   disabled={loading}
-                  render={<Link href={hideLink.href} scroll={false} />}
+                  render={<ServerLink path={hideLink.href} scroll={false} />}
                   onClick={close}
                 >
                   <Eye size={14} aria-hidden />
@@ -139,7 +138,7 @@ export function PhotoViewer({
                   colorPalette="danger"
                   size="sm"
                   disabled={loading}
-                  render={<Link href={removeHref} scroll={false} />}
+                  render={<ServerLink path={removeHref} scroll={false} />}
                   onClick={close}
                 >
                   <X size={14} aria-hidden />
@@ -149,8 +148,8 @@ export function PhotoViewer({
                 <Dialog.Close
                   render={
                     <IconButton
-                      variant="outline"
                       size="sm"
+                      className="bg-gray-100"
                       aria-label="닫기 (Esc)"
                       title="닫기 (Esc)"
                     />
@@ -161,8 +160,14 @@ export function PhotoViewer({
               </HStack>
             </HStack>
             <HStack align="center" gap="150" className="min-h-0 flex-1 py-175">
-              <IconButton aria-label="이전 사진 (←)" onClick={() => move(-1)}>
-                <ChevronLeft size={22} aria-hidden />
+              <IconButton
+                variant="outline"
+                size="sm"
+                aria-label="이전 사진 (←)"
+                title="이전 사진 (←)"
+                onClick={() => move(-1)}
+              >
+                <ChevronLeft size={16} aria-hidden />
               </IconButton>
               <VStack className="relative mx-auto h-full max-w-[760px] flex-1 overflow-hidden rounded-400">
                 {failed ? (
@@ -172,9 +177,9 @@ export function PhotoViewer({
                     gap="125"
                     role="img"
                     aria-label={`후기 사진 ${index + 1}/${total} 불러오기 실패`}
-                    className="size-full rounded-400 border border-gray-200 text-hint"
+                    className="size-full rounded-400 border border-gray-200 text-gray-600"
                   >
-                    <ImageOff size={32} aria-hidden />
+                    <ImageIcon size={32} aria-hidden />
                     <Text typography="subtitle2">사진을 불러오지 못했습니다</Text>
                     <Button variant="outline" colorPalette="gray" size="sm" onClick={retry}>
                       <RotateCcw size={14} aria-hidden />
@@ -205,20 +210,46 @@ export function PhotoViewer({
                   </>
                 )}
               </VStack>
-              <IconButton aria-label="다음 사진 (→)" onClick={() => move(1)}>
-                <ChevronRight size={22} aria-hidden />
+              <IconButton
+                variant="outline"
+                size="sm"
+                aria-label="다음 사진 (→)"
+                title="다음 사진 (→)"
+                onClick={() => move(1)}
+              >
+                <ChevronRight size={16} aria-hidden />
               </IconButton>
             </HStack>
             <HStack gap="100" justify="center">
-              {photoUrls.map((url, candidateIndex) => (
-                <PhotoThumb
-                  key={url}
-                  url={url}
-                  label={`후기 사진 ${candidateIndex + 1}/${total}`}
-                  selected={candidateIndex === index}
-                  onClick={() => show(candidateIndex)}
-                />
-              ))}
+              {photoUrls.map((url, candidateIndex) => {
+                const label = `후기 사진 ${candidateIndex + 1}/${total}`;
+                if (loading) return <Skeleton key={url} width={88} height={66} rounded={400} />;
+                if (failed && candidateIndex === index) {
+                  return (
+                    <Card.Root
+                      key={url}
+                      radius={400}
+                      padding="none"
+                      role="img"
+                      aria-label={label}
+                      aria-current
+                      render={<VStack align="center" justify="center" />}
+                      className="h-[66px] w-[88px] shrink-0 border-2 border-gray-900 text-hint"
+                    >
+                      <ImageIcon size={16} aria-hidden />
+                    </Card.Root>
+                  );
+                }
+                return (
+                  <PhotoThumb
+                    key={url}
+                    url={url}
+                    label={label}
+                    selected={candidateIndex === index}
+                    onClick={() => show(candidateIndex)}
+                  />
+                );
+              })}
             </HStack>
             <HStack justify="center" className="mt-100">
               <Text typography="body4" foreground="hint">

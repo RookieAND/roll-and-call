@@ -1,9 +1,8 @@
 import { Table, Text } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { formatDateTime } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
+import { EMPTY_IMAGE, TableEmptyRow, TableColumns, ServerLink } from "@/shared/ui";
 
 const NO_SHOW_WARNING_COUNT = 2;
 const COLUMN_COUNT = 4;
@@ -58,7 +57,7 @@ export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
                   typography="body3"
                   weight="bold"
                   truncate
-                  render={<Link href={`/users/${member.userId}`} />}
+                  render={<ServerLink path={`/users/${member.userId}`} />}
                   className="block after:absolute after:inset-0"
                 >
                   {member.nickname}

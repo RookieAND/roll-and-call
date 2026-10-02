@@ -1,15 +1,15 @@
 "use client";
 
 import { Button, Grid, HStack, Text, VStack, cn, toast } from "@roll-and-call/ui";
-import { compact, isNull, sumBy } from "es-toolkit";
+import { isNull, sumBy } from "es-toolkit";
 import { TriangleAlert } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { formatDate, formatSessionTime } from "@/shared/lib";
-import type { OngoingActivity, Sanction } from "@/shared/server";
-import type { OngoingChoiceRow } from "@/shared/ui";
+import type { OngoingActivity, OngoingChoice, Sanction } from "@/shared/server";
+import type { ChoiceRow } from "@/shared/ui";
+import { ServerLink, useServerPath } from "@/shared/ui";
 
 import { sanctionUser } from "../api/sanction-user";
 import { EMPTY_SANCTION_DRAFT, type SanctionDraft } from "../model/sanction-draft";
@@ -21,6 +21,15 @@ import { SanctionSummary } from "./sanction-summary";
 
 const DAY = 86_400_000;
 
+const HOSTED_OPTIONS = [
+  { value: "keep", label: "구인 진행" },
+  { value: "close", label: "구인 닫기" },
+] as const;
+const PLAYED_OPTIONS = [
+  { value: "keep", label: "참여 진행" },
+  { value: "leave", label: "참여 취소" },
+] as const;
+
 interface SanctionUserFormProps {
   userId: string;
   nickname: string;
@@ -30,6 +39,7 @@ interface SanctionUserFormProps {
 
 export function SanctionUserForm({ userId, nickname, ongoing, backHref }: SanctionUserFormProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [pending, startTransition] = useTransition();
   const [draft, setDraft] = useState<SanctionDraft>(EMPTY_SANCTION_DRAFT);
   const [confirming, setConfirming] = useState(false);
@@ -46,35 +56,26 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
   const hasReason = Boolean(draft.userReason.trim());
   const canConfirm = hasReason && validDays && !pending;
 
-  const rows: OngoingChoiceRow[] = ongoing.map((activity) => {
-    const alternativeAction = activity.hosted ? "close" : "leave";
+  const rows: ChoiceRow[] = ongoing.map((activity) => {
+    const options = activity.hosted ? HOSTED_OPTIONS : PLAYED_OPTIONS;
     return {
       id: activity.sessionId,
       title: activity.title,
       meta: activity.hosted
         ? `${formatSessionTime(activity.startsAt)} · 모집 중 ${activity.memberCount}/${activity.capacity} · 본인이 GM`
         : `${formatSessionTime(activity.startsAt)} · 참여 확정 · GM ${activity.gmNickname}`,
-      alternativeLabel: activity.hosted ? "구인 닫기" : "참여 빼기",
-      alternativeAction,
-      action: draft.leftSessionIds.includes(activity.sessionId) ? alternativeAction : "keep",
+      options,
+      value: draft.leftSessionIds.includes(activity.sessionId) ? options[1].value : "keep",
     };
   });
-  const closedCount = rows.filter((row) => row.action === "close").length;
-  const keptCount = rows.filter((row) => row.action === "keep").length;
+  const closedCount = rows.filter((row) => row.value === "close").length;
+  const keptCount = rows.filter((row) => row.value === "keep").length;
   const closedMemberCount = sumBy(
     ongoing.filter(
       (activity) => activity.hosted && draft.leftSessionIds.includes(activity.sessionId),
     ),
     (activity) => activity.memberCount,
   );
-  const confirmDescription = compact([
-    end
-      ? `${days}일 동안, ${end}까지 모든 활동을 정지합니다.`
-      : "해제하기 전까지 모든 활동을 정지합니다.",
-    closedCount
-      ? `구인 ${closedCount}건이 닫히고 참여자 ${closedMemberCount}명에게 알림이 갑니다.`
-      : "",
-  ]).join(" ");
 
   const changeDraft = (changes: Partial<SanctionDraft>) => setDraft({ ...draft, ...changes });
 
@@ -92,7 +93,10 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
         days,
         userReason: draft.userReason,
         staffMemo: draft.staffMemo,
-        ongoing: rows.map((row) => ({ sessionId: row.id, action: row.action })),
+        ongoing: rows.map((row) => ({
+          sessionId: row.id,
+          action: row.value as OngoingChoice["action"],
+        })),
       });
       setConfirming(false);
       if (!result.ok) {
@@ -100,7 +104,7 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
         return;
       }
       toast.success(`${nickname}님을 제재했습니다`);
-      router.push(backHref);
+      router.push(toServerPath(backHref));
     });
 
   return (
@@ -139,7 +143,7 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
       >
         {hasReason || conflict ? (
           <Text typography="body4" foreground="hint">
-            확정하면 다른 운영진에게 디스코드 알림이 갑니다. 제재는 활동 기록에 남습니다.
+            확정하면 다른 운영진에게 디스코드 알림이 전송되고, 제재 내역은 활동 기록에 남습니다.
           </Text>
         ) : (
           <HStack align="center" gap="075" className="text-hint">
@@ -152,10 +156,12 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
         <HStack gap="100" className="ml-auto">
           {conflict ? (
             <>
-              <Button variant="ghost" colorPalette="gray" render={<Link href={backHref} />}>
+              <Button variant="ghost" colorPalette="gray" render={<ServerLink path={backHref} />}>
                 닫기
               </Button>
-              <Button onClick={() => router.push(backHref)}>유저 상세 새로고침</Button>
+              <Button onClick={() => router.push(toServerPath(backHref))}>
+                유저 상세 새로고침
+              </Button>
             </>
           ) : (
             <>
@@ -163,7 +169,7 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
                 variant="ghost"
                 colorPalette="gray"
                 disabled={pending}
-                render={<Link href={backHref} />}
+                render={<ServerLink path={backHref} />}
               >
                 취소
               </Button>
@@ -182,7 +188,11 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
       <SanctionConfirmDialog
         open={confirming}
         nickname={nickname}
-        description={confirmDescription}
+        days={days}
+        end={end}
+        userReason={draft.userReason.trim()}
+        closedCount={closedCount}
+        closedMemberCount={closedMemberCount}
         pending={pending}
         onBack={() => setConfirming(false)}
         onConfirm={confirm}

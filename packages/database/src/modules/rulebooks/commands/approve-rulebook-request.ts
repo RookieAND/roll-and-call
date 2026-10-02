@@ -32,7 +32,13 @@ export async function approveRulebookRequest({
     const [existing] = await tx
       .select({ id: rulebooks.id })
       .from(rulebooks)
-      .where(and(eq(rulebooks.name, fields.name), eq(rulebooks.edition, fields.edition)));
+      .where(
+        and(
+          eq(rulebooks.serverId, serverId),
+          eq(rulebooks.name, fields.name),
+          eq(rulebooks.edition, fields.edition),
+        ),
+      );
     if (existing) return { ok: false, duplicate: true };
     const claim = await claimRulebookRequest({
       executor: tx,
@@ -42,8 +48,8 @@ export async function approveRulebookRequest({
       outcome: "added",
     });
     if (!claim.ok) return claim;
-    await tx.insert(rulebooks).values(await toRulebookValues({ executor: tx, fields }));
-    await relinkGames(tx);
+    await tx.insert(rulebooks).values(await toRulebookValues({ executor: tx, serverId, fields }));
+    await relinkGames({ executor: tx, serverId });
     await recordAudit({
       executor: tx,
       serverId,

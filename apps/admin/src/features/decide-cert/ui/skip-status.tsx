@@ -1,5 +1,7 @@
 import { Button, Text } from "@roll-and-call/ui";
 
+import { NOTIFY_NOTE } from "../model/notify-note";
+
 interface SkipStatusProps {
   note?: string;
   onSkip: () => void;
@@ -12,12 +14,12 @@ export function SkipStatus({ note, onSkip }: SkipStatusProps) {
         건너뛰기
       </Button>
       {note ? (
-        <Text typography="body4" weight="medium" foreground="danger">
+        <Text typography="body4" weight="bold" foreground="danger">
           {note}
         </Text>
       ) : (
         <Text typography="body4" foreground="hint">
-          결과는 신청자의 내 룰북에만 표시되며, 따로 알림은 가지 않습니다.
+          {NOTIFY_NOTE}
         </Text>
       )}
     </>

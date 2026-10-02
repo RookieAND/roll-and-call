@@ -1,9 +1,8 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { PENDING_COPY } from "@/shared/lib";
 import type { PendingItem } from "@/shared/server";
-import { IconTile } from "@/shared/ui";
+import { IconTile, ServerLink } from "@/shared/ui";
 
 interface PendingRowProps {
   item: PendingItem;
@@ -34,7 +33,7 @@ export function PendingRow({ item }: PendingRowProps) {
         <Text typography="heading3" weight="extrabold" numeric className={countClassName}>
           {item.count}건
         </Text>
-        <Button variant="outline" size="sm" render={<Link href={copy.href} />}>
+        <Button variant="outline" size="sm" render={<ServerLink path={copy.href} />}>
           처리하기
         </Button>
       </HStack>

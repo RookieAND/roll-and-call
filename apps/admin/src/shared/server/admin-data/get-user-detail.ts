@@ -1,6 +1,7 @@
 import "server-only";
 import { countRecentNoShows } from "./count-recent-no-shows";
 import { isSanctioned } from "./is-sanctioned";
+import { previousNicknameOf } from "./previous-nickname-of";
 import { loadSnapshot, type Snapshot } from "./snapshot";
 import type { Session } from "./types";
 
@@ -31,11 +32,21 @@ export async function getUserDetail(userId: string) {
 
   const certifications = db.certifications
     .filter((item) => item.userId === userId)
-    .map((item) => ({
-      rulebook: item.rulebook,
-      approvedAt: item.approvedAt,
-      approvedBy: item.approvedBy,
-    }));
+    .map((item) => {
+      const approved = db.certApplications.find(
+        (application) =>
+          application.userId === userId &&
+          application.rulebookId === item.rulebookId &&
+          application.status === "approved",
+      );
+      return {
+        rulebookId: item.rulebookId,
+        rulebook: item.rulebook,
+        format: approved && !approved.direct ? approved.format : null,
+        approvedAt: item.approvedAt,
+        approvedBy: item.approvedBy,
+      };
+    });
   const applications = db.certApplications
     .flatMap((item) =>
       item.userId === userId && (item.status === "pending" || item.status === "rejected")
@@ -45,7 +56,9 @@ export async function getUserDetail(userId: string) {
     .map((item) => ({
       id: item.id,
       rulebook: item.rulebook,
+      format: item.direct ? null : item.format,
       status: item.status,
+      rejectReason: item.rejectReason ?? null,
       appliedAt: item.appliedAt,
       processedAt: item.processedAt ?? null,
       processedBy: item.processedBy ?? null,
@@ -56,7 +69,15 @@ export async function getUserDetail(userId: string) {
     nickname: user.nickname,
     discordId: user.discordId,
     discordHandle: user.discordHandle,
+    membership: user.membership,
+    ban: user.ban ?? null,
+    previousNickname: previousNicknameOf({
+      auditLog: db.auditLog,
+      userId,
+      nickname: user.nickname,
+    }),
     joinedAt: user.joinedAt,
+    rejoinedAt: user.rejoinedAt ?? null,
     hostedCount: user.hostedCount,
     playedCount: user.playedCount,
     recentNoShowCount: countRecentNoShows(db, userId, now),

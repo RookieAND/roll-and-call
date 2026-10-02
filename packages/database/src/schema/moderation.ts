@@ -1,7 +1,5 @@
 import { sql } from "drizzle-orm";
 import {
-  boolean,
-  check,
   foreignKey,
   index,
   jsonb,
@@ -19,6 +17,9 @@ import { profiles } from "./profiles";
 import { serverId } from "./server-id";
 
 export const staffRole = pgEnum("staff_role", ["owner", "staff"]);
+
+// 운영진 칸에 플랫폼 관리자 배지를 붙이거나 '시스템'으로 적을 때 쓴다.
+export const auditActorKind = pgEnum("audit_actor_kind", ["staff", "platform", "system"]);
 
 // 추가 정보(before/after/related)는 활동 기록 상세에만 쓰므로 jsonb 한 칸에 담는다.
 export type AuditState = { label: string; sub?: string };
@@ -72,7 +73,7 @@ export const reports = pgTable(
   ],
 ).enableRLS();
 
-// 역할은 이 표가 서버마다 정한다. 환경변수 ADMIN_OWNER_DISCORD_IDS는 표가 비어 있을 때 첫 소유자를 들이는 입구다.
+// 서버장이 지정한 운영진. 소유자는 servers.owner_discord_id(디스코드 서버장)가 정하고, 이 표의 owner 역할은 서버장을 아직 못 읽은 서버에서만 쓴다.
 export const staff = pgTable(
   "staff",
   {
@@ -111,6 +112,7 @@ export const auditLog = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     serverId: serverId(),
     actorId: uuid("actor_id").references(() => profiles.id, { onDelete: "set null" }),
+    actorKind: auditActorKind("actor_kind").notNull().default("staff"),
     action: text("action").notNull(),
     target: text("target").notNull(),
     targetUserId: uuid("target_user_id").references(() => profiles.id, { onDelete: "set null" }),
@@ -127,16 +129,6 @@ export const auditLog = pgTable(
     index("audit_log_server_id_created_at_idx").on(table.serverId, table.createdAt),
     index("audit_log_target_game_id_idx").on(table.targetGameId),
   ],
-).enableRLS();
-
-// servers.cert_enforcement_date로 옮겨 더 읽고 쓰지 않는다. 다음 단계에서 지운다.
-export const adminSettings = pgTable(
-  "admin_settings",
-  {
-    id: boolean("id").primaryKey().default(true),
-    certEnforcementDate: timestamp("cert_enforcement_date", { withTimezone: true }),
-  },
-  (table) => [check("admin_settings_single_row", sql`${table.id}`)],
 ).enableRLS();
 
 export type AuditLogEntry = typeof auditLog.$inferSelect;

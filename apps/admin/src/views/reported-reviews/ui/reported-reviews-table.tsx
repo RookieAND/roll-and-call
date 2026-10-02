@@ -1,10 +1,9 @@
-import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
-import { ArrowUp } from "lucide-react";
-import Link from "next/link";
+import { HStack, Table, Text } from "@roll-and-call/ui";
+import { ArrowUp, ChevronRight } from "lucide-react";
 
 import { formatShortDateTime } from "@/shared/lib";
 import type { ReportedReviewRow } from "@/shared/server";
-import { TableColumns } from "@/shared/ui";
+import { ServerLink, TableColumns, Tag } from "@/shared/ui";
 
 interface ReportedReviewsTableProps {
   rows: ReportedReviewRow[];
@@ -13,7 +12,7 @@ interface ReportedReviewsTableProps {
 export function ReportedReviewsTable({ rows }: ReportedReviewsTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[168, 360, 64, 150, 132]} />
+      <TableColumns widths={[168, 360, 64, 150, 132, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>작성자</Table.Head>
@@ -26,6 +25,7 @@ export function ReportedReviewsTable({ rows }: ReportedReviewsTableProps) {
               <ArrowUp size={10} strokeWidth={2.4} aria-hidden />
             </HStack>
           </Table.Head>
+          <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -37,7 +37,7 @@ export function ReportedReviewsTable({ rows }: ReportedReviewsTableProps) {
                 weight="bold"
                 truncate
                 title={row.authorNickname}
-                render={<Link href={`/posts/reviews/${row.id}?from=reports`} />}
+                render={<ServerLink path={`/posts/reviews/${row.id}?from=reports`} />}
                 className="block after:absolute after:inset-0"
               >
                 {row.authorNickname}
@@ -54,12 +54,15 @@ export function ReportedReviewsTable({ rows }: ReportedReviewsTableProps) {
               </Text>
             </Table.Cell>
             <Table.Cell>
-              <Badge colorPalette="danger">{row.topReason}</Badge>
+              <Tag tone="danger">{row.topReason}</Tag>
             </Table.Cell>
             <Table.Cell>
               <Text typography="body3" foreground="hint">
                 {formatShortDateTime(row.oldestReportedAt)}
               </Text>
+            </Table.Cell>
+            <Table.Cell align="end">
+              <ChevronRight size={16} aria-hidden className="inline text-hint" />
             </Table.Cell>
           </Table.Row>
         ))}

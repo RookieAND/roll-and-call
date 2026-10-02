@@ -14,11 +14,11 @@ export function EditionCertTable({ rows }: EditionCertTableProps) {
       <Table.Header>
         <Table.Row>
           <Table.Head>판본</Table.Head>
-          <Table.Head align="center">인증된 GM</Table.Head>
-          <Table.Head align="center">심사 대기</Table.Head>
-          <Table.Head align="center">미신청</Table.Head>
+          <Table.Head align="end">인증된 GM</Table.Head>
+          <Table.Head align="end">심사 대기</Table.Head>
+          <Table.Head align="end">미신청</Table.Head>
           <Table.Head>진행률</Table.Head>
-          <Table.Head align="center">최근 90일 세션</Table.Head>
+          <Table.Head align="end">최근 90일 세션</Table.Head>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -32,10 +32,10 @@ export function EditionCertTable({ rows }: EditionCertTableProps) {
                   {row.edition}
                 </Text>
               </Table.Cell>
-              <Table.Cell align="center" numeric>
+              <Table.Cell align="end" numeric>
                 {row.certifiedCount}명
               </Table.Cell>
-              <Table.Cell align="center" numeric>
+              <Table.Cell align="end" numeric>
                 <Text
                   typography="body3"
                   weight={row.pendingCount ? "bold" : undefined}
@@ -45,7 +45,7 @@ export function EditionCertTable({ rows }: EditionCertTableProps) {
                   {row.pendingCount}명
                 </Text>
               </Table.Cell>
-              <Table.Cell align="center" numeric>
+              <Table.Cell align="end" numeric>
                 <Text
                   typography="body3"
                   weight={row.unappliedCount ? "bold" : undefined}
@@ -55,7 +55,7 @@ export function EditionCertTable({ rows }: EditionCertTableProps) {
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                <HStack align="center" gap="100">
+                <HStack align="end" gap="100">
                   <Progress value={row.certifiedCount} max={total} className="flex-1" />
                   <Text
                     typography="body4"
@@ -67,7 +67,7 @@ export function EditionCertTable({ rows }: EditionCertTableProps) {
                   </Text>
                 </HStack>
               </Table.Cell>
-              <Table.Cell align="center" numeric>
+              <Table.Cell align="end" numeric>
                 {row.sessionCount}회
               </Table.Cell>
             </Table.Row>

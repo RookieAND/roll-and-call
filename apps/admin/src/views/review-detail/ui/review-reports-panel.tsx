@@ -1,9 +1,9 @@
-import { Badge, Callout, VStack } from "@roll-and-call/ui";
+import { Callout, VStack } from "@roll-and-call/ui";
 import { Flag } from "lucide-react";
 
 import { formatShortDateTime } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
-import { ItemCard, Panel } from "@/shared/ui";
+import { ItemCard, Panel, Tag } from "@/shared/ui";
 
 interface ReviewReportsPanelProps {
   review: ReviewDetail;
@@ -28,7 +28,7 @@ export function ReviewReportsPanel({ review }: ReviewReportsPanelProps) {
             tone="danger"
             title={report.reporterNickname}
             meta={formatShortDateTime(report.reportedAt)}
-            tags={<Badge colorPalette="danger">{report.reason}</Badge>}
+            tags={<Tag tone="danger">{report.reason}</Tag>}
           >
             {report.detail || null}
           </ItemCard>

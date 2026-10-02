@@ -8,6 +8,9 @@ import { waitedDays } from "./waited-days";
 export const PENDING_KINDS = ["cert", "rulebookRequest", "report", "reviewReport"] as const;
 export type PendingKind = (typeof PENDING_KINDS)[number];
 
+// 홈·폰 안내·⌘K의 할 일 목록은 시안 메모대로 이 셋만 보인다. 신고된 후기는 사이드바 구인 건수에만 더한다.
+export const TODO_KINDS: readonly PendingKind[] = ["cert", "rulebookRequest", "report"];
+
 export interface PendingItem {
   kind: PendingKind;
   count: number;

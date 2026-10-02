@@ -20,7 +20,6 @@ export { addDays } from "./add-days";
 export { endDateBounds } from "./end-date-bounds";
 export { GAME_IMAGE_BUCKET, gameImagePathOf } from "./storage-path";
 export { richTextLength } from "./rich-text-length";
-export { richTextToMarkdown } from "./rich-text-markdown";
 export { OG_IMAGE } from "./og-image";
 export { comitativeParticle } from "./comitative-particle";
 export { subjectParticle } from "./subject-particle";

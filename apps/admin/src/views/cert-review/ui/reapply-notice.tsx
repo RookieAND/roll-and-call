@@ -1,81 +1,51 @@
-import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
-import { Check, RotateCcw, X } from "lucide-react";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { RotateCcw } from "lucide-react";
 
 import { formatDate } from "@/shared/lib";
 import type { PreviousRejection } from "@/shared/server";
-
-const SHOT_LABELS = { front: "앞면", back: "뒷면", side: "책등" } as const;
+import { IconTile } from "@/shared/ui";
 
 interface ReapplyNoticeProps {
   latest: PreviousRejection;
   attempt: number;
-  replacedShots: (keyof typeof SHOT_LABELS)[];
 }
 
-export function ReapplyNotice({ latest, attempt, replacedShots }: ReapplyNoticeProps) {
-  const unchanged = (Object.keys(SHOT_LABELS) as (keyof typeof SHOT_LABELS)[])
-    .filter((shot) => !replacedShots.includes(shot))
-    .map((shot) => SHOT_LABELS[shot]);
+export function ReapplyNotice({ latest, attempt }: ReapplyNoticeProps) {
   return (
     <VStack
       render={<section aria-label="재신청 안내" />}
-      className="overflow-hidden rounded-600 border border-tinted-border bg-tinted-bg"
+      className="overflow-hidden rounded-600 border border-gray-200 bg-surface"
     >
-      <HStack align="center" gap="100" className="border-b border-tinted-border px-150 py-125">
-        <RotateCcw size={14} aria-hidden className="text-tinted-ink" />
-        <Text typography="subtitle2" foreground="primary">
+      <HStack
+        align="center"
+        gap="100"
+        className="border-b border-(--rc-color-border-subtle) px-200 py-150"
+      >
+        <IconTile icon={RotateCcw} tone="primary" />
+        <Text typography="heading3" render={<h2 />}>
           {attempt}번째 신청
         </Text>
-        <Text typography="body4" foreground="muted">
-          {formatDate(latest.rejectedAt)} 반려
+        <Text typography="body4" foreground="hint">
+          이전 신청은 {formatDate(latest.rejectedAt)}에 반려되었습니다
         </Text>
-        <HStack gap="075" className="ml-auto">
-          {latest.tags.map((tag) => (
-            <Badge key={tag} colorPalette="warning">
-              {tag}
-            </Badge>
-          ))}
-        </HStack>
       </HStack>
-      <VStack gap="100" className="px-150 py-125">
-        <VStack gap="050">
-          <Text typography="body4" weight="bold" foreground="primary">
-            지난번에 요청한 사항
-          </Text>
-          <VStack gap="050" render={<ul />}>
-            {latest.requests.map((request) => (
+      <VStack gap="125" className="px-200 py-175">
+        <Text typography="subtitle1">지난번 반려 사유</Text>
+        <VStack gap="075" render={<ol />}>
+          {latest.requests.map((request, index) => (
+            <HStack key={request} align="baseline" gap="100" render={<li />}>
               <Text
-                key={request}
                 typography="body4"
-                render={<li />}
-                className="ml-150 list-disc marker:text-tinted-border"
+                weight="bold"
+                foreground="muted"
+                className="grid size-[18px] shrink-0 place-items-center rounded-full bg-gray-100"
               >
-                {request}
+                {index + 1}
               </Text>
-            ))}
-          </VStack>
+              <Text typography="body3">{request}</Text>
+            </HStack>
+          ))}
         </VStack>
-        <HStack align="center" gap="175" className="border-t border-tinted-border pt-100">
-          <Text typography="body4" weight="bold" foreground="primary">
-            이번에 바뀐 사항
-          </Text>
-          {replacedShots.length ? (
-            <HStack align="center" gap="075">
-              <Check size={14} aria-hidden />
-              <Text typography="body4" weight="medium">
-                {replacedShots.map((shot) => SHOT_LABELS[shot]).join("·")} 사진 교체
-              </Text>
-            </HStack>
-          ) : null}
-          {unchanged.length ? (
-            <HStack align="center" gap="075" className="text-hint">
-              <X size={14} aria-hidden />
-              <Text typography="body4" foreground="hint">
-                {unchanged.join("·")}은 그대로
-              </Text>
-            </HStack>
-          ) : null}
-        </HStack>
       </VStack>
     </VStack>
   );

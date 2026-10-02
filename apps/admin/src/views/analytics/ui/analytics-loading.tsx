@@ -6,12 +6,7 @@ import { AnalyticsSection } from "./analytics-section";
 import { PeriodBar } from "./period-bar";
 import { SkeletonBars } from "./skeleton-bars";
 
-const SUMMARY_LABELS = [
-  "진행된 세션",
-  "참여한 인원 (중복 제외)",
-  "구인을 연 GM",
-  "불참률",
-] as const;
+const SUMMARY_LABELS = ["진행된 세션", "참여한 사람", "구인을 연 GM", "불참률"] as const;
 const HEAT_CELL_COUNT = 42;
 
 export function AnalyticsLoading() {
@@ -22,11 +17,7 @@ export function AnalyticsLoading() {
         label="분석 데이터를 불러오는 중입니다"
         className="mx-auto w-full max-w-content gap-150 p-200"
       >
-        <PeriodBar
-          description={
-            <Skeleton width={200} height={12} render={<span />} className="inline-block" />
-          }
-        />
+        <PeriodBar disabled />
         <Grid className="grid-cols-4 overflow-hidden rounded-600 border border-gray-200 bg-surface">
           {SUMMARY_LABELS.map((label) => (
             <VStack

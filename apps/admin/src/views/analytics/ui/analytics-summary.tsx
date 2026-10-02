@@ -33,10 +33,10 @@ export function AnalyticsSummary({ summary, early }: AnalyticsSummaryProps) {
       sub: early ? noCompare : `지난 4주 ${finishedSessions.previous}건`,
     },
     {
-      label: "참여한 인원 (중복 제외)",
+      label: "참여한 사람",
       value: `${participants.value ?? 0}명`,
       delta: <Delta value={percent(participants)} unit="%" />,
-      sub: early ? noCompare : `지난 4주 ${participants.previous}명`,
+      sub: early ? noCompare : `중복 제외 · 지난 4주 ${participants.previous}명`,
     },
     {
       label: "구인을 연 GM",

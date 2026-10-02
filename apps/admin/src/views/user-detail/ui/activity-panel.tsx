@@ -1,8 +1,16 @@
-import { Badge, Table, Text } from "@roll-and-call/ui";
+import { Table, Text } from "@roll-and-call/ui";
 
 import { formatSessionTime, paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow, UrlSelect, TableColumns } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  ListPager,
+  Panel,
+  TableEmptyRow,
+  TableColumns,
+  Tag,
+  UrlSelect,
+} from "@/shared/ui";
 
 import { ACTIVITY_ROLE, type ActivityRole } from "../model/activity-role";
 import { NoShowBadge } from "./no-show-badge";
@@ -69,11 +77,7 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
                 </Text>
               </Table.Cell>
               <Table.Cell align="center">
-                {activity.hosted ? (
-                  <Badge colorPalette="primary">GM</Badge>
-                ) : (
-                  <Badge colorPalette="gray">참여</Badge>
-                )}
+                <Tag>{activity.hosted ? "GM" : "참여"}</Tag>
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" truncate title={activity.title}>

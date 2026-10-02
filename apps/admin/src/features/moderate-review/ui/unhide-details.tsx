@@ -20,6 +20,7 @@ export function UnhideDetails({ review, hidden }: UnhideDetailsProps) {
         </Callout.Root>
       )}
       <FactRows
+        labelWidth={96}
         items={[
           { label: "숨긴 사유", value: hidden.reasonLabel },
           { label: "숨긴 시각", value: `${formatShortDateTime(hidden.at)} · ${hidden.by}` },

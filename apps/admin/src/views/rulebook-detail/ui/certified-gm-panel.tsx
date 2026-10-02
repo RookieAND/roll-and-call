@@ -1,10 +1,18 @@
-import { Badge, Button, Table, Text } from "@roll-and-call/ui";
+import { Button, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 import { formatDate, paginate } from "@/shared/lib";
 import type { CertifiedGm } from "@/shared/server";
-import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow, TableColumns } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  ListPager,
+  Panel,
+  TableEmptyRow,
+  TableColumns,
+  ServerLink,
+  Tag,
+} from "@/shared/ui";
 
 interface CertifiedGmPanelProps {
   gms: CertifiedGm[];
@@ -14,7 +22,7 @@ interface CertifiedGmPanelProps {
 
 export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelProps) {
   const paged = paginate(gms, page);
-  const count = <Badge colorPalette="gray">{gms.length}명</Badge>;
+  const count = <Tag>{`${gms.length}명`}</Tag>;
   const right = certRequired ? (
     <>
       {count}
@@ -44,12 +52,12 @@ export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelPr
       }
     >
       <Table.Root className="table-equal">
-        <TableColumns widths={[180, 132, 112, { fixed: 44 }]} />
+        <TableColumns widths={[180, 104, 112, { fixed: 44 }]} />
         <Table.Header>
           <Table.Row>
             <Table.Head>닉네임</Table.Head>
             <Table.Head>인증일</Table.Head>
-            <Table.Head align="center">최근 90일 세션</Table.Head>
+            <Table.Head align="end">최근 90일 세션</Table.Head>
             <Table.Head />
           </Table.Row>
         </Table.Header>
@@ -73,7 +81,7 @@ export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelPr
                   typography="body3"
                   weight="bold"
                   truncate
-                  render={<Link href={`/users/${gm.userId}`} />}
+                  render={<ServerLink path={`/users/${gm.userId}`} />}
                   className="block after:absolute after:inset-0"
                 >
                   {gm.nickname}
@@ -84,7 +92,7 @@ export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelPr
                   {formatDate(gm.approvedAt)}
                 </Text>
               </Table.Cell>
-              <Table.Cell align="center" numeric>
+              <Table.Cell align="end" numeric>
                 {gm.recentSessionCount}회
               </Table.Cell>
               <Table.Cell align="end">

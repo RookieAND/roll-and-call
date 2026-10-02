@@ -30,7 +30,7 @@ export function ReportedReviewsView({ reviews }: ReportedReviewsViewProps) {
             param="reason"
             allLabel="사유 전체"
             options={reviews.reasonOptions}
-            className="w-[150px]"
+            className="w-[126px]"
           />
         </HStack>
         <Panel>

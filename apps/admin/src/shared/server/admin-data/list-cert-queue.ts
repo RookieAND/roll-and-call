@@ -1,17 +1,15 @@
 import "server-only";
 import type { RulebookKind } from "@roll-and-call/database";
-import { isNull, uniq } from "es-toolkit";
+import { uniq } from "es-toolkit";
 
-import { certBlockers } from "./cert-blockers";
 import { loadSnapshot } from "./snapshot";
 import type { CertFormat } from "./types";
 import { waitedDays } from "./waited-days";
 
-// 활성 GM은 최근 90일에 구인을 연 사람, 적용일 전 접수는 인증 적용일 전에 낸 신청이다.
+// 활성 GM은 최근 90일에 구인을 연 사람이다.
 export const CERT_QUEUE_FILTERS = {
   reapplied: "재신청",
   activeGm: "활성 GM",
-  early: "적용일 전 접수",
 } as const;
 export type CertQueueFilterKey = keyof typeof CERT_QUEUE_FILTERS;
 
@@ -28,17 +26,14 @@ export interface CertQueueRow {
   category: string;
   kind: RulebookKind;
   format: CertFormat;
-  waiting: boolean;
   appliedAt: Date;
   waitedDays: number;
   previousRejectionCount: number;
   activeGm: boolean;
-  early: boolean;
 }
 
 export async function listCertQueue(filter: CertQueueFilter) {
   const db = await loadSnapshot();
-  const enforcementDate = db.settings.certEnforcementDate;
   const pending = db.certApplications
     .filter((application) => application.status === "pending")
     .toSorted((a, b) => a.appliedAt.getTime() - b.appliedAt.getTime())
@@ -52,12 +47,10 @@ export async function listCertQueue(filter: CertQueueFilter) {
         category: book?.category ?? "",
         kind: book?.kind ?? "core",
         format: application.format,
-        waiting: certBlockers(application, db).waitingOn.length > 0,
         appliedAt: application.appliedAt,
         waitedDays: waitedDays(application.appliedAt),
         previousRejectionCount: application.previousRejections.length,
         activeGm: user.recentHostedCount > 0,
-        early: !isNull(enforcementDate) && application.appliedAt < enforcementDate,
       };
     });
   const rows = pending.filter(
@@ -65,8 +58,7 @@ export async function listCertQueue(filter: CertQueueFilter) {
       (!filter.query || row.nickname.includes(filter.query)) &&
       (!filter.rulebook || row.rulebook === filter.rulebook) &&
       (filter.filter !== "reapplied" || row.previousRejectionCount > 0) &&
-      (filter.filter !== "activeGm" || row.activeGm) &&
-      (filter.filter !== "early" || row.early),
+      (filter.filter !== "activeGm" || row.activeGm),
   );
   return {
     total: pending.length,

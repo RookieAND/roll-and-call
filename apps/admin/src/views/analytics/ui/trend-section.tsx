@@ -12,12 +12,10 @@ interface TrendSectionProps {
 }
 
 export function TrendSection({ analytics }: TrendSectionProps) {
-  const currentWeek = analytics.trend.find((week) => week.current);
   const chartHeight = analytics.early ? 200 : 240;
   return (
     <AnalyticsSection
       title="세션 추이"
-      sub={`${currentWeek?.label ?? "이번 주"}(이번 주)부터 예정 포함`}
       right={<Legend items={TREND_SEGMENTS} />}
       insight={trendInsight(analytics.trend, analytics.early)}
     >

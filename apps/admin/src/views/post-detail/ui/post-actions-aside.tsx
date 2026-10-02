@@ -1,11 +1,14 @@
-import { Callout, Text, VStack } from "@roll-and-call/ui";
-import { Check, Eye, FileText, Shield } from "lucide-react";
-import Link from "next/link";
+import { Callout, VStack } from "@roll-and-call/ui";
+import { Check, Eye, Shield, X } from "lucide-react";
 
 import { POST_ACTION, type PostAction } from "@/features/moderate-post";
+import { formatDate } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { ActionCard } from "@/shared/ui";
+import { ActionCard, ServerLink } from "@/shared/ui";
 
+import { receivedActionValue } from "../model/received-action-value";
+import { AsideHeading } from "./aside-heading";
+import { DetailAside } from "./detail-aside";
 import { GmInfo } from "./gm-info";
 
 interface PostActionsAsideProps {
@@ -14,36 +17,25 @@ interface PostActionsAsideProps {
 }
 
 export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
+  const { gm } = post;
   const reported = post.unresolvedReportCount > 0;
   const notice = reported
     ? `어떤 조치를 확정해도 신고 ${post.unresolvedReportCount}건이 처리됨으로 바뀝니다. 신고자에게는 알림이 가지 않습니다.`
     : "운영진은 GM이 쓴 글을 직접 고치지 않습니다. 두 조치 모두 사유가 필요하고, GM에게만 알림이 갑니다.";
+  const certifiedSub = gm.certifiedRulebooks.includes(post.rulebook)
+    ? `${post.rulebook} 포함`
+    : undefined;
+  const link = (action: PostAction) => <ServerLink path={actionHref(action)} scroll={false} />;
   return (
-    <VStack
-      render={<aside />}
-      className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-[300px] shrink-0 overflow-y-auto border-l border-gray-200 bg-surface"
-    >
-      <Text
-        typography="subtitle2"
-        foreground="muted"
-        render={<h2 />}
-        className="border-b border-(--rc-color-border-subtle) bg-gray-50 px-175 py-125"
-      >
-        조치
-      </Text>
+    <DetailAside>
+      <AsideHeading>조치</AsideHeading>
       <VStack gap="075" className="p-150">
-        <ActionCard
-          icon={FileText}
-          title="GM에게 수정 요청"
-          description="구인은 그대로 두고 고쳐 달라고 알립니다"
-          link={<Link href={actionHref(POST_ACTION.edit)} scroll={false} />}
-        />
         {post.hidden ? (
           <ActionCard
             icon={Eye}
             title="숨김 해제"
             description="목록과 검색에 다시 보이게 합니다"
-            link={<Link href={actionHref(POST_ACTION.unhide)} scroll={false} />}
+            link={link(POST_ACTION.unhide)}
             tone="primary"
           />
         ) : (
@@ -51,7 +43,7 @@ export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
             icon={Eye}
             title="숨김"
             description="목록과 검색에서만 빠집니다"
-            link={<Link href={actionHref(POST_ACTION.hide)} scroll={false} />}
+            link={link(POST_ACTION.hide)}
           />
         )}
         {reported ? (
@@ -59,9 +51,16 @@ export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
             icon={Check}
             title="처리 완료 (조치 없음)"
             description="문제가 없다고 보고 신고만 닫습니다"
-            link={<Link href={actionHref(POST_ACTION.resolve)} scroll={false} />}
+            link={link(POST_ACTION.resolve)}
           />
         ) : null}
+        <ActionCard
+          icon={X}
+          title="제거"
+          description="참여 정보와 후기까지 함께 삭제합니다"
+          link={link(POST_ACTION.remove)}
+          tone="danger"
+        />
         <Callout.Root colorPalette="gray" size="sm" className="mt-050">
           <Callout.Icon>
             <Shield size={14} />
@@ -69,7 +68,25 @@ export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
           <Callout.Description>{notice}</Callout.Description>
         </Callout.Root>
       </VStack>
-      <GmInfo gm={post.gm} rulebook={post.rulebook} />
-    </VStack>
+      <GmInfo
+        nickname={gm.nickname}
+        meta={`${formatDate(gm.joinedAt)} 가입`}
+        facts={[
+          { label: "인증 룰북", value: `${gm.certifiedRulebooks.length}개`, sub: certifiedSub },
+          {
+            label: "연 구인",
+            value: `${gm.hostedCount}건`,
+            sub: `진행 중 ${gm.ongoingHostedCount}건`,
+          },
+          {
+            label: "받은 조치",
+            value: receivedActionValue(gm.hideCount),
+            danger: gm.hideCount > 0,
+            sub: `숨김 ${gm.hideCount}`,
+          },
+          { label: "처리한 불참", value: `${gm.handledNoShowCount}건` },
+        ]}
+      />
+    </DetailAside>
   );
 }

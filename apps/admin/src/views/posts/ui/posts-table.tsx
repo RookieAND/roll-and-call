@@ -1,12 +1,9 @@
 import { HStack, Table, Text, cn } from "@roll-and-call/ui";
-import { ArrowDown } from "lucide-react";
-import Link from "next/link";
+import { ArrowDown, ChevronRight } from "lucide-react";
 
 import { formatSessionTime } from "@/shared/lib";
 import type { PostRow } from "@/shared/server";
-import { TableColumns } from "@/shared/ui";
-
-import { StaffActionBadge } from "./staff-action-badge";
+import { ServerLink, TableColumns, Tag } from "@/shared/ui";
 
 interface PostsTableProps {
   rows: PostRow[];
@@ -15,7 +12,7 @@ interface PostsTableProps {
 export function PostsTable({ rows }: PostsTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[360, 125, 210, 192, 76, 112, { fixed: 110 }]} />
+      <TableColumns widths={[360, 104, 140, 192, 76, 112, 118, { fixed: 110 }, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>제목</Table.Head>
@@ -29,25 +26,23 @@ export function PostsTable({ rows }: PostsTableProps) {
           </Table.Head>
           <Table.Head align="end">참여</Table.Head>
           <Table.Head align="center">상태</Table.Head>
+          <Table.Head align="end">처리 안 된 신고</Table.Head>
           <Table.Head>운영진 조치</Table.Head>
+          <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {rows.map((row) => {
-          const reported = row.unresolvedReportCount > 0;
           const ended = row.status === "종료";
           return (
-            <Table.Row
-              key={row.id}
-              interactive
-              className={cn("relative", reported && "bg-danger-50", ended && "opacity-50")}
-            >
+            <Table.Row key={row.id} interactive className={cn("relative", ended && "opacity-50")}>
               <Table.Cell>
                 <Text
                   typography="body3"
+                  weight="bold"
                   truncate
                   title={row.title}
-                  render={<Link href={`/posts/${row.id}`} />}
+                  render={<ServerLink path={`/posts/${row.id}`} />}
                   className="block after:absolute after:inset-0"
                 >
                   {row.title}
@@ -72,14 +67,28 @@ export function PostsTable({ rows }: PostsTableProps) {
                   {row.status}
                 </Text>
               </Table.Cell>
-              <Table.Cell>
-                {row.staffAction ? (
-                  <StaffActionBadge action={row.staffAction} />
+              <Table.Cell align="end" numeric>
+                {row.unresolvedReportCount ? (
+                  <Text typography="body3" weight="bold" foreground="danger">
+                    {row.unresolvedReportCount}건
+                  </Text>
                 ) : (
                   <Text typography="body3" foreground="hint">
                     —
                   </Text>
                 )}
+              </Table.Cell>
+              <Table.Cell>
+                {row.staffAction ? (
+                  <Tag>{row.staffAction}</Tag>
+                ) : (
+                  <Text typography="body3" foreground="hint">
+                    —
+                  </Text>
+                )}
+              </Table.Cell>
+              <Table.Cell align="end">
+                <ChevronRight size={16} aria-hidden className="inline text-hint" />
               </Table.Cell>
             </Table.Row>
           );

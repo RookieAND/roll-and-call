@@ -1,9 +1,8 @@
-import { Button, cn, HStack, Text } from "@roll-and-call/ui";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { cn, HStack, Text } from "@roll-and-call/ui";
+import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { PaletteLauncher } from "./palette-launcher";
+import { ServerLink } from "./server-link";
 
 interface AdminHeaderProps {
   title: ReactNode;
@@ -17,7 +16,7 @@ export function AdminHeader({ title, sub, back, actions, withAside }: AdminHeade
   return (
     <HStack
       align="center"
-      gap="125"
+      gap="100"
       render={<header data-full-bleed />}
       className={cn(
         "sticky top-0 z-(--rc-z-sticky) h-(--rc-size-appbar) shrink-0 border-b border-gray-200 bg-surface whitespace-nowrap",
@@ -25,27 +24,27 @@ export function AdminHeader({ title, sub, back, actions, withAside }: AdminHeade
       )}
     >
       {back ? (
-        <Button
-          variant="outline"
-          colorPalette="gray"
-          size="sm"
-          render={<Link href={back.href} />}
-          className="gap-075 rounded-full pr-150 pl-100"
+        <HStack
+          align="center"
+          gap="050"
+          render={<ServerLink path={back.href} />}
+          className="text-hint hover:text-gray-600"
         >
-          <ArrowLeft size={14} aria-hidden />
-          {back.label}
-        </Button>
+          <Text typography="body2" weight="medium" foreground="inherit">
+            {back.label}
+          </Text>
+          <ChevronRight size={16} aria-hidden />
+        </HStack>
       ) : null}
-      <Text typography="heading2" render={<h1 />}>
+      <Text typography="heading1" render={<h1 />}>
         {title}
       </Text>
       {sub ? (
-        <Text typography="body4" foreground="hint">
+        <Text typography="body3" foreground="hint" numeric>
           {sub}
         </Text>
       ) : null}
       <HStack align="center" gap="100" className="ml-auto">
-        <PaletteLauncher />
         {actions}
       </HStack>
     </HStack>

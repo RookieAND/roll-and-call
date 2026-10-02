@@ -49,11 +49,11 @@ export function CertStatusLoading() {
             rows={6}
             columns={[
               { label: "판본", kind: "text", width: 200 },
-              { label: "인증된 GM", kind: "number", width: 96, align: "center" },
-              { label: "심사 대기", kind: "number", width: 88, align: "center" },
-              { label: "미신청", kind: "number", width: 80, align: "center" },
+              { label: "인증된 GM", kind: "number", width: 96, align: "end" },
+              { label: "심사 대기", kind: "number", width: 88, align: "end" },
+              { label: "미신청", kind: "number", width: 80, align: "end" },
               { label: "진행률", kind: "bar", width: 220 },
-              { label: "최근 90일 세션", kind: "number", width: 112, align: "center" },
+              { label: "최근 90일 세션", kind: "number", width: 112, align: "end" },
             ]}
           />
         </Panel>

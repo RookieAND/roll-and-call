@@ -1,8 +1,9 @@
 import "server-only";
+import { listStaff } from "./list-staff";
 import { loadSnapshot } from "./snapshot";
 
 export async function getAuditEntry(id: string) {
-  const db = await loadSnapshot();
+  const [db, staff] = await Promise.all([loadSnapshot(), listStaff()]);
   const entry = db.auditLog.find((candidate) => candidate.id === id);
   if (!entry) return null;
   const [targetName = entry.target, targetDetail] = entry.target.split(" · ");
@@ -11,7 +12,7 @@ export async function getAuditEntry(id: string) {
     targetName,
     targetDetail,
     targetUserId: entry.targetUserId ?? db.users.find((user) => user.nickname === targetName)?.id,
-    actorRole: db.staff.find((staff) => staff.nickname === entry.actor)?.role,
+    actorRole: staff.find((member) => member.userId === entry.actorId)?.role,
   };
 }
 

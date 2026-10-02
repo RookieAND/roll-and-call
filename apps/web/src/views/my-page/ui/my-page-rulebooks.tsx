@@ -1,9 +1,7 @@
-import { Button, Callout, HStack, Text, VStack } from "@roll-and-call/ui";
-import { isNull } from "es-toolkit";
-import { CalendarDays, Plus } from "lucide-react";
+import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Plus } from "lucide-react";
 
-import { CERT_STATE, isCertEnforced, type MyRulebooks } from "@/entities/rulebook";
-import { formatDate } from "@/shared/lib";
+import { CERT_STATE, type MyRulebooks } from "@/entities/rulebook";
 import { ServerLink } from "@/shared/ui";
 
 import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
@@ -17,13 +15,10 @@ interface MyPageRulebooksProps {
   rulebooks: MyRulebooks;
 }
 
-export function MyPageRulebooks({
-  rulebooks: { rulebooks, enforcementDate },
-}: MyPageRulebooksProps) {
+export function MyPageRulebooks({ rulebooks: { rulebooks } }: MyPageRulebooksProps) {
   const rows = SHOWN_STATES.flatMap((state) =>
     rulebooks.filter((rulebook) => rulebook.state === state),
   );
-  const showBand = !isNull(enforcementDate) && !isCertEnforced(enforcementDate);
 
   return (
     <VStack gap="125" render={<section />}>
@@ -35,19 +30,6 @@ export function MyPageRulebooks({
           {rows.length}
         </Text>
       </HStack>
-
-      {showBand && (
-        <Callout.Root colorPalette="notice" role="note" className="border-notice-border">
-          <Callout.Icon>
-            <CalendarDays size={16} />
-          </Callout.Icon>
-          <Callout.Description className="font-semibold">
-            {formatDate(enforcementDate)}부터 구인을 열려면 룰북 인증이 필요합니다.
-            <br />
-            미리 인증해 두세요.
-          </Callout.Description>
-        </Callout.Root>
-      )}
 
       {rows.length > 0 ? (
         <>

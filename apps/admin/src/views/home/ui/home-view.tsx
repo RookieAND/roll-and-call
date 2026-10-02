@@ -1,14 +1,13 @@
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { CalendarDays, FileText } from "lucide-react";
 
-import { formatDate, formatDayRange } from "@/shared/lib";
+import { formatDayRange } from "@/shared/lib";
 import type { PendingItem, WeeklySummary } from "@/shared/server";
 import { AdminHeader, EMPTY_IMAGE, EmptyState, Panel } from "@/shared/ui";
 
+import { formatToday } from "../model/format-today";
 import { PendingRow } from "./pending-row";
 import { WeekCard } from "./week-card";
-
-const weekday = new Intl.DateTimeFormat("ko-KR", { weekday: "short", timeZone: "Asia/Seoul" });
 
 interface HomeViewProps {
   weekly: WeeklySummary;
@@ -16,10 +15,9 @@ interface HomeViewProps {
 }
 
 export function HomeView({ weekly, pendingItems }: HomeViewProps) {
-  const today = `${formatDate(weekly.to)} (${weekday.format(weekly.to)})`;
   return (
     <>
-      <AdminHeader title="홈" sub={today} />
+      <AdminHeader title="홈" sub={formatToday(weekly.to)} />
       <VStack gap="150" className="mx-auto w-full max-w-content p-200">
         <HStack align="baseline" gap="100">
           <Text typography="subtitle1" render={<h2 />}>
@@ -47,11 +45,7 @@ export function HomeView({ weekly, pendingItems }: HomeViewProps) {
             </ul>
           ) : (
             <div className="h-[260px]">
-              <EmptyState
-                image={EMPTY_IMAGE.hosted}
-                title="처리할 일이 없어요"
-                description="새 인증 신청, 룰북 추가 요청, 구인 신고가 들어오면 디스코드로 알림이 갑니다."
-              />
+              <EmptyState image={EMPTY_IMAGE.hosted} title="처리할 일이 없어요" />
             </div>
           )}
         </Panel>

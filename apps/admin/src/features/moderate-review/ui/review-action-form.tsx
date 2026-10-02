@@ -1,13 +1,14 @@
 "use client";
 
-import { Button, Callout, Dialog, HStack, Text, VStack, cn, toast } from "@roll-and-call/ui";
+import { Button, Callout, Dialog, HStack, Text, VStack, toast } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { Check, Eye, RotateCcw, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState, useTransition, type RefObject } from "react";
 
 import { REVIEW_REASON, type ReviewReason } from "@/shared/lib";
 import type { ReviewDetail, ReviewModerationResult } from "@/shared/server";
+import { ModalServerLabel, useServerPath } from "@/shared/ui";
 
 import { submitReviewModeration } from "../api/submit-review-moderation";
 import { ACTION_COPY } from "../model/action-copy";
@@ -16,7 +17,6 @@ import { reviewNextHref } from "../model/review-next-href";
 import { AuthorMessagePreview } from "./author-message-preview";
 import { ImpactLines } from "./impact-lines";
 import { ReportSummary } from "./report-summary";
-import { ReviewFailureNotice } from "./review-failure-notice";
 import { ReviewReasonRadio } from "./review-reason-radio";
 import { ReviewTarget } from "./review-target";
 import { StaffMemoField } from "./staff-memo-field";
@@ -41,7 +41,9 @@ interface ReviewActionFormProps {
   review: ReviewDetail;
   action: ReviewAction;
   fromReports: boolean;
+  cancelRef: RefObject<HTMLButtonElement | null>;
   onDone: () => void;
+  onFailure: (failure: Failure) => void;
   onSwitchToHide: () => void;
 }
 
@@ -49,17 +51,19 @@ export function ReviewActionForm({
   review,
   action,
   fromReports,
+  cancelRef,
   onDone,
+  onFailure,
   onSwitchToHide,
 }: ReviewActionFormProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [pending, startTransition] = useTransition();
   const needsReason = REASON_ACTIONS.includes(action);
   const [reason, setReason] = useState<ReviewReason | null>(
     needsReason ? ((review.topReasonKey as ReviewReason | undefined) ?? null) : null,
   );
   const [staffMemo, setStaffMemo] = useState("");
-  const [failure, setFailure] = useState<Failure | null>(null);
   const [networkError, setNetworkError] = useState(false);
 
   const copy = ACTION_COPY[action];
@@ -67,8 +71,7 @@ export function ReviewActionForm({
   const reportCount = review.reports.length;
   const removing = action === REVIEW_ACTION.remove;
   const unhiding = action === REVIEW_ACTION.unhide;
-  const blocked = !isNull(failure);
-  const canConfirm = (!needsReason || !isNull(reason)) && !pending && !blocked;
+  const canConfirm = (!needsReason || !isNull(reason)) && !pending;
   const reasonLabel = reason ? REVIEW_REASON[reason] : null;
   const impactLines = IMPACT_LINES[action];
   const description =
@@ -79,7 +82,6 @@ export function ReviewActionForm({
   const FooterIcon = copy.footerIcon;
   const ConfirmIcon = networkError ? RotateCcw : CONFIRM_ICON[action];
   const confirmLabel = networkError ? "다시 시도" : copy.confirmLabel;
-  const cancelLabel = blocked ? "닫기" : "취소";
   const confirmPalette = removing ? "danger" : "primary";
   const nextHref = reviewNextHref({ fromReports, nextReportedId: review.nextReportedId });
 
@@ -105,7 +107,7 @@ export function ReviewActionForm({
         return;
       }
       if (!result.ok) {
-        setFailure(result);
+        onFailure(result);
         return;
       }
       const message = nextHref
@@ -116,47 +118,43 @@ export function ReviewActionForm({
       } else {
         toast.success(message);
       }
-      if (nextHref) router.push(nextHref);
-      else if (removing) router.push(`/posts/${review.session.id}?tab=reviews`);
+      if (nextHref) router.push(toServerPath(nextHref));
+      else if (removing) router.push(toServerPath(`/posts/${review.session.id}?tab=reviews`));
       else onDone();
     });
 
   return (
     <>
       <Dialog.Header>
+        <ModalServerLabel />
         <Dialog.Title>{copy.title(author)}</Dialog.Title>
         <Dialog.Description>{description}</Dialog.Description>
       </Dialog.Header>
       <Dialog.Body className="mt-200">
         <VStack gap="150">
-          {failure ? <ReviewFailureNotice failure={failure} /> : null}
           {networkError ? (
             <Callout.Root colorPalette="danger" size="sm">
               <Callout.Icon />
-              <Callout.Description>
-                네트워크 오류로 처리하지 못했습니다. 고른 사유는 그대로 남아 있습니다.
-              </Callout.Description>
+              <Callout.Description>{copy.networkError}</Callout.Description>
             </Callout.Root>
           ) : null}
-          <VStack gap="150" className={cn(blocked && "pointer-events-none opacity-50")}>
-            {unhiding && review.hidden ? (
-              <UnhideDetails review={review} hidden={review.hidden} />
-            ) : (
-              <ReviewTarget review={review} />
-            )}
-            {!unhiding && reportCount ? <ReportSummary reasonCounts={review.reasonCounts} /> : null}
-            {impactLines ? <ImpactLines lines={impactLines} danger={removing} /> : null}
-            {needsReason ? (
-              <>
-                <ReviewReasonRadio value={reason} disabled={blocked} onValueChange={setReason} />
-                <AuthorMessagePreview removing={removing} reasonLabel={reasonLabel} />
-              </>
-            ) : null}
-            {action === REVIEW_ACTION.dismiss ? (
-              <StaffMemoField value={staffMemo} disabled={blocked} onValueChange={setStaffMemo} />
-            ) : null}
-            {removing ? <SwitchToHide onSwitch={onSwitchToHide} /> : null}
-          </VStack>
+          {unhiding && review.hidden ? (
+            <UnhideDetails review={review} hidden={review.hidden} />
+          ) : (
+            <ReviewTarget review={review} />
+          )}
+          {!unhiding && reportCount ? <ReportSummary reasonCounts={review.reasonCounts} /> : null}
+          {impactLines ? <ImpactLines lines={impactLines} danger={removing} /> : null}
+          {needsReason ? (
+            <>
+              <ReviewReasonRadio value={reason} disabled={pending} onValueChange={setReason} />
+              <AuthorMessagePreview removing={removing} reasonLabel={reasonLabel} />
+            </>
+          ) : null}
+          {action === REVIEW_ACTION.dismiss ? (
+            <StaffMemoField value={staffMemo} disabled={pending} onValueChange={setStaffMemo} />
+          ) : null}
+          {removing ? <SwitchToHide onSwitch={onSwitchToHide} /> : null}
         </VStack>
       </Dialog.Body>
       <Dialog.Footer layout="row" className="items-center">
@@ -168,20 +166,22 @@ export function ReviewActionForm({
             </Text>
           </HStack>
         ) : null}
-        <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
-          {cancelLabel}
+        <Dialog.Close
+          ref={cancelRef}
+          render={<Button variant="ghost" colorPalette="gray" />}
+          disabled={pending}
+        >
+          취소
         </Dialog.Close>
-        {blocked ? null : (
-          <Button
-            colorPalette={confirmPalette}
-            disabled={!canConfirm}
-            loading={pending}
-            onClick={confirm}
-          >
-            <ConfirmIcon size={16} aria-hidden />
-            {confirmLabel}
-          </Button>
-        )}
+        <Button
+          colorPalette={confirmPalette}
+          disabled={!canConfirm}
+          loading={pending}
+          onClick={confirm}
+        >
+          <ConfirmIcon size={16} aria-hidden />
+          {confirmLabel}
+        </Button>
       </Dialog.Footer>
     </>
   );

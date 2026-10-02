@@ -30,7 +30,7 @@ export async function loadCertificationContext({
         supersedesId: rulebooks.supersedesId,
       })
       .from(rulebooks)
-      .where(eq(rulebooks.hidden, false)),
+      .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.hidden, false))),
     db
       .select({ rulebookId: certifications.rulebookId })
       .from(certifications)
@@ -72,6 +72,7 @@ export async function loadCertificationContext({
       .from(rulebookQuizQuestions)
       .where(
         and(
+          eq(rulebookQuizQuestions.serverId, serverId),
           eq(rulebookQuizQuestions.rulebookId, rulebookId),
           eq(rulebookQuizQuestions.active, true),
         ),

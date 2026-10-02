@@ -18,3 +18,19 @@ export { updateForumPost } from "./forum/update-forum-post";
 export { deleteDiscordThread } from "./forum/delete-discord-thread";
 export { getForumTags } from "./forum/get-forum-tags";
 export { getGuildMember, type DiscordGuildMember } from "./guild/get-guild-member";
+export { getGuild, type DiscordGuild } from "./guild/get-guild";
+export { banGuildMember } from "./guild/ban-guild-member";
+export { unbanGuildMember } from "./guild/unban-guild-member";
+export {
+  getGuildChannels,
+  type DiscordGuildChannel,
+  type DiscordPermissionOverwrite,
+} from "./guild/get-guild-channels";
+export { getGuildRoles, type DiscordRole } from "./guild/get-guild-roles";
+export { getBotUser } from "./user/get-bot-user";
+export { DISCORD_CHANNEL_TYPE, DISCORD_PERMISSION } from "./permission/discord-permission";
+export { computeGuildPermissions } from "./permission/compute-guild-permissions";
+export { computeChannelPermissions } from "./permission/compute-channel-permissions";
+export { isGuildBanned } from "./guild/is-guild-banned";
+export { sendDirectMessage } from "./direct/send-direct-message";
+export { DiscordApiError } from "./api/discord-api-error";

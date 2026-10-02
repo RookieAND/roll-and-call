@@ -1,7 +1,6 @@
 import type { Game } from "@roll-and-call/database";
 import { sendDiscordMessage } from "@roll-and-call/discord";
-
-import { gameUrl } from "../game-url";
+import { gameUrl } from "@roll-and-call/game-notices";
 
 // url이 같은 embed는 디스코드가 갤러리(4장씩)로 묶는다.
 // ponytail: 구인 수정으로 이미지가 바뀌어도 다시 보내지 않는다. 필요해지면 refreshRecruitPost에서 처리.

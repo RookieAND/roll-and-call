@@ -2,12 +2,11 @@
 
 import { Button, Dialog, Field, Textarea, VStack, cn, toast } from "@roll-and-call/ui";
 import { Bell } from "lucide-react";
-import Link from "next/link";
 import { useState, useTransition, type ReactNode } from "react";
 
 import { formatDateTime } from "@/shared/lib";
 import type { NoShowDetail } from "@/shared/server";
-import { ConflictNotice } from "@/shared/ui";
+import { ConflictNotice, ModalServerLabel, ServerLink } from "@/shared/ui";
 
 import { cancelNoShowRecord } from "../api/cancel-no-show-record";
 import { FooterNote } from "./footer-note";
@@ -47,6 +46,7 @@ export function CancelForm({
   return (
     <>
       <Dialog.Header>
+        <ModalServerLabel />
         <Dialog.Title>불참 취소</Dialog.Title>
         <Dialog.Description>디스코드 DM으로 사정을 들은 뒤 기록을 취소합니다</Dialog.Description>
       </Dialog.Header>
@@ -58,7 +58,7 @@ export function CancelForm({
               description={`${formatDateTime(conflict.at)} · 사유: ${conflict.reason.replace(/\.$/, "")}. 입력한 내용은 저장되지 않았습니다.`}
               actions={
                 nextRecordHref ? (
-                  <Button size="sm" render={<Link href={nextRecordHref} scroll={false} />}>
+                  <Button size="sm" render={<ServerLink path={nextRecordHref} scroll={false} />}>
                     다음 기록
                   </Button>
                 ) : null

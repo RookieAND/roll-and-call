@@ -1,0 +1,1 @@
+ALTER TABLE "server_members" ADD COLUMN "rejoined_at" timestamp with time zone;

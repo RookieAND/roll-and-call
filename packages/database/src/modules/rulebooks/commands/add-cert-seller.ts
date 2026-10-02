@@ -5,7 +5,7 @@ import type { Actor } from "../../moderation/model/types";
 
 export type AddCertSellerResult = { ok: true } | { ok: false; duplicate: true };
 
-// 판매처 목록은 모든 서버가 함께 쓴다. 활동 기록만 조치한 서버에 남긴다.
+// 판매처 목록은 서버마다 따로 둔다.
 export async function addCertSeller({
   serverId,
   name,
@@ -18,7 +18,7 @@ export async function addCertSeller({
   return db.transaction(async (tx) => {
     const [row] = await tx
       .insert(certSellers)
-      .values({ name })
+      .values({ serverId, name })
       .onConflictDoNothing()
       .returning({ id: certSellers.id });
     if (!row) return { ok: false, duplicate: true };

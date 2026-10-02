@@ -1,18 +1,32 @@
 import { HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import Image from "next/image";
 
-import { NAV_ITEMS, type NavKey } from "./nav-items";
-import { SidebarLink } from "./sidebar-link";
+import { STAFF_ROLE_LABEL, serverPath } from "@/shared/lib";
 
-const ROLE_LABEL = { owner: "소유자", staff: "운영진" } as const;
+import { NAV_ITEMS, type NavKey } from "./nav-items";
+import { ServerSwitch, type SwitchServer } from "./server-switch";
+import { SidebarLauncher } from "./sidebar-launcher";
+import { SidebarLink } from "./sidebar-link";
 
 interface SidebarProps {
   nickname: string;
-  role: keyof typeof ROLE_LABEL;
+  role: keyof typeof STAFF_ROLE_LABEL;
+  platformAdmin: boolean;
+  server: SwitchServer;
+  servers: SwitchServer[];
   countPromises: Partial<Record<NavKey, Promise<number | undefined>>>;
 }
 
-export function Sidebar({ nickname, role, countPromises }: SidebarProps) {
+export function Sidebar({
+  nickname,
+  role,
+  platformAdmin,
+  server,
+  servers,
+  countPromises,
+}: SidebarProps) {
+  const roleLabel = platformAdmin ? "플랫폼 관리자" : `${server.name} ${STAFF_ROLE_LABEL[role]}`;
+  const emphasizedRole = platformAdmin || role === "owner";
   return (
     <VStack className="sticky top-0 h-dvh w-[212px] shrink-0 border-r border-gray-200 bg-surface">
       <HStack
@@ -30,10 +44,26 @@ export function Sidebar({ nickname, role, countPromises }: SidebarProps) {
           ADMIN
         </Text>
       </HStack>
+      <ServerSwitch current={server} servers={servers} platformAdmin={platformAdmin} />
+      <div className="px-100 pt-125">
+        <SidebarLauncher />
+      </div>
+      <VStack gap="025" render={<nav aria-label={`${server.name} 메뉴`} />} className="p-100">
+        {NAV_ITEMS.filter((item) => role === "owner" || !("ownerOnly" in item)).map((item) => (
+          <SidebarLink
+            key={item.key}
+            href={serverPath({ slug: server.slug, path: item.href })}
+            exact={item.href === "/"}
+            label={item.label}
+            icon={<item.icon size={16} aria-hidden />}
+            countPromise={countPromises[item.key]}
+          />
+        ))}
+      </VStack>
       <HStack
         align="center"
         gap="100"
-        className="border-b border-(--rc-color-border-subtle) px-175 py-150"
+        className="mt-auto border-t border-(--rc-color-border-subtle) px-175 py-150"
       >
         <Text
           typography="body4"
@@ -51,24 +81,14 @@ export function Sidebar({ nickname, role, countPromises }: SidebarProps) {
           <Text
             typography="body4"
             weight="medium"
-            foreground={role === "owner" ? "inherit" : "hint"}
-            className={cn("leading-[1.3]", role === "owner" && "text-primary-600")}
+            foreground={emphasizedRole ? "inherit" : "hint"}
+            truncate
+            className={cn("leading-[1.3]", emphasizedRole && "text-primary-600")}
           >
-            {ROLE_LABEL[role]}
+            {roleLabel}
           </Text>
         </VStack>
       </HStack>
-      <VStack gap="025" render={<nav aria-label="어드민 메뉴" />} className="p-100">
-        {NAV_ITEMS.filter((item) => role === "owner" || !("ownerOnly" in item)).map((item) => (
-          <SidebarLink
-            key={item.key}
-            href={item.href}
-            label={item.label}
-            icon={<item.icon size={16} aria-hidden />}
-            countPromise={countPromises[item.key]}
-          />
-        ))}
-      </VStack>
     </VStack>
   );
 }

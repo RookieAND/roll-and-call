@@ -1,10 +1,8 @@
-import { Badge, Button, HStack, Table, Text } from "@roll-and-call/ui";
-import Link from "next/link";
+import { Button, HStack, Table, Text } from "@roll-and-call/ui";
 
-import { ChangeRoleButton } from "@/features/change-staff-role";
 import { formatDate, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
-import { TableColumns } from "@/shared/ui";
+import { ServerLink, TableColumns, Tag } from "@/shared/ui";
 
 import { formatLastActive } from "../model/format-last-active";
 
@@ -43,17 +41,15 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
                   <Text typography="body3" weight="bold" truncate>
                     {row.nickname}
                   </Text>
-                  {row.nickname === viewer ? <Badge colorPalette="primary">나</Badge> : null}
+                  {row.nickname === viewer ? <Tag>나</Tag> : null}
                 </HStack>
               </Table.Cell>
               <Table.Cell align="center">
-                <Badge colorPalette={owner ? "primary" : "gray"}>
-                  {STAFF_ROLE_LABEL[row.role]}
-                </Badge>
+                <Tag>{STAFF_ROLE_LABEL[row.role]}</Tag>
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
-                  {formatDate(row.since)}
+                  {row.since ? formatDate(row.since) : "—"}
                 </Text>
               </Table.Cell>
               <Table.Cell>
@@ -64,12 +60,11 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
               <Table.Cell align="end">
                 {owner ? null : (
                   <HStack gap="075" justify="end">
-                    <ChangeRoleButton userId={row.userId} nickname={row.nickname} />
                     <Button
                       variant="outline"
                       colorPalette="danger"
                       size="sm"
-                      render={<Link href={removeHref} scroll={false} />}
+                      render={<ServerLink path={removeHref} scroll={false} />}
                     >
                       해제
                     </Button>

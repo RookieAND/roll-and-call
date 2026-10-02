@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { PENDING_COPY } from "@/shared/lib";
-import { OPEN_PALETTE_EVENT } from "@/shared/ui";
+import { OPEN_PALETTE_EVENT, useServerPath } from "@/shared/ui";
 
 const SEQUENCE_WINDOW = 1000;
 
@@ -14,6 +14,7 @@ const isTyping = (target: EventTarget | null) =>
 
 export function usePaletteShortcuts(open: () => void) {
   const router = useRouter();
+  const toServerPath = useServerPath();
 
   useEffect(() => {
     let pressedGAt = 0;
@@ -31,7 +32,7 @@ export function usePaletteShortcuts(open: () => void) {
       }
       if (Date.now() - pressedGAt > SEQUENCE_WINDOW) return;
       const target = Object.values(PENDING_COPY).find((copy) => copy.shortcut === key);
-      if (target) router.push(target.href);
+      if (target) router.push(toServerPath(target.href));
       pressedGAt = 0;
     };
     window.addEventListener("keydown", onKeyDown);
@@ -40,5 +41,5 @@ export function usePaletteShortcuts(open: () => void) {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener(OPEN_PALETTE_EVENT, open);
     };
-  }, [open, router]);
+  }, [open, router, toServerPath]);
 }

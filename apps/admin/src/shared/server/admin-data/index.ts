@@ -25,13 +25,18 @@ export {
   AUDIT_ACTIONS,
   AUDIT_RETENTION_DAYS,
   cancelNoShow,
-  changeStaffRole,
   EXPIRING_AUDIT_ACTIONS,
   getStaffRole,
   moderatePost,
   moderateReview,
   releaseSanction,
   removeStaff,
+  kickMember,
+  unbanMember,
+  editNickname,
+  getKickImpact,
+  type KickImpact,
+  type EditNicknameResult,
   type AuditAction,
   type CancelNoShowResult,
   type OngoingChoice,
@@ -45,11 +50,6 @@ export {
   type SanctionResult,
 } from "@roll-and-call/database/moderation";
 export {
-  ENFORCEMENT_CHANGE,
-  updateCertEnforcementDate,
-  type EnforcementChange,
-} from "@roll-and-call/database/servers";
-export {
   grantCertification,
   revokeCertifications,
   type CertDecision,
@@ -60,6 +60,7 @@ export {
 export { decideCert } from "./decide-cert";
 export { type ReviewModeration } from "./review-moderation";
 export { getUserDetail, type OngoingActivity, type UserDetail } from "./get-user-detail";
+export { checkDiscordBanFailed } from "./check-discord-ban-failed";
 export { listUsers, USER_FILTERS, type UserFilter, type UserRow } from "./list-users";
 export { retentionDaysLeft } from "./retention-days-left";
 export { getCertReview, type CertReview } from "./get-cert-review";
@@ -77,7 +78,13 @@ export {
   type CertQueueFilterKey,
   type CertQueueRow,
 } from "./list-cert-queue";
-export { getPendingItems, PENDING_KINDS, type PendingItem, type PendingKind } from "./pending";
+export {
+  getPendingItems,
+  PENDING_KINDS,
+  TODO_KINDS,
+  type PendingItem,
+  type PendingKind,
+} from "./pending";
 export { searchUsers, type UserSearchResult } from "./search";
 export { getNoShow, type NoShowDetail } from "./get-no-show";
 export {
@@ -109,12 +116,13 @@ export { POST_STATUS, type PostStatus } from "./post-status";
 export { AUDIT_PERIODS, DEFAULT_AUDIT_PERIOD, type AuditPeriod } from "./audit-period";
 export { POST_PERIODS } from "./post-period";
 export { getAuditEntry, type AuditEntryDetail } from "./get-audit-entry";
-export { getCertDateSettings } from "./get-cert-date-settings";
 export { listAuditLog } from "./list-audit-log";
 export { listStaff, type StaffRow } from "./list-staff";
+export { listRulebookOptions, type RulebookOption } from "./list-rulebook-options";
 export { searchStaffCandidates, type StaffCandidate } from "./search-staff-candidates";
 export { type CategoryEdition } from "./category-editions";
 export { getRulebookDetail, type CertifiedGm, type RulebookDetail } from "./get-rulebook-detail";
+export { getRulebookImpact, type RulebookImpactCase } from "./get-rulebook-impact";
 export { listRulebookRequests, type RulebookRequestRow } from "./list-rulebook-requests";
 export { listRulebooks, type RulebookCategory, type RulebookRow } from "./list-rulebooks";
 export {
@@ -133,3 +141,8 @@ export {
 } from "./list-reported-reviews";
 export { REVIEW_REASON, REVIEW_REASONS, type ReviewReason } from "@/shared/lib";
 export { parseNoShowId } from "./parse-no-show-id";
+export {
+  getServerOwnerProfile,
+  updateServerSettings,
+  type ServerSettings,
+} from "@roll-and-call/database/servers";

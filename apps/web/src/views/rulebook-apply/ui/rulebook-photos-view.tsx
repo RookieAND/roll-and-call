@@ -46,9 +46,11 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
   const [records, profile, sellers, quiz] = await Promise.all([
     getRulebookRecords({ serverId: server.id, userId: user.id }),
     getProfile(server.id, user.id),
-    getCertSellers(),
+    getCertSellers({ serverId: server.id }),
     // 주소의 rulebook 값은 아직 검증 전이라, uuid가 아니면 Postgres 캐스팅 에러 대신 아래 redirect로 보낸다.
-    z.uuid().safeParse(rulebookId).success ? getQuizQuestion(rulebookId) : null,
+    z.uuid().safeParse(rulebookId).success
+      ? getQuizQuestion({ serverId: server.id, rulebookId })
+      : null,
   ]);
   const data = toMyRulebooks(records);
   if (data.suspended) redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));

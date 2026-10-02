@@ -7,8 +7,9 @@ import type { AuditAction } from "../model/audit-actions";
 import type { Actor } from "../model/types";
 import { recordAudit } from "./record-audit";
 
-export type PostModerationAction = "edit" | "hide" | "unhide" | "resolve";
+export type PostModerationAction = "hide" | "unhide" | "resolve" | "remove";
 
+// 제거의 userReason은 고른 사유 이름이다.
 export interface PostModeration {
   action: PostModerationAction;
   userReason: string;
@@ -20,17 +21,18 @@ export type PostModerationResult =
   | { ok: false; conflict: { action: AuditAction; by: string; at: Date } | null };
 
 const AUDIT_ACTION = {
-  edit: "구인 수정 요청",
   hide: "구인 숨김",
   unhide: "구인 숨김 해제",
   resolve: "신고 처리 완료",
+  remove: "구인 제거",
 } as const satisfies Record<PostModerationAction, AuditAction>;
 
 const POST_AUDIT_ACTIONS: AuditAction[] = Object.values(AUDIT_ACTION);
 
 // 구인 조치 확정. 무엇을 확정하든 그 구인의 처리 안 된 신고는 모두 처리됨으로 바뀐다.
 // 이미 상태가 바뀐 구인이면 아무것도 바꾸지 않고, 마지막으로 처리한 조치를 충돌로 돌려준다.
-// ponytail: GM 알림(수정 요청·숨김)은 아직 보내지 않는다. 알림 경로가 정해지면 여기서 보낸다.
+// 제거는 구인 행을 지워 참여·대기·후기·신고가 cascade로 함께 지워진다. 활동 기록은 target 글자로 남는다.
+// ponytail: GM 알림(숨김·제거)은 아직 보내지 않는다. 알림 경로가 정해지면 여기서 보낸다.
 export async function moderatePost({
   serverId,
   id,
@@ -56,7 +58,8 @@ export async function moderatePost({
       .innerJoin(profiles, eq(profiles.id, games.gmId))
       .where(thisGame)
       .for("update", { of: games });
-    if (!game) throw new Error("구인을 찾을 수 없습니다");
+    // 다른 운영진이 먼저 제거했으면 구인 행이 없다.
+    if (!game) return { ok: false, conflict: null };
     const unresolved = await tx.select({ id: reports.id }).from(reports).where(openReports);
     const hidden = isNotNil(game.hiddenAt);
     const stale =
@@ -85,17 +88,11 @@ export async function moderatePost({
       };
     }
 
-    if (unresolved.length) {
+    if (unresolved.length && moderation.action !== "remove") {
       await tx
         .update(reports)
         .set({ resolvedBy: actor.id, resolvedAt: sql`now()` })
         .where(openReports);
-    }
-    if (moderation.action === "edit") {
-      await tx
-        .update(games)
-        .set({ editRequestedAt: sql`now()` })
-        .where(thisGame);
     }
     if (moderation.action === "hide") {
       await tx
@@ -111,6 +108,8 @@ export async function moderatePost({
     }
 
     const hiddenAfter = moderation.action === "hide" || (hidden && moderation.action !== "unhide");
+    const afterLabel = hiddenAfter ? "숨김 중" : "공개";
+    // 제거하면 구인 행이 사라져 target_game_id는 FK(on delete set null)로 비워진다.
     await recordAudit({
       executor: tx,
       serverId,
@@ -122,10 +121,11 @@ export async function moderatePost({
         reason: moderation.userReason || moderation.staffMemo,
         staffMemo: moderation.userReason ? moderation.staffMemo || undefined : undefined,
         before: { label: hidden ? "숨김 중" : "공개" },
-        after: { label: hiddenAfter ? "숨김 중" : "공개" },
+        after: { label: moderation.action === "remove" ? "제거됨" : afterLabel },
         related: unresolved.length ? [`처리 안 된 신고 ${unresolved.length}건 처리됨`] : undefined,
       },
     });
+    if (moderation.action === "remove") await tx.delete(games).where(thisGame);
     return { ok: true };
   });
 }

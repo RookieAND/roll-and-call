@@ -1,8 +1,8 @@
-import { Badge, Grid, HStack, Text } from "@roll-and-call/ui";
+import { Grid, HStack, Text } from "@roll-and-call/ui";
 
 import { formatDate } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
-import { FactRows, UserInitial } from "@/shared/ui";
+import { FactRows, Tag, UserInitial } from "@/shared/ui";
 
 const LONG_WAIT_DAYS = 5;
 
@@ -11,8 +11,7 @@ interface ApplicantCardProps {
 }
 
 export function ApplicantCard({ review }: ApplicantCardProps) {
-  const { applicant, previousRejections } = review;
-  const latestRejection = previousRejections.at(-1);
+  const { applicant } = review;
   const waitForeground = review.waitedDays >= LONG_WAIT_DAYS ? "danger" : "normal";
   return (
     <section className="rounded-600 border border-gray-200 bg-surface">
@@ -22,8 +21,7 @@ export function ApplicantCard({ review }: ApplicantCardProps) {
           <Text typography="heading3" render={<h2 />}>
             {applicant.nickname}
           </Text>
-          {latestRejection ? <Badge colorPalette="warning">재신청</Badge> : null}
-          {review.format === "ebook" ? <Badge colorPalette="primary">전자책</Badge> : null}
+          {review.format === "ebook" ? <Tag tone="primary">전자책</Tag> : null}
         </HStack>
       </HStack>
       <Grid className="grid-cols-2 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">

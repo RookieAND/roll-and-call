@@ -4,10 +4,10 @@ import { AdminHeader } from "@/shared/ui";
 
 interface CertRevokeViewProps {
   user: UserDetail;
-  initialRulebook?: string;
+  initialRulebookId: string;
 }
 
-export function CertRevokeView({ user, initialRulebook }: CertRevokeViewProps) {
+export function CertRevokeView({ user, initialRulebookId }: CertRevokeViewProps) {
   const backHref = `/users/${user.id}?tab=cert`;
   return (
     <>
@@ -20,7 +20,7 @@ export function CertRevokeView({ user, initialRulebook }: CertRevokeViewProps) {
         userId={user.id}
         nickname={user.nickname}
         certifications={user.certifications}
-        initialRulebook={initialRulebook}
+        initialRulebookId={initialRulebookId}
         ongoing={user.ongoing}
         backHref={backHref}
       />

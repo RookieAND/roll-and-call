@@ -1,10 +1,9 @@
 import { Button } from "@roll-and-call/ui";
 import { Calendar } from "lucide-react";
-import Link from "next/link";
 
 import { formatSessionTime } from "@/shared/lib";
 import { NO_SHOW_TIMINGS, type NoShowDetail } from "@/shared/server";
-import { EntityHead, IconTile } from "@/shared/ui";
+import { EntityHead, IconTile, ServerLink } from "@/shared/ui";
 
 const REPEATED_NO_SHOW_COUNT = 2;
 
@@ -34,7 +33,7 @@ export function NoShowSummary({ record }: NoShowSummaryProps) {
           variant="outline"
           colorPalette="gray"
           size="sm"
-          render={<Link href={`/users/${record.userId}?tab=noshow`} />}
+          render={<ServerLink path={`/users/${record.userId}?tab=noshow`} />}
         >
           {record.nickname}의 불참 기록 전체 보기
         </Button>

@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { formatDateTime } from "@/shared/lib";
 import type { NoShowDetail } from "@/shared/server";
-import { ItemCard } from "@/shared/ui";
+import { ItemCard, ModalServerLabel } from "@/shared/ui";
 
 import { FooterNote } from "./footer-note";
 
@@ -19,6 +19,7 @@ export function CancelledRecord({ gmNickname, cancellation, summary }: Cancelled
   return (
     <>
       <Dialog.Header>
+        <ModalServerLabel />
         <Dialog.Title>취소된 불참 기록</Dialog.Title>
         <Dialog.Description>{cancelledAt}에 취소됨</Dialog.Description>
       </Dialog.Header>

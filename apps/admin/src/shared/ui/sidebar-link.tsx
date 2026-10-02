@@ -11,13 +11,14 @@ interface SidebarLinkProps {
   href: string;
   label: string;
   icon: ReactNode;
+  // 서버 홈처럼 하위 주소에서는 켜지 않는 메뉴
+  exact?: boolean;
   countPromise?: Promise<number | undefined>;
 }
 
-export function SidebarLink({ href, label, icon, countPromise }: SidebarLinkProps) {
+export function SidebarLink({ href, label, icon, exact, countPromise }: SidebarLinkProps) {
   const pathname = usePathname();
-  const active =
-    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+  const active = pathname === href || (!exact && pathname.startsWith(`${href}/`));
 
   return (
     <HStack

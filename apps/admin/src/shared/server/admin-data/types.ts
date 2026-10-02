@@ -1,11 +1,14 @@
 import type { RulebookKind } from "@roll-and-call/database";
 import type {
   AuditAction,
+  AuditActorKind,
   AuditState,
   Sanction,
   ShotKey,
   StaffRole,
 } from "@roll-and-call/database/moderation";
+
+import type { MembershipStatus } from "@/shared/lib";
 
 import type { PostStatus } from "./post-status";
 
@@ -35,6 +38,9 @@ export interface AdminUser {
   playedCount: number;
   recentHostedCount: number;
   sanction?: Sanction;
+  membership: MembershipStatus;
+  ban?: { at: Date; by: string; reason: string };
+  rejoinedAt?: Date;
 }
 
 export interface Rulebook {
@@ -76,6 +82,9 @@ export interface CertApplication {
   // 여러 권을 한 번에 낸 신청끼리 같은 값. 한 권이면 null.
   groupId: string | null;
   format: CertFormat;
+  // 신청 없이 운영진이 준 인증이거나, 그 인증을 반려로 돌린 기록이다.
+  direct: boolean;
+  rejectReason?: string;
   appliedAt: Date;
   memo: string;
   photoUrls: Partial<Record<ShotKey, string>>;
@@ -152,7 +161,6 @@ export interface Session {
   notices?: string[];
   imageUrls?: string[];
   thumbnailUrl?: string;
-  editRequestedAt?: Date;
   attendanceConfirmedAt?: Date;
   hidden?: { reason: string; by: string; at: Date };
   gmEditSinceHidden?: { title: string; body: string; at: Date };
@@ -209,6 +217,8 @@ export interface AuditEntry {
   id: string;
   at: Date;
   actor: string;
+  actorId?: string;
+  actorKind: AuditActorKind;
   action: AuditAction;
   target: string;
   targetUserId?: string;

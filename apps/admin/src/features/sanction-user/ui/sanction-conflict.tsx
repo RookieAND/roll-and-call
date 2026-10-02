@@ -1,9 +1,8 @@
 import { Button } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { formatDate, withTopicParticle } from "@/shared/lib";
 import type { Sanction } from "@/shared/server";
-import { ConflictNotice } from "@/shared/ui";
+import { ConflictNotice, ServerLink } from "@/shared/ui";
 
 interface SanctionConflictProps {
   nickname: string;
@@ -21,7 +20,7 @@ export function SanctionConflict({ nickname, conflict }: SanctionConflictProps) 
           variant="outline"
           colorPalette="gray"
           size="sm"
-          render={<Link href={`/log?target=${encodeURIComponent(nickname)}`} />}
+          render={<ServerLink path={`/log?target=${encodeURIComponent(nickname)}`} />}
         >
           활동 기록에서 보기
         </Button>

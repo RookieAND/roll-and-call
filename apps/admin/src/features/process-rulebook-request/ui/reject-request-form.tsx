@@ -21,7 +21,7 @@ import {
   withTopicParticle,
 } from "@/shared/lib";
 import type { RulebookActionResult, RulebookRequestRow } from "@/shared/server";
-import { UserPreview } from "@/shared/ui";
+import { ModalServerLabel, UserPreview } from "@/shared/ui";
 
 import { rejectRequest } from "../api/reject-request";
 import { RequestConflict } from "./request-conflict";
@@ -56,6 +56,7 @@ export function RejectRequestForm({ request, onDone }: RejectRequestFormProps) {
   return (
     <>
       <Dialog.Header>
+        <ModalServerLabel />
         <Dialog.Title>룰북 추가 요청 반려</Dialog.Title>
         <Dialog.Description>
           {withSubjectParticle(request.requesterNickname)} 요청한{" "}

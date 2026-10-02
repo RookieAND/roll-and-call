@@ -1,9 +1,9 @@
 import type { Game } from "@roll-and-call/database";
 import type { Server } from "@roll-and-call/database";
 import { sendDiscordMessage, startDiscordThread } from "@roll-and-call/discord";
+import { recruitButtons } from "@roll-and-call/game-notices";
+import { recruitEmbed } from "@roll-and-call/game-notices";
 
-import { recruitButtons } from "./recruit-buttons";
-import { recruitEmbed } from "./recruit-embed";
 import { sendGameImages } from "./send-game-images";
 
 // 반환값은 스레드 id(= 공지 메시지 id, 실패 시 undefined).

@@ -1,10 +1,10 @@
-import { Badge, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { ArrowRight } from "lucide-react";
 
 import { actionTone, formatDateTime, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
 import { retentionDaysLeft, type AuditEntryDetail } from "@/shared/server";
-import { AdminHeader, FactRows, FactSub, IconTile } from "@/shared/ui";
+import { AdminHeader, FactRows, FactSub, IconTile, Tag } from "@/shared/ui";
 
 import { actionIcon } from "../model/action-icon";
 import { USER_VISIBLE_REASON_ACTIONS } from "../model/user-visible-reason-actions";
@@ -21,8 +21,7 @@ export function AuditEntryView({ entry }: AuditEntryViewProps) {
     ? "사용자에게 보인 사유"
     : "사유";
   const tone = actionTone(entry.action);
-  const afterTone =
-    entry.action.includes("제재") && !entry.action.includes("해제") ? "danger" : "normal";
+  const afterTone = tone === "danger" ? "danger" : "normal";
   const actionLabel = entry.targetDetail ? `${entry.action} ${entry.targetDetail}` : entry.action;
   const sameTargetHref = withQuery("/log", {}, { target: entry.targetName });
   const related = entry.related ?? [];
@@ -39,7 +38,7 @@ export function AuditEntryView({ entry }: AuditEntryViewProps) {
               <Text typography="heading3" render={<h2 />}>
                 {entry.targetName}
               </Text>
-              <Badge colorPalette={tone}>{actionLabel}</Badge>
+              <Tag tone={tone}>{actionLabel}</Tag>
             </HStack>
             <EntryMoreMenu targetUserId={entry.targetUserId} sameTargetHref={sameTargetHref} />
           </HStack>
@@ -52,7 +51,8 @@ export function AuditEntryView({ entry }: AuditEntryViewProps) {
                   value: (
                     <>
                       {entry.actor}
-                      {entry.actorRole ? (
+                      {entry.actorKind === "platform" ? <Tag>플랫폼 관리자</Tag> : null}
+                      {entry.actorKind === "staff" && entry.actorRole ? (
                         <FactSub>{STAFF_ROLE_LABEL[entry.actorRole]}</FactSub>
                       ) : null}
                     </>

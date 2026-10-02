@@ -19,7 +19,10 @@ export async function hideRulebook({
   reason: string;
 }): Promise<RulebookActionResult> {
   return db.transaction(async (tx) => {
-    const [rulebook] = await tx.select().from(rulebooks).where(eq(rulebooks.id, id));
+    const [rulebook] = await tx
+      .select()
+      .from(rulebooks)
+      .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, id)));
     if (!rulebook) throw new Error("룰북을 찾을 수 없습니다");
     const label = rulebookLabel(rulebook);
     const hidden = await tx

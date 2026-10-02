@@ -1,6 +1,5 @@
 import { Button, Callout, HStack, VStack } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 
 import {
   REQUEST_ACTION,
@@ -14,7 +13,15 @@ import type {
   RulebookRequestRow,
   RulebookRow,
 } from "@/shared/server";
-import { AdminHeader, ListPager, Panel, RouteTabs, TabCount, UrlSearchInput } from "@/shared/ui";
+import {
+  AdminHeader,
+  ListPager,
+  Panel,
+  RouteTabs,
+  TabCount,
+  UrlSearchInput,
+  ServerLink,
+} from "@/shared/ui";
 
 import { RULEBOOKS_TAB, type RulebooksTab } from "../model/rulebooks-tab";
 import { AddRulebookRoute } from "./add-rulebook-route";
@@ -89,7 +96,7 @@ export function RulebooksView({
   return (
     <>
       <AdminHeader
-        title="룰북"
+        title="룰북 카탈로그"
         sub={`카테고리 ${rulebooks.categories.length}개 · 책 ${rulebooks.total}권`}
       />
       <RouteTabs label="룰북 화면" items={tabs} value={tabHref} />
@@ -109,26 +116,19 @@ export function RulebooksView({
                 </Callout.Description>
               </Callout.Root>
             ) : null}
+            <HStack align="center" gap="100">
+              <UrlSearchInput placeholder="이름, 판본, 카테고리, 다른 이름" className="w-[300px]" />
+              <Button
+                render={
+                  <ServerLink path={withQuery("/rules", pageQuery, { add: "1" })} scroll={false} />
+                }
+                className="ml-auto gap-050"
+              >
+                <Plus size={16} aria-hidden />
+                룰북 추가
+              </Button>
+            </HStack>
             <Panel
-              right={
-                <>
-                  <UrlSearchInput
-                    placeholder="이름, 판본, 카테고리, 다른 이름"
-                    size="sm"
-                    className="w-[260px]"
-                  />
-                  <Button
-                    size="sm"
-                    render={
-                      <Link href={withQuery("/rules", pageQuery, { add: "1" })} scroll={false} />
-                    }
-                    className="gap-050"
-                  >
-                    <Plus size={14} aria-hidden />
-                    룰북 추가
-                  </Button>
-                </>
-              }
               footer={
                 <ListPager
                   page={paged.page}

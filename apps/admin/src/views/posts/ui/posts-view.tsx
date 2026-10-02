@@ -1,5 +1,4 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { formatSessionTime, paginate, withQuery } from "@/shared/lib";
 import { POST_PERIODS, type listPosts } from "@/shared/server";
@@ -14,6 +13,7 @@ import {
   PostRouteTabs,
   UrlSearchInput,
   UrlSelect,
+  ServerLink,
 } from "@/shared/ui";
 
 import { PostsTable } from "./posts-table";
@@ -85,11 +85,12 @@ export function PostsView({ posts, page, query }: PostsViewProps) {
             options={POST_PERIODS.map(({ label, value }) => ({ label, value }))}
             className="w-[176px]"
           />
-          <Chip selected={reportedOnly} render={<Link href={reportedHref} scroll={false} />}>
+          <Chip selected={reportedOnly} render={<ServerLink path={reportedHref} scroll={false} />}>
             처리 안 된 신고 있음
           </Chip>
+          <HStack className="ml-auto">{csvButton}</HStack>
         </HStack>
-        <Panel className="flex-1" right={csvButton} footer={empty ? null : pager}>
+        <Panel className="flex-1" footer={empty ? null : pager}>
           {empty ? (
             <EmptyState
               image={EMPTY_IMAGE.search}

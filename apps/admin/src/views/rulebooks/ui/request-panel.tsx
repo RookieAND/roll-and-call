@@ -1,8 +1,8 @@
-import { Badge, Table, Text, VStack } from "@roll-and-call/ui";
+import { Table, Text, VStack } from "@roll-and-call/ui";
 
 import { RequestActions, type RequestAction } from "@/features/process-rulebook-request";
 import type { RulebookRequestRow } from "@/shared/server";
-import { Panel, TableColumns } from "@/shared/ui";
+import { Panel, TableColumns, Tag } from "@/shared/ui";
 
 interface RequestPanelProps {
   requests: RulebookRequestRow[];
@@ -10,11 +10,11 @@ interface RequestPanelProps {
 }
 
 export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
-  const countPalette = requests.length > 0 ? "primary" : "gray";
+  const countTone = requests.length > 0 ? "primary" : "gray";
   return (
     <Panel
       title="룰북 추가 요청"
-      right={<Badge colorPalette={countPalette}>{requests.length}건</Badge>}
+      right={<Tag tone={countTone}>{requests.length}건</Tag>}
       bodyClassName={requests.length === 0 ? "p-150" : undefined}
     >
       {requests.length === 0 ? (

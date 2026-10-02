@@ -1,10 +1,11 @@
-import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
-import { Ban, CircleCheck } from "lucide-react";
-import Link from "next/link";
+import { HStack, Table, Text } from "@roll-and-call/ui";
 
 import { formatDate } from "@/shared/lib";
 import type { UserRow } from "@/shared/server";
-import { EMPTY_IMAGE, IconBadge, TableEmptyRow, TableColumns } from "@/shared/ui";
+import { EMPTY_IMAGE, ServerLink, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
+
+import { USER_COLUMNS } from "../model/user-columns";
+import { UserStateCell } from "./user-state-cell";
 
 const NO_SHOW_WARNING_COUNT = 2;
 
@@ -15,22 +16,20 @@ interface UsersTableProps {
 export function UsersTable({ rows }: UsersTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[180, 132, 74, 82, 120, 82, 98, 132]} />
+      <TableColumns widths={[...USER_COLUMNS.map((column) => ({ fixed: column.width })), 0]} />
       <Table.Header>
         <Table.Row>
-          <Table.Head>닉네임</Table.Head>
-          <Table.Head>가입일</Table.Head>
-          <Table.Head align="end">연 세션</Table.Head>
-          <Table.Head align="end">참여 세션</Table.Head>
-          <Table.Head align="end">최근 3개월 불참</Table.Head>
-          <Table.Head align="end">인증 룰북</Table.Head>
-          <Table.Head align="center">상태</Table.Head>
-          <Table.Head>제재 종료</Table.Head>
+          {USER_COLUMNS.map((column) => (
+            <Table.Head key={column.label} align={"align" in column ? column.align : undefined}>
+              {column.label}
+            </Table.Head>
+          ))}
+          <Table.Head aria-hidden />
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {rows.length === 0 ? (
-          <TableEmptyRow colSpan={8} image={EMPTY_IMAGE.search} title="조건에 맞는 유저가 없어요" />
+          <TableEmptyRow colSpan={9} image={EMPTY_IMAGE.search} title="조건에 맞는 유저가 없어요" />
         ) : null}
         {rows.map((row) => {
           const frequentNoShow = row.recentNoShowCount >= NO_SHOW_WARNING_COUNT;
@@ -42,12 +41,12 @@ export function UsersTable({ rows }: UsersTableProps) {
                     typography="body3"
                     weight="bold"
                     truncate
-                    render={<Link href={`/users/${row.id}`} />}
+                    render={<ServerLink path={`/users/${row.id}`} />}
                     className="after:absolute after:inset-0"
                   >
                     {row.nickname}
                   </Text>
-                  {row.isNew ? <Badge colorPalette="primary">신규</Badge> : null}
+                  {row.isNew ? <Tag>신규</Tag> : null}
                 </HStack>
               </Table.Cell>
               <Table.Cell>
@@ -74,15 +73,7 @@ export function UsersTable({ rows }: UsersTableProps) {
                 {row.certifiedCount}개
               </Table.Cell>
               <Table.Cell align="center">
-                {row.sanctioned ? (
-                  <IconBadge icon={Ban} colorPalette="danger">
-                    제재 중
-                  </IconBadge>
-                ) : (
-                  <IconBadge icon={CircleCheck} colorPalette="gray">
-                    정상
-                  </IconBadge>
-                )}
+                <UserStateCell row={row} />
               </Table.Cell>
               <Table.Cell>
                 {row.sanctioned ? (
@@ -95,6 +86,7 @@ export function UsersTable({ rows }: UsersTableProps) {
                   </Text>
                 )}
               </Table.Cell>
+              <Table.Cell />
             </Table.Row>
           );
         })}

@@ -31,7 +31,7 @@ export async function grantCertification({
         certRequired: rulebooks.certRequired,
       })
       .from(profiles)
-      .innerJoin(rulebooks, eq(rulebooks.id, rulebookId))
+      .innerJoin(rulebooks, and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, rulebookId)))
       .where(eq(profiles.id, userId));
     if (!names) throw new Error("유저나 룰북을 찾을 수 없습니다");
     if (!names.certRequired) throw new Error("인증이 필요 없는 룰북입니다");
