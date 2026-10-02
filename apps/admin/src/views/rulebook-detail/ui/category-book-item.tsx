@@ -1,10 +1,10 @@
-import { Badge, HStack, Text, VStack, cn } from "@roll-and-call/ui";
+import { HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
 import { ChevronRight } from "lucide-react";
 
 import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { RulebookRow } from "@/shared/server";
-import { ServerLink } from "@/shared/ui";
+import { ServerLink, Tag } from "@/shared/ui";
 
 const KIND_NOTE = {
   core: null,
@@ -43,7 +43,7 @@ export function CategoryBookItem({ book, current }: CategoryBookItemProps) {
           >
             {book.label}
           </Text>
-          {current ? <Badge colorPalette="primary">이 책</Badge> : null}
+          {current ? <Tag>이 책</Tag> : null}
         </HStack>
         <Text typography="body4" foreground="hint">
           {meta}

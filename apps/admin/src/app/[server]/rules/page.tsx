@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { listCertSellers, listRulebookRequests, listRulebooks } from "@/shared/server";
 import { RULEBOOKS_TAB, RulebooksView, type RulebooksTab } from "@/views/rulebooks";
 
-export const metadata: Metadata = { title: "룰북" };
+export const metadata: Metadata = { title: "룰북 카탈로그" };
 
 export default async function RulebooksPage({ searchParams }: PageProps<"/[server]/rules">) {
   const query = (await searchParams) as Record<string, string | undefined>;

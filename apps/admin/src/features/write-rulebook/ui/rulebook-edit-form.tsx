@@ -6,16 +6,19 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition, type ReactNode } from "react";
 
 import { formatDateTime } from "@/shared/lib";
-import type { RulebookActionResult, RulebookDetail } from "@/shared/server";
+import type { RulebookActionResult, RulebookDetail, RulebookImpactCase } from "@/shared/server";
 import { ConflictNotice, Panel } from "@/shared/ui";
 
+import { checkRulebookImpact } from "../api/check-rulebook-impact";
 import { submitRulebookHide } from "../api/submit-rulebook-hide";
 import { submitRulebookSave } from "../api/submit-rulebook-save";
 import { categoryHelp } from "../model/category-help";
 import { draftCategory } from "../model/draft-category";
+import { needsImpactCheck } from "../model/needs-impact-check";
 import type { RulebookDraft } from "../model/rulebook-draft";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
+import { ImpactDialog } from "./impact-dialog";
 import { KindCards } from "./kind-cards";
 import { SupersedesField } from "./supersedes-field";
 
@@ -41,6 +44,7 @@ export function RulebookEditForm({ rulebook, aside }: RulebookEditFormProps) {
   const [draft, setDraft] = useState(saved);
   const [reason, setReason] = useState("");
   const [conflict, setConflict] = useState<Conflict | undefined>(undefined);
+  const [impact, setImpact] = useState<RulebookImpactCase[]>([]);
 
   const category = draftCategory(draft, rulebook.allRulebooks, rulebook.id);
   const next = { ...draft, supersedesId: category.supersedesId };
@@ -61,11 +65,23 @@ export function RulebookEditForm({ rulebook, aside }: RulebookEditFormProps) {
     : "입력한 사유는 저장되지 않았습니다.";
   const change = (changes: Partial<RulebookDraft>) => setDraft({ ...draft, ...changes });
 
+  const persist = async () => {
+    await submitRulebookSave(rulebook.id, next, reason);
+    toast.success(`「${draft.name.trim()}」 룰북을 저장했습니다`);
+    setImpact([]);
+    setReason("");
+  };
+
   const save = () =>
     startTransition(async () => {
-      await submitRulebookSave(rulebook.id, next, reason);
-      toast.success(`「${draft.name.trim()}」 룰북을 저장했습니다`);
-      setReason("");
+      const cases = needsImpactCheck({ saved, next })
+        ? await checkRulebookImpact(rulebook.id, next)
+        : [];
+      if (cases.length > 0) {
+        setImpact(cases);
+        return;
+      }
+      await persist();
     });
 
   const hide = () =>
@@ -160,6 +176,13 @@ export function RulebookEditForm({ rulebook, aside }: RulebookEditFormProps) {
           저장
         </Button>
       </HStack>
+      <ImpactDialog
+        rulebookLabel={rulebook.label}
+        cases={impact}
+        pending={pending}
+        onConfirm={() => startTransition(persist)}
+        onClose={() => setImpact([])}
+      />
     </VStack>
   );
 }

@@ -11,6 +11,7 @@ interface BasicInfoFieldsProps {
   categoryError?: string;
   nameError?: string;
   disabled?: boolean;
+  withAliases?: boolean;
   onChange: (changes: Partial<RulebookDraft>) => void;
   children?: ReactNode;
 }
@@ -23,6 +24,7 @@ export function BasicInfoFields({
   categoryError,
   nameError,
   disabled,
+  withAliases = true,
   onChange,
   children,
 }: BasicInfoFieldsProps) {
@@ -73,15 +75,17 @@ export function BasicInfoFields({
         </Field.Root>
       </div>
       {children}
-      <Field.Root label="다른 이름" htmlFor={`${idPrefix}-aliases`}>
-        <TextInput
-          id={`${idPrefix}-aliases`}
-          value={draft.aliasesText}
-          placeholder="쉼표로 구분합니다"
-          disabled={disabled}
-          onChange={(event) => onChange({ aliasesText: event.target.value })}
-        />
-      </Field.Root>
+      {withAliases ? (
+        <Field.Root label="다른 이름" htmlFor={`${idPrefix}-aliases`}>
+          <TextInput
+            id={`${idPrefix}-aliases`}
+            value={draft.aliasesText}
+            placeholder="쉼표로 구분합니다"
+            disabled={disabled}
+            onChange={(event) => onChange({ aliasesText: event.target.value })}
+          />
+        </Field.Root>
+      ) : null}
     </VStack>
   );
 }

@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import { quoteWithParticle, withObjectParticle } from "@/shared/lib";
+import { ModalServerLabel } from "@/shared/ui";
 
 import { saveSeller } from "../api/save-seller";
 
@@ -34,6 +35,7 @@ export function AddSellerButton() {
       </Dialog.Trigger>
       <Dialog.Popup className="max-w-[480px]">
         <Dialog.Header>
+          <ModalServerLabel />
           <Dialog.Title>전자책 판매처 추가</Dialog.Title>
           <Dialog.Description>
             신청자가 전자책을 신청할 때 고르는 목록에 들어갑니다.

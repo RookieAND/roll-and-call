@@ -1,7 +1,8 @@
-import { Badge, HStack, Text } from "@roll-and-call/ui";
+import { HStack, Text } from "@roll-and-call/ui";
 import { Fragment } from "react";
 
 import type { CategoryEdition } from "@/shared/server";
+import { Tag } from "@/shared/ui";
 
 interface GmConditionProps {
   edition: CategoryEdition;
@@ -31,7 +32,7 @@ export function GmCondition({ edition }: GmConditionProps) {
               +
             </Text>
           ) : null}
-          <Badge colorPalette="primary">{book.label}</Badge>
+          <Tag tone="primary">{book.label}</Tag>
         </Fragment>
       ))}
       {edition.alternatives.map((book) => (
@@ -39,7 +40,7 @@ export function GmCondition({ edition }: GmConditionProps) {
           <Text typography="body4" foreground="hint">
             또는
           </Text>
-          <Badge colorPalette="primary">{book.label}</Badge>
+          <Tag tone="primary">{book.label}</Tag>
         </Fragment>
       ))}
     </HStack>

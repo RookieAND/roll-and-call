@@ -18,6 +18,7 @@ import { X } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import type { QuizQuestion } from "@/shared/server";
+import { ModalServerLabel } from "@/shared/ui";
 
 import { submitQuizQuestion } from "../api/submit-quiz-question";
 import { addAnswer } from "../model/add-answer";
@@ -61,6 +62,7 @@ export function QuizQuestionDialog({
     <Dialog.Root open={open} onOpenChange={(nextOpen) => nextOpen || pending || onClose()}>
       <Dialog.Popup className="max-w-[600px]">
         <Dialog.Header>
+          <ModalServerLabel />
           <Dialog.Title>본문 퀴즈 문항 {editing ? "수정" : "추가"}</Dialog.Title>
           <Dialog.Description>
             책을 가진 사람이 쉽게 답할 수 있는 질문으로 적어 주세요.
