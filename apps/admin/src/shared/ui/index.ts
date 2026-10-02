@@ -24,7 +24,7 @@ export { ItemCard } from "./item-card";
 export { Kbd } from "./kbd";
 export { KeyHint } from "./key-hint";
 export { ModalServerLabel } from "./modal-server-label";
-export { NAV_ITEMS, PLATFORM_NAV_ITEMS, type NavKey } from "./nav-items";
+export { NAV_ITEMS, type NavKey } from "./nav-items";
 export { OngoingChoiceList, type OngoingChoiceRow } from "./ongoing-choice-list";
 export { OPEN_PALETTE_EVENT, openPalette } from "./open-palette";
 export { ListPager } from "./list-pager";

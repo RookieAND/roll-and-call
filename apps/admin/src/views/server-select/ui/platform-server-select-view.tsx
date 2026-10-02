@@ -1,5 +1,4 @@
-import { Button, Chip, HStack, Text, VStack } from "@roll-and-call/ui";
-import { BookOpen } from "lucide-react";
+import { Chip, HStack, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { withQuery } from "@/shared/lib";
@@ -49,14 +48,6 @@ export function PlatformServerSelectView({
                 플랫폼 관리자로 보는 중입니다. 모든 서버에 소유자 권한으로 들어갑니다.
               </Text>
             </VStack>
-            <Button
-              variant="outline"
-              colorPalette="gray"
-              render={<Link href="/platform/catalog" />}
-            >
-              <BookOpen size={16} aria-hidden />
-              룰북 카탈로그
-            </Button>
           </HStack>
           <HStack align="center" gap="100">
             <UrlSearchInput placeholder="서버 이름이나 slug로 찾기" className="w-[320px]" />
