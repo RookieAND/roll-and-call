@@ -82,6 +82,9 @@ CREATE TRIGGER servers_copy_default_rulebooks
   FOR EACH ROW EXECUTE FUNCTION public.copy_default_rulebooks_on_server_insert();
 --> statement-breakpoint
 SELECT public.copy_default_rulebooks("id") FROM "servers" WHERE "slug" <> 'trpia';--> statement-breakpoint
+-- 서버 추가 트리거만 부르는 함수라 API(PostgREST rpc)로 부르지 못하게 막는다.
+REVOKE EXECUTE ON FUNCTION public.copy_default_rulebooks(uuid) FROM public, anon, authenticated;--> statement-breakpoint
+REVOKE EXECUTE ON FUNCTION public.copy_default_rulebooks_on_server_insert() FROM public, anon, authenticated;--> statement-breakpoint
 -- 구인의 rule 글자는 그 서버의 룰북에만 맞춘다.
 DROP FUNCTION public.match_rulebook(text) CASCADE;--> statement-breakpoint
 CREATE OR REPLACE FUNCTION public.match_rulebook(rule text, server uuid)
@@ -104,6 +107,7 @@ AS $$
   LIMIT 1
 $$;
 --> statement-breakpoint
+REVOKE EXECUTE ON FUNCTION public.match_rulebook(text, uuid) FROM public, anon, authenticated;--> statement-breakpoint
 CREATE OR REPLACE FUNCTION public.set_game_rulebook()
 RETURNS trigger
 LANGUAGE plpgsql
