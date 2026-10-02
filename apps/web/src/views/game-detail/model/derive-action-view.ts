@@ -1,6 +1,4 @@
 export const GAME_ACTION_VIEW = {
-  anon: "anon",
-  nonMember: "nonMember",
   joinable: "joinable",
   full: "full",
   applied: "applied",
@@ -15,13 +13,12 @@ export const GAME_ACTION_VIEW = {
 } as const;
 export type GameActionView = (typeof GAME_ACTION_VIEW)[keyof typeof GAME_ACTION_VIEW];
 
-// 순서가 곧 우선순위: GM > 세션 종료 > 대기 > 일정 확정 > 참여 > 마감 > 비로그인 > 비멤버 > 정원 참 > 접수 가능.
+// 상세는 멤버만 보므로 뷰어는 늘 로그인한 멤버다.
+// 순서가 곧 우선순위: GM > 세션 종료 > 대기 > 일정 확정 > 참여 > 마감 > 정원 참 > 접수 가능.
 // 이미 들어와 있는 뷰어(대기·참여)는 모집이 마감돼도 자기 상태를 이어 가므로 마감보다 앞선다.
 // 일정 확정 안내는 그 세션에 낀 사람의 것이다. 안 낀 사람에게는 끝난 모집이다.
 export function deriveActionView({
   isGm,
-  isSignedIn,
-  isMember,
   viewerConfirmed,
   viewerWaiting,
   isLottery,
@@ -33,8 +30,6 @@ export function deriveActionView({
   isFull,
 }: {
   isGm: boolean;
-  isSignedIn: boolean;
-  isMember: boolean;
   viewerConfirmed: boolean;
   viewerWaiting: boolean;
   isLottery: boolean;
@@ -59,8 +54,6 @@ export function deriveActionView({
   }
   if (viewerConfirmed) return canLeave ? GAME_ACTION_VIEW.applied : GAME_ACTION_VIEW.joined;
   if (isClosed) return GAME_ACTION_VIEW.outsider;
-  if (!isSignedIn) return GAME_ACTION_VIEW.anon;
-  if (!isMember) return GAME_ACTION_VIEW.nonMember;
   // 추첨은 정원과 무관하게 마감까지 신청을 받아 정원 참 상태가 없다.
   if (isFull && !isLottery) return GAME_ACTION_VIEW.full;
   return GAME_ACTION_VIEW.joinable;

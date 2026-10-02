@@ -8,5 +8,5 @@ export function revalidateReviews({ slug, gameId }: { slug: string; gameId: stri
   revalidatePath(`${gamePath}/reviews`);
   revalidatePath(`${gamePath}/manage`);
   revalidatePath(serverPath({ slug, path: "/me" }), "layout");
-  revalidatePath("/[server]/u/[id]", "layout");
+  revalidatePath("/[server]/users/[id]", "layout");
 }

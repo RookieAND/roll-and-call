@@ -19,7 +19,7 @@ export function ProfileMemoCard({ targetId, targetName, body }: ProfileMemoCardP
           내가 쓴 메모
         </Text>
         <IconButton
-          render={<ServerLink path={`/u/${targetId}/memo`} />}
+          render={<ServerLink path={`/users/${targetId}/memo`} />}
           variant="ghost"
           aria-label="메모 수정"
           className="h-11 w-11"

@@ -25,7 +25,7 @@ export function RosterRow({
   return (
     <HStack align="center" gap="125" className="min-h-15 py-100 pr-075 pl-175">
       <ServerLink
-        path={`/u/${member.userId}`}
+        path={`/users/${member.userId}`}
         className="flex min-h-11 min-w-0 flex-1 items-center gap-125"
       >
         {isNotNil(rank) && (

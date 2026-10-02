@@ -17,7 +17,7 @@ export function ServerCtaButton({ server, compact, className }: ServerCtaButtonP
   return (
     <Button
       size={size}
-      render={<Link href={serverPath({ slug: server.slug, path: "/games" })} />}
+      render={<Link href={serverPath({ slug: server.slug, path: "/" })} />}
       className={className}
     >
       <ServerIcon name={server.name} icon={server.icon} size="sm" />

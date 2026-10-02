@@ -9,9 +9,10 @@ import { signInWithDiscord } from "../api/sign-in";
 interface LoginButtonProps {
   className?: string;
   next?: string;
+  label?: string;
 }
 
-export function LoginButton({ className, next }: LoginButtonProps) {
+export function LoginButton({ className, next, label = "디스코드로 로그인" }: LoginButtonProps) {
   return (
     <Button
       variant="solid"
@@ -21,7 +22,7 @@ export function LoginButton({ className, next }: LoginButtonProps) {
       className={cn(className)}
     >
       <BrandMark service="discord" size={18} />
-      디스코드로 로그인
+      {label}
     </Button>
   );
 }

@@ -1,12 +1,12 @@
 import { cn, HStack, IconButton, Text } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { ChevronLeft, X } from "lucide-react";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { BackButton } from "./back-button";
 import { BACK_BUTTON_CLASS } from "./back-button-class";
 import { BrandLogo } from "./brand-logo";
+import { ServerLink } from "./server-link";
 import { ServerSwitcher } from "./server-switcher";
 
 interface AppBarProps {
@@ -14,6 +14,8 @@ interface AppBarProps {
   subtitle?: string;
   // 워드마크로 제목을 대체한다. title은 스크린리더가 읽을 이름으로 남는다.
   brand?: boolean;
+  // brand 옆 서버 배지 자리. 서버 홈만 전환 메뉴가 달린 배지를 넘긴다.
+  serverSwitch?: ReactNode;
   // 제목을 페이지의 h1로 그린다. 본문이 자기 h1을 가지면 false로 끈다.
   heading?: boolean;
   // 진입 경로가 없을 때(직접 URL·디스코드 링크)만 쓰는 폴백. 평소엔 히스토리 뒤로.
@@ -27,6 +29,7 @@ export function AppBar({
   title,
   subtitle,
   brand,
+  serverSwitch,
   heading = true,
   back,
   onBack,
@@ -61,13 +64,13 @@ export function AppBar({
         back && <BackButton fallback={back} />
       )}
       {brand ? (
-        <HStack align="center" gap="075" className="min-w-0">
+        <HStack align="center" gap="100" className="min-w-0">
           <HStack render={titleElement} className="flex-none">
-            <Link href="/">
+            <ServerLink path="/">
               <BrandLogo label={title} />
-            </Link>
+            </ServerLink>
           </HStack>
-          <ServerSwitcher />
+          {serverSwitch ?? <ServerSwitcher />}
         </HStack>
       ) : (
         <Text

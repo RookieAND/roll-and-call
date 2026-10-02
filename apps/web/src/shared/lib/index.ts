@@ -33,5 +33,6 @@ export { serverPath } from "./server-path";
 export { useServerPath } from "./use-server-path";
 export { legacyServerRedirect } from "./legacy-server-redirect";
 export { safeNextPath } from "./safe-next-path";
+export { serverNextPath } from "./server-next-path";
 export { REQUEST_PATH_HEADER } from "./request-path-header";
 export { serverJoinPath } from "./server-join-path";

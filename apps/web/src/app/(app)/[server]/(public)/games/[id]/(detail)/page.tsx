@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 import { OG_IMAGE } from "@/shared/lib";
-import { getCurrentServer, getGameById } from "@/shared/server";
-import { GameDetailView } from "@/views/game-detail";
+import { getCurrentMembership, getCurrentServer, getGameById } from "@/shared/server";
+import { GameDetailView, GameMemberOnlyView } from "@/views/game-detail";
 
 export async function generateMetadata({
   params,
@@ -24,7 +24,8 @@ export async function generateMetadata({
   };
 }
 
+// 비멤버에게도 OG 미리보기가 나가도록 (public)에 두고, 본문만 멤버 여부로 가른다.
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  return <GameDetailView id={id} />;
+  const [{ id }, membership] = await Promise.all([params, getCurrentMembership()]);
+  return membership ? <GameDetailView id={id} /> : <GameMemberOnlyView id={id} />;
 }

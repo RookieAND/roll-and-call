@@ -31,6 +31,6 @@ export async function saveFeaturedBadges(keys: string[]): Promise<ActionResult> 
     featuredBadges: featured,
   });
   revalidatePath(serverPath({ slug: server.slug, path: "/me" }), "layout");
-  revalidatePath(serverPath({ slug: server.slug, path: `/u/${user.id}` }), "layout");
+  revalidatePath(serverPath({ slug: server.slug, path: `/users/${user.id}` }), "layout");
   redirect(serverPath({ slug: server.slug, path: "/me/badges" }));
 }

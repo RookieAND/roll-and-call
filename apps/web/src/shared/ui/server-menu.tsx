@@ -2,6 +2,8 @@
 
 import { Menu } from "@base-ui-components/react/menu";
 import { Text } from "@roll-and-call/ui";
+import { Info } from "lucide-react";
+import Link from "next/link";
 import type { ReactElement, RefObject } from "react";
 
 import type { MenuServer } from "./menu-server";
@@ -14,15 +16,18 @@ interface ServerMenuProps {
   // 분할 버튼처럼 트리거보다 넓은 묶음 아래에 같은 폭으로 열 때 준다.
   anchor?: RefObject<HTMLElement | null>;
   align?: "start" | "end";
+  // 서버 홈 헤더의 전환 메뉴는 끝에 소개 페이지 링크를 단다.
+  aboutLink?: boolean;
 }
 
-// 소개 페이지 주 버튼의 ▾와 서버 화면 헤더의 서버 전환이 같이 쓴다.
+// 소개 페이지 주 버튼의 ▾와 서버 홈 헤더의 서버 전환이 같이 쓴다.
 export function ServerMenu({
   servers,
   checkedSlug,
   trigger,
   anchor,
   align = "start",
+  aboutLink = false,
 }: ServerMenuProps) {
   return (
     <Menu.Root>
@@ -54,6 +59,20 @@ export function ServerMenu({
                 />
               ))}
             </Menu.RadioGroup>
+            {aboutLink && (
+              <>
+                <Menu.Separator className="mx-125 my-075 h-px bg-gray-200" />
+                <Menu.Item
+                  render={<Link href="/about" />}
+                  className="flex h-11 cursor-pointer items-center gap-125 rounded-400 px-125 text-gray-600 outline-none data-[highlighted]:bg-gray-50"
+                >
+                  <Info size={18} aria-hidden className="flex-none" />
+                  <Text typography="body3" weight="medium" foreground="muted">
+                    롤앤콜 소개
+                  </Text>
+                </Menu.Item>
+              </>
+            )}
           </Menu.Popup>
         </Menu.Positioner>
       </Menu.Portal>

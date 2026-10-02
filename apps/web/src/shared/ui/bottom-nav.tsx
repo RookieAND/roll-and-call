@@ -17,7 +17,7 @@ const tabs = [
 ];
 
 // 몰입 화면(상세·등록·수정·조율 등 하단 CTA가 있는 곳)은 탭을 숨기고 FloatingBar만 남긴다. 서버 slug 뒤의 경로로 본다.
-const IMMERSIVE = /^\/games\/(new$|[^/]+)/;
+const IMMERSIVE = /^\/(games\/(new$|[^/]+)|join$)/;
 
 interface BottomNavProps {
   slug: string;

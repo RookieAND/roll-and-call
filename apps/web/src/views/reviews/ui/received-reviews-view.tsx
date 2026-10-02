@@ -30,7 +30,7 @@ export async function ReceivedReviewsView({ userId }: ReceivedReviewsViewProps) 
   return (
     <ReviewsPage
       title={mine ? "진행한 세션 후기" : `${profile.username}님이 진행한 세션 후기`}
-      back={mine ? "/me" : `/u/${targetId}`}
+      back={mine ? "/me" : `/users/${targetId}`}
     >
       <ReviewList
         rows={rows}

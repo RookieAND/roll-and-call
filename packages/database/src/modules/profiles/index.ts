@@ -1,10 +1,11 @@
+export { copyMemberProfile } from "./commands/copy-member-profile";
 export { deleteProfileMemo } from "./commands/delete-profile-memo";
 export { saveAvatarUrl } from "./commands/save-avatar-url";
 export { saveMemberAvailability } from "./commands/save-member-availability";
-export { saveMemberIntro } from "./commands/save-member-intro";
 export { saveMemberProfile } from "./commands/save-member-profile";
 export { saveMemberShowBadges } from "./commands/save-member-show-badges";
 export { saveProfileMemo } from "./commands/save-profile-memo";
+export { saveUsername } from "./commands/save-username";
 export { countServerMembers } from "./queries/count-server-members";
 export { findMemberProfile, type MemberProfile } from "./queries/find-member-profile";
 export { getDiscordId } from "./queries/get-discord-id";

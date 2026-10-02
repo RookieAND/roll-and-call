@@ -1,4 +1,4 @@
-// 서버 주소(/{slug})로 쓸 수 없는 이름. 서버 밖 화면·API와, 옛 주소 리다이렉트가 쓰는 접두어(games·me·u)다.
+// 서버 주소(/{slug})로 쓸 수 없는 이름. 서버 밖 화면·API와, 옛 주소 리다이렉트가 쓰는 접두어(games·me·u)와 프로필 경로(users)다.
 export const RESERVED_SERVER_SLUGS = [
   "help",
   "about",
@@ -14,4 +14,5 @@ export const RESERVED_SERVER_SLUGS = [
   "games",
   "me",
   "u",
+  "users",
 ] as const;

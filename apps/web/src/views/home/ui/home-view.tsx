@@ -5,7 +5,7 @@ import { BadgeAwardGate } from "@/features/acknowledge-badges";
 import { LoginButton } from "@/features/auth";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getMonthSessions, getCurrentServer } from "@/shared/server";
-import { AppBar, HelpButton, ThemeToggleButton } from "@/shared/ui";
+import { AppBar, HelpButton, ServerSwitcher, ThemeToggleButton } from "@/shared/ui";
 
 import { buildMonthRecord } from "../model/build-month-record";
 import { groupSessionsByDay } from "../model/group-sessions-by-day";
@@ -13,6 +13,7 @@ import { resolveCalendarView } from "../model/resolve-calendar-view";
 import { toCalendarSessions } from "../model/to-calendar-sessions";
 import { HomeCalendarSection } from "./home-calendar-section";
 import { HomeMonthRecord } from "./home-month-record";
+import { HomeServerSwitch } from "./home-server-switch";
 
 export async function HomeView({ date, authError }: { date?: string; authError: boolean }) {
   const { monthStart, selectedKey, todayKey } = resolveCalendarView(date);
@@ -34,6 +35,13 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
       <AppBar
         title="롤앤콜"
         brand
+        serverSwitch={
+          user && (
+            <Suspense fallback={<ServerSwitcher />}>
+              <HomeServerSwitch userId={user.id} />
+            </Suspense>
+          )
+        }
         action={
           user ? (
             <HelpButton />

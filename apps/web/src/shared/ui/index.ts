@@ -31,4 +31,5 @@ export { ServerLink } from "./server-link";
 export { ServerIcon } from "./server-icon";
 export { ServerMenu } from "./server-menu";
 export { ServerNavProvider } from "./server-nav-provider";
+export { ServerSwitcher } from "./server-switcher";
 export type { MenuServer } from "./menu-server";

@@ -21,7 +21,7 @@ interface RosterMemberRowProps {
 export function RosterMemberRow({ userId, name, avatarUrl, bio, tags = [] }: RosterMemberRowProps) {
   return (
     <ServerLink
-      path={`/u/${userId}`}
+      path={`/users/${userId}`}
       className="flex min-h-15 items-center gap-125 px-175 py-100 transition-colors hover:bg-gray-50"
     >
       <ProfileRow

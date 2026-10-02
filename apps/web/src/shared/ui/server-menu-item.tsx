@@ -23,13 +23,18 @@ export function ServerMenuItem({ server, checked }: ServerMenuItemProps) {
       value={server.slug}
       label={server.name}
       closeOnClick
-      onClick={() => router.push(serverPath({ slug: server.slug, path: "/games" }))}
+      onClick={() => router.push(serverPath({ slug: server.slug, path: "/" }))}
       className="flex h-12 cursor-pointer items-center gap-125 rounded-400 px-125 outline-none data-[checked]:bg-tinted-bg data-[highlighted]:bg-gray-50 data-[checked]:data-[highlighted]:bg-tinted-bg-hover"
     >
       <ServerIcon name={server.name} icon={server.icon} />
       <Text typography="body3" weight={weight} truncate className="min-w-0 flex-1">
         {server.name}
       </Text>
+      {!!server.todoCount && (
+        <Text typography="body5" weight="bold" foreground="primary" className="flex-none">
+          할 일 {server.todoCount}
+        </Text>
+      )}
       <Menu.RadioItemIndicator className="flex-none text-tinted-ink">
         <Check size={18} strokeWidth={2.6} aria-hidden />
       </Menu.RadioItemIndicator>

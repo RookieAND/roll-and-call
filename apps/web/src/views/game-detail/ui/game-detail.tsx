@@ -76,7 +76,6 @@ export function GameDetail({ game, viewerId }: GameDetailProps) {
 
           <GameDetailActions
             game={game}
-            viewerId={viewerId}
             isGm={isGm}
             viewerStatus={viewerParticipant?.status ?? null}
             waitlistRank={viewerParticipant?.waitlistRank ?? null}

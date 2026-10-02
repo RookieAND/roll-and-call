@@ -37,7 +37,7 @@ export function HomeRecordRow({ row, position }: HomeRecordRowProps) {
 
   return (
     <ServerLink
-      path={`/u/${row.person.id}`}
+      path={`/users/${row.person.id}`}
       className="flex items-center gap-125 px-150 py-125 transition-colors hover:bg-gray-50"
     >
       {rankNumber}

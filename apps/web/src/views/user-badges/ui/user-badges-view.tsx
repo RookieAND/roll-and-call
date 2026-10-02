@@ -34,7 +34,7 @@ export async function UserBadgesView({ id }: UserBadgesViewProps) {
   if (!profile) notFound();
 
   const title = `${profile.username}의 업적`;
-  const back = `/u/${id}`;
+  const back = `/users/${id}`;
   if (!profile.showBadges) {
     return (
       <>

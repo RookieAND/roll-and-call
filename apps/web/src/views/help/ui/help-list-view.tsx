@@ -38,6 +38,10 @@ export function HelpListView() {
             </HStack>
           </Card.Root>
 
+          <Card.Root padding="none" className="overflow-hidden">
+            <HelpDocRow href="/about" title="롤앤콜 소개" />
+          </Card.Root>
+
           {HELP_CATEGORIES.map((category) => (
             <VStack key={category} gap="125" render={<section />}>
               <Text typography="body4" weight="extrabold" foreground="hint" render={<h2 />}>
@@ -45,7 +49,7 @@ export function HelpListView() {
               </Text>
               <Card.Root padding="none" className="overflow-hidden">
                 {HELP_DOCS.filter((doc) => doc.category === category).map((doc) => (
-                  <HelpDocRow key={doc.slug} slug={doc.slug} title={doc.title} />
+                  <HelpDocRow key={doc.slug} href={`/help/${doc.slug}`} title={doc.title} />
                 ))}
               </Card.Root>
             </VStack>

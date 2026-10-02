@@ -36,7 +36,7 @@ export function DrawRow({ entry, variant, isMe }: DrawRowProps) {
     <HStack
       align="center"
       gap="125"
-      render={<ServerLink path={`/u/${entry.userId}`} />}
+      render={<ServerLink path={`/users/${entry.userId}`} />}
       className={row({ variant, isMe, graded: !isNull(toRollGrade(entry.roll)) })}
     >
       <ProfileRow

@@ -26,3 +26,4 @@ export { KeywordChips } from "./ui/keyword-chips";
 export { ProfileLinks } from "./ui/profile-links";
 export { EMPTY_BIO_TEXT } from "./model/empty-bio";
 export { ProfileRow } from "./ui/profile-row";
+export { USERNAME_MAX_LENGTH } from "./model/username-max-length";

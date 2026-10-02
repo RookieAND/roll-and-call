@@ -27,7 +27,7 @@ export async function WrittenReviewsView({ userId }: WrittenReviewsViewProps) {
   if (!profile) notFound();
 
   return (
-    <ReviewsPage title={`${profile.username}님이 작성한 후기`} back={`/u/${userId}`}>
+    <ReviewsPage title={`${profile.username}님이 작성한 후기`} back={`/users/${userId}`}>
       <ReviewList
         rows={rows}
         perspective={REVIEW_PERSPECTIVE.written}

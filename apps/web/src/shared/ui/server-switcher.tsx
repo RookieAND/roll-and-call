@@ -1,48 +1,44 @@
 "use client";
 
-import { Button, HStack, Text } from "@roll-and-call/ui";
+import { Badge } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { ChevronDown } from "lucide-react";
 import { useContext } from "react";
 
-import { ServerIcon } from "./server-icon";
+import type { MenuServer } from "./menu-server";
 import { ServerMenu } from "./server-menu";
 import { ServerNavContext } from "./server-nav-context";
 
-// 옮겨 갈 다른 서버가 있을 때만 ▾를 단다. 비멤버로 공개 화면을 볼 때도 지금 서버 이름은 보인다.
-export function ServerSwitcher() {
-  const nav = useContext(ServerNavContext);
-  if (isNull(nav)) return null;
-  const { current, servers } = nav;
-  const switchable = servers.some((server) => server.slug !== current.slug);
-  const icon = <ServerIcon name={current.name} icon={current.icon} size="sm" />;
+interface ServerSwitcherProps {
+  // 서버 홈만 내 서버 목록을 넘긴다. 옮겨 갈 다른 서버가 있을 때만 ▾를 단다.
+  servers?: MenuServer[];
+}
 
+export function ServerSwitcher({ servers = [] }: ServerSwitcherProps) {
+  const current = useContext(ServerNavContext);
+  if (isNull(current)) return null;
+  const switchable = servers.some((server) => server.slug !== current.slug);
   if (!switchable) {
     return (
-      <HStack align="center" gap="075" className="min-w-0">
-        {icon}
-        <Text typography="subtitle2" truncate>
-          {current.name}
-        </Text>
-      </HStack>
+      <Badge colorPalette="primary" className="min-w-0 shrink">
+        <span className="truncate">{current.name}</span>
+      </Badge>
     );
   }
   return (
     <ServerMenu
       servers={servers}
       checkedSlug={current.slug}
+      aboutLink
       trigger={
-        <Button
-          variant="ghost"
-          colorPalette="gray"
-          size="sm"
-          aria-label={`${current.name}, 다른 서버로 옮기기`}
-          className="min-w-0 shrink gap-075 px-075 text-gray-900"
+        <Badge
+          colorPalette="primary"
+          render={<button type="button" aria-label={`${current.name}, 다른 서버로 옮기기`} />}
+          className="min-w-0 shrink cursor-pointer gap-050 hover:bg-tinted-bg-hover"
         >
-          {icon}
-          <span className="min-w-0 truncate">{current.name}</span>
-          <ChevronDown size={14} strokeWidth={2.4} aria-hidden className="flex-none text-hint" />
-        </Button>
+          <span className="truncate">{current.name}</span>
+          <ChevronDown size={14} strokeWidth={2.4} aria-hidden className="flex-none" />
+        </Badge>
       }
     />
   );

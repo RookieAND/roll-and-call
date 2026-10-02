@@ -1,9 +1,11 @@
+import { listMemberServers } from "@roll-and-call/database/servers";
 import { Container, Text, VStack } from "@roll-and-call/ui";
 
 import { getCurrentServer, getCurrentSessionUser, getProfile } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, ServerLink } from "@/shared/ui";
 
-import { ServerIntroForm } from "./server-intro-form";
+import { ProfileImportCallout } from "./profile-import-callout";
+import { WelcomeUsernameForm } from "./welcome-username-form";
 
 interface ServerWelcomeViewProps {
   next: string;
@@ -12,7 +14,10 @@ interface ServerWelcomeViewProps {
 // (member) 레이아웃을 지나 왔으니 로그인한 멤버다.
 export async function ServerWelcomeView({ next }: ServerWelcomeViewProps) {
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
-  const profile = user ? await getProfile(server.id, user.id) : undefined;
+  const [profile, memberServers] = user
+    ? await Promise.all([getProfile(server.id, user.id), listMemberServers(user.id)])
+    : [undefined, []];
+  const otherServers = memberServers.filter((memberServer) => memberServer.id !== server.id);
 
   return (
     <>
@@ -24,15 +29,15 @@ export async function ServerWelcomeView({ next }: ServerWelcomeViewProps) {
               {server.name}에 오신 걸 환영해요
             </Text>
             <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
-              이 서버에서 보일 프로필을 적어 두면 함께할 사람을 찾기 쉬워요. 지금 건너뛰어도
-              마이페이지에서 언제든 고칠 수 있어요.
+              닉네임만 확인하면 바로 시작할 수 있어요. 소개·성향·링크·기본 가능 시간은 나중에{" "}
+              <ServerLink path="/me/edit" className="underline">
+                마이페이지
+              </ServerLink>
+              에서 채워도 돼요.
             </Text>
           </VStack>
-          <ServerIntroForm
-            defaultBio={profile?.bio ?? ""}
-            defaultKeywords={profile?.keywords ?? []}
-            next={next}
-          />
+          {otherServers.length > 0 && <ProfileImportCallout servers={otherServers} />}
+          <WelcomeUsernameForm defaultUsername={profile?.username ?? ""} next={next} />
         </VStack>
       </Container>
     </>

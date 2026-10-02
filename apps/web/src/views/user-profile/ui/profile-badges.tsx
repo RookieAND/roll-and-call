@@ -24,7 +24,7 @@ export function ProfileBadges({ userId, featured, total }: ProfileBadgesProps) {
           weight="bold"
           typography="body4"
           foreground="muted"
-          render={<ServerLink path={`/u/${userId}/badges`} />}
+          render={<ServerLink path={`/users/${userId}/badges`} />}
           className="mb-100 inline-flex min-h-7 items-center gap-025"
         >
           {total}개 모두 보기

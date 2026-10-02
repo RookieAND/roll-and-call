@@ -13,7 +13,7 @@ import {
 export async function EditMemoView({ id }: { id: string }) {
   const [server, viewer] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!viewer) {
-    const memoPath = serverPath({ slug: server.slug, path: `/u/${id}/memo` });
+    const memoPath = serverPath({ slug: server.slug, path: `/users/${id}/memo` });
     redirect(`${serverPath({ slug: server.slug, path: "/" })}?next=${memoPath}`);
   }
   if (viewer.id === id) redirect(serverPath({ slug: server.slug, path: "/me" }));

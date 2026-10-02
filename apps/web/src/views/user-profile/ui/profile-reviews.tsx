@@ -23,13 +23,13 @@ export async function ProfileReviews({ userId, received, written }: ProfileRevie
           <CountLinkRow
             label="진행한 세션 후기"
             count={received}
-            href={serverPath({ slug: server.slug, path: `/u/${userId}/reviews/received` })}
+            href={serverPath({ slug: server.slug, path: `/users/${userId}/reviews/received` })}
           />
         )}
         <CountLinkRow
           label="작성한 후기"
           count={written}
-          href={serverPath({ slug: server.slug, path: `/u/${userId}/reviews/written` })}
+          href={serverPath({ slug: server.slug, path: `/users/${userId}/reviews/written` })}
         />
       </Card.Root>
     </VStack>

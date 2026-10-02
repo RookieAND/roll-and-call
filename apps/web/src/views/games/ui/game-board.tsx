@@ -13,6 +13,7 @@ import { statusCounts } from "../model/status-counts";
 import { CrossTabHint } from "./cross-tab-hint";
 import { GameList } from "./game-list";
 import { GameListSkeleton } from "./game-list-skeleton";
+import { GamesJoinCallout } from "./games-join-callout";
 import { GamesResultRow } from "./games-result-row";
 import { GamesToolbar } from "./games-toolbar";
 import { PastGameListSkeleton } from "./past-game-list-skeleton";
@@ -36,6 +37,7 @@ export async function GameBoard({ page = 1, filter }: GameBoardProps) {
 
   return (
     <Container>
+      <GamesJoinCallout page={page} filter={filter} />
       <GamesToolbar filter={filter} counts={counts} tabCounts={allCounts ?? counts} />
       <VStack gap="150" className="pt-150 pb-200">
         <GamesResultRow filter={filter} count={count} />

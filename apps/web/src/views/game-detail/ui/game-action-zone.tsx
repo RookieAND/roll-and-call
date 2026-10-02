@@ -10,10 +10,8 @@ import {
   type ParticipantStatus,
   RECRUIT_METHOD,
 } from "@/entities/game";
-import { LoginSheetButton } from "@/features/auth";
-import { formatDateTime, serverJoinPath, serverPath } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
-import { getCurrentMembership, getCurrentServer } from "@/shared/server";
 
 import { deriveActionView, GAME_ACTION_VIEW } from "../model/derive-action-view";
 import { leaveLock } from "../model/leave-locked-reason";
@@ -21,18 +19,15 @@ import { ClosedActions } from "./closed-actions";
 import { ConfirmedActions } from "./confirmed-actions";
 import { EndedActions } from "./ended-actions";
 import { EndedGmActions } from "./ended-gm-actions";
-import { JoinHint } from "./join-hint";
 import { JoinableActions } from "./joinable-actions";
 import { LeaveableJoinedActions } from "./leaveable-joined-actions";
 import { LockedJoinedActions } from "./locked-joined-actions";
 import { LotteryAppliedActions } from "./lottery-applied-actions";
 import { ManageGameLink } from "./manage-game-link";
-import { NonMemberActions } from "./non-member-actions";
 import { WaitingActions } from "./waiting-actions";
 
 export interface GameActionZoneProps {
   game: GameDetailData;
-  viewerId: string | null;
   isGm: boolean;
   viewerStatus: ParticipantStatus | null;
   waitlistRank: number | null;
@@ -42,9 +37,8 @@ export interface GameActionZoneProps {
   canSchedule: boolean;
 }
 
-export async function GameActionZone({
+export function GameActionZone({
   game,
-  viewerId,
   isGm,
   viewerStatus,
   waitlistRank,
@@ -53,8 +47,6 @@ export async function GameActionZone({
   status,
   canSchedule,
 }: GameActionZoneProps) {
-  const [server, membership] = await Promise.all([getCurrentServer(), getCurrentMembership()]);
-  const gamePath = serverPath({ slug: server.slug, path: `/games/${game.id}` });
   // 기한 경과, 대기 신청을 끈 게임의 정원 충족(full), 조율형의 일정 확정(scheduled). 대기 받는 정원 충족(confirmed)은 마감이 아니다.
   const isClosed =
     status === GAME_STATUS.closed ||
@@ -67,8 +59,6 @@ export async function GameActionZone({
 
   const actionView = deriveActionView({
     isGm,
-    isSignedIn: Boolean(viewerId),
-    isMember: Boolean(membership),
     viewerConfirmed: viewerStatus === PARTICIPANT_STATUS.confirmed,
     viewerWaiting: viewerStatus === PARTICIPANT_STATUS.waiting,
     isLottery,
@@ -84,19 +74,6 @@ export async function GameActionZone({
   switch (actionView) {
     case GAME_ACTION_VIEW.gm:
       return <ManageGameLink gameId={game.id} />;
-    case GAME_ACTION_VIEW.anon:
-      return (
-        <>
-          <JoinHint>
-            {isLottery
-              ? "추첨에 참여하려면 로그인이 필요합니다."
-              : "참여하려면 로그인이 필요합니다."}
-          </JoinHint>
-          <LoginSheetButton next={gamePath} className="mt-125 w-full" />
-        </>
-      );
-    case GAME_ACTION_VIEW.nonMember:
-      return <NonMemberActions joinPath={serverJoinPath({ slug: server.slug, next: gamePath })} />;
     case GAME_ACTION_VIEW.joinable:
     case GAME_ACTION_VIEW.full:
       return (

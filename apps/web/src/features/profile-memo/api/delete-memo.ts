@@ -17,7 +17,7 @@ export async function deleteMemo(targetId: string): Promise<ActionResult> {
 
   await deleteProfileMemo({ serverId: server.id, ownerId: user.id, targetId });
 
-  const profilePath = serverPath({ slug: server.slug, path: `/u/${targetId}` });
+  const profilePath = serverPath({ slug: server.slug, path: `/users/${targetId}` });
   revalidatePath(profilePath);
   redirect(profilePath);
 }

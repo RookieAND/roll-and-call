@@ -22,7 +22,7 @@ export function EmptyProfileMemoCard({ targetId, targetName }: EmptyProfileMemoC
         이 사람에 대해 남긴 것이 없습니다.
       </Text>
       <Button
-        render={<ServerLink path={`/u/${targetId}/memo`} />}
+        render={<ServerLink path={`/users/${targetId}/memo`} />}
         variant="outline"
         className="mt-150 h-11 w-full"
       >

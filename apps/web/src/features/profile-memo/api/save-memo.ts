@@ -32,7 +32,7 @@ export async function saveMemo({
     await saveProfileMemo({ ...memoKey, body: memo });
   }
 
-  const profilePath = serverPath({ slug: server.slug, path: `/u/${targetId}` });
+  const profilePath = serverPath({ slug: server.slug, path: `/users/${targetId}` });
   revalidatePath(profilePath);
   redirect(profilePath);
 }

@@ -61,7 +61,7 @@ export function HomeRecordLeader({ people, count }: HomeRecordLeaderProps) {
   if (people.length > 1) return <div className={CARD}>{body}</div>;
 
   return (
-    <ServerLink path={`/u/${first.id}`} className={cn(CARD, "hover:bg-primary-100")}>
+    <ServerLink path={`/users/${first.id}`} className={cn(CARD, "hover:bg-primary-100")}>
       {body}
     </ServerLink>
   );

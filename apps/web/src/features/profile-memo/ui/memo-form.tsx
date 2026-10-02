@@ -34,7 +34,7 @@ export function MemoForm({
   return (
     <>
       <AppBar
-        back={`/u/${targetId}`}
+        back={`/users/${targetId}`}
         title="메모"
         action={
           <Button

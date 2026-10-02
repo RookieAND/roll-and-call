@@ -359,3 +359,81 @@ html {
   height: 128px;
   font-size: 62px;
 }
+
+/* 서버 가입 화면 배경. 점 무늬가 흐르고 색 덩어리가 천천히 떠다닌다. */
+@keyframes join-dots {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 22px 22px;
+  }
+}
+
+@keyframes join-dots-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes join-blob-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(36px, 28px) scale(1.12);
+  }
+}
+
+@keyframes join-blob-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1.05);
+  }
+  50% {
+    transform: translate(-30px, 40px) scale(0.94);
+  }
+}
+
+@keyframes join-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.32);
+    opacity: 0;
+  }
+}
+
+@utility animate-join-dots {
+  animation:
+    join-dots 8s linear infinite,
+    join-dots-glow 5s ease-in-out infinite;
+}
+
+@utility animate-join-blob-a {
+  animation: join-blob-a 14s ease-in-out infinite;
+}
+
+@utility animate-join-blob-b {
+  animation: join-blob-b 17s ease-in-out infinite;
+}
+
+@utility animate-join-pulse {
+  animation: join-pulse 1.6s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-join-dots,
+  .animate-join-blob-a,
+  .animate-join-blob-b,
+  .animate-join-pulse {
+    animation: none;
+  }
+}

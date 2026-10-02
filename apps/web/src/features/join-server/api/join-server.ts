@@ -6,7 +6,7 @@ import { isUndefined } from "es-toolkit";
 import { redirect } from "next/navigation";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
-import { safeNextPath, serverPath } from "@/shared/lib";
+import { serverNextPath, serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentUser, isDiscordGuildMember } from "@/shared/server";
 
 import { JOIN_CHECK_FAILED_MESSAGE } from "../model/join-check-failed-message";
@@ -30,10 +30,7 @@ export async function joinServer({ next }: { next: string }): Promise<JoinServer
 
   await ensureMembership({ serverId: server.id, userId: user.id });
 
-  const safeNext = safeNextPath({
-    value: next,
-    fallback: serverPath({ slug: server.slug, path: "/games" }),
-  });
+  const safeNext = serverNextPath({ slug: server.slug, value: next });
   redirect(
     `${serverPath({ slug: server.slug, path: "/welcome" })}?next=${encodeURIComponent(safeNext)}`,
   );

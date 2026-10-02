@@ -17,6 +17,6 @@ export async function updateShowBadges(showBadges: boolean): Promise<ActionResul
   await saveMemberShowBadges({ serverId: server.id, userId: user.id, showBadges });
 
   revalidatePath(serverPath({ slug: server.slug, path: "/me" }));
-  revalidatePath(serverPath({ slug: server.slug, path: `/u/${user.id}` }), "layout");
+  revalidatePath(serverPath({ slug: server.slug, path: `/users/${user.id}` }), "layout");
   return {};
 }

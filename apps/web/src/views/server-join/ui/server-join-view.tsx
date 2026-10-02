@@ -1,11 +1,11 @@
-import { Container, Text, VStack } from "@roll-and-call/ui";
 import { redirect } from "next/navigation";
 
 import { LoginButton } from "@/features/auth";
-import { JoinServerPanel } from "@/features/join-server";
 import { serverJoinPath } from "@/shared/lib";
 import { getCurrentMembership, getCurrentServer, getCurrentSessionUser } from "@/shared/server";
-import { AppBar, ServerIcon } from "@/shared/ui";
+
+import { JoinLayout } from "./join-layout";
+import { MemberJoinCheck } from "./member-join-check";
 
 interface ServerJoinViewProps {
   next: string;
@@ -19,27 +19,25 @@ export async function ServerJoinView({ next }: ServerJoinViewProps) {
   ]);
   if (membership) redirect(next);
 
+  const target = {
+    slug: server.slug,
+    name: server.name,
+    icon: server.icon,
+    inviteUrl: server.inviteUrl,
+  };
+  if (user) return <MemberJoinCheck target={target} next={next} />;
+
   return (
-    <>
-      <AppBar title="서버 가입" heading={false} />
-      <Container size="sm">
-        <VStack gap="300" className="py-400">
-          <VStack gap="150" align="center" className="text-center">
-            <ServerIcon name={server.name} icon={server.icon} size="lg" />
-            <Text typography="heading1" render={<h1 />}>
-              {server.name}
-            </Text>
-            <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
-              이 서버의 디스코드 멤버만 가입할 수 있어요.
-            </Text>
-          </VStack>
-          {user ? (
-            <JoinServerPanel next={next} inviteUrl={server.inviteUrl} />
-          ) : (
-            <LoginButton next={serverJoinPath({ slug: server.slug, next })} className="w-full" />
-          )}
-        </VStack>
-      </Container>
-    </>
+    <JoinLayout
+      target={target}
+      status="signedOut"
+      action={
+        <LoginButton
+          next={serverJoinPath({ slug: server.slug, next })}
+          label="디스코드로 로그인하고 가입하기"
+          className="w-full"
+        />
+      }
+    />
   );
 }
