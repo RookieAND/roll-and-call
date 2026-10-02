@@ -13,17 +13,23 @@ import {
   toast,
 } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
-import { ScrollText, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { formatDateTime } from "@/shared/lib";
 import type { PostDetail, PostModerationResult } from "@/shared/server";
-import { ConflictNotice, UserPreview, ServerLink, useServerPath } from "@/shared/ui";
+import {
+  ConflictNotice,
+  ModalServerLabel,
+  ServerLink,
+  UserPreview,
+  useServerPath,
+} from "@/shared/ui";
 
 import { submitPostModeration } from "../api/submit-post-moderation";
-import { ACTION_COPY } from "../model/action-copy";
-import { POST_ACTION, type PostAction } from "../model/post-action";
+import { ACTION_COPY, type FormAction } from "../model/action-copy";
+import { POST_ACTION } from "../model/post-action";
 import { REQUIRED_FIELD } from "../model/required-field";
 import { HideImpact } from "./hide-impact";
 import { ReasonFields } from "./reason-fields";
@@ -31,21 +37,16 @@ import { UnhideHistory } from "./unhide-history";
 
 type Conflict = Extract<PostModerationResult, { ok: false }>["conflict"];
 
-const REASON_PLACEHOLDER = {
-  [POST_ACTION.edit]: "예: 시놉시스의 비하 표현",
-  [POST_ACTION.hide]: "예: 선정적인 썸네일 이미지",
-} as const;
-
 const CONFLICT_VERB = {
-  "구인 수정 요청": "수정을 요청",
   "구인 숨김": "숨김 처리",
+  "구인 제거": "제거",
   "구인 숨김 해제": "숨김을 해제",
   "신고 처리 완료": "신고를 처리",
 } as const;
 
 interface PostActionFormProps {
   post: PostDetail;
-  action: PostAction;
+  action: FormAction;
   onDone: () => void;
 }
 
@@ -73,12 +74,8 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
   const conflictDescription = conflict
     ? `${formatDateTime(conflict.at)}에 처리됐습니다. 입력한 내용은 저장되지 않았습니다.`
     : "입력한 내용은 저장되지 않았습니다.";
-  const reasonPlaceholder =
-    action === POST_ACTION.edit || action === POST_ACTION.hide ? REASON_PLACEHOLDER[action] : null;
-  const gmMessage =
-    action === POST_ACTION.hide
-      ? `「${post.title}」 구인이 목록과 검색에서 숨겨졌어요. 사유: ${filled.userReason || "…"}. 수정한 뒤 운영진이 확인하면 다시 보여요.`
-      : `「${post.title}」 구인에 대해 운영진 요청이 있어요. 사유: ${filled.userReason || "…"}. 내용을 수정한 뒤 운영진에게 알려주세요.`;
+  const hiding = action === POST_ACTION.hide;
+  const gmMessage = `「${post.title}」 구인이 목록과 검색에서 숨겨졌어요. 사유: ${filled.userReason || "…"}. 수정한 뒤 운영진이 확인하면 다시 보여요.`;
 
   const undoHide = async () => {
     const result = await submitPostModeration(post.id, {
@@ -98,7 +95,7 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
         setConflict(result.conflict);
         return;
       }
-      if (action === POST_ACTION.hide) {
+      if (hiding) {
         toast.success(copy.successMessage(post.title), {
           action: { label: "되돌리기", onClick: () => void undoHide() },
         });
@@ -112,6 +109,7 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
   return (
     <>
       <Dialog.Header>
+        <ModalServerLabel />
         <Dialog.Title>{copy.title}</Dialog.Title>
         <Dialog.Description>{description}</Dialog.Description>
       </Dialog.Header>
@@ -129,7 +127,7 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
             />
           ) : null}
           <VStack gap="150" className={cn(conflicted && "pointer-events-none opacity-50")}>
-            {action === POST_ACTION.hide ? (
+            {hiding ? (
               <HideImpact
                 memberCount={post.memberCount}
                 waitingCount={post.waitingCount}
@@ -139,10 +137,10 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
             {action === POST_ACTION.unhide && post.hidden ? (
               <UnhideHistory hidden={post.hidden} gmEdit={post.gmEditSinceHidden} />
             ) : null}
-            {reasonPlaceholder ? (
+            {hiding ? (
               <>
                 <ReasonFields
-                  placeholder={reasonPlaceholder}
+                  placeholder="예: 선정적인 썸네일 이미지"
                   userReason={userReason}
                   staffMemo={staffMemo}
                   disabled={conflicted}
@@ -172,20 +170,12 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
                 />
               </Field.Root>
             )}
-            {action === POST_ACTION.hide ? (
+            {hiding ? (
               <Callout.Root colorPalette="gray" size="sm">
                 <Callout.Icon>
                   <Users size={14} />
                 </Callout.Icon>
                 <Callout.Description>참여자에게는 알림이 가지 않습니다.</Callout.Description>
-              </Callout.Root>
-            ) : null}
-            {action === POST_ACTION.unhide ? (
-              <Callout.Root colorPalette="gray" size="sm">
-                <Callout.Icon>
-                  <ScrollText size={14} />
-                </Callout.Icon>
-                <Callout.Description>해제도 활동 기록에 남습니다.</Callout.Description>
               </Callout.Root>
             ) : null}
           </VStack>

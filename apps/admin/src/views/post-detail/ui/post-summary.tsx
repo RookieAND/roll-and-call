@@ -1,20 +1,21 @@
-import { Badge, Grid, HStack, Text } from "@roll-and-call/ui";
+import { Grid, HStack, Text } from "@roll-and-call/ui";
 
-import { formatDate, formatDateTime, formatSessionTime } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { FactRows } from "@/shared/ui";
+import { FactRows, type FactRow, Tag } from "@/shared/ui";
 
-import { POST_STATUS_TONE } from "../model/post-status-tone";
 import { ImagePlaceholder } from "./image-placeholder";
 import { PostMoreMenu } from "./post-more-menu";
 
 interface PostSummaryProps {
   post: PostDetail;
+  rows: [FactRow[], FactRow[]];
   userAppHref: string | null;
   logHref: string;
+  removeHref: string;
 }
 
-export function PostSummary({ post, userAppHref, logHref }: PostSummaryProps) {
+export function PostSummary({ post, rows, userAppHref, logHref, removeHref }: PostSummaryProps) {
+  const [leftRows, rightRows] = rows;
   return (
     <section className="shrink-0 rounded-600 border border-gray-200 bg-surface">
       <HStack align="center" gap="150" className="px-200 py-175">
@@ -31,36 +32,18 @@ export function PostSummary({ post, userAppHref, logHref }: PostSummaryProps) {
           <Text typography="heading3" render={<h2 />}>
             {post.title}
           </Text>
-          <Badge colorPalette={POST_STATUS_TONE[post.status]}>{post.status}</Badge>
+          <Tag>{post.status}</Tag>
         </HStack>
-        <PostMoreMenu userAppHref={userAppHref} gmId={post.gm.id} logHref={logHref} />
+        <PostMoreMenu
+          userAppHref={userAppHref}
+          gmId={post.gm.id}
+          logHref={logHref}
+          removeHref={removeHref}
+        />
       </HStack>
       <Grid className="grid-cols-2 items-start gap-x-400 border-t border-(--rc-color-border-subtle) px-200 py-100">
-        <FactRows
-          items={[
-            { label: "세션 일정", value: formatSessionTime(post.startsAt) },
-            { label: "플레이타임", value: post.playTime ?? "—" },
-            { label: "룰", value: post.rulebook },
-          ]}
-        />
-        <FactRows
-          items={[
-            {
-              label: "모집 마감일",
-              value: post.recruitDeadline ? formatDateTime(post.recruitDeadline) : "—",
-            },
-            { label: "GM", value: post.gm.nickname },
-            ...(post.attendance.confirmedAt && post.attendance.reviewDeadline
-              ? [
-                  { label: "출석 확인", value: formatDateTime(post.attendance.confirmedAt) },
-                  {
-                    label: "후기 작성 기한",
-                    value: `${formatDate(post.attendance.reviewDeadline)}까지`,
-                  },
-                ]
-              : []),
-          ]}
-        />
+        <FactRows items={leftRows} />
+        <FactRows items={rightRows} />
       </Grid>
     </section>
   );

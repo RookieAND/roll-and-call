@@ -14,6 +14,7 @@ interface PostDetailTabsProps {
   memberCount: number;
   waitlistCount: number;
   reviewCount: number;
+  reviewReported: boolean;
   reportPanel: ReactNode | null;
   contentPanel: ReactNode;
   memberPanel: ReactNode;
@@ -27,6 +28,7 @@ export function PostDetailTabs({
   memberCount,
   waitlistCount,
   reviewCount,
+  reviewReported,
   reportPanel,
   contentPanel,
   memberPanel,
@@ -69,7 +71,11 @@ export function PostDetailTabs({
           </Tabs.Trigger>
           <Tabs.Trigger value={POST_DETAIL_TAB.reviews}>
             후기
-            <TabCount count={reviewCount} selected={tab === POST_DETAIL_TAB.reviews} />
+            <TabCount
+              count={reviewCount}
+              selected={tab === POST_DETAIL_TAB.reviews}
+              danger={reviewReported}
+            />
           </Tabs.Trigger>
           <Tabs.Indicator />
         </Tabs.List>

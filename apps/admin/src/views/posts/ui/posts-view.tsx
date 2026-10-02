@@ -88,8 +88,9 @@ export function PostsView({ posts, page, query }: PostsViewProps) {
           <Chip selected={reportedOnly} render={<ServerLink path={reportedHref} scroll={false} />}>
             처리 안 된 신고 있음
           </Chip>
+          <HStack className="ml-auto">{csvButton}</HStack>
         </HStack>
-        <Panel className="flex-1" right={csvButton} footer={empty ? null : pager}>
+        <Panel className="flex-1" footer={empty ? null : pager}>
           {empty ? (
             <EmptyState
               image={EMPTY_IMAGE.search}

@@ -28,7 +28,7 @@ export function HideImpact({ memberCount, waitingCount, startsAt }: HideImpactPr
           <Text typography="body4" foreground="hint" truncate render={<dt />}>
             {item.label}
           </Text>
-          <Text typography="subtitle1" render={<dd />}>
+          <Text typography="heading3" numeric render={<dd />}>
             {item.value}
           </Text>
           {item.sub ? (

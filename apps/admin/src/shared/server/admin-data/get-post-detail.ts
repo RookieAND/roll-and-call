@@ -19,6 +19,10 @@ export async function getPostDetail(id: string) {
   const gmSessions = db.sessions.filter((candidate) => candidate.gmId === gm.id);
   const gmTargetSuffix = ` · GM ${gm.nickname}`;
   const receivedActions = db.auditLog.filter((entry) => entry.target.endsWith(gmTargetSuffix));
+  const gmReviews = db.reviews.filter(
+    (review) =>
+      !review.removed && gmSessions.some((candidate) => candidate.id === review.sessionId),
+  );
   const reports = db.reports
     .filter((report) => report.sessionId === id)
     .toSorted((a, b) => a.reportedAt.getTime() - b.reportedAt.getTime());
@@ -102,14 +106,19 @@ export async function getPostDetail(id: string) {
     gm: {
       id: gm.id,
       nickname: gm.nickname,
+      discordHandle: gm.discordHandle,
       joinedAt: gm.joinedAt,
+      receivedReviewCount: gmReviews.length,
+      reviewedSessionCount: new Set(gmReviews.map((review) => review.sessionId)).size,
+      pendingAttendanceCount: gmSessions.filter(
+        (candidate) => candidate.startsAt.getTime() < now && !candidate.attendanceConfirmedAt,
+      ).length,
       certifiedRulebooks: db.certifications
         .filter((certification) => certification.userId === gm.id)
         .map((certification) => certification.rulebook),
       hostedCount: Math.max(gm.hostedCount, gmSessions.length),
       ongoingHostedCount: gmSessions.filter((candidate) => candidate.startsAt.getTime() >= now)
         .length,
-      editRequestCount: receivedActions.filter((entry) => entry.action === "구인 수정 요청").length,
       hideCount: receivedActions.filter((entry) => entry.action === "구인 숨김").length,
       handledNoShowCount: db.noShows.filter((noShow) =>
         gmSessions.some((candidate) => candidate.id === noShow.sessionId),

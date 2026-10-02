@@ -35,7 +35,7 @@ export function ReportedReviewsLoading() {
               className="pl-400 text-body3"
             />
           </HStack>
-          <VStack className="w-[150px]">
+          <VStack className="w-[126px]">
             <SkeletonSelect label="사유 전체" />
           </VStack>
         </HStack>
@@ -48,6 +48,7 @@ export function ReportedReviewsLoading() {
               { label: "신고", kind: "number", width: 64, align: "end" },
               { label: "가장 많은 사유", kind: "badge", width: 150 },
               { label: "가장 오래된 신고", kind: "date", width: 132 },
+              { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />
         </Panel>

@@ -1,4 +1,4 @@
-import { Bell, Mail, RotateCcw, type LucideIcon } from "lucide-react";
+import { Bell, RotateCcw, type LucideIcon } from "lucide-react";
 
 import { withObjectParticle } from "@/shared/lib";
 
@@ -14,16 +14,9 @@ interface ActionCopy {
   successMessage: (title: string) => string;
 }
 
-export const ACTION_COPY: Record<PostAction, ActionCopy> = {
-  [POST_ACTION.edit]: {
-    widthClassName: "max-w-[600px]",
-    title: "GM에게 수정 요청",
-    description: "구인은 그대로 유지됩니다",
-    footerIcon: Mail,
-    footerNote: "GM에게만 알림이 갑니다",
-    confirmLabel: "수정 요청 보내기",
-    successMessage: (title) => `GM에게 수정을 요청했습니다 · ${title}`,
-  },
+export type FormAction = Exclude<PostAction, typeof POST_ACTION.remove>;
+
+export const ACTION_COPY: Record<FormAction, ActionCopy> = {
   [POST_ACTION.hide]: {
     widthClassName: "max-w-[620px]",
     title: "구인 숨김",
