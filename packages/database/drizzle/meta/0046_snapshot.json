@@ -1,65 +1,9 @@
 {
-  "id": "a1fde589-0c10-4646-add9-8fa53b615fb3",
+  "id": "32ccc099-c990-4d18-9b32-36b1542f0aab",
   "prevId": "9d2651b8-f80d-4235-bac7-fc3091504b19",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.server_free_rulebooks": {
-      "name": "server_free_rulebooks",
-      "schema": "",
-      "columns": {
-        "server_id": {
-          "name": "server_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "rulebook_id": {
-          "name": "rulebook_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "server_free_rulebooks_server_id_servers_id_fk": {
-          "name": "server_free_rulebooks_server_id_servers_id_fk",
-          "tableFrom": "server_free_rulebooks",
-          "tableTo": "servers",
-          "columnsFrom": ["server_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "server_free_rulebooks_rulebook_id_rulebooks_id_fk": {
-          "name": "server_free_rulebooks_rulebook_id_rulebooks_id_fk",
-          "tableFrom": "server_free_rulebooks",
-          "tableTo": "rulebooks",
-          "columnsFrom": ["rulebook_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "server_free_rulebooks_server_id_rulebook_id_pk": {
-          "name": "server_free_rulebooks_server_id_rulebook_id_pk",
-          "columns": ["server_id", "rulebook_id"]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": true
-    },
     "public.server_members": {
       "name": "server_members",
       "schema": "",
@@ -1867,6 +1811,12 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "server_id": {
+          "name": "server_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "name": {
           "name": "name",
           "type": "text",
@@ -1881,16 +1831,42 @@
           "default": "now()"
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "rulebook_categories_name_unique": {
-          "name": "rulebook_categories_name_unique",
-          "nullsNotDistinct": false,
-          "columns": ["name"]
+      "indexes": {
+        "rulebook_categories_server_id_name_unique": {
+          "name": "rulebook_categories_server_id_name_unique",
+          "columns": [
+            {
+              "expression": "server_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
+      "foreignKeys": {
+        "rulebook_categories_server_id_servers_id_fk": {
+          "name": "rulebook_categories_server_id_servers_id_fk",
+          "tableFrom": "rulebook_categories",
+          "tableTo": "servers",
+          "columnsFrom": ["server_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": true
@@ -2163,6 +2139,12 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "server_id": {
+          "name": "server_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "category_id": {
           "name": "category_id",
           "type": "uuid",
@@ -2226,9 +2208,15 @@
         }
       },
       "indexes": {
-        "rulebooks_name_edition_unique": {
-          "name": "rulebooks_name_edition_unique",
+        "rulebooks_server_id_name_edition_unique": {
+          "name": "rulebooks_server_id_name_edition_unique",
           "columns": [
+            {
+              "expression": "server_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
             {
               "expression": "name",
               "isExpression": false,
@@ -2264,6 +2252,15 @@
         }
       },
       "foreignKeys": {
+        "rulebooks_server_id_servers_id_fk": {
+          "name": "rulebooks_server_id_servers_id_fk",
+          "tableFrom": "rulebooks",
+          "tableTo": "servers",
+          "columnsFrom": ["server_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "rulebooks_category_id_rulebook_categories_id_fk": {
           "name": "rulebooks_category_id_rulebook_categories_id_fk",
           "tableFrom": "rulebooks",

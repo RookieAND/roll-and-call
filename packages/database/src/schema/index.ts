@@ -1,10 +1,4 @@
-export {
-  servers,
-  serverMembers,
-  serverFreeRulebooks,
-  type Server,
-  type ServerMember,
-} from "./servers";
+export { servers, serverMembers, type Server, type ServerMember } from "./servers";
 export * from "./profiles";
 export * from "./games";
 export * from "./reviews";

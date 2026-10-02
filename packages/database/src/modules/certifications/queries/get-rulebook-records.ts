@@ -37,7 +37,7 @@ export async function getRulebookRecords({
     })
     .from(rulebooks)
     .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
-    .where(eq(rulebooks.hidden, false))
+    .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.hidden, false)))
     .orderBy(rulebookCategories.name, rulebooks.name, rulebooks.edition);
   const pendingRequestNames = await db
     .selectDistinct({ name: rulebookRequests.name, edition: rulebookRequests.edition })

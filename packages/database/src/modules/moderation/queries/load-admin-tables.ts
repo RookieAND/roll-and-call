@@ -22,7 +22,7 @@ import {
   staffMemos,
 } from "../../../schema";
 
-// 어드민 스냅숏이 읽는 표 전체. 서버별 표(퀴즈 문항·판매처 포함)는 그 서버 것만, 룰북 카탈로그는 전역으로 읽는다.
+// 어드민 스냅숏이 읽는 표 전체. 룰북·카테고리·퀴즈 문항·판매처까지 모두 그 서버 것만 읽는다.
 // 사람(profiles)은 그 서버 멤버만 읽는다.
 export async function loadAdminTables(serverId: string) {
   // 트랜잭션 풀러(:6543)에 13개를 Promise.all로 한꺼번에 보내면 응답이 멈춘다(2026-09-24 재현).
@@ -43,12 +43,16 @@ export async function loadAdminTables(serverId: string) {
   const rulebookRows = await db
     .select({ ...getTableColumns(rulebooks), category: rulebookCategories.name })
     .from(rulebooks)
-    .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId));
+    .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
+    .where(eq(rulebooks.serverId, serverId));
   const requestRows = await db
     .select()
     .from(rulebookRequests)
     .where(eq(rulebookRequests.serverId, serverId));
-  const categoryRows = await db.select().from(rulebookCategories);
+  const categoryRows = await db
+    .select()
+    .from(rulebookCategories)
+    .where(eq(rulebookCategories.serverId, serverId));
   const applicationRows = await db
     .select()
     .from(certApplications)

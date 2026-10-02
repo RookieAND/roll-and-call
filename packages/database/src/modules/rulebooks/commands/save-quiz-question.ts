@@ -28,7 +28,10 @@ export async function saveQuizQuestion({
   actor: Actor;
 }) {
   await db.transaction(async (tx) => {
-    const [rulebook] = await tx.select().from(rulebooks).where(eq(rulebooks.id, rulebookId));
+    const [rulebook] = await tx
+      .select()
+      .from(rulebooks)
+      .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, rulebookId)));
     if (!rulebook) throw new Error("룰북을 찾을 수 없습니다");
     const [before] = id
       ? await tx

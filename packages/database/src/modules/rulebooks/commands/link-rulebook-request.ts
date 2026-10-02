@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 import { db } from "../../../client";
 import { rulebooks } from "../../../schema";
@@ -26,7 +26,10 @@ export async function linkRulebookRequest({
   input: RulebookLinkInput;
 }): Promise<RulebookActionResult> {
   return db.transaction(async (tx) => {
-    const [rulebook] = await tx.select().from(rulebooks).where(eq(rulebooks.id, input.rulebookId));
+    const [rulebook] = await tx
+      .select()
+      .from(rulebooks)
+      .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, input.rulebookId)));
     if (!rulebook) throw new Error("연결할 룰북을 찾을 수 없습니다");
     const claim = await claimRulebookRequest({
       executor: tx,
@@ -45,7 +48,7 @@ export async function linkRulebookRequest({
         .set({ aliases: sql`array_append(${rulebooks.aliases}, ${claim.label})` })
         .where(eq(rulebooks.id, rulebook.id));
     }
-    await relinkGames(tx);
+    await relinkGames({ executor: tx, serverId });
     await recordAudit({
       executor: tx,
       serverId,

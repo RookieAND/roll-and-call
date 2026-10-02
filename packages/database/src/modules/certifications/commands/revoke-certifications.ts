@@ -34,7 +34,7 @@ export async function revokeCertifications({
     .from(profiles)
     .where(eq(profiles.id, userId));
   if (!user) throw new Error("유저를 찾을 수 없습니다");
-  const allRulebooks = await db.select().from(rulebooks);
+  const allRulebooks = await db.select().from(rulebooks).where(eq(rulebooks.serverId, serverId));
   const ids = allRulebooks
     .filter((rulebook) => input.rulebooks.includes(rulebookLabel(rulebook)))
     .map((rulebook) => rulebook.id);

@@ -29,7 +29,9 @@ export async function requestRulebook(input: RulebookRequestValues): Promise<Act
     return { error: "이미 요청된 룰북입니다." };
   }
 
-  const knownCategoryId = category ? await findRulebookCategoryId(category) : null;
+  const knownCategoryId = category
+    ? await findRulebookCategoryId({ serverId: server.id, name: category })
+    : null;
   await createRulebookRequest({
     serverId: server.id,
     request: {

@@ -10,7 +10,7 @@ import { toRulebookValues } from "./rulebook-values";
 
 export type AddRulebookResult = { ok: true; id: string } | { ok: false; duplicate: true };
 
-// 이름·판본이 같은 룰북은 유니크 인덱스가 막는다.
+// 한 서버에서 이름·판본이 같은 룰북은 유니크 인덱스가 막는다.
 export async function addRulebook({
   serverId,
   fields,
@@ -25,11 +25,11 @@ export async function addRulebook({
   return db.transaction(async (tx) => {
     const [row] = await tx
       .insert(rulebooks)
-      .values(await toRulebookValues({ executor: tx, fields }))
+      .values(await toRulebookValues({ executor: tx, serverId, fields }))
       .onConflictDoNothing()
       .returning({ id: rulebooks.id });
     if (!row) return { ok: false, duplicate: true };
-    await relinkGames(tx);
+    await relinkGames({ executor: tx, serverId });
     await recordAudit({
       executor: tx,
       serverId,

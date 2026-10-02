@@ -24,11 +24,19 @@ export const rulebookRequestOutcome = pgEnum("rulebook_request_outcome", [
 export const rulebookKind = pgEnum("rulebook_kind", ["core", "supplement", "handbook"]);
 
 // 같은 TRPG의 책을 묶는다. 단권 룰도 카테고리 하나에 책 하나다.
-export const rulebookCategories = pgTable("rulebook_categories", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull().unique(),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-}).enableRLS();
+// 룰북 목록은 서버마다 따로 두고, 새 서버는 trpia의 목록을 복사해 시작한다(copy_default_rulebooks, 퀴즈 제외).
+export const rulebookCategories = pgTable(
+  "rulebook_categories",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
+    name: text("name").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("rulebook_categories_server_id_name_unique").on(table.serverId, table.name),
+  ],
+).enableRLS();
 
 // 책 한 권이 한 행이다. 같은 카테고리·판본의 core를 모두 가져야 그 판본으로 GM을 설 수 있고,
 // supersedesId는 이 책이 대신하는 구판이다(7판 → 6판). 구인·인증은 "이름 판본"으로 부른다.
@@ -36,6 +44,7 @@ export const rulebooks = pgTable(
   "rulebooks",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     categoryId: uuid("category_id")
       .notNull()
       .references(() => rulebookCategories.id, { onDelete: "restrict" }),
@@ -51,7 +60,11 @@ export const rulebooks = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
-    uniqueIndex("rulebooks_name_edition_unique").on(table.name, table.edition),
+    uniqueIndex("rulebooks_server_id_name_edition_unique").on(
+      table.serverId,
+      table.name,
+      table.edition,
+    ),
     index("rulebooks_category_id_idx").on(table.categoryId),
   ],
 ).enableRLS();

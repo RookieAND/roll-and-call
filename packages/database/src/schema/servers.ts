@@ -12,7 +12,6 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { type AvailabilityInterval, type ProfileLink, profiles } from "./profiles";
-import { rulebooks } from "./rulebooks";
 
 // 디스코드 서버 하나가 한 행이다. 서버 안의 데이터는 모두 server_id로 이 행에 묶인다.
 export const servers = pgTable("servers", {
@@ -66,21 +65,6 @@ export const serverMembers = pgTable(
     index("server_members_user_id_idx").on(table.userId),
     check("server_members_featured_badges_limit", sql`cardinality(${table.featuredBadges}) <= 3`),
   ],
-).enableRLS();
-
-// 이 서버에서 인증 없이 구인을 열 수 있는 룰. 카탈로그의 무료 배포(rulebooks.cert_required = false)와 별개로 서버마다 더한다.
-export const serverFreeRulebooks = pgTable(
-  "server_free_rulebooks",
-  {
-    serverId: uuid("server_id")
-      .notNull()
-      .references(() => servers.id),
-    rulebookId: uuid("rulebook_id")
-      .notNull()
-      .references(() => rulebooks.id, { onDelete: "cascade" }),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-  },
-  (table) => [primaryKey({ columns: [table.serverId, table.rulebookId] })],
 ).enableRLS();
 
 export type Server = typeof servers.$inferSelect;

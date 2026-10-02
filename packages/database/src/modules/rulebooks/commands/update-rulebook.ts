@@ -26,11 +26,14 @@ export async function updateRulebook({
   reason: string;
 }) {
   await db.transaction(async (tx) => {
-    const [rulebook] = await tx.select().from(rulebooks).where(eq(rulebooks.id, id));
+    const [rulebook] = await tx
+      .select()
+      .from(rulebooks)
+      .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, id)));
     if (!rulebook) throw new Error("룰북을 찾을 수 없습니다");
-    const values = await toRulebookValues({ executor: tx, fields, selfId: id });
+    const values = await toRulebookValues({ executor: tx, serverId, fields, selfId: id });
     await tx.update(rulebooks).set(values).where(eq(rulebooks.id, id));
-    const pointsHere = eq(rulebooks.supersedesId, id);
+    const pointsHere = and(eq(rulebooks.serverId, serverId), eq(rulebooks.supersedesId, id));
     await tx
       .update(rulebooks)
       .set({ supersedesId: null })
@@ -39,8 +42,8 @@ export async function updateRulebook({
           ? and(pointsHere, ne(rulebooks.categoryId, values.categoryId))
           : pointsHere,
       );
-    await removeEmptyCategories(tx);
-    await relinkGames(tx);
+    await removeEmptyCategories({ executor: tx, serverId });
+    await relinkGames({ executor: tx, serverId });
     const label = rulebookLabel(fields);
     await recordAudit({
       executor: tx,
