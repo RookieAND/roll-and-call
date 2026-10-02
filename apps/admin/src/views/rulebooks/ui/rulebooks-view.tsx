@@ -1,6 +1,5 @@
 import { Button, Callout, HStack, VStack } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 
 import {
   REQUEST_ACTION,
@@ -14,7 +13,15 @@ import type {
   RulebookRequestRow,
   RulebookRow,
 } from "@/shared/server";
-import { AdminHeader, ListPager, Panel, RouteTabs, TabCount, UrlSearchInput } from "@/shared/ui";
+import {
+  AdminHeader,
+  ListPager,
+  Panel,
+  RouteTabs,
+  TabCount,
+  UrlSearchInput,
+  ServerLink,
+} from "@/shared/ui";
 
 import { RULEBOOKS_TAB, type RulebooksTab } from "../model/rulebooks-tab";
 import { AddRulebookRoute } from "./add-rulebook-route";
@@ -120,7 +127,10 @@ export function RulebooksView({
                   <Button
                     size="sm"
                     render={
-                      <Link href={withQuery("/rules", pageQuery, { add: "1" })} scroll={false} />
+                      <ServerLink
+                        path={withQuery("/rules", pageQuery, { add: "1" })}
+                        scroll={false}
+                      />
                     }
                     className="gap-050"
                   >

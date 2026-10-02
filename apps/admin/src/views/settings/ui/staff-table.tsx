@@ -1,10 +1,9 @@
 import { Badge, Button, HStack, Table, Text } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { ChangeRoleButton } from "@/features/change-staff-role";
 import { formatDate, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
-import { TableColumns } from "@/shared/ui";
+import { TableColumns, ServerLink } from "@/shared/ui";
 
 import { formatLastActive } from "../model/format-last-active";
 
@@ -69,7 +68,7 @@ export function StaffTable({ rows, viewer }: StaffTableProps) {
                       variant="outline"
                       colorPalette="danger"
                       size="sm"
-                      render={<Link href={removeHref} scroll={false} />}
+                      render={<ServerLink path={removeHref} scroll={false} />}
                     >
                       해제
                     </Button>

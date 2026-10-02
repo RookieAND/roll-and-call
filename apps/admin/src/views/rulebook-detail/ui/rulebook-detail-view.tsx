@@ -1,9 +1,8 @@
 import { Button, HStack, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { RulebookEditForm } from "@/features/write-rulebook";
 import type { GrantCandidate, RulebookDetail } from "@/shared/server";
-import { AdminHeader, RouteTabs, TabCount } from "@/shared/ui";
+import { AdminHeader, RouteTabs, TabCount, ServerLink } from "@/shared/ui";
 
 import { RULEBOOK_DETAIL_TAB, type RulebookDetailTab } from "../model/rulebook-detail-tab";
 import { CategoryCard } from "./category-card";
@@ -58,7 +57,12 @@ export function RulebookDetailView({
         title={rulebook.label}
         sub={sub}
         actions={
-          <Button variant="outline" colorPalette="gray" size="sm" render={<Link href={logHref} />}>
+          <Button
+            variant="outline"
+            colorPalette="gray"
+            size="sm"
+            render={<ServerLink path={logHref} />}
+          >
             활동 기록에서 보기
           </Button>
         }

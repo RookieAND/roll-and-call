@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import type { PostDetail } from "@/shared/server";
+import { useServerPath } from "@/shared/ui";
 
 import { ACTION_COPY } from "../model/action-copy";
 import type { PostAction } from "../model/post-action";
@@ -20,9 +21,10 @@ interface PostActionDialogProps {
 // 닫히는 동안에도 제목이 남도록 마지막 조치를 기억한다.
 export function PostActionDialog({ post, action, closeHref }: PostActionDialogProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [shownAction, setShownAction] = useState(action);
   if (action && action !== shownAction) setShownAction(action);
-  const close = () => router.replace(closeHref, { scroll: false });
+  const close = () => router.replace(toServerPath(closeHref), { scroll: false });
   return (
     <Dialog.Root open={!isNull(action)} onOpenChange={(open) => open || close()}>
       <Dialog.Popup

@@ -364,7 +364,6 @@ export const loadSnapshot = cache(async () => {
     reviewReports: reviewReportList,
     auditLog: auditList,
     staffMemos: memoList,
-    settings: { certEnforcementDate: server.certEnforcementDate },
   };
 });
 

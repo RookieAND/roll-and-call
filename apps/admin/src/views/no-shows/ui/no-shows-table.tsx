@@ -1,10 +1,9 @@
 import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
 import { ArrowDown } from "lucide-react";
-import Link from "next/link";
 
 import { formatSessionTime } from "@/shared/lib";
 import { NO_SHOW_TIMINGS, type NoShowRow } from "@/shared/server";
-import { TableEmptyRow, type EmptyImage, TableColumns } from "@/shared/ui";
+import { TableEmptyRow, type EmptyImage, TableColumns, ServerLink } from "@/shared/ui";
 
 interface NoShowsTableProps {
   rows: NoShowRow[];
@@ -56,7 +55,7 @@ export function NoShowsTable({
                 typography="body3"
                 weight="bold"
                 truncate
-                render={<Link href={hrefOf(row.id)} scroll={false} />}
+                render={<ServerLink path={hrefOf(row.id)} scroll={false} />}
                 className="after:absolute after:inset-0"
               >
                 {row.nickname}

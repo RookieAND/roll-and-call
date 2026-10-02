@@ -1,9 +1,8 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { paginate, withQuery } from "@/shared/lib";
 import { USER_FILTERS, type UserFilter, type UserRow } from "@/shared/server";
-import { AdminHeader, ListPager, Panel, UrlSearchInput } from "@/shared/ui";
+import { AdminHeader, ListPager, Panel, UrlSearchInput, ServerLink } from "@/shared/ui";
 
 import { UsersTable } from "./users-table";
 
@@ -33,8 +32,8 @@ export function UsersView({ rows, page, query }: UsersViewProps) {
                 key={key}
                 selected={selected}
                 render={
-                  <Link
-                    href={withQuery("/users", query, { filter: selected ? undefined : key })}
+                  <ServerLink
+                    path={withQuery("/users", query, { filter: selected ? undefined : key })}
                     scroll={false}
                   />
                 }

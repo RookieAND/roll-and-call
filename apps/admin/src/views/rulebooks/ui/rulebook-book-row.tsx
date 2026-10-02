@@ -1,9 +1,9 @@
 import { Badge, HStack, Table, Text, cn } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { RulebookRow } from "@/shared/server";
+import { ServerLink } from "@/shared/ui";
 
 interface RulebookBookRowProps {
   row: RulebookRow;
@@ -18,7 +18,7 @@ export function RulebookBookRow({ row }: RulebookBookRowProps) {
             typography="body3"
             weight="medium"
             truncate
-            render={<Link href={`/rules/${row.id}`} />}
+            render={<ServerLink path={`/rules/${row.id}`} />}
             className="after:absolute after:inset-0"
           >
             {row.name}

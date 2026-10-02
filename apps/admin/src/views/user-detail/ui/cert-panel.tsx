@@ -1,10 +1,16 @@
 import { Badge, Button, Callout, Table, Text, VStack } from "@roll-and-call/ui";
 import { Ban } from "lucide-react";
-import Link from "next/link";
 
 import { paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow, TableColumns } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  ListPager,
+  Panel,
+  TableEmptyRow,
+  TableColumns,
+  ServerLink,
+} from "@/shared/ui";
 
 import { CERT_STATE_VIEW } from "../model/cert-state-view";
 import { CERT_ROW_STATE, toCertRows } from "../model/to-cert-rows";
@@ -103,7 +109,7 @@ export function CertPanel({ user, page }: CertPanelProps) {
                         variant={state.action.variant}
                         colorPalette={state.action.tone}
                         size="sm"
-                        render={<Link href={row.href} />}
+                        render={<ServerLink path={row.href} />}
                       >
                         {state.action.label}
                       </Button>

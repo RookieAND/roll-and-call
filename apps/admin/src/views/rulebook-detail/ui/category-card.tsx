@@ -1,10 +1,9 @@
 import { Badge, Button, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 
 import { withQuery } from "@/shared/lib";
 import type { RulebookDetail } from "@/shared/server";
-import { Panel } from "@/shared/ui";
+import { Panel, ServerLink } from "@/shared/ui";
 
 import { CategoryBookItem } from "./category-book-item";
 import { GmCondition } from "./gm-condition";
@@ -53,7 +52,7 @@ export function CategoryCard({ rulebook }: CategoryCardProps) {
           variant="outline"
           colorPalette="gray"
           size="sm"
-          render={<Link href={addHref} />}
+          render={<ServerLink path={addHref} />}
           className="w-full gap-050"
         >
           <Plus size={14} aria-hidden />이 카테고리에 책 추가

@@ -1,10 +1,9 @@
 import { Button, HStack, Text } from "@roll-and-call/ui";
 import { Eye } from "lucide-react";
-import Link from "next/link";
 
 import { formatDate } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { IconBadge } from "@/shared/ui";
+import { IconBadge, ServerLink } from "@/shared/ui";
 
 interface HiddenBannerProps {
   hidden: NonNullable<PostDetail["hidden"]>;
@@ -27,7 +26,12 @@ export function HiddenBanner({ hidden, logHref }: HiddenBannerProps) {
       <Text typography="body4" foreground="hint" className="whitespace-nowrap">
         {formatDate(hidden.at)} {hidden.by}
       </Text>
-      <Button variant="outline" colorPalette="gray" size="sm" render={<Link href={logHref} />}>
+      <Button
+        variant="outline"
+        colorPalette="gray"
+        size="sm"
+        render={<ServerLink path={logHref} />}
+      >
         활동 기록에서 보기
       </Button>
     </HStack>

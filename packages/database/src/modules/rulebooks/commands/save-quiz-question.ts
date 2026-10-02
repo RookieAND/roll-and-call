@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { db } from "../../../client";
 import { rulebookQuizQuestions, rulebooks } from "../../../schema";
@@ -31,13 +31,21 @@ export async function saveQuizQuestion({
     const [rulebook] = await tx.select().from(rulebooks).where(eq(rulebooks.id, rulebookId));
     if (!rulebook) throw new Error("룰북을 찾을 수 없습니다");
     const [before] = id
-      ? await tx.select().from(rulebookQuizQuestions).where(eq(rulebookQuizQuestions.id, id))
+      ? await tx
+          .select()
+          .from(rulebookQuizQuestions)
+          .where(
+            and(eq(rulebookQuizQuestions.serverId, serverId), eq(rulebookQuizQuestions.id, id)),
+          )
       : [];
     if (id && !before) throw new Error("문항을 찾을 수 없습니다");
     if (id) {
-      await tx.update(rulebookQuizQuestions).set(input).where(eq(rulebookQuizQuestions.id, id));
+      await tx
+        .update(rulebookQuizQuestions)
+        .set(input)
+        .where(and(eq(rulebookQuizQuestions.serverId, serverId), eq(rulebookQuizQuestions.id, id)));
     } else {
-      await tx.insert(rulebookQuizQuestions).values({ rulebookId, ...input });
+      await tx.insert(rulebookQuizQuestions).values({ serverId, rulebookId, ...input });
     }
     await recordAudit({
       executor: tx,

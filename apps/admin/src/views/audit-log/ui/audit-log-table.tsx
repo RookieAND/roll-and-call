@@ -1,11 +1,10 @@
 import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { ArrowDown, ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { actionTone, formatShortDateTime } from "@/shared/lib";
 import { retentionDaysLeft, type AuditEntry } from "@/shared/server";
-import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
+import { EMPTY_IMAGE, TableEmptyRow, TableColumns, ServerLink } from "@/shared/ui";
 
 import { retentionTone } from "../model/retention-tone";
 import { splitTarget } from "../model/split-target";
@@ -54,7 +53,7 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
                   typography="body3"
                   foreground="hint"
                   numeric
-                  render={<Link href={`/log/${row.id}`} />}
+                  render={<ServerLink path={`/log/${row.id}`} />}
                   className="after:absolute after:inset-0"
                 >
                   {formatShortDateTime(row.at)}

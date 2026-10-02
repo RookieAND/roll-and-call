@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { use, useCallback, useEffect, useState, type KeyboardEvent } from "react";
 
 import type { PendingItem, UserSearchResult } from "@/shared/server";
-import { Kbd } from "@/shared/ui";
+import { Kbd, useServerPath } from "@/shared/ui";
 
 import { searchPalette } from "../api/search-palette";
 import { buildDefaultGroups } from "../model/build-default-groups";
@@ -25,6 +25,7 @@ interface QuickSearchPaletteProps {
 export function QuickSearchPalette({ pendingItemsPromise }: QuickSearchPaletteProps) {
   const pendingItems = use(pendingItemsPromise);
   const router = useRouter();
+  const toServerPath = useServerPath();
   const recentScreens = useRecentScreens();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -70,7 +71,7 @@ export function QuickSearchPalette({ pendingItemsPromise }: QuickSearchPalettePr
     if (event.key !== "Enter" || !activeItem || event.nativeEvent.isComposing) return;
     event.preventDefault();
     if (event.metaKey || event.ctrlKey) window.open(activeItem.href, "_blank");
-    else router.push(activeItem.href);
+    else router.push(toServerPath(activeItem.href));
     close();
   };
 

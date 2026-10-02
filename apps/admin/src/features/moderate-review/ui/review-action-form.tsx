@@ -8,6 +8,7 @@ import { useState, useTransition } from "react";
 
 import { REVIEW_REASON, type ReviewReason } from "@/shared/lib";
 import type { ReviewDetail, ReviewModerationResult } from "@/shared/server";
+import { useServerPath } from "@/shared/ui";
 
 import { submitReviewModeration } from "../api/submit-review-moderation";
 import { ACTION_COPY } from "../model/action-copy";
@@ -53,6 +54,7 @@ export function ReviewActionForm({
   onSwitchToHide,
 }: ReviewActionFormProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [pending, startTransition] = useTransition();
   const needsReason = REASON_ACTIONS.includes(action);
   const [reason, setReason] = useState<ReviewReason | null>(
@@ -116,8 +118,8 @@ export function ReviewActionForm({
       } else {
         toast.success(message);
       }
-      if (nextHref) router.push(nextHref);
-      else if (removing) router.push(`/posts/${review.session.id}?tab=reviews`);
+      if (nextHref) router.push(toServerPath(nextHref));
+      else if (removing) router.push(toServerPath(`/posts/${review.session.id}?tab=reviews`));
       else onDone();
     });
 

@@ -1,9 +1,8 @@
 import { Button, Callout, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Ban, BookOpen, CircleCheck, FileText, Mail, Shield } from "lucide-react";
-import Link from "next/link";
 
 import type { UserDetail } from "@/shared/server";
-import { ActionCard } from "@/shared/ui";
+import { ActionCard, ServerLink } from "@/shared/ui";
 
 import { revokeHref } from "../model/revoke-href";
 import { USER_ACTION } from "../model/user-action";
@@ -38,8 +37,8 @@ export function UserActionsAside({ user, tab }: UserActionsAsideProps) {
             title="제재 해제"
             description="남은 제재를 지금 해제합니다"
             link={
-              <Link
-                href={userActionHref(user.id, { tab, action: USER_ACTION.release })}
+              <ServerLink
+                path={userActionHref(user.id, { tab, action: USER_ACTION.release })}
                 scroll={false}
               />
             }
@@ -50,7 +49,7 @@ export function UserActionsAside({ user, tab }: UserActionsAsideProps) {
             tone="danger"
             title="제재"
             description="정해진 기간 동안 활동을 제한합니다"
-            link={<Link href={`/users/${user.id}/sanction`} />}
+            link={<ServerLink path={`/users/${user.id}/sanction`} />}
           />
         )}
         {user.certifications.length ? (
@@ -58,7 +57,7 @@ export function UserActionsAside({ user, tab }: UserActionsAsideProps) {
             icon={BookOpen}
             title="룰북 인증 반려로 돌리기"
             description="반려된 룰북으로는 구인을 열 수 없습니다"
-            link={<Link href={revokeHref(user.id)} />}
+            link={<ServerLink path={revokeHref(user.id)} />}
           />
         ) : null}
         <ActionCard
@@ -66,8 +65,8 @@ export function UserActionsAside({ user, tab }: UserActionsAsideProps) {
           title="운영진 메모 추가"
           description="사용자에게 보이지 않는 메모를 남깁니다"
           link={
-            <Link
-              href={userActionHref(user.id, {
+            <ServerLink
+              path={userActionHref(user.id, {
                 tab: USER_DETAIL_TAB.memo,
                 action: USER_ACTION.memo,
               })}
@@ -96,7 +95,12 @@ export function UserActionsAside({ user, tab }: UserActionsAsideProps) {
           </Callout.Description>
         </Callout.Root>
         <HStack justify="end">
-          <Button variant="outline" colorPalette="gray" size="sm" render={<Link href={logHref} />}>
+          <Button
+            variant="outline"
+            colorPalette="gray"
+            size="sm"
+            render={<ServerLink path={logHref} />}
+          >
             활동 기록에서 보기
           </Button>
         </HStack>

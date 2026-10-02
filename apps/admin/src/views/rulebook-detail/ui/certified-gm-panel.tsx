@@ -4,7 +4,14 @@ import Link from "next/link";
 
 import { formatDate, paginate } from "@/shared/lib";
 import type { CertifiedGm } from "@/shared/server";
-import { EMPTY_IMAGE, ListPager, Panel, TableEmptyRow, TableColumns } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  ListPager,
+  Panel,
+  TableEmptyRow,
+  TableColumns,
+  ServerLink,
+} from "@/shared/ui";
 
 interface CertifiedGmPanelProps {
   gms: CertifiedGm[];
@@ -73,7 +80,7 @@ export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelPr
                   typography="body3"
                   weight="bold"
                   truncate
-                  render={<Link href={`/users/${gm.userId}`} />}
+                  render={<ServerLink path={`/users/${gm.userId}`} />}
                   className="block after:absolute after:inset-0"
                 >
                   {gm.nickname}

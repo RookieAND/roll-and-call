@@ -13,13 +13,18 @@ import {
   VStack,
   toast,
 } from "@roll-and-call/ui";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { formatDate, formatSessionTime } from "@/shared/lib";
 import type { OngoingActivity, UserDetail } from "@/shared/server";
-import { FormSection, OngoingChoiceList, type OngoingChoiceRow } from "@/shared/ui";
+import {
+  FormSection,
+  OngoingChoiceList,
+  type OngoingChoiceRow,
+  ServerLink,
+  useServerPath,
+} from "@/shared/ui";
 
 import { revokeUserCertifications } from "../api/revoke-user-certifications";
 import { RevokeSummary } from "./revoke-summary";
@@ -42,6 +47,7 @@ export function RevokeCertForm({
   backHref,
 }: RevokeCertFormProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [pending, startTransition] = useTransition();
   const [rulebooks, setRulebooks] = useState(initialRulebook ? [initialRulebook] : []);
   const [userReason, setUserReason] = useState("");
@@ -88,7 +94,7 @@ export function RevokeCertForm({
       });
       if (result.ok) toast.success(`${nickname}님의 룰북 인증을 반려로 돌렸습니다`);
       else toast.info("이미 반려로 돌린 인증입니다");
-      router.push(backHref);
+      router.push(toServerPath(backHref));
     });
 
   return (
@@ -182,7 +188,7 @@ export function RevokeCertForm({
             variant="ghost"
             colorPalette="gray"
             disabled={pending}
-            render={<Link href={backHref} />}
+            render={<ServerLink path={backHref} />}
           >
             취소
           </Button>

@@ -1,13 +1,6 @@
-import { isNull, uniq } from "es-toolkit";
+import { uniq } from "es-toolkit";
 
-import {
-  CERT_STATE,
-  certApplyHref,
-  isCertEnforced,
-  setStatus,
-  type MyRulebooks,
-} from "@/entities/rulebook";
-import { ddayKst, formatDate } from "@/shared/lib";
+import { CERT_STATE, certApplyHref, setStatus, type MyRulebooks } from "@/entities/rulebook";
 
 import { recentUnopenedSets } from "./recent-unopened-sets";
 import { suspensionNotice } from "./suspension-notice";
@@ -19,7 +12,7 @@ const STATUS_ORDER = [CERT_STATE.rejected, CERT_STATE.revoked, CERT_STATE.pendin
 const STATUS_WORD = { rejected: "반려", revoked: "취소", pending: "심사 중" } as const;
 
 export function myRulebooksHome(data: MyRulebooks, now: Date) {
-  const { rulebooks, sets, enforcementDate, suspended, suspendedUntil } = data;
+  const { rulebooks, sets, suspended, suspendedUntil } = data;
   const inStatus = STATUS_ORDER.map((state) =>
     rulebooks.filter((rulebook) => rulebook.state === state && !rulebook.unlockedBy),
   );
@@ -32,17 +25,8 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
     toOwnedCategory({ categoryId, rulebooks, sets }),
   );
   const requests = data.requests.map(toRequestRow);
-  const dday =
-    enforcementDate && !isCertEnforced(enforcementDate, now) ? ddayKst(enforcementDate, now) : null;
   const [suggested] = recentUnopenedSets(data);
   return {
-    banner:
-      !isNull(dday) && !suspended
-        ? {
-            title: `${formatDate(enforcementDate!)}부터 룰북 인증이 필요합니다`,
-            dday: dday === 0 ? "D-DAY" : `D-${dday}`,
-          }
-        : null,
     suspension: suspensionNotice({ suspended, suspendedUntil }),
     statusRows,
     statusSummary,
@@ -54,9 +38,7 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
       ? {
           lines: [
             `최근에 ${suggested.label} 구인을 열었습니다.`,
-            !isNull(dday)
-              ? `${formatDate(enforcementDate!)} 전에 인증해 두세요.`
-              : "인증해 두면 계속 열 수 있습니다.",
+            "인증해 두면 계속 열 수 있습니다.",
           ],
           href: certApplyHref({ rulebookIds: setStatus(suggested).missing.map((core) => core.id) }),
         }

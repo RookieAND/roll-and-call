@@ -1,9 +1,8 @@
 import { Button } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { formatDateTime } from "@/shared/lib";
 import type { ReviewModerationResult } from "@/shared/server";
-import { ConflictNotice } from "@/shared/ui";
+import { ConflictNotice, ServerLink } from "@/shared/ui";
 
 import { CONFLICT_VERB } from "../model/action-copy";
 
@@ -25,7 +24,7 @@ export function ReviewFailureNotice({ failure }: ReviewFailureNoticeProps) {
       title={title}
       description={description}
       actions={
-        <Button size="sm" render={<Link href="/posts/reviews" />}>
+        <Button size="sm" render={<ServerLink path="/posts/reviews" />}>
           {actionLabel}
         </Button>
       }

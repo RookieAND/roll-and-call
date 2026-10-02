@@ -1,10 +1,9 @@
 import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
 import { Ban, CircleCheck } from "lucide-react";
-import Link from "next/link";
 
 import { formatDate } from "@/shared/lib";
 import type { UserRow } from "@/shared/server";
-import { EMPTY_IMAGE, IconBadge, TableEmptyRow, TableColumns } from "@/shared/ui";
+import { EMPTY_IMAGE, IconBadge, TableEmptyRow, TableColumns, ServerLink } from "@/shared/ui";
 
 const NO_SHOW_WARNING_COUNT = 2;
 
@@ -42,7 +41,7 @@ export function UsersTable({ rows }: UsersTableProps) {
                     typography="body3"
                     weight="bold"
                     truncate
-                    render={<Link href={`/users/${row.id}`} />}
+                    render={<ServerLink path={`/users/${row.id}`} />}
                     className="after:absolute after:inset-0"
                   >
                     {row.nickname}

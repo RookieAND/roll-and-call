@@ -1,9 +1,8 @@
 import { Button, cn, HStack, Text } from "@roll-and-call/ui";
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { PaletteLauncher } from "./palette-launcher";
+import { ServerLink } from "./server-link";
 
 interface AdminHeaderProps {
   title: ReactNode;
@@ -29,14 +28,14 @@ export function AdminHeader({ title, sub, back, actions, withAside }: AdminHeade
           variant="outline"
           colorPalette="gray"
           size="sm"
-          render={<Link href={back.href} />}
+          render={<ServerLink path={back.href} />}
           className="gap-075 rounded-full pr-150 pl-100"
         >
           <ArrowLeft size={14} aria-hidden />
           {back.label}
         </Button>
       ) : null}
-      <Text typography="heading2" render={<h1 />}>
+      <Text typography="heading1" render={<h1 />}>
         {title}
       </Text>
       {sub ? (
@@ -45,7 +44,6 @@ export function AdminHeader({ title, sub, back, actions, withAside }: AdminHeade
         </Text>
       ) : null}
       <HStack align="center" gap="100" className="ml-auto">
-        <PaletteLauncher />
         {actions}
       </HStack>
     </HStack>

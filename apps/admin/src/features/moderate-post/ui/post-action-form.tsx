@@ -14,13 +14,12 @@ import {
 } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { ScrollText, Users } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { formatDateTime } from "@/shared/lib";
 import type { PostDetail, PostModerationResult } from "@/shared/server";
-import { ConflictNotice, UserPreview } from "@/shared/ui";
+import { ConflictNotice, UserPreview, ServerLink, useServerPath } from "@/shared/ui";
 
 import { submitPostModeration } from "../api/submit-post-moderation";
 import { ACTION_COPY } from "../model/action-copy";
@@ -52,6 +51,7 @@ interface PostActionFormProps {
 
 export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [pending, startTransition] = useTransition();
   const [userReason, setUserReason] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
@@ -102,7 +102,7 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
         toast.success(copy.successMessage(post.title), {
           action: { label: "되돌리기", onClick: () => void undoHide() },
         });
-        router.push("/posts");
+        router.push(toServerPath("/posts"));
         return;
       }
       toast.success(copy.successMessage(post.title));
@@ -122,7 +122,7 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
               title={conflictTitle}
               description={conflictDescription}
               actions={
-                <Button size="sm" render={<Link href="/posts?filter=reported" />}>
+                <Button size="sm" render={<ServerLink path="/posts?filter=reported" />}>
                   다음 건
                 </Button>
               }

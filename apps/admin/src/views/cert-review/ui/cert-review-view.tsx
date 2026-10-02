@@ -1,12 +1,11 @@
 import { Button, Callout } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
 import { Quote, Receipt } from "lucide-react";
-import Link from "next/link";
 
 import { CertDecisionForm } from "@/features/decide-cert";
 import { formatDateTime } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
-import { AdminHeader, ConflictNotice, ItemCard } from "@/shared/ui";
+import { AdminHeader, ConflictNotice, ItemCard, ServerLink } from "@/shared/ui";
 
 import { processedConflictTitle } from "../model/processed-conflict-title";
 import { ApplicantCard } from "./applicant-card";
@@ -80,7 +79,7 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
             title="신청자가 신청을 거뒀습니다"
             description={`${formatDateTime(withdrawnAt)}에 거둔 신청이며, 올린 사진도 함께 삭제되었습니다.`}
             actions={
-              <Button size="sm" render={<Link href={nextHref} />}>
+              <Button size="sm" render={<ServerLink path={nextHref} />}>
                 다음 건
               </Button>
             }
@@ -96,11 +95,13 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
                   variant="outline"
                   colorPalette="gray"
                   size="sm"
-                  render={<Link href={`/log?target=${encodeURIComponent(applicant.nickname)}`} />}
+                  render={
+                    <ServerLink path={`/log?target=${encodeURIComponent(applicant.nickname)}`} />
+                  }
                 >
                   활동 기록에서 보기
                 </Button>
-                <Button size="sm" render={<Link href={nextHref} />}>
+                <Button size="sm" render={<ServerLink path={nextHref} />}>
                   다음 건
                 </Button>
               </>

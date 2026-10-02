@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import type { ReviewDetail } from "@/shared/server";
+import { useServerPath } from "@/shared/ui";
 
 import type { ReviewAction } from "../model/review-action";
 import { ReviewActionForm } from "./review-action-form";
@@ -27,9 +28,10 @@ export function ReviewActionDialog({
   hideHref,
 }: ReviewActionDialogProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [shownAction, setShownAction] = useState(action);
   if (action && action !== shownAction) setShownAction(action);
-  const close = () => router.replace(closeHref, { scroll: false });
+  const close = () => router.replace(toServerPath(closeHref), { scroll: false });
   return (
     <Dialog.Root open={!isNull(action)} onOpenChange={(open) => open || close()}>
       <Dialog.Popup size="lg" className="max-w-[600px]">
@@ -40,7 +42,7 @@ export function ReviewActionDialog({
             action={shownAction}
             fromReports={fromReports}
             onDone={close}
-            onSwitchToHide={() => router.replace(hideHref, { scroll: false })}
+            onSwitchToHide={() => router.replace(toServerPath(hideHref), { scroll: false })}
           />
         ) : null}
       </Dialog.Popup>

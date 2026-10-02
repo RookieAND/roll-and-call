@@ -15,6 +15,7 @@
   "dependencies": {
     "@ant-design/plots": "^2.6.8",
     "@roll-and-call/database": "workspace:*",
+    "@roll-and-call/discord": "workspace:*",
     "@roll-and-call/review-forum": "workspace:*",
     "@roll-and-call/tiptap": "workspace:*",
     "@roll-and-call/ui": "workspace:*",

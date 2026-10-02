@@ -1,10 +1,9 @@
 import { Badge, HStack, Table, Text, cn } from "@roll-and-call/ui";
 import { ArrowDown, ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { CERT_FORMAT_LABEL, RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { CertQueueRow } from "@/shared/server";
-import { EMPTY_IMAGE, TableEmptyRow, TableColumns } from "@/shared/ui";
+import { EMPTY_IMAGE, TableEmptyRow, TableColumns, ServerLink } from "@/shared/ui";
 
 const LONG_WAIT_DAYS = 5;
 
@@ -48,7 +47,7 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
                   typography="body3"
                   weight="bold"
                   truncate
-                  render={<Link href={`/cert/${row.id}`} />}
+                  render={<ServerLink path={`/cert/${row.id}`} />}
                   className="block after:absolute after:inset-0"
                 >
                   {row.nickname}

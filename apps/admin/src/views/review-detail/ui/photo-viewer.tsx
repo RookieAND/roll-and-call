@@ -21,10 +21,9 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
-import { PhotoThumb } from "@/shared/ui";
+import { PhotoThumb, ServerLink } from "@/shared/ui";
 
 const ZOOM_STEP = 0.5;
 const ZOOM_MAX = 3;
@@ -128,7 +127,7 @@ export function PhotoViewer({
                   colorPalette="gray"
                   size="sm"
                   disabled={loading}
-                  render={<Link href={hideLink.href} scroll={false} />}
+                  render={<ServerLink path={hideLink.href} scroll={false} />}
                   onClick={close}
                 >
                   <Eye size={14} aria-hidden />
@@ -139,7 +138,7 @@ export function PhotoViewer({
                   colorPalette="danger"
                   size="sm"
                   disabled={loading}
-                  render={<Link href={removeHref} scroll={false} />}
+                  render={<ServerLink path={removeHref} scroll={false} />}
                   onClick={close}
                 >
                   <X size={14} aria-hidden />

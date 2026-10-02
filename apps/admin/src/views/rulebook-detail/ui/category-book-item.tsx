@@ -1,10 +1,10 @@
 import { Badge, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { RulebookRow } from "@/shared/server";
+import { ServerLink } from "@/shared/ui";
 
 const KIND_NOTE = {
   core: null,
@@ -38,7 +38,7 @@ export function CategoryBookItem({ book, current }: CategoryBookItemProps) {
           <Text
             typography="subtitle2"
             truncate
-            render={current ? undefined : <Link href={`/rules/${book.id}`} />}
+            render={current ? undefined : <ServerLink path={`/rules/${book.id}`} />}
             className={current ? undefined : "after:absolute after:inset-0"}
           >
             {book.label}

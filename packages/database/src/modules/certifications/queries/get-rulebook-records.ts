@@ -10,7 +10,6 @@ import {
   rulebookRequests,
   rulebooks,
   sanctions,
-  servers,
 } from "../../../schema";
 
 const RECENT_DAYS = 90;
@@ -24,37 +23,29 @@ export async function getRulebookRecords({
   serverId: string;
   userId: string | null;
 }) {
-  const [catalog, [server]] = await Promise.all([
-    db
-      .select({
-        id: rulebooks.id,
-        name: rulebooks.name,
-        edition: rulebooks.edition,
-        aliases: rulebooks.aliases,
-        certRequired: rulebooks.certRequired,
-        kind: rulebooks.kind,
-        supersedesId: rulebooks.supersedesId,
-        categoryId: rulebooks.categoryId,
-        categoryName: rulebookCategories.name,
-      })
-      .from(rulebooks)
-      .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
-      .where(eq(rulebooks.hidden, false))
-      .orderBy(rulebookCategories.name, rulebooks.name, rulebooks.edition),
-    db
-      .select({ certEnforcementDate: servers.certEnforcementDate })
-      .from(servers)
-      .where(eq(servers.id, serverId)),
-  ]);
+  const catalog = await db
+    .select({
+      id: rulebooks.id,
+      name: rulebooks.name,
+      edition: rulebooks.edition,
+      aliases: rulebooks.aliases,
+      certRequired: rulebooks.certRequired,
+      kind: rulebooks.kind,
+      supersedesId: rulebooks.supersedesId,
+      categoryId: rulebooks.categoryId,
+      categoryName: rulebookCategories.name,
+    })
+    .from(rulebooks)
+    .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
+    .where(eq(rulebooks.hidden, false))
+    .orderBy(rulebookCategories.name, rulebooks.name, rulebooks.edition);
   const pendingRequestNames = await db
     .selectDistinct({ name: rulebookRequests.name, edition: rulebookRequests.edition })
     .from(rulebookRequests)
     .where(and(eq(rulebookRequests.serverId, serverId), isNull(rulebookRequests.outcome)));
-  const enforcementDate = server?.certEnforcementDate ?? null;
   if (!userId) {
     return {
       catalog,
-      enforcementDate,
       pendingRequestNames,
       certificationRows: [],
       applicationRows: [],
@@ -138,7 +129,6 @@ export async function getRulebookRecords({
   const recentRulebookIds = uniq(compact(recentGames.map((game) => game.rulebookId)));
   return {
     catalog,
-    enforcementDate,
     pendingRequestNames,
     certificationRows,
     applicationRows,

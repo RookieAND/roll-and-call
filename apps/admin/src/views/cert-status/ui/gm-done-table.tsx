@@ -1,8 +1,7 @@
 import { Table, Text } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import type { GmCertRow } from "@/shared/server";
-import { TableColumns } from "@/shared/ui";
+import { TableColumns, ServerLink } from "@/shared/ui";
 
 import { CertifiedEditions } from "./certified-editions";
 
@@ -30,7 +29,7 @@ export function GmDoneTable({ rows }: GmDoneTableProps) {
                 typography="body3"
                 weight="bold"
                 truncate
-                render={<Link href={`/users/${row.userId}?tab=cert`} />}
+                render={<ServerLink path={`/users/${row.userId}?tab=cert`} />}
                 className="after:absolute after:inset-0"
               >
                 {row.nickname}

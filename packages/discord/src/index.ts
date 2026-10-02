@@ -18,3 +18,7 @@ export { updateForumPost } from "./forum/update-forum-post";
 export { deleteDiscordThread } from "./forum/delete-discord-thread";
 export { getForumTags } from "./forum/get-forum-tags";
 export { getGuildMember, type DiscordGuildMember } from "./guild/get-guild-member";
+export { getGuild, type DiscordGuild } from "./guild/get-guild";
+export { banGuildMember } from "./guild/ban-guild-member";
+export { unbanGuildMember } from "./guild/unban-guild-member";
+export { DiscordApiError } from "./api/discord-api-error";

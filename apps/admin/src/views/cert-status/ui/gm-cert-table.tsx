@@ -1,8 +1,7 @@
 import { Badge, Button, HStack, Table, Text, cn } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import type { GmCertRow } from "@/shared/server";
-import { TableColumns } from "@/shared/ui";
+import { TableColumns, ServerLink } from "@/shared/ui";
 
 import { CertifiedEditions } from "./certified-editions";
 import { GmCertStateBadge } from "./gm-cert-state-badge";
@@ -73,7 +72,7 @@ export function GmCertTable({ rows }: GmCertTableProps) {
                   variant="outline"
                   colorPalette="gray"
                   size="sm"
-                  render={<Link href={`/cert/${row.pending.applicationId}`} />}
+                  render={<ServerLink path={`/cert/${row.pending.applicationId}`} />}
                 >
                   심사하기
                 </Button>

@@ -1,10 +1,17 @@
 import { Badge, Button, Table, Text, VStack } from "@roll-and-call/ui";
 import { Flag } from "lucide-react";
-import Link from "next/link";
 
 import { formatDate, formatSessionTime, paginate, withQuery } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, ItemCard, ListPager, Panel, TableEmptyRow, TableColumns } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  ItemCard,
+  ListPager,
+  Panel,
+  TableEmptyRow,
+  TableColumns,
+  ServerLink,
+} from "@/shared/ui";
 
 interface NoShowPanelProps {
   nickname: string;
@@ -83,7 +90,9 @@ export function NoShowPanel({ nickname, noShows, page }: NoShowPanelProps) {
               colorPalette="gray"
               size="sm"
               render={
-                <Link href={withQuery("/noshow", {}, { q: nickname, record: latestValid.id })} />
+                <ServerLink
+                  path={withQuery("/noshow", {}, { q: nickname, record: latestValid.id })}
+                />
               }
             >
               기록 열기

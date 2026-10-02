@@ -2,8 +2,9 @@
 
 import { Button, IconButton, Popover, VStack } from "@roll-and-call/ui";
 import { Ellipsis, FileText, ScrollText, User } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
+
+import { ServerLink } from "@/shared/ui";
 
 interface ReviewMoreMenuProps {
   sessionId: string;
@@ -31,7 +32,7 @@ export function ReviewMoreMenu({ sessionId, authorId, logHref }: ReviewMoreMenuP
               variant="ghost"
               colorPalette="gray"
               size="sm"
-              render={<Link href={href} />}
+              render={<ServerLink path={href} />}
               onClick={() => setOpen(false)}
               className="justify-start gap-100"
             >

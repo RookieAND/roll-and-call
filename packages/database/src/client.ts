@@ -3,7 +3,6 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
 import {
-  adminSettings,
   auditLog,
   certApplications,
   certifications,
@@ -57,6 +56,5 @@ export const db = drizzle(client, {
     staff,
     staffMemos,
     auditLog,
-    adminSettings,
   },
 });

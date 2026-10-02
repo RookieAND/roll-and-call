@@ -1,10 +1,9 @@
 import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
 import { ArrowUp } from "lucide-react";
-import Link from "next/link";
 
 import { formatShortDateTime } from "@/shared/lib";
 import type { ReportedReviewRow } from "@/shared/server";
-import { TableColumns } from "@/shared/ui";
+import { TableColumns, ServerLink } from "@/shared/ui";
 
 interface ReportedReviewsTableProps {
   rows: ReportedReviewRow[];
@@ -37,7 +36,7 @@ export function ReportedReviewsTable({ rows }: ReportedReviewsTableProps) {
                 weight="bold"
                 truncate
                 title={row.authorNickname}
-                render={<Link href={`/posts/reviews/${row.id}?from=reports`} />}
+                render={<ServerLink path={`/posts/reviews/${row.id}?from=reports`} />}
                 className="block after:absolute after:inset-0"
               >
                 {row.authorNickname}

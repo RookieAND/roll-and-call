@@ -1,5 +1,6 @@
 import { Callout, Text, VStack, cn } from "@roll-and-call/ui";
-import Link from "next/link";
+
+import { ServerLink } from "@/shared/ui";
 
 import { SETTINGS_NAV_ITEMS, type SettingsHref } from "../model/settings-nav-items";
 
@@ -29,7 +30,7 @@ export function SettingsNav({ active }: SettingsNavProps) {
             foreground={current ? "inherit" : "muted"}
             weight={current ? "bold" : "medium"}
             aria-current={current ? "page" : undefined}
-            render={<Link href={item.href} />}
+            render={<ServerLink path={item.href} />}
             className={cn(
               "border-b border-(--rc-color-border-subtle) px-175 py-125 hover:bg-gray-50",
               current &&

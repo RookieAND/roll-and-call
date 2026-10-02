@@ -1,8 +1,8 @@
 import { Badge, Button, Card, HStack, Text } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { formatShortDateTime } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
+import { ServerLink } from "@/shared/ui";
 
 interface ReviewHiddenBannerProps {
   hidden: NonNullable<ReviewDetail["hidden"]>;
@@ -23,7 +23,12 @@ export function ReviewHiddenBanner({ hidden, logHref }: ReviewHiddenBannerProps)
       <Text typography="body4" foreground="hint" className="whitespace-nowrap">
         {formatShortDateTime(hidden.at)} · {hidden.by}
       </Text>
-      <Button variant="outline" colorPalette="gray" size="sm" render={<Link href={logHref} />}>
+      <Button
+        variant="outline"
+        colorPalette="gray"
+        size="sm"
+        render={<ServerLink path={logHref} />}
+      >
         활동 기록에서 보기
       </Button>
     </Card.Root>

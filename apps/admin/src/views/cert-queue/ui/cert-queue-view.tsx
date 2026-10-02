@@ -1,5 +1,4 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { CERT_TABS, paginate, withQuery } from "@/shared/lib";
 import { CERT_QUEUE_FILTERS, type CertQueueFilterKey, type listCertQueue } from "@/shared/server";
@@ -12,6 +11,7 @@ import {
   RouteTabs,
   UrlSearchInput,
   UrlSelect,
+  ServerLink,
 } from "@/shared/ui";
 
 import { CertQueueTable } from "./cert-queue-table";
@@ -63,7 +63,9 @@ export function CertQueueView({ queue, page, query }: CertQueueViewProps) {
                 <Chip
                   key={label}
                   selected={query.filter === key}
-                  render={<Link href={withQuery("/cert", query, { filter: key })} scroll={false} />}
+                  render={
+                    <ServerLink path={withQuery("/cert", query, { filter: key })} scroll={false} />
+                  }
                 >
                   {label}
                 </Chip>

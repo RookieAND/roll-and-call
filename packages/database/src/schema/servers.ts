@@ -12,6 +12,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { type AvailabilityInterval, type ProfileLink, profiles } from "./profiles";
+import { rulebooks } from "./rulebooks";
 
 // 디스코드 서버 하나가 한 행이다. 서버 안의 데이터는 모두 server_id로 이 행에 묶인다.
 export const servers = pgTable("servers", {
@@ -23,10 +24,12 @@ export const servers = pgTable("servers", {
   recruitChannelId: text("recruit_channel_id"),
   closedChannelId: text("closed_channel_id"),
   reviewForumChannelId: text("review_forum_channel_id"),
+  announceChannelId: text("announce_channel_id"),
   gmRoleId: text("gm_role_id"),
+  // 디스코드 서버장. 어드민에 들어올 때 길드 정보와 비교해 바뀌었으면 소유권을 옮긴다.
+  ownerDiscordId: text("owner_discord_id"),
   // 디스코드 서버 멤버가 아니라 가입할 수 없을 때 보여 주는 초대 링크. 없으면 안내 문구만 보인다.
   inviteUrl: text("invite_url"),
-  certEnforcementDate: timestamp("cert_enforcement_date", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 }).enableRLS();
 
@@ -51,6 +54,10 @@ export const serverMembers = pgTable(
     featuredBadges: text("featured_badges").array().notNull().default([]),
     joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    // 추방하면 디스코드에서 차단하고 이 칸을 채운다. 차단 해제 때 비운다.
+    bannedAt: timestamp("banned_at", { withTimezone: true }),
+    bannedBy: uuid("banned_by").references(() => profiles.id, { onDelete: "set null" }),
+    banReason: text("ban_reason"),
     // 인덱스의 내 서버 목록을 최근 방문 순으로 늘어놓는다. 서버 화면에 들어올 때 채운다.
     lastVisitedAt: timestamp("last_visited_at", { withTimezone: true }),
   },
@@ -59,6 +66,21 @@ export const serverMembers = pgTable(
     index("server_members_user_id_idx").on(table.userId),
     check("server_members_featured_badges_limit", sql`cardinality(${table.featuredBadges}) <= 3`),
   ],
+).enableRLS();
+
+// 이 서버에서 인증 없이 구인을 열 수 있는 룰. 카탈로그의 무료 배포(rulebooks.cert_required = false)와 별개로 서버마다 더한다.
+export const serverFreeRulebooks = pgTable(
+  "server_free_rulebooks",
+  {
+    serverId: uuid("server_id")
+      .notNull()
+      .references(() => servers.id),
+    rulebookId: uuid("rulebook_id")
+      .notNull()
+      .references(() => rulebooks.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.serverId, table.rulebookId] })],
 ).enableRLS();
 
 export type Server = typeof servers.$inferSelect;

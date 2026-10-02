@@ -1,6 +1,5 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
-import Link from "next/link";
 
 import { formatDateTime, paginate, withQuery } from "@/shared/lib";
 import {
@@ -18,6 +17,7 @@ import {
   Panel,
   UrlSearchInput,
   UrlSelect,
+  ServerLink,
 } from "@/shared/ui";
 
 import { ActionFilter } from "./action-filter";
@@ -43,7 +43,9 @@ export function AuditLogView({ log, query }: AuditLogViewProps) {
           {query.target ? (
             <Chip
               selected
-              render={<Link href={clearTargetHref} scroll={false} aria-label="대상 필터 지우기" />}
+              render={
+                <ServerLink path={clearTargetHref} scroll={false} aria-label="대상 필터 지우기" />
+              }
             >
               대상 · {query.target}
               <X size={12} aria-hidden />

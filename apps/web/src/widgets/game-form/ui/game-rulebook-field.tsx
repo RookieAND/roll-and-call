@@ -93,18 +93,14 @@ export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
         </HStack>
       )}
       {gate && gate.type !== RULE_GATE.open && (
-        <Callout.Root colorPalette={gate.type === RULE_GATE.blocked ? "danger" : "primary"}>
+        <Callout.Root colorPalette="danger">
           <Callout.Icon />
           <Callout.Description className="break-keep">
             <LineBreaks lines={gate.lines} />
           </Callout.Description>
           {gate.action && (
             <Callout.Action>
-              <Button
-                render={<ServerLink path={gate.action.href} />}
-                size="sm"
-                variant={gate.type === RULE_GATE.blocked ? "solid" : "tinted"}
-              >
+              <Button render={<ServerLink path={gate.action.href} />} size="sm" variant="solid">
                 {gate.action.label}
               </Button>
             </Callout.Action>

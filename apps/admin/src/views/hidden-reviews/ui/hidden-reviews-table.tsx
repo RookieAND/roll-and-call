@@ -1,10 +1,9 @@
 import { Badge, HStack, Table, Text } from "@roll-and-call/ui";
 import { ArrowDown } from "lucide-react";
-import Link from "next/link";
 
 import { formatShortDateTime } from "@/shared/lib";
 import type { HiddenReviewRow } from "@/shared/server";
-import { TableColumns } from "@/shared/ui";
+import { TableColumns, ServerLink } from "@/shared/ui";
 
 interface HiddenReviewsTableProps {
   rows: HiddenReviewRow[];
@@ -38,7 +37,7 @@ export function HiddenReviewsTable({ rows }: HiddenReviewsTableProps) {
                 weight="bold"
                 truncate
                 title={row.authorNickname}
-                render={<Link href={`/posts/reviews/${row.id}`} />}
+                render={<ServerLink path={`/posts/reviews/${row.id}`} />}
                 className="block after:absolute after:inset-0"
               >
                 {row.authorNickname}

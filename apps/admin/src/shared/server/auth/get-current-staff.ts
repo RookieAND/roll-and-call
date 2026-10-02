@@ -2,27 +2,36 @@ import "server-only";
 import { cache } from "react";
 
 import { getStaffRole, type StaffRole } from "../admin-data";
-import { createSupabaseServerClient } from "./create-supabase-server-client";
 import { getCurrentServer } from "./get-current-server";
+import { getSessionAccount } from "./get-session-account";
 
 export type CurrentStaff =
   | { status: "anonymous" }
   | { status: "denied"; nickname: string }
-  | { status: "staff"; id: string; nickname: string; role: StaffRole };
+  | {
+      status: "staff";
+      id: string;
+      nickname: string;
+      role: StaffRole;
+      platformAdmin: boolean;
+      kind: "staff" | "platform";
+    };
 
+// 지금 서버(주소의 slug)에서의 역할. 플랫폼 관리자는 모든 서버에서 소유자다.
 export const getCurrentStaff = cache(async (): Promise<CurrentStaff> => {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "anonymous" };
-
-  const metadata = user.user_metadata as Record<string, string | undefined>;
-  const nickname = metadata.full_name ?? metadata.name ?? user.email ?? "";
-  const discordId = metadata.provider_id;
+  const account = await getSessionAccount();
+  if (!account) return { status: "anonymous" };
   const server = await getCurrentServer();
-  const role = discordId
-    ? await getStaffRole({ serverId: server.id, userId: user.id, discordId })
+  const role = account.discordId
+    ? await getStaffRole({ server, userId: account.userId, discordId: account.discordId })
     : null;
-  return role ? { status: "staff", id: user.id, nickname, role } : { status: "denied", nickname };
+  if (!role) return { status: "denied", nickname: account.nickname };
+  return {
+    status: "staff",
+    id: account.userId,
+    nickname: account.nickname,
+    role,
+    platformAdmin: account.platformAdmin,
+    kind: account.platformAdmin ? "platform" : "staff",
+  };
 });

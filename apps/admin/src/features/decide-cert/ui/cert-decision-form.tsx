@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition, type ReactNode } from "react";
 
 import type { CertDecisionResult, CertFormat, ShotKey } from "@/shared/server";
-import { KeyHint } from "@/shared/ui";
+import { KeyHint, useServerPath } from "@/shared/ui";
 
 import { approveCert } from "../api/approve-cert";
 import { rejectCert } from "../api/reject-cert";
@@ -55,6 +55,7 @@ export function CertDecisionForm({
   quiz,
 }: CertDecisionFormProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
@@ -91,7 +92,7 @@ export function CertDecisionForm({
       return;
     }
     toast.success(message);
-    router.push(nextHref);
+    router.push(toServerPath(nextHref));
   };
 
   const approve = () =>
@@ -219,7 +220,7 @@ export function CertDecisionForm({
               note={
                 disabled || allChecked ? undefined : "모든 확인 항목을 체크해야 승인할 수 있습니다"
               }
-              onSkip={() => router.push(nextHref)}
+              onSkip={() => router.push(toServerPath(nextHref))}
             />
           }
         >

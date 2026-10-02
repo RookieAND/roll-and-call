@@ -12,6 +12,8 @@ export { CATEGORY_PAGE_SIZE, PAGE_SIZE, paginate } from "./paginate";
 export { PENDING_COPY } from "./pending-copy";
 export { quoteWithParticle } from "./quote-with-particle";
 export { withQuery } from "./with-query";
+export { serverPath } from "./server-path";
+export { SERVER_SLUG_HEADER } from "./server-slug-header";
 export { withObjectParticle } from "./with-object-particle";
 export { withSubjectParticle } from "./with-subject-particle";
 export { withTopicParticle } from "./with-topic-particle";

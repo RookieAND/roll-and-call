@@ -2,8 +2,9 @@
 
 import { Button, IconButton, Popover, VStack } from "@roll-and-call/ui";
 import { Ellipsis, Eye, ScrollText, User } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
+
+import { ServerLink } from "@/shared/ui";
 
 interface PostMoreMenuProps {
   userAppHref: string | null;
@@ -24,8 +25,8 @@ export function PostMoreMenu({ userAppHref, gmId, logHref }: PostMoreMenuProps) 
           },
         ]
       : []),
-    { label: "GM 유저 상세 열기", icon: User, link: <Link href={`/users/${gmId}`} /> },
-    { label: "활동 기록에서 보기", icon: ScrollText, link: <Link href={logHref} /> },
+    { label: "GM 유저 상세 열기", icon: User, link: <ServerLink path={`/users/${gmId}`} /> },
+    { label: "활동 기록에서 보기", icon: ScrollText, link: <ServerLink path={logHref} /> },
   ];
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>

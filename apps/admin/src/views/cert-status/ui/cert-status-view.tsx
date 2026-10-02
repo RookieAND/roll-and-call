@@ -1,5 +1,4 @@
 import { Chip, Text, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
 
 import { CERT_TABS, paginate, withQuery } from "@/shared/lib";
 import type { CertStatusData } from "@/shared/server";
@@ -10,6 +9,7 @@ import {
   Panel,
   RouteTabs,
   UrlSearchInput,
+  ServerLink,
 } from "@/shared/ui";
 
 import { CERT_STATUS_TAB, type CertStatusTab } from "../model/cert-status-tab";
@@ -59,7 +59,7 @@ export function CertStatusView({
     />
   );
   const filterChip = (label: string, selected: boolean, href: string) => (
-    <Chip key={label} selected={selected} render={<Link href={href} scroll={false} />}>
+    <Chip key={label} selected={selected} render={<ServerLink path={href} scroll={false} />}>
       {label}
     </Chip>
   );

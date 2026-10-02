@@ -72,6 +72,7 @@ export async function loadCertificationContext({
       .from(rulebookQuizQuestions)
       .where(
         and(
+          eq(rulebookQuizQuestions.serverId, serverId),
           eq(rulebookQuizQuestions.rulebookId, rulebookId),
           eq(rulebookQuizQuestions.active, true),
         ),

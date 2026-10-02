@@ -1,10 +1,9 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ArrowDown } from "lucide-react";
-import Link from "next/link";
 
 import { formatShortDateTime } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { ReviewStatusBadge, TableColumns } from "@/shared/ui";
+import { ReviewStatusBadge, TableColumns, ServerLink } from "@/shared/ui";
 
 interface ReviewsTableProps {
   reviews: PostDetail["reviews"];
@@ -37,7 +36,7 @@ export function ReviewsTable({ reviews }: ReviewsTableProps) {
                 weight="bold"
                 truncate
                 title={review.authorNickname}
-                render={<Link href={`/posts/reviews/${review.id}`} />}
+                render={<ServerLink path={`/posts/reviews/${review.id}`} />}
                 className="block after:absolute after:inset-0"
               >
                 {review.authorNickname}

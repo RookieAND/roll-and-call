@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 
 import type { NoShowDetail } from "@/shared/server";
+import { useServerPath } from "@/shared/ui";
 
 import { NoShowDialogContent } from "./no-show-dialog-content";
 
@@ -24,11 +25,12 @@ export function CancelNoShowDialog({
   nextRecordHref,
 }: CancelNoShowDialogProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [conflict, setConflict] = useState<{
     recordId: string;
     detail: NonNullable<NoShowDetail["cancellation"]>;
   } | null>(null);
-  const close = () => router.replace(closeHref, { scroll: false });
+  const close = () => router.replace(toServerPath(closeHref), { scroll: false });
   const recordConflict = record && conflict?.recordId === record.id ? conflict.detail : null;
 
   return (

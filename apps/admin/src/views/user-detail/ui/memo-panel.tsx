@@ -1,10 +1,9 @@
 import { Button, VStack } from "@roll-and-call/ui";
 import { Quote } from "lucide-react";
-import Link from "next/link";
 
 import { formatDate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import { EMPTY_IMAGE, EmptyState, ItemCard, Panel } from "@/shared/ui";
+import { EMPTY_IMAGE, EmptyState, ItemCard, Panel, ServerLink } from "@/shared/ui";
 
 import { USER_ACTION } from "../model/user-action";
 import { userActionHref } from "../model/user-action-href";
@@ -25,8 +24,8 @@ export function MemoPanel({ userId, memos }: MemoPanelProps) {
           colorPalette="gray"
           size="sm"
           render={
-            <Link
-              href={userActionHref(userId, { tab: USER_DETAIL_TAB.memo, action: USER_ACTION.memo })}
+            <ServerLink
+              path={userActionHref(userId, { tab: USER_DETAIL_TAB.memo, action: USER_ACTION.memo })}
               scroll={false}
             />
           }

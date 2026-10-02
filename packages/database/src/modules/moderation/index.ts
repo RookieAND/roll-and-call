@@ -19,5 +19,5 @@ export {
 export { releaseSanction, type ReleaseResult } from "./commands/release-sanction";
 export { removeStaff } from "./commands/remove-staff";
 export { loadAdminTables, type AdminTables } from "./queries/load-admin-tables";
-export { getStaffRole } from "./queries/staff";
+export { getStaffRole, isPlatformAdmin } from "./queries/staff";
 export * from "./model";

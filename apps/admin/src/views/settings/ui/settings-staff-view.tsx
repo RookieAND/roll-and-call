@@ -1,9 +1,8 @@
 import { Button, Text } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 
 import type { StaffCandidate, StaffRow } from "@/shared/server";
-import { Panel } from "@/shared/ui";
+import { Panel, ServerLink } from "@/shared/ui";
 
 import { PermissionTable } from "./permission-table";
 import { SettingsFrame } from "./settings-frame";
@@ -25,7 +24,7 @@ export function SettingsStaffView({ staff, viewer, candidates, removing }: Setti
         right={
           <Button
             size="sm"
-            render={<Link href="/settings/staff?action=add" scroll={false} />}
+            render={<ServerLink path="/settings/staff?action=add" scroll={false} />}
             className="gap-050"
           >
             <Plus size={14} aria-hidden />

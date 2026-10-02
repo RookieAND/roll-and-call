@@ -3,13 +3,13 @@
 import { Button, Grid, HStack, Text, VStack, cn, toast } from "@roll-and-call/ui";
 import { compact, isNull, sumBy } from "es-toolkit";
 import { TriangleAlert } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { formatDate, formatSessionTime } from "@/shared/lib";
 import type { OngoingActivity, Sanction } from "@/shared/server";
 import type { OngoingChoiceRow } from "@/shared/ui";
+import { ServerLink, useServerPath } from "@/shared/ui";
 
 import { sanctionUser } from "../api/sanction-user";
 import { EMPTY_SANCTION_DRAFT, type SanctionDraft } from "../model/sanction-draft";
@@ -30,6 +30,7 @@ interface SanctionUserFormProps {
 
 export function SanctionUserForm({ userId, nickname, ongoing, backHref }: SanctionUserFormProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
   const [pending, startTransition] = useTransition();
   const [draft, setDraft] = useState<SanctionDraft>(EMPTY_SANCTION_DRAFT);
   const [confirming, setConfirming] = useState(false);
@@ -100,7 +101,7 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
         return;
       }
       toast.success(`${nickname}님을 제재했습니다`);
-      router.push(backHref);
+      router.push(toServerPath(backHref));
     });
 
   return (
@@ -152,10 +153,12 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
         <HStack gap="100" className="ml-auto">
           {conflict ? (
             <>
-              <Button variant="ghost" colorPalette="gray" render={<Link href={backHref} />}>
+              <Button variant="ghost" colorPalette="gray" render={<ServerLink path={backHref} />}>
                 닫기
               </Button>
-              <Button onClick={() => router.push(backHref)}>유저 상세 새로고침</Button>
+              <Button onClick={() => router.push(toServerPath(backHref))}>
+                유저 상세 새로고침
+              </Button>
             </>
           ) : (
             <>
@@ -163,7 +166,7 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
                 variant="ghost"
                 colorPalette="gray"
                 disabled={pending}
-                render={<Link href={backHref} />}
+                render={<ServerLink path={backHref} />}
               >
                 취소
               </Button>

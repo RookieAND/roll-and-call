@@ -1,10 +1,9 @@
 import { HStack, Table, Text, cn } from "@roll-and-call/ui";
 import { ArrowDown } from "lucide-react";
-import Link from "next/link";
 
 import { formatSessionTime } from "@/shared/lib";
 import type { PostRow } from "@/shared/server";
-import { TableColumns } from "@/shared/ui";
+import { TableColumns, ServerLink } from "@/shared/ui";
 
 import { StaffActionBadge } from "./staff-action-badge";
 
@@ -47,7 +46,7 @@ export function PostsTable({ rows }: PostsTableProps) {
                   typography="body3"
                   truncate
                   title={row.title}
-                  render={<Link href={`/posts/${row.id}`} />}
+                  render={<ServerLink path={`/posts/${row.id}`} />}
                   className="block after:absolute after:inset-0"
                 >
                   {row.title}

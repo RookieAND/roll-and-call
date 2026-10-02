@@ -82,12 +82,13 @@ export const rulebookRequests = pgTable(
   (table) => [index("rulebook_requests_user_id_idx").on(table.userId)],
 ).enableRLS();
 
-// 본문 퀴즈 문항. 인증 신청 때 사용 중인 문항 하나를 내고, 답은 answers 가운데 하나면 맞다(공백·대소문자 무시).
+// 본문 퀴즈 문항은 서버마다 따로 둔다. 인증 신청 때 사용 중인 문항 하나를 내고, 답은 answers 가운데 하나면 맞다(공백·대소문자 무시).
 // 출제된 문항은 지우지 않고 active를 끈다.
 export const rulebookQuizQuestions = pgTable(
   "rulebook_quiz_questions",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
     rulebookId: uuid("rulebook_id")
       .notNull()
       .references(() => rulebooks.id, { onDelete: "cascade" }),
@@ -100,12 +101,17 @@ export const rulebookQuizQuestions = pgTable(
   (table) => [index("rulebook_quiz_questions_rulebook_id_idx").on(table.rulebookId)],
 ).enableRLS();
 
-// 전자책 인증에서 고르는 판매처. 목록에 없으면 신청자가 적은 이름이 그대로 들어간다.
-export const certSellers = pgTable("cert_sellers", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull().unique(),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-}).enableRLS();
+// 전자책 인증에서 고르는 판매처. 서버마다 따로 두고, 목록에 없으면 신청자가 적은 이름이 그대로 들어간다.
+export const certSellers = pgTable(
+  "cert_sellers",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    serverId: serverId(),
+    name: text("name").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [uniqueIndex("cert_sellers_server_id_name_unique").on(table.serverId, table.name)],
+).enableRLS();
 
 export type Rulebook = typeof rulebooks.$inferSelect;
 
