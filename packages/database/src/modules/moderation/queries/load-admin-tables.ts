@@ -33,7 +33,8 @@ export async function loadAdminTables(serverId: string) {
     .innerJoin(
       serverMembers,
       and(eq(serverMembers.serverId, serverId), eq(serverMembers.userId, profiles.id)),
-    );
+    )
+    .orderBy(profiles.createdAt, profiles.id);
   const gameRows = await db.select().from(games).where(eq(games.serverId, serverId));
   const participantRows = await db
     .select()
