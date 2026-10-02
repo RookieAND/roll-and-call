@@ -1,6 +1,6 @@
 import "server-only";
 import type { Game } from "@roll-and-call/database";
-import { loadAdminTables, type AuditAction } from "@roll-and-call/database/moderation";
+import { type AuditAction } from "@roll-and-call/database/moderation";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { compact, isNull } from "es-toolkit";
 import { cache } from "react";
@@ -8,6 +8,7 @@ import { cache } from "react";
 import { getCurrentServer } from "../auth/get-current-server";
 import { gameStartsAt } from "./game-starts-at";
 import { gameStatus } from "./game-status";
+import { loadSharedTables } from "./load-shared-tables";
 import { noShowId } from "./no-show-id";
 import { plainText } from "./plain-text";
 import { similarRulebook } from "./similar-rulebook";
@@ -61,7 +62,7 @@ export const loadSnapshot = cache(async () => {
     memoRows,
     auditRows,
     handleRows,
-  } = await loadAdminTables(server.id);
+  } = await loadSharedTables(server.id);
   const handles = new Map(handleRows.map((row) => [row.id, row.handle]));
 
   const nicknames = new Map(profileRows.map((profile) => [profile.id, profile.username]));
