@@ -54,12 +54,11 @@ export function PostsLoading() {
           <SkeletonTable
             columns={[
               { label: "제목", kind: "text", width: 360 },
-              { label: "GM", kind: "text", width: 104 },
-              { label: "룰북", kind: "text", width: 140 },
+              { label: "GM", kind: "text", width: 125 },
+              { label: "룰북", kind: "text", width: 210 },
               { label: "세션 일시", kind: "date", width: 192, sorted: true },
               { label: "참여", kind: "number", width: 76, align: "end" },
               { label: "상태", kind: "text", width: 112, align: "center" },
-              { label: "처리 안 된 신고", kind: "number", width: 118, align: "end" },
               { label: "운영진 조치", kind: "badge", width: 110, fixed: true },
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}

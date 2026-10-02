@@ -11,6 +11,7 @@ const server = (slug: string, overrides: Partial<MyServer> = {}): MyServer => ({
   name: slug.toUpperCase(),
   icon: null,
   role: "owner",
+  joined: true,
   botConnected: true,
   members: 0,
   pending: 0,

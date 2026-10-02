@@ -13,7 +13,7 @@ import { SelectTop } from "./select-top";
 interface PlatformServerSelectViewProps {
   nickname: string;
   servers: MyServer[];
-  query: { q?: string; filter?: ServerFilter };
+  query: { q?: string; filter?: ServerFilter; all?: string };
 }
 
 export function PlatformServerSelectView({

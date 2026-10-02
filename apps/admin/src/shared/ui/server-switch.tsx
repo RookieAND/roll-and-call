@@ -130,7 +130,9 @@ export function ServerSwitch({ current, servers, platformAdmin }: ServerSwitchPr
               variant="ghost"
               colorPalette="gray"
               size="sm"
-              render={<Link href="/" onClick={() => setOpen(false)} />}
+              render={
+                <Link href={platformAdmin ? "/?all=1" : "/"} onClick={() => setOpen(false)} />
+              }
               className="w-full justify-start"
             >
               {platformAdmin ? "전체 서버 목록에서 찾기" : "서버 목록 화면으로"}

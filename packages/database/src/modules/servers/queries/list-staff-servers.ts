@@ -19,5 +19,9 @@ export async function listStaffServers({
     .leftJoin(staff, and(eq(staff.serverId, servers.id), eq(staff.userId, userId)))
     .where(all ? undefined : or(eq(servers.ownerDiscordId, discordId), eq(staff.userId, userId)))
     .orderBy(asc(servers.name));
-  return rows.map(({ server }) => server);
+  // joined: 서버장이거나 운영진으로 지정된 서버. 플랫폼 관리자가 모든 서버를 볼 때도 자기 서버를 가려낸다.
+  return rows.map(({ server, staffRole }) => ({
+    ...server,
+    joined: server.ownerDiscordId === discordId || staffRole !== null,
+  }));
 }

@@ -45,7 +45,7 @@ export function PostsView({ posts, page, query }: PostsViewProps) {
   const csvButton = (
     <CsvExportButton
       fileName="구인 목록.csv"
-      header={["제목", "GM", "룰북", "세션 일시", "참여", "상태", "처리 안 된 신고", "운영진 조치"]}
+      header={["제목", "GM", "룰북", "세션 일시", "참여", "상태", "운영진 조치"]}
       rows={posts.rows.map((row) => [
         row.title,
         row.gmNickname,
@@ -53,7 +53,6 @@ export function PostsView({ posts, page, query }: PostsViewProps) {
         formatSessionTime(row.startsAt),
         `${row.memberCount}/${row.capacity}`,
         row.status,
-        row.unresolvedReportCount,
         row.staffAction ?? "",
       ])}
     />

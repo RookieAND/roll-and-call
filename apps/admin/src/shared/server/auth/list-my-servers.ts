@@ -13,6 +13,7 @@ export interface MyServer {
   name: string;
   icon: string | null;
   role: StaffRole;
+  joined: boolean;
   botConnected: boolean;
   members: number;
   pending: number;
@@ -41,6 +42,7 @@ export const listMyServers = cache(async (): Promise<MyServer[]> => {
       name: server.name,
       icon: server.icon,
       role: owner ? "owner" : "staff",
+      joined: server.joined,
       botConnected: !isNull(guilds[index]),
       members: queue?.members ?? 0,
       pending: queue?.pending ?? 0,
