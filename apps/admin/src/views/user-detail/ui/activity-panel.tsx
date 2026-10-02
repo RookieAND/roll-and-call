@@ -29,7 +29,6 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
   const paged = paginate(rows, page);
   return (
     <Panel
-      title={`활동 ${rows.length}건`}
       right={
         <UrlSelect
           param="role"

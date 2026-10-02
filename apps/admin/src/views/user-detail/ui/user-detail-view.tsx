@@ -4,7 +4,8 @@ import type { KickImpact, UserDetail } from "@/shared/server";
 import { AdminHeader, ServerLink } from "@/shared/ui";
 
 import type { ActivityRole } from "../model/activity-role";
-import type { UserDetailTab } from "../model/user-detail-tab";
+import { toCertRows } from "../model/to-cert-rows";
+import { USER_DETAIL_TAB, type UserDetailTab } from "../model/user-detail-tab";
 import { ActivityPanel } from "./activity-panel";
 import { CertPanel } from "./cert-panel";
 import { KickFailNotice } from "./kick-fail-notice";
@@ -64,6 +65,12 @@ export function UserDetailView({
           <UserStateCard user={user} discordBanFailed={discordBanFailed} />
           <UserDetailTabs
             tab={tab}
+            counts={{
+              [USER_DETAIL_TAB.activity]: user.activities.length,
+              [USER_DETAIL_TAB.cert]: toCertRows(user).length,
+              [USER_DETAIL_TAB.noShow]: user.noShows.length,
+              [USER_DETAIL_TAB.memo]: user.memos.length,
+            }}
             activityPanel={<ActivityPanel activities={user.activities} role={role} page={page} />}
             certPanel={<CertPanel user={user} page={page} />}
             noShowPanel={

@@ -70,7 +70,6 @@ export function UserDetailLoading() {
             </div>
             <Tabs.Panel value={USER_DETAIL_TAB.activity} className="p-200">
               <Panel
-                title="활동"
                 footer={<SkeletonPager />}
                 right={
                   <div className="w-[132px] [&_[data-slot=select-trigger]]:h-[32px] [&_[data-slot=select-trigger]]:min-h-[32px]">

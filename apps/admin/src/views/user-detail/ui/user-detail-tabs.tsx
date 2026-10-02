@@ -4,10 +4,14 @@ import { Tabs } from "@roll-and-call/ui";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { TabCount } from "@/shared/ui";
+
 import { USER_DETAIL_TAB, type UserDetailTab } from "../model/user-detail-tab";
+import { USER_DETAIL_TABS } from "../model/user-detail-tabs";
 
 interface UserDetailTabsProps {
   tab: UserDetailTab;
+  counts: Record<UserDetailTab, number>;
   activityPanel: ReactNode;
   certPanel: ReactNode;
   noShowPanel: ReactNode;
@@ -16,6 +20,7 @@ interface UserDetailTabsProps {
 
 export function UserDetailTabs({
   tab,
+  counts,
   activityPanel,
   certPanel,
   noShowPanel,
@@ -38,10 +43,12 @@ export function UserDetailTabs({
     >
       <div className="bleed border-b border-gray-200 bg-surface px-200">
         <Tabs.List aria-label="유저 상세 보기" scrollable={false} className="border-b-0">
-          <Tabs.Trigger value={USER_DETAIL_TAB.activity}>활동</Tabs.Trigger>
-          <Tabs.Trigger value={USER_DETAIL_TAB.cert}>룰북 인증</Tabs.Trigger>
-          <Tabs.Trigger value={USER_DETAIL_TAB.noShow}>불참 기록</Tabs.Trigger>
-          <Tabs.Trigger value={USER_DETAIL_TAB.memo}>운영진 메모</Tabs.Trigger>
+          {USER_DETAIL_TABS.map(({ value, label }) => (
+            <Tabs.Trigger key={value} value={value}>
+              {label}
+              <TabCount count={counts[value]} selected={tab === value} />
+            </Tabs.Trigger>
+          ))}
           <Tabs.Indicator />
         </Tabs.List>
       </div>

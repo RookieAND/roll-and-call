@@ -21,7 +21,9 @@ interface TabCountProps {
   danger?: boolean;
 }
 
+// 건수가 0이면 뱃지를 그리지 않는다.
 export function TabCount({ count, selected, danger = false }: TabCountProps) {
+  if (count === 0) return null;
   const tone = tabCountTone({ selected, danger });
   return <span className={tabCount({ tone })}>{count}</span>;
 }
