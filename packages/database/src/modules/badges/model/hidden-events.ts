@@ -6,7 +6,7 @@ import { doubleHeaderEvents } from "./double-header-events";
 import { drawEvents } from "./draw-events";
 import type { BadgeEvent } from "./reached-tier";
 
-const EXPEDITION_MIN_PLAYERS = 6;
+const EXPEDITION_MIN_ATTENDED = 6;
 const POPULAR_MIN_APPLICANTS = 10;
 const POPULAR_RATIO = 3;
 
@@ -42,7 +42,7 @@ export function hiddenEvents({
       return doubleHeaderEvents(facts);
     case HIDDEN_LADDER.expedition:
       return [...facts.played, ...facts.hosted]
-        .filter((session) => session.maxPlayers >= EXPEDITION_MIN_PLAYERS)
+        .filter((session) => session.attendedCount >= EXPEDITION_MIN_ATTENDED)
         .toSorted((left, right) => left.endsAt.getTime() - right.endsAt.getTime())
         .map((session) => ({ at: session.endsAt, gameId: session.gameId }));
     case HIDDEN_LADDER.popular:

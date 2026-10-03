@@ -14,7 +14,7 @@ function session(index: number, categoryId: string | null = "coc"): BadgeSession
     endsAt,
     categoryId,
     categoryName: null,
-    maxPlayers: 4,
+    attendedCount: 4,
   };
 }
 
@@ -183,15 +183,18 @@ describe("숨겨진 칭호", () => {
     expect(keys(computeBadges(facts({ joinedAt: new Date(Date.UTC(2020, 0, 1)) })))).toEqual([]);
   });
 
-  it("더블 헤더는 같은 한국 날짜, 양손잡이는 같은 달, 대규모 원정은 정원 6명부터다", () => {
+  it("더블 헤더는 같은 한국 날짜, 양손잡이는 같은 달, 대규모 원정은 참석 6명부터다", () => {
     const morning = { ...session(0), gameId: "m", startsAt: new Date("2026-03-01T16:00:00Z") };
     const evening = { ...session(0), gameId: "e", startsAt: new Date("2026-03-02T10:00:00Z") };
     expect(keys(computeBadges(facts({ played: [morning], hosted: [evening] })))).toEqual([
       "sp.ambi",
       "sp.double",
     ]);
-    expect(keys(computeBadges(facts({ played: [{ ...session(0), maxPlayers: 6 }] })))).toEqual([
+    expect(keys(computeBadges(facts({ played: [{ ...session(0), attendedCount: 6 }] })))).toEqual([
       "sp.expedition",
     ]);
+    expect(keys(computeBadges(facts({ played: [{ ...session(0), attendedCount: 5 }] })))).toEqual(
+      [],
+    );
   });
 });

@@ -13,7 +13,7 @@ type SessionRow = {
   cancelledAt: Date | null;
   categoryId: string | null;
   categoryName: string | null;
-  maxPlayers: number;
+  attendedCount: number;
 };
 
 // 확정 참여자 수는 쿼리가 이미 1명 이상으로 걸렀다.
@@ -28,7 +28,7 @@ export function toBadgeSessions(rows: SessionRow[], now: Date): BadgeSession[] {
         endsAt: sessionEndsAt({ startsAt: row.confirmedAt!, playMinutes: row.playMinutes }),
         categoryId: row.categoryId,
         categoryName: row.categoryName,
-        maxPlayers: row.maxPlayers,
+        attendedCount: row.attendedCount,
       },
     ];
   });

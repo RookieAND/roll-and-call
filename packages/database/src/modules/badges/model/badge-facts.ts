@@ -7,7 +7,8 @@ export type BadgeSession = {
   endsAt: Date;
   categoryId: string | null;
   categoryName: string | null;
-  maxPlayers: number;
+  // 불참이 아닌 확정 참여자 수(GM 제외).
+  attendedCount: number;
 };
 
 export type BadgeReview = { gameId: string; createdAt: Date };
