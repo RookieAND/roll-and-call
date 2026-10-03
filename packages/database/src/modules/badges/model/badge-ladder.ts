@@ -16,6 +16,8 @@ export const HIDDEN_LADDER = {
   tripleHeader: "sp.triple",
   expedition: "sp.expedition",
   popular: "sp.popular",
+  needle: "sp.needle",
+  marathon: "sp.marathon",
   rush: "sp.rush",
 } as const;
 export type HiddenLadderKey = (typeof HIDDEN_LADDER)[keyof typeof HIDDEN_LADDER];

@@ -13,8 +13,16 @@ export type BadgeSession = {
 
 export type BadgeReview = { gameId: string; createdAt: Date };
 
-// 적용한 추첨에서 내가 굴린 1d100. nearMiss는 대기 1번(정원 + 1위)이다.
-export type BadgeDraw = { gameId: string; roll: number; nearMiss: boolean; drawnAt: Date };
+// 적용한 추첨에서 내가 굴린 1d100. nearMiss는 대기 1번(정원 + 1위), picked는 추첨 순간 확정이다.
+export type BadgeDraw = {
+  gameId: string;
+  roll: number;
+  nearMiss: boolean;
+  picked: boolean;
+  applicants: number;
+  maxPlayers: number;
+  drawnAt: Date;
+};
 
 // 내가 연 추첨 구인의 신청자(1d100을 굴린 사람) 수.
 export type BadgeHostedDraw = {

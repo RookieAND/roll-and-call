@@ -102,6 +102,18 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     grade: 5,
     description: "많은 사람이 이 테이블에 앉고 싶어 했습니다.",
   }),
+  [HIDDEN_LADDER.needle]: hidden({
+    emoji: "🎟️",
+    name: "바늘구멍",
+    grade: 3,
+    description: "좁은 문을 뚫고 자리를 얻었습니다.",
+  }),
+  [HIDDEN_LADDER.marathon]: hidden({
+    emoji: "🏃",
+    name: "마라톤",
+    grade: 3,
+    description: "긴 모험을 끝까지 함께했습니다.",
+  }),
   [HIDDEN_LADDER.rush]: hidden({
     emoji: "🖱️",
     name: "광클 마감",

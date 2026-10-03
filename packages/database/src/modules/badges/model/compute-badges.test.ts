@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { BadgeFacts, BadgeSession } from "./badge-facts";
+import type { BadgeDraw, BadgeFacts, BadgeSession } from "./badge-facts";
 import { computeBadges } from "./compute-badges";
 import { diffBadges } from "./diff-badges";
 import { monthlyWinners } from "./monthly-winners";
@@ -142,13 +142,53 @@ describe("숨겨진 칭호", () => {
   const keys = (badges: ReturnType<typeof computeBadges>) =>
     badges.map((badge) => badge.badgeKey).filter((key) => key.startsWith("sp."));
   const drawnAt = new Date(Date.UTC(2026, 5, 1));
+  const draw = (overrides: Partial<BadgeDraw>): BadgeDraw => ({
+    gameId: "g",
+    roll: 50,
+    nearMiss: false,
+    picked: false,
+    applicants: 4,
+    maxPlayers: 4,
+    drawnAt,
+    ...overrides,
+  });
+
+  it("바늘구멍은 신청자가 정원의 3배이면서 10명 이상인 추첨에서 뽑힌 때다", () => {
+    expect(
+      keys(
+        computeBadges(facts({ draws: [draw({ picked: true, applicants: 12, maxPlayers: 4 })] })),
+      ),
+    ).toEqual(["sp.needle"]);
+    expect(
+      keys(
+        computeBadges(
+          facts({
+            draws: [
+              draw({ picked: true, applicants: 9, maxPlayers: 3 }),
+              draw({ picked: false, applicants: 12, maxPlayers: 4 }),
+            ],
+          }),
+        ),
+      ),
+    ).toEqual([]);
+  });
+
+  it("마라톤은 360분 이상인 인정 세션이다", () => {
+    const lasting = (minutes: number) => ({
+      ...session(0),
+      endsAt: new Date(session(0).startsAt.getTime() + minutes * 60_000),
+    });
+    expect(keys(computeBadges(facts({ played: [lasting(360)] })))).toEqual(["sp.marathon"]);
+    expect(keys(computeBadges(facts({ hosted: [lasting(359)] })))).toEqual([]);
+    expect(keys(computeBadges(facts({ played: [lasting(180)] })))).toEqual([]);
+  });
 
   it("추첨 값과 대기 1번으로 판정한다", () => {
     const draws = [
-      { gameId: "a", roll: 1, nearMiss: false, drawnAt },
-      { gameId: "b", roll: 7, nearMiss: false, drawnAt },
-      { gameId: "c", roll: 40, nearMiss: true, drawnAt },
-      { gameId: "d", roll: 11, nearMiss: false, drawnAt },
+      draw({ gameId: "a", roll: 1 }),
+      draw({ gameId: "b", roll: 10 }),
+      draw({ gameId: "c", roll: 40, nearMiss: true }),
+      draw({ gameId: "d", roll: 11 }),
     ];
     expect(keys(computeBadges(facts({ draws })))).toEqual(["sp.critical", "sp.extreme", "sp.near"]);
   });

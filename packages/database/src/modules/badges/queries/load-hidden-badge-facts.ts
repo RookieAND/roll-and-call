@@ -13,6 +13,11 @@ const isFirstWaiting = sql<boolean>`${drawResults.status} = 'waiting' and not ex
     and ahead.roll < ${drawResults.roll}
 )`;
 
+const applicantsOfGame = sql<number>`(
+  select count(*)::int from ${drawResults} as applicant
+  where applicant.game_id = ${drawResults.gameId} and applicant.roll is not null
+)`;
+
 type HiddenBadgeFacts = Pick<BadgeFacts, "draws" | "hostedDraws" | "joinedAt" | "rush">;
 
 // 숨겨진 칭호만 쓰는 기록. 숨기거나 취소한 구인은 근거에서 빠져 칭호도 회수된다.
@@ -34,6 +39,9 @@ export async function loadHiddenBadgeFacts({
         gameId: drawResults.gameId,
         roll: drawResults.roll,
         nearMiss: isFirstWaiting,
+        picked: sql<boolean>`${drawResults.status} = 'confirmed'`,
+        applicants: applicantsOfGame,
+        maxPlayers: games.maxPlayers,
         drawnAt: games.drawnAt,
       })
       .from(drawResults)

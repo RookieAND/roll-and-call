@@ -7,8 +7,12 @@ import type { BadgeEvent } from "./reached-tier";
 import { sameDayEvents } from "./same-day-events";
 
 const EXPEDITION_MIN_ATTENDED = 6;
-const POPULAR_MIN_APPLICANTS = 10;
-const POPULAR_RATIO = 3;
+const CROWDED_MIN_APPLICANTS = 10;
+const CROWDED_RATIO = 3;
+const MARATHON_MINUTES = 360;
+
+const isCrowded = ({ applicants, maxPlayers }: { applicants: number; maxPlayers: number }) =>
+  applicants >= CROWDED_MIN_APPLICANTS && applicants >= maxPlayers * CROWDED_RATIO;
 
 // 숨겨진 칭호는 한 단계라 첫 사건이 획득 시각·근거다(R28).
 export function hiddenEvents({
@@ -49,13 +53,19 @@ export function hiddenEvents({
         .map((session) => ({ at: session.endsAt, gameId: session.gameId }));
     case HIDDEN_LADDER.popular:
       return facts.hostedDraws
-        .filter(
-          (draw) =>
-            draw.applicants >= POPULAR_MIN_APPLICANTS &&
-            draw.applicants >= draw.maxPlayers * POPULAR_RATIO,
-        )
+        .filter(isCrowded)
         .toSorted((left, right) => left.drawnAt.getTime() - right.drawnAt.getTime())
         .map((draw) => ({ at: draw.drawnAt, gameId: draw.gameId }));
+    case HIDDEN_LADDER.needle:
+      return drawEvents({ draws, matches: (draw) => draw.picked && isCrowded(draw) });
+    case HIDDEN_LADDER.marathon:
+      return [...facts.played, ...facts.hosted]
+        .filter(
+          (session) =>
+            session.endsAt.getTime() - session.startsAt.getTime() >= MARATHON_MINUTES * 60_000,
+        )
+        .toSorted((left, right) => left.endsAt.getTime() - right.endsAt.getTime())
+        .map((session) => ({ at: session.endsAt, gameId: session.gameId }));
     case HIDDEN_LADDER.rush:
       return facts.rush;
   }
