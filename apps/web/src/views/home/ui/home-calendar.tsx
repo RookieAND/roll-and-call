@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, cn, Grid, HStack, IconButton, Skeleton, Text } from "@roll-and-call/ui";
+import { useQuery } from "@tanstack/react-query";
 import type { Dayjs } from "dayjs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -9,6 +10,7 @@ import { useServerPath } from "@/shared/lib";
 
 import { buildMonthCells } from "../model/build-month-cells";
 import { DATE_KEY_FORMAT } from "../model/date-key-format";
+import { holidayQuery } from "../model/holiday-query";
 import type { CalendarSession } from "../model/to-calendar-sessions";
 import { WEEKDAY_TONE } from "../model/weekday-tone";
 import { HomeCalendarCell } from "./home-calendar-cell";
@@ -30,6 +32,7 @@ export function HomeCalendar({
 }: HomeCalendarProps) {
   const toServerPath = useServerPath();
   const cells = buildMonthCells(monthStart);
+  const { data: holidays } = useQuery(holidayQuery(monthStart.year()));
   const previousHref = `${toServerPath("/")}?date=${monthStart.subtract(1, "month").format(DATE_KEY_FORMAT)}`;
   const nextHref = `${toServerPath("/")}?date=${monthStart.add(1, "month").format(DATE_KEY_FORMAT)}`;
 
@@ -83,6 +86,7 @@ export function HomeCalendar({
               key={cell.key}
               cell={cell}
               sessions={sessionsByDay[cell.key] ?? []}
+              holidayNames={holidays?.[cell.key]}
               selected={cell.key === selectedKey}
               today={cell.key === todayKey}
             />

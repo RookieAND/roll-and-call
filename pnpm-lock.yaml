@@ -304,6 +304,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.7.1
         version: 5.7.1(react-hook-form@7.85.0(react@19.2.8))(zod@4.4.3)
+      '@hyunbinseo/holidays-kr':
+        specifier: ^5.2027.2
+        version: 5.2027.2
       '@roll-and-call/database':
         specifier: workspace:*
         version: link:../../packages/database
@@ -1235,6 +1238,10 @@ packages:
         optional: true
       zod:
         optional: true
+
+  '@hyunbinseo/holidays-kr@5.2027.2':
+    resolution: {integrity: sha512-woNzPkDU1YGlSt0o/Kigd6iuiS+SNTq49+UhFFuVGTDLiUIBWwuIFvQKRS8l+cmJvX9yX55yjBrH2J6GN2lOYg==}
+    engines: {node: '>=18'}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -3640,6 +3647,8 @@ snapshots:
       react-hook-form: 7.85.0(react@19.2.8)
     optionalDependencies:
       zod: 4.4.3
+
+  '@hyunbinseo/holidays-kr@5.2027.2': {}
 
   '@img/colour@1.1.0':
     optional: true

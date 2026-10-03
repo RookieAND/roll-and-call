@@ -16,25 +16,32 @@ const MAX_DOTS = 3;
 interface HomeCalendarCellProps {
   cell: MonthCell;
   sessions: CalendarSession[];
+  holidayNames?: readonly string[];
   selected: boolean;
   today: boolean;
 }
 
 // ponytail: 달력 칸은 버튼·칩 프리미티브와 모양이 달라 Link를 직접 칠한다.
-export function HomeCalendarCell({ cell, sessions, selected, today }: HomeCalendarCellProps) {
+export function HomeCalendarCell({
+  cell,
+  sessions,
+  holidayNames,
+  selected,
+  today,
+}: HomeCalendarCellProps) {
   const toServerPath = useServerPath();
   const mine = sessions.find((session) => session.mine);
   const dots = (mine ? [mine, ...sessions.filter((session) => session !== mine)] : sessions).slice(
     0,
     MAX_DOTS,
   );
-  const ariaLabel = sessions.length > 0 ? `${cell.label} 세션 ${sessions.length}건` : cell.label;
+  const dayLabel = holidayNames ? `${cell.label} ${holidayNames.join("·")}` : cell.label;
+  const ariaLabel = sessions.length > 0 ? `${dayLabel} 세션 ${sessions.length}건` : dayLabel;
   const href = `${toServerPath("/")}?date=${cell.key}`;
 
   const tone = CALENDAR_CELL_TONE[calendarCellState({ selected, today })];
-  const weekdayTone = cell.inMonth
-    ? (WEEKDAY_TONE[cell.weekday] ?? "text-gray-600")
-    : "text-hint opacity-50";
+  const redDayTone = holidayNames ? "text-sunday" : WEEKDAY_TONE[cell.weekday];
+  const weekdayTone = cell.inMonth ? (redDayTone ?? "text-gray-600") : "text-hint opacity-50";
   const dayTone = tone.day ?? weekdayTone;
 
   // 같은 달은 이미 받은 세션으로 그리므로 서버를 다시 부르지 않는다. 다른 달 칸과 새 탭 열기는 원래대로 이동한다.
