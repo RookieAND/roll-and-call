@@ -2,7 +2,7 @@ import { and, eq, isNotNull, ne, or } from "drizzle-orm";
 
 import { db } from "../../../client";
 import { games, participants } from "../../../schema";
-import { DEFAULT_PLAY_MINUTES } from "../../badges/model/session-ends-at";
+import { DEFAULT_PLAY_MINUTES } from "../model/session-ends-at";
 
 const SLOT_MS = 30 * 60 * 1000;
 

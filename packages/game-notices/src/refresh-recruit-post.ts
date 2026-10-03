@@ -8,7 +8,8 @@ import { recruitEmbed } from "./recruit-embed";
 
 export async function refreshRecruitPost({ server, gameId }: { server: Server; gameId: string }) {
   const game = await getGameForNotice({ serverId: server.id, gameId });
-  if (!game?.discordThreadId) return;
+  // 취소한 구인의 공지는 notifyGameCancelled가 남긴 모양 그대로 둔다.
+  if (!game?.discordThreadId || game.cancelledAt) return;
 
   await Promise.all([
     editDiscordMessage({

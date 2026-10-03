@@ -7,6 +7,7 @@ export const recognizedGamesWhere = and(
   isNotNull(games.confirmedAt),
   isNotNull(games.attendanceConfirmedAt),
   isNull(games.hiddenAt),
+  isNull(games.cancelledAt),
   exists(
     sql`(select 1 from ${participants} where ${participants.gameId} = ${games.id} and ${participants.status} = 'confirmed')`,
   ),

@@ -35,6 +35,7 @@ export async function loadBadgeFacts({
   const visibleReview = and(
     eq(games.serverId, serverId),
     isNull(games.hiddenAt),
+    isNull(games.cancelledAt),
     isNull(sessionReviews.removedAt),
     isNull(sessionReviews.hiddenAt),
     not(reviewAuthorAbsent),

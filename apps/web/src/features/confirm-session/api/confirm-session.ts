@@ -1,11 +1,11 @@
 "use server";
 
-import { confirmGameSession, getGameConfirmedAt } from "@roll-and-call/database/games";
+import { confirmGameSession, getGameSchedule } from "@roll-and-call/database/games";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { type ActionResult } from "@/shared/api";
+import { GAME_CANCELLED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
@@ -30,7 +30,10 @@ export async function confirmSession({
   const confirmedAt = new Date(slotIso);
   if (Number.isNaN(confirmedAt.getTime())) return { error: "잘못된 시간입니다." };
 
-  const previousConfirmedAt = await getGameConfirmedAt({ serverId: server.id, gameId });
+  const before = await getGameSchedule({ serverId: server.id, gameId });
+  if (!before) return GAME_NOT_FOUND_RESULT;
+  if (before.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
+  const previousConfirmedAt = before.confirmedAt;
   const updated = await confirmGameSession({
     serverId: server.id,
     gameId,

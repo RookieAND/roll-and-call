@@ -29,7 +29,18 @@ export { isSessionLocked } from "./model/session-lock";
 export { isSessionEnded } from "./model/is-session-ended";
 export { sessionEndsAt } from "./model/session-end";
 export { isAttendanceDue } from "./model/is-attendance-due";
-export { ABSENCE_RECORD_MONTHS, absenceExpiresAt } from "./model/absence-expiry";
+export { isAttendanceSettled } from "./model/is-attendance-settled";
+export {
+  ATTENDANCE_EDIT_DAYS,
+  attendanceDeadline,
+  isAttendancePastDeadline,
+  isAutoConfirmedAttendance,
+} from "@roll-and-call/database/games/model";
+export {
+  ABSENCE_WINDOW_DAYS,
+  absenceExpiresAt,
+  isAbsenceActive,
+} from "@roll-and-call/database/games/model";
 export { recruitMethodLabel } from "./model/recruit-method-label";
 export { RecruitMethodBadge } from "./ui/recruit-method-badge";
 export { availabilityNote } from "./model/availability-note";

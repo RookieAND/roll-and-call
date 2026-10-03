@@ -1,6 +1,6 @@
 import { isNull } from "es-toolkit";
 
-import { absenceExpiresAt } from "@/entities/game";
+import { absenceExpiresAt, isAbsenceActive } from "@/entities/game";
 
 import type { SessionGame } from "./session-card-model";
 
@@ -30,6 +30,6 @@ export function recentAbsences({
       sessionAt: new Date(game.confirmedAt!),
       expiresAt: absenceExpiresAt(game.confirmedAt!),
     }))
-    .filter((absence) => absence.expiresAt.getTime() > now.getTime())
+    .filter((absence) => isAbsenceActive({ sessionStartsAt: absence.sessionAt, now }))
     .toSorted((left, right) => right.sessionAt.getTime() - left.sessionAt.getTime());
 }

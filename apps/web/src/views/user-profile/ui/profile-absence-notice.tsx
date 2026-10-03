@@ -1,7 +1,7 @@
 import { Callout } from "@roll-and-call/ui";
 import { AlertCircle } from "lucide-react";
 
-import { ABSENCE_RECORD_MONTHS } from "@/entities/game";
+import { ABSENCE_WINDOW_DAYS } from "@/entities/game";
 import type { Absence } from "@/widgets/session-list";
 
 interface ProfileAbsenceNoticeProps {
@@ -17,8 +17,7 @@ export function ProfileAbsenceNotice({ absences }: ProfileAbsenceNoticeProps) {
       <Callout.Icon>
         <AlertCircle size={15} strokeWidth={2.2} />
       </Callout.Icon>
-      <Callout.Title>{`최근 ${ABSENCE_RECORD_MONTHS}개월 내 세션 불참 이력이 있습니다`}</Callout.Title>
-      <Callout.Description>구인 등록 및 세션 참여 신청 시 패널티가 부과됩니다.</Callout.Description>
+      <Callout.Title>{`최근 ${ABSENCE_WINDOW_DAYS}일 안에 세션 불참 기록이 있습니다`}</Callout.Title>
     </Callout.Root>
   );
 }

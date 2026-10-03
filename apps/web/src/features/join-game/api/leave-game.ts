@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
 import { countConfirmed, isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
-import { GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import { GAME_CANCELLED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
@@ -23,6 +23,7 @@ export async function leaveGame(gameId: string): Promise<ActionResult> {
 
   const game = await getGameWithRoster({ serverId: server.id, gameId });
   if (!game) return GAME_NOT_FOUND_RESULT;
+  if (game.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
 
   const membership = game.participants.find((participant) => participant.userId === user.id);
   if (!membership) return { error: "참여 중이 아닙니다." };

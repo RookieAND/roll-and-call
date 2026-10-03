@@ -1,21 +1,22 @@
-import { and, eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 
 import { db } from "../../../client";
-import { games, participants, profiles, serverMembers } from "../../../schema";
+import { profiles, serverMembers, type Game } from "../../../schema";
+import { releaseMemberGames } from "../../games/commands/release-member-games";
+import { GAME_CANCEL_KIND } from "../../games/model/game-cancel-kind";
 import type { Actor } from "../model/types";
-import { notStartedGamesWhere } from "../queries/not-started-games-where";
 import { recordAudit } from "./record-audit";
 
 export type KickResult =
   | {
       ok: true;
       discordId: string;
-      cancelledGames: (typeof games.$inferSelect)[];
+      cancelledGames: Game[];
       leftGameIds: string[];
     }
   | { ok: false; alreadyBanned: true };
 
-// 롤앤콜 쪽 추방: 멤버십을 차단됨(나간 상태)으로 두고, 시작 전 구인의 신청·대기·확정에서 빼고, 본인이 GM인 시작 전 구인은 사용자 앱의 구인 삭제처럼 지운다.
+// 롤앤콜 쪽 추방: 멤버십을 차단됨(나간 상태)으로 두고, 탈퇴와 같은 정리(releaseMemberGames)를 한다. 본인이 GM인 시작 전 구인은 운영진 취소다.
 // 지난 기록은 그대로다. DM·디스코드 차단·알림은 부르는 쪽이 이 결과로 한다.
 export async function kickMember({
   serverId,
@@ -53,25 +54,13 @@ export async function kickMember({
       .returning({ userId: serverMembers.userId });
     if (banned.length === 0) return { ok: false, alreadyBanned: true };
 
-    const notStarted = tx
-      .select({ id: games.id })
-      .from(games)
-      .where(notStartedGamesWhere(serverId));
-    const left = await tx
-      .delete(participants)
-      .where(
-        and(
-          eq(participants.serverId, serverId),
-          eq(participants.userId, userId),
-          inArray(participants.gameId, notStarted),
-        ),
-      )
-      .returning({ gameId: participants.gameId });
-    // ponytail: 시작 전 구인이라 후기 포럼 글이 없다고 보고 지우지 않는다. 남는 업로드 파일은 하루 한 번 도는 정리 작업이 지운다.
-    const cancelledGames = await tx
-      .delete(games)
-      .where(and(notStartedGamesWhere(serverId), eq(games.gmId, userId)))
-      .returning();
+    const released = await releaseMemberGames({
+      transaction: tx,
+      serverId,
+      userId,
+      cancelKind: GAME_CANCEL_KIND.staff,
+      actorId: actor.id,
+    });
 
     await recordAudit({
       executor: tx,
@@ -89,8 +78,8 @@ export async function kickMember({
     return {
       ok: true,
       discordId: user.discordId,
-      cancelledGames,
-      leftGameIds: left.map((row) => row.gameId),
+      cancelledGames: released.cancelledGames,
+      leftGameIds: released.leftGameIds,
     };
   });
 }

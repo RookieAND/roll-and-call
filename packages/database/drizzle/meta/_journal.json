@@ -337,6 +337,13 @@
       "when": 1793300000000,
       "tag": "0047_member_rejoined_at",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1793400000000,
+      "tag": "0048_game_cancelled",
+      "breakpoints": true
     }
   ]
 }

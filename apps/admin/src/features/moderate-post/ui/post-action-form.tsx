@@ -39,7 +39,7 @@ type Conflict = Extract<PostModerationResult, { ok: false }>["conflict"];
 
 const CONFLICT_VERB = {
   "구인 숨김": "숨김 처리",
-  "구인 제거": "제거",
+  "구인 취소": "제거",
   "구인 숨김 해제": "숨김을 해제",
   "신고 처리 완료": "신고를 처리",
 } as const;

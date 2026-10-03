@@ -91,6 +91,7 @@ Deno.serve(async () => {
     .not("discord_thread_id", "is", null)
     .is("notified_at", null)
     .is("hidden_at", null)
+    .is("cancelled_at", null)
     .gt("confirmed_at", now.toISOString())
     .lte("confirmed_at", new Date(now.getTime() + ONE_HOUR_MS).toISOString())
     .select(

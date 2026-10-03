@@ -8,7 +8,7 @@ import {
 import { revalidatePath } from "next/cache";
 
 import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
-import { GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import { GAME_CANCELLED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, notMemberError } from "@/shared/server";
 
@@ -29,6 +29,7 @@ export async function saveAvailability({
 
   const game = await getGameWithRoster({ serverId: server.id, gameId });
   if (!game) return GAME_NOT_FOUND_RESULT;
+  if (game.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) {
     return { error: "일시가 지정된 게임은 조율 대상이 아닙니다." };
   }

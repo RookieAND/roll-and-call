@@ -3,8 +3,13 @@ import { listParticipantUserIds, lockGame } from "@roll-and-call/database/games"
 import { withTransaction, type Transaction } from "@roll-and-call/database/transaction";
 import { after } from "next/server";
 
-import { isAttendanceDue, PARTICIPANT_STATUS } from "@/entities/game";
-import { ERROR_DISPLAY, GAME_NOT_FOUND_MESSAGE, type ActionResult } from "@/shared/api";
+import { isAttendanceDue, isAttendancePastDeadline, PARTICIPANT_STATUS } from "@/entities/game";
+import {
+  ERROR_DISPLAY,
+  GAME_CANCELLED_MESSAGE,
+  GAME_NOT_FOUND_MESSAGE,
+  type ActionResult,
+} from "@/shared/api";
 import { evaluateGameBadges, getActingMember, notMemberError } from "@/shared/server";
 
 import { AttendanceError } from "./attendance-error";
@@ -31,6 +36,7 @@ export async function guardAttendance({
       const game = await lockGame({ transaction, serverId, gameId });
       if (!game) throw new AttendanceError(GAME_NOT_FOUND_MESSAGE, ERROR_DISPLAY.page);
       if (game.gmId !== gmId) throw new AttendanceError("권한이 없습니다.");
+      if (game.cancelledAt) throw new AttendanceError(GAME_CANCELLED_MESSAGE);
 
       const confirmedUserIds = await listParticipantUserIds({
         transaction,
@@ -39,6 +45,9 @@ export async function guardAttendance({
         status: PARTICIPANT_STATUS.confirmed,
       });
 
+      if (isAttendancePastDeadline({ ...game, now: new Date() })) {
+        throw new AttendanceError("출석 확인 기한이 지났습니다.");
+      }
       // 다시 여는 길도 같은 가드를 타므로 확정 시각은 빼고 "세션이 끝났는가"만 본다.
       if (
         !isAttendanceDue({

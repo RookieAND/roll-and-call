@@ -39,4 +39,9 @@ describe("isAttendanceDue", () => {
       isAttendanceDue({ game: { ...ended, confirmedAt: null }, confirmedCount: 3, now: NOW }),
     ).toBe(false);
   });
+
+  it("기한(종료 + 7일)이 지나면 할 일이 아니다", () => {
+    const longAgo = { ...ended, confirmedAt: new Date(NOW.getTime() - 8 * 24 * HOUR) };
+    expect(isAttendanceDue({ game: longAgo, confirmedCount: 3, now: NOW })).toBe(false);
+  });
 });

@@ -47,7 +47,7 @@ export function UserDetailLoading() {
                 <FactRows labelWidth={72} items={["연 세션", "참여 세션"].map(skeletonFact)} />
                 <FactRows
                   labelWidth={100}
-                  items={["최근 3개월 불참", "인증 룰북"].map(skeletonFact)}
+                  items={["최근 30일 불참", "인증 룰북"].map(skeletonFact)}
                 />
               </Grid>
             </section>

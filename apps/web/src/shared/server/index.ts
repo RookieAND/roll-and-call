@@ -12,6 +12,7 @@ export type {
 export { getCertSellers, getQuizQuestion } from "@roll-and-call/database/rulebooks";
 export {
   getGameAvailabilities,
+  findGameServerSlug,
   getGameParticipants,
   getGamesByGm,
   getGamesCounts,
@@ -80,6 +81,9 @@ export { getCurrentMembership } from "./membership/get-current-membership";
 export { requireMembership } from "./membership/require-membership";
 export { getActingMember } from "./membership/get-acting-member";
 export { isDiscordGuildMember } from "./membership/is-discord-guild-member";
+export { handleMemberLeft } from "./membership/handle-member-left";
+export { detectRosterDepartures } from "./membership/detect-roster-departures";
+export { findDepartedMembers } from "./membership/find-departed-members";
 export { listJoinableServers } from "./membership/list-joinable-servers";
 export { MEMBERSHIP_REQUIRED_MESSAGE } from "./membership/membership-required-message";
 export { notMemberError } from "./membership/not-member-error";

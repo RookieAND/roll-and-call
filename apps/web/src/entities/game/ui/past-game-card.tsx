@@ -27,6 +27,7 @@ export function PastGameCard({ game }: PastGameCardProps) {
     waitlistEnabled: game.waitlistEnabled,
     scheduleMode: game.scheduleMode,
     confirmedAt: game.confirmedAt,
+    cancelledAt: game.cancelledAt,
   });
   const when = game.confirmedAt
     ? `${formatDate(game.confirmedAt)} 세션 · ${count}명`

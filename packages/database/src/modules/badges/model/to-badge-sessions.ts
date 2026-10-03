@@ -1,6 +1,6 @@
+import { sessionEndsAt } from "../../games/model/session-ends-at";
 import { type BadgeSession } from "./badge-facts";
 import { isRecognizedSession } from "./is-recognized-session";
-import { sessionEndsAt } from "./session-ends-at";
 
 type SessionRow = {
   gameId: string;
@@ -9,6 +9,7 @@ type SessionRow = {
   playMinutes: number | null;
   attendanceConfirmedAt: Date | null;
   hiddenAt: Date | null;
+  cancelledAt: Date | null;
   categoryId: string | null;
   categoryName: string | null;
 };

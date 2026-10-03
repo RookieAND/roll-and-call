@@ -30,6 +30,7 @@ export { formatMonthDayTime } from "./format-month-day-time";
 export { SERVER_SLUG_HEADER } from "./server-slug-header";
 export { serverPath } from "./server-path";
 export { useServerPath } from "./use-server-path";
+export { isUuid } from "./is-uuid";
 export { legacyServerRedirect } from "./legacy-server-redirect";
 export { safeNextPath } from "./safe-next-path";
 export { serverNextPath } from "./server-next-path";

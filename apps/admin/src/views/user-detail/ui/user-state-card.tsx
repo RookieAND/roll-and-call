@@ -75,7 +75,7 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
             labelWidth={100}
             items={[
               {
-                label: "최근 3개월 불참",
+                label: "최근 30일 불참",
                 value: (
                   <Text typography="body3" weight="medium" foreground={noShowForeground}>
                     {user.recentNoShowCount}회

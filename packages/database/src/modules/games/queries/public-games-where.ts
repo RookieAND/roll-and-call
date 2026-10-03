@@ -4,5 +4,10 @@ import { games } from "../../../schema";
 import { hiddenGmWhere } from "./hidden-gm-where";
 
 export function publicGamesWhere(serverId: string) {
-  return and(eq(games.serverId, serverId), isNull(games.hiddenAt), hiddenGmWhere)!;
+  return and(
+    eq(games.serverId, serverId),
+    isNull(games.hiddenAt),
+    isNull(games.cancelledAt),
+    hiddenGmWhere,
+  )!;
 }

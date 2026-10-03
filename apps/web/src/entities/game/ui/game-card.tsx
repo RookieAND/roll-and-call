@@ -33,6 +33,7 @@ export function GameCard({ game }: GameCardProps) {
     waitlistEnabled: game.waitlistEnabled,
     scheduleMode: game.scheduleMode,
     confirmedAt: game.confirmedAt,
+    cancelledAt: game.cancelledAt,
   });
   const ended = isSessionEnded(game);
   const live = isLiveGame({ status, ended });

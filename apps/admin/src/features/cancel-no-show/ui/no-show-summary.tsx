@@ -1,3 +1,4 @@
+import { isAbsenceActive } from "@roll-and-call/database/games/model";
 import { Button } from "@roll-and-call/ui";
 import { Calendar } from "lucide-react";
 
@@ -12,6 +13,8 @@ interface NoShowSummaryProps {
 }
 
 export function NoShowSummary({ record }: NoShowSummaryProps) {
+  const counted =
+    !record.cancelled && isAbsenceActive({ sessionStartsAt: record.startsAt, now: Date.now() });
   return (
     <EntityHead
       lead={<IconTile icon={Calendar} size="lg" />}
@@ -22,10 +25,10 @@ export function NoShowSummary({ record }: NoShowSummaryProps) {
         { label: "처리한 GM", value: record.gmNickname },
         { label: "처리 시점", value: NO_SHOW_TIMINGS[record.timing] },
         {
-          label: "당사자의 최근 3개월 불참",
+          label: "당사자의 최근 30일 불참",
           value: `${record.recentNoShowCount}회`,
           danger: record.recentNoShowCount >= REPEATED_NO_SHOW_COUNT,
-          sub: record.cancelled ? undefined : "이 기록 포함",
+          sub: counted ? "이 기록 포함" : undefined,
         },
       ]}
       actions={

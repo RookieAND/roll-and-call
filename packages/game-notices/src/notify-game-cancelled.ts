@@ -8,10 +8,11 @@ import {
   DISCORD_COLOR,
 } from "@roll-and-call/discord";
 
+import { cancelDescription } from "./cancel-description";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { recruitEmbed } from "./recruit-embed";
 
-// 삭제 전에 받아둔 행으로 부른다. 모집 공지는 빨갛게 고쳐 남기고, 스레드에는 취소를 알린다.
+// GM 삭제는 지우기 전에 받아둔 행으로, 운영진·자동 취소는 취소한 행으로 부른다. 모집 공지는 빨갛게 고쳐 남기고, 스레드에는 취소를 알린다.
 export async function notifyGameCancelled({ server, game }: { server: Server; game: Game }) {
   if (!game.discordThreadId) return;
 
@@ -38,7 +39,7 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
             gmName,
             emoji: "🚫",
             color: DISCORD_COLOR.cancelled,
-            description: `GM이 세션을 취소했어요.\n신청은 모두 사라졌고, 다시 열리면 새 공지로 올라옵니다.`,
+            description: cancelDescription(game.cancelKind),
             linked: false,
           }),
         ],

@@ -4,7 +4,12 @@ import { withTransaction, type Transaction } from "@roll-and-call/database/trans
 import { after } from "next/server";
 
 import { isSessionLocked } from "@/entities/game";
-import { ERROR_DISPLAY, GAME_NOT_FOUND_MESSAGE, type ActionResult } from "@/shared/api";
+import {
+  ERROR_DISPLAY,
+  GAME_CANCELLED_MESSAGE,
+  GAME_NOT_FOUND_MESSAGE,
+  type ActionResult,
+} from "@/shared/api";
 import {
   type Game,
   getActingMember,
@@ -38,6 +43,7 @@ export async function adjustRoster({
       const game = await lockGame({ transaction, serverId: server.id, gameId });
       if (!game) throw new RosterError(GAME_NOT_FOUND_MESSAGE, ERROR_DISPLAY.page);
       if (game.gmId !== gmId) throw new RosterError("권한이 없습니다.");
+      if (game.cancelledAt) throw new RosterError(GAME_CANCELLED_MESSAGE);
       if (isSessionLocked(game)) throw new RosterError("이미 확정된 게임입니다.");
       await work(transaction, game);
     });

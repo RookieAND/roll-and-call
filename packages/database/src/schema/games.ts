@@ -28,6 +28,9 @@ export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery"])
 // 정원(maxPlayers)만큼 confirmed로 채우고 초과분은 waiting. 승격/강등/자동 승계는 이 값만 바꾼다.
 export const participantStatus = pgEnum("participant_status", ["confirmed", "waiting"]);
 
+// 구인을 누가 취소했는지. auto는 GM이 디스코드 서버를 나가 자동으로 취소된 경우다.
+export const gameCancelKind = pgEnum("game_cancel_kind", ["gm", "staff", "auto"]);
+
 export const games = pgTable(
   "games",
   {
@@ -77,6 +80,11 @@ export const games = pgTable(
     hiddenBy: uuid("hidden_by").references(() => profiles.id, { onDelete: "set null" }),
     hiddenReason: text("hidden_reason"),
     editRequestedAt: timestamp("edit_requested_at", { withTimezone: true }),
+    // 취소한 구인은 지우지 않고 남겨 신청·수정·명단 조정만 막는다. 사유는 GM이 취소할 때만 남긴다.
+    cancelledAt: timestamp("cancelled_at", { withTimezone: true }),
+    cancelledBy: uuid("cancelled_by").references(() => profiles.id, { onDelete: "set null" }),
+    cancelKind: gameCancelKind("cancel_kind"),
+    cancelReason: text("cancel_reason"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
@@ -95,6 +103,11 @@ export const games = pgTable(
     check(
       "games_tag_limits",
       sql`cardinality(${table.genres}) <= 5 and cardinality(${table.triggers}) <= 5 and cardinality(${table.platforms}) <= 5`,
+    ),
+    check("games_cancel_reason_length", sql`char_length(${table.cancelReason}) <= 200`),
+    check(
+      "games_cancelled_has_kind",
+      sql`${table.cancelledAt} is null or ${table.cancelKind} is not null`,
     ),
   ],
 );

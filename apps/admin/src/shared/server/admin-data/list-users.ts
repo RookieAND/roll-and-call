@@ -10,7 +10,7 @@ const WEEK = 7 * 86_400_000;
 
 export const USER_FILTERS = {
   gm: "GM (인증 룰북 있음)",
-  noshow: "최근 3개월 불참 2회 이상",
+  noshow: "최근 30일 불참 2회 이상",
   sanctioned: "제재 중",
   recent: "최근 가입 (7일)",
 } as const;

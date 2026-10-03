@@ -2,15 +2,16 @@ import { and, eq, exists, isNotNull, isNull, sql } from "drizzle-orm";
 
 import { db } from "../../../client";
 import { games, participants } from "../../../schema";
+import { sessionEndsAt } from "../../games/model/session-ends-at";
 import { BADGE_ROLE } from "../model/badge-ladder";
 import { type MonthlyAppearance } from "../model/monthly-winners";
-import { sessionEndsAt } from "../model/session-ends-at";
 import { attendedWhere } from "./attended-where";
 
 // 홈의 이 달 기록과 같은 기준으로 센다. 끝난 세션이면 출석 확인 전이어도 넣고, 불참으로 적힌 사람만 뺀다.
 const monthlyGamesWhere = and(
   isNotNull(games.confirmedAt),
   isNull(games.hiddenAt),
+  isNull(games.cancelledAt),
   exists(
     sql`(select 1 from ${participants} where ${participants.gameId} = ${games.id} and ${participants.status} = 'confirmed')`,
   ),

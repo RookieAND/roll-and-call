@@ -3,7 +3,7 @@ import { countParticipants, insertParticipant, lockGame } from "@roll-and-call/d
 import { withTransaction } from "@roll-and-call/database/transaction";
 
 import { DIE_FACES, isSessionLocked, PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
-import { GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import { GAME_CANCELLED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
 import type { Game } from "@/shared/server";
 
 export type Application = {
@@ -30,6 +30,7 @@ export async function applyToGame({
     const game = await lockGame({ transaction, serverId, gameId });
 
     if (!game) return GAME_NOT_FOUND_RESULT;
+    if (game.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
     if (game.gmId === userId) {
       return { error: "GM은 참여자로 참여할 수 없습니다." };
     }

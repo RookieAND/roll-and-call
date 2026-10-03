@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { type ActionResult } from "@/shared/api";
+import { GAME_CANCELLED_MESSAGE, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
@@ -40,6 +40,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
   const owner = { serverId: server.id, gameId: id, gmId: user.id };
   const before = await findOwnedGameSettings(owner);
   if (!before) return { error: FORBIDDEN_MESSAGE };
+  if (before.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
 
   const roster = await listRosterStatuses({ serverId: server.id, gameId: id });
   const confirmedCount = roster.filter((status) => status === PARTICIPANT_STATUS.confirmed).length;

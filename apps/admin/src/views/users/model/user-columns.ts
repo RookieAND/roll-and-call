@@ -4,7 +4,7 @@ export const USER_COLUMNS = [
   { label: "가입일", width: 104, kind: "date" },
   { label: "연 세션", width: 74, kind: "number", align: "end" },
   { label: "참여 세션", width: 82, kind: "number", align: "end" },
-  { label: "최근 3개월 불참", width: 120, kind: "number", align: "end" },
+  { label: "최근 30일 불참", width: 120, kind: "number", align: "end" },
   { label: "인증 룰북", width: 82, kind: "number", align: "end" },
   { label: "상태", width: 96, kind: "badge", align: "center" },
   { label: "제재 종료", width: 92, kind: "date" },

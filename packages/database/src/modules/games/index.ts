@@ -1,3 +1,9 @@
+export {
+  autoConfirmAttendance,
+  autoConfirmAttendanceForGame,
+  type AutoConfirmedGame,
+} from "./commands/auto-confirm-attendance";
+export { cancelGame, type CancelGameResult } from "./commands/cancel-game";
 export { closeGameRecruitment } from "./commands/close-game-recruitment";
 export { confirmGameSession } from "./commands/confirm-game-session";
 export { createGameWithRoster } from "./commands/create-game-with-roster";
@@ -20,15 +26,16 @@ export { countRolledParticipants } from "./queries/count-rolled-participants";
 export { findGameDetail, type GameDetailData } from "./queries/find-game-detail";
 export { findGameFileUrlsInUse } from "./queries/find-game-file-urls-in-use";
 export { findGameGmId } from "./queries/find-game-gm-id";
+export { findGameServerSlug } from "./queries/find-game-server-slug";
 export { findOwnedGameSettings } from "./queries/find-owned-game-settings";
 export { findParticipantStatus } from "./queries/find-participant-status";
 export { findPreviousRound } from "./queries/find-previous-round";
 export { getGameAvailabilities } from "./queries/get-game-availabilities";
-export { getGameConfirmedAt } from "./queries/get-game-confirmed-at";
 export { getGameForDrawNotice } from "./queries/get-game-for-draw-notice";
 export { getGameForNotice } from "./queries/get-game-for-notice";
 export { getGameForRecruitmentNotice } from "./queries/get-game-for-recruitment-notice";
 export { getGameParticipants } from "./queries/get-game-participants";
+export { getGameSchedule } from "./queries/get-game-schedule";
 export { getGameWithGmName } from "./queries/get-game-with-gm-name";
 export { getGameWithRoster } from "./queries/get-game-with-roster";
 export { getGamesByGm } from "./queries/get-games-by-gm";
@@ -46,6 +53,7 @@ export { hasAnsweredAvailability } from "./queries/has-answered-availability";
 export { isGameOwner } from "./queries/is-game-owner";
 export { listParticipantUserIds } from "./queries/list-participant-user-ids";
 export { listRolledApplicantIds } from "./queries/list-rolled-applicant-ids";
+export { listRosterDiscordIds } from "./queries/list-roster-discord-ids";
 export { listRosterStatuses } from "./queries/list-roster-statuses";
 export { lockGame } from "./queries/lock-game";
 export { searchGameCandidates } from "./queries/search-game-candidates";

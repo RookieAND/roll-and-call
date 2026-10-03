@@ -15,6 +15,7 @@ describe("deriveGameStatus", () => {
         waitlistEnabled: true,
         scheduleMode: "coordinate",
         confirmedAt: null,
+        cancelledAt: null,
       }),
     ).toBe(GAME_STATUS.closed);
   });
@@ -28,6 +29,7 @@ describe("deriveGameStatus", () => {
         waitlistEnabled: true,
         scheduleMode: "coordinate",
         confirmedAt: null,
+        cancelledAt: null,
       }),
     ).toBe(GAME_STATUS.confirmed);
   });
@@ -41,6 +43,7 @@ describe("deriveGameStatus", () => {
         waitlistEnabled: true,
         scheduleMode: "coordinate",
         confirmedAt: null,
+        cancelledAt: null,
       }),
     ).toBe(GAME_STATUS.recruiting);
   });
@@ -54,6 +57,7 @@ describe("deriveGameStatus", () => {
         waitlistEnabled: false,
         scheduleMode: "coordinate",
         confirmedAt: null,
+        cancelledAt: null,
       }),
     ).toBe(GAME_STATUS.full);
   });
@@ -67,6 +71,7 @@ describe("deriveGameStatus", () => {
         waitlistEnabled: false,
         scheduleMode: "coordinate",
         confirmedAt: null,
+        cancelledAt: null,
       }),
     ).toBe(GAME_STATUS.closed);
   });
@@ -80,6 +85,7 @@ describe("deriveGameStatus", () => {
         waitlistEnabled: true,
         scheduleMode: "coordinate",
         confirmedAt: future,
+        cancelledAt: null,
       }),
     ).toBe(GAME_STATUS.scheduled);
   });
@@ -93,6 +99,7 @@ describe("deriveGameStatus", () => {
         waitlistEnabled: true,
         scheduleMode: "coordinate",
         confirmedAt: future,
+        cancelledAt: null,
       }),
     ).toBe(GAME_STATUS.scheduled);
   });
@@ -106,7 +113,22 @@ describe("deriveGameStatus", () => {
         waitlistEnabled: true,
         scheduleMode: "fixed",
         confirmedAt: future,
+        cancelledAt: null,
       }),
     ).toBe(GAME_STATUS.confirmed);
+  });
+
+  it("취소된 구인은 다른 조건과 상관없이 취소됨이다", () => {
+    expect(
+      deriveGameStatus({
+        maxPlayers: 4,
+        endDate: future,
+        participantCount: 1,
+        waitlistEnabled: true,
+        scheduleMode: "coordinate",
+        confirmedAt: future,
+        cancelledAt: past,
+      }),
+    ).toBe(GAME_STATUS.cancelled);
   });
 });

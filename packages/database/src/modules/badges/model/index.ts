@@ -26,4 +26,4 @@ export { monthlyWinners, type MonthlyAppearance } from "./monthly-winners";
 export { nextMonthStart } from "./next-month-start";
 export { parseBadgeKey } from "./parse-badge-key";
 export { type BadgeEvent } from "./reached-tier";
-export { DEFAULT_PLAY_MINUTES, sessionEndsAt } from "./session-ends-at";
+export { DEFAULT_PLAY_MINUTES, sessionEndsAt } from "../../games/model/session-ends-at";

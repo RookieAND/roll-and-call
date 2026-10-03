@@ -25,7 +25,7 @@ export function buildSearchGroups(query: string, users: UserSearchResult[]): Pal
         icon: User,
         tone: index === 0 ? "primary" : "gray",
         title: user.nickname,
-        meta: `참여 ${user.playedCount}회 · 최근 3개월 불참 ${user.recentNoShowCount}회`,
+        meta: `참여 ${user.playedCount}회 · 최근 30일 불참 ${user.recentNoShowCount}회`,
         href: `/users/${user.id}`,
       })),
     },

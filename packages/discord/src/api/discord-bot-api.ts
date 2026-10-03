@@ -1,10 +1,10 @@
 import { isUndefined } from "es-toolkit";
 
 import { DiscordApiError } from "./discord-api-error";
-import { discordErrorCode } from "./discord-error-code";
+import { discordErrorCode, discordRetryAfter } from "./discord-error-code";
 
 // 상주 봇(gateway) 없이 서버 액션에서 봇 토큰으로 REST만 부른다.
-// ponytail: 429(rate limit)는 재시도 없이 실패로 올린다. 알림은 가끔 가는 거라 충분.
+// ponytail: 429(rate limit)는 재시도 없이 실패로 올린다. 알림은 가끔 가는 거라 충분. 멤버십 크론만 retryAfter를 보고 한 번 더 부른다.
 export async function discordBotApi<T>({
   path,
   method = "GET",
@@ -32,6 +32,7 @@ export async function discordBotApi<T>({
       `Discord ${method} ${path} → ${response.status} ${text}`,
       response.status,
       discordErrorCode(text),
+      discordRetryAfter(text),
     );
   }
   return (response.status === 204 ? undefined : await response.json()) as T;

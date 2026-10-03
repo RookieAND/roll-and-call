@@ -1,4 +1,4 @@
-export type GameStatus = "recruiting" | "closed" | "confirmed" | "full" | "scheduled";
+export type GameStatus = "recruiting" | "closed" | "confirmed" | "full" | "scheduled" | "cancelled";
 
 export const GAME_STATUS = {
   recruiting: "recruiting",
@@ -6,6 +6,7 @@ export const GAME_STATUS = {
   confirmed: "confirmed",
   full: "full",
   scheduled: "scheduled",
+  cancelled: "cancelled",
 } as const satisfies Record<GameStatus, GameStatus>;
 
 // confirmed(정원 충족)는 대기를 받으므로 마감이 아니고, full(대기 끔)은 신청이 막혀 closed와 같은 문구다.
@@ -15,4 +16,5 @@ export const gameStatusLabel: Record<GameStatus, string> = {
   confirmed: "대기 접수 중",
   full: "모집 마감",
   scheduled: "일정 확정",
+  cancelled: "취소됨",
 };

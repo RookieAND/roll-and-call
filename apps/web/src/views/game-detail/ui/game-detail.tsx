@@ -36,6 +36,7 @@ export function GameDetail({ game, viewerId }: GameDetailProps) {
     waitlistEnabled: game.waitlistEnabled,
     scheduleMode: game.scheduleMode,
     confirmedAt: game.confirmedAt,
+    cancelledAt: game.cancelledAt,
   });
 
   return (

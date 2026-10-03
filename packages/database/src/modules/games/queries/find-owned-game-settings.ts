@@ -18,6 +18,7 @@ export async function findOwnedGameSettings({
       images: games.images,
       scheduleMode: games.scheduleMode,
       recruitMethod: games.recruitMethod,
+      cancelledAt: games.cancelledAt,
     })
     .from(games)
     .where(and(eq(games.serverId, serverId), eq(games.id, gameId), eq(games.gmId, gmId)));

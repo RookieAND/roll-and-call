@@ -8,7 +8,10 @@ export function headcountFields({
   confirmedCount,
   waitingCount,
 }: {
-  game: Pick<Game, "maxPlayers" | "endDate" | "waitlistEnabled" | "scheduleMode" | "confirmedAt">;
+  game: Pick<
+    Game,
+    "maxPlayers" | "endDate" | "waitlistEnabled" | "scheduleMode" | "confirmedAt" | "cancelledAt"
+  >;
   confirmedCount: number;
   waitingCount: number;
 }): DiscordEmbedField[] {

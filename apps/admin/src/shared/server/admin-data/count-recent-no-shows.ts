@@ -1,12 +1,12 @@
 import "server-only";
-import type { Snapshot } from "./snapshot";
+import { isAbsenceActive } from "@roll-and-call/database/games/model";
 
-const THREE_MONTHS = 91 * 86_400_000;
+import type { Snapshot } from "./snapshot";
 
 export function countRecentNoShows(db: Snapshot, userId: string, now: number = Date.now()) {
   return db.noShows.filter((noShow) => {
     if (noShow.userId !== userId || noShow.cancelled) return false;
     const session = db.sessions.find((candidate) => candidate.id === noShow.sessionId)!;
-    return now - session.startsAt.getTime() < THREE_MONTHS;
+    return isAbsenceActive({ sessionStartsAt: session.startsAt, now });
   }).length;
 }

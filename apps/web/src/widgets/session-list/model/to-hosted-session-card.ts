@@ -26,6 +26,7 @@ export function toHostedSessionCard({
     waitlistEnabled: game.waitlistEnabled,
     scheduleMode: game.scheduleMode,
     confirmedAt: game.confirmedAt,
+    cancelledAt: game.cancelledAt,
   });
   const hostChip = hostSessionChip({ state, awaitingTime });
   const responses = context.responseCounts.get(game.id) ?? 0;

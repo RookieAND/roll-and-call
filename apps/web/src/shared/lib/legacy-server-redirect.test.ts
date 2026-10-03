@@ -10,6 +10,8 @@ describe("legacyServerRedirect", () => {
       path: "/trpia/games/123/reviews",
       permanent: true,
     });
+    expect(redirectOf("/games/new")).toEqual({ path: "/trpia/games/new", permanent: true });
+    expect(redirectOf("/games")).toEqual({ path: "/trpia/games", permanent: true });
     expect(redirectOf("/me")).toEqual({ path: "/trpia/me", permanent: true });
   });
 
@@ -21,6 +23,11 @@ describe("legacyServerRedirect", () => {
       permanent: true,
     });
     expect(redirectOf("/other/u")).toEqual({ path: "/other/users", permanent: true });
+  });
+
+  it("구인 상세는 구인 id로 서버를 찾는 라우트에 맡긴다", () => {
+    expect(redirectOf("/games/0b7c6c1e-5a4f-4d0e-9a51-1f2d3c4b5a69")).toBeNull();
+    expect(redirectOf("/games/0b7c6c1e-5a4f-4d0e-9a51-1f2d3c4b5a69/reviews")).toBeNull();
   });
 
   it("서버 밖 화면과 이미 서버 주소인 경로는 그대로 둔다", () => {

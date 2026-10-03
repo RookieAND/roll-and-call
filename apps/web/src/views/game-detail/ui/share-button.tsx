@@ -3,6 +3,7 @@
 import { IconButton } from "@roll-and-call/ui";
 import { Share2 } from "lucide-react";
 
+import { useServerPath } from "@/shared/lib";
 import { toast } from "@/shared/ui";
 
 interface ShareButtonProps {
@@ -10,9 +11,13 @@ interface ShareButtonProps {
 }
 
 export function ShareButton({ gameId }: ShareButtonProps) {
+  const toServerPath = useServerPath();
+
   async function share() {
     try {
-      await navigator.clipboard.writeText(`${window.location.origin}/games/${gameId}`);
+      await navigator.clipboard.writeText(
+        `${window.location.origin}${toServerPath(`/games/${gameId}`)}`,
+      );
       toast.success("구인글 링크를 복사했습니다");
     } catch {
       toast.error("링크를 복사하지 못했습니다");
