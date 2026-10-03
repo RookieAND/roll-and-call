@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles, servers, staff, type Server } from "../../../schema";
-import { recordAudit } from "../../moderation/commands/record-audit";
+import { db } from "#/client";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import { profiles, servers, staff, type Server } from "#/schema";
 
 // 디스코드 길드 정보로 이름·아이콘·서버장을 맞춘다. 서버장이 바뀌면 시스템 조치로 기록하고 이전 서버장을 운영진으로 둔다.
 export async function syncServerGuild({

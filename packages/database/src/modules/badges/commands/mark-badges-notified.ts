@@ -1,7 +1,7 @@
 import { and, eq, inArray } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { userBadges } from "../../../schema";
+import { db } from "#/client";
+import { userBadges } from "#/schema";
 
 export async function markBadgesNotified({
   serverId,

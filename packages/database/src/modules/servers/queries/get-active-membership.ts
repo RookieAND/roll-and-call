@@ -1,7 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { serverMembers } from "../../../schema";
+import { db } from "#/client";
+import { serverMembers } from "#/schema";
 
 // 탈퇴(deleted_at)하지 않은 멤버십. 없으면 그 서버에 가입하지 않은 사람이다.
 export async function getActiveMembership({

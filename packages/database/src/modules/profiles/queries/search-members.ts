@@ -1,7 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles, serverMembers } from "../../../schema";
+import { db } from "#/client";
+import { profiles, serverMembers } from "#/schema";
+
 import { memberSearchWhere } from "./member-search-where";
 
 export async function searchMembers({

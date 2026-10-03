@@ -1,7 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { serverMembers } from "../../../schema";
+import { db } from "#/client";
+import { serverMembers } from "#/schema";
 
 // 다른 서버의 소개·성향·링크·기본 가능 시간만 옮긴다. 기록·뱃지·인증은 서버마다 따로다.
 export async function copyMemberProfile({

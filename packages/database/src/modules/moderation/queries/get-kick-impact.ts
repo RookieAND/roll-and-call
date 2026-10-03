@@ -1,8 +1,8 @@
 import { and, count, eq, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games, participants } from "../../../schema";
-import { notStartedGamesWhere } from "../../games/queries/not-started-games-where";
+import { db } from "#/client";
+import { notStartedGamesWhere } from "#/modules/games/queries/not-started-games-where";
+import { games, participants } from "#/schema";
 
 export interface KickImpact {
   appliedCount: number;

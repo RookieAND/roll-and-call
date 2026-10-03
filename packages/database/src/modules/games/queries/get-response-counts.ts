@@ -1,8 +1,8 @@
 import { and, eq, inArray, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { availabilities, participants } from "../../../schema";
-import { PARTICIPANT_STATUS } from "../model/participant-status";
+import { db } from "#/client";
+import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
+import { availabilities, participants } from "#/schema";
 
 export async function getResponseCounts({
   serverId,

@@ -1,4 +1,4 @@
-import type { AuditAction } from "../../moderation/model/audit-actions";
+import type { AuditAction } from "#/modules/moderation/model/audit-actions";
 
 export type RulebookActionResult =
   | { ok: true }

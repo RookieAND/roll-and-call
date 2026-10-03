@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profileMemos } from "../../../schema";
+import { db } from "#/client";
+import { profileMemos } from "#/schema";
 
 // 쓴 사람만 본다. 상대는 내용도, 메모가 있다는 사실도 볼 수 없다.
 export async function getProfileMemo({

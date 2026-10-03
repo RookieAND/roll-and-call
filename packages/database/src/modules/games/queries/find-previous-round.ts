@@ -1,6 +1,6 @@
-import { db } from "../../../client";
-import { memberBioSql } from "../../profiles/queries/member-bio-sql";
-import { PARTICIPANT_STATUS } from "../model/participant-status";
+import { db } from "#/client";
+import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
+import { memberBioSql } from "#/modules/profiles/queries/member-bio-sql";
 
 export async function findPreviousRound({
   serverId,

@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
-import { db } from "../../../client";
+import { db } from "#/client";
 import {
   games,
   participants,
@@ -9,7 +9,7 @@ import {
   rulebookCategories,
   rulebooks,
   sessionReviews,
-} from "../../../schema";
+} from "#/schema";
 
 const gm = alias(profiles, "gm");
 

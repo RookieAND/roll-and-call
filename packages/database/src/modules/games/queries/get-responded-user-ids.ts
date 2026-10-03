@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { availabilities } from "../../../schema";
+import { db } from "#/client";
+import { availabilities } from "#/schema";
 
 export async function getRespondedUserIds({
   serverId,

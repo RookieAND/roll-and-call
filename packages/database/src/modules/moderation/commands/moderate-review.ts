@@ -1,10 +1,11 @@
 import { and, desc, eq, inArray, isNull, like, sql } from "drizzle-orm";
 import { isNotNil } from "es-toolkit";
 
-import { db } from "../../../client";
-import { auditLog, games, profiles, reviewReports, sessionReviews } from "../../../schema";
-import type { AuditAction } from "../model/audit-actions";
-import type { Actor } from "../model/types";
+import { db } from "#/client";
+import type { AuditAction } from "#/modules/moderation/model/audit-actions";
+import type { Actor } from "#/modules/moderation/model/types";
+import { auditLog, games, profiles, reviewReports, sessionReviews } from "#/schema";
+
 import { recordAudit } from "./record-audit";
 
 export type ReviewModerationAction = "hide" | "unhide" | "remove" | "dismiss";

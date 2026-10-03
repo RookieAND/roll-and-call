@@ -1,7 +1,8 @@
 import { sql } from "drizzle-orm";
 
-import { games } from "../../../schema";
-import { DEFAULT_PLAY_MINUTES } from "../model/session-ends-at";
+import { DEFAULT_PLAY_MINUTES } from "#/modules/games/model/session-ends-at";
+import { games } from "#/schema";
+
 import { confirmedCountSql } from "./confirmed-count-sql";
 
 // 목록 탭·칩의 기준. 모집 상태 배지(deriveGameStatus)와 같고, 세션이 끝난 글은 종료로 뺀다.

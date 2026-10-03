@@ -1,5 +1,5 @@
-import { db } from "../../../client";
-import { availabilities } from "../../../schema";
+import { db } from "#/client";
+import { availabilities } from "#/schema";
 
 export async function seedAvailabilities({
   serverId,

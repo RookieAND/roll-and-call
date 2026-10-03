@@ -1,7 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games } from "../../../schema";
+import { db } from "#/client";
+import { games } from "#/schema";
 
 // GM 본인 글이 아니거나 취소된 구인이면 바꾸지 않고 false.
 export async function confirmGameSession({

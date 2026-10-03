@@ -1,10 +1,10 @@
 import { and, eq, isNotNull, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { certApplications, certifications, profiles, rulebooks } from "../../../schema";
-import { recordAudit } from "../../moderation/commands/record-audit";
-import type { Actor } from "../../moderation/model/types";
-import { rulebookLabel } from "../../rulebooks/model/rulebook-label";
+import { db } from "#/client";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import type { Actor } from "#/modules/moderation/model/types";
+import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
+import { certApplications, certifications, profiles, rulebooks } from "#/schema";
 
 export type GrantResult = { ok: true } | { ok: false; alreadyCertified: true };
 

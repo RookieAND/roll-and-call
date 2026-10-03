@@ -1,7 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { userBadges } from "../../../schema";
+import { db } from "#/client";
+import { userBadges } from "#/schema";
 
 export async function markBadgesSeen({ serverId, userId }: { serverId: string; userId: string }) {
   await db

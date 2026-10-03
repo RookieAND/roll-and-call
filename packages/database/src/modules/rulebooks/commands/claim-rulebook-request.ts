@@ -1,10 +1,10 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
-import { profiles, rulebookRequests } from "../../../schema";
-import type { Executor } from "../../moderation/commands/record-audit";
-import type { Actor } from "../../moderation/model/types";
-import type { RulebookActionResult } from "../model/rulebook-action-result";
-import { rulebookLabel } from "../model/rulebook-label";
+import type { Executor } from "#/modules/moderation/commands/record-audit";
+import type { Actor } from "#/modules/moderation/model/types";
+import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
+import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
+import { profiles, rulebookRequests } from "#/schema";
 
 const OUTCOME_ACTION = {
   added: "룰북 추가",

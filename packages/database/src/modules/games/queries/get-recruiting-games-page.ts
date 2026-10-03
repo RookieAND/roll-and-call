@@ -1,6 +1,7 @@
-import { db } from "../../../client";
-import { games } from "../../../schema";
-import { GAME_TAB, type GamesFilter } from "../model/games-filter";
+import { db } from "#/client";
+import { GAME_TAB, type GamesFilter } from "#/modules/games/model/games-filter";
+import { games } from "#/schema";
+
 import { recruitingGamesOrderBy } from "./recruiting-games-order-by";
 import { recruitingGamesWhere } from "./recruiting-games-where";
 

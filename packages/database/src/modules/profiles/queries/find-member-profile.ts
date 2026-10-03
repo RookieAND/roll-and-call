@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles, serverMembers } from "../../../schema";
+import { db } from "#/client";
+import { profiles, serverMembers } from "#/schema";
 
 // 계정(profiles)에 이 서버에서 보이는 프로필(server_members)을 붙인다. 이 서버 멤버가 아니면 없는 사람으로 본다.
 export async function findMemberProfile({

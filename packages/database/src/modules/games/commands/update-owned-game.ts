@@ -1,7 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games, type NewGame } from "../../../schema";
+import { db } from "#/client";
+import { games, type NewGame } from "#/schema";
 
 // 바뀐 행이 없으면(남의 글이거나 지워졌거나 취소됐으면) false.
 export async function updateOwnedGame({

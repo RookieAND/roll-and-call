@@ -1,14 +1,14 @@
 import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { certApplications, certifications, profiles, rulebooks } from "../../../schema";
+import { db } from "#/client";
 import {
   applyOngoingChoices,
   type OngoingChoice,
-} from "../../moderation/commands/apply-ongoing-choices";
-import { recordAudit } from "../../moderation/commands/record-audit";
-import type { Actor } from "../../moderation/model/types";
-import { rulebookLabel } from "../../rulebooks/model/rulebook-label";
+} from "#/modules/moderation/commands/apply-ongoing-choices";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import type { Actor } from "#/modules/moderation/model/types";
+import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
+import { certApplications, certifications, profiles, rulebooks } from "#/schema";
 
 export interface RevokeInput {
   rulebooks: string[];

@@ -1,7 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { sessionReviews } from "../../../schema";
+import { db } from "#/client";
+import { sessionReviews } from "#/schema";
 
 // 지워지지 않은 후기의 작성자. 없으면 undefined.
 export async function findLiveReviewAuthor({

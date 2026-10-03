@@ -1,12 +1,13 @@
 import { and, desc, eq, inArray, isNotNull, isNull, sql } from "drizzle-orm";
 import { isNotNil } from "es-toolkit";
 
-import { db } from "../../../client";
-import { auditLog, games, profiles, reports, type Game } from "../../../schema";
-import { cancelGame } from "../../games/commands/cancel-game";
-import { GAME_CANCEL_KIND } from "../../games/model/game-cancel-kind";
-import type { AuditAction } from "../model/audit-actions";
-import type { Actor } from "../model/types";
+import { db } from "#/client";
+import { cancelGame } from "#/modules/games/commands/cancel-game";
+import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
+import type { AuditAction } from "#/modules/moderation/model/audit-actions";
+import type { Actor } from "#/modules/moderation/model/types";
+import { auditLog, games, profiles, reports, type Game } from "#/schema";
+
 import { recordAudit } from "./record-audit";
 
 export type PostModerationAction = "hide" | "unhide" | "resolve" | "remove";

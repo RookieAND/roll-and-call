@@ -1,8 +1,8 @@
 import { and, asc, eq, isNotNull } from "drizzle-orm";
 
-import { participants } from "../../../schema";
-import type { Transaction } from "../../transaction/transaction";
-import { PARTICIPANT_STATUS } from "../model/participant-status";
+import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
+import type { Transaction } from "#/modules/transaction/transaction";
+import { participants } from "#/schema";
 
 // 굴린 값이 낮은 순, 같으면 먼저 신청한 순.
 export async function listRolledApplicantIds({

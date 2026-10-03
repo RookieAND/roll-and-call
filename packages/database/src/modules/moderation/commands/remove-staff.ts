@@ -1,9 +1,10 @@
 import { and, eq, ne } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles, staff } from "../../../schema";
-import { STAFF_ROLE_LABEL } from "../model/staff-role-label";
-import type { Actor } from "../model/types";
+import { db } from "#/client";
+import { STAFF_ROLE_LABEL } from "#/modules/moderation/model/staff-role-label";
+import type { Actor } from "#/modules/moderation/model/types";
+import { profiles, staff } from "#/schema";
+
 import { recordAudit } from "./record-audit";
 
 // ponytail: notify는 활동 기록에만 남긴다. 디스코드 DM은 알림 채널이 생기면 보낸다.

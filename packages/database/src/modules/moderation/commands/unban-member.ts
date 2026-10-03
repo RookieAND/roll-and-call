@@ -1,8 +1,9 @@
 import { and, eq, isNotNull } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles, serverMembers } from "../../../schema";
-import type { Actor } from "../model/types";
+import { db } from "#/client";
+import type { Actor } from "#/modules/moderation/model/types";
+import { profiles, serverMembers } from "#/schema";
+
 import { recordAudit } from "./record-audit";
 
 export type UnbanResult = { ok: true; discordId: string } | { ok: false; alreadyUnbanned: true };

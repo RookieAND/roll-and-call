@@ -1,6 +1,6 @@
-import type { db } from "../../../client";
-import { auditLog } from "../../../schema";
-import type { Actor, AuditInput } from "../model/types";
+import type { db } from "#/client";
+import type { Actor, AuditInput } from "#/modules/moderation/model/types";
+import { auditLog } from "#/schema";
 
 export type Executor = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0];
 

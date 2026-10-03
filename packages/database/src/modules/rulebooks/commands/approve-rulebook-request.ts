@@ -1,14 +1,15 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { rulebooks } from "../../../schema";
-import { certPolicyLabel } from "../../certifications/model/cert-policy-label";
-import { recordAudit } from "../../moderation/commands/record-audit";
-import type { Actor } from "../../moderation/model/types";
-import type { RulebookActionResult } from "../model/rulebook-action-result";
-import type { RulebookFields } from "../model/rulebook-fields";
-import { rulebookLabel } from "../model/rulebook-label";
-import { relinkGames } from "../queries/relink-games";
+import { db } from "#/client";
+import { certPolicyLabel } from "#/modules/certifications/model/cert-policy-label";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import type { Actor } from "#/modules/moderation/model/types";
+import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
+import type { RulebookFields } from "#/modules/rulebooks/model/rulebook-fields";
+import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
+import { relinkGames } from "#/modules/rulebooks/queries/relink-games";
+import { rulebooks } from "#/schema";
+
 import type { AddRulebookResult } from "./add-rulebook";
 import { claimRulebookRequest } from "./claim-rulebook-request";
 import { toRulebookValues } from "./rulebook-values";

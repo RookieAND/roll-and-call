@@ -1,12 +1,13 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { rulebooks } from "../../../schema";
-import { recordAudit } from "../../moderation/commands/record-audit";
-import type { Actor } from "../../moderation/model/types";
-import type { RulebookActionResult } from "../model/rulebook-action-result";
-import { rulebookLabel } from "../model/rulebook-label";
-import { relinkGames } from "../queries/relink-games";
+import { db } from "#/client";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import type { Actor } from "#/modules/moderation/model/types";
+import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
+import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
+import { relinkGames } from "#/modules/rulebooks/queries/relink-games";
+import { rulebooks } from "#/schema";
+
 import { claimRulebookRequest } from "./claim-rulebook-request";
 
 export interface RulebookLinkInput {

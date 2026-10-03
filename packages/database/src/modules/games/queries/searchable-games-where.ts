@@ -1,6 +1,7 @@
 import { and, ilike, or, type SQL } from "drizzle-orm";
 
-import { games } from "../../../schema";
+import { games } from "#/schema";
+
 import { publicGamesWhere } from "./public-games-where";
 
 export function searchableGamesWhere({ serverId, q }: { serverId: string; q: string | undefined }) {

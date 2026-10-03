@@ -1,7 +1,7 @@
 import { and, asc, eq, isNull, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { serverMembers, servers, staff } from "../../../schema";
+import { db } from "#/client";
+import { serverMembers, servers, staff } from "#/schema";
 
 // 탈퇴하지 않은 멤버십이 있는 서버를 최근 방문 순으로. 한 번도 안 들어간 서버는 가입 순으로 뒤에 둔다.
 export async function listMemberServers(userId: string) {

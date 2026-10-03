@@ -1,7 +1,7 @@
 import { and, desc, eq, isNotNull, ne } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { certApplications, certifications } from "../../../schema";
+import { db } from "#/client";
+import { certApplications, certifications } from "#/schema";
 
 // 반려됐거나 인증이 취소된 책의 기록을 지운다. 앞선 기록이 남으면 다시 그 상태로 보이므로
 // 그 책의 신청 기록과 취소된 인증을 모두 지운다. 살아 있는 인증이나 심사 중인 신청이 있으면 막는다(null).

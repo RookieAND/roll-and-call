@@ -1,4 +1,4 @@
-import { sessionEndsAt } from "../../games/model/session-ends-at";
+import { sessionEndsAt } from "#/modules/games/model/session-ends-at";
 
 // 출석 확인 전에는 누가 불참인지 정해지지 않아 넣지 않는다.
 export function isRecognizedSession({

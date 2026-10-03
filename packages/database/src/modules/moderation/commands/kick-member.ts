@@ -1,10 +1,11 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles, serverMembers, type Game } from "../../../schema";
-import { releaseMemberGames } from "../../games/commands/release-member-games";
-import { GAME_CANCEL_KIND } from "../../games/model/game-cancel-kind";
-import type { Actor } from "../model/types";
+import { db } from "#/client";
+import { releaseMemberGames } from "#/modules/games/commands/release-member-games";
+import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
+import type { Actor } from "#/modules/moderation/model/types";
+import { profiles, serverMembers, type Game } from "#/schema";
+
 import { recordAudit } from "./record-audit";
 
 export type KickResult =

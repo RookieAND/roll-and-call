@@ -1,4 +1,5 @@
-import { sessionEndsAt } from "../../games/model/session-ends-at";
+import { sessionEndsAt } from "#/modules/games/model/session-ends-at";
+
 import { type BadgeSession } from "./badge-facts";
 import { isRecognizedSession } from "./is-recognized-session";
 

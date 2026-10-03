@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games } from "../../../schema";
+import { db } from "#/client";
+import { games } from "#/schema";
 
 export async function findOwnedGameSettings({
   serverId,

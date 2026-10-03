@@ -1,7 +1,8 @@
 import { asc } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games } from "../../../schema";
+import { db } from "#/client";
+import { games } from "#/schema";
+
 import { publicGamesWhere } from "./public-games-where";
 
 export async function getMonthSessions({

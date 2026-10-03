@@ -1,4 +1,4 @@
-import { db } from "../../../client";
+import { db } from "#/client";
 
 export async function getGameForNotice({ serverId, gameId }: { serverId: string; gameId: string }) {
   return db.query.games.findFirst({

@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { certApplications } from "../../../schema";
+import { db } from "#/client";
+import { certApplications } from "#/schema";
 
 // 행은 withdrawn으로 남겨 운영진이 거둔 사실을 보게 한다.
 // 예전에 여러 권을 함께 낸 신청이면 같은 묶음의 심사 중인 신청을 모두 거둔다.

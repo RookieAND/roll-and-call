@@ -1,6 +1,6 @@
-import { db } from "../../../client";
-import { games, participants, type NewGame } from "../../../schema";
-import { PARTICIPANT_STATUS } from "../model/participant-status";
+import { db } from "#/client";
+import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
+import { games, participants, type NewGame } from "#/schema";
 
 export async function createGameWithRoster({
   serverId,

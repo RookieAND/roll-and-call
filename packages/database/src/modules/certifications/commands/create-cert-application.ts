@@ -1,5 +1,5 @@
-import { db } from "../../../client";
-import { certApplications } from "../../../schema";
+import { db } from "#/client";
+import { certApplications } from "#/schema";
 
 type NewCertApplication = typeof certApplications.$inferInsert;
 

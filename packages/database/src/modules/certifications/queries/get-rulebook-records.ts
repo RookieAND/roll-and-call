@@ -1,7 +1,7 @@
 import { and, desc, eq, gt, isNull, ne, or, sql } from "drizzle-orm";
 import { compact, uniq } from "es-toolkit";
 
-import { db } from "../../../client";
+import { db } from "#/client";
 import {
   certApplications,
   certifications,
@@ -10,7 +10,7 @@ import {
   rulebookRequests,
   rulebooks,
   sanctions,
-} from "../../../schema";
+} from "#/schema";
 
 const RECENT_DAYS = 90;
 const REQUEST_RESULT_DAYS = 30;

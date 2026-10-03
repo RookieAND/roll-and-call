@@ -1,4 +1,4 @@
-import { games, profiles, sessionReviews } from "../../../schema";
+import { games, profiles, sessionReviews } from "#/schema";
 
 export const reviewCardColumns = {
   id: sessionReviews.id,

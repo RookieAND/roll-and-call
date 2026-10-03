@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { participants } from "../../../schema";
+import { db } from "#/client";
+import { participants } from "#/schema";
 
 export async function listRosterStatuses({
   serverId,

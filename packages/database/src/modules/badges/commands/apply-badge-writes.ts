@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { userBadges } from "../../../schema";
-import type { BadgeWrite } from "../model/diff-badges";
+import { db } from "#/client";
+import type { BadgeWrite } from "#/modules/badges/model/diff-badges";
+import { userBadges } from "#/schema";
 
 export async function applyBadgeWrites({
   serverId,

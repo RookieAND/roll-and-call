@@ -1,7 +1,8 @@
 import { and, desc, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games, profiles, sessionReviews } from "../../../schema";
+import { db } from "#/client";
+import { games, profiles, sessionReviews } from "#/schema";
+
 import { publicReviewsWhere } from "./public-reviews-where";
 import { reviewCardColumns } from "./review-card-columns";
 

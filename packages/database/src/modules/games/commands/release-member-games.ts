@@ -1,11 +1,12 @@
 import { and, eq, inArray, isNull, or } from "drizzle-orm";
 
-import { games, participants, staff, type Game } from "../../../schema";
-import type { Transaction } from "../../transaction/transaction";
-import { departedGmGameAction } from "../model/departed-gm-game-action";
-import type { GameCancelKind } from "../model/game-cancel-kind";
-import { PARTICIPANT_STATUS } from "../model/participant-status";
-import { notStartedGamesWhere } from "../queries/not-started-games-where";
+import { departedGmGameAction } from "#/modules/games/model/departed-gm-game-action";
+import type { GameCancelKind } from "#/modules/games/model/game-cancel-kind";
+import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
+import { notStartedGamesWhere } from "#/modules/games/queries/not-started-games-where";
+import type { Transaction } from "#/modules/transaction/transaction";
+import { games, participants, staff, type Game } from "#/schema";
+
 import { autoConfirmAttendanceForGame } from "./auto-confirm-attendance";
 import { cancelGame } from "./cancel-game";
 

@@ -1,6 +1,6 @@
-import { participants } from "../../../schema";
-import type { Transaction } from "../../transaction/transaction";
-import type { ParticipantStatus } from "../model/participant-status";
+import type { ParticipantStatus } from "#/modules/games/model/participant-status";
+import type { Transaction } from "#/modules/transaction/transaction";
+import { participants } from "#/schema";
 
 // 이미 행이 있으면 넣지 않고 false를 돌려준다.
 export async function insertParticipant({

@@ -1,7 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games, participants } from "../../../schema";
+import { db } from "#/client";
+import { games, participants } from "#/schema";
+
 import { evaluateBadges } from "./evaluate-badges";
 
 export async function evaluateGameBadges({

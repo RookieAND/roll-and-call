@@ -1,6 +1,7 @@
 import { and, not, type SQL } from "drizzle-orm";
 
-import { GAME_STATUS_FILTER, GAME_TAB, type GamesFilter } from "../model/games-filter";
+import { GAME_STATUS_FILTER, GAME_TAB, type GamesFilter } from "#/modules/games/model/games-filter";
+
 import { gameBucketSql } from "./game-bucket-sql";
 import { searchableGamesWhere } from "./searchable-games-where";
 

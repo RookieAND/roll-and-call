@@ -1,7 +1,8 @@
 import { and, count, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games, sessionReviews } from "../../../schema";
+import { db } from "#/client";
+import { games, sessionReviews } from "#/schema";
+
 import { ownReviewsWhere } from "./own-reviews-where";
 import { publicReviewsWhere } from "./public-reviews-where";
 

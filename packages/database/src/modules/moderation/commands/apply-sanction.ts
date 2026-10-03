@@ -1,9 +1,10 @@
 import { and, eq, isNull, lte, sql } from "drizzle-orm";
 import { isNil } from "es-toolkit";
 
-import { db } from "../../../client";
-import { profiles, sanctions } from "../../../schema";
-import type { Actor, Sanction } from "../model/types";
+import { db } from "#/client";
+import type { Actor, Sanction } from "#/modules/moderation/model/types";
+import { profiles, sanctions } from "#/schema";
+
 import { applyOngoingChoices, type OngoingChoice } from "./apply-ongoing-choices";
 import { recordAudit } from "./record-audit";
 

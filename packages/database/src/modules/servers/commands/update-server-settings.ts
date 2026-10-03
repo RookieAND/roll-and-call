@@ -1,9 +1,9 @@
 import { and, eq, inArray } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { rulebooks, servers } from "../../../schema";
-import { recordAudit } from "../../moderation/commands/record-audit";
-import type { Actor } from "../../moderation/model/types";
+import { db } from "#/client";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import type { Actor } from "#/modules/moderation/model/types";
+import { rulebooks, servers } from "#/schema";
 
 export interface ServerSettings {
   recruitChannelId: string | null;

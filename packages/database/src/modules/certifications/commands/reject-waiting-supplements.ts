@@ -1,8 +1,8 @@
 import { and, eq, inArray, sql } from "drizzle-orm";
 
-import { certApplications } from "../../../schema";
-import { recordAudit, type Executor } from "../../moderation/commands/record-audit";
-import type { Actor } from "../../moderation/model/types";
+import { recordAudit, type Executor } from "#/modules/moderation/commands/record-audit";
+import type { Actor } from "#/modules/moderation/model/types";
+import { certApplications } from "#/schema";
 
 export const CORE_REJECTED_TAG = "기본 룰북 반려";
 

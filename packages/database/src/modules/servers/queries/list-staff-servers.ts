@@ -1,7 +1,7 @@
 import { and, asc, eq, or } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { servers, staff } from "../../../schema";
+import { db } from "#/client";
+import { servers, staff } from "#/schema";
 
 // 어드민 서버 선택에 보일 서버. 서버장이거나 운영진으로 지정된 서버이고, 플랫폼 관리자는 모든 서버다.
 export async function listStaffServers({

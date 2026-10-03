@@ -1,9 +1,10 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles, staff } from "../../../schema";
-import { STAFF_ROLE_LABEL } from "../model/staff-role-label";
-import type { Actor, StaffRole } from "../model/types";
+import { db } from "#/client";
+import { STAFF_ROLE_LABEL } from "#/modules/moderation/model/staff-role-label";
+import type { Actor, StaffRole } from "#/modules/moderation/model/types";
+import { profiles, staff } from "#/schema";
+
 import { recordAudit } from "./record-audit";
 
 // ponytail: 당사자 디스코드 알림은 아직 보내지 않는다. 알림 채널이 생기면 여기서 보낸다.

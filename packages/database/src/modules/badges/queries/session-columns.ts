@@ -1,4 +1,4 @@
-import { games, rulebookCategories } from "../../../schema";
+import { games, rulebookCategories } from "#/schema";
 
 export const sessionColumns = {
   gameId: games.id,

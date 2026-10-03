@@ -1,13 +1,17 @@
 import { and, eq, exists, isNotNull, isNull, lte, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games, participants } from "../../../schema";
-import type { Transaction } from "../../transaction/transaction";
-import { ATTENDANCE_EDIT_DAYS, attendanceDeadline } from "../model/attendance-deadline";
-import { PARTICIPANT_STATUS } from "../model/participant-status";
-import { DEFAULT_PLAY_MINUTES } from "../model/session-ends-at";
-import { shouldAutoConfirmAttendance } from "../model/should-auto-confirm-attendance";
-import { listParticipantUserIds } from "../queries/list-participant-user-ids";
+import { db } from "#/client";
+import {
+  ATTENDANCE_EDIT_DAYS,
+  attendanceDeadline,
+} from "#/modules/games/model/attendance-deadline";
+import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
+import { DEFAULT_PLAY_MINUTES } from "#/modules/games/model/session-ends-at";
+import { shouldAutoConfirmAttendance } from "#/modules/games/model/should-auto-confirm-attendance";
+import { listParticipantUserIds } from "#/modules/games/queries/list-participant-user-ids";
+import type { Transaction } from "#/modules/transaction/transaction";
+import { games, participants } from "#/schema";
+
 import { saveAttendance } from "./save-attendance";
 
 export type AutoConfirmedGame = { serverId: string; gameId: string; gmId: string; title: string };

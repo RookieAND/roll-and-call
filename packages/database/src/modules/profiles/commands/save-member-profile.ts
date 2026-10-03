@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles, serverMembers, type ProfileKeyword, type ProfileLink } from "../../../schema";
+import { db } from "#/client";
+import { profiles, serverMembers, type ProfileKeyword, type ProfileLink } from "#/schema";
 
 // 닉네임은 계정(profiles)에, 소개·성향·링크는 이 서버의 프로필(server_members)에 쓴다.
 export async function saveMemberProfile({

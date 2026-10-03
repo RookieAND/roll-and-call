@@ -1,7 +1,7 @@
 import { and, eq, inArray } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { serverMembers } from "../../../schema";
+import { db } from "#/client";
+import { serverMembers } from "#/schema";
 
 export async function countServerMembers({
   serverId,

@@ -1,9 +1,9 @@
 import { and, eq } from "drizzle-orm";
 import { compact } from "es-toolkit";
 
-import { db } from "../../../client";
-import { staff, type Server } from "../../../schema";
-import type { StaffRole } from "../model/types";
+import { db } from "#/client";
+import type { StaffRole } from "#/modules/moderation/model/types";
+import { staff, type Server } from "#/schema";
 
 const idsFromEnv = (value: string | undefined) =>
   compact((value ?? "").split(",").map((id) => id.trim()));

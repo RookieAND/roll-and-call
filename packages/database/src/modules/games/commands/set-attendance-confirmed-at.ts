@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { games } from "../../../schema";
-import type { Transaction } from "../../transaction/transaction";
+import type { Transaction } from "#/modules/transaction/transaction";
+import { games } from "#/schema";
 
 export async function setAttendanceConfirmedAt({
   transaction,

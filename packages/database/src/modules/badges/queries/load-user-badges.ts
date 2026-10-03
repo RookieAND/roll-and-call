@@ -1,7 +1,7 @@
 import { and, desc, eq, isNull, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games, rulebookCategories, userBadges } from "../../../schema";
+import { db } from "#/client";
+import { games, rulebookCategories, userBadges } from "#/schema";
 
 // 회수되지 않은 뱃지. 이달의 GM·PL은 지난 달 것도 기록으로 함께 온다(지금 붙어 있는지는 entities/badge가 가린다).
 // 룰별 뱃지 이름은 표시할 때 분류 이름을 붙이므로 분류 이름을 같이 읽는다. 숨긴 구인은 근거 세션 링크를 내지 않는다.

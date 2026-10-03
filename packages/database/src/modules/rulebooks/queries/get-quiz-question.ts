@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { rulebookQuizQuestions } from "../../../schema";
+import { db } from "#/client";
+import { rulebookQuizQuestions } from "#/schema";
 
 // 답은 내려보내지 않는다.
 export async function getQuizQuestion({

@@ -1,6 +1,6 @@
 import { and, eq, getTableColumns, isNull, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
+import { db } from "#/client";
 import {
   auditLog,
   certApplications,
@@ -20,7 +20,7 @@ import {
   sessionReviews,
   staff,
   staffMemos,
-} from "../../../schema";
+} from "#/schema";
 
 // 어드민 스냅숏이 읽는 표 전체. 룰북·카테고리·퀴즈 문항·판매처까지 모두 그 서버 것만 읽는다.
 // 사람(profiles)은 그 서버 멤버만 읽고, 멤버십 상태(탈퇴·차단)를 함께 붙인다.

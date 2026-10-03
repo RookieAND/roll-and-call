@@ -1,7 +1,8 @@
 import { sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games } from "../../../schema";
+import { db } from "#/client";
+import { games } from "#/schema";
+
 import { gameBucketSql } from "./game-bucket-sql";
 import { searchableGamesWhere } from "./searchable-games-where";
 

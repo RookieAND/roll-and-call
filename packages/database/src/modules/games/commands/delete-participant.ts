@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { participants } from "../../../schema";
-import type { Transaction } from "../../transaction/transaction";
+import { db } from "#/client";
+import type { Transaction } from "#/modules/transaction/transaction";
+import { participants } from "#/schema";
 
 // 지운 행이 없으면 false.
 export async function deleteParticipant({

@@ -1,5 +1,5 @@
-import { db } from "../../../client";
-import { rulebookRequests } from "../../../schema";
+import { db } from "#/client";
+import { rulebookRequests } from "#/schema";
 
 type NewRulebookRequest = typeof rulebookRequests.$inferInsert;
 

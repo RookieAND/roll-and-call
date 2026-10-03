@@ -1,7 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { reviewReports, sessionReviews } from "../../../schema";
+import { db } from "#/client";
+import { reviewReports, sessionReviews } from "#/schema";
 
 // 행은 남겨 같은 세션에 다시 쓰지 못하게 하고, 본문·사진은 비운다. 남은 신고는 대상이 없어 기각으로 닫는다.
 // 이미 지워졌거나 남의 후기면 null.

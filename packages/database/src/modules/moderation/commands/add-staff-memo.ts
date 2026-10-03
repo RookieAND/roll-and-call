@@ -1,8 +1,9 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles, staffMemos } from "../../../schema";
-import type { Actor } from "../model/types";
+import { db } from "#/client";
+import type { Actor } from "#/modules/moderation/model/types";
+import { profiles, staffMemos } from "#/schema";
+
 import { recordAudit } from "./record-audit";
 
 export async function addStaffMemo({

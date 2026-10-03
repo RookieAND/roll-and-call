@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { participants, profiles, serverMembers } from "../../../schema";
-import { memberSearchWhere } from "../../profiles/queries/member-search-where";
+import { db } from "#/client";
+import { memberSearchWhere } from "#/modules/profiles/queries/member-search-where";
+import { participants, profiles, serverMembers } from "#/schema";
 
 // 이 서버 멤버만 찾고, 이 게임에 이미 있는 사람은 상태를 함께 돌려준다.
 export async function searchGameCandidates({

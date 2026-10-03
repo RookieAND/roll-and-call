@@ -1,13 +1,13 @@
 import { and, desc, eq, isNull, ne, or, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
+import { db } from "#/client";
 import {
   certApplications,
   certifications,
   rulebookQuizQuestions,
   rulebooks,
   sanctions,
-} from "../../../schema";
+} from "#/schema";
 
 // 인증 신청을 받을지 가르는 데 필요한 것을 한 번에 읽는다.
 export async function loadCertificationContext({

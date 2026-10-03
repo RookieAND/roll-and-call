@@ -1,14 +1,15 @@
 import { and, eq, like, or } from "drizzle-orm";
 import { groupBy, uniq } from "es-toolkit";
 
-import { db } from "../../../client";
-import { userBadges } from "../../../schema";
-import { applyBadgeWrites } from "../commands/apply-badge-writes";
-import { BADGE_LADDER } from "../model/badge-ladder";
-import { diffBadges } from "../model/diff-badges";
-import { isMonthSettled } from "../model/is-month-settled";
-import { monthlyWinners } from "../model/monthly-winners";
-import { parseBadgeKey } from "../model/parse-badge-key";
+import { db } from "#/client";
+import { applyBadgeWrites } from "#/modules/badges/commands/apply-badge-writes";
+import { BADGE_LADDER } from "#/modules/badges/model/badge-ladder";
+import { diffBadges } from "#/modules/badges/model/diff-badges";
+import { isMonthSettled } from "#/modules/badges/model/is-month-settled";
+import { monthlyWinners } from "#/modules/badges/model/monthly-winners";
+import { parseBadgeKey } from "#/modules/badges/model/parse-badge-key";
+import { userBadges } from "#/schema";
+
 import { loadMonthlyAppearances } from "./load-monthly-appearances";
 
 // 이달의 GM·PL은 여러 사람을 견주므로 한 사람만 다시 계산할 수 없다. 전체 1위를 다시 정해 모두와 비교한다.

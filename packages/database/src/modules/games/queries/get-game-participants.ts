@@ -1,5 +1,6 @@
-import { db } from "../../../client";
-import { memberBioSql } from "../../profiles/queries/member-bio-sql";
+import { db } from "#/client";
+import { memberBioSql } from "#/modules/profiles/queries/member-bio-sql";
+
 import { getRespondedUserIds } from "./get-responded-user-ids";
 
 export async function getGameParticipants({

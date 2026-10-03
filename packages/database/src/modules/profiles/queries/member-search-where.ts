@@ -1,6 +1,6 @@
 import { and, eq, ilike, ne, or } from "drizzle-orm";
 
-import { profiles } from "../../../schema";
+import { profiles } from "#/schema";
 
 // 닉네임 일부나 디스코드 ID 전체로 찾는다. 찾는 사람 자신은 뺀다.
 export function memberSearchWhere({

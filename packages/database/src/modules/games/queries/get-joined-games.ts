@@ -1,8 +1,8 @@
 import { desc } from "drizzle-orm";
 import { isNull } from "es-toolkit";
 
-import { db } from "../../../client";
-import { participants } from "../../../schema";
+import { db } from "#/client";
+import { participants } from "#/schema";
 
 export async function getJoinedGames({ serverId, userId }: { serverId: string; userId: string }) {
   const rows = await db.query.participants.findMany({

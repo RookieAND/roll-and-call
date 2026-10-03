@@ -1,8 +1,9 @@
 import { and, eq, ne } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles } from "../../../schema";
-import type { Actor } from "../model/types";
+import { db } from "#/client";
+import type { Actor } from "#/modules/moderation/model/types";
+import { profiles } from "#/schema";
+
 import { recordAudit } from "./record-audit";
 
 export type EditNicknameResult =

@@ -1,7 +1,7 @@
 import { and, eq, inArray, notInArray } from "drizzle-orm";
 
-import { participants } from "../../../schema";
-import type { Transaction } from "../../transaction/transaction";
+import type { Transaction } from "#/modules/transaction/transaction";
+import { participants } from "#/schema";
 
 // 확정 참여자 전원을 다시 쓴다. 기본값이 참석이라 목록에 없는 사람은 absent를 되돌린다.
 export async function saveAttendance({

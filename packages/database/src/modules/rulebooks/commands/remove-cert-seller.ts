@@ -1,9 +1,9 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { certSellers } from "../../../schema";
-import { recordAudit } from "../../moderation/commands/record-audit";
-import type { Actor } from "../../moderation/model/types";
+import { db } from "#/client";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import type { Actor } from "#/modules/moderation/model/types";
+import { certSellers } from "#/schema";
 
 // 목록에서만 뺀다. 이미 이 판매처로 낸 신청은 적힌 이름을 그대로 둔다.
 export async function removeCertSeller({

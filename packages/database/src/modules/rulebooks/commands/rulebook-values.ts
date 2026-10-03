@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import { rulebookCategories, rulebooks } from "../../../schema";
-import type { Executor } from "../../moderation/commands/record-audit";
-import type { RulebookFields } from "../model/rulebook-fields";
+import type { Executor } from "#/modules/moderation/commands/record-audit";
+import type { RulebookFields } from "#/modules/rulebooks/model/rulebook-fields";
+import { rulebookCategories, rulebooks } from "#/schema";
 
 export async function toRulebookValues({
   executor,

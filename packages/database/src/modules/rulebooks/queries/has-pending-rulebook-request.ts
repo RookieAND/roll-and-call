@@ -1,7 +1,7 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { rulebookRequests } from "../../../schema";
+import { db } from "#/client";
+import { rulebookRequests } from "#/schema";
 
 export async function hasPendingRulebookRequest({
   serverId,

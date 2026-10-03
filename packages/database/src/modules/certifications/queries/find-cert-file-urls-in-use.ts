@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { certApplications } from "../../../schema";
+import { db } from "#/client";
+import { certApplications } from "#/schema";
 
 export async function findCertFileUrlsInUse({
   serverId,

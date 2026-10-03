@@ -1,4 +1,4 @@
-import { db } from "../../../client";
+import { db } from "#/client";
 
 export async function getGameForDrawNotice({
   serverId,

@@ -1,12 +1,13 @@
 import { and, eq } from "drizzle-orm";
 import { uniq } from "es-toolkit";
 
-import { db } from "../../../client";
-import { userBadges } from "../../../schema";
-import { applyBadgeWrites } from "../commands/apply-badge-writes";
-import { computeBadges } from "../model/compute-badges";
-import { diffBadges } from "../model/diff-badges";
-import { isRecomputedBadgeKey } from "../model/is-recomputed-badge-key";
+import { db } from "#/client";
+import { applyBadgeWrites } from "#/modules/badges/commands/apply-badge-writes";
+import { computeBadges } from "#/modules/badges/model/compute-badges";
+import { diffBadges } from "#/modules/badges/model/diff-badges";
+import { isRecomputedBadgeKey } from "#/modules/badges/model/is-recomputed-badge-key";
+import { userBadges } from "#/schema";
+
 import { loadBadgeFacts } from "./load-badge-facts";
 import { syncMonthlyBadges } from "./sync-monthly-badges";
 

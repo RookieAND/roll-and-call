@@ -1,6 +1,7 @@
 import { and, eq, gt, sql } from "drizzle-orm";
 
-import { games, participants } from "../../../schema";
+import { games, participants } from "#/schema";
+
 import type { Executor } from "./record-audit";
 
 export interface OngoingChoice {

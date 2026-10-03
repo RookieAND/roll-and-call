@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 
-import { participants, sessionReviews } from "../../../schema";
+import { participants, sessionReviews } from "#/schema";
 
 // 운영진이 취소한 불참은 세지 않는다.
 export const reviewAuthorAbsentSql = sql<boolean>`exists (

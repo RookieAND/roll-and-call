@@ -1,5 +1,5 @@
-import { db } from "../../../client";
-import { memberBioSql } from "../../profiles/queries/member-bio-sql";
+import { db } from "#/client";
+import { memberBioSql } from "#/modules/profiles/queries/member-bio-sql";
 
 export async function findGameDetail({ serverId, gameId }: { serverId: string; gameId: string }) {
   return db.query.games.findFirst({

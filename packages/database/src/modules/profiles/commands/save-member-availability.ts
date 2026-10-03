@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { serverMembers, type AvailabilityInterval } from "../../../schema";
+import { db } from "#/client";
+import { serverMembers, type AvailabilityInterval } from "#/schema";
 
 export async function saveMemberAvailability({
   serverId,

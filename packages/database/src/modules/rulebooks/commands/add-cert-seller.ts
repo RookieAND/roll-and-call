@@ -1,7 +1,7 @@
-import { db } from "../../../client";
-import { certSellers } from "../../../schema";
-import { recordAudit } from "../../moderation/commands/record-audit";
-import type { Actor } from "../../moderation/model/types";
+import { db } from "#/client";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import type { Actor } from "#/modules/moderation/model/types";
+import { certSellers } from "#/schema";
 
 export type AddCertSellerResult = { ok: true } | { ok: false; duplicate: true };
 

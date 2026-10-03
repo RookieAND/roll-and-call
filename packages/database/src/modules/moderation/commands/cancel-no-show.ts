@@ -1,8 +1,9 @@
 import { and, eq, isNotNull, isNull, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games, participants, profiles } from "../../../schema";
-import type { Actor } from "../model/types";
+import { db } from "#/client";
+import type { Actor } from "#/modules/moderation/model/types";
+import { games, participants, profiles } from "#/schema";
+
 import { recordAudit } from "./record-audit";
 
 export type CancelNoShowResult =

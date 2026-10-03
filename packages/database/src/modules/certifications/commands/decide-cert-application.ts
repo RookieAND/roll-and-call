@@ -1,10 +1,11 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { certApplications, certifications, profiles, rulebooks } from "../../../schema";
-import { recordAudit } from "../../moderation/commands/record-audit";
-import type { Actor, ShotKey } from "../../moderation/model/types";
-import { rulebookLabel } from "../../rulebooks/model/rulebook-label";
+import { db } from "#/client";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import type { Actor, ShotKey } from "#/modules/moderation/model/types";
+import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
+import { certApplications, certifications, profiles, rulebooks } from "#/schema";
+
 import { rejectWaitingSupplements, type WaitingSupplements } from "./reject-waiting-supplements";
 
 export type CertDecision =

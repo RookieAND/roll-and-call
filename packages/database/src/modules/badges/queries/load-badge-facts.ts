@@ -1,15 +1,10 @@
 import { and, eq, isNull, not, sql } from "drizzle-orm";
 
-import { db } from "../../../client";
-import {
-  games,
-  participants,
-  rulebookCategories,
-  rulebooks,
-  sessionReviews,
-} from "../../../schema";
-import type { BadgeFacts } from "../model/badge-facts";
-import { toBadgeSessions } from "../model/to-badge-sessions";
+import { db } from "#/client";
+import type { BadgeFacts } from "#/modules/badges/model/badge-facts";
+import { toBadgeSessions } from "#/modules/badges/model/to-badge-sessions";
+import { games, participants, rulebookCategories, rulebooks, sessionReviews } from "#/schema";
+
 import { attendedWhere } from "./attended-where";
 import { recognizedGamesWhere } from "./recognized-games-where";
 import { sessionColumns } from "./session-columns";

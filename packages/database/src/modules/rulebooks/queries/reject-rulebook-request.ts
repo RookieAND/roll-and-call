@@ -1,8 +1,8 @@
-import { db } from "../../../client";
-import { recordAudit } from "../../moderation/commands/record-audit";
-import type { Actor } from "../../moderation/model/types";
-import { claimRulebookRequest } from "../commands/claim-rulebook-request";
-import type { RulebookActionResult } from "../model/rulebook-action-result";
+import { db } from "#/client";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import type { Actor } from "#/modules/moderation/model/types";
+import { claimRulebookRequest } from "#/modules/rulebooks/commands/claim-rulebook-request";
+import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
 
 export async function rejectRulebookRequest({
   serverId,

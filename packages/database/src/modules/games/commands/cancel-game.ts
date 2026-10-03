@@ -1,12 +1,12 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games, type Game } from "../../../schema";
-import type { Transaction } from "../../transaction/transaction";
-import { cancelBlockReason } from "../model/cancel-block-reason";
-import type { GameCancelKind } from "../model/game-cancel-kind";
-import { storedCancelReason } from "../model/stored-cancel-reason";
-import { lockGame } from "../queries/lock-game";
+import { db } from "#/client";
+import { cancelBlockReason } from "#/modules/games/model/cancel-block-reason";
+import type { GameCancelKind } from "#/modules/games/model/game-cancel-kind";
+import { storedCancelReason } from "#/modules/games/model/stored-cancel-reason";
+import { lockGame } from "#/modules/games/queries/lock-game";
+import type { Transaction } from "#/modules/transaction/transaction";
+import { games, type Game } from "#/schema";
 
 export type CancelGameResult =
   | { ok: true; game: Game }

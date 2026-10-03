@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { profiles } from "../../../schema";
+import { db } from "#/client";
+import { profiles } from "#/schema";
 
 export async function getDiscordId(userId: string) {
   const [profile] = await db

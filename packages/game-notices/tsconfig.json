@@ -1,7 +1,10 @@
 {
   "extends": "@roll-and-call/typescript-config/base.json",
   "compilerOptions": {
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "#/*": ["../../packages/database/src/*"]
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

@@ -1,13 +1,13 @@
 import { and, count, countDistinct, eq, inArray, isNull } from "drizzle-orm";
 
-import { db } from "../../../client";
+import { db } from "#/client";
 import {
   certApplications,
   reports,
   reviewReports,
   rulebookRequests,
   serverMembers,
-} from "../../../schema";
+} from "#/schema";
 
 // 어드민 서버 선택 화면의 서버별 멤버 수와 처리 대기 건수. 서버 홈의 처리 대기와 같은 네 가지를 센다.
 export async function listServerQueueCounts({ serverIds }: { serverIds: string[] }) {

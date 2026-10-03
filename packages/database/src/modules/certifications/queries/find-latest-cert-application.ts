@@ -1,7 +1,7 @@
 import { and, desc, eq, ne } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { certApplications } from "../../../schema";
+import { db } from "#/client";
+import { certApplications } from "#/schema";
 
 export async function findLatestCertApplication({
   serverId,

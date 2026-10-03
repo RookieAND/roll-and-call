@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "../../../client";
-import { games, participants, profiles } from "../../../schema";
+import { db } from "#/client";
+import { games, participants, profiles } from "#/schema";
 
 // 구인 명단(GM·확정·대기)의 디스코드 ID. 화면을 열 때 디스코드 서버를 나간 사람을 찾는 데 쓴다.
 export async function listRosterDiscordIds({
