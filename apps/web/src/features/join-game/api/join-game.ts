@@ -8,6 +8,7 @@ import { serverPath } from "@/shared/lib";
 import {
   announceRecruitmentComplete,
   getActingMember,
+  grantRushBadge,
   refreshRecruitPost,
   notMemberError,
 } from "@/shared/server";
@@ -36,7 +37,10 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
       isWaiting: application.waiting,
       confirmedCount: application.confirmedCount,
     });
-    if (application.becameFull) await announceRecruitmentComplete({ server, gameId });
+    if (application.becameFull) {
+      await announceRecruitmentComplete({ server, gameId });
+      await grantRushBadge({ serverId: server.id, gameId });
+    }
     await refreshRecruitPost({ server, gameId });
   });
 

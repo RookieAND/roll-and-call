@@ -1,6 +1,7 @@
 import {
   BADGE_LADDER,
   BADGE_LADDERS,
+  isHiddenLadder,
   type BadgeEvent,
   type BadgeLadderKey,
 } from "@roll-and-call/database/badges/model";
@@ -45,6 +46,8 @@ export function buildLadderDetail({
   events,
 }: LadderDetailInput): BadgeDetail {
   const { steps, granted } = BADGE_LADDERS[ladder];
+  // 특별 칭호는 단계·진행도 없이 설명만 보인다. 숨겨진 칭호는 분류 대신 등급 이름을 등급 색으로 쓴다(R29).
+  const special = granted || isHiddenLadder(ladder);
   const step = steps[stepIndex]!;
   const meta = LADDER_META[ladder];
   const heldTier = held?.tier ?? 0;
@@ -80,7 +83,7 @@ export function buildLadderDetail({
           }
         : null,
     progress:
-      !earned && !isNull(count)
+      !special && !earned && !isNull(count)
         ? {
             label: `${step.threshold - count}${meta.unit} 남았습니다`,
             countLabel: `${count} / ${step.threshold}`,
@@ -88,8 +91,8 @@ export function buildLadderDetail({
             max: step.threshold,
           }
         : null,
-    stepsTitle: "단계",
-    steps: (granted ? [] : steps).map((candidate, index) => {
+    stepsTitle: special ? "" : "단계",
+    steps: (special ? [] : steps).map((candidate, index) => {
       const candidateEarned = index < heldTier;
       const candidateEvent = events?.[candidate.threshold - 1];
       const candidateDate = index + 1 === heldTier ? held!.earnedAt : (candidateEvent?.at ?? null);

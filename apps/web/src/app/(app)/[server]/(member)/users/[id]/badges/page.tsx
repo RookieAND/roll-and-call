@@ -4,7 +4,13 @@ import { UserBadgesView } from "@/views/user-badges";
 
 export const metadata: Metadata = { title: "업적" };
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  return <UserBadgesView id={id} />;
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ tab?: string | string[] }>;
+}) {
+  const [{ id }, { tab }] = await Promise.all([params, searchParams]);
+  return <UserBadgesView id={id} tab={tab} />;
 }

@@ -1,4 +1,4 @@
-import { BADGE_ROLE, nextMonthStart } from "@roll-and-call/database/badges/model";
+import { BADGE_ROLE, isHiddenLadder, nextMonthStart } from "@roll-and-call/database/badges/model";
 
 import { badgeCondition, monthLabel } from "@/entities/badge";
 import { toKst } from "@/shared/lib";
@@ -15,6 +15,12 @@ export function singleAwardSheet({
   firstBadge: boolean;
 }): AwardSheet {
   const item = toAwardItem(badge);
+
+  const source = badge.record.source;
+  const sourceLink = source && {
+    label: `${source.title} · ${toKst(source.startsAt).format("M월 D일")} 세션`,
+    href: `/games/${source.gameId}`,
+  };
 
   if (badge.monthKey) {
     const until = toKst(nextMonthStart(badge.monthKey)).endOf("month").format("M월 D일");
@@ -33,21 +39,16 @@ export function singleAwardSheet({
   }
 
   if (badge.role === BADGE_ROLE.special) {
+    const hidden = isHiddenLadder(badge.ladder);
     return {
       kind: "single",
-      item: { ...item, tag: "특별 칭호를 받았습니다" },
+      item: hidden ? item : { ...item, tag: "특별 칭호를 받았습니다" },
       lines: [badgeCondition({ ladder: badge.ladder, step: badge.step, categoryName: null })],
-      source: null,
+      source: hidden ? (sourceLink ?? null) : null,
       gold: true,
       pinnable: true,
     };
   }
-
-  const source = badge.record.source;
-  const sourceLink = source && {
-    label: `${source.title} · ${toKst(source.startsAt).format("M월 D일")} 세션`,
-    href: `/games/${source.gameId}`,
-  };
 
   if (firstBadge) {
     return {

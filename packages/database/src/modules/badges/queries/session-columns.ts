@@ -10,4 +10,5 @@ export const sessionColumns = {
   cancelledAt: games.cancelledAt,
   categoryId: rulebookCategories.id,
   categoryName: rulebookCategories.name,
+  maxPlayers: games.maxPlayers,
 };

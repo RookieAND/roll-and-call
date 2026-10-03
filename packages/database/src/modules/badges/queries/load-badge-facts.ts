@@ -6,6 +6,7 @@ import { toBadgeSessions } from "#/modules/badges/model/to-badge-sessions";
 import { games, participants, rulebookCategories, rulebooks, sessionReviews } from "#/schema";
 
 import { attendedWhere } from "./attended-where";
+import { loadHiddenBadgeFacts } from "./load-hidden-badge-facts";
 import { recognizedGamesWhere } from "./recognized-games-where";
 import { sessionColumns } from "./session-columns";
 
@@ -35,7 +36,7 @@ export async function loadBadgeFacts({
     isNull(sessionReviews.hiddenAt),
     not(reviewAuthorAbsent),
   );
-  const [played, hosted, reviews, written] = await Promise.all([
+  const [played, hosted, reviews, written, hidden] = await Promise.all([
     db
       .select(sessionColumns)
       .from(participants)
@@ -66,11 +67,14 @@ export async function loadBadgeFacts({
       .from(sessionReviews)
       .innerJoin(games, eq(games.id, sessionReviews.gameId))
       .where(and(eq(sessionReviews.authorId, userId), visibleReview)),
+    loadHiddenBadgeFacts({ serverId, userId }),
   ]);
   return {
     played: toBadgeSessions(played, now),
     hosted: toBadgeSessions(hosted, now),
     reviews,
     written,
+    ...hidden,
+    asOf: now,
   };
 }

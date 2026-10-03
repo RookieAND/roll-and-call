@@ -1,5 +1,7 @@
 import type { BadgeFacts, BadgeReview, BadgeSession } from "./badge-facts";
 import { BADGE_LADDER, type BadgeLadderKey } from "./badge-ladder";
+import { hiddenEvents } from "./hidden-events";
+import { isHiddenLadder } from "./is-hidden-ladder";
 import type { BadgeEvent } from "./reached-tier";
 
 function toEvents(sessions: BadgeSession[]): BadgeEvent[] {
@@ -36,6 +38,7 @@ export function ladderEvents({
   ladder: BadgeLadderKey;
   subject?: string | null;
 }): BadgeEvent[] {
+  if (isHiddenLadder(ladder)) return hiddenEvents({ facts, ladder });
   const { played, hosted, reviews, written } = facts;
   switch (ladder) {
     case BADGE_LADDER.playerTotal:

@@ -1,33 +1,28 @@
-import { BADGE_ROLE } from "@roll-and-call/database/badges/model";
 import { Container, Text, VStack } from "@roll-and-call/ui";
 import { Lock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
-import { heldBadges } from "@/entities/badge";
-import { heldBadgeDetail } from "@/features/view-badge";
-import { toKst, serverPath } from "@/shared/lib";
+import { BADGE_TAB, BADGE_TABS, badgeTabOf, heldBadges } from "@/entities/badge";
+import { serverPath } from "@/shared/lib";
 import {
   getCurrentSessionUser,
   getProfile,
   getUserBadges,
   getCurrentServer,
 } from "@/shared/server";
-import { AppBar, EmptyState } from "@/shared/ui";
+import { AppBar } from "@/shared/ui";
+import { SessionTabs } from "@/widgets/session-list";
 
-import { badgeRowRequirement } from "../model/badge-row-requirement";
+import { roleGroups } from "../model/role-groups";
+import { userTabKey } from "../model/user-tab-key";
 import { UserBadgeGroup } from "./user-badge-group";
-
-const GROUPS = [
-  { role: BADGE_ROLE.player, title: "PL 참여" },
-  { role: BADGE_ROLE.gm, title: "GM 운영" },
-  { role: BADGE_ROLE.special, title: "특별 칭호" },
-] as const;
 
 interface UserBadgesViewProps {
   id: string;
+  tab: string | string[] | undefined;
 }
 
-export async function UserBadgesView({ id }: UserBadgesViewProps) {
+export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
   const server = await getCurrentServer();
   const [viewer, profile] = await Promise.all([getCurrentSessionUser(), getProfile(server.id, id)]);
   if (viewer?.id === id) redirect(serverPath({ slug: server.slug, path: "/me/badges" }));
@@ -55,20 +50,23 @@ export async function UserBadgesView({ id }: UserBadgesViewProps) {
   const now = new Date();
   const records = await getUserBadges(server.id, id);
   const held = heldBadges(records, now);
-  const groups = GROUPS.map((group) => ({
-    ...group,
-    rows: held
-      .filter((badge) => badge.role === group.role)
-      .map((badge) => ({
-        key: badge.key,
-        emoji: badge.emoji,
-        look: badge.look,
-        name: badge.name,
-        requirement: badgeRowRequirement(badge),
-        dateLabel: toKst(badge.record.earnedAt).format("YY.MM.DD"),
-        detail: heldBadgeDetail({ badge, records, facts: null, now }),
-      })),
-  })).filter((group) => group.rows.length > 0);
+  const countOf = (key: string) => held.filter((badge) => badgeTabOf(badge) === key).length;
+  const counts = {
+    [BADGE_TAB.gm]: countOf(BADGE_TAB.gm),
+    [BADGE_TAB.player]: countOf(BADGE_TAB.player),
+    [BADGE_TAB.special]: countOf(BADGE_TAB.special),
+  };
+  const activeTab = userTabKey({ tab, counts });
+  const tabs = BADGE_TABS.map((badgeTab) => ({
+    ...badgeTab,
+    count: counts[badgeTab.key],
+    href: serverPath({ slug: server.slug, path: `/users/${id}/badges?tab=${badgeTab.key}` }),
+  }));
+  const groups = roleGroups({ tab: activeTab, held, records, now });
+  const emptyText =
+    activeTab === BADGE_TAB.special
+      ? "아직 받은 특별 업적이 없습니다"
+      : "아직 받은 뱃지가 없습니다";
 
   return (
     <>
@@ -81,15 +79,18 @@ export async function UserBadgesView({ id }: UserBadgesViewProps) {
           </Text>
         }
       />
+      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface">
+        <Container size="sm" className="px-0">
+          <SessionTabs label="분류" tabs={tabs} activeKey={activeTab} />
+        </Container>
+      </div>
       <Container size="sm" className="pb-250">
         {groups.length > 0 ? (
-          groups.map((group) => (
-            <UserBadgeGroup key={group.role} title={group.title} rows={group.rows} />
-          ))
+          groups.map((group) => <UserBadgeGroup key={group.key} group={group} />)
         ) : (
-          <VStack className="py-300">
-            <EmptyState title="아직 받은 뱃지가 없습니다" />
-          </VStack>
+          <Text typography="body3" foreground="hint" className="py-300 text-center">
+            {emptyText}
+          </Text>
         )}
       </Container>
     </>

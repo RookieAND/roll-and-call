@@ -48,6 +48,7 @@ export { type Server } from "@roll-and-call/database";
 export {
   evaluateBadges,
   evaluateGameBadges,
+  grantRushBadge,
   loadBadgeFacts as getBadgeFacts,
   loadMonthlyAppearances as getMonthlyAppearances,
 } from "@roll-and-call/database/badges";

@@ -1,3 +1,4 @@
+import { isHiddenLadder } from "@roll-and-call/database/badges/model";
 import { isNull } from "es-toolkit";
 
 import { BADGE_TONE, badgeRequirement, lookTone, monthLabel } from "@/entities/badge";
@@ -8,7 +9,7 @@ import type { HeldBadge } from "./held-badge";
 
 export function toAwardItem(badge: HeldBadge): AwardItem {
   const monthly = !isNull(badge.monthKey);
-  const highlighted = monthly || badge.tier > 1;
+  const highlighted = monthly || badge.tier > 1 || isHiddenLadder(badge.ladder);
   return {
     key: badge.key,
     emoji: badge.emoji,

@@ -1,30 +1,22 @@
-import type { BadgeLook } from "@roll-and-call/database/badges/model";
 import { Card, Text, VStack } from "@roll-and-call/ui";
 
 import { BadgeMedal } from "@/entities/badge";
-import { BadgeDetailSheet, type BadgeDetail } from "@/features/view-badge";
+import { BadgeDetailSheet } from "@/features/view-badge";
+
+import type { BadgeRowGroup } from "../model/badge-row";
 
 interface UserBadgeGroupProps {
-  title: string;
-  rows: {
-    key: string;
-    emoji: string;
-    look: BadgeLook;
-    name: string;
-    requirement: string;
-    dateLabel: string;
-    detail: BadgeDetail;
-  }[];
+  group: BadgeRowGroup;
 }
 
-export function UserBadgeGroup({ title, rows }: UserBadgeGroupProps) {
+export function UserBadgeGroup({ group }: UserBadgeGroupProps) {
   return (
     <VStack gap="100" render={<section />} className="pt-175">
       <Text typography="body4" weight="bold" foreground="muted" render={<h2 />}>
-        {title}
+        {group.title}
       </Text>
       <Card.Root padding="none" radius={600} className="overflow-hidden">
-        {rows.map((row) => (
+        {group.rows.map((row) => (
           <BadgeDetailSheet
             key={row.key}
             detail={row.detail}
@@ -35,7 +27,7 @@ export function UserBadgeGroup({ title, rows }: UserBadgeGroupProps) {
               <Text typography="subtitle1" weight="extrabold" truncate>
                 {row.name}
               </Text>
-              <Text typography="body4" foreground="muted">
+              <Text typography="body4" foreground="muted" className="break-keep">
                 {row.requirement}
               </Text>
             </VStack>

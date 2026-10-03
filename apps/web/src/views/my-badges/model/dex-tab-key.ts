@@ -1,5 +1,6 @@
-import { BADGE_ROLE, type BadgeRole } from "@roll-and-call/database/badges/model";
+import { BADGE_TAB, type BadgeTab } from "@/entities/badge";
 
-export function dexTabKey(tab: string | string[] | undefined): BadgeRole {
-  return tab === BADGE_ROLE.gm ? BADGE_ROLE.gm : BADGE_ROLE.player;
+export function dexTabKey(tab: string | string[] | undefined): BadgeTab {
+  if (tab === BADGE_TAB.gm || tab === BADGE_TAB.special) return tab;
+  return BADGE_TAB.player;
 }

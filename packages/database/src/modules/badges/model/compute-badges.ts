@@ -2,7 +2,7 @@ import { uniq } from "es-toolkit";
 
 import type { BadgeFacts, EarnedBadge } from "./badge-facts";
 import { badgeKey } from "./badge-key";
-import { BADGE_LADDER, type BadgeLadderKey } from "./badge-ladder";
+import { BADGE_LADDER, HIDDEN_LADDER, type BadgeLadderKey } from "./badge-ladder";
 import { BADGE_LADDERS } from "./badge-ladders";
 import { ladderEvents } from "./ladder-events";
 import { reachedTier } from "./reached-tier";
@@ -30,5 +30,6 @@ export function computeBadges(facts: BadgeFacts): EarnedBadge[] {
   for (const categoryId of categoryIds(facts.hosted)) add(BADGE_LADDER.gmRule, categoryId);
   add(BADGE_LADDER.gmVariety);
   add(BADGE_LADDER.gmReviews);
+  for (const ladder of Object.values(HIDDEN_LADDER)) add(ladder);
   return earned;
 }

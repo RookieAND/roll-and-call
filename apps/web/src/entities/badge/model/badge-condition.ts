@@ -1,5 +1,7 @@
 import {
   BADGE_LADDER,
+  BADGE_LADDERS,
+  isHiddenLadder,
   type BadgeLadderKey,
   type BadgeStep,
 } from "@roll-and-call/database/badges/model";
@@ -14,6 +16,8 @@ export function badgeCondition({
   step: BadgeStep;
   categoryName: string | null;
 }): string {
+  // 숨겨진 칭호는 조건을 끝까지 숨기고 설명 한 줄만 보인다(R29).
+  if (isHiddenLadder(ladder)) return BADGE_LADDERS[ladder].description!;
   const count = step.threshold;
   switch (ladder) {
     case BADGE_LADDER.playerTotal:

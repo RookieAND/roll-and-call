@@ -5,6 +5,7 @@ import {
   type BadgeRole,
   type BadgeStep,
 } from "./badge-ladder";
+import { HIDDEN_BADGE_LADDERS } from "./hidden-badge-ladders";
 
 export type BadgeLadderDefinition = {
   role: BadgeRole;
@@ -13,6 +14,8 @@ export type BadgeLadderDefinition = {
   monthly: boolean;
   // 기록으로 계산하지 않고 오너가 직접 주는 칭호. 재계산이 건드리지 않는다.
   granted: boolean;
+  // 특별 칭호의 한 줄 설명. 숨겨진 칭호는 조건 대신 이 문장만 보인다.
+  description?: string;
   steps: BadgeStep[];
 };
 
@@ -131,6 +134,7 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     perRule: false,
     monthly: false,
     granted: true,
+    description: "롤앤콜을 만든 사람입니다.",
     steps: [{ threshold: 1, emoji: "🛠️", name: "개발자", grade: 5, look: "developer" }],
   },
   [BADGE_LADDER.guildMaster]: {
@@ -138,6 +142,8 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     perRule: false,
     monthly: false,
     granted: true,
+    description: "이 서버를 이끄는 사람입니다.",
     steps: [{ threshold: 1, emoji: "🏰", name: "길드장", grade: 5, look: "guildMaster" }],
   },
+  ...HIDDEN_BADGE_LADDERS,
 };

@@ -1,6 +1,24 @@
 export const BADGE_ROLE = { player: "pl", gm: "gm", special: "sp" } as const;
 export type BadgeRole = (typeof BADGE_ROLE)[keyof typeof BADGE_ROLE];
 
+// 숨겨진 칭호. 받기 전에는 이름·조건을 숨기고, 받은 뒤에도 조건 대신 설명 한 줄만 보인다.
+export const HIDDEN_LADDER = {
+  critical: "sp.critical",
+  extreme: "sp.extreme",
+  luckySeven: "sp.lucky",
+  fumble: "sp.fumble",
+  nearMiss: "sp.near",
+  oneMonth: "sp.month",
+  halfYear: "sp.halfyear",
+  oneYear: "sp.year",
+  ambidextrous: "sp.ambi",
+  doubleHeader: "sp.double",
+  expedition: "sp.expedition",
+  popular: "sp.popular",
+  rush: "sp.rush",
+} as const;
+export type HiddenLadderKey = (typeof HIDDEN_LADDER)[keyof typeof HIDDEN_LADDER];
+
 // 뱃지 키의 앞부분. 룰별은 뒤에 룰 분류 id, 이달의 GM·PL은 뒤에 달(2026-09)을 붙인다.
 export const BADGE_LADDER = {
   playerTotal: "pl.total",
@@ -14,6 +32,7 @@ export const BADGE_LADDER = {
   gmMonthly: "gm.monthly",
   developer: "sp.dev",
   guildMaster: "sp.guild",
+  ...HIDDEN_LADDER,
 } as const;
 export type BadgeLadderKey = (typeof BADGE_LADDER)[keyof typeof BADGE_LADDER];
 

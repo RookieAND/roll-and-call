@@ -10,7 +10,7 @@ import {
 
 import { PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
-import { notifyDrawResult } from "@/shared/server";
+import { evaluateGameBadges, notifyDrawResult } from "@/shared/server";
 
 import { adjustRoster } from "./adjust-roster";
 import { RosterError } from "./roster-error";
@@ -49,6 +49,10 @@ export async function applyDrawResult(gameId: string): Promise<ActionResult> {
       await markGameDrawn({ transaction, serverId, gameId });
       await saveDrawResults({ transaction, serverId, gameId });
     },
-    notify: (server) => notifyDrawResult({ server, gameId }),
+    // 추첨 칭호(대성공·한 끗 차이·인기 폭발 등)는 추첨을 적용한 직후에 판정한다.
+    notify: async (server) => {
+      await notifyDrawResult({ server, gameId });
+      await evaluateGameBadges({ serverId: server.id, gameId });
+    },
   });
 }
