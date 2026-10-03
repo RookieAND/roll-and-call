@@ -13,6 +13,7 @@ export const HIDDEN_LADDER = {
   oneYear: "sp.year",
   ambidextrous: "sp.ambi",
   doubleHeader: "sp.double",
+  tripleHeader: "sp.triple",
   expedition: "sp.expedition",
   popular: "sp.popular",
   rush: "sp.rush",

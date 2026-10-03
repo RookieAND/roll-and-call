@@ -2,9 +2,9 @@ import { ambidextrousEvents } from "./ambidextrous-events";
 import { anniversaryEvents } from "./anniversary-events";
 import type { BadgeFacts } from "./badge-facts";
 import { HIDDEN_LADDER, type HiddenLadderKey } from "./badge-ladder";
-import { doubleHeaderEvents } from "./double-header-events";
 import { drawEvents } from "./draw-events";
 import type { BadgeEvent } from "./reached-tier";
+import { sameDayEvents } from "./same-day-events";
 
 const EXPEDITION_MIN_ATTENDED = 6;
 const POPULAR_MIN_APPLICANTS = 10;
@@ -39,7 +39,9 @@ export function hiddenEvents({
     case HIDDEN_LADDER.ambidextrous:
       return ambidextrousEvents(facts);
     case HIDDEN_LADDER.doubleHeader:
-      return doubleHeaderEvents(facts);
+      return sameDayEvents({ facts, count: 2 });
+    case HIDDEN_LADDER.tripleHeader:
+      return sameDayEvents({ facts, count: 3 });
     case HIDDEN_LADDER.expedition:
       return [...facts.played, ...facts.hosted]
         .filter((session) => session.attendedCount >= EXPEDITION_MIN_ATTENDED)

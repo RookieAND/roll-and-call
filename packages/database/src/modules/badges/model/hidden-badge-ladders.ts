@@ -84,6 +84,12 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     grade: 3,
     description: "하루에 두 번 테이블에 앉았습니다.",
   }),
+  [HIDDEN_LADDER.tripleHeader]: hidden({
+    emoji: "🌩️",
+    name: "트리플 헤더",
+    grade: 4,
+    description: "하루에 세 번 테이블에 앉았습니다.",
+  }),
   [HIDDEN_LADDER.expedition]: hidden({
     emoji: "🗺️",
     name: "대규모 원정",

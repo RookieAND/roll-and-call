@@ -183,6 +183,19 @@ describe("숨겨진 칭호", () => {
     expect(keys(computeBadges(facts({ joinedAt: new Date(Date.UTC(2020, 0, 1)) })))).toEqual([]);
   });
 
+  it("트리플 헤더는 같은 날 세 번째 세션이 근거다", () => {
+    const day = (index: number) => ({
+      ...session(index),
+      gameId: `t${index}`,
+      startsAt: new Date(`2026-03-02T0${index}:00:00Z`),
+      endsAt: new Date(`2026-03-02T0${index + 1}:00:00Z`),
+    });
+    const badges = computeBadges(facts({ played: [day(1), day(2)], hosted: [day(3)] }));
+    expect(keys(badges)).toEqual(expect.arrayContaining(["sp.double", "sp.triple"]));
+    expect(badges.find((badge) => badge.badgeKey === "sp.triple")!.sourceGameId).toBe("t3");
+    expect(keys(computeBadges(facts({ played: [day(1), day(2)] })))).not.toContain("sp.triple");
+  });
+
   it("더블 헤더는 같은 한국 날짜, 양손잡이는 같은 달, 대규모 원정은 참석 6명부터다", () => {
     const morning = { ...session(0), gameId: "m", startsAt: new Date("2026-03-01T16:00:00Z") };
     const evening = { ...session(0), gameId: "e", startsAt: new Date("2026-03-02T10:00:00Z") };
