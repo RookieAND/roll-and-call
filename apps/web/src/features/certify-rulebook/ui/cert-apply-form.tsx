@@ -2,7 +2,7 @@
 
 import { Button, Callout, Container, FloatingBar, Progress, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { certApplyHref, type MyRulebook } from "@/entities/rulebook";
 import { useServerPath } from "@/shared/lib";
@@ -12,6 +12,7 @@ import { submitCertification } from "../api/submit-certification";
 import { toCertEntry } from "../model/cert-entry";
 import { draftMissing } from "../model/draft-missing";
 import { initialDraft } from "../model/initial-draft";
+import { revokePreview } from "../model/photo-slot";
 import { QUIZ_ANSWER_FIELD } from "../model/quiz-answer-field";
 import { BookDraftCard } from "./book-draft-card";
 import { quizHintText } from "./quiz-hint-text";
@@ -24,6 +25,7 @@ interface CertApplyFormProps {
   sellers: string[];
   quiz: { id: string; question: string } | null;
   rejection: { title: string; lines: string[] } | null;
+  previews: Record<string, string>;
 }
 
 export function CertApplyForm({
@@ -33,9 +35,22 @@ export function CertApplyForm({
   sellers,
   quiz,
   rejection,
+  previews,
 }: CertApplyFormProps) {
   const toServerPath = useServerPath();
-  const [draft, setDraft] = useState(() => initialDraft({ rulebook, sellers }));
+  const [draft, setDraft] = useState(() => initialDraft({ rulebook, sellers, previews }));
+  const latestDraft = useRef(draft);
+  useEffect(() => {
+    latestDraft.current = draft;
+  }, [draft]);
+  useEffect(
+    () => () =>
+      [
+        ...Object.values(latestDraft.current.shots),
+        ...Object.values(latestDraft.current.proofs),
+      ].forEach(revokePreview),
+    [],
+  );
   const [onQuiz, setOnQuiz] = useState(false);
   const [answer, setAnswer] = useState("");
   const [quizError, setQuizError] = useState<string | null>(null);

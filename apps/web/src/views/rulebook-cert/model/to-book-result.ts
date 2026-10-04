@@ -20,7 +20,7 @@ export interface BookResult {
   dates: { label: string; value: string }[];
   badge: { label: string; palette: Palette } | null;
   reason: { label: string; text: string; tone: "warning" | "danger" } | null;
-  thumbs: { label: string; url: string; flagged: boolean }[];
+  thumbs: { label: string; src: string | null; flagged: boolean }[];
   deleted: boolean;
   memo: string | null;
   retryHref: string | null;
@@ -40,7 +40,13 @@ const DECIDED_LABEL: Record<string, string> = {
   [CERT_STATE.revoked]: "인증 취소",
 };
 
-export function toBookResult(rulebook: MyRulebook): BookResult {
+export function toBookResult({
+  rulebook,
+  signedUrls,
+}: {
+  rulebook: MyRulebook;
+  signedUrls: Map<string, string>;
+}): BookResult {
   const application = rulebook.latestApplication;
   const state = rulebook.state ?? CERT_STATE.pending;
   const day = (at: Date) => toKst(at).format("YYYY.MM.DD");
@@ -57,8 +63,10 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
   const rejected = state === CERT_STATE.rejected;
   const revoked = state === CERT_STATE.revoked;
   const photosKept = rejected || state === CERT_STATE.pending || state === CERT_STATE.certified;
-  const thumbs = photosKept && application && !direct ? bookThumbs(application) : [];
-  const kept = thumbs.filter((thumb) => thumb.url);
+  const purged = !direct && Boolean(application?.filesPurgedAt);
+  const thumbs =
+    photosKept && application && !direct ? bookThumbs({ application, signedUrls }) : [];
+  const kept = thumbs.filter((thumb) => thumb.src !== null);
   return {
     id: rulebook.id,
     title: rulebook.shortName,
@@ -68,7 +76,7 @@ export function toBookResult(rulebook: MyRulebook): BookResult {
     badge: BADGE[state] ?? null,
     reason: bookReason(rulebook),
     thumbs: kept.length > 0 ? thumbs : [],
-    deleted: rejected && thumbs.length > 0 && kept.length === 0,
+    deleted: purged || (rejected && thumbs.length > 0 && kept.length === 0),
     memo: rejected && memo !== rejectionSummary(application) ? memo : null,
     retryHref:
       rejected || revoked ? certApplyHref({ rulebookIds: [rulebook.id], step: "photos" }) : null,

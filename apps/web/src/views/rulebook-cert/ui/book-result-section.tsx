@@ -86,7 +86,7 @@ export function BookResultSection({ result, guide }: BookResultSectionProps) {
               className="mt-025 flex-none text-hint"
             />
             <Text typography="body3" foreground="muted" render={<p />}>
-              보관 기간이 지나 사진이 삭제됐어요.
+              보관 기간이 지나 사진이 삭제되었습니다.
               <br />
               새로 찍어 올려 주세요.
             </Text>

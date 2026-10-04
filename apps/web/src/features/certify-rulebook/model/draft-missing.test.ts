@@ -4,7 +4,7 @@ import type { BookDraft } from "./book-draft";
 import { draftMissing } from "./draft-missing";
 import { PHOTO_SLOT } from "./photo-slot";
 
-const done = { status: PHOTO_SLOT.done, url: "u" } as const;
+const done = { status: PHOTO_SLOT.done, key: "u", previewUrl: "" } as const;
 const empty = { status: PHOTO_SLOT.empty } as const;
 
 const draft = (overrides: Partial<BookDraft>): BookDraft => ({

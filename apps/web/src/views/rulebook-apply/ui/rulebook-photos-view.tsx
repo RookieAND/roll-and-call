@@ -22,6 +22,7 @@ import {
   getQuizQuestion,
   getRulebookRecords,
   getCurrentServer,
+  signCertPhotoUrls,
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -60,6 +61,13 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
   }
   const { name, handle } = profileDisplay({ profile, user });
   const rejected = rulebook.state === CERT_STATE.rejected ? rulebook.latestApplication : null;
+  const previews = rejected
+    ? await signCertPhotoUrls([
+        ...Object.values(rejected.photoUrls),
+        rejected.purchaseCaptureUrl,
+        rejected.receiptUrl,
+      ])
+    : new Map<string, string>();
 
   return (
     <CertApplyForm
@@ -68,6 +76,7 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
       nickname={handle ?? name}
       sellers={sellers}
       quiz={quiz}
+      previews={Object.fromEntries(previews)}
       rejection={
         rejected
           ? {

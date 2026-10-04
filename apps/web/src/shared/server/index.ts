@@ -90,6 +90,7 @@ export { getCurrentUser } from "./auth/get-current-user";
 export { getCurrentSessionUser } from "./auth/get-current-session-user";
 export { getCurrentServer } from "./auth/get-current-server";
 export { removeUnusedCertPhotos } from "./cert-files";
+export { signCertPhotoUrls } from "./sign-cert-photo-urls";
 export { removeUnusedReviewPhotos } from "./review-files";
 export { revalidateReviews } from "./revalidate-reviews";
 export { revalidateGamePaths } from "./revalidate-game-paths";

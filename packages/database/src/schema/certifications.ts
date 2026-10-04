@@ -67,6 +67,8 @@ export const certApplications = pgTable(
     flaggedShots: text("flagged_shots").array().$type<CertShot[]>().notNull().default([]),
     processedBy: uuid("processed_by").references(() => profiles.id, { onDelete: "set null" }),
     processedAt: timestamp("processed_at", { withTimezone: true }),
+    // 보관 기간(결정 뒤 30일)이 지나 사진 칸을 비운 시각
+    filesPurgedAt: timestamp("files_purged_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [

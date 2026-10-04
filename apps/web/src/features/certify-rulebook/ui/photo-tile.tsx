@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 import { CircleAlert, FileText, Plus, X } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { PHOTO_SLOT, slotUrl, type PhotoSlot } from "../model/photo-slot";
+import { PHOTO_SLOT, slotKey, slotPreviewUrl, type PhotoSlot } from "../model/photo-slot";
 import { photoLabelForeground } from "./photo-label-foreground";
 import { photoTag } from "./photo-tag";
 
@@ -72,9 +72,10 @@ export function PhotoTile({
   onPick,
   onRemove,
 }: PhotoTileProps) {
-  const url = slotUrl(slot);
-  const pdf = url.toLowerCase().endsWith(".pdf");
-  const filled = url !== "";
+  const key = slotKey(slot);
+  const previewUrl = slotPreviewUrl(slot);
+  const pdf = key.toLowerCase().endsWith(".pdf");
+  const filled = key !== "";
   const labelForeground = photoLabelForeground({ status: slot.status, selected });
   const tag = photoTag({ status: slot.status, pdf });
 
@@ -89,10 +90,10 @@ export function PhotoTile({
           onClick={onPick}
           className={cn(frame({ status: slot.status, square, selected, needed }))}
         >
-          {filled &&
+          {previewUrl &&
             !pdf && (
               // oxlint-disable-next-line nextjs/no-img-element -- 스토리지 원본 사진이라 최적화 경로를 타지 않는다.
-              <img src={url} alt="" className="absolute inset-0 size-full object-cover" />
+              <img src={previewUrl} alt="" className="absolute inset-0 size-full object-cover" />
             )}
           {filled && pdf && (
             <span className="absolute inset-0 flex items-center justify-center text-gray-600">

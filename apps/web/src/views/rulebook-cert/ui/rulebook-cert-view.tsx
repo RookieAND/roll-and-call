@@ -12,7 +12,12 @@ import {
 import { LoginRequired } from "@/features/auth";
 import { CancelApplicationButton } from "@/features/certify-rulebook";
 import { serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
+import {
+  getCurrentSessionUser,
+  getRulebookRecords,
+  getCurrentServer,
+  signCertPhotoUrls,
+} from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { applicationGroup } from "../model/application-group";
@@ -47,7 +52,18 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
     redirect(serverPath({ slug: server.slug, path: certApplyHref({ rulebookIds: [rulebookId] }) }));
 
   const books = applicationGroup({ rulebook, rulebooks });
-  const results = books.map(toBookResult);
+  const signedUrls = await signCertPhotoUrls(
+    books.flatMap(({ latestApplication }) =>
+      latestApplication
+        ? [
+            ...Object.values(latestApplication.photoUrls),
+            latestApplication.purchaseCaptureUrl,
+            latestApplication.receiptUrl,
+          ]
+        : [],
+    ),
+  );
+  const results = books.map((book) => toBookResult({ rulebook: book, signedUrls }));
   const pending = books.some((book) => book.state === CERT_STATE.pending);
   const allCertified = books.every((book) => book.state === CERT_STATE.certified);
   const set = rulebook.kind === RULEBOOK_KIND.core ? setOf({ rulebook, sets }) : null;

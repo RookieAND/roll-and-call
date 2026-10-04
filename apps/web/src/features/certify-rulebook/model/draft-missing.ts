@@ -8,7 +8,7 @@ import {
 
 import type { BookDraft } from "./book-draft";
 import { OTHER_SELLER } from "./other-seller";
-import { PHOTO_SLOT, slotUrl, type PhotoSlot } from "./photo-slot";
+import { PHOTO_SLOT, slotKey, type PhotoSlot } from "./photo-slot";
 
 export function draftMissing(draft: BookDraft): string | null {
   const ebook = draft.format === CERT_FORMAT.ebook;
@@ -19,7 +19,7 @@ export function draftMissing(draft: BookDraft): string | null {
   if (failed) return `${failed[0]} 사진을 다시 올려 주세요`;
   if (slots.some(([, slot]) => slot.status === PHOTO_SLOT.uploading))
     return "사진을 올리는 중입니다";
-  const empty = slots.filter(([, slot]) => !slotUrl(slot)).map(([label]) => label);
+  const empty = slots.filter(([, slot]) => !slotKey(slot)).map(([label]) => label);
   if (empty.length > 0) {
     return empty.length === slots.length
       ? `사진 ${slots.length}장을 올려 주세요`

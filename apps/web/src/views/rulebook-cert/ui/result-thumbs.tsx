@@ -30,7 +30,7 @@ export function ResultThumbs({ thumbs }: ResultThumbsProps) {
     <HStack gap="100">
       {thumbs.map((thumb, index) => (
         <VStack key={thumb.label} gap="075" className="min-w-0 flex-1">
-          {thumb.url ? (
+          {thumb.src ? (
             // ponytail: 사진 자체가 버튼이라 Button 프리미티브(텍스트·패딩 룩)와 맞지 않아 손코딩.
             <button
               type="button"
@@ -39,7 +39,7 @@ export function ResultThumbs({ thumbs }: ResultThumbsProps) {
               className={thumbFrame({ flagged: thumb.flagged })}
             >
               {/* oxlint-disable-next-line nextjs/no-img-element -- 스토리지 원본 사진이라 최적화 경로를 타지 않는다. */}
-              <img src={thumb.url} alt="" className="size-full object-cover" />
+              <img src={thumb.src} alt="" className="size-full object-cover" />
             </button>
           ) : (
             <div className={thumbFrame({ flagged: thumb.flagged })} />
@@ -55,7 +55,7 @@ export function ResultThumbs({ thumbs }: ResultThumbsProps) {
         </VStack>
       ))}
       <ImageLightbox
-        url={open?.url || null}
+        url={open?.src || null}
         label={`${open?.label ?? ""} 사진`}
         onClose={() => setOpenIndex(null)}
       />
