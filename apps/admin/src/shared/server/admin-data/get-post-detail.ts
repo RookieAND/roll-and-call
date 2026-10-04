@@ -65,7 +65,7 @@ export async function getPostDetail({ id, filter }: { id: string; filter: PostLi
     imageUrls: session.imageUrls ?? [],
     thumbnailUrl: session.thumbnailUrl,
     hidden: session.hidden,
-    gmEditSinceHidden: session.gmEditSinceHidden,
+    editedSinceHiddenAt: session.editedSinceHiddenAt,
     cancelled: session.cancelled ?? false,
     cancellable: !session.cancelBlock,
     sessionStarted: session.sessionStarted ?? false,

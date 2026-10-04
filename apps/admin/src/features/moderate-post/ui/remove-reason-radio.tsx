@@ -1,14 +1,16 @@
 import { Grid, HStack, Radio, RadioGroup, Text, VStack } from "@roll-and-call/ui";
 
-import { REVIEW_REASON, REVIEW_REASONS, type ReviewReason } from "@/shared/lib";
+import { REVIEW_REASON } from "@/shared/lib";
+
+const REMOVE_REASONS = Object.values(REVIEW_REASON);
 
 interface RemoveReasonRadioProps {
-  value: ReviewReason | null;
+  value: string | null;
   disabled: boolean;
-  onValueChange: (value: ReviewReason) => void;
+  onValueChange: (value: string) => void;
 }
 
-// 구인과 후기는 같은 사유 목록을 쓴다(시안 MOD_REASONS).
+// 구인과 후기는 같은 조치 사유 6개를 쓴다(시안 MOD_REASONS). 운영진 기록용이다.
 export function RemoveReasonRadio({ value, disabled, onValueChange }: RemoveReasonRadioProps) {
   return (
     <VStack gap="075">
@@ -28,19 +30,22 @@ export function RemoveReasonRadio({ value, disabled, onValueChange }: RemoveReas
       <RadioGroup
         value={value}
         disabled={disabled}
-        onValueChange={(next) => onValueChange(next as ReviewReason)}
+        onValueChange={(next) => onValueChange(next as string)}
         aria-labelledby="post-remove-reason-label"
-        render={<Grid className="grid-cols-2 gap-x-200 gap-y-075" />}
+        render={<Grid className="grid-cols-2 gap-x-200 gap-y-050" />}
       >
-        {REVIEW_REASONS.map((reason) => (
+        {REMOVE_REASONS.map((reason) => (
           <Radio.Field key={reason}>
             <Radio.Root value={reason}>
               <Radio.Indicator />
             </Radio.Root>
-            <Radio.Label>{REVIEW_REASON[reason]}</Radio.Label>
+            <Radio.Label>{reason}</Radio.Label>
           </Radio.Field>
         ))}
       </RadioGroup>
+      <Text typography="body4" foreground="hint">
+        운영진 기록에만 남고 사용자에게는 보이지 않습니다.
+      </Text>
     </VStack>
   );
 }

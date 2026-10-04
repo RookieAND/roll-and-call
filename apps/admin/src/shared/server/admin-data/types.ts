@@ -178,7 +178,8 @@ export interface Session {
   staffCancelRecipientIds?: string[];
   // 세션이 끝나는 시각(isSessionEnded와 같은 기준). 일시가 정해지지 않았으면 null.
   endsAt?: Date | null;
-  gmEditSinceHidden?: { title: string; body: string; at: Date };
+  // ponytail: games에 수정 시각 칸이 없어 아직 채우지 않는다(R42). 칸이 생기면 hidden_at 뒤의 수정 시각을 넣는다.
+  editedSinceHiddenAt?: Date;
 }
 
 export interface Review {

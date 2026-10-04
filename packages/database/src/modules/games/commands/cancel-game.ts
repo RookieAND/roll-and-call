@@ -12,7 +12,7 @@ import type { Transaction } from "#/modules/transaction/transaction";
 import { games, participants, type Game } from "#/schema";
 
 export type CancelGameResult =
-  | { ok: true; game: Game }
+  | { ok: true; game: Game; notifiedCount: number }
   | { ok: false; reason: "not_found" | "already_cancelled" | "session_ended" };
 
 // GM·운영진·자동 취소가 모두 여기를 지난다. 구인 행과 참여자·가능 시간·후기는 그대로 남는다.
@@ -58,7 +58,7 @@ export async function cancelGame({
       cancelKind: kind,
       reason: kind === GAME_CANCEL_KIND.gm ? cancelled!.cancelReason : null,
     };
-    await createNotifications({
+    const notifiedCount = await createNotifications({
       executor: tx,
       serverId,
       actorId,
@@ -68,7 +68,7 @@ export async function cancelGame({
         params,
       })),
     });
-    return { ok: true, game: cancelled! };
+    return { ok: true, game: cancelled!, notifiedCount };
   };
   return transaction ? run(transaction) : db.transaction(run);
 }

@@ -1,99 +1,119 @@
 "use client";
 
-import { Button, Dialog, Text, VStack, cn, toast } from "@roll-and-call/ui";
-import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-
-import { REVIEW_REASON, withObjectParticle, type ReviewReason } from "@/shared/lib";
-import type { PostDetail } from "@/shared/server";
 import {
-  ConflictNotice,
-  ModalServerLabel,
-  ServerLink,
-  UserPreview,
-  useServerPath,
-} from "@/shared/ui";
+  Button,
+  Card,
+  Dialog,
+  Field,
+  HStack,
+  Text,
+  Textarea,
+  VStack,
+  toast,
+} from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
+import { RotateCcw, Users, X } from "lucide-react";
+import { useState, type RefObject } from "react";
+
+import { OTHER_REASON, useActionSubmit } from "@/shared/lib";
+import type { PostDetail } from "@/shared/server";
+import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
 
 import { submitPostModeration } from "../api/submit-post-moderation";
+import { ACTION_COPY } from "../model/action-copy";
 import { POST_ACTION } from "../model/post-action";
-import { RemoveImpact } from "./remove-impact";
+import type { PostModerationOutcome } from "../model/post-moderation-outcome";
 import { RemoveReasonRadio } from "./remove-reason-radio";
 import { RemoveTarget } from "./remove-target";
 
+const COPY = ACTION_COPY[POST_ACTION.remove];
+
 interface PostRemoveFormProps {
   post: PostDetail;
+  cancelRef: RefObject<HTMLButtonElement | null>;
+  onSettled: (outcome: PostModerationOutcome) => void;
 }
 
-export function PostRemoveForm({ post }: PostRemoveFormProps) {
-  const router = useRouter();
-  const toServerPath = useServerPath();
-  const [pending, startTransition] = useTransition();
-  const [reason, setReason] = useState<ReviewReason | null>(null);
-  const [conflicted, setConflicted] = useState(false);
+// 운영진 사유는 활동 기록에만 남고 알림에는 「운영진이 취소했습니다.」만 보인다.
+export function PostRemoveForm({ post, cancelRef, onSettled }: PostRemoveFormProps) {
+  const { pending, networkError, submit } = useActionSubmit(submitPostModeration);
+  const [reason, setReason] = useState<string | null>(null);
+  const [staffMemo, setStaffMemo] = useState("");
+  const other = reason === OTHER_REASON;
+  const canConfirm = Boolean(reason) && (!other || Boolean(staffMemo.trim())) && !pending;
+  const { memberCount, waitingCount } = post.cancelRecipients;
 
-  const canConfirm = Boolean(reason) && !pending && !conflicted;
-  const titleWithParticle = withObjectParticle(post.title);
-
-  const confirm = () =>
-    startTransition(async () => {
-      if (!reason) return;
-      const result = await submitPostModeration(post.id, {
-        action: POST_ACTION.remove,
-        userReason: REVIEW_REASON[reason],
-        staffMemo: "",
-      });
-      if (!result.ok) {
-        setConflicted(true);
-        return;
-      }
-      toast.success(`${titleWithParticle} 제거했습니다`);
-      router.push(toServerPath("/posts"));
+  const confirm = async () => {
+    if (!reason) return;
+    const outcome = await submit({
+      postId: post.id,
+      moderation: { action: POST_ACTION.remove, userReason: reason, staffMemo },
     });
+    if (isUndefined(outcome)) return;
+    if (outcome.ok) toast.success(COPY.successMessage(post.title));
+    onSettled(outcome);
+  };
 
   return (
     <>
       <Dialog.Header>
         <ModalServerLabel />
-        <Dialog.Title>{titleWithParticle} 제거할까요?</Dialog.Title>
-        <Dialog.Description>구인과 참여 정보, 후기가 모두 삭제됩니다</Dialog.Description>
+        <Dialog.Title>{COPY.title}</Dialog.Title>
+        <Dialog.Description>{COPY.description}</Dialog.Description>
       </Dialog.Header>
       <Dialog.Body className="mt-200">
         <VStack gap="150">
-          {conflicted ? (
-            <ConflictNotice
-              title="이미 처리된 구인입니다"
-              description="입력한 내용은 저장되지 않았습니다."
-              actions={
-                <Button size="sm" render={<ServerLink path="/posts" />}>
-                  다음 건
-                </Button>
-              }
-            />
+          {networkError ? <ActionNetworkError /> : null}
+          <RemoveTarget post={post} />
+          <Card.Root radius={400} padding="sm" render={<HStack align="center" gap="100" />}>
+            <Users size={14} aria-hidden />
+            <Text typography="body3" weight="bold">
+              참여자 {memberCount}명 · 대기 {waitingCount}명에게 영향이 있습니다
+            </Text>
+          </Card.Root>
+          <RemoveReasonRadio value={reason} disabled={pending} onValueChange={setReason} />
+          {other ? (
+            <Field.Root label="운영진 메모" htmlFor="post-remove-staff-memo" required>
+              <Textarea
+                id="post-remove-staff-memo"
+                rows={2}
+                value={staffMemo}
+                disabled={pending}
+                placeholder="목록에 없는 사유를 적어 주세요"
+                onChange={(event) => setStaffMemo(event.target.value)}
+              />
+            </Field.Root>
           ) : null}
-          <VStack gap="150" className={cn(conflicted && "pointer-events-none opacity-50")}>
-            <RemoveTarget post={post} />
-            <RemoveImpact memberCount={post.memberCount} />
-            <RemoveReasonRadio value={reason} disabled={conflicted} onValueChange={setReason} />
-            <UserPreview title="GM에게 이렇게 갑니다">
-              {reason ? (
-                `「${post.title}」 구인이 운영진에 의해 제거되었습니다.`
-              ) : (
-                <Text typography="body3" foreground="hint">
-                  사유를 고르면 보낼 문구가 표시됩니다.
-                </Text>
-              )}
-            </UserPreview>
-          </VStack>
+          <NotificationPreview
+            payload={{
+              kind: "game_cancelled",
+              params: {
+                gameId: post.id,
+                gameTitle: post.title,
+                cancelKind: "staff",
+                reason: null,
+              },
+            }}
+            recipients={`GM · 확정 참여자 ${memberCount}명 · 대기자 ${waitingCount}명에게 알립니다.`}
+          />
         </VStack>
       </Dialog.Body>
       <Dialog.Footer layout="row" className="items-center justify-end">
-        <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+        <Dialog.Close
+          ref={cancelRef}
+          render={<Button variant="ghost" colorPalette="gray" />}
+          disabled={pending}
+        >
           취소
         </Dialog.Close>
-        <Button colorPalette="danger" disabled={!canConfirm} loading={pending} onClick={confirm}>
-          <X size={16} aria-hidden />
-          제거
+        <Button
+          colorPalette="danger"
+          disabled={!canConfirm}
+          loading={pending}
+          onClick={() => void confirm()}
+        >
+          {networkError ? <RotateCcw size={16} aria-hidden /> : <X size={16} aria-hidden />}
+          {networkError ? "다시 시도" : COPY.confirmLabel}
         </Button>
       </Dialog.Footer>
     </>

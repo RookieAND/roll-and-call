@@ -21,6 +21,7 @@ interface PostDetailViewProps {
   listQuery: Record<string, string | undefined>;
   // 사용자 앱에서 이 서버 화면의 주소(…/{slug}).
   serverAppUrl: string | undefined;
+  viewerId: string;
 }
 
 export function PostDetailView({
@@ -29,6 +30,7 @@ export function PostDetailView({
   action,
   listQuery,
   serverAppUrl,
+  viewerId,
 }: PostDetailViewProps) {
   const pathname = `/posts/${post.id}`;
   const cancelOpen = !post.cancelled && post.cancellable && !post.sessionStarted;
@@ -86,6 +88,7 @@ export function PostDetailView({
         post={post}
         action={openAction}
         closeHref={withQuery(pathname, query, {})}
+        viewerId={viewerId}
       />
     </>
   );

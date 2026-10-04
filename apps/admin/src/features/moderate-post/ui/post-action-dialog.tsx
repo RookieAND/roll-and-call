@@ -1,46 +1,69 @@
 "use client";
 
-import { Dialog } from "@roll-and-call/ui";
+import { AlertDialog, Dialog, toast } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
+import { conflictToastText } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import { useServerPath } from "@/shared/ui";
 
 import { ACTION_COPY } from "../model/action-copy";
 import { POST_ACTION, type PostAction } from "../model/post-action";
-import { PostActionForm } from "./post-action-form";
+import type { PostModerationOutcome } from "../model/post-moderation-outcome";
+import { PostHideForm } from "./post-hide-form";
 import { PostRemoveForm } from "./post-remove-form";
+import { PostUnhideForm } from "./post-unhide-form";
 
-const REMOVE_WIDTH_CLASS_NAME = "max-w-[600px]";
+const CONFLICT_TARGET = "구인";
 
 interface PostActionDialogProps {
   post: PostDetail;
   action: PostAction | null;
   closeHref: string;
+  viewerId: string;
 }
 
-// 닫히는 동안에도 제목이 남도록 마지막 조치를 기억한다.
-export function PostActionDialog({ post, action, closeHref }: PostActionDialogProps) {
+// 닫히는 동안에도 제목이 남도록 마지막 조치를 기억한다. 구인 취소는 되돌릴 수 없어 AlertDialog로 연다.
+// 충돌은 창 안에 두지 않는다. 창을 닫고 상세를 새로 읽은 뒤 토스트로만 알린다(D295, D296).
+export function PostActionDialog({ post, action, closeHref, viewerId }: PostActionDialogProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
+  const cancelRef = useRef<HTMLButtonElement>(null);
   const [shownAction, setShownAction] = useState(action);
   if (action && action !== shownAction) setShownAction(action);
   const close = () => router.replace(toServerPath(closeHref), { scroll: false });
+  const settle = (outcome: PostModerationOutcome) => {
+    if (outcome.ok) {
+      close();
+      return;
+    }
+    if (outcome.gone) {
+      router.push(toServerPath("/posts"));
+      toast.info(conflictToastText({ conflict: null, self: false, target: CONFLICT_TARGET }));
+      return;
+    }
+    close();
+    router.refresh();
+    const self = outcome.conflict?.byId === viewerId;
+    toast.info(conflictToastText({ conflict: outcome.conflict, self, target: CONFLICT_TARGET }));
+  };
   const removing = shownAction === POST_ACTION.remove;
-  const widthClassName =
-    shownAction && shownAction !== POST_ACTION.remove
-      ? ACTION_COPY[shownAction].widthClassName
-      : REMOVE_WIDTH_CLASS_NAME;
+  const Root = removing ? AlertDialog.Root : Dialog.Root;
   return (
-    <Dialog.Root open={!isNull(action)} onOpenChange={(open) => open || close()}>
-      <Dialog.Popup size="lg" className={widthClassName}>
-        {removing ? <PostRemoveForm key={shownAction} post={post} /> : null}
-        {shownAction && shownAction !== POST_ACTION.remove ? (
-          <PostActionForm key={shownAction} post={post} action={shownAction} onDone={close} />
+    <Root open={!isNull(action)} onOpenChange={(open) => open || close()}>
+      <Dialog.Popup
+        size="lg"
+        initialFocus={removing ? cancelRef : undefined}
+        className={shownAction ? ACTION_COPY[shownAction].widthClassName : undefined}
+      >
+        {shownAction === POST_ACTION.hide ? <PostHideForm post={post} onSettled={settle} /> : null}
+        {shownAction === POST_ACTION.unhide ? (
+          <PostUnhideForm post={post} onSettled={settle} />
         ) : null}
+        {removing ? <PostRemoveForm post={post} cancelRef={cancelRef} onSettled={settle} /> : null}
       </Dialog.Popup>
-    </Dialog.Root>
+    </Root>
   );
 }

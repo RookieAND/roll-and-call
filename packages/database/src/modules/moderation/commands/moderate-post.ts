@@ -6,6 +6,8 @@ import { cancelGame } from "#/modules/games/commands/cancel-game";
 import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
 import type { AuditAction } from "#/modules/moderation/model/audit-actions";
 import type { Actor } from "#/modules/moderation/model/types";
+import { createNotifications } from "#/modules/notifications/commands/create-notifications";
+import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { auditLog, games, profiles, type Game } from "#/schema";
 
@@ -13,7 +15,8 @@ import { recordAudit } from "./record-audit";
 
 export type PostModerationAction = "hide" | "unhide" | "remove";
 
-// 제거의 userReason은 고른 사유 이름이다.
+// 숨김의 userReason은 GM에게 보이는 사유(칩 이름, 기타면 「기타 · {입력}」)다.
+// 구인 취소의 userReason은 운영진 기록용 칩 이름이고 사용자에게 보이지 않는다.
 export interface PostModeration {
   action: PostModerationAction;
   userReason: string;
@@ -23,8 +26,10 @@ export interface PostModeration {
 // 취소한 구인은 부르는 쪽이 구인 스레드에 알리도록 행을 돌려준다.
 export type PostModerationResult =
   | { ok: true; cancelledGame: Game | null }
+  | { ok: false; gone: true }
   | {
       ok: false;
+      gone: false;
       conflict: { action: AuditAction; by: string; byId: string | null; at: Date } | null;
     };
 
@@ -37,8 +42,8 @@ const AUDIT_ACTION = {
 const POST_AUDIT_ACTIONS: AuditAction[] = Object.values(AUDIT_ACTION);
 
 // 구인 조치 확정. 이미 상태가 바뀐 구인이면 아무것도 바꾸지 않고, 마지막으로 처리한 조치를 충돌로 돌려준다.
+// 숨김·해제는 GM의 알림 탭으로만 알린다(DM 없음). 구인 취소 알림은 cancelGame이 GM·확정자·대기자에게 만든다.
 // 구인 취소는 구인을 운영진 취소로 바꾼다. 참여·대기·후기는 그대로 남는다. 끝난 세션은 취소하지 않는다.
-// ponytail: GM 알림(숨김·제거)은 아직 보내지 않는다. 알림 경로가 정해지면 여기서 보낸다.
 export async function moderatePost({
   serverId,
   id,
@@ -56,6 +61,7 @@ export async function moderatePost({
     const [game] = await tx
       .select({
         title: games.title,
+        gmId: games.gmId,
         hiddenAt: games.hiddenAt,
         cancelledAt: games.cancelledAt,
         gm: memberNicknameSql(serverId),
@@ -64,7 +70,7 @@ export async function moderatePost({
       .innerJoin(profiles, eq(profiles.id, games.gmId))
       .where(thisGame)
       .for("update", { of: games });
-    if (!game) return { ok: false, conflict: null };
+    if (!game) return { ok: false, gone: true };
     const hidden = isNotNil(game.hiddenAt);
     const stale =
       (moderation.action === "hide" && hidden) ||
@@ -91,6 +97,7 @@ export async function moderatePost({
         .limit(1);
       return {
         ok: false,
+        gone: false,
         conflict: latest
           ? {
               action: latest.action as AuditAction,
@@ -102,20 +109,42 @@ export async function moderatePost({
       };
     }
 
+    const gameParams = { gameId: id, gameTitle: game.title };
     if (moderation.action === "hide") {
       await tx
         .update(games)
         .set({ hiddenAt: sql`now()`, hiddenBy: actor.id, hiddenReason: moderation.userReason })
         .where(thisGame);
+      await createNotifications({
+        executor: tx,
+        serverId,
+        actorId: actor.id,
+        notifications: [
+          {
+            userId: game.gmId,
+            kind: NOTIFICATION_KIND.gameHidden,
+            params: { ...gameParams, reason: moderation.userReason },
+          },
+        ],
+      });
     }
     if (moderation.action === "unhide") {
       await tx
         .update(games)
         .set({ hiddenAt: null, hiddenBy: null, hiddenReason: null })
         .where(and(thisGame, isNotNull(games.hiddenAt)));
+      await createNotifications({
+        executor: tx,
+        serverId,
+        actorId: actor.id,
+        notifications: [
+          { userId: game.gmId, kind: NOTIFICATION_KIND.gameUnhidden, params: gameParams },
+        ],
+      });
     }
 
     let cancelledGame: Game | null = null;
+    let related: string[] | undefined;
     if (moderation.action === "remove") {
       const cancelled = await cancelGame({
         transaction: tx,
@@ -125,8 +154,9 @@ export async function moderatePost({
         actorId: actor.id,
         reason: null,
       });
-      if (!cancelled.ok) return { ok: false, conflict: null };
+      if (!cancelled.ok) return { ok: false, gone: false, conflict: null };
       cancelledGame = cancelled.game;
+      related = [`GM·확정자·대기자 ${cancelled.notifiedCount}명 알림 탭에 알림 보냄`];
     }
 
     const hiddenAfter = moderation.action === "hide" || (hidden && moderation.action !== "unhide");
@@ -143,6 +173,7 @@ export async function moderatePost({
         staffMemo: moderation.userReason ? moderation.staffMemo || undefined : undefined,
         before: { label: hidden ? "숨김 중" : "공개" },
         after: { label: moderation.action === "remove" ? "취소됨" : afterLabel },
+        related,
       },
     });
     return { ok: true, cancelledGame };
