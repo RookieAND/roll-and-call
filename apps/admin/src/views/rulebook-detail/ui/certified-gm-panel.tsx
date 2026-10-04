@@ -1,63 +1,75 @@
+import type { RulebookKind } from "@roll-and-call/database";
+import { RULEBOOK_KIND } from "@roll-and-call/database/rulebooks/model";
 import { Button, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 
-import { formatDate, paginate } from "@/shared/lib";
+import { formatDate, paginate, sortRows, withQuery, type TableSort } from "@/shared/lib";
 import type { CertifiedGm } from "@/shared/server";
 import {
   EMPTY_IMAGE,
   ListPager,
   Panel,
-  TableEmptyRow,
-  TableColumns,
   ServerLink,
-  Tag,
+  SortableHead,
+  TableColumns,
+  TableEmptyRow,
 } from "@/shared/ui";
 
+import type { CertifiedGmSortColumn } from "../model/certified-gm-sort";
+
 interface CertifiedGmPanelProps {
+  rulebookId: string;
+  kind: RulebookKind;
   gms: CertifiedGm[];
   certRequired: boolean;
+  sort: TableSort<CertifiedGmSortColumn>;
   page?: string;
 }
 
-export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelProps) {
-  const paged = paginate(gms, page);
-  const count = <Tag>{`${gms.length}명`}</Tag>;
+export function CertifiedGmPanel({
+  rulebookId,
+  kind,
+  gms,
+  certRequired,
+  sort,
+  page,
+}: CertifiedGmPanelProps) {
+  const sorted = sortRows({
+    rows: gms,
+    sort,
+    accessors: { approved: (gm) => gm.approvedAt, sessions: (gm) => gm.recentSessionCount },
+  });
+  const paged = paginate(sorted, page);
+  const title = kind === RULEBOOK_KIND.core ? "이 룰북으로 인증된 GM" : "인증한 사람";
   const right = certRequired ? (
-    <>
-      {count}
-      <Button
-        variant="outline"
-        colorPalette="gray"
-        size="sm"
-        render={<Link href="?tab=gms&action=grant" scroll={false} />}
-      >
-        GM 직접 추가
-      </Button>
-    </>
+    <Button
+      variant="outline"
+      colorPalette="gray"
+      size="sm"
+      render={<ServerLink path={withQuery("/cert/manage", {}, { rulebook: rulebookId })} />}
+    >
+      인증 관리에서 보기
+    </Button>
   ) : (
-    <>
-      <Text typography="body4" foreground="hint">
-        인증이 필요 없는 룰북이므로 GM을 추가하지 않아도 됩니다
-      </Text>
-      {count}
-    </>
+    <Text typography="body4" foreground="hint">
+      인증이 필요 없는 룰북이므로 인증을 부여하지 않아도 됩니다
+    </Text>
   );
   return (
     <Panel
-      title="이 룰북으로 인증된 GM"
+      title={title}
       right={right}
       footer={
         <ListPager page={paged.page} totalPages={paged.totalPages} total={gms.length} unit="명" />
       }
     >
       <Table.Root className="table-equal">
-        <TableColumns widths={[180, 104, 112, { fixed: 44 }]} />
+        <TableColumns widths={[180, 140, 140, { fixed: 44 }]} />
         <Table.Header>
           <Table.Row>
             <Table.Head>닉네임</Table.Head>
-            <Table.Head>인증일</Table.Head>
-            <Table.Head align="end">최근 90일 세션</Table.Head>
+            <SortableHead column="approved" label="인증일" sort={sort} />
+            <SortableHead column="sessions" label="최근 90일 세션" sort={sort} align="end" />
             <Table.Head />
           </Table.Row>
         </Table.Header>
@@ -69,7 +81,7 @@ export function CertifiedGmPanel({ gms, certRequired, page }: CertifiedGmPanelPr
               title="이 룰북으로 인증된 GM이 없습니다"
               description={
                 certRequired
-                  ? "GM의 인증 신청이 승인되거나 운영진이 GM을 직접 추가하면 이곳에 표시됩니다."
+                  ? "GM의 인증 신청이 승인되거나 인증 관리에서 인증을 부여하면 이곳에 표시됩니다."
                   : "인증이 필요 없는 룰북이므로 누구나 이 룰북으로 구인을 열 수 있습니다."
               }
             />

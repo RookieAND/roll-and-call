@@ -1,20 +1,21 @@
 import { Button, HStack, VStack } from "@roll-and-call/ui";
 
 import { RulebookEditForm } from "@/features/write-rulebook";
-import type { GrantCandidate, RulebookDetail } from "@/shared/server";
+import type { TableSort } from "@/shared/lib";
+import type { RulebookDetail } from "@/shared/server";
 import { AdminHeader, RouteTabs, TabCount, ServerLink } from "@/shared/ui";
 
+import type { CertifiedGmSortColumn } from "../model/certified-gm-sort";
 import { RULEBOOK_DETAIL_TAB, type RulebookDetailTab } from "../model/rulebook-detail-tab";
 import { CategoryCard } from "./category-card";
 import { CertifiedGmPanel } from "./certified-gm-panel";
-import { GrantDialogSlot } from "./grant-dialog-slot";
 import { QuizDialogSlot } from "./quiz-dialog-slot";
 import { QuizQuestionPanel } from "./quiz-question-panel";
 
 interface RulebookDetailViewProps {
   rulebook: RulebookDetail;
   tab: RulebookDetailTab;
-  grantCandidates: GrantCandidate[];
+  gmSort: TableSort<CertifiedGmSortColumn>;
   viewerId: string;
   page?: string;
 }
@@ -22,7 +23,7 @@ interface RulebookDetailViewProps {
 export function RulebookDetailView({
   rulebook,
   tab,
-  grantCandidates,
+  gmSort,
   viewerId,
   page,
 }: RulebookDetailViewProps) {
@@ -83,8 +84,11 @@ export function RulebookDetailView({
             <QuizQuestionPanel questions={rulebook.quizQuestions} />
           ) : (
             <CertifiedGmPanel
+              rulebookId={rulebook.id}
+              kind={rulebook.kind}
               gms={rulebook.certifiedGms}
               certRequired={rulebook.certRequired}
+              sort={gmSort}
               page={page}
             />
           )}
@@ -92,14 +96,6 @@ export function RulebookDetailView({
       )}
       {tab === RULEBOOK_DETAIL_TAB.quiz ? (
         <QuizDialogSlot rulebookId={rulebook.id} questions={rulebook.quizQuestions} />
-      ) : null}
-      {tab === RULEBOOK_DETAIL_TAB.gms && rulebook.certRequired ? (
-        <GrantDialogSlot
-          rulebookId={rulebook.id}
-          rulebookLabel={rulebook.label}
-          categoryEdition={`${rulebook.category} ${rulebook.edition}`.trim()}
-          candidates={grantCandidates}
-        />
       ) : null}
     </>
   );

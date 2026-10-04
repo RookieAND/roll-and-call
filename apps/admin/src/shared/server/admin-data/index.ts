@@ -59,7 +59,7 @@ export {
   type SanctionResult,
 } from "@roll-and-call/database/moderation";
 export {
-  grantCertification,
+  grantCertifications,
   revokeCertifications,
   type CertDecision,
   type CertDecisionResult,
@@ -164,11 +164,7 @@ export { getRulebookImpact, type RulebookImpactCase } from "./get-rulebook-impac
 export { getKindImpact, type KindImpactPage } from "./get-kind-impact";
 export { listRulebookRequests, type RulebookRequestRow } from "./list-rulebook-requests";
 export { listRulebooks, type RulebookCategory, type RulebookRow } from "./list-rulebooks";
-export {
-  searchGrantCandidates,
-  type GrantCandidate,
-  type GrantCandidateState,
-} from "./search-grant-candidates";
+export { getGrantOptions, type GrantOptions } from "./get-grant-options";
 export type * from "./types";
 export { listCertSellers, type CertSellerRow } from "./list-cert-sellers";
 export { getReviewDetail, type ReviewDetail } from "./get-review-detail";

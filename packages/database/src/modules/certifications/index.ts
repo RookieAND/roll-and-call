@@ -5,7 +5,7 @@ export {
   type CertDecisionResult,
 } from "./commands/decide-cert-application";
 export { discardRulebookRecord } from "./commands/discard-rulebook-record";
-export { grantCertification, type GrantResult } from "./commands/grant-certification";
+export { grantCertifications, type GrantResult } from "./commands/grant-certifications";
 export { type WaitingSupplements } from "./commands/reject-waiting-supplements";
 export { revokeCertifications, type RevokeResult } from "./commands/revoke-certifications";
 export { withdrawPendingApplications } from "./commands/withdraw-pending-applications";

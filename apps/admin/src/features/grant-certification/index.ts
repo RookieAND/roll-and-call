@@ -1,1 +1,1 @@
-export { GrantGmDialog } from "./ui/grant-gm-dialog";
+export { GrantCertForm } from "./ui/grant-cert-form";

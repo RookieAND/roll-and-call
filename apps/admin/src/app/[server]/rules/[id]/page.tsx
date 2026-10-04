@@ -2,8 +2,11 @@ import { isString } from "es-toolkit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { getRulebookDetail, requireStaff, searchGrantCandidates } from "@/shared/server";
+import { parseSort } from "@/shared/lib";
+import { getRulebookDetail, requireStaff } from "@/shared/server";
 import {
+  CERTIFIED_GM_SORT_COLUMNS,
+  CERTIFIED_GM_SORT_FALLBACK,
   RULEBOOK_DETAIL_TAB,
   RulebookDetailView,
   type RulebookDetailTab,
@@ -20,11 +23,8 @@ export default async function RulebookDetailPage({
   params,
   searchParams,
 }: PageProps<"/[server]/rules/[id]">) {
-  const [{ id }, { tab, action, q, page }, staff] = await Promise.all([
-    params,
-    searchParams,
-    requireStaff(),
-  ]);
+  const [{ id }, query, staff] = await Promise.all([params, searchParams, requireStaff()]);
+  const { tab, page } = query;
   const rulebook = await getRulebookDetail(id);
   if (!rulebook) notFound();
   const detailTab: RulebookDetailTab =
@@ -32,13 +32,16 @@ export default async function RulebookDetailPage({
       (candidate) =>
         candidate === tab && (candidate !== RULEBOOK_DETAIL_TAB.quiz || rulebook.certRequired),
     ) ?? RULEBOOK_DETAIL_TAB.info;
-  const grantCandidates =
-    action === "grant" && isString(q) ? await searchGrantCandidates(id, q) : [];
+  const gmSort = parseSort({
+    searchParams: query,
+    columns: CERTIFIED_GM_SORT_COLUMNS,
+    fallback: CERTIFIED_GM_SORT_FALLBACK,
+  });
   return (
     <RulebookDetailView
       rulebook={rulebook}
       tab={detailTab}
-      grantCandidates={grantCandidates}
+      gmSort={gmSort}
       viewerId={staff.id}
       page={isString(page) ? page : undefined}
     />
