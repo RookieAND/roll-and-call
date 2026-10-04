@@ -11,16 +11,19 @@ import { EmptyState, ServerLink } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
+import type { NewGameSanction } from "../model/new-game-sanction";
+import { NewGameButton } from "./new-game-button";
 
 interface GamesEmptyProps {
   filter: GamesFilter;
   // 같은 조건의 전체 건수. 1 이상인데 행이 없으면 쪽 번호가 범위를 넘은 것이다.
   total: number;
+  sanction: NewGameSanction | null;
 }
 
-export function GamesEmpty({ filter, total }: GamesEmptyProps) {
+export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
-  const newGame = <Button render={<ServerLink path={"/games/new"} />}>새 구인 등록</Button>;
+  const newGame = <NewGameButton sanction={sanction}>새 구인 등록</NewGameButton>;
 
   if (total > 0) {
     return (

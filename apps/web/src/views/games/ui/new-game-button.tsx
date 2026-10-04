@@ -6,16 +6,17 @@ import { useState } from "react";
 
 import { useServerPath } from "@/shared/lib";
 
-import { NewGameGateSheet, type PendingCertification } from "./new-game-gate-sheet";
+import type { NewGameSanction } from "../model/new-game-sanction";
+import { NewGameSanctionSheet } from "./new-game-sanction-sheet";
 
 interface NewGameButtonProps extends Omit<ButtonProps, "render" | "onClick"> {
-  gate: { pending: PendingCertification | null } | null;
+  sanction: NewGameSanction | null;
 }
 
-export function NewGameButton({ gate, children, ...buttonProps }: NewGameButtonProps) {
+export function NewGameButton({ sanction, children, ...buttonProps }: NewGameButtonProps) {
   const toServerPath = useServerPath();
   const [open, setOpen] = useState(false);
-  if (!gate) {
+  if (!sanction) {
     return (
       <Button render={<Link href={toServerPath("/games/new")} />} {...buttonProps}>
         {children}
@@ -27,7 +28,7 @@ export function NewGameButton({ gate, children, ...buttonProps }: NewGameButtonP
       <Button {...buttonProps} onClick={() => setOpen(true)}>
         {children}
       </Button>
-      <NewGameGateSheet open={open} onOpenChange={setOpen} pending={gate.pending} />
+      <NewGameSanctionSheet open={open} onOpenChange={setOpen} sanction={sanction} />
     </>
   );
 }
