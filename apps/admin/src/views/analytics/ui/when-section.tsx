@@ -20,9 +20,7 @@ export function WhenSection({ analytics, mode }: WhenSectionProps) {
   const activeMode = early ? GRID_MODE.open : mode;
   const finishedCount = analytics.summary.finishedSessions.value ?? 0;
   const insight =
-    activeMode === GRID_MODE.open
-      ? openGridInsight(grid.open, early)
-      : finishedGridInsight(grid.finished);
+    activeMode === GRID_MODE.open ? openGridInsight(grid.open) : finishedGridInsight(grid.finished);
   const caption =
     activeMode === GRID_MODE.open
       ? `합계 ${analytics.openSessionCount}건 · 후보 시간이 여럿이면 모두 셉니다`

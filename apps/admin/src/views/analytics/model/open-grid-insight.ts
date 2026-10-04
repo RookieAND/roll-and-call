@@ -1,7 +1,7 @@
 import { findTopCells } from "./find-top-cells";
 import { TIME_SLOTS, WEEKDAYS } from "./time-grid";
 
-export function openGridInsight(grid: number[][], early: boolean) {
+export function openGridInsight(grid: number[][]) {
   const [top] = findTopCells(grid);
   if (!top) return null;
   const row = grid[top.day]!;
@@ -15,8 +15,5 @@ export function openGridInsight(grid: number[][], early: boolean) {
     (row[neighbor] ?? 0) > 0 && start && end && "start" in start && "end" in end
       ? { label: `${start.start}–${end.end}시`, count: row[from]! + row[to]! }
       : { label: TIME_SLOTS[top.slot]!.label, count: top.count };
-  const subject = early ? "모집 중이거나 일정을 조율 중인 세션" : "모집 중인 세션";
-  const lastCode = merged.label.charCodeAt(merged.label.length - 1) - 0xac00;
-  const particle = lastCode >= 0 && lastCode % 28 !== 0 ? "을" : "를";
-  return `${subject} 가운데 ${merged.count}건이 ${WEEKDAYS[top.day]}요일 ${merged.label}${particle} 희망하고 있습니다.`;
+  return `시간이 정해진 예정 세션 가운데 ${merged.count}건이 ${WEEKDAYS[top.day]}요일 ${merged.label}에 열립니다.`;
 }

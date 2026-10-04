@@ -95,11 +95,11 @@ export {
   ANALYTICS_EARLY_THRESHOLD,
   GMS_NEEDED,
   PEOPLE_WEEKS_NEEDED,
-  getAnalytics,
   type AnalyticsData,
   type AnalyticsMetric,
   type AnalyticsTrendWeek,
-} from "./get-analytics";
+} from "./build-analytics";
+export { getAnalytics } from "./get-analytics";
 export {
   getWeeklySummary,
   type WeeklyPoint,

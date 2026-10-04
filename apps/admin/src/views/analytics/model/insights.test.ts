@@ -22,14 +22,14 @@ describe("격자 인사이트", () => {
 
   it("가장 많은 칸과 더 많은 이웃 시간대를 합친다", () => {
     const open = [[0, 0, 0, 1, 8, 6, 1]];
-    expect(openGridInsight(open, false)).toBe(
-      "모집 중인 세션 가운데 14건이 월요일 20–24시를 희망하고 있습니다.",
+    expect(openGridInsight(open)).toBe(
+      "시간이 정해진 예정 세션 가운데 14건이 월요일 20–24시에 열립니다.",
     );
   });
 
   it("시간 범위가 없는 이웃과는 합치지 않는다", () => {
-    expect(openGridInsight([[5, 1, 0, 0, 0, 0, 0]], true)).toBe(
-      "모집 중이거나 일정을 조율 중인 세션 가운데 5건이 월요일 오전을 희망하고 있습니다.",
+    expect(openGridInsight([[5, 1, 0, 0, 0, 0, 0]])).toBe(
+      "시간이 정해진 예정 세션 가운데 5건이 월요일 오전에 열립니다.",
     );
   });
 
