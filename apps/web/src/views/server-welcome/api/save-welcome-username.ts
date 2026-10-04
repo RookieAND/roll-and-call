@@ -1,10 +1,10 @@
 "use server";
 
-import { saveUsername } from "@roll-and-call/database/profiles";
+import { saveMemberNickname } from "@roll-and-call/database/profiles";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { USERNAME_MAX_LENGTH } from "@/entities/profile";
+import { nicknameTakenMessage, USERNAME_MAX_LENGTH } from "@/entities/profile";
 import type { ActionResult } from "@/shared/api";
 import { safeNextPath, serverPath } from "@/shared/lib";
 import { getActingMember, notMemberError } from "@/shared/server";
@@ -19,13 +19,19 @@ export async function saveWelcomeUsername({
   const member = await getActingMember();
   if (!member) return { error: await notMemberError() };
 
-  const trimmedUsername = username.trim();
-  if (trimmedUsername.length < 1 || trimmedUsername.length > USERNAME_MAX_LENGTH) {
-    return { error: `닉네임은 1~${USERNAME_MAX_LENGTH}자로 입력하세요.`, field: "username" };
+  const nickname = username.trim();
+  if (nickname.length < 1 || nickname.length > USERNAME_MAX_LENGTH) {
+    return { error: `닉네임은 1~${USERNAME_MAX_LENGTH}자로 입력해 주세요.`, field: "username" };
   }
 
   const { server, user } = member;
-  await saveUsername({ userId: user.id, username: trimmedUsername });
+  const saved = await saveMemberNickname({
+    serverId: server.id,
+    userId: user.id,
+    nickname,
+    keepSuffixNotice: false,
+  });
+  if (!saved.ok) return { error: nicknameTakenMessage(server.name), field: "username" };
 
   revalidatePath(serverPath({ slug: server.slug, path: "/me" }));
   redirect(

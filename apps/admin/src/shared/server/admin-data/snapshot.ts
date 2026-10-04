@@ -66,7 +66,7 @@ export const loadSnapshot = cache(async () => {
   } = await loadSharedTables(server.id);
   const handles = new Map(handleRows.map((row) => [row.id, row.handle]));
 
-  const nicknames = new Map(profileRows.map((profile) => [profile.id, profile.username]));
+  const nicknames = new Map(profileRows.map((profile) => [profile.id, profile.nickname]));
   const nicknameOf = (id: string | null) =>
     id ? (nicknames.get(id) ?? "알 수 없음") : "알 수 없음";
   const labels = new Map(rulebookRows.map((rulebook) => [rulebook.id, rulebookLabel(rulebook)]));
@@ -78,7 +78,7 @@ export const loadSnapshot = cache(async () => {
     const sanction = sanctionRows.find((row) => row.userId === profile.id);
     return {
       id: profile.id,
-      nickname: profile.username,
+      nickname: profile.nickname,
       discordId: profile.discordId,
       discordHandle: handles.get(profile.id) ?? profile.username,
       joinedAt: profile.createdAt,

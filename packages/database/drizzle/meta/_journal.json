@@ -344,6 +344,13 @@
       "when": 1793400000000,
       "tag": "0048_game_cancelled",
       "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1793500000000,
+      "tag": "0049_member_nickname",
+      "breakpoints": true
     }
   ]
 }

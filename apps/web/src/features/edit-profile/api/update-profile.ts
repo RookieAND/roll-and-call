@@ -4,7 +4,12 @@ import { saveMemberProfile } from "@roll-and-call/database/profiles";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { normalizeKeywords, normalizeLinks, type ProfileLink } from "@/entities/profile";
+import {
+  nicknameTakenMessage,
+  normalizeKeywords,
+  normalizeLinks,
+  type ProfileLink,
+} from "@/entities/profile";
 import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, notMemberError } from "@/shared/server";
@@ -25,10 +30,10 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
   }
   const { server, user } = member;
 
-  const username = input.username.trim();
-  if (username.length < 1 || username.length > USERNAME_MAX_LENGTH) {
+  const nickname = input.username.trim();
+  if (nickname.length < 1 || nickname.length > USERNAME_MAX_LENGTH) {
     return {
-      error: `닉네임은 1~${USERNAME_MAX_LENGTH}자로 입력하세요.`,
+      error: `닉네임은 1~${USERNAME_MAX_LENGTH}자로 입력해 주세요.`,
       field: PROFILE_FIELD.username,
     };
   }
@@ -40,14 +45,17 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     };
   }
 
-  await saveMemberProfile({
+  const saved = await saveMemberProfile({
     serverId: server.id,
     userId: user.id,
-    username,
+    nickname,
     bio: bio || null,
     keywords: normalizeKeywords(input.keywords),
     links: normalizeLinks(input.links),
   });
+  if (!saved.ok) {
+    return { error: nicknameTakenMessage(server.name), field: PROFILE_FIELD.username };
+  }
 
   const myPagePath = serverPath({ slug: server.slug, path: "/me" });
   revalidatePath(myPagePath);

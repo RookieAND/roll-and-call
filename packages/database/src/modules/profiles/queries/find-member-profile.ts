@@ -15,7 +15,9 @@ export async function findMemberProfile({
     .select({
       id: profiles.id,
       discordId: profiles.discordId,
-      username: profiles.username,
+      username: serverMembers.nickname,
+      nicknameSuffixBase: serverMembers.nicknameSuffixBase,
+      rejoinedAt: serverMembers.rejoinedAt,
       avatarUrl: profiles.avatarUrl,
       createdAt: profiles.createdAt,
       bio: serverMembers.bio,

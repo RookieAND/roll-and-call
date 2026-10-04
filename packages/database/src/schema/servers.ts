@@ -8,6 +8,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
 
@@ -42,6 +43,10 @@ export const serverMembers = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    // 이 서버에서 보이는 닉네임. 활동 중인 멤버끼리 대소문자 없이 유일하다.
+    nickname: text("nickname").notNull(),
+    // 겹쳐서 숫자를 붙였을 때 붙이기 전 닉네임. 값이 있으면 숫자가 붙은 상태이고, 본인이나 운영진이 닉네임을 저장하면 비운다.
+    nicknameSuffixBase: text("nickname_suffix_base"),
     bio: text("bio"),
     keywords: text("keywords").array().notNull().default([]),
     availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
@@ -65,6 +70,9 @@ export const serverMembers = pgTable(
   (table) => [
     primaryKey({ columns: [table.serverId, table.userId] }),
     index("server_members_user_id_idx").on(table.userId),
+    uniqueIndex("server_members_active_nickname_uq")
+      .on(table.serverId, sql`lower(${table.nickname})`)
+      .where(sql`${table.deletedAt} is null`),
     check("server_members_featured_badges_limit", sql`cardinality(${table.featuredBadges}) <= 3`),
   ],
 ).enableRLS();

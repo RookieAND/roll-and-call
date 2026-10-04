@@ -1,6 +1,6 @@
 "use server";
 
-import { isUsernameTaken, requireStaff } from "@/shared/server";
+import { getCurrentServer, isNicknameTaken, requireStaff } from "@/shared/server";
 
 import {
   followsNicknameRule,
@@ -12,6 +12,7 @@ import {
 export async function checkNickname(userId: string, nickname: string) {
   await requireStaff();
   if (!followsNicknameRule(nickname)) return NICKNAME_RULE_ERROR;
-  if (await isUsernameTaken({ userId, username: nickname })) return NICKNAME_TAKEN_ERROR;
+  const server = await getCurrentServer();
+  if (await isNicknameTaken({ serverId: server.id, userId, nickname })) return NICKNAME_TAKEN_ERROR;
   return null;
 }

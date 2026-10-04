@@ -11,7 +11,7 @@ export {
   syncReviewForumPost,
 } from "@roll-and-call/review-forum";
 export { evaluateGameBadges, evaluateReviewBadges } from "@roll-and-call/database/badges";
-export { isUsernameTaken } from "@roll-and-call/database/profiles";
+export { isNicknameTaken } from "@roll-and-call/database/profiles";
 export { banGuildMember, sendDirectMessage, unbanGuildMember } from "@roll-and-call/discord";
 export {
   notifyGameCancelled,

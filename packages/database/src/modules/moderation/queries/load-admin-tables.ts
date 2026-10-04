@@ -30,6 +30,7 @@ export async function loadAdminTables(serverId: string) {
   const profileRows = await db
     .select({
       ...getTableColumns(profiles),
+      nickname: serverMembers.nickname,
       leftAt: serverMembers.deletedAt,
       rejoinedAt: serverMembers.rejoinedAt,
       bannedAt: serverMembers.bannedAt,
@@ -93,7 +94,7 @@ export async function loadAdminTables(serverId: string) {
   const staffRows = await db.select().from(staff).where(eq(staff.serverId, serverId));
   const memoRows = await db.select().from(staffMemos).where(eq(staffMemos.serverId, serverId));
   const auditRows = await db.select().from(auditLog).where(eq(auditLog.serverId, serverId));
-  // 디스코드 아이디는 profiles에 없다(username은 사용자가 고치는 닉네임). 디스코드 로그인은 full_name에 아이디를 넣는다.
+  // 디스코드 아이디는 profiles에 없다(username은 계정 이름이고 닉네임은 server_members.nickname). 디스코드 로그인은 full_name에 아이디를 넣는다.
   const handleRows = await db.execute<{ id: string; handle: string | null }>(
     sql`select u.id, u.raw_user_meta_data->>'full_name' as handle
         from auth.users u

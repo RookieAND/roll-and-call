@@ -1,7 +1,12 @@
 import { DiscordApiError } from "../api/discord-api-error";
 import { discordBotApi } from "../api/discord-bot-api";
 
-export type DiscordGuildMember = { user: { id: string }; joined_at: string; roles: string[] };
+export type DiscordGuildMember = {
+  user: { id: string; username: string; global_name: string | null };
+  nick?: string | null;
+  joined_at: string;
+  roles: string[];
+};
 
 // 디스코드가 "그 서버에 없는 사람"으로 답하는 코드. 10004(Unknown Guild, 봇이 그 서버에 없음)는 설정 문제라 오류로 올린다.
 const NOT_A_MEMBER_CODES: ReadonlySet<number> = new Set([10007, 10013]);

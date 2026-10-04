@@ -1,10 +1,8 @@
-import { listMemberServers } from "@roll-and-call/database/servers";
 import { Container, Text, VStack } from "@roll-and-call/ui";
 
 import { getCurrentServer, getCurrentSessionUser, getProfile } from "@/shared/server";
 import { AppBar, ServerLink } from "@/shared/ui";
 
-import { ProfileImportCallout } from "./profile-import-callout";
 import { WelcomeUsernameForm } from "./welcome-username-form";
 
 interface ServerWelcomeViewProps {
@@ -14,10 +12,7 @@ interface ServerWelcomeViewProps {
 // (member) 레이아웃을 지나 왔으니 로그인한 멤버다.
 export async function ServerWelcomeView({ next }: ServerWelcomeViewProps) {
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
-  const [profile, memberServers] = user
-    ? await Promise.all([getProfile(server.id, user.id), listMemberServers(user.id)])
-    : [undefined, []];
-  const otherServers = memberServers.filter((memberServer) => memberServer.id !== server.id);
+  const profile = user ? await getProfile(server.id, user.id) : undefined;
 
   return (
     <>
@@ -36,7 +31,6 @@ export async function ServerWelcomeView({ next }: ServerWelcomeViewProps) {
               에서 채워도 돼요.
             </Text>
           </VStack>
-          {otherServers.length > 0 && <ProfileImportCallout servers={otherServers} />}
           <WelcomeUsernameForm defaultUsername={profile?.username ?? ""} next={next} />
         </VStack>
       </Container>

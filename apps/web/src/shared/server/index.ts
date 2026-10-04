@@ -81,6 +81,7 @@ export { revalidateReviews } from "./revalidate-reviews";
 export { getCurrentMembership } from "./membership/get-current-membership";
 export { requireMembership } from "./membership/require-membership";
 export { getActingMember } from "./membership/get-acting-member";
+export { findGuildDisplayName } from "./membership/find-guild-display-name";
 export { isDiscordGuildMember } from "./membership/is-discord-guild-member";
 export { handleMemberLeft } from "./membership/handle-member-left";
 export { detectRosterDepartures } from "./membership/detect-roster-departures";
