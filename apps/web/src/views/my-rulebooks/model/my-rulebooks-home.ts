@@ -8,8 +8,8 @@ import { toOwnedCategory } from "./to-owned-category";
 import { toRequestRow } from "./to-request-row";
 import { toStatusRow } from "./to-status-row";
 
-const STATUS_ORDER = [CERT_STATE.rejected, CERT_STATE.revoked, CERT_STATE.pending] as const;
-const STATUS_WORD = { rejected: "반려", revoked: "취소", pending: "심사 중" } as const;
+const STATUS_ORDER = [CERT_STATE.rejected, CERT_STATE.pending] as const;
+const STATUS_WORD = { rejected: "반려", pending: "심사 중" } as const;
 
 export function myRulebooksHome(data: MyRulebooks, now: Date) {
   const { rulebooks, sets, sanction } = data;

@@ -1,7 +1,7 @@
 import { HStack, Radio, RadioGroup, TextInput } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
-import { OTHER_REASON, type RejectReason } from "../model/reject-reasons";
+import { OTHER_REASON, type RejectReason } from "@/shared/lib";
 
 const reasonRow = cva("min-h-11 border-(--rc-color-border-subtle) px-150", {
   variants: {

@@ -8,7 +8,6 @@ export const SET_STATUS = {
   rejected: "rejected",
   pending: "pending",
   partial: "partial",
-  revoked: "revoked",
   none: "none",
 } as const;
 export type SetStatus = (typeof SET_STATUS)[keyof typeof SET_STATUS];
@@ -27,7 +26,5 @@ export function setStatus(set: EditionSet): {
   const pending = withState(CERT_STATE.pending);
   if (pending) return result(SET_STATUS.pending, pending);
   if (missing.length < set.cores.length) return result(SET_STATUS.partial);
-  const revoked = withState(CERT_STATE.revoked);
-  if (revoked) return result(SET_STATUS.revoked, revoked);
   return result(SET_STATUS.none);
 }

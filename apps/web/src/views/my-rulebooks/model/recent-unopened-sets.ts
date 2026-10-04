@@ -6,7 +6,7 @@ export function recentUnopenedSets({ rulebooks, sets, recentRulebookIds }: MyRul
     const set = rulebook && setOf({ rulebook, sets });
     if (!set || set.opened) return [];
     const { status } = setStatus(set);
-    return status === SET_STATUS.none || status === SET_STATUS.revoked ? [set] : [];
+    return status === SET_STATUS.none ? [set] : [];
   });
   return [...new Map(found.map((set) => [set.key, set])).values()];
 }

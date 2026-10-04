@@ -12,14 +12,25 @@ import {
   VStack,
   toast,
 } from "@roll-and-call/ui";
-import { isUndefined } from "es-toolkit";
+import { isUndefined, uniq } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
-import { conflictToastText, useActionSubmit } from "@/shared/lib";
+import {
+  conflictToastText,
+  EBOOK_REJECT_REASONS,
+  OTHER_REASON,
+  REJECT_REASONS,
+  useActionSubmit,
+} from "@/shared/lib";
 import type { RevokeTarget } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  NotificationPreview,
+  ReasonChips,
+} from "@/shared/ui";
 
 import { revokeUserCertification } from "../api/revoke-user-certification";
 import { RevokeGameList } from "./revoke-game-list";
@@ -34,16 +45,20 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
   const router = useRouter();
   const backRef = useRef<HTMLButtonElement>(null);
   const { pending, networkError, submit } = useActionSubmit(revokeUserCertification);
+  const [chip, setChip] = useState<string | null>(null);
   const [userReason, setUserReason] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
+  const reasons = target.ebook ? EBOOK_REJECT_REASONS : REJECT_REASONS;
+  const other = chip === OTHER_REASON;
   const gameCount = target.games.length;
-  const canRevoke = Boolean(userReason.trim()) && !pending;
+  const canRevoke = Boolean(chip && userReason.trim()) && !pending;
   const confirmLabel = gameCount > 0 ? `반려로 돌리고 구인 ${gameCount}개 취소` : "반려로 돌리기";
 
   const revoke = async () => {
     const result = await submit({
       userId: target.userId,
       rulebookId: target.rulebookId,
+      reasonTag: other ? null : chip,
       userReason,
       staffMemo,
     });
@@ -57,6 +72,11 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
       return;
     }
     toast.success(`${target.nickname}님의 ${target.rulebook} 인증을 반려로 돌렸습니다`);
+  };
+
+  const chooseReason = (next: string) => {
+    setChip(next);
+    setUserReason(reasons.find((reason) => reason.name === next)?.message ?? "");
   };
 
   return (
@@ -73,20 +93,33 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
           <VStack gap="175">
             {networkError ? <ActionNetworkError /> : null}
             <VStack gap="150">
-              <Field.Root
-                label="사용자에게 보이는 사유"
-                htmlFor="revoke-user-reason"
-                required
-                description="당사자의 신청 상세에 그대로 보입니다."
-              >
-                <Textarea
-                  id="revoke-user-reason"
-                  rows={2}
-                  value={userReason}
-                  disabled={pending}
-                  onChange={(event) => setUserReason(event.target.value)}
-                />
-              </Field.Root>
+              <ReasonChips
+                label="반려 사유"
+                reasons={uniq([...reasons.map((reason) => reason.name), OTHER_REASON])}
+                value={chip}
+                otherText={other ? userReason : ""}
+                onValueChange={chooseReason}
+                onOtherTextChange={setUserReason}
+                otherLabel="사용자에게 보이는 사유"
+                otherPlaceholder="사용자에게 보이는 사유를 직접 적어 주세요"
+                disabled={pending}
+              />
+              {chip && !other ? (
+                <Field.Root
+                  label="사용자에게 보이는 사유"
+                  htmlFor="revoke-user-reason"
+                  required
+                  description="당사자의 신청 상세에 그대로 보입니다."
+                >
+                  <Textarea
+                    id="revoke-user-reason"
+                    rows={2}
+                    value={userReason}
+                    disabled={pending}
+                    onChange={(event) => setUserReason(event.target.value)}
+                  />
+                </Field.Root>
+              ) : null}
               <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="revoke-staff-memo">
                 <TextInput
                   id="revoke-staff-memo"

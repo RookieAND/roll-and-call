@@ -15,6 +15,8 @@ import {
 interface RevokeUserCertificationInput {
   userId: string;
   rulebookId: string;
+  // 고른 반려 사유 이름. 기타면 null이고 userReason이 사유다.
+  reasonTag: string | null;
   userReason: string;
   staffMemo: string;
 }
@@ -31,6 +33,7 @@ export async function revokeUserCertification(input: RevokeUserCertificationInpu
     userId: input.userId,
     rulebookId: input.rulebookId,
     actor: staff,
+    reasonTag: input.reasonTag,
     userReason,
     staffMemo: input.staffMemo.trim(),
   });

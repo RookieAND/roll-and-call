@@ -25,6 +25,14 @@ export async function getRevokeTarget({
     nickname: user.nickname,
     rulebookId,
     rulebook: certification.rulebook,
+    // 전자책으로 승인된 인증이면 전자책 반려 사유를 고른다. 직접 준 인증은 실물 목록이다.
+    ebook: db.certApplications.some(
+      (application) =>
+        application.userId === userId &&
+        application.rulebookId === rulebookId &&
+        application.status === "approved" &&
+        application.format === "ebook",
+    ),
     games: targets.map(({ game, confirmedCount }) => ({
       sessionId: game.id,
       title: game.title,

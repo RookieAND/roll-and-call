@@ -3,7 +3,7 @@ import { and, desc, eq, isNotNull, isNull, ne, sql } from "drizzle-orm";
 import { db } from "#/client";
 import { certApplications, certifications } from "#/schema";
 
-// 반려됐거나 인증이 취소된 책의 기록을 사용자 앱에서 숨긴다. 앞선 기록이 남으면 다시 그 상태로 보이므로
+// 반려된(반려로 돌린 인증 포함) 책의 기록을 사용자 앱에서 숨긴다. 앞선 기록이 남으면 다시 그 상태로 보이므로
 // 그 책의 신청 기록과 취소된 인증을 모두 숨기고, 어드민 이력·중복 주문번호 비교를 위해 행은 남긴다. 증빙 사진 칸은 비운다.
 // 살아 있는 인증이나 심사 중인 신청이 있으면 막는다(null). 비우기 전 사진 키를 돌려준다.
 export async function discardRulebookRecord({

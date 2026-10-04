@@ -26,7 +26,7 @@ export type RevokeResult =
   | { ok: true; nickname: string; rulebookLabel: string; cancelledGames: Game[] }
   | { ok: false; conflict: ModerationConflict | null };
 
-// 책 한 권의 인증을 지우고, 마지막 승인 신청을 반려로 바꾼다. 신청 없이 직접 준 인증이면 반려 기록을 새로 만든다.
+// 책 한 권의 인증에 취소 시각·사유를 채워 남기고(다시 인증하면 비운다), 마지막 승인 신청을 반려로 바꾼다. 신청 없이 직접 준 인증이면 반려 기록을 새로 만든다.
 // 증빙 이미지(사진·구매 캡처·영수증) URL을 비우면 어느 행도 가리키지 않게 되어 하루 한 번 도는 정리 작업(0041)이 파일을 지운다.
 // 그 판본으로 연 시작 전 구인은 운영진 취소로 닫는다(알림은 cancelGame). 운영진 채널 글은 부르는 쪽이 커밋 뒤에 올린다.
 export async function revokeCertifications({
@@ -34,6 +34,7 @@ export async function revokeCertifications({
   userId,
   rulebookId,
   actor,
+  reasonTag,
   userReason,
   staffMemo,
 }: {
@@ -41,6 +42,8 @@ export async function revokeCertifications({
   userId: string;
   rulebookId: string;
   actor: Actor;
+  // 심사 반려와 같은 사유 목록에서 고른 이름. 기타면 null이다.
+  reasonTag: string | null;
   userReason: string;
   staffMemo: string;
 }): Promise<RevokeResult> {
@@ -56,7 +59,8 @@ export async function revokeCertifications({
   );
   return db.transaction(async (tx) => {
     const [revoked] = await tx
-      .delete(certifications)
+      .update(certifications)
+      .set({ revokedAt: sql`now()`, revokedBy: actor.id, revokeReason: userReason })
       .where(and(thisCertification, isNull(certifications.revokedAt)))
       .returning({ rulebookId: certifications.rulebookId });
     if (!revoked) {
@@ -80,6 +84,7 @@ export async function revokeCertifications({
 
     const rejection = {
       status: "rejected" as const,
+      rejectTag: reasonTag,
       rejectReason: userReason,
       flaggedShots: [],
       photoUrls: {},
@@ -162,6 +167,7 @@ export async function revokeCertifications({
         target: `${names.nickname} · ${label}`,
         targetUserId: userId,
         reason: userReason,
+        reasonTag: reasonTag ?? undefined,
         staffMemo: staffMemo || undefined,
         before: { label: "인증됨" },
         after: { label: "반려됨" },

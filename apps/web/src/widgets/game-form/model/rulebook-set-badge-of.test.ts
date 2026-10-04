@@ -45,7 +45,6 @@ describe("rulebookSetBadgeOf", () => {
       colorPalette: "gray",
     });
     expect(rulebookSetBadgeOf(setWith({ state: CERT_STATE.rejected })).label).toBe("반려됨");
-    expect(rulebookSetBadgeOf(setWith({ state: CERT_STATE.revoked })).label).toBe("미인증");
     expect(rulebookSetBadgeOf(setWith({})).label).toBe("미인증");
   });
 });

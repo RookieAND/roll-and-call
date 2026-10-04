@@ -55,12 +55,6 @@ export function certOption({
       `${toKst(rulebook.stateAt).format("MM.DD")} 반려 · ${PICK_AGAIN}`,
     );
   }
-  if (rulebook.state === CERT_STATE.revoked && rulebook.stateAt) {
-    return result(
-      CERT_OPTION.pick,
-      `${toKst(rulebook.stateAt).format("MM.DD")} 인증 취소 · ${PICK_AGAIN}`,
-    );
-  }
   if (rulebook.kind === RULEBOOK_KIND.handbook) {
     return result(CERT_OPTION.pick, "GM 자격에는 포함되지 않습니다");
   }

@@ -11,7 +11,8 @@ interface ApplicationRecord {
   processedAt: Date | null;
 }
 
-// 룰북 하나에 대한 내 상태. 살아 있는 인증이 가장 앞서고, 그다음은 마지막 신청, 인증 취소는 그 뒤에 새 신청이 없을 때만.
+// 룰북 하나에 대한 내 상태. 살아 있는 인증이 가장 앞서고, 그다음은 마지막 신청이다.
+// 운영진이 반려로 돌린 인증도 반려다. 보통은 마지막 신청이 반려로 바뀌어 있고, 신청 기록이 맞지 않는 옛 취소 기록만 취소 시각을 쓴다.
 export function deriveCertState({
   certification,
   latestApplication,
@@ -22,18 +23,15 @@ export function deriveCertState({
   if (certification && !certification.revokedAt) {
     return { state: CERT_STATE.certified, at: certification.approvedAt };
   }
-  const revokedAt = certification?.revokedAt ?? null;
-  const applicationIsNewer =
-    latestApplication && (!revokedAt || latestApplication.createdAt > revokedAt);
-  if (applicationIsNewer && latestApplication.status === "pending") {
+  if (latestApplication?.status === "pending") {
     return { state: CERT_STATE.pending, at: latestApplication.createdAt };
   }
-  if (applicationIsNewer && latestApplication.status === "rejected") {
+  if (latestApplication?.status === "rejected") {
     return {
       state: CERT_STATE.rejected,
       at: latestApplication.processedAt ?? latestApplication.createdAt,
     };
   }
-  if (revokedAt) return { state: CERT_STATE.revoked, at: revokedAt };
+  if (certification?.revokedAt) return { state: CERT_STATE.rejected, at: certification.revokedAt };
   return null;
 }

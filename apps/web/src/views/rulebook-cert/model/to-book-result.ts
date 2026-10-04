@@ -31,13 +31,11 @@ const BADGE: Record<string, NonNullable<BookResult["badge"]>> = {
   [CERT_STATE.pending]: { label: "심사 중", palette: "gray" },
   [CERT_STATE.certified]: { label: "승인됨", palette: "success" },
   [CERT_STATE.rejected]: { label: "반려됨", palette: "danger" },
-  [CERT_STATE.revoked]: { label: "취소됨", palette: "danger" },
 };
 
 const DECIDED_LABEL: Record<string, string> = {
   [CERT_STATE.certified]: "승인",
   [CERT_STATE.rejected]: "반려",
-  [CERT_STATE.revoked]: "인증 취소",
 };
 
 export function toBookResult({
@@ -63,7 +61,6 @@ export function toBookResult({
       : []),
   ];
   const rejected = state === CERT_STATE.rejected;
-  const revoked = state === CERT_STATE.revoked;
   const photosKept = rejected || state === CERT_STATE.pending || state === CERT_STATE.certified;
   const purged = !direct && Boolean(application?.filesPurgedAt);
   const thumbs =
@@ -80,8 +77,7 @@ export function toBookResult({
     thumbs: kept.length > 0 ? thumbs : [],
     deleted: purged || (rejected && thumbs.length > 0 && kept.length === 0),
     memo: rejected && memo !== rejectionSummary(application) ? memo : null,
-    retryHref:
-      rejected || revoked ? certApplyHref({ rulebookIds: [rulebook.id], step: "photos" }) : null,
-    discardable: rejected || revoked,
+    retryHref: rejected ? certApplyHref({ rulebookIds: [rulebook.id], step: "photos" }) : null,
+    discardable: rejected,
   };
 }

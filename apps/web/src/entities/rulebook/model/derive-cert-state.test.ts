@@ -15,7 +15,7 @@ describe("deriveCertState", () => {
     ).toEqual({ state: CERT_STATE.certified, at: at(2) });
   });
 
-  it("인증 취소 뒤에 낸 신청이 있으면 그 신청 상태다", () => {
+  it("반려로 돌린 인증은 반려다. 그 뒤에 낸 신청이 있으면 그 신청 상태다", () => {
     expect(
       deriveCertState({
         certification: { approvedAt: at(2), revokedAt: at(4) },
@@ -25,9 +25,15 @@ describe("deriveCertState", () => {
     expect(
       deriveCertState({
         certification: { approvedAt: at(2), revokedAt: at(4) },
+        latestApplication: { status: "rejected", createdAt: at(1), processedAt: at(4) },
+      }),
+    ).toEqual({ state: CERT_STATE.rejected, at: at(4) });
+    expect(
+      deriveCertState({
+        certification: { approvedAt: at(2), revokedAt: at(4) },
         latestApplication: { status: "approved", createdAt: at(1), processedAt: at(2) },
-      })?.state,
-    ).toBe(CERT_STATE.revoked);
+      }),
+    ).toEqual({ state: CERT_STATE.rejected, at: at(4) });
   });
 
   it("반려는 처리 시각, 기록이 없으면 null", () => {

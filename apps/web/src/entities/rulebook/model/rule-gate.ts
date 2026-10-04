@@ -62,7 +62,6 @@ export function ruleGate({
         href: "/me/rulebooks",
       });
     case SET_STATUS.rejected:
-    case SET_STATUS.revoked:
       return blocked(["인증이 완료되지 않았습니다.", "다시 신청해 주세요."], {
         label: "다시 신청하기",
         href: `/me/rulebooks/${book!.id}`,

@@ -95,7 +95,7 @@ export const certifications = pgTable(
       .references(() => rulebooks.id, { onDelete: "cascade" }),
     approvedBy: uuid("approved_by").references(() => profiles.id, { onDelete: "set null" }),
     approvedAt: timestamp("approved_at", { withTimezone: true }).notNull().defaultNow(),
-    // 운영진이 취소하면 지우지 않고 남긴다. 사용자 화면의 "인증 취소됨"과 사유가 여기서 나온다.
+    // 운영진이 반려로 돌리면 지우지 않고 남긴다. 사용자 화면에는 반려로 보이고, 다시 인증하면 비운다.
     revokedAt: timestamp("revoked_at", { withTimezone: true }),
     revokedBy: uuid("revoked_by").references(() => profiles.id, { onDelete: "set null" }),
     revokeReason: text("revoke_reason"),

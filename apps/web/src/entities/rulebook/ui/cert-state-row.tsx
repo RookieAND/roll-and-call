@@ -46,7 +46,6 @@ export function CertStateRow({
 }: CertStateRowProps) {
   const { label: defaultLabel, foreground } = CERT_STATE_META[state];
   const label = statusLabel ?? defaultLabel;
-  const titleForeground = state === CERT_STATE.revoked ? "hint" : "normal";
   const metaForeground = state === CERT_STATE.rejected ? "warning" : "hint";
   const status = (
     <Text typography="body4" weight="bold" foreground={foreground} className="flex-none">
@@ -59,7 +58,7 @@ export function CertStateRow({
       <CertStateIcon state={state} size={ICON_SIZE[size]} />
       <VStack gap="025" className="min-w-0 flex-1">
         <HStack align="baseline" gap="075">
-          <Text typography="body2" weight="bold" foreground={titleForeground} truncate>
+          <Text typography="body2" weight="bold" foreground="normal" truncate>
             {title}
           </Text>
           {statusPlacement === "inline" && status}

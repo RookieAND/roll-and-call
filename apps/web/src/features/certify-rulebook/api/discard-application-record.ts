@@ -8,8 +8,7 @@ import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, removeUnusedCertPhotos, notMemberError } from "@/shared/server";
 
-const NOT_DISCARDABLE =
-  "반려되거나 인증이 취소된 책만 기록을 지울 수 있습니다. 화면을 새로 고쳐 주세요.";
+const NOT_DISCARDABLE = "반려된 책만 기록을 지울 수 있습니다. 화면을 새로 고쳐 주세요.";
 
 // stay면 알림 탭에 남는다(할 일 카드). 그 밖에서는 내 룰북으로 간다.
 export async function discardApplicationRecord({

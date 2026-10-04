@@ -1,6 +1,7 @@
 import { Field, Text, Textarea, VStack } from "@roll-and-call/ui";
 
-import { EBOOK_REJECT_REASONS, OTHER_REASON, REJECT_REASONS } from "../model/reject-reasons";
+import { EBOOK_REJECT_REASONS, OTHER_REASON, REJECT_REASONS } from "@/shared/lib";
+
 import { ReasonRadio } from "./reason-radio";
 
 interface RejectPanelProps {

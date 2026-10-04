@@ -3,6 +3,7 @@ import type { CertApplication, RulebookRecords } from "@/shared/server";
 import { CERT_STATE, type CertState } from "./cert-state";
 import { deriveCertState } from "./derive-cert-state";
 import { editionSets } from "./edition-sets";
+import { rejectionSummary } from "./rejection-summary";
 import type { RulebookKind } from "./rulebook-kind";
 import { rulebookLabel } from "./rulebook-label";
 
@@ -21,7 +22,8 @@ export interface MyRulebook {
   state: CertState | null;
   stateAt: Date | null;
   latestApplication: CertApplication | null;
-  revokeReason: string | null;
+  // 반려 한 줄 요약. 반려로 돌린 옛 취소 기록은 신청 대신 인증 행의 사유를 쓴다.
+  rejection: string | null;
   unlockedBy: MyRulebook | null;
 }
 
@@ -46,7 +48,14 @@ export function toMyRulebooks(records: RulebookRecords) {
       state: derived?.state ?? null,
       stateAt: derived?.at ?? null,
       latestApplication,
-      revokeReason: certification?.revokeReason ?? null,
+      rejection:
+        derived?.state === CERT_STATE.rejected
+          ? rejectionSummary(
+              latestApplication?.status === "rejected"
+                ? latestApplication
+                : { rejectReason: certification?.revokeReason },
+            )
+          : null,
       unlockedBy: null,
     };
   });

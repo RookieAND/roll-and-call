@@ -8,7 +8,7 @@ import { RotateCcw } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState, type ReactNode } from "react";
 
-import { useActionSubmit } from "@/shared/lib";
+import { EBOOK_REJECT_REASONS, REJECT_REASONS, useActionSubmit } from "@/shared/lib";
 import type { CertDecisionResult, CertFormat, ShotKey } from "@/shared/server";
 import {
   ActionNetworkError,
@@ -23,7 +23,6 @@ import { rejectCert } from "../api/reject-cert";
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
 import { decisionToastText } from "../model/decision-toast-text";
 import { rejectMessage } from "../model/reject-message";
-import { EBOOK_REJECT_REASONS, REJECT_REASONS } from "../model/reject-reasons";
 import { EBOOK_SHOTS, SHOTS } from "../model/shots";
 import { DecisionFooter } from "./decision-footer";
 import { FlaggedStatus } from "./flagged-status";

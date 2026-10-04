@@ -1,5 +1,6 @@
-export const OTHER_REASON = "기타";
+import { OTHER_REASON } from "./user-action-reason";
 
+// 인증 심사 반려와 반려로 돌리기가 함께 쓰는 사유 목록.
 export interface RejectReason {
   // 사유 이름은 사유 태그다. 사용자 신청 화면의 반려 요약과 알림에도 보인다.
   name: string;

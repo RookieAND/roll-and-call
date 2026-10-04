@@ -57,7 +57,7 @@ function rulebook(latestApplication: CertApplication): MyRulebook {
     state: CERT_STATE.certified,
     stateAt: new Date("2026-09-01T00:00:00Z"),
     latestApplication,
-    revokeReason: null,
+    rejection: null,
     unlockedBy: null,
   };
 }

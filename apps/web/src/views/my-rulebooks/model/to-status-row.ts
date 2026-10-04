@@ -1,9 +1,4 @@
-import {
-  CERT_STATE,
-  rejectionSummary,
-  RULEBOOK_KIND_GROUP,
-  type MyRulebook,
-} from "@/entities/rulebook";
+import { CERT_STATE, RULEBOOK_KIND_GROUP, type MyRulebook } from "@/entities/rulebook";
 import { toKst } from "@/shared/lib";
 
 import { isFresh } from "./is-fresh";
@@ -20,16 +15,13 @@ export function toStatusRow({ rulebook, now }: { rulebook: MyRulebook; now: Date
       badge: { label: "심사 중", palette: "gray" },
     };
   }
-  const rejected = rulebook.state === CERT_STATE.rejected;
   return {
     ...base,
     icon: "alert",
     tone: "danger",
-    sub: rejected
-      ? rejectionSummary(rulebook.latestApplication)
-      : (rulebook.revokeReason ?? "운영진이 인증을 취소했습니다"),
+    sub: rulebook.rejection ?? "",
     subTone: "danger",
-    badge: { label: rejected ? "반려됨" : "취소됨", palette: "danger" },
+    badge: { label: "반려됨", palette: "danger" },
     fresh: isFresh(rulebook.stateAt, now),
   };
 }

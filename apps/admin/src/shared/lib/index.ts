@@ -51,6 +51,7 @@ export {
   type SortValue,
   type TableSort,
 } from "./table-sort";
+export { EBOOK_REJECT_REASONS, REJECT_REASONS, type RejectReason } from "./cert-reject-reasons";
 export { chosenReason } from "./chosen-reason";
 export { OTHER_REASON, USER_ACTION_REASON, type UserActionReason } from "./user-action-reason";
 export { REVIEW_LIST_PATH, reviewListHref } from "./review-list-href";

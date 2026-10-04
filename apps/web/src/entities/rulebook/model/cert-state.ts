@@ -3,7 +3,6 @@ export const CERT_STATE = {
   certified: "certified",
   pending: "pending",
   rejected: "rejected",
-  revoked: "revoked",
   requested: "requested",
 } as const;
 

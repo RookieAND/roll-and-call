@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+import { OTHER_REASON, REJECT_REASONS } from "@/shared/lib";
+
 import { rejectMessage } from "./reject-message";
-import { OTHER_REASON, REJECT_REASONS } from "./reject-reasons";
 
 const prefill = (name: string) =>
   rejectMessage({
