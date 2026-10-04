@@ -9,7 +9,7 @@ import { recordAudit } from "./record-audit";
 
 export type CancelNoShowResult =
   | { ok: true }
-  | { ok: false; conflict: { by: string; at: Date; reason: string } };
+  | { ok: false; conflict: { by: string; byId: string | null; at: Date; reason: string } };
 
 // 이미 다른 운영진이 취소했으면 아무것도 바꾸지 않고 충돌을 알린다.
 export async function cancelNoShow({
@@ -48,6 +48,7 @@ export async function cancelNoShow({
           at: participants.absenceCancelledAt,
           reason: participants.absenceCancelReason,
           by: memberNicknameSql(serverId),
+          byId: participants.absenceCancelledBy,
         })
         .from(participants)
         .leftJoin(profiles, eq(profiles.id, participants.absenceCancelledBy))
@@ -55,7 +56,12 @@ export async function cancelNoShow({
       if (!current) throw new Error("불참 기록을 찾을 수 없습니다");
       return {
         ok: false,
-        conflict: { by: current.by ?? "알 수 없음", at: current.at!, reason: current.reason ?? "" },
+        conflict: {
+          by: current.by ?? "알 수 없음",
+          byId: current.byId,
+          at: current.at!,
+          reason: current.reason ?? "",
+        },
       };
     }
     const [names] = await tx

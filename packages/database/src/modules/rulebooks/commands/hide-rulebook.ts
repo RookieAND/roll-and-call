@@ -33,7 +33,11 @@ export async function hideRulebook({
       .returning({ id: rulebooks.id });
     if (hidden.length === 0) {
       const [latest] = await tx
-        .select({ at: auditLog.createdAt, by: memberNicknameSql(serverId) })
+        .select({
+          at: auditLog.createdAt,
+          by: memberNicknameSql(serverId),
+          byId: auditLog.actorId,
+        })
         .from(auditLog)
         .leftJoin(profiles, eq(profiles.id, auditLog.actorId))
         .where(
@@ -48,7 +52,12 @@ export async function hideRulebook({
       return {
         ok: false,
         conflict: latest
-          ? { action: "룰북 숨김", by: latest.by ?? "알 수 없음", at: latest.at }
+          ? {
+              action: "룰북 숨김",
+              by: latest.by ?? "알 수 없음",
+              byId: latest.byId,
+              at: latest.at,
+            }
           : null,
       };
     }

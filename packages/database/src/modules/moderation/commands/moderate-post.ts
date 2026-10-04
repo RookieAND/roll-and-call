@@ -23,7 +23,10 @@ export interface PostModeration {
 // 취소한 구인은 부르는 쪽이 구인 스레드에 알리도록 행을 돌려준다.
 export type PostModerationResult =
   | { ok: true; cancelledGame: Game | null }
-  | { ok: false; conflict: { action: AuditAction; by: string; at: Date } | null };
+  | {
+      ok: false;
+      conflict: { action: AuditAction; by: string; byId: string | null; at: Date } | null;
+    };
 
 const AUDIT_ACTION = {
   hide: "구인 숨김",
@@ -82,6 +85,7 @@ export async function moderatePost({
           action: auditLog.action,
           at: auditLog.createdAt,
           by: memberNicknameSql(serverId),
+          byId: auditLog.actorId,
         })
         .from(auditLog)
         .leftJoin(profiles, eq(profiles.id, auditLog.actorId))
@@ -97,7 +101,12 @@ export async function moderatePost({
       return {
         ok: false,
         conflict: latest
-          ? { action: latest.action as AuditAction, by: latest.by ?? "알 수 없음", at: latest.at }
+          ? {
+              action: latest.action as AuditAction,
+              by: latest.by ?? "알 수 없음",
+              byId: latest.byId,
+              at: latest.at,
+            }
           : null,
       };
     }

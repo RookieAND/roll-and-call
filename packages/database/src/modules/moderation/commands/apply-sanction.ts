@@ -18,7 +18,9 @@ export interface SanctionInput {
   ongoing: OngoingChoice[];
 }
 
-export type SanctionResult = { ok: true } | { ok: false; conflict: Sanction };
+export type SanctionResult =
+  | { ok: true }
+  | { ok: false; conflict: Sanction & { byId: string | null } };
 
 // 그사이 다른 운영진이 먼저 제재했다면 아무것도 바꾸지 않는다.
 export async function applySanction({
@@ -64,6 +66,7 @@ export async function applySanction({
           at: sanctions.createdAt,
           reason: sanctions.reason,
           by: memberNicknameSql(serverId),
+          byId: sanctions.createdBy,
         })
         .from(sanctions)
         .leftJoin(profiles, eq(profiles.id, sanctions.createdBy))

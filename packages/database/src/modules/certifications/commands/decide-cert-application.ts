@@ -21,7 +21,15 @@ export type CertDecision =
 
 export type CertDecisionResult =
   | { ok: true }
-  | { ok: false; conflict: { status: "approved" | "rejected" | "withdrawn"; by: string; at: Date } }
+  | {
+      ok: false;
+      conflict: {
+        status: "approved" | "rejected" | "withdrawn";
+        by: string;
+        byId: string | null;
+        at: Date;
+      };
+    }
   | { ok: false; blocked: string };
 
 // 이미 다른 운영진이 처리했으면 아무것도 바꾸지 않고 충돌을 알린다.
@@ -64,6 +72,7 @@ export async function decideCertApplication({
           status: certApplications.status,
           at: certApplications.processedAt,
           by: memberNicknameSql(serverId),
+          byId: certApplications.processedBy,
         })
         .from(certApplications)
         .leftJoin(profiles, eq(profiles.id, certApplications.processedBy))
@@ -74,6 +83,7 @@ export async function decideCertApplication({
         conflict: {
           status: current.status === "pending" ? "rejected" : current.status,
           by: current.by ?? "알 수 없음",
+          byId: current.byId,
           at: current.at ?? new Date(),
         },
       };

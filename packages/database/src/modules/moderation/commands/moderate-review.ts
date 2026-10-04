@@ -25,7 +25,11 @@ export type ReviewModerationResult =
       gone: true;
       deleted: { author: string; at: Date; closedReportCount: number } | null;
     }
-  | { ok: false; gone: false; conflict: { action: AuditAction; by: string; at: Date } | null };
+  | {
+      ok: false;
+      gone: false;
+      conflict: { action: AuditAction; by: string; byId: string | null; at: Date } | null;
+    };
 
 const AUDIT_ACTION = {
   hide: "후기 숨김",
@@ -111,6 +115,7 @@ export async function moderateReview({
           action: auditLog.action,
           at: auditLog.createdAt,
           by: memberNicknameSql(serverId),
+          byId: auditLog.actorId,
         })
         .from(auditLog)
         .leftJoin(profiles, eq(profiles.id, auditLog.actorId))
@@ -132,6 +137,7 @@ export async function moderateReview({
         conflict: {
           action: latest.action as AuditAction,
           by: latest.by ?? "알 수 없음",
+          byId: latest.byId,
           at: latest.at,
         },
       };

@@ -1,4 +1,5 @@
 export { ActionCard } from "./action-card";
+export { ActionNetworkError } from "./action-network-error";
 export { AdminHeader } from "./admin-header";
 export { BotBanner } from "./bot-banner";
 export { BrandMark } from "./brand-mark";

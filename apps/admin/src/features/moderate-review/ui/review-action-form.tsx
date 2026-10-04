@@ -1,12 +1,12 @@
 "use client";
 
 import { Button, Callout, Dialog, HStack, Text, VStack, toast } from "@roll-and-call/ui";
-import { isNull } from "es-toolkit";
+import { isNull, isUndefined } from "es-toolkit";
 import { Check, Eye, RotateCcw, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useTransition, type RefObject } from "react";
+import { useState, type RefObject } from "react";
 
-import { REVIEW_REASON, type ReviewReason } from "@/shared/lib";
+import { REVIEW_REASON, useActionSubmit, type ReviewReason } from "@/shared/lib";
 import type { ReviewDetail, ReviewModerationResult } from "@/shared/server";
 import { ModalServerLabel, useServerPath } from "@/shared/ui";
 
@@ -58,13 +58,12 @@ export function ReviewActionForm({
 }: ReviewActionFormProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
-  const [pending, startTransition] = useTransition();
+  const { pending, networkError, submit } = useActionSubmit(submitReviewModeration);
   const needsReason = REASON_ACTIONS.includes(action);
   const [reason, setReason] = useState<ReviewReason | null>(
     needsReason ? ((review.topReasonKey as ReviewReason | undefined) ?? null) : null,
   );
   const [staffMemo, setStaffMemo] = useState("");
-  const [networkError, setNetworkError] = useState(false);
 
   const copy = ACTION_COPY[action];
   const author = review.author.nickname;
@@ -96,32 +95,25 @@ export function ReviewActionForm({
     router.refresh();
   };
 
-  const confirm = () =>
-    startTransition(async () => {
-      setNetworkError(false);
-      let result: ReviewModerationResult;
-      try {
-        result = await submitReviewModeration(review.id, { action, reason, staffMemo });
-      } catch {
-        setNetworkError(true);
-        return;
-      }
-      if (!result.ok) {
-        onFailure(result);
-        return;
-      }
-      const message = nextHref
-        ? `${copy.successMessage(author)}. 다음 신고로 이동했습니다`
-        : copy.successMessage(author);
-      if (action === REVIEW_ACTION.hide) {
-        toast.success(message, { action: { label: "되돌리기", onClick: () => void undoHide() } });
-      } else {
-        toast.success(message);
-      }
-      if (nextHref) router.push(toServerPath(nextHref));
-      else if (removing) router.push(toServerPath(`/posts/${review.session.id}?tab=reviews`));
-      else onDone();
-    });
+  const confirm = async () => {
+    const result = await submit(review.id, { action, reason, staffMemo });
+    if (isUndefined(result)) return;
+    if (!result.ok) {
+      onFailure(result);
+      return;
+    }
+    const message = nextHref
+      ? `${copy.successMessage(author)}. 다음 신고로 이동했습니다`
+      : copy.successMessage(author);
+    if (action === REVIEW_ACTION.hide) {
+      toast.success(message, { action: { label: "되돌리기", onClick: () => void undoHide() } });
+    } else {
+      toast.success(message);
+    }
+    if (nextHref) router.push(toServerPath(nextHref));
+    else if (removing) router.push(toServerPath(`/posts/${review.session.id}?tab=reviews`));
+    else onDone();
+  };
 
   return (
     <>
@@ -177,7 +169,7 @@ export function ReviewActionForm({
           colorPalette={confirmPalette}
           disabled={!canConfirm}
           loading={pending}
-          onClick={confirm}
+          onClick={() => void confirm()}
         >
           <ConfirmIcon size={16} aria-hidden />
           {confirmLabel}

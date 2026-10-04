@@ -61,6 +61,7 @@ export async function claimRulebookRequest({
       outcome: rulebookRequests.outcome,
       at: rulebookRequests.processedAt,
       by: memberNicknameSql(serverId),
+      byId: rulebookRequests.processedBy,
     })
     .from(rulebookRequests)
     .leftJoin(profiles, eq(profiles.id, rulebookRequests.processedBy))
@@ -73,6 +74,7 @@ export async function claimRulebookRequest({
         ? {
             action: OUTCOME_ACTION[current.outcome],
             by: current.by ?? "알 수 없음",
+            byId: current.byId,
             at: current.at,
           }
         : null,
