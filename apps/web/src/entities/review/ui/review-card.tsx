@@ -8,8 +8,8 @@ import { ReviewPhotos } from "./review-photos";
 import { SpoilerCover } from "./spoiler-cover";
 
 interface ReviewCardProps {
-  title: string;
-  meta: string;
+  title: ReactNode;
+  meta: ReactNode;
   body: string;
   photoUrls: string[];
   spoiler: boolean;

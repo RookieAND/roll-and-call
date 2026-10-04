@@ -42,7 +42,7 @@ export function DeleteReviewDialog({
       pending={pending}
       onConfirm={remove}
     >
-      <Callout.Root colorPalette="danger">
+      <Callout.Root colorPalette="danger" className="break-keep">
         <Callout.Description>
           같은 세션에 다시 쓸 수 없습니다.
           <br />

@@ -66,6 +66,8 @@ export function ReviewPhotoTile({
   return (
     <div
       draggable
+      data-photo-index={index}
+      onContextMenu={(event) => event.preventDefault()}
       aria-label={`${label} · 끌어서 순서 변경`}
       onDragStart={onDragStart}
       onDragOver={(event) => event.preventDefault()}
@@ -75,11 +77,16 @@ export function ReviewPhotoTile({
       }}
       onDragEnd={onDragEnd}
       className={cn(
-        "relative aspect-square cursor-grab overflow-hidden rounded-400 bg-gray-100",
+        "relative aspect-square cursor-grab overflow-hidden rounded-400 bg-gray-100 select-none [-webkit-touch-callout:none]",
         dragging && "opacity-55",
       )}
     >
-      <img src={item.url!} alt={label} className="size-full object-cover" />
+      <img
+        src={item.url!}
+        alt={label}
+        draggable={false}
+        className="pointer-events-none size-full object-cover"
+      />
       <PhotoRemoveButton label={label} onRemove={onRemove} />
     </div>
   );

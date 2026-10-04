@@ -14,7 +14,7 @@ export function ReviewsPage({ title, back, children }: ReviewsPageProps) {
     <>
       <AppBar back={back} title={title} />
       <Container size="sm">
-        <VStack gap="150" className="py-200">
+        <VStack gap="150" className="py-200 break-keep">
           {children}
         </VStack>
       </Container>

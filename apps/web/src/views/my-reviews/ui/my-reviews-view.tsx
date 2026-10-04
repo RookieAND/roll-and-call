@@ -17,9 +17,9 @@ export async function MyReviewsView() {
 
   return (
     <>
-      <AppBar back="/me" title="내가 쓴 후기" />
+      <AppBar back="/me" title="작성한 후기" />
       <Container size="sm">
-        <VStack gap="150" className="py-200">
+        <VStack gap="150" className="py-200 break-keep">
           <MyReviewsContent signedIn={!!user} cards={cards} />
         </VStack>
       </Container>

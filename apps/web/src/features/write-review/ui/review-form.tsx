@@ -132,7 +132,7 @@ export function ReviewForm({
   }
 
   return (
-    <VStack render={<form onSubmit={submit} />}>
+    <VStack render={<form onSubmit={submit} />} className="break-keep">
       <AppBar
         title={editing ? "후기 고치기" : "후기 쓰기"}
         backIcon="close"
@@ -209,7 +209,7 @@ export function ReviewForm({
         onOpenChange={setConfirmingLeave}
         title="작성을 그만둘까요?"
         description={
-          editing ? "고친 내용과 새로 올린 사진은 지워집니다" : "글은 저장되고 사진은 지워집니다"
+          editing ? "고친 내용과 새로 올린 사진은 지워집니다." : "글은 저장되고 사진은 지워집니다."
         }
         cancelLabel="계속 쓰기"
         confirmLabel="나가기"

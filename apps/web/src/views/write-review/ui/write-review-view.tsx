@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { reviewEditDeadline } from "@/entities/review";
 import { LoginRequired } from "@/features/auth";
 import { ReviewForm, reviewBlockOf } from "@/features/write-review";
-import { formatMonthDayTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import { getCurrentSessionUser, getReviewDraftTarget, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -30,7 +30,7 @@ export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
   const target = await getReviewDraftTarget({ serverId: server.id, gameId, userId: user.id });
   if (!target) notFound();
   const { game, review } = target;
-  const when = game.confirmedAt ? `${formatMonthDayTime(game.confirmedAt)} · ` : "";
+  const when = game.confirmedAt ? `${formatDateTime(game.confirmedAt)} · ` : "";
   const editable = review && !review.removedAt ? review : null;
 
   return (

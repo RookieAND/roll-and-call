@@ -1,5 +1,5 @@
 import { deriveReviewState, REVIEW_STATE, reviewEditDeadline } from "@/entities/review";
-import { ddayKst, formatMonthDay } from "@/shared/lib";
+import { ddayKst, formatDate } from "@/shared/lib";
 import type { MyReviewRow } from "@/shared/server";
 
 type Palette = "primary" | "gray" | "warning" | "danger";
@@ -27,7 +27,7 @@ export type MyReviewCardModel = {
 
 export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyReviewCardModel {
   const state = deriveReviewState(row, now);
-  const sessionDate = row.sessionAt ? formatMonthDay(row.sessionAt) : formatMonthDay(row.createdAt);
+  const sessionDate = row.sessionAt ? formatDate(row.sessionAt) : formatDate(row.createdAt);
   const base = {
     id: row.id,
     title: row.gameTitle,

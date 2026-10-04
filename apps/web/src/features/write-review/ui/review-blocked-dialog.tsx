@@ -21,7 +21,7 @@ export function ReviewBlockedDialog({ block, fallbackHref }: ReviewBlockedDialog
 
   return (
     <AlertDialog.Root open={!isNull(dialog)} onOpenChange={(open) => !open && router.push(href)}>
-      <AlertDialog.Popup>
+      <AlertDialog.Popup className="break-keep">
         <AlertDialog.Header>
           <AlertDialog.Title>{dialog?.title}</AlertDialog.Title>
           <AlertDialog.Description>{dialog?.description}</AlertDialog.Description>

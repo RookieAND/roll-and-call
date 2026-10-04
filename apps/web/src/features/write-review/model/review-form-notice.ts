@@ -1,4 +1,4 @@
-import { formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 
 type Notice = { palette: "primary" | "warning"; title: string; description: string };
 
@@ -13,7 +13,7 @@ export function reviewFormNotice({
     return {
       palette: "primary",
       title: "이 세션의 공개 후기를 작성합니다",
-      description: `등록 후 ${formatMonthDay(editUntil)}까지 수정할 수 있습니다.`,
+      description: `등록 후 ${formatDate(editUntil)}까지 수정할 수 있습니다.`,
     };
   }
   if (review.hidden) {
@@ -26,6 +26,6 @@ export function reviewFormNotice({
   return {
     palette: "primary",
     title: "공개된 후기를 고칩니다",
-    description: `${formatMonthDay(editUntil)}까지 고칠 수 있습니다.`,
+    description: `${formatDate(editUntil)}까지 고칠 수 있습니다.`,
   };
 }

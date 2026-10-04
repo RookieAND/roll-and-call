@@ -21,11 +21,11 @@ export function MyReviewActions({ card }: MyReviewActionsProps) {
   return (
     <>
       <HStack gap="100" className="[&>*]:flex-1">
-        <Button variant="outline" onClick={() => setDeleting(true)}>
+        <Button variant="outline" size="lg" onClick={() => setDeleting(true)}>
           삭제하기
         </Button>
         {card.actions === MY_REVIEW_ACTIONS.editAndDelete && (
-          <Button variant="tinted" render={<Link href={toServerPath(card.editHref)} />}>
+          <Button variant="tinted" size="lg" render={<Link href={toServerPath(card.editHref)} />}>
             수정하기
           </Button>
         )}

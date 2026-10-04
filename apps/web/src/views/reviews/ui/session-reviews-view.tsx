@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { PARTICIPANT_STATUS, SessionHeading } from "@/entities/game";
-import { formatMonthDayTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import {
   getCurrentSessionUser,
   getGameById,
@@ -43,7 +43,7 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
     );
   }
   const rows = await getGameReviews({ serverId: server.id, gameId, viewerId });
-  const when = game.confirmedAt ? `${formatMonthDayTime(game.confirmedAt)} · ` : "";
+  const when = game.confirmedAt ? `${formatDateTime(game.confirmedAt)} · ` : "";
 
   return (
     <ReviewsPage title="세션 후기" back={`/games/${gameId}`}>

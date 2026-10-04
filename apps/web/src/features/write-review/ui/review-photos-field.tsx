@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import { REVIEW_PHOTO_MAX_COUNT } from "@/entities/review";
 
 import { PHOTO_ACCEPT } from "../model/photo-rules";
+import { useLongPressReorder } from "../model/use-long-press-reorder";
 import type { ReviewPhotos } from "../model/use-review-photos";
 import { ReviewPhotoTile } from "./review-photo-tile";
 
@@ -14,10 +15,10 @@ interface ReviewPhotosFieldProps {
   photos: ReviewPhotos;
 }
 
-// ponytail: 순서 변경은 HTML5 드래그라 데스크톱 전용이다. 터치 정렬이 필요해지면 길게 눌러 끌기를 붙인다.
 export function ReviewPhotosField({ photos }: ReviewPhotosFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const longPress = useLongPressReorder({ onMove: photos.move });
   const remaining = REVIEW_PHOTO_MAX_COUNT - photos.items.length;
   const emptySlots = Math.max(remaining - 1, 0);
 
@@ -37,13 +38,13 @@ export function ReviewPhotosField({ photos }: ReviewPhotosFieldProps) {
           {photos.items.length} / {REVIEW_PHOTO_MAX_COUNT}
         </Text>
       </HStack>
-      <Grid cols={3} gap="100">
+      <Grid ref={longPress.gridRef} cols={3} gap="100">
         {photos.items.map((item, index) => (
           <ReviewPhotoTile
             key={item.key}
             item={item}
             index={index}
-            dragging={dragIndex === index}
+            dragging={dragIndex === index || longPress.pressedIndex === index}
             onRemove={() => photos.remove(item.key)}
             onRetry={() => photos.retry(item.key)}
             onDragStart={() => setDragIndex(index)}
@@ -81,6 +82,11 @@ export function ReviewPhotosField({ photos }: ReviewPhotosFieldProps) {
       ) : (
         <Text typography="body4" foreground="hint" render={<p />}>
           장당 5MB까지 올릴 수 있습니다.
+        </Text>
+      )}
+      {photos.items.length > 1 && (
+        <Text typography="body4" foreground="hint" render={<p />}>
+          길게 눌러 끌면 순서가 바뀝니다.
         </Text>
       )}
       <input

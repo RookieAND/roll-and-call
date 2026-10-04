@@ -16,7 +16,11 @@ export function ImageLightbox({ url, label, onClose }: ImageLightboxProps) {
     <Dialog.Root open={!isNull(url)} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-(--rc-z-overlay) bg-dim" />
-        <Dialog.Popup className="fixed inset-0 z-(--rc-z-dialog) flex items-center justify-center p-200 outline-none">
+        {/* 막 전체를 Popup이 덮어 바깥 누르기가 잡히지 않으므로 사진 밖을 누르면 직접 닫는다. */}
+        <Dialog.Popup
+          onClick={(event) => event.target === event.currentTarget && onClose()}
+          className="fixed inset-0 z-(--rc-z-dialog) flex items-center justify-center p-200 outline-none"
+        >
           <Dialog.Title className="sr-only">{label}</Dialog.Title>
           {url && (
             <img

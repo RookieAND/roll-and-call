@@ -1,8 +1,9 @@
 import { VStack } from "@roll-and-call/ui";
 
 import { ReviewCard, ReviewEmpty, reviewEditDeadline } from "@/entities/review";
-import { formatMonthDay } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 import type { ReviewCardRow } from "@/shared/server";
+import { ServerLink } from "@/shared/ui";
 
 import { reviewCardText } from "../model/review-card-text";
 import type { ReviewPerspective } from "../model/review-perspective";
@@ -22,21 +23,33 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
   return (
     <VStack gap="150">
       {rows.map((row) => {
-        const { title, meta } = reviewCardText({ row, perspective });
+        const { title, byline, meta } = reviewCardText({ row, perspective });
+        const author = (
+          <ServerLink path={`/users/${row.authorId}`} className="hover:underline">
+            {row.authorName}
+          </ServerLink>
+        );
+        const metaLine = byline ? (
+          <>
+            {author} · {meta}
+          </>
+        ) : (
+          meta
+        );
         const own = row.authorId === viewerId;
         const editable = own && reviewEditDeadline(row.createdAt).getTime() > now;
         const menu = own && (
           <ReviewMenu
             reviewId={row.id}
             editPath={editable ? `/games/${row.gameId}/review` : null}
-            deleteSubject={`${row.gameTitle} · ${formatMonthDay(row.createdAt)} 후기`}
+            deleteSubject={`${row.gameTitle} · ${formatDate(row.createdAt)} 후기`}
           />
         );
         return (
           <ReviewCard
             key={row.id}
-            title={title}
-            meta={meta}
+            title={title ?? author}
+            meta={metaLine}
             body={row.body}
             photoUrls={row.photoUrls}
             spoiler={row.spoiler}

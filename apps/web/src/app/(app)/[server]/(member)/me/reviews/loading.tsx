@@ -6,7 +6,7 @@ import { ReviewListSkeleton } from "@/views/reviews";
 export default function Loading() {
   return (
     <>
-      <AppBar back="/me" title="내가 쓴 후기" />
+      <AppBar back="/me" title="작성한 후기" />
       <Container size="sm" className="py-200">
         <ReviewListSkeleton />
       </Container>
