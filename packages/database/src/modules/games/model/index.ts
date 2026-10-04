@@ -43,6 +43,7 @@ export {
   windowHours,
   type CoordinationWindow,
 } from "./coordination-window";
+export { isStartInCoordinationRange } from "./coordination-range";
 export { cancelBlockReason } from "./cancel-block-reason";
 export { GAME_CANCEL_KIND, type GameCancelKind } from "./game-cancel-kind";
 export { storedCancelReason } from "./stored-cancel-reason";

@@ -14,6 +14,7 @@ import { initialSessionStart } from "../model/initial-session-start";
 import { toSessionStart } from "../model/session-start";
 import { sessionStartIso } from "../model/session-start-iso";
 import { sessionWindowLabel } from "../model/session-window-label";
+import { ConfirmSessionDialogBody } from "./confirm-session-dialog-body";
 import { NoCandidatesNotice } from "./no-candidates-notice";
 import { SessionCandidateList } from "./session-candidate-list";
 import { SessionTimeFields } from "./session-time-fields";
@@ -100,6 +101,7 @@ export function ConfirmSessionForm({
         <SessionWindowSummary
           windowLabel={windowLabel}
           memberCount={members.length}
+          respondentCount={respondents.length}
           everyone={absentNames.length === 0}
         />
         {absentNames.length > 0 && <UnavailableWarning names={absentNames} />}
@@ -157,27 +159,17 @@ export function ConfirmSessionForm({
         open={confirming}
         onOpenChange={setConfirming}
         title={changing ? "확정 시간을 바꿀까요?" : "이 시간으로 확정할까요?"}
-        description={
-          <>
-            확정하면 새 신청을 받지 않고, 명단도 고칠 수 없습니다.
-            <br />
-            {!changing && confirmedCount < maxPlayers && (
-              <>
-                정원 {maxPlayers}명 중 {confirmedCount}명으로 확정하면 모집이 닫혀요.
-                <br />
-              </>
-            )}
-            참여자 {confirmedCount}명에게 디스코드로 알립니다.
-          </>
-        }
         confirmLabel={changing ? "변경" : "확정"}
         confirmColorPalette="success"
         pending={pending}
         onConfirm={submit}
       >
-        <Text numeric typography="subtitle1" foreground="success" render={<p />}>
-          {windowLabel}
-        </Text>
+        <ConfirmSessionDialogBody
+          windowLabel={windowLabel}
+          changing={changing}
+          confirmedCount={confirmedCount}
+          maxPlayers={maxPlayers}
+        />
       </ConfirmDialog>
     </VStack>
   );

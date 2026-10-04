@@ -1,18 +1,23 @@
 import { Card, Text } from "@roll-and-call/ui";
 
+import { memberCountTone } from "../model/member-count-tone";
 import { SummaryRow } from "./summary-row";
 
 interface SessionWindowSummaryProps {
   windowLabel: string;
   memberCount: number;
+  respondentCount: number;
   everyone: boolean;
 }
 
 export function SessionWindowSummary({
   windowLabel,
   memberCount,
+  respondentCount,
   everyone,
 }: SessionWindowSummaryProps) {
+  const memberTone = memberCountTone({ respondentCount, everyone });
+
   return (
     <Card.Root
       background="subtle"
@@ -26,12 +31,7 @@ export function SessionWindowSummary({
         </Text>
       </SummaryRow>
       <SummaryRow label="가능 인원">
-        <Text
-          numeric
-          typography="subtitle2"
-          foreground={everyone ? "success" : "warning"}
-          render={<span />}
-        >
+        <Text numeric typography="subtitle2" foreground={memberTone} render={<span />}>
           {memberCount}명
         </Text>
       </SummaryRow>

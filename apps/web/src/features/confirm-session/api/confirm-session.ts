@@ -1,12 +1,19 @@
 "use server";
 
-import { confirmGameSession, getGameSchedule } from "@roll-and-call/database/games";
-import { isAwaitingDraw } from "@roll-and-call/database/games/model";
+import {
+  confirmGameSession,
+  listParticipantUserIds,
+  lockGame,
+} from "@roll-and-call/database/games";
+import { createNotifications } from "@roll-and-call/database/notifications";
+import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
+import { withTransaction } from "@roll-and-call/database/transaction";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { GAME_CANCELLED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import { PARTICIPANT_STATUS } from "@/entities/game";
+import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
@@ -14,6 +21,8 @@ import {
   refreshRecruitPost,
   notMemberError,
 } from "@/shared/server";
+
+import { CONFIRM_FORBIDDEN_MESSAGE, confirmBlockReason } from "../model/confirm-block-reason";
 
 export async function confirmSession({
   gameId,
@@ -31,19 +40,56 @@ export async function confirmSession({
   const confirmedAt = new Date(slotIso);
   if (Number.isNaN(confirmedAt.getTime())) return { error: "잘못된 시간입니다." };
 
-  const before = await getGameSchedule({ serverId: server.id, gameId });
-  if (!before) return GAME_NOT_FOUND_RESULT;
-  if (before.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
-  if (isAwaitingDraw(before)) return { error: "추첨을 먼저 마쳐 주세요." };
-  const previousConfirmedAt = before.confirmedAt;
-  const updated = await confirmGameSession({
-    serverId: server.id,
-    gameId,
-    gmId: user.id,
-    confirmedAt,
-  });
+  // 같은 구인의 명단 조정·추첨·구인 수정과 줄을 서도록 행을 잠그고 검사·저장·알림을 한 번에 한다.
+  const result = await withTransaction(async (transaction) => {
+    const game = await lockGame({ transaction, serverId: server.id, gameId });
+    const block = confirmBlockReason({ game, userId: user.id, startsAt: confirmedAt });
+    if (block || !game) return block ?? { error: CONFIRM_FORBIDDEN_MESSAGE };
 
-  if (!updated) return { error: "확정 권한이 없습니다." };
+    const updated = await confirmGameSession({
+      transaction,
+      serverId: server.id,
+      gameId,
+      gmId: user.id,
+      confirmedAt,
+    });
+    if (!updated) return { error: CONFIRM_FORBIDDEN_MESSAGE };
+
+    const previousConfirmedAt = game.confirmedAt;
+    if (previousConfirmedAt?.getTime() !== confirmedAt.getTime()) {
+      const confirmedIds = await listParticipantUserIds({
+        transaction,
+        serverId: server.id,
+        gameId,
+        status: PARTICIPANT_STATUS.confirmed,
+      });
+      const startsAt = confirmedAt.toISOString();
+      const notification = previousConfirmedAt
+        ? {
+            kind: NOTIFICATION_KIND.sessionTimeChanged,
+            params: {
+              gameId,
+              gameTitle: game.title,
+              previousStartsAt: previousConfirmedAt.toISOString(),
+              startsAt,
+            },
+          }
+        : {
+            kind: NOTIFICATION_KIND.sessionTimeSet,
+            params: { gameId, gameTitle: game.title, startsAt },
+          };
+      await createNotifications({
+        executor: transaction,
+        serverId: server.id,
+        actorId: user.id,
+        notifications: confirmedIds.map((userId) => ({ userId, ...notification })),
+      });
+    }
+    return { previousConfirmedAt };
+  });
+  if (!("previousConfirmedAt" in result)) return result;
+  const { previousConfirmedAt } = result;
+
   after(() =>
     Promise.all([
       refreshRecruitPost({ server, gameId }),

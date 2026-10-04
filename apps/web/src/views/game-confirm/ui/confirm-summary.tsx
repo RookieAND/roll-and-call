@@ -3,12 +3,13 @@ import { Card, Grid, Text } from "@roll-and-call/ui";
 interface ConfirmSummaryProps {
   playLabel: string;
   respondedCount: number;
+  confirmedCount: number;
 }
 
-export function ConfirmSummary({ playLabel, respondedCount }: ConfirmSummaryProps) {
+export function ConfirmSummary({ playLabel, respondedCount, confirmedCount }: ConfirmSummaryProps) {
   const items = [
     { label: "플레이타임", value: playLabel },
-    { label: "가능 시간 제출", value: `${respondedCount}명` },
+    { label: "가능 시간 제출", value: `${respondedCount} / ${confirmedCount}명` },
   ];
 
   return (

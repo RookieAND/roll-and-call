@@ -27,7 +27,7 @@ export function hostTodo({
     return {
       kind: SESSION_ACTION_KIND.confirmTime,
       label: "세션 시간 정하기",
-      href: facts.scheduleHref,
+      href: `/games/${game.id}/confirm`,
       blocked: true,
       sortAt: endDate,
       lines: [

@@ -1,5 +1,5 @@
+import { isAwaitingDraw } from "@roll-and-call/database/games/model";
 import { Badge, Container, VStack } from "@roll-and-call/ui";
-import { uniq } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { aggregateAvailability } from "@/entities/availability";
@@ -7,6 +7,7 @@ import {
   coordinationWindowOf,
   countConfirmed,
   effectivePlayMinutes,
+  isSessionStarted,
   SCHEDULE_MODE,
 } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
@@ -17,17 +18,19 @@ import {
   getGameAvailabilities,
   getGameById,
   getCurrentServer,
+  getResponseCounts,
 } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, EmptyState } from "@/shared/ui";
 
 import { ConfirmSummary } from "./confirm-summary";
 
 export async function GameConfirmView({ id }: { id: string }) {
   const server = await getCurrentServer();
-  const [game, user, availabilities] = await Promise.all([
+  const [game, user, availabilities, responseCounts] = await Promise.all([
     getGameById(server.id, id),
     getCurrentSessionUser(),
     getGameAvailabilities({ serverId: server.id, gameId: id }),
+    getResponseCounts({ serverId: server.id, gameIds: [id] }),
   ]);
   if (!game) notFound();
   if (user?.id !== game.gmId) {
@@ -46,24 +49,49 @@ export async function GameConfirmView({ id }: { id: string }) {
   }
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate)
     redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
+  if (isSessionStarted(game))
+    redirect(serverPath({ slug: server.slug, path: `/games/${id}/manage` }));
+
+  const appBar = (
+    <AppBar
+      back={`/games/${id}/manage`}
+      title="세션 시간 결정"
+      action={<Badge colorPalette="primary">GM</Badge>}
+    />
+  );
+
+  if (isAwaitingDraw(game)) {
+    return (
+      <>
+        {appBar}
+        <Container size="sm" className="py-200">
+          <EmptyState
+            size="section"
+            title="추첨 뒤에 세션 시간을 정할 수 있습니다"
+            description="모집 마감 때 추첨이 끝나면 확정자가 가능 시간을 칠합니다."
+          />
+        </Container>
+      </>
+    );
+  }
   if (!game.rangeStart || !game.rangeEnd)
     redirect(serverPath({ slug: server.slug, path: `/games/${id}/schedule` }));
 
   const { names } = aggregateAvailability({ avails: availabilities, userId: null });
-  const respondedCount = uniq(Object.values(names).flat()).length;
   const minutes = effectivePlayMinutes(game.playMinutes);
   const playLabel = game.playTime ?? `${minutes / 60}시간`;
+  const confirmedCount = countConfirmed(game.participants);
 
   return (
     <>
-      <AppBar
-        back={`/games/${id}/manage`}
-        title="세션 시간 결정"
-        action={<Badge colorPalette="primary">GM</Badge>}
-      />
+      {appBar}
       <Container size="sm">
         <VStack gap="200" className="pt-200 pb-200">
-          <ConfirmSummary playLabel={playLabel} respondedCount={respondedCount} />
+          <ConfirmSummary
+            playLabel={playLabel}
+            respondedCount={responseCounts.get(id) ?? 0}
+            confirmedCount={confirmedCount}
+          />
           <ConfirmSessionForm
             gameId={id}
             days={buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd })}
@@ -73,7 +101,7 @@ export async function GameConfirmView({ id }: { id: string }) {
             playMinutes={minutes}
             playLabel={playLabel}
             slotCount={Math.ceil(minutes / SLOT_MINUTES)}
-            confirmedCount={countConfirmed(game.participants)}
+            confirmedCount={confirmedCount}
             maxPlayers={game.maxPlayers}
             currentIso={game.confirmedAt?.toISOString() ?? null}
           />
