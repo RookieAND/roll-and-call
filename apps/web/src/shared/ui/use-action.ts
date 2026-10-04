@@ -1,19 +1,26 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { unstable_rethrow } from "next/navigation";
 import { useTransition } from "react";
 
-import type { ActionResult } from "@/shared/api";
+import { NAV_BADGES_QUERY_ROOT, type ActionResult } from "@/shared/api";
 
 import { handleActionResult, type ActionHandlers } from "./handle-action-result";
 
 export function useAction() {
   const [pending, startTransition] = useTransition();
+  const queryClient = useQueryClient();
 
   function run<Result extends ActionResult>(
     action: () => Promise<Result>,
     handlers: ActionHandlers<Result> = {},
   ) {
+    // 액션이 할 일·알림을 바꿨을 수 있어 하단 탭 점을 다시 묻는다.
+    const onSuccess = (result: Result) => {
+      void queryClient.invalidateQueries({ queryKey: [NAV_BADGES_QUERY_ROOT] });
+      handlers.onSuccess?.(result);
+    };
     startTransition(async () => {
       let result: Result;
       try {
@@ -23,11 +30,11 @@ export function useAction() {
         try {
           unstable_rethrow(error);
         } catch {
-          handlers.onSuccess?.({} as Result);
+          onSuccess({} as Result);
         }
         throw error;
       }
-      handleActionResult({ result, ...handlers });
+      handleActionResult({ result, ...handlers, onSuccess });
     });
   }
 

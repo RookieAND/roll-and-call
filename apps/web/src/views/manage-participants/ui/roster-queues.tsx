@@ -140,15 +140,17 @@ export function RosterQueues({
       )}
 
       <MemberSheet
-        gameId={gameId}
+        roster={{
+          gameId,
+          confirmedCount,
+          waitingCount: waiting.length,
+          maxPlayers,
+          isCoordinate,
+          beforeDraw,
+          started,
+          capacityRaised,
+        }}
         member={menuMember}
-        confirmedCount={confirmedCount}
-        waitingCount={waiting.length}
-        maxPlayers={maxPlayers}
-        isCoordinate={isCoordinate}
-        beforeDraw={beforeDraw}
-        started={started}
-        capacityRaised={capacityRaised}
         onMarkAbsent={setAbsentMember}
         onClose={() => setMenuMember(null)}
       />

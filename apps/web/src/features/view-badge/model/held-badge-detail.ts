@@ -6,7 +6,7 @@ import {
   type BadgeFacts,
 } from "@roll-and-call/database/badges/model";
 
-import type { BadgeView } from "@/entities/badge";
+import { monthsOfLadder, type BadgeView } from "@/entities/badge";
 import type { BadgeRecord } from "@/shared/server";
 
 import type { BadgeDetail } from "./badge-detail";
@@ -23,13 +23,7 @@ interface HeldBadgeDetailInput {
 
 export function heldBadgeDetail({ badge, records, facts, now }: HeldBadgeDetailInput): BadgeDetail {
   if (badge.monthKey) {
-    const months = records
-      .flatMap((record) => {
-        const parsed = parseBadgeKey(record.badgeKey);
-        return parsed?.ladder === badge.ladder && parsed.subject ? [parsed.subject] : [];
-      })
-      .toSorted()
-      .toReversed();
+    const months = monthsOfLadder({ ladder: badge.ladder, records });
     const sessions = badge.role === BADGE_ROLE.gm ? facts?.hosted : facts?.played;
     const countOf = sessions
       ? (month: string) =>

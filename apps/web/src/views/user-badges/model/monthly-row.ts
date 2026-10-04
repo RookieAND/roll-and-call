@@ -1,10 +1,6 @@
-import {
-  BADGE_LADDERS,
-  parseBadgeKey,
-  type BadgeLadderKey,
-} from "@roll-and-call/database/badges/model";
+import { BADGE_LADDERS, type BadgeLadderKey } from "@roll-and-call/database/badges/model";
 
-import { monthListLabel, previousMonthKey, stepLook } from "@/entities/badge";
+import { monthListLabel, monthsOfLadder, previousMonthKey, stepLook } from "@/entities/badge";
 import { buildMonthlyDetail } from "@/features/view-badge";
 import { toKst } from "@/shared/lib";
 import type { BadgeRecord } from "@/shared/server";
@@ -21,13 +17,7 @@ export function monthlyRow({
   records: BadgeRecord[];
   now: Date;
 }): BadgeRowGroup["rows"][number] | null {
-  const months = records
-    .flatMap((record) => {
-      const parsed = parseBadgeKey(record.badgeKey);
-      return parsed?.ladder === ladder && parsed.subject ? [parsed.subject] : [];
-    })
-    .toSorted()
-    .toReversed();
+  const months = monthsOfLadder({ ladder, records });
   if (months.length === 0) return null;
   const step = BADGE_LADDERS[ladder].steps[0]!;
   const held = months[0] === previousMonthKey(now);

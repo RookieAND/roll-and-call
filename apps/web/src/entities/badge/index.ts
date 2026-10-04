@@ -11,6 +11,7 @@ export {
 } from "@roll-and-call/database/badges/model";
 export { monthLabel } from "./model/month-label";
 export { monthListLabel } from "./model/month-list-label";
+export { monthsOfLadder } from "./model/months-of-ladder";
 export { currentMonthStanding } from "./model/current-month-standing";
 export { ATTENDANCE_HINT } from "./model/attendance-hint";
 export { badgeCondition } from "./model/badge-condition";

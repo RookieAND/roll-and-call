@@ -5,11 +5,12 @@ import { isNull, uniq } from "es-toolkit";
 import { useState } from "react";
 
 import { rankWindows, windowMembers } from "@/entities/availability";
-import type { CoordinationWindow } from "@/entities/game";
-import { buildTimeRows, toKst, type DayColumn } from "@/shared/lib";
+import { coordinationWindowOf } from "@/entities/game";
+import { buildDayColumns, buildTimeRows, SLOT_MINUTES, toKst } from "@/shared/lib";
 import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { confirmSession } from "../api/confirm-session";
+import type { ConfirmSessionGame } from "../model/confirm-session-game";
 import { initialSessionStart } from "../model/initial-session-start";
 import { toSessionStart } from "../model/session-start";
 import { sessionStartIso } from "../model/session-start-iso";
@@ -24,40 +25,24 @@ import { UnavailableWarning } from "./unavailable-warning";
 const CANDIDATE_LIMIT = 3;
 
 interface ConfirmSessionFormProps {
-  gameId: string;
-  days: DayColumn[];
-  rangeStart: string;
-  window: CoordinationWindow;
+  game: ConfirmSessionGame;
   names: Record<string, string[]>;
-  playMinutes: number;
   playLabel: string;
-  slotCount: number;
-  confirmedCount: number;
-  maxPlayers: number;
-  currentIso?: string | null;
 }
 
-export function ConfirmSessionForm({
-  gameId,
-  days,
-  rangeStart,
-  window,
-  names,
-  playMinutes,
-  playLabel,
-  slotCount,
-  confirmedCount,
-  maxPlayers,
-  currentIso = null,
-}: ConfirmSessionFormProps) {
+export function ConfirmSessionForm({ game, names, playLabel }: ConfirmSessionFormProps) {
+  const { id: gameId, playMinutes, confirmedAt } = game;
+  const days = buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd });
+  const window = coordinationWindowOf(game);
+  const slotCount = Math.ceil(playMinutes / SLOT_MINUTES);
   const candidates = rankWindows({ names, slotCount, limit: CANDIDATE_LIMIT });
   const respondents = uniq(Object.values(names).flat());
-  const changing = !isNull(currentIso);
+  const changing = !isNull(confirmedAt);
 
   const [start, setStart] = useState(() =>
     initialSessionStart({
-      seedIso: currentIso ?? candidates[0]?.iso ?? null,
-      rangeStart,
+      seedIso: confirmedAt?.toISOString() ?? candidates[0]?.iso ?? null,
+      rangeStart: game.rangeStart,
       window,
       timeRows: buildTimeRows(window),
     }),
@@ -167,8 +152,8 @@ export function ConfirmSessionForm({
         <ConfirmSessionDialogBody
           windowLabel={windowLabel}
           changing={changing}
-          confirmedCount={confirmedCount}
-          maxPlayers={maxPlayers}
+          confirmedCount={game.confirmedCount}
+          maxPlayers={game.maxPlayers}
         />
       </ConfirmDialog>
     </VStack>

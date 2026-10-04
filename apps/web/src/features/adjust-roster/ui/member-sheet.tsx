@@ -4,6 +4,7 @@ import { VStack, Sheet } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
 import type { MemberSummary } from "../model/member-summary";
+import type { RosterContext } from "../model/roster-context";
 import { DemoteMemberItem } from "./demote-member-item";
 import { MarkAbsentMemberItem } from "./mark-absent-member-item";
 import { MemberSheetHeader } from "./member-sheet-header";
@@ -11,32 +12,23 @@ import { PromoteMemberItem } from "./promote-member-item";
 import { RemoveMemberItem } from "./remove-member-item";
 
 interface MemberSheetProps {
-  gameId: string;
+  roster: RosterContext;
   member: MemberSummary | null;
-  confirmedCount: number;
-  waitingCount: number;
-  maxPlayers: number;
-  isCoordinate: boolean;
-  beforeDraw: boolean;
-  started: boolean;
-  capacityRaised: boolean;
   onMarkAbsent: (member: MemberSummary) => void;
   onClose: () => void;
 }
 
-export function MemberSheet({
-  gameId,
-  member,
-  confirmedCount,
-  waitingCount,
-  maxPlayers,
-  isCoordinate,
-  beforeDraw,
-  started,
-  capacityRaised,
-  onMarkAbsent,
-  onClose,
-}: MemberSheetProps) {
+export function MemberSheet({ roster, member, onMarkAbsent, onClose }: MemberSheetProps) {
+  const {
+    gameId,
+    confirmedCount,
+    waitingCount,
+    maxPlayers,
+    isCoordinate,
+    beforeDraw,
+    started,
+    capacityRaised,
+  } = roster;
   const isConfirmed = isNull(member?.waitlistRank);
 
   return (

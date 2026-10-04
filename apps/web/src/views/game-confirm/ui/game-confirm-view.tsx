@@ -1,10 +1,10 @@
 import { isAwaitingDraw } from "@roll-and-call/database/games/model";
 import { Badge, Container, VStack } from "@roll-and-call/ui";
+import { pick } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { aggregateAvailability } from "@/entities/availability";
 import {
-  coordinationWindowOf,
   countConfirmed,
   effectivePlayMinutes,
   isSessionStarted,
@@ -12,7 +12,7 @@ import {
 } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { ConfirmSessionForm } from "@/features/confirm-session";
-import { buildDayColumns, SLOT_MINUTES, serverPath } from "@/shared/lib";
+import { serverPath } from "@/shared/lib";
 import {
   getCurrentSessionUser,
   getGameAvailabilities,
@@ -74,7 +74,8 @@ export async function GameConfirmView({ id }: { id: string }) {
       </>
     );
   }
-  if (!game.rangeStart || !game.rangeEnd)
+  const { rangeStart, rangeEnd } = game;
+  if (!rangeStart || !rangeEnd)
     redirect(serverPath({ slug: server.slug, path: `/games/${id}/schedule` }));
 
   const { names } = aggregateAvailability({ avails: availabilities, userId: null });
@@ -93,17 +94,21 @@ export async function GameConfirmView({ id }: { id: string }) {
             confirmedCount={confirmedCount}
           />
           <ConfirmSessionForm
-            gameId={id}
-            days={buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd })}
-            rangeStart={game.rangeStart}
-            window={coordinationWindowOf(game)}
+            game={{
+              ...pick(game, [
+                "id",
+                "windowStartHour",
+                "windowEndHour",
+                "maxPlayers",
+                "confirmedAt",
+              ]),
+              rangeStart,
+              rangeEnd,
+              playMinutes: minutes,
+              confirmedCount,
+            }}
             names={names}
-            playMinutes={minutes}
             playLabel={playLabel}
-            slotCount={Math.ceil(minutes / SLOT_MINUTES)}
-            confirmedCount={confirmedCount}
-            maxPlayers={game.maxPlayers}
-            currentIso={game.confirmedAt?.toISOString() ?? null}
           />
         </VStack>
       </Container>

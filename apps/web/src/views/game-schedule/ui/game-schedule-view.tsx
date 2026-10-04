@@ -18,6 +18,7 @@ import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/s
 import { AppBar, EmptyState } from "@/shared/ui";
 
 import { getScheduleAvailability } from "../api/load-availability";
+import { scheduleBodyModeOf } from "../model/schedule-body-mode-of";
 import { ScheduleBody } from "./schedule-body";
 
 export async function GameScheduleView({ id }: { id: string }) {
@@ -73,6 +74,15 @@ export async function GameScheduleView({ id }: { id: string }) {
         participant.userId === viewerId && participant.status === PARTICIPANT_STATUS.confirmed,
     );
   const deadlinePassed = isDeadlinePassed(game.endDate);
+  const mode = scheduleBodyModeOf({
+    confirmedAt: game.confirmedAt,
+    canPaint,
+    awaitingDraw: isAwaitingDraw(game),
+    unscheduled: deadlinePassed && countConfirmed(game.participants) === 0,
+    isGm,
+    isSignedIn: !isNull(viewerId),
+    deadlinePassed,
+  });
   const days = buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd });
   const timeRows = buildTimeRows(coordinationWindowOf(game));
 
@@ -89,16 +99,10 @@ export async function GameScheduleView({ id }: { id: string }) {
               days={days}
               timeRows={timeRows}
               initialAvailability={initialAvailability}
-              confirmedAt={game.confirmedAt}
-              canPaint={canPaint}
-              awaitingDraw={isAwaitingDraw(game)}
-              unscheduled={deadlinePassed && countConfirmed(game.participants) === 0}
-              isGm={isGm}
-              isSignedIn={!isNull(viewerId)}
+              mode={mode}
               // GM도 가능 시간을 내므로 겹침 단계는 정원 + GM 기준으로 나눈다.
               capacity={game.maxPlayers + 1}
               gmName={game.gm?.username}
-              deadlinePassed={deadlinePassed}
             />
           </ErrorBoundary>
         </VStack>

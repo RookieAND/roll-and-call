@@ -9,7 +9,7 @@ import { BottomNav } from "@/shared/ui";
 
 import { fetchNavBadges } from "./fetch-nav-badges";
 
-// 서버별로 한 번 묻고, 화면을 옮길 때마다 다시 묻는다. 새 값이 올 때까지 이전 점이 그대로 보인다.
+// 서버별로 한 번 묻는다. 화면을 옮기면 30초(기본 staleTime)가 지난 값만 다시 묻고, 액션·뮤테이션이 성공하면 바로 무효화한다.
 export function AppBottomNav() {
   const pathname = usePathname();
   const { server } = useParams<{ server?: string }>();
@@ -26,7 +26,7 @@ export function AppBottomNav() {
   useEffect(() => {
     if (shownPathname.current === pathname || !server) return;
     shownPathname.current = pathname;
-    void queryClient.invalidateQueries({ queryKey: navBadgesQueryKey(server) });
+    void queryClient.refetchQueries({ queryKey: navBadgesQueryKey(server), stale: true });
   }, [pathname, server, queryClient]);
 
   // 서버 밖 화면(도움말·둘러보기)에는 탭이 없다.

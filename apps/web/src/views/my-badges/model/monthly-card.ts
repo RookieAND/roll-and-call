@@ -2,7 +2,6 @@ import {
   BADGE_LADDER,
   BADGE_LADDERS,
   kstMonthKey,
-  parseBadgeKey,
   type BadgeLadderKey,
   type MonthlyAppearance,
 } from "@roll-and-call/database/badges/model";
@@ -12,6 +11,7 @@ import {
   currentMonthStanding,
   monthLabel,
   monthListLabel,
+  monthsOfLadder,
   previousMonthKey,
   stepLook,
 } from "@/entities/badge";
@@ -31,13 +31,7 @@ export function monthlyCard({ ladder, records, appearances, userId, now }: Month
   const definition = BADGE_LADDERS[ladder];
   const step = definition.steps[0]!;
   const gm = ladder === BADGE_LADDER.gmMonthly;
-  const months = records
-    .flatMap((record) => {
-      const parsed = parseBadgeKey(record.badgeKey);
-      return parsed?.ladder === ladder && parsed.subject ? [parsed.subject] : [];
-    })
-    .toSorted()
-    .toReversed();
+  const months = monthsOfLadder({ ladder, records });
   // 1위를 정한 집계와 같은 기준으로 센다(loadMonthlyWinners·월간 발표와 같은 값).
   const countOf = (month: string) =>
     appearances.filter(
