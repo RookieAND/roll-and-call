@@ -20,6 +20,7 @@ import { HomeCalendarSection } from "./home-calendar-section";
 import { HomeMonthRecord } from "./home-month-record";
 import { HomeNicknameNotice } from "./home-nickname-notice";
 import { HomeServerSwitch } from "./home-server-switch";
+import { HomeTodoBanner } from "./home-todo-banner";
 
 export async function HomeView({ date, authError }: { date?: string; authError: boolean }) {
   const { monthStart, selectedKey, todayKey } = resolveCalendarView(date);
@@ -78,6 +79,11 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
           <div className="px-200 pt-150">
             <HomeNicknameNotice nickname={profile.username} />
           </div>
+        )}
+        {user && (
+          <Suspense fallback={null}>
+            <HomeTodoBanner serverId={server.id} userId={user.id} />
+          </Suspense>
         )}
         <HomeCalendarSection
           monthStart={monthStart.toDate()}

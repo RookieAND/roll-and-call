@@ -1,26 +1,39 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
+import { navBadgesQueryKey } from "@/shared/api";
 import { BottomNav } from "@/shared/ui";
 
-import { fetchHasSessionTodo } from "./fetch-has-session-todo";
+import { fetchNavBadges } from "./fetch-nav-badges";
 
-const TODO_STALE_MILLISECONDS = 30_000;
-
-// ponytail: 화면마다 따로 캐시해 30초 안에 다시 오면 묻지 않는다. 할 일을 바꾸는 액션에서 무효화하면 더 정확해진다.
+// 서버별로 한 번 묻고, 화면을 옮길 때마다 다시 묻는다. 새 값이 올 때까지 이전 점이 그대로 보인다.
 export function AppBottomNav() {
   const pathname = usePathname();
   const { server } = useParams<{ server?: string }>();
-  const { data: hasTodo = false } = useQuery({
-    queryKey: ["has-session-todo", pathname],
-    queryFn: () => fetchHasSessionTodo(server!),
-    staleTime: TODO_STALE_MILLISECONDS,
+  const queryClient = useQueryClient();
+  const queryKey = navBadgesQueryKey(server ?? "");
+  const { data, isError } = useQuery({
+    queryKey,
+    queryFn: () => fetchNavBadges(server!),
     throwOnError: false,
     enabled: !!server,
   });
+
+  const shownPathname = useRef(pathname);
+  useEffect(() => {
+    if (shownPathname.current === pathname || !server) return;
+    shownPathname.current = pathname;
+    void queryClient.invalidateQueries({ queryKey: navBadgesQueryKey(server) });
+  }, [pathname, server, queryClient]);
+
   // 서버 밖 화면(도움말·둘러보기)에는 탭이 없다.
   if (!server) return null;
-  return <BottomNav slug={server} hasTodo={hasTodo} />;
+  const dots = {
+    home: !isError && (data?.blockedTodo ?? false),
+    notifications: !isError && (data?.unread ?? false),
+  };
+  return <BottomNav slug={server} dots={dots} />;
 }

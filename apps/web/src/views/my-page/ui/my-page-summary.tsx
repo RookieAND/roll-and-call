@@ -4,21 +4,19 @@ import { profileDisplay } from "@/entities/profile";
 import { heldBadgeDetail } from "@/features/view-badge";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared/server";
-import { loadTodos, sessionsHref } from "@/widgets/session-list";
+import { sessionsHref } from "@/widgets/session-list";
 
 import { loadMyBadgeFacts } from "../api/load-my-badge-facts";
 import { loadMyPageSessions } from "../api/load-my-page-sessions";
 import { loadMyProfile } from "../api/load-my-profile";
 import { MyPageProfile } from "./my-page-profile";
-import { MyPageTodos } from "./my-page-todos";
 
 export async function MyPageSummary() {
   const user = (await getCurrentSessionUser())!;
   const server = await getCurrentServer();
-  const [profile, mySessions, todos, badgeRecords, badgeFacts] = await Promise.all([
+  const [profile, mySessions, badgeRecords, badgeFacts] = await Promise.all([
     loadMyProfile(user.id),
     loadMyPageSessions(server.id, user.id),
-    loadTodos(server.id, user.id),
     getUserBadges(server.id, user.id),
     loadMyBadgeFacts(user.id),
   ]);
@@ -34,28 +32,25 @@ export async function MyPageSummary() {
   const { name, avatar } = profileDisplay({ profile, user });
 
   return (
-    <>
-      <MyPageProfile
-        name={name}
-        avatarUrl={avatar}
-        bio={profile?.bio ?? null}
-        featuredBadges={featuredBadges}
-        heldBadgeCount={held.length}
-        keywords={profile?.keywords ?? []}
-        availability={profile?.availability ?? []}
-        hosted={{
-          count: mySessions[SESSION_ROLE.host].length,
-          href: serverPath({ slug: server.slug, path: sessionsHref({ role: SESSION_ROLE.host }) }),
-        }}
-        played={{
-          count: mySessions[SESSION_ROLE.player].length,
-          href: serverPath({
-            slug: server.slug,
-            path: sessionsHref({ role: SESSION_ROLE.player }),
-          }),
-        }}
-      />
-      <MyPageTodos items={todos.items} />
-    </>
+    <MyPageProfile
+      name={name}
+      avatarUrl={avatar}
+      bio={profile?.bio ?? null}
+      featuredBadges={featuredBadges}
+      heldBadgeCount={held.length}
+      keywords={profile?.keywords ?? []}
+      availability={profile?.availability ?? []}
+      hosted={{
+        count: mySessions[SESSION_ROLE.host].length,
+        href: serverPath({ slug: server.slug, path: sessionsHref({ role: SESSION_ROLE.host }) }),
+      }}
+      played={{
+        count: mySessions[SESSION_ROLE.player].length,
+        href: serverPath({
+          slug: server.slug,
+          path: sessionsHref({ role: SESSION_ROLE.player }),
+        }),
+      }}
+    />
   );
 }

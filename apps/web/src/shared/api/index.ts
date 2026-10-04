@@ -32,3 +32,4 @@ export { GAME_NOT_FOUND_RESULT } from "./game-not-found-result";
 export { isPageError } from "./is-page-error";
 export { putWithProgress } from "./put-with-progress";
 export { shrinkImage } from "./shrink-image";
+export { navBadgesQueryKey } from "./nav-badges-query-key";

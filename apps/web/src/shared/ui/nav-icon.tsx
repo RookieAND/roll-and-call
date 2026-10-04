@@ -2,17 +2,17 @@ import type { LucideIcon } from "lucide-react";
 
 interface NavIconProps {
   Icon: LucideIcon;
-  dot?: boolean;
+  dot?: string;
 }
 
-export function NavIcon({ Icon, dot = false }: NavIconProps) {
+export function NavIcon({ Icon, dot }: NavIconProps) {
   return (
     <span className="relative flex">
       <Icon size={26} strokeWidth={1.9} aria-hidden />
       {dot && (
         <span
           role="img"
-          aria-label="할 일 있음"
+          aria-label={dot}
           className="absolute -top-0.5 -right-1 size-2 rounded-full border-[1.5px] border-surface bg-danger-solid"
         />
       )}

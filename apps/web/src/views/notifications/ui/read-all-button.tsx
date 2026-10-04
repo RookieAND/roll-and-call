@@ -14,10 +14,11 @@ interface ReadAllButtonProps {
   inbox: Promise<InboxPage | null>;
   read: ReadState;
   onAllRead: (allRead: boolean) => void;
+  onSaved: () => void;
 }
 
 // 화면을 먼저 0으로 바꾸고, 실패하면 되돌린다. 확인 창은 없다.
-export function ReadAllButton({ inbox, read, onAllRead }: ReadAllButtonProps) {
+export function ReadAllButton({ inbox, read, onAllRead, onSaved }: ReadAllButtonProps) {
   const page = use(inbox);
   const [pending, setPending] = useState(false);
   if (isNull(page) || page.items.length === 0) return null;
@@ -32,6 +33,8 @@ export function ReadAllButton({ inbox, read, onAllRead }: ReadAllButtonProps) {
     if (result.error) {
       onAllRead(false);
       toast.error("잠시 뒤 다시 시도해 주세요.");
+    } else {
+      onSaved();
     }
     setPending(false);
   };

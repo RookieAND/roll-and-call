@@ -1,10 +1,12 @@
 "use client";
 
 import { Container, Tabs } from "@roll-and-call/ui";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { Suspense, useState, type ReactNode } from "react";
 
 import { markNotificationRead } from "@/features/read-notifications";
+import { navBadgesQueryKey } from "@/shared/api";
 import { AppBar } from "@/shared/ui";
 
 import type { InboxPage } from "../model/inbox-page";
@@ -24,6 +26,10 @@ interface NotificationsScreenProps {
 // 할 일·받은 알림은 따로 불러와서 한쪽이 늦거나 실패해도 다른 쪽을 막지 않는다.
 export function NotificationsScreen({ todoCount, todoPanel, inbox }: NotificationsScreenProps) {
   const pathname = usePathname();
+  const { server } = useParams<{ server: string }>();
+  const queryClient = useQueryClient();
+  const refreshNavBadges = () =>
+    void queryClient.invalidateQueries({ queryKey: navBadgesQueryKey(server) });
   const searchParams = useSearchParams();
   const [readIds, setReadIds] = useState<ReadonlySet<string>>(() => new Set());
   const [allRead, setAllRead] = useState(false);
@@ -43,12 +49,12 @@ export function NotificationsScreen({ todoCount, todoPanel, inbox }: Notificatio
   // 결과를 기다리지 않는다. 실패하면 다음에 열 때 다시 안 읽음으로 보일 뿐이다.
   const readOne = (notificationId: string) => {
     setReadIds((previous) => new Set(previous).add(notificationId));
-    markNotificationRead(notificationId).catch(() => undefined);
+    markNotificationRead(notificationId).then(refreshNavBadges, () => undefined);
   };
 
   const readAllAction = tab === NOTIFICATIONS_TAB.inbox && (
     <Suspense fallback={null}>
-      <ReadAllButton inbox={inbox} read={read} onAllRead={setAllRead} />
+      <ReadAllButton inbox={inbox} read={read} onAllRead={setAllRead} onSaved={refreshNavBadges} />
     </Suspense>
   );
 

@@ -10,7 +10,8 @@ export interface BottomNavTabProps {
   href: string;
   label: string;
   Icon: LucideIcon;
-  dot?: boolean;
+  // 점의 이름. 없으면 점을 그리지 않는다.
+  dot?: string;
 }
 
 export function BottomNavTab({ href, label, Icon, dot }: BottomNavTabProps) {
