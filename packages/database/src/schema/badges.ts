@@ -30,6 +30,8 @@ export const userBadges = pgTable(
     revokedAt: timestamp("revoked_at", { withTimezone: true }),
     // 획득 시트를 닫은 시각. null이면 다음 방문 때 시트를 띄운다.
     notifiedAt: timestamp("notified_at", { withTimezone: true }),
+    // 이 키로 알림을 보낸 가장 높은 단계. 같은 단계는 다시 알리지 않는다.
+    notifiedTier: integer("notified_tier"),
   },
   (table) => [
     primaryKey({ columns: [table.serverId, table.userId, table.badgeKey] }),

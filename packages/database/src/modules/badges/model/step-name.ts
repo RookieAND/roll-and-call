@@ -1,4 +1,4 @@
-import type { BadgeStep } from "@roll-and-call/database/badges/model";
+import type { BadgeStep } from "./badge-ladder";
 
 export function stepName({
   step,

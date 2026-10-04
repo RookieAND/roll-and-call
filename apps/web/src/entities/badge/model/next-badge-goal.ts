@@ -1,13 +1,13 @@
 import {
   BADGE_LADDER,
   BADGE_LADDERS,
+  stepName,
   type BadgeLadderKey,
 } from "@roll-and-call/database/badges/model";
 
 import { badgeCondition } from "./badge-condition";
 import type { BadgeCounts } from "./badge-counts";
 import { nextStep } from "./next-step";
-import { stepName } from "./step-name";
 
 type Candidate = { ladder: BadgeLadderKey; count: number; categoryName: string | null };
 

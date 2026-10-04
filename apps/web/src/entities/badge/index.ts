@@ -3,11 +3,14 @@ export { describeBadge } from "./model/describe-badge";
 export { heldBadges } from "./model/held-badges";
 export { pickFeaturedBadges } from "./model/pick-featured-badges";
 export { FEATURED_BADGE_LIMIT } from "./model/featured-badge-limit";
-export { countBadges, previousMonthKey } from "@roll-and-call/database/badges/model";
+export {
+  badgeRequirement,
+  countBadges,
+  previousMonthKey,
+  stepName,
+} from "@roll-and-call/database/badges/model";
 export { monthLabel } from "./model/month-label";
-export { stepName } from "./model/step-name";
 export { badgeCondition } from "./model/badge-condition";
-export { badgeRequirement } from "./model/badge-requirement";
 export { badgeCounts, type BadgeCounts, type RuleCount } from "./model/badge-counts";
 export { nextStep } from "./model/next-step";
 export { nextBadgeGoal } from "./model/next-badge-goal";

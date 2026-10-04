@@ -1,10 +1,6 @@
-import {
-  BADGE_LADDER,
-  BADGE_LADDERS,
-  isHiddenLadder,
-  type BadgeLadderKey,
-  type BadgeStep,
-} from "@roll-and-call/database/badges/model";
+import { BADGE_LADDER, type BadgeLadderKey, type BadgeStep } from "./badge-ladder";
+import { BADGE_LADDERS } from "./badge-ladders";
+import { isHiddenLadder } from "./is-hidden-ladder";
 
 export function badgeRequirement({
   ladder,

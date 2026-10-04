@@ -1,6 +1,6 @@
 import type { BadgeLook } from "@roll-and-call/database/badges/model";
 
-import type { BadgeTone } from "@/entities/badge";
+export const AWARD_SHEET_KIND = { retro: "retro", hidden: "hidden", first: "first" } as const;
 
 export type AwardItem = {
   key: string;
@@ -8,20 +8,18 @@ export type AwardItem = {
   look: BadgeLook;
   name: string;
   ribbon: string | null;
-  tag: string;
-  tagTone: BadgeTone;
-  requirement: string;
 };
 
-// 첫 뱃지·이달의 뱃지·하나만 받음 = single, 여러 개 = multi, 출시 직후 처음 받은 묶음 = retro.
+export type AwardHighlight = AwardItem & {
+  line: string;
+  source: { label: string; href: string } | null;
+};
+
+// 출시 직후 지난 기록으로 채운 묶음 = retro, 숨겨진 칭호 = hidden, 첫 뱃지(누적 1단계) = first. 함께 받은 나머지는 chips.
 export type AwardSheet =
+  | { kind: typeof AWARD_SHEET_KIND.retro; items: AwardItem[] }
   | {
-      kind: "single";
-      item: AwardItem;
-      lines: string[];
-      source: { label: string; href: string } | null;
-      gold: boolean;
-      pinnable: boolean;
-    }
-  | { kind: "multi"; items: AwardItem[]; subtitle: string | null }
-  | { kind: "retro"; items: AwardItem[] };
+      kind: typeof AWARD_SHEET_KIND.hidden | typeof AWARD_SHEET_KIND.first;
+      highlights: AwardHighlight[];
+      chips: AwardItem[];
+    };

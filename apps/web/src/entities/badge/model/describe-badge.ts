@@ -1,8 +1,7 @@
-import { BADGE_LADDERS, parseBadgeKey } from "@roll-and-call/database/badges/model";
+import { BADGE_LADDERS, parseBadgeKey, stepName } from "@roll-and-call/database/badges/model";
 
 import type { BadgeView } from "./badge-view";
 import { stepLook } from "./step-look";
-import { stepName } from "./step-name";
 
 export function describeBadge(record: {
   badgeKey: string;

@@ -1,5 +1,5 @@
 import { and, eq, like, or } from "drizzle-orm";
-import { groupBy, uniq } from "es-toolkit";
+import { groupBy, isNull, uniq } from "es-toolkit";
 
 import { db } from "#/client";
 import { applyBadgeWrites } from "#/modules/badges/commands/apply-badge-writes";
@@ -13,7 +13,7 @@ import { userBadges } from "#/schema";
 import { loadMonthlyAppearances } from "./load-monthly-appearances";
 
 // 이달의 GM·PL은 여러 사람을 견주므로 한 사람만 다시 계산할 수 없다. 전체 1위를 다시 정해 모두와 비교한다.
-// 이미 준 달이 굳었으면(isMonthSettled) 그 달은 건드리지 않는다. 한 번도 주지 않은 달은 굳었어도 새로 준다.
+// 굳은 달(다음 달 8일 00:00 KST, isMonthSettled)만 준다(R5). 굳기 전에 준 행은 회수하고, 이미 준 굳은 달은 건드리지 않는다.
 export async function syncMonthlyBadges({ serverId, now }: { serverId: string; now: Date }) {
   const [appearances, stored] = await Promise.all([
     loadMonthlyAppearances({ serverId, now }),
@@ -35,10 +35,16 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
         ),
       ),
   ]);
-  const awardedKeys = new Set(stored.map((badge) => badge.badgeKey));
+  // 굳기 전에 줬다 회수한 달(배포 전 선지급분)은 굳은 뒤 다시 정해 준다.
+  const awardedKeys = new Set(
+    stored.filter((badge) => isNull(badge.revokedAt)).map((badge) => badge.badgeKey),
+  );
   const isFrozen = (key: string) =>
     awardedKeys.has(key) && isMonthSettled(parseBadgeKey(key)!.subject!, now);
-  const winners = monthlyWinners(appearances, now).filter((winner) => !isFrozen(winner.badgeKey));
+  const winners = monthlyWinners(appearances, now).filter(
+    (winner) =>
+      isMonthSettled(parseBadgeKey(winner.badgeKey)!.subject!, now) && !isFrozen(winner.badgeKey),
+  );
   const open = stored.filter((badge) => !isFrozen(badge.badgeKey));
   const desiredByUser = groupBy(winners, (winner) => winner.userId);
   const storedByUser = groupBy(open, (badge) => badge.userId);

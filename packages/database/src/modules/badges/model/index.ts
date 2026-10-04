@@ -6,6 +6,8 @@ export {
   type BadgeHostedDraw,
 } from "./badge-facts";
 export { badgeKey } from "./badge-key";
+export { BADGE_LAUNCHED_AT, isRetroBadge } from "./badge-launched-at";
+export { badgeRequirement } from "./badge-requirement";
 export {
   BADGE_ROLE,
   BADGE_LADDER,
@@ -34,5 +36,6 @@ export { parseBadgeKey } from "./parse-badge-key";
 export { previousMonthKey } from "./previous-month-key";
 export { type BadgeEvent } from "./reached-tier";
 export { recordAppearances } from "./record-appearances";
+export { stepName } from "./step-name";
 export { isRecordSession, type RecordGame } from "./record-session";
 export { DEFAULT_PLAY_MINUTES, sessionEndAt } from "#/modules/games/model/session-timing";

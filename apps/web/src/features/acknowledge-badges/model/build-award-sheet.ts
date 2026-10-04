@@ -1,26 +1,42 @@
-import { isNull, uniq } from "es-toolkit";
+import { BADGE_LADDER, isHiddenLadder, isRetroBadge } from "@roll-and-call/database/badges/model";
+import { isNull, partition } from "es-toolkit";
 
-import type { AwardSheet } from "./award-sheet";
+import { AWARD_SHEET_KIND, type AwardSheet } from "./award-sheet";
 import type { HeldBadge } from "./held-badge";
-import { singleAwardSheet } from "./single-award-sheet";
+import { toAwardHighlight } from "./to-award-highlight";
 import { toAwardItem } from "./to-award-item";
 
+const FIRST_BADGE_LADDERS: readonly string[] = [BADGE_LADDER.playerTotal, BADGE_LADDER.gmTotal];
+
+const isFirstBadge = (badge: HeldBadge) =>
+  FIRST_BADGE_LADDERS.includes(badge.ladder) && badge.tier === 1;
+
+// 시트는 출시 소급분 > 숨겨진 칭호 > 첫 뱃지 순으로 한 장만 띄운다(D29, R26, R29). 그 밖의 대기 뱃지만 있으면 띄우지 않는다.
 export function buildAwardSheet(held: HeldBadge[]): AwardSheet | null {
   const pending = held.filter((badge) => isNull(badge.record.notifiedAt));
-  if (pending.length === 0) return null;
-
-  if (pending.length === 1) {
-    return singleAwardSheet({ badge: pending[0]!, firstBadge: held.length === 1 });
+  if (pending.some((badge) => isRetroBadge(badge.record.earnedAt))) {
+    return { kind: AWARD_SHEET_KIND.retro, items: pending.map(toAwardItem) };
   }
-
-  // 한 번도 알린 적 없는 사람이 여럿을 한꺼번에 받았으면 출시 직후 지난 기록으로 채운 묶음이다.
-  if (pending.length === held.length) return { kind: "retro", items: pending.map(toAwardItem) };
-
-  const titles = uniq(pending.map((badge) => badge.record.source?.title ?? null));
-  const [title] = titles;
-  return {
-    kind: "multi",
-    items: pending.toSorted((left, right) => right.grade - left.grade).map(toAwardItem),
-    subtitle: titles.length === 1 && title ? `${title} 출석 확인이 끝났습니다.` : null,
-  };
+  const [hidden, others] = partition(pending, (badge) => isHiddenLadder(badge.ladder));
+  if (hidden.length > 0) {
+    return {
+      kind: AWARD_SHEET_KIND.hidden,
+      highlights: hidden.map(toAwardHighlight),
+      chips: others.map(toAwardItem),
+    };
+  }
+  const [first, rest] = partition(pending, isFirstBadge);
+  if (first.length > 0) {
+    return {
+      kind: AWARD_SHEET_KIND.first,
+      highlights: first
+        .toSorted(
+          (left, right) =>
+            FIRST_BADGE_LADDERS.indexOf(left.ladder) - FIRST_BADGE_LADDERS.indexOf(right.ladder),
+        )
+        .map(toAwardHighlight),
+      chips: rest.map(toAwardItem),
+    };
+  }
+  return null;
 }
