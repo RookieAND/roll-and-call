@@ -52,3 +52,13 @@ export { recruitMethodLabel } from "./model/recruit-method-label";
 export { RecruitMethodBadge } from "./ui/recruit-method-badge";
 export { availabilityNote } from "./model/availability-note";
 export { SessionHeading } from "./ui/session-heading";
+export {
+  CONFIRMED_LEAVE_BLOCK,
+  confirmedLeaveBlock,
+  type ConfirmedLeaveBlock,
+} from "./model/confirmed-leave-block";
+export {
+  WAITING_LEAVE_BLOCK,
+  waitingLeaveBlock,
+  type WaitingLeaveBlock,
+} from "./model/waiting-leave-block";

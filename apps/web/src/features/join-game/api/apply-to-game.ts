@@ -12,9 +12,11 @@ import {
   APPLICATION_CLOSED_MESSAGE,
   GAME_CANCELLED_MESSAGE,
   GAME_NOT_FOUND_RESULT,
+  HIDDEN_GAME_APPLY_MESSAGE,
+  SANCTIONED_APPLY_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
-import type { Game } from "@/shared/server";
+import { findActiveSanction, type Game } from "@/shared/server";
 
 export type Application = {
   game: Game;
@@ -43,6 +45,10 @@ export async function applyToGame({
     if (game.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
     if (game.gmId === userId) {
       return { error: "GM은 참여자로 참여할 수 없습니다." };
+    }
+    if (game.hiddenAt) return { error: HIDDEN_GAME_APPLY_MESSAGE };
+    if (await findActiveSanction({ executor: transaction, serverId, userId })) {
+      return { error: SANCTIONED_APPLY_MESSAGE };
     }
     // 일시 지정형은 등록 때부터 confirmedAt이 있으므로, 신청 닫힘은 isApplicationClosed로 본다.
     if (isApplicationClosed(game)) return { error: APPLICATION_CLOSED_MESSAGE };
