@@ -64,11 +64,11 @@ export {
   type CertDecision,
   type CertDecisionResult,
   type GrantResult,
-  type RevokeInput,
+  type RevokeResult,
 } from "@roll-and-call/database/certifications";
 export { decideCert } from "./decide-cert";
 export { type ReviewModeration } from "./review-moderation";
-export { getUserDetail, type OngoingActivity, type UserDetail } from "./get-user-detail";
+export { getUserDetail, type UserDetail } from "./get-user-detail";
 export { getMemberOngoing, type MemberOngoingRow } from "./get-member-ongoing";
 export { checkDiscordBanFailed } from "./check-discord-ban-failed";
 export { checkDiscordUnbanFailed } from "./check-discord-unban-failed";
@@ -78,13 +78,17 @@ export { type UserRow } from "./user-row";
 export { USER_SORT_COLUMNS, USER_SORT_FALLBACK, type UserSortColumn } from "./user-sort";
 export { retentionDaysLeft } from "./retention-days-left";
 export { getCertReview, type CertReview } from "./get-cert-review";
+export { CERT_GRANT_METHOD, type CertGrantMethod, type CertManageRow } from "./cert-manage-row";
+export { type CertManageFilter } from "./cert-manage-filter";
 export {
-  getCertStatus,
-  type CertStatusData,
-  type GmCertRow,
-  type GmCertState,
-  type EditionCertRow,
-} from "./get-cert-status";
+  CERT_MANAGE_SORT_COLUMNS,
+  CERT_MANAGE_SORT_FALLBACK,
+  type CertManageSortColumn,
+} from "./cert-manage-sort";
+export { listCertManage, type CertManageList } from "./list-cert-manage";
+export { type OrderedCertManageRow } from "./order-cert-manage";
+export { parseCertManageFilter } from "./parse-cert-manage-filter";
+export { getRevokeTarget, type RevokeTarget } from "./get-revoke-target";
 export {
   CERT_QUEUE_FILTERS,
   type CertQueueFilter,

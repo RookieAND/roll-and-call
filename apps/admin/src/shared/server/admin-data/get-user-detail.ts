@@ -12,19 +12,6 @@ import type { Session } from "./types";
 const nicknameOf = (db: Snapshot, userId: string) =>
   db.users.find((user) => user.id === userId)?.nickname ?? "";
 
-const toOngoing = (db: Snapshot, session: Session, userId: string) => ({
-  sessionId: session.id,
-  title: session.title,
-  rulebook: session.rulebook,
-  startsAt: session.startsAt,
-  hosted: session.gmId === userId,
-  gmNickname: nicknameOf(db, session.gmId),
-  memberCount: session.memberIds.length,
-  capacity: session.capacity,
-});
-
-export type OngoingActivity = ReturnType<typeof toOngoing>;
-
 export async function getUserDetail(userId: string) {
   const db = await loadSnapshot();
   const user = db.users.find((candidate) => candidate.id === userId);
@@ -130,10 +117,6 @@ export async function getUserDetail(userId: string) {
       })
       .toSorted((a, b) => b.startsAt.getTime() - a.startsAt.getTime()),
     memos: staffMemoRowsOf({ db, userId }),
-    ongoing: db.sessions
-      .filter((session) => mine(session) && !session.closed && session.startsAt.getTime() >= now)
-      .toSorted((a, b) => a.startsAt.getTime() - b.startsAt.getTime())
-      .map((session) => toOngoing(db, session, userId)),
   };
 }
 

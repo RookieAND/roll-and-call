@@ -1,1 +1,1 @@
-export { RevokeCertForm } from "./ui/revoke-cert-form";
+export { RevokeCertDialog } from "./ui/revoke-cert-dialog";

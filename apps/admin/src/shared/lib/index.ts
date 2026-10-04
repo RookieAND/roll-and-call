@@ -2,6 +2,11 @@ export { actionTone } from "./action-tone";
 export { auditLogHref } from "./audit-log-href";
 export { conflictToastText } from "./conflict-toast-text";
 export { deltaArrow } from "./delta-arrow";
+export {
+  CERT_MANAGE_STATUS,
+  CERT_MANAGE_STATUS_LABEL,
+  type CertManageStatus,
+} from "./cert-manage-status";
 export { CERT_TABS } from "./cert-tabs";
 export {
   formatDate,

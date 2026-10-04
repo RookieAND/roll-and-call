@@ -18,6 +18,17 @@ const nextConfig: NextConfig = {
       destination: "/:server/reviews/:path*",
       permanent: true,
     },
+    // 인증 현황과 유저 상세 아래의 반려로 돌리기는 인증 관리 한 화면으로 모았다(D26, D171).
+    {
+      source: "/:server/cert/status",
+      destination: "/:server/cert/manage",
+      permanent: true,
+    },
+    {
+      source: "/:server/users/:id/certs/:certId/revoke",
+      destination: "/:server/cert/manage?user=:id&rulebook=:certId",
+      permanent: true,
+    },
     // 룰북 추가·요청 승인은 다이얼로그에서 별도 페이지로 옮겼다(D291). 쿼리(category, request)는 그대로 넘어간다.
     {
       source: "/:server/rules",

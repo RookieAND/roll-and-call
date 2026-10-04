@@ -8,8 +8,8 @@ describe("withQuery", () => {
       "/cert?q=%EA%B9%80",
     );
     expect(withQuery("/cert", {}, {})).toBe("/cert");
-    expect(withQuery("/cert/status", { tab: "gm" }, { unapplied: "1" })).toBe(
-      "/cert/status?tab=gm&unapplied=1",
+    expect(withQuery("/cert/manage", { q: "gm" }, { status: "pending" })).toBe(
+      "/cert/manage?q=gm&status=pending",
     );
   });
 });
