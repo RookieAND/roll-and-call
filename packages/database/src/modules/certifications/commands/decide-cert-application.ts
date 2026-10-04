@@ -3,10 +3,13 @@ import { and, eq, sql } from "drizzle-orm";
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor, ShotKey } from "#/modules/moderation/model/types";
+import { createNotifications } from "#/modules/notifications/commands/create-notifications";
+import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
 import { certApplications, certifications, profiles, rulebooks } from "#/schema";
 
+import { rejectionSummary } from "../model/rejection-summary";
 import { rejectWaitingSupplements, type WaitingSupplements } from "./reject-waiting-supplements";
 
 export type CertDecision =
@@ -32,7 +35,7 @@ export type CertDecisionResult =
     }
   | { ok: false; blocked: string };
 
-// 이미 다른 운영진이 처리했으면 아무것도 바꾸지 않고 충돌을 알린다.
+// 이미 다른 운영진이 처리했으면 아무것도 바꾸지 않고(알림도 없이) 충돌을 알린다.
 // 기본 룰북을 반려하면 그 결정을 기다리던 서플리먼트(waitingSupplements)도 반려한다.
 export async function decideCertApplication({
   serverId,
@@ -98,7 +101,9 @@ export async function decideCertApplication({
       .from(profiles)
       .innerJoin(rulebooks, eq(rulebooks.id, decided.rulebookId))
       .where(eq(profiles.id, decided.userId));
-    const target = `${names!.nickname} · ${rulebookLabel(names!)}`;
+    const rulebookName = rulebookLabel(names!);
+    const target = `${names!.nickname} · ${rulebookName}`;
+    const rulebook = { rulebookId: decided.rulebookId, rulebookName };
 
     if (decision.kind === "approve") {
       await tx
@@ -132,6 +137,14 @@ export async function decideCertApplication({
           after: { label: "인증됨" },
         },
       });
+      await createNotifications({
+        executor: tx,
+        serverId,
+        actorId: actor.id,
+        notifications: [
+          { userId: decided.userId, kind: NOTIFICATION_KIND.certApproved, params: rulebook },
+        ],
+      });
       return { ok: true };
     }
 
@@ -149,6 +162,18 @@ export async function decideCertApplication({
         before: { label: "심사 대기" },
         after: { label: "반려됨" },
       },
+    });
+    await createNotifications({
+      executor: tx,
+      serverId,
+      actorId: actor.id,
+      notifications: [
+        {
+          userId: decided.userId,
+          kind: NOTIFICATION_KIND.certRejected,
+          params: { ...rulebook, rejectionSummary: rejectionSummary(decided) },
+        },
+      ],
     });
     if (waitingSupplements) {
       await rejectWaitingSupplements({

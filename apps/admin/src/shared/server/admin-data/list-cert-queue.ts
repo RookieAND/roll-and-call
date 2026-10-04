@@ -1,68 +1,20 @@
 import "server-only";
-import type { RulebookKind } from "@roll-and-call/database";
 import { uniq } from "es-toolkit";
 
+import type { CertQueueFilter } from "./cert-queue-filter";
+import { certQueueRows } from "./cert-queue-rows";
+import { filterCertQueue } from "./filter-cert-queue";
 import { loadSnapshot } from "./snapshot";
-import type { CertFormat } from "./types";
-import { waitedDays } from "./waited-days";
-
-// 활성 GM은 최근 90일에 구인을 연 사람이다.
-export const CERT_QUEUE_FILTERS = {
-  reapplied: "재신청",
-  activeGm: "활성 GM",
-} as const;
-export type CertQueueFilterKey = keyof typeof CERT_QUEUE_FILTERS;
-
-export interface CertQueueFilter {
-  query?: string;
-  rulebook?: string;
-  filter?: CertQueueFilterKey;
-}
-
-export interface CertQueueRow {
-  id: string;
-  nickname: string;
-  rulebook: string;
-  category: string;
-  kind: RulebookKind;
-  format: CertFormat;
-  appliedAt: Date;
-  waitedDays: number;
-  previousRejectionCount: number;
-  activeGm: boolean;
-}
 
 export async function listCertQueue(filter: CertQueueFilter) {
   const db = await loadSnapshot();
-  const pending = db.certApplications
-    .filter((application) => application.status === "pending")
-    .toSorted((a, b) => a.appliedAt.getTime() - b.appliedAt.getTime())
-    .map((application): CertQueueRow => {
-      const user = db.users.find((candidate) => candidate.id === application.userId)!;
-      const book = db.rulebooks.find((rulebook) => rulebook.id === application.rulebookId);
-      return {
-        id: application.id,
-        nickname: user.nickname,
-        rulebook: application.rulebook,
-        category: book?.category ?? "",
-        kind: book?.kind ?? "core",
-        format: application.format,
-        appliedAt: application.appliedAt,
-        waitedDays: waitedDays(application.appliedAt),
-        previousRejectionCount: application.previousRejections.length,
-        activeGm: user.recentHostedCount > 0,
-      };
-    });
-  const rows = pending.filter(
-    (row) =>
-      (!filter.query || row.nickname.includes(filter.query)) &&
-      (!filter.rulebook || row.rulebook === filter.rulebook) &&
-      (filter.filter !== "reapplied" || row.previousRejectionCount > 0) &&
-      (filter.filter !== "activeGm" || row.activeGm),
-  );
+  const pending = certQueueRows({
+    records: db,
+    applications: db.certApplications.filter((application) => application.status === "pending"),
+  });
   return {
     total: pending.length,
-    rows,
+    rows: filterCertQueue({ rows: pending, filter }),
     rulebookOptions: uniq(pending.map((row) => row.rulebook)).toSorted(),
   };
 }

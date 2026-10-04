@@ -84,11 +84,12 @@ export {
 } from "./get-cert-status";
 export {
   CERT_QUEUE_FILTERS,
-  listCertQueue,
   type CertQueueFilter,
   type CertQueueFilterKey,
-  type CertQueueRow,
-} from "./list-cert-queue";
+} from "./cert-queue-filter";
+export { type CertQueueRow } from "./cert-queue-rows";
+export { listCertQueue } from "./list-cert-queue";
+export { parseCertQueueFilter } from "./parse-cert-queue-filter";
 export { PENDING_KINDS, type PendingItem, type PendingKind } from "./build-pending-items";
 export { getPendingItems } from "./pending";
 export { isRecognizedPost } from "./recognized-session";

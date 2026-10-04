@@ -1,6 +1,13 @@
 import { Button, Checkbox, Grid, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
 
-import { AdminHeader, FactRows, KeyHint, LoadingRegion, SkeletonItem } from "@/shared/ui";
+import {
+  AdminHeader,
+  FactRows,
+  KeyHint,
+  LoadingRegion,
+  NextItemButton,
+  SkeletonItem,
+} from "@/shared/ui";
 
 const SHOTS = [
   { label: "앞면", note: "표지 + 닉네임 쪽지", question: "룰북·판본과 쪽지 닉네임이 맞는가" },
@@ -18,10 +25,14 @@ export function CertReviewLoading() {
     <>
       <AdminHeader
         title="룰북 인증 심사"
-        sub={<Skeleton width={32} height={12} render={<span />} />}
+        trail={[
+          { href: "/cert", label: "룰북 인증" },
+          { href: "/cert", label: "심사 대기열" },
+        ]}
+        actions={<NextItemButton />}
       />
       <LoadingRegion fullBleed label="심사할 신청을 불러오는 중입니다">
-        <VStack gap="175" className="mx-auto w-full max-w-content flex-1 p-200">
+        <VStack gap="175" className="w-full flex-1 p-200">
           <section className="rounded-600 border border-gray-200 bg-surface">
             <HStack align="center" gap="150" className="px-200 py-175">
               <Skeleton width={40} height={40} rounded="full" />
@@ -52,7 +63,7 @@ export function CertReviewLoading() {
                       {shot.note}
                     </Text>
                   </VStack>
-                  <Skeleton width="100%" height={200} rounded="none" />
+                  <Skeleton width="100%" height={360} rounded="none" />
                   <Checkbox.Field className="px-150 py-125">
                     <Checkbox.Root disabled>
                       <Checkbox.Indicator />

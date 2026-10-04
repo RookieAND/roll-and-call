@@ -2,7 +2,11 @@ import { and, eq, inArray, sql } from "drizzle-orm";
 
 import { recordAudit, type Executor } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { createNotifications } from "#/modules/notifications/commands/create-notifications";
+import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { certApplications } from "#/schema";
+
+import { rejectionSummary } from "../model/rejection-summary";
 
 export const CORE_REJECTED_TAG = "기본 룰북 반려";
 
@@ -27,7 +31,7 @@ export async function rejectWaitingSupplements({
 }) {
   const { userId, nickname, coreLabel, applications } = supplements;
   if (applications.length === 0) return;
-  const reason = `기본 룰북(${coreLabel})이 반려되어 함께 반려되었습니다. 기본 룰북과 함께 다시 신청해 주세요.`;
+  const reason = `기본 룰북(${coreLabel})을 인증한 뒤 다시 신청해 주세요.`;
   const rejected = await executor
     .update(certApplications)
     .set({
@@ -47,10 +51,12 @@ export async function rejectWaitingSupplements({
         eq(certApplications.status, "pending"),
       ),
     )
-    .returning({ id: certApplications.id });
-  for (const application of applications.filter((row) =>
-    rejected.some(({ id }) => id === row.id),
-  )) {
+    .returning({ id: certApplications.id, rulebookId: certApplications.rulebookId });
+  const rejectedApplications = applications.flatMap((application) => {
+    const row = rejected.find(({ id }) => id === application.id);
+    return row ? [{ ...application, rulebookId: row.rulebookId }] : [];
+  });
+  for (const application of rejectedApplications) {
     await recordAudit({
       executor,
       serverId,
@@ -67,4 +73,18 @@ export async function rejectWaitingSupplements({
       },
     });
   }
+  await createNotifications({
+    executor,
+    serverId,
+    actorId: actor.id,
+    notifications: rejectedApplications.map((application) => ({
+      userId,
+      kind: NOTIFICATION_KIND.certRejected,
+      params: {
+        rulebookId: application.rulebookId,
+        rulebookName: application.rulebook,
+        rejectionSummary: rejectionSummary({ rejectTag: CORE_REJECTED_TAG }),
+      },
+    })),
+  });
 }

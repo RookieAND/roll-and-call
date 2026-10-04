@@ -36,7 +36,9 @@ describe("certBlockers", () => {
       certifications: [{ userId: "me", rulebookId: "1권" }] as never,
       certApplications: [application("c", { rulebookId: "2권" }), supplement],
     };
-    expect(certBlockers(supplement, records).waitingOn).toEqual(["2권 3rd"]);
+    expect(certBlockers(supplement, records).waitingOn).toEqual([
+      { label: "2권 3rd", applicationId: "c" },
+    ]);
   });
 
   it("다른 사람이 같은 판매처·주문번호로 낸 전자책이 있으면 중복", () => {

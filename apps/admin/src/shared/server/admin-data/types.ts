@@ -73,6 +73,8 @@ export interface PreviousRejection {
   rejectedAt: Date;
   tags: string[];
   requests: string[];
+  flaggedShots: ShotKey[];
+  photoUrls: Partial<Record<ShotKey, string>>;
 }
 
 export type CertFormat = "physical" | "ebook";

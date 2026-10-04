@@ -10,6 +10,7 @@ import {
   SkeletonPager,
   SkeletonSelect,
   SkeletonTable,
+  SortFixedNote,
 } from "@/shared/ui";
 
 export function CertQueueLoading() {
@@ -41,15 +42,16 @@ export function CertQueueLoading() {
               {label}
             </Chip>
           ))}
+          <SortFixedNote />
         </HStack>
         <Panel footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
               { label: "닉네임", kind: "text", width: 150 },
-              { label: "신청한 책", kind: "text", width: 320 },
+              { label: "신청한 책", kind: "text", width: 380 },
               { label: "종류", kind: "badge", width: 110 },
               { label: "형식", kind: "badge", width: 90 },
-              { label: "대기 일수", kind: "number", width: 90, align: "end", sorted: true },
+              { label: "대기 일수", kind: "number", width: 90, align: "end" },
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />

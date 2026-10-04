@@ -1,7 +1,7 @@
 import { HStack, Radio, RadioGroup, TextInput } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
-import { OTHER_REASON } from "../model/reject-reasons";
+import { OTHER_REASON, type RejectReason } from "../model/reject-reasons";
 
 const reasonRow = cva("min-h-11 border-(--rc-color-border-subtle) px-150", {
   variants: {
@@ -11,20 +11,21 @@ const reasonRow = cva("min-h-11 border-(--rc-color-border-subtle) px-150", {
 });
 
 interface ReasonRadioProps {
-  reasons: readonly string[];
+  reasons: readonly RejectReason[];
   value: string;
-  otherReason: string;
+  // 「기타」를 고르면 이 입력란이 사용자에게 보이는 사유가 된다.
+  otherText: string;
   onValueChange: (value: string) => void;
-  onOtherReasonChange: (otherReason: string) => void;
+  onOtherTextChange: (otherText: string) => void;
   label: string;
 }
 
 export function ReasonRadio({
   reasons,
   value,
-  otherReason,
+  otherText,
   onValueChange,
-  onOtherReasonChange,
+  onOtherTextChange,
   label,
 }: ReasonRadioProps) {
   const otherSelected = value === OTHER_REASON;
@@ -37,38 +38,29 @@ export function ReasonRadio({
     >
       {reasons.map((reason, index) => (
         <HStack
-          key={reason}
+          key={reason.name}
           align="center"
-          className={reasonRow({ selected: value === reason, divided: index > 0 })}
+          gap="125"
+          className={reasonRow({ selected: value === reason.name, divided: index > 0 })}
         >
-          <Radio.Field>
-            <Radio.Root value={reason}>
+          <Radio.Field className="shrink-0">
+            <Radio.Root value={reason.name}>
               <Radio.Indicator />
             </Radio.Root>
-            <Radio.Label>{reason}</Radio.Label>
+            <Radio.Label>{reason.name}</Radio.Label>
           </Radio.Field>
+          {reason.name === OTHER_REASON ? (
+            <TextInput
+              value={otherSelected ? otherText : ""}
+              disabled={!otherSelected}
+              placeholder="사용자에게 보이는 사유를 직접 적어 주세요"
+              aria-label="기타 사유"
+              onChange={(event) => onOtherTextChange(event.target.value)}
+              className="my-075 min-w-0 flex-1"
+            />
+          ) : null}
         </HStack>
       ))}
-      <HStack
-        align="center"
-        gap="125"
-        className={reasonRow({ selected: otherSelected, divided: true })}
-      >
-        <Radio.Field className="shrink-0">
-          <Radio.Root value={OTHER_REASON}>
-            <Radio.Indicator />
-          </Radio.Root>
-          <Radio.Label>{OTHER_REASON}</Radio.Label>
-        </Radio.Field>
-        <TextInput
-          value={otherReason}
-          disabled={!otherSelected}
-          placeholder="목록에 없는 사유를 적어 주세요"
-          aria-label="기타 사유"
-          onChange={(event) => onOtherReasonChange(event.target.value)}
-          className="my-075 min-w-0 flex-1"
-        />
-      </HStack>
     </RadioGroup>
   );
 }

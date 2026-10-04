@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Dialog, HStack, IconButton, Text, cn } from "@roll-and-call/ui";
+import { Button, Checkbox, Dialog, HStack, IconButton, Text, cn } from "@roll-and-call/ui";
 import {
   ChevronLeft,
   ChevronRight,
@@ -11,31 +11,69 @@ import {
   ZoomOut,
   type LucideIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, type RefObject } from "react";
+
+import { Kbd } from "@/shared/ui";
 
 import type { ReviewShot } from "../model/shots";
-import { PhotoSlot } from "./photo-slot";
+import { ZoomPane, type ZoomView } from "./zoom-pane";
 
 const ZOOM_STEP = 0.5;
 const ZOOM_MAX = 3;
+const RESET_VIEW: ZoomView = { zoom: 1, rotation: 0, offset: { x: 0, y: 0 }, original: false };
 
 interface ShotViewerProps {
   shots: ReviewShot[];
   shot: string | null;
-  photoUrls: Partial<Record<string, string | null>>;
+  photoUrls: Partial<Record<string, string>>;
+  // 재신청에서 지난번에 문제로 지정한 사진은 이전 사진과 나란히 본다.
+  previousUrls: Partial<Record<string, string>>;
+  checkedShots: string[];
+  // 확인할 수 있는 사진(사진이 있고 심사 중인 신청). 없으면 체크 줄을 두지 않는다.
+  checkableShots: string[];
+  finalFocus: RefObject<HTMLButtonElement | null>;
   onShotChange: (shot: string | null) => void;
+  onCheck: (shot: string) => void;
 }
 
-export function ShotViewer({ shots, shot, photoUrls, onShotChange }: ShotViewerProps) {
-  const [zoom, setZoom] = useState(1);
-  const [rotation, setRotation] = useState(0);
-  const [original, setOriginal] = useState(false);
+export function ShotViewer({
+  shots,
+  shot,
+  photoUrls,
+  previousUrls,
+  checkedShots,
+  checkableShots,
+  finalFocus,
+  onShotChange,
+  onCheck,
+}: ShotViewerProps) {
+  const [view, setView] = useState(RESET_VIEW);
   const index = shots.findIndex((candidate) => candidate.key === shot);
   const current = shots[index];
+  const previousUrl = current ? previousUrls[current.key] : undefined;
+  const checkable = Boolean(current && checkableShots.includes(current.key));
+  const checked = Boolean(current && checkedShots.includes(current.key));
+  const lastToCheck =
+    checkableShots.filter((key) => !checkedShots.includes(key)).length === 1 && !checked;
+
+  const zoomTo = (zoom: number, point = { x: 0, y: 0 }) => {
+    const next = Math.min(ZOOM_MAX, Math.max(1, zoom));
+    const ratio = next / view.zoom;
+    setView({
+      ...view,
+      zoom: next,
+      offset:
+        next === 1
+          ? { x: 0, y: 0 }
+          : {
+              x: point.x - ratio * (point.x - view.offset.x),
+              y: point.y - ratio * (point.y - view.offset.y),
+            },
+    });
+  };
 
   const move = (step: number) => {
-    setZoom(1);
-    setRotation(0);
+    setView(RESET_VIEW);
     onShotChange(shots[(index + step + shots.length) % shots.length]!.key);
   };
 
@@ -43,26 +81,45 @@ export function ShotViewer({ shots, shot, photoUrls, onShotChange }: ShotViewerP
     {
       label: "확대",
       icon: ZoomIn,
-      onClick: () => setZoom(Math.min(ZOOM_MAX, zoom + ZOOM_STEP)),
-      disabled: zoom >= ZOOM_MAX,
+      onClick: () => zoomTo(view.zoom + ZOOM_STEP),
+      disabled: view.zoom >= ZOOM_MAX,
     },
     {
       label: "축소",
       icon: ZoomOut,
-      onClick: () => setZoom(Math.max(1, zoom - ZOOM_STEP)),
-      disabled: zoom <= 1,
+      onClick: () => zoomTo(view.zoom - ZOOM_STEP),
+      disabled: view.zoom <= 1,
     },
-    { label: "왼쪽으로 회전", icon: RotateCcw, onClick: () => setRotation(rotation - 90) },
-    { label: "오른쪽으로 회전", icon: RotateCw, onClick: () => setRotation(rotation + 90) },
+    {
+      label: "왼쪽으로 회전",
+      icon: RotateCcw,
+      onClick: () => setView({ ...view, rotation: view.rotation - 90 }),
+    },
+    {
+      label: "오른쪽으로 회전",
+      icon: RotateCw,
+      onClick: () => setView({ ...view, rotation: view.rotation + 90 }),
+    },
   ];
+  const paneProps = {
+    view,
+    onZoomAt: (point: { x: number; y: number }) => zoomTo(view.zoom + ZOOM_STEP, point),
+    onPan: (delta: { x: number; y: number }) =>
+      setView({ ...view, offset: { x: view.offset.x + delta.x, y: view.offset.y + delta.y } }),
+  };
 
   return (
     <Dialog.Root
       open={Boolean(current)}
-      onOpenChange={(open) => (open ? null : onShotChange(null))}
+      onOpenChange={(open) => {
+        if (open) return;
+        setView(RESET_VIEW);
+        onShotChange(null);
+      }}
     >
       <Dialog.Popup
         data-theme="dark"
+        finalFocus={finalFocus}
         onKeyDown={(event) => {
           if (event.key === "ArrowLeft") move(-1);
           if (event.key === "ArrowRight") move(1);
@@ -77,6 +134,9 @@ export function ShotViewer({ shots, shot, photoUrls, onShotChange }: ShotViewerP
               </Dialog.Title>
               <Text typography="body4" foreground="muted" numeric>
                 {index + 1} / {shots.length}
+              </Text>
+              <Text typography="body4" foreground="muted">
+                누른 지점을 기준으로 확대하고, 끌어서 옮길 수 있습니다
               </Text>
               <HStack gap="075" className="ml-auto">
                 {tools.map((tool) => (
@@ -96,8 +156,8 @@ export function ShotViewer({ shots, shot, photoUrls, onShotChange }: ShotViewerP
                   variant="outline"
                   colorPalette="gray"
                   size="sm"
-                  aria-pressed={original}
-                  onClick={() => setOriginal(!original)}
+                  aria-pressed={view.original}
+                  onClick={() => setView({ ...view, original: !view.original })}
                 >
                   원본 크기
                 </Button>
@@ -114,25 +174,55 @@ export function ShotViewer({ shots, shot, photoUrls, onShotChange }: ShotViewerP
               <IconButton aria-label="이전 사진" onClick={() => move(-1)}>
                 <ChevronLeft size={22} aria-hidden />
               </IconButton>
-              <div
-                className={cn(
-                  "mx-auto h-full max-w-[760px] flex-1",
-                  original ? "overflow-auto" : "overflow-hidden",
-                )}
-              >
-                <PhotoSlot
-                  url={photoUrls[current.key] ?? undefined}
-                  placeholder={`${current.label} 확대`}
-                  pdfLink
-                  className={cn("transition-transform", original ? "max-w-none" : "size-full")}
-                  imageStyle={{ transform: `scale(${zoom}) rotate(${rotation}deg)` }}
-                />
-              </div>
+              {previousUrl ? (
+                <HStack gap="150" className="h-full min-w-0 flex-1">
+                  <ZoomPane
+                    url={previousUrl}
+                    label={`${current.label} 이전 사진`}
+                    caption="이전 사진 · 지난번에 문제로 지정함"
+                    {...paneProps}
+                  />
+                  <ZoomPane
+                    url={photoUrls[current.key]}
+                    label={`${current.label} 새 사진`}
+                    caption="새 사진"
+                    {...paneProps}
+                  />
+                </HStack>
+              ) : (
+                <HStack className="mx-auto h-full max-w-[760px] min-w-0 flex-1">
+                  <ZoomPane
+                    url={photoUrls[current.key]}
+                    label={`${current.label} 확대`}
+                    {...paneProps}
+                  />
+                </HStack>
+              )}
               <IconButton aria-label="다음 사진" onClick={() => move(1)}>
                 <ChevronRight size={22} aria-hidden />
               </IconButton>
             </HStack>
-            <HStack gap="100" justify="center">
+            {checkable ? (
+              <HStack
+                align="center"
+                gap="150"
+                className="rounded-600 border border-gray-200 bg-gray-100 px-175 py-125"
+              >
+                <Checkbox.Field>
+                  <Checkbox.Root checked={checked} onCheckedChange={() => onCheck(current.key)}>
+                    <Checkbox.Indicator />
+                  </Checkbox.Root>
+                  <Checkbox.Label>{current.question}</Checkbox.Label>
+                </Checkbox.Field>
+                <Kbd>{index + 1}</Kbd>
+                <Text typography="body4" foreground="muted" className="ml-auto">
+                  {lastToCheck
+                    ? "마지막 체크 뒤에는 창이 닫히고 [승인]으로 이동합니다"
+                    : "체크하면 다음 사진으로 넘어갑니다"}
+                </Text>
+              </HStack>
+            ) : null}
+            <HStack gap="100" justify="center" className="mt-150">
               {shots.map((candidate, candidateIndex) => (
                 <Button
                   key={candidate.key}

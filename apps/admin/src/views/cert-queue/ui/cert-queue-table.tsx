@@ -1,36 +1,39 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
-import { ArrowDown, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
-import { CERT_FORMAT_LABEL, RULEBOOK_KIND_LABEL } from "@/shared/lib";
+import { CERT_FORMAT_LABEL, RULEBOOK_KIND_LABEL, withQuery } from "@/shared/lib";
 import type { CertQueueRow } from "@/shared/server";
-import { ServerLink, TableColumns, Tag } from "@/shared/ui";
+import { EMPTY_IMAGE, ServerLink, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
 
 const LONG_WAIT_DAYS = 5;
 
 interface CertQueueTableProps {
   rows: CertQueueRow[];
+  query: Record<string, string | undefined>;
 }
 
-export function CertQueueTable({ rows }: CertQueueTableProps) {
+export function CertQueueTable({ rows, query }: CertQueueTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[150, 320, 110, 90, 90, { fixed: 44 }]} />
+      <TableColumns widths={[150, 380, 110, 90, 90, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>닉네임</Table.Head>
           <Table.Head>신청한 책</Table.Head>
           <Table.Head>종류</Table.Head>
           <Table.Head>형식</Table.Head>
-          <Table.Head align="end" aria-sort="descending" className="text-gray-900">
-            <HStack inline align="center" gap="050">
-              대기 일수
-              <ArrowDown size={10} strokeWidth={2.4} aria-hidden />
-            </HStack>
-          </Table.Head>
+          <Table.Head align="end">대기 일수</Table.Head>
           <Table.Head />
         </Table.Row>
       </Table.Header>
       <Table.Body>
+        {rows.length === 0 ? (
+          <TableEmptyRow
+            colSpan={6}
+            image={EMPTY_IMAGE.search}
+            title="조건에 맞는 신청이 없습니다"
+          />
+        ) : null}
         {rows.map((row) => {
           const longWait = row.waitedDays >= LONG_WAIT_DAYS;
           return (
@@ -40,7 +43,7 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
                   typography="body3"
                   weight="bold"
                   truncate
-                  render={<ServerLink path={`/cert/${row.id}`} />}
+                  render={<ServerLink path={withQuery(`/cert/${row.id}`, query, {})} />}
                   className="block after:absolute after:inset-0"
                 >
                   {row.nickname}
@@ -56,15 +59,14 @@ export function CertQueueTable({ rows }: CertQueueTableProps) {
                       {row.category}
                     </Text>
                   )}
+                  {row.waiting ? <Tag>기본 룰북 심사 후</Tag> : null}
                 </HStack>
               </Table.Cell>
               <Table.Cell>
                 <Tag>{RULEBOOK_KIND_LABEL[row.kind]}</Tag>
               </Table.Cell>
               <Table.Cell>
-                <Tag tone={row.format === "ebook" ? "primary" : "gray"}>
-                  {CERT_FORMAT_LABEL[row.format]}
-                </Tag>
+                <Tag>{CERT_FORMAT_LABEL[row.format]}</Tag>
               </Table.Cell>
               <Table.Cell align="end" numeric>
                 <Text

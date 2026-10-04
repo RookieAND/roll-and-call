@@ -11,7 +11,7 @@ interface ApplicantCardProps {
 }
 
 export function ApplicantCard({ review }: ApplicantCardProps) {
-  const { applicant } = review;
+  const { applicant, quiz } = review;
   const waitForeground = review.waitedDays >= LONG_WAIT_DAYS ? "danger" : "normal";
   return (
     <section className="rounded-600 border border-gray-200 bg-surface">
@@ -21,7 +21,8 @@ export function ApplicantCard({ review }: ApplicantCardProps) {
           <Text typography="heading3" render={<h2 />}>
             {applicant.nickname}
           </Text>
-          {review.format === "ebook" ? <Tag tone="primary">전자책</Tag> : null}
+          {review.previousRejectionCount > 0 ? <Tag tone="warning">재신청</Tag> : null}
+          {review.format === "ebook" ? <Tag>전자책</Tag> : null}
         </HStack>
       </HStack>
       <Grid className="grid-cols-2 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
@@ -47,6 +48,14 @@ export function ApplicantCard({ review }: ApplicantCardProps) {
           ]}
         />
       </Grid>
+      {quiz ? (
+        <Text
+          typography="body3"
+          className="block border-t border-(--rc-color-border-subtle) px-200 py-100"
+        >
+          {`퀴즈 · ${quiz.question} → ${quiz.answer}`}
+        </Text>
+      ) : null}
     </section>
   );
 }

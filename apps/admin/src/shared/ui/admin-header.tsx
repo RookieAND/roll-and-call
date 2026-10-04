@@ -36,7 +36,7 @@ export function AdminHeader({
     >
       {trail.map((step) => (
         <HStack
-          key={step.href}
+          key={step.label}
           align="center"
           gap="050"
           render={<ServerLink path={step.href} />}

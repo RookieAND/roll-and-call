@@ -1,39 +1,22 @@
 import { Text } from "@roll-and-call/ui";
 
-import type { ShotKey } from "@/shared/server";
-
-import { NOTIFY_NOTE } from "../model/notify-note";
-import { SHOTS } from "../model/shots";
-
 interface FlaggedStatusProps {
-  ebook: boolean;
-  reasonTag: string;
-  flaggedShots: ShotKey[];
+  reason: string;
+  flaggedLabels: string[];
 }
 
-export function FlaggedStatus({ ebook, reasonTag, flaggedShots }: FlaggedStatusProps) {
-  if (ebook) {
-    return (
-      <Text typography="body4" foreground="hint">
-        {NOTIFY_NOTE}
-      </Text>
-    );
-  }
-  if (!reasonTag) {
+export function FlaggedStatus({ reason, flaggedLabels }: FlaggedStatusProps) {
+  if (!reason) {
     return (
       <Text typography="body4" foreground="hint">
         사유를 선택해 주세요
       </Text>
     );
   }
-  const labels = SHOTS.filter((shot) => flaggedShots.includes(shot.key as ShotKey)).map(
-    (shot) => shot.label,
-  );
+  const photos = flaggedLabels.length ? ` · ${flaggedLabels.join("·")} 사진 지정됨` : "";
   return (
     <Text typography="body4" weight="bold" foreground="danger">
-      {labels.length
-        ? `사유 1개를 선택했고, ${labels.join("·")} 사진을 지정했습니다`
-        : "사유 1개를 선택했습니다"}
+      {`사유 1개를 선택했습니다${photos}`}
     </Text>
   );
 }

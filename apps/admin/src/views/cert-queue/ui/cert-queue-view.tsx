@@ -1,7 +1,12 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
 
 import { CERT_TABS, paginate, withQuery } from "@/shared/lib";
-import { CERT_QUEUE_FILTERS, type CertQueueFilterKey, type listCertQueue } from "@/shared/server";
+import {
+  CERT_QUEUE_FILTERS,
+  type CertQueueFilter,
+  type CertQueueFilterKey,
+  type listCertQueue,
+} from "@/shared/server";
 import {
   AdminHeader,
   EMPTY_IMAGE,
@@ -9,9 +14,11 @@ import {
   ListPager,
   Panel,
   RouteTabs,
+  ServerLink,
+  SortFixedNote,
+  TabCount,
   UrlSearchInput,
   UrlSelect,
-  ServerLink,
 } from "@/shared/ui";
 
 import { CertQueueTable } from "./cert-queue-table";
@@ -20,7 +27,7 @@ interface CertQueueViewProps {
   queue: Awaited<ReturnType<typeof listCertQueue>>;
   serverName: string;
   page?: string;
-  query: { q?: string; rulebook?: string; filter?: CertQueueFilterKey };
+  filter: CertQueueFilter;
 }
 
 const FILTER_CHIPS = [
@@ -31,17 +38,35 @@ const FILTER_CHIPS = [
   })),
 ];
 
-export function CertQueueView({ queue, serverName, page, query }: CertQueueViewProps) {
+export function CertQueueView({ queue, serverName, page, filter }: CertQueueViewProps) {
   const paged = paginate(queue.rows, page);
+  const query = { q: filter.query, rulebook: filter.rulebook, filter: filter.filter };
+  const tabs = CERT_TABS.map((tab) =>
+    tab.href === "/cert"
+      ? {
+          href: tab.href,
+          label: (
+            <HStack align="center" gap="075" render={<span />}>
+              {tab.label}
+              <TabCount count={queue.total} selected />
+            </HStack>
+          ),
+        }
+      : tab,
+  );
 
   return (
     <>
-      <AdminHeader title="룰북 인증" sub={`${serverName} · ${queue.total}건 심사 대기`} />
-      <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert" />
+      <AdminHeader title="룰북 인증" sub={serverName} />
+      <RouteTabs label="룰북 인증 화면" items={tabs} value="/cert" />
       <VStack gap="150" className="flex-1 p-200">
         {queue.total === 0 ? (
           <Panel>
-            <EmptyState image={EMPTY_IMAGE.myGames} title="심사할 신청이 없습니다" />
+            <EmptyState
+              image={EMPTY_IMAGE.myGames}
+              title="심사할 신청이 없습니다"
+              description="새 인증 신청이 들어오면 여기에 표시됩니다."
+            />
           </Panel>
         ) : (
           <>
@@ -59,7 +84,7 @@ export function CertQueueView({ queue, serverName, page, query }: CertQueueViewP
               {FILTER_CHIPS.map(({ key, label }) => (
                 <Chip
                   key={label}
-                  selected={query.filter === key}
+                  selected={filter.filter === key}
                   render={
                     <ServerLink path={withQuery("/cert", query, { filter: key })} scroll={false} />
                   }
@@ -67,6 +92,7 @@ export function CertQueueView({ queue, serverName, page, query }: CertQueueViewP
                   {label}
                 </Chip>
               ))}
+              <SortFixedNote />
             </HStack>
             <Panel
               footer={
@@ -78,7 +104,7 @@ export function CertQueueView({ queue, serverName, page, query }: CertQueueViewP
                 />
               }
             >
-              <CertQueueTable rows={paged.rows} />
+              <CertQueueTable rows={paged.rows} query={query} />
             </Panel>
           </>
         )}

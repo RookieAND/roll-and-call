@@ -274,6 +274,8 @@ export const loadSnapshot = cache(async () => {
           rejectedAt: earlier.processedAt ?? earlier.createdAt,
           tags: earlier.rejectTag ? [earlier.rejectTag] : [],
           requests: earlier.rejectReason ? [earlier.rejectReason] : [],
+          flaggedShots: earlier.flaggedShots,
+          photoUrls: earlier.photoUrls,
         })),
       quiz: quiz
         ? { question: quiz.question, answer: row.quizAnswer ?? "", page: quiz.page }
