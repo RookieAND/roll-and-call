@@ -44,6 +44,13 @@ export {
 export { getProfileMemo } from "@roll-and-call/database/profiles";
 export { getRulebookRecords, type RulebookRecords } from "@roll-and-call/database/certifications";
 export { markBadgesSeen, type BadgeRecord } from "@roll-and-call/database/badges";
+export {
+  countUnreadNotifications,
+  listNotifications,
+  markAllNotificationsRead,
+  markNotificationRead,
+  type NotificationRow,
+} from "@roll-and-call/database/notifications";
 export { type Server } from "@roll-and-call/database";
 export {
   evaluateBadges,

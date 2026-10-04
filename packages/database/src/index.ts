@@ -23,4 +23,5 @@ export type {
   RulebookKind,
   CertApplication,
   AuditLogEntry,
+  NotificationRecord,
 } from "./schema";

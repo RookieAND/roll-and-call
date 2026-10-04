@@ -13,6 +13,8 @@
     "./games/model": "./src/modules/games/model/index.ts",
     "./moderation": "./src/modules/moderation/index.ts",
     "./moderation/model": "./src/modules/moderation/model/index.ts",
+    "./notifications": "./src/modules/notifications/index.ts",
+    "./notifications/model": "./src/modules/notifications/model/index.ts",
     "./profiles": "./src/modules/profiles/index.ts",
     "./reviews": "./src/modules/reviews/index.ts",
     "./rulebooks": "./src/modules/rulebooks/index.ts",
