@@ -54,6 +54,11 @@ export function deriveSessionFacts({
     isNull(game.drawnAt) &&
     line.deadlinePassed &&
     waitingCount > 0;
+  // 운영 카드는 추첨 전이면 마감 앞뒤로 같은 「모집 중」 카드다(D248).
+  const lotteryOpen =
+    game.recruitMethod === RECRUIT_METHOD.lottery &&
+    isNull(game.drawnAt) &&
+    isNull(game.cancelledAt);
   const past =
     (state === SESSION_STATE.closed && !awaitingTime && !drawPending) ||
     state === SESSION_STATE.finished;
@@ -79,6 +84,7 @@ export function deriveSessionFacts({
     confirmedCount,
     awaitingTime,
     drawPending,
+    lotteryOpen,
     past,
     timeSet,
     sessionWhen,
@@ -93,6 +99,7 @@ export function deriveSessionFacts({
       startsAt,
       deadlinePassed: line.deadlinePassed,
       urgent: false,
+      cancelled: false,
       titleDanger: false,
       waitlistRank: null,
       caption: null,

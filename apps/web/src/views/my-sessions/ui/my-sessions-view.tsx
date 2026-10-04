@@ -6,9 +6,10 @@ import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import {
+  countableCards,
+  isOngoingCard,
   loadMySessions,
   ONGOING_CHIP,
-  ONGOING_EXCLUDED_CHIPS,
   SESSION_CHIPS,
   SESSION_TABS,
   SessionList,
@@ -40,23 +41,17 @@ export async function MySessionsView({ tab, status }: { tab?: string; status?: s
   const chips = SESSION_CHIPS[activeTab];
   const activeChip = chips.find((chip) => chip.key === status)?.key ?? ONGOING_CHIP;
   const list = sessions[activeTab];
-  const items =
-    activeChip === ONGOING_CHIP
-      ? list.filter((card) => !ONGOING_EXCLUDED_CHIPS.has(card.chip))
-      : list.filter((card) => card.chip === activeChip);
+  const inChip = (chip: string) => (card: (typeof list)[number]) =>
+    chip === ONGOING_CHIP ? isOngoingCard(card) : card.chip === chip;
+  const items = list.filter(inChip(activeChip));
   const roleTabs = SESSION_TABS.map((item) => ({
     key: item.key,
     label: item.label,
-    count: sessions[item.key].length,
+    count: countableCards(sessions[item.key]).length,
     href: serverPath({ slug: server.slug, path: sessionsHref({ role: item.key }) }),
   }));
   const chipCounts = Object.fromEntries(
-    chips.map((chip) => [
-      chip.key,
-      chip.key === ONGOING_CHIP
-        ? list.filter((card) => !ONGOING_EXCLUDED_CHIPS.has(card.chip)).length
-        : list.filter((card) => card.chip === chip.key).length,
-    ]),
+    chips.map((chip) => [chip.key, countableCards(list).filter(inChip(chip.key)).length]),
   );
 
   return (

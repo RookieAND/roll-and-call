@@ -49,7 +49,6 @@ const FILTERED_TITLE: Partial<Record<SessionChipKey, string>> = {
   [SESSION_CHIP.scheduling]: "조율 중인 세션이 없습니다",
   [SESSION_CHIP.confirmed]: "확정된 세션이 없습니다",
   [SESSION_CHIP.waiting]: "대기 중인 세션이 없습니다",
-  [SESSION_CHIP.recruiting]: "모집 중인 세션이 없습니다",
 };
 
 interface SessionsEmptyProps {

@@ -12,8 +12,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
   const server = await getCurrentServer();
   const base = serverPath({ slug: server.slug, path: `/me/sessions?tab=${SESSION_ROLE.host}` });
   if (tab === LEGACY_CLOSED_TAB) redirect(`${base}&status=${SESSION_CHIP.ended}`);
-  if (tab === SESSION_CHIP.recruiting || tab === SESSION_CHIP.confirmed) {
-    redirect(`${base}&status=${tab}`);
-  }
+  // 옛 모집 중 탭은 진행 중으로 합쳤다(D82).
+  if (tab === SESSION_CHIP.confirmed) redirect(`${base}&status=${tab}`);
   redirect(base);
 }

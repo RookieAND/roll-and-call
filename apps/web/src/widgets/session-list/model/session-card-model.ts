@@ -68,6 +68,7 @@ export type SessionCardModel = {
   gm: { username: string; avatarUrl: string | null } | null;
   titleDanger: boolean;
   urgent: boolean;
+  cancelled: boolean;
   action: SessionAction | null;
   caption: { text: string; strong: boolean } | null;
   todo: SessionTodo | null;

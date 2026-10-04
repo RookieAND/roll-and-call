@@ -94,13 +94,13 @@ describe("참여 카드", () => {
 });
 
 describe("대기 카드", () => {
-  it("배지로만 갈리고 버튼은 대기 취소 하나다", () => {
+  it("선착순 대기는 마감 전에도 대기 N번이고 버튼은 대기 취소 하나다", () => {
     const card = playerCard({ participants: [other, me(PARTICIPANT_STATUS.waiting)] });
     expect(card.chip).toBe(SESSION_CHIP.waiting);
-    expect(card.badge).toBe("승인 대기");
-    expect(card.badgeColor).toBe("gray");
+    expect(card.badge).toBe("대기 1번");
+    expect(card.badgeColor).toBe("warning");
     expect(card.action?.label).toBe("대기 취소");
-    expect(card.schedule).toBe("신청한 지 2일째입니다 · GM이 아직 보지 않았습니다");
+    expect(card.schedule).toBe("정원이 차 순서를 기다립니다 · 자리가 나면 알립니다");
   });
 
   it("추첨은 뽑기 전까지 순번이 없어 신청으로 센다", () => {
@@ -122,10 +122,83 @@ describe("대기 카드", () => {
       participants: [other, me(PARTICIPANT_STATUS.waiting)],
     });
     expect(card.schedule).toBe("모집이 끝나 곧 추첨합니다");
+    expect(card.action).toBeNull();
   });
 
   it("참여 탭 카드에는 GM 줄이 붙는다", () => {
     expect(playerCard({}).gm?.username).toBe("한랑아");
+  });
+});
+
+describe("취소된 구인", () => {
+  const cancelled = (partial: Partial<SessionGame>) =>
+    ({ cancelledAt: at(-2), participants: [confirmedMe], ...partial }) as Partial<SessionGame>;
+
+  it("두 탭 모두 흐린 취소됨 카드로 종료 칩에 남는다", () => {
+    for (const card of [
+      playerCard(cancelled({ cancelKind: "gm", cancelReason: "GM 사정" })),
+      hostCard(cancelled({ cancelKind: "gm", cancelReason: "GM 사정" })),
+    ]) {
+      expect(card.chip).toBe(SESSION_CHIP.ended);
+      expect(card.badge).toBe("취소됨");
+      expect(card.badgeColor).toBe("gray");
+      expect(card.cancelled).toBe(true);
+      expect(card.action).toBeNull();
+      expect(card.todo).toBeNull();
+      expect(card.schedule).toBe("9월 13일 · GM 사정");
+    }
+  });
+
+  it("예정 시각이 지난 뒤에도 대기자였던 사람의 취소됨 카드가 남는다", () => {
+    const sessions = buildSessions({
+      hosted: [],
+      joined: [
+        game({
+          cancelledAt: at(-3),
+          confirmedAt: at(-1),
+          participants: [me(PARTICIPANT_STATUS.waiting)],
+        }),
+      ],
+      ...context(),
+    });
+    expect(sessions[SESSION_ROLE.player].map((card) => card.badge)).toEqual(["취소됨"]);
+  });
+
+  it("운영진·자동 취소 문구, 사유 없는 GM 취소는 날짜만", () => {
+    expect(playerCard(cancelled({ cancelKind: "staff" })).schedule).toBe(
+      "9월 13일 · 운영진이 취소한 구인입니다",
+    );
+    expect(playerCard(cancelled({ cancelKind: "auto" })).schedule).toBe(
+      "9월 13일 · GM이 서버를 나가 취소되었습니다",
+    );
+    expect(hostCard(cancelled({ cancelKind: "gm", cancelReason: null })).schedule).toBe("9월 13일");
+  });
+});
+
+describe("운영 카드 · 추첨 글", () => {
+  const lottery = (partial: Partial<SessionGame> = {}) =>
+    hostCard({
+      recruitMethod: RECRUIT_METHOD.lottery,
+      endDate: new Date("2026-09-18T19:00:00+09:00"),
+      participants: [me(PARTICIPANT_STATUS.waiting)],
+      ...partial,
+    });
+
+  it("마감 전에는 마감 때 추첨한다고 적고 모집 중 배지다", () => {
+    const card = lottery();
+    expect(card.badge).toBe("모집 중");
+    expect(card.schedule).toBe("9월 18일 19:00 마감 때 추첨합니다");
+    expect(card.urgent).toBe(false);
+    expect(card.action?.label).toBe("운영 관리");
+  });
+
+  it("마감 뒤에도 모집 중 배지이고 붉지 않다", () => {
+    const card = lottery({ endDate: at(-1) });
+    expect(card.badge).toBe("모집 중");
+    expect(card.schedule).toBe("모집이 끝나 곧 추첨합니다");
+    expect(card.urgent).toBe(false);
+    expect(card.scheduleIcon).toBe(SESSION_ICON.clock);
+    expect(card.action?.label).toBe("운영 관리");
   });
 });
 

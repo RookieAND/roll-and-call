@@ -1,7 +1,7 @@
 import { isNull } from "es-toolkit";
 
 import { RECRUIT_METHOD, splitRoster } from "@/entities/game";
-import { ddayKst, formatDate } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 
 import type { SessionFacts } from "./derive-session-facts";
 import { joinParts } from "./join-parts";
@@ -47,23 +47,17 @@ export function toJoinedSessionCard({
           : joinParts(`${formatDate(game.endDate)} 신청 마감`, "마감 때 추첨합니다"),
         scheduleTone: SESSION_TONE.muted,
         scheduleIcon: SESSION_ICON.clock,
-        action: cancel("신청 취소"),
+        action: line.deadlinePassed ? null : cancel("신청 취소"),
       };
     }
 
-    const seen = line.deadlinePassed || timeSet;
     return {
       ...common,
       chip: SESSION_CHIP.waiting,
-      badge: seen ? `대기 ${mine.waitlistRank}번` : "승인 대기",
-      waitlistRank: seen ? mine.waitlistRank : null,
-      badgeColor: seen ? "warning" : "gray",
-      schedule: seen
-        ? "정원이 차 순서를 기다립니다 · 자리가 나면 알립니다"
-        : joinParts(
-            `신청한 지 ${1 - ddayKst(mine.joinedAt, context.now ?? new Date())}일째입니다`,
-            "GM이 아직 보지 않았습니다",
-          ),
+      badge: `대기 ${mine.waitlistRank}번`,
+      waitlistRank: mine.waitlistRank,
+      badgeColor: "warning",
+      schedule: "정원이 차 순서를 기다립니다 · 자리가 나면 알립니다",
       scheduleTone: SESSION_TONE.muted,
       scheduleIcon: SESSION_ICON.clock,
       action: cancel("대기 취소"),

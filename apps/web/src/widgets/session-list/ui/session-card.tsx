@@ -42,7 +42,10 @@ export function SessionCard({ model }: SessionCardProps) {
       padding="sm"
       radius={600}
       background="none"
-      className={model.urgent ? "border-danger-200 bg-danger-50" : "bg-surface"}
+      className={cn(
+        model.urgent ? "border-danger-200 bg-danger-50" : "bg-surface",
+        model.cancelled && "opacity-72",
+      )}
     >
       <VStack gap="100" className="p-025">
         <ServerLink path={`/games/${model.id}`} className="flex flex-col gap-100">

@@ -10,7 +10,6 @@ export type { Absence } from "./model/recent-absences";
 export { PROFILE_SESSION_SECTIONS } from "./model/build-profile-sessions";
 export {
   ONGOING_CHIP,
-  ONGOING_EXCLUDED_CHIPS,
   SESSION_CHIPS,
   SESSION_TABS,
   type SessionChipKey,
@@ -23,6 +22,8 @@ export {
   type SessionChip,
   type SessionTodo,
 } from "./model/session-card-model";
+export { isOngoingCard } from "./model/is-ongoing-card";
+export { countableCards } from "./model/countable-cards";
 export { SessionCountStats } from "./ui/session-count-stats";
 export { loadTodos } from "./api/load-todos";
 export { listTodos, type TodoList } from "./model/list-todos";

@@ -17,8 +17,9 @@ export function buildSessions({
   ...context
 }: SessionContext & { hosted: SessionGame[]; joined: SessionGame[] }): MySessions {
   const now = context.now ?? new Date();
-  // 세션이 시작됐는데 아직 대기라면 끝내 참여하지 못한 것이라 이력에 남기지 않는다.
+  // 세션이 시작됐는데 아직 대기라면 끝내 참여하지 못한 것이라 이력에 남기지 않는다. 취소된 구인은 예정 시각이 지나도 취소됨 카드로 남긴다.
   const missed = (game: SessionGame) =>
+    isNull(game.cancelledAt) &&
     !isNull(game.confirmedAt) &&
     new Date(game.confirmedAt) <= now &&
     game.participants.some(
