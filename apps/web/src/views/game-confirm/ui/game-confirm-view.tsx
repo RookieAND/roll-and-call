@@ -3,7 +3,12 @@ import { uniq } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { aggregateAvailability } from "@/entities/availability";
-import { countConfirmed, effectivePlayMinutes, SCHEDULE_MODE } from "@/entities/game";
+import {
+  coordinationWindowOf,
+  countConfirmed,
+  effectivePlayMinutes,
+  SCHEDULE_MODE,
+} from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { ConfirmSessionForm } from "@/features/confirm-session";
 import { buildDayColumns, SLOT_MINUTES, serverPath } from "@/shared/lib";
@@ -63,6 +68,7 @@ export async function GameConfirmView({ id }: { id: string }) {
             gameId={id}
             days={buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd })}
             rangeStart={game.rangeStart}
+            window={coordinationWindowOf(game)}
             names={names}
             playMinutes={minutes}
             playLabel={playLabel}

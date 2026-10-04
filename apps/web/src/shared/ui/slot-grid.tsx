@@ -3,7 +3,7 @@
 import { cn, Text } from "@roll-and-call/ui";
 import { type ReactNode, useEffect, useRef } from "react";
 
-import { DAY_START_HOUR, type DayColumn, slotIso, type TimeRow } from "@/shared/lib";
+import { type DayColumn, rowSlotIso, type TimeRow } from "@/shared/lib";
 
 const TIME_COL_PX = 44;
 const FIT_DAYS = 4;
@@ -26,12 +26,17 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
   const scrollRef = useRef<HTMLDivElement>(null);
   const fit = days.length <= FIT_DAYS;
   const dayColumnWidth = fit ? "minmax(0, 1fr)" : "var(--rc-size-cell)";
+  const rowsBefore = Math.max(
+    0,
+    timeRows.findIndex(
+      (row) => row.hour === INITIAL_HOUR && row.minute === 0 && row.dayOffset === 0,
+    ),
+  );
 
   // 숨은 탭 안에서는 높이가 0이라 스크롤이 먹지 않는다. 처음 크기가 생길 때 한 번 내린다.
   useEffect(() => {
     const node = scrollRef.current;
     if (!node) return;
-    const rowsBefore = Math.max(0, (INITIAL_HOUR - DAY_START_HOUR) * 2);
     const observer = new ResizeObserver(() => {
       if (node.clientHeight === 0) return;
       node.scrollTo({ top: rowsBefore * (SLOT_ROW_PX + GAP_PX) });
@@ -39,7 +44,7 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
     });
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [rowsBefore]);
 
   return (
     <div
@@ -81,11 +86,14 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
             className="sticky left-0 z-10 -translate-y-1/2 bg-gray-50 leading-none"
             style={{ height: SLOT_ROW_PX }}
           >
-            {row.minute === 0 ? row.label : ""}
+            {row.minute === 0 && row.label}
+            {row.minute === 0 && row.dayOffset === 1 && (
+              <Text typography="body5" foreground="hint" render={<sup />} className="ml-025">
+                +1
+              </Text>
+            )}
           </Text>,
-          ...days.map((day) =>
-            renderCell(slotIso({ date: day.date, hour: row.hour, minute: row.minute })),
-          ),
+          ...days.map((day) => renderCell(rowSlotIso({ date: day.date, row }))),
         ])}
       </div>
     </div>

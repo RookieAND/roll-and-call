@@ -34,7 +34,13 @@ export {
   plannedEndAt,
   sessionEndAt,
 } from "@roll-and-call/database/games/model";
-export { crossesMidnight, DEFAULT_WINDOW, windowHours } from "@roll-and-call/database/games/model";
+export {
+  crossesMidnight,
+  DEFAULT_WINDOW,
+  windowHours,
+  type CoordinationWindow,
+} from "@roll-and-call/database/games/model";
+export { coordinationWindowOf } from "./model/coordination-window-of";
 export { isAttendanceDue } from "./model/is-attendance-due";
 export { isAttendanceSettled } from "./model/is-attendance-settled";
 export {

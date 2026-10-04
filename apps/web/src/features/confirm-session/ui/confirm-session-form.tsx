@@ -5,11 +5,14 @@ import { isNull, uniq } from "es-toolkit";
 import { useState } from "react";
 
 import { rankWindows, windowMembers } from "@/entities/availability";
-import { slotIso, toKst, type DayColumn } from "@/shared/lib";
+import type { CoordinationWindow } from "@/entities/game";
+import { buildTimeRows, toKst, type DayColumn } from "@/shared/lib";
 import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { confirmSession } from "../api/confirm-session";
+import { initialSessionStart } from "../model/initial-session-start";
 import { toSessionStart } from "../model/session-start";
+import { sessionStartIso } from "../model/session-start-iso";
 import { sessionWindowLabel } from "../model/session-window-label";
 import { NoCandidatesNotice } from "./no-candidates-notice";
 import { SessionCandidateList } from "./session-candidate-list";
@@ -18,12 +21,12 @@ import { SessionWindowSummary } from "./session-window-summary";
 import { UnavailableWarning } from "./unavailable-warning";
 
 const CANDIDATE_LIMIT = 3;
-const DEFAULT_HOUR = 19;
 
 interface ConfirmSessionFormProps {
   gameId: string;
   days: DayColumn[];
   rangeStart: string;
+  window: CoordinationWindow;
   names: Record<string, string[]>;
   playMinutes: number;
   playLabel: string;
@@ -37,6 +40,7 @@ export function ConfirmSessionForm({
   gameId,
   days,
   rangeStart,
+  window,
   names,
   playMinutes,
   playLabel,
@@ -49,16 +53,19 @@ export function ConfirmSessionForm({
   const respondents = uniq(Object.values(names).flat());
   const changing = !isNull(currentIso);
 
-  const [start, setStart] = useState(() => {
-    const seed = currentIso ?? candidates[0]?.iso;
-    if (seed) return toSessionStart(seed);
-    return { date: rangeStart, hour: DEFAULT_HOUR, minute: 0 };
-  });
+  const [start, setStart] = useState(() =>
+    initialSessionStart({
+      seedIso: currentIso ?? candidates[0]?.iso ?? null,
+      rangeStart,
+      window,
+      timeRows: buildTimeRows(window),
+    }),
+  );
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { pending, run } = useAction();
 
-  const startIso = slotIso({ date: start.date, hour: start.hour, minute: start.minute });
+  const startIso = sessionStartIso(start);
   const members = windowMembers({ names, startIso, slotCount });
   const absentNames = respondents.filter((name) => !members.includes(name));
   const startLabel = toKst(startIso).format("M/D (dd) HH:mm");
@@ -86,7 +93,7 @@ export function ConfirmSessionForm({
         <Text typography="subtitle2" render={<h2 />}>
           세션 시간
         </Text>
-        <SessionTimeFields days={days} start={start} onChange={setStart} />
+        <SessionTimeFields days={days} window={window} start={start} onChange={setStart} />
         <Text typography="body4" foreground="hint" render={<p />}>
           시작 시각부터 {playLabel}이 끊기지 않고 비는 시간만 셉니다.
         </Text>
@@ -119,7 +126,7 @@ export function ConfirmSessionForm({
             playMinutes={playMinutes}
             respondents={respondents}
             value={pickedCandidate}
-            onPick={(iso) => setStart(toSessionStart(iso))}
+            onPick={(iso) => setStart(toSessionStart({ iso, window }))}
           />
         )}
       </VStack>

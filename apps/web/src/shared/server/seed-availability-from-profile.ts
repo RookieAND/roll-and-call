@@ -31,7 +31,7 @@ export async function seedAvailabilityFromProfile({
   const prefill = availabilityPrefill({
     intervals: profile?.availability ?? [],
     days: buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd }),
-    timeRows: buildTimeRows(),
+    timeRows: buildTimeRows({ startHour: game.windowStartHour, endHour: game.windowEndHour }),
   });
   if (!prefill) return false;
 

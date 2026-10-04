@@ -1,4 +1,4 @@
-type CoordinationWindow = { startHour: number; endHour: number };
+export type CoordinationWindow = { startHour: number; endHour: number };
 
 // 기본 12:00~24:00. 끝 0은 다음 날 0시다.
 export const DEFAULT_WINDOW = { startHour: 12, endHour: 0 } as const;

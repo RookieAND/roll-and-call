@@ -3,7 +3,13 @@ import { isNull } from "es-toolkit";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import { hasUserJoined, isDeadlinePassed, isGameGm, SCHEDULE_MODE } from "@/entities/game";
+import {
+  coordinationWindowOf,
+  hasUserJoined,
+  isDeadlinePassed,
+  isGameGm,
+  SCHEDULE_MODE,
+} from "@/entities/game";
 import { availabilityPrefill } from "@/entities/profile";
 import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows, serverPath } from "@/shared/lib";
@@ -61,7 +67,7 @@ export async function GameScheduleView({ id }: { id: string }) {
 
   const involved = isGm || hasUserJoined({ participants: game.participants, userId: viewerId });
   const days = buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd });
-  const timeRows = buildTimeRows();
+  const timeRows = buildTimeRows(coordinationWindowOf(game));
 
   const [initialAvailability, profile] = await Promise.all([
     getScheduleAvailability({ gameId: id, userId: viewerId }),
