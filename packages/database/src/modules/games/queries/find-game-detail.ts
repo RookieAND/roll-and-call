@@ -18,6 +18,7 @@ export async function findGameDetail({ serverId, gameId }: { serverId: string; g
           drawRank: true,
           waitlistedAt: true,
           absent: true,
+          absenceCancelledAt: true,
         },
         where: (participant, { eq }) => eq(participant.serverId, serverId),
         with: {

@@ -4,6 +4,7 @@ export { formatDateTime } from "./format-date-time";
 export { formatMonthDay } from "./format-month-day";
 export { formatDate } from "./format-date";
 export { formatDateWeekday } from "./format-date-weekday";
+export { formatDateClock } from "./format-date-clock";
 export { ddayKst } from "./dday-kst";
 export { formatGameSchedule } from "./format-game-schedule";
 export { SLOT_MINUTES, DAY_START_HOUR, DAY_END_HOUR } from "./slot-window";

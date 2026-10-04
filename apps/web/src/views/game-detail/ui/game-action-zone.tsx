@@ -1,134 +1,82 @@
-import { isNull } from "es-toolkit";
-
-import {
-  GAME_STATUS,
-  type GameStatus,
-  isApplicationClosed,
-  isAttendanceDue,
-  isSessionEnded,
-  PARTICIPANT_STATUS,
-  type ParticipantStatus,
-  RECRUIT_METHOD,
-} from "@/entities/game";
-import { formatDateTime } from "@/shared/lib";
+import { formatDateClock } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
-import { deriveActionView, GAME_ACTION_VIEW } from "../model/derive-action-view";
-import { leaveLock } from "../model/leave-locked-reason";
+import { confirmedWhenText } from "../model/confirmed-when-text";
+import { GAME_ACTION_VIEW, type GameActionView } from "../model/game-action-view";
+import { AbsentActions } from "./absent-actions";
+import { CancelledActions } from "./cancelled-actions";
 import { ClosedActions } from "./closed-actions";
-import { ConfirmedActions } from "./confirmed-actions";
-import { EndedActions } from "./ended-actions";
+import { ConfirmedLockedActions } from "./confirmed-locked-actions";
+import { ConfirmedOpenActions } from "./confirmed-open-actions";
 import { EndedGmActions } from "./ended-gm-actions";
+import { EndedParticipantActions } from "./ended-participant-actions";
+import { GmLiveActions } from "./gm-live-actions";
+import { GmUpcomingActions } from "./gm-upcoming-actions";
 import { JoinableActions } from "./joinable-actions";
-import { LeaveableJoinedActions } from "./leaveable-joined-actions";
-import { LockedJoinedActions } from "./locked-joined-actions";
 import { LotteryAppliedActions } from "./lottery-applied-actions";
-import { ManageGameLink } from "./manage-game-link";
+import { SanctionedActions } from "./sanctioned-actions";
+import { ScheduledActions } from "./scheduled-actions";
 import { WaitingActions } from "./waiting-actions";
 
 export interface GameActionZoneProps {
   game: GameDetailData;
-  isGm: boolean;
-  viewerStatus: ParticipantStatus | null;
-  waitlistRank: number | null;
-  waitingCount: number;
-  confirmedCount: number;
-  status: GameStatus;
-  canSchedule: boolean;
+  view: GameActionView;
 }
 
-export function GameActionZone({
-  game,
-  isGm,
-  viewerStatus,
-  waitlistRank,
-  waitingCount,
-  confirmedCount,
-  status,
-  canSchedule,
-}: GameActionZoneProps) {
-  // 기한 경과, 대기 신청을 끈 게임의 정원 충족(full), 조율형의 일정 확정(scheduled). 대기 받는 정원 충족(confirmed)은 마감이 아니다.
-  const isClosed =
-    status === GAME_STATUS.closed ||
-    status === GAME_STATUS.full ||
-    status === GAME_STATUS.scheduled;
-  const isFull = status === GAME_STATUS.confirmed;
-  const expired = status === GAME_STATUS.closed;
-  const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
-  const drawn = !isNull(game.drawnAt);
-
-  const actionView = deriveActionView({
-    isGm,
-    viewerConfirmed: viewerStatus === PARTICIPANT_STATUS.confirmed,
-    viewerWaiting: viewerStatus === PARTICIPANT_STATUS.waiting,
-    isLottery,
-    drawn,
-    canLeave: !isFull && !isClosed && !drawn,
-    // 일시 지정형은 등록 때부터 confirmedAt이 있지만 모집 중이면 참여하기를 보여야 한다.
-    sessionConfirmed: isApplicationClosed(game),
-    sessionEnded: isSessionEnded(game),
-    isClosed,
-    isFull,
-  });
-
-  switch (actionView) {
-    case GAME_ACTION_VIEW.gm:
-      return <ManageGameLink gameId={game.id} />;
-    case GAME_ACTION_VIEW.joinable:
-    case GAME_ACTION_VIEW.full:
+export function GameActionZone({ game, view }: GameActionZoneProps) {
+  switch (view.kind) {
+    case GAME_ACTION_VIEW.cancelled:
+      return <CancelledActions gameId={game.id} {...view} />;
+    case GAME_ACTION_VIEW.gmEnded:
+      return <EndedGmActions gameId={game.id} {...view} />;
+    case GAME_ACTION_VIEW.gmLive:
+      return <GmLiveActions gameId={game.id} />;
+    case GAME_ACTION_VIEW.gmUpcoming:
+      return <GmUpcomingActions game={game} calendar={view.calendar} />;
+    case GAME_ACTION_VIEW.absent:
+      return <AbsentActions />;
+    case GAME_ACTION_VIEW.endedParticipant:
+      return <EndedParticipantActions gameId={game.id} {...view} />;
+    case GAME_ACTION_VIEW.endedOther:
+      return <ClosedActions title="종료된 세션입니다" reviewsGameId={game.id} />;
+    case GAME_ACTION_VIEW.lotteryApplied:
+      return <LotteryAppliedActions gameId={game.id} {...view} />;
+    case GAME_ACTION_VIEW.waiting:
+      return <WaitingActions gameId={game.id} {...view} />;
+    case GAME_ACTION_VIEW.scheduled:
+      return <ScheduledActions game={game} {...view} />;
+    case GAME_ACTION_VIEW.confirmedOpen:
+      return <ConfirmedOpenActions game={game} {...view} />;
+    case GAME_ACTION_VIEW.confirmedLocked:
+      return <ConfirmedLockedActions game={game} {...view} />;
+    case GAME_ACTION_VIEW.closedScheduled:
+      return (
+        <ClosedActions
+          title={`일정이 ${confirmedWhenText(view.confirmedAt)} 확정되어 신청을 받지 않습니다`}
+        />
+      );
+    case GAME_ACTION_VIEW.closed:
+      return <ClosedActions title="모집이 끝났습니다" />;
+    case GAME_ACTION_VIEW.sanctioned:
+      return <SanctionedActions reason={view.reason} until={view.until} />;
+    case GAME_ACTION_VIEW.joinWaitlist:
       return (
         <JoinableActions
           gameId={game.id}
-          isFull={actionView === GAME_ACTION_VIEW.full}
-          isLottery={isLottery}
-          waitingCount={waitingCount}
-          endDate={game.endDate}
+          hint={`지금 신청하면 대기 ${view.nextRank}번입니다.`}
+          label="대기로 신청하기"
         />
       );
-    case GAME_ACTION_VIEW.applied:
-      return isLottery ? (
-        <LotteryAppliedActions gameId={game.id} endDate={game.endDate} expired={expired} />
-      ) : (
-        <LeaveableJoinedActions gameId={game.id} canSchedule={canSchedule} />
-      );
-    case GAME_ACTION_VIEW.waiting:
-      return <WaitingActions gameId={game.id} waitlistRank={waitlistRank} isLottery={isLottery} />;
-    case GAME_ACTION_VIEW.joined:
+    case GAME_ACTION_VIEW.join:
       return (
-        <LockedJoinedActions
-          gameId={game.id}
-          canSchedule={canSchedule}
-          drawn={drawn}
-          lock={leaveLock({ drawn, expired })}
-        />
+        <JoinableActions gameId={game.id} hint="지금 신청하면 바로 확정됩니다." label="신청하기" />
       );
-    case GAME_ACTION_VIEW.scheduled:
+    case GAME_ACTION_VIEW.joinLottery:
       return (
-        <ConfirmedActions
+        <JoinableActions
           gameId={game.id}
-          confirmedAt={game.confirmedAt!}
-          canSchedule={canSchedule}
-          drawn={drawn}
-        />
-      );
-    case GAME_ACTION_VIEW.outsider:
-      return status === GAME_STATUS.scheduled ? (
-        <ClosedActions
-          title={`일정이 ${formatDateTime(game.confirmedAt!)}로 확정되어 신청을 받지 않아요`}
-        />
-      ) : (
-        <ClosedActions />
-      );
-    case GAME_ACTION_VIEW.ended:
-      return <EndedActions gameId={game.id} confirmedAt={game.confirmedAt!} />;
-    case GAME_ACTION_VIEW.endedOutsider:
-      return <ClosedActions title="종료된 세션입니다" reviewsGameId={game.id} />;
-    case GAME_ACTION_VIEW.endedGm:
-      return (
-        <EndedGmActions
-          gameId={game.id}
-          attendanceDue={isAttendanceDue({ game, confirmedCount })}
-          attendanceConfirmed={!isNull(game.attendanceConfirmedAt)}
+          hint={`${formatDateClock(view.endDate)} 마감 때 추첨합니다.`}
+          label="신청하기"
         />
       );
   }

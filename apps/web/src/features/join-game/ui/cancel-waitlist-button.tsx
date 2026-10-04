@@ -1,12 +1,9 @@
 "use client";
 
-import { Button } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { useState } from "react";
 
-import { ConfirmDialog, toast, useAction } from "@/shared/ui";
-
-import { leaveGame } from "../api/leave-game";
+import { LEAVE_KIND } from "../model/leave-kind";
+import { LeaveConfirmButton } from "./leave-confirm-button";
 
 interface CancelWaitlistButtonProps {
   gameId: string;
@@ -16,54 +13,21 @@ interface CancelWaitlistButtonProps {
   className?: string;
 }
 
+// 마이페이지 내 세션 카드의 대기·신청 취소. 순번이 없으면 추첨 신청자다. 창은 구인 상세와 같다(D2·D3).
 export function CancelWaitlistButton({
   gameId,
-  title,
   label,
   waitlistRank,
   className,
 }: CancelWaitlistButtonProps) {
-  const [confirming, setConfirming] = useState(false);
-  const { pending, run } = useAction();
-
+  const kind = isNull(waitlistRank) ? LEAVE_KIND.lottery : LEAVE_KIND.waitlist;
   return (
-    <>
-      <Button
-        variant="outline"
-        colorPalette="gray"
-        className={className}
-        onClick={() => setConfirming(true)}
-      >
-        {label}
-      </Button>
-      <ConfirmDialog
-        open={confirming}
-        onOpenChange={setConfirming}
-        title={isNull(waitlistRank) ? "신청을 취소할까요?" : "대기를 취소할까요?"}
-        description={
-          isNull(waitlistRank) ? (
-            <>‘{title}’ 신청이 취소됩니다.</>
-          ) : (
-            <>
-              ‘{title}’ 대기 {waitlistRank}번 순번이 사라집니다.
-              <br />
-              다시 신청하면 맨 뒤 순번으로 들어갑니다.
-            </>
-          )
-        }
-        cancelLabel="돌아가기"
-        confirmLabel={label}
-        danger
-        pending={pending}
-        onConfirm={() =>
-          run(() => leaveGame(gameId), {
-            onSuccess: () => {
-              setConfirming(false);
-              toast.success(`${label}했습니다`);
-            },
-          })
-        }
-      />
-    </>
+    <LeaveConfirmButton
+      gameId={gameId}
+      kind={kind}
+      waitlistRank={waitlistRank}
+      label={label}
+      className={className}
+    />
   );
 }

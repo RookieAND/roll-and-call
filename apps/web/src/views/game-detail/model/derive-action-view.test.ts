@@ -1,84 +1,257 @@
 import { describe, expect, it } from "vitest";
 
-import { deriveActionView, GAME_ACTION_VIEW } from "./derive-action-view";
+import { PARTICIPANT_STATUS, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 
-const base = {
-  isGm: false,
-  viewerConfirmed: false,
-  viewerWaiting: false,
-  isLottery: false,
-  drawn: false,
-  canLeave: true,
-  sessionConfirmed: false,
-  sessionEnded: false,
-  isClosed: false,
-  isFull: false,
+import { deriveActionView } from "./derive-action-view";
+import { type ActionContext, GAME_ACTION_VIEW } from "./game-action-view";
+import { REVIEW_STATUS } from "./review-status";
+
+const NOW = new Date("2026-09-14T12:00:00+09:00");
+const HOUR = 60 * 60 * 1000;
+const at = (hours: number) => new Date(NOW.getTime() + hours * HOUR);
+
+const firstCome: ActionContext["game"] = {
+  scheduleMode: SCHEDULE_MODE.coordinate,
+  recruitMethod: RECRUIT_METHOD.firstCome,
+  confirmedAt: null,
+  endDate: at(48),
+  drawnAt: null,
+  cancelledAt: null,
+  cancelKind: null,
+  cancelReason: null,
+  playMinutes: 180,
+  endedAt: null,
+  attendanceConfirmedAt: null,
+  maxPlayers: 4,
+  waitlistEnabled: true,
 };
+const lottery = { ...firstCome, recruitMethod: RECRUIT_METHOD.lottery };
+const fixed = { ...firstCome, scheduleMode: SCHEDULE_MODE.fixed, confirmedAt: at(72) };
+const outsider: ActionContext["viewer"] = {
+  isGm: false,
+  status: null,
+  absent: false,
+  absenceCancelledAt: null,
+  waitlistRank: null,
+};
+const confirmed = { ...outsider, status: PARTICIPANT_STATUS.confirmed };
+const waiting = { ...outsider, status: PARTICIPANT_STATUS.waiting, waitlistRank: 2 };
+const gm = { ...outsider, isGm: true };
+
+const view = (overrides: Partial<ActionContext>) =>
+  deriveActionView({
+    game: firstCome,
+    viewer: outsider,
+    confirmedCount: 2,
+    waitingCount: 0,
+    sanction: null,
+    review: REVIEW_STATUS.unavailable,
+    now: NOW,
+    ...overrides,
+  });
 
 describe("deriveActionView", () => {
-  it("2 joinable · 모집 중인 구인에는 신청 버튼이 선다", () => {
-    expect(deriveActionView(base)).toBe(GAME_ACTION_VIEW.joinable);
+  it("(1) 취소됨: GM 취소 사유, 운영진·자동 취소, GM과 비GM", () => {
+    const cancelled = { ...firstCome, cancelledAt: at(-1), cancelKind: "gm" as const };
+    expect(view({ game: { ...cancelled, cancelReason: "일정" }, viewer: gm })).toEqual({
+      kind: GAME_ACTION_VIEW.cancelled,
+      cancelKind: "gm",
+      reason: "일정",
+      isGm: true,
+    });
+    expect(view({ game: { ...cancelled, cancelKind: "staff" }, viewer: confirmed })).toMatchObject({
+      kind: GAME_ACTION_VIEW.cancelled,
+      cancelKind: "staff",
+      isGm: false,
+    });
+    expect(view({ game: { ...cancelled, cancelKind: "auto" } })).toMatchObject({
+      cancelKind: "auto",
+    });
   });
 
-  it("3 full · 선착순만 정원 참 상태가 있다", () => {
-    expect(deriveActionView({ ...base, isFull: true })).toBe(GAME_ACTION_VIEW.full);
-    expect(deriveActionView({ ...base, isFull: true, isLottery: true })).toBe(
-      GAME_ACTION_VIEW.joinable,
-    );
+  it("(2) GM 세션 끝남: 출석 할 일, 기록, 확정 0명", () => {
+    const ended = { ...firstCome, confirmedAt: at(-5) };
+    expect(view({ game: ended, viewer: gm })).toEqual({
+      kind: GAME_ACTION_VIEW.gmEnded,
+      attendanceDue: true,
+      attendanceRecorded: false,
+    });
+    expect(view({ game: { ...ended, attendanceConfirmedAt: at(-1) }, viewer: gm })).toMatchObject({
+      attendanceDue: false,
+      attendanceRecorded: true,
+    });
+    expect(view({ game: { ...ended, confirmedAt: at(-24 * 9) }, viewer: gm })).toMatchObject({
+      attendanceDue: false,
+      attendanceRecorded: true,
+    });
+    expect(view({ game: ended, viewer: gm, confirmedCount: 0 })).toMatchObject({
+      attendanceDue: false,
+      attendanceRecorded: false,
+    });
   });
 
-  it("4 applied · 선착순 확정자가 아직 취소할 수 있을 때, 추첨 발표 전 신청자", () => {
-    expect(deriveActionView({ ...base, viewerConfirmed: true })).toBe(GAME_ACTION_VIEW.applied);
-    expect(deriveActionView({ ...base, viewerWaiting: true, isLottery: true })).toBe(
-      GAME_ACTION_VIEW.applied,
-    );
+  it("(3) GM 진행 중", () => {
+    expect(view({ game: { ...firstCome, confirmedAt: at(-1) }, viewer: gm })).toEqual({
+      kind: GAME_ACTION_VIEW.gmLive,
+    });
   });
 
-  it("5 waiting · 선착순 대기, 추첨 발표 뒤 대기", () => {
-    expect(deriveActionView({ ...base, viewerWaiting: true })).toBe(GAME_ACTION_VIEW.waiting);
-    expect(deriveActionView({ ...base, viewerWaiting: true, isLottery: true, drawn: true })).toBe(
-      GAME_ACTION_VIEW.waiting,
-    );
+  it("(4) GM 시작 전: 시각이 있으면 캘린더", () => {
+    expect(view({ game: fixed, viewer: gm })).toEqual({
+      kind: GAME_ACTION_VIEW.gmUpcoming,
+      calendar: true,
+    });
+    expect(view({ viewer: gm })).toEqual({ kind: GAME_ACTION_VIEW.gmUpcoming, calendar: false });
   });
 
-  it("6 joined · 확정자가 더는 취소할 수 없으면 마감 뒤에도 자기 상태를 유지한다", () => {
+  it("(5) 불참 기록: removed 진행 중, 출석에서 불참, 불참 취소는 아님", () => {
+    const live = { ...firstCome, confirmedAt: at(-1) };
+    const removed = { ...outsider, status: PARTICIPANT_STATUS.removed };
+    expect(view({ game: live, viewer: removed })).toEqual({ kind: GAME_ACTION_VIEW.absent });
+    const ended = { ...firstCome, confirmedAt: at(-5) };
+    expect(view({ game: ended, viewer: { ...confirmed, absent: true } })).toEqual({
+      kind: GAME_ACTION_VIEW.absent,
+    });
     expect(
-      deriveActionView({ ...base, viewerConfirmed: true, canLeave: false, isClosed: true }),
-    ).toBe(GAME_ACTION_VIEW.joined);
+      view({ game: ended, viewer: { ...confirmed, absent: true, absenceCancelledAt: at(-1) } }),
+    ).toMatchObject({ kind: GAME_ACTION_VIEW.endedParticipant });
   });
 
-  it("7 scheduled · 일정이 확정되면 참여자는 확정 안내를 본다", () => {
-    expect(deriveActionView({ ...base, viewerConfirmed: true, sessionConfirmed: true })).toBe(
-      GAME_ACTION_VIEW.scheduled,
-    );
+  it("(6) 종료 참여자: 출석 확정 여부와 후기 상태", () => {
+    const ended = { ...firstCome, confirmedAt: at(-5) };
+    expect(view({ game: ended, viewer: confirmed })).toEqual({
+      kind: GAME_ACTION_VIEW.endedParticipant,
+      endedOn: at(-5),
+      attendanceConfirmed: false,
+      review: REVIEW_STATUS.unavailable,
+    });
+    expect(
+      view({
+        game: { ...ended, attendanceConfirmedAt: at(-1) },
+        viewer: confirmed,
+        review: REVIEW_STATUS.writable,
+      }),
+    ).toMatchObject({ attendanceConfirmed: true, review: REVIEW_STATUS.writable });
   });
 
-  it("8 outsider · 안 낀 사람에게 마감·확정된 글은 끝난 모집이다", () => {
-    expect(deriveActionView({ ...base, isClosed: true })).toBe(GAME_ACTION_VIEW.outsider);
-    expect(deriveActionView({ ...base, sessionConfirmed: true })).toBe(GAME_ACTION_VIEW.outsider);
+  it("(7) 종료 그 밖: 끝난 세션의 대기자와 비참여자", () => {
+    const ended = { ...firstCome, confirmedAt: at(-5) };
+    expect(view({ game: ended, viewer: waiting })).toEqual({ kind: GAME_ACTION_VIEW.endedOther });
+    expect(view({ game: ended })).toEqual({ kind: GAME_ACTION_VIEW.endedOther });
   });
 
-  it("확정 뒤에도 대기자는 순번과 대기 취소를 유지한다", () => {
-    expect(deriveActionView({ ...base, viewerWaiting: true, sessionConfirmed: true })).toBe(
-      GAME_ACTION_VIEW.waiting,
-    );
+  it("(8) 추첨 신청함: 마감 전과 마감 뒤", () => {
+    const applicant = { ...outsider, status: PARTICIPANT_STATUS.waiting, waitlistRank: 1 };
+    expect(view({ game: lottery, viewer: applicant })).toEqual({
+      kind: GAME_ACTION_VIEW.lotteryApplied,
+      endDate: at(48),
+      closed: false,
+    });
+    expect(view({ game: { ...lottery, endDate: at(-1) }, viewer: applicant })).toMatchObject({
+      closed: true,
+    });
   });
 
-  it("9 gm · GM은 언제나 운영 관리 바를 본다", () => {
-    expect(deriveActionView({ ...base, isGm: true, sessionConfirmed: true })).toBe(
-      GAME_ACTION_VIEW.gm,
-    );
+  it("(9) 대기 중: 선착순 대기, 추첨 뒤 대기", () => {
+    expect(view({ viewer: waiting })).toEqual({
+      kind: GAME_ACTION_VIEW.waiting,
+      rank: 2,
+      resultLink: false,
+    });
+    expect(view({ game: { ...lottery, drawnAt: at(-1) }, viewer: waiting })).toMatchObject({
+      resultLink: true,
+    });
   });
 
-  it("10·11·12 · 세션이 끝나면 참여자·미참여자·GM이 각자의 종료 바를 본다", () => {
-    const ended = { ...base, sessionConfirmed: true, sessionEnded: true, isClosed: true };
-    expect(deriveActionView({ ...ended, viewerConfirmed: true, canLeave: false })).toBe(
-      GAME_ACTION_VIEW.ended,
+  it("(10) 일정 확정 참여자: 시작 전과 진행 중", () => {
+    const scheduled = { ...firstCome, confirmedAt: at(24) };
+    expect(view({ game: scheduled, viewer: confirmed })).toEqual({
+      kind: GAME_ACTION_VIEW.scheduled,
+      confirmedAt: at(24),
+      live: false,
+      resultLink: false,
+      scheduleLink: true,
+      calendar: true,
+    });
+    expect(
+      view({ game: { ...lottery, confirmedAt: at(24), drawnAt: at(-1) }, viewer: confirmed }),
+    ).toMatchObject({ resultLink: true, scheduleLink: false });
+    expect(view({ game: { ...fixed, confirmedAt: at(-1) }, viewer: confirmed })).toMatchObject({
+      kind: GAME_ACTION_VIEW.scheduled,
+      live: true,
+      scheduleLink: false,
+      calendar: false,
+    });
+  });
+
+  it("(11) 확정·취소 가능: 자리 남음, 정원 참이어도 대기 있음, 추첨 글 직접 확정자", () => {
+    expect(view({ viewer: confirmed })).toMatchObject({
+      kind: GAME_ACTION_VIEW.confirmedOpen,
+      scheduleLink: true,
+      calendar: false,
+    });
+    expect(view({ viewer: confirmed, confirmedCount: 4, waitingCount: 1 })).toMatchObject({
+      kind: GAME_ACTION_VIEW.confirmedOpen,
+    });
+    expect(view({ game: lottery, viewer: confirmed, confirmedCount: 4 })).toMatchObject({
+      kind: GAME_ACTION_VIEW.confirmedOpen,
+    });
+    expect(view({ game: fixed, viewer: confirmed })).toMatchObject({
+      kind: GAME_ACTION_VIEW.confirmedOpen,
+      scheduleLink: false,
+      calendar: true,
+    });
+  });
+
+  it("(12) 확정·취소 불가: 정원 참·마감·추첨 뒤", () => {
+    expect(view({ viewer: confirmed, confirmedCount: 4 })).toMatchObject({
+      kind: GAME_ACTION_VIEW.confirmedLocked,
+      block: "full",
+    });
+    expect(view({ game: { ...firstCome, endDate: at(-1) }, viewer: confirmed })).toMatchObject({
+      block: "expired",
+    });
+    expect(
+      view({
+        game: { ...fixed, recruitMethod: RECRUIT_METHOD.lottery, drawnAt: at(-1) },
+        viewer: confirmed,
+      }),
+    ).toMatchObject({ block: "drawn", resultLink: true, scheduleLink: false, calendar: true });
+  });
+
+  it("(13) 비참여자 · 조율형 일정 확정", () => {
+    expect(view({ game: { ...firstCome, confirmedAt: at(24) } })).toEqual({
+      kind: GAME_ACTION_VIEW.closedScheduled,
+      confirmedAt: at(24),
+    });
+  });
+
+  it("(14) 비참여자 · 모집 끝: 마감 지남, 대기 끈 정원 참, 일시 지정형 시작", () => {
+    const closed = { kind: GAME_ACTION_VIEW.closed };
+    expect(view({ game: { ...firstCome, endDate: at(-1) } })).toEqual(closed);
+    expect(view({ game: { ...firstCome, waitlistEnabled: false }, confirmedCount: 4 })).toEqual(
+      closed,
     );
-    expect(deriveActionView({ ...ended, viewerWaiting: true })).toBe(
-      GAME_ACTION_VIEW.endedOutsider,
-    );
-    expect(deriveActionView(ended)).toBe(GAME_ACTION_VIEW.endedOutsider);
-    expect(deriveActionView({ ...ended, isGm: true })).toBe(GAME_ACTION_VIEW.endedGm);
+    expect(view({ game: { ...fixed, confirmedAt: at(-1) } })).toEqual(closed);
+  });
+
+  it("(15) 제재 중: 모집이 열려 있을 때만", () => {
+    const sanction = { reason: "반복된 불참", until: null };
+    expect(view({ sanction })).toEqual({ kind: GAME_ACTION_VIEW.sanctioned, ...sanction });
+    expect(view({ sanction, game: { ...firstCome, endDate: at(-1) } })).toEqual({
+      kind: GAME_ACTION_VIEW.closed,
+    });
+  });
+
+  it("(16) 대기로 신청 · (17) 신청 · (18) 추첨 신청", () => {
+    expect(view({ confirmedCount: 4, waitingCount: 1 })).toEqual({
+      kind: GAME_ACTION_VIEW.joinWaitlist,
+      nextRank: 2,
+    });
+    expect(view({})).toEqual({ kind: GAME_ACTION_VIEW.join });
+    expect(view({ game: lottery, confirmedCount: 9 })).toEqual({
+      kind: GAME_ACTION_VIEW.joinLottery,
+      endDate: at(48),
+    });
   });
 });

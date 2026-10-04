@@ -68,3 +68,5 @@ export {
   type CalendarViewerRole,
 } from "./model/can-add-to-calendar";
 export { calendarViewerRole } from "./model/calendar-viewer-role";
+export { canViewHiddenGame } from "./model/can-view-hidden-game";
+export { GAME_CANCEL_KIND, type GameCancelKind } from "@roll-and-call/database/games/model";

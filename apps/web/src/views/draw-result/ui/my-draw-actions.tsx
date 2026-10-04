@@ -1,6 +1,6 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { LeaveGameButton } from "@/features/join-game";
+import { LEAVE_KIND, LeaveConfirmButton } from "@/features/join-game";
 import { ServerLink } from "@/shared/ui";
 
 import { MY_DRAW_ACTION, type MyDrawAction } from "../model/my-draw-footer";
@@ -9,14 +9,19 @@ interface MyDrawActionsProps {
   gameId: string;
   hint: string | null;
   actions: MyDrawAction[];
+  waitlistRank: number | null;
 }
 
-export function MyDrawActions({ gameId, hint, actions }: MyDrawActionsProps) {
+export function MyDrawActions({ gameId, hint, actions, waitlistRank }: MyDrawActionsProps) {
   const buttons = {
     [MY_DRAW_ACTION.leaveWaitlist]: (
-      <LeaveGameButton key={MY_DRAW_ACTION.leaveWaitlist} gameId={gameId}>
-        대기 취소
-      </LeaveGameButton>
+      <LeaveConfirmButton
+        key={MY_DRAW_ACTION.leaveWaitlist}
+        gameId={gameId}
+        kind={LEAVE_KIND.waitlist}
+        waitlistRank={waitlistRank}
+        size="lg"
+      />
     ),
     [MY_DRAW_ACTION.viewGame]: (
       <Button

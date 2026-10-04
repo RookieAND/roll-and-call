@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { toast, useAction } from "@/shared/ui";
 
 import { joinGame } from "../api/join-game";
+import { joinSuccessMessage } from "../model/join-success-message";
 
 interface JoinGameButtonProps {
   gameId: string;
@@ -18,7 +19,7 @@ export function JoinGameButton({ gameId, children, className }: JoinGameButtonPr
 
   function join() {
     run(() => joinGame(gameId), {
-      onSuccess: (result) => toast.success(result.waiting ? "대기로 접수했습니다" : "참여했습니다"),
+      onSuccess: (result) => toast.success(joinSuccessMessage(result)),
     });
   }
 

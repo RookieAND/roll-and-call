@@ -10,21 +10,30 @@ import {
 interface GameDetailHeaderProps {
   title: string;
   status: GameStatus;
+  ended: boolean;
+  showDeadline: boolean;
   statusLine: ScheduleLine;
 }
 
-export function GameDetailHeader({ title, status, statusLine }: GameDetailHeaderProps) {
+// 끝난 세션은 목록 카드처럼 「종료」로 덮는다. deriveGameStatus는 다른 화면도 써서 여기서만 바꾼다.
+export function GameDetailHeader({
+  title,
+  status,
+  ended,
+  showDeadline,
+  statusLine,
+}: GameDetailHeaderProps) {
+  const deadline = showDeadline ? statusLine.deadlineShort : null;
+
   return (
     <VStack gap="100">
       <HStack justify="between" align="start" gap="100">
         <Text typography="heading1" render={<h1 />} className="min-w-0 flex-1">
           {title}
         </Text>
-        {statusLine.deadlineShort && (
-          <Badge className="mt-025 tabular-nums">{statusLine.deadlineShort}</Badge>
-        )}
+        {deadline && <Badge className="mt-025 tabular-nums">{deadline}</Badge>}
         <span className="mt-025">
-          <GameStatusBadge status={status} />
+          {ended ? <Badge colorPalette="gray">종료</Badge> : <GameStatusBadge status={status} />}
         </span>
       </HStack>
       <GameScheduleRow line={statusLine} scale="header" />

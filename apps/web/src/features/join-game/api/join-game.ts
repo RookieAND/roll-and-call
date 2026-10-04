@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
+import { RECRUIT_METHOD } from "@/entities/game";
 import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
@@ -17,8 +18,10 @@ import {
 import { announceNewApplication } from "./announce-new-application";
 import { applyToGame } from "./apply-to-game";
 
-// waiting은 화면 표시 시점이 아니라 실제 접수 결과라 토스트 문구가 이걸 따른다.
-export async function joinGame(gameId: string): Promise<ActionResult & { waiting?: boolean }> {
+// waiting·lottery는 화면 표시 시점이 아니라 실제 접수 결과라 토스트 문구가 이걸 따른다.
+export async function joinGame(
+  gameId: string,
+): Promise<ActionResult & { waiting?: boolean; lottery?: boolean }> {
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };
@@ -49,5 +52,8 @@ export async function joinGame(gameId: string): Promise<ActionResult & { waiting
   revalidatePath(`${gamePath}/participants`);
   revalidatePath(`${gamePath}/schedule`);
   revalidatePath(serverPath({ slug: server.slug, path: "/games" }));
-  return { waiting: application.waiting };
+  return {
+    waiting: application.waiting,
+    lottery: application.game.recruitMethod === RECRUIT_METHOD.lottery,
+  };
 }

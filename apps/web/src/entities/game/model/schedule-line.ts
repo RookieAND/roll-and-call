@@ -14,14 +14,16 @@ type ScheduleGame = Pick<
 >;
 
 // D-n은 KST 날짜 차이로 센다(날짜 경계에서 서버·클라이언트 값이 갈리지 않게).
+// 확정 표시는 일시가 정해졌는지로 본다(D266). 글자 끝 「확정」은 조율형만 붙인다.
 export function scheduleLine(game: ScheduleGame, now: Date = new Date()) {
-  const confirmed = game.scheduleMode === SCHEDULE_MODE.coordinate && !isNull(game.confirmedAt);
+  const confirmed = !isNull(game.confirmedAt);
 
   let text: string;
   if (game.confirmedAt) {
-    text = confirmed
-      ? `${formatDateTime(game.confirmedAt)} 확정`
-      : formatDateTime(game.confirmedAt);
+    text =
+      game.scheduleMode === SCHEDULE_MODE.coordinate
+        ? `${formatDateTime(game.confirmedAt)} 확정`
+        : formatDateTime(game.confirmedAt);
   } else if (game.rangeStart && game.rangeEnd) {
     text = `${formatDate(game.rangeStart)} ~ ${formatDate(game.rangeEnd)} 중 조율`;
   } else {

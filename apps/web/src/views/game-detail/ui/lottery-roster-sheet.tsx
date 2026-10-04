@@ -25,7 +25,7 @@ export function LotteryRosterSheet({
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Popup>
         <Sheet.Handle />
-        <RosterSheetTitle title="명단" />
+        <RosterSheetTitle title="참여 신청자 명단" />
 
         <VStack gap="150" className="max-h-[23rem] overflow-y-auto">
           <RosterGmGroup gm={gm} viewerId={viewerId} />
@@ -35,7 +35,9 @@ export function LotteryRosterSheet({
             ))}
           </RosterGroup>
           <Text typography="body4" foreground="hint" render={<p />}>
-            추첨 전에는 순번이 없습니다. 신청 순서로만 보여줍니다.
+            추첨 전에는 순번이 없습니다.
+            <br />
+            신청 순서로만 보여 줍니다.
           </Text>
         </VStack>
       </Sheet.Popup>

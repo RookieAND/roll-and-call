@@ -19,6 +19,8 @@ export async function generateMetadata({
   const server = await getCurrentServer();
   const game = await getGameById(server.id, id);
   if (!game) return { title: "구인글" };
+  // 숨긴 구인은 보는 사람과 상관없이 기본 제목·기본 이미지로 미리보기를 낸다(R7).
+  if (game.hiddenAt) return { title: "구인글", openGraph: { title: "구인글", images: [OG_IMAGE] } };
 
   return {
     title: game.title,

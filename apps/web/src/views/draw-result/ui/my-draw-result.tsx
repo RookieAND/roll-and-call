@@ -73,7 +73,12 @@ export function MyDrawResult({
       </VStack>
       <FloatingBar.Spacer />
       <FloatingBar.Content>
-        <MyDrawActions gameId={gameId} hint={footer.hint} actions={footer.actions} />
+        <MyDrawActions
+          gameId={gameId}
+          hint={footer.hint}
+          actions={footer.actions}
+          waitlistRank={waitlistRank}
+        />
       </FloatingBar.Content>
     </FloatingBar.Root>
   );

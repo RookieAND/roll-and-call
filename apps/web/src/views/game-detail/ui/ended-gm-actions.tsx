@@ -8,22 +8,20 @@ import { ManageGameLink } from "./manage-game-link";
 interface EndedGmActionsProps {
   gameId: string;
   attendanceDue: boolean;
-  attendanceConfirmed: boolean;
+  attendanceRecorded: boolean;
 }
 
-export function EndedGmActions({
-  gameId,
-  attendanceDue,
-  attendanceConfirmed,
-}: EndedGmActionsProps) {
+export function EndedGmActions({ gameId, attendanceDue, attendanceRecorded }: EndedGmActionsProps) {
   const attendancePath = `/games/${gameId}/attendance`;
 
   if (attendanceDue) {
     return (
       <VStack gap="125">
-        <ActionNotice title="출석을 확인해 주세요" colorPalette="primary">
-          참석하지 않은 사람만 고르면 됩니다.
-        </ActionNotice>
+        <ActionNotice
+          title="출석을 확인해 주세요"
+          lines={["참석하지 않은 사람만 고르면 됩니다."]}
+          colorPalette="primary"
+        />
         <Button render={<ServerLink path={attendancePath} />} size="lg" className="w-full">
           출석 확인하기
         </Button>
@@ -31,7 +29,7 @@ export function EndedGmActions({
     );
   }
 
-  if (attendanceConfirmed) {
+  if (attendanceRecorded) {
     return (
       <Button
         render={<ServerLink path={attendancePath} />}

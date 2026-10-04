@@ -1,19 +1,28 @@
 import { Callout, type CalloutPalette } from "@roll-and-call/ui";
-import type { ReactNode } from "react";
+import { Fragment } from "react";
 
 interface ActionNoticeProps {
-  title?: ReactNode;
+  title: string;
+  lines?: string[];
   colorPalette?: CalloutPalette;
-  children: ReactNode;
 }
 
-export function ActionNotice({ title, colorPalette = "gray", children }: ActionNoticeProps) {
+export function ActionNotice({ title, lines = [], colorPalette = "gray" }: ActionNoticeProps) {
   return (
     <Callout.Root colorPalette={colorPalette} size="sm">
       <Callout.Icon />
       <div>
-        {title && <Callout.Title>{title}</Callout.Title>}
-        <Callout.Description>{children}</Callout.Description>
+        <Callout.Title>{title}</Callout.Title>
+        {lines.length > 0 && (
+          <Callout.Description>
+            {lines.map((line, index) => (
+              <Fragment key={line}>
+                {index > 0 && <br />}
+                {line}
+              </Fragment>
+            ))}
+          </Callout.Description>
+        )}
       </div>
     </Callout.Root>
   );
