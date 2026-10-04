@@ -8,9 +8,11 @@ import {
   ERROR_DISPLAY,
   GAME_CANCELLED_MESSAGE,
   GAME_NOT_FOUND_MESSAGE,
+  INVALID_REQUEST_MESSAGE,
   ROSTER_SESSION_ENDED_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
+import { isRosterRequest } from "@/shared/lib";
 import {
   type Game,
   getActingMember,
@@ -26,13 +28,16 @@ import { RosterError } from "./roster-error";
 // 모든 명단 조정이 거치는 한 길: 게임 행을 잠근 트랜잭션 안에서 GM 본인·취소 여부·세션 종료 전을 확인한다.
 export async function adjustRoster({
   gameId,
+  userIds,
   work,
   notify,
 }: {
   gameId: string;
+  userIds: string[];
   work: (transaction: Transaction, game: Game, timing: RosterTiming) => Promise<void>;
   notify?: (server: Server) => Promise<void>;
 }): Promise<ActionResult> {
+  if (!isRosterRequest({ gameId, userIds })) return { error: INVALID_REQUEST_MESSAGE };
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

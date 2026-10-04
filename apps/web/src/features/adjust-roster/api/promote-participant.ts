@@ -32,6 +32,7 @@ export async function promoteParticipant({
 
   const result = await adjustRoster({
     gameId,
+    userIds: [userId],
     work: async (transaction, game, timing) => {
       const serverId = game.serverId;
       const status = await findParticipantStatus({ transaction, serverId, gameId, userId });

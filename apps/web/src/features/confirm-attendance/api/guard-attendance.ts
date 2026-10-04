@@ -8,8 +8,10 @@ import {
   ERROR_DISPLAY,
   GAME_CANCELLED_MESSAGE,
   GAME_NOT_FOUND_MESSAGE,
+  INVALID_REQUEST_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
+import { isRosterRequest } from "@/shared/lib";
 import {
   type Game,
   evaluateGameBadges,
@@ -26,12 +28,15 @@ import { AttendanceError } from "./attendance-error";
 // 명단은 지금 확정 + 세션 중 불참으로 내보낸 사람이다.
 export async function guardAttendance({
   gameId,
+  userIds,
   work,
 }: {
   gameId: string;
+  userIds: string[];
   // game은 잠근 행이다(출석 확정 시각을 쓰기 전 값).
   work: (transaction: Transaction, roster: AttendanceRoster, game: Game) => Promise<void>;
 }): Promise<ActionResult> {
+  if (!isRosterRequest({ gameId, userIds })) return { error: INVALID_REQUEST_MESSAGE };
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

@@ -36,6 +36,7 @@ export async function removeParticipant({
 
   return adjustRoster({
     gameId,
+    userIds: [userId],
     work: async (transaction, game, { started, now }) => {
       const serverId = game.serverId;
       const params = { gameId, gameTitle: game.title };

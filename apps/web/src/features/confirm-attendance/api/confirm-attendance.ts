@@ -29,6 +29,7 @@ export async function confirmAttendance({
   const serverId = (await getCurrentServer()).id;
   const result = await guardAttendance({
     gameId,
+    userIds: absences.map((absence) => absence.userId),
     work: async (transaction, { confirmedUserIds, removedUserIds }, game) => {
       const rosterUserIds = [...confirmedUserIds, ...removedUserIds];
       const error = absencesError({ absences, rosterUserIds });

@@ -27,6 +27,7 @@ export async function demoteParticipant({
 
   return adjustRoster({
     gameId,
+    userIds: [userId],
     work: async (transaction, game, { started, now }) => {
       const serverId = game.serverId;
       const status = await findParticipantStatus({ transaction, serverId, gameId, userId });

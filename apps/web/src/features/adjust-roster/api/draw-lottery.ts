@@ -6,8 +6,8 @@ import { withTransaction } from "@roll-and-call/database/transaction";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { ERROR_DISPLAY, type ActionResult } from "@/shared/api";
-import { serverPath } from "@/shared/lib";
+import { ERROR_DISPLAY, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import { isUuid, serverPath } from "@/shared/lib";
 import { finishLotteryDraw, getActingMember, notMemberError } from "@/shared/server";
 
 import { drawRejectionMessage } from "../model/draw-rejection-message";
@@ -17,6 +17,7 @@ export type DrawLotteryResult = ActionResult & { alreadyDrawn?: boolean };
 
 // GM의 [지금 추첨하기]. 잠금·GM·취소·상태 확인은 추첨 명령이 모두 하므로 adjustRoster를 거치지 않는다.
 export async function drawLottery(gameId: string): Promise<DrawLotteryResult> {
+  if (!isUuid(gameId)) return GAME_NOT_FOUND_RESULT;
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

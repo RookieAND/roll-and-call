@@ -40,6 +40,7 @@ export async function addParticipants({
 
   const result = await adjustRoster({
     gameId,
+    userIds: invitedIds,
     work: async (transaction, game, timing) => {
       if (invitedIds.includes(game.gmId)) {
         throw new RosterError("GM은 참여자로 넣을 수 없습니다.");

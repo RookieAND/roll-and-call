@@ -36,6 +36,7 @@ export { serverPath } from "./server-path";
 export { useServerPath } from "./use-server-path";
 export { QUERY_NOTICE, QUERY_NOTICE_PARAM, type QueryNotice } from "./query-notice";
 export { isUuid } from "./is-uuid";
+export { isRosterRequest } from "./is-roster-request";
 export { legacyServerRedirect } from "./legacy-server-redirect";
 export { safeNextPath } from "./safe-next-path";
 export { serverNextPath } from "./server-next-path";

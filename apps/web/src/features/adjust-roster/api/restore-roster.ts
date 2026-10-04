@@ -37,6 +37,7 @@ export async function restoreRoster({
 
   return adjustRoster({
     gameId,
+    userIds: entries.map((entry) => entry.userId),
     work: async (transaction, game, { started }) => {
       const serverId = game.serverId;
       if (started && entries.some((entry) => entry.status === waiting)) {
