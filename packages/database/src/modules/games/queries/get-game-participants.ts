@@ -28,6 +28,9 @@ export async function getGameParticipants({
             waitlistedAt: true,
             drawRoll: true,
             absent: true,
+            absenceReason: true,
+            absenceCancelledAt: true,
+            absenceAddedAt: true,
           },
           where: (participant, { eq }) => eq(participant.serverId, serverId),
           with: {

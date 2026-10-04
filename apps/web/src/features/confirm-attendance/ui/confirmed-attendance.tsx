@@ -1,5 +1,7 @@
-import { Card, VStack } from "@roll-and-call/ui";
+import { Card, Text, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
+
+import { formatDateTime } from "@/shared/lib";
 
 import type { Attendee } from "../model/attendee";
 import { AttendanceRow } from "./attendance-row";
@@ -9,6 +11,7 @@ import { ReopenAttendanceButton } from "./reopen-attendance-button";
 interface ConfirmedAttendanceProps {
   attendees: Attendee[];
   canReopen: boolean;
+  deadline: Date;
   onReopen: () => void;
   children?: ReactNode;
 }
@@ -16,10 +19,13 @@ interface ConfirmedAttendanceProps {
 export function ConfirmedAttendance({
   attendees,
   canReopen,
+  deadline,
   onReopen,
   children,
 }: ConfirmedAttendanceProps) {
-  const absentCount = attendees.filter((attendee) => attendee.absent).length;
+  const absentCount = attendees.filter(
+    (attendee) => attendee.absent && !attendee.staffCancelled,
+  ).length;
 
   return (
     <VStack gap="200">
@@ -42,7 +48,14 @@ export function ConfirmedAttendance({
             />
           ))}
         </Card.Root>
-        {canReopen && <ReopenAttendanceButton onReopen={onReopen} />}
+        {canReopen && (
+          <VStack gap="100">
+            <Text typography="body4" foreground="hint">
+              {formatDateTime(deadline)}까지 고칠 수 있습니다.
+            </Text>
+            <ReopenAttendanceButton onReopen={onReopen} />
+          </VStack>
+        )}
       </VStack>
     </VStack>
   );

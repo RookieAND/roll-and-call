@@ -6,6 +6,7 @@ import { useState, type ReactNode } from "react";
 import { ConfirmDialog, LineBreaks, toast, useAction } from "@/shared/ui";
 
 import { confirmAttendance } from "../api/confirm-attendance";
+import { ATTENDANCE_PAST_DEADLINE_MESSAGE } from "../model/attendance-messages";
 import type { Attendee } from "../model/attendee";
 import { confirmDescription } from "../model/confirm-description";
 import { AttendanceRow } from "./attendance-row";
@@ -16,6 +17,7 @@ interface AttendanceFormProps {
   attendees: Attendee[];
   onConfirmed: () => void;
   onReopen: () => void;
+  onExpired: () => void;
   children?: ReactNode;
 }
 
@@ -24,19 +26,28 @@ export function AttendanceForm({
   attendees,
   onConfirmed,
   onReopen,
+  onExpired,
   children,
 }: AttendanceFormProps) {
   const [absentIds, setAbsentIds] = useState(
     () =>
       new Set(attendees.filter((attendee) => attendee.absent).map((attendee) => attendee.userId)),
   );
+  // 참석으로 바꿨다가 다시 불참으로 돌아오면 적어 둔 사유를 되살린다.
+  const [reasons, setReasons] = useState(
+    () =>
+      new Map(
+        attendees.map((attendee) => [attendee.userId, attendee.absenceReason ?? ""] as const),
+      ),
+  );
   const [confirming, setConfirming] = useState(false);
   const { pending, run } = useAction();
 
-  const absentNames = attendees
-    .filter((attendee) => absentIds.has(attendee.userId))
-    .map((attendee) => attendee.username);
-  const description = confirmDescription(absentNames);
+  const counted = attendees.filter(
+    (attendee) => absentIds.has(attendee.userId) && !attendee.staffCancelled,
+  );
+  const named = counted.filter((attendee) => !attendee.staffAdded);
+  const description = confirmDescription(named.map((attendee) => attendee.username));
 
   function toggle(userId: string, absent: boolean) {
     setAbsentIds((previous) => {
@@ -47,40 +58,47 @@ export function AttendanceForm({
     });
   }
 
+  function changeReason(userId: string, reason: string) {
+    setReasons((previous) => new Map(previous).set(userId, reason));
+  }
+
   function requestConfirm() {
-    if (absentIds.size === 0) submit();
+    if (named.length === 0) submit();
     else setConfirming(true);
   }
 
   function submit() {
-    run(
-      () =>
-        confirmAttendance({
-          gameId,
-          absences: [...absentIds].map((userId) => ({ userId, reason: null })),
-        }),
-      {
-        onSuccess: () => {
-          setConfirming(false);
-          onConfirmed();
-          toast.success("출석을 확정했습니다", {
-            undo: () => {
-              onReopen();
-              toast.success("다시 고칠 수 있습니다");
-            },
-          });
-        },
-        onError: () => setConfirming(false),
+    const absences = attendees
+      .filter((attendee) => absentIds.has(attendee.userId) && !attendee.staffAdded)
+      .map((attendee) => ({
+        userId: attendee.userId,
+        reason: reasons.get(attendee.userId) || null,
+      }));
+    run(() => confirmAttendance({ gameId, absences }), {
+      onSuccess: () => {
+        setConfirming(false);
+        onConfirmed();
+        toast.success("출석을 확정했습니다", {
+          undo: () => {
+            onReopen();
+            toast.success("다시 고칠 수 있습니다");
+          },
+        });
       },
-    );
+      onError: ({ error }) => {
+        setConfirming(false);
+        if (error === ATTENDANCE_PAST_DEADLINE_MESSAGE) onExpired();
+        else toast.error(error);
+      },
+    });
   }
 
   return (
     <VStack gap="200">
       <VStack gap="100">
         <AttendanceStats
-          presentCount={attendees.length - absentIds.size}
-          absentCount={absentIds.size}
+          presentCount={attendees.length - counted.length}
+          absentCount={counted.length}
         />
         {children}
       </VStack>
@@ -95,7 +113,9 @@ export function AttendanceForm({
             key={attendee.userId}
             attendee={attendee}
             absent={absentIds.has(attendee.userId)}
+            reason={reasons.get(attendee.userId)}
             onChange={(absent) => toggle(attendee.userId, absent)}
+            onReasonChange={(reason) => changeReason(attendee.userId, reason)}
           />
         ))}
       </Card.Root>

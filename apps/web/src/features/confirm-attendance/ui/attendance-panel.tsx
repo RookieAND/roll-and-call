@@ -1,16 +1,21 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 
+import { attendanceGuideKind } from "../model/attendance-guide-kind";
+import { ATTENDANCE_PHASE, type AttendancePhase } from "../model/attendance-phase";
 import type { Attendee } from "../model/attendee";
 import { AttendanceForm } from "./attendance-form";
+import { AttendanceGuide } from "./attendance-guide";
 import { ConfirmedAttendance } from "./confirmed-attendance";
 
 interface AttendancePanelProps {
   gameId: string;
   attendees: Attendee[];
-  attendanceConfirmed: boolean;
-  canReopen: boolean;
+  phase: AttendancePhase;
+  deadline: Date;
+  attendanceConfirmedAt: Date | null;
   children?: ReactNode;
 }
 
@@ -18,31 +23,55 @@ interface AttendancePanelProps {
 export function AttendancePanel({
   gameId,
   attendees,
-  attendanceConfirmed,
-  canReopen,
+  phase,
+  deadline,
+  attendanceConfirmedAt,
   children,
 }: AttendancePanelProps) {
-  const [editing, setEditing] = useState(!attendanceConfirmed);
+  const router = useRouter();
+  const [editing, setEditing] = useState(phase === ATTENDANCE_PHASE.open);
+  const [expired, setExpired] = useState(false);
+  const guideKind = attendanceGuideKind({ phase, editing, expired });
+  const canEdit =
+    !expired && (phase === ATTENDANCE_PHASE.open || phase === ATTENDANCE_PHASE.confirmed);
 
-  if (editing) {
+  const info = (
+    <>
+      {children}
+      <AttendanceGuide
+        kind={guideKind}
+        deadline={deadline}
+        attendanceConfirmedAt={attendanceConfirmedAt}
+        hasRemoved={attendees.some((attendee) => attendee.removed)}
+      />
+    </>
+  );
+
+  if (editing && canEdit) {
     return (
       <AttendanceForm
         gameId={gameId}
         attendees={attendees}
         onConfirmed={() => setEditing(false)}
         onReopen={() => setEditing(true)}
+        onExpired={() => {
+          setEditing(false);
+          setExpired(true);
+          router.refresh();
+        }}
       >
-        {children}
+        {info}
       </AttendanceForm>
     );
   }
   return (
     <ConfirmedAttendance
       attendees={attendees}
-      canReopen={canReopen}
+      canReopen={canEdit && phase === ATTENDANCE_PHASE.confirmed}
+      deadline={deadline}
       onReopen={() => setEditing(true)}
     >
-      {children}
+      {info}
     </ConfirmedAttendance>
   );
 }

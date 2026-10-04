@@ -14,7 +14,7 @@ export default function ErrorPage({ retry }: { error: Error; retry: () => void }
           <>
             연결이 잠시 끊겼을 수 있습니다.
             <br />
-            잠시 뒤 다시 시도해주세요.
+            잠시 뒤 다시 시도해 주세요.
           </>
         }
         action={

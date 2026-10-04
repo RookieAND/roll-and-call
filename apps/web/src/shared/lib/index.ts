@@ -25,6 +25,7 @@ export { directionalParticle } from "./directional-particle";
 export { objectParticle } from "./object-particle";
 export { subjectParticle } from "./subject-particle";
 export { topicParticle } from "./topic-particle";
+export { CLOCK_PARTICLE_KIND, clockParticle, type ClockParticleKind } from "./clock-particle";
 export { CERT_PHOTO_BUCKET, certPhotoPathOf } from "./cert-photo-path";
 export { REVIEW_PHOTO_BUCKET, reviewPhotoPathOf } from "./review-photo-path";
 export { formatMonthDayTime } from "./format-month-day-time";

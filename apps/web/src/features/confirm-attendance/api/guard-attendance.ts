@@ -17,6 +17,7 @@ import {
   revalidateGamePaths,
 } from "@/shared/server";
 
+import { ATTENDANCE_PAST_DEADLINE_MESSAGE } from "../model/attendance-messages";
 import type { AttendanceRoster } from "../model/attendance-roster";
 import { AttendanceError } from "./attendance-error";
 
@@ -58,7 +59,7 @@ export async function guardAttendance({
       });
 
       if (isAttendancePastDeadline({ ...game, now: new Date() })) {
-        throw new AttendanceError("출석 확인 기한이 지났습니다.");
+        throw new AttendanceError(ATTENDANCE_PAST_DEADLINE_MESSAGE);
       }
       // 다시 고친 뒤 확정하는 길도 같은 가드를 타므로 확정 시각은 빼고 "세션이 끝났는가"만 본다.
       if (
