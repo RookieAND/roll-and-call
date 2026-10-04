@@ -4,7 +4,6 @@ import {
   check,
   foreignKey,
   index,
-  pgEnum,
   pgTable,
   text,
   timestamp,
@@ -63,48 +62,4 @@ export const sessionReviews = pgTable(
   ],
 ).enableRLS();
 
-export const reviewReportOutcome = pgEnum("review_report_outcome", [
-  "dismissed",
-  "hidden",
-  "removed",
-]);
-
-// outcome이 null이면 처리 전이다. 운영진이 후기를 처리하면 그 후기의 남은 신고가 모두 같은 결과로 닫힌다.
-export const reviewReports = pgTable(
-  "review_reports",
-  {
-    id: uuid("id").primaryKey().defaultRandom(),
-    serverId: serverId(),
-    reviewId: uuid("review_id")
-      .notNull()
-      .references(() => sessionReviews.id, { onDelete: "cascade" }),
-    reporterId: uuid("reporter_id").references(() => profiles.id, { onDelete: "set null" }),
-    category: text("category").notNull(),
-    // category가 other일 때만 적는다.
-    detail: text("detail").notNull().default(""),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-    outcome: reviewReportOutcome("outcome"),
-    resolvedBy: uuid("resolved_by").references(() => profiles.id, { onDelete: "set null" }),
-    resolvedAt: timestamp("resolved_at", { withTimezone: true }),
-  },
-  (table) => [
-    index("review_reports_review_id_idx").on(table.reviewId),
-    foreignKey({
-      columns: [table.reviewId, table.serverId],
-      foreignColumns: [sessionReviews.id, sessionReviews.serverId],
-      name: "review_reports_review_server_fk",
-    }).onDelete("cascade"),
-    uniqueIndex("review_reports_open_reporter_unique")
-      .on(table.reviewId, table.reporterId)
-      .where(sql`outcome is null`),
-    check(
-      "review_reports_category",
-      sql`${table.category} in ('abuse', 'privacy', 'spoiler', 'image', 'unrelated', 'other')`,
-    ),
-    check("review_reports_detail_length", sql`char_length(${table.detail}) <= 200`),
-  ],
-).enableRLS();
-
 export type SessionReview = typeof sessionReviews.$inferSelect;
-
-export type ReviewReport = typeof reviewReports.$inferSelect;

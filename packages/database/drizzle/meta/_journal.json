@@ -442,6 +442,13 @@
       "when": 1795200000000,
       "tag": "0066_cert_discard",
       "breakpoints": true
+    },
+    {
+      "idx": 67,
+      "version": "7",
+      "when": 1795300000000,
+      "tag": "0067_drop_review_reports",
+      "breakpoints": true
     }
   ]
 }

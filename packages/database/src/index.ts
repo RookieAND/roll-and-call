@@ -10,7 +10,6 @@ export type {
   NewAvailability,
   ProfileMemo,
   SessionReview,
-  ReviewReport,
   UserBadge,
   Server,
   ServerMember,

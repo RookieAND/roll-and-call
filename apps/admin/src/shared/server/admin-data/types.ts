@@ -196,16 +196,6 @@ export interface Review {
   held: boolean;
 }
 
-export interface ReviewReport {
-  id: string;
-  reviewId: string;
-  reporterId?: string;
-  category: string;
-  detail: string;
-  reportedAt: Date;
-  open: boolean;
-}
-
 export interface NoShow {
   id: string;
   userId: string;

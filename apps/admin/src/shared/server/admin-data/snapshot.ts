@@ -34,7 +34,6 @@ import type {
   NoShow,
   QuizQuestion,
   Review,
-  ReviewReport,
   Rulebook,
   RulebookRequest,
   Session,
@@ -68,7 +67,6 @@ export const loadSnapshot = cache(async () => {
     sellerRows,
     sanctionRows,
     reviewRows,
-    reviewReportRows,
     staffRows,
     memoRows,
     auditRows,
@@ -340,15 +338,6 @@ export const loadSnapshot = cache(async () => {
       : undefined,
     held: absentKeys.has(`${row.gameId}:${row.authorId}`),
   }));
-  const reviewReportList: ReviewReport[] = reviewReportRows.map((row) => ({
-    id: row.id,
-    reviewId: row.reviewId,
-    reporterId: row.reporterId ?? undefined,
-    category: row.category,
-    detail: row.detail,
-    reportedAt: row.createdAt,
-    open: isNull(row.outcome),
-  }));
 
   const discordIds = new Map(profileRows.map((profile) => [profile.id, profile.discordId]));
   const staffList: Staff[] = staffRows.map((row) => ({
@@ -411,7 +400,6 @@ export const loadSnapshot = cache(async () => {
     sessions,
     noShows,
     reviews: reviewList,
-    reviewReports: reviewReportList,
     auditLog: auditList,
     staffMemos: memoList,
   };
