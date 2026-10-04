@@ -18,7 +18,7 @@ export function RevokeSummary({
   const items = [
     { label: "반려로 돌림", value: `${rulebooks.length}개`, sub: rulebooks.join(", ") },
     {
-      label: "닫는 구인",
+      label: "취소하는 구인",
       value: `${closedCount}건`,
       sub: "참여자에게 운영진 조치 알림",
       danger: true,

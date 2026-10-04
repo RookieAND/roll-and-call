@@ -2,6 +2,8 @@ import { and, eq, gt, isNull, or, sql } from "drizzle-orm";
 
 import { db } from "#/client";
 import type { Actor } from "#/modules/moderation/model/types";
+import { createNotifications } from "#/modules/notifications/commands/create-notifications";
+import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, sanctions } from "#/schema";
 
@@ -39,6 +41,13 @@ export async function releaseSanction({
       )
       .returning({ id: sanctions.id });
     if (released.length === 0) return { ok: false, alreadyReleased: true };
+    // 해제 사유는 활동 기록에만 남기고 알림에는 넣지 않는다(D86, R10).
+    await createNotifications({
+      executor: tx,
+      serverId,
+      actorId: actor.id,
+      notifications: [{ userId, kind: NOTIFICATION_KIND.sanctionReleased, params: {} }],
+    });
     await recordAudit({
       executor: tx,
       serverId,

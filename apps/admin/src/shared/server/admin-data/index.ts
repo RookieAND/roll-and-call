@@ -69,6 +69,7 @@ export {
 export { decideCert } from "./decide-cert";
 export { type ReviewModeration } from "./review-moderation";
 export { getUserDetail, type OngoingActivity, type UserDetail } from "./get-user-detail";
+export { getMemberOngoing, type MemberOngoingRow } from "./get-member-ongoing";
 export { checkDiscordBanFailed } from "./check-discord-ban-failed";
 export { checkDiscordUnbanFailed } from "./check-discord-unban-failed";
 export { listUsers } from "./list-users";

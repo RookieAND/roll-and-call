@@ -44,7 +44,7 @@ export function RevokeConfirmDialog({
                 { label: "반려로 돌릴 룰북", value: rulebookNames },
                 { label: "사유", value: userReason },
                 {
-                  label: "닫는 구인",
+                  label: "취소하는 구인",
                   value: (
                     <>
                       {`${closedCount}건`}

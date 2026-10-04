@@ -2,11 +2,15 @@ import { and, eq, isNull, lte, sql } from "drizzle-orm";
 import { isNil } from "es-toolkit";
 
 import { db } from "#/client";
-import type { Actor, Sanction } from "#/modules/moderation/model/types";
+import { STAFF_CHANNEL_RELATED } from "#/modules/moderation/model/audit-actions";
+import type { Actor } from "#/modules/moderation/model/types";
+import { createNotifications } from "#/modules/notifications/commands/create-notifications";
+import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { profiles, sanctions } from "#/schema";
+import { profiles, sanctions, servers, type Game } from "#/schema";
 
 import { applyOngoingChoices, type OngoingChoice } from "./apply-ongoing-choices";
+import { type ModerationConflict } from "./moderation-conflict";
 import { recordAudit } from "./record-audit";
 
 const DAY = 86_400_000;
@@ -19,10 +23,11 @@ export interface SanctionInput {
 }
 
 export type SanctionResult =
-  | { ok: true }
-  | { ok: false; conflict: Sanction & { byId: string | null } };
+  | { ok: true; until: Date | null; cancelledGames: Game[]; leftGameIds: string[] }
+  | { ok: false; conflict: ModerationConflict | null };
 
-// 그사이 다른 운영진이 먼저 제재했다면 아무것도 바꾸지 않는다.
+// 그사이 다른 운영진이 먼저 제재했다면 아무것도 바꾸지 않고 그 운영진과 시각을 돌려준다(D296).
+// 운영진 채널 글은 부르는 쪽이 커밋 뒤에 올리므로, 활동 기록의 운영진 채널 줄은 채널 설정 여부로 정한다.
 export async function applySanction({
   serverId,
   userId,
@@ -48,32 +53,49 @@ export async function applySanction({
       .set({ releasedAt: sanctions.until })
       .where(and(thisUser, isNull(sanctions.releasedAt), lte(sanctions.until, sql`now()`)));
     const now = new Date();
+    const until = isNil(input.days) ? null : new Date(now.getTime() + input.days * DAY);
     const [created] = await tx
       .insert(sanctions)
-      .values({
-        serverId,
-        userId,
-        reason: input.userReason,
-        until: isNil(input.days) ? null : new Date(now.getTime() + input.days * DAY),
-        createdBy: actor.id,
-      })
+      .values({ serverId, userId, reason: input.userReason, until, createdBy: actor.id })
       .onConflictDoNothing()
       .returning({ id: sanctions.id });
     if (!created) {
       const [current] = await tx
         .select({
-          until: sanctions.until,
           at: sanctions.createdAt,
-          reason: sanctions.reason,
           by: memberNicknameSql(serverId),
           byId: sanctions.createdBy,
         })
         .from(sanctions)
         .leftJoin(profiles, eq(profiles.id, sanctions.createdBy))
         .where(and(thisUser, isNull(sanctions.releasedAt)));
-      return { ok: false, conflict: { ...current!, by: current!.by ?? "알 수 없음" } };
+      const conflict =
+        current?.byId && current.by ? { byId: current.byId, by: current.by, at: current.at } : null;
+      return { ok: false, conflict };
     }
-    await applyOngoingChoices({ executor: tx, serverId, userId, choices: input.ongoing });
+    const { cancelledGames, leftGameIds } = await applyOngoingChoices({
+      transaction: tx,
+      serverId,
+      userId,
+      actorId: actor.id,
+      choices: input.ongoing,
+    });
+    await createNotifications({
+      executor: tx,
+      serverId,
+      actorId: actor.id,
+      notifications: [
+        {
+          userId,
+          kind: NOTIFICATION_KIND.sanctioned,
+          params: { reason: input.userReason, until: until?.toISOString() ?? null },
+        },
+      ],
+    });
+    const [server] = await tx
+      .select({ staffChannelId: servers.staffChannelId })
+      .from(servers)
+      .where(eq(servers.id, serverId));
     await recordAudit({
       executor: tx,
       serverId,
@@ -84,8 +106,14 @@ export async function applySanction({
         targetUserId: userId,
         reason: input.userReason,
         staffMemo: input.staffMemo || undefined,
+        related: [
+          ...(cancelledGames.length > 0 ? [`취소된 구인 ${cancelledGames.length}개`] : []),
+          ...(leftGameIds.length > 0 ? [`참여에서 뺀 활동 ${leftGameIds.length}건`] : []),
+          "당사자 알림 탭에 알림 보냄",
+          server?.staffChannelId ? STAFF_CHANNEL_RELATED.posted : STAFF_CHANNEL_RELATED.missing,
+        ],
       },
     });
-    return { ok: true };
+    return { ok: true, until, cancelledGames, leftGameIds };
   });
 }

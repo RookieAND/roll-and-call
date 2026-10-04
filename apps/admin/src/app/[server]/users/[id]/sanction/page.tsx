@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { serverPath } from "@/shared/lib";
-import { getCurrentServer, getUserDetail, requireStaff } from "@/shared/server";
+import { getCurrentServer, getMemberOngoing, getUserDetail, requireStaff } from "@/shared/server";
 import { UserSanctionView } from "@/views/user-sanction";
 
 export async function generateMetadata({
@@ -15,12 +15,11 @@ export async function generateMetadata({
 export default async function UserSanctionPage({
   params,
 }: PageProps<"/[server]/users/[id]/sanction">) {
-  const [{ id }] = await Promise.all([params, requireStaff()]);
-  const user = await getUserDetail(id);
+  const [{ id }, server] = await Promise.all([params, getCurrentServer(), requireStaff()]);
+  const [user, ongoing] = await Promise.all([getUserDetail(id), getMemberOngoing(id)]);
   if (!user) notFound();
-  if (user.sanction) {
-    const server = await getCurrentServer();
-    redirect(serverPath({ slug: server.slug, path: `/users/${id}` }));
-  }
-  return <UserSanctionView user={user} />;
+  if (user.sanction) redirect(serverPath({ slug: server.slug, path: `/users/${id}` }));
+  return (
+    <UserSanctionView user={user} ongoing={ongoing} staffChannel={Boolean(server.staffChannelId)} />
+  );
 }

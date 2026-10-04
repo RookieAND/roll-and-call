@@ -8,14 +8,17 @@ import {
   VStack,
 } from "@roll-and-call/ui";
 
-import { ChoiceRowList, FormSection, Tag, type ChoiceRow } from "@/shared/ui";
+import { USER_ACTION_REASON } from "@/shared/lib";
+import { ChoiceRowList, FormSection, ReasonChips, Tag, type ChoiceRow } from "@/shared/ui";
 
 import type { SanctionDraft } from "../model/sanction-draft";
+import { SANCTION_EFFECT_TEXT } from "../model/sanction-period-hint";
 import { SANCTION_PERIODS, type SanctionPeriod } from "../model/sanction-periods";
 
 interface SanctionFormProps {
   draft: SanctionDraft;
   periodHint: string;
+  validDays: boolean;
   rows: ChoiceRow[];
   onDraftChange: (changes: Partial<SanctionDraft>) => void;
   onChoiceChange: (sessionId: string, action: string) => void;
@@ -24,13 +27,23 @@ interface SanctionFormProps {
 export function SanctionForm({
   draft,
   periodHint,
+  validDays,
   rows,
   onDraftChange,
   onChoiceChange,
 }: SanctionFormProps) {
   return (
     <VStack gap="250" className="rounded-600 border border-gray-200 bg-surface p-250">
-      <FormSection title="1. 제재 기간" description={periodHint}>
+      <FormSection
+        title="1. 제재 기간"
+        description={
+          <>
+            {periodHint}
+            <br />
+            {SANCTION_EFFECT_TEXT}
+          </>
+        }
+      >
         <SegmentedControl.Root
           value={draft.period}
           onValueChange={(period) => onDraftChange({ period: period as SanctionPeriod })}
@@ -43,13 +56,14 @@ export function SanctionForm({
           ))}
         </SegmentedControl.Root>
         {draft.period === "custom" ? (
-          <HStack align="center" gap="075">
+          <HStack align="center" gap="075" className="p-025">
             <TextInput
               aria-label="제재 일수"
               type="number"
               inputMode="numeric"
               min={1}
               value={draft.customDays}
+              invalid={!validDays}
               onChange={(event) => onDraftChange({ customDays: event.target.value })}
               className="w-[120px]"
             />
@@ -57,21 +71,18 @@ export function SanctionForm({
           </HStack>
         ) : null}
       </FormSection>
-      <FormSection title="2. 제재 사유">
-        <Field.Root
-          label="사용자에게 보여줄 사유"
-          htmlFor="sanction-user-reason"
-          required
-          description="입력한 사유는 사용자 화면에서 ‘사유:’ 뒤에 그대로 표시됩니다. 명사형으로 짧게 적어 주세요."
-        >
-          <Textarea
-            id="sanction-user-reason"
-            rows={2}
-            placeholder="예: 반복된 불참"
-            value={draft.userReason}
-            onChange={(event) => onDraftChange({ userReason: event.target.value })}
-          />
-        </Field.Root>
+      <FormSection
+        title="2. 제재 사유"
+        description="사용자에게 보이는 사유와 운영진끼리만 보는 메모를 나누어 적습니다."
+      >
+        <ReasonChips
+          label="사용자에게 보여 줄 사유"
+          reasons={USER_ACTION_REASON}
+          value={draft.reasonChip}
+          otherText={draft.otherReason}
+          onValueChange={(reasonChip) => onDraftChange({ reasonChip })}
+          onOtherTextChange={(otherReason) => onDraftChange({ otherReason })}
+        />
         <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="sanction-staff-memo">
           <Textarea
             id="sanction-staff-memo"
@@ -84,7 +95,7 @@ export function SanctionForm({
       </FormSection>
       <FormSection
         title="3. 진행 중인 활동"
-        description="기본값은 모두 진행입니다. 바꿀 항목만 골라 주세요."
+        description="기본값은 구인 진행입니다. 필요한 항목만 골라서 처리해 주세요."
         right={<Tag>{`${rows.length}건`}</Tag>}
       >
         {rows.length > 0 ? (

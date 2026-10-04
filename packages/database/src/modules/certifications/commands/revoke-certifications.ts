@@ -92,7 +92,13 @@ export async function revokeCertifications({
       }
     }
     if (revoked.length === 0) return { ok: false as const, alreadyRevoked: true as const };
-    await applyOngoingChoices({ executor: tx, serverId, userId, choices: input.ongoing });
+    await applyOngoingChoices({
+      transaction: tx,
+      serverId,
+      userId,
+      actorId: actor.id,
+      choices: input.ongoing,
+    });
     const labels = allRulebooks
       .filter((rulebook) => revoked.some((row) => row.rulebookId === rulebook.id))
       .map(rulebookLabel);

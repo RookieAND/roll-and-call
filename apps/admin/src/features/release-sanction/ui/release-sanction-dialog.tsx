@@ -1,12 +1,21 @@
 "use client";
 
-import { Button, Dialog, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Dialog, Field, TextInput, VStack, toast } from "@roll-and-call/ui";
+import { isNull, isUndefined } from "es-toolkit";
+import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
-import { formatDate } from "@/shared/lib";
+import { chosenReason, formatDateTime, useActionSubmit, USER_ACTION_REASON } from "@/shared/lib";
 import type { Sanction } from "@/shared/server";
-import { FactBox, FactSub, ModalServerLabel, Tag, UserPreview } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  FactBox,
+  FactSub,
+  ModalServerLabel,
+  NotificationPreview,
+  ReasonChips,
+} from "@/shared/ui";
 
 import { releaseUserSanction } from "../api/release-user-sanction";
 
@@ -28,28 +37,29 @@ export function ReleaseSanctionDialog({
   onOpenChange,
 }: ReleaseSanctionDialogProps) {
   const router = useRouter();
-  const [pending, startTransition] = useTransition();
-  const [userReason, setUserReason] = useState("");
+  const { pending, networkError, submit } = useActionSubmit(releaseUserSanction);
+  const [chip, setChip] = useState<string | null>(null);
+  const [otherText, setOtherText] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
+  const reason = chosenReason({ chip, otherText });
+  const canRelease = Boolean(reason) && !pending;
 
-  const current = sanction.until ? `${formatDate(sanction.until)}까지` : "무기한";
-  const remaining = sanction.until
-    ? `${Math.max(1, Math.ceil((sanction.until.getTime() - Date.now()) / DAY))}일 남음`
-    : null;
-  const canRelease = Boolean(userReason.trim()) && !pending;
+  const until = sanction.until;
+  const description = isNull(until)
+    ? "무기한 제재를 지금 해제합니다"
+    : `${formatDateTime(until)}까지 남은 제재를 지금 해제합니다`;
+  const remaining = isNull(until)
+    ? "무기한"
+    : `${Math.max(1, Math.ceil((until.getTime() - Date.now()) / DAY))}일`;
 
-  const release = () =>
-    startTransition(async () => {
-      const result = await releaseUserSanction(userId, { userReason, staffMemo });
-      if (result.ok) toast.success(`${nickname}님의 제재를 해제했습니다`);
-      else {
-        toast.info("이미 해제된 제재입니다");
-        router.refresh();
-      }
-      setUserReason("");
-      setStaffMemo("");
-      onOpenChange(false);
-    });
+  const release = async () => {
+    const result = await submit({ userId, input: { reason, staffMemo } });
+    if (isUndefined(result)) return;
+    onOpenChange(false);
+    router.refresh();
+    if (result.ok) toast.success(`${nickname}님의 제재를 해제했습니다`);
+    else toast.info("이미 해제된 제재입니다");
+  };
 
   return (
     <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
@@ -57,58 +67,54 @@ export function ReleaseSanctionDialog({
         <Dialog.Header>
           <ModalServerLabel />
           <Dialog.Title>{nickname} 제재 해제</Dialog.Title>
-          <Dialog.Description>해제하는 즉시 모든 활동을 다시 할 수 있습니다.</Dialog.Description>
+          <Dialog.Description>{description}</Dialog.Description>
         </Dialog.Header>
         <Dialog.Body className="mt-200">
           <VStack gap="150">
+            {networkError ? <ActionNetworkError /> : null}
             <FactBox
               items={[
                 {
-                  label: "현재 제재",
+                  label: "남은 기간",
                   value: (
                     <>
-                      {current}
-                      {remaining ? <FactSub>{remaining}</FactSub> : null}
+                      {remaining}
+                      {until ? <FactSub>{`${formatDateTime(until)}까지`}</FactSub> : null}
                     </>
                   ),
                 },
-                { label: "해제 후", value: <Tag>활동 가능</Tag> },
+                { label: "제재 사유", value: sanction.reason },
               ]}
             />
-            <Field.Root
-              label="해제 사유 (사용자에게 보임)"
-              htmlFor="release-user-reason"
-              required
-              description="입력한 사유는 사용자 화면에서 ‘사유:’ 뒤에 그대로 표시됩니다."
-            >
-              <Textarea
-                id="release-user-reason"
-                rows={2}
-                value={userReason}
-                onChange={(event) => setUserReason(event.target.value)}
-              />
-            </Field.Root>
+            <ReasonChips
+              label="해제 사유 (운영진 기록)"
+              reasons={USER_ACTION_REASON}
+              value={chip}
+              otherText={otherText}
+              onValueChange={setChip}
+              onOtherTextChange={setOtherText}
+              help="사용자에게는 보이지 않고 활동 기록에 남습니다."
+              disabled={pending}
+            />
             <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="release-staff-memo">
-              <Textarea
+              <TextInput
                 id="release-staff-memo"
-                rows={1}
                 placeholder="선택"
                 value={staffMemo}
+                disabled={pending}
                 onChange={(event) => setStaffMemo(event.target.value)}
               />
             </Field.Root>
-            <UserPreview>
-              제재가 해제됐어요. 사유: {userReason.trim()}. 이제 모든 활동(참가·대기 신청, 구인
-              개설)을 다시 할 수 있어요.
-            </UserPreview>
+            <NotificationPreview payload={{ kind: "sanction_released", params: {} }} />
           </VStack>
         </Dialog.Body>
         <Dialog.Footer layout="row" className="items-center justify-end">
           <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
             취소
           </Dialog.Close>
-          <Button loading={pending} disabled={!canRelease} onClick={release}>
-            해제 확정
+          <Button loading={pending} disabled={!canRelease} onClick={() => void release()}>
+            {networkError ? <RotateCcw size={16} aria-hidden /> : null}
+            {networkError ? "다시 시도" : "해제 확정"}
           </Button>
         </Dialog.Footer>
       </Dialog.Popup>

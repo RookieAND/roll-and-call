@@ -1,17 +1,10 @@
-import { and, count, eq, sql } from "drizzle-orm";
+import { kickImpactOf, type KickImpact } from "#/modules/moderation/model/kick-impact-of";
 
-import { db } from "#/client";
-import { notStartedGamesWhere } from "#/modules/games/queries/not-started-games-where";
-import { games, participants } from "#/schema";
+import { loadMemberOngoing } from "./load-member-ongoing";
 
-export interface KickImpact {
-  appliedCount: number;
-  waitingCount: number;
-  confirmedCount: number;
-  cancelledGameCount: number;
-}
+export type { KickImpact };
 
-// 추방하면 빠지는 신청·대기·확정과 취소되는 구인 수. 추첨 전 추첨 구인의 확정 상태는 아직 신청이다.
+// 추방 모달의 영향 줄. 제재 페이지의 진행 중인 활동과 같은 범위(loadMemberOngoing)를 센다.
 export async function getKickImpact({
   serverId,
   userId,
@@ -19,37 +12,5 @@ export async function getKickImpact({
   serverId: string;
   userId: string;
 }): Promise<KickImpact> {
-  const [joined] = await db
-    .select({
-      applied:
-        sql<number>`count(*) filter (where ${participants.status} = 'confirmed' and ${games.recruitMethod} = 'lottery' and ${games.drawnAt} is null)`.mapWith(
-          Number,
-        ),
-      waiting: sql<number>`count(*) filter (where ${participants.status} = 'waiting')`.mapWith(
-        Number,
-      ),
-      confirmed:
-        sql<number>`count(*) filter (where ${participants.status} = 'confirmed' and (${games.recruitMethod} <> 'lottery' or ${games.drawnAt} is not null))`.mapWith(
-          Number,
-        ),
-    })
-    .from(participants)
-    .innerJoin(games, eq(games.id, participants.gameId))
-    .where(
-      and(
-        eq(participants.serverId, serverId),
-        eq(participants.userId, userId),
-        notStartedGamesWhere(serverId),
-      ),
-    );
-  const [hosted] = await db
-    .select({ value: count() })
-    .from(games)
-    .where(and(notStartedGamesWhere(serverId), eq(games.gmId, userId)));
-  return {
-    appliedCount: joined?.applied ?? 0,
-    waitingCount: joined?.waiting ?? 0,
-    confirmedCount: joined?.confirmed ?? 0,
-    cancelledGameCount: hosted?.value ?? 0,
-  };
+  return kickImpactOf(await loadMemberOngoing({ serverId, userId }));
 }

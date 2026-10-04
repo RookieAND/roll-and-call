@@ -33,7 +33,7 @@ import { RevokeSummary } from "./revoke-summary";
 
 const HOSTED_OPTIONS = [
   { value: "keep", label: "구인 진행" },
-  { value: "close", label: "구인 닫기" },
+  { value: "cancel", label: "구인 취소" },
 ] as const;
 
 interface RevokeCertFormProps {
@@ -72,9 +72,9 @@ export function RevokeCertForm({
       title: activity.title,
       meta: `${formatSessionTime(activity.startsAt)} · 모집 중 ${activity.memberCount}/${activity.capacity}`,
       options: HOSTED_OPTIONS,
-      value: closedSessionIds.includes(activity.sessionId) ? "close" : "keep",
+      value: closedSessionIds.includes(activity.sessionId) ? "cancel" : "keep",
     }));
-  const closedCount = rows.filter((row) => row.value === "close").length;
+  const closedCount = rows.filter((row) => row.value === "cancel").length;
   const reason = userReason.trim();
   const canRevoke = selectedRulebooks.length > 0 && Boolean(reason) && !pending;
 
@@ -85,7 +85,7 @@ export function RevokeCertForm({
 
   const changeChoice = (sessionId: string, value: string) =>
     setClosedSessionIds(
-      value === "close"
+      value === "cancel"
         ? [...closedSessionIds, sessionId]
         : closedSessionIds.filter((item) => item !== sessionId),
     );
@@ -97,8 +97,8 @@ export function RevokeCertForm({
         userReason,
         staffMemo,
         ongoing: rows
-          .filter((row) => row.value === "close")
-          .map((row) => ({ sessionId: row.id, action: "close" })),
+          .filter((row) => row.value === "cancel")
+          .map((row) => ({ sessionId: row.id, action: "cancel" })),
       });
       setConfirming(false);
       if (result.ok) toast.success(`${nickname}님의 룰북 인증을 반려로 돌렸습니다`);

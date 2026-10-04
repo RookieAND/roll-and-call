@@ -1,10 +1,10 @@
-import { HStack, SegmentedControl, Text, VStack, cn } from "@roll-and-call/ui";
+import { HStack, SegmentedControl, Text, VStack } from "@roll-and-call/ui";
 
 export interface ChoiceRow {
   id: string;
   title: string;
   meta: string;
-  // 첫 값이 기본(그대로 두기)이고, 나머지를 고르면 행이 위험 색으로 바뀐다.
+  // 첫 값이 기본(그대로 두기)이고, 둘째 값은 세그먼트만 위험 색이다(행 배경은 칠하지 않는다).
   options: readonly [{ value: string; label: string }, { value: string; label: string }];
   value: string;
 }
@@ -21,12 +21,7 @@ export function ChoiceRowList({ rows, onChange }: ChoiceRowListProps) {
       {rows.map((row) => {
         const [keep, change] = row.options;
         return (
-          <HStack
-            key={row.id}
-            align="center"
-            gap="125"
-            className={cn("px-150 py-125", row.value !== keep.value && "bg-danger-50")}
-          >
+          <HStack key={row.id} align="center" gap="125" className="px-150 py-125">
             <VStack gap="025" className="min-w-0 flex-1">
               <Text typography="subtitle2" truncate>
                 {row.title}

@@ -1,49 +1,45 @@
 "use client";
 
-import { Button, Grid, HStack, Text, VStack, cn, toast } from "@roll-and-call/ui";
-import { isNull, sumBy } from "es-toolkit";
+import { Button, Grid, HStack, Text, VStack, toast } from "@roll-and-call/ui";
+import { isNull, isUndefined, sumBy } from "es-toolkit";
 import { TriangleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
-import { formatDate, formatSessionTime } from "@/shared/lib";
-import type { OngoingActivity, OngoingChoice, Sanction } from "@/shared/server";
-import type { ChoiceRow } from "@/shared/ui";
-import { ServerLink, useServerPath } from "@/shared/ui";
+import { chosenReason, conflictToastText, useActionSubmit } from "@/shared/lib";
+import type { MemberOngoingRow, OngoingChoice } from "@/shared/server";
+import { NotificationPreview, ServerLink, useServerPath } from "@/shared/ui";
 
 import { sanctionUser } from "../api/sanction-user";
+import { ongoingChoiceRows } from "../model/ongoing-choice-rows";
 import { EMPTY_SANCTION_DRAFT, type SanctionDraft } from "../model/sanction-draft";
 import { sanctionPeriodHint } from "../model/sanction-period-hint";
 import { SanctionConfirmDialog } from "./sanction-confirm-dialog";
-import { SanctionConflict } from "./sanction-conflict";
 import { SanctionForm } from "./sanction-form";
 import { SanctionSummary } from "./sanction-summary";
 
 const DAY = 86_400_000;
 
-const HOSTED_OPTIONS = [
-  { value: "keep", label: "구인 진행" },
-  { value: "close", label: "구인 닫기" },
-] as const;
-const PLAYED_OPTIONS = [
-  { value: "keep", label: "참여 진행" },
-  { value: "leave", label: "참여 취소" },
-] as const;
-
 interface SanctionUserFormProps {
   userId: string;
   nickname: string;
-  ongoing: OngoingActivity[];
+  ongoing: MemberOngoingRow[];
+  staffChannel: boolean;
   backHref: string;
 }
 
-export function SanctionUserForm({ userId, nickname, ongoing, backHref }: SanctionUserFormProps) {
+export function SanctionUserForm({
+  userId,
+  nickname,
+  ongoing,
+  staffChannel,
+  backHref,
+}: SanctionUserFormProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
-  const [pending, startTransition] = useTransition();
+  const { pending, networkError, submit } = useActionSubmit(sanctionUser);
   const [draft, setDraft] = useState<SanctionDraft>(EMPTY_SANCTION_DRAFT);
   const [confirming, setConfirming] = useState(false);
-  const [conflict, setConflict] = useState<Sanction | null>(null);
 
   const now = new Date();
   const days =
@@ -51,76 +47,63 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
       ? null
       : Number(draft.period === "custom" ? draft.customDays : draft.period);
   const validDays = isNull(days) || (Number.isInteger(days) && days > 0);
-  const end = days && validDays ? formatDate(new Date(now.getTime() + days * DAY)) : null;
+  const end = !isNull(days) && validDays ? new Date(now.getTime() + days * DAY) : null;
   const periodHint = sanctionPeriodHint({ validDays, end, now });
-  const hasReason = Boolean(draft.userReason.trim());
-  const canConfirm = hasReason && validDays && !pending;
+  const reason = chosenReason({ chip: draft.reasonChip, otherText: draft.otherReason });
+  const canConfirm = Boolean(reason) && validDays;
 
-  const rows: ChoiceRow[] = ongoing.map((activity) => {
-    const options = activity.hosted ? HOSTED_OPTIONS : PLAYED_OPTIONS;
-    return {
-      id: activity.sessionId,
-      title: activity.title,
-      meta: activity.hosted
-        ? `${formatSessionTime(activity.startsAt)} · 모집 중 ${activity.memberCount}/${activity.capacity} · 본인이 GM`
-        : `${formatSessionTime(activity.startsAt)} · 참여 확정 · GM ${activity.gmNickname}`,
-      options,
-      value: draft.leftSessionIds.includes(activity.sessionId) ? options[1].value : "keep",
-    };
-  });
-  const closedCount = rows.filter((row) => row.value === "close").length;
+  const rows = ongoingChoiceRows({ ongoing, changedSessionIds: draft.changedSessionIds });
+  const cancelled = ongoing.filter((_, index) => rows[index]!.value === "cancel");
+  const cancelCount = cancelled.length;
+  const notifiedCount = sumBy(cancelled, (activity) => activity.notifiedCount);
   const keptCount = rows.filter((row) => row.value === "keep").length;
-  const closedMemberCount = sumBy(
-    ongoing.filter(
-      (activity) => activity.hosted && draft.leftSessionIds.includes(activity.sessionId),
-    ),
-    (activity) => activity.memberCount,
-  );
+  const preview = reason
+    ? { kind: "sanctioned" as const, params: { reason, until: end?.toISOString() ?? null } }
+    : null;
 
   const changeDraft = (changes: Partial<SanctionDraft>) => setDraft({ ...draft, ...changes });
 
   const changeChoice = (sessionId: string, action: string) =>
     changeDraft({
-      leftSessionIds:
+      changedSessionIds:
         action === "keep"
-          ? draft.leftSessionIds.filter((item) => item !== sessionId)
-          : [...draft.leftSessionIds, sessionId],
+          ? draft.changedSessionIds.filter((item) => item !== sessionId)
+          : [...draft.changedSessionIds, sessionId],
     });
 
-  const confirm = () =>
-    startTransition(async () => {
-      const result = await sanctionUser(userId, {
+  const confirm = async () => {
+    const result = await submit({
+      userId,
+      input: {
         days,
-        userReason: draft.userReason,
+        userReason: reason,
         staffMemo: draft.staffMemo,
         ongoing: rows.map((row) => ({
           sessionId: row.id,
           action: row.value as OngoingChoice["action"],
         })),
-      });
-      setConfirming(false);
-      if (!result.ok) {
-        setConflict(result.conflict);
-        return;
-      }
-      toast.success(`${nickname}님을 제재했습니다`);
-      router.push(toServerPath(backHref));
+      },
     });
+    if (isUndefined(result)) return;
+    setConfirming(false);
+    router.push(toServerPath(backHref));
+    if (!result.ok) {
+      toast.info(
+        conflictToastText({ conflict: result.conflict, self: result.self, target: "제재" }),
+      );
+      return;
+    }
+    toast.success(`${nickname}님을 제재했습니다`);
+  };
 
   return (
     <>
       <VStack gap="150" className="mx-auto w-full max-w-[1000px] flex-1 p-200">
-        {conflict ? <SanctionConflict nickname={nickname} conflict={conflict} /> : null}
-        <Grid
-          aria-hidden={conflict ? true : undefined}
-          className={cn(
-            "grid-cols-[minmax(0,1fr)_320px] items-start gap-200",
-            conflict && "pointer-events-none opacity-50",
-          )}
-        >
+        <Grid className="grid-cols-[minmax(0,1fr)_320px] items-start gap-200">
           <SanctionForm
             draft={draft}
             periodHint={periodHint}
+            validDays={validDays}
             rows={rows}
             onDraftChange={changeDraft}
             onChoiceChange={changeChoice}
@@ -128,12 +111,12 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
           <SanctionSummary
             days={days}
             end={end}
-            userReason={draft.userReason}
-            closedCount={closedCount}
-            closedMemberCount={closedMemberCount}
+            cancelCount={cancelCount}
+            notifiedCount={notifiedCount}
             keptCount={keptCount}
           />
         </Grid>
+        <NotificationPreview payload={preview} />
       </VStack>
       <HStack
         align="center"
@@ -141,9 +124,9 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
         data-full-bleed
         className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-page py-150"
       >
-        {hasReason || conflict ? (
+        {reason ? (
           <Text typography="body4" foreground="hint">
-            확정하면 다른 운영진에게 디스코드 알림이 전송되고, 제재 내역은 활동 기록에 남습니다.
+            확정하면 당사자의 알림 탭으로 알리고, 제재는 활동 기록에 남습니다.
           </Text>
         ) : (
           <HStack align="center" gap="075" className="text-hint">
@@ -154,35 +137,17 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
           </HStack>
         )}
         <HStack gap="100" className="ml-auto">
-          {conflict ? (
-            <>
-              <Button variant="ghost" colorPalette="gray" render={<ServerLink path={backHref} />}>
-                닫기
-              </Button>
-              <Button onClick={() => router.push(toServerPath(backHref))}>
-                유저 상세 새로고침
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                variant="ghost"
-                colorPalette="gray"
-                disabled={pending}
-                render={<ServerLink path={backHref} />}
-              >
-                취소
-              </Button>
-              <Button
-                colorPalette="danger"
-                disabled={!canConfirm}
-                onClick={() => setConfirming(true)}
-                className="min-w-[128px]"
-              >
-                제재 확정
-              </Button>
-            </>
-          )}
+          <Button variant="ghost" colorPalette="gray" render={<ServerLink path={backHref} />}>
+            취소
+          </Button>
+          <Button
+            colorPalette="danger"
+            disabled={!canConfirm}
+            onClick={() => setConfirming(true)}
+            className="min-w-[128px]"
+          >
+            제재 확정
+          </Button>
         </HStack>
       </HStack>
       <SanctionConfirmDialog
@@ -190,12 +155,14 @@ export function SanctionUserForm({ userId, nickname, ongoing, backHref }: Sancti
         nickname={nickname}
         days={days}
         end={end}
-        userReason={draft.userReason.trim()}
-        closedCount={closedCount}
-        closedMemberCount={closedMemberCount}
+        userReason={reason}
+        cancelCount={cancelCount}
+        notifiedCount={notifiedCount}
+        staffChannel={staffChannel}
         pending={pending}
+        networkError={networkError}
         onBack={() => setConfirming(false)}
-        onConfirm={confirm}
+        onConfirm={() => void confirm()}
       />
     </>
   );

@@ -4,7 +4,11 @@ export { conflictTitle } from "./conflict-title";
 export { conflictToastText } from "./conflict-toast-text";
 export { deltaArrow } from "./delta-arrow";
 export { CERT_TABS } from "./cert-tabs";
-export { formatDate, STAFF_ROLE_LABEL } from "@roll-and-call/database/moderation/model";
+export {
+  formatDate,
+  ONGOING_ROLE,
+  STAFF_ROLE_LABEL,
+} from "@roll-and-call/database/moderation/model";
 export { formatDateTime } from "./format-date-time";
 export { formatDayRange } from "./format-day-range";
 export { formatRelativeTime } from "./format-relative-time";
