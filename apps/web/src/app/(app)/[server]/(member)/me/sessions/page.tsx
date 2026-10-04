@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
+import { requireMembership } from "@/shared/server";
 import { MySessionsView } from "@/views/my-sessions";
 
 import Loading from "./loading";
@@ -13,6 +14,7 @@ export default async function Page({
 }: {
   searchParams: Promise<{ tab?: string; status?: string }>;
 }) {
+  await requireMembership();
   const { tab, status } = await searchParams;
   return (
     <Suspense key={`${tab}-${status}`} fallback={<Loading />}>

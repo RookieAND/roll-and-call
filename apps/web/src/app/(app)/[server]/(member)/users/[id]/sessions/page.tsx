@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { getCurrentServer, getProfile } from "@/shared/server";
+import { getCurrentServer, getProfile, requireMembership } from "@/shared/server";
 import { UserSessionsView } from "@/views/user-sessions";
 
 export async function generateMetadata({
@@ -8,6 +8,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
+  await requireMembership();
   const { id } = await params;
   const server = await getCurrentServer();
   const profile = await getProfile(server.id, id);
@@ -22,6 +23,7 @@ export default async function Page({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ tab?: string }>;
 }) {
+  await requireMembership();
   const [{ id }, { tab }] = await Promise.all([params, searchParams]);
   return <UserSessionsView id={id} tab={tab} />;
 }
