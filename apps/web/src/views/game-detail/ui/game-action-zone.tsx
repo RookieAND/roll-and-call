@@ -3,9 +3,9 @@ import { isNull } from "es-toolkit";
 import {
   GAME_STATUS,
   type GameStatus,
+  isApplicationClosed,
   isAttendanceDue,
   isSessionEnded,
-  isSessionLocked,
   PARTICIPANT_STATUS,
   type ParticipantStatus,
   RECRUIT_METHOD,
@@ -65,7 +65,7 @@ export function GameActionZone({
     drawn,
     canLeave: !isFull && !isClosed && !drawn,
     // 일시 지정형은 등록 때부터 confirmedAt이 있지만 모집 중이면 참여하기를 보여야 한다.
-    sessionConfirmed: isSessionLocked(game),
+    sessionConfirmed: isApplicationClosed(game),
     sessionEnded: isSessionEnded(game),
     isClosed,
     isFull,

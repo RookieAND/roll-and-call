@@ -15,6 +15,7 @@ export const sessionColumns = {
   title: games.title,
   confirmedAt: games.confirmedAt,
   playMinutes: games.playMinutes,
+  endedAt: games.endedAt,
   attendanceConfirmedAt: games.attendanceConfirmedAt,
   hiddenAt: games.hiddenAt,
   cancelledAt: games.cancelledAt,

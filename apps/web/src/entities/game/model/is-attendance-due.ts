@@ -1,6 +1,4 @@
-import { isAttendancePastDeadline } from "@roll-and-call/database/games/model";
-
-import { isSessionEnded } from "./is-session-ended";
+import { isAttendancePastDeadline, isSessionEnded } from "@roll-and-call/database/games/model";
 
 // 기한이 지난 세션은 크론이 전원 출석으로 확정하므로 할 일이 아니다.
 export function isAttendanceDue({

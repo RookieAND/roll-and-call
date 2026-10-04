@@ -25,9 +25,15 @@ export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
 export { GameGmLabel } from "./ui/game-gm-label";
 export { GameScheduleRow } from "./ui/game-schedule-row";
 export { deriveSessionState, SESSION_ROLE, SESSION_STATE, type SessionRole } from "./model/session";
-export { isSessionLocked } from "./model/session-lock";
-export { isSessionEnded } from "./model/is-session-ended";
-export { sessionEndsAt } from "./model/session-end";
+export {
+  effectivePlayMinutes,
+  isApplicationClosed,
+  isSessionEnded,
+  isSessionInProgress,
+  isSessionStarted,
+  plannedEndAt,
+  sessionEndAt,
+} from "@roll-and-call/database/games/model";
 export { isAttendanceDue } from "./model/is-attendance-due";
 export { isAttendanceSettled } from "./model/is-attendance-settled";
 export {

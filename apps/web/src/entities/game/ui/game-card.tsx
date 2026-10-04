@@ -1,15 +1,17 @@
-import { deriveGameStatus } from "@roll-and-call/database/games/model";
+import {
+  deriveGameStatus,
+  isSessionEnded,
+  sessionEndAt,
+} from "@roll-and-call/database/games/model";
 import { Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
 
 import type { Game } from "@/shared/server";
 
 import { isLiveGame } from "../model/is-live-game";
-import { isSessionEnded } from "../model/is-session-ended";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { pastScheduleLine } from "../model/past-schedule-line";
 import { scheduleLine } from "../model/schedule-line";
-import { sessionEndsAt } from "../model/session-end";
 import { GameCapacity } from "./game-capacity";
 import { GameCardScheduleRow } from "./game-card-schedule-row";
 import { GameDeadlineCount } from "./game-deadline-count";
@@ -42,7 +44,7 @@ export function GameCard({ game }: GameCardProps) {
     ended || (!live && !game.confirmedAt)
       ? pastScheduleLine({
           line: current,
-          endsAt: ended ? sessionEndsAt(game) : null,
+          endsAt: ended ? sessionEndAt(game) : null,
           endDate: game.endDate,
         })
       : current;

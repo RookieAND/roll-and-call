@@ -4,8 +4,13 @@ import { deleteParticipant, getGameWithRoster } from "@roll-and-call/database/ga
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
-import { countConfirmed, isSessionLocked, PARTICIPANT_STATUS } from "@/entities/game";
-import { GAME_CANCELLED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import { countConfirmed, isApplicationClosed, PARTICIPANT_STATUS } from "@/entities/game";
+import {
+  GAME_CANCELLED_MESSAGE,
+  GAME_NOT_FOUND_RESULT,
+  LEAVE_AFTER_SCHEDULE_MESSAGE,
+  type ActionResult,
+} from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
@@ -29,16 +34,16 @@ export async function leaveGame(gameId: string): Promise<ActionResult> {
   if (!membership) return { error: "참여 중이 아닙니다." };
   // 대기자는 언제든(세션 확정 후에도) 취소할 수 있고, 확정자만 확정·마감 후 자가 취소가 막혀 GM을 거친다.
   if (membership.status === PARTICIPANT_STATUS.confirmed) {
-    if (isSessionLocked(game)) {
-      return { error: "확정된 게임은 취소할 수 없습니다. GM에게 문의하세요." };
+    if (isApplicationClosed(game)) {
+      return { error: LEAVE_AFTER_SCHEDULE_MESSAGE };
     }
     const full = countConfirmed(game.participants) >= game.maxPlayers;
     const expired = game.endDate.getTime() <= Date.now();
     if (expired) {
-      return { error: "모집이 마감되어 취소할 수 없습니다. GM에게 문의하세요." };
+      return { error: "모집이 마감되어 취소할 수 없습니다. GM에게 문의해 주세요." };
     }
     if (full) {
-      return { error: "정원이 차서 취소할 수 없습니다. GM에게 문의하세요." };
+      return { error: "정원이 차서 취소할 수 없습니다. GM에게 문의해 주세요." };
     }
   }
 

@@ -6,9 +6,9 @@ import {
   attendanceDeadline,
 } from "#/modules/games/model/attendance-deadline";
 import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { DEFAULT_PLAY_MINUTES } from "#/modules/games/model/session-ends-at";
 import { shouldAutoConfirmAttendance } from "#/modules/games/model/should-auto-confirm-attendance";
 import { listParticipantUserIds } from "#/modules/games/queries/list-participant-user-ids";
+import { sessionEndAtSql } from "#/modules/games/queries/session-end-at-sql";
 import type { Transaction } from "#/modules/transaction/transaction";
 import { games, participants } from "#/schema";
 
@@ -64,7 +64,7 @@ export async function autoConfirmAttendanceForGame({
 
 // 매일 크론이 업적 계산보다 먼저 부른다. 모든 서버에서 기한이 지난 미확정 세션을 고른다.
 export async function autoConfirmAttendance(now: Date = new Date()): Promise<AutoConfirmedGame[]> {
-  const deadline = sql`${games.confirmedAt} + coalesce(${games.playMinutes}, ${DEFAULT_PLAY_MINUTES}) * interval '1 minute' + ${ATTENDANCE_EDIT_DAYS} * interval '1 day'`;
+  const deadline = sql`${sessionEndAtSql} + ${ATTENDANCE_EDIT_DAYS} * interval '1 day'`;
   const candidates = await db
     .select({ id: games.id })
     .from(games)

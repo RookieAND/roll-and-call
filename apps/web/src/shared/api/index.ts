@@ -19,9 +19,12 @@ export { parseGameSort } from "./parse-game-sort";
 export { parseGameStatusFilter } from "./parse-game-status-filter";
 export { parseGameTab } from "./parse-game-tab";
 export {
+  APPLICATION_CLOSED_MESSAGE,
   AUTH_REQUIRED_MESSAGE,
   GAME_CANCELLED_MESSAGE,
   GAME_NOT_FOUND_MESSAGE,
+  LEAVE_AFTER_SCHEDULE_MESSAGE,
+  ROSTER_SESSION_ENDED_MESSAGE,
 } from "./action-messages";
 export { AppError } from "./app-error";
 export { ERROR_DISPLAY, UNEXPECTED_ERROR_MESSAGE, type ErrorDisplay } from "./error-display";

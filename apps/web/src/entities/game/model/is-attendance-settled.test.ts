@@ -8,6 +8,7 @@ const DAY = 24 * HOUR;
 const game = (startedAgo: number) => ({
   confirmedAt: new Date(NOW.getTime() - startedAgo),
   playMinutes: 60,
+  endedAt: null,
   attendanceConfirmedAt: null,
 });
 

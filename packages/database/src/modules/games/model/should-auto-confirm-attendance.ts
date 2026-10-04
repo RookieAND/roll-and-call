@@ -12,6 +12,7 @@ export function shouldAutoConfirmAttendance({
   game: {
     confirmedAt: Date | null;
     playMinutes: number | null;
+    endedAt: Date | null;
     attendanceConfirmedAt: Date | null;
     cancelledAt: Date | null;
   };

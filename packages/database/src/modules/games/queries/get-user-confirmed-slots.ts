@@ -1,7 +1,7 @@
 import { and, eq, isNotNull, ne, or } from "drizzle-orm";
 
 import { db } from "#/client";
-import { DEFAULT_PLAY_MINUTES } from "#/modules/games/model/session-ends-at";
+import { plannedEndAt } from "#/modules/games/model/session-timing";
 import { games, participants } from "#/schema";
 
 const SLOT_MS = 30 * 60 * 1000;
@@ -40,7 +40,7 @@ export async function getUserConfirmedSlots({
   for (const row of rows) {
     // KST +9h도 30분의 배수라 UTC에서 30분 경계로 내려도 같은 칸이다.
     const start = Math.floor(row.confirmedAt!.getTime() / SLOT_MS) * SLOT_MS;
-    const end = row.confirmedAt!.getTime() + (row.playMinutes || DEFAULT_PLAY_MINUTES) * 60 * 1000;
+    const end = plannedEndAt(row)!.getTime();
     for (let slotTime = start; slotTime < end; slotTime += SLOT_MS) {
       slots.add(new Date(slotTime).toISOString());
     }

@@ -12,7 +12,16 @@ export {
   type GamesFilter,
 } from "./games-filter";
 export { PARTICIPANT_STATUS, type ParticipantStatus } from "./participant-status";
-export { DEFAULT_PLAY_MINUTES, sessionEndsAt } from "./session-ends-at";
+export {
+  DEFAULT_PLAY_MINUTES,
+  effectivePlayMinutes,
+  isApplicationClosed,
+  isSessionEnded,
+  isSessionInProgress,
+  isSessionStarted,
+  plannedEndAt,
+  sessionEndAt,
+} from "./session-timing";
 export { cancelBlockReason } from "./cancel-block-reason";
 export { GAME_CANCEL_KIND, type GameCancelKind } from "./game-cancel-kind";
 export { storedCancelReason } from "./stored-cancel-reason";

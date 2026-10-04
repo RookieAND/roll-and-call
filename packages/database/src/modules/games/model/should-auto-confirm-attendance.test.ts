@@ -9,6 +9,7 @@ type Game = Parameters<typeof shouldAutoConfirmAttendance>[0]["game"];
 const game: Game = {
   confirmedAt: new Date(now.getTime() - 8 * DAY),
   playMinutes: 120,
+  endedAt: null,
   attendanceConfirmedAt: null,
   cancelledAt: null,
 };

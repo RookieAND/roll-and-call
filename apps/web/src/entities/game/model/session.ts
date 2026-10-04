@@ -1,7 +1,8 @@
+import { isSessionEnded } from "@roll-and-call/database/games/model";
+
 import type { Game } from "@/shared/server";
 
 import { SCHEDULE_MODE, type ScheduleMode } from "./schedule-mode";
-import { sessionEndsAt } from "./session-end";
 
 export const SESSION_STATE = {
   recruiting: "recruiting",
@@ -28,6 +29,7 @@ export function deriveSessionState(
   {
     confirmedAt,
     playMinutes,
+    endedAt,
     endDate,
     maxPlayers,
     confirmedCount,
@@ -35,6 +37,7 @@ export function deriveSessionState(
   }: {
     confirmedAt: Game["confirmedAt"];
     playMinutes: Game["playMinutes"];
+    endedAt: Game["endedAt"];
     endDate: Game["endDate"];
     maxPlayers: number;
     confirmedCount: number;
@@ -46,7 +49,7 @@ export function deriveSessionState(
   const deadlinePassed = new Date(endDate).getTime() < nowTime;
   if (confirmedAt) {
     // 시작이 아니라 플레이타임만큼 지나야 끝난 것이다. 진행 중인 세션은 아직 종료가 아니다.
-    if (sessionEndsAt({ confirmedAt, playMinutes })!.getTime() < nowTime) {
+    if (isSessionEnded({ confirmedAt, playMinutes, endedAt }, now)) {
       return SESSION_STATE.finished;
     }
     if (scheduleMode === SCHEDULE_MODE.fixed) {

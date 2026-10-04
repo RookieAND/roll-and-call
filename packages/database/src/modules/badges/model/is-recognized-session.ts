@@ -1,4 +1,4 @@
-import { sessionEndsAt } from "#/modules/games/model/session-ends-at";
+import { isSessionEnded } from "#/modules/games/model/session-timing";
 
 // 출석 확인 전에는 누가 불참인지 정해지지 않아 넣지 않는다.
 export function isRecognizedSession({
@@ -9,6 +9,7 @@ export function isRecognizedSession({
   game: {
     confirmedAt: Date | null;
     playMinutes: number | null;
+    endedAt: Date | null;
     attendanceConfirmedAt: Date | null;
     hiddenAt: Date | null;
     cancelledAt: Date | null;
@@ -19,8 +20,5 @@ export function isRecognizedSession({
   if (!game.confirmedAt || !game.attendanceConfirmedAt || game.hiddenAt || game.cancelledAt)
     return false;
   if (confirmedCount === 0) return false;
-  return (
-    sessionEndsAt({ startsAt: game.confirmedAt, playMinutes: game.playMinutes }).getTime() <=
-    now.getTime()
-  );
+  return isSessionEnded(game, now);
 }

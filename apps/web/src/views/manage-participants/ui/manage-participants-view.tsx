@@ -2,7 +2,7 @@ import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound } from "next/navigation";
 
-import { isSessionLocked, SCHEDULE_MODE, splitRoster } from "@/entities/game";
+import { isApplicationClosed, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
@@ -65,7 +65,7 @@ export async function ManageParticipantsView({ id }: { id: string }) {
         isCoordinate,
       })}
       isCoordinate={isCoordinate}
-      locked={isSessionLocked(game)}
+      locked={isApplicationClosed(game)}
       attendanceStage={attendanceStage}
     />
   );

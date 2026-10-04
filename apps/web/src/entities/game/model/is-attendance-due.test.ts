@@ -7,6 +7,7 @@ const HOUR = 60 * 60 * 1000;
 const startedTwoHoursAgo = {
   confirmedAt: new Date(NOW.getTime() - 2 * HOUR),
   playMinutes: 360,
+  endedAt: null,
   attendanceConfirmedAt: null,
 };
 const ended = { ...startedTwoHoursAgo, playMinutes: 60 };

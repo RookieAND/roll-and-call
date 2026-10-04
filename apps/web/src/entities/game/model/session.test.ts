@@ -10,6 +10,7 @@ const fromNow = (hours: number) => new Date(NOW.getTime() + hours * HOUR);
 const coordinating = {
   confirmedAt: null,
   playMinutes: 180,
+  endedAt: null,
   endDate: fromNow(48),
   maxPlayers: 4,
   confirmedCount: 4,
@@ -51,6 +52,21 @@ describe("deriveSessionState", () => {
   it("플레이타임만큼 지나면 종료다", () => {
     expect(
       deriveSessionState({ ...coordinating, confirmedAt: fromNow(-4), playMinutes: 180 }, NOW),
+    ).toBe(SESSION_STATE.finished);
+  });
+
+  it("종료 시각이 되는 순간 종료다", () => {
+    expect(
+      deriveSessionState({ ...coordinating, confirmedAt: fromNow(-3), playMinutes: 180 }, NOW),
+    ).toBe(SESSION_STATE.finished);
+  });
+
+  it("세션을 마친 시각이 지나면 플레이타임이 남아도 종료다", () => {
+    expect(
+      deriveSessionState(
+        { ...coordinating, confirmedAt: fromNow(-1), playMinutes: 360, endedAt: fromNow(-0.5) },
+        NOW,
+      ),
     ).toBe(SESSION_STATE.finished);
   });
 });

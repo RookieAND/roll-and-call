@@ -12,25 +12,39 @@ const DAY = 24 * HOUR;
 
 describe("attendanceDeadline", () => {
   it("세션 종료 7×24시간 뒤다", () => {
-    expect(attendanceDeadline({ confirmedAt: startsAt, playMinutes: 120 })?.toISOString()).toBe(
-      "2026-09-27T13:00:00.000Z",
-    );
+    expect(
+      attendanceDeadline({ confirmedAt: startsAt, playMinutes: 120, endedAt: null })?.toISOString(),
+    ).toBe("2026-09-27T13:00:00.000Z");
   });
 
   it("플레이타임이 없으면 3시간으로 본다", () => {
-    expect(attendanceDeadline({ confirmedAt: startsAt, playMinutes: null })?.toISOString()).toBe(
-      "2026-09-27T14:00:00.000Z",
-    );
+    expect(
+      attendanceDeadline({
+        confirmedAt: startsAt,
+        playMinutes: null,
+        endedAt: null,
+      })?.toISOString(),
+    ).toBe("2026-09-27T14:00:00.000Z");
+  });
+
+  it("세션을 마친 시각이 있으면 그 7×24시간 뒤다", () => {
+    expect(
+      attendanceDeadline({
+        confirmedAt: startsAt,
+        playMinutes: 120,
+        endedAt: new Date("2026-09-20T12:30:00Z"),
+      })?.toISOString(),
+    ).toBe("2026-09-27T12:30:00.000Z");
   });
 
   it("시간이 정해지지 않았으면 기한도 없다", () => {
-    expect(attendanceDeadline({ confirmedAt: null, playMinutes: 120 })).toBeNull();
+    expect(attendanceDeadline({ confirmedAt: null, playMinutes: 120, endedAt: null })).toBeNull();
   });
 });
 
 describe("isAttendancePastDeadline", () => {
   const deadline = startsAt.getTime() + 2 * HOUR + 7 * DAY;
-  const game = { confirmedAt: startsAt, playMinutes: 120 };
+  const game = { confirmedAt: startsAt, playMinutes: 120, endedAt: null };
 
   it("기한 직전에는 지나지 않았다", () => {
     expect(isAttendancePastDeadline({ ...game, now: new Date(deadline - 1) })).toBe(false);
@@ -42,13 +56,18 @@ describe("isAttendancePastDeadline", () => {
 
   it("시간이 정해지지 않으면 지나지 않는다", () => {
     expect(
-      isAttendancePastDeadline({ confirmedAt: null, playMinutes: 120, now: new Date(deadline) }),
+      isAttendancePastDeadline({
+        confirmedAt: null,
+        playMinutes: 120,
+        endedAt: null,
+        now: new Date(deadline),
+      }),
     ).toBe(false);
   });
 });
 
 describe("isAutoConfirmedAttendance", () => {
-  const game = { confirmedAt: startsAt, playMinutes: 120 };
+  const game = { confirmedAt: startsAt, playMinutes: 120, endedAt: null };
   const deadline = new Date(startsAt.getTime() + 2 * HOUR + 7 * DAY);
 
   it("기한 시각에 확정했으면 자동 확정이다", () => {

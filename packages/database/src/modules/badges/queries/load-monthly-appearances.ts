@@ -3,7 +3,7 @@ import { and, eq, exists, isNotNull, isNull, sql } from "drizzle-orm";
 import { db } from "#/client";
 import { BADGE_ROLE } from "#/modules/badges/model/badge-ladder";
 import { type MonthlyAppearance } from "#/modules/badges/model/monthly-winners";
-import { sessionEndsAt } from "#/modules/games/model/session-ends-at";
+import { isSessionEnded } from "#/modules/games/model/session-timing";
 import { games, participants } from "#/schema";
 
 import { attendedWhere } from "./attended-where";
@@ -30,6 +30,7 @@ export async function loadMonthlyAppearances({
   const gameColumns = {
     confirmedAt: games.confirmedAt,
     playMinutes: games.playMinutes,
+    endedAt: games.endedAt,
   };
   const [hosted, played] = await Promise.all([
     db
@@ -44,11 +45,7 @@ export async function loadMonthlyAppearances({
   ]);
   const toAppearances = (rows: typeof hosted, role: MonthlyAppearance["role"]) =>
     rows
-      .filter(
-        (row) =>
-          sessionEndsAt({ startsAt: row.confirmedAt!, playMinutes: row.playMinutes }).getTime() <=
-          now.getTime(),
-      )
+      .filter((row) => isSessionEnded(row, now))
       .map((row) => ({ userId: row.userId, role, startsAt: row.confirmedAt! }));
   return [...toAppearances(hosted, BADGE_ROLE.gm), ...toAppearances(played, BADGE_ROLE.player)];
 }

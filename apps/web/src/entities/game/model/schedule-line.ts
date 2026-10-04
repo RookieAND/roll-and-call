@@ -1,9 +1,10 @@
+import { isNull } from "es-toolkit";
+
 import { ddayKst, formatDate, formatDateTime } from "@/shared/lib";
 import type { Game } from "@/shared/server";
 
 import { isDeadlinePassed } from "./is-deadline-passed";
 import { SCHEDULE_MODE } from "./schedule-mode";
-import { isSessionLocked } from "./session-lock";
 
 const DEADLINE_WARN_DAYS = 3;
 
@@ -14,13 +15,7 @@ type ScheduleGame = Pick<
 
 // D-n은 KST 날짜 차이로 센다(날짜 경계에서 서버·클라이언트 값이 갈리지 않게).
 export function scheduleLine(game: ScheduleGame, now: Date = new Date()) {
-  const confirmed =
-    game.scheduleMode === SCHEDULE_MODE.coordinate &&
-    isSessionLocked({
-      scheduleMode: game.scheduleMode,
-      confirmedAt: game.confirmedAt,
-      now: now.getTime(),
-    });
+  const confirmed = game.scheduleMode === SCHEDULE_MODE.coordinate && !isNull(game.confirmedAt);
 
   let text: string;
   if (game.confirmedAt) {

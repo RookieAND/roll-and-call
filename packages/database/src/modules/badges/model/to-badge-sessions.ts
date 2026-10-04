@@ -1,4 +1,4 @@
-import { sessionEndsAt } from "#/modules/games/model/session-ends-at";
+import { sessionEndAt } from "#/modules/games/model/session-timing";
 
 import { type BadgeSession } from "./badge-facts";
 import { isRecognizedSession } from "./is-recognized-session";
@@ -8,6 +8,7 @@ type SessionRow = {
   title: string;
   confirmedAt: Date | null;
   playMinutes: number | null;
+  endedAt: Date | null;
   attendanceConfirmedAt: Date | null;
   hiddenAt: Date | null;
   cancelledAt: Date | null;
@@ -25,7 +26,7 @@ export function toBadgeSessions(rows: SessionRow[], now: Date): BadgeSession[] {
         gameId: row.gameId,
         title: row.title,
         startsAt: row.confirmedAt!,
-        endsAt: sessionEndsAt({ startsAt: row.confirmedAt!, playMinutes: row.playMinutes }),
+        endsAt: sessionEndAt(row)!,
         categoryId: row.categoryId,
         categoryName: row.categoryName,
         attendedCount: row.attendedCount,

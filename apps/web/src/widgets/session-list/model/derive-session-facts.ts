@@ -33,6 +33,7 @@ export function deriveSessionFacts({
     {
       confirmedAt: game.confirmedAt,
       playMinutes: game.playMinutes,
+      endedAt: game.endedAt,
       endDate: game.endDate,
       maxPlayers: game.maxPlayers,
       confirmedCount,

@@ -1,6 +1,6 @@
 import { isNull } from "es-toolkit";
 
-import { sessionEndsAt } from "./session-ends-at";
+import { sessionEndAt } from "./session-timing";
 
 const DAY_MS = 86_400_000;
 
@@ -10,25 +10,29 @@ export const ATTENDANCE_EDIT_DAYS = 7;
 export function attendanceDeadline({
   confirmedAt,
   playMinutes,
+  endedAt,
 }: {
   confirmedAt: Date | string | null;
   playMinutes: number | null;
+  endedAt: Date | string | null;
 }): Date | null {
-  if (isNull(confirmedAt)) return null;
-  const endsAt = sessionEndsAt({ startsAt: new Date(confirmedAt), playMinutes });
-  return new Date(endsAt.getTime() + ATTENDANCE_EDIT_DAYS * DAY_MS);
+  const endAt = sessionEndAt({ confirmedAt, playMinutes, endedAt });
+  if (isNull(endAt)) return null;
+  return new Date(endAt.getTime() + ATTENDANCE_EDIT_DAYS * DAY_MS);
 }
 
 export function isAttendancePastDeadline({
   confirmedAt,
   playMinutes,
+  endedAt,
   now,
 }: {
   confirmedAt: Date | string | null;
   playMinutes: number | null;
+  endedAt: Date | string | null;
   now: Date;
 }): boolean {
-  const deadline = attendanceDeadline({ confirmedAt, playMinutes });
+  const deadline = attendanceDeadline({ confirmedAt, playMinutes, endedAt });
   return !isNull(deadline) && deadline.getTime() <= now.getTime();
 }
 
@@ -37,12 +41,14 @@ export function isAutoConfirmedAttendance({
   attendanceConfirmedAt,
   confirmedAt,
   playMinutes,
+  endedAt,
 }: {
   attendanceConfirmedAt: Date | string | null;
   confirmedAt: Date | string | null;
   playMinutes: number | null;
+  endedAt: Date | string | null;
 }): boolean {
-  const deadline = attendanceDeadline({ confirmedAt, playMinutes });
+  const deadline = attendanceDeadline({ confirmedAt, playMinutes, endedAt });
   if (isNull(attendanceConfirmedAt) || isNull(deadline)) return false;
   return new Date(attendanceConfirmedAt).getTime() >= deadline.getTime();
 }

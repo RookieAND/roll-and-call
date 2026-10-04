@@ -8,7 +8,12 @@ import {
 import { revalidatePath } from "next/cache";
 
 import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
-import { GAME_CANCELLED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import {
+  APPLICATION_CLOSED_MESSAGE,
+  GAME_CANCELLED_MESSAGE,
+  GAME_NOT_FOUND_RESULT,
+  type ActionResult,
+} from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, notMemberError } from "@/shared/server";
 
@@ -31,9 +36,9 @@ export async function saveAvailability({
   if (!game) return GAME_NOT_FOUND_RESULT;
   if (game.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) {
-    return { error: "일시가 지정된 게임은 조율 대상이 아닙니다." };
+    return { error: "일시가 지정된 구인은 조율 대상이 아닙니다." };
   }
-  if (game.confirmedAt) return { error: "이미 일정이 확정된 게임입니다." };
+  if (game.confirmedAt) return { error: APPLICATION_CLOSED_MESSAGE };
 
   const involved =
     isGameGm({ gmId: game.gmId, userId: user.id }) ||

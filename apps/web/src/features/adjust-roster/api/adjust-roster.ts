@@ -3,8 +3,9 @@ import { lockGame } from "@roll-and-call/database/games";
 import { withTransaction, type Transaction } from "@roll-and-call/database/transaction";
 import { after } from "next/server";
 
-import { isSessionLocked } from "@/entities/game";
+import { isApplicationClosed } from "@/entities/game";
 import {
+  APPLICATION_CLOSED_MESSAGE,
   ERROR_DISPLAY,
   GAME_CANCELLED_MESSAGE,
   GAME_NOT_FOUND_MESSAGE,
@@ -44,7 +45,7 @@ export async function adjustRoster({
       if (!game) throw new RosterError(GAME_NOT_FOUND_MESSAGE, ERROR_DISPLAY.page);
       if (game.gmId !== gmId) throw new RosterError("권한이 없습니다.");
       if (game.cancelledAt) throw new RosterError(GAME_CANCELLED_MESSAGE);
-      if (isSessionLocked(game)) throw new RosterError("이미 확정된 게임입니다.");
+      if (isApplicationClosed(game)) throw new RosterError(APPLICATION_CLOSED_MESSAGE);
       await work(transaction, game);
     });
   } catch (error) {

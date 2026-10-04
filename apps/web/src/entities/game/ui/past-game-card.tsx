@@ -1,11 +1,10 @@
-import { deriveGameStatus } from "@roll-and-call/database/games/model";
+import { deriveGameStatus, isSessionEnded } from "@roll-and-call/database/games/model";
 import { Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
 
 import { formatDate } from "@/shared/lib";
 import type { Game } from "@/shared/server";
 
-import { isSessionEnded } from "../model/is-session-ended";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { GameStatusBadge } from "./game-status-badge";
 import { GameThumbnail } from "./game-thumbnail";

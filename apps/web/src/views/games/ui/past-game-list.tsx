@@ -1,6 +1,6 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { PastGameCard, sessionEndsAt } from "@/entities/game";
+import { PastGameCard, sessionEndAt } from "@/entities/game";
 import type { GamesFilter } from "@/shared/api";
 import { ServerLink } from "@/shared/ui";
 
@@ -20,7 +20,7 @@ export function PastGameList({ gamesPage, page, filter }: PastGameListProps) {
   const { rows, total } = gamesPage;
   const groups = groupByMonth({
     items: rows,
-    finishedAt: (game) => sessionEndsAt(game) ?? game.endDate,
+    finishedAt: (game) => sessionEndAt(game) ?? game.endDate,
   });
 
   return (

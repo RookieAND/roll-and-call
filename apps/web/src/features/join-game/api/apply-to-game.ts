@@ -2,8 +2,18 @@ import "server-only";
 import { countParticipants, insertParticipant, lockGame } from "@roll-and-call/database/games";
 import { withTransaction } from "@roll-and-call/database/transaction";
 
-import { DIE_FACES, isSessionLocked, PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
-import { GAME_CANCELLED_MESSAGE, GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import {
+  DIE_FACES,
+  isApplicationClosed,
+  PARTICIPANT_STATUS,
+  RECRUIT_METHOD,
+} from "@/entities/game";
+import {
+  APPLICATION_CLOSED_MESSAGE,
+  GAME_CANCELLED_MESSAGE,
+  GAME_NOT_FOUND_RESULT,
+  type ActionResult,
+} from "@/shared/api";
 import type { Game } from "@/shared/server";
 
 export type Application = {
@@ -34,8 +44,8 @@ export async function applyToGame({
     if (game.gmId === userId) {
       return { error: "GM은 참여자로 참여할 수 없습니다." };
     }
-    // 일시 지정형은 등록 때부터 confirmedAt이 있으므로, 확정 여부는 isSessionLocked로 본다.
-    if (isSessionLocked(game)) return { error: "이미 일정이 확정된 게임입니다." };
+    // 일시 지정형은 등록 때부터 confirmedAt이 있으므로, 신청 닫힘은 isApplicationClosed로 본다.
+    if (isApplicationClosed(game)) return { error: APPLICATION_CLOSED_MESSAGE };
     if (game.endDate.getTime() <= Date.now()) {
       return { error: "모집이 마감되었습니다." };
     }

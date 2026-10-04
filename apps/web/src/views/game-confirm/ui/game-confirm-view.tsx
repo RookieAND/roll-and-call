@@ -3,10 +3,10 @@ import { uniq } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { aggregateAvailability } from "@/entities/availability";
-import { countConfirmed, SCHEDULE_MODE } from "@/entities/game";
+import { countConfirmed, effectivePlayMinutes, SCHEDULE_MODE } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { ConfirmSessionForm } from "@/features/confirm-session";
-import { buildDayColumns, playMinutes, SLOT_MINUTES, serverPath } from "@/shared/lib";
+import { buildDayColumns, SLOT_MINUTES, serverPath } from "@/shared/lib";
 import {
   getCurrentSessionUser,
   getGameAvailabilities,
@@ -46,7 +46,7 @@ export async function GameConfirmView({ id }: { id: string }) {
 
   const { names } = aggregateAvailability({ avails: availabilities, userId: null });
   const respondedCount = uniq(Object.values(names).flat()).length;
-  const minutes = playMinutes(game.playMinutes);
+  const minutes = effectivePlayMinutes(game.playMinutes);
   const playLabel = game.playTime ?? `${minutes / 60}시간`;
 
   return (
