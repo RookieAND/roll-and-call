@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import { ProfileRow } from "@/entities/profile";
 import { formatDate } from "@/shared/lib";
-import { AppBar, toast, useAction } from "@/shared/ui";
+import { AppBar, ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { deleteMemo } from "../api/delete-memo";
 import { saveMemo } from "../api/save-memo";
@@ -28,7 +28,9 @@ export function MemoForm({
   updatedAt,
 }: MemoFormProps) {
   const [body, setBody] = useState(defaultBody);
-  const { pending, run } = useAction();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const save = useAction();
+  const remove = useAction();
   const canSave = body.trim().length > 0;
 
   return (
@@ -41,10 +43,11 @@ export function MemoForm({
             variant="ghost"
             colorPalette="primary"
             size="sm"
-            disabled={!canSave}
-            loading={pending}
+            className="relative after:absolute after:inset-x-0 after:-inset-y-075"
+            disabled={!canSave || remove.pending}
+            loading={save.pending}
             onClick={() =>
-              run(() => saveMemo({ targetId, body }), {
+              save.run(() => saveMemo({ targetId, body }), {
                 onSuccess: () => toast.success("메모를 저장했습니다"),
               })
             }
@@ -93,15 +96,25 @@ export function MemoForm({
             colorPalette="danger"
             size="lg"
             className="w-full"
-            loading={pending}
-            onClick={() =>
-              run(() => deleteMemo(targetId), {
-                onSuccess: () => toast.success("메모를 지웠습니다"),
-              })
-            }
+            disabled={save.pending}
+            onClick={() => setConfirmOpen(true)}
           >
             메모 삭제
           </Button>
+          <ConfirmDialog
+            open={confirmOpen}
+            onOpenChange={setConfirmOpen}
+            title="메모를 지울까요?"
+            description="지운 메모는 되돌릴 수 없습니다."
+            confirmLabel="지우기"
+            danger
+            pending={remove.pending}
+            onConfirm={() =>
+              remove.run(() => deleteMemo(targetId), {
+                onSuccess: () => toast.success("메모를 지웠습니다"),
+              })
+            }
+          />
           {updatedAt && (
             <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
               {formatDate(updatedAt)}에 마지막으로 고쳤습니다.
