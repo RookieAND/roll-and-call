@@ -16,8 +16,12 @@ interface ReasonChipsProps {
   label?: string;
   ariaLabel?: string;
   otherLabel?: string;
+  otherPlaceholder?: string;
+  otherMaxLength?: number;
   help?: string;
   disabled?: boolean;
+  // 선택지 글자를 굵게 하지 않는다(고른 것만 500). 후기 조치 창이 쓴다.
+  regularWeight?: boolean;
 }
 
 // 조치 사유 칩(시안 ReasonChips). 한 번에 하나만 고르고 기본값은 없다.
@@ -30,12 +34,19 @@ export function ReasonChips({
   label,
   ariaLabel,
   otherLabel = "기타 사유",
+  otherPlaceholder = "목록에 없는 사유를 적어 주세요",
+  otherMaxLength,
   help,
   disabled,
+  regularWeight = false,
 }: ReasonChipsProps) {
   const labelId = useId();
   const otherId = useId();
   const otherEmpty = !otherText.trim();
+  const chipWeight = (selected: boolean) => {
+    if (!regularWeight) return undefined;
+    return selected ? "font-medium" : "font-normal";
+  };
   return (
     <VStack gap="125">
       <VStack gap="075">
@@ -61,6 +72,7 @@ export function ReasonChips({
               aria-checked={value === reason}
               selected={value === reason}
               disabled={disabled}
+              className={chipWeight(value === reason)}
               onClick={() => onValueChange(reason)}
             >
               {reason}
@@ -79,7 +91,8 @@ export function ReasonChips({
           <Textarea
             id={otherId}
             rows={2}
-            placeholder="목록에 없는 사유를 적어 주세요"
+            placeholder={otherPlaceholder}
+            maxLength={otherMaxLength}
             value={otherText}
             disabled={disabled}
             onChange={(event) => onOtherTextChange(event.target.value)}

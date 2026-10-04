@@ -7,6 +7,7 @@ import {
   REVIEW_DEFAULT_SORT,
   REVIEW_LIST_TAB,
   REVIEW_SORT_COLUMNS,
+  requireStaff,
 } from "@/shared/server";
 import { ReviewDetailView } from "@/views/review-detail";
 
@@ -31,10 +32,10 @@ export default async function ReviewDetailPage({
     columns: REVIEW_SORT_COLUMNS,
     fallback: REVIEW_DEFAULT_SORT,
   });
-  const review = await getReviewDetail({
-    id,
-    filter: { tab: listTab, query: q, photo, game, sort: tableSort },
-  });
+  const [review, staff] = await Promise.all([
+    getReviewDetail({ id, filter: { tab: listTab, query: q, photo, game, sort: tableSort } }),
+    requireStaff(),
+  ]);
   if (!review) notFound();
   return (
     <ReviewDetailView
@@ -42,6 +43,7 @@ export default async function ReviewDetailPage({
       tab={listTab}
       action={action}
       listQuery={{ q, photo, game, sort, dir }}
+      viewerId={staff.id}
     />
   );
 }

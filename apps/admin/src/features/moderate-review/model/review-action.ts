@@ -7,8 +7,3 @@ export const REVIEW_ACTION = {
 } as const satisfies Record<string, ReviewModerationAction>;
 
 export type ReviewAction = (typeof REVIEW_ACTION)[keyof typeof REVIEW_ACTION];
-
-export const REASON_ACTIONS: readonly ReviewModerationAction[] = [
-  REVIEW_ACTION.hide,
-  REVIEW_ACTION.remove,
-];

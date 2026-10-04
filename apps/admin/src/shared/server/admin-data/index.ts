@@ -67,7 +67,6 @@ export {
   type RevokeResult,
 } from "@roll-and-call/database/certifications";
 export { decideCert } from "./decide-cert";
-export { type ReviewModeration } from "./review-moderation";
 export { getUserDetail, type UserDetail } from "./get-user-detail";
 export { getMemberOngoing, type MemberOngoingRow } from "./get-member-ongoing";
 export { checkDiscordBanFailed } from "./check-discord-ban-failed";

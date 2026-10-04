@@ -1,45 +1,22 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { after } from "next/server";
+import { requireStaff } from "@/shared/server";
 
-import { REVIEW_REASON, REVIEW_REASONS } from "@/shared/lib";
-import {
-  getCurrentServer,
-  moderateReview,
-  requireStaff,
-  syncReviewForumPost,
-  type ReviewModeration,
-} from "@/shared/server";
+import { requiredReviewReason } from "../model/required-review-reason";
+import { REVIEW_ACTION, type ReviewAction } from "../model/review-action";
+import { runReviewModeration } from "./run-review-moderation";
 
-import { REASON_ACTIONS } from "../model/review-action";
+interface SubmitReviewModerationOptions {
+  reviewId: string;
+  moderation: { action: ReviewAction; reasonKey: string | null; otherText: string };
+}
 
-export async function submitReviewModeration(reviewId: string, moderation: ReviewModeration) {
+export async function submitReviewModeration({
+  reviewId,
+  moderation,
+}: SubmitReviewModerationOptions) {
   const staff = await requireStaff();
-  const needsReason = REASON_ACTIONS.includes(moderation.action);
-  if (needsReason && !REVIEW_REASONS.includes(moderation.reason!)) {
-    throw new Error("사유를 골라 주세요");
-  }
-  const server = await getCurrentServer();
-  const result = await moderateReview({
-    serverId: server.id,
-    id: reviewId,
-    actor: staff,
-    moderation: {
-      action: moderation.action,
-      reasonLabel: needsReason ? REVIEW_REASON[moderation.reason!] : "",
-      staffMemo: moderation.staffMemo.trim(),
-    },
-  });
-  revalidatePath("/", "layout");
-  if (result.ok) {
-    after(() =>
-      syncReviewForumPost({
-        serverId: server.id,
-        reviewId,
-        siteOrigin: process.env.NEXT_PUBLIC_USER_APP_URL,
-      }),
-    );
-  }
-  return result;
+  const { action } = moderation;
+  const reason = action === REVIEW_ACTION.unhide ? "" : requiredReviewReason(moderation);
+  return runReviewModeration({ staff, reviewId, action, reason });
 }
