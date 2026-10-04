@@ -9,54 +9,57 @@ import { Delta } from "./delta";
 interface AnalyticsSummaryProps {
   summary: AnalyticsData["summary"];
   early: boolean;
+  compare: boolean;
 }
 
 interface SummaryTile {
   label: string;
-  value: string;
+  value: string | null;
   delta: ReactNode;
   sub: string;
 }
 
-export function AnalyticsSummary({ summary, early }: AnalyticsSummaryProps) {
+export function AnalyticsSummary({ summary, early, compare }: AnalyticsSummaryProps) {
   const { finishedSessions, participants, hostingGms, noShowRate } = summary;
-  const noCompare = "비교할 지난 기간이 아직 없습니다";
   const percent = (metric: AnalyticsData["summary"]["participants"]) =>
     !isNull(metric.value) && metric.previous
       ? Math.round(((metric.value - metric.previous) / metric.previous) * 100)
       : 0;
+  const noShowValue = early ? null : noShowRate.value;
+  const noShowCompare = compare && !isNull(noShowValue) && !isNull(noShowRate.previous);
+  const earlyNoShowSub = early ? `세션 ${ANALYTICS_EARLY_THRESHOLD}건부터 계산합니다` : "";
   const tiles: SummaryTile[] = [
     {
       label: "진행된 세션",
       value: `${finishedSessions.value ?? 0}건`,
-      delta: <Delta value={percent(finishedSessions)} unit="%" />,
-      sub: early ? noCompare : `지난 4주 ${finishedSessions.previous}건`,
+      delta: compare ? <Delta value={percent(finishedSessions)} unit="%" /> : null,
+      sub: compare ? `지난 4주 ${finishedSessions.previous}건` : "",
     },
     {
       label: "참여한 사람",
       value: `${participants.value ?? 0}명`,
-      delta: <Delta value={percent(participants)} unit="%" />,
-      sub: early ? noCompare : `중복 제외 · 지난 4주 ${participants.previous}명`,
+      delta: compare ? <Delta value={percent(participants)} unit="%" /> : null,
+      sub: compare ? `중복 제외 · 지난 4주 ${participants.previous}명` : "중복 제외",
     },
     {
-      label: "구인을 연 GM",
+      label: "세션을 진행한 GM",
       value: `${hostingGms.value ?? 0}명`,
-      delta: <Delta value={(hostingGms.value ?? 0) - (hostingGms.previous ?? 0)} unit="명" />,
-      sub: early ? noCompare : `지난 4주 ${hostingGms.previous}명`,
+      delta: compare ? (
+        <Delta value={(hostingGms.value ?? 0) - (hostingGms.previous ?? 0)} unit="명" />
+      ) : null,
+      sub: compare ? `지난 4주 ${hostingGms.previous}명` : "",
     },
     {
       label: "불참률",
-      value: early || isNull(noShowRate.value) ? "—" : `${noShowRate.value}%`,
-      delta: (
+      value: isNull(noShowValue) ? null : `${noShowValue}%`,
+      delta: noShowCompare ? (
         <Delta
-          value={Math.round(((noShowRate.value ?? 0) - (noShowRate.previous ?? 0)) * 10) / 10}
+          value={Math.round(((noShowValue ?? 0) - (noShowRate.previous ?? 0)) * 10) / 10}
           unit="%p"
           higherIsWorse
         />
-      ),
-      sub: early
-        ? `세션 ${ANALYTICS_EARLY_THRESHOLD}건부터 계산합니다`
-        : `지난 4주 ${noShowRate.previous}%`,
+      ) : null,
+      sub: noShowCompare ? `지난 4주 ${noShowRate.previous}%` : earlyNoShowSub,
     },
   ];
   return (
@@ -71,14 +74,21 @@ export function AnalyticsSummary({ summary, early }: AnalyticsSummaryProps) {
             {tile.label}
           </Text>
           <HStack align="baseline" gap="100">
-            <Text typography="heading1" numeric className="leading-[1.15]">
-              {tile.value}
+            <Text
+              typography="heading1"
+              foreground={isNull(tile.value) ? "hint" : undefined}
+              numeric
+              className="leading-[1.15]"
+            >
+              {tile.value ?? "-"}
             </Text>
-            {early ? null : tile.delta}
+            {tile.delta}
           </HStack>
-          <Text typography="body4" foreground="hint">
-            {tile.sub}
-          </Text>
+          {tile.sub ? (
+            <Text typography="body4" foreground="hint">
+              {tile.sub}
+            </Text>
+          ) : null}
         </VStack>
       ))}
     </Grid>

@@ -28,7 +28,7 @@ export function EarlyNotice({ serviceWeeks, hostingGms, sections }: EarlyNoticeP
     <HStack
       align="center"
       gap="400"
-      render={<section aria-label="데이터가 더 쌓이면 보여드릴게요" />}
+      render={<section aria-label="데이터가 더 쌓이면 이 자리에 보입니다" />}
       className="rounded-600 border border-gray-200 bg-surface px-300 py-400"
     >
       <VStack className="w-[300px] shrink-0">
@@ -36,7 +36,7 @@ export function EarlyNotice({ serviceWeeks, hostingGms, sections }: EarlyNoticeP
           <Hourglass size={18} aria-hidden />
         </span>
         <Text typography="heading3" render={<h2 />}>
-          데이터가 더 쌓이면 보여드릴게요
+          데이터가 더 쌓이면 이 자리에 보입니다
         </Text>
         <Text typography="body3" foreground="hint" className="mt-050 leading-[1.6]">
           서비스를 시작한 지 {serviceWeeks}주가 지났습니다. 아래 지표는 비교할 만큼 기록이 모이면 이

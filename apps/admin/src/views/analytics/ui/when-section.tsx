@@ -23,8 +23,8 @@ export function WhenSection({ analytics, mode }: WhenSectionProps) {
     activeMode === GRID_MODE.open ? openGridInsight(grid.open) : finishedGridInsight(grid.finished);
   const caption =
     activeMode === GRID_MODE.open
-      ? `합계 ${analytics.openSessionCount}건 · 후보 시간이 여럿이면 모두 셉니다`
-      : `합계 ${finishedCount}건`;
+      ? `시간이 정해진 예정 세션 ${analytics.openSessionCount}건`
+      : `지난 4주 동안 실제로 진행된 세션 ${finishedCount}건`;
   const rulebookTitle = activeMode === GRID_MODE.open ? "룰북별 모집 중" : "룰북별 진행된 세션";
   return (
     <AnalyticsSection

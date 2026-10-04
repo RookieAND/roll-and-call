@@ -1,5 +1,4 @@
 import { HStack, VStack } from "@roll-and-call/ui";
-import { sumBy } from "es-toolkit";
 
 import type { AnalyticsData } from "@/shared/server";
 
@@ -18,12 +17,9 @@ interface PeopleSectionProps {
 }
 
 export function PeopleSection({ analytics }: PeopleSectionProps) {
-  const { people, recruitment } = analytics;
-  const participants = analytics.summary.participants.value ?? 0;
-  const firstTimers = sumBy(people, (week) => week.first);
-  const firstShare = participants ? Math.round((firstTimers / participants) * 100) : 0;
+  const { people, recruitment, firstTimers, firstShare } = analytics;
   return (
-    <AnalyticsSection title="참여자 추이">
+    <AnalyticsSection title="참여자 추이" sub="이번 주를 뺀 지난 4주">
       <HStack align="start" gap="300">
         <VStack gap="125" className="min-w-0 flex-1">
           <PeopleChart people={people} />
@@ -47,7 +43,7 @@ export function PeopleSection({ analytics }: PeopleSectionProps) {
             ) : null}
             <SideStat
               label="첫 참여자"
-              sub={`참여한 사람의 ${firstShare}%`}
+              sub={`최근 4주 참여한 사람의 ${firstShare}%`}
               value={`${firstTimers}명`}
             />
           </VStack>

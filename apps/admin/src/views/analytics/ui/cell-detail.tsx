@@ -1,16 +1,15 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 
+import { GRID_MODE, GRID_MODE_LABEL, type GridMode } from "../model/grid-mode";
+
 interface CellDetailProps {
   label: string;
-  finishedCount: number;
-  openCount: number;
+  mode: GridMode;
+  counts: Record<GridMode, number>;
 }
 
-export function CellDetail({ label, finishedCount, openCount }: CellDetailProps) {
-  const values = [
-    { label: "진행된 세션", count: finishedCount },
-    { label: "모집 중", count: openCount },
-  ];
+export function CellDetail({ label, mode, counts }: CellDetailProps) {
+  const otherMode = mode === GRID_MODE.open ? GRID_MODE.finished : GRID_MODE.open;
   return (
     <HStack
       align="stretch"
@@ -25,19 +24,17 @@ export function CellDetail({ label, finishedCount, openCount }: CellDetailProps)
           {label}
         </Text>
       </VStack>
-      {values.map((value) => (
-        <VStack
-          key={value.label}
-          className="flex-1 border-r border-(--rc-color-border-subtle) px-175 py-125 last:border-r-0"
-        >
-          <Text typography="body4" foreground="hint">
-            {value.label}
-          </Text>
-          <Text typography="body2" weight="bold" numeric>
-            {value.count}건
-          </Text>
-        </VStack>
-      ))}
+      <VStack className="flex-1 px-175 py-125">
+        <Text typography="body4" foreground="hint">
+          {GRID_MODE_LABEL[mode]}
+        </Text>
+        <Text typography="body2" weight="bold" numeric>
+          {counts[mode]}건
+        </Text>
+        <Text typography="body4" foreground="hint" numeric>
+          {GRID_MODE_LABEL[otherMode]} {counts[otherMode]}건
+        </Text>
+      </VStack>
     </HStack>
   );
 }

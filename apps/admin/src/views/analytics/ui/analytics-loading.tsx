@@ -2,22 +2,30 @@ import { Grid, Skeleton, Text, VStack } from "@roll-and-call/ui";
 
 import { AdminHeader, LoadingRegion } from "@/shared/ui";
 
+import { GRID_MODE } from "../model/grid-mode";
+import { TREND_SEGMENTS } from "../model/trend-segments";
 import { AnalyticsSection } from "./analytics-section";
+import { GridTabs } from "./grid-tabs";
+import { HeatGrid } from "./heat-grid";
+import { HeatScale } from "./heat-scale";
+import { Legend } from "./legend";
 import { PeriodBar } from "./period-bar";
 import { SkeletonBars } from "./skeleton-bars";
+import { TrendNote } from "./trend-note";
 
-const SUMMARY_LABELS = ["진행된 세션", "참여한 사람", "구인을 연 GM", "불참률"] as const;
-const HEAT_CELL_COUNT = 42;
+const SUMMARY_LABELS = ["진행된 세션", "참여한 사람", "세션을 진행한 GM", "불참률"] as const;
+const GM_BAR_WIDTHS = ["88%", "76%", "70%", "58%", "46%"] as const;
 
 export function AnalyticsLoading() {
   return (
     <>
-      <AdminHeader title="분석" />
+      <AdminHeader title="분석" contentWidth />
       <LoadingRegion
         label="분석 데이터를 불러오는 중입니다"
+        fullBleed
         className="mx-auto w-full max-w-content gap-150 p-200"
       >
-        <PeriodBar disabled />
+        <PeriodBar description={<Skeleton width={280} height={12} />} />
         <Grid className="grid-cols-4 overflow-hidden rounded-600 border border-gray-200 bg-surface">
           {SUMMARY_LABELS.map((label) => (
             <VStack
@@ -33,19 +41,23 @@ export function AnalyticsLoading() {
             </VStack>
           ))}
         </Grid>
-        <AnalyticsSection title="세션 추이">
-          <SkeletonBars count={12} height={240} />
-          <Skeleton width="56%" height={14} className="mt-150" />
+        <AnalyticsSection title="세션 추이" right={<Legend items={TREND_SEGMENTS} />}>
+          <TrendNote />
+          <SkeletonBars count={8} height={240} />
         </AnalyticsSection>
-        <AnalyticsSection title="참여자 추이">
-          <SkeletonBars count={4} height={150} maxWidth={96} />
+        <AnalyticsSection
+          title="언제 열리고 있나"
+          right={<GridTabs mode={GRID_MODE.finished} disabled />}
+        >
+          <HeatGrid grid={[]} loading />
+          <HeatScale caption="" />
         </AnalyticsSection>
-        <AnalyticsSection title="언제 열리고 있나">
-          <Grid className="grid-cols-7 gap-050">
-            {Array.from({ length: HEAT_CELL_COUNT }, (_, index) => (
-              <Skeleton key={index} width="100%" height={28} rounded={200} />
+        <AnalyticsSection title="GM 분포" sub="진행된 세션 기준">
+          <VStack gap="150">
+            {GM_BAR_WIDTHS.map((width) => (
+              <Skeleton key={width} width={width} height={14} />
             ))}
-          </Grid>
+          </VStack>
         </AnalyticsSection>
       </LoadingRegion>
     </>

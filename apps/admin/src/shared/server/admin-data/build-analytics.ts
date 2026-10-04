@@ -250,7 +250,7 @@ export function buildAnalytics({ previewEarly, now, ...db }: BuildAnalyticsOptio
     today: now,
     period: {
       from: new Date(periodFrom),
-      to: new Date(today - (early ? 0 : DAY)),
+      to: now,
       serviceWeeks,
     },
     summary: {

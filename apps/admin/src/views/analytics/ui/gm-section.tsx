@@ -6,7 +6,6 @@ import type { AnalyticsData } from "@/shared/server";
 import { AnalyticsSection } from "./analytics-section";
 import { Delta } from "./delta";
 import { GmBarChart } from "./gm-bar-chart";
-import { GmShareDonut } from "./gm-share-donut";
 
 const TOP_COUNT = 3;
 
@@ -52,9 +51,8 @@ export function GmSection({ analytics }: GmSectionProps) {
             )}
           </HStack>
           <Text typography="body4" foreground="hint" className="mt-025">
-            상위 {TOP_COUNT}명이 {totalSessions}건 중 {topSessions}건을 진행했습니다
+            상위 {TOP_COUNT}명이 {totalSessions}건 중 {topSessions}건을 진행했습니다.
           </Text>
-          <GmShareDonut topSessions={topSessions} totalSessions={totalSessions} />
         </VStack>
       </HStack>
     </AnalyticsSection>

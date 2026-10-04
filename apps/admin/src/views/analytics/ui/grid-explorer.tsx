@@ -9,6 +9,8 @@ import { CellDetail } from "./cell-detail";
 import { HeatGrid } from "./heat-grid";
 import { HeatScale } from "./heat-scale";
 
+type CellPosition = Pick<GridCell, "day" | "slot">;
+
 interface GridExplorerProps {
   grids: Record<GridMode, number[][]>;
   mode: GridMode;
@@ -17,26 +19,24 @@ interface GridExplorerProps {
 }
 
 export function GridExplorer({ grids, mode, caption, interactive }: GridExplorerProps) {
-  const [selected, setSelected] = useState<Pick<GridCell, "day" | "slot"> | null>(
-    () => findTopCells(grids.finished)[0] ?? findTopCells(grids.open)[0] ?? null,
-  );
-  const selectedLabel = selected
-    ? `${WEEKDAYS[selected.day]}요일 ${TIME_SLOTS[selected.slot]!.label}`
-    : null;
+  // 직접 고른 칸은 탭을 바꿔도 유지하고, 고르기 전에는 지금 탭의 최댓값 칸을 보인다.
+  const [picked, setPicked] = useState<CellPosition | null>(null);
+  const selected: CellPosition | null = picked ?? findTopCells(grids[mode])[0] ?? null;
+  const countAt = (grid: number[][]) => (selected ? (grid[selected.day]?.[selected.slot] ?? 0) : 0);
   return (
     <>
       <HeatGrid
         grid={grids[mode]}
         selected={interactive ? selected : null}
         interactive={interactive}
-        onSelect={setSelected}
+        onSelect={setPicked}
       />
       <HeatScale caption={caption} />
-      {interactive && selected && selectedLabel ? (
+      {interactive && selected ? (
         <CellDetail
-          label={selectedLabel}
-          finishedCount={grids.finished[selected.day]?.[selected.slot] ?? 0}
-          openCount={grids.open[selected.day]?.[selected.slot] ?? 0}
+          label={`${WEEKDAYS[selected.day]}요일 ${TIME_SLOTS[selected.slot]!.label}`}
+          mode={mode}
+          counts={{ finished: countAt(grids.finished), open: countAt(grids.open) }}
         />
       ) : null}
     </>

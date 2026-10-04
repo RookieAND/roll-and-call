@@ -16,6 +16,11 @@
   padding-inline: calc(max(0px, (100% - var(--container-page)) / 2) + var(--spacing-225));
 }
 
+/* 본문을 920px 칸(max-w-content p-200)으로 두는 화면의 머리말. 제목이 본문 시작선에 선다. */
+@utility px-content {
+  padding-inline: calc(max(0px, (100% - var(--container-content)) / 2) + var(--spacing-200));
+}
+
 /* padding의 %는 부모(줄 전체) 폭 기준이라 aside 폭이 식에서 지워진다: (본문 − (page − aside)) / 2 = (줄 − page) / 2. */
 @utility px-center {
   padding-inline: max(0px, (100% - var(--container-page)) / 2);

@@ -23,6 +23,8 @@ export function GmBarChart({ gms }: GmBarChartProps) {
     rank: index < TOP_COUNT ? RANK.top : RANK.rest,
   }));
   const height = gms.length * 34 + 16;
+  // 가장 긴 막대 끝에도 건수 글자가 들어갈 자리를 남긴다.
+  const domainMax = Math.ceil(Math.max(1, ...gms.map((gm) => gm.count)) * 1.25);
   const summary = gms.map((gm) => `${gm.nickname} ${gm.count}건`).join(", ");
   return (
     <div
@@ -44,7 +46,7 @@ export function GmBarChart({ gms }: GmBarChartProps) {
           paddingRight={40}
           scale={{
             color: { domain: Object.values(RANK), range: [tokens.primary, tokens.heat3] },
-            y: { domainMin: 0, nice: true },
+            y: { domainMin: 0, domainMax },
             x: { paddingInner: 0.6 },
           }}
           legend={false}
@@ -57,7 +59,7 @@ export function GmBarChart({ gms }: GmBarChartProps) {
               labelFill: tokens.normal,
               labelFillOpacity: 1,
               labelFontSize: 13,
-              labelFontWeight: 600,
+              labelFontWeight: 500,
               labelFontFamily: tokens.font,
               labelSpacing: 10,
             },
@@ -67,6 +69,7 @@ export function GmBarChart({ gms }: GmBarChartProps) {
             text: (gm: { count: number }) => `${gm.count}건`,
             position: "right",
             dx: 6,
+            textAlign: "start",
             style: {
               fill: tokens.muted,
               fontSize: 12,

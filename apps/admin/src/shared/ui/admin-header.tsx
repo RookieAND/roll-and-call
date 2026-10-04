@@ -10,9 +10,18 @@ interface AdminHeaderProps {
   trail?: { href: string; label: string }[];
   actions?: ReactNode;
   withAside?: boolean;
+  // 본문이 920px 칸인 화면은 제목을 그 칸의 시작선에 맞춘다.
+  contentWidth?: boolean;
 }
 
-export function AdminHeader({ title, sub, trail = [], actions, withAside }: AdminHeaderProps) {
+export function AdminHeader({
+  title,
+  sub,
+  trail = [],
+  actions,
+  withAside,
+  contentWidth,
+}: AdminHeaderProps) {
   return (
     <HStack
       align="center"
@@ -20,7 +29,9 @@ export function AdminHeader({ title, sub, trail = [], actions, withAside }: Admi
       render={<header data-full-bleed />}
       className={cn(
         "sticky top-0 z-(--rc-z-sticky) h-(--rc-size-appbar) shrink-0 border-b border-gray-200 bg-surface whitespace-nowrap",
-        withAside ? "pr-150 pl-center-200" : "px-page",
+        withAside && "pr-150 pl-center-200",
+        contentWidth && "px-content",
+        !withAside && !contentWidth && "px-page",
       )}
     >
       {trail.map((step) => (
