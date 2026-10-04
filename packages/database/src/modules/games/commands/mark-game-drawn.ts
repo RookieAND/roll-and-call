@@ -7,13 +7,15 @@ export async function markGameDrawn({
   transaction,
   serverId,
   gameId,
+  at,
 }: {
   transaction: Transaction;
   serverId: string;
   gameId: string;
+  at: Date;
 }) {
   await transaction
     .update(games)
-    .set({ drawnAt: new Date() })
+    .set({ drawnAt: at })
     .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));
 }

@@ -47,7 +47,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 **feature 슬라이스는 하나의 동작이다.** FSD 문서의 표현으로 "하나의 피처는 사용자에게 유용한 하나의 기능이며, 여러 기능이 한 피처에 구현되면 경계 위반"이다. `manage-game`처럼 아무 동작도 지칭하지 않는 포괄어로 묶으면 엔티티명만 피한 자루가 된다. 단, 엔티티와 같은 시험대를 적용한다. **쪼갰을 때 교차 import가 생기면 한 동작으로 본다.** 지금 남아 있는 두 예외는 그래서다.
 
 - `write-game`: 등록과 수정이 `gameFormSchema`를 공유한다
-- `adjust-roster`: 추첨·승격·강등·내보내기가 `adjustRoster` 한 트랜잭션 가드(게임 행 잠금 · GM 확인 · 세션 잠김 확인)를 공유한다
+- `adjust-roster`: 승격·강등·내보내기가 `adjustRoster` 한 트랜잭션 가드(게임 행 잠금 · GM 확인 · 세션 잠김 확인)를 공유한다. 추첨은 추첨 카드가 참여자 관리의 명단 조작과 같은 화면 동작 묶음이라서 같은 슬라이스에 둔다
 
 사용처가 한 곳뿐이고 상태 변경이 없는 표시/탭 UI는 feature로 빼지 말고 그 view 안에 둔다(예: `ScheduleTabs`, `SessionTabFilter`, `Heatmap`). 서버 액션 반환은 `shared/api`의 `ActionResult` 하나를 쓴다.
 

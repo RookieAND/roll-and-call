@@ -1,64 +1,48 @@
 "use server";
 
-import { randomInt } from "node:crypto";
-
-import {
-  closeGameRecruitment,
-  countRolledParticipants,
-  listParticipantUserIds,
-  setDrawRoll,
-} from "@roll-and-call/database/games";
+import { drawLottery as runLotteryDraw } from "@roll-and-call/database/games";
+import { DRAW_REJECTION, DRAW_RESULT_KIND } from "@roll-and-call/database/games/model";
+import { withTransaction } from "@roll-and-call/database/transaction";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 
-import { DIE_FACES, PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
-import type { ActionResult } from "@/shared/api";
+import { ERROR_DISPLAY, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import { getCurrentServer } from "@/shared/server";
+import { finishLotteryDraw, getActingMember, notMemberError } from "@/shared/server";
 
-import { rollDistinct } from "../model/roll-distinct";
-import { adjustRoster } from "./adjust-roster";
-import { RosterError } from "./roster-error";
+import { drawRejectionMessage } from "../model/draw-rejection-message";
+import { revalidateRoster } from "./revalidate-roster";
 
-// 추첨은 한 번만 돈다. 직접 확정한 사람은 빼고 신청자마다 1d100을 굴려 둔다.
-// 명단과 알림은 GM이 결과 페이지에서 적용할 때(applyDrawResult) 바뀐다. 모집은 굴리는 순간 닫힌다.
-export async function drawLottery(gameId: string): Promise<ActionResult> {
-  const result = await adjustRoster({
-    gameId,
-    work: async (transaction, game) => {
-      if (game.recruitMethod !== RECRUIT_METHOD.lottery) {
-        throw new RosterError("추첨으로 모집하는 구인글이 아닙니다.");
-      }
-      const serverId = game.serverId;
-      const alreadyRolled = await countRolledParticipants({ transaction, serverId, gameId });
-      if (game.drawnAt || alreadyRolled > 0) throw new RosterError("이미 추첨을 마쳤습니다.");
+export type DrawLotteryResult = ActionResult & { alreadyDrawn?: boolean };
 
-      const applicantIds = await listParticipantUserIds({
-        transaction,
-        serverId,
-        gameId,
-        status: PARTICIPANT_STATUS.waiting,
-      });
-      if (applicantIds.length === 0) throw new RosterError("추첨할 신청자가 없습니다.");
-      if (applicantIds.length > DIE_FACES) {
-        throw new RosterError(`추첨 신청자는 ${DIE_FACES}명까지만 굴릴 수 있습니다.`);
-      }
+// GM의 [지금 추첨하기]. 잠금·GM·취소·상태 확인은 추첨 명령이 모두 하므로 adjustRoster를 거치지 않는다.
+export async function drawLottery(gameId: string): Promise<DrawLotteryResult> {
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
 
-      const rolls = rollDistinct({
-        count: applicantIds.length,
-        roll: () => randomInt(1, DIE_FACES + 1),
-      });
-      for (const [index, userId] of applicantIds.entries()) {
-        await setDrawRoll({ transaction, serverId, gameId, userId, drawRoll: rolls[index]! });
-      }
+  const result = await withTransaction((transaction) =>
+    runLotteryDraw({
+      transaction,
+      serverId: server.id,
+      gameId,
+      actorId: user.id,
+      now: new Date(),
+    }),
+  );
+  if (result.kind === DRAW_RESULT_KIND.rejected) {
+    const errorDisplay =
+      result.reason === DRAW_REJECTION.notFound ? ERROR_DISPLAY.page : ERROR_DISPLAY.toast;
+    return {
+      error: drawRejectionMessage(result.reason),
+      errorDisplay,
+      alreadyDrawn: result.reason === DRAW_REJECTION.alreadyDrawn,
+    };
+  }
 
-      // endDate를 당겨 두면 목록 배지·신청 차단이 기존 기한 기준을 그대로 쓴다.
-      const now = new Date();
-      if (game.endDate > now) {
-        await closeGameRecruitment({ transaction, serverId, gameId, endDate: now });
-      }
-    },
-  });
-  if (result.error) return result;
-  const server = await getCurrentServer();
+  revalidateRoster({ slug: server.slug, gameId });
+  after(() => finishLotteryDraw({ server, gameId, result }));
   redirect(serverPath({ slug: server.slug, path: `/games/${gameId}/draw` }));
 }

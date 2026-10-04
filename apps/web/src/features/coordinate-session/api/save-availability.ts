@@ -5,6 +5,7 @@ import {
   getUserConfirmedSlots,
   replaceAvailability,
 } from "@roll-and-call/database/games";
+import { isAwaitingDraw } from "@roll-and-call/database/games/model";
 import { revalidatePath } from "next/cache";
 
 import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
@@ -39,6 +40,9 @@ export async function saveAvailability({
     return { error: "일시가 지정된 구인은 조율 대상이 아닙니다." };
   }
   if (game.confirmedAt) return { error: APPLICATION_CLOSED_MESSAGE };
+  if (isAwaitingDraw(game)) {
+    return { error: "추첨 결과가 나온 뒤에 가능 시간을 낼 수 있습니다." };
+  }
 
   const involved =
     isGameGm({ gmId: game.gmId, userId: user.id }) ||

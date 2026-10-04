@@ -13,7 +13,7 @@ export async function getGameForDrawNotice({
     with: {
       gm: { columns: {}, extras: { username: memberNicknameSql(serverId) } },
       participants: {
-        columns: { status: true, drawRank: true },
+        columns: { status: true, drawRank: true, joinedAt: true, waitlistedAt: true },
         where: (participant, { eq }) => eq(participant.serverId, serverId),
         with: { user: { columns: {}, extras: { username: memberNicknameSql(serverId) } } },
       },

@@ -5,8 +5,7 @@ import {
   hasAnsweredAvailability,
   seedAvailabilities,
 } from "@roll-and-call/database/games";
-import { RECRUIT_METHOD, SCHEDULE_MODE } from "@roll-and-call/database/games/model";
-import { isNull } from "es-toolkit";
+import { isAwaitingDraw, SCHEDULE_MODE } from "@roll-and-call/database/games/model";
 
 import { availabilityPrefill, buildDayColumns, buildTimeRows } from "@/shared/lib";
 
@@ -23,7 +22,7 @@ export async function seedAvailabilityFromProfile({
 }): Promise<boolean> {
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) return false;
   if (game.confirmedAt || !game.rangeStart || !game.rangeEnd) return false;
-  if (game.recruitMethod === RECRUIT_METHOD.lottery && isNull(game.drawnAt)) return false;
+  if (isAwaitingDraw(game)) return false;
 
   const serverId = game.serverId;
   if (await hasAnsweredAvailability({ serverId, gameId: game.id, userId })) return false;

@@ -1,6 +1,10 @@
 export { countConfirmed } from "./count-confirmed";
 export { countWaiting } from "./count-waiting";
 export { compareWaitlistOrder } from "./compare-waitlist-order";
+export { DIE_FACES } from "./die-faces";
+export { DRAW_REJECTION, type DrawRejection } from "./draw-rejection";
+export { DRAW_RESULT_KIND } from "./draw-result-kind";
+export { isAwaitingDraw } from "./is-awaiting-draw";
 export { seatOpenedRecipientIds } from "./seat-opened-recipient-ids";
 export { gameCancelledRecipients } from "./game-cancelled-recipients";
 export { RECRUIT_METHOD, RECRUIT_METHODS, type RecruitMethod } from "./recruit-method";

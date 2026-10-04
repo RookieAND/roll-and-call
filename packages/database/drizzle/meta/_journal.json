@@ -379,6 +379,13 @@
       "when": 1793900000000,
       "tag": "0053_cron_route_base",
       "breakpoints": true
+    },
+    {
+      "idx": 60,
+      "version": "7",
+      "when": 1794600000000,
+      "tag": "0060_draw_lotteries_cron",
+      "breakpoints": true
     }
   ]
 }

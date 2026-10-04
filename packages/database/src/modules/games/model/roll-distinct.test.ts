@@ -2,8 +2,7 @@ import { randomInt } from "node:crypto";
 
 import { describe, expect, it } from "vitest";
 
-import { DIE_FACES } from "@/entities/game";
-
+import { DIE_FACES } from "./die-faces";
 import { rollDistinct } from "./roll-distinct";
 
 function scripted(sequence: number[]) {

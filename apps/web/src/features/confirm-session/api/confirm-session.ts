@@ -1,6 +1,7 @@
 "use server";
 
 import { confirmGameSession, getGameSchedule } from "@roll-and-call/database/games";
+import { isAwaitingDraw } from "@roll-and-call/database/games/model";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
@@ -33,6 +34,7 @@ export async function confirmSession({
   const before = await getGameSchedule({ serverId: server.id, gameId });
   if (!before) return GAME_NOT_FOUND_RESULT;
   if (before.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
+  if (isAwaitingDraw(before)) return { error: "추첨을 먼저 마쳐 주세요." };
   const previousConfirmedAt = before.confirmedAt;
   const updated = await confirmGameSession({
     serverId: server.id,

@@ -1,9 +1,11 @@
 "use client";
 
 import { Button, Callout } from "@roll-and-call/ui";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { ConfirmDialog, LineBreaks, useAction } from "@/shared/ui";
+import { useServerPath } from "@/shared/lib";
+import { ConfirmDialog, LineBreaks, toast, useAction } from "@/shared/ui";
 
 import { drawLottery } from "../api/draw-lottery";
 
@@ -24,6 +26,8 @@ export function DrawLotteryCard({
 }: DrawLotteryCardProps) {
   const [confirming, setConfirming] = useState(false);
   const { pending, run } = useAction();
+  const router = useRouter();
+  const toServerPath = useServerPath();
 
   const drawnCount = Math.min(applicantCount, drawCount);
   const leftoverCount = applicantCount - drawnCount;
@@ -41,6 +45,12 @@ export function DrawLotteryCard({
   function draw() {
     run(() => drawLottery(gameId), {
       onSuccess: () => setConfirming(false),
+      onError: (result) => {
+        toast.error(result.error);
+        if (!result.alreadyDrawn) return;
+        setConfirming(false);
+        router.push(toServerPath(`/games/${gameId}/draw`));
+      },
     });
   }
 

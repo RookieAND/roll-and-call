@@ -4,7 +4,7 @@ import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
 import type { Transaction } from "#/modules/transaction/transaction";
 import { drawResults, participants } from "#/schema";
 
-// 적용한 순간의 명단을 따로 남긴다. 뒤에 누가 나가도 추첨 결과는 그대로다.
+// 추첨한 순간의 명단(굴린 사람 + 직접 확정자)을 따로 남긴다. 뒤에 누가 나가도 추첨 결과는 그대로다.
 export async function saveDrawResults({
   transaction,
   serverId,
@@ -28,5 +28,6 @@ export async function saveDrawResults({
         or(isNotNull(participants.drawRoll), eq(participants.status, PARTICIPANT_STATUS.confirmed)),
       ),
     );
+  if (roster.length === 0) return;
   await transaction.insert(drawResults).values(roster.map((row) => ({ serverId, gameId, ...row })));
 }

@@ -22,7 +22,7 @@ import { serverId } from "./server-id";
 
 export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
 
-// first_come은 정원까지 신청 순서대로 확정하고, lottery는 정원과 무관하게 받아 GM이 확정 인원을 고른다.
+// first_come은 정원까지 신청 순서대로 확정하고, lottery는 정원과 무관하게 받아 마감 때 1d100 추첨으로 확정 인원을 정한다.
 export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery"]);
 
 // 정원(maxPlayers)만큼 confirmed로 채우고 초과분은 waiting. 승격/강등/자동 승계는 이 값만 바꾼다.
@@ -73,6 +73,7 @@ export const games = pgTable(
     // set when the 1h-before reminder has been sent (dedupe)
     notifiedAt: timestamp("notified_at", { withTimezone: true }),
     // 추첨을 돌린 시각. 값이 있으면 신청을 받지 않고, 확정·대기 명단은 이미 정해진 뒤다.
+    // 신청자 0명으로 마감된 추첨 글도 값이 있다(굴린 값 없음).
     drawnAt: timestamp("drawn_at", { withTimezone: true }),
     // GM이 참석 여부를 확정한 시각. null이면 세션이 끝났어도 아직 출석 확인이 남아 있다.
     attendanceConfirmedAt: timestamp("attendance_confirmed_at", { withTimezone: true }),
@@ -105,6 +106,10 @@ export const games = pgTable(
     index("games_server_id_confirmed_at_idx")
       .on(table.serverId, table.confirmedAt)
       .where(sql`confirmed_at is not null`),
+    // 마감 때 추첨 크론이 집는 글
+    index("games_lottery_due_idx")
+      .on(table.endDate)
+      .where(sql`recruit_method = 'lottery' and drawn_at is null and cancelled_at is null`),
     check("games_max_players_positive", sql`${table.maxPlayers} >= 1`),
     check("games_play_minutes_positive", sql`${table.playMinutes} > 0`),
     check("games_range_order", sql`${table.rangeEnd} >= ${table.rangeStart}`),
@@ -142,7 +147,7 @@ export const participants = pgTable(
     status: participantStatus("status").notNull().default("confirmed"),
     // 추첨이 정한 순서. 선착순이거나 뽑기 전이면 null이고, 그때는 joinedAt이 순서다.
     drawRank: integer("draw_rank"),
-    // 추첨에서 굴린 1d100. GM이 결과를 적용하기 전에는 이 값만 있고 drawRank·status는 그대로다.
+    // 추첨에서 굴린 1d100. 추첨 명령이 drawRank·status와 함께 한 번에 쓴다.
     drawRoll: integer("draw_roll"),
     // 기본값이 전원 참석이라 GM이 출석을 확정할 때 예외만 true가 된다.
     absent: boolean("absent").notNull().default(false),

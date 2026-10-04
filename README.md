@@ -61,7 +61,7 @@ pnpm -F @roll-and-call/database db:generate | db:migrate | db:studio
 | `purge-orphan-files`    | `0 20 * * *`  | Edge Function `purge-orphan-files` | pg_cron → Edge Function |
 | `purge-notifications`   | `30 18 * * *` | SQL                                | pg_cron                 |
 | `session-reminders`     | `*/5 * * * *` | Edge Function `session-reminders`  | pg_cron → Edge Function |
-| `draw-lotteries`        | (W12 작업 2)  | `/api/cron/draws`                  | pg_cron → Next 라우트   |
+| `draw-lotteries`        | `*/5 * * * *` | `/api/cron/draws`                  | pg_cron → Next 라우트   |
 | badges                  | `5 15 * * *`  | `/api/cron/badges`                 | Vercel Cron             |
 | members                 | `10 19 * * *` | `/api/cron/members`                | Vercel Cron             |
 

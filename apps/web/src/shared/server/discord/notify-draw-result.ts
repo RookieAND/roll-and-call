@@ -1,11 +1,11 @@
 import { type Server } from "@roll-and-call/database";
 import { getGameForDrawNotice } from "@roll-and-call/database/games";
-import { PARTICIPANT_STATUS } from "@roll-and-call/database/games/model";
+import { compareWaitlistOrder, PARTICIPANT_STATUS } from "@roll-and-call/database/games/model";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import { gameUrl } from "@roll-and-call/game-notices";
 import { gameNoticeEmbed } from "@roll-and-call/game-notices";
 
-// GM이 추첨 결과를 적용한 뒤에 부른다. 링크는 각자 자기 값을 보는 결과 페이지로 보낸다.
+// 추첨 명령이 커밋된 뒤 부른다(GM 버튼, 마감 크론 모두). 링크는 각자 자기 값을 보는 결과 페이지로 보낸다.
 // 떨어진 사람도 알아야 다른 판을 잡으므로 확정·대기를 한 글에 같이 적는다.
 export async function notifyDrawResult({ server, gameId }: { server: Server; gameId: string }) {
   const game = await getGameForDrawNotice({ serverId: server.id, gameId });
@@ -18,8 +18,9 @@ export async function notifyDrawResult({ server, gameId }: { server: Server; gam
   const confirmed = byRank
     .filter((participant) => participant.status === PARTICIPANT_STATUS.confirmed)
     .map((participant, index) => nameOf(index + 1, participant.user?.username ?? "?"));
-  const waiting = byRank
+  const waiting = game.participants
     .filter((participant) => participant.status === PARTICIPANT_STATUS.waiting)
+    .toSorted(compareWaitlistOrder)
     .map((participant, index) => nameOf(index + 1, participant.user?.username ?? "?"));
 
   const detailUrl = gameUrl({ slug: server.slug, gameId: game.id });
@@ -31,7 +32,7 @@ export async function notifyDrawResult({ server, gameId }: { server: Server; gam
     url: drawUrl,
     emoji: "🎲",
     color: DISCORD_COLOR.complete,
-    description: `추첨이 끝났어요. 신청한 ${byRank.length}명 중 ${confirmed.length}명이 확정됐어요.\n자리가 나면 대기 순번대로 확정됩니다. 내 1d100 값은 링크에서 확인하세요.`,
+    description: `추첨이 끝났어요. 신청한 ${byRank.length}명 중 ${confirmed.length}명이 확정됐어요.\n자리가 나면 GM이 대기 명단에서 확정해요. 내 1d100 값은 링크에서 확인하세요.`,
     fields: [
       // Discord field value 상한 1024자
       { name: `✅ 확정 ${confirmed.length}명`, value: confirmed.join("\n").slice(0, 1024) || "-" },
