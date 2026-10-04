@@ -11,6 +11,7 @@ export type BadgeRowGroup = {
     look: BadgeLook;
     name: string;
     requirement: string;
+    note: string | null;
     dateLabel: string;
     detail: BadgeDetail;
   }[];

@@ -3,8 +3,8 @@ import {
   type BadgeRole,
   type MonthlyAppearance,
 } from "@roll-and-call/database/badges/model";
-import { uniq } from "es-toolkit";
 
+// 이번 달 내 횟수와 1위 횟수(R18). 이달의 GM·PL을 정하는 집계(recordAppearances)를 그대로 센다.
 export function currentMonthStanding({
   appearances,
   userId,
@@ -22,8 +22,5 @@ export function currentMonthStanding({
     if (appearance.role !== role || kstMonthKey(appearance.startsAt) !== month) continue;
     counts.set(appearance.userId, (counts.get(appearance.userId) ?? 0) + 1);
   }
-  const count = counts.get(userId) ?? 0;
-  const rank =
-    count > 0 ? uniq([...counts.values()].filter((other) => other > count)).length + 1 : null;
-  return { count, rank };
+  return { count: counts.get(userId) ?? 0, topCount: Math.max(0, ...counts.values()) };
 }

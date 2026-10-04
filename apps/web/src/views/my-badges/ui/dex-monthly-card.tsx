@@ -28,12 +28,17 @@ export function DexMonthlyCard({ card }: DexMonthlyCardProps) {
           size="lg"
         />
         <VStack gap="050" className="min-w-0 flex-1">
-          <Text typography="subtitle1" weight="extrabold">
+          <Text typography="subtitle1" weight="extrabold" className="break-keep">
             {card.status}
           </Text>
-          <Text typography="body3" foreground="muted" className="[text-wrap:pretty]">
+          <Text typography="body3" foreground="muted" className="break-keep [text-wrap:pretty]">
             {card.description}
           </Text>
+          {card.monthLine && (
+            <Text typography="body4" foreground="hint" numeric className="break-keep">
+              {card.monthLine}
+            </Text>
+          )}
         </VStack>
       </HStack>
       <Text

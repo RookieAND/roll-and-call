@@ -1,7 +1,7 @@
 import { HStack, Progress, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { BadgeMedal, TONE_CLASS } from "@/entities/badge";
+import { ATTENDANCE_HINT, BadgeMedal, TONE_CLASS } from "@/entities/badge";
 import { ServerLink } from "@/shared/ui";
 
 import type { BadgeDetail } from "../model/badge-detail";
@@ -93,6 +93,9 @@ export function BadgeDetailContent({ detail }: BadgeDetailContentProps) {
             </Text>
           </HStack>
           <Progress value={progress.value} max={progress.max} />
+          <Text typography="body4" foreground="hint">
+            {ATTENDANCE_HINT}
+          </Text>
         </VStack>
       )}
 

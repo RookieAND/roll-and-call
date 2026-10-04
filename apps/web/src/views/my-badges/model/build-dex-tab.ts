@@ -73,7 +73,6 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
     monthly: monthlyCard({
       ladder: gm ? BADGE_LADDER.gmMonthly : BADGE_LADDER.playerMonthly,
       records,
-      facts,
       appearances,
       userId,
       now,

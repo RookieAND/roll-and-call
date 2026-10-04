@@ -1,5 +1,7 @@
 import { Grid, Text } from "@roll-and-call/ui";
 
+import { ATTENDANCE_HINT } from "@/entities/badge";
+
 import type { DexMedal } from "../model/dex-medal";
 import type { LadderNext } from "../model/ladder-next";
 import { DexMedalTile } from "./dex-medal-tile";
@@ -23,6 +25,8 @@ export function DexGridSection({ board }: DexGridSectionProps) {
         note={
           <Text typography="body4" foreground="hint">
             {board.note}
+            <br />
+            {ATTENDANCE_HINT}
           </Text>
         }
       />

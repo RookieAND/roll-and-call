@@ -1,4 +1,7 @@
 import { BADGE_ROLE } from "@roll-and-call/database/badges/model";
+import { Text } from "@roll-and-call/ui";
+
+import { ATTENDANCE_HINT } from "@/entities/badge";
 
 import type { DexTab } from "../model/build-dex-tab";
 import { DexGridSection } from "./dex-grid-section";
@@ -23,11 +26,23 @@ export function DexRoleTab({ role, board }: DexRoleTabProps) {
     <>
       <DexSection title={board.total.title} hint={board.total.hint}>
         <DexLadderTrack total={board.total} />
-        <DexNextCard next={board.total.next} />
+        <DexNextCard
+          next={board.total.next}
+          note={
+            <Text typography="body4" foreground="hint">
+              {ATTENDANCE_HINT}
+            </Text>
+          }
+        />
       </DexSection>
 
       <DexSection title={board.rules.title}>
         <DexRuleList rows={board.rules.rows} emptyText={RULE_EMPTY[role]} />
+        {board.rules.rows.length > 0 && (
+          <Text typography="body4" foreground="hint">
+            {ATTENDANCE_HINT}
+          </Text>
+        )}
       </DexSection>
 
       {board.variety && <DexGridSection board={board.variety} />}

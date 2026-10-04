@@ -30,6 +30,11 @@ export function UserBadgeGroup({ group }: UserBadgeGroupProps) {
               <Text typography="body4" foreground="muted" className="break-keep">
                 {row.requirement}
               </Text>
+              {row.note && (
+                <Text typography="body4" foreground="hint" className="break-keep">
+                  {row.note}
+                </Text>
+              )}
             </VStack>
             <Text typography="body4" foreground="hint" numeric>
               {row.dateLabel}

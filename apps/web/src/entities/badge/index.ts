@@ -10,6 +10,9 @@ export {
   stepName,
 } from "@roll-and-call/database/badges/model";
 export { monthLabel } from "./model/month-label";
+export { monthListLabel } from "./model/month-list-label";
+export { currentMonthStanding } from "./model/current-month-standing";
+export { ATTENDANCE_HINT } from "./model/attendance-hint";
 export { badgeCondition } from "./model/badge-condition";
 export { badgeCounts, type BadgeCounts, type RuleCount } from "./model/badge-counts";
 export { nextStep } from "./model/next-step";
