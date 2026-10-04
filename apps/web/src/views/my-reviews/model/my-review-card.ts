@@ -57,7 +57,7 @@ export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyRevi
       return {
         ...base,
         badge: { label: "보류", palette: "gray" },
-        callout: { palette: "gray", title: "불참으로 바뀌어 비공개됐습니다", lines: [] },
+        callout: { palette: "gray", title: "불참으로 바뀌어 비공개되었습니다", lines: [] },
         actions: MY_REVIEW_ACTIONS.delete,
       };
     case REVIEW_STATE.hidden:

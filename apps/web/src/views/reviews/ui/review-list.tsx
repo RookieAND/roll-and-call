@@ -25,13 +25,11 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
         const { title, meta } = reviewCardText({ row, perspective });
         const own = row.authorId === viewerId;
         const editable = own && reviewEditDeadline(row.createdAt).getTime() > now;
-        const menu = viewerId && (
+        const menu = own && (
           <ReviewMenu
             reviewId={row.id}
-            own={own}
             editPath={editable ? `/games/${row.gameId}/review` : null}
             deleteSubject={`${row.gameTitle} · ${formatMonthDay(row.createdAt)} 후기`}
-            reportSubject={`${row.authorName}님의 후기 · ${row.gameTitle}`}
           />
         );
         return (

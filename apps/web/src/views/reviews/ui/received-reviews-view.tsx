@@ -22,7 +22,7 @@ export async function ReceivedReviewsView({ userId }: ReceivedReviewsViewProps) 
   const server = await getCurrentServer();
   const [profile, rows] = await Promise.all([
     getProfile(server.id, targetId),
-    getReceivedReviews({ serverId: server.id, gmId: targetId }),
+    getReceivedReviews({ serverId: server.id, gmId: targetId, viewerId: viewer?.id ?? null }),
   ]);
   if (!profile) notFound();
   const mine = targetId === viewer?.id;

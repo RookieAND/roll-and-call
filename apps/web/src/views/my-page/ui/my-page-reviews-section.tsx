@@ -8,6 +8,7 @@ export async function MyPageReviewsSection() {
   const { received, written } = await getReviewCounts({
     serverId: server.id,
     userId: user.id,
+    viewerId: user.id,
     own: true,
   });
   return <MyPageReviews received={received} written={written} />;

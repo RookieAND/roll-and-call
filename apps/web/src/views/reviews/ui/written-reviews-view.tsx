@@ -21,7 +21,13 @@ export async function WrittenReviewsView({ userId }: WrittenReviewsViewProps) {
   const [viewer, profile, rows] = await Promise.all([
     getCurrentSessionUser(),
     getProfile(server.id, userId),
-    getWrittenReviews({ serverId: server.id, authorId: userId }),
+    getCurrentSessionUser().then((currentViewer) =>
+      getWrittenReviews({
+        serverId: server.id,
+        authorId: userId,
+        viewerId: currentViewer?.id ?? null,
+      }),
+    ),
   ]);
   if (viewer?.id === userId) redirect(serverPath({ slug: server.slug, path: "/me/reviews" }));
   if (!profile) notFound();

@@ -32,6 +32,7 @@ export async function loadForumReview({
       removedAt: sessionReviews.removedAt,
       threadId: sessionReviews.discordThreadId,
       gameTitle: games.title,
+      gameHiddenAt: games.hiddenAt,
       rule: games.rule,
       category: rulebookCategories.name,
       gmName: memberNicknameSql(serverId, gm),

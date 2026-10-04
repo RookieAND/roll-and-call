@@ -31,7 +31,9 @@ export async function UserProfileView({ id }: { id: string }) {
     viewerPromise,
     loadProfile(id),
     getRulebookRecords({ serverId: server.id, userId: id }),
-    getReviewCounts({ serverId: server.id, userId: id }),
+    viewerPromise.then((currentViewer) =>
+      getReviewCounts({ serverId: server.id, userId: id, viewerId: currentViewer?.id ?? null }),
+    ),
     getUserBadges(server.id, id),
     viewerPromise.then((currentViewer) =>
       currentViewer

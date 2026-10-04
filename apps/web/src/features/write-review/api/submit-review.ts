@@ -12,7 +12,6 @@ import {
 import { type ActionResult } from "@/shared/api";
 import { reviewPhotoPathOf, serverPath } from "@/shared/lib";
 import {
-  evaluateBadges,
   getActingMember,
   getReviewDraftTarget,
   removeUnusedReviewPhotos,
@@ -100,7 +99,5 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
       }),
     );
   }
-  if (!target.review)
-    after(() => evaluateBadges({ serverId: server.id, userIds: [target.game.gmId, user.id] }));
   redirect(serverPath({ slug: server.slug, path: MY_REVIEWS_HREF }));
 }

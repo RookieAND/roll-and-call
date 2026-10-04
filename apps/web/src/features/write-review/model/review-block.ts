@@ -5,6 +5,7 @@ export const REVIEW_BLOCK = {
   absent: "absent",
   editPeriodOver: "edit-period-over",
   unavailable: "unavailable",
+  suspended: "suspended",
 } as const;
 
 export type ReviewBlock = (typeof REVIEW_BLOCK)[keyof typeof REVIEW_BLOCK];
@@ -17,7 +18,7 @@ export const REVIEW_BLOCK_DIALOG: Record<
 > = {
   [REVIEW_BLOCK.writePeriodOver]: {
     title: "작성 기간이 지났습니다",
-    description: "쓰던 글은 임시 저장돼 있습니다.",
+    description: "쓰던 글은 임시 저장되어 있습니다.",
     confirmLabel: "확인",
     toMyReviews: false,
   },
@@ -47,7 +48,13 @@ export const REVIEW_BLOCK_DIALOG: Record<
   },
   [REVIEW_BLOCK.unavailable]: {
     title: "볼 수 없는 후기입니다",
-    description: "삭제됐거나 권한이 없습니다.",
+    description: "삭제되었거나 권한이 없습니다.",
+    confirmLabel: "확인",
+    toMyReviews: false,
+  },
+  [REVIEW_BLOCK.suspended]: {
+    title: "활동 정지 기간입니다",
+    description: "정지가 끝나면 후기를 쓸 수 있습니다.",
     confirmLabel: "확인",
     toMyReviews: false,
   },

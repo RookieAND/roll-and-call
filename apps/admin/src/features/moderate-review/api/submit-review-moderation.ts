@@ -5,7 +5,6 @@ import { after } from "next/server";
 
 import { REVIEW_REASON, REVIEW_REASONS } from "@/shared/lib";
 import {
-  evaluateReviewBadges,
   getCurrentServer,
   moderateReview,
   requireStaff,
@@ -41,7 +40,6 @@ export async function submitReviewModeration(reviewId: string, moderation: Revie
         siteOrigin: process.env.NEXT_PUBLIC_USER_APP_URL,
       }),
     );
-    after(() => evaluateReviewBadges({ serverId: server.id, reviewId }));
   }
   return result;
 }

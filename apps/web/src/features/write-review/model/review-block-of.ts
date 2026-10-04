@@ -12,7 +12,12 @@ import type { ReviewDraftTarget } from "@/shared/server";
 import { REVIEW_BLOCK, type ReviewBlock } from "./review-block";
 
 export function reviewBlockOf(
-  { game, participant, review }: Pick<ReviewDraftTarget, "game" | "participant" | "review">,
+  {
+    game,
+    participant,
+    review,
+    suspended,
+  }: Pick<ReviewDraftTarget, "game" | "participant" | "review" | "suspended">,
   now: Date = new Date(),
 ): ReviewBlock | null {
   if (!participant || participant.status !== PARTICIPANT_STATUS.confirmed) {
@@ -29,6 +34,7 @@ export function reviewBlockOf(
 
   if (!game.attendanceConfirmedAt) return REVIEW_BLOCK.attendancePending;
   if (authorAbsent) return REVIEW_BLOCK.absent;
+  if (suspended) return REVIEW_BLOCK.suspended;
   const firstConfirmedAt = game.attendanceFirstConfirmedAt ?? game.attendanceConfirmedAt;
   if (reviewWriteDeadline(firstConfirmedAt).getTime() <= now.getTime()) {
     return REVIEW_BLOCK.writePeriodOver;

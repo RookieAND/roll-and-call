@@ -5,31 +5,21 @@ import { EllipsisVertical } from "lucide-react";
 import { useState } from "react";
 
 import { DeleteReviewDialog } from "@/features/delete-review";
-import { ReportReviewSheet } from "@/features/report-review";
 import { ServerLink } from "@/shared/ui";
 
 interface ReviewMenuProps {
   reviewId: string;
-  own: boolean;
   editPath: string | null;
   deleteSubject: string;
-  reportSubject: string;
 }
 
-export function ReviewMenu({
-  reviewId,
-  own,
-  editPath,
-  deleteSubject,
-  reportSubject,
-}: ReviewMenuProps) {
+export function ReviewMenu({ reviewId, editPath, deleteSubject }: ReviewMenuProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [reporting, setReporting] = useState(false);
 
-  function openAfterMenu(open: (value: boolean) => void) {
+  function openDelete() {
     setMenuOpen(false);
-    open(true);
+    setDeleting(true);
   }
 
   return (
@@ -44,37 +34,19 @@ export function ReviewMenu({
         <Sheet.Popup aria-label="후기 메뉴">
           <Sheet.Handle />
           <Sheet.Body>
-            {own && editPath && (
-              <Sheet.Item render={<ServerLink path={editPath} />}>수정하기</Sheet.Item>
-            )}
-            {own && (
-              <Sheet.Item onClick={() => openAfterMenu(setDeleting)} className="text-danger-600">
-                삭제하기
-              </Sheet.Item>
-            )}
-            {!own && (
-              <Sheet.Item onClick={() => openAfterMenu(setReporting)} className="text-danger-600">
-                신고하기
-              </Sheet.Item>
-            )}
+            {editPath && <Sheet.Item render={<ServerLink path={editPath} />}>수정하기</Sheet.Item>}
+            <Sheet.Item onClick={openDelete} className="text-danger-600">
+              삭제하기
+            </Sheet.Item>
           </Sheet.Body>
         </Sheet.Popup>
       </Sheet.Root>
-      {own ? (
-        <DeleteReviewDialog
-          reviewId={reviewId}
-          subject={deleteSubject}
-          open={deleting}
-          onOpenChange={setDeleting}
-        />
-      ) : (
-        <ReportReviewSheet
-          reviewId={reviewId}
-          subject={reportSubject}
-          open={reporting}
-          onOpenChange={setReporting}
-        />
-      )}
+      <DeleteReviewDialog
+        reviewId={reviewId}
+        subject={deleteSubject}
+        open={deleting}
+        onOpenChange={setDeleting}
+      />
     </>
   );
 }

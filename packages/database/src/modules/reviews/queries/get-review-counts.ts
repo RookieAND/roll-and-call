@@ -10,10 +10,12 @@ import { publicReviewsWhere } from "./public-reviews-where";
 export async function getReviewCounts({
   serverId,
   userId,
+  viewerId,
   own = false,
 }: {
   serverId: string;
   userId: string;
+  viewerId: string | null;
   own?: boolean;
 }) {
   const [[received], [written]] = await Promise.all([
@@ -21,14 +23,14 @@ export async function getReviewCounts({
       .select({ value: count() })
       .from(sessionReviews)
       .innerJoin(games, and(eq(games.serverId, serverId), eq(games.id, sessionReviews.gameId)))
-      .where(and(eq(games.gmId, userId), publicReviewsWhere(serverId))),
+      .where(and(eq(games.gmId, userId), publicReviewsWhere({ serverId, viewerId }))),
     db
       .select({ value: count() })
       .from(sessionReviews)
       .where(
         own
           ? ownReviewsWhere({ serverId, authorId: userId })
-          : and(eq(sessionReviews.authorId, userId), publicReviewsWhere(serverId)),
+          : and(eq(sessionReviews.authorId, userId), publicReviewsWhere({ serverId, viewerId })),
       ),
   ]);
   return { received: received?.value ?? 0, written: written?.value ?? 0 };

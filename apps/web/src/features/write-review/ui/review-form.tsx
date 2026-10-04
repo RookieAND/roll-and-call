@@ -184,7 +184,7 @@ export function ReviewForm({
           <Callout.Root colorPalette="danger">
             <Callout.Icon />
             <Callout.Title>등록하지 못했습니다</Callout.Title>
-            <Callout.Description>쓴 내용은 저장돼 있습니다.</Callout.Description>
+            <Callout.Description>쓴 내용은 저장되어 있습니다.</Callout.Description>
           </Callout.Root>
         )}
       </VStack>

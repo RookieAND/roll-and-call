@@ -28,7 +28,7 @@ export async function syncReviewForumPost({
   if (!review) return;
 
   const held = Boolean(review.absent) && isNull(review.absenceCancelledAt);
-  const visible = !review.removedAt && !review.hiddenAt && !held;
+  const visible = !review.removedAt && !review.hiddenAt && !review.gameHiddenAt && !held;
   if (!visible) {
     if (review.threadId) {
       await deleteDiscordThread(review.threadId);

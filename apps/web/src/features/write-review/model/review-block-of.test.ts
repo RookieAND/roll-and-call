@@ -16,6 +16,7 @@ const target = {
   },
   participant: { status: PARTICIPANT_STATUS.confirmed, absent: false, absenceCancelledAt: null },
   review: null,
+  suspended: false,
 } as unknown as ReviewDraftTarget;
 
 const review = { createdAt: new Date(NOW.getTime() - DAY), hiddenAt: null, removedAt: null };
@@ -74,5 +75,30 @@ describe("reviewBlockOf", () => {
       review: { ...review, removedAt: NOW },
     } as unknown as ReviewDraftTarget;
     expect(reviewBlockOf(deleted, NOW)).toBe(REVIEW_BLOCK.unavailable);
+  });
+
+  it("활동 정지 중이면 새 후기를 막고, 이미 쓴 후기는 고칠 수 있다", () => {
+    const suspended = { ...target, suspended: true };
+    expect(reviewBlockOf(suspended, NOW)).toBe(REVIEW_BLOCK.suspended);
+    const written = { ...suspended, review } as unknown as ReviewDraftTarget;
+    expect(reviewBlockOf(written, NOW)).toBeNull();
+  });
+
+  it("출석 미확정·불참은 활동 정지보다 먼저 알린다", () => {
+    const pending = {
+      ...target,
+      suspended: true,
+      game: { attendanceConfirmedAt: null, attendanceFirstConfirmedAt: null },
+    } as ReviewDraftTarget;
+    expect(reviewBlockOf(pending, NOW)).toBe(REVIEW_BLOCK.attendancePending);
+    const absent = { ...target.participant!, absent: true };
+    expect(reviewBlockOf({ ...target, suspended: true, participant: absent }, NOW)).toBe(
+      REVIEW_BLOCK.absent,
+    );
+  });
+
+  it("활동 정지는 작성 기간 지남보다 먼저 알린다", () => {
+    const late = new Date(NOW.getTime() + 11 * DAY);
+    expect(reviewBlockOf({ ...target, suspended: true }, late)).toBe(REVIEW_BLOCK.suspended);
   });
 });

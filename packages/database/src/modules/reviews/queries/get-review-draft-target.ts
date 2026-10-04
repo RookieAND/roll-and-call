@@ -1,6 +1,8 @@
 import { and, eq } from "drizzle-orm";
+import { isNull } from "es-toolkit";
 
 import { db } from "#/client";
+import { findActiveSanction } from "#/modules/moderation/queries/find-active-sanction";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { games, participants, profiles, sessionReviews } from "#/schema";
 
@@ -30,7 +32,7 @@ export async function getReviewDraftTarget({
     .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));
   if (!game) return null;
 
-  const [[participant], [review]] = await Promise.all([
+  const [[participant], [review], sanction] = await Promise.all([
     db
       .select({
         status: participants.status,
@@ -55,9 +57,15 @@ export async function getReviewDraftTarget({
           eq(sessionReviews.authorId, userId),
         ),
       ),
+    findActiveSanction({ serverId, userId }),
   ]);
 
-  return { game, participant: participant ?? null, review: review ?? null };
+  return {
+    game,
+    participant: participant ?? null,
+    review: review ?? null,
+    suspended: !isNull(sanction),
+  };
 }
 
 export type ReviewDraftTarget = NonNullable<Awaited<ReturnType<typeof getReviewDraftTarget>>>;

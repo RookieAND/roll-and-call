@@ -4,4 +4,3 @@ export const REVIEW_EDIT_DAYS = 14;
 export const REVIEW_BODY_MIN_LENGTH = 20;
 export const REVIEW_BODY_MAX_LENGTH = 2000;
 export const REVIEW_PHOTO_MAX_COUNT = 5;
-export const REPORT_DETAIL_MAX_LENGTH = 200;

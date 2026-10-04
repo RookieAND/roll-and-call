@@ -5,7 +5,6 @@ export { saveMemberFeaturedBadges } from "./commands/save-member-featured-badges
 export { evaluateAllBadges } from "./queries/evaluate-all-badges";
 export { evaluateBadges } from "./queries/evaluate-badges";
 export { evaluateGameBadges } from "./queries/evaluate-game-badges";
-export { evaluateReviewBadges } from "./queries/evaluate-review-badges";
 export { loadBadgeFacts } from "./queries/load-badge-facts";
 export { loadMonthlyAppearances } from "./queries/load-monthly-appearances";
 export { loadUserBadges, type BadgeRecord } from "./queries/load-user-badges";

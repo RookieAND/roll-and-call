@@ -21,6 +21,7 @@ const review = {
   removedAt: null,
   threadId: null,
   gameTitle: "붉은 여관의 밤",
+  gameHiddenAt: null,
   rule: "CoC 7th",
   category: "크툴루의 부름",
   gmName: "달빛토끼",

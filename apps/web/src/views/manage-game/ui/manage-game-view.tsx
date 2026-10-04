@@ -24,7 +24,9 @@ export async function ManageGameView({ id }: { id: string }) {
     getGameById(server.id, id),
     getCurrentSessionUser(),
     getResponseCounts({ serverId: server.id, gameIds: [id] }),
-    getGameReviews({ serverId: server.id, gameId: id }),
+    getCurrentSessionUser().then((viewer) =>
+      getGameReviews({ serverId: server.id, gameId: id, viewerId: viewer?.id ?? null }),
+    ),
   ]);
   if (!game) notFound();
   if (user?.id !== game.gmId) {

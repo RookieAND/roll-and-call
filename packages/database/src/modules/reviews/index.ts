@@ -1,4 +1,3 @@
-export { insertReviewReport } from "./commands/insert-review-report";
 export { insertReview } from "./commands/insert-review";
 export { removeOwnReview } from "./commands/remove-own-review";
 export { saveThreadId } from "./commands/save-thread-id";
