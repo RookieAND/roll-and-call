@@ -1,6 +1,7 @@
 export { countConfirmed } from "./count-confirmed";
 export { countWaiting } from "./count-waiting";
 export { compareWaitlistOrder } from "./compare-waitlist-order";
+export { seatOpenedRecipientIds } from "./seat-opened-recipient-ids";
 export { RECRUIT_METHOD, RECRUIT_METHODS, type RecruitMethod } from "./recruit-method";
 export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./schedule-mode";
 export { deriveGameStatus } from "./derive-game-status";

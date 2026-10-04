@@ -5,6 +5,7 @@ import {
   insertParticipant,
   setParticipantStatus,
 } from "@roll-and-call/database/games";
+import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { uniq } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
@@ -14,6 +15,7 @@ import { CAPACITY_ACTION } from "../model/capacity-action";
 import type { RosterActionResult } from "../model/roster-action-result";
 import { adjustRoster } from "./adjust-roster";
 import { announceConfirmed } from "./announce-confirmed";
+import { notifyRosterChange } from "./notify-roster-change";
 import { rejectSanctioned } from "./reject-sanctioned";
 import { RosterError } from "./roster-error";
 import { secureSeats } from "./secure-seats";
@@ -67,6 +69,15 @@ export async function addParticipants({
           await insertParticipant({ transaction, serverId, gameId, userId, status: confirmed });
         }
       }
+      await notifyRosterChange({
+        transaction,
+        game,
+        notifications: invitedIds.map((userId) => ({
+          userId,
+          kind: NOTIFICATION_KIND.participationConfirmed,
+          params: { gameId, gameTitle: game.title },
+        })),
+      });
       addedTo = game;
       capacityRaised = seats.raised;
       becameFull = !timing.started && seats.confirmedCount + invitedIds.length === seats.maxPlayers;

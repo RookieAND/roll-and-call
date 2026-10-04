@@ -7,6 +7,8 @@ import {
 } from "@roll-and-call/database/games";
 import { compareWaitlistOrder } from "@roll-and-call/database/games/model";
 import { listSanctionedUserIds } from "@roll-and-call/database/moderation";
+import { createNotifications } from "@roll-and-call/database/notifications";
+import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { withTransaction } from "@roll-and-call/database/transaction";
 import { isNull } from "es-toolkit";
 import { redirect } from "next/navigation";
@@ -86,7 +88,9 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
         orderedIds: waiting.map((participant) => participant.userId),
         excludedIds: [
           ...sanctionedIds,
-          ...waiting.filter((participant) => participant.departed).map((participant) => participant.userId),
+          ...waiting
+            .filter((participant) => participant.departed)
+            .map((participant) => participant.userId),
         ],
         maxPlayers: game.maxPlayers,
       });
@@ -98,9 +102,7 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
       }
       const set = game.rulebookId ? ruleSetOf({ myRulebooks, rulebookId: game.rulebookId }) : null;
       if (!set || ruleGate({ set, myRulebooks }).type === RULE_GATE.blocked) {
-        throw new AppError(
-          "이 룰로는 지금 구인을 열 수 없습니다. 룰북 인증 상태를 확인해 주세요.",
-        );
+        throw new AppError("이 룰로는 지금 구인을 열 수 없습니다. 룰북 인증 상태를 확인해 주세요.");
       }
 
       const baseDate = nextRoundBaseDate({
@@ -111,7 +113,11 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
       const coordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
       const sessionStart = startsAt ? new Date(startsAt) : undefined;
       if (coordinate) {
-        if (!rangeStart || !rangeEnd || !isNextRoundRangeValid({ baseDate, rangeStart, rangeEnd })) {
+        if (
+          !rangeStart ||
+          !rangeEnd ||
+          !isNextRoundRangeValid({ baseDate, rangeStart, rangeEnd })
+        ) {
           throw new AppError(NEXT_ROUND_RANGE_MESSAGE);
         }
       } else if (!sessionStart || !isNextRoundStartValid({ baseDate, startsAt: sessionStart })) {
@@ -137,6 +143,16 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
         confirmedUserIds: roster.confirmed,
         waitingUserIds: roster.waiting,
         now,
+      });
+      await createNotifications({
+        executor: transaction,
+        serverId: server.id,
+        actorId: user.id,
+        notifications: roster.confirmed.map((userId) => ({
+          userId,
+          kind: NOTIFICATION_KIND.participationConfirmed,
+          params: { gameId, gameTitle: game.title },
+        })),
       });
       return { gameId, confirmedUserIds: roster.confirmed, maxPlayers: game.maxPlayers };
     });

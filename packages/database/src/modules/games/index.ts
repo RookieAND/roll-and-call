@@ -55,6 +55,7 @@ export { isGameOwner } from "./queries/is-game-owner";
 export { listParticipantUserIds } from "./queries/list-participant-user-ids";
 export { listRolledApplicantIds } from "./queries/list-rolled-applicant-ids";
 export { listWaitingParticipants } from "./queries/list-waiting-participants";
+export { listSeatOpenedRecipients } from "./queries/list-seat-opened-recipients";
 export { listRosterDiscordIds } from "./queries/list-roster-discord-ids";
 export { listRosterStatuses } from "./queries/list-roster-statuses";
 export { lockGame } from "./queries/lock-game";
