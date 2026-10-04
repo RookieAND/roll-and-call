@@ -25,7 +25,7 @@ export function KeywordChips({ keywords }: KeywordChipsProps) {
   return (
     <HStack gap="075" wrap>
       {keywords.map((keyword) => (
-        <Chip key={keyword} shape="pill" selected render={<span />}>
+        <Chip key={keyword} shape="pill" tone="neutral" render={<span />}>
           #{keyword}
         </Chip>
       ))}

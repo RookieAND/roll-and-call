@@ -1,9 +1,9 @@
 import { Container } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { heldBadges, pickFeaturedBadges } from "@/entities/badge";
-import { SESSION_ROLE } from "@/entities/game";
-import { AvailabilityRows, ProfileLinks } from "@/entities/profile";
+import { AvailabilityRows, DepartedMemberScreen, ProfileLinks } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { ProfileMemoBlock } from "@/features/profile-memo";
 import { heldBadgeDetail } from "@/features/view-badge";
@@ -47,12 +47,14 @@ export async function UserProfileView({ id }: { id: string }) {
 
   if (!loaded) notFound();
 
-  const { profile, sessions, absences } = loaded;
+  const { profile, counts, absences } = loaded;
+  if (!isNull(profile.deletedAt)) {
+    return <DepartedMemberScreen name={profile.username} avatarUrl={profile.avatarUrl} />;
+  }
   const certified = toMyRulebooks(rulebookRecords)
     .rulebooks.filter((rulebook) => rulebook.state === CERT_STATE.certified)
     .toSorted((left, right) => right.stateAt!.getTime() - left.stateAt!.getTime())
     .map((rulebook) => ({ id: rulebook.id, label: rulebook.label }));
-  const isGm = certified.length > 0;
   const now = new Date();
   const held = profile.showBadges ? heldBadges(badgeRecords, now) : [];
   const featuredBadges = pickFeaturedBadges({ featuredKeys: profile.featuredBadges, held }).map(
@@ -69,8 +71,8 @@ export async function UserProfileView({ id }: { id: string }) {
         <ProfileSummary
           profile={profile}
           absences={absences}
-          hosted={sessions[SESSION_ROLE.host].length}
-          played={sessions[SESSION_ROLE.player].length}
+          hosted={counts.hosted}
+          played={counts.played}
           featuredBadges={featuredBadges}
           badgeTotal={held.length}
         />
@@ -79,7 +81,7 @@ export async function UserProfileView({ id }: { id: string }) {
 
         <ProfileReviews
           userId={profile.id}
-          received={isGm ? reviewCounts.received : null}
+          received={counts.hosted >= 1 ? reviewCounts.received : null}
           written={reviewCounts.written}
         />
 

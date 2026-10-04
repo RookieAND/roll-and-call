@@ -26,3 +26,4 @@ export { EMPTY_BIO_TEXT } from "./model/empty-bio";
 export { ProfileRow } from "./ui/profile-row";
 export { USERNAME_MAX_LENGTH } from "./model/username-max-length";
 export { nicknameTakenMessage } from "./model/nickname-taken-message";
+export { DepartedMemberScreen } from "./ui/departed-member-screen";

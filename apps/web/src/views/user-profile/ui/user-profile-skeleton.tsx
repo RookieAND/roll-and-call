@@ -35,8 +35,8 @@ export function UserProfileSkeleton() {
           <div className="mt-175">
             <Skeleton width={40} height={17} className="mb-100" />
             <HStack gap="075">
-              <Skeleton width={80} height={30} rounded="full" />
-              <Skeleton width={64} height={30} rounded="full" />
+              <Skeleton width={80} height={32} rounded="full" />
+              <Skeleton width={64} height={32} rounded="full" />
             </HStack>
           </div>
         </div>

@@ -2,8 +2,9 @@ import type { BadgeLook } from "@roll-and-call/database/badges/model";
 import { cn } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
+// 알약은 단계별 테두리 색만 쓰고 움직이지 않는다(D287). badge-framed의 테두리 회전도 끈다.
 const pill = cva(
-  "relative inline-flex max-w-full min-w-0 shrink-0 items-center gap-050 overflow-hidden rounded-full border font-extrabold tracking-tight whitespace-nowrap",
+  "inline-flex max-w-full min-w-0 shrink-0 items-center gap-050 overflow-hidden rounded-full border font-extrabold tracking-tight whitespace-nowrap animate-none!",
   {
     variants: {
       look: {
@@ -34,7 +35,6 @@ interface BadgePillProps {
 }
 
 export function BadgePill({ emoji, name, look, tag, size = "md", className }: BadgePillProps) {
-  const shines = !(look === 1 || look === 2 || look === 3);
   return (
     <span title={name} className={cn(pill({ look, size }), className)}>
       <span
@@ -48,12 +48,6 @@ export function BadgePill({ emoji, name, look, tag, size = "md", className }: Ba
         <span className="flex h-[18px] flex-none items-center rounded-full bg-primary-600 px-075 text-body4 leading-none font-extrabold text-on-primary">
           {tag}
         </span>
-      )}
-      {shines && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-full animate-badge-shine"
-        />
       )}
     </span>
   );

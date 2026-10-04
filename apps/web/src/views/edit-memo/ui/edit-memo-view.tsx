@@ -1,6 +1,8 @@
 import { Container } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
+import { DepartedMemberScreen } from "@/entities/profile";
 import { MemoForm } from "@/features/profile-memo";
 import { serverPath } from "@/shared/lib";
 import {
@@ -23,6 +25,9 @@ export async function EditMemoView({ id }: { id: string }) {
     getProfileMemo({ serverId: server.id, ownerId: viewer.id, targetId: id }),
   ]);
   if (!target) notFound();
+  if (!isNull(target.deletedAt)) {
+    return <DepartedMemberScreen name={target.username} avatarUrl={target.avatarUrl} />;
+  }
 
   return (
     <Container size="sm" className="px-0">

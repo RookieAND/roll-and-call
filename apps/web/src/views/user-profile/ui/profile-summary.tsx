@@ -3,8 +3,7 @@ import { Text } from "@roll-and-call/ui";
 import { SESSION_ROLE } from "@/entities/game";
 import { EMPTY_BIO_TEXT, KeywordChips, ProfileRow } from "@/entities/profile";
 import { toKst, serverPath } from "@/shared/lib";
-import type { Profile } from "@/shared/server";
-import { getCurrentServer } from "@/shared/server";
+import { getCurrentServer, type MemberProfile } from "@/shared/server";
 import {
   AbsenceNotice,
   SessionCountStats,
@@ -16,7 +15,7 @@ import { ProfileBadges, type ProfileFeaturedBadge } from "./profile-badges";
 import { ProfileBlockLabel } from "./profile-block-label";
 
 interface ProfileSummaryProps {
-  profile: Profile;
+  profile: MemberProfile;
   absences: Absence[];
   hosted: number;
   played: number;
@@ -33,7 +32,7 @@ export async function ProfileSummary({
   badgeTotal,
 }: ProfileSummaryProps) {
   const server = await getCurrentServer();
-  const joinedLabel = toKst(profile.createdAt).format("YYYY년 M월부터");
+  const joinedLabel = toKst(profile.joinedAt).format("YYYY년 M월부터");
   const bioText = profile.bio || EMPTY_BIO_TEXT;
   const bioForeground = profile.bio ? "normal" : "hint";
 

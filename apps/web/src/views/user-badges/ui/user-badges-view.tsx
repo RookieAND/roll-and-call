@@ -1,8 +1,10 @@
 import { Container, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { Lock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
 import { BADGE_TAB, BADGE_TABS, badgeTabOf, heldBadges } from "@/entities/badge";
+import { DepartedMemberScreen } from "@/entities/profile";
 import { serverPath } from "@/shared/lib";
 import {
   getCurrentSessionUser,
@@ -27,6 +29,9 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
   const [viewer, profile] = await Promise.all([getCurrentSessionUser(), getProfile(server.id, id)]);
   if (viewer?.id === id) redirect(serverPath({ slug: server.slug, path: "/me/badges" }));
   if (!profile) notFound();
+  if (!isNull(profile.deletedAt)) {
+    return <DepartedMemberScreen name={profile.username} avatarUrl={profile.avatarUrl} />;
+  }
 
   const title = `${profile.username}의 업적`;
   const back = `/users/${id}`;

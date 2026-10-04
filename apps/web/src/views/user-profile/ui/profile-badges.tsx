@@ -25,7 +25,7 @@ export function ProfileBadges({ userId, featured, total }: ProfileBadgesProps) {
           typography="body4"
           foreground="muted"
           render={<ServerLink path={`/users/${userId}/badges`} />}
-          className="mb-100 inline-flex min-h-7 items-center gap-025"
+          className="-mt-100 inline-flex min-h-11 items-center gap-025"
         >
           {total}개 모두 보기
           <ChevronRight size={12} strokeWidth={2.2} aria-hidden />
@@ -33,7 +33,11 @@ export function ProfileBadges({ userId, featured, total }: ProfileBadgesProps) {
       </HStack>
       <HStack wrap gap="075">
         {featured.map((badge) => (
-          <BadgeDetailSheet key={badge.key} detail={badge.detail} className="max-w-full min-w-0">
+          <BadgeDetailSheet
+            key={badge.key}
+            detail={badge.detail}
+            className="inline-flex min-h-11 max-w-full min-w-0 items-center"
+          >
             <BadgePill
               emoji={badge.emoji}
               name={badge.name}

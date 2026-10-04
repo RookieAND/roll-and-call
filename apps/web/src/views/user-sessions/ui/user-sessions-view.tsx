@@ -1,7 +1,9 @@
 import { Container } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { SESSION_ROLE } from "@/entities/game";
+import { DepartedMemberScreen } from "@/entities/profile";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
@@ -22,6 +24,9 @@ export async function UserSessionsView({ id, tab }: { id: string; tab?: string }
   if (!loaded) notFound();
 
   const { profile, sessions } = loaded;
+  if (!isNull(profile.deletedAt)) {
+    return <DepartedMemberScreen name={profile.username} avatarUrl={profile.avatarUrl} />;
+  }
   const activeSection =
     PROFILE_SESSION_SECTIONS.find((section) => section.key === tab) ??
     PROFILE_SESSION_SECTIONS.find((section) => section.key === SESSION_ROLE.host)!;
