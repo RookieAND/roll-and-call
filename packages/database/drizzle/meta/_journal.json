@@ -421,6 +421,13 @@
       "when": 1794700000000,
       "tag": "0061_attendance_cron",
       "breakpoints": true
+    },
+    {
+      "idx": 62,
+      "version": "7",
+      "when": 1794800000000,
+      "tag": "0062_profile_onboarded_at",
+      "breakpoints": true
     }
   ]
 }

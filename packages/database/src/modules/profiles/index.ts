@@ -1,4 +1,5 @@
 export { deleteProfileMemo } from "./commands/delete-profile-memo";
+export { markOnboarded } from "./commands/mark-onboarded";
 export { saveAvatarUrl } from "./commands/save-avatar-url";
 export { saveMemberAvailability } from "./commands/save-member-availability";
 export { saveMemberNickname, type SaveMemberNicknameResult } from "./commands/save-member-nickname";
@@ -9,6 +10,7 @@ export { countServerMembers } from "./queries/count-server-members";
 export { getAccountName } from "./queries/get-account-name";
 export { findMemberProfile, type MemberProfile } from "./queries/find-member-profile";
 export { getDiscordId } from "./queries/get-discord-id";
+export { hasOnboarded } from "./queries/has-onboarded";
 export { getProfileMemo } from "./queries/get-profile-memo";
 export { getMemberNickname } from "./queries/get-member-nickname";
 export { getMemberNicknames } from "./queries/get-member-nicknames";

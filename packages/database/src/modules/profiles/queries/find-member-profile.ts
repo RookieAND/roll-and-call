@@ -20,6 +20,7 @@ export async function findMemberProfile({
       rejoinedAt: serverMembers.rejoinedAt,
       avatarUrl: profiles.avatarUrl,
       createdAt: profiles.createdAt,
+      onboardedAt: profiles.onboardedAt,
       bio: serverMembers.bio,
       keywords: serverMembers.keywords,
       availability: serverMembers.availability,

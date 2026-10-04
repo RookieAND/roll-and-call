@@ -5,8 +5,8 @@ import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { type PointerEvent, useEffect, useRef, useState } from "react";
 
+import { markOnboardingSeen } from "../api/mark-onboarding-seen";
 import { nextLabel } from "../model/next-label";
-import { markOnboardingSeen } from "../model/onboarding-seen";
 import { ONBOARDING_SLIDES } from "../model/onboarding-slides";
 import { swipeDirection } from "../model/swipe-direction";
 import { ActiveSlideDot } from "./active-slide-dot";
@@ -26,8 +26,10 @@ export function OnboardingView({ doneHref }: OnboardingViewProps) {
   const [back, setBack] = useState(false);
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
 
-  // 건너뛰기든 끝까지 보든 두 번 뜨지 않게, 들어온 순간 본 것으로 친다.
-  useEffect(markOnboardingSeen, []);
+  // 건너뛰기든 끝까지 보든 두 번 뜨지 않게, 들어온 순간 본 것으로 친다. 결과는 기다리지 않는다.
+  useEffect(() => {
+    void markOnboardingSeen();
+  }, []);
 
   const slide = ONBOARDING_SLIDES[index]!;
   const welcome = isNull(slide.eyebrow);
