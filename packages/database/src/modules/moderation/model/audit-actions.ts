@@ -2,7 +2,7 @@
 export const AUDIT_ACTION_GROUPS = [
   {
     label: "룰북 인증",
-    actions: ["인증 승인", "직접 인증", "인증 반려", "반려로 돌림", "안내 DM"],
+    actions: ["인증 승인", "직접 인증", "인증 반려", "반려로 돌림"],
   },
   {
     label: "유저",
@@ -34,11 +34,16 @@ export const AUDIT_ACTION_GROUPS = [
   },
 ] as const;
 
-export type AuditAction = (typeof AUDIT_ACTION_GROUPS)[number]["actions"][number];
+// 지금은 남기지 않지만 지난 기록에 남아 있는 조치 이름이다. 필터에는 보이지 않는다(D203: 봇 DM 없음).
+export const LEGACY_AUDIT_ACTIONS = ["안내 DM"] as const;
 
-export const AUDIT_ACTIONS = AUDIT_ACTION_GROUPS.flatMap(
+export type AuditAction =
+  | (typeof AUDIT_ACTION_GROUPS)[number]["actions"][number]
+  | (typeof LEGACY_AUDIT_ACTIONS)[number];
+
+export const AUDIT_ACTIONS: readonly AuditAction[] = AUDIT_ACTION_GROUPS.flatMap(
   (group) => group.actions,
-) as readonly AuditAction[];
+);
 
 // 이 조치들만 기록된 날부터 30일 뒤 DB가 지운다(마이그레이션 0027의 pg_cron). 목록을 바꾸면 cron도 다시 건다.
 export const EXPIRING_AUDIT_ACTIONS: readonly string[] = [

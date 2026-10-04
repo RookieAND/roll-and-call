@@ -20,7 +20,7 @@ export function sortRows<Row, Column extends string>({
   const comparable = (value: SortValue) => (value instanceof Date ? value.getTime() : value);
   return rows
     .map((row) => ({ row, value: comparable(read(row)) }))
-    .sort((first, second) => {
+    .toSorted((first, second) => {
       const firstBlank = isBlank(first.value);
       const secondBlank = isBlank(second.value);
       if (firstBlank || secondBlank) return Number(firstBlank) - Number(secondBlank);

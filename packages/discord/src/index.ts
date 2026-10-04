@@ -33,5 +33,4 @@ export { DISCORD_CHANNEL_TYPE, DISCORD_PERMISSION } from "./permission/discord-p
 export { computeGuildPermissions } from "./permission/compute-guild-permissions";
 export { computeChannelPermissions } from "./permission/compute-channel-permissions";
 export { isGuildBanned } from "./guild/is-guild-banned";
-export { sendDirectMessage } from "./direct/send-direct-message";
 export { DiscordApiError } from "./api/discord-api-error";

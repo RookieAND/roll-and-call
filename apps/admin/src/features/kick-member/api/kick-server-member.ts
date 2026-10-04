@@ -13,13 +13,9 @@ import {
   notifyGameLeft,
   refreshRecruitPost,
   requireStaff,
-  sendDirectMessage,
 } from "@/shared/server";
 
-import { kickDmText } from "../model/kick-dm-text";
-
-// 롤앤콜 쪽 정리를 먼저 끝내고, 사유 DM → 디스코드 차단 순서로 보낸다. 차단 뒤에는 봇이 DM을 보낼 수 없다.
-// 디스코드 쪽이 실패해도(봇 권한 부족·봇 연결 끊김) 데이터 변경은 그대로 두고 discordBanned로 알린다.
+// 롤앤콜 쪽 정리를 먼저 끝내고 디스코드 차단을 한다. 디스코드 쪽이 실패해도 데이터 변경은 그대로 두고 discordBanned로 알린다.
 export async function kickServerMember(userId: string, reason: string) {
   const staff = await requireStaff();
   const trimmed = reason.trim();
@@ -34,14 +30,6 @@ export async function kickServerMember(userId: string, reason: string) {
     return { ok: false as const };
   }
 
-  try {
-    await sendDirectMessage({
-      discordUserId: result.discordId,
-      input: { content: kickDmText({ serverName: server.name, reason: trimmed }) },
-    });
-  } catch (error) {
-    console.warn("추방 사유 DM을 보내지 못했습니다:", error);
-  }
   let discordBanned = true;
   try {
     await banGuildMember({ guildId: server.discordGuildId, discordUserId: result.discordId });

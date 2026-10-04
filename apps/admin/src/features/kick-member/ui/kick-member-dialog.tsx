@@ -15,11 +15,17 @@ import { useState, useTransition } from "react";
 
 import { withObjectParticle } from "@/shared/lib";
 import type { KickImpact } from "@/shared/server";
-import { FactRows, FactSub, ModalServerLabel, UserPreview, useCurrentServer } from "@/shared/ui";
+import {
+  FactRows,
+  FactSub,
+  ManualNoticePreview,
+  ModalServerLabel,
+  useCurrentServer,
+} from "@/shared/ui";
 
 import { kickServerMember } from "../api/kick-server-member";
-import { kickDmText } from "../model/kick-dm-text";
 import { kickImpactLines } from "../model/kick-impact-lines";
+import { kickNoticeText } from "../model/kick-notice-text";
 
 interface KickMemberDialogProps {
   userId: string;
@@ -62,8 +68,9 @@ export function KickMemberDialog({
           <ModalServerLabel />
           <AlertDialog.Title>{withObjectParticle(nickname)} 서버에서 추방할까요?</AlertDialog.Title>
           <AlertDialog.Description>
-            디스코드에서 차단(ban)해 서버에서 내보냅니다. 서버에 남기고 활동만 막으려면 제재를
-            쓰세요.
+            디스코드에서 차단(ban)해 서버에서 내보냅니다.
+            <br />
+            서버에 남기고 활동만 막으려면 제재를 사용해 주세요.
           </AlertDialog.Description>
         </AlertDialog.Header>
         <AlertDialog.Body className="mt-200">
@@ -105,7 +112,7 @@ export function KickMemberDialog({
               label="추방 사유"
               htmlFor="kick-reason"
               required
-              description="추방 직전에 디스코드 DM으로 당사자에게 전달되고, 활동 기록에 남습니다."
+              description="활동 기록에 남습니다."
             >
               <Textarea
                 id="kick-reason"
@@ -114,17 +121,12 @@ export function KickMemberDialog({
                 onChange={(event) => setReason(event.target.value)}
               />
             </Field.Root>
-            <UserPreview title={`${nickname}에게 보낼 DM`}>
-              <span className="whitespace-pre-line">
-                {kickDmText({ serverName: server.name, reason: reason.trim() })}
-              </span>
-            </UserPreview>
+            <ManualNoticePreview
+              text={kickNoticeText({ serverName: server.name, reason: reason.trim() })}
+            />
           </VStack>
         </AlertDialog.Body>
         <AlertDialog.Footer layout="row" className="items-center justify-end">
-          <Text typography="body4" foreground="hint" className="mr-auto">
-            확정하면 다른 운영진에게 알림이 갑니다
-          </Text>
           <AlertDialog.Close
             render={<Button variant="ghost" colorPalette="gray" />}
             disabled={pending}
