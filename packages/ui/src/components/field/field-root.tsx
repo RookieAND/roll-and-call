@@ -17,7 +17,7 @@ export interface FieldRootProps extends StateProps<FieldState> {
   label?: string;
   counter?: ReactNode;
   description?: string;
-  error?: string;
+  error?: ReactNode;
   required?: boolean;
   htmlFor?: string;
   children: ReactNode;

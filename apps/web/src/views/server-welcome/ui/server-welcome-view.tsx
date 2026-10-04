@@ -1,8 +1,10 @@
 import { Container, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { getCurrentServer, getCurrentSessionUser, getProfile } from "@/shared/server";
 import { AppBar, ServerLink } from "@/shared/ui";
 
+import { WelcomeSuffixNotice } from "./welcome-suffix-notice";
 import { WelcomeUsernameForm } from "./welcome-username-form";
 
 interface ServerWelcomeViewProps {
@@ -13,6 +15,7 @@ interface ServerWelcomeViewProps {
 export async function ServerWelcomeView({ next }: ServerWelcomeViewProps) {
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   const profile = user ? await getProfile(server.id, user.id) : undefined;
+  const suffixBase = profile?.nicknameSuffixBase;
 
   return (
     <>
@@ -21,17 +24,28 @@ export async function ServerWelcomeView({ next }: ServerWelcomeViewProps) {
         <VStack gap="300" className="py-300">
           <VStack gap="100">
             <Text typography="heading1" render={<h1 />} className="text-pretty">
-              {server.name}에 오신 걸 환영해요
+              {server.name}에 오신 것을 환영합니다
             </Text>
             <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
-              닉네임만 확인하면 바로 시작할 수 있어요. 소개·성향·링크·기본 가능 시간은 나중에{" "}
+              닉네임만 확인하면 바로 시작할 수 있습니다.
+              <br />
+              소개·성향·링크·기본 가능 시간은
+              <br />
+              나중에{" "}
               <ServerLink path="/me/edit" className="underline">
                 마이페이지
               </ServerLink>
-              에서 채워도 돼요.
+              에서 채울 수 있습니다.
             </Text>
           </VStack>
-          <WelcomeUsernameForm defaultUsername={profile?.username ?? ""} next={next} />
+          {suffixBase && (
+            <WelcomeSuffixNotice suffixBase={suffixBase} rejoined={!isNull(profile.rejoinedAt)} />
+          )}
+          <WelcomeUsernameForm
+            serverName={server.name}
+            defaultUsername={profile?.username ?? ""}
+            next={next}
+          />
         </VStack>
       </Container>
     </>

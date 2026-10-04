@@ -1,44 +1,57 @@
 "use client";
 
-import { Button, Field, FloatingBar, TextInput, VStack } from "@roll-and-call/ui";
-import Link from "next/link";
+import { Button, Field, FloatingBar, HStack, TextInput } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { USERNAME_MAX_LENGTH } from "@/entities/profile";
-import { useAction } from "@/shared/ui";
+import { LineBreaks, useAction } from "@/shared/ui";
 
 import { saveWelcomeUsername } from "../api/save-welcome-username";
+import { WELCOME_SAVE_MODE, type WelcomeSaveMode } from "../model/welcome-save-mode";
 
 interface WelcomeUsernameFormProps {
+  serverName: string;
   defaultUsername: string;
   next: string;
 }
 
-export function WelcomeUsernameForm({ defaultUsername, next }: WelcomeUsernameFormProps) {
+export function WelcomeUsernameForm({
+  serverName,
+  defaultUsername,
+  next,
+}: WelcomeUsernameFormProps) {
   const [username, setUsername] = useState(defaultUsername);
   const [usernameError, setUsernameError] = useState<string>();
   const { pending, run } = useAction();
 
-  function submit(event: React.FormEvent) {
-    event.preventDefault();
+  function save(mode: WelcomeSaveMode) {
     setUsernameError(undefined);
-    run(() => saveWelcomeUsername({ username, next }), {
+    run(() => saveWelcomeUsername({ username, next, mode }), {
       onError: (result) => setUsernameError(result.error),
     });
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-col">
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        save(WELCOME_SAVE_MODE.start);
+      }}
+      className="flex flex-col"
+    >
       <Field.Root
         label="닉네임"
         htmlFor="username"
-        description="닉네임은 계정에 하나라서, 바꾸면 모든 서버에 함께 바뀌어요."
-        error={usernameError}
+        description={`이 닉네임은 ${serverName}에서만 쓰입니다.`}
+        error={usernameError && <LineBreaks lines={usernameError.split("\n")} />}
       >
         <TextInput
           id="username"
           value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          onChange={(event) => {
+            setUsername(event.target.value);
+            setUsernameError(undefined);
+          }}
           invalid={!!usernameError}
           maxLength={USERNAME_MAX_LENGTH}
         />
@@ -46,19 +59,21 @@ export function WelcomeUsernameForm({ defaultUsername, next }: WelcomeUsernameFo
 
       <FloatingBar.Root elevated={false}>
         <FloatingBar.Content>
-          <VStack gap="050">
-            <Button type="submit" size="lg" className="w-full" loading={pending}>
-              시작하기
-            </Button>
+          <HStack gap="100">
             <Button
-              variant="ghost"
+              type="button"
+              variant="outline"
               size="lg"
-              className="w-full"
-              render={<Link href={next} replace />}
+              className="min-w-0 flex-1"
+              disabled={pending || !!usernameError}
+              onClick={() => save(WELCOME_SAVE_MODE.later)}
             >
               나중에 하기
             </Button>
-          </VStack>
+            <Button type="submit" size="lg" className="min-w-0 flex-1" disabled={pending}>
+              시작하기
+            </Button>
+          </HStack>
         </FloatingBar.Content>
         <FloatingBar.Spacer />
       </FloatingBar.Root>

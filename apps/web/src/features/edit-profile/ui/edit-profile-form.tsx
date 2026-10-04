@@ -20,7 +20,7 @@ import {
   type ProfileLink,
 } from "@/entities/profile";
 import { useServerPath } from "@/shared/lib";
-import { ConfirmDialog, TagInput, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, LineBreaks, TagInput, toast, useAction } from "@/shared/ui";
 
 import { updateProfile } from "../api/update-profile";
 import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
@@ -29,6 +29,7 @@ import { AvatarRefreshField } from "./avatar-refresh-field";
 import { ProfileLinksField } from "./profile-links-field";
 
 interface EditProfileFormProps {
+  serverName: string;
   defaultUsername: string;
   defaultBio?: string;
   defaultKeywords?: string[];
@@ -38,6 +39,7 @@ interface EditProfileFormProps {
 }
 
 export function EditProfileForm({
+  serverName,
   defaultUsername,
   defaultBio = "",
   defaultKeywords = [],
@@ -85,10 +87,10 @@ export function EditProfileForm({
         <AvatarRefreshField defaultUrl={avatarUrl} name={username} />
 
         <Field.Root
-          label="표시 이름"
+          label="닉네임"
           htmlFor="username"
-          description="구인 카드와 참여자 명단에 보이는 이름입니다."
-          error={usernameError}
+          description={`${serverName}에서 구인 카드와 참여자 명단에 보이는 이름입니다.`}
+          error={usernameError && <LineBreaks lines={usernameError.split("\n")} />}
         >
           <TextInput
             id="username"
@@ -103,7 +105,7 @@ export function EditProfileForm({
           label="한 줄 소개 (선택)"
           htmlFor="bio"
           counter={`${bio.length} / ${BIO_MAX_LENGTH}`}
-          description="마이페이지와 참여자 명단에 함께 보입니다."
+          description="이 서버의 프로필과 참여자 명단에 보입니다."
           error={bioError}
         >
           <Textarea

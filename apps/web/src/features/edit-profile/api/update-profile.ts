@@ -40,7 +40,7 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
   const bio = input.bio.trim();
   if (bio.length > BIO_MAX_LENGTH) {
     return {
-      error: `한 줄 소개는 ${BIO_MAX_LENGTH}자 이내로 입력하세요.`,
+      error: `한 줄 소개는 ${BIO_MAX_LENGTH}자 이내로 입력해 주세요.`,
       field: PROFILE_FIELD.bio,
     };
   }

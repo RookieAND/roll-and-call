@@ -4,7 +4,12 @@ import { Suspense } from "react";
 import { BadgeAwardGate } from "@/features/acknowledge-badges";
 import { LoginButton } from "@/features/auth";
 import { serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getMonthSessions, getCurrentServer } from "@/shared/server";
+import {
+  getCurrentServer,
+  getCurrentSessionUser,
+  getMonthSessions,
+  getProfile,
+} from "@/shared/server";
 import { AppBar, HelpButton, ServerSwitcher, ThemeToggleButton } from "@/shared/ui";
 
 import { buildMonthRecord } from "../model/build-month-record";
@@ -13,6 +18,7 @@ import { resolveCalendarView } from "../model/resolve-calendar-view";
 import { toCalendarSessions } from "../model/to-calendar-sessions";
 import { HomeCalendarSection } from "./home-calendar-section";
 import { HomeMonthRecord } from "./home-month-record";
+import { HomeNicknameNotice } from "./home-nickname-notice";
 import { HomeServerSwitch } from "./home-server-switch";
 
 export async function HomeView({ date, authError }: { date?: string; authError: boolean }) {
@@ -27,6 +33,7 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
     }),
   ]);
 
+  const profile = user ? await getProfile(server.id, user.id) : undefined;
   const sessions = toCalendarSessions({ rows, viewerId: user?.id ?? null });
   const sessionsByDay = groupSessionsByDay(sessions);
 
@@ -65,6 +72,11 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
                 로그인하지 못했습니다. 오른쪽 위 버튼으로 다시 시도해 주세요.
               </Callout.Description>
             </Callout.Root>
+          </div>
+        )}
+        {profile?.nicknameSuffixBase && (
+          <div className="px-200 pt-150">
+            <HomeNicknameNotice nickname={profile.username} />
           </div>
         )}
         <HomeCalendarSection

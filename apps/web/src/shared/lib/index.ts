@@ -22,6 +22,8 @@ export { GAME_IMAGE_BUCKET, gameImagePathOf } from "./storage-path";
 export { richTextLength } from "./rich-text-length";
 export { OG_IMAGE } from "./og-image";
 export { comitativeParticle } from "./comitative-particle";
+export { directionalParticle } from "./directional-particle";
+export { objectParticle } from "./object-particle";
 export { subjectParticle } from "./subject-particle";
 export { topicParticle } from "./topic-particle";
 export { CERT_PHOTO_BUCKET, certPhotoPathOf } from "./cert-photo-path";

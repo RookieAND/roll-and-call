@@ -17,6 +17,7 @@ export async function EditProfileView() {
         <VStack gap="300" className="py-300">
           {user ? (
             <EditProfileForm
+              serverName={server.name}
               defaultUsername={profile?.username ?? ""}
               defaultBio={profile?.bio ?? ""}
               defaultKeywords={profile?.keywords ?? []}
