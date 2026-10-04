@@ -16,7 +16,7 @@ export { saveAttendance } from "./commands/save-attendance";
 export { saveDiscordThreadId } from "./commands/save-discord-thread-id";
 export { saveDrawResults } from "./commands/save-draw-results";
 export { seedAvailabilities } from "./commands/seed-availabilities";
-export { setAttendanceConfirmedAt } from "./commands/set-attendance-confirmed-at";
+export { markAttendanceConfirmed } from "./commands/mark-attendance-confirmed";
 export { setDrawRank } from "./commands/set-draw-rank";
 export { setDrawRoll } from "./commands/set-draw-roll";
 export { setParticipantStatus } from "./commands/set-participant-status";

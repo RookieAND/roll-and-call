@@ -8,13 +8,17 @@ const DAY = 24 * 60 * 60 * 1000;
 const game = {
   id: "game",
   attendanceConfirmedAt: new Date(NOW.getTime() - 12 * DAY),
+  attendanceFirstConfirmedAt: new Date(NOW.getTime() - 12 * DAY),
 } as SessionGame;
 const context = (reviewed: [string, { createdAt: Date; removedAt: Date | null }][] = []) =>
   ({ viewerId: "me", now: NOW, reviewedGames: new Map(reviewed) }) as unknown as SessionContext;
 
 describe("reviewNote", () => {
   it("출석 확인 전에는 GM 확인을 기다린다", () => {
-    const note = reviewNote({ game: { ...game, attendanceConfirmedAt: null }, context: context() });
+    const note = reviewNote({
+      game: { ...game, attendanceConfirmedAt: null, attendanceFirstConfirmedAt: null },
+      context: context(),
+    });
     expect(note.caption?.text).toBe("GM 확인 대기");
     expect(note.action).toBeNull();
   });
@@ -23,6 +27,17 @@ describe("reviewNote", () => {
     const note = reviewNote({ game, context: context() });
     expect(note.caption).toEqual({ text: "후기 마감 D-2", strong: true });
     expect(note.action?.kind).toBe(SESSION_ACTION_KIND.writeReview);
+  });
+
+  it("처음 확정 3일 뒤 다시 확정해도 마감은 처음 확정 + 14일이다", () => {
+    const reconfirmed = {
+      ...game,
+      attendanceFirstConfirmedAt: new Date(NOW.getTime() - 15 * DAY),
+      attendanceConfirmedAt: new Date(NOW.getTime() - 12 * DAY),
+    };
+    expect(reviewNote({ game: reconfirmed, context: context() }).caption?.text).toBe(
+      "작성 기간 지남",
+    );
   });
 
   it("썼으면 수정 기한과 내 후기 보기를 단다", () => {
@@ -37,7 +52,11 @@ describe("reviewNote", () => {
   });
 
   it("기한이 지났거나 남의 프로필이면 버튼이 없다", () => {
-    const late = { ...game, attendanceConfirmedAt: new Date(NOW.getTime() - 20 * DAY) };
+    const late = {
+      ...game,
+      attendanceConfirmedAt: new Date(NOW.getTime() - 20 * DAY),
+      attendanceFirstConfirmedAt: new Date(NOW.getTime() - 20 * DAY),
+    };
     expect(reviewNote({ game: late, context: context() }).caption?.text).toBe("작성 기간 지남");
     expect(reviewNote({ game, context: { ...context(), readOnly: true } }).caption).toBeNull();
   });

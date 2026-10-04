@@ -152,6 +152,7 @@ export const loadSnapshot = cache(async () => {
       imageUrls: game.images,
       thumbnailUrl: game.thumbnailUrl ?? undefined,
       attendanceConfirmedAt: game.attendanceConfirmedAt ?? undefined,
+      attendanceFirstConfirmedAt: game.attendanceFirstConfirmedAt ?? undefined,
       hidden: game.hiddenAt
         ? { reason: game.hiddenReason ?? "", by: nicknameOf(game.hiddenBy), at: game.hiddenAt }
         : undefined,

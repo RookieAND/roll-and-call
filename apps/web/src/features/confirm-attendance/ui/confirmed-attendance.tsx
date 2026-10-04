@@ -7,12 +7,18 @@ import { AttendanceStats } from "./attendance-stats";
 import { ReopenAttendanceButton } from "./reopen-attendance-button";
 
 interface ConfirmedAttendanceProps {
-  gameId: string;
   attendees: Attendee[];
+  canReopen: boolean;
+  onReopen: () => void;
   children?: ReactNode;
 }
 
-export function ConfirmedAttendance({ gameId, attendees, children }: ConfirmedAttendanceProps) {
+export function ConfirmedAttendance({
+  attendees,
+  canReopen,
+  onReopen,
+  children,
+}: ConfirmedAttendanceProps) {
   const absentCount = attendees.filter((attendee) => attendee.absent).length;
 
   return (
@@ -36,7 +42,7 @@ export function ConfirmedAttendance({ gameId, attendees, children }: ConfirmedAt
             />
           ))}
         </Card.Root>
-        <ReopenAttendanceButton gameId={gameId} />
+        {canReopen && <ReopenAttendanceButton onReopen={onReopen} />}
       </VStack>
     </VStack>
   );

@@ -2,28 +2,22 @@
 
 import { Button } from "@roll-and-call/ui";
 
-import { toast, useAction } from "@/shared/ui";
-
-import { reopenAttendance } from "../api/reopen-attendance";
+import { toast } from "@/shared/ui";
 
 interface ReopenAttendanceButtonProps {
-  gameId: string;
+  onReopen: () => void;
 }
 
-export function ReopenAttendanceButton({ gameId }: ReopenAttendanceButtonProps) {
-  const { pending, run } = useAction();
-
+export function ReopenAttendanceButton({ onReopen }: ReopenAttendanceButtonProps) {
   return (
     <Button
       variant="outline"
       size="lg"
       className="w-full"
-      loading={pending}
-      onClick={() =>
-        run(() => reopenAttendance(gameId), {
-          onSuccess: () => toast.success("다시 고칠 수 있습니다"),
-        })
-      }
+      onClick={() => {
+        onReopen();
+        toast.success("다시 고칠 수 있습니다");
+      }}
     >
       다시 고치기
     </Button>

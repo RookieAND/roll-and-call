@@ -33,7 +33,7 @@ export function manageRows({
     href: `/games/${game.id}/reviews`,
   } as const;
   const reviewDeadline = game.attendanceConfirmedAt
-    ? reviewWriteDeadline(game.attendanceConfirmedAt)
+    ? reviewWriteDeadline(game.attendanceFirstConfirmedAt ?? game.attendanceConfirmedAt)
     : null;
   const review: ManageRow = !reviewDeadline
     ? {

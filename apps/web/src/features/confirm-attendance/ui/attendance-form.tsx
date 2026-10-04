@@ -3,17 +3,9 @@
 import { Button, Callout, Card, FloatingBar, VStack } from "@roll-and-call/ui";
 import { useState, type ReactNode } from "react";
 
-import {
-  ConfirmDialog,
-  handleActionResult,
-  LineBreaks,
-  reportError,
-  toast,
-  useAction,
-} from "@/shared/ui";
+import { ConfirmDialog, LineBreaks, toast, useAction } from "@/shared/ui";
 
 import { confirmAttendance } from "../api/confirm-attendance";
-import { reopenAttendance } from "../api/reopen-attendance";
 import type { Attendee } from "../model/attendee";
 import { confirmDescription } from "../model/confirm-description";
 import { AttendanceRow } from "./attendance-row";
@@ -22,10 +14,18 @@ import { AttendanceStats } from "./attendance-stats";
 interface AttendanceFormProps {
   gameId: string;
   attendees: Attendee[];
+  onConfirmed: () => void;
+  onReopen: () => void;
   children?: ReactNode;
 }
 
-export function AttendanceForm({ gameId, attendees, children }: AttendanceFormProps) {
+export function AttendanceForm({
+  gameId,
+  attendees,
+  onConfirmed,
+  onReopen,
+  children,
+}: AttendanceFormProps) {
   const [absentIds, setAbsentIds] = useState(
     () =>
       new Set(attendees.filter((attendee) => attendee.absent).map((attendee) => attendee.userId)),
@@ -56,18 +56,11 @@ export function AttendanceForm({ gameId, attendees, children }: AttendanceFormPr
     run(() => confirmAttendance({ gameId, absentUserIds: [...absentIds] }), {
       onSuccess: () => {
         setConfirming(false);
-        // 되돌리기는 토스트 콜백이라 ErrorBoundary 밖이다.
+        onConfirmed();
         toast.success("출석을 확정했습니다", {
-          undo: async () => {
-            try {
-              const result = await reopenAttendance(gameId);
-              handleActionResult({
-                result,
-                onSuccess: () => toast.success("다시 고칠 수 있습니다"),
-              });
-            } catch (error) {
-              reportError({ error });
-            }
+          undo: () => {
+            onReopen();
+            toast.success("다시 고칠 수 있습니다");
           },
         });
       },

@@ -1,6 +1,6 @@
 "use server";
 
-import { saveAttendance, setAttendanceConfirmedAt } from "@roll-and-call/database/games";
+import { markAttendanceConfirmed, saveAttendance } from "@roll-and-call/database/games";
 import { after } from "next/server";
 
 import type { ActionResult } from "@/shared/api";
@@ -33,12 +33,7 @@ export async function confirmAttendance({
         confirmedUserIds,
         absentUserIds: absent,
       });
-      await setAttendanceConfirmedAt({
-        transaction,
-        serverId,
-        gameId,
-        attendanceConfirmedAt: new Date(),
-      });
+      await markAttendanceConfirmed({ transaction, serverId, gameId, at: new Date() });
     },
   });
   if (!result.error) {

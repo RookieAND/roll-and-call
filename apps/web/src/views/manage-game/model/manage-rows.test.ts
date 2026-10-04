@@ -20,7 +20,9 @@ const coordinating = {
   scheduleMode: SCHEDULE_MODE.coordinate,
   confirmedAt: null,
   playMinutes: 60,
+  endedAt: null,
   attendanceConfirmedAt: null,
+  attendanceFirstConfirmedAt: null,
   endDate: new Date(NOW.getTime() + 2 * DAY),
   maxPlayers: 4,
   participants: ["a", "b", "c", "d"].map(member),
@@ -67,9 +69,21 @@ describe("manageRows", () => {
       ...coordinating,
       confirmedAt: new Date(NOW.getTime() - 2 * DAY),
       attendanceConfirmedAt: new Date(NOW.getTime() - DAY),
+      attendanceFirstConfirmedAt: new Date(NOW.getTime() - DAY),
     } as unknown as GameDetailData;
     const [, review] = manageRows({ game: confirmed, reviewCount: 2, now: NOW });
     expect(review!.state).toBe(MANAGE_ROW_STATE.open);
     expect(review!.detail).toBe("후기 2개가 달렸습니다 · 10월 3일까지 받습니다");
+  });
+
+  it("처음 확정 3일 뒤 다시 확정해도 후기 기한은 처음 확정 + 14일이다", () => {
+    const reconfirmed = {
+      ...coordinating,
+      confirmedAt: new Date(NOW.getTime() - 5 * DAY),
+      attendanceFirstConfirmedAt: new Date(NOW.getTime() - 4 * DAY),
+      attendanceConfirmedAt: new Date(NOW.getTime() - DAY),
+    } as unknown as GameDetailData;
+    const [, review] = manageRows({ game: reconfirmed, reviewCount: 0, now: NOW });
+    expect(review!.detail).toBe("후기 0개가 달렸습니다 · 9월 30일까지 받습니다");
   });
 });

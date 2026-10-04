@@ -29,7 +29,8 @@ export function reviewBlockOf(
 
   if (!game.attendanceConfirmedAt) return REVIEW_BLOCK.attendancePending;
   if (authorAbsent) return REVIEW_BLOCK.absent;
-  if (reviewWriteDeadline(game.attendanceConfirmedAt).getTime() <= now.getTime()) {
+  const firstConfirmedAt = game.attendanceFirstConfirmedAt ?? game.attendanceConfirmedAt;
+  if (reviewWriteDeadline(firstConfirmedAt).getTime() <= now.getTime()) {
     return REVIEW_BLOCK.writePeriodOver;
   }
   return null;

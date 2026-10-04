@@ -23,6 +23,7 @@ export async function getReviewDraftTarget({
       confirmedAt: games.confirmedAt,
       playMinutes: games.playMinutes,
       attendanceConfirmedAt: games.attendanceConfirmedAt,
+      attendanceFirstConfirmedAt: games.attendanceFirstConfirmedAt,
     })
     .from(games)
     .innerJoin(profiles, eq(profiles.id, games.gmId))

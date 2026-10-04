@@ -11,6 +11,7 @@ const game: Game = {
   playMinutes: 120,
   endedAt: null,
   attendanceConfirmedAt: null,
+  attendanceFirstConfirmedAt: null,
   cancelledAt: null,
 };
 const check = (
@@ -50,5 +51,9 @@ describe("shouldAutoConfirmAttendance", () => {
     expect(check({ confirmedCount: 0 })).toBe(false);
     expect(check({ attendanceConfirmedAt: now })).toBe(false);
     expect(check({ cancelledAt: now })).toBe(false);
+  });
+
+  it("처음 확정 이력이 있으면 대상이 아니다", () => {
+    expect(check({ attendanceFirstConfirmedAt: new Date(now.getTime() - 2 * DAY) })).toBe(false);
   });
 });

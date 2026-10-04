@@ -37,7 +37,9 @@ export function reviewNote({
     };
   }
 
-  const writeDeadline = reviewWriteDeadline(game.attendanceConfirmedAt);
+  const writeDeadline = reviewWriteDeadline(
+    game.attendanceFirstConfirmedAt ?? game.attendanceConfirmedAt,
+  );
   if (writeDeadline.getTime() <= now.getTime()) {
     return { ...NONE, caption: { text: "작성 기간 지남", strong: false } };
   }

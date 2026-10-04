@@ -162,6 +162,7 @@ export interface Session {
   imageUrls?: string[];
   thumbnailUrl?: string;
   attendanceConfirmedAt?: Date;
+  attendanceFirstConfirmedAt?: Date;
   hidden?: { reason: string; by: string; at: Date };
   gmEditSinceHidden?: { title: string; body: string; at: Date };
 }

@@ -12,11 +12,11 @@ import { sessionEndAtSql } from "#/modules/games/queries/session-end-at-sql";
 import type { Transaction } from "#/modules/transaction/transaction";
 import { games, participants } from "#/schema";
 
-import { saveAttendance } from "./save-attendance";
+import { markAttendanceConfirmed } from "./mark-attendance-confirmed";
 
 export type AutoConfirmedGame = { serverId: string; gameId: string; gmId: string; title: string };
 
-// 한 구인의 확정 참여자 전원을 출석으로 저장한다. 출석 확정 시각은 기한 시각이라 자동 확정인지 나중에 가릴 수 있다.
+// 출석 결과는 그대로 두고 확정 시각만 기한 시각으로 남긴다. 그래서 자동 확정인지 나중에 가릴 수 있다.
 // onlyPastDeadline이 false면(GM이 서버를 나간 진행 중 세션) 기한을 기다리지 않는다.
 export async function autoConfirmAttendanceForGame({
   transaction,
@@ -46,17 +46,12 @@ export async function autoConfirmAttendanceForGame({
       onlyPastDeadline,
     });
     if (!due) return null;
-    await saveAttendance({
+    await markAttendanceConfirmed({
       transaction: tx,
       serverId,
       gameId,
-      confirmedUserIds,
-      absentUserIds: [],
+      at: attendanceDeadline(game)!,
     });
-    await tx
-      .update(games)
-      .set({ attendanceConfirmedAt: attendanceDeadline(game) })
-      .where(eq(games.id, gameId));
     return { serverId, gameId, gmId: game.gmId, title: game.title };
   };
   return transaction ? run(transaction) : db.transaction(run);
@@ -72,6 +67,7 @@ export async function autoConfirmAttendance(now: Date = new Date()): Promise<Aut
       and(
         isNotNull(games.confirmedAt),
         isNull(games.attendanceConfirmedAt),
+        isNull(games.attendanceFirstConfirmedAt),
         isNull(games.cancelledAt),
         lte(deadline, now),
         exists(

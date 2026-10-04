@@ -2,9 +2,9 @@ import { Container, VStack } from "@roll-and-call/ui";
 import { Clock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
-import { isAttendanceDue, splitRoster } from "@/entities/game";
+import { isAttendanceDue, isAttendancePastDeadline, splitRoster } from "@/entities/game";
 import { GmOnlyNotice, LoginRequired } from "@/features/auth";
-import { AttendanceForm, ConfirmedAttendance, type Attendee } from "@/features/confirm-attendance";
+import { AttendancePanel, type Attendee } from "@/features/confirm-attendance";
 import { formatDateTime, serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
 import { AppBar, SummaryLine } from "@/shared/ui";
@@ -64,6 +64,8 @@ export async function GameAttendanceView({ id }: { id: string }) {
     absent: participant.absent,
   }));
 
+  const canReopen = !isAttendancePastDeadline({ ...game, now: new Date() });
+
   const sessionInfo = (
     <>
       <SummaryLine
@@ -88,15 +90,14 @@ export async function GameAttendanceView({ id }: { id: string }) {
             confirmedCount={attendees.length}
             attendanceConfirmed={Boolean(game.attendanceConfirmedAt)}
           />
-          {game.attendanceConfirmedAt ? (
-            <ConfirmedAttendance gameId={id} attendees={attendees}>
-              {sessionInfo}
-            </ConfirmedAttendance>
-          ) : (
-            <AttendanceForm gameId={id} attendees={attendees}>
-              {sessionInfo}
-            </AttendanceForm>
-          )}
+          <AttendancePanel
+            gameId={id}
+            attendees={attendees}
+            attendanceConfirmed={Boolean(game.attendanceConfirmedAt)}
+            canReopen={canReopen}
+          >
+            {sessionInfo}
+          </AttendancePanel>
         </VStack>
       </Container>
     </>

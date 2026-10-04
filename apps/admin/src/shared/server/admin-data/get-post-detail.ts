@@ -35,8 +35,9 @@ export async function getPostDetail(id: string) {
       .filter((noShow) => noShow.sessionId === id && !noShow.cancelled)
       .map((noShow) => noShow.userId),
   );
-  // ponytail: 작성 기한은 출석 확인 + 14일로 어드민이 따로 계산한다. 사용자 앱(apps/web)의 계산과 같은 규칙이다.
+  // ponytail: 작성 기한은 처음 출석 확인 + 14일로 어드민이 따로 계산한다. 사용자 앱(apps/web)의 계산과 같은 규칙이다.
   const attendanceConfirmedAt = session.attendanceConfirmedAt;
+  const reviewWindowStart = session.attendanceFirstConfirmedAt ?? attendanceConfirmedAt;
 
   return {
     id: session.id,
@@ -79,8 +80,8 @@ export async function getPostDetail(id: string) {
     })),
     attendance: {
       confirmedAt: attendanceConfirmedAt,
-      reviewDeadline: attendanceConfirmedAt
-        ? new Date(attendanceConfirmedAt.getTime() + REVIEW_WINDOW_DAYS * DAY)
+      reviewDeadline: reviewWindowStart
+        ? new Date(reviewWindowStart.getTime() + REVIEW_WINDOW_DAYS * DAY)
         : undefined,
       attendedCount: session.memberIds.filter((userId) => !absentIds.has(userId)).length,
     },

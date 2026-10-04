@@ -48,7 +48,7 @@ export async function guardAttendance({
       if (isAttendancePastDeadline({ ...game, now: new Date() })) {
         throw new AttendanceError("출석 확인 기한이 지났습니다.");
       }
-      // 다시 여는 길도 같은 가드를 타므로 확정 시각은 빼고 "세션이 끝났는가"만 본다.
+      // 다시 고친 뒤 확정하는 길도 같은 가드를 타므로 확정 시각은 빼고 "세션이 끝났는가"만 본다.
       if (
         !isAttendanceDue({
           game: { ...game, attendanceConfirmedAt: null },

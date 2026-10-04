@@ -10,7 +10,10 @@ const NOW = new Date("2026-09-28T12:00:00+09:00");
 const DAY = 24 * 60 * 60 * 1000;
 
 const target = {
-  game: { attendanceConfirmedAt: new Date(NOW.getTime() - 3 * DAY) },
+  game: {
+    attendanceConfirmedAt: new Date(NOW.getTime() - 3 * DAY),
+    attendanceFirstConfirmedAt: new Date(NOW.getTime() - 3 * DAY),
+  },
   participant: { status: PARTICIPANT_STATUS.confirmed, absent: false, absenceCancelledAt: null },
   review: null,
 } as unknown as ReviewDraftTarget;
@@ -26,9 +29,12 @@ describe("reviewBlockOf", () => {
     expect(reviewBlockOf({ ...target, participant: null }, NOW)).toBe(REVIEW_BLOCK.unavailable);
   });
 
-  it("출석이 다시 열려 있으면 기다리게 한다", () => {
-    const reopened = { ...target, game: { attendanceConfirmedAt: null } } as ReviewDraftTarget;
-    expect(reviewBlockOf(reopened, NOW)).toBe(REVIEW_BLOCK.attendancePending);
+  it("아직 출석 미확정이면 기다리게 한다", () => {
+    const pending = {
+      ...target,
+      game: { attendanceConfirmedAt: null, attendanceFirstConfirmedAt: null },
+    } as ReviewDraftTarget;
+    expect(reviewBlockOf(pending, NOW)).toBe(REVIEW_BLOCK.attendancePending);
   });
 
   it("불참이면 쓸 수 없고, 운영진이 취소한 불참은 쓸 수 있다", () => {
@@ -41,6 +47,20 @@ describe("reviewBlockOf", () => {
   it("출석 확정 14일이 지나면 작성 기간이 끝난다", () => {
     const late = new Date(NOW.getTime() + 11 * DAY);
     expect(reviewBlockOf(target, late)).toBe(REVIEW_BLOCK.writePeriodOver);
+  });
+
+  it("처음 확정 3일 뒤 다시 확정해도 작성 기한은 처음 확정 + 14일이다", () => {
+    const reconfirmed = {
+      ...target,
+      game: {
+        attendanceFirstConfirmedAt: new Date(NOW.getTime() - 13 * DAY),
+        attendanceConfirmedAt: new Date(NOW.getTime() - 10 * DAY),
+      },
+    } as ReviewDraftTarget;
+    expect(reviewBlockOf(reconfirmed, new Date(NOW.getTime() + DAY - 1))).toBeNull();
+    expect(reviewBlockOf(reconfirmed, new Date(NOW.getTime() + DAY))).toBe(
+      REVIEW_BLOCK.writePeriodOver,
+    );
   });
 
   it("쓴 후기는 등록 14일 안에만 고치고, 지운 후기는 다시 열지 못한다", () => {
