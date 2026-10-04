@@ -25,6 +25,8 @@ export const servers = pgTable("servers", {
   closedChannelId: text("closed_channel_id"),
   reviewForumChannelId: text("review_forum_channel_id"),
   announceChannelId: text("announce_channel_id"),
+  // 운영진만 보는 디스코드 채널. 처리 대기와 무거운 조치 글을 올린다. 비면 올리지 않는다.
+  staffChannelId: text("staff_channel_id"),
   gmRoleId: text("gm_role_id"),
   // 디스코드 서버장. 어드민에 들어올 때 길드 정보와 비교해 바뀌었으면 소유권을 옮긴다.
   ownerDiscordId: text("owner_discord_id"),

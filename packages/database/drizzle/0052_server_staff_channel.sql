@@ -1,0 +1,1 @@
+ALTER TABLE "servers" ADD COLUMN "staff_channel_id" text;

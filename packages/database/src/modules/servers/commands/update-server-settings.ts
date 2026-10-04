@@ -9,6 +9,7 @@ export interface ServerSettings {
   recruitChannelId: string | null;
   closedChannelId: string | null;
   announceChannelId: string | null;
+  staffChannelId: string | null;
   reviewForumChannelId: string | null;
   gmRoleId: string | null;
   inviteUrl: string | null;

@@ -16,5 +16,8 @@ export { banGuildMember, unbanGuildMember } from "@roll-and-call/discord";
 export {
   notifyGameCancelled,
   notifyGameLeft,
+  postStaffNotice,
   refreshRecruitPost,
+  STAFF_NOTICE_KIND,
+  type StaffNotice,
 } from "@roll-and-call/game-notices";

@@ -64,6 +64,7 @@ export { refreshRecruitPost } from "@roll-and-call/game-notices";
 export { notifyGameJoined } from "./discord/notify-game-joined";
 export { notifyGameLeft } from "@roll-and-call/game-notices";
 export { notifyGameCancelled } from "@roll-and-call/game-notices";
+export { postStaffNotice, STAFF_NOTICE_KIND } from "@roll-and-call/game-notices";
 export { announceRecruitmentComplete } from "./discord/announce-recruitment-complete";
 export { notifyDrawResult } from "./discord/notify-draw-result";
 export { notifyDirectConfirmed } from "./discord/notify-direct-confirmed";

@@ -48,6 +48,7 @@ export function DiscordLinkPanel({
           value={ids[field.key]}
           check={checks[field.key]}
           serverName={serverName}
+          emptyHint={"emptyHint" in field ? field.emptyHint : undefined}
           onChange={(value) => onChange({ key: field.key, value })}
           onCheck={() => onCheck(field.key)}
         />

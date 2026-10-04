@@ -23,6 +23,7 @@ export async function loadCertificationContext({
     db
       .select({
         id: rulebooks.id,
+        name: rulebooks.name,
         categoryId: rulebooks.categoryId,
         edition: rulebooks.edition,
         kind: rulebooks.kind,

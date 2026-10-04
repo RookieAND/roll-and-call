@@ -14,7 +14,8 @@
     "@roll-and-call/database": "workspace:*",
     "@roll-and-call/discord": "workspace:*",
     "@roll-and-call/tiptap": "workspace:*",
-    "dayjs": "^1.11.23"
+    "dayjs": "^1.11.23",
+    "es-toolkit": "^1.52.0"
   },
   "devDependencies": {
     "@roll-and-call/typescript-config": "workspace:*",

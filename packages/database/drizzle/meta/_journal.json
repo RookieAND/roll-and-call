@@ -367,6 +367,13 @@
       "breakpoints": true
     },
     {
+      "idx": 52,
+      "version": "7",
+      "when": 1793800000000,
+      "tag": "0052_server_staff_channel",
+      "breakpoints": true
+    },
+    {
       "idx": 53,
       "version": "7",
       "when": 1793900000000,

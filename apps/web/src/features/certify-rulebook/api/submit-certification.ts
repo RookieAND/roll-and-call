@@ -4,12 +4,19 @@ import {
   createCertApplication,
   loadCertificationContext,
 } from "@roll-and-call/database/certifications";
+import { getMemberNickname } from "@roll-and-call/database/profiles";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 
-import { CERT_FORMAT, CERT_SHOTS, RULEBOOK_KIND } from "@/entities/rulebook";
+import { CERT_FORMAT, CERT_SHOTS, RULEBOOK_KIND, rulebookLabel } from "@/entities/rulebook";
 import { type ActionResult } from "@/shared/api";
 import { certPhotoPathOf, serverPath } from "@/shared/lib";
-import { getActingMember, notMemberError } from "@/shared/server";
+import {
+  getActingMember,
+  notMemberError,
+  postStaffNotice,
+  STAFF_NOTICE_KIND,
+} from "@/shared/server";
 
 import type { CertEntry } from "../model/cert-entry";
 import { isQuizAnswer } from "../model/is-quiz-answer";
@@ -81,7 +88,7 @@ export async function submitCertification({
   }
 
   const previous = latest?.status === "rejected" ? latest.photoUrls : null;
-  await createCertApplication({
+  const { id: applicationId } = await createCertApplication({
     serverId: server.id,
     application: {
       userId: user.id,
@@ -100,6 +107,18 @@ export async function submitCertification({
       quizQuestionId: question?.id ?? null,
       quizAnswer: question ? quiz!.answer.trim().slice(0, 200) : null,
     },
+  });
+  after(async () => {
+    const applicantNickname = await getMemberNickname({ serverId: server.id, userId: user.id });
+    await postStaffNotice({
+      server,
+      notice: {
+        kind: STAFF_NOTICE_KIND.certApplied,
+        applicantNickname: applicantNickname ?? "",
+        rulebookLabel: rulebookLabel(book),
+        applicationId,
+      },
+    });
   });
   redirect(serverPath({ slug: server.slug, path: `/me/rulebooks/${book.id}/submitted` }));
 }

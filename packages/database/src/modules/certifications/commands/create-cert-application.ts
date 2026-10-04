@@ -10,5 +10,9 @@ export async function createCertApplication({
   serverId: string;
   application: Omit<NewCertApplication, "serverId">;
 }) {
-  await db.insert(certApplications).values({ ...application, serverId });
+  const [created] = await db
+    .insert(certApplications)
+    .values({ ...application, serverId })
+    .returning({ id: certApplications.id });
+  return created!;
 }

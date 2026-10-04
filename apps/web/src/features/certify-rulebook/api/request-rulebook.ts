@@ -1,13 +1,20 @@
 "use server";
 
+import { getMemberNickname } from "@roll-and-call/database/profiles";
 import {
   createRulebookRequest,
   findRulebookCategoryId,
   hasPendingRulebookRequest,
 } from "@roll-and-call/database/rulebooks";
+import { after } from "next/server";
 
 import { type ActionResult } from "@/shared/api";
-import { getActingMember, notMemberError } from "@/shared/server";
+import {
+  getActingMember,
+  notMemberError,
+  postStaffNotice,
+  STAFF_NOTICE_KIND,
+} from "@/shared/server";
 
 import {
   rulebookRequestSchema,
@@ -43,6 +50,18 @@ export async function requestRulebook(input: RulebookRequestValues): Promise<Act
       categoryName: knownCategoryId || !category ? null : category,
       note: link ? `참고 링크 ${link}` : "",
     },
+  });
+  after(async () => {
+    const requesterNickname = await getMemberNickname({ serverId: server.id, userId: user.id });
+    await postStaffNotice({
+      server,
+      notice: {
+        kind: STAFF_NOTICE_KIND.rulebookRequested,
+        requesterNickname: requesterNickname ?? "",
+        name,
+        edition,
+      },
+    });
   });
   return {};
 }

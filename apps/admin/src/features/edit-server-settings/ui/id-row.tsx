@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Grid, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 
 import type { SettingCheck } from "../model/setting-check";
 import { CheckStatus } from "./check-status";
@@ -11,12 +12,23 @@ interface IdRowProps {
   value: string;
   check: SettingCheck | "checking" | undefined;
   serverName: string;
+  emptyHint?: string;
   onChange: (value: string) => void;
   onCheck: () => void;
 }
 
-export function IdRow({ id, label, value, check, serverName, onChange, onCheck }: IdRowProps) {
+export function IdRow({
+  id,
+  label,
+  value,
+  check,
+  serverName,
+  emptyHint,
+  onChange,
+  onCheck,
+}: IdRowProps) {
   const checking = check === "checking";
+  const showEmptyHint = isUndefined(check) && !isUndefined(emptyHint) && !value.trim();
   const failed = check !== "checking" && check?.status === "fail";
   const buttonLabel = checking ? "확인 중" : "확인";
   return (
@@ -44,6 +56,11 @@ export function IdRow({ id, label, value, check, serverName, onChange, onCheck }
           </Button>
         </HStack>
         {check ? <CheckStatus check={check} serverName={serverName} /> : null}
+        {showEmptyHint ? (
+          <Text typography="body4" foreground="hint">
+            {emptyHint}
+          </Text>
+        ) : null}
       </VStack>
     </Grid>
   );

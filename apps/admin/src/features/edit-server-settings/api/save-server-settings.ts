@@ -68,6 +68,7 @@ export async function saveServerSettings({
       recruitChannelId: orNull(ids.recruitChannelId),
       closedChannelId: orNull(ids.closedChannelId),
       announceChannelId: orNull(ids.announceChannelId),
+      staffChannelId: orNull(ids.staffChannelId),
       reviewForumChannelId: orNull(ids.reviewForumChannelId),
       gmRoleId: orNull(ids.gmRoleId),
       inviteUrl: nextInviteUrl,
