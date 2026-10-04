@@ -49,6 +49,7 @@ export { getScheduleAvailabilityRows } from "./queries/get-schedule-availability
 export { getUserConfirmedSlots } from "./queries/get-user-confirmed-slots";
 export { hasAnsweredAvailability } from "./queries/has-answered-availability";
 export { isGameOwner } from "./queries/is-game-owner";
+export { listAttendanceRows } from "./queries/list-attendance-rows";
 export { listParticipantUserIds } from "./queries/list-participant-user-ids";
 export { listWaitingParticipants } from "./queries/list-waiting-participants";
 export { listSeatOpenedRecipients } from "./queries/list-seat-opened-recipients";

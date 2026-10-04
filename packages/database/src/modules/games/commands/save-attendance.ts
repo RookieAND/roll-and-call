@@ -1,10 +1,11 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import {
   planAttendance,
   type AttendanceAbsence,
   type AttendanceChanges,
 } from "#/modules/games/model/attendance-changes";
+import { listAttendanceRows } from "#/modules/games/queries/list-attendance-rows";
 import type { Transaction } from "#/modules/transaction/transaction";
 import { participants } from "#/schema";
 
@@ -23,23 +24,7 @@ export async function saveAttendance({
   rosterUserIds: string[];
   absences: AttendanceAbsence[];
 }): Promise<AttendanceChanges> {
-  if (rosterUserIds.length === 0) return { newlyAbsent: [], newlyPresent: [], restored: [] };
-  const rows = await transaction
-    .select({
-      userId: participants.userId,
-      status: participants.status,
-      absent: participants.absent,
-      absenceCancelledAt: participants.absenceCancelledAt,
-      absenceAddedAt: participants.absenceAddedAt,
-    })
-    .from(participants)
-    .where(
-      and(
-        eq(participants.serverId, serverId),
-        eq(participants.gameId, gameId),
-        inArray(participants.userId, rosterUserIds),
-      ),
-    );
+  const rows = await listAttendanceRows({ transaction, serverId, gameId, userIds: rosterUserIds });
   const { updates, changes } = planAttendance({ rows, absences });
   for (const { userId, ...values } of updates) {
     await transaction

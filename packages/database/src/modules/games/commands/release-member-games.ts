@@ -99,7 +99,12 @@ export async function releaseMemberGames({
       if (isSessionInProgress(game, now)) {
         await setSessionEndedAt({ transaction, serverId, gameId: game.id, endedAt: now });
       }
-      const confirmed = await autoConfirmAttendanceForGame({ transaction, gameId: game.id, now });
+      const confirmed = await autoConfirmAttendanceForGame({
+        transaction,
+        gameId: game.id,
+        now,
+        notifyGm: false,
+      });
       if (confirmed) autoConfirmedGameIds.push(game.id);
     }
   }

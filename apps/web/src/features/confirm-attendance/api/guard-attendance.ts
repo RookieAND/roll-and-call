@@ -11,6 +11,7 @@ import {
   type ActionResult,
 } from "@/shared/api";
 import {
+  type Game,
   evaluateGameBadges,
   getActingMember,
   notMemberError,
@@ -28,7 +29,8 @@ export async function guardAttendance({
   work,
 }: {
   gameId: string;
-  work: (transaction: Transaction, roster: AttendanceRoster) => Promise<void>;
+  // game은 잠근 행이다(출석 확정 시각을 쓰기 전 값).
+  work: (transaction: Transaction, roster: AttendanceRoster, game: Game) => Promise<void>;
 }): Promise<ActionResult> {
   const member = await getActingMember();
   if (!member) {
@@ -71,7 +73,7 @@ export async function guardAttendance({
         throw new AttendanceError("아직 끝나지 않은 세션입니다.");
       }
 
-      await work(transaction, { confirmedUserIds, removedUserIds });
+      await work(transaction, { confirmedUserIds, removedUserIds }, game);
     });
   } catch (error) {
     if (error instanceof AttendanceError) {

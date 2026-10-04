@@ -55,15 +55,16 @@ pnpm -F @roll-and-call/database db:generate | db:migrate | db:studio
 
 매일 도는 앱 작업은 Vercel Cron(`apps/web/vercel.json`, GET)이, 앱 로직이 필요한 분 단위 작업은 Supabase pg_cron이 `net.http_post`로 Next 라우트(`/api/cron/*`, POST)를 부른다. 두 방식 모두 `Authorization: Bearer {CRON_SECRET}`을 보내고, 라우트는 `isCronRequest`(`apps/web/src/shared/server`)로 확인한다. 일정은 UTC다.
 
-| 이름                    | 일정 (UTC)    | 부르는 곳                          | 방식                    |
-| ----------------------- | ------------- | ---------------------------------- | ----------------------- |
-| `purge-light-audit-log` | `0 19 * * *`  | SQL                                | pg_cron                 |
-| `purge-orphan-files`    | `0 20 * * *`  | Edge Function `purge-orphan-files` | pg_cron → Edge Function |
-| `purge-notifications`   | `30 18 * * *` | SQL                                | pg_cron                 |
-| `session-reminders`     | `*/5 * * * *` | Edge Function `session-reminders`  | pg_cron → Edge Function |
-| `draw-lotteries`        | `*/5 * * * *` | `/api/cron/draws`                  | pg_cron → Next 라우트   |
-| badges                  | `5 15 * * *`  | `/api/cron/badges`                 | Vercel Cron             |
-| members                 | `10 19 * * *` | `/api/cron/members`                | Vercel Cron             |
+| 이름                      | 일정 (UTC)    | 부르는 곳                          | 방식                    |
+| ------------------------- | ------------- | ---------------------------------- | ----------------------- |
+| `purge-light-audit-log`   | `0 19 * * *`  | SQL                                | pg_cron                 |
+| `purge-orphan-files`      | `0 20 * * *`  | Edge Function `purge-orphan-files` | pg_cron → Edge Function |
+| `purge-notifications`     | `30 18 * * *` | SQL                                | pg_cron                 |
+| `session-reminders`       | `*/5 * * * *` | Edge Function `session-reminders`  | pg_cron → Edge Function |
+| `draw-lotteries`          | `*/5 * * * *` | `/api/cron/draws`                  | pg_cron → Next 라우트   |
+| `attendance-auto-confirm` | `5 * * * *`   | `/api/cron/attendance`             | pg_cron → Next 라우트   |
+| badges                    | `5 15 * * *`  | `/api/cron/badges`                 | Vercel Cron             |
+| members                   | `10 19 * * *` | `/api/cron/members`                | Vercel Cron             |
 
 pg_cron → Next 라우트 규칙: 라우트는 `export async function POST`만 두고 Vercel이 부르지 않는다. 한 번 실행에 처리한 수를 `{ ok: true, ... }`로 돌려준다. 오래 걸릴 수 있으면 `export const maxDuration = 60`을 둔다.
 

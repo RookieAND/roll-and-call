@@ -68,3 +68,5 @@ export {
   type AttendanceRosterRow,
   type AttendanceUpdate,
 } from "./attendance-changes";
+export { gmAttendanceNotices } from "./gm-attendance-notices";
+export { autoConfirmNotices } from "./auto-confirm-notices";

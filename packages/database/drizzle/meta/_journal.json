@@ -386,6 +386,13 @@
       "when": 1794600000000,
       "tag": "0060_draw_lotteries_cron",
       "breakpoints": true
+    },
+    {
+      "idx": 61,
+      "version": "7",
+      "when": 1794700000000,
+      "tag": "0061_attendance_cron",
+      "breakpoints": true
     }
   ]
 }
