@@ -26,7 +26,7 @@ export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
   const error = gate?.type === RULE_GATE.blocked ? null : formState.errors.rule?.message;
   const hint = rulebooks
     ? "구인을 열 룰과 판본을 고릅니다."
-    : "룰을 잘못 골랐다면 구인을 지우고 새로 열어 주세요.";
+    : "룰북을 잘못 골랐다면 구인을 취소하고 새로 열어 주세요.";
 
   return (
     <VStack gap="100">

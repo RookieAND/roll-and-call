@@ -26,7 +26,6 @@ interface RulebookOptionProps {
   selected?: boolean;
   disabled?: boolean;
   locked?: boolean;
-  expanded?: boolean;
   reason?: ReactNode;
   onClick?: () => void;
 }
@@ -37,22 +36,21 @@ export function RulebookOption({
   selected = false,
   disabled = false,
   locked = false,
-  expanded = false,
   reason,
   onClick,
 }: RulebookOptionProps) {
   const nameForeground = disabled || locked ? "hint" : "normal";
   const nameWeight = selected ? "bold" : "medium";
+  const inactive = disabled || locked;
   return (
-    // ponytail: 라디오처럼 읽히되 잠긴 줄도 눌러 안내를 펼쳐야 해서 네이티브 radio 대신 button + aria-checked.
+    // ponytail: 줄 끝에 배지를 둔 라디오 줄이라 네이티브 radio 대신 button + aria-checked.
     <button
       type="button"
-      role={locked ? "button" : "radio"}
-      aria-checked={locked ? undefined : selected}
-      aria-expanded={locked ? expanded : undefined}
-      aria-disabled={disabled}
-      onClick={disabled ? undefined : onClick}
-      className={row({ selected, disabled })}
+      role="radio"
+      aria-checked={selected}
+      aria-disabled={inactive}
+      onClick={inactive ? undefined : onClick}
+      className={row({ selected, disabled: inactive })}
     >
       {locked ? (
         <Lock size={18} strokeWidth={2.2} aria-hidden className="flex-none text-hint" />

@@ -9,7 +9,7 @@ interface WaitlistFieldProps {
 
 export function WaitlistField({ value, onChange }: WaitlistFieldProps) {
   const hint = value
-    ? "자리가 나면 GM이 순서대로 올립니다."
+    ? "자리가 나면 GM이 대기 명단에서 확정합니다."
     : "끄면 정원이 차는 순간 신청이 닫힙니다.";
 
   return (

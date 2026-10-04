@@ -9,6 +9,7 @@ export type GameEditContext = {
   gameId: string;
   applicantCount: number;
   confirmedCount: number;
+  drawn: boolean;
 };
 
 export interface GameFormLayoutProps {

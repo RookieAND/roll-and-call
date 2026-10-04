@@ -2,9 +2,16 @@ import { Container } from "@roll-and-call/ui";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import { getCurrentServer, getCurrentSessionUser, getRulebookRecords } from "@/shared/server";
+import {
+  findActiveSanction,
+  getCurrentServer,
+  getCurrentSessionUser,
+  getRulebookRecords,
+} from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { CreateGameForm } from "@/widgets/game-form";
+
+import { CreateGameSanctioned } from "./create-game-sanctioned";
 
 interface CreateGameViewProps {
   rulebookId?: string;
@@ -27,7 +34,11 @@ export async function CreateGameView({ rulebookId }: CreateGameViewProps) {
 
   // 위저드가 단계별로 앱바·진행바를 바꾸므로 폼이 페이지 셸을 소유한다.
   const server = await getCurrentServer();
-  const records = await getRulebookRecords({ serverId: server.id, userId: user.id });
+  const [sanction, records] = await Promise.all([
+    findActiveSanction({ serverId: server.id, userId: user.id }),
+    getRulebookRecords({ serverId: server.id, userId: user.id }),
+  ]);
+  if (sanction) return <CreateGameSanctioned reason={sanction.reason} until={sanction.until} />;
   return (
     <CreateGameForm
       serverId={server.id}

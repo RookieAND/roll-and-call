@@ -19,6 +19,7 @@ export interface DateTimePickerProps {
   invalid?: boolean;
   min?: string;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export function DateTimePicker({
@@ -28,6 +29,7 @@ export function DateTimePicker({
   invalid,
   min,
   placeholder,
+  disabled = false,
 }: DateTimePickerProps) {
   const [datePart = "", timePart = ""] = value ? value.split("T") : [];
   const time = timePart.slice(0, 5) || DEFAULT_TIME;
@@ -46,6 +48,7 @@ export function DateTimePicker({
           invalid={invalid}
           min={min}
           placeholder={placeholder}
+          disabled={disabled}
           onChange={(date) => emit(date, time)}
         />
       </div>
@@ -53,6 +56,7 @@ export function DateTimePicker({
         <Select.Root
           items={items}
           value={time}
+          disabled={disabled}
           onValueChange={(timeValue) => emit(datePart, timeValue)}
         >
           <Select.Trigger aria-label="시각" />

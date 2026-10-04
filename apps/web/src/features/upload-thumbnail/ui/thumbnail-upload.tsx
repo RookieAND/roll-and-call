@@ -46,7 +46,7 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
         onProgress: (ratio) => setPercent(Math.round(ratio * 100)),
       });
       if ("error" in result) {
-        setError(uploadFailedMessage(result.error));
+        setError(result.error);
         return;
       }
       onChange(result.url);

@@ -55,11 +55,11 @@ export function GameRecruitFields({
           />
         </Field.Root>
         {minPlayers > 1 && (
-          <Callout.Root colorPalette="danger" size="sm">
-            <Callout.Icon />
-            <Callout.Title>{`확정 참여자가 ${minPlayers}명이라 정원을 ${minPlayers}명보다 줄일 수 없습니다.`}</Callout.Title>
+          <Callout.Root colorPalette="gray" size="sm">
             <Callout.Description>
-              줄이려면 참여자 관리에서 확정을 먼저 풀어주세요.
+              {`확정 참여자가 ${minPlayers}명이라 정원을 ${minPlayers}명보다 줄일 수 없습니다.`}
+              <br />
+              줄이려면 참여자 관리에서 확정을 먼저 풀어 주세요.
             </Callout.Description>
           </Callout.Root>
         )}
@@ -96,22 +96,22 @@ export function GameRecruitFields({
         {!locked && isLottery && (
           <Callout.Root colorPalette="gray" size="sm">
             <Callout.Description>
-              정원과 관계없이 신청을 받고, 마감 때 뽑습니다.
+              정원과 관계없이 신청을 받고, 마감 때 추첨합니다.
               <br />
               뽑히지 않은 신청자는 대기 명단에 순서대로 남습니다.
             </Callout.Description>
           </Callout.Root>
         )}
         {!locked && !isLottery && (
-          <>
-            <Callout.Root colorPalette="gray" size="sm">
-              <Callout.Description>신청한 순서대로 정원까지 바로 확정됩니다.</Callout.Description>
-            </Callout.Root>
-            <WaitlistField
-              value={watch("waitlistEnabled")}
-              onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
-            />
-          </>
+          <Callout.Root colorPalette="gray" size="sm">
+            <Callout.Description>신청한 순서대로 정원까지 바로 확정됩니다.</Callout.Description>
+          </Callout.Root>
+        )}
+        {!isLottery && (
+          <WaitlistField
+            value={watch("waitlistEnabled")}
+            onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
+          />
         )}
       </VStack>
     </>

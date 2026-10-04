@@ -8,7 +8,7 @@ import { useState } from "react";
 import { formatPickerDate } from "./format-picker-date";
 
 const triggerClass =
-  "flex h-11 w-full items-center justify-between gap-100 rounded-400 border bg-surface px-150 text-left text-sm outline-none transition-colors focus:ring-2";
+  "flex h-11 w-full items-center justify-between gap-100 rounded-400 border bg-surface px-150 text-left text-sm outline-none transition-colors focus:ring-2 disabled:opacity-50";
 
 export interface DatePickerProps {
   value?: string;
@@ -18,6 +18,7 @@ export interface DatePickerProps {
   invalid?: boolean;
   min?: string;
   max?: string;
+  disabled?: boolean;
 }
 
 export function DatePicker({
@@ -28,6 +29,7 @@ export function DatePicker({
   invalid,
   min,
   max,
+  disabled = false,
 }: DatePickerProps) {
   const [open, setOpen] = useState(false);
   const fieldAria = useFieldControlAria({ invalid });
@@ -37,7 +39,12 @@ export function DatePicker({
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger id={id} {...fieldAria} className={cn(triggerClass, toneClass)}>
+      <Popover.Trigger
+        id={id}
+        disabled={disabled}
+        {...fieldAria}
+        className={cn(triggerClass, toneClass)}
+      >
         {value ? (
           <span className="truncate">{formatPickerDate(value)}</span>
         ) : (

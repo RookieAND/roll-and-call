@@ -1,10 +1,6 @@
 "use client";
 
-import { Button, Text, VStack } from "@roll-and-call/ui";
-import { useState } from "react";
-
 import { RULE_GATE, RulebookOption, type EditionSet, type RuleGate } from "@/entities/rulebook";
-import { LineBreaks, ServerLink } from "@/shared/ui";
 
 import { RulebookSetBadge } from "./rulebook-set-badge";
 
@@ -16,42 +12,14 @@ interface RulebookSheetOptionProps {
 }
 
 export function RulebookSheetOption({ set, gate, selected, onPick }: RulebookSheetOptionProps) {
-  const [expanded, setExpanded] = useState(false);
-  const locked = gate.type === RULE_GATE.blocked;
-  const [title, ...body] = gate.lines;
-
   return (
-    <div className={expanded ? "rounded-400 bg-gray-50" : undefined}>
-      <RulebookOption
-        name={set.edition || set.categoryName}
-        edition=""
-        selected={selected}
-        locked={locked}
-        expanded={expanded}
-        reason={<RulebookSetBadge set={set} />}
-        onClick={locked ? () => setExpanded(!expanded) : onPick}
-      />
-      {expanded && (
-        <VStack gap="125" className="pr-150 pb-150 pl-500">
-          <VStack className="break-keep">
-            <Text typography="body3" weight="bold">
-              {title}
-            </Text>
-            <Text typography="body3" foreground="muted">
-              <LineBreaks lines={body} />
-            </Text>
-          </VStack>
-          {gate.action && (
-            <Button
-              render={<ServerLink path={gate.action.href} />}
-              variant="tinted"
-              className="w-full"
-            >
-              {gate.action.label}
-            </Button>
-          )}
-        </VStack>
-      )}
-    </div>
+    <RulebookOption
+      name={set.edition || set.categoryName}
+      edition=""
+      selected={selected}
+      locked={gate.type === RULE_GATE.blocked}
+      reason={<RulebookSetBadge set={set} />}
+      onClick={onPick}
+    />
   );
 }

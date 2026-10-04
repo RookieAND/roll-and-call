@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 
-import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import { DEFAULT_WINDOW, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 import { ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
 import type { GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
@@ -64,6 +64,8 @@ export function GameForm({
       confirmedAt: defaultGame?.confirmedAt ? toKstDateTimeInput(defaultGame.confirmedAt) : "",
       rangeStart: defaultGame?.rangeStart ?? "",
       rangeEnd: defaultGame?.rangeEnd ?? "",
+      windowStartHour: String(defaultGame?.windowStartHour ?? DEFAULT_WINDOW.startHour),
+      windowEndHour: String(defaultGame?.windowEndHour ?? DEFAULT_WINDOW.endHour),
       thumbnailUrl: defaultGame?.thumbnailUrl ?? "",
       thumbnailSpoiler: defaultGame?.thumbnailSpoiler ?? false,
       images: defaultGame?.images ?? [],

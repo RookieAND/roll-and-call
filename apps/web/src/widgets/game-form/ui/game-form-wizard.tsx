@@ -47,6 +47,11 @@ export function GameFormWizard({
   const leaveHref = toServerPath(edit ? `/games/${edit.gameId}` : "/games");
   const applicants = edit?.applicantCount ?? 0;
   const locked = applicants > 0;
+  const confirmedCount = edit?.confirmedCount ?? 0;
+  const sessionNotice =
+    confirmedCount > 0
+      ? `바꾸면 구인 스레드로 참여자 ${confirmedCount}명에게 새 일시를 알립니다.`
+      : null;
 
   // 숨겨진 단계의 필드로는 스크롤할 수 없어서 그 단계로 먼저 돌린다.
   function onInvalid(errors: FieldErrors<GameFormValues>) {
@@ -107,9 +112,8 @@ export function GameFormWizard({
           <GameScheduleFields
             form={form}
             modeLocked={locked}
-            sessionNotice={
-              applicants > 0 ? `바꾸면 참여자 ${applicants}명에게 디스코드로 알립니다.` : null
-            }
+            endDateLocked={edit?.drawn ?? false}
+            sessionNotice={sessionNotice}
           />
         );
     }
@@ -166,7 +170,7 @@ export function GameFormWizard({
         submitLabel={submitLabel}
         error={
           form.formState.errors.root?.message ??
-          // 마감이 세션·조율 기간보다 늦은 교차 검증은 한 칸의 잘못이 아니라 제출 버튼 위에서 알린다.
+          // 마감이 세션·조율 시작보다 늦은 교차 검증은 한 칸의 잘못이 아니라 제출 버튼 위에서 알린다.
           (form.formState.errors.endDate?.type === "custom"
             ? form.formState.errors.endDate.message
             : undefined)

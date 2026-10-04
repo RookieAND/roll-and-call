@@ -6,22 +6,31 @@ import { getGameById, getCurrentSessionUser, getCurrentServer } from "@/shared/s
 import { AppBar } from "@/shared/ui";
 import { EditGameForm } from "@/widgets/game-form";
 
+import { editLockedTitle } from "../model/edit-locked-title";
+import { EditLockedNotice } from "./edit-locked-notice";
+
 export async function EditGameView({ id }: { id: string }) {
   const server = await getCurrentServer();
   const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();
-  if (user?.id === game.gmId) return <EditGameForm serverId={server.id} game={game} />;
+  const isGm = user?.id === game.gmId;
+  const lockedTitle = isGm ? editLockedTitle(game) : null;
+  if (isGm && !lockedTitle) return <EditGameForm serverId={server.id} game={game} />;
 
   return (
     <>
       <AppBar back={`/games/${id}`} title="구인 수정" />
       <Container size="md">
         <VStack gap="300" className="py-300">
-          <GmOnlyNotice
-            gameId={id}
-            signedIn={!!user}
-            description="이 구인글의 수정은 GM만 할 수 있습니다."
-          />
+          {lockedTitle ? (
+            <EditLockedNotice gameId={id} title={lockedTitle} />
+          ) : (
+            <GmOnlyNotice
+              gameId={id}
+              signedIn={!!user}
+              description="이 구인글의 수정은 GM만 할 수 있습니다."
+            />
+          )}
         </VStack>
       </Container>
     </>

@@ -81,7 +81,9 @@ export function PreConfirmedField({
         confirmedCount={count}
         maxPlayers={maxPlayers}
         excludeIds={players.map((player) => player.userId)}
-        onPick={(candidates) => onAdd(candidates.map(({ status: _status, ...player }) => player))}
+        onPick={(candidates) =>
+          onAdd(candidates.map(({ status: _status, sanctioned: _sanctioned, ...player }) => player))
+        }
       />
     </VStack>
   );

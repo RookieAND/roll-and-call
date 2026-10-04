@@ -28,13 +28,21 @@ export const SECTION_FIELDS = {
   ],
   [FORM_SECTION.media]: ["thumbnailUrl", "thumbnailSpoiler", "images"],
   [FORM_SECTION.recruit]: ["maxPlayers", "preConfirmed", "recruitMethod", "waitlistEnabled"],
-  [FORM_SECTION.schedule]: ["scheduleMode", "confirmedAt", "rangeStart", "rangeEnd", "endDate"],
+  [FORM_SECTION.schedule]: [
+    "scheduleMode",
+    "confirmedAt",
+    "rangeStart",
+    "rangeEnd",
+    "windowStartHour",
+    "windowEndHour",
+    "endDate",
+  ],
 } as const satisfies Record<SectionKey, readonly (keyof GameFormValues)[]>;
 
 export const GAME_FORM_STEPS = [
   {
-    title: "게임 정보",
-    description: "어떤 게임을 얼마나 하는지 알려주세요.",
+    title: "구인 정보",
+    description: "어떤 세션을 얼마나 하는지 알려 주세요.",
     sections: [FORM_SECTION.basics],
   },
   {
@@ -44,7 +52,7 @@ export const GAME_FORM_STEPS = [
   },
   {
     title: "이미지",
-    description: "구인글에 보여줄 그림입니다. 나중에 올려도 됩니다.",
+    description: "구인글에 보여 줄 그림입니다. 나중에 올려도 됩니다.",
     sections: [FORM_SECTION.media],
   },
   {

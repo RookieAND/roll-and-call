@@ -28,7 +28,7 @@ export function GameBasicsFields({ form, rulebooks }: GameBasicsFieldsProps) {
 
   return (
     <>
-      <Field.Root label="게임명" htmlFor="title" required error={errors.title?.message}>
+      <Field.Root label="구인 제목" htmlFor="title" required error={errors.title?.message}>
         <TextInput
           id="title"
           placeholder="예: 마지막 열차"
@@ -62,7 +62,7 @@ export function GameBasicsFields({ form, rulebooks }: GameBasicsFieldsProps) {
           value={synopsis}
           limit={GAME_SYNOPSIS_MAX}
           invalid={!!errors.synopsis}
-          placeholder="어떤 이야기인지, 어떤 분위기인지 적어주세요."
+          placeholder="어떤 이야기인지, 어떤 분위기인지 적어 주세요."
           onChange={(value) => setValue("synopsis", value, { shouldDirty: true })}
         />
       </Field.Root>

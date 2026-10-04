@@ -1,5 +1,7 @@
 "use client";
 
+import { isNull } from "es-toolkit";
+
 import { countConfirmed } from "@/entities/game";
 import { updateGame } from "@/features/write-game";
 import type { GameDetailData } from "@/shared/server";
@@ -23,6 +25,7 @@ export function EditGameForm({ serverId, game }: EditGameFormProps) {
         gameId: game.id,
         applicantCount: game.participants.length,
         confirmedCount: countConfirmed(game.participants),
+        drawn: !isNull(game.drawnAt),
       }}
     />
   );

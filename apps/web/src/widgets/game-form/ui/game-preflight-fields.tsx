@@ -96,7 +96,7 @@ export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
           value={notice}
           limit={GAME_NOTICE_MAX}
           invalid={!!errors.notice}
-          placeholder="참여 전에 알아야 할 것을 적어주세요. 캐릭터 준비물, 지각 규칙, 중도 하차 처리 같은 것."
+          placeholder="참여 전에 알아야 할 것을 적어 주세요. 캐릭터 준비물, 지각 규칙, 중도 하차 처리 같은 것."
           onChange={(value) => setValue("notice", value, { shouldDirty: true })}
         />
       </Field.Root>

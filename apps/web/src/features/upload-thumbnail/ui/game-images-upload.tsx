@@ -48,7 +48,7 @@ export function GameImagesUpload({ serverId, value, onChange, max }: GameImagesU
       for (const file of files.slice(0, remaining)) {
         const result = await uploadThumbnail({ serverId, file });
         if ("error" in result) {
-          setError(uploadFailedMessage(result.error));
+          setError(result.error);
           break;
         }
         urls.push(result.url);
@@ -147,7 +147,7 @@ export function GameImagesUpload({ serverId, value, onChange, max }: GameImagesU
         </Text>
       ) : (
         <Text typography="body4" foreground="hint" render={<p />}>
-          각 이미지 당 최대 5MB 까지 업로드 가능합니다.
+          이미지당 최대 5MB까지 올릴 수 있습니다.
         </Text>
       )}
 

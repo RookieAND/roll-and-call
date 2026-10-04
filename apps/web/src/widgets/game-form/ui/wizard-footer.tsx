@@ -2,6 +2,8 @@
 
 import { Button, Callout, Container, FloatingBar, HStack, VStack } from "@roll-and-call/ui";
 
+import { LineBreaks } from "@/shared/ui";
+
 import { WizardNextButton } from "./wizard-next-button";
 import { WizardSavingButton } from "./wizard-saving-button";
 import { WizardSubmitButton } from "./wizard-submit-button";
@@ -39,7 +41,9 @@ export function WizardFooter({
             {isLastStep && error && (
               <Callout.Root colorPalette="danger" size="sm">
                 <Callout.Icon />
-                <Callout.Description>{error}</Callout.Description>
+                <Callout.Description>
+                  <LineBreaks lines={error.split("\n")} />
+                </Callout.Description>
               </Callout.Root>
             )}
             <HStack gap="100" className="[&>*]:flex-1">

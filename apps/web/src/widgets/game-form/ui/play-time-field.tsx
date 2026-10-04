@@ -36,7 +36,7 @@ export function PlayTimeField({ value, onChange, error }: PlayTimeFieldProps) {
   }
 
   return (
-    <Field.Root label="플레이타임" error={error}>
+    <Field.Root label="플레이타임" required error={error}>
       <HStack gap="100">
         <Select.Root
           items={hourItems}

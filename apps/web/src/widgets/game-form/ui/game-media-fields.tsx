@@ -24,6 +24,7 @@ export function GameMediaFields({ serverId, form }: GameMediaFieldsProps) {
       />
       <ThumbnailSpoilerField
         value={watch("thumbnailSpoiler")}
+        disabled={!watch("thumbnailUrl")}
         onChange={(spoiler) => setValue("thumbnailSpoiler", spoiler, { shouldDirty: true })}
       />
       <GameImagesUpload
