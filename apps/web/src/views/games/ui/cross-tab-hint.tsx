@@ -22,7 +22,20 @@ export function CrossTabHint({ filter, otherCount }: CrossTabHintProps) {
         {otherLabel}에도 ‘{filter.q}’ {otherCount}건이 있습니다.
       </Text>
       <Button
-        render={<ServerLink path={gamesHref(filterParams({ q: filter.q, tab: otherTab }))} />}
+        render={
+          <ServerLink
+            path={gamesHref(
+              filterParams({
+                q: filter.q,
+                rules: filter.rules,
+                days: filter.days,
+                times: filter.times,
+                includeUnscheduled: filter.includeUnscheduled,
+                tab: otherTab,
+              }),
+            )}
+          />
+        }
         variant="outline"
         className="w-full"
       >

@@ -1,9 +1,17 @@
 import { HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
-import { GAME_TAB, GAME_TAB_DEFAULT, type GamesFilter } from "@/shared/api";
+import {
+  GAME_STATUS_FILTER_DEFAULT,
+  GAME_TAB,
+  GAME_TAB_DEFAULT,
+  type GamesFilter,
+} from "@/shared/api";
 import type { GamesCounts } from "@/shared/server";
 
 import { statusCounts } from "../model/status-counts";
+import { AppliedFilterChips } from "./applied-filter-chips";
+import { GameFilterButton } from "./game-filter-button";
+import { GameFilterSheet } from "./game-filter-sheet";
 import { GameScopeTabs } from "./game-scope-tabs";
 import { GameSearchForm } from "./game-search-form";
 import { GameSortSheet } from "./game-sort-sheet";
@@ -16,20 +24,38 @@ interface GamesToolbarProps {
   counts?: GamesCounts;
   // 탭 건수는 검색어·필터와 무관하다.
   tabCounts?: GamesCounts;
+  ruleOptions?: { key: string; label: string }[];
 }
 
 // top = AppBar 높이 토큰. Container의 px-200을 -mx-200으로 되돌려 배경을 끝까지 채운다.
-// 지난 구인은 끝난 날짜 최근 먼저로 고정이라 정렬 버튼이 없다.
-export function GamesToolbar({ filter = {}, counts, tabCounts }: GamesToolbarProps) {
+// 지난 구인은 끝난 날짜 최근 먼저로 고정이라 정렬 버튼이 없다. 건수가 없으면(첫 진입 뼈대) 필터 버튼만 그린다.
+export function GamesToolbar({
+  filter = {},
+  counts,
+  tabCounts,
+  ruleOptions = [],
+}: GamesToolbarProps) {
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
+  const chipCounts = counts ? statusCounts({ counts, tab }) : undefined;
   return (
     <VStack className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 border-b border-gray-200 bg-surface">
       <GameScopeTabs filter={filter} counts={tabCounts} />
       <VStack gap="125" className="px-200 py-150">
-        <GameSearchForm key={filter.q ?? ""} filter={filter} />
+        <HStack align="center" gap="050">
+          <GameSearchForm key={filter.q ?? ""} filter={filter} />
+          {chipCounts ? (
+            <GameFilterSheet
+              filter={filter}
+              ruleOptions={ruleOptions}
+              count={chipCounts[filter.status ?? GAME_STATUS_FILTER_DEFAULT] ?? 0}
+            />
+          ) : (
+            <GameFilterButton count={0} />
+          )}
+        </HStack>
         <HStack align="center" gap="075">
-          {counts ? (
-            <GameStatusChips filter={filter} counts={statusCounts({ counts, tab })} />
+          {chipCounts ? (
+            <GameStatusChips filter={filter} counts={chipCounts} />
           ) : (
             <HStack gap="075" className="min-w-0 flex-1">
               {CHIP_SKELETON_WIDTHS.map((width) => (
@@ -39,6 +65,7 @@ export function GamesToolbar({ filter = {}, counts, tabCounts }: GamesToolbarPro
           )}
           {tab === GAME_TAB.live && <GameSortSheet filter={filter} />}
         </HStack>
+        {counts && <AppliedFilterChips filter={filter} ruleOptions={ruleOptions} />}
       </VStack>
     </VStack>
   );

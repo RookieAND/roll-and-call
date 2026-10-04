@@ -37,7 +37,7 @@ export function GameSearchForm({ filter }: GameSearchFormProps) {
   return (
     <form
       role="search"
-      className="relative"
+      className="relative min-w-0 flex-1"
       onSubmit={(event) => {
         event.preventDefault();
         search(value.trim());

@@ -2,7 +2,12 @@ import { Container, VStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
 
 import { GAME_TAB, GAME_TAB_DEFAULT, hasGameFilters, type GamesFilter } from "@/shared/api";
-import { getGamesCounts, getRecruitingGamesPage, getCurrentServer } from "@/shared/server";
+import {
+  getCurrentServer,
+  getGamesCounts,
+  getRecruitingGamesPage,
+  listGameRuleOptions,
+} from "@/shared/server";
 
 import { filterParams } from "../lib/filter-params";
 import { CrossTabHint } from "./cross-tab-hint";
@@ -21,20 +26,26 @@ interface GameBoardProps {
 export async function GameBoard({ page = 1, filter }: GameBoardProps) {
   const server = await getCurrentServer();
   const gamesPage = getRecruitingGamesPage({ serverId: server.id, page, filter });
-  const [counts, allCounts] = await Promise.all([
+  const tab = filter.tab ?? GAME_TAB_DEFAULT;
+  const [counts, allCounts, ruleOptions] = await Promise.all([
     getGamesCounts({ serverId: server.id, q: filter.q, filter }),
     filter.q || hasGameFilters(filter)
       ? getGamesCounts({ serverId: server.id, q: undefined })
       : null,
+    listGameRuleOptions({ serverId: server.id, tab, now: new Date() }),
   ]);
-  const tab = filter.tab ?? GAME_TAB_DEFAULT;
   const listSkeleton = tab === GAME_TAB.past ? <PastGameListSkeleton /> : <GameListSkeleton />;
   const key = JSON.stringify(filterParams({ ...filter, page }));
 
   return (
     <Container className="group/games">
       <GamesJoinCallout page={page} filter={filter} />
-      <GamesToolbar filter={filter} counts={counts} tabCounts={allCounts ?? counts} />
+      <GamesToolbar
+        filter={filter}
+        counts={counts}
+        tabCounts={allCounts ?? counts}
+        ruleOptions={ruleOptions}
+      />
       <VStack gap="150" className="pt-150 pb-200">
         <div className="hidden group-has-[input[aria-busy=true]]/games:contents">
           {listSkeleton}
