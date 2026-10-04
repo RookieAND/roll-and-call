@@ -5,7 +5,6 @@ import type { GuildSnapshot } from "./guild-snapshot";
 import { settingCheckMessage } from "./setting-check-message";
 
 const VIEW_AND_SEND = String((1n << 10n) | (1n << 11n));
-const MANAGE_ROLES = String(1n << 28n);
 
 const guild: GuildSnapshot = {
   guildId: "guild",
@@ -13,9 +12,7 @@ const guild: GuildSnapshot = {
   botRoleIds: ["bot-role"],
   roles: [
     { id: "guild", name: "@everyone", position: 0, permissions: VIEW_AND_SEND },
-    { id: "bot-role", name: "Roll & Call", position: 5, permissions: MANAGE_ROLES },
-    { id: "gm-low", name: "GM", position: 3, permissions: "0" },
-    { id: "gm-high", name: "운영", position: 8, permissions: "0" },
+    { id: "bot-role", name: "Roll & Call", position: 5, permissions: "0" },
   ],
   channels: [
     { id: "forum", name: "모집-게시판", type: 15 },
@@ -72,32 +69,6 @@ describe("checkSettingId", () => {
       status: "ok",
     });
   });
-
-  it("GM 역할이 봇 역할보다 위면 실패한다", () => {
-    expect(checkSettingId({ field: "gmRoleId", id: "gm-high", guild })).toMatchObject({
-      reason: "role-above-bot",
-    });
-    expect(checkSettingId({ field: "gmRoleId", id: "gm-low", guild })).toEqual({
-      status: "ok",
-      kind: "role",
-      name: "GM",
-    });
-  });
-
-  it("역할 관리 권한이 없거나 없는 역할이면 실패한다", () => {
-    const withoutManage = {
-      ...guild,
-      roles: guild.roles.map((role) =>
-        role.id === "bot-role" ? { ...role, permissions: "0" } : role,
-      ),
-    };
-    expect(checkSettingId({ field: "gmRoleId", id: "gm-low", guild: withoutManage })).toMatchObject(
-      { reason: "cannot-manage-roles" },
-    );
-    expect(checkSettingId({ field: "gmRoleId", id: "guild", guild })).toMatchObject({
-      reason: "role-not-in-server",
-    });
-  });
 });
 
 describe("settingCheckMessage", () => {
@@ -107,21 +78,27 @@ describe("settingCheckMessage", () => {
         check: { status: "ok", kind: "channel", name: "세션-완료" },
         serverName: "TRPIA",
       }),
-    ).toBe("#세션-완료 채널을 확인했습니다");
-    expect(
-      settingCheckMessage({
-        check: { status: "ok", kind: "role", name: "GM" },
-        serverName: "TRPIA",
-      }),
-    ).toBe("@GM 역할을 확인했습니다");
+    ).toEqual({ title: "#세션-완료 채널을 확인했습니다" });
   });
 
-  it("실패 이유마다 다른 문구를 쓴다", () => {
+  it("실패 문구는 무엇이 문제인지와 어떻게 고치는지 두 줄이다", () => {
     expect(
       settingCheckMessage({
         check: { status: "fail", reason: "not-in-server" },
         serverName: "TRPIA",
       }),
-    ).toBe("이 서버의 채널이 아닙니다. TRPIA 서버에 있는 채널의 ID를 넣어 주세요.");
+    ).toEqual({
+      title: "이 서버의 채널이 아닙니다.",
+      description: "TRPIA 서버에 있는 채널의 ID를 넣어 주세요.",
+    });
+    expect(
+      settingCheckMessage({
+        check: { status: "fail", reason: "cannot-post" },
+        serverName: "TRPIA",
+      }),
+    ).toEqual({
+      title: "봇이 이 채널에 글을 쓸 수 없습니다.",
+      description: "채널 권한에서 Roll & Call 봇에 메시지 보내기를 허용해 주세요.",
+    });
   });
 });

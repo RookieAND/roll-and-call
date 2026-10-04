@@ -1,0 +1,1 @@
+ALTER TABLE "servers" DROP COLUMN "gm_role_id";

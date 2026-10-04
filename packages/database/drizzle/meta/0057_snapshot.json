@@ -1,6 +1,6 @@
 {
-  "id": "d334b9fc-4f72-497d-852b-cefb9ff09c35",
-  "prevId": "65157412-71bf-4828-9c99-62554325a0b2",
+  "id": "65157412-71bf-4828-9c99-62554325a0b2",
+  "prevId": "b40279a1-9e76-4823-b23e-ed714738de73",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1043,22 +1043,6 @@
           ],
           "isUnique": false,
           "where": "confirmed_at is not null",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "games_lottery_due_idx": {
-          "name": "games_lottery_due_idx",
-          "columns": [
-            {
-              "expression": "end_date",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "where": "recruit_method = 'lottery' and drawn_at is null and cancelled_at is null",
           "concurrently": false,
           "method": "btree",
           "with": {}

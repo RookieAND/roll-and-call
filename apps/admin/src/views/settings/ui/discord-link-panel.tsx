@@ -19,14 +19,18 @@ interface DiscordLinkPanelProps {
   ids: SettingIds;
   checks: Partial<Record<SettingFieldKey, RowCheck>>;
   serverName: string;
-  onChange: (input: { key: SettingFieldKey; value: string }) => void;
-  onCheck: (key: SettingFieldKey) => void;
+  locked?: boolean;
+  loading?: boolean;
+  onChange?: (input: { key: SettingFieldKey; value: string }) => void;
+  onCheck?: (key: SettingFieldKey) => void;
 }
 
 export function DiscordLinkPanel({
   ids,
   checks,
   serverName,
+  locked,
+  loading,
   onChange,
   onCheck,
 }: DiscordLinkPanelProps) {
@@ -49,8 +53,10 @@ export function DiscordLinkPanel({
           check={checks[field.key]}
           serverName={serverName}
           emptyHint={"emptyHint" in field ? field.emptyHint : undefined}
-          onChange={(value) => onChange({ key: field.key, value })}
-          onCheck={() => onCheck(field.key)}
+          locked={locked}
+          loading={loading}
+          onChange={(value) => onChange?.({ key: field.key, value })}
+          onCheck={() => onCheck?.(field.key)}
         />
       ))}
       <VStack

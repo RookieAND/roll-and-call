@@ -135,7 +135,6 @@ export { getAuditEntry, type AuditEntryDetail } from "./get-audit-entry";
 export { AUDIT_SUBJECT, type AuditSubjectKind } from "./audit-subject";
 export { listAuditLog } from "./list-audit-log";
 export { listStaff, type StaffRow } from "./list-staff";
-export { listRulebookOptions, type RulebookOption } from "./list-rulebook-options";
 export { searchStaffCandidates } from "./search-staff-candidates";
 export { type StaffCandidate } from "./pick-staff-candidates";
 export { type CategoryEdition } from "./category-editions";

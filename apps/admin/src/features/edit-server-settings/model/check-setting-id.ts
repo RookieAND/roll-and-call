@@ -4,7 +4,6 @@ import {
   DISCORD_PERMISSION,
 } from "@roll-and-call/discord";
 
-import { checkRoleId } from "./check-role-id";
 import type { GuildSnapshot } from "./guild-snapshot";
 import { SETTING_CHANNEL_TYPES } from "./setting-channel-types";
 import { SETTING_FAIL_REASON, SETTING_TARGET_KIND, type SettingCheck } from "./setting-check";
@@ -23,7 +22,6 @@ export function checkSettingId({
   guild: GuildSnapshot;
 }): SettingCheck {
   const channelTypes = SETTING_CHANNEL_TYPES[field];
-  if (!channelTypes) return checkRoleId({ id, guild });
   const channel = guild.channels.find((candidate) => candidate.id === id);
   if (!channel) return { status: "fail", reason: SETTING_FAIL_REASON.notInServer };
   if (!channelTypes.includes(channel.type)) {

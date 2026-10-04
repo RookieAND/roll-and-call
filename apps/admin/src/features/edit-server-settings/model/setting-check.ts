@@ -2,15 +2,12 @@ export const SETTING_FAIL_REASON = {
   notInServer: "not-in-server",
   wrongType: "wrong-type",
   cannotPost: "cannot-post",
-  roleNotInServer: "role-not-in-server",
-  cannotManageRoles: "cannot-manage-roles",
-  roleAboveBot: "role-above-bot",
   unreachable: "unreachable",
 } as const;
 
 export type SettingFailReason = (typeof SETTING_FAIL_REASON)[keyof typeof SETTING_FAIL_REASON];
 
-export const SETTING_TARGET_KIND = { channel: "channel", forum: "forum", role: "role" } as const;
+export const SETTING_TARGET_KIND = { channel: "channel", forum: "forum" } as const;
 
 export type SettingTargetKind = (typeof SETTING_TARGET_KIND)[keyof typeof SETTING_TARGET_KIND];
 

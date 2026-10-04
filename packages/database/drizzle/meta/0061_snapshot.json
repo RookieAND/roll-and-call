@@ -273,12 +273,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "gm_role_id": {
-          "name": "gm_role_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "owner_discord_id": {
           "name": "owner_discord_id",
           "type": "text",
