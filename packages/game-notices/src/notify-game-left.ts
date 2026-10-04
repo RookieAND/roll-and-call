@@ -1,7 +1,7 @@
 import { type Server } from "@roll-and-call/database";
 import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed, countWaiting } from "@roll-and-call/database/games/model";
-import { getUsername } from "@roll-and-call/database/profiles";
+import { getMemberNickname } from "@roll-and-call/database/profiles";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { gameNoticeEmbed } from "./game-notice-embed";
@@ -24,7 +24,7 @@ export async function notifyGameLeft({
 }) {
   const [game, username] = await Promise.all([
     getGameForNotice({ serverId: server.id, gameId }),
-    getUsername(userId),
+    getMemberNickname({ serverId: server.id, userId }),
   ]);
   if (!game?.discordThreadId) return;
 

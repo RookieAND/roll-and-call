@@ -21,7 +21,7 @@ export async function searchGameCandidates({
   return db
     .select({
       userId: profiles.id,
-      username: profiles.username,
+      username: serverMembers.nickname,
       avatarUrl: profiles.avatarUrl,
       bio: serverMembers.bio,
       status: participants.status,
@@ -40,6 +40,6 @@ export async function searchGameCandidates({
       ),
     )
     .where(memberSearchWhere({ excludeUserId, keyword }))
-    .orderBy(profiles.username)
+    .orderBy(serverMembers.nickname)
     .limit(limit);
 }

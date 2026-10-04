@@ -1,5 +1,6 @@
 import { db } from "#/client";
 import { memberBioSql } from "#/modules/profiles/queries/member-bio-sql";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 
 import { getRespondedUserIds } from "./get-responded-user-ids";
 
@@ -14,7 +15,10 @@ export async function getGameParticipants({
     db.query.games.findFirst({
       where: (gameRow, { and, eq }) => and(eq(gameRow.serverId, serverId), eq(gameRow.id, gameId)),
       with: {
-        gm: { columns: { id: true, username: true, avatarUrl: true } },
+        gm: {
+          columns: { id: true, avatarUrl: true },
+          extras: { username: memberNicknameSql(serverId) },
+        },
         participants: {
           columns: {
             userId: true,
@@ -27,8 +31,8 @@ export async function getGameParticipants({
           where: (participant, { eq }) => eq(participant.serverId, serverId),
           with: {
             user: {
-              columns: { username: true, avatarUrl: true },
-              extras: { bio: memberBioSql(serverId) },
+              columns: { avatarUrl: true },
+              extras: { username: memberNicknameSql(serverId), bio: memberBioSql(serverId) },
             },
           },
         },
@@ -36,8 +40,8 @@ export async function getGameParticipants({
           where: (drawResult, { eq }) => eq(drawResult.serverId, serverId),
           with: {
             user: {
-              columns: { username: true, avatarUrl: true },
-              extras: { bio: memberBioSql(serverId) },
+              columns: { avatarUrl: true },
+              extras: { username: memberNicknameSql(serverId), bio: memberBioSql(serverId) },
             },
           },
         },

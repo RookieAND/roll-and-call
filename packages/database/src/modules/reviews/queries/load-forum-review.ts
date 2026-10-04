@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
 import { db } from "#/client";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import {
   games,
   participants,
@@ -33,8 +34,8 @@ export async function loadForumReview({
       gameTitle: games.title,
       rule: games.rule,
       category: rulebookCategories.name,
-      gmName: gm.username,
-      authorName: profiles.username,
+      gmName: memberNicknameSql(serverId, gm),
+      authorName: memberNicknameSql(serverId),
       authorDiscordId: profiles.discordId,
       absent: participants.absent,
       absenceCancelledAt: participants.absenceCancelledAt,

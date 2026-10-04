@@ -1,7 +1,7 @@
 import { type Server } from "@roll-and-call/database";
 import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed, countWaiting } from "@roll-and-call/database/games/model";
-import { getUsernames } from "@roll-and-call/database/profiles";
+import { getMemberNicknames } from "@roll-and-call/database/profiles";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import { gameNoticeEmbed } from "@roll-and-call/game-notices";
 import { headcountFields } from "@roll-and-call/game-notices";
@@ -19,7 +19,7 @@ export async function notifyDirectConfirmed({
 
   const [game, invitedNames] = await Promise.all([
     getGameForNotice({ serverId: server.id, gameId }),
-    getUsernames(userIds),
+    getMemberNicknames({ serverId: server.id, userIds }),
   ]);
   if (!game?.discordThreadId || invitedNames.length === 0) return;
 

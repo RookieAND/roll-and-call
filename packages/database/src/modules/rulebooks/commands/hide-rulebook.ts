@@ -3,6 +3,7 @@ import { and, desc, eq } from "drizzle-orm";
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
 import { auditLog, profiles, rulebooks } from "#/schema";
@@ -32,7 +33,7 @@ export async function hideRulebook({
       .returning({ id: rulebooks.id });
     if (hidden.length === 0) {
       const [latest] = await tx
-        .select({ at: auditLog.createdAt, by: profiles.username })
+        .select({ at: auditLog.createdAt, by: memberNicknameSql(serverId) })
         .from(auditLog)
         .leftJoin(profiles, eq(profiles.id, auditLog.actorId))
         .where(

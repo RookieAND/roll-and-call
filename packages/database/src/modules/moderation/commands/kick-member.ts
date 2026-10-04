@@ -4,6 +4,7 @@ import { db } from "#/client";
 import { releaseMemberGames } from "#/modules/games/commands/release-member-games";
 import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
 import type { Actor } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, serverMembers, type Game } from "#/schema";
 
 import { recordAudit } from "./record-audit";
@@ -31,7 +32,7 @@ export async function kickMember({
   reason: string;
 }): Promise<KickResult> {
   const [user] = await db
-    .select({ nickname: profiles.username, discordId: profiles.discordId })
+    .select({ nickname: memberNicknameSql(serverId), discordId: profiles.discordId })
     .from(profiles)
     .where(eq(profiles.id, userId));
   if (!user) throw new Error("유저를 찾을 수 없습니다");

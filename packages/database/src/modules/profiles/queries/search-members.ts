@@ -19,7 +19,7 @@ export async function searchMembers({
   return db
     .select({
       userId: profiles.id,
-      username: profiles.username,
+      username: serverMembers.nickname,
       avatarUrl: profiles.avatarUrl,
       bio: serverMembers.bio,
     })
@@ -29,6 +29,6 @@ export async function searchMembers({
       and(eq(serverMembers.serverId, serverId), eq(serverMembers.userId, profiles.id)),
     )
     .where(memberSearchWhere({ excludeUserId, keyword }))
-    .orderBy(profiles.username)
+    .orderBy(serverMembers.nickname)
     .limit(limit);
 }

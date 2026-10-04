@@ -1,4 +1,5 @@
 import { db } from "#/client";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 
 export async function getGameForRecruitmentNotice({
   serverId,
@@ -10,11 +11,13 @@ export async function getGameForRecruitmentNotice({
   return db.query.games.findFirst({
     where: (game, { and, eq }) => and(eq(game.serverId, serverId), eq(game.id, gameId)),
     with: {
-      gm: { columns: { username: true } },
+      gm: { columns: {}, extras: { username: memberNicknameSql(serverId) } },
       participants: {
         where: (participant, { eq }) => eq(participant.serverId, serverId),
         orderBy: (participant, { asc }) => asc(participant.joinedAt),
-        with: { user: { columns: { username: true, discordId: true } } },
+        with: {
+          user: { columns: { discordId: true }, extras: { username: memberNicknameSql(serverId) } },
+        },
       },
     },
   });

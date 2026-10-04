@@ -6,6 +6,7 @@ import { cancelGame } from "#/modules/games/commands/cancel-game";
 import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
 import type { AuditAction } from "#/modules/moderation/model/audit-actions";
 import type { Actor } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { auditLog, games, profiles, reports, type Game } from "#/schema";
 
 import { recordAudit } from "./record-audit";
@@ -61,7 +62,7 @@ export async function moderatePost({
         title: games.title,
         hiddenAt: games.hiddenAt,
         cancelledAt: games.cancelledAt,
-        gm: profiles.username,
+        gm: memberNicknameSql(serverId),
       })
       .from(games)
       .innerJoin(profiles, eq(profiles.id, games.gmId))
@@ -77,7 +78,11 @@ export async function moderatePost({
       (moderation.action === "remove" && isNotNil(game.cancelledAt));
     if (stale) {
       const [latest] = await tx
-        .select({ action: auditLog.action, at: auditLog.createdAt, by: profiles.username })
+        .select({
+          action: auditLog.action,
+          at: auditLog.createdAt,
+          by: memberNicknameSql(serverId),
+        })
         .from(auditLog)
         .leftJoin(profiles, eq(profiles.id, auditLog.actorId))
         .where(

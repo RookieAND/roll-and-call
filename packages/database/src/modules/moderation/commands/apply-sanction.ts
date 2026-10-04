@@ -3,6 +3,7 @@ import { isNil } from "es-toolkit";
 
 import { db } from "#/client";
 import type { Actor, Sanction } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, sanctions } from "#/schema";
 
 import { applyOngoingChoices, type OngoingChoice } from "./apply-ongoing-choices";
@@ -32,7 +33,7 @@ export async function applySanction({
   input: SanctionInput;
 }): Promise<SanctionResult> {
   const [user] = await db
-    .select({ nickname: profiles.username })
+    .select({ nickname: memberNicknameSql(serverId) })
     .from(profiles)
     .where(eq(profiles.id, userId));
   if (!user) throw new Error("유저를 찾을 수 없습니다");
@@ -62,7 +63,7 @@ export async function applySanction({
           until: sanctions.until,
           at: sanctions.createdAt,
           reason: sanctions.reason,
-          by: profiles.username,
+          by: memberNicknameSql(serverId),
         })
         .from(sanctions)
         .leftJoin(profiles, eq(profiles.id, sanctions.createdBy))

@@ -2,6 +2,7 @@ import { and, eq, isNotNull, isNull, sql } from "drizzle-orm";
 
 import { db } from "#/client";
 import type { Actor } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { games, participants, profiles } from "#/schema";
 
 import { recordAudit } from "./record-audit";
@@ -46,7 +47,7 @@ export async function cancelNoShow({
         .select({
           at: participants.absenceCancelledAt,
           reason: participants.absenceCancelReason,
-          by: profiles.username,
+          by: memberNicknameSql(serverId),
         })
         .from(participants)
         .leftJoin(profiles, eq(profiles.id, participants.absenceCancelledBy))
@@ -58,7 +59,7 @@ export async function cancelNoShow({
       };
     }
     const [names] = await tx
-      .select({ nickname: profiles.username, title: games.title })
+      .select({ nickname: memberNicknameSql(serverId), title: games.title })
       .from(games)
       .innerJoin(profiles, eq(profiles.id, userId))
       .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));

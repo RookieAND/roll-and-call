@@ -3,6 +3,7 @@ import { and, eq, isNotNull, sql } from "drizzle-orm";
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
 import { certApplications, certifications, profiles, rulebooks } from "#/schema";
 
@@ -25,7 +26,7 @@ export async function grantCertification({
   return db.transaction(async (tx) => {
     const [names] = await tx
       .select({
-        nickname: profiles.username,
+        nickname: memberNicknameSql(serverId),
         name: rulebooks.name,
         edition: rulebooks.edition,
         certRequired: rulebooks.certRequired,

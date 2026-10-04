@@ -2,6 +2,7 @@ import { and, eq, isNull, sql } from "drizzle-orm";
 
 import type { Executor } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
 import { profiles, rulebookRequests } from "#/schema";
@@ -44,7 +45,7 @@ export async function claimRulebookRequest({
     });
   if (claimed) {
     const [requester] = await executor
-      .select({ nickname: profiles.username })
+      .select({ nickname: memberNicknameSql(serverId) })
       .from(profiles)
       .where(eq(profiles.id, claimed.userId));
     return {
@@ -59,7 +60,7 @@ export async function claimRulebookRequest({
     .select({
       outcome: rulebookRequests.outcome,
       at: rulebookRequests.processedAt,
-      by: profiles.username,
+      by: memberNicknameSql(serverId),
     })
     .from(rulebookRequests)
     .leftJoin(profiles, eq(profiles.id, rulebookRequests.processedBy))

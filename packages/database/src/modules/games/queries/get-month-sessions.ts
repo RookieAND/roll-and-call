@@ -1,6 +1,7 @@
 import { asc } from "drizzle-orm";
 
 import { db } from "#/client";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { games } from "#/schema";
 
 import { publicGamesWhere } from "./public-games-where";
@@ -19,11 +20,19 @@ export async function getMonthSessions({
       and(gte(game.confirmedAt, from), lt(game.confirmedAt, to), publicGamesWhere(serverId)),
     orderBy: asc(games.confirmedAt),
     with: {
-      gm: { columns: { id: true, username: true, avatarUrl: true } },
+      gm: {
+        columns: { id: true, avatarUrl: true },
+        extras: { username: memberNicknameSql(serverId) },
+      },
       participants: {
         columns: { userId: true, status: true, absent: true, absenceCancelledAt: true },
         where: (participant, { eq }) => eq(participant.serverId, serverId),
-        with: { user: { columns: { id: true, username: true, avatarUrl: true } } },
+        with: {
+          user: {
+            columns: { id: true, avatarUrl: true },
+            extras: { username: memberNicknameSql(serverId) },
+          },
+        },
       },
     },
   });

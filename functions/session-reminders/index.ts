@@ -17,6 +17,8 @@ type DueGame = {
   rule: string;
   confirmed_at: string;
   discord_thread_id: string;
+  server_id: string;
+  gm_id: string;
   server: { slug: string };
   gm: { discord_id: string; username: string } | null;
   participants: { status: string; user: { discord_id: string } | null }[];
@@ -39,7 +41,7 @@ function formatKst(value: string) {
   return `${parts.month}월 ${parts.day}일 (${parts.weekday}) ${parts.hour}:${parts.minute}`;
 }
 
-async function sendReminder(game: DueGame) {
+async function sendReminder(game: DueGame, gmName: string) {
   const mentionIds = [
     game.gm?.discord_id,
     ...game.participants
@@ -64,7 +66,7 @@ async function sendReminder(game: DueGame) {
               { name: "📜 룰", value: game.rule, inline: true },
               { name: "🕒 시간", value: formatKst(game.confirmed_at), inline: true },
             ],
-            footer: { text: `GM ${game.gm?.username ?? "?"}` },
+            footer: { text: `GM ${gmName}` },
             timestamp: new Date().toISOString(),
           },
         ],
@@ -74,6 +76,17 @@ async function sendReminder(game: DueGame) {
     },
   );
   if (!response.ok) throw new Error(`Discord ${response.status} ${await response.text()}`);
+}
+
+// 닉네임은 서버별(server_members.nickname)이다. 멤버십이 없으면 계정 이름으로 대신한다.
+async function gmNickname(game: DueGame) {
+  const { data } = await supabase
+    .from("server_members")
+    .select("nickname")
+    .eq("server_id", game.server_id)
+    .eq("user_id", game.gm_id)
+    .maybeSingle<{ nickname: string }>();
+  return data?.nickname;
 }
 
 Deno.serve(async () => {
@@ -95,7 +108,7 @@ Deno.serve(async () => {
     .gt("confirmed_at", now.toISOString())
     .lte("confirmed_at", new Date(now.getTime() + ONE_HOUR_MS).toISOString())
     .select(
-      "id, title, rule, confirmed_at, discord_thread_id, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(discord_id, username), participants!participants_game_id_games_id_fk(status, user:profiles!participants_user_id_profiles_id_fk(discord_id))",
+      "id, title, rule, confirmed_at, discord_thread_id, server_id, gm_id, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(discord_id, username), participants!participants_game_id_games_id_fk(status, user:profiles!participants_user_id_profiles_id_fk(discord_id))",
     )
     .returns<DueGame[]>();
   if (error) return Response.json({ error: error.message }, { status: 500 });
@@ -103,7 +116,7 @@ Deno.serve(async () => {
   const failed: string[] = [];
   for (const game of data) {
     try {
-      await sendReminder(game);
+      await sendReminder(game, (await gmNickname(game)) ?? game.gm?.username ?? "?");
     } catch (sendError) {
       // 되돌려 두면 세션이 시작하기 전까지 다음 주기에 다시 보낸다.
       console.warn(`reminder failed for ${game.id}:`, sendError);

@@ -1,6 +1,7 @@
 import { db } from "#/client";
 import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
 import { memberBioSql } from "#/modules/profiles/queries/member-bio-sql";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 
 export async function findPreviousRound({
   serverId,
@@ -20,8 +21,8 @@ export async function findPreviousRound({
           and(eq(table.serverId, serverId), eq(table.status, PARTICIPANT_STATUS.waiting)),
         with: {
           user: {
-            columns: { username: true, avatarUrl: true },
-            extras: { bio: memberBioSql(serverId) },
+            columns: { avatarUrl: true },
+            extras: { username: memberNicknameSql(serverId), bio: memberBioSql(serverId) },
           },
         },
       },

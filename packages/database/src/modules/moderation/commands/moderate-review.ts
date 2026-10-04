@@ -4,6 +4,7 @@ import { isNotNil } from "es-toolkit";
 import { db } from "#/client";
 import type { AuditAction } from "#/modules/moderation/model/audit-actions";
 import type { Actor } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { auditLog, games, profiles, reviewReports, sessionReviews } from "#/schema";
 
 import { recordAudit } from "./record-audit";
@@ -64,7 +65,7 @@ export async function moderateReview({
         hiddenAt: sessionReviews.hiddenAt,
         removedAt: sessionReviews.removedAt,
         removedBy: sessionReviews.removedBy,
-        author: profiles.username,
+        author: memberNicknameSql(serverId),
         title: games.title,
       })
       .from(sessionReviews)
@@ -106,7 +107,11 @@ export async function moderateReview({
       (moderation.action === "dismiss" && unresolved.length === 0);
     if (stale) {
       const [latest] = await tx
-        .select({ action: auditLog.action, at: auditLog.createdAt, by: profiles.username })
+        .select({
+          action: auditLog.action,
+          at: auditLog.createdAt,
+          by: memberNicknameSql(serverId),
+        })
         .from(auditLog)
         .leftJoin(profiles, eq(profiles.id, auditLog.actorId))
         .where(

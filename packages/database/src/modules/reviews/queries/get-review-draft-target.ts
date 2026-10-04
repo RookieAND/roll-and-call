@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { db } from "#/client";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { games, participants, profiles, sessionReviews } from "#/schema";
 
 export async function getReviewDraftTarget({
@@ -18,7 +19,7 @@ export async function getReviewDraftTarget({
       title: games.title,
       rule: games.rule,
       gmId: games.gmId,
-      gmName: profiles.username,
+      gmName: memberNicknameSql(serverId),
       confirmedAt: games.confirmedAt,
       playMinutes: games.playMinutes,
       attendanceConfirmedAt: games.attendanceConfirmedAt,

@@ -1,5 +1,6 @@
 import { db } from "#/client";
 import { GAME_TAB, type GamesFilter } from "#/modules/games/model/games-filter";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { games } from "#/schema";
 
 import { recruitingGamesOrderBy } from "./recruiting-games-order-by";
@@ -28,7 +29,7 @@ export async function getRecruitingGamesPage({
       where,
       orderBy: recruitingGamesOrderBy({ filter, now }),
       with: {
-        gm: { columns: { username: true, avatarUrl: true } },
+        gm: { columns: { avatarUrl: true }, extras: { username: memberNicknameSql(serverId) } },
         participants: {
           columns: { userId: true, status: true },
           where: (participant, { eq }) => eq(participant.serverId, serverId),

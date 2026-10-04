@@ -2,6 +2,7 @@ import { and, eq, gt, isNull, or, sql } from "drizzle-orm";
 
 import { db } from "#/client";
 import type { Actor } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, sanctions } from "#/schema";
 
 import { recordAudit } from "./record-audit";
@@ -20,7 +21,7 @@ export async function releaseSanction({
   input: { userReason: string; staffMemo: string };
 }): Promise<ReleaseResult> {
   const [user] = await db
-    .select({ nickname: profiles.username })
+    .select({ nickname: memberNicknameSql(serverId) })
     .from(profiles)
     .where(eq(profiles.id, userId));
   if (!user) throw new Error("유저를 찾을 수 없습니다");

@@ -7,6 +7,7 @@ import {
 } from "#/modules/moderation/commands/apply-ongoing-choices";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
 import { certApplications, certifications, profiles, rulebooks } from "#/schema";
 
@@ -31,7 +32,7 @@ export async function revokeCertifications({
   input: RevokeInput;
 }) {
   const [user] = await db
-    .select({ nickname: profiles.username })
+    .select({ nickname: memberNicknameSql(serverId) })
     .from(profiles)
     .where(eq(profiles.id, userId));
   if (!user) throw new Error("유저를 찾을 수 없습니다");

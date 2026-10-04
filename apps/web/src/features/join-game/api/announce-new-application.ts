@@ -1,6 +1,6 @@
 import "server-only";
 import { countParticipants } from "@roll-and-call/database/games";
-import { getUsername } from "@roll-and-call/database/profiles";
+import { getMemberNickname } from "@roll-and-call/database/profiles";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { notifyGameJoined, type Game, type Server } from "@/shared/server";
@@ -21,8 +21,8 @@ export async function announceNewApplication({
   confirmedCount: number;
 }) {
   const [applicantName, gmName, waitingCount] = await Promise.all([
-    getUsername(applicantId),
-    getUsername(game.gmId),
+    getMemberNickname({ serverId: game.serverId, userId: applicantId }),
+    getMemberNickname({ serverId: game.serverId, userId: game.gmId }),
     countParticipants({
       serverId: game.serverId,
       gameId: game.id,

@@ -1,4 +1,5 @@
 import { db } from "#/client";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 
 export async function getGameAvailabilities({
   serverId,
@@ -10,6 +11,6 @@ export async function getGameAvailabilities({
   return db.query.availabilities.findMany({
     where: (availability, { and, eq }) =>
       and(eq(availability.serverId, serverId), eq(availability.gameId, gameId)),
-    with: { user: { columns: { username: true } } },
+    with: { user: { columns: {}, extras: { username: memberNicknameSql(serverId) } } },
   });
 }

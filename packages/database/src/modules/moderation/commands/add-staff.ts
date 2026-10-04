@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { db } from "#/client";
 import { STAFF_ROLE_LABEL } from "#/modules/moderation/model/staff-role-label";
 import type { Actor, StaffRole } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, staff } from "#/schema";
 
 import { recordAudit } from "./record-audit";
@@ -20,7 +21,7 @@ export async function addStaff({
   actor: Actor;
 }) {
   const [user] = await db
-    .select({ nickname: profiles.username })
+    .select({ nickname: memberNicknameSql(serverId) })
     .from(profiles)
     .where(eq(profiles.id, userId));
   if (!user) throw new Error("유저를 찾을 수 없습니다");

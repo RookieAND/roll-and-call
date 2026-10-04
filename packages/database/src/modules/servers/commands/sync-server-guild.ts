@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, servers, staff, type Server } from "#/schema";
 
 // 디스코드 길드 정보로 이름·아이콘·서버장을 맞춘다. 서버장이 바뀌면 시스템 조치로 기록하고 이전 서버장을 운영진으로 둔다.
@@ -27,11 +28,11 @@ export async function syncServerGuild({
     if (!previousOwnerId || previousOwnerId === guild.ownerDiscordId) return updated!;
     const [[previous], [next]] = await Promise.all([
       tx
-        .select({ id: profiles.id, nickname: profiles.username })
+        .select({ id: profiles.id, nickname: memberNicknameSql(server.id) })
         .from(profiles)
         .where(eq(profiles.discordId, previousOwnerId)),
       tx
-        .select({ id: profiles.id, nickname: profiles.username })
+        .select({ id: profiles.id, nickname: memberNicknameSql(server.id) })
         .from(profiles)
         .where(eq(profiles.discordId, guild.ownerDiscordId)),
     ]);

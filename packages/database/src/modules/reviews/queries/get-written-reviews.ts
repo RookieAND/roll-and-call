@@ -14,7 +14,7 @@ export async function getWrittenReviews({
   authorId: string;
 }) {
   return db
-    .select(reviewCardColumns)
+    .select(reviewCardColumns(serverId))
     .from(sessionReviews)
     .innerJoin(profiles, eq(profiles.id, sessionReviews.authorId))
     .innerJoin(games, and(eq(games.serverId, serverId), eq(games.id, sessionReviews.gameId)))

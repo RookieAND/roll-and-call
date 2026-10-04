@@ -3,6 +3,7 @@ import { and, eq, ne } from "drizzle-orm";
 import { db } from "#/client";
 import { STAFF_ROLE_LABEL } from "#/modules/moderation/model/staff-role-label";
 import type { Actor } from "#/modules/moderation/model/types";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, staff } from "#/schema";
 
 import { recordAudit } from "./record-audit";
@@ -28,7 +29,7 @@ export async function removeStaff({
       .returning({ role: staff.role });
     if (!removed) throw new Error("운영진을 찾을 수 없거나 소유자입니다");
     const [user] = await tx
-      .select({ nickname: profiles.username })
+      .select({ nickname: memberNicknameSql(serverId) })
       .from(profiles)
       .where(eq(profiles.id, userId));
     await recordAudit({

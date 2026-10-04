@@ -2,6 +2,7 @@ import { desc } from "drizzle-orm";
 import { isNull } from "es-toolkit";
 
 import { db } from "#/client";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { participants } from "#/schema";
 
 export async function getJoinedGames({ serverId, userId }: { serverId: string; userId: string }) {
@@ -12,7 +13,7 @@ export async function getJoinedGames({ serverId, userId }: { serverId: string; u
     with: {
       game: {
         with: {
-          gm: { columns: { username: true, avatarUrl: true } },
+          gm: { columns: { avatarUrl: true }, extras: { username: memberNicknameSql(serverId) } },
           participants: {
             columns: {
               userId: true,

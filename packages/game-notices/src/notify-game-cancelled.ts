@@ -1,6 +1,6 @@
 import type { Game } from "@roll-and-call/database";
 import { type Server } from "@roll-and-call/database";
-import { getUsername } from "@roll-and-call/database/profiles";
+import { getMemberNickname } from "@roll-and-call/database/profiles";
 import {
   sendDiscordMessage,
   editDiscordMessage,
@@ -16,7 +16,7 @@ import { recruitEmbed } from "./recruit-embed";
 export async function notifyGameCancelled({ server, game }: { server: Server; game: Game }) {
   if (!game.discordThreadId) return;
 
-  const gmName = (await getUsername(game.gmId)) ?? "?";
+  const gmName = (await getMemberNickname({ serverId: server.id, userId: game.gmId })) ?? "?";
 
   await Promise.all([
     editDiscordMessage({
