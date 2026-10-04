@@ -31,8 +31,8 @@ export function AuditLogLoading() {
               <TextInput
                 type="search"
                 disabled
-                placeholder="대상 닉네임 검색"
-                aria-label="대상 닉네임 검색"
+                placeholder="대상 검색"
+                aria-label="대상 검색"
                 className="pl-400 text-body3"
               />
             </HStack>
@@ -61,12 +61,12 @@ export function AuditLogLoading() {
         <Panel footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
-              { label: "일시", kind: "date", width: 128, sorted: true },
-              { label: "조치", kind: "badge", width: 124 },
-              { label: "대상", kind: "text", width: 220 },
+              { label: "일시", kind: "date", width: 176, sorted: true, fixed: true },
+              { label: "조치", kind: "badge", width: 124, fixed: true },
+              { label: "대상", kind: "text", width: 220, fixed: true },
               { label: "사유", kind: "text", width: 240 },
-              { label: "운영진", kind: "text", width: 96 },
-              { label: "보관", kind: "text", width: 88, align: "end" },
+              { label: "운영진", kind: "text", width: 120, fixed: true },
+              { label: "보관", kind: "text", width: 88, align: "end", fixed: true },
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />

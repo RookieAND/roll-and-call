@@ -1,6 +1,7 @@
 import { Button } from "@roll-and-call/ui";
 import type { Metadata } from "next";
 
+import { withQuery } from "@/shared/lib";
 import { getAuditEntry } from "@/shared/server";
 import { AdminHeader, EMPTY_IMAGE, EmptyState, ServerLink } from "@/shared/ui";
 import { AuditEntryView } from "@/views/audit-entry";
@@ -12,8 +13,12 @@ export async function generateMetadata({
   return { title: entry ? `${entry.action} · ${entry.targetName}` : "조치 상세" };
 }
 
-export default async function AuditEntryPage({ params }: PageProps<"/[server]/log/[id]">) {
-  const entry = await getAuditEntry((await params).id);
+export default async function AuditEntryPage({
+  params,
+  searchParams,
+}: PageProps<"/[server]/log/[id]">) {
+  const [{ id }, query] = await Promise.all([params, searchParams]);
+  const entry = await getAuditEntry(id);
   if (!entry) {
     return (
       <>
@@ -32,5 +37,6 @@ export default async function AuditEntryPage({ params }: PageProps<"/[server]/lo
       </>
     );
   }
-  return <AuditEntryView entry={entry} />;
+  const listHref = withQuery("/log", query as Record<string, string | undefined>, {});
+  return <AuditEntryView entry={entry} listHref={listHref} />;
 }

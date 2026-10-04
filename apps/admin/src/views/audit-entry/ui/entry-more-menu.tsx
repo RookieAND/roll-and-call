@@ -1,22 +1,25 @@
 "use client";
 
 import { Button, IconButton, Popover, VStack } from "@roll-and-call/ui";
-import { Ellipsis, ScrollText, User } from "lucide-react";
+import { Ellipsis, ScrollText } from "lucide-react";
 import { useState } from "react";
 
+import type { AuditSubjectKind } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
 
+import { SUBJECT_OPEN_ITEM } from "../model/subject-open-item";
+
 interface EntryMoreMenuProps {
-  targetUserId?: string;
+  subjectKind: AuditSubjectKind;
+  openPath?: string;
   sameTargetHref: string;
 }
 
-export function EntryMoreMenu({ targetUserId, sameTargetHref }: EntryMoreMenuProps) {
+export function EntryMoreMenu({ subjectKind, openPath, sameTargetHref }: EntryMoreMenuProps) {
   const [open, setOpen] = useState(false);
+  const openItem = SUBJECT_OPEN_ITEM[subjectKind];
   const items = [
-    ...(targetUserId
-      ? [{ label: "유저 상세 열기", icon: User, href: `/users/${targetUserId}` }]
-      : []),
+    ...(openItem && openPath ? [{ ...openItem, href: openPath }] : []),
     { label: "같은 대상의 조치 보기", icon: ScrollText, href: sameTargetHref },
   ];
   return (

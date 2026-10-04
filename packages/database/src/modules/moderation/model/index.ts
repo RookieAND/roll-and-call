@@ -3,8 +3,11 @@ export {
   AUDIT_ACTIONS,
   EXPIRING_AUDIT_ACTIONS,
   AUDIT_RETENTION_DAYS,
+  LEGACY_AUDIT_ACTIONS,
+  STAFF_CHANNEL_RELATED,
   type AuditAction,
 } from "./audit-actions";
+export { auditActionLabel } from "./audit-action-label";
 export { formatDate } from "./format-date";
 export { STAFF_ROLE_LABEL } from "./staff-role-label";
 export {

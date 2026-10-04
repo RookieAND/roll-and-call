@@ -3,7 +3,7 @@ import { isNull } from "es-toolkit";
 import { Hourglass } from "lucide-react";
 
 import { POST_ACTION, PostActionDialog, type PostAction } from "@/features/moderate-post";
-import { paginate, withQuery } from "@/shared/lib";
+import { auditLogHref, paginate, withQuery } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import { AdminHeader, ListPager, Panel } from "@/shared/ui";
 
@@ -65,7 +65,7 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
       unit="명"
     />
   ) : null;
-  const logHref = `/log?target=${encodeURIComponent(post.title)}`;
+  const logHref = auditLogHref({ targetGameId: post.id });
   const userAppHref = serverAppUrl ? `${serverAppUrl}/games/${post.id}` : null;
   const reviewsTab = currentTab === POST_DETAIL_TAB.reviews;
   const actionHref = (nextAction: PostAction) => withQuery(pathname, query, { action: nextAction });

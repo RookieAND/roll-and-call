@@ -229,6 +229,10 @@ export interface AuditEntry {
   action: AuditAction;
   target: string;
   targetUserId?: string;
+  targetGameId?: string;
+  // 기록에 따로 남지 않아 대상(후기 작성자·구인, 룰북 이름)으로 찾은 ID다. 지워진 대상이면 없다.
+  reviewId?: string;
+  rulebookId?: string;
   reason: string;
   reasonTag?: string;
   staffMemo?: string;

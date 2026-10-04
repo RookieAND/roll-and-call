@@ -8,6 +8,7 @@ import {
   type AbsenceAddedTag,
 } from "@roll-and-call/database/games/model";
 import { type AuditAction } from "@roll-and-call/database/moderation";
+import { auditActionLabel } from "@roll-and-call/database/moderation/model";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { compact, isNull } from "es-toolkit";
 import { cache } from "react";
@@ -365,6 +366,7 @@ export const loadSnapshot = cache(async () => {
     body: row.body,
   }));
 
+  const rulebookIds = new Map([...labels].map(([id, label]) => [label, id]));
   const auditList: AuditEntry[] = auditRows
     .toSorted((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     .map((row) => ({
@@ -373,9 +375,20 @@ export const loadSnapshot = cache(async () => {
       actor: row.actorKind === "system" ? "시스템" : nicknameOf(row.actorId),
       actorId: row.actorId ?? undefined,
       actorKind: row.actorKind,
-      action: row.action as AuditAction,
+      action: auditActionLabel(row.action),
       target: row.target,
       targetUserId: row.targetUserId ?? undefined,
+      targetGameId: row.targetGameId ?? undefined,
+      reviewId: row.action.startsWith("후기")
+        ? reviewList.find(
+            (review) =>
+              review.sessionId === row.targetGameId && review.authorId === row.targetUserId,
+          )?.id
+        : undefined,
+      rulebookId: row.target
+        .split(" · ")
+        .map((part) => rulebookIds.get(part))
+        .find(Boolean),
       reason: row.reason,
       reasonTag: row.reasonTag ?? undefined,
       staffMemo: row.staffMemo ?? undefined,

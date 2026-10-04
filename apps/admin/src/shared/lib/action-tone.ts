@@ -1,14 +1,12 @@
-// 조치 종류 뱃지는 회색이 기본이고, 되돌릴 수 없거나 사용자를 제한하는 조치만 빨간색이다(시안 s4.jsx ACT_DANGER).
-const DANGER_ACTIONS: readonly string[] = [
-  "제재",
-  "추방",
-  "반려로 돌림",
-  "구인 취소",
-  "후기 제거",
-  "운영진 해제",
-  "인증 반려",
-];
+import type { StatusTone } from "./status-tone";
 
-export function actionTone(action: string) {
-  return DANGER_ACTIONS.includes(action) ? "danger" : "gray";
+const SUCCESS_WORDS = ["승인", "직접 인증", "해제"] as const;
+const DANGER_WORDS = ["반려", "제재", "취소"] as const;
+
+// 조치 뱃지 색: 「불참 취소」 파랑, 승인·직접 인증·해제 초록, 반려·제재·취소 빨강, 나머지 회색.
+export function actionTone(action: string): StatusTone {
+  if (action === "불참 취소") return "primary";
+  if (SUCCESS_WORDS.some((word) => action.includes(word))) return "success";
+  if (DANGER_WORDS.some((word) => action.includes(word))) return "danger";
+  return "gray";
 }

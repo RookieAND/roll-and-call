@@ -2,7 +2,7 @@ import { Button, Callout } from "@roll-and-call/ui";
 import { Quote } from "lucide-react";
 
 import { CertDecisionForm } from "@/features/decide-cert";
-import { formatDateTime } from "@/shared/lib";
+import { auditLogHref, formatDateTime } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
 import { AdminHeader, ConflictNotice, ItemCard, ServerLink } from "@/shared/ui";
 
@@ -80,9 +80,7 @@ export function CertReviewView({ review, viewer, rejecting }: CertReviewViewProp
                   variant="outline"
                   colorPalette="gray"
                   size="sm"
-                  render={
-                    <ServerLink path={`/log?target=${encodeURIComponent(applicant.nickname)}`} />
-                  }
+                  render={<ServerLink path={auditLogHref({ targetUserId: applicant.id })} />}
                 >
                   활동 기록에서 보기
                 </Button>

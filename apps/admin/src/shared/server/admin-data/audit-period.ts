@@ -7,3 +7,6 @@ export const AUDIT_PERIODS = [
 export type AuditPeriod = (typeof AUDIT_PERIODS)[number]["value"];
 
 export const DEFAULT_AUDIT_PERIOD: AuditPeriod = "week";
+
+// 「전체 기간」. UrlSelect의 전체 항목 값과 같다.
+export const ALL_AUDIT_PERIOD = "all";

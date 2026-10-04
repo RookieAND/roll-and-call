@@ -381,6 +381,13 @@
       "breakpoints": true
     },
     {
+      "idx": 56,
+      "version": "7",
+      "when": 1794200000000,
+      "tag": "0056_audit_retention_keep_memos",
+      "breakpoints": true
+    },
+    {
       "idx": 60,
       "version": "7",
       "when": 1794600000000,

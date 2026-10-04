@@ -1,11 +1,12 @@
 import { Chip, HStack, Text, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
-import { formatDateTime, paginate, withQuery } from "@/shared/lib";
+import { formatDateTime, paginate, withQuery, type TableSort } from "@/shared/lib";
 import {
+  ALL_AUDIT_PERIOD,
   AUDIT_ACTION_GROUPS,
   AUDIT_PERIODS,
-  DEFAULT_AUDIT_PERIOD,
+  defaultAuditPeriod,
   type listAuditLog,
 } from "@/shared/server";
 import {
@@ -20,21 +21,33 @@ import {
 
 import { RETENTION_NOTE } from "../model/retention-note";
 import { ActionFilter } from "./action-filter";
+import { AuditLogEmpty } from "./audit-log-empty";
 import { AuditLogTable } from "./audit-log-table";
 
 interface AuditLogViewProps {
   log: Awaited<ReturnType<typeof listAuditLog>>;
   query: Record<string, string | undefined>;
+  sort: TableSort<"at">;
 }
 
-export function AuditLogView({ log, query }: AuditLogViewProps) {
-  const clearTargetHref = withQuery("/log", query, { target: undefined, page: undefined });
+export function AuditLogView({ log, query, sort }: AuditLogViewProps) {
+  const clearTargetHref = withQuery("/log", query, {
+    target: undefined,
+    targetUser: undefined,
+    targetGame: undefined,
+    page: undefined,
+  });
+  const allPeriodHref = withQuery("/log", query, { period: ALL_AUDIT_PERIOD, page: undefined });
   const paged = paginate(log.rows, query.page);
-  const filteredByTarget = Boolean(query.target);
+  const filteredByTarget = Boolean(query.target || query.targetUser || query.targetGame);
+  const scoped = filteredByTarget || Boolean(query.q);
   const showPager = !filteredByTarget || paged.totalPages > 1;
   const pager = showPager ? (
     <ListPager page={paged.page} totalPages={paged.totalPages} total={log.rows.length} unit="건" />
   ) : null;
+  const empty = (
+    <AuditLogEmpty periodLimited={log.period !== ALL_AUDIT_PERIOD} allPeriodHref={allPeriodHref} />
+  );
 
   return (
     <>
@@ -49,12 +62,12 @@ export function AuditLogView({ log, query }: AuditLogViewProps) {
                   <ServerLink path={clearTargetHref} scroll={false} aria-label="대상 필터 지우기" />
                 }
               >
-                대상 · {query.target}
+                대상 · {log.targetName}
                 <X size={12} aria-hidden />
               </Chip>
             ) : (
               <>
-                <UrlSearchInput placeholder="대상 닉네임 검색" className="w-[220px]" />
+                <UrlSearchInput placeholder="대상 검색" className="w-[220px]" />
                 <UrlSelect
                   param="actor"
                   allLabel="전체 운영진"
@@ -68,7 +81,7 @@ export function AuditLogView({ log, query }: AuditLogViewProps) {
               param="period"
               allLabel="전체 기간"
               options={AUDIT_PERIODS.map(({ label, value }) => ({ label, value }))}
-              defaultValue={filteredByTarget ? undefined : DEFAULT_AUDIT_PERIOD}
+              defaultValue={defaultAuditPeriod({ scoped })}
               className="w-[128px]"
             />
           </HStack>
@@ -89,7 +102,12 @@ export function AuditLogView({ log, query }: AuditLogViewProps) {
           )}
         </HStack>
         <Panel footer={pager}>
-          <AuditLogTable rows={paged.rows} />
+          <AuditLogTable
+            rows={paged.rows}
+            sort={sort}
+            empty={empty}
+            listQuery={withQuery("", query, {})}
+          />
         </Panel>
         {filteredByTarget ? null : (
           <Text typography="body4" foreground="hint">

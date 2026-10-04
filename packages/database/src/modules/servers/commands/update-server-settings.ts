@@ -45,7 +45,7 @@ export async function updateServerSettings({
       executor: tx,
       serverId,
       actor,
-      entry: { action: "설정 변경", target: audit.target, reason: audit.reason },
+      entry: { action: "서버 설정 변경", target: audit.target, reason: audit.reason },
     });
   });
 }

@@ -1,5 +1,6 @@
 import { Button, HStack, VStack } from "@roll-and-call/ui";
 
+import { auditLogHref } from "@/shared/lib";
 import type { KickImpact, UserDetail } from "@/shared/server";
 import { AdminHeader, ServerLink } from "@/shared/ui";
 
@@ -37,7 +38,7 @@ export function UserDetailView({
   discordBanFailed,
   kickImpact,
 }: UserDetailViewProps) {
-  const logHref = `/log?target=${encodeURIComponent(user.nickname)}`;
+  const logHref = auditLogHref({ targetUserId: user.id });
   return (
     <>
       <AdminHeader
