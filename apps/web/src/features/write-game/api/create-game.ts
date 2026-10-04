@@ -1,10 +1,6 @@
 "use server";
 
-import {
-  createGameWithRoster,
-  getGameWithGmName,
-  saveDiscordThreadId,
-} from "@roll-and-call/database/games";
+import { createGameWithRoster } from "@roll-and-call/database/games";
 import { countServerMembers } from "@roll-and-call/database/profiles";
 import { uniq } from "es-toolkit";
 import { redirect } from "next/navigation";
@@ -14,11 +10,9 @@ import { RULE_GATE, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebo
 import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
-  announceRecruitmentComplete,
+  announceGameOpened,
   getActingMember,
   getRulebookRecords,
-  notifyDirectConfirmed,
-  notifyGameCreated,
   notMemberError,
 } from "@/shared/server";
 
@@ -70,23 +64,14 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     confirmedUserIds: invitedIds,
   });
 
-  const recruitmentComplete = invitedIds.length === Number(parsed.data.maxPlayers);
-  after(async () => {
-    const game = await getGameWithGmName({ serverId: server.id, gameId });
-    const threadId =
-      game &&
-      (await notifyGameCreated({
-        server,
-        game,
-        gmName: game.gm?.username ?? "?",
-        confirmedCount: invitedIds.length,
-      }));
-    if (threadId) {
-      await saveDiscordThreadId({ serverId: server.id, gameId, threadId });
-      await notifyDirectConfirmed({ server, gameId, userIds: invitedIds });
-    }
-    if (recruitmentComplete) await announceRecruitmentComplete({ server, gameId });
-  });
+  after(() =>
+    announceGameOpened({
+      server,
+      gameId,
+      confirmedUserIds: invitedIds,
+      maxPlayers: Number(parsed.data.maxPlayers),
+    }),
+  );
 
   redirect(serverPath({ slug: server.slug, path: `/games/${gameId}` }));
 }

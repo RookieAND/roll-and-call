@@ -70,6 +70,7 @@ export { announceRecruitmentComplete } from "./discord/announce-recruitment-comp
 export { notifyDrawResult } from "./discord/notify-draw-result";
 export { notifyDirectConfirmed } from "./discord/notify-direct-confirmed";
 export { notifySessionConfirmed } from "./discord/notify-session-confirmed";
+export { announceGameOpened } from "./discord/announce-game-opened";
 export {
   deleteGameReviewForumPosts,
   syncGameReviewForumPosts,

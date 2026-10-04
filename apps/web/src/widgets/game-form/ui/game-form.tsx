@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 
 import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 import { ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
-import type { GameFormValues, PreConfirmedPlayer } from "@/features/write-game";
+import type { GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
 import { toKstDateTimeInput } from "@/shared/lib";
 import { toast, useAction } from "@/shared/ui";
@@ -20,7 +20,6 @@ interface GameFormProps {
   serverId: string;
   onSubmit: (values: GameFormValues) => Promise<ActionResult | void>;
   defaultGame?: GameDefaults;
-  defaultPreConfirmed?: PreConfirmedPlayer[];
   submitLabel: string;
   successMessage?: string;
   edit?: GameEditContext;
@@ -37,7 +36,6 @@ export function GameForm({
   edit,
   rulebooks,
   initialRulebookId,
-  defaultPreConfirmed = [],
 }: GameFormProps) {
   const { pending, run } = useAction();
   // 주소로 넘어온 책(서플리먼트일 수도 있다)은 그 판본의 룰로 바꿔 채운다.
@@ -70,7 +68,7 @@ export function GameForm({
       thumbnailSpoiler: defaultGame?.thumbnailSpoiler ?? false,
       images: defaultGame?.images ?? [],
       waitlistEnabled: defaultGame?.waitlistEnabled ?? true,
-      preConfirmed: defaultPreConfirmed,
+      preConfirmed: [],
     },
   });
 
