@@ -3,12 +3,12 @@ import { lockGame } from "@roll-and-call/database/games";
 import { withTransaction, type Transaction } from "@roll-and-call/database/transaction";
 import { after } from "next/server";
 
-import { isApplicationClosed } from "@/entities/game";
+import { isSessionEnded, isSessionStarted } from "@/entities/game";
 import {
-  APPLICATION_CLOSED_MESSAGE,
   ERROR_DISPLAY,
   GAME_CANCELLED_MESSAGE,
   GAME_NOT_FOUND_MESSAGE,
+  ROSTER_SESSION_ENDED_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
 import {
@@ -19,17 +19,18 @@ import {
   notMemberError,
 } from "@/shared/server";
 
+import type { RosterTiming } from "../model/roster-timing";
 import { revalidateRoster } from "./revalidate-roster";
 import { RosterError } from "./roster-error";
 
-// 모든 명단 조정이 거치는 한 길: 게임 행을 잠근 트랜잭션 안에서 GM 본인·세션 잠기기 전을 확인한다.
+// 모든 명단 조정이 거치는 한 길: 게임 행을 잠근 트랜잭션 안에서 GM 본인·취소 여부·세션 종료 전을 확인한다.
 export async function adjustRoster({
   gameId,
   work,
   notify,
 }: {
   gameId: string;
-  work: (transaction: Transaction, game: Game) => Promise<void>;
+  work: (transaction: Transaction, game: Game, timing: RosterTiming) => Promise<void>;
   notify?: (server: Server) => Promise<void>;
 }): Promise<ActionResult> {
   const member = await getActingMember();
@@ -38,6 +39,7 @@ export async function adjustRoster({
   }
   const { server } = member;
   const gmId = member.user.id;
+  const now = new Date();
 
   try {
     await withTransaction(async (transaction) => {
@@ -45,8 +47,8 @@ export async function adjustRoster({
       if (!game) throw new RosterError(GAME_NOT_FOUND_MESSAGE, ERROR_DISPLAY.page);
       if (game.gmId !== gmId) throw new RosterError("권한이 없습니다.");
       if (game.cancelledAt) throw new RosterError(GAME_CANCELLED_MESSAGE);
-      if (isApplicationClosed(game)) throw new RosterError(APPLICATION_CLOSED_MESSAGE);
-      await work(transaction, game);
+      if (isSessionEnded(game, now)) throw new RosterError(ROSTER_SESSION_ENDED_MESSAGE);
+      await work(transaction, game, { started: isSessionStarted(game, now), now });
     });
   } catch (error) {
     if (error instanceof RosterError) return { error: error.message, errorDisplay: error.display };

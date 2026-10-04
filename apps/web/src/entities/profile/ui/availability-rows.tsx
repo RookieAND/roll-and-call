@@ -1,7 +1,9 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { Clock } from "lucide-react";
 
-import { type AvailabilityInterval, filledDays } from "../model/availability";
+import { filledDays } from "@/shared/lib";
+
+import type { AvailabilityInterval } from "../model/availability";
 import { AvailabilityDayRow } from "./availability-day-row";
 import { AvailabilityMore } from "./availability-more";
 

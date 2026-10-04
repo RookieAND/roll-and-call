@@ -25,6 +25,7 @@ export async function getGameParticipants({
             joinedAt: true,
             status: true,
             drawRank: true,
+            waitlistedAt: true,
             drawRoll: true,
             absent: true,
           },

@@ -1,5 +1,8 @@
 export { countConfirmed } from "./count-confirmed";
 export { countWaiting } from "./count-waiting";
+export { compareWaitlistOrder } from "./compare-waitlist-order";
+export { RECRUIT_METHOD, RECRUIT_METHODS, type RecruitMethod } from "./recruit-method";
+export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./schedule-mode";
 export { deriveGameStatus } from "./derive-game-status";
 export { GAME_STATUS, gameStatusLabel, type GameStatus } from "./game-status";
 export {

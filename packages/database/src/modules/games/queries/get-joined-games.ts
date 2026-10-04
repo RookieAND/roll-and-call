@@ -19,6 +19,8 @@ export async function getJoinedGames({ serverId, userId }: { serverId: string; u
               userId: true,
               status: true,
               joinedAt: true,
+              drawRank: true,
+              waitlistedAt: true,
               absent: true,
               absenceCancelledAt: true,
             },

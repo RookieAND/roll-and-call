@@ -11,6 +11,8 @@ export { deleteOwnedGame } from "./commands/delete-owned-game";
 export { deleteParticipant } from "./commands/delete-participant";
 export { insertParticipant } from "./commands/insert-participant";
 export { markGameDrawn } from "./commands/mark-game-drawn";
+export { markParticipantRemoved } from "./commands/mark-participant-removed";
+export { raiseGameCapacity } from "./commands/raise-game-capacity";
 export { replaceAvailability } from "./commands/replace-availability";
 export { saveAttendance } from "./commands/save-attendance";
 export { saveDiscordThreadId } from "./commands/save-discord-thread-id";

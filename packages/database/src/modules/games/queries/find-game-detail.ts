@@ -11,7 +11,14 @@ export async function findGameDetail({ serverId, gameId }: { serverId: string; g
         extras: { username: memberNicknameSql(serverId), bio: memberBioSql(serverId) },
       },
       participants: {
-        columns: { userId: true, joinedAt: true, status: true, drawRank: true, absent: true },
+        columns: {
+          userId: true,
+          joinedAt: true,
+          status: true,
+          drawRank: true,
+          waitlistedAt: true,
+          absent: true,
+        },
         where: (participant, { eq }) => eq(participant.serverId, serverId),
         with: {
           user: {

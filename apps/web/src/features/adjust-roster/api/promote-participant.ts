@@ -1,57 +1,62 @@
 "use server";
 
-import {
-  countParticipants,
-  findParticipantStatus,
-  setParticipantStatus,
-} from "@roll-and-call/database/games";
+import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/games";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import type { ActionResult } from "@/shared/api";
-import { announceRecruitmentComplete, notifyDirectConfirmed } from "@/shared/server";
+import { announceRecruitmentComplete, type Game } from "@/shared/server";
 
+import { CAPACITY_ACTION } from "../model/capacity-action";
+import type { RosterActionResult } from "../model/roster-action-result";
 import { adjustRoster } from "./adjust-roster";
+import { announceConfirmed } from "./announce-confirmed";
+import { rejectSanctioned } from "./reject-sanctioned";
 import { PARTICIPANT_NOT_FOUND_MESSAGE, RosterError } from "./roster-error";
+import { secureSeats } from "./secure-seats";
 
-const { confirmed } = PARTICIPANT_STATUS;
+const { confirmed, waiting } = PARTICIPANT_STATUS;
 
 export async function promoteParticipant({
   gameId,
   userId,
+  raiseCapacity = false,
 }: {
   gameId: string;
   userId: string;
-}): Promise<ActionResult> {
-  let promoted = false;
+  raiseCapacity?: boolean;
+}): Promise<RosterActionResult> {
+  let promotedIn: Game | null = null;
   let becameFull = false;
+  let capacityRaised = false;
 
-  return adjustRoster({
+  const result = await adjustRoster({
     gameId,
-    work: async (transaction, game) => {
+    work: async (transaction, game, timing) => {
       const serverId = game.serverId;
       const status = await findParticipantStatus({ transaction, serverId, gameId, userId });
-      if (!status) throw new RosterError(PARTICIPANT_NOT_FOUND_MESSAGE);
+      if (status !== confirmed && status !== waiting) {
+        throw new RosterError(PARTICIPANT_NOT_FOUND_MESSAGE);
+      }
       if (status === confirmed) return;
 
-      const confirmedCount = await countParticipants({
+      await rejectSanctioned({ transaction, serverId, userIds: [userId], timing });
+      const seats = await secureSeats({
         transaction,
-        serverId,
-        gameId,
-        status: confirmed,
+        game,
+        timing,
+        action: CAPACITY_ACTION.promote,
+        addingCount: 1,
+        raiseCapacity,
       });
-      if (confirmedCount >= game.maxPlayers) {
-        throw new RosterError(
-          `정원 ${game.maxPlayers}명이 차 있습니다. 확정에서 한 명을 대기로 옮기세요.`,
-        );
-      }
       await setParticipantStatus({ transaction, serverId, gameId, userId, status: confirmed });
-      promoted = true;
-      becameFull = confirmedCount + 1 === game.maxPlayers;
+      promotedIn = game;
+      capacityRaised = seats.raised;
+      becameFull = !timing.started && seats.confirmedCount + 1 === seats.maxPlayers;
     },
     notify: async (server) => {
-      if (!promoted) return;
-      await notifyDirectConfirmed({ server, gameId, userIds: [userId] });
+      if (!promotedIn) return;
+      await announceConfirmed({ server, game: promotedIn, userIds: [userId] });
       if (becameFull) await announceRecruitmentComplete({ server, gameId });
     },
   });
+  return result.error ? result : { ...result, capacityRaised };
 }

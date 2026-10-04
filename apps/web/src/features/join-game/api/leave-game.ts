@@ -31,7 +31,9 @@ export async function leaveGame(gameId: string): Promise<ActionResult> {
   if (game.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
 
   const membership = game.participants.find((participant) => participant.userId === user.id);
-  if (!membership) return { error: "참여 중이 아닙니다." };
+  if (!membership || membership.status === PARTICIPANT_STATUS.removed) {
+    return { error: "참여 중이 아닙니다." };
+  }
   // 대기자는 언제든(세션 확정 후에도) 취소할 수 있고, 확정자만 확정·마감 후 자가 취소가 막혀 GM을 거친다.
   if (membership.status === PARTICIPANT_STATUS.confirmed) {
     if (isApplicationClosed(game)) {

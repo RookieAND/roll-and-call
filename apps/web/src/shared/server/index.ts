@@ -42,6 +42,7 @@ export {
   type ReviewedGames,
 } from "@roll-and-call/database/reviews";
 export { getProfileMemo } from "@roll-and-call/database/profiles";
+export { findActiveSanction } from "@roll-and-call/database/moderation";
 export { getRulebookRecords, type RulebookRecords } from "@roll-and-call/database/certifications";
 export { markBadgesSeen, type BadgeRecord } from "@roll-and-call/database/badges";
 export {
@@ -62,7 +63,7 @@ export {
 export { notifyGameCreated } from "./discord/notify-game-created";
 export { refreshRecruitPost } from "@roll-and-call/game-notices";
 export { notifyGameJoined } from "./discord/notify-game-joined";
-export { notifyGameLeft } from "@roll-and-call/game-notices";
+export { notifyGameLeft, notifyMovedToWaitlist } from "@roll-and-call/game-notices";
 export { notifyGameCancelled } from "@roll-and-call/game-notices";
 export { postStaffNotice, STAFF_NOTICE_KIND } from "@roll-and-call/game-notices";
 export { announceRecruitmentComplete } from "./discord/announce-recruitment-complete";
@@ -80,6 +81,7 @@ export { getUserBadges } from "./db/get-user-badges";
 export { siteOrigin } from "./site-origin";
 export { isCronRequest } from "./cron/is-cron-request";
 export { removeUnusedGameFiles } from "./game-files";
+export { seedAvailabilityFromProfile } from "./seed-availability-from-profile";
 export { createSupabaseServerClient } from "./auth/create-supabase-server-client";
 export { getCurrentUser } from "./auth/get-current-user";
 export { getCurrentSessionUser } from "./auth/get-current-session-user";

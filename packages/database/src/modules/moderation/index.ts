@@ -21,6 +21,8 @@ export { kickMember, type KickResult } from "./commands/kick-member";
 export { unbanMember, type UnbanResult } from "./commands/unban-member";
 export { editNickname, type EditNicknameResult } from "./commands/edit-nickname";
 export { getKickImpact, type KickImpact } from "./queries/get-kick-impact";
+export { findActiveSanction } from "./queries/find-active-sanction";
+export { listSanctionedUserIds } from "./queries/list-sanctioned-user-ids";
 export { loadAdminTables, type AdminTables } from "./queries/load-admin-tables";
 export { getStaffRole, isPlatformAdmin } from "./queries/staff";
 export * from "./model";

@@ -76,7 +76,14 @@ export async function applyToGame({
     }
     const status = isConfirmed ? PARTICIPANT_STATUS.confirmed : PARTICIPANT_STATUS.waiting;
 
-    const inserted = await insertParticipant({ transaction, serverId, gameId, userId, status });
+    const inserted = await insertParticipant({
+      transaction,
+      serverId,
+      gameId,
+      userId,
+      status,
+      waitlistedAt: new Date(),
+    });
     if (!inserted) return { error: "이미 참여 중입니다." };
 
     const confirmedAfter = isConfirmed ? confirmedCount + 1 : confirmedCount;

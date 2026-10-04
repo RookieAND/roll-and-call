@@ -11,7 +11,14 @@ export async function getGamesByGm({ serverId, userId }: { serverId: string; use
     with: {
       gm: { columns: { avatarUrl: true }, extras: { username: memberNicknameSql(serverId) } },
       participants: {
-        columns: { userId: true, status: true, joinedAt: true, absent: true },
+        columns: {
+          userId: true,
+          status: true,
+          joinedAt: true,
+          drawRank: true,
+          waitlistedAt: true,
+          absent: true,
+        },
         where: (participant, { eq }) => eq(participant.serverId, serverId),
       },
     },

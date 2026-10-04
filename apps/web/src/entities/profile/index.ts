@@ -1,15 +1,13 @@
 export { profileDisplay } from "./model/display";
 export {
-  availabilityPrefill,
   AVAILABILITY_MAX_HOUR,
   AVAILABILITY_MIN_HOUR,
-  filledDays,
   formatHour,
   formatInterval,
   normalizeAvailability,
-  WEEKDAY_LABELS,
   type AvailabilityInterval,
 } from "./model/availability";
+export { availabilityPrefill, filledDays, WEEKDAY_LABELS } from "@/shared/lib";
 export { KEYWORD_MAX_COUNT, KEYWORD_MAX_LENGTH, normalizeKeywords } from "./model/keywords";
 export {
   detectLinkService,

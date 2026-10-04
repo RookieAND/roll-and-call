@@ -33,17 +33,49 @@ describe("splitRoster", () => {
     ]);
   });
 
-  it("추첨을 돌린 뒤에는 신청 순서가 아니라 drawRank가 대기 순번을 정한다", () => {
+  it("추첨 적용 시각이 같은 대기는 신청 순서가 아니라 drawRank가 대기 순번을 정한다", () => {
+    const drawnAt = new Date(10);
     const drawn = [
-      { userId: "a", status: PARTICIPANT_STATUS.waiting, joinedAt: new Date(1), drawRank: 4 },
+      {
+        userId: "a",
+        status: PARTICIPANT_STATUS.waiting,
+        joinedAt: new Date(1),
+        drawRank: 4,
+        waitlistedAt: drawnAt,
+      },
       { userId: "b", status: PARTICIPANT_STATUS.confirmed, joinedAt: new Date(2), drawRank: 1 },
-      { userId: "c", status: PARTICIPANT_STATUS.waiting, joinedAt: new Date(3), drawRank: 3 },
+      {
+        userId: "c",
+        status: PARTICIPANT_STATUS.waiting,
+        joinedAt: new Date(3),
+        drawRank: 3,
+        waitlistedAt: drawnAt,
+      },
     ];
     expect(
       splitRoster(drawn).waiting.map((member) => [member.userId, member.waitlistRank]),
     ).toEqual([
       ["c", 1],
       ["a", 2],
+    ]);
+  });
+
+  it("GM이 내린 사람은 신청이 빨라도 대기 맨 뒤에 선다", () => {
+    const demoted = [
+      ...roster,
+      {
+        userId: "z",
+        status: PARTICIPANT_STATUS.waiting,
+        joinedAt: new Date(0),
+        waitlistedAt: new Date(9),
+      },
+    ];
+    expect(
+      splitRoster(demoted).waiting.map((member) => [member.userId, member.waitlistRank]),
+    ).toEqual([
+      ["c", 1],
+      ["d", 2],
+      ["z", 3],
     ]);
   });
 
@@ -55,9 +87,10 @@ describe("splitRoster", () => {
     const split = splitRoster(withRemoved);
     expect(split.confirmed.map((member) => member.userId)).toEqual(["a", "b"]);
     expect(split.waiting.map((member) => member.userId)).toEqual(["c", "d"]);
-    expect(split.removed.map((member) => [member.userId, member.applicationRank])).toEqual([
-      ["e", 1],
+    expect(split.removed.map((member) => [member.userId, member.waitlistRank])).toEqual([
+      ["e", null],
     ]);
+    expect(split.waiting.map((member) => member.waitlistRank)).toEqual([1, 2]);
   });
 });
 

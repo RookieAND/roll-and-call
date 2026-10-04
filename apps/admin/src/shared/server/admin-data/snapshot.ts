@@ -1,6 +1,6 @@
 import "server-only";
 import type { Game } from "@roll-and-call/database";
-import { sessionEndAt } from "@roll-and-call/database/games/model";
+import { compareWaitlistOrder, sessionEndAt } from "@roll-and-call/database/games/model";
 import { type AuditAction } from "@roll-and-call/database/moderation";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { compact, isNull } from "es-toolkit";
@@ -130,7 +130,10 @@ export const loadSnapshot = cache(async () => {
       startsAt: gameStartsAt(game),
       timeFixed: !isNull(game.confirmedAt),
       memberIds: roster.filter((row) => row.status === "confirmed").map((row) => row.userId),
-      waitingIds: roster.filter((row) => row.status === "waiting").map((row) => row.userId),
+      waitingIds: roster
+        .filter((row) => row.status === "waiting")
+        .toSorted(compareWaitlistOrder)
+        .map((row) => row.userId),
       capacity: game.maxPlayers,
       closed: game.endDate.getTime() <= now,
       recruitStatus: gameStatus(game, now),
