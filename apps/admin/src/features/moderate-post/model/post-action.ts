@@ -3,7 +3,6 @@ import type { PostModerationAction } from "@/shared/server";
 export const POST_ACTION = {
   hide: "hide",
   unhide: "unhide",
-  resolve: "resolve",
   remove: "remove",
 } as const satisfies Record<string, PostModerationAction>;
 

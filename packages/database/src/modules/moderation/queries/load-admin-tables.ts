@@ -9,7 +9,6 @@ import {
   games,
   participants,
   profiles,
-  reports,
   reviewReports,
   rulebookCategories,
   rulebookQuizQuestions,
@@ -83,7 +82,6 @@ export async function loadAdminTables(serverId: string) {
     .select()
     .from(sanctions)
     .where(and(eq(sanctions.serverId, serverId), isNull(sanctions.releasedAt)));
-  const reportRows = await db.select().from(reports).where(eq(reports.serverId, serverId));
   const reviewRows = await db
     .select()
     .from(sessionReviews)
@@ -113,7 +111,6 @@ export async function loadAdminTables(serverId: string) {
     quizRows,
     sellerRows,
     sanctionRows,
-    reportRows,
     reviewRows,
     reviewReportRows,
     staffRows,

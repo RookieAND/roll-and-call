@@ -4,19 +4,19 @@ import type { PostDetail } from "@/shared/server";
 import { FactRows, Tag } from "@/shared/ui";
 
 import { ContentSection } from "./content-section";
-import { ImagePlaceholder } from "./image-placeholder";
+import { ZoomablePhotos } from "./zoomable-photos";
 
 interface ContentPanelProps {
   post: Pick<
     PostDetail,
-    "genres" | "triggers" | "platforms" | "aiImage" | "synopsis" | "notices" | "imageUrls"
+    "title" | "genres" | "triggers" | "platforms" | "aiImage" | "synopsis" | "notices" | "imageUrls"
   >;
 }
 
 // 어드민에서는 스포일러를 가리지 않는다.
 export function ContentPanel({ post }: ContentPanelProps) {
   const tagsOf = (values: string[]) =>
-    values.length ? values.map((value) => <Tag key={value}>{value}</Tag>) : "—";
+    values.length ? values.map((value) => <Tag key={value}>{value}</Tag>) : "없음";
   const aiImageBadge = post.aiImage ? <Tag>사용</Tag> : <Tag>사용 안 함</Tag>;
   return (
     <VStack className="px-200">
@@ -67,22 +67,12 @@ export function ContentPanel({ post }: ContentPanelProps) {
           }
         >
           <Grid className="grid-cols-2 gap-150">
-            {post.imageUrls.map((url, index) =>
-              url ? (
-                <img
-                  key={url}
-                  src={url}
-                  alt={`본문 이미지 ${index + 1}`}
-                  className="h-[150px] w-full rounded-300 border border-gray-200 object-cover"
-                />
-              ) : (
-                <ImagePlaceholder
-                  key={index}
-                  label={`본문 이미지 ${index + 1}`}
-                  className="h-[150px]"
-                />
-              ),
-            )}
+            <ZoomablePhotos
+              photos={post.imageUrls}
+              title={post.title}
+              subtitle="본문 이미지"
+              className="h-[150px] w-full"
+            />
           </Grid>
         </ContentSection>
       ) : null}

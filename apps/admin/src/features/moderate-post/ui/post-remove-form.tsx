@@ -1,7 +1,7 @@
 "use client";
 
-import { Button, Dialog, HStack, Text, VStack, cn, toast } from "@roll-and-call/ui";
-import { Bell, X } from "lucide-react";
+import { Button, Dialog, Text, VStack, cn, toast } from "@roll-and-call/ui";
+import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -20,7 +20,6 @@ import { POST_ACTION } from "../model/post-action";
 import { RemoveImpact } from "./remove-impact";
 import { RemoveReasonRadio } from "./remove-reason-radio";
 import { RemoveTarget } from "./remove-target";
-import { ReportSummary } from "./report-summary";
 
 interface PostRemoveFormProps {
   post: PostDetail;
@@ -66,7 +65,7 @@ export function PostRemoveForm({ post }: PostRemoveFormProps) {
               title="이미 처리된 구인입니다"
               description="입력한 내용은 저장되지 않았습니다."
               actions={
-                <Button size="sm" render={<ServerLink path="/posts?filter=reported" />}>
+                <Button size="sm" render={<ServerLink path="/posts" />}>
                   다음 건
                 </Button>
               }
@@ -74,8 +73,7 @@ export function PostRemoveForm({ post }: PostRemoveFormProps) {
           ) : null}
           <VStack gap="150" className={cn(conflicted && "pointer-events-none opacity-50")}>
             <RemoveTarget post={post} />
-            {post.unresolvedReportCount > 0 ? <ReportSummary reports={post.reports} /> : null}
-            <RemoveImpact memberCount={post.memberCount} reviewCount={post.reviews.length} />
+            <RemoveImpact memberCount={post.memberCount} />
             <RemoveReasonRadio value={reason} disabled={conflicted} onValueChange={setReason} />
             <UserPreview title="GM에게 이렇게 갑니다">
               {reason ? (
@@ -89,13 +87,7 @@ export function PostRemoveForm({ post }: PostRemoveFormProps) {
           </VStack>
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center">
-        <HStack align="center" gap="075" className="mr-auto text-hint">
-          <Bell size={14} aria-hidden />
-          <Text typography="body4" foreground="hint">
-            GM에게만 알림이 갑니다
-          </Text>
-        </HStack>
+      <Dialog.Footer layout="row" className="items-center justify-end">
         <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
           취소
         </Dialog.Close>

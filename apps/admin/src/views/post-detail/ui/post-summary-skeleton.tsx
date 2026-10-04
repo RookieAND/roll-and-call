@@ -1,4 +1,4 @@
-import { Grid, HStack, Skeleton } from "@roll-and-call/ui";
+import { Card, Grid, HStack, Skeleton } from "@roll-and-call/ui";
 
 import { FactRows } from "@/shared/ui";
 
@@ -7,26 +7,22 @@ const valueOf = (label: string) => ({
   value: <Skeleton width={120} height={14} render={<span />} className="inline-block" />,
 });
 
-interface PostSummarySkeletonProps {
-  labels: [string[], string[]];
-}
+const LEFT_LABELS = ["세션 일정", "플레이타임", "룰"];
+const RIGHT_LABELS = ["모집 마감일", "GM"];
 
-export function PostSummarySkeleton({ labels }: PostSummarySkeletonProps) {
-  const [leftLabels, rightLabels] = labels;
+export function PostSummarySkeleton() {
   return (
-    <section className="shrink-0 rounded-600 border border-gray-200 bg-surface">
-      <HStack align="center" gap="150" className="px-200 py-175">
-        <Skeleton width={96} height={64} rounded={400} />
-        <HStack align="center" gap="100" className="min-w-0 flex-1">
-          <Skeleton width={160} height={20} />
-          <Skeleton width={52} height={20} rounded={300} />
-        </HStack>
-        <Skeleton width={32} height={32} rounded={400} />
-      </HStack>
-      <Grid className="grid-cols-2 items-start gap-x-400 border-t border-(--rc-color-border-subtle) px-200 py-100">
-        <FactRows items={leftLabels.map(valueOf)} />
-        <FactRows items={rightLabels.map(valueOf)} />
+    <Card.Root
+      padding="none"
+      render={<HStack align="center" gap="150" />}
+      className="shrink-0 px-200 py-175"
+    >
+      <Skeleton width={96} height={64} rounded={400} />
+      <Grid className="min-w-0 flex-1 grid-cols-2 items-start gap-x-400">
+        <FactRows items={LEFT_LABELS.map(valueOf)} />
+        <FactRows items={RIGHT_LABELS.map(valueOf)} />
       </Grid>
-    </section>
+      <Skeleton width={32} height={32} rounded={400} />
+    </Card.Root>
   );
 }

@@ -1,6 +1,6 @@
 import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { formatSessionTime } from "@/shared/lib";
+import { sessionTimeLabel } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 
 interface RemoveTargetProps {
@@ -16,7 +16,7 @@ export function RemoveTarget({ post }: RemoveTargetProps) {
           {post.title}
         </Text>
         <Text typography="body4" foreground="hint" truncate>
-          GM {post.gm.nickname} · {formatSessionTime(post.startsAt)}
+          GM {post.gm.nickname} · {sessionTimeLabel(post.sessionAt)}
         </Text>
       </HStack>
       {firstLine ? (

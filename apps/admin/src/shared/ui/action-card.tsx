@@ -1,6 +1,6 @@
 import { Button, Text, VStack } from "@roll-and-call/ui";
 import type { LucideIcon } from "lucide-react";
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 
 import { IconTile } from "./icon-tile";
 
@@ -25,7 +25,7 @@ const TONE = {
 interface ActionCardProps {
   icon: LucideIcon;
   title: string;
-  description: string;
+  description: ReactNode;
   link: ReactElement<Record<string, unknown>>;
   tone?: keyof typeof TONE;
 }

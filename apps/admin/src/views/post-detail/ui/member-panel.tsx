@@ -33,9 +33,9 @@ export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
           <Table.Head>디스코드 ID</Table.Head>
           <Table.Head>신청 일시</Table.Head>
           {waiting ? (
-            <Table.Head align="center">대기 순번</Table.Head>
+            <Table.Head align="center">목록 순서</Table.Head>
           ) : (
-            <Table.Head align="end">불참 횟수</Table.Head>
+            <Table.Head align="end">최근 30일 불참</Table.Head>
           )}
         </Table.Row>
       </Table.Header>
@@ -70,12 +70,12 @@ export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
               </Table.Cell>
               <Table.Cell numeric>
                 <Text typography="body3" foreground="muted">
-                  {member.joinedAt ? formatDateTime(member.joinedAt) : "—"}
+                  {member.joinedAt ? formatDateTime(member.joinedAt) : "없음"}
                 </Text>
               </Table.Cell>
-              {"queueOrder" in member ? (
+              {"listOrder" in member ? (
                 <Table.Cell align="center" numeric>
-                  {member.queueOrder}
+                  {member.listOrder}
                 </Table.Cell>
               ) : (
                 <Table.Cell align="end" numeric>

@@ -5,14 +5,14 @@ import { formatDate } from "@/shared/lib";
 interface HideImpactProps {
   memberCount: number;
   waitingCount: number;
-  startsAt: Date;
+  sessionAt: Date | null;
 }
 
-export function HideImpact({ memberCount, waitingCount, startsAt }: HideImpactProps) {
+export function HideImpact({ memberCount, waitingCount, sessionAt }: HideImpactProps) {
   const items = [
     { label: "목록 · 검색", value: "빠짐", sub: "새로 보는 사람에게만" },
     { label: `참여자 ${memberCount}명 · 대기 ${waitingCount}명`, value: "그대로 접근" },
-    { label: `${formatDate(startsAt)} 세션`, value: "그대로 진행" },
+    { label: sessionAt ? `${formatDate(sessionAt)} 세션` : "세션", value: "그대로 진행" },
   ];
   return (
     <Grid

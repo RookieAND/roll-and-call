@@ -35,13 +35,4 @@ export const ACTION_COPY: Record<FormAction, ActionCopy> = {
     confirmLabel: "숨김 해제",
     successMessage: (title) => `숨김을 해제했습니다 · ${title}`,
   },
-  [POST_ACTION.resolve]: {
-    widthClassName: "max-w-[560px]",
-    title: "신고 처리 완료",
-    description: "조치 없이 이 구인의 처리 안 된 신고를 처리됨으로 바꿉니다",
-    footerIcon: Bell,
-    footerNote: "GM과 신고자 모두에게 알리지 않습니다",
-    confirmLabel: "처리 완료",
-    successMessage: (title) => `신고를 처리 완료했습니다 · ${title}`,
-  },
 };

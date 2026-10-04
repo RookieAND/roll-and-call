@@ -1,71 +1,17 @@
 import "server-only";
 import { uniq } from "es-toolkit";
 
-import { POST_PERIODS } from "./post-period";
-import { postStaffAction } from "./post-staff-action";
-import { POST_STATUS, type PostStatus } from "./post-status";
-import { postStatusOf } from "./post-status-of";
+import { POST_STATUS } from "./post-status";
+import { selectPostRows, type PostListFilter } from "./select-post-rows";
 import { loadSnapshot } from "./snapshot";
-
-const DAY = 86_400_000;
-
-export interface PostListFilter {
-  query?: string;
-  status?: string;
-  rulebook?: string;
-  reportedOnly?: boolean;
-  period?: string;
-}
-
-export type PostStaffAction = "숨김";
-
-export interface PostRow {
-  id: string;
-  title: string;
-  gmNickname: string;
-  rulebook: string;
-  startsAt: Date;
-  memberCount: number;
-  capacity: number;
-  status: PostStatus;
-  unresolvedReportCount: number;
-  staffAction: PostStaffAction | null;
-}
+import { toPostRow } from "./to-post-row";
 
 export async function listPosts(filter: PostListFilter) {
   const db = await loadSnapshot();
-  const all = db.sessions
-    .map((session): PostRow => ({
-      id: session.id,
-      title: session.title,
-      gmNickname: db.users.find((user) => user.id === session.gmId)!.nickname,
-      rulebook: session.rulebook,
-      startsAt: session.startsAt,
-      memberCount: session.memberIds.length,
-      capacity: session.capacity,
-      status: postStatusOf(session),
-      unresolvedReportCount: db.reports.filter(
-        (report) => report.sessionId === session.id && !report.resolved,
-      ).length,
-      staffAction: postStaffAction(session),
-    }))
-    .toSorted((a, b) => b.startsAt.getTime() - a.startsAt.getTime());
-  const keyword = filter.query?.trim();
-  const days = POST_PERIODS.find((candidate) => candidate.value === filter.period)?.days;
-  const since = days ? Date.now() - days * DAY : null;
-  const rows = all.filter(
-    (row) =>
-      (!keyword || row.title.includes(keyword) || row.gmNickname.includes(keyword)) &&
-      (!filter.status || row.status === filter.status) &&
-      (!filter.rulebook || row.rulebook === filter.rulebook) &&
-      (!filter.reportedOnly || row.unresolvedReportCount > 0) &&
-      (!since || row.startsAt.getTime() >= since),
-  );
+  const all = db.sessions.map((session) => toPostRow({ db, session }));
   return {
     total: all.length,
-    rows,
-    reportedCount: all.filter((row) => row.unresolvedReportCount > 0).length,
-    actedCount: all.filter((row) => row.staffAction).length,
+    rows: selectPostRows({ rows: all, ...filter }),
     statusOptions: Object.values(POST_STATUS),
     rulebookOptions: uniq(all.map((row) => row.rulebook)).toSorted(),
   };

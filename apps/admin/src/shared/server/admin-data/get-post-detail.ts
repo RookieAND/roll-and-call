@@ -1,40 +1,46 @@
 import "server-only";
+import { PAGE_SIZE } from "@/shared/lib";
+
 import { countRecentNoShows } from "./count-recent-no-shows";
-import { postAuditTarget } from "./post-audit-target";
 import { postStatusOf } from "./post-status-of";
+import { selectPostRows, type PostListFilter } from "./select-post-rows";
 import { loadSnapshot, type Snapshot } from "./snapshot";
+import { toPostRow } from "./to-post-row";
 
 const REVIEW_WINDOW_DAYS = 14;
 const DAY = 86_400_000;
+// GM이 받은 조치로 세는 구인 조치(숨김 해제는 받은 조치가 아니다).
+const RECEIVED_POST_ACTIONS: readonly string[] = ["구인 숨김", "구인 취소"];
 
 const userOf = (db: Snapshot, userId: string) => db.users.find((user) => user.id === userId)!;
-const nicknameOf = (db: Snapshot, userId: string) => userOf(db, userId).nickname;
 
-export async function getPostDetail(id: string) {
+// filter는 들어온 목록의 검색·필터·정렬이다. [다음 건]은 그 목록에서 다음 구인과 그 구인이 있는 쪽이다.
+export async function getPostDetail({ id, filter }: { id: string; filter: PostListFilter }) {
   const db = await loadSnapshot();
   const session = db.sessions.find((candidate) => candidate.id === id);
   if (!session) return null;
   const now = Date.now();
-  const gm = db.users.find((user) => user.id === session.gmId)!;
-  const gmSessions = db.sessions.filter((candidate) => candidate.gmId === gm.id);
-  const gmTargetSuffix = ` · GM ${gm.nickname}`;
-  const receivedActions = db.auditLog.filter((entry) => entry.target.endsWith(gmTargetSuffix));
-  const gmReviews = db.reviews.filter(
-    (review) =>
-      !review.removed && gmSessions.some((candidate) => candidate.id === review.sessionId),
+  const gm = userOf(db, session.gmId);
+  const gmGameIds = new Set(
+    db.sessions.filter((candidate) => candidate.gmId === gm.id).map((candidate) => candidate.id),
   );
-  const reports = db.reports
-    .filter((report) => report.sessionId === id)
-    .toSorted((a, b) => a.reportedAt.getTime() - b.reportedAt.getTime());
+  const receivedActionCount = db.auditLog.filter(
+    (entry) =>
+      entry.targetGameId &&
+      gmGameIds.has(entry.targetGameId) &&
+      RECEIVED_POST_ACTIONS.includes(entry.action),
+  ).length;
+  const listIds = selectPostRows({
+    rows: db.sessions.map((candidate) => toPostRow({ db, session: candidate })),
+    ...filter,
+  }).map((row) => row.id);
+  const nextIndex = listIds.indexOf(id) + 1;
+  const next =
+    nextIndex > 0 && nextIndex < listIds.length
+      ? { id: listIds[nextIndex]!, page: Math.floor(nextIndex / PAGE_SIZE) + 1 }
+      : null;
   const waitingIds = session.waitingIds ?? [];
-  const reviews = db.reviews
-    .filter((review) => review.sessionId === id && !review.removed)
-    .toSorted((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  const absentIds = new Set(
-    db.noShows
-      .filter((noShow) => noShow.sessionId === id && !noShow.cancelled)
-      .map((noShow) => noShow.userId),
-  );
+  const cancelRecipientIds = new Set(session.staffCancelRecipientIds ?? []);
   // ponytail: 작성 기한은 처음 출석 확인 + 14일로 어드민이 따로 계산한다. 사용자 앱(apps/web)의 계산과 같은 규칙이다.
   const attendanceConfirmedAt = session.attendanceConfirmedAt;
   const reviewWindowStart = session.attendanceFirstConfirmedAt ?? attendanceConfirmedAt;
@@ -44,9 +50,7 @@ export async function getPostDetail(id: string) {
     title: session.title,
     rulebook: session.rulebook,
     status: postStatusOf(session, now),
-    auditTarget: postAuditTarget(db, session),
-    createdAt: session.createdAt,
-    startsAt: session.startsAt,
+    sessionAt: session.timeFixed ? session.startsAt : null,
     memberCount: session.memberIds.length,
     waitingCount: waitingIds.length,
     capacity: session.capacity,
@@ -62,69 +66,35 @@ export async function getPostDetail(id: string) {
     thumbnailUrl: session.thumbnailUrl,
     hidden: session.hidden,
     gmEditSinceHidden: session.gmEditSinceHidden,
-    reports: reports.map((report) => ({
-      id: report.id,
-      reporterNickname: report.reporterId ? nicknameOf(db, report.reporterId) : "알 수 없음",
-      reportedAt: report.reportedAt,
-      category: report.category ?? "기타",
-      detail: report.detail ?? "",
-      resolved: report.resolved,
-    })),
-    unresolvedReportCount: reports.filter((report) => !report.resolved).length,
+    cancelled: session.cancelled ?? false,
+    cancellable: !session.cancelBlock,
+    sessionStarted: session.sessionStarted ?? false,
+    cancelRecipients: {
+      memberCount: session.memberIds.filter((userId) => cancelRecipientIds.has(userId)).length,
+      waitingCount: waitingIds.filter((userId) => cancelRecipientIds.has(userId)).length,
+    },
+    next,
     members: session.memberIds.map((userId) => ({
       userId,
-      nickname: nicknameOf(db, userId),
+      nickname: userOf(db, userId).nickname,
       discordHandle: userOf(db, userId).discordHandle,
       joinedAt: session.joinedAt?.get(userId),
       recentNoShowCount: countRecentNoShows(db, userId, now),
+    })),
+    waitlist: waitingIds.map((userId, index) => ({
+      userId,
+      listOrder: index + 1,
+      nickname: userOf(db, userId).nickname,
+      discordHandle: userOf(db, userId).discordHandle,
+      joinedAt: session.joinedAt?.get(userId),
     })),
     attendance: {
       confirmedAt: attendanceConfirmedAt,
       reviewDeadline: reviewWindowStart
         ? new Date(reviewWindowStart.getTime() + REVIEW_WINDOW_DAYS * DAY)
         : undefined,
-      attendedCount: session.memberIds.filter((userId) => !absentIds.has(userId)).length,
     },
-    reviews: reviews.map((review) => ({
-      id: review.id,
-      authorNickname: nicknameOf(db, review.authorId),
-      createdAt: review.createdAt,
-      photoCount: review.photoUrls.length,
-      spoiler: review.spoiler,
-      openReportCount: db.reviewReports.filter(
-        (report) => report.reviewId === review.id && report.open,
-      ).length,
-      hidden: Boolean(review.hidden),
-      held: review.held,
-    })),
-    waitlist: waitingIds.map((userId, index) => ({
-      userId,
-      queueOrder: index + 1,
-      nickname: nicknameOf(db, userId),
-      discordHandle: userOf(db, userId).discordHandle,
-      joinedAt: session.joinedAt?.get(userId),
-    })),
-    gm: {
-      id: gm.id,
-      nickname: gm.nickname,
-      discordHandle: gm.discordHandle,
-      joinedAt: gm.joinedAt,
-      receivedReviewCount: gmReviews.length,
-      reviewedSessionCount: new Set(gmReviews.map((review) => review.sessionId)).size,
-      pendingAttendanceCount: gmSessions.filter(
-        (candidate) => candidate.startsAt.getTime() < now && !candidate.attendanceConfirmedAt,
-      ).length,
-      certifiedRulebooks: db.certifications
-        .filter((certification) => certification.userId === gm.id)
-        .map((certification) => certification.rulebook),
-      hostedCount: Math.max(gm.hostedCount, gmSessions.length),
-      ongoingHostedCount: gmSessions.filter((candidate) => candidate.startsAt.getTime() >= now)
-        .length,
-      hideCount: receivedActions.filter((entry) => entry.action === "구인 숨김").length,
-      handledNoShowCount: db.noShows.filter((noShow) =>
-        gmSessions.some((candidate) => candidate.id === noShow.sessionId),
-      ).length,
-    },
+    gm: { id: gm.id, nickname: gm.nickname, receivedActionCount },
   };
 }
 

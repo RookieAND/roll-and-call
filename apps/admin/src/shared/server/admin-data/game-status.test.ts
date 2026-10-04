@@ -9,6 +9,7 @@ const NOW = new Date("2026-09-24T12:00:00+09:00").getTime();
 const game = (fields: Partial<Game>) =>
   ({
     confirmedAt: null,
+    cancelledAt: null,
     playMinutes: 180,
     endedAt: null,
     endDate: new Date(NOW + 1),
@@ -39,6 +40,16 @@ describe("gameStatus", () => {
         NOW,
       ),
     ).toBe(POST_STATUS.ended);
+  });
+
+  it("취소된 구인은 다른 상태보다 취소됨이 먼저", () => {
+    expect(gameStatus(game({ cancelledAt: new Date(NOW - 1) }), NOW)).toBe(POST_STATUS.cancelled);
+    expect(
+      gameStatus(
+        game({ cancelledAt: new Date(NOW - 1), confirmedAt: new Date(NOW - 4 * 3_600_000) }),
+        NOW,
+      ),
+    ).toBe(POST_STATUS.cancelled);
   });
 
   it("미확정이면 모집 마감 전은 모집 중, 뒤는 일정 조율 중", () => {

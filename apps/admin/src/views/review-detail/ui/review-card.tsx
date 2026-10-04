@@ -11,11 +11,9 @@ import { ReviewStateTag } from "./review-state-tag";
 interface ReviewCardProps {
   review: ReviewDetail;
   logHref: string;
-  hideLink: { label: string; href: string };
-  removeHref: string;
 }
 
-export function ReviewCard({ review, logHref, hideLink, removeHref }: ReviewCardProps) {
+export function ReviewCard({ review, logHref }: ReviewCardProps) {
   const editedValue = review.editedAt ? (
     <HStack align="baseline" gap="075" render={<span />}>
       {formatDateTime(review.editedAt)}
@@ -71,10 +69,8 @@ export function ReviewCard({ review, logHref, hideLink, removeHref }: ReviewCard
           <ReviewPhotos
             photoUrls={review.photoUrls}
             title={review.author.nickname}
-            meta={`${review.session.title} · ${formatDateTime(review.createdAt)}`}
+            subtitle={`${review.session.title} · ${formatDateTime(review.createdAt)}`}
             spoiler={review.spoiler}
-            hideLink={hideLink}
-            removeHref={removeHref}
           />
         ) : null}
       </VStack>

@@ -1,36 +1,32 @@
 import { Callout, VStack } from "@roll-and-call/ui";
-import { Check, Eye, Shield, X } from "lucide-react";
+import { Eye, Shield, X } from "lucide-react";
+import type { ReactElement } from "react";
 
 import { POST_ACTION, type PostAction } from "@/features/moderate-post";
-import { formatDate } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import { ActionCard, ServerLink } from "@/shared/ui";
 
-import { receivedActionValue } from "../model/received-action-value";
 import { AsideHeading } from "./aside-heading";
 import { DetailAside } from "./detail-aside";
-import { GmInfo } from "./gm-info";
+
+const DISABLED_LINK = <button type="button" disabled />;
 
 interface PostActionsAsideProps {
-  post: PostDetail;
-  actionHref: (action: PostAction) => string;
+  // 불러오는 중이면 없고, 카드는 글자만 그대로 두고 비활성이다.
+  post?: PostDetail;
+  actionHref?: (action: PostAction) => string;
 }
 
 export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
-  const { gm } = post;
-  const reported = post.unresolvedReportCount > 0;
-  const notice = reported
-    ? `어떤 조치를 확정해도 신고 ${post.unresolvedReportCount}건이 처리됨으로 바뀝니다. 신고자에게는 알림이 가지 않습니다.`
-    : "운영진은 GM이 쓴 글을 직접 고치지 않습니다. 두 조치 모두 사유가 필요하고, GM에게만 알림이 갑니다.";
-  const certifiedSub = gm.certifiedRulebooks.includes(post.rulebook)
-    ? `${post.rulebook} 포함`
-    : undefined;
-  const link = (action: PostAction) => <ServerLink path={actionHref(action)} scroll={false} />;
+  const link = (action: PostAction): ReactElement<Record<string, unknown>> =>
+    actionHref ? <ServerLink path={actionHref(action)} scroll={false} /> : DISABLED_LINK;
+  const cancelShown = !post || (!post.cancelled && post.cancellable);
+  const cancelLocked = post?.sessionStarted ?? false;
   return (
     <DetailAside>
       <AsideHeading>조치</AsideHeading>
       <VStack gap="075" className="p-150">
-        {post.hidden ? (
+        {post?.hidden ? (
           <ActionCard
             icon={Eye}
             title="숨김 해제"
@@ -42,51 +38,36 @@ export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
           <ActionCard
             icon={Eye}
             title="숨김"
-            description="목록과 검색에서만 빠집니다"
+            description="목록·검색·달력·링크 미리보기에서 빠지고, 참여자만 상세를 봅니다"
             link={link(POST_ACTION.hide)}
           />
         )}
-        {reported ? (
+        {cancelShown ? (
           <ActionCard
-            icon={Check}
-            title="처리 완료 (조치 없음)"
-            description="문제가 없다고 보고 신고만 닫습니다"
-            link={link(POST_ACTION.resolve)}
+            icon={X}
+            title="구인 취소"
+            description={
+              cancelLocked ? (
+                "시작한 세션은 취소할 수 없습니다"
+              ) : (
+                <>
+                  취소한 구인은 "취소됨"으로 남고
+                  <br />
+                  신청과 수정이 막힙니다
+                </>
+              )
+            }
+            link={cancelLocked ? DISABLED_LINK : link(POST_ACTION.remove)}
+            tone="danger"
           />
         ) : null}
-        <ActionCard
-          icon={X}
-          title="제거"
-          description="참여 정보와 후기까지 함께 삭제합니다"
-          link={link(POST_ACTION.remove)}
-          tone="danger"
-        />
         <Callout.Root colorPalette="gray" size="sm" className="mt-050">
           <Callout.Icon>
             <Shield size={14} />
           </Callout.Icon>
-          <Callout.Description>{notice}</Callout.Description>
+          <Callout.Description>운영진은 GM이 쓴 글을 직접 고치지 않습니다.</Callout.Description>
         </Callout.Root>
       </VStack>
-      <GmInfo
-        nickname={gm.nickname}
-        meta={`${formatDate(gm.joinedAt)} 가입`}
-        facts={[
-          { label: "인증 룰북", value: `${gm.certifiedRulebooks.length}개`, sub: certifiedSub },
-          {
-            label: "연 구인",
-            value: `${gm.hostedCount}건`,
-            sub: `진행 중 ${gm.ongoingHostedCount}건`,
-          },
-          {
-            label: "받은 조치",
-            value: receivedActionValue(gm.hideCount),
-            danger: gm.hideCount > 0,
-            sub: `숨김 ${gm.hideCount}`,
-          },
-          { label: "처리한 불참", value: `${gm.handledNoShowCount}건` },
-        ]}
-      />
     </DetailAside>
   );
 }

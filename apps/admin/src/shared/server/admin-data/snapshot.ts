@@ -2,8 +2,12 @@ import "server-only";
 import type { Game } from "@roll-and-call/database";
 import {
   ABSENCE_ADDED_TAG_LABEL,
+  cancelBlockReason,
   compareWaitlistOrder,
+  GAME_CANCEL_KIND,
+  gameCancelledRecipients,
   isAutoConfirmedAttendance,
+  isSessionStarted,
   sessionEndAt,
   type AbsenceAddedTag,
 } from "@roll-and-call/database/games/model";
@@ -29,7 +33,6 @@ import type {
   Certification,
   NoShow,
   QuizQuestion,
-  Report,
   Review,
   ReviewReport,
   Rulebook,
@@ -64,7 +67,6 @@ export const loadSnapshot = cache(async () => {
     quizRows,
     sellerRows,
     sanctionRows,
-    reportRows,
     reviewRows,
     reviewReportRows,
     staffRows,
@@ -171,6 +173,13 @@ export const loadSnapshot = cache(async () => {
         ? { reason: game.hiddenReason ?? "", by: nicknameOf(game.hiddenBy), at: game.hiddenAt }
         : undefined,
       cancelled: !isNull(game.cancelledAt),
+      cancelBlock: cancelBlockReason({ game, now: new Date(now) }),
+      sessionStarted: isSessionStarted(game, new Date(now)),
+      staffCancelRecipientIds: gameCancelledRecipients({
+        game,
+        kind: GAME_CANCEL_KIND.staff,
+        roster,
+      }),
       endsAt: sessionEndAt(game),
     };
   });
@@ -309,18 +318,6 @@ export const loadSnapshot = cache(async () => {
         : undefined,
   }));
 
-  const reportList: Report[] = reportRows.map((row) => ({
-    id: row.id,
-    sessionId: row.gameId,
-    reportedAt: row.createdAt,
-    resolved: !isNull(row.resolvedAt),
-    reporterId: row.reporterId ?? undefined,
-    category: row.category,
-    detail: row.detail,
-    resolvedBy: row.resolvedBy ? nicknameOf(row.resolvedBy) : undefined,
-    resolvedAt: row.resolvedAt ?? undefined,
-  }));
-
   const absentKeys = new Set(
     participantRows
       .filter((row) => row.absent && isNull(row.absenceCancelledAt))
@@ -413,7 +410,6 @@ export const loadSnapshot = cache(async () => {
     rulebookRequests: requestList,
     sessions,
     noShows,
-    reports: reportList,
     reviews: reviewList,
     reviewReports: reviewReportList,
     auditLog: auditList,

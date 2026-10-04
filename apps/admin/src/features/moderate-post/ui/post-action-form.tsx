@@ -41,7 +41,6 @@ const CONFLICT_VERB = {
   "구인 숨김": "숨김 처리",
   "구인 취소": "제거",
   "구인 숨김 해제": "숨김을 해제",
-  "신고 처리 완료": "신고를 처리",
 } as const;
 
 interface PostActionFormProps {
@@ -64,10 +63,7 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
   const requiredField = REQUIRED_FIELD[action];
   const filled = { userReason: userReason.trim(), staffMemo: staffMemo.trim() };
   const canConfirm = (!requiredField || Boolean(filled[requiredField])) && !pending && !conflicted;
-  const description =
-    action === POST_ACTION.resolve
-      ? `조치 없이 이 구인의 처리 안 된 신고 ${post.unresolvedReportCount}건을 처리됨으로 바꿉니다`
-      : copy.description;
+  const description = copy.description;
   const conflictTitle = conflict
     ? `다른 운영진(${conflict.by})이 먼저 ${CONFLICT_VERB[conflict.action as keyof typeof CONFLICT_VERB] ?? "처리"}했습니다`
     : "이미 처리된 구인입니다";
@@ -120,7 +116,7 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
               title={conflictTitle}
               description={conflictDescription}
               actions={
-                <Button size="sm" render={<ServerLink path="/posts?filter=reported" />}>
+                <Button size="sm" render={<ServerLink path="/posts" />}>
                   다음 건
                 </Button>
               }
@@ -131,7 +127,7 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
               <HideImpact
                 memberCount={post.memberCount}
                 waitingCount={post.waitingCount}
-                startsAt={post.startsAt}
+                sessionAt={post.sessionAt}
               />
             ) : null}
             {action === POST_ACTION.unhide && post.hidden ? (
@@ -150,22 +146,13 @@ export function PostActionForm({ post, action, onDone }: PostActionFormProps) {
                 <UserPreview title="GM에게 이렇게 갑니다">{gmMessage}</UserPreview>
               </>
             ) : (
-              <Field.Root
-                label="운영진 메모 (사용자에게 안 보임)"
-                htmlFor="post-action-staff-memo"
-                required={requiredField === "staffMemo"}
-                description={action === POST_ACTION.resolve ? "활동 기록에 남습니다." : undefined}
-              >
+              <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="post-action-staff-memo">
                 <Textarea
                   id="post-action-staff-memo"
                   rows={2}
                   value={staffMemo}
                   disabled={conflicted}
-                  placeholder={
-                    action === POST_ACTION.resolve
-                      ? "예: 시놉시스 표현은 작품 속 설정으로 문제없음"
-                      : "확인한 내용을 적어 주세요"
-                  }
+                  placeholder="확인한 내용을 적어 주세요"
                   onChange={(event) => setStaffMemo(event.target.value)}
                 />
               </Field.Root>

@@ -1,22 +1,19 @@
 "use client";
 
 import { Grid } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState } from "react";
 
-import { PhotoThumb } from "@/shared/ui";
-
-import { PhotoViewer } from "./photo-viewer";
+import { PhotoThumb, PhotoViewer } from "@/shared/ui";
 
 interface ReviewPhotosProps {
   photoUrls: string[];
   title: string;
-  meta: string;
+  subtitle: string;
   spoiler: boolean;
-  hideLink: { label: string; href: string };
-  removeHref: string;
 }
 
-export function ReviewPhotos({ photoUrls, ...viewer }: ReviewPhotosProps) {
+export function ReviewPhotos({ photoUrls, title, subtitle, spoiler }: ReviewPhotosProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   return (
     <>
@@ -30,12 +27,16 @@ export function ReviewPhotos({ photoUrls, ...viewer }: ReviewPhotosProps) {
           />
         ))}
       </Grid>
-      <PhotoViewer
-        photoUrls={photoUrls}
-        index={openIndex}
-        onIndexChange={setOpenIndex}
-        {...viewer}
-      />
+      {isNull(openIndex) ? null : (
+        <PhotoViewer
+          photos={photoUrls}
+          title={title}
+          subtitle={subtitle}
+          spoiler={spoiler}
+          initialIndex={openIndex}
+          onClose={() => setOpenIndex(null)}
+        />
+      )}
     </>
   );
 }

@@ -13,6 +13,7 @@ export { formatDateTime } from "./format-date-time";
 export { formatDayRange } from "./format-day-range";
 export { formatRelativeTime } from "./format-relative-time";
 export { formatSessionTime } from "./format-session-time";
+export { sessionTimeLabel } from "./session-time-label";
 export { formatTime } from "./format-time";
 export { CATEGORY_PAGE_SIZE, PAGE_SIZE, paginate } from "./paginate";
 export { PENDING_COPY } from "./pending-copy";

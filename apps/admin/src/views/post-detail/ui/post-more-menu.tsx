@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, IconButton, Popover, VStack } from "@roll-and-call/ui";
-import { Ellipsis, Eye, ScrollText, User, X } from "lucide-react";
+import { Ellipsis, Eye, Quote, ScrollText, User } from "lucide-react";
 import { useState } from "react";
 
 import { ServerLink } from "@/shared/ui";
@@ -9,11 +9,11 @@ import { ServerLink } from "@/shared/ui";
 interface PostMoreMenuProps {
   userAppHref: string | null;
   gmId: string;
+  postId: string;
   logHref: string;
-  removeHref: string;
 }
 
-export function PostMoreMenu({ userAppHref, gmId, logHref, removeHref }: PostMoreMenuProps) {
+export function PostMoreMenu({ userAppHref, gmId, postId, logHref }: PostMoreMenuProps) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   const items = [
@@ -27,6 +27,11 @@ export function PostMoreMenu({ userAppHref, gmId, logHref, removeHref }: PostMor
         ]
       : []),
     { label: "GM 유저 상세 열기", icon: User, link: <ServerLink path={`/users/${gmId}`} /> },
+    {
+      label: "후기 목록에서 보기",
+      icon: Quote,
+      link: <ServerLink path={`/reviews?game=${postId}`} />,
+    },
     { label: "활동 기록에서 보기", icon: ScrollText, link: <ServerLink path={logHref} /> },
   ];
   return (
@@ -50,18 +55,6 @@ export function PostMoreMenu({ userAppHref, gmId, logHref, removeHref }: PostMor
               {label}
             </Button>
           ))}
-          <div role="separator" className="-mx-075 my-050 h-px bg-gray-200" />
-          <Button
-            variant="ghost"
-            colorPalette="danger"
-            size="sm"
-            render={<ServerLink path={removeHref} scroll={false} />}
-            onClick={close}
-            className="justify-start gap-100"
-          >
-            <X size={16} aria-hidden />
-            구인 제거
-          </Button>
         </VStack>
       </Popover.Popup>
     </Popover.Root>

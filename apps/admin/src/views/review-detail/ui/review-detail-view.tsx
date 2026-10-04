@@ -34,9 +34,6 @@ export function ReviewDetailView({ review, action, from }: ReviewDetailViewProps
   const back = fromReports
     ? { href: "/reviews", label: "신고된 후기" }
     : { href: `/posts/${review.session.id}?tab=reviews`, label: "구인 상세" };
-  const hideLink = review.hidden
-    ? { label: "숨김 해제", href: actionHref(REVIEW_ACTION.unhide) }
-    : { label: "숨김", href: actionHref(REVIEW_ACTION.hide) };
 
   return (
     <>
@@ -49,12 +46,7 @@ export function ReviewDetailView({ review, action, from }: ReviewDetailViewProps
       <HStack data-full-bleed align="stretch" className="flex-1">
         <VStack gap="150" className="min-w-0 flex-1 px-center-200 py-200">
           {review.hidden ? <ReviewHiddenBanner hidden={review.hidden} logHref={logHref} /> : null}
-          <ReviewCard
-            review={review}
-            logHref={logHref}
-            hideLink={hideLink}
-            removeHref={actionHref(REVIEW_ACTION.remove)}
-          />
+          <ReviewCard review={review} logHref={logHref} />
           {review.reports.length ? <ReviewReportsPanel review={review} /> : null}
         </VStack>
         <ReviewActionsAside review={review} actionHref={actionHref} />

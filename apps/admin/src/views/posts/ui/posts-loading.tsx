@@ -1,4 +1,4 @@
-import { Button, Chip, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
+import { Button, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import {
@@ -39,10 +39,6 @@ export function PostsLoading() {
           <div className="w-[126px]">
             <SkeletonSelect label="룰북 전체" />
           </div>
-          <div className="w-[176px]">
-            <SkeletonSelect label="세션 일시 · 전체" />
-          </div>
-          <Chip disabled>처리 안 된 신고 있음</Chip>
           <Button variant="outline" colorPalette="gray" size="sm" disabled className="ml-auto">
             CSV 내보내기
           </Button>
@@ -51,11 +47,11 @@ export function PostsLoading() {
           <SkeletonTable
             columns={[
               { label: "제목", kind: "text", width: 360 },
-              { label: "GM", kind: "text", width: 125 },
-              { label: "룰북", kind: "text", width: 210 },
-              { label: "세션 일시", kind: "date", width: 192, sorted: true },
-              { label: "참여", kind: "number", width: 76, align: "end" },
-              { label: "상태", kind: "text", width: 112, align: "center" },
+              { label: "GM", kind: "text", width: 104, fixed: true },
+              { label: "룰북", kind: "text", width: 140, fixed: true },
+              { label: "세션 일시", kind: "date", width: 192, fixed: true, sorted: true },
+              { label: "참여", kind: "number", width: 76, fixed: true, align: "end" },
+              { label: "상태", kind: "text", width: 112, fixed: true, align: "center" },
               { label: "운영진 조치", kind: "badge", width: 110, fixed: true },
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}

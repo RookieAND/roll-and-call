@@ -1,9 +1,11 @@
 import type { Game } from "@roll-and-call/database";
 import { isSessionEnded } from "@roll-and-call/database/games/model";
+import { isNull } from "es-toolkit";
 
 import { POST_STATUS, type PostStatus } from "./post-status";
 
 export function gameStatus(game: Game, now: number): PostStatus {
+  if (!isNull(game.cancelledAt)) return POST_STATUS.cancelled;
   if (game.confirmedAt) {
     return isSessionEnded(game, new Date(now)) ? POST_STATUS.ended : POST_STATUS.confirmed;
   }

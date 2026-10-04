@@ -171,21 +171,14 @@ export interface Session {
   attendanceAutoConfirmed?: boolean;
   hidden?: { reason: string; by: string; at: Date };
   cancelled?: boolean;
+  // 운영진 취소를 막는 이유(cancelBlockReason). 없으면 null.
+  cancelBlock?: "already_cancelled" | "session_ended" | null;
+  sessionStarted?: boolean;
+  // 운영진이 취소하면 game_cancelled 알림을 받는 사람(gameCancelledRecipients, GM 포함).
+  staffCancelRecipientIds?: string[];
   // 세션이 끝나는 시각(isSessionEnded와 같은 기준). 일시가 정해지지 않았으면 null.
   endsAt?: Date | null;
   gmEditSinceHidden?: { title: string; body: string; at: Date };
-}
-
-export interface Report {
-  id: string;
-  sessionId: string;
-  reportedAt: Date;
-  resolved: boolean;
-  reporterId?: string;
-  category?: string;
-  detail?: string;
-  resolvedBy?: string;
-  resolvedAt?: Date;
 }
 
 export interface Review {

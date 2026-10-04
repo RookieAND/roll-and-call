@@ -3,10 +3,9 @@ import { TriangleAlert } from "lucide-react";
 
 interface RemoveImpactProps {
   memberCount: number;
-  reviewCount: number;
 }
 
-export function RemoveImpact({ memberCount, reviewCount }: RemoveImpactProps) {
+export function RemoveImpact({ memberCount }: RemoveImpactProps) {
   return (
     <Callout.Root colorPalette="danger" size="sm">
       <Callout.Icon>
@@ -14,7 +13,7 @@ export function RemoveImpact({ memberCount, reviewCount }: RemoveImpactProps) {
       </Callout.Icon>
       <Callout.Title>되돌릴 수 없습니다</Callout.Title>
       <Callout.Description>
-        참여자 {memberCount}명의 참여 정보와 후기 {reviewCount}개가 함께 삭제됩니다
+        참여자 {memberCount}명의 참여 정보와 후기가 함께 삭제됩니다
       </Callout.Description>
     </Callout.Root>
   );
