@@ -168,6 +168,8 @@ export const participants = pgTable(
     absenceCancelReason: text("absence_cancel_reason"),
     // 대기가 된 시각. 같은 시각끼리는 drawRank, 그다음 joinedAt 순서다. 확정 상태에서는 의미가 없다.
     waitlistedAt: timestamp("waitlisted_at", { withTimezone: true }),
+    // 본인이 조율표를 저장한 마지막 시각. 서버가 기본 가능 시간을 자동 저장한 것은 제출로 치지 않는다(R15).
+    availabilitySubmittedAt: timestamp("availability_submitted_at", { withTimezone: true }),
     // GM이 불참으로 내보내거나 출석에서 불참으로 고를 때 적는 사유. 운영진만 본다.
     absenceReason: text("absence_reason"),
     // 운영진이 출석을 불참으로 바꾼 불참 기록 추가. 태그는 gm_request·member_confirmed·other다.

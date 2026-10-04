@@ -1,9 +1,10 @@
-import { and, eq, sql } from "drizzle-orm";
+import { and, count, eq, isNotNull } from "drizzle-orm";
 
 import { db } from "#/client";
 import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { availabilities, games, participants } from "#/schema";
+import { games, participants } from "#/schema";
 
+// GM 구인마다 확정 참여자 중 본인이 저장한 사람(자동 저장 제외, R15) 수.
 export async function getResponseCountsByGm({
   serverId,
   gmId,
@@ -12,22 +13,17 @@ export async function getResponseCountsByGm({
   gmId: string;
 }): Promise<Map<string, number>> {
   const rows = await db
-    .select({
-      gameId: availabilities.gameId,
-      count: sql<number>`count(distinct ${availabilities.userId})::int`,
-    })
-    .from(availabilities)
-    .innerJoin(
-      participants,
+    .select({ gameId: participants.gameId, count: count() })
+    .from(participants)
+    .innerJoin(games, and(eq(games.serverId, serverId), eq(games.id, participants.gameId)))
+    .where(
       and(
         eq(participants.serverId, serverId),
-        eq(participants.gameId, availabilities.gameId),
-        eq(participants.userId, availabilities.userId),
+        eq(games.gmId, gmId),
         eq(participants.status, PARTICIPANT_STATUS.confirmed),
+        isNotNull(participants.availabilitySubmittedAt),
       ),
     )
-    .innerJoin(games, and(eq(games.serverId, serverId), eq(games.id, availabilities.gameId)))
-    .where(and(eq(availabilities.serverId, serverId), eq(games.gmId, gmId)))
-    .groupBy(availabilities.gameId);
+    .groupBy(participants.gameId);
   return new Map(rows.map((row) => [row.gameId, Number(row.count)]));
 }

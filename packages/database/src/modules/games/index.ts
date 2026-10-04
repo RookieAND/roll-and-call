@@ -14,6 +14,7 @@ export { insertParticipant } from "./commands/insert-participant";
 export { markParticipantRemoved } from "./commands/mark-participant-removed";
 export { raiseGameCapacity } from "./commands/raise-game-capacity";
 export { replaceAvailability } from "./commands/replace-availability";
+export { markAvailabilitySubmitted } from "./commands/mark-availability-submitted";
 export { saveAttendance } from "./commands/save-attendance";
 export { saveDiscordThreadId } from "./commands/save-discord-thread-id";
 export { seedAvailabilities } from "./commands/seed-availabilities";

@@ -1,9 +1,10 @@
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, count, eq, inArray, isNotNull } from "drizzle-orm";
 
 import { db } from "#/client";
 import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { availabilities, participants } from "#/schema";
+import { participants } from "#/schema";
 
+// 확정 참여자 중 본인이 저장한 사람(자동 저장 제외, R15) 수.
 export async function getResponseCounts({
   serverId,
   gameIds,
@@ -13,21 +14,16 @@ export async function getResponseCounts({
 }): Promise<Map<string, number>> {
   if (gameIds.length === 0) return new Map();
   const rows = await db
-    .select({
-      gameId: availabilities.gameId,
-      count: sql<number>`count(distinct ${availabilities.userId})::int`,
-    })
-    .from(availabilities)
-    .innerJoin(
-      participants,
+    .select({ gameId: participants.gameId, count: count() })
+    .from(participants)
+    .where(
       and(
         eq(participants.serverId, serverId),
-        eq(participants.gameId, availabilities.gameId),
-        eq(participants.userId, availabilities.userId),
+        inArray(participants.gameId, gameIds),
         eq(participants.status, PARTICIPANT_STATUS.confirmed),
+        isNotNull(participants.availabilitySubmittedAt),
       ),
     )
-    .where(and(eq(availabilities.serverId, serverId), inArray(availabilities.gameId, gameIds)))
-    .groupBy(availabilities.gameId);
+    .groupBy(participants.gameId);
   return new Map(rows.map((row) => [row.gameId, Number(row.count)]));
 }

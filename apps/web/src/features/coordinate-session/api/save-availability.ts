@@ -3,8 +3,10 @@
 import {
   getGameWithRoster,
   getUserConfirmedSlots,
+  markAvailabilitySubmitted,
   replaceAvailability,
 } from "@roll-and-call/database/games";
+import { withTransaction } from "@roll-and-call/database/transaction";
 import { revalidatePath } from "next/cache";
 
 import { GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
@@ -49,7 +51,12 @@ export async function saveAvailability({
     .slice(0, MAX_SLOT_COUNT)
     .map((iso) => new Date(iso));
 
-  await replaceAvailability({ serverId: server.id, gameId, userId: user.id, slotStarts });
+  // 본인 저장은 0칸이어도 제출이다(R15). 칸 교체와 제출 표시를 함께 남긴다.
+  const owner = { serverId: server.id, gameId, userId: user.id };
+  await withTransaction(async (transaction) => {
+    await replaceAvailability({ transaction, ...owner, slotStarts });
+    await markAvailabilitySubmitted({ transaction, ...owner });
+  });
 
   revalidatePath(serverPath({ slug: server.slug, path: `/games/${gameId}/schedule` }));
   return {};

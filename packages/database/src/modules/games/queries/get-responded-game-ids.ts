@@ -1,8 +1,9 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, isNotNull } from "drizzle-orm";
 
 import { db } from "#/client";
-import { availabilities } from "#/schema";
+import { participants } from "#/schema";
 
+// 내가 참여한 구인 중 본인이 저장한 구인(자동 저장 제외, R15).
 export async function getRespondedGameIds({
   serverId,
   userId,
@@ -11,8 +12,14 @@ export async function getRespondedGameIds({
   userId: string;
 }): Promise<Set<string>> {
   const rows = await db
-    .selectDistinct({ gameId: availabilities.gameId })
-    .from(availabilities)
-    .where(and(eq(availabilities.serverId, serverId), eq(availabilities.userId, userId)));
+    .select({ gameId: participants.gameId })
+    .from(participants)
+    .where(
+      and(
+        eq(participants.serverId, serverId),
+        eq(participants.userId, userId),
+        isNotNull(participants.availabilitySubmittedAt),
+      ),
+    );
   return new Set(rows.map((row) => row.gameId));
 }

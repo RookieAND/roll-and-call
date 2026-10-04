@@ -1,20 +1,23 @@
 import { and, eq } from "drizzle-orm";
 
 import { db } from "#/client";
+import type { Transaction } from "#/modules/transaction/transaction";
 import { availabilities } from "#/schema";
 
 export async function replaceAvailability({
+  transaction: outer,
   serverId,
   gameId,
   userId,
   slotStarts,
 }: {
+  transaction?: Transaction;
   serverId: string;
   gameId: string;
   userId: string;
   slotStarts: Date[];
 }) {
-  await db.transaction(async (transaction) => {
+  await (outer ?? db).transaction(async (transaction) => {
     await transaction
       .delete(availabilities)
       .where(
