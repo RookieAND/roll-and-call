@@ -10,18 +10,24 @@ import {
   GAME_NOT_FOUND_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
-import { evaluateGameBadges, getActingMember, notMemberError } from "@/shared/server";
+import {
+  evaluateGameBadges,
+  getActingMember,
+  notMemberError,
+  revalidateGamePaths,
+} from "@/shared/server";
 
+import type { AttendanceRoster } from "../model/attendance-roster";
 import { AttendanceError } from "./attendance-error";
-import { revalidateAttendance } from "./revalidate-attendance";
 
 // 출석을 건드리는 모든 길이 거치는 곳: 게임 행을 잠그고 GM 본인·세션이 끝났는지를 확인한다.
+// 명단은 지금 확정 + 세션 중 불참으로 내보낸 사람이다.
 export async function guardAttendance({
   gameId,
   work,
 }: {
   gameId: string;
-  work: (transaction: Transaction, confirmedUserIds: string[]) => Promise<void>;
+  work: (transaction: Transaction, roster: AttendanceRoster) => Promise<void>;
 }): Promise<ActionResult> {
   const member = await getActingMember();
   if (!member) {
@@ -44,6 +50,12 @@ export async function guardAttendance({
         gameId,
         status: PARTICIPANT_STATUS.confirmed,
       });
+      const removedUserIds = await listParticipantUserIds({
+        transaction,
+        serverId,
+        gameId,
+        status: PARTICIPANT_STATUS.removed,
+      });
 
       if (isAttendancePastDeadline({ ...game, now: new Date() })) {
         throw new AttendanceError("출석 확인 기한이 지났습니다.");
@@ -58,7 +70,7 @@ export async function guardAttendance({
         throw new AttendanceError("아직 끝나지 않은 세션입니다.");
       }
 
-      await work(transaction, confirmedUserIds);
+      await work(transaction, { confirmedUserIds, removedUserIds });
     });
   } catch (error) {
     if (error instanceof AttendanceError) {
@@ -67,7 +79,7 @@ export async function guardAttendance({
     throw error;
   }
 
-  revalidateAttendance({ slug: server.slug, gameId });
+  revalidateGamePaths({ slug: server.slug, gameId });
   after(() => evaluateGameBadges({ serverId, gameId }));
   return {};
 }

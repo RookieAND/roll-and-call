@@ -10,6 +10,7 @@ export { createGameWithRoster } from "./commands/create-game-with-roster";
 export { deleteOwnedGame } from "./commands/delete-owned-game";
 export { drawLottery, type DrawLotteryResult } from "./commands/draw-lottery";
 export { deleteParticipant } from "./commands/delete-participant";
+export { setSessionEndedAt } from "./commands/end-session";
 export { insertParticipant } from "./commands/insert-participant";
 export { markParticipantRemoved } from "./commands/mark-participant-removed";
 export { raiseGameCapacity } from "./commands/raise-game-capacity";

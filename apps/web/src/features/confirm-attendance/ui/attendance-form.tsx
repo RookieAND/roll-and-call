@@ -53,19 +53,26 @@ export function AttendanceForm({
   }
 
   function submit() {
-    run(() => confirmAttendance({ gameId, absentUserIds: [...absentIds] }), {
-      onSuccess: () => {
-        setConfirming(false);
-        onConfirmed();
-        toast.success("출석을 확정했습니다", {
-          undo: () => {
-            onReopen();
-            toast.success("다시 고칠 수 있습니다");
-          },
-        });
+    run(
+      () =>
+        confirmAttendance({
+          gameId,
+          absences: [...absentIds].map((userId) => ({ userId, reason: null })),
+        }),
+      {
+        onSuccess: () => {
+          setConfirming(false);
+          onConfirmed();
+          toast.success("출석을 확정했습니다", {
+            undo: () => {
+              onReopen();
+              toast.success("다시 고칠 수 있습니다");
+            },
+          });
+        },
+        onError: () => setConfirming(false),
       },
-      onError: () => setConfirming(false),
-    });
+    );
   }
 
   return (

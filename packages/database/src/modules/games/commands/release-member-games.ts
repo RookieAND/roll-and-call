@@ -4,6 +4,7 @@ import { departedGmGameAction } from "#/modules/games/model/departed-gm-game-act
 import type { GameCancelKind } from "#/modules/games/model/game-cancel-kind";
 import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
 import { listSeatOpenedRecipients } from "#/modules/games/queries/list-seat-opened-recipients";
+import { isSessionInProgress } from "#/modules/games/model/session-timing";
 import { notStartedGamesWhere } from "#/modules/games/queries/not-started-games-where";
 import { createNotifications } from "#/modules/notifications/commands/create-notifications";
 import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
@@ -12,6 +13,7 @@ import { games, participants, staff, type Game } from "#/schema";
 
 import { autoConfirmAttendanceForGame } from "./auto-confirm-attendance";
 import { cancelGame } from "./cancel-game";
+import { setSessionEndedAt } from "./end-session";
 
 export type ReleasedMemberGames = {
   leftGameIds: string[];
@@ -21,7 +23,7 @@ export type ReleasedMemberGames = {
 };
 
 // 서버를 떠난 사람(추방·탈퇴)의 정리. 운영진 역할을 떼고(소유자는 그대로), 시작 전 구인의 신청·대기·확정에서 빼고,
-// GM인 시작 전 구인은 취소하고, GM인 시작한 세션은 확정자 전원을 출석으로 확정한다. 끝난 세션·후기·불참 기록은 그대로다.
+// GM인 시작 전 구인은 취소하고, GM인 시작한 세션은 진행 중이면 나간 시각에 마치고, 출석 결과는 그대로 둔 채 확정한다. 끝난 세션·후기·불참 기록은 그대로다.
 export async function releaseMemberGames({
   transaction,
   serverId,
@@ -60,6 +62,8 @@ export async function releaseMemberGames({
     .select({
       id: games.id,
       confirmedAt: games.confirmedAt,
+      playMinutes: games.playMinutes,
+      endedAt: games.endedAt,
       attendanceConfirmedAt: games.attendanceConfirmedAt,
       cancelledAt: games.cancelledAt,
     })
@@ -90,6 +94,11 @@ export async function releaseMemberGames({
       if (cancelled.ok) cancelledGames.push(cancelled.game);
     }
     if (action === "confirm_attendance") {
+      // 이미 끝난 세션은 ended_at을 그대로 둔다. 자동 확정 시각은 기한(마친 시각 + 7일, 미래)이라
+      // isAutoConfirmedAttendance가 이 확정을 자동 확정으로 본다.
+      if (isSessionInProgress(game, now)) {
+        await setSessionEndedAt({ transaction, serverId, gameId: game.id, endedAt: now });
+      }
       const confirmed = await autoConfirmAttendanceForGame({ transaction, gameId: game.id, now });
       if (confirmed) autoConfirmedGameIds.push(game.id);
     }

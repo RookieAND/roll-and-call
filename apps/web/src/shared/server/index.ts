@@ -91,6 +91,7 @@ export { getCurrentServer } from "./auth/get-current-server";
 export { removeUnusedCertPhotos } from "./cert-files";
 export { removeUnusedReviewPhotos } from "./review-files";
 export { revalidateReviews } from "./revalidate-reviews";
+export { revalidateGamePaths } from "./revalidate-game-paths";
 export { getCurrentMembership } from "./membership/get-current-membership";
 export { requireMembership } from "./membership/require-membership";
 export { getActingMember } from "./membership/get-acting-member";
