@@ -47,7 +47,7 @@ export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
     return (
       <EmptyState
         image="/empty-states/empty-search.png"
-        title={`‘${filter.q}’에 맞는 구인이 없습니다`}
+        title={`「${filter.q}」에 맞는 구인이 없습니다`}
         description={
           <span className="break-keep">검색어를 바꾸거나 직접 구인을 올릴 수 있습니다.</span>
         }
@@ -72,7 +72,7 @@ export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
     return (
       <EmptyState
         image="/empty-states/empty-search.png"
-        title={`‘${label}’인 구인이 없습니다`}
+        title={`「${label}」인 구인이 없습니다`}
         action={
           <Button
             render={

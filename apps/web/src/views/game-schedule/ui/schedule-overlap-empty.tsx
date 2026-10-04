@@ -17,7 +17,7 @@ export function ScheduleOverlapEmpty({ onPaint }: ScheduleOverlapEmptyProps) {
           <>
             참여자가 시간을 내면 여기에 겹쳐 보입니다.
             <br />
-            먼저 내 가능 시간을 칠해 두세요.
+            먼저 내 가능 시간을 칠해 주세요.
           </>
         ) : (
           "참여자가 시간을 내면 여기에 겹쳐 보입니다."

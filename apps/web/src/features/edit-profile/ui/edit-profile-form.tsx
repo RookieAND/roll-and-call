@@ -112,7 +112,7 @@ export function EditProfileForm({
             id="bio"
             value={bio}
             onChange={(event) => setBio(event.target.value)}
-            placeholder="어떤 판을 즐겨 하는지 한 줄로 적어주세요."
+            placeholder="어떤 판을 즐겨 하는지 한 줄로 적어 주세요."
             maxLength={BIO_MAX_LENGTH}
             invalid={!!bioError}
             rows={3}

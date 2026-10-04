@@ -14,7 +14,7 @@ export const GAME_TAGS_MAX = 5;
 export const GAME_TAG_MAX_LENGTH = 20;
 export const GAME_NOTICE_MAX = 500;
 export const GAME_SYNOPSIS_MAX = 2000;
-export const INVALID_INPUT_MESSAGE = "입력값을 확인하세요.";
+export const INVALID_INPUT_MESSAGE = "입력값을 확인해 주세요.";
 
 const DAY_MS = 86_400_000;
 
@@ -59,7 +59,7 @@ export const gameFormSchema = z
     }, `1~${GAME_MAX_PLAYERS} 사이로 적어 주세요.`),
     recruitMethod: z.enum(RECRUIT_METHODS),
     scheduleMode: z.enum(SCHEDULE_MODES),
-    endDate: z.string().min(1, "모집 마감 기한을 입력하세요."),
+    endDate: z.string().min(1, "모집 마감 기한을 입력해 주세요."),
     confirmedAt: z.string().optional(),
     rangeStart: z.string().optional(),
     rangeEnd: z.string().optional(),
@@ -95,7 +95,7 @@ export const gameFormSchema = z
     if (values.scheduleMode === SCHEDULE_MODE.fixed && !values.confirmedAt) {
       context.addIssue({
         code: "custom",
-        message: "세션 일시를 입력하세요.",
+        message: "세션 일시를 입력해 주세요.",
         path: ["confirmedAt"],
       });
     }
@@ -128,14 +128,14 @@ export const gameFormSchema = z
     if (!values.rangeStart) {
       context.addIssue({
         code: "custom",
-        message: "시작일을 입력하세요.",
+        message: "시작일을 입력해 주세요.",
         path: ["rangeStart"],
       });
     }
     if (!values.rangeEnd) {
       context.addIssue({
         code: "custom",
-        message: "종료일을 입력하세요.",
+        message: "종료일을 입력해 주세요.",
         path: ["rangeEnd"],
       });
     } else if (values.rangeStart && values.rangeEnd < values.rangeStart) {

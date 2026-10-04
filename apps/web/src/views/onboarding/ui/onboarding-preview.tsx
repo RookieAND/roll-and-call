@@ -30,7 +30,7 @@ export function OnboardingPreview({ slideKey }: OnboardingPreviewProps) {
         <VStack gap="100" className="px-175 pt-150 pb-175">
           <VStack gap="025">
             <Text typography="heading3" weight="extrabold" render={<span />}>
-              물벼락 — 1부
+              물벼락 1부
             </Text>
             <Text typography="body4" foreground="hint" render={<span />}>
               GM 라온 · 크툴루의 부름 · 3시간

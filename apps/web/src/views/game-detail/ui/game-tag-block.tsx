@@ -21,7 +21,12 @@ export function GameTagBlock({ label, tags, note, tone = "outline" }: GameTagBlo
         ))}
       </HStack>
       {note && (
-        <Text typography="body4" foreground="hint" render={<p />}>
+        <Text
+          typography="body4"
+          foreground="hint"
+          render={<p />}
+          className="break-keep whitespace-pre-line"
+        >
           {note}
         </Text>
       )}

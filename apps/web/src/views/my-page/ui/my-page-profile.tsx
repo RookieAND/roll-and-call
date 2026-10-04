@@ -38,7 +38,7 @@ export function MyPageProfile({
   hosted,
   played,
 }: MyPageProfileProps) {
-  const bioText = bio || "한 줄 소개를 적어보세요.";
+  const bioText = bio || "한 줄 소개를 적어 주세요.";
   const bioForeground = bio ? "muted" : "hint";
 
   return (

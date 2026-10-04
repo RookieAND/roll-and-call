@@ -80,7 +80,9 @@ export function AvailabilityGrid({
   return (
     <VStack gap="150">
       <Text typography="body4" foreground="hint" render={<p />}>
-        누르거나 드래그해서 칠하세요. 다시 누르면 지워집니다.
+        누르거나 드래그해서 칠해 주세요.
+        <br />
+        다시 누르면 지워집니다.
       </Text>
 
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />

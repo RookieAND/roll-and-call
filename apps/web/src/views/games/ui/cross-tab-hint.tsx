@@ -19,7 +19,7 @@ export function CrossTabHint({ filter, otherCount }: CrossTabHintProps) {
   return (
     <VStack gap="100" className="mt-075 border-t border-gray-200 pt-175">
       <Text typography="body4" foreground="muted">
-        {otherLabel}에도 ‘{filter.q}’ {otherCount}건이 있습니다.
+        {otherLabel}에도 「{filter.q}」 {otherCount}건이 있습니다.
       </Text>
       <Button
         render={

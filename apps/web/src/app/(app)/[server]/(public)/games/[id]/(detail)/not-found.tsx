@@ -13,7 +13,7 @@ export default function NotFound() {
           <>
             GM이 구인을 취소했거나 주소가 바뀌었습니다.
             <br />
-            다른 모집 중인 구인을 둘러보세요.
+            다른 모집 중인 구인을 둘러봐 주세요.
           </>
         }
         action={

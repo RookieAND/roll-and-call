@@ -82,7 +82,7 @@ export function MemoForm({
             id="memo"
             value={body}
             onChange={(event) => setBody(event.target.value)}
-            placeholder="다음에 같이 할 때 기억할 것을 적어두세요."
+            placeholder="다음에 같이 할 때 기억할 것을 적어 주세요."
             maxLength={MEMO_MAX_LENGTH}
             rows={6}
           />
