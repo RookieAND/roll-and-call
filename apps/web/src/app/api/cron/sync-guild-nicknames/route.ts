@@ -8,15 +8,12 @@ import { isUniqueViolation } from "@roll-and-call/database/transaction";
 import { getGuildMember, guildMemberDisplayName } from "@roll-and-call/discord";
 import { isUndefined } from "es-toolkit";
 
-import { checkEachMember } from "@/shared/server";
+import { checkEachMember, isCronRequest } from "@/shared/server";
 
 // C01 작업 2: 기존 멤버 닉네임을 디스코드 서버 닉네임으로 한 번 맞춘다. 크론으로 등록하지 않고 손으로 부른다.
 // apply=1이 없으면 미리 보기만 하고, server=슬러그로 한 서버만 고를 수 있다. 작업 5에서 지운다.
 export async function GET(request: Request) {
-  const secret = process.env.CRON_SECRET;
-  if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+  if (!isCronRequest(request)) return new Response("Unauthorized", { status: 401 });
   const { searchParams } = new URL(request.url);
   const apply = searchParams.get("apply") === "1";
   const slug = searchParams.get("server");

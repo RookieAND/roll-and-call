@@ -16,7 +16,6 @@ const user = (id: string, overrides: Partial<AdminUser> = {}): AdminUser => ({
   joinedAt: daysAgo(400),
   memberJoinedAt: daysAgo(100),
   hostedCount: 0,
-  playedCount: 0,
   recentHostedCount: 0,
   membership: "active",
   ...overrides,

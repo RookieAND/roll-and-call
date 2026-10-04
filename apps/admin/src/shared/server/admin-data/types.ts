@@ -37,7 +37,6 @@ export interface AdminUser {
   // 그 서버에 처음 가입한 날(server_members.joined_at). 다시 가입해도 바뀌지 않는다.
   memberJoinedAt: Date;
   hostedCount: number;
-  playedCount: number;
   recentHostedCount: number;
   sanction?: Sanction;
   membership: MembershipStatus;

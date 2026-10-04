@@ -92,9 +92,6 @@ export const loadSnapshot = cache(async () => {
       joinedAt: profile.createdAt,
       memberJoinedAt: profile.memberJoinedAt,
       hostedCount: hosted.length,
-      playedCount: participantRows.filter(
-        (row) => row.userId === profile.id && row.status === "confirmed",
-      ).length,
       recentHostedCount: hosted.filter((game) => now - gameStartsAt(game).getTime() < NINETY_DAYS)
         .length,
       sanction: sanction

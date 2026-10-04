@@ -1,6 +1,7 @@
 import "server-only";
 import { isUndefined, sortBy } from "es-toolkit";
 
+import { countPlayedSessions } from "./count-played-sessions";
 import { countRecentNoShows } from "./count-recent-no-shows";
 import { nicknameMatchRank } from "./nickname-match-rank";
 import { loadSnapshot, type Snapshot } from "./snapshot";
@@ -28,6 +29,7 @@ const nicknameOf = (db: Snapshot, userId: string) =>
 
 export async function searchUsers(query: string): Promise<UserSearchResult[]> {
   const db = await loadSnapshot();
+  const now = new Date();
   const keyword = query.trim();
   if (!keyword) return [];
   const ranked = db.users
@@ -46,7 +48,7 @@ export async function searchUsers(query: string): Promise<UserSearchResult[]> {
       return {
         id: user.id,
         nickname: user.nickname,
-        playedCount: user.playedCount,
+        playedCount: countPlayedSessions({ db, userId: user.id, now }),
         recentNoShowCount: countRecentNoShows(db, user.id),
         noShows: validNoShows.map(({ id, session }) => ({
           id,

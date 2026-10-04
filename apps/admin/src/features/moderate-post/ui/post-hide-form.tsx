@@ -27,9 +27,10 @@ const COPY = ACTION_COPY[POST_ACTION.hide];
 interface PostHideFormProps {
   post: PostDetail;
   onSettled: (outcome: PostModerationOutcome) => void;
+  onUndoSettled: (outcome: PostModerationOutcome) => void;
 }
 
-export function PostHideForm({ post, onSettled }: PostHideFormProps) {
+export function PostHideForm({ post, onSettled, onUndoSettled }: PostHideFormProps) {
   const { pending, networkError, submit } = useActionSubmit(submitPostModeration);
   const [chip, setChip] = useState<string | null>(null);
   const [otherText, setOtherText] = useState("");
@@ -53,7 +54,7 @@ export function PostHideForm({ post, onSettled }: PostHideFormProps) {
       return;
     }
     if (outcome.ok) toast.success(`숨김을 되돌렸습니다 · ${post.title}`);
-    onSettled(outcome);
+    onUndoSettled(outcome);
   };
 
   const confirm = async () => {

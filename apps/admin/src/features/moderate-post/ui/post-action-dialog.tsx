@@ -49,6 +49,14 @@ export function PostActionDialog({ post, action, closeHref, viewerId }: PostActi
     const self = outcome.conflict?.byId === viewerId;
     toast.info(conflictToastText({ conflict: outcome.conflict, self, target: CONFLICT_TARGET }));
   };
+  // 되돌리기는 창이 닫힌 뒤 토스트에서 누르므로, 주소를 바꾸지 않고 지금 화면만 새로 읽는다.
+  const settleUndo = (outcome: PostModerationOutcome) => {
+    if (!outcome.ok && !outcome.gone) {
+      const self = outcome.conflict?.byId === viewerId;
+      toast.info(conflictToastText({ conflict: outcome.conflict, self, target: CONFLICT_TARGET }));
+    }
+    router.refresh();
+  };
   const removing = shownAction === POST_ACTION.remove;
   const Root = removing ? AlertDialog.Root : Dialog.Root;
   return (
@@ -58,7 +66,9 @@ export function PostActionDialog({ post, action, closeHref, viewerId }: PostActi
         initialFocus={removing ? cancelRef : undefined}
         className={shownAction ? ACTION_COPY[shownAction].widthClassName : undefined}
       >
-        {shownAction === POST_ACTION.hide ? <PostHideForm post={post} onSettled={settle} /> : null}
+        {shownAction === POST_ACTION.hide ? (
+          <PostHideForm post={post} onSettled={settle} onUndoSettled={settleUndo} />
+        ) : null}
         {shownAction === POST_ACTION.unhide ? (
           <PostUnhideForm post={post} onSettled={settle} />
         ) : null}
