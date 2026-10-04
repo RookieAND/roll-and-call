@@ -163,6 +163,7 @@ export interface Session {
   thumbnailUrl?: string;
   attendanceConfirmedAt?: Date;
   attendanceFirstConfirmedAt?: Date;
+  attendanceAutoConfirmed?: boolean;
   hidden?: { reason: string; by: string; at: Date };
   cancelled?: boolean;
   // 세션이 끝나는 시각(isSessionEnded와 같은 기준). 일시가 정해지지 않았으면 null.

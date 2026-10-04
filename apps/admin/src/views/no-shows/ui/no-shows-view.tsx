@@ -1,14 +1,24 @@
-import { HStack, VStack } from "@roll-and-call/ui";
+import { Button, HStack, VStack } from "@roll-and-call/ui";
 
+import { AddNoShowDialog } from "@/features/add-no-show";
 import { CancelNoShowDialog, NoShowSummary } from "@/features/cancel-no-show";
 import { paginate, withQuery, type TableSort } from "@/shared/lib";
 import {
   NO_SHOW_STATUS_LABEL,
   type NoShowDetail,
   type NoShowRow,
+  type NoShowSessionSearch,
   type NoShowSortColumn,
 } from "@/shared/server";
-import { AdminHeader, EMPTY_IMAGE, ListPager, Panel, UrlSearchInput, UrlSelect } from "@/shared/ui";
+import {
+  AdminHeader,
+  EMPTY_IMAGE,
+  ListPager,
+  Panel,
+  ServerLink,
+  UrlSearchInput,
+  UrlSelect,
+} from "@/shared/ui";
 
 import { NoShowsTable } from "./no-shows-table";
 
@@ -33,20 +43,43 @@ const EMPTY = {
 interface NoShowsViewProps {
   rows: NoShowRow[];
   record: NoShowDetail | null;
+  addSearch: NoShowSessionSearch | null;
   sort: TableSort<NoShowSortColumn>;
   query: Record<string, string | undefined>;
   filtered: boolean;
   page?: string;
 }
 
-export function NoShowsView({ rows, record, sort, query, filtered, page }: NoShowsViewProps) {
+export function NoShowsView({
+  rows,
+  record,
+  addSearch,
+  sort,
+  query,
+  filtered,
+  page,
+}: NoShowsViewProps) {
   const paged = paginate(rows, page);
   const hrefOf = (id: string | undefined) => withQuery("/noshow", query, { record: id });
   const empty = filtered ? EMPTY.filtered : EMPTY.none;
+  const addHref = withQuery("/noshow", query, { add: "1", record: undefined });
+  const listHref = withQuery("/noshow", query, { add: undefined, sq: undefined });
 
   return (
     <>
-      <AdminHeader title="불참 기록" sub={`${rows.length}건`} />
+      <AdminHeader
+        title="불참 기록"
+        sub={`${rows.length}건`}
+        actions={
+          <Button
+            variant="outline"
+            colorPalette="gray"
+            render={<ServerLink path={addHref} scroll={false} />}
+          >
+            불참 기록 추가
+          </Button>
+        }
+      />
       <VStack gap="150" className="flex-1 p-200">
         <HStack align="center" gap="100">
           <UrlSearchInput placeholder="닉네임 · 세션 검색" className="w-[240px]" />
@@ -82,6 +115,7 @@ export function NoShowsView({ rows, record, sort, query, filtered, page }: NoSho
         summary={record ? <NoShowSummary record={record} /> : null}
         closeHref={hrefOf(undefined)}
       />
+      <AddNoShowDialog search={addSearch} closeHref={listHref} />
     </>
   );
 }

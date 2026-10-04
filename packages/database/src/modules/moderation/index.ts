@@ -4,6 +4,7 @@ export { type OngoingChoice } from "./commands/apply-ongoing-choices";
 export { applySanction, type SanctionInput, type SanctionResult } from "./commands/apply-sanction";
 export { cancelNoShow, type CancelNoShowResult } from "./commands/cancel-no-show";
 export { restoreNoShow, type RestoreNoShowResult } from "./commands/restore-no-show";
+export { ADD_NO_SHOW_FAILURE, addNoShow, type AddNoShowResult } from "./commands/add-no-show";
 export {
   moderatePost,
   type PostModerationAction,

@@ -6,6 +6,7 @@ import {
   listNoShows,
   NO_SHOW_DEFAULT_SORT,
   NO_SHOW_SORT_COLUMNS,
+  searchNoShowSessions,
   type NoShowStatus,
 } from "@/shared/server";
 import { NoShowsView } from "@/views/no-shows";
@@ -15,7 +16,7 @@ export const metadata: Metadata = { title: "불참 기록" };
 export default async function NoShowsPage({ searchParams }: PageProps<"/[server]/noshow">) {
   const params = await searchParams;
   const query = params as Record<string, string | undefined>;
-  const { q, status, record, page, pin } = query;
+  const { q, status, record, page, pin, add, sq } = query;
   const sort = parseSort({
     searchParams: params,
     columns: NO_SHOW_SORT_COLUMNS,
@@ -28,10 +29,12 @@ export default async function NoShowsPage({ searchParams }: PageProps<"/[server]
     pinId: pin,
   });
   const detail = record ? await getNoShow(record) : null;
+  const addSearch = add ? await searchNoShowSessions(sq) : null;
   return (
     <NoShowsView
       rows={rows}
       record={detail}
+      addSearch={addSearch}
       page={page}
       sort={sort}
       query={query}

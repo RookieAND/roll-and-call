@@ -3,6 +3,7 @@ import type { Game } from "@roll-and-call/database";
 import {
   ABSENCE_ADDED_TAG_LABEL,
   compareWaitlistOrder,
+  isAutoConfirmedAttendance,
   sessionEndAt,
   type AbsenceAddedTag,
 } from "@roll-and-call/database/games/model";
@@ -162,6 +163,7 @@ export const loadSnapshot = cache(async () => {
       thumbnailUrl: game.thumbnailUrl ?? undefined,
       attendanceConfirmedAt: game.attendanceConfirmedAt ?? undefined,
       attendanceFirstConfirmedAt: game.attendanceFirstConfirmedAt ?? undefined,
+      attendanceAutoConfirmed: isAutoConfirmedAttendance(game),
       hidden: game.hiddenAt
         ? { reason: game.hiddenReason ?? "", by: nicknameOf(game.hiddenBy), at: game.hiddenAt }
         : undefined,
