@@ -6,6 +6,7 @@ import {
   RECRUIT_METHOD,
   SCHEDULE_MODE,
   SESSION_ROLE,
+  type SessionRole,
 } from "@/entities/game";
 
 import { buildProfileSessions } from "./build-profile-sessions";
@@ -14,6 +15,7 @@ import {
   SESSION_ACTION_KIND,
   SESSION_CHIP,
   SESSION_ICON,
+  SESSION_TONE,
   type SessionGame,
 } from "./session-card-model";
 import { toSessionCard } from "./to-session-card";
@@ -385,5 +387,57 @@ describe("buildProfileSessions · 숨긴 구인과 내보낸 참여", () => {
     const ids = build("stranger").map((card) => card.id);
     expect(ids).toContain("removed-ended");
     expect(ids).not.toContain("removed-ongoing");
+  });
+});
+
+describe("남의 세션 기록 카드(readOnly)", () => {
+  const readOnlyContext = { ...context(), readOnly: true };
+  const readOnlyCard = (partial: Partial<SessionGame>, role: SessionRole = SESSION_ROLE.player) =>
+    toSessionCard({ game: game(partial), role, context: readOnlyContext });
+
+  it("불참으로 끝난 세션도 회색 완료와 세션을 마쳤다는 줄이다", () => {
+    const card = readOnlyCard({
+      confirmedAt: at(-1),
+      attendanceConfirmedAt: at(-1),
+      participants: [{ ...confirmedMe, absent: true }, other],
+    });
+    expect(card.badge).toBe("완료");
+    expect(card.badgeColor).toBe("gray");
+    expect(card.titleDanger).toBe(false);
+    expect(card.schedule).toMatch(/ · 세션을 마쳤습니다/);
+    expect(card.scheduleTone).not.toBe(SESSION_TONE.danger);
+  });
+
+  it("불참으로 내보낸 참여도 완료다", () => {
+    const card = readOnlyCard({
+      confirmedAt: at(-1),
+      attendanceConfirmedAt: at(-1),
+      participants: [{ ...me(PARTICIPANT_STATUS.removed), absent: true }, other],
+    });
+    expect(card.badge).toBe("완료");
+    expect(card.titleDanger).toBe(false);
+  });
+
+  it("추첨 글 마감 뒤 뽑기 전에는 추첨 진행 문구를 두지 않는다", () => {
+    const card = readOnlyCard(
+      {
+        recruitMethod: RECRUIT_METHOD.lottery,
+        endDate: at(-1),
+        participants: [me(PARTICIPANT_STATUS.waiting)],
+      },
+      SESSION_ROLE.host,
+    );
+    expect(card.schedule).not.toMatch(/추첨/);
+  });
+
+  it("숨긴 구인은 가린 카드로 제목·일정·GM을 비운다", () => {
+    const [card] = buildProfileSessions({
+      hosted: [],
+      joined: [game({ id: "hidden", hiddenAt: at(-1), participants: [confirmedMe] })],
+      userId: "me",
+      viewerId: "stranger",
+      now: NOW,
+    })[SESSION_ROLE.player];
+    expect(card).toMatchObject({ hidden: true, title: "", schedule: "", gm: null });
   });
 });

@@ -11,6 +11,7 @@ import {
   type SessionTone,
 } from "../model/session-card-model";
 import { sessionTitleForeground } from "../model/session-title-foreground";
+import { HiddenSessionCard } from "./hidden-session-card";
 import { SessionCardAction } from "./session-card-action";
 
 const TONE_CLASS: Record<SessionTone, string> = {
@@ -31,6 +32,8 @@ interface SessionCardProps {
 }
 
 export function SessionCard({ model }: SessionCardProps) {
+  if (model.hidden) return <HiddenSessionCard />;
+
   const ScheduleIcon = SCHEDULE_ICON[model.scheduleIcon];
   const titleForeground = sessionTitleForeground(model);
 

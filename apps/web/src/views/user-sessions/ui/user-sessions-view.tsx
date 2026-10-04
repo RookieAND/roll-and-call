@@ -8,6 +8,7 @@ import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import {
+  countableCards,
   loadProfile,
   PROFILE_SESSION_SECTIONS,
   SessionEmptyLine,
@@ -27,14 +28,14 @@ export async function UserSessionsView({ id, tab }: { id: string; tab?: string }
   if (!isNull(profile.deletedAt)) {
     return <DepartedMemberScreen name={profile.username} avatarUrl={profile.avatarUrl} />;
   }
-  const activeSection =
-    PROFILE_SESSION_SECTIONS.find((section) => section.key === tab) ??
-    PROFILE_SESSION_SECTIONS.find((section) => section.key === SESSION_ROLE.host)!;
+  // ?tab=host만 운영 탭이고, 옛 ?tab=player와 모르는 값은 기본인 참여 탭이다(R23).
+  const activeKey = tab === SESSION_ROLE.host ? SESSION_ROLE.host : SESSION_ROLE.player;
+  const activeSection = PROFILE_SESSION_SECTIONS.find((section) => section.key === activeKey)!;
   const items = sessions[activeSection.key];
   const tabs = PROFILE_SESSION_SECTIONS.map((section) => ({
     key: section.key,
     label: section.title,
-    count: sessions[section.key].length,
+    count: countableCards(sessions[section.key]).length,
     href: serverPath({
       slug: server.slug,
       path: userSessionsHref({ userId: profile.id, role: section.key }),

@@ -46,8 +46,11 @@ export function buildProfileSessions({
     now,
     readOnly: true,
   });
+  // 가린 카드는 제목·일정·GM을 비워 화면 데이터에도 남기지 않는다.
   const marked = (role: SessionRole) =>
-    sessions[role].map((card) => ({ ...card, hidden: hiddenIds.has(card.id) }));
+    sessions[role].map((card) =>
+      hiddenIds.has(card.id) ? { ...card, hidden: true, title: "", schedule: "", gm: null } : card,
+    );
 
   return {
     [SESSION_ROLE.player]: marked(SESSION_ROLE.player),
@@ -56,6 +59,6 @@ export function buildProfileSessions({
 }
 
 export const PROFILE_SESSION_SECTIONS = [
-  { key: SESSION_ROLE.host, title: "운영", empty: "아직 운영한 세션이 없습니다." },
   { key: SESSION_ROLE.player, title: "참여", empty: "참여한 세션이 없습니다." },
+  { key: SESSION_ROLE.host, title: "운영", empty: "아직 운영한 세션이 없습니다." },
 ] as const;

@@ -37,7 +37,8 @@ export function toPastSessionCard({
         (participant) => participant.userId === context.viewerId,
       )?.waitlistRank ?? null)
     : null;
-  const absent = player && viewerAbsent && Boolean(game.confirmedAt);
+  // 남의 세션 기록에서는 불참·내보냄도 다른 끝난 세션처럼 보인다(R13).
+  const absent = player && !context.readOnly && viewerAbsent && Boolean(game.confirmedAt);
 
   const when = game.confirmedAt ? formatDateTime(game.confirmedAt) : null;
   const ago = game.confirmedAt
