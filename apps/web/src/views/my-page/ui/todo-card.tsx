@@ -3,48 +3,36 @@ import { cva } from "class-variance-authority";
 import { CircleAlert, Clock } from "lucide-react";
 
 import { LineBreaks, ServerLink } from "@/shared/ui";
-import { SESSION_ACTION_KIND } from "@/widgets/session-list";
-
-import type { TodoItem } from "../model/session-todos";
-
-const EYEBROW: Record<string, string> = {
-  [SESSION_ACTION_KIND.drawLottery]: "추첨 대기",
-  [SESSION_ACTION_KIND.confirmTime]: "세션 일시 미정",
-  [SESSION_ACTION_KIND.reviewApplicants]: "신청 승인 대기",
-  [SESSION_ACTION_KIND.fillVacancy]: "빈자리 생김",
-  [SESSION_ACTION_KIND.confirmAttendance]: "출석 미확인",
-  [SESSION_ACTION_KIND.submitAvailability]: "가능 시간 미제출",
-};
+import type { SessionTodoItem } from "@/widgets/session-list";
 
 const todoCard = cva("p-175", {
   variants: { blocked: { true: "border-danger-200 bg-danger-50", false: "" } },
 });
 
 interface TodoCardProps {
-  item: TodoItem;
+  item: SessionTodoItem;
 }
 
-export function TodoCard({ item: { title, todo } }: TodoCardProps) {
-  const label = EYEBROW[todo.kind]!;
-  const Icon = todo.blocked ? CircleAlert : Clock;
+export function TodoCard({ item }: TodoCardProps) {
+  const Icon = item.blocked ? CircleAlert : Clock;
 
-  const buttonVariant = todo.blocked ? "solid" : "tinted";
-  const buttonPalette = todo.blocked ? "success" : "primary";
+  const buttonVariant = item.blocked ? "solid" : "tinted";
+  const buttonPalette = item.blocked ? "success" : "primary";
 
   return (
-    <Card.Root padding="none" className={todoCard({ blocked: todo.blocked })}>
+    <Card.Root padding="none" className={todoCard({ blocked: item.blocked })}>
       <HStack
         align="center"
         gap="100"
-        className={todo.blocked ? "text-danger-600" : "text-warning-600"}
+        className={item.blocked ? "text-danger-600" : "text-warning-600"}
       >
         <Icon size={14} strokeWidth={2.2} aria-hidden className="shrink-0" />
         <Text weight="bold" typography="body4" foreground="inherit">
-          {label}
+          {item.eyebrow}
         </Text>
       </HStack>
       <Text truncate typography="heading3" render={<h3 />} className="mt-100">
-        {title}
+        {item.title}
       </Text>
       <Text
         typography="body4"
@@ -52,15 +40,15 @@ export function TodoCard({ item: { title, todo } }: TodoCardProps) {
         render={<p />}
         className="mt-050 [text-wrap:pretty]"
       >
-        <LineBreaks lines={todo.lines} />
+        <LineBreaks lines={item.lines} />
       </Text>
       <Button
-        render={<ServerLink path={todo.href} />}
+        render={<ServerLink path={item.action.href} />}
         variant={buttonVariant}
         colorPalette={buttonPalette}
         className="mt-150 w-full"
       >
-        {todo.label}
+        {item.action.label}
       </Button>
     </Card.Root>
   );

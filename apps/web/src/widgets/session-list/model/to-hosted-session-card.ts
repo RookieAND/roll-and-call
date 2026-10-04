@@ -30,8 +30,10 @@ export function toHostedSessionCard({
   });
   const hostChip = hostSessionChip({ state, awaitingTime });
   const responses = context.responseCounts.get(game.id) ?? 0;
-  const todo = context.readOnly ? null : hostTodo({ game, facts, responses });
-  const gmTodo = todo?.blocked ?? false;
+  const todo = context.readOnly
+    ? null
+    : hostTodo({ game, facts, responses, now: context.now ?? new Date() });
+  const gmTodo = (todo?.blocked ?? false) || facts.drawPending;
   const scheduleTone = hostScheduleTone({ gmTodo, timeSet });
   const scheduleIcon = hostScheduleIcon({ gmTodo, timeSet });
 

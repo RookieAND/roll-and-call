@@ -85,6 +85,7 @@ export function toJoinedSessionCard({
 
   const needsResponse =
     !context.readOnly && !context.respondedGameIds.has(game.id) && !line.deadlinePassed;
+  const cancelled = !isNull(game.cancelledAt);
   const submit = {
     kind: SESSION_ACTION_KIND.submitAvailability,
     label: "일정 조율",
@@ -102,14 +103,17 @@ export function toJoinedSessionCard({
       scheduleTone: SESSION_TONE.danger,
       scheduleIcon: SESSION_ICON.alert,
       action: submit,
-      todo: {
-        ...submit,
-        blocked: false,
-        lines: [
-          "아직 가능 시간을 내지 않았습니다.",
-          `${formatDate(game.endDate)}까지 내면 됩니다.`,
-        ],
-      },
+      todo: cancelled
+        ? null
+        : {
+            ...submit,
+            blocked: false,
+            sortAt: new Date(game.endDate).toISOString(),
+            lines: [
+              "아직 가능 시간을 내지 않았습니다.",
+              `${formatDate(game.endDate)}까지 내면 됩니다.`,
+            ],
+          },
     };
   }
 

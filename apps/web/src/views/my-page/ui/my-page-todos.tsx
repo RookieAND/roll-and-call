@@ -1,22 +1,23 @@
 import { Text, VStack } from "@roll-and-call/ui";
 
-import type { MyRulebook } from "@/entities/rulebook";
+import { TODO_ITEM_TYPE, type TodoItem } from "@/widgets/session-list";
 
-import type { TodoItem } from "../model/session-todos";
 import { CertTodoCard } from "./cert-todo-card";
 import { TodoCard } from "./todo-card";
 import { TodoMore } from "./todo-more";
 
 interface MyPageTodosProps {
-  todos: TodoItem[];
-  rejectedRulebooks: MyRulebook[];
+  items: TodoItem[];
 }
 
-export function MyPageTodos({ todos, rejectedRulebooks }: MyPageTodosProps) {
-  const cards = [
-    ...todos.map((item) => <TodoCard key={item.id} item={item} />),
-    ...rejectedRulebooks.map((rulebook) => <CertTodoCard key={rulebook.id} rulebook={rulebook} />),
-  ];
+export function MyPageTodos({ items }: MyPageTodosProps) {
+  const cards = items.map((item) =>
+    item.type === TODO_ITEM_TYPE.cert ? (
+      <CertTodoCard key={item.key} item={item} />
+    ) : (
+      <TodoCard key={item.key} item={item} />
+    ),
+  );
   const [first, ...rest] = cards;
   if (!first) return null;
 

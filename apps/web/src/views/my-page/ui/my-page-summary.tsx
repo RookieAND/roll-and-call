@@ -1,27 +1,24 @@
 import { heldBadges, pickFeaturedBadges } from "@/entities/badge";
 import { SESSION_ROLE } from "@/entities/game";
 import { profileDisplay } from "@/entities/profile";
-import { CERT_STATE } from "@/entities/rulebook";
 import { heldBadgeDetail } from "@/features/view-badge";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared/server";
-import { sessionsHref } from "@/widgets/session-list";
+import { loadTodos, sessionsHref } from "@/widgets/session-list";
 
 import { loadMyBadgeFacts } from "../api/load-my-badge-facts";
 import { loadMyPageSessions } from "../api/load-my-page-sessions";
 import { loadMyProfile } from "../api/load-my-profile";
-import { loadMyRulebooks } from "../api/load-my-rulebooks";
-import { sessionTodos } from "../model/session-todos";
 import { MyPageProfile } from "./my-page-profile";
 import { MyPageTodos } from "./my-page-todos";
 
 export async function MyPageSummary() {
   const user = (await getCurrentSessionUser())!;
   const server = await getCurrentServer();
-  const [profile, mySessions, rulebooks, badgeRecords, badgeFacts] = await Promise.all([
+  const [profile, mySessions, todos, badgeRecords, badgeFacts] = await Promise.all([
     loadMyProfile(user.id),
     loadMyPageSessions(server.id, user.id),
-    loadMyRulebooks(user.id),
+    loadTodos(server.id, user.id),
     getUserBadges(server.id, user.id),
     loadMyBadgeFacts(user.id),
   ]);
@@ -35,9 +32,6 @@ export async function MyPageSummary() {
     detail: heldBadgeDetail({ badge, records: badgeRecords, facts: badgeFacts, now }),
   }));
   const { name, avatar } = profileDisplay({ profile, user });
-  const rejectedRulebooks = rulebooks.rulebooks.filter(
-    (rulebook) => rulebook.state === CERT_STATE.rejected,
-  );
 
   return (
     <>
@@ -61,7 +55,7 @@ export async function MyPageSummary() {
           }),
         }}
       />
-      <MyPageTodos todos={sessionTodos(mySessions)} rejectedRulebooks={rejectedRulebooks} />
+      <MyPageTodos items={todos.items} />
     </>
   );
 }

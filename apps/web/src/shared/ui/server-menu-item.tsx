@@ -45,7 +45,7 @@ export function ServerMenuItem({ server, checked, destination }: ServerMenuItemP
       </VStack>
       {!!server.todoCount && (
         <Text typography="body5" weight="bold" foreground="primary" className="flex-none">
-          할 일 {server.todoCount}
+          할 일 {server.todoCount}건
         </Text>
       )}
       <Menu.RadioItemIndicator className="flex-none text-tinted-ink">

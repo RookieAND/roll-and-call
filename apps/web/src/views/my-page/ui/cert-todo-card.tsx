@@ -1,25 +1,25 @@
 import { Button, Card, HStack, Text } from "@roll-and-call/ui";
 import { CircleAlert } from "lucide-react";
 
-import { rejectionSummary, type MyRulebook } from "@/entities/rulebook";
 import { DiscardApplicationButton } from "@/features/certify-rulebook";
-import { ServerLink } from "@/shared/ui";
+import { LineBreaks, ServerLink } from "@/shared/ui";
+import type { CertTodoItem } from "@/widgets/session-list";
 
 interface CertTodoCardProps {
-  rulebook: MyRulebook;
+  item: CertTodoItem;
 }
 
-export function CertTodoCard({ rulebook }: CertTodoCardProps) {
+export function CertTodoCard({ item }: CertTodoCardProps) {
   return (
     <Card.Root padding="none" className="p-175">
       <HStack align="center" gap="100" className="text-warning-600">
         <CircleAlert size={14} strokeWidth={2.2} aria-hidden className="shrink-0" />
         <Text weight="bold" typography="body4" foreground="inherit">
-          인증 반려
+          {item.eyebrow}
         </Text>
       </HStack>
       <Text truncate typography="heading3" render={<h3 />} className="mt-100">
-        룰북 인증 다시 신청하기
+        {item.title}
       </Text>
       <Text
         typography="body4"
@@ -27,12 +27,12 @@ export function CertTodoCard({ rulebook }: CertTodoCardProps) {
         render={<p />}
         className="mt-050 [text-wrap:pretty]"
       >
-        {rulebook.label} · {rejectionSummary(rulebook.latestApplication)}
+        <LineBreaks lines={item.lines} />
       </Text>
       <HStack gap="100" className="mt-150">
-        <DiscardApplicationButton rulebookId={rulebook.id} className="min-w-0 flex-1" />
+        <DiscardApplicationButton rulebookId={item.rulebookId} className="min-w-0 flex-1" />
         <Button
-          render={<ServerLink path={`/me/rulebooks/apply?rulebook=${rulebook.id}`} />}
+          render={<ServerLink path={`/me/rulebooks/apply?rulebook=${item.rulebookId}`} />}
           variant="tinted"
           className="min-w-0 flex-1"
         >

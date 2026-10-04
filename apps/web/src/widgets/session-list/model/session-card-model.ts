@@ -31,11 +31,9 @@ export type SessionIcon = (typeof SESSION_ICON)[keyof typeof SESSION_ICON];
 export const SESSION_ACTION_KIND = {
   confirmTime: "confirm-time",
   submitAvailability: "submit-availability",
-  reviewApplicants: "review-applicants",
   hostMenu: "host-menu",
   cancelWaitlist: "cancel-waitlist",
   confirmAttendance: "confirm-attendance",
-  drawLottery: "draw-lottery",
   fillVacancy: "fill-vacancy",
   writeReview: "write-review",
   viewReview: "view-review",
@@ -49,7 +47,13 @@ export type SessionAction = {
   href: string;
 };
 
-export type SessionTodo = SessionAction & { lines: string[]; blocked: boolean };
+// sortAt은 같은 종류 안에서 가까운 순으로 세울 때 쓰는 시각(ISO)이다.
+export type SessionTodo = SessionAction & {
+  lines: string[];
+  blocked: boolean;
+  sortAt: string;
+  eyebrow?: string;
+};
 
 export type SessionCardModel = {
   id: string;

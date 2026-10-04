@@ -1,6 +1,9 @@
+import { isNull } from "es-toolkit";
+
 import { SESSION_ROLE, SESSION_STATE, splitRoster } from "@/entities/game";
 import { ddayKst, formatDateTime } from "@/shared/lib";
 
+import { confirmAttendanceTodo } from "./confirm-attendance-todo";
 import type { SessionFacts } from "./derive-session-facts";
 import { hostMenuAction } from "./host-menu-action";
 import { joinParts } from "./join-parts";
@@ -9,7 +12,6 @@ import { pastScheduleTone } from "./past-schedule-tone";
 import { relativeDay } from "./relative-day";
 import { reviewNote } from "./review-note";
 import {
-  SESSION_ACTION_KIND,
   SESSION_CHIP,
   SESSION_ICON,
   type SessionTodo,
@@ -51,17 +53,8 @@ export function toPastSessionCard({
   });
 
   const attendanceTodo: SessionTodo | null =
-    !player && facts.attendanceDue && !context.readOnly
-      ? {
-          kind: SESSION_ACTION_KIND.confirmAttendance,
-          label: "출석 확인",
-          href: `/games/${game.id}/attendance`,
-          blocked: false,
-          lines: [
-            `${formatDateTime(game.confirmedAt!)} 세션이 끝났습니다.`,
-            `확정 참여자 ${facts.confirmedCount}명이 왔는지 표시해주세요.`,
-          ],
-        }
+    !player && facts.attendanceDue && !context.readOnly && isNull(game.cancelledAt)
+      ? confirmAttendanceTodo({ game, now: context.now ?? new Date() })
       : null;
 
   const review =

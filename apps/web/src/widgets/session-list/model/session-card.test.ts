@@ -39,6 +39,8 @@ function game(partial: Partial<SessionGame>): SessionGame {
     drawnAt: null,
     playMinutes: 180,
     attendanceConfirmedAt: null,
+    endedAt: null,
+    cancelledAt: null,
     gm: { username: "한랑아", avatarUrl: null },
     participants: [],
     ...partial,
@@ -131,6 +133,20 @@ describe("운영 카드", () => {
     expect(card.todo?.kind).toBe(SESSION_ACTION_KIND.confirmAttendance);
     expect(card.todo?.lines).toHaveLength(2);
     expect(card.action?.href).toBe("/games/ended/manage");
+  });
+
+  it("출석 할 일은 자동 처리까지 남은 날을 머리표에 단다", () => {
+    const card = hostCard({ confirmedAt: at(-4), participants: [confirmedMe, other] });
+    expect(card.todo?.eyebrow).toBe("출석 확인 · 자동 처리 D-3");
+    expect(card.todo?.lines[1]).toBe("확인하지 않으면 출석이 자동으로 확정됩니다.");
+  });
+
+  it("마감 전이라도 대기자가 있는 선착순 구인은 참여자 관리가 할 일이다", () => {
+    const waiting = { ...other, userId: "b", status: PARTICIPANT_STATUS.waiting };
+    const card = hostCard({ participants: [other, waiting] });
+    expect(card.todo?.kind).toBe(SESSION_ACTION_KIND.fillVacancy);
+    expect(card.todo?.label).toBe("참여자 관리");
+    expect(card.todo?.lines[1]).toBe("대기 중인 1명 가운데 누구를 올릴지 정해 주세요.");
   });
 
   it("출석을 확정한 뒤에도 운영 관리로 들어가 고칠 수 있다", () => {
