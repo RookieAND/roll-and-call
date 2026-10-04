@@ -351,6 +351,13 @@
       "when": 1793500000000,
       "tag": "0049_member_nickname",
       "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1793600000000,
+      "tag": "0050_session_timing_columns",
+      "breakpoints": true
     }
   ]
 }

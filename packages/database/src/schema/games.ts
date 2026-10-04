@@ -26,7 +26,10 @@ export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
 export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery"]);
 
 // 정원(maxPlayers)만큼 confirmed로 채우고 초과분은 waiting. 승격/강등/자동 승계는 이 값만 바꾼다.
-export const participantStatus = pgEnum("participant_status", ["confirmed", "waiting"]);
+// removed는 세션 시작 뒤 불참으로 내보낸 사람이다. 행을 남기고 absent = true로 두며 확정 인원·정원에 세지 않는다.
+// removed는 ALTER TYPE ... ADD VALUE로 더했다. 같은 트랜잭션에서는 쓸 수 없고 drizzle-kit migrate는 밀린 마이그레이션을
+// 한 트랜잭션으로 돌리므로, removed를 SQL에서 쓰는 마이그레이션은 이 값을 더한 마이그레이션을 적용한 뒤에 따로 돌린다.
+export const participantStatus = pgEnum("participant_status", ["confirmed", "waiting", "removed"]);
 
 // 구인을 누가 취소했는지. auto는 GM이 디스코드 서버를 나가 자동으로 취소된 경우다.
 export const gameCancelKind = pgEnum("game_cancel_kind", ["gm", "staff", "auto"]);
@@ -73,13 +76,18 @@ export const games = pgTable(
     drawnAt: timestamp("drawn_at", { withTimezone: true }),
     // GM이 참석 여부를 확정한 시각. null이면 세션이 끝났어도 아직 출석 확인이 남아 있다.
     attendanceConfirmedAt: timestamp("attendance_confirmed_at", { withTimezone: true }),
+    // 출석을 처음 확정한 시각(GM이든 자동이든). 후기 작성 14일 기준이고, attendanceConfirmedAt은 마지막 확정 시각이다.
+    attendanceFirstConfirmedAt: timestamp("attendance_first_confirmed_at", { withTimezone: true }),
+    // GM이 세션 마치기를 누른 시각. null이면 시작 + 플레이타임이 종료다.
+    endedAt: timestamp("ended_at", { withTimezone: true }),
+    // 세션 시작 뒤 정원을 1명 늘린 시각. 구인당 한 번만 늘릴 수 있고 늘린 값은 maxPlayers에 들어간다.
+    capacityRaisedAt: timestamp("capacity_raised_at", { withTimezone: true }),
     // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.
     discordThreadId: text("discord_thread_id"),
     // 운영진 조치. 숨긴 구인은 사용자 앱의 목록·검색에서만 빠진다.
     hiddenAt: timestamp("hidden_at", { withTimezone: true }),
     hiddenBy: uuid("hidden_by").references(() => profiles.id, { onDelete: "set null" }),
     hiddenReason: text("hidden_reason"),
-    editRequestedAt: timestamp("edit_requested_at", { withTimezone: true }),
     // 취소한 구인은 지우지 않고 남겨 신청·수정·명단 조정만 막는다. 사유는 GM이 취소할 때만 남긴다.
     cancelledAt: timestamp("cancelled_at", { withTimezone: true }),
     cancelledBy: uuid("cancelled_by").references(() => profiles.id, { onDelete: "set null" }),
@@ -109,6 +117,14 @@ export const games = pgTable(
       "games_cancelled_has_kind",
       sql`${table.cancelledAt} is null or ${table.cancelKind} is not null`,
     ),
+    check(
+      "games_ended_after_start",
+      sql`${table.endedAt} is null or (${table.confirmedAt} is not null and ${table.endedAt} >= ${table.confirmedAt})`,
+    ),
+    check(
+      "games_attendance_first_confirmed",
+      sql`${table.attendanceFirstConfirmedAt} is null or ${table.attendanceConfirmedAt} is not null`,
+    ),
   ],
 );
 
@@ -136,6 +152,17 @@ export const participants = pgTable(
       onDelete: "set null",
     }),
     absenceCancelReason: text("absence_cancel_reason"),
+    // 대기가 된 시각. 같은 시각끼리는 drawRank, 그다음 joinedAt 순서다. 확정 상태에서는 의미가 없다.
+    waitlistedAt: timestamp("waitlisted_at", { withTimezone: true }),
+    // GM이 불참으로 내보내거나 출석에서 불참으로 고를 때 적는 사유. 운영진만 본다.
+    absenceReason: text("absence_reason"),
+    // 운영진이 출석을 불참으로 바꾼 불참 기록 추가. 태그는 gm_request·member_confirmed·other다.
+    absenceAddedAt: timestamp("absence_added_at", { withTimezone: true }),
+    absenceAddedBy: uuid("absence_added_by").references(() => profiles.id, {
+      onDelete: "set null",
+    }),
+    absenceAddedTag: text("absence_added_tag"),
+    absenceAddedReason: text("absence_added_reason"),
   },
   (table) => [
     primaryKey({ columns: [table.gameId, table.userId] }),
@@ -150,9 +177,27 @@ export const participants = pgTable(
     uniqueIndex("participants_game_id_draw_roll_unique").on(table.gameId, table.drawRoll),
     check("participants_draw_roll_range", sql`${table.drawRoll} between 1 and 100`),
     check("participants_draw_rank_positive", sql`${table.drawRank} >= 1`),
+    check("participants_absence_reason_length", sql`char_length(${table.absenceReason}) <= 200`),
+    check(
+      "participants_absence_added_tag",
+      sql`${table.absenceAddedTag} is null or ${table.absenceAddedTag} in ('gm_request', 'member_confirmed', 'other')`,
+    ),
+    check(
+      "participants_absence_added_complete",
+      sql`${table.absenceAddedAt} is null or ${table.absenceAddedTag} is not null`,
+    ),
+    check(
+      "participants_absence_added_other_reason",
+      sql`${table.absenceAddedTag} is distinct from 'other' or ${table.absenceAddedReason} is not null`,
+    ),
+    check(
+      "participants_absence_added_reason_length",
+      sql`char_length(${table.absenceAddedReason}) <= 200`,
+    ),
   ],
 );
 
+// status에는 removed를 쓰지 않는다(participants와 같은 enum이라 DB로는 막지 않는다).
 // 추첨을 적용한 순간의 명단. 뒤에 누가 나가거나 순번이 바뀌어도 추첨 결과 페이지는 이 기록을 보여 준다.
 // roll이 null이면 추첨 전에 직접 확정한 사람이다.
 export const drawResults = pgTable(

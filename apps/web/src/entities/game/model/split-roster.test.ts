@@ -46,6 +46,19 @@ describe("splitRoster", () => {
       ["a", 2],
     ]);
   });
+
+  it("removed는 확정·대기 어디에도 들어가지 않고 removed 배열로 간다", () => {
+    const withRemoved = [
+      ...roster,
+      { userId: "e", status: PARTICIPANT_STATUS.removed, joinedAt: new Date(0) },
+    ];
+    const split = splitRoster(withRemoved);
+    expect(split.confirmed.map((member) => member.userId)).toEqual(["a", "b"]);
+    expect(split.waiting.map((member) => member.userId)).toEqual(["c", "d"]);
+    expect(split.removed.map((member) => [member.userId, member.applicationRank])).toEqual([
+      ["e", 1],
+    ]);
+  });
 });
 
 describe("countConfirmed", () => {

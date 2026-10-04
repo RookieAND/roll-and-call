@@ -22,9 +22,12 @@ export function splitRoster<T extends Member>(participants: T[]) {
 
   const confirmed: RosterMember<T>[] = [];
   const waiting: RosterMember<T>[] = [];
+  const removed: RosterMember<T>[] = [];
 
   byOrder.forEach((participant, index) => {
-    if (participant.status === PARTICIPANT_STATUS.waiting) {
+    if (participant.status === PARTICIPANT_STATUS.removed) {
+      removed.push({ ...participant, applicationRank: index + 1, waitlistRank: null });
+    } else if (participant.status === PARTICIPANT_STATUS.waiting) {
       waiting.push({
         ...participant,
         applicationRank: index + 1,
@@ -35,5 +38,5 @@ export function splitRoster<T extends Member>(participants: T[]) {
     }
   });
 
-  return { confirmed, waiting };
+  return { confirmed, waiting, removed };
 }
