@@ -3,9 +3,11 @@ import { deriveGameStatus, gameStatusLabel } from "@roll-and-call/database/games
 import { loadMemberOngoing } from "@roll-and-call/database/moderation";
 
 import { getCurrentServer } from "../auth/get-current-server";
+import { requireStaff } from "../auth/require-staff";
 
 // 제재 페이지 「진행 중인 활동」. 범위는 추방 영향과 같은 loadMemberOngoing이다.
 export async function getMemberOngoing(userId: string) {
+  await requireStaff();
   const server = await getCurrentServer();
   const ongoing = await loadMemberOngoing({ serverId: server.id, userId });
   return ongoing.map(({ game, gmNickname, role, confirmedCount, notifiedCount }) => ({

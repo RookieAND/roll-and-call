@@ -18,6 +18,7 @@ import { compact, isNull } from "es-toolkit";
 import { cache } from "react";
 
 import { getCurrentServer } from "../auth/get-current-server";
+import { requireStaff } from "../auth/require-staff";
 import { gameStartsAt } from "./game-starts-at";
 import { gameStatus } from "./game-status";
 import { loadSharedTables } from "./load-shared-tables";
@@ -51,7 +52,9 @@ const OUTCOME_ACTION = {
 } as const satisfies Record<string, AuditAction>;
 
 // ponytail: 요청마다 현재 서버에서 어드민이 보는 표를 통째로 읽어 목업과 같은 모양으로 바꾼다. 서버 규모(수백 건)에서는 충분하고, 수만 건이 되면 화면별 쿼리로 나눈다.
+// 레이아웃 가드는 클라이언트 이동 때 다시 돌지 않을 수 있어, 데이터를 읽는 이 자리에서 운영진인지 다시 확인한다.
 export const loadSnapshot = cache(async () => {
+  await requireStaff();
   const now = Date.now();
   const server = await getCurrentServer();
   const {
