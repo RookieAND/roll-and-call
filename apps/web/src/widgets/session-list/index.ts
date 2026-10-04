@@ -6,7 +6,9 @@ export { userSessionsHref } from "./model/user-sessions-href";
 export { sessionsHref } from "./model/sessions-href";
 export { loadMySessions } from "./api/load-sessions";
 export { loadProfile } from "./api/load-profile";
-export type { Absence } from "./model/recent-absences";
+export { recentAbsences, type Absence } from "./model/recent-absences";
+export { AbsenceNotice } from "./ui/absence-notice";
+export { countRecordSessions } from "./model/count-record-sessions";
 export { PROFILE_SESSION_SECTIONS } from "./model/build-profile-sessions";
 export {
   ONGOING_CHIP,

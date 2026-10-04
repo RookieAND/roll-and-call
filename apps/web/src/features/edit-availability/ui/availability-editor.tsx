@@ -10,29 +10,32 @@ import { AppBar, toast, useAction } from "@/shared/ui";
 
 import { updateAvailability } from "../api/update-availability";
 import { addInterval, removeAt, removeDay, setHour } from "../model/availability-draft";
+import { availabilityReturnPath } from "../model/availability-return-path";
 import { overlappingIntervals } from "../model/overlapping-intervals";
 import { AvailabilityDayEditor } from "./availability-day-editor";
 
 interface AvailabilityEditorProps {
   defaultValue: AvailabilityInterval[];
+  from?: string;
 }
 
-export function AvailabilityEditor({ defaultValue }: AvailabilityEditorProps) {
+export function AvailabilityEditor({ defaultValue, from }: AvailabilityEditorProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
   const [intervals, setIntervals] = useState(defaultValue);
   const { pending, run } = useAction();
   const conflicts = overlappingIntervals(intervals);
+  const returnPath = availabilityReturnPath(from);
 
   function save() {
-    run(() => updateAvailability(intervals), {
+    run(() => updateAvailability({ intervals, from }), {
       onSuccess: () => toast.success("가능 시간대를 저장했습니다"),
     });
   }
 
   return (
     <>
-      <AppBar back="/me/edit" title="가능 시간대" />
+      <AppBar back={returnPath} title="가능 시간대" />
 
       <div className="border-b border-gray-200 px-200 py-175">
         <Callout.Root colorPalette="gray" size="sm">
@@ -96,7 +99,7 @@ export function AvailabilityEditor({ defaultValue }: AvailabilityEditorProps) {
             <Button
               variant="outline"
               size="lg"
-              onClick={() => router.push(toServerPath("/me/edit"))}
+              onClick={() => router.push(toServerPath(returnPath))}
             >
               취소
             </Button>

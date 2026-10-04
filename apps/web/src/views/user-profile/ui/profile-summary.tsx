@@ -5,9 +5,13 @@ import { EMPTY_BIO_TEXT, KeywordChips, ProfileRow } from "@/entities/profile";
 import { toKst, serverPath } from "@/shared/lib";
 import type { Profile } from "@/shared/server";
 import { getCurrentServer } from "@/shared/server";
-import { SessionCountStats, userSessionsHref, type Absence } from "@/widgets/session-list";
+import {
+  AbsenceNotice,
+  SessionCountStats,
+  userSessionsHref,
+  type Absence,
+} from "@/widgets/session-list";
 
-import { ProfileAbsenceNotice } from "./profile-absence-notice";
 import { ProfileBadges, type ProfileFeaturedBadge } from "./profile-badges";
 import { ProfileBlockLabel } from "./profile-block-label";
 
@@ -37,7 +41,7 @@ export async function ProfileSummary({
     <div className="px-200 pt-250 pb-050">
       {absences.length > 0 && (
         <div className="mb-200">
-          <ProfileAbsenceNotice absences={absences} />
+          <AbsenceNotice absences={absences} />
         </div>
       )}
       <ProfileRow

@@ -9,7 +9,15 @@ import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, notMemberError } from "@/shared/server";
 
-export async function updateAvailability(intervals: AvailabilityInterval[]): Promise<ActionResult> {
+import { availabilityReturnPath } from "../model/availability-return-path";
+
+export async function updateAvailability({
+  intervals,
+  from,
+}: {
+  intervals: AvailabilityInterval[];
+  from?: string;
+}): Promise<ActionResult> {
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };
@@ -23,5 +31,5 @@ export async function updateAvailability(intervals: AvailabilityInterval[]): Pro
   });
 
   revalidatePath(serverPath({ slug: server.slug, path: "/me" }));
-  redirect(serverPath({ slug: server.slug, path: "/me/edit" }));
+  redirect(serverPath({ slug: server.slug, path: availabilityReturnPath(from) }));
 }

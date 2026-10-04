@@ -8,20 +8,16 @@ import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 
 interface MyPageBadgesProps {
   heldCount: number;
-  hasNew: boolean;
   goal: ReturnType<typeof nextBadgeGoal>;
 }
 
-export function MyPageBadges({ heldCount, hasNew, goal }: MyPageBadgesProps) {
+export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
   return (
     <VStack gap="125" render={<section />}>
       <HStack align="center" gap="075">
         <Text typography="heading3" render={<h2 />}>
           업적
         </Text>
-        {hasNew && (
-          <span role="img" aria-label="새 뱃지" className="size-[7px] rounded-full bg-danger-600" />
-        )}
         <Text typography="body4" foreground="hint" numeric className="ml-auto">
           {heldCount}개
         </Text>

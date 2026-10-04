@@ -5,7 +5,11 @@ import { AvailabilityEditor } from "@/features/edit-availability";
 import { getCurrentSessionUser, getProfile, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
-export async function EditAvailabilityView() {
+interface EditAvailabilityViewProps {
+  from?: string;
+}
+
+export async function EditAvailabilityView({ from }: EditAvailabilityViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
@@ -25,7 +29,7 @@ export async function EditAvailabilityView() {
 
   return (
     <Container size="sm" className="px-0">
-      <AvailabilityEditor defaultValue={profile?.availability ?? []} />
+      <AvailabilityEditor defaultValue={profile?.availability ?? []} from={from} />
     </Container>
   );
 }

@@ -1,5 +1,3 @@
-import { isNull } from "es-toolkit";
-
 import { badgeCounts, heldBadges, nextBadgeGoal } from "@/entities/badge";
 import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared/server";
 
@@ -14,11 +12,5 @@ export async function MyPageBadgesSection() {
     loadMyBadgeFacts(user.id),
   ]);
   const held = heldBadges(records);
-  return (
-    <MyPageBadges
-      heldCount={held.length}
-      hasNew={held.some((badge) => isNull(badge.record.seenAt))}
-      goal={nextBadgeGoal(badgeCounts(facts))}
-    />
-  );
+  return <MyPageBadges heldCount={held.length} goal={nextBadgeGoal(badgeCounts(facts))} />;
 }

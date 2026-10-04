@@ -19,6 +19,9 @@ export function MyPageRulebooks({ rulebooks: { rulebooks } }: MyPageRulebooksPro
   const rows = SHOWN_STATES.flatMap((state) =>
     rulebooks.filter((rulebook) => rulebook.state === state),
   );
+  const certifiedCount = rulebooks.filter(
+    (rulebook) => rulebook.state === CERT_STATE.certified,
+  ).length;
 
   return (
     <VStack gap="125" render={<section />}>
@@ -27,7 +30,7 @@ export function MyPageRulebooks({ rulebooks: { rulebooks } }: MyPageRulebooksPro
           인증한 룰북
         </Text>
         <Text typography="body4" foreground="hint" numeric>
-          {rows.length}
+          {certifiedCount}
         </Text>
       </HStack>
 

@@ -2,14 +2,15 @@ import { Callout } from "@roll-and-call/ui";
 import { AlertCircle } from "lucide-react";
 
 import { ABSENCE_WINDOW_DAYS } from "@/entities/game";
-import type { Absence } from "@/widgets/session-list";
 
-interface ProfileAbsenceNoticeProps {
+import type { Absence } from "../model/recent-absences";
+
+interface AbsenceNoticeProps {
   absences: Absence[];
 }
 
 // 불참이 없으면 아무것도 보이지 않는다. 있을 때도 횟수·목록은 펼치지 않는다 — 낙인이 된다.
-export function ProfileAbsenceNotice({ absences }: ProfileAbsenceNoticeProps) {
+export function AbsenceNotice({ absences }: AbsenceNoticeProps) {
   if (absences.length === 0) return null;
 
   return (

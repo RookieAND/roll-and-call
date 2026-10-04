@@ -2,6 +2,8 @@ import { CERT_STATE, CertStateRow, certRowMeta, type MyRulebook } from "@/entiti
 import { toKst } from "@/shared/lib";
 import { ServerLink } from "@/shared/ui";
 
+import { MY_PAGE_CERT_LABEL } from "../model/my-page-cert-label";
+
 interface MyPageRulebookRowProps {
   rulebook: MyRulebook;
 }
@@ -21,6 +23,7 @@ export function MyPageRulebookRow({ rulebook }: MyPageRulebookRowProps) {
         title={rulebook.label}
         meta={meta}
         statusPlacement="badge"
+        statusLabel={MY_PAGE_CERT_LABEL[rulebook.state!]}
         size="sm"
       />
     </ServerLink>

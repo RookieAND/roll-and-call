@@ -29,6 +29,8 @@ interface CertStateRowProps {
   title: string;
   meta?: string;
   statusPlacement?: "inline" | "end" | "badge" | "none";
+  // 화면마다 짧은 라벨을 쓸 때 덮어 쓴다(마이페이지 「인증」·「반려」).
+  statusLabel?: string;
   chevron?: boolean;
   size?: "md" | "sm";
 }
@@ -38,10 +40,12 @@ export function CertStateRow({
   title,
   meta,
   statusPlacement = "end",
+  statusLabel,
   chevron = true,
   size = "md",
 }: CertStateRowProps) {
-  const { label, foreground } = CERT_STATE_META[state];
+  const { label: defaultLabel, foreground } = CERT_STATE_META[state];
+  const label = statusLabel ?? defaultLabel;
   const titleForeground = state === CERT_STATE.revoked ? "hint" : "normal";
   const metaForeground = state === CERT_STATE.rejected ? "warning" : "hint";
   const status = (

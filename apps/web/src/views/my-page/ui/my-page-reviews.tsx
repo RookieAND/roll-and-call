@@ -9,9 +9,10 @@ import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 interface MyPageReviewsProps {
   received: number;
   written: number;
+  showReceived: boolean;
 }
 
-export async function MyPageReviews({ received, written }: MyPageReviewsProps) {
+export async function MyPageReviews({ received, written, showReceived }: MyPageReviewsProps) {
   const server = await getCurrentServer();
   return (
     <VStack gap="125" render={<section />}>
@@ -19,11 +20,13 @@ export async function MyPageReviews({ received, written }: MyPageReviewsProps) {
         후기
       </Text>
       <div className={MY_PAGE_GROUP_CLASS}>
-        <CountLinkRow
-          label="진행한 세션 후기"
-          count={received}
-          href={serverPath({ slug: server.slug, path: "/me/reviews/received" })}
-        />
+        {showReceived && (
+          <CountLinkRow
+            label="진행한 세션 후기"
+            count={received}
+            href={serverPath({ slug: server.slug, path: "/me/reviews/received" })}
+          />
+        )}
         <CountLinkRow
           label="작성한 후기"
           count={written}

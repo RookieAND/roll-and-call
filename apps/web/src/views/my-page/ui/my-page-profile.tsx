@@ -1,4 +1,5 @@
 import { Button, HStack, VStack } from "@roll-and-call/ui";
+import type { ReactNode } from "react";
 
 import {
   AvailabilityRows,
@@ -13,6 +14,7 @@ import { MyPageBlockLabel } from "./my-page-block-label";
 import { MyPageFeaturedBadges, type FeaturedBadge } from "./my-page-featured-badges";
 
 interface MyPageProfileProps {
+  notices: ReactNode;
   name: string;
   avatarUrl: string | null;
   bio: string | null;
@@ -25,6 +27,7 @@ interface MyPageProfileProps {
 }
 
 export function MyPageProfile({
+  notices,
   name,
   avatarUrl,
   bio,
@@ -40,6 +43,7 @@ export function MyPageProfile({
 
   return (
     <VStack gap="175" render={<section />}>
+      {notices}
       <HStack align="center" gap="175">
         <ProfileRow
           size="xl"
@@ -69,7 +73,7 @@ export function MyPageProfile({
         <MyPageBlockLabel
           label="가능 시간대"
           action={{
-            path: "/me/availability",
+            path: "/me/availability?from=me",
             label: availability.length > 0 ? "편집" : "추가",
           }}
         />
