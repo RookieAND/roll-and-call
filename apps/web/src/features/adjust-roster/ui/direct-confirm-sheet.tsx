@@ -12,7 +12,10 @@ import { candidateSearchQuery } from "../model/candidate-search-query";
 import { searchKeyword } from "../model/search-keyword";
 import { CandidateSearchInput } from "./candidate-search-input";
 import { CandidateSearchResults } from "./candidate-search-results";
+import { RaiseCapacityDialog } from "./raise-capacity-dialog";
+import { raisedToastMessage } from "./raised-toast-message";
 import { SeatsFullNotice } from "./seats-full-notice";
+import { SEATS_NOTICE, seatsNotice } from "./seats-notice";
 import { seatsStatus } from "./seats-status";
 import { SelectedCandidateChip } from "./selected-candidate-chip";
 
@@ -24,6 +27,8 @@ interface DirectConfirmSheetBaseProps {
   onOpenChange: (open: boolean) => void;
   confirmedCount: number;
   maxPlayers: number;
+  started?: boolean;
+  capacityRaised?: boolean;
 }
 
 type DirectConfirmSheetProps = DirectConfirmSheetBaseProps &
@@ -40,14 +45,21 @@ export function DirectConfirmSheet({
   onOpenChange,
   confirmedCount,
   maxPlayers,
+  started = false,
+  capacityRaised = false,
 }: DirectConfirmSheetProps) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Candidate[]>([]);
+  const [raising, setRaising] = useState(false);
   const { pending, run } = useAction();
 
   const openSeats = Math.max(maxPlayers - confirmedCount, 0);
-  const noSeats = openSeats === 0;
-  const seatsFilled = selected.length >= openSeats;
+  const notice = gameId ? seatsNotice({ openSeats, started, capacityRaised }) : null;
+  const raisable = notice === SEATS_NOTICE.raisable;
+  // 세션 시작 뒤 정원이 찼으면 정원을 늘려 1명만 넣을 수 있다.
+  const pickLimit = raisable ? 1 : openSeats;
+  const noSeats = pickLimit === 0;
+  const seatsFilled = selected.length >= pickLimit;
   const keyword = searchKeyword(query);
   const debouncedKeyword = useDebouncedValue({ value: keyword, delay: SEARCH_DELAY_MS });
   const typedEnough = keyword.length >= MIN_QUERY_LENGTH;
@@ -80,25 +92,36 @@ export function DirectConfirmSheet({
     );
   }
 
+  function add(raiseCapacity: boolean) {
+    if (!gameId) return;
+    const userIds = selected.map((candidate) => candidate.userId);
+    run(() => addParticipants({ gameId, userIds, raiseCapacity }), {
+      onSuccess: (result) => {
+        const first = selected[0]!.username;
+        if (result.capacityRaised) {
+          toast.success(raisedToastMessage({ maxPlayers, username: first }));
+        } else if (selected.length === 1) {
+          toast.success(`${first}님을 참여자로 넣었습니다`);
+        } else {
+          toast.success(`${selected.length}명을 참여자로 넣었습니다`);
+        }
+        setRaising(false);
+        reset(false);
+      },
+    });
+  }
+
   function confirm() {
     if (!gameId) {
       onPick?.(selected);
       reset(false);
       return;
     }
-    run(() => addParticipants({ gameId, userIds: selected.map((candidate) => candidate.userId) }), {
-      onSuccess: () => {
-        toast.success(
-          selected.length === 1
-            ? `${selected[0]!.username}님을 참여자로 넣었습니다`
-            : `${selected.length}명을 참여자로 넣었습니다`,
-        );
-        reset(false);
-      },
-    });
+    if (raisable) setRaising(true);
+    else add(false);
   }
 
-  const seats = seatsStatus({ openSeats, pickedCount: selected.length });
+  const seats = raisable ? null : seatsStatus({ openSeats, pickedCount: selected.length });
 
   return (
     <Sheet.Root open={open} onOpenChange={reset}>
@@ -107,12 +130,14 @@ export function DirectConfirmSheet({
         <VStack gap="150">
           <HStack align="baseline" gap="100" className="px-250">
             <Sheet.Title className="mb-0 flex-1">참여자 찾기</Sheet.Title>
-            <Text numeric typography="body4" weight="bold" foreground={seats.foreground}>
-              {seats.label}
-            </Text>
+            {seats && (
+              <Text numeric typography="body4" weight="bold" foreground={seats.foreground}>
+                {seats.label}
+              </Text>
+            )}
           </HStack>
 
-          {noSeats && gameId && <SeatsFullNotice />}
+          {notice && <SeatsFullNotice notice={notice} />}
 
           {selected.length > 0 && (
             <HStack gap="075" wrap className="px-250">
@@ -156,6 +181,13 @@ export function DirectConfirmSheet({
           </div>
         </VStack>
       </Sheet.Popup>
+      <RaiseCapacityDialog
+        open={raising}
+        onOpenChange={setRaising}
+        maxPlayers={maxPlayers}
+        pending={pending}
+        onConfirm={() => add(true)}
+      />
     </Sheet.Root>
   );
 }

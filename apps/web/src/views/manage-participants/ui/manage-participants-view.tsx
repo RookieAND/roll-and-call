@@ -1,18 +1,23 @@
 import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
-import { isApplicationClosed, SCHEDULE_MODE, splitRoster } from "@/entities/game";
+import { isSessionEnded, isSessionStarted, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
+import { nextRoundBaseDate } from "@/features/open-next-round";
+import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { summarizeRoster } from "../model/roster-summary";
 import { toManagedMember } from "../model/to-managed-member";
-import { attendanceStageOf } from "./attendance-stage-of";
 import { ParticipantManager } from "./participant-manager";
 
-export async function ManageParticipantsView({ id }: { id: string }) {
+interface ManageParticipantsViewProps {
+  id: string;
+}
+
+export async function ManageParticipantsView({ id }: ManageParticipantsViewProps) {
   const server = await getCurrentServer();
   const [data, user] = await Promise.all([
     getGameParticipants({ serverId: server.id, gameId: id }),
@@ -37,36 +42,49 @@ export async function ManageParticipantsView({ id }: { id: string }) {
       </>
     );
   }
+  if (game.cancelledAt || isSessionEnded(game)) {
+    redirect(serverPath({ slug: server.slug, path: `/games/${id}/manage` }));
+  }
 
   const roster = splitRoster(game.participants);
   const toMember = (participant: (typeof roster.confirmed)[number]) =>
     toManagedMember({ participant, availableUserIds });
   const confirmed = roster.confirmed.map(toMember);
   const waiting = roster.waiting.map(toMember);
+  const confirmedRows = [...roster.confirmed, ...roster.removed]
+    .toSorted((left, right) => left.applicationRank - right.applicationRank)
+    .map(toMember);
   const isCoordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
-  const attendanceStage = attendanceStageOf({ game, confirmedCount: confirmed.length });
+  const summary = summarizeRoster({
+    confirmed,
+    waiting,
+    maxPlayers: game.maxPlayers,
+    endDate: game.endDate,
+    recruitMethod: game.recruitMethod,
+    drawnAt: game.drawnAt,
+    rolled: game.participants.some((participant) => !isNull(participant.drawRoll)),
+    isCoordinate,
+    started: isSessionStarted(game),
+    capacityRaised: !isNull(game.capacityRaisedAt),
+  });
 
   return (
     <ParticipantManager
-      gameId={game.id}
-      title={game.title}
-      confirmedAt={game.confirmedAt}
-      maxPlayers={game.maxPlayers}
-      confirmed={confirmed}
-      waiting={waiting}
-      summary={summarizeRoster({
-        confirmed,
-        waiting,
+      game={{
+        id: game.id,
+        title: game.title,
         maxPlayers: game.maxPlayers,
-        endDate: game.endDate,
-        recruitMethod: game.recruitMethod,
-        drawnAt: game.drawnAt,
-        rolled: game.participants.some((participant) => !isNull(participant.drawRoll)),
-        isCoordinate,
-      })}
+        scheduleMode: game.scheduleMode,
+      }}
+      confirmedRows={confirmedRows}
+      confirmedCount={confirmed.length}
+      waiting={waiting}
+      summary={summary}
       isCoordinate={isCoordinate}
-      locked={isApplicationClosed(game)}
-      attendanceStage={attendanceStage}
+      nextRoundBaseDate={nextRoundBaseDate({
+        confirmedAt: game.confirmedAt,
+        rangeEnd: game.rangeEnd,
+      })}
     />
   );
 }

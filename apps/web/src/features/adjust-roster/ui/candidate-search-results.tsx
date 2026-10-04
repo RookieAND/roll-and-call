@@ -53,7 +53,9 @@ export function CandidateSearchResults({
         render={<p />}
         className="px-400 pt-150 pb-500 text-center"
       >
-        사람을 찾지 못했습니다. 잠시 뒤 다시 적어 주세요.
+        사람을 찾지 못했습니다.
+        <br />
+        잠시 뒤 다시 적어 주세요.
       </Text>
     );
   }

@@ -1,56 +1,37 @@
 import { Grid } from "@roll-and-call/ui";
 
-import { ATTENDANCE_STAGE, type AttendanceStage } from "../model/attendance-stage";
-import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { STAT_TONE } from "../model/stat-tone";
 import { RosterStat } from "./roster-stat";
 
 interface RosterStatsProps {
-  confirmed: ManagedMember[];
+  confirmedCount: number;
   waitingCount: number;
+  maxPlayers: number;
   summary: RosterSummary;
-  attendanceStage: AttendanceStage | null;
 }
 
 export function RosterStats({
-  confirmed,
+  confirmedCount,
   waitingCount,
+  maxPlayers,
   summary,
-  attendanceStage,
 }: RosterStatsProps) {
-  if (attendanceStage) {
-    const checked = attendanceStage === ATTENDANCE_STAGE.done;
-    const absentCount = confirmed.filter((member) => member.absent).length;
+  if (summary.beforeDraw || summary.noApplicantsClosed) {
+    const drawTone = summary.noApplicantsClosed ? STAT_TONE.neutral : STAT_TONE.primary;
     return (
       <Grid cols={2} gap="100">
-        <RosterStat label="완료" count={checked ? confirmed.length - absentCount : null} />
-        <RosterStat
-          label="불참"
-          count={checked ? absentCount : null}
-          tone={checked && absentCount > 0 ? STAT_TONE.danger : STAT_TONE.neutral}
-        />
+        <RosterStat label="신청" value={`${summary.applicantCount}명`} />
+        <RosterStat label="뽑을 인원" value={`${summary.drawCount}명`} tone={drawTone} />
       </Grid>
     );
   }
 
+  const confirmedTone = confirmedCount > 0 ? STAT_TONE.success : STAT_TONE.neutral;
   return (
     <Grid cols={2} gap="100">
-      {summary.beforeDraw ? (
-        <>
-          <RosterStat label="신청" count={summary.applicantCount} />
-          <RosterStat label="뽑을 인원" count={summary.drawCount} tone={STAT_TONE.primary} />
-        </>
-      ) : (
-        <>
-          <RosterStat
-            label="확정"
-            count={confirmed.length}
-            tone={confirmed.length > 0 ? STAT_TONE.success : STAT_TONE.neutral}
-          />
-          <RosterStat label="대기" count={waitingCount} />
-        </>
-      )}
+      <RosterStat label="확정" value={`${confirmedCount}/${maxPlayers}`} tone={confirmedTone} />
+      <RosterStat label="대기" value={`${waitingCount}명`} />
     </Grid>
   );
 }

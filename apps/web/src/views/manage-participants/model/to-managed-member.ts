@@ -1,11 +1,11 @@
-import type { RosterMember } from "@/entities/game";
+import { PARTICIPANT_STATUS, type ParticipantStatus, type RosterMember } from "@/entities/game";
 
 import type { ManagedMember } from "./managed-member";
 
 type ParticipantRow = RosterMember<{
   userId: string;
   joinedAt: Date;
-  absent: boolean;
+  status: ParticipantStatus;
   user: { username: string; avatarUrl: string | null } | null;
 }>;
 
@@ -23,6 +23,6 @@ export function toManagedMember({
     waitlistRank: participant.waitlistRank,
     hasAvailability: availableUserIds.has(participant.userId),
     joinedAt: participant.joinedAt,
-    absent: participant.absent,
+    removed: participant.status === PARTICIPANT_STATUS.removed,
   };
 }

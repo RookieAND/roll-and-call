@@ -21,10 +21,7 @@ export function ManageParticipantsSkeleton() {
               <Skeleton height={73} rounded={500} />
               <Skeleton height={73} rounded={500} />
             </Grid>
-            <VStack gap="100">
-              <Skeleton height={45} rounded={500} />
-              <Skeleton width={256} height={17} />
-            </VStack>
+            <Skeleton height={45} rounded={500} />
           </VStack>
 
           <VStack gap="100">

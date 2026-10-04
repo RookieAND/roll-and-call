@@ -1,5 +1,4 @@
 import { Card, Text, VStack } from "@roll-and-call/ui";
-import { isNull } from "es-toolkit";
 
 import { STAT_TONE, type StatTone } from "../model/stat-tone";
 
@@ -15,17 +14,15 @@ const TONE = {
     label: "success",
     value: "success",
   },
-  [STAT_TONE.danger]: { card: "bg-surface", label: "hint", value: "danger" },
 } as const;
 
 interface RosterStatProps {
   label: string;
-  count: number | null;
+  value: string;
   tone?: StatTone;
 }
 
-// count가 null이면 아직 셀 수 없는 값이다(출석 확인 전). 0과 구분해 줄표로 둔다.
-export function RosterStat({ label, count, tone = STAT_TONE.neutral }: RosterStatProps) {
+export function RosterStat({ label, value, tone = STAT_TONE.neutral }: RosterStatProps) {
   const style = TONE[tone];
   return (
     <Card.Root padding="sm" radius={500} background="none" className={style.card}>
@@ -33,8 +30,8 @@ export function RosterStat({ label, count, tone = STAT_TONE.neutral }: RosterSta
         <Text typography="body4" foreground={style.label}>
           {label}
         </Text>
-        <Text numeric typography="heading2" foreground={isNull(count) ? "hint" : style.value}>
-          {isNull(count) ? "—" : `${count}명`}
+        <Text numeric typography="heading2" foreground={style.value}>
+          {value}
         </Text>
       </VStack>
     </Card.Root>

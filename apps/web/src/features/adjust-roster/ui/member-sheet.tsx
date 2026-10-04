@@ -5,6 +5,7 @@ import { isNull } from "es-toolkit";
 
 import type { MemberSummary } from "../model/member-summary";
 import { DemoteMemberItem } from "./demote-member-item";
+import { MarkAbsentMemberItem } from "./mark-absent-member-item";
 import { MemberSheetHeader } from "./member-sheet-header";
 import { PromoteMemberItem } from "./promote-member-item";
 import { RemoveMemberItem } from "./remove-member-item";
@@ -17,6 +18,9 @@ interface MemberSheetProps {
   maxPlayers: number;
   isCoordinate: boolean;
   beforeDraw: boolean;
+  started: boolean;
+  capacityRaised: boolean;
+  onMarkAbsent: (member: MemberSummary) => void;
   onClose: () => void;
 }
 
@@ -28,6 +32,9 @@ export function MemberSheet({
   maxPlayers,
   isCoordinate,
   beforeDraw,
+  started,
+  capacityRaised,
+  onMarkAbsent,
   onClose,
 }: MemberSheetProps) {
   const isConfirmed = isNull(member?.waitlistRank);
@@ -42,8 +49,9 @@ export function MemberSheet({
               member={member}
               isCoordinate={isCoordinate}
               beforeDraw={beforeDraw}
+              started={started}
             />
-            {isConfirmed ? (
+            {isConfirmed && !started && (
               <DemoteMemberItem
                 gameId={gameId}
                 member={member}
@@ -51,21 +59,34 @@ export function MemberSheet({
                 beforeDraw={beforeDraw}
                 onDone={onClose}
               />
-            ) : (
+            )}
+            {!isConfirmed && (
               <PromoteMemberItem
                 gameId={gameId}
                 member={member}
                 confirmedCount={confirmedCount}
                 maxPlayers={maxPlayers}
+                started={started}
+                capacityRaised={capacityRaised}
                 onDone={onClose}
               />
             )}
-            <RemoveMemberItem
-              gameId={gameId}
-              member={member}
-              leavesEmptySeat={isConfirmed && waitingCount > 0 && !beforeDraw}
-              onDone={onClose}
-            />
+            {isConfirmed && started ? (
+              <MarkAbsentMemberItem
+                onSelect={() => {
+                  onClose();
+                  onMarkAbsent(member);
+                }}
+              />
+            ) : (
+              <RemoveMemberItem
+                gameId={gameId}
+                member={member}
+                leavesEmptySeat={isConfirmed && waitingCount > 0 && !beforeDraw}
+                notifies={!started}
+                onDone={onClose}
+              />
+            )}
           </VStack>
         )}
       </Sheet.Popup>
