@@ -6,9 +6,11 @@ import {
   findRulebookCategoryId,
   hasPendingRulebookRequest,
 } from "@roll-and-call/database/rulebooks";
+import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
 import { type ActionResult } from "@/shared/api";
+import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
   notMemberError,
@@ -51,6 +53,7 @@ export async function requestRulebook(input: RulebookRequestValues): Promise<Act
       note: link ? `참고 링크 ${link}` : "",
     },
   });
+  revalidatePath(serverPath({ slug: server.slug, path: "/me/rulebooks" }), "layout");
   after(async () => {
     const requesterNickname = await getMemberNickname({ serverId: server.id, userId: user.id });
     await postStaffNotice({

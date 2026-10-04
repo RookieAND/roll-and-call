@@ -2,7 +2,8 @@ import { Callout, Field, HStack, Text, TextInput, VStack } from "@roll-and-call/
 import { BookOpen } from "lucide-react";
 
 interface QuizStepProps {
-  bookLabel: string;
+  bookTitle: string;
+  bookSub: string;
   question: string;
   answer: string;
   error: string | null;
@@ -11,7 +12,14 @@ interface QuizStepProps {
 
 const ANSWER_ID = "cert-quiz-answer";
 
-export function QuizStep({ bookLabel, question, answer, error, onAnswerChange }: QuizStepProps) {
+export function QuizStep({
+  bookTitle,
+  bookSub,
+  question,
+  answer,
+  error,
+  onAnswerChange,
+}: QuizStepProps) {
   return (
     <VStack gap="200">
       <VStack gap="050">
@@ -27,9 +35,12 @@ export function QuizStep({ bookLabel, question, answer, error, onAnswerChange }:
           <HStack align="center" gap="075" render={<span />}>
             <BookOpen size={16} strokeWidth={2.1} aria-hidden className="flex-none" />
             <Text typography="body3" weight="bold" foreground="inherit">
-              {bookLabel}
+              {bookTitle}
             </Text>
           </HStack>
+          <Text typography="body4" foreground="muted" className="pl-300">
+            {bookSub}
+          </Text>
         </Callout.Description>
       </Callout.Root>
       <VStack gap="150" className="pt-100">

@@ -52,21 +52,26 @@ export function BookPicker({
   const [query, setQuery] = useState("");
   const [categoryId, setCategoryId] = useState(initial?.categoryId ?? null);
   const [requestOpen, setRequestOpen] = useState(false);
+  const [requestKey, setRequestKey] = useState(0);
+  const [showAll, setShowAll] = useState(false);
 
   const allCategories = pickerCategories({ rulebooks, query: "" });
   const category = allCategories.find((candidate) => candidate.id === categoryId);
   const recent = recentCategories({ categories: allCategories, rulebooks, recentRulebookIds });
-  const { categories: listed, title: listTitle } = pickerListing({
-    rulebooks,
-    query,
-    recent,
-    allCategories,
-  });
+  const {
+    categories: listed,
+    title: listTitle,
+    recentOnly,
+  } = pickerListing({ rulebooks, query, recent, allCategories, showAll });
   const books = category?.editions.flatMap((edition) => edition.rulebooks) ?? [];
   const kinds = Object.values(RULEBOOK_KIND).filter((kind) =>
     books.some((book) => book.kind === kind),
   );
   const needNote = coreNeedNote(books);
+  const openRequest = () => {
+    setRequestKey((key) => key + 1);
+    setRequestOpen(true);
+  };
 
   return (
     <>
@@ -111,6 +116,17 @@ export function BookPicker({
                   />
                 ))}
               </VStack>
+              {recentOnly && (
+                <Button
+                  variant="ghost"
+                  colorPalette="primary"
+                  size="sm"
+                  className="self-start"
+                  onClick={() => setShowAll(true)}
+                >
+                  전체 룰 보기
+                </Button>
+              )}
             </VStack>
           )}
 
@@ -125,6 +141,9 @@ export function BookPicker({
                 <br />
                 목록에 없으면 추가를 요청해 주세요.
               </Text>
+              <Button variant="tinted" className="mt-100" onClick={openRequest}>
+                추가 요청
+              </Button>
             </VStack>
           )}
 
@@ -191,14 +210,14 @@ export function BookPicker({
           <Callout.Root colorPalette="gray">
             <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
             <Callout.Description className="break-keep">
-              신규 룰북 등록을 신청해 주세요.
+              추가 요청을 보내 주세요.
               <br />
-              추가되면 내 룰북에서 확인할 수 있습니다.
+              추가되면 알림 탭으로 알립니다.
             </Callout.Description>
             <Callout.Action>
-              <Button variant="outline" size="sm" onClick={() => setRequestOpen(true)}>
+              <Button variant="outline" size="sm" onClick={openRequest}>
                 <Plus size={14} strokeWidth={2.4} aria-hidden />
-                등록 신청
+                추가 요청
               </Button>
             </Callout.Action>
           </Callout.Root>
@@ -206,6 +225,7 @@ export function BookPicker({
       </Container>
 
       <RulebookRequestSheet
+        key={requestKey}
         open={requestOpen}
         onOpenChange={setRequestOpen}
         categoryNames={uniq(rulebooks.map((rulebook) => rulebook.categoryName))}

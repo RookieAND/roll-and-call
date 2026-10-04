@@ -31,7 +31,11 @@ const STATUS = {
     badge: { label: "심사 중", palette: "gray" },
   },
   [CERT_OPTION.needsCore]: { icon: Lock, className: "text-hint", badge: null },
-  [CERT_OPTION.free]: { icon: CircleMinus, className: "text-hint", badge: null },
+  [CERT_OPTION.free]: {
+    icon: CircleMinus,
+    className: "text-hint",
+    badge: { label: "인증 불필요", palette: "gray" },
+  },
   [CERT_OPTION.unlocked]: { icon: CircleMinus, className: "text-hint", badge: null },
 } as const;
 

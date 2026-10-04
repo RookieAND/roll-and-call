@@ -126,7 +126,8 @@ export function CertApplyForm({
         <div className="pt-200 pb-250">
           {onQuiz && quiz ? (
             <QuizStep
-              bookLabel={rulebook.label}
+              bookTitle={rulebook.shortName}
+              bookSub={`${rulebook.categoryName} ${rulebook.edition}`.trim()}
               question={quiz.question}
               answer={answer}
               error={quizError}

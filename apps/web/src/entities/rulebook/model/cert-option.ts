@@ -31,8 +31,7 @@ export function certOption({
     note,
     missing,
   });
-  if (!rulebook.certRequired)
-    return result(CERT_OPTION.free, "무료 배포라 인증 없이 열 수 있습니다");
+  if (!rulebook.certRequired) return result(CERT_OPTION.free, "인증 없이 구인을 열 수 있습니다");
   if (rulebook.state === CERT_STATE.certified) {
     return result(CERT_OPTION.certified, certRowMeta(rulebook));
   }

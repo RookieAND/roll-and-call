@@ -24,7 +24,7 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
   const owned = uniq(certified.map((rulebook) => rulebook.categoryId)).map((categoryId) =>
     toOwnedCategory({ categoryId, rulebooks, sets }),
   );
-  const requests = data.requests.map(toRequestRow);
+  const requests = data.requests.map((request) => toRequestRow({ request, rulebooks }));
   const [suggested] = recentUnopenedSets(data);
   return {
     suspension: sanction ? sanctionLines(sanction) : null,

@@ -41,7 +41,9 @@ export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedVie
               신청이 완료되었습니다
             </Text>
             <Text typography="body2" foreground="muted" render={<p />} className="break-keep">
-              운영진이 확인하면 내 룰북에서 결과를 볼 수 있습니다.
+              운영진이 확인하면 결과를 알림 탭으로 알립니다.
+              <br />
+              보통 2~3일 안에 확인합니다.
             </Text>
           </VStack>
           <Card.Root padding="none" className="overflow-hidden">

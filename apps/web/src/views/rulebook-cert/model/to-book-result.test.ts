@@ -82,4 +82,31 @@ describe("toBookResult", () => {
     expect(result.thumbs).toEqual([]);
     expect(result.deleted).toBe(true);
   });
+
+  it("운영진이 직접 인증한 책은 그 전 반려 신청의 형식·신청일·사진을 섞지 않는다", () => {
+    const result = toBookResult({
+      rulebook: rulebook(application({ status: "rejected", flaggedShots: ["side"] })),
+      signedUrls: new Map([[KEY, SIGNED]]),
+    });
+    expect(result.mode).toBe("운영진 인증");
+    expect(result.dates).toEqual([{ label: "승인", value: "2026.09.01" }]);
+    expect(result.thumbs).toEqual([]);
+    expect(result.badge?.label).toBe("승인됨");
+  });
+
+  it("반려 요약과 다른 사유 전문만 자세한 사유로 보인다", () => {
+    const rejected = {
+      ...rulebook(
+        application({
+          status: "rejected",
+          rejectTag: "사진이 잘렸거나 흐립니다",
+          rejectReason: "책등 제목이 읽히지 않습니다.",
+        }),
+      ),
+      state: CERT_STATE.rejected,
+    };
+    const result = toBookResult({ rulebook: rejected, signedUrls: new Map() });
+    expect(result.memo).toBe("책등 제목이 읽히지 않습니다.");
+    expect(result.discardable).toBe(true);
+  });
 });

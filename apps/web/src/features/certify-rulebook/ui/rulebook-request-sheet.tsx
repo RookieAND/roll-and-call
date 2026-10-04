@@ -95,7 +95,7 @@ export function RulebookRequestSheet({
         <Sheet.Body className="px-200 pb-200">
           <VStack gap="175">
             <Text typography="body3" foreground="muted" render={<p />}>
-              추가되면 내 룰북에서 알려 드립니다.
+              추가되면 알림 탭으로 알립니다.
             </Text>
             <Field.Root
               label="룰북 이름"
@@ -118,7 +118,7 @@ export function RulebookRequestSheet({
                 <Callout.Description className="break-keep">
                   이미 요청된 룰북입니다.
                   <br />
-                  추가되면 내 룰북에서 알려 드립니다.
+                  추가되면 알림 탭으로 알립니다.
                 </Callout.Description>
               </Callout.Root>
             )}

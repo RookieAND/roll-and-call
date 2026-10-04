@@ -18,11 +18,16 @@ import {
   type CertFormat,
   type MyRulebook,
 } from "@/entities/rulebook";
+import { LineBreaks } from "@/shared/ui";
 
 import { uploadCertPhoto } from "../api/upload-cert-photo";
 import type { BookDraft } from "../model/book-draft";
 import { certPhotoError } from "../model/cert-photo-error";
-import { CERT_PHOTO_ACCEPT, CERT_RECEIPT_ACCEPT } from "../model/cert-photo-rules";
+import {
+  CERT_PHOTO_ACCEPT,
+  CERT_PHOTO_UPLOAD_FAILED,
+  CERT_RECEIPT_ACCEPT,
+} from "../model/cert-photo-rules";
 import { PHOTO_SLOT, revokePreview, slotKey, type PhotoSlot } from "../model/photo-slot";
 import { isProofKey, slotOf, type SlotKey } from "../model/slot-of";
 import { EbookFields } from "./ebook-fields";
@@ -78,7 +83,7 @@ export function BookDraftCard({
       serverId,
       file,
       onProgress: (progress) => setSlot(key, { status: PHOTO_SLOT.uploading, progress }),
-    }).catch(() => ({ error: "사진을 올리지 못했습니다. 다시 올려 주세요." }));
+    }).catch(() => ({ error: CERT_PHOTO_UPLOAD_FAILED }));
     setSlot(
       key,
       "key" in result
@@ -194,7 +199,9 @@ export function BookDraftCard({
         {errorMessage && (
           <Callout.Root colorPalette="warning" role="alert">
             <Callout.Icon />
-            <Callout.Description className="break-keep">{errorMessage}</Callout.Description>
+            <Callout.Description className="break-keep">
+              <LineBreaks lines={errorMessage.split("\n")} />
+            </Callout.Description>
           </Callout.Root>
         )}
         {fileInput(CERT_PROOF.order)}

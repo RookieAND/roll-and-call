@@ -7,19 +7,19 @@ import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { withdrawApplication } from "../api/withdraw-application";
 
-interface CancelApplicationButtonProps {
+interface WithdrawApplicationButtonProps {
   rulebookId: string;
   bookCount: number;
   size?: ButtonProps["size"];
   className?: string;
 }
 
-export function CancelApplicationButton({
+export function WithdrawApplicationButton({
   rulebookId,
   bookCount,
   size,
   className = "w-full",
-}: CancelApplicationButtonProps) {
+}: WithdrawApplicationButtonProps) {
   const [open, setOpen] = useState(false);
   const { pending, run } = useAction();
   const description =

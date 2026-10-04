@@ -6,7 +6,12 @@ import {
 } from "@/shared/api";
 import { CERT_PHOTO_BUCKET } from "@/shared/lib";
 
-import { CERT_PHOTO_MAX_SIDE } from "../model/cert-photo-rules";
+import {
+  CERT_PHOTO_MAX_BYTES,
+  CERT_PHOTO_MAX_SIDE,
+  CERT_PHOTO_TOO_LARGE,
+  CERT_PHOTO_UPLOAD_FAILED,
+} from "../model/cert-photo-rules";
 
 // key는 공개 URL 모양 문자열이다. 버킷은 비공개라 그 주소로 열리지 않지만,
 // 하루 정리 함수 orphan_storage_objects(0041)가 이 모양으로 연결 여부를 판단하므로 경로로 바꾸면 모든 인증 사진이 지워진다.
@@ -28,12 +33,16 @@ export async function uploadCertPhoto({
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
   const upload = await shrinkImage({ file, maxSide: CERT_PHOTO_MAX_SIDE });
+  if (upload.size > CERT_PHOTO_MAX_BYTES) return { error: CERT_PHOTO_TOO_LARGE };
   const extension = upload.name.split(".").pop() ?? "jpg";
   const path = `servers/${serverId}/${user.id}/${crypto.randomUUID()}.${extension}`;
   const bucket = supabase.storage.from(CERT_PHOTO_BUCKET);
   const { data: signed, error } = await bucket.createSignedUploadUrl(path);
-  if (error) return { error: error.message };
+  if (error) {
+    console.error(error);
+    return { error: CERT_PHOTO_UPLOAD_FAILED };
+  }
   const status = await putWithProgress({ url: signed.signedUrl, file: upload, onProgress });
-  if (status >= 400) return { error: `업로드 실패 (${status})` };
+  if (status >= 400) return { error: CERT_PHOTO_UPLOAD_FAILED };
   return { key: bucket.getPublicUrl(path).data.publicUrl, previewUrl: URL.createObjectURL(upload) };
 }

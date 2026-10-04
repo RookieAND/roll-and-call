@@ -14,7 +14,7 @@ export function ownedCategorySub({
     return "구인을 열 수 있습니다";
   }
   if (nearest) {
-    return `${nearest.missing.length}권만 더 인증하면 ${nearest.set.edition || nearest.set.label} GM이 될 수 있습니다`;
+    return `${nearest.missing.length}권만 더 인증하면 ${nearest.set.label} GM이 될 수 있습니다`;
   }
   return "기본 룰북을 인증하면 GM이 될 수 있습니다";
 }

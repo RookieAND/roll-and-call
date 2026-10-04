@@ -1,4 +1,6 @@
 export const CERT_PHOTO_MAX_BYTES = 10 * 1024 * 1024;
+export const CERT_PHOTO_TOO_LARGE = "10MB를 넘습니다. 더 작은 사진으로 올려 주세요.";
+export const CERT_PHOTO_UPLOAD_FAILED = "사진을 올리지 못했습니다.\n다시 올려 주세요.";
 // 아이폰은 JPG·PNG만 받는 입력에 HEIC 사진을 JPG로 바꿔 넘긴다. 어드민 브라우저가 HEIC를 못 그려서 이렇게 받는다.
 export const CERT_PHOTO_ACCEPT = "image/jpeg,image/png";
 export const CERT_RECEIPT_ACCEPT = `${CERT_PHOTO_ACCEPT},application/pdf`;

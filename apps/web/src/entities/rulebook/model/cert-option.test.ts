@@ -46,9 +46,11 @@ describe("certOption", () => {
   });
 
   it("무료 배포·신판으로 열린 책은 고를 수 없다", () => {
-    expect(certOption({ rulebook: book("F", { certRequired: false }), rulebooks: [] }).type).toBe(
-      CERT_OPTION.free,
-    );
+    expect(certOption({ rulebook: book("F", { certRequired: false }), rulebooks: [] })).toEqual({
+      type: CERT_OPTION.free,
+      note: "인증 없이 구인을 열 수 있습니다",
+      missing: [],
+    });
     const newer = book("7", { edition: "7판", state: CERT_STATE.certified, stateAt: new Date() });
     expect(
       certOption({ rulebook: book("6", { unlockedBy: newer }), rulebooks: [newer] }).note,

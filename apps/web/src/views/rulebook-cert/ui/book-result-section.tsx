@@ -95,7 +95,7 @@ export function BookResultSection({ result, guide }: BookResultSectionProps) {
       )}
 
       {result.memo && (
-        <ResultSection label="운영진 메모">
+        <ResultSection label="자세한 사유">
           <Text typography="body2" className="break-keep whitespace-pre-line">
             {result.memo}
           </Text>

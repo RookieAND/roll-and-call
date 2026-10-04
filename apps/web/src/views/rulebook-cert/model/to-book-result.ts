@@ -52,8 +52,10 @@ export function toBookResult({
   const day = (at: Date) => toKst(at).format("YYYY.MM.DD");
   const decidedLabel = DECIDED_LABEL[state];
   const memo = application?.rejectReason?.trim() || null;
-  // 운영진이 직접 준 인증을 반려로 돌린 기록은 신청한 적이 없어 신청일·사진이 없다.
-  const direct = application?.direct ?? false;
+  // 운영진이 직접 준 인증과 그 인증을 반려로 돌린 기록은 신청일·사진을 보이지 않는다.
+  // 직접 인증된 책의 latestApplication은 그 전 반려 신청이라 「승인됨」 아래 섞지 않는다.
+  const grantedDirectly = state === CERT_STATE.certified && application?.status !== "approved";
+  const direct = (application?.direct ?? false) || grantedDirectly;
   const dates = [
     ...(application && !direct ? [{ label: "신청", value: day(application.createdAt) }] : []),
     ...(decidedLabel && rulebook.stateAt
