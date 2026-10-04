@@ -1,20 +1,41 @@
 import type { Metadata } from "next";
 
-import { getNoShow, listNoShows, type NoShowFilter } from "@/shared/server";
+import { parseSort } from "@/shared/lib";
+import {
+  getNoShow,
+  listNoShows,
+  NO_SHOW_DEFAULT_SORT,
+  NO_SHOW_SORT_COLUMNS,
+  type NoShowStatus,
+} from "@/shared/server";
 import { NoShowsView } from "@/views/no-shows";
 
 export const metadata: Metadata = { title: "불참 기록" };
 
 export default async function NoShowsPage({ searchParams }: PageProps<"/[server]/noshow">) {
-  const { q, timing, status, record, page } = (await searchParams) as Record<
-    string,
-    string | undefined
-  >;
+  const params = await searchParams;
+  const query = params as Record<string, string | undefined>;
+  const { q, status, record, page, pin } = query;
+  const sort = parseSort({
+    searchParams: params,
+    columns: NO_SHOW_SORT_COLUMNS,
+    fallback: NO_SHOW_DEFAULT_SORT,
+  });
   const rows = await listNoShows({
     query: q,
-    timing: timing as NoShowFilter["timing"],
-    status: status as NoShowFilter["status"],
+    status: status as NoShowStatus | undefined,
+    sort,
+    pinId: pin,
   });
   const detail = record ? await getNoShow(record) : null;
-  return <NoShowsView rows={rows} record={detail} page={page} query={{ q, timing, status }} />;
+  return (
+    <NoShowsView
+      rows={rows}
+      record={detail}
+      page={page}
+      sort={sort}
+      query={query}
+      filtered={Boolean(q || status)}
+    />
+  );
 }

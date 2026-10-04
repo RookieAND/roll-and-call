@@ -33,10 +33,7 @@ export function NoShowsLoading() {
               className="pl-400 text-body3"
             />
           </HStack>
-          <div className="w-[150px]">
-            <SkeletonSelect label="처리 시점 전체" />
-          </div>
-          <div className="w-[124px]">
+          <div className="w-[140px]">
             <SkeletonSelect label="상태 전체" />
           </div>
         </HStack>
@@ -47,9 +44,9 @@ export function NoShowsLoading() {
               { label: "세션", kind: "text", width: 200 },
               { label: "룰북", kind: "text", width: 140 },
               { label: "일시", kind: "date", width: 192, sorted: true },
-              { label: "처리한 GM", kind: "text", width: 100 },
-              { label: "처리 시점", kind: "text", width: 86 },
-              { label: "상태", kind: "badge", width: 84, align: "center" },
+              { label: "처리한 사람", kind: "text", width: 140 },
+              { label: "상태", kind: "badge", width: 84 },
+              { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />
         </Panel>

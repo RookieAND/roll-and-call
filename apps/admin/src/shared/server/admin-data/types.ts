@@ -210,11 +210,13 @@ export interface NoShow {
   id: string;
   userId: string;
   sessionId: string;
-  recordedAt: Date;
   cancelled: boolean;
   cancelledBy?: string;
   cancelledAt?: Date;
   cancelReason?: string;
+  gmReason?: string;
+  // 운영진이 추가한 기록. 사유는 태그 이름이고 기타면 입력한 글자다.
+  added?: { by: string; at: Date; reason: string };
 }
 
 export interface AuditEntry {

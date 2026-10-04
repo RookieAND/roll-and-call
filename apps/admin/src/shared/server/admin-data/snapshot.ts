@@ -1,6 +1,11 @@
 import "server-only";
 import type { Game } from "@roll-and-call/database";
-import { compareWaitlistOrder, sessionEndAt } from "@roll-and-call/database/games/model";
+import {
+  ABSENCE_ADDED_TAG_LABEL,
+  compareWaitlistOrder,
+  sessionEndAt,
+  type AbsenceAddedTag,
+} from "@roll-and-call/database/games/model";
 import { type AuditAction } from "@roll-and-call/database/moderation";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { compact, isNull } from "es-toolkit";
@@ -174,11 +179,20 @@ export const loadSnapshot = cache(async () => {
       id: noShowId(row.gameId, row.userId),
       userId: row.userId,
       sessionId: row.gameId,
-      recordedAt: attendanceConfirmedAt.get(row.gameId)!,
       cancelled: !isNull(row.absenceCancelledAt),
       cancelledBy: row.absenceCancelledBy ? nicknameOf(row.absenceCancelledBy) : undefined,
       cancelledAt: row.absenceCancelledAt ?? undefined,
       cancelReason: row.absenceCancelReason ?? undefined,
+      gmReason: row.absenceReason ?? undefined,
+      added: row.absenceAddedAt
+        ? {
+            by: nicknameOf(row.absenceAddedBy),
+            at: row.absenceAddedAt,
+            reason:
+              row.absenceAddedReason ??
+              ABSENCE_ADDED_TAG_LABEL[row.absenceAddedTag as AbsenceAddedTag],
+          }
+        : undefined,
     }));
 
   const rulebookList: Rulebook[] = rulebookRows

@@ -39,3 +39,8 @@ export {
 } from "./attendance-deadline";
 export { shouldAutoConfirmAttendance } from "./should-auto-confirm-attendance";
 export { departedGmGameAction } from "./departed-gm-game-action";
+export {
+  ABSENCE_ADDED_TAG,
+  ABSENCE_ADDED_TAG_LABEL,
+  type AbsenceAddedTag,
+} from "./absence-added-tag";

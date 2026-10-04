@@ -1,48 +1,49 @@
-import { HStack, Table, Text } from "@roll-and-call/ui";
-import { ArrowDown, ChevronRight } from "lucide-react";
+import { Table, Text } from "@roll-and-call/ui";
+import { ChevronRight } from "lucide-react";
 
-import { formatSessionTime } from "@/shared/lib";
-import { NO_SHOW_TIMINGS, type NoShowRow } from "@/shared/server";
-import { TableEmptyRow, type EmptyImage, TableColumns, ServerLink, Tag } from "@/shared/ui";
+import { formatSessionTime, type TableSort } from "@/shared/lib";
+import { NO_SHOW_SORT_COLUMN, type NoShowRow, type NoShowSortColumn } from "@/shared/server";
+import {
+  TableEmptyRow,
+  TableColumns,
+  ServerLink,
+  SortableHead,
+  type EmptyImage,
+} from "@/shared/ui";
+
+import { NoShowStatusTag } from "./no-show-status-tag";
 
 interface NoShowsTableProps {
   rows: NoShowRow[];
-  emptyTitle: string;
-  emptyImage: EmptyImage;
+  sort: TableSort<NoShowSortColumn>;
+  empty: { title: string; description: string; image: EmptyImage };
   selectedId?: string;
   hrefOf: (id: string) => string;
 }
 
-export function NoShowsTable({
-  rows,
-  emptyTitle,
-  emptyImage,
-  selectedId,
-  hrefOf,
-}: NoShowsTableProps) {
+export function NoShowsTable({ rows, sort, empty, selectedId, hrefOf }: NoShowsTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[110, 200, 140, 192, 100, 86, 84, { fixed: 44 }]} />
+      <TableColumns widths={[110, 200, 140, 192, 140, 84, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
-          <Table.Head>불참 당사자</Table.Head>
+          <SortableHead column={NO_SHOW_SORT_COLUMN.nickname} label="불참 당사자" sort={sort} />
           <Table.Head>세션</Table.Head>
           <Table.Head>룰북</Table.Head>
-          <Table.Head aria-sort="descending" className="text-gray-900">
-            <HStack align="center" gap="050" render={<span />}>
-              일시
-              <ArrowDown size={10} strokeWidth={2.4} aria-hidden />
-            </HStack>
-          </Table.Head>
-          <Table.Head>처리한 GM</Table.Head>
-          <Table.Head>처리 시점</Table.Head>
-          <Table.Head align="center">상태</Table.Head>
+          <SortableHead column={NO_SHOW_SORT_COLUMN.at} label="일시" sort={sort} />
+          <Table.Head>처리한 사람</Table.Head>
+          <Table.Head>상태</Table.Head>
           <Table.Head aria-label="열기" />
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {rows.length === 0 ? (
-          <TableEmptyRow colSpan={8} image={emptyImage} title={emptyTitle} />
+          <TableEmptyRow
+            colSpan={7}
+            image={empty.image}
+            title={empty.title}
+            description={empty.description}
+          />
         ) : null}
         {rows.map((row) => (
           <Table.Row
@@ -77,14 +78,13 @@ export function NoShowsTable({
                 {formatSessionTime(row.startsAt)}
               </Text>
             </Table.Cell>
-            <Table.Cell className="truncate">{row.gmNickname}</Table.Cell>
             <Table.Cell>
-              <Text typography="body3" foreground="muted">
-                {NO_SHOW_TIMINGS[row.timing]}
+              <Text typography="body3" truncate>
+                {row.handler}
               </Text>
             </Table.Cell>
-            <Table.Cell align="center">
-              <Tag>{row.cancelled ? "취소됨" : "유효"}</Tag>
+            <Table.Cell>
+              <NoShowStatusTag status={row.status} />
             </Table.Cell>
             <Table.Cell align="end">
               <ChevronRight size={16} aria-hidden className="inline text-hint" />

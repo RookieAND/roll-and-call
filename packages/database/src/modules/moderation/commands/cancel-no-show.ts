@@ -2,9 +2,12 @@ import { and, eq, isNotNull, isNull, sql } from "drizzle-orm";
 
 import { db } from "#/client";
 import type { Actor } from "#/modules/moderation/model/types";
+import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { games, participants, profiles } from "#/schema";
+import { participants, profiles } from "#/schema";
 
+import { loadNoShowParties } from "./load-no-show-parties";
+import { NO_SHOW_NOTIFIED, notifyNoShowParties } from "./notify-no-show-parties";
 import { recordAudit } from "./record-audit";
 
 export type CancelNoShowResult =
@@ -64,24 +67,31 @@ export async function cancelNoShow({
         },
       };
     }
-    const [names] = await tx
-      .select({ nickname: memberNicknameSql(serverId), title: games.title })
-      .from(games)
-      .innerJoin(profiles, eq(profiles.id, userId))
-      .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));
+    const parties = await loadNoShowParties({ tx, serverId, gameId, userId });
     await recordAudit({
       executor: tx,
       serverId,
       actor,
       entry: {
         action: "불참 취소",
-        target: `${names!.nickname} · ${names!.title}`,
+        target: `${parties.nickname} · ${parties.title}`,
         targetUserId: userId,
         targetGameId: gameId,
         reason: reason.trim(),
         before: { label: "유효" },
         after: { label: "취소됨" },
+        related: [NO_SHOW_NOTIFIED],
       },
+    });
+    await notifyNoShowParties({
+      tx,
+      serverId,
+      actorId: actor.id,
+      kind: NOTIFICATION_KIND.absenceCancelled,
+      gameId,
+      gameTitle: parties.title,
+      userId,
+      gmId: parties.gmId,
     });
     return { ok: true };
   });

@@ -1,46 +1,70 @@
-import { isAbsenceActive } from "@roll-and-call/database/games/model";
-import { Button } from "@roll-and-call/ui";
-import { Calendar } from "lucide-react";
+import { Text } from "@roll-and-call/ui";
 
 import { formatSessionTime } from "@/shared/lib";
-import { NO_SHOW_TIMINGS, type NoShowDetail } from "@/shared/server";
-import { EntityHead, IconTile, ServerLink } from "@/shared/ui";
+import { NO_SHOW_STATUS, type NoShowDetail } from "@/shared/server";
+import { FactRows, FactSub } from "@/shared/ui";
 
 const REPEATED_NO_SHOW_COUNT = 2;
+
+const COUNT_SUB = {
+  [NO_SHOW_STATUS.valid]: "이 기록 포함",
+  [NO_SHOW_STATUS.expired]: null,
+  [NO_SHOW_STATUS.cancelled]: "이 기록 제외",
+} as const;
 
 interface NoShowSummaryProps {
   record: NoShowDetail;
 }
 
 export function NoShowSummary({ record }: NoShowSummaryProps) {
-  const counted =
-    !record.cancelled && isAbsenceActive({ sessionStartsAt: record.startsAt, now: Date.now() });
-  return (
-    <EntityHead
-      lead={<IconTile icon={Calendar} size="lg" />}
-      title={record.sessionTitle}
-      meta={`${formatSessionTime(record.startsAt)} · ${record.rulebook} · GM ${record.gmNickname}`}
-      facts={[
-        { label: "불참 당사자", value: record.nickname },
-        { label: "처리한 GM", value: record.gmNickname },
-        { label: "처리 시점", value: NO_SHOW_TIMINGS[record.timing] },
-        {
-          label: "당사자의 최근 30일 불참",
-          value: `${record.recentNoShowCount}회`,
-          danger: record.recentNoShowCount >= REPEATED_NO_SHOW_COUNT,
-          sub: counted ? "이 기록 포함" : undefined,
-        },
-      ]}
-      actions={
-        <Button
-          variant="outline"
-          colorPalette="gray"
-          size="sm"
-          render={<ServerLink path={`/users/${record.userId}?tab=noshow`} />}
-        >
-          {record.nickname}의 불참 기록 전체 보기
-        </Button>
+  const countSub = COUNT_SUB[record.status];
+  const countForeground = record.recentNoShowCount >= REPEATED_NO_SHOW_COUNT ? "danger" : "normal";
+  const reasonRow = record.added
+    ? {
+        label: "추가 사유",
+        value: (
+          <>
+            {record.added.reason}
+            <FactSub>운영진 기록</FactSub>
+          </>
+        ),
       }
-    />
+    : { label: "GM이 남긴 사유", value: record.gmReason ?? "없음" };
+  return (
+    <div className="rounded-400 border border-gray-200 px-175 py-050">
+      <FactRows
+        labelWidth={140}
+        items={[
+          {
+            label: "세션",
+            value: (
+              <>
+                {record.sessionTitle}
+                <FactSub>{`${formatSessionTime(record.startsAt)} · ${record.rulebook}`}</FactSub>
+              </>
+            ),
+          },
+          { label: "불참 당사자", value: record.nickname },
+          { label: "처리한 사람", value: record.handler },
+          reasonRow,
+          {
+            label: "최근 30일 불참",
+            value: (
+              <>
+                <Text
+                  typography="body3"
+                  weight="medium"
+                  foreground={countForeground}
+                  render={<span />}
+                >
+                  {record.recentNoShowCount}회
+                </Text>
+                {countSub ? <FactSub>{countSub}</FactSub> : null}
+              </>
+            ),
+          },
+        ]}
+      />
+    </div>
   );
 }
