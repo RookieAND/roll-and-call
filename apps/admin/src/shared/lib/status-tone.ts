@@ -34,7 +34,7 @@ export const STATUS_TONE: Readonly<Record<string, StatusTone>> = {
   반려: "danger",
   반려됨: "danger",
   "운영진이 숨김": "danger",
-  정상: "success",
+  정상: "gray",
   "활동 가능": "success",
   확정: "success",
   유효: "gray",

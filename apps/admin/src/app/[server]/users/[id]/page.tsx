@@ -10,7 +10,13 @@ import {
   getUserDetail,
   requireStaff,
 } from "@/shared/server";
-import { ACTIVITY_ROLE, USER_ACTION, USER_DETAIL_TAB, UserDetailView } from "@/views/user-detail";
+import {
+  ACTIVITY_ROLE,
+  kickBlockReason,
+  USER_ACTION,
+  USER_DETAIL_TAB,
+  UserDetailView,
+} from "@/views/user-detail";
 
 const TABS = Object.values(USER_DETAIL_TAB);
 const ROLES = Object.values(ACTIVITY_ROLE);
@@ -26,7 +32,7 @@ export default async function UserDetailPage({
   params,
   searchParams,
 }: PageProps<"/[server]/users/[id]">) {
-  const [{ id }, { tab, role, page, action }, , server] = await Promise.all([
+  const [{ id }, { tab, role, page, action }, staff, server] = await Promise.all([
     params,
     searchParams,
     requireStaff(),
@@ -34,13 +40,17 @@ export default async function UserDetailPage({
   ]);
   const user = await getUserDetail(id);
   if (!user) notFound();
-  const serverOwner = user.discordId === server.ownerDiscordId;
+  const kickBlock = kickBlockReason({
+    serverOwner: user.discordId === server.ownerDiscordId,
+    staff: user.staffRole !== null,
+    self: user.id === staff.id,
+  });
   const banned = user.membership === MEMBERSHIP_STATUS.banned;
   const [discordBanFailed, kickImpact] = await Promise.all([
     banned
       ? checkDiscordBanFailed({ guildId: server.discordGuildId, discordId: user.discordId })
       : false,
-    action === USER_ACTION.kick && !serverOwner && !banned
+    action === USER_ACTION.kick && !kickBlock && !banned
       ? getKickImpact({ serverId: server.id, userId: user.id })
       : null,
   ]);
@@ -51,7 +61,8 @@ export default async function UserDetailPage({
       role={ROLES.find((candidate) => candidate === role) ?? ACTIVITY_ROLE.all}
       page={isString(page) ? page : undefined}
       guildId={server.discordGuildId}
-      serverOwner={serverOwner}
+      viewer={{ id: staff.id, owner: staff.role === "owner" }}
+      kickBlock={kickBlock}
       discordBanFailed={discordBanFailed}
       kickImpact={kickImpact}
     />

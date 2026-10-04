@@ -1,104 +1,77 @@
-import { Button, Table, Text, VStack } from "@roll-and-call/ui";
-import { Flag } from "lucide-react";
+import { Table, Text } from "@roll-and-call/ui";
 
-import { formatDate, formatSessionTime, paginate, withQuery } from "@/shared/lib";
+import { formatSessionTime, paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
-import {
-  EMPTY_IMAGE,
-  ItemCard,
-  ListPager,
-  Panel,
-  TableEmptyRow,
-  TableColumns,
-  ServerLink,
-  Tag,
-} from "@/shared/ui";
+import { EMPTY_IMAGE, ListPager, Panel, TableColumns, TableEmptyRow } from "@/shared/ui";
+
+import { NoShowRowMenu } from "./no-show-row-menu";
+import { NoShowStateTag } from "./no-show-state-tag";
 
 interface NoShowPanelProps {
-  nickname: string;
   noShows: UserDetail["noShows"];
   page?: string;
 }
 
-export function NoShowPanel({ nickname, noShows, page }: NoShowPanelProps) {
+export function NoShowPanel({ noShows, page }: NoShowPanelProps) {
   const paged = paginate(noShows, page);
-  const latestValid = noShows.find((noShow) => !noShow.cancelled);
   return (
-    <VStack gap="150">
-      <Panel
-        footer={
-          <ListPager
-            page={paged.page}
-            totalPages={paged.totalPages}
-            total={noShows.length}
-            unit="건"
-          />
-        }
-      >
-        <Table.Root className="table-equal">
-          <TableColumns widths={[192, 200, 100, 88]} />
-          <Table.Header>
-            <Table.Row>
-              <Table.Head>일시</Table.Head>
-              <Table.Head>세션</Table.Head>
-              <Table.Head>처리한 GM</Table.Head>
-              <Table.Head align="center">상태</Table.Head>
+    <Panel
+      footer={
+        <ListPager
+          page={paged.page}
+          totalPages={paged.totalPages}
+          total={noShows.length}
+          unit="건"
+        />
+      }
+    >
+      <Table.Root className="table-equal">
+        <TableColumns widths={[192, 200, 140, { fixed: 96 }, { fixed: 56 }]} />
+        <Table.Header>
+          <Table.Row>
+            <Table.Head>일시</Table.Head>
+            <Table.Head>세션</Table.Head>
+            <Table.Head>처리한 사람</Table.Head>
+            <Table.Head align="center">상태</Table.Head>
+            <Table.Head aria-label="더 보기" />
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {noShows.length === 0 ? (
+            <TableEmptyRow
+              colSpan={5}
+              image={EMPTY_IMAGE.schedule}
+              title="불참 기록이 없습니다"
+              description="GM이 출석 확인에서 불참을 기록하면 이곳에 표시됩니다."
+            />
+          ) : null}
+          {paged.rows.map((noShow) => (
+            <Table.Row key={noShow.id} className={noShow.cancelled ? "opacity-50" : undefined}>
+              <Table.Cell>
+                <Text typography="body3" foreground="hint" numeric>
+                  {formatSessionTime(noShow.startsAt)}
+                </Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text typography="body3" truncate title={noShow.sessionTitle}>
+                  {noShow.sessionTitle}
+                </Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text typography="body3" truncate>
+                  {noShow.recordedBy}
+                </Text>
+              </Table.Cell>
+              <Table.Cell align="center">
+                <NoShowStateTag cancelled={noShow.cancelled} expired={noShow.expired} />
+              </Table.Cell>
+              <Table.Cell align="end">
+                <NoShowRowMenu recordId={noShow.id} />
+              </Table.Cell>
             </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {noShows.length === 0 ? (
-              <TableEmptyRow
-                colSpan={4}
-                image={EMPTY_IMAGE.schedule}
-                title="불참 기록이 없습니다"
-                description="GM이 세션을 마친 뒤 불참을 처리하면 이곳에 기록됩니다."
-              />
-            ) : null}
-            {paged.rows.map((noShow) => (
-              <Table.Row key={noShow.id} className={noShow.cancelled ? "opacity-50" : undefined}>
-                <Table.Cell>
-                  <Text typography="body3" foreground="hint" numeric>
-                    {formatSessionTime(noShow.startsAt)}
-                  </Text>
-                </Table.Cell>
-                <Table.Cell>
-                  <Text typography="body3" truncate title={noShow.sessionTitle}>
-                    {noShow.sessionTitle}
-                  </Text>
-                </Table.Cell>
-                <Table.Cell>{noShow.gmNickname}</Table.Cell>
-                <Table.Cell align="center">
-                  {noShow.cancelled ? <Tag>취소됨</Tag> : <Tag tone="danger">유효</Tag>}
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
-      </Panel>
-      {latestValid ? (
-        <ItemCard
-          icon={Flag}
-          tone="warning"
-          title="최근 불참 기록"
-          meta={`${latestValid.sessionTitle} · ${formatDate(latestValid.startsAt)}`}
-          right={
-            <Button
-              variant="outline"
-              colorPalette="gray"
-              size="sm"
-              render={
-                <ServerLink
-                  path={withQuery("/noshow", {}, { q: nickname, record: latestValid.id })}
-                />
-              }
-            >
-              기록 열기
-            </Button>
-          }
-        >
-          당사자에게 사정을 들었다면 기록을 열어서 불참을 취소할 수 있습니다.
-        </ItemCard>
-      ) : null}
-    </VStack>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </Panel>
   );
 }

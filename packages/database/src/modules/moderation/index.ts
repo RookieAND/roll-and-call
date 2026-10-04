@@ -1,4 +1,7 @@
 export { addStaffMemo } from "./commands/add-staff-memo";
+export { editStaffMemo } from "./commands/edit-staff-memo";
+export { deleteStaffMemo } from "./commands/delete-staff-memo";
+export { type StaffMemoChangeResult } from "./commands/lock-staff-memo";
 export { addStaff } from "./commands/add-staff";
 export { type OngoingChoice } from "./commands/apply-ongoing-choices";
 export { applySanction, type SanctionInput, type SanctionResult } from "./commands/apply-sanction";

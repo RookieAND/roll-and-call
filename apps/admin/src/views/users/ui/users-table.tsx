@@ -1,36 +1,60 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { formatDate } from "@/shared/lib";
-import type { UserRow } from "@/shared/server";
-import { EMPTY_IMAGE, ServerLink, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
+import { formatDate, type TableSort } from "@/shared/lib";
+import type { UserRow, UserSortColumn } from "@/shared/server";
+import {
+  EMPTY_IMAGE,
+  ServerLink,
+  SortableHead,
+  TableColumns,
+  TableEmptyRow,
+  Tag,
+} from "@/shared/ui";
 
-import { USER_COLUMNS } from "../model/user-columns";
+import { USER_COLUMNS, USER_STATE_COLUMN } from "../model/user-columns";
 import { UserStateCell } from "./user-state-cell";
 
 const NO_SHOW_WARNING_COUNT = 2;
 
 interface UsersTableProps {
   rows: UserRow[];
+  sort: TableSort<UserSortColumn>;
+  showState: boolean;
 }
 
-export function UsersTable({ rows }: UsersTableProps) {
+export function UsersTable({ rows, sort, showState }: UsersTableProps) {
+  const widths = [
+    ...USER_COLUMNS.map((column) => column.width),
+    ...(showState ? [USER_STATE_COLUMN.width] : []),
+    { fixed: 44 },
+  ];
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[...USER_COLUMNS.map((column) => column.width), { fixed: 44 }]} />
+      <TableColumns widths={widths} />
       <Table.Header>
         <Table.Row>
           {USER_COLUMNS.map((column) => (
-            <Table.Head key={column.label} align={"align" in column ? column.align : undefined}>
-              {column.label}
-            </Table.Head>
+            <SortableHead
+              key={column.sort}
+              column={column.sort}
+              label={column.label}
+              sort={sort}
+              align={"align" in column ? column.align : undefined}
+            />
           ))}
+          {showState ? <Table.Head>{USER_STATE_COLUMN.label}</Table.Head> : null}
           <Table.Head aria-hidden />
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {rows.length === 0 ? (
-          <TableEmptyRow colSpan={9} image={EMPTY_IMAGE.search} title="조건에 맞는 유저가 없어요" />
+          <TableEmptyRow
+            colSpan={widths.length}
+            image={EMPTY_IMAGE.search}
+            title="조건에 맞는 유저가 없습니다"
+            description="검색어나 필터를 바꿔 보세요."
+          />
         ) : null}
         {rows.map((row) => {
           const frequentNoShow = row.recentNoShowCount >= NO_SHOW_WARNING_COUNT;
@@ -73,20 +97,11 @@ export function UsersTable({ rows }: UsersTableProps) {
               <Table.Cell align="end" numeric>
                 {row.certifiedCount}개
               </Table.Cell>
-              <Table.Cell align="center">
-                <UserStateCell row={row} />
-              </Table.Cell>
-              <Table.Cell>
-                {row.sanctioned ? (
-                  <Text typography="body3" foreground="danger">
-                    {row.sanctionUntil ? formatDate(row.sanctionUntil) : "무기한"}
-                  </Text>
-                ) : (
-                  <Text typography="body3" foreground="hint">
-                    —
-                  </Text>
-                )}
-              </Table.Cell>
+              {showState ? (
+                <Table.Cell>
+                  <UserStateCell row={row} />
+                </Table.Cell>
+              ) : null}
               <Table.Cell align="end">
                 <ChevronRight size={16} aria-hidden className="inline text-hint" />
               </Table.Cell>

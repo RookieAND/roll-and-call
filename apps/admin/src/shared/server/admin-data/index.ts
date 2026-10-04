@@ -20,6 +20,8 @@ export {
 export {
   addStaff,
   addStaffMemo,
+  editStaffMemo,
+  deleteStaffMemo,
   applySanction,
   AUDIT_ACTION_GROUPS,
   AUDIT_ACTIONS,
@@ -66,7 +68,10 @@ export { decideCert } from "./decide-cert";
 export { type ReviewModeration } from "./review-moderation";
 export { getUserDetail, type OngoingActivity, type UserDetail } from "./get-user-detail";
 export { checkDiscordBanFailed } from "./check-discord-ban-failed";
-export { listUsers, USER_FILTERS, type UserFilter, type UserRow } from "./list-users";
+export { listUsers } from "./list-users";
+export { USER_FILTER_HINT, USER_FILTERS, type UserFilter } from "./user-filters";
+export { type UserRow } from "./user-row";
+export { USER_SORT_COLUMNS, USER_SORT_FALLBACK, type UserSortColumn } from "./user-sort";
 export { retentionDaysLeft } from "./retention-days-left";
 export { getCertReview, type CertReview } from "./get-cert-review";
 export {

@@ -2,18 +2,18 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { AddMemoDialog } from "@/features/add-staff-memo";
 import { EditNicknameDialog } from "@/features/edit-nickname";
 import { KickMemberDialog } from "@/features/kick-member";
 import { ReleaseSanctionDialog } from "@/features/release-sanction";
 import { UnbanMemberDialog } from "@/features/unban-member";
+import { StaffMemoDialog } from "@/features/write-staff-memo";
 import type { KickImpact, UserDetail } from "@/shared/server";
 
 import { USER_ACTION } from "../model/user-action";
 
 interface UserActionDialogsProps {
   user: UserDetail;
-  // 추방 모달을 열 때만 읽는다. 서버 소유자면 null.
+  // 추방 모달을 열 때만 읽는다. 추방할 수 없는 유저면 null.
   kickImpact: KickImpact | null;
 }
 
@@ -42,7 +42,7 @@ export function UserActionDialogs({ user, kickImpact }: UserActionDialogsProps) 
   }
   if (action === USER_ACTION.memo) {
     return (
-      <AddMemoDialog
+      <StaffMemoDialog
         userId={user.id}
         nickname={user.nickname}
         open

@@ -31,6 +31,7 @@ export async function loadAdminTables(serverId: string) {
     .select({
       ...getTableColumns(profiles),
       nickname: serverMembers.nickname,
+      memberJoinedAt: serverMembers.joinedAt,
       leftAt: serverMembers.deletedAt,
       rejoinedAt: serverMembers.rejoinedAt,
       bannedAt: serverMembers.bannedAt,

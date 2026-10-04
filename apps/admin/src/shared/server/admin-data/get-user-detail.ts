@@ -1,8 +1,12 @@
 import "server-only";
+import { isAbsenceActive } from "@roll-and-call/database/games/model";
+
+import { countPlayedSessions } from "./count-played-sessions";
 import { countRecentNoShows } from "./count-recent-no-shows";
 import { isSanctioned } from "./is-sanctioned";
 import { previousNicknameOf } from "./previous-nickname-of";
 import { loadSnapshot, type Snapshot } from "./snapshot";
+import { staffMemoRowsOf } from "./staff-memo-rows-of";
 import type { Session } from "./types";
 
 const nicknameOf = (db: Snapshot, userId: string) =>
@@ -26,6 +30,10 @@ export async function getUserDetail(userId: string) {
   const user = db.users.find((candidate) => candidate.id === userId);
   if (!user) return null;
   const now = Date.now();
+  const sanction = isSanctioned(user, now) ? user.sanction! : null;
+  const sanctionCount = db.auditLog.filter(
+    (entry) => entry.action === "제재" && entry.targetUserId === userId,
+  ).length;
   const mine = (session: Session) => session.gmId === userId || session.memberIds.includes(userId);
   const noShowOf = (sessionId: string) =>
     db.noShows.find((noShow) => noShow.userId === userId && noShow.sessionId === sessionId);
@@ -76,12 +84,16 @@ export async function getUserDetail(userId: string) {
       userId,
       nickname: user.nickname,
     }),
-    joinedAt: user.joinedAt,
+    joinedAt: user.memberJoinedAt,
     rejoinedAt: user.rejoinedAt ?? null,
+    leftAt: user.leftAt ?? null,
+    staffRole: db.staff.find((member) => member.userId === userId)?.role ?? null,
     hostedCount: user.hostedCount,
-    playedCount: user.playedCount,
+    playedCount: countPlayedSessions({ db, userId, now: new Date(now) }),
     recentNoShowCount: countRecentNoShows(db, userId, now),
-    sanction: isSanctioned(user, now) ? user.sanction! : null,
+    sanction,
+    // 지금 걸린 제재는 지난 제재로 세지 않는다.
+    pastSanctionCount: Math.max(0, sanctionCount - (sanction ? 1 : 0)),
     certifications,
     applications,
     activities: db.sessions
@@ -107,14 +119,14 @@ export async function getUserDetail(userId: string) {
           id: noShow.id,
           sessionTitle: session.title,
           startsAt: session.startsAt,
-          gmNickname: nicknameOf(db, session.gmId),
+          recordedBy: noShow.added ? `${noShow.added.by} · 운영진` : nicknameOf(db, session.gmId),
           cancelled: noShow.cancelled,
+          expired:
+            !noShow.cancelled && !isAbsenceActive({ sessionStartsAt: session.startsAt, now }),
         };
       })
       .toSorted((a, b) => b.startsAt.getTime() - a.startsAt.getTime()),
-    memos: db.staffMemos
-      .filter((memo) => memo.userId === userId)
-      .toSorted((a, b) => b.at.getTime() - a.at.getTime()),
+    memos: staffMemoRowsOf({ db, userId }),
     ongoing: db.sessions
       .filter((session) => mine(session) && !session.closed && session.startsAt.getTime() >= now)
       .toSorted((a, b) => a.startsAt.getTime() - b.startsAt.getTime())

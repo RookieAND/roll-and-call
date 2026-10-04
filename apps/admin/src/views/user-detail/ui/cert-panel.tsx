@@ -1,7 +1,7 @@
 import { Button, Callout, Table, Text, VStack } from "@roll-and-call/ui";
 import { Ban } from "lucide-react";
 
-import { CERT_FORMAT_LABEL, paginate } from "@/shared/lib";
+import { paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import {
   EMPTY_IMAGE,
@@ -13,8 +13,7 @@ import {
   Tag,
 } from "@/shared/ui";
 
-import { CERT_STATE_VIEW } from "../model/cert-state-view";
-import { CERT_ROW_STATE, toCertRows } from "../model/to-cert-rows";
+import { CERT_ROW_LABEL, CERT_ROW_STATE, toCertRows } from "../model/to-cert-rows";
 
 interface CertPanelProps {
   user: UserDetail;
@@ -48,21 +47,13 @@ export function CertPanel({ user, page }: CertPanelProps) {
       >
         <Table.Root className="table-equal">
           <TableColumns
-            widths={[
-              0,
-              { fixed: 96 },
-              { fixed: 88 },
-              { fixed: 124 },
-              { fixed: 104 },
-              { fixed: 128 },
-            ]}
+            widths={[0, { fixed: 88 }, { fixed: 160 }, { fixed: 104 }, { fixed: 156 }]}
           />
           <Table.Header>
             <Table.Row>
               <Table.Head>룰북</Table.Head>
-              <Table.Head align="center">형식</Table.Head>
               <Table.Head align="center">상태</Table.Head>
-              <Table.Head>처리 일자</Table.Head>
+              <Table.Head>일자</Table.Head>
               <Table.Head>처리한 운영진</Table.Head>
               <Table.Head aria-label="조치" />
             </Table.Row>
@@ -70,15 +61,14 @@ export function CertPanel({ user, page }: CertPanelProps) {
           <Table.Body>
             {rows.length === 0 ? (
               <TableEmptyRow
-                colSpan={6}
+                colSpan={5}
                 image={EMPTY_IMAGE.myGames}
                 title="룰북 인증 기록이 없습니다"
-                description="인증을 신청하면 심사 결과가 이곳에 기록됩니다. 인증을 받기 전에는 인증이 필요한 룰북으로 구인을 열 수 없습니다."
+                description="인증을 신청하면 심사 결과가 이곳에 쌓입니다."
               />
             ) : null}
             {paged.rows.map((row) => {
-              const state = CERT_STATE_VIEW[row.state];
-              const formatTone = row.format === CERT_FORMAT_LABEL.ebook ? "primary" : "gray";
+              const state = CERT_ROW_LABEL[row.state];
               return (
                 <Table.Row
                   key={row.key}
@@ -97,9 +87,6 @@ export function CertPanel({ user, page }: CertPanelProps) {
                     </VStack>
                   </Table.Cell>
                   <Table.Cell align="center">
-                    <Tag tone={formatTone}>{row.format}</Tag>
-                  </Table.Cell>
-                  <Table.Cell align="center">
                     <Tag tone={state.tone}>{state.label}</Tag>
                   </Table.Cell>
                   <Table.Cell>
@@ -115,14 +102,14 @@ export function CertPanel({ user, page }: CertPanelProps) {
                     )}
                   </Table.Cell>
                   <Table.Cell align="end">
-                    {row.href && state.action ? (
+                    {row.action ? (
                       <Button
-                        variant={state.action.variant}
-                        colorPalette={state.action.tone}
+                        variant="outline"
+                        colorPalette="gray"
                         size="sm"
-                        render={<ServerLink path={row.href} />}
+                        render={<ServerLink path={row.action.href} />}
                       >
-                        {state.action.label}
+                        {row.action.label}
                       </Button>
                     ) : null}
                   </Table.Cell>

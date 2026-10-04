@@ -90,6 +90,7 @@ export const loadSnapshot = cache(async () => {
       discordId: profile.discordId,
       discordHandle: handles.get(profile.id) ?? profile.username,
       joinedAt: profile.createdAt,
+      memberJoinedAt: profile.memberJoinedAt,
       hostedCount: hosted.length,
       playedCount: participantRows.filter(
         (row) => row.userId === profile.id && row.status === "confirmed",
@@ -106,6 +107,7 @@ export const loadSnapshot = cache(async () => {
         : undefined,
       membership: membershipOf(profile),
       rejoinedAt: profile.rejoinedAt ?? undefined,
+      leftAt: profile.leftAt ?? undefined,
       ban: profile.bannedAt
         ? {
             at: profile.bannedAt,
@@ -361,6 +363,7 @@ export const loadSnapshot = cache(async () => {
   const memoList: StaffMemo[] = memoRows.map((row) => ({
     id: row.id,
     userId: row.userId,
+    authorId: row.authorId,
     author: nicknameOf(row.authorId),
     at: row.createdAt,
     body: row.body,

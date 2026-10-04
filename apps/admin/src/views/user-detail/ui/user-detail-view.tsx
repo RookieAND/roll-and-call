@@ -7,6 +7,7 @@ import { AdminHeader, ServerLink } from "@/shared/ui";
 import type { ActivityRole } from "../model/activity-role";
 import { toCertRows } from "../model/to-cert-rows";
 import { USER_DETAIL_TAB, type UserDetailTab } from "../model/user-detail-tab";
+import type { Viewer } from "../model/viewer";
 import { ActivityPanel } from "./activity-panel";
 import { CertPanel } from "./cert-panel";
 import { KickFailNotice } from "./kick-fail-notice";
@@ -23,7 +24,8 @@ interface UserDetailViewProps {
   role: ActivityRole;
   page?: string;
   guildId: string;
-  serverOwner: boolean;
+  viewer: Viewer;
+  kickBlock: string | null;
   discordBanFailed: boolean;
   kickImpact: KickImpact | null;
 }
@@ -34,7 +36,8 @@ export function UserDetailView({
   role,
   page,
   guildId,
-  serverOwner,
+  viewer,
+  kickBlock,
   discordBanFailed,
   kickImpact,
 }: UserDetailViewProps) {
@@ -74,13 +77,18 @@ export function UserDetailView({
             }}
             activityPanel={<ActivityPanel activities={user.activities} role={role} page={page} />}
             certPanel={<CertPanel user={user} page={page} />}
-            noShowPanel={
-              <NoShowPanel nickname={user.nickname} noShows={user.noShows} page={page} />
+            noShowPanel={<NoShowPanel noShows={user.noShows} page={page} />}
+            memoPanel={
+              <MemoPanel
+                userId={user.id}
+                nickname={user.nickname}
+                memos={user.memos}
+                viewer={viewer}
+              />
             }
-            memoPanel={<MemoPanel userId={user.id} memos={user.memos} />}
           />
         </VStack>
-        <UserActionsAside user={user} tab={tab} serverOwner={serverOwner} />
+        <UserActionsAside user={user} tab={tab} kickBlock={kickBlock} />
       </HStack>
       <UserActionDialogs user={user} kickImpact={kickImpact} />
     </>

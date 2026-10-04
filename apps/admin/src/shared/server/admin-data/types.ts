@@ -34,6 +34,8 @@ export interface AdminUser {
   discordId: string;
   discordHandle: string;
   joinedAt: Date;
+  // 그 서버에 처음 가입한 날(server_members.joined_at). 다시 가입해도 바뀌지 않는다.
+  memberJoinedAt: Date;
   hostedCount: number;
   playedCount: number;
   recentHostedCount: number;
@@ -41,6 +43,7 @@ export interface AdminUser {
   membership: MembershipStatus;
   ban?: { at: Date; by: string; reason: string };
   rejoinedAt?: Date;
+  leftAt?: Date;
 }
 
 export interface Rulebook {
@@ -244,6 +247,7 @@ export interface AuditEntry {
 export interface StaffMemo {
   id: string;
   userId: string;
+  authorId: string | null;
   author: string;
   at: Date;
   body: string;

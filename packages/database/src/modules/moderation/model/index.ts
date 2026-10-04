@@ -8,6 +8,7 @@ export {
   type AuditAction,
 } from "./audit-actions";
 export { auditActionLabel } from "./audit-action-label";
+export { canManageStaffMemo } from "./can-manage-staff-memo";
 export { formatDate } from "./format-date";
 export { STAFF_ROLE_LABEL } from "./staff-role-label";
 export {

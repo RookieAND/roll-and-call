@@ -1,10 +1,12 @@
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { formatDate, withSubjectParticle } from "@/shared/lib";
+import { formatDate, MEMBERSHIP_STATUS } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import { FactRows, UserInitial } from "@/shared/ui";
 
 import { rejoinedNotice } from "../model/rejoined-notice";
+import { PastSanctionsLink } from "./past-sanctions-link";
+import { SanctionCallout } from "./sanction-callout";
 import { UserStateTag } from "./user-state-tag";
 
 const NO_SHOW_WARNING_COUNT = 2;
@@ -16,11 +18,19 @@ interface UserStateCardProps {
 }
 
 export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
-  const { sanction, ban, previousNickname } = user;
-  const sanctionPeriod = sanction?.until ? `${formatDate(sanction.until)}까지` : "해제될 때까지";
+  const { sanction, ban, previousNickname, leftAt } = user;
+  const left = user.membership === MEMBERSHIP_STATUS.left;
   const noShowForeground = user.recentNoShowCount >= NO_SHOW_WARNING_COUNT ? "danger" : "normal";
+  const showPastSanctions = !sanction && user.pastSanctionCount > 0;
   return (
-    <div className="p-200 pb-150">
+    <VStack gap="150" className="p-200 pb-150">
+      {sanction ? (
+        <SanctionCallout
+          sanction={sanction}
+          nickname={user.nickname}
+          pastSanctionCount={user.pastSanctionCount}
+        />
+      ) : null}
       <section className="rounded-600 border border-gray-200 bg-surface">
         <HStack align="center" gap="150" className="px-200 py-175">
           <UserInitial nickname={user.nickname} />
@@ -31,12 +41,21 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
               </Text>
               <UserStateTag user={user} discordBanFailed={discordBanFailed} />
             </HStack>
-            {ban && !discordBanFailed ? (
+            {ban ? (
               <Text typography="body4" foreground="danger">
-                {`${formatDate(ban.at)}에 ${withSubjectParticle(ban.by)} 서버에서 추방했습니다. 디스코드에서도 차단된 상태입니다.`}
+                {`${formatDate(ban.at)}에 추방했습니다.`}
+                <br />
+                {`사유: ${ban.reason} (${ban.by})`}
               </Text>
             ) : null}
-            {user.rejoinedAt && !ban ? (
+            {left && leftAt ? (
+              <Text typography="body4" foreground="hint">
+                {`${formatDate(leftAt)}에 서버를 나갔습니다.`}
+                <br />
+                다시 가입하면 제재와 기록이 이어집니다.
+              </Text>
+            ) : null}
+            {user.rejoinedAt && !ban && !left ? (
               <Text typography="body4" foreground="hint">
                 {rejoinedNotice({
                   at: user.rejoinedAt,
@@ -49,10 +68,8 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
                 {`이전 닉네임: ${previousNickname.nickname} (${formatDate(previousNickname.at)} 운영진이 수정)`}
               </Text>
             ) : null}
-            {sanction && !ban ? (
-              <Text typography="body4" foreground="danger">
-                {sanctionPeriod} 모든 활동(참가·대기 신청, 구인 개설)을 할 수 없습니다.
-              </Text>
+            {showPastSanctions ? (
+              <PastSanctionsLink nickname={user.nickname} count={user.pastSanctionCount} />
             ) : null}
           </VStack>
         </HStack>
@@ -72,12 +89,16 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
             ]}
           />
           <FactRows
-            labelWidth={100}
+            labelWidth={104}
             items={[
               {
                 label: "최근 30일 불참",
                 value: (
-                  <Text typography="body3" weight="medium" foreground={noShowForeground}>
+                  <Text
+                    typography="body3"
+                    weight={noShowForeground === "danger" ? "bold" : "medium"}
+                    foreground={noShowForeground}
+                  >
                     {user.recentNoShowCount}회
                   </Text>
                 ),
@@ -87,6 +108,6 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
           />
         </Grid>
       </section>
-    </div>
+    </VStack>
   );
 }

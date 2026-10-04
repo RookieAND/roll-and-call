@@ -1,4 +1,5 @@
 import { Table, Text } from "@roll-and-call/ui";
+import { ChevronRight } from "lucide-react";
 
 import { formatSessionTime, paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
@@ -6,6 +7,7 @@ import {
   EMPTY_IMAGE,
   ListPager,
   Panel,
+  ServerLink,
   TableEmptyRow,
   TableColumns,
   Tag,
@@ -13,7 +15,6 @@ import {
 } from "@/shared/ui";
 
 import { ACTIVITY_ROLE, type ActivityRole } from "../model/activity-role";
-import { NoShowBadge } from "./no-show-badge";
 
 interface ActivityPanelProps {
   activities: UserDetail["activities"];
@@ -45,7 +46,7 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
       }
     >
       <Table.Root className="table-equal">
-        <TableColumns widths={[192, 66, 200, 140, 100, 96]} />
+        <TableColumns widths={[192, 66, 200, 140, 100, 96, { fixed: 44 }]} />
         <Table.Header>
           <Table.Row>
             <Table.Head>일시</Table.Head>
@@ -54,12 +55,13 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
             <Table.Head>룰북</Table.Head>
             <Table.Head>GM</Table.Head>
             <Table.Head aria-label="불참" />
+            <Table.Head aria-hidden />
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {rows.length === 0 ? (
             <TableEmptyRow
-              colSpan={6}
+              colSpan={7}
               image={EMPTY_IMAGE.party}
               title="아직 참여하거나 연 세션이 없습니다"
               description="세션에 참여하거나 구인을 열면 이곳에 기록됩니다."
@@ -68,7 +70,8 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
           {paged.rows.map((activity) => (
             <Table.Row
               key={activity.sessionId}
-              className={activity.noShow?.cancelled ? "opacity-50" : undefined}
+              interactive
+              className={activity.noShow?.cancelled ? "relative opacity-50" : "relative"}
             >
               <Table.Cell>
                 <Text typography="body3" foreground="hint" numeric>
@@ -79,7 +82,13 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
                 <Tag>{activity.hosted ? "GM" : "참여"}</Tag>
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" truncate title={activity.title}>
+                <Text
+                  typography="body3"
+                  truncate
+                  title={activity.title}
+                  render={<ServerLink path={`/posts/${activity.sessionId}`} />}
+                  className="after:absolute after:inset-0"
+                >
                   {activity.title}
                 </Text>
               </Table.Cell>
@@ -90,11 +99,12 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" truncate>
-                  {activity.hosted ? "—" : activity.gmNickname}
+                  {activity.hosted ? null : activity.gmNickname}
                 </Text>
               </Table.Cell>
-              <Table.Cell>
-                {activity.noShow ? <NoShowBadge cancelled={activity.noShow.cancelled} /> : null}
+              <Table.Cell>{activity.noShow ? <Tag>불참</Tag> : null}</Table.Cell>
+              <Table.Cell align="end">
+                <ChevronRight size={16} aria-hidden className="inline text-hint" />
               </Table.Cell>
             </Table.Row>
           ))}

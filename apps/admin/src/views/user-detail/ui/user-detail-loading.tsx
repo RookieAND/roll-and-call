@@ -1,13 +1,14 @@
 "use client";
 
 import { Button, Grid, HStack, Skeleton, Tabs, Text, VStack } from "@roll-and-call/ui";
+import { Ban, Gavel, Mail, User } from "lucide-react";
 
 import {
+  ActionCard,
   AdminHeader,
   LoadingRegion,
   Panel,
   FactRows,
-  SkeletonItem,
   SkeletonPager,
   SkeletonSelect,
   SkeletonTable,
@@ -86,6 +87,7 @@ export function UserDetailLoading() {
                     { label: "룰북", kind: "text", width: 140 },
                     { label: "GM", kind: "text", width: 100 },
                     { label: "", kind: "empty", width: 96 },
+                    { label: "", kind: "empty", width: 44, fixed: true },
                   ]}
                 />
               </Panel>
@@ -94,9 +96,25 @@ export function UserDetailLoading() {
         </LoadingRegion>
         <UserActionsAsideFrame>
           <VStack gap="075" className="p-150">
-            <SkeletonItem />
-            <SkeletonItem />
-            <SkeletonItem />
+            <ActionCard
+              icon={Ban}
+              tone="danger"
+              title="제재"
+              description="참가 신청·구인 개설·룰북 인증 신청을 막습니다"
+              link={<button type="button" disabled />}
+            />
+            <ActionCard
+              icon={User}
+              title="닉네임 수정"
+              description="부적절한 닉네임을 운영진이 바꿉니다"
+              link={<button type="button" disabled />}
+            />
+            <ActionCard
+              icon={Mail}
+              title="디스코드 DM 보내기"
+              description="사정을 묻거나 안내할 때 사용합니다"
+              link={<button type="button" disabled />}
+            />
           </VStack>
           <VStack gap="075" className="px-150 pb-150">
             <Text
@@ -107,7 +125,13 @@ export function UserDetailLoading() {
             >
               서버 멤버십
             </Text>
-            <SkeletonItem />
+            <ActionCard
+              icon={Gavel}
+              tone="danger"
+              title="서버에서 추방"
+              description="디스코드에서 차단해 서버에서 내보냅니다"
+              link={<button type="button" disabled />}
+            />
           </VStack>
         </UserActionsAsideFrame>
       </HStack>

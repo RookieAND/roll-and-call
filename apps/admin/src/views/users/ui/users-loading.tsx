@@ -1,12 +1,13 @@
-import { Chip, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
+import { HStack, Skeleton, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import { MEMBERSHIP_STATUS } from "@/shared/lib";
-import { USER_FILTERS } from "@/shared/server";
+import { USER_SORT_FALLBACK } from "@/shared/server";
 import { AdminHeader, LoadingRegion, Panel, SkeletonPager, SkeletonTable } from "@/shared/ui";
 
-import { USER_COLUMNS } from "../model/user-columns";
+import { USER_COLUMNS, USER_STATE_COLUMN } from "../model/user-columns";
 import { MembershipSegment } from "./membership-segment";
+import { UserFilterChips } from "./user-filter-chips";
 
 export function UsersLoading() {
   return (
@@ -24,27 +25,22 @@ export function UsersLoading() {
             <TextInput
               type="search"
               disabled
-              placeholder="디스코드 닉네임 검색"
-              aria-label="디스코드 닉네임 검색"
+              placeholder="닉네임 또는 디스코드 ID 검색"
+              aria-label="닉네임 또는 디스코드 ID 검색"
               className="pl-400 text-body3"
             />
           </HStack>
-          <HStack gap="075" wrap>
-            {Object.values(USER_FILTERS).map((label) => (
-              <Chip key={label} disabled>
-                {label}
-              </Chip>
-            ))}
-          </HStack>
+          <UserFilterChips query={{}} disabled />
         </HStack>
         <Panel footer={<SkeletonPager />} className="flex-none">
           <SkeletonTable
             columns={[
-              ...USER_COLUMNS.map((column) => ({
+              ...[...USER_COLUMNS, USER_STATE_COLUMN].map((column) => ({
                 label: column.label,
                 kind: column.kind,
                 width: column.width,
                 align: "align" in column ? column.align : undefined,
+                sorted: "sort" in column && column.sort === USER_SORT_FALLBACK.column,
               })),
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}
