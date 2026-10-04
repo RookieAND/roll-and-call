@@ -2248,6 +2248,12 @@
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
+        },
+        "reject_reason": {
+          "name": "reject_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -2308,7 +2314,12 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "rulebook_requests_reject_reason_length": {
+          "name": "rulebook_requests_reject_reason_length",
+          "value": "char_length(\"rulebook_requests\".\"reject_reason\") <= 200"
+        }
+      },
       "isRLSEnabled": true
     },
     "public.rulebooks": {

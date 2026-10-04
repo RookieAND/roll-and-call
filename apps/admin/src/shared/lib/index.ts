@@ -1,5 +1,6 @@
 export { actionTone } from "./action-tone";
 export { auditLogHref } from "./audit-log-href";
+export { conflictTitle } from "./conflict-title";
 export { conflictToastText } from "./conflict-toast-text";
 export { deltaArrow } from "./delta-arrow";
 export { CERT_TABS } from "./cert-tabs";
