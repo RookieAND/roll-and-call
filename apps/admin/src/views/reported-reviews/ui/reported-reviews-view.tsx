@@ -6,8 +6,8 @@ import {
   EMPTY_IMAGE,
   EmptyState,
   Panel,
-  POST_ROUTE,
-  PostRouteTabs,
+  REVIEW_ROUTE,
+  ReviewRouteTabs,
   UrlSearchInput,
   UrlSelect,
 } from "@/shared/ui";
@@ -21,8 +21,8 @@ interface ReportedReviewsViewProps {
 export function ReportedReviewsView({ reviews }: ReportedReviewsViewProps) {
   return (
     <>
-      <AdminHeader title="구인" sub={`신고된 후기 ${reviews.counts.reported}건`} />
-      <PostRouteTabs value={POST_ROUTE.reportedReviews} counts={reviews.counts} />
+      <AdminHeader title="후기" sub={`신고된 후기 ${reviews.counts.reported}건`} />
+      <ReviewRouteTabs value={REVIEW_ROUTE.reported} counts={reviews.counts} />
       <VStack gap="150" className="flex-1 p-200">
         <HStack align="center" gap="100">
           <UrlSearchInput placeholder="작성자 · 구인 제목 검색" className="w-[236px]" />

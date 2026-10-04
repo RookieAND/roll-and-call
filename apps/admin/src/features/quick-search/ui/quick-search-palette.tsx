@@ -3,7 +3,7 @@
 import { Dialog, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { use, useCallback, useEffect, useState, type KeyboardEvent } from "react";
+import { use, useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 
 import type { PendingItem, UserSearchResult } from "@/shared/server";
 import { Kbd, useServerPath } from "@/shared/ui";
@@ -14,15 +14,17 @@ import { buildSearchGroups } from "../model/build-search-groups";
 import { usePaletteShortcuts } from "../model/use-palette-shortcuts";
 import { useRecentScreens } from "../model/use-recent-screens";
 import { PaletteFooter } from "./palette-footer";
+import { PaletteMessage } from "./palette-message";
 import { PaletteRow } from "./palette-row";
 
 const SEARCH_DELAY = 150;
 
 interface QuickSearchPaletteProps {
   pendingItemsPromise: Promise<PendingItem[]>;
+  owner: boolean;
 }
 
-export function QuickSearchPalette({ pendingItemsPromise }: QuickSearchPaletteProps) {
+export function QuickSearchPalette({ pendingItemsPromise, owner }: QuickSearchPaletteProps) {
   const pendingItems = use(pendingItemsPromise);
   const router = useRouter();
   const toServerPath = useServerPath();
@@ -30,35 +32,46 @@ export function QuickSearchPalette({ pendingItemsPromise }: QuickSearchPalettePr
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [users, setUsers] = useState<UserSearchResult[]>([]);
+  const [searching, setSearching] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const requestSequence = useRef(0);
 
   const openPalette = useCallback(() => setOpen(true), []);
-  usePaletteShortcuts(openPalette);
+  usePaletteShortcuts({ open: openPalette, pendingItems });
 
+  // 늦게 온 이전 응답은 요청 순번으로 버린다. 찾는 동안에는 이전 결과를 지우고 Enter를 막는다(D187).
   useEffect(() => {
     if (!query.trim()) return;
-    let stale = false;
+    const sequence = ++requestSequence.current;
     const timer = setTimeout(async () => {
       const results = await searchPalette(query);
-      if (!stale) setUsers(results);
+      if (sequence !== requestSequence.current) return;
+      setUsers(results);
+      setSearching(false);
     }, SEARCH_DELAY);
-    return () => {
-      stale = true;
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, [query]);
 
-  const groups = query.trim()
-    ? buildSearchGroups(query, users)
+  const trimmed = query.trim();
+  const groups = trimmed
+    ? buildSearchGroups({ query, users, owner })
     : buildDefaultGroups(pendingItems, recentScreens);
-  const items = groups.flatMap((group) => group.items);
+  const shownGroups = searching ? [] : groups;
+  const items = shownGroups.flatMap((group) => group.items);
   const activeItem = items[Math.min(activeIndex, items.length - 1)];
+  const noResult = Boolean(trimmed) && !searching && items.length === 0;
+
+  const changeQuery = (value: string) => {
+    requestSequence.current += 1;
+    setQuery(value);
+    setUsers([]);
+    setSearching(Boolean(value.trim()));
+    setActiveIndex(0);
+  };
 
   const close = () => {
     setOpen(false);
-    setQuery("");
-    setUsers([]);
-    setActiveIndex(0);
+    changeQuery("");
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -88,12 +101,9 @@ export function QuickSearchPalette({ pendingItemsPromise }: QuickSearchPalettePr
           <TextInput
             autoFocus
             value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setActiveIndex(0);
-            }}
+            onChange={(event) => changeQuery(event.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="닉네임, 세션, 룰북, 화면 이름을 입력해 보세요"
+            placeholder="닉네임, 화면 이름을 입력해 보세요"
             role="combobox"
             aria-expanded
             aria-controls="palette-results"
@@ -108,7 +118,11 @@ export function QuickSearchPalette({ pendingItemsPromise }: QuickSearchPalettePr
           aria-label="빠른 이동 결과"
           className="min-h-0 flex-1 overflow-y-auto px-075 py-050"
         >
-          {groups.map((group) => (
+          {searching ? <PaletteMessage title="찾는 중" /> : null}
+          {noResult ? (
+            <PaletteMessage title="찾는 결과가 없습니다" hint="닉네임, 화면 이름을 입력해 보세요" />
+          ) : null}
+          {shownGroups.map((group) => (
             <VStack
               key={group.label}
               gap="025"

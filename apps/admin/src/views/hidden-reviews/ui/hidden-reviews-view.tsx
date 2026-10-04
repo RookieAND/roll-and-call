@@ -6,8 +6,8 @@ import {
   EMPTY_IMAGE,
   EmptyState,
   Panel,
-  POST_ROUTE,
-  PostRouteTabs,
+  REVIEW_ROUTE,
+  ReviewRouteTabs,
   UrlSearchInput,
 } from "@/shared/ui";
 
@@ -20,8 +20,8 @@ interface HiddenReviewsViewProps {
 export function HiddenReviewsView({ reviews }: HiddenReviewsViewProps) {
   return (
     <>
-      <AdminHeader title="구인" sub={`숨긴 후기 ${reviews.counts.hidden}건`} />
-      <PostRouteTabs value={POST_ROUTE.hiddenReviews} counts={reviews.counts} />
+      <AdminHeader title="후기" sub={`숨긴 후기 ${reviews.counts.hidden}건`} />
+      <ReviewRouteTabs value={REVIEW_ROUTE.hidden} counts={reviews.counts} />
       <VStack gap="150" className="flex-1 p-200">
         <UrlSearchInput placeholder="작성자 닉네임 검색" className="w-[236px]" />
         <Panel>

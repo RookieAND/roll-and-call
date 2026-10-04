@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "숨긴 후기" };
 
 export default async function HiddenReviewsPage({
   searchParams,
-}: PageProps<"/[server]/posts/reviews/hidden">) {
+}: PageProps<"/[server]/reviews/hidden">) {
   const { q } = (await searchParams) as Record<string, string | undefined>;
   const reviews = await listHiddenReviews(q);
   return <HiddenReviewsView reviews={reviews} />;

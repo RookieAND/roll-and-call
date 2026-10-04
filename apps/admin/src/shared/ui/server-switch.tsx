@@ -94,7 +94,8 @@ export function ServerSwitch({ current, servers, platformAdmin }: ServerSwitchPr
             </Text>
             {listed.map((server) => {
               const selected = server.slug === current.slug;
-              const meta = platformAdmin ? `/${server.slug}` : STAFF_ROLE_LABEL[server.role];
+              const where = platformAdmin ? `/${server.slug}` : STAFF_ROLE_LABEL[server.role];
+              const meta = server.pending > 0 ? `${where} · 처리 대기 ${server.pending}건` : where;
               return (
                 <HStack
                   key={server.slug}
@@ -114,7 +115,7 @@ export function ServerSwitch({ current, servers, platformAdmin }: ServerSwitchPr
                       {server.name}
                     </Text>
                     <Text typography="body4" foreground="hint" numeric className="leading-[1.3]">
-                      {meta} · 처리 대기 {server.pending}건
+                      {meta}
                     </Text>
                   </VStack>
                   {server.botConnected ? null : <Tag>봇 연결 끊김</Tag>}

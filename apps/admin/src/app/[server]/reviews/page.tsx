@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "신고된 후기" };
 
 export default async function ReportedReviewsPage({
   searchParams,
-}: PageProps<"/[server]/posts/reviews">) {
+}: PageProps<"/[server]/reviews">) {
   const { q, reason } = (await searchParams) as Record<string, string | undefined>;
   const reviews = await listReportedReviews({ query: q, reason });
   return <ReportedReviewsView reviews={reviews} />;

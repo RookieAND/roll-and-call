@@ -26,6 +26,9 @@ export function PaletteFooter() {
         </HStack>
       ))}
       <Text typography="body4" foreground="hint" className="ml-auto">
+        단축키 G+C·B·R
+      </Text>
+      <Text typography="body4" foreground="hint">
         Windows에서는 Ctrl + K를 누릅니다
       </Text>
     </HStack>

@@ -78,13 +78,9 @@ export {
   type CertQueueFilterKey,
   type CertQueueRow,
 } from "./list-cert-queue";
-export {
-  getPendingItems,
-  PENDING_KINDS,
-  TODO_KINDS,
-  type PendingItem,
-  type PendingKind,
-} from "./pending";
+export { PENDING_KINDS, type PendingItem, type PendingKind } from "./build-pending-items";
+export { getPendingItems } from "./pending";
+export { isRecognizedPost } from "./recognized-session";
 export { searchUsers, type UserSearchResult } from "./search";
 export { getNoShow, type NoShowDetail } from "./get-no-show";
 export {
@@ -142,6 +138,7 @@ export {
 export { REVIEW_REASON, REVIEW_REASONS, type ReviewReason } from "@/shared/lib";
 export { parseNoShowId } from "./parse-no-show-id";
 export {
+  getServerBySlug,
   getServerOwnerProfile,
   updateServerSettings,
   type ServerSettings,

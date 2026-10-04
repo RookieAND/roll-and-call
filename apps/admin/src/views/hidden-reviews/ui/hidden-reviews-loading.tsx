@@ -5,8 +5,8 @@ import {
   AdminHeader,
   LoadingRegion,
   Panel,
-  POST_ROUTE,
-  PostRouteTabs,
+  REVIEW_ROUTE,
+  ReviewRouteTabs,
   SkeletonTable,
 } from "@/shared/ui";
 
@@ -14,10 +14,10 @@ export function HiddenReviewsLoading() {
   return (
     <>
       <AdminHeader
-        title="구인"
+        title="후기"
         sub={<Skeleton width={96} height={12} render={<span />} className="inline-block" />}
       />
-      <PostRouteTabs value={POST_ROUTE.hiddenReviews} />
+      <ReviewRouteTabs value={REVIEW_ROUTE.hidden} />
       <LoadingRegion label="숨긴 후기를 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" className="relative w-[236px]">
           <Search

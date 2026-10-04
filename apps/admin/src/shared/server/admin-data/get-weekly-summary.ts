@@ -1,7 +1,7 @@
 import "server-only";
 import { mean } from "es-toolkit";
 
-import { POST_STATUS } from "./post-status";
+import { isRecognizedPost } from "./recognized-session";
 import { loadSnapshot } from "./snapshot";
 import { weekLabel } from "./week-label";
 
@@ -29,7 +29,8 @@ export interface WeeklySummary {
   finishedSessions: WeeklySeries;
 }
 
-// 이번 주는 오늘까지의 7일이다. 평균은 이번 주를 뺀 지난 7주로 낸다.
+// 최근 7일은 오늘까지의 7일이다. 평균은 최근 7일을 뺀 지난 7주로 낸다.
+// 새 구인은 숨김·취소를 뺀 만든 시각(R6), 진행된 세션은 인정 세션의 시작 시각(R5)으로 센다.
 export async function getWeeklySummary(now: Date = new Date()): Promise<WeeklySummary> {
   const db = await loadSnapshot();
   const end = now.getTime();
@@ -65,11 +66,17 @@ export async function getWeeklySummary(now: Date = new Date()): Promise<WeeklySu
   return {
     from: new Date(end - WEEK + 86_400_000),
     to: now,
-    newPosts: toSeries(countBy(db.sessions.map((session) => session.createdAt!))),
+    newPosts: toSeries(
+      countBy(
+        db.sessions
+          .filter((session) => !session.hidden && !session.cancelled)
+          .map((session) => session.createdAt!),
+      ),
+    ),
     finishedSessions: toSeries(
       countBy(
         db.sessions
-          .filter((session) => session.recruitStatus === POST_STATUS.ended)
+          .filter((session) => isRecognizedPost(session, now))
           .map((session) => session.startsAt),
       ),
     ),

@@ -6,6 +6,6 @@ export function reviewNextHref({
   nextReportedId: string | null;
 }) {
   if (!fromReports) return null;
-  if (nextReportedId) return `/posts/reviews/${nextReportedId}?from=reports`;
-  return "/posts/reviews";
+  if (nextReportedId) return `/reviews/${nextReportedId}?from=reports`;
+  return "/reviews";
 }

@@ -35,6 +35,11 @@ export async function PhoneNotice({ pendingItemsPromise }: PhoneNoticeProps) {
         >
           지금 처리 대기
         </Text>
+        {pendingItems.length === 0 ? (
+          <Text typography="body3" foreground="hint" className="px-175 py-250 text-center">
+            처리할 일이 없습니다
+          </Text>
+        ) : null}
         {pendingItems.map((item) => {
           const copy = PENDING_COPY[item.kind];
           return (
@@ -56,7 +61,7 @@ export async function PhoneNotice({ pendingItemsPromise }: PhoneNoticeProps) {
         })}
       </VStack>
       <Text typography="body4" foreground="hint" className="mt-auto pt-300 text-center">
-        사용자 앱은 휴대폰에서도 그대로 이용할 수 있습니다
+        사용자 앱은 휴대폰에서도 그대로 이용할 수 있습니다.
       </Text>
     </VStack>
   );

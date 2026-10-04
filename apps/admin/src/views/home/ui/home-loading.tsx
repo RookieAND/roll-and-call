@@ -22,7 +22,7 @@ export function HomeLoading() {
       >
         <HStack align="baseline" gap="100">
           <Text typography="subtitle1" render={<h2 />}>
-            이번 주
+            최근 7일
           </Text>
           <Text typography="body4" foreground="hint">
             {formatDayRange(new Date(now.getTime() - SIX_DAYS), now)}
@@ -34,7 +34,6 @@ export function HomeLoading() {
         </Grid>
         <Panel title="처리 대기">
           <ul>
-            <PendingRowLoading />
             <PendingRowLoading />
             <PendingRowLoading />
           </ul>

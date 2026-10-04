@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
     "@roll-and-call/review-forum",
     "@roll-and-call/tiptap",
   ],
+  // 후기는 구인 아래에서 독립 메뉴로 옮겼다(D212). 옛 주소는 308로 보내고 쿼리는 그대로 둔다.
+  redirects: async () => [
+    {
+      source: "/:server/posts/reviews/:path*",
+      destination: "/:server/reviews/:path*",
+      permanent: true,
+    },
+  ],
 };
 
 export default nextConfig;

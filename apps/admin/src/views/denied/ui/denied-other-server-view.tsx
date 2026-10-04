@@ -1,14 +1,17 @@
 import { Button, HStack, Text } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
+import Link from "next/link";
 
-import { SwitchAccountButton } from "@/features/auth";
 import { GateCard } from "@/shared/ui";
 
-interface DeniedViewProps {
-  nickname: string;
+interface DeniedOtherServerViewProps {
+  serverName: string | null;
   userAppUrl: string;
 }
 
-export function DeniedView({ nickname, userAppUrl }: DeniedViewProps) {
+// 다른 서버의 운영진이 주소를 바꿔 들어온 경우다(D179). 어느 서버의 운영진도 아니면 DeniedView를 쓴다.
+export function DeniedOtherServerView({ serverName, userAppUrl }: DeniedOtherServerViewProps) {
+  const target = isNull(serverName) ? "이 서버의" : `${serverName} 서버의`;
   return (
     <GateCard>
       <Text
@@ -20,15 +23,13 @@ export function DeniedView({ nickname, userAppUrl }: DeniedViewProps) {
         !
       </Text>
       <Text typography="heading2" render={<h1 />}>
-        운영진만 이용할 수 있습니다
+        이 서버의 운영진이 아닙니다
       </Text>
       <Text typography="body3" foreground="hint" render={<p />} className="mt-100 mb-250">
-        {nickname} 계정으로 로그인했습니다.
-        <br />
-        권한이 필요하면 서버 소유자에게 문의해 주세요.
+        {target} 관리 화면은 이 서버 운영진만 열 수 있습니다.
       </Text>
       <HStack gap="100" justify="center">
-        <SwitchAccountButton />
+        <Button render={<Link href="/" />}>내 서버로</Button>
         <Button variant="ghost" colorPalette="gray" render={<a href={userAppUrl} />}>
           사용자 앱으로
         </Button>

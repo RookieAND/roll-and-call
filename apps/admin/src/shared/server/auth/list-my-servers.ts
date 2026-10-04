@@ -33,7 +33,7 @@ export const listMyServers = cache(async (): Promise<MyServer[]> => {
     listServerQueueCounts({ serverIds: servers.map((server) => server.id) }),
     Promise.all(servers.map((server) => fetchGuild(server.discordGuildId).catch(() => undefined))),
   ]);
-  return servers.map((server, index) => {
+  const mine = servers.map((server, index): MyServer => {
     const queue = counts.get(server.id);
     const owner = account.platformAdmin || server.ownerDiscordId === account.discordId;
     return {
@@ -49,4 +49,10 @@ export const listMyServers = cache(async (): Promise<MyServer[]> => {
       certPending: queue?.certPending ?? 0,
     };
   });
+  // 처리 대기가 있는 서버가 위, 그다음 이름 순이다.
+  return mine.toSorted(
+    (first, second) =>
+      Number(second.pending > 0) - Number(first.pending > 0) ||
+      first.name.localeCompare(second.name, "ko"),
+  );
 });

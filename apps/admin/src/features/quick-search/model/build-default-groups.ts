@@ -23,7 +23,7 @@ export function buildDefaultGroups(
           tone: index === 0 ? "primary" : "gray",
           title: copy.label,
           meta: copy.paletteMeta(item.count, item.oldestDays),
-          href: copy.href,
+          href: copy.href(item.oldestId),
           shortcut: copy.shortcut,
         };
       }),
@@ -49,7 +49,7 @@ export function buildDefaultGroups(
         icon: Ban,
         tone: "danger",
         title: "유저 제재하기",
-        meta: "닉네임을 입력하면 제재 패널이 바로 열립니다",
+        meta: "유저 상세를 열고 [제재]를 누릅니다",
         href: "/users",
       },
       {

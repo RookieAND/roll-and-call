@@ -5,8 +5,8 @@ import {
   AdminHeader,
   LoadingRegion,
   Panel,
-  POST_ROUTE,
-  PostRouteTabs,
+  REVIEW_ROUTE,
+  ReviewRouteTabs,
   SkeletonSelect,
   SkeletonTable,
 } from "@/shared/ui";
@@ -15,10 +15,10 @@ export function ReportedReviewsLoading() {
   return (
     <>
       <AdminHeader
-        title="구인"
+        title="후기"
         sub={<Skeleton width={96} height={12} render={<span />} className="inline-block" />}
       />
-      <PostRouteTabs value={POST_ROUTE.reportedReviews} />
+      <ReviewRouteTabs value={REVIEW_ROUTE.reported} />
       <LoadingRegion label="신고된 후기를 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">
           <HStack align="center" className="relative w-[236px]">

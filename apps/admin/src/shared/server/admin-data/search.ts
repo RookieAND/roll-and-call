@@ -1,5 +1,8 @@
 import "server-only";
+import { isUndefined, sortBy } from "es-toolkit";
+
 import { countRecentNoShows } from "./count-recent-no-shows";
+import { nicknameMatchRank } from "./nickname-match-rank";
 import { loadSnapshot, type Snapshot } from "./snapshot";
 import { waitedDays } from "./waited-days";
 
@@ -27,8 +30,11 @@ export async function searchUsers(query: string): Promise<UserSearchResult[]> {
   const db = await loadSnapshot();
   const keyword = query.trim();
   if (!keyword) return [];
-  return db.users
-    .filter((user) => user.nickname.includes(keyword))
+  const ranked = db.users
+    .map((user) => ({ user, rank: nicknameMatchRank({ nickname: user.nickname, keyword }) }))
+    .filter((entry) => !isUndefined(entry.rank));
+  return sortBy(ranked, [(entry) => entry.rank!])
+    .map(({ user }) => user)
     .map((user) => {
       const validNoShows = db.noShows
         .filter((noShow) => noShow.userId === user.id && !noShow.cancelled)

@@ -18,7 +18,7 @@ export function ServerSelectView({ nickname, servers }: ServerSelectViewProps) {
         <VStack gap="250" className="w-full max-w-[1040px]">
           <VStack gap="075">
             <Text typography="heading1" render={<h1 />}>
-              운영할 서버를 고르세요
+              관리할 서버를 골라 주세요
             </Text>
             <Text typography="body3" foreground="muted">
               내가 소유자이거나 운영진인 서버 {servers.length}개입니다. 서버마다 데이터가 따로

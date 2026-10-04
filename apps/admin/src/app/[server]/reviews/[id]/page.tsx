@@ -6,7 +6,7 @@ import { ReviewDetailView } from "@/views/review-detail";
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[server]/posts/reviews/[id]">): Promise<Metadata> {
+}: PageProps<"/[server]/reviews/[id]">): Promise<Metadata> {
   const review = await getReviewDetail((await params).id);
   return { title: review ? `${review.author.nickname}의 후기` : "후기 상세" };
 }
@@ -14,7 +14,7 @@ export async function generateMetadata({
 export default async function ReviewDetailPage({
   params,
   searchParams,
-}: PageProps<"/[server]/posts/reviews/[id]">) {
+}: PageProps<"/[server]/reviews/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const { action, from } = query as Record<string, string | undefined>;
   const review = await getReviewDetail(id);

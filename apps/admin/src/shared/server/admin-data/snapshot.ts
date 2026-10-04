@@ -1,5 +1,6 @@
 import "server-only";
 import type { Game } from "@roll-and-call/database";
+import { sessionEndAt } from "@roll-and-call/database/games/model";
 import { type AuditAction } from "@roll-and-call/database/moderation";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { compact, isNull } from "es-toolkit";
@@ -156,6 +157,8 @@ export const loadSnapshot = cache(async () => {
       hidden: game.hiddenAt
         ? { reason: game.hiddenReason ?? "", by: nicknameOf(game.hiddenBy), at: game.hiddenAt }
         : undefined,
+      cancelled: !isNull(game.cancelledAt),
+      endsAt: sessionEndAt(game),
     };
   });
 

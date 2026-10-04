@@ -7,7 +7,6 @@ import {
   getCurrentServer,
   getCurrentStaff,
   getPendingItems,
-  TODO_KINDS,
   listMyServers,
   type PendingKind,
 } from "@/shared/server";
@@ -33,15 +32,12 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
   const pendingItemsPromise = getPendingItems();
   const countOf = (kind: PendingKind) =>
     pendingItemsPromise.then((items) => items.find((item) => item.kind === kind)?.count);
-  const todoItemsPromise = pendingItemsPromise.then((items) =>
-    items.filter((item) => TODO_KINDS.includes(item.kind)),
-  );
 
   return (
     <CurrentServerProvider server={{ slug: server.slug, name: server.name, icon: server.icon }}>
       <div className="md:hidden">
         <Suspense>
-          <PhoneNotice pendingItemsPromise={todoItemsPromise} />
+          <PhoneNotice pendingItemsPromise={pendingItemsPromise} />
         </Suspense>
       </div>
       <HStack align="start" className="hidden min-h-dvh min-w-[1280px] md:flex">
@@ -51,13 +47,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
           platformAdmin={staff.platformAdmin}
           server={current}
           servers={servers}
-          countPromises={{
-            cert: countOf("cert"),
-            rules: countOf("rulebookRequest"),
-            posts: Promise.all([countOf("report"), countOf("reviewReport")]).then(
-              ([posts, reviews]) => (posts ?? 0) + (reviews ?? 0),
-            ),
-          }}
+          countPromises={{ cert: countOf("cert"), rules: countOf("rulebookRequest") }}
         />
         <VStack
           data-slot="admin-main"
@@ -67,7 +57,10 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
           {children}
         </VStack>
         <Suspense>
-          <QuickSearchPalette pendingItemsPromise={todoItemsPromise} />
+          <QuickSearchPalette
+            pendingItemsPromise={pendingItemsPromise}
+            owner={staff.role === "owner"}
+          />
         </Suspense>
       </HStack>
     </CurrentServerProvider>

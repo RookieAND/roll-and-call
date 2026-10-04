@@ -36,7 +36,7 @@ export function ReviewsTable({ reviews }: ReviewsTableProps) {
                 weight="bold"
                 truncate
                 title={review.authorNickname}
-                render={<ServerLink path={`/posts/reviews/${review.id}`} />}
+                render={<ServerLink path={`/reviews/${review.id}`} />}
                 className="block after:absolute after:inset-0"
               >
                 {review.authorNickname}

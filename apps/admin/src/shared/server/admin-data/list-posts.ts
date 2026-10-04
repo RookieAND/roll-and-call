@@ -5,7 +5,6 @@ import { POST_PERIODS } from "./post-period";
 import { postStaffAction } from "./post-staff-action";
 import { POST_STATUS, type PostStatus } from "./post-status";
 import { postStatusOf } from "./post-status-of";
-import { reviewTabCounts } from "./review-tab-counts";
 import { loadSnapshot } from "./snapshot";
 
 const DAY = 86_400_000;
@@ -69,6 +68,5 @@ export async function listPosts(filter: PostListFilter) {
     actedCount: all.filter((row) => row.staffAction).length,
     statusOptions: Object.values(POST_STATUS),
     rulebookOptions: uniq(all.map((row) => row.rulebook)).toSorted(),
-    reviewCounts: reviewTabCounts(db),
   };
 }

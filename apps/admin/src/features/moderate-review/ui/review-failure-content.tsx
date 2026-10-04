@@ -9,7 +9,7 @@ import { ACTION_COPY, CONFLICT_VERB } from "../model/action-copy";
 import type { ReviewAction } from "../model/review-action";
 import { reviewNextHref } from "../model/review-next-href";
 
-const REPORTS_HREF = "/posts/reviews";
+const REPORTS_HREF = "/reviews";
 
 interface ReviewFailureContentProps {
   review: ReviewDetail;

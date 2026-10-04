@@ -12,7 +12,7 @@ export function BotBanner() {
     >
       <TriangleAlert size={16} aria-hidden />
       <Text typography="body3" weight="bold" foreground="danger">
-        봇이 서버에서 제거되어 디스코드 알림이 중단됐습니다. 데이터는 유지됩니다.
+        봇이 서버에서 제거되어 디스코드 글을 올리지 못합니다. 데이터는 그대로 남아 있습니다.
       </Text>
     </HStack>
   );

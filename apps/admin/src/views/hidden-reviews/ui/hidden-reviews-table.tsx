@@ -38,7 +38,7 @@ export function HiddenReviewsTable({ rows }: HiddenReviewsTableProps) {
                 weight="bold"
                 truncate
                 title={row.authorNickname}
-                render={<ServerLink path={`/posts/reviews/${row.id}`} />}
+                render={<ServerLink path={`/reviews/${row.id}`} />}
                 className="block after:absolute after:inset-0"
               >
                 {row.authorNickname}

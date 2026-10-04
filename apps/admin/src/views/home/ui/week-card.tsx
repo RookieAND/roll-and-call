@@ -11,9 +11,10 @@ interface WeekCardProps {
   icon: LucideIcon;
   unit: string;
   series: WeeklySeries;
+  currentLabel: string;
 }
 
-export function WeekCard({ label, icon: Icon, unit, series }: WeekCardProps) {
+export function WeekCard({ label, icon: Icon, unit, series, currentLabel }: WeekCardProps) {
   const { current, previous, delta, deltaPercent } = series;
   const arrow = deltaArrow(delta);
   const deltaForeground = delta < 0 ? "danger" : "normal";
@@ -57,12 +58,18 @@ export function WeekCard({ label, icon: Icon, unit, series }: WeekCardProps) {
             </Text>
           </Text>
           <Text typography="body4" foreground="hint" className="leading-[1.2]">
-            지난주 {previous}
+            지난 7일 {previous}
             {unit} 대비
           </Text>
         </VStack>
       </HStack>
-      <WeekChart weeks={series.weeks} average={series.average} name={label} unit={unit} />
+      <WeekChart
+        weeks={series.weeks}
+        currentLabel={currentLabel}
+        average={series.average}
+        name={label}
+        unit={unit}
+      />
     </VStack>
   );
 }

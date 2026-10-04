@@ -19,7 +19,7 @@ interface ReviewDetailViewProps {
 const FROM_REPORTS = "reports";
 
 export function ReviewDetailView({ review, action, from }: ReviewDetailViewProps) {
-  const pathname = `/posts/reviews/${review.id}`;
+  const pathname = `/reviews/${review.id}`;
   const fromReports = from === FROM_REPORTS;
   const query = { from: fromReports ? FROM_REPORTS : undefined };
   const availableActions: ReviewAction[] = [
@@ -32,7 +32,7 @@ export function ReviewDetailView({ review, action, from }: ReviewDetailViewProps
     withQuery(pathname, query, { action: nextAction });
   const logHref = `/log?target=${encodeURIComponent(`${review.author.nickname}의 후기`)}`;
   const back = fromReports
-    ? { href: "/posts/reviews", label: "신고된 후기" }
+    ? { href: "/reviews", label: "신고된 후기" }
     : { href: `/posts/${review.session.id}?tab=reviews`, label: "구인 상세" };
   const hideLink = review.hidden
     ? { label: "숨김 해제", href: actionHref(REVIEW_ACTION.unhide) }

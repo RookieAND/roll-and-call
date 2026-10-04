@@ -1,4 +1,4 @@
-import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { STAFF_ROLE_LABEL } from "@/shared/lib";
@@ -17,10 +17,7 @@ export function ServerCard({ server }: ServerCardProps) {
     <VStack
       gap="175"
       render={<Link href={`/${server.slug}`} />}
-      className={cn(
-        "rounded-600 border bg-surface p-200 hover:bg-gray-50",
-        botDisconnected ? "border-(--rc-color-border-danger)" : "border-gray-200",
-      )}
+      className="rounded-600 border border-gray-200 bg-surface p-200 hover:bg-gray-50"
     >
       <HStack align="center" gap="150">
         <ServerIcon name={server.name} icon={server.icon} size={48} />
@@ -43,7 +40,7 @@ export function ServerCard({ server }: ServerCardProps) {
               value: botDisconnected ? (
                 <Tag>봇 연결 끊김</Tag>
               ) : (
-                <Text typography="body3" weight="bold" foreground="success">
+                <Text typography="body3" foreground="hint">
                   정상
                 </Text>
               ),
@@ -53,7 +50,7 @@ export function ServerCard({ server }: ServerCardProps) {
       </div>
       {botDisconnected ? (
         <Text typography="body4" foreground="danger">
-          봇이 서버에서 제거되어 디스코드 알림이 중단됐습니다. 데이터는 유지됩니다.
+          봇이 서버에서 제거되어 디스코드 글을 올리지 못합니다. 데이터는 그대로 남아 있습니다.
         </Text>
       ) : null}
     </VStack>

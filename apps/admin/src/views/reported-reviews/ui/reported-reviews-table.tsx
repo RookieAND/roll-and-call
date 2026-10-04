@@ -37,7 +37,7 @@ export function ReportedReviewsTable({ rows }: ReportedReviewsTableProps) {
                 weight="bold"
                 truncate
                 title={row.authorNickname}
-                render={<ServerLink path={`/posts/reviews/${row.id}?from=reports`} />}
+                render={<ServerLink path={`/reviews/${row.id}?from=reports`} />}
                 className="block after:absolute after:inset-0"
               >
                 {row.authorNickname}
