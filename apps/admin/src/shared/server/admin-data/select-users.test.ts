@@ -40,7 +40,6 @@ const noShow = (sessionId: string, userId: string, cancelled = false): NoShow =>
   id: `${sessionId}:${userId}`,
   userId,
   sessionId,
-  recordedAt: daysAgo(9),
   cancelled,
 });
 
