@@ -2,7 +2,7 @@ import { isString } from "es-toolkit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { getRulebookDetail, searchGrantCandidates } from "@/shared/server";
+import { getRulebookDetail, requireStaff, searchGrantCandidates } from "@/shared/server";
 import {
   RULEBOOK_DETAIL_TAB,
   RulebookDetailView,
@@ -20,7 +20,11 @@ export default async function RulebookDetailPage({
   params,
   searchParams,
 }: PageProps<"/[server]/rules/[id]">) {
-  const [{ id }, { tab, action, q, page }] = await Promise.all([params, searchParams]);
+  const [{ id }, { tab, action, q, page }, staff] = await Promise.all([
+    params,
+    searchParams,
+    requireStaff(),
+  ]);
   const rulebook = await getRulebookDetail(id);
   if (!rulebook) notFound();
   const detailTab: RulebookDetailTab =
@@ -35,6 +39,7 @@ export default async function RulebookDetailPage({
       rulebook={rulebook}
       tab={detailTab}
       grantCandidates={grantCandidates}
+      viewerId={staff.id}
       page={isString(page) ? page : undefined}
     />
   );

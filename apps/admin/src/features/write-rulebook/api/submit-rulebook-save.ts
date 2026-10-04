@@ -12,7 +12,7 @@ export async function submitRulebookSave(id: string, draft: RulebookDraft, reaso
   const fields = toRulebookFields(draft);
   if (!fields.name || !reason.trim()) throw new Error("룰북 이름과 변경 사유를 입력해 주세요");
   const server = await getCurrentServer();
-  await updateRulebook({
+  const result = await updateRulebook({
     serverId: server.id,
     id,
     fields,
@@ -20,4 +20,5 @@ export async function submitRulebookSave(id: string, draft: RulebookDraft, reaso
     reason: reason.trim(),
   });
   revalidatePath("/", "layout");
+  return result;
 }

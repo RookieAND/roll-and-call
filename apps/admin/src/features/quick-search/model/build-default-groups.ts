@@ -56,7 +56,7 @@ export function buildDefaultGroups(
         id: "command-rulebook",
         icon: FileText,
         title: "룰북 추가하기",
-        href: "/rules?add=1",
+        href: "/rules/new",
       },
     ],
   });

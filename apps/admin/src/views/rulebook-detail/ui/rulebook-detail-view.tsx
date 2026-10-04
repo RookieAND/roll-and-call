@@ -15,6 +15,7 @@ interface RulebookDetailViewProps {
   rulebook: RulebookDetail;
   tab: RulebookDetailTab;
   grantCandidates: GrantCandidate[];
+  viewerId: string;
   page?: string;
 }
 
@@ -22,6 +23,7 @@ export function RulebookDetailView({
   rulebook,
   tab,
   grantCandidates,
+  viewerId,
   page,
 }: RulebookDetailViewProps) {
   const logHref = `/log?target=${encodeURIComponent(rulebook.name)}`;
@@ -72,6 +74,7 @@ export function RulebookDetailView({
         <RulebookEditForm
           key={rulebook.label}
           rulebook={rulebook}
+          viewerId={viewerId}
           aside={<CategoryCard rulebook={rulebook} />}
         />
       ) : (

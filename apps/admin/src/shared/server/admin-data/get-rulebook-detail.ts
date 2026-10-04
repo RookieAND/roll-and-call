@@ -43,6 +43,10 @@ export async function getRulebookDetail(id: string) {
     aliases: [...rulebook.aliases],
     label,
     certifiedGms,
+    // 숨기면 함께 반려되는 심사 중 신청
+    pendingApplicationCount: db.certApplications.filter(
+      (application) => application.rulebookId === id && application.status === "pending",
+    ).length,
     quizQuestions: db.quizQuestions.filter((question) => question.rulebookId === id),
     allRulebooks,
     categoryBooks,

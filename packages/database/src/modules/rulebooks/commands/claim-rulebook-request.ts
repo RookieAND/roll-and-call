@@ -2,6 +2,8 @@ import { and, eq, isNull, sql } from "drizzle-orm";
 
 import type { Executor } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { createNotifications } from "#/modules/notifications/commands/create-notifications";
+import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
@@ -15,11 +17,18 @@ const OUTCOME_ACTION = {
 
 type Outcome = keyof typeof OUTCOME_ACTION;
 
+const OUTCOME_NOTIFICATION = {
+  added: NOTIFICATION_KIND.rulebookRequestAdded,
+  linked: NOTIFICATION_KIND.rulebookRequestAdded,
+  rejected: NOTIFICATION_KIND.rulebookRequestDeclined,
+} as const;
+
 type ClaimResult =
   | { ok: true; name: string; edition: string; label: string; requester: string }
   | Extract<RulebookActionResult, { ok: false }>;
 
-// 대기 중인 요청만 처리됨으로 바꾼다. 다른 운영진이 먼저 처리했으면 그 처리를 충돌로 돌려준다.
+// 대기 중인 요청만 처리됨으로 바꾸고 같은 트랜잭션에서 요청자에게 결과 알림을 만든다.
+// 다른 운영진이 먼저 처리했으면 알림 없이 그 처리를 충돌로 돌려준다.
 export async function claimRulebookRequest({
   executor,
   serverId,
@@ -48,11 +57,24 @@ export async function claimRulebookRequest({
       .select({ nickname: memberNicknameSql(serverId) })
       .from(profiles)
       .where(eq(profiles.id, claimed.userId));
+    const label = rulebookLabel(claimed);
+    await createNotifications({
+      executor,
+      serverId,
+      actorId: actor.id,
+      notifications: [
+        {
+          userId: claimed.userId,
+          kind: OUTCOME_NOTIFICATION[outcome],
+          params: { rulebookName: label },
+        },
+      ],
+    });
     return {
       ok: true,
       name: claimed.name,
       edition: claimed.edition,
-      label: rulebookLabel(claimed),
+      label,
       requester: requester?.nickname ?? "",
     };
   }

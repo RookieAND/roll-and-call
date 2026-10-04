@@ -8,6 +8,7 @@ export {
   rejectRulebookRequest,
   removeCertSeller,
   saveQuizQuestion,
+  unhideRulebook,
   updateRulebook,
   type AddCertSellerResult,
   type AddRulebookResult,
@@ -16,6 +17,7 @@ export {
   type RulebookActionResult,
   type RulebookFields,
   type RulebookLinkInput,
+  type UpdateRulebookResult,
 } from "@roll-and-call/database/rulebooks";
 export {
   addStaff,
@@ -147,6 +149,7 @@ export { type StaffCandidate } from "./pick-staff-candidates";
 export { type CategoryEdition } from "./category-editions";
 export { getRulebookDetail, type CertifiedGm, type RulebookDetail } from "./get-rulebook-detail";
 export { getRulebookImpact, type RulebookImpactCase } from "./get-rulebook-impact";
+export { getKindImpact, type KindImpactPage } from "./get-kind-impact";
 export { listRulebookRequests, type RulebookRequestRow } from "./list-rulebook-requests";
 export { listRulebooks, type RulebookCategory, type RulebookRow } from "./list-rulebooks";
 export {

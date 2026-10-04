@@ -16,10 +16,11 @@ interface RequestDialogProps {
   opened: { action: Exclude<RequestAction, "add">; request: RulebookRequestRow } | null;
   rulebooks: RulebookRow[];
   closeHref: string;
+  viewerId: string;
 }
 
 // 닫히는 동안에도 내용이 남도록 마지막으로 연 창을 기억한다.
-export function RequestDialog({ opened, rulebooks, closeHref }: RequestDialogProps) {
+export function RequestDialog({ opened, rulebooks, closeHref, viewerId }: RequestDialogProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
   const [shown, setShown] = useState(opened);
@@ -35,11 +36,17 @@ export function RequestDialog({ opened, rulebooks, closeHref }: RequestDialogPro
             key={formKey ?? undefined}
             request={shown.request}
             rulebooks={rulebooks}
+            viewerId={viewerId}
             onDone={close}
           />
         ) : null}
         {shown?.action === REQUEST_ACTION.reject ? (
-          <RejectRequestForm key={formKey ?? undefined} request={shown.request} onDone={close} />
+          <RejectRequestForm
+            key={formKey ?? undefined}
+            request={shown.request}
+            viewerId={viewerId}
+            onDone={close}
+          />
         ) : null}
       </Dialog.Popup>
     </Dialog.Root>

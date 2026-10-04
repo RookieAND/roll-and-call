@@ -1,57 +1,51 @@
 "use client";
 
-import {
-  Button,
-  Dialog,
-  Field,
-  Text,
-  TextInput,
-  Textarea,
-  VStack,
-  cn,
-  toast,
-} from "@roll-and-call/ui";
+import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
+import { Button, Dialog, Field, Text, TextInput, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
-import { useState, useTransition } from "react";
+import { RotateCcw } from "lucide-react";
+import { useState } from "react";
 
 import {
+  conflictToastText,
   quoteWithParticle,
+  useActionSubmit,
   withObjectParticle,
   withSubjectParticle,
-  withTopicParticle,
 } from "@/shared/lib";
-import type { RulebookActionResult, RulebookRequestRow } from "@/shared/server";
-import { ModalServerLabel, UserPreview } from "@/shared/ui";
+import type { RulebookRequestRow } from "@/shared/server";
+import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
 
 import { rejectRequest } from "../api/reject-request";
-import { RequestConflict } from "./request-conflict";
-
-type Conflict = Extract<RulebookActionResult, { ok: false }>["conflict"];
+import { REJECT_REASON_MAX_LENGTH } from "../model/reject-reason-max-length";
 
 interface RejectRequestFormProps {
   request: RulebookRequestRow;
+  viewerId: string;
   onDone: () => void;
 }
 
-export function RejectRequestForm({ request, onDone }: RejectRequestFormProps) {
-  const [pending, startTransition] = useTransition();
+export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFormProps) {
+  const { pending, networkError, submit } = useActionSubmit(rejectRequest);
   const [userReason, setUserReason] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
-  const [conflict, setConflict] = useState<Conflict | undefined>(undefined);
 
-  const conflicted = !isUndefined(conflict);
-  const canConfirm = Boolean(userReason.trim()) && !pending && !conflicted;
+  const canConfirm = Boolean(userReason.trim()) && !pending;
 
-  const confirm = () =>
-    startTransition(async () => {
-      const result = await rejectRequest(request.id, { userReason, staffMemo });
-      if (!result.ok) {
-        setConflict(result.conflict);
-        return;
-      }
-      toast.success(`「${request.name}」 추가 요청을 반려했습니다`);
+  const confirm = async () => {
+    const result = await submit(request.id, { userReason, staffMemo });
+    if (isUndefined(result)) return;
+    if (!result.ok) {
+      const { conflict } = result;
+      toast.info(
+        conflictToastText({ conflict, self: conflict?.byId === viewerId, target: "요청" }),
+      );
       onDone();
-    });
+      return;
+    }
+    toast.success(`「${request.name}」 추가 요청을 반려했습니다`);
+    onDone();
+  };
 
   return (
     <>
@@ -65,39 +59,35 @@ export function RejectRequestForm({ request, onDone }: RejectRequestFormProps) {
       </Dialog.Header>
       <Dialog.Body className="mt-200">
         <VStack gap="150">
-          {conflicted ? <RequestConflict conflict={conflict} /> : null}
-          <VStack gap="150" className={cn(conflicted && "pointer-events-none opacity-50")}>
-            <Field.Root
-              label="사용자에게 보이는 사유"
-              htmlFor="reject-request-user-reason"
-              required
-              description="요청자에게 그대로 보이고, 활동 기록에 남습니다."
-            >
-              <TextInput
-                id="reject-request-user-reason"
-                value={userReason}
-                disabled={conflicted}
-                onChange={(event) => setUserReason(event.target.value)}
-              />
-            </Field.Root>
-            <Field.Root
-              label="운영진 메모 (사용자에게 안 보임)"
-              htmlFor="reject-request-staff-memo"
-            >
-              <Textarea
-                id="reject-request-staff-memo"
-                rows={1}
-                placeholder="선택"
-                value={staffMemo}
-                disabled={conflicted}
-                onChange={(event) => setStaffMemo(event.target.value)}
-              />
-            </Field.Root>
-            <UserPreview title="요청자에게 이렇게 보입니다">
-              요청하신 {quoteWithParticle(request.name, withTopicParticle)} 등록되지 않았어요. 사유:{" "}
-              {userReason.trim() || "…"}
-            </UserPreview>
-          </VStack>
+          {networkError ? <ActionNetworkError /> : null}
+          <Field.Root
+            label="사용자에게 보이는 사유"
+            htmlFor="reject-request-user-reason"
+            required
+            description="요청자의 내 룰북 화면에 그대로 보입니다."
+          >
+            <TextInput
+              id="reject-request-user-reason"
+              value={userReason}
+              maxLength={REJECT_REASON_MAX_LENGTH}
+              onChange={(event) => setUserReason(event.target.value)}
+            />
+          </Field.Root>
+          <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="reject-request-staff-memo">
+            <Textarea
+              id="reject-request-staff-memo"
+              rows={1}
+              placeholder="선택"
+              value={staffMemo}
+              onChange={(event) => setStaffMemo(event.target.value)}
+            />
+          </Field.Root>
+          <NotificationPreview
+            payload={{
+              kind: NOTIFICATION_KIND.rulebookRequestDeclined,
+              params: { rulebookName: request.name },
+            }}
+          />
         </VStack>
       </Dialog.Body>
       <Dialog.Footer layout="row" className="items-center">
@@ -107,8 +97,14 @@ export function RejectRequestForm({ request, onDone }: RejectRequestFormProps) {
         <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
           취소
         </Dialog.Close>
-        <Button colorPalette="danger" loading={pending} disabled={!canConfirm} onClick={confirm}>
-          반려
+        <Button
+          colorPalette="danger"
+          loading={pending}
+          disabled={!canConfirm}
+          onClick={() => void confirm()}
+        >
+          {networkError ? <RotateCcw size={16} aria-hidden /> : null}
+          {networkError ? "다시 시도" : "반려"}
         </Button>
       </Dialog.Footer>
     </>

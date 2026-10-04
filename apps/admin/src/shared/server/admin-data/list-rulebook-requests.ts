@@ -2,6 +2,7 @@ import "server-only";
 import type { RulebookKind } from "@roll-and-call/database";
 
 import { loadSnapshot } from "./snapshot";
+import { waitedDays } from "./waited-days";
 
 export interface RulebookRequestRow {
   id: string;
@@ -13,6 +14,7 @@ export interface RulebookRequestRow {
   note: string;
   requesterNickname: string;
   requestedAt: Date;
+  waitedDays: number;
   similarTo?: string;
 }
 
@@ -31,6 +33,7 @@ export async function listRulebookRequests(): Promise<RulebookRequestRow[]> {
       note: request.note,
       requesterNickname: db.users.find((user) => user.id === request.userId)?.nickname ?? "",
       requestedAt: request.requestedAt,
+      waitedDays: waitedDays(request.requestedAt),
       similarTo: request.similarTo,
     }));
 }

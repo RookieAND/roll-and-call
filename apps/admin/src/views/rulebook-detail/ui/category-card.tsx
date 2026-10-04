@@ -13,7 +13,7 @@ interface CategoryCardProps {
 }
 
 export function CategoryCard({ rulebook }: CategoryCardProps) {
-  const addHref = withQuery("/rules", {}, { add: "1", category: rulebook.category });
+  const addHref = withQuery("/rules/new", {}, { category: rulebook.category });
   return (
     <Panel
       title={`${rulebook.category} 카테고리`}

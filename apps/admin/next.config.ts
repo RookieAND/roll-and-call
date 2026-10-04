@@ -18,6 +18,19 @@ const nextConfig: NextConfig = {
       destination: "/:server/reviews/:path*",
       permanent: true,
     },
+    // 룰북 추가·요청 승인은 다이얼로그에서 별도 페이지로 옮겼다(D291). 쿼리(category, request)는 그대로 넘어간다.
+    {
+      source: "/:server/rules",
+      has: [{ type: "query", key: "add", value: "1" }],
+      destination: "/:server/rules/new",
+      permanent: true,
+    },
+    {
+      source: "/:server/rules",
+      has: [{ type: "query", key: "action", value: "(add|approve)" }],
+      destination: "/:server/rules/new",
+      permanent: true,
+    },
   ],
 };
 

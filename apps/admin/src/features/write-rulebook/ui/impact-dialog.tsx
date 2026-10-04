@@ -2,10 +2,11 @@
 
 import { AlertDialog, Button, Callout, Text, VStack } from "@roll-and-call/ui";
 import { sumBy } from "es-toolkit";
+import { RotateCcw } from "lucide-react";
 
 import { withObjectParticle } from "@/shared/lib";
 import type { RulebookImpactCase } from "@/shared/server";
-import { ModalServerLabel } from "@/shared/ui";
+import { ActionNetworkError, ModalServerLabel } from "@/shared/ui";
 
 import { ImpactList } from "./impact-list";
 
@@ -13,6 +14,7 @@ interface ImpactDialogProps {
   rulebookLabel: string;
   cases: RulebookImpactCase[];
   pending: boolean;
+  networkError: boolean;
   onConfirm: () => void;
   onClose: () => void;
 }
@@ -21,6 +23,7 @@ export function ImpactDialog({
   rulebookLabel,
   cases,
   pending,
+  networkError,
   onConfirm,
   onClose,
 }: ImpactDialogProps) {
@@ -45,6 +48,7 @@ export function ImpactDialog({
         </AlertDialog.Header>
         <AlertDialog.Body className="mt-200">
           <VStack gap="150">
+            {networkError ? <ActionNetworkError /> : null}
             <Callout.Root colorPalette="danger">
               <Callout.Icon />
               <Callout.Description>
@@ -83,7 +87,8 @@ export function ImpactDialog({
             뒤로
           </AlertDialog.Close>
           <Button colorPalette="danger" loading={pending} onClick={onConfirm}>
-            변경 확정
+            {networkError ? <RotateCcw size={16} aria-hidden /> : null}
+            {networkError ? "다시 시도" : "변경 확정"}
           </Button>
         </AlertDialog.Footer>
       </AlertDialog.Popup>

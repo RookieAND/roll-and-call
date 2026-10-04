@@ -56,7 +56,7 @@ export async function listRulebooks({ query }: { query?: string } = {}) {
   const keyword = query?.trim().toLowerCase();
   const matches = (row: RulebookRow) =>
     [row.label, row.category, ...row.aliases].some((text) => text.toLowerCase().includes(keyword!));
-  // 숨기지 않은 책은 있는데 기본 룰북이 하나도 없는 판본. 사용자 앱은 이 판본의 구인을 누구나 열게 둔다.
+  // 숨기지 않은 책은 있는데 기본 룰북이 하나도 없는 판본. 사용자 앱은 이 판본을 구인 룰로 고르지 못한다.
   const visible = db.rulebooks.filter((rulebook) => !rulebook.hidden);
   const editionsWithoutCore = uniq(
     visible

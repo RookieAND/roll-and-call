@@ -1,8 +1,11 @@
+import { and, eq } from "drizzle-orm";
+
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
 import { claimRulebookRequest } from "#/modules/rulebooks/commands/claim-rulebook-request";
 import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
+import { rulebookRequests } from "#/schema";
 
 export async function rejectRulebookRequest({
   serverId,
@@ -24,6 +27,10 @@ export async function rejectRulebookRequest({
       outcome: "rejected",
     });
     if (!claim.ok) return claim;
+    await tx
+      .update(rulebookRequests)
+      .set({ rejectReason: input.userReason.trim() || null })
+      .where(and(eq(rulebookRequests.serverId, serverId), eq(rulebookRequests.id, id)));
     await recordAudit({
       executor: tx,
       serverId,

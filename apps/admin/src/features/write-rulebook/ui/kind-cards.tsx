@@ -29,7 +29,7 @@ export function KindCards({ kind, disabled, onChange }: KindCardsProps) {
               <Icon size={18} aria-hidden />
             </span>
             <RadioCard.Title className="col-start-2">{label}</RadioCard.Title>
-            <RadioCard.Description className="col-start-2">
+            <RadioCard.Description className="col-start-2 whitespace-pre-line">
               {RULEBOOK_KIND_DESCRIPTION[value as RulebookKind]}
             </RadioCard.Description>
             <RadioCard.Indicator className="col-start-3" />

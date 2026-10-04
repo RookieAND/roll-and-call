@@ -2,7 +2,7 @@ import { Table, Text } from "@roll-and-call/ui";
 
 import { AddSellerButton, RemoveSellerButton } from "@/features/manage-cert-sellers";
 import type { CertSellerRow } from "@/shared/server";
-import { Panel, TableColumns, Tag } from "@/shared/ui";
+import { Panel, TableColumns } from "@/shared/ui";
 
 interface SellersPanelProps {
   sellers: CertSellerRow[];
@@ -11,17 +11,9 @@ interface SellersPanelProps {
 export function SellersPanel({ sellers }: SellersPanelProps) {
   return (
     <>
-      <Panel
-        title="전자책 판매처"
-        right={
-          <>
-            <Tag>{sellers.length}곳</Tag>
-            <AddSellerButton />
-          </>
-        }
-      >
+      <Panel title="전자책 판매처" right={<AddSellerButton />}>
         <Table.Root className="table-equal">
-          <TableColumns widths={[200, 160, { fixed: 132 }]} />
+          <TableColumns widths={[200, 160, { fixed: 56 }]} />
           <Table.Header>
             <Table.Row>
               <Table.Head>판매처</Table.Head>

@@ -28,6 +28,7 @@ export function RulebookBookRow({ row, last }: RulebookBookRowProps) {
             {row.name}
           </Text>
           {row.hidden ? <Tag>숨김</Tag> : null}
+          {row.certRequired ? null : <Tag>인증 불필요</Tag>}
         </HStack>
       </Table.Cell>
       <Table.Cell>

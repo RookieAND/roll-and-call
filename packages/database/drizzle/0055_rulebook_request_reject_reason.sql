@@ -1,0 +1,2 @@
+ALTER TABLE "rulebook_requests" ADD COLUMN "reject_reason" text;--> statement-breakpoint
+ALTER TABLE "rulebook_requests" ADD CONSTRAINT "rulebook_requests_reject_reason_length" CHECK (char_length("rulebook_requests"."reject_reason") <= 200);

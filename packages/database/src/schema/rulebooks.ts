@@ -1,5 +1,7 @@
+import { sql } from "drizzle-orm";
 import {
   boolean,
+  check,
   index,
   pgEnum,
   pgTable,
@@ -91,8 +93,13 @@ export const rulebookRequests = pgTable(
     outcome: rulebookRequestOutcome("outcome"),
     processedBy: uuid("processed_by").references(() => profiles.id, { onDelete: "set null" }),
     processedAt: timestamp("processed_at", { withTimezone: true }),
+    // 반려할 때 요청자에게 보이는 사유. 내 룰북에 처리 뒤 30일 보인다
+    rejectReason: text("reject_reason"),
   },
-  (table) => [index("rulebook_requests_user_id_idx").on(table.userId)],
+  (table) => [
+    index("rulebook_requests_user_id_idx").on(table.userId),
+    check("rulebook_requests_reject_reason_length", sql`char_length(${table.rejectReason}) <= 200`),
+  ],
 ).enableRLS();
 
 // 본문 퀴즈 문항은 서버마다 따로 둔다. 인증 신청 때 사용 중인 문항 하나를 내고, 답은 answers 가운데 하나면 맞다(공백·대소문자 무시).
