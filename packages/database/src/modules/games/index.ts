@@ -56,6 +56,7 @@ export { listSeatOpenedRecipients } from "./queries/list-seat-opened-recipients"
 export { listRosterDiscordIds } from "./queries/list-roster-discord-ids";
 export { listRosterStatuses } from "./queries/list-roster-statuses";
 export { listDueLotteries } from "./queries/list-due-lotteries";
+export { listGameRuleOptions } from "./queries/list-game-rule-options";
 export { lockGame } from "./queries/lock-game";
 export { searchGameCandidates } from "./queries/search-game-candidates";
 export * from "./model";

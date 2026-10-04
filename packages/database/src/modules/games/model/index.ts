@@ -12,14 +12,20 @@ export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./schedule-mod
 export { deriveGameStatus } from "./derive-game-status";
 export { GAME_STATUS, gameStatusLabel, type GameStatus } from "./game-status";
 export {
+  GAME_RULE_OTHER,
   GAME_SORT,
   GAME_TAB,
   GAME_STATUS_FILTER,
+  GAME_TIME_SLOT,
+  GAME_TIME_SLOT_HOURS,
   type GameSort,
   type GameTab,
   type GameStatusFilter,
+  type GameTimeSlot,
   type GamesFilter,
 } from "./games-filter";
+export { hasGameFilters } from "./has-game-filters";
+export { gameFilterCount } from "./game-filter-count";
 export { PARTICIPANT_STATUS, type ParticipantStatus } from "./participant-status";
 export {
   DEFAULT_PLAY_MINUTES,

@@ -24,6 +24,7 @@ export {
   getResponseCountsByGm,
   getScheduleAvailabilityRows,
   getUserConfirmedSlots,
+  listGameRuleOptions,
   type GameDetailData,
   type GamesCounts,
   type MonthSessionRow,

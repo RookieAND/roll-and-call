@@ -9,6 +9,7 @@ import { recruitingGamesWhere } from "./recruiting-games-where";
 export const GAMES_PAGE_SIZE = 12;
 
 // 지난 구인은 페이지를 넘기지 않고 "더 보기"로 늘린다: page n이면 처음부터 n쪽 분량.
+// total은 목록과 같은 조건이라 지난 구인 [전체]에서는 취소된 카드까지 센다. 「더 보기」·쪽 번호에만 쓰고 화면 건수로 보이지 않는다.
 export async function getRecruitingGamesPage({
   serverId,
   page,

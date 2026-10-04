@@ -12,6 +12,7 @@ export function gameBucketSql({ now }: { now: Date }) {
   const ended = sql`(${games.confirmedAt} is not null and ${sessionEndAtSql} <= ${at})`;
   const scheduled = sql`(${games.scheduleMode} = 'coordinate' and ${games.confirmedAt} is not null)`;
   const live = sql`(${games.endDate} > ${at} and not ${ended} and not ${scheduled} and (not ${full} or ${games.waitlistEnabled}))`;
-  const finishedAt = sql`coalesce(${sessionEndAtSql}, ${games.endDate})`;
+  // 취소된 구인은 취소한 날에 끝난 것으로 본다.
+  const finishedAt = sql`coalesce(${games.cancelledAt}, ${sessionEndAtSql}, ${games.endDate})`;
   return { full, ended, live, finishedAt };
 }

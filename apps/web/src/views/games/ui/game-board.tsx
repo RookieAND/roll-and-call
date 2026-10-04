@@ -5,10 +5,12 @@ import {
   GAME_STATUS_FILTER_DEFAULT,
   GAME_TAB,
   GAME_TAB_DEFAULT,
+  hasGameFilters,
   type GamesFilter,
 } from "@/shared/api";
 import { getGamesCounts, getRecruitingGamesPage, getCurrentServer } from "@/shared/server";
 
+import { filterParams } from "../lib/filter-params";
 import { statusCounts } from "../model/status-counts";
 import { CrossTabHint } from "./cross-tab-hint";
 import { GameList } from "./game-list";
@@ -27,13 +29,15 @@ export async function GameBoard({ page = 1, filter }: GameBoardProps) {
   const server = await getCurrentServer();
   const gamesPage = getRecruitingGamesPage({ serverId: server.id, page, filter });
   const [counts, allCounts] = await Promise.all([
-    getGamesCounts({ serverId: server.id, q: filter.q }),
-    filter.q ? getGamesCounts({ serverId: server.id, q: undefined }) : null,
+    getGamesCounts({ serverId: server.id, q: filter.q, filter }),
+    filter.q || hasGameFilters(filter)
+      ? getGamesCounts({ serverId: server.id, q: undefined })
+      : null,
   ]);
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
   const count = statusCounts({ counts, tab })[filter.status ?? GAME_STATUS_FILTER_DEFAULT];
   const listSkeleton = tab === GAME_TAB.past ? <PastGameListSkeleton /> : <GameListSkeleton />;
-  const key = `${filter.q ?? ""}|${filter.sort ?? ""}|${tab}|${filter.status ?? ""}|${page}`;
+  const key = JSON.stringify(filterParams({ ...filter, page }));
 
   return (
     <Container>

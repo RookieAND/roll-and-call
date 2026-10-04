@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { parseGameSort, parseGameStatusFilter, parseGameTab } from "@/shared/api";
+import { parseGameFilters, parseGameSort, parseGameStatusFilter, parseGameTab } from "@/shared/api";
 import { GamesView } from "@/views/games";
 
 export const metadata: Metadata = { title: "구인 목록" };
@@ -14,9 +14,13 @@ export default async function Page({
     sort?: string;
     tab?: string;
     status?: string;
+    rule?: string;
+    day?: string;
+    time?: string;
+    unscheduled?: string;
   }>;
 }) {
-  const { page, q, sort, tab, status } = await searchParams;
+  const { page, q, sort, tab, status, rule, day, time, unscheduled } = await searchParams;
   const gameTab = parseGameTab(tab);
   return (
     <GamesView
@@ -26,6 +30,7 @@ export default async function Page({
         sort: parseGameSort(sort),
         tab: gameTab,
         status: parseGameStatusFilter({ value: status, tab: gameTab }),
+        ...parseGameFilters({ rule, day, time, unscheduled }),
       }}
     />
   );
