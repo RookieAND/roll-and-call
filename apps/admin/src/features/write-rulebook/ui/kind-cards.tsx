@@ -3,6 +3,7 @@ import { RadioCard, RadioGroup } from "@roll-and-call/ui";
 import { BookOpen, BookPlus, BookUser } from "lucide-react";
 
 import { RULEBOOK_KIND_DESCRIPTION, RULEBOOK_KIND_LABEL } from "@/shared/lib";
+import { LineBreaks } from "@/shared/ui";
 
 const KIND_ICON = { core: BookOpen, supplement: BookPlus, handbook: BookUser } as const;
 
@@ -29,8 +30,8 @@ export function KindCards({ kind, disabled, onChange }: KindCardsProps) {
               <Icon size={18} aria-hidden />
             </span>
             <RadioCard.Title className="col-start-2">{label}</RadioCard.Title>
-            <RadioCard.Description className="col-start-2 whitespace-pre-line">
-              {RULEBOOK_KIND_DESCRIPTION[value as RulebookKind]}
+            <RadioCard.Description className="col-start-2">
+              <LineBreaks lines={RULEBOOK_KIND_DESCRIPTION[value as RulebookKind].split("\n")} />
             </RadioCard.Description>
             <RadioCard.Indicator className="col-start-3" />
           </RadioCard.Root>

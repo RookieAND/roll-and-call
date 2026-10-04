@@ -2,7 +2,7 @@ import { Button, HStack, Progress, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
 import { ATTENDANCE_HINT, BadgeMedal, type nextBadgeGoal } from "@/entities/badge";
-import { ServerLink } from "@/shared/ui";
+import { LineBreaks, ServerLink } from "@/shared/ui";
 
 import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 
@@ -45,12 +45,8 @@ export function MyPageBadges({ heldCount, goal, monthLines }: MyPageBadgesProps)
                 max={goal.threshold}
                 aria-label={`${goal.name} 진행도`}
               />
-              <Text
-                typography="body4"
-                foreground="muted"
-                className="break-keep whitespace-pre-line"
-              >
-                {goal.condition}
+              <Text typography="body4" foreground="muted" className="break-keep">
+                <LineBreaks lines={goal.condition.split("\n")} />
               </Text>
               <Text typography="body4" foreground="hint">
                 {ATTENDANCE_HINT}

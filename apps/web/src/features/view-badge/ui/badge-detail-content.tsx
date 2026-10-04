@@ -2,7 +2,7 @@ import { HStack, Progress, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
 import { ATTENDANCE_HINT, BadgeMedal, TONE_CLASS } from "@/entities/badge";
-import { ServerLink } from "@/shared/ui";
+import { LineBreaks, ServerLink } from "@/shared/ui";
 
 import type { BadgeDetail } from "../model/badge-detail";
 import { BadgeDetailSteps } from "./badge-detail-steps";
@@ -36,12 +36,8 @@ export function BadgeDetailContent({ detail }: BadgeDetailContentProps) {
           <Sheet.Title render={<Text typography="heading2" render={<h2 />} />}>
             {detail.name}
           </Sheet.Title>
-          <Text
-            typography="body2"
-            foreground="muted"
-            className="whitespace-pre-line [text-wrap:pretty]"
-          >
-            {detail.condition}
+          <Text typography="body2" foreground="muted" className="[text-wrap:pretty]">
+            <LineBreaks lines={detail.condition.split("\n")} />
           </Text>
         </VStack>
       </VStack>
