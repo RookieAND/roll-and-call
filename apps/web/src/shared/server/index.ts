@@ -85,6 +85,7 @@ export { findGuildDisplayName } from "./membership/find-guild-display-name";
 export { isDiscordGuildMember } from "./membership/is-discord-guild-member";
 export { handleMemberLeft } from "./membership/handle-member-left";
 export { detectRosterDepartures } from "./membership/detect-roster-departures";
+export { checkEachMember } from "./membership/check-each-member";
 export { findDepartedMembers } from "./membership/find-departed-members";
 export { listJoinableServers } from "./membership/list-joinable-servers";
 export { MEMBERSHIP_REQUIRED_MESSAGE } from "./membership/membership-required-message";

@@ -2,7 +2,8 @@ import { DiscordApiError } from "@roll-and-call/discord";
 import { delay } from "es-toolkit";
 import { describe, expect, it } from "vitest";
 
-import { findDepartedMembers, MEMBER_CHECK_CONCURRENCY } from "./find-departed-members";
+import { MEMBER_CHECK_CONCURRENCY } from "./check-each-member";
+import { findDepartedMembers } from "./find-departed-members";
 
 const rateLimited = () => new DiscordApiError("429", 429, null, 0.001);
 

@@ -1,3 +1,4 @@
+export { applyNicknameSync } from "./commands/apply-nickname-sync";
 export { ensureMembership } from "./commands/ensure-membership";
 export { leaveServer, type LeaveServerResult } from "./commands/leave-server";
 export { markMemberVisit } from "./commands/mark-member-visit";
@@ -10,6 +11,10 @@ export { getServerById } from "./queries/get-server-by-id";
 export { getServerBySlug } from "./queries/get-server-by-slug";
 export { getServerOwnerProfile } from "./queries/get-server-owner-profile";
 export { listActiveMembers } from "./queries/list-active-members";
+export {
+  listMembersForNicknameSync,
+  type NicknameSyncMember,
+} from "./queries/list-members-for-nickname-sync";
 export { listJoinCandidateServers } from "./queries/list-join-candidate-servers";
 export { listMemberServers } from "./queries/list-member-servers";
 export { listServers } from "./queries/list-servers";

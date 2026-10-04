@@ -7,3 +7,4 @@ export {
   nicknameBaseOf,
   suffixedNickname,
 } from "./member-nickname";
+export { planNicknameSync, type NicknameSyncChange } from "./plan-nickname-sync";
