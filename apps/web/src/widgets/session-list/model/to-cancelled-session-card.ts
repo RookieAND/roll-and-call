@@ -34,6 +34,7 @@ export function toCancelledSessionCard({
     titleDanger: false,
     urgent: false,
     cancelled: true,
+    hidden: false,
     action: null,
     caption: null,
     todo: null,

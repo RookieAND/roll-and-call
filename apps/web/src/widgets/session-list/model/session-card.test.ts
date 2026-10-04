@@ -328,6 +328,7 @@ describe("buildProfileSessions", () => {
       game({ id: "played", confirmedAt: at(-1), participants: [confirmedMe] }),
     ],
     userId: "me",
+    viewerId: "viewer",
     now: NOW,
   });
 
@@ -342,5 +343,47 @@ describe("buildProfileSessions", () => {
     expect(upcoming.schedule).not.toMatch(/미제출/);
     expect(profile[SESSION_ROLE.host]).toHaveLength(1);
     expect(profile[SESSION_ROLE.host][0]?.action).toBeNull();
+  });
+});
+
+describe("buildProfileSessions · 숨긴 구인과 내보낸 참여", () => {
+  const hiddenGame = game({
+    id: "hidden",
+    hiddenAt: at(-1),
+    confirmedAt: at(-2),
+    participants: [confirmedMe, other],
+  });
+  const removedEnded = game({
+    id: "removed-ended",
+    confirmedAt: at(-2),
+    participants: [other, me(PARTICIPANT_STATUS.removed)],
+  });
+  const removedOngoing = game({
+    id: "removed-ongoing",
+    confirmedAt: new Date(NOW.getTime() - 60 * 60 * 1000),
+    participants: [other, me(PARTICIPANT_STATUS.removed)],
+  });
+  const build = (viewerId: string | null) =>
+    buildProfileSessions({
+      hosted: [],
+      joined: [hiddenGame, removedEnded, removedOngoing],
+      userId: "me",
+      viewerId,
+      now: NOW,
+    })[SESSION_ROLE.player];
+  const hiddenOf = (viewerId: string | null) =>
+    build(viewerId).find((card) => card.id === "hidden")?.hidden;
+
+  it("숨긴 구인은 GM·참여자에게는 그대로, 그 밖의 사람·비로그인에게는 가린다", () => {
+    expect(hiddenOf("gm")).toBe(false);
+    expect(hiddenOf("a")).toBe(false);
+    expect(hiddenOf("stranger")).toBe(true);
+    expect(hiddenOf(null)).toBe(true);
+  });
+
+  it("불참으로 내보낸 참여는 세션이 끝난 뒤에만 참여 탭에 남는다", () => {
+    const ids = build("stranger").map((card) => card.id);
+    expect(ids).toContain("removed-ended");
+    expect(ids).not.toContain("removed-ongoing");
   });
 });

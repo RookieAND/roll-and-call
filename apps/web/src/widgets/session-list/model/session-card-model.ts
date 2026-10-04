@@ -69,6 +69,8 @@ export type SessionCardModel = {
   titleDanger: boolean;
   urgent: boolean;
   cancelled: boolean;
+  // 운영진이 숨긴 구인을 보는 사람이 볼 수 없으면 제목만 가린 카드로 그린다(R4, 남의 세션 기록).
+  hidden: boolean;
   action: SessionAction | null;
   caption: { text: string; strong: boolean } | null;
   todo: SessionTodo | null;

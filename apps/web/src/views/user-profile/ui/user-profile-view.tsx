@@ -29,7 +29,9 @@ export async function UserProfileView({ id }: { id: string }) {
   const viewerPromise = getCurrentSessionUser();
   const [viewer, loaded, rulebookRecords, reviewCounts, badgeRecords, memo] = await Promise.all([
     viewerPromise,
-    loadProfile(id),
+    viewerPromise.then((currentViewer) =>
+      loadProfile({ userId: id, viewerId: currentViewer?.id ?? null }),
+    ),
     getRulebookRecords({ serverId: server.id, userId: id }),
     viewerPromise.then((currentViewer) =>
       getReviewCounts({ serverId: server.id, userId: id, viewerId: currentViewer?.id ?? null }),

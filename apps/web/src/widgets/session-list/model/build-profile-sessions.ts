@@ -1,35 +1,58 @@
-import { PARTICIPANT_STATUS, SESSION_ROLE } from "@/entities/game";
+import {
+  canViewHiddenGame,
+  isSessionEnded,
+  PARTICIPANT_STATUS,
+  SESSION_ROLE,
+  type SessionRole,
+} from "@/entities/game";
 
 import { buildSessions } from "./build-sessions";
 import type { MySessions, SessionGame } from "./session-card-model";
 
+// 남의 세션 기록. 참여 탭은 확정자로 들어간 구인과 불참으로 내보낸(removed) 끝난 세션이다. 숨긴 구인은 보는 사람이 볼 수 없으면 가린다(R4).
 export function buildProfileSessions({
   hosted,
   joined,
   userId,
+  viewerId,
   now = new Date(),
 }: {
   hosted: SessionGame[];
   joined: SessionGame[];
   userId: string;
+  viewerId: string | null;
   now?: Date;
 }): MySessions {
-  const confirmed = joined.filter((game) =>
+  const played = joined.filter((game) =>
     game.participants.some(
       (participant) =>
-        participant.userId === userId && participant.status === PARTICIPANT_STATUS.confirmed,
+        participant.userId === userId &&
+        (participant.status === PARTICIPANT_STATUS.confirmed ||
+          (participant.status === PARTICIPANT_STATUS.removed && isSessionEnded(game, now))),
     ),
   );
+  const hiddenIds = new Set(
+    [...hosted, ...played]
+      .filter((game) => !canViewHiddenGame({ game, viewerId }))
+      .map((game) => game.id),
+  );
 
-  return buildSessions({
+  const sessions = buildSessions({
     hosted,
-    joined: confirmed,
+    joined: played,
     viewerId: userId,
     respondedGameIds: new Set(),
     responseCounts: new Map(),
     now,
     readOnly: true,
   });
+  const marked = (role: SessionRole) =>
+    sessions[role].map((card) => ({ ...card, hidden: hiddenIds.has(card.id) }));
+
+  return {
+    [SESSION_ROLE.player]: marked(SESSION_ROLE.player),
+    [SESSION_ROLE.host]: marked(SESSION_ROLE.host),
+  };
 }
 
 export const PROFILE_SESSION_SECTIONS = [

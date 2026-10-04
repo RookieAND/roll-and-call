@@ -100,6 +100,7 @@ export function deriveSessionFacts({
       deadlinePassed: line.deadlinePassed,
       urgent: false,
       cancelled: false,
+      hidden: false,
       titleDanger: false,
       waitlistRank: null,
       caption: null,

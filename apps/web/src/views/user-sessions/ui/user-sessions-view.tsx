@@ -16,8 +16,9 @@ import {
 
 export async function UserSessionsView({ id, tab }: { id: string; tab?: string }) {
   const server = await getCurrentServer();
-  const [viewer, loaded] = await Promise.all([getCurrentSessionUser(), loadProfile(id)]);
+  const viewer = await getCurrentSessionUser();
   if (viewer?.id === id) redirect(serverPath({ slug: server.slug, path: "/me/sessions" }));
+  const loaded = await loadProfile({ userId: id, viewerId: viewer?.id ?? null });
   if (!loaded) notFound();
 
   const { profile, sessions } = loaded;

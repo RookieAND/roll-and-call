@@ -3,7 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "#/client";
 import { profiles, serverMembers } from "#/schema";
 
-// 계정(profiles)에 이 서버에서 보이는 프로필(server_members)을 붙인다. 이 서버 멤버가 아니면 없는 사람으로 본다.
+// 계정(profiles)에 이 서버에서 보이는 프로필(server_members)을 붙인다. 이 서버 멤버였던 적이 없으면 없는 사람으로 본다. 나간 멤버도 돌려주고(deletedAt) 화면이 가른다.
 export async function findMemberProfile({
   serverId,
   userId,
@@ -17,7 +17,9 @@ export async function findMemberProfile({
       discordId: profiles.discordId,
       username: serverMembers.nickname,
       nicknameSuffixBase: serverMembers.nicknameSuffixBase,
+      joinedAt: serverMembers.joinedAt,
       rejoinedAt: serverMembers.rejoinedAt,
+      deletedAt: serverMembers.deletedAt,
       avatarUrl: profiles.avatarUrl,
       createdAt: profiles.createdAt,
       onboardedAt: profiles.onboardedAt,
