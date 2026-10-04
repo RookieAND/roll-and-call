@@ -1,7 +1,7 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ArrowUp, ChevronRight } from "lucide-react";
 
-import { formatShortDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { ReportedReviewRow } from "@/shared/server";
 import { ServerLink, TableColumns, Tag } from "@/shared/ui";
 
@@ -58,7 +58,7 @@ export function ReportedReviewsTable({ rows }: ReportedReviewsTableProps) {
             </Table.Cell>
             <Table.Cell>
               <Text typography="body3" foreground="hint">
-                {formatShortDateTime(row.oldestReportedAt)}
+                {formatDateTime(row.oldestReportedAt)}
               </Text>
             </Table.Cell>
             <Table.Cell align="end">

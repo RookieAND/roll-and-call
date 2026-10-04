@@ -1,6 +1,6 @@
 import { Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { formatShortDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
 import { FactRows } from "@/shared/ui";
 
@@ -18,7 +18,7 @@ interface ReviewCardProps {
 export function ReviewCard({ review, logHref, hideLink, removeHref }: ReviewCardProps) {
   const editedValue = review.editedAt ? (
     <HStack align="baseline" gap="075" render={<span />}>
-      {formatShortDateTime(review.editedAt)}
+      {formatDateTime(review.editedAt)}
       {review.editedAfterReport ? (
         <Text typography="body3" weight="bold" foreground="warning" render={<span />}>
           신고 후 수정됨
@@ -52,7 +52,7 @@ export function ReviewCard({ review, logHref, hideLink, removeHref }: ReviewCard
           labelWidth={72}
           items={[
             { label: "세션", value: review.session.title },
-            { label: "작성 시각", value: formatShortDateTime(review.createdAt) },
+            { label: "작성 시각", value: formatDateTime(review.createdAt) },
           ]}
         />
         <FactRows
@@ -71,7 +71,7 @@ export function ReviewCard({ review, logHref, hideLink, removeHref }: ReviewCard
           <ReviewPhotos
             photoUrls={review.photoUrls}
             title={review.author.nickname}
-            meta={`${review.session.title} · ${formatShortDateTime(review.createdAt)}`}
+            meta={`${review.session.title} · ${formatDateTime(review.createdAt)}`}
             spoiler={review.spoiler}
             hideLink={hideLink}
             removeHref={removeHref}

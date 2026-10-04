@@ -31,6 +31,7 @@ export { OngoingChoiceList, type OngoingChoiceRow } from "./ongoing-choice-list"
 export { OPEN_PALETTE_EVENT, openPalette } from "./open-palette";
 export { ListPager } from "./list-pager";
 export { OutcomePanel, type Outcome } from "./outcome-panel";
+export { NextItemButton } from "./next-item-button";
 export { Panel } from "./panel";
 export { POST_ROUTE, PostRouteTabs } from "./post-route-tabs";
 export { PhotoThumb } from "./photo-thumb";
@@ -41,6 +42,8 @@ export { ServerIcon } from "./server-icon";
 export { ServerLink } from "./server-link";
 export { ServerSwitch, type SwitchServer } from "./server-switch";
 export { Sidebar } from "./sidebar";
+export { SortableHead } from "./sortable-head";
+export { SortFixedNote } from "./sort-fixed-note";
 export { TableColumns, type TableColumnWidth } from "./table-columns";
 export { TableEmptyRow } from "./table-empty-row";
 export { TabCount } from "./tab-count";

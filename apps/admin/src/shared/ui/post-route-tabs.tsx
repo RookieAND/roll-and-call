@@ -23,7 +23,7 @@ export function PostRouteTabs({ value, counts }: PostRouteTabsProps) {
       label: (
         <HStack align="center" gap="075" render={<span />}>
           신고된 후기
-          {counts?.reported ? (
+          {counts ? (
             <TabCount
               count={counts.reported}
               selected={value === POST_ROUTE.reportedReviews}
@@ -38,7 +38,7 @@ export function PostRouteTabs({ value, counts }: PostRouteTabsProps) {
       label: (
         <HStack align="center" gap="075" render={<span />}>
           숨긴 후기
-          {counts?.hidden ? (
+          {counts ? (
             <TabCount count={counts.hidden} selected={value === POST_ROUTE.hiddenReviews} />
           ) : null}
         </HStack>

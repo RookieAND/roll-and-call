@@ -7,12 +7,12 @@ import { ServerLink } from "./server-link";
 interface AdminHeaderProps {
   title: ReactNode;
   sub?: ReactNode;
-  back?: { href: string; label: string };
+  trail?: { href: string; label: string }[];
   actions?: ReactNode;
   withAside?: boolean;
 }
 
-export function AdminHeader({ title, sub, back, actions, withAside }: AdminHeaderProps) {
+export function AdminHeader({ title, sub, trail = [], actions, withAside }: AdminHeaderProps) {
   return (
     <HStack
       align="center"
@@ -23,19 +23,20 @@ export function AdminHeader({ title, sub, back, actions, withAside }: AdminHeade
         withAside ? "pr-150 pl-center-200" : "px-page",
       )}
     >
-      {back ? (
+      {trail.map((step) => (
         <HStack
+          key={step.href}
           align="center"
           gap="050"
-          render={<ServerLink path={back.href} />}
+          render={<ServerLink path={step.href} />}
           className="text-hint hover:text-gray-600"
         >
           <Text typography="body2" weight="medium" foreground="inherit">
-            {back.label}
+            {step.label}
           </Text>
           <ChevronRight size={16} aria-hidden />
         </HStack>
-      ) : null}
+      ))}
       <Text typography="heading1" render={<h1 />}>
         {title}
       </Text>

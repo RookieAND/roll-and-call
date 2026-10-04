@@ -1,7 +1,7 @@
 import { Button, Dialog } from "@roll-and-call/ui";
 import { RotateCcw, X } from "lucide-react";
 
-import { formatDateTime, formatShortDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { ReviewDetail, ReviewModerationResult } from "@/shared/server";
 import { ConflictNotice, ItemCard, ModalServerLabel, ServerLink } from "@/shared/ui";
 
@@ -38,9 +38,7 @@ export function ReviewFailureContent({
           <ItemCard
             icon={X}
             title="작성자가 삭제한 후기입니다"
-            meta={
-              deleted ? `${deleted.author} · ${formatShortDateTime(deleted.at)} 삭제` : undefined
-            }
+            meta={deleted ? `${deleted.author} · ${formatDateTime(deleted.at)} 삭제` : undefined}
           >
             {deleted?.closedReportCount
               ? `이 후기에 걸린 신고 ${deleted.closedReportCount}건은 자동으로 닫혔습니다.`

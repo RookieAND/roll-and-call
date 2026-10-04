@@ -26,7 +26,7 @@ export function UserDetailLoading() {
     <>
       <AdminHeader
         title={<Skeleton width={96} height={22} render={<span />} />}
-        back={{ href: "/users", label: "유저" }}
+        trail={[{ href: "/users", label: "유저" }]}
         actions={
           <Button variant="outline" colorPalette="gray" size="sm" disabled>
             활동 기록에서 보기

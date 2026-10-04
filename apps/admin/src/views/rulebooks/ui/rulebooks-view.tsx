@@ -82,9 +82,7 @@ export function RulebooksView({
       label: (
         <HStack align="center" gap="075" render={<span />}>
           추가 요청
-          {requests.length > 0 ? (
-            <TabCount count={requests.length} selected={tab === RULEBOOKS_TAB.requests} />
-          ) : null}
+          <TabCount count={requests.length} selected={tab === RULEBOOKS_TAB.requests} />
         </HStack>
       ),
       href: `/rules?tab=${RULEBOOKS_TAB.requests}`,

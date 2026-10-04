@@ -43,7 +43,7 @@ export function ReviewDetailView({ review, action, from }: ReviewDetailViewProps
       <AdminHeader
         title={`${review.author.nickname}의 후기`}
         sub="후기 상세"
-        back={back}
+        trail={[back]}
         withAside
       />
       <HStack data-full-bleed align="stretch" className="flex-1">

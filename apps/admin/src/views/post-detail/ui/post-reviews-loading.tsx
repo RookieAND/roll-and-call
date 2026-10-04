@@ -19,7 +19,7 @@ export function PostReviewsLoading() {
       <AdminHeader
         title={<Skeleton width={140} height={22} render={<span />} className="inline-block" />}
         sub="구인 상세"
-        back={{ href: "/posts", label: "구인 목록" }}
+        trail={[{ href: "/posts", label: "구인 목록" }]}
         withAside
       />
       <HStack data-full-bleed align="stretch" className="flex-1">

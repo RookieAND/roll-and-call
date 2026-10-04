@@ -2,7 +2,7 @@ import { HStack, Table, Text } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { ArrowDown, ChevronRight } from "lucide-react";
 
-import { actionTone, formatShortDateTime } from "@/shared/lib";
+import { actionTone, formatDateTime } from "@/shared/lib";
 import { retentionDaysLeft, type AuditEntry } from "@/shared/server";
 import { EMPTY_IMAGE, ServerLink, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
 
@@ -56,7 +56,7 @@ export function AuditLogTable({ rows }: AuditLogTableProps) {
                   render={<ServerLink path={`/log/${row.id}`} />}
                   className="after:absolute after:inset-0"
                 >
-                  {formatShortDateTime(row.at)}
+                  {formatDateTime(row.at)}
                 </Text>
               </Table.Cell>
               <Table.Cell>

@@ -1,7 +1,7 @@
 import { Callout, VStack } from "@roll-and-call/ui";
 import { Flag } from "lucide-react";
 
-import { formatShortDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
 import { ItemCard, Panel, Tag } from "@/shared/ui";
 
@@ -27,7 +27,7 @@ export function ReviewReportsPanel({ review }: ReviewReportsPanelProps) {
             icon={Flag}
             tone="danger"
             title={report.reporterNickname}
-            meta={formatShortDateTime(report.reportedAt)}
+            meta={formatDateTime(report.reportedAt)}
             tags={<Tag tone="danger">{report.reason}</Tag>}
           >
             {report.detail || null}

@@ -79,7 +79,7 @@ export function PostDetailView({ post, tab, action, page, serverAppUrl }: PostDe
       <AdminHeader
         title={post.title}
         sub={post.hidden ? "숨김 중" : "구인 상세"}
-        back={{ href: "/posts", label: "구인 목록" }}
+        trail={[{ href: "/posts", label: "구인 목록" }]}
         withAside
       />
       <HStack data-full-bleed align="stretch" className="flex-1">

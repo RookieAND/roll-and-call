@@ -1,6 +1,6 @@
 import { Button, Card, HStack, Text } from "@roll-and-call/ui";
 
-import { formatShortDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
 import { ServerLink, Tag } from "@/shared/ui";
 
@@ -21,7 +21,7 @@ export function ReviewHiddenBanner({ hidden, logHref }: ReviewHiddenBannerProps)
         사유: {hidden.reasonLabel}
       </Text>
       <Text typography="body4" foreground="hint" className="whitespace-nowrap">
-        {formatShortDateTime(hidden.at)} · {hidden.by}
+        {formatDateTime(hidden.at)} · {hidden.by}
       </Text>
       <Button
         variant="outline"

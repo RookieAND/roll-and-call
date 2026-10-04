@@ -46,9 +46,7 @@ export function UserDetailTabs({
           {USER_DETAIL_TABS.map(({ value, label }) => (
             <Tabs.Trigger key={value} value={value}>
               {label}
-              {counts[value] > 0 ? (
-                <TabCount count={counts[value]} selected={tab === value} />
-              ) : null}
+              <TabCount count={counts[value]} selected={tab === value} />
             </Tabs.Trigger>
           ))}
           <Tabs.Indicator />

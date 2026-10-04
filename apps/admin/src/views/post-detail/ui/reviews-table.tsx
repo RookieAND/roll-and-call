@@ -1,7 +1,7 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ArrowDown } from "lucide-react";
 
-import { formatShortDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import { ReviewStatusBadge, TableColumns, ServerLink } from "@/shared/ui";
 
@@ -44,7 +44,7 @@ export function ReviewsTable({ reviews }: ReviewsTableProps) {
             </Table.Cell>
             <Table.Cell>
               <Text typography="body3" foreground="hint">
-                {formatShortDateTime(review.createdAt)}
+                {formatDateTime(review.createdAt)}
               </Text>
             </Table.Cell>
             <Table.Cell align="end" numeric>

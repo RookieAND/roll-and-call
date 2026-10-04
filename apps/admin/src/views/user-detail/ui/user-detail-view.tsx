@@ -42,7 +42,7 @@ export function UserDetailView({
     <>
       <AdminHeader
         title={user.nickname}
-        back={{ href: "/users", label: "유저" }}
+        trail={[{ href: "/users", label: "유저" }]}
         actions={
           <Button
             variant="outline"

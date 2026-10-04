@@ -1,6 +1,6 @@
 import { Callout, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { formatShortDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
 import { FactRows, PhotoThumb } from "@/shared/ui";
 
@@ -23,10 +23,10 @@ export function UnhideDetails({ review, hidden }: UnhideDetailsProps) {
         labelWidth={96}
         items={[
           { label: "숨긴 사유", value: hidden.reasonLabel },
-          { label: "숨긴 시각", value: `${formatShortDateTime(hidden.at)} · ${hidden.by}` },
+          { label: "숨긴 시각", value: `${formatDateTime(hidden.at)} · ${hidden.by}` },
           {
             label: "작성자 수정",
-            value: editedAfterHidden ? formatShortDateTime(editedAfterHidden) : "없음",
+            value: editedAfterHidden ? formatDateTime(editedAfterHidden) : "없음",
           },
         ]}
       />

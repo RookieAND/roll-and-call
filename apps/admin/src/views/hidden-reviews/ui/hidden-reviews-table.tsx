@@ -1,7 +1,7 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ArrowDown, ChevronRight } from "lucide-react";
 
-import { formatShortDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 import type { HiddenReviewRow } from "@/shared/server";
 import { ServerLink, TableColumns, Tag } from "@/shared/ui";
 
@@ -56,12 +56,12 @@ export function HiddenReviewsTable({ rows }: HiddenReviewsTableProps) {
             </Table.Cell>
             <Table.Cell>
               <Text typography="body3" foreground="hint">
-                {formatShortDateTime(row.hiddenAt)}
+                {formatDateTime(row.hiddenAt)}
               </Text>
             </Table.Cell>
             <Table.Cell>
               {row.editedAfterHidden ? (
-                <Text typography="body3">{formatShortDateTime(row.editedAfterHidden)}</Text>
+                <Text typography="body3">{formatDateTime(row.editedAfterHidden)}</Text>
               ) : (
                 <Text typography="body3" foreground="hint">
                   없음

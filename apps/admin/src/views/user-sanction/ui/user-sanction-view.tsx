@@ -13,7 +13,7 @@ export function UserSanctionView({ user }: UserSanctionViewProps) {
       <AdminHeader
         title={`${user.nickname} 제재`}
         sub="유저 상세"
-        back={{ href: backHref, label: user.nickname }}
+        trail={[{ href: backHref, label: user.nickname }]}
       />
       <SanctionUserForm
         userId={user.id}
