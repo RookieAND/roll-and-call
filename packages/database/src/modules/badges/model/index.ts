@@ -21,6 +21,7 @@ export {
 export { BADGE_LADDERS, type BadgeLadderDefinition } from "./badge-ladders";
 export { computeBadges } from "./compute-badges";
 export { countsAsAttended } from "./counts-as-attended";
+export { countsForRanking } from "./counts-for-ranking";
 export { diffBadges, type BadgeWrite } from "./diff-badges";
 export { isHiddenLadder } from "./is-hidden-ladder";
 export { isMonthSettled } from "./is-month-settled";
@@ -31,4 +32,6 @@ export { monthlyWinners, type MonthlyAppearance } from "./monthly-winners";
 export { nextMonthStart } from "./next-month-start";
 export { parseBadgeKey } from "./parse-badge-key";
 export { type BadgeEvent } from "./reached-tier";
+export { recordAppearances } from "./record-appearances";
+export { isRecordSession, type RecordGame } from "./record-session";
 export { DEFAULT_PLAY_MINUTES, sessionEndAt } from "#/modules/games/model/session-timing";
