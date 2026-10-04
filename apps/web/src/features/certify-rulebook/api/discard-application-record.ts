@@ -11,7 +11,14 @@ import { getActingMember, removeUnusedCertPhotos, notMemberError } from "@/share
 const NOT_DISCARDABLE =
   "반려되거나 인증이 취소된 책만 기록을 지울 수 있습니다. 화면을 새로 고쳐 주세요.";
 
-export async function discardApplicationRecord(rulebookId: string): Promise<ActionResult> {
+// stay면 알림 탭에 남는다(할 일 카드). 그 밖에서는 내 룰북으로 간다.
+export async function discardApplicationRecord({
+  rulebookId,
+  stay,
+}: {
+  rulebookId: string;
+  stay: boolean;
+}): Promise<ActionResult> {
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };
@@ -35,5 +42,9 @@ export async function discardApplicationRecord(rulebookId: string): Promise<Acti
     ]),
   });
   revalidatePath(serverPath({ slug: server.slug, path: "/me" }), "layout");
+  if (stay) {
+    revalidatePath(serverPath({ slug: server.slug, path: "/notifications" }));
+    return {};
+  }
   redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
 }

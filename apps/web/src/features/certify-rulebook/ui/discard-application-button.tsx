@@ -9,12 +9,14 @@ import { discardApplicationRecord } from "../api/discard-application-record";
 
 interface DiscardApplicationButtonProps {
   rulebookId: string;
+  stay?: boolean;
   size?: ButtonProps["size"];
   className?: string;
 }
 
 export function DiscardApplicationButton({
   rulebookId,
+  stay = false,
   size,
   className,
 }: DiscardApplicationButtonProps) {
@@ -22,10 +24,10 @@ export function DiscardApplicationButton({
   const { pending, run } = useAction();
 
   const discard = () =>
-    run(() => discardApplicationRecord(rulebookId), {
+    run(() => discardApplicationRecord({ rulebookId, stay }), {
       onSuccess: () => {
         setOpen(false);
-        toast.success("신청을 취소했습니다");
+        toast.success("기록을 지웠습니다");
       },
     });
 
@@ -38,12 +40,12 @@ export function DiscardApplicationButton({
         className={className}
         onClick={() => setOpen(true)}
       >
-        신청 취소
+        기록 지우기
       </Button>
       <ConfirmDialog
         open={open}
         onOpenChange={setOpen}
-        title="신청을 취소할까요?"
+        title="기록을 지울까요?"
         description={
           <>
             신청 기록과 올린 사진이 모두 지워집니다.
@@ -52,7 +54,7 @@ export function DiscardApplicationButton({
           </>
         }
         cancelLabel="돌아가기"
-        confirmLabel="신청 취소"
+        confirmLabel="기록 지우기"
         danger
         pending={pending}
         onConfirm={discard}

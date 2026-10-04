@@ -14,7 +14,7 @@ export function RetryBar({ rulebookId, retryHref, discardable }: RetryBarProps) 
     <VStack gap="100" className="border-t border-gray-200 px-200 pt-150 pb-200">
       {discardable && (
         <Text typography="body4" foreground="muted" className="text-center">
-          신청을 취소하면 이 신청 기록이 지워져요.
+          기록을 지우면 이 신청 기록이 지워집니다.
         </Text>
       )}
       <HStack gap="100">

@@ -7,6 +7,8 @@ import type { MySessions, SessionCardModel } from "./session-card-model";
 import { TODO_ITEM_TYPE, type SessionTodoItem, type TodoItem } from "./todo-item";
 import { TODO_EYEBROW, TODO_KIND, TODO_ORDER } from "./todo-kind";
 
+export type TodoList = { items: TodoItem[]; count: number; blocked: boolean };
+
 type Ranked = { item: TodoItem; roleRank: number; sortAt: number };
 
 // 같은 종류 안에서는 GM 일(roleRank 0)이 먼저이고, 그다음 가까운 세션·마감·기한 순이다.
@@ -18,7 +20,7 @@ export function listTodos({
   sessions: MySessions;
   rejectedRulebooks: MyRulebook[];
   now: Date;
-}): { items: TodoItem[]; count: number; blocked: boolean } {
+}): TodoList {
   const fromCards = (cards: SessionCardModel[], roleRank: number): Ranked[] =>
     cards.flatMap(({ id, title, todo }) => {
       if (isNull(todo)) return [];
