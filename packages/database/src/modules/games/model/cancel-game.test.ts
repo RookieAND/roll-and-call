@@ -10,43 +10,28 @@ const at = (hours: number) => new Date(now.getTime() + hours * HOUR);
 
 describe("cancelBlockReason", () => {
   it("이미 취소한 구인은 다시 취소하지 않는다", () => {
-    const game = { cancelledAt: at(-1), confirmedAt: at(5), playMinutes: 60, endedAt: null };
+    const game = { cancelledAt: at(-1), confirmedAt: at(5) };
     expect(cancelBlockReason({ game, now })).toBe("already_cancelled");
   });
 
   it("시간이 정해지지 않은 구인은 취소할 수 있다", () => {
-    const game = { cancelledAt: null, confirmedAt: null, playMinutes: null, endedAt: null };
+    const game = { cancelledAt: null, confirmedAt: null };
     expect(cancelBlockReason({ game, now })).toBeNull();
   });
 
-  it("진행 중인 세션은 취소할 수 있다", () => {
-    const game = { cancelledAt: null, confirmedAt: at(-1), playMinutes: 120, endedAt: null };
+  it("시작 1분 전에는 취소할 수 있다", () => {
+    const game = { cancelledAt: null, confirmedAt: new Date(now.getTime() + 60_000) };
     expect(cancelBlockReason({ game, now })).toBeNull();
   });
 
-  it("끝난 세션은 취소하지 않는다", () => {
-    const game = { cancelledAt: null, confirmedAt: at(-2), playMinutes: 120, endedAt: null };
-    expect(cancelBlockReason({ game, now })).toBe("session_ended");
+  it("진행 중인 세션은 취소하지 않는다", () => {
+    const game = { cancelledAt: null, confirmedAt: at(-1) };
+    expect(cancelBlockReason({ game, now })).toBe("session_started");
   });
 
-  it("세션을 마친 시각이 지났으면 예정 종료 전이어도 취소하지 않는다", () => {
-    const game = { cancelledAt: null, confirmedAt: at(-1), playMinutes: 240, endedAt: at(-0.5) };
-    expect(cancelBlockReason({ game, now })).toBe("session_ended");
-  });
-
-  it("플레이타임이 없으면 3시간으로 본다", () => {
-    expect(
-      cancelBlockReason({
-        game: { cancelledAt: null, confirmedAt: at(-2.9), playMinutes: null, endedAt: null },
-        now,
-      }),
-    ).toBeNull();
-    expect(
-      cancelBlockReason({
-        game: { cancelledAt: null, confirmedAt: at(-3), playMinutes: null, endedAt: null },
-        now,
-      }),
-    ).toBe("session_ended");
+  it("끝난 세션도 시작한 세션으로 보고 취소하지 않는다", () => {
+    const game = { cancelledAt: null, confirmedAt: at(-48) };
+    expect(cancelBlockReason({ game, now })).toBe("session_started");
   });
 });
 

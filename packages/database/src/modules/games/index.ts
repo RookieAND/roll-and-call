@@ -7,7 +7,6 @@ export { cancelGame, type CancelGameResult } from "./commands/cancel-game";
 export { closeGameRecruitment } from "./commands/close-game-recruitment";
 export { confirmGameSession } from "./commands/confirm-game-session";
 export { createGameWithRoster } from "./commands/create-game-with-roster";
-export { deleteOwnedGame } from "./commands/delete-owned-game";
 export { drawLottery, type DrawLotteryResult } from "./commands/draw-lottery";
 export { deleteParticipant } from "./commands/delete-participant";
 export { setSessionEndedAt } from "./commands/end-session";

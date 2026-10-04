@@ -5,11 +5,7 @@ export { requireOwner, requireStaff } from "./auth/require-staff";
 export { getSessionAccount, type SessionAccount } from "./auth/get-session-account";
 export { getCurrentServer, type CurrentServer } from "./auth/get-current-server";
 export { listMyServers, type MyServer } from "./auth/list-my-servers";
-export {
-  deleteGameReviewForumPosts,
-  syncGameReviewForumPosts,
-  syncReviewForumPost,
-} from "@roll-and-call/review-forum";
+export { syncGameReviewForumPosts, syncReviewForumPost } from "@roll-and-call/review-forum";
 export { evaluateGameBadges } from "@roll-and-call/database/badges";
 export { isNicknameTaken } from "@roll-and-call/database/profiles";
 export { banGuildMember, unbanGuildMember } from "@roll-and-call/discord";

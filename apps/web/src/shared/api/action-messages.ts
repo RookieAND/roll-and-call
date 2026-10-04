@@ -13,4 +13,6 @@ export const SANCTIONED_APPLY_MESSAGE = "활동 정지 기간에는 신청할 �
 export const HIDDEN_GAME_APPLY_MESSAGE = "운영진이 숨긴 구인입니다.";
 // 세션 종료 뒤 명단 조정 거부.
 export const ROSTER_SESSION_ENDED_MESSAGE = "세션이 끝나 명단을 바꿀 수 없습니다.";
+export const GAME_ALREADY_CANCELLED_MESSAGE = "이미 취소한 구인입니다.";
+export const SESSION_STARTED_CANCEL_MESSAGE = "시작한 세션은 취소할 수 없습니다.";
 export const SIGN_OUT_FAILED_MESSAGE = "로그아웃하지 못했습니다. 다시 시도해 주세요.";

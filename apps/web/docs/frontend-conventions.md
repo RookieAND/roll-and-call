@@ -12,7 +12,7 @@
 | `packages/database` | `src/schema/<도메인>.ts`와 `src/modules/<도메인>/{queries,commands,model}`. 도메인은 servers·profiles·games·reviews·badges·rulebooks·certifications·moderation. 서버 코드는 `@roll-and-call/database/<도메인>`, 클라이언트에서도 쓰는 순수 값·규칙은 `/<도메인>/model`(db를 읽지 않는다)에서 가져온다. 서버별 표를 쓰는 함수는 `serverId` 필수. 앱은 `.`에서 타입만 가져오고 `db`·표·drizzle-orm을 직접 쓰지 않는다 | GAME_STATUS, PARTICIPANT_STATUS, deriveGameStatus, countConfirmed |
 | `shared/ui`        | 앱 공용(도메인 약함) 조합 컴포넌트                        | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                                  |
 | `entities/*`       | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위 | game, profile, availability                                                           |
-| `features/*`       | **단일 사용자 동작**(server action·toggle 등 상태 변경)   | JoinGameButton, DeleteGameRow, GameStatusChips, ThumbnailUpload                       |
+| `features/*`       | **단일 사용자 동작**(server action·toggle 등 상태 변경)   | JoinGameButton, CancelGameRow, GameStatusChips, ThumbnailUpload                       |
 | `widgets/*`        | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)    | game-form, session-list                                                               |
 | `views/*`          | 한 화면의 조합 전체 + 라우트 글루                         | GamesView, GameDetail, ParticipantManager                                             |
 
@@ -41,7 +41,7 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 | 레이어     | 나누는 축 | 답하는 질문            | 예                          |
 | ---------- | --------- | ---------------------- | --------------------------- |
 | `entities` | 명사      | 이것은 무엇인가        | game, profile, availability |
-| `features` | 동사      | 사용자가 무엇을 하는가 | join-game, delete-game      |
+| `features` | 동사      | 사용자가 무엇을 하는가 | join-game, cancel-game      |
 | `views`    | 화면      | 이 라우트는 무엇인가   | games, game-detail          |
 
 **feature 슬라이스는 하나의 동작이다.** FSD 문서의 표현으로 "하나의 피처는 사용자에게 유용한 하나의 기능이며, 여러 기능이 한 피처에 구현되면 경계 위반"이다. `manage-game`처럼 아무 동작도 지칭하지 않는 포괄어로 묶으면 엔티티명만 피한 자루가 된다. 단, 엔티티와 같은 시험대를 적용한다. **쪼갰을 때 교차 import가 생기면 한 동작으로 본다.** 지금 남아 있는 두 예외는 그래서다.

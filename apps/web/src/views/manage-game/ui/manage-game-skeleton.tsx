@@ -3,7 +3,7 @@ import { range } from "es-toolkit";
 
 import { AppBar } from "@/shared/ui";
 
-// manageRows 5행 + DeleteGameRow 1행.
+// manageRows 5행 + CancelGameRow 1행.
 const ROW_COUNT = 6;
 
 export function ManageGameSkeleton() {

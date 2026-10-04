@@ -13,6 +13,7 @@ interface ConfirmDialogProps {
   danger?: boolean;
   confirmColorPalette?: "primary" | "success" | "danger";
   pending?: boolean;
+  confirmDisabled?: boolean;
   onConfirm: () => void;
   children?: ReactNode;
 }
@@ -27,6 +28,7 @@ export function ConfirmDialog({
   danger,
   confirmColorPalette,
   pending,
+  confirmDisabled,
   onConfirm,
   children,
 }: ConfirmDialogProps) {
@@ -63,7 +65,7 @@ export function ConfirmDialog({
             size="lg"
             className="flex-1"
             loading={pending}
-            disabled={pending}
+            disabled={pending || confirmDisabled}
             onClick={onConfirm}
           >
             {confirmLabel}

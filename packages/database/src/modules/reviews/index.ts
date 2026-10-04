@@ -11,5 +11,4 @@ export { getReviewDraftTarget, type ReviewDraftTarget } from "./queries/get-revi
 export { getReviewedGames, type ReviewedGames } from "./queries/get-reviewed-games";
 export { getWrittenReviews } from "./queries/get-written-reviews";
 export { listGameReviewIds } from "./queries/list-game-review-ids";
-export { listGameReviewThreadIds } from "./queries/list-game-review-thread-ids";
 export { loadForumReview, type ForumReview } from "./queries/load-forum-review";

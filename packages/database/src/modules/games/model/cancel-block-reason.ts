@@ -1,20 +1,15 @@
 import { isNull } from "es-toolkit";
 
-import { isSessionEnded } from "./session-timing";
+import { isSessionStarted } from "./session-timing";
 
-// 끝난 세션은 기록으로 남아야 해서 취소하지 않는다.
+// 시작한 세션은 출석·불참 기록과 어긋나서 취소하지 않는다(D239). GM·운영진·자동 취소가 모두 이 판단을 쓴다.
 export function cancelBlockReason({
   game,
   now,
 }: {
-  game: {
-    cancelledAt: Date | null;
-    confirmedAt: Date | null;
-    playMinutes: number | null;
-    endedAt: Date | null;
-  };
+  game: { cancelledAt: Date | null; confirmedAt: Date | null };
   now: Date;
-}): "already_cancelled" | "session_ended" | null {
+}): "already_cancelled" | "session_started" | null {
   if (!isNull(game.cancelledAt)) return "already_cancelled";
-  return isSessionEnded(game, now) ? "session_ended" : null;
+  return isSessionStarted(game, now) ? "session_started" : null;
 }

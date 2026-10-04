@@ -1,9 +1,9 @@
 import { Badge, Card, Container, HStack, Text } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
-import { countConfirmed, isSessionEnded } from "@/entities/game";
+import { GAME_CANCEL_KIND, gameCancelledRecipients, isSessionStarted } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
-import { DeleteGameRow } from "@/features/delete-game";
+import { CancelGameRow } from "@/features/cancel-game";
 import {
   getCurrentSessionUser,
   getGameById,
@@ -44,7 +44,11 @@ export async function ManageGameView({ id }: { id: string }) {
     );
   }
   const responses = responseCounts.get(id) ?? 0;
-  const confirmedCount = countConfirmed(game.participants);
+  const notifyCount = gameCancelledRecipients({
+    game,
+    kind: GAME_CANCEL_KIND.gm,
+    roster: game.participants,
+  }).length;
   const { stage, stats } = manageSummary({ game, responses });
   const rows = manageRows({ game, reviewCount: reviews.length });
 
@@ -82,12 +86,10 @@ export async function ManageGameView({ id }: { id: string }) {
             {rows.map((row) => (
               <ManageRow key={row.key} row={row} />
             ))}
-            <DeleteGameRow
+            <CancelGameRow
               gameId={id}
-              confirmedCount={confirmedCount}
-              lockedReason={
-                isSessionEnded(game) ? "이미 치른 세션은 취소할 수 없습니다" : undefined
-              }
+              notifyCount={notifyCount}
+              lockedReason={isSessionStarted(game) ? "시작한 세션은 취소할 수 없습니다" : undefined}
             />
           </Card.Root>
         </div>
