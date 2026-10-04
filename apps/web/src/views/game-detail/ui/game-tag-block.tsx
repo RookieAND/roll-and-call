@@ -1,13 +1,15 @@
 import { Chip, HStack, Text, VStack, type ChipProps } from "@roll-and-call/ui";
 
+import { LineBreaks } from "@/shared/ui";
+
 interface GameTagBlockProps {
   label: string;
   tags: string[];
-  note?: string;
+  noteLines?: readonly string[];
   tone?: ChipProps["tone"];
 }
 
-export function GameTagBlock({ label, tags, note, tone = "outline" }: GameTagBlockProps) {
+export function GameTagBlock({ label, tags, noteLines, tone = "outline" }: GameTagBlockProps) {
   return (
     <VStack gap="100">
       <Text typography="subtitle2" render={<h2 />}>
@@ -20,14 +22,9 @@ export function GameTagBlock({ label, tags, note, tone = "outline" }: GameTagBlo
           </Chip>
         ))}
       </HStack>
-      {note && (
-        <Text
-          typography="body4"
-          foreground="hint"
-          render={<p />}
-          className="break-keep whitespace-pre-line"
-        >
-          {note}
+      {noteLines && (
+        <Text typography="body4" foreground="hint" render={<p />} className="break-keep">
+          <LineBreaks lines={noteLines} />
         </Text>
       )}
     </VStack>

@@ -27,7 +27,7 @@ const tagList = (label: string) =>
 // re-validates and converts strings to DB types (Number/Date).
 export const gameFormSchema = z
   .object({
-    title: z.string().trim().min(1, "구인 제목을 입력하세요.").max(100),
+    title: z.string().trim().min(1, "구인 제목을 입력해 주세요.").max(100),
     // rule은 고른 룰북의 이름(표시용)이고, 등록할 때 서버는 rulebookId로 룰북을 다시 찾는다.
     rule: z.string().trim().min(1, "룰북을 선택해 주세요.").max(100),
     rulebookId: z.string(),

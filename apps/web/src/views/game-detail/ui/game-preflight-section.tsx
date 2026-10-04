@@ -7,7 +7,10 @@ import { AiImageBlock } from "./ai-image-block";
 import { GameNoticeBlock } from "./game-notice-block";
 import { GameTagBlock } from "./game-tag-block";
 
-const TRIGGER_NOTE = "신청 전에 확인해 주세요.\n불편한 소재가 있으면 GM에게 미리 말해도 됩니다.";
+const TRIGGER_NOTE_LINES = [
+  "신청 전에 확인해 주세요.",
+  "불편한 소재가 있으면 GM에게 미리 말해도 됩니다.",
+] as const;
 
 interface GamePreflightSectionProps {
   game: GameDetailData;
@@ -23,7 +26,7 @@ export function GamePreflightSection({ game }: GamePreflightSectionProps) {
         <GameTagBlock
           label={gameTagLabel[GAME_TAG.triggers]}
           tags={game.triggers}
-          note={TRIGGER_NOTE}
+          noteLines={TRIGGER_NOTE_LINES}
           tone="notice"
         />
       )}
