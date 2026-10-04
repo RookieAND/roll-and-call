@@ -997,6 +997,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "edit_requested_at": {
+          "name": "edit_requested_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {

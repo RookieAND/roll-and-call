@@ -484,6 +484,13 @@
       "when": 1795800000000,
       "tag": "0072_availability_submitted",
       "breakpoints": true
+    },
+    {
+      "idx": 73,
+      "version": "7",
+      "when": 1795900000000,
+      "tag": "0073_drop_game_edit_requested_at",
+      "breakpoints": true
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "id": "bbe3fe3d-6852-4ac3-8746-33a2a7be9b99",
-  "prevId": "5d68c8e1-d936-4e7c-9035-45f3faec0150",
+  "id": "87925fb3-cfb8-4910-8103-82d7909170e6",
+  "prevId": "6c219a2a-9ce7-4356-b1ce-cd24f0d785b5",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -267,8 +267,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "gm_role_id": {
-          "name": "gm_role_id",
+        "staff_channel_id": {
+          "name": "staff_channel_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -281,6 +281,12 @@
         },
         "invite_url": {
           "name": "invite_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "monthly_announced_month": {
+          "name": "monthly_announced_month",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -502,6 +508,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "onboarded_at": {
+          "name": "onboarded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -880,6 +892,20 @@
           "primaryKey": false,
           "notNull": false
         },
+        "window_start_hour": {
+          "name": "window_start_hour",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 12
+        },
+        "window_end_hour": {
+          "name": "window_end_hour",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
         "notified_at": {
           "name": "notified_at",
           "type": "timestamp with time zone",
@@ -971,12 +997,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "edit_requested_at": {
-          "name": "edit_requested_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
@@ -1052,6 +1072,22 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "games_lottery_due_idx": {
+          "name": "games_lottery_due_idx",
+          "columns": [
+            {
+              "expression": "end_date",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "recruit_method = 'lottery' and drawn_at is null and cancelled_at is null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -1118,6 +1154,10 @@
         "games_play_minutes_positive": {
           "name": "games_play_minutes_positive",
           "value": "\"games\".\"play_minutes\" > 0"
+        },
+        "games_window_hours": {
+          "name": "games_window_hours",
+          "value": "\"games\".\"window_start_hour\" between 0 and 23 and \"games\".\"window_end_hour\" between 0 and 23 and \"games\".\"window_start_hour\" <> \"games\".\"window_end_hour\""
         },
         "games_range_order": {
           "name": "games_range_order",
@@ -1222,6 +1262,12 @@
         },
         "waitlisted_at": {
           "name": "waitlisted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "availability_submitted_at": {
+          "name": "availability_submitted_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
@@ -1390,176 +1436,6 @@
         }
       },
       "isRLSEnabled": false
-    },
-    "public.review_reports": {
-      "name": "review_reports",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "server_id": {
-          "name": "server_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "review_id": {
-          "name": "review_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "reporter_id": {
-          "name": "reporter_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "category": {
-          "name": "category",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "detail": {
-          "name": "detail",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "outcome": {
-          "name": "outcome",
-          "type": "review_report_outcome",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "resolved_by": {
-          "name": "resolved_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "resolved_at": {
-          "name": "resolved_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "review_reports_review_id_idx": {
-          "name": "review_reports_review_id_idx",
-          "columns": [
-            {
-              "expression": "review_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "review_reports_open_reporter_unique": {
-          "name": "review_reports_open_reporter_unique",
-          "columns": [
-            {
-              "expression": "review_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "reporter_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "where": "outcome is null",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "review_reports_server_id_servers_id_fk": {
-          "name": "review_reports_server_id_servers_id_fk",
-          "tableFrom": "review_reports",
-          "tableTo": "servers",
-          "columnsFrom": ["server_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "review_reports_review_id_session_reviews_id_fk": {
-          "name": "review_reports_review_id_session_reviews_id_fk",
-          "tableFrom": "review_reports",
-          "tableTo": "session_reviews",
-          "columnsFrom": ["review_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "review_reports_reporter_id_profiles_id_fk": {
-          "name": "review_reports_reporter_id_profiles_id_fk",
-          "tableFrom": "review_reports",
-          "tableTo": "profiles",
-          "columnsFrom": ["reporter_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "review_reports_resolved_by_profiles_id_fk": {
-          "name": "review_reports_resolved_by_profiles_id_fk",
-          "tableFrom": "review_reports",
-          "tableTo": "profiles",
-          "columnsFrom": ["resolved_by"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "review_reports_review_server_fk": {
-          "name": "review_reports_review_server_fk",
-          "tableFrom": "review_reports",
-          "tableTo": "session_reviews",
-          "columnsFrom": ["review_id", "server_id"],
-          "columnsTo": ["id", "server_id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {
-        "review_reports_category": {
-          "name": "review_reports_category",
-          "value": "\"review_reports\".\"category\" in ('abuse', 'privacy', 'spoiler', 'image', 'unrelated', 'other')"
-        },
-        "review_reports_detail_length": {
-          "name": "review_reports_detail_length",
-          "value": "char_length(\"review_reports\".\"detail\") <= 200"
-        }
-      },
-      "isRLSEnabled": true
     },
     "public.session_reviews": {
       "name": "session_reviews",
@@ -1833,9 +1709,9 @@
           "primaryKey": false,
           "notNull": false
         },
-        "seen_at": {
-          "name": "seen_at",
-          "type": "timestamp with time zone",
+        "notified_tier": {
+          "name": "notified_tier",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         }
@@ -2238,6 +2114,12 @@
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
+        },
+        "reject_reason": {
+          "name": "reject_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -2298,7 +2180,12 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "rulebook_requests_reject_reason_length": {
+          "name": "rulebook_requests_reject_reason_length",
+          "value": "char_length(\"rulebook_requests\".\"reject_reason\") <= 200"
+        }
+      },
       "isRLSEnabled": true
     },
     "public.rulebooks": {
@@ -2611,6 +2498,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "files_purged_at": {
+          "name": "files_purged_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "discarded_at": {
+          "name": "discarded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
@@ -2776,6 +2675,12 @@
         "revoke_reason": {
           "name": "revoke_reason",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "discarded_at": {
+          "name": "discarded_at",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
         }
@@ -3488,6 +3393,154 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": true
+    },
+    "public.notifications": {
+      "name": "notifications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "server_id": {
+          "name": "server_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "params": {
+          "name": "params",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "read_at": {
+          "name": "read_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "notifications_server_user_created_idx": {
+          "name": "notifications_server_user_created_idx",
+          "columns": [
+            {
+              "expression": "server_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "notifications_unread_idx": {
+          "name": "notifications_unread_idx",
+          "columns": [
+            {
+              "expression": "server_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "read_at is null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "notifications_created_at_idx": {
+          "name": "notifications_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "notifications_server_id_servers_id_fk": {
+          "name": "notifications_server_id_servers_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "servers",
+          "columnsFrom": ["server_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "notifications_user_id_profiles_id_fk": {
+          "name": "notifications_user_id_profiles_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "profiles",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
     }
   },
   "enums": {
@@ -3510,11 +3563,6 @@
       "name": "schedule_mode",
       "schema": "public",
       "values": ["fixed", "coordinate"]
-    },
-    "public.review_report_outcome": {
-      "name": "review_report_outcome",
-      "schema": "public",
-      "values": ["dismissed", "hidden", "removed"]
     },
     "public.rulebook_kind": {
       "name": "rulebook_kind",

@@ -16,6 +16,5 @@ ALTER TABLE "participants" ADD CONSTRAINT "participants_absence_added_tag" CHECK
 ALTER TABLE "participants" ADD CONSTRAINT "participants_absence_added_complete" CHECK ("participants"."absence_added_at" is null or "participants"."absence_added_tag" is not null);--> statement-breakpoint
 ALTER TABLE "participants" ADD CONSTRAINT "participants_absence_added_other_reason" CHECK ("participants"."absence_added_tag" is distinct from 'other' or "participants"."absence_added_reason" is not null);--> statement-breakpoint
 ALTER TABLE "participants" ADD CONSTRAINT "participants_absence_added_reason_length" CHECK (char_length("participants"."absence_added_reason") <= 200);--> statement-breakpoint
-ALTER TABLE "games" DROP COLUMN "edit_requested_at";--> statement-breakpoint
 update games set attendance_first_confirmed_at = attendance_confirmed_at where attendance_confirmed_at is not null;--> statement-breakpoint
 update participants p set waitlisted_at = case when p.draw_rank is not null then coalesce(g.drawn_at, p.joined_at) else p.joined_at end from games g where g.id = p.game_id and p.status = 'waiting';
