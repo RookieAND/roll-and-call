@@ -4,17 +4,19 @@ import { Crown } from "lucide-react";
 import { ServerLink } from "@/shared/ui";
 
 import type { RecordPerson } from "../model/rank-people";
+import { HomeRecordTieSheet } from "./home-record-tie-sheet";
 import { leaderName } from "./leader-name";
 
 const CARD = "flex items-center gap-150 rounded-600 bg-primary-50 p-175 transition-colors";
 
 interface HomeRecordLeaderProps {
+  label: string;
   people: [RecordPerson, ...RecordPerson[]];
   count: number;
 }
 
-// 공동 1위는 갈 곳이 하나가 아니라 링크를 걸지 않고 카드만 둔다.
-export function HomeRecordLeader({ people, count }: HomeRecordLeaderProps) {
+// 공동 1위는 갈 곳이 하나가 아니라 카드가 동점자 시트를 연다.
+export function HomeRecordLeader({ label, people, count }: HomeRecordLeaderProps) {
   const [first] = people;
   const name = leaderName(people);
 
@@ -58,7 +60,20 @@ export function HomeRecordLeader({ people, count }: HomeRecordLeaderProps) {
     </>
   );
 
-  if (people.length > 1) return <div className={CARD}>{body}</div>;
+  if (people.length > 1)
+    return (
+      <HomeRecordTieSheet
+        label={label}
+        people={people}
+        count={count}
+        className={cn(
+          CARD,
+          "w-full text-left hover:bg-primary-100 focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none",
+        )}
+      >
+        {body}
+      </HomeRecordTieSheet>
+    );
 
   return (
     <ServerLink path={`/users/${first.id}`} className={cn(CARD, "hover:bg-primary-100")}>

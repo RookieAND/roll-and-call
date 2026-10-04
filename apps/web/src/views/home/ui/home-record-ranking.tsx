@@ -3,16 +3,17 @@ import { HomeRecordLeader } from "./home-record-leader";
 import { HomeRecordRow } from "./home-record-row";
 
 interface HomeRecordRankingProps {
+  label: string;
   ranking: RecordRanking;
   first: RecordRanking["leaders"][number];
 }
 
-export function HomeRecordRanking({ ranking, first }: HomeRecordRankingProps) {
+export function HomeRecordRanking({ label, ranking, first }: HomeRecordRankingProps) {
   const { leaders, leaderCount, runnersUp } = ranking;
 
   return (
     <>
-      <HomeRecordLeader people={[first, ...leaders.slice(1)]} count={leaderCount} />
+      <HomeRecordLeader label={label} people={[first, ...leaders.slice(1)]} count={leaderCount} />
       <div className="divide-y divide-gray-100 px-025">
         {runnersUp.map((row, index) => (
           <HomeRecordRow key={row?.person.id ?? `empty-${index}`} row={row} position={index + 2} />

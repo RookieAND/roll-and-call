@@ -24,6 +24,7 @@ import { HomeTodoBanner } from "./home-todo-banner";
 
 export async function HomeView({ date, authError }: { date?: string; authError: boolean }) {
   const { monthStart, selectedKey, todayKey } = resolveCalendarView(date);
+  const now = new Date();
   const server = await getCurrentServer();
   const [user, rows] = await Promise.all([
     getCurrentSessionUser(),
@@ -35,7 +36,7 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
   ]);
 
   const profile = user ? await getProfile(server.id, user.id) : undefined;
-  const sessions = toCalendarSessions({ rows, viewerId: user?.id ?? null });
+  const sessions = toCalendarSessions({ rows, viewerId: user?.id ?? null, now });
   const sessionsByDay = groupSessionsByDay(sessions);
 
   return (
@@ -91,7 +92,7 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
           initialSelectedKey={selectedKey}
           todayKey={todayKey}
         />
-        <HomeMonthRecord monthStart={monthStart} record={buildMonthRecord(sessions)} />
+        <HomeMonthRecord monthStart={monthStart} record={buildMonthRecord({ rows, now })} />
       </Container>
       {user && (
         <Suspense fallback={null}>

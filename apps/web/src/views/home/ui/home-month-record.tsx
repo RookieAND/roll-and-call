@@ -6,6 +6,9 @@ import { HomeRecordEmpty } from "./home-record-empty";
 import { HomeRecordRanking } from "./home-record-ranking";
 import { HomeRecordSection } from "./home-record-section";
 
+const GM_LABEL = "GM으로 운영한 세션 수";
+const PLAYER_LABEL = "플레이어로 참여한 세션 수";
+
 interface HomeMonthRecordProps {
   monthStart: Dayjs;
   record: MonthRecord;
@@ -29,9 +32,9 @@ export function HomeMonthRecord({ monthStart, record }: HomeMonthRecordProps) {
         {summary}
       </Text>
 
-      <HomeRecordSection label="GM으로 운영한 세션 수">
+      <HomeRecordSection label={GM_LABEL}>
         {topGm ? (
-          <HomeRecordRanking ranking={record.gms} first={topGm} />
+          <HomeRecordRanking label={GM_LABEL} ranking={record.gms} first={topGm} />
         ) : (
           <HomeRecordEmpty
             title="아직 세션을 마친 GM이 없습니다"
@@ -40,12 +43,9 @@ export function HomeMonthRecord({ monthStart, record }: HomeMonthRecordProps) {
         )}
       </HomeRecordSection>
 
-      <HomeRecordSection
-        label="플레이어로 참여한 세션 수"
-        className="mt-200 border-t border-gray-100 pt-200"
-      >
+      <HomeRecordSection label={PLAYER_LABEL} className="mt-200 border-t border-gray-100 pt-200">
         {topPlayer ? (
-          <HomeRecordRanking ranking={record.players} first={topPlayer} />
+          <HomeRecordRanking label={PLAYER_LABEL} ranking={record.players} first={topPlayer} />
         ) : (
           <HomeRecordEmpty
             title="아직 참여를 마친 사람이 없습니다"
