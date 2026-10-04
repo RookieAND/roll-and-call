@@ -2,11 +2,14 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "#/client";
 import { cancelBlockReason } from "#/modules/games/model/cancel-block-reason";
-import type { GameCancelKind } from "#/modules/games/model/game-cancel-kind";
+import { GAME_CANCEL_KIND, type GameCancelKind } from "#/modules/games/model/game-cancel-kind";
+import { gameCancelledRecipients } from "#/modules/games/model/game-cancelled-recipients";
 import { storedCancelReason } from "#/modules/games/model/stored-cancel-reason";
 import { lockGame } from "#/modules/games/queries/lock-game";
+import { createNotifications } from "#/modules/notifications/commands/create-notifications";
+import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import type { Transaction } from "#/modules/transaction/transaction";
-import { games, type Game } from "#/schema";
+import { games, participants, type Game } from "#/schema";
 
 export type CancelGameResult =
   | { ok: true; game: Game }
@@ -45,6 +48,26 @@ export async function cancelGame({
       })
       .where(and(eq(games.serverId, serverId), eq(games.id, gameId)))
       .returning();
+    const roster = await tx
+      .select({ userId: participants.userId, status: participants.status })
+      .from(participants)
+      .where(and(eq(participants.serverId, serverId), eq(participants.gameId, gameId)));
+    const params = {
+      gameId,
+      gameTitle: cancelled!.title,
+      cancelKind: kind,
+      reason: kind === GAME_CANCEL_KIND.gm ? cancelled!.cancelReason : null,
+    };
+    await createNotifications({
+      executor: tx,
+      serverId,
+      actorId,
+      notifications: gameCancelledRecipients({ game: cancelled!, kind, roster }).map((userId) => ({
+        userId,
+        kind: NOTIFICATION_KIND.gameCancelled,
+        params,
+      })),
+    });
     return { ok: true, game: cancelled! };
   };
   return transaction ? run(transaction) : db.transaction(run);

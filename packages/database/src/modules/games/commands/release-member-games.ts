@@ -3,7 +3,10 @@ import { and, eq, inArray, isNull, or } from "drizzle-orm";
 import { departedGmGameAction } from "#/modules/games/model/departed-gm-game-action";
 import type { GameCancelKind } from "#/modules/games/model/game-cancel-kind";
 import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
+import { listSeatOpenedRecipients } from "#/modules/games/queries/list-seat-opened-recipients";
 import { notStartedGamesWhere } from "#/modules/games/queries/not-started-games-where";
+import { createNotifications } from "#/modules/notifications/commands/create-notifications";
+import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import type { Transaction } from "#/modules/transaction/transaction";
 import { games, participants, staff, type Game } from "#/schema";
 
@@ -92,11 +95,40 @@ export async function releaseMemberGames({
     }
   }
 
+  const leftConfirmedGameIds = left
+    .filter((row) => row.status === PARTICIPANT_STATUS.confirmed)
+    .map((row) => row.gameId);
+  // 비운 확정 자리마다 대기자에게 빈자리 알림을 보낸다. 취소된 구인은 listSeatOpenedRecipients가 거른다.
+  const seatOpenedGames =
+    leftConfirmedGameIds.length === 0
+      ? []
+      : await transaction
+          .select()
+          .from(games)
+          .where(and(eq(games.serverId, serverId), inArray(games.id, leftConfirmedGameIds)));
+  for (const game of seatOpenedGames) {
+    const recipients = await listSeatOpenedRecipients({
+      transaction,
+      serverId,
+      gameId: game.id,
+      game,
+      now,
+    });
+    await createNotifications({
+      executor: transaction,
+      serverId,
+      actorId,
+      notifications: recipients.map((recipientId) => ({
+        userId: recipientId,
+        kind: NOTIFICATION_KIND.seatOpened,
+        params: { gameId: game.id, gameTitle: game.title },
+      })),
+    });
+  }
+
   return {
     leftGameIds: left.map((row) => row.gameId),
-    leftConfirmedGameIds: left
-      .filter((row) => row.status === PARTICIPANT_STATUS.confirmed)
-      .map((row) => row.gameId),
+    leftConfirmedGameIds,
     cancelledGames,
     autoConfirmedGameIds,
   };
