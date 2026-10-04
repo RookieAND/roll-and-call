@@ -15,9 +15,9 @@ describe("followsNicknameRule", () => {
 
 describe("quoteWithDirection", () => {
   it("받침이 없거나 ㄹ이면 '로', 그 밖의 받침이면 '으로'를 붙인다", () => {
-    expect(quoteWithDirection("모험가4821")).toBe("‘모험가4821’로");
-    expect(quoteWithDirection("달빛운영자")).toBe("‘달빛운영자’로");
-    expect(quoteWithDirection("하늘")).toBe("‘하늘’로");
-    expect(quoteWithDirection("고양")).toBe("‘고양’으로");
+    expect(quoteWithDirection("모험가4821")).toBe("「모험가4821」로");
+    expect(quoteWithDirection("달빛운영자")).toBe("「달빛운영자」로");
+    expect(quoteWithDirection("하늘")).toBe("「하늘」로");
+    expect(quoteWithDirection("고양")).toBe("「고양」으로");
   });
 });

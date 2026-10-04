@@ -94,6 +94,9 @@ export async function getUserDetail(userId: string) {
     sanction,
     // 지금 걸린 제재는 지난 제재로 세지 않는다.
     pastSanctionCount: Math.max(0, sanctionCount - (sanction ? 1 : 0)),
+    unbanned: db.auditLog.some(
+      (entry) => entry.action === "차단 해제" && entry.targetUserId === userId,
+    ),
     certifications,
     applications,
     activities: db.sessions

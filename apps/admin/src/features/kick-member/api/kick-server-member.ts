@@ -16,18 +16,26 @@ import {
 } from "@/shared/server";
 
 // 롤앤콜 쪽 정리를 먼저 끝내고 디스코드 차단을 한다. 디스코드 쪽이 실패해도 데이터 변경은 그대로 두고 discordBanned로 알린다.
-export async function kickServerMember(userId: string, reason: string) {
+// 서버 소유자·운영진·본인은 추방할 수 없다. 그사이 다른 운영진이 먼저 추방했으면 그 사람과 시각을 돌려준다(D296).
+export async function kickServerMember({ userId, reason }: { userId: string; reason: string }) {
   const staff = await requireStaff();
   const trimmed = reason.trim();
-  if (!trimmed) throw new Error("추방 사유를 입력해 주세요");
+  if (!trimmed) throw new Error("추방 사유를 골라 주세요");
   const [server, user] = await Promise.all([getCurrentServer(), getUserDetail(userId)]);
   if (!user) notFound();
-  if (user.discordId === server.ownerDiscordId) forbidden();
+  if (user.discordId === server.ownerDiscordId || user.staffRole || user.id === staff.id) {
+    forbidden();
+  }
 
   const result = await kickMember({ serverId: server.id, userId, actor: staff, reason: trimmed });
   if (!result.ok) {
     revalidatePath("/", "layout");
-    return { ok: false as const };
+    const conflict = result.conflict;
+    return {
+      ok: false as const,
+      conflict: conflict ? { by: conflict.by, at: conflict.at } : null,
+      self: conflict?.byId === staff.id,
+    };
   }
 
   let discordBanned = true;

@@ -15,7 +15,14 @@ interface EditMemberNicknameInput {
   staffMemo: string;
 }
 
-export async function editMemberNickname(userId: string, input: EditMemberNicknameInput) {
+// 성공하면 editNickname이 같은 트랜잭션에서 당사자 알림 탭에 알린다. 그사이 닉네임이 바뀌었으면 충돌로 돌려준다(D296).
+export async function editMemberNickname({
+  userId,
+  input,
+}: {
+  userId: string;
+  input: EditMemberNicknameInput;
+}) {
   const staff = await requireStaff();
   const reason = input.reason.trim();
   if (
@@ -39,5 +46,11 @@ export async function editMemberNickname(userId: string, input: EditMemberNickna
     },
   });
   revalidatePath("/", "layout");
-  return result;
+  if (result.ok || "taken" in result) return result;
+  const conflict = result.conflict;
+  return {
+    ok: false as const,
+    conflict: conflict ? { by: conflict.by, at: conflict.at } : null,
+    self: conflict?.byId === staff.id,
+  };
 }

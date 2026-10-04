@@ -1,13 +1,28 @@
 "use client";
 
-import { Button, Dialog, Field, Text, Textarea, VStack } from "@roll-and-call/ui";
+import { Button, Dialog, Text, VStack, toast } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
+import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
-import { formatDate } from "@/shared/lib";
-import { FactRows, ModalServerLabel } from "@/shared/ui";
+import {
+  chosenReason,
+  conflictToastText,
+  formatDate,
+  useActionSubmit,
+  USER_ACTION_REASON,
+} from "@/shared/lib";
+import {
+  ActionNetworkError,
+  FactRows,
+  ManualNoticePreview,
+  ModalServerLabel,
+  ReasonChips,
+} from "@/shared/ui";
 
 import { unbanServerMember } from "../api/unban-server-member";
+import { unbanNoticeText } from "../model/unban-notice-text";
 
 interface UnbanMemberDialogProps {
   userId: string;
@@ -25,17 +40,25 @@ export function UnbanMemberDialog({
   onOpenChange,
 }: UnbanMemberDialogProps) {
   const router = useRouter();
-  const [pending, startTransition] = useTransition();
-  const [reason, setReason] = useState("");
-  const canUnban = Boolean(reason.trim()) && !pending;
+  const { pending, networkError, submit } = useActionSubmit(unbanServerMember);
+  const [chip, setChip] = useState<string | null>(null);
+  const [otherText, setOtherText] = useState("");
+  const reason = chosenReason({ chip, otherText });
+  const canUnban = Boolean(reason) && !pending;
 
-  const unban = () =>
-    startTransition(async () => {
-      await unbanServerMember(userId, reason);
-      setReason("");
-      onOpenChange(false);
-      router.refresh();
-    });
+  const unban = async () => {
+    const result = await submit({ userId, reason });
+    if (isUndefined(result)) return;
+    onOpenChange(false);
+    router.refresh();
+    if (!result.ok) {
+      toast.info(
+        conflictToastText({ conflict: result.conflict, self: result.self, target: "차단 해제" }),
+      );
+      return;
+    }
+    if (result.discordUnbanned) toast.success(`${nickname}의 차단을 해제했습니다`);
+  };
 
   return (
     <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
@@ -47,6 +70,7 @@ export function UnbanMemberDialog({
         </Dialog.Header>
         <Dialog.Body className="mt-200">
           <VStack gap="175">
+            {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">
               <FactRows
                 labelWidth={88}
@@ -57,15 +81,16 @@ export function UnbanMemberDialog({
                 ]}
               />
             </div>
-            <Field.Root label="해제 사유" htmlFor="unban-reason" required>
-              <Textarea
-                id="unban-reason"
-                rows={2}
-                placeholder="활동 기록에 남습니다"
-                value={reason}
-                onChange={(event) => setReason(event.target.value)}
-              />
-            </Field.Root>
+            <ReasonChips
+              label="해제 사유"
+              reasons={USER_ACTION_REASON}
+              value={chip}
+              otherText={otherText}
+              onValueChange={setChip}
+              onOtherTextChange={setOtherText}
+              disabled={pending}
+            />
+            <ManualNoticePreview text={unbanNoticeText(reason)} />
             <Text typography="body4" foreground="muted">
               당사자가 서버에 다시 들어오면 일반 재가입처럼 처리되어 이전 인증과 GM 권한이
               복구됩니다.
@@ -76,8 +101,9 @@ export function UnbanMemberDialog({
           <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
             취소
           </Dialog.Close>
-          <Button loading={pending} disabled={!canUnban} onClick={unban}>
-            차단 해제
+          <Button loading={pending} disabled={!canUnban} onClick={() => void unban()}>
+            {networkError ? <RotateCcw size={16} aria-hidden /> : null}
+            {networkError ? "다시 시도" : "차단 해제"}
           </Button>
         </Dialog.Footer>
       </Dialog.Popup>

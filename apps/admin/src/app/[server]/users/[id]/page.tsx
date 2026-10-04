@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { MEMBERSHIP_STATUS } from "@/shared/lib";
 import {
   checkDiscordBanFailed,
+  checkDiscordUnbanFailed,
   getCurrentServer,
   getKickImpact,
   getUserDetail,
@@ -46,9 +47,14 @@ export default async function UserDetailPage({
     self: user.id === staff.id,
   });
   const banned = user.membership === MEMBERSHIP_STATUS.banned;
-  const [discordBanFailed, kickImpact] = await Promise.all([
+  // 롤앤콜에서 차단을 푼 뒤 디스코드 해제만 실패했는지는 나간 상태에서만 묻는다(다시 들어왔으면 디스코드 차단이 없다).
+  const unbannedLeft = user.unbanned && user.membership === MEMBERSHIP_STATUS.left;
+  const [discordBanFailed, discordUnbanFailed, kickImpact] = await Promise.all([
     banned
       ? checkDiscordBanFailed({ guildId: server.discordGuildId, discordId: user.discordId })
+      : false,
+    unbannedLeft
+      ? checkDiscordUnbanFailed({ guildId: server.discordGuildId, discordId: user.discordId })
       : false,
     action === USER_ACTION.kick && !kickBlock && !banned
       ? getKickImpact({ serverId: server.id, userId: user.id })
@@ -64,6 +70,7 @@ export default async function UserDetailPage({
       viewer={{ id: staff.id, owner: staff.role === "owner" }}
       kickBlock={kickBlock}
       discordBanFailed={discordBanFailed}
+      discordUnbanFailed={discordUnbanFailed}
       kickImpact={kickImpact}
     />
   );

@@ -34,6 +34,7 @@ export { ManualNoticePreview } from "./manual-notice-preview";
 export { OutcomePanel, type Outcome } from "./outcome-panel";
 export { NextItemButton } from "./next-item-button";
 export { NotificationPreview } from "./notification-preview";
+export { ReasonChips } from "./reason-chips";
 export { Panel } from "./panel";
 export { PhotoThumb } from "./photo-thumb";
 export { PICK_STATE, PickButton, type PickState } from "./pick-button";

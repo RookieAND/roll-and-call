@@ -1,13 +1,16 @@
-import { and, eq, isNotNull } from "drizzle-orm";
+import { and, desc, eq, isNotNull } from "drizzle-orm";
 
 import { db } from "#/client";
 import type { Actor } from "#/modules/moderation/model/types";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { profiles, serverMembers } from "#/schema";
+import { auditLog, profiles, serverMembers } from "#/schema";
 
+import { type ModerationConflict } from "./moderation-conflict";
 import { recordAudit } from "./record-audit";
 
-export type UnbanResult = { ok: true; discordId: string } | { ok: false; alreadyUnbanned: true };
+export type UnbanResult =
+  | { ok: true; discordId: string }
+  | { ok: false; conflict: ModerationConflict | null };
 
 // 차단 칸만 비운다. 멤버십은 나간 상태(deleted_at)로 남아 다시 들어오면 일반 재가입이 된다.
 export async function unbanMember({
@@ -39,7 +42,26 @@ export async function unbanMember({
         ),
       )
       .returning({ userId: serverMembers.userId });
-    if (unbanned.length === 0) return { ok: false, alreadyUnbanned: true };
+    if (unbanned.length === 0) {
+      // 차단 해제는 멤버십 칸을 비우므로 누가 언제 풀었는지는 마지막 「차단 해제」 기록에서 읽는다.
+      const [latest] = await tx
+        .select({ byId: auditLog.actorId, by: memberNicknameSql(serverId), at: auditLog.createdAt })
+        .from(auditLog)
+        .leftJoin(profiles, eq(profiles.id, auditLog.actorId))
+        .where(
+          and(
+            eq(auditLog.serverId, serverId),
+            eq(auditLog.targetUserId, userId),
+            eq(auditLog.action, "차단 해제"),
+          ),
+        )
+        .orderBy(desc(auditLog.createdAt))
+        .limit(1);
+      const conflict = latest?.byId
+        ? { byId: latest.byId, by: latest.by ?? "", at: latest.at }
+        : null;
+      return { ok: false, conflict };
+    }
     await recordAudit({
       executor: tx,
       serverId,

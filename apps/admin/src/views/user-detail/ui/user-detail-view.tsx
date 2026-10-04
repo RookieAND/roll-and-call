@@ -13,6 +13,7 @@ import { CertPanel } from "./cert-panel";
 import { KickFailNotice } from "./kick-fail-notice";
 import { MemoPanel } from "./memo-panel";
 import { NoShowPanel } from "./no-show-panel";
+import { UnbanFailNotice } from "./unban-fail-notice";
 import { UserActionDialogs } from "./user-action-dialogs";
 import { UserActionsAside } from "./user-actions-aside";
 import { UserDetailTabs } from "./user-detail-tabs";
@@ -27,6 +28,7 @@ interface UserDetailViewProps {
   viewer: Viewer;
   kickBlock: string | null;
   discordBanFailed: boolean;
+  discordUnbanFailed: boolean;
   kickImpact: KickImpact | null;
 }
 
@@ -39,6 +41,7 @@ export function UserDetailView({
   viewer,
   kickBlock,
   discordBanFailed,
+  discordUnbanFailed,
   kickImpact,
 }: UserDetailViewProps) {
   const logHref = auditLogHref({ targetUserId: user.id });
@@ -64,6 +67,11 @@ export function UserDetailView({
           {discordBanFailed ? (
             <div className="px-200 pt-200">
               <KickFailNotice userId={user.id} nickname={user.nickname} guildId={guildId} />
+            </div>
+          ) : null}
+          {discordUnbanFailed ? (
+            <div className="px-200 pt-200">
+              <UnbanFailNotice userId={user.id} guildId={guildId} />
             </div>
           ) : null}
           <UserStateCard user={user} discordBanFailed={discordBanFailed} />
