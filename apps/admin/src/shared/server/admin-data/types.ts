@@ -172,7 +172,7 @@ export interface Session {
   hidden?: { reason: string; by: string; at: Date };
   cancelled?: boolean;
   // 운영진 취소를 막는 이유(cancelBlockReason). 없으면 null.
-  cancelBlock?: "already_cancelled" | "session_ended" | null;
+  cancelBlock?: "already_cancelled" | "session_started" | null;
   sessionStarted?: boolean;
   // 운영진이 취소하면 game_cancelled 알림을 받는 사람(gameCancelledRecipients, GM 포함).
   staffCancelRecipientIds?: string[];
