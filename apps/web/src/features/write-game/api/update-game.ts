@@ -1,6 +1,13 @@
 "use server";
 
-import { listRosterStatuses, lockGame, updateOwnedGame } from "@roll-and-call/database/games";
+import {
+  listParticipantUserIds,
+  listRosterStatuses,
+  lockGame,
+  updateOwnedGame,
+} from "@roll-and-call/database/games";
+import { createNotifications } from "@roll-and-call/database/notifications";
+import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { withTransaction } from "@roll-and-call/database/transaction";
 import { isNull } from "es-toolkit";
 import { redirect } from "next/navigation";
@@ -11,6 +18,7 @@ import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
+  notifySessionConfirmed,
   refreshRecruitPost,
   removeUnusedGameFiles,
   notMemberError,
@@ -18,6 +26,7 @@ import {
 
 import { EDIT_FORBIDDEN_MESSAGE, editBlockReason } from "../model/edit-block-reason";
 import { gameFormSchema, INVALID_INPUT_MESSAGE, type GameFormValues } from "../model/game-form";
+import { sessionTimeChanged } from "../model/session-time-change";
 import { toGameColumns } from "../model/to-game-columns";
 
 export async function updateGame(id: string, input: GameFormValues): Promise<ActionResult> {
@@ -52,18 +61,58 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     const clearsSession =
       game.scheduleMode === SCHEDULE_MODE.fixed &&
       columns.scheduleMode === SCHEDULE_MODE.coordinate;
+    const timeChanged = sessionTimeChanged({
+      scheduleMode: columns.scheduleMode,
+      previous: game.confirmedAt,
+      next: columns.confirmedAt,
+    });
+    // 시간이 실제로 바뀔 때만 1시간 전 리마인더 기록을 지워 새 시간에 다시 보낸다.
     const updated = await updateOwnedGame({
       transaction,
       ...owner,
-      columns: clearsSession ? { ...columns, confirmedAt: null } : columns,
+      columns: {
+        ...columns,
+        ...(clearsSession ? { confirmedAt: null } : {}),
+        ...(timeChanged ? { notifiedAt: null } : {}),
+      },
     });
     if (!updated) return { error: EDIT_FORBIDDEN_MESSAGE };
-    return { before: game };
+
+    if (timeChanged && game.confirmedAt && columns.confirmedAt) {
+      const confirmedIds = await listParticipantUserIds({
+        transaction,
+        serverId: server.id,
+        gameId: id,
+        status: PARTICIPANT_STATUS.confirmed,
+      });
+      const params = {
+        gameId: id,
+        gameTitle: columns.title,
+        previousStartsAt: game.confirmedAt.toISOString(),
+        startsAt: columns.confirmedAt.toISOString(),
+      };
+      await createNotifications({
+        executor: transaction,
+        serverId: server.id,
+        actorId: user.id,
+        notifications: confirmedIds.map((userId) => ({
+          userId,
+          kind: NOTIFICATION_KIND.sessionTimeChanged,
+          params,
+        })),
+      });
+    }
+    return { before: game, timeChanged };
   });
   if ("error" in result) return result;
-  const { before } = result;
+  const { before, timeChanged } = result;
 
-  after(() => refreshRecruitPost({ server, gameId: id }));
+  after(async () => {
+    await refreshRecruitPost({ server, gameId: id });
+    if (timeChanged) {
+      await notifySessionConfirmed({ server, gameId: id, previousConfirmedAt: before.confirmedAt });
+    }
+  });
 
   const kept = new Set<string>([values.thumbnailUrl ?? "", ...values.images]);
   await removeUnusedGameFiles({
