@@ -8,7 +8,7 @@ interface SettingsDeniedViewProps {
 }
 
 export function SettingsDeniedView({ ownerNickname }: SettingsDeniedViewProps) {
-  const owner = ownerNickname ? `소유자(${ownerNickname})` : "소유자";
+  const owner = ownerNickname ? `소유자(${ownerNickname})가` : "소유자가";
   return (
     <>
       <AdminHeader title="설정" />
@@ -21,10 +21,10 @@ export function SettingsDeniedView({ ownerNickname }: SettingsDeniedViewProps) {
             <Lock size={18} aria-hidden />
           </span>
           <Text typography="heading3" render={<h2 />}>
-            소유자만 이용할 수 있어요
+            소유자만 이용할 수 있습니다
           </Text>
           <Text typography="body3" foreground="hint" render={<p />} className="mt-075">
-            운영진 관리와 서비스 설정은 {owner}가 담당합니다.
+            운영진 관리와 서버 설정은 {owner} 담당합니다.
           </Text>
         </VStack>
       </div>

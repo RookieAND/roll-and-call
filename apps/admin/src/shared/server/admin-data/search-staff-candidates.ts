@@ -1,24 +1,10 @@
 import "server-only";
+import { listStaff } from "./list-staff";
+import { pickStaffCandidates } from "./pick-staff-candidates";
 import { loadSnapshot } from "./snapshot";
 
-export interface StaffCandidate {
-  id: string;
-  nickname: string;
-  discordHandle: string;
-  joinedAt: Date;
-}
-
-export async function searchStaffCandidates(query: string): Promise<StaffCandidate[]> {
-  const db = await loadSnapshot();
-  const keyword = query.trim();
-  if (!keyword) return [];
-  const staffNicknames = new Set(db.staff.map((staff) => staff.nickname));
-  return db.users
-    .filter((user) => user.nickname.includes(keyword) && !staffNicknames.has(user.nickname))
-    .map(({ id, nickname, discordHandle, joinedAt }) => ({
-      id,
-      nickname,
-      discordHandle,
-      joinedAt,
-    }));
+export async function searchStaffCandidates(query: string) {
+  const [db, staff] = await Promise.all([loadSnapshot(), listStaff()]);
+  const staffIds = new Set(staff.map((member) => member.userId));
+  return pickStaffCandidates({ users: db.users, staffIds, query });
 }

@@ -12,8 +12,6 @@ export function PermissionMark({ allowed }: PermissionMarkProps) {
       <span className="sr-only">가능</span>
     </Text>
   ) : (
-    <Text typography="body3" weight="bold" foreground="hint">
-      —<span className="sr-only">불가</span>
-    </Text>
+    <span className="sr-only">불가</span>
   );
 }

@@ -1,20 +1,21 @@
 "use client";
 
-import {
-  AlertDialog,
-  Button,
-  Checkbox,
-  Field,
-  Text,
-  Textarea,
-  VStack,
-  toast,
-} from "@roll-and-call/ui";
-import { useState, useTransition } from "react";
+import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
+import { AlertDialog, Button, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
+import { RotateCcw } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-import { formatDate, STAFF_ROLE_LABEL, withObjectParticle } from "@/shared/lib";
+import { formatDate, STAFF_ROLE_LABEL, useActionSubmit, withObjectParticle } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
-import { FactRows, ModalServerLabel, Tag } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  FactRows,
+  ModalServerLabel,
+  NotificationPreview,
+  Tag,
+} from "@/shared/ui";
 
 import { removeStaffMember } from "../api/remove-staff-member";
 
@@ -25,18 +26,24 @@ interface RemoveStaffDialogProps {
 }
 
 export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDialogProps) {
-  const [pending, startTransition] = useTransition();
+  const router = useRouter();
+  const { pending, networkError, submit } = useActionSubmit(removeStaffMember);
   const [reason, setReason] = useState("");
-  const [notify, setNotify] = useState(true);
 
   const canRemove = Boolean(reason.trim()) && !pending;
+  const confirmLabel = networkError ? "다시 시도" : "해제 확정";
 
-  const remove = () =>
-    startTransition(async () => {
-      await removeStaffMember(staff.userId, { reason, notify });
+  const remove = async () => {
+    const result = await submit(staff.userId, reason);
+    if (isUndefined(result)) return;
+    onOpenChange(false);
+    if (result.ok) {
       toast.success(`${staff.nickname}님을 운영진에서 해제했습니다`);
-      onOpenChange(false);
-    });
+      return;
+    }
+    toast.info("이미 해제됐거나 소유자인 사람입니다");
+    router.refresh();
+  };
 
   return (
     <AlertDialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
@@ -52,18 +59,16 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
         </AlertDialog.Header>
         <AlertDialog.Body className="mt-200">
           <VStack gap="150">
+            {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">
               <FactRows
                 labelWidth={80}
                 items={[
-                  {
-                    label: "역할",
-                    value: <Tag>{STAFF_ROLE_LABEL[staff.role]}</Tag>,
-                  },
-                  { label: "추가한 날", value: staff.since ? formatDate(staff.since) : "—" },
+                  { label: "역할", value: <Tag>{STAFF_ROLE_LABEL[staff.role]}</Tag> },
+                  { label: "추가한 날", value: staff.since ? formatDate(staff.since) : "" },
                   {
                     label: "최근 활동",
-                    value: staff.lastActiveAt ? formatDate(staff.lastActiveAt) : "—",
+                    value: staff.lastActiveAt ? formatDate(staff.lastActiveAt) : "",
                   },
                 ]}
               />
@@ -77,17 +82,7 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
                 onChange={(event) => setReason(event.target.value)}
               />
             </Field.Root>
-            <Checkbox.Field className="items-start">
-              <Checkbox.Root checked={notify} onCheckedChange={setNotify} className="mt-025">
-                <Checkbox.Indicator />
-              </Checkbox.Root>
-              <VStack gap="025">
-                <Checkbox.Label>당사자에게 디스코드 알림 보내기</Checkbox.Label>
-                <Text typography="body4" foreground="hint">
-                  해제되었다는 사실만 알리고, 사유는 보내지 않습니다
-                </Text>
-              </VStack>
-            </Checkbox.Field>
+            <NotificationPreview payload={{ kind: NOTIFICATION_KIND.staffRemoved, params: {} }} />
           </VStack>
         </AlertDialog.Body>
         <AlertDialog.Footer layout="row" className="justify-end">
@@ -97,8 +92,15 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
           >
             취소
           </AlertDialog.Close>
-          <Button colorPalette="danger" loading={pending} disabled={!canRemove} onClick={remove}>
-            해제 확정
+          <Button
+            colorPalette="danger"
+            loading={pending}
+            disabled={!canRemove}
+            onClick={() => void remove()}
+            className="gap-050"
+          >
+            {networkError ? <RotateCcw size={14} aria-hidden /> : null}
+            {confirmLabel}
           </Button>
         </AlertDialog.Footer>
       </AlertDialog.Popup>

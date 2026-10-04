@@ -29,7 +29,7 @@ export function StaffDialogs({ candidates, removing }: StaffDialogsProps) {
       />
       {removing ? (
         <RemoveStaffDialog
-          key={removing.nickname}
+          key={removing.userId}
           staff={removing}
           open={action === "remove"}
           onOpenChange={(open) => open || close()}

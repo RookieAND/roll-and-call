@@ -1,4 +1,4 @@
-import { Callout, Text, VStack, cn } from "@roll-and-call/ui";
+import { Text, VStack, cn } from "@roll-and-call/ui";
 
 import { ServerLink } from "@/shared/ui";
 
@@ -41,11 +41,6 @@ export function SettingsNav({ active }: SettingsNavProps) {
           </Text>
         );
       })}
-      <div className="p-175">
-        <Callout.Root colorPalette="gray" size="sm">
-          <Callout.Description>소유자만 볼 수 있는 화면입니다.</Callout.Description>
-        </Callout.Root>
-      </div>
     </VStack>
   );
 }

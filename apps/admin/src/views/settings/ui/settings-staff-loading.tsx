@@ -1,9 +1,9 @@
-import { Button, Text } from "@roll-and-call/ui";
+import { Button } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
 
 import { LoadingRegion, Panel, SkeletonTable } from "@/shared/ui";
 
-import { PermissionTable } from "./permission-table";
+import { PermissionPanel } from "./permission-panel";
 import { SettingsFrame } from "./settings-frame";
 
 export function SettingsStaffLoading() {
@@ -12,16 +12,6 @@ export function SettingsStaffLoading() {
       <LoadingRegion label="운영진 목록을 불러오는 중입니다" className="gap-150">
         <Panel
           title="운영진"
-          footer={
-            <Text
-              typography="body4"
-              foreground="hint"
-              className="border-t border-(--rc-color-border-subtle) px-175 py-125"
-            >
-              소유자는 디스코드 서버장으로 자동 지정되며, 소유권이 이전되면 이전 소유자는 운영진이
-              됩니다.
-            </Text>
-          }
           right={
             <Button size="sm" disabled className="gap-050">
               <Plus size={14} aria-hidden />
@@ -33,16 +23,14 @@ export function SettingsStaffLoading() {
             rows={4}
             columns={[
               { label: "닉네임", kind: "text", width: 180 },
-              { label: "역할", kind: "badge", width: 104, align: "center" },
+              { label: "역할", kind: "badge", width: 104 },
               { label: "추가한 날", kind: "date", width: 104 },
               { label: "최근 활동", kind: "date", width: 104 },
               { label: "", kind: "button", width: 150, align: "end" },
             ]}
           />
         </Panel>
-        <Panel title="권한" bodyClassName="p-175">
-          <PermissionTable />
-        </Panel>
+        <PermissionPanel />
       </LoadingRegion>
     </SettingsFrame>
   );

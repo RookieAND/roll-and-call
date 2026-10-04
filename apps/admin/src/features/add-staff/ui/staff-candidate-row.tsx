@@ -1,8 +1,8 @@
-import { HStack, Text, VStack, cn } from "@roll-and-call/ui";
+import { Button, HStack, Text, VStack, cn } from "@roll-and-call/ui";
+import { Check } from "lucide-react";
 
 import { formatDate } from "@/shared/lib";
 import type { StaffCandidate } from "@/shared/server";
-import { PICK_STATE, PickButton } from "@/shared/ui";
 
 interface StaffCandidateRowProps {
   candidate: StaffCandidate;
@@ -12,14 +12,19 @@ interface StaffCandidateRowProps {
 
 export function StaffCandidateRow({ candidate, selected, onToggle }: StaffCandidateRowProps) {
   return (
-    <HStack
-      align="center"
-      gap="125"
+    <Button
+      variant="ghost"
+      colorPalette="gray"
+      aria-pressed={selected}
+      onClick={onToggle}
       className={cn(
-        "border-t border-(--rc-color-border-subtle) px-150 py-125 first:border-t-0",
-        selected && "bg-(--rc-color-bg-primary-weakest)",
+        "h-auto w-full justify-start gap-125 rounded-none border-t border-(--rc-color-border-subtle) px-150 py-125 text-left font-normal",
+        selected && "bg-(--rc-color-bg-primary-weakest) hover:bg-(--rc-color-bg-primary-weakest)",
       )}
     >
+      <HStack align="center" justify="center" className="size-[18px] shrink-0 text-primary-600">
+        {selected ? <Check size={18} aria-hidden /> : null}
+      </HStack>
       <Text
         typography="body4"
         weight="bold"
@@ -37,7 +42,6 @@ export function StaffCandidateRow({ candidate, selected, onToggle }: StaffCandid
           @{candidate.discordHandle} · {formatDate(candidate.joinedAt)} 가입
         </Text>
       </VStack>
-      <PickButton state={selected ? PICK_STATE.picked : PICK_STATE.open} onClick={onToggle} />
-    </HStack>
+    </Button>
   );
 }

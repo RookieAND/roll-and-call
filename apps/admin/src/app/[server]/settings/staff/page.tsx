@@ -14,13 +14,11 @@ export default async function SettingsStaffPage({
     listStaff(),
   ]);
   const candidates = query.action === "add" ? await searchStaffCandidates(query.q ?? "") : [];
-  const removing = staff.find(
-    (member) => member.nickname === query.staff && member.role !== "owner",
-  );
+  const removing = staff.find((member) => member.userId === query.staff && member.role !== "owner");
   return (
     <SettingsStaffView
       staff={staff}
-      viewer={viewer.nickname}
+      viewerId={viewer.id}
       candidates={candidates}
       removing={removing}
     />
