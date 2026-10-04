@@ -456,6 +456,13 @@
       "when": 1795400000000,
       "tag": "0068_game_coordination_window",
       "breakpoints": true
+    },
+    {
+      "idx": 69,
+      "version": "7",
+      "when": 1795500000000,
+      "tag": "0069_badge_cleanup",
+      "breakpoints": true
     }
   ]
 }

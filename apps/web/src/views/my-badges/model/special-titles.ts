@@ -1,5 +1,5 @@
 import { BADGE_ROLE, HIDDEN_LADDER, isHiddenLadder } from "@roll-and-call/database/badges/model";
-import { isNull, partition } from "es-toolkit";
+import { partition } from "es-toolkit";
 
 import type { BadgeView } from "@/entities/badge";
 import { heldBadgeDetail } from "@/features/view-badge";
@@ -30,7 +30,6 @@ export function specialTitles({
       emoji: badge.emoji,
       look: badge.look,
       name: badge.name,
-      isNew: isNull(badge.record.seenAt),
       detail: heldBadgeDetail({ badge, records, facts: null, now }),
     })),
     unknownCount: Math.max(HIDDEN_TITLE_COUNT - hidden.length, 0),

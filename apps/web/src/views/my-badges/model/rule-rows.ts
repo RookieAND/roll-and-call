@@ -5,7 +5,6 @@ import {
   type BadgeFacts,
   type BadgeLadderKey,
 } from "@roll-and-call/database/badges/model";
-import { isNull } from "es-toolkit";
 
 import { lookTone, stepLook, type RuleCount } from "@/entities/badge";
 import { buildLadderDetail, LADDER_META } from "@/features/view-badge";
@@ -38,7 +37,6 @@ export function ruleRows({
       key,
       emoji: step.emoji,
       look: stepLook(step),
-      isNew: isNull(record?.seenAt),
       tier,
       tone: lookTone(stepLook(step)),
       stepCount: steps.length,

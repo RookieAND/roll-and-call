@@ -1,4 +1,4 @@
-import { heldBadges, pickFeaturedBadges } from "@/entities/badge";
+import { countBadges, heldBadges, pickFeaturedBadges } from "@/entities/badge";
 import { SESSION_ROLE } from "@/entities/game";
 import { profileDisplay } from "@/entities/profile";
 import { heldBadgeDetail } from "@/features/view-badge";
@@ -57,7 +57,7 @@ export async function MyPageSummary() {
       avatarUrl={avatar}
       bio={profile?.bio ?? null}
       featuredBadges={featuredBadges}
-      heldBadgeCount={held.length}
+      heldBadgeCount={countBadges(badgeRecords, now).total}
       keywords={profile?.keywords ?? []}
       availability={profile?.availability ?? []}
       hosted={{

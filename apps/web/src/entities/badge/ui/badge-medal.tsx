@@ -60,7 +60,6 @@ export interface BadgeMedalProps {
   size?: keyof typeof SIZE_CLASS;
   locked?: boolean;
   ribbon?: string | null;
-  isNew?: boolean;
   label?: string;
   className?: string;
 }
@@ -71,7 +70,6 @@ export function BadgeMedal({
   size = "md",
   locked = false,
   ribbon: ribbonText,
-  isNew = false,
   label,
   className,
 }: BadgeMedalProps) {
@@ -105,13 +103,6 @@ export function BadgeMedal({
         <span aria-hidden className={ribbon({ large })}>
           {ribbonText}
         </span>
-      )}
-      {isNew && (
-        <span
-          role="img"
-          aria-label="새 뱃지"
-          className="absolute top-0 right-0 size-[11px] rounded-full border-2 border-surface bg-danger-600"
-        />
       )}
     </span>
   );

@@ -32,8 +32,8 @@ export async function applyBadgeWrites({
         continue;
       }
       const { badgeKey, tier, earnedAt, sourceGameId } = write.badge;
-      // 단계가 내려가면 조용히 고치고, 새로 받거나 오르면 획득 시트와 새 뱃지 점을 다시 켠다.
-      const renotify = write.kind === "grant" ? { notifiedAt: null, seenAt: null } : {};
+      // 단계가 내려가면 조용히 고치고, 새로 받거나 오르면 획득 시트를 다시 켠다.
+      const renotify = write.kind === "grant" ? { notifiedAt: null } : {};
       await transaction
         .insert(userBadges)
         .values({ serverId, userId, badgeKey, tier, earnedAt, sourceGameId })

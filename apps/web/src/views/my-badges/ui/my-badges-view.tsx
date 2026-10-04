@@ -1,11 +1,10 @@
 import { BADGE_ROLE } from "@roll-and-call/database/badges/model";
 import { Container, VStack } from "@roll-and-call/ui";
-import { after } from "next/server";
 
 import {
   BADGE_TAB,
   BADGE_TABS,
-  badgeTabOf,
+  countBadges,
   heldBadges,
   pickFeaturedBadges,
 } from "@/entities/badge";
@@ -17,7 +16,6 @@ import {
   getMonthlyAppearances,
   getProfile,
   getUserBadges,
-  markBadgesSeen,
   getCurrentServer,
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
@@ -54,14 +52,14 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
     getBadgeFacts({ serverId: server.id, userId: user.id, now }),
     getMonthlyAppearances({ serverId: server.id, now }),
   ]);
-  after(() => markBadgesSeen({ serverId: server.id, userId: user.id }));
 
   const held = heldBadges(records, now);
   const featured = pickFeaturedBadges({ featuredKeys: profile?.featuredBadges ?? [], held });
   const activeTab = dexTabKey(tab);
+  const badgeCount = countBadges(records, now);
   const tabs = BADGE_TABS.map((badgeTab) => ({
     ...badgeTab,
-    count: held.filter((badge) => badgeTabOf(badge) === badgeTab.key).length,
+    count: badgeCount[badgeTab.key],
     href: serverPath({ slug: server.slug, path: `/me/badges?tab=${badgeTab.key}` }),
   }));
   const role = activeTab === BADGE_TAB.gm ? BADGE_ROLE.gm : BADGE_ROLE.player;
@@ -70,7 +68,7 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
     <>
       <AppBar back="/me" title="업적 도감" />
       <Container size="sm" className="px-0 pb-300">
-        <DexHeader earnedCount={held.length} featured={featured} />
+        <DexHeader earnedCount={badgeCount.total} featured={featured} />
         <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface">
           <SessionTabs label="분류" tabs={tabs} activeKey={activeTab} />
         </div>

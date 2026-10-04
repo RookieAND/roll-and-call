@@ -1,4 +1,4 @@
-import { badgeCounts, heldBadges, nextBadgeGoal } from "@/entities/badge";
+import { badgeCounts, countBadges, nextBadgeGoal } from "@/entities/badge";
 import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared/server";
 
 import { loadMyBadgeFacts } from "../api/load-my-badge-facts";
@@ -11,6 +11,10 @@ export async function MyPageBadgesSection() {
     getUserBadges(server.id, user.id),
     loadMyBadgeFacts(user.id),
   ]);
-  const held = heldBadges(records);
-  return <MyPageBadges heldCount={held.length} goal={nextBadgeGoal(badgeCounts(facts))} />;
+  return (
+    <MyPageBadges
+      heldCount={countBadges(records, new Date()).total}
+      goal={nextBadgeGoal(badgeCounts(facts))}
+    />
+  );
 }

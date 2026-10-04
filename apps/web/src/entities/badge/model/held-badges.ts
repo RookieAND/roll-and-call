@@ -1,6 +1,7 @@
+import { previousMonthKey } from "@roll-and-call/database/badges/model";
+
 import type { BadgeView } from "./badge-view";
 import { describeBadge } from "./describe-badge";
-import { previousMonthKey } from "./previous-month-key";
 
 type BadgeRecordLike = { badgeKey: string; tier: number; categoryName: string | null };
 

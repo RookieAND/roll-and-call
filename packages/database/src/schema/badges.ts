@@ -30,8 +30,6 @@ export const userBadges = pgTable(
     revokedAt: timestamp("revoked_at", { withTimezone: true }),
     // 획득 시트를 닫은 시각. null이면 다음 방문 때 시트를 띄운다.
     notifiedAt: timestamp("notified_at", { withTimezone: true }),
-    // 도감을 연 시각. null이면 새 뱃지 점을 찍는다.
-    seenAt: timestamp("seen_at", { withTimezone: true }),
   },
   (table) => [
     primaryKey({ columns: [table.serverId, table.userId, table.badgeKey] }),

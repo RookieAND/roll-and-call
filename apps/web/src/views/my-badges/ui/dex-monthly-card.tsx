@@ -25,7 +25,6 @@ export function DexMonthlyCard({ card }: DexMonthlyCardProps) {
           look={card.look}
           locked={!card.held}
           ribbon={card.ribbon}
-          isNew={card.isNew}
           size="lg"
         />
         <VStack gap="050" className="min-w-0 flex-1">

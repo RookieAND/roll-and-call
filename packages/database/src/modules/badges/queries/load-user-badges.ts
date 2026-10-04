@@ -12,7 +12,6 @@ export async function loadUserBadges({ serverId, userId }: { serverId: string; u
       tier: userBadges.tier,
       earnedAt: userBadges.earnedAt,
       notifiedAt: userBadges.notifiedAt,
-      seenAt: userBadges.seenAt,
       categoryName: rulebookCategories.name,
       sourceGameId: userBadges.sourceGameId,
       sourceTitle: games.title,

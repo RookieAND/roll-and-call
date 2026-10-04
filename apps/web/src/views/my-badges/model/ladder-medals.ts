@@ -3,7 +3,6 @@ import {
   type BadgeEvent,
   type BadgeLadderKey,
 } from "@roll-and-call/database/badges/model";
-import { isNull } from "es-toolkit";
 
 import { stepLook } from "@/entities/badge";
 import { buildLadderDetail, LADDER_META } from "@/features/view-badge";
@@ -29,7 +28,6 @@ export function ladderMedals({
     emoji: step.emoji,
     look: stepLook(step),
     locked: index >= heldTier,
-    isNew: index + 1 === heldTier && isNull(record?.seenAt),
     name: step.name,
     caption: `${step.threshold}${unit}`,
     detail: buildLadderDetail({ ladder, categoryName: null, stepIndex: index, held, events }),

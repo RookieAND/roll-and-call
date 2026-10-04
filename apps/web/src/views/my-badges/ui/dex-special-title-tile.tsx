@@ -15,7 +15,7 @@ export function DexSpecialTitleTile({ title }: DexSpecialTitleTileProps) {
       detail={title.detail}
       className="flex w-full min-w-0 flex-col items-center gap-100 rounded-500 bg-gray-50 px-025 pt-150 pb-125 text-center hover:bg-gray-100"
     >
-      <BadgeMedal emoji={title.emoji} look={title.look} isNew={title.isNew} />
+      <BadgeMedal emoji={title.emoji} look={title.look} />
       <Text typography="body4" weight="bold" truncate className="w-full px-025">
         {title.name}
       </Text>

@@ -3,7 +3,7 @@ import { isNull } from "es-toolkit";
 import { Lock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
-import { BADGE_TAB, BADGE_TABS, badgeTabOf, heldBadges } from "@/entities/badge";
+import { BADGE_TAB, BADGE_TABS, countBadges, heldBadges } from "@/entities/badge";
 import { DepartedMemberScreen } from "@/entities/profile";
 import { serverPath } from "@/shared/lib";
 import {
@@ -55,12 +55,7 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
   const now = new Date();
   const records = await getUserBadges(server.id, id);
   const held = heldBadges(records, now);
-  const countOf = (key: string) => held.filter((badge) => badgeTabOf(badge) === key).length;
-  const counts = {
-    [BADGE_TAB.gm]: countOf(BADGE_TAB.gm),
-    [BADGE_TAB.player]: countOf(BADGE_TAB.player),
-    [BADGE_TAB.special]: countOf(BADGE_TAB.special),
-  };
+  const counts = countBadges(records, now);
   const activeTab = userTabKey({ tab, counts });
   const tabs = BADGE_TABS.map((badgeTab) => ({
     ...badgeTab,
@@ -80,7 +75,7 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
         title={title}
         action={
           <Text typography="body3" foreground="hint" numeric className="pr-125">
-            {held.length}개
+            {counts.total}개
           </Text>
         }
       />

@@ -11,10 +11,11 @@ import { stepName } from "./step-name";
 
 type Candidate = { ladder: BadgeLadderKey; count: number; categoryName: string | null };
 
+// 다음 뱃지(R17). 단계형 가운데 진행 비율이 가장 높은 것, 같으면 남은 횟수가 적은 것, 그것도 같으면 후보 순서. 0회인 사다리는 뺀다.
 export function nextBadgeGoal(counts: BadgeCounts) {
   const candidates: Candidate[] = [
     { ladder: BADGE_LADDER.playerTotal, count: counts.playerTotal, categoryName: null },
-    { ladder: BADGE_LADDER.playerReviews, count: counts.playerReviews, categoryName: null },
+    { ladder: BADGE_LADDER.gmTotal, count: counts.gmTotal, categoryName: null },
     ...counts.playerRules.map((rule) => ({
       ladder: BADGE_LADDER.playerRule,
       count: rule.count,
@@ -25,23 +26,17 @@ export function nextBadgeGoal(counts: BadgeCounts) {
       count: rule.count,
       categoryName: rule.categoryName,
     })),
+    { ladder: BADGE_LADDER.gmVariety, count: counts.gmVariety, categoryName: null },
   ];
-  if (counts.gmTotal > 0) {
-    candidates.push(
-      { ladder: BADGE_LADDER.gmTotal, count: counts.gmTotal, categoryName: null },
-      { ladder: BADGE_LADDER.gmVariety, count: counts.gmVariety, categoryName: null },
-      { ladder: BADGE_LADDER.gmReviews, count: counts.gmReviews, categoryName: null },
-    );
-  }
 
   const goals = candidates.flatMap((candidate) => {
+    if (candidate.count === 0) return [];
     const step = nextStep({ steps: BADGE_LADDERS[candidate.ladder].steps, count: candidate.count });
     if (!step) return [];
-    const name = stepName({ step, categoryName: candidate.categoryName });
     return [
       {
         emoji: step.emoji,
-        name,
+        name: stepName({ step, categoryName: candidate.categoryName }),
         remaining: step.threshold - candidate.count,
         count: candidate.count,
         threshold: step.threshold,
@@ -53,5 +48,11 @@ export function nextBadgeGoal(counts: BadgeCounts) {
       },
     ];
   });
-  return goals.toSorted((left, right) => left.remaining - right.remaining)[0] ?? null;
+  return (
+    goals.toSorted(
+      (left, right) =>
+        right.count / right.threshold - left.count / left.threshold ||
+        left.remaining - right.remaining,
+    )[0] ?? null
+  );
 }

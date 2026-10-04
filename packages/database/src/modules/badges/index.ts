@@ -1,6 +1,5 @@
 export { grantRushBadge } from "./commands/grant-rush-badge";
 export { markBadgesNotified } from "./commands/mark-badges-notified";
-export { markBadgesSeen } from "./commands/mark-badges-seen";
 export { saveMemberFeaturedBadges } from "./commands/save-member-featured-badges";
 export { evaluateAllBadges } from "./queries/evaluate-all-badges";
 export { evaluateBadges } from "./queries/evaluate-badges";

@@ -29,7 +29,7 @@ export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
             <VStack gap="075" className="min-w-0 flex-1">
               <HStack align="baseline" gap="075">
                 <Text typography="subtitle2" weight="extrabold" className="min-w-0 flex-1">
-                  {goal.count === 0 ? goal.name : `${goal.name}까지 ${goal.remaining}회`}
+                  {goal.name}까지 {goal.remaining}회
                 </Text>
                 <Text typography="body4" foreground="hint" numeric>
                   {goal.count} / {goal.threshold}
@@ -45,6 +45,11 @@ export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
               </Text>
             </VStack>
           </HStack>
+        )}
+        {!goal && heldCount === 0 && (
+          <Text typography="body3" foreground="muted" className="p-175">
+            첫 세션에 참석해 🎲 첫 주사위를 받아 보세요
+          </Text>
         )}
         <Button
           render={<ServerLink path={"/me/badges"} />}

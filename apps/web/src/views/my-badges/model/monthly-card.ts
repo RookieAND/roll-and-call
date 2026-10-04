@@ -51,10 +51,6 @@ export function monthlyCard({
   const verb = gm ? "진행" : "참여";
   const standing = currentMonthStanding({ appearances, userId, role: definition.role, now });
   const thisMonth = monthLabel(kstMonthKey(now));
-  const monthKey = heldMonth ? `${ladder}.${heldMonth}` : null;
-  const record = monthKey
-    ? records.find((candidate) => candidate.badgeKey === monthKey)
-    : undefined;
 
   return {
     title: step.name,
@@ -62,7 +58,6 @@ export function monthlyCard({
     emoji: step.emoji,
     look: stepLook(step),
     ribbon: heldMonth ? monthLabel(heldMonth) : null,
-    isNew: isNull(record?.seenAt),
     status: heldMonth
       ? `${monthLabel(heldMonth)} ${roleLabel} 1위 · ${countOf(heldMonth)}회 ${verb}`
       : `${thisMonth} ${roleLabel} ${standing.count}회${standing.rank ? ` · 지금 ${standing.rank}위` : ""}`,

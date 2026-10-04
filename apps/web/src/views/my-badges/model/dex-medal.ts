@@ -7,7 +7,6 @@ export type DexMedal = {
   emoji: string;
   look: BadgeLook;
   locked: boolean;
-  isNew: boolean;
   name: string;
   caption: string;
   detail: BadgeDetail;

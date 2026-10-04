@@ -2,7 +2,7 @@ import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
-import { heldBadges, pickFeaturedBadges } from "@/entities/badge";
+import { countBadges, heldBadges, pickFeaturedBadges } from "@/entities/badge";
 import { AvailabilityRows, DepartedMemberScreen, ProfileLinks } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { ProfileMemoBlock } from "@/features/profile-memo";
@@ -74,7 +74,7 @@ export async function UserProfileView({ id }: { id: string }) {
           hosted={counts.hosted}
           played={counts.played}
           featuredBadges={featuredBadges}
-          badgeTotal={held.length}
+          badgeTotal={profile.showBadges ? countBadges(badgeRecords, now).total : 0}
         />
 
         {certified.length > 0 && <ProfileRulebooks rulebooks={certified} />}

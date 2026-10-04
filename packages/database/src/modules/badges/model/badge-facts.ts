@@ -11,8 +11,6 @@ export type BadgeSession = {
   attendedCount: number;
 };
 
-export type BadgeReview = { gameId: string; createdAt: Date };
-
 // 적용한 추첨에서 내가 굴린 1d100. nearMiss는 대기 1번(정원 + 1위), picked는 추첨 순간 확정이다.
 export type BadgeDraw = {
   gameId: string;
@@ -35,8 +33,6 @@ export type BadgeHostedDraw = {
 export type BadgeFacts = {
   played: BadgeSession[];
   hosted: BadgeSession[];
-  reviews: BadgeReview[];
-  written: BadgeReview[];
   draws: BadgeDraw[];
   hostedDraws: BadgeHostedDraw[];
   // 그 서버 가입 시각. 가입 기간 칭호가 센다.

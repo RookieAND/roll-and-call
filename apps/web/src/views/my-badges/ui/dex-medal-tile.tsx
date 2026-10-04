@@ -23,7 +23,7 @@ export function DexMedalTile({ medal, bordered = false, caption, children }: Dex
         bordered && "rounded-500 border border-gray-200 px-025 pt-150 pb-125 hover:bg-gray-50",
       )}
     >
-      <BadgeMedal emoji={medal.emoji} look={medal.look} locked={medal.locked} isNew={medal.isNew} />
+      <BadgeMedal emoji={medal.emoji} look={medal.look} locked={medal.locked} />
       <VStack align="center" gap="050" className="w-full">
         <Text
           typography="body4"

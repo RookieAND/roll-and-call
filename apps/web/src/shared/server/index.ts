@@ -45,7 +45,7 @@ export {
 export { getProfileMemo, type MemberProfile } from "@roll-and-call/database/profiles";
 export { findActiveSanction } from "@roll-and-call/database/moderation";
 export { getRulebookRecords, type RulebookRecords } from "@roll-and-call/database/certifications";
-export { markBadgesSeen, type BadgeRecord } from "@roll-and-call/database/badges";
+export { type BadgeRecord } from "@roll-and-call/database/badges";
 export {
   countUnreadNotifications,
   listNotifications,

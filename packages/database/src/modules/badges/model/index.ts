@@ -1,6 +1,5 @@
 export {
   type BadgeSession,
-  type BadgeReview,
   type BadgeFacts,
   type EarnedBadge,
   type BadgeDraw,
@@ -20,6 +19,7 @@ export {
 } from "./badge-ladder";
 export { BADGE_LADDERS, type BadgeLadderDefinition } from "./badge-ladders";
 export { computeBadges } from "./compute-badges";
+export { countBadges, type BadgeCount } from "./count-badges";
 export { countsAsAttended } from "./counts-as-attended";
 export { countsForRanking } from "./counts-for-ranking";
 export { diffBadges, type BadgeWrite } from "./diff-badges";
@@ -31,6 +31,7 @@ export { ladderEvents } from "./ladder-events";
 export { monthlyWinners, type MonthlyAppearance } from "./monthly-winners";
 export { nextMonthStart } from "./next-month-start";
 export { parseBadgeKey } from "./parse-badge-key";
+export { previousMonthKey } from "./previous-month-key";
 export { type BadgeEvent } from "./reached-tier";
 export { recordAppearances } from "./record-appearances";
 export { isRecordSession, type RecordGame } from "./record-session";

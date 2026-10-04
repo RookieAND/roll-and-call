@@ -1,5 +1,4 @@
 import {
-  BADGE_LADDER,
   BADGE_LADDERS,
   isHiddenLadder,
   type BadgeEvent,
@@ -58,10 +57,6 @@ export function buildLadderDetail({
   const earnedEvent = events?.[step.threshold - 1] ?? null;
   const earnedAt = tier === heldTier ? held!.earnedAt : (earnedEvent?.at ?? null);
   const heldSource = tier === heldTier ? held!.source : null;
-  const sourceHeading =
-    ladder === BADGE_LADDER.gmReviews || ladder === BADGE_LADDER.playerReviews
-      ? "채운 후기"
-      : "채운 세션";
 
   return {
     name: stepName({ step, categoryName }),
@@ -75,7 +70,7 @@ export function buildLadderDetail({
             dateLabel: toKst(earnedAt).format("YYYY년 M월 D일"),
             source: heldSource
               ? {
-                  heading: sourceHeading,
+                  heading: "채운 세션",
                   label: `${heldSource.title} · ${toKst(heldSource.startsAt).format("M월 D일")}`,
                   href: `/games/${heldSource.gameId}`,
                 }

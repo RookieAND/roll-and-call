@@ -31,7 +31,6 @@ export function DexRoleTab({ role, board }: DexRoleTabProps) {
       </DexSection>
 
       {board.variety && <DexGridSection board={board.variety} />}
-      <DexGridSection board={board.reviews} />
 
       <DexSection title={board.monthly.title}>
         <DexMonthlyCard card={board.monthly} />
