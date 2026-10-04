@@ -2,6 +2,7 @@ import { Callout, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { HelpStep } from "../model/help-docs";
 import { HelpFigure } from "./help-figure";
+import { HelpStepBody } from "./help-step-body";
 
 interface HelpStepsProps {
   steps: HelpStep[];
@@ -30,9 +31,7 @@ export function HelpSteps({ steps }: HelpStepsProps) {
               <Text typography="subtitle1" weight="extrabold" render={<h3 />}>
                 {step.title}
               </Text>
-              <Text typography="body3" foreground="muted" render={<p />} className="text-pretty">
-                {step.body}
-              </Text>
+              <HelpStepBody lines={step.body} />
               {step.figure && (
                 <div className="mt-075">
                   <HelpFigure figure={step.figure} />

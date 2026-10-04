@@ -24,7 +24,7 @@ export function HelpDocView({ slug }: HelpDocViewProps) {
     <>
       <AppBar back="/help" title={doc.title} heading={false} />
       <Container size="sm">
-        <VStack gap="250" className="py-250">
+        <VStack gap="250" className="py-250 break-keep">
           <VStack gap="100">
             <Text typography="body4" weight="extrabold" foreground="primary" render={<p />}>
               {doc.category}

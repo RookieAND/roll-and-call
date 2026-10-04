@@ -37,7 +37,7 @@ export function HelpFigure({ figure }: HelpFigureProps) {
               <span className="size-[34px] flex-none rounded-300 bg-tinted-bg" />
               <VStack className="min-w-0 flex-1">
                 <Text typography="subtitle2" weight="extrabold" render={<span />}>
-                  물벼락 — 1부
+                  물벼락 1부
                 </Text>
                 <Text typography="body4" foreground="hint" render={<span />}>
                   선착순 · 확정 2 · 정원 4
@@ -56,9 +56,9 @@ export function HelpFigure({ figure }: HelpFigureProps) {
         <VStack gap="125">
           <VStack gap="075">
             <Text typography="body4" weight="extrabold" foreground="hint" render={<span />}>
-              게임명
+              구인 제목
             </Text>
-            <TextInput defaultValue="물벼락 — 1부" readOnly aria-label="게임명" />
+            <TextInput defaultValue="물벼락 1부" readOnly aria-label="구인 제목" />
           </VStack>
           <HStack gap="125">
             <VStack gap="075" className="min-w-0 flex-1">
