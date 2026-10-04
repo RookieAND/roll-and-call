@@ -1,6 +1,7 @@
 "use server";
 
 import { createGameWithRoster } from "@roll-and-call/database/games";
+import { listSanctionedUserIds } from "@roll-and-call/database/moderation";
 import { countServerMembers } from "@roll-and-call/database/profiles";
 import { uniq } from "es-toolkit";
 import { redirect } from "next/navigation";
@@ -11,12 +12,14 @@ import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   announceGameOpened,
+  findActiveSanction,
   getActingMember,
   getRulebookRecords,
   notMemberError,
 } from "@/shared/server";
 
 import { gameFormSchema, INVALID_INPUT_MESSAGE, type GameFormValues } from "../model/game-form";
+import { pastScheduleError } from "../model/past-schedule-error";
 import { toGameColumns } from "../model/to-game-columns";
 
 export async function createGame(input: GameFormValues): Promise<ActionResult> {
@@ -26,10 +29,20 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
   }
   const { server, user } = member;
 
+  if (await findActiveSanction({ serverId: server.id, userId: user.id })) {
+    return { error: "활동 정지 기간에는 새 구인을 열 수 없습니다." };
+  }
+
   const parsed = gameFormSchema.safeParse(input);
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? INVALID_INPUT_MESSAGE };
   }
+  const columns = toGameColumns(parsed.data);
+  const pastError = pastScheduleError({
+    endDate: columns.endDate,
+    confirmedAt: columns.confirmedAt,
+  });
+  if (pastError) return pastError;
 
   // 룰은 카테고리·판본 단위다. 표시 이름은 "카테고리 판본", 구인은 그 판본의 첫 기본 룰북을 가리킨다.
   const myRulebooks = toMyRulebooks(
@@ -51,6 +64,10 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     if (found !== invitedIds.length) {
       return { error: "찾을 수 없는 사람이 있습니다. 직접 확정할 사람을 다시 골라 주세요." };
     }
+    const sanctioned = await listSanctionedUserIds({ serverId: server.id, userIds: invitedIds });
+    if (sanctioned.length > 0) {
+      return { error: "활동이 정지된 사람은 직접 확정할 수 없습니다.", field: "preConfirmed" };
+    }
   }
 
   const gameId = await createGameWithRoster({
@@ -59,7 +76,7 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
       gmId: user.id,
       rule: set.label,
       rulebookId: set.cores[0]!.id,
-      ...toGameColumns(parsed.data),
+      ...columns,
     },
     confirmedUserIds: invitedIds,
   });

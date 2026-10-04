@@ -1,5 +1,6 @@
 "use server";
 
+import { listSanctionedUserIds } from "@roll-and-call/database/moderation";
 import { searchMembers } from "@roll-and-call/database/profiles";
 
 import { getActingMember } from "@/shared/server";
@@ -22,5 +23,15 @@ export async function searchProfiles(query: string): Promise<Candidate[]> {
     keyword,
     limit: RESULT_LIMIT,
   });
-  return found.map((profile) => ({ ...profile, status: null }));
+  const sanctioned = new Set(
+    await listSanctionedUserIds({
+      serverId: server.id,
+      userIds: found.map((profile) => profile.userId),
+    }),
+  );
+  return found.map((profile) => ({
+    ...profile,
+    status: null,
+    sanctioned: sanctioned.has(profile.userId),
+  }));
 }

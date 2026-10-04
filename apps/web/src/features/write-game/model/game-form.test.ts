@@ -39,8 +39,10 @@ describe("gameFormSchema", () => {
     expect(firstError(base)).toBeNull();
   });
 
-  it("정원은 20명을 넘길 수 없다", () => {
+  it("정원은 1~20명이다", () => {
     expect(firstError({ ...base, maxPlayers: "21" })).toBe("maxPlayers");
+    expect(firstError({ ...base, maxPlayers: "" })).toBe("maxPlayers");
+    expect(firstError({ ...base, maxPlayers: "20" })).toBeNull();
   });
 
   it("정원을 직접 확정한 사람 수보다 줄일 수 없다", () => {
@@ -50,13 +52,34 @@ describe("gameFormSchema", () => {
     expect(firstError({ ...base, maxPlayers: "2", preConfirmed: twoPlayers })).toBeNull();
   });
 
-  it("조율 기간은 하루 이상 2주 이하다", () => {
-    expect(firstError({ ...base, rangeEnd: "2026-09-12" })).toBe("rangeEnd");
-    expect(firstError({ ...base, rangeEnd: "2026-09-30" })).toBe("rangeEnd");
+  it("조율 기간은 하루짜리부터 시작일 포함 14일까지다", () => {
+    expect(firstError({ ...base, rangeEnd: "2026-09-12" })).toBeNull();
+    expect(firstError({ ...base, rangeEnd: "2026-09-25" })).toBeNull();
+    expect(firstError({ ...base, rangeEnd: "2026-09-26" })).toBe("rangeEnd");
+    expect(firstError({ ...base, rangeEnd: "2026-09-11" })).toBe("rangeEnd");
   });
 
-  it("모집 마감이 조율 종료보다 뒤일 수 없다", () => {
-    expect(firstError({ ...base, endDate: "2026-09-25T20:00" })).toBe("endDate");
+  it("모집 마감은 조율 시작일 0시보다 앞서야 한다", () => {
+    expect(firstError({ ...base, endDate: "2026-09-12T00:00" })).toBe("endDate");
+    expect(firstError({ ...base, endDate: "2026-09-11T23:59" })).toBeNull();
+    const issue = gameFormSchema.safeParse({ ...base, endDate: "2026-09-12T00:00" }).error
+      ?.issues[0];
+    expect(issue?.message).toBe(
+      "모집 마감이 조율 시작일보다 늦습니다.\n마감을 9월 12일 이전으로 바꿔 주세요.",
+    );
+  });
+
+  it("조율 시간대는 시작과 끝이 달라야 하고 자정을 넘길 수 있다", () => {
+    expect(firstError({ ...base, windowStartHour: "22", windowEndHour: "2" })).toBeNull();
+    expect(firstError({ ...base, windowStartHour: "9", windowEndHour: "9" })).toBe("windowEndHour");
+    expect(firstError({ ...base, windowStartHour: "24", windowEndHour: "2" })).toBe(
+      "windowStartHour",
+    );
+  });
+
+  it("일시 지정형은 조율 시간대를 보지 않는다", () => {
+    const fixed = { ...base, scheduleMode: SCHEDULE_MODE.fixed, confirmedAt: "2026-09-12T19:00" };
+    expect(firstError({ ...fixed, windowStartHour: "9", windowEndHour: "9" })).toBeNull();
   });
 
   it("이미지는 5장까지, 스토리지 주소만 받는다", () => {
@@ -70,6 +93,8 @@ describe("gameFormSchema", () => {
     expect(firstError(fixed)).toBeNull();
     expect(firstError({ ...fixed, confirmedAt: "" })).toBe("confirmedAt");
     expect(firstError({ ...fixed, endDate: "2026-09-12T20:00" })).toBe("endDate");
+    expect(firstError({ ...fixed, endDate: "2026-09-12T19:00" })).toBe("endDate");
+    expect(firstError({ ...fixed, endDate: "2026-09-12T18:59" })).toBeNull();
   });
 
   it("AI 이미지 사용 여부는 고르지 않고 넘어갈 수 없다", () => {
@@ -100,6 +125,25 @@ describe("toGameColumns", () => {
     const spoiler = { ...base, thumbnailSpoiler: true };
     expect(toGameColumns({ ...spoiler, thumbnailUrl: imageUrl(1) }).thumbnailSpoiler).toBe(true);
     expect(toGameColumns({ ...spoiler, thumbnailUrl: "" }).thumbnailSpoiler).toBe(false);
+  });
+
+  it("조율 시간대를 숫자로 저장하고 일시 지정형은 기본값을 쓴다", () => {
+    const coordinate = toGameColumns({ ...base, windowStartHour: "22", windowEndHour: "2" });
+    expect([coordinate.windowStartHour, coordinate.windowEndHour]).toEqual([22, 2]);
+    const fixed = toGameColumns({
+      ...base,
+      scheduleMode: SCHEDULE_MODE.fixed,
+      confirmedAt: "2026-09-12T19:00",
+      windowStartHour: "22",
+      windowEndHour: "2",
+    });
+    expect([fixed.windowStartHour, fixed.windowEndHour]).toEqual([12, 0]);
+  });
+
+  it("조율형은 세션 시각 칼럼을 넣지 않아 GM이 정한 시각을 지우지 않는다", () => {
+    expect("confirmedAt" in toGameColumns({ ...base, confirmedAt: "2026-09-12T19:00" })).toBe(
+      false,
+    );
   });
 
   it("플레이타임 문자열에서 분을 뽑아 같이 저장한다", () => {

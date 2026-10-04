@@ -1,0 +1,3 @@
+ALTER TABLE "games" ADD COLUMN "window_start_hour" smallint DEFAULT 12 NOT NULL;--> statement-breakpoint
+ALTER TABLE "games" ADD COLUMN "window_end_hour" smallint DEFAULT 0 NOT NULL;--> statement-breakpoint
+ALTER TABLE "games" ADD CONSTRAINT "games_window_hours" CHECK ("games"."window_start_hour" between 0 and 23 and "games"."window_end_hour" between 0 and 23 and "games"."window_start_hour" <> "games"."window_end_hour");

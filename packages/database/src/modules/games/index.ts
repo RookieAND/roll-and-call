@@ -25,7 +25,6 @@ export { findGameDetail, type GameDetailData } from "./queries/find-game-detail"
 export { findGameFileUrlsInUse } from "./queries/find-game-file-urls-in-use";
 export { findGameGmId } from "./queries/find-game-gm-id";
 export { findGameServerSlug } from "./queries/find-game-server-slug";
-export { findOwnedGameSettings } from "./queries/find-owned-game-settings";
 export { findParticipantStatus } from "./queries/find-participant-status";
 export { getGameAvailabilities } from "./queries/get-game-availabilities";
 export { getGameForDrawNotice } from "./queries/get-game-for-draw-notice";

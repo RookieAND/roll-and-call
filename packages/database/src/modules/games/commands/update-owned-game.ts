@@ -1,21 +1,24 @@
 import { and, eq, isNull } from "drizzle-orm";
 
 import { db } from "#/client";
+import type { Transaction } from "#/modules/transaction/transaction";
 import { games, type NewGame } from "#/schema";
 
 // 바뀐 행이 없으면(남의 글이거나 지워졌거나 취소됐으면) false.
 export async function updateOwnedGame({
+  transaction,
   serverId,
   gameId,
   gmId,
   columns,
 }: {
+  transaction?: Transaction;
   serverId: string;
   gameId: string;
   gmId: string;
   columns: Partial<Omit<NewGame, "id" | "serverId" | "gmId">>;
 }) {
-  const updated = await db
+  const updated = await (transaction ?? db)
     .update(games)
     .set(columns)
     .where(

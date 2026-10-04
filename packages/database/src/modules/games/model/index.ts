@@ -37,6 +37,7 @@ export {
   plannedEndAt,
   sessionEndAt,
 } from "./session-timing";
+export { crossesMidnight, DEFAULT_WINDOW, windowHours } from "./coordination-window";
 export { cancelBlockReason } from "./cancel-block-reason";
 export { GAME_CANCEL_KIND, type GameCancelKind } from "./game-cancel-kind";
 export { storedCancelReason } from "./stored-cancel-reason";

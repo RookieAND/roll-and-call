@@ -1,16 +1,13 @@
 "use server";
 
-import {
-  findOwnedGameSettings,
-  listRosterStatuses,
-  updateOwnedGame,
-} from "@roll-and-call/database/games";
+import { listRosterStatuses, lockGame, updateOwnedGame } from "@roll-and-call/database/games";
+import { withTransaction } from "@roll-and-call/database/transaction";
 import { isNull } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { PARTICIPANT_STATUS } from "@/entities/game";
-import { GAME_CANCELLED_MESSAGE, type ActionResult } from "@/shared/api";
+import { PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
+import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
@@ -19,10 +16,9 @@ import {
   notMemberError,
 } from "@/shared/server";
 
+import { EDIT_FORBIDDEN_MESSAGE, editBlockReason } from "../model/edit-block-reason";
 import { gameFormSchema, INVALID_INPUT_MESSAGE, type GameFormValues } from "../model/game-form";
 import { toGameColumns } from "../model/to-game-columns";
-
-const FORBIDDEN_MESSAGE = "수정 권한이 없습니다.";
 
 export async function updateGame(id: string, input: GameFormValues): Promise<ActionResult> {
   const member = await getActingMember();
@@ -36,39 +32,37 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     return { error: parsed.error.issues[0]?.message ?? INVALID_INPUT_MESSAGE };
   }
   const values = parsed.data;
-
+  const columns = toGameColumns(values);
   const owner = { serverId: server.id, gameId: id, gmId: user.id };
-  const before = await findOwnedGameSettings(owner);
-  if (!before) return { error: FORBIDDEN_MESSAGE };
-  if (before.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
 
-  const roster = await listRosterStatuses({ serverId: server.id, gameId: id });
-  const confirmedCount = roster.filter((status) => status === PARTICIPANT_STATUS.confirmed).length;
+  // 같은 구인의 신청·명단 조정·추첨과 줄을 서도록 행을 잠그고 검사와 저장을 한 번에 한다.
+  const result = await withTransaction(async (transaction) => {
+    const game = await lockGame({ transaction, serverId: server.id, gameId: id });
+    const roster = await listRosterStatuses({ transaction, serverId: server.id, gameId: id });
+    const block = editBlockReason({
+      game,
+      userId: user.id,
+      columns,
+      rosterCount: roster.length,
+      confirmedCount: roster.filter((status) => status === PARTICIPANT_STATUS.confirmed).length,
+    });
+    if (block || !game) return block ?? { error: EDIT_FORBIDDEN_MESSAGE };
 
-  if (Number(values.maxPlayers) < confirmedCount) {
-    return {
-      error: `이미 확정된 참여자가 ${confirmedCount}명이라 정원을 그보다 줄일 수 없습니다.`,
-      field: "maxPlayers",
-    };
-  }
-  // 조율 응답·확정 명단이 일정 방식에, 확정 순서가 모집 방식에 묶여 있어 신청자가 있으면 못 바꾼다.
-  if (roster.length > 0 && values.scheduleMode !== before.scheduleMode) {
-    return {
-      error:
-        "신청자가 있어 일정 방식은 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔주세요.",
-      field: "scheduleMode",
-    };
-  }
-  if (roster.length > 0 && values.recruitMethod !== before.recruitMethod) {
-    return {
-      error:
-        "신청자가 있어 모집 방식은 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔주세요.",
-      field: "recruitMethod",
-    };
-  }
+    // 신청자 없이 일시 지정형을 조율형으로 바꾸면 예전 세션 시각을 지운다.
+    const clearsSession =
+      game.scheduleMode === SCHEDULE_MODE.fixed &&
+      columns.scheduleMode === SCHEDULE_MODE.coordinate;
+    const updated = await updateOwnedGame({
+      transaction,
+      ...owner,
+      columns: clearsSession ? { ...columns, confirmedAt: null } : columns,
+    });
+    if (!updated) return { error: EDIT_FORBIDDEN_MESSAGE };
+    return { before: game };
+  });
+  if ("error" in result) return result;
+  const { before } = result;
 
-  const updated = await updateOwnedGame({ ...owner, columns: toGameColumns(values) });
-  if (!updated) return { error: FORBIDDEN_MESSAGE };
   after(() => refreshRecruitPost({ server, gameId: id }));
 
   const kept = new Set<string>([values.thumbnailUrl ?? "", ...values.images]);

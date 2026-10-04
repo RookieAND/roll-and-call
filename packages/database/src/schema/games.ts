@@ -9,6 +9,7 @@ import {
   pgEnum,
   pgTable,
   primaryKey,
+  smallint,
   text,
   timestamp,
   unique,
@@ -70,6 +71,10 @@ export const games = pgTable(
     rangeEnd: date("range_end"),
     // both schedule modes route through here once the start is confirmed
     confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
+    // 조율형 격자의 하루 범위. 일시 지정형은 쓰지 않는다. 끝이 시작 이하면 자정을 넘긴다.
+    windowStartHour: smallint("window_start_hour").notNull().default(12),
+    // 조율형 격자의 하루 범위. 일시 지정형은 쓰지 않는다. 끝이 시작 이하면 자정을 넘긴다.
+    windowEndHour: smallint("window_end_hour").notNull().default(0),
     // set when the 1h-before reminder has been sent (dedupe)
     notifiedAt: timestamp("notified_at", { withTimezone: true }),
     // 추첨을 돌린 시각. 값이 있으면 신청을 받지 않고, 확정·대기 명단은 이미 정해진 뒤다.
@@ -112,6 +117,10 @@ export const games = pgTable(
       .where(sql`recruit_method = 'lottery' and drawn_at is null and cancelled_at is null`),
     check("games_max_players_positive", sql`${table.maxPlayers} >= 1`),
     check("games_play_minutes_positive", sql`${table.playMinutes} > 0`),
+    check(
+      "games_window_hours",
+      sql`${table.windowStartHour} between 0 and 23 and ${table.windowEndHour} between 0 and 23 and ${table.windowStartHour} <> ${table.windowEndHour}`,
+    ),
     check("games_range_order", sql`${table.rangeEnd} >= ${table.rangeStart}`),
     check(
       "games_tag_limits",

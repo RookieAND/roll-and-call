@@ -1,10 +1,11 @@
-import { RECRUIT_METHOD } from "@/entities/game";
+import { DEFAULT_WINDOW, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 import { fromKstDateTimeInput, splitPlayTime } from "@/shared/lib";
 
 import type { GameFormValues } from "./game-form";
 
 export function toGameColumns(values: GameFormValues) {
   const { hours, minutes } = splitPlayTime(values.playTime);
+  const isFixed = values.scheduleMode === SCHEDULE_MODE.fixed;
 
   return {
     title: values.title,
@@ -28,6 +29,15 @@ export function toGameColumns(values: GameFormValues) {
     endDate: fromKstDateTimeInput(values.endDate),
     rangeStart: values.rangeStart || null,
     rangeEnd: values.rangeEnd || null,
-    confirmedAt: values.confirmedAt ? fromKstDateTimeInput(values.confirmedAt) : null,
+    windowStartHour:
+      isFixed || !values.windowStartHour
+        ? DEFAULT_WINDOW.startHour
+        : Number(values.windowStartHour),
+    windowEndHour:
+      isFixed || !values.windowEndHour ? DEFAULT_WINDOW.endHour : Number(values.windowEndHour),
+    // 조율형 세션 시각은 GM이 세션 시간 결정에서 정한다. 폼은 그 값을 건드리지 않는다.
+    ...(isFixed && values.confirmedAt
+      ? { confirmedAt: fromKstDateTimeInput(values.confirmedAt) }
+      : {}),
   };
 }
