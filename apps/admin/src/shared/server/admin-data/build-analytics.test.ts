@@ -35,7 +35,7 @@ function session(overrides: Partial<Session> & { startsAt: Date }): Session {
 }
 
 function noShow(sessionId: string, userId: string, cancelled = false): NoShow {
-  return { id: `${sessionId}:${userId}`, sessionId, userId, recordedAt: now, cancelled };
+  return { id: `${sessionId}:${userId}`, sessionId, userId, cancelled };
 }
 
 function build(sessions: Session[], noShows: NoShow[] = []) {
