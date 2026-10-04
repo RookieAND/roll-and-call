@@ -3,7 +3,6 @@
 import { isNull } from "es-toolkit";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-// initial과 saved를 따로 받아 프로필 기본 시간대처럼 "칠했지만 저장 전"인 상태를 만든다.
 export function useSlotPainter({
   initial,
   saved: savedInitial,

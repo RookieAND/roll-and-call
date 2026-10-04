@@ -28,18 +28,17 @@ export async function seedAvailabilityFromProfile({
   if (await hasAnsweredAvailability({ serverId, gameId: game.id, userId })) return false;
 
   const profile = await getProfile(serverId, userId);
-  const prefill = availabilityPrefill({
+  const prefillKeys = availabilityPrefill({
     intervals: profile?.availability ?? [],
     days: buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd }),
     timeRows: buildTimeRows({ startHour: game.windowStartHour, endHour: game.windowEndHour }),
   });
-  if (!prefill) return false;
 
   // 다른 확정 세션이 차지한 칸은 조율표에서도 못 칠하는 칸이라 여기서도 뺀다.
   const blocked = new Set(
     await getUserConfirmedSlots({ serverId, userId, excludeGameId: game.id }),
   );
-  const slotStarts = prefill.keys
+  const slotStarts = prefillKeys
     .filter((slotIso) => !blocked.has(slotIso))
     .map((slotIso) => new Date(slotIso));
   if (slotStarts.length === 0) return false;

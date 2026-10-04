@@ -3,7 +3,6 @@
 import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useState } from "react";
 
 import { availabilityQuery } from "@/entities/availability";
 import { AppError } from "@/shared/api";
@@ -16,14 +15,12 @@ import { useSlotPainter } from "../model/use-slot-painter";
 import { AvailabilitySaveBar } from "./availability-save-bar";
 import { BLOCKED_STRIPES, cellTone, UNSAVED_SELECTED_TONE } from "./cell-tone";
 import { Legend } from "./legend";
-import { PrefillNotice } from "./prefill-notice";
 
 interface AvailabilityGridProps {
   gameId: string;
   days: DayColumn[];
   timeRows: TimeRow[];
   savedMine: string[];
-  prefill?: { keys: string[]; label: string } | null;
   blocked: string[];
 }
 
@@ -34,16 +31,9 @@ export function AvailabilityGrid({
   days,
   timeRows,
   savedMine,
-  prefill,
   blocked,
 }: AvailabilityGridProps) {
-  const usePrefill = savedMine.length === 0 && Boolean(prefill?.keys.length);
-  const painter = useSlotPainter({
-    initial: usePrefill ? prefill!.keys : savedMine,
-    saved: savedMine,
-    blocked,
-  });
-  const [prefillNotice, setPrefillNotice] = useState(usePrefill);
+  const painter = useSlotPainter({ initial: savedMine, saved: savedMine, blocked });
   const queryClient = useQueryClient();
   const { server } = useParams<{ server: string }>();
   const { mutate, isPending: pending } = useMutation({
@@ -55,7 +45,6 @@ export function AvailabilityGrid({
     meta: { errorMessage: "가능 시간을 저장하지 못했습니다" },
     onSuccess: (keys) => {
       painter.markSaved(keys);
-      setPrefillNotice(false);
       toast.success("가능 시간을 저장했습니다");
       // 전체 겹침·확정 후보가 같은 캐시를 읽으므로 저장 결과를 다시 받아 반영한다.
       return queryClient.invalidateQueries({
@@ -88,17 +77,8 @@ export function AvailabilityGrid({
     );
   }
 
-  function clearPrefill() {
-    painter.reset();
-    setPrefillNotice(false);
-  }
-
   return (
     <VStack gap="150">
-      {prefillNotice && painter.dirty && (
-        <PrefillNotice label={prefill!.label} onClear={clearPrefill} />
-      )}
-
       <Text typography="body4" foreground="hint" render={<p />}>
         누르거나 드래그해서 칠하세요. 다시 누르면 지워집니다.
       </Text>

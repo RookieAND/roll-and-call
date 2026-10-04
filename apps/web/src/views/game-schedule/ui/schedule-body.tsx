@@ -10,12 +10,14 @@ import { availabilityQuery, type ScheduleAvailability } from "@/entities/availab
 import { AvailabilityGrid } from "@/features/coordinate-session";
 import type { DayColumn, TimeRow } from "@/shared/lib";
 
+import { closedScheduleNotice } from "../model/closed-schedule-notice";
 import { groupDaysByWeek } from "../model/group-days-by-week";
+import { SCHEDULE_NOTICE } from "../model/schedule-notices";
 import { SCHEDULE_TAB, type ScheduleTab } from "../model/schedule-tab";
 import { weekIndexOf } from "../model/week-index-of";
 import { ConfirmedSessionNotice } from "./confirmed-session-notice";
-import { DeadlinePassedNotice } from "./deadline-passed-notice";
 import { ParticipantsOnlyNotice } from "./participants-only-notice";
+import { ScheduleNotice } from "./schedule-notice";
 import { ScheduleOverlap } from "./schedule-overlap";
 import { ScheduleOverlapEmpty } from "./schedule-overlap-empty";
 import { ScheduleTabs } from "./schedule-tabs";
@@ -28,12 +30,15 @@ interface ScheduleBodyProps {
   // 서버 첫 렌더 값. 이후엔 쿼리 캐시(저장 후 invalidate, 포커스 복귀 시 refetch)가 갱신한다.
   initialAvailability: ScheduleAvailability;
   confirmedAt: Date | null;
-  involved: boolean;
+  // GM 또는 확정 참여자. 대기자·추첨 전 신청자·내보낸 사람은 보기만 한다(R2).
+  canPaint: boolean;
+  awaitingDraw: boolean;
+  // 모집 마감이 지났는데 확정 참여자가 없다.
+  unscheduled: boolean;
   isGm: boolean;
   isSignedIn: boolean;
   capacity: number;
   gmName?: string;
-  prefill: { keys: string[]; label: string } | null;
   deadlinePassed: boolean;
 }
 
@@ -43,12 +48,13 @@ export function ScheduleBody({
   timeRows,
   initialAvailability,
   confirmedAt,
-  involved,
+  canPaint,
+  awaitingDraw,
+  unscheduled,
   isGm,
   isSignedIn,
   capacity,
   gmName,
-  prefill,
   deadlinePassed,
 }: ScheduleBodyProps) {
   const { server } = useParams<{ server: string }>();
@@ -71,11 +77,21 @@ export function ScheduleBody({
   const respondentCount = uniq(Object.values(aggregate.names).flat()).length;
   const hasResponses = respondentCount > 0;
   const overlapProps = { days: weekDays, timeRows, aggregate, confirmedAt, capacity, gmName };
+  const paintable = canPaint && !confirmedAt && !awaitingDraw && !unscheduled;
   const overlap = hasResponses ? (
     <ScheduleOverlap hint="색이 진할수록 그 시간에 가능한 사람이 많습니다." {...overlapProps} />
   ) : (
-    <ScheduleOverlapEmpty
-      onPaint={involved && !confirmedAt ? () => setTab(SCHEDULE_TAB.mine) : undefined}
+    <ScheduleOverlapEmpty onPaint={paintable ? () => setTab(SCHEDULE_TAB.mine) : undefined} />
+  );
+
+  const lockedTabs = (
+    <ScheduleTabs
+      value={SCHEDULE_TAB.overlap}
+      onValueChange={setTab}
+      respondentCount={respondentCount}
+      mine={null}
+      overlap={overlap}
+      disabled
     />
   );
 
@@ -84,22 +100,26 @@ export function ScheduleBody({
       <VStack gap="150">
         {pager}
         <ConfirmedSessionNotice confirmedAt={confirmedAt} />
-        <ScheduleTabs
-          value={SCHEDULE_TAB.overlap}
-          onValueChange={setTab}
-          respondentCount={respondentCount}
-          mine={null}
-          overlap={overlap}
-          disabled
-        />
+        {lockedTabs}
       </VStack>
     );
   }
 
-  if (involved) {
+  const closedNotice = closedScheduleNotice({ awaitingDraw, unscheduled });
+  if (closedNotice) {
+    return (
+      <VStack gap="150">
+        <ScheduleNotice {...closedNotice} />
+        {pager}
+        {lockedTabs}
+      </VStack>
+    );
+  }
+
+  if (paintable) {
     return (
       <VStack gap="250">
-        {!isGm && deadlinePassed && <DeadlinePassedNotice />}
+        {!isGm && deadlinePassed && <ScheduleNotice {...SCHEDULE_NOTICE.deadlinePassed} />}
         <VStack gap="150">
           {pager}
           <ScheduleTabs
@@ -112,7 +132,6 @@ export function ScheduleBody({
                 days={weekDays}
                 timeRows={timeRows}
                 savedMine={aggregate.mine}
-                prefill={prefill}
                 blocked={blocked}
               />
             }

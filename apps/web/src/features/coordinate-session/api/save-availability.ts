@@ -5,18 +5,13 @@ import {
   getUserConfirmedSlots,
   replaceAvailability,
 } from "@roll-and-call/database/games";
-import { isAwaitingDraw } from "@roll-and-call/database/games/model";
 import { revalidatePath } from "next/cache";
 
-import { hasUserJoined, isGameGm, SCHEDULE_MODE } from "@/entities/game";
-import {
-  APPLICATION_CLOSED_MESSAGE,
-  GAME_CANCELLED_MESSAGE,
-  GAME_NOT_FOUND_RESULT,
-  type ActionResult,
-} from "@/shared/api";
+import { GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, notMemberError } from "@/shared/server";
+
+import { availabilityBlockReason } from "../model/availability-block-reason";
 
 const MAX_SLOT_COUNT = 2000;
 
@@ -35,21 +30,12 @@ export async function saveAvailability({
 
   const game = await getGameWithRoster({ serverId: server.id, gameId });
   if (!game) return GAME_NOT_FOUND_RESULT;
-  if (game.cancelledAt) return { error: GAME_CANCELLED_MESSAGE };
-  if (game.scheduleMode !== SCHEDULE_MODE.coordinate) {
-    return { error: "일시가 지정된 구인은 조율 대상이 아닙니다." };
-  }
-  if (game.confirmedAt) return { error: APPLICATION_CLOSED_MESSAGE };
-  if (isAwaitingDraw(game)) {
-    return { error: "추첨 결과가 나온 뒤에 가능 시간을 낼 수 있습니다." };
-  }
-
-  const involved =
-    isGameGm({ gmId: game.gmId, userId: user.id }) ||
-    hasUserJoined({ participants: game.participants, userId: user.id });
-  if (!involved) {
-    return { error: "참여자만 가능 시간을 등록할 수 있습니다." };
-  }
+  const block = availabilityBlockReason({
+    game,
+    participants: game.participants,
+    userId: user.id,
+  });
+  if (block) return { error: block };
 
   // 다른 확정 세션과 겹친 칸은 화면에서 막혀 있지만, 주소를 우회해 들어와도 저장하지 않는다.
   const blocked = new Set(

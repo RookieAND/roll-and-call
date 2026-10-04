@@ -17,7 +17,7 @@ describe("availabilityPrefill", () => {
       days: monday,
       timeRows: buildTimeRows({ startHour: 22, endHour: 2 }),
     });
-    expect(prefill?.keys.toSorted()).toEqual(
+    expect(prefill.toSorted()).toEqual(
       ["00:00", "00:30", "01:00", "01:30"].map((clock) => {
         const [hour, minute] = clock.split(":").map(Number);
         return slotIso({ date: "2026-09-15", hour: hour!, minute: minute! });
@@ -31,7 +31,7 @@ describe("availabilityPrefill", () => {
       days: monday,
       timeRows: buildTimeRows({ startHour: 12, endHour: 0 }),
     });
-    expect(prefill).toBeNull();
+    expect(prefill).toEqual([]);
   });
 
   it("오전 시간대면 오전 기본 시간을 칠한다", () => {
@@ -40,7 +40,7 @@ describe("availabilityPrefill", () => {
       days: monday,
       timeRows: buildTimeRows({ startHour: 9, endHour: 13 }),
     });
-    expect(prefill?.keys).toHaveLength(4);
-    expect(prefill?.keys).toContain(slotIso({ date: "2026-09-14", hour: 9, minute: 0 }));
+    expect(prefill).toHaveLength(4);
+    expect(prefill).toContain(slotIso({ date: "2026-09-14", hour: 9, minute: 0 }));
   });
 });

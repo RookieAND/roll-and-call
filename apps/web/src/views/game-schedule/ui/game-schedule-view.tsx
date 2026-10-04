@@ -1,3 +1,4 @@
+import { isAwaitingDraw } from "@roll-and-call/database/games/model";
 import { Badge, Button, Container, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import Link from "next/link";
@@ -5,15 +6,15 @@ import { notFound, redirect } from "next/navigation";
 
 import {
   coordinationWindowOf,
-  hasUserJoined,
+  countConfirmed,
   isDeadlinePassed,
   isGameGm,
+  PARTICIPANT_STATUS,
   SCHEDULE_MODE,
 } from "@/entities/game";
-import { availabilityPrefill } from "@/entities/profile";
 import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows, serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getGameById, getProfile, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
 import { getScheduleAvailability } from "../api/load-availability";
@@ -46,7 +47,7 @@ export async function GameScheduleView({ id }: { id: string }) {
         <Container size="sm">
           <div className="py-300">
             <EmptyState
-              title="조율 기간을 먼저 정해주세요"
+              title="조율 기간을 먼저 정해 주세요"
               description="조율 기간이 있어야 참여자가 가능 시간을 낼 수 있습니다."
               action={
                 <Button
@@ -65,17 +66,17 @@ export async function GameScheduleView({ id }: { id: string }) {
     );
   }
 
-  const involved = isGm || hasUserJoined({ participants: game.participants, userId: viewerId });
+  const canPaint =
+    isGm ||
+    game.participants.some(
+      (participant) =>
+        participant.userId === viewerId && participant.status === PARTICIPANT_STATUS.confirmed,
+    );
+  const deadlinePassed = isDeadlinePassed(game.endDate);
   const days = buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd });
   const timeRows = buildTimeRows(coordinationWindowOf(game));
 
-  const [initialAvailability, profile] = await Promise.all([
-    getScheduleAvailability({ gameId: id, userId: viewerId }),
-    involved && viewerId && !game.confirmedAt ? getProfile(server.id, viewerId) : null,
-  ]);
-  const prefill = profile
-    ? availabilityPrefill({ intervals: profile.availability, days, timeRows })
-    : null;
+  const initialAvailability = await getScheduleAvailability({ gameId: id, userId: viewerId });
 
   return (
     <>
@@ -89,14 +90,15 @@ export async function GameScheduleView({ id }: { id: string }) {
               timeRows={timeRows}
               initialAvailability={initialAvailability}
               confirmedAt={game.confirmedAt}
-              involved={involved}
+              canPaint={canPaint}
+              awaitingDraw={isAwaitingDraw(game)}
+              unscheduled={deadlinePassed && countConfirmed(game.participants) === 0}
               isGm={isGm}
               isSignedIn={!isNull(viewerId)}
               // GM도 가능 시간을 내므로 겹침 단계는 정원 + GM 기준으로 나눈다.
               capacity={game.maxPlayers + 1}
               gmName={game.gm?.username}
-              prefill={prefill}
-              deadlinePassed={isDeadlinePassed(game.endDate)}
+              deadlinePassed={deadlinePassed}
             />
           </ErrorBoundary>
         </VStack>
