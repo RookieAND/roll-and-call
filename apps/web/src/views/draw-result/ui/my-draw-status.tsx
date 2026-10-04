@@ -1,13 +1,13 @@
 import { Callout } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { Check, Clock } from "lucide-react";
 
 interface MyDrawStatusProps {
-  confirmed: boolean;
   waitlistRank: number | null;
 }
 
-export function MyDrawStatus({ confirmed, waitlistRank }: MyDrawStatusProps) {
-  if (confirmed) {
+export function MyDrawStatus({ waitlistRank }: MyDrawStatusProps) {
+  if (isNull(waitlistRank)) {
     return (
       <Callout.Root colorPalette="primary">
         <Callout.Icon>
@@ -23,7 +23,8 @@ export function MyDrawStatus({ confirmed, waitlistRank }: MyDrawStatusProps) {
       <Callout.Icon>
         <Clock size={14} strokeWidth={2.2} />
       </Callout.Icon>
-      <Callout.Title>아쉽지만 추첨 결과 대기 {waitlistRank}번이에요</Callout.Title>
+      <Callout.Title>아쉽지만 추첨 결과 대기 {waitlistRank}번입니다</Callout.Title>
+      <Callout.Description>자리가 나면 GM이 대기 명단에서 확정합니다.</Callout.Description>
     </Callout.Root>
   );
 }

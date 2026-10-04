@@ -11,6 +11,7 @@ export const toast = {
         ? { duration: UNDO_DURATION_MS, action: { label: "되돌리기", onClick: options.undo } }
         : { duration: DEFAULT_DURATION_MS },
     ),
+  info: (message: string) => uiToast.info(message, { id: message, duration: DEFAULT_DURATION_MS }),
   error: (message: string) =>
     uiToast.danger(message, { id: message, duration: DEFAULT_DURATION_MS }),
 };

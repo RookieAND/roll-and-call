@@ -96,7 +96,7 @@ export function GameRecruitFields({
         {!locked && isLottery && (
           <Callout.Root colorPalette="gray" size="sm">
             <Callout.Description>
-              정원과 관계없이 신청을 받고, 마감 뒤 GM이 뽑습니다.
+              정원과 관계없이 신청을 받고, 마감 때 뽑습니다.
               <br />
               뽑히지 않은 신청자는 대기 명단에 순서대로 남습니다.
             </Callout.Description>

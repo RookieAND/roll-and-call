@@ -1,7 +1,6 @@
-import { Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
+import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { DrawEntry } from "../model/draw-entry";
-import { DRAW_ROW_VARIANT, type DrawRowVariant } from "../model/draw-row-variant";
 import { DrawQueueMore } from "./draw-queue-more";
 import { DrawRow } from "./draw-row";
 
@@ -9,30 +8,20 @@ interface DrawQueueProps {
   label: string;
   caption?: string;
   entries: DrawEntry[];
-  variant: DrawRowVariant;
   meUserId: string | null;
-  previewCount: number;
+  // 없으면 모두 편다.
+  previewCount?: number;
 }
 
 const UNFOLDED_MAX = 3;
 
-export function DrawQueue({
-  label,
-  caption,
-  entries,
-  variant,
-  meUserId,
-  previewCount,
-}: DrawQueueProps) {
+export function DrawQueue({ label, caption, entries, meUserId, previewCount }: DrawQueueProps) {
   const rows = entries.map((entry) => (
-    <DrawRow key={entry.userId} entry={entry} variant={variant} isMe={entry.userId === meUserId} />
+    <DrawRow key={entry.userId} entry={entry} isMe={entry.userId === meUserId} />
   ));
-  const shownCount = entries.length > UNFOLDED_MAX ? previewCount : entries.length;
+  const folds = entries.length > UNFOLDED_MAX && previewCount !== undefined;
+  const shownCount = folds ? previewCount : entries.length;
   const hiddenRows = rows.slice(shownCount);
-  const cardClass = cn(
-    "overflow-hidden",
-    variant === DRAW_ROW_VARIANT.highlight && "border-tinted-border",
-  );
 
   return (
     <VStack gap="100" render={<section />}>
@@ -49,16 +38,14 @@ export function DrawQueue({
           </Text>
         )}
       </HStack>
-      {entries.length > 0 && (
-        <Card.Root radius={500} padding="none" className={cardClass}>
-          {rows.slice(0, shownCount)}
-          {hiddenRows.length > 0 && (
-            <DrawQueueMore noun={label} count={hiddenRows.length}>
-              {hiddenRows}
-            </DrawQueueMore>
-          )}
-        </Card.Root>
-      )}
+      <Card.Root radius={500} padding="none" className="overflow-hidden">
+        {rows.slice(0, shownCount)}
+        {hiddenRows.length > 0 && (
+          <DrawQueueMore noun={label} count={hiddenRows.length}>
+            {hiddenRows}
+          </DrawQueueMore>
+        )}
+      </Card.Root>
     </VStack>
   );
 }

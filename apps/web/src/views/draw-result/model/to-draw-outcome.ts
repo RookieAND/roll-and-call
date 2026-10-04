@@ -12,7 +12,7 @@ type DrawParticipant = {
   user: { username: string; avatarUrl: string | null; bio: string | null } | null;
 };
 
-// 굴린 값으로 두 통을 가른다. 적용 뒤에는 명단 대신 적용 시점 기록(drawResults)을 넣는다.
+// 굴린 값으로 두 통을 가른다. 명단 대신 추첨 시점 기록(drawResults)을 넣는다.
 export function toDrawOutcome({
   participants,
   maxPlayers,
@@ -22,7 +22,7 @@ export function toDrawOutcome({
 }) {
   const toEntry = (participant: DrawParticipant): DrawEntry => ({
     userId: participant.userId,
-    username: participant.user?.username ?? "익명",
+    username: participant.user?.username ?? "?",
     avatarUrl: participant.user?.avatarUrl ?? null,
     bio: participant.user?.bio ?? null,
     roll: participant.drawRoll,

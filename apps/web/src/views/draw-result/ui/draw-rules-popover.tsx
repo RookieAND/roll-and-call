@@ -8,7 +8,11 @@ export function DrawRulesPopover() {
     <Popover.Root>
       <Popover.Trigger
         render={
-          <IconButton variant="ghost" aria-label="추첨 방식 안내" className="text-gray-600" />
+          <IconButton
+            variant="ghost"
+            aria-label="추첨 방식 안내"
+            className="size-11 text-gray-600"
+          />
         }
       >
         <Info size={16} strokeWidth={2.2} aria-hidden />
@@ -24,7 +28,7 @@ export function DrawRulesPopover() {
             render={<Popover.Description />}
             className="text-pretty"
           >
-            서버가 신청자마다 1d100을 굴립니다.
+            추첨하면 신청자마다 1d100을 굴립니다.
             <br />
             낮은 숫자부터 정원만큼 확정되고, 나머지는 대기로 남습니다.
             <br />

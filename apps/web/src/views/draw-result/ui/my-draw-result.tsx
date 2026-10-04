@@ -1,81 +1,79 @@
-import { Button, FloatingBar, HStack, VStack } from "@roll-and-call/ui";
+import { FloatingBar, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
-import { LeaveGameButton } from "@/features/join-game";
-import { ServerLink } from "@/shared/ui";
+import type { ScheduleMode } from "@/entities/game";
 
-import { DRAW_ROW_VARIANT } from "../model/draw-row-variant";
+import { myDrawFooter } from "../model/my-draw-footer";
 import type { DrawOutcome } from "../model/to-draw-outcome";
 import { DrawConfetti } from "./draw-confetti";
 import { DrawQueue } from "./draw-queue";
 import { DrawSummary } from "./draw-summary";
+import { MyDrawActions } from "./my-draw-actions";
 import { MyDrawStatus } from "./my-draw-status";
+
+const WAITING_PREVIEW = 2;
 
 interface MyDrawResultProps {
   gameId: string;
   title: string;
   outcome: DrawOutcome;
+  drawnAt: Date;
   meUserId: string;
   // 지금 명단 기준. 추첨 뒤 자리가 나 올라왔으면 확정으로 보인다.
   waitlistRank: number | null;
-  needsAvailability: boolean;
+  scheduleMode: ScheduleMode;
+  confirmedAt: Date | null;
+  sessionEnded: boolean;
 }
 
+// 굴린 신청자 본인 화면(보드 12 D·E·F·G). 두 통은 추첨 기록, 내 결과와 하단 버튼은 지금 명단 기준이다.
 export function MyDrawResult({
   gameId,
   title,
   outcome,
+  drawnAt,
   meUserId,
   waitlistRank,
-  needsAvailability,
+  scheduleMode,
+  confirmedAt,
+  sessionEnded,
 }: MyDrawResultProps) {
   const confirmed = isNull(waitlistRank);
   const myWaitingIndex = outcome.waiting.findIndex((entry) => entry.userId === meUserId);
-  const waitingPreview = Math.max(2, myWaitingIndex + 1);
+  const waitingPreview = Math.max(WAITING_PREVIEW, myWaitingIndex + 1);
+  const footer = myDrawFooter({ confirmed, scheduleMode, confirmedAt, sessionEnded });
 
   return (
     <FloatingBar.Root elevated={false}>
       <VStack gap="250">
         {confirmed && <DrawConfetti />}
-        <VStack gap="100">
+        <VStack gap="150">
           <DrawSummary
             title={title}
             applicantCount={outcome.rolled.length}
-            resultLabel="확정"
-            resultCount={outcome.confirmed.length}
-            applied
+            confirmedCount={outcome.confirmed.length}
+            drawnAt={drawnAt}
           />
-          <MyDrawStatus confirmed={confirmed} waitlistRank={waitlistRank} />
+          <MyDrawStatus waitlistRank={waitlistRank} />
         </VStack>
         <DrawQueue
           label="확정"
           caption="값이 낮은 순"
           entries={outcome.confirmed}
-          variant={DRAW_ROW_VARIANT.compact}
           meUserId={meUserId}
-          previewCount={outcome.confirmed.length}
         />
-        <DrawQueue
-          label="대기"
-          entries={outcome.waiting}
-          variant={DRAW_ROW_VARIANT.compact}
-          meUserId={meUserId}
-          previewCount={waitingPreview}
-        />
+        {outcome.waiting.length > 0 && (
+          <DrawQueue
+            label="대기"
+            entries={outcome.waiting}
+            meUserId={meUserId}
+            previewCount={waitingPreview}
+          />
+        )}
       </VStack>
       <FloatingBar.Spacer />
       <FloatingBar.Content>
-        <HStack gap="100" className="[&>*]:flex-1">
-          {!confirmed && <LeaveGameButton gameId={gameId}>대기 취소</LeaveGameButton>}
-          <Button render={<ServerLink path={`/games/${gameId}`} />} variant="outline" size="lg">
-            구인 글 보기
-          </Button>
-          {confirmed && needsAvailability && (
-            <Button render={<ServerLink path={`/games/${gameId}/schedule`} />} size="lg">
-              가능 시간 제출
-            </Button>
-          )}
-        </HStack>
+        <MyDrawActions gameId={gameId} hint={footer.hint} actions={footer.actions} />
       </FloatingBar.Content>
     </FloatingBar.Root>
   );

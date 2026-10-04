@@ -54,6 +54,14 @@ describe("toDrawOutcome", () => {
     expect(ids(outcome.confirmed)).toEqual(["a"]);
   });
 
+  it("닉네임이 없는 사람은 ?로 보인다", () => {
+    const outcome = toDrawOutcome({
+      participants: [{ ...participant("a", 5), user: null }],
+      maxPlayers: 1,
+    });
+    expect(outcome.confirmed[0]!.username).toBe("?");
+  });
+
   it("같은 값이면 먼저 신청한 사람이 앞선다", () => {
     const outcome = toDrawOutcome({
       participants: [

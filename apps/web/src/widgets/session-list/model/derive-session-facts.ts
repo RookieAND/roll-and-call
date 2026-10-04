@@ -48,7 +48,7 @@ export function deriveSessionFacts({
   const waitingCount = game.participants.filter(
     (participant) => participant.status === PARTICIPANT_STATUS.waiting,
   ).length;
-  // 추첨은 마감 뒤에 뽑는다. 확정자가 없어도 뽑기 전이면 무산이 아니라 GM이 뽑을 차례다.
+  // 추첨은 마감 뒤에 뽑는다. 확정자가 없어도 뽑기 전이면 무산이 아니라 마감 때 추첨된다.
   const drawPending =
     game.recruitMethod === RECRUIT_METHOD.lottery &&
     isNull(game.drawnAt) &&

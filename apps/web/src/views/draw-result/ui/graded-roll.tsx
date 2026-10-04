@@ -3,6 +3,7 @@ import { cva } from "class-variance-authority";
 
 import { ROLL_GRADE, type RollGrade } from "../model/roll-grade";
 import { ROLL_SPARKLES } from "../model/roll-sparkles";
+import { SlotNumber } from "./slot-number";
 
 const SPARKLE_START_S = 0.5;
 const SPARKLE_PATH = "M12 2.6l1.9 5.5 5.5 1.9-5.5 1.9L12 17.4l-1.9-5.5L4.6 10l5.5-1.9z";
@@ -50,7 +51,7 @@ export function GradedRoll({ value, grade, typography }: GradedRollProps) {
           foreground="inherit"
           className="relative"
         >
-          {value}
+          <SlotNumber value={value} />
         </Text>
       </span>
       {ROLL_SPARKLES[grade].map((sparkle, index) => (

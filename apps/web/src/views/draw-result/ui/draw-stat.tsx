@@ -5,18 +5,17 @@ const box = cva("rounded-500 px-175 py-150", {
   variants: {
     tone: {
       plain: "",
-      tinted: "border-tinted-border bg-tinted-bg",
       success: "border-success-200 bg-success-100",
     },
   },
 });
 
-const ink = { plain: "normal", tinted: "primary", success: "success" } as const;
+const ink = { plain: "normal", success: "success" } as const;
 
 interface DrawStatProps {
   label: string;
   count: number;
-  tone: "plain" | "tinted" | "success";
+  tone: "plain" | "success";
 }
 
 export function DrawStat({ label, count, tone }: DrawStatProps) {

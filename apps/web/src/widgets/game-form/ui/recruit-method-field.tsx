@@ -13,7 +13,7 @@ import { LockedModeNotice } from "./locked-mode-notice";
 
 const DESCRIPTION = {
   [RECRUIT_METHOD.firstCome]: "신청 순서대로 확정",
-  [RECRUIT_METHOD.lottery]: "마감 뒤 GM이 뽑음",
+  [RECRUIT_METHOD.lottery]: "마감 때 뽑음",
 } as const;
 
 interface RecruitMethodFieldProps {

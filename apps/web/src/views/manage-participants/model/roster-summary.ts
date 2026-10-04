@@ -19,7 +19,7 @@ export function summarizeRoster({
   endDate,
   recruitMethod,
   drawnAt,
-  rolled = false,
+  hasRolls = false,
   isCoordinate,
   started,
   capacityRaised,
@@ -31,8 +31,8 @@ export function summarizeRoster({
   endDate: Date;
   recruitMethod: RecruitMethod;
   drawnAt: Date | null;
-  // 굴렸지만 GM이 아직 결과를 적용하지 않았다. 명단은 뽑기 전 그대로다.
-  rolled?: boolean;
+  // 추첨에서 굴린 값이 있다. 신청자 없이 마감된 추첨 글과 1d100 도입 전 추첨은 값이 없다.
+  hasRolls?: boolean;
   isCoordinate: boolean;
   started: boolean;
   capacityRaised: boolean;
@@ -45,7 +45,7 @@ export function summarizeRoster({
   const noApplicantsClosed =
     isLottery &&
     passed &&
-    !rolled &&
+    !hasRolls &&
     waiting.length === 0 &&
     (beforeDraw || confirmed.length === 0);
 
@@ -53,9 +53,8 @@ export function summarizeRoster({
     isLottery,
     beforeDraw,
     drawn: !isNull(drawnAt),
-    awaitingApply: beforeDraw && rolled,
-    // 1d100 도입 전에 뽑은 글은 굴린 값이 없어 결과 페이지가 없다.
-    hasDrawResult: !isNull(drawnAt) && rolled,
+    // 1d100 도입 전에 뽑은 글과 신청자 없이 마감된 글은 굴린 값이 없어 결과 표가 없다.
+    hasDrawResult: !isNull(drawnAt) && hasRolls,
     noApplicantsClosed,
     recruitMethod,
     methodLabel: isLottery && drawnAt ? "추첨 완료" : recruitMethodLabel(recruitMethod),

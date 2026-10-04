@@ -1,67 +1,46 @@
-import { Button, FloatingBar, VStack } from "@roll-and-call/ui";
-import { CircleCheck } from "lucide-react";
+import { FloatingBar, VStack } from "@roll-and-call/ui";
 
-import { SummaryLine, ServerLink } from "@/shared/ui";
-
-import { DRAW_ROW_VARIANT } from "../model/draw-row-variant";
 import type { DrawOutcome } from "../model/to-draw-outcome";
+import { BackToGameBar } from "./back-to-game-bar";
 import { DrawQueue } from "./draw-queue";
 import { DrawSummary } from "./draw-summary";
+
+const WAITING_PREVIEW = 2;
 
 interface AppliedDrawProps {
   gameId: string;
   title: string;
   outcome: DrawOutcome;
-  drawnAtLabel: string;
+  drawnAt: Date;
 }
 
-export function AppliedDraw({ gameId, title, outcome, drawnAtLabel }: AppliedDrawProps) {
+// GM·직접 확정자·나간 사람·비참여자가 보는 결과(보드 12 C·H).
+export function AppliedDraw({ gameId, title, outcome, drawnAt }: AppliedDrawProps) {
   return (
     <FloatingBar.Root elevated={false}>
       <VStack gap="250">
-        <VStack gap="100">
-          <DrawSummary
-            title={title}
-            applicantCount={outcome.rolled.length}
-            resultLabel="확정"
-            resultCount={outcome.confirmed.length}
-            applied
-          />
-          <SummaryLine
-            icon={CircleCheck}
-            tone="success"
-            label="추첨"
-            value={drawnAtLabel}
-            badge="완료"
-          />
-        </VStack>
+        <DrawSummary
+          title={title}
+          applicantCount={outcome.rolled.length}
+          confirmedCount={outcome.confirmed.length}
+          drawnAt={drawnAt}
+        />
         <DrawQueue
           label="확정"
           caption="값이 낮은 순"
           entries={outcome.confirmed}
-          variant={DRAW_ROW_VARIANT.highlight}
           meUserId={null}
-          previewCount={outcome.confirmed.length}
         />
-        <DrawQueue
-          label="대기"
-          entries={outcome.waiting}
-          variant={DRAW_ROW_VARIANT.plain}
-          meUserId={null}
-          previewCount={2}
-        />
+        {outcome.waiting.length > 0 && (
+          <DrawQueue
+            label="대기"
+            entries={outcome.waiting}
+            meUserId={null}
+            previewCount={WAITING_PREVIEW}
+          />
+        )}
       </VStack>
-      <FloatingBar.Spacer />
-      <FloatingBar.Content>
-        <Button
-          render={<ServerLink path={`/games/${gameId}`} />}
-          variant="outline"
-          size="lg"
-          className="w-full"
-        >
-          구인 글로 돌아가기
-        </Button>
-      </FloatingBar.Content>
+      <BackToGameBar gameId={gameId} />
     </FloatingBar.Root>
   );
 }

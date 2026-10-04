@@ -6,7 +6,6 @@ import { formatDateTime } from "@/shared/lib";
 
 import type { RosterSummary } from "../model/roster-summary";
 import { DeadlineCard } from "./deadline-card";
-import { DrawPendingCard } from "./draw-pending-card";
 import { RosterDateRow } from "./roster-date-row";
 
 interface RosterStatusCardProps {
@@ -53,8 +52,7 @@ export function RosterStatusCard({ gameId, summary }: RosterStatusCardProps) {
     return (
       <VStack gap="175">
         <DeadlineCard summary={summary} />
-        {hasApplicants && summary.awaitingApply && <DrawPendingCard gameId={gameId} />}
-        {hasApplicants && !summary.awaitingApply && (
+        {hasApplicants && (
           <DrawLotteryCard
             gameId={gameId}
             applicantCount={summary.applicantCount}

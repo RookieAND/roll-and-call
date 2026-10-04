@@ -2,20 +2,22 @@ import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
-import { countConfirmed, SCHEDULE_MODE, splitRoster } from "@/entities/game";
-import { formatDateTime, serverPath } from "@/shared/lib";
+import { countConfirmed, isSessionEnded, RECRUIT_METHOD, splitRoster } from "@/entities/game";
+import { QUERY_NOTICE, QUERY_NOTICE_PARAM, serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { toDrawOutcome } from "../model/to-draw-outcome";
 import { AppliedDraw } from "./applied-draw";
+import { EmptyDraw } from "./empty-draw";
 import { MyDrawResult } from "./my-draw-result";
 
 interface DrawResultViewProps {
   id: string;
 }
 
-// 추첨한 순간 남긴 기록(drawResults)을 보여 준다.
+// 두 통은 추첨한 순간 남긴 기록(drawResults)이라 그 뒤 명단을 고쳐도 바뀌지 않는다.
+// 굴린 신청자 본인이 지금 명단에 있으면 내 결과(나), 그 밖(GM·직접 확정자·나간 사람·비참여자)은 결과판(다)이다.
 export async function DrawResultView({ id }: DrawResultViewProps) {
   const server = await getCurrentServer();
   const [data, user] = await Promise.all([
@@ -25,42 +27,46 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
   if (!data) notFound();
   const { game } = data;
 
-  if (isNull(game.drawnAt)) redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
+  const noResultPath = serverPath({
+    slug: server.slug,
+    path: `/games/${id}?${QUERY_NOTICE_PARAM}=${QUERY_NOTICE.noDrawResult}`,
+  });
+  const drawnAt = game.drawnAt;
+  if (game.recruitMethod !== RECRUIT_METHOD.lottery || isNull(drawnAt)) redirect(noResultPath);
+
   const drawn = game.drawResults.map((result) => ({
     ...result,
     drawRoll: result.roll,
-    joinedAt: game.drawnAt!,
+    joinedAt: drawnAt,
   }));
-  if (!drawn.some((participant) => !isNull(participant.drawRoll))) {
-    redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
-  }
+  const myResult = drawn.find((result) => result.userId === user?.id && !isNull(result.drawRoll));
+  const hasRolls = drawn.some((result) => !isNull(result.drawRoll));
+  // 1d100 도입 전 추첨은 순위만 있고 굴린 값이 없다. 신청자 없이 마감된 글은 순위도 없다.
+  const legacyDraw = game.participants.some((participant) => !isNull(participant.drawRank));
+  if (!hasRolls && legacyDraw) redirect(noResultPath);
 
-  // 기록에 남은 확정 수가 정원이다. 그 뒤 정원을 고쳐도 결과는 바뀌지 않는다.
   const outcome = toDrawOutcome({ participants: drawn, maxPlayers: countConfirmed(drawn) });
   const roster = splitRoster(game.participants);
-  const mine = [...roster.confirmed, ...roster.waiting].find(
-    (participant) => participant.userId === user?.id && !isNull(participant.drawRoll),
-  );
-  const needsAvailability =
-    game.scheduleMode === SCHEDULE_MODE.coordinate && isNull(game.confirmedAt);
+  const mine = myResult
+    ? [...roster.confirmed, ...roster.waiting].find(
+        (participant) => participant.userId === myResult.userId,
+      )
+    : undefined;
 
-  let content = (
-    <AppliedDraw
-      gameId={id}
-      title={game.title}
-      outcome={outcome}
-      drawnAtLabel={formatDateTime(game.drawnAt)}
-    />
-  );
-  if (mine && user) {
+  let content = <AppliedDraw gameId={id} title={game.title} outcome={outcome} drawnAt={drawnAt} />;
+  if (!hasRolls) content = <EmptyDraw gameId={id} title={game.title} />;
+  else if (mine) {
     content = (
       <MyDrawResult
         gameId={id}
         title={game.title}
         outcome={outcome}
-        meUserId={user.id}
+        drawnAt={drawnAt}
+        meUserId={mine.userId}
         waitlistRank={mine.waitlistRank}
-        needsAvailability={needsAvailability}
+        scheduleMode={game.scheduleMode}
+        confirmedAt={game.confirmedAt}
+        sessionEnded={isSessionEnded(game)}
       />
     );
   }

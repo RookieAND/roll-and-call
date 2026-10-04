@@ -112,6 +112,16 @@ describe("대기 카드", () => {
     expect(card.badgeColor).toBe("gray");
     expect(card.waitlistRank).toBeNull();
     expect(card.action?.label).toBe("신청 취소");
+    expect(card.schedule).toMatch(/신청 마감 · 마감 때 추첨합니다$/);
+  });
+
+  it("추첨 글 마감이 지나 아직 추첨 전이면 곧 추첨한다고 적는다", () => {
+    const card = playerCard({
+      recruitMethod: RECRUIT_METHOD.lottery,
+      endDate: at(-1),
+      participants: [other, me(PARTICIPANT_STATUS.waiting)],
+    });
+    expect(card.schedule).toBe("모집이 끝나 곧 추첨합니다");
   });
 
   it("참여 탭 카드에는 GM 줄이 붙는다", () => {

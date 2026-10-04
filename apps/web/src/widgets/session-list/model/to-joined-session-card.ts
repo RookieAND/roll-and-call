@@ -43,8 +43,8 @@ export function toJoinedSessionCard({
         badge: "추첨 전",
         badgeColor: "gray",
         schedule: line.deadlinePassed
-          ? "모집이 끝나 GM이 추첨하는 중입니다"
-          : joinParts(`${formatDate(game.endDate)} 신청 마감`, "마감 뒤 GM이 뽑습니다"),
+          ? "모집이 끝나 곧 추첨합니다"
+          : joinParts(`${formatDate(game.endDate)} 신청 마감`, "마감 때 추첨합니다"),
         scheduleTone: SESSION_TONE.muted,
         scheduleIcon: SESSION_ICON.clock,
         action: cancel("신청 취소"),
