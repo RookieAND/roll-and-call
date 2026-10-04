@@ -3,6 +3,7 @@ import { isNull } from "es-toolkit";
 import Image from "next/image";
 
 const SIZES = {
+  xs: { pixels: 16, className: "size-4 rounded-100", typography: "body5", textClassName: "" },
   sm: { pixels: 20, className: "size-5 rounded-200", typography: "body5", textClassName: "" },
   md: { pixels: 28, className: "size-7 rounded-300", typography: "subtitle2", textClassName: "" },
   xl: {

@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react";
 import { useContext } from "react";
 
 import type { MenuServer } from "./menu-server";
+import { ServerIcon } from "./server-icon";
 import { ServerMenu } from "./server-menu";
 import { ServerNavContext } from "./server-nav-context";
 
@@ -20,7 +21,8 @@ export function ServerSwitcher({ servers = [] }: ServerSwitcherProps) {
   const switchable = servers.some((server) => server.slug !== current.slug);
   if (!switchable) {
     return (
-      <Badge colorPalette="primary" className="min-w-0 shrink">
+      <Badge colorPalette="primary" className="min-w-0 shrink gap-050 pl-075">
+        <ServerIcon name={current.name} icon={current.icon} size="xs" />
         <span className="truncate">{current.name}</span>
       </Badge>
     );
@@ -34,8 +36,9 @@ export function ServerSwitcher({ servers = [] }: ServerSwitcherProps) {
         <Badge
           colorPalette="primary"
           render={<button type="button" aria-label={`${current.name}, 다른 서버로 옮기기`} />}
-          className="min-w-0 shrink cursor-pointer gap-050 hover:bg-tinted-bg-hover"
+          className="min-w-0 shrink cursor-pointer gap-050 pl-075 hover:bg-tinted-bg-hover"
         >
+          <ServerIcon name={current.name} icon={current.icon} size="xs" />
           <span className="truncate">{current.name}</span>
           <ChevronDown size={14} strokeWidth={2.4} aria-hidden className="flex-none" />
         </Badge>

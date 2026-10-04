@@ -6,7 +6,7 @@ interface BotIconProps {
   className?: string;
 }
 
-// 디스코드 알림을 보내는 봇의 얼굴. 앱 아이콘(app/icon.png)과 같은 그림이다.
+// 롤앤콜 디스코드 봇의 얼굴. 앱 아이콘(app/icon.png)과 같은 그림이다.
 // 프리플라이트가 img 높이를 auto로 두어 flex 줄 높이만큼 늘어나 찌그러지므로 크기를 직접 고정한다.
 export function BotIcon({ size, className }: BotIconProps) {
   return (

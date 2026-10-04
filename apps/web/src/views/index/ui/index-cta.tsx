@@ -21,7 +21,20 @@ interface IndexCtaProps {
 // 첫 화면 주 버튼. compact는 스크롤 뒤 헤더에 붙는 작은 버전이다.
 export function IndexCta({ servers, joinable, compact = false, authError = false }: IndexCtaProps) {
   if (isNull(servers)) {
-    if (compact) return <LoginButton next="/" className="h-8 px-150 text-body3" />;
+    if (compact) {
+      return (
+        <LoginButton
+          next="/"
+          label={
+            <>
+              <span className="@max-2xl:hidden">디스코드로 로그인</span>
+              <span className="@2xl:hidden">로그인</span>
+            </>
+          }
+          className="h-8 px-150 text-body3"
+        />
+      );
+    }
     return (
       <>
         {authError && <AuthErrorNotice />}

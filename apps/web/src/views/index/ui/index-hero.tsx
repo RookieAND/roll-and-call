@@ -32,7 +32,7 @@ export function IndexHero({ servers, joinable, authError }: IndexHeroProps) {
         >
           <VStack gap="225" className="min-w-0 flex-[1_1_440px]">
             <HStack>
-              <Badge colorPalette="primary">ORPG 세션 운영 도구</Badge>
+              <Badge colorPalette="primary">TRPG 세션 운영 도구</Badge>
             </HStack>
             <Text
               typography="heading1"
@@ -51,9 +51,9 @@ export function IndexHero({ servers, joinable, authError }: IndexHeroProps) {
               render={<p />}
               className="text-[length:clamp(15px,1.4cqw,17px)] leading-[1.7] [text-wrap:pretty]"
             >
-              ORPG 를 좋아하고 사랑하는 사람들을 위해
+              구인 신청부터 일정 조율, 출석과 후기까지
               <br />
-              Roll &amp; Call 에서는 다양하고 편리한 기능을 제공합니다.
+              디스코드 서버 주소 하나에서 합니다.
             </Text>
             <VStack id={HERO_CTA_ID} gap="125" className="mt-100 w-full max-w-[360px]">
               <IndexCta servers={servers} joinable={joinable} authError={authError} />
@@ -61,7 +61,7 @@ export function IndexHero({ servers, joinable, authError }: IndexHeroProps) {
                 <HStack align="center" justify="center" gap="075" className="text-gray-600">
                   <LockKeyhole size={14} aria-hidden />
                   <Text typography="body4" foreground="muted">
-                    로그인하면 내 서버가 보여요
+                    로그인하면 내 서버가 보입니다
                   </Text>
                 </HStack>
               )}

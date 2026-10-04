@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 interface FeatureCardProps {
   title: string;
-  description: string;
+  description: ReactNode;
   visual: ReactNode;
 }
 

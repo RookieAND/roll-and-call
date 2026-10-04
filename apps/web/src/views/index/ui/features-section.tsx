@@ -1,11 +1,11 @@
 import { Badge, Container, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Bell } from "lucide-react";
 
 import { BadgeMedal, TIER_NAME } from "@/entities/badge";
 
 import { FEATURE_HEAT_STEPS } from "../model/demo-heat";
 import { FEATURE_MEDALS } from "../model/demo-medals";
 import { heatBackground } from "../model/heat-background";
-import { BotIcon } from "./bot-icon";
 import { FeatureCard } from "./feature-card";
 import { SectionHeading } from "./section-heading";
 
@@ -15,8 +15,8 @@ const RECRUIT_ROWS = [
 ] as const;
 
 const NOTICES = [
-  "신청이 확정되었습니다 · 달빛 여관의 실종자",
-  "가능 시간을 알려 주세요 · 마감 D-2",
+  "달빛 여관의 실종자 참여가 확정되었습니다.",
+  "달빛 여관의 실종자 세션 시간이 정해졌습니다.",
 ];
 
 export function FeaturesSection() {
@@ -68,13 +68,21 @@ export function FeaturesSection() {
             }
           />
           <FeatureCard
-            title="디스코드 알림"
-            description="신청 결과와 확정된 일정을 디스코드로 바로 받습니다."
+            title="알림"
+            description={
+              <>
+                참여 확정과 세션 시간을
+                <br />
+                알림 탭과 디스코드 구인 글로 알립니다.
+              </>
+            }
             visual={
               <VStack justify="center" gap="100" className="h-full">
                 {NOTICES.map((notice) => (
                   <HStack key={notice} align="center" gap="100">
-                    <BotIcon size={24} />
+                    <span className="flex size-6 flex-none items-center justify-center rounded-full bg-gray-100 text-gray-600">
+                      <Bell size={13} aria-hidden />
+                    </span>
                     <Text
                       typography="body4"
                       foreground="muted"

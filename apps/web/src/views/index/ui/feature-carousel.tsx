@@ -1,6 +1,7 @@
 "use client";
 
-import { HStack, VStack, cn } from "@roll-and-call/ui";
+import { HStack, IconButton, VStack, cn } from "@roll-and-call/ui";
+import { Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { BadgeSlide } from "./badge-slide";
@@ -20,21 +21,28 @@ const AUTOPLAY_MILLISECONDS = 4500;
 
 export function FeatureCarousel() {
   const [current, setCurrent] = useState(0);
-  const [restartKey, setRestartKey] = useState(0);
-  const paused = useRef(false);
+  const [playing, setPlaying] = useState(true);
+  const hovered = useRef(false);
+
+  // 움직임 줄이기 설정이면 멈춘 채로 시작한다. 그래도 재생을 누르면 넘긴다.
+  useEffect(() => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) setPlaying(false);
+  }, []);
 
   useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!playing) return;
     const timer = setInterval(() => {
-      if (!paused.current) setCurrent((index) => (index + 1) % SLIDES.length);
+      if (!hovered.current) setCurrent((index) => (index + 1) % SLIDES.length);
     }, AUTOPLAY_MILLISECONDS);
     return () => clearInterval(timer);
-  }, [restartKey]);
+  }, [playing]);
 
   const select = (index: number) => {
     setCurrent(index);
-    setRestartKey((key) => key + 1);
+    setPlaying(false);
   };
+  const toggleLabel = playing ? "일시 정지" : "재생";
+  const ToggleIcon = playing ? Pause : Play;
 
   return (
     <VStack
@@ -44,10 +52,10 @@ export function FeatureCarousel() {
       gap="175"
       className="min-w-0 flex-[1_1_440px]"
       onMouseEnter={() => {
-        paused.current = true;
+        hovered.current = true;
       }}
       onMouseLeave={() => {
-        paused.current = false;
+        hovered.current = false;
       }}
     >
       <div className="grid">
@@ -71,7 +79,7 @@ export function FeatureCarousel() {
           );
         })}
       </div>
-      <HStack justify="center">
+      <HStack justify="center" align="center">
         {SLIDES.map((slide, index) => (
           <CarouselDot
             key={slide.label}
@@ -80,6 +88,14 @@ export function FeatureCarousel() {
             onSelect={() => select(index)}
           />
         ))}
+        <IconButton
+          variant="ghost"
+          aria-label={toggleLabel}
+          onClick={() => setPlaying((value) => !value)}
+          className="ml-100 size-11 rounded-full"
+        >
+          <ToggleIcon size={16} fill="currentColor" aria-hidden />
+        </IconButton>
       </HStack>
     </VStack>
   );
