@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@roll-and-call/ui";
+import { Button, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { RotateCw } from "lucide-react";
 import type { ReactNode } from "react";
@@ -17,7 +17,13 @@ interface MemberJoinCheckProps {
 }
 
 export function MemberJoinCheck({ target, next }: MemberJoinCheckProps) {
-  const { status, retry } = useJoinServer({ next });
+  const { status, retry, recheck } = useJoinServer({ next });
+  const recheckButton = (
+    <Button variant="outline" size="lg" className="w-full" onClick={recheck}>
+      <RotateCw size={17} aria-hidden />
+      다시 확인하기
+    </Button>
+  );
 
   const actions: Record<JoinStatus, ReactNode> = {
     checking: (
@@ -26,19 +32,20 @@ export function MemberJoinCheck({ target, next }: MemberJoinCheckProps) {
       </Button>
     ),
     denied: isNull(target.inviteUrl) ? (
-      <Button variant="outline" size="lg" disabled className="w-full">
-        지금은 초대를 받지 않는 서버입니다
-      </Button>
+      recheckButton
     ) : (
-      <Button
-        colorPalette="discord"
-        size="lg"
-        className="w-full"
-        render={<a href={target.inviteUrl} target="_blank" rel="noreferrer" />}
-      >
-        <BrandMark service="discord" size={18} />
-        디스코드 서버 참여하기
-      </Button>
+      <VStack gap="125">
+        <Button
+          colorPalette="discord"
+          size="lg"
+          className="w-full"
+          render={<a href={target.inviteUrl} target="_blank" rel="noreferrer" />}
+        >
+          <BrandMark service="discord" size={18} />
+          디스코드 서버 참여하기
+        </Button>
+        {recheckButton}
+      </VStack>
     ),
     failed: (
       <Button size="lg" className="w-full" onClick={retry}>

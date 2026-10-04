@@ -34,13 +34,7 @@ export async function ServerJoinView({ next, authError }: ServerJoinViewProps) {
       target={target}
       status="signedOut"
       notice={authError && <JoinAuthErrorNotice />}
-      action={
-        <LoginButton
-          next={serverJoinPath({ slug: server.slug, next })}
-          label="디스코드로 로그인하고 가입하기"
-          className="w-full"
-        />
-      }
+      action={<LoginButton next={serverJoinPath({ slug: server.slug, next })} className="w-full" />}
     />
   );
 }

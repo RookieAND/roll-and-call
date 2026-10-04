@@ -3,6 +3,7 @@
 import { getAccountName, getDiscordId } from "@roll-and-call/database/profiles";
 import { ensureMembership } from "@roll-and-call/database/servers";
 import { isUndefined } from "es-toolkit";
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
@@ -11,6 +12,7 @@ import {
   findGuildDisplayName,
   getCurrentServer,
   getCurrentUser,
+  guildMemberTag,
   isDiscordGuildMember,
 } from "@/shared/server";
 
@@ -18,12 +20,22 @@ import { JOIN_CHECK_FAILED_MESSAGE } from "../model/join-check-failed-message";
 
 export type JoinServerResult = ActionResult & { notGuildMember?: boolean };
 
-export async function joinServer({ next }: { next: string }): Promise<JoinServerResult> {
+// recheck면 5분 캐시를 지우고 디스코드에 다시 묻는다(가입 불가 화면의 [다시 확인하기], D173).
+export async function joinServer({
+  next,
+  recheck = false,
+}: {
+  next: string;
+  recheck?: boolean;
+}): Promise<JoinServerResult> {
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentUser()]);
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 
   const discordId = await getDiscordId(user.id);
   if (isUndefined(discordId)) return { error: JOIN_CHECK_FAILED_MESSAGE };
+
+  if (recheck)
+    updateTag(guildMemberTag({ guildId: server.discordGuildId, discordUserId: discordId }));
 
   let guildMember: boolean;
   try {

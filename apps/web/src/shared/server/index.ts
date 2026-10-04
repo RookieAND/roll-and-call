@@ -97,6 +97,7 @@ export { requireMembership } from "./membership/require-membership";
 export { getActingMember } from "./membership/get-acting-member";
 export { findGuildDisplayName } from "./membership/find-guild-display-name";
 export { isDiscordGuildMember } from "./membership/is-discord-guild-member";
+export { guildMemberTag } from "./membership/guild-member-tag";
 export { handleMemberLeft } from "./membership/handle-member-left";
 export { detectRosterDepartures } from "./membership/detect-roster-departures";
 export { checkEachMember } from "./membership/check-each-member";

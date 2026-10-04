@@ -23,8 +23,8 @@ const tabs = [
   { path: "/me", label: "마이페이지", Icon: User, dot: null },
 ] as const;
 
-// 몰입 화면(상세·등록·수정·조율 등 하단 CTA가 있는 곳)은 탭을 숨기고 FloatingBar만 남긴다. 서버 slug 뒤의 경로로 본다.
-const IMMERSIVE = /^\/(games\/(new$|[^/]+)|join$)/;
+// 몰입 화면(상세·등록·수정·조율 등 하단 CTA가 있는 곳)과 가입·welcome은 탭을 숨긴다. 서버 slug 뒤의 경로로 본다.
+const IMMERSIVE = /^\/(games\/(new$|[^/]+)|join$|welcome$)/;
 
 interface BottomNavProps {
   slug: string;
