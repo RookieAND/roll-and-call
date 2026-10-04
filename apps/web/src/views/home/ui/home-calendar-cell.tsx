@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, Text } from "@roll-and-call/ui";
+import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 import type { MouseEvent } from "react";
 
@@ -31,10 +31,9 @@ export function HomeCalendarCell({
 }: HomeCalendarCellProps) {
   const toServerPath = useServerPath();
   const mine = sessions.find((session) => session.mine);
-  const dots = (mine ? [mine, ...sessions.filter((session) => session !== mine)] : sessions).slice(
-    0,
-    MAX_DOTS,
-  );
+  const lead = mine ?? sessions[0];
+  const overflow = sessions.length > MAX_DOTS;
+  const dots = mine ? [mine, ...sessions.filter((session) => session !== mine)] : sessions;
   const dayLabel = holidayNames ? `${cell.label} ${holidayNames.join("·")}` : cell.label;
   const ariaLabel = sessions.length > 0 ? `${dayLabel} 세션 ${sessions.length}건` : dayLabel;
   const href = `${toServerPath("/")}?date=${cell.key}`;
@@ -43,6 +42,10 @@ export function HomeCalendarCell({
   const redDayTone = holidayNames ? "text-sunday" : WEEKDAY_TONE[cell.weekday];
   const weekdayTone = cell.inMonth ? (redDayTone ?? "text-gray-600") : "text-hint opacity-50";
   const dayTone = tone.day ?? weekdayTone;
+  const dotTone = (session: CalendarSession) =>
+    tone.dot ?? (session.mine ? "bg-primary-600" : "bg-hint");
+  const chipTone =
+    tone.chip ?? (lead?.mine ? "bg-primary-100 text-tinted-ink" : "bg-gray-100 text-gray-600");
 
   // 같은 달은 이미 받은 세션으로 그리므로 서버를 다시 부르지 않는다. 다른 달 칸과 새 탭 열기는 원래대로 이동한다.
   function selectDay(event: MouseEvent<HTMLAnchorElement>) {
@@ -60,7 +63,7 @@ export function HomeCalendarCell({
       aria-label={ariaLabel}
       aria-current={selected ? "date" : undefined}
       className={cn(
-        "flex h-12 flex-col gap-075 rounded-300 px-050 pt-100 pb-075 transition-colors",
+        "flex h-12 min-w-0 flex-col gap-075 rounded-300 px-050 pt-100 pb-075 transition-colors md:h-19",
         tone.cell,
       )}
     >
@@ -72,28 +75,52 @@ export function HomeCalendarCell({
       >
         {cell.day}
       </Text>
-      {dots.length > 0 && (
-        <span aria-hidden className="flex h-2 items-center justify-center gap-050">
-          {dots.map((session) => (
-            <span
-              key={session.id}
-              className={cn(
-                "size-1.5 rounded-full",
-                tone.dot ?? (session.mine ? "bg-primary-600" : "bg-hint"),
-              )}
-            />
-          ))}
-          {sessions.length > MAX_DOTS && (
-            <Text
-              weight="extrabold"
-              typography="body5"
-              tight
-              className={cn("leading-2", tone.more)}
-            >
-              +
+      {lead && (
+        <VStack aria-hidden gap="025" render={<span />} className="hidden min-w-0 md:flex">
+          <Text
+            typography="body4"
+            weight="bold"
+            truncate
+            className={cn("rounded-200 px-075 py-025 leading-4", chipTone)}
+          >
+            {lead.title}
+          </Text>
+          {sessions.length > 1 && (
+            <Text typography="body5" weight="bold" className={cn("pl-050", tone.more)}>
+              외 {sessions.length - 1}
             </Text>
           )}
-        </span>
+        </VStack>
+      )}
+      {lead && (
+        <HStack
+          aria-hidden
+          align="center"
+          justify="center"
+          gap="050"
+          render={<span />}
+          className="h-3 md:hidden"
+        >
+          {!overflow &&
+            dots.map((session) => (
+              <span key={session.id} className={cn("size-1.5 rounded-full", dotTone(session))} />
+            ))}
+          {overflow && (
+            <Text
+              typography="body5"
+              weight="extrabold"
+              numeric
+              tight
+              className={cn(
+                "inline-flex h-3 items-center gap-050 rounded-full pr-050 pl-025",
+                tone.pill,
+              )}
+            >
+              <span className={cn("size-1.5 rounded-full", dotTone(lead))} />
+              {sessions.length}
+            </Text>
+          )}
+        </HStack>
       )}
       {today && sessions.length === 0 && (
         <Text

@@ -6,6 +6,7 @@ import { games } from "#/schema";
 
 import { publicGamesWhere } from "./public-games-where";
 
+// 취소된 구인은 홈 날짜 목록의 흐린 카드로만 쓰므로 함께 읽는다. 건수·순위에서는 호출한 쪽이 뺀다.
 export async function getMonthSessions({
   serverId,
   from,
@@ -17,7 +18,11 @@ export async function getMonthSessions({
 }) {
   return db.query.games.findMany({
     where: (game, { and, gte, lt }) =>
-      and(gte(game.confirmedAt, from), lt(game.confirmedAt, to), publicGamesWhere(serverId)),
+      and(
+        gte(game.confirmedAt, from),
+        lt(game.confirmedAt, to),
+        publicGamesWhere(serverId, { includeCancelled: true }),
+      ),
     orderBy: asc(games.confirmedAt),
     with: {
       gm: {

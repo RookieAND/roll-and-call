@@ -1,4 +1,5 @@
 import { Container, HStack } from "@roll-and-call/ui";
+import { partition } from "es-toolkit";
 import { Suspense } from "react";
 
 import { BadgeAwardGate } from "@/features/acknowledge-badges";
@@ -37,7 +38,7 @@ export async function HomeView({ date }: { date?: string }) {
 
   const profile = user ? await getProfile(server.id, user.id) : undefined;
   const sessions = toCalendarSessions({ rows, viewerId: user?.id ?? null, now });
-  const sessionsByDay = groupSessionsByDay(sessions);
+  const [cancelledSessions, liveSessions] = partition(sessions, (session) => session.cancelled);
 
   return (
     <>
@@ -65,7 +66,7 @@ export async function HomeView({ date }: { date?: string }) {
           )
         }
       />
-      <Container size="sm" className="px-0">
+      <Container size="sm" className="max-w-3xl px-0">
         {profile?.nicknameSuffixBase && (
           <div className="px-200 pt-150">
             <HomeNicknameNotice nickname={profile.username} />
@@ -78,7 +79,8 @@ export async function HomeView({ date }: { date?: string }) {
         )}
         <HomeCalendarSection
           monthStart={monthStart.toDate()}
-          sessionsByDay={sessionsByDay}
+          sessionsByDay={groupSessionsByDay(liveSessions)}
+          cancelledByDay={groupSessionsByDay(cancelledSessions)}
           initialSelectedKey={selectedKey}
           todayKey={todayKey}
         />

@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { Container, Skeleton, Text, VStack } from "@roll-and-call/ui";
 
 import { AppBar, HelpButton } from "@/shared/ui";
 
@@ -19,16 +19,13 @@ export function HomeSkeleton({ date }: HomeSkeletonProps) {
   return (
     <>
       <AppBar title="롤앤콜" brand action={<HelpButton />} />
-      <Container size="sm" className="px-0">
+      <Container size="sm" className="max-w-3xl px-0">
         <HomeCalendar monthStart={monthStart} />
 
         <section className="border-t border-gray-200 p-200">
-          <HStack align="baseline" gap="100" className="mb-150">
-            <Text typography="heading3" render={<h3 />} className="font-extrabold">
-              {selected.format("M월 D일 (dd)")}
-            </Text>
-            <Skeleton width={32} height={15} />
-          </HStack>
+          <Text typography="heading3" render={<h3 />} className="mb-150 font-extrabold">
+            {selected.format("M월 D일 (dd)")}
+          </Text>
           <VStack gap="100">
             <Skeleton width="100%" height={78} rounded={600} />
             <Skeleton width="100%" height={78} rounded={600} />

@@ -11,6 +11,8 @@ type CalendarCellTone = {
   day: string | null;
   dot: string | null;
   more: string;
+  chip: string | null;
+  pill: string;
   today: string;
 };
 
@@ -20,6 +22,8 @@ export const CALENDAR_CELL_TONE: Record<CalendarCellState, CalendarCellTone> = {
     day: "text-on-primary",
     dot: "bg-on-primary",
     more: "text-on-primary",
+    chip: "bg-on-primary/20 text-on-primary",
+    pill: "bg-on-primary/20 text-on-primary",
     today: "text-on-primary",
   },
   [CALENDAR_CELL_STATE.today]: {
@@ -27,6 +31,8 @@ export const CALENDAR_CELL_TONE: Record<CalendarCellState, CalendarCellTone> = {
     day: "text-tinted-ink",
     dot: null,
     more: "text-hint",
+    chip: null,
+    pill: "bg-gray-100 text-gray-600",
     today: "text-tinted-ink",
   },
   [CALENDAR_CELL_STATE.plain]: {
@@ -34,6 +40,8 @@ export const CALENDAR_CELL_TONE: Record<CalendarCellState, CalendarCellTone> = {
     day: null,
     dot: null,
     more: "text-hint",
+    chip: null,
+    pill: "bg-gray-100 text-gray-600",
     today: "text-tinted-ink",
   },
 };
