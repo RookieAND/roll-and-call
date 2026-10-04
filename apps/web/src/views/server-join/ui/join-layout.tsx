@@ -16,10 +16,11 @@ interface JoinLayoutProps {
   target: JoinTarget;
   status: JoinScreenStatus;
   action: ReactNode;
+  notice?: ReactNode;
 }
 
 // 위 서버 영역은 상태와 상관없이 그대로 두고 아래 시트만 상태에 따라 바뀐다.
-export function JoinLayout({ target, status, action }: JoinLayoutProps) {
+export function JoinLayout({ target, status, action, notice }: JoinLayoutProps) {
   return (
     <VStack
       className="relative min-h-dvh overflow-hidden"
@@ -61,6 +62,7 @@ export function JoinLayout({ target, status, action }: JoinLayoutProps) {
         serverName={target.name}
         hasInvite={!isNull(target.inviteUrl)}
         action={action}
+        notice={notice}
       />
     </VStack>
   );

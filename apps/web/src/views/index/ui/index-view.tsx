@@ -14,14 +14,15 @@ interface IndexViewProps {
   servers: MenuServer[] | null;
   // 가입한 서버가 없을 때 바로 가입할 수 있는 서버
   joinable: MenuServer[];
+  authError: boolean;
 }
 
 // 모바일 틀 밖의 전체 폭 화면이라 본문(main#main)을 스스로 둔다. 너비 기준은 컨테이너(cqw)다.
-export function IndexView({ servers, joinable }: IndexViewProps) {
+export function IndexView({ servers, joinable, authError }: IndexViewProps) {
   return (
     <main id="main" className="@container min-h-dvh bg-surface text-gray-900">
       <IndexHeader servers={servers} joinable={joinable} />
-      <IndexHero servers={servers} joinable={joinable} />
+      <IndexHero servers={servers} joinable={joinable} authError={authError} />
       <FeaturesSection />
       <FlowSection />
       <ClosingSection signedIn={!isNull(servers)} />

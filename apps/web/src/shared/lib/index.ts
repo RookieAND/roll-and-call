@@ -43,3 +43,4 @@ export { WEEKDAY_LABELS } from "./weekday-labels";
 export { groupByDay, type AvailabilityDay } from "./group-by-day";
 export { filledDays } from "./filled-days";
 export { availabilityPrefill } from "./availability-prefill";
+export { authFailurePath } from "./auth-failure-path";

@@ -9,9 +9,10 @@ interface JoinSheetProps {
   serverName: string;
   hasInvite: boolean;
   action: ReactNode;
+  notice?: ReactNode;
 }
 
-export function JoinSheet({ status, serverName, hasInvite, action }: JoinSheetProps) {
+export function JoinSheet({ status, serverName, hasInvite, action, notice }: JoinSheetProps) {
   const { badge, badgePalette, title, body } = JOIN_SHEET_COPY[status]({ serverName, hasInvite });
   return (
     <VStack
@@ -19,6 +20,7 @@ export function JoinSheet({ status, serverName, hasInvite, action }: JoinSheetPr
       aria-live="polite"
       className="relative flex-none rounded-t-800 bg-surface px-300 pt-400 pb-[calc(var(--spacing-300)+var(--rc-safe-bottom))] shadow-[0_-10px_30px_rgb(23_23_28/0.06)]"
     >
+      {notice}
       <VStack align="center" gap="125" className="text-center">
         <Badge colorPalette={badgePalette}>{badge}</Badge>
         <Text typography="heading1" render={<h2 />} className="text-pretty">

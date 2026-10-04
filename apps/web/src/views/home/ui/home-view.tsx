@@ -1,4 +1,4 @@
-import { Callout, Container, HStack } from "@roll-and-call/ui";
+import { Container, HStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
 
 import { BadgeAwardGate } from "@/features/acknowledge-badges";
@@ -22,7 +22,7 @@ import { HomeNicknameNotice } from "./home-nickname-notice";
 import { HomeServerSwitch } from "./home-server-switch";
 import { HomeTodoBanner } from "./home-todo-banner";
 
-export async function HomeView({ date, authError }: { date?: string; authError: boolean }) {
+export async function HomeView({ date }: { date?: string }) {
   const { monthStart, selectedKey, todayKey } = resolveCalendarView(date);
   const now = new Date();
   const server = await getCurrentServer();
@@ -66,16 +66,6 @@ export async function HomeView({ date, authError }: { date?: string; authError: 
         }
       />
       <Container size="sm" className="px-0">
-        {authError && (
-          <div className="px-200 pt-150">
-            <Callout.Root colorPalette="gray" size="sm">
-              <Callout.Icon />
-              <Callout.Description>
-                로그인하지 못했습니다. 오른쪽 위 버튼으로 다시 시도해 주세요.
-              </Callout.Description>
-            </Callout.Root>
-          </div>
-        )}
         {profile?.nicknameSuffixBase && (
           <div className="px-200 pt-150">
             <HomeNicknameNotice nickname={profile.username} />

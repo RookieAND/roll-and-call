@@ -19,7 +19,7 @@ export function ServerCtaButton({ server, mode, compact, className }: ServerCtaB
   const href =
     mode === "join"
       ? serverJoinPath({ slug: server.slug })
-      : serverPath({ slug: server.slug, path: "/" });
+      : serverPath({ slug: server.slug, path: "/games" });
   return (
     <Button size={size} render={<Link href={href} />} className={className}>
       {!(compact && mode === "join") && (

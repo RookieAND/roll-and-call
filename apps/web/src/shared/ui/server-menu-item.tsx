@@ -14,16 +14,17 @@ import { ServerIcon } from "./server-icon";
 interface ServerMenuItemProps {
   server: MenuServer;
   checked: boolean;
-  destination: "home" | "join";
+  destination: "home" | "games" | "join";
 }
 
 export function ServerMenuItem({ server, checked, destination }: ServerMenuItemProps) {
   const router = useRouter();
   const weight = checked ? "extrabold" : "medium";
-  const href =
-    destination === "join"
-      ? serverJoinPath({ slug: server.slug })
-      : serverPath({ slug: server.slug, path: "/" });
+  const href = {
+    home: serverPath({ slug: server.slug, path: "/" }),
+    games: serverPath({ slug: server.slug, path: "/games" }),
+    join: serverJoinPath({ slug: server.slug }),
+  }[destination];
   return (
     <Menu.RadioItem
       value={server.slug}

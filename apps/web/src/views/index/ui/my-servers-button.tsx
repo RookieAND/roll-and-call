@@ -16,6 +16,7 @@ export function MyServersButton({ servers }: MyServersButtonProps) {
       servers={servers}
       checkedSlug={servers[0].slug}
       align="end"
+      destination="games"
       trigger={
         <Button size="sm">
           내 서버

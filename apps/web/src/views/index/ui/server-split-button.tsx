@@ -38,7 +38,7 @@ export function ServerSplitButton({ servers, mode }: ServerSplitButtonProps) {
         checkedSlug={first.slug}
         anchor={groupRef}
         label={MENU_LABELS[mode]}
-        destination={mode === "join" ? "join" : "home"}
+        destination={mode === "join" ? "join" : "games"}
         trigger={
           <Button
             size="lg"

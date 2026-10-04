@@ -3,6 +3,7 @@ import { isNull } from "es-toolkit";
 import { LoginButton } from "@/features/auth";
 import type { MenuServer } from "@/shared/ui";
 
+import { AuthErrorNotice } from "./auth-error-notice";
 import { MyServersButton } from "./my-servers-button";
 import { NoServerNotice } from "./no-server-notice";
 import { ReturningNotice } from "./returning-notice";
@@ -14,13 +15,19 @@ interface IndexCtaProps {
   servers: MenuServer[] | null;
   joinable: MenuServer[];
   compact?: boolean;
+  authError?: boolean;
 }
 
 // 첫 화면 주 버튼. compact는 스크롤 뒤 헤더에 붙는 작은 버전이다.
-export function IndexCta({ servers, joinable, compact = false }: IndexCtaProps) {
+export function IndexCta({ servers, joinable, compact = false, authError = false }: IndexCtaProps) {
   if (isNull(servers)) {
-    const loginClass = compact ? "h-8 px-150 text-body3" : "w-full";
-    return <LoginButton next="/" className={loginClass} />;
+    if (compact) return <LoginButton next="/" className="h-8 px-150 text-body3" />;
+    return (
+      <>
+        {authError && <AuthErrorNotice />}
+        <LoginButton next="/" className="w-full" />
+      </>
+    );
   }
 
   const [recent, ...rest] = servers;

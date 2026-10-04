@@ -13,10 +13,11 @@ interface IndexHeroProps {
   // null이면 비로그인
   servers: MenuServer[] | null;
   joinable: MenuServer[];
+  authError: boolean;
 }
 
 // 헤더(h-16)가 위에 겹쳐 있어 그만큼 위쪽 여백을 더 둔다.
-export function IndexHero({ servers, joinable }: IndexHeroProps) {
+export function IndexHero({ servers, joinable, authError }: IndexHeroProps) {
   return (
     <div
       className="relative overflow-hidden"
@@ -55,7 +56,7 @@ export function IndexHero({ servers, joinable }: IndexHeroProps) {
               Roll &amp; Call 에서는 다양하고 편리한 기능을 제공합니다.
             </Text>
             <VStack id={HERO_CTA_ID} gap="125" className="mt-100 w-full max-w-[360px]">
-              <IndexCta servers={servers} joinable={joinable} />
+              <IndexCta servers={servers} joinable={joinable} authError={authError} />
               {isNull(servers) && (
                 <HStack align="center" justify="center" gap="075" className="text-gray-600">
                   <LockKeyhole size={14} aria-hidden />

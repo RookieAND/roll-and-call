@@ -19,8 +19,8 @@ interface ServerMenuProps {
   // 서버 홈 헤더의 전환 메뉴는 끝에 소개 페이지 링크를 단다.
   aboutLink?: boolean;
   label?: string;
-  // join이면 항목을 누를 때 서버 홈 대신 가입 화면으로 간다.
-  destination?: "home" | "join";
+  // 항목을 누를 때 갈 곳. 서버 홈 헤더는 home, 인덱스의 내 서버는 구인 목록(games), 가입 가능 서버는 가입 화면(join).
+  destination?: "home" | "games" | "join";
 }
 
 // 소개 페이지 주 버튼의 ▾와 서버 홈 헤더의 서버 전환이 같이 쓴다.
