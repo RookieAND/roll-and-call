@@ -1,7 +1,7 @@
 "use client";
 
 import { HStack, IconButton, TextInput } from "@roll-and-call/ui";
-import { Loader2, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -20,6 +20,8 @@ export function GameSearchForm({ filter }: GameSearchFormProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [value, setValue] = useState(filter.q ?? "");
+
+  const searchLabel = pending ? "검색 중" : "구인 제목·룰 검색";
 
   function search(query: string) {
     startTransition(() => {
@@ -50,25 +52,22 @@ export function GameSearchForm({ filter }: GameSearchFormProps) {
         name="q"
         value={value}
         onChange={(event) => setValue(event.target.value)}
-        placeholder="게임명 검색"
-        aria-label="게임명 검색"
+        placeholder="구인 제목·룰 검색"
+        aria-label={searchLabel}
+        aria-busy={pending}
         enterKeyHint="search"
         className="pl-9 pr-11"
       />
       <HStack align="center" className="absolute inset-y-0 right-0">
-        {pending ? (
-          <Loader2 size={16} className="mr-175 animate-spin text-hint" aria-label="검색 중" />
-        ) : (
-          value && (
-            <IconButton
-              variant="ghost"
-              aria-label="검색어 지우기"
-              className="h-11 w-11"
-              onClick={clear}
-            >
-              <X size={16} aria-hidden />
-            </IconButton>
-          )
+        {value && (
+          <IconButton
+            variant="ghost"
+            aria-label="검색어 지우기"
+            className="h-11 w-11"
+            onClick={clear}
+          >
+            <X size={16} aria-hidden />
+          </IconButton>
         )}
       </HStack>
     </form>

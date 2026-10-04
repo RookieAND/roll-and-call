@@ -1,11 +1,9 @@
-import { deriveGameStatus, isSessionEnded } from "@roll-and-call/database/games/model";
 import { Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
-import { compact } from "es-toolkit";
 
-import { formatDate } from "@/shared/lib";
 import type { Game } from "@/shared/server";
 
-import { countConfirmed, type ParticipantStatus } from "../model/participant";
+import type { ParticipantStatus } from "../model/participant";
+import { pastGameCardView } from "../model/past-game-card-view";
 import { GameStatusBadge } from "./game-status-badge";
 import { GameThumbnail } from "./game-thumbnail";
 
@@ -17,29 +15,14 @@ interface PastGameCardProps {
 
 // 스포일러 썸네일은 작게라도 드러내지 않는다.
 export function PastGameCard({ game }: PastGameCardProps) {
-  const count = countConfirmed(game.participants);
-  const ended = isSessionEnded(game);
-  const status = deriveGameStatus({
-    maxPlayers: game.maxPlayers,
-    endDate: game.endDate,
-    participantCount: count,
-    waitlistEnabled: game.waitlistEnabled,
-    scheduleMode: game.scheduleMode,
-    confirmedAt: game.confirmedAt,
-    cancelledAt: game.cancelledAt,
-  });
-  const when = game.confirmedAt
-    ? `${formatDate(game.confirmedAt)} 세션 · ${count}명`
-    : `${formatDate(game.endDate)} 마감`;
-  const meta = compact([game.rule, when]).join(" · ");
-  const thumbnailUrl = game.thumbnailSpoiler ? null : game.thumbnailUrl;
+  const view = pastGameCardView(game);
 
   return (
     <Card.Root interactive padding="sm">
       <HStack align="center" gap="150" className="opacity-72">
-        {thumbnailUrl ? (
+        {view.thumbnailUrl ? (
           <GameThumbnail
-            url={thumbnailUrl}
+            url={view.thumbnailUrl}
             sizes="56px"
             className="size-14 flex-none rounded-400"
           />
@@ -51,10 +34,14 @@ export function PastGameCard({ game }: PastGameCardProps) {
             <Text truncate typography="subtitle1" foreground="muted" className="min-w-0 flex-1">
               {game.title}
             </Text>
-            {ended ? <Badge colorPalette="gray">종료</Badge> : <GameStatusBadge status={status} />}
+            {view.grayBadge ? (
+              <Badge colorPalette="gray">{view.grayBadge}</Badge>
+            ) : (
+              <GameStatusBadge status={view.status} />
+            )}
           </HStack>
           <Text truncate typography="body4" foreground="muted">
-            {meta}
+            {view.meta}
           </Text>
         </VStack>
       </HStack>

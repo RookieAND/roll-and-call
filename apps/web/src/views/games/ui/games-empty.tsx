@@ -14,11 +14,31 @@ import { gamesHref } from "../lib/games-href";
 
 interface GamesEmptyProps {
   filter: GamesFilter;
+  // 같은 조건의 전체 건수. 1 이상인데 행이 없으면 쪽 번호가 범위를 넘은 것이다.
+  total: number;
 }
 
-export function GamesEmpty({ filter }: GamesEmptyProps) {
+export function GamesEmpty({ filter, total }: GamesEmptyProps) {
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
   const newGame = <Button render={<ServerLink path={"/games/new"} />}>새 구인 등록</Button>;
+
+  if (total > 0) {
+    return (
+      <EmptyState
+        image="/empty-states/empty-search.png"
+        title="이 쪽에는 구인이 없습니다"
+        action={
+          <Button
+            render={<ServerLink path={gamesHref(filterParams({ ...filter, page: undefined }))} />}
+            variant="outline"
+            className="mt-100"
+          >
+            첫 쪽으로
+          </Button>
+        }
+      />
+    );
+  }
 
   if (filter.q) {
     return (
@@ -26,11 +46,7 @@ export function GamesEmpty({ filter }: GamesEmptyProps) {
         image="/empty-states/empty-search.png"
         title={`‘${filter.q}’에 맞는 구인이 없습니다`}
         description={
-          <>
-            검색어를 바꾸거나
-            <br />
-            직접 구인을 올려보세요.
-          </>
+          <span className="break-keep">검색어를 바꾸거나 직접 구인을 올릴 수 있습니다.</span>
         }
         action={
           <HStack gap="100" className="mt-100 w-full [&>*]:flex-1">
@@ -64,7 +80,7 @@ export function GamesEmpty({ filter }: GamesEmptyProps) {
             variant="outline"
             className="mt-100"
           >
-            필터 해제
+            전체 보기
           </Button>
         }
       />

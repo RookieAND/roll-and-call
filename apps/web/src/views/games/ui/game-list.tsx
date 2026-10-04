@@ -13,7 +13,7 @@ interface GameListProps {
 
 export async function GameList({ promise, page, filter }: GameListProps) {
   const gamesPage = await promise;
-  if (gamesPage.rows.length === 0) return <GamesEmpty filter={filter} />;
+  if (gamesPage.rows.length === 0) return <GamesEmpty filter={filter} total={gamesPage.total} />;
   if (filter.tab === GAME_TAB.past) {
     return <PastGameList gamesPage={gamesPage} page={page} filter={filter} />;
   }

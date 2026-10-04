@@ -24,7 +24,7 @@ export async function GamesJoinCallout({ page, filter }: GamesJoinCalloutProps) 
   return (
     <Callout.Root colorPalette="primary" className="my-150">
       <Callout.Description className="break-keep">
-        {server.name}에 가입하면 구인글을 자세히 보고 신청할 수 있어요.
+        이 서버 멤버가 되면 구인에 신청할 수 있습니다.
       </Callout.Description>
       <Callout.Action>
         <Button render={<Link href={serverJoinPath({ slug: server.slug, next })} />} size="sm">

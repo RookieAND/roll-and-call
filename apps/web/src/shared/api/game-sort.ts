@@ -42,7 +42,7 @@ export const GAME_STATUS_FILTERS = {
   ],
   past: [
     { key: GAME_STATUS_FILTER.all, label: "전체" },
-    { key: GAME_STATUS_FILTER.closed, label: "마감" },
+    { key: GAME_STATUS_FILTER.closed, label: "모집 종료" },
     { key: GAME_STATUS_FILTER.ended, label: "종료" },
   ],
 } as const satisfies Record<GameTab, ReadonlyArray<{ key: GameStatusFilter; label: string }>>;
