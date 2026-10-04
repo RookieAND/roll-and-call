@@ -1,6 +1,7 @@
 import { createSupabaseBrowserClient } from "@/shared/api";
 
-export async function signOut() {
+export async function signOut(): Promise<{ ok: boolean }> {
   const supabase = createSupabaseBrowserClient();
-  await supabase.auth.signOut();
+  const { error } = await supabase.auth.signOut();
+  return { ok: !error };
 }

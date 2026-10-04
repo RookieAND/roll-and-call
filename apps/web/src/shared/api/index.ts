@@ -25,6 +25,7 @@ export {
   GAME_NOT_FOUND_MESSAGE,
   LEAVE_AFTER_SCHEDULE_MESSAGE,
   ROSTER_SESSION_ENDED_MESSAGE,
+  SIGN_OUT_FAILED_MESSAGE,
 } from "./action-messages";
 export { AppError } from "./app-error";
 export { ERROR_DISPLAY, UNEXPECTED_ERROR_MESSAGE, type ErrorDisplay } from "./error-display";

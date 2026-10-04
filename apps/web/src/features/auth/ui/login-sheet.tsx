@@ -21,13 +21,13 @@ export function LoginSheet({ open, onOpenChange, next }: LoginSheetProps) {
         <Sheet.Body>
           <VStack gap="200">
             <VStack gap="100">
-              <Text typography="heading2">로그인하면 이어서 참여합니다</Text>
+              <Text typography="heading2">디스코드로 로그인해 주세요</Text>
               <Text typography="body3" foreground="muted" className="[text-wrap:pretty]">
                 디스코드 계정으로 시작합니다.
                 <br />
                 닉네임과 아바타만 가져옵니다.
                 <br />
-                로그인 후 이 구인글로 돌아옵니다.
+                로그인하면 이 화면으로 돌아옵니다.
               </Text>
             </VStack>
             <VStack gap="100">
