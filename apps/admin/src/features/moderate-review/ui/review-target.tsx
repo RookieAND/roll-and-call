@@ -15,7 +15,7 @@ export function ReviewTarget({ review }: ReviewTargetProps) {
           {review.author.nickname}의 후기
         </Text>
         <Text typography="body4" foreground="hint" truncate>
-          {review.session.title} · {formatDateTime(review.createdAt)} 작성
+          {review.game.title} · {formatDateTime(review.createdAt)} 작성
         </Text>
       </HStack>
       <Text typography="body3" foreground="muted" truncate>

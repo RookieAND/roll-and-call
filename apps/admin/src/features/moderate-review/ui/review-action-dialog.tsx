@@ -18,7 +18,6 @@ const POPUP_WIDTH = {
   [REVIEW_ACTION.hide]: "max-w-[600px]",
   [REVIEW_ACTION.unhide]: "max-w-[600px]",
   [REVIEW_ACTION.remove]: "max-w-[600px]",
-  [REVIEW_ACTION.dismiss]: "max-w-[560px]",
 } as const;
 
 const GONE_WIDTH = "max-w-[520px]";
@@ -26,9 +25,7 @@ const GONE_WIDTH = "max-w-[520px]";
 interface ReviewActionDialogProps {
   review: ReviewDetail;
   action: ReviewAction | null;
-  fromReports: boolean;
   closeHref: string;
-  hideHref: string;
   listHref: string;
 }
 
@@ -36,9 +33,7 @@ interface ReviewActionDialogProps {
 export function ReviewActionDialog({
   review,
   action,
-  fromReports,
   closeHref,
-  hideHref,
   listHref,
 }: ReviewActionDialogProps) {
   const router = useRouter();
@@ -76,11 +71,10 @@ export function ReviewActionDialog({
             key={shownAction}
             review={review}
             action={shownAction}
-            fromReports={fromReports}
             cancelRef={cancelRef}
             onDone={close}
+            listHref={listHref}
             onFailure={setFailure}
-            onSwitchToHide={() => router.replace(toServerPath(hideHref), { scroll: false })}
           />
         ) : null}
       </Dialog.Popup>

@@ -2,7 +2,7 @@
 
 import { Button, Callout, Dialog, HStack, Text, VStack, toast } from "@roll-and-call/ui";
 import { isNull, isUndefined } from "es-toolkit";
-import { Check, Eye, RotateCcw, X } from "lucide-react";
+import { Eye, RotateCcw, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, type RefObject } from "react";
 
@@ -13,14 +13,10 @@ import { ModalServerLabel, useServerPath } from "@/shared/ui";
 import { submitReviewModeration } from "../api/submit-review-moderation";
 import { ACTION_COPY } from "../model/action-copy";
 import { REASON_ACTIONS, REVIEW_ACTION, type ReviewAction } from "../model/review-action";
-import { reviewNextHref } from "../model/review-next-href";
 import { AuthorMessagePreview } from "./author-message-preview";
 import { ImpactLines } from "./impact-lines";
-import { ReportSummary } from "./report-summary";
 import { ReviewReasonRadio } from "./review-reason-radio";
 import { ReviewTarget } from "./review-target";
-import { StaffMemoField } from "./staff-memo-field";
-import { SwitchToHide } from "./switch-to-hide";
 import { UnhideDetails } from "./unhide-details";
 
 type Failure = Extract<ReviewModerationResult, { ok: false }>;
@@ -29,7 +25,6 @@ const CONFIRM_ICON = {
   [REVIEW_ACTION.hide]: Eye,
   [REVIEW_ACTION.unhide]: Eye,
   [REVIEW_ACTION.remove]: X,
-  [REVIEW_ACTION.dismiss]: Check,
 } as const;
 
 const IMPACT_LINES: Partial<Record<ReviewAction, [string, string]>> = {
@@ -40,49 +35,39 @@ const IMPACT_LINES: Partial<Record<ReviewAction, [string, string]>> = {
 interface ReviewActionFormProps {
   review: ReviewDetail;
   action: ReviewAction;
-  fromReports: boolean;
   cancelRef: RefObject<HTMLButtonElement | null>;
+  listHref: string;
   onDone: () => void;
   onFailure: (failure: Failure) => void;
-  onSwitchToHide: () => void;
 }
 
 export function ReviewActionForm({
   review,
   action,
-  fromReports,
   cancelRef,
+  listHref,
   onDone,
   onFailure,
-  onSwitchToHide,
 }: ReviewActionFormProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
   const { pending, networkError, submit } = useActionSubmit(submitReviewModeration);
   const needsReason = REASON_ACTIONS.includes(action);
-  const [reason, setReason] = useState<ReviewReason | null>(
-    needsReason ? ((review.topReasonKey as ReviewReason | undefined) ?? null) : null,
-  );
-  const [staffMemo, setStaffMemo] = useState("");
+  const [reason, setReason] = useState<ReviewReason | null>(null);
 
   const copy = ACTION_COPY[action];
   const author = review.author.nickname;
-  const reportCount = review.reports.length;
   const removing = action === REVIEW_ACTION.remove;
   const unhiding = action === REVIEW_ACTION.unhide;
   const canConfirm = (!needsReason || !isNull(reason)) && !pending;
   const reasonLabel = reason ? REVIEW_REASON[reason] : null;
   const impactLines = IMPACT_LINES[action];
-  const description =
-    action === REVIEW_ACTION.dismiss
-      ? `후기는 그대로 두고 신고 ${reportCount}건을 닫습니다`
-      : copy.description;
+  const description = copy.description;
   const footerNote = copy.footerNote ?? null;
   const FooterIcon = copy.footerIcon;
   const ConfirmIcon = networkError ? RotateCcw : CONFIRM_ICON[action];
   const confirmLabel = networkError ? "다시 시도" : copy.confirmLabel;
   const confirmPalette = removing ? "danger" : "primary";
-  const nextHref = reviewNextHref({ fromReports, nextReportedId: review.nextReportedId });
 
   const undoHide = async () => {
     const result = await submitReviewModeration(review.id, {
@@ -96,22 +81,19 @@ export function ReviewActionForm({
   };
 
   const confirm = async () => {
-    const result = await submit(review.id, { action, reason, staffMemo });
+    const result = await submit(review.id, { action, reason, staffMemo: "" });
     if (isUndefined(result)) return;
     if (!result.ok) {
       onFailure(result);
       return;
     }
-    const message = nextHref
-      ? `${copy.successMessage(author)}. 다음 신고로 이동했습니다`
-      : copy.successMessage(author);
+    const message = copy.successMessage(author);
     if (action === REVIEW_ACTION.hide) {
       toast.success(message, { action: { label: "되돌리기", onClick: () => void undoHide() } });
     } else {
       toast.success(message);
     }
-    if (nextHref) router.push(toServerPath(nextHref));
-    else if (removing) router.push(toServerPath(`/posts/${review.session.id}?tab=reviews`));
+    if (removing) router.push(toServerPath(listHref));
     else onDone();
   };
 
@@ -135,7 +117,6 @@ export function ReviewActionForm({
           ) : (
             <ReviewTarget review={review} />
           )}
-          {!unhiding && reportCount ? <ReportSummary reasonCounts={review.reasonCounts} /> : null}
           {impactLines ? <ImpactLines lines={impactLines} danger={removing} /> : null}
           {needsReason ? (
             <>
@@ -143,10 +124,6 @@ export function ReviewActionForm({
               <AuthorMessagePreview removing={removing} reasonLabel={reasonLabel} />
             </>
           ) : null}
-          {action === REVIEW_ACTION.dismiss ? (
-            <StaffMemoField value={staffMemo} disabled={pending} onValueChange={setStaffMemo} />
-          ) : null}
-          {removing ? <SwitchToHide onSwitch={onSwitchToHide} /> : null}
         </VStack>
       </Dialog.Body>
       <Dialog.Footer layout="row" className="items-center">

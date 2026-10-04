@@ -24,7 +24,7 @@ export const STATUS_TONE: Readonly<Record<string, StatusTone>> = {
   중복: "warning",
   보류: "warning",
   사용: "warning",
-  "스포일러 포함": "warning",
+  "스포일러 포함": "gray",
   "일정 조율 중": "warning",
   "제재 중": "danger",
   제재: "danger",

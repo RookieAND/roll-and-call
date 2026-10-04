@@ -1,19 +1,25 @@
-import { Callout, VStack } from "@roll-and-call/ui";
-import { Check, Eye, Shield, X } from "lucide-react";
+import { VStack } from "@roll-and-call/ui";
+import { Eye, X } from "lucide-react";
+import type { ReactElement } from "react";
 
 import { REVIEW_ACTION, type ReviewAction } from "@/features/moderate-review";
 import type { ReviewDetail } from "@/shared/server";
 import { ActionCard, ServerLink } from "@/shared/ui";
 
 import { AsideHeading } from "./aside-heading";
-import { AuthorInfo } from "./author-info";
+
+const DISABLED_LINK = <button type="button" disabled />;
 
 interface ReviewActionsAsideProps {
-  review: ReviewDetail;
-  actionHref: (action: ReviewAction) => string;
+  // 불러오는 중이면 없고, 카드는 글자만 그대로 두고 비활성이다.
+  review?: ReviewDetail;
+  actionHref?: (action: ReviewAction) => string;
 }
 
+// 조치 효과 설명은 이 카드에만 있다(D273). 설명에는 마침표를 붙이지 않는다.
 export function ReviewActionsAside({ review, actionHref }: ReviewActionsAsideProps) {
+  const link = (action: ReviewAction): ReactElement<Record<string, unknown>> =>
+    actionHref ? <ServerLink path={actionHref(action)} scroll={false} /> : DISABLED_LINK;
   return (
     <VStack
       render={<aside />}
@@ -21,20 +27,12 @@ export function ReviewActionsAside({ review, actionHref }: ReviewActionsAsidePro
     >
       <AsideHeading>조치</AsideHeading>
       <VStack gap="075" className="p-150">
-        {review.reports.length ? (
-          <ActionCard
-            icon={Check}
-            title="신고 기각"
-            description="후기는 그대로 두고 신고만 닫습니다"
-            link={<ServerLink path={actionHref(REVIEW_ACTION.dismiss)} scroll={false} />}
-          />
-        ) : null}
-        {review.hidden ? (
+        {review?.hidden ? (
           <ActionCard
             icon={Eye}
             title="숨김 해제"
-            description="GM 프로필에 다시 보이게 합니다"
-            link={<ServerLink path={actionHref(REVIEW_ACTION.unhide)} scroll={false} />}
+            description="다시 모두에게 보입니다"
+            link={link(REVIEW_ACTION.unhide)}
             tone="primary"
           />
         ) : (
@@ -42,24 +40,17 @@ export function ReviewActionsAside({ review, actionHref }: ReviewActionsAsidePro
             icon={Eye}
             title="숨김"
             description="작성자만 볼 수 있게 가립니다"
-            link={<ServerLink path={actionHref(REVIEW_ACTION.hide)} scroll={false} />}
+            link={link(REVIEW_ACTION.hide)}
           />
         )}
         <ActionCard
           icon={X}
           title="제거"
-          description="본문과 사진을 바로 지웁니다"
-          link={<ServerLink path={actionHref(REVIEW_ACTION.remove)} scroll={false} />}
+          description="후기를 바로 지웁니다"
+          link={link(REVIEW_ACTION.remove)}
           tone="danger"
         />
-        <Callout.Root colorPalette="gray" size="sm" className="mt-050">
-          <Callout.Icon>
-            <Shield size={14} />
-          </Callout.Icon>
-          <Callout.Description>신고만으로는 후기가 숨겨지지 않습니다.</Callout.Description>
-        </Callout.Root>
       </VStack>
-      <AuthorInfo author={review.author} />
     </VStack>
   );
 }

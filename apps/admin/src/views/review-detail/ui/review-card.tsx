@@ -1,78 +1,52 @@
-import { Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { formatDateTime } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
-import { FactRows } from "@/shared/ui";
+import { Tag } from "@/shared/ui";
 
 import { ReviewMoreMenu } from "./review-more-menu";
-import { ReviewPhotos } from "./review-photos";
-import { ReviewStateTag } from "./review-state-tag";
 
 interface ReviewCardProps {
   review: ReviewDetail;
   logHref: string;
 }
 
+// 작성자 섹션과 후기 섹션을 카드 폭 전체 구분선으로 나눈다(D272). 스포일러여도 본문을 가리지 않는다.
 export function ReviewCard({ review, logHref }: ReviewCardProps) {
-  const editedValue = review.editedAt ? (
-    <HStack align="baseline" gap="075" render={<span />}>
-      {formatDateTime(review.editedAt)}
-      {review.editedAfterReport ? (
-        <Text typography="body3" weight="bold" foreground="warning" render={<span />}>
-          신고 후 수정됨
-        </Text>
-      ) : null}
-    </HStack>
-  ) : (
-    "없음"
-  );
+  const { author } = review;
+  const actionSummary = author.receivedActionCount
+    ? `받은 조치 ${author.receivedActionCount}회`
+    : "받은 조치 없음";
+  const writtenLine = review.editedAt
+    ? `${formatDateTime(review.createdAt)} 작성 · ${formatDateTime(review.editedAt)} 수정`
+    : `${formatDateTime(review.createdAt)} 작성`;
   return (
     <Card.Root padding="none" render={<section />} className="shrink-0">
-      <HStack align="center" gap="100" className="px-200 py-150">
+      <HStack align="center" gap="150" className="px-200 py-150">
         <Text typography="heading3" render={<h2 />}>
-          {review.author.nickname}
+          {author.nickname}
         </Text>
-        <ReviewStateTag
-          openReportCount={review.reports.length}
-          hidden={Boolean(review.hidden)}
-          held={review.held}
-        />
+        <Text typography="body4" foreground="hint">
+          쓴 후기 {author.reviewCount}개 · {actionSummary}
+        </Text>
         <HStack className="ml-auto">
-          <ReviewMoreMenu
-            sessionId={review.session.id}
-            authorId={review.author.id}
-            logHref={logHref}
-          />
+          <ReviewMoreMenu gameId={review.game.id} authorId={author.id} logHref={logHref} />
         </HStack>
       </HStack>
-      <Grid className="grid-cols-2 items-start gap-x-400 border-t border-(--rc-color-border-subtle) px-200 py-100">
-        <FactRows
-          labelWidth={72}
-          items={[
-            { label: "세션", value: review.session.title },
-            { label: "작성 시각", value: formatDateTime(review.createdAt) },
-          ]}
-        />
-        <FactRows
-          labelWidth={72}
-          items={[
-            { label: "수정 시각", value: editedValue },
-            { label: "스포일러", value: review.spoiler ? "포함" : "없음" },
-          ]}
-        />
-      </Grid>
       <VStack gap="150" className="border-t border-(--rc-color-border-subtle) px-200 py-175">
+        <HStack align="center" gap="100">
+          <Text typography="body4" foreground="hint">
+            {writtenLine}
+          </Text>
+          {review.spoiler ? (
+            <HStack className="ml-auto">
+              <Tag>스포일러 포함</Tag>
+            </HStack>
+          ) : null}
+        </HStack>
         <Text typography="body2" render={<p />} className="whitespace-pre-line">
           {review.body}
         </Text>
-        {review.photoUrls.length ? (
-          <ReviewPhotos
-            photoUrls={review.photoUrls}
-            title={review.author.nickname}
-            subtitle={`${review.session.title} · ${formatDateTime(review.createdAt)}`}
-            spoiler={review.spoiler}
-          />
-        ) : null}
       </VStack>
     </Card.Root>
   );

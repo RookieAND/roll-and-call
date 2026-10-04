@@ -10,7 +10,7 @@ interface UnhideDetailsProps {
 }
 
 export function UnhideDetails({ review, hidden }: UnhideDetailsProps) {
-  const editedAfterHidden = review.editedAt && review.editedAt > hidden.at ? review.editedAt : null;
+  const editedAfterHidden = hidden.editedAfterHidden ? review.editedAt : null;
   return (
     <>
       {editedAfterHidden ? null : (
@@ -22,7 +22,7 @@ export function UnhideDetails({ review, hidden }: UnhideDetailsProps) {
       <FactRows
         labelWidth={96}
         items={[
-          { label: "숨긴 사유", value: hidden.reasonLabel },
+          { label: "숨긴 사유", value: hidden.reason },
           { label: "숨긴 시각", value: `${formatDateTime(hidden.at)} · ${hidden.by}` },
           {
             label: "작성자 수정",

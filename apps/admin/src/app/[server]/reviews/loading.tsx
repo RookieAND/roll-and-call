@@ -1,5 +1,5 @@
-import { ReportedReviewsLoading } from "@/views/reported-reviews";
+import { ReviewListLoading } from "@/views/review-list";
 
 export default function Loading() {
-  return <ReportedReviewsLoading />;
+  return <ReviewListLoading />;
 }

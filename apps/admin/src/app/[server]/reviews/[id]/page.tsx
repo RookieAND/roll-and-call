@@ -1,23 +1,47 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { getReviewDetail } from "@/shared/server";
+import { parseSort } from "@/shared/lib";
+import {
+  getReviewDetail,
+  REVIEW_DEFAULT_SORT,
+  REVIEW_LIST_TAB,
+  REVIEW_SORT_COLUMNS,
+} from "@/shared/server";
 import { ReviewDetailView } from "@/views/review-detail";
 
 export async function generateMetadata({
   params,
 }: PageProps<"/[server]/reviews/[id]">): Promise<Metadata> {
-  const review = await getReviewDetail((await params).id);
-  return { title: review ? `${review.author.nickname}의 후기` : "후기 상세" };
+  const filter = { tab: REVIEW_LIST_TAB.all, sort: REVIEW_DEFAULT_SORT };
+  const review = await getReviewDetail({ id: (await params).id, filter });
+  return { title: review ? review.game.title : "후기 상세" };
 }
 
+// 들어온 목록의 탭·검색·사진·구인 칩·정렬을 주소로 받아 뒤로 가기와 [다음 건]을 만든다.
 export default async function ReviewDetailPage({
   params,
   searchParams,
 }: PageProps<"/[server]/reviews/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
-  const { action, from } = query as Record<string, string | undefined>;
-  const review = await getReviewDetail(id);
+  const { tab, action, q, photo, game, sort, dir } = query as Record<string, string | undefined>;
+  const listTab = tab === REVIEW_LIST_TAB.hidden ? REVIEW_LIST_TAB.hidden : REVIEW_LIST_TAB.all;
+  const tableSort = parseSort({
+    searchParams: query,
+    columns: REVIEW_SORT_COLUMNS,
+    fallback: REVIEW_DEFAULT_SORT,
+  });
+  const review = await getReviewDetail({
+    id,
+    filter: { tab: listTab, query: q, photo, game, sort: tableSort },
+  });
   if (!review) notFound();
-  return <ReviewDetailView review={review} action={action} from={from} />;
+  return (
+    <ReviewDetailView
+      review={review}
+      tab={listTab}
+      action={action}
+      listQuery={{ q, photo, game, sort, dir }}
+    />
+  );
 }

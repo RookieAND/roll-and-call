@@ -7,9 +7,6 @@ import { ConflictNotice, ItemCard, ModalServerLabel, ServerLink } from "@/shared
 
 import { ACTION_COPY, CONFLICT_VERB } from "../model/action-copy";
 import type { ReviewAction } from "../model/review-action";
-import { reviewNextHref } from "../model/review-next-href";
-
-const REPORTS_HREF = "/reviews";
 
 interface ReviewFailureContentProps {
   review: ReviewDetail;
@@ -26,8 +23,7 @@ export function ReviewFailureContent({
 }: ReviewFailureContentProps) {
   if (failure.gone) {
     const { deleted } = failure;
-    const nextHref =
-      reviewNextHref({ fromReports: true, nextReportedId: review.nextReportedId }) ?? REPORTS_HREF;
+    const nextHref = review.nextId ? `/reviews/${review.nextId}` : listHref;
     return (
       <>
         <Dialog.Header>
@@ -39,15 +35,11 @@ export function ReviewFailureContent({
             icon={X}
             title="작성자가 삭제한 후기입니다"
             meta={deleted ? `${deleted.author} · ${formatDateTime(deleted.at)} 삭제` : undefined}
-          >
-            {deleted?.closedReportCount
-              ? `이 후기에 걸린 신고 ${deleted.closedReportCount}건은 자동으로 닫혔습니다.`
-              : null}
-          </ItemCard>
+          ></ItemCard>
         </Dialog.Body>
         <Dialog.Footer layout="row" className="items-center justify-end">
           <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />}>닫기</Dialog.Close>
-          <Button render={<ServerLink path={nextHref} />}>다음 신고</Button>
+          <Button render={<ServerLink path={nextHref} />}>다음 건</Button>
         </Dialog.Footer>
       </>
     );

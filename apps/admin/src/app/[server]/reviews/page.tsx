@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 
-import { listReportedReviews } from "@/shared/server";
-import { ReportedReviewsView } from "@/views/reported-reviews";
+import { REVIEW_LIST_TAB } from "@/shared/server";
 
-export const metadata: Metadata = { title: "신고된 후기" };
+import { ReviewListPage } from "./review-list-page";
 
-export default async function ReportedReviewsPage({
-  searchParams,
-}: PageProps<"/[server]/reviews">) {
-  const { q, reason } = (await searchParams) as Record<string, string | undefined>;
-  const reviews = await listReportedReviews({ query: q, reason });
-  return <ReportedReviewsView reviews={reviews} />;
+export const metadata: Metadata = { title: "전체 후기" };
+
+export default async function AllReviewsPage({ searchParams }: PageProps<"/[server]/reviews">) {
+  return <ReviewListPage tab={REVIEW_LIST_TAB.all} searchParams={await searchParams} />;
 }

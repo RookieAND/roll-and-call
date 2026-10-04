@@ -7,21 +7,27 @@ import { useState } from "react";
 import { ServerLink } from "@/shared/ui";
 
 interface ReviewMoreMenuProps {
-  sessionId: string;
-  authorId: string;
-  logHref: string;
+  // 불러오는 중이면 없고, 메뉴 자리만 비활성으로 둔다.
+  gameId?: string;
+  authorId?: string;
+  logHref?: string;
 }
 
-export function ReviewMoreMenu({ sessionId, authorId, logHref }: ReviewMoreMenuProps) {
+// 후기 상세의 이동 경로는 이 메뉴 한 곳에만 둔다.
+export function ReviewMoreMenu({ gameId, authorId, logHref }: ReviewMoreMenuProps) {
   const [open, setOpen] = useState(false);
   const items = [
-    { label: "구인 상세 열기", icon: FileText, href: `/posts/${sessionId}?tab=reviews` },
+    { label: "구인 상세 열기", icon: FileText, href: `/posts/${gameId}` },
     { label: "작성자 유저 상세 열기", icon: User, href: `/users/${authorId}` },
-    { label: "활동 기록에서 보기", icon: ScrollText, href: logHref },
+    { label: "활동 기록에서 보기", icon: ScrollText, href: logHref ?? "/log" },
   ];
+  const loading = !gameId;
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger render={<IconButton variant="outline" size="sm" aria-label="이동 메뉴" />}>
+      <Popover.Trigger
+        disabled={loading}
+        render={<IconButton variant="outline" size="sm" aria-label="이동 메뉴" />}
+      >
         <Ellipsis size={16} aria-hidden />
       </Popover.Trigger>
       <Popover.Popup align="end" className="w-[200px] p-075">
