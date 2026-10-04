@@ -18,9 +18,10 @@ import { WelcomeVisual } from "./welcome-visual";
 interface OnboardingViewProps {
   // 다 보거나 건너뛰면 갈 곳. 온보딩은 서버 밖 화면이라 들어온 서버 화면을 받아 둔다.
   doneHref: string;
+  fromHelp: boolean;
 }
 
-export function OnboardingView({ doneHref }: OnboardingViewProps) {
+export function OnboardingView({ doneHref, fromHelp }: OnboardingViewProps) {
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [back, setBack] = useState(false);
@@ -34,7 +35,8 @@ export function OnboardingView({ doneHref }: OnboardingViewProps) {
   const slide = ONBOARDING_SLIDES[index]!;
   const welcome = isNull(slide.eyebrow);
   const last = index === ONBOARDING_SLIDES.length - 1;
-  // 남는 높이를 위아래로 나눠 갖는다. 내용이 더 길면 flex-1이 늘어나므로 위가 잘리지 않는다.
+  // 남는 높이를 위아래로 나눠 갖는다. 내용이 더 길면 flex-1이 늘어나므로 위가 잘리지 않고,
+  // 바깥 칸만 스크롤되어 아래 버튼은 작은 화면(320×568)에서도 늘 보인다.
   const slideClass = cn(
     "flex flex-1 flex-col justify-center touch-pan-y",
     back ? "animate-slide-in-back" : "animate-slide-in",
@@ -73,32 +75,34 @@ export function OnboardingView({ doneHref }: OnboardingViewProps) {
   };
 
   return (
-    <VStack className="min-h-dvh" style={{ backgroundImage: "var(--gradient-onboarding)" }}>
+    <VStack className="h-dvh break-keep" style={{ backgroundImage: "var(--gradient-onboarding)" }}>
       <span className="h-[52px] flex-none" />
-      <Container size="sm" className="flex flex-1 flex-col">
-        <div
-          key={slide.key}
-          className={slideClass}
-          onPointerDown={(event) => {
-            pointerStart.current = { x: event.clientX, y: event.clientY };
-          }}
-          onPointerUp={onPointerEnd}
-          onPointerCancel={() => {
-            pointerStart.current = null;
-          }}
-        >
-          {slide.eyebrow === null ? <WelcomeVisual /> : <SlideVisual slideKey={slide.key} />}
-          <VStack gap="125" className={welcome ? "mt-400" : "mt-300"}>
-            {slide.eyebrow && (
-              <SlideEyebrow number={slide.eyebrow.number} label={slide.eyebrow.label} />
-            )}
-            <Text typography="heading1" render={<h1 />} className="leading-[1.32]">
-              {slide.title}
-            </Text>
-            <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
-              {slide.body}
-            </Text>
-          </VStack>
+      <Container size="sm" className="flex min-h-0 flex-1 flex-col">
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+          <div
+            key={slide.key}
+            className={slideClass}
+            onPointerDown={(event) => {
+              pointerStart.current = { x: event.clientX, y: event.clientY };
+            }}
+            onPointerUp={onPointerEnd}
+            onPointerCancel={() => {
+              pointerStart.current = null;
+            }}
+          >
+            {slide.eyebrow === null ? <WelcomeVisual /> : <SlideVisual slideKey={slide.key} />}
+            <VStack gap="125" className={welcome ? "mt-400" : "mt-300"}>
+              {slide.eyebrow && (
+                <SlideEyebrow number={slide.eyebrow.number} label={slide.eyebrow.label} />
+              )}
+              <Text typography="heading1" render={<h1 />} className="leading-[1.32]">
+                {slide.title}
+              </Text>
+              <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
+                {slide.body}
+              </Text>
+            </VStack>
+          </div>
         </div>
         <HStack justify="center" gap="075" className="py-200">
           {ONBOARDING_SLIDES.map((item, itemIndex) =>
@@ -107,7 +111,7 @@ export function OnboardingView({ doneHref }: OnboardingViewProps) {
         </HStack>
         <VStack gap="050" className="mb-[calc(var(--spacing-300)+var(--rc-safe-bottom))]">
           <Button size="lg" className="w-full" onClick={goNext}>
-            {nextLabel({ welcome, last })}
+            {nextLabel({ welcome, last, fromHelp })}
           </Button>
           {!last && (
             <Button variant="ghost" size="lg" className="w-full" onClick={skip}>

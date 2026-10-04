@@ -5,21 +5,26 @@ import Link from "next/link";
 import { BrandMark } from "@/entities/profile";
 import { AppBar } from "@/shared/ui";
 
+import { loadHelpServer } from "../api/load-help-server";
 import { HELP_CATEGORIES, HELP_DOCS } from "../model/help-docs";
 import { HelpDocRow } from "./help-doc-row";
 
-const DISCORD_INVITE_URL = "https://discord.gg/22q39AUyXc";
+interface HelpListViewProps {
+  from: string | null;
+}
 
-export function HelpListView() {
+export async function HelpListView({ from }: HelpListViewProps) {
+  const server = await loadHelpServer(from);
+
   return (
     <>
       <AppBar back="/" title="도움말" />
       <Container size="sm">
-        <VStack gap="250" className="py-200">
+        <VStack gap="250" className="py-200 break-keep">
           <Card.Root
             padding="sm"
             interactive
-            render={<Link href="/onboarding" />}
+            render={<Link href="/onboarding?from=help" />}
             className="border-tinted-border bg-tinted-bg hover:bg-tinted-bg-hover"
           >
             <HStack align="center" gap="150" className="px-050 py-025">
@@ -39,7 +44,11 @@ export function HelpListView() {
           </Card.Root>
 
           <Card.Root padding="none" className="overflow-hidden">
-            <HelpDocRow href="/about" title="롤앤콜 소개" />
+            <HelpDocRow
+              href="/about"
+              title="롤앤콜 소개"
+              description="롤앤콜이 무엇을 하는지 한 장으로 봅니다"
+            />
           </Card.Root>
 
           {HELP_CATEGORIES.map((category) => (
@@ -49,7 +58,12 @@ export function HelpListView() {
               </Text>
               <Card.Root padding="none" className="overflow-hidden">
                 {HELP_DOCS.filter((doc) => doc.category === category).map((doc) => (
-                  <HelpDocRow key={doc.slug} href={`/help/${doc.slug}`} title={doc.title} />
+                  <HelpDocRow
+                    key={doc.slug}
+                    href={`/help/${doc.slug}`}
+                    title={doc.title}
+                    description={doc.rowDescription}
+                  />
                 ))}
               </Card.Root>
             </VStack>
@@ -66,19 +80,19 @@ export function HelpListView() {
                 </Text>
               </HStack>
               <Text typography="body3" foreground="muted" render={<p />} className="text-pretty">
-                디스코드 서버에서 물어보세요.
-                <br />
-                운영자와 다른 GM들이 같이 봅니다.
+                롤앤콜을 쓰는 디스코드 서버의 운영진에게 물어봐 주세요.
               </Text>
-              <Button
-                render={<a href={DISCORD_INVITE_URL} target="_blank" rel="noreferrer" />}
-                variant="outline"
-                size="lg"
-                className="mt-050 w-full"
-              >
-                디스코드 서버 열기
-                <ExternalLink size={15} aria-hidden />
-              </Button>
+              {server && (
+                <Button
+                  render={<a href={server.inviteUrl} target="_blank" rel="noreferrer" />}
+                  variant="outline"
+                  size="lg"
+                  className="mt-050 w-full"
+                >
+                  <span className="min-w-0 truncate">{server.name} 디스코드 열기</span>
+                  <ExternalLink size={15} className="flex-none" aria-hidden />
+                </Button>
+              )}
             </VStack>
           </Card.Root>
         </VStack>

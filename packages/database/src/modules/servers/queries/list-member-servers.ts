@@ -11,6 +11,7 @@ export async function listMemberServers(userId: string) {
       slug: servers.slug,
       name: servers.name,
       icon: servers.icon,
+      inviteUrl: servers.inviteUrl,
       staffRole: staff.role,
     })
     .from(serverMembers)
