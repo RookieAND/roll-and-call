@@ -6,5 +6,6 @@ export { evaluateBadges } from "./queries/evaluate-badges";
 export { evaluateGameBadges } from "./queries/evaluate-game-badges";
 export { loadBadgeFacts } from "./queries/load-badge-facts";
 export { loadMonthlyAppearances } from "./queries/load-monthly-appearances";
+export { loadMonthlyWinners, type MonthlyWinner } from "./queries/load-monthly-winners";
 export { loadUserBadges, type BadgeRecord } from "./queries/load-user-badges";
 export * from "./model";

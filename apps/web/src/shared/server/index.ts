@@ -68,6 +68,7 @@ export { notifyGameLeft, notifyMovedToWaitlist } from "@roll-and-call/game-notic
 export { notifyGameCancelled } from "@roll-and-call/game-notices";
 export { postStaffNotice, STAFF_NOTICE_KIND } from "@roll-and-call/game-notices";
 export { announceRecruitmentComplete } from "./discord/announce-recruitment-complete";
+export { announceMonthlyAwards } from "./discord/announce-monthly-awards";
 export { notifyDrawResult } from "./discord/notify-draw-result";
 export { notifyDirectConfirmed } from "./discord/notify-direct-confirmed";
 export { notifySessionConfirmed } from "./discord/notify-session-confirmed";

@@ -1,0 +1,1 @@
+ALTER TABLE "servers" ADD COLUMN "monthly_announced_month" text;

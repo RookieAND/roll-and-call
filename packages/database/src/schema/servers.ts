@@ -31,6 +31,8 @@ export const servers = pgTable("servers", {
   ownerDiscordId: text("owner_discord_id"),
   // 디스코드 서버 멤버가 아니라 가입할 수 없을 때 보여 주는 초대 링크. 없으면 안내 문구만 보인다.
   inviteUrl: text("invite_url"),
+  // 월간 발표를 보낸 마지막 달, YYYY-MM. 다시 보내지 않게 막는다.
+  monthlyAnnouncedMonth: text("monthly_announced_month"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 }).enableRLS();
 

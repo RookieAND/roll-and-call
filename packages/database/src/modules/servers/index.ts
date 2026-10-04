@@ -1,4 +1,5 @@
 export { applyNicknameSync } from "./commands/apply-nickname-sync";
+export { claimMonthlyAnnouncement } from "./commands/claim-monthly-announcement";
 export { ensureMembership } from "./commands/ensure-membership";
 export { leaveServer, type LeaveServerResult } from "./commands/leave-server";
 export { markMemberVisit } from "./commands/mark-member-visit";
