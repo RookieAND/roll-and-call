@@ -39,11 +39,11 @@ export function EbookFields({ idPrefix, sellers, draft, onChange }: EbookFieldsP
         )}
       </Field.Root>
       <HStack gap="100" className="[&>*]:min-w-0 [&>*]:flex-1">
-        <Field.Root label="주문번호 (선택)" htmlFor={`${idPrefix}-order-number`}>
+        <Field.Root label="주문번호" htmlFor={`${idPrefix}-order-number`} required>
           <TextInput
             id={`${idPrefix}-order-number`}
             maxLength={100}
-            placeholder="영수증에 있으면"
+            placeholder="영수증의 주문번호"
             value={draft.orderNumber}
             onChange={(event) => onChange({ orderNumber: event.target.value })}
           />

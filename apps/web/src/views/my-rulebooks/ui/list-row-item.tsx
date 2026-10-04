@@ -52,6 +52,11 @@ export function ListRowItem({ row }: ListRowItemProps) {
             {row.sub}
           </Text>
         )}
+        {row.note && (
+          <Text typography="body4" foreground="muted" className="break-keep">
+            {row.note}
+          </Text>
+        )}
       </VStack>
       {row.badge && (
         <Badge colorPalette={row.badge.palette} className="flex-none">

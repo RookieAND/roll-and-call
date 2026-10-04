@@ -20,6 +20,7 @@ export function toRequestRow(request: Request): ListRow {
       ...base,
       tone: "gray",
       sub: `${toKst(request.processedAt!).format("MM.DD")} 처리`,
+      note: request.rejectReason ?? undefined,
       badge: { label: "추가하지 않음", palette: "gray" },
     };
   }

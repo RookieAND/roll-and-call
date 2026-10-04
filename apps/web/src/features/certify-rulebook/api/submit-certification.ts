@@ -49,13 +49,16 @@ export async function submitCertification({
       return { error: "구매 내역과 영수증을 모두 올려 주세요." };
     if (!entry.seller.trim() || !entry.orderDate.trim())
       return { error: "판매처와 주문일을 적어 주세요." };
+    if (!entry.orderNumber.trim()) return { error: "주문번호를 적어 주세요." };
   }
 
-  const { books, certified, applications, sanction, questions } = await loadCertificationContext({
-    serverId: server.id,
-    userId: user.id,
-    rulebookId: entry.rulebookId,
-  });
+  const { books, certified, applications, sanction, quizQuestion } = await loadCertificationContext(
+    {
+      serverId: server.id,
+      userId: user.id,
+      rulebookId: entry.rulebookId,
+    },
+  );
   if (sanction) return { error: "활동 정지 기간에는 인증을 신청할 수 없습니다." };
 
   const book = books.find((candidate) => candidate.id === entry.rulebookId);
@@ -79,11 +82,10 @@ export async function submitCertification({
     return { error: "같은 판본의 기본 룰북을 먼저 인증해야 합니다." };
   }
 
-  const question = questions.find((candidate) => candidate.id === quiz?.questionId);
-  if (questions.length > 0 && !question) {
+  if (quizQuestion && quizQuestion.id !== quiz?.questionId) {
     return { error: "퀴즈가 바뀌었습니다. 화면을 새로 고쳐 주세요." };
   }
-  if (question && !isQuizAnswer({ answer: quiz!.answer, answers: question.answers })) {
+  if (quizQuestion && !isQuizAnswer({ answer: quiz!.answer, answers: quizQuestion.answers })) {
     return { error: "답이 맞지 않습니다. 책을 다시 확인해 주세요.", field: QUIZ_ANSWER_FIELD };
   }
 
@@ -102,10 +104,10 @@ export async function submitCertification({
       seller: physical ? null : entry.seller.trim().slice(0, 100),
       purchaseCaptureUrl: physical ? null : entry.captureUrl,
       receiptUrl: physical ? null : entry.receiptUrl,
-      orderNumber: physical ? null : entry.orderNumber.trim().slice(0, 100) || null,
+      orderNumber: physical ? null : entry.orderNumber.trim().slice(0, 100),
       orderDate: physical ? null : entry.orderDate.trim().slice(0, 20),
-      quizQuestionId: question?.id ?? null,
-      quizAnswer: question ? quiz!.answer.trim().slice(0, 200) : null,
+      quizQuestionId: quizQuestion?.id ?? null,
+      quizAnswer: quizQuestion ? quiz!.answer.trim().slice(0, 200) : null,
     },
   });
   after(async () => {

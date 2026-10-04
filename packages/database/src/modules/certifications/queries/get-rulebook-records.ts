@@ -2,6 +2,7 @@ import { and, desc, eq, gt, isNull, ne, or, sql } from "drizzle-orm";
 import { compact, uniq } from "es-toolkit";
 
 import { db } from "#/client";
+import { findActiveSanction } from "#/modules/moderation/queries/find-active-sanction";
 import {
   certApplications,
   certifications,
@@ -9,13 +10,12 @@ import {
   rulebookCategories,
   rulebookRequests,
   rulebooks,
-  sanctions,
 } from "#/schema";
 
 const RECENT_DAYS = 90;
 const REQUEST_RESULT_DAYS = 30;
 
-// 거둔 신청은 없던 것으로 본다. 최근 연 구인의 룰북은 신청 추천에, 이미 대기 중인 추가 요청 이름은 중복 요청을 막는 데 쓴다.
+// 거둔 신청과 사용자가 지운 기록은 없던 것으로 본다. 최근 연 구인의 룰북은 신청 추천에, 이미 대기 중인 추가 요청 이름은 중복 요청을 막는 데 쓴다.
 export async function getRulebookRecords({
   serverId,
   userId,
@@ -51,12 +51,11 @@ export async function getRulebookRecords({
       applicationRows: [],
       requestRows: [],
       recentRulebookIds: [] as string[],
-      suspendedUntil: null,
-      suspended: false,
+      sanction: null,
     };
   }
 
-  const [certificationRows, applicationRows, requestRows, recentGames, [sanction]] =
+  const [certificationRows, applicationRows, requestRows, recentGames, sanction] =
     await Promise.all([
       db
         .select({
@@ -66,7 +65,13 @@ export async function getRulebookRecords({
           revokeReason: certifications.revokeReason,
         })
         .from(certifications)
-        .where(and(eq(certifications.serverId, serverId), eq(certifications.userId, userId))),
+        .where(
+          and(
+            eq(certifications.serverId, serverId),
+            eq(certifications.userId, userId),
+            isNull(certifications.discardedAt),
+          ),
+        ),
       db
         .select()
         .from(certApplications)
@@ -75,6 +80,7 @@ export async function getRulebookRecords({
             eq(certApplications.serverId, serverId),
             eq(certApplications.userId, userId),
             ne(certApplications.status, "withdrawn"),
+            isNull(certApplications.discardedAt),
           ),
         )
         .orderBy(desc(certApplications.createdAt)),
@@ -87,6 +93,7 @@ export async function getRulebookRecords({
           createdAt: rulebookRequests.createdAt,
           outcome: rulebookRequests.outcome,
           processedAt: rulebookRequests.processedAt,
+          rejectReason: rulebookRequests.rejectReason,
         })
         .from(rulebookRequests)
         .where(
@@ -114,17 +121,7 @@ export async function getRulebookRecords({
           ),
         )
         .orderBy(desc(games.createdAt)),
-      db
-        .select({ until: sanctions.until })
-        .from(sanctions)
-        .where(
-          and(
-            eq(sanctions.serverId, serverId),
-            eq(sanctions.userId, userId),
-            isNull(sanctions.releasedAt),
-            or(isNull(sanctions.until), gt(sanctions.until, sql`now()`)),
-          ),
-        ),
+      findActiveSanction({ serverId, userId }),
     ]);
   const recentRulebookIds = uniq(compact(recentGames.map((game) => game.rulebookId)));
   return {
@@ -134,8 +131,7 @@ export async function getRulebookRecords({
     applicationRows,
     requestRows,
     recentRulebookIds,
-    suspendedUntil: sanction?.until ?? null,
-    suspended: Boolean(sanction),
+    sanction,
   };
 }
 

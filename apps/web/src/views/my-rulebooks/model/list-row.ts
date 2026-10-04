@@ -7,6 +7,7 @@ export interface ListRow {
   tone: RowTone;
   title: string;
   sub: string;
+  note?: string;
   subTone?: "muted" | "warning" | "primary" | "danger";
   badge?: { label: string; palette: RowTone };
   fresh?: boolean;

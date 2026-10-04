@@ -69,6 +69,8 @@ export const certApplications = pgTable(
     processedAt: timestamp("processed_at", { withTimezone: true }),
     // 보관 기간(결정 뒤 30일)이 지나 사진 칸을 비운 시각
     filesPurgedAt: timestamp("files_purged_at", { withTimezone: true }),
+    // 사용자가 반려 기록을 지운 시각. 사용자 앱에서만 숨기고 어드민 이력에는 남는다
+    discardedAt: timestamp("discarded_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
@@ -97,6 +99,8 @@ export const certifications = pgTable(
     revokedAt: timestamp("revoked_at", { withTimezone: true }),
     revokedBy: uuid("revoked_by").references(() => profiles.id, { onDelete: "set null" }),
     revokeReason: text("revoke_reason"),
+    // 사용자가 반려 기록을 지운 시각. 사용자 앱에서만 숨기고 어드민 이력에는 남는다
+    discardedAt: timestamp("discarded_at", { withTimezone: true }),
   },
   (table) => [
     primaryKey({ columns: [table.serverId, table.userId, table.rulebookId] }),

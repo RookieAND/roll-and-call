@@ -435,6 +435,13 @@
       "when": 1795000000000,
       "tag": "0064_private_cert_photos",
       "breakpoints": true
+    },
+    {
+      "idx": 66,
+      "version": "7",
+      "when": 1795200000000,
+      "tag": "0066_cert_discard",
+      "breakpoints": true
     }
   ]
 }

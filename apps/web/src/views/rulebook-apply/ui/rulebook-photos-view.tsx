@@ -50,11 +50,11 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
     getCertSellers({ serverId: server.id }),
     // 주소의 rulebook 값은 아직 검증 전이라, uuid가 아니면 Postgres 캐스팅 에러 대신 아래 redirect로 보낸다.
     z.uuid().safeParse(rulebookId).success
-      ? getQuizQuestion({ serverId: server.id, rulebookId })
+      ? getQuizQuestion({ serverId: server.id, rulebookId, userId: user.id })
       : null,
   ]);
   const data = toMyRulebooks(records);
-  if (data.suspended) redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
+  if (data.sanction) redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
   const rulebook = data.rulebooks.find((candidate) => candidate.id === rulebookId);
   if (!rulebook || certOption({ rulebook, rulebooks: data.rulebooks }).type !== CERT_OPTION.pick) {
     redirect(serverPath({ slug: server.slug, path: certApplyHref({ rulebookIds: [rulebookId] }) }));

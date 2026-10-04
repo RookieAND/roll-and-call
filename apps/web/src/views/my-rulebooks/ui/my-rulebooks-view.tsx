@@ -42,10 +42,11 @@ export async function MyRulebooksView() {
           {home.suspension && (
             <Callout.Root colorPalette="danger">
               <Callout.Icon />
-              <Callout.Description className="break-keep">
+              <Callout.Title className="break-keep">
                 활동 정지 기간에는 인증을 신청할 수 없습니다.
-                <br />
-                {home.suspension}
+              </Callout.Title>
+              <Callout.Description className="break-keep">
+                <LineBreaks lines={home.suspension} />
               </Callout.Description>
             </Callout.Root>
           )}

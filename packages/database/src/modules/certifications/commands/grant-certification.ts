@@ -49,6 +49,7 @@ export async function grantCertification({
           revokedAt: null,
           revokedBy: null,
           revokeReason: null,
+          discardedAt: null,
         },
         setWhere: isNotNull(certifications.revokedAt),
       })

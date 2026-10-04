@@ -63,6 +63,7 @@ export function toMyRulebooks(records: RulebookRecords) {
     createdAt: request.createdAt,
     outcome: request.outcome,
     processedAt: request.processedAt,
+    rejectReason: request.rejectReason,
   }));
   return {
     rulebooks,
@@ -70,8 +71,7 @@ export function toMyRulebooks(records: RulebookRecords) {
     requests,
     recentRulebookIds: records.recentRulebookIds,
     pendingRequestNames: records.pendingRequestNames.map(rulebookLabel),
-    suspended: records.suspended,
-    suspendedUntil: records.suspendedUntil,
+    sanction: records.sanction,
   };
 }
 

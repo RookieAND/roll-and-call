@@ -29,5 +29,6 @@ export function draftMissing(draft: BookDraft): string | null {
   const seller = draft.seller === OTHER_SELLER ? draft.sellerOther.trim() : draft.seller;
   if (!seller) return "판매처를 골라 주세요";
   if (!draft.orderDate.trim()) return "주문일을 적어 주세요";
+  if (!draft.orderNumber.trim()) return "주문번호를 적어 주세요";
   return null;
 }

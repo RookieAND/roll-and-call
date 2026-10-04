@@ -122,6 +122,7 @@ export async function decideCertApplication({
             revokedAt: null,
             revokedBy: null,
             revokeReason: null,
+            discardedAt: null,
           },
         });
       await recordAudit({

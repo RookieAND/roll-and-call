@@ -27,7 +27,7 @@ export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps)
     );
   }
   const data = toMyRulebooks(await getRulebookRecords({ serverId: server.id, userId: user.id }));
-  if (data.suspended) redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
+  if (data.sanction) redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
   return (
     <>
       <AppBar

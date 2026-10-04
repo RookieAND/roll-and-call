@@ -26,10 +26,13 @@ describe("draftMissing", () => {
     expect(draftMissing(draft({}))).toBeNull();
   });
 
-  it("전자책은 판매처와 주문일이 필요하고 주문번호는 선택이다", () => {
+  it("전자책은 판매처 → 주문일 → 주문번호 순서로 묻는다", () => {
     const ebook = draft({ format: "ebook", proofs: { order: done, receipt: done } });
     expect(draftMissing(ebook)).toBe("판매처를 골라 주세요");
     expect(draftMissing({ ...ebook, seller: "리디" })).toBe("주문일을 적어 주세요");
-    expect(draftMissing({ ...ebook, seller: "리디", orderDate: "2026.09.12" })).toBeNull();
+    const dated = { ...ebook, seller: "리디", orderDate: "2026.09.12" };
+    expect(draftMissing(dated)).toBe("주문번호를 적어 주세요");
+    expect(draftMissing({ ...dated, orderNumber: "  " })).toBe("주문번호를 적어 주세요");
+    expect(draftMissing({ ...dated, orderNumber: "A-1" })).toBeNull();
   });
 });

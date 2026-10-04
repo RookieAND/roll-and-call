@@ -1,15 +1,11 @@
-import { and, desc, eq, isNull, ne, or, sql } from "drizzle-orm";
+import { and, desc, eq, isNull, ne } from "drizzle-orm";
 
 import { db } from "#/client";
-import {
-  certApplications,
-  certifications,
-  rulebookQuizQuestions,
-  rulebooks,
-  sanctions,
-} from "#/schema";
+import { findActiveSanction } from "#/modules/moderation/queries/find-active-sanction";
+import { findAssignedQuizQuestion } from "#/modules/rulebooks/queries/find-assigned-quiz-question";
+import { certApplications, certifications, rulebooks } from "#/schema";
 
-// 인증 신청을 받을지 가르는 데 필요한 것을 한 번에 읽는다.
+// 인증 신청을 받을지 가르는 데 필요한 것을 한 번에 읽는다. 사용자가 지운 기록은 없던 것으로 본다.
 export async function loadCertificationContext({
   serverId,
   userId,
@@ -19,7 +15,7 @@ export async function loadCertificationContext({
   userId: string;
   rulebookId: string;
 }) {
-  const [books, certified, applications, [sanction], questions] = await Promise.all([
+  const [books, certified, applications, sanction, quizQuestion] = await Promise.all([
     db
       .select({
         id: rulebooks.id,
@@ -40,6 +36,7 @@ export async function loadCertificationContext({
           eq(certifications.serverId, serverId),
           eq(certifications.userId, userId),
           isNull(certifications.revokedAt),
+          isNull(certifications.discardedAt),
         ),
       ),
     db
@@ -54,30 +51,12 @@ export async function loadCertificationContext({
           eq(certApplications.serverId, serverId),
           eq(certApplications.userId, userId),
           ne(certApplications.status, "withdrawn"),
+          isNull(certApplications.discardedAt),
         ),
       )
       .orderBy(desc(certApplications.createdAt)),
-    db
-      .select({ id: sanctions.id })
-      .from(sanctions)
-      .where(
-        and(
-          eq(sanctions.serverId, serverId),
-          eq(sanctions.userId, userId),
-          isNull(sanctions.releasedAt),
-          or(isNull(sanctions.until), sql`${sanctions.until} > now()`),
-        ),
-      ),
-    db
-      .select({ id: rulebookQuizQuestions.id, answers: rulebookQuizQuestions.answers })
-      .from(rulebookQuizQuestions)
-      .where(
-        and(
-          eq(rulebookQuizQuestions.serverId, serverId),
-          eq(rulebookQuizQuestions.rulebookId, rulebookId),
-          eq(rulebookQuizQuestions.active, true),
-        ),
-      ),
+    findActiveSanction({ serverId, userId }),
+    findAssignedQuizQuestion({ serverId, rulebookId, userId }),
   ]);
-  return { books, certified, applications, sanction, questions };
+  return { books, certified, applications, sanction, quizQuestion };
 }

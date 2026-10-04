@@ -1,9 +1,9 @@
 import { uniq } from "es-toolkit";
 
 import { CERT_STATE, certApplyHref, setStatus, type MyRulebooks } from "@/entities/rulebook";
+import { sanctionLines } from "@/entities/sanction";
 
 import { recentUnopenedSets } from "./recent-unopened-sets";
-import { suspensionNotice } from "./suspension-notice";
 import { toOwnedCategory } from "./to-owned-category";
 import { toRequestRow } from "./to-request-row";
 import { toStatusRow } from "./to-status-row";
@@ -12,7 +12,7 @@ const STATUS_ORDER = [CERT_STATE.rejected, CERT_STATE.revoked, CERT_STATE.pendin
 const STATUS_WORD = { rejected: "반려", revoked: "취소", pending: "심사 중" } as const;
 
 export function myRulebooksHome(data: MyRulebooks, now: Date) {
-  const { rulebooks, sets, suspended, suspendedUntil } = data;
+  const { rulebooks, sets, sanction } = data;
   const inStatus = STATUS_ORDER.map((state) =>
     rulebooks.filter((rulebook) => rulebook.state === state && !rulebook.unlockedBy),
   );
@@ -27,7 +27,7 @@ export function myRulebooksHome(data: MyRulebooks, now: Date) {
   const requests = data.requests.map(toRequestRow);
   const [suggested] = recentUnopenedSets(data);
   return {
-    suspension: suspensionNotice({ suspended, suspendedUntil }),
+    suspension: sanction ? sanctionLines(sanction) : null,
     statusRows,
     statusSummary,
     owned,
