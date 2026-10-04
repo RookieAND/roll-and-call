@@ -1,48 +1,11 @@
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { HStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
-import {
-  Check,
-  ChevronRight,
-  ClipboardCheck,
-  Clock,
-  MessageSquareText,
-  Pencil,
-  Users,
-} from "lucide-react";
 
-import { IconTile, ServerLink } from "@/shared/ui";
+import { ServerLink } from "@/shared/ui";
 
-import type { ManageRow as Row } from "../model/manage-row-state";
-
-const ICONS = {
-  clipboard: ClipboardCheck,
-  message: MessageSquareText,
-  clock: Clock,
-  check: Check,
-  users: Users,
-  pencil: Pencil,
-};
-
-const ICON_TONE = {
-  open: "primary",
-  blocked: "urgent",
-  done: "success",
-  locked: "locked",
-} as const;
-
-const LABEL_FOREGROUND = {
-  open: "normal",
-  blocked: "danger",
-  done: "normal",
-  locked: "hint",
-} as const;
-
-const DETAIL_FOREGROUND = {
-  open: "muted",
-  blocked: "danger",
-  done: "muted",
-  locked: "hint",
-} as const;
+import { MANAGE_ROW_ACTION, type ManageRow as Row } from "../model/manage-row-state";
+import { AttendanceRowButton } from "./attendance-row-button";
+import { ManageRowContent } from "./manage-row-content";
 
 const manageRow = cva("min-h-16 px-175 py-150", {
   variants: {
@@ -53,9 +16,19 @@ const manageRow = cva("min-h-16 px-175 py-150", {
 
 interface ManageRowProps {
   row: Row;
+  gameId: string;
+  plannedEndAt: Date | null;
 }
 
-export function ManageRow({ row }: ManageRowProps) {
+export function ManageRow({ row, gameId, plannedEndAt }: ManageRowProps) {
+  if (row.action === MANAGE_ROW_ACTION.endSession && plannedEndAt) {
+    return (
+      <AttendanceRowButton gameId={gameId} plannedEndAt={plannedEndAt}>
+        <ManageRowContent row={row} chevron />
+      </AttendanceRowButton>
+    );
+  }
+
   const container = row.href ? <ServerLink path={row.href} /> : <div />;
 
   return (
@@ -65,16 +38,7 @@ export function ManageRow({ row }: ManageRowProps) {
       render={container}
       className={manageRow({ interactive: Boolean(row.href), blocked: row.state === "blocked" })}
     >
-      <IconTile icon={ICONS[row.icon]} tone={ICON_TONE[row.state]} />
-      <VStack gap="025" className="min-w-0 flex-1">
-        <Text typography="subtitle1" foreground={LABEL_FOREGROUND[row.state]}>
-          {row.label}
-        </Text>
-        <Text typography="body4" foreground={DETAIL_FOREGROUND[row.state]}>
-          {row.detail}
-        </Text>
-      </VStack>
-      {row.href && <ChevronRight size={17} className="flex-none text-hint" aria-hidden />}
+      <ManageRowContent row={row} chevron={Boolean(row.href)} />
     </HStack>
   );
 }

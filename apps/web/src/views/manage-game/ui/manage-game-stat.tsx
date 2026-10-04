@@ -17,7 +17,7 @@ export function ManageGameStat({ stat }: ManageGameStatProps) {
         typography="body3"
         weight="extrabold"
         foreground={stat.danger ? "danger" : "normal"}
-        className="whitespace-nowrap"
+        className={stat.wrap ? "break-keep" : "whitespace-nowrap"}
       >
         {stat.value}
       </Text>

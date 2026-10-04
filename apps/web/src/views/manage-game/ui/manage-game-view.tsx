@@ -1,7 +1,15 @@
 import { Badge, Card, Container, HStack, Text } from "@roll-and-call/ui";
+import { isNil } from "es-toolkit";
 import { notFound } from "next/navigation";
 
-import { GAME_CANCEL_KIND, gameCancelledRecipients, isSessionStarted } from "@/entities/game";
+import {
+  GAME_CANCEL_KIND,
+  gameCancelledRecipients,
+  isSessionEnded,
+  MANAGE_STAGE_LABEL,
+  MANAGE_STAGE_TONE,
+  plannedEndAt,
+} from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { CancelGameRow } from "@/features/cancel-game";
 import {
@@ -13,8 +21,10 @@ import {
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
+import { cancelRowLock } from "../model/cancel-row-lock";
 import { manageRows } from "../model/manage-rows";
 import { manageSummary } from "../model/manage-summary";
+import { ManageCancelNote } from "./manage-cancel-note";
 import { ManageGameStat } from "./manage-game-stat";
 import { ManageRow } from "./manage-row";
 
@@ -49,7 +59,8 @@ export async function ManageGameView({ id }: { id: string }) {
     kind: GAME_CANCEL_KIND.gm,
     roster: game.participants,
   }).length;
-  const { stage, stats } = manageSummary({ game, responses });
+  const { stage, stats, cancelNote } = manageSummary({ game, responses });
+  const showNextSessionHint = isNil(game.cancelledAt) && isSessionEnded(game);
   const rows = manageRows({ game, reviewCount: reviews.length });
 
   return (
@@ -67,12 +78,14 @@ export async function ManageGameView({ id }: { id: string }) {
               >
                 {game.title}
               </Text>
-              <Badge colorPalette="gray">{stage}</Badge>
+              <Badge colorPalette={MANAGE_STAGE_TONE[stage]}>{MANAGE_STAGE_LABEL[stage]}</Badge>
             </HStack>
             <HStack align="stretch" className="mt-150 border-t border-gray-200 pt-150">
-              {stats.map((stat) => (
-                <ManageGameStat key={stat.label} stat={stat} />
-              ))}
+              {isNil(cancelNote) ? (
+                stats.map((stat) => <ManageGameStat key={stat.label} stat={stat} />)
+              ) : (
+                <ManageCancelNote note={cancelNote} />
+              )}
             </HStack>
           </Card.Root>
         </div>
@@ -84,14 +97,19 @@ export async function ManageGameView({ id }: { id: string }) {
             className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
           >
             {rows.map((row) => (
-              <ManageRow key={row.key} row={row} />
+              <ManageRow key={row.key} row={row} gameId={id} plannedEndAt={plannedEndAt(game)} />
             ))}
             <CancelGameRow
               gameId={id}
               notifyCount={notifyCount}
-              lockedReason={isSessionStarted(game) ? "시작한 세션은 취소할 수 없습니다" : undefined}
+              lockedReason={cancelRowLock({ game })}
             />
           </Card.Root>
+          {showNextSessionHint && (
+            <Text typography="body4" foreground="hint" className="mt-150 px-100">
+              다음 세션은 새 구인을 열고 참여자로 확정해 초대해 주세요
+            </Text>
+          )}
         </div>
       </Container>
     </>

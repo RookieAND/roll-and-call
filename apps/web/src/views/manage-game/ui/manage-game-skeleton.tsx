@@ -1,4 +1,4 @@
-import { Badge, Card, Container, HStack, Skeleton } from "@roll-and-call/ui";
+import { Card, Container, HStack, Skeleton } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
 
 import { AppBar } from "@/shared/ui";
@@ -9,15 +9,7 @@ const ROW_COUNT = 6;
 export function ManageGameSkeleton() {
   return (
     <>
-      <AppBar
-        back="/games"
-        title="운영 관리"
-        action={
-          <Badge colorPalette="primary" className="mr-100">
-            GM
-          </Badge>
-        }
-      />
+      <AppBar back="/games" title="운영 관리" />
       <Container size="sm" className="px-0">
         <div className="border-b border-gray-100 px-200 pt-225 pb-175">
           <HStack align="start" gap="125">

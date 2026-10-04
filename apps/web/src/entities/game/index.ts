@@ -70,6 +70,12 @@ export {
 export { calendarViewerRole } from "./model/calendar-viewer-role";
 export { canViewHiddenGame } from "./model/can-view-hidden-game";
 export {
+  MANAGE_STAGE,
+  MANAGE_STAGE_LABEL,
+  MANAGE_STAGE_TONE,
+  type ManageStage,
+} from "./model/manage-stage";
+export {
   GAME_CANCEL_KIND,
   gameCancelledRecipients,
   type GameCancelKind,
