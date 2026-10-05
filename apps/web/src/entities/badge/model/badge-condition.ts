@@ -30,6 +30,8 @@ export function badgeCondition({
       return `${categoryName} 세션에 ${count}회 참석하면 받습니다.`;
     case BADGE_LADDER.gmRule:
       return `${categoryName} 세션을 ${count}회 진행하면 받습니다.`;
+    case BADGE_LADDER.playerVariety:
+      return `서로 다른 룰을 ${count}종 참석하면 받습니다.\n판본만 다른 같은 룰은 1종으로 셉니다.`;
     case BADGE_LADDER.gmVariety:
       return `서로 다른 룰을 ${count}종 진행하면 받습니다.\n판본만 다른 같은 룰은 1종으로 셉니다.`;
     case BADGE_LADDER.playerReviews:

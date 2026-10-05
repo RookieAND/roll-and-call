@@ -33,6 +33,7 @@ export function nextBadgeGoal(counts: BadgeCounts) {
       count: rule.count,
       categoryName: rule.categoryName,
     })),
+    { ladder: BADGE_LADDER.playerVariety, count: counts.playerVariety, categoryName: null },
     { ladder: BADGE_LADDER.gmVariety, count: counts.gmVariety, categoryName: null },
   ];
 

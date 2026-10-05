@@ -5,6 +5,7 @@ export const SPECIAL_GROUP_KEY = "special";
 export const FEATURED_GROUP_META: Record<string, { emoji: string; title: string }> = {
   [BADGE_LADDER.playerTotal]: { emoji: "📅", title: "누적 참여" },
   [BADGE_LADDER.playerRule]: { emoji: "🎲", title: "룰별 참여" },
+  [BADGE_LADDER.playerVariety]: { emoji: "🧭", title: "다양한 룰 참여" },
   [BADGE_LADDER.playerReviews]: { emoji: "✏️", title: "후기 작성" },
   [BADGE_LADDER.playerMonthly]: { emoji: "🎖️", title: "이달의 PL" },
   [BADGE_LADDER.gmTotal]: { emoji: "📅", title: "누적 운영" },

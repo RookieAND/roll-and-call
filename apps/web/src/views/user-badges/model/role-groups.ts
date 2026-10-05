@@ -29,6 +29,7 @@ const GROUPS = {
   [BADGE_TAB.player]: [
     { title: "누적", matches: ladderIs(BADGE_LADDER.playerTotal) },
     { title: "룰별", matches: ladderIs(BADGE_LADDER.playerRule) },
+    { title: "다양한 룰 참여", matches: ladderIs(BADGE_LADDER.playerVariety) },
     { title: "후기", matches: ladderIs(BADGE_LADDER.playerReviews) },
   ],
   [BADGE_TAB.special]: [

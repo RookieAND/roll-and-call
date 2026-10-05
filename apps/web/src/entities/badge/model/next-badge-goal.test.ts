@@ -7,6 +7,7 @@ const counts = (overrides: Partial<BadgeCounts>): BadgeCounts => ({
   playerTotal: 0,
   gmTotal: 0,
   playerRules: [],
+  playerVariety: 0,
   gmRules: [],
   gmVariety: 0,
   playerReviews: 0,
@@ -15,6 +16,17 @@ const counts = (overrides: Partial<BadgeCounts>): BadgeCounts => ({
 });
 
 describe("nextBadgeGoal", () => {
+  it("PL 다양한 룰 참여도 후보이고 서로 다른 룰 3종이면 여행가가 60퍼센트다", () => {
+    const goal = nextBadgeGoal(counts({ playerVariety: 3 }));
+    expect(goal).toMatchObject({
+      emoji: "🧭",
+      name: "여행가",
+      count: 3,
+      threshold: 5,
+      remaining: 2,
+    });
+  });
+
   it("진행 비율이 가장 높은 단계형을 고른다", () => {
     const goal = nextBadgeGoal(
       counts({

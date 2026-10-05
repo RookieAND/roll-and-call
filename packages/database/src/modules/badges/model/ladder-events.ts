@@ -49,6 +49,8 @@ export function ladderEvents({
       return toEvents(played.filter((session) => session.categoryId === subject));
     case BADGE_LADDER.gmRule:
       return toEvents(hosted.filter((session) => session.categoryId === subject));
+    case BADGE_LADDER.playerVariety:
+      return toEvents(firstOfEachCategory(played));
     case BADGE_LADDER.gmVariety:
       return toEvents(firstOfEachCategory(hosted));
     case BADGE_LADDER.gmReviews:

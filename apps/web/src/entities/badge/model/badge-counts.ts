@@ -18,11 +18,13 @@ function countByRule(sessions: BadgeSession[]): RuleCount[] {
 
 // 진행도를 그릴 때 쓰는 횟수. 판정(computeBadges)과 같은 인정 세션을 센다.
 export function badgeCounts({ played, hosted, reviews, written }: BadgeFacts) {
+  const playerRules = countByRule(played);
   const hostedRules = countByRule(hosted);
   return {
     playerTotal: played.length,
     gmTotal: hosted.length,
-    playerRules: countByRule(played),
+    playerRules,
+    playerVariety: playerRules.length,
     playerReviews: written.length,
     gmRules: hostedRules,
     gmVariety: hostedRules.length,

@@ -23,6 +23,8 @@ export function badgeRequirement({
       return `${categoryName} 세션 ${count}회 참석`;
     case BADGE_LADDER.gmRule:
       return `${categoryName} 세션 ${count}회 진행`;
+    case BADGE_LADDER.playerVariety:
+      return `서로 다른 룰 ${count}종 참석`;
     case BADGE_LADDER.gmVariety:
       return `서로 다른 룰 ${count}종`;
     case BADGE_LADDER.playerReviews:

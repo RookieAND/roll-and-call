@@ -16,6 +16,7 @@ const HIDDEN_META = Object.fromEntries(
 export const LADDER_META: Record<BadgeLadderKey, LadderMeta> = {
   [BADGE_LADDER.playerTotal]: { title: "누적 참여", unit: "회", verb: "참석" },
   [BADGE_LADDER.playerRule]: { title: "룰별 참여", unit: "회", verb: "참석" },
+  [BADGE_LADDER.playerVariety]: { title: "다양한 룰 참여", unit: "종", verb: "참석" },
   [BADGE_LADDER.playerReviews]: { title: "작성한 후기", unit: "건", verb: "작성" },
   [BADGE_LADDER.playerMonthly]: { title: "이달의 PL", unit: "회", verb: "참여" },
   [BADGE_LADDER.gmTotal]: { title: "누적 운영", unit: "회", verb: "진행" },

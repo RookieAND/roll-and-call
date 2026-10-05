@@ -36,6 +36,8 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
   const totalCount = gm ? counts.gmTotal : counts.playerTotal;
   const reviewLadder = gm ? BADGE_LADDER.gmReviews : BADGE_LADDER.playerReviews;
   const reviewCount = gm ? counts.gmReviews : counts.playerReviews;
+  const varietyLadder = gm ? BADGE_LADDER.gmVariety : BADGE_LADDER.playerVariety;
+  const varietyCount = gm ? counts.gmVariety : counts.playerVariety;
   const events = (ladder: BadgeLadderKey) => ladderEvents({ facts, ladder });
 
   return {
@@ -59,19 +61,17 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
         recordsByKey,
       }),
     },
-    variety: gm
-      ? {
-          title: "다양한 룰 운영",
-          hint: `진행한 룰 ${counts.gmVariety}종`,
-          note: "판본만 다른 같은 룰은 1종으로 셉니다",
-          medals: ladderMedals({
-            ladder: BADGE_LADDER.gmVariety,
-            events: events(BADGE_LADDER.gmVariety),
-            record: recordsByKey.get(BADGE_LADDER.gmVariety),
-          }),
-          next: ladderNext({ ladder: BADGE_LADDER.gmVariety, count: counts.gmVariety }),
-        }
-      : null,
+    variety: {
+      title: gm ? "다양한 룰 운영" : "다양한 룰 참여",
+      hint: gm ? `진행한 룰 ${counts.gmVariety}종` : `참석한 룰 ${counts.playerVariety}종`,
+      note: "판본만 다른 같은 룰은 1종으로 셉니다",
+      medals: ladderMedals({
+        ladder: varietyLadder,
+        events: events(varietyLadder),
+        record: recordsByKey.get(varietyLadder),
+      }),
+      next: ladderNext({ ladder: varietyLadder, count: varietyCount }),
+    },
     reviews: {
       title: gm ? "받은 후기" : "작성한 후기",
       hint: `${reviewCount}건 ${gm ? "받음" : "작성"}`,

@@ -96,6 +96,19 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     granted: false,
     steps: RULE_GM_STEPS,
   },
+  [BADGE_LADDER.playerVariety]: {
+    role: BADGE_ROLE.player,
+    perRule: false,
+    monthly: false,
+    granted: false,
+    steps: [
+      { threshold: 3, emoji: "🧳", name: "나그네", grade: 1 },
+      { threshold: 5, emoji: "🧭", name: "여행가", grade: 2 },
+      { threshold: 7, emoji: "🌍", name: "세계 일주", grade: 3 },
+      { threshold: 10, emoji: "🚀", name: "우주 여행", grade: 4 },
+      { threshold: 15, emoji: "🌌", name: "은하 횡단", grade: 5 },
+    ],
+  },
   [BADGE_LADDER.gmVariety]: {
     role: BADGE_ROLE.gm,
     perRule: false,

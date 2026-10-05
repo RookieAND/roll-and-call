@@ -54,6 +54,44 @@ describe("computeBadges", () => {
     const variety = badges.find((badge) => badge.badgeKey === "gm.variety")!;
     expect(variety).toMatchObject({ tier: 1, sourceGameId: "g3" });
   });
+
+  it("PL 다양한 룰 참여는 서로 다른 룰 3·5·7·10·15종이 각 1~5단계다", () => {
+    const tierAt = (kinds: number) => {
+      const played = Array.from({ length: kinds }, (_, index) => session(index, `rule${index}`));
+      return computeBadges(facts({ played })).find((badge) => badge.badgeKey === "pl.variety")
+        ?.tier;
+    };
+    expect([2, 3, 4, 5, 6, 7, 9, 10, 14, 15].map(tierAt)).toEqual([
+      undefined,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      4,
+      4,
+      5,
+    ]);
+  });
+
+  it("PL 다양한 룰 참여는 같은 룰 여러 번을 1종으로, 룰북 없는 세션은 0종으로 센다", () => {
+    const sameRule = computeBadges(facts({ played: sessions(10) }));
+    expect(sameRule.some((badge) => badge.badgeKey === "pl.variety")).toBe(false);
+    const noRulebook = computeBadges(facts({ played: sessions(5, null) }));
+    expect(noRulebook.some((badge) => badge.badgeKey === "pl.variety")).toBe(false);
+  });
+
+  it("PL 다양한 룰 참여는 진행(GM) 세션을 세지 않고 획득 시각은 3번째 새 룰의 종료 시각이다", () => {
+    const rules = ["a", "b", "b", "c", "d"].map((category, index) => session(index, category));
+    const asGm = computeBadges(facts({ hosted: rules }));
+    expect(asGm.some((badge) => badge.badgeKey === "pl.variety")).toBe(false);
+    const asPlayer = computeBadges(facts({ played: rules }));
+    expect(asPlayer.find((badge) => badge.badgeKey === "pl.variety")).toMatchObject({
+      tier: 1,
+      sourceGameId: "g3",
+    });
+  });
 });
 
 describe("diffBadges", () => {
