@@ -1,10 +1,9 @@
 "use client";
 
-import { Button, IconButton, Popover, Tooltip, VStack } from "@roll-and-call/ui";
-import { Ellipsis, RotateCcw, ScrollText, Search } from "lucide-react";
-import { useState } from "react";
+import { IconButton, Tooltip } from "@roll-and-call/ui";
+import { RotateCcw, ScrollText, Search } from "lucide-react";
 
-import { ServerLink } from "@/shared/ui";
+import { MoreMenu, ServerLink } from "@/shared/ui";
 
 import { CERT_ROW_ACTION, type CertRowActionLink } from "../model/cert-row-action";
 
@@ -21,7 +20,6 @@ interface CertRowMenuProps {
 
 // 동작이 하나뿐이면(반려됨) 메뉴 대신 아이콘 버튼 + 툴팁이다(D293).
 export function CertRowMenu({ label, actions }: CertRowMenuProps) {
-  const [open, setOpen] = useState(false);
   const [only] = actions;
   if (actions.length === 1 && only) {
     const { label: actionLabel, Icon } = ACTION_VIEW[only.action];
@@ -39,33 +37,13 @@ export function CertRowMenu({ label, actions }: CertRowMenuProps) {
     );
   }
   return (
-    <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger
-        render={<IconButton variant="outline" size="sm" aria-label={`${label} 더 보기`} />}
-      >
-        <Ellipsis size={16} aria-hidden />
-      </Popover.Trigger>
-      <Popover.Popup align="end" className="w-[190px] p-075">
-        <VStack>
-          {actions.map(({ action, href }) => {
-            const { label: actionLabel, Icon, danger } = ACTION_VIEW[action];
-            return (
-              <Button
-                key={action}
-                variant="ghost"
-                colorPalette={danger ? "danger" : "gray"}
-                size="sm"
-                render={<ServerLink path={href} scroll={false} />}
-                onClick={() => setOpen(false)}
-                className="justify-start gap-100"
-              >
-                <Icon size={16} aria-hidden />
-                {actionLabel}
-              </Button>
-            );
-          })}
-        </VStack>
-      </Popover.Popup>
-    </Popover.Root>
+    <MoreMenu
+      label={`${label} 더 보기`}
+      widthClassName="w-[190px]"
+      items={actions.map(({ action, href }) => {
+        const { label: actionLabel, Icon, danger } = ACTION_VIEW[action];
+        return { label: actionLabel, icon: Icon, href, scroll: false, danger };
+      })}
+    />
   );
 }
