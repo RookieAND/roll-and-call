@@ -52,9 +52,12 @@ export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
           </HStack>
         )}
         {!goal && heldCount === 0 && (
-          <Text typography="body3" foreground="muted" className="p-175 break-keep">
-            첫 세션에 참석해 🎲 첫 주사위를 받아 보세요
-          </Text>
+          <HStack align="center" gap="150" className="p-175">
+            <BadgeMedal emoji="🎲" look={1} size="sm" locked />
+            <Text typography="body3" foreground="muted" className="min-w-0 flex-1 break-keep">
+              첫 세션에 참석해 첫 주사위를 받아 보세요
+            </Text>
+          </HStack>
         )}
         <Button
           render={<ServerLink path={"/me/badges"} />}
