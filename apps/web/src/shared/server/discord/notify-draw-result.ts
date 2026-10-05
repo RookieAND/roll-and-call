@@ -3,7 +3,7 @@ import { getGameForDrawNotice } from "@roll-and-call/database/games";
 import { compareWaitlistOrder, PARTICIPANT_STATUS } from "@roll-and-call/database/games/model";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import { gameUrl } from "@roll-and-call/game-notices";
-import { gameNoticeEmbed } from "@roll-and-call/game-notices";
+import { gameHeadValues, gameNoticeEmbed, messageHeadInput } from "@roll-and-call/game-notices";
 
 // 추첨 명령이 커밋된 뒤 부른다(GM 버튼, 마감 크론 모두). 링크는 각자 자기 값을 보는 결과 페이지로 보낸다.
 // 떨어진 사람도 알아야 다른 판을 잡으므로 확정·대기를 한 글에 같이 적는다.
@@ -44,6 +44,11 @@ export async function notifyDrawResult({ server, gameId }: { server: Server; gam
     channelId: game.discordThreadId,
     input: {
       embeds: [embed],
+      ...(await messageHeadInput({
+        serverId: server.id,
+        key: "draw",
+        values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+      })),
       buttons: drawUrl ? [{ label: "🎲 추첨 결과 보기", url: drawUrl }] : [],
     },
   });

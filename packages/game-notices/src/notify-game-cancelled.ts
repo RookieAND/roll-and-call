@@ -12,6 +12,7 @@ import {
 
 import { cancelDescription } from "./cancel-description";
 import { gameNoticeEmbed } from "./game-notice-embed";
+import { gameHeadValues, messageHeadInput } from "./message-head-input";
 import { recruitEmbed } from "./recruit-embed";
 
 // 취소한 행으로 부른다. 모집 공지는 취소한 때 인원 그대로 빨갛게 고쳐 남기고, 스레드에는 취소를 알린다.
@@ -39,6 +40,11 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
     sendDiscordMessage({
       channelId: game.discordThreadId,
       input: {
+        ...(await messageHeadInput({
+          serverId: server.id,
+          key: "cancel",
+          values: gameHeadValues({ server, game, gmName }),
+        })),
         embeds: [
           gameNoticeEmbed({
             slug: server.slug,

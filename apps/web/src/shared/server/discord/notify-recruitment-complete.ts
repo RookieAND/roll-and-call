@@ -1,7 +1,7 @@
 import type { Game } from "@roll-and-call/database";
 import type { Server } from "@roll-and-call/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-import { gameNoticeEmbed } from "@roll-and-call/game-notices";
+import { gameHeadValues, gameNoticeEmbed, messageHeadInput } from "@roll-and-call/game-notices";
 import { headcountFields } from "@roll-and-call/game-notices";
 
 import { formatGameSchedule } from "@/shared/lib";
@@ -41,5 +41,19 @@ export async function notifyRecruitmentComplete({
     ],
   });
 
-  await sendDiscordMessage({ channelId: server.closedChannelId, input: { embeds: [embed] } });
+  await sendDiscordMessage({
+    channelId: server.closedChannelId,
+    input: {
+      embeds: [embed],
+      ...(await messageHeadInput({
+        serverId: server.id,
+        key: "done",
+        values: {
+          ...gameHeadValues({ server, game, gmName }),
+          "참여자 멘션": playerLabels.join(" "),
+        },
+        userMentions: players.flatMap((player) => player.discordId ?? []),
+      })),
+    },
+  });
 }

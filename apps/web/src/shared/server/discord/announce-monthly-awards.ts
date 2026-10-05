@@ -6,6 +6,7 @@ import {
 } from "@roll-and-call/database/badges/model";
 import { claimMonthlyAnnouncement, listServers } from "@roll-and-call/database/servers";
 import { sendDiscordMessage } from "@roll-and-call/discord";
+import { messageHeadInput } from "@roll-and-call/game-notices";
 
 import { serverPath } from "@/shared/lib";
 
@@ -32,14 +33,20 @@ export async function announceMonthlyAwards({ now }: { now: Date }): Promise<num
     const { gm, pl } = await loadMonthlyWinners({ serverId: server.id, month });
     if (gm.length === 0 && pl.length === 0) continue;
     if (!(await claimMonthlyAnnouncement({ serverId: server.id, month }))) continue;
-    const content = monthlyAnnouncementText({
+    const body = monthlyAnnouncementText({
       month,
       gm,
       pl,
       profileUrl: (userId) =>
         `${origin}${serverPath({ slug: server.slug, path: `/users/${userId}` })}`,
     });
-    await sendDiscordMessage({ channelId: server.announceChannelId, input: { content } });
+    const input = await messageHeadInput({
+      serverId: server.id,
+      key: "monthly",
+      values: { 달: `${Number(month.slice(5))}월` },
+      after: body,
+    });
+    await sendDiscordMessage({ channelId: server.announceChannelId, input });
     announced += 1;
   }
   return announced;

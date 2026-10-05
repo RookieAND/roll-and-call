@@ -7,6 +7,7 @@ import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 import { leftNoticeText } from "./left-notice-text";
+import { gameHeadValues, messageHeadInput } from "./message-head-input";
 
 // 삭제 후에 불러야 현재 인원이 맞다. leftServer는 디스코드 서버를 나가 자동으로 빠진 경우다.
 export async function notifyGameLeft({
@@ -43,5 +44,15 @@ export async function notifyGameLeft({
     }),
   });
 
-  await sendDiscordMessage({ channelId: game.discordThreadId, input: { embeds: [embed] } });
+  await sendDiscordMessage({
+    channelId: game.discordThreadId,
+    input: {
+      embeds: [embed],
+      ...(await messageHeadInput({
+        serverId: server.id,
+        key: "leave",
+        values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+      })),
+    },
+  });
 }

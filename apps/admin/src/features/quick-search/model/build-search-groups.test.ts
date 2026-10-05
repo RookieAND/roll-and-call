@@ -40,9 +40,8 @@ describe("buildSearchGroups", () => {
     expect(actions?.items.at(-1)).toMatchObject({ title: "유저 상세 열기", href: "/users/1" });
   });
 
-  it("화면 이동은 소유자 전용 메뉴를 거르고 후기 메뉴를 찾는다", () => {
-    expect(buildSearchGroups({ query: "설정", users: [], owner: false })).toEqual([]);
-    expect(buildSearchGroups({ query: "설정", users: [], owner: true })).toHaveLength(1);
+  it("설정은 운영진도 찾고(디스코드 메시지를 읽는다) 후기 메뉴를 찾는다", () => {
+    expect(buildSearchGroups({ query: "설정", users: [], owner: false })).toHaveLength(1);
     const [screens] = buildSearchGroups({ query: "후기", users: [], owner: false });
     expect(screens?.items.map((item) => item.href)).toEqual(["/reviews"]);
   });

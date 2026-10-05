@@ -21,7 +21,7 @@ export const NAV_ITEMS = [
   { key: "noshow", label: "불참 기록", href: "/noshow", icon: Flag },
   { key: "analytics", label: "분석", href: "/analytics", icon: ChartColumn },
   { key: "log", label: "활동 기록", href: "/log", icon: ScrollText },
-  { key: "settings", label: "설정", href: "/settings", icon: Settings, ownerOnly: true },
+  { key: "settings", label: "설정", href: "/settings", icon: Settings },
 ] as const;
 
 export type NavKey = (typeof NAV_ITEMS)[number]["key"];

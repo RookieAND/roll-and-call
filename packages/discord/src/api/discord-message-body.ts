@@ -8,6 +8,7 @@ export function discordMessageBody({
   embeds,
   buttons,
   userMentions = [],
+  roleMentions = [],
 }: DiscordMessageInput) {
   const buttonRow = {
     type: COMPONENT_TYPE.actionRow,
@@ -19,5 +20,10 @@ export function discordMessageBody({
     })),
   };
   const components = buttons && (buttons.length > 0 ? [buttonRow] : []);
-  return { content, embeds, components, allowed_mentions: { parse: [], users: userMentions } };
+  return {
+    content,
+    embeds,
+    components,
+    allowed_mentions: { parse: [], users: userMentions, roles: roleMentions },
+  };
 }

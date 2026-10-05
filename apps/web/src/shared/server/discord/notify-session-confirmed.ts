@@ -2,7 +2,7 @@ import { type Server } from "@roll-and-call/database";
 import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed, countWaiting } from "@roll-and-call/database/games/model";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-import { gameNoticeEmbed } from "@roll-and-call/game-notices";
+import { gameHeadValues, gameNoticeEmbed, messageHeadInput } from "@roll-and-call/game-notices";
 import { headcountFields } from "@roll-and-call/game-notices";
 
 import { formatDateTime } from "@/shared/lib";
@@ -43,5 +43,15 @@ export async function notifySessionConfirmed({
     fields,
   });
 
-  await sendDiscordMessage({ channelId: game.discordThreadId, input: { embeds: [embed] } });
+  await sendDiscordMessage({
+    channelId: game.discordThreadId,
+    input: {
+      embeds: [embed],
+      ...(await messageHeadInput({
+        serverId: server.id,
+        key: "time",
+        values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+      })),
+    },
+  });
 }

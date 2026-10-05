@@ -1,0 +1,109 @@
+import {
+  defaultMessageHead,
+  MESSAGE_CASES,
+  type MessageCaseKey,
+} from "@roll-and-call/database/servers/model";
+import { Text, VStack, cn } from "@roll-and-call/ui";
+
+import { MessageEditor } from "@/features/edit-discord-messages";
+import { Panel, ServerLink, Tag } from "@/shared/ui";
+
+import { SettingsFrame } from "./settings-frame";
+
+interface MessagesViewProps {
+  selected: MessageCaseKey;
+  heads: Record<MessageCaseKey, { headLine: string; updatedAt: Date | null }>;
+  readOnly: boolean;
+}
+
+export function MessagesView({ selected, heads, readOnly }: MessagesViewProps) {
+  const current = MESSAGE_CASES.find((messageCase) => messageCase.key === selected)!;
+  return (
+    <SettingsFrame title="디스코드 메시지" active="/settings/messages">
+      <VStack gap="025">
+        <Text typography="heading2" render={<h2 />}>
+          디스코드 메시지
+        </Text>
+        <Text typography="body3" foreground="muted">
+          봇이 보내는 메시지 위에 붙일 한 줄을 경우마다 정합니다.
+        </Text>
+        <Text typography="body3" foreground="muted">
+          비워 두면 기본 문구를 씁니다.
+        </Text>
+        {readOnly ? (
+          <Text typography="body4" foreground="hint">
+            서버장만 고칠 수 있습니다.
+          </Text>
+        ) : null}
+      </VStack>
+      <div className="grid grid-cols-[304px_minmax(0,1fr)] items-start gap-150">
+        <Panel bodyClassName="p-0">
+          {MESSAGE_CASES.map(({ key, label, to }, index) => {
+            const head = heads[key].headLine;
+            const on = key === selected;
+            return (
+              <VStack
+                key={key}
+                gap="025"
+                aria-current={on ? "true" : undefined}
+                render={<ServerLink path={`/settings/messages?case=${key}`} scroll={false} />}
+                className={cn(
+                  "px-150 py-100 hover:bg-gray-50",
+                  index > 0 && "border-t border-(--rc-color-border-subtle)",
+                  on &&
+                    "bg-tinted-bg shadow-[inset_4px_0_0_var(--rc-color-bg-primary)] hover:bg-tinted-bg",
+                )}
+              >
+                <div className="flex items-center gap-075">
+                  <Text
+                    typography="subtitle2"
+                    className={cn("whitespace-nowrap", on && "text-(--rc-color-fg-primary-strong)")}
+                  >
+                    {label}
+                  </Text>
+                  {head !== defaultMessageHead(key) ? <Tag>바꿈</Tag> : null}
+                </div>
+                <div className="flex min-w-0 items-center gap-100">
+                  <Text
+                    typography="body4"
+                    foreground="muted"
+                    className="shrink-0 whitespace-nowrap"
+                  >
+                    {to}
+                  </Text>
+                  {head ? (
+                    <Text typography="body4" truncate className="min-w-0">
+                      {head}
+                    </Text>
+                  ) : (
+                    <Text typography="body4" foreground="hint">
+                      머리 줄 없음
+                    </Text>
+                  )}
+                </div>
+              </VStack>
+            );
+          })}
+        </Panel>
+        <Panel
+          title={current.label}
+          right={
+            <Text typography="body4" foreground="hint">
+              보내는 곳: {current.to}
+            </Text>
+          }
+          bodyClassName="p-0"
+        >
+          <MessageEditor
+            key={`${selected}:${heads[selected].updatedAt?.toISOString() ?? ""}`}
+            caseKey={selected}
+            label={current.label}
+            savedHead={heads[selected].headLine}
+            savedAt={heads[selected].updatedAt?.toISOString() ?? null}
+            readOnly={readOnly}
+          />
+        </Panel>
+      </div>
+    </SettingsFrame>
+  );
+}

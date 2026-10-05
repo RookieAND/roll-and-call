@@ -22,6 +22,8 @@ export type DiscordMessageInput = {
   buttons?: DiscordLinkButton[];
   // allowed_mentions allowlist: 멘션은 content에도 있어야 울린다.
   userMentions?: string[];
+  // 서버 운영진이 머리 줄에 직접 적은 역할 멘션. content에 같은 <@&id>가 있어야 울린다.
+  roleMentions?: string[];
 };
 
 export type DiscordFile = { name: string; blob: Blob };

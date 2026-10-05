@@ -82,6 +82,21 @@ export const serverMembers = pgTable(
   ],
 ).enableRLS();
 
+// 봇 메시지 위에 붙일 머리 줄. 행이 없으면 기본 문구(구인 개설만 있고 나머지는 머리 줄 없음)를 쓴다. 빈 문자열은 머리 줄 없이 보낸다는 뜻이다.
+export const serverMessageHeads = pgTable(
+  "server_message_heads",
+  {
+    serverId: uuid("server_id")
+      .notNull()
+      .references(() => servers.id),
+    caseKey: text("case_key").notNull(),
+    headLine: text("head_line").notNull(),
+    updatedBy: uuid("updated_by").references(() => profiles.id, { onDelete: "set null" }),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.serverId, table.caseKey] })],
+).enableRLS();
+
 export type Server = typeof servers.$inferSelect;
 
 export type ServerMember = typeof serverMembers.$inferSelect;

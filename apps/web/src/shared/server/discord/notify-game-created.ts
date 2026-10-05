@@ -1,7 +1,7 @@
 import type { Game } from "@roll-and-call/database";
 import type { Server } from "@roll-and-call/database";
 import { sendDiscordMessage, startDiscordThread } from "@roll-and-call/discord";
-import { recruitButtons } from "@roll-and-call/game-notices";
+import { gameHeadValues, messageHeadInput, recruitButtons } from "@roll-and-call/game-notices";
 import { recruitEmbed } from "@roll-and-call/game-notices";
 
 import { sendGameImages } from "./send-game-images";
@@ -21,7 +21,11 @@ export async function notifyGameCreated({
   const message = await sendDiscordMessage({
     channelId: server.recruitChannelId,
     input: {
-      content: "📢 새로운 구인 글이 올라왔어요!",
+      ...(await messageHeadInput({
+        serverId: server.id,
+        key: "open",
+        values: gameHeadValues({ server, game, gmName }),
+      })),
       embeds: [recruitEmbed({ slug: server.slug, game, gmName, confirmedCount })],
       buttons: recruitButtons({ slug: server.slug, gameId: game.id }),
     },

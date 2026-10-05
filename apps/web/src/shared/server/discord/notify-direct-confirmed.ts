@@ -3,7 +3,7 @@ import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed, countWaiting, SCHEDULE_MODE } from "@roll-and-call/database/games/model";
 import { getMemberNicknames } from "@roll-and-call/database/profiles";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-import { gameNoticeEmbed } from "@roll-and-call/game-notices";
+import { gameHeadValues, gameNoticeEmbed, messageHeadInput } from "@roll-and-call/game-notices";
 import { headcountFields } from "@roll-and-call/game-notices";
 import { isNull } from "es-toolkit";
 
@@ -51,5 +51,15 @@ export async function notifyDirectConfirmed({
     }),
   });
 
-  await sendDiscordMessage({ channelId: game.discordThreadId, input: { embeds: [embed] } });
+  await sendDiscordMessage({
+    channelId: game.discordThreadId,
+    input: {
+      embeds: [embed],
+      ...(await messageHeadInput({
+        serverId: server.id,
+        key: "direct",
+        values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+      })),
+    },
+  });
 }
