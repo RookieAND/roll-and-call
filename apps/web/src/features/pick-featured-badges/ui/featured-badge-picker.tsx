@@ -43,7 +43,10 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
   const pickedChoices = picked.flatMap((key) => choices.filter((choice) => choice.key === key));
 
   return (
-    <Container size="sm" className="px-0">
+    <Container
+      size="sm"
+      className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-3px)] flex-col px-0"
+    >
       <VStack gap="200" className="p-200">
         <HStack align="center" gap="050" className="-my-050 -mr-100">
           <Text typography="heading3" render={<h2 />} className="flex-1">
@@ -126,7 +129,7 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
           />
         ))}
       </VStack>
-      <div className="px-200 pb-300">
+      <div className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) mt-auto border-t border-gray-100 bg-surface px-200 py-150">
         <Button
           size="lg"
           className="w-full"
