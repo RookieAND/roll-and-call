@@ -26,10 +26,12 @@ export type HiddenLadderKey = (typeof HIDDEN_LADDER)[keyof typeof HIDDEN_LADDER]
 export const BADGE_LADDER = {
   playerTotal: "pl.total",
   playerRule: "pl.rule",
+  playerReviews: "pl.reviews",
   playerMonthly: "pl.monthly",
   gmTotal: "gm.total",
   gmRule: "gm.rule",
   gmVariety: "gm.variety",
+  gmReviews: "gm.reviews",
   gmMonthly: "gm.monthly",
   developer: "sp.dev",
   guildMaster: "sp.guild",

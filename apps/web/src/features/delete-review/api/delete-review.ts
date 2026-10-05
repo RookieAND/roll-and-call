@@ -5,6 +5,7 @@ import { after } from "next/server";
 
 import { type ActionResult } from "@/shared/api";
 import {
+  evaluateGameBadges,
   getActingMember,
   removeUnusedReviewPhotos,
   revalidateReviews,
@@ -27,5 +28,6 @@ export async function deleteReview(reviewId: string): Promise<ActionResult> {
   await removeUnusedReviewPhotos(deleted.photoUrls);
   revalidateReviews({ slug: server.slug, gameId: deleted.gameId });
   after(() => syncReviewForumPost({ serverId: server.id, reviewId, siteOrigin: siteOrigin() }));
+  after(() => evaluateGameBadges({ serverId: server.id, gameId: deleted.gameId }));
   return {};
 }

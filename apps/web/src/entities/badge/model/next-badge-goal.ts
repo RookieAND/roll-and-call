@@ -9,6 +9,11 @@ import { badgeCondition } from "./badge-condition";
 import type { BadgeCounts } from "./badge-counts";
 import { nextStep } from "./next-step";
 
+const REVIEW_LADDERS: ReadonlySet<BadgeLadderKey> = new Set([
+  BADGE_LADDER.playerReviews,
+  BADGE_LADDER.gmReviews,
+]);
+
 type Candidate = { ladder: BadgeLadderKey; count: number; categoryName: string | null };
 
 // 다음 뱃지(R17). 단계형 가운데 진행 비율이 가장 높은 것, 같으면 남은 횟수가 적은 것, 그것도 같으면 후보 순서. 0회인 사다리는 뺀다.
@@ -16,6 +21,8 @@ export function nextBadgeGoal(counts: BadgeCounts) {
   const candidates: Candidate[] = [
     { ladder: BADGE_LADDER.playerTotal, count: counts.playerTotal, categoryName: null },
     { ladder: BADGE_LADDER.gmTotal, count: counts.gmTotal, categoryName: null },
+    { ladder: BADGE_LADDER.playerReviews, count: counts.playerReviews, categoryName: null },
+    { ladder: BADGE_LADDER.gmReviews, count: counts.gmReviews, categoryName: null },
     ...counts.playerRules.map((rule) => ({
       ladder: BADGE_LADDER.playerRule,
       count: rule.count,
@@ -36,6 +43,8 @@ export function nextBadgeGoal(counts: BadgeCounts) {
     return [
       {
         emoji: step.emoji,
+        unit: REVIEW_LADDERS.has(candidate.ladder) ? "건" : "회",
+        countsAttendance: !REVIEW_LADDERS.has(candidate.ladder),
         name: stepName({ step, categoryName: candidate.categoryName }),
         remaining: step.threshold - candidate.count,
         count: candidate.count,

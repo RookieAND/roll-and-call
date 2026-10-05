@@ -34,6 +34,8 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
   const totalLadder = gm ? BADGE_LADDER.gmTotal : BADGE_LADDER.playerTotal;
   const ruleLadder = gm ? BADGE_LADDER.gmRule : BADGE_LADDER.playerRule;
   const totalCount = gm ? counts.gmTotal : counts.playerTotal;
+  const reviewLadder = gm ? BADGE_LADDER.gmReviews : BADGE_LADDER.playerReviews;
+  const reviewCount = gm ? counts.gmReviews : counts.playerReviews;
   const events = (ladder: BadgeLadderKey) => ladderEvents({ facts, ladder });
 
   return {
@@ -70,6 +72,17 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
           next: ladderNext({ ladder: BADGE_LADDER.gmVariety, count: counts.gmVariety }),
         }
       : null,
+    reviews: {
+      title: gm ? "받은 후기" : "작성한 후기",
+      hint: `${reviewCount}건 ${gm ? "받음" : "작성"}`,
+      medals: ladderMedals({
+        ladder: reviewLadder,
+        events: events(reviewLadder),
+        record: recordsByKey.get(reviewLadder),
+      }),
+      fillPercent: ladderFill({ steps: BADGE_LADDERS[reviewLadder].steps, count: reviewCount }),
+      next: ladderNext({ ladder: reviewLadder, count: reviewCount }),
+    },
     monthly: monthlyCard({
       ladder: gm ? BADGE_LADDER.gmMonthly : BADGE_LADDER.playerMonthly,
       records,

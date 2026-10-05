@@ -9,6 +9,8 @@ const counts = (overrides: Partial<BadgeCounts>): BadgeCounts => ({
   playerRules: [],
   gmRules: [],
   gmVariety: 0,
+  playerReviews: 0,
+  gmReviews: 0,
   ...overrides,
 });
 
@@ -36,6 +38,15 @@ describe("nextBadgeGoal", () => {
   it("0회인 사다리는 후보가 아니다", () => {
     expect(nextBadgeGoal(counts({}))).toBeNull();
     expect(nextBadgeGoal(counts({ playerTotal: 1 }))).toMatchObject({ name: "떠돌이" });
+  });
+
+  it("후기 사다리도 후보이고 단위는 건이다", () => {
+    expect(nextBadgeGoal(counts({ playerReviews: 3 }))).toMatchObject({
+      name: "기록꾼",
+      remaining: 2,
+      unit: "건",
+      countsAttendance: false,
+    });
   });
 
   it("모두 달성하면 null이다", () => {

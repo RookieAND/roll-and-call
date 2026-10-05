@@ -1,4 +1,5 @@
 import {
+  BADGE_LADDER,
   BADGE_LADDERS,
   isHiddenLadder,
   type BadgeEvent,
@@ -56,7 +57,9 @@ export function buildLadderDetail({
 
   const earnedEvent = events?.[step.threshold - 1] ?? null;
   const earnedAt = tier === heldTier ? held!.earnedAt : (earnedEvent?.at ?? null);
-  const heldSource = tier === heldTier ? held!.source : null;
+  // 후기 사다리는 세션 링크 행을 두지 않는다.
+  const reviewLadder = ladder === BADGE_LADDER.gmReviews || ladder === BADGE_LADDER.playerReviews;
+  const heldSource = tier === heldTier && !reviewLadder ? held!.source : null;
 
   return {
     name: stepName({ step, categoryName }),

@@ -6,14 +6,14 @@ import { buildMonthlyDetail } from "./build-monthly-detail";
 const now = new Date("2026-10-20T03:00:00Z");
 
 describe("buildMonthlyDetail", () => {
-  it("다는 중이면 ×횟수, 말일까지 붙는다는 줄, 받은 달 목록 끝에 M월 D일까지", () => {
+  it("다는 중이면 말일까지 붙는다는 줄, 받은 달 목록 끝에 M월 D일까지", () => {
     const detail = buildMonthlyDetail({
       ladder: "gm.monthly",
       months: ["2026-09", "2026-06"],
       countOf: (month) => (month === "2026-09" ? 5 : 3),
       now,
     });
-    expect(detail.tierLabel).toBe("이달의 GM · ×2");
+    expect(detail.tierLabel).toBe("골드");
     expect(detail.condition).toBe(
       "한 달 동안 세션을 가장 많이 연 GM입니다.\n10월 31일까지 프로필에 붙습니다.",
     );
@@ -31,7 +31,7 @@ describe("buildMonthlyDetail", () => {
       countOf: null,
       now,
     });
-    expect(detail.tierLabel).toBe("이달의 PL · ×1");
+    expect(detail.tierLabel).toBe("골드");
     expect(detail.condition).not.toContain("까지");
     expect(detail.steps[0]).toMatchObject({ caption: "1위", status: "" });
   });

@@ -10,6 +10,7 @@ import {
   monthLabel,
   previousMonthKey,
   stepLook,
+  TIER_NAME,
 } from "@/entities/badge";
 import { toKst } from "@/shared/lib";
 
@@ -56,7 +57,7 @@ export function buildMonthlyDetail({
       locked: !heldMonth,
       ribbon: shownMonth ? monthLabel(shownMonth) : null,
     },
-    tierLabel: `${meta.title} · ×${months.length}`,
+    tierLabel: TIER_NAME[4],
     tierTone: heldMonth ? BADGE_TONE.gold : BADGE_TONE.hint,
     condition: heldUntil ? `${condition}\n${heldUntil}까지 프로필에 붙습니다.` : condition,
     earned: heldMonth

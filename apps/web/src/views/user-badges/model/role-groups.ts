@@ -24,10 +24,12 @@ const GROUPS = {
     { title: "누적", matches: ladderIs(BADGE_LADDER.gmTotal) },
     { title: "룰별", matches: ladderIs(BADGE_LADDER.gmRule) },
     { title: "다양한 룰", matches: ladderIs(BADGE_LADDER.gmVariety) },
+    { title: "후기", matches: ladderIs(BADGE_LADDER.gmReviews) },
   ],
   [BADGE_TAB.player]: [
     { title: "누적", matches: ladderIs(BADGE_LADDER.playerTotal) },
     { title: "룰별", matches: ladderIs(BADGE_LADDER.playerRule) },
+    { title: "후기", matches: ladderIs(BADGE_LADDER.playerReviews) },
   ],
   [BADGE_TAB.special]: [
     { title: "특별 칭호", matches: (badge: HeldBadge) => badge.role === BADGE_ROLE.special },

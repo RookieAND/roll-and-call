@@ -47,6 +47,11 @@ export function DexRoleTab({ role, board }: DexRoleTabProps) {
 
       {board.variety && <DexGridSection board={board.variety} />}
 
+      <DexSection title={board.reviews.title} hint={board.reviews.hint}>
+        <DexLadderTrack total={board.reviews} />
+        <DexNextCard next={board.reviews.next} />
+      </DexSection>
+
       <DexSection title={board.monthly.title}>
         <DexMonthlyCard card={board.monthly} />
       </DexSection>

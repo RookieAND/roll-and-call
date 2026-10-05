@@ -18,7 +18,7 @@ export function ladderNext({
     const last = steps.at(-1)!;
     return {
       done: true,
-      label: "마지막 단계를 받았습니다",
+      label: "마지막 단계입니다",
       countLabel: `${count} / ${last.threshold}`,
       value: last.threshold,
       max: last.threshold,

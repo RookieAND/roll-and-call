@@ -6,6 +6,8 @@ import {
   type BadgeStep,
 } from "@roll-and-call/database/badges/model";
 
+const REVIEW_LENGTH_NOTE = "공백 제외 10자 이상인 후기만 셉니다.";
+
 // 상세 시트의 조건 문장. 문장마다 줄을 바꾸므로 그리는 쪽은 whitespace-pre-line을 준다.
 export function badgeCondition({
   ladder,
@@ -30,6 +32,10 @@ export function badgeCondition({
       return `${categoryName} 세션을 ${count}회 진행하면 받습니다.`;
     case BADGE_LADDER.gmVariety:
       return `서로 다른 룰을 ${count}종 진행하면 받습니다.\n판본만 다른 같은 룰은 1종으로 셉니다.`;
+    case BADGE_LADDER.playerReviews:
+      return `후기를 ${count}건 쓰면 받습니다.\n${REVIEW_LENGTH_NOTE}`;
+    case BADGE_LADDER.gmReviews:
+      return `내 세션에 후기가 ${count}건 달리면 받습니다.\n${REVIEW_LENGTH_NOTE}`;
     case BADGE_LADDER.playerMonthly:
       return "한 달 동안 세션에 가장 많이 참석한 PL입니다.";
     case BADGE_LADDER.gmMonthly:

@@ -33,7 +33,8 @@ export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
                   weight="extrabold"
                   className="min-w-0 flex-1 break-keep"
                 >
-                  {goal.name}까지 {goal.remaining}회
+                  {goal.name}까지 {goal.remaining}
+                  {goal.unit}
                 </Text>
                 <Text typography="body4" foreground="hint" numeric>
                   {goal.count} / {goal.threshold}
@@ -47,9 +48,11 @@ export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
               <Text typography="body4" foreground="muted" className="break-keep">
                 <LineBreaks lines={goal.condition.split("\n")} />
               </Text>
-              <Text typography="body4" foreground="hint">
-                {ATTENDANCE_HINT}
-              </Text>
+              {goal.countsAttendance && (
+                <Text typography="body4" foreground="hint">
+                  {ATTENDANCE_HINT}
+                </Text>
+              )}
             </VStack>
           </HStack>
         )}

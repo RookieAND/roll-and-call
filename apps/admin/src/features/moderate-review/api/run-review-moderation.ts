@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
 import {
+  evaluateReviewBadges,
   getCurrentServer,
   moderateReview,
   requireStaff,
@@ -43,6 +44,7 @@ export async function runReviewModeration({
         siteOrigin: process.env.NEXT_PUBLIC_USER_APP_URL,
       }),
     );
+    after(() => evaluateReviewBadges({ serverId: server.id, reviewId }));
   }
   return result;
 }

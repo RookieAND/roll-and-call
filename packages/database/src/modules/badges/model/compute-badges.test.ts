@@ -21,6 +21,8 @@ function session(index: number, categoryId: string | null = "coc"): BadgeSession
 const facts = (overrides: Partial<BadgeFacts>): BadgeFacts => ({
   played: [],
   hosted: [],
+  reviews: [],
+  written: [],
   draws: [],
   hostedDraws: [],
   joinedAt: null,
@@ -119,6 +121,27 @@ describe("monthlyWinners", () => {
       new Date("2026-10-01T00:00:00Z"),
     );
     expect(winners[0]!.badgeKey).toBe("pl.monthly.2026-09");
+  });
+});
+
+describe("작성한 후기·받은 후기", () => {
+  const reviewsOf = (count: number) =>
+    Array.from({ length: count }, (_, index) => ({
+      gameId: `g${index}`,
+      createdAt: new Date(Date.UTC(2026, 0, 1 + index)),
+    }));
+
+  it("쓴 후기 수로 단계를 매긴다", () => {
+    const badges = computeBadges(facts({ written: reviewsOf(5) }));
+    expect(badges.find((badge) => badge.badgeKey === "pl.reviews")).toMatchObject({
+      tier: 2,
+      sourceGameId: "g4",
+    });
+  });
+
+  it("받은 후기 수로 단계를 매긴다", () => {
+    const badges = computeBadges(facts({ reviews: reviewsOf(12) }));
+    expect(badges.find((badge) => badge.badgeKey === "gm.reviews")).toMatchObject({ tier: 2 });
   });
 });
 

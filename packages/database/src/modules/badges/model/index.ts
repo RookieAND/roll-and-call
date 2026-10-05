@@ -1,5 +1,6 @@
 export {
   type BadgeSession,
+  type BadgeReview,
   type BadgeFacts,
   type EarnedBadge,
   type BadgeDraw,

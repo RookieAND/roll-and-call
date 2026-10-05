@@ -25,6 +25,10 @@ export function badgeRequirement({
       return `${categoryName} 세션 ${count}회 진행`;
     case BADGE_LADDER.gmVariety:
       return `서로 다른 룰 ${count}종`;
+    case BADGE_LADDER.playerReviews:
+      return `후기 ${count}건 작성`;
+    case BADGE_LADDER.gmReviews:
+      return `후기 ${count}건 받음`;
     case BADGE_LADDER.playerMonthly:
       return "한 달 참여 1위";
     case BADGE_LADDER.gmMonthly:

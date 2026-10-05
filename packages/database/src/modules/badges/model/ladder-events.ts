@@ -1,4 +1,4 @@
-import type { BadgeFacts, BadgeSession } from "./badge-facts";
+import type { BadgeFacts, BadgeReview, BadgeSession } from "./badge-facts";
 import { BADGE_LADDER, type BadgeLadderKey } from "./badge-ladder";
 import { hiddenEvents } from "./hidden-events";
 import { isHiddenLadder } from "./is-hidden-ladder";
@@ -8,6 +8,12 @@ function toEvents(sessions: BadgeSession[]): BadgeEvent[] {
   return sessions
     .toSorted((left, right) => left.endsAt.getTime() - right.endsAt.getTime())
     .map((session) => ({ at: session.endsAt, gameId: session.gameId }));
+}
+
+function toReviewEvents(reviews: BadgeReview[]): BadgeEvent[] {
+  return reviews
+    .toSorted((left, right) => left.createdAt.getTime() - right.createdAt.getTime())
+    .map((review) => ({ at: review.createdAt, gameId: review.gameId }));
 }
 
 // 룰별 첫 운영이 다양성의 사건이다. 판본만 다른 책은 같은 분류라 한 번만 센다.
@@ -33,7 +39,7 @@ export function ladderEvents({
   subject?: string | null;
 }): BadgeEvent[] {
   if (isHiddenLadder(ladder)) return hiddenEvents({ facts, ladder });
-  const { played, hosted } = facts;
+  const { played, hosted, reviews, written } = facts;
   switch (ladder) {
     case BADGE_LADDER.playerTotal:
       return toEvents(played);
@@ -45,6 +51,10 @@ export function ladderEvents({
       return toEvents(hosted.filter((session) => session.categoryId === subject));
     case BADGE_LADDER.gmVariety:
       return toEvents(firstOfEachCategory(hosted));
+    case BADGE_LADDER.gmReviews:
+      return toReviewEvents(reviews);
+    case BADGE_LADDER.playerReviews:
+      return toReviewEvents(written);
     case BADGE_LADDER.playerMonthly:
     case BADGE_LADDER.gmMonthly:
     case BADGE_LADDER.developer:
