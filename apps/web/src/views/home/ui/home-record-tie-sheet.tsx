@@ -51,9 +51,6 @@ export function HomeRecordTieSheet({
             </Sheet.Item>
           ))}
         </Sheet.Body>
-        <Text typography="body4" foreground="hint" render={<p />} className="mx-100 mt-100">
-          이름을 누르면 그 사람의 프로필로 이동합니다.
-        </Text>
       </Sheet.Popup>
     </Sheet.Root>
   );
