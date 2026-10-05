@@ -15,8 +15,8 @@ import { monthlyAnnouncementText } from "./monthly-announcement-text";
 
 const ANNOUNCE_DEADLINE_MS = 14 * 24 * 60 * 60 * 1000;
 
-// 매달 8일 그 서버의 공지 채널에 지난달 이달의 GM·PL을 한 번 올린다(R6). 보낸 서버 수를 돌려준다.
-// 굳은 뒤 7일(15일 00:00 KST)이 지나면 올리지 않는다. 배포가 늦은 달에 지난 발표를 뒤늦게 올리지 않기 위해서다.
+// 매달 2일 그 서버의 공지 채널에 지난달 이달의 GM·PL을 한 번 올린다(R6). 보낸 서버 수를 돌려준다.
+// 굳은 뒤 13일(15일 00:00 KST)이 지나면 올리지 않는다. 배포가 늦은 달에 지난 발표를 뒤늦게 올리지 않기 위해서다.
 export async function announceMonthlyAwards({ now }: { now: Date }): Promise<number> {
   const month = previousMonthKey(now);
   const deadline = nextMonthStart(month).getTime() + ANNOUNCE_DEADLINE_MS;
