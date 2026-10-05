@@ -4,6 +4,7 @@ import {
   Avatar,
   Button,
   Chip,
+  cn,
   Container,
   FloatingBar,
   Grid,
@@ -92,7 +93,10 @@ export function FeaturedBadgePicker({
                   onClick={() =>
                     setPicked((current) => toggleFeatured({ picked: current, key: choice.key }))
                   }
-                  className="relative h-auto flex-col gap-075 rounded-500 px-050 pt-125 pb-100 whitespace-normal"
+                  className={cn(
+                    "relative h-auto flex-col gap-075 rounded-500 px-050 pt-125 pb-100 whitespace-normal",
+                    selected ? "border-2" : "bg-transparent",
+                  )}
                 >
                   <BadgeMedal emoji={choice.emoji} look={choice.look} ribbon={choice.tag} />
                   <Text

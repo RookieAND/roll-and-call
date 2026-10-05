@@ -48,11 +48,6 @@ export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
               <Text typography="body4" foreground="muted" className="break-keep">
                 <LineBreaks lines={goal.condition.split("\n")} />
               </Text>
-              {goal.countsAttendance && (
-                <Text typography="body4" foreground="hint">
-                  {ATTENDANCE_HINT}
-                </Text>
-              )}
             </VStack>
           </HStack>
         )}

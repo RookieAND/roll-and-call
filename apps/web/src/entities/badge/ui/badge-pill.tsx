@@ -2,9 +2,8 @@ import type { BadgeLook } from "@roll-and-call/database/badges/model";
 import { cn } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
-// 알약은 단계별 테두리 색만 쓰고 움직이지 않는다(D287). badge-framed의 테두리 회전도 끈다.
 const pill = cva(
-  "inline-flex max-w-full min-w-0 shrink-0 items-center gap-050 overflow-hidden rounded-full border font-extrabold tracking-tight whitespace-nowrap animate-none!",
+  "relative inline-flex max-w-full min-w-0 shrink-0 items-center gap-050 rounded-full border font-extrabold tracking-tight whitespace-nowrap",
   {
     variants: {
       look: {
@@ -25,6 +24,27 @@ const pill = cva(
   },
 );
 
+// 알약 가장자리 반짝이: [왼쪽 %, 위 %, 크기 px, 주기 s, 지연 s]
+const PILL_SPARKS = [
+  [-3, 4, 9, 2.2, 0.1],
+  [20, 106, 7, 2.7, 0.9],
+  [48, -5, 9, 2.1, 0.4],
+  [76, 105, 7, 2.3, 1.1],
+  [99, 30, 9, 2.6, 1.3],
+] as const;
+
+const PILL_SPARK_COLORS: Partial<Record<BadgeLook, string[]>> = {
+  5: [
+    "text-badge-guild",
+    "text-badge-indigo",
+    "text-rank-gold",
+    "text-badge-green",
+    "text-badge-prism",
+  ],
+  developer: ["text-badge-green", "text-badge-blue"],
+  guildMaster: ["text-badge-guild", "text-rank-gold"],
+};
+
 interface BadgePillProps {
   emoji: string;
   name: string;
@@ -35,6 +55,8 @@ interface BadgePillProps {
 }
 
 export function BadgePill({ emoji, name, look, tag, size = "md", className }: BadgePillProps) {
+  const shines = look !== 1 && look !== 2 && look !== 3;
+  const sparkColors = PILL_SPARK_COLORS[look];
   return (
     <span title={name} className={cn(pill({ look, size }), className)}>
       <span
@@ -49,6 +71,32 @@ export function BadgePill({ emoji, name, look, tag, size = "md", className }: Ba
           {tag}
         </span>
       )}
+      {shines && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-full animate-badge-shine"
+        />
+      )}
+      {sparkColors &&
+        PILL_SPARKS.map(([left, top, fontSize, duration, delay], index) => (
+          <span
+            key={left}
+            aria-hidden
+            className={`pointer-events-none absolute animate-badge-twinkle leading-none ${sparkColors[index % sparkColors.length]}`}
+            style={
+              {
+                left: `${left}%`,
+                top: `${top}%`,
+                margin: -fontSize / 2,
+                fontSize,
+                "--badge-twinkle-duration": `${duration}s`,
+                "--badge-twinkle-delay": `-${delay}s`,
+              } as React.CSSProperties
+            }
+          >
+            ✦
+          </span>
+        ))}
     </span>
   );
 }
