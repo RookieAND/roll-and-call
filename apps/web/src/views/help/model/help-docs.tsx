@@ -966,7 +966,7 @@ export const HELP_DOCS: HelpDoc[] = [
         label: "점수표",
         rows: [
           { term: "정식 세션", description: "100점" },
-          { term: "미니룰 세션", description: "50점" },
+          { term: "미니룰 세션", description: "70점" },
           { term: "타이만 세션", description: "15점" },
         ],
       },

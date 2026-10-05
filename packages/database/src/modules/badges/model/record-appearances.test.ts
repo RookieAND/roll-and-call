@@ -44,13 +44,13 @@ describe("GM 점수", () => {
     expect(scores).toEqual([100, 120, 140, 160, 160]);
   });
 
-  it("미니룰은 50·60·70·80이고 룰북이 없는 구인도 미니룰이다", () => {
+  it("미니룰은 70·80·90·100이고 룰북이 없는 구인도 미니룰이다", () => {
     const mini = { category: { miniRule: true } };
     const scores = [3, 4, 5, 6].map((count) =>
       gmScore(game({ rulebook: mini, participants: players(count) })),
     );
-    expect(scores).toEqual([50, 60, 70, 80]);
-    expect(gmScore(game({ rulebook: null }))).toBe(50);
+    expect(scores).toEqual([70, 80, 90, 100]);
+    expect(gmScore(game({ rulebook: null }))).toBe(70);
   });
 
   it("타이만은 15점이고 가점이 없으며 미니룰보다 우선한다", () => {

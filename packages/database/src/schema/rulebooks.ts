@@ -33,7 +33,7 @@ export const rulebookCategories = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     serverId: serverId(),
     name: text("name").notNull(),
-    // 이 분류에 속한 룰북의 세션을 미니룰로 센다(이 달의 기록 점수 50점). 서버장이 어드민에서 켠다.
+    // 이 분류에 속한 룰북의 세션을 미니룰로 센다(이 달의 기록 점수 70점). 서버장이 어드민에서 켠다.
     miniRule: boolean("mini_rule").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
