@@ -40,7 +40,7 @@ const row = (overrides: Partial<MonthSessionRow> = {}) =>
 const build = (rows: MonthSessionRow[]) =>
   buildMonthRecord({ rows, appearances: recordAppearances(rows, NOW), month: "2026-09", now: NOW });
 
-const ids = (people: { id: string }[]) => people.map((target) => target.id);
+const ids = (rows: { person: { id: string } }[]) => rows.map((target) => target.person.id);
 
 describe("buildMonthRecord", () => {
   it("취소·숨김·무산·아직 안 끝난 세션은 건수와 순위에서 빠진다", () => {
@@ -69,7 +69,7 @@ describe("buildMonthRecord", () => {
     expect(record.sessionCount).toBe(1);
     expect(ids(record.gms.leaders)).toEqual(["gm"]);
     expect(ids(record.players.leaders)).toEqual(["present", "forgiven"]);
-    expect(record.players.leaderScore).toBe(100);
+    expect(record.players.leaders[0]!.score).toBe(100);
   });
 
   it("1위 동점자는 2위 줄에 다시 나오지 않는다", () => {

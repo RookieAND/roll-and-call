@@ -26,3 +26,4 @@ export { stepLook } from "./model/step-look";
 export { TIER_NAME } from "./model/tier-name";
 export { TONE_CLASS } from "./model/tone-class";
 export { BADGE_TAB, BADGE_TABS, type BadgeTab } from "./model/badge-tab";
+export { ScoreRuleSheet } from "./ui/score-rule-sheet";

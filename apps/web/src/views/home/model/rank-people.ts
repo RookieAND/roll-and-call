@@ -9,9 +9,7 @@ export type RecordRow = {
   sessionCount: number;
 };
 export type RecordRanking = {
-  leaders: RecordPerson[];
-  leaderScore: number;
-  leaderSessionCount: number;
+  leaders: RecordRow[];
   runnersUp: (RecordRow | null)[];
 };
 
@@ -24,15 +22,15 @@ export function rankPeople(
 ): RecordRanking {
   const ranked = board.flatMap((row) => {
     const person = people.get(row.userId);
-    return person ? [{ ...row, person }] : [];
+    return person
+      ? [{ rank: row.rank, person, score: row.score, sessionCount: row.sessionCount }]
+      : [];
   });
   const leaders = ranked.filter((row) => row.rank === 1);
   const runnersUp = ranked.filter((row) => row.rank !== 1);
 
   return {
-    leaders: leaders.map((row) => row.person),
-    leaderScore: leaders[0]?.score ?? 0,
-    leaderSessionCount: leaders[0]?.sessionCount ?? 0,
+    leaders,
     runnersUp: range(RUNNER_UP_SIZE).map((index) => runnersUp[index] ?? null),
   };
 }

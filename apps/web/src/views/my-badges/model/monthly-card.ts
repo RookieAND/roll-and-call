@@ -41,7 +41,10 @@ export function monthlyCard({ ladder, records, appearances, userId, now }: Month
   const heldMonth = months.find((month) => month === previousMonthKey(now)) ?? null;
   const verb = gm ? "진행" : "참여";
   const standing = currentMonthStanding({ appearances, userId, role: definition.role, now });
-  const monthLine = `${monthLabel(kstMonthKey(now))} ${verb} ${standing.sessionCount}회 · 1위 ${standing.topSessionCount}회`;
+  const month = monthLabel(kstMonthKey(now));
+  const monthLine = standing.rank
+    ? `${month} ${standing.score}점 · ${standing.rank}위 · 1위 ${standing.topScore}점`
+    : `${month} 순위 없음`;
 
   return {
     title: step.name,
@@ -50,12 +53,12 @@ export function monthlyCard({ ladder, records, appearances, userId, now }: Month
     look: stepLook(step),
     ribbon: heldMonth ? monthLabel(heldMonth) : null,
     status: heldMonth
-      ? `${monthLabel(heldMonth)} ${verb} 1위 · ${countOf(heldMonth)}회 ${verb}`
-      : monthLine,
+      ? `${monthLabel(heldMonth)} 점수 1위 · ${countOf(heldMonth)}회 ${verb}`
+      : null,
     description: heldMonth
       ? `${toKst(now).endOf("month").format("M월 D일")}까지 프로필에 붙습니다.`
-      : `이번 달 ${verb} 수 1위가 다음 달 한 달 동안 답니다.`,
-    monthLine: heldMonth ? monthLine : null,
+      : "이번 달 점수 1위가 다음 달 한 달 동안 답니다.",
+    monthLine,
     standing,
     history:
       months.length > 0

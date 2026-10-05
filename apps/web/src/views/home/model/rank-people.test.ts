@@ -14,8 +14,8 @@ const row = (userId: string, rank: number, score: number) => ({
 describe("rankPeople", () => {
   it("1위가 한 장이고 다음 점수대가 2·3위다", () => {
     const podium = rankPeople([row("a", 1, 300), row("b", 2, 200), row("c", 3, 100)], people);
-    expect(podium.leaders.map((leader) => leader.id)).toEqual(["a"]);
-    expect(podium.leaderScore).toBe(300);
+    expect(podium.leaders.map((leader) => leader.person.id)).toEqual(["a"]);
+    expect(podium.leaders[0]!.score).toBe(300);
     expect(podium.runnersUp.map((item) => item && [item.person.id, item.rank, item.score])).toEqual(
       [
         ["b", 2, 200],
@@ -26,7 +26,7 @@ describe("rankPeople", () => {
 
   it("동점 1위는 전원이다", () => {
     const tied = rankPeople([row("a", 1, 100), row("b", 1, 100), row("c", 1, 100)], people);
-    expect(tied.leaders.map((leader) => leader.id)).toEqual(["a", "b", "c"]);
+    expect(tied.leaders.map((leader) => leader.person.id)).toEqual(["a", "b", "c"]);
     expect(tied.runnersUp).toEqual([null, null]);
   });
 

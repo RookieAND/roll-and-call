@@ -3,7 +3,7 @@ import { Crown } from "lucide-react";
 
 import { ServerLink } from "@/shared/ui";
 
-import type { RecordPerson } from "../model/rank-people";
+import type { RecordPerson, RecordRow } from "../model/rank-people";
 import { HomeRecordTieSheet } from "./home-record-tie-sheet";
 import { leaderName } from "./leader-name";
 
@@ -11,13 +11,15 @@ const CARD = "flex items-center gap-150 rounded-600 bg-primary-50 p-175 transiti
 
 interface HomeRecordLeaderProps {
   label: string;
-  people: [RecordPerson, ...RecordPerson[]];
-  count: number;
+  leaders: [RecordRow, ...RecordRow[]];
 }
 
 // 공동 1위는 갈 곳이 하나가 아니라 카드가 동점자 시트를 연다.
-export function HomeRecordLeader({ label, people, count }: HomeRecordLeaderProps) {
+export function HomeRecordLeader({ label, leaders }: HomeRecordLeaderProps) {
+  const people = leaders.map((leader) => leader.person) as [RecordPerson, ...RecordPerson[]];
   const [first] = people;
+  const { score, sessionCount } = leaders[0];
+  const sameSessions = leaders.every((leader) => leader.sessionCount === sessionCount);
   const name = leaderName(people);
 
   const body = (
@@ -48,13 +50,18 @@ export function HomeRecordLeader({ label, people, count }: HomeRecordLeaderProps
         >
           {name}
         </Text>
+        {sameSessions && (
+          <Text typography="body4" foreground="hint" render={<div />} className="mt-025">
+            세션 {sessionCount}회
+          </Text>
+        )}
       </div>
       <HStack align="baseline" gap="025" className="flex-none text-tinted-ink">
         <Text typography="heading1" numeric foreground="inherit" className="tracking-[-0.03em]">
-          {count}
+          {score}
         </Text>
         <Text weight="bold" typography="body4" foreground="inherit">
-          번
+          점
         </Text>
       </HStack>
     </>
@@ -64,8 +71,7 @@ export function HomeRecordLeader({ label, people, count }: HomeRecordLeaderProps
     return (
       <HomeRecordTieSheet
         label={label}
-        people={people}
-        count={count}
+        leaders={leaders}
         className={cn(
           CARD,
           "w-full text-left hover:bg-primary-100 focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none",
