@@ -53,14 +53,14 @@ describe("GM 점수", () => {
     expect(gmScore(game({ rulebook: null }))).toBe(70);
   });
 
-  it("타이만은 15점이고 가점이 없으며 미니룰보다 우선한다", () => {
-    expect(gmScore(game({ participants: players(1) }))).toBe(15);
-    expect(gmScore(game({ rulebook: null, participants: players(1) }))).toBe(15);
+  it("타이만은 10점이고 가점이 없으며 미니룰보다 우선한다", () => {
+    expect(gmScore(game({ participants: players(1) }))).toBe(10);
+    expect(gmScore(game({ rulebook: null, participants: players(1) }))).toBe(10);
   });
 
   it("정원이 아니라 실제 참석자로 타이만을 가른다(불참자는 빼고 센다)", () => {
     const target = game({ participants: [player("p0"), player("p1", { absent: true })] });
-    expect(gmScore(target)).toBe(15);
+    expect(gmScore(target)).toBe(10);
   });
 });
 
