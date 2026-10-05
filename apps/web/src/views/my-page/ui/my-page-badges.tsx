@@ -9,10 +9,9 @@ import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 interface MyPageBadgesProps {
   heldCount: number;
   goal: ReturnType<typeof nextBadgeGoal>;
-  monthLines: string[];
 }
 
-export function MyPageBadges({ heldCount, goal, monthLines }: MyPageBadgesProps) {
+export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
   return (
     <VStack gap="125" render={<section />}>
       <HStack align="center" gap="075">
@@ -59,13 +58,6 @@ export function MyPageBadges({ heldCount, goal, monthLines }: MyPageBadgesProps)
             첫 세션에 참석해 🎲 첫 주사위를 받아 보세요
           </Text>
         )}
-        <VStack gap="025" className="border-gray-200 px-175 py-125 not-first:border-t">
-          {monthLines.map((line) => (
-            <Text key={line} typography="body4" foreground="muted" numeric>
-              {line}
-            </Text>
-          ))}
-        </VStack>
         <Button
           render={<ServerLink path={"/me/badges"} />}
           variant="ghost"
