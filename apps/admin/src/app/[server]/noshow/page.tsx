@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { parseSort, type NoShowStatus } from "@/shared/lib";
+import { parseSort, type NoShowStatus, stringParams } from "@/shared/lib";
 import {
   getNoShow,
   listNoShows,
@@ -14,7 +14,7 @@ export const metadata: Metadata = { title: "불참 기록" };
 
 export default async function NoShowsPage({ searchParams }: PageProps<"/[server]/noshow">) {
   const params = await searchParams;
-  const query = params as Record<string, string | undefined>;
+  const query = stringParams(params);
   const { q, status, record, page, pin, add, sq } = query;
   const sort = parseSort({
     searchParams: params,

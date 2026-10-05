@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+import { stringParams } from "@/shared/lib";
 import { getSessionAccount, listMyServers } from "@/shared/server";
 import { PlatformServerSelectView, SERVER_FILTER, ServerSelectView } from "@/views/server-select";
 
@@ -11,7 +12,7 @@ export default async function ServerSelectPage({ searchParams }: PageProps<"/">)
   if (!account) redirect("/login");
   const servers = await listMyServers();
   if (account.platformAdmin) {
-    const { q, filter, all } = (await searchParams) as Record<string, string | undefined>;
+    const { q, filter, all } = stringParams(await searchParams);
     // 플랫폼 관리자도 직접 운영하는 서버가 하나면 바로 들어간다. 전체 목록은 ?all=1(스위처의 「전체 서버 목록에서 찾기」)로 연다.
     const joined = servers.filter((server) => server.joined);
     if (!all && joined.length === 1) redirect(`/${joined[0]!.slug}`);

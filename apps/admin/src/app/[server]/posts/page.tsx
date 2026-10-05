@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { parseSort } from "@/shared/lib";
+import { parseSort, stringParams } from "@/shared/lib";
 import { listPosts, POST_DEFAULT_SORT, POST_SORT_COLUMNS } from "@/shared/server";
 import { PostsView } from "@/views/posts";
 
@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "구인" };
 
 export default async function PostsPage({ searchParams }: PageProps<"/[server]/posts">) {
   const params = await searchParams;
-  const { q, status, rulebook, sort, dir, page } = params as Record<string, string | undefined>;
+  const { q, status, rulebook, sort, dir, page } = stringParams(params);
   const tableSort = parseSort({
     searchParams: params,
     columns: POST_SORT_COLUMNS,

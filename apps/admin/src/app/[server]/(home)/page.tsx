@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { stringParams } from "@/shared/lib";
 import {
   getCurrentServer,
   getCurrentStaff,
@@ -11,7 +12,7 @@ import { HomeView } from "@/views/home";
 export const metadata: Metadata = { title: "홈" };
 
 export default async function HomePage({ searchParams }: PageProps<"/[server]">) {
-  const { empty } = (await searchParams) as Record<string, string | undefined>;
+  const { empty } = stringParams(await searchParams);
   const [weekly, pendingItems, server, staff] = await Promise.all([
     getWeeklySummary(),
     getPendingItems(),

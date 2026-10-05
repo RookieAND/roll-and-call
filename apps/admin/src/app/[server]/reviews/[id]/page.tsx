@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { parseSort } from "@/shared/lib";
+import { parseSort, stringParams } from "@/shared/lib";
 import {
   getReviewDetail,
   REVIEW_DEFAULT_SORT,
@@ -25,7 +25,7 @@ export default async function ReviewDetailPage({
   searchParams,
 }: PageProps<"/[server]/reviews/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
-  const { tab, q, photo, game, sort, dir } = query as Record<string, string | undefined>;
+  const { tab, q, photo, game, sort, dir } = stringParams(query);
   const listTab = tab === REVIEW_LIST_TAB.hidden ? REVIEW_LIST_TAB.hidden : REVIEW_LIST_TAB.all;
   const tableSort = parseSort({
     searchParams: query,

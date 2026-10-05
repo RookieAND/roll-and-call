@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { parseSort } from "@/shared/lib";
+import { parseSort, stringParams } from "@/shared/lib";
 import {
   CERT_MANAGE_SORT_COLUMNS,
   CERT_MANAGE_SORT_FALLBACK,
@@ -14,7 +14,7 @@ import { CERT_ROW_ACTION, CertManageView } from "@/views/cert-manage";
 export const metadata: Metadata = { title: "인증 관리" };
 
 export default async function CertManagePage({ searchParams }: PageProps<"/[server]/cert/manage">) {
-  const query = (await searchParams) as Record<string, string | undefined>;
+  const query = stringParams(await searchParams);
   const filter = parseCertManageFilter(query);
   const sort = parseSort({
     searchParams: query,

@@ -1,4 +1,4 @@
-import { parseSort } from "@/shared/lib";
+import { parseSort, stringParams } from "@/shared/lib";
 import {
   listReviews,
   REVIEW_DEFAULT_SORT,
@@ -14,7 +14,7 @@ interface ReviewListPageProps {
 
 // 전체 후기·숨긴 후기 두 page.tsx가 tab만 다르게 넘긴다.
 export async function ReviewListPage({ tab, searchParams }: ReviewListPageProps) {
-  const { q, photo, game, sort, dir } = searchParams as Record<string, string | undefined>;
+  const { q, photo, game, sort, dir } = stringParams(searchParams);
   const tableSort = parseSort({
     searchParams,
     columns: REVIEW_SORT_COLUMNS,

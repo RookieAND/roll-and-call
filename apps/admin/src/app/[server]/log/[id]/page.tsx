@@ -1,7 +1,7 @@
 import { Button } from "@roll-and-call/ui";
 import type { Metadata } from "next";
 
-import { withQuery } from "@/shared/lib";
+import { withQuery, stringParams } from "@/shared/lib";
 import { getAuditEntry } from "@/shared/server";
 import { AdminHeader, EMPTY_IMAGE, EmptyState, ServerLink } from "@/shared/ui";
 import { AuditEntryView } from "@/views/audit-entry";
@@ -37,6 +37,6 @@ export default async function AuditEntryPage({
       </>
     );
   }
-  const listHref = withQuery("/log", query as Record<string, string | undefined>, {});
+  const listHref = withQuery("/log", stringParams(query), {});
   return <AuditEntryView entry={entry} listHref={listHref} />;
 }

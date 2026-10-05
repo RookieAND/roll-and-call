@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { stringParams } from "@/shared/lib";
 import {
   listCertSellers,
   listRulebookRequests,
@@ -11,7 +12,7 @@ import { RULEBOOKS_TAB, RulebooksView, type RulebooksTab } from "@/views/ruleboo
 export const metadata: Metadata = { title: "룰북" };
 
 export default async function RulebooksPage({ searchParams }: PageProps<"/[server]/rules">) {
-  const query = (await searchParams) as Record<string, string | undefined>;
+  const query = stringParams(await searchParams);
   const tab: RulebooksTab =
     Object.values(RULEBOOKS_TAB).find((candidate) => candidate === query.tab) ?? RULEBOOKS_TAB.list;
   const [rulebooks, all, requests, sellers, staff] = await Promise.all([
