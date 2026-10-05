@@ -1,12 +1,20 @@
 import "server-only";
-import { countParticipants, insertParticipant, lockGame } from "@roll-and-call/database/games";
+import {
+  countParticipants,
+  insertParticipant,
+  listUserSessionTimings,
+  lockGame,
+  lockUserApplications,
+} from "@roll-and-call/database/games";
 import { withTransaction } from "@roll-and-call/database/transaction";
 
 import {
   DIE_FACES,
   isApplicationClosed,
+  findOverlappingGame,
   PARTICIPANT_STATUS,
   RECRUIT_METHOD,
+  SCHEDULE_MODE,
 } from "@/entities/game";
 import {
   APPLICATION_CLOSED_MESSAGE,
@@ -18,6 +26,8 @@ import {
 } from "@/shared/api";
 import { findActiveSanction, type Game } from "@/shared/server";
 
+import { OVERLAP_MESSAGE, OVERLAP_REASON, type OverlapRejection } from "../model/overlap-rejection";
+
 export type Application = {
   game: Game;
   waiting: boolean;
@@ -25,7 +35,7 @@ export type Application = {
   becameFull: boolean;
 };
 
-type Rejection = ActionResult & { error: string };
+type Rejection = (ActionResult & { error: string }) | OverlapRejection;
 
 export async function applyToGame({
   serverId,
@@ -54,6 +64,18 @@ export async function applyToGame({
     if (isApplicationClosed(game)) return { error: APPLICATION_CLOSED_MESSAGE };
     if (game.endDate.getTime() <= Date.now()) {
       return { error: "모집이 마감되었습니다." };
+    }
+
+    // 일정 조율형은 신청 때 일시가 없어 겹침을 보지 않는다. 같은 사람의 신청끼리 줄을 세워 동시 신청도 막는다.
+    if (game.scheduleMode === SCHEDULE_MODE.fixed && game.confirmedAt) {
+      await lockUserApplications({ transaction, userId });
+      const [overlapping] = findOverlappingGame({
+        target: { startsAt: game.confirmedAt, playMinutes: game.playMinutes },
+        mine: await listUserSessionTimings({ transaction, userId, excludeGameId: gameId }),
+      });
+      if (overlapping) {
+        return { error: OVERLAP_MESSAGE, reason: OVERLAP_REASON, overlapGameId: overlapping.id };
+      }
     }
 
     const confirmedCount = await countParticipants({

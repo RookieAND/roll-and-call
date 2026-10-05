@@ -15,13 +15,19 @@ import {
   seedAvailabilityFromProfile,
 } from "@/shared/server";
 
+import { type OverlapRejection } from "../model/overlap-rejection";
 import { announceNewApplication } from "./announce-new-application";
 import { applyToGame } from "./apply-to-game";
 
 // waiting·lottery는 화면 표시 시점이 아니라 실제 접수 결과라 토스트 문구가 이걸 따른다.
-export async function joinGame(
-  gameId: string,
-): Promise<ActionResult & { waiting?: boolean; lottery?: boolean }> {
+export async function joinGame(gameId: string): Promise<
+  ActionResult & {
+    waiting?: boolean;
+    lottery?: boolean;
+    reason?: OverlapRejection["reason"];
+    overlapGameId?: string;
+  }
+> {
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

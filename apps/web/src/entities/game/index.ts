@@ -27,6 +27,7 @@ export { GameScheduleRow } from "./ui/game-schedule-row";
 export { deriveSessionState, SESSION_ROLE, SESSION_STATE, type SessionRole } from "./model/session";
 export {
   effectivePlayMinutes,
+  findOverlappingGame,
   isApplicationClosed,
   isSessionEnded,
   isSessionInProgress,
