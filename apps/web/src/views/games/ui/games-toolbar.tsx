@@ -27,7 +27,8 @@ interface GamesToolbarProps {
   ruleOptions?: { key: string; label: string }[];
 }
 
-// top = AppBar 높이 토큰. Container의 px-200을 -mx-200으로 되돌려 배경을 끝까지 채운다.
+// 탭 줄만 AppBar 아래에 고정하고 검색·필터·칩 줄은 목록과 함께 스크롤된다(시안 05 F). top = AppBar 높이 토큰.
+// Container의 px-200을 -mx-200으로 되돌려 탭 배경을 끝까지 채운다.
 // 지난 구인은 끝난 날짜 최근 먼저로 고정이라 정렬 버튼이 없다. 건수가 없으면(첫 진입 뼈대) 필터 버튼만 그린다.
 export function GamesToolbar({
   filter = {},
@@ -38,9 +39,11 @@ export function GamesToolbar({
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
   const chipCounts = counts ? statusCounts({ counts, tab }) : undefined;
   return (
-    <VStack className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 border-b border-gray-200 bg-surface">
-      <GameScopeTabs filter={filter} counts={tabCounts} />
-      <VStack gap="125" className="px-200 py-150">
+    <>
+      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 border-b border-gray-200 bg-surface">
+        <GameScopeTabs filter={filter} counts={tabCounts} />
+      </div>
+      <VStack gap="125" className="py-150">
         <HStack align="center" gap="050">
           <GameSearchForm key={filter.q ?? ""} filter={filter} />
           {chipCounts ? (
@@ -66,6 +69,6 @@ export function GamesToolbar({
         </HStack>
         {counts && <AppliedFilterChips filter={filter} ruleOptions={ruleOptions} />}
       </VStack>
-    </VStack>
+    </>
   );
 }
