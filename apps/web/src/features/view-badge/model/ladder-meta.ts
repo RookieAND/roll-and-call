@@ -26,5 +26,6 @@ export const LADDER_META: Record<BadgeLadderKey, LadderMeta> = {
   [BADGE_LADDER.gmMonthly]: { title: "이달의 GM", unit: "회", verb: "진행" },
   [BADGE_LADDER.developer]: SPECIAL_META,
   [BADGE_LADDER.guildMaster]: SPECIAL_META,
+  [BADGE_LADDER.creator]: SPECIAL_META,
   ...HIDDEN_META,
 };

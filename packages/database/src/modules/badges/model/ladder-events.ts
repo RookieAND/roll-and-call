@@ -61,6 +61,7 @@ export function ladderEvents({
     case BADGE_LADDER.gmMonthly:
     case BADGE_LADDER.developer:
     case BADGE_LADDER.guildMaster:
+    case BADGE_LADDER.creator:
       return [];
   }
 }
