@@ -37,7 +37,7 @@ export function DeleteMemoDialog({ memoId, open, onOpenChange }: DeleteMemoDialo
           <AlertDialog.Description>지운 메모는 되돌릴 수 없습니다.</AlertDialog.Description>
         </AlertDialog.Header>
         {networkError ? (
-          <AlertDialog.Body className="mt-200">
+          <AlertDialog.Body>
             <ActionNetworkError />
           </AlertDialog.Body>
         ) : null}

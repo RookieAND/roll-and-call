@@ -71,7 +71,7 @@ export function ReleaseSanctionDialog({
           <Dialog.Title>{nickname} 제재 해제</Dialog.Title>
           <Dialog.Description>{description}</Dialog.Description>
         </Dialog.Header>
-        <Dialog.Body className="mt-200">
+        <Dialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <FactBox

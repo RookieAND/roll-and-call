@@ -87,7 +87,7 @@ export function LinkRequestForm({ request, rulebooks, viewerId, onDone }: LinkRe
           룰북으로 처리합니다
         </Dialog.Description>
       </Dialog.Header>
-      <Dialog.Body className="mt-200">
+      <Dialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <VStack gap="075">

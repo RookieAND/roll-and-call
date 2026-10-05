@@ -65,7 +65,7 @@ export function HideRulebookDialog({
             {`${quoteWithParticle(rulebookLabel, withObjectParticle)} 숨길까요?`}
           </AlertDialog.Title>
         </AlertDialog.Header>
-        <AlertDialog.Body className="mt-200">
+        <AlertDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <FactRows

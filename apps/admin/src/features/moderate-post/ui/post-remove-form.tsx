@@ -63,7 +63,7 @@ export function PostRemoveForm({ post, cancelRef, onSettled }: PostRemoveFormPro
         <Dialog.Title>{COPY.title}</Dialog.Title>
         <Dialog.Description>{COPY.description}</Dialog.Description>
       </Dialog.Header>
-      <Dialog.Body className="mt-200">
+      <Dialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <RemoveTarget post={post} />

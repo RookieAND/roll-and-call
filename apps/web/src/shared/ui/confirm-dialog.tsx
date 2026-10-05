@@ -48,7 +48,7 @@ export function ConfirmDialog({
           <AlertDialog.Title>{title}</AlertDialog.Title>
           {description && <AlertDialog.Description>{description}</AlertDialog.Description>}
         </AlertDialog.Header>
-        {children}
+        {children && <AlertDialog.Body>{children}</AlertDialog.Body>}
         <AlertDialog.Footer layout="row">
           <Button
             ref={cancelRef}

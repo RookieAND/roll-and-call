@@ -40,7 +40,7 @@ export function ReviewUnhideForm({ review, onSettled }: ReviewUnhideFormProps) {
         <ModalServerLabel />
         <Dialog.Title>{COPY.title}</Dialog.Title>
       </Dialog.Header>
-      <Dialog.Body className="mt-200">
+      <Dialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           {review.held ? (

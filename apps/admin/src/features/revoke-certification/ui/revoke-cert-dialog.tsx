@@ -98,7 +98,7 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
             {`${target.nickname}님의 「${target.rulebook}」 인증을 반려 상태로 바꿉니다.`}
           </AlertDialog.Description>
         </AlertDialog.Header>
-        <AlertDialog.Body className="mt-200">
+        <AlertDialog.Body>
           <VStack gap="175">
             {networkError ? <ActionNetworkError /> : null}
             <VStack gap="150">

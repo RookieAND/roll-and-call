@@ -59,7 +59,7 @@ export function SanctionConfirmDialog({
             ) : null}
           </AlertDialog.Description>
         </AlertDialog.Header>
-        <AlertDialog.Body className="mt-200">
+        <AlertDialog.Body>
           <VStack gap="125">
             {networkError ? <ActionNetworkError /> : null}
             <FactBox

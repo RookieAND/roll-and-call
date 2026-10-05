@@ -106,7 +106,7 @@ export function EditNicknameDialog({
             수정한 닉네임은 앱 전체와 지난 구인, 후기에 바로 반영됩니다.
           </Dialog.Description>
         </Dialog.Header>
-        <Dialog.Body className="mt-200">
+        <Dialog.Body>
           <VStack gap="200">
             {networkError ? <ActionNetworkError /> : null}
             <FactBox

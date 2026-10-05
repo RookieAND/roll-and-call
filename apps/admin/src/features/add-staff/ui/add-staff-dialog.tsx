@@ -56,7 +56,7 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
           <Dialog.Title>운영진 추가</Dialog.Title>
           <Dialog.Description>이 서버에 가입한 멤버 중에서 찾습니다.</Dialog.Description>
         </Dialog.Header>
-        <Dialog.Body className="mt-200">
+        <Dialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <UrlSearchInput placeholder="가입한 유저 닉네임 검색" className="w-full" />

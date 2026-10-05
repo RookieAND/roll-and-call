@@ -42,7 +42,7 @@ export function AddSellerButton() {
             신청자가 전자책을 신청할 때 고르는 목록에 들어갑니다.
           </Dialog.Description>
         </Dialog.Header>
-        <Dialog.Body className="mt-200">
+        <Dialog.Body>
           <Field.Root
             label="판매처 이름"
             htmlFor="seller-name"

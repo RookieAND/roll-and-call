@@ -45,7 +45,7 @@ export function ImpactDialog({
           <AlertDialog.Title>{title}</AlertDialog.Title>
           <AlertDialog.Description>{description}</AlertDialog.Description>
         </AlertDialog.Header>
-        <AlertDialog.Body className="mt-200">
+        <AlertDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <Callout.Root colorPalette="danger">

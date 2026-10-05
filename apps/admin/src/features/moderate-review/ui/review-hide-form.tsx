@@ -77,7 +77,7 @@ export function ReviewHideForm({ review, onSettled, onUndoSettled }: ReviewHideF
         <ModalServerLabel />
         <Dialog.Title>{COPY.title}</Dialog.Title>
       </Dialog.Header>
-      <Dialog.Body className="mt-200">
+      <Dialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <ReasonChips

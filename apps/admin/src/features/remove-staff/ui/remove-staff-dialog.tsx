@@ -57,7 +57,7 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
             어드민에는 로그인할 수 없게 되지만, 사용자 앱은 그대로 이용합니다.
           </AlertDialog.Description>
         </AlertDialog.Header>
-        <AlertDialog.Body className="mt-200">
+        <AlertDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">

@@ -19,7 +19,7 @@ export function ReviewGoneContent({ deleted, nextHref, onClose }: ReviewGoneCont
         <ModalServerLabel />
         <Dialog.Title>후기를 찾을 수 없습니다</Dialog.Title>
       </Dialog.Header>
-      <Dialog.Body className="mt-200">
+      <Dialog.Body>
         <ItemCard icon={X} title="작성자가 삭제한 후기입니다." meta={meta} />
       </Dialog.Body>
       <Dialog.Footer layout="row" className="items-center justify-end">

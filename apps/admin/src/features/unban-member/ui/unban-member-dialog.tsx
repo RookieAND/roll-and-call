@@ -65,7 +65,7 @@ export function UnbanMemberDialog({
           <Dialog.Title>{nickname}의 차단을 해제할까요?</Dialog.Title>
           <Dialog.Description>디스코드 차단도 함께 해제됩니다.</Dialog.Description>
         </Dialog.Header>
-        <Dialog.Body className="mt-200">
+        <Dialog.Body>
           <VStack gap="175">
             {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">

@@ -61,7 +61,7 @@ export function RemoveMemberItem({
         onConfirm={remove}
       >
         {(leavesEmptySeat || notifies) && (
-          <VStack gap="100" className="mt-250">
+          <VStack gap="100">
             {leavesEmptySeat && (
               <Callout.Root colorPalette="warning" size="sm">
                 <Callout.Icon />

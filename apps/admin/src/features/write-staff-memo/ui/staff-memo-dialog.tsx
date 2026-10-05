@@ -55,7 +55,7 @@ export function StaffMemoDialog({
           <Dialog.Title>{title}</Dialog.Title>
           <Dialog.Description>운영진 메모는 사용자에게 보이지 않습니다.</Dialog.Description>
         </Dialog.Header>
-        <Dialog.Body className="mt-200">
+        <Dialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <Textarea

@@ -65,7 +65,7 @@ export function NoShowReasonForm({
         <Dialog.Title>{copy.title}</Dialog.Title>
         <Dialog.Description>{copy.description}</Dialog.Description>
       </Dialog.Header>
-      <Dialog.Body className="mt-200">
+      <Dialog.Body>
         <VStack gap="150">
           {action.networkError ? <ActionNetworkError /> : null}
           {summary}

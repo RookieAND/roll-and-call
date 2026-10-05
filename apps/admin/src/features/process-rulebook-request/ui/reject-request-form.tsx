@@ -57,7 +57,7 @@ export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFo
           {quoteWithParticle(request.name, withObjectParticle)} 등록하지 않습니다
         </Dialog.Description>
       </Dialog.Header>
-      <Dialog.Body className="mt-200">
+      <Dialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <Field.Root

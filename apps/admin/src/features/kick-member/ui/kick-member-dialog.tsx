@@ -81,7 +81,7 @@ export function KickMemberDialog({
             서버에 남기고 활동만 막으려면 제재를 사용해 주세요.
           </AlertDialog.Description>
         </AlertDialog.Header>
-        <AlertDialog.Body className="mt-200">
+        <AlertDialog.Body>
           <VStack gap="175">
             {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">

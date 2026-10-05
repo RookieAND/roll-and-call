@@ -37,7 +37,7 @@ export function FreeImpactDialog({
             {`${rulebookLabel}${objectParticle(rulebookLabel)} 누구나 구인을 열 수 있는 룰북으로 바꿉니다.`}
           </AlertDialog.Description>
         </AlertDialog.Header>
-        <AlertDialog.Body className="mt-200">
+        <AlertDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <FactRows

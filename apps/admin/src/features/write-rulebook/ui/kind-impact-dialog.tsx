@@ -110,7 +110,7 @@ export function KindImpactDialog({
             {`${rulebookLabel}${objectParticle(rulebookLabel)} ${fromLabel}에서 ${toLabel}${directionalParticle(toLabel)} 바꿉니다`}
           </AlertDialog.Description>
         </AlertDialog.Header>
-        <AlertDialog.Body className="mt-200">
+        <AlertDialog.Body>
           <VStack gap="125">
             {networkError || loadFailed ? <ActionNetworkError /> : null}
             <HStack align="center" gap="075">

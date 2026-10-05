@@ -72,7 +72,7 @@ export function QuizQuestionDialog({
             책을 가진 사람이 쉽게 답할 수 있는 질문으로 적어 주세요.
           </Dialog.Description>
         </Dialog.Header>
-        <Dialog.Body className="mt-200">
+        <Dialog.Body>
           <VStack gap="150">
             <Field.Root label="질문" htmlFor="quiz-question" required>
               <Textarea

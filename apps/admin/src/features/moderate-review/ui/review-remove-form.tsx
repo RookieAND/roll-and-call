@@ -65,7 +65,7 @@ export function ReviewRemoveForm({ review, cancelRef, onSettled }: ReviewRemoveF
         <ModalServerLabel />
         <Dialog.Title>{COPY.title}</Dialog.Title>
       </Dialog.Header>
-      <Dialog.Body className="mt-200">
+      <Dialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <Callout.Root colorPalette="danger" size="sm">

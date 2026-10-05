@@ -85,7 +85,7 @@ export function AddNoShowForm({ search, onClose, onAdded }: AddNoShowFormProps) 
         <Dialog.Title>불참 기록 추가</Dialog.Title>
         <Dialog.Description>참석으로 기록된 참여자를 불참으로 바꿉니다.</Dialog.Description>
       </Dialog.Header>
-      <Dialog.Body className="mt-200">
+      <Dialog.Body>
         <VStack gap="150">
           {action.networkError ? <ActionNetworkError /> : null}
           <VStack gap="100">
