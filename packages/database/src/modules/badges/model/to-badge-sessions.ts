@@ -18,7 +18,7 @@ type SessionRow = {
   attendedCount: number;
 };
 
-// 확정 참여자 수는 쿼리가 이미 1명 이상으로 걸렀다. 타이만(1:1)은 업적에서 뺀다(D309).
+// 확정 참여자 수는 쿼리가 이미 1명 이상으로 걸렀다. 타이만(1:1)은 업적에서 뺀다.
 export function toBadgeSessions(rows: SessionRow[], now: Date): BadgeSession[] {
   return rows.flatMap((row) => {
     if (
