@@ -1,28 +1,38 @@
-import { groupBy, range, sumBy, uniq } from "es-toolkit";
+import type { ScoreboardRow } from "@roll-and-call/database/badges/model";
+import { range } from "es-toolkit";
 
 export type RecordPerson = { id: string; username: string; avatarUrl: string | null };
-export type RecordRow = { rank: number; person: RecordPerson; count: number };
+export type RecordRow = {
+  rank: number;
+  person: RecordPerson;
+  score: number;
+  sessionCount: number;
+};
 export type RecordRanking = {
   leaders: RecordPerson[];
-  leaderCount: number;
+  leaderScore: number;
+  leaderSessionCount: number;
   runnersUp: (RecordRow | null)[];
 };
 
 const RUNNER_UP_SIZE = 2;
 
-// 1위는 동점자를 한 장으로 묶고, 아래 두 줄은 다음 점수대부터 2·3위로 잇는다. 못 채운 자리는 null로 남긴다.
-export function rankPeople(appearances: { person: RecordPerson; weight: number }[]): RecordRanking {
-  const sorted = Object.values(groupBy(appearances, ({ person }) => person.id))
-    .map((group) => ({ person: group[0]!.person, count: sumBy(group, ({ weight }) => weight) }))
-    .toSorted((left, right) => right.count - left.count);
-  const scores = uniq(sorted.map((row) => row.count));
-  const ranked = sorted.map((row) => ({ ...row, rank: scores.indexOf(row.count) + 1 }));
+// 점수판(monthScoreboard)을 홈 모양으로 옮긴다. 1위는 동점자를 한 장으로 묶고, 아래 두 줄은 다음 점수대부터 2·3위로 잇는다. 못 채운 자리는 null로 남긴다.
+export function rankPeople(
+  board: ScoreboardRow[],
+  people: ReadonlyMap<string, RecordPerson>,
+): RecordRanking {
+  const ranked = board.flatMap((row) => {
+    const person = people.get(row.userId);
+    return person ? [{ ...row, person }] : [];
+  });
   const leaders = ranked.filter((row) => row.rank === 1);
   const runnersUp = ranked.filter((row) => row.rank !== 1);
 
   return {
     leaders: leaders.map((row) => row.person),
-    leaderCount: leaders[0]?.count ?? 0,
+    leaderScore: leaders[0]?.score ?? 0,
+    leaderSessionCount: leaders[0]?.sessionCount ?? 0,
     runnersUp: range(RUNNER_UP_SIZE).map((index) => runnersUp[index] ?? null),
   };
 }

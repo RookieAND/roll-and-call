@@ -8,5 +8,4 @@ export interface RulebookFields {
   supersedesId: string | null;
   aliases: string[];
   certRequired: boolean;
-  miniRule: boolean;
 }

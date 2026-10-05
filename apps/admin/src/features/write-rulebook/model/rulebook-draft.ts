@@ -9,5 +9,4 @@ export interface RulebookDraft {
   supersedesId: string | null;
   aliasesText: string;
   certRequired: boolean;
-  miniRule: boolean;
 }

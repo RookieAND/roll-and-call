@@ -11,7 +11,6 @@ const saved: RulebookDraft = {
   supersedesId: "coc6",
   aliasesText: "",
   certRequired: false,
-  miniRule: false,
 };
 
 describe("needsImpactCheck", () => {

@@ -43,7 +43,7 @@ export function HomeRecordRow({ row, position }: HomeRecordRowProps) {
       {rankNumber}
       <ProfileRow size="sm" name={row.person.username} avatarUrl={row.person.avatarUrl} />
       <Text typography="body4" weight="extrabold" numeric className="flex-none">
-        {row.count}
+        {row.sessionCount}
       </Text>
     </ServerLink>
   );

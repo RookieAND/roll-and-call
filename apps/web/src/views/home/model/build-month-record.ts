@@ -1,8 +1,9 @@
 import {
   BADGE_ROLE,
   isRecordSession,
-  recordAppearances,
+  monthScoreboard,
   type BadgeRole,
+  type MonthlyAppearance,
 } from "@roll-and-call/database/badges/model";
 
 import { countConfirmed } from "@/entities/game";
@@ -12,23 +13,32 @@ import { rankPeople, type RecordPerson } from "./rank-people";
 
 export type MonthRecord = ReturnType<typeof buildMonthRecord>;
 
-// 이달의 GM·PL과 같은 판정(recordAppearances)으로 순위를 매긴다. 세션 건수는 순위에서 빼는 세션도 센다.
-export function buildMonthRecord({ rows, now }: { rows: MonthSessionRow[]; now: Date }) {
+// 이달의 GM·PL과 같은 점수판(monthScoreboard)으로 순위를 매긴다. 세션 건수는 타이만·미니룰도 센다.
+// people에는 점수는 있는데 이 달 세션 목록에 없는 사람(앞선 달 세션의 후기 점수)을 더해 준다.
+export function buildMonthRecord({
+  rows,
+  appearances,
+  month,
+  extraPeople = [],
+  now,
+}: {
+  rows: MonthSessionRow[];
+  appearances: MonthlyAppearance[];
+  month: string;
+  extraPeople?: RecordPerson[];
+  now: Date;
+}) {
   const people = new Map(
-    rows
-      .flatMap((row) => [row.gm, ...row.participants.map((participant) => participant.user)])
-      .map((person): [string, RecordPerson] => [person.id, person]),
+    [
+      ...rows.flatMap((row) => [
+        row.gm,
+        ...row.participants.map((participant) => participant.user),
+      ]),
+      ...extraPeople,
+    ].map((person): [string, RecordPerson] => [person.id, person]),
   );
-  const appearances = recordAppearances(rows, now);
   const rankRole = (role: BadgeRole) =>
-    rankPeople(
-      appearances
-        .filter((appearance) => appearance.role === role)
-        .map((appearance) => ({
-          person: people.get(appearance.userId)!,
-          weight: appearance.weight,
-        })),
-    );
+    rankPeople(monthScoreboard({ appearances, role, month }), people);
 
   return {
     sessionCount: rows.filter((row) =>

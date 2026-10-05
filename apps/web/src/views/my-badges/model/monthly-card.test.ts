@@ -17,7 +17,8 @@ const appearance = (userId: string, startsAt: string) => ({
   userId,
   role: "gm" as const,
   startsAt: new Date(startsAt),
-  weight: 1,
+  score: 100,
+  sessions: 1,
 });
 const appearances = [
   appearance("me", "2026-09-10T03:00:00Z"),

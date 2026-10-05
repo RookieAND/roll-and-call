@@ -1,3 +1,4 @@
+import { kstMonthKey } from "@roll-and-call/database/badges/model";
 import { Container, HStack } from "@roll-and-call/ui";
 import { partition } from "es-toolkit";
 import { Suspense } from "react";
@@ -8,8 +9,10 @@ import { serverPath } from "@/shared/lib";
 import {
   getCurrentServer,
   getCurrentSessionUser,
+  getMonthlyAppearances,
   getMonthSessions,
   getProfile,
+  getRecordPeople,
 } from "@/shared/server";
 import { AppBar, HelpButton, ServerSwitcher, ThemeToggleButton } from "@/shared/ui";
 
@@ -27,14 +30,24 @@ export async function HomeView({ date }: { date?: string }) {
   const { monthStart, selectedKey, todayKey } = resolveCalendarView(date);
   const now = new Date();
   const server = await getCurrentServer();
-  const [user, rows] = await Promise.all([
+  const range = { from: monthStart.toDate(), to: monthStart.add(1, "month").toDate() };
+  const [user, rows, appearances] = await Promise.all([
     getCurrentSessionUser(),
-    getMonthSessions({
-      serverId: server.id,
-      from: monthStart.toDate(),
-      to: monthStart.add(1, "month").toDate(),
-    }),
+    getMonthSessions({ serverId: server.id, ...range }),
+    getMonthlyAppearances({ serverId: server.id, now, range }),
   ]);
+  const listedIds = new Set(
+    rows.flatMap((row) => [
+      row.gm.id,
+      ...row.participants.map((participant) => participant.user.id),
+    ]),
+  );
+  const extraPeople = await getRecordPeople({
+    serverId: server.id,
+    userIds: [...new Set(appearances.map((appearance) => appearance.userId))].filter(
+      (id) => !listedIds.has(id),
+    ),
+  });
 
   const profile = user ? await getProfile(server.id, user.id) : undefined;
   const sessions = toCalendarSessions({ rows, viewerId: user?.id ?? null, now });
@@ -84,7 +97,16 @@ export async function HomeView({ date }: { date?: string }) {
           initialSelectedKey={selectedKey}
           todayKey={todayKey}
         />
-        <HomeMonthRecord monthStart={monthStart} record={buildMonthRecord({ rows, now })} />
+        <HomeMonthRecord
+          monthStart={monthStart}
+          record={buildMonthRecord({
+            rows,
+            appearances,
+            month: kstMonthKey(monthStart.toDate()),
+            extraPeople,
+            now,
+          })}
+        />
       </Container>
       {user && (
         <Suspense fallback={null}>

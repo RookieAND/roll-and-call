@@ -9,6 +9,7 @@ export { hideRulebook } from "./commands/hide-rulebook";
 export { linkRulebookRequest, type RulebookLinkInput } from "./commands/link-rulebook-request";
 export { removeCertSeller } from "./commands/remove-cert-seller";
 export { saveQuizQuestion, type QuizQuestionInput } from "./commands/save-quiz-question";
+export { setCategoryMiniRule } from "./commands/set-category-mini-rule";
 export { unhideRulebook } from "./commands/unhide-rulebook";
 export { updateRulebook, type UpdateRulebookResult } from "./commands/update-rulebook";
 export { findRulebookCategoryId } from "./queries/find-rulebook-category-id";

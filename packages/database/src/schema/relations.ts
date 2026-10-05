@@ -2,7 +2,7 @@ import { relations } from "drizzle-orm";
 
 import { availabilities, drawResults, games, participants } from "./games";
 import { profiles } from "./profiles";
-import { rulebooks } from "./rulebooks";
+import { rulebookCategories, rulebooks } from "./rulebooks";
 
 export const profilesRelations = relations(profiles, ({ many }) => ({
   hostedGames: many(games),
@@ -39,5 +39,12 @@ export const availabilitiesRelations = relations(availabilities, ({ one }) => ({
   user: one(profiles, {
     fields: [availabilities.userId],
     references: [profiles.id],
+  }),
+}));
+
+export const rulebooksRelations = relations(rulebooks, ({ one }) => ({
+  category: one(rulebookCategories, {
+    fields: [rulebooks.categoryId],
+    references: [rulebookCategories.id],
   }),
 }));

@@ -8,6 +8,7 @@ export {
   rejectRulebookRequest,
   removeCertSeller,
   saveQuizQuestion,
+  setCategoryMiniRule,
   unhideRulebook,
   updateRulebook,
   type QuizQuestionInput,

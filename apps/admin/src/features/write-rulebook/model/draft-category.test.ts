@@ -17,7 +17,6 @@ const draft = (changes: Partial<RulebookDraft>): RulebookDraft => ({
   supersedesId: null,
   aliasesText: "",
   certRequired: true,
-  miniRule: false,
   ...changes,
 });
 

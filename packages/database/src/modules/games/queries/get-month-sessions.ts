@@ -25,7 +25,6 @@ export async function getMonthSessions({
       ),
     orderBy: asc(games.confirmedAt),
     with: {
-      rulebook: { columns: { miniRule: true } },
       gm: {
         columns: { id: true, avatarUrl: true },
         extras: { username: memberNicknameSql(serverId) },
