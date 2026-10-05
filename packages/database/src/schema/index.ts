@@ -2,6 +2,7 @@ export {
   servers,
   serverMembers,
   serverMessageHeads,
+  serverMessageTexts,
   type Server,
   type ServerMember,
 } from "./servers";

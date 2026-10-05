@@ -1,4 +1,9 @@
-import { messageVariables, type MessageCaseKey } from "@roll-and-call/database/servers/model";
+import {
+  messageTextVariables,
+  messageVariables,
+  type MessageCaseKey,
+  type MessageTextKey,
+} from "@roll-and-call/database/servers/model";
 import { Skeleton } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
@@ -21,6 +26,10 @@ const SAMPLE: Record<string, string> = {
   GM: "새벽세시",
   룰: "피아스코",
   달: "9월",
+  참여자: "@탐정놀이중",
+  확정자: "@탐정놀이중, @달빛토끼",
+  "신청 수": "7",
+  "확정 수": "4",
 };
 
 function Mention({ children, unknown }: { children: ReactNode; unknown?: boolean }) {
@@ -94,16 +103,27 @@ function Bar({ width, height = 12 }: { width: number | string; height?: number }
 interface DiscordPreviewProps {
   caseKey: MessageCaseKey;
   text: string;
+  // 임베드 설명 문장 미리보기. 있으면 임베드의 둘째 막대 자리에 글로 그린다.
+  description?: { key: MessageTextKey; text: string };
   guildRoleIds?: string[];
   loading?: boolean;
 }
 
 // 임베드와 버튼은 고치지 않는 자리라 막대로만 그린다. 변수는 예시 값으로 바꿔 보여 준다.
-export function DiscordPreview({ caseKey, text, guildRoleIds, loading }: DiscordPreviewProps) {
+export function DiscordPreview({
+  caseKey,
+  text,
+  description,
+  guildRoleIds,
+  loading,
+}: DiscordPreviewProps) {
   const nodes = loading
     ? null
     : renderHead({ text, variables: messageVariables(caseKey), guildRoleIds });
   const hasHead = nodes?.some((node) => typeof node !== "string" || node.trim());
+  const descriptionNodes = description
+    ? renderHead({ text: description.text, variables: messageTextVariables(description.key) })
+    : null;
   return (
     <div
       className="flex gap-150 rounded-400 px-200 py-150"
@@ -136,7 +156,13 @@ export function DiscordPreview({ caseKey, text, guildRoleIds, loading }: Discord
           style={{ background: DISCORD.embed, borderColor: DISCORD.bar }}
         >
           <Bar width="45%" height={14} />
-          <Bar width="90%" />
+          {descriptionNodes ? (
+            <div className="text-body3 leading-[20px] whitespace-pre-line [overflow-wrap:anywhere]">
+              {descriptionNodes}
+            </div>
+          ) : (
+            <Bar width="90%" />
+          )}
           <Bar width="65%" />
           <div className="flex gap-150">
             <Bar width={72} />

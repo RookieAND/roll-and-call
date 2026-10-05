@@ -5,9 +5,9 @@ import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
-import { leftNoticeText } from "./left-notice-text";
 import { memberMention } from "./member-mention";
 import { gameHeadValues, messageHeadInput } from "./message-head-input";
+import { messageText } from "./message-text";
 
 // 삭제 후에 불러야 현재 인원이 맞다. leftServer는 디스코드 서버를 나가 자동으로 빠진 경우다.
 export async function notifyGameLeft({
@@ -29,13 +29,19 @@ export async function notifyGameLeft({
   ]);
   if (!game?.discordThreadId) return;
 
+  const gmName = game.gm?.username ?? "?";
+  const textKey = leftTextKey({ leftServer, removedByGm });
   const embed = gameNoticeEmbed({
     slug: server.slug,
     game,
     gmName: game.gm?.username ?? "?",
     emoji: "🚪",
     color: DISCORD_COLOR.left,
-    description: leftNoticeText({ mention, removedByGm, leftServer }),
+    description: await messageText({
+      serverId: server.id,
+      key: textKey,
+      values: { ...gameHeadValues({ server, game, gmName }), 참여자: mention },
+    }),
     fields: headcountFields({
       game,
       confirmedCount: countConfirmed(game.participants),
@@ -54,4 +60,9 @@ export async function notifyGameLeft({
       })),
     },
   });
+}
+
+function leftTextKey({ leftServer, removedByGm }: { leftServer: boolean; removedByGm: boolean }) {
+  if (leftServer) return "leave_server";
+  return removedByGm ? "leave_gm" : "leave";
 }

@@ -13,6 +13,9 @@ const SITE_URL = Deno.env.get("SITE_URL");
 const ONE_HOUR_MS = 60 * 60 * 1000;
 const RECRUIT_COLOR = 0x5865f2;
 const HEAD_CASE_KEY = "remind";
+const TEXT_KEY = "remind";
+// packages/database/src/modules/servers/model/message-texts.ts의 remind 기본 문장과 같게 둔다.
+const DEFAULT_DESCRIPTION = "세션이 곧 시작해요!";
 
 type DueGame = {
   id: string;
@@ -44,6 +47,15 @@ function formatKst(value: string) {
   return `${parts.month}월 ${parts.day}일 (${parts.weekday}) ${parts.hour}:${parts.minute}`;
 }
 
+function messageValues(game: DueGame, gmName: string): Record<string, string> {
+  return {
+    "구인 제목": game.title,
+    GM: gmName,
+    룰: game.rule,
+    링크: `${SITE_URL}/${game.server.slug}/games/${game.id}`,
+  };
+}
+
 // 서버가 정한 「1시간 전 알림」 머리 줄(server_message_heads). 없거나 못 읽으면 머리 줄 없이 보낸다.
 async function headLine(game: DueGame, gmName: string) {
   const { data, error } = await supabase
@@ -53,13 +65,26 @@ async function headLine(game: DueGame, gmName: string) {
     .eq("case_key", HEAD_CASE_KEY)
     .maybeSingle<{ head_line: string }>();
   if (error) console.warn(`message head read failed for ${game.server_id}:`, error.message);
-  const values: Record<string, string> = {
-    "구인 제목": game.title,
-    GM: gmName,
-    룰: game.rule,
-    링크: `${SITE_URL}/${game.server.slug}/games/${game.id}`,
-  };
-  return renderMessageHead({ template: data?.head_line ?? "", values });
+  return renderMessageHead({
+    template: data?.head_line ?? "",
+    values: messageValues(game, gmName),
+  });
+}
+
+// 서버가 정한 임베드 설명 문장(server_message_texts). 없거나 못 읽거나 비면 기본 문장을 쓴다.
+async function descriptionText(game: DueGame, gmName: string) {
+  const { data, error } = await supabase
+    .from("server_message_texts")
+    .select("body")
+    .eq("server_id", game.server_id)
+    .eq("text_key", TEXT_KEY)
+    .maybeSingle<{ body: string }>();
+  if (error) console.warn(`message text read failed for ${game.server_id}:`, error.message);
+  const values = messageValues(game, gmName);
+  return (
+    renderMessageHead({ template: data?.body ?? "", values }) ||
+    renderMessageHead({ template: DEFAULT_DESCRIPTION, values })
+  );
 }
 
 async function sendReminder(game: DueGame, gmName: string) {
@@ -70,7 +95,10 @@ async function sendReminder(game: DueGame, gmName: string) {
       .map((participant) => participant.user?.discord_id),
   ].filter((discordId): discordId is string => !!discordId);
 
-  const head = await headLine(game, gmName);
+  const [head, description] = await Promise.all([
+    headLine(game, gmName),
+    descriptionText(game, gmName),
+  ]);
   const roleIds = roleMentionIds(head);
   const content =
     [head, mentionIds.map((discordId) => `<@${discordId}>`).join(" ")].filter(Boolean).join("\n") ||
@@ -87,7 +115,7 @@ async function sendReminder(game: DueGame, gmName: string) {
           {
             title: `⏰ ${game.title}`,
             url: `${SITE_URL}/${game.server.slug}/games/${game.id}`,
-            description: "세션이 곧 시작해요!",
+            description,
             color: RECRUIT_COLOR,
             fields: [
               { name: "📜 룰", value: game.rule, inline: true },

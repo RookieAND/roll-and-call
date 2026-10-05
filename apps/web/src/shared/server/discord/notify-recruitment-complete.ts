@@ -1,7 +1,12 @@
 import type { Game } from "@roll-and-call/database";
 import type { Server } from "@roll-and-call/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-import { gameHeadValues, gameNoticeEmbed, messageHeadInput } from "@roll-and-call/game-notices";
+import {
+  gameHeadValues,
+  gameNoticeEmbed,
+  messageHeadInput,
+  messageText,
+} from "@roll-and-call/game-notices";
 import { headcountFields } from "@roll-and-call/game-notices";
 
 import { formatGameSchedule } from "@/shared/lib";
@@ -31,7 +36,11 @@ export async function notifyRecruitmentComplete({
     gmName,
     emoji: "🎉",
     color: DISCORD_COLOR.complete,
-    description: "구인이 완료됐어요!",
+    description: await messageText({
+      serverId: server.id,
+      key: "done",
+      values: gameHeadValues({ server, game, gmName }),
+    }),
     fields: [
       { name: "📜 룰", value: game.rule, inline: true },
       ...headcountFields({ game, confirmedCount: players.length, waitingCount }),

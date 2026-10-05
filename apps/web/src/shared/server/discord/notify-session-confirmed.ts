@@ -2,7 +2,12 @@ import { type Server } from "@roll-and-call/database";
 import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed, countWaiting } from "@roll-and-call/database/games/model";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-import { gameHeadValues, gameNoticeEmbed, messageHeadInput } from "@roll-and-call/game-notices";
+import {
+  gameHeadValues,
+  gameNoticeEmbed,
+  messageHeadInput,
+  messageText,
+} from "@roll-and-call/game-notices";
 import { headcountFields } from "@roll-and-call/game-notices";
 
 import { formatDateTime } from "@/shared/lib";
@@ -39,7 +44,11 @@ export async function notifySessionConfirmed({
     gmName: game.gm?.username ?? "?",
     emoji: "🗓️",
     color: DISCORD_COLOR.confirmed,
-    description: previousConfirmedAt ? "세션 시간이 변경됐어요." : "세션 시간이 확정됐어요.",
+    description: await messageText({
+      serverId: server.id,
+      key: previousConfirmedAt ? "time_changed" : "time",
+      values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+    }),
     fields,
   });
 

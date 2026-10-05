@@ -10,9 +10,10 @@ import {
   DISCORD_COLOR,
 } from "@roll-and-call/discord";
 
-import { cancelDescription } from "./cancel-description";
+import { cancelReasonLine, cancelTextKey } from "./cancel-description";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { gameHeadValues, messageHeadInput } from "./message-head-input";
+import { messageText } from "./message-text";
 import { recruitEmbed } from "./recruit-embed";
 
 // 취소한 행으로 부른다. 모집 공지는 취소한 때 인원 그대로 빨갛게 고쳐 남기고, 스레드에는 취소를 알린다.
@@ -52,7 +53,12 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
             gmName,
             emoji: "🚫",
             color: DISCORD_COLOR.cancelled,
-            description: cancelDescription({ kind: game.cancelKind, reason: game.cancelReason }),
+            description:
+              (await messageText({
+                serverId: server.id,
+                key: cancelTextKey(game.cancelKind),
+                values: gameHeadValues({ server, game, gmName }),
+              })) + cancelReasonLine({ kind: game.cancelKind, reason: game.cancelReason }),
             linked: false,
           }),
         ],

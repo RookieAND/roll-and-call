@@ -6,6 +6,7 @@ import {
   messageVariables,
   validateMessageHead,
   type MessageCaseKey,
+  type MessageTextKey,
 } from "@roll-and-call/database/servers/model";
 import { Button, Callout, Chip, HStack, Text, TextInput, VStack, toast } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
@@ -16,12 +17,15 @@ import { conflictToastText } from "@/shared/lib";
 import { checkMessageRoles } from "../api/check-message-roles";
 import { saveMessageHeadAction } from "../api/save-message-head";
 import { DiscordPreview } from "./discord-preview";
+import { MessageTextEditor } from "./message-text-editor";
 
 interface MessageEditorProps {
   caseKey: MessageCaseKey;
   label: string;
   savedHead: string;
   savedAt: string | null;
+  // 이 경우에 속한 임베드 설명 문장들. 없으면(구인 개설·이달의 GM·PL) 머리 줄만 고친다.
+  texts: { key: MessageTextKey; label: string; savedBody: string; savedAt: string | null }[];
   readOnly: boolean;
 }
 
@@ -31,6 +35,7 @@ export function MessageEditor({
   label,
   savedHead,
   savedAt,
+  texts,
   readOnly,
 }: MessageEditorProps) {
   const router = useRouter();
@@ -163,6 +168,27 @@ export function MessageEditor({
           저장
         </Button>
       </HStack>
+      {texts.length > 0 ? (
+        <VStack gap="175" className="border-t border-(--rc-color-border-subtle) pt-175">
+          <VStack gap="025">
+            <Text typography="subtitle2">설명 문장</Text>
+            <Text typography="body4" foreground="hint">
+              머리 줄 아래 임베드의 설명 한 줄입니다. 시간·인원 칸과 색, 버튼은 그대로입니다.
+            </Text>
+          </VStack>
+          {texts.map((text) => (
+            <MessageTextEditor
+              key={`${text.key}:${text.savedAt ?? ""}`}
+              caseKey={caseKey}
+              textKey={text.key}
+              label={text.label}
+              savedBody={text.savedBody}
+              savedAt={text.savedAt}
+              readOnly={readOnly}
+            />
+          ))}
+        </VStack>
+      ) : null}
     </VStack>
   );
 }

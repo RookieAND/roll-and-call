@@ -6,6 +6,8 @@ import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 import { memberMention } from "./member-mention";
+import { gameHeadValues } from "./message-head-input";
+import { messageText } from "./message-text";
 
 // 바꾼 뒤에 불러야 현재 인원이 맞다.
 export async function notifyMovedToWaitlist({
@@ -29,7 +31,14 @@ export async function notifyMovedToWaitlist({
     gmName: game.gm?.username ?? "?",
     emoji: "⏳",
     color: DISCORD_COLOR.waiting,
-    description: `${mention}님이 대기로 옮겨졌어요.`,
+    description: await messageText({
+      serverId: server.id,
+      key: "moved_waiting",
+      values: {
+        ...gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+        참여자: mention,
+      },
+    }),
     fields: headcountFields({
       game,
       confirmedCount: countConfirmed(game.participants),

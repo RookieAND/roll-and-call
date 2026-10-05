@@ -97,6 +97,21 @@ export const serverMessageHeads = pgTable(
   (table) => [primaryKey({ columns: [table.serverId, table.caseKey] })],
 ).enableRLS();
 
+// 봇 메시지 임베드의 설명 문장. 행이 없으면 코드의 기본 문장을 쓴다. 기본과 같게 저장하면 행을 지운다.
+export const serverMessageTexts = pgTable(
+  "server_message_texts",
+  {
+    serverId: uuid("server_id")
+      .notNull()
+      .references(() => servers.id),
+    textKey: text("text_key").notNull(),
+    body: text("body").notNull(),
+    updatedBy: uuid("updated_by").references(() => profiles.id, { onDelete: "set null" }),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.serverId, table.textKey] })],
+).enableRLS();
+
 export type Server = typeof servers.$inferSelect;
 
 export type ServerMember = typeof serverMembers.$inferSelect;

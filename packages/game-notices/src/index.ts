@@ -11,4 +11,5 @@ export { gameUrl } from "./game-url";
 export { postStaffNotice } from "./post-staff-notice";
 export { STAFF_NOTICE_KIND, type StaffNotice } from "./staff-notice-kind";
 export { gameHeadValues, messageHeadInput } from "./message-head-input";
+export { messageText } from "./message-text";
 export { memberMention } from "./member-mention";

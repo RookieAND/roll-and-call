@@ -1,7 +1,9 @@
 import {
   defaultMessageHead,
   MESSAGE_CASES,
+  messageTextsOfCase,
   type MessageCaseKey,
+  type MessageTextKey,
 } from "@roll-and-call/database/servers/model";
 import { Text, VStack, cn } from "@roll-and-call/ui";
 
@@ -13,11 +15,18 @@ import { SettingsFrame } from "./settings-frame";
 interface MessagesViewProps {
   selected: MessageCaseKey;
   heads: Record<MessageCaseKey, { headLine: string; updatedAt: Date | null }>;
+  texts: Record<MessageTextKey, { body: string; updatedAt: Date | null }>;
   readOnly: boolean;
 }
 
-export function MessagesView({ selected, heads, readOnly }: MessagesViewProps) {
+export function MessagesView({ selected, heads, texts, readOnly }: MessagesViewProps) {
   const current = MESSAGE_CASES.find((messageCase) => messageCase.key === selected)!;
+  const currentTexts = messageTextsOfCase(selected).map((text) => ({
+    key: text.key,
+    label: text.label,
+    savedBody: texts[text.key].body,
+    savedAt: texts[text.key].updatedAt?.toISOString() ?? null,
+  }));
   return (
     <SettingsFrame title="디스코드 메시지" active="/settings/messages">
       <VStack gap="025">
@@ -25,7 +34,7 @@ export function MessagesView({ selected, heads, readOnly }: MessagesViewProps) {
           디스코드 메시지
         </Text>
         <Text typography="body3" foreground="muted">
-          봇이 보내는 메시지 위에 붙일 한 줄을 경우마다 정합니다.
+          봇이 보내는 메시지 위에 붙일 한 줄과 임베드의 설명 문장을 경우마다 정합니다.
         </Text>
         <Text typography="body3" foreground="muted">
           비워 두면 기본 문구를 씁니다.
@@ -96,6 +105,7 @@ export function MessagesView({ selected, heads, readOnly }: MessagesViewProps) {
         >
           <MessageEditor
             key={`${selected}:${heads[selected].updatedAt?.toISOString() ?? ""}`}
+            texts={currentTexts}
             caseKey={selected}
             label={current.label}
             savedHead={heads[selected].headLine}

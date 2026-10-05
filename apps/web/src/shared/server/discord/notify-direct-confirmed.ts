@@ -2,7 +2,12 @@ import { type Server } from "@roll-and-call/database";
 import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed, countWaiting, SCHEDULE_MODE } from "@roll-and-call/database/games/model";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-import { gameHeadValues, gameNoticeEmbed, messageHeadInput } from "@roll-and-call/game-notices";
+import {
+  gameHeadValues,
+  gameNoticeEmbed,
+  messageHeadInput,
+  messageText,
+} from "@roll-and-call/game-notices";
 import { headcountFields, memberMention } from "@roll-and-call/game-notices";
 import { isNull } from "es-toolkit";
 
@@ -42,7 +47,15 @@ export async function notifyDirectConfirmed({
     gmName: game.gm?.username ?? "?",
     emoji: "✅",
     color: DISCORD_COLOR.confirmed,
-    description: `GM이 ${names}님을 참여자로 확정했어요.${availabilityLine}`,
+    description:
+      (await messageText({
+        serverId: server.id,
+        key: "direct",
+        values: {
+          ...gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+          확정자: names,
+        },
+      })) + availabilityLine,
     fields: headcountFields({
       game,
       confirmedCount: countConfirmed(game.participants),

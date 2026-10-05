@@ -17,4 +17,13 @@ export {
   validateMessageHead,
   type MessageCaseKey,
 } from "./message-heads";
+export {
+  defaultMessageText,
+  MESSAGE_TEXT_MAX_LENGTH,
+  MESSAGE_TEXTS,
+  messageTextsOfCase,
+  messageTextVariables,
+  validateMessageText,
+  type MessageTextKey,
+} from "./message-texts";
 export { renderMessageHead, roleMentionIds } from "./render-message-head";

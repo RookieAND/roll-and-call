@@ -1,27 +1,27 @@
 import { GAME_CANCEL_KIND } from "@roll-and-call/database/games/model";
 import { describe, expect, it } from "vitest";
 
-import { cancelDescription } from "./cancel-description";
+import { cancelReasonLine, cancelTextKey } from "./cancel-description";
 
-describe("cancelDescription", () => {
-  it("GM 취소는 사유를 둘째 줄에 적는다", () => {
-    expect(cancelDescription({ kind: GAME_CANCEL_KIND.gm, reason: "GM 사정" })).toBe(
-      "GM이 세션을 취소했어요.\n사유: GM 사정",
+describe("cancelTextKey", () => {
+  it("취소 종류마다 설명 문장 키가 다르다", () => {
+    expect(cancelTextKey(GAME_CANCEL_KIND.gm)).toBe("cancel_gm");
+    expect(cancelTextKey(GAME_CANCEL_KIND.staff)).toBe("cancel_staff");
+    expect(cancelTextKey(GAME_CANCEL_KIND.auto)).toBe("cancel_auto");
+    expect(cancelTextKey(null)).toBe("cancel_gm");
+  });
+});
+
+describe("cancelReasonLine", () => {
+  it("GM 취소만 사유를 둘째 줄에 적는다", () => {
+    expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.gm, reason: "GM 사정" })).toBe(
+      "\n사유: GM 사정",
     );
   });
 
-  it("사유가 없던 옛 GM 취소는 첫 줄만", () => {
-    expect(cancelDescription({ kind: GAME_CANCEL_KIND.gm, reason: null })).toBe(
-      "GM이 세션을 취소했어요.",
-    );
-  });
-
-  it("운영진·자동 취소 문구", () => {
-    expect(cancelDescription({ kind: GAME_CANCEL_KIND.staff, reason: null })).toBe(
-      "운영진이 취소한 구인입니다.",
-    );
-    expect(cancelDescription({ kind: GAME_CANCEL_KIND.auto, reason: null })).toBe(
-      "GM이 디스코드 서버를 나가 취소된 구인입니다.",
-    );
+  it("사유가 없거나 운영진·자동 취소면 붙이지 않는다", () => {
+    expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.gm, reason: null })).toBe("");
+    expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.staff, reason: "사유" })).toBe("");
+    expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.auto, reason: "사유" })).toBe("");
   });
 });
