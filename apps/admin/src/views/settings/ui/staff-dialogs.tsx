@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { AddStaffDialog } from "@/features/add-staff";
 import { RemoveStaffDialog } from "@/features/remove-staff";
@@ -12,11 +12,10 @@ interface StaffDialogsProps {
 }
 
 export function StaffDialogs({ candidates, removing }: StaffDialogsProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const action = searchParams.get("action");
-  const close = () => router.replace(pathname, { scroll: false });
+  const close = () => window.history.replaceState(null, "", pathname);
 
   return (
     <>

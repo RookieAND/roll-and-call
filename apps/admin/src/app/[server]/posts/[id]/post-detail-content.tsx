@@ -11,18 +11,11 @@ import { PostDetailView } from "@/views/post-detail";
 interface PostDetailContentProps {
   id: string;
   tab: string | undefined;
-  action: string | undefined;
   filter: PostListFilter;
   listQuery: Record<string, string | undefined>;
 }
 
-export async function PostDetailContent({
-  id,
-  tab,
-  action,
-  filter,
-  listQuery,
-}: PostDetailContentProps) {
+export async function PostDetailContent({ id, tab, filter, listQuery }: PostDetailContentProps) {
   const [post, server, staff] = await Promise.all([
     getPostDetail({ id, filter }),
     getCurrentServer(),
@@ -34,7 +27,6 @@ export async function PostDetailContent({
     <PostDetailView
       post={post}
       tab={tab}
-      action={action}
       listQuery={listQuery}
       viewerId={staff.id}
       serverAppUrl={userAppUrl && `${userAppUrl}/${server.slug}`}

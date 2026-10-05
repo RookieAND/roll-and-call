@@ -13,19 +13,12 @@ import { ReviewPhotos } from "./review-photos";
 interface ReviewDetailViewProps {
   review: ReviewDetail;
   tab: ReviewListTab;
-  action: string | undefined;
   // 들어온 목록의 검색·사진·구인 칩·정렬(q, photo, game, sort, dir).
   listQuery: Record<string, string | undefined>;
   viewerId: string;
 }
 
-export function ReviewDetailView({
-  review,
-  tab,
-  action,
-  listQuery,
-  viewerId,
-}: ReviewDetailViewProps) {
+export function ReviewDetailView({ review, tab, listQuery, viewerId }: ReviewDetailViewProps) {
   const pathname = `/reviews/${review.id}`;
   const hiddenTab = tab === REVIEW_LIST_TAB.hidden;
   const query = { tab: hiddenTab ? tab : undefined, ...listQuery };
@@ -39,7 +32,6 @@ export function ReviewDetailView({
     review.hidden ? REVIEW_ACTION.unhide : REVIEW_ACTION.hide,
     REVIEW_ACTION.remove,
   ];
-  const openAction = availableActions.find((candidate) => candidate === action) ?? null;
   const actionHref = (nextAction: ReviewAction) =>
     withQuery(pathname, query, { action: nextAction });
   const logHref = auditLogHref({ targetUserId: review.author.id, targetGameId: review.game.id });
@@ -62,7 +54,7 @@ export function ReviewDetailView({
       </HStack>
       <ReviewActionDialog
         review={review}
-        action={openAction}
+        availableActions={availableActions}
         closeHref={withQuery(pathname, query, {})}
         listHref={listHref}
         nextHref={nextHref}

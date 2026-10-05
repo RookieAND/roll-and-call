@@ -2,7 +2,7 @@
 
 import { AlertDialog, Dialog, toast } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 
 import { conflictToastText } from "@/shared/lib";
@@ -25,7 +25,7 @@ type Gone = Extract<ReviewModerationOutcome, { gone: true }>;
 
 interface ReviewActionDialogProps {
   review: ReviewDetail;
-  action: ReviewAction | null;
+  availableActions: ReviewAction[];
   closeHref: string;
   // 들어온 목록(검색·구인 칩·정렬 유지). 제거·사라짐 뒤에 돌아간다.
   listHref: string;
@@ -37,7 +37,7 @@ interface ReviewActionDialogProps {
 // 충돌은 창 안에 두지 않는다. 창을 닫고 새로 읽은 뒤 토스트로만 알린다(D296).
 export function ReviewActionDialog({
   review,
-  action,
+  availableActions,
   closeHref,
   listHref,
   nextHref,
@@ -45,6 +45,8 @@ export function ReviewActionDialog({
 }: ReviewActionDialogProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
+  const actionParam = useSearchParams().get("action");
+  const action = availableActions.find((candidate) => candidate === actionParam) ?? null;
   const cancelRef = useRef<HTMLButtonElement>(null);
   const [shownAction, setShownAction] = useState(action);
   const [gone, setGone] = useState<Gone | null>(null);
@@ -52,7 +54,7 @@ export function ReviewActionDialog({
     setShownAction(action);
     setGone(null);
   }
-  const close = () => router.replace(toServerPath(closeHref), { scroll: false });
+  const close = () => window.history.replaceState(null, "", toServerPath(closeHref));
   const backToList = () => {
     router.push(toServerPath(listHref));
     router.refresh();

@@ -120,7 +120,8 @@ export function CertDecisionForm({
     const next = new URLSearchParams(searchParams);
     if (value) next.set(key, value);
     else next.delete(key);
-    router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });
+    // 서버 데이터가 필요 없는 화면 상태라 주소만 바꾼다(서버 재렌더·서명 URL 재발급 방지).
+    window.history.replaceState(null, "", next.size ? `${pathname}?${next}` : pathname);
   };
 
   const finish = (result: CertDecisionResult | undefined, message: string) => {

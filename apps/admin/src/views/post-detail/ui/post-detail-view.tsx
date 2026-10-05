@@ -16,7 +16,6 @@ import { PostSummary } from "./post-summary";
 interface PostDetailViewProps {
   post: PostDetail;
   tab: string | undefined;
-  action: string | undefined;
   // 들어온 목록의 검색·필터·정렬·쪽(q, status, rulebook, sort, dir, page).
   listQuery: Record<string, string | undefined>;
   // 사용자 앱에서 이 서버 화면의 주소(…/{slug}).
@@ -27,7 +26,6 @@ interface PostDetailViewProps {
 export function PostDetailView({
   post,
   tab,
-  action,
   listQuery,
   serverAppUrl,
   viewerId,
@@ -41,7 +39,6 @@ export function PostDetailView({
   const availableTabs: PostDetailTab[] = Object.values(POST_DETAIL_TAB);
   const currentTab =
     availableTabs.find((candidate) => candidate === tab) ?? POST_DETAIL_TAB.content;
-  const openAction = availableActions.find((candidate) => candidate === action) ?? null;
   const query = { ...listQuery, tab: tab ? currentTab : undefined };
   const listHref = withQuery("/posts", listQuery, {});
   const nextHref = post.next
@@ -86,7 +83,7 @@ export function PostDetailView({
       </HStack>
       <PostActionDialog
         post={post}
-        action={openAction}
+        availableActions={availableActions}
         closeHref={withQuery(pathname, query, {})}
         viewerId={viewerId}
       />

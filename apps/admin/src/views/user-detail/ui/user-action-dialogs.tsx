@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { EditNicknameDialog } from "@/features/edit-nickname";
 import { KickMemberDialog } from "@/features/kick-member";
@@ -18,7 +18,6 @@ interface UserActionDialogsProps {
 }
 
 export function UserActionDialogs({ user, kickImpact }: UserActionDialogsProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const action = searchParams.get("action");
@@ -26,7 +25,7 @@ export function UserActionDialogs({ user, kickImpact }: UserActionDialogsProps) 
     if (open) return;
     const next = new URLSearchParams(searchParams);
     next.delete("action");
-    router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });
+    window.history.replaceState(null, "", next.size ? `${pathname}?${next}` : pathname);
   };
 
   if (action === USER_ACTION.release && user.sanction) {
