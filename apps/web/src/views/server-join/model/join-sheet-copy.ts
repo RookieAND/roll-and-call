@@ -24,7 +24,7 @@ export const JOIN_SHEET_COPY: Record<
     title: `${serverName} 롤앤콜에 로그인해 주세요`,
     body: [
       "구인 신청과 일정 조율을 여기서 합니다.",
-      `${serverName} 디스코드 서버 멤버라면 로그인만 하면 바로 쓸 수 있습니다.`,
+      `${serverName} 디스코드 서버 멤버라면 로그인하세요.`,
     ],
   }),
   checking: ({ serverName }) => ({
