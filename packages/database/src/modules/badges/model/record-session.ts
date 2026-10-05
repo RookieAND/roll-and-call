@@ -12,6 +12,8 @@ export type RecordGame = {
   endedAt: Moment;
   hiddenAt: Moment;
   cancelledAt: Moment;
+  // 룰북을 연결하지 않은 구인은 미니룰이 아니다.
+  rulebook?: { miniRule: boolean } | null;
   participants: {
     userId: string;
     status: string;

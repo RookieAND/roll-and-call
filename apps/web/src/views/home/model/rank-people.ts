@@ -1,4 +1,4 @@
-import { groupBy, range, uniq } from "es-toolkit";
+import { groupBy, range, sumBy, uniq } from "es-toolkit";
 
 export type RecordPerson = { id: string; username: string; avatarUrl: string | null };
 export type RecordRow = { rank: number; person: RecordPerson; count: number };
@@ -11,9 +11,9 @@ export type RecordRanking = {
 const RUNNER_UP_SIZE = 2;
 
 // 1위는 동점자를 한 장으로 묶고, 아래 두 줄은 다음 점수대부터 2·3위로 잇는다. 못 채운 자리는 null로 남긴다.
-export function rankPeople(appearances: RecordPerson[]): RecordRanking {
-  const sorted = Object.values(groupBy(appearances, (person) => person.id))
-    .map((group) => ({ person: group[0]!, count: group.length }))
+export function rankPeople(appearances: { person: RecordPerson; weight: number }[]): RecordRanking {
+  const sorted = Object.values(groupBy(appearances, ({ person }) => person.id))
+    .map((group) => ({ person: group[0]!.person, count: sumBy(group, ({ weight }) => weight) }))
     .toSorted((left, right) => right.count - left.count);
   const scores = uniq(sorted.map((row) => row.count));
   const ranked = sorted.map((row) => ({ ...row, rank: scores.indexOf(row.count) + 1 }));

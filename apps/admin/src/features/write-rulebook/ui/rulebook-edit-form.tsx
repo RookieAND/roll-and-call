@@ -24,6 +24,7 @@ import { HideRulebookDialog } from "./hide-rulebook-dialog";
 import { ImpactDialog } from "./impact-dialog";
 import { KindCards } from "./kind-cards";
 import { KindImpactDialog } from "./kind-impact-dialog";
+import { MiniRuleField } from "./mini-rule-field";
 import { SupersedesField } from "./supersedes-field";
 
 interface RulebookEditFormProps {
@@ -45,6 +46,7 @@ export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditForm
     supersedesId: rulebook.supersedesId,
     aliasesText: rulebook.aliases.join(", "),
     certRequired: rulebook.certRequired,
+    miniRule: rulebook.miniRule,
   };
   const [draft, setDraft] = useState(saved);
   const [reason, setReason] = useState("");
@@ -178,6 +180,13 @@ export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditForm
               certRequired={draft.certRequired}
               disabled={pending}
               onChange={(certRequired) => change({ certRequired })}
+            />
+          </Panel>
+          <Panel title="미니룰" bodyClassName="p-175">
+            <MiniRuleField
+              miniRule={draft.miniRule}
+              disabled={pending}
+              onChange={(miniRule) => change({ miniRule })}
             />
           </Panel>
         </VStack>

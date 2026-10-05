@@ -5,7 +5,7 @@ import {
   type BadgeLadderKey,
   type MonthlyAppearance,
 } from "@roll-and-call/database/badges/model";
-import { isNull } from "es-toolkit";
+import { isNull, sumBy } from "es-toolkit";
 
 import {
   currentMonthStanding,
@@ -34,12 +34,15 @@ export function monthlyCard({ ladder, records, appearances, userId, now }: Month
   const months = monthsOfLadder({ ladder, records });
   // 1위를 정한 집계와 같은 기준으로 센다(loadMonthlyWinners·월간 발표와 같은 값).
   const countOf = (month: string) =>
-    appearances.filter(
-      (appearance) =>
-        appearance.userId === userId &&
-        appearance.role === definition.role &&
-        kstMonthKey(appearance.startsAt) === month,
-    ).length;
+    sumBy(
+      appearances.filter(
+        (appearance) =>
+          appearance.userId === userId &&
+          appearance.role === definition.role &&
+          kstMonthKey(appearance.startsAt) === month,
+      ),
+      (appearance) => appearance.weight,
+    );
   const heldMonth = months.find((month) => month === previousMonthKey(now)) ?? null;
   const verb = gm ? "진행" : "참여";
   const standing = currentMonthStanding({ appearances, userId, role: definition.role, now });

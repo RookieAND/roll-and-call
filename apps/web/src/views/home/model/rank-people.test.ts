@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { rankPeople } from "./rank-people";
 
 const person = (id: string) => ({ id, username: id, avatarUrl: null });
-const people = (...ids: string[]) => ids.map(person);
+const people = (...ids: string[]) => ids.map((id) => ({ person: person(id), weight: 1 }));
 
 describe("rankPeople", () => {
   it("가장 많이 나온 사람이 1위, 그다음 점수대가 2위다", () => {
@@ -36,5 +36,18 @@ describe("rankPeople", () => {
     const empty = rankPeople([]);
     expect(empty.leaders).toEqual([]);
     expect(empty.runnersUp).toEqual([null, null]);
+  });
+});
+
+describe("rankPeople 미니룰", () => {
+  it("미니룰 세션은 0.5회로 센다", () => {
+    const podium = rankPeople([
+      { person: person("a"), weight: 1 },
+      { person: person("b"), weight: 0.5 },
+      { person: person("b"), weight: 0.5 },
+      { person: person("b"), weight: 0.5 },
+    ]);
+    expect(podium.leaders.map((leader) => leader.id)).toEqual(["b"]);
+    expect(podium.leaderCount).toBe(1.5);
   });
 });

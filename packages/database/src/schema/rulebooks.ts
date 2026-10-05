@@ -59,6 +59,8 @@ export const rulebooks = pgTable(
     aliases: text("aliases").array().notNull().default([]),
     certRequired: boolean("cert_required").notNull().default(true),
     hidden: boolean("hidden").notNull().default(false),
+    // GM 없이 모두가 PL로 하는 룰. 이 룰의 세션은 이 달의 기록 순위에서 회차당 50점으로 센다.
+    miniRule: boolean("mini_rule").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [

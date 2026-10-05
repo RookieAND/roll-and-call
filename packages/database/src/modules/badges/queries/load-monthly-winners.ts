@@ -1,4 +1,5 @@
 import { and, eq, inArray, isNull } from "drizzle-orm";
+import { sumBy } from "es-toolkit";
 
 import { db } from "#/client";
 import { badgeKey } from "#/modules/badges/model/badge-key";
@@ -46,12 +47,15 @@ export async function loadMonthlyWinners({
       .map((holder) => ({
         userId: holder.userId,
         nickname: holder.nickname,
-        sessionCount: appearances.filter(
-          (appearance) =>
-            appearance.userId === holder.userId &&
-            appearance.role === role &&
-            kstMonthKey(appearance.startsAt) === month,
-        ).length,
+        sessionCount: sumBy(
+          appearances.filter(
+            (appearance) =>
+              appearance.userId === holder.userId &&
+              appearance.role === role &&
+              kstMonthKey(appearance.startsAt) === month,
+          ),
+          (appearance) => appearance.weight,
+        ),
       }));
   return { gm: winnersOf(gmKey, BADGE_ROLE.gm), pl: winnersOf(plKey, BADGE_ROLE.player) };
 }

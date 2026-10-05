@@ -15,5 +15,6 @@ export function toRulebookFields(draft: RulebookDraft): RulebookFields {
     supersedesId: draft.kind === "core" ? draft.supersedesId : null,
     aliases: uniq(aliases),
     certRequired: draft.certRequired,
+    miniRule: draft.miniRule,
   };
 }

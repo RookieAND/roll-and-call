@@ -24,7 +24,10 @@ export function buildMonthRecord({ rows, now }: { rows: MonthSessionRow[]; now: 
     rankPeople(
       appearances
         .filter((appearance) => appearance.role === role)
-        .map((appearance) => people.get(appearance.userId)!),
+        .map((appearance) => ({
+          person: people.get(appearance.userId)!,
+          weight: appearance.weight,
+        })),
     );
 
   return {

@@ -96,9 +96,9 @@ describe("recordAppearances", () => {
       at(10),
     );
     expect(appearances).toEqual([
-      { userId: "gm", role: BADGE_ROLE.gm, startsAt: START },
-      { userId: "present", role: BADGE_ROLE.player, startsAt: START },
-      { userId: "forgiven", role: BADGE_ROLE.player, startsAt: START },
+      { userId: "gm", role: BADGE_ROLE.gm, startsAt: START, weight: 1 },
+      { userId: "present", role: BADGE_ROLE.player, startsAt: START, weight: 1 },
+      { userId: "forgiven", role: BADGE_ROLE.player, startsAt: START, weight: 1 },
     ]);
   });
 
@@ -133,11 +133,21 @@ describe("recordAppearances", () => {
         isSessionEnded(target, now),
     );
     const expected = [
-      ...legacy.map((target) => ({ userId: target.gmId, role: BADGE_ROLE.gm, startsAt: START })),
+      ...legacy.map((target) => ({
+        userId: target.gmId,
+        role: BADGE_ROLE.gm,
+        startsAt: START,
+        weight: 1,
+      })),
       ...legacy.flatMap((target) =>
         target.participants
           .filter(countsAsAttended)
-          .map((row) => ({ userId: row.userId, role: BADGE_ROLE.player, startsAt: START })),
+          .map((row) => ({
+            userId: row.userId,
+            role: BADGE_ROLE.player,
+            startsAt: START,
+            weight: 1,
+          })),
       ),
     ];
     const sortKey = (row: { userId: string; role: string }) => `${row.role}|${row.userId}`;

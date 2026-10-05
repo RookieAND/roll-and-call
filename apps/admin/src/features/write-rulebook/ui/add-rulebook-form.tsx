@@ -25,6 +25,7 @@ import type { RulebookDraft } from "../model/rulebook-draft";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
 import { KindCards } from "./kind-cards";
+import { MiniRuleField } from "./mini-rule-field";
 import { RequestSummary } from "./request-summary";
 import { SupersedesField } from "./supersedes-field";
 
@@ -53,6 +54,7 @@ export function AddRulebookForm({
     supersedesId: null,
     aliasesText: "",
     certRequired: true,
+    miniRule: false,
   });
   const [reason, setReason] = useState(request ? "추가 요청 승인" : "");
   const [duplicate, setDuplicate] = useState(false);
@@ -137,6 +139,13 @@ export function AddRulebookForm({
                 certRequired={draft.certRequired}
                 disabled={pending}
                 onChange={(certRequired) => change({ certRequired })}
+              />
+            </FormSection>
+            <FormSection title="4. 미니룰">
+              <MiniRuleField
+                miniRule={draft.miniRule}
+                disabled={pending}
+                onChange={(miniRule) => change({ miniRule })}
               />
             </FormSection>
             <Field.Root label="변경 사유" htmlFor="add-rulebook-reason" required>

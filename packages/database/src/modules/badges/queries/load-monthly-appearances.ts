@@ -28,6 +28,7 @@ export async function loadMonthlyAppearances({
         isNull(game.cancelledAt),
       ),
     with: {
+      rulebook: { columns: { miniRule: true } },
       participants: {
         columns: { userId: true, status: true, absent: true, absenceCancelledAt: true },
         where: (participant, { eq }) => eq(participant.serverId, serverId),

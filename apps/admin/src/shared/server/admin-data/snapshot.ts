@@ -239,6 +239,7 @@ export const loadSnapshot = cache(async () => {
       supersedesId: rulebook.supersedesId,
       aliases: rulebook.aliases,
       certRequired: rulebook.certRequired,
+      miniRule: rulebook.miniRule,
       hidden: rulebook.hidden,
     }));
 

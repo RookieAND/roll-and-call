@@ -17,11 +17,11 @@ describe("currentMonthStanding", () => {
   const at = new Date("2026-10-10T03:00:00Z");
   it("내 횟수와 1위 횟수를 센다", () => {
     const appearances = [
-      { userId: "a", role: "pl" as const, startsAt: at },
-      { userId: "b", role: "pl" as const, startsAt: at },
-      { userId: "b", role: "pl" as const, startsAt: at },
-      { userId: "b", role: "gm" as const, startsAt: at },
-      { userId: "a", role: "pl" as const, startsAt: new Date("2026-09-10T03:00:00Z") },
+      { userId: "a", role: "pl" as const, startsAt: at, weight: 1 },
+      { userId: "b", role: "pl" as const, startsAt: at, weight: 1 },
+      { userId: "b", role: "pl" as const, startsAt: at, weight: 1 },
+      { userId: "b", role: "gm" as const, startsAt: at, weight: 1 },
+      { userId: "a", role: "pl" as const, startsAt: new Date("2026-09-10T03:00:00Z"), weight: 1 },
     ];
     expect(currentMonthStanding({ appearances, userId: "a", role: "pl", now })).toEqual({
       count: 1,

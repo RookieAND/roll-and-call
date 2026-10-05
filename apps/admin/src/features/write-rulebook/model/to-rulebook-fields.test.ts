@@ -13,6 +13,7 @@ describe("toRulebookFields", () => {
         supersedesId: "6",
         aliasesText: "황혼, 선서,, 황혼 ",
         certRequired: false,
+        miniRule: true,
       }),
     ).toEqual({
       name: "황혼선서",
@@ -22,6 +23,7 @@ describe("toRulebookFields", () => {
       supersedesId: null,
       aliases: ["황혼", "선서"],
       certRequired: false,
+      miniRule: true,
     });
   });
 
@@ -34,6 +36,7 @@ describe("toRulebookFields", () => {
       supersedesId: null,
       aliasesText: "",
       certRequired: true,
+      miniRule: false,
     };
     expect(toRulebookFields(draft).category).toBe("팀 셜록");
   });

@@ -4,7 +4,13 @@ import { BADGE_LADDER, BADGE_ROLE, type BadgeRole } from "./badge-ladder";
 import { kstMonthKey } from "./kst-month-key";
 import { nextMonthStart } from "./next-month-start";
 
-export type MonthlyAppearance = { userId: string; role: BadgeRole; startsAt: Date };
+// weight는 순위에 더하는 값이다. 일반 세션은 회차당 100점이라 1, 미니룰은 50점이라 0.5.
+export type MonthlyAppearance = {
+  userId: string;
+  role: BadgeRole;
+  startsAt: Date;
+  weight: number;
+};
 
 // 끝난 달마다 역할별 1위. 동점이면 모두 받는다. 이번 달은 아직 끝나지 않아 뺀다.
 export function monthlyWinners(
@@ -18,7 +24,7 @@ export function monthlyWinners(
     if (month >= currentMonth) continue;
     const group = `${appearance.role}|${month}`;
     const users = counts.get(group) ?? new Map<string, number>();
-    users.set(appearance.userId, (users.get(appearance.userId) ?? 0) + 1);
+    users.set(appearance.userId, (users.get(appearance.userId) ?? 0) + appearance.weight);
     counts.set(group, users);
   }
 

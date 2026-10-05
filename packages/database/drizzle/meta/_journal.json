@@ -512,6 +512,13 @@
       "when": 1796400000000,
       "tag": "0078_server_message_heads",
       "breakpoints": true
+    },
+    {
+      "idx": 79,
+      "version": "7",
+      "when": 1796500000000,
+      "tag": "0079_rulebook_mini_rule",
+      "breakpoints": true
     }
   ]
 }

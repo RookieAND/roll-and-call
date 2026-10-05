@@ -20,7 +20,7 @@ export function currentMonthStanding({
   const counts = new Map<string, number>();
   for (const appearance of appearances) {
     if (appearance.role !== role || kstMonthKey(appearance.startsAt) !== month) continue;
-    counts.set(appearance.userId, (counts.get(appearance.userId) ?? 0) + 1);
+    counts.set(appearance.userId, (counts.get(appearance.userId) ?? 0) + appearance.weight);
   }
   return { count: counts.get(userId) ?? 0, topCount: Math.max(0, ...counts.values()) };
 }
