@@ -13,6 +13,7 @@ interface HomeCalendarSectionProps {
   monthStart: Date;
   sessionsByDay: Record<string, CalendarSession[]>;
   cancelledByDay: Record<string, CalendarSession[]>;
+  hasNextMonthSessions: boolean;
   initialSelectedKey: string;
   todayKey: string;
 }
@@ -22,6 +23,7 @@ export function HomeCalendarSection({
   monthStart,
   sessionsByDay,
   cancelledByDay,
+  hasNextMonthSessions,
   initialSelectedKey,
   todayKey,
 }: HomeCalendarSectionProps) {
@@ -35,6 +37,7 @@ export function HomeCalendarSection({
       <HomeCalendar
         monthStart={toKst(monthStart)}
         sessionsByDay={sessionsByDay}
+        hasNextMonthSessions={hasNextMonthSessions}
         selectedKey={selectedKey}
         todayKey={todayKey}
       />

@@ -13,6 +13,7 @@ import {
   getMonthSessions,
   getProfile,
   getRecordPeople,
+  hasSessionsBetween,
 } from "@/shared/server";
 import { AppBar, HelpButton, ServerSwitcher, ThemeToggleButton } from "@/shared/ui";
 
@@ -31,10 +32,16 @@ export async function HomeView({ date }: { date?: string }) {
   const now = new Date();
   const server = await getCurrentServer();
   const range = { from: monthStart.toDate(), to: monthStart.add(1, "month").toDate() };
-  const [user, rows, appearances] = await Promise.all([
+  const nextMonthStart = monthStart.add(1, "month");
+  const [user, rows, appearances, hasNextMonthSessions] = await Promise.all([
     getCurrentSessionUser(),
     getMonthSessions({ serverId: server.id, ...range }),
     getMonthlyAppearances({ serverId: server.id, now, range }),
+    hasSessionsBetween({
+      serverId: server.id,
+      from: nextMonthStart.toDate(),
+      to: nextMonthStart.add(1, "month").toDate(),
+    }),
   ]);
   const listedIds = new Set(
     rows.flatMap((row) => [
@@ -94,6 +101,7 @@ export async function HomeView({ date }: { date?: string }) {
           monthStart={monthStart.toDate()}
           sessionsByDay={groupSessionsByDay(liveSessions)}
           cancelledByDay={groupSessionsByDay(cancelledSessions)}
+          hasNextMonthSessions={hasNextMonthSessions}
           initialSelectedKey={selectedKey}
           todayKey={todayKey}
         />

@@ -20,6 +20,7 @@ const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"] as const;
 interface HomeCalendarProps {
   monthStart: Dayjs;
   sessionsByDay?: Record<string, CalendarSession[]>;
+  hasNextMonthSessions?: boolean;
   selectedKey?: string;
   todayKey?: string;
 }
@@ -27,6 +28,7 @@ interface HomeCalendarProps {
 export function HomeCalendar({
   monthStart,
   sessionsByDay,
+  hasNextMonthSessions = true,
   selectedKey,
   todayKey,
 }: HomeCalendarProps) {
@@ -57,9 +59,10 @@ export function HomeCalendar({
           <ChevronLeft size={20} />
         </IconButton>
         <IconButton
-          render={<Link href={nextHref} scroll={false} />}
+          render={hasNextMonthSessions ? <Link href={nextHref} scroll={false} /> : undefined}
           variant="ghost"
           aria-label="다음 달"
+          disabled={!hasNextMonthSessions}
         >
           <ChevronRight size={20} />
         </IconButton>

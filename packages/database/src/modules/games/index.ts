@@ -47,6 +47,7 @@ export { getResponseCounts } from "./queries/get-response-counts";
 export { getScheduleAvailabilityRows } from "./queries/get-schedule-availability-rows";
 export { getUserConfirmedSlots } from "./queries/get-user-confirmed-slots";
 export { hasAnsweredAvailability } from "./queries/has-answered-availability";
+export { hasSessionsBetween } from "./queries/has-sessions-between";
 export { isGameOwner } from "./queries/is-game-owner";
 export { listAttendanceRows } from "./queries/list-attendance-rows";
 export { listParticipantUserIds } from "./queries/list-participant-user-ids";

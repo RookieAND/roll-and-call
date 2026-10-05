@@ -18,6 +18,7 @@ export {
   getGamesCounts,
   getJoinedGames,
   getMonthSessions,
+  hasSessionsBetween,
   getRecruitingGamesPage,
   getRespondedGameIds,
   getResponseCounts,
