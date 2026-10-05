@@ -1,3 +1,5 @@
+import { VARIABLE_PATTERN } from "./render-message-head";
+
 // 시안 s16.jsx의 경우 10개와 같은 순서·이름이다. 임베드와 버튼은 고치지 않고 머리 줄만 정한다.
 export const MESSAGE_CASES = [
   { key: "open", label: "구인 개설", to: "모집 채널" },
@@ -31,27 +33,6 @@ export function messageVariables(key: MessageCaseKey): readonly string[] {
 
 export function defaultMessageHead(key: MessageCaseKey) {
   return DEFAULT_MESSAGE_HEADS[key] ?? "";
-}
-
-const VARIABLE_PATTERN = /\{([^}]+)\}/g;
-export const ROLE_MENTION_PATTERN = /<@&(\d+)>/g;
-
-// 변수 값이 비면 빈칸으로 바꾸고 앞뒤 공백을 하나로 줄인다. 결과가 비면 머리 줄 없이 보낸다.
-export function renderMessageHead({
-  template,
-  values,
-}: {
-  template: string;
-  values: Record<string, string | undefined>;
-}) {
-  return template
-    .replace(VARIABLE_PATTERN, (_, name: string) => values[name] ?? "")
-    .replace(/[^\S\n]+/g, " ")
-    .trim();
-}
-
-export function roleMentionIds(text: string) {
-  return [...text.matchAll(ROLE_MENTION_PATTERN)].flatMap((match) => match[1] ?? []);
 }
 
 // 저장을 막는 오류. 없는 역할은 경고라 여기서 다루지 않는다(화면이 길드 역할과 대조한다).

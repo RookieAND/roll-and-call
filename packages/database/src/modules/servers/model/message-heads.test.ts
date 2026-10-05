@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { renderMessageHead, validateMessageHead } from "./message-heads";
+import { validateMessageHead } from "./message-heads";
+import { renderMessageHead } from "./render-message-head";
 
 describe("renderMessageHead", () => {
   it("빈 변수는 빈칸으로 바꾸고 공백을 하나로 줄인다", () => {

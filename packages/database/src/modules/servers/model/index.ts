@@ -14,8 +14,7 @@ export {
   MESSAGE_CASES,
   MESSAGE_HEAD_MAX_LENGTH,
   messageVariables,
-  renderMessageHead,
-  roleMentionIds,
   validateMessageHead,
   type MessageCaseKey,
 } from "./message-heads";
+export { renderMessageHead, roleMentionIds } from "./render-message-head";

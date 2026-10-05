@@ -23,9 +23,7 @@ export async function saveMessageHead({
   headLine: string;
   expectedUpdatedAt: Date | null;
   actor: Actor;
-}): Promise<
-  { ok: true } | { ok: false; conflict: { by: string | null; at: Date | null } }
-> {
+}): Promise<{ ok: true } | { ok: false; conflict: { by: string | null; at: Date | null } }> {
   return db.transaction(async (tx) => {
     const [current] = await tx
       .select({ updatedAt: serverMessageHeads.updatedAt, updatedBy: serverMessageHeads.updatedBy })

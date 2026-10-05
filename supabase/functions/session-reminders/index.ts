@@ -1,5 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
+import { renderMessageHead, roleMentionIds } from "./render-message-head.ts";
+
 // pg_cron이 5분마다 부른다(packages/database/drizzle/0040_session_reminder_cron.sql).
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
@@ -43,7 +45,6 @@ function formatKst(value: string) {
 }
 
 // 서버가 정한 「1시간 전 알림」 머리 줄(server_message_heads). 없거나 못 읽으면 머리 줄 없이 보낸다.
-// 변수 치환은 packages/database/src/modules/servers/model/message-heads.ts의 renderMessageHead와 같은 규칙이다.
 async function headLine(game: DueGame, gmName: string) {
   const { data, error } = await supabase
     .from("server_message_heads")
@@ -58,10 +59,7 @@ async function headLine(game: DueGame, gmName: string) {
     룰: game.rule,
     링크: `${SITE_URL}/${game.server.slug}/games/${game.id}`,
   };
-  return (data?.head_line ?? "")
-    .replace(/\{([^}]+)\}/g, (_, name: string) => values[name] ?? "")
-    .replace(/[^\S\n]+/g, " ")
-    .trim();
+  return renderMessageHead({ template: data?.head_line ?? "", values });
 }
 
 async function sendReminder(game: DueGame, gmName: string) {
@@ -73,7 +71,7 @@ async function sendReminder(game: DueGame, gmName: string) {
   ].filter((discordId): discordId is string => !!discordId);
 
   const head = await headLine(game, gmName);
-  const roleIds = [...head.matchAll(/<@&(\d+)>/g)].map((match) => match[1]);
+  const roleIds = roleMentionIds(head);
   const content =
     [head, mentionIds.map((discordId) => `<@${discordId}>`).join(" ")].filter(Boolean).join("\n") ||
     undefined;
