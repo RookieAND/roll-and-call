@@ -9,6 +9,7 @@ import {
   getCurrentServer,
   getKickImpact,
   getUserDetail,
+  getUserNickname,
   requireStaff,
 } from "@/shared/server";
 import {
@@ -25,8 +26,8 @@ const ROLES = Object.values(ACTIVITY_ROLE);
 export async function generateMetadata({
   params,
 }: PageProps<"/[server]/users/[id]">): Promise<Metadata> {
-  const user = await getUserDetail((await params).id);
-  return { title: user ? `${user.nickname} 유저 상세` : "유저 상세" };
+  const nickname = await getUserNickname((await params).id);
+  return { title: nickname ? `${nickname} 유저 상세` : "유저 상세" };
 }
 
 export default async function UserDetailPage({

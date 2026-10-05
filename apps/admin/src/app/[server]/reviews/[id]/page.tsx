@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { parseSort, stringParams } from "@/shared/lib";
 import {
   getReviewDetail,
+  getReviewTitle,
   REVIEW_DEFAULT_SORT,
   REVIEW_LIST_TAB,
   REVIEW_SORT_COLUMNS,
@@ -14,9 +15,8 @@ import { ReviewDetailView } from "@/views/review-detail";
 export async function generateMetadata({
   params,
 }: PageProps<"/[server]/reviews/[id]">): Promise<Metadata> {
-  const filter = { tab: REVIEW_LIST_TAB.all, sort: REVIEW_DEFAULT_SORT };
-  const review = await getReviewDetail({ id: (await params).id, filter });
-  return { title: review ? review.game.title : "후기 상세" };
+  const title = await getReviewTitle((await params).id);
+  return { title: title ?? "후기 상세" };
 }
 
 // 들어온 목록의 탭·검색·사진·구인 칩·정렬을 주소로 받아 뒤로 가기와 [다음 건]을 만든다.

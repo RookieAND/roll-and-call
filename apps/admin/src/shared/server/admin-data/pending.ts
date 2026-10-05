@@ -1,10 +1,12 @@
 import "server-only";
+import { cache } from "react";
+
 import { buildPendingItems, type PendingItem } from "./build-pending-items";
 import { certBlockers } from "./cert-blockers";
 import { loadSnapshot } from "./snapshot";
 
 // 사이드바 건수·홈 처리 대기·폰 안내·⌘K가 모두 이 한 곳에서 읽는다. 처리 대기는 2종이다(D212).
-export async function getPendingItems(): Promise<PendingItem[]> {
+export const getPendingItems = cache(async (): Promise<PendingItem[]> => {
   const db = await loadSnapshot();
   const pendingCerts = db.certApplications.filter(
     (application) => application.status === "pending",
@@ -19,4 +21,4 @@ export async function getPendingItems(): Promise<PendingItem[]> {
       .filter((request) => !request.processed)
       .map((request) => ({ at: request.requestedAt })),
   });
-}
+});

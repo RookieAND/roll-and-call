@@ -10,14 +10,9 @@ export {
   saveQuizQuestion,
   unhideRulebook,
   updateRulebook,
-  type AddCertSellerResult,
-  type AddRulebookResult,
-  type ApproveRequestResult,
   type QuizQuestionInput,
-  type RulebookActionResult,
   type RulebookFields,
   type RulebookLinkInput,
-  type UpdateRulebookResult,
 } from "@roll-and-call/database/rulebooks";
 export {
   addStaff,
@@ -26,7 +21,6 @@ export {
   deleteStaffMemo,
   applySanction,
   AUDIT_ACTION_GROUPS,
-  AUDIT_ACTIONS,
   AUDIT_RETENTION_DAYS,
   addNoShow,
   ADD_NO_SHOW_FAILURE,
@@ -44,30 +38,21 @@ export {
   editNickname,
   getKickImpact,
   type KickImpact,
-  type EditNicknameResult,
   type AuditAction,
-  type CancelNoShowResult,
-  type RestoreNoShowResult,
   type OngoingChoice,
   type PostModeration,
   type PostModerationAction,
-  type PostModerationResult,
-  type ReleaseResult,
   type ReviewModerationAction,
-  type ReviewModerationResult,
   type SanctionInput,
-  type SanctionResult,
 } from "@roll-and-call/database/moderation";
 export {
   grantCertifications,
   revokeCertifications,
-  type CertDecision,
   type CertDecisionResult,
-  type GrantResult,
-  type RevokeResult,
 } from "@roll-and-call/database/certifications";
 export { decideCert } from "./decide-cert";
 export { getUserDetail, type UserDetail } from "./get-user-detail";
+export { getUserNickname } from "./get-user-nickname";
 export { getMemberOngoing, type MemberOngoingRow } from "./get-member-ongoing";
 export { checkDiscordBanFailed } from "./check-discord-ban-failed";
 export { checkDiscordUnbanFailed } from "./check-discord-unban-failed";
@@ -77,7 +62,7 @@ export { type UserRow } from "./user-row";
 export { USER_SORT_COLUMNS, USER_SORT_FALLBACK, type UserSortColumn } from "./user-sort";
 export { retentionDaysLeft } from "./retention-days-left";
 export { getCertReview, type CertReview } from "./get-cert-review";
-export { CERT_GRANT_METHOD, type CertGrantMethod, type CertManageRow } from "./cert-manage-row";
+export { CERT_GRANT_METHOD, type CertManageRow } from "./cert-manage-row";
 export { type CertManageFilter } from "./cert-manage-filter";
 export {
   CERT_MANAGE_SORT_COLUMNS,
@@ -96,13 +81,11 @@ export {
 export { type CertQueueRow } from "./cert-queue-rows";
 export { listCertQueue } from "./list-cert-queue";
 export { parseCertQueueFilter } from "./parse-cert-queue-filter";
-export { PENDING_KINDS, type PendingItem, type PendingKind } from "./build-pending-items";
+export { type PendingItem, type PendingKind } from "./build-pending-items";
 export { getPendingItems } from "./pending";
-export { isRecognizedPost } from "./recognized-session";
 export { searchUsers, type UserSearchResult } from "./search";
 export { getNoShow, type NoShowDetail } from "./get-no-show";
 export { listNoShows } from "./list-no-shows";
-export { type NoShowFilter } from "./select-no-show-rows";
 export {
   NO_SHOW_DEFAULT_SORT,
   NO_SHOW_SORT_COLUMN,
@@ -121,7 +104,6 @@ export {
   GMS_NEEDED,
   PEOPLE_WEEKS_NEEDED,
   type AnalyticsData,
-  type AnalyticsMetric,
   type AnalyticsTrendWeek,
 } from "./build-analytics";
 export { getAnalytics } from "./get-analytics";
@@ -132,8 +114,9 @@ export {
   type WeeklySummary,
 } from "./get-weekly-summary";
 export { getPostDetail, type PostDetail } from "./get-post-detail";
+export { getPostTitle } from "./get-post-title";
 export { listPosts } from "./list-posts";
-export { type PostRow, type PostStaffAction } from "./post-row";
+export { type PostRow } from "./post-row";
 export { type PostListFilter } from "./select-post-rows";
 export {
   POST_DEFAULT_SORT,
@@ -142,16 +125,10 @@ export {
   type PostSortColumn,
 } from "./post-sort";
 export { POST_STATUS, type PostStatus } from "./post-status";
-export {
-  ALL_AUDIT_PERIOD,
-  AUDIT_PERIODS,
-  DEFAULT_AUDIT_PERIOD,
-  type AuditPeriod,
-} from "./audit-period";
+export { ALL_AUDIT_PERIOD, AUDIT_PERIODS } from "./audit-period";
 export { defaultAuditPeriod } from "./default-audit-period";
-export { type AuditLogFilter } from "./filter-audit-log";
 export { getAuditEntry, type AuditEntryDetail } from "./get-audit-entry";
-export { AUDIT_SUBJECT, type AuditSubjectKind } from "./audit-subject";
+export { type AuditSubjectKind } from "./audit-subject";
 export { listAuditLog } from "./list-audit-log";
 export { listStaff, type StaffRow } from "./list-staff";
 export { searchStaffCandidates } from "./search-staff-candidates";
@@ -166,12 +143,12 @@ export { getGrantOptions, type GrantOptions } from "./get-grant-options";
 export type * from "./types";
 export { listCertSellers, type CertSellerRow } from "./list-cert-sellers";
 export { getReviewDetail } from "./get-review-detail";
+export { getReviewTitle } from "./get-review-title";
 export { type ReviewDetail } from "./build-review-detail";
 export { listReviews, type ReviewList } from "./list-reviews";
-export { type ReviewListFilter } from "./select-review-rows";
 export { type ReviewRow } from "./review-row";
 export { REVIEW_LIST_TAB, type ReviewListTab } from "./review-list-tab";
-export { REVIEW_PHOTO_FILTER, type ReviewPhotoFilter } from "./review-photo-filter";
+export { REVIEW_PHOTO_FILTER } from "./review-photo-filter";
 export {
   REVIEW_DEFAULT_SORT,
   REVIEW_SORT_COLUMN,
@@ -184,5 +161,4 @@ export {
   getServerBySlug,
   getServerOwnerProfile,
   updateServerSettings,
-  type ServerSettings,
 } from "@roll-and-call/database/servers";

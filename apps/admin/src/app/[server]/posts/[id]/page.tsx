@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { parseSort, stringParams } from "@/shared/lib";
-import { getPostDetail, POST_DEFAULT_SORT, POST_SORT_COLUMNS } from "@/shared/server";
+import { getPostTitle, POST_DEFAULT_SORT, POST_SORT_COLUMNS } from "@/shared/server";
 import { PostDetailLoading } from "@/views/post-detail";
 
 import { PostDetailContent } from "./post-detail-content";
@@ -10,8 +10,8 @@ import { PostDetailContent } from "./post-detail-content";
 export async function generateMetadata({
   params,
 }: PageProps<"/[server]/posts/[id]">): Promise<Metadata> {
-  const post = await getPostDetail({ id: (await params).id, filter: { sort: POST_DEFAULT_SORT } });
-  return { title: post ? `${post.title} 구인 상세` : "구인 상세" };
+  const title = await getPostTitle((await params).id);
+  return { title: title ? `${title} 구인 상세` : "구인 상세" };
 }
 
 // 탭을 바꾸면 불러오는 중 화면을 보여 준다. 조치 모달(action)은 주소만 바꿔 열고 닫는다.
