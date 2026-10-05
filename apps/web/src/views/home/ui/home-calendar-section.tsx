@@ -12,7 +12,6 @@ import { HomeDaySessions } from "./home-day-sessions";
 interface HomeCalendarSectionProps {
   monthStart: Date;
   sessionsByDay: Record<string, CalendarSession[]>;
-  cancelledByDay: Record<string, CalendarSession[]>;
   hasNextMonthSessions: boolean;
   initialSelectedKey: string;
   todayKey: string;
@@ -22,7 +21,6 @@ interface HomeCalendarSectionProps {
 export function HomeCalendarSection({
   monthStart,
   sessionsByDay,
-  cancelledByDay,
   hasNextMonthSessions,
   initialSelectedKey,
   todayKey,
@@ -41,11 +39,7 @@ export function HomeCalendarSection({
         selectedKey={selectedKey}
         todayKey={todayKey}
       />
-      <HomeDaySessions
-        date={selected.toDate()}
-        sessions={sessionsByDay[selectedKey] ?? []}
-        cancelledSessions={cancelledByDay[selectedKey] ?? []}
-      />
+      <HomeDaySessions date={selected.toDate()} sessions={sessionsByDay[selectedKey] ?? []} />
     </>
   );
 }

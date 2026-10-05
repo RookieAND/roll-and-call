@@ -63,12 +63,7 @@ describe("toCalendarSessions", () => {
     expect(ids([row({ confirmedAt: null })], BEFORE_DEADLINE)).toEqual([]);
   });
 
-  it("취소된 구인은 무산이어도 cancelled로 넣는다", () => {
-    const [session] = toCalendarSessions({
-      rows: [row({ cancelledAt: BEFORE_START, gmId: "viewer" })],
-      viewerId: "viewer",
-      now: AFTER_END,
-    });
-    expect(session).toMatchObject({ id: "game", cancelled: true, mine: true });
+  it("취소된 구인은 뺀다", () => {
+    expect(ids([row({ cancelledAt: BEFORE_START })], AFTER_END)).toEqual([]);
   });
 });

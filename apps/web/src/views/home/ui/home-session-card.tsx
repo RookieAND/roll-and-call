@@ -11,7 +11,6 @@ interface HomeSessionCardProps {
 
 export function HomeSessionCard({ session }: HomeSessionCardProps) {
   const time = toKst(session.startsAt).format("HH:mm");
-  const tinted = session.mine && !session.cancelled;
 
   return (
     <Card.Root
@@ -19,10 +18,7 @@ export function HomeSessionCard({ session }: HomeSessionCardProps) {
       padding="sm"
       radius={600}
       background="none"
-      className={cn(
-        tinted && "border-tinted-border bg-tinted-bg",
-        session.cancelled && "opacity-72",
-      )}
+      className={cn(session.mine && "border-tinted-border bg-tinted-bg")}
     >
       <HStack gap="150" align="start" className="px-025">
         <Text typography="subtitle2" weight="extrabold" numeric className="w-11 flex-none pt-025">
@@ -33,8 +29,7 @@ export function HomeSessionCard({ session }: HomeSessionCardProps) {
             <Text truncate typography="subtitle1" className="min-w-0 flex-1">
               {session.title}
             </Text>
-            {session.cancelled && <Badge colorPalette="gray">취소됨</Badge>}
-            {tinted && <Badge colorPalette="primary">내가 참여</Badge>}
+            {session.mine && <Badge colorPalette="primary">내가 참여</Badge>}
           </HStack>
           <HStack align="center" gap="100">
             <Badge colorPalette="gray">{session.rule}</Badge>

@@ -9,10 +9,9 @@ import { HomeSessionCard } from "./home-session-card";
 interface HomeDaySessionsProps {
   date: Date;
   sessions: CalendarSession[];
-  cancelledSessions: CalendarSession[];
 }
 
-export function HomeDaySessions({ date, sessions, cancelledSessions }: HomeDaySessionsProps) {
+export function HomeDaySessions({ date, sessions }: HomeDaySessionsProps) {
   const title = toKst(date).format("M월 D일 (dd)");
   const countLabel = sessions.length > 0 ? `${sessions.length}건` : "세션 없음";
 
@@ -45,7 +44,7 @@ export function HomeDaySessions({ date, sessions, cancelledSessions }: HomeDaySe
             }
           />
         )}
-        {[...sessions, ...cancelledSessions].map((session) => (
+        {sessions.map((session) => (
           <ServerLink key={session.id} path={`/games/${session.id}`} className="block">
             <HomeSessionCard session={session} />
           </ServerLink>
