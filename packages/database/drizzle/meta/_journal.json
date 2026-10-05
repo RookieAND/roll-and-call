@@ -540,6 +540,13 @@
       "when": 1796800000000,
       "tag": "0082_attendance_deadline_24h",
       "breakpoints": true
+    },
+    {
+      "idx": 83,
+      "version": "7",
+      "when": 1796900000000,
+      "tag": "0083_draw_results_user_id_idx",
+      "breakpoints": true
     }
   ]
 }

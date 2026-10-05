@@ -239,6 +239,7 @@ export const drawResults = pgTable(
       name: "draw_results_game_server_fk",
     }).onDelete("cascade"),
     check("draw_results_roll_range", sql`${table.roll} between 1 and 100`),
+    index("draw_results_user_id_idx").on(table.userId),
   ],
 ).enableRLS();
 

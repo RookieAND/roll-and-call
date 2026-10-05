@@ -1,0 +1,1 @@
+CREATE INDEX "draw_results_user_id_idx" ON "draw_results" USING btree ("user_id");
