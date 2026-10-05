@@ -1,10 +1,9 @@
 import { Grid, Text, VStack } from "@roll-and-call/ui";
 
 import type { PostDetail } from "@/shared/server";
-import { FactRows, Tag } from "@/shared/ui";
+import { FactRows, Tag, ZoomablePhotos } from "@/shared/ui";
 
 import { ContentSection } from "./content-section";
-import { ZoomablePhotos } from "./zoomable-photos";
 
 interface ContentPanelProps {
   post: Pick<

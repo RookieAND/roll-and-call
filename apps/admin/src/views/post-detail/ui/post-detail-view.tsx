@@ -3,11 +3,10 @@ import { HStack, VStack } from "@roll-and-call/ui";
 import { POST_ACTION, PostActionDialog, type PostAction } from "@/features/moderate-post";
 import { auditLogHref, withQuery } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { AdminHeader, NextItemButton, Panel, Tag } from "@/shared/ui";
+import { AdminHeader, HiddenBanner, NextItemButton, Panel, Tag } from "@/shared/ui";
 
 import { POST_DETAIL_TAB, type PostDetailTab } from "../model/post-detail-tab";
 import { ContentPanel } from "./content-panel";
-import { HiddenBanner } from "./hidden-banner";
 import { MemberPanel } from "./member-panel";
 import { PostActionsAside } from "./post-actions-aside";
 import { PostDetailTabs } from "./post-detail-tabs";

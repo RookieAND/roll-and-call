@@ -7,6 +7,7 @@ import {
   LoadingRegion,
   NextItemButton,
   SkeletonItem,
+  skeletonFact,
 } from "@/shared/ui";
 
 const SHOTS = [
@@ -14,11 +15,6 @@ const SHOTS = [
   { label: "뒷면", note: "뒤표지", question: "같은 책의 뒤표지인가" },
   { label: "책등", note: "책 옆면의 제목", question: "실물 책이고 제목이 보이는가" },
 ] as const;
-
-const skeletonFact = (label: string) => ({
-  label,
-  value: <Skeleton width={96} height={14} render={<span />} className="inline-block" />,
-});
 
 export function CertReviewLoading() {
   return (

@@ -1,14 +1,9 @@
 import { Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import { ArrowRight } from "lucide-react";
 
-import { AdminHeader, FactRows, LoadingRegion } from "@/shared/ui";
+import { AdminHeader, FactRows, LoadingRegion, skeletonFact } from "@/shared/ui";
 
 import { EntrySection } from "./entry-section";
-
-const skeletonFact = (label: string) => ({
-  label,
-  value: <Skeleton width={96} height={14} render={<span />} className="inline-block" />,
-});
 
 export function AuditEntryLoading() {
   return (

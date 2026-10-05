@@ -12,15 +12,11 @@ import {
   SkeletonPager,
   SkeletonSelect,
   SkeletonTable,
+  skeletonFact,
 } from "@/shared/ui";
 
 import { USER_DETAIL_TAB } from "../model/user-detail-tab";
 import { UserActionsAsideFrame } from "./user-actions-aside-frame";
-
-const skeletonFact = (label: string) => ({
-  label,
-  value: <Skeleton width={96} height={14} render={<span />} className="inline-block" />,
-});
 
 export function UserDetailLoading() {
   return (

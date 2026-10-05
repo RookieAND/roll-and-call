@@ -1,4 +1,5 @@
 export { LoadingRegion } from "./loading-region";
+export { skeletonFact } from "./skeleton-fact";
 export { SkeletonCell, type SkeletonCellKind } from "./skeleton-cell";
 export { SkeletonEntity } from "./skeleton-entity";
 export { SkeletonFacts } from "./skeleton-facts";

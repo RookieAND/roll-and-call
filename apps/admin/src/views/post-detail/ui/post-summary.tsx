@@ -1,13 +1,12 @@
 import { Card, Grid, HStack, Text } from "@roll-and-call/ui";
 
 import type { PostDetail } from "@/shared/server";
-import { FactRows } from "@/shared/ui";
+import { FactRows, ZoomablePhotos } from "@/shared/ui";
 
 import { receivedActionValue } from "../model/received-action-value";
 import { summaryRows } from "../model/summary-rows";
 import { ImagePlaceholder } from "./image-placeholder";
 import { PostMoreMenu } from "./post-more-menu";
-import { ZoomablePhotos } from "./zoomable-photos";
 
 const THUMBNAIL = "썸네일";
 
