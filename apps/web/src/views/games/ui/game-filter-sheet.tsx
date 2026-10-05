@@ -124,7 +124,6 @@ export function GameFilterSheet({ filter, count }: GameFilterSheetProps) {
                 </Checkbox.Root>
                 <Checkbox.Label>일정 미정 구인도 보기</Checkbox.Label>
               </Checkbox.Field>
-              {/* 체크박스(20px)와 간격(10px)만큼 들여 글자 줄에 맞춘다. */}
               <Text
                 typography="body4"
                 foreground="hint"
@@ -136,11 +135,6 @@ export function GameFilterSheet({ filter, count }: GameFilterSheetProps) {
           </VStack>
         </Sheet.Body>
         <Sheet.Footer>
-          {empty && (
-            <Text typography="body4" foreground="hint" className="text-center">
-              조건에 맞는 구인이 없습니다
-            </Text>
-          )}
           <Grid cols={2} gap="100">
             <Button variant="outline" size="lg" onClick={() => update(EMPTY_FILTER_DRAFT)}>
               초기화

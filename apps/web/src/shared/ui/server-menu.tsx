@@ -49,22 +49,24 @@ export function ServerMenu({
             aria-label={label}
             className="flex w-[max(var(--anchor-width),260px)] max-w-[calc(100vw-32px)] flex-col rounded-600 border border-gray-200 bg-surface p-075 shadow-[0_16px_40px_rgba(23,23,28,0.16)] outline-none"
           >
-            <Menu.RadioGroup value={checkedSlug}>
+            <Menu.Group>
               <Menu.GroupLabel
                 render={<Text typography="body5" weight="bold" foreground="hint" />}
                 className="block px-125 pt-100 pb-075"
               >
                 {label}
               </Menu.GroupLabel>
-              {servers.map((server) => (
-                <ServerMenuItem
-                  key={server.slug}
-                  server={server}
-                  checked={server.slug === checkedSlug}
-                  destination={destination}
-                />
-              ))}
-            </Menu.RadioGroup>
+              <Menu.RadioGroup value={checkedSlug}>
+                {servers.map((server) => (
+                  <ServerMenuItem
+                    key={server.slug}
+                    server={server}
+                    checked={server.slug === checkedSlug}
+                    destination={destination}
+                  />
+                ))}
+              </Menu.RadioGroup>
+            </Menu.Group>
             {aboutLink && (
               <>
                 <Menu.Separator className="mx-125 my-075 h-px bg-gray-200" />

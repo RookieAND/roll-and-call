@@ -64,11 +64,6 @@ export function GameSortSheet({ filter }: GameSortSheetProps) {
                   {option.label}
                   {selected && <Check size={16} aria-hidden />}
                 </Sheet.Item>
-                {option.key === GAME_SORT.slots && (
-                  <Text typography="body4" foreground="hint" className="px-150 pb-075">
-                    추첨 구인은 맨 뒤에 보입니다
-                  </Text>
-                )}
               </Fragment>
             );
           })}
