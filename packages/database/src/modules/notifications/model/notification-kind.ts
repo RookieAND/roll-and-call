@@ -9,6 +9,8 @@ export const NOTIFICATION_KIND = {
   participantLeft: "participant_left",
   drawWon: "draw_won",
   drawWaitlisted: "draw_waitlisted",
+  lotteryScheduleConfirmed: "lottery_schedule_confirmed",
+  lotteryParticipationConfirmed: "lottery_participation_confirmed",
   recruitmentClosedEmpty: "recruitment_closed_empty",
   sessionTimeSet: "session_time_set",
   sessionTimeChanged: "session_time_changed",
@@ -61,6 +63,8 @@ export type NotificationParamsMap = {
   participant_left: GameParams & { nickname: string };
   draw_won: GameParams;
   draw_waitlisted: WaitlistParams;
+  lottery_schedule_confirmed: GameParams;
+  lottery_participation_confirmed: GameParams;
   recruitment_closed_empty: GameParams;
   session_time_set: GameParams & { startsAt: string };
   session_time_changed: GameParams & { previousStartsAt: string; startsAt: string };

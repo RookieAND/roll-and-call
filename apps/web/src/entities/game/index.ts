@@ -49,7 +49,11 @@ export {
   isAttendancePastDeadline,
   isAutoConfirmedAttendance,
 } from "@roll-and-call/database/games/model";
-export { canEndSession } from "@roll-and-call/database/games/model";
+export {
+  canEndSession,
+  countOpenLotterySeats,
+  shouldSkipLottery,
+} from "@roll-and-call/database/games/model";
 export {
   ABSENCE_WINDOW_DAYS,
   absenceExpiresAt,

@@ -9,12 +9,18 @@ interface LotteryAppliedActionsProps {
   gameId: string;
   endDate: Date;
   closed: boolean;
+  confirmsAll: boolean;
 }
 
 // 마감 뒤에는 추첨 대상이 정해져 취소 버튼이 없다(D245).
-export function LotteryAppliedActions({ gameId, endDate, closed }: LotteryAppliedActionsProps) {
+export function LotteryAppliedActions({
+  gameId,
+  endDate,
+  closed,
+  confirmsAll,
+}: LotteryAppliedActionsProps) {
   const drawLine = closed
-    ? "모집이 끝나 곧 추첨합니다."
+    ? `모집이 끝나 곧 ${confirmsAll ? "확정" : "추첨"}합니다.`
     : `${formatDateClock(endDate)} 모집이 끝나면 추첨합니다.`;
   const notice = (
     <ActionNotice

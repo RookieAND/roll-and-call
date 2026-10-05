@@ -90,7 +90,12 @@ export type GameActionView =
       review: ReviewStatus;
     }
   | { kind: typeof GAME_ACTION_VIEW.endedOther }
-  | { kind: typeof GAME_ACTION_VIEW.lotteryApplied; endDate: Date; closed: boolean }
+  | {
+      kind: typeof GAME_ACTION_VIEW.lotteryApplied;
+      endDate: Date;
+      closed: boolean;
+      confirmsAll: boolean;
+    }
   | { kind: typeof GAME_ACTION_VIEW.waiting; rank: number; resultLink: boolean }
   | ({ kind: typeof GAME_ACTION_VIEW.scheduled; confirmedAt: Date; live: boolean } & ActionLinks)
   | ({ kind: typeof GAME_ACTION_VIEW.confirmedOpen; confirmedAt: Date | null } & ActionLinks)

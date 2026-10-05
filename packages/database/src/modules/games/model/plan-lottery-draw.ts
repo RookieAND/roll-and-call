@@ -1,5 +1,7 @@
 import { sortBy } from "es-toolkit";
 
+import { countOpenLotterySeats } from "./count-open-lottery-seats";
+
 type RolledApplicant = { userId: string; roll: number };
 
 export type PlannedDrawEntry = RolledApplicant & { rank: number };
@@ -14,7 +16,7 @@ export function planLotteryDraw({
   confirmedCount: number;
   maxPlayers: number;
 }): { confirmed: PlannedDrawEntry[]; waiting: PlannedDrawEntry[] } {
-  const openSeats = Math.max(maxPlayers - confirmedCount, 0);
+  const openSeats = countOpenLotterySeats({ maxPlayers, confirmedCount });
   const ranked = sortBy(applicants, ["roll"]).map((applicant, index) => ({
     ...applicant,
     rank: index + 1,

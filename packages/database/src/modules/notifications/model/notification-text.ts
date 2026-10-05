@@ -64,6 +64,10 @@ export function notificationText(payload: NotificationPayload): NotificationText
         ` 추첨 결과 대기 ${payload.params.waitlistRank}번입니다.`,
         "자리가 나면 GM이 대기 명단에서 확정합니다.",
       );
+    case NOTIFICATION_KIND.lotteryScheduleConfirmed:
+      return bold(payload.params.gameTitle, " 일정이 확정되었습니다.");
+    case NOTIFICATION_KIND.lotteryParticipationConfirmed:
+      return bold(payload.params.gameTitle, " 참여가 확정되었습니다.", "일정을 조율해 주세요.");
     case NOTIFICATION_KIND.recruitmentClosedEmpty:
       return bold(payload.params.gameTitle, " 신청자 없이 모집이 끝났습니다.");
     case NOTIFICATION_KIND.sessionTimeSet:

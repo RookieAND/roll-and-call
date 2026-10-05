@@ -1,6 +1,8 @@
 export { countConfirmed } from "./count-confirmed";
 export { countWaiting } from "./count-waiting";
 export { compareWaitlistOrder } from "./compare-waitlist-order";
+export { countOpenLotterySeats } from "./count-open-lottery-seats";
+export { shouldSkipLottery } from "./should-skip-lottery";
 export { DIE_FACES } from "./die-faces";
 export { DRAW_REJECTION, type DrawRejection } from "./draw-rejection";
 export { DRAW_RESULT_KIND } from "./draw-result-kind";

@@ -6,7 +6,9 @@ import { closeGameRecruitment } from "#/modules/games/commands/close-game-recrui
 import { markGameDrawn } from "#/modules/games/commands/mark-game-drawn";
 import { saveDrawResults } from "#/modules/games/commands/save-draw-results";
 import { setDrawRank } from "#/modules/games/commands/set-draw-rank";
+import { setParticipantStatus } from "#/modules/games/commands/set-participant-status";
 import { compareWaitlistOrder } from "#/modules/games/model/compare-waitlist-order";
+import { countOpenLotterySeats } from "#/modules/games/model/count-open-lottery-seats";
 import { DIE_FACES } from "#/modules/games/model/die-faces";
 import { DRAW_REJECTION, type DrawRejection } from "#/modules/games/model/draw-rejection";
 import { DRAW_RESULT_KIND } from "#/modules/games/model/draw-result-kind";
@@ -14,7 +16,9 @@ import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
 import { planLotteryDraw } from "#/modules/games/model/plan-lottery-draw";
 import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
 import { rollDistinct } from "#/modules/games/model/roll-distinct";
+import { SCHEDULE_MODE } from "#/modules/games/model/schedule-mode";
 import { isApplicationClosed } from "#/modules/games/model/session-timing";
+import { shouldSkipLottery } from "#/modules/games/model/should-skip-lottery";
 import { countRolledParticipants } from "#/modules/games/queries/count-rolled-participants";
 import { listParticipantUserIds } from "#/modules/games/queries/list-participant-user-ids";
 import { listWaitingParticipants } from "#/modules/games/queries/list-waiting-participants";
@@ -28,6 +32,12 @@ export type DrawLotteryResult =
       kind: typeof DRAW_RESULT_KIND.drawn;
       confirmedUserIds: string[];
       waitingUserIds: string[];
+      preConfirmedUserIds: string[];
+      becameFull: boolean;
+    }
+  | {
+      kind: typeof DRAW_RESULT_KIND.confirmedAll;
+      confirmedUserIds: string[];
       preConfirmedUserIds: string[];
       becameFull: boolean;
     }
@@ -95,6 +105,41 @@ export async function drawLottery({
       ],
     });
     return { kind: DRAW_RESULT_KIND.empty };
+  }
+
+  const openSeats = countOpenLotterySeats({
+    maxPlayers: game.maxPlayers,
+    confirmedCount: preConfirmedUserIds.length,
+  });
+  if (shouldSkipLottery({ applicantCount: applicantIds.length, openSeats })) {
+    for (const userId of applicantIds) {
+      await setParticipantStatus({
+        transaction,
+        serverId,
+        gameId,
+        userId,
+        status: PARTICIPANT_STATUS.confirmed,
+      });
+    }
+    await createNotifications({
+      executor: transaction,
+      serverId,
+      actorId,
+      notifications: applicantIds.map((userId) => ({
+        userId,
+        kind:
+          game.scheduleMode === SCHEDULE_MODE.fixed
+            ? NOTIFICATION_KIND.lotteryScheduleConfirmed
+            : NOTIFICATION_KIND.lotteryParticipationConfirmed,
+        params: gameParams,
+      })),
+    });
+    return {
+      kind: DRAW_RESULT_KIND.confirmedAll,
+      confirmedUserIds: applicantIds,
+      preConfirmedUserIds,
+      becameFull: preConfirmedUserIds.length + applicantIds.length === game.maxPlayers,
+    };
   }
 
   const rolls = rollDistinct({

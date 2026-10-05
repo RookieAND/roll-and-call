@@ -146,10 +146,19 @@ describe("deriveActionView", () => {
       kind: GAME_ACTION_VIEW.lotteryApplied,
       endDate: at(48),
       closed: false,
+      confirmsAll: false,
     });
     expect(view({ game: { ...lottery, endDate: at(-1) }, viewer: applicant })).toMatchObject({
       closed: true,
     });
+    expect(
+      view({
+        game: { ...lottery, endDate: at(-1) },
+        viewer: applicant,
+        confirmedCount: 0,
+        waitingCount: 1,
+      }),
+    ).toMatchObject({ confirmsAll: true });
   });
 
   it("(9) 대기 중: 선착순 대기, 추첨 뒤 대기", () => {

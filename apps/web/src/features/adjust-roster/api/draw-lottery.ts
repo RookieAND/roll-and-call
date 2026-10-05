@@ -45,5 +45,7 @@ export async function drawLottery(gameId: string): Promise<DrawLotteryResult> {
 
   revalidateRoster({ slug: server.slug, gameId });
   after(() => finishLotteryDraw({ server, gameId, result }));
+  // 추첨을 생략하고 전원 확정한 글은 보여 줄 결과 화면이 없어 참여자 관리에 머문다.
+  if (result.kind === DRAW_RESULT_KIND.confirmedAll) return {};
   redirect(serverPath({ slug: server.slug, path: `/games/${gameId}/draw` }));
 }

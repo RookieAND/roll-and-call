@@ -21,6 +21,8 @@ const CASES: [NotificationPayload, string | null][] = [
     { kind: NOTIFICATION_KIND.participantLeft, params: { ...game, nickname: "새벽별" } },
     "/games/g1/participants",
   ],
+  [{ kind: NOTIFICATION_KIND.lotteryScheduleConfirmed, params: game }, "/games/g1"],
+  [{ kind: NOTIFICATION_KIND.lotteryParticipationConfirmed, params: game }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.drawWon, params: game }, "/games/g1/draw"],
   [
     { kind: NOTIFICATION_KIND.drawWaitlisted, params: { ...game, waitlistRank: 2 } },

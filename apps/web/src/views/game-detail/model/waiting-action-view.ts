@@ -1,6 +1,11 @@
 import { isNil } from "es-toolkit";
 
-import { isSessionEnded, RECRUIT_METHOD } from "@/entities/game";
+import {
+  countOpenLotterySeats,
+  isSessionEnded,
+  RECRUIT_METHOD,
+  shouldSkipLottery,
+} from "@/entities/game";
 
 import { type ActionContext, GAME_ACTION_VIEW, type GameActionView } from "./game-action-view";
 
@@ -8,9 +13,13 @@ import { type ActionContext, GAME_ACTION_VIEW, type GameActionView } from "./gam
 export function waitingActionView({
   game,
   viewer,
+  confirmedCount,
   waitingCount,
   now,
-}: Pick<ActionContext, "game" | "viewer" | "waitingCount" | "now">): GameActionView {
+}: Pick<
+  ActionContext,
+  "game" | "viewer" | "confirmedCount" | "waitingCount" | "now"
+>): GameActionView {
   if (isSessionEnded(game, now)) return { kind: GAME_ACTION_VIEW.endedOther };
   const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
   if (isLottery && isNil(game.drawnAt)) {
@@ -18,6 +27,10 @@ export function waitingActionView({
       kind: GAME_ACTION_VIEW.lotteryApplied,
       endDate: game.endDate,
       closed: game.endDate.getTime() <= now.getTime(),
+      confirmsAll: shouldSkipLottery({
+        applicantCount: waitingCount,
+        openSeats: countOpenLotterySeats({ maxPlayers: game.maxPlayers, confirmedCount }),
+      }),
     };
   }
   return {

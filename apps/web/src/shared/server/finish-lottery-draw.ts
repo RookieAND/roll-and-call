@@ -28,7 +28,7 @@ export async function finishLotteryDraw({
     }
   };
 
-  if (result.kind === DRAW_RESULT_KIND.drawn) {
+  if (result.kind === DRAW_RESULT_KIND.drawn || result.kind === DRAW_RESULT_KIND.confirmedAll) {
     await step("가능 시간", async () => {
       const game = await getGameById(server.id, gameId);
       if (!game) return;
@@ -36,11 +36,16 @@ export async function finishLotteryDraw({
         await step("가능 시간", () => seedAvailabilityFromProfile({ game, userId }));
       }
     });
-    await step("디스코드 결과", () => notifyDrawResult({ server, gameId }));
+    // 추첨을 생략한 글은 굴림이 없어 결과 공지·칭호 판정이 없다(D331).
+    if (result.kind === DRAW_RESULT_KIND.drawn) {
+      await step("디스코드 결과", () => notifyDrawResult({ server, gameId }));
+    }
     if (result.becameFull) {
       await step("모집 완료", () => announceRecruitmentComplete({ server, gameId }));
     }
-    await step("칭호", () => evaluateGameBadges({ serverId: server.id, gameId }));
+    if (result.kind === DRAW_RESULT_KIND.drawn) {
+      await step("칭호", () => evaluateGameBadges({ serverId: server.id, gameId }));
+    }
   }
   if (result.kind !== DRAW_RESULT_KIND.rejected) {
     await step("구인 글", () => refreshRecruitPost({ server, gameId }));
