@@ -1,6 +1,5 @@
 import { Callout, Text, VStack } from "@roll-and-call/ui";
 
-import { ATTENDANCE_EDIT_DAYS } from "@/entities/game";
 import { clockParticle, formatDateTime } from "@/shared/lib";
 import { LineBreaks } from "@/shared/ui";
 
@@ -12,9 +11,9 @@ import {
 const ASK_STAFF = "고쳐야 할 기록이 있으면 운영진에게 문의해 주세요.";
 
 const LOCKED_LINES = {
-  [ATTENDANCE_GUIDE.autoConfirmed]: `세션이 끝나고 ${ATTENDANCE_EDIT_DAYS}일이 지나 출석이 자동으로 확정되었습니다.`,
+  [ATTENDANCE_GUIDE.autoConfirmed]: `세션이 끝나고 24시간이 지나 출석이 자동으로 확정되었습니다.`,
   [ATTENDANCE_GUIDE.closed]: "출석을 고칠 수 있는 기간이 지났습니다.",
-  [ATTENDANCE_GUIDE.frozen]: `세션이 끝나고 ${ATTENDANCE_EDIT_DAYS}일이 지나 직전에 확정한 대로 굳었습니다.`,
+  [ATTENDANCE_GUIDE.frozen]: `세션이 끝나고 24시간이 지나 직전에 확정한 대로 굳었습니다.`,
 } as const;
 
 interface AttendanceGuideProps {

@@ -119,7 +119,7 @@ export function notificationText(payload: NotificationPayload): NotificationText
       return bold(
         payload.params.gameTitle,
         " 출석이 자동으로 확정되었습니다.",
-        "세션이 끝나고 7일이 지났습니다.",
+        "세션이 끝나고 24시간이 지났습니다.",
       );
     case NOTIFICATION_KIND.reviewAvailable:
       return bold(payload.params.gameTitle, " 후기를 남길 수 있습니다.");

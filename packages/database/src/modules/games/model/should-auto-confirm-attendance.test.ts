@@ -7,7 +7,7 @@ const DAY = 24 * HOUR;
 const now = new Date("2026-10-03T00:00:00Z");
 type Game = Parameters<typeof shouldAutoConfirmAttendance>[0]["game"];
 const game: Game = {
-  confirmedAt: new Date(now.getTime() - 8 * DAY),
+  confirmedAt: new Date(now.getTime() - 2 * DAY),
   playMinutes: 120,
   endedAt: null,
   attendanceConfirmedAt: null,
@@ -32,7 +32,7 @@ describe("shouldAutoConfirmAttendance", () => {
   });
 
   it("기한 전이면 크론은 건너뛴다", () => {
-    expect(check({ confirmedAt: new Date(now.getTime() - 6 * DAY) })).toBe(false);
+    expect(check({ confirmedAt: new Date(now.getTime() - 12 * HOUR) })).toBe(false);
   });
 
   it("바로 확정할 때는 시작한 세션이면 기한 전이어도 확정한다", () => {

@@ -2,7 +2,7 @@ import { and, eq, exists, inArray, isNotNull, isNull, lte, sql } from "drizzle-o
 
 import { db } from "#/client";
 import {
-  ATTENDANCE_EDIT_DAYS,
+  ATTENDANCE_EDIT_HOURS,
   attendanceDeadline,
 } from "#/modules/games/model/attendance-deadline";
 import { autoConfirmNotices } from "#/modules/games/model/auto-confirm-notices";
@@ -90,7 +90,7 @@ export async function autoConfirmAttendanceForGame({
 
 // 매시 5분 크론(/api/cron/attendance)이 부른다. 모든 서버에서 기한이 지난 미확정 세션을 고른다.
 export async function autoConfirmAttendance(now: Date = new Date()): Promise<AutoConfirmedGame[]> {
-  const deadline = sql`${sessionEndAtSql} + ${ATTENDANCE_EDIT_DAYS} * interval '1 day'`;
+  const deadline = sql`${sessionEndAtSql} + ${ATTENDANCE_EDIT_HOURS} * interval '1 hour'`;
   const candidates = await db
     .select({ id: games.id })
     .from(games)

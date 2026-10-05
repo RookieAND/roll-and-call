@@ -1,6 +1,6 @@
 import { clamp } from "es-toolkit";
 
-import { ATTENDANCE_EDIT_DAYS, attendanceDeadline } from "@/entities/game";
+import { ATTENDANCE_EDIT_HOURS, attendanceDeadline } from "@/entities/game";
 import { ddayKst, formatDateTime } from "@/shared/lib";
 
 import { SESSION_ACTION_KIND, type SessionGame, type SessionTodo } from "./session-card-model";
@@ -14,7 +14,7 @@ export function confirmAttendanceTodo({
   now: Date;
 }): SessionTodo {
   const deadline = attendanceDeadline(game)!;
-  const daysLeft = clamp(ddayKst(deadline, now), 0, ATTENDANCE_EDIT_DAYS);
+  const daysLeft = clamp(ddayKst(deadline, now), 0, ATTENDANCE_EDIT_HOURS / 24);
   return {
     kind: SESSION_ACTION_KIND.confirmAttendance,
     label: "출석 확인",

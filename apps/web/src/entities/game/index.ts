@@ -44,7 +44,7 @@ export { coordinationWindowOf } from "./model/coordination-window-of";
 export { isAttendanceDue } from "./model/is-attendance-due";
 export { isAttendanceSettled } from "./model/is-attendance-settled";
 export {
-  ATTENDANCE_EDIT_DAYS,
+  ATTENDANCE_EDIT_HOURS,
   attendanceDeadline,
   isAttendancePastDeadline,
   isAutoConfirmedAttendance,

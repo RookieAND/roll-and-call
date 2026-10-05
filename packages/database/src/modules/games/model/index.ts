@@ -51,7 +51,7 @@ export { GAME_CANCEL_KIND, type GameCancelKind } from "./game-cancel-kind";
 export { storedCancelReason } from "./stored-cancel-reason";
 export { ABSENCE_WINDOW_DAYS, absenceExpiresAt, isAbsenceActive } from "./absence-window";
 export {
-  ATTENDANCE_EDIT_DAYS,
+  ATTENDANCE_EDIT_HOURS,
   attendanceDeadline,
   isAttendancePastDeadline,
   isAutoConfirmedAttendance,

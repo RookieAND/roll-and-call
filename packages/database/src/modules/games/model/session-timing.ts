@@ -51,7 +51,7 @@ export function isSessionStarted(
   return !isNil(confirmedAt) && new Date(confirmedAt).getTime() <= now.getTime();
 }
 
-// 세션 종료: GM 명단 수정 끝·참여자 관리 닫힘·출석 확인 열림·출석 7일 기한.
+// 세션 종료: GM 명단 수정 끝·참여자 관리 닫힘·출석 확인 열림·출석 24시간 기한.
 export function isSessionEnded(game: TimedGame, now: Date = new Date()): boolean {
   const endAt = sessionEndAt(game);
   return !isNil(endAt) && endAt.getTime() <= now.getTime();

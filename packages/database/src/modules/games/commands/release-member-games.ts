@@ -94,7 +94,7 @@ export async function releaseMemberGames({
       if (cancelled.ok) cancelledGames.push(cancelled.game);
     }
     if (action === "confirm_attendance") {
-      // 이미 끝난 세션은 ended_at을 그대로 둔다. 자동 확정 시각은 기한(마친 시각 + 7일, 미래)이라
+      // 이미 끝난 세션은 ended_at을 그대로 둔다. 자동 확정 시각은 기한(마친 시각 + 24시간, 미래)이라
       // isAutoConfirmedAttendance가 이 확정을 자동 확정으로 본다.
       if (isSessionInProgress(game, now)) {
         await setSessionEndedAt({ transaction, serverId, gameId: game.id, endedAt: now });

@@ -75,7 +75,7 @@ function todos({
 
 const awaitingTime = (id: string, endDate = at(-1)) =>
   game({ id, endDate, participants: [confirmed("a")] });
-const attendance = (id: string, confirmedAt = at(-1)) =>
+const attendance = (id: string, confirmedAt = at(-0.5)) =>
   game({ id, confirmedAt, participants: [confirmed("a")] });
 const vacancy = (id: string, partial: Partial<SessionGame> = {}) =>
   game({ id, participants: [confirmed("a"), waiting("b")], ...partial });
@@ -99,7 +99,7 @@ describe("listTodos", () => {
     expect(result.count).toBe(5);
     expect(result.items.map((item) => item.eyebrow)).toEqual([
       "세션 일시 미정",
-      "출석 확인 · 자동 처리 D-6",
+      "출석 확인 · 자동 처리 D-1",
       "빈자리 생김",
       "가능 시간 미제출",
       "인증 반려",
@@ -111,8 +111,8 @@ describe("listTodos", () => {
       hosted: [
         vacancy("later", { endDate: at(5) }),
         vacancy("sooner", { endDate: at(2) }),
-        attendance("old", at(-3)),
-        attendance("recent", at(-1)),
+        attendance("old", at(-0.7)),
+        attendance("recent", at(-0.4)),
         awaitingTime("time-recent", at(-1)),
         awaitingTime("time-old", at(-3)),
       ],

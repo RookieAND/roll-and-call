@@ -1,4 +1,4 @@
-// 서버가 정하는 출석 확인 단계. 기한은 실제 종료 + 7일이다.
+// 서버가 정하는 출석 확인 단계. 기한은 실제 종료 + 24시간이다.
 export const ATTENDANCE_PHASE = {
   open: "open",
   confirmed: "confirmed",

@@ -7,7 +7,7 @@ import { attendancePhaseOf } from "./attendance-phase-of";
 const DAY = 86_400_000;
 const confirmedAt = new Date("2026-09-19T11:00:00Z");
 const endedAt = new Date("2026-09-19T13:40:00Z");
-const deadline = new Date(endedAt.getTime() + 7 * DAY);
+const deadline = new Date(endedAt.getTime() + DAY);
 const game = (attendanceConfirmedAt: Date | null) => ({
   attendanceConfirmedAt,
   confirmedAt,
@@ -18,7 +18,7 @@ const game = (attendanceConfirmedAt: Date | null) => ({
 describe("attendancePhaseOf", () => {
   const beforeDeadline = new Date(deadline.getTime() - 1);
 
-  it("기한 전에는 확정 여부로 나뉜다(기한은 마친 시각 + 7일)", () => {
+  it("기한 전에는 확정 여부로 나뉜다(기한은 마친 시각 + 24시간)", () => {
     expect(attendancePhaseOf({ game: game(null), now: beforeDeadline })).toBe(
       ATTENDANCE_PHASE.open,
     );

@@ -154,7 +154,7 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.attendanceAutoConfirmed, params: game },
     "검은 산의 노래 출석이 자동으로 확정되었습니다.",
-    "세션이 끝나고 7일이 지났습니다.",
+    "세션이 끝나고 24시간이 지났습니다.",
   ],
   [
     { kind: NOTIFICATION_KIND.reviewAvailable, params: game },

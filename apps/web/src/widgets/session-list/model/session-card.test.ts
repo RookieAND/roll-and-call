@@ -221,8 +221,8 @@ describe("운영 카드", () => {
   });
 
   it("출석 할 일은 자동 처리까지 남은 날을 머리표에 단다", () => {
-    const card = hostCard({ confirmedAt: at(-4), participants: [confirmedMe, other] });
-    expect(card.todo?.eyebrow).toBe("출석 확인 · 자동 처리 D-3");
+    const card = hostCard({ confirmedAt: at(-0.5), participants: [confirmedMe, other] });
+    expect(card.todo?.eyebrow).toBe("출석 확인 · 자동 처리 D-1");
     expect(card.todo?.lines[1]).toBe("확인하지 않으면 출석이 자동으로 확정됩니다.");
   });
 

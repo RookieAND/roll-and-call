@@ -533,6 +533,13 @@
       "when": 1796700000000,
       "tag": "0081_game_trigger_limit",
       "breakpoints": true
+    },
+    {
+      "idx": 82,
+      "version": "7",
+      "when": 1796800000000,
+      "tag": "0082_attendance_deadline_24h",
+      "breakpoints": true
     }
   ]
 }
