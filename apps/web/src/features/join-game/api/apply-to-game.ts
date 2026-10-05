@@ -71,7 +71,12 @@ export async function applyToGame({
       await lockUserApplications({ transaction, userId });
       const [overlapping] = findOverlappingGame({
         target: { startsAt: game.confirmedAt, playMinutes: game.playMinutes },
-        mine: await listUserSessionTimings({ transaction, userId, excludeGameId: gameId }),
+        mine: await listUserSessionTimings({
+          transaction,
+          serverId,
+          userId,
+          excludeGameId: gameId,
+        }),
       });
       if (overlapping) {
         return { error: OVERLAP_MESSAGE, reason: OVERLAP_REASON, overlapGameId: overlapping.id };

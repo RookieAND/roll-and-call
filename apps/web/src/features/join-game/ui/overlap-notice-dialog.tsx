@@ -15,7 +15,6 @@ const BODY_LINES = [
   "겹치는 세션을 확인한 뒤 다시 신청해 주세요.",
 ] as const;
 
-// 서버 없는 구인 주소는 그 구인의 서버로 보내 주므로, 다른 서버의 세션도 id만으로 간다.
 export function OverlapNoticeDialog({ overlapGameId, onClose }: OverlapNoticeDialogProps) {
   const router = useRouter();
 
