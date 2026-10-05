@@ -15,10 +15,11 @@ export function waitingActionView({
   viewer,
   confirmedCount,
   waitingCount,
+  lotteryHeld,
   now,
 }: Pick<
   ActionContext,
-  "game" | "viewer" | "confirmedCount" | "waitingCount" | "now"
+  "game" | "viewer" | "confirmedCount" | "waitingCount" | "lotteryHeld" | "now"
 >): GameActionView {
   if (isSessionEnded(game, now)) return { kind: GAME_ACTION_VIEW.endedOther };
   const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
@@ -36,6 +37,6 @@ export function waitingActionView({
   return {
     kind: GAME_ACTION_VIEW.waiting,
     rank: viewer.waitlistRank ?? waitingCount,
-    resultLink: isLottery,
+    resultLink: isLottery && lotteryHeld,
   };
 }

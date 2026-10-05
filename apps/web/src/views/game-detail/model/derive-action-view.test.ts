@@ -44,11 +44,43 @@ const view = (overrides: Partial<ActionContext>) =>
     viewer: outsider,
     confirmedCount: 2,
     waitingCount: 0,
+    lotteryHeld: true,
     sanction: null,
     review: REVIEW_STATUS.unavailable,
     now: NOW,
     ...overrides,
   });
+
+describe("추첨 없이 확정된 구인", () => {
+  it("추첨을 적용한 글이어도 굴린 추첨이 없으면 [결과 보러 가기]를 두지 않고 일정 조율 입구를 둔다", () => {
+    const skipped = { ...lottery, scheduleMode: SCHEDULE_MODE.coordinate, drawnAt: at(-1) };
+    expect(
+      view({
+        game: { ...skipped, confirmedAt: at(24) },
+        viewer: confirmed,
+        lotteryHeld: false,
+      }),
+    ).toMatchObject({ resultLink: false, scheduleLink: true });
+    expect(
+      view({
+        game: { ...skipped, confirmedAt: at(24) },
+        viewer: confirmed,
+        lotteryHeld: true,
+      }),
+    ).toMatchObject({ resultLink: true, scheduleLink: false });
+  });
+
+  it("추첨 없이 확정된 구인의 확정자 잠금 상태에도 결과 입구가 없다", () => {
+    expect(
+      view({
+        game: { ...fixed, recruitMethod: RECRUIT_METHOD.lottery, drawnAt: at(-1) },
+        viewer: confirmed,
+        confirmedCount: 4,
+        lotteryHeld: false,
+      }),
+    ).toMatchObject({ resultLink: false });
+  });
+});
 
 describe("deriveActionView", () => {
   it("(1) 취소됨: GM 취소 사유, 운영진·자동 취소, GM과 비GM", () => {

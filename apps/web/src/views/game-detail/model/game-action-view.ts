@@ -60,6 +60,8 @@ export interface ActionContext {
   viewer: ActionViewer;
   confirmedCount: number;
   waitingCount: number;
+  // 굴린 추첨이 실제로 있었는지. 신청자가 자리 이하라 추첨 없이 확정된 구인은 false라 [결과 보러 가기]를 두지 않는다.
+  lotteryHeld: boolean;
   sanction: ActionSanction | null;
   review: ReviewStatus;
   now: Date;

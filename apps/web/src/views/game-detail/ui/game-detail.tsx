@@ -68,6 +68,7 @@ export function GameDetail({ game, viewerId, sanction, review, now }: GameDetail
     },
     confirmedCount: confirmed.length,
     waitingCount: waiting.length,
+    lotteryHeld: game.participants.some((participant) => !isNull(participant.drawRank)),
     sanction,
     review,
     now,

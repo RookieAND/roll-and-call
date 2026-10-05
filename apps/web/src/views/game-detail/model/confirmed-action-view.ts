@@ -18,6 +18,7 @@ export function confirmedActionView({
   game,
   confirmedCount,
   waitingCount,
+  lotteryHeld,
   review,
   now,
 }: Omit<ActionContext, "viewer" | "sanction">): GameActionView {
@@ -31,7 +32,7 @@ export function confirmedActionView({
   }
 
   const coordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
-  const drawn = !isNil(game.drawnAt);
+  const drawn = !isNil(game.drawnAt) && lotteryHeld;
   const calendar = canAddToCalendar({ game, viewerRole: CALENDAR_VIEWER_ROLE.confirmed, now });
 
   if (isApplicationClosed(game, now)) {
