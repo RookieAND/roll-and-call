@@ -41,8 +41,9 @@ export async function proxy(request: NextRequest) {
     },
   );
 
-  // Refreshes the auth token and writes it back to the response cookies.
-  await supabase.auth.getUser();
+  // getClaims()는 만료된 토큰을 갱신해 응답 쿠키에 쓰고, 비대칭 키면 Auth 서버를 부르지 않는다.
+  // 신원 검증은 서버 액션·페이지의 getUser()가 맡는다.
+  await supabase.auth.getClaims();
 
   return response;
 }

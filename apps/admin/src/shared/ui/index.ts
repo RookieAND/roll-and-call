@@ -12,6 +12,7 @@ export {
 export { CsvExportButton } from "./csv-export-button";
 export { DiscordIcon } from "./discord-icon";
 export { EMPTY_IMAGE, EmptyState, type EmptyImage } from "./empty-state";
+export { ErrorScreen } from "./error-screen";
 export { EntityHead } from "./entity-head";
 export { FactBox } from "./fact-box";
 export { FactRows, type FactRow } from "./fact-rows";
