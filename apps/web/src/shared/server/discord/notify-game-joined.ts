@@ -1,10 +1,10 @@
 import type { Game, Server } from "@roll-and-call/database";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import { gameHeadValues, gameNoticeEmbed, messageHeadInput } from "@roll-and-call/game-notices";
-import { headcountFields } from "@roll-and-call/game-notices";
+import { headcountFields, memberMention } from "@roll-and-call/game-notices";
 
 type JoinInfo = {
-  applicantName: string;
+  applicantId: string;
   gmName: string;
   confirmedCount: number;
   waitingCount: number;
@@ -14,7 +14,7 @@ type JoinInfo = {
 export async function notifyGameJoined({
   server,
   game,
-  applicantName,
+  applicantId,
   gmName,
   confirmedCount,
   waitingCount,
@@ -22,6 +22,7 @@ export async function notifyGameJoined({
 }: JoinInfo & { server: Server; game: Game }) {
   if (!game.discordThreadId) return;
 
+  const applicant = await memberMention(applicantId);
   const embed = gameNoticeEmbed({
     slug: server.slug,
     game,
@@ -29,8 +30,8 @@ export async function notifyGameJoined({
     emoji: isWaiting ? "⏳" : "🙋",
     color: isWaiting ? DISCORD_COLOR.waiting : DISCORD_COLOR.confirmed,
     description: isWaiting
-      ? `**${applicantName}**님이 대기열에 등록했어요.`
-      : `**${applicantName}**님이 참여했어요.`,
+      ? `${applicant}님이 대기열에 등록했어요.`
+      : `${applicant}님이 참여했어요.`,
     fields: headcountFields({ game, confirmedCount, waitingCount }),
   });
 

@@ -14,14 +14,15 @@ export async function notifyDrawResult({ server, gameId }: { server: Server; gam
   const byRank = game.participants.toSorted(
     (left, right) => (left.drawRank ?? 0) - (right.drawRank ?? 0),
   );
-  const nameOf = (rank: number, username: string) => `${rank}. ${username}`;
+  const nameOf = (rank: number, user: { discordId?: string; username: string } | null) =>
+    `${rank}. ${user?.discordId ? `<@${user.discordId}>` : (user?.username ?? "?")}`;
   const confirmed = byRank
     .filter((participant) => participant.status === PARTICIPANT_STATUS.confirmed)
-    .map((participant, index) => nameOf(index + 1, participant.user?.username ?? "?"));
+    .map((participant, index) => nameOf(index + 1, participant.user));
   const waiting = game.participants
     .filter((participant) => participant.status === PARTICIPANT_STATUS.waiting)
     .toSorted(compareWaitlistOrder)
-    .map((participant, index) => nameOf(index + 1, participant.user?.username ?? "?"));
+    .map((participant, index) => nameOf(index + 1, participant.user));
 
   const detailUrl = gameUrl({ slug: server.slug, gameId: game.id });
   const drawUrl = detailUrl && `${detailUrl}/draw`;

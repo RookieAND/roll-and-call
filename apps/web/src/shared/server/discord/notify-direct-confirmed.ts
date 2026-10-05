@@ -1,10 +1,9 @@
 import { type Server } from "@roll-and-call/database";
 import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed, countWaiting, SCHEDULE_MODE } from "@roll-and-call/database/games/model";
-import { getMemberNicknames } from "@roll-and-call/database/profiles";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import { gameHeadValues, gameNoticeEmbed, messageHeadInput } from "@roll-and-call/game-notices";
-import { headcountFields } from "@roll-and-call/game-notices";
+import { headcountFields, memberMention } from "@roll-and-call/game-notices";
 import { isNull } from "es-toolkit";
 
 export async function notifyDirectConfirmed({
@@ -23,18 +22,18 @@ export async function notifyDirectConfirmed({
 
   const [game, invitedNames, unpaintedNames] = await Promise.all([
     getGameForNotice({ serverId: server.id, gameId }),
-    getMemberNicknames({ serverId: server.id, userIds }),
-    getMemberNicknames({ serverId: server.id, userIds: needsAvailabilityUserIds }),
+    Promise.all(userIds.map(memberMention)),
+    Promise.all(needsAvailabilityUserIds.map(memberMention)),
   ]);
   if (!game?.discordThreadId || invitedNames.length === 0) return;
 
-  const names = invitedNames.map((username) => `**${username}**`).join(", ");
+  const names = invitedNames.join(", ");
   const asksAvailability =
     game.scheduleMode === SCHEDULE_MODE.coordinate &&
     isNull(game.confirmedAt) &&
     unpaintedNames.length > 0;
   const availabilityLine = asksAvailability
-    ? `\n${unpaintedNames.map((username) => `**${username}**`).join(", ")}님은 구인 페이지에서 가능 시간을 칠해 주세요.`
+    ? `\n${unpaintedNames.join(", ")}님은 구인 페이지에서 가능 시간을 칠해 주세요.`
     : "";
 
   const embed = gameNoticeEmbed({

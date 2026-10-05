@@ -20,8 +20,7 @@ export async function announceNewApplication({
   isWaiting: boolean;
   confirmedCount: number;
 }) {
-  const [applicantName, gmName, waitingCount] = await Promise.all([
-    getMemberNickname({ serverId: game.serverId, userId: applicantId }),
+  const [gmName, waitingCount] = await Promise.all([
     getMemberNickname({ serverId: game.serverId, userId: game.gmId }),
     countParticipants({
       serverId: game.serverId,
@@ -32,7 +31,7 @@ export async function announceNewApplication({
   await notifyGameJoined({
     server,
     game,
-    applicantName: applicantName ?? UNKNOWN_USERNAME,
+    applicantId,
     gmName: gmName ?? UNKNOWN_USERNAME,
     confirmedCount,
     waitingCount,
