@@ -1,4 +1,4 @@
-import { and, eq, gt, isNotNull, isNull, ne, or } from "drizzle-orm";
+import { and, eq, isNotNull, isNull, ne, or, sql } from "drizzle-orm";
 
 import { db } from "#/client";
 import type { MySessionTiming } from "#/modules/games/model/find-overlapping-game";
@@ -44,7 +44,8 @@ export async function listUserSessionTimings({
         ne(games.id, excludeGameId),
         isNull(games.cancelledAt),
         isNotNull(games.confirmedAt),
-        gt(sessionEndAtSql, now),
+        // 식 쪽에는 컬럼 타입이 없어 Date를 직렬화하지 못하므로 문자열로 넘긴다.
+        sql`${sessionEndAtSql} > ${now.toISOString()}::timestamptz`,
         or(eq(games.gmId, userId), isNotNull(participants.userId)),
       ),
     );
