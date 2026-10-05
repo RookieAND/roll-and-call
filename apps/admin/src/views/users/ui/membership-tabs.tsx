@@ -1,20 +1,21 @@
 "use client";
 
-import { SegmentedControl } from "@roll-and-call/ui";
+import { Tabs } from "@roll-and-call/ui";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { MEMBERSHIP_LABEL, MEMBERSHIP_STATUS, type MembershipStatus } from "@/shared/lib";
+import { TabCount } from "@/shared/ui";
 
 const MEMBERSHIPS = Object.values(MEMBERSHIP_STATUS);
 
-interface MembershipSegmentProps {
+interface MembershipTabsProps {
   value: MembershipStatus;
-  bannedCount?: number;
+  counts?: Record<MembershipStatus, number>;
   disabled?: boolean;
 }
 
-// 멤버십 상태를 먼저 고른다. 빠른 필터와 검색어는 그대로 두고 쪽 번호만 지운다. 차단됨은 0이 아닐 때 건수를 붙인다.
-export function MembershipSegment({ value, bannedCount = 0, disabled }: MembershipSegmentProps) {
+// 멤버십 상태를 먼저 고른다. 빠른 필터와 검색어는 그대로 두고 쪽 번호만 지운다.
+export function MembershipTabs({ value, counts, disabled }: MembershipTabsProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -25,24 +26,25 @@ export function MembershipSegment({ value, bannedCount = 0, disabled }: Membersh
     else next.set("membership", membership);
     router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });
   };
-  const label = (membership: MembershipStatus) =>
-    membership === MEMBERSHIP_STATUS.banned && bannedCount > 0
-      ? `${MEMBERSHIP_LABEL[membership]} ${bannedCount}`
-      : MEMBERSHIP_LABEL[membership];
   return (
-    <SegmentedControl.Root
+    <Tabs.Root
+      data-full-bleed
       value={value}
       onValueChange={(next) => change(next as MembershipStatus)}
-      aria-label="멤버십 상태"
-      fullWidth={false}
-      disabled={disabled}
-      className="shrink-0"
     >
-      {MEMBERSHIPS.map((membership) => (
-        <SegmentedControl.Item key={membership} value={membership}>
-          {label(membership)}
-        </SegmentedControl.Item>
-      ))}
-    </SegmentedControl.Root>
+      <Tabs.List
+        aria-label="유저 멤버십 상태"
+        scrollable={false}
+        className="border-b border-gray-200 bg-surface px-page"
+      >
+        {MEMBERSHIPS.map((membership) => (
+          <Tabs.Trigger key={membership} value={membership} disabled={disabled}>
+            {MEMBERSHIP_LABEL[membership]}
+            {counts && <TabCount count={counts[membership]} selected={value === membership} />}
+          </Tabs.Trigger>
+        ))}
+        <Tabs.Indicator />
+      </Tabs.List>
+    </Tabs.Root>
   );
 }

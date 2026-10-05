@@ -28,7 +28,7 @@ export function PostDetailLoading() {
           className="min-w-0 gap-150 px-center-200 py-200"
         >
           <PostSummarySkeleton />
-          <Panel className="flex-1">
+          <Panel>
             <SkeletonTabs items={["구인 내용", "참여자", "대기자"]} />
             <VStack gap="125" className="p-150">
               <SkeletonItem />

@@ -37,7 +37,7 @@ export function PostsTable({ rows, sort, empty, detailQuery }: PostsTableProps) 
       <TableColumns
         widths={[
           360,
-          { fixed: 104 },
+          { fixed: 124 },
           { fixed: 140 },
           { fixed: 192 },
           { fixed: 76 },

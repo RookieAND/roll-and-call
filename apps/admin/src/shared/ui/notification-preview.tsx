@@ -19,7 +19,7 @@ export function NotificationPreview({
   return (
     <Callout.Root colorPalette="gray" size="sm" className="mt-050">
       <VStack gap="100" className="col-start-2 min-w-0">
-        <Text typography="body4" foreground="hint">
+        <Text typography="body4" weight="bold" foreground="hint">
           당사자의 알림 탭에 이렇게 보입니다
         </Text>
         <Card.Root radius={400} padding="sm" background="subtle">

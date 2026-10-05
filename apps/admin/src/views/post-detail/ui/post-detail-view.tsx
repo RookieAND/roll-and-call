@@ -67,7 +67,7 @@ export function PostDetailView({
         <VStack gap="150" className="min-w-0 flex-1 px-center-200 py-200">
           {post.hidden ? <HiddenBanner hidden={post.hidden} /> : null}
           <PostSummary post={post} userAppHref={userAppHref} logHref={logHref} />
-          <Panel className="flex-1">
+          <Panel>
             <PostDetailTabs
               tab={currentTab}
               memberCount={post.members.length}

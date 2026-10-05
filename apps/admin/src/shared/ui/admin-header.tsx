@@ -42,7 +42,7 @@ export function AdminHeader({
           render={<ServerLink path={step.href} />}
           className="text-hint hover:text-gray-600"
         >
-          <Text typography="body2" weight="medium" foreground="inherit">
+          <Text typography="heading1" weight="medium" foreground="inherit">
             {step.label}
           </Text>
           <ChevronRight size={16} aria-hidden />

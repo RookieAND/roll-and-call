@@ -10,7 +10,7 @@ import {
 import type { UserFilter, UserRow, UserSortColumn } from "@/shared/server";
 import { AdminHeader, ListPager, Panel, UrlSearchInput } from "@/shared/ui";
 
-import { MembershipSegment } from "./membership-segment";
+import { MembershipTabs } from "./membership-tabs";
 import { UserFilterChips } from "./user-filter-chips";
 import { UsersTable } from "./users-table";
 
@@ -44,9 +44,9 @@ export function UsersView({
   return (
     <>
       <AdminHeader title="유저" sub={sub} />
+      <MembershipTabs value={membership} counts={membershipCounts} />
       <VStack gap="150" className="flex-1 p-200">
         <HStack align="center" gap="125">
-          <MembershipSegment value={membership} bannedCount={membershipCounts.banned} />
           <UrlSearchInput
             placeholder="닉네임 또는 디스코드 ID 검색"
             className="w-[240px] shrink-0"
