@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { OG_IMAGE } from "@/shared/lib";
 import { HELP_DOCS, HelpDocView } from "@/views/help";
 
 export function generateStaticParams() {
@@ -13,7 +14,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const doc = HELP_DOCS.find((candidate) => candidate.slug === slug);
-  return doc ? { title: doc.title, description: doc.description } : { title: "도움말" };
+  if (!doc) return { title: "도움말" };
+  return {
+    title: doc.title,
+    description: doc.description,
+    // 부모 openGraph는 통째로 덮이므로 기본 이미지를 여기서도 깐다.
+    openGraph: { title: doc.title, description: doc.description, images: [OG_IMAGE] },
+  };
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
