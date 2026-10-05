@@ -35,17 +35,18 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
         ),
       ),
   ]);
-  // 굳기 전에 줬다 회수한 달(배포 전 선지급분)은 굳은 뒤 다시 정해 준다.
-  const awardedKeys = new Set(
-    stored.filter((badge) => isNull(badge.revokedAt)).map((badge) => badge.badgeKey),
+  // 굳기 전에 줬다 회수한 사람은 굳은 뒤 다시 정해 준다. 굳은 달에 이미 받은 사람의 행만 건드리지 않는다(공동 1위 중 한 명이 받았다고 나머지를 막지 않는다).
+  const isFrozen = (badge: { userId: string; badgeKey: string; revokedAt: Date | null }) =>
+    isNull(badge.revokedAt) && isMonthSettled(parseBadgeKey(badge.badgeKey)!.subject!, now);
+  const frozenKeys = new Set(
+    stored.filter(isFrozen).map((badge) => `${badge.userId}|${badge.badgeKey}`),
   );
-  const isFrozen = (key: string) =>
-    awardedKeys.has(key) && isMonthSettled(parseBadgeKey(key)!.subject!, now);
   const winners = monthlyWinners(appearances, now).filter(
     (winner) =>
-      isMonthSettled(parseBadgeKey(winner.badgeKey)!.subject!, now) && !isFrozen(winner.badgeKey),
+      isMonthSettled(parseBadgeKey(winner.badgeKey)!.subject!, now) &&
+      !frozenKeys.has(`${winner.userId}|${winner.badgeKey}`),
   );
-  const open = stored.filter((badge) => !isFrozen(badge.badgeKey));
+  const open = stored.filter((badge) => !isFrozen(badge));
   const desiredByUser = groupBy(winners, (winner) => winner.userId);
   const storedByUser = groupBy(open, (badge) => badge.userId);
   const userIds = uniq([...Object.keys(desiredByUser), ...Object.keys(storedByUser)]);
