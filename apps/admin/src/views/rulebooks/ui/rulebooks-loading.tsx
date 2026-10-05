@@ -9,7 +9,11 @@ import { RULEBOOKS_TAB } from "../model/rulebooks-tab";
 export function RulebooksLoading() {
   return (
     <>
-      <AdminHeader title="룰북" sub={<Skeleton width={140} height={12} render={<span />} />} />
+      <AdminHeader
+        title="룰북 카탈로그"
+        trail={[{ href: "/rules", label: "룰북" }]}
+        sub={<Skeleton width={140} height={12} render={<span />} />}
+      />
       <RouteTabs
         label="룰북 화면"
         value="/rules"

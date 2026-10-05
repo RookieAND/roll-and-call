@@ -16,7 +16,11 @@ interface SettingsFrameProps {
 export function SettingsFrame({ title, active, actions, children }: SettingsFrameProps) {
   return (
     <>
-      <AdminHeader title={`설정 · ${title}`} actions={actions} />
+      <AdminHeader
+        title={`설정 · ${title}`}
+        trail={[{ href: "/settings", label: "설정" }]}
+        actions={actions}
+      />
       <HStack align="stretch" className="flex-1">
         <SettingsNav active={active} />
         <VStack gap="150" className="min-w-0 flex-1 p-200">

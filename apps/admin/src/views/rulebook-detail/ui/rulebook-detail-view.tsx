@@ -58,6 +58,7 @@ export function RulebookDetailView({
     <>
       <AdminHeader
         title={rulebook.label}
+        trail={[{ href: "/rules", label: "룰북" }]}
         sub={sub}
         actions={
           <Button

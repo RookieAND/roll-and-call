@@ -5,13 +5,7 @@ import { AdminHeader, LoadingRegion } from "@/shared/ui";
 export function CertGrantLoading() {
   return (
     <>
-      <AdminHeader
-        title="인증 부여"
-        trail={[
-          { href: "/cert", label: "룰북 인증" },
-          { href: "/cert/manage", label: "인증 관리" },
-        ]}
-      />
+      <AdminHeader title="인증 부여" trail={[{ href: "/cert/manage", label: "룰북 인증" }]} />
       <LoadingRegion
         label="인증 부여 화면을 불러오는 중입니다"
         className="mx-auto w-full max-w-[1000px] p-200"

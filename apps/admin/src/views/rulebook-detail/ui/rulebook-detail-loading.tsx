@@ -14,6 +14,7 @@ export function RulebookDetailLoading() {
     <>
       <AdminHeader
         title={<Skeleton width={120} height={22} render={<span />} />}
+        trail={[{ href: "/rules", label: "룰북" }]}
         sub="룰북 상세"
         actions={
           <Button variant="outline" colorPalette="gray" size="sm" disabled>

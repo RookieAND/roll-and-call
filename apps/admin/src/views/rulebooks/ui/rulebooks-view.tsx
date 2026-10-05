@@ -95,7 +95,8 @@ export function RulebooksView({
   return (
     <>
       <AdminHeader
-        title="룰북"
+        title="룰북 카탈로그"
+        trail={[{ href: "/rules", label: "룰북" }]}
         sub={`카테고리 ${rulebooks.categories.length}개 · 책 ${rulebooks.total}권`}
       />
       <RouteTabs label="룰북 화면" items={tabs} value={tabHref} />

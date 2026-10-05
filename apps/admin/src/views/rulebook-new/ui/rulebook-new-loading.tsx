@@ -5,7 +5,7 @@ import { AdminHeader, LoadingRegion, SkeletonField } from "@/shared/ui";
 export function RulebookNewLoading() {
   return (
     <>
-      <AdminHeader title="룰북 추가" trail={[{ href: "/rules", label: "룰북" }]} />
+      <AdminHeader title="룰북 추가" trail={[{ href: "/rules", label: "룰북 카탈로그" }]} />
       <LoadingRegion label="룰북 추가 화면을 불러오는 중입니다">
         <VStack gap="150" className="mx-auto w-full max-w-[880px] p-200">
           <Card.Root padding="lg">
