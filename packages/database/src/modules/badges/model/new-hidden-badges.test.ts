@@ -45,6 +45,7 @@ const draw = (index: number, overrides: Partial<BadgeDraw> = {}): BadgeDraw => (
   maxPlayers: 4,
   drawnAt: new Date(Date.UTC(2026, 5, 1 + index)),
   lastSeat: false,
+  contested: true,
   ...overrides,
 });
 
@@ -154,6 +155,8 @@ describe("숨겨진 칭호 14종", () => {
     expect(earned({ draws: pick(79) }, "revive")).toBe(false);
     expect(earned({ draws: pick(80) }, "revive")).toBe(true);
     expect(earned({ draws: pick(90, 3) }, "revive")).toBe(false);
+    const uncontested = [draw(0, { picked: true, roll: 90, contested: false })];
+    expect(earned({ draws: uncontested }, "revive")).toBe(false);
   });
 
   it("같은 기록으로 다시 계산해도 결과가 같다", () => {

@@ -200,6 +200,7 @@ describe("숨겨진 칭호", () => {
     maxPlayers: 4,
     drawnAt,
     lastSeat: false,
+    contested: true,
     ...overrides,
   });
 

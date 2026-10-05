@@ -110,7 +110,10 @@ export function hiddenEvents({
       return drawEvents({
         draws,
         matches: (draw) =>
-          draw.picked && draw.maxPlayers >= REVIVE_MIN_PLAYERS && draw.roll >= REVIVE_MIN_ROLL,
+          draw.picked &&
+          draw.contested &&
+          draw.maxPlayers >= REVIVE_MIN_PLAYERS &&
+          draw.roll >= REVIVE_MIN_ROLL,
       });
     case HIDDEN_LADDER.days7:
       return dayStreakEvents({ facts, length: 7 });

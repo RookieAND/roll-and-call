@@ -26,6 +26,8 @@ export type BadgeDraw = {
   drawnAt: Date;
   // 확정자 가운데 내 값이 가장 크다(마지막 자리).
   lastSeat: boolean;
+  // 신청자 가운데 대기로 밀린 사람이 있었다(참여자가 전원 확정이 아니었다).
+  contested: boolean;
 };
 
 // 내가 연 추첨 구인의 신청자(1d100을 굴린 사람) 수.

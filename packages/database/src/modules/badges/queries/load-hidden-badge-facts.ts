@@ -33,6 +33,13 @@ const isLastSeat = sql<boolean>`${drawResults.status} = 'confirmed' and not exis
     and other.roll > ${drawResults.roll}
 )`;
 
+const isContested = sql<boolean>`exists (
+  select 1 from ${drawResults} as waiting
+  where waiting.game_id = ${drawResults.gameId}
+    and waiting.status = 'waiting'
+    and waiting.roll is not null
+)`;
+
 const FULL_CAST_MIN_ATTENDED = 4;
 
 const applicantsOfGame = sql<number>`(
@@ -65,6 +72,7 @@ export async function loadHiddenBadgeFacts({
       roll: drawResults.roll,
       nearMiss: isFirstWaiting,
       lastSeat: isLastSeat,
+      contested: isContested,
       picked: sql<boolean>`${drawResults.status} = 'confirmed'`,
       applicants: applicantsOfGame,
       maxPlayers: games.maxPlayers,
