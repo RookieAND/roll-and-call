@@ -38,7 +38,11 @@ export function MyPageFeaturedBadges({ badges, heldCount }: MyPageFeaturedBadges
       </HStack>
       <HStack wrap gap="075">
         {badges.map((badge) => (
-          <BadgeDetailSheet key={badge.key} detail={badge.detail} className="max-w-full min-w-0">
+          <BadgeDetailSheet
+            key={`${badge.key}:${badge.name}`}
+            detail={badge.detail}
+            className="max-w-full min-w-0"
+          >
             <BadgePill
               emoji={badge.emoji}
               name={badge.name}

@@ -34,7 +34,7 @@ export function ProfileBadges({ userId, featured, total }: ProfileBadgesProps) {
       <HStack wrap gap="075">
         {featured.map((badge) => (
           <BadgeDetailSheet
-            key={badge.key}
+            key={`${badge.key}:${badge.name}`}
             detail={badge.detail}
             className="inline-flex min-h-11 max-w-full min-w-0 items-center"
           >

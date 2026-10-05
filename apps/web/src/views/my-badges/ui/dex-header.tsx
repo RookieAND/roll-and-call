@@ -37,7 +37,7 @@ export function DexHeader({ earnedCount, featured }: DexHeaderProps) {
           <Grid cols={3} gap="100" render={<ol />}>
             {featured.map((badge, index) => (
               <VStack
-                key={badge.key}
+                key={`${badge.key}:${badge.name}`}
                 align="center"
                 gap="125"
                 render={<li />}

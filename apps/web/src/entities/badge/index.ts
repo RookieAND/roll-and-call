@@ -2,6 +2,8 @@ export type { BadgeView } from "./model/badge-view";
 export { describeBadge } from "./model/describe-badge";
 export { heldBadges } from "./model/held-badges";
 export { pickFeaturedBadges } from "./model/pick-featured-badges";
+export { featuredOptions } from "./model/featured-options";
+export { resolveFeaturedEntry } from "./model/resolve-featured-entry";
 export { FEATURED_BADGE_LIMIT } from "./model/featured-badge-limit";
 export {
   badgeRequirement,

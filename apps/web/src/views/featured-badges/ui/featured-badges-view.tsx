@@ -1,6 +1,6 @@
 import { VStack } from "@roll-and-call/ui";
 
-import { heldBadges, monthLabel } from "@/entities/badge";
+import { featuredOptions, heldBadges, monthLabel, resolveFeaturedEntry } from "@/entities/badge";
 import { profileDisplay } from "@/entities/profile";
 import { LoginRequired } from "@/features/auth";
 import { FeaturedBadgePicker } from "@/features/pick-featured-badges";
@@ -31,15 +31,17 @@ export async function FeaturedBadgesView() {
     getUserBadges(server.id, user.id),
   ]);
   const { name, avatar } = profileDisplay({ profile, user });
-  const choices = heldBadges(records).map((badge) => ({
-    key: badge.key,
+  const held = heldBadges(records);
+  const choices = featuredOptions(held).map(({ entry, badge }) => ({
+    key: entry,
     emoji: badge.emoji,
     name: badge.name,
     look: badge.look,
     tag: badge.monthKey ? monthLabel(badge.monthKey) : null,
   }));
-  const heldKeys = new Set(choices.map((choice) => choice.key));
-  const initialKeys = (profile?.featuredBadges ?? []).filter((key) => heldKeys.has(key));
+  const initialKeys = (profile?.featuredBadges ?? []).filter((entry) =>
+    resolveFeaturedEntry(entry, held),
+  );
 
   return (
     <>
