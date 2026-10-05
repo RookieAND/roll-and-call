@@ -106,7 +106,7 @@ export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditForm
         return;
       }
       const cases = needsImpactCheck({ saved, next })
-        ? await checkRulebookImpact(rulebook.id, next)
+        ? await checkRulebookImpact({ id: rulebook.id, draft: next })
         : [];
       if (cases.length > 0) {
         setImpact(cases);

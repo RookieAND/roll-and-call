@@ -4,7 +4,12 @@ import { getRulebookImpact, requireStaff } from "@/shared/server";
 
 import type { RulebookDraft } from "../model/rulebook-draft";
 
-export async function checkRulebookImpact(id: string, draft: RulebookDraft) {
+interface CheckRulebookImpactInput {
+  id: string;
+  draft: RulebookDraft;
+}
+
+export async function checkRulebookImpact({ id, draft }: CheckRulebookImpactInput) {
   await requireStaff();
   return getRulebookImpact({
     rulebookId: id,

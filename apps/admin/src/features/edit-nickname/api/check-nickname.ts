@@ -9,7 +9,12 @@ import {
 } from "../model/nickname-rule";
 
 // 입력하는 동안 규칙과 중복을 확인한다. 쓸 수 있으면 null.
-export async function checkNickname(userId: string, nickname: string) {
+interface CheckNicknameInput {
+  userId: string;
+  nickname: string;
+}
+
+export async function checkNickname({ userId, nickname }: CheckNicknameInput) {
   await requireStaff();
   if (!followsNicknameRule(nickname)) return NICKNAME_RULE_ERROR;
   const server = await getCurrentServer();

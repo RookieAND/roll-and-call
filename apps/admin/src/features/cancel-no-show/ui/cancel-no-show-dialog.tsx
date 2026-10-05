@@ -62,7 +62,7 @@ export function CancelNoShowDialog({ record, summary, closeHref }: CancelNoShowD
               kind: NOTIFICATION_KIND.absenceRestored,
               params: { gameId: record.gameId, gameTitle: record.sessionTitle },
             }}
-            submit={(reason) => restoreNoShowRecord(record.id, reason)}
+            submit={(reason) => restoreNoShowRecord({ noShowId: record.id, reason })}
             onClose={close}
           />
         ) : null}
@@ -82,7 +82,7 @@ export function CancelNoShowDialog({ record, summary, closeHref }: CancelNoShowD
               kind: NOTIFICATION_KIND.absenceCancelled,
               params: { gameId: record.gameId, gameTitle: record.sessionTitle },
             }}
-            submit={(reason) => cancelNoShowRecord(record.id, reason)}
+            submit={(reason) => cancelNoShowRecord({ noShowId: record.id, reason })}
             onClose={close}
           />
         ) : null}

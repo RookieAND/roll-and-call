@@ -21,7 +21,7 @@ export function useNicknameCheck({ userId, nickname }: { userId: string; nicknam
     }
     let cancelled = false;
     const timer = setTimeout(async () => {
-      const error = await checkNickname(userId, nickname);
+      const error = await checkNickname({ userId, nickname });
       if (!cancelled) setCheck({ nickname, error });
     }, CHECK_DELAY_MS);
     return () => {

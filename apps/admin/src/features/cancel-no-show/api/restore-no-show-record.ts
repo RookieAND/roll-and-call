@@ -12,8 +12,13 @@ import {
   syncGameReviewForumPosts,
 } from "@/shared/server";
 
+interface RestoreNoShowRecordInput {
+  noShowId: string;
+  reason: string;
+}
+
 // 불참이 되살아나면 그 사람의 후기가 보류되고 업적이 바뀐다.
-export async function restoreNoShowRecord(noShowId: string, reason: string) {
+export async function restoreNoShowRecord({ noShowId, reason }: RestoreNoShowRecordInput) {
   const staff = await requireStaff();
   if (!reason.trim()) throw new Error("되돌리는 사유를 입력해 주세요");
   const server = await getCurrentServer();
