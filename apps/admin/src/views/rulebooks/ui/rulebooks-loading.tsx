@@ -47,8 +47,8 @@ export function RulebooksLoading() {
             rows={10}
             columns={[
               { label: "룰북", kind: "text", width: 320 },
-              { label: "판본", kind: "text", width: 120 },
-              { label: "종류", kind: "badge", width: 120, align: "center" },
+              { label: "판본", kind: "text", width: 120, fixed: true },
+              { label: "종류", kind: "badge", width: 120, fixed: true, align: "center" },
               { label: "", kind: "icon", width: 44, fixed: true, align: "end" },
             ]}
           />

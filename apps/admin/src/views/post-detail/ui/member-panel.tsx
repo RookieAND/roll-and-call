@@ -26,7 +26,7 @@ interface MemberPanelProps {
 export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[160, 180, 170, 96]} />
+      <TableColumns widths={[160, { fixed: 180 }, { fixed: 170 }, { fixed: 96 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>닉네임</Table.Head>

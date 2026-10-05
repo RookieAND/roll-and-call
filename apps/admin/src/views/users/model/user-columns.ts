@@ -1,4 +1,4 @@
-// 시안 UCOLS. 숫자 열은 오른쪽에 둔다. width는 최소 폭이고 남는 폭은 열마다 고르게 나눈다.
+// 시안 UCOLS. 숫자 열은 오른쪽에 둔다. 닉네임 열만 남는 폭을 받고 나머지는 고정 폭이다.
 export const USER_COLUMNS = [
   { label: "닉네임", width: 180, kind: "text", sort: "nickname" },
   { label: "가입일", width: 104, kind: "date", sort: "joined" },

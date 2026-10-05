@@ -11,7 +11,9 @@ interface PlatformServerTableProps {
 export function PlatformServerTable({ servers }: PlatformServerTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[220, 120, 80, 90, 120, 120]} />
+      <TableColumns
+        widths={[220, { fixed: 120 }, { fixed: 80 }, { fixed: 90 }, { fixed: 120 }, { fixed: 120 }]}
+      />
       <Table.Header>
         <Table.Row>
           <Table.Head>서버</Table.Head>

@@ -13,7 +13,7 @@ export function SellersPanel({ sellers }: SellersPanelProps) {
     <>
       <Panel title="전자책 판매처" right={<AddSellerButton />}>
         <Table.Root className="table-equal">
-          <TableColumns widths={[200, 160, { fixed: 56 }]} />
+          <TableColumns widths={[200, { fixed: 160 }, { fixed: 56 }]} />
           <Table.Header>
             <Table.Row>
               <Table.Head>판매처</Table.Head>

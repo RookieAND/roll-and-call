@@ -16,7 +16,7 @@ interface RulebookTableProps {
 export function RulebookTable({ groups, query }: RulebookTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[320, 120, 120, { fixed: 44 }]} />
+      <TableColumns widths={[320, { fixed: 120 }, { fixed: 120 }, { fixed: 44 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>룰북</Table.Head>

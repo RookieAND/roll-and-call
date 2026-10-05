@@ -35,10 +35,11 @@ export function UsersLoading() {
         <Panel footer={<SkeletonPager />} className="flex-none">
           <SkeletonTable
             columns={[
-              ...[...USER_COLUMNS, USER_STATE_COLUMN].map((column) => ({
+              ...[...USER_COLUMNS, USER_STATE_COLUMN].map((column, index) => ({
                 label: column.label,
                 kind: column.kind,
                 width: column.width,
+                fixed: index > 0,
                 align: "align" in column ? column.align : undefined,
                 sorted: "sort" in column && column.sort === USER_SORT_FALLBACK.column,
               })),

@@ -39,7 +39,9 @@ export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
         사용 중인 문항 1개를 무작위로 출제하며, 답이 틀리면 제출할 수 없습니다.
       </Text>
       <Table.Root className="table-equal">
-        <TableColumns widths={[320, 200, 80, 64, 80, { fixed: 44 }]} />
+        <TableColumns
+          widths={[320, { fixed: 200 }, { fixed: 80 }, { fixed: 64 }, { fixed: 80 }, { fixed: 44 }]}
+        />
         <Table.Header>
           <Table.Row>
             <Table.Head>질문</Table.Head>

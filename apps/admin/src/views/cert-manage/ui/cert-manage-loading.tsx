@@ -49,11 +49,11 @@ export function CertManageLoading() {
         <Panel footer={<SkeletonPager />} className="flex-none">
           <SkeletonTable
             columns={[
-              { label: "유저", kind: "text", width: 170 },
-              { label: "판본", kind: "text", width: 260 },
+              { label: "유저", kind: "text", width: 170, fixed: true },
+              { label: "판본", kind: "text", width: 260, fixed: true },
               { label: "인증한 책", kind: "text", width: 300 },
-              { label: "상태", kind: "badge", width: 90, align: "center" },
-              { label: "최근 변경", kind: "text", width: 120, sorted: true },
+              { label: "상태", kind: "badge", width: 90, fixed: true, align: "center" },
+              { label: "최근 변경", kind: "text", width: 120, fixed: true, sorted: true },
               { label: "", kind: "empty", width: 64, fixed: true },
             ]}
           />

@@ -27,7 +27,7 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
           { fixed: 124 },
           { fixed: 220 },
           240,
-          { fixed: 120 },
+          { fixed: 96 },
           { fixed: 88 },
           { fixed: 44 },
         ]}

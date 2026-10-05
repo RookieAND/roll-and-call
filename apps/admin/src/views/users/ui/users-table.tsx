@@ -25,8 +25,8 @@ interface UsersTableProps {
 
 export function UsersTable({ rows, sort, showState }: UsersTableProps) {
   const widths = [
-    ...USER_COLUMNS.map((column) => column.width),
-    ...(showState ? [USER_STATE_COLUMN.width] : []),
+    ...USER_COLUMNS.map((column, index) => (index === 0 ? column.width : { fixed: column.width })),
+    ...(showState ? [{ fixed: USER_STATE_COLUMN.width }] : []),
     { fixed: 44 },
   ];
   return (

@@ -25,7 +25,17 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
   return (
     <Panel title="룰북 추가 요청" right={<SortFixedNote />}>
       <Table.Root className="table-equal">
-        <TableColumns widths={[260, 180, 116, 104, 96, 170, { fixed: 220 }]} />
+        <TableColumns
+          widths={[
+            260,
+            { fixed: 108 },
+            { fixed: 116 },
+            { fixed: 104 },
+            { fixed: 96 },
+            { fixed: 170 },
+            { fixed: 220 },
+          ]}
+        />
         <Table.Header>
           <Table.Row>
             <Table.Head>요청한 룰북</Table.Head>

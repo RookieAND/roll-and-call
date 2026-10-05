@@ -8,7 +8,7 @@ import { PermissionMark } from "./permission-mark";
 export function PermissionTable() {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[240, 100, 100]} />
+      <TableColumns widths={[240, { fixed: 100 }, { fixed: 100 }]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>

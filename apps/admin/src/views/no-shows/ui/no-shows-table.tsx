@@ -23,7 +23,17 @@ interface NoShowsTableProps {
 export function NoShowsTable({ rows, sort, empty, selectedId, hrefOf }: NoShowsTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[110, 200, 140, 192, 140, 84, { fixed: 44 }]} />
+      <TableColumns
+        widths={[
+          { fixed: 110 },
+          200,
+          { fixed: 140 },
+          { fixed: 192 },
+          { fixed: 140 },
+          { fixed: 84 },
+          { fixed: 44 },
+        ]}
+      />
       <Table.Header>
         <Table.Row>
           <SortableHead column={NO_SHOW_SORT_COLUMN.nickname} label="불참 당사자" sort={sort} />

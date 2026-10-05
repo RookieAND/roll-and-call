@@ -15,7 +15,9 @@ interface CertQueueTableProps {
 export function CertQueueTable({ rows, query }: CertQueueTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[150, 380, 110, 90, 90, { fixed: 44 }]} />
+      <TableColumns
+        widths={[{ fixed: 150 }, 380, { fixed: 110 }, { fixed: 90 }, { fixed: 90 }, { fixed: 44 }]}
+      />
       <Table.Header>
         <Table.Row>
           <Table.Head>닉네임</Table.Head>

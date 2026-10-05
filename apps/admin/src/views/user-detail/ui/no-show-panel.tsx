@@ -33,7 +33,9 @@ export function NoShowPanel({ noShows, page }: NoShowPanelProps) {
       }
     >
       <Table.Root className="table-equal">
-        <TableColumns widths={[192, 200, 140, { fixed: 96 }, { fixed: 56 }]} />
+        <TableColumns
+          widths={[{ fixed: 192 }, 200, { fixed: 140 }, { fixed: 96 }, { fixed: 56 }]}
+        />
         <Table.Header>
           <Table.Row>
             <Table.Head>일시</Table.Head>

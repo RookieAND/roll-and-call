@@ -14,7 +14,9 @@ interface StaffTableProps {
 export function StaffTable({ rows, viewerId }: StaffTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[180, 104, 104, 104, 150]} />
+      <TableColumns
+        widths={[180, { fixed: 104 }, { fixed: 104 }, { fixed: 104 }, { fixed: 150 }]}
+      />
       <Table.Header>
         <Table.Row>
           <Table.Head>닉네임</Table.Head>

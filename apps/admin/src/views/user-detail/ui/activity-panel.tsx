@@ -46,7 +46,17 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
       }
     >
       <Table.Root className="table-equal">
-        <TableColumns widths={[192, 66, 200, 140, 100, 96, { fixed: 44 }]} />
+        <TableColumns
+          widths={[
+            { fixed: 192 },
+            { fixed: 66 },
+            200,
+            { fixed: 140 },
+            { fixed: 100 },
+            { fixed: 96 },
+            { fixed: 44 },
+          ]}
+        />
         <Table.Header>
           <Table.Row>
             <Table.Head>일시</Table.Head>

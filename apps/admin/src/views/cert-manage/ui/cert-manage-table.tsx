@@ -34,7 +34,9 @@ interface CertManageTableProps {
 export function CertManageTable({ rows, sort, query, noRecords }: CertManageTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[170, 260, 300, 90, 120, { fixed: 64 }]} />
+      <TableColumns
+        widths={[{ fixed: 170 }, { fixed: 260 }, 300, { fixed: 90 }, { fixed: 120 }, { fixed: 64 }]}
+      />
       <Table.Header>
         <Table.Row>
           <SortableHead column="user" label="유저" sort={sort} />

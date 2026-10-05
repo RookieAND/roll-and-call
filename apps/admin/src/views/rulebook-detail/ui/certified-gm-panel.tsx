@@ -64,7 +64,7 @@ export function CertifiedGmPanel({
       }
     >
       <Table.Root className="table-equal">
-        <TableColumns widths={[180, 140, 140, { fixed: 44 }]} />
+        <TableColumns widths={[180, { fixed: 140 }, { fixed: 140 }, { fixed: 44 }]} />
         <Table.Header>
           <Table.Row>
             <Table.Head>닉네임</Table.Head>

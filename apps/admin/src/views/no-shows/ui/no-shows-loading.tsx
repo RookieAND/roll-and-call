@@ -40,12 +40,12 @@ export function NoShowsLoading() {
         <Panel className="flex-1" footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
-              { label: "불참 당사자", kind: "text", width: 110 },
+              { label: "불참 당사자", kind: "text", width: 110, fixed: true },
               { label: "세션", kind: "text", width: 200 },
-              { label: "룰북", kind: "text", width: 140 },
-              { label: "일시", kind: "date", width: 192, sorted: true },
-              { label: "처리한 사람", kind: "text", width: 140 },
-              { label: "상태", kind: "badge", width: 84 },
+              { label: "룰북", kind: "text", width: 140, fixed: true },
+              { label: "일시", kind: "date", width: 192, fixed: true, sorted: true },
+              { label: "처리한 사람", kind: "text", width: 140, fixed: true },
+              { label: "상태", kind: "badge", width: 84, fixed: true },
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />
