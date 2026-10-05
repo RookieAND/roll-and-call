@@ -4,14 +4,13 @@ import { ChevronRight } from "lucide-react";
 import { formatSessionTime, type TableSort } from "@/shared/lib";
 import { NO_SHOW_SORT_COLUMN, type NoShowRow, type NoShowSortColumn } from "@/shared/server";
 import {
+  NoShowStatusTag,
   TableEmptyRow,
   TableColumns,
   ServerLink,
   SortableHead,
   type EmptyImage,
 } from "@/shared/ui";
-
-import { NoShowStatusTag } from "./no-show-status-tag";
 
 interface NoShowsTableProps {
   rows: NoShowRow[];

@@ -2,9 +2,8 @@ import { Button, HStack, VStack } from "@roll-and-call/ui";
 
 import { AddNoShowDialog } from "@/features/add-no-show";
 import { CancelNoShowDialog, NoShowSummary } from "@/features/cancel-no-show";
-import { paginate, withQuery, type TableSort } from "@/shared/lib";
+import { NO_SHOW_STATUS_LABEL, paginate, withQuery, type TableSort } from "@/shared/lib";
 import {
-  NO_SHOW_STATUS_LABEL,
   type NoShowDetail,
   type NoShowRow,
   type NoShowSessionSearch,

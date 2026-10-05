@@ -8,6 +8,7 @@ export {
   type CertManageStatus,
 } from "./cert-manage-status";
 export { CERT_TABS } from "./cert-tabs";
+export { NO_SHOW_STATUS, NO_SHOW_STATUS_LABEL, type NoShowStatus } from "./no-show-status";
 export {
   formatDate,
   ONGOING_ROLE,

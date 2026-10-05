@@ -1,4 +1,5 @@
-import type { NoShowStatus } from "./no-show-status";
+import type { NoShowStatus } from "@/shared/lib";
+
 import { noShowStatusOf } from "./no-show-status-of";
 import type { Snapshot } from "./snapshot";
 import type { NoShow } from "./types";

@@ -1,7 +1,6 @@
-import { sortRows, type SortDir } from "@/shared/lib";
+import { sortRows, type NoShowStatus, type SortDir } from "@/shared/lib";
 
 import type { NoShowSortColumn } from "./no-show-sort";
-import type { NoShowStatus } from "./no-show-status";
 import type { NoShowRow } from "./to-no-show-row";
 
 export interface NoShowFilter {

@@ -26,6 +26,7 @@ export { ItemCard } from "./item-card";
 export { Kbd } from "./kbd";
 export { KeyHint } from "./key-hint";
 export { ModalServerLabel } from "./modal-server-label";
+export { NoShowStatusTag } from "./no-show-status-tag";
 export { MoreMenu, type MoreMenuItem } from "./more-menu";
 export { RetryableLabel } from "./retryable-label";
 export { NAV_ITEMS, type NavKey } from "./nav-items";

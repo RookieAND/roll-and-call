@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 
-import { parseSort } from "@/shared/lib";
+import { parseSort, type NoShowStatus } from "@/shared/lib";
 import {
   getNoShow,
   listNoShows,
   NO_SHOW_DEFAULT_SORT,
   NO_SHOW_SORT_COLUMNS,
   searchNoShowSessions,
-  type NoShowStatus,
 } from "@/shared/server";
 import { NoShowsView } from "@/views/no-shows";
 

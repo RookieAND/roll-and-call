@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+import { NO_SHOW_STATUS } from "@/shared/lib";
+
 import { NO_SHOW_DEFAULT_SORT } from "./no-show-sort";
-import { NO_SHOW_STATUS } from "./no-show-status";
 import { selectNoShowRows } from "./select-no-show-rows";
 import { toNoShowRow, type NoShowRow } from "./to-no-show-row";
 import type { NoShow } from "./types";

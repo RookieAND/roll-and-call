@@ -1,7 +1,7 @@
 import { Text } from "@roll-and-call/ui";
 
-import { formatSessionTime } from "@/shared/lib";
-import { NO_SHOW_STATUS, type NoShowDetail } from "@/shared/server";
+import { formatSessionTime, NO_SHOW_STATUS } from "@/shared/lib";
+import type { NoShowDetail } from "@/shared/server";
 import { FactRows, FactSub } from "@/shared/ui";
 
 const REPEATED_NO_SHOW_COUNT = 2;

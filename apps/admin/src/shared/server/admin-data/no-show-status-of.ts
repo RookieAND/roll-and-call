@@ -1,6 +1,6 @@
 import { isAbsenceActive } from "@roll-and-call/database/games/model";
 
-import { NO_SHOW_STATUS } from "./no-show-status";
+import { NO_SHOW_STATUS } from "@/shared/lib";
 
 interface NoShowStatusOfOptions {
   cancelled: boolean;

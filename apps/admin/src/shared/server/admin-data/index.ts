@@ -103,7 +103,6 @@ export { searchUsers, type UserSearchResult } from "./search";
 export { getNoShow, type NoShowDetail } from "./get-no-show";
 export { listNoShows } from "./list-no-shows";
 export { type NoShowFilter } from "./select-no-show-rows";
-export { NO_SHOW_STATUS, NO_SHOW_STATUS_LABEL, type NoShowStatus } from "./no-show-status";
 export {
   NO_SHOW_DEFAULT_SORT,
   NO_SHOW_SORT_COLUMN,
