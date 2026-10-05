@@ -151,7 +151,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     description: "행운이 세 번 연달아 찾아왔습니다.",
   }),
   [HIDDEN_LADDER.days3]: hidden({
-    emoji: "🎯",
+    emoji: "🏁",
     name: "연속 출전",
     grade: 2,
     description: "사흘 내내 테이블에 앉았습니다.",
@@ -203,5 +203,29 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "불꽃 행진",
     grade: 5,
     description: "열흘 내내 테이블의 열기가 식지 않았습니다.",
+  }),
+  [HIDDEN_LADDER.allSizes]: hidden({
+    emoji: "🪑",
+    name: "두루두루",
+    grade: 2,
+    description: "어떤 규모의 테이블에도 앉아 보았습니다.",
+  }),
+  [HIDDEN_LADDER.allTimes]: hidden({
+    emoji: "🕰️",
+    name: "시간 수집가",
+    grade: 3,
+    description: "하루의 모든 시간에 테이블이 열렸습니다.",
+  }),
+  [HIDDEN_LADDER.collectorKing]: hidden({
+    emoji: "🗃️",
+    name: "수집왕",
+    grade: 5,
+    description: "모든 구간을 빠짐없이 채웠습니다.",
+  }),
+  [HIDDEN_LADDER.boxOffice]: hidden({
+    emoji: "🎪",
+    name: "흥행 보증",
+    grade: 5,
+    description: "여는 테이블마다 사람이 몰렸습니다.",
   }),
 };

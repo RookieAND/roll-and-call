@@ -3,12 +3,15 @@ import { ambidextrousEvents } from "./ambidextrous-events";
 import { anniversaryEvents } from "./anniversary-events";
 import type { BadgeFacts } from "./badge-facts";
 import { HIDDEN_LADDER, type HiddenLadderKey } from "./badge-ladder";
+import { collectorKingEvents } from "./collector-king-events";
 import { dayStreakEvents } from "./day-streak-events";
 import { drawEvents } from "./draw-events";
 import { lightningEvents } from "./lightning-events";
 import { owlEvents } from "./owl-events";
 import type { BadgeEvent } from "./reached-tier";
 import { sameDayEvents } from "./same-day-events";
+import { sizeEvents } from "./size-events";
+import { timeSlotEvents } from "./time-slot-events";
 import { weekdayEvents } from "./weekday-events";
 import { winStreakEvents } from "./win-streak-events";
 
@@ -21,6 +24,7 @@ const PULLUP_MIN_PLAYERS = 3;
 const REVIVE_MIN_PLAYERS = 4;
 const REVIVE_MIN_ROLL = 80;
 const COIN_ROLL = 50;
+const BOX_OFFICE_MIN_GAMES = 3;
 
 const isCrowded = ({ applicants, maxPlayers }: { applicants: number; maxPlayers: number }) =>
   applicants >= CROWDED_MIN_APPLICANTS && applicants >= maxPlayers * CROWDED_RATIO;
@@ -121,5 +125,18 @@ export function hiddenEvents({
       return winStreakEvents({ draws, length: 5 });
     case HIDDEN_LADDER.days10:
       return dayStreakEvents({ facts, length: 10 });
+    case HIDDEN_LADDER.allSizes:
+      return sizeEvents(facts);
+    case HIDDEN_LADDER.allTimes:
+      return timeSlotEvents(facts);
+    case HIDDEN_LADDER.collectorKing:
+      return collectorKingEvents(facts);
+    case HIDDEN_LADDER.boxOffice:
+      return facts.hostedDraws
+        .filter(isCrowded)
+        .toSorted((left, right) => left.drawnAt.getTime() - right.drawnAt.getTime())
+        .slice(BOX_OFFICE_MIN_GAMES - 1)
+        .slice(0, 1)
+        .map((draw) => ({ at: draw.drawnAt, gameId: draw.gameId }));
   }
 }

@@ -171,3 +171,58 @@ describe("숨겨진 칭호 14종", () => {
 function range(length: number): number[] {
   return Array.from({ length }, (_, index) => index + 1);
 }
+
+describe("숨겨진 칭호 4종 (D343)", () => {
+  const sized = (counts: number[]) =>
+    counts.map((attendedCount, index) => session({ day: index + 1, attendedCount }));
+  const atHours = (hours: number[]) =>
+    hours.map((hour, index) => {
+      const startsAt = new Date(Date.UTC(2026, 2, index + 1, hour - 9));
+      return session({ day: index + 1, startsAt, endsAt: new Date(startsAt.getTime() + HOUR) });
+    });
+
+  it("두루두루는 소(2~3)·중(4~5)·대(6+)를 모두 거쳐야 하고 둘만으로는 못 받는다", () => {
+    expect(earned({ played: sized([2, 3, 4, 5]) }, "sizes")).toBe(false);
+    expect(earned({ played: sized([2, 4, 6]) }, "sizes")).toBe(true);
+    expect(earned({ hosted: sized([3, 5, 9]) }, "sizes")).toBe(true);
+  });
+
+  it("시간 수집가는 새벽·오전·오후·저녁 네 구간의 경계를 지킨다", () => {
+    expect(earned({ played: atHours([0, 6, 12]) }, "times")).toBe(false);
+    expect(earned({ played: atHours([5, 11, 17, 23]) }, "times")).toBe(true);
+    expect(earned({ played: atHours([0, 6, 12, 18]) }, "times")).toBe(true);
+    expect(earned({ played: atHours([0, 1, 6, 12, 17]) }, "times")).toBe(false);
+  });
+
+  it("수집왕은 요일 수집가·시간 수집가·두루두루를 모두 받아야 하고 하나라도 빠지면 못 받는다", () => {
+    const rich = (weekdays: number, sizes: number[], hours: number[]) =>
+      Array.from({ length: weekdays }, (_, index) => {
+        const startsAt = new Date(Date.UTC(2026, 2, 1 + index, hours[index % hours.length]! - 9));
+        return session({
+          day: index + 1,
+          startsAt,
+          endsAt: new Date(startsAt.getTime() + HOUR),
+          attendedCount: sizes[index % sizes.length]!,
+        });
+      });
+    expect(earned({ played: rich(7, [2, 4, 6], [3, 8, 14, 20]) }, "king")).toBe(true);
+    expect(earned({ played: rich(6, [2, 4, 6], [3, 8, 14, 20]) }, "king")).toBe(false);
+    expect(earned({ played: rich(7, [2, 4], [3, 8, 14, 20]) }, "king")).toBe(false);
+    expect(earned({ played: rich(7, [2, 4, 6], [3, 8, 14]) }, "king")).toBe(false);
+  });
+
+  it("흥행 보증은 인기 폭발 기준을 채운 내 추첨 구인이 3개 이상이어야 한다", () => {
+    const crowded = (index: number, applicants = 12) => ({
+      gameId: `h${index}`,
+      applicants,
+      maxPlayers: 4,
+      drawnAt: new Date(Date.UTC(2026, 5, 1 + index)),
+    });
+    expect(earned({ hostedDraws: [crowded(0), crowded(1)] }, "boxoffice")).toBe(false);
+    expect(earned({ hostedDraws: [crowded(0), crowded(1), crowded(2)] }, "boxoffice")).toBe(true);
+    expect(earned({ hostedDraws: [crowded(0), crowded(1), crowded(2, 11)] }, "boxoffice")).toBe(
+      false,
+    );
+    expect(earned({ hostedDraws: [crowded(0), crowded(1), crowded(2)] }, "popular")).toBe(true);
+  });
+});
