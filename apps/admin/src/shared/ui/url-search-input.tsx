@@ -3,7 +3,7 @@
 import { HStack, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const DELAY = 250;
 
@@ -25,18 +25,33 @@ export function UrlSearchInput({
   const searchParams = useSearchParams();
   const current = searchParams.get(param) ?? "";
   const [value, setValue] = useState(current);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const pushed = useRef(current);
 
+  // 주소가 밖에서 바뀌면(뒤로 가기) 입력칸을 따라간다. 내가 올린 값이 돌아온 것이면 건드리지 않는다.
   useEffect(() => {
-    if (value.trim() === current) return;
-    const timer = setTimeout(() => {
-      const next = new URLSearchParams(searchParams);
+    if (current === pushed.current) return;
+    pushed.current = current;
+    clearTimeout(timer.current);
+    setValue(current);
+  }, [current]);
+
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const change = (nextValue: string) => {
+    setValue(nextValue);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      const trimmed = nextValue.trim();
+      if (trimmed === pushed.current) return;
+      pushed.current = trimmed;
+      const next = new URLSearchParams(window.location.search);
       next.delete("page");
-      if (value.trim()) next.set(param, value.trim());
+      if (trimmed) next.set(param, trimmed);
       else next.delete(param);
       router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });
     }, DELAY);
-    return () => clearTimeout(timer);
-  }, [value, current, param, pathname, router, searchParams]);
+  };
 
   return (
     <HStack align="center" className={`relative ${className ?? ""}`}>
@@ -44,7 +59,7 @@ export function UrlSearchInput({
       <TextInput
         type="search"
         value={value}
-        onChange={(event) => setValue(event.target.value)}
+        onChange={(event) => change(event.target.value)}
         placeholder={placeholder}
         aria-label={placeholder}
         className={size === "sm" ? "h-[32px] pl-400 text-body3" : "pl-400 text-body3"}
