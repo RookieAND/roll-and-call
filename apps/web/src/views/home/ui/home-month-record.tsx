@@ -1,7 +1,7 @@
 import { HStack, Text } from "@roll-and-call/ui";
 import type { Dayjs } from "dayjs";
 
-import { ScoreRuleSheet } from "@/entities/badge";
+import { ScoreRuleLink } from "@/entities/badge";
 
 import type { MonthRecord } from "../model/build-month-record";
 import { HomeRecordEmpty } from "./home-record-empty";
@@ -31,7 +31,7 @@ export function HomeMonthRecord({ monthStart, record }: HomeMonthRecordProps) {
         <Text typography="heading2" render={<h3 />} className="font-extrabold">
           {monthLabel}의 기록
         </Text>
-        <ScoreRuleSheet className="-my-150 -ml-100" />
+        <ScoreRuleLink className="-my-150 -ml-100" />
       </HStack>
       <Text typography="body4" foreground="hint" render={<p />} className="mt-050 mb-200">
         {summary}

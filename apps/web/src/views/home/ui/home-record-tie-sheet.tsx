@@ -1,6 +1,6 @@
 "use client";
 
-import { Sheet, Text, VStack } from "@roll-and-call/ui";
+import { Sheet, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -35,27 +35,28 @@ export function HomeRecordTieSheet({
         <Sheet.Handle />
         <Sheet.Title className="mb-075 text-heading3">{label} · 공동 1위</Sheet.Title>
         <Sheet.Body>
-          {sortedLeaders.map(({ person, score, sessionCount }) => (
+          {sortedLeaders.map(({ person, score }) => (
             <Sheet.Item
               key={person.id}
               render={<ServerLink path={`/users/${person.id}`} />}
               className="min-h-14 justify-start gap-150 px-100"
             >
               <ProfileRow name={person.username} avatarUrl={person.avatarUrl} />
-              <VStack align="end" className="flex-none">
-                <Text typography="subtitle2" weight="extrabold" foreground="primary" numeric>
-                  {score}점
-                </Text>
-                <Text typography="body4" foreground="hint">
-                  세션 {sessionCount}회
-                </Text>
-              </VStack>
+              <Text
+                typography="subtitle2"
+                weight="extrabold"
+                foreground="primary"
+                numeric
+                className="flex-none"
+              >
+                {score}점
+              </Text>
               <ChevronRight size={16} aria-hidden className="flex-none text-hint" />
             </Sheet.Item>
           ))}
         </Sheet.Body>
         <Text typography="body4" foreground="hint" render={<p />} className="mx-100 mt-100">
-          이름을 누르면 그 사람의 프로필로 이동합니다.
+          프로필에서 소개와 링크, 진행한 세션 후기를 볼 수 있습니다.
         </Text>
       </Sheet.Popup>
     </Sheet.Root>

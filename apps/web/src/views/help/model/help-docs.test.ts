@@ -26,7 +26,7 @@ const BANNED = [
 ];
 
 describe("HELP_DOCS", () => {
-  it("11편이 목록 순서와 분류대로 있고 slug가 겹치지 않는다", () => {
+  it("12편이 목록 순서와 분류대로 있고 slug가 겹치지 않는다", () => {
     expect(HELP_DOCS.map((doc) => [doc.slug, doc.category])).toEqual([
       ["find-and-join", HELP_CATEGORY.join],
       ["recruit-methods", HELP_CATEGORY.join],
@@ -39,6 +39,7 @@ describe("HELP_DOCS", () => {
       ["notifications", HELP_CATEGORY.account],
       ["profile-links", HELP_CATEGORY.account],
       ["status-glossary", HELP_CATEGORY.account],
+      ["monthly-score", HELP_CATEGORY.account],
     ]);
     expect(HELP_CATEGORY.account).toBe("계정과 알림");
   });

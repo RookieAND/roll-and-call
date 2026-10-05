@@ -43,14 +43,16 @@ export function HelpDocView({ slug }: HelpDocViewProps) {
             <HelpDocBlock key={index} block={block} />
           ))}
 
-          <VStack gap="125" render={<section />} className="border-t border-gray-200 pt-225">
-            <Text typography="body4" weight="extrabold" foreground="hint" render={<h2 />}>
-              이어 읽기
-            </Text>
-            {related.map((target) => (
-              <HelpRelatedRow key={target.slug} slug={target.slug} title={target.title} />
-            ))}
-          </VStack>
+          {related.length > 0 && (
+            <VStack gap="125" render={<section />} className="border-t border-gray-200 pt-225">
+              <Text typography="body4" weight="extrabold" foreground="hint" render={<h2 />}>
+                이어 읽기
+              </Text>
+              {related.map((target) => (
+                <HelpRelatedRow key={target.slug} slug={target.slug} title={target.title} />
+              ))}
+            </VStack>
+          )}
         </VStack>
       </Container>
     </>

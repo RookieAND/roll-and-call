@@ -18,8 +18,7 @@ interface HomeRecordLeaderProps {
 export function HomeRecordLeader({ label, leaders }: HomeRecordLeaderProps) {
   const people = leaders.map((leader) => leader.person) as [RecordPerson, ...RecordPerson[]];
   const [first] = people;
-  const { score, sessionCount } = leaders[0];
-  const sameSessions = leaders.every((leader) => leader.sessionCount === sessionCount);
+  const { score } = leaders[0];
   const name = leaderName(people);
 
   const body = (
@@ -50,11 +49,6 @@ export function HomeRecordLeader({ label, leaders }: HomeRecordLeaderProps) {
         >
           {name}
         </Text>
-        {sameSessions && (
-          <Text typography="body4" foreground="hint" render={<div />} className="mt-025">
-            세션 {sessionCount}회
-          </Text>
-        )}
       </div>
       <HStack align="baseline" gap="025" className="flex-none text-tinted-ink">
         <Text typography="heading1" numeric foreground="inherit" className="tracking-[-0.03em]">

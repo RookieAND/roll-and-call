@@ -41,13 +41,7 @@ export function HomeRecordRow({ row, position }: HomeRecordRowProps) {
       className="flex items-center gap-125 px-150 py-125 transition-colors hover:bg-gray-50"
     >
       {rankNumber}
-      <ProfileRow
-        size="sm"
-        name={row.person.username}
-        avatarUrl={row.person.avatarUrl}
-        subline={`세션 ${row.sessionCount}회`}
-        sublineForeground="hint"
-      />
+      <ProfileRow size="sm" name={row.person.username} avatarUrl={row.person.avatarUrl} />
       <Text typography="body4" weight="extrabold" numeric className="flex-none">
         {row.score}점
       </Text>

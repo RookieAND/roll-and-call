@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
+import { cn, HStack, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 import type { MouseEvent } from "react";
 
@@ -38,14 +38,13 @@ export function HomeCalendarCell({
   const ariaLabel = sessions.length > 0 ? `${dayLabel} 세션 ${sessions.length}건` : dayLabel;
   const href = `${toServerPath("/")}?date=${cell.key}`;
 
-  const tone = CALENDAR_CELL_TONE[calendarCellState({ selected, today })];
+  const tone =
+    CALENDAR_CELL_TONE[calendarCellState({ selected, today, hasSessions: sessions.length > 0 })];
   const redDayTone = holidayNames ? "text-sunday" : WEEKDAY_TONE[cell.weekday];
-  const weekdayTone = cell.inMonth ? (redDayTone ?? "text-gray-600") : "text-hint opacity-50";
+  const weekdayTone = cell.inMonth ? (redDayTone ?? "text-gray-600") : "text-hint";
   const dayTone = tone.day ?? weekdayTone;
   const dotTone = (session: CalendarSession) =>
     tone.dot ?? (session.mine ? "bg-primary-600" : "bg-hint");
-  const chipTone =
-    tone.chip ?? (lead?.mine ? "bg-primary-100 text-tinted-ink" : "bg-gray-100 text-gray-600");
 
   // 같은 달은 이미 받은 세션으로 그리므로 서버를 다시 부르지 않는다. 다른 달 칸과 새 탭 열기는 원래대로 이동한다.
   function selectDay(event: MouseEvent<HTMLAnchorElement>) {
@@ -63,7 +62,7 @@ export function HomeCalendarCell({
       aria-label={ariaLabel}
       aria-current={selected ? "date" : undefined}
       className={cn(
-        "flex h-12 min-w-0 flex-col gap-075 rounded-300 px-050 pt-100 pb-075 transition-colors md:h-19",
+        "flex h-12 min-w-0 flex-col gap-075 rounded-300 px-050 pt-100 pb-075 transition-colors",
         tone.cell,
       )}
     >
@@ -76,30 +75,13 @@ export function HomeCalendarCell({
         {cell.day}
       </Text>
       {lead && (
-        <VStack aria-hidden gap="025" render={<span />} className="hidden min-w-0 md:flex">
-          <Text
-            typography="body4"
-            weight="bold"
-            truncate
-            className={cn("rounded-200 px-075 py-025 leading-4", chipTone)}
-          >
-            {lead.title}
-          </Text>
-          {sessions.length > 1 && (
-            <Text typography="body5" weight="bold" className={cn("pl-050", tone.more)}>
-              외 {sessions.length - 1}
-            </Text>
-          )}
-        </VStack>
-      )}
-      {lead && (
         <HStack
           aria-hidden
           align="center"
           justify="center"
           gap="050"
           render={<span />}
-          className="h-3 md:hidden"
+          className="h-3"
         >
           {!overflow &&
             dots.map((session) => (

@@ -1,6 +1,6 @@
 import { HStack, Text, VStack, cn } from "@roll-and-call/ui";
 
-import { BadgeMedal, ScoreRuleSheet } from "@/entities/badge";
+import { BadgeMedal, ScoreRuleLink } from "@/entities/badge";
 import { BadgeDetailSheet } from "@/features/view-badge";
 
 import type { MonthlyCard } from "../model/monthly-card";
@@ -44,7 +44,7 @@ export function DexMonthlyCard({ card }: DexMonthlyCardProps) {
         >
           {card.monthLine}
         </Text>
-        <ScoreRuleSheet />
+        <ScoreRuleLink />
       </HStack>
       <BadgeDetailSheet detail={card.detail} className="w-full text-left">
         <Text

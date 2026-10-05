@@ -27,8 +27,8 @@ export function HomeSkeleton({ date }: HomeSkeletonProps) {
             {selected.format("M월 D일 (dd)")}
           </Text>
           <VStack gap="100">
-            <Skeleton width="100%" height={78} rounded={600} />
-            <Skeleton width="100%" height={78} rounded={600} />
+            <Skeleton width="100%" height={72} rounded={600} />
+            <Skeleton width="100%" height={72} rounded={600} />
           </VStack>
         </section>
 
@@ -42,10 +42,10 @@ export function HomeSkeleton({ date }: HomeSkeletonProps) {
               key={group}
               className={index > 0 ? "mt-200 border-t border-gray-100 pt-200" : undefined}
             >
-              <Skeleton width={128} height={15} className="mb-125" />
-              <Skeleton height={74} rounded={600} />
-              <Skeleton height={44} className="mt-050" />
-              <Skeleton height={44} className="mt-px" />
+              <Skeleton width={120} height={14} className="mb-125" />
+              <Skeleton height={76} rounded={600} />
+              <Skeleton height={28} className="mt-050" />
+              <Skeleton height={28} className="mt-050" />
             </div>
           ))}
         </section>
