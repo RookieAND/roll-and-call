@@ -5,7 +5,7 @@ import { directionalParticle, objectParticle } from "@roll-and-call/database/not
 import { AlertDialog, Button, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { RotateCcw, Search } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { KindImpactPage } from "@/shared/server";
@@ -13,6 +13,8 @@ import { ActionNetworkError, ModalServerLabel, Tag } from "@/shared/ui";
 
 import { loadKindImpact } from "../api/load-kind-impact";
 import { KindImpactList } from "./kind-impact-list";
+
+const SEARCH_DELAY = 250;
 
 interface KindImpactDialogProps {
   rulebookId: string;
@@ -40,6 +42,9 @@ export function KindImpactDialog({
   onClose,
 }: KindImpactDialogProps) {
   const loading = useRef(false);
+  const requestId = useRef(0);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(initial);
   const [shownInitial, setShownInitial] = useState(initial);
@@ -47,28 +52,49 @@ export function KindImpactDialog({
     setShownInitial(initial);
     setPage(initial);
     setQuery("");
+    setLoadFailed(false);
   }
   const fromLabel = RULEBOOK_KIND_LABEL[fromKind];
   const toLabel = RULEBOOK_KIND_LABEL[toKind];
 
-  const search = async (nextQuery: string) => {
-    setQuery(nextQuery);
-    setPage(await loadKindImpact({ rulebookId, nextKind: toKind, query: nextQuery, cursor: null }));
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const fetchPage = async (nextQuery: string, cursor: string | null) => {
+    try {
+      const result = await loadKindImpact({
+        rulebookId,
+        nextKind: toKind,
+        query: nextQuery,
+        cursor,
+      });
+      setLoadFailed(false);
+      return result;
+    } catch {
+      setLoadFailed(true);
+      return null;
+    }
   };
 
-  // ponytail: 같은 쪽을 두 번 부르지 않게만 막는다. 검색어를 빠르게 바꿀 때 늦게 온 응답이 덮는 경합은 두고, 문제가 되면 요청 번호로 거른다.
+  const search = (nextQuery: string) => {
+    setQuery(nextQuery);
+    clearTimeout(timer.current);
+    requestId.current += 1;
+    const current = requestId.current;
+    timer.current = setTimeout(async () => {
+      const result = await fetchPage(nextQuery, null);
+      if (result && current === requestId.current) setPage(result);
+    }, SEARCH_DELAY);
+  };
+
   const loadMore = async () => {
     if (!page?.nextCursor || loading.current) return;
     loading.current = true;
-    const next = await loadKindImpact({
-      rulebookId,
-      nextKind: toKind,
-      query,
-      cursor: page.nextCursor,
-    }).finally(() => {
+    const current = requestId.current;
+    const next = await fetchPage(query, page.nextCursor).finally(() => {
       loading.current = false;
     });
-    setPage({ ...next, rows: [...page.rows, ...next.rows] });
+    if (next && current === requestId.current)
+      setPage({ ...next, rows: [...page.rows, ...next.rows] });
   };
 
   return (
@@ -86,7 +112,7 @@ export function KindImpactDialog({
         </AlertDialog.Header>
         <AlertDialog.Body className="mt-200">
           <VStack gap="125">
-            {networkError ? <ActionNetworkError /> : null}
+            {networkError || loadFailed ? <ActionNetworkError /> : null}
             <HStack align="center" gap="075">
               <Text typography="body4" weight="bold">
                 구인 자격을 잃는 사람
@@ -104,7 +130,7 @@ export function KindImpactDialog({
                 value={query}
                 placeholder="닉네임 검색"
                 aria-label="닉네임 검색"
-                onChange={(event) => void search(event.target.value)}
+                onChange={(event) => search(event.target.value)}
                 className="pl-400 text-body3"
               />
             </HStack>
