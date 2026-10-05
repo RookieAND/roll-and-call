@@ -27,6 +27,8 @@ async function evaluateUser({
         badgeKey: userBadges.badgeKey,
         tier: userBadges.tier,
         revokedAt: userBadges.revokedAt,
+        earnedAt: userBadges.earnedAt,
+        sourceGameId: userBadges.sourceGameId,
       })
       .from(userBadges)
       .where(and(eq(userBadges.serverId, serverId), eq(userBadges.userId, userId))),

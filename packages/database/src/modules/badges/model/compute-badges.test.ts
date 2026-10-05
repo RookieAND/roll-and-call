@@ -98,6 +98,50 @@ describe("computeBadges", () => {
   });
 });
 
+describe("diffBadges 근거 갱신", () => {
+  const badge = (sourceGameId: string, earnedAt: Date) => ({
+    badgeKey: "sp.expedition",
+    tier: 1,
+    earnedAt,
+    sourceGameId,
+  });
+  const at = new Date("2026-09-30T00:00:00Z");
+
+  it("같은 단계에서 근거 구인이 바뀌면 알리지 않고 갱신한다", () => {
+    expect(
+      diffBadges({
+        stored: [{ ...badge("old", at), revokedAt: null }],
+        desired: [badge("new", at)],
+      }),
+    ).toEqual([{ kind: "refresh", badge: badge("new", at) }]);
+  });
+
+  it("획득 시각만 바뀌어도 갱신하고, 같으면 아무것도 하지 않는다", () => {
+    const later = new Date("2026-10-01T00:00:00Z");
+    expect(
+      diffBadges({
+        stored: [{ ...badge("same", at), revokedAt: null }],
+        desired: [badge("same", later)],
+      }),
+    ).toEqual([{ kind: "refresh", badge: badge("same", later) }]);
+    expect(
+      diffBadges({
+        stored: [{ ...badge("same", at), revokedAt: null }],
+        desired: [badge("same", at)],
+      }),
+    ).toEqual([]);
+  });
+
+  it("저장된 근거를 모르면(월간 뱃지 등) 갱신하지 않는다", () => {
+    expect(
+      diffBadges({
+        stored: [{ badgeKey: "sp.expedition", tier: 1, revokedAt: null }],
+        desired: [badge("new", at)],
+      }),
+    ).toEqual([]);
+  });
+});
+
 describe("diffBadges", () => {
   const earned = (tier: number) => ({
     badgeKey: "pl.total",
