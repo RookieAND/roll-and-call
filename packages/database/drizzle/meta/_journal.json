@@ -547,6 +547,13 @@
       "when": 1796900000000,
       "tag": "0083_draw_results_user_id_idx",
       "breakpoints": true
+    },
+    {
+      "idx": 84,
+      "version": "7",
+      "when": 1797000000000,
+      "tag": "0084_drop_games_play_time",
+      "breakpoints": true
     }
   ]
 }

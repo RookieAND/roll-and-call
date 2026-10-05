@@ -51,8 +51,7 @@ export const games = pgTable(
     thumbnailUrl: text("thumbnail_url"),
     thumbnailSpoiler: boolean("thumbnail_spoiler").notNull().default(false),
     images: text("images").array().notNull().default([]),
-    playTime: text("play_time"),
-    // 플레이 시간의 유일한 값(분). 종료 시각 판별과 화면 표기가 모두 이 값을 쓴다. playTime 텍스트는 더 읽지 않는다.
+    // 플레이 시간의 유일한 값(분). 종료 시각 판별과 화면 표기가 모두 이 값을 쓴다.
     playMinutes: integer("play_minutes"),
     // 신청 전에 알아야 할 것들. 각각 최대 5개이고 순서를 그대로 보여준다.
     genres: text("genres").array().notNull().default([]),
