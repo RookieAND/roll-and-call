@@ -1,13 +1,11 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
-import { isNull } from "es-toolkit";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { actionTone, formatDateTime, type TableSort } from "@/shared/lib";
-import { retentionDaysLeft, type AuditEntry } from "@/shared/server";
+import type { AuditEntry } from "@/shared/server";
 import { ServerLink, SortableHead, TableColumns, Tag } from "@/shared/ui";
 
-import { retentionTone } from "../model/retention-tone";
 import { splitTarget } from "../model/split-target";
 
 interface AuditLogTableProps {
@@ -27,8 +25,7 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
           { fixed: 124 },
           { fixed: 220 },
           240,
-          { fixed: 96 },
-          { fixed: 88 },
+          { fixed: 150 },
           { fixed: 44 },
         ]}
       />
@@ -39,7 +36,6 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
           <Table.Head>대상</Table.Head>
           <Table.Head>사유</Table.Head>
           <Table.Head>운영진</Table.Head>
-          <Table.Head align="end">보관</Table.Head>
           <Table.Head aria-label="열기" />
         </Table.Row>
       </Table.Header>
@@ -47,7 +43,6 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
         {rows.length === 0 ? empty : null}
         {rows.map((row) => {
           const target = splitTarget(row.target);
-          const daysLeft = retentionDaysLeft(row);
           return (
             <Table.Row key={row.id} interactive className="relative">
               <Table.Cell>
@@ -87,13 +82,6 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
                   </HStack>
                 ) : (
                   row.actor
-                )}
-              </Table.Cell>
-              <Table.Cell align="end">
-                {isNull(daysLeft) ? null : (
-                  <Text typography="body3" foreground={retentionTone(daysLeft)}>
-                    {daysLeft}일 남음
-                  </Text>
                 )}
               </Table.Cell>
               <Table.Cell align="end">

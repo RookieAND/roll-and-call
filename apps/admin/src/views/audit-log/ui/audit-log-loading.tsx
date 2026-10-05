@@ -65,8 +65,7 @@ export function AuditLogLoading() {
               { label: "조치", kind: "badge", width: 124, fixed: true },
               { label: "대상", kind: "text", width: 220, fixed: true },
               { label: "사유", kind: "text", width: 240 },
-              { label: "운영진", kind: "text", width: 120, fixed: true },
-              { label: "보관", kind: "text", width: 88, align: "end", fixed: true },
+              { label: "운영진", kind: "text", width: 150, fixed: true },
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />

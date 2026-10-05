@@ -63,25 +63,22 @@ export function CertManageTable({ rows, sort, query, noRecords }: CertManageTabl
             title="조건에 맞는 인증이 없습니다"
           />
         ) : null}
-        {rows.map((row, index) => {
-          const showUser = index === 0 || !row.sameUserAsAbove;
+        {rows.map((row) => {
           const status = CERT_MANAGE_STATUS_LABEL[row.status];
           return (
             <Table.Row key={row.key}>
               <Table.Cell>
-                {showUser ? (
-                  <HStack align="center" gap="075" className="min-w-0">
-                    <Text
-                      typography="body3"
-                      weight="bold"
-                      truncate
-                      render={<ServerLink path={`/users/${row.userId}`} />}
-                    >
-                      {row.nickname}
-                    </Text>
-                    {row.sanctioned ? <Tag>제재 중</Tag> : null}
-                  </HStack>
-                ) : null}
+                <HStack align="center" gap="075" className="min-w-0">
+                  <Text
+                    typography="body3"
+                    weight="bold"
+                    truncate
+                    render={<ServerLink path={`/users/${row.userId}`} />}
+                  >
+                    {row.nickname}
+                  </Text>
+                  {row.sanctioned ? <Tag>제재 중</Tag> : null}
+                </HStack>
               </Table.Cell>
               <Table.Cell>
                 <HStack align="center" gap="075" className="min-w-0">

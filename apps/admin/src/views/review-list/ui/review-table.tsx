@@ -24,10 +24,10 @@ export function ReviewTable({ rows, sort, gameChip, empty, detailQuery }: Review
         widths={[
           { fixed: 168 },
           { fixed: 128 },
-          ...(gameColumns ? [{ fixed: 132 }, { fixed: 96 }] : []),
+          ...(gameColumns ? [{ fixed: 200 }, { fixed: 96 }] : []),
           240,
           { fixed: 64 },
-          { fixed: 168 },
+          { fixed: 120 },
           { fixed: 44 },
         ]}
       />

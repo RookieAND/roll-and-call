@@ -2,7 +2,7 @@ import { Button } from "@roll-and-call/ui";
 
 import { EMPTY_IMAGE, ServerLink, TableEmptyRow } from "@/shared/ui";
 
-const COLUMN_COUNT = 7;
+const COLUMN_COUNT = 6;
 
 interface AuditLogEmptyProps {
   periodLimited: boolean;
