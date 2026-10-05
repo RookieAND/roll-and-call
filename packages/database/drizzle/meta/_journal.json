@@ -526,6 +526,13 @@
       "when": 1796600000000,
       "tag": "0080_rulebook_category_mini_rule",
       "breakpoints": true
+    },
+    {
+      "idx": 81,
+      "version": "7",
+      "when": 1796700000000,
+      "tag": "0081_game_trigger_limit",
+      "breakpoints": true
     }
   ]
 }

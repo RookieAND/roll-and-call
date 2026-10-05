@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { RECRUIT_METHODS, SCHEDULE_MODE, SCHEDULE_MODES } from "@/entities/game";
+import { GAME_TAG, RECRUIT_METHODS, SCHEDULE_MODE, SCHEDULE_MODES } from "@/entities/game";
 import { richTextLength } from "@/shared/lib";
 
 import { isWindowHour } from "./is-window-hour";
@@ -10,7 +10,11 @@ import { monthDayLabel } from "./month-day-label";
 export const GAME_RANGE_MAX_DAYS = 14;
 export const GAME_IMAGES_MAX = 5;
 export const GAME_MAX_PLAYERS = 20;
-export const GAME_TAGS_MAX = 5;
+export const GAME_TAGS_MAX = {
+  [GAME_TAG.genres]: 5,
+  [GAME_TAG.triggers]: 10,
+  [GAME_TAG.platforms]: 5,
+} as const;
 export const GAME_TAG_MAX_LENGTH = 20;
 export const GAME_NOTICE_MAX = 500;
 export const GAME_SYNOPSIS_MAX = 2000;
@@ -18,10 +22,10 @@ export const INVALID_INPUT_MESSAGE = "입력값을 확인해 주세요.";
 
 const DAY_MS = 86_400_000;
 
-const tagList = (label: string) =>
+const tagList = (label: string, max: number) =>
   z
     .array(z.string().trim().min(1).max(GAME_TAG_MAX_LENGTH))
-    .max(GAME_TAGS_MAX, `${label}는 최대 ${GAME_TAGS_MAX}개까지 넣을 수 있습니다.`);
+    .max(max, `${label}는 최대 ${max}개까지 넣을 수 있습니다.`);
 
 // String-based (RHF-friendly: input type === output type). The server action
 // re-validates and converts strings to DB types (Number/Date).
@@ -40,9 +44,9 @@ export const gameFormSchema = z
         `시놉시스는 ${GAME_SYNOPSIS_MAX}자까지 쓸 수 있습니다.`,
       )
       .optional(),
-    genres: tagList("장르"),
-    triggers: tagList("트리거"),
-    platforms: tagList("사용 플랫폼"),
+    genres: tagList("장르", GAME_TAGS_MAX.genres),
+    triggers: tagList("트리거", GAME_TAGS_MAX.triggers),
+    platforms: tagList("사용 플랫폼", GAME_TAGS_MAX.platforms),
     notice: z
       .string()
       .max(GAME_NOTICE_MAX * 20)

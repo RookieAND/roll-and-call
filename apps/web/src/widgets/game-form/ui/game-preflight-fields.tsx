@@ -51,13 +51,13 @@ export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
             key={key}
             label={gameTagLabel[key]}
             htmlFor={key}
-            counter={`${tags.length} / ${GAME_TAGS_MAX}`}
+            counter={`${tags.length} / ${GAME_TAGS_MAX[key]}`}
             error={errors[key]?.message}
           >
             <TagInput
               id={key}
               value={tags}
-              max={GAME_TAGS_MAX}
+              max={GAME_TAGS_MAX[key]}
               maxLength={GAME_TAG_MAX_LENGTH}
               placeholder={TAG_PLACEHOLDER[key]}
               suggestions={TAG_SUGGESTIONS[key]}
