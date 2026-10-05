@@ -27,8 +27,8 @@ export function HomeSkeleton({ date }: HomeSkeletonProps) {
             {selected.format("M월 D일 (dd)")}
           </Text>
           <VStack gap="100">
-            <Skeleton width="100%" height={78} rounded={600} />
-            <Skeleton width="100%" height={78} rounded={600} />
+            <Skeleton width="100%" height={72} rounded={600} />
+            <Skeleton width="100%" height={72} rounded={600} />
           </VStack>
         </section>
 
