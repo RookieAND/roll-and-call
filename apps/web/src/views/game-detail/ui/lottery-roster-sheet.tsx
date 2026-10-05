@@ -34,11 +34,6 @@ export function LotteryRosterSheet({
               <RosterSheetRow key={member.userId} member={member} viewerId={viewerId} />
             ))}
           </RosterGroup>
-          <Text typography="body4" foreground="hint" render={<p />}>
-            추첨 전에는 순번이 없습니다.
-            <br />
-            신청 순서로만 보여 줍니다.
-          </Text>
         </VStack>
       </Sheet.Popup>
     </Sheet.Root>
