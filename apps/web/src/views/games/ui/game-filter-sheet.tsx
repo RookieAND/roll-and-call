@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Checkbox, Chip, Grid, Sheet, Text, VStack } from "@roll-and-call/ui";
+import { Button, Checkbox, Chip, Grid, Sheet, Text, VStack, cn } from "@roll-and-call/ui";
 import { xor } from "es-toolkit";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -20,14 +20,13 @@ import { GameFilterButton } from "./game-filter-button";
 
 interface GameFilterSheetProps {
   filter: GamesFilter;
-  ruleOptions: { key: string; label: string }[];
   // 지금 적용된 조건의 건수(상태 칩 건수). 시트를 열 때 [N건 보기]의 첫 숫자다.
   count: number;
 }
 
 // 시트 안에서 고른 것은 [N건 보기]를 눌러야 주소에 들어간다. 바깥을 누르거나 내려 닫으면 버리고, 다시 열면 적용된 조건으로 채운다.
 // 건수는 고를 때마다 서버에서 다시 세고, 요청 순서 번호로 마지막 요청의 답만 반영한다(D54).
-export function GameFilterSheet({ filter, ruleOptions, count }: GameFilterSheetProps) {
+export function GameFilterSheet({ filter, count }: GameFilterSheetProps) {
   const toServerPath = useServerPath();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -81,25 +80,7 @@ export function GameFilterSheet({ filter, ruleOptions, count }: GameFilterSheetP
         <Sheet.Title className="mb-100">필터</Sheet.Title>
         <Sheet.Body>
           <VStack gap="225" className="pb-050">
-            {ruleOptions.length > 0 && (
-              <FilterSection title="룰">
-                {ruleOptions.map((option) => {
-                  const selected = draft.rules.includes(option.key);
-                  return (
-                    <Chip
-                      key={option.key}
-                      selected={selected}
-                      aria-pressed={selected}
-                      className={CHIP_HIT_AREA}
-                      onClick={() => update({ ...draft, rules: xor(draft.rules, [option.key]) })}
-                    >
-                      {option.label}
-                    </Chip>
-                  );
-                })}
-              </FilterSection>
-            )}
-            <FilterSection title="요일">
+            <FilterSection title="요일" columns="grid-cols-7">
               {GAME_WEEKDAYS.map((label, day) => {
                 const selected = draft.days.includes(day);
                 return (
@@ -107,7 +88,7 @@ export function GameFilterSheet({ filter, ruleOptions, count }: GameFilterSheetP
                     key={label}
                     selected={selected}
                     aria-pressed={selected}
-                    className={CHIP_HIT_AREA}
+                    className={cn(CHIP_HIT_AREA, "w-full")}
                     onClick={() => update({ ...draft, days: xor(draft.days, [day]) })}
                   >
                     {label}
@@ -115,7 +96,7 @@ export function GameFilterSheet({ filter, ruleOptions, count }: GameFilterSheetP
                 );
               })}
             </FilterSection>
-            <FilterSection title="시간대" hint="세션 시작 시각 기준입니다.">
+            <FilterSection title="시간대" columns="grid-cols-4">
               {GAME_TIME_SLOTS.map((slot) => {
                 const selected = draft.times.includes(slot.key);
                 return (
@@ -123,18 +104,10 @@ export function GameFilterSheet({ filter, ruleOptions, count }: GameFilterSheetP
                     key={slot.key}
                     selected={selected}
                     aria-pressed={selected}
-                    className={CHIP_HIT_AREA}
+                    className={cn(CHIP_HIT_AREA, "w-full")}
                     onClick={() => update({ ...draft, times: xor(draft.times, [slot.key]) })}
                   >
                     {slot.label}
-                    <Text
-                      typography="body5"
-                      foreground="inherit"
-                      render={<span />}
-                      className="opacity-72"
-                    >
-                      {slot.hint}
-                    </Text>
                   </Chip>
                 );
               })}
@@ -149,7 +122,7 @@ export function GameFilterSheet({ filter, ruleOptions, count }: GameFilterSheetP
                     <Check size={14} strokeWidth={3} aria-hidden />
                   </Checkbox.Indicator>
                 </Checkbox.Root>
-                <Checkbox.Label>일정이 아직 정해지지 않은 구인도 보기</Checkbox.Label>
+                <Checkbox.Label>일정 미정 구인도 보기</Checkbox.Label>
               </Checkbox.Field>
               {/* 체크박스(20px)와 간격(10px)만큼 들여 글자 줄에 맞춘다. */}
               <Text
@@ -157,7 +130,7 @@ export function GameFilterSheet({ filter, ruleOptions, count }: GameFilterSheetP
                 foreground="hint"
                 className="pl-[calc(var(--spacing-250)+var(--spacing-125))] break-keep"
               >
-                켜 두면 조율 중이거나 일정 미정인 구인은 요일·시간대와 상관없이 보입니다.
+                요일·시간대 조건과 관계없이 보입니다.
               </Text>
             </VStack>
           </VStack>

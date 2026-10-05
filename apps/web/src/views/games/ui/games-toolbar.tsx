@@ -46,7 +46,6 @@ export function GamesToolbar({
           {chipCounts ? (
             <GameFilterSheet
               filter={filter}
-              ruleOptions={ruleOptions}
               count={chipCounts[filter.status ?? GAME_STATUS_FILTER_DEFAULT] ?? 0}
             />
           ) : (

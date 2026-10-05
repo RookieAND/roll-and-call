@@ -30,6 +30,13 @@ export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
       <EmptyState
         image="/empty-states/empty-search.png"
         title="이 쪽에는 구인이 없습니다"
+        description={
+          <>
+            구인이 줄어 이 쪽이 사라졌을 수 있습니다.
+            <br />
+            첫 쪽에서 다시 확인해 보세요.
+          </>
+        }
         action={
           <Button
             render={<ServerLink path={gamesHref(filterParams({ ...filter, page: undefined }))} />}
