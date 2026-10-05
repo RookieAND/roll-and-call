@@ -16,7 +16,8 @@ export type CertDecision =
   | { kind: "approve" }
   | {
       kind: "reject";
-      reasonTag: string;
+      // 고른 반려 사유 이름. 기타면 null이고 userReason이 사유다.
+      reasonTag: string | null;
       userReason: string;
       staffMemo: string;
       flaggedShots: ShotKey[];
@@ -158,7 +159,7 @@ export async function decideCertApplication({
         target,
         targetUserId: decided.userId,
         reason: decision.userReason,
-        reasonTag: decision.reasonTag,
+        reasonTag: decision.reasonTag ?? undefined,
         staffMemo: decision.staffMemo || undefined,
         before: { label: "심사 대기" },
         after: { label: "반려됨" },

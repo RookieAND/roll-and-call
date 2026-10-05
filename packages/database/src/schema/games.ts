@@ -93,7 +93,9 @@ export const games = pgTable(
     // 운영진 조치. 숨긴 구인은 사용자 앱의 목록·검색에서만 빠진다.
     hiddenAt: timestamp("hidden_at", { withTimezone: true }),
     hiddenBy: uuid("hidden_by").references(() => profiles.id, { onDelete: "set null" }),
-    hiddenReason: text("hidden_reason"),
+    // 사유 코드(CONTENT_REASON 키)와 기타일 때 입력한 글. 보이는 글은 reasonLabel로 만든다.
+    hiddenReasonCode: text("hidden_reason_code"),
+    hiddenReasonText: text("hidden_reason_text"),
     // 취소한 구인은 지우지 않고 남겨 신청·수정·명단 조정만 막는다. 사유는 GM이 취소할 때만 남긴다.
     cancelledAt: timestamp("cancelled_at", { withTimezone: true }),
     cancelledBy: uuid("cancelled_by").references(() => profiles.id, { onDelete: "set null" }),

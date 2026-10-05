@@ -1,8 +1,5 @@
+import { CONTENT_REASON } from "@roll-and-call/database/moderation/model";
 import { Grid, HStack, Radio, RadioGroup, Text, VStack } from "@roll-and-call/ui";
-
-import { REVIEW_REASON } from "@/shared/lib";
-
-const REMOVE_REASONS = Object.values(REVIEW_REASON);
 
 interface RemoveReasonRadioProps {
   value: string | null;
@@ -10,7 +7,7 @@ interface RemoveReasonRadioProps {
   onValueChange: (value: string) => void;
 }
 
-// 구인과 후기는 같은 조치 사유 6개를 쓴다(시안 MOD_REASONS). 운영진 기록용이다.
+// 구인 취소 사유(시안 MOD_REASONS). 운영진 기록용이다.
 export function RemoveReasonRadio({ value, disabled, onValueChange }: RemoveReasonRadioProps) {
   return (
     <VStack gap="075">
@@ -34,12 +31,12 @@ export function RemoveReasonRadio({ value, disabled, onValueChange }: RemoveReas
         aria-labelledby="post-remove-reason-label"
         render={<Grid className="grid-cols-2 gap-x-200 gap-y-050" />}
       >
-        {REMOVE_REASONS.map((reason) => (
-          <Radio.Field key={reason}>
-            <Radio.Root value={reason}>
+        {Object.entries(CONTENT_REASON).map(([code, label]) => (
+          <Radio.Field key={code}>
+            <Radio.Root value={code}>
               <Radio.Indicator />
             </Radio.Root>
-            <Radio.Label>{reason}</Radio.Label>
+            <Radio.Label>{label}</Radio.Label>
           </Radio.Field>
         ))}
       </RadioGroup>

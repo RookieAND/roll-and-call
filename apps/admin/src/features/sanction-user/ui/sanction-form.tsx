@@ -1,3 +1,4 @@
+import { USER_ACTION_REASON } from "@roll-and-call/database/moderation/model";
 import {
   Field,
   HStack,
@@ -8,7 +9,6 @@ import {
   VStack,
 } from "@roll-and-call/ui";
 
-import { USER_ACTION_REASON } from "@/shared/lib";
 import { ChoiceRowList, FormSection, ReasonChips, Tag, type ChoiceRow } from "@/shared/ui";
 
 import type { SanctionDraft } from "../model/sanction-draft";
@@ -78,9 +78,9 @@ export function SanctionForm({
         <ReasonChips
           label="사용자에게 보여 줄 사유"
           reasons={USER_ACTION_REASON}
-          value={draft.reasonChip}
+          value={draft.reasonCode}
           otherText={draft.otherReason}
-          onValueChange={(reasonChip) => onDraftChange({ reasonChip })}
+          onValueChange={(reasonCode) => onDraftChange({ reasonCode })}
           onOtherTextChange={(otherReason) => onDraftChange({ otherReason })}
         />
         <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="sanction-staff-memo">

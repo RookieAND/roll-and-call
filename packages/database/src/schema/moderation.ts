@@ -33,7 +33,9 @@ export const sanctions = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    reason: text("reason").notNull(),
+    // 사유 코드(USER_ACTION_REASON 키)와 기타일 때 입력한 글. 보이는 글은 reasonLabel로 만든다.
+    reasonCode: text("reason_code").notNull(),
+    reasonText: text("reason_text"),
     until: timestamp("until", { withTimezone: true }),
     createdBy: uuid("created_by").references(() => profiles.id, { onDelete: "set null" }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

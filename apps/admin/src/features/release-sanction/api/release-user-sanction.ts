@@ -1,11 +1,16 @@
 "use server";
 
+import {
+  parseReason,
+  USER_ACTION_REASON,
+  type ChosenReason,
+} from "@roll-and-call/database/moderation/model";
 import { revalidatePath } from "next/cache";
 
 import { getCurrentServer, releaseSanction, requireStaff } from "@/shared/server";
 
 interface ReleaseUserSanctionInput {
-  reason: string;
+  reason: ChosenReason | null;
   staffMemo: string;
 }
 
@@ -18,14 +23,13 @@ export async function releaseUserSanction({
   input: ReleaseUserSanctionInput;
 }) {
   const staff = await requireStaff();
-  const reason = input.reason.trim();
-  if (!reason) throw new Error("해제 사유를 골라 주세요");
+  const reason = parseReason({ reason: input.reason, reasons: USER_ACTION_REASON });
   const server = await getCurrentServer();
   const result = await releaseSanction({
     serverId: server.id,
     userId,
     actor: staff,
-    input: { userReason: reason, staffMemo: input.staffMemo.trim() },
+    input: { reason, staffMemo: input.staffMemo.trim() },
   });
   revalidatePath("/", "layout");
   return result;

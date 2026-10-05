@@ -1,0 +1,1 @@
+export const REASON_TEXT_MAX_LENGTH = 100;

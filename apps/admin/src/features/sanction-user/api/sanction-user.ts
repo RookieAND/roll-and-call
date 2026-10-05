@@ -1,5 +1,6 @@
 "use server";
 
+import { parseReason, USER_ACTION_REASON } from "@roll-and-call/database/moderation/model";
 import { isNull } from "es-toolkit";
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
@@ -22,9 +23,9 @@ import {
 // 디스코드 DM은 보내지 않는다. 당사자 알림은 applySanction이 같은 트랜잭션에서 넣는다.
 export async function sanctionUser({ userId, input }: { userId: string; input: SanctionInput }) {
   const staff = await requireStaff();
-  const userReason = input.userReason.trim();
+  const reason = parseReason({ reason: input.reason, reasons: USER_ACTION_REASON });
   const validDays = isNull(input.days) || (Number.isInteger(input.days) && input.days > 0);
-  if (!validDays || !userReason) throw new Error("기간과 사용자에게 보여 줄 사유를 확인해 주세요");
+  if (!validDays) throw new Error("기간을 확인해 주세요");
   const [server, user] = await Promise.all([getCurrentServer(), getUserDetail(userId)]);
   if (!user) notFound();
 
@@ -32,7 +33,7 @@ export async function sanctionUser({ userId, input }: { userId: string; input: S
     serverId: server.id,
     userId,
     actor: staff,
-    input: { ...input, userReason, staffMemo: input.staffMemo.trim() },
+    input: { ...input, reason, staffMemo: input.staffMemo.trim() },
   });
   revalidatePath("/", "layout");
   if (!result.ok) {

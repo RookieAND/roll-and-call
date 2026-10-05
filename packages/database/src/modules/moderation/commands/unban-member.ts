@@ -1,7 +1,10 @@
 import { and, desc, eq, isNotNull } from "drizzle-orm";
 
 import { db } from "#/client";
+import type { ChosenReason } from "#/modules/moderation/model/chosen-reason";
+import { reasonLabel } from "#/modules/moderation/model/reason-label";
 import type { Actor } from "#/modules/moderation/model/types";
+import { USER_ACTION_REASON } from "#/modules/moderation/model/user-action-reason";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { auditLog, profiles, serverMembers } from "#/schema";
 
@@ -22,7 +25,7 @@ export async function unbanMember({
   serverId: string;
   userId: string;
   actor: Actor;
-  reason: string;
+  reason: ChosenReason;
 }): Promise<UnbanResult> {
   const [user] = await db
     .select({ nickname: memberNicknameSql(serverId), discordId: profiles.discordId })
@@ -33,7 +36,7 @@ export async function unbanMember({
   return db.transaction(async (tx) => {
     const unbanned = await tx
       .update(serverMembers)
-      .set({ bannedAt: null, bannedBy: null, banReason: null })
+      .set({ bannedAt: null, bannedBy: null, banReasonCode: null, banReasonText: null })
       .where(
         and(
           eq(serverMembers.serverId, serverId),
@@ -70,7 +73,7 @@ export async function unbanMember({
         action: "차단 해제",
         target: user.nickname,
         targetUserId: userId,
-        reason,
+        reason: reasonLabel({ ...reason, reasons: USER_ACTION_REASON }),
         before: { label: "차단됨" },
         after: { label: "탈퇴" },
       },

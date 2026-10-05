@@ -4,7 +4,10 @@ import { alias } from "drizzle-orm/pg-core";
 import { db } from "#/client";
 import { releaseMemberGames } from "#/modules/games/commands/release-member-games";
 import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
+import type { ChosenReason } from "#/modules/moderation/model/chosen-reason";
+import { reasonLabel } from "#/modules/moderation/model/reason-label";
 import type { Actor } from "#/modules/moderation/model/types";
+import { USER_ACTION_REASON } from "#/modules/moderation/model/user-action-reason";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, serverMembers, type Game } from "#/schema";
 
@@ -33,7 +36,7 @@ export async function kickMember({
   serverId: string;
   userId: string;
   actor: Actor;
-  reason: string;
+  reason: ChosenReason;
 }): Promise<KickResult> {
   const [user] = await db
     .select({ nickname: memberNicknameSql(serverId), discordId: profiles.discordId })
@@ -47,7 +50,8 @@ export async function kickMember({
       .set({
         bannedAt: sql`now()`,
         bannedBy: actor.id,
-        banReason: reason,
+        banReasonCode: reason.code,
+        banReasonText: reason.text,
         deletedAt: sql`coalesce(${serverMembers.deletedAt}, now())`,
       })
       .where(
@@ -91,7 +95,7 @@ export async function kickMember({
         action: "추방",
         target: user.nickname,
         targetUserId: userId,
-        reason,
+        reason: reasonLabel({ ...reason, reasons: USER_ACTION_REASON }),
         before: { label: "활성" },
         after: { label: "차단됨" },
       },

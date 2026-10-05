@@ -1,11 +1,12 @@
 "use client";
 
+import { CONTENT_REASON, reasonLabel } from "@roll-and-call/database/moderation/model";
 import { Button, Dialog, Field, HStack, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isNull, isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState } from "react";
 
-import { REVIEW_REASON, useActionSubmit } from "@/shared/lib";
+import { draftReason, useActionSubmit } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import {
   ActionNetworkError,
@@ -16,11 +17,9 @@ import {
 
 import { submitPostModeration } from "../api/submit-post-moderation";
 import { ACTION_COPY } from "../model/action-copy";
-import { hideReason } from "../model/hide-reason";
 import { POST_ACTION } from "../model/post-action";
 import type { PostModerationOutcome } from "../model/post-moderation-outcome";
 
-const HIDE_REASONS = Object.values(REVIEW_REASON);
 const UNDO_STAFF_MEMO = "숨김 되돌리기";
 const COPY = ACTION_COPY[POST_ACTION.hide];
 
@@ -32,22 +31,26 @@ interface PostHideFormProps {
 
 export function PostHideForm({ post, onSettled, onUndoSettled }: PostHideFormProps) {
   const { pending, networkError, submit } = useActionSubmit(submitPostModeration);
-  const [chip, setChip] = useState<string | null>(null);
+  const [code, setCode] = useState<string | null>(null);
   const [otherText, setOtherText] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
-  const reason = hideReason({ chip, otherText });
+  const reason = draftReason({ code, otherText });
   const canConfirm = Boolean(reason) && !pending;
   const payload = reason
     ? {
         kind: "game_hidden" as const,
-        params: { gameId: post.id, gameTitle: post.title, reason },
+        params: {
+          gameId: post.id,
+          gameTitle: post.title,
+          reason: reasonLabel({ ...reason, reasons: CONTENT_REASON }),
+        },
       }
     : null;
 
   const undo = async () => {
     const outcome = await submitPostModeration({
       postId: post.id,
-      moderation: { action: POST_ACTION.unhide, userReason: "", staffMemo: UNDO_STAFF_MEMO },
+      moderation: { action: POST_ACTION.unhide, reason: null, staffMemo: UNDO_STAFF_MEMO },
     }).catch(() => null);
     if (isNull(outcome)) {
       toast.danger("네트워크 오류로 처리하지 못했습니다.");
@@ -60,7 +63,7 @@ export function PostHideForm({ post, onSettled, onUndoSettled }: PostHideFormPro
   const confirm = async () => {
     const outcome = await submit({
       postId: post.id,
-      moderation: { action: POST_ACTION.hide, userReason: reason, staffMemo },
+      moderation: { action: POST_ACTION.hide, reason, staffMemo },
     });
     if (isUndefined(outcome)) return;
     if (outcome.ok) {
@@ -83,10 +86,10 @@ export function PostHideForm({ post, onSettled, onUndoSettled }: PostHideFormPro
           {networkError ? <ActionNetworkError /> : null}
           <ReasonChips
             label="사용자에게 보여 줄 사유"
-            reasons={HIDE_REASONS}
-            value={chip}
+            reasons={CONTENT_REASON}
+            value={code}
             otherText={otherText}
-            onValueChange={setChip}
+            onValueChange={setCode}
             onOtherTextChange={setOtherText}
             disabled={pending}
           />

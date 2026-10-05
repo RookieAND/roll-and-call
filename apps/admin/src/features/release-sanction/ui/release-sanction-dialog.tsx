@@ -1,12 +1,13 @@
 "use client";
 
+import { USER_ACTION_REASON } from "@roll-and-call/database/moderation/model";
 import { Button, Dialog, Field, TextInput, VStack, toast } from "@roll-and-call/ui";
 import { isNull, isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { chosenReason, formatDateTime, useActionSubmit, USER_ACTION_REASON } from "@/shared/lib";
+import { draftReason, formatDateTime, useActionSubmit } from "@/shared/lib";
 import type { Sanction } from "@/shared/server";
 import {
   ActionNetworkError,
@@ -38,10 +39,10 @@ export function ReleaseSanctionDialog({
 }: ReleaseSanctionDialogProps) {
   const router = useRouter();
   const { pending, networkError, submit } = useActionSubmit(releaseUserSanction);
-  const [chip, setChip] = useState<string | null>(null);
+  const [code, setCode] = useState<string | null>(null);
   const [otherText, setOtherText] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
-  const reason = chosenReason({ chip, otherText });
+  const reason = draftReason({ code, otherText });
   const canRelease = Boolean(reason) && !pending;
 
   const until = sanction.until;
@@ -53,6 +54,7 @@ export function ReleaseSanctionDialog({
     : `${Math.max(1, Math.ceil((until.getTime() - Date.now()) / DAY))}일`;
 
   const release = async () => {
+    if (!reason) return;
     const result = await submit({ userId, input: { reason, staffMemo } });
     if (isUndefined(result)) return;
     onOpenChange(false);
@@ -89,9 +91,9 @@ export function ReleaseSanctionDialog({
             <ReasonChips
               label="해제 사유 (운영진 기록)"
               reasons={USER_ACTION_REASON}
-              value={chip}
+              value={code}
               otherText={otherText}
-              onValueChange={setChip}
+              onValueChange={setCode}
               onOtherTextChange={setOtherText}
               help="사용자에게는 보이지 않고 활동 기록에 남습니다."
               disabled={pending}

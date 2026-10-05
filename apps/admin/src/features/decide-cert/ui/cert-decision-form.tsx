@@ -8,7 +8,7 @@ import { RotateCcw } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState, type ReactNode } from "react";
 
-import { EBOOK_REJECT_REASONS, REJECT_REASONS, useActionSubmit } from "@/shared/lib";
+import { EBOOK_REJECT_REASONS, OTHER_REASON, REJECT_REASONS, useActionSubmit } from "@/shared/lib";
 import type { CertDecisionResult, CertFormat, ShotKey } from "@/shared/server";
 import {
   ActionNetworkError,
@@ -94,6 +94,7 @@ export function CertDecisionForm({
     : [];
   const allChecked = checkableShots.every((key) => checkedShots.includes(key));
   const canApprove = reviewable && allChecked && !pending;
+  const other = reason === OTHER_REASON;
   const canReject = Boolean(reason && userReason.trim()) && !pending;
   const flaggedLabels = SHOTS.filter((shot) => flaggedShots.includes(shot.key as ShotKey)).map(
     (shot) => shot.label,
@@ -107,7 +108,7 @@ export function CertDecisionForm({
           rulebookId,
           rulebookName: rulebookLabel,
           rejectionSummary: rejectionSummary({
-            rejectTag: reason,
+            rejectTag: other ? null : reason,
             flaggedShots,
             rejectReason: userReason,
           }),
@@ -141,7 +142,7 @@ export function CertDecisionForm({
   const reject = async () => {
     finish(
       await rejection.submit(applicationId, {
-        reasonTag: reason,
+        reasonTag: other ? null : reason,
         userReason,
         staffMemo,
         flaggedShots,

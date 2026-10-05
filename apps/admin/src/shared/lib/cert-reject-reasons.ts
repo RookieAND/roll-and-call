@@ -1,4 +1,4 @@
-import { OTHER_REASON } from "./user-action-reason";
+import { OTHER_REASON } from "./other-reason";
 
 // 인증 심사 반려와 반려로 돌리기가 함께 쓰는 사유 목록.
 export interface RejectReason {

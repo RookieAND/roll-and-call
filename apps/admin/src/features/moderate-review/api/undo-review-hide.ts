@@ -14,6 +14,7 @@ export async function undoReviewHide(reviewId: string) {
     staff,
     reviewId,
     action: REVIEW_ACTION.unhide,
-    reason: UNDO_REASON,
+    reason: null,
+    note: UNDO_REASON,
   });
 }

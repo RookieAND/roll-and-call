@@ -1,13 +1,12 @@
 "use client";
 
+import { OTHER_REASON_CODE } from "@roll-and-call/database/moderation/model";
 import { Chip, Field, HStack, Text, Textarea, VStack } from "@roll-and-call/ui";
 import { useId } from "react";
 
-import { OTHER_REASON } from "@/shared/lib";
-
 interface ReasonChipsProps {
-  // 칩 목록. 마지막에 「기타」가 있으면 고를 때 입력란이 나타난다.
-  reasons: readonly string[];
+  // 사유 코드 → 칩 글자. 코드 other를 고르면 입력란이 나타난다.
+  reasons: Readonly<Record<string, string>>;
   value: string | null;
   otherText: string;
   onValueChange: (value: string) => void;
@@ -65,22 +64,22 @@ export function ReasonChips({
           gap="075"
           wrap
         >
-          {reasons.map((reason) => (
+          {Object.entries(reasons).map(([code, reasonLabel]) => (
             <Chip
-              key={reason}
+              key={code}
               role="radio"
-              aria-checked={value === reason}
-              selected={value === reason}
+              aria-checked={value === code}
+              selected={value === code}
               disabled={disabled}
-              className={chipWeight(value === reason)}
-              onClick={() => onValueChange(reason)}
+              className={chipWeight(value === code)}
+              onClick={() => onValueChange(code)}
             >
-              {reason}
+              {reasonLabel}
             </Chip>
           ))}
         </HStack>
       </VStack>
-      {value === OTHER_REASON ? (
+      {value === OTHER_REASON_CODE ? (
         <Field.Root
           label={otherLabel}
           htmlFor={otherId}

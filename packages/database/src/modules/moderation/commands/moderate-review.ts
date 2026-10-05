@@ -3,6 +3,9 @@ import { isNotNil } from "es-toolkit";
 
 import { db } from "#/client";
 import type { AuditAction } from "#/modules/moderation/model/audit-actions";
+import type { ChosenReason } from "#/modules/moderation/model/chosen-reason";
+import { CONTENT_REASON } from "#/modules/moderation/model/content-reason";
+import { reasonLabel } from "#/modules/moderation/model/reason-label";
 import type { Actor } from "#/modules/moderation/model/types";
 import { createNotifications } from "#/modules/notifications/commands/create-notifications";
 import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
@@ -13,11 +16,12 @@ import { recordAudit } from "./record-audit";
 
 export type ReviewModerationAction = "hide" | "unhide" | "remove";
 
-// reason은 작성자에게 보이는 사유 글자(칩 이름, 기타면 「기타 · {입력}」)다.
-// unhide는 빈 글자이거나 되돌리기면 「숨김 되돌리기」이고, 활동 기록 사유로만 쓴다.
+// 숨김·제거 사유는 후기에 코드·글로 저장하고 알림·활동 기록에는 보이는 글로 넣는다. 해제는 사유가 없다(null).
+// note는 해제의 활동 기록 사유(되돌리기면 「숨김 되돌리기」)다.
 export interface ReviewModerationInput {
   action: ReviewModerationAction;
-  reason: string;
+  reason: ChosenReason | null;
+  note?: string;
 }
 
 export type ReviewModerationResult =
@@ -118,18 +122,26 @@ export async function moderateReview({
       };
     }
 
-    const { action, reason } = moderation;
+    const { action } = moderation;
+    const reasonCode = moderation.reason?.code ?? null;
+    const reasonText = moderation.reason?.text ?? null;
+    const reason = reasonLabel({ code: reasonCode, text: reasonText, reasons: CONTENT_REASON });
     const gameParams = { gameId: review.gameId, gameTitle: review.title };
     if (action === "hide") {
       await tx
         .update(sessionReviews)
-        .set({ hiddenAt: sql`now()`, hiddenBy: actor.id, hiddenReason: reason })
+        .set({
+          hiddenAt: sql`now()`,
+          hiddenBy: actor.id,
+          hiddenReasonCode: reasonCode,
+          hiddenReasonText: reasonText,
+        })
         .where(thisReview);
     }
     if (action === "unhide") {
       await tx
         .update(sessionReviews)
-        .set({ hiddenAt: null, hiddenBy: null, hiddenReason: null })
+        .set({ hiddenAt: null, hiddenBy: null, hiddenReasonCode: null, hiddenReasonText: null })
         .where(thisReview);
     }
     if (action === "remove") {
@@ -138,7 +150,8 @@ export async function moderateReview({
         .set({
           removedAt: sql`now()`,
           removedBy: actor.id,
-          removedReason: reason,
+          removedReasonCode: reasonCode,
+          removedReasonText: reasonText,
           body: "",
           photoUrls: [],
         })
@@ -165,7 +178,7 @@ export async function moderateReview({
         target: `${review.author}의 후기 · ${review.title}`,
         targetUserId: review.authorId,
         targetGameId: review.gameId,
-        reason,
+        reason: reason || (moderation.note ?? ""),
         before: { label: hidden ? "숨김 중" : "공개" },
         after: { label: AFTER_LABEL[action] },
       },

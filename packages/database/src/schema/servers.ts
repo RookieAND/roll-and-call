@@ -66,7 +66,9 @@ export const serverMembers = pgTable(
     // 추방하면 디스코드에서 차단하고 이 칸을 채운다. 차단 해제 때 비운다.
     bannedAt: timestamp("banned_at", { withTimezone: true }),
     bannedBy: uuid("banned_by").references(() => profiles.id, { onDelete: "set null" }),
-    banReason: text("ban_reason"),
+    // 사유 코드(USER_ACTION_REASON 키)와 기타일 때 입력한 글. 보이는 글은 reasonLabel로 만든다.
+    banReasonCode: text("ban_reason_code"),
+    banReasonText: text("ban_reason_text"),
     // 인덱스의 내 서버 목록을 최근 방문 순으로 늘어놓는다. 서버 화면에 들어올 때 채운다.
     lastVisitedAt: timestamp("last_visited_at", { withTimezone: true }),
   },

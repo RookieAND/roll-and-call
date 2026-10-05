@@ -1,21 +1,29 @@
 "use client";
 
+import {
+  CONTENT_REASON,
+  REASON_TEXT_MAX_LENGTH,
+  reasonLabel,
+} from "@roll-and-call/database/moderation/model";
 import { Button, Dialog, VStack, toast } from "@roll-and-call/ui";
 import { isNull, isUndefined } from "es-toolkit";
 import { Eye, RotateCcw } from "lucide-react";
 import { useState } from "react";
 
-import { useActionSubmit, type ReviewReason } from "@/shared/lib";
+import { draftReason, useActionSubmit } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  NotificationPreview,
+  ReasonChips,
+} from "@/shared/ui";
 
 import { submitReviewModeration } from "../api/submit-review-moderation";
 import { undoReviewHide } from "../api/undo-review-hide";
 import { ACTION_COPY } from "../model/action-copy";
 import { REVIEW_ACTION } from "../model/review-action";
 import type { ReviewModerationOutcome } from "../model/review-moderation-outcome";
-import { reviewReasonText } from "../model/review-reason-text";
-import { ReviewReasonField } from "./review-reason-field";
 
 const COPY = ACTION_COPY[REVIEW_ACTION.hide];
 
@@ -27,14 +35,18 @@ interface ReviewHideFormProps {
 
 export function ReviewHideForm({ review, onSettled, onUndoSettled }: ReviewHideFormProps) {
   const { pending, networkError, submit } = useActionSubmit(submitReviewModeration);
-  const [reasonKey, setReasonKey] = useState<ReviewReason | null>(null);
+  const [code, setCode] = useState<string | null>(null);
   const [otherText, setOtherText] = useState("");
-  const reason = reviewReasonText({ reasonKey, otherText });
+  const reason = draftReason({ code, otherText });
   const canConfirm = Boolean(reason) && !pending;
   const payload = reason
     ? {
         kind: "review_hidden" as const,
-        params: { gameId: review.game.id, gameTitle: review.game.title, reason },
+        params: {
+          gameId: review.game.id,
+          gameTitle: review.game.title,
+          reason: reasonLabel({ ...reason, reasons: CONTENT_REASON }),
+        },
       }
     : null;
 
@@ -48,7 +60,7 @@ export function ReviewHideForm({ review, onSettled, onUndoSettled }: ReviewHideF
   const confirm = async () => {
     const outcome = await submit({
       reviewId: review.id,
-      moderation: { action: REVIEW_ACTION.hide, reasonKey, otherText },
+      moderation: { action: REVIEW_ACTION.hide, reason },
     });
     if (isUndefined(outcome)) return;
     if (outcome.ok) {
@@ -68,12 +80,18 @@ export function ReviewHideForm({ review, onSettled, onUndoSettled }: ReviewHideF
       <Dialog.Body className="mt-200">
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
-          <ReviewReasonField
-            reasonKey={reasonKey}
+          <ReasonChips
+            label="사유"
+            reasons={CONTENT_REASON}
+            value={code}
             otherText={otherText}
-            disabled={pending}
-            onReasonKeyChange={setReasonKey}
+            onValueChange={setCode}
             onOtherTextChange={setOtherText}
+            otherPlaceholder="작성자에게 보일 사유를 적어 주세요"
+            otherMaxLength={REASON_TEXT_MAX_LENGTH}
+            help={code ? undefined : "사유를 고르면 확정할 수 있습니다"}
+            disabled={pending}
+            regularWeight
           />
           <NotificationPreview payload={payload} />
         </VStack>

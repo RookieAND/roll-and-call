@@ -1,5 +1,6 @@
 "use client";
 
+import { OTHER_REASON_CODE } from "@roll-and-call/database/moderation/model";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import {
   AlertDialog,
@@ -12,7 +13,7 @@ import {
   VStack,
   toast,
 } from "@roll-and-call/ui";
-import { isUndefined, uniq } from "es-toolkit";
+import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
@@ -49,7 +50,15 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
   const [userReason, setUserReason] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
   const reasons = target.ebook ? EBOOK_REJECT_REASONS : REJECT_REASONS;
-  const other = chip === OTHER_REASON;
+  const other = chip === OTHER_REASON_CODE;
+  const reasonOptions = {
+    ...Object.fromEntries(
+      reasons
+        .filter((reason) => reason.name !== OTHER_REASON)
+        .map((reason) => [reason.name, reason.name]),
+    ),
+    [OTHER_REASON_CODE]: OTHER_REASON,
+  };
   const gameCount = target.games.length;
   const canRevoke = Boolean(chip && userReason.trim()) && !pending;
   const confirmLabel = gameCount > 0 ? `반려로 돌리고 구인 ${gameCount}개 취소` : "반려로 돌리기";
@@ -95,7 +104,7 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
             <VStack gap="150">
               <ReasonChips
                 label="반려 사유"
-                reasons={uniq([...reasons.map((reason) => reason.name), OTHER_REASON])}
+                reasons={reasonOptions}
                 value={chip}
                 otherText={other ? userReason : ""}
                 onValueChange={chooseReason}

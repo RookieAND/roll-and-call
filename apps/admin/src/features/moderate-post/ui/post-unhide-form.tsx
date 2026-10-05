@@ -29,7 +29,7 @@ export function PostUnhideForm({ post, onSettled }: PostUnhideFormProps) {
   const confirm = async () => {
     const outcome = await submit({
       postId: post.id,
-      moderation: { action: POST_ACTION.unhide, userReason: "", staffMemo },
+      moderation: { action: POST_ACTION.unhide, reason: null, staffMemo },
     });
     if (isUndefined(outcome)) return;
     if (outcome.ok) toast.success(COPY.successMessage(post.title));

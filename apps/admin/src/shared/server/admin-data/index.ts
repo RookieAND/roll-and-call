@@ -180,7 +180,6 @@ export {
   type ReviewSortColumn,
 } from "./review-sort";
 export { REVIEW_WINDOW_STATE, type ReviewWindowState } from "./review-window-state";
-export { REVIEW_REASON, REVIEW_REASONS, type ReviewReason } from "@/shared/lib";
 export { parseNoShowId } from "./parse-no-show-id";
 export {
   getServerBySlug,

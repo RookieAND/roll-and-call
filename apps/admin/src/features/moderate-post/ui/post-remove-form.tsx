@@ -1,5 +1,6 @@
 "use client";
 
+import { OTHER_REASON_CODE } from "@roll-and-call/database/moderation/model";
 import {
   Button,
   Card,
@@ -15,7 +16,7 @@ import { isUndefined } from "es-toolkit";
 import { RotateCcw, Users, X } from "lucide-react";
 import { useState, type RefObject } from "react";
 
-import { OTHER_REASON, useActionSubmit } from "@/shared/lib";
+import { draftReason, useActionSubmit } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
 
@@ -37,17 +38,18 @@ interface PostRemoveFormProps {
 // 운영진 사유는 활동 기록에만 남고 알림에는 「운영진이 취소했습니다.」만 보인다.
 export function PostRemoveForm({ post, cancelRef, onSettled }: PostRemoveFormProps) {
   const { pending, networkError, submit } = useActionSubmit(submitPostModeration);
-  const [reason, setReason] = useState<string | null>(null);
+  const [code, setCode] = useState<string | null>(null);
   const [staffMemo, setStaffMemo] = useState("");
-  const other = reason === OTHER_REASON;
-  const canConfirm = Boolean(reason) && (!other || Boolean(staffMemo.trim())) && !pending;
+  const other = code === OTHER_REASON_CODE;
+  const reason = draftReason({ code, otherText: staffMemo });
+  const canConfirm = Boolean(reason) && !pending;
   const { memberCount, waitingCount } = post.cancelRecipients;
 
   const confirm = async () => {
     if (!reason) return;
     const outcome = await submit({
       postId: post.id,
-      moderation: { action: POST_ACTION.remove, userReason: reason, staffMemo },
+      moderation: { action: POST_ACTION.remove, reason, staffMemo: "" },
     });
     if (isUndefined(outcome)) return;
     if (outcome.ok) toast.success(COPY.successMessage(post.title));
@@ -71,7 +73,7 @@ export function PostRemoveForm({ post, cancelRef, onSettled }: PostRemoveFormPro
               참여자 {memberCount}명 · 대기 {waitingCount}명에게 영향이 있습니다
             </Text>
           </Card.Root>
-          <RemoveReasonRadio value={reason} disabled={pending} onValueChange={setReason} />
+          <RemoveReasonRadio value={code} disabled={pending} onValueChange={setCode} />
           {other ? (
             <Field.Root label="운영진 메모" htmlFor="post-remove-staff-memo" required>
               <Textarea

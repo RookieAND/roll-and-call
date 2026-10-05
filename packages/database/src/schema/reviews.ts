@@ -38,10 +38,13 @@ export const sessionReviews = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true }),
     hiddenAt: timestamp("hidden_at", { withTimezone: true }),
     hiddenBy: uuid("hidden_by").references(() => profiles.id, { onDelete: "set null" }),
-    hiddenReason: text("hidden_reason"),
+    // 사유 코드(CONTENT_REASON 키)와 기타일 때 입력한 글. 보이는 글은 reasonLabel로 만든다.
+    hiddenReasonCode: text("hidden_reason_code"),
+    hiddenReasonText: text("hidden_reason_text"),
     removedAt: timestamp("removed_at", { withTimezone: true }),
     removedBy: uuid("removed_by").references(() => profiles.id, { onDelete: "set null" }),
-    removedReason: text("removed_reason"),
+    removedReasonCode: text("removed_reason_code"),
+    removedReasonText: text("removed_reason_text"),
     // 세션후기 포럼 게시글(스레드) id. 공개가 아니게 되면 게시글을 지우고 비운다.
     discordThreadId: text("discord_thread_id"),
   },

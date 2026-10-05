@@ -5,7 +5,8 @@ import { revalidatePath } from "next/cache";
 import { decideCert, getCurrentServer, requireStaff, type ShotKey } from "@/shared/server";
 
 interface RejectCertInput {
-  reasonTag: string;
+  // 고른 반려 사유 이름. 기타면 null이고 userReason이 사유다.
+  reasonTag: string | null;
   userReason: string;
   staffMemo: string;
   flaggedShots: ShotKey[];
@@ -13,8 +14,8 @@ interface RejectCertInput {
 
 export async function rejectCert(applicationId: string, input: RejectCertInput) {
   const staff = await requireStaff();
-  if (!input.reasonTag || !input.userReason.trim()) {
-    throw new Error("사유를 고르고 사용자에게 보이는 사유를 입력해 주세요");
+  if (!input.userReason.trim()) {
+    throw new Error("사용자에게 보이는 사유를 입력해 주세요");
   }
   const server = await getCurrentServer();
   const result = await decideCert({

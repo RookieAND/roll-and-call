@@ -1,12 +1,13 @@
 "use client";
 
+import { reasonLabel, USER_ACTION_REASON } from "@roll-and-call/database/moderation/model";
 import { Button, Grid, HStack, Text, VStack, toast } from "@roll-and-call/ui";
 import { isNull, isUndefined, sumBy } from "es-toolkit";
 import { TriangleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { chosenReason, conflictToastText, useActionSubmit } from "@/shared/lib";
+import { conflictToastText, draftReason, useActionSubmit } from "@/shared/lib";
 import type { MemberOngoingRow, OngoingChoice } from "@/shared/server";
 import { NotificationPreview, ServerLink, useServerPath } from "@/shared/ui";
 
@@ -49,7 +50,8 @@ export function SanctionUserForm({
   const validDays = isNull(days) || (Number.isInteger(days) && days > 0);
   const end = !isNull(days) && validDays ? new Date(now.getTime() + days * DAY) : null;
   const periodHint = sanctionPeriodHint({ validDays, end, now });
-  const reason = chosenReason({ chip: draft.reasonChip, otherText: draft.otherReason });
+  const reason = draftReason({ code: draft.reasonCode, otherText: draft.otherReason });
+  const reasonText = reason ? reasonLabel({ ...reason, reasons: USER_ACTION_REASON }) : "";
   const canConfirm = Boolean(reason) && validDays;
 
   const rows = ongoingChoiceRows({ ongoing, changedSessionIds: draft.changedSessionIds });
@@ -58,7 +60,10 @@ export function SanctionUserForm({
   const notifiedCount = sumBy(cancelled, (activity) => activity.notifiedCount);
   const keptCount = rows.filter((row) => row.value === "keep").length;
   const preview = reason
-    ? { kind: "sanctioned" as const, params: { reason, until: end?.toISOString() ?? null } }
+    ? {
+        kind: "sanctioned" as const,
+        params: { reason: reasonText, until: end?.toISOString() ?? null },
+      }
     : null;
 
   const changeDraft = (changes: Partial<SanctionDraft>) => setDraft({ ...draft, ...changes });
@@ -72,11 +77,12 @@ export function SanctionUserForm({
     });
 
   const confirm = async () => {
+    if (!reason) return;
     const result = await submit({
       userId,
       input: {
         days,
-        userReason: reason,
+        reason,
         staffMemo: draft.staffMemo,
         ongoing: rows.map((row) => ({
           sessionId: row.id,
@@ -155,7 +161,7 @@ export function SanctionUserForm({
         nickname={nickname}
         days={days}
         end={end}
-        userReason={reason}
+        userReason={reasonText}
         cancelCount={cancelCount}
         notifiedCount={notifiedCount}
         staffChannel={staffChannel}

@@ -27,7 +27,7 @@ export function ReviewUnhideForm({ review, onSettled }: ReviewUnhideFormProps) {
   const confirm = async () => {
     const outcome = await submit({
       reviewId: review.id,
-      moderation: { action: REVIEW_ACTION.unhide, reasonKey: null, otherText: "" },
+      moderation: { action: REVIEW_ACTION.unhide, reason: null },
     });
     if (isUndefined(outcome)) return;
     if (outcome.ok) toast.success(COPY.successMessage);

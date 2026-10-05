@@ -1,4 +1,4 @@
-import { nextInList, reviewReasonLabel } from "@/shared/lib";
+import { nextInList } from "@/shared/lib";
 
 import { selectReviewRows, type ReviewListFilter } from "./select-review-rows";
 import type { AdminUser, AuditEntry, Review, Session } from "./types";
@@ -44,7 +44,7 @@ export function buildReviewDetail({
     editedAt,
     hidden: hidden
       ? {
-          reason: reviewReasonLabel(hidden.reason),
+          reason: hidden.reason,
           by: hidden.by,
           at: hidden.at,
           editedAfterHidden: Boolean(editedAt && editedAt > hidden.at),

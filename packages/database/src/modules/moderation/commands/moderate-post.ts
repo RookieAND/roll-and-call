@@ -5,6 +5,9 @@ import { db } from "#/client";
 import { cancelGame } from "#/modules/games/commands/cancel-game";
 import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
 import type { AuditAction } from "#/modules/moderation/model/audit-actions";
+import type { ChosenReason } from "#/modules/moderation/model/chosen-reason";
+import { CONTENT_REASON } from "#/modules/moderation/model/content-reason";
+import { reasonLabel } from "#/modules/moderation/model/reason-label";
 import type { Actor } from "#/modules/moderation/model/types";
 import { createNotifications } from "#/modules/notifications/commands/create-notifications";
 import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
@@ -15,11 +18,11 @@ import { recordAudit } from "./record-audit";
 
 export type PostModerationAction = "hide" | "unhide" | "remove";
 
-// 숨김의 userReason은 GM에게 보이는 사유(칩 이름, 기타면 「기타 · {입력}」)다.
-// 구인 취소의 userReason은 운영진 기록용 칩 이름이고 사용자에게 보이지 않는다.
+// 숨김 사유는 구인에 코드·글로 저장하고 GM 알림에 보이는 글로 넣는다. 구인 취소 사유는 활동 기록에만 남는다.
+// 해제는 사유가 없다(null).
 export interface PostModeration {
   action: PostModerationAction;
-  userReason: string;
+  reason: ChosenReason | null;
   staffMemo: string;
 }
 
@@ -110,10 +113,20 @@ export async function moderatePost({
     }
 
     const gameParams = { gameId: id, gameTitle: game.title };
+    const reason = reasonLabel({
+      code: moderation.reason?.code ?? null,
+      text: moderation.reason?.text ?? null,
+      reasons: CONTENT_REASON,
+    });
     if (moderation.action === "hide") {
       await tx
         .update(games)
-        .set({ hiddenAt: sql`now()`, hiddenBy: actor.id, hiddenReason: moderation.userReason })
+        .set({
+          hiddenAt: sql`now()`,
+          hiddenBy: actor.id,
+          hiddenReasonCode: moderation.reason?.code,
+          hiddenReasonText: moderation.reason?.text,
+        })
         .where(thisGame);
       await createNotifications({
         executor: tx,
@@ -123,7 +136,7 @@ export async function moderatePost({
           {
             userId: game.gmId,
             kind: NOTIFICATION_KIND.gameHidden,
-            params: { ...gameParams, reason: moderation.userReason },
+            params: { ...gameParams, reason },
           },
         ],
       });
@@ -131,7 +144,7 @@ export async function moderatePost({
     if (moderation.action === "unhide") {
       await tx
         .update(games)
-        .set({ hiddenAt: null, hiddenBy: null, hiddenReason: null })
+        .set({ hiddenAt: null, hiddenBy: null, hiddenReasonCode: null, hiddenReasonText: null })
         .where(and(thisGame, isNotNull(games.hiddenAt)));
       await createNotifications({
         executor: tx,
@@ -169,8 +182,8 @@ export async function moderatePost({
         action: AUDIT_ACTION[moderation.action],
         target: `${game.title} · GM ${game.gm}`,
         targetGameId: id,
-        reason: moderation.userReason || moderation.staffMemo,
-        staffMemo: moderation.userReason ? moderation.staffMemo || undefined : undefined,
+        reason: reason || moderation.staffMemo,
+        staffMemo: reason ? moderation.staffMemo || undefined : undefined,
         before: { label: hidden ? "숨김 중" : "공개" },
         after: { label: moderation.action === "remove" ? "취소됨" : afterLabel },
         related,

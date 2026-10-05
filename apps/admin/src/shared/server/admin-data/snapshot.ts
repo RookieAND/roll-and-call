@@ -12,7 +12,12 @@ import {
   type AbsenceAddedTag,
 } from "@roll-and-call/database/games/model";
 import { type AuditAction } from "@roll-and-call/database/moderation";
-import { auditActionLabel } from "@roll-and-call/database/moderation/model";
+import {
+  auditActionLabel,
+  CONTENT_REASON,
+  reasonLabel,
+  USER_ACTION_REASON,
+} from "@roll-and-call/database/moderation/model";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { compact, isNull } from "es-toolkit";
 import { cache } from "react";
@@ -102,7 +107,11 @@ export const loadSnapshot = cache(async () => {
             until: sanction.until,
             by: nicknameOf(sanction.createdBy),
             at: sanction.createdAt,
-            reason: sanction.reason,
+            reason: reasonLabel({
+              code: sanction.reasonCode,
+              text: sanction.reasonText,
+              reasons: USER_ACTION_REASON,
+            }),
           }
         : undefined,
       membership: membershipOf(profile),
@@ -112,7 +121,11 @@ export const loadSnapshot = cache(async () => {
         ? {
             at: profile.bannedAt,
             by: nicknameOf(profile.bannedBy),
-            reason: profile.banReason ?? "",
+            reason: reasonLabel({
+              code: profile.banReasonCode,
+              text: profile.banReasonText,
+              reasons: USER_ACTION_REASON,
+            }),
           }
         : undefined,
     };
@@ -168,7 +181,15 @@ export const loadSnapshot = cache(async () => {
       attendanceFirstConfirmedAt: game.attendanceFirstConfirmedAt ?? undefined,
       attendanceAutoConfirmed: isAutoConfirmedAttendance(game),
       hidden: game.hiddenAt
-        ? { reason: game.hiddenReason ?? "", by: nicknameOf(game.hiddenBy), at: game.hiddenAt }
+        ? {
+            reason: reasonLabel({
+              code: game.hiddenReasonCode,
+              text: game.hiddenReasonText,
+              reasons: CONTENT_REASON,
+            }),
+            by: nicknameOf(game.hiddenBy),
+            at: game.hiddenAt,
+          }
         : undefined,
       cancelled: !isNull(game.cancelledAt),
       cancelBlock: cancelBlockReason({ game, now: new Date(now) }),
@@ -331,10 +352,26 @@ export const loadSnapshot = cache(async () => {
     createdAt: row.createdAt,
     editedAt: row.updatedAt ?? undefined,
     hidden: row.hiddenAt
-      ? { reason: row.hiddenReason ?? "", by: nicknameOf(row.hiddenBy), at: row.hiddenAt }
+      ? {
+          reason: reasonLabel({
+            code: row.hiddenReasonCode,
+            text: row.hiddenReasonText,
+            reasons: CONTENT_REASON,
+          }),
+          by: nicknameOf(row.hiddenBy),
+          at: row.hiddenAt,
+        }
       : undefined,
     removed: row.removedAt
-      ? { reason: row.removedReason ?? "", by: nicknameOf(row.removedBy), at: row.removedAt }
+      ? {
+          reason: reasonLabel({
+            code: row.removedReasonCode,
+            text: row.removedReasonText,
+            reasons: CONTENT_REASON,
+          }),
+          by: nicknameOf(row.removedBy),
+          at: row.removedAt,
+        }
       : undefined,
     held: absentKeys.has(`${row.gameId}:${row.authorId}`),
   }));

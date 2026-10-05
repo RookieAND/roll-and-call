@@ -1,6 +1,8 @@
 import { and, desc, eq, sql } from "drizzle-orm";
 
 import { db } from "#/client";
+import { reasonLabel } from "#/modules/moderation/model/reason-label";
+import { USER_ACTION_REASON } from "#/modules/moderation/model/user-action-reason";
 import type { Transaction } from "#/modules/transaction/transaction";
 import { sanctions } from "#/schema";
 
@@ -20,10 +22,11 @@ export async function findActiveSanction({
   now?: Date;
 }): Promise<{ reason: string; until: Date | null } | null> {
   const [row] = await executor
-    .select({ reason: sanctions.reason, until: sanctions.until })
+    .select({ code: sanctions.reasonCode, text: sanctions.reasonText, until: sanctions.until })
     .from(sanctions)
     .where(and(activeSanctionWhere({ serverId, now }), eq(sanctions.userId, userId)))
     .orderBy(sql`${sanctions.until} desc nulls first`, desc(sanctions.createdAt))
     .limit(1);
-  return row ?? null;
+  if (!row) return null;
+  return { reason: reasonLabel({ ...row, reasons: USER_ACTION_REASON }), until: row.until };
 }

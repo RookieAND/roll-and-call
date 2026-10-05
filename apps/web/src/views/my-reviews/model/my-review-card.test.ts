@@ -14,9 +14,11 @@ const row = {
   createdAt: new Date("2026-09-28T10:00:00+09:00"),
   updatedAt: null,
   hiddenAt: null,
-  hiddenReason: null,
+  hiddenReasonCode: null,
+  hiddenReasonText: null,
   removedAt: null,
-  removedReason: null,
+  removedReasonCode: null,
+  removedReasonText: null,
   authorAbsent: false,
   gameTitle: "물벼락",
   gameRule: "크툴루의 부름",
@@ -46,7 +48,7 @@ describe("toMyReviewCard", () => {
 
   it("운영진이 지운 후기는 본문 없이 사유만 보이고 버튼이 없다", () => {
     const card = toMyReviewCard(
-      { ...row, body: "", removedAt: NOW, removedReason: "개인정보 노출" },
+      { ...row, body: "", removedAt: NOW, removedReasonCode: "privacy" },
       NOW,
     );
     expect(card.body).toBeNull();
@@ -55,9 +57,12 @@ describe("toMyReviewCard", () => {
   });
 
   it("숨긴 후기는 사유와 해제 안내를 함께 적는다", () => {
-    const card = toMyReviewCard({ ...row, hiddenAt: NOW, hiddenReason: "스포일러 미표시" }, NOW);
+    const card = toMyReviewCard(
+      { ...row, hiddenAt: NOW, hiddenReasonCode: "other", hiddenReasonText: "결말 노출" },
+      NOW,
+    );
     expect(card.callout?.lines).toEqual([
-      "사유: 스포일러 미표시",
+      "사유: 기타 · 결말 노출",
       "고친 뒤 디스코드로 해제를 요청해 주세요.",
     ]);
   });

@@ -1,7 +1,10 @@
 import { and, eq, gt, isNull, or, sql } from "drizzle-orm";
 
 import { db } from "#/client";
+import type { ChosenReason } from "#/modules/moderation/model/chosen-reason";
+import { reasonLabel } from "#/modules/moderation/model/reason-label";
 import type { Actor } from "#/modules/moderation/model/types";
+import { USER_ACTION_REASON } from "#/modules/moderation/model/user-action-reason";
 import { createNotifications } from "#/modules/notifications/commands/create-notifications";
 import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
@@ -20,7 +23,7 @@ export async function releaseSanction({
   serverId: string;
   userId: string;
   actor: Actor;
-  input: { userReason: string; staffMemo: string };
+  input: { reason: ChosenReason; staffMemo: string };
 }): Promise<ReleaseResult> {
   const [user] = await db
     .select({ nickname: memberNicknameSql(serverId) })
@@ -56,7 +59,7 @@ export async function releaseSanction({
         action: "제재 해제",
         target: user.nickname,
         targetUserId: userId,
-        reason: input.userReason,
+        reason: reasonLabel({ ...input.reason, reasons: USER_ACTION_REASON }),
         staffMemo: input.staffMemo || undefined,
       },
     });

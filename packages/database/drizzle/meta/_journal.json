@@ -491,6 +491,20 @@
       "when": 1795900000000,
       "tag": "0073_drop_game_edit_requested_at",
       "breakpoints": true
+    },
+    {
+      "idx": 75,
+      "version": "7",
+      "when": 1796100000000,
+      "tag": "0075_reason_codes",
+      "breakpoints": true
+    },
+    {
+      "idx": 77,
+      "version": "7",
+      "when": 1796300000000,
+      "tag": "0077_drop_old_reasons",
+      "breakpoints": true
     }
   ]
 }

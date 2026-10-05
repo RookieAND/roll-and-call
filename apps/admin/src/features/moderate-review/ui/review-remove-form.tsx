@@ -1,20 +1,28 @@
 "use client";
 
+import {
+  CONTENT_REASON,
+  REASON_TEXT_MAX_LENGTH,
+  reasonLabel,
+} from "@roll-and-call/database/moderation/model";
 import { Button, Callout, Dialog, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw, X } from "lucide-react";
 import { useState, type RefObject } from "react";
 
-import { useActionSubmit, type ReviewReason } from "@/shared/lib";
+import { draftReason, useActionSubmit } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  NotificationPreview,
+  ReasonChips,
+} from "@/shared/ui";
 
 import { submitReviewModeration } from "../api/submit-review-moderation";
 import { ACTION_COPY } from "../model/action-copy";
 import { REVIEW_ACTION } from "../model/review-action";
 import type { ReviewModerationOutcome } from "../model/review-moderation-outcome";
-import { reviewReasonText } from "../model/review-reason-text";
-import { ReviewReasonField } from "./review-reason-field";
 
 const COPY = ACTION_COPY[REVIEW_ACTION.remove];
 
@@ -26,21 +34,25 @@ interface ReviewRemoveFormProps {
 
 export function ReviewRemoveForm({ review, cancelRef, onSettled }: ReviewRemoveFormProps) {
   const { pending, networkError, submit } = useActionSubmit(submitReviewModeration);
-  const [reasonKey, setReasonKey] = useState<ReviewReason | null>(null);
+  const [code, setCode] = useState<string | null>(null);
   const [otherText, setOtherText] = useState("");
-  const reason = reviewReasonText({ reasonKey, otherText });
+  const reason = draftReason({ code, otherText });
   const canConfirm = Boolean(reason) && !pending;
   const payload = reason
     ? {
         kind: "review_deleted" as const,
-        params: { gameId: review.game.id, gameTitle: review.game.title, reason },
+        params: {
+          gameId: review.game.id,
+          gameTitle: review.game.title,
+          reason: reasonLabel({ ...reason, reasons: CONTENT_REASON }),
+        },
       }
     : null;
 
   const confirm = async () => {
     const outcome = await submit({
       reviewId: review.id,
-      moderation: { action: REVIEW_ACTION.remove, reasonKey, otherText },
+      moderation: { action: REVIEW_ACTION.remove, reason },
     });
     if (isUndefined(outcome)) return;
     if (outcome.ok) toast.success(COPY.successMessage);
@@ -64,12 +76,18 @@ export function ReviewRemoveForm({ review, cancelRef, onSettled }: ReviewRemoveF
               작성자는 이 세션의 후기를 다시 쓸 수 없습니다.
             </Callout.Description>
           </Callout.Root>
-          <ReviewReasonField
-            reasonKey={reasonKey}
+          <ReasonChips
+            label="사유"
+            reasons={CONTENT_REASON}
+            value={code}
             otherText={otherText}
-            disabled={pending}
-            onReasonKeyChange={setReasonKey}
+            onValueChange={setCode}
             onOtherTextChange={setOtherText}
+            otherPlaceholder="작성자에게 보일 사유를 적어 주세요"
+            otherMaxLength={REASON_TEXT_MAX_LENGTH}
+            help={code ? undefined : "사유를 고르면 확정할 수 있습니다"}
+            disabled={pending}
+            regularWeight
           />
           <NotificationPreview payload={payload} />
         </VStack>

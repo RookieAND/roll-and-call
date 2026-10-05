@@ -1,3 +1,5 @@
+import { CONTENT_REASON, reasonLabel } from "@roll-and-call/database/moderation/model";
+
 import { deriveReviewState, REVIEW_STATE, reviewEditDeadline } from "@/entities/review";
 import { ddayKst, formatDate } from "@/shared/lib";
 import type { MyReviewRow } from "@/shared/server";
@@ -27,6 +29,16 @@ export type MyReviewCardModel = {
 
 export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyReviewCardModel {
   const state = deriveReviewState(row, now);
+  const hiddenReason = reasonLabel({
+    code: row.hiddenReasonCode,
+    text: row.hiddenReasonText,
+    reasons: CONTENT_REASON,
+  });
+  const removedReason = reasonLabel({
+    code: row.removedReasonCode,
+    text: row.removedReasonText,
+    reasons: CONTENT_REASON,
+  });
   const sessionDate = row.sessionAt ? formatDate(row.sessionAt) : formatDate(row.createdAt);
   const base = {
     id: row.id,
@@ -68,7 +80,7 @@ export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyRevi
           palette: "warning",
           title: "운영진이 숨긴 후기입니다",
           lines: [
-            ...(row.hiddenReason ? [`사유: ${row.hiddenReason}`] : []),
+            ...(hiddenReason ? [`사유: ${hiddenReason}`] : []),
             "고친 뒤 디스코드로 해제를 요청해 주세요.",
           ],
         },
@@ -82,7 +94,7 @@ export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyRevi
         callout: {
           palette: "danger",
           title: "운영진이 삭제한 후기입니다",
-          lines: row.removedReason ? [`사유: ${row.removedReason}`] : [],
+          lines: removedReason ? [`사유: ${removedReason}`] : [],
         },
         actions: MY_REVIEW_ACTIONS.none,
       };

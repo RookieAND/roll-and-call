@@ -1,18 +1,13 @@
 "use client";
 
+import { reasonLabel, USER_ACTION_REASON } from "@roll-and-call/database/moderation/model";
 import { Button, Dialog, Text, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import {
-  chosenReason,
-  conflictToastText,
-  formatDate,
-  useActionSubmit,
-  USER_ACTION_REASON,
-} from "@/shared/lib";
+import { conflictToastText, draftReason, formatDate, useActionSubmit } from "@/shared/lib";
 import {
   ActionNetworkError,
   FactRows,
@@ -41,12 +36,14 @@ export function UnbanMemberDialog({
 }: UnbanMemberDialogProps) {
   const router = useRouter();
   const { pending, networkError, submit } = useActionSubmit(unbanServerMember);
-  const [chip, setChip] = useState<string | null>(null);
+  const [code, setCode] = useState<string | null>(null);
   const [otherText, setOtherText] = useState("");
-  const reason = chosenReason({ chip, otherText });
+  const reason = draftReason({ code, otherText });
+  const reasonText = reason ? reasonLabel({ ...reason, reasons: USER_ACTION_REASON }) : "";
   const canUnban = Boolean(reason) && !pending;
 
   const unban = async () => {
+    if (!reason) return;
     const result = await submit({ userId, reason });
     if (isUndefined(result)) return;
     onOpenChange(false);
@@ -84,13 +81,13 @@ export function UnbanMemberDialog({
             <ReasonChips
               label="해제 사유"
               reasons={USER_ACTION_REASON}
-              value={chip}
+              value={code}
               otherText={otherText}
-              onValueChange={setChip}
+              onValueChange={setCode}
               onOtherTextChange={setOtherText}
               disabled={pending}
             />
-            <ManualNoticePreview text={unbanNoticeText(reason)} />
+            <ManualNoticePreview text={unbanNoticeText(reasonText)} />
             <Text typography="body4" foreground="muted">
               당사자가 서버에 다시 들어오면 일반 재가입처럼 처리되어 이전 인증과 GM 권한이
               복구됩니다.

@@ -1,5 +1,6 @@
 "use client";
 
+import { reasonLabel } from "@roll-and-call/database/moderation/model";
 import {
   Button,
   Dialog,
@@ -16,7 +17,7 @@ import { RotateCcw, ScrollText } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { chosenReason, conflictToastText, useActionSubmit } from "@/shared/lib";
+import { conflictToastText, draftReason, useActionSubmit } from "@/shared/lib";
 import {
   ActionNetworkError,
   FactBox,
@@ -28,7 +29,7 @@ import {
 } from "@/shared/ui";
 
 import { editMemberNickname } from "../api/edit-member-nickname";
-import { NICKNAME_REASONS, type NicknameReason } from "../model/nickname-reasons";
+import { NICKNAME_REASON } from "../model/nickname-reasons";
 import { NICKNAME_TAKEN_ERROR } from "../model/nickname-rule";
 import { quoteWithDirection } from "../model/quote-with-direction";
 import { useNicknameCheck } from "../model/use-nickname-check";
@@ -51,7 +52,7 @@ export function EditNicknameDialog({
   const router = useRouter();
   const { pending, networkError, submit } = useActionSubmit(editMemberNickname);
   const [nextNickname, setNextNickname] = useState("");
-  const [reasonTag, setReasonTag] = useState<NicknameReason | null>(null);
+  const [reasonCode, setReasonCode] = useState<string | null>(null);
   const [otherReason, setOtherReason] = useState("");
   const [staffMemo, setStaffMemo] = useState("");
   const [takenNickname, setTakenNickname] = useState<string | null>(null);
@@ -60,18 +61,22 @@ export function EditNicknameDialog({
   const check = useNicknameCheck({ userId, nickname: typed });
   const nicknameError = takenNickname === typed ? NICKNAME_TAKEN_ERROR : (check?.error ?? null);
   const nicknameUsable = Boolean(check) && !nicknameError && typed !== nickname;
-  const reason = chosenReason({ chip: reasonTag, otherText: otherReason });
+  const reason = draftReason({ code: reasonCode, otherText: otherReason });
   const filled = nicknameUsable && Boolean(reason);
   const canConfirm = filled && !pending;
-  const preview = filled
-    ? { kind: "nickname_changed" as const, params: { nickname: typed, reason } }
-    : null;
+  const preview =
+    nicknameUsable && reason
+      ? {
+          kind: "nickname_changed" as const,
+          params: { nickname: typed, reason: reasonLabel({ ...reason, reasons: NICKNAME_REASON }) },
+        }
+      : null;
 
   const confirm = async () => {
-    if (!reasonTag) return;
+    if (!reason) return;
     const result = await submit({
       userId,
-      input: { expected: nickname, nickname: typed, reasonTag, reason, staffMemo },
+      input: { expected: nickname, nickname: typed, reason, staffMemo },
     });
     if (isUndefined(result)) return;
     if (result.ok) {
@@ -151,10 +156,10 @@ export function EditNicknameDialog({
               >
                 <ReasonChips
                   ariaLabel="수정 사유"
-                  reasons={NICKNAME_REASONS}
-                  value={reasonTag}
+                  reasons={NICKNAME_REASON}
+                  value={reasonCode}
                   otherText={otherReason}
-                  onValueChange={(value) => setReasonTag(value as NicknameReason)}
+                  onValueChange={setReasonCode}
                   onOtherTextChange={setOtherReason}
                   otherLabel="사용자에게 보여줄 사유"
                   disabled={pending}

@@ -3,7 +3,10 @@ import { isNil } from "es-toolkit";
 
 import { db } from "#/client";
 import { STAFF_CHANNEL_RELATED } from "#/modules/moderation/model/audit-actions";
+import type { ChosenReason } from "#/modules/moderation/model/chosen-reason";
+import { reasonLabel } from "#/modules/moderation/model/reason-label";
 import type { Actor } from "#/modules/moderation/model/types";
+import { USER_ACTION_REASON } from "#/modules/moderation/model/user-action-reason";
 import { createNotifications } from "#/modules/notifications/commands/create-notifications";
 import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
@@ -17,7 +20,8 @@ const DAY = 86_400_000;
 
 export interface SanctionInput {
   days: number | null;
-  userReason: string;
+  // 당사자에게 보이는 사유. 제재에 코드·글로 저장하고 알림에는 보이는 글로 넣는다.
+  reason: ChosenReason;
   staffMemo: string;
   ongoing: OngoingChoice[];
 }
@@ -52,11 +56,19 @@ export async function applySanction({
       .update(sanctions)
       .set({ releasedAt: sanctions.until })
       .where(and(thisUser, isNull(sanctions.releasedAt), lte(sanctions.until, sql`now()`)));
+    const reason = reasonLabel({ ...input.reason, reasons: USER_ACTION_REASON });
     const now = new Date();
     const until = isNil(input.days) ? null : new Date(now.getTime() + input.days * DAY);
     const [created] = await tx
       .insert(sanctions)
-      .values({ serverId, userId, reason: input.userReason, until, createdBy: actor.id })
+      .values({
+        serverId,
+        userId,
+        reasonCode: input.reason.code,
+        reasonText: input.reason.text,
+        until,
+        createdBy: actor.id,
+      })
       .onConflictDoNothing()
       .returning({ id: sanctions.id });
     if (!created) {
@@ -88,7 +100,7 @@ export async function applySanction({
         {
           userId,
           kind: NOTIFICATION_KIND.sanctioned,
-          params: { reason: input.userReason, until: until?.toISOString() ?? null },
+          params: { reason, until: until?.toISOString() ?? null },
         },
       ],
     });
@@ -104,7 +116,7 @@ export async function applySanction({
         action: "제재",
         target: `${user.nickname} · ${isNil(input.days) ? "무기한" : `${input.days}일`}`,
         targetUserId: userId,
-        reason: input.userReason,
+        reason,
         staffMemo: input.staffMemo || undefined,
         related: [
           ...(cancelledGames.length > 0 ? [`취소된 구인 ${cancelledGames.length}개`] : []),

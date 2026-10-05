@@ -34,7 +34,8 @@ export async function loadAdminTables(serverId: string) {
       rejoinedAt: serverMembers.rejoinedAt,
       bannedAt: serverMembers.bannedAt,
       bannedBy: serverMembers.bannedBy,
-      banReason: serverMembers.banReason,
+      banReasonCode: serverMembers.banReasonCode,
+      banReasonText: serverMembers.banReasonText,
     })
     .from(profiles)
     .innerJoin(

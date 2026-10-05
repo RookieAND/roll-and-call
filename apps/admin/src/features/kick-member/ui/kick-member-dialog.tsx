@@ -1,18 +1,13 @@
 "use client";
 
+import { reasonLabel, USER_ACTION_REASON } from "@roll-and-call/database/moderation/model";
 import { AlertDialog, Button, HStack, Text, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
-import {
-  chosenReason,
-  conflictToastText,
-  useActionSubmit,
-  USER_ACTION_REASON,
-  withObjectParticle,
-} from "@/shared/lib";
+import { conflictToastText, draftReason, useActionSubmit, withObjectParticle } from "@/shared/lib";
 import type { KickImpact } from "@/shared/server";
 import {
   ActionNetworkError,
@@ -49,12 +44,14 @@ export function KickMemberDialog({
   const server = useCurrentServer();
   const cancelRef = useRef<HTMLButtonElement>(null);
   const { pending, networkError, submit } = useActionSubmit(kickServerMember);
-  const [chip, setChip] = useState<string | null>(null);
+  const [code, setCode] = useState<string | null>(null);
   const [otherText, setOtherText] = useState("");
-  const reason = chosenReason({ chip, otherText });
+  const reason = draftReason({ code, otherText });
+  const reasonText = reason ? reasonLabel({ ...reason, reasons: USER_ACTION_REASON }) : "";
   const canKick = Boolean(reason) && !pending;
 
   const kick = async () => {
+    if (!reason) return;
     const result = await submit({ userId, reason });
     if (isUndefined(result)) return;
     onOpenChange(false);
@@ -123,14 +120,16 @@ export function KickMemberDialog({
             <ReasonChips
               label="추방 사유"
               reasons={USER_ACTION_REASON}
-              value={chip}
+              value={code}
               otherText={otherText}
-              onValueChange={setChip}
+              onValueChange={setCode}
               onOtherTextChange={setOtherText}
               help="활동 기록에 남습니다."
               disabled={pending}
             />
-            <ManualNoticePreview text={kickNoticeText({ serverName: server.name, reason })} />
+            <ManualNoticePreview
+              text={kickNoticeText({ serverName: server.name, reason: reasonText })}
+            />
           </VStack>
         </AlertDialog.Body>
         <AlertDialog.Footer layout="row" className="items-center justify-end">
