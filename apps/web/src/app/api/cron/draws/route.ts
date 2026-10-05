@@ -7,7 +7,7 @@ import { finishLotteryDraw, isCronRequest } from "@/shared/server";
 
 export const maxDuration = 60;
 
-// pg_cron draw-lotteries가 5분마다 부른다(0060). 마감이 지난 추첨 글을 GM 버튼과 같은 명령으로 추첨한다.
+// pg_cron draw-lotteries가 10분마다, 추첨할 글이 있을 때만 부른다(0060). 마감이 지난 추첨 글을 GM 버튼과 같은 명령으로 추첨한다.
 // 이미 추첨된 글은 명령이 already_drawn으로 돌려주니 skipped로 센다.
 export async function POST(request: Request) {
   if (!isCronRequest(request)) return new Response("Unauthorized", { status: 401 });
