@@ -19,7 +19,8 @@ export function AddSellerButton() {
     startTransition(async () => {
       const result = await saveSeller(name);
       if (!result.ok) {
-        setDuplicate(true);
+        if ("error" in result) toast.danger(result.error);
+        else setDuplicate(true);
         return;
       }
       toast.success(`판매처 ${quoteWithParticle(name.trim(), withObjectParticle)} 추가했습니다`);

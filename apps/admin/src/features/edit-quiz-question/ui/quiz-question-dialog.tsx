@@ -48,12 +48,16 @@ export function QuizQuestionDialog({
 
   const save = (active: boolean, message: string) =>
     startTransition(async () => {
-      await submitQuizQuestion(rulebookId, question?.id ?? null, {
+      const result = await submitQuizQuestion(rulebookId, question?.id ?? null, {
         question: text,
         answers: withPendingAnswer,
         page,
         active,
       });
+      if (!result.ok) {
+        toast.danger(result.error);
+        return;
+      }
       toast.success(message);
       onClose();
     });

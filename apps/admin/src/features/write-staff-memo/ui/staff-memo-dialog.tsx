@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Dialog, Textarea, VStack, toast } from "@roll-and-call/ui";
-import { isUndefined } from "es-toolkit";
+import { isString, isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -38,6 +38,10 @@ export function StaffMemoDialog({
   const save = async () => {
     const result = await submit({ userId, memo, body });
     if (isUndefined(result)) return;
+    if ("error" in result && isString(result.error)) {
+      toast.danger(result.error);
+      return;
+    }
     if (result.ok) toast.success(editing ? "메모를 고쳤습니다" : "메모를 남겼습니다");
     else toast.info(conflictToastText({ conflict: null, self: false, target: "메모" }));
     onOpenChange(false);

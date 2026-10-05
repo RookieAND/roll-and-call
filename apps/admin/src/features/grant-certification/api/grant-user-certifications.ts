@@ -22,7 +22,7 @@ export async function grantUserCertifications(input: GrantUserCertificationsInpu
   const staff = await requireStaff();
   const evidence = input.evidence.trim();
   if (!evidence) return { ok: false as const, error: "인증 근거를 입력해 주세요" };
-  if (input.userIds.length === 0) throw new Error("인증할 유저를 골라 주세요");
+  if (input.userIds.length === 0) return { ok: false as const, error: "인증할 유저를 골라 주세요" };
   const server = await getCurrentServer();
   const result = await grantCertifications({
     serverId: server.id,

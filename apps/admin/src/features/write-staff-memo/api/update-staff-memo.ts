@@ -8,7 +8,7 @@ import { editStaffMemo, getCurrentServer, requireStaff } from "@/shared/server";
 // 쓴 사람과 서버 소유자(플랫폼 관리자 포함)만 고친다. 그사이 지워진 메모면 { ok: false }.
 export async function updateStaffMemo({ memoId, body }: { memoId: string; body: string }) {
   const staff = await requireStaff();
-  if (!body.trim()) throw new Error("메모를 입력해 주세요");
+  if (!body.trim()) return { ok: false as const, error: "메모를 입력해 주세요" };
   const server = await getCurrentServer();
   const result = await editStaffMemo({
     serverId: server.id,
