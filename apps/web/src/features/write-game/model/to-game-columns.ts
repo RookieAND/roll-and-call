@@ -1,10 +1,9 @@
 import { DEFAULT_WINDOW, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
-import { fromKstDateTimeInput, splitPlayTime } from "@/shared/lib";
+import { fromKstDateTimeInput } from "@/shared/lib";
 
 import type { GameFormValues } from "./game-form";
 
 export function toGameColumns(values: GameFormValues) {
-  const { hours, minutes } = splitPlayTime(values.playTime);
   const isFixed = values.scheduleMode === SCHEDULE_MODE.fixed;
 
   return {
@@ -13,8 +12,7 @@ export function toGameColumns(values: GameFormValues) {
     thumbnailUrl: values.thumbnailUrl || null,
     thumbnailSpoiler: Boolean(values.thumbnailUrl) && values.thumbnailSpoiler,
     images: values.images,
-    playTime: values.playTime || null,
-    playMinutes: hours * 60 + minutes || null,
+    playMinutes: values.playMinutes,
     genres: values.genres,
     triggers: values.triggers,
     platforms: values.platforms,

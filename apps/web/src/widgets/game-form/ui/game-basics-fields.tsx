@@ -41,10 +41,10 @@ export function GameBasicsFields({ form, rulebooks }: GameBasicsFieldsProps) {
       <GameRulebookField form={form} rulebooks={rulebooks} />
 
       <PlayTimeField
-        value={watch("playTime")}
-        error={errors.playTime?.message}
+        value={watch("playMinutes")}
+        error={errors.playMinutes?.message}
         onChange={(value) =>
-          setValue("playTime", value, {
+          setValue("playMinutes", value, {
             shouldDirty: true,
             shouldValidate: true,
           })

@@ -43,7 +43,7 @@ const form: GameFormValues = {
   aiImage: false,
   waitlistEnabled: true,
   preConfirmed: [],
-  playTime: "3시간",
+  playMinutes: 180,
 };
 
 function reason({

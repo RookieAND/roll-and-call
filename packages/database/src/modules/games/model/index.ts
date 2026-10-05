@@ -29,6 +29,7 @@ export {
 export { hasGameFilters } from "./has-game-filters";
 export { gameFilterCount } from "./game-filter-count";
 export { PARTICIPANT_STATUS, type ParticipantStatus } from "./participant-status";
+export { formatPlayMinutes } from "./format-play-minutes";
 export {
   DEFAULT_PLAY_MINUTES,
   effectivePlayMinutes,

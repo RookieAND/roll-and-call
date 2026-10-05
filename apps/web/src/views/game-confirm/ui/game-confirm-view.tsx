@@ -1,4 +1,4 @@
-import { isAwaitingDraw } from "@roll-and-call/database/games/model";
+import { formatPlayMinutes, isAwaitingDraw } from "@roll-and-call/database/games/model";
 import { Badge, Container, VStack } from "@roll-and-call/ui";
 import { pick } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
@@ -80,7 +80,7 @@ export async function GameConfirmView({ id }: { id: string }) {
 
   const { names } = aggregateAvailability({ avails: availabilities, userId: null });
   const minutes = effectivePlayMinutes(game.playMinutes);
-  const playLabel = game.playTime ?? `${minutes / 60}시간`;
+  const playLabel = formatPlayMinutes(minutes);
   const confirmedCount = countConfirmed(game.participants);
 
   return (

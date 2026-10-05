@@ -1,5 +1,6 @@
 "use client";
 
+import { DEFAULT_PLAY_MINUTES } from "@roll-and-call/database/games/model";
 import { useForm } from "react-hook-form";
 
 import { DEFAULT_WINDOW, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
@@ -13,7 +14,6 @@ import type { GameDefaults } from "../model/game-defaults";
 import type { GameEditContext } from "../model/game-form-layout";
 import { gameFormResolver } from "../model/game-form-resolver";
 import { GAME_FORM_STEPS } from "../model/game-form-steps";
-import { DEFAULT_PLAY_TIME } from "../model/play-time-options";
 import { GameFormWizard } from "./game-form-wizard";
 
 interface GameFormProps {
@@ -56,7 +56,7 @@ export function GameForm({
       platforms: defaultGame?.platforms ?? [],
       notice: defaultGame?.notice ?? "",
       aiImage: defaultGame?.aiImage ?? false,
-      playTime: defaultGame ? (defaultGame.playTime ?? "") : DEFAULT_PLAY_TIME,
+      playMinutes: defaultGame?.playMinutes ?? DEFAULT_PLAY_MINUTES,
       maxPlayers: String(defaultGame?.maxPlayers ?? 4),
       recruitMethod: defaultGame?.recruitMethod ?? RECRUIT_METHOD.firstCome,
       scheduleMode: defaultGame?.scheduleMode ?? SCHEDULE_MODE.coordinate,

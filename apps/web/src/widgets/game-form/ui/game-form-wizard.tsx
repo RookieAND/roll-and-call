@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPlayMinutes } from "@roll-and-call/database/games/model";
 import { cn, Container, VStack } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
 import { useRouter } from "next/navigation";
@@ -84,7 +85,7 @@ export function GameFormWizard({
 
   const images = watch("images");
   const thumbnail = watch("thumbnailUrl");
-  const summaryLine = compact([watch("rule"), watch("playTime")]).join(" · ");
+  const summaryLine = compact([watch("rule"), formatPlayMinutes(watch("playMinutes"))]).join(" · ");
   const exitDescription =
     thumbnail || images.length > 0
       ? "지금까지 쓴 내용은 저장되지 않습니다. 올린 썸네일도 함께 사라집니다."

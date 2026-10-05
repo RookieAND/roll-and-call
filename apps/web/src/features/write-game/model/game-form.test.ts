@@ -23,7 +23,7 @@ const base = {
   aiImage: false,
   waitlistEnabled: true,
   preConfirmed: [],
-  playTime: "3시간",
+  playMinutes: 180,
 };
 
 const imageUrl = (index: number) =>
@@ -102,7 +102,7 @@ describe("gameFormSchema", () => {
   });
 
   it("플레이타임을 0시간 0분으로 둘 수 없다", () => {
-    expect(firstError({ ...base, playTime: "" })).toBe("playTime");
+    expect(firstError({ ...base, playMinutes: 0 })).toBe("playMinutes");
   });
 
   it("장르는 5개까지다", () => {
@@ -146,7 +146,7 @@ describe("toGameColumns", () => {
     );
   });
 
-  it("플레이타임 문자열에서 분을 뽑아 같이 저장한다", () => {
-    expect(toGameColumns({ ...base, playTime: "3시간 30분" }).playMinutes).toBe(210);
+  it("플레이타임은 분 값 하나만 저장한다", () => {
+    expect(toGameColumns({ ...base, playMinutes: 210 }).playMinutes).toBe(210);
   });
 });

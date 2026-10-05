@@ -56,7 +56,7 @@ export const gameFormSchema = z
       )
       .optional(),
     aiImage: z.boolean({ error: "AI 이미지 사용 여부를 골라 주세요." }),
-    playTime: z.string().min(1, "플레이타임을 0시간 0분으로 둘 수 없습니다.").max(100),
+    playMinutes: z.number().int().min(1, "플레이타임을 0시간 0분으로 둘 수 없습니다."),
     maxPlayers: z.string().refine((value) => {
       const count = Number(value);
       return value !== "" && Number.isInteger(count) && count >= 1 && count <= GAME_MAX_PLAYERS;

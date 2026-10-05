@@ -2,20 +2,18 @@
 
 import { Field, HStack, Select } from "@roll-and-call/ui";
 
-import { splitPlayTime } from "@/shared/lib";
-
-import { formatPlayTimeMinutes } from "../model/format-play-time-minutes";
 import { MAX_PLAY_HOURS, PLAY_HOUR_OPTIONS, PLAY_MINUTE_OPTIONS } from "../model/play-time-options";
 import { PlayTimeTrigger } from "./play-time-trigger";
 
 interface PlayTimeFieldProps {
-  value?: string;
-  onChange: (value: string) => void;
+  value: number;
+  onChange: (minutes: number) => void;
   error?: string;
 }
 
 export function PlayTimeField({ value, onChange, error }: PlayTimeFieldProps) {
-  const { hours, minutes } = splitPlayTime(value);
+  const hours = Math.floor(value / 60);
+  const minutes = value % 60;
   const hourItems = PLAY_HOUR_OPTIONS.map((hour) => ({
     label: `${hour}시간`,
     value: String(hour),
@@ -30,9 +28,7 @@ export function PlayTimeField({ value, onChange, error }: PlayTimeFieldProps) {
   }));
 
   function change(nextHours: number, nextMinutes: number) {
-    onChange(
-      formatPlayTimeMinutes(nextHours * 60 + (nextHours >= MAX_PLAY_HOURS ? 0 : nextMinutes)),
-    );
+    onChange(nextHours * 60 + (nextHours >= MAX_PLAY_HOURS ? 0 : nextMinutes));
   }
 
   return (
