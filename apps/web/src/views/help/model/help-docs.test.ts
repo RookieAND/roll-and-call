@@ -57,10 +57,4 @@ describe("HELP_DOCS", () => {
     for (const word of BANNED) expect(text).not.toContain(word);
     expect(text).not.toContain("—");
   });
-
-  it("목록 행 설명은 알림 받기에만 있다", () => {
-    expect(HELP_DOCS.filter((doc) => doc.rowDescription).map((doc) => doc.slug)).toEqual([
-      "notifications",
-    ]);
-  });
 });

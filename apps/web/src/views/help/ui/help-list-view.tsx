@@ -58,12 +58,7 @@ export async function HelpListView({ from }: HelpListViewProps) {
               </Text>
               <Card.Root padding="none" className="overflow-hidden">
                 {HELP_DOCS.filter((doc) => doc.category === category).map((doc) => (
-                  <HelpDocRow
-                    key={doc.slug}
-                    href={`/help/${doc.slug}`}
-                    title={doc.title}
-                    description={doc.rowDescription}
-                  />
+                  <HelpDocRow key={doc.slug} href={`/help/${doc.slug}`} title={doc.title} />
                 ))}
               </Card.Root>
             </VStack>

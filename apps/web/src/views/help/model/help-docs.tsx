@@ -73,7 +73,6 @@ export type HelpDoc = {
   category: HelpCategory;
   title: string;
   lead?: ReactNode;
-  rowDescription?: ReactNode;
   blocks: HelpBlock[];
   related: string[];
 };
@@ -662,13 +661,6 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "notifications",
     category: HELP_CATEGORY.account,
     title: "알림 받기",
-    rowDescription: (
-      <>
-        할 일과 받은 알림을 탭으로 나눠 봅니다.
-        <br />
-        할 일이 있으면 홈 맨 위에 배너로 알립니다.
-      </>
-    ),
     lead: (
       <>
         롤앤콜의 알림은 알림 탭과 디스코드 구인 글로 옵니다.
@@ -967,7 +959,7 @@ export const HELP_DOCS: HelpDoc[] = [
         rows: [
           { term: "정식 세션", description: "100점" },
           { term: "미니룰 세션", description: "70점" },
-          { term: "타이만 세션", description: "15점" },
+          { term: "타이만 세션", description: "10점" },
         ],
       },
       {
