@@ -101,13 +101,13 @@ export function AddToCalendarSheet({
           </Card.Root>
           <Card.Root radius={500} padding="none" className="overflow-hidden">
             <CalendarOptionRow
-              iconSrc="/brand/google-calendar.svg"
+              iconSrc="/brand/google-calendar.png"
               name="구글 캘린더"
               description="새 창에서 열립니다"
               onClick={openGoogleCalendar}
             />
             <CalendarOptionRow
-              iconSrc="/brand/apple.svg"
+              iconSrc="/brand/icloud-calendar.png"
               name="iCloud 캘린더"
               description=".ics 파일을 내려받습니다"
               disabled={downloading}
