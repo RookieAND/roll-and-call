@@ -55,9 +55,6 @@ export function HomeRecordTieSheet({
             </Sheet.Item>
           ))}
         </Sheet.Body>
-        <Text typography="body4" foreground="hint" render={<p />} className="mx-100 mt-100">
-          프로필에서 소개와 링크, 진행한 세션 후기를 볼 수 있습니다.
-        </Text>
       </Sheet.Popup>
     </Sheet.Root>
   );
