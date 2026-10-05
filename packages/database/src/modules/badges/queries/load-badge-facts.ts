@@ -8,8 +8,16 @@ import { games, participants, rulebookCategories, rulebooks, sessionReviews } fr
 import { attendedWhere } from "./attended-where";
 import { loadHiddenBadgeFacts } from "./load-hidden-badge-facts";
 import { recognizedGamesWhere } from "./recognized-games-where";
-import { reviewAuthorAbsent } from "./review-author-absent";
 import { sessionColumns } from "./session-columns";
+
+// 후기 작성자가 지금 불참이면 보류된 후기라 세지 않는다.
+const reviewAuthorAbsent = sql<boolean>`exists (
+  select 1 from ${participants}
+  where ${participants.gameId} = ${sessionReviews.gameId}
+    and ${participants.userId} = ${sessionReviews.authorId}
+    and ${participants.absent}
+    and ${participants.absenceCancelledAt} is null
+)`;
 
 // 공백을 뺀 글자가 10자 이상인 후기만 센다.
 const REVIEW_MIN_LENGTH = 10;

@@ -24,7 +24,6 @@ import { SessionTabs } from "@/widgets/session-list";
 import { buildDexTab } from "../model/build-dex-tab";
 import { dexTabKey } from "../model/dex-tab-key";
 import { specialTitles } from "../model/special-titles";
-import { BadgeRulePopover } from "./badge-rule-popover";
 import { DexHeader } from "./dex-header";
 import { DexRoleTab } from "./dex-role-tab";
 import { DexSpecialTab } from "./dex-special-tab";
@@ -67,7 +66,7 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
 
   return (
     <>
-      <AppBar back="/me" title="업적 도감" action={<BadgeRulePopover />} />
+      <AppBar back="/me" title="업적 도감" />
       <Container size="sm" className="px-0 pb-300">
         <DexHeader earnedCount={badgeCount.total} featured={featured} />
         <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface">

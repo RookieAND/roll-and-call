@@ -43,11 +43,7 @@ export {
   type ReviewDraftTarget,
   type ReviewedGames,
 } from "@roll-and-call/database/reviews";
-export {
-  getProfileMemo,
-  getRecordPeople,
-  type MemberProfile,
-} from "@roll-and-call/database/profiles";
+export { getProfileMemo, type MemberProfile } from "@roll-and-call/database/profiles";
 export { findActiveSanction } from "@roll-and-call/database/moderation";
 export { getRulebookRecords, type RulebookRecords } from "@roll-and-call/database/certifications";
 export { markBadgesNotified, type BadgeRecord } from "@roll-and-call/database/badges";

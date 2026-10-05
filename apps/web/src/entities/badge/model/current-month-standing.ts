@@ -1,12 +1,10 @@
 import {
   kstMonthKey,
-  monthScoreboard,
   type BadgeRole,
   type MonthlyAppearance,
 } from "@roll-and-call/database/badges/model";
 
-// 이번 달 내 점수·순위와 1위 점수(R18). 이달의 GM·PL을 정하는 점수판(monthScoreboard)을 그대로 쓴다.
-// 0점 이하는 순위가 없어 score 0, rank null로 돌려준다(음수는 내보내지 않는다).
+// 이번 달 내 횟수와 1위 횟수(R18). 이달의 GM·PL을 정하는 집계(recordAppearances)를 그대로 센다.
 export function currentMonthStanding({
   appearances,
   userId,
@@ -18,14 +16,11 @@ export function currentMonthStanding({
   role: BadgeRole;
   now: Date;
 }) {
-  const board = monthScoreboard({ appearances, role, month: kstMonthKey(now) });
-  const mine = board.find((row) => row.userId === userId);
-  const top = board[0];
-  return {
-    score: mine?.score ?? 0,
-    rank: mine?.rank ?? null,
-    sessionCount: mine?.sessionCount ?? 0,
-    topScore: top?.score ?? 0,
-    topSessionCount: top?.sessionCount ?? 0,
-  };
+  const month = kstMonthKey(now);
+  const counts = new Map<string, number>();
+  for (const appearance of appearances) {
+    if (appearance.role !== role || kstMonthKey(appearance.startsAt) !== month) continue;
+    counts.set(appearance.userId, (counts.get(appearance.userId) ?? 0) + appearance.weight);
+  }
+  return { count: counts.get(userId) ?? 0, topCount: Math.max(0, ...counts.values()) };
 }

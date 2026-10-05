@@ -14,7 +14,6 @@ export { hasOnboarded } from "./queries/has-onboarded";
 export { getProfileMemo } from "./queries/get-profile-memo";
 export { getMemberNickname } from "./queries/get-member-nickname";
 export { getMemberNicknames } from "./queries/get-member-nicknames";
-export { getRecordPeople } from "./queries/get-record-people";
 export { isNicknameTaken } from "./queries/is-nickname-taken";
 export { memberBioSql } from "./queries/member-bio-sql";
 export { memberNicknameSql } from "./queries/member-nickname-sql";

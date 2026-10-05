@@ -15,33 +15,21 @@ describe("monthListLabel", () => {
 describe("currentMonthStanding", () => {
   const now = new Date("2026-10-20T03:00:00Z");
   const at = new Date("2026-10-10T03:00:00Z");
-  it("내 점수·순위와 1위 점수를 돌려준다", () => {
+  it("내 횟수와 1위 횟수를 센다", () => {
     const appearances = [
-      { userId: "a", role: "pl" as const, startsAt: at, score: 100, sessions: 1 },
-      { userId: "b", role: "pl" as const, startsAt: at, score: 100, sessions: 1 },
-      { userId: "b", role: "pl" as const, startsAt: at, score: 100, sessions: 1 },
-      { userId: "b", role: "gm" as const, startsAt: at, score: 100, sessions: 1 },
-      {
-        userId: "a",
-        role: "pl" as const,
-        startsAt: new Date("2026-09-10T03:00:00Z"),
-        score: 100,
-        sessions: 1,
-      },
+      { userId: "a", role: "pl" as const, startsAt: at, weight: 1 },
+      { userId: "b", role: "pl" as const, startsAt: at, weight: 1 },
+      { userId: "b", role: "pl" as const, startsAt: at, weight: 1 },
+      { userId: "b", role: "gm" as const, startsAt: at, weight: 1 },
+      { userId: "a", role: "pl" as const, startsAt: new Date("2026-09-10T03:00:00Z"), weight: 1 },
     ];
     expect(currentMonthStanding({ appearances, userId: "a", role: "pl", now })).toEqual({
-      score: 100,
-      rank: 2,
-      sessionCount: 1,
-      topScore: 200,
-      topSessionCount: 2,
+      count: 1,
+      topCount: 2,
     });
     expect(currentMonthStanding({ appearances: [], userId: "a", role: "gm", now })).toEqual({
-      score: 0,
-      rank: null,
-      sessionCount: 0,
-      topScore: 0,
-      topSessionCount: 0,
+      count: 0,
+      topCount: 0,
     });
   });
 });

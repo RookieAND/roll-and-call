@@ -1,23 +1,19 @@
 import { and, eq, inArray, isNull } from "drizzle-orm";
+import { sumBy } from "es-toolkit";
 
 import { db } from "#/client";
 import { badgeKey } from "#/modules/badges/model/badge-key";
-import { BADGE_LADDER, BADGE_ROLE, type BadgeRole } from "#/modules/badges/model/badge-ladder";
-import { monthScoreboard } from "#/modules/badges/model/month-scoreboard";
+import { BADGE_LADDER, BADGE_ROLE } from "#/modules/badges/model/badge-ladder";
+import { kstMonthKey } from "#/modules/badges/model/kst-month-key";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, userBadges } from "#/schema";
 
 import { loadMonthlyAppearances } from "./load-monthly-appearances";
 
-export type MonthlyWinner = {
-  userId: string;
-  nickname: string;
-  score: number;
-  sessionCount: number;
-};
+export type MonthlyWinner = { userId: string; nickname: string; sessionCount: number };
 
 // 그 달 이달의 GM·PL을 받은 사람. 업적 보이기 설정과 상관없이 모두 넣는다(R6).
-// 점수·세션 수는 이달의 뱃지를 정한 점수판(monthScoreboard)과 같은 기준이다.
+// 횟수는 이달의 뱃지를 정한 집계(loadMonthlyAppearances)와 같은 기준으로 센다.
 export async function loadMonthlyWinners({
   serverId,
   month,
@@ -45,23 +41,21 @@ export async function loadMonthlyWinners({
       ),
     loadMonthlyAppearances({ serverId }),
   ]);
-  const winnersOf = (key: string, role: BadgeRole) => {
-    const board = monthScoreboard({ appearances, role, month });
-    return holders
+  const winnersOf = (key: string, role: string) =>
+    holders
       .filter((holder) => holder.badgeKey === key)
-      .flatMap((holder) => {
-        const row = board.find((item) => item.userId === holder.userId);
-        return row
-          ? [
-              {
-                userId: holder.userId,
-                nickname: holder.nickname,
-                score: row.score,
-                sessionCount: row.sessionCount,
-              },
-            ]
-          : [];
-      });
-  };
+      .map((holder) => ({
+        userId: holder.userId,
+        nickname: holder.nickname,
+        sessionCount: sumBy(
+          appearances.filter(
+            (appearance) =>
+              appearance.userId === holder.userId &&
+              appearance.role === role &&
+              kstMonthKey(appearance.startsAt) === month,
+          ),
+          (appearance) => appearance.weight,
+        ),
+      }));
   return { gm: winnersOf(gmKey, BADGE_ROLE.gm), pl: winnersOf(plKey, BADGE_ROLE.player) };
 }
