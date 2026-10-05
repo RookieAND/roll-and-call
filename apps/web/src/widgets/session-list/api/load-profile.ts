@@ -25,7 +25,7 @@ export async function loadProfile({
   return {
     profile,
     sessions: buildProfileSessions({ hosted, joined, userId, viewerId, now }),
-    counts: countRecordSessions({ hosted, joined, userId, now }),
+    counts: countRecordSessions({ hosted, joined, userId, now, includeUpcoming: true }),
     absences: recentAbsences({ joined, userId }),
   };
 }

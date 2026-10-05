@@ -33,7 +33,14 @@ export async function MyPageSummary() {
     loadMyBadgeFacts(user.id),
     findActiveSanction({ serverId: server.id, userId: user.id, now }),
   ]);
-  const counts = countRecordSessions({ hosted, joined, userId: user.id, now });
+  const counts = countRecordSessions({
+    hosted,
+    joined,
+    userId: user.id,
+    now,
+    includeUpcoming: true,
+    includeWaiting: true,
+  });
   const absences = recentAbsences({ joined, userId: user.id, now });
   const held = heldBadges(badgeRecords, now);
   const featuredBadges = pickFeaturedBadges({
