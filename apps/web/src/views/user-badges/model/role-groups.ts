@@ -46,7 +46,7 @@ const MONTHLY_LADDER: Partial<Record<BadgeTab, BadgeLadderKey>> = {
 const DATE_FORMAT: Record<BadgeTab, string> = {
   [BADGE_TAB.gm]: "YY.MM.DD",
   [BADGE_TAB.player]: "YY.MM.DD",
-  [BADGE_TAB.special]: "YYYY년 M월 D일",
+  [BADGE_TAB.special]: "YYYY.MM.DD",
 };
 
 // 운영진 지급 칭호가 숨겨진 칭호보다 앞이고, 나머지는 받은 순서다.

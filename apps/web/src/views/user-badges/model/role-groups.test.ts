@@ -39,8 +39,8 @@ describe("roleGroups", () => {
       record("sp.dev", "2026-09-25T03:00:00Z"),
     ]);
     expect(groups[0]!.rows.map((row) => [row.name, row.requirement, row.dateLabel])).toEqual([
-      ["개발자", "롤앤콜을 만든 사람입니다.", "2026년 9월 25일"],
-      ["대성공", expect.any(String), "2026년 9월 20일"],
+      ["개발자", "롤앤콜을 만든 사람입니다.", "2026.09.25"],
+      ["대성공", expect.any(String), "2026.09.20"],
     ]);
   });
 });
