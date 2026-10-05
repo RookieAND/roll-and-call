@@ -109,6 +109,7 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
               </span>
             </Tabs.Trigger>
           ))}
+          <Tabs.Indicator />
         </Tabs.List>
       </Tabs.Root>
       <VStack gap="125" className="px-200 pt-200 pb-250">
