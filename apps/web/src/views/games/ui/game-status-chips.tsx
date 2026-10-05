@@ -25,7 +25,7 @@ export function GameStatusChips({ filter, counts }: GameStatusChipsProps) {
     <HStack
       gap="075"
       render={<nav aria-label="모집 상태" />}
-      className="-my-075 min-w-0 flex-1 overflow-x-auto py-075 [scrollbar-width:none]"
+      className="-my-075 min-w-0 flex-1 overflow-x-auto py-075 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
       {GAME_STATUS_FILTERS[filter.tab ?? GAME_TAB_DEFAULT].map((option) => {
         const selected = option.key === current;
