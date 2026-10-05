@@ -4,12 +4,12 @@ import type { RulebookKind } from "@roll-and-call/database";
 import { directionalParticle, objectParticle } from "@roll-and-call/database/notifications/model";
 import { AlertDialog, Button, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { RotateCcw, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { KindImpactPage } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, Tag } from "@/shared/ui";
+import { ActionNetworkError, ModalServerLabel, RetryableLabel, Tag } from "@/shared/ui";
 
 import { loadKindImpact } from "../api/load-kind-impact";
 import { KindImpactList } from "./kind-impact-list";
@@ -149,8 +149,7 @@ export function KindImpactDialog({
             취소
           </AlertDialog.Close>
           <Button colorPalette="danger" loading={pending} onClick={onConfirm}>
-            {networkError ? <RotateCcw size={16} aria-hidden /> : null}
-            {networkError ? "다시 시도" : "종류 바꾸기"}
+            <RetryableLabel failed={networkError}>{"종류 바꾸기"}</RetryableLabel>
           </Button>
         </AlertDialog.Footer>
       </AlertDialog.Popup>

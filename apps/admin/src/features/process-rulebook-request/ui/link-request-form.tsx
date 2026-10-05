@@ -14,7 +14,7 @@ import {
   toast,
 } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
-import { RotateCcw, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
 
 import {
@@ -26,7 +26,12 @@ import {
   withSubjectParticle,
 } from "@/shared/lib";
 import type { RulebookRequestRow, RulebookRow } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  NotificationPreview,
+  RetryableLabel,
+} from "@/shared/ui";
 
 import { linkRequest } from "../api/link-request";
 
@@ -144,8 +149,7 @@ export function LinkRequestForm({ request, rulebooks, viewerId, onDone }: LinkRe
           취소
         </Dialog.Close>
         <Button loading={pending} disabled={!canConfirm} onClick={() => void confirm()}>
-          {networkError ? <RotateCcw size={16} aria-hidden /> : null}
-          {networkError ? "다시 시도" : "연결"}
+          <RetryableLabel failed={networkError}>{"연결"}</RetryableLabel>
         </Button>
       </Dialog.Footer>
     </>

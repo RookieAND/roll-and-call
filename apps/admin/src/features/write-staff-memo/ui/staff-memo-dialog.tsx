@@ -2,12 +2,11 @@
 
 import { Button, Dialog, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isString, isUndefined } from "es-toolkit";
-import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { conflictToastText, useActionSubmit } from "@/shared/lib";
-import { ActionNetworkError, ModalServerLabel } from "@/shared/ui";
+import { ActionNetworkError, ModalServerLabel, RetryableLabel } from "@/shared/ui";
 
 import { submitStaffMemo } from "../api/submit-staff-memo";
 
@@ -73,8 +72,7 @@ export function StaffMemoDialog({
             취소
           </Dialog.Close>
           <Button loading={pending} disabled={!canSave} onClick={() => void save()}>
-            {networkError ? <RotateCcw size={16} aria-hidden /> : null}
-            {networkError ? "다시 시도" : saveLabel}
+            <RetryableLabel failed={networkError}>{saveLabel}</RetryableLabel>
           </Button>
         </Dialog.Footer>
       </Dialog.Popup>

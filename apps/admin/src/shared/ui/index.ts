@@ -27,6 +27,7 @@ export { Kbd } from "./kbd";
 export { KeyHint } from "./key-hint";
 export { ModalServerLabel } from "./modal-server-label";
 export { MoreMenu, type MoreMenuItem } from "./more-menu";
+export { RetryableLabel } from "./retryable-label";
 export { NAV_ITEMS, type NavKey } from "./nav-items";
 export { ChoiceRowList, type ChoiceRow } from "./choice-row-list";
 export { OPEN_PALETTE_EVENT, openPalette } from "./open-palette";

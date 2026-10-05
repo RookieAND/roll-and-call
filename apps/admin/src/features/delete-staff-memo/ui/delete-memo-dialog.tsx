@@ -2,11 +2,10 @@
 
 import { AlertDialog, Button, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
-import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { conflictToastText, useActionSubmit } from "@/shared/lib";
-import { ActionNetworkError, ModalServerLabel } from "@/shared/ui";
+import { ActionNetworkError, ModalServerLabel, RetryableLabel } from "@/shared/ui";
 
 import { removeStaffMemo } from "../api/remove-staff-memo";
 
@@ -50,8 +49,7 @@ export function DeleteMemoDialog({ memoId, open, onOpenChange }: DeleteMemoDialo
             취소
           </AlertDialog.Close>
           <Button colorPalette="danger" loading={pending} onClick={() => void remove()}>
-            {networkError ? <RotateCcw size={16} aria-hidden /> : null}
-            {networkError ? "다시 시도" : "지우기"}
+            <RetryableLabel failed={networkError}>{"지우기"}</RetryableLabel>
           </Button>
         </AlertDialog.Footer>
       </AlertDialog.Popup>

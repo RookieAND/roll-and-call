@@ -13,7 +13,7 @@ import {
   toast,
 } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
-import { RotateCcw, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -23,6 +23,7 @@ import {
   ActionNetworkError,
   FormSection,
   NotificationPreview,
+  RetryableLabel,
   ServerLink,
   Tag,
   useServerPath,
@@ -195,8 +196,7 @@ export function GrantCertForm({ options, staffChannel, backHref }: GrantCertForm
             onClick={() => void confirm()}
             className="min-w-[128px]"
           >
-            {networkError ? <RotateCcw size={16} aria-hidden /> : null}
-            {networkError ? "다시 시도" : "인증 확정"}
+            <RetryableLabel failed={networkError}>{"인증 확정"}</RetryableLabel>
           </Button>
         </HStack>
       </HStack>

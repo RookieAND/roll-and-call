@@ -2,9 +2,8 @@
 
 import { objectParticle } from "@roll-and-call/database/notifications/model";
 import { AlertDialog, Button, Text, VStack } from "@roll-and-call/ui";
-import { RotateCcw } from "lucide-react";
 
-import { ActionNetworkError, FactRows, ModalServerLabel } from "@/shared/ui";
+import { ActionNetworkError, FactRows, ModalServerLabel, RetryableLabel } from "@/shared/ui";
 
 interface FreeImpactDialogProps {
   open: boolean;
@@ -56,8 +55,7 @@ export function FreeImpactDialog({
             뒤로
           </AlertDialog.Close>
           <Button loading={pending} onClick={onConfirm}>
-            {networkError ? <RotateCcw size={16} aria-hidden /> : null}
-            {networkError ? "다시 시도" : "변경 확정"}
+            <RetryableLabel failed={networkError}>{"변경 확정"}</RetryableLabel>
           </Button>
         </AlertDialog.Footer>
       </AlertDialog.Popup>

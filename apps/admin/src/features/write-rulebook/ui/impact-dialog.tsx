@@ -2,11 +2,10 @@
 
 import { AlertDialog, Button, Callout, Text, VStack } from "@roll-and-call/ui";
 import { sumBy } from "es-toolkit";
-import { RotateCcw } from "lucide-react";
 
 import { withObjectParticle } from "@/shared/lib";
 import type { RulebookImpactCase } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel } from "@/shared/ui";
+import { ActionNetworkError, ModalServerLabel, RetryableLabel } from "@/shared/ui";
 
 import { ImpactList } from "./impact-list";
 
@@ -87,8 +86,7 @@ export function ImpactDialog({
             뒤로
           </AlertDialog.Close>
           <Button colorPalette="danger" loading={pending} onClick={onConfirm}>
-            {networkError ? <RotateCcw size={16} aria-hidden /> : null}
-            {networkError ? "다시 시도" : "변경 확정"}
+            <RetryableLabel failed={networkError}>{"변경 확정"}</RetryableLabel>
           </Button>
         </AlertDialog.Footer>
       </AlertDialog.Popup>

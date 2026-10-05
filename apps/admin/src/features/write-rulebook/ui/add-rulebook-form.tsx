@@ -3,7 +3,7 @@
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { Button, Card, Field, HStack, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined, uniq } from "es-toolkit";
-import { RotateCcw, TriangleAlert } from "lucide-react";
+import { TriangleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -13,6 +13,7 @@ import {
   ActionNetworkError,
   FormSection,
   NotificationPreview,
+  RetryableLabel,
   ServerLink,
   useServerPath,
 } from "@/shared/ui";
@@ -191,8 +192,7 @@ export function AddRulebookForm({
             onClick={() => void add()}
             className="min-w-[104px]"
           >
-            {networkError ? <RotateCcw size={16} aria-hidden /> : null}
-            {networkError ? "다시 시도" : "추가"}
+            <RetryableLabel failed={networkError}>{"추가"}</RetryableLabel>
           </Button>
         </HStack>
       </HStack>
