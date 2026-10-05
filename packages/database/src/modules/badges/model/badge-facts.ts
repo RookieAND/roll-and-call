@@ -9,6 +9,8 @@ export type BadgeSession = {
   categoryName: string | null;
   // 불참이 아닌 확정 참여자 수(GM 제외).
   attendedCount: number;
+  // 구인글을 올린 시각. 번개가 등록과 시작 사이를 잰다.
+  registeredAt: Date;
 };
 
 export type BadgeReview = { gameId: string; createdAt: Date };
@@ -22,6 +24,8 @@ export type BadgeDraw = {
   applicants: number;
   maxPlayers: number;
   drawnAt: Date;
+  // 확정자 가운데 내 값이 가장 크다(마지막 자리).
+  lastSeat: boolean;
 };
 
 // 내가 연 추첨 구인의 신청자(1d100을 굴린 사람) 수.
@@ -44,6 +48,8 @@ export type BadgeFacts = {
   joinedAt: Date | null;
   // 광클 마감은 정원이 찬 순간에만 준다. 재계산은 이미 받은 것 가운데 근거 구인이 살아 있는 것만 남긴다.
   rush: BadgeEvent[];
+  // 내가 GM이고 참석자 4명 이상인 세션에서 참석자 전원이 후기를 남긴 순간(마지막 후기의 작성 시각).
+  fullCasts: BadgeEvent[];
   asOf: Date;
 };
 

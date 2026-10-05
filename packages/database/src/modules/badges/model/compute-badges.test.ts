@@ -15,6 +15,7 @@ function session(index: number, categoryId: string | null = "coc"): BadgeSession
     categoryId,
     categoryName: null,
     attendedCount: 4,
+    registeredAt: new Date(Date.UTC(2025, 0, 1)),
   };
 }
 
@@ -27,6 +28,7 @@ const facts = (overrides: Partial<BadgeFacts>): BadgeFacts => ({
   hostedDraws: [],
   joinedAt: null,
   rush: [],
+  fullCasts: [],
   asOf: new Date(Date.UTC(2027, 0, 1)),
   ...overrides,
 });
@@ -45,7 +47,9 @@ describe("computeBadges", () => {
 
   it("룰북이 없는 세션은 누적에만 센다", () => {
     const badges = computeBadges(facts({ played: sessions(3, null) }));
-    expect(badges.map((badge) => badge.badgeKey)).toEqual(["pl.total"]);
+    expect(badges.map((badge) => badge.badgeKey).filter((key) => !key.startsWith("sp."))).toEqual([
+      "pl.total",
+    ]);
   });
 
   it("다양성은 서로 다른 룰 분류 수로 센다", () => {
@@ -189,12 +193,13 @@ describe("숨겨진 칭호", () => {
   const drawnAt = new Date(Date.UTC(2026, 5, 1));
   const draw = (overrides: Partial<BadgeDraw>): BadgeDraw => ({
     gameId: "g",
-    roll: 50,
+    roll: 60,
     nearMiss: false,
     picked: false,
     applicants: 4,
     maxPlayers: 4,
     drawnAt,
+    lastSeat: false,
     ...overrides,
   });
 
@@ -287,6 +292,7 @@ describe("숨겨진 칭호", () => {
     expect(keys(computeBadges(facts({ played: [morning], hosted: [evening] })))).toEqual([
       "sp.ambi",
       "sp.double",
+      "sp.owl",
     ]);
     expect(keys(computeBadges(facts({ played: [{ ...session(0), attendedCount: 6 }] })))).toEqual([
       "sp.expedition",

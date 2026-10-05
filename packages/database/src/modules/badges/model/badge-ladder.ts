@@ -19,6 +19,20 @@ export const HIDDEN_LADDER = {
   needle: "sp.needle",
   marathon: "sp.marathon",
   rush: "sp.rush",
+  hundred: "sp.hundred",
+  owl: "sp.owl",
+  pullUp: "sp.pullup",
+  lightning: "sp.lightning",
+  wins3: "sp.wins3",
+  days3: "sp.days3",
+  allNight: "sp.allnight",
+  fullCast: "sp.fullcast",
+  weekdays: "sp.weekdays",
+  coin: "sp.coin",
+  revive: "sp.revive",
+  days7: "sp.days7",
+  wins5: "sp.wins5",
+  days10: "sp.days10",
 } as const;
 export type HiddenLadderKey = (typeof HIDDEN_LADDER)[keyof typeof HIDDEN_LADDER];
 

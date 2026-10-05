@@ -3,7 +3,7 @@ import { sql } from "drizzle-orm";
 import { games, participants, rulebookCategories } from "#/schema";
 
 // attendedWhere와 같은 조건. 참여 쿼리가 participants를 이미 조인하므로 별칭으로 센다.
-const attendedCount = sql<number>`(
+export const attendedCount = sql<number>`(
   select count(*)::int from ${participants} as attendee
   where attendee.game_id = ${games.id}
     and attendee.status = 'confirmed'
@@ -22,4 +22,5 @@ export const sessionColumns = {
   categoryId: rulebookCategories.id,
   categoryName: rulebookCategories.name,
   attendedCount,
+  registeredAt: games.createdAt,
 };

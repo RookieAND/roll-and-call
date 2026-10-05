@@ -69,7 +69,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
   [HIDDEN_LADDER.oneYear]: hidden({
     emoji: "🌳",
     name: "1주년",
-    grade: 4,
+    grade: 3,
     description: "롤앤콜과 함께한 지 1년이 되었습니다.",
   }),
   [HIDDEN_LADDER.ambidextrous]: hidden({
@@ -119,5 +119,89 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "광클 마감",
     grade: 3,
     description: "모집을 열자마자 자리가 찼습니다.",
+  }),
+  [HIDDEN_LADDER.hundred]: hidden({
+    emoji: "🌼",
+    name: "백일",
+    grade: 1,
+    description: "롤앤콜과 함께한 지 100일이 되었습니다.",
+  }),
+  [HIDDEN_LADDER.owl]: hidden({
+    emoji: "🦉",
+    name: "올빼미",
+    grade: 1,
+    description: "모두가 잠든 시간에 테이블이 열렸습니다.",
+  }),
+  [HIDDEN_LADDER.pullUp]: hidden({
+    emoji: "🧗",
+    name: "턱걸이",
+    grade: 2,
+    description: "마지막 자리를 겨우 붙잡았습니다.",
+  }),
+  [HIDDEN_LADDER.lightning]: hidden({
+    emoji: "🎆",
+    name: "번개",
+    grade: 2,
+    description: "구인이 열리자마자 모험이 시작되었습니다.",
+  }),
+  [HIDDEN_LADDER.wins3]: hidden({
+    emoji: "🎰",
+    name: "연승",
+    grade: 2,
+    description: "행운이 세 번 연달아 찾아왔습니다.",
+  }),
+  [HIDDEN_LADDER.days3]: hidden({
+    emoji: "🎯",
+    name: "연속 출전",
+    grade: 2,
+    description: "사흘 내내 테이블에 앉았습니다.",
+  }),
+  [HIDDEN_LADDER.allNight]: hidden({
+    emoji: "🌄",
+    name: "밤샘",
+    grade: 3,
+    description: "해가 뜰 때까지 모험이 이어졌습니다.",
+  }),
+  [HIDDEN_LADDER.fullCast]: hidden({
+    emoji: "🎞️",
+    name: "풀 캐스트",
+    grade: 3,
+    description: "참석자 모두가 이 모험을 기록으로 남겼습니다.",
+  }),
+  [HIDDEN_LADDER.weekdays]: hidden({
+    emoji: "📅",
+    name: "요일 수집가",
+    grade: 3,
+    description: "일주일의 모든 요일에 테이블에 앉았습니다.",
+  }),
+  [HIDDEN_LADDER.coin]: hidden({
+    emoji: "🪙",
+    name: "동전 던지기",
+    grade: 3,
+    description: "주사위가 딱 반반의 눈을 보여 주었습니다.",
+  }),
+  [HIDDEN_LADDER.revive]: hidden({
+    emoji: "🪂",
+    name: "기사회생",
+    grade: 4,
+    description: "나쁜 눈이 나왔지만 자리를 지켜 냈습니다.",
+  }),
+  [HIDDEN_LADDER.days7]: hidden({
+    emoji: "🚄",
+    name: "특급 열차",
+    grade: 4,
+    description: "일주일 내내 멈추지 않고 달렸습니다.",
+  }),
+  [HIDDEN_LADDER.wins5]: hidden({
+    emoji: "💎",
+    name: "연전연승",
+    grade: 5,
+    description: "행운이 다섯 번 연달아 찾아왔습니다.",
+  }),
+  [HIDDEN_LADDER.days10]: hidden({
+    emoji: "🌋",
+    name: "불꽃 행진",
+    grade: 5,
+    description: "열흘 내내 테이블의 열기가 식지 않았습니다.",
   }),
 };
