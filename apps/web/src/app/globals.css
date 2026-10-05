@@ -163,17 +163,17 @@ html {
     opacity: 0;
     transform: scale(0.2) rotate(0deg);
   }
-  12% {
+  14% {
     opacity: 1;
-    transform: scale(1.25) rotate(25deg);
+    transform: scale(1.25) rotate(28deg);
   }
-  26% {
-    opacity: 0.25;
-    transform: scale(0.6) rotate(60deg);
+  34% {
+    opacity: 0.55;
+    transform: scale(0.8) rotate(65deg);
   }
-  40% {
+  58% {
     opacity: 0;
-    transform: scale(0.2) rotate(90deg);
+    transform: scale(0.2) rotate(100deg);
   }
 }
 
@@ -342,6 +342,11 @@ html {
   width: 34px;
   height: 34px;
   font-size: 16px;
+}
+@utility badge-size-row {
+  width: 40px;
+  height: 40px;
+  font-size: 19px;
 }
 @utility badge-size-sm {
   width: 44px;

@@ -47,6 +47,7 @@ const ribbon = cva(
 
 const SIZE_CLASS = {
   xs: "badge-size-xs",
+  row: "badge-size-row",
   sm: "badge-size-sm",
   md: "badge-size-md",
   lg: "badge-size-lg",

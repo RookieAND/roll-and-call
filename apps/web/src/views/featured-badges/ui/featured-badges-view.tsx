@@ -1,7 +1,12 @@
 import { VStack } from "@roll-and-call/ui";
 
-import { featuredOptions, heldBadges, monthLabel, resolveFeaturedEntry } from "@/entities/badge";
-import { profileDisplay } from "@/entities/profile";
+import {
+  badgeRequirement,
+  featuredOptions,
+  heldBadges,
+  monthLabel,
+  resolveFeaturedEntry,
+} from "@/entities/badge";
 import { LoginRequired } from "@/features/auth";
 import { FeaturedBadgePicker } from "@/features/pick-featured-badges";
 import {
@@ -17,7 +22,7 @@ export async function FeaturedBadgesView() {
   if (!user) {
     return (
       <>
-        <AppBar back="/me/badges" title="대표 뱃지" />
+        <AppBar back="/me/badges" title="대표 뱃지 설정" />
         <VStack className="py-300">
           <LoginRequired />
         </VStack>
@@ -30,7 +35,6 @@ export async function FeaturedBadgesView() {
     getProfile(server.id, user.id),
     getUserBadges(server.id, user.id),
   ]);
-  const { name, avatar } = profileDisplay({ profile, user });
   const held = heldBadges(records);
   const choices = featuredOptions(held).map(({ entry, badge }) => ({
     key: entry,
@@ -38,6 +42,13 @@ export async function FeaturedBadgesView() {
     name: badge.name,
     look: badge.look,
     tag: badge.monthKey ? monthLabel(badge.monthKey) : null,
+    role: badge.role,
+    ladder: badge.ladder,
+    requirement: badgeRequirement({
+      ladder: badge.ladder,
+      step: badge.step,
+      categoryName: badge.categoryName,
+    }),
   }));
   const initialKeys = (profile?.featuredBadges ?? []).filter((entry) =>
     resolveFeaturedEntry(entry, held),
@@ -45,14 +56,9 @@ export async function FeaturedBadgesView() {
 
   return (
     <>
-      <AppBar back="/me/badges" title="대표 뱃지" />
+      <AppBar back="/me/badges" title="대표 뱃지 설정" />
       {choices.length > 0 ? (
-        <FeaturedBadgePicker
-          choices={choices}
-          initialKeys={initialKeys}
-          name={name}
-          avatarUrl={avatar}
-        />
+        <FeaturedBadgePicker choices={choices} initialKeys={initialKeys} />
       ) : (
         <VStack className="py-300">
           <EmptyState

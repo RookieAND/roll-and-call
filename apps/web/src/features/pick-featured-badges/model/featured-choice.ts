@@ -1,4 +1,4 @@
-import type { BadgeLook } from "@roll-and-call/database/badges/model";
+import type { BadgeLadderKey, BadgeLook, BadgeRole } from "@roll-and-call/database/badges/model";
 
 export type FeaturedChoice = {
   key: string;
@@ -6,4 +6,7 @@ export type FeaturedChoice = {
   name: string;
   look: BadgeLook;
   tag: string | null;
+  role: BadgeRole;
+  ladder: BadgeLadderKey;
+  requirement: string;
 };

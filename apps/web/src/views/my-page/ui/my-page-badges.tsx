@@ -1,7 +1,7 @@
 import { Button, HStack, Progress, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { ATTENDANCE_HINT, BadgeMedal, type nextBadgeGoal } from "@/entities/badge";
+import { BadgeMedal, type nextBadgeGoal } from "@/entities/badge";
 import { LineBreaks, ServerLink } from "@/shared/ui";
 
 import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";

@@ -24,13 +24,12 @@ const pill = cva(
   },
 );
 
-// 알약 가장자리 반짝이: [왼쪽 %, 위 %, 크기 px, 주기 s, 지연 s]
+// 알약 가장자리 반짝이: [왼쪽 %, 위 %, 크기 px, 주기 s]
 const PILL_SPARKS = [
-  [-3, 4, 9, 2.2, 0.1],
-  [20, 106, 7, 2.7, 0.9],
-  [48, -5, 9, 2.1, 0.4],
-  [76, 105, 7, 2.3, 1.1],
-  [99, 30, 9, 2.6, 1.3],
+  [-3, 4, 9, 1.7],
+  [24, 106, 7, 2.1],
+  [62, -5, 9, 1.6],
+  [99, 40, 9, 2.0],
 ] as const;
 
 const PILL_SPARK_COLORS: Partial<Record<BadgeLook, string[]>> = {
@@ -57,6 +56,7 @@ interface BadgePillProps {
 export function BadgePill({ emoji, name, look, tag, size = "md", className }: BadgePillProps) {
   const shines = look !== 1 && look !== 2 && look !== 3;
   const sparkColors = PILL_SPARK_COLORS[look];
+  const glyph = look === "developer" || look === "guildMaster" ? "✧" : "✦";
   return (
     <span title={name} className={cn(pill({ look, size }), className)}>
       <span
@@ -78,25 +78,28 @@ export function BadgePill({ emoji, name, look, tag, size = "md", className }: Ba
         />
       )}
       {sparkColors &&
-        PILL_SPARKS.map(([left, top, fontSize, duration, delay], index) => (
-          <span
-            key={left}
-            aria-hidden
-            className={`pointer-events-none absolute animate-badge-twinkle leading-none ${sparkColors[index % sparkColors.length]}`}
-            style={
-              {
-                left: `${left}%`,
-                top: `${top}%`,
-                margin: -fontSize / 2,
-                fontSize,
-                "--badge-twinkle-duration": `${duration}s`,
-                "--badge-twinkle-delay": `-${delay}s`,
-              } as React.CSSProperties
-            }
-          >
-            ✦
-          </span>
-        ))}
+        PILL_SPARKS.map(([left, top, fontSize, baseDuration], index) => {
+          const duration = baseDuration * 1.3;
+          return (
+            <span
+              key={left}
+              aria-hidden
+              className={`pointer-events-none absolute animate-badge-twinkle leading-none ${sparkColors[index % sparkColors.length]}`}
+              style={
+                {
+                  left: `${left}%`,
+                  top: `${top}%`,
+                  margin: -fontSize / 2,
+                  fontSize,
+                  "--badge-twinkle-duration": `${duration.toFixed(2)}s`,
+                  "--badge-twinkle-delay": `-${((duration * index) / PILL_SPARKS.length).toFixed(2)}s`,
+                } as React.CSSProperties
+              }
+            >
+              {glyph}
+            </span>
+          );
+        })}
     </span>
   );
 }
