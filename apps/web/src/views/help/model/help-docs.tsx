@@ -72,6 +72,7 @@ export type HelpDoc = {
   slug: string;
   category: HelpCategory;
   title: string;
+  description: string;
   lead?: ReactNode;
   blocks: HelpBlock[];
   related: string[];
@@ -82,6 +83,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "find-and-join",
     category: HELP_CATEGORY.join,
     title: "구인 찾고 신청하기",
+    description: "참여할 수 있는 구인을 찾고, 조건을 확인한 뒤 신청하는 방법을 안내합니다.",
     blocks: [
       {
         kind: HELP_BLOCK.steps,
@@ -131,6 +133,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "recruit-methods",
     category: HELP_CATEGORY.join,
     title: "선착순과 추첨은 무엇이 다른가요",
+    description: "선착순과 추첨 모집이 어떻게 다르고 결과가 어떻게 정해지는지 설명합니다.",
     lead: (
       <>
         모집 방식은 GM이 등록할 때 고릅니다.
@@ -212,6 +215,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "schedule-grid",
     category: HELP_CATEGORY.join,
     title: "일정 조율 격자 쓰는 법",
+    description: "일정 조율 격자에서 가능한 시간을 칠하고 저장하는 방법을 안내합니다.",
     lead: (
       <>
         격자는 참여자들이 가능한 시간을 겹쳐서 보여 줍니다.
@@ -279,6 +283,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "cancel-participation",
     category: HELP_CATEGORY.join,
     title: "참여를 취소하고 싶을 때",
+    description: "신청한 구인의 참여를 취소하는 방법과 취소할 수 없는 경우를 안내합니다.",
     lead: (
       <>
         확정 뒤에는 다른 참여자의 일정이 걸려 있습니다.
@@ -373,6 +378,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "after-session",
     category: HELP_CATEGORY.join,
     title: "세션이 끝난 뒤: 출석과 후기",
+    description: "세션이 끝난 뒤 GM의 출석 확인과 후기 작성이 어떻게 이어지는지 안내합니다.",
     lead: (
       <>
         세션이 끝나면 GM이 출석을 확인합니다.
@@ -445,6 +451,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "rulebook-cert",
     category: HELP_CATEGORY.host,
     title: "GM이 되려면: 룰북 인증",
+    description: "GM이 되기 위해 룰북을 인증하는 절차와 필요한 증빙을 안내합니다.",
     lead: (
       <>
         "인증 필요" 룰로 구인을 열려면 룰북을 인증해야 합니다.
@@ -512,6 +519,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "create-game",
     category: HELP_CATEGORY.host,
     title: "구인 등록하기",
+    description: "구인 정보와 참여 전 안내를 채워 새 구인을 등록하는 방법을 안내합니다.",
     lead: (
       <>
         구인 목록 오른쪽 위 [+ 새 구인]에서 시작합니다.
@@ -582,6 +590,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "manage-roster",
     category: HELP_CATEGORY.host,
     title: "참여자 관리와 세션 운영",
+    description: "GM이 참여자 명단을 관리하고 세션을 운영하는 방법을 안내합니다.",
     lead: (
       <>
         구인 상세 → [운영 관리]에서 시작합니다.
@@ -661,6 +670,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "notifications",
     category: HELP_CATEGORY.account,
     title: "알림 받기",
+    description: "디스코드 알림을 받는 조건과 설정 방법을 안내합니다.",
     lead: (
       <>
         롤앤콜의 알림은 알림 탭과 디스코드 구인 글로 옵니다.
@@ -730,6 +740,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "profile-links",
     category: HELP_CATEGORY.account,
     title: "프로필과 업적",
+    description: "프로필에 표시되는 정보와 업적(배지)이 어떻게 쌓이는지 안내합니다.",
     lead: (
       <>
         프로필은 디스코드 서버마다 따로 만듭니다.
@@ -799,6 +810,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "status-glossary",
     category: HELP_CATEGORY.account,
     title: "상태 용어 사전",
+    description: "구인과 참여 화면에 나오는 상태 이름의 뜻을 한곳에 모아 설명합니다.",
     blocks: [
       {
         kind: HELP_BLOCK.terms,
@@ -952,6 +964,7 @@ export const HELP_DOCS: HelpDoc[] = [
     slug: "monthly-score",
     category: HELP_CATEGORY.account,
     title: "이 달의 기록 순위는 어떻게 정해지나요?",
+    description: "이 달의 기록 순위가 어떤 점수로 정해지는지 설명합니다.",
     blocks: [
       {
         kind: HELP_BLOCK.terms,

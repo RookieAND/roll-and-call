@@ -13,7 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const doc = HELP_DOCS.find((candidate) => candidate.slug === slug);
-  return { title: doc?.title ?? "도움말" };
+  return doc ? { title: doc.title, description: doc.description } : { title: "도움말" };
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
