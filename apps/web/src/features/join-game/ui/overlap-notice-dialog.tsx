@@ -22,7 +22,7 @@ export function OverlapNoticeDialog({ overlapGameId, onClose }: OverlapNoticeDia
     <Dialog.Root open={overlapGameId !== null} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Popup>
         <Dialog.Header>
-          <Dialog.Title>신청할 수 없습니다</Dialog.Title>
+          <Dialog.Title>세션을 신청할 수 없습니다</Dialog.Title>
           <Dialog.Description>
             <LineBreaks lines={BODY_LINES} />
           </Dialog.Description>
