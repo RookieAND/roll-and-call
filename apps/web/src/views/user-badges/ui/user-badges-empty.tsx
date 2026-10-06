@@ -24,5 +24,5 @@ interface UserBadgesEmptyProps {
 }
 
 export function UserBadgesEmpty({ tab }: UserBadgesEmptyProps) {
-  return <EmptyState size="section" {...EMPTY_COPY[tab]} />;
+  return <EmptyState size="section" className="mt-200" {...EMPTY_COPY[tab]} />;
 }
