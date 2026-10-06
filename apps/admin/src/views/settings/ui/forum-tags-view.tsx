@@ -4,11 +4,7 @@ import { Button, HStack, Select, Text, VStack, toast } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
-import {
-  saveForumTagsAction,
-  type ForumTagForm,
-  type ForumTagOptions,
-} from "@/features/edit-forum-tags";
+import type { ForumTagForm, ForumTagOptions } from "@/features/edit-forum-tags";
 import { Panel } from "@/shared/ui";
 
 import { SettingsFrame } from "./settings-frame";
@@ -16,6 +12,8 @@ import { SettingsFrame } from "./settings-frame";
 const NONE = "none";
 
 interface ForumTagsViewProps {
+  // 서버 전용 모듈이 클라이언트 번들에 들어가지 않게 페이지가 서버 액션을 넘긴다.
+  onSave: (form: ForumTagForm) => Promise<{ ok: boolean }>;
   options: ForumTagOptions;
   categories: { id: string; name: string }[];
   saved: ForumTagForm;
@@ -57,7 +55,7 @@ function TagSelect({
   );
 }
 
-export function ForumTagsView({ options, categories, saved }: ForumTagsViewProps) {
+export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsViewProps) {
   const router = useRouter();
   const [saving, startSaving] = useTransition();
   const [form, setForm] = useState(saved);
@@ -65,7 +63,7 @@ export function ForumTagsView({ options, categories, saved }: ForumTagsViewProps
 
   const save = () =>
     startSaving(async () => {
-      const result = await saveForumTagsAction(form);
+      const result = await onSave(form);
       if (result.ok) toast.success("포럼 태그를 저장했습니다");
       router.refresh();
     });

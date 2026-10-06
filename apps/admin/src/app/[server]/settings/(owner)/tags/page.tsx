@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { loadForumTagOptions } from "@/features/edit-forum-tags";
+import { loadForumTagOptions, saveForumTagsAction } from "@/features/edit-forum-tags";
 import { getCurrentServer, listRulebookCategories } from "@/shared/server";
 import { ForumTagsView } from "@/views/settings";
 
@@ -15,6 +15,7 @@ export default async function SettingsTagsPage() {
   const saved = server.forumTags;
   return (
     <ForumTagsView
+      onSave={saveForumTagsAction}
       options={options}
       categories={categories}
       saved={{
