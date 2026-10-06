@@ -34,7 +34,6 @@ export function GameFilterSheet({ filter, count }: GameFilterSheetProps) {
   const [draftCount, setDraftCount] = useState(count);
   const [counting, setCounting] = useState(false);
   const requestRef = useRef(0);
-  const empty = !counting && draftCount === 0;
 
   function changeOpen(nextOpen: boolean) {
     if (nextOpen) {

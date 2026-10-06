@@ -1,4 +1,4 @@
-import { Sheet, Text, VStack } from "@roll-and-call/ui";
+import { Sheet, VStack } from "@roll-and-call/ui";
 
 import { RosterGmGroup, type RosterSheetGm } from "./roster-gm-group";
 import { RosterGroup } from "./roster-group";

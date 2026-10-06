@@ -1,17 +1,11 @@
 "use client";
 
-import { Sheet, Text, cn } from "@roll-and-call/ui";
+import { Sheet, cn } from "@roll-and-call/ui";
 import { Check, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
 
-import {
-  GAME_SORT,
-  GAME_SORTS,
-  type GameSort,
-  type GamesFilter,
-  parseGameSort,
-} from "@/shared/api";
+import { GAME_SORTS, type GameSort, type GamesFilter, parseGameSort } from "@/shared/api";
 import { useServerPath } from "@/shared/lib";
 
 import { filterParams } from "../lib/filter-params";
