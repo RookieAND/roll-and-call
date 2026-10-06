@@ -41,7 +41,7 @@ export function SlotNumber({ value }: SlotNumberProps) {
       <span className="sr-only">{value}</span>
       <span
         aria-hidden
-        className="flex flex-col items-end"
+        className="flex flex-col items-center"
         style={{ transform: `translateY(-${offset}em)`, transition }}
         onTransitionEnd={() => setPhase("stopped")}
       >
