@@ -94,7 +94,7 @@ export function HomeCalendar({
               today={cell.key === todayKey}
             />
           ) : (
-            <Skeleton key={cell.key} rounded={300} className="h-12" />
+            <Skeleton key={cell.key} rounded={300} className="h-14" />
           ),
         )}
       </Grid>

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, HStack, Text } from "@roll-and-call/ui";
+import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 import type { MouseEvent } from "react";
 
@@ -8,10 +8,9 @@ import { useServerPath } from "@/shared/lib";
 
 import type { MonthCell } from "../model/build-month-cells";
 import { CALENDAR_CELL_TONE, calendarCellState } from "../model/calendar-cell-tone";
+import { MAX_CALENDAR_DOTS, splitDotRows } from "../model/split-dot-rows";
 import type { CalendarSession } from "../model/to-calendar-sessions";
 import { WEEKDAY_TONE } from "../model/weekday-tone";
-
-const MAX_DOTS = 3;
 
 interface HomeCalendarCellProps {
   cell: MonthCell;
@@ -32,7 +31,7 @@ export function HomeCalendarCell({
   const toServerPath = useServerPath();
   const mine = sessions.find((session) => session.mine);
   const lead = mine ?? sessions[0];
-  const overflow = sessions.length > MAX_DOTS;
+  const overflow = sessions.length > MAX_CALENDAR_DOTS;
   const dots = mine ? [mine, ...sessions.filter((session) => session !== mine)] : sessions;
   const dayLabel = holidayNames ? `${cell.label} ${holidayNames.join("·")}` : cell.label;
   const ariaLabel = sessions.length > 0 ? `${dayLabel} 세션 ${sessions.length}건` : dayLabel;
@@ -62,7 +61,7 @@ export function HomeCalendarCell({
       aria-label={ariaLabel}
       aria-current={selected ? "date" : undefined}
       className={cn(
-        "flex h-12 min-w-0 flex-col gap-075 rounded-300 px-050 pt-100 pb-075 transition-colors",
+        "flex h-14 min-w-0 flex-col gap-075 rounded-300 px-050 pt-100 pb-075 transition-colors",
         tone.cell,
       )}
     >
@@ -75,17 +74,31 @@ export function HomeCalendarCell({
         {cell.day}
       </Text>
       {lead && (
-        <HStack
+        <VStack
           aria-hidden
           align="center"
           justify="center"
           gap="050"
           render={<span />}
-          className="h-3"
+          className="min-h-3"
         >
           {!overflow &&
-            dots.map((session) => (
-              <span key={session.id} className={cn("size-1.5 rounded-full", dotTone(session))} />
+            splitDotRows(dots).map((row) => (
+              <HStack
+                key={row[0]?.id}
+                align="center"
+                justify="center"
+                gap="050"
+                render={<span />}
+                className="h-1.5"
+              >
+                {row.map((session) => (
+                  <span
+                    key={session.id}
+                    className={cn("size-1.5 rounded-full", dotTone(session))}
+                  />
+                ))}
+              </HStack>
             ))}
           {overflow && (
             <Text
@@ -102,7 +115,7 @@ export function HomeCalendarCell({
               {sessions.length}
             </Text>
           )}
-        </HStack>
+        </VStack>
       )}
       {today && sessions.length === 0 && (
         <Text
