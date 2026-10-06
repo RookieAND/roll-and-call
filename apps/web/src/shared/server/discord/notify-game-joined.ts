@@ -6,7 +6,7 @@ import {
   messageHeadInput,
   messageText,
 } from "@roll-and-call/game-notices";
-import { headcountFields, memberMention } from "@roll-and-call/game-notices";
+import { headcountFields, memberMention, memberNoticeLine } from "@roll-and-call/game-notices";
 
 type JoinInfo = {
   applicantId: string;
@@ -50,6 +50,10 @@ export async function notifyGameJoined({
         serverId: server.id,
         key: "apply",
         values: gameHeadValues({ server, game, gmName }),
+        ...(await memberNoticeLine({
+          userId: applicantId,
+          text: isWaiting ? "님이 세션에 대기로 신청하셨어요." : "님이 세션에 참여하셨어요.",
+        })),
       })),
     },
   });

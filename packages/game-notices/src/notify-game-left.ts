@@ -6,6 +6,7 @@ import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
 import { memberMention } from "./member-mention";
+import { memberNoticeLine } from "./member-notice-line";
 import { gameHeadValues, messageHeadInput } from "./message-head-input";
 import { messageText } from "./message-text";
 
@@ -57,10 +58,17 @@ export async function notifyGameLeft({
         serverId: server.id,
         key: "leave",
         values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+        ...(await memberNoticeLine({ userId, text: LEFT_LINE[textKey] })),
       })),
     },
   });
 }
+
+const LEFT_LINE = {
+  leave: "님이 세션 참여를 취소하셨어요.",
+  leave_gm: "님이 참여 목록에서 제외되었어요.",
+  leave_server: "님이 서버를 나가 참여가 취소되었어요.",
+} as const;
 
 function leftTextKey({ leftServer, removedByGm }: { leftServer: boolean; removedByGm: boolean }) {
   if (leftServer) return "leave_server";

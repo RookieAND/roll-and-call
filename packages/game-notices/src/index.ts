@@ -20,3 +20,4 @@ export { STAFF_NOTICE_KIND, type StaffNotice } from "./staff-notice-kind";
 export { gameHeadValues, messageHeadInput } from "./message-head-input";
 export { messageText } from "./message-text";
 export { memberMention } from "./member-mention";
+export { memberNoticeLine } from "./member-notice-line";
