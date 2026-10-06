@@ -42,7 +42,7 @@ export function PreviewEmbed({ spec, description }: PreviewEmbedProps) {
         </div>
       ) : null}
       <div className="flex items-center gap-075 text-body4" style={{ color: DISCORD.muted }}>
-        <span>GM 새벽세시</span>
+        <span>{spec.footer ?? "GM 새벽세시"}</span>
       </div>
       {spec.button ? (
         <span

@@ -17,10 +17,18 @@ interface MessagesViewProps {
   heads: Record<MessageCaseKey, { headLine: string; updatedAt: Date | null }>;
   texts: Record<MessageTextKey, { body: string; updatedAt: Date | null }>;
   guildRoles?: MessageRole[];
+  recruitForum: boolean;
   readOnly: boolean;
 }
 
-export function MessagesView({ selected, heads, texts, guildRoles, readOnly }: MessagesViewProps) {
+export function MessagesView({
+  selected,
+  heads,
+  texts,
+  guildRoles,
+  recruitForum,
+  readOnly,
+}: MessagesViewProps) {
   const current = MESSAGE_CASES.find((messageCase) => messageCase.key === selected)!;
   const currentTexts = messageTextsOfCase(selected).map((text) => ({
     key: text.key,
@@ -113,6 +121,7 @@ export function MessagesView({ selected, heads, texts, guildRoles, readOnly }: M
             savedHead={heads[selected].headLine}
             savedAt={heads[selected].updatedAt?.toISOString() ?? null}
             guildRoles={guildRoles}
+            recruitForum={recruitForum}
             readOnly={readOnly}
           />
         </Panel>

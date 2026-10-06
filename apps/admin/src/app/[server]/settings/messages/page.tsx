@@ -1,7 +1,7 @@
 import { MESSAGE_CASES, type MessageCaseKey } from "@roll-and-call/database/servers/model";
 import type { Metadata } from "next";
 
-import { loadMessageRoles } from "@/features/edit-discord-messages";
+import { loadMessageRoles, loadRecruitForum } from "@/features/edit-discord-messages";
 import { getCurrentServer, getMessageHeads, getMessageTexts, requireStaff } from "@/shared/server";
 import { MessagesView } from "@/views/settings";
 
@@ -19,10 +19,11 @@ export default async function SettingsMessagesPage({
   const selected =
     MESSAGE_CASES.find((messageCase) => messageCase.key === query.case)?.key ??
     ("open" satisfies MessageCaseKey);
-  const [heads, texts, guildRoles] = await Promise.all([
+  const [heads, texts, guildRoles, recruitForum] = await Promise.all([
     getMessageHeads({ serverId: server.id }),
     getMessageTexts({ serverId: server.id }),
     loadMessageRoles(server.discordGuildId),
+    loadRecruitForum(server.recruitChannelId),
   ]);
   return (
     <MessagesView
@@ -30,6 +31,7 @@ export default async function SettingsMessagesPage({
       heads={heads}
       texts={texts}
       guildRoles={guildRoles}
+      recruitForum={recruitForum}
       readOnly={viewer.role !== "owner"}
     />
   );

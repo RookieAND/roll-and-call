@@ -9,7 +9,7 @@ import Image from "next/image";
 
 import { DISCORD } from "../model/discord-theme";
 import type { MessageRole } from "../model/message-role";
-import { PREVIEW_EMBED_SPECS } from "../model/preview-embed-specs";
+import { OPEN_EMBED_SPEC, PREVIEW_EMBED_SPECS } from "../model/preview-embed-specs";
 import { Mention } from "./discord-mention";
 import { PreviewEmbed } from "./preview-embed";
 import { PreviewMonthly } from "./preview-monthly";
@@ -87,6 +87,8 @@ interface DiscordPreviewProps {
   // 머리 줄 아래, 임베드 위에 붙는 본문 줄 미리보기.
   bodyLine?: { key: MessageTextKey; text: string };
   guildRoles?: MessageRole[];
+  // 모집 채널이 포럼이면 구인 개설이 평문으로 나간다.
+  recruitForum?: boolean;
   loading?: boolean;
 }
 
@@ -97,6 +99,7 @@ export function DiscordPreview({
   description,
   bodyLine,
   guildRoles,
+  recruitForum = false,
   loading,
 }: DiscordPreviewProps) {
   const nodes = loading
@@ -117,7 +120,8 @@ export function DiscordPreview({
         guildRoles,
       })
     : null;
-  const embedSpec = PREVIEW_EMBED_SPECS[caseKey];
+  const embedSpec =
+    caseKey === "open" && !recruitForum ? OPEN_EMBED_SPEC : PREVIEW_EMBED_SPECS[caseKey];
   return (
     <div
       className="flex gap-150 rounded-400 px-200 py-150"
@@ -148,7 +152,7 @@ export function DiscordPreview({
         {bodyNodes ? (
           <div className="leading-[22px] [overflow-wrap:anywhere]">{bodyNodes}</div>
         ) : null}
-        {caseKey === "open" ? <PreviewPlain /> : null}
+        {caseKey === "open" && recruitForum ? <PreviewPlain /> : null}
         {caseKey === "monthly" ? <PreviewMonthly /> : null}
         {embedSpec ? <PreviewEmbed spec={embedSpec} description={descriptionNodes} /> : null}
       </div>
