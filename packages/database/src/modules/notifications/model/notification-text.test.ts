@@ -26,17 +26,17 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.participationConfirmed, params: game },
     "검은 산의 노래 참여가 확정되었습니다.",
-    null,
+    "구인 글에서 세션 정보를 확인해 주세요.",
   ],
   [
     { kind: NOTIFICATION_KIND.movedToWaitlist, params: { ...game, waitlistRank: 2 } },
     "검은 산의 노래에서 대기로 옮겨졌습니다.",
-    "대기 2번",
+    "현재 대기 2번입니다.",
   ],
   [
     { kind: NOTIFICATION_KIND.removedFromRoster, params: game },
     "검은 산의 노래 참여 목록에서 제외되었습니다.",
-    null,
+    "자세한 내용은 GM에게 문의해 주세요.",
   ],
   [
     { kind: NOTIFICATION_KIND.seatOpened, params: game },
@@ -46,7 +46,7 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.participantLeft, params: { ...game, nickname: "새벽별" } },
     "새벽별님이 검은 산의 노래 참여를 취소했습니다.",
-    null,
+    "남은 자리를 확인해 주세요.",
   ],
   [
     { kind: NOTIFICATION_KIND.drawWon, params: game },
@@ -56,22 +56,22 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.drawWaitlisted, params: { ...game, waitlistRank: 1 } },
     "검은 산의 노래 추첨 결과 대기 1번입니다.",
-    "자리가 나면 GM이 대기 명단에서 확정합니다.",
+    "자리가 나면 GM이 확정합니다.",
   ],
   [
     { kind: NOTIFICATION_KIND.lotteryScheduleConfirmed, params: game },
     "검은 산의 노래 일정이 확정되었습니다.",
-    null,
+    "구인 글에서 일정을 확인해 주세요.",
   ],
   [
     { kind: NOTIFICATION_KIND.lotteryParticipationConfirmed, params: game },
     "검은 산의 노래 참여가 확정되었습니다.",
-    "일정을 조율해 주세요.",
+    "GM과 일정을 조율해 주세요.",
   ],
   [
     { kind: NOTIFICATION_KIND.recruitmentClosedEmpty, params: game },
     "검은 산의 노래 신청자 없이 모집이 끝났습니다.",
-    null,
+    "구인을 다시 올릴 수 있습니다.",
   ],
   [
     {
@@ -79,7 +79,7 @@ const CASES: [NotificationPayload, string, string | null][] = [
       params: { ...game, startsAt: "2026-09-27T11:00:00.000Z" },
     },
     "검은 산의 노래 세션 시간이 정해졌습니다.",
-    "9월 27일 (일) 20:00",
+    "9월 27일 (일) 20:00에 진행됩니다.",
   ],
   [
     {
@@ -107,7 +107,7 @@ const CASES: [NotificationPayload, string, string | null][] = [
       params: { ...game, cancelKind: GAME_CANCEL_KIND.gm, reason: null },
     },
     "검은 산의 노래 구인이 취소되었습니다.",
-    null,
+    "GM이 취소했습니다.",
   ],
   [
     {
@@ -130,7 +130,11 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "검은 산의 노래를 운영진이 숨겼습니다.",
     "사유: 도배",
   ],
-  [{ kind: NOTIFICATION_KIND.gameUnhidden, params: game }, "검은 산의 노래가 다시 보입니다.", null],
+  [
+    { kind: NOTIFICATION_KIND.gameUnhidden, params: game },
+    "검은 산의 노래가 다시 보입니다.",
+    "운영진이 숨김을 풀었습니다.",
+  ],
   [
     { kind: NOTIFICATION_KIND.absenceRecorded, params: game },
     "검은 산의 노래 세션에 불참으로 기록되었습니다.",
@@ -144,12 +148,12 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.absenceCancelled, params: game },
     "검은 산의 노래 불참 기록이 취소되었습니다.",
-    null,
+    "불참 횟수에 포함되지 않습니다.",
   ],
   [
     { kind: NOTIFICATION_KIND.absenceRestored, params: game },
     "검은 산의 노래 불참 기록이 다시 남았습니다.",
-    null,
+    "운영진이 취소를 되돌렸습니다.",
   ],
   [
     { kind: NOTIFICATION_KIND.attendanceAutoConfirmed, params: game },
@@ -159,12 +163,12 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.reviewAvailable, params: game },
     "검은 산의 노래 후기를 남길 수 있습니다.",
-    null,
+    "함께한 세션의 후기를 남겨 주세요.",
   ],
   [
     { kind: NOTIFICATION_KIND.certApproved, params: rulebook },
     "인세인 인증이 승인되었습니다.",
-    null,
+    "내 인증 목록에서 확인할 수 있습니다.",
   ],
   [
     {
@@ -177,7 +181,7 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.certRevoked, params: { ...rulebook, cancelledGameCount: 2 } },
     "인세인 인증이 반려로 바뀌었습니다.",
-    "열었던 구인 2개가 함께 취소되었습니다.",
+    "구인 2개도 함께 취소되었습니다.",
   ],
   [
     { kind: NOTIFICATION_KIND.certRevoked, params: { ...rulebook, cancelledGameCount: 0 } },
@@ -192,12 +196,12 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.rulebookRequestAdded, params: { rulebookName: "인세인" } },
     "요청한 인세인을 추가했습니다.",
-    null,
+    "이제 구인에서 선택할 수 있습니다.",
   ],
   [
     { kind: NOTIFICATION_KIND.rulebookRequestDeclined, params: { rulebookName: "인세인" } },
     "요청한 인세인은 추가하지 않았습니다.",
-    null,
+    "자세한 내용은 운영진에게 문의해 주세요.",
   ],
   [
     { kind: NOTIFICATION_KIND.reviewHidden, params: { ...game, reason: "스포일러" } },
@@ -207,7 +211,7 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.reviewUnhidden, params: game },
     "검은 산의 노래 후기가 다시 보입니다.",
-    null,
+    "운영진이 숨김을 풀었습니다.",
   ],
   [
     { kind: NOTIFICATION_KIND.reviewDeleted, params: { ...game, reason: "비방" } },
@@ -227,21 +231,33 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "활동이 정지되었습니다.",
     "사유: 노쇼 반복 · 기간: 해제될 때까지",
   ],
-  [{ kind: NOTIFICATION_KIND.sanctionReleased, params: {} }, "활동 정지가 풀렸습니다.", null],
+  [
+    { kind: NOTIFICATION_KIND.sanctionReleased, params: {} },
+    "활동 정지가 풀렸습니다.",
+    "이제 다시 참여할 수 있습니다.",
+  ],
   [
     { kind: NOTIFICATION_KIND.nicknameChanged, params: { nickname: "새벽별", reason: "부적절" } },
     "운영진이 닉네임을 새벽별로 바꿨습니다.",
     "사유: 부적절",
   ],
-  [{ kind: NOTIFICATION_KIND.staffAdded, params: {} }, "운영진이 되었습니다.", null],
-  [{ kind: NOTIFICATION_KIND.staffRemoved, params: {} }, "운영진에서 빠졌습니다.", null],
+  [
+    { kind: NOTIFICATION_KIND.staffAdded, params: {} },
+    "운영진이 되었습니다.",
+    "운영 메뉴를 사용할 수 있습니다.",
+  ],
+  [
+    { kind: NOTIFICATION_KIND.staffRemoved, params: {} },
+    "운영진에서 빠졌습니다.",
+    "운영 권한이 해제되었습니다.",
+  ],
   [
     {
       kind: NOTIFICATION_KIND.badgeEarned,
       params: { emoji: "🎒", name: "떠돌이", criterion: "세션 10회 참석" },
     },
     "새 업적 🎒 떠돌이를 받았습니다.",
-    "세션 10회 참석",
+    "조건: 세션 10회 참석",
   ],
   [
     {
@@ -254,12 +270,12 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.monthlyAward, params: { month: 9, role: MONTHLY_AWARD_ROLE.gm } },
     "9월의 GM으로 뽑혔습니다.",
-    null,
+    "9월 활약을 인정받았습니다.",
   ],
   [
     { kind: NOTIFICATION_KIND.monthlyAward, params: { month: 9, role: MONTHLY_AWARD_ROLE.pl } },
     "9월의 PL로 뽑혔습니다.",
-    null,
+    "9월 활약을 인정받았습니다.",
   ],
 ];
 
@@ -317,7 +333,7 @@ describe("notificationText", () => {
         kind: NOTIFICATION_KIND.sessionTimeSet,
         params: { ...game, startsAt: "2026-09-26T15:00:00.000Z" },
       }).sub,
-    ).toBe("9월 27일 (일) 00:00");
+    ).toBe("9월 27일 (일) 00:00에 진행됩니다.");
   });
 
   it("문구에 작은따옴표·엠대시·금지어가 없다", () => {
