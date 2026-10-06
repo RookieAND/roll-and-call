@@ -5,6 +5,7 @@ import {
   MESSAGE_HEAD_MAX_LENGTH,
   messageVariables,
   validateMessageHead,
+  validateMessageText,
   type MessageCaseKey,
   type MessageTextKey,
 } from "@roll-and-call/database/servers/model";
@@ -15,6 +16,7 @@ import { useRef, useState, useTransition } from "react";
 import { conflictToastText } from "@/shared/lib";
 
 import { saveMessageHeadAction } from "../api/save-message-head";
+import { saveMessageTextAction } from "../api/save-message-text";
 import type { MessageRole } from "../model/message-role";
 import { UNKNOWN_ROLE_WARNING, unknownRoleIds } from "../model/unknown-role-ids";
 import { DiscordPreview } from "./discord-preview";
@@ -85,8 +87,12 @@ export function MessageEditor({
 
   const length = [...text].length;
   const error = validateMessageHead({ key: caseKey, text: text.trim() });
-  const dirty = text.trim() !== savedHead;
   const disabled = readOnly || saving;
+  const dirtyTexts = texts.filter((item) => (drafts[item.key] ?? "").trim() !== item.savedBody);
+  const textError = dirtyTexts.some((item) =>
+    validateMessageText({ key: item.key, text: (drafts[item.key] ?? "").trim() }),
+  );
+  const dirty = text.trim() !== savedHead || dirtyTexts.length > 0;
   const warning =
     guildRoles && unknownRoleIds({ text, guildRoleIds: guildRoles.map(({ id }) => id) }).length > 0
       ? UNKNOWN_ROLE_WARNING
@@ -104,26 +110,34 @@ export function MessageEditor({
     startSaving(async () => {
       setFailed(false);
       try {
-        const result = await saveMessageHeadAction({
-          key: caseKey,
-          headLine: text,
-          expectedUpdatedAt: savedAt,
-        });
-        if (result.ok) {
-          toast.success(`「${label}」 메시지를 저장했습니다`);
-        } else if ("conflict" in result) {
+        const results = await Promise.all([
+          ...(text.trim() !== savedHead
+            ? [saveMessageHeadAction({ key: caseKey, headLine: text, expectedUpdatedAt: savedAt })]
+            : []),
+          ...dirtyTexts.map((item) =>
+            saveMessageTextAction({
+              key: item.key,
+              body: drafts[item.key] ?? "",
+              expectedUpdatedAt: item.savedAt,
+            }),
+          ),
+        ]);
+        const conflict = results.find((result) => !result.ok && "conflict" in result);
+        if (conflict && !conflict.ok && "conflict" in conflict) {
           toast.info(
             conflictToastText({
-              conflict: result.conflict.at
-                ? { by: result.conflict.by, at: result.conflict.at }
+              conflict: conflict.conflict.at
+                ? { by: conflict.conflict.by, at: conflict.conflict.at }
                 : null,
               self: false,
               target: "메시지",
             }),
           );
-        } else {
+        } else if (results.some((result) => !result.ok)) {
           setFailed(true);
           return;
+        } else {
+          toast.success(`「${label}」 메시지를 저장했습니다`);
         }
         router.refresh();
       } catch {
@@ -150,6 +164,15 @@ export function MessageEditor({
           <Text typography="body4" weight="bold" foreground="muted">
             머리 줄
           </Text>
+          <Button
+            variant="ghost"
+            colorPalette="gray"
+            size="sm"
+            disabled={disabled || text === defaultMessageHead(caseKey)}
+            onClick={() => setText(defaultMessageHead(caseKey))}
+          >
+            기본값
+          </Button>
           <Text
             typography="body4"
             numeric
@@ -202,19 +225,6 @@ export function MessageEditor({
           </Callout.Description>
         </Callout.Root>
       ) : null}
-      <HStack align="center" justify="between" gap="100">
-        <Button
-          variant="ghost"
-          colorPalette="gray"
-          disabled={disabled || text === defaultMessageHead(caseKey)}
-          onClick={() => setText(defaultMessageHead(caseKey))}
-        >
-          기본 문구로 되돌리기
-        </Button>
-        <Button loading={saving} disabled={disabled || !dirty || Boolean(error)} onClick={save}>
-          저장
-        </Button>
-      </HStack>
       {SECTIONS.map(({ place, title, hint }) => {
         const sectionTexts = texts.filter((item) => item.place === place);
         if (sectionTexts.length === 0) return null;
@@ -232,19 +242,30 @@ export function MessageEditor({
             </VStack>
             {sectionTexts.map((item) => (
               <MessageTextEditor
-                key={`${item.key}:${item.savedAt ?? ""}`}
+                key={item.key}
                 textKey={item.key}
                 label={item.label}
-                savedBody={item.savedBody}
-                savedAt={item.savedAt}
-                readOnly={readOnly}
-                onDraftChange={(draft) => setDrafts({ ...drafts, [item.key]: draft })}
+                value={drafts[item.key] ?? ""}
+                disabled={disabled}
+                onChange={(draft) => setDrafts({ ...drafts, [item.key]: draft })}
                 onActivate={() => setActive({ ...active, [place]: item.key })}
               />
             ))}
           </VStack>
         );
       })}
+      <HStack
+        justify="end"
+        className="sticky bottom-0 border-t border-(--rc-color-border-subtle) bg-surface py-100"
+      >
+        <Button
+          loading={saving}
+          disabled={disabled || !dirty || Boolean(error) || textError}
+          onClick={save}
+        >
+          저장
+        </Button>
+      </HStack>
     </VStack>
   );
 }

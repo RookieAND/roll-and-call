@@ -8,6 +8,10 @@ export const DISCORD = {
   brand: "#5865f2", // tokens-check-ignore
   link: "#00a8fc", // tokens-check-ignore
   confirmed: "#57f287", // tokens-check-ignore
+  recruit: "#5865f2", // tokens-check-ignore
+  left: "#99aab5", // tokens-check-ignore
+  complete: "#eb459e", // tokens-check-ignore
+  cancelled: "#ed4245", // tokens-check-ignore
   mention: "rgba(88,101,242,.3)",
   mentionText: "#c9cdfb", // tokens-check-ignore
   unknownRole: "rgba(148,155,164,.25)",

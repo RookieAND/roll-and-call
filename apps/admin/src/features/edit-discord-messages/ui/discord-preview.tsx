@@ -9,8 +9,11 @@ import Image from "next/image";
 
 import { DISCORD } from "../model/discord-theme";
 import type { MessageRole } from "../model/message-role";
+import { PREVIEW_EMBED_SPECS } from "../model/preview-embed-specs";
 import { Mention } from "./discord-mention";
 import { PreviewEmbed } from "./preview-embed";
+import { PreviewMonthly } from "./preview-monthly";
+import { PreviewPlain } from "./preview-plain";
 
 const SAMPLE: Record<string, string> = {
   "구인 제목": "달그림자 여관",
@@ -87,7 +90,7 @@ interface DiscordPreviewProps {
   loading?: boolean;
 }
 
-// 모든 경우를 한 가지 예시 임베드(칸·푸터·버튼 포함)로 보여 주고 설명 문장만 바꿔 끼운다. 변수는 예시 값으로 바꾼다.
+// 경우마다 실제로 나가는 모양(평문 또는 임베드의 칸·푸터·버튼)으로 보여 주고 설명 문장만 바꿔 끼운다. 변수는 예시 값으로 바꾼다.
 export function DiscordPreview({
   caseKey,
   text,
@@ -114,6 +117,7 @@ export function DiscordPreview({
         guildRoles,
       })
     : null;
+  const embedSpec = PREVIEW_EMBED_SPECS[caseKey];
   return (
     <div
       className="flex gap-150 rounded-400 px-200 py-150"
@@ -144,7 +148,9 @@ export function DiscordPreview({
         {bodyNodes ? (
           <div className="leading-[22px] [overflow-wrap:anywhere]">{bodyNodes}</div>
         ) : null}
-        <PreviewEmbed description={descriptionNodes} />
+        {caseKey === "open" ? <PreviewPlain /> : null}
+        {caseKey === "monthly" ? <PreviewMonthly /> : null}
+        {embedSpec ? <PreviewEmbed spec={embedSpec} description={descriptionNodes} /> : null}
       </div>
     </div>
   );
