@@ -15,6 +15,7 @@ interface GameRecruitFieldsProps {
   form: UseFormReturn<GameFormValues>;
   confirmedCount?: number;
   minPlayersLocked?: boolean;
+  savedMinPlayers?: number | null;
   locked?: boolean;
   preConfirmable?: boolean;
 }
@@ -23,6 +24,7 @@ export function GameRecruitFields({
   form,
   confirmedCount = 1,
   minPlayersLocked = false,
+  savedMinPlayers = null,
   locked = false,
   preConfirmable = false,
 }: GameRecruitFieldsProps) {
@@ -66,8 +68,9 @@ export function GameRecruitFields({
             </Callout.Description>
           </Callout.Root>
         )}
-        <MinPlayersField form={form} locked={minPlayersLocked} />
       </VStack>
+
+      <MinPlayersField form={form} locked={minPlayersLocked} savedMinPlayers={savedMinPlayers} />
 
       {preConfirmable && (
         <PreConfirmedField

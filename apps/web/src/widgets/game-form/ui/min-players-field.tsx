@@ -1,20 +1,26 @@
 "use client";
 
-import { Field, HStack, Text, TextInput } from "@roll-and-call/ui";
+import { Field, Stepper, Text } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
-import type { GameFormValues } from "@/features/write-game";
+import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
 interface MinPlayersFieldProps {
   form: UseFormReturn<GameFormValues>;
   locked: boolean;
+  savedMinPlayers: number | null;
 }
 
-export function MinPlayersField({ form, locked }: MinPlayersFieldProps) {
+// 0은 최소 인원 없음이다. 신청자가 있으면 저장된 값까지만 올릴 수 있다.
+export function MinPlayersField({ form, locked, savedMinPlayers }: MinPlayersFieldProps) {
   const {
-    register,
+    setValue,
+    watch,
     formState: { errors },
   } = form;
+  const minPlayers = Number(watch("minPlayers") || 0);
+  const maxPlayers = Number(watch("maxPlayers"));
+  const ceiling = locked ? (savedMinPlayers ?? 0) : Math.min(maxPlayers, GAME_MAX_PLAYERS);
 
   return (
     <Field.Root error={errors.minPlayers?.message}>
@@ -24,31 +30,23 @@ export function MinPlayersField({ form, locked }: MinPlayersFieldProps) {
           선택
         </Text>
       </Field.Label>
-      <HStack align="center" gap="100">
-        <TextInput
-          id="minPlayers"
-          inputMode="numeric"
-          placeholder="없음"
-          invalid={!!errors.minPlayers}
-          className="w-24"
-          {...register("minPlayers")}
-        />
-        <Text typography="body3">명</Text>
-      </HStack>
+      <Stepper
+        id="minPlayers"
+        value={minPlayers}
+        min={0}
+        max={ceiling}
+        invalid={!!errors.minPlayers}
+        onChange={(count) =>
+          setValue("minPlayers", count === 0 ? "" : String(count), {
+            shouldDirty: true,
+            shouldValidate: true,
+          })
+        }
+      />
       <Text typography="body4" foreground="muted" render={<p />}>
-        {locked ? (
-          <>
-            신청자가 있어 최소 인원은 낮출 수만 있습니다.
-            <br />
-            올리려면 참여자 관리에서 명단을 비운 뒤 바꿔 주세요.
-          </>
-        ) : (
-          <>
-            이 인원이 모이지 않으면
-            <br />
-            마감 때 구인이 자동으로 취소됩니다.
-          </>
-        )}
+        {locked
+          ? "신청자가 있어 낮추기만 할 수 있습니다."
+          : "0이면 없고, 모자라면 마감 때 취소됩니다."}
       </Text>
     </Field.Root>
   );
