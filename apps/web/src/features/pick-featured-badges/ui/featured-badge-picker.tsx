@@ -37,7 +37,11 @@ interface FeaturedBadgePickerProps {
 
 export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePickerProps) {
   const [picked, setPicked] = useState(initialKeys);
-  const [role, setRole] = useState<BadgeRole>(BADGE_ROLE.gm);
+  const countByRole = (target: BadgeRole) =>
+    choices.filter((choice) => choice.role === target).length;
+  const [role, setRole] = useState<BadgeRole>(
+    () => TABS.find((tab) => countByRole(tab.role) > 0)?.role ?? BADGE_ROLE.gm,
+  );
   const { run, pending } = useAction();
   const full = picked.length >= FEATURED_BADGE_LIMIT;
   const pickedChoices = picked.flatMap((key) => choices.filter((choice) => choice.key === key));
@@ -105,11 +109,14 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
       <Tabs.Root value={role} onValueChange={(next) => setRole(next as BadgeRole)}>
         <Tabs.List aria-label="분류" scrollable={false} className="w-full">
           {TABS.map((tab) => (
-            <Tabs.Trigger key={tab.role} value={tab.role} className="flex-1">
+            <Tabs.Trigger
+              key={tab.role}
+              value={tab.role}
+              disabled={countByRole(tab.role) === 0}
+              className="flex-1"
+            >
               {tab.label}
-              <span className="tabular-nums opacity-72">
-                {choices.filter((choice) => choice.role === tab.role).length}
-              </span>
+              <span className="tabular-nums opacity-72">{countByRole(tab.role)}</span>
             </Tabs.Trigger>
           ))}
           <Tabs.Indicator />
