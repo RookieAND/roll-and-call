@@ -33,7 +33,7 @@ export function DrawRollText({ roll, isMe }: DrawRollTextProps) {
       typography={typography}
       weight="extrabold"
       foreground={foreground}
-      className="min-w-8 text-right tracking-tight"
+      className="w-9 text-center tracking-tight"
     >
       <SlotNumber value={roll} />
     </Text>
