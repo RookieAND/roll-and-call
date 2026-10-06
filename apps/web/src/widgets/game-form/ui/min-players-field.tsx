@@ -24,12 +24,7 @@ export function MinPlayersField({ form, locked, savedMinPlayers }: MinPlayersFie
 
   return (
     <Field.Root error={errors.minPlayers?.message}>
-      <Field.Label htmlFor="minPlayers">
-        최소 인원{" "}
-        <Text render={<span />} typography="body4" foreground="muted">
-          선택
-        </Text>
-      </Field.Label>
+      <Field.Label htmlFor="minPlayers">최소 인원</Field.Label>
       <Stepper
         id="minPlayers"
         value={minPlayers}
