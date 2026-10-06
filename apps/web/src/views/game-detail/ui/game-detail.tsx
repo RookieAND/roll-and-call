@@ -78,6 +78,7 @@ export function GameDetail({ game, viewerId, sanction, review, now }: GameDetail
     <>
       <AppBar
         back="/games"
+        backHistory={false}
         title="구인 상세"
         heading={false}
         action={<ShareButton gameId={game.id} title={game.title} />}

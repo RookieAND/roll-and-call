@@ -6,7 +6,7 @@ import { AppBar, ErrorScreen, ServerLink } from "@/shared/ui";
 export function GameHiddenView() {
   return (
     <>
-      <AppBar back="/games" title="구인 상세" />
+      <AppBar back="/games" backHistory={false} title="구인 상세" />
       <ErrorScreen
         image="/empty-states/empty-search.png"
         title="운영진이 숨긴 구인입니다"

@@ -6,7 +6,7 @@ import { AppBar } from "@/shared/ui";
 export function GameDetailSkeleton() {
   return (
     <FloatingBar.Root elevated={false}>
-      <AppBar back="/games" title="구인 상세" />
+      <AppBar back="/games" backHistory={false} title="구인 상세" />
       <Container size="md" className="px-0">
         <VStack gap="200">
           <Skeleton width="100%" height={168} rounded="none" />

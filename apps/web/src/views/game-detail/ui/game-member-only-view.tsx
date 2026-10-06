@@ -16,7 +16,7 @@ export async function GameMemberOnlyView({ id }: GameMemberOnlyViewProps) {
   const gamePath = serverPath({ slug: server.slug, path: `/games/${id}` });
   return (
     <>
-      <AppBar back="/games" title="구인 상세" heading={false} />
+      <AppBar back="/games" backHistory={false} title="구인 상세" heading={false} />
       <Container size="sm">
         <div className="py-300">
           <EmptyState

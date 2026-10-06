@@ -20,6 +20,8 @@ interface AppBarProps {
   heading?: boolean;
   // 진입 경로가 없을 때(직접 URL·디스코드 링크)만 쓰는 폴백. 평소엔 히스토리 뒤로.
   back?: string;
+  // false면 히스토리 대신 항상 back 경로로 간다(구인 상세→구인 목록처럼 정해진 상위 화면).
+  backHistory?: boolean;
   onBack?: () => void;
   backIcon?: "back" | "close";
   action?: ReactNode;
@@ -32,6 +34,7 @@ export function AppBar({
   serverSwitch,
   heading = true,
   back,
+  backHistory = true,
   onBack,
   backIcon = "back",
   action,
@@ -61,7 +64,7 @@ export function AppBar({
           <BackIcon size={22} />
         </IconButton>
       ) : (
-        back && <BackButton fallback={back} />
+        back && <BackButton fallback={back} useHistory={backHistory} />
       )}
       {brand ? (
         <HStack align="center" gap="100" className="min-w-0">

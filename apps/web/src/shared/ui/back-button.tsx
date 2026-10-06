@@ -11,9 +11,11 @@ import { ServerLink } from "./server-link";
 interface BackButtonProps {
   // 서버 화면이면 서버 안 경로("/games")다. slug는 ServerLink가 붙인다.
   fallback: string;
+  // false면 이동 기록과 상관없이 항상 fallback 경로로 간다.
+  useHistory?: boolean;
 }
 
-export function BackButton({ fallback }: BackButtonProps) {
+export function BackButton({ fallback, useHistory = true }: BackButtonProps) {
   const router = useRouter();
 
   return (
@@ -22,7 +24,7 @@ export function BackButton({ fallback }: BackButtonProps) {
         <ServerLink
           path={fallback}
           onClick={(event) => {
-            if (!navigationHistory.navigatedInApp) return;
+            if (!useHistory || !navigationHistory.navigatedInApp) return;
             event.preventDefault();
             router.back();
           }}
