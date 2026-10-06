@@ -3,7 +3,7 @@ import { isNull } from "es-toolkit";
 import { Lock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
-import { BADGE_TAB, BADGE_TABS, countBadges, heldBadges } from "@/entities/badge";
+import { BADGE_TABS, countBadges, heldBadges } from "@/entities/badge";
 import { DepartedMemberScreen } from "@/entities/profile";
 import { serverPath } from "@/shared/lib";
 import {
@@ -18,6 +18,7 @@ import { SessionTabs } from "@/widgets/session-list";
 import { roleGroups } from "../model/role-groups";
 import { userTabKey } from "../model/user-tab-key";
 import { UserBadgeGroup } from "./user-badge-group";
+import { UserBadgesEmpty } from "./user-badges-empty";
 
 interface UserBadgesViewProps {
   id: string;
@@ -63,10 +64,6 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
     href: serverPath({ slug: server.slug, path: `/users/${id}/badges?tab=${badgeTab.key}` }),
   }));
   const groups = roleGroups({ tab: activeTab, held, records, now });
-  const emptyText =
-    activeTab === BADGE_TAB.special
-      ? "아직 받은 특별 업적이 없습니다"
-      : "아직 받은 뱃지가 없습니다";
 
   return (
     <>
@@ -88,9 +85,7 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
         {groups.length > 0 ? (
           groups.map((group) => <UserBadgeGroup key={group.key} group={group} />)
         ) : (
-          <Text typography="body3" foreground="hint" className="py-300 text-center">
-            {emptyText}
-          </Text>
+          <UserBadgesEmpty tab={activeTab} />
         )}
       </Container>
     </>
