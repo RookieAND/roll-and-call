@@ -1,17 +1,15 @@
 import { BADGE_ROLE } from "@roll-and-call/database/badges/model";
-import { Grid, Text } from "@roll-and-call/ui";
+import { Text } from "@roll-and-call/ui";
 
 import { ATTENDANCE_HINT } from "@/entities/badge";
 
 import type { DexTab } from "../model/build-dex-tab";
-import type { SpecialTitle } from "../model/to-special-title";
 import { DexGridSection } from "./dex-grid-section";
 import { DexLadderTrack } from "./dex-ladder-track";
 import { DexMonthlyCard } from "./dex-monthly-card";
 import { DexNextCard } from "./dex-next-card";
 import { DexRuleList } from "./dex-rule-list";
 import { DexSection } from "./dex-section";
-import { DexSpecialTitleTile } from "./dex-special-title-tile";
 
 const RULE_EMPTY = {
   [BADGE_ROLE.gm]: "룰북이 연결된 구인을 운영하면 룰별 뱃지가 생깁니다",
@@ -21,22 +19,11 @@ const RULE_EMPTY = {
 interface DexRoleTabProps {
   role: keyof typeof RULE_EMPTY;
   board: DexTab;
-  titles: SpecialTitle[];
 }
 
-export function DexRoleTab({ role, board, titles }: DexRoleTabProps) {
+export function DexRoleTab({ role, board }: DexRoleTabProps) {
   return (
     <>
-      {titles.length > 0 && (
-        <DexSection title="특별 칭호">
-          <Grid cols={4} gap="100">
-            {titles.map((title) => (
-              <DexSpecialTitleTile key={title.key} title={title} />
-            ))}
-          </Grid>
-        </DexSection>
-      )}
-
       <DexSection title={board.total.title} hint={board.total.hint}>
         <DexLadderTrack total={board.total} />
         <DexNextCard

@@ -46,7 +46,5 @@ export function badgeCondition({
       return "롤앤콜을 만드는 개발자에게만 붙습니다.";
     case BADGE_LADDER.guildMaster:
       return "디스코드 길드를 이끄는 길드장에게 붙습니다.";
-    case BADGE_LADDER.creator:
-      return "롤앤콜의 세계를 만든 창조주에게만 붙습니다.";
   }
 }

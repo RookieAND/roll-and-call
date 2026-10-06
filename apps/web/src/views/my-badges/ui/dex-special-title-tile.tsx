@@ -3,7 +3,7 @@ import { Text } from "@roll-and-call/ui";
 import { BadgeMedal } from "@/entities/badge";
 import { BadgeDetailSheet } from "@/features/view-badge";
 
-import type { SpecialTitle } from "../model/to-special-title";
+import type { SpecialTitle } from "../model/special-titles";
 
 interface DexSpecialTitleTileProps {
   title: SpecialTitle;

@@ -39,7 +39,5 @@ export function badgeRequirement({
       return "롤앤콜 개발자";
     case BADGE_LADDER.guildMaster:
       return "디스코드 길드장";
-    case BADGE_LADDER.creator:
-      return "롤앤콜의 창조주";
   }
 }

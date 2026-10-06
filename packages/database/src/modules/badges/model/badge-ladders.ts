@@ -158,13 +158,5 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     description: "이 서버를 이끄는 사람입니다.",
     steps: [{ threshold: 1, emoji: "🏰", name: "길드장", grade: 5, look: "guildMaster" }],
   },
-  [BADGE_LADDER.creator]: {
-    role: BADGE_ROLE.gm,
-    perRule: false,
-    monthly: false,
-    granted: true,
-    description: "롤앤콜의 세계를 만든 사람입니다.",
-    steps: [{ threshold: 1, emoji: "🌌", name: "창조주", grade: 5 }],
-  },
   ...HIDDEN_BADGE_LADDERS,
 };

@@ -23,7 +23,6 @@ import { SessionTabs } from "@/widgets/session-list";
 
 import { buildDexTab } from "../model/build-dex-tab";
 import { dexTabKey } from "../model/dex-tab-key";
-import { roleTitles } from "../model/role-titles";
 import { specialTitles } from "../model/special-titles";
 import { DexHeader } from "./dex-header";
 import { DexRoleTab } from "./dex-role-tab";
@@ -78,7 +77,6 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
         ) : (
           <DexRoleTab
             role={role}
-            titles={role === BADGE_ROLE.gm ? roleTitles({ held, records, now }) : []}
             board={buildDexTab({ role, records, facts, appearances, userId: user.id, now })}
           />
         )}

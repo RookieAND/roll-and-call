@@ -13,6 +13,5 @@ export const FEATURED_GROUP_META: Record<string, { emoji: string; title: string 
   [BADGE_LADDER.gmVariety]: { emoji: "🧭", title: "다양한 룰 운영" },
   [BADGE_LADDER.gmReviews]: { emoji: "💬", title: "받은 후기" },
   [BADGE_LADDER.gmMonthly]: { emoji: "🎖️", title: "이달의 GM" },
-  [BADGE_LADDER.creator]: { emoji: "🌌", title: "특별 칭호" },
   [SPECIAL_GROUP_KEY]: { emoji: "🏷️", title: "특별 칭호" },
 };
