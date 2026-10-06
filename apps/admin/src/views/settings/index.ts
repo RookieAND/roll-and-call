@@ -5,3 +5,4 @@ export { ServerSettingsForm } from "./ui/server-settings-form";
 export { ServerSettingsLoading } from "./ui/server-settings-loading";
 export { MessagesView } from "./ui/messages-view";
 export { MessagesLoading } from "./ui/messages-loading";
+export { ForumTagsView } from "./ui/forum-tags-view";

@@ -7,6 +7,8 @@ import {
 import { Skeleton } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
+import type { MessageRole } from "../model/message-role";
+
 // 디스코드 화면을 흉내 내므로 앱 테마와 상관없이 디스코드 다크 색을 쓴다.
 const DISCORD = {
   background: "#313338", // tokens-check-ignore
@@ -49,11 +51,11 @@ function Mention({ children, unknown }: { children: ReactNode; unknown?: boolean
 function renderHead({
   text,
   variables,
-  guildRoleIds,
+  guildRoles,
 }: {
   text: string;
   variables: readonly string[];
-  guildRoleIds?: string[];
+  guildRoles?: MessageRole[];
 }) {
   return text
     .split(/(\{[^}]+\}|<@&\d+>)/)
@@ -79,10 +81,11 @@ function renderHead({
       }
       const roleId = part.match(/^<@&(\d+)>$/)?.[1];
       if (roleId) {
-        const known = guildRoleIds?.includes(roleId) ?? false;
+        const role = guildRoles?.find((candidate) => candidate.id === roleId);
+        const unknown = guildRoles !== undefined && !role;
         return (
-          <Mention key={index} unknown={!known}>
-            {known ? "@역할" : "@알 수 없는 역할"}
+          <Mention key={index} unknown={unknown}>
+            {unknown ? "@알 수 없는 역할" : `@${role?.name ?? "역할"}`}
           </Mention>
         );
       }
@@ -105,7 +108,7 @@ interface DiscordPreviewProps {
   text: string;
   // 임베드 설명 문장 미리보기. 있으면 임베드의 둘째 막대 자리에 글로 그린다.
   description?: { key: MessageTextKey; text: string };
-  guildRoleIds?: string[];
+  guildRoles?: MessageRole[];
   loading?: boolean;
 }
 
@@ -114,15 +117,19 @@ export function DiscordPreview({
   caseKey,
   text,
   description,
-  guildRoleIds,
+  guildRoles,
   loading,
 }: DiscordPreviewProps) {
   const nodes = loading
     ? null
-    : renderHead({ text, variables: messageVariables(caseKey), guildRoleIds });
+    : renderHead({ text, variables: messageVariables(caseKey), guildRoles });
   const hasHead = nodes?.some((node) => typeof node !== "string" || node.trim());
   const descriptionNodes = description
-    ? renderHead({ text: description.text, variables: messageTextVariables(description.key) })
+    ? renderHead({
+        text: description.text,
+        variables: messageTextVariables(description.key),
+        guildRoles,
+      })
     : null;
   return (
     <div

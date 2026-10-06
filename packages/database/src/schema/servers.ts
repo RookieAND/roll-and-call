@@ -14,6 +14,14 @@ import {
 
 import { type AvailabilityInterval, type ProfileLink, profiles } from "./profiles";
 
+// 모집 포럼 글에 붙일 태그. 값은 포럼 태그 id이고, 비면 태그 이름으로 찾는다.
+export interface ForumTagMap {
+  open?: string;
+  closed?: string;
+  // 룰북 분류(rulebook_categories.id)마다 태그 하나.
+  categories?: Record<string, string>;
+}
+
 // 디스코드 서버 하나가 한 행이다. 서버 안의 데이터는 모두 server_id로 이 행에 묶인다.
 export const servers = pgTable("servers", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -27,6 +35,7 @@ export const servers = pgTable("servers", {
   announceChannelId: text("announce_channel_id"),
   // 운영진만 보는 디스코드 채널. 처리 대기와 무거운 조치 글을 올린다. 비면 올리지 않는다.
   staffChannelId: text("staff_channel_id"),
+  forumTags: jsonb("forum_tags").$type<ForumTagMap>(),
   // 디스코드 서버장. 어드민에 들어올 때 길드 정보와 비교해 바뀌었으면 소유권을 옮긴다.
   ownerDiscordId: text("owner_discord_id"),
   // 디스코드 서버 멤버가 아니라 가입할 수 없을 때 보여 주는 초대 링크. 없으면 안내 문구만 보인다.

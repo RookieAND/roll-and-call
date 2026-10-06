@@ -3,6 +3,7 @@ export {
   serverMembers,
   serverMessageHeads,
   serverMessageTexts,
+  type ForumTagMap,
   type Server,
   type ServerMember,
 } from "./servers";

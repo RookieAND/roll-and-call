@@ -14,8 +14,9 @@ import { useRef, useState, useTransition } from "react";
 
 import { conflictToastText } from "@/shared/lib";
 
-import { checkMessageRoles } from "../api/check-message-roles";
 import { saveMessageHeadAction } from "../api/save-message-head";
+import type { MessageRole } from "../model/message-role";
+import { UNKNOWN_ROLE_WARNING, unknownRoleIds } from "../model/unknown-role-ids";
 import { DiscordPreview } from "./discord-preview";
 import { MessageTextEditor } from "./message-text-editor";
 
@@ -26,6 +27,8 @@ interface MessageEditorProps {
   savedAt: string | null;
   // 이 경우에 속한 임베드 설명 문장들. 없으면(구인 개설·이달의 GM·PL) 머리 줄만 고친다.
   texts: { key: MessageTextKey; label: string; savedBody: string; savedAt: string | null }[];
+  // 디스코드에서 못 읽으면 없다. 그때는 미리보기가 역할 이름을 못 보여 주고 경고도 내지 않는다.
+  guildRoles?: MessageRole[];
   readOnly: boolean;
 }
 
@@ -36,12 +39,12 @@ export function MessageEditor({
   savedHead,
   savedAt,
   texts,
+  guildRoles,
   readOnly,
 }: MessageEditorProps) {
   const router = useRouter();
   const [saving, startSaving] = useTransition();
   const [text, setText] = useState(savedHead);
-  const [warning, setWarning] = useState<string>();
   const [failed, setFailed] = useState(false);
   const input = useRef<HTMLInputElement>(null);
 
@@ -49,6 +52,10 @@ export function MessageEditor({
   const error = validateMessageHead({ key: caseKey, text: text.trim() });
   const dirty = text.trim() !== savedHead;
   const disabled = readOnly || saving;
+  const warning =
+    guildRoles && unknownRoleIds({ text, guildRoleIds: guildRoles.map(({ id }) => id) }).length > 0
+      ? UNKNOWN_ROLE_WARNING
+      : undefined;
 
   const insert = (variable: string) => {
     const element = input.current;
@@ -114,7 +121,6 @@ export function MessageEditor({
           invalid={Boolean(error)}
           disabled={disabled}
           onChange={(event) => setText(event.target.value)}
-          onBlur={() => void checkMessageRoles(text).then(setWarning)}
         />
         {error ? (
           <Text typography="body4" foreground="danger">
@@ -143,7 +149,7 @@ export function MessageEditor({
         <Text typography="body4" weight="bold" foreground="muted">
           미리보기
         </Text>
-        <DiscordPreview caseKey={caseKey} text={text} />
+        <DiscordPreview caseKey={caseKey} text={text} guildRoles={guildRoles} />
       </VStack>
       {failed ? (
         <Callout.Root colorPalette="danger">
@@ -184,6 +190,7 @@ export function MessageEditor({
               label={text.label}
               savedBody={text.savedBody}
               savedAt={text.savedAt}
+              guildRoles={guildRoles}
               readOnly={readOnly}
             />
           ))}

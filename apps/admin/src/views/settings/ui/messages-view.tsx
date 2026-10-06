@@ -7,7 +7,7 @@ import {
 } from "@roll-and-call/database/servers/model";
 import { Text, VStack, cn } from "@roll-and-call/ui";
 
-import { MessageEditor } from "@/features/edit-discord-messages";
+import { MessageEditor, type MessageRole } from "@/features/edit-discord-messages";
 import { Panel, ServerLink, Tag } from "@/shared/ui";
 
 import { SettingsFrame } from "./settings-frame";
@@ -16,10 +16,11 @@ interface MessagesViewProps {
   selected: MessageCaseKey;
   heads: Record<MessageCaseKey, { headLine: string; updatedAt: Date | null }>;
   texts: Record<MessageTextKey, { body: string; updatedAt: Date | null }>;
+  guildRoles?: MessageRole[];
   readOnly: boolean;
 }
 
-export function MessagesView({ selected, heads, texts, readOnly }: MessagesViewProps) {
+export function MessagesView({ selected, heads, texts, guildRoles, readOnly }: MessagesViewProps) {
   const current = MESSAGE_CASES.find((messageCase) => messageCase.key === selected)!;
   const currentTexts = messageTextsOfCase(selected).map((text) => ({
     key: text.key,
@@ -110,6 +111,7 @@ export function MessagesView({ selected, heads, texts, readOnly }: MessagesViewP
             label={current.label}
             savedHead={heads[selected].headLine}
             savedAt={heads[selected].updatedAt?.toISOString() ?? null}
+            guildRoles={guildRoles}
             readOnly={readOnly}
           />
         </Panel>

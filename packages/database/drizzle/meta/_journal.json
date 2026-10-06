@@ -561,6 +561,13 @@
       "when": 1797100000000,
       "tag": "0085_server_message_texts",
       "breakpoints": true
+    },
+    {
+      "idx": 86,
+      "version": "7",
+      "when": 1797200000000,
+      "tag": "0086_servers_forum_tags",
+      "breakpoints": true
     }
   ]
 }

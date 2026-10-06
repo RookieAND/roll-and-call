@@ -17,9 +17,11 @@ export {
   STAFF_NOTICE_KIND,
   type StaffNotice,
 } from "@roll-and-call/game-notices";
+export { listRulebookCategories } from "@roll-and-call/database/rulebooks";
 export {
   getMessageHeads,
   getMessageTexts,
+  saveForumTags,
   saveMessageHead,
   saveMessageText,
 } from "@roll-and-call/database/servers";

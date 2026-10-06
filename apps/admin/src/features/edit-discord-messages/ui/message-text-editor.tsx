@@ -15,6 +15,7 @@ import { useRef, useState, useTransition } from "react";
 import { conflictToastText } from "@/shared/lib";
 
 import { saveMessageTextAction } from "../api/save-message-text";
+import type { MessageRole } from "../model/message-role";
 import { DiscordPreview } from "./discord-preview";
 
 interface MessageTextEditorProps {
@@ -23,6 +24,7 @@ interface MessageTextEditorProps {
   label: string;
   savedBody: string;
   savedAt: string | null;
+  guildRoles?: MessageRole[];
   readOnly: boolean;
 }
 
@@ -33,6 +35,7 @@ export function MessageTextEditor({
   label,
   savedBody,
   savedAt,
+  guildRoles,
   readOnly,
 }: MessageTextEditorProps) {
   const router = useRouter();
@@ -119,7 +122,12 @@ export function MessageTextEditor({
           </Chip>
         ))}
       </HStack>
-      <DiscordPreview caseKey={caseKey} text="" description={{ key: textKey, text }} />
+      <DiscordPreview
+        caseKey={caseKey}
+        text=""
+        description={{ key: textKey, text }}
+        guildRoles={guildRoles}
+      />
       <HStack align="center" justify="between" gap="100">
         <Button
           variant="ghost"

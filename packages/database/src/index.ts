@@ -12,6 +12,7 @@ export type {
   SessionReview,
   UserBadge,
   Server,
+  ForumTagMap,
   ServerMember,
   ProfileKeyword,
   AvailabilityInterval,

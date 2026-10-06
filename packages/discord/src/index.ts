@@ -10,6 +10,8 @@ export type {
   DiscordMessageInput,
 } from "./model/discord-types";
 export { sendDiscordMessage } from "./message/send-discord-message";
+export { addFileToMessage } from "./message/add-file-to-message";
+export { sendDiscordFile } from "./message/send-discord-file";
 export { editDiscordMessage } from "./message/edit-discord-message";
 export { startDiscordThread } from "./thread/start-discord-thread";
 export { renameDiscordThread } from "./thread/rename-discord-thread";
@@ -17,6 +19,11 @@ export { createForumPost } from "./forum/create-forum-post";
 export { updateForumPost } from "./forum/update-forum-post";
 export { deleteDiscordThread } from "./forum/delete-discord-thread";
 export { getForumTags } from "./forum/get-forum-tags";
+export { addForumTags } from "./forum/add-forum-tags";
+export { getDiscordChannel, type DiscordChannelInfo } from "./forum/get-discord-channel";
+export { createForumMessagePost } from "./forum/create-forum-message-post";
+export { syncForumFollowUps, FOLLOW_UP_MARK } from "./forum/sync-forum-follow-ups";
+export { setForumPostTags } from "./forum/set-forum-post-tags";
 export { getGuildMember, type DiscordGuildMember } from "./guild/get-guild-member";
 export { guildMemberDisplayName } from "./guild/guild-member-display-name";
 export { getGuild, type DiscordGuild } from "./guild/get-guild";

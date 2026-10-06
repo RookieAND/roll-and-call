@@ -4,6 +4,7 @@ export { ensureMembership } from "./commands/ensure-membership";
 export { leaveServer, type LeaveServerResult } from "./commands/leave-server";
 export { markMemberVisit } from "./commands/mark-member-visit";
 export { syncServerGuild } from "./commands/sync-server-guild";
+export { saveForumTags } from "./commands/save-forum-tags";
 export { saveMessageHead } from "./commands/save-message-head";
 export { saveMessageText } from "./commands/save-message-text";
 export { updateServerSettings, type ServerSettings } from "./commands/update-server-settings";

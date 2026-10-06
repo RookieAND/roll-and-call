@@ -6,6 +6,7 @@ import {
   gameHeadValues,
   gameNoticeEmbed,
   messageHeadInput,
+  gameUrl,
   messageText,
 } from "@roll-and-call/game-notices";
 import { headcountFields } from "@roll-and-call/game-notices";
@@ -52,6 +53,7 @@ export async function notifySessionConfirmed({
     fields,
   });
 
+  const sessionUrl = gameUrl({ slug: server.slug, gameId: game.id });
   await sendDiscordMessage({
     channelId: game.discordThreadId,
     input: {
@@ -61,6 +63,7 @@ export async function notifySessionConfirmed({
         key: "time",
         values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
       })),
+      buttons: sessionUrl ? [{ label: "🕒 세션 확인하기", url: sessionUrl }] : [],
     },
   });
 }
