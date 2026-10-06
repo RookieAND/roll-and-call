@@ -21,6 +21,7 @@ const ladderIs = (ladder: string) => (badge: HeldBadge) => badge.ladder === ladd
 // 이달의 GM·PL은 각 역할 탭 맨 아래에 받은 달 기록 한 줄로, 특별 탭에는 특별 칭호만 둔다(R16, D235).
 const GROUPS = {
   [BADGE_TAB.gm]: [
+    { title: "특별 칭호", matches: ladderIs(BADGE_LADDER.creator) },
     { title: "누적", matches: ladderIs(BADGE_LADDER.gmTotal) },
     { title: "룰별", matches: ladderIs(BADGE_LADDER.gmRule) },
     { title: "다양한 룰", matches: ladderIs(BADGE_LADDER.gmVariety) },

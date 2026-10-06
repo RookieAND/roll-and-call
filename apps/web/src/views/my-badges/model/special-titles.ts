@@ -2,8 +2,9 @@ import { BADGE_ROLE, HIDDEN_LADDER, isHiddenLadder } from "@roll-and-call/databa
 import { partition } from "es-toolkit";
 
 import type { BadgeView } from "@/entities/badge";
-import { heldBadgeDetail } from "@/features/view-badge";
 import type { BadgeRecord } from "@/shared/server";
+
+import { toSpecialTitle } from "./to-special-title";
 
 const HIDDEN_TITLE_COUNT = Object.keys(HIDDEN_LADDER).length;
 
@@ -25,15 +26,7 @@ export function specialTitles({
     (left, right) => left.record.earnedAt.getTime() - right.record.earnedAt.getTime(),
   );
   return {
-    titles: [...granted, ...earnedOrder].map((badge) => ({
-      key: badge.key,
-      emoji: badge.emoji,
-      look: badge.look,
-      name: badge.name,
-      detail: heldBadgeDetail({ badge, records, facts: null, now }),
-    })),
+    titles: [...granted, ...earnedOrder].map((badge) => toSpecialTitle({ badge, records, now })),
     unknownCount: Math.max(HIDDEN_TITLE_COUNT - hidden.length, 0),
   };
 }
-
-export type SpecialTitle = ReturnType<typeof specialTitles>["titles"][number];

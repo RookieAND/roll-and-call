@@ -159,7 +159,7 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     steps: [{ threshold: 1, emoji: "🏰", name: "길드장", grade: 5, look: "guildMaster" }],
   },
   [BADGE_LADDER.creator]: {
-    role: BADGE_ROLE.player,
+    role: BADGE_ROLE.gm,
     perRule: false,
     monthly: false,
     granted: true,

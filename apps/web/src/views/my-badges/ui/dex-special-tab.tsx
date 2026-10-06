@@ -1,7 +1,7 @@
 import { Grid } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
 
-import type { SpecialTitle } from "../model/special-titles";
+import type { SpecialTitle } from "../model/to-special-title";
 import { DexSection } from "./dex-section";
 import { DexSpecialTitleTile } from "./dex-special-title-tile";
 import { DexUnknownTitleTile } from "./dex-unknown-title-tile";
