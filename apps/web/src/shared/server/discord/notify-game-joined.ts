@@ -51,8 +51,10 @@ export async function notifyGameJoined({
         key: "apply",
         values: gameHeadValues({ server, game, gmName }),
         ...(await memberNoticeLine({
+          serverId: server.id,
           userId: applicantId,
-          text: isWaiting ? "님이 세션에 대기로 신청하셨어요." : "님이 세션에 참여하셨어요.",
+          key: isWaiting ? "apply_waiting_line" : "apply_line",
+          values: gameHeadValues({ server, game, gmName }),
         })),
       })),
     },

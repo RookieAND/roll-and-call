@@ -25,6 +25,7 @@ export function MessagesView({ selected, heads, texts, guildRoles, readOnly }: M
   const currentTexts = messageTextsOfCase(selected).map((text) => ({
     key: text.key,
     label: text.label,
+    place: text.place,
     savedBody: texts[text.key].body,
     savedAt: texts[text.key].updatedAt?.toISOString() ?? null,
   }));

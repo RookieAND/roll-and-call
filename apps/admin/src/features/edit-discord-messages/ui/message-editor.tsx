@@ -20,13 +20,32 @@ import { UNKNOWN_ROLE_WARNING, unknownRoleIds } from "../model/unknown-role-ids"
 import { DiscordPreview } from "./discord-preview";
 import { MessageTextEditor } from "./message-text-editor";
 
+const SECTIONS = [
+  {
+    place: "body",
+    title: "본문 알림 줄",
+    hint: "머리 줄 아래, 임베드 위에 붙는 한 줄입니다. 멘션된 사람에게 알림이 갑니다.",
+  },
+  {
+    place: "embed",
+    title: "설명 문장",
+    hint: "머리 줄 아래 임베드의 설명 한 줄입니다. 시간·인원 칸과 색, 버튼은 그대로입니다.",
+  },
+] as const;
+
 interface MessageEditorProps {
   caseKey: MessageCaseKey;
   label: string;
   savedHead: string;
   savedAt: string | null;
   // 이 경우에 속한 임베드 설명 문장들. 없으면(구인 개설·이달의 GM·PL) 머리 줄만 고친다.
-  texts: { key: MessageTextKey; label: string; savedBody: string; savedAt: string | null }[];
+  texts: {
+    key: MessageTextKey;
+    label: string;
+    place: "embed" | "body";
+    savedBody: string;
+    savedAt: string | null;
+  }[];
   // 디스코드에서 못 읽으면 없다. 그때는 미리보기가 역할 이름을 못 보여 주고 경고도 내지 않는다.
   guildRoles?: MessageRole[];
   readOnly: boolean;
@@ -174,28 +193,37 @@ export function MessageEditor({
           저장
         </Button>
       </HStack>
-      {texts.length > 0 ? (
-        <VStack gap="175" className="border-t border-(--rc-color-border-subtle) pt-175">
-          <VStack gap="025">
-            <Text typography="subtitle2">설명 문장</Text>
-            <Text typography="body4" foreground="hint">
-              머리 줄 아래 임베드의 설명 한 줄입니다. 시간·인원 칸과 색, 버튼은 그대로입니다.
-            </Text>
+      {SECTIONS.map(({ place, title, hint }) => {
+        const sectionTexts = texts.filter((text) => text.place === place);
+        if (sectionTexts.length === 0) return null;
+        return (
+          <VStack
+            key={place}
+            gap="175"
+            className="border-t border-(--rc-color-border-subtle) pt-175"
+          >
+            <VStack gap="025">
+              <Text typography="subtitle2">{title}</Text>
+              <Text typography="body4" foreground="hint">
+                {hint}
+              </Text>
+            </VStack>
+            {sectionTexts.map((text) => (
+              <MessageTextEditor
+                key={`${text.key}:${text.savedAt ?? ""}`}
+                caseKey={caseKey}
+                textKey={text.key}
+                place={place}
+                label={text.label}
+                savedBody={text.savedBody}
+                savedAt={text.savedAt}
+                guildRoles={guildRoles}
+                readOnly={readOnly}
+              />
+            ))}
           </VStack>
-          {texts.map((text) => (
-            <MessageTextEditor
-              key={`${text.key}:${text.savedAt ?? ""}`}
-              caseKey={caseKey}
-              textKey={text.key}
-              label={text.label}
-              savedBody={text.savedBody}
-              savedAt={text.savedAt}
-              guildRoles={guildRoles}
-              readOnly={readOnly}
-            />
-          ))}
-        </VStack>
-      ) : null}
+        );
+      })}
     </VStack>
   );
 }

@@ -21,6 +21,7 @@ import { DiscordPreview } from "./discord-preview";
 interface MessageTextEditorProps {
   caseKey: MessageCaseKey;
   textKey: MessageTextKey;
+  place: "embed" | "body";
   label: string;
   savedBody: string;
   savedAt: string | null;
@@ -32,6 +33,7 @@ interface MessageTextEditorProps {
 export function MessageTextEditor({
   caseKey,
   textKey,
+  place,
   label,
   savedBody,
   savedAt,
@@ -125,7 +127,9 @@ export function MessageTextEditor({
       <DiscordPreview
         caseKey={caseKey}
         text=""
-        description={{ key: textKey, text }}
+        {...(place === "body"
+          ? { bodyLine: { key: textKey, text } }
+          : { description: { key: textKey, text } })}
         guildRoles={guildRoles}
       />
       <HStack align="center" justify="between" gap="100">
