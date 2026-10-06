@@ -92,7 +92,7 @@ export const serverMembers = pgTable(
   ],
 ).enableRLS();
 
-// 봇 메시지 위에 붙일 머리 줄. 행이 없으면 기본 문구(구인 개설만 있고 나머지는 머리 줄 없음)를 쓴다. 빈 문자열은 머리 줄 없이 보낸다는 뜻이다.
+// 봇 메시지 위에 붙일 머리 줄. 행이 없으면 기본 문구(경우마다 📢로 시작)를 쓴다. 빈 문자열은 머리 줄 없이 보낸다는 뜻이다.
 export const serverMessageHeads = pgTable(
   "server_message_heads",
   {

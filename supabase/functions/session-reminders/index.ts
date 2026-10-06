@@ -56,7 +56,10 @@ function messageValues(game: DueGame, gmName: string): Record<string, string> {
   };
 }
 
-// 서버가 정한 「1시간 전 알림」 머리 줄(server_message_heads). 없거나 못 읽으면 머리 줄 없이 보낸다.
+// message-heads.ts의 기본 머리 줄 remind와 같다.
+const DEFAULT_HEAD = "📢 {구인 제목} 세션이 곧 시작해요!";
+
+// 서버가 정한 「1시간 전 알림」 머리 줄(server_message_heads). 행이 없거나 못 읽으면 기본 머리 줄을 쓴다.
 async function headLine(game: DueGame, gmName: string) {
   const { data, error } = await supabase
     .from("server_message_heads")
@@ -66,7 +69,7 @@ async function headLine(game: DueGame, gmName: string) {
     .maybeSingle<{ head_line: string }>();
   if (error) console.warn(`message head read failed for ${game.server_id}:`, error.message);
   return renderMessageHead({
-    template: data?.head_line ?? "",
+    template: data?.head_line ?? DEFAULT_HEAD,
     values: messageValues(game, gmName),
   });
 }

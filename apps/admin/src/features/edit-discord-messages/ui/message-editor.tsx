@@ -65,6 +65,22 @@ export function MessageEditor({
   const [saving, startSaving] = useTransition();
   const [text, setText] = useState(savedHead);
   const [failed, setFailed] = useState(false);
+  // 고치는 중인 문장과 지금 미리보기에 올릴 문장(자리마다 마지막으로 만진 것).
+  const [drafts, setDrafts] = useState(() =>
+    Object.fromEntries(texts.map(({ key, savedBody }) => [key, savedBody])),
+  );
+  const [active, setActive] = useState<Partial<Record<"embed" | "body", MessageTextKey>>>(() =>
+    Object.fromEntries(
+      (["body", "embed"] as const).flatMap((place) => {
+        const first = texts.find((item) => item.place === place);
+        return first ? [[place, first.key]] : [];
+      }),
+    ),
+  );
+  const activeLine = (place: "embed" | "body") => {
+    const key = active[place];
+    return key ? { key, text: drafts[key] ?? "" } : undefined;
+  };
   const input = useRef<HTMLInputElement>(null);
 
   const length = [...text].length;
@@ -117,6 +133,18 @@ export function MessageEditor({
 
   return (
     <VStack gap="175" className="p-175">
+      <VStack gap="075" className="sticky top-(--rc-size-appbar) z-10 bg-surface pb-075">
+        <Text typography="body4" weight="bold" foreground="muted">
+          미리보기
+        </Text>
+        <DiscordPreview
+          caseKey={caseKey}
+          text={text}
+          bodyLine={activeLine("body")}
+          description={activeLine("embed")}
+          guildRoles={guildRoles}
+        />
+      </VStack>
       <VStack gap="075">
         <HStack align="baseline">
           <Text typography="body4" weight="bold" foreground="muted">
@@ -164,12 +192,6 @@ export function MessageEditor({
           역할을 직접 멘션하려면 {"<@&역할ID>"}를 적습니다.
         </Text>
       </VStack>
-      <VStack gap="075">
-        <Text typography="body4" weight="bold" foreground="muted">
-          미리보기
-        </Text>
-        <DiscordPreview caseKey={caseKey} text={text} guildRoles={guildRoles} />
-      </VStack>
       {failed ? (
         <Callout.Root colorPalette="danger">
           <Callout.Icon />
@@ -194,7 +216,7 @@ export function MessageEditor({
         </Button>
       </HStack>
       {SECTIONS.map(({ place, title, hint }) => {
-        const sectionTexts = texts.filter((text) => text.place === place);
+        const sectionTexts = texts.filter((item) => item.place === place);
         if (sectionTexts.length === 0) return null;
         return (
           <VStack
@@ -208,17 +230,16 @@ export function MessageEditor({
                 {hint}
               </Text>
             </VStack>
-            {sectionTexts.map((text) => (
+            {sectionTexts.map((item) => (
               <MessageTextEditor
-                key={`${text.key}:${text.savedAt ?? ""}`}
-                caseKey={caseKey}
-                textKey={text.key}
-                place={place}
-                label={text.label}
-                savedBody={text.savedBody}
-                savedAt={text.savedAt}
-                guildRoles={guildRoles}
+                key={`${item.key}:${item.savedAt ?? ""}`}
+                textKey={item.key}
+                label={item.label}
+                savedBody={item.savedBody}
+                savedAt={item.savedAt}
                 readOnly={readOnly}
+                onDraftChange={(draft) => setDrafts({ ...drafts, [item.key]: draft })}
+                onActivate={() => setActive({ ...active, [place]: item.key })}
               />
             ))}
           </VStack>

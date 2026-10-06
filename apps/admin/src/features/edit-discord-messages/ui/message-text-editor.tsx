@@ -5,7 +5,6 @@ import {
   MESSAGE_TEXT_MAX_LENGTH,
   messageTextVariables,
   validateMessageText,
-  type MessageCaseKey,
   type MessageTextKey,
 } from "@roll-and-call/database/servers/model";
 import { Button, Chip, HStack, Text, TextInput, VStack, toast } from "@roll-and-call/ui";
@@ -15,34 +14,35 @@ import { useRef, useState, useTransition } from "react";
 import { conflictToastText } from "@/shared/lib";
 
 import { saveMessageTextAction } from "../api/save-message-text";
-import type { MessageRole } from "../model/message-role";
-import { DiscordPreview } from "./discord-preview";
 
 interface MessageTextEditorProps {
-  caseKey: MessageCaseKey;
   textKey: MessageTextKey;
-  place: "embed" | "body";
   label: string;
   savedBody: string;
   savedAt: string | null;
-  guildRoles?: MessageRole[];
   readOnly: boolean;
+  // 합친 미리보기가 고치는 중인 값을 그리도록 부모에게 알린다.
+  onDraftChange: (text: string) => void;
+  onActivate: () => void;
 }
 
 // 임베드 설명 문장 한 줄. 경우를 바꾸거나 저장된 값이 바뀌면 부모가 key로 새로 그린다.
 export function MessageTextEditor({
-  caseKey,
   textKey,
-  place,
   label,
   savedBody,
   savedAt,
-  guildRoles,
   readOnly,
+  onDraftChange,
+  onActivate,
 }: MessageTextEditorProps) {
   const router = useRouter();
   const [saving, startSaving] = useTransition();
-  const [text, setText] = useState(savedBody);
+  const [text, setDraft] = useState(savedBody);
+  const setText = (next: string) => {
+    setDraft(next);
+    onDraftChange(next);
+  };
   const input = useRef<HTMLInputElement>(null);
 
   const length = [...text].length;
@@ -110,6 +110,7 @@ export function MessageTextEditor({
         value={text}
         invalid={Boolean(error)}
         disabled={disabled}
+        onFocus={onActivate}
         onChange={(event) => setText(event.target.value)}
       />
       {error ? (
@@ -124,14 +125,6 @@ export function MessageTextEditor({
           </Chip>
         ))}
       </HStack>
-      <DiscordPreview
-        caseKey={caseKey}
-        text=""
-        {...(place === "body"
-          ? { bodyLine: { key: textKey, text } }
-          : { description: { key: textKey, text } })}
-        guildRoles={guildRoles}
-      />
       <HStack align="center" justify="between" gap="100">
         <Button
           variant="ghost"

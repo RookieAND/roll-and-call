@@ -18,9 +18,19 @@ export type MessageCaseKey = (typeof MESSAGE_CASES)[number]["key"];
 
 export const MESSAGE_HEAD_MAX_LENGTH = 300;
 
-// 행이 없을 때 쓰는 기본 머리 줄. 적혀 있지 않은 경우는 머리 줄 없이 보낸다.
+// 행이 없을 때 쓰는 기본 머리 줄. 앞에 📢를 붙인다.
 export const DEFAULT_MESSAGE_HEADS: Partial<Record<MessageCaseKey, string>> = {
   open: "📢 새로운 구인 글이 올라왔어요!",
+  apply: "📢 {구인 제목} 참가 신청이 들어왔어요!",
+  leave: "📢 {구인 제목} 참여자가 바뀌었어요.",
+  direct: "📢 {구인 제목} 참여자가 확정됐어요!",
+  draw: "📢 {구인 제목} 추첨 결과가 나왔어요!",
+  time: "📢 {구인 제목} 세션 시간이 정해졌어요!",
+  done: "📢 {구인 제목} 모집이 완료됐어요!",
+  // supabase/functions/session-reminders/index.ts의 DEFAULT_HEAD와 같아야 한다.
+  remind: "📢 {구인 제목} 세션이 곧 시작해요!",
+  cancel: "📢 {구인 제목} 구인이 취소됐어요.",
+  monthly: "📢 {달}에 활약한 분들을 소개해요!",
 };
 
 const BASE_VARIABLES = ["구인 제목", "GM", "룰", "링크"] as const;
