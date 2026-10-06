@@ -61,7 +61,7 @@ export function HomeCalendarCell({
       aria-label={ariaLabel}
       aria-current={selected ? "date" : undefined}
       className={cn(
-        "flex h-14 min-w-0 flex-col gap-075 rounded-300 px-050 pt-100 pb-075 transition-colors",
+        "flex h-14 min-w-0 flex-col justify-evenly rounded-300 px-050 transition-colors",
         tone.cell,
       )}
     >
@@ -74,14 +74,7 @@ export function HomeCalendarCell({
         {cell.day}
       </Text>
       {lead && (
-        <VStack
-          aria-hidden
-          align="center"
-          justify="center"
-          gap="050"
-          render={<span />}
-          className="min-h-3"
-        >
+        <VStack aria-hidden align="center" justify="center" gap="050" render={<span />}>
           {!overflow &&
             splitDotRows(dots).map((row) => (
               <HStack
