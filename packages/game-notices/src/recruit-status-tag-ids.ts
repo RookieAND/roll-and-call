@@ -4,13 +4,18 @@ import type { RecruitTarget } from "./recruit-target";
 export function recruitStatusTagIds({
   target,
   closed,
+  cancelled = false,
   categoryId,
 }: {
   target: RecruitTarget;
   closed: boolean;
+  cancelled?: boolean;
   categoryId: string | null;
 }) {
-  const { open, closed: closedTag, categories } = target.tags;
+  const { open, closed: closedTag, cancelled: cancelledTag, categories } = target.tags;
   const categoryTag = categoryId ? categories[categoryId] : undefined;
-  return [closed ? closedTag : open, categoryTag].flatMap((id) => id ?? []);
+  // 취소됨 태그를 연결하지 않았으면 마감 태그로 둔다.
+  const endedTag = cancelled ? (cancelledTag ?? closedTag) : closedTag;
+  const statusTag = closed ? endedTag : open;
+  return [statusTag, categoryTag].flatMap((id) => id ?? []);
 }

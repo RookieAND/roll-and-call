@@ -20,6 +20,7 @@ export default async function SettingsTagsPage() {
       saved={{
         open: saved?.open ?? "",
         closed: saved?.closed ?? "",
+        cancelled: saved?.cancelled ?? "",
         categories: saved?.categories ?? {},
       }}
     />

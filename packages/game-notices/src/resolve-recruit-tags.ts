@@ -1,10 +1,11 @@
 import type { ForumTagMap } from "@roll-and-call/database";
 
-export const RECRUIT_TAG_NAME = { open: "모집중", closed: "마감" } as const;
+export const RECRUIT_TAG_NAME = { open: "모집중", closed: "마감", cancelled: "취소됨" } as const;
 
 export type RecruitTags = {
   open?: string;
   closed?: string;
+  cancelled?: string;
   categories: Record<string, string>;
   // 봇이 붙이고 떼는 태그 전부. 운영진이 직접 단 다른 태그는 건드리지 않는다.
   managed: string[];
@@ -28,13 +29,17 @@ export function resolveRecruitTags({
   };
   const open = idOf("open");
   const closed = idOf("closed");
+  const cancelled = idOf("cancelled");
   const categories = Object.fromEntries(
     Object.entries(saved?.categories ?? {}).filter(([, tagId]) => exists(tagId)),
   );
   return {
     open,
     closed,
+    cancelled,
     categories,
-    managed: [...new Set([open, closed, ...Object.values(categories)].flatMap((id) => id ?? []))],
+    managed: [
+      ...new Set([open, closed, cancelled, ...Object.values(categories)].flatMap((id) => id ?? [])),
+    ],
   };
 }

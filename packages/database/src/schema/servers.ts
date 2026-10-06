@@ -18,6 +18,7 @@ import { type AvailabilityInterval, type ProfileLink, profiles } from "./profile
 export interface ForumTagMap {
   open?: string;
   closed?: string;
+  cancelled?: string;
   // 룰북 분류(rulebook_categories.id)마다 태그 하나.
   categories?: Record<string, string>;
 }

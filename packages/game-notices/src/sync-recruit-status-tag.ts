@@ -7,17 +7,19 @@ export async function syncRecruitStatusTag({
   target,
   threadId,
   closed,
+  cancelled,
   categoryId,
 }: {
   target: RecruitTarget;
   threadId: string;
   closed: boolean;
+  cancelled?: boolean;
   categoryId: string | null;
 }) {
   if (!target.forum) return;
   await setForumPostTags({
     threadId,
     managedTagIds: target.tags.managed,
-    tagIds: recruitStatusTagIds({ target, closed, categoryId }),
+    tagIds: recruitStatusTagIds({ target, closed, cancelled, categoryId }),
   });
 }

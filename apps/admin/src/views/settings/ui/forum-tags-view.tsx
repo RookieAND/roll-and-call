@@ -96,6 +96,12 @@ export function ForumTagsView({ options, categories, saved }: ForumTagsViewProps
                 tags={options.tags}
                 onChange={(closed) => setForm({ ...form, closed })}
               />
+              <TagSelect
+                label="취소됨"
+                value={form.cancelled}
+                tags={options.tags}
+                onChange={(cancelled) => setForm({ ...form, cancelled })}
+              />
             </VStack>
           </Panel>
           <Panel title="룰 분류" bodyClassName="p-175">

@@ -2,6 +2,7 @@
 export type ForumTagForm = {
   open: string;
   closed: string;
+  cancelled: string;
   categories: Record<string, string>;
 };
 

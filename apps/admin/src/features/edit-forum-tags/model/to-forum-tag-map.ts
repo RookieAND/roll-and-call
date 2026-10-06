@@ -8,6 +8,7 @@ export function toForumTagMap(form: ForumTagForm): ForumTagMap | null {
   const map: ForumTagMap = {
     ...(form.open ? { open: form.open } : {}),
     ...(form.closed ? { closed: form.closed } : {}),
+    ...(form.cancelled ? { cancelled: form.cancelled } : {}),
     ...(Object.keys(categories).length > 0 ? { categories } : {}),
   };
   return Object.keys(map).length > 0 ? map : null;

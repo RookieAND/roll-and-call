@@ -1,6 +1,10 @@
 import { RECRUIT_TAG_NAME } from "./resolve-recruit-tags";
 
-const STATUS_EMOJI = { [RECRUIT_TAG_NAME.open]: "🟢", [RECRUIT_TAG_NAME.closed]: "🔴" } as const;
+const STATUS_EMOJI = {
+  [RECRUIT_TAG_NAME.open]: "🟢",
+  [RECRUIT_TAG_NAME.closed]: "🔴",
+  [RECRUIT_TAG_NAME.cancelled]: "🚫",
+} as const;
 
 // 룰 이름에 들어 있는 낱말로 고른다. 어디에도 안 맞으면 기본 주사위.
 const RULE_EMOJI: [keyword: string, emoji: string][] = [

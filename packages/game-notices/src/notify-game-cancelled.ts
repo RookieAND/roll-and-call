@@ -99,6 +99,12 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
         ? recruitPostTitle({ title: game.title, gmName, cancelled: true })
         : `${game.title} (취소됨)`,
     }),
-    syncRecruitStatusTag({ target, threadId: game.discordThreadId, closed: true, categoryId }),
+    syncRecruitStatusTag({
+      target,
+      threadId: game.discordThreadId,
+      closed: true,
+      cancelled: true,
+      categoryId,
+    }),
   ]);
 }

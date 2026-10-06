@@ -18,7 +18,7 @@ export async function saveForumTagsAction(form: ForumTagForm): Promise<SaveForum
   if (options.status !== "forum") return { ok: false };
 
   const map = toForumTagMap(form);
-  const chosen = [map?.open, map?.closed, ...Object.values(map?.categories ?? {})];
+  const chosen = [map?.open, map?.closed, map?.cancelled, ...Object.values(map?.categories ?? {})];
   const known = options.tags.map((tag) => tag.id);
   if (chosen.some((id) => id && !known.includes(id))) return { ok: false };
 
