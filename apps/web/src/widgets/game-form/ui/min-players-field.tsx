@@ -41,7 +41,7 @@ export function MinPlayersField({ form, locked, savedMinPlayers }: MinPlayersFie
       <Text typography="body4" foreground="muted" render={<p />}>
         {locked
           ? "신청자가 있어 낮추기만 할 수 있습니다."
-          : "0이면 없고, 모자라면 마감 때 취소됩니다."}
+          : "설정한 인원 수보다 구인이 적게 될 경우 마감 시 모집이 취소됩니다"}
       </Text>
     </Field.Root>
   );
