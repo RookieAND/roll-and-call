@@ -2,16 +2,20 @@ import { randomInt } from "node:crypto";
 
 import { isNull } from "es-toolkit";
 
+import { cancelForMinPlayers } from "#/modules/games/commands/cancel-for-min-players";
 import { closeGameRecruitment } from "#/modules/games/commands/close-game-recruitment";
 import { markGameDrawn } from "#/modules/games/commands/mark-game-drawn";
+import { markMinPlayersJudged } from "#/modules/games/commands/mark-min-players-judged";
 import { saveDrawResults } from "#/modules/games/commands/save-draw-results";
 import { setDrawRank } from "#/modules/games/commands/set-draw-rank";
 import { setParticipantStatus } from "#/modules/games/commands/set-participant-status";
+import { canDrawLottery } from "#/modules/games/model/can-draw-lottery";
 import { compareWaitlistOrder } from "#/modules/games/model/compare-waitlist-order";
 import { countOpenLotterySeats } from "#/modules/games/model/count-open-lottery-seats";
 import { DIE_FACES } from "#/modules/games/model/die-faces";
 import { DRAW_REJECTION, type DrawRejection } from "#/modules/games/model/draw-rejection";
 import { DRAW_RESULT_KIND } from "#/modules/games/model/draw-result-kind";
+import { judgeMinPlayers } from "#/modules/games/model/min-players-judgement";
 import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
 import { planLotteryDraw } from "#/modules/games/model/plan-lottery-draw";
 import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
@@ -26,6 +30,7 @@ import { lockGame } from "#/modules/games/queries/lock-game";
 import { createNotifications } from "#/modules/notifications/commands/create-notifications";
 import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import type { Transaction } from "#/modules/transaction/transaction";
+import type { Game } from "#/schema";
 
 export type DrawLotteryResult =
   | {
@@ -42,11 +47,13 @@ export type DrawLotteryResult =
       becameFull: boolean;
     }
   | { kind: typeof DRAW_RESULT_KIND.empty }
-  | { kind: typeof DRAW_RESULT_KIND.rejected; reason: DrawRejection };
+  | { kind: typeof DRAW_RESULT_KIND.cancelled; game: Game }
+  | { kind: typeof DRAW_RESULT_KIND.rejected; reason: DrawRejection; minPlayers: number | null };
 
-const reject = (reason: DrawRejection): DrawLotteryResult => ({
+const reject = (reason: DrawRejection, minPlayers: number | null = null): DrawLotteryResult => ({
   kind: DRAW_RESULT_KIND.rejected,
   reason,
+  minPlayers,
 });
 
 // 추첨은 굴림·확정·대기·알림을 한 트랜잭션에서 끝낸다(R10). GM 버튼과 마감 크론이 같은 명령을 부르고,
@@ -88,6 +95,29 @@ export async function drawLottery({
     gameId,
     status: PARTICIPANT_STATUS.confirmed,
   });
+  const gathered = {
+    confirmedCount: preConfirmedUserIds.length,
+    applicantCount: applicantIds.length,
+  };
+  if (isNull(actorId)) {
+    // 마감 판정은 크론 경로에서만 한다. 미달이면 추첨 없이 취소하고, 통과하면 표시만 채우고 이어서 추첨한다.
+    const judgement = judgeMinPlayers({
+      recruitMethod: game.recruitMethod,
+      minPlayers: game.minPlayers,
+      judgedAt: game.minPlayersJudgedAt,
+      ...gathered,
+    });
+    if (judgement === "cancel") {
+      const cancelled = await cancelForMinPlayers({ transaction, serverId, gameId, now });
+      if (!cancelled.ok) return reject(DRAW_REJECTION.applicationClosed);
+      return { kind: DRAW_RESULT_KIND.cancelled, game: cancelled.game };
+    }
+    if (judgement === "pass")
+      await markMinPlayersJudged({ transaction, serverId, gameId, at: now });
+  } else if (!canDrawLottery({ minPlayers: game.minPlayers, ...gathered })) {
+    // GM의 [지금 추첨하기]는 마감 판정이 아니라서 표시를 건드리지 않고 거절만 한다.
+    return reject(DRAW_REJECTION.minPlayersUnmet, game.minPlayers);
+  }
   if (game.endDate > now) {
     await closeGameRecruitment({ transaction, serverId, gameId, endDate: now });
   }

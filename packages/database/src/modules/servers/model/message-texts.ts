@@ -124,6 +124,14 @@ export const MESSAGE_TEXTS = [
     extra: [],
   },
   {
+    key: "cancel_min_players",
+    caseKey: "cancel",
+    place: "embed",
+    label: "최소 인원이 모이지 않아 취소됐어요",
+    body: "최소 인원이 모이지 않아 취소되었습니다.",
+    extra: [],
+  },
+  {
     key: "apply_line",
     caseKey: "apply",
     place: "body",

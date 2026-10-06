@@ -102,7 +102,7 @@ export function GameDetail({ game, viewerId, sanction, review, now }: GameDetail
 
             <GamePreflightSection game={game} />
 
-            <GameRecruitMethodSection game={game} />
+            <GameRecruitMethodSection game={game} now={now} />
 
             {game.images.length > 0 && <GameImageGallery images={game.images} />}
 

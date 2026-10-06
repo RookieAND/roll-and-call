@@ -10,6 +10,7 @@ const base = {
   rule: "CoC 7판",
   rulebookId: "",
   maxPlayers: "4",
+  minPlayers: "",
   recruitMethod: RECRUIT_METHOD.firstCome,
   scheduleMode: SCHEDULE_MODE.coordinate,
   genres: ["호러"],
@@ -33,6 +34,32 @@ function firstError(values: object) {
   const result = gameFormSchema.safeParse(values);
   return result.success ? null : (result.error.issues[0]?.path.join(".") ?? "?");
 }
+
+describe("gameFormSchema 최소 인원", () => {
+  function minPlayersError(minPlayers: string, maxPlayers = "6") {
+    const result = gameFormSchema.safeParse({ ...base, minPlayers, maxPlayers });
+    if (result.success) return null;
+    return result.error.issues.find((issue) => issue.path[0] === "minPlayers")?.message ?? null;
+  }
+
+  it.each(["", "1", "6"])("%j은 받는다", (value) => {
+    expect(minPlayersError(value)).toBeNull();
+  });
+
+  it("0이나 정수가 아닌 값은 범위 오류다", () => {
+    expect(minPlayersError("0")).toBe("1~6 사이로 적어 주세요.");
+    expect(minPlayersError("2.5")).toBe("1~6 사이로 적어 주세요.");
+  });
+
+  it("정원보다 크면 오류다", () => {
+    expect(minPlayersError("8")).toBe("정원 6명보다 클 수 없습니다.");
+  });
+
+  it("비우면 컬럼이 null이고 값이 있으면 숫자다", () => {
+    expect(toGameColumns({ ...base, minPlayers: "" } as never).minPlayers).toBeNull();
+    expect(toGameColumns({ ...base, minPlayers: "3" } as never).minPlayers).toBe(3);
+  });
+});
 
 describe("gameFormSchema", () => {
   it("채워야 할 것을 다 채우면 통과한다", () => {

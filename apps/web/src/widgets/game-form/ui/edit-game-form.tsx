@@ -26,6 +26,7 @@ export function EditGameForm({ serverId, game }: EditGameFormProps) {
         applicantCount: game.participants.length,
         confirmedCount: countConfirmed(game.participants),
         drawn: !isNull(game.drawnAt),
+        minPlayers: game.minPlayers,
       }}
     />
   );

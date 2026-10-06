@@ -10,6 +10,7 @@ const CANCELLED_TITLE: Record<GameCancelKind, string> = {
   [GAME_CANCEL_KIND.gm]: "GM이 구인을 취소했습니다",
   [GAME_CANCEL_KIND.staff]: "운영진이 구인을 취소했습니다",
   [GAME_CANCEL_KIND.auto]: "GM이 서버를 나가 구인이 취소되었습니다",
+  [GAME_CANCEL_KIND.minPlayersUnmet]: "최소 인원이 모이지 않아 취소되었습니다",
 };
 
 interface CancelledActionsProps {

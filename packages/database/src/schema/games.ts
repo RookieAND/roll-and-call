@@ -33,7 +33,12 @@ export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery"])
 export const participantStatus = pgEnum("participant_status", ["confirmed", "waiting", "removed"]);
 
 // 구인을 누가 취소했는지. auto는 GM이 디스코드 서버를 나가 자동으로 취소된 경우다.
-export const gameCancelKind = pgEnum("game_cancel_kind", ["gm", "staff", "auto"]);
+export const gameCancelKind = pgEnum("game_cancel_kind", [
+  "gm",
+  "staff",
+  "auto",
+  "min_players_unmet",
+]);
 
 export const games = pgTable(
   "games",
@@ -61,6 +66,10 @@ export const games = pgTable(
     // 세션 진행 중 AI 이미지를 쓸 수 있는지. 등록할 때 반드시 고르고, 목록에는 내보내지 않는다.
     aiImage: boolean("ai_image").notNull().default(false),
     maxPlayers: integer("max_players").notNull(),
+    // 선택 입력. 모집 마감 때 모인 인원이 이보다 적으면 구인이 자동 취소된다. 1 이상 정원 이하.
+    minPlayers: integer("min_players"),
+    // 마감 판정을 이미 한 시각. 판정은 한 번만 하고, 마감을 미래로 고치면 비운다.
+    minPlayersJudgedAt: timestamp("min_players_judged_at", { withTimezone: true }),
     recruitMethod: recruitMethod("recruit_method").notNull().default("first_come"),
     // false면 정원이 찼을 때 대기 신청을 받지 않는다(status "full"). 선착순에서만 쓴다.
     waitlistEnabled: boolean("waitlist_enabled").notNull().default(true),
@@ -116,7 +125,17 @@ export const games = pgTable(
     index("games_lottery_due_idx")
       .on(table.endDate)
       .where(sql`recruit_method = 'lottery' and drawn_at is null and cancelled_at is null`),
+    // 마감 때 최소 인원 판정 크론이 집는 글
+    index("games_min_players_due_idx")
+      .on(table.endDate)
+      .where(
+        sql`recruit_method = 'first_come' and min_players is not null and min_players_judged_at is null and cancelled_at is null`,
+      ),
     check("games_max_players_positive", sql`${table.maxPlayers} >= 1`),
+    check(
+      "games_min_players_range",
+      sql`${table.minPlayers} is null or (${table.minPlayers} >= 1 and ${table.minPlayers} <= ${table.maxPlayers})`,
+    ),
     check("games_play_minutes_positive", sql`${table.playMinutes} > 0`),
     check(
       "games_window_hours",

@@ -4,6 +4,7 @@ export {
   type AutoConfirmedGame,
 } from "./commands/auto-confirm-attendance";
 export { cancelGame, type CancelGameResult } from "./commands/cancel-game";
+export { judgeMinPlayersForGame, type JudgeMinPlayersResult } from "./commands/judge-min-players";
 export { closeGameRecruitment } from "./commands/close-game-recruitment";
 export { confirmGameSession } from "./commands/confirm-game-session";
 export { createGameWithRoster } from "./commands/create-game-with-roster";
@@ -58,6 +59,7 @@ export { listSeatOpenedRecipients } from "./queries/list-seat-opened-recipients"
 export { listRosterDiscordIds } from "./queries/list-roster-discord-ids";
 export { listRosterStatuses } from "./queries/list-roster-statuses";
 export { listDueLotteries } from "./queries/list-due-lotteries";
+export { listDueMinPlayers } from "./queries/list-due-min-players";
 export { listGameRuleOptions } from "./queries/list-game-rule-options";
 export { lockGame } from "./queries/lock-game";
 export { searchGameCandidates } from "./queries/search-game-candidates";

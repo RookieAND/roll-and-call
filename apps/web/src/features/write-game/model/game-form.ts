@@ -4,6 +4,7 @@ import { GAME_TAG, RECRUIT_METHODS, SCHEDULE_MODE, SCHEDULE_MODES } from "@/enti
 import { richTextLength } from "@/shared/lib";
 
 import { isWindowHour } from "./is-window-hour";
+import { minPlayersRangeError } from "./min-players-range-error";
 import { monthDayLabel } from "./month-day-label";
 
 // 시작일 포함 일수다. 시작일과 종료일이 같은 하루짜리도 받는다.
@@ -61,6 +62,8 @@ export const gameFormSchema = z
       const count = Number(value);
       return value !== "" && Number.isInteger(count) && count >= 1 && count <= GAME_MAX_PLAYERS;
     }, `1~${GAME_MAX_PLAYERS} 사이로 적어 주세요.`),
+    // 비우면 최소 인원 없음. 범위(정원 이하)는 정원과 함께 보므로 superRefine에서 검사한다.
+    minPlayers: z.string(),
     recruitMethod: z.enum(RECRUIT_METHODS),
     scheduleMode: z.enum(SCHEDULE_MODES),
     endDate: z.string().min(1, "모집 마감 기한을 입력해 주세요."),
@@ -95,6 +98,10 @@ export const gameFormSchema = z
         message: `직접 확정한 ${values.preConfirmed.length}명보다 줄일 수 없습니다.`,
         path: ["maxPlayers"],
       });
+    }
+    const minPlayersError = minPlayersRangeError(values);
+    if (minPlayersError) {
+      context.addIssue({ code: "custom", message: minPlayersError, path: ["minPlayers"] });
     }
     if (values.scheduleMode === SCHEDULE_MODE.fixed && !values.confirmedAt) {
       context.addIssue({

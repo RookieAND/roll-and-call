@@ -19,6 +19,7 @@ export function toGameColumns(values: GameFormValues) {
     notice: values.notice || null,
     aiImage: values.aiImage,
     maxPlayers: Number(values.maxPlayers),
+    minPlayers: values.minPlayers === "" ? null : Number(values.minPlayers),
     recruitMethod: values.recruitMethod,
     // 추첨은 정원과 무관하게 받으므로 대기 접수 설정을 쓰지 않는다.
     waitlistEnabled:

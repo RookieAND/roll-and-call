@@ -103,7 +103,8 @@ export function GameFormWizard({
         return (
           <GameRecruitFields
             form={form}
-            minPlayers={Math.max(1, edit?.confirmedCount ?? 1)}
+            confirmedCount={Math.max(1, edit?.confirmedCount ?? 1)}
+            minPlayersLocked={locked}
             locked={locked}
             preConfirmable={!edit}
           />

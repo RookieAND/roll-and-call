@@ -8,6 +8,7 @@ describe("cancelTextKey", () => {
     expect(cancelTextKey(GAME_CANCEL_KIND.gm)).toBe("cancel_gm");
     expect(cancelTextKey(GAME_CANCEL_KIND.staff)).toBe("cancel_staff");
     expect(cancelTextKey(GAME_CANCEL_KIND.auto)).toBe("cancel_auto");
+    expect(cancelTextKey(GAME_CANCEL_KIND.minPlayersUnmet)).toBe("cancel_min_players");
     expect(cancelTextKey(null)).toBe("cancel_gm");
   });
 });
@@ -23,5 +24,6 @@ describe("cancelReasonLine", () => {
     expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.gm, reason: null })).toBe("");
     expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.staff, reason: "사유" })).toBe("");
     expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.auto, reason: "사유" })).toBe("");
+    expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.minPlayersUnmet, reason: "사유" })).toBe("");
   });
 });

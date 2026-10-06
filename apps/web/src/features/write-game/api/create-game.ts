@@ -18,7 +18,8 @@ import {
   notMemberError,
 } from "@/shared/server";
 
-import { gameFormSchema, INVALID_INPUT_MESSAGE, type GameFormValues } from "../model/game-form";
+import { gameFormSchema, type GameFormValues } from "../model/game-form";
+import { invalidInputResult } from "../model/invalid-input-result";
 import { pastScheduleError } from "../model/past-schedule-error";
 import { toGameColumns } from "../model/to-game-columns";
 
@@ -35,7 +36,7 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
 
   const parsed = gameFormSchema.safeParse(input);
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? INVALID_INPUT_MESSAGE };
+    return invalidInputResult(parsed.error.issues[0]);
   }
   const columns = toGameColumns(parsed.data);
   const pastError = pastScheduleError({

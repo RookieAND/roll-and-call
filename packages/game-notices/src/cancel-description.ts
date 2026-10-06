@@ -6,6 +6,7 @@ import type { MessageTextKey } from "@roll-and-call/database/servers";
 export function cancelTextKey(kind: Game["cancelKind"]): MessageTextKey {
   if (kind === GAME_CANCEL_KIND.staff) return "cancel_staff";
   if (kind === GAME_CANCEL_KIND.auto) return "cancel_auto";
+  if (kind === GAME_CANCEL_KIND.minPlayersUnmet) return "cancel_min_players";
   return "cancel_gm";
 }
 
@@ -17,6 +18,6 @@ export function cancelReasonLine({
   kind: Game["cancelKind"];
   reason: string | null;
 }): string {
-  const byGm = kind !== GAME_CANCEL_KIND.staff && kind !== GAME_CANCEL_KIND.auto;
+  const byGm = kind === GAME_CANCEL_KIND.gm;
   return byGm && reason ? `\n사유: ${reason}` : "";
 }

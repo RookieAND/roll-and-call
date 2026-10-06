@@ -24,6 +24,7 @@ const game: LockedGame = {
   windowEndHour: 0,
   drawnAt: null,
   endDate,
+  minPlayers: null,
 };
 
 const form: GameFormValues = {
@@ -31,6 +32,7 @@ const form: GameFormValues = {
   rule: "CoC 7판",
   rulebookId: "",
   maxPlayers: "4",
+  minPlayers: "",
   recruitMethod: RECRUIT_METHOD.firstCome,
   scheduleMode: SCHEDULE_MODE.fixed,
   genres: [],
@@ -104,6 +106,22 @@ describe("editBlockReason", () => {
       error: "확정 참여자가 3명이라 정원을 3명보다 줄일 수 없습니다.",
       field: "maxPlayers",
     });
+  });
+
+  it("신청자가 있으면 최소 인원을 올릴 수 없고 낮추거나 비우는 것은 된다", () => {
+    const saved = { overrides: { minPlayers: 3 }, rosterCount: 1 };
+    expect(reason({ ...saved, values: { minPlayers: "4" } })).toEqual({
+      error: "신청자가 있어 올릴 수 없습니다.",
+      field: "minPlayers",
+    });
+    expect(reason({ ...saved, values: { minPlayers: "3" } })).toBeNull();
+    expect(reason({ ...saved, values: { minPlayers: "2" } })).toBeNull();
+    expect(reason({ ...saved, values: { minPlayers: "" } })).toBeNull();
+    expect(reason({ rosterCount: 1, values: { minPlayers: "2" } })?.field).toBe("minPlayers");
+  });
+
+  it("신청자가 없으면 최소 인원을 자유롭게 올린다", () => {
+    expect(reason({ overrides: { minPlayers: 2 }, values: { minPlayers: "4" } })).toBeNull();
   });
 
   it("신청자가 있으면 일정 방식·모집 방식을 바꿀 수 없다", () => {

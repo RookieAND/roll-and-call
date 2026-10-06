@@ -1,6 +1,7 @@
 import { isNull } from "es-toolkit";
 
 import {
+  canDrawLottery,
   isDeadlinePassed,
   RECRUIT_METHOD,
   recruitMethodLabel,
@@ -16,6 +17,7 @@ export function summarizeRoster({
   confirmed,
   waiting,
   maxPlayers,
+  minPlayers = null,
   endDate,
   recruitMethod,
   drawnAt,
@@ -28,6 +30,7 @@ export function summarizeRoster({
   confirmed: ManagedMember[];
   waiting: ManagedMember[];
   maxPlayers: number;
+  minPlayers?: number | null;
   endDate: Date;
   recruitMethod: RecruitMethod;
   drawnAt: Date | null;
@@ -61,6 +64,16 @@ export function summarizeRoster({
     isFull: confirmed.length >= maxPlayers,
     started,
     capacityRaised,
+    // 신청자(직접 확정 포함)가 최소 인원에 못 미쳐 지금 추첨할 수 없을 때의 최소 인원. 그 밖에는 null이다.
+    blockedMinPlayers:
+      beforeDraw &&
+      !canDrawLottery({
+        minPlayers,
+        confirmedCount: confirmed.length,
+        applicantCount: waiting.length,
+      })
+        ? minPlayers
+        : null,
     // 뽑기 전에는 추첨에 들어갈 사람만 신청으로 센다. 직접 확정한 사람은 확정 목록에 따로 선다.
     applicantCount: waiting.length,
     // 뽑기 전에 확정에 있는 사람은 GM이 직접 넣은 사람이다. 추첨은 남은 자리만 뽑는다.

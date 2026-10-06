@@ -58,6 +58,7 @@ export function RosterStatusCard({ gameId, summary }: RosterStatusCardProps) {
             applicantCount={summary.applicantCount}
             drawCount={summary.drawCount}
             deadlinePassed={summary.deadlinePassed}
+            blockedMinPlayers={summary.blockedMinPlayers}
           />
         )}
       </VStack>

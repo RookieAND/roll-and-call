@@ -3,7 +3,7 @@ import type { Server } from "@roll-and-call/database";
 import { evaluateGameBadges } from "@roll-and-call/database/badges";
 import type { DrawLotteryResult } from "@roll-and-call/database/games";
 import { DRAW_RESULT_KIND } from "@roll-and-call/database/games/model";
-import { refreshRecruitPost } from "@roll-and-call/game-notices";
+import { notifyGameCancelled, refreshRecruitPost } from "@roll-and-call/game-notices";
 
 import { getGameById } from "./db/get-game-by-id";
 import { announceRecruitmentComplete } from "./discord/announce-recruitment-complete";
@@ -28,6 +28,10 @@ export async function finishLotteryDraw({
     }
   };
 
+  if (result.kind === DRAW_RESULT_KIND.cancelled) {
+    await step("취소 알림", () => notifyGameCancelled({ server, game: result.game }));
+    return;
+  }
   if (result.kind === DRAW_RESULT_KIND.drawn || result.kind === DRAW_RESULT_KIND.confirmedAll) {
     await step("가능 시간", async () => {
       const game = await getGameById(server.id, gameId);

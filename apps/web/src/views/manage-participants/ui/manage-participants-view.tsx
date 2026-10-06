@@ -59,6 +59,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
     confirmed,
     waiting,
     maxPlayers: game.maxPlayers,
+    minPlayers: game.minPlayers,
     endDate: game.endDate,
     recruitMethod: game.recruitMethod,
     drawnAt: game.drawnAt,

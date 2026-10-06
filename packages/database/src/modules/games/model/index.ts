@@ -3,6 +3,9 @@ export { countWaiting } from "./count-waiting";
 export { compareWaitlistOrder } from "./compare-waitlist-order";
 export { countOpenLotterySeats } from "./count-open-lottery-seats";
 export { shouldSkipLottery } from "./should-skip-lottery";
+export { canDrawLottery } from "./can-draw-lottery";
+export { countMinPlayersPool } from "./count-min-players-pool";
+export { judgeMinPlayers, type MinPlayersJudgement } from "./min-players-judgement";
 export { DIE_FACES } from "./die-faces";
 export { DRAW_REJECTION, type DrawRejection } from "./draw-rejection";
 export { DRAW_RESULT_KIND } from "./draw-result-kind";
@@ -49,7 +52,11 @@ export {
 } from "./coordination-window";
 export { isStartInCoordinationRange } from "./coordination-range";
 export { cancelBlockReason } from "./cancel-block-reason";
-export { GAME_CANCEL_KIND, type GameCancelKind } from "./game-cancel-kind";
+export {
+  GAME_CANCEL_KIND,
+  MIN_PLAYERS_UNMET_CANCEL_TEXT,
+  type GameCancelKind,
+} from "./game-cancel-kind";
 export { storedCancelReason } from "./stored-cancel-reason";
 export { ABSENCE_WINDOW_DAYS, absenceExpiresAt, isAbsenceActive } from "./absence-window";
 export {

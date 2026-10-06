@@ -24,6 +24,30 @@ describe("gameCancelledRecipients", () => {
     expect(gameCancelledRecipients({ game: lottery, kind: "gm", roster })).toEqual(["a"]);
   });
 
+  it("최소 인원 미달 취소는 GM·확정자·대기자가 받는다", () => {
+    expect(gameCancelledRecipients({ game, kind: "min_players_unmet", roster })).toEqual([
+      "a",
+      "b",
+      "gm",
+    ]);
+  });
+
+  it("최소 인원 미달로 추첨 전에 취소되면 추첨 신청자도 받는다", () => {
+    const lottery = { ...game, recruitMethod: "lottery" as const };
+    expect(gameCancelledRecipients({ game: lottery, kind: "min_players_unmet", roster })).toEqual([
+      "a",
+      "b",
+      "gm",
+    ]);
+  });
+
+  it("GM이 확정자이기도 하면 최소 인원 미달 알림은 한 번만 받는다", () => {
+    const duplicated = [...roster, { userId: "gm", status: "confirmed" as const }];
+    expect(
+      gameCancelledRecipients({ game, kind: "min_players_unmet", roster: duplicated }),
+    ).toEqual(["a", "b", "gm"]);
+  });
+
   it("추첨 글 추첨 뒤면 대기자도 받는다", () => {
     const drawn = { ...game, recruitMethod: "lottery" as const, drawnAt: new Date() };
     expect(gameCancelledRecipients({ game: drawn, kind: "gm", roster })).toEqual(["a", "b"]);

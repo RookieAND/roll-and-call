@@ -6,20 +6,23 @@ import type { UseFormReturn } from "react-hook-form";
 import { RECRUIT_METHOD } from "@/entities/game";
 import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
+import { MinPlayersField } from "./min-players-field";
 import { PreConfirmedField } from "./pre-confirmed-field";
 import { RecruitMethodField } from "./recruit-method-field";
 import { WaitlistField } from "./waitlist-field";
 
 interface GameRecruitFieldsProps {
   form: UseFormReturn<GameFormValues>;
-  minPlayers?: number;
+  confirmedCount?: number;
+  minPlayersLocked?: boolean;
   locked?: boolean;
   preConfirmable?: boolean;
 }
 
 export function GameRecruitFields({
   form,
-  minPlayers = 1,
+  confirmedCount = 1,
+  minPlayersLocked = false,
   locked = false,
   preConfirmable = false,
 }: GameRecruitFieldsProps) {
@@ -32,7 +35,7 @@ export function GameRecruitFields({
   const isLottery = method === RECRUIT_METHOD.lottery;
   const maxPlayers = Number(watch("maxPlayers"));
   const preConfirmed = watch("preConfirmed");
-  const playersFloor = Math.max(minPlayers, preConfirmed.length);
+  const playersFloor = Math.max(confirmedCount, preConfirmed.length);
 
   return (
     <>
@@ -54,15 +57,16 @@ export function GameRecruitFields({
             }
           />
         </Field.Root>
-        {minPlayers > 1 && (
+        {confirmedCount > 1 && (
           <Callout.Root colorPalette="gray" size="sm">
             <Callout.Description>
-              {`확정 참여자가 ${minPlayers}명이라 정원을 ${minPlayers}명보다 줄일 수 없습니다.`}
+              {`확정 참여자가 ${confirmedCount}명이라 정원을 ${confirmedCount}명보다 줄일 수 없습니다.`}
               <br />
               줄이려면 참여자 관리에서 확정을 먼저 풀어 주세요.
             </Callout.Description>
           </Callout.Root>
         )}
+        <MinPlayersField form={form} locked={minPlayersLocked} />
       </VStack>
 
       {preConfirmable && (

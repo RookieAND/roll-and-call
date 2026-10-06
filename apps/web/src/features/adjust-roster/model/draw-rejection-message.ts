@@ -15,8 +15,12 @@ const MESSAGES: Record<DrawRejection, string> = {
   [DRAW_REJECTION.applicationClosed]: APPLICATION_CLOSED_MESSAGE,
   [DRAW_REJECTION.noApplicants]: "추첨할 신청자가 없습니다.",
   [DRAW_REJECTION.tooMany]: `추첨 신청자는 ${DIE_FACES}명까지만 굴릴 수 있습니다.`,
+  [DRAW_REJECTION.minPlayersUnmet]: "최소 인원에 못 미쳐 추첨할 수 없습니다.",
 };
 
-export function drawRejectionMessage(reason: DrawRejection): string {
+export function drawRejectionMessage(reason: DrawRejection, minPlayers: number | null): string {
+  if (reason === DRAW_REJECTION.minPlayersUnmet && minPlayers !== null) {
+    return `최소 인원 ${minPlayers}명에 못 미쳐 추첨할 수 없습니다.`;
+  }
   return MESSAGES[reason];
 }

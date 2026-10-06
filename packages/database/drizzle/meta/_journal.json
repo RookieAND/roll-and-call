@@ -568,6 +568,27 @@
       "when": 1797200000000,
       "tag": "0086_servers_forum_tags",
       "breakpoints": true
+    },
+    {
+      "idx": 87,
+      "version": "7",
+      "when": 1797300000000,
+      "tag": "0087_game_cancel_kind_min_players_unmet",
+      "breakpoints": true
+    },
+    {
+      "idx": 88,
+      "version": "7",
+      "when": 1797400000000,
+      "tag": "0088_games_min_players",
+      "breakpoints": true
+    },
+    {
+      "idx": 89,
+      "version": "7",
+      "when": 1797500000000,
+      "tag": "0089_min_players_cron",
+      "breakpoints": true
     }
   ]
 }

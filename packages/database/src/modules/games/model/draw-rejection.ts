@@ -7,6 +7,7 @@ export const DRAW_REJECTION = {
   applicationClosed: "application_closed",
   noApplicants: "no_applicants",
   tooMany: "too_many",
+  minPlayersUnmet: "min_players_unmet",
 } as const;
 
 export type DrawRejection = (typeof DRAW_REJECTION)[keyof typeof DRAW_REJECTION];

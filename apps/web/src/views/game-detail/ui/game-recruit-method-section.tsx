@@ -5,11 +5,14 @@ import { Dice5, Zap } from "lucide-react";
 import { PARTICIPANT_STATUS, RECRUIT_METHOD, recruitMethodLabel } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 
+import { minPlayersLine } from "../model/min-players-line";
+
 interface GameRecruitMethodSectionProps {
   game: GameDetailData;
+  now: Date;
 }
 
-export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps) {
+export function GameRecruitMethodSection({ game, now }: GameRecruitMethodSectionProps) {
   const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
   const Icon = isLottery ? Dice5 : Zap;
   // 등록 때 직접 확정한 사람은 추첨 순위가 없고, 그만큼 뽑을 자리가 줄어든다.
@@ -26,6 +29,12 @@ export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps
           ? "정원이 차도 대기로 신청할 수 있습니다."
           : "정원이 차면 신청이 닫힙니다.",
       ];
+
+  const minPlayersText = minPlayersLine({
+    minPlayers: game.minPlayers,
+    endDate: game.endDate,
+    now,
+  });
 
   return (
     <VStack gap="100" render={<section />}>
@@ -45,6 +54,12 @@ export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps
               {lines[0]}
               <br />
               {lines[1]}
+              {minPlayersText && (
+                <>
+                  <br />
+                  {minPlayersText}
+                </>
+              )}
             </Text>
           </VStack>
         </HStack>

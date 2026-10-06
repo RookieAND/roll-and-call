@@ -4,6 +4,8 @@ import { isSessionStarted, SCHEDULE_MODE } from "@/entities/game";
 import { GAME_CANCELLED_MESSAGE } from "@/shared/api";
 import type { Game } from "@/shared/server";
 
+import { isMinPlayersRaise } from "./is-min-players-raise";
+import { MIN_PLAYERS_RAISE_MESSAGE } from "./min-players-raise-message";
 import { pastScheduleError } from "./past-schedule-error";
 import type { toGameColumns } from "./to-game-columns";
 
@@ -21,6 +23,7 @@ type LockedGame = Pick<
   | "windowStartHour"
   | "windowEndHour"
   | "drawnAt"
+  | "minPlayers"
   | "endDate"
 >;
 
@@ -50,6 +53,9 @@ export function editBlockReason(
       error: `확정 참여자가 ${confirmedCount}명이라 정원을 ${confirmedCount}명보다 줄일 수 없습니다.`,
       field: "maxPlayers",
     };
+  }
+  if (rosterCount > 0 && isMinPlayersRaise({ saved: game.minPlayers, next: columns.minPlayers })) {
+    return { error: MIN_PLAYERS_RAISE_MESSAGE, field: "minPlayers" };
   }
   // 조율 응답·확정 명단이 일정 방식·시간대에, 확정 순서가 모집 방식에 묶여 있어 신청자가 있으면 못 바꾼다.
   if (rosterCount > 0) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Callout } from "@roll-and-call/ui";
+import { Button, Callout, Text } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -14,6 +14,7 @@ interface DrawLotteryCardProps {
   applicantCount: number;
   drawCount: number;
   deadlinePassed: boolean;
+  blockedMinPlayers: number | null;
 }
 
 // applicantCount는 직접 확정한 사람을 뺀 추첨 대상 수다. 직접 확정은 뽑을 자리에서만 뺀다.
@@ -23,6 +24,7 @@ export function DrawLotteryCard({
   applicantCount,
   drawCount,
   deadlinePassed,
+  blockedMinPlayers,
 }: DrawLotteryCardProps) {
   const [confirming, setConfirming] = useState(false);
   const { pending, run } = useAction();
@@ -65,9 +67,21 @@ export function DrawLotteryCard({
           <LineBreaks lines={lines} />
         </Callout.Description>
         <div className="col-span-full mt-150">
-          <Button size="lg" className="w-full" onClick={() => setConfirming(true)}>
+          <Button
+            size="lg"
+            className="w-full"
+            disabled={blockedMinPlayers !== null}
+            onClick={() => setConfirming(true)}
+          >
             지금 추첨하기
           </Button>
+          {blockedMinPlayers !== null && (
+            <Text typography="body4" foreground="muted" render={<p />} className="mt-100">
+              <LineBreaks
+                lines={[`최소 인원 ${blockedMinPlayers}명에 못 미쳐`, "지금 추첨할 수 없습니다."]}
+              />
+            </Text>
+          )}
         </div>
       </Callout.Root>
 

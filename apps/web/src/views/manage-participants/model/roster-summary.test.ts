@@ -70,4 +70,53 @@ describe("summarizeRoster", () => {
     });
     expect(open.noApplicantsClosed).toBe(false);
   });
+
+  describe("blockedMinPlayers", () => {
+    const lottery = { ...base, recruitMethod: RECRUIT_METHOD.lottery, drawnAt: null };
+
+    it("신청자가 최소 인원에 못 미치면 최소 인원을 돌려준다", () => {
+      const summary = summarizeRoster({
+        ...lottery,
+        minPlayers: 3,
+        confirmed: [],
+        waiting: [member("a", 1), member("b", 2)],
+      });
+      expect(summary.blockedMinPlayers).toBe(3);
+    });
+
+    it("최소 인원을 채우면 막지 않는다", () => {
+      const summary = summarizeRoster({
+        ...lottery,
+        minPlayers: 3,
+        confirmed: [],
+        waiting: [member("a", 1), member("b", 2), member("c", 3)],
+      });
+      expect(summary.blockedMinPlayers).toBeNull();
+    });
+
+    it("직접 확정한 사람도 채운 수에 넣는다", () => {
+      const summary = summarizeRoster({
+        ...lottery,
+        minPlayers: 3,
+        confirmed: [member("pre", null)],
+        waiting: [member("a", 1), member("b", 2)],
+      });
+      expect(summary.blockedMinPlayers).toBeNull();
+    });
+
+    it("최소 인원이 없거나 추첨 글이 아니면 막지 않는다", () => {
+      const waiting = [member("a", 1)];
+      expect(summarizeRoster({ ...lottery, confirmed: [], waiting }).blockedMinPlayers).toBeNull();
+      expect(
+        summarizeRoster({
+          ...base,
+          minPlayers: 3,
+          recruitMethod: RECRUIT_METHOD.firstCome,
+          drawnAt: null,
+          confirmed: [],
+          waiting,
+        }).blockedMinPlayers,
+      ).toBeNull();
+    });
+  });
 });

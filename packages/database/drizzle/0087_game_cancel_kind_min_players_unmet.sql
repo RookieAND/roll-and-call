@@ -1,0 +1,1 @@
+ALTER TYPE "public"."game_cancel_kind" ADD VALUE 'min_players_unmet';

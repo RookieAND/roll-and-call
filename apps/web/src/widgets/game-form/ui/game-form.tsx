@@ -45,7 +45,7 @@ export function GameForm({
       : null;
 
   const form = useForm<GameFormValues>({
-    resolver: gameFormResolver(rulebooks),
+    resolver: gameFormResolver({ rulebooks, edit }),
     defaultValues: {
       title: defaultGame?.title ?? "",
       rule: defaultGame?.rule ?? initialSet?.label ?? "",
@@ -58,6 +58,7 @@ export function GameForm({
       aiImage: defaultGame?.aiImage ?? false,
       playMinutes: defaultGame?.playMinutes ?? DEFAULT_PLAY_MINUTES,
       maxPlayers: String(defaultGame?.maxPlayers ?? 4),
+      minPlayers: String(defaultGame?.minPlayers ?? ""),
       recruitMethod: defaultGame?.recruitMethod ?? RECRUIT_METHOD.firstCome,
       scheduleMode: defaultGame?.scheduleMode ?? SCHEDULE_MODE.coordinate,
       endDate: defaultGame?.endDate ? toKstDateTimeInput(defaultGame.endDate) : "",

@@ -27,7 +27,13 @@ export const SECTION_FIELDS = {
     "notice",
   ],
   [FORM_SECTION.media]: ["thumbnailUrl", "thumbnailSpoiler", "images"],
-  [FORM_SECTION.recruit]: ["maxPlayers", "preConfirmed", "recruitMethod", "waitlistEnabled"],
+  [FORM_SECTION.recruit]: [
+    "maxPlayers",
+    "minPlayers",
+    "preConfirmed",
+    "recruitMethod",
+    "waitlistEnabled",
+  ],
   [FORM_SECTION.schedule]: [
     "scheduleMode",
     "confirmedAt",

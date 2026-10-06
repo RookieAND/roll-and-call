@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { isNextRoundRangeValid } from "./is-next-round-range-valid";
 import { isNextRoundStartValid } from "./is-next-round-start-valid";
 import { nextRoundBaseDate } from "./next-round-base-date";
+import { nextRoundColumns } from "./next-round-columns";
 import { nextRoundDeadline } from "./next-round-deadline";
 import { splitNextRoundRoster } from "./split-next-round-roster";
 
@@ -99,5 +100,20 @@ describe("splitNextRoundRoster", () => {
         maxPlayers: 3,
       }),
     ).toEqual({ confirmed: ["a", "c", "d"], waiting: ["e"] });
+  });
+});
+
+describe("nextRoundColumns", () => {
+  it("최소 인원과 판정 표시를 이어받지 않는다", () => {
+    const game = { id: "g", serverId: "s", createdAt: now, minPlayers: 3, minPlayersJudgedAt: now };
+    const columns = nextRoundColumns({
+      game: game as never,
+      endDate: now,
+      rangeStart: null,
+      rangeEnd: null,
+      confirmedAt: null,
+    });
+    expect(columns.minPlayers).toBeNull();
+    expect(columns.minPlayersJudgedAt).toBeNull();
   });
 });

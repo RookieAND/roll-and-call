@@ -10,6 +10,7 @@ export type GameEditContext = {
   applicantCount: number;
   confirmedCount: number;
   drawn: boolean;
+  minPlayers: number | null;
 };
 
 export interface GameFormLayoutProps {

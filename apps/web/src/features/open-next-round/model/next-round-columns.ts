@@ -5,6 +5,9 @@ import { omit } from "es-toolkit";
 const DROPPED_COLUMNS = ["id", "serverId", "createdAt"] as const;
 
 const CLEARED_COLUMNS = {
+  // 새 회차는 최소 인원 없이 시작한다. 이전 회차의 값과 판정 표시를 이어받지 않는다.
+  minPlayers: null,
+  minPlayersJudgedAt: null,
   discordThreadId: null,
   notifiedAt: null,
   drawnAt: null,

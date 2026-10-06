@@ -1,5 +1,7 @@
 export { createGame } from "./api/create-game";
 export { updateGame } from "./api/update-game";
+export { isMinPlayersRaise } from "./model/is-min-players-raise";
+export { MIN_PLAYERS_RAISE_MESSAGE } from "./model/min-players-raise-message";
 export {
   gameFormSchema,
   GAME_IMAGES_MAX,

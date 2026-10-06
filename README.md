@@ -63,6 +63,7 @@ pnpm -F @roll-and-call/database db:generate | db:migrate | db:studio
 | `session-reminders`       | `*/5 * * * *`  | Edge Function `session-reminders`  | pg_cron → Edge Function |
 | `draw-lotteries`          | `*/10 * * * *` | `/api/cron/draws`                  | pg_cron → Next 라우트   |
 | `attendance-auto-confirm` | `5 * * * *`    | `/api/cron/attendance`             | pg_cron → Next 라우트   |
+| `judge-min-players`       | `*/10 * * * *` | `/api/cron/min-players`            | pg_cron → Next 라우트   |
 | badges                    | `5 15 * * *`   | `/api/cron/badges`                 | Vercel Cron             |
 | members                   | `10 19 * * *`  | `/api/cron/members`                | Vercel Cron             |
 

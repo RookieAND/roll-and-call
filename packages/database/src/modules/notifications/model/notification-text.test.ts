@@ -126,6 +126,14 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "GM이 서버를 나가 취소되었습니다.",
   ],
   [
+    {
+      kind: NOTIFICATION_KIND.gameCancelled,
+      params: { ...game, cancelKind: GAME_CANCEL_KIND.minPlayersUnmet, reason: null },
+    },
+    "검은 산의 노래 구인이 취소되었습니다.",
+    "최소 인원이 모이지 않아 취소되었습니다.",
+  ],
+  [
     { kind: NOTIFICATION_KIND.gameHidden, params: { ...game, reason: "도배" } },
     "검은 산의 노래를 운영진이 숨겼습니다.",
     "사유: 도배",
