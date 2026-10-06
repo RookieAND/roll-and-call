@@ -120,6 +120,7 @@ export function HomeCalendarCell({
           오늘
         </Text>
       )}
+      {!lead && !today && <span aria-hidden className="h-1.5" />}
     </Link>
   );
 }
