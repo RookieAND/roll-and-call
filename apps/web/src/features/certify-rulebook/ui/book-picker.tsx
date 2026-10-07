@@ -10,10 +10,11 @@ import {
   IconButton,
   Text,
   TextInput,
+  UiImage,
   VStack,
 } from "@roll-and-call/ui";
 import { uniq } from "es-toolkit";
-import { ArrowRightLeft, Plus, Search } from "lucide-react";
+import { ArrowRightLeft, Plus } from "lucide-react";
 import { useState } from "react";
 
 import {
@@ -132,9 +133,7 @@ export function BookPicker({
 
           {!category && listed.length === 0 && (
             <VStack align="center" gap="100" className="px-150 pt-400 pb-500 text-center">
-              <span className="mb-075 flex size-14 items-center justify-center rounded-full bg-gray-100 text-gray-600">
-                <Search size={26} aria-hidden />
-              </span>
+              <UiImage name="empty-rulebook-search" width={140} height={140} />
               <Text typography="heading3">"{query.trim()}"에 맞는 룰북이 없습니다</Text>
               <Text typography="body3" foreground="muted" render={<p />}>
                 정식 이름이나 줄임말로도 찾을 수 있습니다.
