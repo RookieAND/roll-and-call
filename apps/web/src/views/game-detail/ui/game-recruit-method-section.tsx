@@ -22,7 +22,12 @@ export function GameRecruitMethodSection({ game, now }: GameRecruitMethodSection
   ).length;
   const drawCount = Math.max(game.maxPlayers - preConfirmedCount, 0);
   const lines = isLottery
-    ? ["정원과 관계없이 신청을 받습니다.", `마감 때 추첨으로 ${drawCount}명을 정합니다.`]
+    ? [
+        "정원과 관계없이 신청을 받습니다.",
+        drawCount > 0
+          ? `마감 때 추첨으로 ${drawCount}명을 정합니다.`
+          : "정원이 이미 모두 확정되어 추첨할 자리가 없습니다.",
+      ]
     : [
         "신청한 순서대로 정원까지 바로 확정됩니다.",
         game.waitlistEnabled
