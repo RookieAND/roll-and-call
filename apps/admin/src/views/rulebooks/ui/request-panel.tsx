@@ -3,7 +3,7 @@ import { Table, Text, VStack } from "@roll-and-call/ui";
 import { RequestActions, type RequestAction } from "@/features/process-rulebook-request";
 import { formatDate, RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { RulebookRequestRow } from "@/shared/server";
-import { Panel, SortFixedNote, TableColumns, Tag } from "@/shared/ui";
+import { EMPTY_IMAGE, EmptyState, Panel, SortFixedNote, TableColumns, Tag } from "@/shared/ui";
 
 interface RequestPanelProps {
   requests: RulebookRequestRow[];
@@ -13,12 +13,12 @@ interface RequestPanelProps {
 export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
   if (requests.length === 0) {
     return (
-      <Panel title="룰북 추가 요청" bodyClassName="p-150">
-        <Text typography="body4" foreground="hint">
-          대기 중인 요청이 없습니다.
-          <br />
-          사용자가 카탈로그에 없는 룰북을 요청하면 이곳에 표시됩니다.
-        </Text>
+      <Panel title="룰북 추가 요청">
+        <EmptyState
+          image={EMPTY_IMAGE.search}
+          title="대기 중인 요청이 없습니다"
+          description="사용자가 카탈로그에 없는 룰북을 요청하면 이곳에 표시됩니다."
+        />
       </Panel>
     );
   }
