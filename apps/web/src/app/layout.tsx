@@ -1,5 +1,6 @@
 import { Toast } from "@roll-and-call/ui";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import Script from "next/script";
 
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </QueryProvider>
         <Toast.Viewport offset={76} />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
