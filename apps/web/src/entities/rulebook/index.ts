@@ -6,6 +6,7 @@ export { certApplyHref } from "./model/cert-apply-href";
 export { CERT_STATE, type CertState } from "./model/cert-state";
 export { CERT_STATE_META } from "./model/cert-state-meta";
 export { deriveCertState } from "./model/derive-cert-state";
+export { isCertEnforced } from "./model/is-cert-enforced";
 export { rulebookLabel } from "./model/rulebook-label";
 export { toMyRulebooks, type MyRulebook, type MyRulebooks } from "./model/to-my-rulebooks";
 export { CertStateIcon } from "./ui/cert-state-icon";

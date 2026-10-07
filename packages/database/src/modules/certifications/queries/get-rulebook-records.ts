@@ -10,6 +10,7 @@ import {
   rulebookCategories,
   rulebookRequests,
   rulebooks,
+  servers,
 } from "#/schema";
 
 const RECENT_DAYS = 90;
@@ -39,6 +40,11 @@ export async function getRulebookRecords({
     .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
     .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.hidden, false)))
     .orderBy(rulebookCategories.name, rulebooks.name, rulebooks.edition);
+  const [server] = await db
+    .select({ certEnforcementDate: servers.certEnforcementDate })
+    .from(servers)
+    .where(eq(servers.id, serverId));
+  const enforcementDate = server?.certEnforcementDate ?? null;
   const pendingRequestNames = await db
     .selectDistinct({ name: rulebookRequests.name, edition: rulebookRequests.edition })
     .from(rulebookRequests)
@@ -46,6 +52,7 @@ export async function getRulebookRecords({
   if (!userId) {
     return {
       catalog,
+      enforcementDate,
       pendingRequestNames,
       certificationRows: [],
       applicationRows: [],
@@ -126,6 +133,7 @@ export async function getRulebookRecords({
   const recentRulebookIds = uniq(compact(recentGames.map((game) => game.rulebookId)));
   return {
     catalog,
+    enforcementDate,
     pendingRequestNames,
     certificationRows,
     applicationRows,

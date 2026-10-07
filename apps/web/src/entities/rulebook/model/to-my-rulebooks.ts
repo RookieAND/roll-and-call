@@ -78,6 +78,7 @@ export function toMyRulebooks(records: RulebookRecords) {
     rulebooks,
     sets: editionSets(rulebooks),
     requests,
+    enforcementDate: records.enforcementDate,
     recentRulebookIds: records.recentRulebookIds,
     pendingRequestNames: records.pendingRequestNames.map(rulebookLabel),
     sanction: records.sanction,

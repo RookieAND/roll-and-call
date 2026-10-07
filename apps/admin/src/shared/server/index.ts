@@ -24,4 +24,6 @@ export {
   saveForumTags,
   saveMessageHead,
   saveMessageText,
+  updateCertEnforcementDate,
+  type EnforcementChange,
 } from "@roll-and-call/database/servers";

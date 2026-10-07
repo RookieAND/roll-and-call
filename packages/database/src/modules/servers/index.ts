@@ -3,6 +3,11 @@ export { claimMonthlyAnnouncement } from "./commands/claim-monthly-announcement"
 export { ensureMembership } from "./commands/ensure-membership";
 export { leaveServer, type LeaveServerResult } from "./commands/leave-server";
 export { markMemberVisit } from "./commands/mark-member-visit";
+export {
+  ENFORCEMENT_CHANGE,
+  updateCertEnforcementDate,
+  type EnforcementChange,
+} from "./commands/update-cert-enforcement-date";
 export { syncServerGuild } from "./commands/sync-server-guild";
 export { saveForumTags } from "./commands/save-forum-tags";
 export { saveMessageHead } from "./commands/save-message-head";

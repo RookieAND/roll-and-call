@@ -43,6 +43,8 @@ export const servers = pgTable("servers", {
   inviteUrl: text("invite_url"),
   // 월간 발표를 보낸 마지막 달, YYYY-MM. 다시 보내지 않게 막는다.
   monthlyAnnouncedMonth: text("monthly_announced_month"),
+  // 룰북 인증 적용일. 이 날 전까지는 인증 없이도 구인을 열 수 있다(유예 기간). 비어 있으면 바로 적용한다.
+  certEnforcementDate: timestamp("cert_enforcement_date", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 }).enableRLS();
 

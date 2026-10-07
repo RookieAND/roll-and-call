@@ -1,0 +1,1 @@
+ALTER TABLE "servers" ADD COLUMN "cert_enforcement_date" timestamp with time zone;

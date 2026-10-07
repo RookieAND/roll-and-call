@@ -1,12 +1,13 @@
-import { topicParticle } from "@/shared/lib";
+import { formatDate, topicParticle } from "@/shared/lib";
 
 import { certApplyHref } from "./cert-apply-href";
 import { CERT_OPTION, certOption } from "./cert-option";
 import type { EditionSet } from "./edition-sets";
+import { isCertEnforced } from "./is-cert-enforced";
 import { SET_STATUS, setStatus } from "./set-status";
 import type { MyRulebooks } from "./to-my-rulebooks";
 
-export const RULE_GATE = { open: "open", blocked: "blocked" } as const;
+export const RULE_GATE = { open: "open", notice: "notice", blocked: "blocked" } as const;
 export type RuleGateType = (typeof RULE_GATE)[keyof typeof RULE_GATE];
 
 export interface RuleGate {
@@ -16,15 +17,17 @@ export interface RuleGate {
   action: { label: string; href: string } | null;
 }
 
-// 구인을 이 판본으로 열 수 있는지.
+// 구인을 이 판본으로 열 수 있는지. 적용일 전(유예 기간)에는 알려만 주고, 지나면 막는다.
 export function ruleGate({
   set,
   myRulebooks,
+  now = new Date(),
 }: {
   set: EditionSet;
   myRulebooks: MyRulebooks;
+  now?: Date;
 }): RuleGate {
-  const { rulebooks, sets } = myRulebooks;
+  const { rulebooks, sets, enforcementDate } = myRulebooks;
   const { status, book, missing } = setStatus(set);
   const applicable = missing
     .filter((core) => certOption({ rulebook: core, rulebooks }).type === CERT_OPTION.pick)
@@ -39,6 +42,16 @@ export function ruleGate({
       okText: set.unlockedBy ? `${set.unlockedBy} 인증으로 열 수 있습니다` : null,
       lines: [],
       action: null,
+    };
+  }
+  if (!isCertEnforced(enforcementDate, now)) {
+    return {
+      type: RULE_GATE.notice,
+      okText: null,
+      lines: [
+        `${formatDate(enforcementDate!)}부터는 이 룰로 구인을 열려면 룰북 인증이 필요합니다.`,
+      ],
+      action: status === SET_STATUS.pending ? null : applyAction("지금 인증 신청하기"),
     };
   }
   const blocked = (lines: string[], action: RuleGate["action"]): RuleGate => ({

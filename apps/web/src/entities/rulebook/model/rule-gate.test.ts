@@ -5,6 +5,9 @@ import { editionSets } from "./edition-sets";
 import { RULE_GATE, ruleGate } from "./rule-gate";
 import type { MyRulebook, MyRulebooks } from "./to-my-rulebooks";
 
+const NOW = new Date("2026-10-20T00:00:00+09:00");
+const COMING = new Date("2026-10-28T00:00:00+09:00");
+
 const book = (id: string, overrides: Partial<MyRulebook> = {}) =>
   ({
     id,
@@ -21,8 +24,8 @@ const book = (id: string, overrides: Partial<MyRulebook> = {}) =>
     ...overrides,
   }) as MyRulebook;
 
-const data = (rulebooks: MyRulebook[]) =>
-  ({ rulebooks, sets: editionSets(rulebooks) }) as MyRulebooks;
+const data = (rulebooks: MyRulebook[], enforcementDate: Date | null = null) =>
+  ({ rulebooks, sets: editionSets(rulebooks), enforcementDate }) as MyRulebooks;
 
 describe("ruleGate", () => {
   it("기본 룰북이 모자란 판본을 막고 남은 책을 알려 준다", () => {
@@ -33,6 +36,20 @@ describe("ruleGate", () => {
       lines: ["기본 룰북 2권 중 1권이 남았습니다.", "남은 책을 인증하면 열 수 있습니다."],
       action: { label: "남은 책 인증하기", href: "/me/rulebooks/apply?rulebook=2%EA%B6%8C" },
     });
+  });
+
+  it("적용일 전(유예 기간)에는 알려만 준다", () => {
+    const records = data([book("1권")], COMING);
+    expect(ruleGate({ set: records.sets[0]!, myRulebooks: records, now: NOW }).type).toBe(
+      RULE_GATE.notice,
+    );
+  });
+
+  it("적용일이 지났거나 비어 있으면 막는다", () => {
+    const passed = data([book("1권")], new Date("2026-10-08T00:00:00+09:00"));
+    expect(ruleGate({ set: passed.sets[0]!, myRulebooks: passed, now: NOW }).type).toBe(
+      RULE_GATE.blocked,
+    );
   });
 
   it("신판 인증으로 구판을 연다", () => {
