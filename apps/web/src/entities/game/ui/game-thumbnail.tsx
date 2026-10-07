@@ -36,7 +36,6 @@ export function GameThumbnail({
         src={url ?? OG_IMAGE.url}
         alt={alt}
         fill
-        unoptimized
         sizes={sizes}
         fetchPriority={fetchPriority}
         className={cn(
