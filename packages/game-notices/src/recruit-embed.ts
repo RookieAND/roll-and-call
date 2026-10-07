@@ -5,6 +5,7 @@ import { discordOverview } from "./discord-overview";
 import { gameUrl } from "./game-url";
 import { formatGameSchedule } from "./lib/format-game-schedule";
 import { formatMonthDay } from "./lib/format-month-day";
+import { formatRecruitHeadcount } from "./lib/format-recruit-headcount";
 
 // cancelled면 글은 그 자리에 남기고 빨갛게 바꾼다 — 들어갈 곳이 없어졌으니 링크는 뺀다. CTA는 recruitButtons.
 export function recruitEmbed({
@@ -23,7 +24,7 @@ export function recruitEmbed({
   const url = cancelled ? undefined : gameUrl({ slug, gameId: game.id });
   const fields = [
     { name: "📜 룰", value: game.rule, inline: true },
-    { name: "👥 인원", value: `${confirmedCount}/${game.maxPlayers}명`, inline: true },
+    { name: "👥 인원", value: formatRecruitHeadcount({ game, confirmedCount }), inline: true },
     { name: "🎯 방식", value: game.recruitMethod === "lottery" ? "추첨" : "선착순", inline: true },
     { name: "🕒 시간", value: formatGameSchedule(game), inline: false },
   ];

@@ -4,6 +4,7 @@ import { formatPlayMinutes } from "@roll-and-call/database/games/model";
 import { inlineCodeTags } from "./inline-code-tags";
 import { formatDateTime } from "./lib/format-date-time";
 import { formatGameSchedule } from "./lib/format-game-schedule";
+import { formatRecruitHeadcount } from "./lib/format-recruit-headcount";
 import { richTextToMarkdown } from "./lib/rich-text-markdown";
 import { splitMessage } from "./split-message";
 
@@ -47,7 +48,7 @@ export function recruitPlainText({
       "## 📋 모집 정보",
       list([
         item("룰", game.rule),
-        item("인원", `${confirmedCount}/${game.maxPlayers}명 · ${method}`),
+        item("인원", `${formatRecruitHeadcount({ game, confirmedCount })} · ${method}`),
         item("GM", gmName),
       ]),
     ),
