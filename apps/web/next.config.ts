@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["@roll-and-call/ui"],
   },
   images: {
+    // 소스 하나당 변환이 기기 폭×DPR마다 생겨 한도를 먹는다. 카드 폭(412px)의 1~3배로만 묶는다.
+    deviceSizes: [420, 840, 1260],
+    imageSizes: [56, 112, 168],
     remotePatterns: [
       {
         protocol: "https",
