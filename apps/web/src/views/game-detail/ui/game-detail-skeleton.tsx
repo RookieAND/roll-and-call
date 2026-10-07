@@ -16,7 +16,6 @@ export function GameDetailSkeleton() {
             <Skeleton width="100%" height={200} rounded={500} />
             <Skeleton width="100%" height={14} />
             <Skeleton width="80%" height={14} />
-            <Skeleton width="100%" height={160} rounded={600} />
           </VStack>
         </VStack>
       </Container>

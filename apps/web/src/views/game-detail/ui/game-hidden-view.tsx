@@ -12,7 +12,12 @@ export function GameHiddenView() {
         title="운영진이 숨긴 구인입니다"
         description="지금은 내용을 볼 수 없습니다."
         action={
-          <Button render={<ServerLink path="/games" />} variant="outline">
+          <Button
+            render={<ServerLink path="/games" />}
+            variant="outline"
+            size="lg"
+            className="w-full"
+          >
             구인 목록 보기
           </Button>
         }

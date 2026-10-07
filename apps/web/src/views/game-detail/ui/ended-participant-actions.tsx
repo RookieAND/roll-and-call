@@ -16,14 +16,31 @@ interface EndedParticipantActionsProps {
   review: ReviewStatus;
 }
 
+function reviewLines({
+  attendanceConfirmed,
+  writable,
+  review,
+}: {
+  attendanceConfirmed: boolean;
+  writable: boolean;
+  review: ReviewStatus;
+}) {
+  if (!attendanceConfirmed) return ["GM이 출석을 확인하면 후기를 쓸 수 있습니다."];
+  if (writable) return ["출석이 확정되었습니다.", "세션 후기를 남길 수 있습니다."];
+  if (review === REVIEW_STATUS.written) {
+    return ["후기를 남겼습니다.", "작성한 후기는 후기 보기에서 확인할 수 있습니다."];
+  }
+  return [];
+}
+
 export function EndedParticipantActions({
   gameId,
   endedOn,
   attendanceConfirmed,
   review,
 }: EndedParticipantActionsProps) {
-  const lines = attendanceConfirmed ? [] : ["GM이 출석을 확인하면 후기를 쓸 수 있습니다."];
   const writable = attendanceConfirmed && review === REVIEW_STATUS.writable;
+  const lines = reviewLines({ attendanceConfirmed, writable, review });
 
   return (
     <VStack gap="125">

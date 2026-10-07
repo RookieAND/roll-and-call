@@ -1,4 +1,4 @@
-import { Sheet, VStack } from "@roll-and-call/ui";
+import { Sheet, Text, VStack } from "@roll-and-call/ui";
 
 import { RosterGmGroup, type RosterSheetGm } from "./roster-gm-group";
 import { RosterGroup } from "./roster-group";
@@ -27,13 +27,22 @@ export function LotteryRosterSheet({
         <Sheet.Handle />
         <RosterSheetTitle title="참여 신청자 명단" />
 
-        <VStack gap="150" className="max-h-[23rem] overflow-y-auto">
+        <VStack gap="150">
           <RosterGmGroup gm={gm} viewerId={viewerId} />
-          <RosterGroup label="신청" count={applicants.length}>
+          <RosterGroup
+            label="신청"
+            count={applicants.length}
+            className="max-h-[368px] overflow-y-auto"
+          >
             {applicants.map((member) => (
               <RosterSheetRow key={member.userId} member={member} viewerId={viewerId} />
             ))}
           </RosterGroup>
+          <Text typography="body4" foreground="hint" render={<p />}>
+            추첨 전에는 순번이 없습니다.
+            <br />
+            신청 순서로만 보여 줍니다.
+          </Text>
         </VStack>
       </Sheet.Popup>
     </Sheet.Root>

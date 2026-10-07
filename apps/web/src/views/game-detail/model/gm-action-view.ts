@@ -22,7 +22,8 @@ export function gmActionView({
       (Boolean(game.attendanceConfirmedAt) || isAttendancePastDeadline({ ...game, now }));
     return { kind: GAME_ACTION_VIEW.gmEnded, attendanceDue, attendanceRecorded };
   }
-  if (isSessionInProgress(game, now)) return { kind: GAME_ACTION_VIEW.gmLive };
+  if (isSessionInProgress(game, now))
+    return { kind: GAME_ACTION_VIEW.gmLive, attendanceExpected: confirmedCount > 0 };
   const calendar = canAddToCalendar({ game, viewerRole: CALENDAR_VIEWER_ROLE.gm, now });
   return { kind: GAME_ACTION_VIEW.gmUpcoming, calendar };
 }

@@ -125,7 +125,11 @@ describe("deriveActionView", () => {
   it("(3) GM 진행 중", () => {
     expect(view({ game: { ...firstCome, confirmedAt: at(-1) }, viewer: gm })).toEqual({
       kind: GAME_ACTION_VIEW.gmLive,
+      attendanceExpected: true,
     });
+    expect(
+      view({ game: { ...firstCome, confirmedAt: at(-1) }, viewer: gm, confirmedCount: 0 }),
+    ).toEqual({ kind: GAME_ACTION_VIEW.gmLive, attendanceExpected: false });
   });
 
   it("(4) GM 시작 전: 시각이 있으면 캘린더", () => {

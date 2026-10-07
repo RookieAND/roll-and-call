@@ -11,7 +11,7 @@ export default function NotFound() {
         title="찾을 수 없는 구인입니다"
         description={
           <>
-            GM이 구인을 취소했거나 주소가 바뀌었습니다.
+            주소가 잘못되었거나 다른 서버의 구인입니다.
             <br />
             다른 모집 중인 구인을 둘러봐 주세요.
           </>

@@ -1,4 +1,4 @@
-import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Card, cn, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import type { ReactNode } from "react";
 
@@ -6,9 +6,10 @@ interface RosterGroupProps {
   label?: string;
   count?: number;
   children: ReactNode;
+  className?: string;
 }
 
-export function RosterGroup({ label, count, children }: RosterGroupProps) {
+export function RosterGroup({ label, count, children, className }: RosterGroupProps) {
   return (
     <VStack gap="075" render={<section />}>
       {label && (
@@ -26,7 +27,7 @@ export function RosterGroup({ label, count, children }: RosterGroupProps) {
       <Card.Root
         padding="none"
         radius={500}
-        className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
+        className={cn("overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200", className)}
       >
         {children}
       </Card.Root>

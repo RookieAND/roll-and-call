@@ -81,7 +81,7 @@ export type GameActionView =
       isGm: boolean;
     }
   | { kind: typeof GAME_ACTION_VIEW.gmEnded; attendanceDue: boolean; attendanceRecorded: boolean }
-  | { kind: typeof GAME_ACTION_VIEW.gmLive }
+  | { kind: typeof GAME_ACTION_VIEW.gmLive; attendanceExpected: boolean }
   | { kind: typeof GAME_ACTION_VIEW.gmUpcoming; calendar: boolean }
   | { kind: typeof GAME_ACTION_VIEW.absent }
   | {

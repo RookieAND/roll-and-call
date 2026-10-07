@@ -29,7 +29,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
     case GAME_ACTION_VIEW.gmEnded:
       return <EndedGmActions gameId={game.id} {...view} />;
     case GAME_ACTION_VIEW.gmLive:
-      return <GmLiveActions gameId={game.id} />;
+      return <GmLiveActions gameId={game.id} {...view} />;
     case GAME_ACTION_VIEW.gmUpcoming:
       return <GmUpcomingActions game={game} calendar={view.calendar} />;
     case GAME_ACTION_VIEW.absent:
@@ -49,7 +49,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
     case GAME_ACTION_VIEW.confirmedLocked:
       return <ConfirmedLockedActions game={game} {...view} />;
     case GAME_ACTION_VIEW.closedScheduled:
-      return <ClosedActions title="일정이 확정되어 추가 신청을 받지 않습니다" />;
+      return <ClosedActions title="일정이 확정되어 신청을 받지 않습니다" />;
     case GAME_ACTION_VIEW.closed:
       return <ClosedActions title="모집이 끝났습니다" />;
     case GAME_ACTION_VIEW.sanctioned:

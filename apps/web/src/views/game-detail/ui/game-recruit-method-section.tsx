@@ -39,6 +39,7 @@ export function GameRecruitMethodSection({ game, now }: GameRecruitMethodSection
     minPlayers: game.minPlayers,
     endDate: game.endDate,
     now,
+    recruitMethod: game.recruitMethod,
   });
 
   return (
