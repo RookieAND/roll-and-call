@@ -125,7 +125,7 @@ export function BookPicker({
                   className="self-start w-full"
                   onClick={() => setShowAll(true)}
                 >
-                  전체 룰 보기
+                  + 전체 룰 보기
                 </Button>
               )}
             </VStack>
