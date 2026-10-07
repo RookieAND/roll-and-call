@@ -3,6 +3,7 @@ import { Badge, Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 interface ConfirmSummaryProps {
   title: string;
   rule: string;
+  respondedCount: number;
   confirmedCount: number;
   playLabel: string;
   deadlineLabel: string;
@@ -11,6 +12,7 @@ interface ConfirmSummaryProps {
 export function ConfirmSummary({
   title,
   rule,
+  respondedCount,
   confirmedCount,
   playLabel,
   deadlineLabel,
@@ -22,7 +24,9 @@ export function ConfirmSummary({
           {title}
         </Text>
         <Badge className="shrink-0">{rule}</Badge>
-        <Badge className="shrink-0 tabular-nums">확정 {confirmedCount}명</Badge>
+        <Badge className="shrink-0 tabular-nums">
+          가능 시간 제출 {respondedCount} / {confirmedCount}명
+        </Badge>
       </HStack>
       <Grid cols={2} gap="100">
         <SummaryCard label="플레이타임" value={playLabel} />

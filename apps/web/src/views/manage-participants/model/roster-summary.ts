@@ -22,6 +22,7 @@ export function summarizeRoster({
   recruitMethod,
   drawnAt,
   hasRolls = false,
+  isCoordinate,
   started,
   capacityRaised,
   now = new Date(),
@@ -35,6 +36,7 @@ export function summarizeRoster({
   drawnAt: Date | null;
   // 추첨에서 굴린 값이 있다. 신청자 없이 마감된 추첨 글과 1d100 도입 전 추첨은 값이 없다.
   hasRolls?: boolean;
+  isCoordinate: boolean;
   started: boolean;
   capacityRaised: boolean;
   now?: Date;
@@ -80,6 +82,9 @@ export function summarizeRoster({
     deadlineLabel: deadlineLabel({ passed, daysLeft }),
     deadlinePassed: passed,
     drawnAt,
+    unsubmittedCount: isCoordinate
+      ? confirmed.filter((member) => !member.hasAvailability).length
+      : 0,
   };
 }
 

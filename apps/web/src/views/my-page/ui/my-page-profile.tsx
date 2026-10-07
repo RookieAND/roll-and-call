@@ -1,7 +1,12 @@
 import { Button, HStack, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
-import { KeywordChips, ProfileRow } from "@/entities/profile";
+import {
+  AvailabilityRows,
+  KeywordChips,
+  ProfileRow,
+  type AvailabilityInterval,
+} from "@/entities/profile";
 import { ServerLink } from "@/shared/ui";
 import { SessionCountStats } from "@/widgets/session-list";
 
@@ -16,6 +21,7 @@ interface MyPageProfileProps {
   featuredBadges: FeaturedBadge[];
   heldBadgeCount: number;
   keywords: string[];
+  availability: AvailabilityInterval[];
   hosted: { count: number; href: string };
   played: { count: number; href: string };
 }
@@ -28,6 +34,7 @@ export function MyPageProfile({
   featuredBadges,
   heldBadgeCount,
   keywords,
+  availability,
   hosted,
   played,
 }: MyPageProfileProps) {
@@ -60,6 +67,24 @@ export function MyPageProfile({
       <div>
         <MyPageBlockLabel label="성향" />
         <KeywordChips keywords={keywords} />
+      </div>
+
+      <div>
+        <MyPageBlockLabel
+          label="가능 시간대"
+          action={{
+            path: "/me/availability?from=me",
+            label: availability.length > 0 ? "편집" : "추가",
+          }}
+        />
+        <AvailabilityRows
+          intervals={availability}
+          note={
+            availability.length > 0
+              ? "일정 조율 화면을 열면 이 시간대가 미리 칠해져 있습니다."
+              : "적어두면 일정 조율 화면에 미리 칠해져 있습니다."
+          }
+        />
       </div>
     </VStack>
   );

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { isNextRoundRangeValid } from "./is-next-round-range-valid";
 import { isNextRoundStartValid } from "./is-next-round-start-valid";
 import { nextRoundBaseDate } from "./next-round-base-date";
 import { nextRoundColumns } from "./next-round-columns";
@@ -34,6 +35,31 @@ describe("nextRoundBaseDate", () => {
   });
 });
 
+describe("isNextRoundRangeValid", () => {
+  const baseDate = "2026-09-21";
+
+  it("시작일 포함 14일은 허용하고 15일은 거부한다", () => {
+    expect(
+      isNextRoundRangeValid({ baseDate, rangeStart: "2026-09-21", rangeEnd: "2026-10-04" }),
+    ).toBe(true);
+    expect(
+      isNextRoundRangeValid({ baseDate, rangeStart: "2026-09-21", rangeEnd: "2026-10-05" }),
+    ).toBe(false);
+  });
+
+  it("종료일이 시작일보다 앞이면 거부한다", () => {
+    expect(
+      isNextRoundRangeValid({ baseDate, rangeStart: "2026-09-25", rangeEnd: "2026-09-24" }),
+    ).toBe(false);
+  });
+
+  it("기준일보다 앞에서 시작하면 거부한다", () => {
+    expect(
+      isNextRoundRangeValid({ baseDate, rangeStart: "2026-09-20", rangeEnd: "2026-09-24" }),
+    ).toBe(false);
+  });
+});
+
 describe("isNextRoundStartValid", () => {
   it("세션 일시의 KST 날짜가 기준일부터면 허용한다", () => {
     expect(
@@ -58,8 +84,10 @@ describe("nextRoundDeadline", () => {
     );
   });
 
-  it("조율형은 조율 종료일 0시(KST) 1시간 전이다", () => {
-    expect(nextRoundDeadline({ rangeEnd: "2026-09-21" })).toEqual(new Date("2026-09-20T14:00:00Z"));
+  it("조율형은 조율 시작일 0시(KST) 1시간 전이다", () => {
+    expect(nextRoundDeadline({ rangeStart: "2026-09-21" })).toEqual(
+      new Date("2026-09-20T14:00:00Z"),
+    );
   });
 });
 

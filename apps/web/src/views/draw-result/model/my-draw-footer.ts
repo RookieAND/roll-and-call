@@ -4,6 +4,7 @@ import { formatDateTime } from "@/shared/lib";
 export const MY_DRAW_ACTION = {
   leaveWaitlist: "leave-waitlist",
   viewGame: "view-game",
+  submitAvailability: "submit-availability",
 } as const;
 
 export type MyDrawAction = (typeof MY_DRAW_ACTION)[keyof typeof MY_DRAW_ACTION];
@@ -22,7 +23,7 @@ export function myDrawFooter({
   confirmedAt: Date | null;
   sessionEnded: boolean;
 }): { hint: string | null; actions: MyDrawAction[] } {
-  const { leaveWaitlist, viewGame } = MY_DRAW_ACTION;
+  const { leaveWaitlist, viewGame, submitAvailability } = MY_DRAW_ACTION;
   if (!confirmed) {
     if (sessionEnded) return { hint: null, actions: [viewGame] };
     return { hint: WAITLIST_HINT, actions: [leaveWaitlist, viewGame] };
@@ -33,5 +34,8 @@ export function myDrawFooter({
   if (confirmedAt) {
     return { hint: `${formatDateTime(confirmedAt)}으로 확정되었습니다.`, actions: [viewGame] };
   }
-  return { hint: "시간이 정해지면 알림 탭으로 알립니다.", actions: [viewGame] };
+  return {
+    hint: "시간이 정해지면 알림 탭으로 알립니다.",
+    actions: [viewGame, submitAvailability],
+  };
 }

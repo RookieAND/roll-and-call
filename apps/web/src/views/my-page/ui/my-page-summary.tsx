@@ -66,6 +66,7 @@ export async function MyPageSummary() {
       featuredBadges={featuredBadges}
       heldBadgeCount={countBadges(badgeRecords, now).total}
       keywords={profile?.keywords ?? []}
+      availability={profile?.availability ?? []}
       hosted={{
         count: counts.hosted,
         href: serverPath({ slug: server.slug, path: sessionsHref({ role: SESSION_ROLE.host }) }),

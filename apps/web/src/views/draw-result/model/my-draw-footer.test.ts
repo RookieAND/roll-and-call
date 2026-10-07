@@ -7,7 +7,7 @@ import { MY_DRAW_ACTION, myDrawFooter } from "./my-draw-footer";
 const startsAt = new Date("2026-09-16T11:00:00Z");
 
 describe("myDrawFooter", () => {
-  it("확정 · 조율형 · 세션 시각 없음이면 시간이 정해지면 알린다고 안내한다", () => {
+  it("확정 · 조율형 · 세션 시각 없음이면 가능 시간 제출을 함께 둔다", () => {
     expect(
       myDrawFooter({
         confirmed: true,
@@ -17,7 +17,7 @@ describe("myDrawFooter", () => {
       }),
     ).toEqual({
       hint: "시간이 정해지면 알림 탭으로 알립니다.",
-      actions: [MY_DRAW_ACTION.viewGame],
+      actions: [MY_DRAW_ACTION.viewGame, MY_DRAW_ACTION.submitAvailability],
     });
   });
 

@@ -9,12 +9,19 @@ type ParticipantRow = RosterMember<{
   user: { username: string; avatarUrl: string | null } | null;
 }>;
 
-export function toManagedMember(participant: ParticipantRow): ManagedMember {
+export function toManagedMember({
+  participant,
+  availableUserIds,
+}: {
+  participant: ParticipantRow;
+  availableUserIds: Set<string>;
+}): ManagedMember {
   return {
     userId: participant.userId,
     username: participant.user?.username ?? "익명",
     avatarUrl: participant.user?.avatarUrl ?? null,
     waitlistRank: participant.waitlistRank,
+    hasAvailability: availableUserIds.has(participant.userId),
     joinedAt: participant.joinedAt,
     removed: participant.status === PARTICIPANT_STATUS.removed,
   };

@@ -3,6 +3,7 @@ import { Badge, Container, VStack } from "@roll-and-call/ui";
 import { pick } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
+import { aggregateAvailability } from "@/entities/availability";
 import {
   countConfirmed,
   effectivePlayMinutes,
@@ -12,14 +13,25 @@ import {
 import { GmOnlyNotice } from "@/features/auth";
 import { ConfirmSessionForm } from "@/features/confirm-session";
 import { formatDate, serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
+import {
+  getCurrentSessionUser,
+  getGameAvailabilities,
+  getGameById,
+  getCurrentServer,
+  getResponseCounts,
+} from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
 import { ConfirmSummary } from "./confirm-summary";
 
 export async function GameConfirmView({ id }: { id: string }) {
   const server = await getCurrentServer();
-  const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
+  const [game, user, availabilities, responseCounts] = await Promise.all([
+    getGameById(server.id, id),
+    getCurrentSessionUser(),
+    getGameAvailabilities({ serverId: server.id, gameId: id }),
+    getResponseCounts({ serverId: server.id, gameIds: [id] }),
+  ]);
   if (!game) notFound();
   if (user?.id !== game.gmId) {
     return (
@@ -53,14 +65,20 @@ export async function GameConfirmView({ id }: { id: string }) {
       <>
         {appBar}
         <Container size="sm" className="py-200">
-          <EmptyState size="section" title="추첨 뒤에 세션 시간을 정할 수 있습니다" />
+          <EmptyState
+            size="section"
+            title="추첨 뒤에 세션 시간을 정할 수 있습니다"
+            description="모집 마감 때 추첨이 끝나면 확정자가 가능 시간을 칠합니다."
+          />
         </Container>
       </>
     );
   }
   const { rangeStart, rangeEnd } = game;
-  if (!rangeStart || !rangeEnd) redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
+  if (!rangeStart || !rangeEnd)
+    redirect(serverPath({ slug: server.slug, path: `/games/${id}/schedule` }));
 
+  const { names } = aggregateAvailability({ avails: availabilities, userId: null });
   const minutes = effectivePlayMinutes(game.playMinutes);
   const playLabel = formatPlayMinutes(minutes);
   const confirmedCount = countConfirmed(game.participants);
@@ -73,6 +91,7 @@ export async function GameConfirmView({ id }: { id: string }) {
           <ConfirmSummary
             title={game.title}
             rule={game.rule}
+            respondedCount={responseCounts.get(id) ?? 0}
             confirmedCount={confirmedCount}
             playLabel={playLabel}
             deadlineLabel={formatDate(game.endDate)}
@@ -91,6 +110,8 @@ export async function GameConfirmView({ id }: { id: string }) {
               playMinutes: minutes,
               confirmedCount,
             }}
+            names={names}
+            playLabel={playLabel}
           />
         </VStack>
       </Container>

@@ -17,6 +17,8 @@ const base = {
   triggers: [] as string[],
   platforms: [] as string[],
   endDate: "2026-09-10T20:00",
+  rangeStart: "2026-09-12",
+  rangeEnd: "2026-09-20",
   images: [] as string[],
   thumbnailSpoiler: false,
   aiImage: false,
@@ -77,6 +79,36 @@ describe("gameFormSchema", () => {
     expect(firstError({ ...base, maxPlayers: "2", preConfirmed: twoPlayers })).toBeNull();
   });
 
+  it("조율 기간은 하루짜리부터 시작일 포함 14일까지다", () => {
+    expect(firstError({ ...base, rangeEnd: "2026-09-12" })).toBeNull();
+    expect(firstError({ ...base, rangeEnd: "2026-09-25" })).toBeNull();
+    expect(firstError({ ...base, rangeEnd: "2026-09-26" })).toBe("rangeEnd");
+    expect(firstError({ ...base, rangeEnd: "2026-09-11" })).toBe("rangeEnd");
+  });
+
+  it("모집 마감은 조율 시작일 0시보다 앞서야 한다", () => {
+    expect(firstError({ ...base, endDate: "2026-09-12T00:00" })).toBe("endDate");
+    expect(firstError({ ...base, endDate: "2026-09-11T23:59" })).toBeNull();
+    const issue = gameFormSchema.safeParse({ ...base, endDate: "2026-09-12T00:00" }).error
+      ?.issues[0];
+    expect(issue?.message).toBe(
+      "모집 마감이 조율 시작일보다 늦습니다.\n마감을 9월 12일 이전으로 바꿔 주세요.",
+    );
+  });
+
+  it("조율 시간대는 시작과 끝이 달라야 하고 자정을 넘길 수 있다", () => {
+    expect(firstError({ ...base, windowStartHour: "22", windowEndHour: "2" })).toBeNull();
+    expect(firstError({ ...base, windowStartHour: "9", windowEndHour: "9" })).toBe("windowEndHour");
+    expect(firstError({ ...base, windowStartHour: "24", windowEndHour: "2" })).toBe(
+      "windowStartHour",
+    );
+  });
+
+  it("일시 지정형은 조율 시간대를 보지 않는다", () => {
+    const fixed = { ...base, scheduleMode: SCHEDULE_MODE.fixed, confirmedAt: "2026-09-12T19:00" };
+    expect(firstError({ ...fixed, windowStartHour: "9", windowEndHour: "9" })).toBeNull();
+  });
+
   it("이미지는 5장까지, 스토리지 주소만 받는다", () => {
     expect(firstError({ ...base, images: [1, 2, 3, 4, 5].map(imageUrl) })).toBeNull();
     expect(firstError({ ...base, images: [1, 2, 3, 4, 5, 6].map(imageUrl) })).toBe("images");
@@ -120,6 +152,19 @@ describe("toGameColumns", () => {
     const spoiler = { ...base, thumbnailSpoiler: true };
     expect(toGameColumns({ ...spoiler, thumbnailUrl: imageUrl(1) }).thumbnailSpoiler).toBe(true);
     expect(toGameColumns({ ...spoiler, thumbnailUrl: "" }).thumbnailSpoiler).toBe(false);
+  });
+
+  it("조율 시간대를 숫자로 저장하고 일시 지정형은 기본값을 쓴다", () => {
+    const coordinate = toGameColumns({ ...base, windowStartHour: "22", windowEndHour: "2" });
+    expect([coordinate.windowStartHour, coordinate.windowEndHour]).toEqual([22, 2]);
+    const fixed = toGameColumns({
+      ...base,
+      scheduleMode: SCHEDULE_MODE.fixed,
+      confirmedAt: "2026-09-12T19:00",
+      windowStartHour: "22",
+      windowEndHour: "2",
+    });
+    expect([fixed.windowStartHour, fixed.windowEndHour]).toEqual([12, 0]);
   });
 
   it("조율형은 세션 시각 칼럼을 넣지 않아 GM이 정한 시각을 지우지 않는다", () => {

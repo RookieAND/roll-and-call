@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { buildTimeRows } from "./build-time-rows";
+import { rowSlotIso } from "./row-slot-iso";
 
 describe("buildTimeRows", () => {
   it("12~0은 12:00~23:30 24줄이고 모두 같은 날이다", () => {
@@ -30,5 +31,13 @@ describe("buildTimeRows", () => {
     const rows = buildTimeRows({ startHour: 0, endHour: 6 });
     expect(rows).toHaveLength(12);
     expect(rows.every((row) => row.dayOffset === 0)).toBe(true);
+  });
+});
+
+describe("rowSlotIso", () => {
+  it("자정 뒤 줄은 열 날짜 다음 날 KST 시각이다", () => {
+    const rows = buildTimeRows({ startHour: 22, endHour: 2 });
+    expect(rowSlotIso({ date: "2026-09-14", row: rows[6]! })).toBe("2026-09-14T16:00:00.000Z");
+    expect(rowSlotIso({ date: "2026-09-14", row: rows[0]! })).toBe("2026-09-14T13:00:00.000Z");
   });
 });

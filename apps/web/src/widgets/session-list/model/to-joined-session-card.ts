@@ -77,6 +77,40 @@ export function toJoinedSessionCard({
     };
   }
 
+  const needsResponse =
+    !context.readOnly && !context.respondedGameIds.has(game.id) && !line.deadlinePassed;
+  const cancelled = !isNull(game.cancelledAt);
+  const submit = {
+    kind: SESSION_ACTION_KIND.submitAvailability,
+    label: "일정 조율",
+    href: facts.scheduleHref,
+  };
+
+  if (needsResponse) {
+    return {
+      ...common,
+      urgent: true,
+      chip: SESSION_CHIP.scheduling,
+      badge: "조율 중",
+      badgeColor: "primary",
+      schedule: `${formatDate(game.endDate)}까지 가능 시간을 내야 합니다`,
+      scheduleTone: SESSION_TONE.danger,
+      scheduleIcon: SESSION_ICON.alert,
+      action: submit,
+      todo: cancelled
+        ? null
+        : {
+            ...submit,
+            blocked: false,
+            sortAt: new Date(game.endDate).toISOString(),
+            lines: [
+              "아직 가능 시간을 내지 않았습니다.",
+              `${formatDate(game.endDate)}까지 내면 됩니다.`,
+            ],
+          },
+    };
+  }
+
   return {
     ...common,
     chip: SESSION_CHIP.scheduling,

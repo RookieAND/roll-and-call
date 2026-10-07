@@ -9,6 +9,7 @@ import { ActionNotice } from "./action-notice";
 import { ActionPair } from "./action-pair";
 import { DrawResultLink } from "./draw-result-link";
 import { GameCalendarButton } from "./game-calendar-button";
+import { ScheduleLink } from "./schedule-link";
 
 interface ConfirmedLockedActionsProps extends ActionLinks {
   game: GameDetailData;
@@ -19,9 +20,10 @@ export function ConfirmedLockedActions({
   game,
   block,
   resultLink,
+  scheduleLink,
   calendar,
 }: ConfirmedLockedActionsProps) {
-  const hasButtons = resultLink || calendar;
+  const hasButtons = resultLink || scheduleLink || calendar;
 
   return (
     <VStack gap="125">
@@ -36,7 +38,8 @@ export function ConfirmedLockedActions({
       {hasButtons && (
         <ActionPair>
           {resultLink && <DrawResultLink gameId={game.id} variant="outline" size="lg" />}
-          {calendar && <GameCalendarButton game={game} variant="tinted" />}
+          {scheduleLink && <ScheduleLink gameId={game.id} size="lg" />}
+          {!scheduleLink && calendar && <GameCalendarButton game={game} variant="tinted" />}
         </ActionPair>
       )}
     </VStack>

@@ -90,6 +90,7 @@ export function deriveSessionFacts({
     sessionWhen,
     sessionAgo,
     seats: `${confirmedCount}/${game.maxPlayers}`,
+    scheduleHref: `/games/${game.id}/schedule`,
     sortKey: new Date(startsAt ?? game.endDate).getTime(),
     base: {
       id: game.id,

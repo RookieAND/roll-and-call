@@ -52,6 +52,7 @@ const base = {
 const summary = (patch: Record<string, unknown> = {}) =>
   manageSummary({
     game: { ...base, ...patch } as unknown as GameDetailData,
+    responses: 1,
     now: NOW,
   });
 
@@ -83,7 +84,11 @@ describe("manageSummary", () => {
 
   it("조율 중과 기한 지남", () => {
     expect(summary().stage).toBe(MANAGE_STAGE.coordinating);
-    expect(values({})).toEqual(["조율 마감 9월 22일", "확정 인원 2 / 4명"]);
+    expect(values({})).toEqual([
+      "조율 마감 9월 22일",
+      "가능 시간 제출 1 / 2명",
+      "확정 인원 2 / 4명",
+    ]);
     const overdue = summary({ endDate: at(-DAY) });
     expect(overdue.stage).toBe(MANAGE_STAGE.overdue);
     expect(overdue.stats[0]).toMatchObject({ value: "9월 19일 지남", danger: true });

@@ -4,6 +4,7 @@ export interface RosterContext {
   confirmedCount: number;
   waitingCount: number;
   maxPlayers: number;
+  isCoordinate: boolean;
   beforeDraw: boolean;
   started: boolean;
   capacityRaised: boolean;

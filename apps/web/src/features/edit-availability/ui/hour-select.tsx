@@ -1,0 +1,51 @@
+"use client";
+
+import { Select } from "@roll-and-call/ui";
+
+import { formatHour } from "@/entities/profile";
+
+import { HOUR_OPTIONS } from "../model/availability-draft";
+
+interface HourSelectProps {
+  label: string;
+  value: number;
+  min?: number;
+  max?: number;
+  invalid?: boolean;
+  onChange: (hour: number) => void;
+}
+
+export function HourSelect({
+  label,
+  value,
+  min = 0,
+  max = 24,
+  invalid = false,
+  onChange,
+}: HourSelectProps) {
+  const items = HOUR_OPTIONS.filter((hour) => hour >= min && hour <= max).map((hour) => ({
+    value: String(hour),
+    label: formatHour(hour),
+  }));
+
+  return (
+    <Select.Root
+      items={items}
+      value={String(value)}
+      onValueChange={(hour) => onChange(Number(hour))}
+    >
+      <Select.Trigger
+        aria-label={label}
+        invalid={invalid}
+        className="h-11 min-w-0 flex-1 tabular-nums"
+      />
+      <Select.Popup>
+        {items.map((item) => (
+          <Select.Item key={item.value} value={item.value}>
+            {item.label}
+          </Select.Item>
+        ))}
+      </Select.Popup>
+    </Select.Root>
+  );
+}

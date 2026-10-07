@@ -1,0 +1,35 @@
+import { Button } from "@roll-and-call/ui";
+
+import { EmptyState } from "@/shared/ui";
+
+interface ScheduleOverlapEmptyProps {
+  onPaint?: () => void;
+}
+
+export function ScheduleOverlapEmpty({ onPaint }: ScheduleOverlapEmptyProps) {
+  return (
+    <EmptyState
+      image="empty-schedule"
+      size="section"
+      title="아직 가능 시간을 낸 사람이 없습니다"
+      description={
+        onPaint ? (
+          <>
+            참여자가 시간을 내면 여기에 겹쳐 보입니다.
+            <br />
+            먼저 내 가능 시간을 칠해 주세요.
+          </>
+        ) : (
+          "참여자가 시간을 내면 여기에 겹쳐 보입니다."
+        )
+      }
+      action={
+        onPaint && (
+          <Button onClick={onPaint} className="mt-100 w-full">
+            내 가능 시간 칠하기
+          </Button>
+        )
+      }
+    />
+  );
+}

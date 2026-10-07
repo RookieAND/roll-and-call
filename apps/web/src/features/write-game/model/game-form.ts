@@ -3,9 +3,12 @@ import { z } from "zod";
 import { GAME_TAG, RECRUIT_METHODS, SCHEDULE_MODE, SCHEDULE_MODES } from "@/entities/game";
 import { richTextLength } from "@/shared/lib";
 
+import { isWindowHour } from "./is-window-hour";
 import { minPlayersRangeError } from "./min-players-range-error";
 import { monthDayLabel } from "./month-day-label";
 
+// 시작일 포함 일수다. 시작일과 종료일이 같은 하루짜리도 받는다.
+export const GAME_RANGE_MAX_DAYS = 14;
 export const GAME_IMAGES_MAX = 5;
 export const GAME_MAX_PLAYERS = 20;
 export const GAME_TAGS_MAX = {
@@ -17,6 +20,8 @@ export const GAME_TAG_MAX_LENGTH = 20;
 export const GAME_NOTICE_MAX = 500;
 export const GAME_SYNOPSIS_MAX = 2000;
 export const INVALID_INPUT_MESSAGE = "입력값을 확인해 주세요.";
+
+const DAY_MS = 86_400_000;
 
 const tagList = (label: string, max: number) =>
   z
@@ -63,6 +68,11 @@ export const gameFormSchema = z
     scheduleMode: z.enum(SCHEDULE_MODES),
     endDate: z.string().min(1, "모집 마감 기한을 입력해 주세요."),
     confirmedAt: z.string().optional(),
+    rangeStart: z.string().optional(),
+    rangeEnd: z.string().optional(),
+    // 조율 시간대(KST 시, "0"~"23"). 끝이 시작 이하면 자정을 넘긴다. 일시 지정형은 쓰지 않는다.
+    windowStartHour: z.string().optional(),
+    windowEndHour: z.string().optional(),
     thumbnailUrl: z.string().optional(),
     thumbnailSpoiler: z.boolean(),
     images: z
@@ -100,7 +110,7 @@ export const gameFormSchema = z
         path: ["confirmedAt"],
       });
     }
-    // 문자열은 로컬 ISO라 사전순 비교가 곧 시간순이다. 마감은 세션 시작보다 앞서야 한다.
+    // 문자열은 로컬 ISO라 사전순 비교가 곧 시간순이다. 마감은 세션 시작·조율 시작일 0시보다 앞서야 한다.
     // 두 줄 문구는 제출 버튼 위 안내가 줄마다 나눠 그린다.
     if (
       values.scheduleMode === SCHEDULE_MODE.fixed &&
@@ -111,6 +121,69 @@ export const gameFormSchema = z
         code: "custom",
         message: `모집 마감이 세션 일시보다 늦습니다.\n마감을 ${monthDayLabel(values.confirmedAt)} 이전으로 바꿔 주세요.`,
         path: ["endDate"],
+      });
+    }
+    if (
+      values.scheduleMode === SCHEDULE_MODE.coordinate &&
+      values.rangeStart &&
+      values.endDate >= `${values.rangeStart}T00:00`
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: `모집 마감이 조율 시작일보다 늦습니다.\n마감을 ${monthDayLabel(values.rangeStart)} 이전으로 바꿔 주세요.`,
+        path: ["endDate"],
+      });
+    }
+    if (values.scheduleMode !== SCHEDULE_MODE.coordinate) return;
+
+    if (!values.rangeStart) {
+      context.addIssue({
+        code: "custom",
+        message: "시작일을 입력해 주세요.",
+        path: ["rangeStart"],
+      });
+    }
+    if (!values.rangeEnd) {
+      context.addIssue({
+        code: "custom",
+        message: "종료일을 입력해 주세요.",
+        path: ["rangeEnd"],
+      });
+    } else if (values.rangeStart && values.rangeEnd < values.rangeStart) {
+      context.addIssue({
+        code: "custom",
+        message: "종료일은 시작일보다 앞설 수 없습니다.",
+        path: ["rangeEnd"],
+      });
+    } else if (values.rangeStart) {
+      const days = (Date.parse(values.rangeEnd) - Date.parse(values.rangeStart)) / DAY_MS;
+      if (days > GAME_RANGE_MAX_DAYS - 1) {
+        context.addIssue({
+          code: "custom",
+          message: `조율 기간은 최대 ${GAME_RANGE_MAX_DAYS}일까지 고를 수 있습니다.`,
+          path: ["rangeEnd"],
+        });
+      }
+    }
+
+    const { windowStartHour = "12", windowEndHour = "0" } = values;
+    if (!isWindowHour(windowStartHour)) {
+      context.addIssue({
+        code: "custom",
+        message: "조율 시간대 시작 시각을 골라 주세요.",
+        path: ["windowStartHour"],
+      });
+    } else if (!isWindowHour(windowEndHour)) {
+      context.addIssue({
+        code: "custom",
+        message: "조율 시간대 끝 시각을 골라 주세요.",
+        path: ["windowEndHour"],
+      });
+    } else if (Number(windowStartHour) === Number(windowEndHour)) {
+      context.addIssue({
+        code: "custom",
+        message: "조율 시간대의 시작과 끝을 다르게 골라 주세요.",
+        path: ["windowEndHour"],
       });
     }
   });

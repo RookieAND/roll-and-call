@@ -11,6 +11,7 @@ function member(userId: string, waitlistRank: number | null): ManagedMember {
     username: userId,
     avatarUrl: null,
     waitlistRank,
+    hasAvailability: true,
     joinedAt: new Date("2026-09-18T00:00:00Z"),
     removed: false,
   };
@@ -19,6 +20,7 @@ function member(userId: string, waitlistRank: number | null): ManagedMember {
 const base = {
   maxPlayers: 4,
   endDate: new Date("2026-09-30T00:00:00Z"),
+  isCoordinate: false,
   started: false,
   capacityRaised: false,
   now: new Date("2026-09-20T00:00:00Z"),

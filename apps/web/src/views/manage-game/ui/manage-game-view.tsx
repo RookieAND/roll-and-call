@@ -16,6 +16,7 @@ import {
   getCurrentSessionUser,
   getGameById,
   getGameReviews,
+  getResponseCounts,
   getCurrentServer,
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
@@ -29,9 +30,10 @@ import { ManageRow } from "./manage-row";
 
 export async function ManageGameView({ id }: { id: string }) {
   const server = await getCurrentServer();
-  const [game, user, reviews] = await Promise.all([
+  const [game, user, responseCounts, reviews] = await Promise.all([
     getGameById(server.id, id),
     getCurrentSessionUser(),
+    getResponseCounts({ serverId: server.id, gameIds: [id] }),
     getCurrentSessionUser().then((viewer) =>
       getGameReviews({ serverId: server.id, gameId: id, viewerId: viewer?.id ?? null }),
     ),
@@ -51,12 +53,13 @@ export async function ManageGameView({ id }: { id: string }) {
       </>
     );
   }
+  const responses = responseCounts.get(id) ?? 0;
   const notifyCount = gameCancelledRecipients({
     game,
     kind: GAME_CANCEL_KIND.gm,
     roster: game.participants,
   }).length;
-  const { stage, stats, cancelNote } = manageSummary({ game });
+  const { stage, stats, cancelNote } = manageSummary({ game, responses });
   const showNextSessionHint = isNil(game.cancelledAt) && isSessionEnded(game);
   const rows = manageRows({ game, reviewCount: reviews.length });
 

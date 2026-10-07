@@ -26,9 +26,11 @@ export type ManageSummary = { stage: ManageStage; stats: ManageStat[]; cancelNot
 // 위에서부터 처음 맞는 단계 하나.
 export function manageSummary({
   game,
+  responses,
   now = new Date(),
 }: {
   game: GameDetailData;
+  responses: number;
   now?: Date;
 }): ManageSummary {
   const { confirmed, waiting } = splitRoster(game.participants);
@@ -66,6 +68,7 @@ export function manageSummary({
           value: `${formatDate(game.endDate)}${overdue ? " 지남" : ""}`,
           danger: overdue,
         },
+        { label: "가능 시간 제출", value: `${responses} / ${confirmed.length}명` },
         seats,
       ],
     };

@@ -41,6 +41,8 @@ export function buildProfileSessions({
     hosted,
     joined: played,
     viewerId: userId,
+    respondedGameIds: new Set(),
+    responseCounts: new Map(),
     now,
     readOnly: true,
   });

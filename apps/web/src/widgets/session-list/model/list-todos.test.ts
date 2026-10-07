@@ -66,6 +66,8 @@ function todos({
     hosted,
     joined,
     viewerId: "me",
+    respondedGameIds: new Set(),
+    responseCounts: new Map(),
     now: NOW,
   });
   return listTodos({ sessions, rejectedRulebooks: rulebooks, now: NOW });
@@ -77,24 +79,29 @@ const attendance = (id: string, confirmedAt = at(-0.5)) =>
   game({ id, confirmedAt, participants: [confirmed("a")] });
 const vacancy = (id: string, partial: Partial<SessionGame> = {}) =>
   game({ id, participants: [confirmed("a"), waiting("b")], ...partial });
+const availability = (id: string, endDate = at(3)) =>
+  game({ id, gmId: "gm", endDate, participants: [confirmed("me")] });
 
 describe("listTodos", () => {
-  it("네 종류가 정해진 순서로 온다", () => {
+  it("다섯 종류가 정해진 순서로 온다", () => {
     const result = todos({
       hosted: [vacancy("vacancy"), attendance("attendance"), awaitingTime("time")],
+      joined: [availability("availability")],
       rulebooks: [rejected("r", at(-1))],
     });
     expect(result.items.map((item) => item.kind)).toEqual([
       TODO_KIND.confirmTime,
       TODO_KIND.confirmAttendance,
       TODO_KIND.fillVacancy,
+      TODO_KIND.submitAvailability,
       TODO_KIND.certRejected,
     ]);
-    expect(result.count).toBe(4);
+    expect(result.count).toBe(5);
     expect(result.items.map((item) => item.eyebrow)).toEqual([
       "세션 일시 미정",
       "출석 확인 · 자동 처리 D-1",
       "빈자리 생김",
+      "가능 시간 미제출",
       "인증 반려",
     ]);
   });
@@ -109,11 +116,23 @@ describe("listTodos", () => {
         awaitingTime("time-recent", at(-1)),
         awaitingTime("time-old", at(-3)),
       ],
+      joined: [availability("far", at(6)), availability("near", at(1))],
       rulebooks: [rejected("new", at(-1)), rejected("old", at(-3))],
     });
     expect(
       result.items.map((item) => (item.type === "session" ? item.gameId : item.rulebookId)),
-    ).toEqual(["time-old", "time-recent", "old", "recent", "sooner", "later", "old", "new"]);
+    ).toEqual([
+      "time-old",
+      "time-recent",
+      "old",
+      "recent",
+      "sooner",
+      "later",
+      "near",
+      "far",
+      "old",
+      "new",
+    ]);
   });
 
   it("세션 일시 미정은 마감 7일 뒤에 내린다", () => {
@@ -136,6 +155,7 @@ describe("listTodos", () => {
         { ...attendance("attendance"), cancelledAt },
         { ...vacancy("vacancy"), cancelledAt },
       ],
+      joined: [{ ...availability("availability"), cancelledAt }],
     });
     expect(result.count).toBe(0);
   });

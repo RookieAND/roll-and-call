@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 
 import { GAME_STATUS, GameStatusBadge } from "@/entities/game";
 import { ProfileLinks } from "@/entities/profile";
+import { HeatSample } from "@/shared/ui";
 
 import type { OnboardingSlide } from "../model/onboarding-slides";
 import { WizardStepMark } from "./wizard-step-mark";
@@ -43,6 +44,14 @@ export function OnboardingPreview({ slideKey }: OnboardingPreviewProps) {
             신청하기
           </Button>
         </VStack>
+      </Card.Root>
+    );
+  }
+
+  if (slideKey === "schedule") {
+    return (
+      <Card.Root radius={500} padding="sm" className="shadow-lg">
+        <HeatSample />
       </Card.Root>
     );
   }

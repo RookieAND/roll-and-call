@@ -3,12 +3,15 @@ import "server-only";
 export type {
   Profile,
   Game,
+  Availability,
+  AvailabilityInterval,
   ProfileLink,
   CertApplication,
   SessionReview,
 } from "@roll-and-call/database";
 export { getCertSellers, getQuizQuestion } from "@roll-and-call/database/rulebooks";
 export {
+  getGameAvailabilities,
   findGameServerSlug,
   getGameParticipants,
   getGamesByGm,
@@ -17,6 +20,10 @@ export {
   getMonthSessions,
   hasSessionsBetween,
   getRecruitingGamesPage,
+  getRespondedGameIds,
+  getResponseCounts,
+  getResponseCountsByGm,
+  getScheduleAvailabilityRows,
   getUserConfirmedSlots,
   listGameRuleOptions,
   type GameDetailData,
@@ -75,6 +82,7 @@ export { getUserBadges } from "./db/get-user-badges";
 export { siteOrigin } from "./site-origin";
 export { isCronRequest } from "./cron/is-cron-request";
 export { removeUnusedGameFiles } from "./game-files";
+export { seedAvailabilityFromProfile } from "./seed-availability-from-profile";
 export { finishLotteryDraw } from "./finish-lottery-draw";
 export { createSupabaseServerClient } from "./auth/create-supabase-server-client";
 export { getCurrentUser } from "./auth/get-current-user";

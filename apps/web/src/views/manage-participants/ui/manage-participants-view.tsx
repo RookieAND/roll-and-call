@@ -2,7 +2,7 @@ import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
-import { isSessionEnded, isSessionStarted, splitRoster } from "@/entities/game";
+import { isSessionEnded, isSessionStarted, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { nextRoundBaseDate } from "@/features/open-next-round";
 import { serverPath } from "@/shared/lib";
@@ -24,7 +24,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
     getCurrentSessionUser(),
   ]);
   if (!data) notFound();
-  const { game } = data;
+  const { game, availableUserIds } = data;
 
   if (!user || user.id !== game.gmId) {
     return (
@@ -47,12 +47,14 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
   }
 
   const roster = splitRoster(game.participants);
-  const toMember = (participant: (typeof roster.confirmed)[number]) => toManagedMember(participant);
+  const toMember = (participant: (typeof roster.confirmed)[number]) =>
+    toManagedMember({ participant, availableUserIds });
   const confirmed = roster.confirmed.map(toMember);
   const waiting = roster.waiting.map(toMember);
   const confirmedRows = [...roster.confirmed, ...roster.removed]
     .toSorted((left, right) => left.applicationRank - right.applicationRank)
     .map(toMember);
+  const isCoordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
   const summary = summarizeRoster({
     confirmed,
     waiting,
@@ -62,6 +64,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
     recruitMethod: game.recruitMethod,
     drawnAt: game.drawnAt,
     hasRolls: game.participants.some((participant) => !isNull(participant.drawRoll)),
+    isCoordinate,
     started: isSessionStarted(game),
     capacityRaised: !isNull(game.capacityRaisedAt),
   });
@@ -78,6 +81,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
       confirmedCount={confirmed.length}
       waiting={waiting}
       summary={summary}
+      isCoordinate={isCoordinate}
       nextRoundBaseDate={nextRoundBaseDate({
         confirmedAt: game.confirmedAt,
         rangeEnd: game.rangeEnd,

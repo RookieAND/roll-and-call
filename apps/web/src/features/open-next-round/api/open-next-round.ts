@@ -24,7 +24,7 @@ import {
   GAME_NOT_FOUND_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
-import { coordinationRange, serverPath } from "@/shared/lib";
+import { serverPath } from "@/shared/lib";
 import {
   announceGameOpened,
   getActingMember,
@@ -32,23 +32,28 @@ import {
   notMemberError,
 } from "@/shared/server";
 
+import { isNextRoundRangeValid } from "../model/is-next-round-range-valid";
 import { isNextRoundStartValid } from "../model/is-next-round-start-valid";
 import { nextRoundBaseDate } from "../model/next-round-base-date";
 import { nextRoundColumns } from "../model/next-round-columns";
 import { nextRoundDeadline } from "../model/next-round-deadline";
-import { NEXT_ROUND_START_MESSAGE } from "../model/next-round-rules";
+import { NEXT_ROUND_RANGE_MESSAGE, NEXT_ROUND_START_MESSAGE } from "../model/next-round-rules";
 import { splitNextRoundRoster } from "../model/split-next-round-roster";
+
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 const inputSchema = z.object({
   fromGameId: z.uuid(),
+  rangeStart: z.string().regex(DATE).optional(),
+  rangeEnd: z.string().regex(DATE).optional(),
   startsAt: z.iso.datetime({ offset: true }).optional(),
 });
 
-// 다음 회차는 원 구인의 정보와 대기자를 넘겨 새 구인으로 연다. 원 구인과 그 명단은 바꾸지 않는다.
+// 다음 회차는 원 구인의 정보와 대기자를 넘겨 새 구인으로 연다. 원 구인과 그 명단은 바꾸지 않고, 가능 시간은 넘기지 않는다.
 export async function openNextRound(input: z.input<typeof inputSchema>): Promise<ActionResult> {
   const parsed = inputSchema.safeParse(input);
   if (!parsed.success) return { error: "다음 회차 일정을 다시 골라 주세요." };
-  const { fromGameId, startsAt } = parsed.data;
+  const { fromGameId, rangeStart, rangeEnd, startsAt } = parsed.data;
 
   const member = await getActingMember();
   if (!member) return { error: await notMemberError() };
@@ -107,15 +112,19 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
       });
       const coordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
       const sessionStart = startsAt ? new Date(startsAt) : undefined;
-      if (
-        !coordinate &&
-        (!sessionStart || !isNextRoundStartValid({ baseDate, startsAt: sessionStart }))
-      ) {
+      if (coordinate) {
+        if (
+          !rangeStart ||
+          !rangeEnd ||
+          !isNextRoundRangeValid({ baseDate, rangeStart, rangeEnd })
+        ) {
+          throw new AppError(NEXT_ROUND_RANGE_MESSAGE);
+        }
+      } else if (!sessionStart || !isNextRoundStartValid({ baseDate, startsAt: sessionStart })) {
         throw new AppError(NEXT_ROUND_START_MESSAGE);
       }
-      const range = coordinate ? coordinationRange(now) : null;
-      const endDate = range
-        ? nextRoundDeadline({ rangeEnd: range.rangeEnd })
+      const endDate = coordinate
+        ? nextRoundDeadline({ rangeStart })
         : nextRoundDeadline({ startsAt: sessionStart });
       if (endDate.getTime() <= now.getTime()) {
         throw new AppError("모집 마감이 이미 지난 일정입니다. 날짜를 하루 뒤로 골라 주세요.");
@@ -127,8 +136,8 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
         columns: nextRoundColumns({
           game,
           endDate,
-          rangeStart: range?.rangeStart ?? null,
-          rangeEnd: range?.rangeEnd ?? null,
+          rangeStart: coordinate ? rangeStart! : null,
+          rangeEnd: coordinate ? rangeEnd! : null,
           confirmedAt: coordinate ? null : sessionStart!,
         }),
         confirmedUserIds: roster.confirmed,

@@ -62,18 +62,29 @@ const other = {
   absent: false,
 };
 const confirmedMe = me(PARTICIPANT_STATUS.confirmed);
-const context = () => ({ viewerId: "me", now: NOW });
-const playerCard = (partial: Partial<SessionGame>) =>
-  toSessionCard({ game: game(partial), role: SESSION_ROLE.player, context: context() });
+const context = (responded: string[] = []) => ({
+  viewerId: "me",
+  respondedGameIds: new Set(responded),
+  responseCounts: new Map<string, number>(),
+  now: NOW,
+});
+const playerCard = (partial: Partial<SessionGame>, responded: string[] = []) =>
+  toSessionCard({ game: game(partial), role: SESSION_ROLE.player, context: context(responded) });
 const hostCard = (partial: Partial<SessionGame>) =>
   toSessionCard({ game: game(partial), role: SESSION_ROLE.host, context: context() });
 
 describe("참여 카드", () => {
-  it("시간이 정해지기 전에는 조율 중이고 할 일이 없다", () => {
+  it("가능 시간을 내지 않았으면 막힌 카드로 칠하고 일정 조율이 할 일로 남는다", () => {
     const card = playerCard({ participants: [confirmedMe] });
     expect(card.chip).toBe(SESSION_CHIP.scheduling);
-    expect(card.urgent).toBe(false);
-    expect(card.todo).toBeNull();
+    expect(card.urgent).toBe(true);
+    expect(card.scheduleIcon).toBe(SESSION_ICON.alert);
+    expect(card.todo?.label).toBe("일정 조율");
+    expect(card.schedule).toMatch(/까지 가능 시간을 내야 합니다$/);
+  });
+
+  it("가능 시간을 내면 할 일이 사라진다", () => {
+    expect(playerCard({ participants: [confirmedMe] }, ["g"]).todo).toBeNull();
   });
 
   it("시간이 정해지면 언제인지가 앞에 온다", () => {
@@ -331,6 +342,7 @@ describe("buildProfileSessions", () => {
     const upcoming = profile[SESSION_ROLE.player][0]!;
     expect(upcoming.action).toBeNull();
     expect(upcoming.urgent).toBe(false);
+    expect(upcoming.schedule).not.toMatch(/미제출/);
     expect(profile[SESSION_ROLE.host]).toHaveLength(1);
     expect(profile[SESSION_ROLE.host][0]?.action).toBeNull();
   });

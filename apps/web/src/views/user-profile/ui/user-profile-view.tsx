@@ -3,7 +3,7 @@ import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { countBadges, heldBadges, pickFeaturedBadges } from "@/entities/badge";
-import { DepartedMemberScreen, ProfileLinks } from "@/entities/profile";
+import { AvailabilityRows, DepartedMemberScreen, ProfileLinks } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { ProfileMemoBlock } from "@/features/profile-memo";
 import { heldBadgeDetail } from "@/features/view-badge";
@@ -88,6 +88,11 @@ export async function UserProfileView({ id }: { id: string }) {
         <section className="p-200">
           <ProfileBlockLabel label="링크" />
           <ProfileLinks links={profile.links} />
+        </section>
+
+        <section className="px-200 pb-200">
+          <ProfileBlockLabel label="가능 시간대" />
+          <AvailabilityRows intervals={profile.availability} />
         </section>
 
         {viewer && (

@@ -8,6 +8,8 @@ import type { GameFormValues } from "@/features/write-game";
 import { toKstDateInput } from "@/shared/lib";
 import { DateTimePicker } from "@/shared/ui";
 
+import { CoordinationRangeFields } from "./coordination-range-fields";
+import { CoordinationWindowField } from "./coordination-window-field";
 import { FixedSessionField } from "./fixed-session-field";
 import { ScheduleModeField } from "./schedule-mode-field";
 
@@ -40,7 +42,14 @@ export function GameScheduleFields({
         onChange={(next) => setValue("scheduleMode", next, { shouldDirty: true })}
       />
 
-      {mode === SCHEDULE_MODE.fixed && <FixedSessionField form={form} notice={sessionNotice} />}
+      {mode === SCHEDULE_MODE.fixed ? (
+        <FixedSessionField form={form} notice={sessionNotice} />
+      ) : (
+        <>
+          <CoordinationRangeFields form={form} />
+          <CoordinationWindowField form={form} locked={modeLocked} />
+        </>
+      )}
 
       <VStack gap="075">
         <Field.Root label="모집 마감" htmlFor="endDate" required error={errors.endDate?.message}>

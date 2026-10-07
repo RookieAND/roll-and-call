@@ -1,6 +1,7 @@
 import { Avatar, Badge, Card, Chip, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
 
 import { BrandMark, LINK_SERVICES } from "@/entities/profile";
+import { HeatSample } from "@/shared/ui";
 
 import { HELP_FIGURE, type HelpFigureKey } from "../model/help-docs";
 
@@ -12,6 +13,14 @@ interface HelpFigureProps {
 
 // ponytail: 시안의 "실제 화면 조각"을 설명용으로 축소한 그림이다. inert라 누르거나 초점이 가는 것은 하나도 없다.
 export function HelpFigure({ figure }: HelpFigureProps) {
+  if (figure === HELP_FIGURE.heatGrid) {
+    return (
+      <Card.Root radius={500} background="subtle" padding="sm" inert>
+        <HeatSample />
+      </Card.Root>
+    );
+  }
+
   if (figure === HELP_FIGURE.gameList) {
     return (
       <Card.Root radius={500} background="subtle" padding="sm" inert>

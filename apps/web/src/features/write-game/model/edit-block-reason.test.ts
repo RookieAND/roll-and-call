@@ -20,6 +20,8 @@ const game: LockedGame = {
   confirmedAt: session,
   scheduleMode: SCHEDULE_MODE.fixed,
   recruitMethod: RECRUIT_METHOD.firstCome,
+  windowStartHour: 12,
+  windowEndHour: 0,
   drawnAt: null,
   endDate,
   minPlayers: null,
@@ -125,13 +127,32 @@ describe("editBlockReason", () => {
   it("신청자가 있으면 일정 방식·모집 방식을 바꿀 수 없다", () => {
     expect(
       reason({
-        values: { scheduleMode: SCHEDULE_MODE.coordinate },
+        values: { scheduleMode: SCHEDULE_MODE.coordinate, rangeStart: "2026-09-12" },
         rosterCount: 1,
       })?.field,
     ).toBe("scheduleMode");
     expect(
       reason({ values: { recruitMethod: RECRUIT_METHOD.lottery }, rosterCount: 1 })?.field,
     ).toBe("recruitMethod");
+  });
+
+  it("신청자가 있으면 조율 시간대를 바꿀 수 없다", () => {
+    const coordinate = {
+      overrides: { scheduleMode: SCHEDULE_MODE.coordinate, confirmedAt: null },
+      values: {
+        scheduleMode: SCHEDULE_MODE.coordinate,
+        rangeStart: "2026-09-12",
+        rangeEnd: "2026-09-14",
+        windowStartHour: "22",
+        windowEndHour: "2",
+      },
+    };
+    expect(reason({ ...coordinate, rosterCount: 1 })).toEqual({
+      error:
+        "신청자가 있어 조율 시간대는 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔 주세요.",
+      field: "windowStartHour",
+    });
+    expect(reason(coordinate)).toBeNull();
   });
 
   it("추첨 뒤에는 마감을 그대로 두면 받고 바꾸면 막는다", () => {

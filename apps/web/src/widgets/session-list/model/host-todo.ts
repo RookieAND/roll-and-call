@@ -10,10 +10,12 @@ import { SESSION_ACTION_KIND, type SessionGame, type SessionTodo } from "./sessi
 export function hostTodo({
   game,
   facts,
+  responses,
   now,
 }: {
   game: SessionGame;
   facts: SessionFacts;
+  responses: number;
   now: Date;
 }): SessionTodo | null {
   if (!isNull(game.cancelledAt)) return null;
@@ -28,7 +30,10 @@ export function hostTodo({
       href: `/games/${game.id}/confirm`,
       blocked: true,
       sortAt: endDate,
-      lines: ["조율 기한이 지났습니다."],
+      lines: [
+        "조율 기한이 지났습니다.",
+        `지금까지 ${responses}명이 낸 시간으로 일시를 정할 수 있습니다.`,
+      ],
     };
   }
 
