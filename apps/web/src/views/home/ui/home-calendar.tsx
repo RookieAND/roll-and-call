@@ -98,23 +98,16 @@ export function HomeCalendar({
           ),
         )}
       </Grid>
-
-      {sessionsByDay && Object.keys(sessionsByDay).length === 0 ? (
-        <Text typography="body3" foreground="hint" render={<p />} className="px-200 pb-150">
-          이 달에 잡힌 세션이 없습니다.
-        </Text>
-      ) : (
-        <HStack align="center" gap="150" className="px-200 pb-150 text-body4 text-hint">
-          <span className="flex items-center gap-075">
-            <span className="size-1.5 rounded-full bg-primary-600" />
-            내가 참여
-          </span>
-          <span className="flex items-center gap-075">
-            <span className="size-1.5 rounded-full bg-hint" />
-            다른 세션
-          </span>
-        </HStack>
-      )}
+      <HStack align="center" gap="150" className="px-200 pb-150 text-body4 text-hint">
+        <span className="flex items-center gap-075">
+          <span className="size-1.5 rounded-full bg-primary-600" />
+          내가 참여
+        </span>
+        <span className="flex items-center gap-075">
+          <span className="size-1.5 rounded-full bg-hint" />
+          다른 세션
+        </span>
+      </HStack>
     </section>
   );
 }
