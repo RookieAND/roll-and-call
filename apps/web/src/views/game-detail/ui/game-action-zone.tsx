@@ -1,7 +1,6 @@
 import { formatDateClock } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
-import { confirmedWhenText } from "../model/confirmed-when-text";
 import { GAME_ACTION_VIEW, type GameActionView } from "../model/game-action-view";
 import { AbsentActions } from "./absent-actions";
 import { CancelledActions } from "./cancelled-actions";
@@ -50,11 +49,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
     case GAME_ACTION_VIEW.confirmedLocked:
       return <ConfirmedLockedActions game={game} {...view} />;
     case GAME_ACTION_VIEW.closedScheduled:
-      return (
-        <ClosedActions
-          title={`일정이 ${confirmedWhenText(view.confirmedAt)} 확정되어 신청을 받지 않습니다`}
-        />
-      );
+      return <ClosedActions title="일정이 확정되어 추가 신청을 받지 않습니다" />;
     case GAME_ACTION_VIEW.closed:
       return <ClosedActions title="모집이 끝났습니다" />;
     case GAME_ACTION_VIEW.sanctioned:
