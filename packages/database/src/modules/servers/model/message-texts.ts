@@ -100,6 +100,14 @@ export const MESSAGE_TEXTS = [
     extra: [],
   },
   {
+    key: "end",
+    caseKey: "end",
+    place: "embed",
+    label: "세션이 끝났어요",
+    body: "세션이 끝났어요! 함께한 분들께 후기를 남겨 주세요.",
+    extra: [],
+  },
+  {
     key: "cancel_gm",
     caseKey: "cancel",
     place: "embed",

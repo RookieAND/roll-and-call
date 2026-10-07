@@ -1,6 +1,6 @@
 import { VARIABLE_PATTERN } from "./render-message-head";
 
-// 시안 s16.jsx의 경우 10개와 같은 순서·이름이다. 임베드와 버튼은 고치지 않고 머리 줄만 정한다.
+// 시안 s16.jsx의 경우 10개에 세션 종료 안내를 더했다. 임베드와 버튼은 고치지 않고 머리 줄만 정한다.
 export const MESSAGE_CASES = [
   { key: "open", label: "구인 개설", to: "모집 채널" },
   { key: "apply", label: "참가 신청", to: "구인 스레드" },
@@ -10,6 +10,7 @@ export const MESSAGE_CASES = [
   { key: "time", label: "세션 시간 확정·변경", to: "구인 스레드" },
   { key: "done", label: "구인 완료", to: "완료 채널" },
   { key: "remind", label: "1시간 전 알림", to: "구인 스레드" },
+  { key: "end", label: "세션 종료 안내", to: "구인 스레드" },
   { key: "cancel", label: "구인 취소", to: "구인 스레드" },
   { key: "monthly", label: "이달의 GM·PL 발표", to: "공지 채널" },
 ] as const;
@@ -29,6 +30,7 @@ export const DEFAULT_MESSAGE_HEADS: Partial<Record<MessageCaseKey, string>> = {
   done: "📢 {구인 제목} 모집이 완료됐어요!",
   // supabase/functions/session-reminders/index.ts의 DEFAULT_HEAD와 같아야 한다.
   remind: "📢 {구인 제목} 세션이 곧 시작해요!",
+  end: "📢 {구인 제목} 세션이 끝났어요!",
   cancel: "📢 {구인 제목} 구인이 취소됐어요.",
   monthly: "📢 {달}에 활약한 분들을 소개해요!",
 };

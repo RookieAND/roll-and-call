@@ -589,6 +589,20 @@
       "when": 1797500000000,
       "tag": "0089_min_players_cron",
       "breakpoints": true
+    },
+    {
+      "idx": 90,
+      "version": "7",
+      "when": 1797600000000,
+      "tag": "0090_end_notice",
+      "breakpoints": true
+    },
+    {
+      "idx": 91,
+      "version": "7",
+      "when": 1797700000000,
+      "tag": "0091_end_notice_cron",
+      "breakpoints": true
     }
   ]
 }

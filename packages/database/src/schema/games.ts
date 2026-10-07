@@ -94,6 +94,8 @@ export const games = pgTable(
     attendanceFirstConfirmedAt: timestamp("attendance_first_confirmed_at", { withTimezone: true }),
     // GM이 세션 마치기를 누른 시각. null이면 시작 + 플레이타임이 종료다.
     endedAt: timestamp("ended_at", { withTimezone: true }),
+    // 세션 종료 안내를 스레드에 올린 시각(한 번만 보내는 표시). 끝난 세션을 먼저 이 값으로 집어 간다.
+    endNotifiedAt: timestamp("end_notified_at", { withTimezone: true }),
     // 세션 시작 뒤 정원을 1명 늘린 시각. 구인당 한 번만 늘릴 수 있고 늘린 값은 maxPlayers에 들어간다.
     capacityRaisedAt: timestamp("capacity_raised_at", { withTimezone: true }),
     // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.

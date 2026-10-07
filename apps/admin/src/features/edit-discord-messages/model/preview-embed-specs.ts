@@ -65,6 +65,12 @@ export const PREVIEW_EMBED_SPECS: Partial<Record<MessageCaseKey, PreviewEmbedSpe
     color: DISCORD.recruit,
     fields: [{ name: "📜 룰", value: "피아스코", inline: true }, SESSION_TIME],
   },
+  end: {
+    emoji: "🏁",
+    color: DISCORD.complete,
+    fields: [],
+    button: "✍ 후기 작성하기",
+  },
   cancel: { emoji: "🚫", color: DISCORD.cancelled, unlinked: true, fields: [] },
 };
 
