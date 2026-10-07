@@ -6,6 +6,7 @@ import {
   type DiscordMessageInput,
 } from "@roll-and-call/discord";
 
+import { gameUrl } from "./game-url";
 import { gameHeadValues, messageHeadInput } from "./message-head-input";
 import { recruitButtons } from "./recruit-buttons";
 import { recruitPlainText } from "./recruit-plain-text";
@@ -43,6 +44,7 @@ export async function recruitForumPost({
     gmName: gmDiscordId ? `<@${gmDiscordId}>` : gmName,
     confirmedCount,
     cancelled,
+    url: cancelled ? undefined : gameUrl({ slug: server.slug, gameId: game.id }),
     limit: MESSAGE_LIMIT - reserved,
   });
   const buttons = cancelled ? [] : recruitButtons({ slug: server.slug, gameId: game.id });

@@ -15,12 +15,15 @@ export function recruitPlainText({
   gmName,
   confirmedCount,
   cancelled = false,
+  url,
   limit = MESSAGE_LIMIT,
 }: {
   game: Game;
   gmName: string;
   confirmedCount: number;
   cancelled?: boolean;
+  // 구인 상세 주소. 없으면 링크 줄을 뺀다.
+  url?: string;
   // 머리 줄 등 본문 앞에 붙을 글자 수를 뺀 한 메시지 상한.
   limit?: number;
 }): { content: string; followUps: string[] } {
@@ -39,6 +42,7 @@ export function recruitPlainText({
     items.filter((value) => value !== undefined).join("\n");
   const text = [
     cancelled ? "> 🚫 **취소된 구인입니다**" : undefined,
+    url ? `🔗 [구인글 상세 보기](${url})` : undefined,
     section(
       "## 📋 모집 정보",
       list([
