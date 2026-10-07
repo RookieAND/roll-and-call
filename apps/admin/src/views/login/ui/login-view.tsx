@@ -1,16 +1,18 @@
 import { Callout, Text, VStack } from "@roll-and-call/ui";
 
-import { LoginButton } from "@/features/auth";
+import { LoginButton, SignedOutToast } from "@/features/auth";
 import { BrandMark, GateCard } from "@/shared/ui";
 
 interface LoginViewProps {
   failed: boolean;
+  signedOut?: boolean;
 }
 
-export function LoginView({ failed }: LoginViewProps) {
+export function LoginView({ failed, signedOut }: LoginViewProps) {
   const buttonLabel = failed ? "디스코드로 다시 로그인" : "디스코드로 로그인";
   return (
     <GateCard>
+      {signedOut ? <SignedOutToast /> : null}
       <BrandMark />
       <Text
         typography="body3"

@@ -14,7 +14,7 @@ export function SignOutButton() {
       size="sm"
       onClick={async () => {
         await signOut();
-        router.replace("/login");
+        router.replace("/login?signedOut=1");
       }}
     >
       로그아웃

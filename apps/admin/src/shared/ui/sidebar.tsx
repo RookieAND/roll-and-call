@@ -77,7 +77,7 @@ export function Sidebar({
         >
           {nickname.slice(0, 1)}
         </Text>
-        <VStack gap="025" className="min-w-0">
+        <VStack gap="025" className="min-w-0 flex-1">
           <Text typography="subtitle2" truncate className="leading-[1.25]">
             {nickname}
           </Text>
