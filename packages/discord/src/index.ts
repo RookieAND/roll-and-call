@@ -12,6 +12,9 @@ export type {
 export { sendDiscordMessage } from "./message/send-discord-message";
 export { addFileToMessage } from "./message/add-file-to-message";
 export { sendDiscordFile } from "./message/send-discord-file";
+export { createFileMessage } from "./message/create-file-message";
+export { updateFileMessage } from "./message/update-file-message";
+export { deleteDiscordMessage } from "./message/delete-discord-message";
 export { editDiscordMessage } from "./message/edit-discord-message";
 export { startDiscordThread } from "./thread/start-discord-thread";
 export { renameDiscordThread } from "./thread/rename-discord-thread";

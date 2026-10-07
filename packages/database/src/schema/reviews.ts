@@ -45,7 +45,7 @@ export const sessionReviews = pgTable(
     removedBy: uuid("removed_by").references(() => profiles.id, { onDelete: "set null" }),
     removedReasonCode: text("removed_reason_code"),
     removedReasonText: text("removed_reason_text"),
-    // 세션후기 포럼 게시글(스레드) id. 공개가 아니게 되면 게시글을 지우고 비운다.
+    // 세션후기 포럼 게시글(스레드) 또는 텍스트 채널 메시지 id. 공개가 아니게 되면 지우고 비운다.
     discordThreadId: text("discord_thread_id"),
   },
   (table) => [

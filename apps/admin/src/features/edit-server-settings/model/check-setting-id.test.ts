@@ -53,7 +53,7 @@ describe("checkSettingId", () => {
   });
 
   it("받지 않는 종류의 채널이면 실패한다", () => {
-    expect(checkSettingId({ field: "reviewForumChannelId", id: "text", guild })).toMatchObject({
+    expect(checkSettingId({ field: "staffChannelId", id: "forum", guild })).toMatchObject({
       reason: "wrong-type",
     });
     expect(checkSettingId({ field: "announceChannelId", id: "voice", guild })).toMatchObject({

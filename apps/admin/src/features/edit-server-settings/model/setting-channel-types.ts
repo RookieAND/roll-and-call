@@ -11,5 +11,5 @@ export const SETTING_CHANNEL_TYPES: Record<SettingFieldKey, readonly number[]> =
   closedChannelId: POSTABLE,
   announceChannelId: POSTABLE,
   staffChannelId: POSTABLE,
-  reviewForumChannelId: [DISCORD_CHANNEL_TYPE.forum],
+  reviewForumChannelId: [...POSTABLE, DISCORD_CHANNEL_TYPE.forum],
 };

@@ -9,7 +9,7 @@ export const SETTING_FIELDS = [
     auditLabel: "운영진 채널",
     emptyHint: "운영진 채널을 정하지 않으면 디스코드 글 없이 어드민에서만 처리 대기를 봅니다.",
   },
-  { key: "reviewForumChannelId", label: "후기 포럼 채널 ID", auditLabel: "후기 포럼 채널" },
+  { key: "reviewForumChannelId", label: "후기 채널 ID", auditLabel: "후기 채널" },
 ] as const;
 
 export type SettingField = (typeof SETTING_FIELDS)[number];
