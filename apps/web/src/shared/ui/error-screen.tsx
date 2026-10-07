@@ -1,11 +1,10 @@
-import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
-import Image from "next/image";
+import { Button, HStack, Text, UiImage, VStack, type UiAssetName } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import { ServerLink } from "./server-link";
 
 interface ErrorScreenProps {
-  image?: string;
+  image?: UiAssetName;
   title: ReactNode;
   description?: ReactNode;
   action?: ReactNode;
@@ -13,7 +12,7 @@ interface ErrorScreenProps {
 }
 
 export function ErrorScreen({
-  image = "/empty-states/empty-error.png",
+  image = "empty-error",
   title,
   description,
   action,
@@ -21,7 +20,7 @@ export function ErrorScreen({
 }: ErrorScreenProps) {
   return (
     <VStack gap="250" className="min-h-[70vh] items-center justify-center px-250 text-center">
-      <Image src={image} alt="" width={140} height={140} aria-hidden className="dark:opacity-80" />
+      <UiImage name={image} width={140} height={140} />
       <VStack gap="050" className="items-center">
         <Text typography="heading3">{title}</Text>
         {description && (

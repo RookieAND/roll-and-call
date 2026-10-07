@@ -1,9 +1,8 @@
-import { Text, VStack, cn } from "@roll-and-call/ui";
-import Image from "next/image";
+import { Text, UiImage, VStack, cn, type UiAssetName } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 interface EmptyStateProps {
-  image?: string;
+  image?: UiAssetName;
   size?: "full" | "section";
   title: ReactNode;
   description?: ReactNode;
@@ -29,9 +28,7 @@ export function EmptyState({
         className,
       )}
     >
-      {image && (
-        <Image src={image} alt="" width={imagePx} height={imagePx} className="dark:opacity-80" />
-      )}
+      {image && <UiImage name={image} width={imagePx} height={imagePx} />}
       <VStack gap="050" className="items-center">
         <Text typography="subtitle1">{title}</Text>
         {description && (

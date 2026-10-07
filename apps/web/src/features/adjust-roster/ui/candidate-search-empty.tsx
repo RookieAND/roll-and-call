@@ -16,7 +16,7 @@ export function CandidateSearchEmpty({ keyword, onClear }: CandidateSearchEmptyP
       </Text>
       <EmptyState
         size="section"
-        image="/empty-states/empty-search.png"
+        image="empty-search"
         className="border-0 px-400 pt-075 pb-400"
         title={`${keyword}${comitativeParticle(keyword)} 맞는 사람이 없습니다`}
         description={

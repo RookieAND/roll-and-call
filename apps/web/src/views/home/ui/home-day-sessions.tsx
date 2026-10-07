@@ -28,6 +28,7 @@ export function HomeDaySessions({ date, sessions }: HomeDaySessionsProps) {
       <VStack gap="100">
         {sessions.length === 0 && (
           <EmptyState
+            image="empty-day"
             size="section"
             className="p-200"
             title="이 날 잡힌 세션이 없습니다"

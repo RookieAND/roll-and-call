@@ -603,6 +603,13 @@
       "when": 1797700000000,
       "tag": "0091_end_notice_cron",
       "breakpoints": true
+    },
+    {
+      "idx": 92,
+      "version": "7",
+      "when": 1797800000000,
+      "tag": "0092_ui_assets_bucket",
+      "breakpoints": true
     }
   ]
 }

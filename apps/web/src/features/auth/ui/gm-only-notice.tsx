@@ -14,7 +14,7 @@ export function GmOnlyNotice({ gameId, signedIn, description }: GmOnlyNoticeProp
   if (!signedIn) return <LoginRequired />;
   return (
     <EmptyState
-      image="/empty-states/empty-error.png"
+      image="empty-forbidden"
       size="section"
       title="GM만 볼 수 있는 화면입니다"
       description={description}

@@ -9,7 +9,7 @@ interface RosterEmptyStateProps {
 export function RosterEmptyState({ gameId }: RosterEmptyStateProps) {
   return (
     <EmptyState
-      image="/empty-states/empty-party.png"
+      image="empty-party"
       size="section"
       title="아직 신청한 사람이 없습니다"
       description={

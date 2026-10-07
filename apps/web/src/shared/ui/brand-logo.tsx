@@ -1,8 +1,8 @@
-import Image from "next/image";
+import { UiImage } from "@roll-and-call/ui";
 
 const SIZES = {
-  sm: { light: { width: 106, height: 26 }, dark: { width: 100, height: 26 } },
-  lg: { light: { width: 248, height: 61 }, dark: { width: 248, height: 64 } },
+  sm: { width: 106, height: 26 },
+  lg: { width: 248, height: 62 },
 } as const;
 
 interface BrandLogoProps {
@@ -10,30 +10,11 @@ interface BrandLogoProps {
   size?: keyof typeof SIZES;
 }
 
-// 워드마크가 두 장이라 테마 전환을 CSS로 맡긴다. JS로 고르면 첫 페인트에 반대 색이 번쩍인다.
-// preload는 두 장을 다 받으므로 lazy + fetchPriority로 보이는 한 장만 서둘러 받는다.
+// 워드마크가 라이트·다크 두 장이라 테마 전환은 UiImage가 CSS로 맡는다.
 export function BrandLogo({ label, size = "sm" }: BrandLogoProps) {
-  const { light, dark } = SIZES[size];
-
   return (
     <span className="flex items-center">
-      <Image
-        src="/empty-states/logo_light.png"
-        alt={label}
-        width={light.width}
-        height={light.height}
-        fetchPriority="high"
-        className="dark:hidden"
-      />
-      <Image
-        src="/empty-states/logo_dark.png"
-        alt=""
-        width={dark.width}
-        height={dark.height}
-        fetchPriority="high"
-        aria-hidden
-        className="hidden dark:block"
-      />
+      <UiImage name="logo" alt={label} loading="eager" fetchPriority="high" {...SIZES[size]} />
     </span>
   );
 }

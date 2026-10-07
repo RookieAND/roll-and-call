@@ -1,6 +1,15 @@
-import { Button, Callout, Container, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
+import {
+  Button,
+  Callout,
+  Container,
+  FloatingBar,
+  HStack,
+  Text,
+  UiImage,
+  VStack,
+} from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { BookOpen, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 
 import { toMyRulebooks } from "@/entities/rulebook";
@@ -78,9 +87,7 @@ export async function MyRulebooksView() {
           {home.empty && (
             <VStack gap="250" className="pt-100">
               <VStack align="center" gap="100" className="px-150 pt-300 pb-100 text-center">
-                <span className="mb-075 flex size-16 items-center justify-center rounded-full bg-gray-100 text-gray-600">
-                  <BookOpen size={30} strokeWidth={1.9} aria-hidden />
-                </span>
+                <UiImage name="empty-rulebook" width={140} height={140} />
                 <Text typography="heading3" render={<h2 />}>
                   아직 인증한 룰북이 없습니다
                 </Text>

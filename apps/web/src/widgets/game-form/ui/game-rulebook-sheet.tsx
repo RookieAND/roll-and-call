@@ -77,6 +77,7 @@ export function GameRulebookSheet({
             ))}
             {groups.length === 0 && (
               <EmptyState
+                image="empty-rulebook-search"
                 size="section"
                 title="맞는 룰이 없습니다"
                 action={

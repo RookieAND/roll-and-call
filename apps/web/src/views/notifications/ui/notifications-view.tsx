@@ -23,7 +23,7 @@ export async function NotificationsView() {
         <Container size="sm">
           <VStack className="py-200">
             <LoginRequired
-              image="/empty-states/empty-party.png"
+              image="empty-party"
               title="로그인하면 알림을 볼 수 있습니다"
               description="디스코드 계정으로 로그인해 주세요."
             />

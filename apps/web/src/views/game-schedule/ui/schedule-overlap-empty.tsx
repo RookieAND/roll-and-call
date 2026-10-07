@@ -9,7 +9,7 @@ interface ScheduleOverlapEmptyProps {
 export function ScheduleOverlapEmpty({ onPaint }: ScheduleOverlapEmptyProps) {
   return (
     <EmptyState
-      image="/empty-states/empty-schedule.png"
+      image="empty-schedule"
       size="section"
       title="아직 가능 시간을 낸 사람이 없습니다"
       description={

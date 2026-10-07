@@ -1,4 +1,4 @@
-import { VStack } from "@roll-and-call/ui";
+import { UiImage, VStack } from "@roll-and-call/ui";
 import Image from "next/image";
 
 const SIZES = {
@@ -15,7 +15,7 @@ export function BrandMark({ size = "md" }: BrandMarkProps) {
   return (
     <VStack align="center" gap="175">
       <Image src="/icon.png" alt="" width={icon} height={icon} priority className="rounded-600" />
-      <Image src="/logo_light.png" alt="Roll & Call" {...wordmark} priority />
+      <UiImage name="logo" alt="Roll & Call" {...wordmark} loading="eager" />
     </VStack>
   );
 }

@@ -1,4 +1,4 @@
-import { Button } from "@roll-and-call/ui";
+import { Button, type UiAssetName } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import { SESSION_ROLE, type SessionRole } from "@/entities/game";
@@ -40,9 +40,9 @@ const ONGOING_EMPTY: Record<
   },
 };
 
-const ONGOING_IMAGE: Record<SessionRole, string> = {
-  [SESSION_ROLE.player]: "/empty-states/empty-my-games.png",
-  [SESSION_ROLE.host]: "/empty-states/empty-hosted.png",
+const ONGOING_IMAGE: Record<SessionRole, UiAssetName> = {
+  [SESSION_ROLE.player]: "empty-my-games",
+  [SESSION_ROLE.host]: "empty-hosted",
 };
 
 const FILTERED_TITLE: Partial<Record<SessionChipKey, string>> = {
@@ -78,7 +78,7 @@ export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
     return (
       <EmptyState
         size="section"
-        image="/empty-states/empty-my-games.png"
+        image="empty-my-games"
         title="끝난 세션이 없습니다"
         description="세션이 끝나면 여기에 기록으로 남습니다."
       />
@@ -88,7 +88,7 @@ export function SessionsEmpty({ activeTab, activeChip }: SessionsEmptyProps) {
   return (
     <EmptyState
       size="section"
-      image="/empty-states/empty-search.png"
+      image="empty-search"
       title={FILTERED_TITLE[activeChip] ?? "이 상태인 세션이 없습니다"}
       description="필터를 풀면 진행 중인 세션을 모두 볼 수 있습니다."
       action={

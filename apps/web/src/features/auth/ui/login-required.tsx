@@ -1,3 +1,5 @@
+import type { UiAssetName } from "@roll-and-call/ui";
+
 import { EmptyState } from "@/shared/ui";
 
 import { LoginButton } from "./login-button";
@@ -5,7 +7,7 @@ import { LoginButton } from "./login-button";
 interface LoginRequiredProps {
   title?: string;
   description?: string;
-  image?: string;
+  image?: UiAssetName;
 }
 
 export function LoginRequired({

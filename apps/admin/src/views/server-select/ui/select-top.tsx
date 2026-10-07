@@ -1,5 +1,4 @@
-import { HStack, Text } from "@roll-and-call/ui";
-import Image from "next/image";
+import { HStack, Text, UiImage } from "@roll-and-call/ui";
 
 import { SignOutButton } from "@/features/auth";
 import { Tag } from "@/shared/ui";
@@ -17,7 +16,7 @@ export function SelectTop({ nickname, platformAdmin }: SelectTopProps) {
       render={<header />}
       className="h-[64px] shrink-0 border-b border-gray-200 bg-surface px-300"
     >
-      <Image src="/logo_light.png" alt="Roll & Call" width={78} height={19} priority />
+      <UiImage name="logo" alt="Roll & Call" width={78} height={19} loading="eager" />
       <Text
         typography="body4"
         weight="bold"

@@ -20,7 +20,7 @@ export async function TodoPanel({ serverId, userId }: TodoPanelProps) {
   if (isNull(list)) {
     return (
       <EmptyState
-        image="/empty-states/empty-error.png"
+        image="empty-error"
         title="할 일을 불러오지 못했습니다"
         description="잠시 뒤 다시 시도해 주세요."
         action={<ReloadButton />}
@@ -30,7 +30,7 @@ export async function TodoPanel({ serverId, userId }: TodoPanelProps) {
   if (list.count === 0) {
     return (
       <EmptyState
-        image="/empty-states/empty-schedule.png"
+        image="empty-schedule"
         title="지금 처리할 일이 없습니다"
         description="새로 할 일이 생기면 홈 맨 위에도 알려 드립니다."
       />

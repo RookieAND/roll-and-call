@@ -28,7 +28,7 @@ export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
   if (total > 0) {
     return (
       <EmptyState
-        image="/empty-states/empty-search.png"
+        image="empty-search"
         title="이 쪽에는 구인이 없습니다"
         description={
           <>
@@ -53,7 +53,7 @@ export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
   if (filter.q) {
     return (
       <EmptyState
-        image="/empty-states/empty-search.png"
+        image="empty-search"
         title={`「${filter.q}」에 맞는 구인이 없습니다`}
         description={
           <span className="break-keep">검색어를 바꾸거나 직접 구인을 올릴 수 있습니다.</span>
@@ -78,7 +78,7 @@ export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
     const label = GAME_STATUS_FILTERS[tab].find((option) => option.key === status)!.label;
     return (
       <EmptyState
-        image="/empty-states/empty-search.png"
+        image="empty-search"
         title={`「${label}」인 구인이 없습니다`}
         action={
           <Button
@@ -100,7 +100,7 @@ export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
   if (tab === GAME_TAB.past) {
     return (
       <EmptyState
-        image="/empty-states/empty-my-games.png"
+        image="empty-my-games"
         title="지난 구인이 아직 없습니다"
         description="모집이 끝난 구인이 이 자리에 쌓입니다."
       />
@@ -109,7 +109,7 @@ export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
 
   return (
     <EmptyState
-      image="/empty-states/empty-my-games.png"
+      image="empty-recruit-feed"
       title="아직 올라온 구인이 없습니다"
       description="첫 구인을 올리면 이 자리에 보입니다."
       action={<div className="mt-100">{newGame}</div>}

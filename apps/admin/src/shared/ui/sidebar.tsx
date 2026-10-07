@@ -1,5 +1,4 @@
-import { HStack, Text, VStack, cn } from "@roll-and-call/ui";
-import Image from "next/image";
+import { HStack, Text, UiImage, VStack, cn } from "@roll-and-call/ui";
 
 import { STAFF_ROLE_LABEL, serverPath } from "@/shared/lib";
 
@@ -34,7 +33,7 @@ export function Sidebar({
         gap="100"
         className="border-b border-(--rc-color-border-subtle) px-175 pt-175 pb-150"
       >
-        <Image src="/logo_light.png" alt="Roll & Call" width={78} height={19} priority />
+        <UiImage name="logo" alt="Roll & Call" width={78} height={19} loading="eager" />
         <Text
           typography="body4"
           weight="bold"

@@ -22,7 +22,7 @@ export function InboxPanel({ inbox, read, onRead }: InboxPanelProps) {
     return (
       <Container size="sm" className="py-200">
         <EmptyState
-          image="/empty-states/empty-error.png"
+          image="empty-error"
           title="받은 알림을 불러오지 못했습니다"
           description="잠시 뒤 다시 시도해 주세요."
           action={<ReloadButton />}
@@ -33,10 +33,7 @@ export function InboxPanel({ inbox, read, onRead }: InboxPanelProps) {
   if (page.items.length === 0) {
     return (
       <Container size="sm" className="py-200">
-        <EmptyState
-          image="/empty-states/empty-party.png"
-          title="최근 7일 동안 받은 알림이 없습니다."
-        />
+        <EmptyState image="empty-notification" title="최근 7일 동안 받은 알림이 없습니다." />
       </Container>
     );
   }

@@ -7,7 +7,7 @@ export default function NotFound() {
     <>
       <AppBar back="/games" title="구인 상세" />
       <ErrorScreen
-        image="/empty-states/empty-search.png"
+        image="empty-search"
         title="찾을 수 없는 구인입니다"
         description={
           <>

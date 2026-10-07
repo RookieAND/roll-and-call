@@ -37,6 +37,7 @@ export function HomeMonthRecord({ monthStart, record }: HomeMonthRecordProps) {
           <HomeRecordRanking label={GM_LABEL} ranking={record.gms} first={topGm} />
         ) : (
           <HomeRecordEmpty
+            image="empty-month-record"
             title="아직 세션을 마친 GM이 없습니다"
             description="세션이 완료될 때마다 집계합니다."
           />

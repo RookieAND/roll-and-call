@@ -9,7 +9,7 @@ export function NoCandidatesNotice({ playLabel, respondentCount }: NoCandidatesN
   return (
     <EmptyState
       size="section"
-      image="/empty-states/empty-schedule.png"
+      image="empty-schedule"
       title={`${playLabel}이 연속으로 비는 시간이 없습니다`}
       description={
         <>

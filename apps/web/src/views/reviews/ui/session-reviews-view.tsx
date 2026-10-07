@@ -61,7 +61,7 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
         />
       ) : (
         <EmptyState
-          image="/empty-states/empty-party.png"
+          image="empty-review"
           title="아직 달린 후기가 없습니다"
           description="참여자가 후기를 남기면 여기에 모입니다."
           className="min-h-[60dvh] justify-center border-0"

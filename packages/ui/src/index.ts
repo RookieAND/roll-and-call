@@ -83,3 +83,5 @@ export {
   type RadioCardIndicator,
 } from "./components/radio-card/radio-card";
 export { Popover, type PopoverPopupProps } from "./components/popover/popover";
+export { UiImage } from "./assets/ui-image";
+export { UI_ASSET_NAMES, uiAssetUrl, type UiAssetName } from "./assets/ui-asset";

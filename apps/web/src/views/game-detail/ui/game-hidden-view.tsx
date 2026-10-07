@@ -8,7 +8,7 @@ export function GameHiddenView() {
     <>
       <AppBar back="/games" backHistory={false} title="구인 상세" />
       <ErrorScreen
-        image="/empty-states/empty-search.png"
+        image="empty-search"
         title="운영진이 숨긴 구인입니다"
         description="지금은 내용을 볼 수 없습니다."
         action={

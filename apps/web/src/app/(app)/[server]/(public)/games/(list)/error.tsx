@@ -11,7 +11,7 @@ export default function ErrorPage({ retry }: { error: Error; retry: () => void }
       <AppBar title="구인 목록" brand />
       <Container className="py-300">
         <EmptyState
-          image="/empty-states/empty-error.png"
+          image="empty-error"
           title="구인 목록을 불러오지 못했습니다"
           description={
             <>
