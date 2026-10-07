@@ -7,6 +7,6 @@ export type ForumTagForm = {
 };
 
 export type ForumTagOptions =
-  | { status: "forum"; tags: { id: string; name: string }[] }
+  | { status: "forum"; tags: { id: string; name: string; emoji: string | null }[] }
   | { status: "notForum" }
   | { status: "unreachable" };

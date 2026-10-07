@@ -1,15 +1,19 @@
 "use client";
 
-import { Button, HStack, Select, Text, VStack, toast } from "@roll-and-call/ui";
+import { Button, Text, VStack, toast } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import type { ForumTagForm, ForumTagOptions } from "@/features/edit-forum-tags";
-import { Panel } from "@/shared/ui";
 
+import { ForumTagSection } from "./forum-tag-section";
 import { SettingsFrame } from "./settings-frame";
 
-const NONE = "none";
+const STATUS_ROWS = [
+  { key: "open", label: "모집중" },
+  { key: "closed", label: "마감" },
+  { key: "cancelled", label: "취소됨" },
+] as const;
 
 interface ForumTagsViewProps {
   // 서버 전용 모듈이 클라이언트 번들에 들어가지 않게 페이지가 서버 액션을 넘긴다.
@@ -17,42 +21,6 @@ interface ForumTagsViewProps {
   options: ForumTagOptions;
   categories: { id: string; name: string }[];
   saved: ForumTagForm;
-}
-
-function TagSelect({
-  label,
-  value,
-  tags,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  tags: { id: string; name: string }[];
-  onChange: (value: string) => void;
-}) {
-  const items = [
-    { label: "연결 안 함", value: NONE },
-    ...tags.map((tag) => ({ label: tag.name, value: tag.id })),
-  ];
-  return (
-    <HStack align="center" justify="between" gap="150">
-      <Text typography="body3">{label}</Text>
-      <Select.Root
-        items={items}
-        value={value || NONE}
-        onValueChange={(next) => onChange(next === NONE ? "" : next)}
-      >
-        <Select.Trigger aria-label={label} className="w-[220px]" />
-        <Select.Popup>
-          {items.map((item) => (
-            <Select.Item key={item.value} value={item.value}>
-              {item.label}
-            </Select.Item>
-          ))}
-        </Select.Popup>
-      </Select.Root>
-    </HStack>
-  );
 }
 
 export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsViewProps) {
@@ -80,43 +48,36 @@ export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsV
     >
       {options.status === "forum" ? (
         <VStack gap="150" className="max-w-[880px]">
-          <Panel title="모집 상태" bodyClassName="p-175">
-            <VStack gap="125">
-              <TagSelect
-                label="모집중"
-                value={form.open}
-                tags={options.tags}
-                onChange={(open) => setForm({ ...form, open })}
-              />
-              <TagSelect
-                label="마감"
-                value={form.closed}
-                tags={options.tags}
-                onChange={(closed) => setForm({ ...form, closed })}
-              />
-              <TagSelect
-                label="취소됨"
-                value={form.cancelled}
-                tags={options.tags}
-                onChange={(cancelled) => setForm({ ...form, cancelled })}
-              />
-            </VStack>
-          </Panel>
-          <Panel title="룰 분류" bodyClassName="p-175">
-            <VStack gap="125">
-              {categories.map((category) => (
-                <TagSelect
-                  key={category.id}
-                  label={category.name}
-                  value={form.categories[category.id] ?? ""}
-                  tags={options.tags}
-                  onChange={(tagId) =>
-                    setForm({ ...form, categories: { ...form.categories, [category.id]: tagId } })
-                  }
-                />
-              ))}
-            </VStack>
-          </Panel>
+          <Text typography="body3" foreground="muted">
+            모집 상태와 룰 분류마다 디스코드 포럼 태그를 하나씩 연결합니다. 연결하지 않으면 해당
+            태그는 붙지 않습니다.
+          </Text>
+          <ForumTagSection
+            title="모집 상태"
+            columnLabel="모집 단계"
+            tags={options.tags}
+            rows={STATUS_ROWS.map(({ key, label }) => ({
+              key,
+              label,
+              value: form[key],
+              savedValue: saved[key],
+            }))}
+            onChange={(key, tagId) => setForm({ ...form, [key]: tagId })}
+          />
+          <ForumTagSection
+            title="룰 분류"
+            columnLabel="룰 분류"
+            tags={options.tags}
+            rows={categories.map((category) => ({
+              key: category.id,
+              label: category.name,
+              value: form.categories[category.id] ?? "",
+              savedValue: saved.categories[category.id] ?? "",
+            }))}
+            onChange={(id, tagId) =>
+              setForm({ ...form, categories: { ...form.categories, [id]: tagId } })
+            }
+          />
         </VStack>
       ) : (
         <Text typography="body3" foreground="muted">

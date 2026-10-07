@@ -1,4 +1,5 @@
 import { HStack, Text, UiImage, VStack, cn } from "@roll-and-call/ui";
+import type { ReactNode } from "react";
 
 import { STAFF_ROLE_LABEL, serverPath } from "@/shared/lib";
 
@@ -14,6 +15,8 @@ interface SidebarProps {
   server: SwitchServer;
   servers: SwitchServer[];
   countPromises: Partial<Record<NavKey, Promise<number | undefined>>>;
+  // shared는 features를 못 가져오므로 로그아웃 버튼은 레이아웃이 넘긴다.
+  signOutButton: ReactNode;
 }
 
 export function Sidebar({
@@ -23,6 +26,7 @@ export function Sidebar({
   server,
   servers,
   countPromises,
+  signOutButton,
 }: SidebarProps) {
   const roleLabel = platformAdmin ? "플랫폼 관리자" : `${server.name} ${STAFF_ROLE_LABEL[role]}`;
   const emphasizedRole = platformAdmin || role === "owner";
@@ -87,6 +91,7 @@ export function Sidebar({
             {roleLabel}
           </Text>
         </VStack>
+        {signOutButton}
       </HStack>
     </VStack>
   );

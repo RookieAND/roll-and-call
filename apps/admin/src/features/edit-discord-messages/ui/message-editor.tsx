@@ -2,14 +2,17 @@
 
 import {
   defaultMessageHead,
+  defaultMessageText,
   MESSAGE_HEAD_MAX_LENGTH,
+  MESSAGE_TEXT_MAX_LENGTH,
+  messageTextVariables,
   messageVariables,
   validateMessageHead,
   validateMessageText,
   type MessageCaseKey,
   type MessageTextKey,
 } from "@roll-and-call/database/servers/model";
-import { Button, Callout, Chip, HStack, Text, TextInput, VStack, toast } from "@roll-and-call/ui";
+import { Button, Callout, Chip, HStack, Text, VStack, toast } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
 
@@ -20,20 +23,9 @@ import { saveMessageTextAction } from "../api/save-message-text";
 import type { MessageRole } from "../model/message-role";
 import { UNKNOWN_ROLE_WARNING, unknownRoleIds } from "../model/unknown-role-ids";
 import { DiscordPreview } from "./discord-preview";
-import { MessageTextEditor } from "./message-text-editor";
+import { MessageField } from "./message-field";
 
-const SECTIONS = [
-  {
-    place: "body",
-    title: "본문 알림 줄",
-    hint: "머리 줄 아래, 임베드 위에 붙는 한 줄입니다. 멘션된 사람에게 알림이 갑니다.",
-  },
-  {
-    place: "embed",
-    title: "설명 문장",
-    hint: "머리 줄 아래 임베드의 설명 한 줄입니다. 시간·인원 칸과 색, 버튼은 그대로입니다.",
-  },
-] as const;
+const FIELD_TITLE = { body: "본문 알림 줄", embed: "설명 문장" } as const;
 
 interface MessageEditorProps {
   caseKey: MessageCaseKey;
@@ -69,25 +61,20 @@ export function MessageEditor({
   const [saving, startSaving] = useTransition();
   const [text, setText] = useState(savedHead);
   const [failed, setFailed] = useState(false);
-  // 고치는 중인 문장과 지금 미리보기에 올릴 문장(자리마다 마지막으로 만진 것).
   const [drafts, setDrafts] = useState(() =>
     Object.fromEntries(texts.map(({ key, savedBody }) => [key, savedBody])),
   );
-  const [active, setActive] = useState<Partial<Record<"embed" | "body", MessageTextKey>>>(() =>
-    Object.fromEntries(
-      (["body", "embed"] as const).flatMap((place) => {
-        const first = texts.find((item) => item.place === place);
-        return first ? [[place, first.key]] : [];
-      }),
-    ),
-  );
-  const activeLine = (place: "embed" | "body") => {
-    const key = active[place];
-    return key ? { key, text: drafts[key] ?? "" } : undefined;
-  };
-  const input = useRef<HTMLInputElement>(null);
+  const labels = [...new Set(texts.map((item) => item.label))];
+  const [variant, setVariant] = useState(labels[0]);
+  const [focused, setFocused] = useState<"head" | MessageTextKey>("head");
+  const inputs = useRef<Record<string, HTMLInputElement | null>>({});
 
-  const length = [...text].length;
+  const shown = texts.filter((item) => item.label === variant);
+  const bodyItem = shown.find((item) => item.place === "body");
+  const embedItem = shown.find((item) => item.place === "embed");
+  const line = (item?: (typeof texts)[number]) =>
+    item ? { key: item.key, text: drafts[item.key] ?? "" } : undefined;
+
   const error = validateMessageHead({ key: caseKey, text: text.trim() });
   const disabled = readOnly || saving;
   const dirtyTexts = texts.filter((item) => (drafts[item.key] ?? "").trim() !== item.savedBody);
@@ -95,17 +82,35 @@ export function MessageEditor({
     validateMessageText({ key: item.key, text: (drafts[item.key] ?? "").trim() }),
   );
   const dirty = text.trim() !== savedHead || dirtyTexts.length > 0;
+  const isDefault =
+    text === defaultMessageHead(caseKey) &&
+    texts.every((item) => drafts[item.key] === defaultMessageText(item.key));
   const warning =
     guildRoles && unknownRoleIds({ text, guildRoleIds: guildRoles.map(({ id }) => id) }).length > 0
       ? UNKNOWN_ROLE_WARNING
       : undefined;
 
+  const variables = [
+    ...new Set([
+      ...messageVariables(caseKey),
+      ...shown.flatMap((item) => messageTextVariables(item.key)),
+    ]),
+  ];
+
   const insert = (variable: string) => {
-    const element = input.current;
-    const at = element?.selectionStart ?? text.length;
+    const element = inputs.current[focused];
+    const current = focused === "head" ? text : (drafts[focused] ?? "");
+    const at = element?.selectionStart ?? current.length;
     const end = element?.selectionEnd ?? at;
-    setText(`${text.slice(0, at)}{${variable}}${text.slice(end)}`);
+    const next = `${current.slice(0, at)}{${variable}}${current.slice(end)}`;
+    if (focused === "head") setText(next);
+    else setDrafts({ ...drafts, [focused]: next });
     element?.focus();
+  };
+
+  const reset = () => {
+    setText(defaultMessageHead(caseKey));
+    setDrafts(Object.fromEntries(texts.map(({ key }) => [key, defaultMessageText(key)])));
   };
 
   const save = () =>
@@ -148,74 +153,85 @@ export function MessageEditor({
     });
 
   return (
-    <VStack gap="175" className="p-175">
-      <VStack gap="075" className="sticky top-(--rc-size-appbar) z-10 bg-surface pb-075">
-        <Text typography="body4" weight="bold" foreground="muted">
-          미리보기
-        </Text>
-        <DiscordPreview
-          caseKey={caseKey}
-          text={text}
-          bodyLine={activeLine("body")}
-          description={activeLine("embed")}
-          guildRoles={guildRoles}
-          recruitForum={recruitForum}
-        />
-      </VStack>
-      <VStack gap="075">
-        <HStack align="baseline">
+    <VStack gap="150" className="p-175">
+      {labels.length > 1 ? (
+        <VStack gap="075">
           <Text typography="body4" weight="bold" foreground="muted">
-            머리 줄
+            보내는 경우
           </Text>
-          <Button
-            variant="ghost"
-            colorPalette="gray"
-            size="sm"
-            disabled={disabled || text === defaultMessageHead(caseKey)}
-            onClick={() => setText(defaultMessageHead(caseKey))}
-          >
-            기본값
-          </Button>
-          <Text
-            typography="body4"
-            numeric
-            foreground={length > MESSAGE_HEAD_MAX_LENGTH ? "danger" : "hint"}
-            weight={length > MESSAGE_HEAD_MAX_LENGTH ? "bold" : undefined}
-            className="ml-auto"
-          >
-            {length} / {MESSAGE_HEAD_MAX_LENGTH}
-          </Text>
-        </HStack>
-        <TextInput
-          ref={input}
-          aria-label="머리 줄"
-          placeholder="머리 줄 없음"
-          value={text}
-          invalid={Boolean(error)}
-          disabled={disabled}
-          onChange={(event) => setText(event.target.value)}
-        />
-        {error ? (
-          <Text typography="body4" foreground="danger">
-            {error}
-          </Text>
-        ) : null}
-        {!error && warning ? (
-          <Text typography="body4" className="text-notice-ink">
-            {warning}
-          </Text>
-        ) : null}
-      </VStack>
+          <HStack wrap gap="075">
+            {labels.map((item) => (
+              <Chip key={item} selected={item === variant} onClick={() => setVariant(item)}>
+                {item}
+              </Chip>
+            ))}
+          </HStack>
+        </VStack>
+      ) : null}
+      <DiscordPreview
+        caseKey={caseKey}
+        text={text}
+        bodyLine={line(bodyItem)}
+        description={line(embedItem)}
+        guildRoles={guildRoles}
+        recruitForum={recruitForum}
+      />
+      {caseKey === "open" ? (
+        <Text typography="body4" foreground="hint">
+          {recruitForum
+            ? "포럼 글 맨 위에 구인글 상세 링크가 고정으로 붙습니다. 본문과 버튼은 고칠 수 없습니다."
+            : "텍스트 채널에는 임베드로 나가며 설명은 구인 줄거리를 그대로 씁니다."}
+        </Text>
+      ) : null}
+      {caseKey === "monthly" ? (
+        <Text typography="body4" foreground="hint">
+          본문은 임베드 없이 평문으로 나가며 고칠 수 없습니다.
+        </Text>
+      ) : null}
+      <MessageField
+        ref={(element) => {
+          inputs.current.head = element;
+        }}
+        label="머리 줄"
+        placeholder="머리 줄 없음"
+        value={text}
+        max={MESSAGE_HEAD_MAX_LENGTH}
+        error={error}
+        warning={warning}
+        disabled={disabled}
+        onChange={setText}
+        onFocus={() => setFocused("head")}
+      />
+      {[bodyItem, embedItem].map((item) =>
+        item ? (
+          <MessageField
+            key={item.key}
+            ref={(element) => {
+              inputs.current[item.key] = element;
+            }}
+            label={FIELD_TITLE[item.place]}
+            value={drafts[item.key] ?? ""}
+            max={MESSAGE_TEXT_MAX_LENGTH}
+            error={validateMessageText({ key: item.key, text: (drafts[item.key] ?? "").trim() })}
+            disabled={disabled}
+            onChange={(draft) => setDrafts({ ...drafts, [item.key]: draft })}
+            onFocus={() => setFocused(item.key)}
+          />
+        ) : null,
+      )}
       <VStack gap="075">
+        <Text typography="body4" weight="bold" foreground="muted">
+          쓸 수 있는 변수
+        </Text>
         <HStack wrap gap="075">
-          {messageVariables(caseKey).map((variable) => (
+          {variables.map((variable) => (
             <Chip key={variable} disabled={disabled} onClick={() => insert(variable)}>
               {variable}
             </Chip>
           ))}
         </HStack>
         <Text typography="body4" foreground="hint">
-          역할을 직접 멘션하려면 {"<@&역할ID>"}를 적습니다.
+          역할 멘션은 {"<@&역할ID>"}로 적습니다.
         </Text>
       </VStack>
       {failed ? (
@@ -228,39 +244,15 @@ export function MessageEditor({
           </Callout.Description>
         </Callout.Root>
       ) : null}
-      {SECTIONS.map(({ place, title, hint }) => {
-        const sectionTexts = texts.filter((item) => item.place === place);
-        if (sectionTexts.length === 0) return null;
-        return (
-          <VStack
-            key={place}
-            gap="175"
-            className="border-t border-(--rc-color-border-subtle) pt-175"
-          >
-            <VStack gap="025">
-              <Text typography="subtitle2">{title}</Text>
-              <Text typography="body4" foreground="hint">
-                {hint}
-              </Text>
-            </VStack>
-            {sectionTexts.map((item) => (
-              <MessageTextEditor
-                key={item.key}
-                textKey={item.key}
-                label={item.label}
-                value={drafts[item.key] ?? ""}
-                disabled={disabled}
-                onChange={(draft) => setDrafts({ ...drafts, [item.key]: draft })}
-                onActivate={() => setActive({ ...active, [place]: item.key })}
-              />
-            ))}
-          </VStack>
-        );
-      })}
-      <HStack
-        justify="end"
-        className="sticky bottom-0 border-t border-(--rc-color-border-subtle) bg-surface py-100"
-      >
+      <HStack align="center" justify="between" gap="100">
+        <Button
+          variant="ghost"
+          colorPalette="gray"
+          disabled={disabled || isDefault}
+          onClick={reset}
+        >
+          기본 문구로 되돌리기
+        </Button>
         <Button
           loading={saving}
           disabled={disabled || !dirty || Boolean(error) || textError}

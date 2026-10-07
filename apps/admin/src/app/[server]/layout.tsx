@@ -2,6 +2,7 @@ import { HStack, VStack } from "@roll-and-call/ui";
 import { forbidden, redirect } from "next/navigation";
 import { Suspense } from "react";
 
+import { SignOutIconButton } from "@/features/auth";
 import { QuickSearchPalette } from "@/features/quick-search";
 import {
   getCurrentServer,
@@ -48,6 +49,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
           server={current}
           servers={servers}
           countPromises={{ cert: countOf("cert"), rules: countOf("rulebookRequest") }}
+          signOutButton={<SignOutIconButton />}
         />
         <VStack
           data-slot="admin-main"
