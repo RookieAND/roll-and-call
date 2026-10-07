@@ -7,8 +7,8 @@ const NOW = new Date("2026-09-28T12:00:00+09:00");
 const DAY = 24 * 60 * 60 * 1000;
 const game = {
   id: "game",
-  attendanceConfirmedAt: new Date(NOW.getTime() - 12 * DAY),
-  attendanceFirstConfirmedAt: new Date(NOW.getTime() - 12 * DAY),
+  attendanceConfirmedAt: new Date(NOW.getTime() - 5 * DAY),
+  attendanceFirstConfirmedAt: new Date(NOW.getTime() - 5 * DAY),
 } as SessionGame;
 const context = (reviewed: [string, { createdAt: Date; removedAt: Date | null }][] = []) =>
   ({ viewerId: "me", now: NOW, reviewedGames: new Map(reviewed) }) as unknown as SessionContext;
@@ -29,11 +29,11 @@ describe("reviewNote", () => {
     expect(note.action?.kind).toBe(SESSION_ACTION_KIND.writeReview);
   });
 
-  it("처음 확정 3일 뒤 다시 확정해도 마감은 처음 확정 + 14일이다", () => {
+  it("처음 확정 3일 뒤 다시 확정해도 마감은 처음 확정 + 7일이다", () => {
     const reconfirmed = {
       ...game,
-      attendanceFirstConfirmedAt: new Date(NOW.getTime() - 15 * DAY),
-      attendanceConfirmedAt: new Date(NOW.getTime() - 12 * DAY),
+      attendanceFirstConfirmedAt: new Date(NOW.getTime() - 8 * DAY),
+      attendanceConfirmedAt: new Date(NOW.getTime() - 5 * DAY),
     };
     expect(reviewNote({ game: reconfirmed, context: context() }).caption?.text).toBe(
       "작성 기간 지남",
@@ -47,7 +47,7 @@ describe("reviewNote", () => {
         ["game", { createdAt: new Date(NOW.getTime() - 5 * DAY), removedAt: null }],
       ]),
     });
-    expect(note.caption?.text).toBe("수정 가능 · D-9");
+    expect(note.caption?.text).toBe("수정 가능 · D-2");
     expect(note.action?.kind).toBe(SESSION_ACTION_KIND.viewReview);
   });
 

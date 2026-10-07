@@ -90,7 +90,7 @@ export const games = pgTable(
     drawnAt: timestamp("drawn_at", { withTimezone: true }),
     // GM이 참석 여부를 확정한 시각. null이면 세션이 끝났어도 아직 출석 확인이 남아 있다.
     attendanceConfirmedAt: timestamp("attendance_confirmed_at", { withTimezone: true }),
-    // 출석을 처음 확정한 시각(GM이든 자동이든). 후기 작성 14일 기준이고, attendanceConfirmedAt은 마지막 확정 시각이다.
+    // 출석을 처음 확정한 시각(GM이든 자동이든). 후기 작성 7일 기준이고, attendanceConfirmedAt은 마지막 확정 시각이다.
     attendanceFirstConfirmedAt: timestamp("attendance_first_confirmed_at", { withTimezone: true }),
     // GM이 세션 마치기를 누른 시각. null이면 시작 + 플레이타임이 종료다.
     endedAt: timestamp("ended_at", { withTimezone: true }),

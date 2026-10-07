@@ -15,12 +15,12 @@ const review = {
 };
 
 describe("deriveReviewState", () => {
-  it("등록하고 14일 안이면 고칠 수 있다", () => {
+  it("등록하고 7일 안이면 고칠 수 있다", () => {
     expect(deriveReviewState(review, NOW)).toBe(REVIEW_STATE.editable);
   });
 
-  it("14일이 지나면 잠긴다", () => {
-    const old = { ...review, createdAt: new Date(NOW.getTime() - 14 * DAY) };
+  it("7일이 지나면 잠긴다", () => {
+    const old = { ...review, createdAt: new Date(NOW.getTime() - 7 * DAY) };
     expect(deriveReviewState(old, NOW)).toBe(REVIEW_STATE.locked);
   });
 
@@ -41,9 +41,9 @@ describe("deriveReviewState", () => {
 });
 
 describe("reviewWriteDeadline", () => {
-  it("출석 확정 14일 뒤까지 받는다", () => {
+  it("출석 확정 7일 뒤까지 받는다", () => {
     expect(reviewWriteDeadline(new Date("2026-09-20T12:00:00+09:00")).toISOString()).toBe(
-      new Date("2026-10-04T12:00:00+09:00").toISOString(),
+      new Date("2026-09-27T12:00:00+09:00").toISOString(),
     );
   });
 });

@@ -4,7 +4,7 @@ import {
   getGameForNotice,
   listConfirmedDiscordIds,
 } from "@roll-and-call/database/games";
-import { countConfirmed } from "@roll-and-call/database/games/model";
+import { countConfirmed, REVIEW_WRITE_DAYS } from "@roll-and-call/database/games/model";
 import { getDiscordId } from "@roll-and-call/database/profiles";
 import { DISCORD_COLOR, sendDiscordMessage } from "@roll-and-call/discord";
 import { compact, uniq } from "es-toolkit";
@@ -48,9 +48,24 @@ export async function notifyGameEnded({ server, gameId }: { server: Server; game
           emoji: "🏁",
           color: DISCORD_COLOR.complete,
           description: await messageText({ serverId: server.id, key: "end", values }),
+          fields: [
+            { name: "📜 룰", value: game.rule, inline: true },
+            {
+              name: "✍ 후기 작성 기간",
+              value: reviewPeriodText(game.attendanceFirstConfirmedAt),
+              inline: true,
+            },
+          ],
         }),
       ],
       buttons: detailUrl ? [{ label: "✍ 후기 작성하기", url: `${detailUrl}/review` }] : [],
     },
   });
+}
+
+// 출석을 확정하면 그 시각부터 센다. 종료 안내 때는 보통 아직 확정 전이라 기간만 적는다. 확정돼 있으면 디스코드가 보는 사람의 시간대로 마감 시각을 보여 준다.
+function reviewPeriodText(attendanceFirstConfirmedAt: Date | null) {
+  if (!attendanceFirstConfirmedAt) return `출석 확인 후 ${REVIEW_WRITE_DAYS}일 이내`;
+  const deadline = new Date(attendanceFirstConfirmedAt.getTime() + REVIEW_WRITE_DAYS * 86_400_000);
+  return `<t:${Math.floor(deadline.getTime() / 1000)}:f>까지`;
 }

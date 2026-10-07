@@ -26,9 +26,9 @@ const row = {
 } as MyReviewRow;
 
 describe("toMyReviewCard", () => {
-  it("방금 쓴 후기는 수정 D-14 배지와 두 버튼을 단다", () => {
+  it("방금 쓴 후기는 수정 D-7 배지와 두 버튼을 단다", () => {
     const card = toMyReviewCard(row, NOW);
-    expect(card.badge).toEqual({ label: "수정 D-14", palette: "primary" });
+    expect(card.badge).toEqual({ label: "수정 D-7", palette: "primary" });
     expect(card.actions).toBe(MY_REVIEW_ACTIONS.editAndDelete);
     expect(card.meta).toBe("크툴루의 부름 · 9월 19일");
     expect(card.subject).toBe("물벼락 · 9월 19일 세션");
@@ -42,7 +42,7 @@ describe("toMyReviewCard", () => {
   });
 
   it("수정 기한 마지막 날은 수정 오늘까지로 적는다", () => {
-    const lastDay = new Date("2026-10-12T09:00:00+09:00");
+    const lastDay = new Date("2026-10-05T09:00:00+09:00");
     expect(toMyReviewCard(row, lastDay).badge?.label).toBe("수정 오늘까지");
   });
 

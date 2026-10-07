@@ -146,10 +146,10 @@ describe("manageRows", () => {
       }),
     );
     expect(rows.review.state).toBe(MANAGE_ROW_STATE.open);
-    expect(rows.review.detail).toBe("후기 0개가 달렸습니다 · 10월 3일까지 받습니다");
+    expect(rows.review.detail).toBe("후기 0개가 달렸습니다 · 9월 26일까지 받습니다");
   });
 
-  it("처음 확정 3일 뒤 다시 확정해도 후기 기한은 처음 확정 + 14일이다", () => {
+  it("처음 확정 3일 뒤 다시 확정해도 후기 기한은 처음 확정 + 7일이다", () => {
     const rows = byKey(
       gameWith({
         confirmedAt: at(-5 * DAY),
@@ -157,7 +157,7 @@ describe("manageRows", () => {
         attendanceConfirmedAt: at(-DAY),
       }),
     );
-    expect(rows.review.detail).toBe("후기 0개가 달렸습니다 · 9월 30일까지 받습니다");
+    expect(rows.review.detail).toBe("후기 0개가 달렸습니다 · 9월 23일까지 받습니다");
   });
 
   it("취소한 구인은 여섯 줄이 모두 잠긴다", () => {

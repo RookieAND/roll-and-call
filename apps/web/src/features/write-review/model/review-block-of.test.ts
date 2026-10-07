@@ -22,7 +22,7 @@ const target = {
 const review = { createdAt: new Date(NOW.getTime() - DAY), hiddenAt: null, removedAt: null };
 
 describe("reviewBlockOf", () => {
-  it("출석 확정 뒤 14일 안의 참석자는 쓸 수 있다", () => {
+  it("출석 확정 뒤 7일 안의 참석자는 쓸 수 있다", () => {
     expect(reviewBlockOf(target, NOW)).toBeNull();
   });
 
@@ -45,17 +45,17 @@ describe("reviewBlockOf", () => {
     expect(reviewBlockOf({ ...target, participant: cancelled }, NOW)).toBeNull();
   });
 
-  it("출석 확정 14일이 지나면 작성 기간이 끝난다", () => {
-    const late = new Date(NOW.getTime() + 11 * DAY);
+  it("출석 확정 7일이 지나면 작성 기간이 끝난다", () => {
+    const late = new Date(NOW.getTime() + 4 * DAY);
     expect(reviewBlockOf(target, late)).toBe(REVIEW_BLOCK.writePeriodOver);
   });
 
-  it("처음 확정 3일 뒤 다시 확정해도 작성 기한은 처음 확정 + 14일이다", () => {
+  it("처음 확정 3일 뒤 다시 확정해도 작성 기한은 처음 확정 + 7일이다", () => {
     const reconfirmed = {
       ...target,
       game: {
-        attendanceFirstConfirmedAt: new Date(NOW.getTime() - 13 * DAY),
-        attendanceConfirmedAt: new Date(NOW.getTime() - 10 * DAY),
+        attendanceFirstConfirmedAt: new Date(NOW.getTime() - 6 * DAY),
+        attendanceConfirmedAt: new Date(NOW.getTime() - 3 * DAY),
       },
     } as ReviewDraftTarget;
     expect(reviewBlockOf(reconfirmed, new Date(NOW.getTime() + DAY - 1))).toBeNull();
@@ -64,10 +64,10 @@ describe("reviewBlockOf", () => {
     );
   });
 
-  it("쓴 후기는 등록 14일 안에만 고치고, 지운 후기는 다시 열지 못한다", () => {
+  it("쓴 후기는 등록 7일 안에만 고치고, 지운 후기는 다시 열지 못한다", () => {
     const written = { ...target, review } as unknown as ReviewDraftTarget;
     expect(reviewBlockOf(written, NOW)).toBeNull();
-    expect(reviewBlockOf(written, new Date(NOW.getTime() + 14 * DAY))).toBe(
+    expect(reviewBlockOf(written, new Date(NOW.getTime() + 7 * DAY))).toBe(
       REVIEW_BLOCK.editPeriodOver,
     );
     const deleted = {
@@ -98,7 +98,7 @@ describe("reviewBlockOf", () => {
   });
 
   it("활동 정지는 작성 기간 지남보다 먼저 알린다", () => {
-    const late = new Date(NOW.getTime() + 11 * DAY);
+    const late = new Date(NOW.getTime() + 4 * DAY);
     expect(reviewBlockOf({ ...target, suspended: true }, late)).toBe(REVIEW_BLOCK.suspended);
   });
 });

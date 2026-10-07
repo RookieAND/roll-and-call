@@ -122,18 +122,18 @@ describe("selectReviewRows", () => {
     expect(unknown.counts.all).toBe(3);
   });
 
-  it("칩 0건이면 출석 상태를 돌려준다(기한 = 첫 출석 확정 + 14일)", () => {
+  it("칩 0건이면 출석 상태를 돌려준다(기한 = 첫 출석 확정 + 7일)", () => {
     expect(select({ game: "g-pending" }).game?.window).toEqual({
       state: REVIEW_WINDOW_STATE.pending,
       deadline: null,
     });
     expect(select({ game: "g-open" }).game?.window).toEqual({
       state: REVIEW_WINDOW_STATE.open,
-      deadline: new Date(NOW + 11 * DAY),
+      deadline: new Date(NOW + 4 * DAY),
     });
     expect(select({ game: "g-closed" }).game?.window).toEqual({
       state: REVIEW_WINDOW_STATE.closed,
-      deadline: new Date(NOW - 6 * DAY),
+      deadline: new Date(NOW - 13 * DAY),
     });
   });
 });

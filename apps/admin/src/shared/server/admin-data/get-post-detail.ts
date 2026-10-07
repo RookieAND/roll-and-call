@@ -1,4 +1,6 @@
 import "server-only";
+import { REVIEW_WRITE_DAYS } from "@roll-and-call/database/games/model";
+
 import { PAGE_SIZE } from "@/shared/lib";
 
 import { countRecentNoShows } from "./count-recent-no-shows";
@@ -7,7 +9,6 @@ import { selectPostRows, type PostListFilter } from "./select-post-rows";
 import { loadSnapshot, type Snapshot } from "./snapshot";
 import { toPostRow } from "./to-post-row";
 
-const REVIEW_WINDOW_DAYS = 14;
 const DAY = 86_400_000;
 // GM이 받은 조치로 세는 구인 조치(숨김 해제는 받은 조치가 아니다).
 const RECEIVED_POST_ACTIONS: readonly string[] = ["구인 숨김", "구인 취소"];
@@ -41,7 +42,7 @@ export async function getPostDetail({ id, filter }: { id: string; filter: PostLi
       : null;
   const waitingIds = session.waitingIds ?? [];
   const cancelRecipientIds = new Set(session.staffCancelRecipientIds ?? []);
-  // ponytail: 작성 기한은 처음 출석 확인 + 14일로 어드민이 따로 계산한다. 사용자 앱(apps/web)의 계산과 같은 규칙이다.
+  // ponytail: 작성 기한은 처음 출석 확인 + 7일로 어드민이 따로 계산한다. 사용자 앱(apps/web)의 계산과 같은 규칙이다.
   const attendanceConfirmedAt = session.attendanceConfirmedAt;
   const reviewWindowStart = session.attendanceFirstConfirmedAt ?? attendanceConfirmedAt;
 
@@ -91,7 +92,7 @@ export async function getPostDetail({ id, filter }: { id: string; filter: PostLi
     attendance: {
       confirmedAt: attendanceConfirmedAt,
       reviewDeadline: reviewWindowStart
-        ? new Date(reviewWindowStart.getTime() + REVIEW_WINDOW_DAYS * DAY)
+        ? new Date(reviewWindowStart.getTime() + REVIEW_WRITE_DAYS * DAY)
         : undefined,
     },
     gm: { id: gm.id, nickname: gm.nickname, receivedActionCount },
