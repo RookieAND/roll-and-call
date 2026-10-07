@@ -2,7 +2,7 @@ import type { CertFormat } from "./cert-format";
 
 export const CERT_GUIDE: Record<CertFormat, readonly string[]> = {
   physical: [
-    "앞면은 디스코드 닉네임을 적은 쪽지와 함께 찍어 주세요.",
+    "앞면은 닉네임과 서버명을 적은 쪽지와 함께 찍어 주세요.",
     "뒷면은 뒤표지 전체가 보이게 찍어 주세요.",
     "책등은 제목이 보이게 찍어 주세요.",
   ],
