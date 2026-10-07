@@ -1,8 +1,10 @@
 import { Plus } from "lucide-react";
+import { Suspense } from "react";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar, ServerSwitcher } from "@/shared/ui";
 
 import { loadNewGameSanction } from "../api/load-new-game-sanction";
+import { GamesServerSwitch } from "./games-server-switch";
 import { NewGameButton } from "./new-game-button";
 
 export async function GamesAppBar() {
@@ -11,6 +13,11 @@ export async function GamesAppBar() {
     <AppBar
       title="구인 목록"
       brand
+      serverSwitch={
+        <Suspense fallback={<ServerSwitcher />}>
+          <GamesServerSwitch />
+        </Suspense>
+      }
       action={
         <NewGameButton
           sanction={sanction}

@@ -3,7 +3,7 @@
 import { Badge } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { ChevronDown } from "lucide-react";
-import { useContext } from "react";
+import { useContext, type ComponentProps } from "react";
 
 import type { MenuServer } from "./menu-server";
 import { ServerIcon } from "./server-icon";
@@ -13,9 +13,11 @@ import { ServerNavContext } from "./server-nav-context";
 interface ServerSwitcherProps {
   // 서버 홈만 내 서버 목록을 넘긴다. 옮겨 갈 다른 서버가 있을 때만 ▾를 단다.
   servers?: MenuServer[];
+  // 항목을 누르면 갈 화면. 기본은 서버 홈이고, 구인 목록 헤더는 games.
+  destination?: ComponentProps<typeof ServerMenu>["destination"];
 }
 
-export function ServerSwitcher({ servers = [] }: ServerSwitcherProps) {
+export function ServerSwitcher({ servers = [], destination }: ServerSwitcherProps) {
   const current = useContext(ServerNavContext);
   if (isNull(current)) return null;
   const switchable = servers.some((server) => server.slug !== current.slug);
@@ -32,6 +34,7 @@ export function ServerSwitcher({ servers = [] }: ServerSwitcherProps) {
       servers={servers}
       checkedSlug={current.slug}
       aboutLink
+      destination={destination}
       trigger={
         <Badge
           colorPalette="primary"
