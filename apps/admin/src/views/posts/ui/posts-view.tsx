@@ -91,7 +91,10 @@ export function PostsView({ posts, sort, page, query }: PostsViewProps) {
           />
           <HStack className="ml-auto">{csvButton}</HStack>
         </HStack>
-        <Panel className="flex-1" footer={posts.rows.length ? pager : null}>
+        <Panel
+          className={posts.rows.length ? "flex-1" : undefined}
+          footer={posts.rows.length ? pager : null}
+        >
           <PostsTable rows={paged.rows} sort={sort} empty={empty} detailQuery={detailQuery} />
         </Panel>
       </VStack>
