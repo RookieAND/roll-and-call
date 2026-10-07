@@ -1,6 +1,6 @@
 import type { MessageCaseKey } from "@roll-and-call/database/servers/model";
 
-import { DISCORD } from "./discord-theme";
+import { DISCORD } from "@/shared/lib";
 
 interface PreviewField {
   name: string;

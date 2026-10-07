@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
-import { DISCORD } from "../model/discord-theme";
+import { DISCORD } from "@/shared/lib";
+
 import type { PreviewEmbedSpec } from "../model/preview-embed-specs";
 
 interface PreviewEmbedProps {

@@ -52,3 +52,4 @@ export { EBOOK_REJECT_REASONS, REJECT_REASONS, type RejectReason } from "./cert-
 export { REVIEW_LIST_PATH, reviewListHref } from "./review-list-href";
 export { singleParam } from "./single-param";
 export { stringParams } from "./string-params";
+export { DISCORD } from "./discord-theme";

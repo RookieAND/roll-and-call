@@ -1,4 +1,4 @@
-import { DISCORD } from "@/features/edit-discord-messages";
+import { DISCORD } from "@/shared/lib";
 
 interface ForumTagChipProps {
   tag: { name: string; emoji: string | null };

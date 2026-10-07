@@ -7,7 +7,8 @@ import {
 import { Skeleton } from "@roll-and-call/ui";
 import Image from "next/image";
 
-import { DISCORD } from "../model/discord-theme";
+import { DISCORD } from "@/shared/lib";
+
 import type { MessageRole } from "../model/message-role";
 import { OPEN_EMBED_SPEC, PREVIEW_EMBED_SPECS } from "../model/preview-embed-specs";
 import { Mention } from "./discord-mention";

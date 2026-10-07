@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { DISCORD } from "../model/discord-theme";
+import { DISCORD } from "@/shared/lib";
 
 export function Mention({ children, unknown }: { children: ReactNode; unknown?: boolean }) {
   return (

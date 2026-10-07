@@ -1,4 +1,4 @@
-import { DISCORD } from "../model/discord-theme";
+import { DISCORD } from "@/shared/lib";
 
 const SECTIONS = [
   {

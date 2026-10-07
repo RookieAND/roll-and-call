@@ -1,4 +1,4 @@
-import { DISCORD } from "../model/discord-theme";
+import { DISCORD } from "@/shared/lib";
 
 // 이달의 GM·PL은 임베드 없이 머리 줄 아래에 평문 본문이 붙는다. 이름은 프로필 링크다.
 export function PreviewMonthly() {
