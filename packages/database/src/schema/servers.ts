@@ -12,7 +12,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-import { type AvailabilityInterval, type ProfileLink, profiles } from "./profiles";
+import { type ProfileLink, profiles } from "./profiles";
 
 // 모집 포럼 글에 붙일 태그. 값은 포럼 태그 id이고, 비면 태그 이름으로 찾는다.
 export interface ForumTagMap {
@@ -62,7 +62,6 @@ export const serverMembers = pgTable(
     nicknameSuffixBase: text("nickname_suffix_base"),
     bio: text("bio"),
     keywords: text("keywords").array().notNull().default([]),
-    availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
     links: jsonb("links").$type<ProfileLink[]>().notNull().default([]),
     // 인증된 룰북이 있어도 Player로 보이고 싶으면 끈다.
     showGmBadge: boolean("show_gm_badge").notNull().default(true),

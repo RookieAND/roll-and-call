@@ -16,9 +16,6 @@ import { serverId } from "./server-id";
 // 본인이 적는 성향. 서버에서 정규화해 넣으므로 읽는 화면은 다시 다듬지 않는다.
 export type ProfileKeyword = string;
 
-// 요일 하나에 구간 목록. day는 0=월 … 6=일, from·to는 1시간 단위 시각(0~24).
-export type AvailabilityInterval = { day: number; from: number; to: number };
-
 // service는 link-services의 키, value는 핸들이나 주소 원문.
 export type ProfileLink = { service: string; value: string };
 
@@ -33,7 +30,6 @@ export const profiles = pgTable(
     // bio부터 featuredBadges까지는 server_members로 옮겨 더 읽고 쓰지 않는다. 다음 단계에서 지운다.
     bio: text("bio"),
     keywords: text("keywords").array().notNull().default([]),
-    availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
     links: jsonb("links").$type<ProfileLink[]>().notNull().default([]),
     showGmBadge: boolean("show_gm_badge").notNull().default(true),
     showBadges: boolean("show_badges").notNull().default(true),

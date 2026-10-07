@@ -3,8 +3,6 @@ import "server-only";
 export type {
   Profile,
   Game,
-  Availability,
-  AvailabilityInterval,
   ProfileLink,
   CertApplication,
   SessionReview,
