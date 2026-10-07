@@ -19,16 +19,8 @@ interface MemberSheetProps {
 }
 
 export function MemberSheet({ roster, member, onMarkAbsent, onClose }: MemberSheetProps) {
-  const {
-    gameId,
-    confirmedCount,
-    waitingCount,
-    maxPlayers,
-    isCoordinate,
-    beforeDraw,
-    started,
-    capacityRaised,
-  } = roster;
+  const { gameId, confirmedCount, waitingCount, maxPlayers, beforeDraw, started, capacityRaised } =
+    roster;
   const isConfirmed = isNull(member?.waitlistRank);
 
   return (
@@ -37,12 +29,7 @@ export function MemberSheet({ roster, member, onMarkAbsent, onClose }: MemberShe
         <Sheet.Handle />
         {member && (
           <VStack gap={0}>
-            <MemberSheetHeader
-              member={member}
-              isCoordinate={isCoordinate}
-              beforeDraw={beforeDraw}
-              started={started}
-            />
+            <MemberSheetHeader member={member} beforeDraw={beforeDraw} started={started} />
             {isConfirmed && !started && (
               <DemoteMemberItem
                 gameId={gameId}

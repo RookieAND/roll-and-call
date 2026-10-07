@@ -15,7 +15,6 @@ export { PARTICIPANT_STATUS, countConfirmed, type ParticipantStatus } from "./mo
 export { splitRoster, type RosterMember } from "./model/split-roster";
 export { isGameGm } from "./model/is-game-gm";
 export { hasUserJoined } from "./model/has-user-joined";
-export { canCoordinate } from "./model/can-coordinate";
 export { GameCard } from "./ui/game-card";
 export { PastGameCard } from "./ui/past-game-card";
 export { GameThumbnail } from "./ui/game-thumbnail";
@@ -62,7 +61,6 @@ export {
 } from "@roll-and-call/database/games/model";
 export { recruitMethodLabel } from "./model/recruit-method-label";
 export { RecruitMethodBadge } from "./ui/recruit-method-badge";
-export { availabilityNote } from "./model/availability-note";
 export { SessionHeading } from "./ui/session-heading";
 export {
   CONFIRMED_LEAVE_BLOCK,

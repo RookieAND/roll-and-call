@@ -31,10 +31,7 @@ export function toHostedSessionCard({
   // 추첨 글은 마감 뒤에도 추첨 전까지 「모집 중」이다(D254).
   const badgeStatus = facts.lotteryOpen ? GAME_STATUS.recruiting : status;
   const hostChip = hostSessionChip({ state, awaitingTime });
-  const responses = context.responseCounts.get(game.id) ?? 0;
-  const todo = context.readOnly
-    ? null
-    : hostTodo({ game, facts, responses, now: context.now ?? new Date() });
+  const todo = context.readOnly ? null : hostTodo({ game, facts, now: context.now ?? new Date() });
   const gmTodo = !facts.lotteryOpen && (todo?.blocked ?? false);
   const timeShown = timeSet && !facts.lotteryOpen;
   const scheduleTone = hostScheduleTone({ gmTodo, timeSet: timeShown });

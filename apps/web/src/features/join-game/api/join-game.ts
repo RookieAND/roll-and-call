@@ -12,7 +12,6 @@ import {
   grantRushBadge,
   refreshRecruitPost,
   notMemberError,
-  seedAvailabilityFromProfile,
 } from "@/shared/server";
 
 import { type OverlapRejection } from "../model/overlap-rejection";
@@ -37,7 +36,6 @@ export async function joinGame(gameId: string): Promise<
   const application = await applyToGame({ serverId: server.id, gameId, userId: user.id });
   if ("error" in application) return application;
 
-  await seedAvailabilityFromProfile({ game: application.game, userId: user.id });
   after(async () => {
     await announceNewApplication({
       server,
@@ -56,7 +54,6 @@ export async function joinGame(gameId: string): Promise<
   const gamePath = serverPath({ slug: server.slug, path: `/games/${gameId}` });
   revalidatePath(gamePath);
   revalidatePath(`${gamePath}/participants`);
-  revalidatePath(`${gamePath}/schedule`);
   revalidatePath(serverPath({ slug: server.slug, path: "/games" }));
   return {
     waiting: application.waiting,

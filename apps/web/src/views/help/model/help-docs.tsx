@@ -26,7 +26,6 @@ export const HELP_CATEGORIES = [
 
 export const HELP_FIGURE = {
   gameList: "gameList",
-  heatGrid: "heatGrid",
   formFields: "formFields",
   rosterRows: "rosterRows",
   linkMarks: "linkMarks",
@@ -159,7 +158,6 @@ export const HELP_DOCS: HelpDoc[] = [
               },
               {
                 title: "확정되면 바로 일정 조율에 참여합니다",
-                body: "범위 조율 구인이면 곧바로 시간을 칠합니다.",
               },
             ],
           },
@@ -182,7 +180,6 @@ export const HELP_DOCS: HelpDoc[] = [
               },
               {
                 title: "뽑힌 뒤에 일정 조율이 열립니다",
-                body: "범위 조율 구인이면 그때부터 시간을 칠합니다.",
               },
             ],
             foot: (
@@ -214,69 +211,10 @@ export const HELP_DOCS: HelpDoc[] = [
   {
     slug: "schedule-grid",
     category: HELP_CATEGORY.join,
-    title: "일정 조율 격자 쓰는 법",
-    description: "일정 조율 격자에서 가능한 시간을 칠하고 저장하는 방법을 안내합니다.",
-    lead: (
-      <>
-        격자는 참여자들이 가능한 시간을 겹쳐서 보여 줍니다.
-        <br />
-        색이 진할수록 그 시간에 되는 사람이 많습니다.
-      </>
-    ),
-    blocks: [
-      {
-        kind: HELP_BLOCK.steps,
-        steps: [
-          {
-            title: "칠할 수 있는지 확인합니다",
-            body: [
-              "GM과 확정 참여자만 칠할 수 있습니다.",
-              "대기자와 추첨 전 신청자는 겹친 시간만 봅니다.",
-              "추첨 구인은 추첨이 끝난 뒤에 칠합니다.",
-              "일시가 정해진 구인은 칠할 필요가 없습니다.",
-            ],
-          },
-          {
-            title: "칸을 누르거나 끌어서 칠합니다",
-            body: [
-              "가로는 날짜, 세로는 시각입니다.",
-              "칠한 칸을 다시 누르면 지워집니다.",
-              "빗금 칸은 내가 확정된 다른 세션과 겹칩니다.",
-            ],
-            figure: HELP_FIGURE.heatGrid,
-            note: (
-              <>
-                기본 가능 시간을 정해 두었다면 미리 칠해져 있습니다.
-                <br />
-                확인하고 저장해야 제출한 것으로 봅니다.
-              </>
-            ),
-          },
-          {
-            title: "저장합니다",
-            body: [
-              "저장하지 않은 칸은 따로 표시됩니다.",
-              "아래 [저장]을 누르면 다른 참여자에게도 보입니다.",
-            ],
-          },
-          {
-            title: "세션 시간이 정해질 때까지 고칠 수 있습니다",
-            body: [
-              "모집이 마감되어도 시간이 정해지기 전이면 고칠 수 있습니다.",
-              "시간이 정해지면 격자 입력이 잠깁니다.",
-              "정해진 시간은 알림 탭과 홈 달력에 올라갑니다.",
-            ],
-            note: (
-              <>
-                늦게 고치면 GM이 일정을 다시 정해야 합니다.
-                <br />
-                사정이 바뀌면 바로 고쳐 주세요.
-              </>
-            ),
-          },
-        ],
-      },
-    ],
+    title: "조율 스레드에서 일정 정하기",
+    description: "디스코드 조율 스레드에서 세션 일정을 정하는 방법을 안내합니다.",
+    lead: "세션 일정은 디스코드 조율 스레드에서 정합니다.",
+    blocks: [],
     related: ["status-glossary", "manage-roster"],
   },
   {
@@ -566,7 +504,6 @@ export const HELP_DOCS: HelpDoc[] = [
             title: "일정",
             body: [
               "범위 조율과 일시 지정 중 하나를 고릅니다.",
-              "범위 조율은 조율 기간을 14일까지 잡을 수 있습니다.",
               "모집 마감은 세션 시작보다 앞이어야 합니다.",
             ],
             note: (
@@ -622,7 +559,6 @@ export const HELP_DOCS: HelpDoc[] = [
           {
             title: "세션 시간을 정합니다",
             body: [
-              "범위 조율 구인은 참여자들이 격자에 시간을 칠합니다.",
               '"세션 시간 정하기"에서 추천 후보를 고르거나 직접 고릅니다.',
               "정하면 디스코드 구인 글과 알림 탭으로 알립니다.",
               "시작 1시간 전에 디스코드 구인 글로 한 번 더 알립니다.",
@@ -729,7 +665,6 @@ export const HELP_DOCS: HelpDoc[] = [
           },
           { term: "출석 미확인", description: "끝난 세션의 출석을 확인해 주세요.", gm: true },
           { term: "빈자리 생김", description: "대기자를 참여자로 등록할 수 있습니다.", gm: true },
-          { term: "가능 시간 미제출", description: "일정 조율 격자를 칠하고 저장해 주세요." },
           { term: "인증 반려", description: "반려 사유를 보고 다시 신청할 수 있습니다." },
         ],
       },
@@ -767,13 +702,6 @@ export const HELP_DOCS: HelpDoc[] = [
               "아래 여덟 곳은 로고가 자동으로 붙습니다.",
             ],
             figure: HELP_FIGURE.linkMarks,
-          },
-          {
-            title: "기본 가능 시간",
-            body: [
-              '마이페이지 "기본 가능 시간"에서 고칩니다.',
-              "일정 조율에 참여하게 되면 이 시간이 미리 칠해집니다.",
-            ],
           },
           {
             title: "업적",
@@ -890,14 +818,14 @@ export const HELP_DOCS: HelpDoc[] = [
           },
           {
             term: MANAGE_STAGE_LABEL.coordinating,
-            description: "참여자들이 가능한 시간을 칠하고 있습니다.",
+            description: "참여자들과 일정을 조율하고 있습니다.",
             stage: MANAGE_STAGE.coordinating,
           },
           {
             term: MANAGE_STAGE_LABEL.overdue,
             description: (
               <>
-                조율 기간이 끝났지만 세션 시간이 없습니다.
+                조율이 끝났지만 세션 시간이 없습니다.
                 <br />
                 7일이 더 지나면 구인이 무산됩니다.
               </>
@@ -932,16 +860,6 @@ export const HELP_DOCS: HelpDoc[] = [
                 신청이 닫히는 때입니다.
                 <br />
                 추첨 글은 이때 추첨합니다.
-              </>
-            ),
-          },
-          {
-            term: "조율 기간",
-            description: (
-              <>
-                가능 시간을 모으는 날짜 범위입니다.
-                <br />
-                범위 조율 구인에만 있습니다.
               </>
             ),
           },

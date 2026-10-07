@@ -22,7 +22,6 @@ export async function EditProfileView() {
               defaultBio={profile?.bio ?? ""}
               defaultKeywords={profile?.keywords ?? []}
               defaultLinks={profile?.links ?? []}
-              availability={profile?.availability ?? []}
               avatarUrl={profileDisplay({ profile, user }).avatar}
             />
           ) : (

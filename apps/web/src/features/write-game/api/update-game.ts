@@ -27,6 +27,7 @@ import {
 import { EDIT_FORBIDDEN_MESSAGE, editBlockReason } from "../model/edit-block-reason";
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
 import { invalidInputResult } from "../model/invalid-input-result";
+import { rangeColumnsOnUpdate } from "../model/range-columns-on-update";
 import { reopensMinPlayersJudgement } from "../model/reopens-min-players-judgement";
 import { sessionTimeChanged } from "../model/session-time-change";
 import { toGameColumns } from "../model/to-game-columns";
@@ -68,6 +69,10 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       previous: game.confirmedAt,
       next: columns.confirmedAt,
     });
+    const range = rangeColumnsOnUpdate({
+      previousMode: game.scheduleMode,
+      nextMode: columns.scheduleMode,
+    });
     // 마감을 미래로 고치면 새 마감 때 최소 인원을 다시 판정한다.
     const reopensJudgement = reopensMinPlayersJudgement({
       previousEndDate: game.endDate,
@@ -80,6 +85,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       ...owner,
       columns: {
         ...columns,
+        ...range,
         ...(clearsSession ? { confirmedAt: null } : {}),
         ...(timeChanged ? { notifiedAt: null } : {}),
         ...(reopensJudgement ? { minPlayersJudgedAt: null } : {}),

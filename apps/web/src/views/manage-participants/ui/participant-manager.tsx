@@ -17,7 +17,6 @@ interface ParticipantManagerProps {
   confirmedCount: number;
   waiting: ManagedMember[];
   summary: RosterSummary;
-  isCoordinate: boolean;
   nextRoundBaseDate: string;
 }
 
@@ -27,7 +26,6 @@ export function ParticipantManager({
   confirmedCount,
   waiting,
   summary,
-  isCoordinate,
   nextRoundBaseDate,
 }: ParticipantManagerProps) {
   const showNextRound = waiting.length > 0 && !summary.beforeDraw;
@@ -60,7 +58,6 @@ export function ParticipantManager({
             waiting={waiting}
             maxPlayers={game.maxPlayers}
             summary={summary}
-            isCoordinate={isCoordinate}
           />
 
           {showNextRound && (

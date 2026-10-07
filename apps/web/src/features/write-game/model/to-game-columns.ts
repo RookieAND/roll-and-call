@@ -1,4 +1,4 @@
-import { DEFAULT_WINDOW, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 import { fromKstDateTimeInput } from "@/shared/lib";
 
 import type { GameFormValues } from "./game-form";
@@ -26,14 +26,6 @@ export function toGameColumns(values: GameFormValues) {
       values.recruitMethod === RECRUIT_METHOD.firstCome ? values.waitlistEnabled : true,
     scheduleMode: values.scheduleMode,
     endDate: fromKstDateTimeInput(values.endDate),
-    rangeStart: values.rangeStart || null,
-    rangeEnd: values.rangeEnd || null,
-    windowStartHour:
-      isFixed || !values.windowStartHour
-        ? DEFAULT_WINDOW.startHour
-        : Number(values.windowStartHour),
-    windowEndHour:
-      isFixed || !values.windowEndHour ? DEFAULT_WINDOW.endHour : Number(values.windowEndHour),
     // 조율형 세션 시각은 GM이 세션 시간 결정에서 정한다. 폼은 그 값을 건드리지 않는다.
     ...(isFixed && values.confirmedAt
       ? { confirmedAt: fromKstDateTimeInput(values.confirmedAt) }

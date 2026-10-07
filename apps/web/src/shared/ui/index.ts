@@ -25,7 +25,6 @@ export { ThemeSetting } from "./theme-setting";
 export { ThemeToggleButton } from "./theme-toggle-button";
 export { toast } from "./toast";
 export { QueryNoticeToast } from "./query-notice-toast";
-export { SLOT_ROW_PX, SlotGrid } from "./slot-grid";
 export { TabCount } from "./tab-count";
 export { CountLinkRow } from "./count-link-row";
 export { ImageLightbox } from "./image-lightbox";

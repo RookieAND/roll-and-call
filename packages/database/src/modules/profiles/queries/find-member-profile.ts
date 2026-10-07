@@ -25,7 +25,6 @@ export async function findMemberProfile({
       onboardedAt: profiles.onboardedAt,
       bio: serverMembers.bio,
       keywords: serverMembers.keywords,
-      availability: serverMembers.availability,
       links: serverMembers.links,
       showGmBadge: serverMembers.showGmBadge,
       showBadges: serverMembers.showBadges,

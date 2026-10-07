@@ -22,7 +22,6 @@ import { RosterHint } from "./roster-hint";
 import { RosterQueue } from "./roster-queue";
 import { RosterRow } from "./roster-row";
 import { RosterRowAction } from "./roster-row-action";
-import { UnsubmittedNote } from "./unsubmitted-note";
 
 interface RosterQueuesProps {
   gameId: string;
@@ -31,7 +30,6 @@ interface RosterQueuesProps {
   waiting: ManagedMember[];
   maxPlayers: number;
   summary: RosterSummary;
-  isCoordinate: boolean;
 }
 
 // 뽑기 전에는 대기 자리에 순번 없는 신청자가 선다. 먼저 신청한 사람이 유리해 보이지 않게 한다.
@@ -43,7 +41,6 @@ export function RosterQueues({
   waiting,
   maxPlayers,
   summary,
-  isCoordinate,
 }: RosterQueuesProps) {
   const [menuMember, setMenuMember] = useState<ManagedMember | null>(null);
   const [absentMember, setAbsentMember] = useState<MemberSummary | null>(null);
@@ -76,12 +73,7 @@ export function RosterQueues({
             disabled={addDisabled}
           />
         }
-        footnote={
-          <>
-            <RosterHint lines={confirmedHintLines(summary)} />
-            {summary.unsubmittedCount > 0 && <UnsubmittedNote count={summary.unsubmittedCount} />}
-          </>
-        }
+        footnote={<RosterHint lines={confirmedHintLines(summary)} />}
         emptyState={
           confirmedRows.length === 0 && (
             <VStack gap="075">
@@ -98,7 +90,7 @@ export function RosterQueues({
         }
       >
         {confirmedRows.map((member) => {
-          const note = confirmedRowNote({ member, isCoordinate, started });
+          const note = confirmedRowNote(member);
           return (
             <RosterRow
               key={member.userId}
@@ -145,7 +137,6 @@ export function RosterQueues({
           confirmedCount,
           waitingCount: waiting.length,
           maxPlayers,
-          isCoordinate,
           beforeDraw,
           started,
           capacityRaised,

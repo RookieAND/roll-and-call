@@ -8,7 +8,6 @@ import {
   isApplicationClosed,
   isSessionEnded,
   isSessionInProgress,
-  SCHEDULE_MODE,
 } from "@/entities/game";
 
 import { type ActionContext, GAME_ACTION_VIEW, type GameActionView } from "./game-action-view";
@@ -31,18 +30,15 @@ export function confirmedActionView({
     };
   }
 
-  const coordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
   const drawn = !isNil(game.drawnAt) && lotteryHeld;
   const calendar = canAddToCalendar({ game, viewerRole: CALENDAR_VIEWER_ROLE.confirmed, now });
 
   if (isApplicationClosed(game, now)) {
-    // 한 줄에 버튼은 둘까지라 추첨 뒤에는 [일정 보기] 대신 [결과 보러 가기]를 둔다.
     return {
       kind: GAME_ACTION_VIEW.scheduled,
       confirmedAt: game.confirmedAt!,
       live: isSessionInProgress(game, now),
       resultLink: drawn,
-      scheduleLink: coordinate && !drawn,
       calendar,
     };
   }
@@ -53,7 +49,6 @@ export function confirmedActionView({
       kind: GAME_ACTION_VIEW.confirmedOpen,
       confirmedAt: game.confirmedAt,
       resultLink: false,
-      scheduleLink: coordinate,
       calendar,
     };
   }
@@ -61,7 +56,6 @@ export function confirmedActionView({
     kind: GAME_ACTION_VIEW.confirmedLocked,
     block,
     resultLink: drawn,
-    scheduleLink: coordinate,
     calendar,
   };
 }

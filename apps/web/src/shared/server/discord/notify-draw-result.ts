@@ -19,15 +19,20 @@ export async function notifyDrawResult({ server, gameId }: { server: Server; gam
   const byRank = game.participants.toSorted(
     (left, right) => (left.drawRank ?? 0) - (right.drawRank ?? 0),
   );
-  const nameOf = (rank: number, user: { discordId?: string; username: string } | null) =>
-    `${rank}. ${user?.discordId ? `<@${user.discordId}>` : (user?.username ?? "?")}`;
-  const confirmed = byRank
-    .filter((participant) => participant.status === PARTICIPANT_STATUS.confirmed)
-    .map((participant, index) => nameOf(index + 1, participant.user));
+  const nameOf = (
+    rank: number,
+    user: { discordId?: string; username: string } | null,
+    mentionable: boolean,
+  ) =>
+    `${rank}. ${mentionable && user?.discordId ? `<@${user.discordId}>` : (user?.username ?? "?")}`;
+  const winners = byRank.filter(
+    (participant) => participant.status === PARTICIPANT_STATUS.confirmed,
+  );
+  const confirmed = winners.map((participant, index) => nameOf(index + 1, participant.user, true));
   const waiting = game.participants
     .filter((participant) => participant.status === PARTICIPANT_STATUS.waiting)
     .toSorted(compareWaitlistOrder)
-    .map((participant, index) => nameOf(index + 1, participant.user));
+    .map((participant, index) => nameOf(index + 1, participant.user, false));
 
   const detailUrl = gameUrl({ slug: server.slug, gameId: game.id });
   const drawUrl = detailUrl && `${detailUrl}/draw`;
@@ -62,6 +67,7 @@ export async function notifyDrawResult({ server, gameId }: { server: Server; gam
         serverId: server.id,
         key: "draw",
         values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+        userMentions: winners.flatMap((participant) => participant.user?.discordId ?? []),
       })),
       buttons: drawUrl ? [{ label: "🎲 추첨 결과 보기", url: drawUrl }] : [],
     },

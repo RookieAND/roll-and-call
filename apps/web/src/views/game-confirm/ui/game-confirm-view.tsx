@@ -3,7 +3,6 @@ import { Badge, Container, VStack } from "@roll-and-call/ui";
 import { pick } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
-import { aggregateAvailability } from "@/entities/availability";
 import {
   countConfirmed,
   effectivePlayMinutes,
@@ -13,25 +12,14 @@ import {
 import { GmOnlyNotice } from "@/features/auth";
 import { ConfirmSessionForm } from "@/features/confirm-session";
 import { serverPath } from "@/shared/lib";
-import {
-  getCurrentSessionUser,
-  getGameAvailabilities,
-  getGameById,
-  getCurrentServer,
-  getResponseCounts,
-} from "@/shared/server";
+import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
 import { ConfirmSummary } from "./confirm-summary";
 
 export async function GameConfirmView({ id }: { id: string }) {
   const server = await getCurrentServer();
-  const [game, user, availabilities, responseCounts] = await Promise.all([
-    getGameById(server.id, id),
-    getCurrentSessionUser(),
-    getGameAvailabilities({ serverId: server.id, gameId: id }),
-    getResponseCounts({ serverId: server.id, gameIds: [id] }),
-  ]);
+  const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();
   if (user?.id !== game.gmId) {
     return (
@@ -65,20 +53,14 @@ export async function GameConfirmView({ id }: { id: string }) {
       <>
         {appBar}
         <Container size="sm" className="py-200">
-          <EmptyState
-            size="section"
-            title="추첨 뒤에 세션 시간을 정할 수 있습니다"
-            description="모집 마감 때 추첨이 끝나면 확정자가 가능 시간을 칠합니다."
-          />
+          <EmptyState size="section" title="추첨 뒤에 세션 시간을 정할 수 있습니다" />
         </Container>
       </>
     );
   }
   const { rangeStart, rangeEnd } = game;
-  if (!rangeStart || !rangeEnd)
-    redirect(serverPath({ slug: server.slug, path: `/games/${id}/schedule` }));
+  if (!rangeStart || !rangeEnd) redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
 
-  const { names } = aggregateAvailability({ avails: availabilities, userId: null });
   const minutes = effectivePlayMinutes(game.playMinutes);
   const playLabel = formatPlayMinutes(minutes);
   const confirmedCount = countConfirmed(game.participants);
@@ -88,11 +70,7 @@ export async function GameConfirmView({ id }: { id: string }) {
       {appBar}
       <Container size="sm">
         <VStack gap="200" className="pt-200 pb-200">
-          <ConfirmSummary
-            playLabel={playLabel}
-            respondedCount={responseCounts.get(id) ?? 0}
-            confirmedCount={confirmedCount}
-          />
+          <ConfirmSummary playLabel={playLabel} />
           <ConfirmSessionForm
             game={{
               ...pick(game, [
@@ -107,8 +85,6 @@ export async function GameConfirmView({ id }: { id: string }) {
               playMinutes: minutes,
               confirmedCount,
             }}
-            names={names}
-            playLabel={playLabel}
           />
         </VStack>
       </Container>

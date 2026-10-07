@@ -10,7 +10,6 @@ interface RosterBodyProps {
   waiting: ManagedMember[];
   maxPlayers: number;
   summary: RosterSummary;
-  isCoordinate: boolean;
 }
 
 export function RosterBody({
@@ -20,7 +19,6 @@ export function RosterBody({
   waiting,
   maxPlayers,
   summary,
-  isCoordinate,
 }: RosterBodyProps) {
   if (confirmedRows.length + waiting.length === 0) return <RosterEmptyState gameId={gameId} />;
 
@@ -32,7 +30,6 @@ export function RosterBody({
       waiting={waiting}
       maxPlayers={maxPlayers}
       summary={summary}
-      isCoordinate={isCoordinate}
     />
   );
 }

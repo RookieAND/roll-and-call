@@ -33,15 +33,6 @@ export function MyDrawActions({ gameId, hint, actions, waitlistRank }: MyDrawAct
         구인 글 보기
       </Button>
     ),
-    [MY_DRAW_ACTION.submitAvailability]: (
-      <Button
-        key={MY_DRAW_ACTION.submitAvailability}
-        render={<ServerLink path={`/games/${gameId}/schedule`} />}
-        size="lg"
-      >
-        가능 시간 제출
-      </Button>
-    ),
   };
 
   return (

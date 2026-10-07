@@ -8,7 +8,6 @@ import { ActionNotice } from "./action-notice";
 import { ActionPair } from "./action-pair";
 import { DrawResultLink } from "./draw-result-link";
 import { GameCalendarButton } from "./game-calendar-button";
-import { ScheduleLink } from "./schedule-link";
 
 interface ScheduledActionsProps extends ActionLinks {
   game: GameDetailData;
@@ -27,11 +26,10 @@ export function ScheduledActions({
   confirmedAt,
   live,
   resultLink,
-  scheduleLink,
   calendar,
 }: ScheduledActionsProps) {
   const lines = live ? [] : LOCKED_LINES;
-  const hasButtons = resultLink || scheduleLink || calendar;
+  const hasButtons = resultLink || calendar;
 
   return (
     <VStack gap="125">
@@ -43,9 +41,6 @@ export function ScheduledActions({
       {hasButtons && (
         <ActionPair>
           {resultLink && <DrawResultLink gameId={game.id} variant="outline" size="lg" />}
-          {scheduleLink && (
-            <ScheduleLink gameId={game.id} label="일정 보기" variant="outline" size="lg" />
-          )}
           {calendar && <GameCalendarButton game={game} variant="tinted" />}
         </ActionPair>
       )}

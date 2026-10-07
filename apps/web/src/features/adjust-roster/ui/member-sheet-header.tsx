@@ -5,18 +5,12 @@ import { memberSheetSubline } from "./member-sheet-subline";
 
 interface MemberSheetHeaderProps {
   member: MemberSummary;
-  isCoordinate: boolean;
   beforeDraw: boolean;
   started: boolean;
 }
 
-export function MemberSheetHeader({
-  member,
-  isCoordinate,
-  beforeDraw,
-  started,
-}: MemberSheetHeaderProps) {
-  const subline = memberSheetSubline({ member, isCoordinate, beforeDraw, started });
+export function MemberSheetHeader({ member, beforeDraw, started }: MemberSheetHeaderProps) {
+  const subline = memberSheetSubline({ member, beforeDraw, started });
 
   return (
     <ProfileRow

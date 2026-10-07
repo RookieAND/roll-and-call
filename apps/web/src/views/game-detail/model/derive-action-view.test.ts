@@ -52,7 +52,7 @@ const view = (overrides: Partial<ActionContext>) =>
   });
 
 describe("추첨 없이 확정된 구인", () => {
-  it("추첨을 적용한 글이어도 굴린 추첨이 없으면 [결과 보러 가기]를 두지 않고 일정 조율 입구를 둔다", () => {
+  it("추첨을 적용한 글이어도 굴린 추첨이 없으면 [결과 보러 가기]를 두지 않는다", () => {
     const skipped = { ...lottery, scheduleMode: SCHEDULE_MODE.coordinate, drawnAt: at(-1) };
     expect(
       view({
@@ -60,14 +60,14 @@ describe("추첨 없이 확정된 구인", () => {
         viewer: confirmed,
         lotteryHeld: false,
       }),
-    ).toMatchObject({ resultLink: false, scheduleLink: true });
+    ).toMatchObject({ resultLink: false });
     expect(
       view({
         game: { ...skipped, confirmedAt: at(24) },
         viewer: confirmed,
         lotteryHeld: true,
       }),
-    ).toMatchObject({ resultLink: true, scheduleLink: false });
+    ).toMatchObject({ resultLink: true });
   });
 
   it("추첨 없이 확정된 구인의 확정자 잠금 상태에도 결과 입구가 없다", () => {
@@ -211,16 +211,14 @@ describe("deriveActionView", () => {
       confirmedAt: at(24),
       live: false,
       resultLink: false,
-      scheduleLink: true,
       calendar: true,
     });
     expect(
       view({ game: { ...lottery, confirmedAt: at(24), drawnAt: at(-1) }, viewer: confirmed }),
-    ).toMatchObject({ resultLink: true, scheduleLink: false });
+    ).toMatchObject({ resultLink: true });
     expect(view({ game: { ...fixed, confirmedAt: at(-1) }, viewer: confirmed })).toMatchObject({
       kind: GAME_ACTION_VIEW.scheduled,
       live: true,
-      scheduleLink: false,
       calendar: false,
     });
   });
@@ -228,7 +226,6 @@ describe("deriveActionView", () => {
   it("(11) 확정·취소 가능: 자리 남음, 정원 참이어도 대기 있음, 추첨 글 직접 확정자", () => {
     expect(view({ viewer: confirmed })).toMatchObject({
       kind: GAME_ACTION_VIEW.confirmedOpen,
-      scheduleLink: true,
       calendar: false,
     });
     expect(view({ viewer: confirmed, confirmedCount: 4, waitingCount: 1 })).toMatchObject({
@@ -239,7 +236,6 @@ describe("deriveActionView", () => {
     });
     expect(view({ game: fixed, viewer: confirmed })).toMatchObject({
       kind: GAME_ACTION_VIEW.confirmedOpen,
-      scheduleLink: false,
       calendar: true,
     });
   });
@@ -257,7 +253,7 @@ describe("deriveActionView", () => {
         game: { ...fixed, recruitMethod: RECRUIT_METHOD.lottery, drawnAt: at(-1) },
         viewer: confirmed,
       }),
-    ).toMatchObject({ block: "drawn", resultLink: true, scheduleLink: false, calendar: true });
+    ).toMatchObject({ block: "drawn", resultLink: true, calendar: true });
   });
 
   it("(13) 비참여자 · 조율형 일정 확정", () => {

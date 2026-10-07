@@ -8,11 +8,9 @@ import { BadgeSlide } from "./badge-slide";
 import { CarouselDot } from "./carousel-dot";
 import { NoticeSlide } from "./notice-slide";
 import { RecruitSlide } from "./recruit-slide";
-import { ScheduleSlide } from "./schedule-slide";
 
 const SLIDES = [
   { label: "구인", content: <RecruitSlide /> },
-  { label: "일정 조율", content: <ScheduleSlide /> },
   { label: "알림", content: <NoticeSlide /> },
   { label: "업적", content: <BadgeSlide /> },
 ] as const;

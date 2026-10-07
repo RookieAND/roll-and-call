@@ -10,7 +10,6 @@ export {
   GAME_SYNOPSIS_MAX,
   GAME_TAGS_MAX,
   GAME_TAG_MAX_LENGTH,
-  GAME_RANGE_MAX_DAYS,
   type GameFormValues,
   type PreConfirmedPlayer,
 } from "./model/game-form";

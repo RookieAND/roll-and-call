@@ -20,8 +20,6 @@ type LockedGame = Pick<
   | "confirmedAt"
   | "scheduleMode"
   | "recruitMethod"
-  | "windowStartHour"
-  | "windowEndHour"
   | "drawnAt"
   | "minPlayers"
   | "endDate"
@@ -57,7 +55,7 @@ export function editBlockReason(
   if (rosterCount > 0 && isMinPlayersRaise({ saved: game.minPlayers, next: columns.minPlayers })) {
     return { error: MIN_PLAYERS_RAISE_MESSAGE, field: "minPlayers" };
   }
-  // 조율 응답·확정 명단이 일정 방식·시간대에, 확정 순서가 모집 방식에 묶여 있어 신청자가 있으면 못 바꾼다.
+  // 조율 응답·확정 명단이 일정 방식에, 확정 순서가 모집 방식에 묶여 있어 신청자가 있으면 못 바꾼다.
   if (rosterCount > 0) {
     if (columns.scheduleMode !== game.scheduleMode) {
       return {
@@ -71,17 +69,6 @@ export function editBlockReason(
         error:
           "신청자가 있어 모집 방식은 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔 주세요.",
         field: "recruitMethod",
-      };
-    }
-    if (
-      game.scheduleMode === SCHEDULE_MODE.coordinate &&
-      (columns.windowStartHour !== game.windowStartHour ||
-        columns.windowEndHour !== game.windowEndHour)
-    ) {
-      return {
-        error:
-          "신청자가 있어 조율 시간대는 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔 주세요.",
-        field: "windowStartHour",
       };
     }
   }

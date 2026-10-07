@@ -1,13 +1,4 @@
 export { profileDisplay } from "./model/display";
-export {
-  AVAILABILITY_MAX_HOUR,
-  AVAILABILITY_MIN_HOUR,
-  formatHour,
-  formatInterval,
-  normalizeAvailability,
-  type AvailabilityInterval,
-} from "./model/availability";
-export { availabilityPrefill, filledDays, WEEKDAY_LABELS } from "@/shared/lib";
 export { KEYWORD_MAX_COUNT, KEYWORD_MAX_LENGTH, normalizeKeywords } from "./model/keywords";
 export {
   detectLinkService,
@@ -18,7 +9,6 @@ export {
   OTHER_LINK_SERVICE,
   type ProfileLink,
 } from "./model/link-services";
-export { AvailabilityRows } from "./ui/availability-rows";
 export { BrandMark } from "./ui/brand-mark";
 export { KeywordChips } from "./ui/keyword-chips";
 export { ProfileLinks } from "./ui/profile-links";

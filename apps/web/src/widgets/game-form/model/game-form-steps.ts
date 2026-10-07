@@ -34,15 +34,7 @@ export const SECTION_FIELDS = {
     "recruitMethod",
     "waitlistEnabled",
   ],
-  [FORM_SECTION.schedule]: [
-    "scheduleMode",
-    "confirmedAt",
-    "rangeStart",
-    "rangeEnd",
-    "windowStartHour",
-    "windowEndHour",
-    "endDate",
-  ],
+  [FORM_SECTION.schedule]: ["scheduleMode", "confirmedAt", "endDate"],
 } as const satisfies Record<SectionKey, readonly (keyof GameFormValues)[]>;
 
 export const GAME_FORM_STEPS = [

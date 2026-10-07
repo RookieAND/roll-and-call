@@ -1,29 +1,18 @@
-import { Card, Grid, Text } from "@roll-and-call/ui";
+import { Card, Text } from "@roll-and-call/ui";
 
 interface ConfirmSummaryProps {
   playLabel: string;
-  respondedCount: number;
-  confirmedCount: number;
 }
 
-export function ConfirmSummary({ playLabel, respondedCount, confirmedCount }: ConfirmSummaryProps) {
-  const items = [
-    { label: "플레이타임", value: playLabel },
-    { label: "가능 시간 제출", value: `${respondedCount} / ${confirmedCount}명` },
-  ];
-
+export function ConfirmSummary({ playLabel }: ConfirmSummaryProps) {
   return (
-    <Grid cols={2} gap="100">
-      {items.map((item) => (
-        <Card.Root key={item.label} radius={500} padding="sm" className="flex flex-col gap-050">
-          <Text typography="body4" foreground="hint" render={<p />}>
-            {item.label}
-          </Text>
-          <Text numeric typography="heading2" render={<p />}>
-            {item.value}
-          </Text>
-        </Card.Root>
-      ))}
-    </Grid>
+    <Card.Root radius={500} padding="sm" className="flex flex-col gap-050">
+      <Text typography="body4" foreground="hint" render={<p />}>
+        플레이타임
+      </Text>
+      <Text numeric typography="heading2" render={<p />}>
+        {playLabel}
+      </Text>
+    </Card.Root>
   );
 }

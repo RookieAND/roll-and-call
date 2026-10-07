@@ -1,11 +1,11 @@
-import { CalendarDays, Package, Search, SquareCheckBig, Star, type LucideIcon } from "lucide-react";
+import { Package, Search, SquareCheckBig, Star, type LucideIcon } from "lucide-react";
 
 export interface FlowStep {
   title: string;
   description: string;
   who: string;
   icon: LucideIcon;
-  palette: "blue" | "purple" | "green" | "indigo" | "pink";
+  palette: "blue" | "purple" | "indigo" | "pink";
 }
 
 export const FLOW_STEPS: FlowStep[] = [
@@ -22,13 +22,6 @@ export const FLOW_STEPS: FlowStep[] = [
     who: "참여자",
     icon: SquareCheckBig,
     palette: "purple",
-  },
-  {
-    title: "일정 조율",
-    description: "되는 시간을 칠하면 GM이 확정합니다.",
-    who: "참여자 · GM",
-    icon: CalendarDays,
-    palette: "green",
   },
   {
     title: "세션",

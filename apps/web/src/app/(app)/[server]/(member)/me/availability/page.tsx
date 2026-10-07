@@ -1,11 +1,10 @@
-import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-import { requireMembership } from "@/shared/server";
-import { EditAvailabilityView } from "@/views/edit-availability";
+import { serverPath } from "@/shared/lib";
+import { getCurrentServer, requireMembership } from "@/shared/server";
 
-export const metadata: Metadata = { title: "가능 시간대" };
-export default async function Page({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
+export default async function Page() {
   await requireMembership();
-  const { from } = await searchParams;
-  return <EditAvailabilityView from={from} />;
+  const server = await getCurrentServer();
+  redirect(serverPath({ slug: server.slug, path: "/me" }));
 }

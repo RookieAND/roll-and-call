@@ -13,18 +13,12 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import {
-  KEYWORD_MAX_COUNT,
-  KEYWORD_MAX_LENGTH,
-  type AvailabilityInterval,
-  type ProfileLink,
-} from "@/entities/profile";
+import { KEYWORD_MAX_COUNT, KEYWORD_MAX_LENGTH, type ProfileLink } from "@/entities/profile";
 import { useServerPath } from "@/shared/lib";
 import { ConfirmDialog, LineBreaks, TagInput, toast, useAction } from "@/shared/ui";
 
 import { updateProfile } from "../api/update-profile";
 import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
-import { AvailabilitySummaryField } from "./availability-summary-field";
 import { AvatarRefreshField } from "./avatar-refresh-field";
 import { ProfileLinksField } from "./profile-links-field";
 
@@ -34,7 +28,6 @@ interface EditProfileFormProps {
   defaultBio?: string;
   defaultKeywords?: string[];
   defaultLinks?: ProfileLink[];
-  availability?: AvailabilityInterval[];
   avatarUrl?: string | null;
 }
 
@@ -44,7 +37,6 @@ export function EditProfileForm({
   defaultBio = "",
   defaultKeywords = [],
   defaultLinks = [],
-  availability = [],
   avatarUrl,
 }: EditProfileFormProps) {
   const router = useRouter();
@@ -141,8 +133,6 @@ export function EditProfileForm({
         </VStack>
 
         <ProfileLinksField value={links} onChange={setLinks} />
-
-        <AvailabilitySummaryField intervals={availability} />
       </VStack>
 
       <FloatingBar.Root elevated={false}>

@@ -4,7 +4,6 @@ import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 import { GAME_NOT_FOUND_RESULT } from "@/shared/api";
 
 import { confirmBlockReason } from "./confirm-block-reason";
-import { unavailableSubject } from "./unavailable-subject";
 
 const GM = "gm";
 const now = new Date("2026-09-15T03:00:00Z");
@@ -77,13 +76,5 @@ describe("confirmBlockReason", () => {
     expect(reason({ scheduleMode: SCHEDULE_MODE.fixed })).toBe(
       "일시가 지정된 구인은 조율 대상이 아닙니다.",
     );
-  });
-});
-
-describe("unavailableSubject", () => {
-  it("한 명·두 명·셋 이상", () => {
-    expect(unavailableSubject(["오세진"])).toBe("오세진은");
-    expect(unavailableSubject(["오세진", "정민서"])).toBe("오세진, 정민서는");
-    expect(unavailableSubject(["오세진", "정민서", "박하진"])).toBe("오세진 외 2인은");
   });
 });

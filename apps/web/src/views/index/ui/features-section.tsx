@@ -3,9 +3,7 @@ import { Bell } from "lucide-react";
 
 import { BadgeMedal, TIER_NAME } from "@/entities/badge";
 
-import { FEATURE_HEAT_STEPS } from "../model/demo-heat";
 import { FEATURE_MEDALS } from "../model/demo-medals";
-import { heatBackground } from "../model/heat-background";
 import { FeatureCard } from "./feature-card";
 import { SectionHeading } from "./section-heading";
 
@@ -48,23 +46,6 @@ export function FeaturesSection() {
                   </HStack>
                 ))}
               </VStack>
-            }
-          />
-          <FeatureCard
-            title="일정 조율"
-            description="참여자가 되는 시간을 칠하면 겹치는 시간이 진하게 보입니다."
-            visual={
-              <HStack align="center" justify="center" className="h-full">
-                <div className="grid grid-cols-[repeat(7,22px)] auto-rows-[18px] gap-050">
-                  {FEATURE_HEAT_STEPS.map((step, index) => (
-                    <span
-                      key={index}
-                      className="rounded-200"
-                      style={{ background: heatBackground(step) }}
-                    />
-                  ))}
-                </div>
-              </HStack>
             }
           />
           <FeatureCard

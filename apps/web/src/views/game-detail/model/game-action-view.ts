@@ -67,10 +67,9 @@ export interface ActionContext {
   now: Date;
 }
 
-// 조율형은 [일정 조율]·[일정 보기], 추첨 뒤에는 [결과 보러 가기]를 붙인다. [캘린더에 추가]는 canAddToCalendar로만 정한다.
+// 추첨 뒤에는 [결과 보러 가기]를 붙인다. [캘린더에 추가]는 canAddToCalendar로만 정한다.
 export interface ActionLinks {
   resultLink: boolean;
-  scheduleLink: boolean;
   calendar: boolean;
 }
 

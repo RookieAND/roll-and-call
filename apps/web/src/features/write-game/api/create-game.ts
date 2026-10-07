@@ -7,9 +7,10 @@ import { uniq } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
+import { SCHEDULE_MODE } from "@/entities/game";
 import { RULE_GATE, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { type ActionResult } from "@/shared/api";
-import { serverPath } from "@/shared/lib";
+import { coordinationRange, serverPath } from "@/shared/lib";
 import {
   announceGameOpened,
   findActiveSanction,
@@ -78,6 +79,7 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
       rule: set.label,
       rulebookId: set.cores[0]!.id,
       ...columns,
+      ...(columns.scheduleMode === SCHEDULE_MODE.coordinate ? coordinationRange() : {}),
     },
     confirmedUserIds: invitedIds,
   });

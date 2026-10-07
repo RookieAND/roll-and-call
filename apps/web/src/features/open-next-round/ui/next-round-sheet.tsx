@@ -4,12 +4,11 @@ import { Button, Field, Grid, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
-import { addDays, fromKstDateTimeInput } from "@/shared/lib";
-import { DatePicker, DateTimePicker, LineBreaks, toast, useAction } from "@/shared/ui";
+import { fromKstDateTimeInput } from "@/shared/lib";
+import { DateTimePicker, LineBreaks, toast, useAction } from "@/shared/ui";
 
 import { openNextRound } from "../api/open-next-round";
 import { nextRoundGuide } from "../model/next-round-guide";
-import { NEXT_ROUND_MAX_DAYS } from "../model/next-round-rules";
 import { NextRoundCarryList } from "./next-round-carry-list";
 
 interface NextRoundSheetProps {
@@ -28,36 +27,23 @@ export function NextRoundSheet({
   waitingCount,
   baseDate,
 }: NextRoundSheetProps) {
-  const [rangeStart, setRangeStart] = useState("");
-  const [rangeEnd, setRangeEnd] = useState("");
   const [startsAt, setStartsAt] = useState("");
   const { pending, run } = useAction();
   const coordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
-  const ready = coordinate ? Boolean(rangeStart && rangeEnd) : Boolean(startsAt);
-  const lastEnd = rangeStart
-    ? addDays({ date: rangeStart, count: NEXT_ROUND_MAX_DAYS - 1 })
-    : undefined;
+  const ready = coordinate || Boolean(startsAt);
   const guide = nextRoundGuide({ coordinate, ready });
 
   function changeOpen(nextOpen: boolean) {
     if (pending) return;
     if (!nextOpen) {
-      setRangeStart("");
-      setRangeEnd("");
       setStartsAt("");
     }
     onOpenChange(nextOpen);
   }
 
-  function pickStart(date: string) {
-    setRangeStart(date);
-    const last = addDays({ date, count: NEXT_ROUND_MAX_DAYS - 1 });
-    if (rangeEnd && (rangeEnd < date || rangeEnd > last)) setRangeEnd("");
-  }
-
   function submit() {
     const input = coordinate
-      ? { fromGameId: game.id, rangeStart, rangeEnd }
+      ? { fromGameId: game.id }
       : { fromGameId: game.id, startsAt: fromKstDateTimeInput(startsAt).toISOString() };
     run(() => openNextRound(input), {
       onSuccess: () => toast.success("다음 회차를 열었습니다"),
@@ -76,22 +62,7 @@ export function NextRoundSheet({
         </Sheet.Header>
         <VStack gap="200">
           <NextRoundCarryList waitingCount={waitingCount} />
-          {coordinate ? (
-            <Grid cols={2} gap="100">
-              <Field.Root label="조율 시작일">
-                <DatePicker value={rangeStart} min={baseDate} onChange={pickStart} />
-              </Field.Root>
-              <Field.Root label="조율 종료일">
-                <DatePicker
-                  value={rangeEnd}
-                  min={rangeStart || baseDate}
-                  max={lastEnd}
-                  placeholder="선택"
-                  onChange={setRangeEnd}
-                />
-              </Field.Root>
-            </Grid>
-          ) : (
+          {!coordinate && (
             <Field.Root label="세션 일시">
               <DateTimePicker value={startsAt} min={baseDate} onChange={setStartsAt} />
             </Field.Root>

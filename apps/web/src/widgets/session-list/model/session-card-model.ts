@@ -30,7 +30,6 @@ export type SessionIcon = (typeof SESSION_ICON)[keyof typeof SESSION_ICON];
 
 export const SESSION_ACTION_KIND = {
   confirmTime: "confirm-time",
-  submitAvailability: "submit-availability",
   hostMenu: "host-menu",
   cancelWaitlist: "cancel-waitlist",
   confirmAttendance: "confirm-attendance",
@@ -95,8 +94,6 @@ export type SessionGame = Game & {
 
 export type SessionContext = {
   viewerId: string;
-  respondedGameIds: ReadonlySet<string>;
-  responseCounts: ReadonlyMap<string, number>;
   now?: Date;
   readOnly?: boolean;
   reviewedGames?: ReviewedGames;

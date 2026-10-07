@@ -1,7 +1,6 @@
 export { deleteProfileMemo } from "./commands/delete-profile-memo";
 export { markOnboarded } from "./commands/mark-onboarded";
 export { saveAvatarUrl } from "./commands/save-avatar-url";
-export { saveMemberAvailability } from "./commands/save-member-availability";
 export { saveMemberNickname, type SaveMemberNicknameResult } from "./commands/save-member-nickname";
 export { saveMemberProfile } from "./commands/save-member-profile";
 export { saveMemberShowBadges } from "./commands/save-member-show-badges";
