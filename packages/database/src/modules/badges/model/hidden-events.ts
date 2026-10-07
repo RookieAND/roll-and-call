@@ -124,7 +124,7 @@ export function hiddenEvents({
     case HIDDEN_LADDER.wins5:
       return winStreakEvents({ draws, length: 5 });
     case HIDDEN_LADDER.days10:
-      return dayStreakEvents({ facts, length: 10 });
+      return dayStreakEvents({ facts, length: 14 });
     case HIDDEN_LADDER.allSizes:
       return sizeEvents(facts);
     case HIDDEN_LADDER.allTimes:

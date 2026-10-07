@@ -202,7 +202,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     emoji: "🌋",
     name: "불꽃 행진",
     grade: 5,
-    description: "열흘 내내 테이블의 열기가 식지 않았습니다.",
+    description: "2주 내내 테이블의 열기가 식지 않았습니다.",
   }),
   [HIDDEN_LADDER.allSizes]: hidden({
     emoji: "🪑",

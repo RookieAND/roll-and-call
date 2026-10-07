@@ -115,9 +115,11 @@ describe("숨겨진 칭호 14종", () => {
     expect(has(run(3), "sp.days3")).toBe(true);
     expect(has(run(6), "sp.days7")).toBe(false);
     expect(has(run(7), "sp.days7") && has(run(7), "sp.days3")).toBe(true);
-    expect(has(run(9), "sp.days10")).toBe(false);
-    const ten = run(10);
-    expect(has(ten, "sp.days10") && has(ten, "sp.days7") && has(ten, "sp.days3")).toBe(true);
+    expect(has(run(13), "sp.days10")).toBe(false);
+    const fourteen = run(14);
+    expect(
+      has(fourteen, "sp.days10") && has(fourteen, "sp.days7") && has(fourteen, "sp.days3"),
+    ).toBe(true);
     const skipped = facts({ played: sessionsOnDays([1, 2, 4]) });
     expect(has(computeBadges(skipped), "sp.days3")).toBe(false);
   });
