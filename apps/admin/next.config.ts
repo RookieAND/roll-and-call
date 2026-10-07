@@ -43,6 +43,10 @@ const nextConfig: NextConfig = {
       permanent: true,
     },
   ],
+  images: {
+    // Vercel 변환 한도를 넘기면 새 폭 요청이 402로 깨진다. 로고·아이콘은 정적 파일이라 변환을 끈다.
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;
