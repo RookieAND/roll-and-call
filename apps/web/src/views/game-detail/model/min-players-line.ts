@@ -9,5 +9,5 @@ export function minPlayersLine({
   now: Date;
 }): string | null {
   if (minPlayers === null || endDate.getTime() <= now.getTime()) return null;
-  return `${minPlayers}명 미만이면 취소됩니다.`;
+  return `신청자가 ${minPlayers}명 미만이면 취소됩니다.`;
 }
