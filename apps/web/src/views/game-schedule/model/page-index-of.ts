@@ -1,13 +1,13 @@
 import type { DayColumn } from "@/shared/lib";
 
-export function weekIndexOf({
-  weeks,
+export function pageIndexOf({
+  pages,
   date,
 }: {
-  weeks: DayColumn[][];
+  pages: DayColumn[][];
   date: string | null;
 }): number {
   if (!date) return 0;
-  const index = weeks.findIndex((week) => week.some((day) => day.date === date));
+  const index = pages.findIndex((page) => page.some((day) => day.date === date));
   return Math.max(index, 0);
 }

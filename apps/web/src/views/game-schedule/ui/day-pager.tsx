@@ -3,23 +3,23 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import type { DayColumn } from "@/shared/lib";
 
-interface WeekPagerProps {
-  weeks: DayColumn[][];
+interface DayPagerProps {
+  pages: DayColumn[][];
   index: number;
   onChange: (index: number) => void;
 }
 
-export function WeekPager({ weeks, index, onChange }: WeekPagerProps) {
-  const week = weeks[index]!;
-  const first = week[0]!;
-  const last = week.at(-1)!;
+export function DayPager({ pages, index, onChange }: DayPagerProps) {
+  const page = pages[index]!;
+  const first = page[0]!;
+  const last = page.at(-1)!;
   const rangeLabel = `${first.md}(${first.dow}) – ${last.md}(${last.dow})`;
 
   return (
     <HStack align="center" gap="050">
       <IconButton
         className="h-11 w-11"
-        aria-label="이전 주"
+        aria-label="이전 날짜"
         disabled={index === 0}
         onClick={() => onChange(index - 1)}
       >
@@ -34,12 +34,12 @@ export function WeekPager({ weeks, index, onChange }: WeekPagerProps) {
         {rangeLabel}
       </Text>
       <Text typography="body4" foreground="hint" numeric render={<span />}>
-        {index + 1} / {weeks.length}주
+        {index + 1} / {pages.length}
       </Text>
       <IconButton
         className="h-11 w-11"
-        aria-label="다음 주"
-        disabled={index === weeks.length - 1}
+        aria-label="다음 날짜"
+        disabled={index === pages.length - 1}
         onClick={() => onChange(index + 1)}
       >
         <ChevronRight size={18} aria-hidden />

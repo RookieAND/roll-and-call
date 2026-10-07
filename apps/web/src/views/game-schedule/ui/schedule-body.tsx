@@ -2,7 +2,7 @@
 
 import { VStack } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
-import { isNull, uniq } from "es-toolkit";
+import { chunk, isNull, uniq } from "es-toolkit";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -10,18 +10,18 @@ import { availabilityQuery, type ScheduleAvailability } from "@/entities/availab
 import { AvailabilityGrid } from "@/features/coordinate-session";
 import { toKstDateInput, type DayColumn, type TimeRow } from "@/shared/lib";
 
-import { groupDaysByWeek } from "../model/group-days-by-week";
+import { DAYS_PER_PAGE } from "../model/days-per-page";
+import { pageIndexOf } from "../model/page-index-of";
 import { SCHEDULE_BODY_MODE, type ScheduleBodyMode } from "../model/schedule-body-mode";
 import { SCHEDULE_NOTICE } from "../model/schedule-notices";
 import { SCHEDULE_TAB, type ScheduleTab } from "../model/schedule-tab";
-import { weekIndexOf } from "../model/week-index-of";
 import { ConfirmedSessionNotice } from "./confirmed-session-notice";
+import { DayPager } from "./day-pager";
 import { ParticipantsOnlyNotice } from "./participants-only-notice";
 import { ScheduleNotice } from "./schedule-notice";
 import { ScheduleOverlap } from "./schedule-overlap";
 import { ScheduleOverlapEmpty } from "./schedule-overlap-empty";
 import { ScheduleTabs } from "./schedule-tabs";
-import { WeekPager } from "./week-pager";
 
 interface ScheduleBodyProps {
   gameId: string;
@@ -51,18 +51,18 @@ export function ScheduleBody({
   const { aggregate, blocked } = data;
 
   const confirmedAt = mode.kind === SCHEDULE_BODY_MODE.confirmed ? mode.confirmedAt : null;
-  const weeks = groupDaysByWeek(days);
+  const pages = chunk(days, DAYS_PER_PAGE);
   const confirmedDate = isNull(confirmedAt) ? null : toKstDateInput(confirmedAt);
-  const [weekIndex, setWeekIndex] = useState(() => weekIndexOf({ weeks, date: confirmedDate }));
+  const [pageIndex, setPageIndex] = useState(() => pageIndexOf({ pages, date: confirmedDate }));
   const [tab, setTab] = useState<ScheduleTab>(
     confirmedAt ? SCHEDULE_TAB.overlap : SCHEDULE_TAB.mine,
   );
-  const weekDays = weeks[weekIndex] ?? days;
-  const pager = <WeekPager weeks={weeks} index={weekIndex} onChange={setWeekIndex} />;
+  const pageDays = pages[pageIndex] ?? days;
+  const pager = <DayPager pages={pages} index={pageIndex} onChange={setPageIndex} />;
 
   const respondentCount = uniq(Object.values(aggregate.names).flat()).length;
   const hasResponses = respondentCount > 0;
-  const overlapProps = { days: weekDays, timeRows, aggregate, confirmedAt, capacity, gmName };
+  const overlapProps = { days: pageDays, timeRows, aggregate, confirmedAt, capacity, gmName };
   const paintable = mode.kind === SCHEDULE_BODY_MODE.paint;
   const overlap = hasResponses ? (
     <ScheduleOverlap hint="색이 진할수록 그 시간에 가능한 사람이 많습니다." {...overlapProps} />
@@ -111,7 +111,7 @@ export function ScheduleBody({
               mine={
                 <AvailabilityGrid
                   gameId={gameId}
-                  days={weekDays}
+                  days={pageDays}
                   timeRows={timeRows}
                   savedMine={aggregate.mine}
                   blocked={blocked}

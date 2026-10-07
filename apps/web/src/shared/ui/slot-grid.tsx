@@ -16,6 +16,11 @@ const MIN_VISIBLE_ROWS = 9;
 const MIN_HEIGHT_PX = HEADER_PX + (SLOT_ROW_PX + GAP_PX) * MIN_VISIBLE_ROWS;
 const INITIAL_HOUR = 18;
 
+const COVER = "var(--color-gray-50)";
+const CORNER_COVER = `4px 0 0 0 ${COVER}, 0 4px 0 0 ${COVER}, -12px 0 0 0 ${COVER}`;
+const DAY_COVER = `2px 0 0 0 ${COVER}, -2px 0 0 0 ${COVER}, 0 4px 0 0 ${COVER}`;
+const TIME_COVER = `4px 0 0 0 ${COVER}, -12px 0 0 0 ${COVER}, 0 2px 0 0 ${COVER}, 0 -2px 0 0 ${COVER}`;
+
 interface SlotGridProps {
   days: DayColumn[];
   timeRows: TimeRow[];
@@ -61,7 +66,7 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
           gridTemplateColumns: `${TIME_COL_PX}px repeat(${days.length}, ${dayColumnWidth})`,
         }}
       >
-        <span className="sticky top-0 left-0 z-20 bg-gray-50" />
+        <span className="sticky top-0 left-0 z-20 bg-gray-50" style={{ boxShadow: CORNER_COVER }} />
         {days.map((day) => (
           <Text
             key={day.date}
@@ -70,7 +75,7 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
             foreground="muted"
             render={<div />}
             className="sticky top-0 z-10 flex flex-col items-center justify-center bg-gray-50 leading-tight"
-            style={{ height: HEADER_PX }}
+            style={{ height: HEADER_PX, boxShadow: DAY_COVER }}
           >
             {day.dow}
             <Text typography="body4" weight="medium" foreground="hint" numeric render={<span />}>
@@ -87,7 +92,7 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
             numeric
             render={<span />}
             className="sticky left-0 z-10 -translate-y-1/2 bg-gray-50 leading-none"
-            style={{ height: SLOT_ROW_PX }}
+            style={{ height: SLOT_ROW_PX, boxShadow: TIME_COVER }}
           >
             {row.minute === 0 && row.label}
             {row.minute === 0 && row.dayOffset === 1 && (
