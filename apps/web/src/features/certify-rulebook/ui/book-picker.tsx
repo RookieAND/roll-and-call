@@ -122,7 +122,7 @@ export function BookPicker({
                   variant="ghost"
                   colorPalette="primary"
                   size="sm"
-                  className="self-start"
+                  className="self-start w-full"
                   onClick={() => setShowAll(true)}
                 >
                   전체 룰 보기
