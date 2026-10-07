@@ -5,12 +5,15 @@ import { type ReactNode, useEffect, useRef } from "react";
 
 import { type DayColumn, rowSlotIso, type TimeRow } from "@/shared/lib";
 
+import { useFillViewport } from "./use-fill-viewport";
+
 const TIME_COL_PX = 44;
 const FIT_DAYS = 4;
 const HEADER_PX = 40;
 const GAP_PX = 4;
 export const SLOT_ROW_PX = 26;
-const VISIBLE_ROWS = 9;
+const MIN_VISIBLE_ROWS = 9;
+const MIN_HEIGHT_PX = HEADER_PX + (SLOT_ROW_PX + GAP_PX) * MIN_VISIBLE_ROWS;
 const INITIAL_HOUR = 18;
 
 interface SlotGridProps {
@@ -26,6 +29,7 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
   const scrollRef = useRef<HTMLDivElement>(null);
   const fit = days.length <= FIT_DAYS;
   const dayColumnWidth = fit ? "minmax(0, 1fr)" : "var(--rc-size-cell)";
+  useFillViewport({ ref: scrollRef, minHeight: MIN_HEIGHT_PX });
   const rowsBefore = Math.max(
     0,
     timeRows.findIndex(
@@ -50,7 +54,6 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
     <div
       ref={scrollRef}
       className="overflow-auto overscroll-contain rounded-500 border border-gray-200 bg-gray-50 px-125 pb-150"
-      style={{ maxHeight: HEADER_PX + (SLOT_ROW_PX + GAP_PX) * VISIBLE_ROWS }}
     >
       <div
         className={cn("grid gap-050 select-none", fit && "min-w-full", className)}
