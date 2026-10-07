@@ -1,10 +1,9 @@
-import { HStack, VStack } from "@roll-and-call/ui";
+import { VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
-import { AdminHeader } from "@/shared/ui";
+import { AdminHeader, RouteTabs } from "@/shared/ui";
 
-import type { SettingsHref } from "../model/settings-nav-items";
-import { SettingsNav } from "./settings-nav";
+import { SETTINGS_NAV_ITEMS, type SettingsHref } from "../model/settings-nav-items";
 
 interface SettingsFrameProps {
   title: string;
@@ -17,12 +16,10 @@ export function SettingsFrame({ title, active, actions, children }: SettingsFram
   return (
     <>
       <AdminHeader title={title} trail={[{ href: "/settings", label: "설정" }]} actions={actions} />
-      <HStack align="stretch" className="flex-1">
-        <SettingsNav active={active} />
-        <VStack gap="150" className="min-w-0 flex-1 p-200">
-          {children}
-        </VStack>
-      </HStack>
+      <RouteTabs label="설정 화면" items={[...SETTINGS_NAV_ITEMS]} value={active} />
+      <VStack gap="150" className="min-w-0 flex-1 p-200">
+        {children}
+      </VStack>
     </>
   );
 }

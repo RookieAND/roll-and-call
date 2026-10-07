@@ -10,8 +10,9 @@ import { settingsAudit } from "../model/settings-audit";
 import { checkServerSettings, type SettingChecks } from "./check-server-settings";
 
 interface SaveServerSettingsInput {
-  ids: SettingIds;
-  inviteUrl: string;
+  // 한 화면에서 한쪽만 고치므로 안 넘긴 쪽은 저장된 값 그대로 둔다.
+  ids?: SettingIds;
+  inviteUrl?: string;
 }
 
 type SaveServerSettingsResult =
@@ -29,13 +30,18 @@ export async function saveServerSettings({
 }: SaveServerSettingsInput): Promise<SaveServerSettingsResult> {
   const actor = await requireOwner();
   const server = await getCurrentServer();
-  const invite = normalizeInviteUrl(inviteUrl);
+  const nextIds =
+    ids ??
+    (Object.fromEntries(
+      SETTING_FIELDS.map((field) => [field.key, server[field.key] ?? ""]),
+    ) as SettingIds);
+  const invite = normalizeInviteUrl(inviteUrl ?? server.inviteUrl ?? "");
   if (!invite.ok) return { ok: false, inviteError: invite.error };
   const changedFields = SETTING_FIELDS.filter(
-    (field) => orNull(ids[field.key]) !== server[field.key],
+    (field) => orNull(nextIds[field.key]) !== server[field.key],
   );
   const checks = await checkServerSettings(
-    Object.fromEntries(changedFields.map((field) => [field.key, ids[field.key]])),
+    Object.fromEntries(changedFields.map((field) => [field.key, nextIds[field.key]])),
   );
   if (Object.values(checks).some((check) => check?.status === "fail")) return { ok: false, checks };
 
@@ -53,11 +59,11 @@ export async function saveServerSettings({
   await updateServerSettings({
     serverId: server.id,
     settings: {
-      recruitChannelId: orNull(ids.recruitChannelId),
-      closedChannelId: orNull(ids.closedChannelId),
-      announceChannelId: orNull(ids.announceChannelId),
-      staffChannelId: orNull(ids.staffChannelId),
-      reviewForumChannelId: orNull(ids.reviewForumChannelId),
+      recruitChannelId: orNull(nextIds.recruitChannelId),
+      closedChannelId: orNull(nextIds.closedChannelId),
+      announceChannelId: orNull(nextIds.announceChannelId),
+      staffChannelId: orNull(nextIds.staffChannelId),
+      reviewForumChannelId: orNull(nextIds.reviewForumChannelId),
       inviteUrl: invite.url,
     },
     actor,

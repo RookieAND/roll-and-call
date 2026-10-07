@@ -20,7 +20,7 @@ export function StaffChannelHint({ staffChannel, owner }: StaffChannelHintProps)
     <Text
       typography="body4"
       foreground="primary"
-      render={<ServerLink path="/settings/server" />}
+      render={<ServerLink path="/settings/discord" />}
       className="underline"
     >
       [서버 설정]

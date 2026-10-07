@@ -21,7 +21,7 @@ export function MessagesLoading() {
             비워 두면 기본 문구를 씁니다.
           </Text>
         </VStack>
-        <div className="grid grid-cols-[304px_minmax(0,1fr)] items-start gap-150">
+        <div className="grid grid-cols-[216px_minmax(0,1fr)] items-start gap-150">
           <Panel bodyClassName="p-0">
             {MESSAGE_CASES.map(({ key, label, to }, index) => (
               <VStack
