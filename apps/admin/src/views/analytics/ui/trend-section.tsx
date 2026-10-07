@@ -1,4 +1,3 @@
-import { formatDate } from "@/shared/lib";
 import type { AnalyticsData } from "@/shared/server";
 
 import { trendInsight } from "../model/trend-insight";
@@ -21,11 +20,7 @@ export function TrendSection({ analytics }: TrendSectionProps) {
       insight={trendInsight(analytics.trend, analytics.early)}
     >
       <TrendNote />
-      <SessionTrendChart
-        trend={analytics.trend}
-        todayLabel={formatDate(analytics.today)}
-        height={chartHeight}
-      />
+      <SessionTrendChart trend={analytics.trend} height={chartHeight} />
     </AnalyticsSection>
   );
 }

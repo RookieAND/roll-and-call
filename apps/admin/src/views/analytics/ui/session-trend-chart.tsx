@@ -1,6 +1,5 @@
 "use client";
 
-import { Text } from "@roll-and-call/ui";
 import { sumBy } from "es-toolkit";
 import dynamic from "next/dynamic";
 
@@ -14,19 +13,14 @@ const Column = dynamic(() => import("@ant-design/plots").then((module) => module
 });
 
 const PADDING = { top: 24, right: 12, bottom: 28, left: 36 } as const;
-const HATCH =
-  "repeating-linear-gradient(135deg, var(--rc-color-bg-canvas-base) 0 var(--rc-size-space-050), transparent var(--rc-size-space-050) var(--rc-size-space-100))";
 
 interface SessionTrendChartProps {
   trend: AnalyticsTrendWeek[];
-  todayLabel: string;
   height: number;
 }
 
-export function SessionTrendChart({ trend, todayLabel, height }: SessionTrendChartProps) {
+export function SessionTrendChart({ trend, height }: SessionTrendChartProps) {
   const { ref, tokens } = useChartTokens();
-  const firstUpcoming = trend.findIndex((week) => week.upcoming);
-  const bandLeft = `calc(${PADDING.left}px + (100% - ${PADDING.left + PADDING.right}px) * ${firstUpcoming / trend.length})`;
   const data = trend.flatMap((week) =>
     TREND_SEGMENTS.filter((segment) => week[segment.key] > 0).map((segment) => ({
       week: week.label,
@@ -39,12 +33,6 @@ export function SessionTrendChart({ trend, todayLabel, height }: SessionTrendCha
     total: sumBy(TREND_SEGMENTS, (segment) => week[segment.key]),
   }));
   const chartHeight = height + 40;
-  const bandStyle = {
-    top: PADDING.top - 6,
-    bottom: PADDING.bottom,
-    left: bandLeft,
-    right: PADDING.right,
-  };
   const summary = trend
     .map(
       (week, index) =>
@@ -61,21 +49,6 @@ export function SessionTrendChart({ trend, todayLabel, height }: SessionTrendCha
     >
       {tokens ? (
         <>
-          <div aria-hidden className="absolute rounded-t-300 bg-gray-100" style={bandStyle} />
-          <div
-            aria-hidden
-            className="absolute border-l border-dashed border-(--rc-color-fg-hint)"
-            style={{ ...bandStyle, right: undefined }}
-          />
-          <Text
-            typography="body4"
-            weight="bold"
-            foreground="muted"
-            className="absolute top-0 whitespace-nowrap"
-            style={{ left: `calc(${bandLeft} + var(--rc-size-space-075))` }}
-          >
-            오늘 · {todayLabel} → 예정
-          </Text>
           <Column
             data={data}
             xField="week"
@@ -156,11 +129,6 @@ export function SessionTrendChart({ trend, todayLabel, height }: SessionTrendCha
                 contentFill: "transparent",
               },
             }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute opacity-45"
-            style={{ ...bandStyle, backgroundImage: HATCH }}
           />
         </>
       ) : null}
