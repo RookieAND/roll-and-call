@@ -11,7 +11,7 @@ import {
 } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { ConfirmSessionForm } from "@/features/confirm-session";
-import { serverPath } from "@/shared/lib";
+import { formatDate, serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
 import { AppBar, EmptyState } from "@/shared/ui";
 
@@ -70,7 +70,13 @@ export async function GameConfirmView({ id }: { id: string }) {
       {appBar}
       <Container size="sm">
         <VStack gap="200" className="pt-200 pb-200">
-          <ConfirmSummary playLabel={playLabel} />
+          <ConfirmSummary
+            title={game.title}
+            rule={game.rule}
+            confirmedCount={confirmedCount}
+            playLabel={playLabel}
+            deadlineLabel={formatDate(game.endDate)}
+          />
           <ConfirmSessionForm
             game={{
               ...pick(game, [
