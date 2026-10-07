@@ -51,8 +51,10 @@ export async function proxy(request: NextRequest) {
     },
   );
 
-  // getClaims()는 만료된 토큰을 갱신해 응답 쿠키에 쓰고, 비대칭 키면 Auth 서버를 부르지 않는다.
-  await supabase.auth.getClaims();
+  // getClaims()는 만료된 토큰을 갱신해 응답 쿠키에 쓰고, 비대칭 키면 Auth 서버를 부르지 않는다. 로그인 쿠키가 없으면 갱신할 것이 없어 건너뛴다.
+  if (request.cookies.getAll().some(({ name }) => /^sb-.+-auth-token(\.\d+)?$/.test(name))) {
+    await supabase.auth.getClaims();
+  }
 
   return response;
 }
