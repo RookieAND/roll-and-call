@@ -21,7 +21,9 @@ const LOCKED_LINES = [
   "참여를 취소하려면 GM에게 직접 문의해 주세요.",
 ];
 
-// 진행 중에는 제목만 남고 [캘린더에 추가]가 사라진다.
+const LIVE_LINES = ["세션이 진행 중입니다.", "끝나면 후기를 쓸 수 있습니다."];
+
+// 진행 중에는 안내가 바뀌고 [캘린더에 추가]가 사라진다.
 export function ScheduledActions({
   game,
   confirmedAt,
@@ -30,7 +32,7 @@ export function ScheduledActions({
   scheduleLink,
   calendar,
 }: ScheduledActionsProps) {
-  const lines = live ? [] : LOCKED_LINES;
+  const lines = live ? LIVE_LINES : LOCKED_LINES;
   const hasButtons = resultLink || scheduleLink || calendar;
 
   return (
