@@ -86,6 +86,7 @@ export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
 
       <Field.Root
         label="주의 사항"
+        description="하우스룰이 있다면 여기에 적어 주세요"
         htmlFor="notice"
         counter={`${noticeLength} / ${GAME_NOTICE_MAX}`}
         error={errors.notice?.message}

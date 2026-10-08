@@ -1,6 +1,15 @@
 import { z } from "zod";
 
-import { GAME_TAG, RECRUIT_METHODS, SCHEDULE_MODE, SCHEDULE_MODES } from "@/entities/game";
+import {
+  GAME_KIND,
+  GAME_KINDS,
+  GAME_TAG,
+  PLAY_TYPE,
+  PLAY_TYPES,
+  RECRUIT_METHODS,
+  SCHEDULE_MODE,
+  SCHEDULE_MODES,
+} from "@/entities/game";
 import { richTextLength } from "@/shared/lib";
 
 import { isWindowHour } from "./is-window-hour";
@@ -33,6 +42,9 @@ const tagList = (label: string, max: number) =>
 export const gameFormSchema = z
   .object({
     title: z.string().trim().min(1, "구인 제목을 입력해 주세요.").max(100),
+    kind: z.enum(GAME_KINDS),
+    // 설명회는 보이스로 고정이다. 화면은 문항을 숨기고, 여기서 다른 값을 거부한다.
+    playType: z.enum(PLAY_TYPES),
     // rule은 고른 룰북의 이름(표시용)이고, 등록할 때 서버는 rulebookId로 룰북을 다시 찾는다.
     rule: z.string().trim().min(1, "룰북을 선택해 주세요.").max(100),
     rulebookId: z.string(),
@@ -92,6 +104,13 @@ export const gameFormSchema = z
       .max(GAME_MAX_PLAYERS),
   })
   .superRefine((values, context) => {
+    if (values.kind === GAME_KIND.briefing && values.playType !== PLAY_TYPE.voice) {
+      context.addIssue({
+        code: "custom",
+        message: "설명회는 보이스로만 열 수 있습니다.",
+        path: ["playType"],
+      });
+    }
     if (values.preConfirmed.length > Number(values.maxPlayers)) {
       context.addIssue({
         code: "custom",

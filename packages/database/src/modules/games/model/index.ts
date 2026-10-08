@@ -13,6 +13,8 @@ export { isAwaitingDraw } from "./is-awaiting-draw";
 export { seatOpenedRecipientIds } from "./seat-opened-recipient-ids";
 export { gameCancelledRecipients } from "./game-cancelled-recipients";
 export { RECRUIT_METHOD, RECRUIT_METHODS, type RecruitMethod } from "./recruit-method";
+export { GAME_KIND, GAME_KINDS, type GameKind } from "./game-kind";
+export { PLAY_TYPE, PLAY_TYPES, type PlayType } from "./play-type";
 export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./schedule-mode";
 export { deriveGameStatus } from "./derive-game-status";
 export { GAME_STATUS, gameStatusLabel, type GameStatus } from "./game-status";

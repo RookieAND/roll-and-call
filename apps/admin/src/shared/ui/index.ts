@@ -29,6 +29,7 @@ export { NoShowStatusTag } from "./no-show-status-tag";
 export { MoreMenu, type MoreMenuItem } from "./more-menu";
 export { RetryableLabel } from "./retryable-label";
 export { NAV_ITEMS, type NavKey } from "./nav-items";
+export { OwnerOnlyView } from "./owner-only-view";
 export { ChoiceRowList, type ChoiceRow } from "./choice-row-list";
 export { OPEN_PALETTE_EVENT, openPalette } from "./open-palette";
 export { ListPager } from "./list-pager";

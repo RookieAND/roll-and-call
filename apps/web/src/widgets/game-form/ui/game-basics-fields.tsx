@@ -4,19 +4,23 @@ import { RichTextEditor } from "@roll-and-call/tiptap";
 import { Field, TextInput } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
+import { GAME_KIND, PLAY_TYPE } from "@/entities/game";
 import type { MyRulebooks } from "@/entities/rulebook";
 import { GAME_SYNOPSIS_MAX, type GameFormValues } from "@/features/write-game";
 import { richTextLength } from "@/shared/lib";
 
+import { GameKindField } from "./game-kind-field";
 import { GameRulebookField } from "./game-rulebook-field";
 import { PlayTimeField } from "./play-time-field";
+import { PlayTypeField } from "./play-type-field";
 
 interface GameBasicsFieldsProps {
   form: UseFormReturn<GameFormValues>;
   rulebooks?: MyRulebooks;
+  kindLocked?: boolean;
 }
 
-export function GameBasicsFields({ form, rulebooks }: GameBasicsFieldsProps) {
+export function GameBasicsFields({ form, rulebooks, kindLocked = false }: GameBasicsFieldsProps) {
   const {
     register,
     setValue,
@@ -25,6 +29,8 @@ export function GameBasicsFields({ form, rulebooks }: GameBasicsFieldsProps) {
   } = form;
   const synopsis = watch("synopsis") ?? "";
   const synopsisLength = richTextLength(synopsis);
+  const kind = watch("kind");
+  const isBriefing = kind === GAME_KIND.briefing;
 
   return (
     <>
@@ -66,6 +72,24 @@ export function GameBasicsFields({ form, rulebooks }: GameBasicsFieldsProps) {
           onChange={(value) => setValue("synopsis", value, { shouldDirty: true })}
         />
       </Field.Root>
+
+      <GameKindField
+        value={kind}
+        locked={kindLocked}
+        onChange={(next) => {
+          setValue("kind", next, { shouldDirty: true });
+          if (next === GAME_KIND.briefing) {
+            setValue("playType", PLAY_TYPE.voice, { shouldDirty: true });
+          }
+        }}
+      />
+
+      {!isBriefing && (
+        <PlayTypeField
+          value={watch("playType")}
+          onChange={(next) => setValue("playType", next, { shouldDirty: true })}
+        />
+      )}
     </>
   );
 }

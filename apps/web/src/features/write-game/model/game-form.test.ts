@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import { GAME_KIND, PLAY_TYPE, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 
 import { gameFormSchema } from "./game-form";
 import { toGameColumns } from "./to-game-columns";
 
 const base = {
   title: "마지막 열차",
+  kind: GAME_KIND.session,
+  playType: PLAY_TYPE.voice,
   rule: "CoC 7판",
   rulebookId: "",
   maxPlayers: "4",
@@ -134,6 +136,18 @@ describe("gameFormSchema", () => {
 
   it("장르는 5개까지다", () => {
     expect(firstError({ ...base, genres: ["1", "2", "3", "4", "5", "6"] })).toBe("genres");
+  });
+});
+
+describe("구분과 플레이 유형", () => {
+  it("설명회는 보이스만 받고 텍스트는 거부한다", () => {
+    const briefing = { ...base, kind: GAME_KIND.briefing };
+    expect(firstError(briefing)).toBeNull();
+    expect(firstError({ ...briefing, playType: PLAY_TYPE.text })).not.toBeNull();
+  });
+
+  it("세션은 텍스트도 받는다", () => {
+    expect(firstError({ ...base, playType: PLAY_TYPE.text })).toBeNull();
   });
 });
 

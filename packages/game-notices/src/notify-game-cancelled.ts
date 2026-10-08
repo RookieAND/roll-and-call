@@ -105,6 +105,8 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
       closed: true,
       cancelled: true,
       categoryId,
+      kind: game.kind,
+      playType: game.playType,
     }),
   ]);
 }

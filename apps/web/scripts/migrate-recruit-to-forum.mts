@@ -93,7 +93,13 @@ for (const row of rows) {
     (game.confirmedAt !== null && game.confirmedAt <= now) ||
     game.endDate < now;
   const categoryId = categoryIds.get(game.id) ?? null;
-  const tagIds = recruitStatusTagIds({ target, closed, categoryId });
+  const tagIds = recruitStatusTagIds({
+    target,
+    closed,
+    categoryId,
+    kind: game.kind,
+    playType: game.playType,
+  });
   const name = game.cancelledAt ? `${game.title} (취소됨)` : game.title;
   console.log(
     `${apply ? "[이관]" : "[계획]"} ${name} · ${closed ? "마감" : "모집중"} · 태그 ${tagIds.map((id) => nameById.get(id)).join(", ")}`,

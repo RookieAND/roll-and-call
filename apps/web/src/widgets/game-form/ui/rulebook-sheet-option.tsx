@@ -17,7 +17,7 @@ export function RulebookSheetOption({ set, gate, selected, onPick }: RulebookShe
       name={set.edition || set.categoryName}
       edition=""
       selected={selected}
-      locked={gate.type === RULE_GATE.blocked}
+      locked={gate.type !== RULE_GATE.open}
       reason={<RulebookSetBadge set={set} />}
       onClick={onPick}
     />

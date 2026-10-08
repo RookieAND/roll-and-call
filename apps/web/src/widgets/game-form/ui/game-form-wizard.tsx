@@ -94,7 +94,7 @@ export function GameFormWizard({
   function renderSection(section: SectionKey) {
     switch (section) {
       case FORM_SECTION.basics:
-        return <GameBasicsFields form={form} rulebooks={rulebooks} />;
+        return <GameBasicsFields form={form} rulebooks={rulebooks} kindLocked={locked} />;
       case FORM_SECTION.preflight:
         return <GamePreflightFields form={form} />;
       case FORM_SECTION.media:

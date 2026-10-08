@@ -10,7 +10,7 @@ import { HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { MessageEditor, type MessageRole } from "@/features/edit-discord-messages";
 import { Panel, ServerLink, Tag } from "@/shared/ui";
 
-import { SettingsFrame } from "./settings-frame";
+import { DiscordFrame } from "./discord-frame";
 
 interface MessagesViewProps {
   selected: MessageCaseKey;
@@ -38,7 +38,7 @@ export function MessagesView({
     savedAt: texts[text.key].updatedAt?.toISOString() ?? null,
   }));
   return (
-    <SettingsFrame title="디스코드 메시지" active="/settings/messages">
+    <DiscordFrame title="디스코드 메시지" active="/discord/messages">
       <VStack gap="025">
         <Text typography="heading2" render={<h2 />}>
           디스코드 메시지
@@ -63,7 +63,7 @@ export function MessagesView({
                 align="center"
                 gap="075"
                 aria-current={on ? "true" : undefined}
-                render={<ServerLink path={`/settings/messages?case=${key}`} scroll={false} />}
+                render={<ServerLink path={`/discord/messages?case=${key}`} scroll={false} />}
                 className={cn(
                   "min-h-11 px-150 hover:bg-gray-50",
                   index > 0 && "border-t border-(--rc-color-border-subtle)",
@@ -104,6 +104,6 @@ export function MessagesView({
           />
         </Panel>
       </div>
-    </SettingsFrame>
+    </DiscordFrame>
   );
 }

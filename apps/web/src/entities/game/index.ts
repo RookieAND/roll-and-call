@@ -60,6 +60,10 @@ export {
   absenceExpiresAt,
   isAbsenceActive,
 } from "@roll-and-call/database/games/model";
+export { GAME_KIND, GAME_KINDS, type GameKind } from "./model/game-kind";
+export { gameKindLabel } from "./model/game-kind-label";
+export { PLAY_TYPE, PLAY_TYPES, type PlayType } from "./model/play-type";
+export { playTypeLabel } from "./model/play-type-label";
 export { recruitMethodLabel } from "./model/recruit-method-label";
 export { RecruitMethodBadge } from "./ui/recruit-method-badge";
 export { availabilityNote } from "./model/availability-note";

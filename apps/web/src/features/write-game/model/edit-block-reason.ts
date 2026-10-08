@@ -16,6 +16,7 @@ type EditBlock = { error: string; field?: string };
 type LockedGame = Pick<
   Game,
   | "gmId"
+  | "kind"
   | "cancelledAt"
   | "confirmedAt"
   | "scheduleMode"
@@ -59,6 +60,12 @@ export function editBlockReason(
   }
   // 조율 응답·확정 명단이 일정 방식·시간대에, 확정 순서가 모집 방식에 묶여 있어 신청자가 있으면 못 바꾼다.
   if (rosterCount > 0) {
+    if (columns.kind !== game.kind) {
+      return {
+        error: "신청자가 있어 구분은 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔 주세요.",
+        field: "kind",
+      };
+    }
     if (columns.scheduleMode !== game.scheduleMode) {
       return {
         error:

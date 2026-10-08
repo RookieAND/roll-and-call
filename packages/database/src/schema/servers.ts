@@ -21,6 +21,10 @@ export interface ForumTagMap {
   cancelled?: string;
   // 룰북 분류(rulebook_categories.id)마다 태그 하나.
   categories?: Record<string, string>;
+  // 플레이 유형(play_type)마다 태그 하나.
+  playTypes?: { voice?: string; text?: string };
+  // 설명회 글에만 더 붙는 구분 태그.
+  briefing?: string;
 }
 
 // 디스코드 서버 하나가 한 행이다. 서버 안의 데이터는 모두 server_id로 이 행에 묶인다.

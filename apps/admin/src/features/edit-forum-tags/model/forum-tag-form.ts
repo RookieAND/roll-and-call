@@ -4,6 +4,8 @@ export type ForumTagForm = {
   closed: string;
   cancelled: string;
   categories: Record<string, string>;
+  playTypes: { voice: string; text: string };
+  briefing: string;
 };
 
 export type ForumTagOptions =

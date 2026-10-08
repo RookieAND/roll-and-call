@@ -34,4 +34,15 @@ describe("resolveRecruitTags", () => {
     expect(tags.open).toBe("1");
     expect(tags.categories).toEqual({});
   });
+
+  it("플레이 유형·구분 태그는 저장한 id가 포럼에 있을 때만 쓰고 이름으로 찾지 않는다", () => {
+    const tags = resolveRecruitTags({
+      saved: { playTypes: { voice: "3", text: "gone" }, briefing: "gone" },
+      available: [...available, { id: "4", name: "보이스" }],
+    });
+    expect(tags.playTypes).toEqual({ voice: "3", text: undefined });
+    expect(tags.briefing).toBeUndefined();
+    expect(tags.managed).toContain("3");
+    expect(resolveRecruitTags({ saved: null, available }).playTypes).toEqual({});
+  });
 });

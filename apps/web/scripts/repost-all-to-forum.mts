@@ -187,6 +187,8 @@ for (const row of games) {
       target,
       closed,
       categoryId: categoryIds.get(game.id) ?? null,
+      kind: game.kind,
+      playType: game.playType,
     }),
     input: post.input,
   });

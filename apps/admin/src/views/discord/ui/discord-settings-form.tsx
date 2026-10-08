@@ -13,8 +13,8 @@ import {
   type SettingIds,
 } from "@/features/edit-server-settings";
 
+import { DiscordFrame } from "./discord-frame";
 import { DiscordLinkPanel, type RowCheck } from "./discord-link-panel";
-import { SettingsFrame } from "./settings-frame";
 
 interface DiscordSettingsFormProps {
   serverName: string;
@@ -69,9 +69,9 @@ export function DiscordSettingsForm({
     });
 
   return (
-    <SettingsFrame
+    <DiscordFrame
       title="디스코드 연동"
-      active="/settings/discord"
+      active="/discord/link"
       actions={
         <Button loading={saving} disabled={!canSave} onClick={save}>
           변경 저장
@@ -88,6 +88,6 @@ export function DiscordSettingsForm({
           onCheck={check}
         />
       </VStack>
-    </SettingsFrame>
+    </DiscordFrame>
   );
 }

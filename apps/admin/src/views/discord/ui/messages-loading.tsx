@@ -4,11 +4,11 @@ import { Button, Skeleton, Text, VStack } from "@roll-and-call/ui";
 import { DiscordPreview } from "@/features/edit-discord-messages";
 import { LoadingRegion, Panel, SkeletonField } from "@/shared/ui";
 
-import { SettingsFrame } from "./settings-frame";
+import { DiscordFrame } from "./discord-frame";
 
 export function MessagesLoading() {
   return (
-    <SettingsFrame title="디스코드 메시지" active="/settings/messages">
+    <DiscordFrame title="디스코드 메시지" active="/discord/messages">
       <LoadingRegion label="디스코드 메시지를 불러오는 중입니다" className="gap-175">
         <VStack gap="025">
           <Text typography="heading2" render={<h2 />}>
@@ -59,6 +59,6 @@ export function MessagesLoading() {
           </Panel>
         </div>
       </LoadingRegion>
-    </SettingsFrame>
+    </DiscordFrame>
   );
 }

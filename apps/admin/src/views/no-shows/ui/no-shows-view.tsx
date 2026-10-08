@@ -90,7 +90,6 @@ export function NoShowsView({
           />
         </HStack>
         <Panel
-          className="flex-1"
           footer={
             <ListPager
               page={paged.page}

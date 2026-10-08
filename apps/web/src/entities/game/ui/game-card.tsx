@@ -9,9 +9,12 @@ import { compact } from "es-toolkit";
 
 import type { Game } from "@/shared/server";
 
+import { GAME_KIND } from "../model/game-kind";
+import { gameKindLabel } from "../model/game-kind-label";
 import { isLiveGame } from "../model/is-live-game";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { pastScheduleLine } from "../model/past-schedule-line";
+import { playTypeLabel } from "../model/play-type-label";
 import { scheduleLine } from "../model/schedule-line";
 import { GameCapacity } from "./game-capacity";
 import { GameCardScheduleRow } from "./game-card-schedule-row";
@@ -55,6 +58,8 @@ export function GameCard({ game }: GameCardProps) {
     game.playMinutes ? formatPlayMinutes(game.playMinutes) : null,
   ]).join(" · ");
 
+  const kindColor = game.kind === GAME_KIND.briefing ? "primary" : "gray";
+
   return (
     <Card.Root
       interactive
@@ -86,6 +91,10 @@ export function GameCard({ game }: GameCardProps) {
               {meta}
             </Text>
           )}
+          <HStack gap="050">
+            <Badge colorPalette={kindColor}>{gameKindLabel(game.kind)}</Badge>
+            <Badge colorPalette="gray">{playTypeLabel(game.playType)}</Badge>
+          </HStack>
         </VStack>
         <GameCardScheduleRow text={line.text} />
       </VStack>

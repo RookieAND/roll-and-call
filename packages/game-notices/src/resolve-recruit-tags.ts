@@ -7,6 +7,9 @@ export type RecruitTags = {
   closed?: string;
   cancelled?: string;
   categories: Record<string, string>;
+  // 연결하지 않은 칸은 비어 있다. 이름으로는 찾지 않는다.
+  playTypes: { voice?: string; text?: string };
+  briefing?: string;
   // 봇이 붙이고 떼는 태그 전부. 운영진이 직접 단 다른 태그는 건드리지 않는다.
   managed: string[];
 };
@@ -22,6 +25,7 @@ export function resolveRecruitTags({
   available: { id: string; name: string }[];
 }): RecruitTags {
   const exists = (id: string | undefined) => available.some((tag) => tag.id === id);
+  const existing = (id: string | undefined) => (exists(id) ? id : undefined);
   const idOf = (key: keyof typeof RECRUIT_TAG_NAME) => {
     const savedId = saved?.[key];
     if (exists(savedId)) return savedId;
@@ -33,13 +37,30 @@ export function resolveRecruitTags({
   const categories = Object.fromEntries(
     Object.entries(saved?.categories ?? {}).filter(([, tagId]) => exists(tagId)),
   );
+  const playTypes = {
+    voice: existing(saved?.playTypes?.voice),
+    text: existing(saved?.playTypes?.text),
+  };
+  const briefing = existing(saved?.briefing);
   return {
     open,
     closed,
     cancelled,
     categories,
+    playTypes,
+    briefing,
     managed: [
-      ...new Set([open, closed, cancelled, ...Object.values(categories)].flatMap((id) => id ?? [])),
+      ...new Set(
+        [
+          open,
+          closed,
+          cancelled,
+          ...Object.values(categories),
+          playTypes.voice,
+          playTypes.text,
+          briefing,
+        ].flatMap((id) => id ?? []),
+      ),
     ],
   };
 }

@@ -30,6 +30,12 @@ export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery"])
 // removed는 세션 시작 뒤 불참으로 내보낸 사람이다. 행을 남기고 absent = true로 두며 확정 인원·정원에 세지 않는다.
 // removed는 ALTER TYPE ... ADD VALUE로 더했다. 같은 트랜잭션에서는 쓸 수 없고 drizzle-kit migrate는 밀린 마이그레이션을
 // 한 트랜잭션으로 돌리므로, removed를 SQL에서 쓰는 마이그레이션은 이 값을 더한 마이그레이션을 적용한 뒤에 따로 돌린다.
+// briefing은 설명회, session은 일반 세션. 신청자가 생기기 전에만 바꿀 수 있다.
+export const gameKind = pgEnum("game_kind", ["briefing", "session"]);
+
+// 설명회는 voice로 고정한다.
+export const playType = pgEnum("play_type", ["voice", "text"]);
+
 export const participantStatus = pgEnum("participant_status", ["confirmed", "waiting", "removed"]);
 
 // 구인을 누가 취소했는지. auto는 GM이 디스코드 서버를 나가 자동으로 취소된 경우다.
@@ -49,6 +55,8 @@ export const games = pgTable(
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
     title: text("title").notNull(),
+    kind: gameKind("kind").notNull().default("session"),
+    playType: playType("play_type").notNull().default("voice"),
     rule: text("rule").notNull(),
     // rule 글자를 룰북 이름·다른 이름에 맞춰 트리거가 채운다. 맞는 룰북이 없으면 null.
     rulebookId: uuid("rulebook_id").references(() => rulebooks.id, { onDelete: "set null" }),
@@ -133,6 +141,7 @@ export const games = pgTable(
       .where(
         sql`recruit_method = 'first_come' and min_players is not null and min_players_judged_at is null and cancelled_at is null`,
       ),
+    check("games_briefing_voice", sql`${table.kind} <> 'briefing' or ${table.playType} = 'voice'`),
     check("games_max_players_positive", sql`${table.maxPlayers} >= 1`),
     check(
       "games_min_players_range",

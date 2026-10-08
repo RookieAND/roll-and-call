@@ -7,7 +7,7 @@ interface StaffChannelHintProps {
   owner: boolean;
 }
 
-// 운영진 채널(servers.staff_channel_id)이 있으면 처리 대기 글이 디스코드에도 올라간다. [서버 설정]은 소유자에게만 링크다.
+// 운영진 채널(servers.staff_channel_id)이 있으면 처리 대기 글이 디스코드에도 올라간다. [Discord]는 소유자에게만 링크다.
 export function StaffChannelHint({ staffChannel, owner }: StaffChannelHintProps) {
   if (staffChannel) {
     return (
@@ -20,13 +20,13 @@ export function StaffChannelHint({ staffChannel, owner }: StaffChannelHintProps)
     <Text
       typography="body4"
       foreground="primary"
-      render={<ServerLink path="/settings/discord" />}
+      render={<ServerLink path="/discord/link" />}
       className="underline"
     >
-      [서버 설정]
+      [Discord]
     </Text>
   ) : (
-    "[서버 설정]"
+    "[Discord]"
   );
   return (
     <Text typography="body4" foreground="hint">

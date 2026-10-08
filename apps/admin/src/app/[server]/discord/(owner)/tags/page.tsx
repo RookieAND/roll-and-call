@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 
 import { loadForumTagOptions, saveForumTagsAction } from "@/features/edit-forum-tags";
 import { getCurrentServer, listRulebookCategories } from "@/shared/server";
-import { ForumTagsView } from "@/views/settings";
+import { ForumTagsView } from "@/views/discord";
 
-export const metadata: Metadata = { title: "설정 · 포럼 태그" };
+export const metadata: Metadata = { title: "Discord · 포럼 태그" };
 
-export default async function SettingsTagsPage() {
+export default async function DiscordTagsPage() {
   const server = await getCurrentServer();
   const [options, categories] = await Promise.all([
     loadForumTagOptions(server.recruitChannelId),
@@ -23,6 +23,8 @@ export default async function SettingsTagsPage() {
         closed: saved?.closed ?? "",
         cancelled: saved?.cancelled ?? "",
         categories: saved?.categories ?? {},
+        playTypes: { voice: saved?.playTypes?.voice ?? "", text: saved?.playTypes?.text ?? "" },
+        briefing: saved?.briefing ?? "",
       }}
     />
   );

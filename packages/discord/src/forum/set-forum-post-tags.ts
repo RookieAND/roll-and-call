@@ -5,15 +5,22 @@ export async function setForumPostTags({
   threadId,
   managedTagIds,
   tagIds,
+  skipLocked = false,
 }: {
   threadId: string;
   managedTagIds: string[];
   tagIds: string[];
+  // 잠긴 게시글은 건드리지 않는다.
+  skipLocked?: boolean;
 }) {
   try {
-    const thread = await discordBotApi<{ applied_tags?: string[] }>({
+    const thread = await discordBotApi<{
+      applied_tags?: string[];
+      thread_metadata?: { locked?: boolean };
+    }>({
       path: `/channels/${threadId}`,
     });
+    if (skipLocked && thread.thread_metadata?.locked) return;
     const current = thread.applied_tags ?? [];
     const next = [...current.filter((id) => !managedTagIds.includes(id)), ...tagIds];
     if (next.length === current.length && next.every((id) => current.includes(id))) return;

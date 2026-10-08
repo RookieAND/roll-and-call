@@ -2,6 +2,7 @@ import { Select, Table, Text } from "@roll-and-call/ui";
 
 import { Panel, TableColumns, Tag } from "@/shared/ui";
 
+import { describeStatus } from "../model/describe-forum-tag-status";
 import { ForumTagChip } from "./forum-tag-chip";
 
 const NONE = "none";
@@ -16,6 +17,7 @@ interface ForumTagRow {
 interface ForumTagSectionProps {
   title: string;
   columnLabel: string;
+  optional?: boolean;
   rows: ForumTagRow[];
   tags: { id: string; name: string; emoji: string | null }[];
   onChange: (key: string, tagId: string) => void;
@@ -24,6 +26,7 @@ interface ForumTagSectionProps {
 export function ForumTagSection({
   title,
   columnLabel,
+  optional = false,
   rows,
   tags,
   onChange,
@@ -56,6 +59,8 @@ export function ForumTagSection({
         <Table.Body>
           {rows.map((row) => {
             const tag = tags.find((candidate) => candidate.id === row.value);
+            const deleted = Boolean(row.value) && !tag;
+            const status = describeStatus({ row, deleted, optional });
             return (
               <Table.Row key={row.key}>
                 <Table.Cell>
@@ -63,23 +68,28 @@ export function ForumTagSection({
                     {row.label}
                   </Text>
                 </Table.Cell>
-                <Table.Cell>{tag ? <ForumTagChip tag={tag} /> : null}</Table.Cell>
                 <Table.Cell>
-                  {row.value ? (
-                    <Tag tone={row.value === row.savedValue ? "success" : "primary"}>
-                      {row.value === row.savedValue ? "연결됨" : "변경됨"}
-                    </Tag>
-                  ) : (
-                    <Tag>연결 안 함</Tag>
-                  )}
+                  {deleted ? (
+                    <span className="inline-flex items-center rounded-200 border border-dashed border-gray-500 px-100 text-body4 leading-[18px] text-muted">
+                      삭제된 태그
+                    </span>
+                  ) : null}
+                  {tag ? <ForumTagChip tag={tag} /> : null}
+                </Table.Cell>
+                <Table.Cell>
+                  <Tag tone={status.tone}>{status.label}</Tag>
                 </Table.Cell>
                 <Table.Cell>
                   <Select.Root
                     items={items}
-                    value={row.value || NONE}
+                    value={deleted ? "" : row.value || NONE}
                     onValueChange={(next) => onChange(row.key, next === NONE ? "" : next)}
                   >
-                    <Select.Trigger aria-label={`${row.label} 태그`} className="w-[188px]" />
+                    <Select.Trigger
+                      aria-label={`${row.label} 태그`}
+                      placeholder="태그를 다시 고르세요"
+                      className="w-[188px]"
+                    />
                     <Select.Popup>
                       {items.map((item) => (
                         <Select.Item key={item.value} value={item.value}>

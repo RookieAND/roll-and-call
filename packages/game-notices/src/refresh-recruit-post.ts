@@ -60,6 +60,9 @@ export async function refreshRecruitPost({ server, gameId }: { server: Server; g
       threadId,
       closed: confirmedCount >= game.maxPlayers,
       categoryId,
+      kind: game.kind,
+      playType: game.playType,
+      skipLocked: true,
     }),
   ]);
 }

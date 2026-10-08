@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import { GAME_KIND, PLAY_TYPE, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 import { GAME_CANCELLED_MESSAGE } from "@/shared/api";
 
 import { editBlockReason } from "./edit-block-reason";
@@ -16,6 +16,7 @@ type LockedGame = NonNullable<Parameters<typeof editBlockReason>[0]["game"]>;
 
 const game: LockedGame = {
   gmId,
+  kind: GAME_KIND.session,
   cancelledAt: null,
   confirmedAt: session,
   scheduleMode: SCHEDULE_MODE.fixed,
@@ -29,6 +30,8 @@ const game: LockedGame = {
 
 const form: GameFormValues = {
   title: "마지막 열차",
+  kind: GAME_KIND.session,
+  playType: PLAY_TYPE.voice,
   rule: "CoC 7판",
   rulebookId: "",
   maxPlayers: "4",
@@ -134,6 +137,16 @@ describe("editBlockReason", () => {
     expect(
       reason({ values: { recruitMethod: RECRUIT_METHOD.lottery }, rosterCount: 1 })?.field,
     ).toBe("recruitMethod");
+  });
+
+  it("신청자가 있으면 구분을 바꿀 수 없고 없으면 바꾼다", () => {
+    const briefing = { kind: GAME_KIND.briefing };
+    expect(reason({ values: briefing, rosterCount: 1 })?.field).toBe("kind");
+    expect(reason({ values: briefing })).toBeNull();
+  });
+
+  it("신청자가 있어도 플레이 유형은 바꿀 수 있다", () => {
+    expect(reason({ values: { playType: PLAY_TYPE.text }, rosterCount: 1 })).toBeNull();
   });
 
   it("신청자가 있으면 조율 시간대를 바꿀 수 없다", () => {

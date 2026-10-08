@@ -46,6 +46,8 @@ export async function notifyGameCreated({
         target,
         closed: confirmedCount >= game.maxPlayers,
         categoryId,
+        kind: game.kind,
+        playType: game.playType,
       }),
       input: post.input,
     });

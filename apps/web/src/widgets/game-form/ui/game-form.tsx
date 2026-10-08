@@ -3,7 +3,13 @@
 import { DEFAULT_PLAY_MINUTES } from "@roll-and-call/database/games/model";
 import { useForm } from "react-hook-form";
 
-import { DEFAULT_WINDOW, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import {
+  DEFAULT_WINDOW,
+  GAME_KIND,
+  PLAY_TYPE,
+  RECRUIT_METHOD,
+  SCHEDULE_MODE,
+} from "@/entities/game";
 import { ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
 import type { GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
@@ -48,6 +54,8 @@ export function GameForm({
     resolver: gameFormResolver({ rulebooks, edit }),
     defaultValues: {
       title: defaultGame?.title ?? "",
+      kind: defaultGame?.kind ?? GAME_KIND.session,
+      playType: defaultGame?.playType ?? PLAY_TYPE.voice,
       rule: defaultGame?.rule ?? initialSet?.label ?? "",
       rulebookId: defaultGame?.rulebookId ?? initialSet?.cores[0]?.id ?? "",
       synopsis: defaultGame?.synopsis ?? "",
