@@ -9,8 +9,6 @@ import { compact } from "es-toolkit";
 
 import type { Game } from "@/shared/server";
 
-import { GAME_KIND } from "../model/game-kind";
-import { gameKindLabel } from "../model/game-kind-label";
 import { isLiveGame } from "../model/is-live-game";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";
 import { pastScheduleLine } from "../model/past-schedule-line";
@@ -87,11 +85,6 @@ export function GameCard({ game }: GameCardProps) {
             <Text truncate typography="body3" foreground="muted">
               {meta}
             </Text>
-          )}
-          {game.kind === GAME_KIND.briefing && (
-            <HStack>
-              <Badge colorPalette="primary">{gameKindLabel(game.kind)}</Badge>
-            </HStack>
           )}
         </VStack>
         <GameCardScheduleRow text={line.text} />
