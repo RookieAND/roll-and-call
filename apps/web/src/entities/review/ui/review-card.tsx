@@ -9,6 +9,7 @@ import { SpoilerCover } from "./spoiler-cover";
 
 interface ReviewCardProps {
   authorName: string;
+  authorAvatarUrl: string | null;
   title: ReactNode;
   meta: ReactNode;
   body: string;
@@ -19,6 +20,7 @@ interface ReviewCardProps {
 
 export function ReviewCard({
   authorName,
+  authorAvatarUrl,
   title,
   meta,
   body,
@@ -38,7 +40,7 @@ export function ReviewCard({
     <Card.Root padding="md" radius={500} render={<article />}>
       <VStack gap="125">
         <HStack align="center" gap="125">
-          <Avatar name={authorName} size="md" />
+          <Avatar src={authorAvatarUrl} name={authorName} size="md" />
           <VStack gap="025" className="min-w-0 flex-1">
             <Text typography="subtitle2" truncate render={<h3 />}>
               {title}

@@ -49,6 +49,7 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
           <ReviewCard
             key={row.id}
             authorName={row.authorName}
+            authorAvatarUrl={row.authorAvatarUrl}
             title={title ?? author}
             meta={metaLine}
             body={row.body}

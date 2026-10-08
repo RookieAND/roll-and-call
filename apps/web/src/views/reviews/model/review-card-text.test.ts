@@ -15,6 +15,7 @@ const row = {
   createdAt: new Date("2026-09-20T23:30:00+09:00"),
   updatedAt: null,
   authorName: "윤소라",
+  authorAvatarUrl: null,
   gameTitle: "물벼락",
 } satisfies ReviewCardRow;
 

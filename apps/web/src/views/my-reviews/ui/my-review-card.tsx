@@ -15,7 +15,7 @@ export function MyReviewCard({ card }: MyReviewCardProps) {
     <Card.Root padding="md" radius={500} render={<article />}>
       <VStack gap="125">
         <HStack align="center" gap="125">
-          <Avatar name={card.authorName} size="md" />
+          <Avatar src={card.authorAvatarUrl} name={card.authorName} size="md" />
           <VStack gap="025" className="min-w-0 flex-1">
             <Text typography="subtitle2" truncate render={<h3 />}>
               {card.title}

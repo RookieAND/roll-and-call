@@ -25,6 +25,7 @@ export async function getMyReviews({ serverId, authorId }: { serverId: string; a
       removedReasonText: sessionReviews.removedReasonText,
       authorAbsent: reviewAuthorAbsentSql,
       authorName: memberNicknameSql(serverId),
+      authorAvatarUrl: profiles.avatarUrl,
       gameTitle: games.title,
       gameRule: games.rule,
       sessionAt: games.confirmedAt,
