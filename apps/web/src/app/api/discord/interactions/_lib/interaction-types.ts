@@ -7,7 +7,12 @@ export type DiscordInteractionUser = { id: string; username: string; global_name
 export type DiscordInteraction = {
   type: number;
   guild_id?: string;
-  data?: { name: string; custom_id?: string; options?: DiscordInteractionOption[] };
+  data?: {
+    name?: string;
+    custom_id?: string;
+    options?: DiscordInteractionOption[];
+    components?: { components: { custom_id: string; value?: string }[] }[];
+  };
   member?: { nick?: string | null; user: DiscordInteractionUser };
   user?: DiscordInteractionUser;
 };
@@ -18,6 +23,9 @@ export type DiscordInteractionResponse = {
     content?: string;
     flags?: number;
     embeds?: DiscordEmbed[];
-    allowed_mentions: { parse: [] };
+    allowed_mentions?: { parse: [] };
+    custom_id?: string;
+    title?: string;
+    components?: unknown[];
   };
 };
