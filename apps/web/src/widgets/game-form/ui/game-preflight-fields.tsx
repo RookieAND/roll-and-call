@@ -4,7 +4,7 @@ import { RichTextEditor } from "@roll-and-call/tiptap";
 import { Field, SegmentedControl } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
-import { GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "@/entities/game";
+import { GAME_KIND, GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "@/entities/game";
 import {
   GAME_NOTICE_MAX,
   GAME_TAGS_MAX,
@@ -13,6 +13,8 @@ import {
 } from "@/features/write-game";
 import { richTextLength } from "@/shared/lib";
 import { TagInput } from "@/shared/ui";
+
+import { PlayTypeField } from "./play-type-field";
 
 const TAG_PLACEHOLDER: Record<GameTagKey, string> = {
   [GAME_TAG.genres]: "예: 호러, 미스터리",
@@ -41,6 +43,7 @@ export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
   const notice = watch("notice") ?? "";
   const noticeLength = richTextLength(notice);
   const aiImage = watch("aiImage");
+  const isBriefing = watch("kind") === GAME_KIND.briefing;
 
   return (
     <>
@@ -67,6 +70,13 @@ export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
           </Field.Root>
         );
       })}
+
+      {!isBriefing && (
+        <PlayTypeField
+          value={watch("playType")}
+          onChange={(next) => setValue("playType", next, { shouldDirty: true })}
+        />
+      )}
 
       <Field.Root
         label="AI 이미지"

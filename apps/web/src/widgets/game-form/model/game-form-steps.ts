@@ -18,11 +18,12 @@ export type WizardStepConfig = {
 };
 
 export const SECTION_FIELDS = {
-  [FORM_SECTION.basics]: ["title", "kind", "playType", "rule", "playMinutes", "synopsis"],
+  [FORM_SECTION.basics]: ["title", "kind", "rule", "playMinutes", "synopsis"],
   [FORM_SECTION.preflight]: [
     GAME_TAG.genres,
     GAME_TAG.triggers,
     GAME_TAG.platforms,
+    "playType",
     "aiImage",
     "notice",
   ],

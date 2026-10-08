@@ -12,7 +12,6 @@ import { richTextLength } from "@/shared/lib";
 import { GameKindField } from "./game-kind-field";
 import { GameRulebookField } from "./game-rulebook-field";
 import { PlayTimeField } from "./play-time-field";
-import { PlayTypeField } from "./play-type-field";
 
 interface GameBasicsFieldsProps {
   form: UseFormReturn<GameFormValues>;
@@ -30,7 +29,6 @@ export function GameBasicsFields({ form, rulebooks, kindLocked = false }: GameBa
   const synopsis = watch("synopsis") ?? "";
   const synopsisLength = richTextLength(synopsis);
   const kind = watch("kind");
-  const isBriefing = kind === GAME_KIND.briefing;
 
   return (
     <>
@@ -83,13 +81,6 @@ export function GameBasicsFields({ form, rulebooks, kindLocked = false }: GameBa
           }
         }}
       />
-
-      {!isBriefing && (
-        <PlayTypeField
-          value={watch("playType")}
-          onChange={(next) => setValue("playType", next, { shouldDirty: true })}
-        />
-      )}
     </>
   );
 }
