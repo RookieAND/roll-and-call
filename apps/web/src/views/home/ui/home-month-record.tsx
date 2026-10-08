@@ -49,6 +49,7 @@ export function HomeMonthRecord({ monthStart, record }: HomeMonthRecordProps) {
           <HomeRecordRanking label={PLAYER_LABEL} ranking={record.players} first={topPlayer} />
         ) : (
           <HomeRecordEmpty
+            image="empty-month-record"
             title="아직 참여를 마친 사람이 없습니다"
             description="무산된 세션은 세지 않습니다."
           />
