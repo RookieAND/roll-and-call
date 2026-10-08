@@ -15,7 +15,7 @@ export function toSessionStart({
 }): SessionStart {
   const kst = toKst(iso);
   const date = kst.format("YYYY-MM-DD");
-  const minutes = kst.hour() * 60 + (kst.minute() < 30 ? 0 : 30);
+  const minutes = kst.hour() * 60 + kst.minute();
   if (crossesMidnight(window) && kst.hour() < window.endHour) {
     return { date: addDays({ date, count: -1 }), minutes: minutes + DAY_MINUTES };
   }

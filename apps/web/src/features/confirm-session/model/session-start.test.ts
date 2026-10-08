@@ -2,10 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import { buildTimeRows, slotIso } from "@/shared/lib";
 
+import { hourOptions, minuteOptions } from "./clock-options";
+import { coveringSlots } from "./covering-slots";
 import { initialSessionStart } from "./initial-session-start";
 import { toSessionStart } from "./session-start";
 import { sessionStartIso } from "./session-start-iso";
-import { sessionTimeOptions } from "./session-time-options";
 import { sessionWindowLabel } from "./session-window-label";
 
 const LATE = { startHour: 22, endHour: 2 };
@@ -29,26 +30,30 @@ describe("toSessionStart · sessionStartIso", () => {
     const start = toSessionStart({ iso, window: LATE });
     expect(start).toEqual({ date: "2026-09-18", minutes: 540 });
     expect(sessionStartIso(start)).toBe(iso);
-    const options = sessionTimeOptions({
-      timeRows: buildTimeRows(LATE),
-      selectedMinutes: start.minutes,
-    });
-    expect(options).toHaveLength(9);
-    expect(options[0]!.label).toBe("09:00");
+    const options = hourOptions({ timeRows: buildTimeRows(LATE), selectedMinutes: start.minutes });
+    expect(options).toHaveLength(5);
+    expect(options[0]!.label).toBe("9시");
   });
 
-  it("선택지는 시간대 줄이고 자정 뒤는 +1을 붙인다", () => {
-    const options = sessionTimeOptions({ timeRows: buildTimeRows(LATE), selectedMinutes: 1320 });
-    expect(options.map((option) => option.label)).toEqual([
-      "22:00",
-      "22:30",
-      "23:00",
-      "23:30",
-      "00:00 +1",
-      "00:30 +1",
-      "01:00 +1",
-      "01:30 +1",
-    ]);
+  it("시 선택지는 시간대의 시이고 자정 뒤는 +1을 붙인다", () => {
+    const options = hourOptions({ timeRows: buildTimeRows(LATE), selectedMinutes: 1320 });
+    expect(options.map((option) => option.label)).toEqual(["22시", "23시", "0시 +1", "1시 +1"]);
+  });
+
+  it("일시 지정은 0~23시, 분은 5분 단위에 예전 값을 더한다", () => {
+    expect(hourOptions({ selectedMinutes: 0 })).toHaveLength(24);
+    expect(minuteOptions({ selectedMinutes: 1230 })).toHaveLength(12);
+    expect(minuteOptions({ selectedMinutes: 1237 }).map((option) => option.label)).toContain(
+      "37분",
+    );
+  });
+
+  it("5분 단위 시작은 걸친 30분 칸 전부로 센다", () => {
+    const startIso = slotIso({ date: "2026-09-18", hour: 20, minute: 10 });
+    const covering = coveringSlots({ startIso, playMinutes: 180 });
+    expect(covering.startIso).toBe(slotIso({ date: "2026-09-18", hour: 20, minute: 0 }));
+    expect(covering.slotCount).toBe(7);
+    expect(coveringSlots({ startIso: covering.startIso, playMinutes: 180 }).slotCount).toBe(6);
   });
 });
 

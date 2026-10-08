@@ -1,12 +1,12 @@
 "use client";
 
-import { Field, HStack, Select } from "@roll-and-call/ui";
+import { Field, Select, VStack } from "@roll-and-call/ui";
 
 import type { CoordinationWindow } from "@/entities/game";
 import { buildTimeRows, type DayColumn } from "@/shared/lib";
 
 import type { SessionStart } from "../model/session-start";
-import { sessionTimeOptions } from "../model/session-time-options";
+import { SessionClockFields } from "./session-clock-fields";
 
 interface SessionTimeFieldsProps {
   days: DayColumn[];
@@ -17,14 +17,10 @@ interface SessionTimeFieldsProps {
 
 export function SessionTimeFields({ days, window, start, onChange }: SessionTimeFieldsProps) {
   const dateItems = days.map((day) => ({ value: day.date, label: day.label }));
-  const timeItems = sessionTimeOptions({
-    timeRows: buildTimeRows(window),
-    selectedMinutes: start.minutes,
-  });
 
   return (
-    <HStack gap="100" align="start">
-      <Field.Root label="날짜" className="min-w-0 flex-3">
+    <VStack gap="100">
+      <Field.Root label="날짜">
         <Select.Root
           items={dateItems}
           value={start.date}
@@ -40,22 +36,7 @@ export function SessionTimeFields({ days, window, start, onChange }: SessionTime
           </Select.Popup>
         </Select.Root>
       </Field.Root>
-      <Field.Root label="시작 시각" className="min-w-0 flex-2">
-        <Select.Root
-          items={timeItems}
-          value={String(start.minutes)}
-          onValueChange={(value: string) => onChange({ ...start, minutes: Number(value) })}
-        >
-          <Select.Trigger aria-label="시작 시각" />
-          <Select.Popup>
-            {timeItems.map((option) => (
-              <Select.Item key={option.value} value={option.value}>
-                {option.label}
-              </Select.Item>
-            ))}
-          </Select.Popup>
-        </Select.Root>
-      </Field.Root>
-    </HStack>
+      <SessionClockFields start={start} timeRows={buildTimeRows(window)} onChange={onChange} />
+    </VStack>
   );
 }

@@ -13,6 +13,7 @@ import { confirmSession } from "../api/confirm-session";
 import { confirmButtonLabel } from "../model/confirm-button-label";
 import { confirmDialogContent } from "../model/confirm-dialog-content";
 import type { ConfirmSessionGame } from "../model/confirm-session-game";
+import { coveringSlots } from "../model/covering-slots";
 import { initialSessionStart } from "../model/initial-session-start";
 import { sessionDialogLabel } from "../model/session-dialog-label";
 import { toSessionStart } from "../model/session-start";
@@ -55,7 +56,8 @@ export function ConfirmSessionForm({ game, names, playLabel }: ConfirmSessionFor
   const { pending, run } = useAction();
 
   const startIso = sessionStartIso(start);
-  const members = windowMembers({ names, startIso, slotCount });
+  const covering = coveringSlots({ startIso, playMinutes });
+  const members = windowMembers({ names, ...covering });
   const absentNames = respondents.filter((name) => !members.includes(name));
   const startLabel = toKst(startIso).format("M/D (dd) HH:mm");
 
