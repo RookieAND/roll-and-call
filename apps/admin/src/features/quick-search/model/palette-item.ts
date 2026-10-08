@@ -1,8 +1,8 @@
-import type { LucideIcon } from "lucide-react";
+import type { IconComponent } from "@/shared/ui";
 
 export interface PaletteItem {
   id: string;
-  icon: LucideIcon;
+  icon: IconComponent;
   tone?: "gray" | "primary" | "danger";
   title: string;
   meta?: string;

@@ -58,7 +58,7 @@ export function Sidebar({
             href={serverPath({ slug: server.slug, path: item.href })}
             exact={item.href === "/"}
             label={item.label}
-            icon={<item.icon size={16} aria-hidden />}
+            icon={<item.icon size={16} />}
             countPromise={countPromises[item.key]}
           />
         ))}

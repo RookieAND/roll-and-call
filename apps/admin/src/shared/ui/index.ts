@@ -28,6 +28,7 @@ export { ZoomablePhotos } from "./zoomable-photos";
 export { NoShowStatusTag } from "./no-show-status-tag";
 export { MoreMenu, type MoreMenuItem } from "./more-menu";
 export { RetryableLabel } from "./retryable-label";
+export type { IconComponent } from "./icon-component";
 export { NAV_ITEMS, type NavKey } from "./nav-items";
 export { OwnerOnlyView } from "./owner-only-view";
 export { ChoiceRowList, type ChoiceRow } from "./choice-row-list";

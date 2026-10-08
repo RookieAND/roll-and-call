@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import type { LucideIcon } from "lucide-react";
+
+import type { IconComponent } from "./icon-component";
 
 const tile = cva("grid shrink-0 place-items-center", {
   variants: {
@@ -23,7 +24,7 @@ const tile = cva("grid shrink-0 place-items-center", {
 const ICON_SIZE = { sm: 14, md: 16, lg: 18, xl: 20 } as const;
 
 interface IconTileProps extends VariantProps<typeof tile> {
-  icon: LucideIcon;
+  icon: IconComponent;
 }
 
 export function IconTile({ icon: Icon, tone, size = "md" }: IconTileProps) {
