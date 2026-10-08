@@ -32,7 +32,7 @@ export async function TodoPanel({ serverId, userId }: TodoPanelProps) {
       <EmptyState
         image="empty-schedule"
         title="지금 처리할 일이 없습니다"
-        description="새로 할 일이 생기면 홈 맨 위에도 알려 드립니다."
+        description="새로 할 일이 생기면 홈 맨 위 배너로도 알립니다."
       />
     );
   }

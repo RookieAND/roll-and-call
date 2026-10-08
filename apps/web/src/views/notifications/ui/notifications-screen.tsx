@@ -14,7 +14,7 @@ import { NOTIFICATIONS_TAB, type NotificationsTab } from "../model/notifications
 import { CountSkeleton } from "./count-skeleton";
 import { InboxPanel } from "./inbox-panel";
 import { InboxSkeleton } from "./inbox-skeleton";
-import { ReadAllButton } from "./read-all-button";
+import { ReadAllBar } from "./read-all-bar";
 import { UnreadCount } from "./unread-count";
 
 interface NotificationsScreenProps {
@@ -52,15 +52,9 @@ export function NotificationsScreen({ todoCount, todoPanel, inbox }: Notificatio
     markNotificationRead(notificationId).then(refreshNavBadges, () => undefined);
   };
 
-  const readAllAction = tab === NOTIFICATIONS_TAB.inbox && (
-    <Suspense fallback={null}>
-      <ReadAllButton inbox={inbox} read={read} onAllRead={setAllRead} onSaved={refreshNavBadges} />
-    </Suspense>
-  );
-
   return (
     <>
-      <AppBar title="알림" action={readAllAction} />
+      <AppBar title="알림" />
       <Tabs.Root value={tab} onValueChange={changeTab}>
         <Tabs.List
           aria-label="알림"
@@ -84,6 +78,14 @@ export function NotificationsScreen({ todoCount, todoPanel, inbox }: Notificatio
           </Container>
         </Tabs.Panel>
         <Tabs.Panel value={NOTIFICATIONS_TAB.inbox} keepMounted className="pt-0">
+          <Suspense fallback={null}>
+            <ReadAllBar
+              inbox={inbox}
+              read={read}
+              onAllRead={setAllRead}
+              onSaved={refreshNavBadges}
+            />
+          </Suspense>
           <Suspense fallback={<InboxSkeleton />}>
             <InboxPanel inbox={inbox} read={read} onRead={readOne} />
           </Suspense>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Container } from "@roll-and-call/ui";
+import { Container, Text } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { use } from "react";
 
@@ -33,7 +33,18 @@ export function InboxPanel({ inbox, read, onRead }: InboxPanelProps) {
   if (page.items.length === 0) {
     return (
       <Container size="sm" className="py-200">
-        <EmptyState image="empty-notification" title="최근 7일 동안 받은 알림이 없습니다." />
+        <EmptyState
+          image="empty-notification"
+          title="받은 알림이 없습니다"
+          description={
+            <>
+              새 알림이 오면 여기에 모아 보여 줍니다.
+              <Text typography="body5" foreground="hint" render={<span />} className="mt-050 block">
+                최근 7일 동안 받은 알림이 없습니다.
+              </Text>
+            </>
+          }
+        />
       </Container>
     );
   }

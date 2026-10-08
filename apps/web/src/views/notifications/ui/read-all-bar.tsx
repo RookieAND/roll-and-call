@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@roll-and-call/ui";
+import { Button, HStack, Text } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { use, useState } from "react";
 
@@ -10,7 +10,7 @@ import { toast } from "@/shared/ui";
 import type { InboxPage, ReadState } from "../model/inbox-page";
 import { unreadCountOf } from "../model/unread-count-of";
 
-interface ReadAllButtonProps {
+interface ReadAllBarProps {
   inbox: Promise<InboxPage | null>;
   read: ReadState;
   onAllRead: (allRead: boolean) => void;
@@ -18,11 +18,12 @@ interface ReadAllButtonProps {
 }
 
 // 화면을 먼저 0으로 바꾸고, 실패하면 되돌린다. 확인 창은 없다.
-export function ReadAllButton({ inbox, read, onAllRead, onSaved }: ReadAllButtonProps) {
+export function ReadAllBar({ inbox, read, onAllRead, onSaved }: ReadAllBarProps) {
   const page = use(inbox);
   const [pending, setPending] = useState(false);
   if (isNull(page) || page.items.length === 0) return null;
-  const disabled = pending || unreadCountOf({ inbox: page, read }) === 0;
+  const unreadCount = unreadCountOf({ inbox: page, read });
+  const disabled = pending || unreadCount === 0;
 
   const readAll = async () => {
     setPending(true);
@@ -40,8 +41,19 @@ export function ReadAllButton({ inbox, read, onAllRead, onSaved }: ReadAllButton
   };
 
   return (
-    <Button variant="ghost" colorPalette="primary" size="lg" disabled={disabled} onClick={readAll}>
-      모두 읽음
-    </Button>
+    <HStack align="center" gap="100" className="min-h-12 border-b border-gray-200 pr-100 pl-200">
+      <Text typography="body3" foreground="muted" className="flex-1">
+        {unreadCount > 0 ? `안 읽은 알림 ${unreadCount}건` : "모두 읽었습니다"}
+      </Text>
+      <Button
+        variant="ghost"
+        colorPalette="primary"
+        className="h-11"
+        disabled={disabled}
+        onClick={readAll}
+      >
+        모두 읽음
+      </Button>
+    </HStack>
   );
 }
