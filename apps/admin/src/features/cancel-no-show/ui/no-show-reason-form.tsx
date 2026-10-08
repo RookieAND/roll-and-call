@@ -7,7 +7,12 @@ import { RotateCcw } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { conflictToastText, useActionSubmit } from "@/shared/lib";
-import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  NotificationPreview,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 type SubmitResult =
   | { ok: true }
@@ -87,9 +92,9 @@ export function NoShowReasonForm({
           <NotificationPreview payload={notification} recipients="당사자와 GM에게 알립니다." />
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center">
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
         <Dialog.Close
-          render={<Button variant="ghost" colorPalette="gray" />}
+          render={<Button variant="outline" colorPalette="gray" />}
           disabled={action.pending}
           className="ml-auto"
         >

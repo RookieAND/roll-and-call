@@ -3,7 +3,13 @@
 import { objectParticle } from "@roll-and-call/database/notifications/model";
 import { AlertDialog, Button, Text, VStack } from "@roll-and-call/ui";
 
-import { ActionNetworkError, FactRows, ModalServerLabel, RetryableLabel } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  FactRows,
+  ModalServerLabel,
+  RetryableLabel,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 interface FreeImpactDialogProps {
   open: boolean;
@@ -47,9 +53,9 @@ export function FreeImpactDialog({
             <Text typography="body3">{`심사 중 신청 ${pendingApplicationCount}건은 대기열에 남습니다.`}</Text>
           </VStack>
         </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className="justify-end">
+        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <AlertDialog.Close
-            render={<Button variant="ghost" colorPalette="gray" />}
+            render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             뒤로

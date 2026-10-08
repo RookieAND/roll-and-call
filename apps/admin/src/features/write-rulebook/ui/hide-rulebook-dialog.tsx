@@ -12,7 +12,7 @@ import {
   useActionSubmit,
   withObjectParticle,
 } from "@/shared/lib";
-import { ActionNetworkError, FactRows, ModalServerLabel } from "@/shared/ui";
+import { ActionNetworkError, FactRows, ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
 
 import { submitRulebookHide } from "../api/submit-rulebook-hide";
 
@@ -85,9 +85,9 @@ export function HideRulebookDialog({
             </Field.Root>
           </VStack>
         </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className="justify-end">
+        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <AlertDialog.Close
-            render={<Button variant="ghost" colorPalette="gray" />}
+            render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소

@@ -5,7 +5,12 @@ import { sumBy } from "es-toolkit";
 
 import { withObjectParticle } from "@/shared/lib";
 import type { RulebookImpactCase } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, RetryableLabel } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  RetryableLabel,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 import { ImpactList } from "./impact-list";
 
@@ -81,9 +86,9 @@ export function ImpactDialog({
             ))}
           </VStack>
         </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className="justify-end">
+        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <AlertDialog.Close
-            render={<Button variant="ghost" colorPalette="gray" />}
+            render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             뒤로

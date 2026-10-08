@@ -18,7 +18,7 @@ import { X } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import type { QuizQuestion } from "@/shared/server";
-import { ModalServerLabel } from "@/shared/ui";
+import { ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
 
 import { submitQuizQuestion } from "../api/submit-quiz-question";
 import { addAnswer } from "../model/add-answer";
@@ -148,7 +148,7 @@ export function QuizQuestionDialog({
             )}
           </VStack>
         </Dialog.Body>
-        <Dialog.Footer layout="row">
+        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           {editing ? (
             <Button
               variant="outline"
@@ -165,7 +165,10 @@ export function QuizQuestionDialog({
               {question.active ? "비활성화" : "다시 사용"}
             </Button>
           ) : null}
-          <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+          <Dialog.Close
+            render={<Button variant="outline" colorPalette="gray" />}
+            disabled={pending}
+          >
             취소
           </Dialog.Close>
           <Button

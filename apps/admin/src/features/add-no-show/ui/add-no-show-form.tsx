@@ -20,6 +20,7 @@ import {
   ModalServerLabel,
   NotificationPreview,
   UrlSearchInput,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { addNoShowRecord } from "../api/add-no-show-record";
@@ -188,9 +189,9 @@ export function AddNoShowForm({ search, onClose, onAdded }: AddNoShowFormProps) 
           ) : null}
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center">
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
         <Dialog.Close
-          render={<Button variant="ghost" colorPalette="gray" />}
+          render={<Button variant="outline" colorPalette="gray" />}
           disabled={action.pending}
           className="ml-auto"
         >

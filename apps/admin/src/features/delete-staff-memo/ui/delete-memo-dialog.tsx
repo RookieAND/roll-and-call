@@ -5,7 +5,12 @@ import { isUndefined } from "es-toolkit";
 import { useRouter } from "next/navigation";
 
 import { conflictToastText, useActionSubmit } from "@/shared/lib";
-import { ActionNetworkError, ModalServerLabel, RetryableLabel } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  RetryableLabel,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 import { removeStaffMemo } from "../api/remove-staff-memo";
 
@@ -41,9 +46,9 @@ export function DeleteMemoDialog({ memoId, open, onOpenChange }: DeleteMemoDialo
             <ActionNetworkError />
           </AlertDialog.Body>
         ) : null}
-        <AlertDialog.Footer layout="row" className="items-center justify-end">
+        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <AlertDialog.Close
-            render={<Button variant="ghost" colorPalette="gray" />}
+            render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소

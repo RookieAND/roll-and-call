@@ -6,7 +6,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { conflictToastText, useActionSubmit } from "@/shared/lib";
-import { ActionNetworkError, ModalServerLabel, RetryableLabel } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  RetryableLabel,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 import { submitStaffMemo } from "../api/submit-staff-memo";
 
@@ -67,8 +72,11 @@ export function StaffMemoDialog({
             />
           </VStack>
         </Dialog.Body>
-        <Dialog.Footer layout="row" className="items-center justify-end">
-          <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <Dialog.Close
+            render={<Button variant="outline" colorPalette="gray" />}
+            disabled={pending}
+          >
             취소
           </Dialog.Close>
           <Button loading={pending} disabled={!canSave} onClick={() => void save()}>

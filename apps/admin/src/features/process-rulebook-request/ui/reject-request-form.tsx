@@ -14,7 +14,12 @@ import {
   withSubjectParticle,
 } from "@/shared/lib";
 import type { RulebookRequestRow } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  NotificationPreview,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 import { rejectRequest } from "../api/reject-request";
 import { REJECT_REASON_MAX_LENGTH } from "../model/reject-reason-max-length";
@@ -94,8 +99,8 @@ export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFo
           </Text>
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row">
-        <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <Dialog.Close render={<Button variant="outline" colorPalette="gray" />} disabled={pending}>
           취소
         </Dialog.Close>
         <Button

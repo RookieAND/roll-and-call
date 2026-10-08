@@ -17,6 +17,7 @@ import {
   ModalServerLabel,
   NotificationPreview,
   ReasonChips,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { submitReviewModeration } from "../api/submit-review-moderation";
@@ -92,10 +93,10 @@ export function ReviewRemoveForm({ review, cancelRef, onSettled }: ReviewRemoveF
           <NotificationPreview payload={payload} />
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center justify-end">
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
         <Dialog.Close
           ref={cancelRef}
-          render={<Button variant="ghost" colorPalette="gray" />}
+          render={<Button variant="outline" colorPalette="gray" />}
           disabled={pending}
         >
           취소

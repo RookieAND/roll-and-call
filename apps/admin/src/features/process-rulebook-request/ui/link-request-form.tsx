@@ -31,6 +31,7 @@ import {
   ModalServerLabel,
   NotificationPreview,
   RetryableLabel,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { linkRequest } from "../api/link-request";
@@ -144,8 +145,8 @@ export function LinkRequestForm({ request, rulebooks, viewerId, onDone }: LinkRe
           />
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center justify-end">
-        <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <Dialog.Close render={<Button variant="outline" colorPalette="gray" />} disabled={pending}>
           취소
         </Dialog.Close>
         <Button loading={pending} disabled={!canConfirm} onClick={() => void confirm()}>

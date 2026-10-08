@@ -4,7 +4,13 @@ import { RotateCcw } from "lucide-react";
 import { useRef } from "react";
 
 import { formatDateTime } from "@/shared/lib";
-import { ActionNetworkError, FactBox, FactSub, ModalServerLabel } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  FactBox,
+  FactSub,
+  ModalServerLabel,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 const BLOCKED_TEXT = "참가 신청·구인 개설·룰북 인증 신청을 막습니다.";
 
@@ -94,10 +100,10 @@ export function SanctionConfirmDialog({
             ) : null}
           </VStack>
         </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className="items-center justify-end">
+        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <Button
             ref={backRef}
-            variant="ghost"
+            variant="outline"
             colorPalette="gray"
             disabled={pending}
             onClick={onBack}

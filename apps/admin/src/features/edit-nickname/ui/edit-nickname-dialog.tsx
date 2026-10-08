@@ -1,19 +1,9 @@
 "use client";
 
 import { reasonLabel } from "@roll-and-call/database/moderation/model";
-import {
-  Button,
-  Dialog,
-  Field,
-  HStack,
-  Text,
-  TextInput,
-  Textarea,
-  VStack,
-  toast,
-} from "@roll-and-call/ui";
+import { Button, Dialog, Field, Text, TextInput, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
-import { RotateCcw, ScrollText } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -26,6 +16,7 @@ import {
   ModalServerLabel,
   NotificationPreview,
   ReasonChips,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { editMemberNickname } from "../api/edit-member-nickname";
@@ -179,24 +170,19 @@ export function EditNicknameDialog({
               payload={preview}
               emptyText="새 닉네임과 사유를 정하면 알림 미리보기가 표시됩니다."
             />
+            <Text typography="body4" foreground="hint">
+              수정 내역은 활동 기록에 남습니다.
+            </Text>
           </VStack>
         </Dialog.Body>
-        <Dialog.Footer layout="row" className="items-center justify-end">
-          <HStack align="center" gap="075" className="mr-auto text-hint">
-            <ScrollText size={14} aria-hidden />
-            <Text typography="body4" foreground="hint">
-              수정 내역은 활동 기록에 남습니다
-            </Text>
-          </HStack>
-          <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <Dialog.Close
+            render={<Button variant="outline" colorPalette="gray" />}
+            disabled={pending}
+          >
             취소
           </Dialog.Close>
-          <Button
-            loading={pending}
-            disabled={!canConfirm}
-            onClick={() => void confirm()}
-            className="min-w-[112px]"
-          >
+          <Button loading={pending} disabled={!canConfirm} onClick={() => void confirm()}>
             {networkError ? <RotateCcw size={16} aria-hidden /> : null}
             {networkError ? "다시 시도" : "수정 확정"}
           </Button>

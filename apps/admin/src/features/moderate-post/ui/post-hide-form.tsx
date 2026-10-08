@@ -13,6 +13,7 @@ import {
   ModalServerLabel,
   NotificationPreview,
   ReasonChips,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { submitPostModeration } from "../api/submit-post-moderation";
@@ -106,14 +107,14 @@ export function PostHideForm({ post, onSettled, onUndoSettled }: PostHideFormPro
           <NotificationPreview payload={payload} recipients="GM의 알림 탭으로 알립니다." />
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center">
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
         <HStack align="center" gap="075" className="mr-auto text-hint">
           <RotateCcw size={14} aria-hidden />
           <Text typography="body4" foreground="hint">
             언제든 숨김 해제할 수 있습니다
           </Text>
         </HStack>
-        <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+        <Dialog.Close render={<Button variant="outline" colorPalette="gray" />} disabled={pending}>
           취소
         </Dialog.Close>
         <Button disabled={!canConfirm} loading={pending} onClick={() => void confirm()}>

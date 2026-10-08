@@ -17,6 +17,7 @@ import {
   ModalServerLabel,
   NotificationPreview,
   ReasonChips,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { submitReviewModeration } from "../api/submit-review-moderation";
@@ -96,8 +97,8 @@ export function ReviewHideForm({ review, onSettled, onUndoSettled }: ReviewHideF
           <NotificationPreview payload={payload} />
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center justify-end">
-        <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <Dialog.Close render={<Button variant="outline" colorPalette="gray" />} disabled={pending}>
           취소
         </Dialog.Close>
         <Button disabled={!canConfirm} loading={pending} onClick={() => void confirm()}>

@@ -7,7 +7,12 @@ import { useState } from "react";
 
 import { formatDateTime, useActionSubmit } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  NotificationPreview,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 import { submitPostModeration } from "../api/submit-post-moderation";
 import { ACTION_COPY } from "../model/action-copy";
@@ -74,8 +79,8 @@ export function PostUnhideForm({ post, onSettled }: PostUnhideFormProps) {
           />
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center justify-end">
-        <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <Dialog.Close render={<Button variant="outline" colorPalette="gray" />} disabled={pending}>
           취소
         </Dialog.Close>
         <Button loading={pending} disabled={pending} onClick={() => void confirm()}>

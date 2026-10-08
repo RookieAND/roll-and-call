@@ -24,6 +24,7 @@ export { ItemCard } from "./item-card";
 export { Kbd } from "./kbd";
 export { KeyHint } from "./key-hint";
 export { ModalServerLabel } from "./modal-server-label";
+export { MODAL_FOOTER_CLASS } from "./modal-footer-class";
 export { ZoomablePhotos } from "./zoomable-photos";
 export { NoShowStatusTag } from "./no-show-status-tag";
 export { MoreMenu, type MoreMenuItem } from "./more-menu";

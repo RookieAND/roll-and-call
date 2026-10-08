@@ -2,7 +2,7 @@ import { Button, Dialog } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
 import { formatDateTime } from "@/shared/lib";
-import { ItemCard, ModalServerLabel, ServerLink } from "@/shared/ui";
+import { ItemCard, ModalServerLabel, ServerLink, MODAL_FOOTER_CLASS } from "@/shared/ui";
 
 interface ReviewGoneContentProps {
   deleted: { author: string; at: Date } | null;
@@ -22,8 +22,8 @@ export function ReviewGoneContent({ deleted, nextHref, onClose }: ReviewGoneCont
       <Dialog.Body>
         <ItemCard icon={X} title="작성자가 삭제한 후기입니다." meta={meta} />
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center justify-end">
-        <Button variant="ghost" colorPalette="gray" onClick={onClose}>
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <Button variant="outline" colorPalette="gray" onClick={onClose}>
           닫기
         </Button>
         <Button disabled={!nextHref} render={nextHref ? <ServerLink path={nextHref} /> : undefined}>

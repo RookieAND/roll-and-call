@@ -31,6 +31,7 @@ import {
   ModalServerLabel,
   NotificationPreview,
   ReasonChips,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { revokeUserCertification } from "../api/revoke-user-certification";
@@ -179,10 +180,10 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
             ) : null}
           </VStack>
         </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className="items-center justify-end">
+        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <Button
             ref={backRef}
-            variant="ghost"
+            variant="outline"
             colorPalette="gray"
             disabled={pending}
             onClick={onClose}

@@ -9,7 +9,13 @@ import { useEffect, useRef, useState } from "react";
 
 import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { KindImpactPage } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, RetryableLabel, Tag } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  RetryableLabel,
+  Tag,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 import { loadKindImpact } from "../api/load-kind-impact";
 import { KindImpactList } from "./kind-impact-list";
@@ -141,9 +147,9 @@ export function KindImpactDialog({
             />
           </VStack>
         </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className="justify-end">
+        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <AlertDialog.Close
-            render={<Button variant="ghost" colorPalette="gray" />}
+            render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소

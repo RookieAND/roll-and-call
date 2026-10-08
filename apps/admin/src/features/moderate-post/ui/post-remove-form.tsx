@@ -18,7 +18,12 @@ import { useState, type RefObject } from "react";
 
 import { draftReason, useActionSubmit } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  NotificationPreview,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 import { submitPostModeration } from "../api/submit-post-moderation";
 import { ACTION_COPY } from "../model/action-copy";
@@ -100,10 +105,10 @@ export function PostRemoveForm({ post, cancelRef, onSettled }: PostRemoveFormPro
           />
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center justify-end">
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
         <Dialog.Close
           ref={cancelRef}
-          render={<Button variant="ghost" colorPalette="gray" />}
+          render={<Button variant="outline" colorPalette="gray" />}
           disabled={pending}
         >
           취소

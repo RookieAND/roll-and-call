@@ -6,7 +6,12 @@ import { Eye, RotateCcw } from "lucide-react";
 
 import { useActionSubmit } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
-import { ActionNetworkError, ModalServerLabel, NotificationPreview } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  NotificationPreview,
+  MODAL_FOOTER_CLASS,
+} from "@/shared/ui";
 
 import { submitReviewModeration } from "../api/submit-review-moderation";
 import { ACTION_COPY } from "../model/action-copy";
@@ -59,8 +64,8 @@ export function ReviewUnhideForm({ review, onSettled }: ReviewUnhideFormProps) {
           />
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center justify-end">
-        <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <Dialog.Close render={<Button variant="outline" colorPalette="gray" />} disabled={pending}>
           취소
         </Dialog.Close>
         <Button loading={pending} disabled={pending} onClick={() => void confirm()}>

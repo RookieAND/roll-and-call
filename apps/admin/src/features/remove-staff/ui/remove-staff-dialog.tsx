@@ -15,6 +15,7 @@ import {
   ModalServerLabel,
   NotificationPreview,
   Tag,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { removeStaffMember } from "../api/remove-staff-member";
@@ -85,9 +86,9 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
             <NotificationPreview payload={{ kind: NOTIFICATION_KIND.staffRemoved, params: {} }} />
           </VStack>
         </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className="justify-end">
+        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <AlertDialog.Close
-            render={<Button variant="ghost" colorPalette="gray" />}
+            render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소

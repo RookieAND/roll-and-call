@@ -7,7 +7,7 @@ import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { draftReason, formatDateTime, useActionSubmit } from "@/shared/lib";
+import { draftReason, formatDate, useActionSubmit } from "@/shared/lib";
 import type { Sanction } from "@/shared/server";
 import {
   ActionNetworkError,
@@ -16,6 +16,7 @@ import {
   ModalServerLabel,
   NotificationPreview,
   ReasonChips,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { releaseUserSanction } from "../api/release-user-sanction";
@@ -46,12 +47,10 @@ export function ReleaseSanctionDialog({
   const canRelease = Boolean(reason) && !pending;
 
   const until = sanction.until;
-  const description = isNull(until)
-    ? "무기한 제재를 지금 해제합니다"
-    : `${formatDateTime(until)}까지 남은 제재를 지금 해제합니다`;
+  const description = "해제하는 즉시 참가 신청·구인 개설·룰북 인증 신청을 다시 할 수 있습니다.";
   const remaining = isNull(until)
-    ? "무기한"
-    : `${Math.max(1, Math.ceil((until.getTime() - Date.now()) / DAY))}일`;
+    ? null
+    : `${Math.max(1, Math.ceil((until.getTime() - Date.now()) / DAY))}일 남음`;
 
   const release = async () => {
     if (!reason) return;
@@ -72,16 +71,16 @@ export function ReleaseSanctionDialog({
           <Dialog.Description>{description}</Dialog.Description>
         </Dialog.Header>
         <Dialog.Body>
-          <VStack gap="150">
+          <VStack gap="175">
             {networkError ? <ActionNetworkError /> : null}
             <FactBox
               items={[
                 {
-                  label: "남은 기간",
+                  label: "현재 제재",
                   value: (
                     <>
-                      {remaining}
-                      {until ? <FactSub>{`${formatDateTime(until)}까지`}</FactSub> : null}
+                      {until ? `${formatDate(until)}까지` : "무기한"}
+                      {remaining ? <FactSub>{remaining}</FactSub> : null}
                     </>
                   ),
                 },
@@ -110,8 +109,11 @@ export function ReleaseSanctionDialog({
             <NotificationPreview payload={{ kind: "sanction_released", params: {} }} />
           </VStack>
         </Dialog.Body>
-        <Dialog.Footer layout="row" className="items-center justify-end">
-          <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <Dialog.Close
+            render={<Button variant="outline" colorPalette="gray" />}
+            disabled={pending}
+          >
             취소
           </Dialog.Close>
           <Button loading={pending} disabled={!canRelease} onClick={() => void release()}>

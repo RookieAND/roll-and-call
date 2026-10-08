@@ -14,6 +14,7 @@ import {
   ModalServerLabel,
   NotificationPreview,
   UrlSearchInput,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { addStaffMember } from "../api/add-staff-member";
@@ -94,8 +95,11 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
             />
           </VStack>
         </Dialog.Body>
-        <Dialog.Footer layout="row" className="justify-end">
-          <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <Dialog.Close
+            render={<Button variant="outline" colorPalette="gray" />}
+            disabled={pending}
+          >
             취소
           </Dialog.Close>
           <Button

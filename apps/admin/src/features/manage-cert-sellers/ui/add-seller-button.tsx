@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import { quoteWithParticle, withObjectParticle } from "@/shared/lib";
-import { ModalServerLabel } from "@/shared/ui";
+import { ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
 
 import { saveSeller } from "../api/save-seller";
 
@@ -61,8 +61,11 @@ export function AddSellerButton() {
             />
           </Field.Root>
         </Dialog.Body>
-        <Dialog.Footer layout="row" className="items-center justify-end">
-          <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
+        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <Dialog.Close
+            render={<Button variant="outline" colorPalette="gray" />}
+            disabled={pending}
+          >
             취소
           </Dialog.Close>
           <Button loading={pending} disabled={!name.trim() || pending} onClick={save}>

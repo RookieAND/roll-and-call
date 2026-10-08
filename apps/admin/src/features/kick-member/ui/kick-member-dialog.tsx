@@ -17,6 +17,7 @@ import {
   ModalServerLabel,
   ReasonChips,
   useCurrentServer,
+  MODAL_FOOTER_CLASS,
 } from "@/shared/ui";
 
 import { kickServerMember } from "../api/kick-server-member";
@@ -132,10 +133,10 @@ export function KickMemberDialog({
             />
           </VStack>
         </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className="items-center justify-end">
+        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <AlertDialog.Close
             ref={cancelRef}
-            render={<Button variant="ghost" colorPalette="gray" />}
+            render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
