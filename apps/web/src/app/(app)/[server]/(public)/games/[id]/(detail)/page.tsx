@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { OG_IMAGE } from "@/shared/lib";
+import { OG_IMAGE, serverJoinPath, serverPath } from "@/shared/lib";
 import {
   detectRosterDepartures,
   getCurrentMembership,
   getCurrentServer,
   getGameById,
 } from "@/shared/server";
-import { GameDetailView, GameMemberOnlyView } from "@/views/game-detail";
+import { GameDetailView } from "@/views/game-detail";
 
 export async function generateMetadata({
   params,
@@ -32,13 +33,21 @@ export async function generateMetadata({
   };
 }
 
-// 비멤버에게도 OG 미리보기가 나가도록 (public)에 두고, 본문만 멤버 여부로 가른다.
+// 비멤버는 가입 화면으로 보내고, 가입을 마치면 이 구인으로 돌아온다.
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const [{ id }, membership, server] = await Promise.all([
     params,
     getCurrentMembership(),
     getCurrentServer(),
   ]);
-  if (membership) after(() => detectRosterDepartures({ server, gameId: id }));
-  return membership ? <GameDetailView id={id} /> : <GameMemberOnlyView id={id} />;
+  if (!membership) {
+    redirect(
+      serverJoinPath({
+        slug: server.slug,
+        next: serverPath({ slug: server.slug, path: `/games/${id}` }),
+      }),
+    );
+  }
+  after(() => detectRosterDepartures({ server, gameId: id }));
+  return <GameDetailView id={id} />;
 }
