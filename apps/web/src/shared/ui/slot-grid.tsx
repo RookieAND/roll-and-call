@@ -9,7 +9,7 @@ import { useFillViewport } from "./use-fill-viewport";
 
 const TIME_COL_PX = 44;
 const FIT_DAYS = 4;
-const HEADER_PX = 40;
+const HEADER_PX = 48;
 const GAP_PX = 4;
 export const SLOT_ROW_PX = 26;
 const MIN_VISIBLE_ROWS = 9;
@@ -74,7 +74,7 @@ export function SlotGrid({ days, timeRows, renderCell, className }: SlotGridProp
             weight="bold"
             foreground="muted"
             render={<div />}
-            className="sticky top-0 z-10 flex flex-col items-center justify-center bg-gray-50 leading-tight"
+            className="sticky top-0 z-10 flex flex-col items-center justify-center bg-gray-50 pt-100 leading-tight"
             style={{ height: HEADER_PX, boxShadow: DAY_COVER }}
           >
             {day.dow}
