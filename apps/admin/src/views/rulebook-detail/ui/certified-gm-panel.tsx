@@ -60,7 +60,9 @@ export function CertifiedGmPanel({
       title={title}
       right={right}
       footer={
-        <ListPager page={paged.page} totalPages={paged.totalPages} total={gms.length} unit="명" />
+        gms.length > 0 ? (
+          <ListPager page={paged.page} totalPages={paged.totalPages} total={gms.length} unit="명" />
+        ) : null
       }
     >
       <Table.Root className="table-equal">
@@ -81,7 +83,7 @@ export function CertifiedGmPanel({
               title="이 룰북으로 인증된 GM이 없습니다"
               description={
                 certRequired
-                  ? "GM의 인증 신청이 승인되거나 인증 관리에서 인증을 부여하면 이곳에 표시됩니다."
+                  ? "GM의 인증 신청이 승인되거나 운영진이 인증을 부여하면 이곳에 표시됩니다."
                   : "인증이 필요 없는 룰북이므로 누구나 이 룰북으로 구인을 열 수 있습니다."
               }
             />

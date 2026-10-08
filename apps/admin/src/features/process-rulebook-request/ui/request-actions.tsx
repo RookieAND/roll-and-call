@@ -28,6 +28,7 @@ export function RequestActions({ label, similar, actionHref }: RequestActionsPro
         variant="outline"
         colorPalette="gray"
         size="sm"
+        className="min-w-[136px]"
         render={<ServerLink path={actionHref(primary)} scroll={false} />}
       >
         {ACTION_LABEL[primary]}

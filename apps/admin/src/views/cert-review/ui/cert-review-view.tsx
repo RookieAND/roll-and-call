@@ -88,8 +88,9 @@ export function CertReviewView({ review, viewerId, filter }: CertReviewViewProps
         {duplicate && state === CERT_REVIEW_STATE.open ? (
           <Callout.Root colorPalette="warning">
             <Callout.Icon />
+            <Callout.Title>이미 다른 신청에 쓰인 주문번호입니다</Callout.Title>
             <Callout.Description>
-              이미 다른 사용자({duplicate.nickname})의 신청에 쓰인 주문번호입니다. 이 경고를
+              {duplicate.nickname}님의 신청에서 같은 판매처와 주문번호가 확인되었습니다. 이 경고를
               참고해서 판단해 주세요.
             </Callout.Description>
           </Callout.Root>

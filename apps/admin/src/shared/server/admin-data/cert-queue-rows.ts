@@ -18,9 +18,14 @@ export interface CertQueueRow {
   activeGm: boolean;
   // 같은 사람의 기본 룰북 심사를 기다리는 서플리먼트. 목록 뒤로 보낸다.
   waiting: boolean;
+  // 전자책인데 판매처 목록에 없는 이름이다(신청자가 「기타」로 입력).
+  sellerUnlisted: boolean;
 }
 
-type QueueRecords = Pick<Snapshot, "users" | "rulebooks" | "certifications" | "certApplications">;
+type QueueRecords = Pick<
+  Snapshot,
+  "users" | "rulebooks" | "certifications" | "certApplications" | "sellers"
+>;
 
 // 대기열은 정렬하지 않는다(D200). 신청일이 오래된 순이고, 기본 룰북 심사를 기다리는 서플리먼트는 맨 뒤다.
 export function certQueueRows({
@@ -46,6 +51,10 @@ export function certQueueRows({
         waitedDays: waitedDays(application.appliedAt),
         previousRejectionCount: application.previousRejections.length,
         activeGm: user.recentHostedCount > 0,
+        sellerUnlisted:
+          application.format === "ebook" &&
+          Boolean(application.purchase.seller) &&
+          !records.sellers.some((seller) => seller.name === application.purchase.seller),
         waiting:
           application.status === "pending" &&
           certBlockers(application, records).waitingOn.length > 0,

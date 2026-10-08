@@ -23,7 +23,7 @@ export function RulebooksLoading() {
           { label: "전자책 판매처", href: `/rules?tab=${RULEBOOKS_TAB.sellers}` },
         ]}
       />
-      <LoadingRegion label="룰북 목록을 불러오는 중입니다" className="gap-150 p-200">
+      <LoadingRegion label="룰북 목록을 불러오는 중입니다" className="gap-200 p-200">
         <Panel
           right={
             <>

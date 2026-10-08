@@ -62,6 +62,7 @@ export function CertQueueTable({ rows, query }: CertQueueTableProps) {
                     </Text>
                   )}
                   {row.waiting ? <Tag>기본 룰북 심사 후</Tag> : null}
+                  {row.sellerUnlisted ? <Tag>판매처 확인 필요</Tag> : null}
                 </HStack>
               </Table.Cell>
               <Table.Cell>

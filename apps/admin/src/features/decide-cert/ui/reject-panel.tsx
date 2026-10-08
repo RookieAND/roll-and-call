@@ -34,9 +34,7 @@ export function RejectPanel({
           반려 사유
         </Text>
         <Text typography="body4" foreground="hint">
-          {ebook
-            ? "판단하기 어려우면 [추가 확인이 필요합니다]를 고르고, 요청할 내용을 사유에 적어 주세요."
-            : "사유를 선택해 주세요. 특정 사진에 문제가 있으면 사진 카드의 [문제 지정]을 눌러 함께 지정할 수 있습니다."}
+          사유를 고르면 사용자에게 보이는 문구가 미리 채워집니다. 문구는 고칠 수 있습니다.
         </Text>
       </VStack>
       <VStack gap="150" className="p-150">
@@ -57,7 +55,7 @@ export function RejectPanel({
             label="사용자에게 보이는 사유"
             htmlFor="reject-user-reason"
             required
-            description="입력한 사유는 신청자에게 그대로 보이고, 활동 기록에도 남습니다."
+            description="신청자에게 그대로 보이고, 활동 기록에도 남습니다."
           >
             <Textarea
               id="reject-user-reason"

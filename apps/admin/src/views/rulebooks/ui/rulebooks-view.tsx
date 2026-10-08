@@ -100,7 +100,7 @@ export function RulebooksView({
         sub={`카테고리 ${rulebooks.categories.length}개 · 책 ${rulebooks.total}권`}
       />
       <RouteTabs label="룰북 화면" items={tabs} value={tabHref} />
-      <VStack gap="150" className="flex-1 p-200">
+      <VStack gap="200" className="flex-1 p-200">
         {tab === RULEBOOKS_TAB.requests ? (
           <RequestPanel requests={requests} actionHref={actionHref} />
         ) : null}

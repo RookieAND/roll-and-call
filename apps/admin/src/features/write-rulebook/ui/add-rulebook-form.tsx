@@ -68,7 +68,7 @@ export function AddRulebookForm({
   const canAdd =
     Boolean(draft.name.trim() && reason.trim()) && !category.error && !nameError && !pending;
   const footerNote = request
-    ? "추가하면 요청은 처리됨으로 바뀌고, 요청자에게 알림 탭으로 알립니다."
+    ? "추가하면 요청은 처리됨으로 바뀌고, 처리 내역은 활동 기록에 남습니다."
     : "추가한 내용과 사유는 활동 기록에 남습니다.";
   const change = (changes: Partial<RulebookDraft>) => {
     setDraft({ ...draft, ...changes });

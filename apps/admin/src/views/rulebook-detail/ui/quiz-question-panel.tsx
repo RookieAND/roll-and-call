@@ -10,13 +10,11 @@ interface QuizQuestionPanelProps {
 }
 
 export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
-  const activeCount = questions.filter((question) => question.active).length;
   return (
     <Panel
       title="본문 퀴즈"
       right={
         <>
-          <Tag>{`사용 중 ${activeCount}개`}</Tag>
           <Button
             variant="outline"
             colorPalette="gray"

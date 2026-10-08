@@ -87,13 +87,14 @@ export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFo
               kind: NOTIFICATION_KIND.rulebookRequestDeclined,
               params: { rulebookName: request.name },
             }}
+            recipients="요청자의 알림 탭으로 알립니다."
           />
+          <Text typography="body4" foreground="hint">
+            사유를 입력해야 반려할 수 있습니다.
+          </Text>
         </VStack>
       </Dialog.Body>
-      <Dialog.Footer layout="row" className="items-center">
-        <Text typography="body4" foreground="hint" className="mr-auto">
-          사유를 입력해야 반려할 수 있습니다
-        </Text>
+      <Dialog.Footer layout="row">
         <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
           취소
         </Dialog.Close>

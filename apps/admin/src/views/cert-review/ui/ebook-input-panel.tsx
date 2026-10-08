@@ -20,7 +20,7 @@ export function EbookInputPanel({ purchase, sellerRegistered, duplicate }: Ebook
           캡처에 보이는 값과 비교합니다
         </Text>
       }
-      bodyClassName="px-175 py-100"
+      bodyClassName="p-175"
     >
       <FactRows
         labelWidth={72}

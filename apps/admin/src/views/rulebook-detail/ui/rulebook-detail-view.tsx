@@ -80,7 +80,7 @@ export function RulebookDetailView({
           aside={<CategoryCard rulebook={rulebook} />}
         />
       ) : (
-        <VStack gap="150" className="flex-1 p-200">
+        <VStack gap="200" className="flex-1 p-200">
           {tab === RULEBOOK_DETAIL_TAB.quiz ? (
             <QuizQuestionPanel questions={rulebook.quizQuestions} />
           ) : (

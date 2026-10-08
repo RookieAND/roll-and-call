@@ -1,19 +1,12 @@
-import { Button, Field, HStack, Skeleton, Text, TextInput, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
 
-import {
-  AdminHeader,
-  LoadingRegion,
-  Panel,
-  SkeletonField,
-  SkeletonPager,
-  SkeletonTable,
-} from "@/shared/ui";
+import { AdminHeader, LoadingRegion, Panel, SkeletonField, SkeletonTable } from "@/shared/ui";
 
 export function RulebookDetailLoading() {
   return (
     <>
       <AdminHeader
-        title={<Skeleton width={120} height={22} render={<span />} />}
+        title={<Skeleton width={160} height={22} render={<span />} />}
         trail={[{ href: "/rules", label: "룰북" }]}
         sub="룰북 상세"
         actions={
@@ -23,8 +16,8 @@ export function RulebookDetailLoading() {
         }
       />
       <LoadingRegion fullBleed label="룰북 정보를 불러오는 중입니다">
-        <div className="mx-auto grid w-full max-w-page flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-150 p-200">
-          <VStack gap="150" className="min-w-0">
+        <div className="mx-auto grid w-full max-w-page flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-200 p-200">
+          <VStack gap="200" className="min-w-0">
             <Panel title="기본 정보" bodyClassName="p-175">
               <VStack gap="150">
                 <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_120px] gap-125">
@@ -47,7 +40,6 @@ export function RulebookDetailLoading() {
             </Panel>
             <Panel
               title="이 룰북으로 인증된 GM"
-              footer={<SkeletonPager />}
               right={<Skeleton width={40} height={22} rounded="full" />}
             >
               <SkeletonTable
@@ -83,22 +75,9 @@ export function RulebookDetailLoading() {
           </Panel>
         </div>
         <HStack
-          align="end"
-          gap="125"
-          className="sticky bottom-0 border-t border-gray-200 bg-surface px-page py-150"
+          gap="100"
+          className="sticky bottom-0 justify-end border-t border-gray-200 bg-surface px-page py-150"
         >
-          <Field.Root
-            label="변경 사유"
-            htmlFor="rulebook-reason-loading"
-            required
-            className="flex-1"
-          >
-            <TextInput
-              id="rulebook-reason-loading"
-              disabled
-              placeholder="기본 정보와 인증 정책을 함께 저장하며, 사유는 활동 기록에 남습니다"
-            />
-          </Field.Root>
           <Button variant="outline" colorPalette="gray" disabled>
             숨김 처리
           </Button>

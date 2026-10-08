@@ -62,11 +62,7 @@ export function CertQueueView({ queue, serverName, page, filter }: CertQueueView
       <VStack gap="150" className="flex-1 p-200">
         {queue.total === 0 ? (
           <Panel>
-            <EmptyState
-              image={EMPTY_IMAGE.myGames}
-              title="심사할 신청이 없습니다"
-              description="새 인증 신청이 들어오면 여기에 표시됩니다."
-            />
+            <EmptyState image={EMPTY_IMAGE.myGames} title="심사할 신청이 없습니다" />
           </Panel>
         ) : (
           <>

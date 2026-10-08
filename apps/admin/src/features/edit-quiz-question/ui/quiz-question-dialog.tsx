@@ -92,7 +92,7 @@ export function QuizQuestionDialog({
                 align="center"
                 gap="075"
                 wrap
-                className="min-h-11 rounded-400 border border-gray-200 px-125 py-100 focus-within:outline-2 focus-within:outline-(--rc-color-border-primary-strong)"
+                className="min-h-11 rounded-400 border border-gray-200 px-125 py-100 focus-within:border-(--rc-color-border-focus) focus-within:shadow-[inset_0_0_0_1px_var(--rc-color-border-focus)]"
               >
                 {answers.map((answer) => (
                   <Badge key={answer} className="gap-025">
@@ -136,13 +136,19 @@ export function QuizQuestionDialog({
             </Field.Root>
             <Callout.Root>
               <Callout.Icon />
+              <Callout.Title>문항은 다시 뽑힙니다</Callout.Title>
               <Callout.Description>
                 틀리면 같은 문항에 다시 답하고, 재신청하면 문항을 새로 뽑습니다.
               </Callout.Description>
             </Callout.Root>
+            {editing ? null : (
+              <Text typography="body4" foreground="hint">
+                다음 신청부터 출제됩니다.
+              </Text>
+            )}
           </VStack>
         </Dialog.Body>
-        <Dialog.Footer layout="row" className="items-center">
+        <Dialog.Footer layout="row">
           {editing ? (
             <Button
               variant="outline"
@@ -158,11 +164,7 @@ export function QuizQuestionDialog({
             >
               {question.active ? "비활성화" : "다시 사용"}
             </Button>
-          ) : (
-            <Text typography="body4" foreground="hint" className="mr-auto">
-              다음 신청부터 출제됩니다
-            </Text>
-          )}
+          ) : null}
           <Dialog.Close render={<Button variant="ghost" colorPalette="gray" />} disabled={pending}>
             취소
           </Dialog.Close>

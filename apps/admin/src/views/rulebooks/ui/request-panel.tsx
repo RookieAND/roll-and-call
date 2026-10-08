@@ -14,11 +14,13 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
   if (requests.length === 0) {
     return (
       <Panel title="룰북 추가 요청">
-        <EmptyState
-          image={EMPTY_IMAGE.search}
-          title="대기 중인 요청이 없습니다"
-          description="사용자가 카탈로그에 없는 룰북을 요청하면 이곳에 표시됩니다."
-        />
+        <div className="h-[300px]">
+          <EmptyState
+            image={EMPTY_IMAGE.hosted}
+            title="대기 중인 요청이 없습니다"
+            description="사용자가 카탈로그에 없는 룰북을 요청하면 이곳에 표시됩니다."
+          />
+        </div>
       </Panel>
     );
   }

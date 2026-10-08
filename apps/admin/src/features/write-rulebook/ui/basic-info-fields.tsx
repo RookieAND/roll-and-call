@@ -74,7 +74,6 @@ export function BasicInfoFields({
           />
         </Field.Root>
       </div>
-      {children}
       {withAliases ? (
         <Field.Root label="다른 이름" htmlFor={`${idPrefix}-aliases`}>
           <TextInput
@@ -86,6 +85,7 @@ export function BasicInfoFields({
           />
         </Field.Root>
       ) : null}
+      {children}
     </VStack>
   );
 }

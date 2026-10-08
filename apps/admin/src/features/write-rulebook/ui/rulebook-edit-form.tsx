@@ -134,8 +134,8 @@ export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditForm
 
   return (
     <VStack data-full-bleed className="min-h-0 flex-1">
-      <div className="mx-auto grid w-full max-w-page flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-150 p-200">
-        <VStack gap="150" className="min-w-0">
+      <div className="mx-auto grid w-full max-w-page flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-200 p-200">
+        <VStack gap="200" className="min-w-0">
           {(saving.networkError && !dialogOpen) || unhiding.networkError ? (
             <ActionNetworkError />
           ) : null}

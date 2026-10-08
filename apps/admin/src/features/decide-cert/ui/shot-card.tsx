@@ -80,7 +80,7 @@ export function ShotCard({
         <VStack
           align="center"
           justify="center"
-          className="mx-150 mb-150 h-[336px] rounded-400 border border-dashed border-gray-300 p-150 text-center"
+          className="mx-150 mb-150 h-[216px] rounded-400 border border-dashed border-gray-300 p-150 text-center"
         >
           <Text typography="body3" foreground="hint">
             보관 기간이 지나 사진이 삭제되었습니다.

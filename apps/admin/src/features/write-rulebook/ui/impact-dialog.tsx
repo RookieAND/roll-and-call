@@ -48,8 +48,11 @@ export function ImpactDialog({
         <AlertDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
-            <Callout.Root colorPalette="danger">
+            <Callout.Root colorPalette="warning">
               <Callout.Icon />
+              {loserCount > 0 ? (
+                <Callout.Title>GM 자격을 잃는 사람이 있습니다</Callout.Title>
+              ) : null}
               <Callout.Description>
                 {loserCount}명이 GM 자격을 잃고, 진행 중인 구인 {gameCount}개가 영향을 받습니다.
               </Callout.Description>
