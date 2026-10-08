@@ -47,7 +47,7 @@ export function ForumTagSection({
       bodyClassName="p-0"
     >
       <Table.Root className="table-equal">
-        <TableColumns widths={[200, { fixed: 160 }, { fixed: 96 }, { fixed: 204 }]} />
+        <TableColumns widths={[200, { fixed: 192 }, { fixed: 96 }, { fixed: 204 }]} />
         <Table.Header>
           <Table.Row>
             <Table.Head>{columnLabel}</Table.Head>
@@ -88,7 +88,7 @@ export function ForumTagSection({
                     <Select.Trigger
                       aria-label={`${row.label} 태그`}
                       placeholder="태그를 다시 고르세요"
-                      className="w-[188px]"
+                      className="h-(--rc-size-control-xs) w-[188px]"
                     />
                     <Select.Popup>
                       {items.map((item) => (
