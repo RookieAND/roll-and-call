@@ -1,4 +1,4 @@
-import { Callout, Text, VStack } from "@roll-and-call/ui";
+import { Callout } from "@roll-and-call/ui";
 
 import { clockParticle, formatDateTime } from "@/shared/lib";
 import { LineBreaks } from "@/shared/ui";
@@ -10,10 +10,19 @@ import {
 
 const ASK_STAFF = "고쳐야 할 기록이 있으면 운영진에게 문의해 주세요.";
 
-const LOCKED_LINES = {
-  [ATTENDANCE_GUIDE.autoConfirmed]: `세션이 끝나고 24시간이 지나 출석이 자동으로 확정되었습니다.`,
-  [ATTENDANCE_GUIDE.closed]: "출석을 고칠 수 있는 기간이 지났습니다.",
-  [ATTENDANCE_GUIDE.frozen]: `세션이 끝나고 24시간이 지나 직전에 확정한 대로 굳었습니다.`,
+const LOCKED_GUIDE = {
+  [ATTENDANCE_GUIDE.autoConfirmed]: {
+    title: "출석이 자동으로 확정되었습니다",
+    lines: ["세션이 끝나고 24시간이 지났습니다.", ASK_STAFF],
+  },
+  [ATTENDANCE_GUIDE.closed]: {
+    title: "출석을 고칠 수 있는 기간이 지났습니다",
+    lines: [ASK_STAFF],
+  },
+  [ATTENDANCE_GUIDE.frozen]: {
+    title: "출석을 고칠 수 있는 기간이 지났습니다",
+    lines: ["직전에 확정한 결과로 굳었습니다.", ASK_STAFF],
+  },
 } as const;
 
 interface AttendanceGuideProps {
@@ -32,24 +41,20 @@ export function AttendanceGuide({
   const deadlineText = formatDateTime(deadline);
 
   if (kind === ATTENDANCE_GUIDE.open) {
-    const autoLines = [`${deadlineText}까지 확인하지 않으면 자동으로 확정됩니다.`];
-    if (hasRemoved) {
-      autoLines.push("이때 불참으로 내보낸 사람은 불참으로 남고, 나머지는 참석으로 처리됩니다.");
-    }
+    const lines = hasRemoved
+      ? ["내보낸 사람은 불참으로 남습니다.", "확인하지 않으면 나머지는 참석으로 자동 확정됩니다."]
+      : [
+          "오지 않은 사람만 불참으로 바꿔 주세요.",
+          "확인하지 않으면 전원 참석으로 자동 확정됩니다.",
+        ];
     return (
-      <VStack gap="100">
-        <Callout.Root colorPalette="primary">
-          <Callout.Icon />
-          <Callout.Description className="break-keep">
-            기본값은 전원 참석입니다.
-            <br />
-            오지 않은 사람만 <b>불참</b>으로 바꿔 주세요.
-          </Callout.Description>
-        </Callout.Root>
-        <Text typography="body4" foreground="hint" render={<p />} className="break-keep">
-          <LineBreaks lines={autoLines} />
-        </Text>
-      </VStack>
+      <Callout.Root colorPalette="primary">
+        <Callout.Icon />
+        <Callout.Title>{deadlineText}까지 확인해 주세요</Callout.Title>
+        <Callout.Description className="break-keep">
+          <LineBreaks lines={lines} />
+        </Callout.Description>
+      </Callout.Root>
     );
   }
   if (kind === ATTENDANCE_GUIDE.reediting) {
@@ -73,19 +78,21 @@ export function AttendanceGuide({
     return (
       <Callout.Root colorPalette="success">
         <Callout.Icon />
+        <Callout.Title>{formatDateTime(attendanceConfirmedAt)}에 출석을 확정했습니다</Callout.Title>
         <Callout.Description className="break-keep">
-          {formatDateTime(attendanceConfirmedAt)}에 출석을 확정했습니다.
-          <br />
           다시 고치기를 누르면 참석·불참을 다시 정할 수 있습니다.
         </Callout.Description>
       </Callout.Root>
     );
   }
   if (kind === ATTENDANCE_GUIDE.confirmed) return null;
+  const locked = LOCKED_GUIDE[kind];
   return (
     <Callout.Root colorPalette="gray">
+      <Callout.Icon />
+      <Callout.Title>{locked.title}</Callout.Title>
       <Callout.Description className="break-keep">
-        <LineBreaks lines={[LOCKED_LINES[kind], ASK_STAFF]} />
+        <LineBreaks lines={locked.lines} />
       </Callout.Description>
     </Callout.Root>
   );

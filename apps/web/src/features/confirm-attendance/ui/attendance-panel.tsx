@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 
-import { attendanceGuideKind } from "../model/attendance-guide-kind";
+import { ATTENDANCE_GUIDE, attendanceGuideKind } from "../model/attendance-guide-kind";
 import { ATTENDANCE_PHASE, type AttendancePhase } from "../model/attendance-phase";
 import type { Attendee } from "../model/attendee";
 import { AttendanceForm } from "./attendance-form";
@@ -35,6 +35,12 @@ export function AttendancePanel({
   const canEdit =
     !expired && (phase === ATTENDANCE_PHASE.open || phase === ATTENDANCE_PHASE.confirmed);
 
+  const reeditNote =
+    guideKind === ATTENDANCE_GUIDE.reediting &&
+    !attendees.some((attendee) => attendee.staffCancelled)
+      ? "처음 값은 직전 결과입니다."
+      : undefined;
+
   const info = (
     <>
       {children}
@@ -54,6 +60,7 @@ export function AttendancePanel({
         attendees={attendees}
         onConfirmed={() => setEditing(false)}
         onReopen={() => setEditing(true)}
+        footnote={reeditNote}
         onExpired={() => {
           setEditing(false);
           setExpired(true);

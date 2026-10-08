@@ -1,9 +1,9 @@
 "use client";
 
-import { Button, Callout, Card, FloatingBar, VStack } from "@roll-and-call/ui";
+import { Button, Card, FloatingBar, Text, VStack } from "@roll-and-call/ui";
 import { useState, type ReactNode } from "react";
 
-import { ConfirmDialog, LineBreaks, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { confirmAttendance } from "../api/confirm-attendance";
 import { ATTENDANCE_PAST_DEADLINE_MESSAGE } from "../model/attendance-messages";
@@ -11,6 +11,7 @@ import type { Attendee } from "../model/attendee";
 import { confirmDescription } from "../model/confirm-description";
 import { AttendanceRow } from "./attendance-row";
 import { AttendanceStats } from "./attendance-stats";
+import { ConfirmAttendanceSummary } from "./confirm-attendance-summary";
 
 interface AttendanceFormProps {
   gameId: string;
@@ -18,6 +19,7 @@ interface AttendanceFormProps {
   onConfirmed: () => void;
   onReopen: () => void;
   onExpired: () => void;
+  footnote?: string;
   children?: ReactNode;
 }
 
@@ -27,6 +29,7 @@ export function AttendanceForm({
   onConfirmed,
   onReopen,
   onExpired,
+  footnote,
   children,
 }: AttendanceFormProps) {
   const [absentIds, setAbsentIds] = useState(
@@ -119,6 +122,11 @@ export function AttendanceForm({
           />
         ))}
       </Card.Root>
+      {footnote && (
+        <Text typography="body4" foreground="hint">
+          {footnote}
+        </Text>
+      )}
 
       <FloatingBar.Root elevated={false}>
         <FloatingBar.Content>
@@ -133,17 +141,16 @@ export function AttendanceForm({
         open={confirming}
         onOpenChange={setConfirming}
         title="출석을 확정할까요?"
-        description={description.headline}
-        confirmLabel="확정하기"
-        cancelLabel="다시 보기"
+        confirmLabel="확정"
         pending={pending}
         onConfirm={submit}
       >
-        <Callout.Root colorPalette="gray">
-          <Callout.Description>
-            <LineBreaks lines={description.lines} />
-          </Callout.Description>
-        </Callout.Root>
+        <ConfirmAttendanceSummary
+          presentCount={attendees.length - counted.length}
+          absentNames={description.names}
+          warningLines={description.warningLines}
+          notice={description.notice}
+        />
       </ConfirmDialog>
     </VStack>
   );

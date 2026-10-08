@@ -10,10 +10,9 @@ import {
   VStack,
 } from "@roll-and-call/ui";
 
-import { EMPTY_BIO_TEXT } from "@/entities/profile";
-
 import { ABSENCE_REASON_MAX_LENGTH } from "../model/absences-error";
 import { ATTENDANCE_CHOICE, ATTENDANCE_OPTIONS } from "../model/attendance-choice";
+import { attendanceRowLine } from "../model/attendance-row-line";
 import type { Attendee } from "../model/attendee";
 import { AttendanceRowNote } from "./attendance-row-note";
 
@@ -37,6 +36,7 @@ export function AttendanceRow({
   const choice = absent ? ATTENDANCE_CHOICE.absent : ATTENDANCE_CHOICE.present;
   const editable = !readOnly && !attendee.staffAdded;
   const showsReason = editable && absent;
+  const line = attendanceRowLine({ attendee, absent, editable });
 
   return (
     <VStack>
@@ -58,19 +58,9 @@ export function AttendanceRow({
               </Badge>
             )}
           </HStack>
-          <Text typography="body4" foreground="hint" truncate>
-            {attendee.bio || EMPTY_BIO_TEXT}
+          <Text typography="body4" foreground={line.foreground} truncate>
+            {line.text}
           </Text>
-          {attendee.removed && (
-            <Text typography="body4" foreground="hint">
-              세션 중 불참으로 내보냈습니다.
-            </Text>
-          )}
-          {editable && absent && !attendee.staffCancelled && (
-            <Text typography="body4" foreground="danger">
-              불참으로 기록됩니다
-            </Text>
-          )}
         </VStack>
         <SegmentedControl.Root
           size="sm"
