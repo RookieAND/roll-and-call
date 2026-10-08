@@ -129,7 +129,7 @@ export const gameFormSchema = z
         path: ["confirmedAt"],
       });
     }
-    // 문자열은 로컬 ISO라 사전순 비교가 곧 시간순이다. 마감은 세션 시작·조율 시작일 0시보다 앞서야 한다.
+    // 문자열은 로컬 ISO라 사전순 비교가 곧 시간순이다. 마감은 세션 시작·조율 첫 시간대보다 앞서야 한다.
     // 두 줄 문구는 제출 버튼 위 안내가 줄마다 나눠 그린다.
     if (
       values.scheduleMode === SCHEDULE_MODE.fixed &&
@@ -142,16 +142,20 @@ export const gameFormSchema = z
         path: ["endDate"],
       });
     }
+    const { windowStartHour = "12" } = values;
     if (
       values.scheduleMode === SCHEDULE_MODE.coordinate &&
       values.rangeStart &&
-      values.endDate >= `${values.rangeStart}T00:00`
+      isWindowHour(windowStartHour)
     ) {
-      context.addIssue({
-        code: "custom",
-        message: `모집 마감이 조율 시작일보다 늦습니다.\n마감을 ${monthDayLabel(values.rangeStart)} 이전으로 바꿔 주세요.`,
-        path: ["endDate"],
-      });
+      const firstSlot = `${values.rangeStart}T${windowStartHour.padStart(2, "0")}:00`;
+      if (values.endDate >= firstSlot) {
+        context.addIssue({
+          code: "custom",
+          message: `모집 마감이 조율 시작 시각보다 늦습니다.\n마감을 ${monthDayLabel(firstSlot)} ${firstSlot.slice(11)} 이전으로 바꿔 주세요.`,
+          path: ["endDate"],
+        });
+      }
     }
     if (values.scheduleMode !== SCHEDULE_MODE.coordinate) return;
 
@@ -185,7 +189,7 @@ export const gameFormSchema = z
       }
     }
 
-    const { windowStartHour = "12", windowEndHour = "0" } = values;
+    const { windowEndHour = "0" } = values;
     if (!isWindowHour(windowStartHour)) {
       context.addIssue({
         code: "custom",

@@ -88,13 +88,14 @@ describe("gameFormSchema", () => {
     expect(firstError({ ...base, rangeEnd: "2026-09-11" })).toBe("rangeEnd");
   });
 
-  it("모집 마감은 조율 시작일 0시보다 앞서야 한다", () => {
-    expect(firstError({ ...base, endDate: "2026-09-12T00:00" })).toBe("endDate");
-    expect(firstError({ ...base, endDate: "2026-09-11T23:59" })).toBeNull();
-    const issue = gameFormSchema.safeParse({ ...base, endDate: "2026-09-12T00:00" }).error
-      ?.issues[0];
+  it("모집 마감은 조율 첫 시간대보다 앞서야 한다", () => {
+    const window = { windowStartHour: "21", windowEndHour: "0", rangeEnd: "2026-09-12" };
+    expect(firstError({ ...base, ...window, endDate: "2026-09-12T21:00" })).toBe("endDate");
+    expect(firstError({ ...base, ...window, endDate: "2026-09-12T20:59" })).toBeNull();
+    const issue = gameFormSchema.safeParse({ ...base, ...window, endDate: "2026-09-12T21:00" })
+      .error?.issues[0];
     expect(issue?.message).toBe(
-      "모집 마감이 조율 시작일보다 늦습니다.\n마감을 9월 12일 이전으로 바꿔 주세요.",
+      "모집 마감이 조율 시작 시각보다 늦습니다.\n마감을 9월 12일 21:00 이전으로 바꿔 주세요.",
     );
   });
 
