@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import {
   detectLinkService,
   LINK_MAX_COUNT,
+  linkError,
   LINK_SERVICES,
   linkServiceOf,
   OTHER_LINK_SERVICE,
@@ -28,6 +29,7 @@ export function ProfileLinksField({ value, onChange, discordHandle }: ProfileLin
   // 줄을 지워도 아래 줄의 입력 상태가 한 칸씩 밀리지 않게 줄마다 고정 key를 둔다.
   const nextKey = useRef(value.length);
   const [keys, setKeys] = useState(() => value.map((_, index) => index));
+  const [touched, setTouched] = useState<ReadonlySet<number>>(new Set());
   const replace = (index: number, link: ProfileLink) =>
     onChange(value.map((item, itemIndex) => (itemIndex === index ? link : item)));
 
@@ -45,56 +47,67 @@ export function ProfileLinksField({ value, onChange, discordHandle }: ProfileLin
       <VStack gap="075">
         {value.map((link, index) => {
           const service = linkServiceOf(link.service);
+          const rowKey = keys[index] ?? -index - 1;
+          const error = touched.has(rowKey) ? linkError(link) : null;
           return (
-            <HStack key={keys[index] ?? `extra-${index}`} gap="075">
-              <Select.Root
-                items={SERVICE_OPTIONS}
-                value={link.service}
-                onValueChange={(next) => {
-                  const nextService = String(next);
-                  // 디스코드는 계정에서 사용자명을 알고 있어 고르기만 하면 채운다. 링크는 보는 쪽에서 ID로 잇는다.
-                  const filled =
-                    nextService === "discord" && discordHandle ? discordHandle : link.value;
-                  replace(index, { service: nextService, value: filled });
-                }}
-              >
-                <Select.Trigger
-                  aria-label={`${index + 1}번째 링크 서비스`}
-                  className="h-11 w-[132px] flex-none gap-075"
+            <VStack key={rowKey} gap="050">
+              <HStack gap="075">
+                <Select.Root
+                  items={SERVICE_OPTIONS}
+                  value={link.service}
+                  onValueChange={(next) => {
+                    const nextService = String(next);
+                    // 디스코드는 계정에서 사용자명을 알고 있어 고르기만 하면 채운다. 링크는 보는 쪽에서 ID로 잇는다.
+                    const filled =
+                      nextService === "discord" && discordHandle ? discordHandle : link.value;
+                    replace(index, { service: nextService, value: filled });
+                  }}
+                >
+                  <Select.Trigger
+                    aria-label={`${index + 1}번째 링크 서비스`}
+                    className="h-11 w-[132px] flex-none gap-075"
+                  />
+                  <Select.Popup>
+                    {SERVICE_OPTIONS.map((option) => (
+                      <Select.Item key={option.value} value={option.value}>
+                        {option.label}
+                      </Select.Item>
+                    ))}
+                  </Select.Popup>
+                </Select.Root>
+                <TextInput
+                  value={link.value}
+                  placeholder={service.placeholder}
+                  aria-label={`${service.label} 주소`}
+                  className="h-11 min-w-0 flex-1"
+                  onChange={(event) => replace(index, { ...link, value: event.target.value })}
+                  aria-invalid={error ? true : undefined}
+                  onBlur={(event) => {
+                    setTouched(new Set(touched).add(rowKey));
+                    const detected = detectLinkService(event.target.value);
+                    if (detected !== link.service && detected !== OTHER_LINK_SERVICE) {
+                      replace(index, { service: detected, value: event.target.value });
+                    }
+                  }}
                 />
-                <Select.Popup>
-                  {SERVICE_OPTIONS.map((option) => (
-                    <Select.Item key={option.value} value={option.value}>
-                      {option.label}
-                    </Select.Item>
-                  ))}
-                </Select.Popup>
-              </Select.Root>
-              <TextInput
-                value={link.value}
-                placeholder={service.placeholder}
-                aria-label={`${service.label} 주소`}
-                className="h-11 min-w-0 flex-1"
-                onChange={(event) => replace(index, { ...link, value: event.target.value })}
-                onBlur={(event) => {
-                  const detected = detectLinkService(event.target.value);
-                  if (detected !== link.service && detected !== OTHER_LINK_SERVICE) {
-                    replace(index, { service: detected, value: event.target.value });
-                  }
-                }}
-              />
-              <IconButton
-                variant="outline"
-                aria-label={`${service.label} 링크 지우기`}
-                className="h-11 w-11 flex-none"
-                onClick={() => {
-                  setKeys(keys.filter((_, itemIndex) => itemIndex !== index));
-                  onChange(value.filter((_, itemIndex) => itemIndex !== index));
-                }}
-              >
-                <Trash2 size={15} aria-hidden />
-              </IconButton>
-            </HStack>
+                <IconButton
+                  variant="outline"
+                  aria-label={`${service.label} 링크 지우기`}
+                  className="h-11 w-11 flex-none"
+                  onClick={() => {
+                    setKeys(keys.filter((_, itemIndex) => itemIndex !== index));
+                    onChange(value.filter((_, itemIndex) => itemIndex !== index));
+                  }}
+                >
+                  <Trash2 size={15} aria-hidden />
+                </IconButton>
+              </HStack>
+              {error && (
+                <Text typography="body4" foreground="danger" render={<p />} role="alert">
+                  {error}
+                </Text>
+              )}
+            </VStack>
           );
         })}
       </VStack>

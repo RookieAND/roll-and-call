@@ -9,6 +9,7 @@ export {
 } from "./model/availability";
 export { availabilityPrefill, filledDays, WEEKDAY_LABELS } from "@/shared/lib";
 export { KEYWORD_MAX_COUNT, KEYWORD_MAX_LENGTH, normalizeKeywords } from "./model/keywords";
+export { linkError } from "./model/link-error";
 export {
   detectLinkService,
   linkServiceOf,

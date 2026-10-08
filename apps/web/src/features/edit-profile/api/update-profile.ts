@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 import {
   nicknameTakenMessage,
+  linkError,
   normalizeKeywords,
   normalizeLinks,
   type ProfileLink,
@@ -43,6 +44,11 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
       error: `한 줄 소개는 ${BIO_MAX_LENGTH}자 이내로 입력해 주세요.`,
       field: PROFILE_FIELD.bio,
     };
+  }
+
+  const invalidLink = input.links.map(linkError).find(Boolean);
+  if (invalidLink) {
+    return { error: invalidLink };
   }
 
   const saved = await saveMemberProfile({

@@ -69,7 +69,7 @@ export function detectLinkService(value: string): LinkServiceKey {
   return HOST_SERVICES.find(([pattern]) => pattern.test(host))?.[1] ?? OTHER_LINK_SERVICE;
 }
 
-function toUrl(value: string): URL | null {
+export function toUrl(value: string): URL | null {
   const trimmed = value.trim();
   if (!trimmed || trimmed.startsWith("@")) return null;
   try {
