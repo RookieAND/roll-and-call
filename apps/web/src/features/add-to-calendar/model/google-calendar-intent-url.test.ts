@@ -17,7 +17,7 @@ describe("googleCalendarIntentUrl", () => {
     const intent = googleCalendarIntentUrl(event);
     const web = new URL(googleCalendarUrl(event));
     expect(
-      intent.startsWith(`intent://calendar.google.com${web.pathname}${web.search}#Intent;`),
+      intent.startsWith(`intent://calendar.google.com/calendar/r/eventedit${web.search}#Intent;`),
     ).toBe(true);
     expect(intent).toContain("package=com.google.android.calendar");
     expect(intent).toContain(`S.browser_fallback_url=${encodeURIComponent(web.toString())};end`);
