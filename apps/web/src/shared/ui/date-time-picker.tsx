@@ -1,14 +1,18 @@
 "use client";
 
-import { Select, VStack } from "@roll-and-call/ui";
+import { HStack, Select, VStack } from "@roll-and-call/ui";
 
 import { padTwoDigits } from "@/shared/lib";
 
 import { DatePicker } from "./date-picker";
 
-const TIME_VALUES = Array.from(
-  { length: 48 },
-  (_, index) => `${padTwoDigits(Math.floor(index / 2))}:${index % 2 ? "30" : "00"}`,
+const HOUR_ITEMS = Array.from({ length: 24 }, (_, hour) => {
+  const value = padTwoDigits(hour);
+  return { label: `${hour}시`, value };
+});
+const MINUTE_STEP = 5;
+const MINUTE_VALUES = Array.from({ length: 60 / MINUTE_STEP }, (_, index) =>
+  padTwoDigits(index * MINUTE_STEP),
 );
 const DEFAULT_TIME = "19:00";
 
@@ -33,9 +37,13 @@ export function DateTimePicker({
 }: DateTimePickerProps) {
   const [datePart = "", timePart = ""] = value ? value.split("T") : [];
   const time = timePart.slice(0, 5) || DEFAULT_TIME;
-  // 예전에 30분 단위가 아닌 시각으로 저장된 값도 그대로 고를 수 있게 목록에 끼워 둔다.
-  const values = TIME_VALUES.includes(time) ? TIME_VALUES : [time, ...TIME_VALUES];
-  const items = values.map((timeValue) => ({ label: timeValue, value: timeValue }));
+  const [hour = "19", minute = "00"] = time.split(":");
+  // 예전에 5분 단위가 아닌 시각으로 저장된 값도 그대로 고를 수 있게 목록에 끼워 둔다.
+  const minuteValues = MINUTE_VALUES.includes(minute) ? MINUTE_VALUES : [minute, ...MINUTE_VALUES];
+  const minuteItems = minuteValues.map((minuteValue) => ({
+    label: `${Number(minuteValue)}분`,
+    value: minuteValue,
+  }));
 
   const emit = (date: string, timeValue: string) => onChange(date ? `${date}T${timeValue}` : "");
 
@@ -52,23 +60,42 @@ export function DateTimePicker({
           onChange={(date) => emit(date, time)}
         />
       </div>
-      <div>
-        <Select.Root
-          items={items}
-          value={time}
-          disabled={disabled}
-          onValueChange={(timeValue) => emit(datePart, timeValue)}
-        >
-          <Select.Trigger aria-label="시각" />
-          <Select.Popup>
-            {items.map((option) => (
-              <Select.Item key={option.value} value={option.value}>
-                {option.label}
-              </Select.Item>
-            ))}
-          </Select.Popup>
-        </Select.Root>
-      </div>
+      <HStack gap="100">
+        <div className="min-w-0 flex-1">
+          <Select.Root
+            items={HOUR_ITEMS}
+            value={hour}
+            disabled={disabled}
+            onValueChange={(next) => emit(datePart, `${next}:${minute}`)}
+          >
+            <Select.Trigger aria-label="시" />
+            <Select.Popup>
+              {HOUR_ITEMS.map((option) => (
+                <Select.Item key={option.value} value={option.value}>
+                  {option.label}
+                </Select.Item>
+              ))}
+            </Select.Popup>
+          </Select.Root>
+        </div>
+        <div className="min-w-0 flex-1">
+          <Select.Root
+            items={minuteItems}
+            value={minute}
+            disabled={disabled}
+            onValueChange={(next) => emit(datePart, `${hour}:${next}`)}
+          >
+            <Select.Trigger aria-label="분" />
+            <Select.Popup>
+              {minuteItems.map((option) => (
+                <Select.Item key={option.value} value={option.value}>
+                  {option.label}
+                </Select.Item>
+              ))}
+            </Select.Popup>
+          </Select.Root>
+        </div>
+      </HStack>
     </VStack>
   );
 }
