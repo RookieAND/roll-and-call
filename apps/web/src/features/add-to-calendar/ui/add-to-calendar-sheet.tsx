@@ -9,6 +9,7 @@ import { toast } from "@/shared/ui";
 
 import { downloadIcs } from "../api/download-ics";
 import { calendarEvent } from "../model/calendar-event";
+import { googleCalendarIntentUrl } from "../model/google-calendar-intent-url";
 import { googleCalendarUrl } from "../model/google-calendar-url";
 import { sessionRangeText } from "../model/session-range-text";
 import { CalendarOptionRow } from "./calendar-option-row";
@@ -54,7 +55,11 @@ export function AddToCalendarSheet({
       playMinutes,
       gameUrl: window.location.origin + toServerPath(`/games/${gameId}`),
     });
-    window.open(googleCalendarUrl(event), "_blank", "noopener");
+    if (/Android/i.test(navigator.userAgent)) {
+      window.location.href = googleCalendarIntentUrl(event);
+    } else {
+      window.open(googleCalendarUrl(event), "_blank", "noopener");
+    }
     changeOpen(false);
   }
 
