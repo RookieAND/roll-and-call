@@ -22,7 +22,8 @@ export function RosterBody({
   summary,
   isCoordinate,
 }: RosterBodyProps) {
-  if (confirmedRows.length + waiting.length === 0) return <RosterEmptyState gameId={gameId} />;
+  if (confirmedRows.length + waiting.length === 0)
+    return <RosterEmptyState gameId={gameId} closed={summary.noApplicantsClosed} />;
 
   return (
     <RosterQueues

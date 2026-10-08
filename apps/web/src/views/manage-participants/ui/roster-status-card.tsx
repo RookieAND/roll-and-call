@@ -52,6 +52,12 @@ export function RosterStatusCard({ gameId, summary }: RosterStatusCardProps) {
     return (
       <VStack gap="175">
         <DeadlineCard summary={summary} />
+        {!hasApplicants && (
+          <Callout.Root colorPalette="gray" size="sm">
+            <Callout.Icon />
+            <Callout.Description>아직 참여 신청자가 없습니다</Callout.Description>
+          </Callout.Root>
+        )}
         {hasApplicants && (
           <DrawLotteryCard
             gameId={gameId}
