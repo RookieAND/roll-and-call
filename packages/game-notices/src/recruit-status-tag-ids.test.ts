@@ -12,6 +12,7 @@ const target = (cancelled?: string): RecruitTarget => ({
     categories: { cat: "k" },
     playTypes: { voice: "v", text: "t" },
     briefing: "b",
+    session: "s",
     managed: [],
   },
 });
@@ -20,19 +21,20 @@ const session = { kind: "session", playType: "voice" } as const;
 
 it("취소는 취소됨 태그를 쓰고, 연결하지 않았으면 마감 태그로 둔다", () => {
   const args = { closed: true, cancelled: true, categoryId: "cat", ...session };
-  expect(recruitStatusTagIds({ target: target("x"), ...args })).toEqual(["x", "k", "v"]);
-  expect(recruitStatusTagIds({ target: target(), ...args })).toEqual(["c", "k", "v"]);
+  expect(recruitStatusTagIds({ target: target("x"), ...args })).toEqual(["x", "k", "v", "s"]);
+  expect(recruitStatusTagIds({ target: target(), ...args })).toEqual(["c", "k", "v", "s"]);
   expect(
     recruitStatusTagIds({ target: target("x"), closed: false, categoryId: null, ...session }),
-  ).toEqual(["o", "v"]);
+  ).toEqual(["o", "v", "s"]);
 });
 
-it("플레이 유형 태그를 붙이고, 설명회면 구분 태그를 더 붙인다", () => {
+it("플레이 유형 태그와 구분 태그(설명회·세션)를 붙인다", () => {
   const args = { target: target(), closed: false, categoryId: "cat" };
   expect(recruitStatusTagIds({ ...args, kind: "session", playType: "text" })).toEqual([
     "o",
     "k",
     "t",
+    "s",
   ]);
   expect(recruitStatusTagIds({ ...args, kind: "briefing", playType: "voice" })).toEqual([
     "o",

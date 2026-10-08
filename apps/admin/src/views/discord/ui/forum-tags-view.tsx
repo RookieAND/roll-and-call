@@ -14,6 +14,11 @@ const PLAY_TYPE_ROWS = [
   { key: "text", label: "텍스트" },
 ] as const;
 
+const KIND_ROWS = [
+  { key: "briefing", label: "설명회" },
+  { key: "session", label: "세션" },
+] as const;
+
 const STATUS_ROWS = [
   { key: "open", label: "모집중" },
   { key: "closed", label: "마감" },
@@ -39,6 +44,7 @@ export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsV
     form.playTypes.voice,
     form.playTypes.text,
     form.briefing,
+    form.session,
     ...Object.values(form.categories),
   ].filter(Boolean);
   const hasDeleted =
@@ -79,7 +85,7 @@ export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsV
               value: form[key],
               savedValue: saved[key],
             }))}
-            onChange={(key, tagId) => setForm({ ...form, [key]: tagId })}
+            onChange={(key, tagId) => setForm({ ...form, [key as "briefing" | "session"]: tagId })}
           />
           <ForumTagSection
             title="룰 분류"
@@ -115,15 +121,13 @@ export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsV
             columnLabel="구분"
             optional
             tags={options.tags}
-            rows={[
-              {
-                key: "briefing",
-                label: "설명회",
-                value: form.briefing,
-                savedValue: saved.briefing,
-              },
-            ]}
-            onChange={(_, tagId) => setForm({ ...form, briefing: tagId })}
+            rows={KIND_ROWS.map(({ key, label }) => ({
+              key,
+              label,
+              value: form[key],
+              savedValue: saved[key],
+            }))}
+            onChange={(key, tagId) => setForm({ ...form, [key as "briefing" | "session"]: tagId })}
           />
           {hasDeleted ? (
             <Callout.Root colorPalette="warning">

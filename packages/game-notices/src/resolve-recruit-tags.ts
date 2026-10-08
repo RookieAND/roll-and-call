@@ -10,6 +10,7 @@ export type RecruitTags = {
   // 연결하지 않은 칸은 비어 있다. 이름으로는 찾지 않는다.
   playTypes: { voice?: string; text?: string };
   briefing?: string;
+  session?: string;
   // 봇이 붙이고 떼는 태그 전부. 운영진이 직접 단 다른 태그는 건드리지 않는다.
   managed: string[];
 };
@@ -42,6 +43,7 @@ export function resolveRecruitTags({
     text: existing(saved?.playTypes?.text),
   };
   const briefing = existing(saved?.briefing);
+  const session = existing(saved?.session);
   return {
     open,
     closed,
@@ -49,6 +51,7 @@ export function resolveRecruitTags({
     categories,
     playTypes,
     briefing,
+    session,
     managed: [
       ...new Set(
         [
@@ -59,6 +62,7 @@ export function resolveRecruitTags({
           playTypes.voice,
           playTypes.text,
           briefing,
+          session,
         ].flatMap((id) => id ?? []),
       ),
     ],

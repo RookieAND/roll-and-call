@@ -10,6 +10,7 @@ const empty: ForumTagForm = {
   categories: {},
   playTypes: { voice: "", text: "" },
   briefing: "",
+  session: "",
 };
 
 it("연결하지 않은 칸은 저장하지 않는다", () => {

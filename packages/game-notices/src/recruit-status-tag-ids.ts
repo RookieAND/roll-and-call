@@ -2,7 +2,7 @@ import type { GameKind, PlayType } from "@roll-and-call/database/games/model";
 
 import type { RecruitTarget } from "./recruit-target";
 
-// 모집 상태, 룰 분류, 플레이 유형 태그와 설명회면 구분 태그. 포럼에 없거나 연결하지 않은 것은 빠진다.
+// 모집 상태, 룰 분류, 플레이 유형, 구분 태그. 포럼에 없거나 연결하지 않은 것은 빠진다.
 export function recruitStatusTagIds({
   target,
   closed,
@@ -23,8 +23,8 @@ export function recruitStatusTagIds({
   // 취소됨 태그를 연결하지 않았으면 마감 태그로 둔다.
   const endedTag = cancelled ? (cancelledTag ?? closedTag) : closedTag;
   const statusTag = closed ? endedTag : open;
-  const briefingTag = kind === "briefing" ? target.tags.briefing : undefined;
-  return [statusTag, categoryTag, target.tags.playTypes[playType], briefingTag].flatMap(
+  const kindTag = kind === "briefing" ? target.tags.briefing : target.tags.session;
+  return [statusTag, categoryTag, target.tags.playTypes[playType], kindTag].flatMap(
     (id) => id ?? [],
   );
 }

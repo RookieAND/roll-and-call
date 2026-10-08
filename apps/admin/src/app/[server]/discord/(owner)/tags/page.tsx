@@ -25,6 +25,7 @@ export default async function DiscordTagsPage() {
         categories: saved?.categories ?? {},
         playTypes: { voice: saved?.playTypes?.voice ?? "", text: saved?.playTypes?.text ?? "" },
         briefing: saved?.briefing ?? "",
+        session: saved?.session ?? "",
       }}
     />
   );

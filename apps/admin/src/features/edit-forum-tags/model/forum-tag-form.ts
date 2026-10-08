@@ -6,6 +6,7 @@ export type ForumTagForm = {
   categories: Record<string, string>;
   playTypes: { voice: string; text: string };
   briefing: string;
+  session: string;
 };
 
 export type ForumTagOptions =
