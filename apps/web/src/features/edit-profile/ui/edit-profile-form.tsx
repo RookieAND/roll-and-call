@@ -105,7 +105,7 @@ export function EditProfileForm({
           label="한 줄 소개 (선택)"
           htmlFor="bio"
           counter={`${bio.length} / ${BIO_MAX_LENGTH}`}
-          description="이 서버의 프로필과 참여자 명단에 보입니다."
+          description="마이페이지와 참여자 명단에 함께 보입니다."
           error={bioError}
         >
           <Textarea
@@ -119,26 +119,24 @@ export function EditProfileForm({
           />
         </Field.Root>
 
-        <VStack gap="075">
-          <Field.Root
-            label="성향"
-            htmlFor="keywords"
-            counter={`${keywords.length} / ${KEYWORD_MAX_COUNT}`}
-          >
-            <TagInput
-              id="keywords"
-              value={keywords}
-              onChange={setKeywords}
-              max={KEYWORD_MAX_COUNT}
-              maxLength={KEYWORD_MAX_LENGTH}
-              prefix="#"
-              placeholder="수사중심"
-            />
-          </Field.Root>
-          <Text typography="body4" foreground="hint" render={<p />}>
-            {KEYWORD_MAX_LENGTH}자까지 · 앞에 #가 붙습니다.
-          </Text>
-        </VStack>
+        <Field.Root
+          label="성향"
+          htmlFor="keywords"
+          counter={`${keywords.length} / ${KEYWORD_MAX_COUNT}`}
+        >
+          <TagInput
+            id="keywords"
+            value={keywords}
+            onChange={setKeywords}
+            max={KEYWORD_MAX_COUNT}
+            maxLength={KEYWORD_MAX_LENGTH}
+            prefix="#"
+            placeholder="수사중심"
+            delimited
+            hint={`${KEYWORD_MAX_LENGTH}자까지 · 앞에 #가 붙습니다.`}
+            typingHint="쉼표나 띄어쓰기로도 끊깁니다. 같은 성향은 한 번만 들어갑니다."
+          />
+        </Field.Root>
 
         <ProfileLinksField value={links} onChange={setLinks} />
 

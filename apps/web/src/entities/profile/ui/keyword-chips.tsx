@@ -2,9 +2,10 @@ import { Chip, HStack, Text } from "@roll-and-call/ui";
 
 interface KeywordChipsProps {
   keywords: readonly string[];
+  selected?: boolean;
 }
 
-export function KeywordChips({ keywords }: KeywordChipsProps) {
+export function KeywordChips({ keywords, selected = false }: KeywordChipsProps) {
   if (keywords.length === 0) {
     return (
       <HStack
@@ -25,7 +26,7 @@ export function KeywordChips({ keywords }: KeywordChipsProps) {
   return (
     <HStack gap="075" wrap>
       {keywords.map((keyword) => (
-        <Chip key={keyword} shape="pill" tone="neutral" render={<span />}>
+        <Chip key={keyword} shape="pill" tone="neutral" selected={selected} render={<span />}>
           #{keyword}
         </Chip>
       ))}

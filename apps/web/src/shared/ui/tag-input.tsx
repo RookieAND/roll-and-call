@@ -1,6 +1,7 @@
 "use client";
 
-import { HStack, VStack } from "@roll-and-call/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { uniq } from "es-toolkit";
 import { useState, type KeyboardEvent } from "react";
 
 import { NoticeTagChip } from "./notice-tag-chip";
@@ -19,6 +20,11 @@ export interface TagInputProps {
   // 칩과 입력 칸 앞에 붙는 글자. 저장되는 값에는 들어가지 않는다.
   prefix?: string;
   tone?: "primary" | "notice";
+  // 쉼표나 띄어쓰기를 치면 그 앞까지를 태그로 끊는다.
+  delimited?: boolean;
+  hint?: string;
+  // 입력 칸에 글자가 있는 동안 hint 대신 보인다.
+  typingHint?: string;
 }
 
 export function TagInput({
@@ -31,6 +37,9 @@ export function TagInput({
   suggestions = [],
   prefix = "",
   tone = "primary",
+  delimited = false,
+  hint,
+  typingHint,
 }: TagInputProps) {
   const [draft, setDraft] = useState("");
   const isFull = value.length >= max;
@@ -40,6 +49,20 @@ export function TagInput({
     if (!next || isFull || value.includes(next)) return;
     onChange([...value, next]);
     setDraft("");
+  }
+
+  function changeDraft(next: string) {
+    if (!delimited || !/[,\s]/.test(next)) {
+      setDraft(next);
+      return;
+    }
+    const pieces = next.split(/[,\s]+/);
+    const rest = pieces.pop() ?? "";
+    const added = uniq(pieces.map((piece) => piece.slice(0, maxLength)).filter(Boolean)).filter(
+      (piece) => !value.includes(piece),
+    );
+    if (added.length > 0) onChange([...value, ...added].slice(0, max));
+    setDraft(rest);
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
@@ -82,11 +105,16 @@ export function TagInput({
           placeholder={placeholder}
           maxLength={maxLength}
           suggestions={unusedSuggestions}
-          onDraftChange={setDraft}
+          onDraftChange={changeDraft}
           onKeyDown={onKeyDown}
           onCommit={() => add(draft)}
           onAdd={add}
         />
+      )}
+      {hint && (
+        <Text typography="body4" foreground="hint" render={<p />}>
+          {draft && typingHint ? typingHint : hint}
+        </Text>
       )}
     </VStack>
   );

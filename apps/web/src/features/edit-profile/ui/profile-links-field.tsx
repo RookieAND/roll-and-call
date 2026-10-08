@@ -108,9 +108,7 @@ export function ProfileLinksField({ value, onChange }: ProfileLinksFieldProps) {
       )}
 
       <Text typography="body4" foreground="hint" render={<p />}>
-        SNS는 서비스를 고르고 핸들만 적으면 주소를 만듭니다.
-        <br />
-        위에서부터 마이페이지와 타인 프로필에 그대로 나옵니다.
+        위에서부터 마이페이지와 타인 프로필에 같은 순서로 보입니다.
       </Text>
     </VStack>
   );
