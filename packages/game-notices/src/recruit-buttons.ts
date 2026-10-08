@@ -1,6 +1,8 @@
-import type { DiscordLinkButton } from "@roll-and-call/discord";
+import type { DiscordButton } from "@roll-and-call/discord";
 
 import { gameUrl } from "./game-url";
+
+export const APPLY_BUTTON_PREFIX = "apply:";
 
 export function recruitButtons({
   slug,
@@ -8,7 +10,10 @@ export function recruitButtons({
 }: {
   slug: string;
   gameId: string;
-}): DiscordLinkButton[] {
+}): DiscordButton[] {
   const url = gameUrl({ slug, gameId });
-  return url ? [{ label: "▶ 참여하러 가기", url }] : [];
+  return [
+    { label: "✅ 바로 신청하기", customId: `${APPLY_BUTTON_PREFIX}${gameId}` },
+    ...(url ? [{ label: "▶ 참여하러 가기", url }] : []),
+  ];
 }

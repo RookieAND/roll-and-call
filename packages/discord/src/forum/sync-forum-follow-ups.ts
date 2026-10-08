@@ -1,6 +1,6 @@
 import { discordBotApi } from "../api/discord-bot-api";
 import { discordMessageBody } from "../api/discord-message-body";
-import type { DiscordLinkButton } from "../model/discord-types";
+import type { DiscordButton } from "../model/discord-types";
 
 // 첫 메시지에 다 못 담은 본문을 이어 보낸 메시지의 머리 표시. 이 표시로 다시 맞출 때 같은 메시지를 찾는다.
 export const FOLLOW_UP_MARK = "-# ↳ 이어서";
@@ -16,7 +16,7 @@ export async function syncForumFollowUps({
   threadId: string;
   chunks: string[];
   // 본문을 다 읽은 자리에 오도록 마지막 조각에만 붙인다. 나머지 조각의 버튼은 지운다.
-  buttons?: DiscordLinkButton[];
+  buttons?: DiscordButton[];
 }) {
   try {
     const messages = await discordBotApi<ThreadMessage[]>({

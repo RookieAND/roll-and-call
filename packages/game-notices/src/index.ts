@@ -12,7 +12,7 @@ export { recruitPostTitle } from "./recruit-post-title";
 export { recruitForumPost } from "./recruit-forum-post";
 export { recruitPlainText } from "./recruit-plain-text";
 export { recruitEmbed } from "./recruit-embed";
-export { recruitButtons } from "./recruit-buttons";
+export { APPLY_BUTTON_PREFIX, recruitButtons } from "./recruit-buttons";
 export { gameNoticeEmbed } from "./game-notice-embed";
 export { headcountFields } from "./headcount-fields";
 export { gameUrl } from "./game-url";

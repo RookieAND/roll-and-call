@@ -1,23 +1,12 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { after } from "next/server";
-
 import { RECRUIT_METHOD } from "@/entities/game";
 import { type ActionResult } from "@/shared/api";
-import { serverPath } from "@/shared/lib";
-import {
-  announceRecruitmentComplete,
-  getActingMember,
-  grantRushBadge,
-  refreshRecruitPost,
-  notMemberError,
-  seedAvailabilityFromProfile,
-} from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 import { type OverlapRejection } from "../model/overlap-rejection";
-import { announceNewApplication } from "./announce-new-application";
 import { applyToGame } from "./apply-to-game";
+import { finishApplication } from "./finish-application";
 
 // waiting·lottery는 화면 표시 시점이 아니라 실제 접수 결과라 토스트 문구가 이걸 따른다.
 export async function joinGame(gameId: string): Promise<
@@ -37,27 +26,8 @@ export async function joinGame(gameId: string): Promise<
   const application = await applyToGame({ serverId: server.id, gameId, userId: user.id });
   if ("error" in application) return application;
 
-  await seedAvailabilityFromProfile({ game: application.game, userId: user.id });
-  after(async () => {
-    await announceNewApplication({
-      server,
-      game: application.game,
-      applicantId: user.id,
-      isWaiting: application.waiting,
-      confirmedCount: application.confirmedCount,
-    });
-    if (application.becameFull) {
-      await announceRecruitmentComplete({ server, gameId });
-      await grantRushBadge({ serverId: server.id, gameId });
-    }
-    await refreshRecruitPost({ server, gameId });
-  });
+  await finishApplication({ server, userId: user.id, application });
 
-  const gamePath = serverPath({ slug: server.slug, path: `/games/${gameId}` });
-  revalidatePath(gamePath);
-  revalidatePath(`${gamePath}/participants`);
-  revalidatePath(`${gamePath}/schedule`);
-  revalidatePath(serverPath({ slug: server.slug, path: "/games" }));
   return {
     waiting: application.waiting,
     lottery: application.game.recruitMethod === RECRUIT_METHOD.lottery,

@@ -10,6 +10,7 @@ export { countServerMembers } from "./queries/count-server-members";
 export { getAccountName } from "./queries/get-account-name";
 export { findMemberProfile, type MemberProfile } from "./queries/find-member-profile";
 export { getDiscordId } from "./queries/get-discord-id";
+export { getUserIdByDiscordId } from "./queries/get-user-id-by-discord-id";
 export { hasOnboarded } from "./queries/has-onboarded";
 export { getProfileMemo } from "./queries/get-profile-memo";
 export { getMemberNickname } from "./queries/get-member-nickname";

@@ -1,7 +1,7 @@
 import type { DiscordMessageInput } from "../model/discord-types";
 
 const COMPONENT_TYPE = { actionRow: 1, button: 2 } as const;
-const LINK_BUTTON_STYLE = 5;
+const BUTTON_STYLE = { primary: 1, link: 5 } as const;
 
 export function discordMessageBody({
   content,
@@ -12,12 +12,21 @@ export function discordMessageBody({
 }: DiscordMessageInput) {
   const buttonRow = {
     type: COMPONENT_TYPE.actionRow,
-    components: buttons?.map(({ label, url }) => ({
-      type: COMPONENT_TYPE.button,
-      style: LINK_BUTTON_STYLE,
-      label,
-      url,
-    })),
+    components: buttons?.map((button) =>
+      "url" in button
+        ? {
+            type: COMPONENT_TYPE.button,
+            style: BUTTON_STYLE.link,
+            label: button.label,
+            url: button.url,
+          }
+        : {
+            type: COMPONENT_TYPE.button,
+            style: BUTTON_STYLE.primary,
+            label: button.label,
+            custom_id: button.customId,
+          },
+    ),
   };
   const components = buttons && (buttons.length > 0 ? [buttonRow] : []);
   return {

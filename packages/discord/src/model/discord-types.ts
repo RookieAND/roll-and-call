@@ -13,13 +13,18 @@ export type DiscordEmbed = {
 
 export type DiscordLinkButton = { label: string; url: string };
 
+// 누르면 인터랙션 엔드포인트로 customId가 온다.
+export type DiscordActionButton = { label: string; customId: string };
+
+export type DiscordButton = DiscordLinkButton | DiscordActionButton;
+
 export type DiscordMessage = { id: string; channel_id: string };
 
 export type DiscordMessageInput = {
   content?: string;
   embeds?: DiscordEmbed[];
-  // 링크 버튼만 된다(인터랙션 엔드포인트 없음). 수정 때 빠지면 기존 버튼이 남고, []면 지운다.
-  buttons?: DiscordLinkButton[];
+  // 수정 때 빠지면 기존 버튼이 남고, []면 지운다.
+  buttons?: DiscordButton[];
   // allowed_mentions allowlist: 멘션은 content에도 있어야 울린다.
   userMentions?: string[];
   // 서버 운영진이 머리 줄에 직접 적은 역할 멘션. content에 같은 <@&id>가 있어야 울린다.

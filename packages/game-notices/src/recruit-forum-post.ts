@@ -2,7 +2,7 @@ import type { Game, Server } from "@roll-and-call/database";
 import { getDiscordId } from "@roll-and-call/database/profiles";
 import {
   FOLLOW_UP_MARK,
-  type DiscordLinkButton,
+  type DiscordButton,
   type DiscordMessageInput,
 } from "@roll-and-call/discord";
 
@@ -29,7 +29,7 @@ export async function recruitForumPost({
 }): Promise<{
   input: DiscordMessageInput;
   followUps: string[];
-  followUpButtons: DiscordLinkButton[];
+  followUpButtons: DiscordButton[];
 }> {
   const gmDiscordId = await getDiscordId(game.gmId);
   const head = await messageHeadInput({

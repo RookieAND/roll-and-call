@@ -1,6 +1,8 @@
 // 서버 전용: DISCORD_BOT_TOKEN을 읽으므로 서버 코드(server-only 모듈)에서만 import한다.
 export { DISCORD_COLOR } from "./model/discord-color";
 export type {
+  DiscordActionButton,
+  DiscordButton,
   DiscordEmbed,
   DiscordEmbedField,
   DiscordFile,
