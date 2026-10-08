@@ -1,9 +1,11 @@
-import { Container, Text, VStack } from "@roll-and-call/ui";
+import { Badge, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
 import { getCurrentServer, getCurrentSessionUser, getProfile } from "@/shared/server";
-import { AppBar, ServerLink } from "@/shared/ui";
+import { ServerLink } from "@/shared/ui";
+import { EntrySheet, ServerStage } from "@/widgets/server-entry";
 
+import { WELCOME_EMBLEM_MARK } from "../model/welcome-emblem-mark";
 import { WelcomeSuffixNotice } from "./welcome-suffix-notice";
 import { WelcomeUsernameForm } from "./welcome-username-form";
 
@@ -18,26 +20,12 @@ export async function ServerWelcomeView({ next }: ServerWelcomeViewProps) {
   const suffixBase = profile?.nicknameSuffixBase;
 
   return (
-    <>
-      <AppBar title="가입 완료" heading={false} />
-      <Container size="md">
-        <VStack gap="300" className="py-300">
-          <VStack gap="100">
-            <Text typography="heading1" render={<h1 />} className="text-pretty">
-              {server.name}에 오신 것을 환영합니다
-            </Text>
-            <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
-              닉네임만 확인하면 바로 시작할 수 있습니다.
-              <br />
-              소개·성향·링크·기본 가능 시간은
-              <br />
-              나중에{" "}
-              <ServerLink path="/me/edit" className="underline">
-                마이페이지
-              </ServerLink>
-              에서 채울 수 있습니다.
-            </Text>
-          </VStack>
+    <ServerStage
+      name={server.name}
+      icon={server.icon}
+      mark={WELCOME_EMBLEM_MARK}
+      sheet={
+        <EntrySheet>
           {suffixBase && (
             <WelcomeSuffixNotice suffixBase={suffixBase} rejoined={!isNull(profile.rejoinedAt)} />
           )}
@@ -46,8 +34,30 @@ export async function ServerWelcomeView({ next }: ServerWelcomeViewProps) {
             defaultUsername={profile?.username ?? ""}
             next={next}
           />
-        </VStack>
-      </Container>
-    </>
+        </EntrySheet>
+      }
+    >
+      <VStack align="center" gap="125" className="text-center">
+        <Badge colorPalette="success">가입 완료</Badge>
+        <Text
+          typography="heading1"
+          render={<h1 />}
+          className="text-[length:26px] leading-[1.3] tracking-[-0.04em] text-pretty"
+        >
+          {server.name}에 오신 것을
+          <br />
+          환영합니다
+        </Text>
+        <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
+          닉네임만 확인하면 바로 시작할 수 있습니다.
+          <br />
+          나머지는{" "}
+          <ServerLink path="/me/edit" className="underline">
+            마이페이지
+          </ServerLink>
+          에서 채울 수 있습니다.
+        </Text>
+      </VStack>
+    </ServerStage>
   );
 }

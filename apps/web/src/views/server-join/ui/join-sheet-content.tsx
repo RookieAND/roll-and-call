@@ -4,23 +4,17 @@ import type { ReactNode } from "react";
 import type { JoinScreenStatus } from "../model/join-screen-status";
 import { JOIN_SHEET_COPY } from "../model/join-sheet-copy";
 
-interface JoinSheetProps {
+interface JoinSheetContentProps {
   status: JoinScreenStatus;
   serverName: string;
   hasInvite: boolean;
   action: ReactNode;
-  notice?: ReactNode;
 }
 
-export function JoinSheet({ status, serverName, hasInvite, action, notice }: JoinSheetProps) {
+export function JoinSheetContent({ status, serverName, hasInvite, action }: JoinSheetContentProps) {
   const { badge, badgePalette, title, body } = JOIN_SHEET_COPY[status]({ serverName, hasInvite });
   return (
-    <VStack
-      gap="250"
-      aria-live="polite"
-      className="relative flex-none rounded-t-800 bg-surface px-300 pt-400 pb-[calc(var(--spacing-300)+var(--rc-safe-bottom))] shadow-[0_-10px_30px_rgb(23_23_28/0.06)]"
-    >
-      {notice}
+    <>
       <VStack align="center" gap="125" className="text-center">
         <Badge colorPalette={badgePalette}>{badge}</Badge>
         <Text typography="heading1" render={<h2 />} className="text-pretty">
@@ -35,6 +29,6 @@ export function JoinSheet({ status, serverName, hasInvite, action, notice }: Joi
         </Text>
       </VStack>
       {action}
-    </VStack>
+    </>
   );
 }

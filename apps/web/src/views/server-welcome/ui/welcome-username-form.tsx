@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, FloatingBar, HStack, TextInput } from "@roll-and-call/ui";
+import { Button, Field, HStack, TextInput } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { USERNAME_MAX_LENGTH } from "@/entities/profile";
@@ -57,26 +57,21 @@ export function WelcomeUsernameForm({
         />
       </Field.Root>
 
-      <FloatingBar.Root elevated={false}>
-        <FloatingBar.Content>
-          <HStack gap="100">
-            <Button
-              type="button"
-              variant="outline"
-              size="lg"
-              className="min-w-0 flex-1"
-              disabled={pending || !!usernameError}
-              onClick={() => save(WELCOME_SAVE_MODE.later)}
-            >
-              나중에 하기
-            </Button>
-            <Button type="submit" size="lg" className="min-w-0 flex-1" disabled={pending}>
-              시작하기
-            </Button>
-          </HStack>
-        </FloatingBar.Content>
-        <FloatingBar.Spacer />
-      </FloatingBar.Root>
+      <HStack gap="100" className="mt-250">
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          className="min-w-0 flex-1"
+          disabled={pending || !!usernameError}
+          onClick={() => save(WELCOME_SAVE_MODE.later)}
+        >
+          나중에 하기
+        </Button>
+        <Button type="submit" size="lg" className="min-w-0 flex-1" disabled={pending}>
+          시작하기
+        </Button>
+      </HStack>
     </form>
   );
 }

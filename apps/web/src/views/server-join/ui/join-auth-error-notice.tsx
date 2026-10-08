@@ -1,14 +1,15 @@
-import { Callout } from "@roll-and-call/ui";
+"use client";
+
+import { useEffect } from "react";
+
+import { toast } from "@/shared/ui";
+
+const MESSAGE = "디스코드 로그인을 마치지 못했습니다. 다시 시도해 주세요.";
 
 export function JoinAuthErrorNotice() {
-  return (
-    <Callout.Root colorPalette="gray" size="sm">
-      <Callout.Icon />
-      <Callout.Description>
-        디스코드 로그인을 마치지 못했습니다.
-        <br />
-        아래 버튼으로 다시 시도해 주세요.
-      </Callout.Description>
-    </Callout.Root>
-  );
+  // toast id가 문구라 StrictMode에서 두 번 불려도 한 번만 보인다.
+  useEffect(() => {
+    toast.error(MESSAGE);
+  }, []);
+  return null;
 }

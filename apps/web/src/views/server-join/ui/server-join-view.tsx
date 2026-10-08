@@ -30,11 +30,15 @@ export async function ServerJoinView({ next, authError }: ServerJoinViewProps) {
   if (user) return <MemberJoinCheck target={target} next={next} />;
 
   return (
-    <JoinLayout
-      target={target}
-      status="signedOut"
-      notice={authError && <JoinAuthErrorNotice />}
-      action={<LoginButton next={serverJoinPath({ slug: server.slug, next })} className="w-full" />}
-    />
+    <>
+      {authError && <JoinAuthErrorNotice />}
+      <JoinLayout
+        target={target}
+        status="signedOut"
+        action={
+          <LoginButton next={serverJoinPath({ slug: server.slug, next })} className="w-full" />
+        }
+      />
+    </>
   );
 }

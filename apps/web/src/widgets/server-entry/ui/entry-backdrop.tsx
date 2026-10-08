@@ -4,7 +4,7 @@ const GRID_MASK = "radial-gradient(120% 75% at 50% 32%, black 30%, transparent 8
 const STAR_PATH =
   "M12 0C12.9 8.2 15.8 11.1 24 12C15.8 12.9 12.9 15.8 12 24C11.1 15.8 8.2 12.9 0 12C8.2 11.1 11.1 8.2 12 0Z";
 
-export function JoinBackdrop() {
+export function EntryBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       <div className="absolute inset-0" style={{ maskImage: GRID_MASK }}>
