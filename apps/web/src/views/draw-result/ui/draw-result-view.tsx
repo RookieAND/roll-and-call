@@ -11,6 +11,7 @@ import { toDrawOutcome } from "../model/to-draw-outcome";
 import { AppliedDraw } from "./applied-draw";
 import { EmptyDraw } from "./empty-draw";
 import { MyDrawResult } from "./my-draw-result";
+import { NoDrawEmpty } from "./no-draw-empty";
 
 interface DrawResultViewProps {
   id: string;
@@ -32,7 +33,16 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
     path: `/games/${id}?${QUERY_NOTICE_PARAM}=${QUERY_NOTICE.noDrawResult}`,
   });
   const drawnAt = game.drawnAt;
-  if (game.recruitMethod !== RECRUIT_METHOD.lottery || isNull(drawnAt)) redirect(noResultPath);
+  if (game.recruitMethod !== RECRUIT_METHOD.lottery) redirect(noResultPath);
+  const resultAppBar = <AppBar back={`/games/${id}`} title="추첨 결과" />;
+  if (isNull(drawnAt)) {
+    return (
+      <>
+        {resultAppBar}
+        <NoDrawEmpty gameId={id} />
+      </>
+    );
+  }
 
   const drawn = game.drawResults.map((result) => ({
     ...result,
@@ -43,7 +53,14 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
   const hasRolls = drawn.some((result) => !isNull(result.drawRoll));
   // 1d100 도입 전 추첨은 순위만 있고 굴린 값이 없다. 신청자 없이 마감된 글은 순위도 없다.
   const legacyDraw = game.participants.some((participant) => !isNull(participant.drawRank));
-  if (!hasRolls && legacyDraw) redirect(noResultPath);
+  if (!hasRolls && legacyDraw) {
+    return (
+      <>
+        {resultAppBar}
+        <NoDrawEmpty gameId={id} />
+      </>
+    );
+  }
 
   const outcome = toDrawOutcome({ participants: drawn, maxPlayers: countConfirmed(drawn) });
   const roster = splitRoster(game.participants);
@@ -73,7 +90,7 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
 
   return (
     <>
-      <AppBar back={`/games/${id}`} title="추첨 결과" />
+      {resultAppBar}
       <Container size="sm" className="py-200">
         {content}
       </Container>
