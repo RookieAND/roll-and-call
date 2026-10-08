@@ -1,19 +1,17 @@
 "use client";
 
-import { Button, Calendar, HStack, Popover, Select, toast } from "@roll-and-call/ui";
+import { Button, Calendar, HStack, Popover, Text, VStack, toast } from "@roll-and-call/ui";
 import { CalendarDays } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import { formatDate } from "@/shared/lib";
-import { FactRows, FactSub } from "@/shared/ui";
+import { FactRows, Tag } from "@/shared/ui";
 
 import { changeEnforcementDate } from "../api/change-enforcement-date";
 import { formatEnforcementDate } from "../model/format-enforcement-date";
-import { POSTPONE_OPTIONS } from "../model/postpone-options";
 import { toSeoulDateKey } from "../model/to-seoul-date-key";
-import { ConfirmDateChangeDialog } from "./confirm-date-change-dialog";
-
-const DAY = 86_400_000;
+import { DateShiftPreview } from "./date-shift-preview";
+import { EnforcementScope } from "./enforcement-scope";
 
 interface EnforcementDateFormProps {
   enforcementDate: Date | null;
@@ -22,46 +20,55 @@ interface EnforcementDateFormProps {
 export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProps) {
   const [pending, startTransition] = useTransition();
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [postponeDays, setPostponeDays] = useState<string>();
+  const [picked, setPicked] = useState<Date | null>(null);
 
-  const [change, setChange] = useState<{ date: Date; kind: "set" | "postpone" } | null>(null);
-
-  const pickDate = (dateKey: string) => {
-    setCalendarOpen(false);
-    setChange({ date: new Date(`${dateKey}T00:00:00+09:00`), kind: "set" });
-  };
-
-  const pickPostpone = () =>
-    enforcementDate &&
-    setChange({
-      date: new Date(enforcementDate.getTime() + Number(postponeDays) * DAY),
-      kind: "postpone",
-    });
   const current = enforcementDate ? formatEnforcementDate(enforcementDate) : null;
-  const pickLabel = enforcementDate ? "날짜 변경" : "날짜 지정";
-  const dateKey = enforcementDate ? toSeoulDateKey(enforcementDate) : undefined;
+  const dateKey = picked ? toSeoulDateKey(picked) : undefined;
+  const changeLabel = enforcementDate ? "적용일 변경" : "적용일 설정";
+  const isPostpone = Boolean(enforcementDate && picked && picked > enforcementDate);
+
+  const pickDate = (key: string) => {
+    setCalendarOpen(false);
+    setPicked(new Date(`${key}T00:00:00+09:00`));
+  };
 
   const confirm = () =>
     startTransition(async () => {
-      if (!change) return;
-      await changeEnforcementDate(change.date, change.kind);
-      const verb = change.kind === "postpone" ? "연기했습니다" : "지정했습니다";
-      toast.success(`적용일을 ${formatDate(change.date)}로 ${verb}`);
-      setChange(null);
-      setPostponeDays(undefined);
+      if (!picked) return;
+      await changeEnforcementDate(picked, isPostpone ? "postpone" : "set");
+      toast.success(`적용일을 ${formatDate(picked)}로 ${isPostpone ? "연기" : "지정"}했습니다`);
+      setPicked(null);
     });
 
   return (
-    <>
-      <FactRows
-        labelWidth={96}
-        items={[
-          {
-            label: "현재 적용일",
-            value: (
-              <>
-                {current ? current.label : "없음 (바로 적용 중)"}
-                {current ? <FactSub>{current.remaining}</FactSub> : null}
+    <FactRows
+      labelWidth={120}
+      items={[
+        {
+          label: "현재 적용일",
+          value: (
+            <VStack gap="050" className="py-100">
+              <HStack align="center" gap="100">
+                <Text typography="heading2" render={<span />}>
+                  {current ? current.label : "설정 안 됨"}
+                </Text>
+                <Tag tone={current ? "primary" : "success"}>
+                  {current ? current.remaining : "적용 중"}
+                </Tag>
+              </HStack>
+              <Text typography="body4" foreground="muted" weight="regular">
+                {current
+                  ? "이 날짜 전까지는 인증이 필요한 룰북도 인증 없이 구인을 열 수 있습니다."
+                  : "인증이 필요한 룰북은 인증을 받아야 구인을 열 수 있습니다."}
+              </Text>
+            </VStack>
+          ),
+        },
+        {
+          label: changeLabel,
+          value: (
+            <VStack gap="075" className="py-100">
+              <HStack align="center" gap="100">
                 <Popover.Root open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <Popover.Trigger
                     disabled={pending}
@@ -69,15 +76,15 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
                       <Button
                         variant="outline"
                         colorPalette="gray"
-                        size="sm"
-                        className="ml-auto gap-050"
+                        aria-label="적용일 선택"
+                        className="w-[240px] justify-start gap-100"
                       />
                     }
                   >
-                    <CalendarDays size={14} aria-hidden />
-                    {pickLabel}
+                    <CalendarDays size={16} aria-hidden />
+                    {picked ? formatEnforcementDate(picked).label : "날짜 선택"}
                   </Popover.Trigger>
-                  <Popover.Popup align="end">
+                  <Popover.Popup align="start">
                     <Calendar
                       value={dateKey}
                       min={toSeoulDateKey(new Date())}
@@ -85,50 +92,28 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
                     />
                   </Popover.Popup>
                 </Popover.Root>
-              </>
-            ),
-          },
-          {
-            label: "적용일 연기",
-            value: (
-              <HStack align="center" gap="100">
-                <div className="w-[148px] [&_[data-slot=select-trigger]]:h-[32px] [&_[data-slot=select-trigger]]:min-h-[32px]">
-                  <Select.Root
-                    key={dateKey}
-                    items={POSTPONE_OPTIONS}
-                    onValueChange={setPostponeDays}
-                  >
-                    <Select.Trigger placeholder="연기 기간 선택" aria-label="연기 기간" />
-                    <Select.Popup>
-                      {POSTPONE_OPTIONS.map((option) => (
-                        <Select.Item key={option.value} value={option.value}>
-                          {option.label}
-                        </Select.Item>
-                      ))}
-                    </Select.Popup>
-                  </Select.Root>
-                </div>
-                <Button
-                  variant="outline"
-                  colorPalette="gray"
-                  size="sm"
-                  disabled={!enforcementDate || !postponeDays || pending}
-                  onClick={pickPostpone}
-                >
-                  연기
+                <Button disabled={!picked || pending} onClick={confirm}>
+                  변경
                 </Button>
               </HStack>
-            ),
-          },
-        ]}
-      />
-      <ConfirmDateChangeDialog
-        change={change}
-        currentDate={enforcementDate}
-        pending={pending}
-        onCancel={() => setChange(null)}
-        onConfirm={confirm}
-      />
-    </>
+              <Text typography="body4" foreground="hint" weight="regular">
+                오늘 이후 날짜만 고를 수 있습니다.
+              </Text>
+              {picked && enforcementDate ? (
+                <DateShiftPreview from={enforcementDate} to={picked} />
+              ) : null}
+            </VStack>
+          ),
+        },
+        {
+          label: "영향 범위",
+          value: (
+            <div className="py-150">
+              <EnforcementScope />
+            </div>
+          ),
+        },
+      ]}
+    />
   );
 }
