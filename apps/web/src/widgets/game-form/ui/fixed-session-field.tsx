@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, Text, VStack } from "@roll-and-call/ui";
+import { Callout, Field, VStack } from "@roll-and-call/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
 
 import type { GameFormValues } from "@/features/write-game";
@@ -11,10 +11,10 @@ import { defaultEndDateForSession } from "../model/default-end-date-for-session"
 
 interface FixedSessionFieldProps {
   form: UseFormReturn<GameFormValues>;
-  notice?: string | null;
+  locked?: boolean;
 }
 
-export function FixedSessionField({ form, notice }: FixedSessionFieldProps) {
+export function FixedSessionField({ form, locked = false }: FixedSessionFieldProps) {
   const { control, getValues, setValue, formState } = form;
   const error = formState.errors.confirmedAt;
 
@@ -29,6 +29,7 @@ export function FixedSessionField({ form, notice }: FixedSessionFieldProps) {
               id="confirmedAt"
               value={field.value}
               invalid={!!error}
+              disabled={locked}
               min={toKstDateInput(new Date())}
               onChange={(value) => {
                 field.onChange(value);
@@ -40,10 +41,15 @@ export function FixedSessionField({ form, notice }: FixedSessionFieldProps) {
           )}
         />
       </Field.Root>
-      {notice && (
-        <Text typography="body4" weight="medium" foreground="warning" render={<p />}>
-          {notice}
-        </Text>
+      {locked && (
+        <Callout.Root colorPalette="gray" size="sm">
+          <Callout.Icon />
+          <Callout.Description>
+            세션 시간은 운영 관리에서 바꿉니다.
+            <br />
+            운영 관리의 세션 시간 바꾸기 줄을 눌러 주세요.
+          </Callout.Description>
+        </Callout.Root>
       )}
     </VStack>
   );

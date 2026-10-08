@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Callout, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull, uniq } from "es-toolkit";
 import { useState } from "react";
 
@@ -10,8 +10,11 @@ import { buildDayColumns, buildTimeRows, SLOT_MINUTES, toKst } from "@/shared/li
 import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { confirmSession } from "../api/confirm-session";
+import { confirmButtonLabel } from "../model/confirm-button-label";
+import { confirmDialogContent } from "../model/confirm-dialog-content";
 import type { ConfirmSessionGame } from "../model/confirm-session-game";
 import { initialSessionStart } from "../model/initial-session-start";
+import { sessionDialogLabel } from "../model/session-dialog-label";
 import { toSessionStart } from "../model/session-start";
 import { sessionStartIso } from "../model/session-start-iso";
 import { sessionWindowLabel } from "../model/session-window-label";
@@ -56,6 +59,11 @@ export function ConfirmSessionForm({ game, names, playLabel }: ConfirmSessionFor
   const absentNames = respondents.filter((name) => !members.includes(name));
   const startLabel = toKst(startIso).format("M/D (dd) HH:mm");
 
+  function openConfirm() {
+    setError(null);
+    setConfirming(true);
+  }
+
   function submit() {
     setError(null);
     run(() => confirmSession({ gameId, slotIso: startIso }), {
@@ -63,14 +71,23 @@ export function ConfirmSessionForm({ game, names, playLabel }: ConfirmSessionFor
         setConfirming(false);
         toast.success(changing ? "확정 시간을 바꿨습니다" : "세션이 확정되었습니다");
       },
-      onError: (result) => {
-        setError(result.error);
-        setConfirming(false);
-      },
+      onError: (result) => setError(result.error),
     });
   }
 
   const windowLabel = sessionWindowLabel({ iso: startIso, playMinutes });
+  const dialogContent = confirmDialogContent({
+    previousLabel: confirmedAt
+      ? sessionDialogLabel({ iso: confirmedAt.toISOString(), playMinutes })
+      : null,
+    nextLabel: sessionDialogLabel({ iso: startIso, playMinutes }),
+    confirmedCount: game.confirmedCount,
+    maxPlayers: game.maxPlayers,
+  });
+  const failure = error
+    ? [changing ? "시간을 바꾸지 못했습니다." : "확정하지 못했습니다.", error]
+    : null;
+  const confirmLabel = confirmButtonLabel({ failed: !!error, changing });
   const pickedCandidate = candidates.find((candidate) => candidate.iso === startIso)?.iso ?? null;
 
   return (
@@ -120,18 +137,12 @@ export function ConfirmSessionForm({ game, names, playLabel }: ConfirmSessionFor
 
       <FloatingBar.Root elevated={false}>
         <FloatingBar.Content>
-          {error && (
-            <Callout.Root colorPalette="danger" size="sm" className="mb-125">
-              <Callout.Icon />
-              <Callout.Description>{error}</Callout.Description>
-            </Callout.Root>
-          )}
           <Button
             variant="solid"
             colorPalette="success"
             size="lg"
             className="w-full"
-            onClick={() => setConfirming(true)}
+            onClick={openConfirm}
           >
             {startLabel}
             {changing ? "으로 변경" : "으로 확정"}
@@ -143,18 +154,13 @@ export function ConfirmSessionForm({ game, names, playLabel }: ConfirmSessionFor
       <ConfirmDialog
         open={confirming}
         onOpenChange={setConfirming}
-        title={changing ? "확정 시간을 바꿀까요?" : "이 시간으로 확정할까요?"}
-        confirmLabel={changing ? "변경" : "확정"}
+        title={changing ? "세션 시간을 바꿀까요?" : "이 시간으로 확정할까요?"}
+        confirmLabel={confirmLabel}
         confirmColorPalette="success"
         pending={pending}
         onConfirm={submit}
       >
-        <ConfirmSessionDialogBody
-          windowLabel={windowLabel}
-          changing={changing}
-          confirmedCount={game.confirmedCount}
-          maxPlayers={game.maxPlayers}
-        />
+        <ConfirmSessionDialogBody content={dialogContent} failure={failure} />
       </ConfirmDialog>
     </VStack>
   );

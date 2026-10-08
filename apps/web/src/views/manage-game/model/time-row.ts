@@ -10,7 +10,8 @@ export function timeRow({ game, now }: { game: GameDetailData; now: Date }): Man
   const base = { key: "time", label: "세션 시간 정하기", icon: "clock" } as const;
   const confirmPath = `/games/${game.id}/confirm`;
 
-  if (game.recruitMethod === RECRUIT_METHOD.lottery && isNil(game.drawnAt)) {
+  const isFixed = game.scheduleMode === SCHEDULE_MODE.fixed;
+  if (!isFixed && game.recruitMethod === RECRUIT_METHOD.lottery && isNil(game.drawnAt)) {
     return {
       ...base,
       state: MANAGE_ROW_STATE.locked,
@@ -34,9 +35,6 @@ export function timeRow({ game, now }: { game: GameDetailData; now: Date }): Man
   const when = formatDateTime(game.confirmedAt);
   const done = { ...base, icon: "check", state: MANAGE_ROW_STATE.done, href: null } as const;
 
-  if (game.scheduleMode === SCHEDULE_MODE.fixed) {
-    return { ...done, label: "세션 시간", detail: `${when} · 등록할 때 정한 시각입니다` };
-  }
   if (!isSessionStarted(game, now)) {
     return {
       ...base,

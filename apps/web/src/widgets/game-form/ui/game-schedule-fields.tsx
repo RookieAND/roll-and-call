@@ -17,14 +17,14 @@ interface GameScheduleFieldsProps {
   form: UseFormReturn<GameFormValues>;
   modeLocked?: boolean;
   endDateLocked?: boolean;
-  sessionNotice?: string | null;
+  sessionLocked?: boolean;
 }
 
 export function GameScheduleFields({
   form,
   modeLocked = false,
   endDateLocked = false,
-  sessionNotice,
+  sessionLocked = false,
 }: GameScheduleFieldsProps) {
   const {
     control,
@@ -43,7 +43,7 @@ export function GameScheduleFields({
       />
 
       {mode === SCHEDULE_MODE.fixed ? (
-        <FixedSessionField form={form} notice={sessionNotice} />
+        <FixedSessionField form={form} locked={sessionLocked} />
       ) : (
         <>
           <CoordinationRangeFields form={form} />

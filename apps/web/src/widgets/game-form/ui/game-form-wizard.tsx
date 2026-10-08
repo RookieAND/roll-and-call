@@ -48,11 +48,6 @@ export function GameFormWizard({
   const leaveHref = toServerPath(edit ? `/games/${edit.gameId}` : "/games");
   const applicants = edit?.applicantCount ?? 0;
   const locked = applicants > 0;
-  const confirmedCount = edit?.confirmedCount ?? 0;
-  const sessionNotice =
-    confirmedCount > 0
-      ? `바꾸면 구인 스레드로 참여자 ${confirmedCount}명에게 새 일시를 알립니다.`
-      : null;
 
   // 숨겨진 단계의 필드로는 스크롤할 수 없어서 그 단계로 먼저 돌린다.
   function onInvalid(errors: FieldErrors<GameFormValues>) {
@@ -116,7 +111,7 @@ export function GameFormWizard({
             form={form}
             modeLocked={locked}
             endDateLocked={edit?.drawn ?? false}
-            sessionNotice={sessionNotice}
+            sessionLocked={!!edit}
           />
         );
     }

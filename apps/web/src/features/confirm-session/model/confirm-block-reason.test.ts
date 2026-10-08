@@ -17,6 +17,7 @@ const game: LockedGame = {
   recruitMethod: RECRUIT_METHOD.lottery,
   drawnAt: new Date("2026-09-14T00:00:00Z"),
   confirmedAt: null,
+  endDate: new Date("2026-09-14T12:00:00Z"),
   rangeStart: "2026-09-16",
   rangeEnd: "2026-09-19",
   windowStartHour: 22,
@@ -73,10 +74,40 @@ describe("confirmBlockReason", () => {
     expect(reason({ rangeStart: null, rangeEnd: null })).toBe("조율 기간 안의 날짜를 골라 주세요.");
   });
 
-  it("일시 지정형은 조율 대상이 아니다", () => {
-    expect(reason({ scheduleMode: SCHEDULE_MODE.fixed })).toBe(
-      "일시가 지정된 구인은 조율 대상이 아닙니다.",
-    );
+  describe("일시 지정형", () => {
+    const fixed = {
+      scheduleMode: SCHEDULE_MODE.fixed,
+      confirmedAt: new Date("2026-09-20T12:00:00Z"),
+    };
+    const afterDeadline = new Date("2026-09-25T12:00:00Z");
+
+    it("마감 뒤 미래 시각은 추첨 전이어도 통과한다", () => {
+      expect(reason(fixed, afterDeadline)).toBeUndefined();
+      expect(reason({ ...fixed, drawnAt: null }, afterDeadline)).toBeUndefined();
+    });
+
+    it("마감 앞이거나 같은 시각은 막는다", () => {
+      const message = "모집 마감 뒤의 시각을 골라 주세요.";
+      expect(reason({ ...fixed, endDate: new Date("2026-09-26T00:00:00Z") }, afterDeadline)).toBe(
+        message,
+      );
+      expect(reason({ ...fixed, endDate: afterDeadline }, afterDeadline)).toBe(message);
+    });
+
+    it("지난 시각과 시작한 세션은 막는다", () => {
+      expect(reason(fixed, new Date(now.getTime() - 60_000))).toBe(
+        "지난 시각으로는 정할 수 없습니다.",
+      );
+      expect(
+        reason({ ...fixed, confirmedAt: new Date(now.getTime() - 60_000) }, afterDeadline),
+      ).toBe("시작한 세션은 시간을 바꿀 수 없습니다.");
+    });
+
+    it("세션 시각이 없으면 막는다", () => {
+      expect(reason({ ...fixed, confirmedAt: null }, afterDeadline)).toBe(
+        "세션 시간이 없는 구인입니다.",
+      );
+    });
   });
 });
 

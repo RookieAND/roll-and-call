@@ -11,7 +11,7 @@ import {
   SCHEDULE_MODE,
 } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
-import { ConfirmSessionForm } from "@/features/confirm-session";
+import { ConfirmSessionForm, FixedSessionChangeForm } from "@/features/confirm-session";
 import { formatDate, serverPath } from "@/shared/lib";
 import {
   getCurrentSessionUser,
@@ -26,12 +26,7 @@ import { ConfirmSummary } from "./confirm-summary";
 
 export async function GameConfirmView({ id }: { id: string }) {
   const server = await getCurrentServer();
-  const [game, user, availabilities, responseCounts] = await Promise.all([
-    getGameById(server.id, id),
-    getCurrentSessionUser(),
-    getGameAvailabilities({ serverId: server.id, gameId: id }),
-    getResponseCounts({ serverId: server.id, gameIds: [id] }),
-  ]);
+  const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();
   if (user?.id !== game.gmId) {
     return (
@@ -47,10 +42,32 @@ export async function GameConfirmView({ id }: { id: string }) {
       </>
     );
   }
-  if (game.scheduleMode !== SCHEDULE_MODE.coordinate)
-    redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
   if (isSessionStarted(game))
     redirect(serverPath({ slug: server.slug, path: `/games/${id}/manage` }));
+  if (game.scheduleMode === SCHEDULE_MODE.fixed) {
+    if (!game.confirmedAt || game.cancelledAt)
+      redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
+    return (
+      <>
+        <AppBar
+          back={`/games/${id}/manage`}
+          title="세션 시간 바꾸기"
+          action={<Badge colorPalette="primary">GM</Badge>}
+        />
+        <Container size="sm">
+          <VStack gap="200" className="pt-200 pb-200">
+            <FixedSessionChangeForm
+              gameId={id}
+              endDate={game.endDate}
+              confirmedAt={game.confirmedAt}
+              confirmedCount={countConfirmed(game.participants)}
+              playMinutes={effectivePlayMinutes(game.playMinutes)}
+            />
+          </VStack>
+        </Container>
+      </>
+    );
+  }
 
   const appBar = (
     <AppBar
@@ -74,6 +91,10 @@ export async function GameConfirmView({ id }: { id: string }) {
       </>
     );
   }
+  const [availabilities, responseCounts] = await Promise.all([
+    getGameAvailabilities({ serverId: server.id, gameId: id }),
+    getResponseCounts({ serverId: server.id, gameIds: [id] }),
+  ]);
   const { rangeStart, rangeEnd } = game;
   if (!rangeStart || !rangeEnd)
     redirect(serverPath({ slug: server.slug, path: `/games/${id}/schedule` }));

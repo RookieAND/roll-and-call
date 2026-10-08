@@ -94,11 +94,27 @@ describe("manageRows", () => {
     expect(rows.time.detail).toBe("9월 20일 (일) 11:30으로 정했습니다");
   });
 
-  it("일시 지정형은 등록할 때 정한 시각이다", () => {
-    const rows = byKey(gameWith({ scheduleMode: SCHEDULE_MODE.fixed, confirmedAt: at(DAY) }));
-    expect(rows.time.label).toBe("세션 시간");
+  it("일시 지정형도 시작 전이면 추첨 전이어도 세션 시간 바꾸기가 열린다", () => {
+    const rows = byKey(
+      gameWith({
+        scheduleMode: SCHEDULE_MODE.fixed,
+        recruitMethod: RECRUIT_METHOD.lottery,
+        confirmedAt: at(DAY),
+      }),
+    );
+    expect(rows.time.label).toBe("세션 시간 바꾸기");
+    expect(rows.time.state).toBe(MANAGE_ROW_STATE.open);
+    expect(rows.time.href).toBe("/games/game/confirm");
+    expect(rows.time.detail).toBe("9월 21일 (월) 12:00 · 시작 전까지 바꿀 수 있습니다");
+  });
+
+  it("일시 지정형 시작 뒤에는 정한 시각만 보인다", () => {
+    const rows = byKey(
+      gameWith({ scheduleMode: SCHEDULE_MODE.fixed, confirmedAt: at(-0.5 * HOUR) }),
+    );
     expect(rows.time.state).toBe(MANAGE_ROW_STATE.done);
-    expect(rows.time.detail).toBe("9월 21일 (월) 12:00 · 등록할 때 정한 시각입니다");
+    expect(rows.time.href).toBeNull();
+    expect(rows.time.detail).toBe("9월 20일 (일) 11:30으로 정했습니다");
   });
 
   it("진행 중이고 확정 1명 이상이면 출석 확인 줄이 세션 마치기 창을 연다", () => {
