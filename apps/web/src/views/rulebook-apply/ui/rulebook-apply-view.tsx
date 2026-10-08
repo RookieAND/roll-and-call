@@ -46,7 +46,6 @@ export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps)
         rulebooks={data.rulebooks}
         initialRulebookIds={rulebookIds}
         recentRulebookIds={data.recentRulebookIds}
-        pendingRequestNames={data.pendingRequestNames}
       />
     </>
   );

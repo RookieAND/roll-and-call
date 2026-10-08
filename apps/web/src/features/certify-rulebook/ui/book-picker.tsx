@@ -13,8 +13,8 @@ import {
   UiImage,
   VStack,
 } from "@roll-and-call/ui";
-import { uniq } from "es-toolkit";
 import { ArrowRightLeft, Plus } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 import {
@@ -33,27 +33,18 @@ import { recentCategories } from "../model/recent-categories";
 import { PickerBookRow } from "./picker-book-row";
 import { PickerCategoryRow } from "./picker-category-row";
 import { pickerListing } from "./picker-listing";
-import { RulebookRequestSheet } from "./rulebook-request-sheet";
 
 interface BookPickerProps {
   rulebooks: MyRulebook[];
   initialRulebookIds: string[];
   recentRulebookIds: string[];
-  pendingRequestNames: string[];
 }
 
-export function BookPicker({
-  rulebooks,
-  initialRulebookIds,
-  recentRulebookIds,
-  pendingRequestNames,
-}: BookPickerProps) {
+export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }: BookPickerProps) {
   const toServerPath = useServerPath();
   const initial = rulebooks.find((rulebook) => rulebook.id === initialRulebookIds[0]);
   const [query, setQuery] = useState("");
   const [categoryId, setCategoryId] = useState(initial?.categoryId ?? null);
-  const [requestOpen, setRequestOpen] = useState(false);
-  const [requestKey, setRequestKey] = useState(0);
   const [showAll, setShowAll] = useState(false);
 
   const allCategories = pickerCategories({ rulebooks, query: "" });
@@ -69,10 +60,9 @@ export function BookPicker({
     books.some((book) => book.kind === kind),
   );
   const needNote = coreNeedNote(books);
-  const openRequest = () => {
-    setRequestKey((key) => key + 1);
-    setRequestOpen(true);
-  };
+  const requestHref = toServerPath(
+    `/me/rulebooks/apply/request${query.trim() ? `?${new URLSearchParams({ name: query.trim() })}` : ""}`,
+  );
 
   return (
     <>
@@ -140,7 +130,7 @@ export function BookPicker({
                 <br />
                 목록에 없으면 추가를 요청해 주세요.
               </Text>
-              <Button variant="tinted" className="mt-100" onClick={openRequest}>
+              <Button render={<Link href={requestHref} />} variant="tinted" className="mt-100">
                 추가 요청
               </Button>
             </VStack>
@@ -214,7 +204,7 @@ export function BookPicker({
               추가되면 알림 탭으로 알립니다.
             </Callout.Description>
             <Callout.Action>
-              <Button variant="outline" size="sm" onClick={openRequest}>
+              <Button render={<Link href={requestHref} />} variant="outline" size="sm">
                 <Plus size={14} strokeWidth={2.4} aria-hidden />
                 추가 요청
               </Button>
@@ -222,15 +212,6 @@ export function BookPicker({
           </Callout.Root>
         </div>
       </Container>
-
-      <RulebookRequestSheet
-        key={requestKey}
-        open={requestOpen}
-        onOpenChange={setRequestOpen}
-        categoryNames={uniq(rulebooks.map((rulebook) => rulebook.categoryName))}
-        pendingRequestNames={pendingRequestNames}
-        initialName={query.trim()}
-      />
     </>
   );
 }

@@ -90,11 +90,10 @@ export function PhotoTile({
           onClick={onPick}
           className={cn(frame({ status: slot.status, square, selected, needed }))}
         >
-          {previewUrl &&
-            !pdf && (
-              // oxlint-disable-next-line nextjs/no-img-element -- 스토리지 원본 사진이라 최적화 경로를 타지 않는다.
-              <img src={previewUrl} alt="" className="absolute inset-0 size-full object-cover" />
-            )}
+          {previewUrl && !pdf && (
+            // oxlint-disable-next-line nextjs/no-img-element -- 스토리지 원본 사진이라 최적화 경로를 타지 않는다.
+            <img src={previewUrl} alt="" className="absolute inset-0 size-full object-cover" />
+          )}
           {filled && pdf && (
             <span className="absolute inset-0 flex items-center justify-center text-gray-600">
               <FileText size={28} aria-hidden />
