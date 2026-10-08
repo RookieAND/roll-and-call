@@ -30,6 +30,7 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
   const staffChannelLabel =
     entry.staffChannelLine === STAFF_CHANNEL_RELATED.posted ? "글 올림" : "올리지 않음";
   const sideFacts = compact([
+    { label: "대상", value: entry.targetName },
     isNull(daysLeft) ? null : { label: "보관", value: `${daysLeft}일 남음` },
     entry.staffChannelLine ? { label: "운영진 채널", value: staffChannelLabel } : null,
   ]);

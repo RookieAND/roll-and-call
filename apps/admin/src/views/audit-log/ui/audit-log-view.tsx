@@ -62,12 +62,12 @@ export function AuditLogView({ log, query, sort }: AuditLogViewProps) {
                   <ServerLink path={clearTargetHref} scroll={false} aria-label="대상 필터 지우기" />
                 }
               >
-                대상 · {log.targetName}
+                대상: {log.targetName}
                 <X size={12} aria-hidden />
               </Chip>
             ) : (
               <>
-                <UrlSearchInput placeholder="대상 검색" className="w-[220px]" />
+                <UrlSearchInput placeholder="대상 닉네임 검색" className="w-[220px]" />
                 <UrlSelect
                   param="actor"
                   allLabel="전체 운영진"

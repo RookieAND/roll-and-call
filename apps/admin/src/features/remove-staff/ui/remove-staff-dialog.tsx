@@ -1,7 +1,7 @@
 "use client";
 
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
-import { AlertDialog, Button, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { AlertDialog, Button, Callout, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -55,7 +55,7 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
             {withObjectParticle(staff.nickname)} 운영진에서 해제할까요?
           </AlertDialog.Title>
           <AlertDialog.Description>
-            어드민에는 로그인할 수 없게 되지만, 사용자 앱은 그대로 이용합니다.
+            권한을 해제하면 어드민에 로그인할 수 없습니다.
           </AlertDialog.Description>
         </AlertDialog.Header>
         <AlertDialog.Body>
@@ -74,6 +74,11 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
                 ]}
               />
             </div>
+            <Callout.Root colorPalette="danger">
+              <Callout.Icon />
+              <Callout.Title>어드민 접근이 바로 끊깁니다</Callout.Title>
+              <Callout.Description>사용자 앱은 그대로 이용할 수 있습니다.</Callout.Description>
+            </Callout.Root>
             <Field.Root label="해제 사유" htmlFor="remove-staff-reason" required>
               <Textarea
                 id="remove-staff-reason"

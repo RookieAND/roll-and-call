@@ -9,7 +9,7 @@ interface EntrySectionProps {
 
 export function EntrySection({ title, right, children }: EntrySectionProps) {
   return (
-    <VStack gap="125" render={<section />} className="px-200 py-175">
+    <VStack gap="100" render={<section />} className="px-200 py-175">
       <HStack align="center" gap="100">
         <Text typography="heading3" render={<h3 />}>
           {title}

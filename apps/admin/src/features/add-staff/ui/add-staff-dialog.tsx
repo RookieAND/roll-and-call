@@ -55,12 +55,12 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
         <Dialog.Header>
           <ModalServerLabel />
           <Dialog.Title>운영진 추가</Dialog.Title>
-          <Dialog.Description>이 서버에 가입한 멤버 중에서 찾습니다.</Dialog.Description>
+          <Dialog.Description>디스코드 서버에 있는 멤버 중에서 찾습니다</Dialog.Description>
         </Dialog.Header>
         <Dialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
-            <UrlSearchInput placeholder="가입한 유저 닉네임 검색" className="w-full" />
+            <UrlSearchInput placeholder="디스코드 닉네임 검색" className="w-full" />
             {candidates.length > 0 ? (
               <VStack
                 render={<ul aria-label="검색 결과" />}
