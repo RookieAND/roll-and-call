@@ -2,12 +2,7 @@
 
 import { RichText } from "@roll-and-call/tiptap";
 import { Button, Text, VStack } from "@roll-and-call/ui";
-import { useState } from "react";
-
-import { richTextLength } from "@/shared/lib";
-
-// 세 줄을 넘길 만한 길이일 때만 펼치기를 단다. 줄 수를 재지 않는 어림값이다.
-const LONG_BODY_LENGTH = 90;
+import { useLayoutEffect, useRef, useState } from "react";
 
 const CLAMP_CLASS = { 2: "line-clamp-2", 3: "line-clamp-3" } as const;
 
@@ -19,18 +14,34 @@ interface ReviewBodyProps {
 
 export function ReviewBody({ body, lines = 3, muted = false }: ReviewBodyProps) {
   const [expanded, setExpanded] = useState(false);
-  const long = richTextLength(body) > LONG_BODY_LENGTH;
+  const [clamped, setClamped] = useState(false);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const long = expanded || clamped;
   const clampClass = expanded ? "" : CLAMP_CLASS[lines];
+
+  // 글자 수로는 줄바꿈·긴 낱말을 못 잡아, 실제로 잘렸는지를 잰다. 펼친 동안은 재지 않고 버튼을 유지한다.
+  useLayoutEffect(() => {
+    const element = bodyRef.current?.firstElementChild;
+    if (!element || expanded) return;
+    const measure = () => setClamped(element.scrollHeight > element.clientHeight + 1);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [body, lines, expanded]);
+
   const foreground = muted ? "muted" : "normal";
 
   return (
     <VStack gap="025" align="start">
-      <Text
-        typography="body3"
-        foreground={foreground}
-        render={<RichText value={body} />}
-        className={`leading-[1.65] [text-wrap:pretty] ${clampClass}`}
-      />
+      <div ref={bodyRef} className="w-full">
+        <Text
+          typography="body3"
+          foreground={foreground}
+          render={<RichText value={body} />}
+          className={`leading-[1.65] [text-wrap:pretty] ${clampClass}`}
+        />
+      </div>
       {long && (
         <Button
           variant="ghost"
