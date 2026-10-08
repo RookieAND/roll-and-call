@@ -72,7 +72,7 @@ export function CertApplyForm({
         onError: (result) =>
           result.field === QUIZ_ANSWER_FIELD
             ? setQuizError(result.error)
-            : toast.error(result.error),
+            : toast.danger(result.error),
       },
     );
 

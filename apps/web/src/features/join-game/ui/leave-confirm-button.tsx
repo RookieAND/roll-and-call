@@ -39,7 +39,7 @@ export function LeaveConfirmButton({
       },
       onError: ({ error }) => {
         setConfirming(false);
-        toast.error(error);
+        toast.danger(error);
       },
     });
   }

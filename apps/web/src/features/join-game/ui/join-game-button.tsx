@@ -26,7 +26,7 @@ export function JoinGameButton({ gameId, children, className }: JoinGameButtonPr
       // 시간이 겹치면 토스트 대신 안내 창을 띄운다. 그 밖의 실패는 기존대로 토스트다.
       onError: ({ error, reason, overlapGameId: overlapId }) => {
         if (reason === OVERLAP_REASON && overlapId) setOverlapGameId(overlapId);
-        else toast.error(error);
+        else toast.danger(error);
       },
     });
   }

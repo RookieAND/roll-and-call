@@ -66,7 +66,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <NavigationTracker />
           {children}
         </QueryProvider>
-        <Toast.Viewport offset={76} />
+        <Toast.Viewport />
         <Analytics />
         <SpeedInsights />
       </body>

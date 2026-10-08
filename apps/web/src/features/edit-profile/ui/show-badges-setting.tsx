@@ -20,7 +20,7 @@ export function ShowBadgesSetting({ showBadges }: ShowBadgesSettingProps) {
     run(() => updateShowBadges(next), {
       onError: (result) => {
         setChecked(!next);
-        toast.error(result.error);
+        toast.danger(result.error);
       },
     });
   }

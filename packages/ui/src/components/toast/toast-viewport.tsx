@@ -9,11 +9,11 @@ export interface ToastViewportProps {
   offset?: number;
 }
 
-export function ToastViewport({ position = "bottom", max = 3, offset = 16 }: ToastViewportProps) {
+export function ToastViewport({ position = "top", max = 3, offset = 16 }: ToastViewportProps) {
   const edge =
     position === "bottom"
       ? { bottom: `calc(var(--rc-floating-bar-height, 0px) + ${offset}px)` }
-      : { top: offset };
+      : { top: `calc(env(safe-area-inset-top, 0px) + ${offset}px)` };
   return (
     <Toaster
       position={`${position}-center`}

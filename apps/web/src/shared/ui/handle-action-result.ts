@@ -21,6 +21,6 @@ export function handleActionResult<Result extends ActionResult>({
     throw new AppError(result.error, ERROR_DISPLAY.page);
   }
   if (onError) onError({ ...result, error: result.error });
-  else toast.error(result.error);
+  else toast.danger(result.error);
   return false;
 }

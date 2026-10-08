@@ -50,7 +50,7 @@ export function DrawLotteryCard({
     run(() => drawLottery(gameId), {
       onSuccess: () => setConfirming(false),
       onError: (result) => {
-        toast.error(result.error);
+        toast.danger(result.error);
         if (!result.alreadyDrawn) return;
         setConfirming(false);
         router.push(toServerPath(`/games/${gameId}/draw`));

@@ -19,7 +19,7 @@ export function CopyLinkButton({ gameId }: CopyLinkButtonProps) {
       );
       toast.success("구인글 링크를 복사했습니다");
     } catch {
-      toast.error("링크를 복사하지 못했습니다");
+      toast.danger("링크를 복사하지 못했습니다");
     }
   }
 

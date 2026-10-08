@@ -17,7 +17,7 @@ export default function GlobalError({
     <html lang="ko">
       <body className="bg-canvas font-sans text-gray-900 antialiased">
         <BoundaryFallback error={error} retry={retry} />
-        <Toast.Viewport offset={76} />
+        <Toast.Viewport />
       </body>
     </html>
   );

@@ -10,5 +10,5 @@ export function reportError({
   fallbackMessage?: string;
 }) {
   if (!(error instanceof AppError)) console.error(error);
-  toast.error(error instanceof AppError ? error.message : fallbackMessage);
+  toast.danger(error instanceof AppError ? error.message : fallbackMessage);
 }

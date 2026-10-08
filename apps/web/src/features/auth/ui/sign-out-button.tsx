@@ -23,7 +23,7 @@ export function SignOutButton({ className, children = "로그아웃" }: SignOutB
     const { ok } = await signOut();
     setPending(false);
     if (!ok) {
-      toast.error(SIGN_OUT_FAILED_MESSAGE);
+      toast.danger(SIGN_OUT_FAILED_MESSAGE);
       return;
     }
     router.refresh();

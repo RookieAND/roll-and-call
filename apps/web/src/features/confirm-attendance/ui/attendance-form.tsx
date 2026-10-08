@@ -91,7 +91,7 @@ export function AttendanceForm({
       onError: ({ error }) => {
         setConfirming(false);
         if (error === ATTENDANCE_PAST_DEADLINE_MESSAGE) onExpired();
-        else toast.error(error);
+        else toast.danger(error);
       },
     });
   }

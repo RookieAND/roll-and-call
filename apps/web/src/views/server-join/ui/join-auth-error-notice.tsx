@@ -9,7 +9,7 @@ const MESSAGE = "디스코드 로그인을 마치지 못했습니다. 다시 시
 export function JoinAuthErrorNotice() {
   // toast id가 문구라 StrictMode에서 두 번 불려도 한 번만 보인다.
   useEffect(() => {
-    toast.error(MESSAGE);
+    toast.danger(MESSAGE);
   }, []);
   return null;
 }

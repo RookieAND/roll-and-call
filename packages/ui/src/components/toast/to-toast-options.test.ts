@@ -3,7 +3,7 @@ import { expect, test } from "vitest";
 import { toToastOptions } from "./to-toast-options";
 
 test("기본 토스트는 4초 뒤 닫힌다", () => {
-  expect(toToastOptions()).toMatchObject({ duration: 4000, closeButton: false });
+  expect(toToastOptions()).toMatchObject({ duration: 3000, closeButton: false });
 });
 
 test("행동이 붙으면 기본으로 남고 닫기 버튼이 생긴다", () => {

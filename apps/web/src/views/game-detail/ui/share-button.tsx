@@ -23,7 +23,7 @@ export function ShareButton({ gameId, title }: ShareButtonProps) {
         await navigator.share({ title, url });
       } catch (error) {
         if (!(error instanceof DOMException && error.name === "AbortError")) {
-          toast.error("링크를 공유하지 못했습니다");
+          toast.danger("링크를 공유하지 못했습니다");
         }
       }
       return;
@@ -32,7 +32,7 @@ export function ShareButton({ gameId, title }: ShareButtonProps) {
       await navigator.clipboard.writeText(url);
       toast.success("구인글 링크를 복사했습니다");
     } catch {
-      toast.error("링크를 복사하지 못했습니다");
+      toast.danger("링크를 복사하지 못했습니다");
     }
   }
 

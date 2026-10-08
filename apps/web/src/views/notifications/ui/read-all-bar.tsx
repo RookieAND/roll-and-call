@@ -33,7 +33,7 @@ export function ReadAllBar({ inbox, read, onAllRead, onSaved }: ReadAllBarProps)
     }));
     if (result.error) {
       onAllRead(false);
-      toast.error("잠시 뒤 다시 시도해 주세요.");
+      toast.danger("잠시 뒤 다시 시도해 주세요.");
     } else {
       onSaved();
     }

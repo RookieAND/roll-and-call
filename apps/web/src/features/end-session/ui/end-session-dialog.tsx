@@ -68,7 +68,7 @@ export function EndSessionDialog({
           toast.success("세션을 마쳤습니다", { undo });
         },
         onError: ({ error, goToAttendance }) => {
-          toast.error(error);
+          toast.danger(error);
           if (goToAttendance) router.push(attendancePath);
         },
       });
