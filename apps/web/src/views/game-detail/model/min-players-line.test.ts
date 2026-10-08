@@ -11,7 +11,7 @@ const future = new Date("2026-09-25T00:00:00Z");
 describe("minPlayersLine", () => {
   it("최소 인원이 있고 마감 전이면 취소 조건을 알린다", () => {
     expect(minPlayersLine({ minPlayers: 3, endDate: future, now, recruitMethod: firstCome })).toBe(
-      "마감 때 확정 참여자가 3명 미만이면 모집이 취소됩니다.",
+      "확정 참여자가 3명 미만이면 모집이 취소됩니다.",
     );
     expect(
       minPlayersLine({
@@ -20,7 +20,7 @@ describe("minPlayersLine", () => {
         now,
         recruitMethod: RECRUIT_METHOD.lottery,
       }),
-    ).toBe("마감 때 추첨 전 신청자가 3명 미만이면 모집이 취소됩니다.");
+    ).toBe("추첨 전 신청자가 3명 미만이면 모집이 취소됩니다.");
   });
 
   it("최소 인원이 없으면 줄이 없다", () => {
