@@ -20,7 +20,9 @@ export const sessionColumns = {
   hiddenAt: games.hiddenAt,
   cancelledAt: games.cancelledAt,
   categoryId: rulebookCategories.id,
-  categoryName: rulebookCategories.name,
+  categoryName: sql<
+    string | null
+  >`coalesce(${rulebookCategories.alias}, ${rulebookCategories.name})`,
   attendedCount,
   registeredAt: games.createdAt,
 };

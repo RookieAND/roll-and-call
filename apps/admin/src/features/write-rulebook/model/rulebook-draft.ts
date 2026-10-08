@@ -5,6 +5,7 @@ export interface RulebookDraft {
   name: string;
   edition: string;
   category: string;
+  categoryAlias: string;
   kind: RulebookKind;
   supersedesId: string | null;
   aliasesText: string;

@@ -56,7 +56,7 @@ export async function applyBadgeWrites({
         ? transaction
             .select({
               id: sql<string>`${rulebookCategories.id}::text`,
-              name: rulebookCategories.name,
+              name: sql<string>`coalesce(${rulebookCategories.alias}, ${rulebookCategories.name})`,
             })
             .from(rulebookCategories)
             .where(

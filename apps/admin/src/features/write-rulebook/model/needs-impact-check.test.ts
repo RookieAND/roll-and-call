@@ -7,6 +7,7 @@ const saved: RulebookDraft = {
   name: "수호자 룰북",
   edition: "7판",
   category: "크툴루의 부름",
+  categoryAlias: "",
   kind: "core",
   supersedesId: "coc6",
   aliasesText: "",

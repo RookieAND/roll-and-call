@@ -15,12 +15,16 @@ export async function toRulebookValues({
   fields: RulebookFields;
   selfId?: string;
 }) {
-  const { category, supersedesId, ...rest } = fields;
+  const { category, categoryAlias, supersedesId, ...rest } = fields;
   if (fields.kind === "core") {
     await executor
       .insert(rulebookCategories)
       .values({ serverId, name: category })
       .onConflictDoNothing();
+    await executor
+      .update(rulebookCategories)
+      .set({ alias: categoryAlias })
+      .where(and(eq(rulebookCategories.serverId, serverId), eq(rulebookCategories.name, category)));
   }
   const [categoryRow] = await executor
     .select({ id: rulebookCategories.id })

@@ -236,6 +236,7 @@ export const loadSnapshot = cache(async () => {
       name: rulebook.name,
       edition: rulebook.edition,
       category: rulebook.category,
+      categoryAlias: rulebook.categoryAlias,
       kind: rulebook.kind,
       supersedesId: rulebook.supersedesId,
       aliases: rulebook.aliases,

@@ -9,6 +9,7 @@ describe("toRulebookFields", () => {
         name: " 황혼선서 ",
         edition: "",
         category: " 마기카로기아 ",
+        categoryAlias: "",
         kind: "supplement",
         supersedesId: "6",
         aliasesText: "황혼, 선서,, 황혼 ",
@@ -18,6 +19,7 @@ describe("toRulebookFields", () => {
       name: "황혼선서",
       edition: "",
       category: "마기카로기아",
+      categoryAlias: null,
       kind: "supplement",
       supersedesId: null,
       aliases: ["황혼", "선서"],
@@ -30,11 +32,34 @@ describe("toRulebookFields", () => {
       name: "팀 셜록",
       edition: "",
       category: " ",
+      categoryAlias: "",
       kind: "core" as const,
       supersedesId: null,
       aliasesText: "",
       certRequired: true,
     };
     expect(toRulebookFields(draft).category).toBe("팀 셜록");
+  });
+
+  it("카테고리 약어는 기본 룰북일 때만 남기고 빈 칸은 null로 둔다", () => {
+    const draft = {
+      name: "거점방어 TRPG 좀비라인",
+      edition: "",
+      category: "",
+      categoryAlias: " 좀비라인 ",
+      kind: "core" as const,
+      supersedesId: null,
+      aliasesText: "",
+      certRequired: true,
+    };
+    expect(toRulebookFields(draft).categoryAlias).toBe("좀비라인");
+    expect(toRulebookFields({ ...draft, categoryAlias: "좀비라인, 좀라" }).categoryAlias).toBe(
+      "좀비라인",
+    );
+    expect(
+      toRulebookFields({ ...draft, categoryAlias: "가".repeat(20) }).categoryAlias,
+    ).toHaveLength(12);
+    expect(toRulebookFields({ ...draft, categoryAlias: " " }).categoryAlias).toBeNull();
+    expect(toRulebookFields({ ...draft, kind: "supplement" }).categoryAlias).toBeNull();
   });
 });

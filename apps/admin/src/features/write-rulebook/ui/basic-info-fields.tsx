@@ -1,6 +1,7 @@
 import { Field, TextInput, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
+import { CATEGORY_ALIAS_MAX_LENGTH } from "../model/category-alias-max-length";
 import type { RulebookDraft } from "../model/rulebook-draft";
 
 interface BasicInfoFieldsProps {
@@ -74,6 +75,24 @@ export function BasicInfoFields({
           />
         </Field.Root>
       </div>
+      {draft.kind === "core" ? (
+        <Field.Root
+          label="카테고리 약어"
+          htmlFor={`${idPrefix}-category-alias`}
+          description="칭호 이름처럼 긴 카테고리 이름 대신 보여 줍니다. 한 개만 쓸 수 있고 비우면 카테고리 이름을 그대로 씁니다."
+        >
+          <TextInput
+            id={`${idPrefix}-category-alias`}
+            value={draft.categoryAlias}
+            placeholder="예: 좀비라인"
+            maxLength={CATEGORY_ALIAS_MAX_LENGTH}
+            disabled={disabled}
+            onChange={(event) =>
+              onChange({ categoryAlias: event.target.value.replaceAll(",", "") })
+            }
+          />
+        </Field.Root>
+      ) : null}
       {withAliases ? (
         <Field.Root label="다른 이름" htmlFor={`${idPrefix}-aliases`}>
           <TextInput

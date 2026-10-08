@@ -49,7 +49,11 @@ export async function loadAdminTables(serverId: string) {
     .from(participants)
     .where(eq(participants.serverId, serverId));
   const rulebookRows = await db
-    .select({ ...getTableColumns(rulebooks), category: rulebookCategories.name })
+    .select({
+      ...getTableColumns(rulebooks),
+      category: rulebookCategories.name,
+      categoryAlias: rulebookCategories.alias,
+    })
     .from(rulebooks)
     .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
     .where(eq(rulebooks.serverId, serverId));

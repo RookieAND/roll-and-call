@@ -1,0 +1,1 @@
+ALTER TABLE "rulebook_categories" ADD COLUMN "alias" text;

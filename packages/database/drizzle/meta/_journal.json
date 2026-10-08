@@ -638,7 +638,13 @@
       "when": 1798200000000,
       "tag": "0096_game_kind_play_type",
       "breakpoints": true
+    },
+    {
+      "idx": 97,
+      "version": "7",
+      "when": 1798300000000,
+      "tag": "0097_category_alias",
+      "breakpoints": true
     }
   ]
 }
-

@@ -49,6 +49,7 @@ export function AddRulebookForm({
     name: request?.bookName ?? "",
     edition: request?.edition ?? "",
     category: request ? (request.category ?? request.bookName) : initialCategory,
+    categoryAlias: "",
     kind: request?.kind ?? "core",
     supersedesId: null,
     aliasesText: "",

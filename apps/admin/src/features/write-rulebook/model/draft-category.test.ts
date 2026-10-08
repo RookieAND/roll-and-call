@@ -13,6 +13,7 @@ const draft = (changes: Partial<RulebookDraft>): RulebookDraft => ({
   name: "",
   edition: "",
   category: "",
+  categoryAlias: "",
   kind: "core",
   supersedesId: null,
   aliasesText: "",

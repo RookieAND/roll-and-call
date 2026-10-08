@@ -1,0 +1,1 @@
+export const CATEGORY_ALIAS_MAX_LENGTH = 12;

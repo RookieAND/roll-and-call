@@ -41,6 +41,7 @@ export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditForm
     name: rulebook.name,
     edition: rulebook.edition,
     category: rulebook.category,
+    categoryAlias: rulebook.categoryAlias ?? "",
     kind: rulebook.kind,
     supersedesId: rulebook.supersedesId,
     aliasesText: rulebook.aliases.join(", "),
