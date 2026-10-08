@@ -24,7 +24,7 @@ export function ReviewPhotos({ urls }: ReviewPhotosProps) {
           type="button"
           onClick={() => setOpenIndex(index)}
           aria-label={`후기 사진 ${index + 1} 크게 보기`}
-          className="size-14 overflow-hidden rounded-300 bg-gray-100 focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none"
+          className="size-18 overflow-hidden rounded-400 border border-gray-200 bg-gray-100 focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none"
         >
           <img src={url} alt="" loading="lazy" className="size-full object-cover" />
         </button>

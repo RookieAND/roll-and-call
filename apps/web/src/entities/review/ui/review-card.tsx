@@ -30,7 +30,7 @@ export function ReviewCard({
 }: ReviewCardProps) {
   const [revealed, setRevealed] = useState(!spoiler);
   const content = (
-    <VStack gap="100">
+    <VStack gap="125">
       <ReviewBody body={body} />
       <ReviewPhotos urls={photoUrls} />
     </VStack>
