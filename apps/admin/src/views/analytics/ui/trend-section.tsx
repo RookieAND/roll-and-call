@@ -1,11 +1,9 @@
 import type { AnalyticsData } from "@/shared/server";
 
 import { trendInsight } from "../model/trend-insight";
-import { TREND_SEGMENTS } from "../model/trend-segments";
 import { AnalyticsSection } from "./analytics-section";
-import { Legend } from "./legend";
 import { SessionTrendChart } from "./session-trend-chart";
-import { TrendNote } from "./trend-note";
+import { TrendLegendCards } from "./trend-legend-cards";
 
 interface TrendSectionProps {
   analytics: AnalyticsData;
@@ -14,13 +12,9 @@ interface TrendSectionProps {
 export function TrendSection({ analytics }: TrendSectionProps) {
   const chartHeight = analytics.early ? 200 : 240;
   return (
-    <AnalyticsSection
-      title="세션 추이"
-      right={<Legend items={TREND_SEGMENTS} />}
-      insight={trendInsight(analytics.trend, analytics.early)}
-    >
-      <TrendNote />
+    <AnalyticsSection title="세션 추이" insight={trendInsight(analytics.trend, analytics.early)}>
       <SessionTrendChart trend={analytics.trend} height={chartHeight} />
+      <TrendLegendCards trend={analytics.trend} early={analytics.early} />
     </AnalyticsSection>
   );
 }

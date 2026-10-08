@@ -3,17 +3,14 @@ import { Grid, Skeleton, Text, VStack } from "@roll-and-call/ui";
 import { AdminHeader, LoadingRegion } from "@/shared/ui";
 
 import { GRID_MODE } from "../model/grid-mode";
-import { TREND_SEGMENTS } from "../model/trend-segments";
 import { AnalyticsSection } from "./analytics-section";
 import { GridTabs } from "./grid-tabs";
 import { HeatGrid } from "./heat-grid";
 import { HeatScale } from "./heat-scale";
-import { Legend } from "./legend";
 import { PeriodBar } from "./period-bar";
 import { SkeletonBars } from "./skeleton-bars";
-import { TrendNote } from "./trend-note";
 
-const SUMMARY_LABELS = ["진행된 세션", "참여한 사람", "세션을 진행한 GM", "불참률"] as const;
+const SUMMARY_LABELS = ["진행된 세션", "참여한 사람", "세션을 진행한 GM"] as const;
 const GM_BAR_WIDTHS = ["88%", "76%", "70%", "58%", "46%"] as const;
 
 export function AnalyticsLoading() {
@@ -26,7 +23,7 @@ export function AnalyticsLoading() {
         className="mx-auto w-full max-w-content gap-150 p-200"
       >
         <PeriodBar description={<Skeleton width={280} height={12} />} />
-        <Grid className="grid-cols-4 overflow-hidden rounded-600 border border-gray-200 bg-surface">
+        <Grid className="grid-cols-3 overflow-hidden rounded-600 border border-gray-200 bg-surface">
           {SUMMARY_LABELS.map((label) => (
             <VStack
               key={label}
@@ -41,8 +38,7 @@ export function AnalyticsLoading() {
             </VStack>
           ))}
         </Grid>
-        <AnalyticsSection title="세션 추이" right={<Legend items={TREND_SEGMENTS} />}>
-          <TrendNote />
+        <AnalyticsSection title="세션 추이">
           <SkeletonBars count={8} height={240} />
         </AnalyticsSection>
         <AnalyticsSection

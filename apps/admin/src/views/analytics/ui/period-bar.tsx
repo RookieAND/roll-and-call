@@ -8,7 +8,7 @@ interface PeriodBarProps {
 export function PeriodBar({ description }: PeriodBarProps) {
   return (
     <HStack align="center" gap="125">
-      <Text typography="body3" weight="medium">
+      <Text typography="body3" weight="bold">
         최근 4주
       </Text>
       {description}

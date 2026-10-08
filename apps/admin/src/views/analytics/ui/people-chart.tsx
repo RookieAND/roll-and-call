@@ -1,105 +1,90 @@
-"use client";
-
-import dynamic from "next/dynamic";
+import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { AnalyticsData } from "@/shared/server";
-import { useChartTokens } from "@/shared/ui";
 
-const Line = dynamic(() => import("@ant-design/plots").then((module) => module.Line), {
-  ssr: false,
-});
-
-const SERIES = { total: "전체 참여", first: "첫 참여" } as const;
-const CHART_HEIGHT = 200;
+const ROW_COLUMNS = "grid-cols-[88px_minmax(0,1fr)_148px]";
 
 interface PeopleChartProps {
   people: AnalyticsData["people"];
 }
 
 export function PeopleChart({ people }: PeopleChartProps) {
-  const { ref, tokens } = useChartTokens();
-  const data = people.flatMap((week) => [
-    { week: week.label, series: SERIES.total, count: week.total },
-    { week: week.label, series: SERIES.first, count: week.first },
-  ]);
-  const summary = people
-    .map((week) => `${week.label} ${week.total}명, 첫 참여 ${week.first}명`)
-    .join(", ");
+  const max = Math.max(1, ...people.map((week) => week.total));
+  const lastIndex = people.length - 1;
   return (
-    <div
-      ref={ref}
-      role="img"
-      aria-label={`주차별 참여자 추이: ${summary}`}
-      className="h-[200px] min-w-0"
-    >
-      {tokens ? (
-        <Line
-          data={data}
-          xField="week"
-          yField="count"
-          colorField="series"
-          height={CHART_HEIGHT}
-          autoFit
-          animate={false}
-          paddingTop={28}
-          paddingRight={28}
-          paddingLeft={36}
-          scale={{
-            color: { domain: Object.values(SERIES), range: [tokens.primary, tokens.heat3] },
-            y: { domainMin: 0, nice: true },
-          }}
-          legend={false}
-          style={{ lineWidth: 2.5 }}
-          point={{
-            shapeField: "circle",
-            sizeField: 4,
-            style: { stroke: tokens.base, lineWidth: 2 },
-          }}
-          label={{
-            text: (point: { count: number }) => `${point.count}명`,
-            dy: -12,
-            style: {
-              textAlign: "center",
-              fontSize: 12,
-              fontWeight: 700,
-              fontFamily: tokens.font,
-              fill: tokens.normal,
-            },
-          }}
-          axis={{
-            x: {
-              title: false,
-              tick: false,
-              line: true,
-              lineStroke: tokens.line,
-              lineStrokeOpacity: 1,
-              labelFill: tokens.muted,
-              labelFillOpacity: 1,
-              labelFontSize: 12,
-              labelFontFamily: tokens.font,
-              labelSpacing: 8,
-            },
-            y: {
-              title: false,
-              tick: false,
-              labelFill: tokens.hint,
-              labelFillOpacity: 1,
-              labelFontSize: 12,
-              labelFontFamily: tokens.font,
-              grid: true,
-              gridStroke: tokens.grid,
-              gridStrokeOpacity: 1,
-              gridLineDash: [0, 0],
-              tickCount: 3,
-            },
-          }}
-          tooltip={{
-            title: "week",
-            items: [{ channel: "y", valueFormatter: (value: number) => `${value}명` }],
-          }}
-          theme={{ type: "light", fontFamily: tokens.font }}
-        />
-      ) : null}
-    </div>
+    <VStack>
+      <Grid className={`${ROW_COLUMNS} gap-150 pb-075`}>
+        <Text typography="body5" foreground="hint">
+          주차
+        </Text>
+        <HStack gap="175">
+          <HStack align="center" gap="050">
+            <span
+              aria-hidden
+              className="size-[8px] rounded-100"
+              style={{ background: "var(--rc-color-bg-primary)" }}
+            />
+            <Text typography="body5" foreground="hint">
+              이전에 참여
+            </Text>
+          </HStack>
+          <HStack align="center" gap="050">
+            <span
+              aria-hidden
+              className="size-[8px] rounded-100"
+              style={{ background: "var(--rc-color-heat-3)" }}
+            />
+            <Text typography="body5" foreground="hint">
+              첫 참여
+            </Text>
+          </HStack>
+        </HStack>
+        <Text typography="body5" foreground="hint" className="text-right">
+          총 참여 · 첫 참여
+        </Text>
+      </Grid>
+      {people.map((week, index) => (
+        <Grid
+          key={week.label}
+          className={`${ROW_COLUMNS} h-[36px] items-center gap-150 border-t border-(--rc-color-border-subtle)`}
+        >
+          <Text
+            typography="body4"
+            weight={index === lastIndex ? "bold" : undefined}
+            foreground={index === lastIndex ? "normal" : "muted"}
+          >
+            {week.label}
+          </Text>
+          <HStack
+            className="h-[14px] overflow-hidden rounded-100"
+            style={{ width: `${(week.total / max) * 100}%` }}
+          >
+            <div
+              style={{ flex: week.total - week.first, background: "var(--rc-color-bg-primary)" }}
+            />
+            <div style={{ flex: week.first, background: "var(--rc-color-heat-3)" }} />
+          </HStack>
+          <HStack justify="end" align="center" gap="100">
+            <Text typography="body4" foreground="muted" numeric>
+              총{" "}
+              <Text typography="body4" weight="bold" foreground="normal" render={<b />}>
+                {week.total}명
+              </Text>
+            </Text>
+            <span
+              aria-hidden
+              className="h-[12px] w-px shrink-0"
+              style={{ background: "var(--rc-color-border-subtle)" }}
+            />
+            <Text typography="body4" foreground="muted" numeric>
+              첫 참여{" "}
+              <Text typography="body4" weight="bold" foreground="primary" render={<b />}>
+                {week.first}명
+              </Text>
+            </Text>
+          </HStack>
+        </Grid>
+      ))}
+    </VStack>
   );
 }

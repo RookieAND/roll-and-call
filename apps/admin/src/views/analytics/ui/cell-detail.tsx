@@ -12,11 +12,11 @@ export function CellDetail({ label, mode, counts }: CellDetailProps) {
   const otherMode = mode === GRID_MODE.open ? GRID_MODE.finished : GRID_MODE.open;
   return (
     <HStack
-      align="stretch"
+      align="center"
       aria-live="polite"
       className="mt-150 overflow-hidden rounded-400 border border-gray-200"
     >
-      <VStack className="border-r border-(--rc-color-border-subtle) bg-canvas px-175 py-125">
+      <VStack className="self-stretch border-r border-(--rc-color-border-subtle) bg-canvas px-175 py-125">
         <Text typography="body4" foreground="hint">
           선택한 칸
         </Text>
@@ -24,17 +24,17 @@ export function CellDetail({ label, mode, counts }: CellDetailProps) {
           {label}
         </Text>
       </VStack>
-      <VStack className="flex-1 px-175 py-125">
+      <VStack className="flex-1 self-stretch border-r border-(--rc-color-border-subtle) px-175 py-125">
         <Text typography="body4" foreground="hint">
           {GRID_MODE_LABEL[mode]}
         </Text>
         <Text typography="body2" weight="bold" numeric>
           {counts[mode]}건
         </Text>
-        <Text typography="body4" foreground="hint" numeric>
-          {GRID_MODE_LABEL[otherMode]} {counts[otherMode]}건
-        </Text>
       </VStack>
+      <Text typography="body4" foreground="hint" numeric className="px-175 whitespace-nowrap">
+        {GRID_MODE_LABEL[otherMode]} {counts[otherMode]}건
+      </Text>
     </HStack>
   );
 }

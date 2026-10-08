@@ -2,13 +2,12 @@ import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import type { ReactNode } from "react";
 
-import { ANALYTICS_EARLY_THRESHOLD, type AnalyticsData } from "@/shared/server";
+import type { AnalyticsData } from "@/shared/server";
 
 import { Delta } from "./delta";
 
 interface AnalyticsSummaryProps {
   summary: AnalyticsData["summary"];
-  early: boolean;
   compare: boolean;
 }
 
@@ -19,15 +18,12 @@ interface SummaryTile {
   sub: string;
 }
 
-export function AnalyticsSummary({ summary, early, compare }: AnalyticsSummaryProps) {
-  const { finishedSessions, participants, hostingGms, noShowRate } = summary;
+export function AnalyticsSummary({ summary, compare }: AnalyticsSummaryProps) {
+  const { finishedSessions, participants, hostingGms } = summary;
   const percent = (metric: AnalyticsData["summary"]["participants"]) =>
     !isNull(metric.value) && metric.previous
       ? Math.round(((metric.value - metric.previous) / metric.previous) * 100)
       : 0;
-  const noShowValue = early ? null : noShowRate.value;
-  const noShowCompare = compare && !isNull(noShowValue) && !isNull(noShowRate.previous);
-  const earlyNoShowSub = early ? `세션 ${ANALYTICS_EARLY_THRESHOLD}건부터 계산합니다` : "";
   const tiles: SummaryTile[] = [
     {
       label: "진행된 세션",
@@ -49,21 +45,9 @@ export function AnalyticsSummary({ summary, early, compare }: AnalyticsSummaryPr
       ) : null,
       sub: compare ? `지난 4주 ${hostingGms.previous}명` : "",
     },
-    {
-      label: "불참률",
-      value: isNull(noShowValue) ? null : `${noShowValue}%`,
-      delta: noShowCompare ? (
-        <Delta
-          value={Math.round(((noShowValue ?? 0) - (noShowRate.previous ?? 0)) * 10) / 10}
-          unit="%p"
-          higherIsWorse
-        />
-      ) : null,
-      sub: noShowCompare ? `지난 4주 ${noShowRate.previous}%` : earlyNoShowSub,
-    },
   ];
   return (
-    <Grid className="grid-cols-4 overflow-hidden rounded-600 border border-gray-200 bg-surface">
+    <Grid className="grid-cols-3 overflow-hidden rounded-600 border border-gray-200 bg-surface">
       {tiles.map((tile) => (
         <VStack
           key={tile.label}

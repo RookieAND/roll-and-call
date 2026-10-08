@@ -34,7 +34,7 @@ export function AnalyticsView({ analytics, gridMode }: AnalyticsViewProps) {
             </Text>
           }
         />
-        <AnalyticsSummary summary={analytics.summary} early={early} compare={compare} />
+        <AnalyticsSummary summary={analytics.summary} compare={compare} />
         <TrendSection analytics={analytics} />
         {sections.people ? <PeopleSection analytics={analytics} /> : null}
         <WhenSection analytics={analytics} mode={gridMode} />
