@@ -86,7 +86,7 @@ export function MessagesView({
           title={current.label}
           right={
             <Text typography="body4" foreground="hint">
-              보내는 곳 {current.to}
+              보내는 곳 {selected === "open" && recruitForum ? "모집 채널 (포럼)" : current.to}
             </Text>
           }
           bodyClassName="p-0"

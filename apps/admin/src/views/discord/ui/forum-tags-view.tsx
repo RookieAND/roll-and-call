@@ -37,19 +37,19 @@ export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsV
   const router = useRouter();
   const [saving, startSaving] = useTransition();
   const [form, setForm] = useState(saved);
-  const linkedIds = [
-    form.open,
-    form.closed,
-    form.cancelled,
-    form.playTypes.voice,
-    form.playTypes.text,
-    form.briefing,
-    form.session,
-    ...Object.values(form.categories),
-  ].filter(Boolean);
-  const hasDeleted =
-    options.status === "forum" &&
-    linkedIds.some((id) => !options.tags.some((tag) => tag.id === id));
+  const linkedRows = [
+    ...STATUS_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
+    ...categories.map(({ id, name }) => ({ label: name, id: form.categories[id] })),
+    ...PLAY_TYPE_ROWS.map(({ key, label }) => ({ label, id: form.playTypes[key] })),
+    ...KIND_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
+  ];
+  const deletedLabels =
+    options.status === "forum"
+      ? linkedRows
+          .filter((row) => row.id && !options.tags.some((tag) => tag.id === row.id))
+          .map((row) => row.label)
+      : [];
+  const hasDeleted = deletedLabels.length > 0;
   const changed = JSON.stringify(form) !== JSON.stringify(saved);
 
   const save = () =>
@@ -132,9 +132,10 @@ export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsV
           {hasDeleted ? (
             <Callout.Root colorPalette="warning">
               <Callout.Icon />
+              <Callout.Title>연결한 디스코드 태그가 삭제되었습니다</Callout.Title>
               <Callout.Description>
-                디스코드에서 삭제된 태그가 연결돼 있습니다. 태그를 다시 고르거나 연결 안 함으로
-                바꾸어 주세요.
+                {deletedLabels.join(", ")}에 연결해 둔 태그를 다시 고르거나 연결 안 함으로 바꾸어
+                주세요.
               </Callout.Description>
             </Callout.Root>
           ) : null}
