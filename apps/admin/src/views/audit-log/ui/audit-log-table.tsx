@@ -22,7 +22,7 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
       <TableColumns
         widths={[
           { fixed: 176 },
-          { fixed: 124 },
+          { fixed: 148 },
           { fixed: 220 },
           240,
           { fixed: 150 },

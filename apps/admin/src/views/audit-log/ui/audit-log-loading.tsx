@@ -62,7 +62,7 @@ export function AuditLogLoading() {
           <SkeletonTable
             columns={[
               { label: "일시", kind: "date", width: 176, sorted: true, fixed: true },
-              { label: "조치", kind: "badge", width: 124, fixed: true },
+              { label: "조치", kind: "badge", width: 148, fixed: true },
               { label: "대상", kind: "text", width: 220, fixed: true },
               { label: "사유", kind: "text", width: 240 },
               { label: "운영진", kind: "text", width: 150, fixed: true },
