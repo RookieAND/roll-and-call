@@ -21,9 +21,10 @@ const SERVICE_OPTIONS = LINK_SERVICES.map((service) => ({
 interface ProfileLinksFieldProps {
   value: ProfileLink[];
   onChange: (links: ProfileLink[]) => void;
+  discordHandle?: string | null;
 }
 
-export function ProfileLinksField({ value, onChange }: ProfileLinksFieldProps) {
+export function ProfileLinksField({ value, onChange, discordHandle }: ProfileLinksFieldProps) {
   // 줄을 지워도 아래 줄의 입력 상태가 한 칸씩 밀리지 않게 줄마다 고정 key를 둔다.
   const nextKey = useRef(value.length);
   const [keys, setKeys] = useState(() => value.map((_, index) => index));
@@ -49,7 +50,13 @@ export function ProfileLinksField({ value, onChange }: ProfileLinksFieldProps) {
               <Select.Root
                 items={SERVICE_OPTIONS}
                 value={link.service}
-                onValueChange={(next) => replace(index, { ...link, service: String(next) })}
+                onValueChange={(next) => {
+                  const nextService = String(next);
+                  // 디스코드는 계정에서 사용자명을 알고 있어 고르기만 하면 채운다. 링크는 보는 쪽에서 ID로 잇는다.
+                  const filled =
+                    nextService === "discord" && discordHandle ? discordHandle : link.value;
+                  replace(index, { service: nextService, value: filled });
+                }}
               >
                 <Select.Trigger
                   aria-label={`${index + 1}번째 링크 서비스`}

@@ -36,6 +36,7 @@ interface EditProfileFormProps {
   defaultLinks?: ProfileLink[];
   availability?: AvailabilityInterval[];
   avatarUrl?: string | null;
+  discordHandle?: string | null;
 }
 
 export function EditProfileForm({
@@ -46,6 +47,7 @@ export function EditProfileForm({
   defaultLinks = [],
   availability = [],
   avatarUrl,
+  discordHandle,
 }: EditProfileFormProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
@@ -138,7 +140,7 @@ export function EditProfileForm({
           />
         </Field.Root>
 
-        <ProfileLinksField value={links} onChange={setLinks} />
+        <ProfileLinksField value={links} onChange={setLinks} discordHandle={discordHandle} />
 
         <AvailabilitySummaryField intervals={availability} />
       </VStack>

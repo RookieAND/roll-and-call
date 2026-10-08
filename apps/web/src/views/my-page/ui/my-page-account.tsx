@@ -12,7 +12,7 @@ export async function MyPageAccount() {
 
   return (
     <>
-      <MyPageLinks links={profile?.links ?? []} />
+      <MyPageLinks links={profile?.links ?? []} discordId={profile?.discordId} />
       <MyPageSettings
         handleLabel={handle ? `@${handle}` : null}
         showBadges={profile?.showBadges ?? true}

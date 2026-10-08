@@ -4,9 +4,10 @@ import { LINK_MAX_COUNT, ProfileLinks, type ProfileLink } from "@/entities/profi
 
 interface MyPageLinksProps {
   links: ProfileLink[];
+  discordId?: string;
 }
 
-export function MyPageLinks({ links }: MyPageLinksProps) {
+export function MyPageLinks({ links, discordId }: MyPageLinksProps) {
   return (
     <section>
       <HStack align="center" className="mb-125">
@@ -17,7 +18,7 @@ export function MyPageLinks({ links }: MyPageLinksProps) {
           {links.length} / {LINK_MAX_COUNT}
         </Text>
       </HStack>
-      <ProfileLinks links={links} />
+      <ProfileLinks links={links} discordId={discordId} />
     </section>
   );
 }

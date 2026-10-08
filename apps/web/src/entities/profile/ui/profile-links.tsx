@@ -17,10 +17,11 @@ const ICON_CLASS =
 
 interface ProfileLinksProps {
   links: readonly ProfileLink[];
+  discordId?: string;
 }
 
 // 클라이언트 컴포넌트다: 서버에서 만든 요소를 Tooltip(render 복제)에 넘기면 lazy 참조라 undefined가 된다.
-export function ProfileLinks({ links }: ProfileLinksProps) {
+export function ProfileLinks({ links, discordId }: ProfileLinksProps) {
   if (links.length === 0) {
     return (
       <HStack
@@ -40,7 +41,7 @@ export function ProfileLinks({ links }: ProfileLinksProps) {
     <HStack gap="100" wrap>
       {links.map((link, index) => {
         const label = linkLabel(link);
-        const href = linkHref(link);
+        const href = linkHref(link, discordId);
         const service = linkServiceOf(link.service).key as LinkServiceKey;
         const mark = <BrandMark service={service} />;
 

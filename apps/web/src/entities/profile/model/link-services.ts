@@ -79,9 +79,10 @@ function toUrl(value: string): URL | null {
   }
 }
 
-export function linkHref({ service, value }: ProfileLink): string | null {
+export function linkHref({ service, value }: ProfileLink, discordId?: string): string | null {
   const trimmed = value.trim();
   if (!trimmed) return null;
+  if (service === "discord" && discordId) return `https://discord.com/users/${discordId}`;
   const { handlePrefix } = linkServiceOf(service);
   if (handlePrefix && !/^https?:\/\//i.test(trimmed) && !trimmed.includes("/")) {
     return `${handlePrefix}${trimmed.replace(/^@/, "")}`;

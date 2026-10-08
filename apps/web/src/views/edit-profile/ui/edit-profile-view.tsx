@@ -10,12 +10,14 @@ export async function EditProfileView() {
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   const profile = user ? await getProfile(server.id, user.id) : null;
 
+  const display = user ? profileDisplay({ profile, user }) : null;
+
   return (
     <>
       <AppBar back="/me" title="프로필 편집" />
       <Container size="md">
         <VStack gap="300" className="py-300">
-          {user ? (
+          {user && display ? (
             <EditProfileForm
               serverName={server.name}
               defaultUsername={profile?.username ?? ""}
@@ -23,7 +25,8 @@ export async function EditProfileView() {
               defaultKeywords={profile?.keywords ?? []}
               defaultLinks={profile?.links ?? []}
               availability={profile?.availability ?? []}
-              avatarUrl={profileDisplay({ profile, user }).avatar}
+              avatarUrl={display.avatar}
+              discordHandle={display.handle}
             />
           ) : (
             <LoginRequired />

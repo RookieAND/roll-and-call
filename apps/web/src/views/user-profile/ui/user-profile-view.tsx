@@ -87,7 +87,7 @@ export async function UserProfileView({ id }: { id: string }) {
 
         <section className="p-200">
           <ProfileBlockLabel label="링크" />
-          <ProfileLinks links={profile.links} />
+          <ProfileLinks links={profile.links} discordId={profile.discordId} />
         </section>
 
         <section className="px-200 pb-200">
