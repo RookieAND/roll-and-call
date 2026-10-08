@@ -2,12 +2,58 @@
 // ponytail: 길드 전용 등록이라 즉시 반영된다. 전역 등록이 필요해지면 경로만 바꾸면 된다.
 const CHAT_INPUT = 1;
 const STRING_OPTION = 3;
+const INTEGER_OPTION = 4;
+const PICK_OPTION_COUNT = 10;
 
 const COMMANDS = [
   {
     name: "능력치",
     type: CHAT_INPUT,
-    description: "크툴루 7판 능력치를 세 줄 굴린다",
+    description: "능력치를 굴린다 (크툴루 7판은 세 줄, DnD 5판은 4d6 중 낮은 눈 버리기)",
+    options: [
+      {
+        name: "규칙",
+        type: STRING_OPTION,
+        description: "기본은 크툴루 7판",
+        choices: [
+          { name: "크툴루 7판", value: "coc" },
+          { name: "DnD 5판", value: "dnd" },
+        ],
+      },
+    ],
+  },
+  {
+    name: "판정",
+    type: CHAT_INPUT,
+    description: "크툴루 7판 기능·특성치 판정 (1d100)",
+    options: [
+      {
+        name: "목표값",
+        type: INTEGER_OPTION,
+        description: "기능이나 특성치 값",
+        required: true,
+        min_value: 1,
+        max_value: 99,
+      },
+      {
+        name: "보정",
+        type: INTEGER_OPTION,
+        description: "양수는 보너스 주사위, 음수는 페널티 주사위 개수",
+        min_value: -2,
+        max_value: 2,
+      },
+    ],
+  },
+  {
+    name: "선택",
+    type: CHAT_INPUT,
+    description: "항목 중 하나를 무작위로 고른다",
+    options: Array.from({ length: PICK_OPTION_COUNT }, (_, index) => ({
+      name: `항목${index + 1}`,
+      type: STRING_OPTION,
+      description: `항목 ${index + 1}`,
+      required: index < 2,
+    })),
   },
   {
     name: "주사위",
