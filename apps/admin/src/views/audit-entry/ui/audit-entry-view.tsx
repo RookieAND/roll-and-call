@@ -66,7 +66,6 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
                   value: (
                     <>
                       {entry.actor}
-                      {entry.actorKind === "platform" ? <Tag>플랫폼 관리자</Tag> : null}
                       {entry.actorKind === "staff" && entry.actorRole ? (
                         <FactSub>{STAFF_ROLE_LABEL[entry.actorRole]}</FactSub>
                       ) : null}

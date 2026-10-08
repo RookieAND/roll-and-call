@@ -8,7 +8,6 @@ export const STATUS_TONE: Readonly<Record<string, StatusTone>> = {
   "이탈 처리됨": "warning",
   "디스코드 차단 실패": "warning",
   탈퇴: "gray",
-  "플랫폼 관리자": "primary",
   재가입: "gray",
   통과: "success",
   "모집 중": "primary",

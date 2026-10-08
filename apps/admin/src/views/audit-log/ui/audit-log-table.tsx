@@ -1,4 +1,4 @@
-import { HStack, Table, Text } from "@roll-and-call/ui";
+import { Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -74,16 +74,7 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
                   {row.reason}
                 </Text>
               </Table.Cell>
-              <Table.Cell className="truncate">
-                {row.actorKind === "platform" ? (
-                  <HStack align="center" gap="075" render={<span />}>
-                    {row.actor}
-                    <Tag>플랫폼 관리자</Tag>
-                  </HStack>
-                ) : (
-                  row.actor
-                )}
-              </Table.Cell>
+              <Table.Cell className="truncate">{row.actor}</Table.Cell>
               <Table.Cell align="end">
                 <ChevronRight size={16} aria-hidden className="inline text-hint" />
               </Table.Cell>
