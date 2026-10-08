@@ -18,14 +18,14 @@
 
 클래스는 Tailwind 유틸리티지만 **이름이 이 키트의 것**이다. 기본 팔레트(`bg-blue-500`)나 기본 스케일(`p-4`, `rounded-lg`)은 컴파일돼 있지 않아 조용히 무시된다. 아래 표의 이름만 쓴다.
 
-| 갈래 | 쓸 수 있는 이름 |
-| --- | --- |
-| 면 | `bg-surface` `bg-canvas` `bg-gray-50` `bg-gray-100` `bg-primary-600` `bg-tinted-bg` `bg-success-100` `bg-warning-50` `bg-danger-50` `bg-notice-bg` `bg-toast` |
-| 글씨 | `text-gray-900` `text-gray-600` `text-hint` `text-tinted-ink` `text-success-700` `text-warning-600` `text-danger-600` `text-on-primary` `text-inverse` |
-| 선 | `border-gray-200` `border-gray-300` `border-tinted-border` `border-success-200` `border-danger-200` `border-notice-border` |
-| 글자 크기 | `text-heading1` `text-heading2` `text-heading3` `text-subtitle1` `text-subtitle2` `text-body2` `text-body3` `text-body4` `text-body5` |
-| 간격 | `p-*` `px-*` `gap-*` 등에 `025 050 075 100 125 150 175 200 225 250 300 400 500 600 700 800` (이름은 px의 절반이 아니라 rem×100이다: `150` = 12px) |
-| 라디우스 | `rounded-100`(4) `200`(6) `300`(8) `400`(10) `500`(12) `600`(14) `700`(16) `800`(20) `rounded-full` |
+| 갈래      | 쓸 수 있는 이름                                                                                                                                               |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 면        | `bg-surface` `bg-canvas` `bg-gray-50` `bg-gray-100` `bg-primary-600` `bg-tinted-bg` `bg-success-100` `bg-warning-50` `bg-danger-50` `bg-notice-bg` `bg-toast` |
+| 글씨      | `text-gray-900` `text-gray-600` `text-hint` `text-tinted-ink` `text-success-700` `text-warning-600` `text-danger-600` `text-on-primary` `text-inverse`        |
+| 선        | `border-gray-200` `border-gray-300` `border-tinted-border` `border-success-200` `border-danger-200` `border-notice-border`                                    |
+| 글자 크기 | `text-heading1` `text-heading2` `text-heading3` `text-subtitle1` `text-subtitle2` `text-body2` `text-body3` `text-body4` `text-body5`                         |
+| 간격      | `p-*` `px-*` `gap-*` 등에 `025 050 075 100 125 150 175 200 225 250 300 400 500 600 700 800` (이름은 px의 절반이 아니라 rem×100이다: `150` = 12px)             |
+| 라디우스  | `rounded-100`(4) `200`(6) `300`(8) `400`(10) `500`(12) `600`(14) `700`(16) `800`(20) `rounded-full`                                                           |
 
 유틸리티가 없는 값은 인라인 `style`에 역할 토큰을 쓴다: `style={{ background: "var(--rc-color-bg-canvas-raised)" }}`. 토큰은 프리미티브(`--rc-color-gray-050`)와 역할(`--rc-color-bg-*`, `--rc-color-fg-*`, `--rc-color-border-*`, `--rc-size-*`, `--rc-radius-*`, `--rc-z-*`) 두 층이고, **화면 코드는 역할 토큰만** 읽는다.
 
@@ -51,8 +51,12 @@
   </Card.Header>
   <Card.Body>
     <VStack gap="075">
-      <Text typography="body4" foreground="muted">CoC 7판 · 4시간 예정</Text>
-      <Text typography="body4" foreground="hint">정원 4명 중 3명 신청</Text>
+      <Text typography="body4" foreground="muted">
+        CoC 7판 · 4시간 예정
+      </Text>
+      <Text typography="body4" foreground="hint">
+        정원 4명 중 3명 신청
+      </Text>
     </VStack>
   </Card.Body>
   <Card.Footer>
