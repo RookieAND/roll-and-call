@@ -28,7 +28,7 @@ export async function MyPageReviews({ received, written, showReceived }: MyPageR
           />
         )}
         <CountLinkRow
-          label="작성한 후기"
+          label="내가 쓴 후기"
           count={written}
           href={serverPath({ slug: server.slug, path: "/me/reviews" })}
         />

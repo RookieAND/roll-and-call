@@ -23,9 +23,6 @@ export function MyPageRulebooks({
     rulebooks.filter((rulebook) => rulebook.state === state),
   );
   const showBand = Boolean(enforcementDate) && !isCertEnforced(enforcementDate);
-  const certifiedCount = rulebooks.filter(
-    (rulebook) => rulebook.state === CERT_STATE.certified,
-  ).length;
 
   return (
     <VStack gap="125" render={<section />}>
@@ -34,7 +31,7 @@ export function MyPageRulebooks({
           인증한 룰북
         </Text>
         <Text typography="body4" foreground="hint" numeric>
-          {certifiedCount}
+          {rows.length}
         </Text>
       </HStack>
 

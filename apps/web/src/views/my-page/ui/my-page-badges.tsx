@@ -54,9 +54,20 @@ export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
         {!goal && heldCount === 0 && (
           <HStack align="center" gap="150" className="p-175">
             <BadgeMedal emoji="🎲" look={1} size="sm" locked />
-            <Text typography="body3" foreground="muted" className="min-w-0 flex-1 break-keep">
-              첫 세션에 참석해 첫 주사위를 받아 보세요
-            </Text>
+            <VStack gap="075" className="min-w-0 flex-1">
+              <HStack align="baseline" gap="075">
+                <Text typography="subtitle2" weight="extrabold" className="min-w-0 flex-1">
+                  첫 주사위
+                </Text>
+                <Text typography="body4" foreground="hint" numeric>
+                  0 / 1
+                </Text>
+              </HStack>
+              <Progress value={0} max={1} aria-label="첫 주사위 진행도" />
+              <Text typography="body4" foreground="muted" className="break-keep">
+                첫 세션에 참석하면 첫 뱃지를 받습니다
+              </Text>
+            </VStack>
           </HStack>
         )}
         <Button
