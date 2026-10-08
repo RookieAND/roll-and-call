@@ -8,7 +8,6 @@ import { AdminHeader, NextItemButton } from "@/shared/ui";
 import { ReviewActionsAside } from "./review-actions-aside";
 import { ReviewCard } from "./review-card";
 import { ReviewHiddenBanner } from "./review-hidden-banner";
-import { ReviewPhotos } from "./review-photos";
 
 interface ReviewDetailViewProps {
   review: ReviewDetail;
@@ -40,15 +39,15 @@ export function ReviewDetailView({ review, tab, listQuery, viewerId }: ReviewDet
     <>
       <AdminHeader
         title={review.game.title}
+        sub="후기 상세"
         trail={trail}
         actions={<NextItemButton href={nextHref} />}
         withAside
       />
       <HStack data-full-bleed align="stretch" className="flex-1">
-        <VStack gap="150" className="min-w-0 flex-1 px-center-200 py-200">
+        <VStack gap="200" className="min-w-0 flex-1 px-center-200 py-200">
           {review.hidden ? <ReviewHiddenBanner hidden={review.hidden} held={review.held} /> : null}
           <ReviewCard review={review} logHref={logHref} />
-          {review.photoUrls.length ? <ReviewPhotos review={review} /> : null}
         </VStack>
         <ReviewActionsAside review={review} actionHref={actionHref} />
       </HStack>

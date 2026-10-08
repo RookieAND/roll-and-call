@@ -3,7 +3,7 @@ import { EMPTY_IMAGE } from "@/shared/ui";
 
 import { reviewWindowEmptyCopy } from "./review-window-empty-copy";
 
-// 칩의 구인에 후기가 없으면 출석 상태, 탭이 비었으면 탭 안내, 아니면 검색·사진 필터 결과 없음(필터 초기화).
+// 칩의 구인에 후기가 없으면 출석 상태, 탭이 비었으면 탭 안내, 아니면 검색·사진 필터 결과 없음(필터 지우기).
 export function reviewEmptyCopy({ list, hidden }: { list: ReviewList; hidden: boolean }) {
   if (list.game && list.counts.all === 0) {
     return { ...reviewWindowEmptyCopy(list.game.window), resettable: false };
@@ -26,7 +26,7 @@ export function reviewEmptyCopy({ list, hidden }: { list: ReviewList; hidden: bo
   }
   return {
     title: "조건에 맞는 후기가 없습니다",
-    description: undefined,
+    description: "검색어를 바꿔 보세요.",
     image: EMPTY_IMAGE.search,
     resettable: true,
   };

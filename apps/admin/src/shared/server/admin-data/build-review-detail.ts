@@ -52,7 +52,11 @@ export function buildReviewDetail({
         }
       : undefined,
     held: review.held,
-    game: { id: session.id, title: session.title },
+    game: {
+      id: session.id,
+      title: session.title,
+      gmNickname: users.find((user) => user.id === session.gmId)?.nickname ?? "",
+    },
     author: {
       id: author.id,
       nickname: author.nickname,

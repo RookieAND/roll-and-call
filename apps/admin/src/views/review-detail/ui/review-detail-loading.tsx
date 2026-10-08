@@ -20,7 +20,7 @@ export function ReviewDetailLoading() {
       <HStack data-full-bleed align="stretch" className="flex-1">
         <LoadingRegion
           label="후기를 불러오는 중입니다"
-          className="min-w-0 gap-150 px-center-200 py-200"
+          className="min-w-0 gap-200 px-center-200 py-200"
         >
           <Card.Root padding="none" render={<section />} className="shrink-0">
             <HStack align="center" gap="150" className="px-200 py-150">

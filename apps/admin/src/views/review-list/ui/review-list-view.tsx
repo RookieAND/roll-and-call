@@ -30,26 +30,19 @@ interface ReviewListViewProps {
 
 export function ReviewListView({ list, tab, sort, query }: ReviewListViewProps) {
   const hidden = tab === REVIEW_LIST_TAB.hidden;
-  const total = hidden ? list.counts.hidden : list.counts.all;
-  const headerSub = `${hidden ? "숨긴 후기" : "전체 후기"} ${total}건`;
   const { resettable, ...empty } = reviewEmptyCopy({ list, hidden });
   const resetHref = reviewListHref({ hidden, query: { ...query, q: undefined, photo: undefined } });
   const withoutGameHref = reviewListHref({ hidden, query: { ...query, game: undefined } });
   const detailQuery = withQuery("", { tab: hidden ? tab : undefined, ...query }, {});
   const resetAction = resettable ? (
-    <Button
-      variant="outline"
-      colorPalette="gray"
-      size="sm"
-      render={<ServerLink path={resetHref} />}
-    >
-      필터 초기화
+    <Button variant="outline" colorPalette="gray" render={<ServerLink path={resetHref} />}>
+      필터 지우기
     </Button>
   ) : undefined;
 
   return (
     <>
-      <AdminHeader title="후기" sub={headerSub} />
+      <AdminHeader title="후기" />
       <ReviewTabs counts={list.counts} />
       <VStack gap="150" className="flex-1 p-200">
         <HStack align="center" gap="100" wrap>
