@@ -1,6 +1,6 @@
 import { Text } from "@roll-and-call/ui";
 
-import { formatSessionTime, NO_SHOW_STATUS } from "@/shared/lib";
+import { formatDateTime, formatSessionTime, NO_SHOW_STATUS } from "@/shared/lib";
 import type { NoShowDetail } from "@/shared/server";
 import { FactRows, FactSub } from "@/shared/ui";
 
@@ -47,6 +47,15 @@ export function NoShowSummary({ record }: NoShowSummaryProps) {
           { label: "불참 당사자", value: record.nickname },
           { label: "처리한 사람", value: record.handler },
           reasonRow,
+          ...(record.cancellation
+            ? [
+                { label: "취소 사유", value: record.cancellation.reason },
+                {
+                  label: "취소한 운영진",
+                  value: `${record.cancellation.by} · ${formatDateTime(record.cancellation.at)}`,
+                },
+              ]
+            : []),
           {
             label: "최근 30일 불참",
             value: (
