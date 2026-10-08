@@ -8,6 +8,7 @@ import {
 } from "@/shared/api";
 import type { GamesCounts } from "@/shared/server";
 
+import type { RuleOption } from "../model/rule-option";
 import { statusCounts } from "../model/status-counts";
 import { GameFilterButton } from "./game-filter-button";
 import { GameFilterSheet } from "./game-filter-sheet";
@@ -23,12 +24,18 @@ interface GamesToolbarProps {
   counts?: GamesCounts;
   // 탭 건수는 검색어·필터와 무관하다.
   tabCounts?: GamesCounts;
+  ruleOptions?: RuleOption[];
 }
 
 // 탭 줄만 AppBar 아래에 고정하고 검색·필터·칩 줄은 목록과 함께 스크롤된다(시안 05 F). top = AppBar 높이 토큰.
 // Container의 px-200을 -mx-200으로 되돌려 탭 배경을 끝까지 채운다.
 // 지난 구인은 끝난 날짜 최근 먼저로 고정이라 정렬 버튼이 없다. 건수가 없으면(첫 진입 뼈대) 필터 버튼만 그린다.
-export function GamesToolbar({ filter = {}, counts, tabCounts }: GamesToolbarProps) {
+export function GamesToolbar({
+  filter = {},
+  counts,
+  tabCounts,
+  ruleOptions = [],
+}: GamesToolbarProps) {
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
   const chipCounts = counts ? statusCounts({ counts, tab }) : undefined;
   return (
@@ -42,6 +49,7 @@ export function GamesToolbar({ filter = {}, counts, tabCounts }: GamesToolbarPro
           {chipCounts ? (
             <GameFilterSheet
               filter={filter}
+              ruleOptions={ruleOptions}
               count={chipCounts[filter.status ?? GAME_STATUS_FILTER_DEFAULT] ?? 0}
             />
           ) : (

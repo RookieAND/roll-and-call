@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { isNull } from "es-toolkit";
 
 import { db } from "#/client";
@@ -16,18 +16,20 @@ export async function listGameRuleOptions({
   serverId: string;
   tab: GameTab;
   now: Date;
-}): Promise<{ key: string; label: string }[]> {
+}): Promise<{ key: string; label: string; count: number }[]> {
   const rows = await db
-    .selectDistinct({ id: rulebookCategories.id, name: rulebookCategories.name })
+    .select({ id: rulebookCategories.id, name: rulebookCategories.name, total: count() })
     .from(games)
     .leftJoin(rulebooks, eq(rulebooks.id, games.rulebookId))
     .leftJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
-    .where(recruitingGamesWhere({ serverId, filter: { tab }, now }));
+    .where(recruitingGamesWhere({ serverId, filter: { tab }, now }))
+    .groupBy(rulebookCategories.id, rulebookCategories.name);
 
   const options = rows
     .filter((row) => !isNull(row.id))
-    .map((row) => ({ key: row.id!, label: row.name! }))
+    .map((row) => ({ key: row.id!, label: row.name!, count: row.total }))
     .toSorted((left, right) => left.label.localeCompare(right.label, "ko"));
-  if (rows.some((row) => isNull(row.id))) options.push({ key: GAME_RULE_OTHER, label: "기타" });
+  const other = rows.find((row) => isNull(row.id));
+  if (other) options.push({ key: GAME_RULE_OTHER, label: "기타", count: other.total });
   return options;
 }
