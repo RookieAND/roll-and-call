@@ -15,6 +15,11 @@ const COMMANDS = [
     description: "1d10, 3d6+2 같은 식으로 주사위를 굴린다",
     options: [{ name: "식", type: STRING_OPTION, description: "예: 1d10, 3d6+2", required: true }],
   },
+  {
+    name: "온보딩",
+    type: CHAT_INPUT,
+    description: "튜토리얼 퀘스트로 롤앤콜을 체험한다",
+  },
 ];
 
 const token = process.env.DISCORD_BOT_TOKEN;

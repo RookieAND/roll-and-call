@@ -5,6 +5,7 @@ import { isNull, range } from "es-toolkit";
 import { useRef, useState } from "react";
 
 import { REVIEW_PHOTO_MAX_COUNT } from "@/entities/review";
+import { TRIAL_SAMPLE_PHOTO, useIsTrial } from "@/shared/trial";
 
 import { PHOTO_ACCEPT } from "../model/photo-rules";
 import { useLongPressReorder } from "../model/use-long-press-reorder";
@@ -16,6 +17,7 @@ interface ReviewPhotosFieldProps {
 }
 
 export function ReviewPhotosField({ photos }: ReviewPhotosFieldProps) {
+  const trial = useIsTrial();
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const longPress = useLongPressReorder({ onMove: photos.move });
@@ -59,11 +61,13 @@ export function ReviewPhotosField({ photos }: ReviewPhotosFieldProps) {
           <Button
             type="button"
             variant="outline"
-            aria-label="사진 추가"
-            onClick={() => inputRef.current?.click()}
+            aria-label={trial ? "샘플 사진 넣기" : "사진 추가"}
+            onClick={() =>
+              trial ? photos.addSample(TRIAL_SAMPLE_PHOTO) : inputRef.current?.click()
+            }
             className="aspect-square h-auto w-full"
           >
-            + 추가
+            {trial ? "샘플 사진 넣기" : "+ 추가"}
           </Button>
         )}
         {range(emptySlots).map((index) => (

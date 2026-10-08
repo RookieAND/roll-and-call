@@ -3,6 +3,7 @@
 import { Button, type ButtonProps } from "@roll-and-call/ui";
 import { Fragment, useState } from "react";
 
+import { TRIAL_HANDLER, useTrialHandler } from "@/shared/trial";
 import { ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { leaveGame } from "../api/leave-game";
@@ -29,10 +30,11 @@ export function LeaveConfirmButton({
 }: LeaveConfirmButtonProps) {
   const [confirming, setConfirming] = useState(false);
   const { pending, run } = useAction();
+  const leaveAction = useTrialHandler(TRIAL_HANDLER.leaveGame, leaveGame);
   const copy = leaveDialogCopy({ kind, waitlistRank });
 
   function leave() {
-    run(() => leaveGame(gameId), {
+    run(() => leaveAction(gameId), {
       onSuccess: () => {
         setConfirming(false);
         toast.success(copy.successMessage);

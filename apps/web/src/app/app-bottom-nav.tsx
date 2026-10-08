@@ -14,12 +14,13 @@ export function AppBottomNav() {
   const pathname = usePathname();
   const { server } = useParams<{ server?: string }>();
   const queryClient = useQueryClient();
+  const inTrial = !!server && pathname.startsWith(`/${server}/onboarding`);
   const queryKey = navBadgesQueryKey(server ?? "");
   const { data, isError } = useQuery({
     queryKey,
     queryFn: () => fetchNavBadges(server!),
     throwOnError: false,
-    enabled: !!server,
+    enabled: !!server && !inTrial,
   });
 
   const shownPathname = useRef(pathname);
@@ -29,8 +30,8 @@ export function AppBottomNav() {
     void queryClient.refetchQueries({ queryKey: navBadgesQueryKey(server), stale: true });
   }, [pathname, server, queryClient]);
 
-  // 서버 밖 화면(도움말·둘러보기)에는 탭이 없다.
-  if (!server) return null;
+  // 서버 밖 화면(도움말·둘러보기)과 튜토리얼 체험에는 탭이 없다.
+  if (!server || inTrial) return null;
   const dots = {
     home: !isError && (data?.blockedTodo ?? false),
     notifications: !isError && (data?.unread ?? false),

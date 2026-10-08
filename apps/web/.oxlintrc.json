@@ -1,3 +1,46 @@
 {
-  "extends": ["../../configs/oxlint-config/base.json"]
+  "extends": ["../../configs/oxlint-config/base.json"],
+  "overrides": [
+    {
+      "files": ["src/views/trial-quest/**", "src/shared/trial/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/shared/server", "@/shared/server/*"],
+                "message": "체험 환경은 서버 모듈을 쓰지 않는다.",
+                "allowTypeImports": true
+              },
+              {
+                "group": [
+                  "@roll-and-call/database",
+                  "@roll-and-call/database/*",
+                  "!@roll-and-call/database/*/model"
+                ],
+                "message": "체험 환경은 DB 모듈을 쓰지 않는다. 순수 규칙은 /model만 가져온다.",
+                "allowTypeImports": true
+              },
+              {
+                "group": [
+                  "@roll-and-call/discord",
+                  "@roll-and-call/discord/*",
+                  "@roll-and-call/game-notices",
+                  "@roll-and-call/review-forum"
+                ],
+                "message": "체험 환경은 디스코드를 부르지 않는다.",
+                "allowTypeImports": true
+              },
+              {
+                "group": ["@/features/upload-thumbnail"],
+                "message": "체험 환경은 업로드·제출 기능을 직접 쓰지 않는다.",
+                "allowTypeImports": true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

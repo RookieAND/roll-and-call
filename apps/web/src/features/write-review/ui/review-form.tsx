@@ -3,12 +3,12 @@
 import { RichTextEditor } from "@roll-and-call/tiptap";
 import { Button, Callout, Field, FloatingBar, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import { SessionHeading } from "@/entities/game";
 import { REVIEW_BODY_MAX_LENGTH, REVIEW_BODY_MIN_LENGTH } from "@/entities/review";
 import { richTextLength, useServerPath } from "@/shared/lib";
+import { TRIAL_HANDLER, useIsTrial, useTrialHandler, useTrialPush } from "@/shared/trial";
 import { AppBar, ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { discardReviewPhotos } from "../api/discard-review-photos";
@@ -34,6 +34,8 @@ interface ReviewFormProps {
   } | null;
   editUntil: Date;
   initialBlock: ReviewBlock | null;
+  // 앱바 바로 아래에 붙는 줄. 체험 환경의 「체험 중」 표시가 쓴다.
+  belowAppBar?: ReactNode;
 }
 
 export function ReviewForm({
@@ -43,8 +45,12 @@ export function ReviewForm({
   review,
   editUntil,
   initialBlock,
+  belowAppBar,
 }: ReviewFormProps) {
-  const router = useRouter();
+  const push = useTrialPush();
+  const trial = useIsTrial();
+  const submitAction = useTrialHandler(TRIAL_HANDLER.submitReview, submitReview);
+  const discardAction = useTrialHandler(TRIAL_HANDLER.discardReviewPhotos, discardReviewPhotos);
   const toServerPath = useServerPath();
   const editing = !isNull(review);
   const initialPhotoUrls = review?.photoUrls ?? [];
@@ -59,7 +65,7 @@ export function ReviewForm({
   const photos = useReviewPhotos({ serverId, initialUrls: initialPhotoUrls });
   const draft = useReviewDraft({
     gameId,
-    enabled: !editing,
+    enabled: !editing && !trial,
     onRestore: (saved) => {
       setBody(saved.body);
       setSpoiler(saved.spoiler);
@@ -105,7 +111,7 @@ export function ReviewForm({
     }
     run(
       () =>
-        submitReview({
+        submitAction({
           gameId,
           reviewId: review?.id ?? null,
           body,
@@ -128,12 +134,12 @@ export function ReviewForm({
 
   function requestLeave() {
     if (dirty) setConfirmingLeave(true);
-    else router.push(leaveHref);
+    else push(leaveHref);
   }
 
   function leave() {
-    void discardReviewPhotos(newPhotoUrls);
-    router.push(leaveHref);
+    void discardAction(newPhotoUrls);
+    push(leaveHref);
   }
 
   return (
@@ -143,6 +149,7 @@ export function ReviewForm({
         backIcon="close"
         onBack={requestLeave}
       />
+      {belowAppBar}
       <VStack gap="250" className="p-200">
         <SessionHeading {...heading} />
 

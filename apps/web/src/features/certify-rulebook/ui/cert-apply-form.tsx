@@ -2,10 +2,11 @@
 
 import { Button, Callout, Container, FloatingBar, Progress, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { certApplyHref, type MyRulebook } from "@/entities/rulebook";
 import { useServerPath } from "@/shared/lib";
+import { TRIAL_HANDLER, useIsTrial, useTrialHandler } from "@/shared/trial";
 import { AppBar, LineBreaks, toast, useAction } from "@/shared/ui";
 
 import { submitCertification } from "../api/submit-certification";
@@ -26,6 +27,8 @@ interface CertApplyFormProps {
   quiz: { id: string; question: string } | null;
   rejection: { title: string; lines: string[] } | null;
   previews: Record<string, string>;
+  // 앱바 바로 아래에 붙는 줄. 체험 환경의 「체험 중」 표시가 쓴다.
+  belowAppBar?: ReactNode;
 }
 
 export function CertApplyForm({
@@ -36,7 +39,10 @@ export function CertApplyForm({
   quiz,
   rejection,
   previews,
+  belowAppBar,
 }: CertApplyFormProps) {
+  const trial = useIsTrial();
+  const submitAction = useTrialHandler(TRIAL_HANDLER.submitCertification, submitCertification);
   const toServerPath = useServerPath();
   const [draft, setDraft] = useState(() => initialDraft({ rulebook, sellers, previews }));
   const latestDraft = useRef(draft);
@@ -64,7 +70,7 @@ export function CertApplyForm({
   const submit = () =>
     run(
       () =>
-        submitCertification({
+        submitAction({
           entry: toCertEntry({ rulebookId: rulebook.id, draft }),
           quiz: quiz ? { questionId: quiz.id, answer } : null,
         }),
@@ -93,14 +99,15 @@ export function CertApplyForm({
               ),
             })}
         action={
-          retry ? undefined : (
+          retry || trial ? undefined : (
             <Text typography="body4" foreground="hint" numeric className="px-100">
               {step} / {totalSteps}
             </Text>
           )
         }
       />
-      {!retry && (
+      {belowAppBar}
+      {!retry && !trial && (
         <Progress
           value={step}
           max={totalSteps}

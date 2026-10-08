@@ -22,6 +22,8 @@
 
 **절대 경로는 2 depth까지만**: `@/레이어/슬라이스`(`@/features/join-game`) 또는 `@/shared/세그먼트`(`@/shared/ui`)까지. 슬라이스 내부 파일(`@/features/join-game/api/join-game`)이나 shared 세그먼트 내부(`@/shared/ui/app-bar`)를 직접 가리키지 않는다. 슬라이스/세그먼트마다 `index.ts` 배럴이 public API다. 같은 슬라이스 안에서는 상대 경로.
 
+서버에서만 부르는 export(디스코드 상호작용 등 `server-only` 모듈)는 클라이언트가 가져오는 `index.ts`에 섞지 말고 슬라이스의 `server.ts`로 나눈다(`@/features/join-game/server`). `lint:fsd`는 이 `server` 진입점만 3단 경로를 허용한다.
+
 `pnpm lint:fsd`(`scripts/fsd-check.mjs`)가 위 세 규칙(depth·방향·교차 슬라이스)을 검사한다. 도메인 규칙·폼 스키마·상태 판정은 모듈 옆 `*.test.ts`(Vitest, `pnpm test`)가 맡는다. UI는 테스트하지 않는다.
 
 **shared 세그먼트는 런타임으로 나뉜다**: 배럴은 tree-shaking되지 않으므로 서버 전용 모듈이 섞이면 클라이언트 번들이 깨진다.

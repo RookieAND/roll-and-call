@@ -1,6 +1,7 @@
 "use client";
 
 import { DEFAULT_PLAY_MINUTES } from "@roll-and-call/database/games/model";
+import { use } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -14,6 +15,7 @@ import { ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
 import type { GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
 import { toKstDateTimeInput } from "@/shared/lib";
+import { TrialContext } from "@/shared/trial";
 import { toast, useAction } from "@/shared/ui";
 
 import type { GameDefaults } from "../model/game-defaults";
@@ -44,6 +46,11 @@ export function GameForm({
   initialRulebookId,
 }: GameFormProps) {
   const { pending, run } = useAction();
+  // 체험에서는 일부 단계만 보인다.
+  const trialStepIndexes = use(TrialContext)?.wizard?.stepIndexes;
+  const steps = trialStepIndexes
+    ? trialStepIndexes.map((index) => GAME_FORM_STEPS[index]!)
+    : GAME_FORM_STEPS;
   // 주소로 넘어온 책(서플리먼트일 수도 있다)은 그 판본의 룰로 바꿔 채운다.
   const initialSet =
     rulebooks && initialRulebookId
@@ -102,7 +109,7 @@ export function GameForm({
       pending={pending}
       submitLabel={submitLabel}
       onValid={onValid}
-      steps={GAME_FORM_STEPS}
+      steps={steps}
       edit={edit}
       rulebooks={rulebooks}
     />

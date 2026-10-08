@@ -19,8 +19,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
   const [user, server] = await Promise.all([getCurrentSessionUser(), getCurrentServer()]);
   // 서비스 소개는 계정당 한 번, 서버 홈에 처음 닿을 때 그리기 전에 보낸다(R6·R17·D48).
   if (user && !(await hasOnboarded(user.id))) {
-    const next = serverPath({ slug: server.slug, path: "/games" });
-    redirect(`/onboarding?next=${encodeURIComponent(next)}`);
+    redirect(serverPath({ slug: server.slug, path: "/onboarding" }));
   }
 
   return (

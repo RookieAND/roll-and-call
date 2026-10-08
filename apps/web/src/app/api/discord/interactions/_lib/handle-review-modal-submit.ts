@@ -1,7 +1,7 @@
 import { REVIEW_BUTTON_PREFIX } from "@roll-and-call/game-notices";
 import { after } from "next/server";
 
-import { writeReviewFromDiscord } from "@/features/write-review";
+import { writeReviewFromDiscord } from "@/features/write-review/server";
 
 import { deferredEphemeralResponse } from "./deferred-ephemeral-response";
 import { editOriginalResponse } from "./edit-original-response";

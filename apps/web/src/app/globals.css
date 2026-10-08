@@ -420,3 +420,37 @@ html {
     animation: none;
   }
 }
+
+@keyframes quest-stamp {
+  0% {
+    transform: rotate(-8deg) scale(1.8);
+    opacity: 0;
+  }
+  60% {
+    transform: rotate(-8deg) scale(0.95);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-8deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes quest-rise {
+  0% {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@utility animate-quest-stamp {
+  animation: quest-stamp 450ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+@utility animate-quest-rise {
+  animation: quest-rise 500ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}

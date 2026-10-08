@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import type { EditionSet, MyRulebooks } from "@/entities/rulebook";
 import { RulebookRequestSheet } from "@/features/certify-rulebook";
+import { useIsTrial } from "@/shared/trial";
 import { EmptyState } from "@/shared/ui";
 
 import { ruleSheetGroups } from "../model/rule-sheet-groups";
@@ -27,6 +28,7 @@ export function GameRulebookSheet({
   selectedKey,
   onSelect,
 }: GameRulebookSheetProps) {
+  const trial = useIsTrial();
   const [query, setQuery] = useState("");
   const [requestOpen, setRequestOpen] = useState(false);
   const [requestKey, setRequestKey] = useState(0);
@@ -81,9 +83,11 @@ export function GameRulebookSheet({
                 size="section"
                 title="맞는 룰이 없습니다"
                 action={
-                  <Button type="button" variant="outline" onClick={openRequest}>
-                    룰북 추가 요청
-                  </Button>
+                  trial ? undefined : (
+                    <Button type="button" variant="outline" onClick={openRequest}>
+                      룰북 추가 요청
+                    </Button>
+                  )
                 }
                 className="mt-150"
               />
@@ -91,14 +95,16 @@ export function GameRulebookSheet({
           </Sheet.Body>
         </Sheet.Popup>
       </Sheet.Root>
-      <RulebookRequestSheet
-        key={requestKey}
-        open={requestOpen}
-        onOpenChange={setRequestOpen}
-        categoryNames={uniq(rulebooks.rulebooks.map((rulebook) => rulebook.categoryName))}
-        pendingRequestNames={rulebooks.pendingRequestNames}
-        initialName={query.trim()}
-      />
+      {!trial && (
+        <RulebookRequestSheet
+          key={requestKey}
+          open={requestOpen}
+          onOpenChange={setRequestOpen}
+          categoryNames={uniq(rulebooks.rulebooks.map((rulebook) => rulebook.categoryName))}
+          pendingRequestNames={rulebooks.pendingRequestNames}
+          initialName={query.trim()}
+        />
+      )}
     </>
   );
 }

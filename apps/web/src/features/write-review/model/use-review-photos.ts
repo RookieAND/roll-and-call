@@ -70,6 +70,16 @@ export function useReviewPhotos({
     for (const item of added) void upload(item.key, item.file);
   }
 
+  // 체험 환경 전용. 파일을 올리지 않고 정적 샘플 사진을 넣는다.
+  function addSample(url: string) {
+    setError(null);
+    if (items.length >= REVIEW_PHOTO_MAX_COUNT) return;
+    setItems((current) => [
+      ...current,
+      { key: crypto.randomUUID(), status: PHOTO_STATUS.done, url, file: null, progress: 1 },
+    ]);
+  }
+
   function retry(key: string) {
     const file = items.find((item) => item.key === key)?.file;
     if (file) void upload(key, file);
@@ -95,7 +105,7 @@ export function useReviewPhotos({
   const uploading = items.some((item) => item.status === PHOTO_STATUS.uploading);
   const failed = items.some((item) => item.status === PHOTO_STATUS.failed);
 
-  return { items, error, urls, uploading, failed, add, retry, remove, move };
+  return { items, error, urls, uploading, failed, add, addSample, retry, remove, move };
 }
 
 export type ReviewPhotos = ReturnType<typeof useReviewPhotos>;

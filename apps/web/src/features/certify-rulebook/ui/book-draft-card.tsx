@@ -18,6 +18,7 @@ import {
   type CertFormat,
   type MyRulebook,
 } from "@/entities/rulebook";
+import { TRIAL_SAMPLE_PHOTO, useIsTrial } from "@/shared/trial";
 import { LineBreaks } from "@/shared/ui";
 
 import { uploadCertPhoto } from "../api/upload-cert-photo";
@@ -52,6 +53,7 @@ export function BookDraftCard({
   highlightEmpty,
   update,
 }: BookDraftCardProps) {
+  const trial = useIsTrial();
   const ebook = draft.format === CERT_FORMAT.ebook;
   const keys: readonly SlotKey[] = ebook ? CERT_PROOFS : CERT_SHOTS;
   const firstEmpty = keys.find((key) => !slotKey(slotOf({ draft, key })));
@@ -71,6 +73,15 @@ export function BookDraftCard({
     setSelectedKey(key);
     const status = slotOf({ draft, key }).status;
     if (status === PHOTO_SLOT.uploading || slotKey(slotOf({ draft, key }))) return;
+    // 체험에서는 파일을 올리지 않고 정적 샘플 사진을 넣는다.
+    if (trial) {
+      setSlot(key, {
+        status: PHOTO_SLOT.done,
+        key: `${TRIAL_SAMPLE_PHOTO}#${key}`,
+        previewUrl: TRIAL_SAMPLE_PHOTO,
+      });
+      return;
+    }
     (key === CERT_PROOF.receipt ? receiptInput : photoInput).current?.click();
   };
 

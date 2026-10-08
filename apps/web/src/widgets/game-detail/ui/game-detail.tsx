@@ -1,5 +1,6 @@
 import { Container, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
+import type { ReactNode } from "react";
 
 import {
   deriveGameStatus,
@@ -33,9 +34,18 @@ interface GameDetailProps {
   sanction: ActionSanction | null;
   review: ReviewStatus;
   now: Date;
+  // 앱바 바로 아래에 붙는 줄. 체험 환경의 「체험 중」 표시가 쓴다.
+  belowAppBar?: ReactNode;
 }
 
-export function GameDetail({ game, viewerId, sanction, review, now }: GameDetailProps) {
+export function GameDetail({
+  game,
+  viewerId,
+  sanction,
+  review,
+  now,
+  belowAppBar,
+}: GameDetailProps) {
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
   const { confirmed, waiting, removed } = splitRoster(game.participants);
 
@@ -83,6 +93,7 @@ export function GameDetail({ game, viewerId, sanction, review, now }: GameDetail
         heading={false}
         action={<ShareButton gameId={game.id} title={game.title} />}
       />
+      {belowAppBar}
       <Container size="md" className="px-0">
         <VStack gap="200">
           <GameDetailThumbnail url={game.thumbnailUrl} spoiler={game.thumbnailSpoiler} />

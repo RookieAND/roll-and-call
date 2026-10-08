@@ -4,11 +4,14 @@ import { NextResponse } from "next/server";
 
 import { buildInteractionResponse } from "./_lib/build-interaction-response";
 import { handleApplyButton } from "./_lib/handle-apply-button";
+import { handleOnboardingCommand } from "./_lib/handle-onboarding-command";
 import { handleReviewButton } from "./_lib/handle-review-button";
 import { handleReviewModalSubmit } from "./_lib/handle-review-modal-submit";
 import type { DiscordInteraction } from "./_lib/interaction-types";
 import { verifyDiscordRequest } from "./_lib/verify-discord-request";
 
+const ONBOARDING_COMMAND_NAME = "온보딩";
+const INTERACTION_APPLICATION_COMMAND = 2;
 const INTERACTION_MESSAGE_COMPONENT = 3;
 const INTERACTION_MODAL_SUBMIT = 5;
 
@@ -27,6 +30,12 @@ export async function POST(request: Request) {
       return NextResponse.json(handleReviewButton(interaction));
     }
     return NextResponse.json(await handleApplyButton(interaction));
+  }
+  if (
+    interaction.type === INTERACTION_APPLICATION_COMMAND &&
+    interaction.data?.name === ONBOARDING_COMMAND_NAME
+  ) {
+    return NextResponse.json(await handleOnboardingCommand(interaction));
   }
   return NextResponse.json(buildInteractionResponse(interaction));
 }

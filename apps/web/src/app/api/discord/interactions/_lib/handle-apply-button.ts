@@ -1,6 +1,6 @@
 import { APPLY_BUTTON_PREFIX } from "@roll-and-call/game-notices";
 
-import { applyFromDiscord } from "@/features/join-game";
+import { applyFromDiscord } from "@/features/join-game/server";
 
 import { ephemeralResponse } from "./ephemeral-response";
 import type { DiscordInteraction, DiscordInteractionResponse } from "./interaction-types";

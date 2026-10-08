@@ -2,13 +2,14 @@
 
 import { formatPlayMinutes } from "@roll-and-call/database/games/model";
 import { cn, Container, VStack } from "@roll-and-call/ui";
+import { Callout } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 import type { FieldErrors } from "react-hook-form";
 
 import type { GameFormValues } from "@/features/write-game";
 import { useServerPath } from "@/shared/lib";
+import { TrialContext, useTrialPush } from "@/shared/trial";
 import { ConfirmDialog } from "@/shared/ui";
 
 import { scrollToField } from "../lib/scroll-to-field";
@@ -37,7 +38,9 @@ export function GameFormWizard({
   edit,
   rulebooks,
 }: GameFormLayoutProps) {
-  const router = useRouter();
+  const push = useTrialPush();
+  const trial = use(TrialContext);
+  const trialWizard = trial?.wizard;
   const toServerPath = useServerPath();
   const [step, setStep] = useState(0);
   const [confirmingExit, setConfirmingExit] = useState(false);
@@ -75,7 +78,7 @@ export function GameFormWizard({
       return;
     }
     if (form.formState.isDirty) setConfirmingExit(true);
-    else router.push(leaveHref);
+    else push(leaveHref);
   }
 
   const images = watch("images");
@@ -102,7 +105,7 @@ export function GameFormWizard({
             minPlayersLocked={locked}
             savedMinPlayers={edit?.minPlayers ?? null}
             locked={locked}
-            preConfirmable={!edit}
+            preConfirmable={!edit && !trial}
           />
         );
       case FORM_SECTION.schedule:
@@ -120,15 +123,29 @@ export function GameFormWizard({
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-h-dvh flex-col">
       <WizardHeader
-        step={step + 1}
-        total={steps.length}
+        step={(trialWizard?.stepIndexes[step] ?? step) + 1}
+        total={trialWizard?.total ?? steps.length}
         title={edit ? "구인 수정" : "구인 등록"}
         onBack={goBack}
       />
+      {trialWizard?.banner}
 
       <Container size="md" className="flex-1">
         <VStack gap="250" className="py-300">
           {intro?.title && <WizardIntro title={intro.title} description={intro.description} />}
+
+          {trialWizard?.hints[step] && (
+            <Callout.Root colorPalette="primary" size="sm">
+              <Callout.Icon />
+              <Callout.Description>
+                {trialWizard.hints[step].map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+              </Callout.Description>
+            </Callout.Root>
+          )}
 
           {edit && step === 0 && applicants > 0 && <EditWithApplicantsNotice />}
           {edit && step === 0 && applicants === 0 && <EditWithoutApplicantsNotice />}
@@ -186,7 +203,7 @@ export function GameFormWizard({
         cancelLabel={edit ? "이어서 고치기" : "이어서 쓰기"}
         confirmLabel="그만두기"
         danger
-        onConfirm={() => router.push(leaveHref)}
+        onConfirm={() => push(leaveHref)}
       />
     </form>
   );

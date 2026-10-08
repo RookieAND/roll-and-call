@@ -16,11 +16,13 @@ import {
   getReviewDraftTarget,
 } from "@/shared/server";
 import { QueryNoticeToast } from "@/shared/ui";
+import {
+  GameDetail,
+  isRecruitmentClosed,
+  REVIEW_STATUS,
+  reviewStatusOf,
+} from "@/widgets/game-detail";
 
-import { isRecruitmentClosed } from "../model/is-recruitment-closed";
-import { REVIEW_STATUS } from "../model/review-status";
-import { reviewStatusOf } from "../model/review-status-of";
-import { GameDetail } from "./game-detail";
 import { GameHiddenView } from "./game-hidden-view";
 
 const NOTICE_MESSAGES = {
