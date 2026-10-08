@@ -1,5 +1,5 @@
-import { Callout, Text, Tooltip, VStack } from "@roll-and-call/ui";
-import { Ban, CircleCheck, Gavel, Mail, RefreshCw, User } from "lucide-react";
+import { Text, Tooltip, VStack } from "@roll-and-call/ui";
+import { Ban, CircleCheck, Gavel, RefreshCw, User } from "lucide-react";
 
 import { MEMBERSHIP_STATUS } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
@@ -22,17 +22,6 @@ export function UserActionsAside({ user, tab, kickBlock }: UserActionsAsideProps
   const actionLink = (action: UserAction) => (
     <ServerLink path={userActionHref(user.id, { tab, action })} scroll={false} />
   );
-  const dmCard = (
-    <ActionCard
-      icon={Mail}
-      title="디스코드 DM 보내기"
-      description="사정을 묻거나 안내할 때 사용합니다"
-      link={
-        <a href={`https://discord.com/users/${user.discordId}`} target="_blank" rel="noreferrer" />
-      }
-    />
-  );
-
   if (user.membership === MEMBERSHIP_STATUS.banned) {
     return (
       <UserActionsAsideFrame>
@@ -44,7 +33,6 @@ export function UserActionsAside({ user, tab, kickBlock }: UserActionsAsideProps
             description="디스코드 차단도 함께 해제합니다"
             link={actionLink(USER_ACTION.unban)}
           />
-          {dmCard}
         </VStack>
       </UserActionsAsideFrame>
     );
@@ -75,7 +63,7 @@ export function UserActionsAside({ user, tab, kickBlock }: UserActionsAsideProps
             icon={Ban}
             tone="danger"
             title="제재"
-            description="참가 신청·구인 개설·룰북 인증 신청을 막습니다"
+            description="서버에 남긴 채 롤앤콜 활동만 정지합니다"
             link={<ServerLink path={`/users/${user.id}/sanction`} />}
           />
         )}
@@ -85,7 +73,6 @@ export function UserActionsAside({ user, tab, kickBlock }: UserActionsAsideProps
           description="부적절한 닉네임을 운영진이 바꿉니다"
           link={actionLink(USER_ACTION.nickname)}
         />
-        {dmCard}
       </VStack>
       <VStack gap="075" className="px-150 pb-150">
         <Text
@@ -105,11 +92,6 @@ export function UserActionsAside({ user, tab, kickBlock }: UserActionsAsideProps
         ) : (
           kickCard
         )}
-      </VStack>
-      <VStack className="px-150 pb-150">
-        <Callout.Root colorPalette="gray" size="sm">
-          <Callout.Description>제재에는 사용자에게 보여 줄 사유가 필요합니다.</Callout.Description>
-        </Callout.Root>
       </VStack>
     </UserActionsAsideFrame>
   );

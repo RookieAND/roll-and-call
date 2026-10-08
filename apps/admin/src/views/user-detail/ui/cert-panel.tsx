@@ -1,5 +1,5 @@
-import { Button, Callout, Table, Text, VStack } from "@roll-and-call/ui";
-import { Ban } from "lucide-react";
+import { Callout, Table, Text, Tooltip, VStack } from "@roll-and-call/ui";
+import { ChevronRight } from "lucide-react";
 
 import { paginate } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
@@ -26,12 +26,11 @@ export function CertPanel({ user, page }: CertPanelProps) {
   return (
     <VStack gap="150">
       {user.sanction ? (
-        <Callout.Root colorPalette="gray">
-          <Callout.Icon>
-            <Ban size={14} strokeWidth={2.2} />
-          </Callout.Icon>
+        <Callout.Root colorPalette="warning">
+          <Callout.Icon />
+          <Callout.Title>제재 기간에는 구인을 개설할 수 없습니다</Callout.Title>
           <Callout.Description>
-            제재 기간에는 인증된 룰북이 있어도 구인을 개설할 수 없습니다.
+            인증된 룰북이 있어도 제재가 끝날 때까지 새 구인을 열 수 없습니다.
           </Callout.Description>
         </Callout.Root>
       ) : null}
@@ -47,13 +46,13 @@ export function CertPanel({ user, page }: CertPanelProps) {
       >
         <Table.Root className="table-equal">
           <TableColumns
-            widths={[0, { fixed: 88 }, { fixed: 160 }, { fixed: 104 }, { fixed: 156 }]}
+            widths={[0, { fixed: 88 }, { fixed: 160 }, { fixed: 104 }, { fixed: 44 }]}
           />
           <Table.Header>
             <Table.Row>
               <Table.Head>룰북</Table.Head>
               <Table.Head align="center">상태</Table.Head>
-              <Table.Head>일자</Table.Head>
+              <Table.Head>처리 일자</Table.Head>
               <Table.Head>처리한 운영진</Table.Head>
               <Table.Head aria-label="조치" />
             </Table.Row>
@@ -72,11 +71,20 @@ export function CertPanel({ user, page }: CertPanelProps) {
               return (
                 <Table.Row
                   key={row.key}
-                  className={row.state === CERT_ROW_STATE.rejected ? "opacity-50" : undefined}
+                  interactive={Boolean(row.action)}
+                  className={
+                    row.state === CERT_ROW_STATE.rejected ? "relative opacity-50" : "relative"
+                  }
                 >
                   <Table.Cell>
                     <VStack gap="025" className="min-w-0">
-                      <Text typography="body3" weight="bold" truncate>
+                      <Text
+                        typography="body3"
+                        weight="bold"
+                        truncate
+                        render={row.action ? <ServerLink path={row.action.href} /> : undefined}
+                        className={row.action ? "after:absolute after:inset-0" : undefined}
+                      >
                         {row.rulebook}
                       </Text>
                       {row.reason ? (
@@ -103,14 +111,9 @@ export function CertPanel({ user, page }: CertPanelProps) {
                   </Table.Cell>
                   <Table.Cell align="end">
                     {row.action ? (
-                      <Button
-                        variant="outline"
-                        colorPalette="gray"
-                        size="sm"
-                        render={<ServerLink path={row.action.href} />}
-                      >
-                        {row.action.label}
-                      </Button>
+                      <Tooltip content={row.action.label}>
+                        <ChevronRight size={16} aria-hidden className="inline text-hint" />
+                      </Tooltip>
                     ) : null}
                   </Table.Cell>
                 </Table.Row>

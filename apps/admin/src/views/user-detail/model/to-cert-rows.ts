@@ -59,7 +59,7 @@ export function toCertRows(user: UserDetail): CertRow[] {
       reason: application.rejectReason,
       date: `${formatDate(application.processedAt ?? application.appliedAt)} 반려`,
       staff: application.processedBy ?? null,
-      action: null,
+      action: { label: "사유 보기", href: `/cert/${application.id}` },
     }));
   return [...certified, ...pending, ...rejected];
 }

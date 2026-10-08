@@ -53,7 +53,7 @@ export function MemoPanel({ userId, nickname, memos, viewer }: MemoPanelProps) {
                   </Text>
                   {memo.tag ? <Tag>{memo.tag}</Tag> : null}
                 </HStack>
-                <Text typography="body3" className="whitespace-pre-line">
+                <Text typography="body3" className="leading-[1.6] whitespace-pre-line">
                   {memo.body}
                 </Text>
               </VStack>
