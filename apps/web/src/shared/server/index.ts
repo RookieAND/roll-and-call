@@ -106,3 +106,4 @@ export { findDepartedMembers } from "./membership/find-departed-members";
 export { listJoinableServers } from "./membership/list-joinable-servers";
 export { MEMBERSHIP_REQUIRED_MESSAGE } from "./membership/membership-required-message";
 export { notMemberError } from "./membership/not-member-error";
+export { uploadReviewPhotos, type ReviewPhotoSource } from "./upload-review-photos";

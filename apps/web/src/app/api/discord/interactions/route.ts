@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 
   const interaction = JSON.parse(body) as DiscordInteraction;
   if (interaction.type === INTERACTION_MODAL_SUBMIT) {
-    return NextResponse.json(await handleReviewModalSubmit(interaction));
+    return NextResponse.json(handleReviewModalSubmit(interaction));
   }
   if (interaction.type === INTERACTION_MESSAGE_COMPONENT) {
     if (interaction.data?.custom_id?.startsWith(REVIEW_BUTTON_PREFIX)) {
