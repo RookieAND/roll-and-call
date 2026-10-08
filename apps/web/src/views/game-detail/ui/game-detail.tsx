@@ -90,6 +90,7 @@ export function GameDetail({ game, viewerId, sanction, review, now }: GameDetail
           <VStack gap="250" className="px-200 pb-100">
             <GameDetailHeader
               title={game.title}
+              kind={game.kind}
               status={status}
               ended={ended}
               showDeadline={showDeadline}

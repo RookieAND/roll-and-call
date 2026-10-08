@@ -2,7 +2,6 @@ import { formatPlayMinutes } from "@roll-and-call/database/games/model";
 import { Avatar, Badge, Card, HStack, Text } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
-import { gameKindLabel, playTypeLabel } from "@/entities/game";
 import { formatDateTime, formatGameSchedule } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
@@ -14,9 +13,7 @@ interface GameInfoTableProps {
 
 export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
   const rows: { label: string; value: ReactNode }[] = [
-    { label: "구분", value: gameKindLabel(game.kind) },
     { label: "룰", value: game.rule },
-    { label: "플레이 유형", value: playTypeLabel(game.playType) },
     {
       label: "GM",
       value: (

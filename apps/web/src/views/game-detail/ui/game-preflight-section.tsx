@@ -6,6 +6,7 @@ import type { GameDetailData } from "@/shared/server";
 import { AiImageBlock } from "./ai-image-block";
 import { GameNoticeBlock } from "./game-notice-block";
 import { GameTagBlock } from "./game-tag-block";
+import { PlayTypeBlock } from "./play-type-block";
 
 const TRIGGER_NOTE_LINES = [
   "신청 전에 확인해 주세요.",
@@ -31,6 +32,7 @@ export function GamePreflightSection({ game }: GamePreflightSectionProps) {
         />
       )}
       {game.notice && <GameNoticeBlock notice={game.notice} />}
+      <PlayTypeBlock playType={game.playType} />
       {game.platforms.length > 0 && (
         <GameTagBlock label={gameTagLabel[GAME_TAG.platforms]} tags={game.platforms} />
       )}
