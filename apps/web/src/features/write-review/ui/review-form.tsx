@@ -1,13 +1,14 @@
 "use client";
 
-import { Button, Callout, Field, FloatingBar, Textarea, VStack } from "@roll-and-call/ui";
+import { RichTextEditor } from "@roll-and-call/tiptap";
+import { Button, Callout, Field, FloatingBar, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { SessionHeading } from "@/entities/game";
 import { REVIEW_BODY_MAX_LENGTH, REVIEW_BODY_MIN_LENGTH } from "@/entities/review";
-import { useServerPath } from "@/shared/lib";
+import { richTextLength, useServerPath } from "@/shared/lib";
 import { AppBar, ConfirmDialog, toast, useAction } from "@/shared/ui";
 
 import { discardReviewPhotos } from "../api/discard-review-photos";
@@ -53,6 +54,8 @@ export function ReviewForm({
   const [submitFailed, setSubmitFailed] = useState(false);
   const [block, setBlock] = useState(initialBlock);
   const [confirmingLeave, setConfirmingLeave] = useState(false);
+  // 에디터는 마운트 뒤 값을 스스로 쥐므로 불러오기·새로 쓰기 때는 키를 바꿔 다시 세운다.
+  const [editorKey, setEditorKey] = useState(0);
   const photos = useReviewPhotos({ serverId, initialUrls: initialPhotoUrls });
   const draft = useReviewDraft({
     gameId,
@@ -60,6 +63,7 @@ export function ReviewForm({
     onRestore: (saved) => {
       setBody(saved.body);
       setSpoiler(saved.spoiler);
+      setEditorKey((key) => key + 1);
     },
   });
   const { pending, run } = useAction();
@@ -76,7 +80,7 @@ export function ReviewForm({
 
   function changeBody(next: string) {
     setBody(next);
-    if (bodyError && next.trim().length >= REVIEW_BODY_MIN_LENGTH) setBodyError(null);
+    if (bodyError && richTextLength(next) >= REVIEW_BODY_MIN_LENGTH) setBodyError(null);
     draft.save({ body: next, spoiler });
   }
 
@@ -89,12 +93,13 @@ export function ReviewForm({
     draft.clear();
     setBody("");
     setSpoiler(false);
+    setEditorKey((key) => key + 1);
   }
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
     setSubmitFailed(false);
-    if (body.trim().length < REVIEW_BODY_MIN_LENGTH) {
+    if (richTextLength(body) < REVIEW_BODY_MIN_LENGTH) {
       setBodyError("20자 이상 적어 주세요");
       return;
     }
@@ -162,17 +167,17 @@ export function ReviewForm({
         <Field.Root
           label="후기"
           htmlFor="reviewBody"
-          counter={`${body.length.toLocaleString()} / ${REVIEW_BODY_MAX_LENGTH.toLocaleString()}`}
+          counter={`${richTextLength(body).toLocaleString()} / ${REVIEW_BODY_MAX_LENGTH.toLocaleString()}`}
           error={bodyError ?? undefined}
         >
-          <Textarea
+          <RichTextEditor
+            key={editorKey}
             id="reviewBody"
             value={body}
-            onChange={(event) => changeBody(event.target.value)}
+            onChange={changeBody}
             placeholder="20자 이상 적어 주세요"
-            maxLength={REVIEW_BODY_MAX_LENGTH}
+            limit={REVIEW_BODY_MAX_LENGTH}
             invalid={!isNull(bodyError)}
-            rows={5}
           />
         </Field.Root>
 

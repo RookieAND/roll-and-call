@@ -498,6 +498,9 @@ importers:
       '@roll-and-call/discord':
         specifier: workspace:*
         version: link:../discord
+      '@roll-and-call/game-notices':
+        specifier: workspace:*
+        version: link:../game-notices
       es-toolkit:
         specifier: ^1.52.0
         version: 1.52.0

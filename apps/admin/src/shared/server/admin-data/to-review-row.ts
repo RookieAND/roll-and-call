@@ -1,5 +1,6 @@
 import { compact } from "es-toolkit";
 
+import { plainText } from "./plain-text";
 import { REVIEW_LIST_TAB, type ReviewListTab } from "./review-list-tab";
 import type { ReviewRow } from "./review-row";
 import type { AdminUser, Review, Session } from "./types";
@@ -25,7 +26,10 @@ export function toReviewRow({ review, users, sessions, tab }: ToReviewRowOptions
     gameId: review.sessionId,
     gameTitle: session?.title ?? "",
     gmNickname: nicknameOf(session?.gmId),
-    firstLine: review.body.split("\n").find((line) => line.trim()) ?? "",
+    firstLine:
+      plainText(review.body)
+        .split("\n")
+        .find((line) => line.trim()) ?? "",
     photoCount: review.photoUrls.length,
     badges: compact([
       review.hidden && tab !== REVIEW_LIST_TAB.hidden ? "숨김" : null,

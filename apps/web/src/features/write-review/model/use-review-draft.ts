@@ -2,6 +2,8 @@
 
 import { useEffect, useEffectEvent, useState } from "react";
 
+import { richTextLength } from "@/shared/lib";
+
 type ReviewDraft = { body: string; spoiler: boolean };
 
 const storageKey = (gameId: string) => `review-draft:${gameId}`;
@@ -26,7 +28,7 @@ export function useReviewDraft({
     try {
       const saved = localStorage.getItem(storageKey(gameId));
       const draft = saved ? (JSON.parse(saved) as ReviewDraft) : null;
-      if (!draft?.body.trim()) return;
+      if (!draft || !richTextLength(draft.body)) return;
       restore(draft);
       setRestored(true);
     } catch {}
@@ -35,7 +37,8 @@ export function useReviewDraft({
   function save(draft: ReviewDraft) {
     if (!enabled) return;
     try {
-      if (draft.body.trim()) localStorage.setItem(storageKey(gameId), JSON.stringify(draft));
+      if (richTextLength(draft.body))
+        localStorage.setItem(storageKey(gameId), JSON.stringify(draft));
       else localStorage.removeItem(storageKey(gameId));
     } catch {}
   }

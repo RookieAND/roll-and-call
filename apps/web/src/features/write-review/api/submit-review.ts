@@ -10,7 +10,7 @@ import {
   REVIEW_PHOTO_MAX_COUNT,
 } from "@/entities/review";
 import { type ActionResult } from "@/shared/api";
-import { reviewPhotoPathOf, serverPath } from "@/shared/lib";
+import { reviewPhotoPathOf, richTextLength, serverPath } from "@/shared/lib";
 import {
   evaluateBadges,
   getActingMember,
@@ -40,9 +40,10 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
   const { server, user } = member;
 
   const body = input.body.trim();
-  if (body.length < REVIEW_BODY_MIN_LENGTH)
-    return { error: "20자 이상 적어 주세요", field: "body" };
-  if (body.length > REVIEW_BODY_MAX_LENGTH)
+  const bodyLength = richTextLength(body);
+  if (bodyLength < REVIEW_BODY_MIN_LENGTH) return { error: "20자 이상 적어 주세요", field: "body" };
+  // 글자 수는 서식을 뺀 본문으로 세므로, 서식 JSON이 터무니없이 커지는 것은 따로 막는다.
+  if (bodyLength > REVIEW_BODY_MAX_LENGTH || body.length > REVIEW_BODY_MAX_LENGTH * 10)
     return { error: "2,000자까지 쓸 수 있습니다", field: "body" };
   // 옛 경로(내 id/…)와 서버별 경로(servers/서버 id/내 id/…) 둘 다 내 사진이다.
   const ownPrefixes = [`${user.id}/`, `servers/${server.id}/${user.id}/`];

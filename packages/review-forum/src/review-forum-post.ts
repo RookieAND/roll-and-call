@@ -1,4 +1,5 @@
 import type { ForumReview } from "@roll-and-call/database/reviews";
+import { richTextToMarkdown } from "@roll-and-call/game-notices/rich-text-markdown";
 
 import { extensionOf } from "./extension-of";
 import { ruleTagName } from "./rule-tag-name";
@@ -20,7 +21,8 @@ export function reviewForumPost({
   tagIds: Map<string, string>;
   reviewsUrl: string | undefined;
 }) {
-  const body = review.spoiler ? `||${review.body.replaceAll("||", "| |")}||` : review.body;
+  const text = richTextToMarkdown(review.body);
+  const body = review.spoiler ? `||${text.replaceAll("||", "| |")}||` : text;
   const meta = [
     `작성자 <@${review.authorDiscordId}>`,
     `룰 ${review.category ?? review.rule}`,

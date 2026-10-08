@@ -13,6 +13,7 @@
   "dependencies": {
     "@roll-and-call/database": "workspace:*",
     "@roll-and-call/discord": "workspace:*",
+    "@roll-and-call/game-notices": "workspace:*",
     "es-toolkit": "^1.52.0"
   },
   "devDependencies": {

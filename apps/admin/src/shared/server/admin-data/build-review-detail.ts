@@ -1,5 +1,6 @@
 import { nextInList } from "@/shared/lib";
 
+import { plainText } from "./plain-text";
 import { selectReviewRows, type ReviewListFilter } from "./select-review-rows";
 import type { AdminUser, AuditEntry, Review, Session } from "./types";
 
@@ -37,7 +38,7 @@ export function buildReviewDetail({
   );
   return {
     id: review.id,
-    body: review.body,
+    body: plainText(review.body),
     spoiler: review.spoiler,
     photoUrls: review.photoUrls,
     createdAt: review.createdAt,

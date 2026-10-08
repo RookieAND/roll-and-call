@@ -9,6 +9,7 @@ const row = {
   id: "review",
   gameId: "game",
   body: "첫 CoC였는데 GM님이 판정 규칙을 그때그때 짚어 주셨습니다.",
+  authorName: "달무리",
   spoiler: false,
   photoUrls: [],
   createdAt: new Date("2026-09-28T10:00:00+09:00"),

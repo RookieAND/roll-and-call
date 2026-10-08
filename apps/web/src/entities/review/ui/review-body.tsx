@@ -1,7 +1,10 @@
 "use client";
 
+import { RichText } from "@roll-and-call/tiptap";
 import { Button, Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
+
+import { richTextLength } from "@/shared/lib";
 
 // 세 줄을 넘길 만한 길이일 때만 펼치기를 단다. 줄 수를 재지 않는 어림값이다.
 const LONG_BODY_LENGTH = 90;
@@ -16,7 +19,7 @@ interface ReviewBodyProps {
 
 export function ReviewBody({ body, lines = 3, muted = false }: ReviewBodyProps) {
   const [expanded, setExpanded] = useState(false);
-  const long = body.length > LONG_BODY_LENGTH;
+  const long = richTextLength(body) > LONG_BODY_LENGTH;
   const clampClass = expanded ? "" : CLAMP_CLASS[lines];
   const foreground = muted ? "muted" : "normal";
 
@@ -25,11 +28,9 @@ export function ReviewBody({ body, lines = 3, muted = false }: ReviewBodyProps) 
       <Text
         typography="body3"
         foreground={foreground}
-        render={<p />}
-        className={`leading-[1.65] whitespace-pre-line [text-wrap:pretty] ${clampClass}`}
-      >
-        {body}
-      </Text>
+        render={<RichText value={body} />}
+        className={`leading-[1.65] [text-wrap:pretty] ${clampClass}`}
+      />
       {long && (
         <Button
           variant="ghost"

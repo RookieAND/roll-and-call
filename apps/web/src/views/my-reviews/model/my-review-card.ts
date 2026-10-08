@@ -16,6 +16,7 @@ export type MyReviewActions = (typeof MY_REVIEW_ACTIONS)[keyof typeof MY_REVIEW_
 
 export type MyReviewCardModel = {
   id: string;
+  authorName: string;
   title: string;
   meta: string;
   body: string | null;
@@ -42,6 +43,7 @@ export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyRevi
   const sessionDate = row.sessionAt ? formatDate(row.sessionAt) : formatDate(row.createdAt);
   const base = {
     id: row.id,
+    authorName: row.authorName,
     title: row.gameTitle,
     meta: `${row.gameRule} · ${sessionDate}${row.updatedAt ? " · 수정됨" : ""}`,
     body: row.body,

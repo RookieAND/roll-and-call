@@ -1,4 +1,4 @@
-import { Badge, Callout, Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Avatar, Badge, Callout, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { ReviewBody } from "@/entities/review";
 import { LineBreaks } from "@/shared/ui";
@@ -14,17 +14,19 @@ export function MyReviewCard({ card }: MyReviewCardProps) {
   return (
     <Card.Root padding="md" radius={500} render={<article />}>
       <VStack gap="125">
-        <HStack align="start" gap="100">
+        <HStack align="center" gap="125">
+          <Avatar name={card.authorName} size="md" />
           <VStack gap="025" className="min-w-0 flex-1">
-            <Text typography="subtitle1" truncate render={<h3 />}>
+            <Text typography="subtitle2" truncate render={<h3 />}>
               {card.title}
             </Text>
-            <Text typography="body4" foreground="hint" numeric>
+            <Text typography="body4" foreground="hint" truncate numeric>
               {card.meta}
             </Text>
           </VStack>
           {card.badge && <Badge colorPalette={card.badge.palette}>{card.badge.label}</Badge>}
         </HStack>
+        <div aria-hidden className="h-px bg-gray-200" />
         {card.body && <ReviewBody body={card.body} lines={2} muted={card.bodyMuted} />}
         {card.callout && (
           <Callout.Root colorPalette={card.callout.palette} size="sm">

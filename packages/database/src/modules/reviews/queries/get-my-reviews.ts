@@ -1,7 +1,8 @@
 import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "#/client";
-import { games, sessionReviews } from "#/schema";
+import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
+import { games, profiles, sessionReviews } from "#/schema";
 
 import { ownReviewsWhere } from "./own-reviews-where";
 import { reviewAuthorAbsentSql } from "./review-author-absent-sql";
@@ -23,12 +24,14 @@ export async function getMyReviews({ serverId, authorId }: { serverId: string; a
       removedReasonCode: sessionReviews.removedReasonCode,
       removedReasonText: sessionReviews.removedReasonText,
       authorAbsent: reviewAuthorAbsentSql,
+      authorName: memberNicknameSql(serverId),
       gameTitle: games.title,
       gameRule: games.rule,
       sessionAt: games.confirmedAt,
     })
     .from(sessionReviews)
     .innerJoin(games, and(eq(games.serverId, serverId), eq(games.id, sessionReviews.gameId)))
+    .innerJoin(profiles, eq(profiles.id, sessionReviews.authorId))
     .where(ownReviewsWhere({ serverId, authorId }))
     .orderBy(desc(sessionReviews.createdAt));
 }
