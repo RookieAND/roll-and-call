@@ -24,6 +24,6 @@ export async function GET(request: Request) {
   }
   await evaluateAnniversaryBadges(now);
   const isSunday = new Date(now.getTime() + KST_OFFSET_MS).getUTCDay() === SUNDAY;
-  if (isSunday) await evaluateAllBadges(now);
+  if (isSunday) await evaluateAllBadges({ now });
   return Response.json({ ok: true, announced, recomputed: isSunday });
 }

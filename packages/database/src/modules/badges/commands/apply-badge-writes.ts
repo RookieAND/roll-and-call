@@ -25,11 +25,14 @@ export async function applyBadgeWrites({
   userId,
   writes,
   now,
+  silent = false,
 }: {
   serverId: string;
   userId: string;
   writes: BadgeWrite[];
   now: Date;
+  // 알림 줄도 획득 시트도 없이 채운다. 새 칭호를 출시할 때 기존 기록으로 소급하는 용도.
+  silent?: boolean;
 }) {
   if (writes.length === 0) return;
   const grants = writes.filter((write): write is Grant => write.kind === "grant");
@@ -75,7 +78,7 @@ export async function applyBadgeWrites({
       })),
       now,
     });
-    const notifiedAt = plan.sheet ? null : now;
+    const notifiedAt = plan.sheet && !silent ? null : now;
 
     for (const write of writes) {
       if (write.kind === "revoke") {
@@ -117,7 +120,10 @@ export async function applyBadgeWrites({
       executor: transaction,
       serverId,
       actorId: null,
-      notifications: plan.notifications.map((notification) => ({ ...notification, userId })),
+      notifications: (silent ? [] : plan.notifications).map((notification) => ({
+        ...notification,
+        userId,
+      })),
     });
   });
 }

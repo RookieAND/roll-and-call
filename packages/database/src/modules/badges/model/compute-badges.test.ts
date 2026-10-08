@@ -285,7 +285,12 @@ describe("숨겨진 칭호", () => {
       draw({ gameId: "c", roll: 40, nearMiss: true }),
       draw({ gameId: "d", roll: 11 }),
     ];
-    expect(keys(computeBadges(facts({ draws })))).toEqual(["sp.critical", "sp.extreme", "sp.near"]);
+    expect(keys(computeBadges(facts({ draws })))).toEqual([
+      "sp.critical",
+      "sp.extreme",
+      "sp.near",
+      "sp.slump3",
+    ]);
   });
 
   it("인기 폭발은 신청자가 정원의 3배이면서 10명 이상이다", () => {

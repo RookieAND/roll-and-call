@@ -15,10 +15,12 @@ async function evaluateUser({
   serverId,
   userId,
   now,
+  silent,
 }: {
   serverId: string;
   userId: string;
   now: Date;
+  silent: boolean;
 }) {
   const [facts, stored] = await Promise.all([
     loadBadgeFacts({ serverId, userId, now }),
@@ -37,7 +39,7 @@ async function evaluateUser({
     stored: stored.filter((badge) => isRecomputedBadgeKey(badge.badgeKey)),
     desired: computeBadges(facts),
   });
-  await applyBadgeWrites({ serverId, userId, writes, now });
+  await applyBadgeWrites({ serverId, userId, writes, now, silent });
 }
 
 // 지난달 기록이 바뀌었을 수 있어 이달의 뱃지도 다시 맞춘다.
@@ -46,11 +48,13 @@ export async function evaluateBadges({
   serverId,
   userIds,
   now = new Date(),
+  silent = false,
 }: {
   serverId: string;
   userIds: string[];
   now?: Date;
+  silent?: boolean;
 }) {
-  for (const userId of uniq(userIds)) await evaluateUser({ serverId, userId, now });
+  for (const userId of uniq(userIds)) await evaluateUser({ serverId, userId, now, silent });
   await syncMonthlyBadges({ serverId, now });
 }

@@ -195,8 +195,32 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
   [HIDDEN_LADDER.wins5]: hidden({
     emoji: "💎",
     name: "연전연승",
-    grade: 5,
+    grade: 4,
     description: "행운이 다섯 번 연달아 찾아왔습니다.",
+  }),
+  [HIDDEN_LADDER.wins7]: hidden({
+    emoji: "🔱",
+    name: "백전불패",
+    grade: 5,
+    description: "행운이 일곱 번 연달아 찾아왔습니다.",
+  }),
+  [HIDDEN_LADDER.slump3]: hidden({
+    emoji: "🌧️",
+    name: "먹구름",
+    grade: 2,
+    description: "하늘이 세 번 연달아 흐렸습니다.",
+  }),
+  [HIDDEN_LADDER.slump5]: hidden({
+    emoji: "⛈️",
+    name: "폭풍우",
+    grade: 4,
+    description: "다섯 번째 추첨까지 비가 그치지 않았습니다.",
+  }),
+  [HIDDEN_LADDER.slump7]: hidden({
+    emoji: "🌑",
+    name: "그믐",
+    grade: 5,
+    description: "일곱 번째 추첨까지 달이 뜨지 않았습니다.",
   }),
   [HIDDEN_LADDER.days10]: hidden({
     emoji: "🌋",

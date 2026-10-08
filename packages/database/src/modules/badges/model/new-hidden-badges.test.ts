@@ -131,14 +131,40 @@ describe("숨겨진 칭호 14종", () => {
     expect(earned({ played: doubleOnly }, "days3")).toBe(false);
   });
 
-  it("연승은 연속 확정 3번, 연전연승은 5번이고 대기가 끼면 끊긴다", () => {
-    const picks = (pattern: boolean[]) => pattern.map((picked, index) => draw(index, { picked }));
-    expect(earned({ draws: picks([true, true]) }, "wins3")).toBe(false);
-    expect(earned({ draws: picks([true, true, true]) }, "wins3")).toBe(true);
-    expect(earned({ draws: picks([true, true, false, true, true]) }, "wins3")).toBe(false);
-    expect(earned({ draws: picks([true, true, true, true]) }, "wins5")).toBe(false);
-    const five = computeBadges(facts({ draws: picks([true, true, true, true, true]) }));
-    expect(has(five, "sp.wins5") && has(five, "sp.wins3")).toBe(true);
+  const picks = (pattern: boolean[]) => pattern.map((picked, index) => draw(index, { picked }));
+  const run = (picked: boolean, length: number) => picks(Array(length).fill(picked));
+  const keys = (drawList: BadgeDraw[]) =>
+    computeBadges(facts({ draws: drawList }))
+      .map((badge) => badge.badgeKey)
+      .filter((key) => /wins|slump/.test(key))
+      .toSorted();
+
+  it("연승은 연속 확정 3번, 연전연승은 5번, 백전불패는 7번이고 대기가 끼면 끊긴다", () => {
+    expect(keys(run(true, 2))).toEqual([]);
+    expect(keys(run(true, 3))).toEqual(["sp.wins3"]);
+    expect(keys(run(true, 6))).toEqual(["sp.wins3", "sp.wins5"]);
+    expect(keys(run(true, 7))).toEqual(["sp.wins3", "sp.wins5", "sp.wins7"]);
+    expect(keys(picks([true, true, false, true, true]))).toEqual([]);
+  });
+
+  it("연패는 연속 대기 3번 먹구름, 5번 폭풍우, 7번 그믐이고 확정이 끼면 처음부터 센다", () => {
+    expect(keys(run(false, 2))).toEqual([]);
+    expect(keys(run(false, 3))).toEqual(["sp.slump3"]);
+    expect(keys(run(false, 5))).toEqual(["sp.slump3", "sp.slump5"]);
+    expect(keys(run(false, 7))).toEqual(["sp.slump3", "sp.slump5", "sp.slump7"]);
+    expect(keys(picks([false, false, true, false, false]))).toEqual([]);
+    expect(keys(picks([false, false, false, false, true, false, false, false, false]))).toEqual([
+      "sp.slump3",
+    ]);
+  });
+
+  it("연승·연패의 사건은 기준 횟수를 처음 채운 추첨이고 같은 기록은 같은 결과를 낸다", () => {
+    const drawList = run(false, 9);
+    const badge = computeBadges(facts({ draws: drawList })).find((b) => b.badgeKey === "sp.slump5");
+    expect(badge?.sourceGameId).toBe("d4");
+    expect(computeBadges(facts({ draws: drawList }))).toEqual(
+      computeBadges(facts({ draws: drawList })),
+    );
   });
 
   it("턱걸이는 정원 3명 이상에서 확정자 가운데 마지막 자리일 때다", () => {

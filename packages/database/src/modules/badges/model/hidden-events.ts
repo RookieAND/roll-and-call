@@ -11,9 +11,9 @@ import { owlEvents } from "./owl-events";
 import type { BadgeEvent } from "./reached-tier";
 import { sameDayEvents } from "./same-day-events";
 import { sizeEvents } from "./size-events";
+import { STREAK_OUTCOME, streakEvents } from "./streak-events";
 import { timeSlotEvents } from "./time-slot-events";
 import { weekdayEvents } from "./weekday-events";
-import { winStreakEvents } from "./win-streak-events";
 
 const EXPEDITION_MIN_ATTENDED = 6;
 const CROWDED_MIN_APPLICANTS = 10;
@@ -99,7 +99,7 @@ export function hiddenEvents({
     case HIDDEN_LADDER.lightning:
       return lightningEvents(facts);
     case HIDDEN_LADDER.wins3:
-      return winStreakEvents({ draws, length: 3 });
+      return streakEvents({ draws, length: 3, outcome: STREAK_OUTCOME.win });
     case HIDDEN_LADDER.days3:
       return dayStreakEvents({ facts, length: 3 });
     case HIDDEN_LADDER.allNight:
@@ -122,7 +122,15 @@ export function hiddenEvents({
     case HIDDEN_LADDER.days7:
       return dayStreakEvents({ facts, length: 7 });
     case HIDDEN_LADDER.wins5:
-      return winStreakEvents({ draws, length: 5 });
+      return streakEvents({ draws, length: 5, outcome: STREAK_OUTCOME.win });
+    case HIDDEN_LADDER.wins7:
+      return streakEvents({ draws, length: 7, outcome: STREAK_OUTCOME.win });
+    case HIDDEN_LADDER.slump3:
+      return streakEvents({ draws, length: 3, outcome: STREAK_OUTCOME.lose });
+    case HIDDEN_LADDER.slump5:
+      return streakEvents({ draws, length: 5, outcome: STREAK_OUTCOME.lose });
+    case HIDDEN_LADDER.slump7:
+      return streakEvents({ draws, length: 7, outcome: STREAK_OUTCOME.lose });
     case HIDDEN_LADDER.days10:
       return dayStreakEvents({ facts, length: 14 });
     case HIDDEN_LADDER.allSizes:
