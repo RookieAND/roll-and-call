@@ -32,7 +32,7 @@ export function GameKindField({ value, onChange, locked = false }: GameKindField
       </Field.Root>
       {isBriefing && (
         <Text typography="body4" foreground="muted">
-          롤앤콜이 무엇인지 설명하는 모집이에요
+          고른 룰북을 설명하는 모임이에요
         </Text>
       )}
       {locked && (
