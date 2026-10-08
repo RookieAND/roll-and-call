@@ -1,14 +1,12 @@
 import { HStack, Text, UiImage } from "@roll-and-call/ui";
 
 import { SignOutButton } from "@/features/auth";
-import { Tag } from "@/shared/ui";
 
 interface SelectTopProps {
   nickname: string;
-  platformAdmin: boolean;
 }
 
-export function SelectTop({ nickname, platformAdmin }: SelectTopProps) {
+export function SelectTop({ nickname }: SelectTopProps) {
   return (
     <HStack
       align="center"
@@ -26,7 +24,6 @@ export function SelectTop({ nickname, platformAdmin }: SelectTopProps) {
         ADMIN
       </Text>
       <HStack align="center" gap="100" className="ml-auto">
-        {platformAdmin ? <Tag>플랫폼 관리자</Tag> : null}
         <Text typography="subtitle2">{nickname}</Text>
         <SignOutButton />
       </HStack>

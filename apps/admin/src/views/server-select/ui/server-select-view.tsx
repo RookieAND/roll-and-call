@@ -13,7 +13,7 @@ interface ServerSelectViewProps {
 export function ServerSelectView({ nickname, servers }: ServerSelectViewProps) {
   return (
     <VStack className="min-h-dvh bg-canvas">
-      <SelectTop nickname={nickname} platformAdmin={false} />
+      <SelectTop nickname={nickname} />
       <VStack align="center" render={<main />} className="flex-1 px-300 py-500">
         <VStack gap="250" className="w-full max-w-[1040px]">
           <VStack gap="075">

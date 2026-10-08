@@ -1,3 +1,4 @@
+import { getActiveMembership } from "@roll-and-call/database/servers";
 import { HStack, VStack } from "@roll-and-call/ui";
 import { forbidden, redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -23,6 +24,15 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
     redirect("/denied");
   }
   const [server, servers] = await Promise.all([getCurrentServer(), listMyServers()]);
+  // 유저 앱에 가입하지 않은 운영진은 가입 화면으로 보낸다. 플랫폼 관리자는 가입 없이 모든 서버를 본다.
+  if (
+    !staff.platformAdmin &&
+    !(await getActiveMembership({ serverId: server.id, userId: staff.id }))
+  ) {
+    const userAppUrl = process.env.NEXT_PUBLIC_USER_APP_URL ?? "";
+    const adminHome = `${process.env.ADMIN_APP_URL?.replace(/\/$/, "")}/${server.slug}`;
+    redirect(`${userAppUrl}/${server.slug}/join?next=${encodeURIComponent(adminHome)}`);
+  }
   const current = servers.find((candidate) => candidate.slug === server.slug) ?? {
     ...server,
     role: staff.role,

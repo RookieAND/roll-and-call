@@ -36,7 +36,7 @@ export function PlatformServerSelectView({
 
   return (
     <VStack className="min-h-dvh bg-canvas">
-      <SelectTop nickname={nickname} platformAdmin />
+      <SelectTop nickname={nickname} />
       <VStack align="center" render={<main />} className="flex-1 px-300 py-400">
         <VStack gap="200" className="w-full max-w-[1040px]">
           <HStack align="end" gap="150">
