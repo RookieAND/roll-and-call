@@ -8,7 +8,7 @@ import {
   messageHeadInput,
   messageText,
 } from "@roll-and-call/game-notices";
-import { headcountFields, memberMention } from "@roll-and-call/game-notices";
+import { headcountFields, memberName, memberNoticeLine } from "@roll-and-call/game-notices";
 import { isNull } from "es-toolkit";
 
 export async function notifyDirectConfirmed({
@@ -27,8 +27,10 @@ export async function notifyDirectConfirmed({
 
   const [game, invitedNames, unpaintedNames] = await Promise.all([
     getGameForNotice({ serverId: server.id, gameId }),
-    Promise.all(userIds.map(memberMention)),
-    Promise.all(needsAvailabilityUserIds.map(memberMention)),
+    Promise.all(userIds.map((userId) => memberName({ serverId: server.id, userId }))),
+    Promise.all(
+      needsAvailabilityUserIds.map((userId) => memberName({ serverId: server.id, userId })),
+    ),
   ]);
   if (!game?.discordThreadId || invitedNames.length === 0) return;
 
@@ -71,6 +73,13 @@ export async function notifyDirectConfirmed({
         serverId: server.id,
         key: "direct",
         values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+        ...(await memberNoticeLine({
+          serverId: server.id,
+          userIds,
+          variable: "확정자",
+          key: "direct_line",
+          values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+        })),
       })),
     },
   });

@@ -6,7 +6,7 @@ import {
   messageHeadInput,
   messageText,
 } from "@roll-and-call/game-notices";
-import { headcountFields, memberMention, memberNoticeLine } from "@roll-and-call/game-notices";
+import { headcountFields, memberName, memberNoticeLine } from "@roll-and-call/game-notices";
 
 type JoinInfo = {
   applicantId: string;
@@ -27,7 +27,7 @@ export async function notifyGameJoined({
 }: JoinInfo & { server: Server; game: Game }) {
   if (!game.discordThreadId) return;
 
-  const applicant = await memberMention(applicantId);
+  const applicant = await memberName({ serverId: server.id, userId: applicantId });
   const embed = gameNoticeEmbed({
     slug: server.slug,
     game,
@@ -52,7 +52,7 @@ export async function notifyGameJoined({
         values: gameHeadValues({ server, game, gmName }),
         ...(await memberNoticeLine({
           serverId: server.id,
-          userId: applicantId,
+          userIds: [applicantId],
           key: isWaiting ? "apply_waiting_line" : "apply_line",
           values: gameHeadValues({ server, game, gmName }),
         })),

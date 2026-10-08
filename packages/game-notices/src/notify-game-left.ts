@@ -5,7 +5,7 @@ import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
-import { memberMention } from "./member-mention";
+import { memberName } from "./member-name";
 import { memberNoticeLine } from "./member-notice-line";
 import { gameHeadValues, messageHeadInput } from "./message-head-input";
 import { messageText } from "./message-text";
@@ -24,9 +24,9 @@ export async function notifyGameLeft({
   removedByGm: boolean;
   leftServer?: boolean;
 }) {
-  const [game, mention] = await Promise.all([
+  const [game, name] = await Promise.all([
     getGameForNotice({ serverId: server.id, gameId }),
-    memberMention(userId),
+    memberName({ serverId: server.id, userId }),
   ]);
   if (!game?.discordThreadId) return;
 
@@ -41,7 +41,7 @@ export async function notifyGameLeft({
     description: await messageText({
       serverId: server.id,
       key: textKey,
-      values: { ...gameHeadValues({ server, game, gmName }), 참여자: mention },
+      values: { ...gameHeadValues({ server, game, gmName }), 참여자: name },
     }),
     fields: headcountFields({
       game,
@@ -60,7 +60,7 @@ export async function notifyGameLeft({
         values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
         ...(await memberNoticeLine({
           serverId: server.id,
-          userId,
+          userIds: [userId],
           key: `${textKey}_line`,
           values: gameHeadValues({ server, game, gmName }),
         })),

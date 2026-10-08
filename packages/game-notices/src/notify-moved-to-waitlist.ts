@@ -5,8 +5,9 @@ import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { headcountFields } from "./headcount-fields";
-import { memberMention } from "./member-mention";
-import { gameHeadValues } from "./message-head-input";
+import { memberName } from "./member-name";
+import { memberNoticeLine } from "./member-notice-line";
+import { gameHeadValues, messageHeadInput } from "./message-head-input";
 import { messageText } from "./message-text";
 
 // 바꾼 뒤에 불러야 현재 인원이 맞다.
@@ -19,9 +20,9 @@ export async function notifyMovedToWaitlist({
   gameId: string;
   userId: string;
 }) {
-  const [game, mention] = await Promise.all([
+  const [game, name] = await Promise.all([
     getGameForNotice({ serverId: server.id, gameId }),
-    memberMention(userId),
+    memberName({ serverId: server.id, userId }),
   ]);
   if (!game?.discordThreadId) return;
 
@@ -36,7 +37,7 @@ export async function notifyMovedToWaitlist({
       key: "moved_waiting",
       values: {
         ...gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
-        참여자: mention,
+        참여자: name,
       },
     }),
     fields: headcountFields({
@@ -46,5 +47,22 @@ export async function notifyMovedToWaitlist({
     }),
   });
 
-  await sendDiscordMessage({ channelId: game.discordThreadId, input: { embeds: [embed] } });
+  const values = gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" });
+  await sendDiscordMessage({
+    channelId: game.discordThreadId,
+    input: {
+      embeds: [embed],
+      ...(await messageHeadInput({
+        serverId: server.id,
+        key: "leave",
+        values,
+        ...(await memberNoticeLine({
+          serverId: server.id,
+          userIds: [userId],
+          key: "moved_waiting_line",
+          values,
+        })),
+      })),
+    },
+  });
 }
