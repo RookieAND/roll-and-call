@@ -15,21 +15,18 @@ const CHART_HEIGHT = 150;
 
 interface WeekChartProps {
   weeks: WeeklyPoint[];
-  currentLabel: string;
   average: number;
   name: string;
   unit: string;
 }
 
-export function WeekChart({ weeks, currentLabel, average, name, unit }: WeekChartProps) {
+export function WeekChart({ weeks, average, name, unit }: WeekChartProps) {
   const { ref, tokens } = useChartTokens();
   const lastWeekLabel = weeks.at(-1)?.label;
   const lastIndex = weeks.length - 1;
   const isCurrent = (point: WeeklyPoint) => point.label === lastWeekLabel;
-  const axisLabels = new Map(
-    weeks.map((week, index) => [week.label, axisLabel({ weeks, index, currentLabel })]),
-  );
-  const summary = `최근 8주 추이, 최근 7일 ${weeks.at(-1)?.count ?? 0}${unit}, 평균 ${average}${unit}`;
+  const axisLabels = new Map(weeks.map((week, index) => [week.label, axisLabel({ weeks, index })]));
+  const summary = `최근 8주 추이, 이번 주 ${weeks.at(-1)?.count ?? 0}${unit}, 평균 ${average}${unit}`;
   return (
     <div ref={ref} role="img" aria-label={summary} className="h-[150px] min-w-0">
       {tokens ? (

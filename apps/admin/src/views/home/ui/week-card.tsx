@@ -11,13 +11,13 @@ interface WeekCardProps {
   icon: LucideIcon;
   unit: string;
   series: WeeklySeries;
-  currentLabel: string;
+  inverse?: boolean;
 }
 
-export function WeekCard({ label, icon: Icon, unit, series, currentLabel }: WeekCardProps) {
+export function WeekCard({ label, icon: Icon, unit, series, inverse }: WeekCardProps) {
   const { current, previous, delta, deltaPercent } = series;
   const arrow = deltaArrow(delta);
-  const deltaForeground = delta < 0 ? "danger" : "normal";
+  const deltaForeground = (inverse ? delta > 0 : delta < 0) ? "danger" : "normal";
   const percentText = `(${delta > 0 ? "+" : ""}${deltaPercent}%)`;
   return (
     <VStack
@@ -58,18 +58,12 @@ export function WeekCard({ label, icon: Icon, unit, series, currentLabel }: Week
             </Text>
           </Text>
           <Text typography="body4" foreground="hint" className="leading-[1.2]">
-            지난 7일 {previous}
+            지난주 {previous}
             {unit} 대비
           </Text>
         </VStack>
       </HStack>
-      <WeekChart
-        weeks={series.weeks}
-        currentLabel={currentLabel}
-        average={series.average}
-        name={label}
-        unit={unit}
-      />
+      <WeekChart weeks={series.weeks} average={series.average} name={label} unit={unit} />
     </VStack>
   );
 }

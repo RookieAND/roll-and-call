@@ -1,5 +1,5 @@
 import { Grid, HStack, Text } from "@roll-and-call/ui";
-import { CalendarDays, FileText } from "lucide-react";
+import { CalendarDays, FileText, User } from "lucide-react";
 
 import { formatDayRange } from "@/shared/lib";
 import { AdminHeader, LoadingRegion, Panel } from "@/shared/ui";
@@ -22,7 +22,7 @@ export function HomeLoading() {
       >
         <HStack align="baseline" gap="100">
           <Text typography="subtitle1" render={<h2 />}>
-            최근 7일
+            이번 주
           </Text>
           <Text typography="body4" foreground="hint">
             {formatDayRange(new Date(now.getTime() - SIX_DAYS), now)}
@@ -31,6 +31,8 @@ export function HomeLoading() {
         <Grid className="grid-cols-[repeat(2,minmax(0,1fr))] gap-125">
           <WeekCardLoading label="새 구인" icon={FileText} />
           <WeekCardLoading label="진행된 세션" icon={CalendarDays} />
+          <WeekCardLoading label="가입" icon={User} />
+          <WeekCardLoading label="탈퇴" icon={User} />
         </Grid>
         <Panel title="처리 대기">
           <ul>
