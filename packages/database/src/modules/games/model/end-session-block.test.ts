@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import { canEndSession } from "./can-end-session";
 import { END_SESSION_BLOCK, endSessionBlock } from "./end-session-block";
-import { UNDO_END_SESSION_BLOCK, undoEndSessionBlock } from "./undo-end-session-block";
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
@@ -75,43 +74,5 @@ describe("endSessionBlock", () => {
     expect(canEndSession({ game: game(), isGm: true, confirmedCount: 0, now: at(MINUTE) })).toBe(
       false,
     );
-  });
-});
-
-describe("undoEndSessionBlock", () => {
-  const endedAt = at(30 * MINUTE);
-  const undo = ({
-    overrides = {},
-    actorId = GM,
-    elapsed = SECOND,
-  }: {
-    overrides?: Partial<{ endedAt: Date | null; attendanceConfirmedAt: Date | null }>;
-    actorId?: string;
-    elapsed?: number;
-  }) =>
-    undoEndSessionBlock({
-      game: { gmId: GM, endedAt, attendanceConfirmedAt: null, ...overrides },
-      actorId,
-      now: new Date(endedAt.getTime() + elapsed),
-    });
-
-  it("GM이 아니면 막는다", () => {
-    expect(undo({ actorId: "other" })).toBe(UNDO_END_SESSION_BLOCK.notGm);
-  });
-
-  it("마치지 않은 세션은 막는다", () => {
-    expect(undo({ overrides: { endedAt: null } })).toBe(UNDO_END_SESSION_BLOCK.notEnded);
-  });
-
-  it("출석을 확정했으면 막는다", () => {
-    expect(undo({ overrides: { attendanceConfirmedAt: at(31 * MINUTE) } })).toBe(
-      UNDO_END_SESSION_BLOCK.attendanceConfirmed,
-    );
-  });
-
-  it("29초·30초는 통과하고 31초는 windowOver다", () => {
-    expect(undo({ elapsed: 29 * SECOND })).toBeNull();
-    expect(undo({ elapsed: 30 * SECOND })).toBeNull();
-    expect(undo({ elapsed: 31 * SECOND })).toBe(UNDO_END_SESSION_BLOCK.windowOver);
   });
 });

@@ -4,9 +4,6 @@ import { isSessionStarted, plannedEndAt } from "./session-timing";
 
 type Moment = Date | string | null;
 
-// 화면 토스트 되돌리기는 6초다. 서버는 네트워크 지연을 감안해 30초까지 받는다(D302).
-export const UNDO_END_SESSION_SECONDS = 30;
-
 export const END_SESSION_BLOCK = {
   notGm: "notGm",
   cancelled: "cancelled",

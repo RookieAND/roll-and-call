@@ -1,11 +1,10 @@
 "use client";
 
+import { toast } from "@roll-and-call/ui";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 import { QUERY_NOTICE_PARAM, type QueryNotice } from "@/shared/lib";
-
-import { toast } from "./toast";
 
 interface QueryNoticeToastProps {
   messages: Partial<Record<QueryNotice, string>>;

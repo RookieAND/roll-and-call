@@ -4,10 +4,9 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { useServerPath } from "@/shared/lib";
-import { handleActionResult, reportError, toast } from "@/shared/ui";
+import { handleActionResult, toast } from "@/shared/ui";
 
 import { endSession } from "../api/end-session";
-import { undoEndSession } from "../api/undo-end-session";
 import type { EndSessionResult } from "../model/end-session-result";
 import { EndSessionDialogView } from "./end-session-dialog-view";
 
@@ -36,21 +35,6 @@ export function EndSessionDialog({
     onOpenChange(false);
   }
 
-  async function undo() {
-    try {
-      const result = await undoEndSession(gameId);
-      handleActionResult({
-        result,
-        onSuccess: () => {
-          toast.success("세션을 다시 열었습니다");
-          router.push(toServerPath(`/games/${gameId}/manage`));
-        },
-      });
-    } catch (error) {
-      reportError({ error });
-    }
-  }
-
   function confirm() {
     startTransition(async () => {
       let result: EndSessionResult;
@@ -65,7 +49,7 @@ export function EndSessionDialog({
         result,
         onSuccess: () => {
           router.push(attendancePath);
-          toast.success("세션을 마쳤습니다", { undo });
+          toast.success("세션을 마쳤습니다");
         },
         onError: ({ error, goToAttendance }) => {
           toast.danger(error);

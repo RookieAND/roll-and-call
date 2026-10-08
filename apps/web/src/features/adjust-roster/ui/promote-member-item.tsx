@@ -4,7 +4,6 @@ import { cn, Sheet } from "@roll-and-call/ui";
 import { ArrowUp } from "lucide-react";
 import { useState } from "react";
 
-import { PARTICIPANT_STATUS } from "@/entities/game";
 import { toast, useAction } from "@/shared/ui";
 
 import { promoteParticipant } from "../api/promote-participant";
@@ -14,7 +13,6 @@ import { MenuItemBody } from "./menu-item-body";
 import { MENU_ITEM_CLASS } from "./menu-item-class";
 import { RaiseCapacityDialog } from "./raise-capacity-dialog";
 import { raisedToastMessage } from "./raised-toast-message";
-import { toastWithUndo } from "./toast-with-undo";
 
 interface PromoteMemberItemProps {
   gameId: string;
@@ -54,17 +52,7 @@ export function PromoteMemberItem({
           toast.success(raisedToastMessage({ maxPlayers, username: member.username }));
           return;
         }
-        const message = `${member.username}님을 확정했습니다`;
-        // 세션이 시작되면 대기로 되돌릴 수 없어 되돌리기를 두지 않는다.
-        if (started) {
-          toast.success(message);
-          return;
-        }
-        toastWithUndo({
-          message,
-          gameId,
-          before: [{ userId: member.userId, status: PARTICIPANT_STATUS.waiting }],
-        });
+        toast.success(`${member.username}님을 확정했습니다`);
       },
     });
   }

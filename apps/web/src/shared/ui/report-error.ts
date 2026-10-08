@@ -1,6 +1,6 @@
-import { AppError, UNEXPECTED_ERROR_MESSAGE } from "@/shared/api";
+import { toast } from "@roll-and-call/ui";
 
-import { toast } from "./toast";
+import { AppError, UNEXPECTED_ERROR_MESSAGE } from "@/shared/api";
 
 export function reportError({
   error,

@@ -83,10 +83,6 @@ export function ReviewActionDialog({
     close();
     router.refresh();
   };
-  const settleUndo = (outcome: ReviewModerationOutcome | null) => {
-    if (outcome && !outcome.ok) conflictToast(outcome);
-    router.refresh();
-  };
 
   const removing = shownAction === REVIEW_ACTION.remove && !gone;
   const Root = removing ? AlertDialog.Root : Dialog.Root;
@@ -102,7 +98,7 @@ export function ReviewActionDialog({
           <ReviewGoneContent deleted={gone.deleted} nextHref={nextHref} onClose={backToList} />
         ) : null}
         {!gone && shownAction === REVIEW_ACTION.hide ? (
-          <ReviewHideForm review={review} onSettled={settle} onUndoSettled={settleUndo} />
+          <ReviewHideForm review={review} onSettled={settle} />
         ) : null}
         {!gone && shownAction === REVIEW_ACTION.unhide ? (
           <ReviewUnhideForm review={review} onSettled={settle} />

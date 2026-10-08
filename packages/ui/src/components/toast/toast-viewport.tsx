@@ -35,8 +35,6 @@ export function ToastViewport({ position = "top", max = 3, offset = 16 }: ToastV
           success: "bg-toast text-toast-ink",
           info: "bg-toast text-toast-ink",
           error: "bg-danger-solid text-inverse",
-          actionButton: "ml-100 shrink-0 font-bold underline underline-offset-2",
-          closeButton: "ml-100 shrink-0 rounded-full p-050 opacity-80 hover:opacity-100",
         },
       }}
     />

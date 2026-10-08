@@ -6,7 +6,7 @@ import {
   reasonLabel,
 } from "@roll-and-call/database/moderation/model";
 import { Button, Dialog, VStack, toast } from "@roll-and-call/ui";
-import { isNull, isUndefined } from "es-toolkit";
+import { isUndefined } from "es-toolkit";
 import { Eye, RotateCcw } from "lucide-react";
 import { useState } from "react";
 
@@ -21,7 +21,6 @@ import {
 } from "@/shared/ui";
 
 import { submitReviewModeration } from "../api/submit-review-moderation";
-import { undoReviewHide } from "../api/undo-review-hide";
 import { ACTION_COPY } from "../model/action-copy";
 import { REVIEW_ACTION } from "../model/review-action";
 import type { ReviewModerationOutcome } from "../model/review-moderation-outcome";
@@ -31,10 +30,9 @@ const COPY = ACTION_COPY[REVIEW_ACTION.hide];
 interface ReviewHideFormProps {
   review: ReviewDetail;
   onSettled: (outcome: ReviewModerationOutcome) => void;
-  onUndoSettled: (outcome: ReviewModerationOutcome | null) => void;
 }
 
-export function ReviewHideForm({ review, onSettled, onUndoSettled }: ReviewHideFormProps) {
+export function ReviewHideForm({ review, onSettled }: ReviewHideFormProps) {
   const { pending, networkError, submit } = useActionSubmit(submitReviewModeration);
   const [code, setCode] = useState<string | null>(null);
   const [otherText, setOtherText] = useState("");
@@ -51,24 +49,13 @@ export function ReviewHideForm({ review, onSettled, onUndoSettled }: ReviewHideF
       }
     : null;
 
-  const undo = async () => {
-    const outcome = await undoReviewHide(review.id).catch(() => null);
-    if (isNull(outcome)) toast.danger("네트워크 오류로 처리하지 못했습니다.");
-    else if (outcome.ok) toast.success("숨김을 되돌렸습니다");
-    onUndoSettled(outcome);
-  };
-
   const confirm = async () => {
     const outcome = await submit({
       reviewId: review.id,
       moderation: { action: REVIEW_ACTION.hide, reason },
     });
     if (isUndefined(outcome)) return;
-    if (outcome.ok) {
-      toast.success(COPY.successMessage, {
-        action: { label: "되돌리기", onClick: () => void undo() },
-      });
-    }
+    if (outcome.ok) toast.success(COPY.successMessage);
     onSettled(outcome);
   };
 

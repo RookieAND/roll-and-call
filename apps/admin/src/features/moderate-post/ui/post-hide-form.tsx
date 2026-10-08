@@ -2,7 +2,7 @@
 
 import { CONTENT_REASON, reasonLabel } from "@roll-and-call/database/moderation/model";
 import { Button, Dialog, Field, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
-import { isNull, isUndefined } from "es-toolkit";
+import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState } from "react";
 
@@ -21,16 +21,14 @@ import { ACTION_COPY } from "../model/action-copy";
 import { POST_ACTION } from "../model/post-action";
 import type { PostModerationOutcome } from "../model/post-moderation-outcome";
 
-const UNDO_STAFF_MEMO = "숨김 되돌리기";
 const COPY = ACTION_COPY[POST_ACTION.hide];
 
 interface PostHideFormProps {
   post: PostDetail;
   onSettled: (outcome: PostModerationOutcome) => void;
-  onUndoSettled: (outcome: PostModerationOutcome) => void;
 }
 
-export function PostHideForm({ post, onSettled, onUndoSettled }: PostHideFormProps) {
+export function PostHideForm({ post, onSettled }: PostHideFormProps) {
   const { pending, networkError, submit } = useActionSubmit(submitPostModeration);
   const [code, setCode] = useState<string | null>(null);
   const [otherText, setOtherText] = useState("");
@@ -48,30 +46,13 @@ export function PostHideForm({ post, onSettled, onUndoSettled }: PostHideFormPro
       }
     : null;
 
-  const undo = async () => {
-    const outcome = await submitPostModeration({
-      postId: post.id,
-      moderation: { action: POST_ACTION.unhide, reason: null, staffMemo: UNDO_STAFF_MEMO },
-    }).catch(() => null);
-    if (isNull(outcome)) {
-      toast.danger("네트워크 오류로 처리하지 못했습니다.");
-      return;
-    }
-    if (outcome.ok) toast.success(`숨김을 되돌렸습니다 · ${post.title}`);
-    onUndoSettled(outcome);
-  };
-
   const confirm = async () => {
     const outcome = await submit({
       postId: post.id,
       moderation: { action: POST_ACTION.hide, reason, staffMemo },
     });
     if (isUndefined(outcome)) return;
-    if (outcome.ok) {
-      toast.success(COPY.successMessage(post.title), {
-        action: { label: "되돌리기", onClick: () => void undo() },
-      });
-    }
+    if (outcome.ok) toast.success(COPY.successMessage(post.title));
     onSettled(outcome);
   };
 

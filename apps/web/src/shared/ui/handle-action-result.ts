@@ -1,6 +1,6 @@
-import { AppError, ERROR_DISPLAY, type ActionResult } from "@/shared/api";
+import { toast } from "@roll-and-call/ui";
 
-import { toast } from "./toast";
+import { AppError, ERROR_DISPLAY, type ActionResult } from "@/shared/api";
 
 export type ActionHandlers<Result extends ActionResult> = {
   onSuccess?: (result: Result) => void;

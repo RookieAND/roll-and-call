@@ -17,7 +17,6 @@ interface AttendanceFormProps {
   gameId: string;
   attendees: Attendee[];
   onConfirmed: () => void;
-  onReopen: () => void;
   onExpired: () => void;
   footnote?: string;
   children?: ReactNode;
@@ -27,7 +26,6 @@ export function AttendanceForm({
   gameId,
   attendees,
   onConfirmed,
-  onReopen,
   onExpired,
   footnote,
   children,
@@ -81,12 +79,7 @@ export function AttendanceForm({
       onSuccess: () => {
         setConfirming(false);
         onConfirmed();
-        toast.success("출석을 확정했습니다", {
-          undo: () => {
-            onReopen();
-            toast.success("다시 고칠 수 있습니다");
-          },
-        });
+        toast.success("출석을 확정했습니다");
       },
       onError: ({ error }) => {
         setConfirming(false);

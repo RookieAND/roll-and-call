@@ -23,7 +23,7 @@ export { TagInput } from "./tag-input";
 export { SummaryLine } from "./summary-line";
 export { ThemeSetting } from "./theme-setting";
 export { ThemeToggleButton } from "./theme-toggle-button";
-export { toast } from "./toast";
+export { toast } from "@roll-and-call/ui";
 export { QueryNoticeToast } from "./query-notice-toast";
 export { SLOT_ROW_PX, SlotGrid } from "./slot-grid";
 export { TabCount } from "./tab-count";

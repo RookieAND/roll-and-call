@@ -59,7 +59,6 @@ export function AttendancePanel({
         gameId={gameId}
         attendees={attendees}
         onConfirmed={() => setEditing(false)}
-        onReopen={() => setEditing(true)}
         footnote={reeditNote}
         onExpired={() => {
           setEditing(false);
