@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Dialog, Field, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Callout, Dialog, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState } from "react";
@@ -9,6 +9,7 @@ import { formatDateTime, useActionSubmit } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import {
   ActionNetworkError,
+  FactBox,
   ModalServerLabel,
   NotificationPreview,
   MODAL_FOOTER_CLASS,
@@ -52,16 +53,32 @@ export function PostUnhideForm({ post, onSettled }: PostUnhideFormProps) {
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           {hidden ? (
-            <Card.Root radius={400} background="subtle" padding="sm" render={<VStack gap="050" />}>
-              <Text typography="body3">
-                {formatDateTime(hidden.at)}에 {hidden.by}님이 숨겼습니다. 사유: {hidden.reason}
-              </Text>
-              {editedSinceHiddenAt ? (
-                <Text typography="body4" foreground="muted">
-                  숨긴 뒤 마지막 수정 {formatDateTime(editedSinceHiddenAt)}
-                </Text>
-              ) : null}
-            </Card.Root>
+            <FactBox
+              labelWidth={88}
+              items={[
+                { label: "구인", value: post.title },
+                { label: "숨긴 일시", value: formatDateTime(hidden.at) },
+                { label: "처리한 운영진", value: hidden.by },
+                { label: "숨김 사유", value: hidden.reason },
+                ...(editedSinceHiddenAt
+                  ? [
+                      {
+                        label: "GM 조치",
+                        value: `구인 수정 · ${formatDateTime(editedSinceHiddenAt)}`,
+                      },
+                    ]
+                  : []),
+              ]}
+            />
+          ) : null}
+          {editedSinceHiddenAt ? (
+            <Callout.Root colorPalette="success">
+              <Callout.Icon />
+              <Callout.Title>GM이 숨긴 뒤 구인을 수정했습니다</Callout.Title>
+              <Callout.Description>
+                해제하면 구인이 목록과 검색에 다시 나타납니다.
+              </Callout.Description>
+            </Callout.Root>
           ) : null}
           <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="post-unhide-staff-memo">
             <Textarea

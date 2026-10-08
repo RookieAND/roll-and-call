@@ -25,7 +25,6 @@ export function summaryRows({
     [
       { label: "세션 일정", value: sessionTimeLabel(post.sessionAt) },
       { label: "플레이타임", value: post.playTime ?? "미정" },
-      { label: "룰", value: post.rulebook },
     ],
     [{ label: "모집 마감일", value: deadline }, { label: "GM", value: gmValue }, ...attendanceRows],
   ];

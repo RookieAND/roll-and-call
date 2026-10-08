@@ -21,14 +21,14 @@ export const ACTION_COPY: Record<PostAction, ActionCopy> = {
   [POST_ACTION.unhide]: {
     widthClassName: "max-w-[560px]",
     title: "숨김 해제",
-    description: "구인이 목록과 검색에 다시 나타납니다.",
+    description: "구인이 목록과 검색에 다시 나타납니다",
     confirmLabel: "숨김 해제",
     successMessage: (title) => `숨김을 해제했습니다 · ${title}`,
   },
   [POST_ACTION.remove]: {
     widthClassName: "max-w-[600px]",
     title: "구인 취소",
-    description: '취소한 구인은 "취소됨"으로 남고 신청과 수정이 막힙니다.',
+    description: '취소한 구인은 "취소됨"으로 남습니다',
     confirmLabel: "구인 취소 확정",
     successMessage: (title) => `구인을 취소했습니다 · ${title}`,
   },

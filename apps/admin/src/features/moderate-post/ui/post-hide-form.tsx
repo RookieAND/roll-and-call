@@ -1,7 +1,7 @@
 "use client";
 
 import { CONTENT_REASON, reasonLabel } from "@roll-and-call/database/moderation/model";
-import { Button, Dialog, Field, HStack, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Dialog, Field, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isNull, isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState } from "react";
@@ -105,15 +105,12 @@ export function PostHideForm({ post, onSettled, onUndoSettled }: PostHideFormPro
             />
           </Field.Root>
           <NotificationPreview payload={payload} recipients="GM의 알림 탭으로 알립니다." />
+          <Text typography="body4" foreground="hint">
+            언제든 숨김 해제할 수 있습니다.
+          </Text>
         </VStack>
       </Dialog.Body>
       <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-        <HStack align="center" gap="075" className="mr-auto text-hint">
-          <RotateCcw size={14} aria-hidden />
-          <Text typography="body4" foreground="hint">
-            언제든 숨김 해제할 수 있습니다
-          </Text>
-        </HStack>
         <Dialog.Close render={<Button variant="outline" colorPalette="gray" />} disabled={pending}>
           취소
         </Dialog.Close>

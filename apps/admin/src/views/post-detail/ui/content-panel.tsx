@@ -4,11 +4,23 @@ import type { PostDetail } from "@/shared/server";
 import { FactRows, Tag, ZoomablePhotos } from "@/shared/ui";
 
 import { ContentSection } from "./content-section";
+import { ContentText } from "./content-text";
 
 interface ContentPanelProps {
   post: Pick<
     PostDetail,
-    "title" | "genres" | "triggers" | "platforms" | "aiImage" | "synopsis" | "notices" | "imageUrls"
+    | "title"
+    | "rulebook"
+    | "kindLabel"
+    | "playTypeLabel"
+    | "genres"
+    | "triggers"
+    | "platforms"
+    | "aiImage"
+    | "synopsis"
+    | "notices"
+    | "thumbnailUrl"
+    | "imageUrls"
   >;
 }
 
@@ -16,18 +28,36 @@ interface ContentPanelProps {
 export function ContentPanel({ post }: ContentPanelProps) {
   const tagsOf = (values: string[]) =>
     values.length ? values.map((value) => <Tag key={value}>{value}</Tag>) : "없음";
-  const aiImageBadge = post.aiImage ? <Tag>사용</Tag> : <Tag>사용 안 함</Tag>;
+  const aiImageBadge = post.aiImage ? <Tag tone="warning">사용</Tag> : <Tag>사용 안 함</Tag>;
   return (
     <VStack className="px-200">
       <ContentSection title="구인 설정">
-        <FactRows
-          items={[
-            { label: "장르", value: tagsOf(post.genres) },
-            { label: "트리거", value: tagsOf(post.triggers) },
-            { label: "사용 플랫폼", value: tagsOf(post.platforms) },
-            { label: "AI 이미지", value: aiImageBadge },
-          ]}
-        />
+        <VStack>
+          <Grid className="grid-cols-2 items-start gap-x-400">
+            <FactRows
+              labelWidth={72}
+              items={[
+                { label: "유형", value: <Tag>{post.kindLabel}</Tag> },
+                { label: "룰", value: post.rulebook },
+              ]}
+            />
+            <FactRows
+              labelWidth={72}
+              items={[
+                { label: "진행 방식", value: <Tag>{post.playTypeLabel}</Tag> },
+                { label: "AI 이미지", value: aiImageBadge },
+              ]}
+            />
+          </Grid>
+          <FactRows
+            labelWidth={72}
+            items={[
+              { label: "장르", value: tagsOf(post.genres) },
+              { label: "트리거", value: tagsOf(post.triggers) },
+              { label: "사용 플랫폼", value: tagsOf(post.platforms) },
+            ]}
+          />
+        </VStack>
       </ContentSection>
       <ContentSection
         title="시놉시스"
@@ -37,23 +67,26 @@ export function ContentPanel({ post }: ContentPanelProps) {
           </Text>
         }
       >
-        <Text
-          typography="body2"
-          foreground={post.synopsis ? "normal" : "hint"}
-          className="rounded-400 border border-gray-200 bg-gray-50 px-200 py-175 leading-[1.7] whitespace-pre-line"
-        >
-          {post.synopsis ?? "시놉시스가 없습니다"}
-        </Text>
+        <ContentText
+          lines={post.synopsis ? post.synopsis.split("\n").filter((line) => line.trim()) : []}
+          empty="시놉시스가 없습니다"
+        />
       </ContentSection>
       {post.notices.length ? (
         <ContentSection title="주의 사항">
-          <VStack gap="050" render={<ul />}>
-            {post.notices.map((notice) => (
-              <Text key={notice} typography="body2" render={<li />} className="leading-[1.65]">
-                {notice}
-              </Text>
-            ))}
-          </VStack>
+          <ContentText lines={post.notices} empty="" />
+        </ContentSection>
+      ) : null}
+      {post.thumbnailUrl ? (
+        <ContentSection title="썸네일">
+          <Grid className="grid-cols-2 gap-150">
+            <ZoomablePhotos
+              photos={[post.thumbnailUrl]}
+              title={post.title}
+              subtitle="썸네일"
+              className="h-[150px] w-full"
+            />
+          </Grid>
         </ContentSection>
       ) : null}
       {post.imageUrls.length ? (

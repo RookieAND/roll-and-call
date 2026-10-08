@@ -97,7 +97,15 @@ export function PostsTable({ rows, sort, empty, detailQuery }: PostsTableProps) 
                 {row.status}
               </Text>
             </Table.Cell>
-            <Table.Cell>{row.staffAction ? <Tag>{row.staffAction}</Tag> : null}</Table.Cell>
+            <Table.Cell>
+              {row.staffAction ? (
+                <Tag>{row.staffAction}</Tag>
+              ) : (
+                <Text typography="body3" foreground="hint">
+                  —
+                </Text>
+              )}
+            </Table.Cell>
             <Table.Cell align="end">
               <ChevronRight size={16} aria-hidden className="inline text-hint" />
             </Table.Cell>

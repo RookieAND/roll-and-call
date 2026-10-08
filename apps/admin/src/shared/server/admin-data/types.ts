@@ -161,6 +161,8 @@ export interface Session {
   triggers?: string[];
   platforms?: string[];
   aiImage?: boolean;
+  kindLabel?: string;
+  playTypeLabel?: string;
   joinedAt?: Map<string, Date>;
   synopsis?: string;
   notices?: string[];

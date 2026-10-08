@@ -38,7 +38,7 @@ export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
           <ActionCard
             icon={Eye}
             title="숨김"
-            description="목록·검색·달력·링크 미리보기에서 빠지고, 참여자만 상세를 봅니다"
+            description="목록과 검색에서만 빠집니다"
             link={link(POST_ACTION.hide)}
           />
         )}
@@ -53,7 +53,7 @@ export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
                 <>
                   취소한 구인은 "취소됨"으로 남고
                   <br />
-                  신청과 수정이 막힙니다
+                  신청과 수정이 막힙니다.
                 </>
               )
             }
@@ -65,6 +65,7 @@ export function PostActionsAside({ post, actionHref }: PostActionsAsideProps) {
           <Callout.Icon>
             <Shield size={14} />
           </Callout.Icon>
+          <Callout.Title>두 조치 모두 사유가 필요합니다</Callout.Title>
           <Callout.Description>운영진은 GM이 쓴 글을 직접 고치지 않습니다.</Callout.Description>
         </Callout.Root>
       </VStack>

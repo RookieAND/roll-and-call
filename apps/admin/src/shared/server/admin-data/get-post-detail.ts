@@ -61,6 +61,8 @@ export async function getPostDetail({ id, filter }: { id: string; filter: PostLi
     triggers: session.triggers ?? [],
     platforms: session.platforms ?? [],
     aiImage: session.aiImage ?? false,
+    kindLabel: session.kindLabel ?? "세션",
+    playTypeLabel: session.playTypeLabel ?? "보이스",
     synopsis: session.synopsis,
     notices: session.notices ?? [],
     imageUrls: session.imageUrls ?? [],

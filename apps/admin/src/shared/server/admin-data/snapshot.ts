@@ -169,6 +169,8 @@ export const loadSnapshot = cache(async () => {
       triggers: game.triggers,
       platforms: game.platforms,
       aiImage: game.aiImage,
+      kindLabel: game.kind === "briefing" ? "설명회" : "세션",
+      playTypeLabel: game.playType === "text" ? "텍스트" : "보이스",
       joinedAt: new Map(roster.map((row) => [row.userId, row.joinedAt])),
       synopsis: game.synopsis ? plainText(game.synopsis) : undefined,
       notices: game.notice

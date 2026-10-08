@@ -73,7 +73,7 @@ export function PostsView({ posts, sort, page, query }: PostsViewProps) {
 
   return (
     <>
-      <AdminHeader title="구인" sub={`${posts.rows.length}건`} />
+      <AdminHeader title="구인" />
       <VStack gap="150" className="flex-1 p-200">
         <HStack align="center" gap="100" wrap>
           <UrlSearchInput placeholder="제목 · GM 닉네임 검색" className="w-[236px]" />
