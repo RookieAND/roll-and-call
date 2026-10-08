@@ -23,7 +23,7 @@ export function ReadAllBar({ inbox, read, onAllRead, onSaved }: ReadAllBarProps)
   const [pending, setPending] = useState(false);
   if (isNull(page) || page.items.length === 0) return null;
   const unreadCount = unreadCountOf({ inbox: page, read });
-  const disabled = pending || unreadCount === 0;
+  if (unreadCount === 0) return null;
 
   const readAll = async () => {
     setPending(true);
@@ -43,13 +43,13 @@ export function ReadAllBar({ inbox, read, onAllRead, onSaved }: ReadAllBarProps)
   return (
     <HStack align="center" gap="100" className="min-h-12 border-b border-gray-200 pr-100 pl-200">
       <Text typography="body3" foreground="muted" className="flex-1">
-        {unreadCount > 0 ? `안 읽은 알림 ${unreadCount}건` : "모두 읽었습니다"}
+        안 읽은 알림 {unreadCount}건
       </Text>
       <Button
         variant="ghost"
         colorPalette="primary"
         className="h-11"
-        disabled={disabled}
+        disabled={pending}
         onClick={readAll}
       >
         모두 읽음
