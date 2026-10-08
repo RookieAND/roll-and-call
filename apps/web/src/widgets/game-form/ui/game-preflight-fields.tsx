@@ -22,12 +22,15 @@ const TAG_PLACEHOLDER: Record<GameTagKey, string> = {
   [GAME_TAG.platforms]: "예: 디스코드, 코코포리아",
 };
 
+const NOTICE_PLACEHOLDER =
+  "1. 캐릭터 준비물\n2. 외부 사이트 사용 여부\n3. 지각 규칙\n4. 하우스 룰 사용 여부";
+
 const AI_IMAGE = { off: "off", on: "on" } as const;
 
 const TAG_SUGGESTIONS: Record<GameTagKey, string[]> = {
-  [GAME_TAG.genres]: ["호러", "미스터리", "판타지", "코미디"],
-  [GAME_TAG.triggers]: ["유혈", "약물", "정신적 충격", "폐쇄 공간"],
-  [GAME_TAG.platforms]: ["디스코드", "구글 스프레드시트", "코코포리아", "Roll20"],
+  [GAME_TAG.genres]: ["미스터리", "호러", "판타지", "추리"],
+  [GAME_TAG.triggers]: ["폐쇄 공간", "유혈", "CoC스러운 모든 것", "정신적 충격"],
+  [GAME_TAG.platforms]: ["디스코드", "구글 스프레드시트", "코코포리아", "Roll20", "FVTT"],
 };
 
 interface GamePreflightFieldsProps {
@@ -106,7 +109,7 @@ export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
           value={notice}
           limit={GAME_NOTICE_MAX}
           invalid={!!errors.notice}
-          placeholder="참여 전에 알아야 할 것을 적어 주세요. 캐릭터 준비물, 외부 사이트 사용 여부, 보이스챗 사용 여부, 지각 규칙, 하우스 룰 사용 여부 같은 것."
+          placeholder={NOTICE_PLACEHOLDER}
           onChange={(value) => setValue("notice", value, { shouldDirty: true })}
         />
       </Field.Root>
