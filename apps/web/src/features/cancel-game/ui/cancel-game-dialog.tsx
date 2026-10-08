@@ -91,7 +91,7 @@ export function CancelGameDialog({
             rows={3}
             value={reason}
             maxLength={CANCEL_REASON_MAX_LENGTH}
-            placeholder="예: GM 사정으로 일정을 맞출 수 없게 되었습니다."
+            placeholder="예: GM 사정으로 일정을 맞출 수 없게 됐습니다."
             disabled={pending}
             onChange={(event) => setReason(event.target.value)}
           />

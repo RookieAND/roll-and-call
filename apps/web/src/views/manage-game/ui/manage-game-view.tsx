@@ -21,6 +21,7 @@ import {
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
+import { cancelRowDetail } from "../model/cancel-row-detail";
 import { cancelRowLock } from "../model/cancel-row-lock";
 import { manageRows } from "../model/manage-rows";
 import { manageSummary } from "../model/manage-summary";
@@ -102,6 +103,7 @@ export async function ManageGameView({ id }: { id: string }) {
             <CancelGameRow
               gameId={id}
               notifyCount={notifyCount}
+              detail={cancelRowDetail({ game, notifyCount })}
               lockedReason={cancelRowLock({ game })}
             />
           </Card.Root>

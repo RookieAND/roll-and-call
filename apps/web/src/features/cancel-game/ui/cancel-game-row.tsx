@@ -11,10 +11,11 @@ import { CancelGameDialog } from "./cancel-game-dialog";
 interface CancelGameRowProps {
   gameId: string;
   notifyCount: number;
+  detail: string;
   lockedReason?: string;
 }
 
-export function CancelGameRow({ gameId, notifyCount, lockedReason }: CancelGameRowProps) {
+export function CancelGameRow({ gameId, notifyCount, detail, lockedReason }: CancelGameRowProps) {
   const [confirming, setConfirming] = useState(false);
   const locked = Boolean(lockedReason);
   const labelForeground = locked ? "hint" : "danger";
@@ -34,7 +35,7 @@ export function CancelGameRow({ gameId, notifyCount, lockedReason }: CancelGameR
             구인 취소
           </Text>
           <Text typography="body4" foreground="hint">
-            {lockedReason ?? "구인을 취소하고 확정자·대기자에게 알립니다"}
+            {lockedReason ?? detail}
           </Text>
         </VStack>
         {!locked && <ChevronRight size={17} className="flex-none text-hint" aria-hidden />}
