@@ -14,6 +14,6 @@ export function recruitButtons({
   const url = gameUrl({ slug, gameId });
   return [
     { label: "✅ 바로 신청하기", customId: `${APPLY_BUTTON_PREFIX}${gameId}` },
-    ...(url ? [{ label: "▶ 참여하러 가기", url }] : []),
+    ...(url ? [{ label: "📄 구인글 상세보기", url }] : []),
   ];
 }

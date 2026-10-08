@@ -61,7 +61,7 @@ export async function notifyGameEnded({ server, gameId }: { server: Server; game
       ],
       buttons: [
         { label: "✍ 바로 작성하기", customId: `${REVIEW_BUTTON_PREFIX}${game.id}` },
-        ...(detailUrl ? [{ label: "✍ 후기 작성하기", url: `${detailUrl}/review` }] : []),
+        ...(detailUrl ? [{ label: "🌐 웹에서 작성하기", url: `${detailUrl}/review` }] : []),
       ],
     },
   });

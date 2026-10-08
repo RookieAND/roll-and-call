@@ -72,7 +72,7 @@ export const PREVIEW_EMBED_SPECS: Partial<Record<MessageCaseKey, PreviewEmbedSpe
       { name: "📜 룰", value: "피아스코", inline: true },
       { name: "✍ 후기 작성 기간", value: "출석 확인 후 7일 이내", inline: true },
     ],
-    button: "✍ 후기 작성하기",
+    button: "🌐 웹에서 작성하기",
   },
   cancel: { emoji: "🚫", color: DISCORD.cancelled, unlinked: true, fields: [] },
 };
@@ -88,5 +88,5 @@ export const OPEN_EMBED_SPEC: PreviewEmbedSpec = {
     { ...SESSION_TIME, inline: false },
   ],
   footer: "GM 새벽세시 · 마감 9/25",
-  button: "▶ 참여하러 가기",
+  button: "📄 구인글 상세보기",
 };

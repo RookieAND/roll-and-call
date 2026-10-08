@@ -39,7 +39,7 @@ export function PreviewPlain() {
         className="mt-050 w-fit rounded-200 px-150 py-050 text-body4 font-semibold text-white"
         style={{ background: DISCORD.bar }}
       >
-        ▶ 참여하러 가기
+        📄 구인글 상세보기
       </span>
     </div>
   );
