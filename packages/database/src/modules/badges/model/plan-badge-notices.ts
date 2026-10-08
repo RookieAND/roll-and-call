@@ -36,7 +36,7 @@ export function planBadgeNotices({ grants, now }: { grants: BadgeGrant[]; now: D
     if (!parsed || badge.tier <= (notifiedTier ?? 0)) continue;
     const definition = BADGE_LADDERS[parsed.ladder];
     const step = definition.steps[badge.tier - 1];
-    if (!step || definition.granted) continue;
+    if (!step || (definition.granted && parsed.ladder !== BADGE_LADDER.apprentice)) continue;
 
     if (definition.monthly) {
       if (parsed.subject !== previousMonthKey(now)) continue;

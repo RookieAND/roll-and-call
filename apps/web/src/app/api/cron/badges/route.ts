@@ -3,6 +3,7 @@ import {
   evaluateAnniversaryBadges,
   syncAllMonthlyBadges,
 } from "@roll-and-call/database/badges";
+import { syncApprenticeBadges } from "@roll-and-call/database/onboarding";
 
 import { announceMonthlyAwards, isCronRequest } from "@/shared/server";
 
@@ -23,6 +24,7 @@ export async function GET(request: Request) {
     console.error("Monthly announcement failed:", error);
   }
   await evaluateAnniversaryBadges(now);
+  await syncApprenticeBadges();
   const isSunday = new Date(now.getTime() + KST_OFFSET_MS).getUTCDay() === SUNDAY;
   if (isSunday) await evaluateAllBadges({ now });
   return Response.json({ ok: true, announced, recomputed: isSunday });

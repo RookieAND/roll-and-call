@@ -88,6 +88,8 @@ export const serverMembers = pgTable(
     banReasonText: text("ban_reason_text"),
     // 인덱스의 내 서버 목록을 최근 방문 순으로 늘어놓는다. 서버 화면에 들어올 때 채운다.
     lastVisitedAt: timestamp("last_visited_at", { withTimezone: true }),
+    // 첫 신청 퀘스트를 처음 깬 때. 값이 있으면 온보딩을 마친 것으로 본다. 다시 깨도 덮어쓰지 않는다.
+    onboardedAt: timestamp("onboarded_at", { withTimezone: true }),
   },
   (table) => [
     primaryKey({ columns: [table.serverId, table.userId] }),

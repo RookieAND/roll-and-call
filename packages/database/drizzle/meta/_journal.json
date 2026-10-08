@@ -645,6 +645,13 @@
       "when": 1798300000000,
       "tag": "0097_category_alias",
       "breakpoints": true
+    },
+    {
+      "idx": 98,
+      "version": "7",
+      "when": 1798400000000,
+      "tag": "0098_onboarding_quest_clears",
+      "breakpoints": true
     }
   ]
 }

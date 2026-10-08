@@ -14,6 +14,8 @@
     "./moderation": "./src/modules/moderation/index.ts",
     "./moderation/model": "./src/modules/moderation/model/index.ts",
     "./notifications": "./src/modules/notifications/index.ts",
+    "./onboarding": "./src/modules/onboarding/index.ts",
+    "./onboarding/model": "./src/modules/onboarding/model/index.ts",
     "./notifications/model": "./src/modules/notifications/model/index.ts",
     "./profiles": "./src/modules/profiles/index.ts",
     "./reviews": "./src/modules/reviews/index.ts",

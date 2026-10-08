@@ -150,6 +150,14 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     description: "롤앤콜을 만든 사람입니다.",
     steps: [{ threshold: 1, emoji: "🛠️", name: "개발자", grade: 5, look: "developer" }],
   },
+  [BADGE_LADDER.apprentice]: {
+    role: BADGE_ROLE.special,
+    perRule: false,
+    monthly: false,
+    granted: true,
+    description: "튜토리얼 퀘스트를 모두 마쳤습니다.",
+    steps: [{ threshold: 1, emoji: "🧭", name: "견습 모험가", grade: 1 }],
+  },
   [BADGE_LADDER.guildMaster]: {
     role: BADGE_ROLE.special,
     perRule: false,
