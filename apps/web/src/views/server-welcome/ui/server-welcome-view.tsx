@@ -29,11 +29,7 @@ export async function ServerWelcomeView({ next }: ServerWelcomeViewProps) {
           {suffixBase && (
             <WelcomeSuffixNotice suffixBase={suffixBase} rejoined={!isNull(profile.rejoinedAt)} />
           )}
-          <WelcomeUsernameForm
-            serverName={server.name}
-            defaultUsername={profile?.username ?? ""}
-            next={next}
-          />
+          <WelcomeUsernameForm defaultUsername={profile?.username ?? ""} next={next} />
         </EntrySheet>
       }
     >
@@ -44,9 +40,7 @@ export async function ServerWelcomeView({ next }: ServerWelcomeViewProps) {
           render={<h1 />}
           className="text-[length:26px] leading-[1.3] tracking-[-0.04em] text-pretty"
         >
-          {server.name}에 오신 것을
-          <br />
-          환영합니다
+          가입을 환영합니다
         </Text>
         <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
           닉네임만 확인하면 바로 시작할 수 있습니다.

@@ -10,16 +10,11 @@ import { saveWelcomeUsername } from "../api/save-welcome-username";
 import { WELCOME_SAVE_MODE, type WelcomeSaveMode } from "../model/welcome-save-mode";
 
 interface WelcomeUsernameFormProps {
-  serverName: string;
   defaultUsername: string;
   next: string;
 }
 
-export function WelcomeUsernameForm({
-  serverName,
-  defaultUsername,
-  next,
-}: WelcomeUsernameFormProps) {
+export function WelcomeUsernameForm({ defaultUsername, next }: WelcomeUsernameFormProps) {
   const [username, setUsername] = useState(defaultUsername);
   const [usernameError, setUsernameError] = useState<string>();
   const { pending, run } = useAction();
@@ -42,7 +37,7 @@ export function WelcomeUsernameForm({
       <Field.Root
         label="닉네임"
         htmlFor="username"
-        description={`이 닉네임은 ${serverName}에서만 쓰입니다.`}
+        description="이 닉네임은 이 서버에서만 쓰입니다."
         error={usernameError && <LineBreaks lines={usernameError.split("\n")} />}
       >
         <TextInput

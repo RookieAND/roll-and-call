@@ -54,7 +54,7 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     links: normalizeLinks(input.links),
   });
   if (!saved.ok) {
-    return { error: nicknameTakenMessage(server.name), field: PROFILE_FIELD.username };
+    return { error: nicknameTakenMessage(), field: PROFILE_FIELD.username };
   }
 
   const myPagePath = serverPath({ slug: server.slug, path: "/me" });
