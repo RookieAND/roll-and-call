@@ -62,7 +62,6 @@ export function MemberSheet({ roster, member, onMarkAbsent, onClose }: MemberShe
                 maxPlayers={maxPlayers}
                 started={started}
                 capacityRaised={capacityRaised}
-                selectionOpen={selectionOpen}
                 onDone={onClose}
               />
             )}

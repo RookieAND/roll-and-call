@@ -6,7 +6,6 @@ import { useState } from "react";
 
 import { toast, useAction } from "@/shared/ui";
 
-import { demoteParticipant } from "../api/demote-participant";
 import { promoteParticipant } from "../api/promote-participant";
 import type { MemberSummary } from "../model/member-summary";
 import { PROMOTE_MODE, promoteOption } from "../model/promote-option";
@@ -22,7 +21,6 @@ interface PromoteMemberItemProps {
   maxPlayers: number;
   started: boolean;
   capacityRaised: boolean;
-  selectionOpen: boolean;
   onDone: () => void;
 }
 
@@ -33,7 +31,6 @@ export function PromoteMemberItem({
   maxPlayers,
   started,
   capacityRaised,
-  selectionOpen,
   onDone,
 }: PromoteMemberItemProps) {
   const [raising, setRaising] = useState(false);
@@ -55,18 +52,8 @@ export function PromoteMemberItem({
           toast.success(raisedToastMessage({ maxPlayers, username: member.username }));
           return;
         }
-        toast.success(`${member.username}님을 확정했습니다`, {
-          action: selectionOpen ? { label: "되돌리기", onClick: () => undoPromotion() } : undefined,
-        });
+        toast.success(`${member.username}님을 확정했습니다`);
       },
-    });
-  }
-
-  function undoPromotion() {
-    // 시트가 닫힌 뒤에 눌리므로 useAction을 거치지 않는다.
-    void demoteParticipant({ gameId, userId: member.userId }).then((result) => {
-      if (result.error) toast.danger(result.error);
-      else toast.success(`${member.username}님의 확정을 되돌렸습니다`);
     });
   }
 

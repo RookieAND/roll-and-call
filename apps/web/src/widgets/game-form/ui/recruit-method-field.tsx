@@ -1,21 +1,10 @@
 "use client";
 
-import { Field, RadioCard, RadioGroup, VStack } from "@roll-and-call/ui";
+import { Field, SegmentedControl, VStack } from "@roll-and-call/ui";
 
-import {
-  RECRUIT_METHOD,
-  RECRUIT_METHODS,
-  recruitMethodLabel,
-  type RecruitMethod,
-} from "@/entities/game";
+import { RECRUIT_METHODS, recruitMethodLabel, type RecruitMethod } from "@/entities/game";
 
 import { LockedModeNotice } from "./locked-mode-notice";
-
-const DESCRIPTION = {
-  [RECRUIT_METHOD.firstCome]: "신청 순서대로 확정",
-  [RECRUIT_METHOD.lottery]: "마감 때 뽑음",
-  [RECRUIT_METHOD.selection]: "GM이 직접 고름",
-} as const;
 
 interface RecruitMethodFieldProps {
   value: RecruitMethod;
@@ -23,25 +12,23 @@ interface RecruitMethodFieldProps {
   locked?: boolean;
 }
 
+// 칸 안에는 설명을 넣지 않는다. 방식별 설명은 아래 한 블록(GameRecruitFields)에서만 한다.
 export function RecruitMethodField({ value, onChange, locked = false }: RecruitMethodFieldProps) {
   return (
     <VStack gap="100">
       <Field.Root label="모집 방식" required={!locked}>
-        <RadioGroup
+        <SegmentedControl.Root
           value={value}
           onValueChange={(next) => onChange(next as RecruitMethod)}
           disabled={locked}
           aria-label="모집 방식"
-          className="grid grid-cols-3 gap-100"
         >
           {RECRUIT_METHODS.map((method) => (
-            <RadioCard.Root key={method} value={method} indicator="radio">
-              <RadioCard.Title>{recruitMethodLabel(method)}</RadioCard.Title>
-              <RadioCard.Description>{DESCRIPTION[method]}</RadioCard.Description>
-              <RadioCard.Indicator />
-            </RadioCard.Root>
+            <SegmentedControl.Item key={method} value={method}>
+              {recruitMethodLabel(method)}
+            </SegmentedControl.Item>
           ))}
-        </RadioGroup>
+        </SegmentedControl.Root>
       </Field.Root>
       {locked && <LockedModeNotice label="모집 방식" />}
     </VStack>
