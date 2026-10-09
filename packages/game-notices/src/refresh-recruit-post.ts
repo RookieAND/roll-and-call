@@ -8,6 +8,7 @@ import {
   syncForumFollowUps,
 } from "@roll-and-call/discord";
 
+import { attachRecruitThumbnail } from "./attach-recruit-thumbnail";
 import { recruitButtons } from "./recruit-buttons";
 import { recruitEmbed } from "./recruit-embed";
 import { recruitForumPost } from "./recruit-forum-post";
@@ -15,7 +16,15 @@ import { recruitPostTitle } from "./recruit-post-title";
 import { loadRecruitTarget, recruitMessageChannelId } from "./recruit-target";
 import { syncRecruitStatusTag } from "./sync-recruit-status-tag";
 
-export async function refreshRecruitPost({ server, gameId }: { server: Server; gameId: string }) {
+export async function refreshRecruitPost({
+  server,
+  gameId,
+  thumbnailChanged = false,
+}: {
+  server: Server;
+  gameId: string;
+  thumbnailChanged?: boolean;
+}) {
   const game = await getGameForNotice({ serverId: server.id, gameId });
   // 취소한 구인의 공지는 notifyGameCancelled가 남긴 모양 그대로 둔다.
   if (!game?.discordThreadId || game.cancelledAt) return;
@@ -42,6 +51,7 @@ export async function refreshRecruitPost({ server, gameId }: { server: Server; g
     }
     const post = await recruitForumPost({ server, game, gmName, confirmedCount });
     await editDiscordMessage({ channelId: threadId, messageId: threadId, input: post.input });
+    if (thumbnailChanged) await attachRecruitThumbnail({ game, threadId });
     await syncForumFollowUps({
       threadId,
       chunks: post.followUps,

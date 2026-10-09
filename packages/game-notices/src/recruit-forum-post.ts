@@ -48,13 +48,11 @@ export async function recruitForumPost({
     limit: MESSAGE_LIMIT - reserved,
   });
   const buttons = cancelled ? [] : recruitButtons({ slug: server.slug, gameId: game.id });
-  // 스포일러 썸네일은 임베드 이미지를 가릴 수 없어 싣지 않는다.
-  const thumbnail = game.thumbnailUrl && !game.thumbnailSpoiler ? game.thumbnailUrl : undefined;
   return {
     input: {
       ...head,
       content: [head.content, content].filter(Boolean).join("\n"),
-      embeds: thumbnail ? [{ image: { url: thumbnail } }] : [],
+      embeds: [],
       // 버튼은 본문의 맨 끝 메시지에 둔다.
       buttons: followUps.length > 0 ? [] : buttons,
     },

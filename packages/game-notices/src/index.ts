@@ -3,6 +3,7 @@ export { notifyGameCancelled } from "./notify-game-cancelled";
 export { notifyGameEnded } from "./notify-game-ended";
 export { notifyGameLeft } from "./notify-game-left";
 export { notifyMovedToWaitlist } from "./notify-moved-to-waitlist";
+export { attachRecruitThumbnail } from "./attach-recruit-thumbnail";
 export { refreshRecruitPost } from "./refresh-recruit-post";
 export { loadRecruitTarget } from "./recruit-target";
 export { resolveRecruitTags } from "./resolve-recruit-tags";

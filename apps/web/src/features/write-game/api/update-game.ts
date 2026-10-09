@@ -117,7 +117,13 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
   const { before, timeChanged } = result;
 
   after(async () => {
-    await refreshRecruitPost({ server, gameId: id });
+    await refreshRecruitPost({
+      server,
+      gameId: id,
+      thumbnailChanged:
+        (values.thumbnailUrl ?? null) !== before.thumbnailUrl ||
+        values.thumbnailSpoiler !== before.thumbnailSpoiler,
+    });
     if (timeChanged) {
       await notifySessionConfirmed({ server, gameId: id, previousConfirmedAt: before.confirmedAt });
     }
