@@ -30,6 +30,13 @@ describe("judgeMinPlayers", () => {
       { recruitMethod: "lottery", applicantCount: 1, confirmedCount: 1 },
       "cancel",
     ],
+    ["선발 신청자 = M", { recruitMethod: "selection", applicantCount: 3 }, "pass"],
+    ["선발 신청자 = M-1", { recruitMethod: "selection", applicantCount: 2 }, "cancel"],
+    [
+      "선발 신청자 + 직접 확정자 = M",
+      { recruitMethod: "selection", applicantCount: 2, confirmedCount: 1 },
+      "pass",
+    ],
   ] as const)("%s → %s", (_name, override, expected) => {
     expect(judgeMinPlayers({ ...base, ...override })).toBe(expected);
   });

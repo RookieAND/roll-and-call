@@ -2,6 +2,7 @@ import { cancelForMinPlayers } from "#/modules/games/commands/cancel-for-min-pla
 import { markMinPlayersJudged } from "#/modules/games/commands/mark-min-players-judged";
 import { cancelBlockReason } from "#/modules/games/model/cancel-block-reason";
 import { countConfirmed } from "#/modules/games/model/count-confirmed";
+import { countWaiting } from "#/modules/games/model/count-waiting";
 import { judgeMinPlayers } from "#/modules/games/model/min-players-judgement";
 import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
 import { listRosterStatuses } from "#/modules/games/queries/list-roster-statuses";
@@ -14,8 +15,8 @@ export type JudgeMinPlayersResult =
   | { kind: "passed" }
   | { kind: "cancelled"; game: Game };
 
-// 선착순 글의 모집 마감 판정. 행을 잠근 뒤 판정 표시를 다시 보므로 동시에 와도 한 번만 처리된다.
-// 대상이 아니거나 취소·세션 시작으로 잠긴 글은 표시를 채우지 않고 넘긴다. 추첨 글은 drawLottery가 판정한다.
+// 선착순·선발 글의 모집 마감 판정. 행을 잠근 뒤 판정 표시를 다시 보므로 동시에 와도 한 번만 처리된다.
+// 대상이 아니거나 취소·세션 시작으로 잠긴 글은 표시를 채우지 않고 넘긴다. 추첨 글은 drawLottery가 판정한다. 선발은 마치기 전까지만 판정한다(마치면 그때 표시를 채운다).
 export async function judgeMinPlayersForGame({
   transaction,
   serverId,
@@ -28,7 +29,8 @@ export async function judgeMinPlayersForGame({
   now: Date;
 }): Promise<JudgeMinPlayersResult> {
   const game = await lockGame({ transaction, serverId, gameId });
-  if (!game || game.recruitMethod !== RECRUIT_METHOD.firstCome) return { kind: "skipped" };
+  if (!game || game.recruitMethod === RECRUIT_METHOD.lottery) return { kind: "skipped" };
+  if (game.selectionFinishedAt) return { kind: "skipped" };
   if (game.endDate > now || cancelBlockReason({ game, now })) return { kind: "skipped" };
 
   const roster = await listRosterStatuses({ transaction, serverId, gameId });
@@ -36,7 +38,7 @@ export async function judgeMinPlayersForGame({
     recruitMethod: game.recruitMethod,
     minPlayers: game.minPlayers,
     confirmedCount: countConfirmed(roster.map((status) => ({ status }))),
-    applicantCount: 0,
+    applicantCount: countWaiting(roster.map((status) => ({ status }))),
     judgedAt: game.minPlayersJudgedAt,
   });
   if (judgement === "skip") return { kind: "skipped" };

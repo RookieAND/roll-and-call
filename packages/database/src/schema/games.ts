@@ -145,7 +145,13 @@ export const games = pgTable(
     index("games_min_players_due_idx")
       .on(table.endDate)
       .where(
-        sql`recruit_method = 'first_come' and min_players is not null and min_players_judged_at is null and cancelled_at is null`,
+        sql`recruit_method in ('first_come', 'selection') and min_players is not null and min_players_judged_at is null and cancelled_at is null`,
+      ),
+    // 선발 기한 크론이 집는 글
+    index("games_selection_due_idx")
+      .on(table.endDate)
+      .where(
+        sql`recruit_method = 'selection' and selection_finished_at is null and cancelled_at is null`,
       ),
     check("games_briefing_voice", sql`${table.kind} <> 'briefing' or ${table.playType} = 'voice'`),
     check("games_max_players_positive", sql`${table.maxPlayers} >= 1`),

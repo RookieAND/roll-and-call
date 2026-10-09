@@ -673,6 +673,13 @@
       "when": 1798700000000,
       "tag": "0101_selection_finished_at",
       "breakpoints": true
+    },
+    {
+      "idx": 102,
+      "version": "7",
+      "when": 1798800000000,
+      "tag": "0102_selection_cron",
+      "breakpoints": true
     }
   ]
 }

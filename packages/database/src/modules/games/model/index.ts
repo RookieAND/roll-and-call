@@ -9,6 +9,7 @@ export { judgeMinPlayers, type MinPlayersJudgement } from "./min-players-judgeme
 export { DIE_FACES } from "./die-faces";
 export { DRAW_REJECTION, type DrawRejection } from "./draw-rejection";
 export { SELECTION_REJECTION, type SelectionRejection } from "./selection-rejection";
+export { selectionDeadline, SELECTION_GRACE_DAYS } from "./selection-deadline";
 export { finishSelectionBlock } from "./can-finish-selection";
 export { DRAW_RESULT_KIND } from "./draw-result-kind";
 export { isAwaitingDraw } from "./is-awaiting-draw";
