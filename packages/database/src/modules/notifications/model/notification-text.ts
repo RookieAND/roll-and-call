@@ -89,7 +89,11 @@ export function notificationText(payload: NotificationPayload): NotificationText
         "GM과 일정을 조율해 주세요.",
       );
     case NOTIFICATION_KIND.selectionScheduleConfirmed:
-      return bold(payload.params.gameTitle, " 일정이 확정되었습니다.");
+      return bold(
+        payload.params.gameTitle,
+        " 일정이 확정되었습니다.",
+        `세션 일시는 ${formatSessionDateTime(payload.params.startsAt)}입니다.`,
+      );
     case NOTIFICATION_KIND.selectionParticipationConfirmed:
       return bold(
         payload.params.gameTitle,
@@ -100,6 +104,7 @@ export function notificationText(payload: NotificationPayload): NotificationText
       return bold(
         payload.params.gameTitle,
         ` 선발 결과 대기 ${payload.params.waitlistRank}번입니다.`,
+        "자리가 나면 GM이 대기 명단에서 확정합니다.",
       );
     case NOTIFICATION_KIND.recruitmentClosedEmpty:
       return bold(

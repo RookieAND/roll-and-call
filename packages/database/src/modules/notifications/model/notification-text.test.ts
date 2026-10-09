@@ -69,9 +69,12 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "GM과 일정을 조율해 주세요.",
   ],
   [
-    { kind: NOTIFICATION_KIND.selectionScheduleConfirmed, params: game },
+    {
+      kind: NOTIFICATION_KIND.selectionScheduleConfirmed,
+      params: { ...game, startsAt: "2026-09-27T11:00:00.000Z" },
+    },
     "검은 산의 노래 일정이 확정되었습니다.",
-    null,
+    "세션 일시는 9월 27일 (일) 20:00입니다.",
   ],
   [
     { kind: NOTIFICATION_KIND.selectionParticipationConfirmed, params: game },
@@ -81,7 +84,7 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     { kind: NOTIFICATION_KIND.selectionWaitlisted, params: { ...game, waitlistRank: 3 } },
     "검은 산의 노래 선발 결과 대기 3번입니다.",
-    null,
+    "자리가 나면 GM이 대기 명단에서 확정합니다.",
   ],
   [
     {

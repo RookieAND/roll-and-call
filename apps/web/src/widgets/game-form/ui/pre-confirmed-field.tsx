@@ -4,6 +4,7 @@ import { Button, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
+import type { RecruitMethod } from "@/entities/game";
 import { DirectConfirmSheet } from "@/features/adjust-roster";
 import type { PreConfirmedPlayer } from "@/features/write-game";
 
@@ -13,7 +14,7 @@ import { PreConfirmedRow } from "./pre-confirmed-row";
 interface PreConfirmedFieldProps {
   players: readonly PreConfirmedPlayer[];
   maxPlayers: number;
-  isLottery: boolean;
+  method: RecruitMethod;
   onRemove: (userId: string) => void;
   onAdd: (players: PreConfirmedPlayer[]) => void;
 }
@@ -21,14 +22,14 @@ interface PreConfirmedFieldProps {
 export function PreConfirmedField({
   players,
   maxPlayers,
-  isLottery,
+  method,
   onRemove,
   onAdd,
 }: PreConfirmedFieldProps) {
   const [picking, setPicking] = useState(false);
   const count = players.length;
   const openSeats = Math.max(maxPlayers - count, 0);
-  const hint = preConfirmedHint({ count, openSeats, isLottery });
+  const hint = preConfirmedHint({ count, openSeats, method });
 
   return (
     <VStack gap="100">

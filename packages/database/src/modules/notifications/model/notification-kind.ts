@@ -68,7 +68,7 @@ export type NotificationParamsMap = {
   draw_waitlisted: WaitlistParams;
   lottery_schedule_confirmed: GameParams;
   lottery_participation_confirmed: GameParams;
-  selection_schedule_confirmed: GameParams;
+  selection_schedule_confirmed: GameParams & { startsAt: string };
   selection_participation_confirmed: GameParams;
   selection_waitlisted: WaitlistParams;
   recruitment_closed_empty: GameParams;

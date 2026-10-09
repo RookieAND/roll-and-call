@@ -32,9 +32,9 @@ export function RecruitMethodField({ value, onChange, locked = false }: RecruitM
           onValueChange={(next) => onChange(next as RecruitMethod)}
           disabled={locked}
           aria-label="모집 방식"
-          className="grid grid-cols-2 gap-100"
+          className="grid grid-cols-3 gap-100"
         >
-          {RECRUIT_METHODS.filter((method) => method !== RECRUIT_METHOD.selection).map((method) => (
+          {RECRUIT_METHODS.map((method) => (
             <RadioCard.Root key={method} value={method} indicator="radio">
               <RadioCard.Title>{recruitMethodLabel(method)}</RadioCard.Title>
               <RadioCard.Description>{DESCRIPTION[method]}</RadioCard.Description>

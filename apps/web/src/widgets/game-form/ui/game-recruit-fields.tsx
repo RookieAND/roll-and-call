@@ -10,6 +10,7 @@ import { ApplicationNoteField } from "./application-note-field";
 import { MinPlayersField } from "./min-players-field";
 import { PreConfirmedField } from "./pre-confirmed-field";
 import { RecruitMethodField } from "./recruit-method-field";
+import { RecruitMethodNote } from "./recruit-method-note";
 import { WaitlistField } from "./waitlist-field";
 
 interface GameRecruitFieldsProps {
@@ -35,7 +36,7 @@ export function GameRecruitFields({
     formState: { errors },
   } = form;
   const method = watch("recruitMethod");
-  const isLottery = method === RECRUIT_METHOD.lottery;
+  const isFirstCome = method === RECRUIT_METHOD.firstCome;
   const maxPlayers = Number(watch("maxPlayers"));
   const preConfirmed = watch("preConfirmed");
   const playersFloor = Math.max(confirmedCount, preConfirmed.length);
@@ -77,7 +78,7 @@ export function GameRecruitFields({
         <PreConfirmedField
           players={preConfirmed}
           maxPlayers={maxPlayers}
-          isLottery={isLottery}
+          method={method}
           onAdd={(players) =>
             setValue("preConfirmed", [...preConfirmed, ...players], {
               shouldDirty: true,
@@ -104,24 +105,16 @@ export function GameRecruitFields({
         <RecruitMethodField
           value={method}
           locked={locked}
-          onChange={(next) => setValue("recruitMethod", next, { shouldDirty: true })}
+          onChange={(next) => {
+            setValue("recruitMethod", next, { shouldDirty: true });
+            if (next === RECRUIT_METHOD.selection) {
+              setValue("applicationNoteEnabled", true, { shouldDirty: true });
+            }
+          }}
         />
 
-        {!locked && isLottery && (
-          <Callout.Root colorPalette="gray" size="sm">
-            <Callout.Description>
-              정원과 관계없이 신청을 받고, 마감 때 추첨합니다.
-              <br />
-              뽑히지 않은 신청자는 대기 명단에 순서대로 남습니다.
-            </Callout.Description>
-          </Callout.Root>
-        )}
-        {!locked && !isLottery && (
-          <Callout.Root colorPalette="gray" size="sm">
-            <Callout.Description>신청한 순서대로 정원까지 바로 확정됩니다.</Callout.Description>
-          </Callout.Root>
-        )}
-        {!isLottery && (
+        {!locked && <RecruitMethodNote method={method} />}
+        {isFirstCome && (
           <WaitlistField
             value={watch("waitlistEnabled")}
             onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}

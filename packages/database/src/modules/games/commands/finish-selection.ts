@@ -90,11 +90,7 @@ export async function finishSelection({
     notifications: [
       ...confirmedUserIds.map((userId) => ({
         userId,
-        kind:
-          game.scheduleMode === SCHEDULE_MODE.fixed
-            ? NOTIFICATION_KIND.selectionScheduleConfirmed
-            : NOTIFICATION_KIND.selectionParticipationConfirmed,
-        params: gameParams,
+        ...confirmedNotification({ game, gameParams }),
       })),
       ...waitingUserIds.map((userId, index) => ({
         userId,
@@ -111,4 +107,20 @@ export async function finishSelection({
     waitingUserIds,
     becameFull: confirmedUserIds.length === game.maxPlayers,
   };
+}
+
+function confirmedNotification({
+  game,
+  gameParams,
+}: {
+  game: Game;
+  gameParams: { gameId: string; gameTitle: string };
+}) {
+  if (game.scheduleMode === SCHEDULE_MODE.fixed && game.confirmedAt) {
+    return {
+      kind: NOTIFICATION_KIND.selectionScheduleConfirmed,
+      params: { ...gameParams, startsAt: game.confirmedAt.toISOString() },
+    } as const;
+  }
+  return { kind: NOTIFICATION_KIND.selectionParticipationConfirmed, params: gameParams } as const;
 }
