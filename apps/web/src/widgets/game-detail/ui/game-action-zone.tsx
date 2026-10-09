@@ -58,18 +58,25 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
       return (
         <JoinableActions
           gameId={game.id}
+          applicationNote={game.applicationNoteEnabled}
           hint={`지금 신청하면 대기 ${view.nextRank}번입니다.`}
           label="대기로 신청하기"
         />
       );
     case GAME_ACTION_VIEW.join:
       return (
-        <JoinableActions gameId={game.id} hint="지금 신청하면 바로 확정됩니다." label="신청하기" />
+        <JoinableActions
+          gameId={game.id}
+          applicationNote={game.applicationNoteEnabled}
+          hint="지금 신청하면 바로 확정됩니다."
+          label="신청하기"
+        />
       );
     case GAME_ACTION_VIEW.joinLottery:
       return (
         <JoinableActions
           gameId={game.id}
+          applicationNote={game.applicationNoteEnabled}
           hint={`${formatDateClock(view.endDate)} 마감 때 추첨합니다.`}
           label="신청하기"
         />
