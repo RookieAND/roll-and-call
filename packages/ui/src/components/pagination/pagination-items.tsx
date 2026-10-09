@@ -1,5 +1,7 @@
 import { cva } from "class-variance-authority";
 
+import { PAGINATION_ELLIPSIS, paginationRange } from "./pagination-range";
+
 const cell = cva(
   "inline-flex h-10 min-w-10 items-center justify-center rounded-400 px-100 text-body3",
   {
@@ -8,6 +10,7 @@ const cell = cva(
         link: "border border-gray-200 text-gray-700 hover:bg-gray-50",
         current: "bg-primary-600 font-bold text-white",
         disabled: "border border-gray-200 text-gray-400",
+        ellipsis: "text-hint",
       },
     },
     defaultVariants: { tone: "link" },
@@ -23,9 +26,7 @@ interface PaginationItemsProps {
 
 // framework-agnostic: renders plain anchors so @roll-and-call/ui stays free of next/link
 export function PaginationItems({ page, totalPages, hrefFor, siblings }: PaginationItemsProps) {
-  const start = Math.max(1, page - siblings);
-  const end = Math.min(totalPages, page + siblings);
-  const pages = Array.from({ length: end - start + 1 }, (_, index) => start + index);
+  const entries = paginationRange({ page, totalPages, siblings });
 
   return (
     <>
@@ -49,18 +50,30 @@ export function PaginationItems({ page, totalPages, hrefFor, siblings }: Paginat
         </span>
       )}
 
-      {pages.map((pageNumber) => (
-        <a
-          key={pageNumber}
-          href={hrefFor(pageNumber)}
-          data-slot="pagination-item"
-          data-state={pageNumber === page ? "active" : "inactive"}
-          aria-current={pageNumber === page ? "page" : undefined}
-          className={cell({ tone: pageNumber === page ? "current" : "link" })}
-        >
-          {pageNumber}
-        </a>
-      ))}
+      {entries.map((entry, index) =>
+        entry === PAGINATION_ELLIPSIS ? (
+          <span
+            key={`ellipsis-${index}`}
+            data-slot="pagination-ellipsis"
+            className={cell({ tone: "ellipsis" })}
+            aria-hidden
+          >
+            …
+          </span>
+        ) : (
+          <a
+            key={entry}
+            href={hrefFor(entry)}
+            data-slot="pagination-item"
+            data-state={entry === page ? "active" : "inactive"}
+            aria-current={entry === page ? "page" : undefined}
+            aria-label={`${entry}쪽`}
+            className={cell({ tone: entry === page ? "current" : "link" })}
+          >
+            {entry}
+          </a>
+        ),
+      )}
 
       {page < totalPages ? (
         <a
