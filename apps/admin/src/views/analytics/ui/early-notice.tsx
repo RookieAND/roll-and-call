@@ -39,8 +39,9 @@ export function EarlyNotice({ serviceWeeks, hostingGms, sections }: EarlyNoticeP
           데이터가 더 쌓이면 보입니다
         </Text>
         <Text typography="body3" foreground="hint" className="mt-050 leading-[1.6]">
-          서비스를 시작한 지 {serviceWeeks}주가 지났습니다. 아래 지표는 비교할 만큼 기록이 모이면 이
-          자리에 나타납니다.
+          서비스를 시작한 지 {serviceWeeks}주가 지났습니다.
+          <br />
+          아래 지표는 비교할 만큼 기록이 모이면 이 자리에 나타납니다.
         </Text>
       </VStack>
       <VStack
