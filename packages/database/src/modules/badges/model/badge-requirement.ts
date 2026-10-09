@@ -26,7 +26,7 @@ export function badgeRequirement({
     case BADGE_LADDER.playerVariety:
       return `서로 다른 룰 ${count}종 참석`;
     case BADGE_LADDER.gmVariety:
-      return `서로 다른 룰 ${count}종`;
+      return `서로 다른 룰 ${count}종 진행`;
     case BADGE_LADDER.playerReviews:
       return `후기 ${count}건 작성`;
     case BADGE_LADDER.gmReviews:
