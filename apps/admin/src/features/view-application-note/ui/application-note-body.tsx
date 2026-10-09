@@ -72,7 +72,7 @@ export function ApplicationNoteBody({ gameId, userId }: ApplicationNoteBodyProps
     <Text
       typography="body3"
       tabIndex={0}
-      className="max-h-80 overflow-y-auto rounded-400 border border-gray-200 bg-gray-50 px-200 py-175 leading-[1.7] break-keep whitespace-pre-wrap"
+      className="max-h-[40dvh] overflow-y-auto rounded-400 border border-gray-200 bg-gray-50 px-200 py-175 leading-[1.7] break-keep whitespace-pre-wrap"
     >
       {state.note}
     </Text>
