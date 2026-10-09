@@ -39,6 +39,9 @@ export function recruitPlainText({
   const item = (label: string, value: string) => `- **${label}**　${value}`;
   const tagItem = (label: string, values: string[]) =>
     values.length > 0 ? item(label, inlineCodeTags(values)) : undefined;
+  // 트리거는 보고 싶지 않은 사람이 있으니 스포일러로 가린다. 코드 안의 ||는 문법이 아니라 가림막이 깨지지 않는다.
+  const spoilerTags = (values: string[]) =>
+    values.map((value) => `||${inlineCodeTags([value])}||`).join(" ");
   const list = (items: (string | undefined)[]) =>
     items.filter((value) => value !== undefined).join("\n");
   const text = [
@@ -68,7 +71,7 @@ export function recruitPlainText({
         tagItem("AI 이미지", [game.aiImage ? "사용" : "사용 안 함"]),
       ]),
     ),
-    section("### ⚠️ 트리거", game.triggers.length > 0 ? inlineCodeTags(game.triggers) : undefined),
+    section("### ⚠️ 트리거", game.triggers.length > 0 ? spoilerTags(game.triggers) : undefined),
     section("## 📖 개요", overview || undefined),
     section("## 📌 주의 사항", notice || undefined),
   ]

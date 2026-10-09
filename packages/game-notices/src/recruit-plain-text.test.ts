@@ -31,7 +31,7 @@ it("항목을 한 줄씩 적고 취소면 맨 위에 알린다", () => {
   expect(content.startsWith("> 🚫")).toBe(true);
   expect(content).toContain("- **인원**　2/3명 · 선착순");
   expect(content).toContain("- **시작**　10월 5일 (월) 13:00");
-  expect(content).toContain("### ⚠️ 트리거\n`유혈` `사망`");
+  expect(content).toContain("### ⚠️ 트리거\n||`유혈`|| ||`사망`||");
   expect(content).toContain("- **플레이 시간**　4시간");
   expect(content).toContain("- **AI 이미지**　`사용 안 함`");
   expect(followUps).toEqual([]);

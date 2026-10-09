@@ -1,5 +1,5 @@
 //   node --env-file=.env.local scripts/register-discord-commands.mjs
-// ponytail: 길드 전용 등록이라 즉시 반영된다. 전역 등록이 필요해지면 경로만 바꾸면 된다.
+// ponytail: 봇이 들어가 있는 모든 서버에 길드 전용으로 등록해 즉시 반영된다. 서버가 200개를 넘으면 /users/@me/guilds 페이지네이션이 필요하다.
 const CHAT_INPUT = 1;
 const STRING_OPTION = 3;
 const INTEGER_OPTION = 4;
@@ -69,8 +69,7 @@ const COMMANDS = [
 ];
 
 const token = process.env.DISCORD_BOT_TOKEN;
-const guildId = process.env.DISCORD_GUILD_ID;
-if (!token || !guildId) throw new Error("DISCORD_BOT_TOKEN, DISCORD_GUILD_ID not set");
+if (!token) throw new Error("DISCORD_BOT_TOKEN not set");
 
 async function discord(path, method = "GET", body) {
   const response = await fetch(`https://discord.com/api/v10${path}`, {
@@ -88,9 +87,12 @@ async function discord(path, method = "GET", body) {
 }
 
 const application = await discord("/applications/@me");
-const registered = await discord(
-  `/applications/${application.id}/guilds/${guildId}/commands`,
-  "PUT",
-  COMMANDS,
-);
-console.log(`registered: ${registered.map((command) => `/${command.name}`).join(", ")}`);
+const guilds = await discord("/users/@me/guilds");
+for (const guild of guilds) {
+  const registered = await discord(
+    `/applications/${application.id}/guilds/${guild.id}/commands`,
+    "PUT",
+    COMMANDS,
+  );
+  console.log(`${guild.name}: ${registered.map((command) => `/${command.name}`).join(", ")}`);
+}
