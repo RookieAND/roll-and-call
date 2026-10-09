@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { Dayjs } from "dayjs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 import { useServerPath } from "@/shared/lib";
 
@@ -36,6 +37,10 @@ export function HomeCalendar({
   const cells = buildMonthCells(monthStart);
   const { data: holidays } = useQuery(holidayQuery(monthStart.year()));
   const previousHref = `${toServerPath("/")}?date=${monthStart.subtract(1, "month").format(DATE_KEY_FORMAT)}`;
+  const monthKey = monthStart.format("YYYY-MM");
+  const [leavingMonthKey, setLeavingMonthKey] = useState<string>();
+  const navigating = leavingMonthKey === monthKey;
+  const canGoNext = hasNextMonthSessions && !navigating;
   const nextHref = `${toServerPath("/")}?date=${monthStart.add(1, "month").format(DATE_KEY_FORMAT)}`;
 
   return (
@@ -52,17 +57,20 @@ export function HomeCalendar({
           오늘
         </Button>
         <IconButton
-          render={<Link href={previousHref} scroll={false} />}
+          render={navigating ? undefined : <Link href={previousHref} scroll={false} />}
+          onClick={() => setLeavingMonthKey(monthKey)}
           variant="ghost"
           aria-label="이전 달"
+          disabled={navigating}
         >
           <ChevronLeft size={20} />
         </IconButton>
         <IconButton
-          render={hasNextMonthSessions ? <Link href={nextHref} scroll={false} /> : undefined}
+          render={canGoNext ? <Link href={nextHref} scroll={false} /> : undefined}
+          onClick={() => setLeavingMonthKey(monthKey)}
           variant="ghost"
           aria-label="다음 달"
-          disabled={!hasNextMonthSessions}
+          disabled={!canGoNext}
         >
           <ChevronRight size={20} />
         </IconButton>
