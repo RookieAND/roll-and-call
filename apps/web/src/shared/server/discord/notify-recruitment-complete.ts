@@ -8,6 +8,7 @@ import {
   messageText,
 } from "@roll-and-call/game-notices";
 import { headcountFields } from "@roll-and-call/game-notices";
+import { isString } from "es-toolkit";
 
 import { formatGameSchedule } from "@/shared/lib";
 
@@ -17,12 +18,14 @@ export async function notifyRecruitmentComplete({
   server,
   game,
   gmName,
+  gmDiscordId,
   players,
   waitingCount,
 }: {
   server: Server;
   game: Game;
   gmName: string;
+  gmDiscordId: string | null;
   players: RecruitmentPlayer[];
   waitingCount: number;
 }) {
@@ -60,9 +63,10 @@ export async function notifyRecruitmentComplete({
         key: "done",
         values: {
           ...gameHeadValues({ server, game, gmName }),
+          "GM 멘션": gmDiscordId ? `<@${gmDiscordId}>` : `**${gmName}**`,
           "참여자 멘션": playerMentions.join(" "),
         },
-        userMentions: players.flatMap((player) => player.discordId ?? []),
+        userMentions: [gmDiscordId, ...players.map((player) => player.discordId)].filter(isString),
       })),
     },
   });

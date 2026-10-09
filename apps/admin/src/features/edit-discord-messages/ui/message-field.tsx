@@ -1,13 +1,14 @@
-import { Text, TextInput, VStack } from "@roll-and-call/ui";
+import { Text, Textarea, TextInput, VStack } from "@roll-and-call/ui";
 import type { Ref } from "react";
 
 const COUNT_FROM = 240;
 
 interface MessageFieldProps {
-  ref?: Ref<HTMLInputElement>;
+  ref?: Ref<HTMLInputElement & HTMLTextAreaElement>;
   label: string;
   value: string;
   max: number;
+  multiline?: boolean;
   error?: string;
   warning?: string;
   placeholder?: string;
@@ -22,6 +23,7 @@ export function MessageField({
   label,
   value,
   max,
+  multiline = false,
   error,
   warning,
   placeholder,
@@ -48,16 +50,30 @@ export function MessageField({
           </Text>
         ) : null}
       </div>
-      <TextInput
-        ref={ref}
-        aria-label={label}
-        placeholder={placeholder}
-        value={value}
-        invalid={Boolean(error)}
-        disabled={disabled}
-        onFocus={onFocus}
-        onChange={(event) => onChange(event.target.value)}
-      />
+      {multiline ? (
+        <Textarea
+          ref={ref}
+          rows={3}
+          aria-label={label}
+          placeholder={placeholder}
+          value={value}
+          invalid={Boolean(error)}
+          disabled={disabled}
+          onFocus={onFocus}
+          onChange={(event) => onChange(event.target.value)}
+        />
+      ) : (
+        <TextInput
+          ref={ref}
+          aria-label={label}
+          placeholder={placeholder}
+          value={value}
+          invalid={Boolean(error)}
+          disabled={disabled}
+          onFocus={onFocus}
+          onChange={(event) => onChange(event.target.value)}
+        />
+      )}
       {error ? (
         <Text typography="body4" foreground="danger">
           {error}

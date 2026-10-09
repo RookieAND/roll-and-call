@@ -42,6 +42,7 @@ function renderHead({
     .map((part, index) => {
       const variable = part.match(/^\{(.+)\}$/)?.[1];
       if (variable && variables.includes(variable)) {
+        if (variable === "GM 멘션") return <Mention key={index}>@새벽세시</Mention>;
         if (variable === "참여자 멘션") {
           return (
             <span key={index}>
@@ -149,7 +150,9 @@ export function DiscordPreview({
           </span>
         </div>
         {loading ? <Skeleton width="70%" height={14} className="mt-075" /> : null}
-        {hasHead ? <div className="leading-[22px] [overflow-wrap:anywhere]">{nodes}</div> : null}
+        {hasHead ? (
+          <div className="leading-[22px] whitespace-pre-line [overflow-wrap:anywhere]">{nodes}</div>
+        ) : null}
         {bodyNodes ? (
           <div className="leading-[22px] [overflow-wrap:anywhere]">{bodyNodes}</div>
         ) : null}

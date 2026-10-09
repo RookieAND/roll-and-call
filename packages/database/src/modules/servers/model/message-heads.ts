@@ -38,7 +38,7 @@ export const DEFAULT_MESSAGE_HEADS: Partial<Record<MessageCaseKey, string>> = {
 const BASE_VARIABLES = ["구인 제목", "GM", "룰", "링크"] as const;
 
 export function messageVariables(key: MessageCaseKey): readonly string[] {
-  if (key === "done") return [...BASE_VARIABLES, "참여자 멘션"];
+  if (key === "done") return [...BASE_VARIABLES, "GM 멘션", "참여자 멘션"];
   if (key === "monthly") return ["달"];
   return BASE_VARIABLES;
 }

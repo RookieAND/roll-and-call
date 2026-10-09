@@ -25,6 +25,7 @@ export async function announceRecruitmentComplete({
     server,
     game,
     gmName: game.gm?.username ?? "?",
+    gmDiscordId: game.gm?.discordId ?? null,
     players,
     waitingCount: countWaiting(game.participants),
   });

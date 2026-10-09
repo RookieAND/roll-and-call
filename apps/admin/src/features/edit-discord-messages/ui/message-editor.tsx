@@ -68,7 +68,7 @@ export function MessageEditor({
   const labels = [...new Set(texts.map((item) => item.label))];
   const [variant, setVariant] = useState(labels[0]);
   const [focused, setFocused] = useState<"head" | MessageTextKey>("head");
-  const inputs = useRef<Record<string, HTMLInputElement | null>>({});
+  const inputs = useRef<Record<string, (HTMLInputElement & HTMLTextAreaElement) | null>>({});
 
   const shown = texts.filter((item) => item.label === variant);
   const bodyItem = shown.find((item) => item.place === "body");
@@ -197,6 +197,7 @@ export function MessageEditor({
             inputs.current.head = element;
           }}
           label="머리 줄"
+          multiline
           placeholder={defaultMessageHead(caseKey)}
           value={text}
           max={MESSAGE_HEAD_MAX_LENGTH}
