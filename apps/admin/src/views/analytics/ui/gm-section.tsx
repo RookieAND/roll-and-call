@@ -7,9 +7,9 @@ import { AnalyticsSection } from "./analytics-section";
 import { Delta } from "./delta";
 import { GmTopCard } from "./gm-top-card";
 
-const TOP_COUNT = 3;
+export const TOP_COUNT = 3;
 const TOP_COLORS = ["--rc-color-bg-primary", "--rc-color-heat-4", "--rc-color-heat-3"] as const;
-const ROW_CLASS =
+export const ROW_CLASS =
   "h-[36px] items-center justify-between border-t border-(--rc-color-border-subtle)";
 
 interface GmSectionProps {

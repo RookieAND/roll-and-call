@@ -1,4 +1,4 @@
-import { HStack, Skeleton, TextInput } from "@roll-and-call/ui";
+import { Button, HStack, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import {
@@ -15,7 +15,11 @@ export function NoShowsLoading() {
     <>
       <AdminHeader
         title="불참 기록"
-        sub={<Skeleton width={40} height={12} render={<span />} className="inline-block" />}
+        actions={
+          <Button variant="outline" colorPalette="gray" disabled>
+            불참 기록 추가
+          </Button>
+        }
       />
       <LoadingRegion label="불참 기록을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">

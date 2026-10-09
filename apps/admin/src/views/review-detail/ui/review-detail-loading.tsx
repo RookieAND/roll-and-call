@@ -1,6 +1,6 @@
-import { Card, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { Card, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
-import { AdminHeader, LoadingRegion, NextItemButton } from "@/shared/ui";
+import { AdminHeader, FactRows, LoadingRegion, NextItemButton, skeletonFact } from "@/shared/ui";
 
 import { ReviewActionsAside } from "./review-actions-aside";
 import { ReviewMoreMenu } from "./review-more-menu";
@@ -30,6 +30,10 @@ export function ReviewDetailLoading() {
                 <ReviewMoreMenu />
               </HStack>
             </HStack>
+            <Grid className="grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
+              <FactRows labelWidth={72} items={["구인", "작성 시각"].map(skeletonFact)} />
+              <FactRows labelWidth={72} items={["GM", "수정 시각"].map(skeletonFact)} />
+            </Grid>
             <VStack gap="150" className="border-t border-(--rc-color-border-subtle) px-200 py-175">
               <Skeleton width={180} height={14} />
               <VStack gap="100">

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Grid, HStack, Skeleton, Tabs, Text, VStack } from "@roll-and-call/ui";
-import { Ban, Gavel, Mail, User } from "lucide-react";
+import { Ban, Gavel, User } from "lucide-react";
 
 import {
   ActionCard,
@@ -96,19 +96,13 @@ export function UserDetailLoading() {
               icon={Ban}
               tone="danger"
               title="제재"
-              description="참가 신청·구인 개설·룰북 인증 신청을 막습니다"
+              description="서버에 남긴 채 롤앤콜 활동만 정지합니다"
               link={<button type="button" disabled />}
             />
             <ActionCard
               icon={User}
               title="닉네임 수정"
               description="부적절한 닉네임을 운영진이 바꿉니다"
-              link={<button type="button" disabled />}
-            />
-            <ActionCard
-              icon={Mail}
-              title="디스코드 DM 보내기"
-              description="사정을 묻거나 안내할 때 사용합니다"
               link={<button type="button" disabled />}
             />
           </VStack>

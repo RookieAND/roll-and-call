@@ -1,18 +1,25 @@
+"use client";
+
 import { Card, Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
+import { useParams } from "next/navigation";
 
 import { AppBar } from "@/shared/ui";
 
-const ROSTER_ROW_COUNT = 3;
+const QUEUES = [
+  { key: "confirmed", rows: 3 },
+  { key: "waiting", rows: 2 },
+] as const;
 
 export function ManageParticipantsSkeleton() {
+  const { id } = useParams<{ id: string }>();
   return (
     <>
-      <AppBar back="/games" title="참여자 관리" />
+      <AppBar back={`/games/${id}/manage`} title="참여자 관리" />
       <Container size="md">
-        <VStack gap="250" className="py-200">
+        <VStack gap="250" className="py-200" aria-busy>
           <VStack gap="150">
-            <HStack align="center" gap="100">
+            <HStack align="center" gap="075">
               <Skeleton height={28} className="min-w-0 flex-1" />
               <Skeleton width={56} height={21} rounded={300} />
               <Skeleton width={64} height={21} rounded={300} />
@@ -24,27 +31,37 @@ export function ManageParticipantsSkeleton() {
             <Skeleton height={45} rounded={500} />
           </VStack>
 
-          <VStack gap="100">
-            <HStack align="baseline" gap="100">
-              <Skeleton width={56} height={21} />
-              <Skeleton width={40} height={21} />
-            </HStack>
-            <Card.Root radius={500} background="none" padding="none" className="overflow-hidden">
-              {range(ROSTER_ROW_COUNT).map((index) => (
-                <HStack
-                  key={index}
-                  align="center"
-                  gap="150"
-                  className="min-h-14 border-t border-gray-100 px-150 py-100 first:border-t-0"
-                >
-                  <Skeleton width={34} height={34} rounded="full" />
-                  <Skeleton width={96} height={17} />
-                  <span className="flex-1" />
-                  <Skeleton width={32} height={32} rounded={400} />
-                </HStack>
-              ))}
-            </Card.Root>
-          </VStack>
+          {QUEUES.map((queue) => (
+            <VStack key={queue.key} gap="125">
+              <HStack align="center" gap="075" className="min-h-8">
+                <Skeleton width={56} height={21} />
+                <Skeleton width={40} height={21} />
+                <span className="flex-1" />
+                <Skeleton width={72} height={32} rounded={400} />
+              </HStack>
+              <Card.Root
+                radius={500}
+                padding="none"
+                className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
+              >
+                {range(queue.rows).map((index) => (
+                  <HStack
+                    key={index}
+                    align="center"
+                    gap="125"
+                    className="min-h-15 py-100 pr-075 pl-175"
+                  >
+                    <Skeleton width={32} height={32} rounded="full" />
+                    <VStack gap="025" className="min-w-0 flex-1">
+                      <Skeleton width={96} height={17} />
+                      <Skeleton width="50%" height={14} />
+                    </VStack>
+                    <Skeleton width={32} height={32} rounded={400} />
+                  </HStack>
+                ))}
+              </Card.Root>
+            </VStack>
+          ))}
         </VStack>
       </Container>
     </>

@@ -1,4 +1,4 @@
-import { Card, Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { Card, Container, FloatingBar, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
 
 import { DrawResultAppBar } from "./draw-result-app-bar";
@@ -52,6 +52,12 @@ export function DrawResultSkeleton() {
           ))}
         </VStack>
       </Container>
+      <FloatingBar.Root elevated={false}>
+        <FloatingBar.Spacer />
+        <FloatingBar.Content aria-busy>
+          <Skeleton height={48} rounded={500} />
+        </FloatingBar.Content>
+      </FloatingBar.Root>
     </>
   );
 }

@@ -1,6 +1,14 @@
 import { Button, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
 
-import { AdminHeader, LoadingRegion, Panel, SkeletonField, SkeletonTable } from "@/shared/ui";
+import { AdminHeader, LoadingRegion, Panel, RouteTabs, SkeletonField } from "@/shared/ui";
+
+import { RULEBOOK_DETAIL_TAB } from "../model/rulebook-detail-tab";
+
+const TAB_ITEMS = [
+  { label: "기본 정보", href: "/rules" },
+  { label: "본문 퀴즈", href: `/rules?tab=${RULEBOOK_DETAIL_TAB.quiz}` },
+  { label: "인증 현황", href: `/rules?tab=${RULEBOOK_DETAIL_TAB.gms}` },
+];
 
 export function RulebookDetailLoading() {
   return (
@@ -8,13 +16,13 @@ export function RulebookDetailLoading() {
       <AdminHeader
         title={<Skeleton width={160} height={22} render={<span />} />}
         trail={[{ href: "/rules", label: "룰북" }]}
-        sub="룰북 상세"
         actions={
           <Button variant="outline" colorPalette="gray" size="sm" disabled>
             활동 기록에서 보기
           </Button>
         }
       />
+      <RouteTabs label="룰북 상세 화면" items={TAB_ITEMS} value="/rules" />
       <LoadingRegion fullBleed label="룰북 정보를 불러오는 중입니다">
         <div className="mx-auto grid w-full max-w-page flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-200 p-200">
           <VStack gap="200" className="min-w-0">
@@ -25,11 +33,11 @@ export function RulebookDetailLoading() {
                   <SkeletonField label="이름" />
                   <SkeletonField label="판본" />
                 </div>
-                <div className="grid grid-cols-2 gap-150">
-                  <SkeletonField label="종류" />
-                  <SkeletonField label="포함하는 구판" />
-                </div>
                 <SkeletonField label="다른 이름" />
+                <VStack gap="175" className="border-t border-(--rc-color-border-subtle) pt-175">
+                  <SkeletonField label="종류" height={200} />
+                  <SkeletonField label="포함하는 구판" className="max-w-[420px]" />
+                </VStack>
               </VStack>
             </Panel>
             <Panel title="인증 정책" bodyClassName="p-175">
@@ -37,20 +45,6 @@ export function RulebookDetailLoading() {
                 <Skeleton width="100%" height={64} rounded={500} />
                 <Skeleton width="100%" height={64} rounded={500} />
               </div>
-            </Panel>
-            <Panel
-              title="이 룰북으로 인증된 GM"
-              right={<Skeleton width={40} height={22} rounded="full" />}
-            >
-              <SkeletonTable
-                rows={3}
-                columns={[
-                  { label: "닉네임", kind: "text", width: 180 },
-                  { label: "인증일", kind: "date", width: 132 },
-                  { label: "최근 90일 세션", kind: "number", width: 112, align: "center" },
-                  { label: "", kind: "empty", width: 44, fixed: true },
-                ]}
-              />
             </Panel>
           </VStack>
           <Panel
@@ -75,10 +69,12 @@ export function RulebookDetailLoading() {
           </Panel>
         </div>
         <HStack
-          gap="100"
-          className="sticky bottom-0 justify-end border-t border-gray-200 bg-surface px-page py-150"
+          gap="125"
+          align="end"
+          className="sticky bottom-0 border-t border-gray-200 bg-surface px-page py-150"
         >
-          <Button variant="outline" colorPalette="gray" disabled>
+          <SkeletonField label="변경 사유" className="flex-1" />
+          <Button variant="outline" colorPalette="danger" disabled>
             숨김 처리
           </Button>
           <Button disabled className="min-w-[96px]">

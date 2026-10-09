@@ -8,7 +8,7 @@ export default function Loading() {
     <>
       <AppBar back="/me" title="작성한 후기" />
       <Container size="sm" className="py-200">
-        <ReviewListSkeleton />
+        <ReviewListSkeleton actions />
       </Container>
     </>
   );

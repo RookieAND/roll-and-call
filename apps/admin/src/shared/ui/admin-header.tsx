@@ -7,8 +7,7 @@ import { ThemeToggleButton } from "./theme-toggle-button";
 
 interface AdminHeaderProps {
   title: ReactNode;
-  sub?: ReactNode;
-  trail?: { href: string; label: string }[];
+  trail?: { href: string; label: ReactNode }[];
   actions?: ReactNode;
   withAside?: boolean;
   // 본문이 가운데 칸인 화면은 제목을 그 칸의 시작선에 맞춘다. true는 920px 칸이고, 숫자는 그 폭(px)의 칸이다.
@@ -17,7 +16,6 @@ interface AdminHeaderProps {
 
 export function AdminHeader({
   title,
-  sub,
   trail = [],
   actions,
   withAside,
@@ -40,9 +38,9 @@ export function AdminHeader({
         !withAside && !contentWidth && "px-page",
       )}
     >
-      {trail.map((step) => (
+      {trail.map((step, index) => (
         <HStack
-          key={step.label}
+          key={index}
           align="center"
           gap="050"
           render={<ServerLink path={step.href} />}
@@ -57,11 +55,6 @@ export function AdminHeader({
       <Text typography="heading1" render={<h1 />}>
         {title}
       </Text>
-      {sub ? (
-        <Text typography="body3" foreground="hint" numeric>
-          {sub}
-        </Text>
-      ) : null}
       <HStack align="center" gap="100" className="ml-auto">
         {actions}
         <ThemeToggleButton />

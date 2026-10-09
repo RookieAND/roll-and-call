@@ -1,4 +1,4 @@
-import { HStack, Skeleton, TextInput } from "@roll-and-call/ui";
+import { HStack, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import { AdminHeader, LoadingRegion, Panel, SkeletonSelect, SkeletonTable } from "@/shared/ui";
@@ -9,10 +9,7 @@ import { ReviewTabs } from "./review-tabs";
 export function ReviewListLoading() {
   return (
     <>
-      <AdminHeader
-        title="후기"
-        sub={<Skeleton width={96} height={12} render={<span />} className="inline-block" />}
-      />
+      <AdminHeader title="후기" />
       <ReviewTabs />
       <LoadingRegion label="후기를 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">

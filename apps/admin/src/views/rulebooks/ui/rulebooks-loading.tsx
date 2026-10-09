@@ -1,7 +1,14 @@
-import { Button, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
-import { Search } from "lucide-react";
+import { Button, HStack, TextInput } from "@roll-and-call/ui";
+import { Plus, Search } from "lucide-react";
 
-import { AdminHeader, LoadingRegion, Panel, RouteTabs, SkeletonTable } from "@/shared/ui";
+import {
+  AdminHeader,
+  LoadingRegion,
+  Panel,
+  RouteTabs,
+  SkeletonPager,
+  SkeletonTable,
+} from "@/shared/ui";
 
 import { RULEBOOKS_TAB } from "../model/rulebooks-tab";
 
@@ -9,11 +16,7 @@ import { RULEBOOKS_TAB } from "../model/rulebooks-tab";
 export function RulebooksLoading() {
   return (
     <>
-      <AdminHeader
-        title="룰북 카탈로그"
-        trail={[{ href: "/rules", label: "룰북" }]}
-        sub={<Skeleton width={140} height={12} render={<span />} />}
-      />
+      <AdminHeader title="룰북 카탈로그" trail={[{ href: "/rules", label: "룰북" }]} />
       <RouteTabs
         label="룰북 화면"
         value="/rules"
@@ -24,29 +27,27 @@ export function RulebooksLoading() {
         ]}
       />
       <LoadingRegion label="룰북 목록을 불러오는 중입니다" className="gap-200 p-200">
-        <Panel
-          right={
-            <>
-              <HStack align="center" className="relative w-[260px]">
-                <Search
-                  size={14}
-                  aria-hidden
-                  className="pointer-events-none absolute left-125 text-hint"
-                />
-                <TextInput
-                  type="search"
-                  disabled
-                  placeholder="이름, 판본, 카테고리, 다른 이름"
-                  aria-label="룰북 검색"
-                  className="h-[32px] pl-400 text-body3"
-                />
-              </HStack>
-              <Button size="sm" disabled>
-                룰북 추가
-              </Button>
-            </>
-          }
-        >
+        <HStack align="center" gap="100">
+          <HStack align="center" className="relative w-[300px]">
+            <Search
+              size={14}
+              aria-hidden
+              className="pointer-events-none absolute left-125 text-hint"
+            />
+            <TextInput
+              type="search"
+              disabled
+              placeholder="이름, 판본, 카테고리, 다른 이름"
+              aria-label="룰북 검색"
+              className="pl-400 text-body3"
+            />
+          </HStack>
+          <Button disabled className="ml-auto gap-050">
+            <Plus size={16} aria-hidden />
+            룰북 추가
+          </Button>
+        </HStack>
+        <Panel footer={<SkeletonPager />}>
           <SkeletonTable
             rows={10}
             columns={[

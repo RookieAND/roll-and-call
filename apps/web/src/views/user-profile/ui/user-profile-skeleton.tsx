@@ -1,4 +1,4 @@
-import { Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { Card, Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
 
 import { AppBar } from "@/shared/ui";
@@ -33,6 +33,13 @@ export function UserProfileSkeleton() {
             </Grid>
           </div>
           <div className="mt-175">
+            <Skeleton width={56} height={17} className="mb-100" />
+            <HStack align="center" gap="075" className="min-h-11">
+              <Skeleton width={96} height={28} rounded="full" />
+              <Skeleton width={80} height={28} rounded="full" />
+            </HStack>
+          </div>
+          <div className="mt-175">
             <Skeleton width={40} height={17} className="mb-100" />
             <HStack gap="075">
               <Skeleton width={80} height={32} rounded="full" />
@@ -40,6 +47,15 @@ export function UserProfileSkeleton() {
             </HStack>
           </div>
         </div>
+
+        <VStack render={<section />} className="px-200 pt-200">
+          <Skeleton width={32} height={17} className="mb-100" />
+          <Card.Root padding="none" radius={500} className="overflow-hidden">
+            {range(2).map((index) => (
+              <Skeleton key={index} width="100%" height={52} rounded="none" />
+            ))}
+          </Card.Root>
+        </VStack>
 
         <section className="p-200">
           <Skeleton width={40} height={17} className="mb-100" />

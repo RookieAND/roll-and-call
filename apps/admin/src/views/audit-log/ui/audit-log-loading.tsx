@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, Text, TextInput } from "@roll-and-call/ui";
+import { Button, HStack, Text, TextInput } from "@roll-and-call/ui";
 import { ChevronDown, Search } from "lucide-react";
 
 import {
@@ -15,10 +15,7 @@ import { RETENTION_NOTE } from "../model/retention-note";
 export function AuditLogLoading() {
   return (
     <>
-      <AdminHeader
-        title="활동 기록"
-        sub={<Skeleton width={40} height={12} render={<span />} className="inline-block" />}
-      />
+      <AdminHeader title="활동 기록" />
       <LoadingRegion label="활동 기록을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">
           <HStack align="center" gap="100" wrap>
@@ -31,8 +28,8 @@ export function AuditLogLoading() {
               <TextInput
                 type="search"
                 disabled
-                placeholder="대상 검색"
-                aria-label="대상 검색"
+                placeholder="대상 닉네임 검색"
+                aria-label="대상 닉네임 검색"
                 className="pl-400 text-body3"
               />
             </HStack>

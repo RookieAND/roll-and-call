@@ -1,4 +1,4 @@
-import { Container, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { Container, FloatingBar, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 
@@ -7,7 +7,7 @@ export function EditProfileSkeleton() {
     <>
       <AppBar back="/me" title="프로필 편집" />
       <Container size="md">
-        <VStack gap="250" className="pt-300 pb-200">
+        <VStack gap="250" className="pt-300 pb-500">
           <HStack align="center" gap="150">
             <Skeleton width={60} height={60} rounded="full" />
             <Skeleton height={20} className="flex-1" />
@@ -35,13 +35,15 @@ export function EditProfileSkeleton() {
           </VStack>
         </VStack>
       </Container>
-      {/* ponytail: bottom-[58px]는 BottomNav 높이(h-[58px])와 결합. nav 높이 바뀌면 같이 조정. */}
-      <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface">
-        <Container size="md" className="flex gap-100 py-150">
-          <Skeleton height={50} rounded={500} className="flex-1" />
-          <Skeleton height={50} rounded={500} className="flex-1" />
-        </Container>
-      </div>
+      <FloatingBar.Root elevated={false}>
+        <FloatingBar.Content>
+          <HStack gap="100">
+            <Skeleton height={48} rounded={500} className="flex-1" />
+            <Skeleton height={48} rounded={500} className="flex-1" />
+          </HStack>
+        </FloatingBar.Content>
+        <FloatingBar.Spacer />
+      </FloatingBar.Root>
     </>
   );
 }

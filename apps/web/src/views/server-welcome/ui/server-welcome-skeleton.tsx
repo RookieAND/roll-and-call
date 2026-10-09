@@ -1,4 +1,4 @@
-import { Skeleton, VStack } from "@roll-and-call/ui";
+import { HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 export function ServerWelcomeSkeleton() {
   return (
@@ -16,8 +16,15 @@ export function ServerWelcomeSkeleton() {
         </VStack>
       </VStack>
       <VStack gap="250" className="rounded-t-800 bg-surface px-300 pt-400 pb-300">
-        <Skeleton width="100%" height={72} rounded={400} />
-        <Skeleton width="100%" height={48} rounded={400} />
+        <VStack gap="075">
+          <Skeleton width={40} height={17} />
+          <Skeleton width="100%" height={48} rounded={400} />
+          <Skeleton width={180} height={17} />
+        </VStack>
+        <HStack gap="100">
+          <Skeleton height={48} rounded={400} className="flex-1" />
+          <Skeleton height={48} rounded={400} className="flex-1" />
+        </HStack>
       </VStack>
     </VStack>
   );

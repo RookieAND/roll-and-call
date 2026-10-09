@@ -1,21 +1,20 @@
-import { Button, Card, Container, HStack, Text, VStack } from "@roll-and-call/ui";
-import { ChevronRight, ExternalLink, PlayCircle } from "lucide-react";
+import { Card, Container, HStack, Text, VStack } from "@roll-and-call/ui";
+import { ChevronRight, PlayCircle } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { BrandMark } from "@/entities/profile";
 import { AppBar } from "@/shared/ui";
 
-import { loadHelpServer } from "../api/load-help-server";
 import { HELP_CATEGORIES, HELP_DOCS } from "../model/help-docs";
 import { HelpDocRow } from "./help-doc-row";
+import { HelpServerButton } from "./help-server-button";
 
 interface HelpListViewProps {
   from: string | null;
 }
 
-export async function HelpListView({ from }: HelpListViewProps) {
-  const server = await loadHelpServer(from);
-
+export function HelpListView({ from }: HelpListViewProps) {
   return (
     <>
       <AppBar back="/" title="도움말" />
@@ -77,17 +76,9 @@ export async function HelpListView({ from }: HelpListViewProps) {
               <Text typography="body3" foreground="muted" render={<p />} className="text-pretty">
                 롤앤콜을 쓰는 디스코드 서버의 운영진에게 물어봐 주세요.
               </Text>
-              {server && (
-                <Button
-                  render={<a href={server.inviteUrl} target="_blank" rel="noreferrer" />}
-                  variant="outline"
-                  size="lg"
-                  className="mt-050 w-full"
-                >
-                  <span className="min-w-0 truncate">{server.name} 디스코드 열기</span>
-                  <ExternalLink size={15} className="flex-none" aria-hidden />
-                </Button>
-              )}
+              <Suspense fallback={null}>
+                <HelpServerButton from={from} />
+              </Suspense>
             </VStack>
           </Card.Root>
         </VStack>

@@ -1,4 +1,4 @@
-import { Container, Skeleton, VStack } from "@roll-and-call/ui";
+import { Container, FloatingBar, Skeleton, VStack } from "@roll-and-call/ui";
 
 import { AppBar } from "@/shared/ui";
 
@@ -16,6 +16,14 @@ export function RulebookSubmittedSkeleton() {
           <Skeleton width="100%" height={72} rounded={500} />
         </VStack>
       </Container>
+      <FloatingBar.Root elevated={false}>
+        <FloatingBar.Content>
+          <Container size="sm">
+            <Skeleton width="100%" height={48} rounded={500} />
+          </Container>
+        </FloatingBar.Content>
+        <FloatingBar.Spacer />
+      </FloatingBar.Root>
     </>
   );
 }

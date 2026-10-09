@@ -6,6 +6,7 @@ export function MyPageLoading() {
   return (
     <>
       <MyPageSummarySkeleton />
+      <MyPageBlockSkeleton titleWidth={40} height={124} />
       <MyPageBlockSkeleton titleWidth={64} height={120} />
       <MyPageBlockSkeleton titleWidth={40} height={96} />
       <MyPageAccountSkeleton />

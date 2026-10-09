@@ -4,7 +4,7 @@ import type { AnalyticsData } from "@/shared/server";
 
 type MethodShare = AnalyticsData["methodShare"]["open"];
 
-const METHOD_SEGMENTS = [
+export const METHOD_SEGMENTS = [
   {
     key: "firstCome",
     label: "선착순",

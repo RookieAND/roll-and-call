@@ -1,12 +1,16 @@
+"use client";
+
 import { Container, HStack, Skeleton } from "@roll-and-call/ui";
+import { useParams } from "next/navigation";
 
 import { AppBar } from "@/shared/ui";
 
 export function EditMemoSkeleton() {
+  const { id } = useParams<{ id: string }>();
   return (
     <Container size="sm" className="px-0">
       <AppBar
-        back="/games"
+        back={`/users/${id}`}
         title="메모"
         action={<Skeleton width={48} height={36} className="mr-100" />}
       />
@@ -20,6 +24,7 @@ export function EditMemoSkeleton() {
       </HStack>
 
       <div className="p-200">
+        <Skeleton width={32} height={17} className="mb-100" />
         <Skeleton width="100%" height={150} rounded={400} />
         <HStack align="baseline" gap="100" className="mt-100">
           <Skeleton height={17} className="flex-1" />

@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
+import { Button, HStack, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import {
@@ -13,10 +13,7 @@ import {
 export function PostsLoading() {
   return (
     <>
-      <AdminHeader
-        title="구인"
-        sub={<Skeleton width={40} height={12} render={<span />} className="inline-block" />}
-      />
+      <AdminHeader title="구인" />
       <LoadingRegion label="구인 목록을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100" wrap>
           <HStack align="center" className="relative w-[236px]">

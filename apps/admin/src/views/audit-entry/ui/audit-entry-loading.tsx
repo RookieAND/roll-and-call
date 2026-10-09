@@ -10,7 +10,6 @@ export function AuditEntryLoading() {
     <>
       <AdminHeader
         title={<Skeleton width={180} height={22} render={<span />} className="inline-block" />}
-        sub="조치 상세"
         trail={[{ href: "/log", label: "활동 기록" }]}
         contentWidth={960}
       />
@@ -23,6 +22,7 @@ export function AuditEntryLoading() {
             </HStack>
             <Grid className="grid-cols-2 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
               <FactRows labelWidth={80} items={["처리한 운영진", "처리 시각"].map(skeletonFact)} />
+              <FactRows labelWidth={80} items={["대상"].map(skeletonFact)} />
             </Grid>
           </section>
           <div className="divide-y divide-(--rc-color-border-subtle) rounded-600 border border-gray-200 bg-surface">

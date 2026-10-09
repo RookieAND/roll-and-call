@@ -1,19 +1,28 @@
+"use client";
+
 import { Card, Container, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
+import { useParams } from "next/navigation";
+
+import { AppBar } from "@/shared/ui";
 
 // 다른 사람 업적 화면 모양: 탭, 분류 제목, 업적 행 카드.
 export function UserBadgesSkeleton() {
+  const { id } = useParams<{ id: string }>();
   return (
     <>
-      <Container size="sm" className="px-0">
-        <HStack align="center" gap="100" className="h-[46px] border-b border-gray-200 px-200">
-          {range(3).map((index) => (
-            <HStack key={index} justify="center" className="flex-1">
-              <Skeleton width={48} height={14} />
-            </HStack>
-          ))}
-        </HStack>
-      </Container>
+      <AppBar back={`/users/${id}`} title="업적" />
+      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface">
+        <Container size="sm" className="px-0">
+          <HStack align="center" gap="100" className="h-[46px] border-b border-gray-200 px-200">
+            {range(3).map((index) => (
+              <HStack key={index} justify="center" className="flex-1">
+                <Skeleton width={48} height={14} />
+              </HStack>
+            ))}
+          </HStack>
+        </Container>
+      </div>
       <Container size="sm" className="pb-250">
         <VStack aria-busy gap="100" className="pt-175">
           <Skeleton width={72} height={14} />
