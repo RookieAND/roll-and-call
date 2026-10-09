@@ -24,12 +24,12 @@ export function listTodos({
   const fromCards = (cards: SessionCardModel[], roleRank: number): Ranked[] =>
     cards.flatMap(({ id, title, todo }) => {
       if (isNull(todo)) return [];
-      const kind = todo.kind as SessionTodoItem["kind"];
+      const { kind } = todo;
       const item: SessionTodoItem = {
         type: TODO_ITEM_TYPE.session,
         key: `${kind}:${id}`,
         kind,
-        eyebrow: todo.eyebrow ?? TODO_EYEBROW[kind as keyof typeof TODO_EYEBROW],
+        eyebrow: todo.eyebrow ?? TODO_EYEBROW[kind],
         gameId: id,
         title,
         lines: todo.lines,

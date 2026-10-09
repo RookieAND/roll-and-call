@@ -8,10 +8,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { conflictToastText, draftReason, useActionSubmit } from "@/shared/lib";
-import type { MemberOngoingRow, OngoingChoice } from "@/shared/server";
+import type { MemberOngoingRow } from "@/shared/server";
 import { NotificationPreview, ServerLink, useServerPath } from "@/shared/ui";
 
 import { sanctionUser } from "../api/sanction-user";
+import { isOngoingAction } from "../model/is-ongoing-action";
 import { ongoingChoiceRows } from "../model/ongoing-choice-rows";
 import { EMPTY_SANCTION_DRAFT, type SanctionDraft } from "../model/sanction-draft";
 import { sanctionPeriodHint } from "../model/sanction-period-hint";
@@ -86,7 +87,7 @@ export function SanctionUserForm({
         staffMemo: draft.staffMemo,
         ongoing: rows.map((row) => ({
           sessionId: row.id,
-          action: row.value as OngoingChoice["action"],
+          action: isOngoingAction(row.value) ? row.value : "keep",
         })),
       },
     });

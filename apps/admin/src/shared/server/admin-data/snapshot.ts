@@ -11,7 +11,6 @@ import {
   isSessionStarted,
   RECRUIT_METHOD_LABEL,
   sessionEndAt,
-  type AbsenceAddedTag,
 } from "@roll-and-call/database/games/model";
 import { type AuditAction } from "@roll-and-call/database/moderation";
 import {
@@ -23,6 +22,8 @@ import {
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { compact, isNull } from "es-toolkit";
 import { cache } from "react";
+
+import { isAbsenceAddedTag } from "@/shared/lib";
 
 import { getCurrentServer } from "../auth/get-current-server";
 import { requireStaff } from "../auth/require-staff";
@@ -231,7 +232,9 @@ export const loadSnapshot = cache(async () => {
             at: row.absenceAddedAt,
             reason:
               row.absenceAddedReason ??
-              ABSENCE_ADDED_TAG_LABEL[row.absenceAddedTag as AbsenceAddedTag],
+              (isAbsenceAddedTag(row.absenceAddedTag)
+                ? ABSENCE_ADDED_TAG_LABEL[row.absenceAddedTag]
+                : ""),
           }
         : undefined,
     }));

@@ -1,4 +1,4 @@
-import { isPlainObject } from "es-toolkit";
+import { isRichTextDoc } from "./is-rich-text-doc";
 
 export type RichTextMark = { type: string; attrs?: { href?: string | null } };
 
@@ -15,13 +15,7 @@ export type RichTextDoc = { type: "doc"; content: RichTextNodeData[] };
 export function toRichTextDoc(value: string): RichTextDoc {
   try {
     const parsed: unknown = JSON.parse(value);
-    if (
-      isPlainObject(parsed) &&
-      (parsed as RichTextDoc).type === "doc" &&
-      Array.isArray((parsed as RichTextDoc).content)
-    ) {
-      return parsed as RichTextDoc;
-    }
+    if (isRichTextDoc(parsed)) return parsed;
   } catch {
     // 평문으로 넘어간다.
   }

@@ -1,6 +1,7 @@
 export { CERT_SHOT, CERT_SHOT_LABEL, CERT_SHOTS, type CertShot } from "./model/cert-shot";
 export { CERT_PROOF, CERT_PROOF_LABEL, CERT_PROOFS, type CertProof } from "./model/cert-proof";
 export { CERT_FORMAT, CERT_FORMAT_LABEL, type CertFormat } from "./model/cert-format";
+export { isCertFormat } from "./model/is-cert-format";
 export { CERT_GUIDE } from "./model/cert-guide";
 export { certApplyHref } from "./model/cert-apply-href";
 export { CERT_STATE, type CertState } from "./model/cert-state";

@@ -5,6 +5,7 @@ import { db } from "#/client";
 import type { AuditAction } from "#/modules/moderation/model/audit-actions";
 import type { ChosenReason } from "#/modules/moderation/model/chosen-reason";
 import { CONTENT_REASON } from "#/modules/moderation/model/content-reason";
+import { isAuditAction } from "#/modules/moderation/model/is-audit-action";
 import { reasonLabel } from "#/modules/moderation/model/reason-label";
 import type { Actor } from "#/modules/moderation/model/types";
 import { createNotifications } from "#/modules/notifications/commands/create-notifications";
@@ -111,14 +112,15 @@ export async function moderateReview({
       return {
         ok: false,
         gone: false,
-        conflict: latest
-          ? {
-              action: latest.action as AuditAction,
-              by: latest.by ?? "알 수 없음",
-              byId: latest.byId,
-              at: latest.at,
-            }
-          : null,
+        conflict:
+          latest && isAuditAction(latest.action)
+            ? {
+                action: latest.action,
+                by: latest.by ?? "알 수 없음",
+                byId: latest.byId,
+                at: latest.at,
+              }
+            : null,
       };
     }
 

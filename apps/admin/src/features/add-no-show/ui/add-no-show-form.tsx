@@ -11,7 +11,12 @@ import { isNull, isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState } from "react";
 
-import { conflictToastText, formatDateTime, useActionSubmit } from "@/shared/lib";
+import {
+  conflictToastText,
+  formatDateTime,
+  isAbsenceAddedTag,
+  useActionSubmit,
+} from "@/shared/lib";
 import type { NoShowSessionCandidate, NoShowSessionSearch } from "@/shared/server";
 import {
   ActionNetworkError,
@@ -24,7 +29,6 @@ import {
 } from "@/shared/ui";
 
 import { addNoShowRecord } from "../api/add-no-show-record";
-import { isAbsenceAddedTag } from "../model/is-absence-added-tag";
 import { OptionList } from "./option-list";
 import { OptionRow } from "./option-row";
 import { StepLabel } from "./step-label";

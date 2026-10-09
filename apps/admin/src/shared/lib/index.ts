@@ -53,6 +53,7 @@ export { REVIEW_LIST_PATH, reviewListHref } from "./review-list-href";
 export { singleParam } from "./single-param";
 export { stringParams } from "./string-params";
 export { DISCORD } from "./discord-theme";
+export { isAbsenceAddedTag } from "./is-absence-added-tag";
 export { isValueOf } from "./is-value-of";
 export { parseJson } from "./parse-json";
 export { idSchema, parseActionInput } from "./parse-action-input";

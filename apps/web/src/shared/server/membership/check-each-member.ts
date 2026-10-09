@@ -19,11 +19,12 @@ export async function checkEachMember<Member, Result>({
       retry(() => check(member), {
         retries: 1,
         shouldRetry: isRateLimited,
-        delay: (_attempt, error) => ((error as DiscordApiError).retryAfter ?? 1) * 1000,
+        delay: (_attempt, error) =>
+          ((error instanceof DiscordApiError ? error.retryAfter : undefined) ?? 1) * 1000,
       }),
     MEMBER_CHECK_CONCURRENCY,
   );
   const results = await Promise.allSettled(members.map((member) => limitedCheck(member)));
-  if (results.some((result) => result.status === "rejected")) return undefined;
-  return results.map((result) => (result as PromiseFulfilledResult<Result>).value);
+  const values = results.flatMap((result) => (result.status === "fulfilled" ? [result.value] : []));
+  return values.length === results.length ? values : undefined;
 }

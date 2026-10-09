@@ -48,7 +48,14 @@ export type SessionAction = {
 };
 
 // sortAt은 같은 종류 안에서 가까운 순으로 세울 때 쓰는 시각(ISO)이다.
-export type SessionTodo = SessionAction & {
+export type SessionTodoKind =
+  | typeof SESSION_ACTION_KIND.confirmTime
+  | typeof SESSION_ACTION_KIND.confirmAttendance
+  | typeof SESSION_ACTION_KIND.fillVacancy
+  | typeof SESSION_ACTION_KIND.submitAvailability;
+
+export type SessionTodo = Omit<SessionAction, "kind"> & {
+  kind: SessionTodoKind;
   lines: string[];
   blocked: boolean;
   sortAt: string;

@@ -1,11 +1,12 @@
-import type { TODO_KIND, TodoKind } from "./todo-kind";
+import type { SessionTodoKind } from "./session-card-model";
+import type { TODO_KIND } from "./todo-kind";
 
 export const TODO_ITEM_TYPE = { session: "session", cert: "cert" } as const;
 
 export type SessionTodoItem = {
   type: typeof TODO_ITEM_TYPE.session;
   key: string;
-  kind: Exclude<TodoKind, typeof TODO_KIND.certRejected>;
+  kind: SessionTodoKind;
   eyebrow: string;
   gameId: string;
   title: string;

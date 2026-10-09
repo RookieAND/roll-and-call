@@ -6,6 +6,7 @@ import { useState, type ReactNode } from "react";
 import { toast, useAction } from "@/shared/ui";
 
 import { requestRulebook } from "../api/request-rulebook";
+import { isRequestKind } from "../model/is-request-kind";
 import {
   NEW_CATEGORY,
   REQUEST_KIND_CARDS,
@@ -144,7 +145,9 @@ export function RulebookRequestBody({
           </Text>
           <RadioGroup
             value={kind}
-            onValueChange={(value) => setKind(value as RulebookRequestValues["kind"])}
+            onValueChange={(value) => {
+              if (isRequestKind(value)) setKind(value);
+            }}
             aria-label="종류"
             className="flex flex-col gap-100"
           >

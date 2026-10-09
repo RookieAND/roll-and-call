@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 
 import {
   CERT_FORMAT,
+  isCertFormat,
   CERT_FORMAT_LABEL,
   CERT_GUIDE,
   CERT_PROOF,
@@ -15,7 +16,6 @@ import {
   ProofArt,
   RULEBOOK_KIND_LABEL,
   ShotArt,
-  type CertFormat,
   type MyRulebook,
 } from "@/entities/rulebook";
 import { TRIAL_SAMPLE_PHOTO, useIsTrial } from "@/shared/trial";
@@ -140,9 +140,9 @@ export function BookDraftCard({
 
       <SegmentedControl.Root
         value={draft.format}
-        onValueChange={(format) =>
-          update((previous) => ({ ...previous, format: format as CertFormat }))
-        }
+        onValueChange={(format) => {
+          if (isCertFormat(format)) update((previous) => ({ ...previous, format }));
+        }}
         aria-label="인증 형식"
       >
         {Object.values(CERT_FORMAT).map((format) => (

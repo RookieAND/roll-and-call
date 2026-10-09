@@ -38,5 +38,6 @@ export function awaitingResultMethod(game: {
   drawnAt: Date | string | null;
   selectionFinishedAt: Date | string | null;
 }): AwaitingResultMethod | null {
-  return isAwaitingResult(game) ? (game.recruitMethod as AwaitingResultMethod) : null;
+  if (!isAwaitingResult(game) || game.recruitMethod === RECRUIT_METHOD.firstCome) return null;
+  return game.recruitMethod;
 }

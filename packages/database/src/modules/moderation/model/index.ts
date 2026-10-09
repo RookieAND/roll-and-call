@@ -7,6 +7,7 @@ export {
   STAFF_CHANNEL_RELATED,
   type AuditAction,
 } from "./audit-actions";
+export { isAuditAction } from "./is-audit-action";
 export { auditActionLabel } from "./audit-action-label";
 export { canManageStaffMemo } from "./can-manage-staff-memo";
 export { formatDate } from "./format-date";

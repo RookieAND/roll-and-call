@@ -3,12 +3,7 @@
 import { HStack, Text, Tooltip, cn } from "@roll-and-call/ui";
 import { Link2 } from "lucide-react";
 
-import {
-  linkHref,
-  linkLabel,
-  linkServiceOf,
-  type ProfileLink,
-} from "../model/link-services";
+import { linkHref, linkLabel, linkServiceOf, type ProfileLink } from "../model/link-services";
 import { BrandMark } from "./brand-mark";
 
 const ICON_CLASS =
