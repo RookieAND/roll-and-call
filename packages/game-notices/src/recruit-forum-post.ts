@@ -53,6 +53,7 @@ export async function recruitForumPost({
       ...head,
       content: [head.content, content].filter(Boolean).join("\n"),
       embeds: [],
+      suppressEmbeds: true,
       // 버튼은 본문의 맨 끝 메시지에 둔다.
       buttons: followUps.length > 0 ? [] : buttons,
     },

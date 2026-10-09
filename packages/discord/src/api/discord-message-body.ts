@@ -3,9 +3,12 @@ import type { DiscordMessageInput } from "../model/discord-types";
 const COMPONENT_TYPE = { actionRow: 1, button: 2 } as const;
 const BUTTON_STYLE = { primary: 1, link: 5 } as const;
 
+const MESSAGE_FLAG_SUPPRESS_EMBEDS = 1 << 2;
+
 export function discordMessageBody({
   content,
   embeds,
+  suppressEmbeds,
   buttons,
   userMentions = [],
   roleMentions = [],
@@ -33,6 +36,7 @@ export function discordMessageBody({
     content,
     embeds,
     components,
+    flags: suppressEmbeds ? MESSAGE_FLAG_SUPPRESS_EMBEDS : undefined,
     allowed_mentions: { parse: [], users: userMentions, roles: roleMentions },
   };
 }

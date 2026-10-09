@@ -66,6 +66,7 @@ export function recruitPlainText({
     section(
       "### 🎯 플레이 정보",
       list([
+        item("진행 방식", game.playType === "text" ? "텍스트" : "보이스"),
         tagItem("장르", game.genres),
         tagItem("플랫폼", game.platforms),
         tagItem("AI 이미지", [game.aiImage ? "사용" : "사용 안 함"]),

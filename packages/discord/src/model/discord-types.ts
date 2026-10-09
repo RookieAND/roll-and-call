@@ -23,6 +23,8 @@ export type DiscordMessage = { id: string; channel_id: string };
 export type DiscordMessageInput = {
   content?: string;
   embeds?: DiscordEmbed[];
+  // 본문 링크의 미리보기를 붙이지 않는다.
+  suppressEmbeds?: boolean;
   // 수정 때 빠지면 기존 버튼이 남고, []면 지운다.
   buttons?: DiscordButton[];
   // allowed_mentions allowlist: 멘션은 content에도 있어야 울린다.

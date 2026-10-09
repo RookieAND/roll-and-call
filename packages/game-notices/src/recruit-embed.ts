@@ -26,6 +26,7 @@ export function recruitEmbed({
     { name: "📜 룰", value: game.rule, inline: true },
     { name: "👥 인원", value: formatRecruitHeadcount({ game, confirmedCount }), inline: true },
     { name: "🎯 방식", value: game.recruitMethod === "lottery" ? "추첨" : "선착순", inline: true },
+    { name: "🎙️ 진행", value: game.playType === "text" ? "텍스트" : "보이스", inline: true },
     { name: "🕒 시간", value: formatGameSchedule(game), inline: false },
   ];
 

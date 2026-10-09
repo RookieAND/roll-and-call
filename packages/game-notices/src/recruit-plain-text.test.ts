@@ -19,6 +19,7 @@ const game = {
   triggers: ["유혈", "사망"],
   playMinutes: 240,
   aiImage: false,
+  playType: "voice",
 } as unknown as Game;
 
 it("항목을 한 줄씩 적고 취소면 맨 위에 알린다", () => {
@@ -34,6 +35,7 @@ it("항목을 한 줄씩 적고 취소면 맨 위에 알린다", () => {
   expect(content).toContain("### ⚠️ 트리거\n||`유혈`|| ||`사망`||");
   expect(content).toContain("- **플레이 시간**　4시간");
   expect(content).toContain("- **AI 이미지**　`사용 안 함`");
+  expect(content).toContain("- **진행 방식**　보이스");
   expect(followUps).toEqual([]);
 });
 
