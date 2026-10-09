@@ -1,4 +1,5 @@
 import type { Game } from "@roll-and-call/database";
+import { RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
 import { DISCORD_COLOR, type DiscordEmbed } from "@roll-and-call/discord";
 
 import { discordOverview } from "./discord-overview";
@@ -25,7 +26,7 @@ export function recruitEmbed({
   const fields = [
     { name: "📜 룰", value: game.rule, inline: true },
     { name: "👥 인원", value: formatRecruitHeadcount({ game, confirmedCount }), inline: true },
-    { name: "🎯 방식", value: game.recruitMethod === "lottery" ? "추첨" : "선착순", inline: true },
+    { name: "🎯 방식", value: RECRUIT_METHOD_LABEL[game.recruitMethod], inline: true },
     { name: "🎙️ 진행", value: game.playType === "text" ? "텍스트" : "보이스", inline: true },
     { name: "🕒 시간", value: formatGameSchedule(game), inline: false },
   ];

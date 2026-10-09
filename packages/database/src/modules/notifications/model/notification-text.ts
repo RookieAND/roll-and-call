@@ -3,6 +3,7 @@ import { isNull } from "es-toolkit";
 import {
   GAME_CANCEL_KIND,
   MIN_PLAYERS_UNMET_CANCEL_TEXT,
+  SELECTION_EXPIRED_CANCEL_TEXT,
 } from "#/modules/games/model/game-cancel-kind";
 
 import { directionalParticle } from "./directional-particle";
@@ -266,6 +267,7 @@ export function notificationText(payload: NotificationPayload): NotificationText
     if (cancelKind === GAME_CANCEL_KIND.staff) return "운영진이 취소했습니다.";
     if (cancelKind === GAME_CANCEL_KIND.auto) return "GM이 서버를 나가 취소되었습니다.";
     if (cancelKind === GAME_CANCEL_KIND.minPlayersUnmet) return MIN_PLAYERS_UNMET_CANCEL_TEXT;
+    if (cancelKind === GAME_CANCEL_KIND.selectionExpired) return SELECTION_EXPIRED_CANCEL_TEXT;
     return reason ? `사유: ${reason}` : "GM이 취소했습니다.";
   }
 

@@ -99,6 +99,7 @@ export function buildTrialGame({
     windowEndHour: 0,
     notifiedAt: null,
     drawnAt: null,
+    selectionFinishedAt: null,
     attendanceConfirmedAt: null,
     attendanceFirstConfirmedAt: null,
     endedAt: null,

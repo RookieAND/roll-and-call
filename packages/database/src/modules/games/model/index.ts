@@ -12,7 +12,12 @@ export { DRAW_RESULT_KIND } from "./draw-result-kind";
 export { isAwaitingDraw } from "./is-awaiting-draw";
 export { seatOpenedRecipientIds } from "./seat-opened-recipient-ids";
 export { gameCancelledRecipients } from "./game-cancelled-recipients";
-export { RECRUIT_METHOD, RECRUIT_METHODS, type RecruitMethod } from "./recruit-method";
+export {
+  RECRUIT_METHOD,
+  RECRUIT_METHOD_LABEL,
+  RECRUIT_METHODS,
+  type RecruitMethod,
+} from "./recruit-method";
 export { GAME_KIND, GAME_KINDS, type GameKind } from "./game-kind";
 export { PLAY_TYPE, PLAY_TYPES, type PlayType } from "./play-type";
 export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./schedule-mode";
@@ -58,6 +63,7 @@ export { cancelBlockReason } from "./cancel-block-reason";
 export {
   GAME_CANCEL_KIND,
   MIN_PLAYERS_UNMET_CANCEL_TEXT,
+  SELECTION_EXPIRED_CANCEL_TEXT,
   type GameCancelKind,
 } from "./game-cancel-kind";
 export { storedCancelReason } from "./stored-cancel-reason";

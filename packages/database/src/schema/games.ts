@@ -24,7 +24,8 @@ import { serverId } from "./server-id";
 export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
 
 // first_come은 정원까지 신청 순서대로 확정하고, lottery는 정원과 무관하게 받아 마감 때 1d100 추첨으로 확정 인원을 정한다.
-export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery"]);
+// selection은 정원과 무관하게 받고 GM이 신청자 중에서 확정자를 직접 골라 [선발 마치기]로 끝낸다.
+export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery", "selection"]);
 
 // 정원(maxPlayers)만큼 confirmed로 채우고 초과분은 waiting. 승격/강등/자동 승계는 이 값만 바꾼다.
 // removed는 세션 시작 뒤 불참으로 내보낸 사람이다. 행을 남기고 absent = true로 두며 확정 인원·정원에 세지 않는다.
@@ -44,6 +45,7 @@ export const gameCancelKind = pgEnum("game_cancel_kind", [
   "staff",
   "auto",
   "min_players_unmet",
+  "selection_expired",
 ]);
 
 export const games = pgTable(
@@ -98,6 +100,8 @@ export const games = pgTable(
     // 추첨을 돌린 시각. 값이 있으면 신청을 받지 않고, 확정·대기 명단은 이미 정해진 뒤다.
     // 신청자 0명으로 마감된 추첨 글도 값이 있다(굴린 값 없음).
     drawnAt: timestamp("drawn_at", { withTimezone: true }),
+    // GM이 [선발 마치기]로 선발을 끝낸 시각. 선발 글이 아니면 항상 null이다.
+    selectionFinishedAt: timestamp("selection_finished_at", { withTimezone: true }),
     // GM이 참석 여부를 확정한 시각. null이면 세션이 끝났어도 아직 출석 확인이 남아 있다.
     attendanceConfirmedAt: timestamp("attendance_confirmed_at", { withTimezone: true }),
     // 출석을 처음 확정한 시각(GM이든 자동이든). 후기 작성 7일 기준이고, attendanceConfirmedAt은 마지막 확정 시각이다.

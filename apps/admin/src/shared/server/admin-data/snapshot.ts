@@ -9,6 +9,7 @@ import {
   gameCancelledRecipients,
   isAutoConfirmedAttendance,
   isSessionStarted,
+  RECRUIT_METHOD_LABEL,
   sessionEndAt,
   type AbsenceAddedTag,
 } from "@roll-and-call/database/games/model";
@@ -162,7 +163,7 @@ export const loadSnapshot = cache(async () => {
       recruitStatus: gameStatus(game, now),
       createdAt: game.createdAt,
       filledAt: confirmedJoins[game.maxPlayers - 1],
-      recruitMethod: game.recruitMethod === "lottery" ? "추첨" : "선착순",
+      recruitMethod: RECRUIT_METHOD_LABEL[game.recruitMethod],
       recruitDeadline: game.endDate,
       playTime: game.playMinutes ? formatPlayMinutes(game.playMinutes) : undefined,
       genres: game.genres,

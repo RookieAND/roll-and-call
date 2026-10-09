@@ -666,6 +666,13 @@
       "when": 1798600000000,
       "tag": "0100_application_note",
       "breakpoints": true
+    },
+    {
+      "idx": 101,
+      "version": "7",
+      "when": 1798700000000,
+      "tag": "0101_selection_finished_at",
+      "breakpoints": true
     }
   ]
 }

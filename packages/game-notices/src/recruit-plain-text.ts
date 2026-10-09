@@ -1,5 +1,5 @@
 import type { Game } from "@roll-and-call/database";
-import { formatPlayMinutes } from "@roll-and-call/database/games/model";
+import { formatPlayMinutes, RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
 
 import { inlineCodeTags } from "./inline-code-tags";
 import { formatDateTime } from "./lib/format-date-time";
@@ -28,7 +28,7 @@ export function recruitPlainText({
   // 머리 줄 등 본문 앞에 붙을 글자 수를 뺀 한 메시지 상한.
   limit?: number;
 }): { content: string; followUps: string[] } {
-  const method = game.recruitMethod === "lottery" ? "추첨" : "선착순";
+  const method = RECRUIT_METHOD_LABEL[game.recruitMethod];
   const markdown = (value: string | null) =>
     // 빈 문단이 줄 바꿈으로 쌓이지 않게 연속 빈 줄은 하나로 줄인다.
     value ? richTextToMarkdown(value).replaceAll(/\n{3,}/g, "\n\n") : "";

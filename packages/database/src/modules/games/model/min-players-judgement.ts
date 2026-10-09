@@ -18,9 +18,27 @@ export function judgeMinPlayers({
   judgedAt: Date | string | null;
 }): MinPlayersJudgement {
   if (minPlayers === null || judgedAt !== null) return "skip";
-  const gathered =
-    recruitMethod === RECRUIT_METHOD.lottery
-      ? countMinPlayersPool({ confirmedCount, applicantCount })
-      : confirmedCount;
-  return gathered < minPlayers ? "cancel" : "pass";
+  return gatheredCount({ recruitMethod, confirmedCount, applicantCount }) < minPlayers
+    ? "cancel"
+    : "pass";
+}
+
+function gatheredCount({
+  recruitMethod,
+  confirmedCount,
+  applicantCount,
+}: {
+  recruitMethod: RecruitMethod;
+  confirmedCount: number;
+  applicantCount: number;
+}): number {
+  switch (recruitMethod) {
+    case RECRUIT_METHOD.firstCome:
+      return confirmedCount;
+    case RECRUIT_METHOD.lottery:
+    case RECRUIT_METHOD.selection:
+      return countMinPlayersPool({ confirmedCount, applicantCount });
+    default:
+      return recruitMethod satisfies never;
+  }
 }

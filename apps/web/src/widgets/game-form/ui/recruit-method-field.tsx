@@ -14,6 +14,7 @@ import { LockedModeNotice } from "./locked-mode-notice";
 const DESCRIPTION = {
   [RECRUIT_METHOD.firstCome]: "신청 순서대로 확정",
   [RECRUIT_METHOD.lottery]: "마감 때 뽑음",
+  [RECRUIT_METHOD.selection]: "GM이 직접 고름",
 } as const;
 
 interface RecruitMethodFieldProps {
@@ -33,7 +34,7 @@ export function RecruitMethodField({ value, onChange, locked = false }: RecruitM
           aria-label="모집 방식"
           className="grid grid-cols-2 gap-100"
         >
-          {RECRUIT_METHODS.map((method) => (
+          {RECRUIT_METHODS.filter((method) => method !== RECRUIT_METHOD.selection).map((method) => (
             <RadioCard.Root key={method} value={method} indicator="radio">
               <RadioCard.Title>{recruitMethodLabel(method)}</RadioCard.Title>
               <RadioCard.Description>{DESCRIPTION[method]}</RadioCard.Description>

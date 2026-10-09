@@ -140,6 +140,14 @@ export const MESSAGE_TEXTS = [
     extra: [],
   },
   {
+    key: "cancel_selection_expired",
+    caseKey: "cancel",
+    place: "embed",
+    label: "기한 안에 선발을 마치지 않아 취소됐어요",
+    body: "기한 안에 선발을 마치지 않아 취소되었습니다.",
+    extra: [],
+  },
+  {
     key: "moved_waiting_line",
     caseKey: "leave",
     place: "body",

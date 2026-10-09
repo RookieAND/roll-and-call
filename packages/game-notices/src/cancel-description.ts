@@ -7,6 +7,7 @@ export function cancelTextKey(kind: Game["cancelKind"]): MessageTextKey {
   if (kind === GAME_CANCEL_KIND.staff) return "cancel_staff";
   if (kind === GAME_CANCEL_KIND.auto) return "cancel_auto";
   if (kind === GAME_CANCEL_KIND.minPlayersUnmet) return "cancel_min_players";
+  if (kind === GAME_CANCEL_KIND.selectionExpired) return "cancel_selection_expired";
   return "cancel_gm";
 }
 
