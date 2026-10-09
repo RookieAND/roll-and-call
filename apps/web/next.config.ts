@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const supabaseHost = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).hostname;
+
 const nextConfig: NextConfig = {
   transpilePackages: [
     "@roll-and-call/database",
@@ -13,8 +15,16 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["@roll-and-call/ui"],
   },
   images: {
-    // Vercel 변환 한도를 넘기면 새 폭 요청이 402로 깨진다. 이미지는 업로드 때 이미 줄이므로 변환을 끈다.
-    unoptimized: true,
+    // 변환은 썸네일에만 쓴다(서버·봇 아이콘은 개별 unoptimized). 폭은 카드(412px) 1~2배와 목록 썸네일(56px) 2배, 총 3종으로 묶는다.
+    deviceSizes: [420, 840],
+    imageSizes: [112],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: supabaseHost,
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
   },
 };
 
