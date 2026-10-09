@@ -18,7 +18,7 @@ export function FactRows({ items, labelWidth = 88 }: FactRowsProps) {
         <div
           key={label}
           style={{ gridTemplateColumns: `${labelWidth}px minmax(0,1fr)` }}
-          className="grid min-h-[36px] items-center gap-x-150"
+          className="grid min-h-9 items-center gap-x-150"
         >
           <Text typography="body4" foreground="hint" render={<dt />}>
             {label}

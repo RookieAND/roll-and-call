@@ -65,7 +65,7 @@ export function ProfileLinksField({ value, onChange, discordHandle }: ProfileLin
                 >
                   <Select.Trigger
                     aria-label={`${index + 1}번째 링크 서비스`}
-                    className="h-11 w-[132px] flex-none gap-075"
+                    className="h-11 w-33 flex-none gap-075"
                   />
                   <Select.Popup>
                     {SERVICE_OPTIONS.map((option) => (

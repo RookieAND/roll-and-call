@@ -26,7 +26,7 @@ export function OwnedCategoryCard({ category, defaultOpen }: OwnedCategoryCardPr
               <ChevronDown
                 size={18}
                 aria-hidden
-                className="flex-none text-hint transition-transform group-data-[panel-open]:rotate-180"
+                className="flex-none text-hint transition-transform group-data-panel-open:rotate-180"
               />
             </HStack>
             <Text typography="body3" foreground="muted" className="break-keep">

@@ -41,7 +41,7 @@ export function EntryBackdrop() {
         </div>
       </div>
       <span
-        className="absolute top-[250px] left-1/2 size-[300px] -translate-1/2 rounded-full opacity-80"
+        className="absolute top-62.5 left-1/2 size-75 -translate-1/2 rounded-full opacity-80"
         style={{
           backgroundImage:
             "radial-gradient(closest-side, var(--rc-color-bg-canvas-base), transparent)",

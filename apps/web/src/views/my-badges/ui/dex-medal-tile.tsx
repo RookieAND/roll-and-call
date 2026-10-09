@@ -29,7 +29,7 @@ export function DexMedalTile({ medal, bordered = false, caption, children }: Dex
           typography="body4"
           weight="extrabold"
           foreground={nameForeground}
-          className="leading-tight [text-wrap:balance]"
+          className="leading-tight text-balance"
         >
           {medal.name}
         </Text>

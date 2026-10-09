@@ -54,7 +54,7 @@ export function Panel({
       ) : null}
       <div
         className={cn(
-          "min-h-0 flex-1 [&_[data-slot=table-container]]:rounded-none [&_[data-slot=table-container]]:border-0",
+          "min-h-0 flex-1 **:data-[slot=table-container]:rounded-none **:data-[slot=table-container]:border-0",
           bodyClassName,
         )}
       >

@@ -15,7 +15,7 @@ export function GameFilterButton({ count, className, ...props }: GameFilterButto
         <Badge
           colorPalette="primary"
           aria-hidden
-          className="absolute top-0 right-0 h-[18px] min-w-[18px] justify-center rounded-full bg-primary-600 px-050 py-0 font-extrabold text-on-primary tabular-nums"
+          className="absolute top-0 right-0 h-4.5 min-w-4.5 justify-center rounded-full bg-primary-600 px-050 py-0 font-extrabold text-on-primary tabular-nums"
         >
           {count}
         </Badge>

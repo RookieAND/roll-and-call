@@ -21,7 +21,7 @@ export function HelpSteps({ steps }: HelpStepsProps) {
                 weight="extrabold"
                 foreground="onPrimary"
                 render={<span />}
-                className="flex size-[26px] items-center justify-center rounded-400 bg-primary-600 tabular-nums"
+                className="flex size-6.5 items-center justify-center rounded-400 bg-primary-600 tabular-nums"
               >
                 {index + 1}
               </Text>

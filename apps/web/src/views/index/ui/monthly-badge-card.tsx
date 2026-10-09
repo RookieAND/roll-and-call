@@ -16,7 +16,7 @@ export function MonthlyBadgeCard() {
     >
       <div className="relative flex-none pb-100">
         <BadgeMedal emoji="🎖️" look={4} size="md" />
-        <span className="absolute bottom-0 left-1/2 h-[18px] -translate-x-1/2 rounded-full bg-primary-500 px-100 text-body5 leading-[18px] font-extrabold whitespace-nowrap text-on-primary ring-2 ring-surface">
+        <span className="absolute bottom-0 left-1/2 h-4.5 -translate-x-1/2 rounded-full bg-primary-500 px-100 text-body5 leading-4.5 font-extrabold whitespace-nowrap text-on-primary ring-2 ring-surface">
           9월
         </span>
       </div>

@@ -19,7 +19,7 @@ export function FlowStepCard({ step, order }: FlowStepCardProps) {
       render={<li />}
       className="relative overflow-hidden rounded-700 border border-gray-200 bg-surface px-225 pt-250 pb-225"
     >
-      <span className="absolute inset-x-0 top-0 h-[3px]" style={{ background: ink }} />
+      <span className="absolute inset-x-0 top-0 h-0.75" style={{ background: ink }} />
       <HStack align="center" gap="150">
         <span
           className="flex size-12 flex-none items-center justify-center rounded-600"

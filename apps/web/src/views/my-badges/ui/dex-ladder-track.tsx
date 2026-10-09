@@ -12,11 +12,11 @@ export function DexLadderTrack({ total }: DexLadderTrackProps) {
     <div className="relative">
       <span
         aria-hidden
-        className="absolute top-[25px] right-[10%] left-[10%] h-[3px] rounded-100 bg-gray-200"
+        className="absolute top-6.25 right-[10%] left-[10%] h-0.75 rounded-100 bg-gray-200"
       />
       <span
         aria-hidden
-        className="absolute top-[25px] left-[10%] h-[3px] rounded-100 bg-rank-gold"
+        className="absolute top-6.25 left-[10%] h-0.75 rounded-100 bg-rank-gold"
         style={{ width: `${total.fillPercent}%` }}
       />
       <Grid cols={5} className="relative">

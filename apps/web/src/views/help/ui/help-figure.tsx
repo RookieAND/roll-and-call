@@ -113,7 +113,7 @@ export function HelpFigure({ figure }: HelpFigureProps) {
           key={service.key}
           role="img"
           aria-label={service.label}
-          className="flex size-[34px] items-center justify-center rounded-400 border border-gray-200 text-gray-600"
+          className="flex size-8.5 items-center justify-center rounded-400 border border-gray-200 text-gray-600"
         >
           <BrandMark service={service.key} size={16} />
         </span>

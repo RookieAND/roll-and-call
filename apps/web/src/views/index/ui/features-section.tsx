@@ -55,7 +55,7 @@ export function FeaturesSection() {
             description="참여자가 되는 시간을 칠하면 겹치는 시간이 진하게 보입니다."
             visual={
               <HStack align="center" justify="center" className="h-full">
-                <div className="grid grid-cols-[repeat(7,22px)] auto-rows-[18px] gap-050">
+                <div className="grid grid-cols-[repeat(7,22px)] auto-rows-4.5 gap-050">
                   {FEATURE_HEAT_STEPS.map((step, index) => (
                     <span
                       key={index}

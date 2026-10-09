@@ -69,7 +69,7 @@ export function UserDetailLoading() {
               <Panel
                 footer={<SkeletonPager />}
                 right={
-                  <div className="w-[132px] [&_[data-slot=select-trigger]]:h-[32px] [&_[data-slot=select-trigger]]:min-h-[32px]">
+                  <div className="w-[132px] **:data-[slot=select-trigger]:h-8 **:data-[slot=select-trigger]:min-h-8">
                     <SkeletonSelect label="전체" />
                   </div>
                 }

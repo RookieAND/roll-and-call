@@ -36,7 +36,7 @@ export function BadgeAwardSheet({ sheet }: BadgeAwardSheetProps) {
     <Sheet.Root open={open} onOpenChange={(next) => !next && close()}>
       <Sheet.Popup aria-label="새 업적">
         {/* 메달 뒤 빛살이 시트 가장자리까지 번지도록 Body를 패딩 밖으로 넓힌다. */}
-        <Sheet.Body className="-mx-250 -mt-250 px-250 pt-250 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <Sheet.Body className="-mx-250 -mt-250 px-250 pt-250 scrollbar-none [&::-webkit-scrollbar]:hidden">
           <Sheet.Handle />
           {sheet.kind === AWARD_SHEET_KIND.retro ? (
             <AwardRetro sheet={sheet} />

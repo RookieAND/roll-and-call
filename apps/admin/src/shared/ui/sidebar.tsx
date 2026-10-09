@@ -32,7 +32,7 @@ export function Sidebar({
   const roleLabel = platformAdmin ? "플랫폼 관리자" : `${server.name} ${STAFF_ROLE_LABEL[role]}`;
   const emphasizedRole = platformAdmin || role === "owner";
   return (
-    <VStack className="sticky top-0 h-dvh w-[212px] shrink-0 border-r border-gray-200 bg-surface">
+    <VStack className="sticky top-0 h-dvh w-53 shrink-0 border-r border-gray-200 bg-surface">
       <HStack
         align="center"
         gap="100"
@@ -75,7 +75,7 @@ export function Sidebar({
           weight="bold"
           foreground="muted"
           aria-hidden
-          className="grid size-[28px] shrink-0 place-items-center rounded-full bg-gray-200"
+          className="grid size-7 shrink-0 place-items-center rounded-full bg-gray-200"
         >
           {nickname.slice(0, 1)}
         </Text>

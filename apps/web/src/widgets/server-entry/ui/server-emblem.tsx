@@ -20,7 +20,7 @@ const PULSE_DELAYS = ["0s", "1.3s"] as const;
 // 서버 아이콘 둘레로 번지는 물결 두 겹과, 오른쪽 아래에 붙는 상태 표시.
 export function ServerEmblem({ name, icon, mark, dimmed = false }: ServerEmblemProps) {
   return (
-    <div className="relative size-[104px] flex-none">
+    <div className="relative size-26 flex-none">
       {PULSE_DELAYS.map((delay) => (
         <span
           key={delay}
@@ -37,7 +37,7 @@ export function ServerEmblem({ name, icon, mark, dimmed = false }: ServerEmblemP
       {!isUndefined(mark) && (
         <span
           className={cn(
-            "absolute -right-100 -bottom-100 flex size-[34px] items-center justify-center rounded-full text-white shadow-[0_0_0_4px_var(--rc-color-bg-canvas-base)]",
+            "absolute -right-100 -bottom-100 flex size-8.5 items-center justify-center rounded-full text-white shadow-[0_0_0_4px_var(--rc-color-bg-canvas-base)]",
             mark.className,
           )}
         >

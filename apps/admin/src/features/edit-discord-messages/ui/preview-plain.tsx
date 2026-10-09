@@ -22,7 +22,7 @@ const SECTIONS = [
 // 구인 개설은 임베드 없이 머리 줄 아래에 평문 본문과 버튼이 붙는다. 본문은 고칠 수 없는 자리다.
 export function PreviewPlain() {
   return (
-    <div className="mt-050 flex flex-col gap-050 leading-[22px]">
+    <div className="mt-050 flex flex-col gap-050 leading-5.5">
       {SECTIONS.map(({ heading, large, items }) => (
         <div key={heading}>
           <div className={large ? "text-body3 font-bold text-white" : "font-bold text-white"}>

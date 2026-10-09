@@ -15,7 +15,7 @@ export function DeniedView({ nickname, userAppUrl }: DeniedViewProps) {
         typography="heading3"
         foreground="hint"
         aria-hidden
-        className="mb-175 grid size-[38px] place-items-center rounded-400 bg-gray-100"
+        className="mb-175 grid size-9.5 place-items-center rounded-400 bg-gray-100"
       >
         !
       </Text>

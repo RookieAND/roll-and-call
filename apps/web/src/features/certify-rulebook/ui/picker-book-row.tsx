@@ -8,7 +8,7 @@ import { CERT_OPTION, type CertOptionType } from "@/entities/rulebook";
 import { bookTitleForeground } from "./book-title-foreground";
 
 const row = cva(
-  "flex min-h-[60px] items-center gap-150 rounded-500 border border-gray-200 px-175 py-150",
+  "flex min-h-15 items-center gap-150 rounded-500 border border-gray-200 px-175 py-150",
   {
     variants: {
       pickable: {

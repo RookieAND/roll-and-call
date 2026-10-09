@@ -36,7 +36,7 @@ export function ActionFilter({ groups }: ActionFilterProps) {
           <Button
             variant="outline"
             colorPalette="gray"
-            className="h-[44px] w-[140px] justify-between font-normal"
+            className="h-[44px] w-35 justify-between font-normal"
           />
         }
       >

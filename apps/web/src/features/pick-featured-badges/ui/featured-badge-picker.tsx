@@ -93,11 +93,7 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
                   {index + 1}
                 </Text>
                 <BadgeMedal emoji={choice.emoji} look={choice.look} ribbon={choice.tag} size="md" />
-                <Text
-                  typography="body4"
-                  weight="extrabold"
-                  className="leading-tight [text-wrap:balance]"
-                >
+                <Text typography="body4" weight="extrabold" className="leading-tight text-balance">
                   {choice.name}
                 </Text>
               </VStack>

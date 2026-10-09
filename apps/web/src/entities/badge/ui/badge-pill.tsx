@@ -67,7 +67,7 @@ export function BadgePill({ emoji, name, look, tag, size = "md", className }: Ba
       </span>
       <span className="min-w-0 truncate">{name}</span>
       {tag && (
-        <span className="flex h-[18px] flex-none items-center rounded-full bg-primary-600 px-075 text-body4 leading-none font-extrabold text-on-primary">
+        <span className="flex h-4.5 flex-none items-center rounded-full bg-primary-600 px-075 text-body4 leading-none font-extrabold text-on-primary">
           {tag}
         </span>
       )}

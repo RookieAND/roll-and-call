@@ -27,7 +27,7 @@ export function HelpListView({ from }: HelpListViewProps) {
             className="border-tinted-border bg-tinted-bg hover:bg-tinted-bg-hover"
           >
             <HStack align="center" gap="150" className="px-050 py-025">
-              <span className="flex size-[38px] flex-none items-center justify-center rounded-500 bg-primary-600 text-white">
+              <span className="flex size-9.5 flex-none items-center justify-center rounded-500 bg-primary-600 text-white">
                 <PlayCircle size={19} aria-hidden />
               </span>
               <VStack gap="025" className="min-w-0 flex-1">

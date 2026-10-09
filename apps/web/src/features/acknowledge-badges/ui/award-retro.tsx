@@ -28,11 +28,7 @@ export function AwardRetro({ sheet }: AwardRetroProps) {
         {sheet.items.map((item) => (
           <VStack key={item.key} align="center" gap="075" render={<li />} className="text-center">
             <BadgeMedal emoji={item.emoji} look={item.look} ribbon={item.ribbon} />
-            <Text
-              typography="body4"
-              weight="extrabold"
-              className="leading-tight [text-wrap:balance]"
-            >
+            <Text typography="body4" weight="extrabold" className="leading-tight text-balance">
               {item.name}
             </Text>
           </VStack>

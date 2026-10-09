@@ -15,7 +15,7 @@ export function ServerSelectView({ nickname, servers }: ServerSelectViewProps) {
     <VStack className="min-h-dvh bg-canvas">
       <SelectTop nickname={nickname} />
       <VStack align="center" render={<main />} className="flex-1 px-300 py-500">
-        <VStack gap="250" className="w-full max-w-[1040px]">
+        <VStack gap="250" className="w-full max-w-260">
           <VStack gap="075">
             <Text typography="heading1" render={<h1 />}>
               관리할 서버를 골라 주세요

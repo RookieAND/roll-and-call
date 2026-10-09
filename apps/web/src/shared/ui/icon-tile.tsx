@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import type { LucideIcon } from "lucide-react";
 
-const iconTile = cva("flex h-[34px] w-[34px] flex-none items-center justify-center rounded-400", {
+const iconTile = cva("flex h-8.5 w-8.5 flex-none items-center justify-center rounded-400", {
   variants: {
     tone: {
       primary: "bg-primary-50 text-tinted-ink",

@@ -38,7 +38,7 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
             { label: "연 세션", value: ACTIVITY_ROLE.hosted },
             { label: "참여 세션", value: ACTIVITY_ROLE.played },
           ]}
-          className="w-[132px] [&_[data-slot=select-trigger]]:h-[32px] [&_[data-slot=select-trigger]]:min-h-[32px]"
+          className="w-[132px] **:data-[slot=select-trigger]:h-8 **:data-[slot=select-trigger]:min-h-8"
         />
       }
       footer={

@@ -15,7 +15,7 @@ export function DrawQueueMore({ noun, count, children }: DrawQueueMoreProps) {
   return (
     <Collapsible.Root>
       <Collapsible.Panel>{children}</Collapsible.Panel>
-      <Collapsible.Trigger className="group flex min-h-[46px] w-full cursor-pointer items-center justify-center gap-100 border-t border-gray-200 hover:bg-gray-50">
+      <Collapsible.Trigger className="group flex min-h-11.5 w-full cursor-pointer items-center justify-center gap-100 border-t border-gray-200 hover:bg-gray-50">
         <Text typography="body3" weight="bold" foreground="muted" render={<span />}>
           <span className="group-data-panel-open:hidden">
             {noun} {count}명 더 보기

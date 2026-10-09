@@ -30,7 +30,7 @@ export function StaffCandidateRow({ candidate, selected, onToggle }: StaffCandid
         weight="bold"
         foreground="muted"
         aria-hidden
-        className="grid size-[28px] shrink-0 place-items-center rounded-full bg-gray-200"
+        className="grid size-7 shrink-0 place-items-center rounded-full bg-gray-200"
       >
         {candidate.nickname.slice(0, 1)}
       </Text>

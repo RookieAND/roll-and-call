@@ -70,7 +70,7 @@ export function FeatureCarousel() {
               aria-hidden={!active}
               inert={!active}
               className={cn(
-                "grid grid-cols-2 content-start gap-150 transition-[opacity,transform,visibility] duration-[450ms] [grid-area:1/1]",
+                "grid grid-cols-2 content-start gap-150 transition-[opacity,transform,visibility] duration-450 [grid-area:1/1]",
                 active ? "visible opacity-100" : "invisible translate-y-2.5 opacity-0",
               )}
             >

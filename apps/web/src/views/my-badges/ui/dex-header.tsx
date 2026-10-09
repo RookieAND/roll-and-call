@@ -57,11 +57,7 @@ export function DexHeader({ earnedCount, featured }: DexHeaderProps) {
                   look={badge.look}
                   ribbon={badge.monthKey ? monthLabel(badge.monthKey) : null}
                 />
-                <Text
-                  typography="body4"
-                  weight="extrabold"
-                  className="leading-tight [text-wrap:balance]"
-                >
+                <Text typography="body4" weight="extrabold" className="leading-tight text-balance">
                   {badge.name}
                 </Text>
               </VStack>

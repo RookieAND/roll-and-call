@@ -45,7 +45,7 @@ export function GameRecruitMethodSection({ game, now }: GameRecruitMethodSection
       </Text>
       <Card.Root radius={500} padding="none" className="px-175 py-150">
         <HStack align="center" gap="150">
-          <span className="flex size-[38px] flex-none items-center justify-center rounded-400 bg-tinted-bg text-tinted-ink">
+          <span className="flex size-9.5 flex-none items-center justify-center rounded-400 bg-tinted-bg text-tinted-ink">
             <Icon size={20} aria-hidden />
           </span>
           <VStack gap="050" className="min-w-0 flex-1">

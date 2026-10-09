@@ -80,7 +80,7 @@ export function ShotCard({
         <VStack
           align="center"
           justify="center"
-          className="mx-150 mb-150 h-[216px] rounded-400 border border-dashed border-gray-300 p-150 text-center"
+          className="mx-150 mb-150 h-54 rounded-400 border border-dashed border-gray-300 p-150 text-center"
         >
           <Text typography="body3" foreground="hint">
             보관 기간이 지나 사진이 삭제되었습니다.
@@ -88,7 +88,7 @@ export function ShotCard({
         </VStack>
       ) : (
         <>
-          <div className="relative h-[360px] w-full border-y border-(--rc-color-border-subtle) bg-gray-100">
+          <div className="relative h-90 w-full border-y border-(--rc-color-border-subtle) bg-gray-100">
             {url ? (
               <>
                 {/* ponytail: 사진 자체가 누르는 자리라 버튼 룩이 없다. 평소에도 반려 중에도 확대 창을 연다(D296). */}

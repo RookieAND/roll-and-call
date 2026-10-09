@@ -42,7 +42,7 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
         trail={[{ href: listHref, label: "활동 기록" }]}
         contentWidth={960}
       />
-      <VStack gap="150" className="mx-auto w-full max-w-[960px] flex-1 p-200">
+      <VStack gap="150" className="mx-auto w-full max-w-240 flex-1 p-200">
         <section className="rounded-600 border border-gray-200 bg-surface">
           <HStack align="center" gap="150" className="px-200 py-175">
             <IconTile icon={actionIcon(entry.action)} tone={tone} size="xl" />

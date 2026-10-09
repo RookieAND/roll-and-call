@@ -190,7 +190,7 @@ export function ShotViewer({
                   />
                 </HStack>
               ) : (
-                <HStack className="mx-auto h-full max-w-[760px] min-w-0 flex-1">
+                <HStack className="mx-auto h-full max-w-190 min-w-0 flex-1">
                   <ZoomPane
                     url={photoUrls[current.key]}
                     label={`${current.label} 확대`}
@@ -231,7 +231,7 @@ export function ShotViewer({
                   aria-current={candidateIndex === index}
                   onClick={() => move(candidateIndex - index)}
                   className={cn(
-                    "h-[44px] w-[62px] rounded-200 bg-gray-100 px-0 text-body4 font-normal",
+                    "h-[44px] w-15.5 rounded-200 bg-gray-100 px-0 text-body4 font-normal",
                     candidateIndex === index && "border-2 border-gray-900",
                   )}
                 >

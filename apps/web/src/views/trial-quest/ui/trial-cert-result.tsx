@@ -63,7 +63,7 @@ export function TrialCertResult({ onBack, onOpenMine }: TrialCertResultProps) {
                   <ChevronDown
                     size={18}
                     aria-hidden
-                    className="flex-none text-hint transition-transform group-data-[panel-open]:rotate-180"
+                    className="flex-none text-hint transition-transform group-data-panel-open:rotate-180"
                   />
                 </HStack>
               </Collapsible.Trigger>

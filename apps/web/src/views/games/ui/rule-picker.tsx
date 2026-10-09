@@ -47,7 +47,7 @@ export function RulePicker({ options, selected, onDone }: RulePickerProps) {
           <ul className="min-h-0 flex-1 divide-y divide-gray-200 overflow-y-auto border-t border-gray-200">
             {visible.map((option) => (
               <li key={option.key}>
-                <label className="flex min-h-[52px] cursor-pointer items-center gap-150">
+                <label className="flex min-h-13 cursor-pointer items-center gap-150">
                   <Checkbox.Root
                     checked={keys.includes(option.key)}
                     onCheckedChange={() => setKeys(xor(keys, [option.key]))}

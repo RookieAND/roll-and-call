@@ -47,7 +47,7 @@ export function QuizStep({
         <Text
           typography="subtitle1"
           render={<label htmlFor={ANSWER_ID} />}
-          className="break-keep [text-wrap:pretty]"
+          className="break-keep text-pretty"
         >
           {question}
         </Text>

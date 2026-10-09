@@ -70,7 +70,7 @@ export function ForumTagSection({
                 </Table.Cell>
                 <Table.Cell>
                   {deleted ? (
-                    <span className="inline-flex items-center rounded-200 border border-dashed border-gray-500 px-100 text-body4 leading-[18px] text-muted">
+                    <span className="inline-flex items-center rounded-200 border border-dashed border-gray-500 px-100 text-body4 leading-4.5 text-muted">
                       삭제된 태그
                     </span>
                   ) : null}
@@ -88,7 +88,7 @@ export function ForumTagSection({
                     <Select.Trigger
                       aria-label={`${row.label} 태그`}
                       placeholder="태그를 다시 고르세요"
-                      className="h-(--rc-size-control-xs) w-[188px]"
+                      className="h-(--rc-size-control-xs) w-47"
                     />
                     <Select.Popup>
                       {items.map((item) => (

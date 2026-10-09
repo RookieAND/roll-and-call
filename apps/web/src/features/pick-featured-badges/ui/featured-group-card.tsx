@@ -26,7 +26,7 @@ export function FeaturedGroupCard({
   return (
     <Card.Root padding="none" className="overflow-hidden">
       <Collapsible.Root defaultOpen={defaultOpen}>
-        <Collapsible.Trigger className="group flex min-h-[52px] w-full cursor-pointer items-center gap-150 bg-gray-50 px-175 py-100 text-left">
+        <Collapsible.Trigger className="group flex min-h-13 w-full cursor-pointer items-center gap-150 bg-gray-50 px-175 py-100 text-left">
           <span
             aria-hidden
             className="flex size-9 flex-none items-center justify-center rounded-400 bg-surface text-subtitle1"

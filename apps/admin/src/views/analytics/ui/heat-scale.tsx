@@ -16,7 +16,7 @@ export function HeatScale({ caption }: HeatScaleProps) {
         <span
           key={level}
           aria-hidden
-          className="h-[10px] w-[20px] rounded-100"
+          className="h-[10px] w-5 rounded-100"
           style={{ background: level ? `var(--color-heat-${level})` : "var(--color-gray-100)" }}
         />
       ))}

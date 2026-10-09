@@ -24,7 +24,7 @@ export function HeatSampleHourRow({ hour, steps }: HeatSampleHourRowProps) {
         weight="bold"
         foreground="hint"
         render={<span />}
-        className="flex h-[25px] items-center tabular-nums"
+        className="flex h-6.25 items-center tabular-nums"
       >
         {hour}
       </Text>

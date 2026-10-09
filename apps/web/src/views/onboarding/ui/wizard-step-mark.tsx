@@ -1,10 +1,9 @@
 import { Text } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
-const mark = cva(
-  "flex size-[22px] flex-none items-center justify-center rounded-300 tabular-nums",
-  { variants: { done: { true: "bg-primary-600 text-white", false: "bg-gray-100 text-hint" } } },
-);
+const mark = cva("flex size-5.5 flex-none items-center justify-center rounded-300 tabular-nums", {
+  variants: { done: { true: "bg-primary-600 text-white", false: "bg-gray-100 text-hint" } },
+});
 
 const connector = cva("h-0.5 flex-1", {
   variants: { done: { true: "bg-tinted-border", false: "bg-gray-200" } },

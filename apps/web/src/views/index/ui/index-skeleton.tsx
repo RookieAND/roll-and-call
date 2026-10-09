@@ -31,7 +31,7 @@ export function IndexSkeleton() {
                 <Skeleton width="70%" height={20} />
                 <Skeleton width="55%" height={20} />
               </VStack>
-              <Skeleton height={52} rounded={400} className="mt-100 w-full max-w-[360px]" />
+              <Skeleton height={52} rounded={400} className="mt-100 w-full max-w-90" />
             </VStack>
             <Skeleton height={320} rounded={600} className="min-w-0 flex-[1_1_360px]" />
           </HStack>

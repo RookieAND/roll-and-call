@@ -11,7 +11,7 @@ export function UserInitial({ nickname }: UserInitialProps) {
       weight="bold"
       foreground="muted"
       aria-hidden
-      className="grid size-[40px] shrink-0 place-items-center rounded-full bg-gray-200"
+      className="grid size-10 shrink-0 place-items-center rounded-full bg-gray-200"
     >
       {nickname.slice(0, 1)}
     </Text>

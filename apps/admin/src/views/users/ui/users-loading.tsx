@@ -16,7 +16,7 @@ export function UsersLoading() {
       <MembershipTabs value={MEMBERSHIP_STATUS.active} disabled />
       <LoadingRegion label="유저 목록을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="125">
-          <HStack align="center" className="relative w-[240px] shrink-0">
+          <HStack align="center" className="relative w-60 shrink-0">
             <Search
               size={14}
               aria-hidden

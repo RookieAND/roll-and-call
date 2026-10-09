@@ -39,7 +39,7 @@ export function ReviewBody({ body, lines = 3, muted = false }: ReviewBodyProps) 
           typography="body3"
           foreground={foreground}
           render={<RichText value={body} />}
-          className={`leading-[1.65] [text-wrap:pretty] ${clampClass}`}
+          className={`leading-[1.65] text-pretty ${clampClass}`}
         />
       </div>
       {long && (

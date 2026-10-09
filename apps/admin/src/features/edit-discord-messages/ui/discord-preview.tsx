@@ -137,7 +137,7 @@ export function DiscordPreview({
         className="size-10 shrink-0 rounded-full"
       />
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-075 leading-[22px]">
+        <div className="flex items-center gap-075 leading-5.5">
           <span className="font-semibold text-white">롤앤콜</span>
           <span
             className="rounded-200 px-050 text-body4 font-semibold text-white"
@@ -151,10 +151,10 @@ export function DiscordPreview({
         </div>
         {loading ? <Skeleton width="70%" height={14} className="mt-075" /> : null}
         {hasHead ? (
-          <div className="leading-[22px] whitespace-pre-line [overflow-wrap:anywhere]">{nodes}</div>
+          <div className="leading-[22px] whitespace-pre-line wrap-anywhere">{nodes}</div>
         ) : null}
         {bodyNodes ? (
-          <div className="leading-[22px] whitespace-pre-line [overflow-wrap:anywhere]">{bodyNodes}</div>
+          <div className="leading-[22px] whitespace-pre-line wrap-anywhere">{bodyNodes}</div>
         ) : null}
         {caseKey === "open" && recruitForum ? <PreviewPlain /> : null}
         {caseKey === "monthly" ? <PreviewMonthly /> : null}

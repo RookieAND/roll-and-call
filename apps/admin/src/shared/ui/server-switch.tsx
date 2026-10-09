@@ -73,7 +73,7 @@ export function ServerSwitch({ current, servers, platformAdmin }: ServerSwitchPr
         <Popover.Trigger
           aria-label={`현재 서버: ${current.name}`}
           className={cn(
-            "flex min-h-[44px] w-full items-center gap-100 rounded-400 border px-100 py-075",
+            "flex min-h-11 w-full items-center gap-100 rounded-400 border px-100 py-075",
             open
               ? "border-(--rc-color-border-primary) bg-tinted-bg"
               : "border-transparent hover:bg-gray-50",

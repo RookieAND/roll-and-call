@@ -29,7 +29,7 @@ export function RadioCardIndicator({ className }: RadioCardIndicatorProps) {
       aria-hidden
       data-slot="radio-card-indicator"
       className={cn(
-        "col-start-2 row-start-1 flex size-5 items-center justify-center rounded-full border border-gray-300 [[data-checked]_&]:border-primary-600",
+        "col-start-2 row-start-1 flex size-5 items-center justify-center rounded-full border border-gray-300 in-data-checked:border-primary-600",
         className,
       )}
     >

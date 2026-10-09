@@ -114,7 +114,7 @@ export function LinkRequestForm({ request, rulebooks, viewerId, onDone }: LinkRe
               value={selectedId}
               onValueChange={(value) => setSelectedId(value as string)}
               aria-labelledby="link-rulebook-label"
-              className="mt-025 flex max-h-[220px] flex-col gap-075 overflow-y-auto"
+              className="mt-025 flex max-h-55 flex-col gap-075 overflow-y-auto"
             >
               {candidates.map((rulebook) => (
                 <RadioCard.Root key={rulebook.id} value={rulebook.id} className="px-150 py-125">

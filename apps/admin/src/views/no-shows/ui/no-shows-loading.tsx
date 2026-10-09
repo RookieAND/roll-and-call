@@ -23,7 +23,7 @@ export function NoShowsLoading() {
       />
       <LoadingRegion label="불참 기록을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">
-          <HStack align="center" className="relative w-[240px]">
+          <HStack align="center" className="relative w-60">
             <Search
               size={14}
               aria-hidden

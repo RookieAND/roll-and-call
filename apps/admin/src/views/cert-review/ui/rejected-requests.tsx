@@ -17,7 +17,7 @@ export function RejectedRequests({ requests }: RejectedRequestsProps) {
             typography="body4"
             weight="bold"
             foreground="muted"
-            className="grid size-[18px] shrink-0 place-items-center rounded-full bg-gray-100"
+            className="grid size-4.5 shrink-0 place-items-center rounded-full bg-gray-100"
           >
             {index + 1}
           </Text>

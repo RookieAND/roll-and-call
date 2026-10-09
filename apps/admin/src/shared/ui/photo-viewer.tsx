@@ -134,7 +134,7 @@ export function PhotoViewer({
           >
             <ChevronLeft size={16} aria-hidden />
           </IconButton>
-          <VStack className="relative mx-auto h-full max-w-[760px] flex-1 overflow-hidden rounded-400">
+          <VStack className="relative mx-auto h-full max-w-190 flex-1 overflow-hidden rounded-400">
             {failed ? (
               <VStack
                 align="center"
@@ -198,7 +198,7 @@ export function PhotoViewer({
                   aria-label={photoLabel(photoIndex)}
                   aria-current
                   render={<VStack align="center" justify="center" />}
-                  className="h-[66px] w-[88px] shrink-0 border-2 border-gray-900 text-hint"
+                  className="h-[66px] w-22 shrink-0 border-2 border-gray-900 text-hint"
                 >
                   <ImageIcon size={16} aria-hidden />
                 </Card.Root>

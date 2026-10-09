@@ -13,7 +13,7 @@ export function ReviewListLoading() {
       <ReviewTabs />
       <LoadingRegion label="후기를 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">
-          <HStack align="center" className="relative w-[236px]">
+          <HStack align="center" className="relative w-59">
             <Search
               size={14}
               aria-hidden

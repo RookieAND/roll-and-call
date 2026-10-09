@@ -11,7 +11,7 @@ const list = cva("relative flex items-stretch", {
   variants: {
     variant: { line: "border-b border-gray-200", solid: "gap-050 rounded-400 bg-gray-100 p-050" },
     scrollable: {
-      true: "overflow-x-auto [scrollbar-width:none] [mask-image:linear-gradient(90deg,transparent,#000_16px,#000_calc(100%-16px),transparent)]",
+      true: "overflow-x-auto scrollbar-none mask-[linear-gradient(90deg,transparent,#000_16px,#000_calc(100%-16px),transparent)]",
       false: "",
     },
   },

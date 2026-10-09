@@ -33,7 +33,7 @@ export function CategoryCard({ rulebook }: CategoryCardProps) {
                 typography="body4"
                 weight="bold"
                 foreground="muted"
-                className="shrink-0 leading-[22px]"
+                className="shrink-0 leading-5.5"
               >
                 GM 조건
               </Text>

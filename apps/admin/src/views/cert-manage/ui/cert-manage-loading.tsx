@@ -19,7 +19,7 @@ export function CertManageLoading() {
       <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/manage" />
       <LoadingRegion label="인증 관리를 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">
-          <HStack align="center" className="relative w-[240px]">
+          <HStack align="center" className="relative w-60">
             <Search
               size={14}
               aria-hidden

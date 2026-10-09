@@ -55,7 +55,7 @@ export async function ProfileSummary({
         typography="body2"
         foreground={bioForeground}
         render={<p />}
-        className="mt-175 [text-wrap:pretty]"
+        className="mt-175 text-pretty"
       >
         {bioText}
       </Text>

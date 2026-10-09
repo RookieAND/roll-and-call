@@ -59,7 +59,7 @@ export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
           <span className="break-keep">검색어를 바꾸거나 직접 구인을 올릴 수 있습니다.</span>
         }
         action={
-          <HStack gap="100" className="mt-100 w-full [&>*]:flex-1">
+          <HStack gap="100" className="mt-100 w-full *:flex-1">
             <Button
               render={<ServerLink path={gamesHref(filterParams({ ...filter, q: undefined }))} />}
               variant="outline"

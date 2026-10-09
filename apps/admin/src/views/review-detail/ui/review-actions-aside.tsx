@@ -23,7 +23,7 @@ export function ReviewActionsAside({ review, actionHref }: ReviewActionsAsidePro
   return (
     <VStack
       render={<aside />}
-      className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-[300px] shrink-0 overflow-y-auto border-l border-gray-200 bg-surface"
+      className="sticky top-(--rc-size-appbar) h-[calc(100dvh-var(--rc-size-appbar))] w-75 shrink-0 overflow-y-auto border-l border-gray-200 bg-surface"
     >
       <AsideHeading>조치</AsideHeading>
       <VStack gap="075" className="p-150">

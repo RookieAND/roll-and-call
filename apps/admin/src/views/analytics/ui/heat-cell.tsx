@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 const cell = cva(
-  "grid h-[40px] place-items-center rounded-200 text-body4 font-bold tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:cursor-default",
+  "grid h-10 place-items-center rounded-200 text-body4 font-bold tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:cursor-default",
   {
     variants: {
       strong: { true: "text-heat-ink-strong", false: "text-heat-ink" },

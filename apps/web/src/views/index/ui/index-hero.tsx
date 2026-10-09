@@ -37,7 +37,7 @@ export function IndexHero({ servers, joinable, authError }: IndexHeroProps) {
             <Text
               typography="heading1"
               render={<h1 />}
-              className="text-[length:clamp(38px,5.4cqw,68px)] leading-[1.15] tracking-[-0.05em]"
+              className="text-[length:clamp(38px,5.4cqw,68px)] leading-[1.15] tracking-tighter"
             >
               구인부터 후기까지
               <br />
@@ -49,13 +49,13 @@ export function IndexHero({ servers, joinable, authError }: IndexHeroProps) {
               typography="body2"
               foreground="muted"
               render={<p />}
-              className="text-[length:clamp(15px,1.4cqw,17px)] leading-[1.7] [text-wrap:pretty]"
+              className="text-[length:clamp(15px,1.4cqw,17px)] leading-[1.7] text-pretty"
             >
               구인 신청부터 일정 조율, 출석과 후기까지
               <br />
               디스코드 서버 주소 하나에서 합니다.
             </Text>
-            <VStack id={HERO_CTA_ID} gap="125" className="mt-100 w-full max-w-[360px]">
+            <VStack id={HERO_CTA_ID} gap="125" className="mt-100 w-full max-w-90">
               <IndexCta servers={servers} joinable={joinable} authError={authError} />
               {isNull(servers) && (
                 <HStack align="center" justify="center" gap="075" className="text-gray-600">

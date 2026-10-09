@@ -11,7 +11,7 @@ export function SheetItem({ className, ...props }: ButtonProps) {
       data-slot="sheet-item"
       className={(state) =>
         cn(
-          "h-auto min-h-[52px] w-full justify-between rounded-none border-b border-gray-100 px-0 text-left text-body2 font-normal text-gray-800 last:border-b-0 hover:bg-transparent",
+          "h-auto min-h-13 w-full justify-between rounded-none border-b border-gray-100 px-0 text-left text-body2 font-normal text-gray-800 last:border-b-0 hover:bg-transparent",
           resolveStateProp({ prop: className, state }),
         )
       }

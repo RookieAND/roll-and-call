@@ -52,7 +52,7 @@ export function GmSection({ analytics }: GmSectionProps) {
           상위 {TOP_COUNT}명이 {topSessions}건을 진행했습니다
         </Text>
       </HStack>
-      <HStack gap="025" className="mt-125 h-[16px] overflow-hidden rounded-100">
+      <HStack gap="025" className="mt-125 h-4 overflow-hidden rounded-100">
         {top.map((gm, index) => (
           <div
             key={gm.nickname}

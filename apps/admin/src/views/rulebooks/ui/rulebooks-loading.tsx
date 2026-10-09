@@ -28,7 +28,7 @@ export function RulebooksLoading() {
       />
       <LoadingRegion label="룰북 목록을 불러오는 중입니다" className="gap-200 p-200">
         <HStack align="center" gap="100">
-          <HStack align="center" className="relative w-[300px]">
+          <HStack align="center" className="relative w-75">
             <Search
               size={14}
               aria-hidden

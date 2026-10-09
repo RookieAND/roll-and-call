@@ -32,7 +32,7 @@ export function EarlyNotice({ serviceWeeks, hostingGms, sections }: EarlyNoticeP
       className="rounded-600 border border-gray-200 bg-surface px-300 py-400"
     >
       <VStack className="w-[300px] shrink-0">
-        <span className="mb-125 grid size-[40px] place-items-center rounded-full bg-gray-100 text-hint">
+        <span className="mb-125 grid size-10 place-items-center rounded-full bg-gray-100 text-hint">
           <Hourglass size={18} aria-hidden />
         </span>
         <Text typography="heading3" render={<h2 />}>

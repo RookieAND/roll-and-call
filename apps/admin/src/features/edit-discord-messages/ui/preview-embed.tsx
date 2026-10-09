@@ -14,14 +14,14 @@ interface PreviewEmbedProps {
 export function PreviewEmbed({ spec, description }: PreviewEmbedProps) {
   return (
     <div
-      className="mt-075 flex max-w-[420px] flex-col gap-100 rounded-200 border-l-4 px-150 pt-100 pb-150"
+      className="mt-075 flex max-w-105 flex-col gap-100 rounded-200 border-l-4 px-150 pt-100 pb-150"
       style={{ background: DISCORD.embed, borderColor: spec.color }}
     >
       <span className="font-semibold" style={spec.unlinked ? undefined : { color: DISCORD.link }}>
         {spec.emoji} 달그림자 여관
       </span>
       {description ? (
-        <div className="text-body3 leading-[20px] whitespace-pre-line [overflow-wrap:anywhere]">
+        <div className="text-body3 leading-5 whitespace-pre-line wrap-anywhere">
           {description}
           {spec.descriptionSuffix ? `\n${spec.descriptionSuffix}` : null}
         </div>

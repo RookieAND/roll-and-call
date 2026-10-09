@@ -27,7 +27,7 @@ export function PreviewCard({
       )}
     >
       <HStack align="center" gap="100">
-        <span className="flex size-[26px] flex-none items-center justify-center rounded-300 bg-gray-100 text-gray-600">
+        <span className="flex size-6.5 flex-none items-center justify-center rounded-300 bg-gray-100 text-gray-600">
           <Icon size={15} strokeWidth={2.2} aria-hidden />
         </span>
         <Text typography="body3" weight="extrabold" foreground="muted" className="flex-1 truncate">

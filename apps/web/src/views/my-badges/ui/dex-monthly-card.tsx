@@ -31,7 +31,7 @@ export function DexMonthlyCard({ card }: DexMonthlyCardProps) {
           <Text typography="subtitle1" weight="extrabold" className="break-keep">
             {card.status}
           </Text>
-          <Text typography="body3" foreground="muted" className="break-keep [text-wrap:pretty]">
+          <Text typography="body3" foreground="muted" className="break-keep text-pretty">
             {card.description}
           </Text>
           {card.monthLine && (

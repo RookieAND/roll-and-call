@@ -21,7 +21,7 @@ const icon = cva("flex-none", {
 });
 
 const ROW_CLASS =
-  "flex min-h-[60px] items-center gap-150 border-t border-gray-100 px-175 py-125 first:border-t-0";
+  "flex min-h-15 items-center gap-150 border-t border-gray-100 px-175 py-125 first:border-t-0";
 
 interface ListRowItemProps {
   row: ListRow;

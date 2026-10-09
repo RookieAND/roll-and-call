@@ -21,7 +21,7 @@ export function PhotoThumb({ url, label, onClick, selected = false }: PhotoThumb
       aria-label={label}
       aria-current={selected || undefined}
       className={cn(
-        "h-[66px] w-[88px] shrink-0 overflow-hidden",
+        "h-[66px] w-22 shrink-0 overflow-hidden",
         interactive && "cursor-zoom-in",
         selected && "border-2 border-gray-900",
       )}

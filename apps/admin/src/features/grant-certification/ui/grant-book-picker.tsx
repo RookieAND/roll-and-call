@@ -36,7 +36,7 @@ export function GrantBookPicker({ books, value, disabled, onChange }: GrantBookP
         disabled={disabled}
         onValueChange={(next) => onChange(String(next))}
         aria-label="인증할 룰북"
-        className="grid max-h-[320px] grid-cols-1 gap-075 overflow-y-auto"
+        className="grid max-h-80 grid-cols-1 gap-075 overflow-y-auto"
       >
         {shown.map((book) => (
           <RadioCard.Root key={book.id} value={book.id}>

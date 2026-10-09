@@ -20,7 +20,7 @@ export function CertQueueLoading() {
       <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert" />
       <LoadingRegion label="심사 대기열을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">
-          <HStack align="center" className="relative w-[220px]">
+          <HStack align="center" className="relative w-55">
             <Search
               size={14}
               aria-hidden

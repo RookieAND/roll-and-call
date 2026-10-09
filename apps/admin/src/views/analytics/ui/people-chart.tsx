@@ -46,7 +46,7 @@ export function PeopleChart({ people }: PeopleChartProps) {
       {people.map((week, index) => (
         <Grid
           key={week.label}
-          className={`${ROW_COLUMNS} h-[36px] items-center gap-150 border-t border-(--rc-color-border-subtle)`}
+          className={`${ROW_COLUMNS} h-9 items-center gap-150 border-t border-(--rc-color-border-subtle)`}
         >
           <Text
             typography="body4"

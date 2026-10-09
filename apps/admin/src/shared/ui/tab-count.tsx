@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 import { tabCountTone } from "./tab-count-tone";
 
 const tabCount = cva(
-  "inline-flex h-[20px] min-w-[20px] items-center justify-center rounded-full px-075 text-body4 leading-none font-bold tabular-nums",
+  "inline-flex h-5 min-w-5 items-center justify-center rounded-full px-075 text-body4 leading-none font-bold tabular-nums",
   {
     variants: {
       tone: {

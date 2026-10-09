@@ -38,7 +38,7 @@ export function EbookFields({ idPrefix, sellers, draft, onChange }: EbookFieldsP
           />
         )}
       </Field.Root>
-      <HStack gap="100" className="[&>*]:min-w-0 [&>*]:flex-1">
+      <HStack gap="100" className="[&>*]:min-w-0 *:flex-1">
         <Field.Root label="주문번호" htmlFor={`${idPrefix}-order-number`} required>
           <TextInput
             id={`${idPrefix}-order-number`}

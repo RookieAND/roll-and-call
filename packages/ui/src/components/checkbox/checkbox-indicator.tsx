@@ -17,12 +17,7 @@ export function CheckboxIndicator({ className, ...props }: CheckboxIndicatorProp
       {...props}
     >
       <Check size={14} strokeWidth={3} aria-hidden className="[[data-indeterminate]_&]:hidden" />
-      <Minus
-        size={14}
-        strokeWidth={3}
-        aria-hidden
-        className="hidden [[data-indeterminate]_&]:block"
-      />
+      <Minus size={14} strokeWidth={3} aria-hidden className="hidden in-data-indeterminate:block" />
     </BaseCheckbox.Indicator>
   );
 }

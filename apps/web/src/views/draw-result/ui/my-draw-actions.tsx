@@ -51,7 +51,7 @@ export function MyDrawActions({ gameId, hint, actions, waitlistRank }: MyDrawAct
           {hint}
         </Text>
       )}
-      <HStack gap="100" className="[&>*]:min-w-0 [&>*]:flex-1">
+      <HStack gap="100" className="[&>*]:min-w-0 *:flex-1">
         {actions.map((action) => buttons[action])}
       </HStack>
     </VStack>

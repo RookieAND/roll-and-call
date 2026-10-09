@@ -23,8 +23,8 @@ export function EditAvailabilitySkeleton() {
         <Skeleton width="100%" height={34} />
       </VStack>
 
-      {/* ponytail: bottom-[58px]는 BottomNav 높이(h-[58px])와 결합. nav 높이 바뀌면 같이 조정. */}
-      <div className="sticky bottom-[58px] z-10 border-t border-gray-200 bg-surface px-200 pt-175 pb-200">
+      {/* ponytail: bottom-14.5는 BottomNav 높이(h-[58px])와 결합. nav 높이 바뀌면 같이 조정. */}
+      <div className="sticky bottom-14.5 z-10 border-t border-gray-200 bg-surface px-200 pt-175 pb-200">
         <HStack gap="100">
           <Skeleton height={50} rounded={500} className="flex-1" />
           <Skeleton height={50} rounded={500} className="flex-1" />

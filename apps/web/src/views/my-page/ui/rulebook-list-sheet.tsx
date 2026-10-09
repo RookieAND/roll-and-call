@@ -13,7 +13,7 @@ interface RulebookListSheetProps {
 export function RulebookListSheet({ count, children }: RulebookListSheetProps) {
   return (
     <Sheet.Root>
-      <Sheet.Trigger className="flex min-h-[46px] w-full cursor-pointer items-center justify-center border-t border-gray-200 transition-colors hover:bg-gray-50">
+      <Sheet.Trigger className="flex min-h-11.5 w-full cursor-pointer items-center justify-center border-t border-gray-200 transition-colors hover:bg-gray-50">
         <Text
           typography="body4"
           weight="bold"

@@ -14,7 +14,7 @@ export function SessionStatusChips({ activeTab, activeChip, counts }: SessionSta
   return (
     <HStack
       gap="075"
-      className="overflow-x-auto px-200 pt-175 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      className="overflow-x-auto px-200 pt-175 scrollbar-none [&::-webkit-scrollbar]:hidden"
     >
       {SESSION_CHIPS[activeTab].map((chip) => {
         const selected = chip.key === activeChip;

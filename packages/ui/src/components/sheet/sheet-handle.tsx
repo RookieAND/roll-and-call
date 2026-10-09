@@ -49,7 +49,7 @@ export function SheetHandle({ className }: SheetHandleProps) {
       onPointerUp={(event) => release(event, false)}
       onPointerCancel={(event) => release(event, true)}
     >
-      <div className="mx-auto h-1 w-[38px] rounded-full bg-gray-300" />
+      <div className="mx-auto h-1 w-9.5 rounded-full bg-gray-300" />
     </div>
   );
 }

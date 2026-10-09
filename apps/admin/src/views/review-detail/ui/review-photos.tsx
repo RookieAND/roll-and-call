@@ -23,7 +23,7 @@ export function ReviewPhotos({ review }: ReviewPhotosProps) {
           subtitle={`${review.game.title} · ${formatDateTime(review.createdAt)}`}
           thumbLabel="후기 사진"
           spoiler={review.spoiler}
-          className="h-[150px] w-[200px]"
+          className="h-[150px] w-50"
         />
       </Grid>
     </VStack>

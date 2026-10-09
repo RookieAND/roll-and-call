@@ -14,7 +14,7 @@ export function BadgeLadder() {
       <HStack align="center" justify="between" className="relative px-025 pt-050">
         <span
           aria-hidden
-          className="absolute top-[calc(50%-8px)] right-[30px] left-[18px] h-[3px] rounded-full"
+          className="absolute top-[calc(50%-8px)] right-7.5 left-4.5 h-0.75 rounded-full"
           style={{
             backgroundImage:
               "linear-gradient(90deg, var(--rc-color-border-strong), var(--rc-color-fg-rank-bronze), var(--rc-color-border-primary), var(--rc-color-fg-rank-gold), var(--rc-color-data-purple-ink))",

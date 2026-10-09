@@ -36,7 +36,7 @@ export function SidebarLink({ href, label, icon, exact, countPromise }: SidebarL
         typography="body3"
         foreground="inherit"
         weight={active ? "bold" : undefined}
-        className={cn("flex-1 leading-[1.5]", !active && "font-medium")}
+        className={cn("flex-1 leading-normal", !active && "font-medium")}
       >
         {label}
       </Text>

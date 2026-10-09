@@ -19,7 +19,7 @@ export function AuditLogLoading() {
       <LoadingRegion label="활동 기록을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">
           <HStack align="center" gap="100" wrap>
-            <HStack align="center" className="relative w-[220px]">
+            <HStack align="center" className="relative w-55">
               <Search
                 size={14}
                 aria-hidden
@@ -40,7 +40,7 @@ export function AuditLogLoading() {
               variant="outline"
               colorPalette="gray"
               disabled
-              className="h-[44px] w-[140px] justify-between font-normal"
+              className="h-[44px] w-35 justify-between font-normal"
             >
               <Text typography="body3" truncate>
                 모든 조치

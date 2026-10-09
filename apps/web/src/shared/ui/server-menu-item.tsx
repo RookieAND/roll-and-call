@@ -31,7 +31,7 @@ export function ServerMenuItem({ server, checked, destination }: ServerMenuItemP
       label={server.name}
       closeOnClick
       onClick={() => router.push(href)}
-      className="flex min-h-12 cursor-pointer items-center gap-125 rounded-400 px-125 py-100 outline-none data-[checked]:bg-tinted-bg data-[highlighted]:bg-gray-50 data-[checked]:data-[highlighted]:bg-tinted-bg-hover"
+      className="flex min-h-12 cursor-pointer items-center gap-125 rounded-400 px-125 py-100 outline-none data-checked:bg-tinted-bg data-highlighted:bg-gray-50 data-checked:data-highlighted:bg-tinted-bg-hover"
     >
       <ServerIcon name={server.name} icon={server.icon} />
       <VStack gap="025" className="min-w-0 flex-1">

@@ -14,7 +14,7 @@ export function AuditEntryLoading() {
         contentWidth={960}
       />
       <LoadingRegion label="조치 상세를 불러오는 중입니다">
-        <VStack gap="150" className="mx-auto w-full max-w-[960px] flex-1 p-200">
+        <VStack gap="150" className="mx-auto w-full max-w-240 flex-1 p-200">
           <section className="rounded-600 border border-gray-200 bg-surface">
             <HStack align="center" gap="150" className="px-200 py-175">
               <Skeleton width={40} height={40} rounded={400} />
