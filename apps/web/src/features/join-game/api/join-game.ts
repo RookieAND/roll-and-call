@@ -4,6 +4,7 @@ import { RECRUIT_METHOD } from "@/entities/game";
 import { type ActionResult } from "@/shared/api";
 import { getActingMember, notMemberError } from "@/shared/server";
 
+import { NOTE_REQUIRED_REASON } from "../model/note-required-rejection";
 import { type OverlapRejection } from "../model/overlap-rejection";
 import { applyToGame } from "./apply-to-game";
 import { finishApplication } from "./finish-application";
@@ -32,7 +33,11 @@ export async function joinGame(
     userId: user.id,
     applicationNote,
   });
-  if ("error" in application) return application;
+  if ("error" in application) {
+    return "reason" in application && application.reason === NOTE_REQUIRED_REASON
+      ? { error: application.error }
+      : application;
+  }
 
   await finishApplication({ server, userId: user.id, application });
 

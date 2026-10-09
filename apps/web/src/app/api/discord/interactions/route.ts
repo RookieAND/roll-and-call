@@ -1,9 +1,10 @@
-import { REVIEW_BUTTON_PREFIX } from "@roll-and-call/game-notices";
+import { APPLY_BUTTON_PREFIX, REVIEW_BUTTON_PREFIX } from "@roll-and-call/game-notices";
 import { isNull } from "es-toolkit";
 import { NextResponse } from "next/server";
 
 import { buildInteractionResponse } from "./_lib/build-interaction-response";
 import { handleApplyButton } from "./_lib/handle-apply-button";
+import { handleApplyModalSubmit } from "./_lib/handle-apply-modal-submit";
 import { handleOnboardingCommand } from "./_lib/handle-onboarding-command";
 import { handleReviewButton } from "./_lib/handle-review-button";
 import { handleReviewModalSubmit } from "./_lib/handle-review-modal-submit";
@@ -23,6 +24,9 @@ export async function POST(request: Request) {
 
   const interaction = JSON.parse(body) as DiscordInteraction;
   if (interaction.type === INTERACTION_MODAL_SUBMIT) {
+    if (interaction.data?.custom_id?.startsWith(APPLY_BUTTON_PREFIX)) {
+      return NextResponse.json(await handleApplyModalSubmit(interaction));
+    }
     return NextResponse.json(handleReviewModalSubmit(interaction));
   }
   if (interaction.type === INTERACTION_MESSAGE_COMPONENT) {
