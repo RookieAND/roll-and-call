@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { Callout, Text } from "@roll-and-call/ui";
 
 import {
   IdRow,
@@ -10,8 +10,6 @@ import {
   type SettingIds,
 } from "@/features/edit-server-settings";
 import { Panel } from "@/shared/ui";
-
-import { DISCORD_LINK_NOTES } from "../model/discord-link-notes";
 
 export type RowCheck = SettingCheck | "checking";
 
@@ -49,6 +47,7 @@ export function DiscordLinkPanel({
           key={field.key}
           id={`setting-${field.key}`}
           label={field.label}
+          purpose={"purpose" in field ? field.purpose : undefined}
           value={ids[field.key]}
           check={checks[field.key]}
           serverName={serverName}
@@ -59,22 +58,13 @@ export function DiscordLinkPanel({
           onCheck={() => onCheck?.(field.key)}
         />
       ))}
-      <VStack
-        gap="050"
-        render={<ul />}
-        className="mt-100 border-t border-(--rc-color-border-subtle) pt-125"
-      >
-        {DISCORD_LINK_NOTES.map((note) => (
-          <HStack key={note} gap="075" render={<li />}>
-            <Text typography="body4" foreground="hint" aria-hidden>
-              ·
-            </Text>
-            <Text typography="body4" foreground="muted">
-              {note}
-            </Text>
-          </HStack>
-        ))}
-      </VStack>
+      <Callout.Root className="mt-150">
+        <Callout.Icon />
+        <Callout.Title>채널을 바꿔도 기존 구인글은 그대로 남습니다</Callout.Title>
+        <Callout.Description>
+          새 구인부터 바뀐 채널에 올라갑니다. 운영진 채널은 운영진만 볼 수 있는 채널로 정해 주세요.
+        </Callout.Description>
+      </Callout.Root>
     </Panel>
   );
 }
