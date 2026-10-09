@@ -45,6 +45,14 @@ export const HIDDEN_LADDER = {
 } as const;
 export type HiddenLadderKey = (typeof HIDDEN_LADDER)[keyof typeof HIDDEN_LADDER];
 
+// 룰북 인증 칭호. 단계가 아니라 기준마다 따로 받는 칭호라, 넘긴 기준만큼 모두 갖는다.
+export const RULEBOOK_LADDER = {
+  scholar: "sp.rb3",
+  collector: "sp.rb10",
+  polymath: "sp.rb20",
+  library: "sp.rb30",
+} as const;
+
 // 뱃지 키의 앞부분. 룰별은 뒤에 룰 분류 id, 이달의 GM·PL은 뒤에 달(2026-09)을 붙인다.
 export const BADGE_LADDER = {
   playerTotal: "pl.total",
@@ -60,9 +68,10 @@ export const BADGE_LADDER = {
   developer: "sp.dev",
   guildMaster: "sp.guild",
   apprentice: "sp.apprentice",
-  rulebooks: "sp.rulebooks",
+  ...RULEBOOK_LADDER,
   ...HIDDEN_LADDER,
 } as const;
+export type RulebookLadderKey = (typeof RULEBOOK_LADDER)[keyof typeof RULEBOOK_LADDER];
 export type BadgeLadderKey = (typeof BADGE_LADDER)[keyof typeof BADGE_LADDER];
 
 export type BadgeGrade = 1 | 2 | 3 | 4 | 5;

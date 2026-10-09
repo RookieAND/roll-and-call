@@ -12,7 +12,7 @@ export async function evaluateRulebookBadges({
   now = new Date(),
   silent = false,
 }: { now?: Date; silent?: boolean } = {}) {
-  const minimum = BADGE_LADDERS[BADGE_LADDER.rulebooks].steps[0]!.threshold;
+  const minimum = BADGE_LADDERS[BADGE_LADDER.scholar].steps[0]!.threshold;
   for (const server of await db.select({ id: servers.id }).from(servers)) {
     const rows = await db
       .select({ userId: certifications.userId })

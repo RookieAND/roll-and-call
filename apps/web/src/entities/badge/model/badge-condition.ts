@@ -38,8 +38,11 @@ export function badgeCondition({
       return `후기를 ${count}건 쓰면 받습니다.\n${REVIEW_LENGTH_NOTE}`;
     case BADGE_LADDER.gmReviews:
       return `내 세션에 후기가 ${count}건 달리면 받습니다.\n${REVIEW_LENGTH_NOTE}`;
-    case BADGE_LADDER.rulebooks:
-      return `룰북을 ${count}종 인증하면 받습니다.`;
+    case BADGE_LADDER.scholar:
+    case BADGE_LADDER.collector:
+    case BADGE_LADDER.polymath:
+    case BADGE_LADDER.library:
+      return `룰북을 ${count}종 인증하면 받습니다.\n${BADGE_LADDERS[ladder].description}`;
     case BADGE_LADDER.playerMonthly:
       return "한 달 동안 세션에 가장 많이 참석한 PL입니다.";
     case BADGE_LADDER.gmMonthly:

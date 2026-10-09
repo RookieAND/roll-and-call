@@ -57,7 +57,10 @@ export function ladderEvents({
       return toReviewEvents(reviews);
     case BADGE_LADDER.playerReviews:
       return toReviewEvents(written);
-    case BADGE_LADDER.rulebooks:
+    case BADGE_LADDER.scholar:
+    case BADGE_LADDER.collector:
+    case BADGE_LADDER.polymath:
+    case BADGE_LADDER.library:
       return facts.certified;
     case BADGE_LADDER.playerMonthly:
     case BADGE_LADDER.gmMonthly:
