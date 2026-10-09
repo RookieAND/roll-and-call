@@ -15,7 +15,7 @@ export function BadgeDetailContent({ detail }: BadgeDetailContentProps) {
   const { earned, progress } = detail;
   return (
     <VStack gap="200">
-      <VStack align="center" gap="125" className="pt-100 text-center">
+      <VStack align="center" gap="125" className="pt-300 text-center">
         <BadgeMedal
           emoji={detail.medal.emoji}
           look={detail.medal.look}
