@@ -69,6 +69,29 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "GM과 일정을 조율해 주세요.",
   ],
   [
+    { kind: NOTIFICATION_KIND.selectionScheduleConfirmed, params: game },
+    "검은 산의 노래 일정이 확정되었습니다.",
+    null,
+  ],
+  [
+    { kind: NOTIFICATION_KIND.selectionParticipationConfirmed, params: game },
+    "검은 산의 노래 참여가 확정되었습니다.",
+    "GM이 세션 시간을 정하면 알려 드립니다.",
+  ],
+  [
+    { kind: NOTIFICATION_KIND.selectionWaitlisted, params: { ...game, waitlistRank: 3 } },
+    "검은 산의 노래 선발 결과 대기 3번입니다.",
+    null,
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.gameCancelled,
+      params: { ...game, cancelKind: GAME_CANCEL_KIND.selectionExpired, reason: null },
+    },
+    "검은 산의 노래 구인이 취소되었습니다.",
+    "사유: 기한 안에 선발을 마치지 않아 취소되었습니다.",
+  ],
+  [
     { kind: NOTIFICATION_KIND.recruitmentClosedEmpty, params: game },
     "검은 산의 노래 신청자 없이 모집이 끝났습니다.",
     "구인을 다시 올릴 수 있습니다.",

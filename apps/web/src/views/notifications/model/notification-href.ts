@@ -12,6 +12,9 @@ export function notificationHref(payload: NotificationPayload): string | null {
     case NOTIFICATION_KIND.seatOpened:
     case NOTIFICATION_KIND.lotteryScheduleConfirmed:
     case NOTIFICATION_KIND.lotteryParticipationConfirmed:
+    case NOTIFICATION_KIND.selectionScheduleConfirmed:
+    case NOTIFICATION_KIND.selectionParticipationConfirmed:
+    case NOTIFICATION_KIND.selectionWaitlisted:
     case NOTIFICATION_KIND.sessionTimeSet:
     case NOTIFICATION_KIND.sessionTimeChanged:
     case NOTIFICATION_KIND.gameCancelled:

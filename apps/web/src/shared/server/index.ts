@@ -86,6 +86,7 @@ export { isCronRequest } from "./cron/is-cron-request";
 export { removeUnusedGameFiles } from "./game-files";
 export { seedAvailabilityFromProfile } from "./seed-availability-from-profile";
 export { finishLotteryDraw } from "./finish-lottery-draw";
+export { finishSelectionNotices } from "./finish-selection-notices";
 export { createSupabaseServerClient } from "./auth/create-supabase-server-client";
 export { getCurrentUser } from "./auth/get-current-user";
 export { getCurrentSessionUser } from "./auth/get-current-session-user";

@@ -88,6 +88,19 @@ export function notificationText(payload: NotificationPayload): NotificationText
         " 참여가 확정되었습니다.",
         "GM과 일정을 조율해 주세요.",
       );
+    case NOTIFICATION_KIND.selectionScheduleConfirmed:
+      return bold(payload.params.gameTitle, " 일정이 확정되었습니다.");
+    case NOTIFICATION_KIND.selectionParticipationConfirmed:
+      return bold(
+        payload.params.gameTitle,
+        " 참여가 확정되었습니다.",
+        "GM이 세션 시간을 정하면 알려 드립니다.",
+      );
+    case NOTIFICATION_KIND.selectionWaitlisted:
+      return bold(
+        payload.params.gameTitle,
+        ` 선발 결과 대기 ${payload.params.waitlistRank}번입니다.`,
+      );
     case NOTIFICATION_KIND.recruitmentClosedEmpty:
       return bold(
         payload.params.gameTitle,
@@ -267,7 +280,9 @@ export function notificationText(payload: NotificationPayload): NotificationText
     if (cancelKind === GAME_CANCEL_KIND.staff) return "운영진이 취소했습니다.";
     if (cancelKind === GAME_CANCEL_KIND.auto) return "GM이 서버를 나가 취소되었습니다.";
     if (cancelKind === GAME_CANCEL_KIND.minPlayersUnmet) return MIN_PLAYERS_UNMET_CANCEL_TEXT;
-    if (cancelKind === GAME_CANCEL_KIND.selectionExpired) return SELECTION_EXPIRED_CANCEL_TEXT;
+    if (cancelKind === GAME_CANCEL_KIND.selectionExpired) {
+      return `사유: ${SELECTION_EXPIRED_CANCEL_TEXT}`;
+    }
     return reason ? `사유: ${reason}` : "GM이 취소했습니다.";
   }
 

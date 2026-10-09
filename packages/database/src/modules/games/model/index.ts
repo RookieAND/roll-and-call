@@ -8,6 +8,8 @@ export { countMinPlayersPool } from "./count-min-players-pool";
 export { judgeMinPlayers, type MinPlayersJudgement } from "./min-players-judgement";
 export { DIE_FACES } from "./die-faces";
 export { DRAW_REJECTION, type DrawRejection } from "./draw-rejection";
+export { SELECTION_REJECTION, type SelectionRejection } from "./selection-rejection";
+export { finishSelectionBlock } from "./can-finish-selection";
 export { DRAW_RESULT_KIND } from "./draw-result-kind";
 export { isAwaitingDraw } from "./is-awaiting-draw";
 export { SELECTION_APPLICANT_LIMIT } from "./selection-limit";

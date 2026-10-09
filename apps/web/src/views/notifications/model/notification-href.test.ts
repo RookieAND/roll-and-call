@@ -23,6 +23,12 @@ const CASES: [NotificationPayload, string | null][] = [
   ],
   [{ kind: NOTIFICATION_KIND.lotteryScheduleConfirmed, params: game }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.lotteryParticipationConfirmed, params: game }, "/games/g1"],
+  [{ kind: NOTIFICATION_KIND.selectionScheduleConfirmed, params: game }, "/games/g1"],
+  [{ kind: NOTIFICATION_KIND.selectionParticipationConfirmed, params: game }, "/games/g1"],
+  [
+    { kind: NOTIFICATION_KIND.selectionWaitlisted, params: { ...game, waitlistRank: 1 } },
+    "/games/g1",
+  ],
   [{ kind: NOTIFICATION_KIND.drawWon, params: game }, "/games/g1/draw"],
   [
     { kind: NOTIFICATION_KIND.drawWaitlisted, params: { ...game, waitlistRank: 2 } },

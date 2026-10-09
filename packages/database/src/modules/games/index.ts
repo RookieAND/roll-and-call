@@ -8,6 +8,7 @@ export { judgeMinPlayersForGame, type JudgeMinPlayersResult } from "./commands/j
 export { closeGameRecruitment } from "./commands/close-game-recruitment";
 export { confirmGameSession } from "./commands/confirm-game-session";
 export { createGameWithRoster } from "./commands/create-game-with-roster";
+export { finishSelection, type FinishSelectionResult } from "./commands/finish-selection";
 export { drawLottery, type DrawLotteryResult } from "./commands/draw-lottery";
 export { deleteParticipant } from "./commands/delete-participant";
 export { claimEndNotice } from "./commands/claim-end-notice";
