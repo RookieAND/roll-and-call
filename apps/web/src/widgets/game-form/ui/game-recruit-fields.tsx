@@ -6,6 +6,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { RECRUIT_METHOD } from "@/entities/game";
 import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
+import { ApplicationNoteField } from "./application-note-field";
 import { MinPlayersField } from "./min-players-field";
 import { PreConfirmedField } from "./pre-confirmed-field";
 import { RecruitMethodField } from "./recruit-method-field";
@@ -92,6 +93,12 @@ export function GameRecruitFields({
           }
         />
       )}
+
+      <ApplicationNoteField
+        value={watch("applicationNoteEnabled")}
+        locked={locked}
+        onChange={(enabled) => setValue("applicationNoteEnabled", enabled, { shouldDirty: true })}
+      />
 
       <VStack gap="100">
         <RecruitMethodField

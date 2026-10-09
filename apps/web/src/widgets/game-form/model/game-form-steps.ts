@@ -33,6 +33,7 @@ export const SECTION_FIELDS = {
     "minPlayers",
     "preConfirmed",
     "recruitMethod",
+    "applicationNoteEnabled",
     "waitlistEnabled",
   ],
   [FORM_SECTION.schedule]: [
