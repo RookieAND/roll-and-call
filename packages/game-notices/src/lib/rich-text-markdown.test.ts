@@ -34,6 +34,20 @@ describe("richTextToMarkdown", () => {
     );
   });
 
+  it("글자가 주소 그대로인 링크는 맨주소로 옮긴다", () => {
+    const url = "https://discord.com/channels/1/2/3";
+    const doc = {
+      type: "doc",
+      content: [
+        paragraph([
+          { type: "text", text: "하우스룰 " },
+          { type: "text", text: url, marks: [{ type: "link", attrs: { href: url } }] },
+        ]),
+      ],
+    };
+    expect(markdownOf(doc)).toBe(`하우스룰 ${url}`);
+  });
+
   it("번호 목록은 1부터 센다", () => {
     const doc = {
       type: "doc",
