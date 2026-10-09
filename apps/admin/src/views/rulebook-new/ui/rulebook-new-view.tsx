@@ -18,9 +18,10 @@ export function RulebookNewView({
   return (
     <>
       <AdminHeader
-        title={request ? "새 룰북으로 추가" : "룰북 추가"}
+        title={request ? "룰북 추가 심사하기" : "룰북 추가"}
         sub={request ? "추가 요청 처리" : "책 한 권 등록"}
         trail={[{ href: request ? "/rules?tab=requests" : "/rules", label: "룰북 카탈로그" }]}
+        contentWidth
       />
       <AddRulebookForm
         rulebooks={rulebooks}

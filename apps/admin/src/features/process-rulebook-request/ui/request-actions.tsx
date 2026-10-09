@@ -7,7 +7,7 @@ import { MoreMenu, ServerLink } from "@/shared/ui";
 import { REQUEST_ACTION, type RequestAction } from "../model/request-action";
 
 const ACTION_LABEL = {
-  [REQUEST_ACTION.add]: "새 룰북으로 추가",
+  [REQUEST_ACTION.add]: "룰북 추가 심사하기",
   [REQUEST_ACTION.link]: "기존 룰북에 연결",
   [REQUEST_ACTION.reject]: "요청 반려",
 } as const;
@@ -18,7 +18,7 @@ interface RequestActionsProps {
   actionHrefs: Record<RequestAction, string>;
 }
 
-// 비슷한 룰북이 있으면 [기존 룰북에 연결], 없으면 [새 룰북으로 추가]가 주 버튼이고 나머지는 ⋯ 메뉴다(D291).
+// 비슷한 룰북이 있으면 [기존 룰북에 연결], 없으면 [룰북 추가 심사하기]가 주 버튼이고 나머지는 ⋯ 메뉴다(D291).
 export function RequestActions({ label, similar, actionHrefs }: RequestActionsProps) {
   const primary = similar ? REQUEST_ACTION.link : REQUEST_ACTION.add;
   const others = Object.values(REQUEST_ACTION).filter((action) => action !== primary);
