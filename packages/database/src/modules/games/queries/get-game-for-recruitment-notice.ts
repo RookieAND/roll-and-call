@@ -13,6 +13,7 @@ export async function getGameForRecruitmentNotice({
     with: {
       gm: { columns: {}, extras: { username: memberNicknameSql(serverId) } },
       participants: {
+        columns: { status: true },
         where: (participant, { eq }) => eq(participant.serverId, serverId),
         orderBy: (participant, { asc }) => asc(participant.joinedAt),
         with: {

@@ -13,6 +13,7 @@ export async function insertParticipant({
   userId,
   status,
   waitlistedAt,
+  applicationNote,
 }: {
   transaction: Transaction;
   serverId: string;
@@ -20,6 +21,7 @@ export async function insertParticipant({
   userId: string;
   status: ParticipantStatus;
   waitlistedAt?: Date;
+  applicationNote?: string | null;
 }) {
   const inserted = await transaction
     .insert(participants)
@@ -28,6 +30,7 @@ export async function insertParticipant({
       gameId,
       userId,
       status,
+      applicationNote,
       waitlistedAt: status === PARTICIPANT_STATUS.waiting ? waitlistedAt : undefined,
     })
     .onConflictDoNothing()

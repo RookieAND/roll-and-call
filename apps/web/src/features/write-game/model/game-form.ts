@@ -91,6 +91,7 @@ export const gameFormSchema = z
       .array(z.url())
       .max(GAME_IMAGES_MAX, `이미지는 최대 ${GAME_IMAGES_MAX}장까지 올릴 수 있습니다.`),
     waitlistEnabled: z.boolean(),
+    applicationNoteEnabled: z.boolean(),
     // 등록과 함께 확정으로 넣을 사람. 서버는 userId만 쓰고 나머지는 목록 표시용이다.
     preConfirmed: z
       .array(

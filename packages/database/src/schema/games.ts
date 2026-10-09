@@ -81,6 +81,8 @@ export const games = pgTable(
     recruitMethod: recruitMethod("recruit_method").notNull().default("first_come"),
     // false면 정원이 찼을 때 대기 신청을 받지 않는다(status "full"). 선착순에서만 쓴다.
     waitlistEnabled: boolean("waitlist_enabled").notNull().default(true),
+    // true면 신청할 때 신청글을 필수로 받는다. 신청자가 한 명이라도 있으면 바꿀 수 없다.
+    applicationNoteEnabled: boolean("application_note_enabled").notNull().default(false),
     scheduleMode: scheduleMode("schedule_mode").notNull(),
     endDate: timestamp("end_date", { withTimezone: true }).notNull(),
     rangeStart: date("range_start"),
@@ -199,6 +201,8 @@ export const participants = pgTable(
     absenceCancelReason: text("absence_cancel_reason"),
     // 대기가 된 시각. 같은 시각끼리는 drawRank, 그다음 joinedAt 순서다. 확정 상태에서는 의미가 없다.
     waitlistedAt: timestamp("waitlisted_at", { withTimezone: true }),
+    // 신청글 받기 구인에서 신청자가 쓴 글. GM만 볼 수 있고 신청을 취소하면 행과 함께 지워진다.
+    applicationNote: text("application_note"),
     // 본인이 조율표를 저장한 마지막 시각. 서버가 기본 가능 시간을 자동 저장한 것은 제출로 치지 않는다(R15).
     availabilitySubmittedAt: timestamp("availability_submitted_at", { withTimezone: true }),
     // GM이 불참으로 내보내거나 출석에서 불참으로 고를 때 적는 사유. 운영진만 본다.
@@ -224,6 +228,10 @@ export const participants = pgTable(
     uniqueIndex("participants_game_id_draw_roll_unique").on(table.gameId, table.drawRoll),
     check("participants_draw_roll_range", sql`${table.drawRoll} between 1 and 100`),
     check("participants_draw_rank_positive", sql`${table.drawRank} >= 1`),
+    check(
+      "participants_application_note_length",
+      sql`char_length(${table.applicationNote}) <= 500`,
+    ),
     check("participants_absence_reason_length", sql`char_length(${table.absenceReason}) <= 200`),
     check(
       "participants_absence_added_tag",

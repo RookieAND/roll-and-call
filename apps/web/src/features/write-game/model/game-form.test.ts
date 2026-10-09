@@ -25,6 +25,7 @@ const base = {
   thumbnailSpoiler: false,
   aiImage: false,
   waitlistEnabled: true,
+  applicationNoteEnabled: false,
   preConfirmed: [],
   playMinutes: 180,
 };

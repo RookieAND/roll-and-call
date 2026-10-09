@@ -21,6 +21,7 @@ const game: LockedGame = {
   confirmedAt: session,
   scheduleMode: SCHEDULE_MODE.fixed,
   recruitMethod: RECRUIT_METHOD.firstCome,
+  applicationNoteEnabled: false,
   windowStartHour: 12,
   windowEndHour: 0,
   drawnAt: null,
@@ -47,6 +48,7 @@ const form: GameFormValues = {
   thumbnailSpoiler: false,
   aiImage: false,
   waitlistEnabled: true,
+  applicationNoteEnabled: false,
   preConfirmed: [],
   playMinutes: 180,
 };
@@ -143,6 +145,19 @@ describe("editBlockReason", () => {
     const briefing = { kind: GAME_KIND.briefing };
     expect(reason({ values: briefing, rosterCount: 1 })?.field).toBe("kind");
     expect(reason({ values: briefing })).toBeNull();
+  });
+
+  it("신청자가 있으면 신청글 받기를 켜고 끄는 것 모두 막고 없으면 바꾼다", () => {
+    const turnOn = { values: { applicationNoteEnabled: true } };
+    expect(reason({ ...turnOn, rosterCount: 1 })?.field).toBe("applicationNoteEnabled");
+    expect(
+      reason({
+        overrides: { applicationNoteEnabled: true },
+        values: { applicationNoteEnabled: false },
+        rosterCount: 1,
+      })?.field,
+    ).toBe("applicationNoteEnabled");
+    expect(reason(turnOn)).toBeNull();
   });
 
   it("신청자가 있어도 플레이 유형은 바꿀 수 있다", () => {

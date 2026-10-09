@@ -9,7 +9,10 @@ import { applyToGame } from "./apply-to-game";
 import { finishApplication } from "./finish-application";
 
 // waiting·lottery는 화면 표시 시점이 아니라 실제 접수 결과라 토스트 문구가 이걸 따른다.
-export async function joinGame(gameId: string): Promise<
+export async function joinGame(
+  gameId: string,
+  applicationNote?: string,
+): Promise<
   ActionResult & {
     waiting?: boolean;
     lottery?: boolean;
@@ -23,7 +26,12 @@ export async function joinGame(gameId: string): Promise<
   }
   const { server, user } = member;
 
-  const application = await applyToGame({ serverId: server.id, gameId, userId: user.id });
+  const application = await applyToGame({
+    serverId: server.id,
+    gameId,
+    userId: user.id,
+    applicationNote,
+  });
   if ("error" in application) return application;
 
   await finishApplication({ server, userId: user.id, application });

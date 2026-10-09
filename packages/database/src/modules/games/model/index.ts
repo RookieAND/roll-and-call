@@ -34,6 +34,7 @@ export {
 export { hasGameFilters } from "./has-game-filters";
 export { gameFilterCount } from "./game-filter-count";
 export { findOverlappingGame, type MySessionTiming } from "./find-overlapping-game";
+export { APPLICATION_NOTE_MAX_LENGTH, normalizeApplicationNote } from "./application-note";
 export { PARTICIPANT_STATUS, type ParticipantStatus } from "./participant-status";
 export { formatPlayMinutes } from "./format-play-minutes";
 export {

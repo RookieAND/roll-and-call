@@ -86,6 +86,7 @@ export function GameForm({
       thumbnailSpoiler: defaultGame?.thumbnailSpoiler ?? false,
       images: defaultGame?.images ?? [],
       waitlistEnabled: defaultGame?.waitlistEnabled ?? true,
+      applicationNoteEnabled: defaultGame?.applicationNoteEnabled ?? false,
       preConfirmed: [],
     },
   });

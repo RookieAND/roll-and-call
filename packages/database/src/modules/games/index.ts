@@ -52,6 +52,7 @@ export { getUserConfirmedSlots } from "./queries/get-user-confirmed-slots";
 export { hasAnsweredAvailability } from "./queries/has-answered-availability";
 export { listUserSessionTimings } from "./queries/list-user-session-timings";
 export { hasSessionsBetween } from "./queries/has-sessions-between";
+export { getApplicationNotes } from "./queries/get-application-notes";
 export { isGameOwner } from "./queries/is-game-owner";
 export { listAttendanceRows } from "./queries/list-attendance-rows";
 export { listParticipantUserIds } from "./queries/list-participant-user-ids";

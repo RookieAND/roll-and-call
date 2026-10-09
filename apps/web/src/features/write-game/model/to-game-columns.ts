@@ -26,6 +26,7 @@ export function toGameColumns(values: GameFormValues) {
     // 추첨은 정원과 무관하게 받으므로 대기 접수 설정을 쓰지 않는다.
     waitlistEnabled:
       values.recruitMethod === RECRUIT_METHOD.firstCome ? values.waitlistEnabled : true,
+    applicationNoteEnabled: values.applicationNoteEnabled,
     scheduleMode: values.scheduleMode,
     endDate: fromKstDateTimeInput(values.endDate),
     rangeStart: values.rangeStart || null,
