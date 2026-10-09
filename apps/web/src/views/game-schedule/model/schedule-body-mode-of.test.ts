@@ -7,7 +7,7 @@ import { SCHEDULE_NOTICE } from "./schedule-notices";
 const base = {
   confirmedAt: null,
   canPaint: true,
-  awaitingDraw: false,
+  awaitingResult: null,
   unscheduled: false,
   isGm: false,
   isSignedIn: true,
@@ -17,14 +17,14 @@ const base = {
 describe("scheduleBodyModeOf", () => {
   it("확정되면 다른 조건보다 먼저 확정 모드다", () => {
     const confirmedAt = new Date("2026-10-10T11:00:00Z");
-    expect(scheduleBodyModeOf({ ...base, confirmedAt, awaitingDraw: true })).toEqual({
+    expect(scheduleBodyModeOf({ ...base, confirmedAt, awaitingResult: "lottery" })).toEqual({
       kind: SCHEDULE_BODY_MODE.confirmed,
       confirmedAt,
     });
   });
 
   it("추첨 전이면 확정자 없음보다 추첨 안내가 먼저다", () => {
-    expect(scheduleBodyModeOf({ ...base, awaitingDraw: true, unscheduled: true })).toEqual({
+    expect(scheduleBodyModeOf({ ...base, awaitingResult: "lottery", unscheduled: true })).toEqual({
       kind: SCHEDULE_BODY_MODE.closed,
       notice: SCHEDULE_NOTICE.awaitingDraw,
     });

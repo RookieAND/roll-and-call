@@ -1,7 +1,7 @@
 import { MESSAGE_CASES } from "@roll-and-call/database/servers/model";
-import { Button, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Skeleton, Text, VStack, cn } from "@roll-and-call/ui";
 
-import { DiscordPreview } from "@/features/edit-discord-messages";
+import { DiscordPreview, MessageSection } from "@/features/edit-discord-messages";
 import { LoadingRegion, Panel, SkeletonField } from "@/shared/ui";
 
 import { DiscordFrame } from "./discord-frame";
@@ -15,46 +15,55 @@ export function MessagesLoading() {
             디스코드 메시지
           </Text>
           <Text typography="body3" foreground="muted">
-            봇이 보내는 메시지 위에 붙일 한 줄을 경우마다 정합니다.
-          </Text>
-          <Text typography="body3" foreground="muted">
-            비워 두면 기본 문구를 씁니다.
+            머리 줄, 설명 문장, 본문 알림 줄을 경우마다 정합니다. 비워 두면 기본 문구를 씁니다.
           </Text>
         </VStack>
         <div className="grid grid-cols-[216px_minmax(0,1fr)] items-start gap-150">
           <Panel bodyClassName="p-0">
-            {MESSAGE_CASES.map(({ key, label, to }, index) => (
-              <VStack
+            {MESSAGE_CASES.map(({ key, label }, index) => (
+              <HStack
                 key={key}
-                gap="025"
-                className={
-                  index > 0
-                    ? "border-t border-(--rc-color-border-subtle) px-150 py-100"
-                    : "px-150 py-100"
-                }
+                align="center"
+                gap="075"
+                className={cn(
+                  "min-h-11 px-150",
+                  index > 0 && "border-t border-(--rc-color-border-subtle)",
+                  index === 0 && "bg-tinted-bg shadow-[inset_4px_0_0_var(--rc-color-bg-primary)]",
+                )}
               >
                 <Text typography="subtitle2" className="whitespace-nowrap">
                   {label}
                 </Text>
-                <div className="flex items-center gap-100">
-                  <Text typography="body4" foreground="muted" className="whitespace-nowrap">
-                    {to}
-                  </Text>
-                  <Skeleton width={120} height={12} />
-                </div>
-              </VStack>
+              </HStack>
             ))}
           </Panel>
-          <Panel title="구인 개설" bodyClassName="p-175">
-            <VStack gap="175">
-              <SkeletonField label="머리 줄" />
-              <DiscordPreview caseKey="open" text="" loading />
-              <div className="flex justify-between">
+          <Panel title="구인 개설" right={<Skeleton width={160} height={14} />} bodyClassName="p-0">
+            <VStack gap="200" className="p-200">
+              <MessageSection first title="미리보기" hint="디스코드에서 이렇게 보입니다">
+                <DiscordPreview caseKey="open" text="" loading />
+                <Skeleton width="60%" height={14} />
+              </MessageSection>
+              <MessageSection title="문구" hint="비워 두면 기본 문구를 씁니다" gap="150">
+                <SkeletonField label="머리 줄" />
+              </MessageSection>
+              <MessageSection title="쓸 수 있는 변수">
+                <HStack wrap gap="075">
+                  <Skeleton width={72} height={28} rounded={400} />
+                  <Skeleton width={72} height={28} rounded={400} />
+                  <Skeleton width={72} height={28} rounded={400} />
+                </HStack>
+              </MessageSection>
+              <HStack
+                align="center"
+                justify="between"
+                gap="100"
+                className="border-t border-(--rc-color-border-subtle) pt-200"
+              >
                 <Button variant="ghost" colorPalette="gray" disabled>
                   기본 문구로 되돌리기
                 </Button>
                 <Button disabled>저장</Button>
-              </div>
+              </HStack>
             </VStack>
           </Panel>
         </div>

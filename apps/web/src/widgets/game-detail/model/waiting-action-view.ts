@@ -34,9 +34,17 @@ export function waitingActionView({
       }),
     };
   }
+  if (game.recruitMethod === RECRUIT_METHOD.selection && isNil(game.selectionFinishedAt)) {
+    return {
+      kind: GAME_ACTION_VIEW.selectionApplied,
+      endDate: game.endDate,
+      closed: game.endDate.getTime() <= now.getTime(),
+    };
+  }
   return {
     kind: GAME_ACTION_VIEW.waiting,
     rank: viewer.waitlistRank ?? waitingCount,
     resultLink: isLottery && lotteryHeld,
+    selection: game.recruitMethod === RECRUIT_METHOD.selection,
   };
 }

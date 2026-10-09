@@ -28,15 +28,15 @@ export function toHostedSessionCard({
     confirmedAt: game.confirmedAt,
     cancelledAt: game.cancelledAt,
   });
-  // 추첨 글은 마감 뒤에도 추첨 전까지 「모집 중」이다(D254).
-  const badgeStatus = facts.lotteryOpen ? GAME_STATUS.recruiting : status;
+  // 추첨·선발 글은 마감 뒤에도 결과 전까지 「모집 중」이다(D254).
+  const badgeStatus = facts.awaitingResult ? GAME_STATUS.recruiting : status;
   const hostChip = hostSessionChip({ state, awaitingTime });
   const responses = context.responseCounts.get(game.id) ?? 0;
   const todo = context.readOnly
     ? null
     : hostTodo({ game, facts, responses, now: context.now ?? new Date() });
-  const gmTodo = !facts.lotteryOpen && (todo?.blocked ?? false);
-  const timeShown = timeSet && !facts.lotteryOpen;
+  const gmTodo = !facts.awaitingResult && (todo?.blocked ?? false);
+  const timeShown = timeSet && !facts.awaitingResult;
   const scheduleTone = hostScheduleTone({ gmTodo, timeSet: timeShown });
   const scheduleIcon = hostScheduleIcon({ gmTodo, timeSet: timeShown });
 

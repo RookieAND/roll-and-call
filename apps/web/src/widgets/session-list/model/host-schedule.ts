@@ -12,10 +12,14 @@ export function hostSchedule({
   endDate: Date | string;
   readOnly?: boolean;
 }) {
-  const { lotteryOpen, awaitingTime, sessionWhen, sessionAgo, line } = facts;
+  const { lotteryOpen, selectionOpen, awaitingTime, sessionWhen, sessionAgo, line } = facts;
   if (lotteryOpen && !line.deadlinePassed) return `${formatDateClock(endDate)} 마감 때 추첨합니다`;
   // 마감 뒤 뽑기 전의 추첨 진행 문구는 남의 화면에 두지 않는다(D93).
   if (lotteryOpen && !readOnly) return "모집이 끝나 곧 추첨합니다";
+  if (selectionOpen && !line.deadlinePassed) return `${formatDateClock(endDate)} 모집 마감`;
+  if (selectionOpen) {
+    return readOnly ? "모집이 끝나 GM이 선발하는 중입니다" : "모집이 끝났습니다 · 선발해 주세요";
+  }
   if (awaitingTime) {
     return readOnly
       ? "모집이 끝나 GM이 세션 시간을 정하는 중입니다"

@@ -5,17 +5,16 @@ import {
   listWaitingParticipants,
   lockGame,
 } from "@roll-and-call/database/games";
-import { compareWaitlistOrder } from "@roll-and-call/database/games/model";
+import { awaitingResultMethod, compareWaitlistOrder } from "@roll-and-call/database/games/model";
 import { listSanctionedUserIds } from "@roll-and-call/database/moderation";
 import { createNotifications } from "@roll-and-call/database/notifications";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { withTransaction } from "@roll-and-call/database/transaction";
-import { isNull } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { z } from "zod";
 
-import { isSessionEnded, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import { isSessionEnded, SCHEDULE_MODE } from "@/entities/game";
 import { RULE_GATE, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import {
   AppError,
@@ -71,8 +70,13 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
       if (game.gmId !== user.id) throw new AppError("권한이 없습니다.");
       if (game.cancelledAt) throw new AppError(GAME_CANCELLED_MESSAGE);
       if (isSessionEnded(game, now)) throw new AppError("세션이 끝나 다음 회차를 열 수 없습니다.");
-      if (game.recruitMethod === RECRUIT_METHOD.lottery && isNull(game.drawnAt)) {
-        throw new AppError("추첨을 마친 뒤에 열 수 있습니다.");
+      const awaitingResult = awaitingResultMethod(game);
+      if (awaitingResult) {
+        throw new AppError(
+          awaitingResult === "lottery"
+            ? "추첨을 마친 뒤에 열 수 있습니다."
+            : "선발을 마친 뒤에 열 수 있습니다.",
+        );
       }
 
       const waiting = (

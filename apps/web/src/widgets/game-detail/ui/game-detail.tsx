@@ -1,3 +1,4 @@
+import { isAwaitingResult } from "@roll-and-call/database/games/model";
 import { Container, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import type { ReactNode } from "react";
@@ -123,8 +124,7 @@ export function GameDetail({
               confirmed={confirmed}
               waiting={waiting}
               maxPlayers={game.maxPlayers}
-              recruitMethod={game.recruitMethod}
-              drawn={!isNull(game.drawnAt)}
+              awaitingResult={isAwaitingResult(game)}
               viewerId={viewerId}
             />
           </VStack>

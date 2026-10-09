@@ -5,9 +5,13 @@ export const APPLICATION_CLOSED_MESSAGE = "이미 일정이 확정된 구인입�
 export const LEAVE_AFTER_SCHEDULE_MESSAGE =
   "일정이 확정되어 신청을 취소할 수 없습니다. GM에게 문의해 주세요.";
 export const LEAVE_DRAWN_MESSAGE = "추첨이 끝나 신청을 취소할 수 없습니다. GM에게 문의해 주세요.";
+export const LEAVE_SELECTED_MESSAGE =
+  "선발이 끝나 신청을 취소할 수 없습니다. GM에게 문의해 주세요.";
 export const LEAVE_EXPIRED_MESSAGE = "모집이 마감되어 취소할 수 없습니다. GM에게 문의해 주세요.";
 export const LEAVE_FULL_MESSAGE = "정원이 차서 취소할 수 없습니다. GM에게 문의해 주세요.";
 export const LOTTERY_CANCEL_CLOSED_MESSAGE = "모집이 마감되어 신청을 취소할 수 없습니다.";
+export const SELECTION_FINISHED_APPLY_MESSAGE = "이미 선발을 마친 구인입니다.";
+export const SELECTION_TOO_MANY_MESSAGE = "선발 신청은 100명까지만 받을 수 있습니다.";
 export const WAITLIST_CANCEL_ENDED_MESSAGE = "세션이 끝나 대기를 취소할 수 없습니다.";
 export const SANCTIONED_APPLY_MESSAGE = "활동 정지 기간에는 신청할 수 없습니다.";
 export const HIDDEN_GAME_APPLY_MESSAGE = "운영진이 숨긴 구인입니다.";

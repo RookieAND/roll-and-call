@@ -59,8 +59,13 @@ export function deriveSessionFacts({
     game.recruitMethod === RECRUIT_METHOD.lottery &&
     isNull(game.drawnAt) &&
     isNull(game.cancelledAt);
+  // 선발은 GM이 마치기 전까지 마감 앞뒤로 같은 「모집 중」 카드다. 기한이 지나면 자동 취소된다.
+  const selectionOpen =
+    game.recruitMethod === RECRUIT_METHOD.selection &&
+    isNull(game.selectionFinishedAt) &&
+    isNull(game.cancelledAt);
   const past =
-    (state === SESSION_STATE.closed && !awaitingTime && !drawPending) ||
+    (state === SESSION_STATE.closed && !awaitingTime && !drawPending && !selectionOpen) ||
     state === SESSION_STATE.finished;
   const timeSet = Boolean(game.confirmedAt) && (!coordinate || line.confirmed);
   const startsAt = timeSet ? new Date(game.confirmedAt!).toISOString() : null;
@@ -85,6 +90,8 @@ export function deriveSessionFacts({
     awaitingTime,
     drawPending,
     lotteryOpen,
+    selectionOpen,
+    awaitingResult: lotteryOpen || selectionOpen,
     past,
     timeSet,
     sessionWhen,

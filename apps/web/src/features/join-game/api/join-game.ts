@@ -9,14 +9,14 @@ import { type OverlapRejection } from "../model/overlap-rejection";
 import { applyToGame } from "./apply-to-game";
 import { finishApplication } from "./finish-application";
 
-// waiting·lottery는 화면 표시 시점이 아니라 실제 접수 결과라 토스트 문구가 이걸 따른다.
+// waiting·application은 화면 표시 시점이 아니라 실제 접수 결과라 토스트 문구가 이걸 따른다.
 export async function joinGame(
   gameId: string,
   applicationNote?: string,
 ): Promise<
   ActionResult & {
     waiting?: boolean;
-    lottery?: boolean;
+    application?: boolean;
     reason?: OverlapRejection["reason"];
     overlapGameId?: string;
   }
@@ -43,6 +43,6 @@ export async function joinGame(
 
   return {
     waiting: application.waiting,
-    lottery: application.game.recruitMethod === RECRUIT_METHOD.lottery,
+    application: application.game.recruitMethod !== RECRUIT_METHOD.firstCome,
   };
 }

@@ -1,3 +1,4 @@
+import type { AwaitingResultMethod } from "@roll-and-call/database/games/model";
 import { isNull } from "es-toolkit";
 
 import { closedScheduleNotice } from "./closed-schedule-notice";
@@ -7,7 +8,7 @@ import { SCHEDULE_BODY_MODE, type ScheduleBodyMode } from "./schedule-body-mode"
 export function scheduleBodyModeOf({
   confirmedAt,
   canPaint,
-  awaitingDraw,
+  awaitingResult,
   unscheduled,
   isGm,
   isSignedIn,
@@ -16,7 +17,7 @@ export function scheduleBodyModeOf({
   confirmedAt: Date | null;
   // GM 또는 확정 참여자. 대기자·추첨 전 신청자·내보낸 사람은 보기만 한다(R2).
   canPaint: boolean;
-  awaitingDraw: boolean;
+  awaitingResult: AwaitingResultMethod | null;
   // 모집 마감이 지났는데 확정 참여자가 없다.
   unscheduled: boolean;
   isGm: boolean;
@@ -24,7 +25,7 @@ export function scheduleBodyModeOf({
   deadlinePassed: boolean;
 }): ScheduleBodyMode {
   if (!isNull(confirmedAt)) return { kind: SCHEDULE_BODY_MODE.confirmed, confirmedAt };
-  const notice = closedScheduleNotice({ awaitingDraw, unscheduled });
+  const notice = closedScheduleNotice({ awaitingResult, unscheduled });
   if (!isNull(notice)) return { kind: SCHEDULE_BODY_MODE.closed, notice };
   if (canPaint) {
     return { kind: SCHEDULE_BODY_MODE.paint, showDeadlineNotice: !isGm && deadlinePassed };

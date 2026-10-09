@@ -16,6 +16,7 @@ const firstCome: ActionContext["game"] = {
   confirmedAt: null,
   endDate: at(48),
   drawnAt: null,
+  selectionFinishedAt: null,
   cancelledAt: null,
   cancelKind: null,
   cancelReason: null,
@@ -202,6 +203,7 @@ describe("deriveActionView", () => {
       kind: GAME_ACTION_VIEW.waiting,
       rank: 2,
       resultLink: false,
+      selection: false,
     });
     expect(view({ game: { ...lottery, drawnAt: at(-1) }, viewer: waiting })).toMatchObject({
       resultLink: true,
@@ -297,6 +299,37 @@ describe("deriveActionView", () => {
     expect(view({ game: lottery, confirmedCount: 9 })).toEqual({
       kind: GAME_ACTION_VIEW.joinLottery,
       endDate: at(48),
+    });
+  });
+});
+
+describe("선발 구인", () => {
+  const selection = { ...firstCome, recruitMethod: RECRUIT_METHOD.selection };
+
+  it("신청 전에는 신청 입구, 마감 뒤에는 모집 끝 안내", () => {
+    expect(view({ game: selection })).toMatchObject({ kind: GAME_ACTION_VIEW.joinSelection });
+    expect(view({ game: { ...selection, endDate: at(-1) } })).toMatchObject({
+      kind: GAME_ACTION_VIEW.closed,
+    });
+  });
+
+  it("선발 전 신청자는 마감 전 취소 입구, 마감 뒤 안내만", () => {
+    expect(view({ game: selection, viewer: waiting })).toMatchObject({
+      kind: GAME_ACTION_VIEW.selectionApplied,
+      closed: false,
+    });
+    expect(view({ game: { ...selection, endDate: at(-1) }, viewer: waiting })).toMatchObject({
+      kind: GAME_ACTION_VIEW.selectionApplied,
+      closed: true,
+    });
+  });
+
+  it("선발을 마친 뒤 대기자는 대기 번호와 결과 입구 없음", () => {
+    const finished = { ...selection, endDate: at(-1), selectionFinishedAt: at(-1) };
+    expect(view({ game: finished, viewer: waiting, waitingCount: 3 })).toMatchObject({
+      kind: GAME_ACTION_VIEW.waiting,
+      rank: 2,
+      resultLink: false,
     });
   });
 });

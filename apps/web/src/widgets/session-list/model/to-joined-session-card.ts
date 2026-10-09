@@ -36,6 +36,21 @@ export function toJoinedSessionCard({
         ? null
         : { kind: SESSION_ACTION_KIND.cancelWaitlist, label, href: `/games/${game.id}` };
 
+    if (game.recruitMethod === RECRUIT_METHOD.selection && isNull(game.selectionFinishedAt)) {
+      return {
+        ...common,
+        chip: SESSION_CHIP.waiting,
+        badge: "선발 전",
+        badgeColor: "gray",
+        schedule: line.deadlinePassed
+          ? "모집이 끝나 GM이 선발하는 중입니다"
+          : joinParts(`${formatDate(game.endDate)} 신청 마감`, "마감 뒤 GM이 선발합니다"),
+        scheduleTone: SESSION_TONE.muted,
+        scheduleIcon: SESSION_ICON.clock,
+        action: line.deadlinePassed ? null : cancel("신청 취소"),
+      };
+    }
+
     if (game.recruitMethod === RECRUIT_METHOD.lottery && isNull(game.drawnAt)) {
       return {
         ...common,

@@ -16,7 +16,15 @@ export async function listSeatOpenedRecipients({
   transaction: Transaction;
   serverId: string;
   gameId: string;
-  game: Pick<Game, "confirmedAt" | "cancelledAt" | "recruitMethod" | "drawnAt" | "maxPlayers">;
+  game: Pick<
+    Game,
+    | "confirmedAt"
+    | "cancelledAt"
+    | "recruitMethod"
+    | "drawnAt"
+    | "selectionFinishedAt"
+    | "maxPlayers"
+  >;
   now?: Date;
 }): Promise<string[]> {
   const rows = await transaction

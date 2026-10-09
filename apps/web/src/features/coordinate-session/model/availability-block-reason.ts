@@ -1,4 +1,4 @@
-import { isAwaitingDraw } from "@roll-and-call/database/games/model";
+import { AWAITING_RESULT_PHRASE, awaitingResultMethod } from "@roll-and-call/database/games/model";
 import { isNil } from "es-toolkit";
 
 import {
@@ -23,6 +23,7 @@ export function availabilityBlockReason({
     cancelledAt: Date | null;
     recruitMethod: RecruitMethod;
     drawnAt: Date | null;
+    selectionFinishedAt: Date | null;
     gmId: string;
   };
   participants: { userId: string; status: ParticipantStatus }[];
@@ -33,7 +34,8 @@ export function availabilityBlockReason({
     return "일시가 지정된 구인은 조율 대상이 아닙니다.";
   }
   if (!isNil(game.confirmedAt)) return APPLICATION_CLOSED_MESSAGE;
-  if (isAwaitingDraw(game)) return "추첨 뒤에 가능 시간을 낼 수 있습니다.";
+  const awaiting = awaitingResultMethod(game);
+  if (awaiting) return `${AWAITING_RESULT_PHRASE[awaiting]} 가능 시간을 낼 수 있습니다.`;
   const confirmed = participants.some(
     (participant) =>
       participant.userId === userId && participant.status === PARTICIPANT_STATUS.confirmed,

@@ -1,4 +1,4 @@
-import { isAwaitingDraw } from "@roll-and-call/database/games/model";
+import { AWAITING_RESULT_PHRASE, awaitingResultMethod } from "@roll-and-call/database/games/model";
 import { isNil } from "es-toolkit";
 
 import {
@@ -28,6 +28,7 @@ export function confirmBlockReason(
           scheduleMode: ScheduleMode;
           recruitMethod: RecruitMethod;
           drawnAt: Date | null;
+          selectionFinishedAt: Date | null;
           confirmedAt: Date | null;
           endDate: Date;
           rangeStart: string | null;
@@ -45,7 +46,10 @@ export function confirmBlockReason(
   if (!isNil(game.cancelledAt)) return { error: GAME_CANCELLED_MESSAGE };
   if (game.gmId !== userId) return { error: CONFIRM_FORBIDDEN_MESSAGE };
   const isFixed = game.scheduleMode === SCHEDULE_MODE.fixed;
-  if (!isFixed && isAwaitingDraw(game)) return { error: "추첨 뒤에 세션 시간을 정할 수 있습니다." };
+  const awaiting = awaitingResultMethod(game);
+  if (!isFixed && awaiting) {
+    return { error: `${AWAITING_RESULT_PHRASE[awaiting]} 세션 시간을 정할 수 있습니다.` };
+  }
   if (isNil(game.confirmedAt) && isFixed) return { error: "세션 시간이 없는 구인입니다." };
   if (isSessionStarted(game, now)) return { error: "시작한 세션은 시간을 바꿀 수 없습니다." };
   if (startsAt.getTime() < now.getTime()) return { error: "지난 시각으로는 정할 수 없습니다." };

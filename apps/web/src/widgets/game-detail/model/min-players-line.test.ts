@@ -23,6 +23,17 @@ describe("minPlayersLine", () => {
     ).toBe("추첨 전 신청자가 3명 미만이면 모집이 취소됩니다.");
   });
 
+  it("선발은 신청자 기준 문구", () => {
+    expect(
+      minPlayersLine({
+        minPlayers: 2,
+        endDate: future,
+        now,
+        recruitMethod: RECRUIT_METHOD.selection,
+      }),
+    ).toBe("신청자가 2명 미만이면 모집이 취소됩니다.");
+  });
+
   it("최소 인원이 없으면 줄이 없다", () => {
     expect(
       minPlayersLine({ minPlayers: null, endDate: future, now, recruitMethod: firstCome }),

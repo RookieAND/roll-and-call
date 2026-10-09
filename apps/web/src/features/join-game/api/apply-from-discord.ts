@@ -53,7 +53,7 @@ export async function applyFromDiscord({
   return {
     message: joinSuccessMessage({
       waiting: application.waiting,
-      lottery: application.game.recruitMethod === RECRUIT_METHOD.lottery,
+      application: application.game.recruitMethod !== RECRUIT_METHOD.firstCome,
     }),
   };
 }

@@ -2,7 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import { gameCancelledRecipients } from "./game-cancelled-recipients";
 
-const game = { gmId: "gm", recruitMethod: "first_come" as const, drawnAt: null };
+const game = {
+  gmId: "gm",
+  recruitMethod: "first_come" as const,
+  drawnAt: null,
+  selectionFinishedAt: null,
+};
 const roster = [
   { userId: "a", status: "confirmed" as const },
   { userId: "b", status: "waiting" as const },
@@ -39,6 +44,16 @@ describe("gameCancelledRecipients", () => {
       "b",
       "gm",
     ]);
+  });
+
+  it("선발 글은 선발 전 신청자를 일반 취소에서 빼고 기한 초과 취소에서는 넣는다", () => {
+    const selection = { ...game, recruitMethod: "selection" as const };
+    expect(gameCancelledRecipients({ game: selection, kind: "gm", roster })).toEqual(["a"]);
+    expect(gameCancelledRecipients({ game: selection, kind: "selection_expired", roster })).toEqual(
+      ["a", "b", "gm"],
+    );
+    const finished = { ...selection, selectionFinishedAt: new Date() };
+    expect(gameCancelledRecipients({ game: finished, kind: "gm", roster })).toEqual(["a", "b"]);
   });
 
   it("GM이 확정자이기도 하면 최소 인원 미달 알림은 한 번만 받는다", () => {

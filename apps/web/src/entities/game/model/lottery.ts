@@ -1,1 +1,5 @@
-export { canDrawLottery, DIE_FACES } from "@roll-and-call/database/games/model";
+export {
+  canDrawLottery,
+  DIE_FACES,
+  SELECTION_APPLICANT_LIMIT,
+} from "@roll-and-call/database/games/model";

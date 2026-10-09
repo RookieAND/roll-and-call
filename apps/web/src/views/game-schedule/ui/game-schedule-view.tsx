@@ -1,4 +1,4 @@
-import { isAwaitingDraw } from "@roll-and-call/database/games/model";
+import { awaitingResultMethod } from "@roll-and-call/database/games/model";
 import { Badge, Button, Container, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import Link from "next/link";
@@ -77,7 +77,7 @@ export async function GameScheduleView({ id }: { id: string }) {
   const mode = scheduleBodyModeOf({
     confirmedAt: game.confirmedAt,
     canPaint,
-    awaitingDraw: isAwaitingDraw(game),
+    awaitingResult: awaitingResultMethod(game),
     unscheduled: deadlinePassed && countConfirmed(game.participants) === 0,
     isGm,
     isSignedIn: !isNull(viewerId),

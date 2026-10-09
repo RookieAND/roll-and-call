@@ -1,11 +1,18 @@
 import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { Dice5, Zap } from "lucide-react";
+import { Dice5, UserCheck, Zap } from "lucide-react";
 
 import { PARTICIPANT_STATUS, RECRUIT_METHOD, recruitMethodLabel } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
 
+import { methodLines } from "../model/method-lines";
 import { minPlayersLine } from "../model/min-players-line";
+
+const METHOD_ICON = {
+  [RECRUIT_METHOD.firstCome]: Zap,
+  [RECRUIT_METHOD.lottery]: Dice5,
+  [RECRUIT_METHOD.selection]: UserCheck,
+} as const;
 
 interface GameRecruitMethodSectionProps {
   game: GameDetailData;
@@ -13,27 +20,16 @@ interface GameRecruitMethodSectionProps {
 }
 
 export function GameRecruitMethodSection({ game, now }: GameRecruitMethodSectionProps) {
-  const isLottery = game.recruitMethod === RECRUIT_METHOD.lottery;
-  const Icon = isLottery ? Dice5 : Zap;
+  const Icon = METHOD_ICON[game.recruitMethod];
   // 등록 때 직접 확정한 사람은 추첨 순위가 없고, 그만큼 뽑을 자리가 줄어든다.
   const preConfirmedCount = game.participants.filter(
     (participant) =>
       participant.status === PARTICIPANT_STATUS.confirmed && isNull(participant.drawRank),
   ).length;
-  const drawCount = Math.max(game.maxPlayers - preConfirmedCount, 0);
-  const lines = isLottery
-    ? [
-        "정원과 관계없이 신청을 받습니다.",
-        drawCount > 0
-          ? `마감 때 추첨으로 ${drawCount}명을 정합니다.`
-          : "정원이 이미 모두 확정되어 추첨할 자리가 없습니다.",
-      ]
-    : [
-        "신청한 순서대로 정원까지 바로 확정됩니다.",
-        game.waitlistEnabled
-          ? "정원이 차도 대기로 신청할 수 있습니다."
-          : "정원이 차면 신청이 닫힙니다.",
-      ];
+  const lines = methodLines({
+    game,
+    drawCount: Math.max(game.maxPlayers - preConfirmedCount, 0),
+  });
 
   const minPlayersText = minPlayersLine({
     minPlayers: game.minPlayers,

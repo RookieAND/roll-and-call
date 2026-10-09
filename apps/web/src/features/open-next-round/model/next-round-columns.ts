@@ -11,6 +11,7 @@ const CLEARED_COLUMNS = {
   discordThreadId: null,
   notifiedAt: null,
   drawnAt: null,
+  selectionFinishedAt: null,
   attendanceConfirmedAt: null,
   attendanceFirstConfirmedAt: null,
   endedAt: null,

@@ -1,0 +1,1 @@
+export const SELECTION_APPLICANT_LIMIT = 100;

@@ -1,10 +1,10 @@
 "use server";
 
 import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/games";
+import { isAwaitingResult } from "@roll-and-call/database/games/model";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
-import { isNull } from "es-toolkit";
 
-import { PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
+import { PARTICIPANT_STATUS } from "@/entities/game";
 import type { ActionResult } from "@/shared/api";
 import { notifyMovedToWaitlist } from "@/shared/server";
 
@@ -45,8 +45,8 @@ export async function demoteParticipant({
         status: PARTICIPANT_STATUS.waiting,
         waitlistedAt: now,
       });
-      // 추첨 전이면 대기가 아니라 다시 추첨 신청자가 된다. 스레드 안내도, 알림도 만들지 않는다.
-      movedToWaitlist = !(game.recruitMethod === RECRUIT_METHOD.lottery && isNull(game.drawnAt));
+      // 결과 전이면 대기가 아니라 다시 신청자가 된다. 스레드 안내도, 알림도 만들지 않는다.
+      movedToWaitlist = !isAwaitingResult(game);
       if (!movedToWaitlist) return;
       const waitlistRank = await waitlistRankOf({ transaction, serverId, gameId, userId });
       await notifyRosterChange({

@@ -1,4 +1,8 @@
-import { formatPlayMinutes, isAwaitingDraw } from "@roll-and-call/database/games/model";
+import {
+  AWAITING_RESULT_PHRASE,
+  awaitingResultMethod,
+  formatPlayMinutes,
+} from "@roll-and-call/database/games/model";
 import { Badge, Container, VStack } from "@roll-and-call/ui";
 import { pick } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
@@ -77,15 +81,21 @@ export async function GameConfirmView({ id }: { id: string }) {
     />
   );
 
-  if (isAwaitingDraw(game)) {
+  const awaitingResult = awaitingResultMethod(game);
+  if (awaitingResult) {
+    const isLottery = awaitingResult === "lottery";
     return (
       <>
         {appBar}
         <Container size="sm" className="py-200">
           <EmptyState
             size="section"
-            title="추첨 뒤에 세션 시간을 정할 수 있습니다"
-            description="모집 마감 때 추첨이 끝나면 확정자가 가능 시간을 칠합니다."
+            title={`${AWAITING_RESULT_PHRASE[awaitingResult]} 세션 시간을 정할 수 있습니다`}
+            description={
+              isLottery
+                ? "모집 마감 때 추첨이 끝나면 확정자가 가능 시간을 칠합니다."
+                : "GM이 선발을 마치면 확정자가 가능 시간을 칠합니다."
+            }
           />
         </Container>
       </>

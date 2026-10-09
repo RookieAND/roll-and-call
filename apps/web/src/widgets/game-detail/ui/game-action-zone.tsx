@@ -15,6 +15,7 @@ import { JoinableActions } from "./joinable-actions";
 import { LotteryAppliedActions } from "./lottery-applied-actions";
 import { SanctionedActions } from "./sanctioned-actions";
 import { ScheduledActions } from "./scheduled-actions";
+import { SelectionAppliedActions } from "./selection-applied-actions";
 import { WaitingActions } from "./waiting-actions";
 
 export interface GameActionZoneProps {
@@ -40,6 +41,8 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
       return <ClosedActions title="종료된 세션입니다" reviewsGameId={game.id} />;
     case GAME_ACTION_VIEW.lotteryApplied:
       return <LotteryAppliedActions gameId={game.id} {...view} />;
+    case GAME_ACTION_VIEW.selectionApplied:
+      return <SelectionAppliedActions gameId={game.id} {...view} />;
     case GAME_ACTION_VIEW.waiting:
       return <WaitingActions gameId={game.id} {...view} />;
     case GAME_ACTION_VIEW.scheduled:
@@ -78,6 +81,15 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
           gameId={game.id}
           applicationNote={game.applicationNoteEnabled}
           hint={`${formatDateClock(view.endDate)} 마감 때 추첨합니다.`}
+          label="신청하기"
+        />
+      );
+    case GAME_ACTION_VIEW.joinSelection:
+      return (
+        <JoinableActions
+          gameId={game.id}
+          applicationNote={game.applicationNoteEnabled}
+          hint={`${formatDateClock(view.endDate)} 모집이 끝나면 GM이 선발합니다.`}
           label="신청하기"
         />
       );

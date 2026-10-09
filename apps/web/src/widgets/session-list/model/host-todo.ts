@@ -1,6 +1,7 @@
+import { isAwaitingResult } from "@roll-and-call/database/games/model";
 import { isNull } from "es-toolkit";
 
-import { isSessionEnded, RECRUIT_METHOD } from "@/entities/game";
+import { isSessionEnded } from "@/entities/game";
 
 import type { SessionFacts } from "./derive-session-facts";
 import { isTodoStale } from "./is-todo-stale";
@@ -38,7 +39,7 @@ export function hostTodo({
   }
 
   const openSeats = game.maxPlayers - confirmedCount;
-  const beforeDraw = game.recruitMethod === RECRUIT_METHOD.lottery && isNull(game.drawnAt);
+  const beforeDraw = isAwaitingResult(game);
   if (waitingCount === 0 || openSeats <= 0 || beforeDraw || isSessionEnded(game, now)) return null;
   return {
     kind: SESSION_ACTION_KIND.fillVacancy,

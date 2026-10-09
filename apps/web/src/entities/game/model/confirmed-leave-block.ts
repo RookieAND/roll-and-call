@@ -7,6 +7,7 @@ import type { ScheduleMode } from "./schedule-mode";
 export const CONFIRMED_LEAVE_BLOCK = {
   schedule: "schedule",
   drawn: "drawn",
+  selected: "selected",
   expired: "expired",
   full: "full",
 } as const;
@@ -25,6 +26,7 @@ export function confirmedLeaveBlock({
     confirmedAt: Date | null;
     endDate: Date;
     drawnAt: Date | null;
+    selectionFinishedAt: Date | null;
     recruitMethod: RecruitMethod;
     maxPlayers: number;
   };
@@ -34,6 +36,7 @@ export function confirmedLeaveBlock({
 }): ConfirmedLeaveBlock | null {
   if (isApplicationClosed(game, now)) return CONFIRMED_LEAVE_BLOCK.schedule;
   if (!isNil(game.drawnAt)) return CONFIRMED_LEAVE_BLOCK.drawn;
+  if (!isNil(game.selectionFinishedAt)) return CONFIRMED_LEAVE_BLOCK.selected;
   if (game.endDate.getTime() <= now.getTime()) return CONFIRMED_LEAVE_BLOCK.expired;
   const isFirstCome = game.recruitMethod === RECRUIT_METHOD.firstCome;
   if (isFirstCome && confirmedCount >= game.maxPlayers && waitingCount === 0) {

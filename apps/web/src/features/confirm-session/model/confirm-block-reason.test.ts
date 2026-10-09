@@ -16,6 +16,7 @@ const game: LockedGame = {
   scheduleMode: SCHEDULE_MODE.coordinate,
   recruitMethod: RECRUIT_METHOD.lottery,
   drawnAt: new Date("2026-09-14T00:00:00Z"),
+  selectionFinishedAt: null,
   confirmedAt: null,
   endDate: new Date("2026-09-14T12:00:00Z"),
   rangeStart: "2026-09-16",
@@ -51,6 +52,12 @@ describe("confirmBlockReason", () => {
 
   it("추첨 전이면 막는다", () => {
     expect(reason({ drawnAt: null })).toBe("추첨 뒤에 세션 시간을 정할 수 있습니다.");
+    expect(reason({ recruitMethod: "selection", drawnAt: null })).toBe(
+      "선발을 마친 뒤에 세션 시간을 정할 수 있습니다.",
+    );
+    expect(
+      reason({ recruitMethod: "selection", selectionFinishedAt: new Date("2026-09-14T00:00:00Z") }),
+    ).toBeUndefined();
   });
 
   it("시작한 세션은 바꿀 수 없고, 시작 1분 전에는 바꿀 수 있다", () => {

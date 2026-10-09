@@ -5,14 +5,14 @@ import {
   hasAnsweredAvailability,
   seedAvailabilities,
 } from "@roll-and-call/database/games";
-import { isAwaitingDraw, SCHEDULE_MODE } from "@roll-and-call/database/games/model";
+import { isAwaitingResult, SCHEDULE_MODE } from "@roll-and-call/database/games/model";
 
 import { availabilityPrefill, buildDayColumns, buildTimeRows } from "@/shared/lib";
 
 import { getProfile } from "./db/get-profile";
 
 // 프로필의 기본 가능 시간으로 조율표를 칠한다. 칠했으면 true, 건너뛰었거나 칠할 칸이 없으면 false.
-// 이 게임에 이미 칸을 낸 적이 있으면(재참여 포함) 본인이 낸 답을 덮지 않는다. 추첨 전 신청자는 칠하지 않는다.
+// 이 게임에 이미 칸을 낸 적이 있으면(재참여 포함) 본인이 낸 답을 덮지 않는다. 추첨·선발 전 신청자는 칠하지 않는다.
 export async function seedAvailabilityFromProfile({
   game,
   userId,
@@ -22,7 +22,7 @@ export async function seedAvailabilityFromProfile({
 }): Promise<boolean> {
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate) return false;
   if (game.confirmedAt || !game.rangeStart || !game.rangeEnd) return false;
-  if (isAwaitingDraw(game)) return false;
+  if (isAwaitingResult(game)) return false;
 
   const serverId = game.serverId;
   if (await hasAnsweredAvailability({ serverId, gameId: game.id, userId })) return false;

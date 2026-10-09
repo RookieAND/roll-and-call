@@ -10,6 +10,13 @@ export { DIE_FACES } from "./die-faces";
 export { DRAW_REJECTION, type DrawRejection } from "./draw-rejection";
 export { DRAW_RESULT_KIND } from "./draw-result-kind";
 export { isAwaitingDraw } from "./is-awaiting-draw";
+export { SELECTION_APPLICANT_LIMIT } from "./selection-limit";
+export {
+  AWAITING_RESULT_PHRASE,
+  awaitingResultMethod,
+  isAwaitingResult,
+  type AwaitingResultMethod,
+} from "./is-awaiting-result";
 export { seatOpenedRecipientIds } from "./seat-opened-recipient-ids";
 export { gameCancelledRecipients } from "./game-cancelled-recipients";
 export {

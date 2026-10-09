@@ -12,6 +12,7 @@ const game = {
   cancelledAt: null,
   recruitMethod: RECRUIT_METHOD.lottery,
   drawnAt: new Date("2026-09-10T00:00:00Z"),
+  selectionFinishedAt: null,
   gmId: GM,
 };
 const participants = [

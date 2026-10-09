@@ -13,6 +13,7 @@ export const GAME_ACTION_VIEW = {
   endedParticipant: "endedParticipant",
   endedOther: "endedOther",
   lotteryApplied: "lotteryApplied",
+  selectionApplied: "selectionApplied",
   waiting: "waiting",
   scheduled: "scheduled",
   confirmedOpen: "confirmedOpen",
@@ -23,6 +24,7 @@ export const GAME_ACTION_VIEW = {
   joinWaitlist: "joinWaitlist",
   join: "join",
   joinLottery: "joinLottery",
+  joinSelection: "joinSelection",
 } as const;
 
 export type ActionGame = Pick<
@@ -32,6 +34,7 @@ export type ActionGame = Pick<
   | "confirmedAt"
   | "endDate"
   | "drawnAt"
+  | "selectionFinishedAt"
   | "cancelledAt"
   | "cancelKind"
   | "cancelReason"
@@ -98,7 +101,8 @@ export type GameActionView =
       closed: boolean;
       confirmsAll: boolean;
     }
-  | { kind: typeof GAME_ACTION_VIEW.waiting; rank: number; resultLink: boolean }
+  | { kind: typeof GAME_ACTION_VIEW.selectionApplied; endDate: Date; closed: boolean }
+  | { kind: typeof GAME_ACTION_VIEW.waiting; rank: number; resultLink: boolean; selection: boolean }
   | ({ kind: typeof GAME_ACTION_VIEW.scheduled; confirmedAt: Date; live: boolean } & ActionLinks)
   | ({ kind: typeof GAME_ACTION_VIEW.confirmedOpen; confirmedAt: Date | null } & ActionLinks)
   | ({
@@ -110,4 +114,5 @@ export type GameActionView =
   | ({ kind: typeof GAME_ACTION_VIEW.sanctioned } & ActionSanction)
   | { kind: typeof GAME_ACTION_VIEW.joinWaitlist; nextRank: number }
   | { kind: typeof GAME_ACTION_VIEW.join }
-  | { kind: typeof GAME_ACTION_VIEW.joinLottery; endDate: Date };
+  | { kind: typeof GAME_ACTION_VIEW.joinLottery; endDate: Date }
+  | { kind: typeof GAME_ACTION_VIEW.joinSelection; endDate: Date };

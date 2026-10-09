@@ -25,6 +25,9 @@ export function outsiderActionView({
   if (game.recruitMethod === RECRUIT_METHOD.lottery) {
     return { kind: GAME_ACTION_VIEW.joinLottery, endDate: game.endDate };
   }
+  if (game.recruitMethod === RECRUIT_METHOD.selection) {
+    return { kind: GAME_ACTION_VIEW.joinSelection, endDate: game.endDate };
+  }
   if (confirmedCount >= game.maxPlayers) {
     return { kind: GAME_ACTION_VIEW.joinWaitlist, nextRank: waitingCount + 1 };
   }

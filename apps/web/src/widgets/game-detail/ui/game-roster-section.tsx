@@ -3,8 +3,6 @@
 import { Card } from "@roll-and-call/ui";
 import { useState } from "react";
 
-import { RECRUIT_METHOD, type RecruitMethod } from "@/entities/game";
-
 import { ROSTER_GAUGE } from "../model/roster-gauge";
 import { ROSTER_SHEET, type RosterSheet } from "../model/roster-sheet";
 import { ConfirmedRosterSheet } from "./confirmed-roster-sheet";
@@ -20,8 +18,7 @@ interface GameRosterSectionProps {
   confirmed: DetailRosterMember[];
   waiting: DetailRosterMember[];
   maxPlayers: number;
-  recruitMethod: RecruitMethod;
-  drawn: boolean;
+  awaitingResult: boolean;
   viewerId: string | null;
 }
 
@@ -30,13 +27,12 @@ export function GameRosterSection({
   confirmed,
   waiting,
   maxPlayers,
-  recruitMethod,
-  drawn,
+  awaitingResult,
   viewerId,
 }: GameRosterSectionProps) {
   const [openSheet, setOpenSheet] = useState<RosterSheet | null>(null);
-  // 추첨은 뽑기 전까지 대기에 순번이 없다 — 정원 밖 줄을 "신청"으로 부른다.
-  const isLottery = recruitMethod === RECRUIT_METHOD.lottery && !drawn;
+  // 추첨·선발은 결과 전까지 대기에 순번이 없다 — 정원 밖 줄을 "신청"으로 부른다.
+  const isApplicantPhase = awaitingResult;
 
   function closeSheet(next: boolean) {
     if (!next) setOpenSheet(null);
@@ -62,7 +58,7 @@ export function GameRosterSection({
           }
           emptyText="아직 참여자가 없습니다."
         />
-        {isLottery && (
+        {isApplicantPhase && (
           <RosterGroupSection
             label="신청"
             gauge={ROSTER_GAUGE.applicants}
@@ -75,7 +71,7 @@ export function GameRosterSection({
             emptyText="아직 신청자가 없습니다."
           />
         )}
-        {!isLottery && waiting.length > 0 && (
+        {!isApplicantPhase && waiting.length > 0 && (
           <RosterGroupSection
             label="대기"
             gauge={ROSTER_GAUGE.waiting}

@@ -17,6 +17,7 @@ const firstCome: LeaveGame = {
   confirmedAt: null,
   endDate: fromNow(48),
   drawnAt: null,
+  selectionFinishedAt: null,
   recruitMethod: RECRUIT_METHOD.firstCome,
   maxPlayers: 4,
   playMinutes: 180,
@@ -40,6 +41,14 @@ describe("confirmedLeaveBlock", () => {
 
   it("추첨 뒤에는 막는다", () => {
     expect(leave({ ...lottery, drawnAt: fromNow(-1) })).toBe(CONFIRMED_LEAVE_BLOCK.drawn);
+  });
+
+  it("선발을 마친 뒤에는 막는다", () => {
+    const selection = { ...firstCome, recruitMethod: RECRUIT_METHOD.selection };
+    expect(leave({ ...selection, selectionFinishedAt: fromNow(-1) })).toBe(
+      CONFIRMED_LEAVE_BLOCK.selected,
+    );
+    expect(leave(selection, { confirmedCount: 4 })).toBeNull();
   });
 
   it("마감이 지나면 막는다", () => {
@@ -80,6 +89,16 @@ describe("waitingLeaveBlock", () => {
   it("GM이 세션을 마쳤으면 실제 종료 시각으로 본다", () => {
     const ended = { ...firstCome, confirmedAt: fromNow(-1), endedAt: fromNow(-0.5) };
     expect(waitingLeaveBlock({ game: ended, now: NOW })).toBe(WAITING_LEAVE_BLOCK.ended);
+  });
+
+  it("선발 신청자는 마감 전 취소하고, 선발을 마친 뒤 대기자는 세션이 끝나기 전까지 취소한다", () => {
+    const selection = { ...firstCome, recruitMethod: RECRUIT_METHOD.selection };
+    expect(waitingLeaveBlock({ game: selection, now: NOW })).toBeNull();
+    expect(waitingLeaveBlock({ game: { ...selection, endDate: fromNow(-1) }, now: NOW })).toBe(
+      WAITING_LEAVE_BLOCK.closed,
+    );
+    const finished = { ...selection, selectionFinishedAt: fromNow(-3), endDate: fromNow(-3) };
+    expect(waitingLeaveBlock({ game: finished, now: NOW })).toBeNull();
   });
 
   it("추첨 결과 대기자는 마감이 지나도 세션이 끝나기 전까지 취소한다", () => {

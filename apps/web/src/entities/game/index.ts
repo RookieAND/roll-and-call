@@ -1,5 +1,5 @@
 export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./model/schedule-mode";
-export { canDrawLottery, DIE_FACES } from "./model/lottery";
+export { canDrawLottery, DIE_FACES, SELECTION_APPLICANT_LIMIT } from "./model/lottery";
 export { RECRUIT_METHOD, RECRUIT_METHODS, type RecruitMethod } from "./model/recruit-method";
 export { GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "./model/game-tag";
 export {

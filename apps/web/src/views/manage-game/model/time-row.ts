@@ -1,6 +1,7 @@
+import { awaitingResultMethod } from "@roll-and-call/database/games/model";
 import { isNil } from "es-toolkit";
 
-import { isDeadlinePassed, isSessionStarted, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import { isDeadlinePassed, isSessionStarted, SCHEDULE_MODE } from "@/entities/game";
 import { CLOCK_PARTICLE_KIND, clockParticle, formatDateTime, toKst } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
@@ -11,12 +12,13 @@ export function timeRow({ game, now }: { game: GameDetailData; now: Date }): Man
   const confirmPath = `/games/${game.id}/confirm`;
 
   const isFixed = game.scheduleMode === SCHEDULE_MODE.fixed;
-  if (!isFixed && game.recruitMethod === RECRUIT_METHOD.lottery && isNil(game.drawnAt)) {
+  const awaitingResult = awaitingResultMethod(game);
+  if (!isFixed && awaitingResult) {
     return {
       ...base,
       state: MANAGE_ROW_STATE.locked,
       href: null,
-      detail: "추첨을 먼저 마쳐 주세요",
+      detail: awaitingResult === "lottery" ? "추첨을 먼저 마쳐 주세요" : "선발을 먼저 마쳐 주세요",
     };
   }
 

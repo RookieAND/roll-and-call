@@ -7,6 +7,7 @@ const game = {
   confirmedAt: new Date("2026-10-10T11:00:00Z"),
   cancelledAt: null,
   drawnAt: null,
+  selectionFinishedAt: null,
   recruitMethod: "first_come" as const,
   maxPlayers: 3,
 };
@@ -29,6 +30,18 @@ describe("seatOpenedRecipientIds", () => {
     expect(
       seatOpenedRecipientIds({
         game: { ...game, recruitMethod: "lottery", drawnAt: now },
+        participants,
+        now,
+      }),
+    ).toEqual(["c", "d"]);
+  });
+
+  it("선발을 마치기 전이면 0명, 마친 뒤면 대기자 전원", () => {
+    const selection = { ...game, recruitMethod: "selection" as const };
+    expect(seatOpenedRecipientIds({ game: selection, participants, now })).toEqual([]);
+    expect(
+      seatOpenedRecipientIds({
+        game: { ...selection, selectionFinishedAt: now },
         participants,
         now,
       }),
