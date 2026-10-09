@@ -10,8 +10,8 @@ import {
 import { ddayKst } from "@/shared/lib";
 
 import { deadlineLabel } from "./deadline-label";
-import { methodLabelOf } from "./method-label-of";
 import type { ManagedMember } from "./managed-member";
+import { methodLabelOf } from "./method-label-of";
 
 // 서버에서 계산해 날짜 경계에서 값이 갈리지 않게 한다. confirmed에는 불참으로 내보낸 사람이 들어 있지 않다.
 export function summarizeRoster({

@@ -1,6 +1,8 @@
 import { SELECTION_REJECTION } from "@roll-and-call/database/games/model";
 
-type FinishBlock = typeof SELECTION_REJECTION.noConfirmed | typeof SELECTION_REJECTION.minPlayersUnmet;
+type FinishBlock =
+  | typeof SELECTION_REJECTION.noConfirmed
+  | typeof SELECTION_REJECTION.minPlayersUnmet;
 
 // 선발하기 카드의 안내 줄. 마치지 못하는 까닭이 있으면 그 줄이 따라붙는다(최소 인원 미달이면 그 줄만).
 export function finishSelectionLines({

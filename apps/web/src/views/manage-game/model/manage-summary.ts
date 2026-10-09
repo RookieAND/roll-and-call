@@ -13,9 +13,9 @@ import {
 import { formatDate, toKst } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
+import { attendanceRoster } from "./attendance-roster";
 import { cancelNoteOf } from "./cancel-note-of";
 import { selectionDeadlineNote } from "./selection-deadline-note";
-import { attendanceRoster } from "./attendance-roster";
 
 const NO_BREAK_SPACE = " ";
 
@@ -72,7 +72,9 @@ export function manageSummary({
         { label: "신청", value: `${waiting.length}명` },
         seats,
       ],
-      deadlineNote: isDeadlinePassed(game.endDate, now) ? selectionDeadlineNote(game, now) : undefined,
+      deadlineNote: isDeadlinePassed(game.endDate, now)
+        ? selectionDeadlineNote(game, now)
+        : undefined,
     };
   }
 

@@ -124,7 +124,10 @@ describe("manageSummary", () => {
   });
 
   describe("선발 글", () => {
-    const selection = { recruitMethod: RECRUIT_METHOD.selection, scheduleMode: SCHEDULE_MODE.fixed };
+    const selection = {
+      recruitMethod: RECRUIT_METHOD.selection,
+      scheduleMode: SCHEDULE_MODE.fixed,
+    };
 
     it("선발 전: 배지와 세 칸, 마감 전에는 기한 줄이 없다", () => {
       const result = summary({ ...selection, confirmedAt: at(20 * DAY) });

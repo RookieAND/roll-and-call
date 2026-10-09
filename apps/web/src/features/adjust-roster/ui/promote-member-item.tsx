@@ -56,9 +56,7 @@ export function PromoteMemberItem({
           return;
         }
         toast.success(`${member.username}님을 확정했습니다`, {
-          action: selectionOpen
-            ? { label: "되돌리기", onClick: () => undoPromotion() }
-            : undefined,
+          action: selectionOpen ? { label: "되돌리기", onClick: () => undoPromotion() } : undefined,
         });
       },
     });

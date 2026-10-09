@@ -57,7 +57,7 @@ export function WhenSection({ analytics, mode }: WhenSectionProps) {
             <RulebookSide
               title={rulebookTitle}
               rulebooks={analytics.rulebooks[activeMode]}
-              firstComeShare={analytics.firstComeShare[activeMode]}
+              methodShare={analytics.methodShare[activeMode]}
             />
           </div>
         )}

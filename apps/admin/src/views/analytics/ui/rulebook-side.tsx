@@ -1,12 +1,40 @@
 import { HStack, Progress, Text, VStack } from "@roll-and-call/ui";
 
+import type { AnalyticsData } from "@/shared/server";
+
+type MethodShare = AnalyticsData["methodShare"]["open"];
+
+const METHOD_SEGMENTS = [
+  {
+    key: "firstCome",
+    label: "선착순",
+    foreground: "onPrimary",
+    className: "flex items-center bg-primary-600 pl-100",
+    style: {},
+  },
+  {
+    key: "lottery",
+    label: "추첨",
+    foreground: "normal",
+    className: "flex items-center justify-end pr-100 text-heat-ink",
+    style: { background: "var(--color-heat-2)" },
+  },
+  {
+    key: "selection",
+    label: "선발",
+    foreground: "normal",
+    className: "flex items-center justify-end pr-100 text-heat-ink-strong",
+    style: { background: "var(--color-heat-4)" },
+  },
+] as const;
+
 interface RulebookSideProps {
   title: string;
   rulebooks: { name: string; count: number }[];
-  firstComeShare: number;
+  methodShare: MethodShare;
 }
 
-export function RulebookSide({ title, rulebooks, firstComeShare }: RulebookSideProps) {
+export function RulebookSide({ title, rulebooks, methodShare }: RulebookSideProps) {
   const max = Math.ceil(Math.max(1, ...rulebooks.map((rulebook) => rulebook.count)) / 10) * 10;
   return (
     <VStack gap="050">
@@ -29,31 +57,25 @@ export function RulebookSide({ title, rulebooks, firstComeShare }: RulebookSideP
           모집 방식 비율
         </Text>
         <HStack className="h-[22px] overflow-hidden rounded-200">
-          <Text
-            typography="body4"
-            weight="bold"
-            foreground="onPrimary"
-            className="flex items-center bg-primary-600 pl-100"
-            style={{ width: `${firstComeShare}%` }}
-          >
-            {firstComeShare}%
-          </Text>
-          <Text
-            typography="body4"
-            weight="bold"
-            className="flex flex-1 items-center justify-end pr-100 text-heat-ink"
-            style={{ background: "var(--color-heat-2)" }}
-          >
-            {100 - firstComeShare}%
-          </Text>
+          {METHOD_SEGMENTS.map((segment) => (
+            <Text
+              key={segment.key}
+              typography="body4"
+              weight="bold"
+              foreground={segment.foreground}
+              className={segment.className}
+              style={{ flexGrow: methodShare[segment.key], flexBasis: 0, ...segment.style }}
+            >
+              {methodShare[segment.key] > 0 ? `${methodShare[segment.key]}%` : null}
+            </Text>
+          ))}
         </HStack>
         <HStack justify="between" className="mt-050">
-          <Text typography="body4" foreground="muted">
-            선착순
-          </Text>
-          <Text typography="body4" foreground="muted">
-            추첨
-          </Text>
+          {METHOD_SEGMENTS.map((segment) => (
+            <Text key={segment.key} typography="body4" foreground="muted">
+              {segment.label}
+            </Text>
+          ))}
         </HStack>
       </VStack>
     </VStack>

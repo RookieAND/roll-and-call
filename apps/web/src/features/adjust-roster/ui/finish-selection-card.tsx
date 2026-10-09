@@ -1,7 +1,7 @@
 "use client";
 
-import { Button, Callout } from "@roll-and-call/ui";
 import type { SELECTION_REJECTION } from "@roll-and-call/database/games/model";
+import { Button, Callout } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { ConfirmDialog, LineBreaks, toast, useAction } from "@/shared/ui";

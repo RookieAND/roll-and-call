@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { RECRUIT_METHOD } from "@/entities/game";
 import { OG_IMAGE } from "@/shared/lib";
 import { getCurrentServer, getGameById, requireMembership } from "@/shared/server";
 import { DrawResultView } from "@/views/draw-result";
@@ -15,7 +16,7 @@ export async function generateMetadata({
   const { id } = await params;
   const server = await getCurrentServer();
   const game = await getGameById(server.id, id);
-  if (!game) return { title: "추첨 결과" };
+  if (!game || game.recruitMethod !== RECRUIT_METHOD.lottery) return { title: "추첨 결과" };
 
   const title = `${game.title} 추첨 결과`;
   return {

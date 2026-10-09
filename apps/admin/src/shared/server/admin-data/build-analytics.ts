@@ -1,3 +1,4 @@
+import { RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
 import { sumBy, uniq } from "es-toolkit";
 
 import { percent } from "./percent";
@@ -41,6 +42,8 @@ export interface AnalyticsMetric {
   previous: number | null;
 }
 
+export type MethodShare = { firstCome: number; lottery: number; selection: number };
+
 export interface AnalyticsData {
   early: boolean;
   // 지난 4주 값이 있어 증감을 그릴 수 있는지. 초기이거나 직전 28일 진행된 세션이 0건이면 false.
@@ -64,7 +67,7 @@ export interface AnalyticsData {
     finished: { name: string; count: number }[];
     open: { name: string; count: number }[];
   };
-  firstComeShare: { finished: number; open: number };
+  methodShare: { finished: MethodShare; open: MethodShare };
   gms: { nickname: string; count: number }[];
   otherGms: { count: number; sessions: number };
   previousTopShare: number | null;
@@ -222,11 +225,18 @@ export function buildAnalytics({ previewEarly, now, ...db }: BuildAnalyticsOptio
 
   // 모집 중 격자는 세션 일시가 정해진 구인만 센다. 조율로 정하는 구인은 아직 시간이 없다.
   const scheduledOpen = open.filter((session) => session.timeFixed);
-  const firstComeShare = (sessions: Session[]) =>
-    percent(
-      sessions.filter((session) => session.recruitMethod === "선착순").length,
-      sessions.length,
-    );
+  const methodShare = (sessions: Session[]): MethodShare => {
+    const shareOf = (label: string) =>
+      percent(
+        sessions.filter((session) => session.recruitMethod === label).length,
+        sessions.length,
+      );
+    return {
+      firstCome: shareOf(RECRUIT_METHOD_LABEL.first_come),
+      lottery: shareOf(RECRUIT_METHOD_LABEL.lottery),
+      selection: shareOf(RECRUIT_METHOD_LABEL.selection),
+    };
+  };
 
   const gmCounts = (sessions: Session[]) =>
     topCounts(
@@ -278,9 +288,9 @@ export function buildAnalytics({ previewEarly, now, ...db }: BuildAnalyticsOptio
         TOP_RULEBOOKS,
       ),
     },
-    firstComeShare: {
-      finished: early ? 0 : firstComeShare(inPeriod),
-      open: firstComeShare(scheduledOpen),
+    methodShare: {
+      finished: early ? { firstCome: 0, lottery: 0, selection: 0 } : methodShare(inPeriod),
+      open: methodShare(scheduledOpen),
     },
     gms: !sections.gms
       ? []

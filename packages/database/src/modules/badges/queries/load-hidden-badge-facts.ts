@@ -3,6 +3,7 @@ import { and, count, eq, isNotNull, isNull, max, sql } from "drizzle-orm";
 import { db } from "#/client";
 import type { BadgeFacts } from "#/modules/badges/model/badge-facts";
 import { HIDDEN_LADDER } from "#/modules/badges/model/badge-ladder";
+import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
 import {
   drawResults,
   games,
@@ -85,6 +86,7 @@ export async function loadHiddenBadgeFacts({
         visibleGame,
         eq(drawResults.userId, userId),
         isNotNull(drawResults.roll),
+        eq(games.recruitMethod, RECRUIT_METHOD.lottery),
         isNotNull(games.drawnAt),
       ),
     );
@@ -97,7 +99,14 @@ export async function loadHiddenBadgeFacts({
     })
     .from(games)
     .innerJoin(drawResults, eq(drawResults.gameId, games.id))
-    .where(and(visibleGame, eq(games.gmId, userId), isNotNull(games.drawnAt)))
+    .where(
+      and(
+        visibleGame,
+        eq(games.gmId, userId),
+        eq(games.recruitMethod, RECRUIT_METHOD.lottery),
+        isNotNull(games.drawnAt),
+      ),
+    )
     .groupBy(games.id);
   const [member] = await db
     .select({ joinedAt: serverMembers.joinedAt })

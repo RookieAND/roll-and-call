@@ -6,8 +6,8 @@ import { ArrowDown } from "lucide-react";
 import { toast, useAction } from "@/shared/ui";
 
 import { demoteParticipant } from "../api/demote-participant";
-import type { MemberSummary } from "../model/member-summary";
 import { demoteLine } from "../model/demote-line";
+import type { MemberSummary } from "../model/member-summary";
 import { MenuItemBody } from "./menu-item-body";
 import { MENU_ITEM_CLASS } from "./menu-item-class";
 

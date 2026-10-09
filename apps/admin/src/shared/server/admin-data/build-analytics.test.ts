@@ -132,6 +132,6 @@ describe("buildAnalytics", () => {
     expect(data.openSessionCount).toBe(2);
     expect(gridTotal).toBe(2);
     expect(data.rulebooks.open).toEqual([{ name: "가", count: 2 }]);
-    expect(data.firstComeShare.open).toBe(50);
+    expect(data.methodShare.open).toEqual({ firstCome: 50, lottery: 50, selection: 0 });
   });
 });
