@@ -1,6 +1,10 @@
 import { Table, Text, VStack } from "@roll-and-call/ui";
 
-import { RequestActions, type RequestAction } from "@/features/process-rulebook-request";
+import {
+  REQUEST_ACTION,
+  RequestActions,
+  type RequestAction,
+} from "@/features/process-rulebook-request";
 import { formatDate, RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { RulebookRequestRow } from "@/shared/server";
 import { EMPTY_IMAGE, EmptyState, Panel, SortFixedNote, TableColumns, Tag } from "@/shared/ui";
@@ -91,7 +95,11 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
                 <RequestActions
                   label={request.name}
                   similar={Boolean(request.similarTo)}
-                  actionHref={(action) => actionHref(action, request.id)}
+                  actionHrefs={{
+                    [REQUEST_ACTION.add]: actionHref(REQUEST_ACTION.add, request.id),
+                    [REQUEST_ACTION.link]: actionHref(REQUEST_ACTION.link, request.id),
+                    [REQUEST_ACTION.reject]: actionHref(REQUEST_ACTION.reject, request.id),
+                  }}
                 />
               </Table.Cell>
             </Table.Row>

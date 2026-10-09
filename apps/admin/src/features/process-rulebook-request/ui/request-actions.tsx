@@ -15,11 +15,11 @@ const ACTION_LABEL = {
 interface RequestActionsProps {
   label: string;
   similar: boolean;
-  actionHref: (action: RequestAction) => string;
+  actionHrefs: Record<RequestAction, string>;
 }
 
 // 비슷한 룰북이 있으면 [기존 룰북에 연결], 없으면 [새 룰북으로 추가]가 주 버튼이고 나머지는 ⋯ 메뉴다(D291).
-export function RequestActions({ label, similar, actionHref }: RequestActionsProps) {
+export function RequestActions({ label, similar, actionHrefs }: RequestActionsProps) {
   const primary = similar ? REQUEST_ACTION.link : REQUEST_ACTION.add;
   const others = Object.values(REQUEST_ACTION).filter((action) => action !== primary);
   return (
@@ -29,7 +29,7 @@ export function RequestActions({ label, similar, actionHref }: RequestActionsPro
         colorPalette="gray"
         size="sm"
         className="min-w-[136px]"
-        render={<ServerLink path={actionHref(primary)} scroll={false} />}
+        render={<ServerLink path={actionHrefs[primary]} scroll={false} />}
       >
         {ACTION_LABEL[primary]}
       </Button>
@@ -37,7 +37,7 @@ export function RequestActions({ label, similar, actionHref }: RequestActionsPro
         label={`${label} 다른 처리`}
         items={others.map((action) => ({
           label: ACTION_LABEL[action],
-          href: actionHref(action),
+          href: actionHrefs[action],
           scroll: false,
           danger: action === REQUEST_ACTION.reject,
         }))}
