@@ -7,6 +7,7 @@ import { NAV_ITEMS, type NavKey } from "./nav-items";
 import { ServerSwitch, type SwitchServer } from "./server-switch";
 import { SidebarLauncher } from "./sidebar-launcher";
 import { SidebarLink } from "./sidebar-link";
+import { SidebarRefresher } from "./sidebar-refresher";
 
 interface SidebarProps {
   nickname: string;
@@ -47,6 +48,7 @@ export function Sidebar({
           ADMIN
         </Text>
       </HStack>
+      <SidebarRefresher />
       <ServerSwitch current={server} servers={servers} platformAdmin={platformAdmin} />
       <div className="px-100 pt-125">
         <SidebarLauncher />
