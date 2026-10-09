@@ -93,9 +93,13 @@ export function SessionCard({ model }: SessionCardProps) {
             </Text>
           )}
         </ServerLink>
-        <SessionCardAction model={model} />
-        {model.canReopen && (
-          <ReopenGameLink gameId={model.id} variant="solid" size="md" label="다시 열기" />
+        {(model.action || model.canReopen) && (
+          <HStack gap="100" className="mt-050 [&>*]:mt-0 [&>*]:min-w-0 *:flex-1">
+            <SessionCardAction model={model} />
+            {model.canReopen && (
+              <ReopenGameLink gameId={model.id} variant="solid" size="md" label="다시 열기" />
+            )}
+          </HStack>
         )}
       </VStack>
     </Card.Root>
