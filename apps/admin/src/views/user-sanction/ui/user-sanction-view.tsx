@@ -18,6 +18,7 @@ export function UserSanctionView({ user, ongoing, staffChannel }: UserSanctionVi
           { href: "/users", label: "유저" },
           { href: backHref, label: user.nickname },
         ]}
+        contentWidth={1000}
       />
       <SanctionUserForm
         userId={user.id}

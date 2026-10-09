@@ -41,6 +41,7 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
         title={`${entry.action} · ${entry.targetName}`}
         sub="조치 상세"
         trail={[{ href: listHref, label: "활동 기록" }]}
+        contentWidth={960}
       />
       <VStack gap="150" className="mx-auto w-full max-w-[960px] flex-1 p-200">
         <section className="rounded-600 border border-gray-200 bg-surface">

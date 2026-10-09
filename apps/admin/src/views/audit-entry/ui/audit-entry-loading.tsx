@@ -12,6 +12,7 @@ export function AuditEntryLoading() {
         title={<Skeleton width={180} height={22} render={<span />} className="inline-block" />}
         sub="조치 상세"
         trail={[{ href: "/log", label: "활동 기록" }]}
+        contentWidth={960}
       />
       <LoadingRegion label="조치 상세를 불러오는 중입니다">
         <VStack gap="150" className="mx-auto w-full max-w-[960px] flex-1 p-200">

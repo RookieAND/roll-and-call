@@ -9,6 +9,7 @@ export function UserSanctionLoading() {
       <AdminHeader
         title={<Skeleton width={120} height={22} render={<span />} />}
         trail={[{ href: "/users", label: "유저" }]}
+        contentWidth={1000}
       />
       <LoadingRegion fullBleed label="제재할 유저 정보를 불러오는 중입니다">
         <Grid className="mx-auto w-full max-w-[1000px] flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-200 p-200">
