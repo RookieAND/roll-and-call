@@ -51,6 +51,7 @@ export interface Rulebook {
   edition: string;
   category: string;
   categoryAlias: string | null;
+  categoryMiniRule: boolean;
   kind: RulebookKind;
   supersedesId: string | null;
   aliases: string[];

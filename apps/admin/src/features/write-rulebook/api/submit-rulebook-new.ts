@@ -16,14 +16,16 @@ import { toRulebookFields } from "../model/to-rulebook-fields";
 export async function submitRulebookNew({
   requestId,
   draft,
+  miniRule,
   reason,
 }: {
   requestId: string | null;
   draft: RulebookDraft;
+  miniRule: boolean;
   reason: string;
 }) {
   const staff = await requireStaff();
-  const fields = toRulebookFields(draft);
+  const fields = { ...toRulebookFields(draft), miniRule };
   if (!fields.name || !reason.trim()) throw new Error("룰북 이름과 변경 사유를 입력해 주세요");
   const server = await getCurrentServer();
   const result = requestId

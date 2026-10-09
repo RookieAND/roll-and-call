@@ -13,9 +13,6 @@ export function MiniRuleField({ miniRule, disabled, onChange }: MiniRuleFieldPro
         <Text typography="body4" foreground="hint">
           GM 없이 모두가 PL이 되어 플레이할 수 있는 룰을 의미합니다.
         </Text>
-        <Text typography="body4" foreground="hint">
-          켜면 이 룰의 세션은 이 달의 기록 순위에서 회차당 100점이 아닌 50점으로 계산합니다.
-        </Text>
       </VStack>
       <Switch.Root checked={miniRule} disabled={disabled} onCheckedChange={onChange}>
         <Switch.Control />

@@ -15,11 +15,11 @@ export async function toRulebookValues({
   fields: RulebookFields;
   selfId?: string;
 }) {
-  const { category, categoryAlias, supersedesId, ...rest } = fields;
+  const { category, categoryAlias, miniRule, supersedesId, ...rest } = fields;
   if (fields.kind === "core") {
     await executor
       .insert(rulebookCategories)
-      .values({ serverId, name: category })
+      .values({ serverId, name: category, miniRule: miniRule ?? false })
       .onConflictDoNothing();
     await executor
       .update(rulebookCategories)

@@ -25,6 +25,7 @@ import type { RulebookDraft } from "../model/rulebook-draft";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
 import { KindCards } from "./kind-cards";
+import { MiniRuleField } from "./mini-rule-field";
 import { RequestSummary } from "./request-summary";
 import { SupersedesField } from "./supersedes-field";
 
@@ -55,6 +56,7 @@ export function AddRulebookForm({
     aliasesText: "",
     certRequired: true,
   });
+  const [miniRule, setMiniRule] = useState(false);
   const [reason, setReason] = useState(request ? "추가 요청 승인" : "");
   const [duplicate, setDuplicate] = useState(false);
 
@@ -65,6 +67,7 @@ export function AddRulebookForm({
     request && !category.exists && category.name === request.bookName
       ? "요청한 이름으로 새 카테고리를 만듭니다."
       : categoryHelp(category);
+  const existingCategory = rulebooks.find((rulebook) => rulebook.category === category.name);
   const nameError = duplicate ? "이미 등록된 룰북입니다" : undefined;
   const canAdd =
     Boolean(draft.name.trim() && reason.trim()) && !category.error && !nameError && !pending;
@@ -80,6 +83,7 @@ export function AddRulebookForm({
     const result = await submit({
       requestId: request?.id ?? null,
       draft: { ...draft, supersedesId: category.supersedesId },
+      miniRule,
       reason,
     });
     if (isUndefined(result)) return;
@@ -138,6 +142,13 @@ export function AddRulebookForm({
                 certRequired={draft.certRequired}
                 disabled={pending}
                 onChange={(certRequired) => change({ certRequired })}
+              />
+            </FormSection>
+            <FormSection title="4. 미니룰">
+              <MiniRuleField
+                miniRule={existingCategory ? existingCategory.categoryMiniRule : miniRule}
+                disabled={pending || category.exists}
+                onChange={setMiniRule}
               />
             </FormSection>
             <Field.Root label="변경 사유" htmlFor="add-rulebook-reason" required>

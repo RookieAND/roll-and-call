@@ -53,6 +53,7 @@ export async function loadAdminTables(serverId: string) {
       ...getTableColumns(rulebooks),
       category: rulebookCategories.name,
       categoryAlias: rulebookCategories.alias,
+      categoryMiniRule: rulebookCategories.miniRule,
     })
     .from(rulebooks)
     .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
