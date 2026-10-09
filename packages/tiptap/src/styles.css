@@ -1,6 +1,10 @@
 /* Registers this package's component sources with the consuming app's Tailwind. */
 @source ".";
 
+/* 긴 주소처럼 끊을 곳 없는 글자도 칸 안에서 줄을 바꾼다. anywhere는 칸의 최소 폭 계산에도 반영돼 flex·grid 안에서 넘치지 않는다. */
+.rich-text {
+  overflow-wrap: anywhere;
+}
 .rich-text > * + * {
   margin-top: 0.5rem;
 }
