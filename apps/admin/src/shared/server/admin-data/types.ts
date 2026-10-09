@@ -165,6 +165,9 @@ export interface Session {
   kindLabel?: string;
   playTypeLabel?: string;
   joinedAt?: Map<string, Date>;
+  applicationNoteEnabled?: boolean;
+  // 신청글을 쓴 사람. 본문은 스냅숏에 없고 [신청글 보기]를 누를 때 읽는다.
+  applicationNoteUserIds?: Set<string>;
   synopsis?: string;
   notices?: string[];
   imageUrls?: string[];

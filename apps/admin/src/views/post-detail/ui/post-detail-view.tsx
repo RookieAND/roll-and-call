@@ -1,6 +1,7 @@
 import { HStack, VStack } from "@roll-and-call/ui";
 
 import { POST_ACTION, PostActionDialog, type PostAction } from "@/features/moderate-post";
+import { ApplicationNoteDialog } from "@/features/view-application-note";
 import { auditLogHref, withQuery } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
 import { AdminHeader, HiddenBanner, NextItemButton, Panel, Tag } from "@/shared/ui";
@@ -47,6 +48,10 @@ export function PostDetailView({
     : undefined;
   const logHref = auditLogHref({ targetGameId: post.id });
   const userAppHref = serverAppUrl ? `${serverAppUrl}/games/${post.id}` : null;
+  const noteHref = (userId: string) => withQuery(pathname, query, { note: userId });
+  const nicknames = Object.fromEntries(
+    [...post.members, ...post.waitlist].map((member) => [member.userId, member.nickname]),
+  );
   const actionHref = (nextAction: PostAction) => withQuery(pathname, query, { action: nextAction });
 
   return (
@@ -73,13 +78,29 @@ export function PostDetailView({
               memberCount={post.members.length}
               waitlistCount={post.waitlist.length}
               contentPanel={<ContentPanel post={post} />}
-              memberPanel={<MemberPanel members={post.members} />}
-              waitlistPanel={<MemberPanel members={post.waitlist} waiting />}
+              memberPanel={
+                <MemberPanel
+                  members={post.members}
+                  noteHref={post.applicationNoteEnabled ? noteHref : undefined}
+                />
+              }
+              waitlistPanel={
+                <MemberPanel
+                  members={post.waitlist}
+                  waiting
+                  noteHref={post.applicationNoteEnabled ? noteHref : undefined}
+                />
+              }
             />
           </Panel>
         </VStack>
         <PostActionsAside post={post} actionHref={actionHref} />
       </HStack>
+      <ApplicationNoteDialog
+        gameId={post.id}
+        nicknames={nicknames}
+        closeHref={withQuery(pathname, query, {})}
+      />
       <PostActionDialog
         post={post}
         availableActions={availableActions}

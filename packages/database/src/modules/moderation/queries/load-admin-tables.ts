@@ -1,4 +1,5 @@
 import { and, eq, getTableColumns, isNull, sql } from "drizzle-orm";
+import { omit } from "es-toolkit";
 
 import { db } from "#/client";
 import {
@@ -44,8 +45,12 @@ export async function loadAdminTables(serverId: string) {
     )
     .orderBy(profiles.createdAt, profiles.id);
   const gameRows = await db.select().from(games).where(eq(games.serverId, serverId));
+  // 신청글 본문은 스냅숏에 싣지 않는다. 있는지만 알리고, 본문은 운영진이 [신청글 보기]를 누를 때 따로 읽는다.
   const participantRows = await db
-    .select()
+    .select({
+      ...omit(getTableColumns(participants), ["applicationNote"]),
+      hasApplicationNote: sql<boolean>`${participants.applicationNote} is not null`,
+    })
     .from(participants)
     .where(eq(participants.serverId, serverId));
   const rulebookRows = await db

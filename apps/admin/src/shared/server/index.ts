@@ -11,6 +11,7 @@ export {
   evaluateGameBadges,
   evaluateReviewBadges,
 } from "@roll-and-call/database/badges";
+export { getApplicationNote } from "@roll-and-call/database/games";
 export { isNicknameTaken } from "@roll-and-call/database/profiles";
 export { banGuildMember, unbanGuildMember } from "@roll-and-call/discord";
 export {

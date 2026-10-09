@@ -77,8 +77,10 @@ export async function getPostDetail({ id, filter }: { id: string; filter: PostLi
       waitingCount: waitingIds.filter((userId) => cancelRecipientIds.has(userId)).length,
     },
     next,
+    applicationNoteEnabled: session.applicationNoteEnabled ?? false,
     members: session.memberIds.map((userId) => ({
       userId,
+      hasApplicationNote: session.applicationNoteUserIds?.has(userId) ?? false,
       nickname: userOf(db, userId).nickname,
       discordHandle: userOf(db, userId).discordHandle,
       joinedAt: session.joinedAt?.get(userId),
@@ -87,6 +89,7 @@ export async function getPostDetail({ id, filter }: { id: string; filter: PostLi
     waitlist: waitingIds.map((userId, index) => ({
       userId,
       listOrder: index + 1,
+      hasApplicationNote: session.applicationNoteUserIds?.has(userId) ?? false,
       nickname: userOf(db, userId).nickname,
       discordHandle: userOf(db, userId).discordHandle,
       joinedAt: session.joinedAt?.get(userId),

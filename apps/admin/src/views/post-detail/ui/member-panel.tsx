@@ -1,4 +1,4 @@
-import { Table, Text } from "@roll-and-call/ui";
+import { Button, Table, Text } from "@roll-and-call/ui";
 
 import { formatDateTime } from "@/shared/lib";
 import type { PostDetail } from "@/shared/server";
@@ -6,6 +6,7 @@ import { EMPTY_IMAGE, TableEmptyRow, TableColumns, ServerLink } from "@/shared/u
 
 const NO_SHOW_WARNING_COUNT = 2;
 const COLUMN_COUNT = 4;
+const NOTE_COLUMN_WIDTH = 120;
 
 const EMPTY_COPY = {
   members: {
@@ -21,12 +22,22 @@ const EMPTY_COPY = {
 interface MemberPanelProps {
   members: PostDetail["members"] | PostDetail["waitlist"];
   waiting?: boolean;
+  // 신청글 받기 구인이면 신청글 열기 주소를 돌려주는 함수를 받는다.
+  noteHref?: (userId: string) => string;
 }
 
-export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
+export function MemberPanel({ members, waiting = false, noteHref }: MemberPanelProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[160, { fixed: 180 }, { fixed: 170 }, { fixed: 96 }]} />
+      <TableColumns
+        widths={[
+          160,
+          { fixed: 180 },
+          { fixed: 170 },
+          { fixed: 96 },
+          ...(noteHref ? [{ fixed: NOTE_COLUMN_WIDTH }] : []),
+        ]}
+      />
       <Table.Header>
         <Table.Row>
           <Table.Head>닉네임</Table.Head>
@@ -37,12 +48,13 @@ export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
           ) : (
             <Table.Head align="end">불참 횟수</Table.Head>
           )}
+          {noteHref && <Table.Head />}
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {members.length === 0 ? (
           <TableEmptyRow
-            colSpan={COLUMN_COUNT}
+            colSpan={noteHref ? COLUMN_COUNT + 1 : COLUMN_COUNT}
             image={EMPTY_IMAGE.party}
             {...EMPTY_COPY[waiting ? "waitlist" : "members"]}
           />
@@ -86,6 +98,22 @@ export function MemberPanel({ members, waiting = false }: MemberPanelProps) {
                   >
                     {member.recentNoShowCount}회
                   </Text>
+                </Table.Cell>
+              )}
+              {noteHref && (
+                <Table.Cell align="end">
+                  {member.hasApplicationNote && (
+                    <Button
+                      variant="outline"
+                      colorPalette="gray"
+                      size="sm"
+                      aria-label={`${member.nickname}님의 신청글 보기`}
+                      className="relative"
+                      render={<ServerLink path={noteHref(member.userId)} scroll={false} />}
+                    >
+                      신청글 보기
+                    </Button>
+                  )}
                 </Table.Cell>
               )}
             </Table.Row>
