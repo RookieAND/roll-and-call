@@ -9,6 +9,8 @@ type LadderMeta = { title: string; unit: string; verb: string };
 
 const SPECIAL_META: LadderMeta = { title: "특별 칭호", unit: "", verb: "" };
 
+const RULEBOOK_META: LadderMeta = { title: "룰북 인증", unit: "종", verb: "인증" };
+
 const HIDDEN_META = Object.fromEntries(
   Object.values(HIDDEN_LADDER).map((ladder) => [ladder, SPECIAL_META]),
 ) as Record<HiddenLadderKey, LadderMeta>;
@@ -24,10 +26,10 @@ export const LADDER_META: Record<BadgeLadderKey, LadderMeta> = {
   [BADGE_LADDER.gmVariety]: { title: "다양한 룰 운영", unit: "종", verb: "진행" },
   [BADGE_LADDER.gmReviews]: { title: "받은 후기", unit: "건", verb: "받음" },
   [BADGE_LADDER.gmMonthly]: { title: "이달의 GM", unit: "회", verb: "진행" },
-  [BADGE_LADDER.scholar]: SPECIAL_META,
-  [BADGE_LADDER.collector]: SPECIAL_META,
-  [BADGE_LADDER.polymath]: SPECIAL_META,
-  [BADGE_LADDER.library]: SPECIAL_META,
+  [BADGE_LADDER.scholar]: RULEBOOK_META,
+  [BADGE_LADDER.collector]: RULEBOOK_META,
+  [BADGE_LADDER.polymath]: RULEBOOK_META,
+  [BADGE_LADDER.library]: RULEBOOK_META,
   [BADGE_LADDER.developer]: SPECIAL_META,
   [BADGE_LADDER.guildMaster]: SPECIAL_META,
   [BADGE_LADDER.apprentice]: SPECIAL_META,

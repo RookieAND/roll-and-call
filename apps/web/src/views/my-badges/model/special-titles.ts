@@ -1,4 +1,9 @@
-import { BADGE_ROLE, HIDDEN_LADDER, isHiddenLadder } from "@roll-and-call/database/badges/model";
+import {
+  BADGE_LADDERS,
+  BADGE_ROLE,
+  HIDDEN_LADDER,
+  isHiddenLadder,
+} from "@roll-and-call/database/badges/model";
 import { partition } from "es-toolkit";
 
 import type { BadgeView } from "@/entities/badge";
@@ -7,7 +12,7 @@ import type { BadgeRecord } from "@/shared/server";
 
 const HIDDEN_TITLE_COUNT = Object.keys(HIDDEN_LADDER).length;
 
-// 운영진 지급 칭호가 앞, 그다음 받은 숨겨진 칭호를 받은 순서로. 못 받은 숨겨진 칭호 수만큼 「???」 카드를 잇는다(R29).
+// 운영진 지급 칭호가 앞, 그다음 기록으로 받은 칭호(숨겨진 칭호·룰북 인증)를 받은 순서로. 못 받은 숨겨진 칭호 수만큼 「???」 카드를 잇는다(R29).
 export function specialTitles({
   held,
   records,
@@ -17,11 +22,11 @@ export function specialTitles({
   records: BadgeRecord[];
   now: Date;
 }) {
-  const [hidden, granted] = partition(
+  const [earned, granted] = partition(
     held.filter((badge) => badge.role === BADGE_ROLE.special),
-    (badge) => isHiddenLadder(badge.ladder),
+    (badge) => !BADGE_LADDERS[badge.ladder].granted,
   );
-  const earnedOrder = hidden.toSorted(
+  const earnedOrder = earned.toSorted(
     (left, right) => left.record.earnedAt.getTime() - right.record.earnedAt.getTime(),
   );
   return {
@@ -32,7 +37,10 @@ export function specialTitles({
       name: badge.name,
       detail: heldBadgeDetail({ badge, records, facts: null, now }),
     })),
-    unknownCount: Math.max(HIDDEN_TITLE_COUNT - hidden.length, 0),
+    unknownCount: Math.max(
+      HIDDEN_TITLE_COUNT - earned.filter((badge) => isHiddenLadder(badge.ladder)).length,
+      0,
+    ),
   };
 }
 

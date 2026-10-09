@@ -2,7 +2,6 @@ import {
   BADGE_LADDER,
   BADGE_LADDERS,
   BADGE_ROLE,
-  isHiddenLadder,
   type BadgeLadderKey,
 } from "@roll-and-call/database/badges/model";
 
@@ -44,9 +43,9 @@ const MONTHLY_LADDER: Partial<Record<BadgeTab, BadgeLadderKey>> = {
 
 const DATE_FORMAT = "YY.MM.DD";
 
-// 운영진 지급 칭호가 숨겨진 칭호보다 앞이고, 나머지는 받은 순서다.
+// 운영진 지급 칭호가 기록으로 받은 칭호보다 앞이고, 나머지는 받은 순서다.
 const earlierFirst = (left: HeldBadge, right: HeldBadge) =>
-  Number(isHiddenLadder(left.ladder)) - Number(isHiddenLadder(right.ladder)) ||
+  Number(!BADGE_LADDERS[left.ladder].granted) - Number(!BADGE_LADDERS[right.ladder].granted) ||
   left.record.earnedAt.getTime() - right.record.earnedAt.getTime();
 
 export function roleGroups({
