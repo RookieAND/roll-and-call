@@ -13,6 +13,7 @@ export { getCertSellers, getQuizQuestion } from "@roll-and-call/database/ruleboo
 export {
   getGameAvailabilities,
   findGameServerSlug,
+  getApplicationNotes,
   getGameParticipants,
   getGamesByGm,
   getGamesCounts,

@@ -5,6 +5,7 @@ import { isNull } from "es-toolkit";
 
 import type { MemberSummary } from "../model/member-summary";
 import type { RosterContext } from "../model/roster-context";
+import { ApplicationNoteBlock } from "./application-note-block";
 import { DemoteMemberItem } from "./demote-member-item";
 import { MarkAbsentMemberItem } from "./mark-absent-member-item";
 import { MemberSheetHeader } from "./member-sheet-header";
@@ -43,6 +44,9 @@ export function MemberSheet({ roster, member, onMarkAbsent, onClose }: MemberShe
               beforeDraw={beforeDraw}
               started={started}
             />
+            {member.applicationNote && (
+              <ApplicationNoteBlock note={member.applicationNote} joinedAt={member.joinedAt} />
+            )}
             {isConfirmed && !started && (
               <DemoteMemberItem
                 gameId={gameId}

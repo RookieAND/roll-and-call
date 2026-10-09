@@ -108,6 +108,8 @@ export function RosterQueues({
               badge={member.removed && <Badge colorPalette="danger">불참</Badge>}
               dimmed={member.removed}
               action={rowAction(member)}
+              quote={member.removed ? null : member.applicationNote}
+              onOpenQuote={() => setMenuMember(member)}
             />
           );
         })}
@@ -133,6 +135,8 @@ export function RosterQueues({
                 note={`${toKst(member.joinedAt).format("M월 D일 HH:mm:ss")} 신청`}
                 noteForeground="hint"
                 action={rowAction(member)}
+                quote={member.applicationNote}
+                onOpenQuote={() => setMenuMember(member)}
               />
             ))}
           </ExpandableRows>

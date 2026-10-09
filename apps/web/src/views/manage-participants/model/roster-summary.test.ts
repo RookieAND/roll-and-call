@@ -13,6 +13,7 @@ function member(userId: string, waitlistRank: number | null): ManagedMember {
     waitlistRank,
     hasAvailability: true,
     joinedAt: new Date("2026-09-18T00:00:00Z"),
+    applicationNote: null,
     removed: false,
   };
 }

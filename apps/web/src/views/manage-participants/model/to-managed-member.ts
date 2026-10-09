@@ -12,9 +12,11 @@ type ParticipantRow = RosterMember<{
 export function toManagedMember({
   participant,
   availableUserIds,
+  applicationNote,
 }: {
   participant: ParticipantRow;
   availableUserIds: Set<string>;
+  applicationNote: string | null;
 }): ManagedMember {
   return {
     userId: participant.userId,
@@ -23,6 +25,7 @@ export function toManagedMember({
     waitlistRank: participant.waitlistRank,
     hasAvailability: availableUserIds.has(participant.userId),
     joinedAt: participant.joinedAt,
+    applicationNote,
     removed: participant.status === PARTICIPANT_STATUS.removed,
   };
 }

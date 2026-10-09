@@ -6,7 +6,12 @@ import { isSessionEnded, isSessionStarted, SCHEDULE_MODE, splitRoster } from "@/
 import { GmOnlyNotice } from "@/features/auth";
 import { nextRoundBaseDate } from "@/features/open-next-round";
 import { serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
+import {
+  getApplicationNotes,
+  getCurrentSessionUser,
+  getGameParticipants,
+  getCurrentServer,
+} from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { summarizeRoster } from "../model/roster-summary";
@@ -46,9 +51,19 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
     redirect(serverPath({ slug: server.slug, path: `/games/${id}/manage` }));
   }
 
+  // 신청글은 GM 확인을 거친 뒤에만 읽는다.
+  const applicationNotes = new Map(
+    (await getApplicationNotes({ serverId: server.id, gameId: id, gmId: user.id })).map(
+      ({ userId, note }) => [userId, note],
+    ),
+  );
   const roster = splitRoster(game.participants);
   const toMember = (participant: (typeof roster.confirmed)[number]) =>
-    toManagedMember({ participant, availableUserIds });
+    toManagedMember({
+      participant,
+      availableUserIds,
+      applicationNote: applicationNotes.get(participant.userId) ?? null,
+    });
   const confirmed = roster.confirmed.map(toMember);
   const waiting = roster.waiting.map(toMember);
   const confirmedRows = [...roster.confirmed, ...roster.removed]
