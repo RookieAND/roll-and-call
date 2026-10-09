@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { ServerLink } from "./server-link";
+import { ThemeToggleButton } from "./theme-toggle-button";
 
 interface AdminHeaderProps {
   title: ReactNode;
@@ -58,6 +59,7 @@ export function AdminHeader({
       ) : null}
       <HStack align="center" gap="100" className="ml-auto">
         {actions}
+        <ThemeToggleButton />
       </HStack>
     </HStack>
   );

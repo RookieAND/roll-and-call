@@ -21,21 +21,31 @@ const CHART_TOKEN_VARIABLES = {
 export type ChartTokens = Record<keyof typeof CHART_TOKEN_VARIABLES, string>;
 
 // 차트 라이브러리는 CSS 변수를 못 읽어서, 그릴 자리의 계산된 값을 꺼내 넘긴다.
-// ponytail: 마운트 때 한 번만 읽는다. 어드민에 테마 전환이 생기면 data-theme를 구독한다.
+// 테마를 바꾸면 <html data-theme>가 달라지므로 그 변화를 구독해 다시 읽는다.
 export function useChartTokens<Element extends HTMLElement = HTMLDivElement>() {
   const ref = useRef<Element>(null);
   const [tokens, setTokens] = useState<ChartTokens | null>(null);
   useLayoutEffect(() => {
-    if (!ref.current) return;
-    const style = getComputedStyle(ref.current);
-    setTokens(
-      Object.fromEntries(
-        Object.entries(CHART_TOKEN_VARIABLES).map(([key, variable]) => [
-          key,
-          style.getPropertyValue(variable).trim(),
-        ]),
-      ) as ChartTokens,
-    );
+    const element = ref.current;
+    if (!element) return;
+    function read() {
+      const style = getComputedStyle(element!);
+      setTokens(
+        Object.fromEntries(
+          Object.entries(CHART_TOKEN_VARIABLES).map(([key, variable]) => [
+            key,
+            style.getPropertyValue(variable).trim(),
+          ]),
+        ) as ChartTokens,
+      );
+    }
+    read();
+    const observer = new MutationObserver(read);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+    return () => observer.disconnect();
   }, []);
   return { ref, tokens };
 }
