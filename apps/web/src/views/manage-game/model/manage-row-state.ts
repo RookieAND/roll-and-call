@@ -17,6 +17,8 @@ export type ManageRow = {
   icon: "clipboard" | "message" | "clock" | "check" | "users" | "pencil";
   label: string;
   detail: string;
+  // 줄 아래에 덧붙이는 안내 한 줄. 줄을 누르는 동작은 그대로다.
+  note?: string;
   href: string | null;
   action?: ManageRowAction;
   state: ManageRowState;

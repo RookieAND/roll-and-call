@@ -1,4 +1,4 @@
-import { formatPlayMinutes } from "@roll-and-call/database/games/model";
+import { formatPlayRange } from "@roll-and-call/database/games/model";
 import { Avatar, Badge, Card, HStack, Text } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
@@ -12,6 +12,7 @@ interface GameInfoTableProps {
 }
 
 export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
+  const playRange = formatPlayRange(game.playMinutesMin, game.playMinutes);
   const rows: { label: string; value: ReactNode }[] = [
     { label: "룰", value: game.rule },
     {
@@ -27,9 +28,7 @@ export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
         </ServerLink>
       ),
     },
-    ...(game.playMinutes
-      ? [{ label: "플레이타임", value: formatPlayMinutes(game.playMinutes) }]
-      : []),
+    ...(playRange ? [{ label: "플레이타임", value: playRange }] : []),
     { label: "모집 마감일", value: formatDateTime(game.endDate) },
     { label: "세션 일정", value: formatGameSchedule(game) },
   ];

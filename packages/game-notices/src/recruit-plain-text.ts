@@ -1,5 +1,5 @@
 import type { Game } from "@roll-and-call/database";
-import { formatPlayMinutes, RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
+import { formatPlayRange, RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
 
 import { inlineCodeTags } from "./inline-code-tags";
 import { formatDateTime } from "./lib/format-date-time";
@@ -37,6 +37,7 @@ export function recruitPlainText({
   const section = (heading: string, body: string | undefined) =>
     body ? `${heading}\n${body}` : undefined;
   const item = (label: string, value: string) => `- **${label}**　${value}`;
+  const playRange = formatPlayRange(game.playMinutesMin, game.playMinutes);
   const tagItem = (label: string, values: string[]) =>
     values.length > 0 ? item(label, inlineCodeTags(values)) : undefined;
   // 트리거는 보고 싶지 않은 사람이 있으니 스포일러로 가린다. 코드 안의 ||는 문법이 아니라 가림막이 깨지지 않는다.
@@ -59,7 +60,7 @@ export function recruitPlainText({
       "### 🗓️ 일정",
       list([
         item("시작", formatGameSchedule(game)),
-        game.playMinutes ? item("플레이 시간", formatPlayMinutes(game.playMinutes)) : undefined,
+        playRange ? item("플레이 시간", playRange) : undefined,
         item("모집 마감", formatDateTime(game.endDate)),
       ]),
     ),

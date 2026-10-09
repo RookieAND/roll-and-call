@@ -1,68 +1,65 @@
 "use client";
 
-import { Field, HStack, Select } from "@roll-and-call/ui";
+import { Button, Field, IconButton, Text, VStack } from "@roll-and-call/ui";
 
-import { MAX_PLAY_HOURS, PLAY_HOUR_OPTIONS, PLAY_MINUTE_OPTIONS } from "../model/play-time-options";
-import { PlayTimeTrigger } from "./play-time-trigger";
+import { PlayTimeRow } from "./play-time-row";
 
 interface PlayTimeFieldProps {
-  value: number;
-  onChange: (minutes: number) => void;
+  min: number;
+  max: number | null;
+  onChangeMin: (minutes: number) => void;
+  onChangeMax: (minutes: number | null) => void;
   error?: string;
 }
 
-export function PlayTimeField({ value, onChange, error }: PlayTimeFieldProps) {
-  const hours = Math.floor(value / 60);
-  const minutes = value % 60;
-  const hourItems = PLAY_HOUR_OPTIONS.map((hour) => ({
-    label: `${hour}시간`,
-    value: String(hour),
-  }));
-  // DB에 남은 예전 값("2시간 15분" 등)의 분도 고를 수 있게 끼워 둔다.
-  const minuteOptions = PLAY_MINUTE_OPTIONS.some((minute) => minute === minutes)
-    ? PLAY_MINUTE_OPTIONS
-    : [minutes, ...PLAY_MINUTE_OPTIONS];
-  const minuteItems = minuteOptions.map((minute) => ({
-    label: `${minute}분`,
-    value: String(minute),
-  }));
-
-  function change(nextHours: number, nextMinutes: number) {
-    onChange(nextHours * 60 + (nextHours >= MAX_PLAY_HOURS ? 0 : nextMinutes));
-  }
-
+export function PlayTimeField({ min, max, onChangeMin, onChangeMax, error }: PlayTimeFieldProps) {
   return (
-    <Field.Root label="플레이타임" required error={error}>
-      <HStack gap="100">
-        <Select.Root
-          items={hourItems}
-          value={String(hours)}
-          onValueChange={(hour) => change(Number(hour), minutes)}
-        >
-          <PlayTimeTrigger value={hours} unit="시간" />
-          <Select.Popup>
-            {hourItems.map((item) => (
-              <Select.Item key={item.value} value={item.value}>
-                {item.label}
-              </Select.Item>
-            ))}
-          </Select.Popup>
-        </Select.Root>
-        <Select.Root
-          items={minuteItems}
-          value={String(minutes)}
-          onValueChange={(minute) => change(hours, Number(minute))}
-        >
-          <PlayTimeTrigger value={minutes} unit="분" />
-          <Select.Popup>
-            {minuteItems.map((item) => (
-              <Select.Item key={item.value} value={item.value}>
-                {item.label}
-              </Select.Item>
-            ))}
-          </Select.Popup>
-        </Select.Root>
-      </HStack>
+    <Field.Root label="플레이타임" required>
+      <VStack gap="100">
+        <PlayTimeRow name={max === null ? undefined : "최소"} value={min} onChange={onChangeMin} />
+        {max === null ? (
+          <Button
+            type="button"
+            variant="outline"
+            colorPalette="gray"
+            className="h-11 w-full"
+            onClick={() => onChangeMax(min)}
+          >
+            + 최대 추가
+          </Button>
+        ) : (
+          <PlayTimeRow
+            name="최대"
+            value={max}
+            onChange={onChangeMax}
+            action={
+              <IconButton aria-label="최대 지우기" onClick={() => onChangeMax(null)}>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                >
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
+              </IconButton>
+            }
+          />
+        )}
+        {error && (
+          <Text role="alert" typography="body4" foreground="danger">
+            {error}
+          </Text>
+        )}
+        {!error && max === null && (
+          <Text typography="body4" foreground="hint">
+            최대를 추가하지 않으면 최소와 같은 시간으로 정해집니다.
+          </Text>
+        )}
+      </VStack>
     </Field.Root>
   );
 }

@@ -66,8 +66,10 @@ export const games = pgTable(
     thumbnailUrl: text("thumbnail_url"),
     thumbnailSpoiler: boolean("thumbnail_spoiler").notNull().default(false),
     images: text("images").array().notNull().default([]),
-    // 플레이 시간의 유일한 값(분). 종료 시각 판별과 화면 표기가 모두 이 값을 쓴다.
+    // 플레이 시간의 최대(분). 종료 시각 판별 등 모든 계산이 이 값을 쓴다.
     playMinutes: integer("play_minutes"),
+    // 플레이 시간의 최소(분). 화면 표기에만 쓴다. 최대와 같으면 범위가 아닌 하나로 보인다.
+    playMinutesMin: integer("play_minutes_min"),
     // 신청 전에 알아야 할 것들. 각각 최대 5개이고 순서를 그대로 보여준다.
     genres: text("genres").array().notNull().default([]),
     triggers: text("triggers").array().notNull().default([]),
@@ -160,6 +162,10 @@ export const games = pgTable(
       sql`${table.minPlayers} is null or (${table.minPlayers} >= 1 and ${table.minPlayers} <= ${table.maxPlayers})`,
     ),
     check("games_play_minutes_positive", sql`${table.playMinutes} > 0`),
+    check(
+      "games_play_minutes_min_range",
+      sql`${table.playMinutesMin} is null or (${table.playMinutesMin} > 0 and ${table.playMinutesMin} <= ${table.playMinutes})`,
+    ),
     check(
       "games_window_hours",
       sql`${table.windowStartHour} between 0 and 23 and ${table.windowEndHour} between 0 and 23 and ${table.windowStartHour} <> ${table.windowEndHour}`,

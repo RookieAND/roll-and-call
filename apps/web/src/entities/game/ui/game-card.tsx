@@ -1,6 +1,6 @@
 import {
   deriveGameStatus,
-  formatPlayMinutes,
+  formatPlayRange,
   isSessionEnded,
   sessionEndAt,
 } from "@roll-and-call/database/games/model";
@@ -50,10 +50,9 @@ export function GameCard({ game }: GameCardProps) {
         })
       : current;
 
-  const meta = compact([
-    game.rule,
-    game.playMinutes ? formatPlayMinutes(game.playMinutes) : null,
-  ]).join(" · ");
+  const meta = compact([game.rule, formatPlayRange(game.playMinutesMin, game.playMinutes)]).join(
+    " · ",
+  );
 
   return (
     <Card.Root

@@ -59,6 +59,11 @@ export function ManageRowContent({ row, chevron }: ManageRowContentProps) {
         <Text typography="body4" foreground={DETAIL_FOREGROUND[row.state]}>
           {row.detail}
         </Text>
+        {row.note && (
+          <Text typography="body4" foreground="hint">
+            {row.note}
+          </Text>
+        )}
       </VStack>
       {chevron && <ChevronRight size={17} className="flex-none text-hint" aria-hidden />}
     </>

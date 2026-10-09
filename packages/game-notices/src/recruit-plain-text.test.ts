@@ -17,6 +17,7 @@ const game = {
   genres: ["클로즈드", "조사"],
   platforms: ["보이스"],
   triggers: ["유혈", "사망"],
+  playMinutesMin: 240,
   playMinutes: 240,
   aiImage: false,
   playType: "voice",

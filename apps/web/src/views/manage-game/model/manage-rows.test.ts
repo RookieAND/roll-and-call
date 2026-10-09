@@ -121,6 +121,9 @@ describe("manageRows", () => {
     const rows = byKey(gameWith({ confirmedAt: at(-0.5 * HOUR) }));
     expect(rows.attendance.state).toBe(MANAGE_ROW_STATE.open);
     expect(rows.attendance.action).toBe(MANAGE_ROW_ACTION.endSession);
+    expect(rows.attendance.note).toBe(
+      "세션을 마치지 않으면 예정된 종료 시각에 출석 확인이 시작됩니다.",
+    );
     expect(rows.attendance.href).toBeNull();
     expect(rows.edit.state).toBe(MANAGE_ROW_STATE.locked);
     expect(rows.edit.detail).toBe("시작한 세션은 고칠 수 없습니다");

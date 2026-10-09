@@ -2,6 +2,7 @@ import {
   AWAITING_RESULT_PHRASE,
   awaitingResultMethod,
   formatPlayMinutes,
+  formatPlayRange,
 } from "@roll-and-call/database/games/model";
 import { Badge, Container, VStack } from "@roll-and-call/ui";
 import { pick } from "es-toolkit";
@@ -116,6 +117,7 @@ export async function GameConfirmView({ id }: GameConfirmViewProps) {
   const { names } = aggregateAvailability({ avails: availabilities, userId: null });
   const minutes = effectivePlayMinutes(game.playMinutes);
   const playLabel = formatPlayMinutes(minutes);
+  const playRangeLabel = formatPlayRange(game.playMinutesMin, game.playMinutes) ?? playLabel;
   const confirmedCount = countConfirmed(game.participants);
 
   return (
@@ -128,7 +130,7 @@ export async function GameConfirmView({ id }: GameConfirmViewProps) {
             rule={game.rule}
             respondedCount={responseCounts.get(id) ?? 0}
             confirmedCount={confirmedCount}
-            playLabel={playLabel}
+            playLabel={playRangeLabel}
             deadlineLabel={formatDate(game.endDate)}
           />
           <ConfirmSessionForm

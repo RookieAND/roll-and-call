@@ -45,13 +45,14 @@ export function GameBasicsFields({ form, rulebooks, kindLocked = false }: GameBa
       <GameRulebookField form={form} rulebooks={rulebooks} />
 
       <PlayTimeField
-        value={watch("playMinutes")}
-        error={errors.playMinutes?.message}
-        onChange={(value) =>
-          setValue("playMinutes", value, {
-            shouldDirty: true,
-            shouldValidate: true,
-          })
+        min={watch("playMinutesMin")}
+        max={watch("playMinutes")}
+        error={errors.playMinutesMin?.message ?? errors.playMinutes?.message}
+        onChangeMin={(value) =>
+          setValue("playMinutesMin", value, { shouldDirty: true, shouldValidate: true })
+        }
+        onChangeMax={(value) =>
+          setValue("playMinutes", value, { shouldDirty: true, shouldValidate: true })
         }
       />
 

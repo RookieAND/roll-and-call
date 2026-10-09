@@ -26,6 +26,7 @@ export function attendanceRow({
       href: null,
       action: MANAGE_ROW_ACTION.endSession,
       detail: "세션이 진행 중입니다 · 끝나면 여기서 세션을 마쳐 주세요",
+      note: "세션을 마치지 않으면 예정된 종료 시각에 출석 확인이 시작됩니다.",
     };
   }
   if (!isSessionEnded(game, now)) return { ...locked, detail: NOT_ENDED };

@@ -71,7 +71,13 @@ export function GameForm({
       platforms: defaultGame?.platforms ?? [],
       notice: defaultGame?.notice ?? "",
       aiImage: defaultGame?.aiImage ?? false,
-      playMinutes: defaultGame?.playMinutes ?? DEFAULT_PLAY_MINUTES,
+      playMinutesMin:
+        defaultGame?.playMinutesMin ?? defaultGame?.playMinutes ?? DEFAULT_PLAY_MINUTES,
+      // 최소와 같으면 최대는 비운 것으로 연다.
+      playMinutes:
+        defaultGame?.playMinutes && defaultGame.playMinutes !== defaultGame.playMinutesMin
+          ? defaultGame.playMinutes
+          : null,
       maxPlayers: String(defaultGame?.maxPlayers ?? 4),
       minPlayers: String(defaultGame?.minPlayers ?? ""),
       recruitMethod: defaultGame?.recruitMethod ?? RECRUIT_METHOD.firstCome,

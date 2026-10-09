@@ -27,7 +27,8 @@ const base = {
   waitlistEnabled: true,
   applicationNoteEnabled: false,
   preConfirmed: [],
-  playMinutes: 180,
+  playMinutesMin: 180,
+  playMinutes: null,
 };
 
 const imageUrl = (index: number) =>
@@ -133,7 +134,11 @@ describe("gameFormSchema", () => {
   });
 
   it("플레이타임을 0시간 0분으로 둘 수 없다", () => {
-    expect(firstError({ ...base, playMinutes: 0 })).toBe("playMinutes");
+    expect(firstError({ ...base, playMinutesMin: 0 })).toBe("playMinutesMin");
+  });
+
+  it("최소가 최대보다 길 수 없다", () => {
+    expect(firstError({ ...base, playMinutesMin: 300, playMinutes: 180 })).toBe("playMinutes");
   });
 
   it("장르는 5개까지다", () => {
@@ -189,7 +194,13 @@ describe("toGameColumns", () => {
     );
   });
 
-  it("플레이타임은 분 값 하나만 저장한다", () => {
-    expect(toGameColumns({ ...base, playMinutes: 210 }).playMinutes).toBe(210);
+  it("최대를 비우면 최대를 최소와 같은 값으로 저장한다", () => {
+    const columns = toGameColumns({ ...base, playMinutesMin: 210, playMinutes: null });
+    expect([columns.playMinutesMin, columns.playMinutes]).toEqual([210, 210]);
+  });
+
+  it("최소와 최대를 모두 저장한다", () => {
+    const columns = toGameColumns({ ...base, playMinutesMin: 180, playMinutes: 300 });
+    expect([columns.playMinutesMin, columns.playMinutes]).toEqual([180, 300]);
   });
 });

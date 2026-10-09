@@ -3,11 +3,12 @@ import { Select, Text } from "@roll-and-call/ui";
 interface PlayTimeTriggerProps {
   value: number;
   unit: string;
+  label?: string;
 }
 
-export function PlayTimeTrigger({ value, unit }: PlayTimeTriggerProps) {
+export function PlayTimeTrigger({ value, unit, label = "" }: PlayTimeTriggerProps) {
   return (
-    <Select.Trigger aria-label={`플레이타임 ${unit}`}>
+    <Select.Trigger aria-label={`${label}플레이타임 ${unit}`}>
       <Text numeric typography="body3" weight="medium" className="flex-1">
         {value}
       </Text>

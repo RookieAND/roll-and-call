@@ -78,6 +78,7 @@ export function buildTrialGame({
     thumbnailUrl: null,
     thumbnailSpoiler: false,
     images: [],
+    playMinutesMin: 210,
     playMinutes: 210,
     genres: ["호러", "미스터리"],
     triggers: [],

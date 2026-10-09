@@ -50,7 +50,8 @@ const form: GameFormValues = {
   waitlistEnabled: true,
   applicationNoteEnabled: false,
   preConfirmed: [],
-  playMinutes: 180,
+  playMinutesMin: 180,
+  playMinutes: null,
 };
 
 function reason({

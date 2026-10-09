@@ -15,6 +15,7 @@ import { richTextLength } from "@/shared/lib";
 import { isWindowHour } from "./is-window-hour";
 import { minPlayersRangeError } from "./min-players-range-error";
 import { monthDayLabel } from "./month-day-label";
+import { playTimeError } from "./play-time-error";
 
 // 시작일 포함 일수다. 시작일과 종료일이 같은 하루짜리도 받는다.
 export const GAME_RANGE_MAX_DAYS = 14;
@@ -69,7 +70,9 @@ export const gameFormSchema = z
       )
       .optional(),
     aiImage: z.boolean({ error: "AI 이미지 사용 여부를 골라 주세요." }),
-    playMinutes: z.number().int().min(1, "플레이타임을 0시간 0분으로 둘 수 없습니다."),
+    // 최소는 필수, 최대는 비우면 최소와 같다. 범위는 superRefine에서 함께 본다.
+    playMinutesMin: z.number().int(),
+    playMinutes: z.number().int().nullable(),
     maxPlayers: z.string().refine((value) => {
       const count = Number(value);
       return value !== "" && Number.isInteger(count) && count >= 1 && count <= GAME_MAX_PLAYERS;
@@ -118,6 +121,10 @@ export const gameFormSchema = z
         message: `직접 확정한 ${values.preConfirmed.length}명보다 줄일 수 없습니다.`,
         path: ["maxPlayers"],
       });
+    }
+    const playTime = playTimeError({ min: values.playMinutesMin, max: values.playMinutes });
+    if (playTime) {
+      context.addIssue({ code: "custom", message: playTime.message, path: [playTime.field] });
     }
     const minPlayersError = minPlayersRangeError(values);
     if (minPlayersError) {
