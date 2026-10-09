@@ -31,7 +31,7 @@ export async function POST(request: Request) {
   }
   if (interaction.type === INTERACTION_MESSAGE_COMPONENT) {
     if (interaction.data?.custom_id?.startsWith(REVIEW_BUTTON_PREFIX)) {
-      return NextResponse.json(handleReviewButton(interaction));
+      return NextResponse.json(await handleReviewButton(interaction));
     }
     return NextResponse.json(await handleApplyButton(interaction));
   }

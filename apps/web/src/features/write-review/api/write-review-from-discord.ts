@@ -15,8 +15,9 @@ import {
   uploadReviewPhotos,
 } from "@/shared/server";
 
+import { blockMessage } from "../model/block-message";
 import { PHOTO_ACCEPT, PHOTO_MAX_BYTES } from "../model/photo-rules";
-import { MY_REVIEWS_HREF, REVIEW_BLOCK, REVIEW_BLOCK_DIALOG } from "../model/review-block";
+import { MY_REVIEWS_HREF, REVIEW_BLOCK } from "../model/review-block";
 import { reviewBlockOf } from "../model/review-block-of";
 
 const UNIQUE_VIOLATION = "23505";
@@ -106,9 +107,4 @@ export async function writeReviewFromDiscord({
 
   const url = `${siteOrigin() ?? ""}${serverPath({ slug: server.slug, path: MY_REVIEWS_HREF })}`;
   return `후기를 등록했습니다. 사진을 고치거나 더하려면 ${url}`;
-}
-
-function blockMessage(block: keyof typeof REVIEW_BLOCK_DIALOG) {
-  const { title, description } = REVIEW_BLOCK_DIALOG[block];
-  return `${title}. ${description}`;
 }
