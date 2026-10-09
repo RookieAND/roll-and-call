@@ -102,7 +102,7 @@ export function AddRulebookForm({
   };
 
   return (
-    <VStack className="min-h-0 flex-1">
+    <VStack data-full-bleed className="min-h-0 flex-1">
       <VStack gap="150" className="mx-auto w-full max-w-[880px] flex-1 p-200">
         {request ? <RequestSummary request={request} /> : null}
         <Card.Root padding="lg">
