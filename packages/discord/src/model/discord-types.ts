@@ -7,6 +7,7 @@ export type DiscordEmbed = {
   color?: number;
   fields?: DiscordEmbedField[];
   image?: { url: string };
+  thumbnail?: { url: string };
   footer?: { text: string };
   timestamp?: string;
 };

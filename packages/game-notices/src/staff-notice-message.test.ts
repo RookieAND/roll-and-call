@@ -4,6 +4,7 @@ import { STAFF_NOTICE_KIND, type StaffNotice } from "./staff-notice-kind";
 import { staffNoticeMessage } from "./staff-notice-message";
 
 const message = (notice: StaffNotice) => staffNoticeMessage({ notice, slug: "trpia" });
+const valuesOf = (notice: StaffNotice) => embedOf(notice)?.fields?.map((field) => field.value);
 const embedOf = (notice: StaffNotice) => message(notice).embeds?.[0];
 
 describe("staffNoticeMessage", () => {
@@ -14,13 +15,22 @@ describe("staffNoticeMessage", () => {
     const result = message({
       kind: STAFF_NOTICE_KIND.certApplied,
       applicantNickname: "김코코",
+      applicantDiscordId: "111",
+      applicantAvatarUrl: null,
       rulebookLabel: "크툴루의 부름 7판",
       applicationId: "app-1",
+      formatLabel: "실물",
     });
     expect(result.embeds?.[0]).toMatchObject({
       title: "새 룰북 인증 신청이 들어왔습니다",
-      description: "김코코 · 크툴루의 부름 7판",
     });
+    expect(result.embeds?.[0]?.fields).toEqual([
+      { name: "📋 항목", value: "룰북 인증 신청", inline: true },
+      { name: "🙋 신청자", value: "<@111>", inline: true },
+      { name: "📖 룰북", value: "크툴루의 부름 7판", inline: true },
+      { name: "🧾 인증 방식", value: "실물", inline: true },
+    ]);
+    expect(result.embeds?.[0]?.timestamp).toBeDefined();
     expect(result.buttons).toEqual([
       { label: "어드민에서 열기", url: "https://admin.example.app/trpia/cert/app-1" },
     ]);
@@ -29,14 +39,24 @@ describe("staffNoticeMessage", () => {
   });
 
   it("추가 요청: 판본이 없으면 이름만 쓴다", () => {
-    const base = { kind: STAFF_NOTICE_KIND.rulebookRequested, requesterNickname: "달빛토끼" };
-    expect(embedOf({ ...base, name: "던전 월드", edition: "2판" })).toMatchObject({
-      title: "새 룰북 추가 요청이 들어왔습니다",
-      description: "달빛토끼 · 던전 월드 2판",
-    });
-    expect(embedOf({ ...base, name: "던전 월드", edition: null })?.description).toBe(
-      "달빛토끼 · 던전 월드",
+    const base = {
+      kind: STAFF_NOTICE_KIND.rulebookRequested,
+      requesterNickname: "달빛토끼",
+      requesterDiscordId: "222",
+      requesterAvatarUrl: null,
+      kindLabel: null,
+      category: "",
+      link: "",
+    };
+    expect(embedOf({ ...base, name: "던전 월드", edition: "2판" })?.title).toBe(
+      "새 룰북 추가 요청이 들어왔습니다",
     );
+    expect(valuesOf({ ...base, name: "던전 월드", edition: "2판" })).toEqual([
+      "룰북 추가 요청",
+      "<@222>",
+      "던전 월드 2판",
+    ]);
+    expect(valuesOf({ ...base, name: "던전 월드", edition: null })?.[2]).toBe("던전 월드");
   });
 
   it("활동 정지: 기한까지, 기한이 없으면 해제될 때까지", () => {
@@ -46,11 +66,11 @@ describe("staffNoticeMessage", () => {
       targetUserId: "user-1",
       targetNickname: "탐정놀이중",
     };
-    expect(embedOf({ ...base, until: new Date("2026-10-22T03:00:00Z") })).toMatchObject({
-      title: "새벽세시님이 활동 정지를 확정했습니다",
-      description: "탐정놀이중 · 2026년 10월 22일까지",
-    });
-    expect(embedOf({ ...base, until: null })?.description).toBe("탐정놀이중 · 해제될 때까지");
+    expect(valuesOf({ ...base, until: new Date("2026-10-22T03:00:00Z") })).toEqual([
+      "탐정놀이중",
+      "2026년 10월 22일까지",
+    ]);
+    expect(valuesOf({ ...base, until: null })).toEqual(["탐정놀이중", "해제될 때까지"]);
   });
 
   it("반려로 돌리기: 취소된 구인이 있으면 개수를 붙인다", () => {
@@ -61,13 +81,12 @@ describe("staffNoticeMessage", () => {
       targetNickname: "김코코",
       rulebookLabel: "크툴루의 부름 7판",
     };
-    expect(embedOf({ ...base, cancelledGameCount: 2 })).toMatchObject({
-      title: "새벽세시님이 인증을 반려로 돌렸습니다",
-      description: "김코코 · 크툴루의 부름 7판 · 취소된 구인 2개",
-    });
-    expect(embedOf({ ...base, cancelledGameCount: 0 })?.description).toBe(
-      "김코코 · 크툴루의 부름 7판",
-    );
+    expect(valuesOf({ ...base, cancelledGameCount: 2 })).toEqual([
+      "김코코",
+      "크툴루의 부름 7판",
+      "2개",
+    ]);
+    expect(valuesOf({ ...base, cancelledGameCount: 0 })).toEqual(["김코코", "크툴루의 부름 7판"]);
   });
 
   it("인증 부여: 4명까지는 모두, 5명이면 앞 3명 외 2명", () => {
@@ -77,13 +96,14 @@ describe("staffNoticeMessage", () => {
       rulebookId: "book-1",
       rulebookLabel: "D&D 5판",
     };
-    expect(embedOf({ ...base, nicknames: ["가", "나", "다", "라"] })?.description).toBe(
-      "D&D 5판 · 가, 나, 다, 라",
-    );
-    expect(embedOf({ ...base, nicknames: ["가", "나", "다", "라", "마"] })).toMatchObject({
-      title: "새벽세시님이 인증을 부여했습니다",
-      description: "D&D 5판 · 가, 나, 다 외 2명",
-    });
+    expect(valuesOf({ ...base, nicknames: ["가", "나", "다", "라"] })).toEqual([
+      "D&D 5판",
+      "가, 나, 다, 라",
+    ]);
+    expect(valuesOf({ ...base, nicknames: ["가", "나", "다", "라", "마"] })).toEqual([
+      "D&D 5판",
+      "가, 나, 다 외 2명",
+    ]);
   });
 
   it("ADMIN_APP_URL이 없으면 버튼이 없다", () => {

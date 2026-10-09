@@ -11,14 +11,22 @@ export type StaffNotice =
   | {
       kind: typeof STAFF_NOTICE_KIND.certApplied;
       applicantNickname: string;
+      applicantDiscordId: string;
+      applicantAvatarUrl: string | null;
       rulebookLabel: string;
       applicationId: string;
+      formatLabel: string;
     }
   | {
       kind: typeof STAFF_NOTICE_KIND.rulebookRequested;
       requesterNickname: string;
+      requesterDiscordId: string;
+      requesterAvatarUrl: string | null;
       name: string;
       edition: string | null;
+      kindLabel: string | null;
+      category: string;
+      link: string;
     }
   | {
       kind: typeof STAFF_NOTICE_KIND.sanctioned;

@@ -13,6 +13,7 @@ export { getDiscordId } from "./queries/get-discord-id";
 export { getUserIdByDiscordId } from "./queries/get-user-id-by-discord-id";
 export { hasOnboarded } from "./queries/has-onboarded";
 export { getProfileMemo } from "./queries/get-profile-memo";
+export { getMemberIdentity } from "./queries/get-member-identity";
 export { getMemberNickname } from "./queries/get-member-nickname";
 export { getMemberNicknames } from "./queries/get-member-nicknames";
 export { isNicknameTaken } from "./queries/is-nickname-taken";

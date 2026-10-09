@@ -1,6 +1,6 @@
 "use server";
 
-import { getMemberNickname } from "@roll-and-call/database/profiles";
+import { getMemberIdentity } from "@roll-and-call/database/profiles";
 import {
   createRulebookRequest,
   findRulebookCategoryId,
@@ -19,6 +19,7 @@ import {
 } from "@/shared/server";
 
 import {
+  REQUEST_KIND_CARDS,
   rulebookRequestSchema,
   UNKNOWN,
   type RulebookRequestValues,
@@ -55,14 +56,20 @@ export async function requestRulebook(input: RulebookRequestValues): Promise<Act
   });
   revalidatePath(serverPath({ slug: server.slug, path: "/me/rulebooks" }), "layout");
   after(async () => {
-    const requesterNickname = await getMemberNickname({ serverId: server.id, userId: user.id });
+    const requester = await getMemberIdentity({ serverId: server.id, userId: user.id });
+    if (!requester) return;
     await postStaffNotice({
       server,
       notice: {
         kind: STAFF_NOTICE_KIND.rulebookRequested,
-        requesterNickname: requesterNickname ?? "",
+        requesterNickname: requester.nickname,
+        requesterDiscordId: requester.discordId,
+        requesterAvatarUrl: requester.avatarUrl,
         name,
         edition,
+        kindLabel: REQUEST_KIND_CARDS.find((card) => card.value === kind)?.title ?? null,
+        category,
+        link,
       },
     });
   });

@@ -4,11 +4,17 @@ import {
   createCertApplication,
   loadCertificationContext,
 } from "@roll-and-call/database/certifications";
-import { getMemberNickname } from "@roll-and-call/database/profiles";
+import { getMemberIdentity } from "@roll-and-call/database/profiles";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { CERT_FORMAT, CERT_SHOTS, RULEBOOK_KIND, rulebookLabel } from "@/entities/rulebook";
+import {
+  CERT_FORMAT,
+  CERT_FORMAT_LABEL,
+  CERT_SHOTS,
+  RULEBOOK_KIND,
+  rulebookLabel,
+} from "@/entities/rulebook";
 import { type ActionResult } from "@/shared/api";
 import { certPhotoPathOf, serverPath } from "@/shared/lib";
 import {
@@ -111,14 +117,18 @@ export async function submitCertification({
     },
   });
   after(async () => {
-    const applicantNickname = await getMemberNickname({ serverId: server.id, userId: user.id });
+    const applicant = await getMemberIdentity({ serverId: server.id, userId: user.id });
+    if (!applicant) return;
     await postStaffNotice({
       server,
       notice: {
         kind: STAFF_NOTICE_KIND.certApplied,
-        applicantNickname: applicantNickname ?? "",
+        applicantNickname: applicant.nickname,
+        applicantDiscordId: applicant.discordId,
+        applicantAvatarUrl: applicant.avatarUrl,
         rulebookLabel: rulebookLabel(book),
         applicationId,
+        formatLabel: CERT_FORMAT_LABEL[entry.format],
       },
     });
   });
