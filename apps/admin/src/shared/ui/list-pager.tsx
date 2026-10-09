@@ -1,6 +1,7 @@
 "use client";
 
 import { HStack, Pagination, Text } from "@roll-and-call/ui";
+import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import { PAGE_SIZE } from "@/shared/lib";
@@ -42,6 +43,7 @@ export function ListPager({ page, totalPages, total, unit, pageSize = PAGE_SIZE 
         totalPages={totalPages}
         siblings={1}
         hrefFor={hrefFor}
+        renderLink={(href) => <Link href={href} />}
         className="ml-auto"
       />
     </HStack>

@@ -1,4 +1,5 @@
 import { useRender } from "@base-ui-components/react/use-render";
+import type { ReactElement } from "react";
 
 import { cn } from "../../lib/cn";
 import { resolveStateProp } from "../../lib/resolve-state-prop";
@@ -12,6 +13,7 @@ export interface PaginationProps extends StateProps<PaginationState> {
   totalPages: number;
   hrefFor: (page: number) => string;
   siblings?: number;
+  renderLink?: (href: string) => ReactElement<Record<string, unknown>>;
 }
 
 export function Pagination({
@@ -19,6 +21,7 @@ export function Pagination({
   totalPages,
   hrefFor,
   siblings = 2,
+  renderLink,
   className,
   style,
   render,
@@ -43,6 +46,7 @@ export function Pagination({
           totalPages={totalPages}
           hrefFor={hrefFor}
           siblings={siblings}
+          renderLink={renderLink}
         />
       ),
     },

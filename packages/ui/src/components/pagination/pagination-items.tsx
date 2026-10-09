@@ -1,5 +1,7 @@
 import { cva } from "class-variance-authority";
+import type { ReactElement } from "react";
 
+import { PaginationLink } from "./pagination-link";
 import { PAGINATION_ELLIPSIS, paginationRange } from "./pagination-range";
 
 const cell = cva(
@@ -22,23 +24,31 @@ interface PaginationItemsProps {
   totalPages: number;
   hrefFor: (page: number) => string;
   siblings: number;
+  renderLink?: (href: string) => ReactElement<Record<string, unknown>>;
 }
 
-// framework-agnostic: renders plain anchors so @roll-and-call/ui stays free of next/link
-export function PaginationItems({ page, totalPages, hrefFor, siblings }: PaginationItemsProps) {
+// framework-agnostic: 기본은 일반 앵커이고, 라우터 링크는 renderLink로 받아 @roll-and-call/ui가 next/link를 모르게 한다
+export function PaginationItems({
+  page,
+  totalPages,
+  hrefFor,
+  siblings,
+  renderLink,
+}: PaginationItemsProps) {
   const entries = paginationRange({ page, totalPages, siblings });
 
   return (
     <>
       {page > 1 ? (
-        <a
+        <PaginationLink
+          renderLink={renderLink}
           href={hrefFor(page - 1)}
           data-slot="pagination-previous"
           className={cell()}
           aria-label="이전"
         >
           ‹
-        </a>
+        </PaginationLink>
       ) : (
         <span
           data-slot="pagination-previous"
@@ -61,7 +71,8 @@ export function PaginationItems({ page, totalPages, hrefFor, siblings }: Paginat
             …
           </span>
         ) : (
-          <a
+          <PaginationLink
+            renderLink={renderLink}
             key={entry}
             href={hrefFor(entry)}
             data-slot="pagination-item"
@@ -71,19 +82,20 @@ export function PaginationItems({ page, totalPages, hrefFor, siblings }: Paginat
             className={cell({ tone: entry === page ? "current" : "link" })}
           >
             {entry}
-          </a>
+          </PaginationLink>
         ),
       )}
 
       {page < totalPages ? (
-        <a
+        <PaginationLink
+          renderLink={renderLink}
           href={hrefFor(page + 1)}
           data-slot="pagination-next"
           className={cell()}
           aria-label="다음"
         >
           ›
-        </a>
+        </PaginationLink>
       ) : (
         <span
           data-slot="pagination-next"

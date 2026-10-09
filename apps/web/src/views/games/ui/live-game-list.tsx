@@ -35,6 +35,7 @@ export async function LiveGameList({ gamesPage, page, filter }: LiveGameListProp
       <Pagination
         page={page}
         totalPages={Math.ceil(total / pageSize)}
+        renderLink={(href) => <Link href={href} />}
         hrefFor={(pageNumber) =>
           serverPath({
             slug: server.slug,
