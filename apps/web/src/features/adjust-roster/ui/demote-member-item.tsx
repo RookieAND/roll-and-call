@@ -7,6 +7,7 @@ import { toast, useAction } from "@/shared/ui";
 
 import { demoteParticipant } from "../api/demote-participant";
 import type { MemberSummary } from "../model/member-summary";
+import { demoteLine } from "../model/demote-line";
 import { MenuItemBody } from "./menu-item-body";
 import { MENU_ITEM_CLASS } from "./menu-item-class";
 
@@ -15,6 +16,7 @@ interface DemoteMemberItemProps {
   member: MemberSummary;
   waitingCount: number;
   beforeDraw: boolean;
+  selectionOpen: boolean;
   onDone: () => void;
 }
 
@@ -23,10 +25,11 @@ export function DemoteMemberItem({
   member,
   waitingCount,
   beforeDraw,
+  selectionOpen,
   onDone,
 }: DemoteMemberItemProps) {
   const { pending, run } = useAction();
-  const line = beforeDraw ? "추첨 대상으로 돌아갑니다." : `대기 ${waitingCount + 1}번이 됩니다.`;
+  const line = demoteLine({ beforeDraw, selectionOpen, waitingCount });
 
   function demote() {
     run(() => demoteParticipant({ gameId, userId: member.userId }), {

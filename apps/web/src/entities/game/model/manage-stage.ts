@@ -2,6 +2,7 @@
 export const MANAGE_STAGE = {
   cancelled: "cancelled",
   beforeDraw: "beforeDraw",
+  beforeSelection: "beforeSelection",
   coordinating: "coordinating",
   overdue: "overdue",
   confirmed: "confirmed",
@@ -14,6 +15,7 @@ export type ManageStage = (typeof MANAGE_STAGE)[keyof typeof MANAGE_STAGE];
 export const MANAGE_STAGE_LABEL = {
   cancelled: "취소됨",
   beforeDraw: "추첨 전",
+  beforeSelection: "선발 전",
   coordinating: "조율 중",
   overdue: "기한 지남",
   confirmed: "세션 확정",
@@ -24,6 +26,7 @@ export const MANAGE_STAGE_LABEL = {
 export const MANAGE_STAGE_TONE = {
   cancelled: "danger",
   beforeDraw: "gray",
+  beforeSelection: "primary",
   coordinating: "gray",
   overdue: "gray",
   confirmed: "gray",

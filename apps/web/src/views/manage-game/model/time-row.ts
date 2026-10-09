@@ -18,7 +18,8 @@ export function timeRow({ game, now }: { game: GameDetailData; now: Date }): Man
       ...base,
       state: MANAGE_ROW_STATE.locked,
       href: null,
-      detail: awaitingResult === "lottery" ? "추첨을 먼저 마쳐 주세요" : "선발을 먼저 마쳐 주세요",
+      detail:
+        awaitingResult === "lottery" ? "추첨을 먼저 마쳐 주세요" : "선발을 마친 뒤에 열립니다.",
     };
   }
 

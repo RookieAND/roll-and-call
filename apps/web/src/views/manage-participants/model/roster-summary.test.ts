@@ -120,4 +120,53 @@ describe("summarizeRoster", () => {
       ).toBeNull();
     });
   });
+
+  it("선발 전에는 신청자로 보고, 확정 0명이면 마칠 수 없다", () => {
+    const summary = summarizeRoster({
+      ...base,
+      confirmed: [],
+      waiting: [member("a", 1), member("b", 2)],
+      recruitMethod: RECRUIT_METHOD.selection,
+      drawnAt: null,
+    });
+    expect(summary).toMatchObject({
+      selectionOpen: true,
+      beforeDraw: true,
+      finishBlock: "no_confirmed",
+      methodLabel: "선발",
+    });
+  });
+
+  it("선발 글 최소 인원은 확정과 신청을 더해 본다", () => {
+    const open = {
+      ...base,
+      waiting: [member("a", 1)],
+      recruitMethod: RECRUIT_METHOD.selection,
+      drawnAt: null,
+      minPlayers: 3,
+    };
+    expect(summarizeRoster({ ...open, confirmed: [member("pre", null)] }).finishBlock).toBe(
+      "min_players_unmet",
+    );
+    expect(
+      summarizeRoster({ ...open, confirmed: [member("p1", null), member("p2", null)] }).finishBlock,
+    ).toBeNull();
+  });
+
+  it("선발을 마친 뒤에는 대기로 보이고 완료 표시", () => {
+    const summary = summarizeRoster({
+      ...base,
+      confirmed: [member("a", null)],
+      waiting: [member("b", 1)],
+      recruitMethod: RECRUIT_METHOD.selection,
+      drawnAt: null,
+      selectionFinishedAt: new Date("2026-09-19T00:00:00Z"),
+    });
+    expect(summary).toMatchObject({
+      selectionOpen: false,
+      beforeDraw: false,
+      finishBlock: null,
+      methodLabel: "선발 완료",
+    });
+  });
 });

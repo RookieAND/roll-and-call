@@ -17,6 +17,18 @@ export function RosterStats({
   maxPlayers,
   summary,
 }: RosterStatsProps) {
+  if (summary.selectionOpen) {
+    return (
+      <Grid cols={2} gap="100">
+        <RosterStat
+          label="확정"
+          value={`${confirmedCount}명`}
+          tone={confirmedCount > 0 ? STAT_TONE.success : STAT_TONE.neutral}
+        />
+        <RosterStat label="신청" value={`${summary.applicantCount}명`} />
+      </Grid>
+    );
+  }
   if (summary.beforeDraw || summary.noApplicantsClosed) {
     const drawTone = summary.noApplicantsClosed ? STAT_TONE.neutral : STAT_TONE.primary;
     return (

@@ -12,7 +12,7 @@ export function RecruitMethodBadge({
   method,
   label = recruitMethodLabel(method),
 }: RecruitMethodBadgeProps) {
-  const color = method === RECRUIT_METHOD.lottery ? "primary" : "gray";
+  const color = method === RECRUIT_METHOD.firstCome ? "gray" : "primary";
   return (
     <Badge colorPalette={color} className="shrink-0">
       {label}

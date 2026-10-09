@@ -7,6 +7,7 @@ import { formatDateTime } from "@/shared/lib";
 import type { RosterSummary } from "../model/roster-summary";
 import { DeadlineCard } from "./deadline-card";
 import { RosterDateRow } from "./roster-date-row";
+import { SelectionStatus } from "./selection-status";
 
 interface RosterStatusCardProps {
   gameId: string;
@@ -47,6 +48,7 @@ export function RosterStatusCard({ gameId, summary }: RosterStatusCardProps) {
       </VStack>
     );
   }
+  if (summary.isSelection) return <SelectionStatus gameId={gameId} summary={summary} />;
   if (summary.beforeDraw) {
     const hasApplicants = summary.applicantCount > 0;
     return (

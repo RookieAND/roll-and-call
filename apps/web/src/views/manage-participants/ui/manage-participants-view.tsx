@@ -78,6 +78,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
     endDate: game.endDate,
     recruitMethod: game.recruitMethod,
     drawnAt: game.drawnAt,
+    selectionFinishedAt: game.selectionFinishedAt,
     hasRolls: game.participants.some((participant) => !isNull(participant.drawRoll)),
     isCoordinate,
     started: isSessionStarted(game),

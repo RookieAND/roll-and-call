@@ -94,5 +94,6 @@ export {
 export {
   GAME_CANCEL_KIND,
   gameCancelledRecipients,
+  SELECTION_EXPIRED_CANCEL_TEXT,
   type GameCancelKind,
 } from "@roll-and-call/database/games/model";

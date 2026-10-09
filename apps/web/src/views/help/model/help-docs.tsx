@@ -890,6 +890,11 @@ export const HELP_DOCS: HelpDoc[] = [
             stage: MANAGE_STAGE.beforeDraw,
           },
           {
+            term: MANAGE_STAGE_LABEL.beforeSelection,
+            description: "선발 글에서 GM이 아직 선발을 마치지 않았습니다.",
+            stage: MANAGE_STAGE.beforeSelection,
+          },
+          {
             term: MANAGE_STAGE_LABEL.coordinating,
             description: "참여자들이 가능한 시간을 칠하고 있습니다.",
             stage: MANAGE_STAGE.coordinating,

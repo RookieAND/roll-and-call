@@ -1,9 +1,10 @@
 "use server";
 
 import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/games";
+import { isAwaitingResult } from "@roll-and-call/database/games/model";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 
-import { PARTICIPANT_STATUS } from "@/entities/game";
+import { PARTICIPANT_STATUS, RECRUIT_METHOD } from "@/entities/game";
 import { announceRecruitmentComplete, type Game } from "@/shared/server";
 
 import { CAPACITY_ACTION } from "../model/capacity-action";
@@ -51,18 +52,22 @@ export async function promoteParticipant({
         raiseCapacity,
       });
       await setParticipantStatus({ transaction, serverId, gameId, userId, status: confirmed });
+      // 선발 전 확정은 선발을 마칠 때 확정자 전원에게 한 번 알린다.
+      const deferred = isAwaitingResult(game) && game.recruitMethod === RECRUIT_METHOD.selection;
       await notifyRosterChange({
         transaction,
         game,
-        notifications: [
-          {
-            userId,
-            kind: NOTIFICATION_KIND.participationConfirmed,
-            params: { gameId, gameTitle: game.title },
-          },
-        ],
+        notifications: deferred
+          ? []
+          : [
+              {
+                userId,
+                kind: NOTIFICATION_KIND.participationConfirmed,
+                params: { gameId, gameTitle: game.title },
+              },
+            ],
       });
-      promotedIn = game;
+      promotedIn = deferred ? null : game;
       capacityRaised = seats.raised;
       becameFull = !timing.started && seats.confirmedCount + 1 === seats.maxPlayers;
     },

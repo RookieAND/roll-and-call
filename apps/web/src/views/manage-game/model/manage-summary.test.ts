@@ -30,6 +30,8 @@ const member = ({
 
 const base = {
   id: "game",
+  selectionFinishedAt: null,
+  rangeEnd: null,
   scheduleMode: SCHEDULE_MODE.coordinate,
   recruitMethod: RECRUIT_METHOD.firstCome,
   drawnAt: null,
@@ -119,5 +121,40 @@ describe("manageSummary", () => {
     expect(summary(ended).stage).toBe(MANAGE_STAGE.ended);
     expect(values(ended)[2]).toBe("출석 2 / 4명");
     expect(values({ ...ended, attendanceConfirmedAt: null })[2]).toBe("출석 0 / 4명");
+  });
+
+  describe("선발 글", () => {
+    const selection = { recruitMethod: RECRUIT_METHOD.selection, scheduleMode: SCHEDULE_MODE.fixed };
+
+    it("선발 전: 배지와 세 칸, 마감 전에는 기한 줄이 없다", () => {
+      const result = summary({ ...selection, confirmedAt: at(20 * DAY) });
+      expect(result.stage).toBe(MANAGE_STAGE.beforeSelection);
+      expect(result.stats.map((stat) => stat.label)).toEqual(["모집 마감", "신청", "확정 인원"]);
+      expect(result.deadlineNote).toBeUndefined();
+    });
+
+    it("마감 뒤에는 기한 줄이 생기고 기한 1일 전부터 강조한다", () => {
+      const closed = { ...selection, confirmedAt: at(20 * DAY), endDate: at(-DAY) };
+      expect(summary(closed).deadlineNote).toEqual({
+        text: "9월 26일까지 선발을 마쳐 주세요.",
+        urgent: false,
+      });
+      const urgent = summary({ ...closed, endDate: at(-6.5 * DAY) }).deadlineNote;
+      expect(urgent).toMatchObject({ text: "9월 21일까지 선발을 마쳐 주세요.", urgent: true });
+    });
+
+    it("선발 기한 초과 취소는 고정 사유를 보인다", () => {
+      const result = summary({
+        ...selection,
+        cancelledAt: at(-HOUR),
+        cancelKind: GAME_CANCEL_KIND.selectionExpired,
+      });
+      expect(result.cancelNote).toBe("기한 안에 선발을 마치지 않아 취소되었습니다.");
+    });
+
+    it("선발을 마친 뒤에는 선발 전 단계가 아니다", () => {
+      const finished = summary({ ...selection, selectionFinishedAt: at(-HOUR) });
+      expect(finished.stage).not.toBe(MANAGE_STAGE.beforeSelection);
+    });
   });
 });

@@ -1,7 +1,6 @@
 import { isNil } from "es-toolkit";
 
 import {
-  GAME_CANCEL_KIND,
   isDeadlinePassed,
   isSessionEnded,
   isSessionInProgress,
@@ -14,6 +13,8 @@ import {
 import { formatDate, toKst } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
+import { cancelNoteOf } from "./cancel-note-of";
+import { selectionDeadlineNote } from "./selection-deadline-note";
 import { attendanceRoster } from "./attendance-roster";
 
 const NO_BREAK_SPACE = " ";
@@ -21,7 +22,15 @@ const NO_BREAK_SPACE = " ";
 // wrap이면 320px에서 넘칠 때 날짜와 시각 사이에서만 줄을 나눈다.
 export type ManageStat = { label: string; value: string; danger?: boolean; wrap?: boolean };
 
-export type ManageSummary = { stage: ManageStage; stats: ManageStat[]; cancelNote?: string };
+// 선발 기한 줄. 마감 뒤에만 있고, 기한 1일 전부터 강조한다(알림은 보내지 않는다).
+export type ManageDeadlineNote = { text: string; urgent: boolean };
+
+export type ManageSummary = {
+  stage: ManageStage;
+  stats: ManageStat[];
+  cancelNote?: string;
+  deadlineNote?: ManageDeadlineNote;
+};
 
 // 위에서부터 처음 맞는 단계 하나.
 export function manageSummary({
@@ -40,10 +49,7 @@ export function manageSummary({
   };
 
   if (!isNil(game.cancelledAt)) {
-    const cancelNote =
-      game.cancelKind === GAME_CANCEL_KIND.gm
-        ? (game.cancelReason ?? "")
-        : "운영진이 취소한 구인입니다";
+    const cancelNote = cancelNoteOf(game);
     return { stage: MANAGE_STAGE.cancelled, stats: [], cancelNote };
   }
 
@@ -55,6 +61,18 @@ export function manageSummary({
         { label: "신청", value: `${waiting.length}명` },
         { label: "뽑을 인원", value: `${Math.max(game.maxPlayers - confirmed.length, 0)}명` },
       ],
+    };
+  }
+
+  if (game.recruitMethod === RECRUIT_METHOD.selection && isNil(game.selectionFinishedAt)) {
+    return {
+      stage: MANAGE_STAGE.beforeSelection,
+      stats: [
+        { label: "모집 마감", value: formatDate(game.endDate) },
+        { label: "신청", value: `${waiting.length}명` },
+        seats,
+      ],
+      deadlineNote: isDeadlinePassed(game.endDate, now) ? selectionDeadlineNote(game, now) : undefined,
     };
   }
 

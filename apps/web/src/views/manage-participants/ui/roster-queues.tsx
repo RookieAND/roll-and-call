@@ -16,6 +16,7 @@ import { confirmedHintLines } from "../model/confirmed-hint-lines";
 import { confirmedRowNote } from "../model/confirmed-row-note";
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
+import { waitingCaptionOf } from "../model/waiting-caption-of";
 import { waitingHintLines } from "../model/waiting-hint-lines";
 import { ApplicationNoteDialog } from "./application-note-dialog";
 import { DrawResultLink } from "./draw-result-link";
@@ -59,7 +60,7 @@ export function RosterQueues({
       onMarkAbsent={setAbsentMember}
     />
   );
-  const waitingCaption = summary.drawn ? "추첨으로 정해진 순서" : "신청 순서";
+  const waitingCaption = waitingCaptionOf(summary);
   const addDisabled = started && summary.isFull && capacityRaised;
 
   return (
@@ -90,7 +91,7 @@ export function RosterQueues({
               <Text typography="subtitle2" weight="bold">
                 아직 확정한 참여자가 없습니다
               </Text>
-              {beforeDraw && (
+              {beforeDraw && summary.isLottery && (
                 <Text typography="body4" foreground="muted" render={<p />}>
                   {maxPlayers}자리 모두 추첨으로 정해집니다.
                 </Text>
@@ -155,6 +156,7 @@ export function RosterQueues({
           maxPlayers,
           isCoordinate,
           beforeDraw,
+          selectionOpen: summary.selectionOpen,
           started,
           capacityRaised,
         }}

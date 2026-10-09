@@ -26,6 +26,7 @@ export function MemberSheet({ roster, member, onMarkAbsent, onClose }: MemberShe
     maxPlayers,
     isCoordinate,
     beforeDraw,
+    selectionOpen,
     started,
     capacityRaised,
   } = roster;
@@ -49,6 +50,7 @@ export function MemberSheet({ roster, member, onMarkAbsent, onClose }: MemberShe
                 member={member}
                 waitingCount={waitingCount}
                 beforeDraw={beforeDraw}
+                selectionOpen={selectionOpen}
                 onDone={onClose}
               />
             )}
@@ -60,6 +62,7 @@ export function MemberSheet({ roster, member, onMarkAbsent, onClose }: MemberShe
                 maxPlayers={maxPlayers}
                 started={started}
                 capacityRaised={capacityRaised}
+                selectionOpen={selectionOpen}
                 onDone={onClose}
               />
             )}

@@ -26,6 +26,7 @@ import { cancelRowLock } from "../model/cancel-row-lock";
 import { manageRows } from "../model/manage-rows";
 import { manageSummary } from "../model/manage-summary";
 import { ManageCancelNote } from "./manage-cancel-note";
+import { ManageDeadlineLine } from "./manage-deadline-line";
 import { ManageGameStat } from "./manage-game-stat";
 import { ManageRow } from "./manage-row";
 
@@ -60,7 +61,7 @@ export async function ManageGameView({ id }: { id: string }) {
     kind: GAME_CANCEL_KIND.gm,
     roster: game.participants,
   }).length;
-  const { stage, stats, cancelNote } = manageSummary({ game, responses });
+  const { stage, stats, cancelNote, deadlineNote } = manageSummary({ game, responses });
   const showNextSessionHint = isNil(game.cancelledAt) && isSessionEnded(game);
   const rows = manageRows({ game, reviewCount: reviews.length });
 
@@ -88,6 +89,7 @@ export async function ManageGameView({ id }: { id: string }) {
                 <ManageCancelNote note={cancelNote} />
               )}
             </HStack>
+            {deadlineNote && <ManageDeadlineLine note={deadlineNote} />}
           </Card.Root>
         </div>
 
