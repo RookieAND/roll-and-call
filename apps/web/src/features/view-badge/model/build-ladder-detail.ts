@@ -50,6 +50,8 @@ export function buildLadderDetail({
   const special = granted || isHiddenLadder(ladder);
   const step = steps[stepIndex]!;
   const meta = LADDER_META[ladder];
+  // 등급이 없는 칭호(개발자·길드장)만 「특별 칭호」로 부른다. 견습 모험가·작은 등불은 등급 이름을 쓴다.
+  const tierless = step.look === "developer" || step.look === "guildMaster";
   const heldTier = held?.tier ?? 0;
   const earned = stepIndex < heldTier;
   const tier = stepIndex + 1;
@@ -64,7 +66,7 @@ export function buildLadderDetail({
   return {
     name: stepName({ step, categoryName }),
     medal: { emoji: step.emoji, look: stepLook(step), locked: !earned, ribbon: null },
-    tierLabel: granted ? meta.title : TIER_NAME[step.grade],
+    tierLabel: tierless ? meta.title : TIER_NAME[step.grade],
     tierTone: earned ? lookTone(stepLook(step)) : BADGE_TONE.hint,
     condition: badgeCondition({ ladder, step, categoryName }),
     earned:

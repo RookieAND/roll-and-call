@@ -6,17 +6,19 @@ function hidden({
   name,
   grade,
   description,
+  granted = false,
 }: {
   emoji: string;
   name: string;
   grade: BadgeGrade;
   description: string;
+  granted?: boolean;
 }): BadgeLadderDefinition {
   return {
     role: BADGE_ROLE.special,
     perRule: false,
     monthly: false,
-    granted: false,
+    granted,
     description,
     steps: [{ threshold: 1, emoji, name, grade }],
   };
@@ -251,5 +253,13 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "흥행 보증",
     grade: 5,
     description: "여는 테이블마다 사람이 몰렸습니다.",
+  }),
+  // 오너가 버그 제보자에게 직접 준다(grant-bug-reporter-badge 스킬). 재계산이 건드리지 않는다.
+  [HIDDEN_LADDER.lantern]: hidden({
+    emoji: "🕯️",
+    name: "작은 등불",
+    grade: 2,
+    description: "보이지 않던 오류를 찾아 제보했습니다.",
+    granted: true,
   }),
 };

@@ -26,6 +26,9 @@ const FIRST_BADGE_LADDERS: ReadonlySet<string> = new Set([
   BADGE_LADDER.gmTotal,
 ]);
 
+// 오너가 주는 칭호 중 받은 사람에게 알리는 것.
+const NOTIFIED_GRANTED_LADDERS = new Set<string>([BADGE_LADDER.apprentice, BADGE_LADDER.lantern]);
+
 // 알림 줄은 알린 적 없는 단계에만 만든다(출시 소급분 제외). 이달의 뱃지는 지난달 것만 monthly_award로 알린다.
 // 시트 대상은 처음 받는 첫 뱃지(누적 1단계)·숨겨진 칭호·출시 소급분이다. 하나라도 있으면 함께 받은 뱃지도 시트에 싣는다.
 export function planBadgeNotices({ grants, now }: { grants: BadgeGrant[]; now: Date }) {
@@ -36,7 +39,7 @@ export function planBadgeNotices({ grants, now }: { grants: BadgeGrant[]; now: D
     if (!parsed || badge.tier <= (notifiedTier ?? 0)) continue;
     const definition = BADGE_LADDERS[parsed.ladder];
     const step = definition.steps[badge.tier - 1];
-    if (!step || (definition.granted && parsed.ladder !== BADGE_LADDER.apprentice)) continue;
+    if (!step || (definition.granted && !NOTIFIED_GRANTED_LADDERS.has(parsed.ladder))) continue;
 
     if (definition.monthly) {
       if (parsed.subject !== previousMonthKey(now)) continue;

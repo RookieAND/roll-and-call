@@ -139,6 +139,8 @@ export function hiddenEvents({
       return timeSlotEvents(facts);
     case HIDDEN_LADDER.collectorKing:
       return collectorKingEvents(facts);
+    case HIDDEN_LADDER.lantern:
+      return [];
     case HIDDEN_LADDER.boxOffice:
       return facts.hostedDraws
         .filter(isCrowded)

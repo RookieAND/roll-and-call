@@ -1,3 +1,5 @@
+export { grantLanternBadge, GRANT_LANTERN_RESULT } from "./commands/grant-lantern-badge";
+export { grantSpecialBadge } from "./commands/grant-special-badge";
 export { grantRushBadge } from "./commands/grant-rush-badge";
 export { markBadgesNotified } from "./commands/mark-badges-notified";
 export { saveMemberFeaturedBadges } from "./commands/save-member-featured-badges";

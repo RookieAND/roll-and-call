@@ -41,6 +41,7 @@ export const HIDDEN_LADDER = {
   allTimes: "sp.times",
   collectorKing: "sp.king",
   boxOffice: "sp.boxoffice",
+  lantern: "sp.lantern",
 } as const;
 export type HiddenLadderKey = (typeof HIDDEN_LADDER)[keyof typeof HIDDEN_LADDER];
 

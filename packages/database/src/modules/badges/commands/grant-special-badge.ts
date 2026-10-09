@@ -1,20 +1,22 @@
 import { and, eq, isNull } from "drizzle-orm";
 
 import { db } from "#/client";
-import { BADGE_LADDER } from "#/modules/badges/model/badge-ladder";
+import type { BadgeLadderKey } from "#/modules/badges/model/badge-ladder";
 import { userBadges } from "#/schema";
 
 import { applyBadgeWrites } from "./apply-badge-writes";
 
-// 튜토리얼 퀘스트 4개를 모두 깬 사람에게 견습 모험가를 준다. 이미 받았으면 아무것도 하지 않는다(멱등).
-export async function grantApprenticeBadge({
+// 오너가 직접 주는 칭호(견습 모험가·작은 등불 등)를 준다. 이미 받았으면 아무것도 하지 않는다(멱등).
+export async function grantSpecialBadge({
   serverId,
   userId,
-  earnedAt,
+  badgeKey,
+  earnedAt = new Date(),
 }: {
   serverId: string;
   userId: string;
-  earnedAt: Date;
+  badgeKey: BadgeLadderKey;
+  earnedAt?: Date;
 }) {
   const [held] = await db
     .select({ badgeKey: userBadges.badgeKey })
@@ -23,7 +25,7 @@ export async function grantApprenticeBadge({
       and(
         eq(userBadges.serverId, serverId),
         eq(userBadges.userId, userId),
-        eq(userBadges.badgeKey, BADGE_LADDER.apprentice),
+        eq(userBadges.badgeKey, badgeKey),
         isNull(userBadges.revokedAt),
       ),
     );
@@ -34,7 +36,7 @@ export async function grantApprenticeBadge({
     writes: [
       {
         kind: "grant",
-        badge: { badgeKey: BADGE_LADDER.apprentice, tier: 1, earnedAt, sourceGameId: null },
+        badge: { badgeKey: badgeKey, tier: 1, earnedAt, sourceGameId: null },
       },
     ],
     now: new Date(),
