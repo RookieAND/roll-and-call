@@ -53,6 +53,7 @@ export { SortFixedNote } from "./sort-fixed-note";
 export { TableColumns, type TableColumnWidth } from "./table-columns";
 export { TableEmptyRow } from "./table-empty-row";
 export { TabCount } from "./tab-count";
+export { GmBadge } from "./gm-badge";
 export { Tag } from "./tag";
 export { UrlSearchInput } from "./url-search-input";
 export { UrlSelect } from "./url-select";

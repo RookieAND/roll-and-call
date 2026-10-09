@@ -62,6 +62,7 @@ export function buildReviewDetail({
     author: {
       id: author.id,
       nickname: author.nickname,
+      isGm: review.authorRole === REVIEW_AUTHOR_ROLE.gm,
       reviewCount: reviews.filter(
         (candidate) =>
           candidate.authorId === author.id &&

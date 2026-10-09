@@ -3,7 +3,7 @@ import { ChevronRight } from "lucide-react";
 
 import { formatDateTime, type TableSort } from "@/shared/lib";
 import { REVIEW_SORT_COLUMN, type ReviewRow, type ReviewSortColumn } from "@/shared/server";
-import { ServerLink, SortableHead, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
+import { ServerLink, SortableHead, TableColumns, TableEmptyRow, Tag, GmBadge } from "@/shared/ui";
 
 interface ReviewTableProps {
   rows: ReviewRow[];
@@ -53,16 +53,19 @@ export function ReviewTable({ rows, sort, gameChip, empty, detailQuery }: Review
               </Text>
             </Table.Cell>
             <Table.Cell>
-              <Text
-                typography="body3"
-                weight="bold"
-                truncate
-                title={row.authorNickname}
-                render={<ServerLink path={`/reviews/${row.id}${detailQuery}`} />}
-                className="block after:absolute after:inset-0"
-              >
-                {row.authorNickname}
-              </Text>
+              <HStack align="center" gap="050" className="min-w-0">
+                <Text
+                  typography="body3"
+                  weight="bold"
+                  truncate
+                  title={row.authorNickname}
+                  render={<ServerLink path={`/reviews/${row.id}${detailQuery}`} />}
+                  className="block min-w-0 after:absolute after:inset-0"
+                >
+                  {row.authorNickname}
+                </Text>
+                {row.authorIsGm ? <GmBadge /> : null}
+              </HStack>
             </Table.Cell>
             {gameColumns ? (
               <Table.Cell>

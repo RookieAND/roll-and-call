@@ -1,3 +1,4 @@
+import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import { compact } from "es-toolkit";
 
 import { plainText } from "./plain-text";
@@ -23,6 +24,7 @@ export function toReviewRow({ review, users, sessions, tab }: ToReviewRowOptions
     id: review.id,
     createdAt: review.createdAt,
     authorNickname: nicknameOf(review.authorId),
+    authorIsGm: review.authorRole === REVIEW_AUTHOR_ROLE.gm,
     gameId: review.sessionId,
     gameTitle: session?.title ?? "",
     gmNickname: nicknameOf(session?.gmId),

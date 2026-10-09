@@ -2,7 +2,7 @@ import { Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { formatDateTime } from "@/shared/lib";
 import type { ReviewDetail } from "@/shared/server";
-import { FactRows, Tag } from "@/shared/ui";
+import { FactRows, GmBadge, Tag } from "@/shared/ui";
 
 import { ReviewMoreMenu } from "./review-more-menu";
 import { ReviewPhotos } from "./review-photos";
@@ -31,6 +31,7 @@ export function ReviewCard({ review, logHref }: ReviewCardProps) {
         <Text typography="heading3" render={<h2 />}>
           {author.nickname}
         </Text>
+        {author.isGm ? <GmBadge /> : null}
         {review.spoiler ? <Tag>스포일러 포함</Tag> : null}
         {review.hidden ? <Tag>숨김</Tag> : null}
         <Text typography="body4" foreground="hint">

@@ -80,6 +80,17 @@ describe("buildReviewDetail", () => {
       now: NOW,
     });
     expect(result?.author.reviewCount).toBe(1);
+    expect(result?.author.isGm).toBe(false);
+    const gmDetail = buildReviewDetail({
+      reviews: withGm,
+      users,
+      sessions,
+      auditLog,
+      id: "r4",
+      filter,
+      now: NOW,
+    });
+    expect(gmDetail?.author.isGm).toBe(true);
   });
 
   it("다음 건은 들어온 목록 순서를 따르고 마지막이면 null이다", () => {
