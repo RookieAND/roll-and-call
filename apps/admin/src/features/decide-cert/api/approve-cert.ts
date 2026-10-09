@@ -1,8 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
-import { decideCert, getCurrentServer, requireStaff } from "@/shared/server";
+import { decideCert, evaluateBadges, getCurrentServer, requireStaff } from "@/shared/server";
 
 export async function approveCert(applicationId: string) {
   const staff = await requireStaff();
@@ -14,5 +15,6 @@ export async function approveCert(applicationId: string) {
     decision: { kind: "approve" },
   });
   revalidatePath("/", "layout");
+  if (result.ok) after(() => evaluateBadges({ serverId: server.id, userIds: [result.userId] }));
   return result;
 }

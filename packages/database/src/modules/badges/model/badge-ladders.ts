@@ -158,6 +158,18 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     description: "튜토리얼 퀘스트를 모두 마쳤습니다.",
     steps: [{ threshold: 1, emoji: "🧭", name: "견습 모험가", grade: 1 }],
   },
+  [BADGE_LADDER.rulebooks]: {
+    role: BADGE_ROLE.special,
+    perRule: false,
+    monthly: false,
+    granted: false,
+    steps: [
+      { threshold: 3, emoji: "📖", name: "서생", grade: 2 },
+      { threshold: 10, emoji: "📚", name: "장서가", grade: 3 },
+      { threshold: 20, emoji: "🎓", name: "박학다식", grade: 4 },
+      { threshold: 30, emoji: "🏛️", name: "대도서관", grade: 5 },
+    ],
+  },
   [BADGE_LADDER.guildMaster]: {
     role: BADGE_ROLE.special,
     perRule: false,

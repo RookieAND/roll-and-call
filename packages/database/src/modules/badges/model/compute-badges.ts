@@ -31,6 +31,7 @@ export function computeBadges(facts: BadgeFacts): EarnedBadge[] {
   for (const categoryId of categoryIds(facts.hosted)) add(BADGE_LADDER.gmRule, categoryId);
   add(BADGE_LADDER.gmVariety);
   add(BADGE_LADDER.gmReviews);
+  add(BADGE_LADDER.rulebooks);
   for (const ladder of Object.values(HIDDEN_LADDER)) add(ladder);
   return earned;
 }

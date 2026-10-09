@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
 import {
+  evaluateBadges,
   getCurrentServer,
   grantCertifications,
   postStaffNotice,
@@ -34,6 +35,9 @@ export async function grantUserCertifications(input: GrantUserCertificationsInpu
   if (!result.ok) return { ok: false as const, error: "인증이 필요 없는 룰북입니다" };
   revalidatePath("/", "layout");
   if (result.granted.length > 0) {
+    after(() =>
+      evaluateBadges({ serverId: server.id, userIds: result.granted.map((row) => row.userId) }),
+    );
     after(() =>
       postStaffNotice({
         server,

@@ -2,6 +2,7 @@ import { and, eq, or, sql } from "drizzle-orm";
 
 import { db } from "#/client";
 import {
+  certifications,
   drawResults,
   games,
   participants,
@@ -23,6 +24,7 @@ export async function loadBadgeCandidateIds(serverId: string): Promise<string[]>
           sql`exists (select 1 from ${games} where ${games.serverId} = ${serverId} and ${games.gmId} = ${serverMembers.userId})`,
           sql`exists (select 1 from ${drawResults} where ${drawResults.serverId} = ${serverId} and ${drawResults.userId} = ${serverMembers.userId})`,
           sql`exists (select 1 from ${sessionReviews} where ${sessionReviews.serverId} = ${serverId} and ${sessionReviews.authorId} = ${serverMembers.userId})`,
+          sql`exists (select 1 from ${certifications} where ${certifications.serverId} = ${serverId} and ${certifications.userId} = ${serverMembers.userId} and ${certifications.revokedAt} is null)`,
           sql`exists (select 1 from ${userBadges} where ${userBadges.serverId} = ${serverId} and ${userBadges.userId} = ${serverMembers.userId} and ${userBadges.revokedAt} is null)`,
         ),
       ),

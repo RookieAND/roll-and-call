@@ -4,6 +4,7 @@ export { grantRushBadge } from "./commands/grant-rush-badge";
 export { markBadgesNotified } from "./commands/mark-badges-notified";
 export { saveMemberFeaturedBadges } from "./commands/save-member-featured-badges";
 export { evaluateAllBadges } from "./queries/evaluate-all-badges";
+export { evaluateRulebookBadges } from "./queries/evaluate-rulebook-badges";
 export { evaluateAnniversaryBadges } from "./queries/evaluate-anniversary-badges";
 export { evaluateBadges } from "./queries/evaluate-badges";
 export { evaluateGameBadges } from "./queries/evaluate-game-badges";

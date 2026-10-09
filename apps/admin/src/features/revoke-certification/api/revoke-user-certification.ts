@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
 import {
+  evaluateBadges,
   getCurrentServer,
   notifyGameCancelled,
   postStaffNotice,
@@ -48,6 +49,7 @@ export async function revokeUserCertification(input: RevokeUserCertificationInpu
   }
 
   after(async () => {
+    await evaluateBadges({ serverId: server.id, userIds: [input.userId] });
     for (const game of result.cancelledGames) await notifyGameCancelled({ server, game });
     await postStaffNotice({
       server,

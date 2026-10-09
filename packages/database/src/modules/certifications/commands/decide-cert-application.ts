@@ -24,7 +24,7 @@ export type CertDecision =
     };
 
 export type CertDecisionResult =
-  | { ok: true }
+  | { ok: true; userId: string }
   | {
       ok: false;
       conflict: {
@@ -147,7 +147,7 @@ export async function decideCertApplication({
           { userId: decided.userId, kind: NOTIFICATION_KIND.certApproved, params: rulebook },
         ],
       });
-      return { ok: true };
+      return { ok: true, userId: decided.userId };
     }
 
     await recordAudit({
@@ -185,6 +185,6 @@ export async function decideCertApplication({
         supplements: waitingSupplements,
       });
     }
-    return { ok: true };
+    return { ok: true, userId: decided.userId };
   });
 }

@@ -60,6 +60,7 @@ export const BADGE_LADDER = {
   developer: "sp.dev",
   guildMaster: "sp.guild",
   apprentice: "sp.apprentice",
+  rulebooks: "sp.rulebooks",
   ...HIDDEN_LADDER,
 } as const;
 export type BadgeLadderKey = (typeof BADGE_LADDER)[keyof typeof BADGE_LADDER];

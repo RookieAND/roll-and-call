@@ -31,6 +31,8 @@ export function badgeRequirement({
       return `후기 ${count}건 작성`;
     case BADGE_LADDER.gmReviews:
       return `후기 ${count}건 받음`;
+    case BADGE_LADDER.rulebooks:
+      return `룰북 ${count}종 인증`;
     case BADGE_LADDER.playerMonthly:
       return "한 달 참여 1위";
     case BADGE_LADDER.gmMonthly:

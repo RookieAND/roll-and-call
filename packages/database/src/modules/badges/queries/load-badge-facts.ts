@@ -1,9 +1,16 @@
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq, isNull } from "drizzle-orm";
 
 import { db } from "#/client";
 import type { BadgeFacts } from "#/modules/badges/model/badge-facts";
 import { toBadgeSessions } from "#/modules/badges/model/to-badge-sessions";
-import { games, participants, rulebookCategories, rulebooks, sessionReviews } from "#/schema";
+import {
+  certifications,
+  games,
+  participants,
+  rulebookCategories,
+  rulebooks,
+  sessionReviews,
+} from "#/schema";
 
 import { attendedWhere } from "./attended-where";
 import { countedReviewWhere } from "./counted-review-where";
@@ -21,7 +28,7 @@ export async function loadBadgeFacts({
   now?: Date;
 }): Promise<BadgeFacts> {
   const countedReview = countedReviewWhere(serverId);
-  const [played, hosted, reviews, written, hidden] = await Promise.all([
+  const [played, hosted, reviews, written, certified, hidden] = await Promise.all([
     db
       .select(sessionColumns)
       .from(participants)
@@ -52,6 +59,17 @@ export async function loadBadgeFacts({
       .from(sessionReviews)
       .innerJoin(games, eq(games.id, sessionReviews.gameId))
       .where(and(eq(sessionReviews.authorId, userId), countedReview)),
+    db
+      .select({ at: certifications.approvedAt })
+      .from(certifications)
+      .where(
+        and(
+          eq(certifications.serverId, serverId),
+          eq(certifications.userId, userId),
+          isNull(certifications.revokedAt),
+        ),
+      )
+      .orderBy(asc(certifications.approvedAt)),
     loadHiddenBadgeFacts({ serverId, userId }),
   ]);
   return {
@@ -59,6 +77,7 @@ export async function loadBadgeFacts({
     hosted: toBadgeSessions(hosted, now),
     reviews,
     written,
+    certified: certified.map((row) => ({ at: row.at, gameId: null })),
     ...hidden,
     asOf: now,
   };

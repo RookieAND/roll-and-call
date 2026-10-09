@@ -52,6 +52,8 @@ export type BadgeFacts = {
   rush: BadgeEvent[];
   // 내가 GM이고 참석자 4명 이상인 세션에서 참석자 전원이 후기를 남긴 순간(마지막 후기의 작성 시각).
   fullCasts: BadgeEvent[];
+  // 유효한 룰북 인증(취소되지 않은 것)을 받은 시각순. 룰북 인증 칭호가 센다.
+  certified: BadgeEvent[];
   asOf: Date;
 };
 

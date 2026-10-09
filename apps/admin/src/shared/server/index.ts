@@ -6,7 +6,11 @@ export { getSessionAccount, type SessionAccount } from "./auth/get-session-accou
 export { getCurrentServer, type CurrentServer } from "./auth/get-current-server";
 export { listMyServers, type MyServer } from "./auth/list-my-servers";
 export { syncGameReviewForumPosts, syncReviewForumPost } from "@roll-and-call/review-forum";
-export { evaluateGameBadges, evaluateReviewBadges } from "@roll-and-call/database/badges";
+export {
+  evaluateBadges,
+  evaluateGameBadges,
+  evaluateReviewBadges,
+} from "@roll-and-call/database/badges";
 export { isNicknameTaken } from "@roll-and-call/database/profiles";
 export { banGuildMember, unbanGuildMember } from "@roll-and-call/discord";
 export {

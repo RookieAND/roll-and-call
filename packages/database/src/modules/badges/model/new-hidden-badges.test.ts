@@ -32,6 +32,7 @@ const facts = (overrides: Partial<BadgeFacts>): BadgeFacts => ({
   joinedAt: null,
   rush: [],
   fullCasts: [],
+  certified: [],
   asOf: new Date(Date.UTC(2027, 0, 1)),
   ...overrides,
 });
