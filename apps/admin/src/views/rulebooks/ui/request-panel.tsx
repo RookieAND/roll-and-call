@@ -34,7 +34,7 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
         <TableColumns
           widths={[
             260,
-            { fixed: 108 },
+            { fixed: 140 },
             { fixed: 116 },
             { fixed: 104 },
             { fixed: 96 },
