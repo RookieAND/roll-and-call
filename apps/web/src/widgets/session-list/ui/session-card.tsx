@@ -94,7 +94,9 @@ export function SessionCard({ model }: SessionCardProps) {
           )}
         </ServerLink>
         <SessionCardAction model={model} />
-        {model.canReopen && <ReopenGameLink gameId={model.id} variant="outline" size="md" />}
+        {model.canReopen && (
+          <ReopenGameLink gameId={model.id} variant="solid" size="md" label="다시 열기" />
+        )}
       </VStack>
     </Card.Root>
   );

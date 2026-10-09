@@ -11,9 +11,15 @@ interface EndedGmActionsProps {
   gameId: string;
   attendanceDue: boolean;
   attendanceRecorded: boolean;
+  reopenable: boolean;
 }
 
-export function EndedGmActions({ gameId, attendanceDue, attendanceRecorded }: EndedGmActionsProps) {
+export function EndedGmActions({
+  gameId,
+  attendanceDue,
+  attendanceRecorded,
+  reopenable,
+}: EndedGmActionsProps) {
   const attendancePath = `/games/${gameId}/attendance`;
 
   if (attendanceDue) {
@@ -28,7 +34,7 @@ export function EndedGmActions({ gameId, attendanceDue, attendanceRecorded }: En
           <Button render={<ServerLink path={attendancePath} />} size="lg" className="w-full">
             출석 확인하기
           </Button>
-          <ReopenGameLink gameId={gameId} />
+          {reopenable && <ReopenGameLink gameId={gameId} />}
         </ActionPair>
       </VStack>
     );
@@ -45,7 +51,7 @@ export function EndedGmActions({ gameId, attendanceDue, attendanceRecorded }: En
         >
           출석 기록 보기
         </Button>
-        <ReopenGameLink gameId={gameId} />
+        {reopenable && <ReopenGameLink gameId={gameId} />}
       </ActionPair>
     );
   }
@@ -53,7 +59,7 @@ export function EndedGmActions({ gameId, attendanceDue, attendanceRecorded }: En
   return (
     <ActionPair>
       <ManageGameLink gameId={gameId} />
-      <ReopenGameLink gameId={gameId} />
+      {reopenable && <ReopenGameLink gameId={gameId} />}
     </ActionPair>
   );
 }

@@ -21,10 +21,17 @@ interface CancelledActionsProps {
   cancelKind: GameCancelKind;
   reason: string | null;
   isGm: boolean;
+  reopenable: boolean;
 }
 
 // 사유는 GM 취소만 보인다. 운영진 취소·인증 반려 자동 취소는 사유 없이 같은 안내다(D267).
-export function CancelledActions({ gameId, cancelKind, reason, isGm }: CancelledActionsProps) {
+export function CancelledActions({
+  gameId,
+  cancelKind,
+  reason,
+  isGm,
+  reopenable,
+}: CancelledActionsProps) {
   const showReason = cancelKind === GAME_CANCEL_KIND.gm && reason;
   const isSelectionExpired = cancelKind === GAME_CANCEL_KIND.selectionExpired;
   const line = showReason ? `사유: ${reason}` : "비슷한 조건의 다른 구인글을 찾아보세요.";
@@ -35,7 +42,7 @@ export function CancelledActions({ gameId, cancelKind, reason, isGm }: Cancelled
       {isGm ? (
         <ActionPair>
           <ManageGameLink gameId={gameId} />
-          <ReopenGameLink gameId={gameId} />
+          {reopenable && <ReopenGameLink gameId={gameId} />}
         </ActionPair>
       ) : (
         <SimilarGamesLink size="lg" className="w-full" />

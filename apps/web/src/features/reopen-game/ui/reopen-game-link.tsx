@@ -6,9 +6,15 @@ interface ReopenGameLinkProps {
   gameId: string;
   variant?: "solid" | "outline";
   size?: "md" | "lg";
+  label?: string;
 }
 
-export function ReopenGameLink({ gameId, variant = "outline", size = "lg" }: ReopenGameLinkProps) {
+export function ReopenGameLink({
+  gameId,
+  variant = "outline",
+  size = "lg",
+  label = "같은 내용으로 다시 열기",
+}: ReopenGameLinkProps) {
   return (
     <Button
       render={<ServerLink path={`/games/new?from=${gameId}`} />}
@@ -16,7 +22,7 @@ export function ReopenGameLink({ gameId, variant = "outline", size = "lg" }: Reo
       size={size}
       className="w-full"
     >
-      같은 내용으로 다시 열기
+      {label}
     </Button>
   );
 }

@@ -1,3 +1,4 @@
+import { canReopenGame } from "@/features/reopen-game";
 import { formatDateClock } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
@@ -23,12 +24,16 @@ export interface GameActionZoneProps {
   view: GameActionView;
 }
 
+// 이 두 화면은 GM에게만 나오므로 GM 본인 기준으로 같은 판정을 쓴다.
+const reopenable = (game: GameDetailData) =>
+  canReopenGame({ game, userId: game.gmId, serverId: game.serverId });
+
 export function GameActionZone({ game, view }: GameActionZoneProps) {
   switch (view.kind) {
     case GAME_ACTION_VIEW.cancelled:
-      return <CancelledActions gameId={game.id} {...view} />;
+      return <CancelledActions gameId={game.id} reopenable={reopenable(game)} {...view} />;
     case GAME_ACTION_VIEW.gmEnded:
-      return <EndedGmActions gameId={game.id} {...view} />;
+      return <EndedGmActions gameId={game.id} reopenable={reopenable(game)} {...view} />;
     case GAME_ACTION_VIEW.gmLive:
       return <GmLiveActions gameId={game.id} {...view} />;
     case GAME_ACTION_VIEW.gmUpcoming:
