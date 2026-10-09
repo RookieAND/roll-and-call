@@ -1,6 +1,7 @@
 import { isNil } from "es-toolkit";
 
 import { SESSION_ROLE, type SessionRole } from "@/entities/game";
+import { canReopenGame } from "@/features/reopen-game";
 
 import { deriveSessionFacts } from "./derive-session-facts";
 import type { SessionCardModel, SessionContext, SessionGame } from "./session-card-model";
@@ -10,6 +11,25 @@ import { toJoinedSessionCard } from "./to-joined-session-card";
 import { toPastSessionCard } from "./to-past-session-card";
 
 export function toSessionCard({
+  game,
+  role,
+  context,
+}: {
+  game: SessionGame;
+  role: SessionRole;
+  context: SessionContext;
+}): SessionCardModel {
+  const card = buildSessionCard({ game, role, context });
+  const canReopen = canReopenGame({
+    game,
+    userId: context.viewerId,
+    serverId: game.serverId,
+    now: context.now,
+  });
+  return canReopen ? { ...card, canReopen } : card;
+}
+
+function buildSessionCard({
   game,
   role,
   context,

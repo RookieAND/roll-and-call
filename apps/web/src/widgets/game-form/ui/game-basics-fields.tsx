@@ -6,6 +6,7 @@ import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_KIND, PLAY_TYPE } from "@/entities/game";
 import type { MyRulebooks } from "@/entities/rulebook";
+import type { RuleNotice } from "@/features/reopen-game";
 import { GAME_SYNOPSIS_MAX, type GameFormValues } from "@/features/write-game";
 import { richTextLength } from "@/shared/lib";
 
@@ -17,9 +18,15 @@ interface GameBasicsFieldsProps {
   form: UseFormReturn<GameFormValues>;
   rulebooks?: MyRulebooks;
   kindLocked?: boolean;
+  ruleNotice?: RuleNotice | null;
 }
 
-export function GameBasicsFields({ form, rulebooks, kindLocked = false }: GameBasicsFieldsProps) {
+export function GameBasicsFields({
+  form,
+  rulebooks,
+  kindLocked = false,
+  ruleNotice,
+}: GameBasicsFieldsProps) {
   const {
     register,
     setValue,
@@ -42,7 +49,7 @@ export function GameBasicsFields({ form, rulebooks, kindLocked = false }: GameBa
         />
       </Field.Root>
 
-      <GameRulebookField form={form} rulebooks={rulebooks} />
+      <GameRulebookField form={form} rulebooks={rulebooks} ruleNotice={ruleNotice} />
 
       <PlayTimeField
         min={watch("playMinutesMin")}

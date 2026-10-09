@@ -79,6 +79,8 @@ export type SessionCardModel = {
   // 운영진이 숨긴 구인을 보는 사람이 볼 수 없으면 제목만 가린 카드로 그린다(R4, 남의 세션 기록).
   hidden: boolean;
   action: SessionAction | null;
+  // 끝나거나 취소된 내 구인을 같은 내용으로 다시 열 수 있다.
+  canReopen?: boolean;
   caption: { text: string; strong: boolean } | null;
   todo: SessionTodo | null;
   waitingCount: number;

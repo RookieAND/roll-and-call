@@ -11,13 +11,16 @@ import {
 import { AppBar } from "@/shared/ui";
 import { CreateGameForm } from "@/widgets/game-form";
 
+import { loadReopen } from "../api/load-reopen";
 import { CreateGameSanctioned } from "./create-game-sanctioned";
 
 interface CreateGameViewProps {
   rulebookId?: string;
+  // 지난 구인을 같은 내용으로 다시 열 때의 원본 구인 ID. 있으면 rulebookId보다 앞선다.
+  fromGameId?: string;
 }
 
-export async function CreateGameView({ rulebookId }: CreateGameViewProps) {
+export async function CreateGameView({ rulebookId, fromGameId }: CreateGameViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
@@ -39,11 +42,17 @@ export async function CreateGameView({ rulebookId }: CreateGameViewProps) {
     getRulebookRecords({ serverId: server.id, userId: user.id }),
   ]);
   if (sanction) return <CreateGameSanctioned reason={sanction.reason} until={sanction.until} />;
+  const rulebooks = toMyRulebooks(records);
+  const reopened = fromGameId
+    ? await loadReopen({ serverId: server.id, userId: user.id, gameId: fromGameId, rulebooks })
+    : null;
   return (
     <CreateGameForm
       serverId={server.id}
-      rulebooks={toMyRulebooks(records)}
-      initialRulebookId={rulebookId}
+      rulebooks={rulebooks}
+      initialRulebookId={reopened?.defaults ? undefined : rulebookId}
+      defaultGame={reopened?.defaults}
+      reopen={reopened?.reopen}
     />
   );
 }

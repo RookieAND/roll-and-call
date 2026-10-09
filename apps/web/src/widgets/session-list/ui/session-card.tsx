@@ -1,6 +1,7 @@
 import { Avatar, Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { CalendarDays, CircleAlert, Clock } from "lucide-react";
 
+import { ReopenGameLink } from "@/features/reopen-game";
 import { ServerLink } from "@/shared/ui";
 
 import {
@@ -93,6 +94,7 @@ export function SessionCard({ model }: SessionCardProps) {
           )}
         </ServerLink>
         <SessionCardAction model={model} />
+        {model.canReopen && <ReopenGameLink gameId={model.id} variant="outline" size="md" />}
       </VStack>
     </Card.Root>
   );

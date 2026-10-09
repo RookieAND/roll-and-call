@@ -1,8 +1,10 @@
 import { VStack } from "@roll-and-call/ui";
 
 import { GAME_CANCEL_KIND, type GameCancelKind } from "@/entities/game";
+import { ReopenGameLink } from "@/features/reopen-game";
 
 import { ActionNotice } from "./action-notice";
+import { ActionPair } from "./action-pair";
 import { ManageGameLink } from "./manage-game-link";
 import { SimilarGamesLink } from "./similar-games-link";
 
@@ -31,7 +33,10 @@ export function CancelledActions({ gameId, cancelKind, reason, isGm }: Cancelled
     <VStack gap="125">
       <ActionNotice title={CANCELLED_TITLE[cancelKind]} lines={isSelectionExpired ? [] : [line]} />
       {isGm ? (
-        <ManageGameLink gameId={gameId} />
+        <ActionPair>
+          <ManageGameLink gameId={gameId} />
+          <ReopenGameLink gameId={gameId} />
+        </ActionPair>
       ) : (
         <SimilarGamesLink size="lg" className="w-full" />
       )}

@@ -23,6 +23,7 @@ import { GameMediaFields } from "./game-media-fields";
 import { GamePreflightFields } from "./game-preflight-fields";
 import { GameRecruitFields } from "./game-recruit-fields";
 import { GameScheduleFields } from "./game-schedule-fields";
+import { ReopenNotice } from "./reopen-notice";
 import { WizardDraftSummary } from "./wizard-draft-summary";
 import { WizardFooter } from "./wizard-footer";
 import { WizardHeader } from "./wizard-header";
@@ -37,6 +38,7 @@ export function GameFormWizard({
   steps,
   edit,
   rulebooks,
+  reopen,
 }: GameFormLayoutProps) {
   const push = useTrialPush();
   const trial = use(TrialContext);
@@ -95,7 +97,14 @@ export function GameFormWizard({
   function renderSection(section: SectionKey) {
     switch (section) {
       case FORM_SECTION.basics:
-        return <GameBasicsFields form={form} rulebooks={rulebooks} kindLocked={locked} />;
+        return (
+          <GameBasicsFields
+            form={form}
+            rulebooks={rulebooks}
+            kindLocked={locked}
+            ruleNotice={reopen?.failed ? null : reopen?.ruleNotice}
+          />
+        );
       case FORM_SECTION.preflight:
         return <GamePreflightFields form={form} />;
       case FORM_SECTION.media:
@@ -150,6 +159,7 @@ export function GameFormWizard({
             </Callout.Root>
           )}
 
+          {reopen && step === 0 && <ReopenNotice reopen={reopen} />}
           {edit && step === 0 && applicants > 0 && <EditWithApplicantsNotice />}
           {edit && step === 0 && applicants === 0 && <EditWithoutApplicantsNotice />}
 

@@ -22,6 +22,7 @@ import type { GameDefaults } from "../model/game-defaults";
 import type { GameEditContext } from "../model/game-form-layout";
 import { gameFormResolver } from "../model/game-form-resolver";
 import { GAME_FORM_STEPS } from "../model/game-form-steps";
+import type { ReopenContext } from "../model/reopen-context";
 import { GameFormWizard } from "./game-form-wizard";
 
 interface GameFormProps {
@@ -33,6 +34,7 @@ interface GameFormProps {
   edit?: GameEditContext;
   rulebooks?: MyRulebooks;
   initialRulebookId?: string;
+  reopen?: ReopenContext;
 }
 
 export function GameForm({
@@ -44,6 +46,7 @@ export function GameForm({
   edit,
   rulebooks,
   initialRulebookId,
+  reopen,
 }: GameFormProps) {
   const { pending, run } = useAction();
   // 체험에서는 일부 단계만 보인다.
@@ -119,6 +122,7 @@ export function GameForm({
       steps={steps}
       edit={edit}
       rulebooks={rulebooks}
+      reopen={reopen}
     />
   );
 }

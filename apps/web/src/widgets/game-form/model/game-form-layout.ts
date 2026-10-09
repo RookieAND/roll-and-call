@@ -4,6 +4,7 @@ import type { MyRulebooks } from "@/entities/rulebook";
 import type { GameFormValues } from "@/features/write-game";
 
 import type { WizardStepConfig } from "./game-form-steps";
+import type { ReopenContext } from "./reopen-context";
 
 export type GameEditContext = {
   gameId: string;
@@ -22,4 +23,5 @@ export interface GameFormLayoutProps {
   steps: readonly WizardStepConfig[];
   edit?: GameEditContext;
   rulebooks?: MyRulebooks;
+  reopen?: ReopenContext;
 }

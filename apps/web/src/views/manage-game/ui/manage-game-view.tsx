@@ -12,6 +12,7 @@ import {
 } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { CancelGameRow } from "@/features/cancel-game";
+import { canReopenGame, ReopenGameLink } from "@/features/reopen-game";
 import {
   getCurrentSessionUser,
   getGameById,
@@ -66,6 +67,7 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
     roster: game.participants,
   }).length;
   const { stage, stats, cancelNote, deadlineNote } = manageSummary({ game, responses });
+  const canReopen = canReopenGame({ game, userId: user.id, serverId: server.id });
   const showNextSessionHint = isNil(game.cancelledAt) && isSessionEnded(game);
   const rows = manageRows({ game, reviewCount: reviews.length });
 
@@ -94,6 +96,11 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
               )}
             </HStack>
             {deadlineNote && <ManageDeadlineLine note={deadlineNote} />}
+            {canReopen && (
+              <div className="mt-150">
+                <ReopenGameLink gameId={id} variant="solid" />
+              </div>
+            )}
           </Card.Root>
         </div>
 

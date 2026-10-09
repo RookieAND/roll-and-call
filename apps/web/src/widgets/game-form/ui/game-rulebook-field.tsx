@@ -6,17 +6,20 @@ import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
 import { RULE_GATE, ruleGate, ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
+import type { RuleNotice } from "@/features/reopen-game";
 import type { GameFormValues } from "@/features/write-game";
 import { LineBreaks, ServerLink } from "@/shared/ui";
 
 import { GameRulebookSheet } from "./game-rulebook-sheet";
+import { RuleNoticeCallout } from "./rule-notice-callout";
 
 interface GameRulebookFieldProps {
   form: UseFormReturn<GameFormValues>;
   rulebooks?: MyRulebooks;
+  ruleNotice?: RuleNotice | null;
 }
 
-export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
+export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookFieldProps) {
   const [open, setOpen] = useState(false);
   const { setValue, watch, formState } = form;
   const rule = watch("rule");
@@ -38,6 +41,8 @@ export function GameRulebookField({ form, rulebooks }: GameRulebookFieldProps) {
           *
         </Text>
       </HStack>
+
+      {ruleNotice && !set && <RuleNoticeCallout notice={ruleNotice} />}
 
       {rulebooks ? (
         // ponytail: 두 줄 값을 담고 시트를 여는 칸이라 Select 대신 손으로 둔다.
