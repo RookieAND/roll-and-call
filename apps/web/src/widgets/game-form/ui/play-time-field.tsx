@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, IconButton, Text, VStack } from "@roll-and-call/ui";
+import { Button, Field, Text, VStack } from "@roll-and-call/ui";
 
 import { PlayTimeRow } from "./play-time-row";
 
@@ -15,7 +15,7 @@ interface PlayTimeFieldProps {
 export function PlayTimeField({ min, max, onChangeMin, onChangeMax, error }: PlayTimeFieldProps) {
   return (
     <Field.Root label="플레이타임" required>
-      <VStack gap="100">
+      <VStack gap="150">
         <PlayTimeRow name={max === null ? undefined : "최소"} value={min} onChange={onChangeMin} />
         {max === null ? (
           <Button
@@ -33,19 +33,15 @@ export function PlayTimeField({ min, max, onChangeMin, onChangeMax, error }: Pla
             value={max}
             onChange={onChangeMax}
             action={
-              <IconButton aria-label="최대 지우기" onClick={() => onChangeMax(null)}>
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                >
-                  <path d="M18 6 6 18M6 6l12 12" />
-                </svg>
-              </IconButton>
+              <Button
+                type="button"
+                variant="ghost"
+                colorPalette="gray"
+                size="sm"
+                onClick={() => onChangeMax(null)}
+              >
+                지우기
+              </Button>
             }
           />
         )}

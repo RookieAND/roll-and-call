@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Select, Text } from "@roll-and-call/ui";
+import { HStack, Select, Text, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import { MAX_PLAY_HOURS, PLAY_HOUR_OPTIONS, PLAY_MINUTE_OPTIONS } from "../model/play-time-options";
@@ -36,41 +36,45 @@ export function PlayTimeRow({ name, value, onChange, action }: PlayTimeRowProps)
   }
 
   return (
-    <HStack gap="100" align="center">
+    <VStack gap="075">
       {name && (
-        <Text typography="body4" weight="bold" foreground="muted" className="w-8 flex-none">
-          {name}
-        </Text>
+        <HStack align="center" justify="between" className="min-h-8">
+          <Text typography="body4" weight="bold" foreground="muted">
+            {name}
+          </Text>
+          {action}
+        </HStack>
       )}
-      <Select.Root
-        items={hourItems}
-        value={String(hours)}
-        onValueChange={(hour) => change(Number(hour), minutes)}
-      >
-        <PlayTimeTrigger value={hours} unit="시간" label={label} />
-        <Select.Popup>
-          {hourItems.map((item) => (
-            <Select.Item key={item.value} value={item.value}>
-              {item.label}
-            </Select.Item>
-          ))}
-        </Select.Popup>
-      </Select.Root>
-      <Select.Root
-        items={minuteItems}
-        value={String(minutes)}
-        onValueChange={(minute) => change(hours, Number(minute))}
-      >
-        <PlayTimeTrigger value={minutes} unit="분" label={label} />
-        <Select.Popup>
-          {minuteItems.map((item) => (
-            <Select.Item key={item.value} value={item.value}>
-              {item.label}
-            </Select.Item>
-          ))}
-        </Select.Popup>
-      </Select.Root>
-      {name && (action ?? <span aria-hidden className="w-11 flex-none" />)}
-    </HStack>
+      <HStack gap="100">
+        <Select.Root
+          items={hourItems}
+          value={String(hours)}
+          onValueChange={(hour) => change(Number(hour), minutes)}
+        >
+          <PlayTimeTrigger value={hours} unit="시간" label={label} />
+          <Select.Popup>
+            {hourItems.map((item) => (
+              <Select.Item key={item.value} value={item.value}>
+                {item.label}
+              </Select.Item>
+            ))}
+          </Select.Popup>
+        </Select.Root>
+        <Select.Root
+          items={minuteItems}
+          value={String(minutes)}
+          onValueChange={(minute) => change(hours, Number(minute))}
+        >
+          <PlayTimeTrigger value={minutes} unit="분" label={label} />
+          <Select.Popup>
+            {minuteItems.map((item) => (
+              <Select.Item key={item.value} value={item.value}>
+                {item.label}
+              </Select.Item>
+            ))}
+          </Select.Popup>
+        </Select.Root>
+      </HStack>
+    </VStack>
   );
 }
