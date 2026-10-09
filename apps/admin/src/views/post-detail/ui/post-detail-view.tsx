@@ -63,7 +63,6 @@ export function PostDetailView({
             <Tag>{post.status}</Tag>
           </HStack>
         }
-        sub={post.hidden ? "숨김 중" : "구인 상세"}
         trail={[{ href: listHref, label: "구인" }]}
         actions={<NextItemButton href={nextHref} />}
         withAside

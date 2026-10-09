@@ -2,7 +2,8 @@ import { VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
 import { EmptyState } from "@/shared/ui";
-import { loadTodos, TODO_ITEM_TYPE } from "@/widgets/session-list";
+import { TODO_ITEM_TYPE } from "@/widgets/session-list";
+import { loadTodos } from "@/widgets/session-list/server";
 
 import { nullOnError } from "../api/null-on-error";
 import { CertTodoCard } from "./cert-todo-card";

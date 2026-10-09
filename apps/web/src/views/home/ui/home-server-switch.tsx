@@ -1,7 +1,7 @@
 import { listMemberServers } from "@roll-and-call/database/servers";
 
 import { ServerSwitcher } from "@/shared/ui";
-import { loadTodos } from "@/widgets/session-list";
+import { loadTodos } from "@/widgets/session-list/server";
 
 interface HomeServerSwitchProps {
   userId: string;

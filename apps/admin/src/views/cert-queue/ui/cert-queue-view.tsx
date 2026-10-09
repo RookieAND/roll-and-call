@@ -25,7 +25,6 @@ import { CertQueueTable } from "./cert-queue-table";
 
 interface CertQueueViewProps {
   queue: Awaited<ReturnType<typeof listCertQueue>>;
-  serverName: string;
   page?: string;
   filter: CertQueueFilter;
 }
@@ -38,7 +37,7 @@ const FILTER_CHIPS = [
   })),
 ];
 
-export function CertQueueView({ queue, serverName, page, filter }: CertQueueViewProps) {
+export function CertQueueView({ queue, page, filter }: CertQueueViewProps) {
   const paged = paginate(queue.rows, page);
   const query = { q: filter.query, rulebook: filter.rulebook, filter: filter.filter };
   const tabs = CERT_TABS.map((tab) =>
@@ -57,7 +56,7 @@ export function CertQueueView({ queue, serverName, page, filter }: CertQueueView
 
   return (
     <>
-      <AdminHeader title="룰북 인증" sub={serverName} />
+      <AdminHeader title="룰북 인증" />
       <RouteTabs label="룰북 인증 화면" items={tabs} value="/cert" />
       <VStack gap="150" className="flex-1 p-200">
         {queue.total === 0 ? (

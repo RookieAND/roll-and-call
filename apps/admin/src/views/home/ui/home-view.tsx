@@ -5,7 +5,6 @@ import { formatDayRange } from "@/shared/lib";
 import type { PendingItem, WeeklySummary } from "@/shared/server";
 import { AdminHeader, EMPTY_IMAGE, EmptyState, Panel } from "@/shared/ui";
 
-import { formatToday } from "../model/format-today";
 import { PendingRow } from "./pending-row";
 import { StaffChannelHint } from "./staff-channel-hint";
 import { WeekCard } from "./week-card";
@@ -20,7 +19,7 @@ interface HomeViewProps {
 export function HomeView({ weekly, pendingItems, staffChannel, owner }: HomeViewProps) {
   return (
     <>
-      <AdminHeader title="홈" sub={formatToday(weekly.to)} />
+      <AdminHeader title="홈" />
       <VStack gap="150" className="mx-auto w-full max-w-content p-200">
         <HStack align="baseline" gap="100">
           <Text typography="subtitle1" render={<h2 />}>

@@ -4,8 +4,6 @@ export { SessionEmptyLine } from "./ui/session-empty-line";
 export { SessionListSkeleton } from "./ui/session-list-skeleton";
 export { userSessionsHref } from "./model/user-sessions-href";
 export { sessionsHref } from "./model/sessions-href";
-export { loadMySessions } from "./api/load-sessions";
-export { loadProfile } from "./api/load-profile";
 export { recentAbsences, type Absence } from "./model/recent-absences";
 export { AbsenceNotice } from "./ui/absence-notice";
 export { countRecordSessions } from "./model/count-record-sessions";
@@ -27,7 +25,6 @@ export {
 export { isOngoingCard } from "./model/is-ongoing-card";
 export { countableCards } from "./model/countable-cards";
 export { SessionCountStats } from "./ui/session-count-stats";
-export { loadTodos } from "./api/load-todos";
 export { listTodos, type TodoList } from "./model/list-todos";
 export { TODO_KIND, type TodoKind } from "./model/todo-kind";
 export {

@@ -43,7 +43,6 @@ interface CertManageViewProps {
   filter: CertManageFilter;
   sort: TableSort<CertManageSortColumn>;
   query: Record<string, string | undefined>;
-  serverName: string;
   revokeTarget: RevokeTarget | null;
   staffChannel: boolean;
 }
@@ -53,7 +52,6 @@ export function CertManageView({
   filter,
   sort,
   query,
-  serverName,
   revokeTarget,
   staffChannel,
 }: CertManageViewProps) {
@@ -78,7 +76,7 @@ export function CertManageView({
 
   return (
     <>
-      <AdminHeader title="룰북 인증" sub={serverName} />
+      <AdminHeader title="룰북 인증" />
       <RouteTabs label="룰북 인증 화면" items={tabs} value="/cert/manage" />
       <VStack gap="150" className="flex-1 p-200">
         <HStack align="center" gap="100" wrap>

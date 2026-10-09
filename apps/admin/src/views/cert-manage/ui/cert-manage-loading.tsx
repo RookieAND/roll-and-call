@@ -1,4 +1,4 @@
-import { Button, Chip, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
+import { Button, Chip, HStack, TextInput } from "@roll-and-call/ui";
 import { Plus, Search } from "lucide-react";
 
 import { CERT_TABS } from "@/shared/lib";
@@ -15,7 +15,7 @@ import {
 export function CertManageLoading() {
   return (
     <>
-      <AdminHeader title="룰북 인증" sub={<Skeleton width={80} height={12} render={<span />} />} />
+      <AdminHeader title="룰북 인증" />
       <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/manage" />
       <LoadingRegion label="인증 관리를 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">

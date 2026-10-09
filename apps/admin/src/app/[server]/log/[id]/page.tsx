@@ -22,7 +22,7 @@ export default async function AuditEntryPage({
   if (!entry) {
     return (
       <>
-        <AdminHeader title="활동 기록" sub="조치 상세" />
+        <AdminHeader title="활동 기록" />
         <EmptyState
           size="full"
           image={EMPTY_IMAGE.search}

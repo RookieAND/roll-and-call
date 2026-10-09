@@ -1,5 +1,5 @@
 import { TabCount } from "@/shared/ui";
-import { loadTodos } from "@/widgets/session-list";
+import { loadTodos } from "@/widgets/session-list/server";
 
 import { nullOnError } from "../api/null-on-error";
 

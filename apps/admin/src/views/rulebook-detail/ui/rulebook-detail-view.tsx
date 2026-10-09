@@ -28,7 +28,6 @@ export function RulebookDetailView({
   page,
 }: RulebookDetailViewProps) {
   const logHref = `/log?target=${encodeURIComponent(rulebook.name)}`;
-  const sub = `${rulebook.hidden ? "숨김 · " : ""}룰북 상세 · ${rulebook.category}`;
   const basePath = `/rules/${rulebook.id}`;
   const activeQuizCount = rulebook.quizQuestions.filter((question) => question.active).length;
   const tabLabel = (label: string, count: number, value: RulebookDetailTab) => (
@@ -59,7 +58,6 @@ export function RulebookDetailView({
       <AdminHeader
         title={rulebook.label}
         trail={[{ href: "/rules", label: "룰북" }]}
-        sub={sub}
         actions={
           <Button
             variant="outline"

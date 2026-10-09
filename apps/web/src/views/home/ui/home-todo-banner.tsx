@@ -3,7 +3,8 @@ import { cva } from "class-variance-authority";
 import { Bell, ChevronRight, CircleAlert } from "lucide-react";
 
 import { ServerLink } from "@/shared/ui";
-import { loadTodos, type TodoList } from "@/widgets/session-list";
+import { type TodoList } from "@/widgets/session-list";
+import { loadTodos } from "@/widgets/session-list/server";
 
 const banner = cva("min-h-11 border-b border-gray-200 px-200 text-gray-900", {
   variants: { blocked: { true: "bg-danger-50", false: "bg-tinted-bg" } },

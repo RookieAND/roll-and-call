@@ -1,26 +1,22 @@
 import { Plus } from "lucide-react";
-import { Suspense } from "react";
+import type { ReactNode } from "react";
 
-import { AppBar, ServerSwitcher } from "@/shared/ui";
+import { AppBar } from "@/shared/ui";
 
 import type { NewGameSanction } from "../model/new-game-sanction";
-import { GamesServerSwitch } from "./games-server-switch";
 import { NewGameButton } from "./new-game-button";
 
 interface GamesAppBarFrameProps {
   sanction: NewGameSanction | null;
+  serverSwitch: ReactNode;
 }
 
-export function GamesAppBarFrame({ sanction }: GamesAppBarFrameProps) {
+export function GamesAppBarFrame({ sanction, serverSwitch }: GamesAppBarFrameProps) {
   return (
     <AppBar
       title="구인 목록"
       brand
-      serverSwitch={
-        <Suspense fallback={<ServerSwitcher />}>
-          <GamesServerSwitch />
-        </Suspense>
-      }
+      serverSwitch={serverSwitch}
       action={
         <NewGameButton
           sanction={sanction}

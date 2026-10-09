@@ -39,7 +39,6 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
     <>
       <AdminHeader
         title={`${entry.action} · ${entry.targetName}`}
-        sub="조치 상세"
         trail={[{ href: listHref, label: "활동 기록" }]}
         contentWidth={960}
       />

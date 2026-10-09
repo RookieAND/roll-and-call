@@ -1,4 +1,4 @@
-import { HStack, Skeleton, TextInput } from "@roll-and-call/ui";
+import { HStack, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import { MEMBERSHIP_STATUS } from "@/shared/lib";
@@ -12,7 +12,7 @@ import { UserFilterChips } from "./user-filter-chips";
 export function UsersLoading() {
   return (
     <>
-      <AdminHeader title="유저" sub={<Skeleton width={48} height={12} render={<span />} />} />
+      <AdminHeader title="유저" />
       <MembershipTabs value={MEMBERSHIP_STATUS.active} disabled />
       <LoadingRegion label="유저 목록을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="125">

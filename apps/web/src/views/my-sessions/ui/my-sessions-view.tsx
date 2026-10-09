@@ -8,7 +8,6 @@ import { AppBar } from "@/shared/ui";
 import {
   countableCards,
   isOngoingCard,
-  loadMySessions,
   ONGOING_CHIP,
   SESSION_CHIPS,
   SESSION_TABS,
@@ -16,6 +15,7 @@ import {
   SessionTabs,
   sessionsHref,
 } from "@/widgets/session-list";
+import { loadMySessions } from "@/widgets/session-list/server";
 
 import { SessionStatusChips } from "./session-status-chips";
 import { SessionsEmpty } from "./sessions-empty";

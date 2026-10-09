@@ -39,7 +39,6 @@ export function ReviewDetailView({ review, tab, listQuery, viewerId }: ReviewDet
     <>
       <AdminHeader
         title={review.game.title}
-        sub="후기 상세"
         trail={trail}
         actions={<NextItemButton href={nextHref} />}
         withAside

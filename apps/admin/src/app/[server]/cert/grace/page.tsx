@@ -7,5 +7,5 @@ export const metadata: Metadata = { title: "유예 기간" };
 
 export default async function CertGracePage() {
   const server = await getCurrentServer();
-  return <CertGraceView serverName={server.name} enforcementDate={server.certEnforcementDate} />;
+  return <CertGraceView enforcementDate={server.certEnforcementDate} />;
 }

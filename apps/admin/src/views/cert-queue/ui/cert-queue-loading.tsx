@@ -1,4 +1,4 @@
-import { Chip, HStack, Skeleton, TextInput } from "@roll-and-call/ui";
+import { Chip, HStack, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
 import { CERT_TABS } from "@/shared/lib";
@@ -16,7 +16,7 @@ import {
 export function CertQueueLoading() {
   return (
     <>
-      <AdminHeader title="룰북 인증" sub={<Skeleton width={80} height={12} render={<span />} />} />
+      <AdminHeader title="룰북 인증" />
       <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert" />
       <LoadingRegion label="심사 대기열을 불러오는 중입니다" className="gap-150 p-200">
         <HStack align="center" gap="100">

@@ -17,7 +17,6 @@ export function PostDetailLoading() {
     <>
       <AdminHeader
         title={<Skeleton width={160} height={22} render={<span />} className="inline-block" />}
-        sub="구인 상세"
         trail={[{ href: "/posts", label: "구인" }]}
         actions={<NextItemButton />}
         withAside

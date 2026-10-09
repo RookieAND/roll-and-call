@@ -68,7 +68,6 @@ export function NoShowsView({
     <>
       <AdminHeader
         title="불참 기록"
-        sub={`${rows.length}건`}
         actions={
           <Button
             variant="outline"

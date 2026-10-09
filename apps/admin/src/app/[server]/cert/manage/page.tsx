@@ -36,7 +36,6 @@ export default async function CertManagePage({ searchParams }: PageProps<"/[serv
       filter={filter}
       sort={sort}
       query={query}
-      serverName={server.name}
       revokeTarget={revokeTarget}
       staffChannel={Boolean(server.staffChannelId)}
     />

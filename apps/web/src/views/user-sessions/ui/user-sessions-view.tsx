@@ -9,13 +9,13 @@ import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import {
   countableCards,
-  loadProfile,
   PROFILE_SESSION_SECTIONS,
   SessionEmptyLine,
   SessionList,
   SessionTabs,
   userSessionsHref,
 } from "@/widgets/session-list";
+import { loadProfile } from "@/widgets/session-list/server";
 
 export async function UserSessionsView({ id, tab }: { id: string; tab?: string }) {
   const server = await getCurrentServer();

@@ -4,6 +4,7 @@ import { Container, VStack } from "@roll-and-call/ui";
 import { useSearchParams } from "next/navigation";
 
 import { GAME_TAB, parseGameTab } from "@/shared/api";
+import { ServerSwitcher } from "@/shared/ui";
 
 import { GameListSkeleton } from "./game-list-skeleton";
 import { GamesAppBarFrame } from "./games-app-bar-frame";
@@ -14,7 +15,7 @@ export function GamesLoading() {
   const tab = parseGameTab(useSearchParams().get("tab") ?? undefined);
   return (
     <>
-      <GamesAppBarFrame sanction={null} />
+      <GamesAppBarFrame sanction={null} serverSwitch={<ServerSwitcher />} />
       <Container>
         <GamesToolbar filter={{ tab }} />
         <VStack gap="150" className="pt-150 pb-200">

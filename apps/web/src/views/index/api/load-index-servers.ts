@@ -2,7 +2,7 @@ import "server-only";
 import { listMemberServers } from "@roll-and-call/database/servers";
 
 import { getCurrentSessionUser, listJoinableServers } from "@/shared/server";
-import { loadTodos } from "@/widgets/session-list";
+import { loadTodos } from "@/widgets/session-list/server";
 
 // 시작 영역 우선순위: 가입한 서버 > 바로 가입할 수 있는 서버 > 없음. servers가 null이면 비로그인.
 // 가입 서버가 2개 이상이면 메뉴 각 줄에 그 서버의 할 일 수(알림 탭 [할 일]과 같은 수, 인증 반려 포함)를 단다. 안 읽은 알림은 세지 않는다(R15).

@@ -51,7 +51,7 @@ export function AuditLogView({ log, query, sort }: AuditLogViewProps) {
 
   return (
     <>
-      <AdminHeader title="활동 기록" sub={`${log.rows.length}건`} />
+      <AdminHeader title="활동 기록" />
       <VStack gap="150" className="flex-1 p-200">
         <HStack align="center" gap="100">
           <HStack align="center" gap="100" wrap>

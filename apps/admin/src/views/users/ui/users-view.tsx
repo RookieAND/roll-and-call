@@ -1,12 +1,6 @@
 import { HStack, VStack } from "@roll-and-call/ui";
 
-import {
-  MEMBERSHIP_LABEL,
-  MEMBERSHIP_STATUS,
-  paginate,
-  type MembershipStatus,
-  type TableSort,
-} from "@/shared/lib";
+import { MEMBERSHIP_STATUS, paginate, type MembershipStatus, type TableSort } from "@/shared/lib";
 import type { UserFilter, UserRow, UserSortColumn } from "@/shared/server";
 import { AdminHeader, ListPager, Panel, UrlSearchInput } from "@/shared/ui";
 
@@ -34,16 +28,14 @@ export function UsersView({
   membership,
 }: UsersViewProps) {
   const paged = paginate(rows, page);
-  const count = `${rows.length}명`;
   const active = membership === MEMBERSHIP_STATUS.active;
-  const sub = active ? count : `${MEMBERSHIP_LABEL[membership]} ${count}`;
   const pager = (
     <ListPager page={paged.page} totalPages={paged.totalPages} total={rows.length} unit="명" />
   );
 
   return (
     <>
-      <AdminHeader title="유저" sub={sub} />
+      <AdminHeader title="유저" />
       <MembershipTabs value={membership} counts={membershipCounts} />
       <VStack gap="150" className="flex-1 p-200">
         <HStack align="center" gap="125">

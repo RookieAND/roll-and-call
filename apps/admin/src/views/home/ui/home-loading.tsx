@@ -4,7 +4,6 @@ import { CalendarDays, FileText, User } from "lucide-react";
 import { formatDayRange } from "@/shared/lib";
 import { AdminHeader, LoadingRegion, Panel } from "@/shared/ui";
 
-import { formatToday } from "../model/format-today";
 import { PendingRowLoading } from "./pending-row-loading";
 import { WeekCardLoading } from "./week-card-loading";
 
@@ -15,7 +14,7 @@ export function HomeLoading() {
   const now = new Date();
   return (
     <>
-      <AdminHeader title="홈" sub={formatToday(now)} />
+      <AdminHeader title="홈" />
       <LoadingRegion
         label="홈 화면을 불러오는 중입니다"
         className="mx-auto w-full max-w-content flex-none gap-150 p-200"

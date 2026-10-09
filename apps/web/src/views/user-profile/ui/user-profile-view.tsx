@@ -17,7 +17,7 @@ import {
   getCurrentServer,
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
-import { loadProfile } from "@/widgets/session-list";
+import { loadProfile } from "@/widgets/session-list/server";
 
 import { ProfileBlockLabel } from "./profile-block-label";
 import { ProfileReviews } from "./profile-reviews";
