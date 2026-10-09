@@ -1,4 +1,4 @@
-import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { BookOpen, ChevronRight } from "lucide-react";
 
 interface TrialRulebookRowProps {
@@ -38,7 +38,7 @@ export function TrialRulebookRow({ title, meta, badge, palette, onClick }: Trial
       align="center"
       gap="125"
       render={<button type="button" onClick={onClick} />}
-      className={`${className} cursor-pointer`}
+      className={cn(className, "cursor-pointer")}
     >
       {content}
     </HStack>

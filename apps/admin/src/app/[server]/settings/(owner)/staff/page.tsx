@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { stringParams } from "@/shared/lib";
 import { listStaff, requireStaff, searchStaffCandidates } from "@/shared/server";
 import { SettingsStaffView } from "@/views/settings";
 
@@ -9,7 +10,7 @@ export default async function SettingsStaffPage({
   searchParams,
 }: PageProps<"/[server]/settings/staff">) {
   const [query, viewer, staff] = await Promise.all([
-    searchParams as Promise<Record<string, string | undefined>>,
+    searchParams.then(stringParams),
     requireStaff(),
     listStaff(),
   ]);

@@ -2,7 +2,12 @@
 
 import { Field, SegmentedControl, VStack } from "@roll-and-call/ui";
 
-import { RECRUIT_METHODS, recruitMethodLabel, type RecruitMethod } from "@/entities/game";
+import {
+  isRecruitMethod,
+  RECRUIT_METHODS,
+  recruitMethodLabel,
+  type RecruitMethod,
+} from "@/entities/game";
 
 import { LockedModeNotice } from "./locked-mode-notice";
 
@@ -19,7 +24,9 @@ export function RecruitMethodField({ value, onChange, locked = false }: RecruitM
       <Field.Root label="모집 방식" required={!locked}>
         <SegmentedControl.Root
           value={value}
-          onValueChange={(next) => onChange(next as RecruitMethod)}
+          onValueChange={(next) => {
+            if (isRecruitMethod(next)) onChange(next);
+          }}
           disabled={locked}
           aria-label="모집 방식"
         >

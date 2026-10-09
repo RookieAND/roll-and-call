@@ -1,4 +1,5 @@
 import type { BadgeLook } from "@roll-and-call/database/badges/model";
+import { cn } from "@roll-and-call/ui";
 
 interface SparkleSet {
   colors: string[];
@@ -88,7 +89,10 @@ export function BadgeSparkles({ look, size }: BadgeSparklesProps) {
         return (
           <span
             key={degree}
-            className={`absolute animate-badge-twinkle leading-none ${colors[index % colors.length]}`}
+            className={cn(
+              "absolute animate-badge-twinkle leading-none",
+              colors[index % colors.length],
+            )}
             style={
               {
                 left: `${50 + 100 * radius * Math.cos(angle)}%`,

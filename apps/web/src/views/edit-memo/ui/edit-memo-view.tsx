@@ -12,7 +12,11 @@ import {
   getCurrentServer,
 } from "@/shared/server";
 
-export async function EditMemoView({ id }: { id: string }) {
+interface EditMemoViewProps {
+  id: string;
+}
+
+export async function EditMemoView({ id }: EditMemoViewProps) {
   const [server, viewer] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!viewer) {
     const memoPath = serverPath({ slug: server.slug, path: `/users/${id}/memo` });

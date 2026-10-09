@@ -11,9 +11,10 @@ import {
 
 import { ChoiceRowList, FormSection, ReasonChips, Tag, type ChoiceRow } from "@/shared/ui";
 
+import { isSanctionPeriod } from "../model/is-sanction-period";
 import type { SanctionDraft } from "../model/sanction-draft";
 import { SANCTION_EFFECT_TEXT } from "../model/sanction-period-hint";
-import { SANCTION_PERIODS, type SanctionPeriod } from "../model/sanction-periods";
+import { SANCTION_PERIODS } from "../model/sanction-periods";
 
 interface SanctionFormProps {
   draft: SanctionDraft;
@@ -46,7 +47,9 @@ export function SanctionForm({
       >
         <SegmentedControl.Root
           value={draft.period}
-          onValueChange={(period) => onDraftChange({ period: period as SanctionPeriod })}
+          onValueChange={(period) => {
+            if (isSanctionPeriod(period)) onDraftChange({ period });
+          }}
           aria-label="제재 기간"
         >
           {SANCTION_PERIODS.map((period) => (

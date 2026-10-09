@@ -1,5 +1,7 @@
 // 클라이언트 번들에 들어가도 안전한 것만. 서버 전용(DB·서버 auth·Discord)은 @/shared/server.
 export type { ActionResult } from "./action-result";
+export { idSchema } from "./id-schema";
+export { parseActionInput, type ParsedActionInput } from "./parse-action-input";
 export { createSupabaseBrowserClient } from "./supabase-browser";
 export {
   GAME_RULE_OTHER,
@@ -55,3 +57,4 @@ export { isPageError } from "./is-page-error";
 export { putWithProgress } from "./put-with-progress";
 export { shrinkImage } from "./shrink-image";
 export { NAV_BADGES_QUERY_ROOT, navBadgesQueryKey } from "./nav-badges-query-key";
+export { isGameTab } from "./is-game-tab";

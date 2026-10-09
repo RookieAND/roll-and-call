@@ -2,7 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
+import { z } from "zod";
 
+import { idSchema, parseActionInput } from "@/shared/lib";
 import {
   evaluateBadges,
   getCurrentServer,
@@ -18,9 +20,16 @@ interface GrantUserCertificationsInput {
   evidence: string;
 }
 
+const grantUserCertificationsSchema = z.object({
+  rulebookId: idSchema,
+  userIds: z.array(idSchema).max(500),
+  evidence: z.string().max(2000),
+}) satisfies z.ZodType<GrantUserCertificationsInput>;
+
 // 부여 사유는 활동 기록에만 남는다. 당사자 알림(cert_granted)은 grantCertifications가 같은 트랜잭션에서 넣는다.
-export async function grantUserCertifications(input: GrantUserCertificationsInput) {
+export async function grantUserCertifications(args: GrantUserCertificationsInput) {
   const staff = await requireStaff();
+  const input = parseActionInput(grantUserCertificationsSchema, args);
   const evidence = input.evidence.trim();
   if (!evidence) return { ok: false as const, error: "인증 근거를 입력해 주세요" };
   if (input.userIds.length === 0) return { ok: false as const, error: "인증할 유저를 골라 주세요" };

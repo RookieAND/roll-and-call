@@ -2,7 +2,7 @@
 
 import { withTransaction } from "@roll-and-call/database/transaction";
 
-import { type ActionResult } from "@/shared/api";
+import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { getActingMember, notMemberError } from "@/shared/server";
 
 import { type OverlapRejection } from "../model/overlap-rejection";
@@ -12,6 +12,9 @@ import { evaluateApplication } from "./evaluate-application";
 export async function checkJoin(
   gameId: string,
 ): Promise<ActionResult & { reason?: OverlapRejection["reason"]; overlapGameId?: string }> {
+  const parsed = parseActionInput(idSchema, gameId);
+  if (!parsed.ok) return parsed.result;
+
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

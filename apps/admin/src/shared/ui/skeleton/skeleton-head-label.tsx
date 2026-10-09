@@ -3,7 +3,11 @@ import { ArrowDown } from "lucide-react";
 
 import type { SkeletonColumn } from "./skeleton-table";
 
-export function SkeletonHeadLabel({ column }: { column: SkeletonColumn }) {
+interface SkeletonHeadLabelProps {
+  column: SkeletonColumn;
+}
+
+export function SkeletonHeadLabel({ column }: SkeletonHeadLabelProps) {
   if (column.label) {
     return (
       <HStack inline align="center" gap="050">

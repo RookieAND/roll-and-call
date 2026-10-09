@@ -21,7 +21,11 @@ import { getScheduleAvailability } from "../api/load-availability";
 import { scheduleBodyModeOf } from "../model/schedule-body-mode-of";
 import { ScheduleBody } from "./schedule-body";
 
-export async function GameScheduleView({ id }: { id: string }) {
+interface GameScheduleViewProps {
+  id: string;
+}
+
+export async function GameScheduleView({ id }: GameScheduleViewProps) {
   const server = await getCurrentServer();
   const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();

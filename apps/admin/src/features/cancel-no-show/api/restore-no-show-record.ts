@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
+import { parseActionInput } from "@/shared/lib";
 import {
   evaluateGameBadges,
   getCurrentServer,
@@ -12,14 +13,17 @@ import {
   syncGameReviewForumPosts,
 } from "@/shared/server";
 
+import { noShowActionSchema } from "../model/no-show-action-schema";
+
 interface RestoreNoShowRecordInput {
   noShowId: string;
   reason: string;
 }
 
 // 불참이 되살아나면 그 사람의 후기가 보류되고 업적이 바뀐다.
-export async function restoreNoShowRecord({ noShowId, reason }: RestoreNoShowRecordInput) {
+export async function restoreNoShowRecord(args: RestoreNoShowRecordInput) {
   const staff = await requireStaff();
+  const { noShowId, reason } = parseActionInput(noShowActionSchema, args);
   if (!reason.trim()) throw new Error("되돌리는 사유를 입력해 주세요");
   const server = await getCurrentServer();
   const { gameId, userId } = parseNoShowId(noShowId);

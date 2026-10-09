@@ -1,4 +1,4 @@
-import { Badge, Button, Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, Button, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { Flag, Lock } from "lucide-react";
 
 import { ServerLink } from "@/shared/ui";
@@ -36,7 +36,10 @@ export function QuestCard({ card, justCleared }: QuestCardProps) {
           <HStack align="center" gap="100">
             <span
               aria-hidden
-              className={`flex size-8 flex-none items-center justify-center rounded-400 ${TILE_CLASS[card.state]}`}
+              className={cn(
+                "flex size-8 flex-none items-center justify-center rounded-400",
+                TILE_CLASS[card.state],
+              )}
             >
               <Flag size={18} strokeWidth={2.1} />
             </span>

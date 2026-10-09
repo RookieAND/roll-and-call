@@ -1,6 +1,8 @@
 import { isString } from "es-toolkit";
 
-import { SORT_DIR, type SortColumns, type SortDir, type TableSort } from "./table-sort";
+import { isSortColumn } from "./is-sort-column";
+import { isSortDir } from "./is-sort-dir";
+import type { SortColumns, SortDir, TableSort } from "./table-sort";
 
 interface ParseSortOptions<Column extends string> {
   searchParams: Record<string, string | string[] | undefined>;
@@ -15,8 +17,8 @@ export function parseSort<Column extends string>({
   fallback,
 }: ParseSortOptions<Column>): TableSort<Column> {
   const { sort: column, dir } = searchParams;
-  const knownColumn = isString(column) && Object.hasOwn(columns, column);
-  const knownDir = isString(dir) && Object.values<string>(SORT_DIR).includes(dir);
-  if (knownColumn && knownDir) return { column: column as Column, dir: dir as SortDir, columns };
+  if (isString(column) && isSortColumn(columns)(column) && isSortDir(dir)) {
+    return { column, dir, columns };
+  }
   return { ...fallback, columns };
 }

@@ -2,12 +2,15 @@
 
 import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/games";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
+import { z } from "zod";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
+import { parseActionInput } from "@/shared/api";
 import { announceRecruitmentComplete, type Game } from "@/shared/server";
 
 import { CAPACITY_ACTION } from "../model/capacity-action";
 import type { RosterActionResult } from "../model/roster-action-result";
+import { rosterMemberInputSchema } from "../model/roster-member-input";
 import { adjustRoster } from "./adjust-roster";
 import { announceConfirmed } from "./announce-confirmed";
 import { notifyRosterChange } from "./notify-roster-change";
@@ -17,15 +20,14 @@ import { secureSeats } from "./secure-seats";
 
 const { confirmed, waiting } = PARTICIPANT_STATUS;
 
-export async function promoteParticipant({
-  gameId,
-  userId,
-  raiseCapacity = false,
-}: {
-  gameId: string;
-  userId: string;
-  raiseCapacity?: boolean;
-}): Promise<RosterActionResult> {
+const inputSchema = rosterMemberInputSchema.extend({ raiseCapacity: z.boolean().optional() });
+
+export async function promoteParticipant(
+  input: z.input<typeof inputSchema>,
+): Promise<RosterActionResult> {
+  const parsed = parseActionInput(inputSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { gameId, userId, raiseCapacity = false } = parsed.data;
   let promotedIn: Game | null = null;
   let becameFull = false;
   let capacityRaised = false;

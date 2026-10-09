@@ -2,13 +2,15 @@ import { APPLY_BUTTON_PREFIX, REVIEW_BUTTON_PREFIX } from "@roll-and-call/game-n
 import { isNull } from "es-toolkit";
 import { NextResponse } from "next/server";
 
+import { parseJson } from "@/shared/lib";
+
 import { buildInteractionResponse } from "./_lib/build-interaction-response";
 import { handleApplyButton } from "./_lib/handle-apply-button";
 import { handleApplyModalSubmit } from "./_lib/handle-apply-modal-submit";
 import { handleOnboardingCommand } from "./_lib/handle-onboarding-command";
 import { handleReviewButton } from "./_lib/handle-review-button";
 import { handleReviewModalSubmit } from "./_lib/handle-review-modal-submit";
-import type { DiscordInteraction } from "./_lib/interaction-types";
+import { interactionSchema } from "./_lib/interaction-schema";
 import { verifyDiscordRequest } from "./_lib/verify-discord-request";
 
 const ONBOARDING_COMMAND_NAME = "온보딩";
@@ -22,7 +24,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid request signature" }, { status: 401 });
   }
 
-  const interaction = JSON.parse(body) as DiscordInteraction;
+  const interaction = parseJson(interactionSchema, body);
+  if (isNull(interaction)) {
+    return NextResponse.json({ error: "invalid interaction" }, { status: 400 });
+  }
   if (interaction.type === INTERACTION_MODAL_SUBMIT) {
     if (interaction.data?.custom_id?.startsWith(APPLY_BUTTON_PREFIX)) {
       return NextResponse.json(await handleApplyModalSubmit(interaction));

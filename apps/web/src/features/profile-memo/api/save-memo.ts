@@ -3,20 +3,24 @@
 import { deleteProfileMemo, saveProfileMemo } from "@roll-and-call/database/profiles";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
-import { type ActionResult } from "@/shared/api";
+import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, notMemberError } from "@/shared/server";
 
 import { MEMO_MAX_LENGTH } from "../model/memo-form";
 
-export async function saveMemo({
-  targetId,
-  body,
-}: {
-  targetId: string;
-  body: string;
-}): Promise<ActionResult> {
+const saveMemoSchema = z.object({
+  targetId: idSchema,
+  body: z.string().max(MEMO_MAX_LENGTH * 10),
+});
+
+export async function saveMemo(input: z.input<typeof saveMemoSchema>): Promise<ActionResult> {
+  const parsed = parseActionInput(saveMemoSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { targetId, body } = parsed.data;
+
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

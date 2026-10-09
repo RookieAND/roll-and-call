@@ -1,4 +1,4 @@
-import { Grid } from "@roll-and-call/ui";
+import { Grid, cn } from "@roll-and-call/ui";
 
 import type { AnalyticsData } from "@/shared/server";
 
@@ -14,7 +14,7 @@ export function PeopleSection({ analytics }: PeopleSectionProps) {
   const { people, recruitment, firstTimers, firstShare } = analytics;
   return (
     <AnalyticsSection title="참여자 추이" sub="주차별 참여한 사람 (중복 제외)">
-      <Grid className={`mb-175 gap-100 ${recruitment ? "grid-cols-3" : "grid-cols-1"}`}>
+      <Grid className={cn("mb-175 gap-100", recruitment ? "grid-cols-3" : "grid-cols-1")}>
         {recruitment ? (
           <>
             <StatCard

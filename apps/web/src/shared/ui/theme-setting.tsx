@@ -36,7 +36,9 @@ export function ThemeSetting({ className }: ThemeSettingProps) {
     <SegmentedControl.Root
       value={mode}
       size="sm"
-      onValueChange={(next) => select(next as ThemeMode)}
+      onValueChange={(next) => {
+        if (isThemeMode(next)) select(next);
+      }}
       aria-label="화면 테마"
       className={className}
     >

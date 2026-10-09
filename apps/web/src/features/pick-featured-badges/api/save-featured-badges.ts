@@ -4,13 +4,19 @@ import { saveMemberFeaturedBadges } from "@roll-and-call/database/badges";
 import { uniq } from "es-toolkit";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
 import { FEATURED_BADGE_LIMIT, heldBadges, resolveFeaturedEntry } from "@/entities/badge";
-import { type ActionResult } from "@/shared/api";
+import { parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, getUserBadges, notMemberError } from "@/shared/server";
 
+const keysSchema = z.array(z.string().max(100)).max(FEATURED_BADGE_LIMIT * 4);
+
 export async function saveFeaturedBadges(keys: string[]): Promise<ActionResult> {
+  const parsed = parseActionInput(keysSchema, keys);
+  if (!parsed.ok) return parsed.result;
+
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, IconButton, Popover, VStack } from "@roll-and-call/ui";
+import { Button, IconButton, Popover, VStack, cn } from "@roll-and-call/ui";
 import { Ellipsis, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -44,7 +44,7 @@ export function MoreMenu({
       >
         <Ellipsis size={16} aria-hidden />
       </Popover.Trigger>
-      <Popover.Popup align="end" className={`${widthClassName} p-075`}>
+      <Popover.Popup align="end" className={cn(widthClassName, "p-075")}>
         <VStack>
           {items.map((item) => {
             const { label: itemLabel, icon: Icon, danger, onSelect } = item;

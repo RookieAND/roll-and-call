@@ -1,9 +1,11 @@
 "use server";
 
-import type { AbsenceAddedTag } from "@roll-and-call/database/games/model";
+import { ABSENCE_ADDED_TAG, type AbsenceAddedTag } from "@roll-and-call/database/games/model";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
+import { z } from "zod";
 
+import { idSchema, parseActionInput } from "@/shared/lib";
 import {
   addNoShow,
   ADD_NO_SHOW_FAILURE,
@@ -14,6 +16,13 @@ import {
   syncGameReviewForumPosts,
 } from "@/shared/server";
 
+const addNoShowSchema = z.object({
+  gameId: idSchema,
+  userId: idSchema,
+  tag: z.enum(ABSENCE_ADDED_TAG),
+  reason: z.string().max(2000),
+});
+
 interface AddNoShowRecordInput {
   gameId: string;
   userId: string;
@@ -22,8 +31,9 @@ interface AddNoShowRecordInput {
 }
 
 // 고를 수 없게 된 경우(notEligible)도 그사이 다른 처리가 있었던 것이라 충돌과 같이 알린다.
-export async function addNoShowRecord({ gameId, userId, tag, reason }: AddNoShowRecordInput) {
+export async function addNoShowRecord(args: AddNoShowRecordInput) {
   const staff = await requireStaff();
+  const { gameId, userId, tag, reason } = parseActionInput(addNoShowSchema, args);
   const server = await getCurrentServer();
   const result = await addNoShow({
     serverId: server.id,

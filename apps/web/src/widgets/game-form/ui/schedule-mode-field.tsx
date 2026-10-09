@@ -2,7 +2,7 @@
 
 import { Callout, Field, RadioCard, RadioGroup, VStack } from "@roll-and-call/ui";
 
-import { SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
+import { isScheduleMode, SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
 
 import { LockedModeNotice } from "./locked-mode-notice";
 
@@ -34,7 +34,9 @@ export function ScheduleModeField({ value, onChange, locked = false }: ScheduleM
       <Field.Root label="일정 방식">
         <RadioGroup
           value={value}
-          onValueChange={(next) => onChange(next as ScheduleMode)}
+          onValueChange={(next) => {
+            if (isScheduleMode(next)) onChange(next);
+          }}
           disabled={locked}
           aria-label="일정 방식"
           className="grid grid-cols-2 gap-100"

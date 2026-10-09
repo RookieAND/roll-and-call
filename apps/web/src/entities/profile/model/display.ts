@@ -1,4 +1,15 @@
+import { z } from "zod";
+
 import type { Profile } from "@/shared/server";
+
+const text = z.string().optional().catch(undefined);
+const metadataSchema = z.object({
+  full_name: text,
+  name: text,
+  avatar_url: text,
+  user_name: text,
+  preferred_username: text,
+});
 
 interface DisplayUser {
   email?: string;
@@ -6,7 +17,7 @@ interface DisplayUser {
 }
 
 export function profileDisplay({ profile, user }: { profile?: Profile | null; user: DisplayUser }) {
-  const metadata = user.user_metadata as Record<string, string | undefined>;
+  const metadata = metadataSchema.parse(user.user_metadata);
   return {
     name: profile?.username ?? metadata.full_name ?? metadata.name ?? user.email ?? "",
     avatar: profile?.avatarUrl ?? metadata.avatar_url ?? null,

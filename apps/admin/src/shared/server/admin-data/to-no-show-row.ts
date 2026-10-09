@@ -1,5 +1,6 @@
 import type { NoShowStatus } from "@/shared/lib";
 
+import { findUserNickname } from "./find-user-nickname";
 import { noShowStatusOf } from "./no-show-status-of";
 import type { Snapshot } from "./snapshot";
 import type { NoShow } from "./types";
@@ -26,8 +27,9 @@ interface ToNoShowRowOptions {
 }
 
 export function toNoShowRow({ db, noShow, now }: ToNoShowRowOptions): NoShowRow {
-  const session = db.sessions.find((candidate) => candidate.id === noShow.sessionId)!;
-  const nicknameOf = (id: string) => db.users.find((user) => user.id === id)!.nickname;
+  const session = db.sessions.find((candidate) => candidate.id === noShow.sessionId);
+  if (!session) throw new Error(`스냅샷에 없는 세션입니다: ${noShow.sessionId}`);
+  const nicknameOf = (userId: string) => findUserNickname({ users: db.users, userId });
   const gmNickname = nicknameOf(session.gmId);
   return {
     id: noShow.id,

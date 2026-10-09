@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, TextInput } from "@roll-and-call/ui";
+import { HStack, TextInput, cn } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -54,7 +54,7 @@ export function UrlSearchInput({
   };
 
   return (
-    <HStack align="center" className={`relative ${className ?? ""}`}>
+    <HStack align="center" className={cn("relative", className)}>
       <Search size={14} aria-hidden className="pointer-events-none absolute left-125 text-hint" />
       <TextInput
         type="search"

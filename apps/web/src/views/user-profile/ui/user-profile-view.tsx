@@ -24,7 +24,11 @@ import { ProfileReviews } from "./profile-reviews";
 import { ProfileRulebooks } from "./profile-rulebooks";
 import { ProfileSummary } from "./profile-summary";
 
-export async function UserProfileView({ id }: { id: string }) {
+interface UserProfileViewProps {
+  id: string;
+}
+
+export async function UserProfileView({ id }: UserProfileViewProps) {
   const server = await getCurrentServer();
   const viewerPromise = getCurrentSessionUser();
   const [viewer, loaded, rulebookRecords, reviewCounts, badgeRecords, memo] = await Promise.all([

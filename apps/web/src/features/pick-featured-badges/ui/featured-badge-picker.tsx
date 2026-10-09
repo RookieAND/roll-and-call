@@ -21,6 +21,7 @@ import { toast, useAction } from "@/shared/ui";
 import { saveFeaturedBadges } from "../api/save-featured-badges";
 import type { FeaturedChoice } from "../model/featured-choice";
 import { groupChoices } from "../model/group-choices";
+import { isBadgeRole } from "../model/is-badge-role";
 import { toggleFeatured } from "../model/toggle-featured";
 import { FeaturedGroupCard } from "./featured-group-card";
 
@@ -102,7 +103,12 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
         ) : null}
       </VStack>
       <div className="border-t-8 border-gray-50" />
-      <Tabs.Root value={role} onValueChange={(next) => setRole(next as BadgeRole)}>
+      <Tabs.Root
+        value={role}
+        onValueChange={(next) => {
+          if (isBadgeRole(next)) setRole(next);
+        }}
+      >
         <Tabs.List aria-label="분류" scrollable={false} className="w-full">
           {TABS.map((tab) => (
             <Tabs.Trigger

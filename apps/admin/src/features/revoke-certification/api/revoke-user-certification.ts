@@ -2,7 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
+import { z } from "zod";
 
+import { idSchema, parseActionInput } from "@/shared/lib";
 import {
   evaluateBadges,
   getCurrentServer,
@@ -22,10 +24,19 @@ interface RevokeUserCertificationInput {
   staffMemo: string;
 }
 
+const schema = z.object({
+  userId: idSchema,
+  rulebookId: idSchema,
+  reasonTag: z.string().max(100).nullable(),
+  userReason: z.string().max(2000),
+  staffMemo: z.string().max(5000),
+}) satisfies z.ZodType<RevokeUserCertificationInput>;
+
 // 그사이 이미 반려·회수됐으면 아무것도 바꾸지 않고 처리한 운영진과 시각을 돌려준다(D296).
 // 당사자·구인 참여자 알림은 revokeCertifications가 같은 트랜잭션에서 넣고, 디스코드 글은 커밋 뒤에 올린다.
-export async function revokeUserCertification(input: RevokeUserCertificationInput) {
+export async function revokeUserCertification(args: RevokeUserCertificationInput) {
   const staff = await requireStaff();
+  const input = parseActionInput(schema, args);
   const userReason = input.userReason.trim();
   if (!userReason) throw new Error("사용자에게 보이는 사유를 입력해 주세요");
   const server = await getCurrentServer();

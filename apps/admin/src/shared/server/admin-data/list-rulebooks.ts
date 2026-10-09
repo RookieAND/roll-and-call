@@ -56,8 +56,8 @@ export async function listRulebooks({ query }: { query?: string } = {}) {
     bookCount: db.rulebooks.filter((rulebook) => rulebook.category === name).length,
   }));
   const keyword = query?.trim().toLowerCase();
-  const matches = (row: RulebookRow) =>
-    [row.label, row.category, ...row.aliases].some((text) => text.toLowerCase().includes(keyword!));
+  const matches = (needle: string) => (row: RulebookRow) =>
+    [row.label, row.category, ...row.aliases].some((text) => text.toLowerCase().includes(needle));
   // 숨기지 않은 책은 있는데 기본 룰북이 하나도 없는 판본. 사용자 앱은 이 판본을 구인 룰로 고르지 못한다.
   const visible = db.rulebooks.filter((rulebook) => !rulebook.hidden);
   const editionsWithoutCore = uniq(
@@ -75,7 +75,7 @@ export async function listRulebooks({ query }: { query?: string } = {}) {
   );
   return {
     total: rows.length,
-    rows: keyword ? rows.filter(matches) : rows,
+    rows: keyword ? rows.filter(matches(keyword)) : rows,
     categories,
     editionsWithoutCore,
   };

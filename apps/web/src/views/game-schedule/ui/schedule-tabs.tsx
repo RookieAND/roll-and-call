@@ -3,6 +3,7 @@
 import { SegmentedControl, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
+import { isScheduleTab } from "../model/is-schedule-tab";
 import { SCHEDULE_TAB, type ScheduleTab } from "../model/schedule-tab";
 
 interface ScheduleTabsProps {
@@ -26,7 +27,9 @@ export function ScheduleTabs({
     <VStack gap="150">
       <SegmentedControl.Root
         value={value}
-        onValueChange={(next) => onValueChange(next as ScheduleTab)}
+        onValueChange={(next) => {
+          if (isScheduleTab(next)) onValueChange(next);
+        }}
         aria-label="조율 탭"
         disabled={disabled}
       >

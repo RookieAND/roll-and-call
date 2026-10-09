@@ -15,11 +15,12 @@ import {
 export function toCancelledSessionCard({
   game,
   role,
+  cancelledAt,
 }: {
   game: SessionGame;
   role: SessionRole;
+  cancelledAt: Date;
 }): SessionCardModel {
-  const cancelledAt = new Date(game.cancelledAt!);
   return {
     id: game.id,
     title: game.title,

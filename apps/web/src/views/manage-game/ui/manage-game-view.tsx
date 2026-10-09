@@ -30,7 +30,11 @@ import { ManageDeadlineLine } from "./manage-deadline-line";
 import { ManageGameStat } from "./manage-game-stat";
 import { ManageRow } from "./manage-row";
 
-export async function ManageGameView({ id }: { id: string }) {
+interface ManageGameViewProps {
+  id: string;
+}
+
+export async function ManageGameView({ id }: ManageGameViewProps) {
   const server = await getCurrentServer();
   const [game, user, responseCounts, reviews] = await Promise.all([
     getGameById(server.id, id),

@@ -8,8 +8,9 @@ import {
 } from "@roll-and-call/database/games";
 import { withTransaction } from "@roll-and-call/database/transaction";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
-import { GAME_NOT_FOUND_RESULT, type ActionResult } from "@/shared/api";
+import { GAME_NOT_FOUND_RESULT, idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, notMemberError } from "@/shared/server";
 
@@ -17,13 +18,15 @@ import { availabilityBlockReason } from "../model/availability-block-reason";
 
 const MAX_SLOT_COUNT = 2000;
 
-export async function saveAvailability({
-  gameId,
-  slotIsos,
-}: {
-  gameId: string;
-  slotIsos: string[];
-}): Promise<ActionResult> {
+const inputSchema = z.object({
+  gameId: idSchema,
+  slotIsos: z.array(z.iso.datetime({ offset: true })).max(MAX_SLOT_COUNT),
+});
+
+export async function saveAvailability(input: z.input<typeof inputSchema>): Promise<ActionResult> {
+  const parsed = parseActionInput(inputSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { gameId, slotIsos } = parsed.data;
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

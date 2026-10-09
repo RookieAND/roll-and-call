@@ -2,7 +2,7 @@
 
 import { Field, SegmentedControl } from "@roll-and-call/ui";
 
-import { PLAY_TYPES, playTypeLabel, type PlayType } from "@/entities/game";
+import { isPlayType, PLAY_TYPES, playTypeLabel, type PlayType } from "@/entities/game";
 
 interface PlayTypeFieldProps {
   value: PlayType;
@@ -14,7 +14,9 @@ export function PlayTypeField({ value, onChange }: PlayTypeFieldProps) {
     <Field.Root label="플레이 유형">
       <SegmentedControl.Root
         value={value}
-        onValueChange={(next) => onChange(next as PlayType)}
+        onValueChange={(next) => {
+          if (isPlayType(next)) onChange(next);
+        }}
         aria-label="플레이 유형"
       >
         {PLAY_TYPES.map((playType) => (

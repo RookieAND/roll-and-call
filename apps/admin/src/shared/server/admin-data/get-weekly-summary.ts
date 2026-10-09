@@ -72,7 +72,7 @@ export async function getWeeklySummary(now: Date = new Date()): Promise<WeeklySu
       countBy(
         db.sessions
           .filter((session) => !session.hidden && !session.cancelled)
-          .map((session) => session.createdAt!),
+          .flatMap((session) => (session.createdAt ? [session.createdAt] : [])),
       ),
     ),
     finishedSessions: toSeries(

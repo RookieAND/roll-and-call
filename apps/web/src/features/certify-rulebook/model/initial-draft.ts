@@ -32,7 +32,7 @@ export function initialDraft({
       ? { status: PHOTO_SLOT.previous, key, previewUrl: previews[key] ?? "" }
       : { status: PHOTO_SLOT.empty };
   const previous = rulebook.state === CERT_STATE.rejected ? rulebook.latestApplication : null;
-  const flagged = (key: string) => previous?.flaggedShots.includes(key as CertShot) ?? false;
+  const flagged = (key: CertShot | CertProof) => previous?.flaggedShots.includes(key) ?? false;
   const ebook = previous?.format === CERT_FORMAT.ebook;
   const proofKey: Record<CertProof, string | null | undefined> = {
     order: ebook ? previous?.purchaseCaptureUrl : null,

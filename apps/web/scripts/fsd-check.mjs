@@ -31,7 +31,8 @@ for (const file of walk(SRC)) {
     if (spec.startsWith("@/")) {
       const parts = spec.slice(2).split("/");
       const serverEntry = parts.length === 3 && parts[2] === "server";
-      if (parts.length > 2 && !serverEntry) errors.push(`${rel}: deep import "${spec}" (max @/layer/slice)`);
+      if (parts.length > 2 && !serverEntry)
+        errors.push(`${rel}: deep import "${spec}" (max @/layer/slice)`);
       const to = { layer: parts[0], slice: parts[1] ?? "" };
       if (LAYERS.indexOf(to.layer) > LAYERS.indexOf(from.layer)) {
         errors.push(`${rel}: upward import "${spec}" from ${from.layer}`);

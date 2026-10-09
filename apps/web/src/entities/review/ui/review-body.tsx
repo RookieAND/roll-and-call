@@ -1,7 +1,7 @@
 "use client";
 
 import { RichText } from "@roll-and-call/tiptap";
-import { Button, Text, VStack } from "@roll-and-call/ui";
+import { Button, Text, VStack, cn } from "@roll-and-call/ui";
 import { useLayoutEffect, useRef, useState } from "react";
 
 const CLAMP_CLASS = { 2: "line-clamp-2", 3: "line-clamp-3" } as const;
@@ -39,7 +39,7 @@ export function ReviewBody({ body, lines = 3, muted = false }: ReviewBodyProps) 
           typography="body3"
           foreground={foreground}
           render={<RichText value={body} />}
-          className={`leading-[1.65] text-pretty ${clampClass}`}
+          className={cn("leading-[1.65] text-pretty", clampClass)}
         />
       </div>
       {long && (

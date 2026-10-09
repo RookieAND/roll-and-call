@@ -3,7 +3,10 @@
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { parseJson } from "@/shared/lib";
+
 import type { RecentScreen } from "./recent-screen";
+import { recentScreensSchema } from "./recent-screens-schema";
 
 const STORAGE_KEY_PREFIX = "admin:recent-screens";
 const LIMIT = 5;
@@ -11,7 +14,7 @@ const TITLE_SUFFIX = / \| Roll & Call 어드민$/;
 
 function readScreens(storageKey: string): RecentScreen[] {
   try {
-    return JSON.parse(localStorage.getItem(storageKey) ?? "[]") as RecentScreen[];
+    return parseJson(recentScreensSchema, localStorage.getItem(storageKey)) ?? [];
   } catch {
     return [];
   }

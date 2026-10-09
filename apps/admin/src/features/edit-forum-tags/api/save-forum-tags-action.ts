@@ -2,17 +2,20 @@
 
 import { revalidatePath } from "next/cache";
 
+import { parseActionInput } from "@/shared/lib";
 import { getCurrentServer, requireOwner, saveForumTags } from "@/shared/server";
 
 import type { ForumTagForm } from "../model/forum-tag-form";
+import { forumTagFormSchema } from "../model/forum-tag-form-schema";
 import { toForumTagMap } from "../model/to-forum-tag-map";
 import { loadForumTagOptions } from "./load-forum-tag-options";
 
 type SaveForumTagsResult = { ok: true } | { ok: false };
 
 // 포럼에 없는 태그 id가 섞여 있으면(그사이 지워짐) 저장하지 않고 화면을 다시 읽게 한다.
-export async function saveForumTagsAction(form: ForumTagForm): Promise<SaveForumTagsResult> {
+export async function saveForumTagsAction(rawForm: ForumTagForm): Promise<SaveForumTagsResult> {
   const actor = await requireOwner();
+  const form = parseActionInput(forumTagFormSchema, rawForm);
   const server = await getCurrentServer();
   const options = await loadForumTagOptions(server.recruitChannelId);
   if (options.status !== "forum") return { ok: false };

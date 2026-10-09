@@ -1,4 +1,4 @@
-import { HStack, Table } from "@roll-and-call/ui";
+import { HStack, Table, cn } from "@roll-and-call/ui";
 
 import { TableColumns } from "../table-columns";
 import { SkeletonCell, type SkeletonCellKind } from "./skeleton-cell";
@@ -45,7 +45,7 @@ export function SkeletonTable({ columns, rows = 8 }: SkeletonTableProps) {
           <Table.Row key={row}>
             {columns.map((column, index) => (
               <Table.Cell key={index} align={column.align}>
-                <HStack align="center" className={`h-5 ${JUSTIFY[column.align ?? "start"]}`}>
+                <HStack align="center" className={cn("h-5", JUSTIFY[column.align ?? "start"])}>
                   <SkeletonCell kind={column.kind} row={row} />
                 </HStack>
               </Table.Cell>

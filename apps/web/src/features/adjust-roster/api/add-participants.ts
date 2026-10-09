@@ -7,8 +7,10 @@ import {
 } from "@roll-and-call/database/games";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { uniq } from "es-toolkit";
+import { z } from "zod";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
+import { idSchema, parseActionInput } from "@/shared/api";
 import { announceRecruitmentComplete, type Game } from "@/shared/server";
 
 import { CAPACITY_ACTION } from "../model/capacity-action";
@@ -22,16 +24,22 @@ import { secureSeats } from "./secure-seats";
 
 const { confirmed } = PARTICIPANT_STATUS;
 
+// 정원 상한 20명에 대기·불참까지 더해도 넘지 않을 값.
+const USER_IDS_MAX = 40;
+
+const inputSchema = z.object({
+  gameId: idSchema,
+  userIds: z.array(idSchema).max(USER_IDS_MAX),
+  raiseCapacity: z.boolean().optional(),
+});
+
 // 대기자는 확정으로 올리고, 불참으로 내보낸 사람(removed)은 확정으로 되돌리며 불참 표시를 지운다.
-export async function addParticipants({
-  gameId,
-  userIds,
-  raiseCapacity = false,
-}: {
-  gameId: string;
-  userIds: string[];
-  raiseCapacity?: boolean;
-}): Promise<RosterActionResult> {
+export async function addParticipants(
+  input: z.input<typeof inputSchema>,
+): Promise<RosterActionResult> {
+  const parsed = parseActionInput(inputSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { gameId, userIds, raiseCapacity = false } = parsed.data;
   if (userIds.length === 0) return { error: "넣을 사람을 골라 주세요." };
   const invitedIds = uniq(userIds);
   let addedTo: Game | null = null;

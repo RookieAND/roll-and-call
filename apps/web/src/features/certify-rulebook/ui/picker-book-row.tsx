@@ -1,4 +1,4 @@
-import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { BookOpen, ChevronRight, CircleCheck, CircleMinus, Clock, Lock } from "lucide-react";
 import Link from "next/link";
@@ -58,7 +58,7 @@ export function PickerBookRow({ title, edition, type, note, rejected, href }: Pi
         size={22}
         strokeWidth={2.1}
         aria-hidden
-        className={`flex-none ${status?.className ?? "text-tinted-ink"}`}
+        className={cn("flex-none", status?.className ?? "text-tinted-ink")}
       />
       <VStack gap="050" className="min-w-0 flex-1">
         <HStack align="baseline" gap="075" wrap>

@@ -84,7 +84,10 @@ export function BadgePill({ emoji, name, look, tag, size = "md", className }: Ba
             <span
               key={left}
               aria-hidden
-              className={`pointer-events-none absolute animate-badge-twinkle leading-none ${sparkColors[index % sparkColors.length]}`}
+              className={cn(
+                "pointer-events-none absolute animate-badge-twinkle leading-none",
+                sparkColors[index % sparkColors.length],
+              )}
               style={
                 {
                   left: `${left}%`,

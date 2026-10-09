@@ -68,7 +68,7 @@ export function deriveSessionFacts({
     (state === SESSION_STATE.closed && !awaitingTime && !drawPending && !selectionOpen) ||
     state === SESSION_STATE.finished;
   const timeSet = Boolean(game.confirmedAt) && (!coordinate || line.confirmed);
-  const startsAt = timeSet ? new Date(game.confirmedAt!).toISOString() : null;
+  const startsAt = game.confirmedAt && timeSet ? new Date(game.confirmedAt).toISOString() : null;
   const sessionWhen = startsAt ? formatDateTime(startsAt) : null;
   const sessionAgo = startsAt ? relativeDay(ddayKst(startsAt, now)) : null;
 

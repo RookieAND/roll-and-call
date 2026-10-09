@@ -3,7 +3,7 @@
 import { removeOwnReview } from "@roll-and-call/database/reviews";
 import { after } from "next/server";
 
-import { type ActionResult } from "@/shared/api";
+import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import {
   evaluateGameBadges,
   getActingMember,
@@ -15,7 +15,10 @@ import {
 } from "@/shared/server";
 
 // 행은 남겨 같은 세션에 다시 쓰지 못하게 하고, 본문·사진은 비운다.
-export async function deleteReview(reviewId: string): Promise<ActionResult> {
+export async function deleteReview(input: string): Promise<ActionResult> {
+  const parsed = parseActionInput(idSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const reviewId = parsed.data;
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

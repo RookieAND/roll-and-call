@@ -1,4 +1,4 @@
-import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Grid, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 
 import type { AnalyticsData } from "@/shared/server";
 
@@ -13,7 +13,7 @@ export function PeopleChart({ people }: PeopleChartProps) {
   const lastIndex = people.length - 1;
   return (
     <VStack>
-      <Grid className={`${ROW_COLUMNS} gap-150 pb-075`}>
+      <Grid className={cn(ROW_COLUMNS, "gap-150 pb-075")}>
         <Text typography="body5" foreground="hint">
           주차
         </Text>
@@ -46,7 +46,10 @@ export function PeopleChart({ people }: PeopleChartProps) {
       {people.map((week, index) => (
         <Grid
           key={week.label}
-          className={`${ROW_COLUMNS} h-9 items-center gap-150 border-t border-(--rc-color-border-subtle)`}
+          className={cn(
+            ROW_COLUMNS,
+            "h-[36px] items-center gap-150 border-t border-(--rc-color-border-subtle)",
+          )}
         >
           <Text
             typography="body4"

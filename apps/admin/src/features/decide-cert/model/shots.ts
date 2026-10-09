@@ -1,7 +1,8 @@
 import type { ShotKey } from "@/shared/server";
+export type ReviewShotKey = ShotKey | EbookShotKey;
 
-export interface ReviewShot {
-  key: ShotKey | EbookShotKey;
+export interface ReviewShot<Key extends ReviewShotKey = ReviewShotKey> {
+  key: Key;
   label: string;
   note: string;
   question: string;
@@ -9,7 +10,7 @@ export interface ReviewShot {
 
 export type EbookShotKey = "order" | "receipt";
 
-export const SHOTS: ReviewShot[] = [
+export const SHOTS = [
   {
     key: "front",
     label: "앞면",
@@ -23,9 +24,9 @@ export const SHOTS: ReviewShot[] = [
     note: "책 옆면의 제목",
     question: "실물 책이고 제목이 보이는가",
   },
-];
+] as const satisfies readonly ReviewShot<ShotKey>[];
 
-export const EBOOK_SHOTS: ReviewShot[] = [
+export const EBOOK_SHOTS = [
   {
     key: "order",
     label: "구매 내역",
@@ -38,4 +39,4 @@ export const EBOOK_SHOTS: ReviewShot[] = [
     note: "이메일 영수증 또는 PDF",
     question: "주문번호가 입력값과 같고, 취소·환불 표시가 없는가",
   },
-];
+] as const satisfies readonly ReviewShot<EbookShotKey>[];

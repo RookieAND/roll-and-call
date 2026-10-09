@@ -1,8 +1,12 @@
 import "server-only";
 import { isPlatformAdmin } from "@roll-and-call/database/moderation";
 import { cache } from "react";
+import { z } from "zod";
 
 import { createSupabaseServerClient } from "./create-supabase-server-client";
+
+const text = z.string().optional().catch(undefined);
+const metadataSchema = z.object({ provider_id: text, full_name: text, name: text });
 
 export interface SessionAccount {
   userId: string;
@@ -18,7 +22,7 @@ export const getSessionAccount = cache(async (): Promise<SessionAccount | null> 
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return null;
-  const metadata = user.user_metadata as Record<string, string | undefined>;
+  const metadata = metadataSchema.parse(user.user_metadata);
   const discordId = metadata.provider_id ?? "";
   return {
     userId: user.id,

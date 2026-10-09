@@ -3,11 +3,13 @@
 import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/games";
 import { isAwaitingResult } from "@roll-and-call/database/games/model";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
+import type { z } from "zod";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import type { ActionResult } from "@/shared/api";
+import { parseActionInput, type ActionResult } from "@/shared/api";
 import { notifyMovedToWaitlist } from "@/shared/server";
 
+import { rosterMemberInputSchema } from "../model/roster-member-input";
 import { adjustRoster } from "./adjust-roster";
 import { notifyRosterChange } from "./notify-roster-change";
 import { PARTICIPANT_NOT_FOUND_MESSAGE, RosterError } from "./roster-error";
@@ -16,13 +18,12 @@ import { waitlistRankOf } from "./waitlist-rank-of";
 
 // 내려온 자리는 저절로 차지 않는다. 대기 맨 앞을 자동으로 올리면 GM이 짜 둔 명단이 뒤집힌다.
 // 내린 사람은 내린 시각으로 대기 맨 뒤에 선다. 추첨 전이면 다시 추첨 신청자가 된다.
-export async function demoteParticipant({
-  gameId,
-  userId,
-}: {
-  gameId: string;
-  userId: string;
-}): Promise<ActionResult> {
+export async function demoteParticipant(
+  input: z.input<typeof rosterMemberInputSchema>,
+): Promise<ActionResult> {
+  const parsed = parseActionInput(rosterMemberInputSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { gameId, userId } = parsed.data;
   let movedToWaitlist = false;
 
   return adjustRoster({

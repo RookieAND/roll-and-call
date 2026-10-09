@@ -20,7 +20,12 @@ import { loadMySessions } from "@/widgets/session-list/server";
 import { SessionStatusChips } from "./session-status-chips";
 import { SessionsEmpty } from "./sessions-empty";
 
-export async function MySessionsView({ tab, status }: { tab?: string; status?: string }) {
+interface MySessionsViewProps {
+  tab?: string;
+  status?: string;
+}
+
+export async function MySessionsView({ tab, status }: MySessionsViewProps) {
   const server = await getCurrentServer();
   const user = await getCurrentSessionUser();
   if (!user) {

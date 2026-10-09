@@ -9,7 +9,11 @@ import { EditGameForm } from "@/widgets/game-form";
 import { editLockedTitle } from "../model/edit-locked-title";
 import { EditLockedNotice } from "./edit-locked-notice";
 
-export async function EditGameView({ id }: { id: string }) {
+interface EditGameViewProps {
+  id: string;
+}
+
+export async function EditGameView({ id }: EditGameViewProps) {
   const server = await getCurrentServer();
   const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();

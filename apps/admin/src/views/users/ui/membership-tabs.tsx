@@ -3,7 +3,12 @@
 import { Tabs } from "@roll-and-call/ui";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { MEMBERSHIP_LABEL, MEMBERSHIP_STATUS, type MembershipStatus } from "@/shared/lib";
+import {
+  isMembershipStatus,
+  MEMBERSHIP_LABEL,
+  MEMBERSHIP_STATUS,
+  type MembershipStatus,
+} from "@/shared/lib";
 import { TabCount } from "@/shared/ui";
 
 const MEMBERSHIPS = Object.values(MEMBERSHIP_STATUS);
@@ -30,7 +35,9 @@ export function MembershipTabs({ value, counts, disabled }: MembershipTabsProps)
     <Tabs.Root
       data-full-bleed
       value={value}
-      onValueChange={(next) => change(next as MembershipStatus)}
+      onValueChange={(next) => {
+        if (isMembershipStatus(next)) change(next);
+      }}
     >
       <Tabs.List
         aria-label="유저 멤버십 상태"

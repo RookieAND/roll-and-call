@@ -47,7 +47,7 @@ export type LinkServiceKey = (typeof LINK_SERVICES)[number]["key"];
 
 export const OTHER_LINK_SERVICE: LinkServiceKey = "link";
 
-export function linkServiceOf(key: string): LinkService {
+export function linkServiceOf(key: string): (typeof LINK_SERVICES)[number] {
   return LINK_SERVICES.find((service) => service.key === key) ?? LINK_SERVICES.at(-1)!;
 }
 

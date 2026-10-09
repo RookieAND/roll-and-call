@@ -14,7 +14,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
-import { type ActionResult } from "@/shared/api";
+import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
@@ -32,16 +32,19 @@ import { sessionTimeChanged } from "../model/session-time-change";
 import { toGameColumns } from "../model/to-game-columns";
 
 export async function updateGame(id: string, input: GameFormValues): Promise<ActionResult> {
-  const member = await getActingMember();
-  if (!member) {
-    return { error: await notMemberError() };
-  }
-  const { server, user } = member;
+  const parsedId = parseActionInput(idSchema, id);
+  if (!parsedId.ok) return parsedId.result;
 
   const parsed = gameFormSchema.safeParse(input);
   if (!parsed.success) {
     return invalidInputResult(parsed.error.issues[0]);
   }
+
+  const member = await getActingMember();
+  if (!member) {
+    return { error: await notMemberError() };
+  }
+  const { server, user } = member;
   const values = parsed.data;
   const columns = toGameColumns(values);
   const owner = { serverId: server.id, gameId: id, gmId: user.id };

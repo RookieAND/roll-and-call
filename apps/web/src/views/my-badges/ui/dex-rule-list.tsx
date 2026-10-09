@@ -1,4 +1,4 @@
-import { Card, HStack, Progress, Text, VStack } from "@roll-and-call/ui";
+import { Card, HStack, Progress, Text, VStack, cn } from "@roll-and-call/ui";
 
 import { BadgeMedal } from "@/entities/badge";
 import { BadgeDetailSheet } from "@/features/view-badge";
@@ -47,7 +47,7 @@ export function DexRuleList({ rows, emptyText }: DexRuleListProps) {
                   typography="body4"
                   weight="bold"
                   foreground="inherit"
-                  className={`min-w-0 flex-1 ${nextClass}`}
+                  className={cn("min-w-0 flex-1", nextClass)}
                 >
                   {nextLabel}
                 </Text>

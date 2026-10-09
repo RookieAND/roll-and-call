@@ -10,27 +10,31 @@ import {
   NOTIFICATION_KIND,
   type NotificationInput,
 } from "@roll-and-call/database/notifications/model";
+import { z } from "zod";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import type { ActionResult } from "@/shared/api";
+import { parseActionInput, type ActionResult } from "@/shared/api";
 import { notifyGameLeft } from "@/shared/server";
 
 import { absenceReasonOf } from "../model/absence-reason-of";
+import { rosterMemberInputSchema } from "../model/roster-member-input";
 import { adjustRoster } from "./adjust-roster";
 import { notifyRosterChange } from "./notify-roster-change";
 import { PARTICIPANT_NOT_FOUND_MESSAGE, RosterError } from "./roster-error";
 
+// 사유의 길이 안내는 absenceReasonOf가 한다. 여기서는 터무니없이 긴 입력만 막는다.
+const ABSENCE_REASON_INPUT_MAX = 1000;
+
+const inputSchema = rosterMemberInputSchema.extend({
+  absenceReason: z.string().max(ABSENCE_REASON_INPUT_MAX).optional(),
+});
+
 // 세션 시작 뒤 확정자는 행을 남겨 불참으로 기록한다. 그 밖(시작 전, 시작 뒤 대기자)은 행을 지운다.
 // 불참 사실과 사유는 스레드에도 알림에도 쓰지 않는다(사유는 운영진만 본다).
-export async function removeParticipant({
-  gameId,
-  userId,
-  absenceReason,
-}: {
-  gameId: string;
-  userId: string;
-  absenceReason?: string;
-}): Promise<ActionResult> {
+export async function removeParticipant(input: z.input<typeof inputSchema>): Promise<ActionResult> {
+  const parsed = parseActionInput(inputSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { gameId, userId, absenceReason } = parsed.data;
   const reason = absenceReasonOf(absenceReason);
   if ("error" in reason) return { error: reason.error };
 

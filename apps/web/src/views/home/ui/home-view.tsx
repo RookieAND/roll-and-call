@@ -23,7 +23,11 @@ import { HomeNicknameNotice } from "./home-nickname-notice";
 import { HomeServerSwitch } from "./home-server-switch";
 import { HomeTodoBanner } from "./home-todo-banner";
 
-export async function HomeView({ date }: { date?: string }) {
+interface HomeViewProps {
+  date?: string;
+}
+
+export async function HomeView({ date }: HomeViewProps) {
   const { monthStart, selectedKey, todayKey } = resolveCalendarView(date);
   const now = new Date();
   const server = await getCurrentServer();

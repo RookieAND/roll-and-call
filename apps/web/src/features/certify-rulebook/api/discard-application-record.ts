@@ -3,21 +3,23 @@
 import { discardRulebookRecord } from "@roll-and-call/database/certifications";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
-import { type ActionResult } from "@/shared/api";
+import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, removeUnusedCertPhotos, notMemberError } from "@/shared/server";
 
 const NOT_DISCARDABLE = "반려된 책만 기록을 지울 수 있습니다. 화면을 새로 고쳐 주세요.";
 
+const inputSchema = z.object({ rulebookId: idSchema, stay: z.boolean() });
+
 // stay면 알림 탭에 남는다(할 일 카드). 그 밖에서는 내 룰북으로 간다.
-export async function discardApplicationRecord({
-  rulebookId,
-  stay,
-}: {
-  rulebookId: string;
-  stay: boolean;
-}): Promise<ActionResult> {
+export async function discardApplicationRecord(
+  input: z.input<typeof inputSchema>,
+): Promise<ActionResult> {
+  const parsed = parseActionInput(inputSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { rulebookId, stay } = parsed.data;
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

@@ -62,7 +62,7 @@ export function GradedRoll({ value, grade, typography }: GradedRollProps) {
           height={sparkle.size}
           viewBox="0 0 24 24"
           fill="currentColor"
-          className={`absolute animate-roll-twinkle ${sparkleColor[grade]}`}
+          className={cn("absolute animate-roll-twinkle", sparkleColor[grade])}
           style={{
             ...sparkle.position,
             animationDelay: `${SPARKLE_START_S + sparkle.delay}s`,

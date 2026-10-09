@@ -2,6 +2,7 @@ import { MESSAGE_CASES, type MessageCaseKey } from "@roll-and-call/database/serv
 import type { Metadata } from "next";
 
 import { loadMessageRoles, loadRecruitForum } from "@/features/edit-discord-messages";
+import { stringParams } from "@/shared/lib";
 import { getCurrentServer, getMessageHeads, getMessageTexts, requireStaff } from "@/shared/server";
 import { MessagesView } from "@/views/discord";
 
@@ -12,7 +13,7 @@ export default async function DiscordMessagesPage({
   searchParams,
 }: PageProps<"/[server]/discord/messages">) {
   const [query, viewer, server] = await Promise.all([
-    searchParams as Promise<Record<string, string | undefined>>,
+    searchParams.then(stringParams),
     requireStaff(),
     getCurrentServer(),
   ]);

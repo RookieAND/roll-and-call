@@ -7,8 +7,16 @@ import {
   validateMessageHead,
 } from "@roll-and-call/database/servers/model";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
+import { parseActionInput } from "@/shared/lib";
 import { getCurrentServer, requireOwner, saveMessageHead } from "@/shared/server";
+
+const saveHeadSchema = z.object({
+  key: z.custom<MessageCaseKey>((value) => MESSAGE_CASES.some((entry) => entry.key === value)),
+  headLine: z.string().max(2000),
+  expectedUpdatedAt: z.string().max(64).nullable(),
+}) satisfies z.ZodType<SaveMessageHeadInput>;
 
 interface SaveMessageHeadInput {
   key: MessageCaseKey;
@@ -22,12 +30,11 @@ type SaveMessageHeadResult =
   | { ok: false; error: string }
   | { ok: false; conflict: { by: string; at: Date | null } };
 
-export async function saveMessageHeadAction({
-  key,
-  headLine,
-  expectedUpdatedAt,
-}: SaveMessageHeadInput): Promise<SaveMessageHeadResult> {
+export async function saveMessageHeadAction(
+  args: SaveMessageHeadInput,
+): Promise<SaveMessageHeadResult> {
   const actor = await requireOwner();
+  const { key, headLine, expectedUpdatedAt } = parseActionInput(saveHeadSchema, args);
   const label = MESSAGE_CASES.find((messageCase) => messageCase.key === key)?.label;
   if (!label) return { ok: false, error: "알 수 없는 경우입니다." };
   const text = headLine.trim();

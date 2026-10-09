@@ -15,7 +15,7 @@ import { useState, type RefObject } from "react";
 
 import { Kbd } from "@/shared/ui";
 
-import type { ReviewShot } from "../model/shots";
+import type { ReviewShot, ReviewShotKey } from "../model/shots";
 import { ZoomPane, type ZoomView } from "./zoom-pane";
 
 const ZOOM_STEP = 0.5;
@@ -23,17 +23,17 @@ const ZOOM_MAX = 3;
 const RESET_VIEW: ZoomView = { zoom: 1, rotation: 0, offset: { x: 0, y: 0 }, original: false };
 
 interface ShotViewerProps {
-  shots: ReviewShot[];
-  shot: string | null;
-  photoUrls: Partial<Record<string, string>>;
+  shots: readonly ReviewShot[];
+  shot: ReviewShotKey | null;
+  photoUrls: Partial<Record<ReviewShotKey, string>>;
   // 재신청에서 지난번에 문제로 지정한 사진은 이전 사진과 나란히 본다.
-  previousUrls: Partial<Record<string, string>>;
-  checkedShots: string[];
+  previousUrls: Partial<Record<ReviewShotKey, string>>;
+  checkedShots: ReviewShotKey[];
   // 확인할 수 있는 사진(사진이 있고 심사 중인 신청). 없으면 체크 줄을 두지 않는다.
-  checkableShots: string[];
+  checkableShots: ReviewShotKey[];
   finalFocus: RefObject<HTMLButtonElement | null>;
-  onShotChange: (shot: string | null) => void;
-  onCheck: (shot: string) => void;
+  onShotChange: (shot: ReviewShotKey | null) => void;
+  onCheck: (shot: ReviewShotKey) => void;
 }
 
 export function ShotViewer({

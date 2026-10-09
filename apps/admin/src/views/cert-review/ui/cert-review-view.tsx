@@ -1,4 +1,5 @@
 import { Callout } from "@roll-and-call/ui";
+import { pick } from "es-toolkit";
 import { Quote } from "lucide-react";
 
 import { CERT_REVIEW_STATE, CertDecisionForm } from "@/features/decide-cert";
@@ -31,9 +32,9 @@ export function CertReviewView({ review, viewerId, filter }: CertReviewViewProps
   const photoUrls = ebook
     ? { order: purchase.captureUrl ?? undefined, receipt: purchase.receiptUrl ?? undefined }
     : review.photoUrls;
-  const previousUrls = Object.fromEntries(
-    (latestRejection?.flaggedShots ?? []).map((shot) => [shot, latestRejection?.photoUrls[shot]]),
-  );
+  const previousUrls = latestRejection
+    ? pick(latestRejection.photoUrls, latestRejection.flaggedShots)
+    : {};
   const freshLabels =
     latestRejection && !ebook
       ? Object.fromEntries(

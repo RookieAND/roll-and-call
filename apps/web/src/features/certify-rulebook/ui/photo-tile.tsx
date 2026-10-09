@@ -90,10 +90,11 @@ export function PhotoTile({
           onClick={onPick}
           className={cn(frame({ status: slot.status, square, selected, needed }))}
         >
-          {previewUrl && !pdf && (
-            // oxlint-disable-next-line nextjs/no-img-element -- 스토리지 원본 사진이라 최적화 경로를 타지 않는다.
-            <img src={previewUrl} alt="" className="absolute inset-0 size-full object-cover" />
-          )}
+          {previewUrl &&
+            !pdf && (
+              // oxlint-disable-next-line nextjs/no-img-element -- 스토리지 원본 사진이라 최적화 경로를 타지 않는다.
+              <img src={previewUrl} alt="" className="absolute inset-0 size-full object-cover" />
+            )}
           {filled && pdf && (
             <span className="absolute inset-0 flex items-center justify-center text-gray-600">
               <FileText size={28} aria-hidden />
@@ -106,7 +107,7 @@ export function PhotoTile({
             </Text>
           )}
           {slot.status === PHOTO_SLOT.empty && (
-            <HStack align="center" className={`${PILL_CLASS} border-gray-200 text-tinted-ink`}>
+            <HStack align="center" className={cn(PILL_CLASS, "border-gray-200 text-tinted-ink")}>
               <Plus size={12} strokeWidth={2.6} aria-hidden />
               <Text typography="body4" weight="bold" foreground="inherit">
                 추가
@@ -130,7 +131,10 @@ export function PhotoTile({
             </VStack>
           )}
           {slot.status === PHOTO_SLOT.error && (
-            <HStack align="center" className={`${PILL_CLASS} border-warning-600 text-warning-600`}>
+            <HStack
+              align="center"
+              className={cn(PILL_CLASS, "border-warning-600 text-warning-600")}
+            >
               <CircleAlert size={12} strokeWidth={2.6} aria-hidden />
               <Text typography="body4" weight="bold" foreground="inherit">
                 다시 올리기

@@ -1,4 +1,4 @@
-import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { BookOpen, ChevronRight, CircleAlert, CircleCheck, Clock } from "lucide-react";
 
@@ -67,7 +67,7 @@ export function ListRowItem({ row }: ListRowItemProps) {
     </>
   );
   return row.href ? (
-    <ServerLink path={row.href} className={`${ROW_CLASS} transition-colors hover:bg-gray-50`}>
+    <ServerLink path={row.href} className={cn(ROW_CLASS, "transition-colors hover:bg-gray-50")}>
       {body}
     </ServerLink>
   ) : (

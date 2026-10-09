@@ -17,7 +17,12 @@ import {
 } from "@/widgets/session-list";
 import { loadProfile } from "@/widgets/session-list/server";
 
-export async function UserSessionsView({ id, tab }: { id: string; tab?: string }) {
+interface UserSessionsViewProps {
+  id: string;
+  tab?: string;
+}
+
+export async function UserSessionsView({ id, tab }: UserSessionsViewProps) {
   const server = await getCurrentServer();
   const viewer = await getCurrentSessionUser();
   if (viewer?.id === id) redirect(serverPath({ slug: server.slug, path: "/me/sessions" }));

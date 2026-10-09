@@ -1,6 +1,10 @@
 import { HStack, Skeleton } from "@roll-and-call/ui";
 
-export function DexSkeletonTitle({ hintWidth }: { hintWidth?: number }) {
+interface DexSkeletonTitleProps {
+  hintWidth?: number;
+}
+
+export function DexSkeletonTitle({ hintWidth }: DexSkeletonTitleProps) {
   return (
     <HStack align="baseline" justify="between">
       <Skeleton width={96} height={18} />

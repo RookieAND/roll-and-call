@@ -17,7 +17,11 @@ import { AppBar, SummaryLine } from "@/shared/ui";
 import { toAttendee } from "../model/to-attendee";
 import { AttendanceHeader } from "./attendance-header";
 
-export async function GameAttendanceView({ id }: { id: string }) {
+interface GameAttendanceViewProps {
+  id: string;
+}
+
+export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
   const server = await getCurrentServer();
   const [data, user] = await Promise.all([
     getGameParticipants({ serverId: server.id, gameId: id }),

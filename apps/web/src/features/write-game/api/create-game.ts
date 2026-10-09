@@ -24,6 +24,11 @@ import { pastScheduleError } from "../model/past-schedule-error";
 import { toGameColumns } from "../model/to-game-columns";
 
 export async function createGame(input: GameFormValues): Promise<ActionResult> {
+  const parsed = gameFormSchema.safeParse(input);
+  if (!parsed.success) {
+    return invalidInputResult(parsed.error.issues[0]);
+  }
+
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };
@@ -32,11 +37,6 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
 
   if (await findActiveSanction({ serverId: server.id, userId: user.id })) {
     return { error: "활동 정지 기간에는 새 구인을 열 수 없습니다." };
-  }
-
-  const parsed = gameFormSchema.safeParse(input);
-  if (!parsed.success) {
-    return invalidInputResult(parsed.error.issues[0]);
   }
   const columns = toGameColumns(parsed.data);
   const pastError = pastScheduleError({

@@ -5,11 +5,14 @@ import { isNull } from "es-toolkit";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
+import { z } from "zod";
 
 import { GAME_CANCEL_KIND } from "@/entities/game";
 import {
   GAME_ALREADY_CANCELLED_MESSAGE,
   GAME_NOT_FOUND_RESULT,
+  idSchema,
+  parseActionInput,
   SESSION_STARTED_CANCEL_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
@@ -18,19 +21,21 @@ import { getActingMember, notifyGameCancelled, notMemberError } from "@/shared/s
 
 import { cancelReasonError } from "../model/cancel-reason-error";
 
+// 사유의 길이 안내는 cancelReasonError가 한다. 여기서는 터무니없이 긴 입력만 막는다.
+const REASON_INPUT_MAX = 2000;
+
+const inputSchema = z.object({ gameId: idSchema, reason: z.string().max(REASON_INPUT_MAX) });
+
 const BLOCKED_RESULT = {
   not_found: GAME_NOT_FOUND_RESULT,
   already_cancelled: { error: GAME_ALREADY_CANCELLED_MESSAGE },
   session_started: { error: SESSION_STARTED_CANCEL_MESSAGE },
 } as const satisfies Record<string, ActionResult>;
 
-export async function cancelGameAsGm({
-  gameId,
-  reason,
-}: {
-  gameId: string;
-  reason: string;
-}): Promise<ActionResult> {
+export async function cancelGameAsGm(input: z.input<typeof inputSchema>): Promise<ActionResult> {
+  const parsed = parseActionInput(inputSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { gameId, reason } = parsed.data;
   const member = await getActingMember();
   if (!member) return { error: await notMemberError() };
   const { server, user } = member;

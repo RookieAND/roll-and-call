@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { parseSort, type NoShowStatus, stringParams } from "@/shared/lib";
+import { isNoShowStatus, parseSort, stringParams } from "@/shared/lib";
 import {
   getNoShow,
   listNoShows,
@@ -23,7 +23,7 @@ export default async function NoShowsPage({ searchParams }: PageProps<"/[server]
   });
   const rows = await listNoShows({
     query: q,
-    status: status as NoShowStatus | undefined,
+    status: isNoShowStatus(status) ? status : undefined,
     sort,
     pinId: pin,
   });

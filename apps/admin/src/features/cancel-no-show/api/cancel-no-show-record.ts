@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
+import { parseActionInput } from "@/shared/lib";
 import {
   cancelNoShow,
   evaluateGameBadges,
@@ -12,13 +13,16 @@ import {
   syncGameReviewForumPosts,
 } from "@/shared/server";
 
+import { noShowActionSchema } from "../model/no-show-action-schema";
+
 interface CancelNoShowRecordInput {
   noShowId: string;
   reason: string;
 }
 
-export async function cancelNoShowRecord({ noShowId, reason }: CancelNoShowRecordInput) {
+export async function cancelNoShowRecord(args: CancelNoShowRecordInput) {
   const staff = await requireStaff();
+  const { noShowId, reason } = parseActionInput(noShowActionSchema, args);
   if (!reason.trim()) throw new Error("취소 사유를 입력해 주세요");
   const server = await getCurrentServer();
   const { gameId, userId } = parseNoShowId(noShowId);

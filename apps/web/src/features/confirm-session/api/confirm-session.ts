@@ -11,9 +11,10 @@ import { withTransaction } from "@roll-and-call/database/transaction";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
+import { z } from "zod";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { type ActionResult } from "@/shared/api";
+import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
@@ -24,13 +25,12 @@ import {
 
 import { CONFIRM_FORBIDDEN_MESSAGE, confirmBlockReason } from "../model/confirm-block-reason";
 
-export async function confirmSession({
-  gameId,
-  slotIso,
-}: {
-  gameId: string;
-  slotIso: string;
-}): Promise<ActionResult> {
+const inputSchema = z.object({ gameId: idSchema, slotIso: z.iso.datetime({ offset: true }) });
+
+export async function confirmSession(input: z.input<typeof inputSchema>): Promise<ActionResult> {
+  const parsed = parseActionInput(inputSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { gameId, slotIso } = parsed.data;
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

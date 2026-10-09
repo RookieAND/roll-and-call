@@ -1,3 +1,4 @@
+import { isLinkServiceKey } from "./is-link-service-key";
 import { detectLinkService, toUrl, type LinkServiceKey, type ProfileLink } from "./link-services";
 
 const YOUTUBE_HANDLE = /^(@[\w.-]{1,100}|[\w-]{1,100})$/;
@@ -18,8 +19,9 @@ function isServiceUrl(value: string, service: LinkServiceKey): boolean {
 export function linkError({ service, value }: ProfileLink): string | null {
   const trimmed = value.trim();
   if (!trimmed) return null;
-  const message = LINK_ERROR[service as LinkServiceKey];
+  if (!isLinkServiceKey(service)) return null;
+  const message = LINK_ERROR[service];
   if (!message) return null;
   if (service === "youtube" && YOUTUBE_HANDLE.test(trimmed)) return null;
-  return isServiceUrl(trimmed, service as LinkServiceKey) ? null : message;
+  return isServiceUrl(trimmed, service) ? null : message;
 }

@@ -7,6 +7,7 @@ import {
 import { getMemberIdentity } from "@roll-and-call/database/profiles";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
+import { z } from "zod";
 
 import {
   CERT_FORMAT,
@@ -15,7 +16,7 @@ import {
   RULEBOOK_KIND,
   rulebookLabel,
 } from "@/entities/rulebook";
-import { type ActionResult } from "@/shared/api";
+import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { certPhotoPathOf, serverPath } from "@/shared/lib";
 import {
   getActingMember,
@@ -24,19 +25,35 @@ import {
   STAFF_NOTICE_KIND,
 } from "@/shared/server";
 
-import type { CertEntry } from "../model/cert-entry";
 import { isQuizAnswer } from "../model/is-quiz-answer";
 import { QUIZ_ANSWER_FIELD } from "../model/quiz-answer-field";
 
+const TEXT_INPUT_MAX = 1000;
+
+const inputSchema = z.object({
+  entry: z.object({
+    rulebookId: idSchema,
+    format: z.enum(Object.values(CERT_FORMAT)),
+    photos: z.record(z.enum(CERT_SHOTS), z.string().max(TEXT_INPUT_MAX)),
+    seller: z.string().max(TEXT_INPUT_MAX),
+    captureUrl: z.string().max(TEXT_INPUT_MAX),
+    receiptUrl: z.string().max(TEXT_INPUT_MAX),
+    orderNumber: z.string().max(TEXT_INPUT_MAX),
+    orderDate: z.string().max(TEXT_INPUT_MAX),
+  }),
+  quiz: z
+    .object({ questionId: z.string().max(TEXT_INPUT_MAX), answer: z.string().max(TEXT_INPUT_MAX) })
+    .nullable(),
+});
+
 // 서플리먼트는 같은 판본 기본 룰북을 모두 가진(인증·신판 인증·무료 배포) 뒤에만 받는다.
 // ponytail: 같은 책을 두 번 눌러 동시에 내는 경우는 막지 않는다. 운영진이 한 건을 반려하면 된다.
-export async function submitCertification({
-  entry,
-  quiz,
-}: {
-  entry: CertEntry;
-  quiz: { questionId: string; answer: string } | null;
-}): Promise<ActionResult> {
+export async function submitCertification(
+  input: z.input<typeof inputSchema>,
+): Promise<ActionResult> {
+  const parsed = parseActionInput(inputSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { entry, quiz } = parsed.data;
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

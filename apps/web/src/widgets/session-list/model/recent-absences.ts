@@ -19,17 +19,22 @@ export function recentAbsences({
     .filter(
       (game) =>
         !isNull(game.attendanceConfirmedAt) &&
-        !isNull(game.confirmedAt) &&
         game.participants.some(
           (participant) => participant.userId === userId && participant.absent,
         ),
     )
-    .map((game) => ({
-      gameId: game.id,
-      title: game.title,
-      sessionAt: new Date(game.confirmedAt!),
-      expiresAt: absenceExpiresAt(game.confirmedAt!),
-    }))
+    .flatMap((game) =>
+      game.confirmedAt
+        ? [
+            {
+              gameId: game.id,
+              title: game.title,
+              sessionAt: new Date(game.confirmedAt),
+              expiresAt: absenceExpiresAt(game.confirmedAt),
+            },
+          ]
+        : [],
+    )
     .filter((absence) => isAbsenceActive({ sessionStartsAt: absence.sessionAt, now }))
     .toSorted((left, right) => right.sessionAt.getTime() - left.sessionAt.getTime());
 }

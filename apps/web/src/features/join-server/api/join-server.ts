@@ -5,8 +5,9 @@ import { ensureMembership } from "@roll-and-call/database/servers";
 import { isUndefined } from "es-toolkit";
 import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
-import { AUTH_REQUIRED_MESSAGE, type ActionResult } from "@/shared/api";
+import { AUTH_REQUIRED_MESSAGE, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverNextPath, serverPath } from "@/shared/lib";
 import {
   findGuildDisplayName,
@@ -20,14 +21,19 @@ import { JOIN_CHECK_FAILED_MESSAGE } from "../model/join-check-failed-message";
 
 export type JoinServerResult = ActionResult & { notGuildMember?: boolean };
 
+const joinServerSchema = z.object({
+  next: z.string().max(2000),
+  recheck: z.boolean().optional(),
+});
+
 // recheck면 5분 캐시를 지우고 디스코드에 다시 묻는다(가입 불가 화면의 [다시 확인하기], D173).
-export async function joinServer({
-  next,
-  recheck = false,
-}: {
-  next: string;
-  recheck?: boolean;
-}): Promise<JoinServerResult> {
+export async function joinServer(
+  input: z.input<typeof joinServerSchema>,
+): Promise<JoinServerResult> {
+  const parsed = parseActionInput(joinServerSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const { next, recheck = false } = parsed.data;
+
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentUser()]);
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
 

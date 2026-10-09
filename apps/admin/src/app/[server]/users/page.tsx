@@ -1,27 +1,16 @@
 import type { Metadata } from "next";
 
-import { MEMBERSHIP_STATUS, parseSort, type MembershipStatus, stringParams } from "@/shared/lib";
-import {
-  USER_FILTERS,
-  USER_SORT_COLUMNS,
-  USER_SORT_FALLBACK,
-  listUsers,
-  type UserFilter,
-} from "@/shared/server";
+import { isMembershipStatus, MEMBERSHIP_STATUS, parseSort, stringParams } from "@/shared/lib";
+import { USER_SORT_COLUMNS, USER_SORT_FALLBACK, listUsers, isUserFilter } from "@/shared/server";
 import { UsersView } from "@/views/users";
 
 export const metadata: Metadata = { title: "유저" };
 
-const MEMBERSHIPS: readonly string[] = Object.values(MEMBERSHIP_STATUS);
-
 export default async function UsersPage({ searchParams }: PageProps<"/[server]/users">) {
   const query = stringParams(await searchParams);
   const { q, filter, page, membership } = query;
-  const activeFilter = filter && filter in USER_FILTERS ? (filter as UserFilter) : undefined;
-  const activeMembership =
-    membership && MEMBERSHIPS.includes(membership)
-      ? (membership as MembershipStatus)
-      : MEMBERSHIP_STATUS.active;
+  const activeFilter = isUserFilter(filter) ? filter : undefined;
+  const activeMembership = isMembershipStatus(membership) ? membership : MEMBERSHIP_STATUS.active;
   const sort = parseSort({
     searchParams: query,
     columns: USER_SORT_COLUMNS,

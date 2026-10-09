@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useEffectEvent, useState } from "react";
+import { z } from "zod";
 
-import { richTextLength } from "@/shared/lib";
+import { parseJson, richTextLength } from "@/shared/lib";
 
-type ReviewDraft = { body: string; spoiler: boolean };
+const reviewDraftSchema = z.object({ body: z.string(), spoiler: z.boolean() });
+
+type ReviewDraft = z.infer<typeof reviewDraftSchema>;
 
 const storageKey = (gameId: string) => `review-draft:${gameId}`;
 
@@ -26,8 +29,7 @@ export function useReviewDraft({
   useEffect(() => {
     if (!enabled) return;
     try {
-      const saved = localStorage.getItem(storageKey(gameId));
-      const draft = saved ? (JSON.parse(saved) as ReviewDraft) : null;
+      const draft = parseJson(reviewDraftSchema, localStorage.getItem(storageKey(gameId)));
       if (!draft || !richTextLength(draft.body)) return;
       restore(draft);
       setRestored(true);

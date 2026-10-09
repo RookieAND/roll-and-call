@@ -2,7 +2,9 @@
 
 import { compact, uniq } from "es-toolkit";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
+import { idSchema, parseActionInput } from "@/shared/lib";
 import {
   getCurrentServer,
   requireStaff,
@@ -10,12 +12,28 @@ import {
   type QuizQuestionInput,
 } from "@/shared/server";
 
+const submitQuizQuestionSchema = z.object({
+  rulebookId: idSchema,
+  id: idSchema.nullable(),
+  input: z.object({
+    question: z.string().max(2000),
+    answers: z.array(z.string().max(500)).max(100),
+    page: z.string().max(200),
+    active: z.boolean(),
+  }) satisfies z.ZodType<QuizQuestionInput>,
+});
+
 export async function submitQuizQuestion(
-  rulebookId: string,
-  id: string | null,
-  input: QuizQuestionInput,
+  rawRulebookId: string,
+  rawId: string | null,
+  rawInput: QuizQuestionInput,
 ) {
   const staff = await requireStaff();
+  const { rulebookId, id, input } = parseActionInput(submitQuizQuestionSchema, {
+    rulebookId: rawRulebookId,
+    id: rawId,
+    input: rawInput,
+  });
   const question = input.question.trim();
   const answers = uniq(compact(input.answers.map((answer) => answer.trim())));
   if (!question || answers.length === 0) {

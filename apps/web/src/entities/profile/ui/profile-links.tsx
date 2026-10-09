@@ -1,13 +1,12 @@
 "use client";
 
-import { HStack, Text, Tooltip } from "@roll-and-call/ui";
+import { HStack, Text, Tooltip, cn } from "@roll-and-call/ui";
 import { Link2 } from "lucide-react";
 
 import {
   linkHref,
   linkLabel,
   linkServiceOf,
-  type LinkServiceKey,
   type ProfileLink,
 } from "../model/link-services";
 import { BrandMark } from "./brand-mark";
@@ -42,7 +41,7 @@ export function ProfileLinks({ links, discordId }: ProfileLinksProps) {
       {links.map((link, index) => {
         const label = linkLabel(link);
         const href = linkHref(link, discordId);
-        const service = linkServiceOf(link.service).key as LinkServiceKey;
+        const service = linkServiceOf(link.service).key;
         const mark = <BrandMark service={service} />;
 
         return href ? (
@@ -53,7 +52,7 @@ export function ProfileLinks({ links, discordId }: ProfileLinksProps) {
               target="_blank"
               rel="noreferrer noopener"
               aria-label={label}
-              className={`${ICON_CLASS} transition-colors hover:bg-gray-50`}
+              className={cn(ICON_CLASS, "transition-colors hover:bg-gray-50")}
             >
               {mark}
             </a>

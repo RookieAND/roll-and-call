@@ -18,7 +18,8 @@ export function toSessionCard({
   role: SessionRole;
   context: SessionContext;
 }): SessionCardModel {
-  if (!isNil(game.cancelledAt)) return toCancelledSessionCard({ game, role });
+  const { cancelledAt } = game;
+  if (!isNil(cancelledAt)) return toCancelledSessionCard({ game, role, cancelledAt });
   const facts = deriveSessionFacts({ game, role, context });
   if (facts.past) return toPastSessionCard({ game, facts, context });
   if (role === SESSION_ROLE.host) return toHostedSessionCard({ game, facts, context });

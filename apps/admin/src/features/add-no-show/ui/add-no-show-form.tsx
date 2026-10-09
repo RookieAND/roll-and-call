@@ -24,6 +24,7 @@ import {
 } from "@/shared/ui";
 
 import { addNoShowRecord } from "../api/add-no-show-record";
+import { isAbsenceAddedTag } from "../model/is-absence-added-tag";
 import { OptionList } from "./option-list";
 import { OptionRow } from "./option-row";
 import { StepLabel } from "./step-label";
@@ -147,7 +148,9 @@ export function AddNoShowForm({ search, onClose, onAdded }: AddNoShowFormProps) 
                 labelledBy="add-no-show-reason"
                 value={tag}
                 disabled={action.pending}
-                onValueChange={(value) => setTag(value as AbsenceAddedTag)}
+                onValueChange={(value) => {
+                  if (isAbsenceAddedTag(value)) setTag(value);
+                }}
               >
                 {TAGS.map((value) => (
                   <OptionRow

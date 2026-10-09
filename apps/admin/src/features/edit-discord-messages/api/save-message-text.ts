@@ -7,8 +7,16 @@ import {
   validateMessageText,
 } from "@roll-and-call/database/servers/model";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
+import { parseActionInput } from "@/shared/lib";
 import { getCurrentServer, requireOwner, saveMessageText } from "@/shared/server";
+
+const saveTextSchema = z.object({
+  key: z.custom<MessageTextKey>((value) => MESSAGE_TEXTS.some((entry) => entry.key === value)),
+  body: z.string().max(2000),
+  expectedUpdatedAt: z.string().max(64).nullable(),
+}) satisfies z.ZodType<SaveMessageTextInput>;
 
 interface SaveMessageTextInput {
   key: MessageTextKey;
@@ -22,12 +30,11 @@ type SaveMessageTextResult =
   | { ok: false; error: string }
   | { ok: false; conflict: { by: string; at: Date | null } };
 
-export async function saveMessageTextAction({
-  key,
-  body,
-  expectedUpdatedAt,
-}: SaveMessageTextInput): Promise<SaveMessageTextResult> {
+export async function saveMessageTextAction(
+  args: SaveMessageTextInput,
+): Promise<SaveMessageTextResult> {
   const actor = await requireOwner();
+  const { key, body, expectedUpdatedAt } = parseActionInput(saveTextSchema, args);
   const label = MESSAGE_TEXTS.find((text) => text.key === key)?.label;
   if (!label) return { ok: false, error: "알 수 없는 문장입니다." };
   const text = body.trim();

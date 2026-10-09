@@ -3,7 +3,13 @@
 import { Tabs } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
-import { GAME_TAB, GAME_TAB_DEFAULT, type GamesFilter, type GameTab } from "@/shared/api";
+import {
+  GAME_TAB,
+  GAME_TAB_DEFAULT,
+  isGameTab,
+  type GamesFilter,
+  type GameTab,
+} from "@/shared/api";
 import { useServerPath } from "@/shared/lib";
 import { TabCount } from "@/shared/ui";
 
@@ -22,7 +28,8 @@ export function GameScopeTabs({ filter, counts }: GameScopeTabsProps) {
   return (
     <Tabs.Root
       value={filter.tab ?? GAME_TAB_DEFAULT}
-      onValueChange={(tab) =>
+      onValueChange={(tab) => {
+        if (!isGameTab(tab)) return;
         router.push(
           toServerPath(
             gamesHref(
@@ -32,12 +39,12 @@ export function GameScopeTabs({ filter, counts }: GameScopeTabsProps) {
                 days: filter.days,
                 times: filter.times,
                 includeUnscheduled: filter.includeUnscheduled,
-                tab: tab as GameTab,
+                tab,
               }),
             ),
           ),
-        )
-      }
+        );
+      }}
     >
       <Tabs.List aria-label="구인 범위" scrollable={false} className="w-full">
         <Tabs.Trigger value={GAME_TAB.live} className="flex-1">

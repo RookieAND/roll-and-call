@@ -1,4 +1,4 @@
-import { Grid, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { Grid, Skeleton, Text, VStack, cn } from "@roll-and-call/ui";
 
 const COLUMNS = { 2: "grid-cols-2", 3: "grid-cols-3", 4: "grid-cols-4", 5: "grid-cols-5" } as const;
 
@@ -9,7 +9,7 @@ interface SkeletonFactsProps {
 
 export function SkeletonFacts({ labels, columns = 4 }: SkeletonFactsProps) {
   return (
-    <Grid render={<dl />} className={`${COLUMNS[columns]} gap-x-200 gap-y-150`}>
+    <Grid render={<dl />} className={cn(COLUMNS[columns], "gap-x-200 gap-y-150")}>
       {labels.map((label, index) => (
         <VStack key={label} gap="050" className="min-w-0">
           <Text typography="body4" foreground="hint" truncate render={<dt />}>

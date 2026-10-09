@@ -27,12 +27,14 @@ import {
 import {
   GAME_CANCELLED_MESSAGE,
   GAME_NOT_FOUND_RESULT,
+  idSchema,
   LEAVE_AFTER_SCHEDULE_MESSAGE,
   LEAVE_DRAWN_MESSAGE,
   LEAVE_SELECTED_MESSAGE,
   LEAVE_EXPIRED_MESSAGE,
   LEAVE_FULL_MESSAGE,
   LOTTERY_CANCEL_CLOSED_MESSAGE,
+  parseActionInput,
   WAITLIST_CANCEL_ENDED_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
@@ -62,6 +64,9 @@ const WAITING_LEAVE_MESSAGE: Record<WaitingLeaveBlock, string> = {
 type LeaveResult = ActionResult & { leftStatus?: ParticipantStatus };
 
 export async function leaveGame(gameId: string): Promise<LeaveResult> {
+  const parsed = parseActionInput(idSchema, gameId);
+  if (!parsed.ok) return parsed.result;
+
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

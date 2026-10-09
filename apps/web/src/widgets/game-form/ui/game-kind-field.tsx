@@ -3,7 +3,7 @@
 import { Field, HStack, SegmentedControl, Text, VStack } from "@roll-and-call/ui";
 import { Lock } from "lucide-react";
 
-import { GAME_KINDS, gameKindLabel, type GameKind } from "@/entities/game";
+import { GAME_KINDS, gameKindLabel, isGameKind, type GameKind } from "@/entities/game";
 
 interface GameKindFieldProps {
   value: GameKind;
@@ -17,7 +17,9 @@ export function GameKindField({ value, onChange, locked = false }: GameKindField
       <Field.Root label="구분" required>
         <SegmentedControl.Root
           value={value}
-          onValueChange={(next) => onChange(next as GameKind)}
+          onValueChange={(next) => {
+            if (isGameKind(next)) onChange(next);
+          }}
           disabled={locked}
           aria-label="구분"
         >

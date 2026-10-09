@@ -6,13 +6,16 @@ import {
 } from "@roll-and-call/database/certifications";
 import { redirect } from "next/navigation";
 
-import { type ActionResult } from "@/shared/api";
+import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getActingMember, removeUnusedCertPhotos, notMemberError } from "@/shared/server";
 
 const ALREADY_PROCESSED = "운영진이 이미 처리한 신청입니다. 화면을 새로 고쳐 주세요.";
 
-export async function withdrawApplication(rulebookId: string): Promise<ActionResult> {
+export async function withdrawApplication(input: string): Promise<ActionResult> {
+  const parsed = parseActionInput(idSchema, input);
+  if (!parsed.ok) return parsed.result;
+  const rulebookId = parsed.data;
   const member = await getActingMember();
   if (!member) {
     return { error: await notMemberError() };

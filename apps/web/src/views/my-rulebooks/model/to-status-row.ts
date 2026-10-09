@@ -7,11 +7,12 @@ import type { ListRow } from "./list-row";
 export function toStatusRow({ rulebook, now }: { rulebook: MyRulebook; now: Date }): ListRow {
   const base = { key: rulebook.id, title: rulebook.label, href: `/me/rulebooks/${rulebook.id}` };
   if (rulebook.state === CERT_STATE.pending) {
+    const kind = RULEBOOK_KIND_GROUP[rulebook.kind];
     return {
       ...base,
       icon: "clock",
       tone: "gray",
-      sub: `${RULEBOOK_KIND_GROUP[rulebook.kind]} · ${toKst(rulebook.stateAt!).format("MM.DD")} 신청`,
+      sub: rulebook.stateAt ? `${kind} · ${toKst(rulebook.stateAt).format("MM.DD")} 신청` : kind,
       badge: { label: "심사 중", palette: "gray" },
     };
   }

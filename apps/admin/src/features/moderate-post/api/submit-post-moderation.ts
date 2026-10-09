@@ -3,7 +3,9 @@
 import { CONTENT_REASON, parseReason } from "@roll-and-call/database/moderation/model";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
+import { z } from "zod";
 
+import { idSchema, parseActionInput } from "@/shared/lib";
 import {
   evaluateGameBadges,
   getCurrentServer,
@@ -15,15 +17,21 @@ import {
 
 import { POST_ACTION } from "../model/post-action";
 
+const submitPostModerationSchema = z.object({
+  postId: idSchema,
+  moderation: z.object({
+    action: z.enum(POST_ACTION),
+    reason: z
+      .object({ code: z.string().max(100), text: z.string().max(1000).nullable() })
+      .nullable(),
+    staffMemo: z.string().max(2000),
+  }) satisfies z.ZodType<PostModeration>,
+});
+
 // 알림(숨김·해제·취소)은 moderatePost가 같은 트랜잭션에서 넣는다. 디스코드 DM은 보내지 않는다.
-export async function submitPostModeration({
-  postId,
-  moderation,
-}: {
-  postId: string;
-  moderation: PostModeration;
-}) {
+export async function submitPostModeration(args: { postId: string; moderation: PostModeration }) {
   const staff = await requireStaff();
+  const { postId, moderation } = parseActionInput(submitPostModerationSchema, args);
   const reason =
     moderation.action === POST_ACTION.unhide
       ? null

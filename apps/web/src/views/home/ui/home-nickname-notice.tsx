@@ -4,7 +4,11 @@ import { directionalParticle } from "@/shared/lib";
 import { LineBreaks, ServerLink } from "@/shared/ui";
 
 // 겹쳐서 숫자가 붙은 닉네임을 쓰는 동안 홈 맨 위에 둔다. 닉네임을 저장하면 사라진다.
-export function HomeNicknameNotice({ nickname }: { nickname: string }) {
+interface HomeNicknameNoticeProps {
+  nickname: string;
+}
+
+export function HomeNicknameNotice({ nickname }: HomeNicknameNoticeProps) {
   return (
     <Callout.Root colorPalette="gray" size="sm">
       <Callout.Icon />

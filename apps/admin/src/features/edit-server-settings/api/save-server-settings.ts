@@ -1,11 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
+import { parseActionInput } from "@/shared/lib";
 import { getCurrentServer, requireOwner, updateServerSettings } from "@/shared/server";
 
 import { normalizeInviteUrl } from "../model/normalize-invite-url";
 import { SETTING_FIELDS, type SettingIds } from "../model/setting-field";
+import { settingIdsSchema } from "../model/setting-ids-schema";
 import { settingsAudit } from "../model/settings-audit";
 import { checkServerSettings, type SettingChecks } from "./check-server-settings";
 
@@ -14,6 +17,11 @@ interface SaveServerSettingsInput {
   ids?: SettingIds;
   inviteUrl?: string;
 }
+
+const saveServerSettingsSchema = z.object({
+  ids: settingIdsSchema.optional(),
+  inviteUrl: z.string().max(2000).optional(),
+}) satisfies z.ZodType<SaveServerSettingsInput>;
 
 type SaveServerSettingsResult =
   | { ok: true }
@@ -24,11 +32,11 @@ const orNull = (value: string) => value.trim() || null;
 
 // 바뀐 ID만 저장 직전에 봇 검증을 다시 한다. 바뀐 칸 중 하나라도 실패하면 저장하지 않고 검증 결과를 돌려준다.
 // 바뀌지 않은 칸은 검증하지 않으므로, 봇 연결이 끊겨도 초대 링크만 고쳐 저장할 수 있다.
-export async function saveServerSettings({
-  ids,
-  inviteUrl,
-}: SaveServerSettingsInput): Promise<SaveServerSettingsResult> {
+export async function saveServerSettings(
+  args: SaveServerSettingsInput,
+): Promise<SaveServerSettingsResult> {
   const actor = await requireOwner();
+  const { ids, inviteUrl } = parseActionInput(saveServerSettingsSchema, args);
   const server = await getCurrentServer();
   const nextIds =
     ids ??

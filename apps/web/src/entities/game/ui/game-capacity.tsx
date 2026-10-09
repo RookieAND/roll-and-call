@@ -1,4 +1,4 @@
-import { HStack, Text } from "@roll-and-call/ui";
+import { HStack, Text, cn } from "@roll-and-call/ui";
 
 import { seatCount } from "../model/seat-count";
 import { SEAT_CELL_CLASS } from "./seat-cell-class";
@@ -15,7 +15,7 @@ export function GameCapacity(input: Parameters<typeof seatCount>[0]) {
           typography="body4"
           numeric
           render={<span />}
-          className={`flex items-center px-100 ${SEAT_CELL_CLASS[cell.tone]}`}
+          className={cn("flex items-center px-100", SEAT_CELL_CLASS[cell.tone])}
         >
           {cell.text}
         </Text>

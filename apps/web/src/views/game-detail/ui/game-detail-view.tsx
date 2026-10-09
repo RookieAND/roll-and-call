@@ -29,7 +29,11 @@ const NOTICE_MESSAGES = {
   [QUERY_NOTICE.noDrawResult]: "추첨 결과가 없는 구인입니다",
 };
 
-export async function GameDetailView({ id }: { id: string }) {
+interface GameDetailViewProps {
+  id: string;
+}
+
+export async function GameDetailView({ id }: GameDetailViewProps) {
   const server = await getCurrentServer();
   const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();

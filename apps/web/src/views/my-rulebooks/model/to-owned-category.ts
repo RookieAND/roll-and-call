@@ -64,7 +64,10 @@ export function toOwnedCategory({
         return {
           key: book.id,
           title: bookTitle(book),
-          meta: certified ? `${kind} · ${toKst(book.stateAt!).format("MM.DD")} 인증` : kind,
+          meta:
+            certified && book.stateAt
+              ? `${kind} · ${toKst(book.stateAt).format("MM.DD")} 인증`
+              : kind,
           badge: certified
             ? { label: "인증됨", palette: "success" }
             : { label: book.state === CERT_STATE.pending ? "심사 중" : "미인증", palette: "gray" },

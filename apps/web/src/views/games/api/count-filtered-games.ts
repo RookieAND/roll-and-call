@@ -1,9 +1,11 @@
 "use server";
 
 import { isString } from "es-toolkit";
+import { z } from "zod";
 
 import {
   GAME_STATUS_FILTER_DEFAULT,
+  parseActionInput,
   parseGameFilters,
   parseGameStatusFilter,
   parseGameTab,
@@ -14,12 +16,16 @@ import { statusCounts } from "../model/status-counts";
 
 type FilterParamKey = "q" | "tab" | "status" | "rule" | "day" | "time" | "unscheduled";
 
+const countSchema = z.object({ filter: z.record(z.string(), z.unknown()) });
+
 // 필터 시트의 [N건 보기] 숫자. 주소 값과 같은 모양으로 받아 서버에서 다시 검사한다(클라이언트 값을 믿지 않는다).
 export async function countFilteredGames({
   filter,
 }: {
   filter: Partial<Record<FilterParamKey, unknown>>;
 }): Promise<number> {
+  const parsed = parseActionInput(countSchema, { filter });
+  if (!parsed.ok) return 0;
   const text = (value: unknown) => (isString(value) ? value : undefined);
   const server = await getCurrentServer();
   const tab = parseGameTab(text(filter.tab));

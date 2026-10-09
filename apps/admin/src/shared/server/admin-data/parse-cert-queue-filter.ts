@@ -1,10 +1,7 @@
 import { singleParam } from "@/shared/lib";
 
-import {
-  CERT_QUEUE_FILTERS,
-  type CertQueueFilter,
-  type CertQueueFilterKey,
-} from "./cert-queue-filter";
+import type { CertQueueFilter } from "./cert-queue-filter";
+import { isCertQueueFilterKey } from "./is-cert-queue-filter-key";
 
 // 대기열과 심사 상세가 같은 주소 쿼리(q, rulebook, filter)를 읽는다.
 export function parseCertQueueFilter(
@@ -14,6 +11,6 @@ export function parseCertQueueFilter(
   return {
     query: singleParam(params.q),
     rulebook: singleParam(params.rulebook),
-    filter: filter && filter in CERT_QUEUE_FILTERS ? (filter as CertQueueFilterKey) : undefined,
+    filter: isCertQueueFilterKey(filter) ? filter : undefined,
   };
 }

@@ -28,7 +28,11 @@ import { AppBar, EmptyState } from "@/shared/ui";
 
 import { ConfirmSummary } from "./confirm-summary";
 
-export async function GameConfirmView({ id }: { id: string }) {
+interface GameConfirmViewProps {
+  id: string;
+}
+
+export async function GameConfirmView({ id }: GameConfirmViewProps) {
   const server = await getCurrentServer();
   const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();

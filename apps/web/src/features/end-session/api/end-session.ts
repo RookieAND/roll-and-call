@@ -7,7 +7,7 @@ import { isNull } from "es-toolkit";
 import { after } from "next/server";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { GAME_NOT_FOUND_RESULT } from "@/shared/api";
+import { GAME_NOT_FOUND_RESULT, idSchema, parseActionInput } from "@/shared/api";
 import {
   getActingMember,
   notifyGameEnded,
@@ -24,6 +24,9 @@ const TO_ATTENDANCE_BLOCKS: readonly string[] = [
 ];
 
 export async function endSession(gameId: string): Promise<EndSessionResult> {
+  const parsed = parseActionInput(idSchema, gameId);
+  if (!parsed.ok) return parsed.result;
+
   const member = await getActingMember();
   if (!member) return { error: await notMemberError() };
   const { server, user } = member;

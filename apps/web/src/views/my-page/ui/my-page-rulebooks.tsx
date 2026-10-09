@@ -1,4 +1,4 @@
-import { Button, Callout, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, Callout, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { CalendarDays, Plus } from "lucide-react";
 
 import { CERT_STATE, isCertEnforced, type MyRulebooks } from "@/entities/rulebook";
@@ -50,7 +50,7 @@ export function MyPageRulebooks({
 
       {rows.length > 0 ? (
         <>
-          <div className={`${MY_PAGE_GROUP_CLASS} [&>a:first-child]:border-t-0`}>
+          <div className={cn(MY_PAGE_GROUP_CLASS, "[&>a:first-child]:border-t-0")}>
             {rows.slice(0, PREVIEW_ROWS).map((rulebook) => (
               <MyPageRulebookRow key={rulebook.id} rulebook={rulebook} />
             ))}
