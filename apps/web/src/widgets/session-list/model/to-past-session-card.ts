@@ -6,6 +6,7 @@ import { ddayKst, formatDateTime } from "@/shared/lib";
 import { confirmAttendanceTodo } from "./confirm-attendance-todo";
 import type { SessionFacts } from "./derive-session-facts";
 import { hostMenuAction } from "./host-menu-action";
+import { hostPastAction } from "./host-past-action";
 import { joinParts } from "./join-parts";
 import { pastEnding } from "./past-ending";
 import { pastScheduleTone } from "./past-schedule-tone";
@@ -62,7 +63,9 @@ export function toPastSessionCard({
     player && finished && !absent && !waitlistRank
       ? reviewNote({ game, context })
       : { caption: null, action: null };
-  const hostAction = context.readOnly ? null : hostMenuAction(game.id);
+  const hostAction = context.readOnly
+    ? null
+    : (hostPastAction({ game, finished: Boolean(finished) }) ?? hostMenuAction(game.id));
   const absentCaption = absent && !context.readOnly ? { text: "불참 처리됨", strong: false } : null;
 
   return {

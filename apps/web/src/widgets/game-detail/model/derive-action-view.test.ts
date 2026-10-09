@@ -23,6 +23,7 @@ const firstCome: ActionContext["game"] = {
   playMinutes: 180,
   endedAt: null,
   attendanceConfirmedAt: null,
+  attendanceFirstConfirmedAt: null,
   maxPlayers: 4,
   waitlistEnabled: true,
 };
@@ -102,12 +103,31 @@ describe("deriveActionView", () => {
     });
   });
 
+  it("GM은 마스터링 후기를 쓸 수 있을 때만 마감까지 남은 일수를 받는다", () => {
+    const recorded = {
+      ...firstCome,
+      confirmedAt: at(-5),
+      attendanceConfirmedAt: at(-1),
+      attendanceFirstConfirmedAt: at(-1),
+    };
+    expect(view({ game: recorded, viewer: gm, review: REVIEW_STATUS.writable })).toMatchObject({
+      review: REVIEW_STATUS.writable,
+      reviewDaysLeft: 7,
+    });
+    expect(view({ game: recorded, viewer: gm, review: REVIEW_STATUS.written })).toMatchObject({
+      reviewDaysLeft: null,
+    });
+  });
+
   it("(2) GM 세션 끝남: 출석 할 일, 기록, 확정 0명", () => {
     const ended = { ...firstCome, confirmedAt: at(-5) };
     expect(view({ game: ended, viewer: gm })).toEqual({
       kind: GAME_ACTION_VIEW.gmEnded,
       attendanceDue: true,
       attendanceRecorded: false,
+      endedOn: ended.confirmedAt,
+      review: REVIEW_STATUS.unavailable,
+      reviewDaysLeft: null,
     });
     expect(view({ game: { ...ended, attendanceConfirmedAt: at(-1) }, viewer: gm })).toMatchObject({
       attendanceDue: false,

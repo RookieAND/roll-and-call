@@ -108,7 +108,7 @@ export function toJoinedSessionCard({
       chip: SESSION_CHIP.scheduling,
       badge: "조율 중",
       badgeColor: "primary",
-      schedule: `${formatDate(game.endDate)}까지 가능 시간을 내야 합니다`,
+      schedule: `${formatDate(game.endDate)}까지 조율 격자에 일정을 설정해야 합니다`,
       scheduleTone: SESSION_TONE.danger,
       scheduleIcon: SESSION_ICON.alert,
       action: submit,

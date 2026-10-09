@@ -22,4 +22,6 @@ export type ManageRow = {
   href: string | null;
   action?: ManageRowAction;
   state: ManageRowState;
+  // 줄 아래에 따로 붙는 GM 마스터링 후기 버튼. 줄 전체가 링크라 줄 안에 넣지 않는다.
+  button?: { label: string; href: string; solid: boolean; caption?: string };
 };

@@ -6,6 +6,7 @@ export { formatDate } from "./format-date";
 export { formatDateWeekday } from "./format-date-weekday";
 export { formatDateClock } from "./format-date-clock";
 export { ddayKst } from "./dday-kst";
+export { formatDday } from "./format-dday";
 export { formatGameSchedule } from "./format-game-schedule";
 export { SLOT_MINUTES } from "./slot-window";
 export { buildDayColumns, type DayColumn } from "./build-day-columns";

@@ -1,3 +1,4 @@
+import { RECRUIT_METHOD } from "@/entities/game";
 import { canReopenGame } from "@/features/reopen-game";
 import { formatDateClock } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
@@ -31,7 +32,14 @@ const reopenable = (game: GameDetailData) =>
 export function GameActionZone({ game, view }: GameActionZoneProps) {
   switch (view.kind) {
     case GAME_ACTION_VIEW.cancelled:
-      return <CancelledActions gameId={game.id} reopenable={reopenable(game)} {...view} />;
+      return (
+        <CancelledActions
+          gameId={game.id}
+          reopenable={reopenable(game)}
+          selection={game.recruitMethod === RECRUIT_METHOD.selection}
+          {...view}
+        />
+      );
     case GAME_ACTION_VIEW.gmEnded:
       return <EndedGmActions gameId={game.id} reopenable={reopenable(game)} {...view} />;
     case GAME_ACTION_VIEW.gmLive:

@@ -80,7 +80,7 @@ describe("참여 카드", () => {
     expect(card.urgent).toBe(true);
     expect(card.scheduleIcon).toBe(SESSION_ICON.alert);
     expect(card.todo?.label).toBe("일정 조율");
-    expect(card.schedule).toMatch(/까지 가능 시간을 내야 합니다$/);
+    expect(card.schedule).toMatch(/까지 조율 격자에 일정을 설정해야 합니다$/);
   });
 
   it("가능 시간을 내면 할 일이 사라진다", () => {
@@ -213,11 +213,11 @@ describe("운영 카드", () => {
     expect(card.action?.label).toBe("운영 관리");
   });
 
-  it("끝난 세션에는 출석 확인이 할 일로 남고, 카드 버튼은 운영 관리 하나다", () => {
+  it("끝난 세션에는 출석 확인이 할 일로 남고, 카드 버튼은 출석 관리다", () => {
     const card = hostCard({ id: "ended", confirmedAt: at(-1), participants: [confirmedMe, other] });
     expect(card.todo?.kind).toBe(SESSION_ACTION_KIND.confirmAttendance);
     expect(card.todo?.lines).toHaveLength(2);
-    expect(card.action?.href).toBe("/games/ended/manage");
+    expect(card.action?.href).toBe("/games/ended/attendance");
   });
 
   it("출석 할 일은 자동 처리까지 남은 날을 머리표에 단다", () => {
@@ -234,7 +234,7 @@ describe("운영 카드", () => {
     expect(card.todo?.lines[1]).toBe("대기 중인 1명 가운데 누구를 올릴지 정해 주세요.");
   });
 
-  it("출석을 확정한 뒤에도 운영 관리로 들어가 고칠 수 있다", () => {
+  it("출석을 확정한 뒤에는 후기 보기를 단다", () => {
     const card = hostCard({
       id: "ended",
       confirmedAt: at(-1),
@@ -242,7 +242,7 @@ describe("운영 카드", () => {
       participants: [confirmedMe, other],
     });
     expect(card.todo).toBeNull();
-    expect(card.action?.href).toBe("/games/ended/manage");
+    expect(card.action?.href).toBe("/games/ended/reviews");
   });
 });
 

@@ -45,3 +45,21 @@ describe("reviewCardText", () => {
     );
   });
 });
+
+describe("reviewCardText GM 후기", () => {
+  const gmRow = { ...row, authorRole: "gm" };
+
+  it("세션 후기에서는 제목을 고정 문구로 두고 작성자를 보조 줄 앞에 붙인다", () => {
+    expect(reviewCardText({ row: gmRow, perspective: REVIEW_PERSPECTIVE.session })).toEqual({
+      title: "GM의 마스터링 후기",
+      byline: true,
+      meta: "9월 20일",
+    });
+  });
+
+  it("작성한 후기에서는 구인 제목을 그대로 쓴다", () => {
+    expect(reviewCardText({ row: gmRow, perspective: REVIEW_PERSPECTIVE.written }).title).toBe(
+      "물벼락",
+    );
+  });
+});

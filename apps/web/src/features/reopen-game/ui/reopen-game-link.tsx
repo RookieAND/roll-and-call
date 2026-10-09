@@ -13,7 +13,7 @@ export function ReopenGameLink({
   gameId,
   variant = "outline",
   size = "lg",
-  label = "같은 내용으로 다시 열기",
+  label = "다시 열기",
 }: ReopenGameLinkProps) {
   return (
     <Button

@@ -6,6 +6,8 @@ import { formatDate } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 
 import { attendanceRow } from "./attendance-row";
+import { gmReviewButton } from "./gm-review-button";
+import type { ManageReviewButton } from "./manage-review-button";
 import { MANAGE_ROW_STATE, type ManageRow } from "./manage-row-state";
 import { timeRow } from "./time-row";
 
@@ -15,10 +17,12 @@ export const CANCELLED_ROW_DETAIL = "취소한 구인입니다";
 export function manageRows({
   game,
   reviewCount,
+  gmReview = null,
   now = new Date(),
 }: {
   game: GameDetailData;
   reviewCount: number;
+  gmReview?: ManageReviewButton | null;
   now?: Date;
 }): ManageRow[] {
   const ended = isSessionEnded(game, now);
@@ -54,6 +58,7 @@ export function manageRows({
           reviewDeadline.getTime() > now.getTime()
             ? `후기 ${reviewCount}개가 달렸습니다 · ${formatDate(reviewDeadline)}까지 받습니다`
             : `후기 ${reviewCount}개가 달렸습니다`,
+        button: gmReviewButton({ gmReview, gameId: game.id, deadline: reviewDeadline, now }),
       };
 
   const rosterBase = { key: "roster", icon: "users", label: "참여자 관리" } as const;

@@ -15,6 +15,7 @@ type ActionLook = {
 };
 
 const ACTION_LOOK: Partial<Record<SessionActionKind, ActionLook>> = {
+  [SESSION_ACTION_KIND.submitAvailability]: { variant: "solid", colorPalette: "primary" },
   [SESSION_ACTION_KIND.confirmTime]: { variant: "solid", colorPalette: "success" },
   [SESSION_ACTION_KIND.writeReview]: { variant: "solid", colorPalette: "primary" },
   [SESSION_ACTION_KIND.viewReview]: { variant: "outline", colorPalette: "gray" },

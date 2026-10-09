@@ -47,6 +47,7 @@ export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
           hidden: !isNull(editable.hiddenAt),
         }
       }
+      gm={target.isGm}
       editUntil={reviewEditDeadline(editable?.createdAt ?? new Date())}
       initialBlock={reviewBlockOf(target)}
     />

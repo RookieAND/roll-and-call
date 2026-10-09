@@ -5,6 +5,7 @@ import { ServerLink } from "@/shared/ui";
 
 import { MANAGE_ROW_ACTION, type ManageRow as Row } from "../model/manage-row-state";
 import { AttendanceRowButton } from "./attendance-row-button";
+import { ManageRowButton } from "./manage-row-button";
 import { ManageRowContent } from "./manage-row-content";
 
 const manageRow = cva("min-h-16 px-175 py-150", {
@@ -31,7 +32,7 @@ export function ManageRow({ row, gameId, plannedEndAt }: ManageRowProps) {
 
   const container = row.href ? <ServerLink path={row.href} /> : <div />;
 
-  return (
+  const content = (
     <HStack
       align="center"
       gap="150"
@@ -40,5 +41,13 @@ export function ManageRow({ row, gameId, plannedEndAt }: ManageRowProps) {
     >
       <ManageRowContent row={row} chevron={Boolean(row.href)} />
     </HStack>
+  );
+  if (!row.button) return content;
+
+  return (
+    <div>
+      {content}
+      <ManageRowButton button={row.button} />
+    </div>
   );
 }

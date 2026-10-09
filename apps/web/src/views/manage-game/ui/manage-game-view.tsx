@@ -17,13 +17,16 @@ import {
   getCurrentSessionUser,
   getGameById,
   getGameReviews,
+  getReviewDraftTarget,
   getResponseCounts,
   getCurrentServer,
 } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
+import { reviewStatusOf } from "@/widgets/game-detail";
 
 import { cancelRowDetail } from "../model/cancel-row-detail";
 import { cancelRowLock } from "../model/cancel-row-lock";
+import { manageReviewButtonOf } from "../model/manage-review-button-of";
 import { manageRows } from "../model/manage-rows";
 import { manageSummary } from "../model/manage-summary";
 import { ManageCancelNote } from "./manage-cancel-note";
@@ -71,7 +74,13 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
   const { stage, stats, cancelNote, deadlineNote } = manageSummary({ game, responses });
   const canReopen = canReopenGame({ game, userId: user.id, serverId: server.id });
   const showNextSessionHint = isNil(game.cancelledAt) && isSessionEnded(game);
-  const rows = manageRows({ game, reviewCount: reviews.length });
+  const reviewTarget = await getReviewDraftTarget({
+    serverId: server.id,
+    gameId: id,
+    userId: user.id,
+  });
+  const gmReview = manageReviewButtonOf(reviewStatusOf(reviewTarget));
+  const rows = manageRows({ game, reviewCount: reviews.length, gmReview });
 
   return (
     <>

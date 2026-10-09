@@ -1,6 +1,6 @@
 import { Avatar, Badge, Callout, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { ReviewBody } from "@/entities/review";
+import { GmBadge, ReviewBody } from "@/entities/review";
 import { LineBreaks } from "@/shared/ui";
 
 import type { MyReviewCardModel } from "../model/my-review-card";
@@ -17,9 +17,12 @@ export function MyReviewCard({ card }: MyReviewCardProps) {
         <HStack align="center" gap="125">
           <Avatar src={card.authorAvatarUrl} name={card.authorName} size="md" />
           <VStack gap="025" className="min-w-0 flex-1">
-            <Text typography="subtitle2" truncate render={<h3 />}>
-              {card.title}
-            </Text>
+            <HStack align="center" gap="075" className="min-w-0">
+              <Text typography="subtitle2" truncate render={<h3 />}>
+                {card.title}
+              </Text>
+              {card.gm && <GmBadge />}
+            </HStack>
             <Text typography="body4" foreground="hint" truncate numeric>
               {card.meta}
             </Text>

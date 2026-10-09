@@ -3,6 +3,7 @@
 import { Avatar, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useState, type ReactNode } from "react";
 
+import { GmBadge } from "./gm-badge";
 import { ReviewBody } from "./review-body";
 import { ReviewPhotos } from "./review-photos";
 import { SpoilerCover } from "./spoiler-cover";
@@ -16,6 +17,8 @@ interface ReviewCardProps {
   photoUrls: string[];
   spoiler: boolean;
   menu?: ReactNode;
+  gm?: boolean;
+  highlighted?: boolean;
 }
 
 export function ReviewCard({
@@ -27,6 +30,8 @@ export function ReviewCard({
   photoUrls,
   spoiler,
   menu,
+  gm = false,
+  highlighted = false,
 }: ReviewCardProps) {
   const [revealed, setRevealed] = useState(!spoiler);
   const content = (
@@ -37,14 +42,23 @@ export function ReviewCard({
   );
 
   return (
-    <Card.Root padding="md" radius={500} render={<article />}>
+    <Card.Root
+      padding="md"
+      radius={500}
+      background={highlighted ? "none" : undefined}
+      className={highlighted ? "border-tinted-border bg-tinted-bg" : undefined}
+      render={<article />}
+    >
       <VStack gap="125">
         <HStack align="center" gap="125">
           <Avatar src={authorAvatarUrl} name={authorName} size="md" />
           <VStack gap="025" className="min-w-0 flex-1">
-            <Text typography="subtitle2" truncate render={<h3 />}>
-              {title}
-            </Text>
+            <HStack align="center" gap="075" className="min-w-0">
+              <Text typography="subtitle2" truncate render={<h3 />}>
+                {title}
+              </Text>
+              {gm && <GmBadge />}
+            </HStack>
             <Text typography="body4" foreground="hint" truncate numeric>
               {meta}
             </Text>

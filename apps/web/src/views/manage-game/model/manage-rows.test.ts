@@ -194,3 +194,23 @@ describe("manageRows", () => {
     );
   });
 });
+
+describe("manageRows GM 마스터링 후기 버튼", () => {
+  const recorded = gameWith({
+    confirmedAt: at(-2 * DAY),
+    attendanceConfirmedAt: at(-DAY),
+    attendanceFirstConfirmedAt: at(-DAY),
+  });
+  const reviewRow = (gmReview: "write" | "view" | null) =>
+    manageRows({ game: recorded, reviewCount: 0, gmReview, now: NOW })[1]!;
+
+  it("쓸 수 있으면 마감일수를 단 쓰기 버튼을, 이미 썼으면 보기 버튼을 붙인다", () => {
+    expect(reviewRow("write").button).toMatchObject({
+      label: "마스터링 후기 쓰기",
+      solid: true,
+      caption: "후기 마감 D-6",
+    });
+    expect(reviewRow("view").button).toMatchObject({ label: "내 후기 보기", solid: false });
+    expect(reviewRow(null).button).toBeUndefined();
+  });
+});

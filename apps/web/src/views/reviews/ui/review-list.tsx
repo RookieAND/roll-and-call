@@ -1,3 +1,4 @@
+import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import { VStack } from "@roll-and-call/ui";
 
 import { ReviewCard, ReviewEmpty, reviewEditDeadline } from "@/entities/review";
@@ -6,7 +7,7 @@ import type { ReviewCardRow } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
 
 import { reviewCardText } from "../model/review-card-text";
-import type { ReviewPerspective } from "../model/review-perspective";
+import { REVIEW_PERSPECTIVE, type ReviewPerspective } from "../model/review-perspective";
 import { ReviewMenu } from "./review-menu";
 
 interface ReviewListProps {
@@ -36,6 +37,7 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
         ) : (
           meta
         );
+        const gm = row.authorRole === REVIEW_AUTHOR_ROLE.gm;
         const own = row.authorId === viewerId;
         const editable = own && reviewEditDeadline(row.createdAt).getTime() > now;
         const menu = own && (
@@ -56,6 +58,8 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
             photoUrls={row.photoUrls}
             spoiler={row.spoiler}
             menu={menu}
+            gm={gm}
+            highlighted={gm && perspective === REVIEW_PERSPECTIVE.session}
           />
         );
       })}

@@ -32,6 +32,8 @@ export const SESSION_ACTION_KIND = {
   confirmTime: "confirm-time",
   submitAvailability: "submit-availability",
   hostMenu: "host-menu",
+  manageAttendance: "manage-attendance",
+  viewSessionReviews: "view-session-reviews",
   cancelWaitlist: "cancel-waitlist",
   confirmAttendance: "confirm-attendance",
   fillVacancy: "fill-vacancy",

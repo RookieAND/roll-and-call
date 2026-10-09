@@ -41,6 +41,7 @@ export type ActionGame = Pick<
   | "playMinutes"
   | "endedAt"
   | "attendanceConfirmedAt"
+  | "attendanceFirstConfirmedAt"
   | "maxPlayers"
   | "waitlistEnabled"
 >;
@@ -84,7 +85,15 @@ export type GameActionView =
       reason: string | null;
       isGm: boolean;
     }
-  | { kind: typeof GAME_ACTION_VIEW.gmEnded; attendanceDue: boolean; attendanceRecorded: boolean }
+  | {
+      kind: typeof GAME_ACTION_VIEW.gmEnded;
+      attendanceDue: boolean;
+      attendanceRecorded: boolean;
+      endedOn: Date;
+      review: ReviewStatus;
+      // 마스터링 후기를 쓸 수 있을 때만 남은 일수(KST 날짜 차이)를 담는다.
+      reviewDaysLeft: number | null;
+    }
   | { kind: typeof GAME_ACTION_VIEW.gmLive; attendanceExpected: boolean }
   | { kind: typeof GAME_ACTION_VIEW.gmUpcoming; calendar: boolean }
   | { kind: typeof GAME_ACTION_VIEW.absent }

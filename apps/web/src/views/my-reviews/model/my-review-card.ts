@@ -1,3 +1,4 @@
+import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import { CONTENT_REASON, reasonLabel } from "@roll-and-call/database/moderation/model";
 
 import { deriveReviewState, REVIEW_STATE, reviewEditDeadline } from "@/entities/review";
@@ -19,6 +20,7 @@ export type MyReviewCardModel = {
   authorName: string;
   authorAvatarUrl: string | null;
   title: string;
+  gm: boolean;
   meta: string;
   body: string | null;
   bodyMuted: boolean;
@@ -47,6 +49,7 @@ export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyRevi
     authorName: row.authorName,
     authorAvatarUrl: row.authorAvatarUrl,
     title: row.gameTitle,
+    gm: row.authorRole === REVIEW_AUTHOR_ROLE.gm,
     meta: `${row.gameRule} · ${sessionDate}${row.updatedAt ? " · 수정됨" : ""}`,
     body: row.body,
     bodyMuted: true,

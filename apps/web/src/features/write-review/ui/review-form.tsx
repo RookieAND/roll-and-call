@@ -14,7 +14,7 @@ import { AppBar, ConfirmDialog, toast, useAction } from "@/shared/ui";
 import { discardReviewPhotos } from "../api/discard-review-photos";
 import { submitReview } from "../api/submit-review";
 import { MY_REVIEWS_HREF, type ReviewBlock } from "../model/review-block";
-import { reviewFormNotice } from "../model/review-form-notice";
+import { reviewFormNotice, reviewFormTitle } from "../model/review-form-notice";
 import { useReviewDraft } from "../model/use-review-draft";
 import { useReviewPhotos } from "../model/use-review-photos";
 import { ReviewBlockedDialog } from "./review-blocked-dialog";
@@ -33,6 +33,7 @@ interface ReviewFormProps {
     hidden: boolean;
   } | null;
   editUntil: Date;
+  gm?: boolean;
   initialBlock: ReviewBlock | null;
   // 앱바 바로 아래에 붙는 줄. 체험 환경의 「체험 중」 표시가 쓴다.
   belowAppBar?: ReactNode;
@@ -44,6 +45,7 @@ export function ReviewForm({
   heading,
   review,
   editUntil,
+  gm = false,
   initialBlock,
   belowAppBar,
 }: ReviewFormProps) {
@@ -76,7 +78,7 @@ export function ReviewForm({
 
   const gameHref = toServerPath(`/games/${gameId}`);
   const leaveHref = editing ? toServerPath(MY_REVIEWS_HREF) : gameHref;
-  const notice = reviewFormNotice({ review, editUntil });
+  const notice = reviewFormNotice({ review, editUntil, gm });
   const newPhotoUrls = photos.urls.filter((url) => !initialPhotoUrls.includes(url));
   const dirty =
     body !== (review?.body ?? "") ||
@@ -144,11 +146,7 @@ export function ReviewForm({
 
   return (
     <VStack render={<form onSubmit={submit} />} className="break-keep">
-      <AppBar
-        title={editing ? "후기 고치기" : "후기 쓰기"}
-        backIcon="close"
-        onBack={requestLeave}
-      />
+      <AppBar title={reviewFormTitle({ editing, gm })} backIcon="close" onBack={requestLeave} />
       {belowAppBar}
       <VStack gap="250" className="p-200">
         <SessionHeading {...heading} />

@@ -5,6 +5,7 @@ import { ReopenGameLink } from "@/features/reopen-game";
 import { ServerLink } from "@/shared/ui";
 
 import {
+  SESSION_CHIP,
   SESSION_ICON,
   SESSION_TONE,
   type SessionCardModel,
@@ -51,7 +52,7 @@ export function SessionCard({ model }: SessionCardProps) {
         model.cancelled && "opacity-72",
       )}
     >
-      <VStack gap="100" className="p-025">
+      <VStack gap={model.chip === SESSION_CHIP.ended ? "075" : "100"} className="p-025">
         <ServerLink path={`/games/${model.id}`} className="flex flex-col gap-100">
           <HStack align="start" gap="100">
             <Text
@@ -96,9 +97,7 @@ export function SessionCard({ model }: SessionCardProps) {
         {(model.action || model.canReopen) && (
           <HStack gap="100" className="mt-050 [&>*]:mt-0 [&>*]:min-w-0 *:flex-1">
             <SessionCardAction model={model} />
-            {model.canReopen && (
-              <ReopenGameLink gameId={model.id} variant="solid" size="md" label="다시 열기" />
-            )}
+            {model.canReopen && <ReopenGameLink gameId={model.id} variant="solid" size="md" />}
           </HStack>
         )}
       </VStack>
