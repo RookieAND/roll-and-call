@@ -37,19 +37,12 @@ const RULE_GM_STEPS: BadgeStep[] = [
   { threshold: 25, emoji: "👑", name: "거장", grade: 5 },
 ];
 
-function rulebook({
-  threshold,
-  emoji,
-  name,
-  grade,
-  description,
-}: BadgeStep & { description: string }): BadgeLadderDefinition {
+function rulebook({ threshold, emoji, name, grade }: BadgeStep): BadgeLadderDefinition {
   return {
     role: BADGE_ROLE.special,
     perRule: false,
     monthly: false,
     granted: false,
-    description,
     steps: [{ threshold, emoji, name, grade }],
   };
 }
@@ -60,28 +53,24 @@ const RULEBOOK_BADGE_LADDERS: Record<RulebookLadderKey, BadgeLadderDefinition> =
     emoji: "📖",
     name: "서생",
     grade: 2,
-    description: "룰북 세 권을 인증하며 첫걸음을 뗐습니다.",
   }),
   [RULEBOOK_LADDER.collector]: rulebook({
     threshold: 10,
     emoji: "📚",
     name: "장서가",
     grade: 3,
-    description: "열 권의 룰북이 책장에 꽂혔습니다.",
   }),
   [RULEBOOK_LADDER.polymath]: rulebook({
     threshold: 20,
     emoji: "🎓",
     name: "박학다식",
     grade: 4,
-    description: "스무 종의 룰북을 두루 익혔습니다.",
   }),
   [RULEBOOK_LADDER.library]: rulebook({
     threshold: 30,
     emoji: "🏛️",
     name: "대도서관",
     grade: 5,
-    description: "서른 종의 룰북이 한자리에 모였습니다.",
   }),
 };
 

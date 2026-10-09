@@ -42,7 +42,7 @@ export function badgeCondition({
     case BADGE_LADDER.collector:
     case BADGE_LADDER.polymath:
     case BADGE_LADDER.library:
-      return `룰북을 ${count}종 인증하면 받습니다.\n${BADGE_LADDERS[ladder].description}`;
+      return `룰북을 ${count}종 인증하면 받습니다.`;
     case BADGE_LADDER.playerMonthly:
       return "한 달 동안 세션에 가장 많이 참석한 PL입니다.";
     case BADGE_LADDER.gmMonthly:
