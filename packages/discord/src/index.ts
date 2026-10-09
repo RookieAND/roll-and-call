@@ -13,6 +13,7 @@ export type {
 } from "./model/discord-types";
 export { sendDiscordMessage } from "./message/send-discord-message";
 export { addFileToMessage } from "./message/add-file-to-message";
+export { hasMessageAttachment } from "./message/has-message-attachment";
 export { sendDiscordFile } from "./message/send-discord-file";
 export { createFileMessage } from "./message/create-file-message";
 export { updateFileMessage } from "./message/update-file-message";

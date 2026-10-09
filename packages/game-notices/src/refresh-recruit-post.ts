@@ -4,6 +4,7 @@ import { countConfirmed } from "@roll-and-call/database/games/model";
 import { findGameCategoryId } from "@roll-and-call/database/rulebooks";
 import {
   editDiscordMessage,
+  hasMessageAttachment,
   renameDiscordThread,
   syncForumFollowUps,
 } from "@roll-and-call/discord";
@@ -51,7 +52,14 @@ export async function refreshRecruitPost({
     }
     const post = await recruitForumPost({ server, game, gmName, confirmedCount });
     await editDiscordMessage({ channelId: threadId, messageId: threadId, input: post.input });
-    if (thumbnailChanged) await attachRecruitThumbnail({ game, threadId });
+    // 첨부 방식으로 바꾸기 전에 올린 글은 첨부가 없어, 고치는 김에 한 번 올려 준다.
+    if (
+      game.thumbnailUrl &&
+      (thumbnailChanged ||
+        !(await hasMessageAttachment({ channelId: threadId, messageId: threadId })))
+    ) {
+      await attachRecruitThumbnail({ game, threadId });
+    }
     await syncForumFollowUps({
       threadId,
       chunks: post.followUps,
