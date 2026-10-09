@@ -17,6 +17,7 @@ import { confirmedRowNote } from "../model/confirmed-row-note";
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
 import { waitingHintLines } from "../model/waiting-hint-lines";
+import { ApplicationNoteDialog } from "./application-note-dialog";
 import { DrawResultLink } from "./draw-result-link";
 import { RosterHint } from "./roster-hint";
 import { RosterQueue } from "./roster-queue";
@@ -46,6 +47,7 @@ export function RosterQueues({
   isCoordinate,
 }: RosterQueuesProps) {
   const [menuMember, setMenuMember] = useState<ManagedMember | null>(null);
+  const [noteMember, setNoteMember] = useState<ManagedMember | null>(null);
   const [absentMember, setAbsentMember] = useState<MemberSummary | null>(null);
   const { beforeDraw, started, capacityRaised } = summary;
 
@@ -109,7 +111,7 @@ export function RosterQueues({
               dimmed={member.removed}
               action={rowAction(member)}
               quote={member.removed ? null : member.applicationNote}
-              onOpenQuote={() => setMenuMember(member)}
+              onOpenQuote={() => setNoteMember(member)}
             />
           );
         })}
@@ -136,12 +138,14 @@ export function RosterQueues({
                 noteForeground="hint"
                 action={rowAction(member)}
                 quote={member.applicationNote}
-                onOpenQuote={() => setMenuMember(member)}
+                onOpenQuote={() => setNoteMember(member)}
               />
             ))}
           </ExpandableRows>
         </RosterQueue>
       )}
+
+      <ApplicationNoteDialog member={noteMember} onClose={() => setNoteMember(null)} />
 
       <MemberSheet
         roster={{
