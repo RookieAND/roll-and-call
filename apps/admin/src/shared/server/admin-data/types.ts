@@ -1,4 +1,5 @@
 import type { RulebookKind } from "@roll-and-call/database";
+import type { ReviewAuthorRole } from "@roll-and-call/database/games/model";
 import type {
   AuditAction,
   AuditActorKind,
@@ -192,6 +193,7 @@ export interface Review {
   id: string;
   sessionId: string;
   authorId: string;
+  authorRole: ReviewAuthorRole;
   body: string;
   spoiler: boolean;
   photoUrls: string[];

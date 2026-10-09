@@ -1,4 +1,5 @@
 export { insertReview } from "./commands/insert-review";
+export { participantReviewWhere } from "./queries/participant-review-where";
 export { removeOwnReview } from "./commands/remove-own-review";
 export { saveThreadId } from "./commands/save-thread-id";
 export { updateReview } from "./commands/update-review";

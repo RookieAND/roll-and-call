@@ -20,6 +20,7 @@ const sessions = [
 
 const review = (fields: Partial<Review> & { id: string; authorId: string; sessionId: string }) =>
   ({
+    authorRole: "participant",
     body: "좋았습니다",
     spoiler: false,
     photoUrls: [],
@@ -62,6 +63,23 @@ describe("buildReviewDetail", () => {
 
   it("쓴 후기 수에서 지운 후기를 뺀다", () => {
     expect(detail("r1")?.author.reviewCount).toBe(1);
+  });
+
+  it("쓴 후기 수에 GM 후기는 세지 않는다", () => {
+    const withGm = [
+      ...reviews,
+      review({ id: "r4", authorId: "u-a", sessionId: "g-1", authorRole: "gm" }),
+    ];
+    const result = buildReviewDetail({
+      reviews: withGm,
+      users,
+      sessions,
+      auditLog,
+      id: "r1",
+      filter,
+      now: NOW,
+    });
+    expect(result?.author.reviewCount).toBe(1);
   });
 
   it("다음 건은 들어온 목록 순서를 따르고 마지막이면 null이다", () => {

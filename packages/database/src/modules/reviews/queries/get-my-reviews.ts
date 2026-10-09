@@ -12,6 +12,7 @@ export async function getMyReviews({ serverId, authorId }: { serverId: string; a
     .select({
       id: sessionReviews.id,
       gameId: sessionReviews.gameId,
+      authorRole: sessionReviews.authorRole,
       body: sessionReviews.body,
       spoiler: sessionReviews.spoiler,
       photoUrls: sessionReviews.photoUrls,

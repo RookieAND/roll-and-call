@@ -1,5 +1,6 @@
 "use server";
 
+import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import { insertReview, updateReview } from "@roll-and-call/database/reviews";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
@@ -94,6 +95,7 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
         serverId: server.id,
         gameId: form.gameId,
         authorId: user.id,
+        authorRole: target.isGm ? REVIEW_AUTHOR_ROLE.gm : REVIEW_AUTHOR_ROLE.participant,
         ...values,
       });
     } catch (error) {

@@ -42,7 +42,9 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
     getCurrentSessionUser(),
     getResponseCounts({ serverId: server.id, gameIds: [id] }),
     getCurrentSessionUser().then((viewer) =>
-      getGameReviews({ serverId: server.id, gameId: id, viewerId: viewer?.id ?? null }),
+      getGameReviews({ serverId: server.id, gameId: id, viewerId: viewer?.id ?? null }).then(
+        ({ participantReviews }) => participantReviews,
+      ),
     ),
   ]);
   if (!game) notFound();

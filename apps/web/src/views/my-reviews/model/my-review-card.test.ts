@@ -7,6 +7,7 @@ import { MY_REVIEW_ACTIONS, toMyReviewCard } from "./my-review-card";
 const NOW = new Date("2026-09-28T12:00:00+09:00");
 const row = {
   id: "review",
+  authorRole: "participant",
   gameId: "game",
   body: "첫 CoC였는데 GM님이 판정 규칙을 그때그때 짚어 주셨습니다.",
   authorName: "달무리",

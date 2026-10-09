@@ -1,0 +1,2 @@
+ALTER TABLE "session_reviews" ADD COLUMN "author_role" text DEFAULT 'participant' NOT NULL;--> statement-breakpoint
+ALTER TABLE "session_reviews" ADD CONSTRAINT "session_reviews_author_role" CHECK ("session_reviews"."author_role" in ('participant', 'gm'));

@@ -30,6 +30,8 @@ export const sessionReviews = pgTable(
     authorId: uuid("author_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    // 마스터링 후기(gm)는 GM이 쓰고, 나머지는 참석자 후기다.
+    authorRole: text("author_role").notNull().default("participant"),
     body: text("body").notNull(),
     spoiler: boolean("spoiler").notNull().default(false),
     // review-photos 버킷의 공개 URL. 배열 순서가 보이는 순서다.
@@ -61,6 +63,7 @@ export const sessionReviews = pgTable(
       "session_reviews_body_length",
       sql`${table.removedAt} is not null or char_length(${table.body}) between 20 and 2000`,
     ),
+    check("session_reviews_author_role", sql`${table.authorRole} in ('participant', 'gm')`),
     check("session_reviews_photo_limit", sql`cardinality(${table.photoUrls}) <= 5`),
   ],
 ).enableRLS();

@@ -1,4 +1,5 @@
 import "server-only";
+import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import { getUserIdByDiscordId } from "@roll-and-call/database/profiles";
 import { insertReview } from "@roll-and-call/database/reviews";
 import { getActiveMembership, getServerByGuildId } from "@roll-and-call/database/servers";
@@ -82,6 +83,7 @@ export async function writeReviewFromDiscord({
       serverId: server.id,
       gameId,
       authorId: userId,
+      authorRole: target.isGm ? REVIEW_AUTHOR_ROLE.gm : REVIEW_AUTHOR_ROLE.participant,
       body: text,
       spoiler,
       photoUrls,

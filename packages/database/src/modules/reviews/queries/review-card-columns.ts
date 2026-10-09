@@ -7,6 +7,7 @@ export function reviewCardColumns(serverId: string) {
     id: sessionReviews.id,
     gameId: sessionReviews.gameId,
     authorId: sessionReviews.authorId,
+    authorRole: sessionReviews.authorRole,
     body: sessionReviews.body,
     spoiler: sessionReviews.spoiler,
     photoUrls: sessionReviews.photoUrls,

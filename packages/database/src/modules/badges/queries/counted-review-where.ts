@@ -1,5 +1,6 @@
 import { and, eq, isNull, not, sql } from "drizzle-orm";
 
+import { participantReviewWhere } from "#/modules/reviews/queries/participant-review-where";
 import { games, participants, sessionReviews } from "#/schema";
 
 // 후기 작성자가 지금 불참이면 보류된 후기라 세지 않는다.
@@ -21,6 +22,7 @@ export function countedReviewWhere(serverId: string) {
     eq(games.serverId, serverId),
     isNull(games.hiddenAt),
     isNull(games.cancelledAt),
+    participantReviewWhere,
     isNull(sessionReviews.removedAt),
     isNull(sessionReviews.hiddenAt),
     not(reviewAuthorAbsent),

@@ -1,5 +1,6 @@
 import "server-only";
 import type { Game } from "@roll-and-call/database";
+import type { ReviewAuthorRole } from "@roll-and-call/database/games/model";
 import {
   ABSENCE_ADDED_TAG_LABEL,
   cancelBlockReason,
@@ -359,6 +360,7 @@ export const loadSnapshot = cache(async () => {
     id: row.id,
     sessionId: row.gameId,
     authorId: row.authorId,
+    authorRole: row.authorRole as ReviewAuthorRole,
     body: row.body,
     spoiler: row.spoiler,
     photoUrls: row.photoUrls,

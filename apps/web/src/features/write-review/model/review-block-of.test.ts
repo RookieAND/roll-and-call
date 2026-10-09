@@ -17,6 +17,8 @@ const target = {
   participant: { status: PARTICIPANT_STATUS.confirmed, absent: false, absenceCancelledAt: null },
   review: null,
   suspended: false,
+  isGm: false,
+  confirmedCount: 3,
 } as unknown as ReviewDraftTarget;
 
 const review = { createdAt: new Date(NOW.getTime() - DAY), hiddenAt: null, removedAt: null };
@@ -100,5 +102,34 @@ describe("reviewBlockOf", () => {
   it("활동 정지는 작성 기간 지남보다 먼저 알린다", () => {
     const late = new Date(NOW.getTime() + 4 * DAY);
     expect(reviewBlockOf({ ...target, suspended: true }, late)).toBe(REVIEW_BLOCK.suspended);
+  });
+});
+
+describe("reviewBlockOf GM", () => {
+  const gm = { ...target, participant: null, isGm: true } as ReviewDraftTarget;
+
+  it("출석이 확정된 구인의 GM은 쓸 수 있다", () => {
+    expect(reviewBlockOf(gm, NOW)).toBeNull();
+  });
+
+  it("출석 확정 전에는 막는다", () => {
+    const pending = { ...gm, game: { ...gm.game, attendanceConfirmedAt: null } };
+    expect(reviewBlockOf(pending, NOW)).toBe(REVIEW_BLOCK.attendancePending);
+  });
+
+  it("확정 참석자가 없으면 막는다", () => {
+    expect(reviewBlockOf({ ...gm, confirmedCount: 0 }, NOW)).toBe(REVIEW_BLOCK.unavailable);
+  });
+
+  it("작성 기간이 지나면 막는다", () => {
+    expect(reviewBlockOf(gm, new Date(NOW.getTime() + 5 * DAY))).toBe(REVIEW_BLOCK.writePeriodOver);
+  });
+
+  it("제재 중이면 막는다", () => {
+    expect(reviewBlockOf({ ...gm, suspended: true }, NOW)).toBe(REVIEW_BLOCK.suspended);
+  });
+
+  it("쓴 GM 후기는 불참 보류 없이 고칠 수 있다", () => {
+    expect(reviewBlockOf({ ...gm, review } as ReviewDraftTarget, NOW)).toBeNull();
   });
 });

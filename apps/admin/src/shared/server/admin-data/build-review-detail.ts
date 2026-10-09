@@ -1,3 +1,5 @@
+import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
+
 import { nextInList } from "@/shared/lib";
 
 import { plainText } from "./plain-text";
@@ -61,7 +63,10 @@ export function buildReviewDetail({
       id: author.id,
       nickname: author.nickname,
       reviewCount: reviews.filter(
-        (candidate) => candidate.authorId === author.id && !candidate.removed,
+        (candidate) =>
+          candidate.authorId === author.id &&
+          candidate.authorRole === REVIEW_AUTHOR_ROLE.participant &&
+          !candidate.removed,
       ).length,
       receivedActionCount: auditLog.filter(
         (entry) =>

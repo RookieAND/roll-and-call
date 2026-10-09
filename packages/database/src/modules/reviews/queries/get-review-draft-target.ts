@@ -1,7 +1,8 @@
-import { and, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import { isNull } from "es-toolkit";
 
 import { db } from "#/client";
+import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
 import { findActiveSanction } from "#/modules/moderation/queries/find-active-sanction";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { games, participants, profiles, sessionReviews } from "#/schema";
@@ -32,7 +33,7 @@ export async function getReviewDraftTarget({
     .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));
   if (!game) return null;
 
-  const [[participant], [review], sanction] = await Promise.all([
+  const [[participant], [review], sanction, [confirmed]] = await Promise.all([
     db
       .select({
         status: participants.status,
@@ -58,6 +59,16 @@ export async function getReviewDraftTarget({
         ),
       ),
     findActiveSanction({ serverId, userId }),
+    db
+      .select({ value: count() })
+      .from(participants)
+      .where(
+        and(
+          eq(participants.serverId, serverId),
+          eq(participants.gameId, gameId),
+          eq(participants.status, PARTICIPANT_STATUS.confirmed),
+        ),
+      ),
   ]);
 
   return {
@@ -65,6 +76,8 @@ export async function getReviewDraftTarget({
     participant: participant ?? null,
     review: review ?? null,
     suspended: !isNull(sanction),
+    isGm: game.gmId === userId,
+    confirmedCount: confirmed?.value ?? 0,
   };
 }
 

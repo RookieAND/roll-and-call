@@ -42,7 +42,11 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
       </ReviewsPage>
     );
   }
-  const rows = await getGameReviews({ serverId: server.id, gameId, viewerId });
+  const { participantReviews: rows } = await getGameReviews({
+    serverId: server.id,
+    gameId,
+    viewerId,
+  });
   const when = game.confirmedAt ? `${formatDateTime(game.confirmedAt)} · ` : "";
 
   return (

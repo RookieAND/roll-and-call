@@ -4,6 +4,7 @@ import { richTextToMarkdown } from "@roll-and-call/game-notices/rich-text-markdo
 import { extensionOf } from "./extension-of";
 import { ruleTagName } from "./rule-tag-name";
 
+const GM_TITLE = "[GM 후기] ";
 const SPOILER_TITLE = "[스포있음] ";
 const TAG = { spoiler: "스포O", noSpoiler: "스포X", trpg: "TRPG" } as const;
 const CONTENT_MAX_LENGTH = 2000;
@@ -37,7 +38,7 @@ export function reviewForumPost({
   ];
 
   return {
-    name: `${review.spoiler ? SPOILER_TITLE : ""}${review.gameTitle} 후기 · ${review.authorName}`,
+    name: `${review.isGmReview ? GM_TITLE : ""}${review.spoiler ? SPOILER_TITLE : ""}${review.gameTitle} 후기 · ${review.authorName}`,
     appliedTags: tagNames.flatMap((name) => tagIds.get(name) ?? []),
     content: withMeta.length <= CONTENT_MAX_LENGTH ? withMeta : body,
     photos: review.photoUrls.map((photoUrl, index) => ({

@@ -9,6 +9,7 @@ const row = {
   id: "review",
   gameId: "game",
   authorId: "author",
+  authorRole: "participant",
   body: "분위기 묘사가 정말 좋았습니다.",
   spoiler: false,
   photoUrls: [],

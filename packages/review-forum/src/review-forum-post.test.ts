@@ -14,6 +14,7 @@ const tags = new Map([
 const review = {
   id: "r1",
   gameId: "g1",
+  isGmReview: false,
   body: "재미있었어요. 반전이 좋았습니다 || 정말로",
   spoiler: false,
   photoUrls: ["https://cdn.example/a/1.png", "https://cdn.example/a/2"],
@@ -65,5 +66,17 @@ describe("reviewForumPost", () => {
     expect(
       reviewForumPost({ review: { ...review, body }, tagIds: tags, reviewsUrl: undefined }).content,
     ).toBe(body);
+  });
+
+  it("GM 후기는 제목 맨 앞에 [GM 후기]를 붙이고 스포일러 표시가 그 뒤에 온다", () => {
+    const gmReview = { ...review, isGmReview: true } satisfies ForumReview;
+    const plain = reviewForumPost({ review: gmReview, tagIds: tags, reviewsUrl: undefined });
+    expect(plain.name).toBe("[GM 후기] 붉은 여관의 밤 후기 · 게굴");
+    const spoiler = reviewForumPost({
+      review: { ...gmReview, spoiler: true },
+      tagIds: tags,
+      reviewsUrl: undefined,
+    });
+    expect(spoiler.name).toBe("[GM 후기] [스포있음] 붉은 여관의 밤 후기 · 게굴");
   });
 });

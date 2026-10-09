@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
 import { db } from "#/client";
+import { REVIEW_AUTHOR_ROLE } from "#/modules/games/model/review-author-role";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import {
   games,
@@ -25,6 +26,7 @@ export async function loadForumReview({
     .select({
       id: sessionReviews.id,
       gameId: sessionReviews.gameId,
+      isGmReview: eq(sessionReviews.authorRole, REVIEW_AUTHOR_ROLE.gm),
       body: sessionReviews.body,
       spoiler: sessionReviews.spoiler,
       photoUrls: sessionReviews.photoUrls,
