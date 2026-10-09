@@ -1,7 +1,7 @@
 import { Button, Chip, HStack, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
-import { reviewListHref, withQuery, type TableSort } from "@/shared/lib";
+import { paginate, reviewListHref, withQuery, type TableSort } from "@/shared/lib";
 import {
   REVIEW_LIST_TAB,
   REVIEW_PHOTO_FILTER,
@@ -9,7 +9,7 @@ import {
   type ReviewListTab,
   type ReviewSortColumn,
 } from "@/shared/server";
-import { AdminHeader, Panel, ServerLink, UrlSearchInput, UrlSelect } from "@/shared/ui";
+import { AdminHeader, ListPager, Panel, ServerLink, UrlSearchInput, UrlSelect } from "@/shared/ui";
 
 import { reviewEmptyCopy } from "../model/review-empty-copy";
 import { ReviewTable } from "./review-table";
@@ -24,16 +24,26 @@ interface ReviewListViewProps {
   list: ReviewList;
   tab: ReviewListTab;
   sort: TableSort<ReviewSortColumn>;
+  page?: string;
   // 들어온 목록의 검색·사진·구인 칩·정렬(q, photo, game, sort, dir). 상세 주소에 그대로 싣는다.
   query: Record<string, string | undefined>;
 }
 
-export function ReviewListView({ list, tab, sort, query }: ReviewListViewProps) {
+export function ReviewListView({ list, tab, sort, page, query }: ReviewListViewProps) {
+  const paged = paginate(list.rows, page);
   const hidden = tab === REVIEW_LIST_TAB.hidden;
   const { resettable, ...empty } = reviewEmptyCopy({ list, hidden });
   const resetHref = reviewListHref({ hidden, query: { ...query, q: undefined, photo: undefined } });
   const withoutGameHref = reviewListHref({ hidden, query: { ...query, game: undefined } });
-  const detailQuery = withQuery("", { tab: hidden ? tab : undefined, ...query }, {});
+  const listPage = paged.page > 1 ? String(paged.page) : undefined;
+  const detailQuery = withQuery(
+    "",
+    { tab: hidden ? tab : undefined, ...query },
+    { page: listPage },
+  );
+  const pager = (
+    <ListPager page={paged.page} totalPages={paged.totalPages} total={list.rows.length} unit="건" />
+  );
   const resetAction = resettable ? (
     <Button variant="outline" colorPalette="gray" render={<ServerLink path={resetHref} />}>
       필터 지우기
@@ -60,9 +70,9 @@ export function ReviewListView({ list, tab, sort, query }: ReviewListViewProps) 
             </Chip>
           ) : null}
         </HStack>
-        <Panel>
+        <Panel footer={list.rows.length ? pager : null}>
           <ReviewTable
-            rows={list.rows}
+            rows={paged.rows}
             sort={sort}
             gameChip={Boolean(list.game)}
             empty={{ ...empty, action: resetAction }}

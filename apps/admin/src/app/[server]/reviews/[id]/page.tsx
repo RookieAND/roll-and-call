@@ -25,7 +25,7 @@ export default async function ReviewDetailPage({
   searchParams,
 }: PageProps<"/[server]/reviews/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
-  const { tab, q, photo, game, sort, dir } = stringParams(query);
+  const { tab, q, photo, game, sort, dir, page } = stringParams(query);
   const listTab = tab === REVIEW_LIST_TAB.hidden ? REVIEW_LIST_TAB.hidden : REVIEW_LIST_TAB.all;
   const tableSort = parseSort({
     searchParams: query,
@@ -41,7 +41,7 @@ export default async function ReviewDetailPage({
     <ReviewDetailView
       review={review}
       tab={listTab}
-      listQuery={{ q, photo, game, sort, dir }}
+      listQuery={{ q, photo, game, sort, dir, page }}
       viewerId={staff.id}
     />
   );
