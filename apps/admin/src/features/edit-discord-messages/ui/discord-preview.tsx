@@ -154,7 +154,7 @@ export function DiscordPreview({
           <div className="leading-[22px] whitespace-pre-line [overflow-wrap:anywhere]">{nodes}</div>
         ) : null}
         {bodyNodes ? (
-          <div className="leading-[22px] [overflow-wrap:anywhere]">{bodyNodes}</div>
+          <div className="leading-[22px] whitespace-pre-line [overflow-wrap:anywhere]">{bodyNodes}</div>
         ) : null}
         {caseKey === "open" && recruitForum ? <PreviewPlain /> : null}
         {caseKey === "monthly" ? <PreviewMonthly /> : null}
