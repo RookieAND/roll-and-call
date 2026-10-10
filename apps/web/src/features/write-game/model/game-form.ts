@@ -27,7 +27,7 @@ export const GAME_TAGS_MAX = {
   [GAME_TAG.platforms]: 5,
 } as const;
 export const GAME_TAG_MAX_LENGTH = 20;
-export const GAME_NOTICE_MAX = 500;
+export const GAME_NOTICE_MAX = 2000;
 export const GAME_SYNOPSIS_MAX = 2000;
 export const INVALID_INPUT_MESSAGE = "입력값을 확인해 주세요.";
 
