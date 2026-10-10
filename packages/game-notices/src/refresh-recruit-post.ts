@@ -10,6 +10,7 @@ import {
 } from "@roll-and-call/discord";
 
 import { attachRecruitThumbnail } from "./attach-recruit-thumbnail";
+import { defaultBannerUrl } from "./default-banner-url";
 import { recruitButtons } from "./recruit-buttons";
 import { recruitEmbed } from "./recruit-embed";
 import { recruitForumPost } from "./recruit-forum-post";
@@ -52,9 +53,9 @@ export async function refreshRecruitPost({
     }
     const post = await recruitForumPost({ server, game, gmName, confirmedCount });
     await editDiscordMessage({ channelId: threadId, messageId: threadId, input: post.input });
-    // 첨부 방식으로 바꾸기 전에 올린 글은 첨부가 없어, 고치는 김에 한 번 올려 준다.
+    // 첨부 방식으로 바꾸기 전에 올린 글은 첨부가 없어, 고치는 김에 한 번 올려 준다. 썸네일이 없으면 기본 배너를 올린다.
     if (
-      game.thumbnailUrl &&
+      (game.thumbnailUrl || defaultBannerUrl()) &&
       (thumbnailChanged ||
         !(await hasMessageAttachment({ channelId: threadId, messageId: threadId })))
     ) {

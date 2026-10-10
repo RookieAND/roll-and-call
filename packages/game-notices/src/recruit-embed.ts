@@ -7,6 +7,7 @@ import { gameUrl } from "./game-url";
 import { formatGameSchedule } from "./lib/format-game-schedule";
 import { formatMonthDay } from "./lib/format-month-day";
 import { formatRecruitHeadcount } from "./lib/format-recruit-headcount";
+import { recruitEmbedImage } from "./recruit-embed-image";
 
 // cancelled면 글은 그 자리에 남기고 빨갛게 바꾼다 — 들어갈 곳이 없어졌으니 링크는 뺀다. CTA는 recruitButtons.
 export function recruitEmbed({
@@ -37,8 +38,7 @@ export function recruitEmbed({
     description: discordOverview(game.synopsis),
     color: cancelled ? DISCORD_COLOR.cancelled : DISCORD_COLOR.recruit,
     fields,
-    // 디스코드 임베드 이미지는 가릴 수 없어서 스포일러 썸네일은 싣지 않는다.
-    image: game.thumbnailUrl && !game.thumbnailSpoiler ? { url: game.thumbnailUrl } : undefined,
+    image: recruitEmbedImage(game),
     footer: { text: `GM ${gmName} · 마감 ${formatMonthDay(game.endDate)}` },
     timestamp: game.createdAt.toISOString(),
   };
