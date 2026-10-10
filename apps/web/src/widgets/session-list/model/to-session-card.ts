@@ -20,6 +20,8 @@ export function toSessionCard({
   context: SessionContext;
 }): SessionCardModel {
   const card = buildSessionCard({ game, role, context });
+  // 남의 세션 기록은 viewerId에 프로필 주인이 들어가므로, 판정하지 않고 다시 열기를 두지 않는다.
+  if (context.readOnly) return card;
   const canReopen = canReopenGame({
     game,
     userId: context.viewerId,

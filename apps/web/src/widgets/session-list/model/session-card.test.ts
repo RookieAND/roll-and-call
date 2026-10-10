@@ -430,6 +430,30 @@ describe("남의 세션 기록 카드(readOnly)", () => {
     expect(card.schedule).not.toMatch(/추첨/);
   });
 
+  it("프로필 주인이 GM인 끝난 구인과 취소된 구인에도 다시 열기를 두지 않는다", () => {
+    const sessions = buildProfileSessions({
+      hosted: [
+        game({ id: "ended", gmId: "me", confirmedAt: at(-2), endedAt: at(-1), serverId: "s" }),
+        game({ id: "cancelled", gmId: "me", cancelledAt: at(-1), serverId: "s" }),
+      ],
+      joined: [],
+      userId: "me",
+      viewerId: "stranger",
+      now: NOW,
+    })[SESSION_ROLE.host];
+    expect(sessions).toHaveLength(2);
+    expect(sessions.every((card) => !card.canReopen)).toBe(true);
+  });
+
+  it("내 세션 목록에서는 끝난 내 구인에 다시 열기가 남는다", () => {
+    const card = toSessionCard({
+      game: game({ gmId: "me", confirmedAt: at(-2), endedAt: at(-1), serverId: "s" }),
+      role: SESSION_ROLE.host,
+      context: context(),
+    });
+    expect(card.canReopen).toBe(true);
+  });
+
   it("숨긴 구인은 가린 카드로 제목·일정·GM을 비운다", () => {
     const [card] = buildProfileSessions({
       hosted: [],
