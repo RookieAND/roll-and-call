@@ -27,7 +27,7 @@ export function cancelledNotice({
   if (cancelKind === GAME_CANCEL_KIND.minPlayersUnmet && selection) {
     return {
       title: SELECTION_TITLE,
-      line: "선발된 인원이 최소 인원에 미치지 못해 취소되었습니다.",
+      line: "신청자가 최소 인원에 못 미쳐 취소되었습니다.",
     };
   }
   const showReason = cancelKind === GAME_CANCEL_KIND.gm && reason;

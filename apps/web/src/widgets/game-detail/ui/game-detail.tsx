@@ -9,6 +9,7 @@ import {
   isApplicationClosed,
   isGameGm,
   isSessionEnded,
+  RECRUIT_METHOD,
   scheduleLine,
   splitRoster,
 } from "@/entities/game";
@@ -125,6 +126,7 @@ export function GameDetail({
               waiting={waiting}
               maxPlayers={game.maxPlayers}
               awaitingResult={isAwaitingResult(game)}
+              selection={game.recruitMethod === RECRUIT_METHOD.selection}
               viewerId={viewerId}
             />
           </VStack>

@@ -20,5 +20,5 @@ export function minPlayersLine({
 }): string | null {
   if (minPlayers === null || endDate.getTime() <= now.getTime()) return null;
   const subject = SUBJECT[recruitMethod] ?? SUBJECT[RECRUIT_METHOD.firstCome];
-  return `${subject} ${minPlayers}명 미만이면 모집이 취소됩니다.`;
+  return `${subject} ${minPlayers}명 미만이면 취소됩니다.`;
 }

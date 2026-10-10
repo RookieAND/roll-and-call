@@ -10,14 +10,14 @@ export function methodLines({
   drawCount: number;
 }): string[] {
   if (game.recruitMethod === RECRUIT_METHOD.selection) {
-    return ["마감 뒤 GM이 직접 고릅니다.", "고르지 않은 신청자는 신청 순서대로 대기합니다."];
+    return ["마감 뒤 GM이 직접 고릅니다.", "남은 신청자는 신청 순서대로 대기합니다."];
   }
   if (game.recruitMethod === RECRUIT_METHOD.lottery) {
     return [
       "정원과 관계없이 신청을 받습니다.",
       drawCount > 0
         ? `마감 때 추첨으로 ${drawCount}명을 정합니다.`
-        : "정원이 이미 모두 확정되어 추첨할 자리가 없습니다.",
+        : "정원이 모두 확정되어 추첨하지 않습니다.",
     ];
   }
   return [

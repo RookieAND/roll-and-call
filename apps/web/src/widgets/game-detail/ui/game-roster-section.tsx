@@ -19,6 +19,7 @@ interface GameRosterSectionProps {
   waiting: DetailRosterMember[];
   maxPlayers: number;
   awaitingResult: boolean;
+  selection: boolean;
   viewerId: string | null;
 }
 
@@ -28,6 +29,7 @@ export function GameRosterSection({
   waiting,
   maxPlayers,
   awaitingResult,
+  selection,
   viewerId,
 }: GameRosterSectionProps) {
   const [openSheet, setOpenSheet] = useState<RosterSheet | null>(null);
@@ -87,6 +89,7 @@ export function GameRosterSection({
         gm={gm}
         applicants={waiting}
         viewerId={viewerId}
+        selection={selection}
       />
       <ConfirmedRosterSheet
         open={openSheet === ROSTER_SHEET.confirmed}
