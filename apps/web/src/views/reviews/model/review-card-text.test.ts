@@ -49,10 +49,10 @@ describe("reviewCardText", () => {
 describe("reviewCardText GM 후기", () => {
   const gmRow = { ...row, authorRole: "gm" };
 
-  it("세션 후기에서는 제목을 고정 문구로 두고 작성자를 보조 줄 앞에 붙인다", () => {
+  it("세션 후기에서는 제목에 작성자 이름을 넣고 보조 줄은 작성일만 적는다", () => {
     expect(reviewCardText({ row: gmRow, perspective: REVIEW_PERSPECTIVE.session })).toEqual({
-      title: "GM의 마스터링 후기",
-      byline: true,
+      title: "윤소라의 마스터링 후기",
+      byline: false,
       meta: "9월 20일",
     });
   });

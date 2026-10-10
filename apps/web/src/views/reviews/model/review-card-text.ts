@@ -5,9 +5,7 @@ import type { ReviewCardRow } from "@/shared/server";
 
 import { REVIEW_PERSPECTIVE, type ReviewPerspective } from "./review-perspective";
 
-const GM_REVIEW_TITLE = "GM의 마스터링 후기";
-
-// 작성자 이름은 프로필 링크로 그리므로 문구와 따로 낸다. 세션 후기는 제목 자리, 진행한 세션 후기는 보조 줄 앞에 붙는다.
+// 작성자 이름은 프로필 링크로 그리므로 문구와 따로 낸다. 진행한 세션 후기는 보조 줄 앞에 붙는다. GM 마스터링 후기는 제목에 작성자 이름이 들어가 보조 줄에는 작성일만 남는다.
 export function reviewCardText({
   row,
   perspective,
@@ -19,7 +17,7 @@ export function reviewCardText({
   switch (perspective) {
     case REVIEW_PERSPECTIVE.session:
       if (row.authorRole === REVIEW_AUTHOR_ROLE.gm) {
-        return { title: GM_REVIEW_TITLE, byline: true, meta };
+        return { title: `${row.authorName}의 마스터링 후기`, byline: false, meta };
       }
       return { title: null, byline: false, meta };
     case REVIEW_PERSPECTIVE.received:
