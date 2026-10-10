@@ -189,9 +189,9 @@ describe("monthlyWinners", () => {
     const october = new Date("2026-10-02T03:00:00Z");
     const winners = monthlyWinners(
       [
-        { userId: "a", role: "gm", startsAt: september, weight: 1 },
-        { userId: "b", role: "gm", startsAt: september, weight: 1 },
-        { userId: "c", role: "gm", startsAt: october, weight: 1 },
+        { userId: "a", role: "gm", startsAt: september, weight: 1, sessions: 1 },
+        { userId: "b", role: "gm", startsAt: september, weight: 1, sessions: 1 },
+        { userId: "c", role: "gm", startsAt: october, weight: 1, sessions: 1 },
       ],
       october,
     );
@@ -204,7 +204,15 @@ describe("monthlyWinners", () => {
 
   it("달 경계는 한국 시각이다", () => {
     const winners = monthlyWinners(
-      [{ userId: "a", role: "pl", startsAt: new Date("2026-08-31T16:00:00Z"), weight: 1 }],
+      [
+        {
+          userId: "a",
+          role: "pl",
+          startsAt: new Date("2026-08-31T16:00:00Z"),
+          weight: 1,
+          sessions: 1,
+        },
+      ],
       new Date("2026-10-01T00:00:00Z"),
     );
     expect(winners[0]!.badgeKey).toBe("pl.monthly.2026-09");

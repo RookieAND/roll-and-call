@@ -12,6 +12,7 @@ export { syncServerGuild } from "./commands/sync-server-guild";
 export { saveForumTags } from "./commands/save-forum-tags";
 export { saveMessageHead } from "./commands/save-message-head";
 export { saveMessageText } from "./commands/save-message-text";
+export { updateRankingMode } from "./commands/update-ranking-mode";
 export { updateServerSettings, type ServerSettings } from "./commands/update-server-settings";
 export { getActiveMembership } from "./queries/get-active-membership";
 export { getDefaultServer } from "./queries/get-default-server";

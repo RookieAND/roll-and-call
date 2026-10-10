@@ -1,4 +1,5 @@
 import { BADGE_ROLE } from "@roll-and-call/database/badges/model";
+import type { RankingMode } from "@roll-and-call/database/servers/model";
 import { Container, VStack } from "@roll-and-call/ui";
 
 import {
@@ -77,7 +78,15 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
         ) : (
           <DexRoleTab
             role={role}
-            board={buildDexTab({ role, records, facts, appearances, userId: user.id, now })}
+            board={buildDexTab({
+              role,
+              records,
+              facts,
+              appearances,
+              userId: user.id,
+              now,
+              mode: server.rankingMode as RankingMode,
+            })}
           />
         )}
       </Container>

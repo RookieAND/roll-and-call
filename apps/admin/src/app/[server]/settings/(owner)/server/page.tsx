@@ -1,3 +1,4 @@
+import type { RankingMode } from "@roll-and-call/database/servers/model";
 import type { Metadata } from "next";
 
 import { getCurrentServer } from "@/shared/server";
@@ -13,6 +14,7 @@ export default async function SettingsServerPage() {
     <ServerSettingsForm
       server={{ name: server.name, slug: server.slug, icon: server.icon }}
       savedInviteUrl={server.inviteUrl ?? ""}
+      savedRankingMode={server.rankingMode as RankingMode}
       joinUrl={`${userAppUrl}/${server.slug}/join`}
     />
   );

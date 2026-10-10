@@ -10,7 +10,13 @@ import { profiles, userBadges } from "#/schema";
 
 import { loadMonthlyAppearances } from "./load-monthly-appearances";
 
-export type MonthlyWinner = { userId: string; nickname: string; sessionCount: number };
+// score는 이달의 뱃지를 정한 값이다(참여 횟수제는 세션 횟수, 포인트제는 점수). sessionCount는 세션으로 센 횟수다.
+export type MonthlyWinner = {
+  userId: string;
+  nickname: string;
+  sessionCount: number;
+  score: number;
+};
 
 // 그 달 이달의 GM·PL을 받은 사람. 업적 보이기 설정과 상관없이 모두 넣는다(R6).
 // 횟수는 이달의 뱃지를 정한 집계(loadMonthlyAppearances)와 같은 기준으로 센다.
@@ -41,21 +47,21 @@ export async function loadMonthlyWinners({
       ),
     loadMonthlyAppearances({ serverId }),
   ]);
+  const monthOf = (userId: string, role: string) =>
+    appearances.filter(
+      (appearance) =>
+        appearance.userId === userId &&
+        appearance.role === role &&
+        kstMonthKey(appearance.startsAt) === month,
+    );
   const winnersOf = (key: string, role: string) =>
     holders
       .filter((holder) => holder.badgeKey === key)
       .map((holder) => ({
         userId: holder.userId,
         nickname: holder.nickname,
-        sessionCount: sumBy(
-          appearances.filter(
-            (appearance) =>
-              appearance.userId === holder.userId &&
-              appearance.role === role &&
-              kstMonthKey(appearance.startsAt) === month,
-          ),
-          (appearance) => appearance.weight,
-        ),
+        sessionCount: sumBy(monthOf(holder.userId, role), (appearance) => appearance.sessions),
+        score: sumBy(monthOf(holder.userId, role), (appearance) => appearance.weight),
       }));
   return { gm: winnersOf(gmKey, BADGE_ROLE.gm), pl: winnersOf(plKey, BADGE_ROLE.player) };
 }

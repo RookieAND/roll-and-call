@@ -13,6 +13,7 @@ interface HomeRecordTieSheetProps {
   label: string;
   people: RecordPerson[];
   count: number;
+  unit: string;
   className: string;
   children: ReactNode;
 }
@@ -21,6 +22,7 @@ export function HomeRecordTieSheet({
   label,
   people,
   count,
+  unit,
   className,
   children,
 }: HomeRecordTieSheetProps) {
@@ -45,7 +47,8 @@ export function HomeRecordTieSheet({
             >
               <ProfileRow name={person.username} avatarUrl={person.avatarUrl} />
               <Text typography="subtitle2" weight="extrabold" foreground="primary" numeric>
-                {count}번
+                {count}
+                {unit}
               </Text>
               <ChevronRight size={16} aria-hidden className="flex-none text-hint" />
             </Sheet.Item>

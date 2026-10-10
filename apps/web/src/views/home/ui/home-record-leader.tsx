@@ -13,10 +13,11 @@ interface HomeRecordLeaderProps {
   label: string;
   people: [RecordPerson, ...RecordPerson[]];
   count: number;
+  unit: string;
 }
 
 // 공동 1위는 갈 곳이 하나가 아니라 카드가 동점자 시트를 연다.
-export function HomeRecordLeader({ label, people, count }: HomeRecordLeaderProps) {
+export function HomeRecordLeader({ label, people, count, unit }: HomeRecordLeaderProps) {
   const [first] = people;
   const name = leaderName(people);
 
@@ -54,7 +55,7 @@ export function HomeRecordLeader({ label, people, count }: HomeRecordLeaderProps
           {count}
         </Text>
         <Text weight="bold" typography="body4" foreground="inherit">
-          번
+          {unit}
         </Text>
       </HStack>
     </>
@@ -66,6 +67,7 @@ export function HomeRecordLeader({ label, people, count }: HomeRecordLeaderProps
         label={label}
         people={people}
         count={count}
+        unit={unit}
         className={cn(
           CARD,
           "w-full text-left hover:bg-primary-100 focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none",

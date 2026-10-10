@@ -13,7 +13,7 @@ import { userBadges } from "#/schema";
 import { loadMonthlyAppearances } from "./load-monthly-appearances";
 
 // 이달의 GM·PL은 여러 사람을 견주므로 한 사람만 다시 계산할 수 없다. 전체 1위를 다시 정해 모두와 비교한다.
-// 굳은 달(다음 달 8일 00:00 KST, isMonthSettled)만 준다(R5). 굳기 전에 준 행은 회수하고, 이미 준 굳은 달은 건드리지 않는다.
+// 굳은 달(다음 달 2일 00:00 KST, isMonthSettled)만 준다(R5). 굳기 전에 준 행은 회수하고, 이미 준 굳은 달은 건드리지 않는다.
 export async function syncMonthlyBadges({ serverId, now }: { serverId: string; now: Date }) {
   const [appearances, stored] = await Promise.all([
     loadMonthlyAppearances({ serverId, now }),

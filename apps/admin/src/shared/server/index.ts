@@ -30,5 +30,6 @@ export {
   saveMessageHead,
   saveMessageText,
   updateCertEnforcementDate,
+  updateRankingMode,
   type EnforcementChange,
 } from "@roll-and-call/database/servers";

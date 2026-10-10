@@ -63,6 +63,7 @@ export {
   grantRushBadge,
   loadBadgeFacts as getBadgeFacts,
   loadMonthlyAppearances as getMonthlyAppearances,
+  loadReviewAppearances as getReviewAppearances,
 } from "@roll-and-call/database/badges";
 export { notifyGameCreated } from "./discord/notify-game-created";
 export { refreshRecruitPost } from "@roll-and-call/game-notices";

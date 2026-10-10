@@ -96,9 +96,9 @@ describe("recordAppearances", () => {
       at(10),
     );
     expect(appearances).toEqual([
-      { userId: "gm", role: BADGE_ROLE.gm, startsAt: START, weight: 1 },
-      { userId: "present", role: BADGE_ROLE.player, startsAt: START, weight: 1 },
-      { userId: "forgiven", role: BADGE_ROLE.player, startsAt: START, weight: 1 },
+      { userId: "gm", role: BADGE_ROLE.gm, startsAt: START, weight: 1, sessions: 1 },
+      { userId: "present", role: BADGE_ROLE.player, startsAt: START, weight: 1, sessions: 1 },
+      { userId: "forgiven", role: BADGE_ROLE.player, startsAt: START, weight: 1, sessions: 1 },
     ]);
   });
 
@@ -138,6 +138,7 @@ describe("recordAppearances", () => {
         role: BADGE_ROLE.gm,
         startsAt: START,
         weight: 1,
+        sessions: 1,
       })),
       ...legacy.flatMap((target) =>
         target.participants.filter(countsAsAttended).map((row) => ({
@@ -145,6 +146,7 @@ describe("recordAppearances", () => {
           role: BADGE_ROLE.player,
           startsAt: START,
           weight: 1,
+          sessions: 1,
         })),
       ),
     ];
