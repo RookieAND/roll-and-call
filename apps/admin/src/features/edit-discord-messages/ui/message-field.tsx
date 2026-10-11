@@ -9,6 +9,7 @@ interface MessageFieldProps {
   value: string;
   max: number;
   multiline?: boolean;
+  rows?: number;
   error?: string;
   warning?: string;
   placeholder?: string;
@@ -24,6 +25,7 @@ export function MessageField({
   value,
   max,
   multiline = false,
+  rows = 3,
   error,
   warning,
   placeholder,
@@ -53,7 +55,7 @@ export function MessageField({
       {multiline ? (
         <Textarea
           ref={ref}
-          rows={3}
+          rows={rows}
           aria-label={label}
           placeholder={placeholder}
           value={value}

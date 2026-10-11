@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq, isNotNull, or } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
 import { db } from "#/client";
@@ -38,6 +38,7 @@ export async function loadForumReview({
       rule: games.rule,
       category: rulebookCategories.name,
       gmName: memberNicknameSql(serverId, gm),
+      gmDiscordId: gm.discordId,
       authorName: memberNicknameSql(serverId),
       authorDiscordId: profiles.discordId,
       absent: participants.absent,
@@ -57,7 +58,21 @@ export async function loadForumReview({
       ),
     )
     .where(and(eq(sessionReviews.serverId, serverId), eq(sessionReviews.id, reviewId)));
-  return row;
+  if (!row) return undefined;
+  // 후기 양식의 {참여자 멘션}에 쓴다. 확정되어 실제로 참석한 사람만, 합류한 순서대로.
+  const players = await db
+    .select({ discordId: profiles.discordId })
+    .from(participants)
+    .innerJoin(profiles, eq(profiles.id, participants.userId))
+    .where(
+      and(
+        eq(participants.gameId, row.gameId),
+        eq(participants.status, "confirmed"),
+        or(eq(participants.absent, false), isNotNull(participants.absenceCancelledAt)),
+      ),
+    )
+    .orderBy(asc(participants.joinedAt));
+  return { ...row, participantDiscordIds: players.map((player) => player.discordId) };
 }
 
 export type ForumReview = NonNullable<Awaited<ReturnType<typeof loadForumReview>>>;
