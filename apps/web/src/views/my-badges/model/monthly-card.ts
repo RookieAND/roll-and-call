@@ -55,7 +55,13 @@ export function monthlyCard({
   const heldMonth = months.find((month) => month === previousMonthKey(now)) ?? null;
   const points = mode === RANKING_MODE.points;
   const verb = gm ? "진행" : "참여";
-  const standing = currentMonthStanding({ appearances, userId, role: definition.role, now });
+  const standing = currentMonthStanding({
+    appearances,
+    userId,
+    role: definition.role,
+    now,
+    breakTies: points,
+  });
   const month = monthLabel(kstMonthKey(now));
   const rankLabel = standing.rank === null ? "순위 없음" : `${standing.rank}위`;
   const monthLine = points
