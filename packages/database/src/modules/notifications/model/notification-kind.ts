@@ -86,7 +86,8 @@ export type NotificationParamsMap = {
   cert_approved: { rulebookId: string; rulebookName: string };
   cert_rejected: { rulebookId: string; rulebookName: string; rejectionSummary: string };
   cert_revoked: { rulebookId: string; rulebookName: string; cancelledGameCount: number };
-  cert_granted: { rulebookId: string; rulebookName: string };
+  // otherCount는 한 번에 함께 등록된 나머지 룰북 수다. 없거나 0이면 한 권이다.
+  cert_granted: { rulebookId: string; rulebookName: string; otherCount?: number };
   rulebook_request_added: { rulebookName: string };
   rulebook_request_declined: { rulebookName: string };
   review_hidden: ReasonedGameParams;

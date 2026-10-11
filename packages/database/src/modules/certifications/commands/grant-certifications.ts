@@ -105,11 +105,8 @@ export async function grantCertifications({
     const shownBooks = books.filter((candidate) => !candidate.hidden);
 
     const results: GrantBookResult[] = [];
-    const notifications: {
-      userId: string;
-      kind: typeof NOTIFICATION_KIND.certGranted;
-      params: { rulebookId: string; rulebookName: string };
-    }[] = [];
+    // 알림은 유저마다 한 건으로 묶는다. 받은 룰북이 여러 권이면 첫 룰북 외 N권으로 알린다.
+    const grantedByUser = new Map<string, { rulebookId: string; rulebookName: string }[]>();
     for (const book of ordered) {
       const label = rulebookLabel(book);
       const granted: GrantBookResult["granted"] = [];
@@ -176,15 +173,25 @@ export async function grantCertifications({
           },
         });
         granted.push({ userId, nickname });
-        notifications.push({
-          userId,
-          kind: NOTIFICATION_KIND.certGranted,
-          params: { rulebookId: book.id, rulebookName: label },
-        });
+        grantedByUser.set(userId, [
+          ...(grantedByUser.get(userId) ?? []),
+          { rulebookId: book.id, rulebookName: label },
+        ]);
       }
       results.push({ rulebookId: book.id, rulebookLabel: label, granted, skipped });
     }
 
+    const notifications = [...grantedByUser].flatMap(([userId, grantedBooks]) => {
+      const [first] = grantedBooks;
+      if (!first) return [];
+      return [
+        {
+          userId,
+          kind: NOTIFICATION_KIND.certGranted,
+          params: { ...first, otherCount: grantedBooks.length - 1 },
+        },
+      ];
+    });
     await createNotifications({ executor: tx, serverId, actorId: actor.id, notifications });
     return { ok: true, books: results };
   });

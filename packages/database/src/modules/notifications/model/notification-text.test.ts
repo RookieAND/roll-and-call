@@ -228,6 +228,16 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "운영진이 직접 등록했습니다.",
   ],
   [
+    { kind: NOTIFICATION_KIND.certGranted, params: { ...rulebook, otherCount: 0 } },
+    "인세인 인증이 등록되었습니다.",
+    "운영진이 직접 등록했습니다.",
+  ],
+  [
+    { kind: NOTIFICATION_KIND.certGranted, params: { ...rulebook, otherCount: 4 } },
+    "인세인 외 4권 인증이 등록되었습니다.",
+    "운영진이 직접 등록했습니다.",
+  ],
+  [
     { kind: NOTIFICATION_KIND.rulebookRequestAdded, params: { rulebookName: "인세인" } },
     "요청한 인세인을 추가했습니다.",
     "이제 구인에서 선택할 수 있습니다.",

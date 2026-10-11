@@ -50,21 +50,25 @@ export async function grantUserCertifications(args: GrantUserCertificationsInput
       grantedBooks.flatMap((book) => book.granted.map((row) => row.userId)),
     );
     after(() => evaluateBadges({ serverId: server.id, userIds: grantedUserIds }));
-    // 운영진 채널에는 룰북마다 한 건씩 올린다. 대상은 룰북마다 다르기 때문이다.
-    after(async () => {
-      for (const book of grantedBooks) {
-        await postStaffNotice({
+    // 운영진 채널에는 한 건으로 묶는다. 대상은 한 권이라도 받은 유저 모두다.
+    const [firstBook] = grantedBooks;
+    if (firstBook) {
+      after(() =>
+        postStaffNotice({
           server,
           notice: {
             kind: STAFF_NOTICE_KIND.certGranted,
             staffNickname: staff.nickname,
-            rulebookId: book.rulebookId,
-            rulebookLabel: book.rulebookLabel,
-            nicknames: book.granted.map((row) => row.nickname),
+            rulebookId: firstBook.rulebookId,
+            rulebookLabel: firstBook.rulebookLabel,
+            otherCount: grantedBooks.length - 1,
+            nicknames: uniq(
+              grantedBooks.flatMap((book) => book.granted.map((row) => row.nickname)),
+            ),
           },
-        });
-      }
-    });
+        }),
+      );
+    }
   }
   return { ok: true as const, books: result.books };
 }

@@ -48,5 +48,7 @@ export type StaffNotice =
       staffNickname: string;
       rulebookId: string;
       rulebookLabel: string;
+      // 한 번에 함께 부여한 나머지 룰북 수. 없거나 0이면 한 권이다.
+      otherCount?: number;
       nicknames: string[];
     };

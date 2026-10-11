@@ -198,7 +198,9 @@ export function notificationText(payload: NotificationPayload): NotificationText
       );
     case NOTIFICATION_KIND.certGranted:
       return bold(
-        payload.params.rulebookName,
+        (payload.params.otherCount ?? 0) > 0
+          ? `${payload.params.rulebookName} 외 ${payload.params.otherCount}권`
+          : payload.params.rulebookName,
         " 인증이 등록되었습니다.",
         "운영진이 직접 등록했습니다.",
       );

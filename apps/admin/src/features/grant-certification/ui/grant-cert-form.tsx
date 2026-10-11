@@ -167,13 +167,13 @@ export function GrantCertForm({ options, staffChannel, backHref }: GrantCertForm
           <NotificationPreview
             payload={{
               kind: NOTIFICATION_KIND.certGranted,
-              params: { rulebookId: firstBook.id, rulebookName: firstBook.label },
+              params: {
+                rulebookId: firstBook.id,
+                rulebookName: firstBook.label,
+                otherCount: chosenBooks.length - 1,
+              },
             }}
-            recipients={
-              chosenBooks.length > 1
-                ? `고른 유저 ${receiving.length}명의 알림 탭으로 룰북마다 1건씩 알립니다. 위는 ${firstBook.label}의 알림입니다.`
-                : `고른 유저 ${receiving.length}명의 알림 탭으로 알립니다.`
-            }
+            recipients={`고른 유저 ${receiving.length}명의 알림 탭으로 알립니다.`}
           />
         ) : null}
         {staffChannel ? (
