@@ -23,8 +23,11 @@ export function GrantBookPicker({ books, selectedIds, disabled, onChange }: Gran
   const keyword = query.trim().toLowerCase();
   const certBooks = books.filter((book) => book.certRequired);
   const selected = certBooks.filter((book) => selectedIds.includes(book.id));
+  // 고른 책은 위 묶음에만 보이고 아래 목록에서는 뺀다. 해제하면 아래 목록으로 돌아간다.
   const shown = certBooks.filter(
-    (book) => !keyword || `${book.category} ${book.label}`.toLowerCase().includes(keyword),
+    (book) =>
+      !selectedIds.includes(book.id) &&
+      (!keyword || `${book.category} ${book.label}`.toLowerCase().includes(keyword)),
   );
   const toggle = (bookId: string, checked: boolean) =>
     onChange(
@@ -37,21 +40,29 @@ export function GrantBookPicker({ books, selectedIds, disabled, onChange }: Gran
   return (
     <VStack gap="100">
       {selected.length > 0 ? (
-        <ul aria-label="고른 룰북" className="flex max-h-24 flex-wrap gap-075 overflow-y-auto">
-          {selected.map((book) => (
-            <li key={book.id}>
-              <Chip
-                selected
-                disabled={disabled}
-                aria-label={`${book.label} 선택 해제`}
-                onClick={() => toggle(book.id, false)}
-              >
-                {book.label}
-                <X size={12} aria-hidden />
-              </Chip>
-            </li>
-          ))}
-        </ul>
+        <VStack
+          gap="075"
+          className="rounded-400 border border-tinted-border bg-tinted-bg px-150 py-100"
+        >
+          <Text typography="body4" weight="bold" foreground="hint">
+            {`고른 룰북 ${selected.length}권`}
+          </Text>
+          <ul aria-label="고른 룰북" className="flex max-h-24 flex-wrap gap-075 overflow-y-auto">
+            {selected.map((book) => (
+              <li key={book.id}>
+                <Chip
+                  selected
+                  disabled={disabled}
+                  aria-label={`${book.label} 선택 해제`}
+                  onClick={() => toggle(book.id, false)}
+                >
+                  {book.label}
+                  <X size={12} aria-hidden />
+                </Chip>
+              </li>
+            ))}
+          </ul>
+        </VStack>
       ) : null}
       <TextInput
         type="search"
@@ -65,20 +76,18 @@ export function GrantBookPicker({ books, selectedIds, disabled, onChange }: Gran
         className="max-h-80 overflow-y-auto rounded-400 border border-gray-200 bg-surface"
       >
         {shown.map((book) => {
-          const checked = selectedIds.includes(book.id);
           const selectable = isBookSelectable({ book, books, selectedIds });
           return (
             <li
               key={book.id}
               className={cn(
                 "border-t border-(--rc-color-border-subtle) px-150 py-100 first:border-t-0",
-                checked && "bg-tinted-bg",
                 !selectable && "opacity-50",
               )}
             >
               <Checkbox.Field>
                 <Checkbox.Root
-                  checked={checked}
+                  checked={false}
                   disabled={disabled || !selectable}
                   onCheckedChange={(next) => toggle(book.id, next)}
                 >
@@ -103,7 +112,7 @@ export function GrantBookPicker({ books, selectedIds, disabled, onChange }: Gran
         {shown.length === 0 ? (
           <li className="px-150 py-200">
             <Text typography="body4" foreground="hint">
-              검색한 룰북이 없습니다.
+              {keyword ? "검색한 룰북이 없습니다." : "고를 수 있는 룰북을 모두 골랐습니다."}
             </Text>
           </li>
         ) : null}
