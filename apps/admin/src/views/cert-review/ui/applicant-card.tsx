@@ -1,10 +1,8 @@
 import { Grid, HStack, Text } from "@roll-and-call/ui";
 
-import { formatDate } from "@/shared/lib";
+import { appliedRulebookLabel, formatDate } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
 import { FactRows, Tag, UserInitial } from "@/shared/ui";
-
-import { appliedRulebookLabel } from "../model/applied-rulebook-label";
 
 const LONG_WAIT_DAYS = 5;
 

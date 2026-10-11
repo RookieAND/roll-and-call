@@ -1,7 +1,12 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { CERT_FORMAT_LABEL, RULEBOOK_KIND_LABEL, withQuery } from "@/shared/lib";
+import {
+  appliedRulebookLabel,
+  CERT_FORMAT_LABEL,
+  RULEBOOK_KIND_LABEL,
+  withQuery,
+} from "@/shared/lib";
 import type { CertQueueRow } from "@/shared/server";
 import { EMPTY_IMAGE, ServerLink, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
 
@@ -54,14 +59,16 @@ export function CertQueueTable({ rows, query }: CertQueueTableProps) {
               <Table.Cell>
                 <HStack align="baseline" gap="075" className="min-w-0">
                   <Text typography="body3" className="flex-none">
-                    {row.rulebook}
+                    {appliedRulebookLabel({
+                      rulebook: row.rulebook,
+                      groupBookCount: row.groupCount,
+                    })}
                   </Text>
                   {row.category && (
                     <Text typography="body4" foreground="hint" truncate>
                       {row.category}
                     </Text>
                   )}
-                  {row.groupCount > 1 ? <Tag>{`묶음 ${row.groupCount}권`}</Tag> : null}
                   {row.waiting ? <Tag>기본 룰북 심사 후</Tag> : null}
                   {row.sellerUnlisted ? <Tag>판매처 확인 필요</Tag> : null}
                 </HStack>

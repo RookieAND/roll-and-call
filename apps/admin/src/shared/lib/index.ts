@@ -1,4 +1,5 @@
 export { actionTone } from "./action-tone";
+export { appliedRulebookLabel } from "./applied-rulebook-label";
 export { auditLogHref } from "./audit-log-href";
 export { conflictToastText } from "./conflict-toast-text";
 export { deltaArrow } from "./delta-arrow";
