@@ -107,6 +107,7 @@ export function buildTrialGame({
     endNotifiedAt: null,
     capacityRaisedAt: null,
     discordThreadId: null,
+    completionMessageId: null,
     hiddenAt: null,
     hiddenBy: null,
     hiddenReasonCode: null,

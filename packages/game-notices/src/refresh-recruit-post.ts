@@ -15,6 +15,7 @@ import { recruitEmbed } from "./recruit-embed";
 import { recruitForumPost } from "./recruit-forum-post";
 import { recruitPostTitle } from "./recruit-post-title";
 import { loadRecruitTarget, recruitMessageChannelId } from "./recruit-target";
+import { refreshRecruitmentComplete } from "./refresh-recruitment-complete";
 import { syncRecruitThread } from "./sync-recruit-thread";
 
 export async function refreshRecruitPost({
@@ -69,6 +70,8 @@ export async function refreshRecruitPost({
 
   await Promise.all([
     updateMessage(),
+    // 구인 완료 공지가 나간 글이면 명단이 바뀐 만큼 그 공지도 고친다.
+    game.completionMessageId ? refreshRecruitmentComplete({ server, gameId }) : undefined,
     syncRecruitThread({
       target,
       threadId,

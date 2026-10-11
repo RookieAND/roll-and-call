@@ -116,4 +116,21 @@ describe("nextRoundColumns", () => {
     expect(columns.minPlayers).toBeNull();
     expect(columns.minPlayersJudgedAt).toBeNull();
   });
+
+  it("1회차의 구인 완료 공지 id를 이어받지 않는다", () => {
+    const game = {
+      id: "g",
+      serverId: "s",
+      createdAt: now,
+      completionMessageId: "1558796851455725689",
+    };
+    const columns = nextRoundColumns({
+      game: game as never,
+      endDate: now,
+      rangeStart: null,
+      rangeEnd: null,
+      confirmedAt: null,
+    });
+    expect(columns.completionMessageId).toBeNull();
+  });
 });

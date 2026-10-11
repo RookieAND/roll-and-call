@@ -1,63 +1,34 @@
-import type { Game } from "@roll-and-call/database";
 import type { Server } from "@roll-and-call/database";
-import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
+import { saveCompletionMessageId } from "@roll-and-call/database/games";
+import { deleteDiscordMessage, sendDiscordMessage } from "@roll-and-call/discord";
 import {
   gameHeadValues,
-  gameNoticeEmbed,
   messageHeadInput,
-  messageText,
+  recruitmentCompleteEmbed,
+  recruitmentCompletePlayers,
+  type RecruitmentNoticeGame,
 } from "@roll-and-call/game-notices";
-import { headcountFields } from "@roll-and-call/game-notices";
 import { isString } from "es-toolkit";
 
-import { formatGameSchedule } from "@/shared/lib";
-
-type RecruitmentPlayer = { username: string; discordId: string | null };
-
+// 구인 완료 공지를 처음 보낸다. 보낸 메시지 id를 저장해 두면 이후 명단 변경은 이 메시지를 고친다.
 export async function notifyRecruitmentComplete({
   server,
   game,
-  gmName,
-  gmDiscordId,
-  players,
-  waitingCount,
 }: {
   server: Server;
-  game: Game;
-  gmName: string;
-  gmDiscordId: string | null;
-  players: RecruitmentPlayer[];
-  waitingCount: number;
+  game: RecruitmentNoticeGame;
 }) {
-  const playerNames = players.map((player) => `**${player.username}**`);
+  const players = recruitmentCompletePlayers(game);
+  const gmName = game.gm?.username ?? "?";
+  const gmDiscordId = game.gm?.discordId ?? null;
   const playerMentions = players.map((player) =>
     player.discordId ? `<@${player.discordId}>` : `**${player.username}**`,
   );
 
-  const embed = gameNoticeEmbed({
-    slug: server.slug,
-    game,
-    gmName,
-    emoji: "🎉",
-    color: DISCORD_COLOR.complete,
-    description: await messageText({
-      serverId: server.id,
-      key: "done",
-      values: gameHeadValues({ server, game, gmName }),
-    }),
-    fields: [
-      { name: "📜 룰", value: game.rule, inline: true },
-      ...headcountFields({ game, confirmedCount: players.length, waitingCount }),
-      { name: "🕒 시간", value: formatGameSchedule(game), inline: false },
-      // Discord field value 상한 1024자
-      { name: "🙋 참여자", value: playerNames.join(", ").slice(0, 1024) || "-", inline: false },
-    ],
-  });
-
-  await sendDiscordMessage({
+  const message = await sendDiscordMessage({
     channelId: server.closedChannelId,
     input: {
-      embeds: [embed],
+      embeds: [await recruitmentCompleteEmbed({ server, game })],
       ...(await messageHeadInput({
         serverId: server.id,
         key: "done",
@@ -70,4 +41,13 @@ export async function notifyRecruitmentComplete({
       })),
     },
   });
+  if (!message) return;
+
+  // 동시에 둘이 보냈다면 먼저 저장한 쪽만 남기고 나머지는 지운다.
+  const saved = await saveCompletionMessageId({
+    serverId: server.id,
+    gameId: game.id,
+    messageId: message.id,
+  });
+  if (!saved) await deleteDiscordMessage({ channelId: message.channel_id, messageId: message.id });
 }

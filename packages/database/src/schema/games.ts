@@ -116,6 +116,8 @@ export const games = pgTable(
     capacityRaisedAt: timestamp("capacity_raised_at", { withTimezone: true }),
     // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.
     discordThreadId: text("discord_thread_id"),
+    // 구인 완료 공지 메시지 id. 있으면 새로 보내지 않고 이 메시지를 고친다(공지는 구인당 한 번만 나간다).
+    completionMessageId: text("completion_message_id"),
     // 운영진 조치. 숨긴 구인은 사용자 앱의 목록·검색에서만 빠진다.
     hiddenAt: timestamp("hidden_at", { withTimezone: true }),
     hiddenBy: uuid("hidden_by").references(() => profiles.id, { onDelete: "set null" }),

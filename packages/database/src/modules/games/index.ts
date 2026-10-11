@@ -22,6 +22,7 @@ export { replaceAvailability } from "./commands/replace-availability";
 export { markAvailabilitySubmitted } from "./commands/mark-availability-submitted";
 export { saveAttendance } from "./commands/save-attendance";
 export { saveDiscordThreadId } from "./commands/save-discord-thread-id";
+export { saveCompletionMessageId } from "./commands/save-completion-message-id";
 export { seedAvailabilities } from "./commands/seed-availabilities";
 export { markAttendanceConfirmed } from "./commands/mark-attendance-confirmed";
 export { setParticipantStatus } from "./commands/set-participant-status";

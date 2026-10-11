@@ -5,6 +5,12 @@ export { notifyGameLeft } from "./notify-game-left";
 export { notifyMovedToWaitlist } from "./notify-moved-to-waitlist";
 export { attachRecruitThumbnail } from "./attach-recruit-thumbnail";
 export { refreshRecruitPost } from "./refresh-recruit-post";
+export { refreshRecruitmentComplete } from "./refresh-recruitment-complete";
+export {
+  recruitmentCompleteEmbed,
+  recruitmentCompletePlayers,
+  type RecruitmentNoticeGame,
+} from "./recruitment-complete-embed";
 export { loadRecruitTarget } from "./recruit-target";
 export { resolveRecruitTags } from "./resolve-recruit-tags";
 export { recruitStatusTagIds } from "./recruit-status-tag-ids";

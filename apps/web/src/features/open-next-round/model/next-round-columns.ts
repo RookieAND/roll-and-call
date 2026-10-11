@@ -9,6 +9,7 @@ const CLEARED_COLUMNS = {
   minPlayers: null,
   minPlayersJudgedAt: null,
   discordThreadId: null,
+  completionMessageId: null,
   notifiedAt: null,
   drawnAt: null,
   selectionFinishedAt: null,
