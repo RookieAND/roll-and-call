@@ -48,30 +48,26 @@ describe("rankingSessionKind", () => {
 });
 
 describe("crowdBonusPoints", () => {
-  it("참석 3명까지는 없고 1명마다 늘며 6명까지만 센다", () => {
-    const bonus = (attendedCount: number) => crowdBonusPoints({ kind: "regular", attendedCount });
-    expect([3, 4, 6, 9].map(bonus)).toEqual([0, 20, 60, 60]);
-    expect(crowdBonusPoints({ kind: "mini", attendedCount: 6 })).toBe(30);
-    expect(crowdBonusPoints({ kind: "tie", attendedCount: 6 })).toBe(0);
+  it("참석 6명까지는 없고 7명부터 1명마다 10점이며 최대 50점이다", () => {
+    const bonus = (attendedCount: number) => crowdBonusPoints({ attendedCount });
+    expect([3, 6, 7, 8, 11, 12, 20].map(bonus)).toEqual([0, 0, 10, 20, 50, 50, 50]);
   });
 });
 
 describe("recordAppearances (포인트제)", () => {
   const points = { mode: RANKING_MODE.points };
 
-  it("정식 세션은 GM과 참석자 모두 100점이고, 참석 4명이면 GM에게 20점이 더해진다", () => {
-    const appearances = recordAppearances([game({ participants: players(4) })], NOW, points);
-    expect(scoreOf(appearances, "gm", BADGE_ROLE.gm)).toBe(120);
+  it("정식 세션은 GM과 참석자 모두 100점이고, 참석 7명이면 GM에게 10점이 더해진다", () => {
+    const appearances = recordAppearances([game({ participants: players(7) })], NOW, points);
+    expect(scoreOf(appearances, "gm", BADGE_ROLE.gm)).toBe(110);
     expect(scoreOf(appearances, "p0", BADGE_ROLE.player)).toBe(100);
   });
 
-  it("미니룰은 70점, 타이만은 0점이고 타이만도 세션 횟수로는 센다", () => {
+  it("미니룰은 70점이고 타이만은 점수 집계에서 뺀다", () => {
     expect(
       scoreOf(recordAppearances([game({ miniRule: true })], NOW, points), "a", BADGE_ROLE.player),
     ).toBe(70);
-    const tie = recordAppearances([game({ participants: [player("a")] })], NOW, points);
-    expect(scoreOf(tie, "gm", BADGE_ROLE.gm)).toBe(0);
-    expect(scoreOf(tie, "a", BADGE_ROLE.player)).toBe(0);
+    expect(recordAppearances([game({ participants: [player("a")] })], NOW, points)).toEqual([]);
   });
 
   it("참여 횟수제는 같은 타이만 세션을 순위에서 뺀다", () => {
@@ -98,9 +94,17 @@ describe("recordAppearances (포인트제)", () => {
     expect(scoreOf(appearances, "forgiven", BADGE_ROLE.player)).toBe(100);
   });
 
-  it("후기 점수는 PL에게만 10점이고 세션 횟수로는 세지 않는다", () => {
-    const [review] = reviewAppearances([{ authorId: "a", createdAt: START }]);
-    expect(review).toMatchObject({ userId: "a", role: BADGE_ROLE.player, weight: 10, sessions: 0 });
+  it("후기 1건은 쓴 사람(PL)과 받은 GM에게 10점씩이고 세션 횟수로는 세지 않는다", () => {
+    const [written, received] = reviewAppearances([
+      { authorId: "a", gmId: "gm", createdAt: START },
+    ]);
+    expect(written).toMatchObject({
+      userId: "a",
+      role: BADGE_ROLE.player,
+      weight: 10,
+      sessions: 0,
+    });
+    expect(received).toMatchObject({ userId: "gm", role: BADGE_ROLE.gm, weight: 10, sessions: 0 });
   });
 
   it("점수 합이 0 이하인 사람은 이달의 뱃지를 받지 못한다", () => {

@@ -8,14 +8,10 @@ export const SESSION_POINTS: Record<RankingSessionKind, number> = {
   tie: 0,
 };
 
-// 참석한 플레이어가 이 수를 넘으면 1명마다 GM에게 가점을 주고, 가점은 CROWD_BONUS_PLAYERS명분까지만 준다.
-export const CROWD_BASE_PLAYERS = 3;
-export const CROWD_BONUS_PLAYERS = 3;
-export const CROWD_BONUS_POINTS: Record<RankingSessionKind, number> = {
-  regular: 20,
-  mini: 10,
-  tie: 0,
-};
+// 참석한 플레이어가 이 수를 넘으면 1명마다 GM에게 가점을 주고, 가점은 CROWD_BONUS_PLAYERS명분까지만 준다(7명부터 +10점, 최대 50점).
+export const CROWD_BASE_PLAYERS = 6;
+export const CROWD_BONUS_PLAYERS = 5;
+export const CROWD_BONUS_POINTS = 10;
 
 export const REVIEW_POINTS = 10;
 export const ABSENCE_POINTS = -100;
@@ -35,13 +31,7 @@ export function rankingSessionKind({
 }
 
 // GM에게만 준다. 정원이 아니라 실제로 참석한 플레이어 수로 센다.
-export function crowdBonusPoints({
-  kind,
-  attendedCount,
-}: {
-  kind: RankingSessionKind;
-  attendedCount: number;
-}): number {
+export function crowdBonusPoints({ attendedCount }: { attendedCount: number }): number {
   const extraPlayers = Math.min(attendedCount - CROWD_BASE_PLAYERS, CROWD_BONUS_PLAYERS);
-  return Math.max(0, extraPlayers) * CROWD_BONUS_POINTS[kind];
+  return Math.max(0, extraPlayers) * CROWD_BONUS_POINTS;
 }

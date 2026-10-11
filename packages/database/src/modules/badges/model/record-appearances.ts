@@ -41,7 +41,7 @@ function pointAppearances(game: RecordGame, startsAt: Date): MonthlyAppearance[]
     miniRule: game.miniRule ?? false,
   });
   const points = SESSION_POINTS[kind];
-  const gmPoints = points + crowdBonusPoints({ kind, attendedCount: attended.length });
+  const gmPoints = points + crowdBonusPoints({ attendedCount: attended.length });
   const absences = game.participants.filter(isActiveAbsence).flatMap((participant) =>
     [BADGE_ROLE.gm, BADGE_ROLE.player].map((role) => ({
       userId: participant.userId,
@@ -64,7 +64,7 @@ function pointAppearances(game: RecordGame, startsAt: Date): MonthlyAppearance[]
   ];
 }
 
-// 순위에 들어가는 출연. 참여 횟수제는 타이만(1:1)을 빼고, 포인트제는 모두 센다.
+// 순위에 들어가는 출연. 타이만(1:1)은 두 방식 모두 뺀다.
 export function recordAppearances(
   games: RecordGame[],
   now: Date,
@@ -76,20 +76,32 @@ export function recordAppearances(
     ).length;
     if (!isRecordSession({ ...game, confirmedCount }, now)) return [];
     const startsAt = new Date(game.confirmedAt!);
-    if (mode === RANKING_MODE.points) return pointAppearances(game, startsAt);
-    return countsForRanking(game) ? countAppearances(game, startsAt) : [];
+    // 타이만(1:1)은 어느 방식에서도 순위 집계에서 뺀다.
+    if (!countsForRanking(game)) return [];
+    return mode === RANKING_MODE.points
+      ? pointAppearances(game, startsAt)
+      : countAppearances(game, startsAt);
   });
 }
 
-// 공개 상태이고 공백 제외 10자 이상인 참석자 후기 1건마다 PL 점수를 준다. 후기를 처음 공개한 달에 센다.
+// 공개 상태인 참석자 후기 1건마다 쓴 사람에게 PL 점수를, 그 세션의 GM에게 GM 점수를 준다. 후기를 처음 공개한 달에 센다.
 export function reviewAppearances(
-  reviews: { authorId: string; createdAt: Date }[],
+  reviews: { authorId: string; gmId: string; createdAt: Date }[],
 ): MonthlyAppearance[] {
-  return reviews.map((review) => ({
-    userId: review.authorId,
-    role: BADGE_ROLE.player,
-    startsAt: review.createdAt,
-    weight: REVIEW_POINTS,
-    sessions: 0,
-  }));
+  return reviews.flatMap((review) => [
+    {
+      userId: review.authorId,
+      role: BADGE_ROLE.player,
+      startsAt: review.createdAt,
+      weight: REVIEW_POINTS,
+      sessions: 0,
+    },
+    {
+      userId: review.gmId,
+      role: BADGE_ROLE.gm,
+      startsAt: review.createdAt,
+      weight: REVIEW_POINTS,
+      sessions: 0,
+    },
+  ]);
 }
