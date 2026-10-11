@@ -264,10 +264,10 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
   }),
   // 한 달에 이달의 GM과 이달의 PL을 함께 받으면 syncMonthlyBadges가 준다. 한 번 받으면 재계산이 건드리지 않는다.
   [HIDDEN_LADDER.doubleCrown]: hidden({
-    emoji: "🌈",
-    name: "쌍관왕",
+    emoji: "🎭",
+    name: "1인 2역",
     grade: 5,
-    description: "한 달 동안 GM과 PL 모두에서 1위를 차지했습니다.",
+    description: "테이블 안팎의 두 자리에서 모두 한 달의 주인공이었습니다.",
     granted: true,
   }),
 };
