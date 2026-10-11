@@ -50,9 +50,8 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
   });
   const [showAll, setShowAll] = useState(false);
   const bulk = mode === APPLY_MODE.bulk;
-  const { selectedIds, clear, toggle } = useBulkSelection({
+  const { selectedIds, clear, toggle, persist } = useBulkSelection({
     rulebooks,
-    bulk,
     onRestore: restoreBulk,
   });
 
@@ -216,7 +215,11 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
                     {`한 번에 최대 ${BULK_CERT_MAX_BOOKS}권까지 신청할 수 있습니다`}
                   </Text>
                 )}
-                <Button render={<Link href={bulkApplyHref} />} size="lg" className="w-full">
+                <Button
+                  render={<Link href={bulkApplyHref} onClick={persist} />}
+                  size="lg"
+                  className="w-full"
+                >
                   {`${selectedIds.length}권 신청하기`}
                 </Button>
               </VStack>

@@ -13,17 +13,17 @@ import {
 
 interface UseBulkSelectionInput {
   rulebooks: MyRulebook[];
-  bulk: boolean;
   onRestore: () => void;
 }
 
-export function useBulkSelection({ rulebooks, bulk, onRestore }: UseBulkSelectionInput) {
+export function useBulkSelection({ rulebooks, onRestore }: UseBulkSelectionInput) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [restored, setRestored] = useState(false);
 
+  // 사진 단계에서 뒤로 돌아온 경우에만 한 번 복원한다. 읽은 값은 바로 지워 다시 들어올 때는 비어 있게 한다.
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem(BULK_SELECTION_STORAGE_KEY);
+      sessionStorage.removeItem(BULK_SELECTION_STORAGE_KEY);
       const ids = pruneBulkSelection({
         rulebooks,
         selectedIds: parseBulkSelection({ raw, now: Date.now() }),
@@ -33,24 +33,9 @@ export function useBulkSelection({ rulebooks, bulk, onRestore }: UseBulkSelectio
         setSelectedIds(ids);
       }
     } catch {}
-    setRestored(true);
     // 처음 한 번만 복원한다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (!restored) return;
-    try {
-      if (bulk && selectedIds.length > 0) {
-        sessionStorage.setItem(
-          BULK_SELECTION_STORAGE_KEY,
-          serializeBulkSelection({ ids: selectedIds, now: Date.now() }),
-        );
-      } else {
-        sessionStorage.removeItem(BULK_SELECTION_STORAGE_KEY);
-      }
-    } catch {}
-  }, [restored, bulk, selectedIds]);
 
   const clear = () => setSelectedIds([]);
 
@@ -59,5 +44,14 @@ export function useBulkSelection({ rulebooks, bulk, onRestore }: UseBulkSelectio
       toggleBulkSelection({ rulebooks, selectedIds: current, rulebookId }),
     );
 
-  return { selectedIds, clear, toggle };
+  const persist = () => {
+    try {
+      sessionStorage.setItem(
+        BULK_SELECTION_STORAGE_KEY,
+        serializeBulkSelection({ ids: selectedIds, now: Date.now() }),
+      );
+    } catch {}
+  };
+
+  return { selectedIds, clear, toggle, persist };
 }
