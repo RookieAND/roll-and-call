@@ -64,7 +64,7 @@ export function CertQueueTable({ rows, query }: CertQueueTableProps) {
                       groupBookCount: row.groupCount,
                     })}
                   </Text>
-                  {row.category && (
+                  {row.category && row.groupCount <= 1 && (
                     <Text typography="body4" foreground="hint" truncate>
                       {row.category}
                     </Text>
