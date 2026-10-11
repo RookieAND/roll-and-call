@@ -5,6 +5,8 @@ import { isLinkServiceKey } from "./is-link-service-key";
 describe("isLinkServiceKey", () => {
   it("accepts known keys only", () => {
     expect(isLinkServiceKey("youtube")).toBe(true);
+    expect(isLinkServiceKey("postype")).toBe(true);
+    expect(isLinkServiceKey("trpgdiary")).toBe(true);
     expect(isLinkServiceKey("unknown")).toBe(false);
   });
 });
