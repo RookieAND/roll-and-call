@@ -70,6 +70,47 @@ describe("reviewForumPost", () => {
     ).toBe(body);
   });
 
+  it("원문이 2000자를 넘으면 …로 줄인다", () => {
+    const { content } = reviewForumPost({
+      review: { ...review, body: "가".repeat(2500) },
+      tagIds: tags,
+      reviewsUrl: undefined,
+    });
+    expect(content.length).toBeLessThanOrEqual(2000);
+    expect(content.endsWith("…")).toBe(true);
+  });
+
+  it("스포일러 후기가 길어도 ||가 닫힌 채로 2000자 안에 든다", () => {
+    const { content } = reviewForumPost({
+      review: { ...review, spoiler: true, body: "나".repeat(2500) },
+      tagIds: tags,
+      reviewsUrl: undefined,
+    });
+    expect(content.length).toBeLessThanOrEqual(2000);
+    expect(content.startsWith("||")).toBe(true);
+    expect(content.endsWith("…||")).toBe(true);
+  });
+
+  it("텍스트 채널은 제목 줄 몫을 빼고 2000자를 맞춘다", () => {
+    const post = reviewForumPost({
+      review: { ...review, body: "가".repeat(2500) },
+      tagIds: tags,
+      reviewsUrl: undefined,
+      textChannel: true,
+    });
+    expect(`**${post.name}**\n${post.content}`.length).toBeLessThanOrEqual(2000);
+  });
+
+  it("이모지 중간에서 자르지 않는다", () => {
+    const { content } = reviewForumPost({
+      review: { ...review, body: "😀".repeat(1500) },
+      tagIds: tags,
+      reviewsUrl: undefined,
+    });
+    expect(content.length).toBeLessThanOrEqual(2000);
+    expect(content).not.toMatch(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])/);
+  });
+
   it("GM 후기는 제목 맨 앞에 [GM 후기]를 붙이고 스포일러 표시가 그 뒤에 온다", () => {
     const gmReview = { ...review, isGmReview: true } satisfies ForumReview;
     const plain = reviewForumPost({ review: gmReview, tagIds: tags, reviewsUrl: undefined });

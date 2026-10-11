@@ -28,7 +28,7 @@ const HEADCOUNT: PreviewField[] = [
 
 const SESSION_TIME: PreviewField = { name: "🕒 시간", value: "9월 27일 (일) 20:00", inline: true };
 
-// 코드가 실제로 보내는 임베드(제목 이모지·색·칸·버튼)와 같게 둔다. 임베드를 안 쓰는 이달의 GM·PL은 없고, 구인 개설은 OPEN_EMBED_SPEC이다.
+// 코드가 실제로 보내는 임베드(제목 이모지·색·칸·버튼)와 같게 둔다. 임베드를 쓰지 않는 구인 개설(포럼 평문)과 이달의 GM·PL은 없다.
 export const PREVIEW_EMBED_SPECS: Partial<Record<MessageCaseKey, PreviewEmbedSpec>> = {
   apply: { emoji: "🙋", color: DISCORD.confirmed, fields: HEADCOUNT },
   leave: { emoji: "🚪", color: DISCORD.left, fields: HEADCOUNT },
@@ -75,18 +75,4 @@ export const PREVIEW_EMBED_SPECS: Partial<Record<MessageCaseKey, PreviewEmbedSpe
     button: "🌐 웹에서 작성하기",
   },
   cancel: { emoji: "🚫", color: DISCORD.cancelled, unlinked: true, fields: [] },
-};
-
-// 텍스트 채널 모집 글. 포럼이면 평문이라 이 임베드는 쓰지 않는다.
-export const OPEN_EMBED_SPEC: PreviewEmbedSpec = {
-  emoji: "🎲",
-  color: DISCORD.recruit,
-  fields: [
-    { name: "📜 룰", value: "피아스코", inline: true },
-    { name: "👥 인원", value: "4/5명", inline: true },
-    { name: "🎯 방식", value: "선착순", inline: true },
-    { ...SESSION_TIME, inline: false },
-  ],
-  footer: "GM 새벽세시 · 마감 9/25",
-  button: "📄 구인글 상세보기",
 };

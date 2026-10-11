@@ -12,7 +12,6 @@ export { recruitTagEmojis } from "./recruit-tag-emojis";
 export { recruitPostTitle } from "./recruit-post-title";
 export { recruitForumPost } from "./recruit-forum-post";
 export { recruitPlainText } from "./recruit-plain-text";
-export { recruitEmbed } from "./recruit-embed";
 export { APPLY_BUTTON_PREFIX, recruitButtons } from "./recruit-buttons";
 export { REVIEW_BUTTON_PREFIX } from "./review-button";
 export { gameNoticeEmbed } from "./game-notice-embed";

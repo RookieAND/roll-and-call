@@ -11,6 +11,7 @@ export {
 export { planNicknameSync, type NicknameSyncChange } from "./plan-nickname-sync";
 export {
   DEFAULT_DRAW_SKIPPED_HEAD,
+  DEFAULT_SELECTION_HEAD,
   DEFAULT_MESSAGE_HEADS,
   defaultMessageHead,
   MESSAGE_CASES,

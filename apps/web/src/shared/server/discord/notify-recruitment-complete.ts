@@ -29,7 +29,6 @@ export async function notifyRecruitmentComplete({
   players: RecruitmentPlayer[];
   waitingCount: number;
 }) {
-  const playerNames = players.map((player) => `**${player.username}**`);
   const playerMentions = players.map((player) =>
     player.discordId ? `<@${player.discordId}>` : `**${player.username}**`,
   );
@@ -49,8 +48,6 @@ export async function notifyRecruitmentComplete({
       { name: "📜 룰", value: game.rule, inline: true },
       ...headcountFields({ game, confirmedCount: players.length, waitingCount }),
       { name: "🕒 시간", value: formatGameSchedule(game), inline: false },
-      // Discord field value 상한 1024자
-      { name: "🙋 참여자", value: playerNames.join(", ").slice(0, 1024) || "-", inline: false },
     ],
   });
 
@@ -66,6 +63,14 @@ export async function notifyRecruitmentComplete({
           "GM 멘션": gmDiscordId ? `<@${gmDiscordId}>` : `**${gmName}**`,
           "참여자 멘션": playerMentions.join(" "),
         },
+        // 참여자 명단은 본문 멘션 줄이 맡는다. 머리 줄이 두 변수를 쓰지 않아도 GM과 참여자는 빠짐없이 알린다.
+        alsoMention: [
+          { id: gmDiscordId, fallback: `**${gmName}**` },
+          ...players.map((player) => ({
+            id: player.discordId,
+            fallback: `**${player.username}**`,
+          })),
+        ],
         userMentions: [gmDiscordId, ...players.map((player) => player.discordId)].filter(isString),
       })),
     },

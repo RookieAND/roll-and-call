@@ -20,6 +20,14 @@ export const MESSAGE_TEXTS = [
     extra: ["참여자"],
   },
   {
+    key: "apply_pending",
+    caseKey: "apply",
+    place: "embed",
+    label: "추첨·선발에 신청했어요",
+    body: "{참여자}님이 신청했어요.",
+    extra: ["참여자"],
+  },
+  {
     key: "leave",
     caseKey: "leave",
     place: "embed",
@@ -74,6 +82,14 @@ export const MESSAGE_TEXTS = [
     label: "추첨 없이 확정됐어요",
     body: "신청한 {신청 수}명이 모두 확정됐어요.",
     extra: ["신청 수"],
+  },
+  {
+    key: "selection",
+    caseKey: "draw",
+    place: "embed",
+    label: "선발이 끝났어요",
+    body: "선발이 끝났어요. 신청한 {신청 수}명 중 {확정 수}명이 확정됐어요.",
+    extra: ["신청 수", "확정 수"],
   },
   {
     key: "time",
@@ -188,11 +204,27 @@ export const MESSAGE_TEXTS = [
     extra: ["확정자"],
   },
   {
+    key: "selection_line",
+    caseKey: "draw",
+    place: "body",
+    label: "선발이 끝났어요",
+    body: "{확정자}님이 확정되었어요.",
+    extra: ["확정자"],
+  },
+  {
     key: "apply_line",
     caseKey: "apply",
     place: "body",
     label: "참여했어요",
     body: "{참여자}님이 세션에 참여하셨어요.",
+    extra: ["참여자"],
+  },
+  {
+    key: "apply_pending_line",
+    caseKey: "apply",
+    place: "body",
+    label: "추첨·선발에 신청했어요",
+    body: "{참여자}님이 신청하셨어요.",
     extra: ["참여자"],
   },
   {

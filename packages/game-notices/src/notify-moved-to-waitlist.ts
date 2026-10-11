@@ -26,20 +26,26 @@ export async function notifyMovedToWaitlist({
   ]);
   if (!game?.discordThreadId) return;
 
+  const values = gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" });
+  const line = await memberNoticeLine({
+    serverId: server.id,
+    userIds: [userId],
+    key: "moved_waiting_line",
+    values,
+  });
   const embed = gameNoticeEmbed({
     slug: server.slug,
     game,
     gmName: game.gm?.username ?? "?",
     emoji: "⏳",
     color: DISCORD_COLOR.waiting,
-    description: await messageText({
-      serverId: server.id,
-      key: "moved_waiting",
-      values: {
-        ...gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
-        참여자: name,
-      },
-    }),
+    description: line.after
+      ? undefined
+      : await messageText({
+          serverId: server.id,
+          key: "moved_waiting",
+          values: { ...values, 참여자: name },
+        }),
     fields: headcountFields({
       game,
       confirmedCount: countConfirmed(game.participants),
@@ -47,7 +53,6 @@ export async function notifyMovedToWaitlist({
     }),
   });
 
-  const values = gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" });
   await sendDiscordMessage({
     channelId: game.discordThreadId,
     input: {
@@ -56,12 +61,7 @@ export async function notifyMovedToWaitlist({
         serverId: server.id,
         key: "leave",
         values,
-        ...(await memberNoticeLine({
-          serverId: server.id,
-          userIds: [userId],
-          key: "moved_waiting_line",
-          values,
-        })),
+        ...line,
       })),
     },
   });

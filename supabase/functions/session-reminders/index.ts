@@ -173,6 +173,12 @@ Deno.serve(async () => {
 
   const failed: string[] = [];
   for (const game of data) {
+    // GM뿐이면(확정 참여자가 없으면) 알릴 사람이 없어 보내지 않는다.
+    // 권리를 되돌려 두므로 세션이 시작하기 전에 참여자가 확정되면 다음 주기에 보낸다.
+    if (!game.participants.some((participant) => participant.status === "confirmed")) {
+      await supabase.from("games").update({ notified_at: null }).eq("id", game.id);
+      continue;
+    }
     try {
       await sendReminder(game, (await gmNickname(game)) ?? game.gm?.username ?? "?");
     } catch (sendError) {

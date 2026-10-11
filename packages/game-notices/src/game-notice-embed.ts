@@ -9,7 +9,8 @@ type GameNotice = {
   gmName: string;
   emoji: string;
   color: number;
-  description: string;
+  // 본문 알림 줄이 같은 말을 하면 비워 둔다(같은 문장이 임베드와 본문에 두 번 나오지 않게).
+  description?: string;
   fields?: DiscordEmbedField[];
   linked?: boolean;
   url?: string;
