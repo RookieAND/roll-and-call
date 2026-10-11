@@ -34,6 +34,7 @@ import { coreNeedNote } from "../model/core-need-note";
 import { pickerCategories } from "../model/picker-categories";
 import { recentCategories } from "../model/recent-categories";
 import { useBulkSelection } from "../model/use-bulk-selection";
+import { useCategoryHistory } from "../model/use-category-history";
 import { BulkModeSwitch } from "./bulk-mode-switch";
 import { BulkSelectedChips } from "./bulk-selected-chips";
 import { PickerBookRow } from "./picker-book-row";
@@ -51,7 +52,9 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
   const trial = useIsTrial();
   const initial = rulebooks.find((rulebook) => rulebook.id === initialRulebookIds[0]);
   const [query, setQuery] = useState("");
-  const [categoryId, setCategoryId] = useState(initial?.categoryId ?? null);
+  const { categoryId, openCategory, closeCategory } = useCategoryHistory(
+    initial?.categoryId ?? null,
+  );
   const [showAll, setShowAll] = useState(false);
   const { bulk, selectedIds, changeBulk, toggle } = useBulkSelection({ rulebooks });
 
@@ -125,7 +128,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
                   <PickerCategoryRow
                     key={candidate.id}
                     category={candidate}
-                    onPick={() => setCategoryId(candidate.id)}
+                    onPick={() => openCategory(candidate.id)}
                   />
                 ))}
               </VStack>
@@ -171,7 +174,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
                     </HStack>
                   </VStack>
                   {bulk ? (
-                    <Button variant="tinted" size="sm" onClick={() => setCategoryId(null)}>
+                    <Button variant="tinted" size="sm" onClick={closeCategory}>
                       <ArrowRightLeft size={14} aria-hidden />
                       다른 룰 고르기
                     </Button>
@@ -179,7 +182,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
                     <IconButton
                       variant="ghost"
                       aria-label="카테고리 바꾸기"
-                      onClick={() => setCategoryId(null)}
+                      onClick={closeCategory}
                     >
                       <ArrowRightLeft size={20} />
                     </IconButton>
