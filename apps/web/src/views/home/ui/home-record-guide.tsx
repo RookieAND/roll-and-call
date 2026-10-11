@@ -12,18 +12,13 @@ import { Sheet, Text } from "@roll-and-call/ui";
 import { Info } from "lucide-react";
 
 const RULES: { label: string; value: string }[] = [
-  { label: "정식 룰 세션 (GM·PL)", value: `${SESSION_POINTS.regular}점` },
-  { label: "미니룰 세션 (GM·PL)", value: `${SESSION_POINTS.mini}점` },
-  { label: "타이만 세션 (GM·PL)", value: `${SESSION_POINTS.tie}점` },
+  { label: "정식 룰 세션", value: `${SESSION_POINTS.regular}점` },
+  { label: "미니룰 세션", value: `${SESSION_POINTS.mini}점` },
   {
-    label: `GM 가점: 플레이어 ${CROWD_BASE_PLAYERS}명 초과 1명마다 (정식 룰)`,
-    value: `+${CROWD_BONUS_POINTS.regular}점`,
+    label: `GM 가점 (플레이어 ${CROWD_BASE_PLAYERS}명 초과 1명마다, 최대 ${CROWD_BONUS_POINTS * CROWD_BONUS_PLAYERS}점)`,
+    value: `+${CROWD_BONUS_POINTS}점`,
   },
-  {
-    label: `GM 가점: 플레이어 ${CROWD_BASE_PLAYERS}명 초과 1명마다 (미니룰)`,
-    value: `+${CROWD_BONUS_POINTS.mini}점`,
-  },
-  { label: "세션 후기 1건", value: `${REVIEW_POINTS}점` },
+  { label: "세션 후기 1건 (쓴 사람, 받은 GM)", value: `${REVIEW_POINTS}점` },
   { label: "불참", value: `${ABSENCE_POINTS}점` },
 ];
 
@@ -42,8 +37,8 @@ export function HomeRecordGuide() {
         <Sheet.Title className="mb-075 text-heading3">점수 기준</Sheet.Title>
         <Sheet.Body>
           <Text typography="body4" foreground="muted" render={<p />} className="mb-125 px-100">
-            세션 점수와 후기 점수를 더하고 불참 점수를 빼서, 점수가 높은 순서로 순위를 정합니다.
-            GM과 플레이어는 따로 셉니다. 0점 이하는 순위에 오르지 않습니다.
+            세션 점수와 후기 점수를 더하고 불참 점수를 빼서 순위를 정합니다. 타이만 세션은 세지
+            않고, 0점 이하는 순위에 오르지 않습니다.
           </Text>
           <ul className="divide-y divide-gray-100">
             {RULES.map((rule) => (
@@ -60,9 +55,6 @@ export function HomeRecordGuide() {
               </li>
             ))}
           </ul>
-          <Text typography="body4" foreground="hint" render={<p />} className="mt-125 px-100">
-            가점은 GM에게만 붙고 플레이어 {CROWD_BASE_PLAYERS + CROWD_BONUS_PLAYERS}명까지 셉니다.
-          </Text>
         </Sheet.Body>
       </Sheet.Popup>
     </Sheet.Root>
