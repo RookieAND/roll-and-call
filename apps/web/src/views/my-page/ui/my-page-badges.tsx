@@ -1,7 +1,13 @@
 import { Button, HStack, Progress, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { BadgeMedal, type nextBadgeGoal } from "@/entities/badge";
+import {
+  BadgeMedal,
+  BadgePill,
+  monthLabel,
+  type BadgeView,
+  type nextBadgeGoal,
+} from "@/entities/badge";
 import { LineBreaks, ServerLink } from "@/shared/ui";
 
 import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
@@ -9,9 +15,11 @@ import { MY_PAGE_GROUP_CLASS } from "./my-page-group-class";
 interface MyPageBadgesProps {
   heldCount: number;
   goal: ReturnType<typeof nextBadgeGoal>;
+  recent: Pick<BadgeView, "key" | "name" | "emoji" | "look" | "monthKey">[];
 }
 
-export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
+export function MyPageBadges({ heldCount, goal, recent }: MyPageBadgesProps) {
+  const showRecent = !goal && recent.length > 0;
   return (
     <VStack gap="125" render={<section />}>
       <HStack align="center" gap="075">
@@ -50,6 +58,24 @@ export function MyPageBadges({ heldCount, goal }: MyPageBadgesProps) {
               </Text>
             </VStack>
           </HStack>
+        )}
+        {showRecent && (
+          <VStack gap="100" className="p-175">
+            <Text typography="body4" foreground="muted">
+              최근에 받은 업적입니다
+            </Text>
+            <HStack wrap gap="075">
+              {recent.map((badge) => (
+                <BadgePill
+                  key={`${badge.key}:${badge.name}`}
+                  emoji={badge.emoji}
+                  name={badge.name}
+                  look={badge.look}
+                  tag={badge.monthKey && monthLabel(badge.monthKey)}
+                />
+              ))}
+            </HStack>
+          </VStack>
         )}
         {!goal && heldCount === 0 && (
           <HStack align="center" gap="150" className="p-175">
