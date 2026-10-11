@@ -7,6 +7,8 @@ import type { RecordPerson } from "../model/rank-people";
 import { HomeRecordTieSheet } from "./home-record-tie-sheet";
 import { leaderName } from "./leader-name";
 
+// 공동 1위가 많아도 아바타가 이름과 점수 자리를 밀어내지 않도록 둘까지만 보이고 나머지는 +N으로 묶는다.
+const MAX_AVATARS = 2;
 const CARD = "flex items-center gap-150 rounded-600 bg-primary-50 p-175 transition-colors";
 
 interface HomeRecordLeaderProps {
@@ -26,6 +28,7 @@ export function HomeRecordLeader({ label, people, count, unit }: HomeRecordLeade
       <AvatarGroup
         people={people.map((person) => ({ src: person.avatarUrl, name: person.username }))}
         size="lg"
+        max={MAX_AVATARS}
         className="flex-none"
       />
       <div className="min-w-0 flex-1">
@@ -35,7 +38,7 @@ export function HomeRecordLeader({ label, people, count, unit }: HomeRecordLeade
             typography="body4"
             weight="extrabold"
             foreground="inherit"
-            className="tracking-[0.08em]"
+            className="tracking-[0.08em] whitespace-nowrap"
           >
             {people.length > 1 ? "공동 1위" : "1위"}
           </Text>
