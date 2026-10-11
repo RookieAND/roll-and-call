@@ -29,13 +29,15 @@ import {
 import { useServerPath } from "@/shared/lib";
 import { useIsTrial } from "@/shared/trial";
 
+import { APPLY_MODE, type ApplyMode } from "../model/apply-mode";
+import { applySubtitle } from "../model/apply-subtitle";
 import { isBulkSelectable } from "../model/bulk-selection";
 import { coreNeedNote } from "../model/core-need-note";
 import { pickerCategories } from "../model/picker-categories";
 import { recentCategories } from "../model/recent-categories";
+import { useApplySteps } from "../model/use-apply-steps";
 import { useBulkSelection } from "../model/use-bulk-selection";
-import { useCategoryHistory } from "../model/use-category-history";
-import { BulkModeSwitch } from "./bulk-mode-switch";
+import { ApplyModeStep } from "./apply-mode-step";
 import { BulkSelectedChips } from "./bulk-selected-chips";
 import { PickerBookRow } from "./picker-book-row";
 import { PickerCategoryRow } from "./picker-category-row";
@@ -52,11 +54,17 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
   const trial = useIsTrial();
   const initial = rulebooks.find((rulebook) => rulebook.id === initialRulebookIds[0]);
   const [query, setQuery] = useState("");
-  const { categoryId, openCategory, closeCategory } = useCategoryHistory(
-    initial?.categoryId ?? null,
-  );
+  const { mode, categoryId, chooseMode, openCategory, closeCategory, restoreBulk } = useApplySteps({
+    initialMode: trial || initial ? APPLY_MODE.single : null,
+    initialCategoryId: initial?.categoryId ?? null,
+  });
   const [showAll, setShowAll] = useState(false);
-  const { bulk, selectedIds, changeBulk, toggle } = useBulkSelection({ rulebooks });
+  const bulk = mode === APPLY_MODE.bulk;
+  const { selectedIds, clear, toggle } = useBulkSelection({
+    rulebooks,
+    bulk,
+    onRestore: restoreBulk,
+  });
 
   const allCategories = pickerCategories({ rulebooks, query: "" });
   const category = allCategories.find((candidate) => candidate.id === categoryId);
@@ -71,7 +79,11 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
     books.some((book) => book.kind === kind),
   );
   const needNote = coreNeedNote(books);
-  const showBulkSwitch = !trial;
+  const choosingMode = mode === null;
+  const chooseApplyMode = (next: ApplyMode) => {
+    if (next === APPLY_MODE.single) clear();
+    chooseMode(next);
+  };
   const bulkApplyHref = toServerPath(certApplyHref({ rulebookIds: selectedIds, step: "photos" }));
   const bulkApplying = bulk && selectedIds.length > 0;
   const selectedBooks = selectedIds.flatMap((id) => {
@@ -80,6 +92,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
       ? [{ id, label: [rulebook.shortName, rulebook.edition].filter(Boolean).join(" ") }]
       : [];
   });
+  const subtitle = applySubtitle(mode);
   const limitReached = selectedIds.length >= BULK_CERT_MAX_BOOKS;
   const requestHref = toServerPath(
     `/me/rulebooks/apply/request${query.trim() ? `?${new URLSearchParams({ name: query.trim() })}` : ""}`,
@@ -98,14 +111,12 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
               인증할 책 고르기
             </Text>
             <Text typography="body2" foreground="muted" render={<p />}>
-              {bulk
-                ? "룰을 바꿔 가며 함께 신청할 책을 모두 골라 주세요."
-                : "한 번에 한 권씩 신청합니다."}
+              {subtitle}
             </Text>
           </VStack>
-          {showBulkSwitch && <BulkModeSwitch checked={bulk} onCheckedChange={changeBulk} />}
+          {choosingMode && <ApplyModeStep onChoose={chooseApplyMode} />}
           {bulkApplying && <BulkSelectedChips books={selectedBooks} onRemove={toggle} />}
-          {!category && (
+          {!choosingMode && !category && (
             <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 -my-100 bg-surface px-200 py-100">
               <TextInput
                 value={query}
@@ -116,7 +127,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
             </div>
           )}
 
-          {!category && listed.length > 0 && (
+          {!choosingMode && !category && listed.length > 0 && (
             <VStack gap="050">
               {listTitle && (
                 <Text typography="body3" weight="bold" foreground="muted">
@@ -146,7 +157,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
             </VStack>
           )}
 
-          {!category && listed.length === 0 && (
+          {!choosingMode && !category && listed.length === 0 && (
             <VStack align="center" gap="100" className="px-150 pt-400 pb-500 text-center">
               <UiImage name="empty-rulebook-search" width={140} height={140} />
               <Text typography="heading3">"{query.trim()}"에 맞는 룰북이 없습니다</Text>
@@ -240,35 +251,37 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
             </VStack>
           )}
         </VStack>
-        <div className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) -mx-200 mt-auto bg-surface px-200 pt-100 pb-200">
-          {bulkApplying ? (
-            <VStack gap="075">
-              {limitReached && (
-                <Text typography="body4" foreground="muted" render={<p />}>
-                  {`한 번에 최대 ${BULK_CERT_MAX_BOOKS}권까지 신청할 수 있습니다`}
-                </Text>
-              )}
-              <Button render={<Link href={bulkApplyHref} />} size="lg" className="w-full">
-                {`${selectedIds.length}권 신청하기`}
-              </Button>
-            </VStack>
-          ) : (
-            <Callout.Root colorPalette="gray">
-              <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
-              <Callout.Description className="break-keep">
-                추가 요청을 보내 주세요.
-                <br />
-                추가되면 알림 탭으로 알립니다.
-              </Callout.Description>
-              <Callout.Action>
-                <Button render={<Link href={requestHref} />} variant="outline" size="sm">
-                  <Plus size={14} strokeWidth={2.4} aria-hidden />
-                  추가 요청
+        {!choosingMode && (
+          <div className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) -mx-200 mt-auto bg-surface px-200 pt-100 pb-200">
+            {bulkApplying ? (
+              <VStack gap="075">
+                {limitReached && (
+                  <Text typography="body4" foreground="muted" render={<p />}>
+                    {`한 번에 최대 ${BULK_CERT_MAX_BOOKS}권까지 신청할 수 있습니다`}
+                  </Text>
+                )}
+                <Button render={<Link href={bulkApplyHref} />} size="lg" className="w-full">
+                  {`${selectedIds.length}권 신청하기`}
                 </Button>
-              </Callout.Action>
-            </Callout.Root>
-          )}
-        </div>
+              </VStack>
+            ) : (
+              <Callout.Root colorPalette="gray">
+                <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
+                <Callout.Description className="break-keep">
+                  추가 요청을 보내 주세요.
+                  <br />
+                  추가되면 알림 탭으로 알립니다.
+                </Callout.Description>
+                <Callout.Action>
+                  <Button render={<Link href={requestHref} />} variant="outline" size="sm">
+                    <Plus size={14} strokeWidth={2.4} aria-hidden />
+                    추가 요청
+                  </Button>
+                </Callout.Action>
+              </Callout.Root>
+            )}
+          </div>
+        )}
       </Container>
     </>
   );

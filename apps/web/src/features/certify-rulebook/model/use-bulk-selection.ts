@@ -13,10 +13,11 @@ import {
 
 interface UseBulkSelectionInput {
   rulebooks: MyRulebook[];
+  bulk: boolean;
+  onRestore: () => void;
 }
 
-export function useBulkSelection({ rulebooks }: UseBulkSelectionInput) {
-  const [bulk, setBulk] = useState(false);
+export function useBulkSelection({ rulebooks, bulk, onRestore }: UseBulkSelectionInput) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [restored, setRestored] = useState(false);
 
@@ -28,7 +29,7 @@ export function useBulkSelection({ rulebooks }: UseBulkSelectionInput) {
         selectedIds: parseBulkSelection({ raw, now: Date.now() }),
       });
       if (ids.length > 0) {
-        setBulk(true);
+        onRestore();
         setSelectedIds(ids);
       }
     } catch {}
@@ -51,15 +52,12 @@ export function useBulkSelection({ rulebooks }: UseBulkSelectionInput) {
     } catch {}
   }, [restored, bulk, selectedIds]);
 
-  const changeBulk = (checked: boolean) => {
-    setBulk(checked);
-    if (!checked) setSelectedIds([]);
-  };
+  const clear = () => setSelectedIds([]);
 
   const toggle = (rulebookId: string) =>
     setSelectedIds((current) =>
       toggleBulkSelection({ rulebooks, selectedIds: current, rulebookId }),
     );
 
-  return { bulk, selectedIds, changeBulk, toggle };
+  return { selectedIds, clear, toggle };
 }
