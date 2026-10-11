@@ -1,4 +1,4 @@
-import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { GroupBook } from "../model/group-book";
 import { pendingGroupBooks } from "../model/group-selection";
@@ -61,7 +61,7 @@ export function GroupBookChecklist({
           모두 반려
         </Button>
       </HStack>
-      <VStack gap="025" className="p-100">
+      <Grid className="grid-cols-1 gap-x-100 gap-y-025 p-100 min-[900px]:grid-cols-2">
         {books.map((book) => (
           <GroupBookRow
             key={book.applicationId}
@@ -73,7 +73,7 @@ export function GroupBookChecklist({
             }
           />
         ))}
-      </VStack>
+      </Grid>
       <GroupDecisionSummary approveCount={approveCount} rejectCount={rejectCount} />
     </VStack>
   );

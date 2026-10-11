@@ -20,7 +20,7 @@ export function GroupBookRow({ book, rejected, disabled, onRejectedChange }: Gro
   const titleForeground = rejected ? "danger" : "normal";
 
   return (
-    <HStack align="center" gap="125" className={`rounded-400 px-100 py-075 ${rowTone}`}>
+    <HStack align="center" gap="100" className={`min-w-0 rounded-400 px-100 py-050 ${rowTone}`}>
       <Text typography="body2" foreground={titleForeground} className="min-w-0 flex-1 break-keep">
         {book.label}
       </Text>
@@ -36,7 +36,9 @@ export function GroupBookRow({ book, rejected, disabled, onRejectedChange }: Gro
           disabled={disabled}
           className="shrink-0"
         >
-          <SegmentedControl.Item value={APPROVE}>승인</SegmentedControl.Item>
+          <SegmentedControl.Item value={APPROVE} colorPalette="success">
+            승인
+          </SegmentedControl.Item>
           <SegmentedControl.Item value={REJECT} colorPalette="danger">
             반려
           </SegmentedControl.Item>
