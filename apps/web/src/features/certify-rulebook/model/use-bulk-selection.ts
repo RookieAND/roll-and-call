@@ -1,0 +1,65 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import type { MyRulebook } from "@/entities/rulebook";
+
+import { pruneBulkSelection, toggleBulkSelection } from "./bulk-selection";
+import {
+  BULK_SELECTION_STORAGE_KEY,
+  parseBulkSelection,
+  serializeBulkSelection,
+} from "./bulk-selection-storage";
+
+interface UseBulkSelectionInput {
+  rulebooks: MyRulebook[];
+}
+
+export function useBulkSelection({ rulebooks }: UseBulkSelectionInput) {
+  const [bulk, setBulk] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [restored, setRestored] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(BULK_SELECTION_STORAGE_KEY);
+      const ids = pruneBulkSelection({
+        rulebooks,
+        selectedIds: parseBulkSelection({ raw, now: Date.now() }),
+      });
+      if (ids.length > 0) {
+        setBulk(true);
+        setSelectedIds(ids);
+      }
+    } catch {}
+    setRestored(true);
+    // 처음 한 번만 복원한다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!restored) return;
+    try {
+      if (bulk && selectedIds.length > 0) {
+        sessionStorage.setItem(
+          BULK_SELECTION_STORAGE_KEY,
+          serializeBulkSelection({ ids: selectedIds, now: Date.now() }),
+        );
+      } else {
+        sessionStorage.removeItem(BULK_SELECTION_STORAGE_KEY);
+      }
+    } catch {}
+  }, [restored, bulk, selectedIds]);
+
+  const changeBulk = (checked: boolean) => {
+    setBulk(checked);
+    if (!checked) setSelectedIds([]);
+  };
+
+  const toggle = (rulebookId: string) =>
+    setSelectedIds((current) =>
+      toggleBulkSelection({ rulebooks, selectedIds: current, rulebookId }),
+    );
+
+  return { bulk, selectedIds, changeBulk, toggle };
+}

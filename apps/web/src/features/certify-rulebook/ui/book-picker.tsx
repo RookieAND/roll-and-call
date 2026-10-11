@@ -2,7 +2,6 @@
 
 import { BULK_CERT_MAX_BOOKS } from "@roll-and-call/database/certifications/model";
 import {
-  Badge,
   Button,
   Callout,
   Card,
@@ -30,11 +29,13 @@ import {
 import { useServerPath } from "@/shared/lib";
 import { useIsTrial } from "@/shared/trial";
 
-import { isBulkSelectable, toggleBulkSelection } from "../model/bulk-selection";
+import { isBulkSelectable } from "../model/bulk-selection";
 import { coreNeedNote } from "../model/core-need-note";
 import { pickerCategories } from "../model/picker-categories";
 import { recentCategories } from "../model/recent-categories";
+import { useBulkSelection } from "../model/use-bulk-selection";
 import { BulkModeSwitch } from "./bulk-mode-switch";
+import { BulkSelectedChips } from "./bulk-selected-chips";
 import { PickerBookRow } from "./picker-book-row";
 import { PickerCategoryRow } from "./picker-category-row";
 import { pickerListing } from "./picker-listing";
@@ -52,8 +53,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
   const [query, setQuery] = useState("");
   const [categoryId, setCategoryId] = useState(initial?.categoryId ?? null);
   const [showAll, setShowAll] = useState(false);
-  const [bulk, setBulk] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const { bulk, selectedIds, changeBulk, toggle } = useBulkSelection({ rulebooks });
 
   const allCategories = pickerCategories({ rulebooks, query: "" });
   const category = allCategories.find((candidate) => candidate.id === categoryId);
@@ -71,6 +71,12 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
   const showBulkSwitch = !trial;
   const bulkApplyHref = toServerPath(certApplyHref({ rulebookIds: selectedIds, step: "photos" }));
   const bulkApplying = bulk && selectedIds.length > 0;
+  const selectedBooks = selectedIds.flatMap((id) => {
+    const rulebook = rulebooks.find((candidate) => candidate.id === id);
+    return rulebook
+      ? [{ id, label: [rulebook.shortName, rulebook.edition].filter(Boolean).join(" ") }]
+      : [];
+  });
   const limitReached = selectedIds.length >= BULK_CERT_MAX_BOOKS;
   const requestHref = toServerPath(
     `/me/rulebooks/apply/request${query.trim() ? `?${new URLSearchParams({ name: query.trim() })}` : ""}`,
@@ -94,15 +100,8 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
                 : "한 번에 한 권씩 신청합니다."}
             </Text>
           </VStack>
-          {showBulkSwitch && (
-            <BulkModeSwitch
-              checked={bulk}
-              onCheckedChange={(checked) => {
-                setBulk(checked);
-                if (!checked) setSelectedIds([]);
-              }}
-            />
-          )}
+          {showBulkSwitch && <BulkModeSwitch checked={bulk} onCheckedChange={changeBulk} />}
+          {bulkApplying && <BulkSelectedChips books={selectedBooks} onRemove={toggle} />}
           {!category && (
             <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 -my-100 bg-surface px-200 py-100">
               <TextInput
@@ -169,9 +168,6 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
                     </Text>
                     <HStack align="center" gap="075" wrap>
                       <Text typography="subtitle1">{category.name}</Text>
-                      {category.aliases.map((alias) => (
-                        <Badge key={alias}>{alias}</Badge>
-                      ))}
                     </HStack>
                   </VStack>
                   {bulk ? (
@@ -225,14 +221,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
                                   checked: selectedIds.includes(book.id),
                                   available,
                                   limitReached,
-                                  onToggle: () =>
-                                    setSelectedIds((current) =>
-                                      toggleBulkSelection({
-                                        rulebooks,
-                                        selectedIds: current,
-                                        rulebookId: book.id,
-                                      }),
-                                    ),
+                                  onToggle: () => toggle(book.id),
                                 }
                               : null
                           }
