@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, Button, Card, HStack } from "@roll-and-call/ui";
+import { Badge, Card, Chip, HStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import type { MyRulebook } from "@/entities/rulebook";
@@ -17,7 +17,7 @@ export function BulkBookList({ books }: BulkBookListProps) {
   const [expanded, setExpanded] = useState(false);
   const foldable = books.length > COLLAPSED_COUNT;
   const shown = foldable && !expanded ? books.slice(0, COLLAPSED_COUNT) : books;
-  const toggleLabel = expanded ? "접기" : `${books.length - COLLAPSED_COUNT}권 더 보기`;
+  const toggleLabel = expanded ? "접기" : `+${books.length - COLLAPSED_COUNT}`;
 
   return (
     <Card.Root background="subtle" padding="sm">
@@ -28,9 +28,9 @@ export function BulkBookList({ books }: BulkBookListProps) {
           </Badge>
         ))}
         {foldable && (
-          <Button variant="ghost" size="sm" onClick={() => setExpanded(!expanded)}>
+          <Chip tone="outline" onClick={() => setExpanded(!expanded)}>
             {toggleLabel}
-          </Button>
+          </Chip>
         )}
       </HStack>
     </Card.Root>
