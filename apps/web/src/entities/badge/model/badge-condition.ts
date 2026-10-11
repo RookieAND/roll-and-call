@@ -1,5 +1,6 @@
 import {
   BADGE_LADDER,
+  BADGE_LADDERS,
   badgeRequirement,
   type BadgeLadderKey,
   type BadgeStep,
@@ -13,6 +14,14 @@ const LONG_CONDITIONS: Partial<Record<BadgeLadderKey, string>> = {
   [BADGE_LADDER.developer]: "롤앤콜을 만드는 개발자에게만 붙습니다.",
   [BADGE_LADDER.guildMaster]: "디스코드 길드를 이끄는 길드장에게 붙습니다.",
 };
+
+// 룰북 인증 칭호는 목록에 보이는 설명을 시트에서도 같은 말로 먼저 보이고, 그 아래에 인증 기준을 적는다.
+const DESCRIBED_LADDERS: ReadonlySet<BadgeLadderKey> = new Set([
+  BADGE_LADDER.scholar,
+  BADGE_LADDER.collector,
+  BADGE_LADDER.polymath,
+  BADGE_LADDER.library,
+]);
 
 function conditionNote(ladder: BadgeLadderKey): string | null {
   switch (ladder) {
@@ -35,6 +44,9 @@ export function badgeCondition({
   categoryName: string | null;
 }): string {
   const note = conditionNote(ladder);
-  const requirement = LONG_CONDITIONS[ladder] ?? badgeRequirement({ ladder, step, categoryName });
+  const base = LONG_CONDITIONS[ladder] ?? badgeRequirement({ ladder, step, categoryName });
+  const requirement = DESCRIBED_LADDERS.has(ladder)
+    ? `${BADGE_LADDERS[ladder].description!}\n${base}`
+    : base;
   return note ? `${requirement}\n${note}` : requirement;
 }
