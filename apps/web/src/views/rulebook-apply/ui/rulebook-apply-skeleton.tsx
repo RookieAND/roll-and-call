@@ -28,9 +28,14 @@ export function RulebookApplySkeleton() {
             <Skeleton width={140} height={21} />
           </VStack>
           <Skeleton width="100%" height={48} rounded={300} />
-          <VStack>
-            {range(5).map((index) => (
-              <Skeleton key={index} width="100%" height={60} rounded="none" />
+          <VStack gap="200">
+            {range(2).map((category) => (
+              <VStack key={category} gap="200" className="rounded-600 bg-gray-50 p-200">
+                <Skeleton width={120} height={24} />
+                {range(2).map((row) => (
+                  <Skeleton key={row} width="100%" height={60} rounded={500} />
+                ))}
+              </VStack>
             ))}
           </VStack>
         </VStack>
