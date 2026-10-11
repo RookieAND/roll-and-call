@@ -64,6 +64,8 @@ export function CertDecisionFooter({
   const networkError = approvalNetworkError || rejectionNetworkError;
   const footerNotice = networkError ? <ActionNetworkError /> : null;
   const approveLabel = groupMode ? `체크한 ${approveBookCount}권 승인` : "승인";
+  const startRejectLabel =
+    groupMode && rejectBookCount > 0 ? `체크 해제한 ${rejectBookCount}권 반려` : "반려";
   const rejectLabel = groupMode ? `${rejectBookCount}권 반려 확정` : "반려 확정";
   const note = footerNote({ reviewable, allChecked, groupMode, approveBookCount });
 
@@ -105,7 +107,7 @@ export function CertDecisionFooter({
         disabled={!canStartReject}
         onClick={onStartReject}
       >
-        반려
+        {startRejectLabel}
         <KeyHint keyLabel="R" />
       </Button>
       <Button

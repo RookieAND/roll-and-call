@@ -35,8 +35,8 @@ export function GroupBookChecklist({
             {`함께 신청한 책 ${books.length}권`}
           </Text>
           <Text typography="body4" foreground="hint" className="break-keep">
-            사진에서 제목이 확인된 책을 체크해 주세요. 체크한 책은 승인하고, 체크하지 않은 책은
-            반려합니다.
+            사진에서 제목이 확인된 책을 체크해 주세요. 승인은 체크한 책만 처리하고, 반려하려는 책은
+            체크를 해제한 뒤 반려하세요.
           </Text>
         </VStack>
         <Button variant="ghost" size="sm" disabled={disabled} onClick={onToggleAll}>
