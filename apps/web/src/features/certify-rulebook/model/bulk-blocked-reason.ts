@@ -58,5 +58,5 @@ function blockedReason({
   if (pendingIds.has(book.id)) return "심사 중인 신청이 있습니다.";
   const target = openable.find((candidate) => candidate.id === book.id)!;
   const cores = supplementCoresOpened({ book: target, books: openable, certifiedIds: openedIds });
-  return cores ? null : "같은 판본의 기본 룰북을 먼저 인증해야 합니다.";
+  return cores ? null : "같은 판본의 기본 룰북을 선택해야 합니다.";
 }

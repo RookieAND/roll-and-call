@@ -48,7 +48,7 @@ describe("bulkBlockedReason", () => {
   it("서플리먼트는 기본 룰북이 묶음에 함께 있어야 받는다", () => {
     const books = [book("core"), book("sup", { kind: "supplement" })];
     expect(bulkBlockedReason({ ...base, rulebookIds: ["sup"], books })).toBe(
-      "sup: 같은 판본의 기본 룰북을 먼저 인증해야 합니다.",
+      "sup: 같은 판본의 기본 룰북을 선택해야 합니다.",
     );
     expect(bulkBlockedReason({ ...base, rulebookIds: ["core", "sup"], books })).toBeNull();
   });
