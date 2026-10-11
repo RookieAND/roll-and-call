@@ -34,7 +34,7 @@ Toast.Viewport: {
 
 ## 함께 쓰는 것
 
-앱 전체에 `Toast.Viewport` 하나만 둔다(레이아웃 최상단). 되돌릴 수 있는 동작에는 `action`(예: 되돌리기)을 붙인다 — `action`이 있으면 `duration`을 지정하지 않아도 저절로 닫히지 않고 닫기 버튼이 나타난다. 화면 하단에 `FloatingBar`가 떠 있으면 `Toast.Viewport`가 `--rc-floating-bar-height` CSS 변수를 자동으로 읽어 바 위로 띄운다.
+앱 전체에 `Toast.Viewport` 하나만 둔다(레이아웃 최상단). 되돌릴 수 있는 동작에는 `action`(예: 되돌리기)을 붙인다 — `action`이 있으면 `duration`을 지정하지 않아도 저절로 닫히지 않고 닫기 버튼이 나타난다. 화면 하단에 `FloatingBar`나 하단 탭이 떠 있으면 `Toast.Viewport`가 `--rc-floating-bar-height`와 `--rc-bottom-nav-height` CSS 변수 중 더 큰 값을 자동으로 읽어 그 위로 띄운다.
 
 ## 예제
 
