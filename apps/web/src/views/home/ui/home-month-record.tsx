@@ -1,13 +1,17 @@
-import { Text } from "@roll-and-call/ui";
+import { RANKING_MODE } from "@roll-and-call/database/servers/model";
+import { HStack, Text } from "@roll-and-call/ui";
 import type { Dayjs } from "dayjs";
 
 import type { MonthRecord } from "../model/build-month-record";
 import { HomeRecordEmpty } from "./home-record-empty";
+import { HomeRecordGuide } from "./home-record-guide";
 import { HomeRecordRanking } from "./home-record-ranking";
 import { HomeRecordSection } from "./home-record-section";
 
-const GM_LABEL = "GM으로 운영한 세션 수";
-const PLAYER_LABEL = "플레이어로 참여한 세션 수";
+const LABELS = {
+  [RANKING_MODE.count]: { gm: "GM으로 운영한 세션 수", player: "플레이어로 참여한 세션 수" },
+  [RANKING_MODE.points]: { gm: "GM으로 얻은 점수", player: "플레이어로 얻은 점수" },
+};
 
 interface HomeMonthRecordProps {
   monthStart: Dayjs;
@@ -20,21 +24,31 @@ export function HomeMonthRecord({ monthStart, record }: HomeMonthRecordProps) {
     record.sessionCount > 0
       ? `이 달에 끝난 세션 ${record.sessionCount}건을 셌습니다.`
       : "아직 이 달에 끝난 세션이 없습니다.";
+  const points = record.mode === RANKING_MODE.points;
+  const { gm: GM_LABEL, player: PLAYER_LABEL } = LABELS[record.mode];
   const topGm = record.gms.leaders[0];
   const topPlayer = record.players.leaders[0];
 
   return (
     <section className="border-t border-gray-200 px-200 pt-225 pb-250">
-      <Text typography="heading2" render={<h3 />} className="font-extrabold">
-        {monthLabel}의 기록
-      </Text>
+      <HStack align="center" gap="050">
+        <Text typography="heading2" render={<h3 />} className="font-extrabold">
+          {monthLabel}의 기록
+        </Text>
+        {points && <HomeRecordGuide />}
+      </HStack>
       <Text typography="body4" foreground="hint" render={<p />} className="mt-050 mb-200">
         {summary}
       </Text>
 
       <HomeRecordSection label={GM_LABEL}>
         {topGm ? (
-          <HomeRecordRanking label={GM_LABEL} ranking={record.gms} first={topGm} />
+          <HomeRecordRanking
+            label={GM_LABEL}
+            ranking={record.gms}
+            first={topGm}
+            mode={record.mode}
+          />
         ) : (
           <HomeRecordEmpty
             image="empty-month-record"
@@ -46,7 +60,12 @@ export function HomeMonthRecord({ monthStart, record }: HomeMonthRecordProps) {
 
       <HomeRecordSection label={PLAYER_LABEL} className="mt-200 border-t border-gray-100 pt-200">
         {topPlayer ? (
-          <HomeRecordRanking label={PLAYER_LABEL} ranking={record.players} first={topPlayer} />
+          <HomeRecordRanking
+            label={PLAYER_LABEL}
+            ranking={record.players}
+            first={topPlayer}
+            mode={record.mode}
+          />
         ) : (
           <HomeRecordEmpty
             image="empty-month-record"

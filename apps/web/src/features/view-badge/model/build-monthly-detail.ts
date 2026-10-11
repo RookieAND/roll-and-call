@@ -3,6 +3,7 @@ import {
   nextMonthStart,
   type BadgeLadderKey,
 } from "@roll-and-call/database/badges/model";
+import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
 
 import {
   BADGE_TONE,
@@ -24,6 +25,7 @@ interface MonthlyDetailInput {
   // 그 달 횟수. 본인 화면만 안다.
   countOf: ((monthKey: string) => number) | null;
   now: Date;
+  mode?: RankingMode;
 }
 
 const monthName = (monthKey: string) =>
@@ -35,6 +37,7 @@ export function buildMonthlyDetail({
   months,
   countOf,
   now,
+  mode = RANKING_MODE.count,
 }: MonthlyDetailInput): BadgeDetail {
   const step = BADGE_LADDERS[ladder].steps[0]!;
   const meta = LADDER_META[ladder];
@@ -42,7 +45,8 @@ export function buildMonthlyDetail({
   const shownMonth = heldMonth ?? months[0] ?? null;
   const recordOf = (month: string) => {
     const count = countOf?.(month);
-    return count ? `${count}회 ${meta.verb} · 1위` : "1위";
+    if (!count) return "1위";
+    return mode === RANKING_MODE.points ? `${count}점 · 1위` : `${count}회 ${meta.verb} · 1위`;
   };
   const heldUntil = heldMonth
     ? toKst(nextMonthStart(heldMonth)).endOf("month").format("M월 D일")

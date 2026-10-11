@@ -1,3 +1,4 @@
+import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
 import { Container, HStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
 
@@ -9,6 +10,7 @@ import {
   getCurrentSessionUser,
   getMonthSessions,
   getProfile,
+  getReviewAppearances,
   hasSessionsBetween,
 } from "@/shared/server";
 import { AppBar, HelpButton, ServerSwitcher, ThemeToggleButton } from "@/shared/ui";
@@ -32,7 +34,8 @@ export async function HomeView({ date }: HomeViewProps) {
   const now = new Date();
   const server = await getCurrentServer();
   const nextMonthStart = monthStart.add(1, "month");
-  const [user, rows, hasNextMonthSessions] = await Promise.all([
+  const mode = server.rankingMode as RankingMode;
+  const [user, rows, hasNextMonthSessions, reviews] = await Promise.all([
     getCurrentSessionUser(),
     getMonthSessions({
       serverId: server.id,
@@ -44,6 +47,13 @@ export async function HomeView({ date }: HomeViewProps) {
       from: nextMonthStart.toDate(),
       to: nextMonthStart.add(1, "month").toDate(),
     }),
+    mode === RANKING_MODE.points
+      ? getReviewAppearances({
+          serverId: server.id,
+          from: monthStart.toDate(),
+          to: nextMonthStart.toDate(),
+        })
+      : [],
   ]);
 
   const profile = user ? await getProfile(server.id, user.id) : undefined;
@@ -93,7 +103,10 @@ export async function HomeView({ date }: HomeViewProps) {
           initialSelectedKey={selectedKey}
           todayKey={todayKey}
         />
-        <HomeMonthRecord monthStart={monthStart} record={buildMonthRecord({ rows, now })} />
+        <HomeMonthRecord
+          monthStart={monthStart}
+          record={buildMonthRecord({ rows, now, mode, reviews })}
+        />
       </Container>
       {user && (
         <Suspense fallback={null}>

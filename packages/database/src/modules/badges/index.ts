@@ -12,6 +12,7 @@ export { evaluateReviewBadges } from "./queries/evaluate-review-badges";
 export { syncAllMonthlyBadges } from "./queries/sync-all-monthly-badges";
 export { loadBadgeFacts } from "./queries/load-badge-facts";
 export { loadMonthlyAppearances } from "./queries/load-monthly-appearances";
+export { loadReviewAppearances } from "./queries/load-review-appearances";
 export { loadMonthlyWinners, type MonthlyWinner } from "./queries/load-monthly-winners";
 export { loadUserBadges, type BadgeRecord } from "./queries/load-user-badges";
 export * from "./model";

@@ -18,6 +18,7 @@ const appearance = (userId: string, startsAt: string) => ({
   role: "gm" as const,
   startsAt: new Date(startsAt),
   weight: 1,
+  sessions: 1,
 });
 const appearances = [
   appearance("me", "2026-09-10T03:00:00Z"),
@@ -55,5 +56,46 @@ describe("monthlyCard", () => {
       monthLine: null,
       history: "아직 받은 적이 없습니다",
     });
+  });
+});
+
+describe("monthlyCard 포인트제", () => {
+  const scored = (userId: string, startsAt: string, weight: number) => ({
+    userId,
+    role: "gm" as const,
+    startsAt: new Date(startsAt),
+    weight,
+    sessions: 1,
+  });
+
+  it("이번 달 줄에 점수와 순위, 1위 점수를 적는다", () => {
+    const card = monthlyCard({
+      ladder: "gm.monthly",
+      records: [],
+      appearances: [
+        scored("me", "2026-10-10T03:00:00Z", 100),
+        scored("rival", "2026-10-11T03:00:00Z", 300),
+      ],
+      userId: "me",
+      now,
+      mode: "points",
+    });
+    expect(card.status).toBe("10월 100점 · 2위 · 1위 300점");
+    expect(card.description).toBe("이번 달 점수 1위가 다음 달 한 달 동안 답니다.");
+  });
+
+  it("점수가 0 이하면 순위 없음이다", () => {
+    const card = monthlyCard({
+      ladder: "gm.monthly",
+      records: [],
+      appearances: [
+        scored("me", "2026-10-10T03:00:00Z", -100),
+        scored("rival", "2026-10-11T03:00:00Z", 300),
+      ],
+      userId: "me",
+      now,
+      mode: "points",
+    });
+    expect(card.status).toBe("10월 -100점 · 순위 없음 · 1위 300점");
   });
 });

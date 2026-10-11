@@ -29,29 +29,35 @@ export interface ForumTagMap {
 }
 
 // 디스코드 서버 하나가 한 행이다. 서버 안의 데이터는 모두 server_id로 이 행에 묶인다.
-export const servers = pgTable("servers", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  discordGuildId: text("discord_guild_id").notNull().unique(),
-  slug: text("slug").notNull().unique(),
-  name: text("name").notNull(),
-  icon: text("icon"),
-  recruitChannelId: text("recruit_channel_id"),
-  closedChannelId: text("closed_channel_id"),
-  reviewForumChannelId: text("review_forum_channel_id"),
-  announceChannelId: text("announce_channel_id"),
-  // 운영진만 보는 디스코드 채널. 처리 대기와 무거운 조치 글을 올린다. 비면 올리지 않는다.
-  staffChannelId: text("staff_channel_id"),
-  forumTags: jsonb("forum_tags").$type<ForumTagMap>(),
-  // 디스코드 서버장. 어드민에 들어올 때 길드 정보와 비교해 바뀌었으면 소유권을 옮긴다.
-  ownerDiscordId: text("owner_discord_id"),
-  // 디스코드 서버 멤버가 아니라 가입할 수 없을 때 보여 주는 초대 링크. 없으면 안내 문구만 보인다.
-  inviteUrl: text("invite_url"),
-  // 월간 발표를 보낸 마지막 달, YYYY-MM. 다시 보내지 않게 막는다.
-  monthlyAnnouncedMonth: text("monthly_announced_month"),
-  // 룰북 인증 적용일. 이 날 전까지는 인증 없이도 구인을 열 수 있다(유예 기간). 비어 있으면 바로 적용한다.
-  certEnforcementDate: timestamp("cert_enforcement_date", { withTimezone: true }),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-}).enableRLS();
+export const servers = pgTable(
+  "servers",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    discordGuildId: text("discord_guild_id").notNull().unique(),
+    slug: text("slug").notNull().unique(),
+    name: text("name").notNull(),
+    icon: text("icon"),
+    recruitChannelId: text("recruit_channel_id"),
+    closedChannelId: text("closed_channel_id"),
+    reviewForumChannelId: text("review_forum_channel_id"),
+    announceChannelId: text("announce_channel_id"),
+    // 운영진만 보는 디스코드 채널. 처리 대기와 무거운 조치 글을 올린다. 비면 올리지 않는다.
+    staffChannelId: text("staff_channel_id"),
+    forumTags: jsonb("forum_tags").$type<ForumTagMap>(),
+    // 디스코드 서버장. 어드민에 들어올 때 길드 정보와 비교해 바뀌었으면 소유권을 옮긴다.
+    ownerDiscordId: text("owner_discord_id"),
+    // 디스코드 서버 멤버가 아니라 가입할 수 없을 때 보여 주는 초대 링크. 없으면 안내 문구만 보인다.
+    inviteUrl: text("invite_url"),
+    // 월간 발표를 보낸 마지막 달, YYYY-MM. 다시 보내지 않게 막는다.
+    monthlyAnnouncedMonth: text("monthly_announced_month"),
+    // 룰북 인증 적용일. 이 날 전까지는 인증 없이도 구인을 열 수 있다(유예 기간). 비어 있으면 바로 적용한다.
+    certEnforcementDate: timestamp("cert_enforcement_date", { withTimezone: true }),
+    // 이 달의 기록 순위를 매기는 방식. count(참여 횟수제)와 points(포인트제) 중 하나이고, 서버마다 정한다.
+    rankingMode: text("ranking_mode").notNull().default("count"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [check("servers_ranking_mode", sql`${table.rankingMode} in ('count', 'points')`)],
+).enableRLS();
 
 // 계정(profiles)은 전역이고, 서버 안에서 보이는 프로필은 여기 있다. 나가도 지우지 않고 deleted_at만 채워 재가입 때 되살린다.
 export const serverMembers = pgTable(

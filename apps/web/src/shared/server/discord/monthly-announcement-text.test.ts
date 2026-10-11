@@ -58,4 +58,22 @@ describe("monthlyAnnouncementText", () => {
       }),
     ).toContain("[\\[GM\\]\\*별\\_](");
   });
+
+  it("포인트제는 세션 횟수 대신 점수를 적는다", () => {
+    expect(
+      monthlyAnnouncementText({
+        month: "2026-09",
+        gm: [{ ...winner("a", "한랑아", 5), score: 620 }],
+        pl: [{ ...winner("b", "루키", 7), score: 480 }],
+        profileUrl,
+        mode: "points",
+      }),
+    ).toBe(
+      [
+        "**9월 이달의 GM·PL**",
+        "🎖️ 이달의 GM: [한랑아](https://rollandcall.xyz/s/users/a) · 620점",
+        "🏅 이달의 PL: [루키](https://rollandcall.xyz/s/users/b) · 480점",
+      ].join("\n"),
+    );
+  });
 });

@@ -5,6 +5,7 @@ import {
   previousMonthKey,
 } from "@roll-and-call/database/badges/model";
 import { claimMonthlyAnnouncement, listServers } from "@roll-and-call/database/servers";
+import type { RankingMode } from "@roll-and-call/database/servers/model";
 import { sendDiscordMessage } from "@roll-and-call/discord";
 import { messageHeadInput } from "@roll-and-call/game-notices";
 
@@ -37,6 +38,7 @@ export async function announceMonthlyAwards({ now }: { now: Date }): Promise<num
       month,
       gm,
       pl,
+      mode: server.rankingMode as RankingMode,
       profileUrl: (userId) =>
         `${origin}${serverPath({ slug: server.slug, path: `/users/${userId}` })}`,
     });

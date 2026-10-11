@@ -8,6 +8,7 @@ import {
   type BadgeRole,
   type MonthlyAppearance,
 } from "@roll-and-call/database/badges/model";
+import type { RankingMode } from "@roll-and-call/database/servers/model";
 
 import { badgeCounts } from "@/entities/badge";
 import type { BadgeRecord } from "@/shared/server";
@@ -25,9 +26,10 @@ interface DexTabInput {
   appearances: MonthlyAppearance[];
   userId: string;
   now: Date;
+  mode?: RankingMode;
 }
 
-export function buildDexTab({ role, records, facts, appearances, userId, now }: DexTabInput) {
+export function buildDexTab({ role, records, facts, appearances, userId, now, mode }: DexTabInput) {
   const gm = role === BADGE_ROLE.gm;
   const counts = badgeCounts(facts);
   const recordsByKey = new Map(records.map((record) => [record.badgeKey, record]));
@@ -89,6 +91,7 @@ export function buildDexTab({ role, records, facts, appearances, userId, now }: 
       appearances,
       userId,
       now,
+      mode,
     }),
   };
 }

@@ -12,6 +12,8 @@ export type RecordGame = {
   endedAt: Moment;
   hiddenAt: Moment;
   cancelledAt: Moment;
+  // 포인트제에서 미니룰 점수로 센다: 룰북이 없거나 미니룰 분류의 룰북(miniRuleOf). 참여 횟수제에서는 보지 않는다.
+  miniRule?: boolean;
   participants: {
     userId: string;
     status: string;

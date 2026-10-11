@@ -36,7 +36,20 @@ export { nextMonthStart } from "./next-month-start";
 export { parseBadgeKey } from "./parse-badge-key";
 export { previousMonthKey } from "./previous-month-key";
 export { type BadgeEvent } from "./reached-tier";
-export { recordAppearances } from "./record-appearances";
+export { miniRuleOf } from "./mini-rule-of";
+export {
+  ABSENCE_POINTS,
+  CROWD_BASE_PLAYERS,
+  CROWD_BONUS_PLAYERS,
+  CROWD_BONUS_POINTS,
+  RANKING_SESSION_KIND,
+  rankingSessionKind,
+  REVIEW_POINTS,
+  SESSION_POINTS,
+  crowdBonusPoints,
+  type RankingSessionKind,
+} from "./ranking-points";
+export { recordAppearances, reviewAppearances } from "./record-appearances";
 export { stepName } from "./step-name";
 export { isRecordSession, type RecordGame } from "./record-session";
 export { DEFAULT_PLAY_MINUTES, sessionEndAt } from "#/modules/games/model/session-timing";
