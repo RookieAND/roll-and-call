@@ -9,6 +9,7 @@ interface RejectPanelProps {
   reason: string;
   userReason: string;
   staffMemo: string;
+  targetLabels: string[];
   onReasonChange: (reason: string) => void;
   onUserReasonChange: (userReason: string) => void;
   onStaffMemoChange: (staffMemo: string) => void;
@@ -19,6 +20,7 @@ export function RejectPanel({
   reason,
   userReason,
   staffMemo,
+  targetLabels,
   onReasonChange,
   onUserReasonChange,
   onStaffMemoChange,
@@ -33,6 +35,11 @@ export function RejectPanel({
         <Text typography="heading3" render={<h2 />}>
           반려 사유
         </Text>
+        {targetLabels.length > 0 ? (
+          <Text typography="body4" weight="bold" foreground="danger" className="break-keep">
+            {`체크 해제한 ${targetLabels.length}권만 반려합니다 · ${targetLabels.join(", ")}`}
+          </Text>
+        ) : null}
         <Text typography="body4" foreground="hint">
           사유를 고르면 사용자에게 보이는 문구가 미리 채워집니다. 문구는 고칠 수 있습니다.
         </Text>

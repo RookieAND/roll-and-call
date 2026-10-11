@@ -10,6 +10,7 @@ interface RejectSectionProps {
   reason: string;
   userReason: string;
   staffMemo: string;
+  targetLabels: string[];
   previewPayload: ComponentProps<typeof NotificationPreview>["payload"];
   onReasonChange: (reason: string) => void;
   onUserReasonChange: (userReason: string) => void;

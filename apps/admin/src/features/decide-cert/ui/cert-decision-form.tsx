@@ -54,6 +54,14 @@ export function CertDecisionForm({
     groupBooks,
     ...decisionOptions,
   });
+  const rejectTargetLabels = decision.groupMode
+    ? groupBooks
+        .filter(
+          (book) =>
+            book.status === "pending" && decision.uncheckedBookIds.includes(book.applicationId),
+        )
+        .map((book) => book.label)
+    : [];
   const { shots, setParam } = decision;
 
   useDecisionKeys({
@@ -112,6 +120,7 @@ export function CertDecisionForm({
             userReason={decision.userReason}
             staffMemo={decision.staffMemo}
             previewPayload={decision.previewPayload}
+            targetLabels={rejectTargetLabels}
             onReasonChange={decision.chooseReason}
             onUserReasonChange={decision.setUserReason}
             onStaffMemoChange={decision.setStaffMemo}
