@@ -8,32 +8,35 @@ import type { Actor } from "#/modules/moderation/model/types";
 import { createNotifications } from "#/modules/notifications/commands/create-notifications";
 import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
+import { RULEBOOK_KIND } from "#/modules/rulebooks/model/rulebook-kind";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
 import { certApplications, certifications, profiles, rulebooks, servers } from "#/schema";
 
 import { GRANT_SKIP_REASON, type GrantSkipReason } from "../model/grant-skip-reason";
 import { supplementCoresOpened } from "../model/supplement-cores-opened";
 
-export type GrantResult =
-  | {
-      ok: true;
-      rulebookLabel: string;
-      granted: { userId: string; nickname: string }[];
-      skipped: { userId: string; nickname: string; reason: GrantSkipReason }[];
-    }
-  | { ok: false; notRequired: true };
+export interface GrantBookResult {
+  rulebookId: string;
+  rulebookLabel: string;
+  granted: { userId: string; nickname: string }[];
+  skipped: { userId: string; nickname: string; reason: GrantSkipReason }[];
+}
 
-// 사람마다 인증을 넣거나 되살리고, 그 사람의 대기 신청을 함께 승인하고, 「직접 인증」 기록 한 건과 cert_granted 알림을 남긴다.
-// 이미 인증된 사람과 같은 판본 기본 룰북을 열지 않은 서플리먼트 대상은 건너뛴다. 운영진 채널 글은 부르는 쪽이 커밋 뒤에 올린다.
+export type GrantResult = { ok: true; books: GrantBookResult[] } | { ok: false; notRequired: true };
+
+// 룰북마다, 사람마다 인증을 넣거나 되살리고, 그 사람의 대기 신청을 함께 승인하고, 「직접 인증」 기록 한 건과 cert_granted 알림을 남긴다.
+// 이미 인증된 사람과 같은 판본 기본 룰북을 열지 않은 서플리먼트 대상은 건너뛴다.
+// 기본 룰북을 서플리먼트보다 먼저 처리하므로 같은 요청에 함께 고른 기본 룰북은 서플리먼트 조건을 채운다.
+// 모든 룰북을 한 트랜잭션에서 처리한다. 운영진 채널 글은 부르는 쪽이 커밋 뒤에 올린다.
 export async function grantCertifications({
   serverId,
-  rulebookId,
+  rulebookIds,
   userIds,
   actor,
   evidence,
 }: {
   serverId: string;
-  rulebookId: string;
+  rulebookIds: string[];
   userIds: string[];
   actor: Actor;
   evidence: string;
@@ -52,12 +55,28 @@ export async function grantCertifications({
       })
       .from(rulebooks)
       .where(eq(rulebooks.serverId, serverId));
-    const book = books.find((candidate) => candidate.id === rulebookId);
-    if (!book) throw new Error("룰북을 찾을 수 없습니다");
-    if (!book.certRequired) return { ok: false, notRequired: true };
-    const label = rulebookLabel(book);
+    const picked = uniq(rulebookIds).map((id) => {
+      const book = books.find((candidate) => candidate.id === id);
+      if (!book) throw new Error("룰북을 찾을 수 없습니다");
+      return book;
+    });
+    if (picked.some((book) => !book.certRequired)) return { ok: false, notRequired: true };
+    const ordered = [
+      ...picked.filter((book) => book.kind !== RULEBOOK_KIND.supplement),
+      ...picked.filter((book) => book.kind === RULEBOOK_KIND.supplement),
+    ];
     const targets = uniq(userIds);
-    if (targets.length === 0) return { ok: true, rulebookLabel: label, granted: [], skipped: [] };
+    if (targets.length === 0) {
+      return {
+        ok: true,
+        books: ordered.map((book) => ({
+          rulebookId: book.id,
+          rulebookLabel: rulebookLabel(book),
+          granted: [],
+          skipped: [],
+        })),
+      };
+    }
 
     const [server] = await tx
       .select({ staffChannelId: servers.staffChannelId })
@@ -77,85 +96,96 @@ export async function grantCertifications({
           isNull(certifications.revokedAt),
         ),
       );
+    const certifiedByUser = new Map<string, Set<string>>();
+    for (const row of certified) {
+      const ids = certifiedByUser.get(row.userId) ?? new Set<string>();
+      ids.add(row.rulebookId);
+      certifiedByUser.set(row.userId, ids);
+    }
     const shownBooks = books.filter((candidate) => !candidate.hidden);
 
-    const granted: { userId: string; nickname: string }[] = [];
-    const skipped: { userId: string; nickname: string; reason: GrantSkipReason }[] = [];
-    for (const { userId, nickname } of people) {
-      const certifiedIds = new Set(
-        certified.filter((row) => row.userId === userId).map((row) => row.rulebookId),
-      );
-      if (!supplementCoresOpened({ book, books: shownBooks, certifiedIds })) {
-        skipped.push({ userId, nickname, reason: GRANT_SKIP_REASON.supplementBlocked });
-        continue;
-      }
-      // 처음 인증이면 넣고, 취소됐던 인증이면 되살린다. 이미 유효한 인증이면 아무것도 돌려받지 못한다.
-      const [inserted] = await tx
-        .insert(certifications)
-        .values({ serverId, userId, rulebookId, approvedBy: actor.id })
-        .onConflictDoUpdate({
-          target: [certifications.serverId, certifications.userId, certifications.rulebookId],
-          set: {
-            approvedBy: actor.id,
-            approvedAt: sql`now()`,
-            revokedAt: null,
-            revokedBy: null,
-            revokeReason: null,
-            discardedAt: null,
+    const results: GrantBookResult[] = [];
+    const notifications: {
+      userId: string;
+      kind: typeof NOTIFICATION_KIND.certGranted;
+      params: { rulebookId: string; rulebookName: string };
+    }[] = [];
+    for (const book of ordered) {
+      const label = rulebookLabel(book);
+      const granted: GrantBookResult["granted"] = [];
+      const skipped: GrantBookResult["skipped"] = [];
+      for (const { userId, nickname } of people) {
+        const certifiedIds = certifiedByUser.get(userId) ?? new Set<string>();
+        if (!supplementCoresOpened({ book, books: shownBooks, certifiedIds })) {
+          skipped.push({ userId, nickname, reason: GRANT_SKIP_REASON.supplementBlocked });
+          continue;
+        }
+        // 처음 인증이면 넣고, 취소됐던 인증이면 되살린다. 이미 유효한 인증이면 아무것도 돌려받지 못한다.
+        const [inserted] = await tx
+          .insert(certifications)
+          .values({ serverId, userId, rulebookId: book.id, approvedBy: actor.id })
+          .onConflictDoUpdate({
+            target: [certifications.serverId, certifications.userId, certifications.rulebookId],
+            set: {
+              approvedBy: actor.id,
+              approvedAt: sql`now()`,
+              revokedAt: null,
+              revokedBy: null,
+              revokeReason: null,
+              discardedAt: null,
+            },
+            setWhere: isNotNull(certifications.revokedAt),
+          })
+          .returning({ userId: certifications.userId });
+        if (!inserted) {
+          skipped.push({ userId, nickname, reason: GRANT_SKIP_REASON.alreadyCertified });
+          continue;
+        }
+        certifiedByUser.set(userId, new Set([...certifiedIds, book.id]));
+        const approvedApplications = await tx
+          .update(certApplications)
+          .set({ status: "approved", processedBy: actor.id, processedAt: sql`now()` })
+          .where(
+            and(
+              eq(certApplications.serverId, serverId),
+              eq(certApplications.userId, userId),
+              eq(certApplications.rulebookId, book.id),
+              eq(certApplications.status, "pending"),
+            ),
+          )
+          .returning({ id: certApplications.id });
+        await recordAudit({
+          executor: tx,
+          serverId,
+          actor,
+          entry: {
+            action: "직접 인증",
+            target: `${nickname} · ${label}`,
+            targetUserId: userId,
+            reason: "운영진 직접 추가",
+            staffMemo: evidence,
+            before: { label: approvedApplications.length ? "심사 대기" : "미인증" },
+            after: { label: "인증됨" },
+            related: [
+              ...(approvedApplications.length
+                ? [`대기 중인 심사 신청 ${approvedApplications.length}건 함께 승인`]
+                : []),
+              "당사자 알림 탭에 알림 보냄",
+              server?.staffChannelId ? STAFF_CHANNEL_RELATED.posted : STAFF_CHANNEL_RELATED.missing,
+            ],
           },
-          setWhere: isNotNull(certifications.revokedAt),
-        })
-        .returning({ userId: certifications.userId });
-      if (!inserted) {
-        skipped.push({ userId, nickname, reason: GRANT_SKIP_REASON.alreadyCertified });
-        continue;
+        });
+        granted.push({ userId, nickname });
+        notifications.push({
+          userId,
+          kind: NOTIFICATION_KIND.certGranted,
+          params: { rulebookId: book.id, rulebookName: label },
+        });
       }
-      const approvedApplications = await tx
-        .update(certApplications)
-        .set({ status: "approved", processedBy: actor.id, processedAt: sql`now()` })
-        .where(
-          and(
-            eq(certApplications.serverId, serverId),
-            eq(certApplications.userId, userId),
-            eq(certApplications.rulebookId, rulebookId),
-            eq(certApplications.status, "pending"),
-          ),
-        )
-        .returning({ id: certApplications.id });
-      await recordAudit({
-        executor: tx,
-        serverId,
-        actor,
-        entry: {
-          action: "직접 인증",
-          target: `${nickname} · ${label}`,
-          targetUserId: userId,
-          reason: "운영진 직접 추가",
-          staffMemo: evidence,
-          before: { label: approvedApplications.length ? "심사 대기" : "미인증" },
-          after: { label: "인증됨" },
-          related: [
-            ...(approvedApplications.length
-              ? [`대기 중인 심사 신청 ${approvedApplications.length}건 함께 승인`]
-              : []),
-            "당사자 알림 탭에 알림 보냄",
-            server?.staffChannelId ? STAFF_CHANNEL_RELATED.posted : STAFF_CHANNEL_RELATED.missing,
-          ],
-        },
-      });
-      granted.push({ userId, nickname });
+      results.push({ rulebookId: book.id, rulebookLabel: label, granted, skipped });
     }
 
-    await createNotifications({
-      executor: tx,
-      serverId,
-      actorId: actor.id,
-      notifications: granted.map(({ userId }) => ({
-        userId,
-        kind: NOTIFICATION_KIND.certGranted,
-        params: { rulebookId, rulebookName: label },
-      })),
-    });
-    return { ok: true, rulebookLabel: label, granted, skipped };
+    await createNotifications({ executor: tx, serverId, actorId: actor.id, notifications });
+    return { ok: true, books: results };
   });
 }

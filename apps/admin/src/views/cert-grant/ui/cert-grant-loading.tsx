@@ -17,7 +17,7 @@ export function CertGrantLoading() {
           <VStack gap="250" className="rounded-600 border border-gray-200 bg-surface p-250">
             <FormSection
               title="1. 인증할 룰북"
-              description="사진 심사 없이 운영진의 판단으로 룰북 인증을 부여합니다. 한 번에 한 권만 고를 수 있습니다."
+              description="사진 심사 없이 운영진의 판단으로 룰북 인증을 부여합니다. 여러 권을 한 번에 고를 수 있습니다."
             >
               <Skeleton width="100%" height={40} rounded={400} />
             </FormSection>

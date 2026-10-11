@@ -12,7 +12,7 @@ import {
   VStack,
   toast,
 } from "@roll-and-call/ui";
-import { isUndefined } from "es-toolkit";
+import { isUndefined, uniq } from "es-toolkit";
 import { ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -30,16 +30,11 @@ import {
 } from "@/shared/ui";
 
 import { grantUserCertifications } from "../api/grant-user-certifications";
-import { GRANT_CANDIDATE_STATUS, grantCandidateStatus } from "../model/grant-candidate-status";
+import { grantMemberPlan } from "../model/grant-candidate-status";
 import { grantResultToast } from "../model/grant-result-toast";
 import { GrantBookPicker } from "./grant-book-picker";
 import { GrantMemberPicker } from "./grant-member-picker";
 import { GrantSummary } from "./grant-summary";
-
-const LOCKED_STATUSES: readonly string[] = [
-  GRANT_CANDIDATE_STATUS.certified,
-  GRANT_CANDIDATE_STATUS.blocked,
-];
 
 interface GrantCertFormProps {
   options: GrantOptions;
@@ -51,34 +46,42 @@ export function GrantCertForm({ options, staffChannel, backHref }: GrantCertForm
   const router = useRouter();
   const toServerPath = useServerPath();
   const { pending, networkError, submit } = useActionSubmit(grantUserCertifications);
-  const [bookId, setBookId] = useState<string | null>(null);
+  const [bookIds, setBookIds] = useState<string[]>([]);
   const [userIds, setUserIds] = useState<string[]>([]);
   const [evidence, setEvidence] = useState("");
 
-  const book = options.books.find((candidate) => candidate.id === bookId);
-  const statusOf = (userId: string) =>
-    book ? grantCandidateStatus({ userId, book, options }) : null;
+  const chosenBooks = options.books.filter((candidate) => bookIds.includes(candidate.id));
+  const planOf = (userId: string, books: typeof chosenBooks) =>
+    grantMemberPlan({ userId, books, options });
   const chosen = options.members.filter((member) => userIds.includes(member.id));
-  const approving = chosen.filter(
-    (member) => statusOf(member.id) === GRANT_CANDIDATE_STATUS.pending,
+  const plans = chosen.map((member) => ({ member, plan: planOf(member.id, chosenBooks) }));
+  // 부여할 룰북이 하나도 없는 유저는 확정 대상에서 뺀다. 고른 룰북이 있으면 인증 건수로 센다.
+  const receiving = plans.filter(({ plan }) => plan.grantable.length > 0);
+  const grantCount = receiving.reduce((sum, { plan }) => sum + plan.grantable.length, 0);
+  const approving = plans.flatMap(({ member, plan }) =>
+    plan.approving.map((book) => ({ nickname: member.nickname, label: book.label })),
   );
-  const canConfirm = Boolean(book) && chosen.length > 0 && Boolean(evidence.trim()) && !pending;
+  const approvingNames = uniq(approving.map((row) => row.nickname));
+  const [firstBook] = chosenBooks;
+  const canConfirm =
+    chosenBooks.length > 0 && receiving.length > 0 && Boolean(evidence.trim()) && !pending;
 
-  const changeBook = (nextId: string) => {
-    const next = options.books.find((candidate) => candidate.id === nextId);
-    setBookId(nextId);
-    if (!next) return;
+  const changeBooks = (nextIds: string[]) => {
+    const next = options.books.filter((candidate) => nextIds.includes(candidate.id));
+    setBookIds(nextIds);
+    // 고른 룰북이 바뀌어 부여할 책이 하나도 남지 않은 유저는 선택에서 뺀다.
     setUserIds(
-      userIds.filter(
-        (userId) =>
-          !LOCKED_STATUSES.includes(grantCandidateStatus({ userId, book: next, options })),
-      ),
+      userIds.filter((userId) => next.length === 0 || planOf(userId, next).grantable.length > 0),
     );
   };
 
   const confirm = async () => {
-    if (!book) return;
-    const result = await submit({ rulebookId: book.id, userIds, evidence });
+    if (chosenBooks.length === 0) return;
+    const result = await submit({
+      rulebookIds: chosenBooks.map((book) => book.id),
+      userIds: receiving.map(({ member }) => member.id),
+      evidence,
+    });
     if (isUndefined(result)) return;
     if (!result.ok) {
       toast.danger(result.error);
@@ -102,13 +105,14 @@ export function GrantCertForm({ options, staffChannel, backHref }: GrantCertForm
             {networkError ? <ActionNetworkError /> : null}
             <FormSection
               title="1. 인증할 룰북"
-              description="사진 심사 없이 운영진의 판단으로 룰북 인증을 부여합니다. 한 번에 한 권만 고를 수 있습니다."
+              description="사진 심사 없이 운영진의 판단으로 룰북 인증을 부여합니다. 여러 권을 한 번에 고를 수 있습니다."
+              right={<Tag tone="primary">{`${chosenBooks.length}권 선택`}</Tag>}
             >
               <GrantBookPicker
                 books={options.books}
-                value={bookId}
+                selectedIds={bookIds}
                 disabled={pending}
-                onChange={changeBook}
+                onChange={changeBooks}
               />
             </FormSection>
             <FormSection
@@ -118,18 +122,18 @@ export function GrantCertForm({ options, staffChannel, backHref }: GrantCertForm
             >
               <GrantMemberPicker
                 options={options}
-                book={book}
+                books={chosenBooks}
                 selectedIds={userIds}
                 disabled={pending}
                 onChange={setUserIds}
               />
-              {approving.length > 0 ? (
+              {approvingNames.length > 0 ? (
                 <Callout.Root colorPalette="primary">
                   <Callout.Icon>
                     <ShieldCheck size={14} aria-hidden />
                   </Callout.Icon>
                   <Callout.Description>
-                    {`${approving.map((member) => member.nickname).join(", ")}의 대기 중인 심사 신청은 이 인증과 함께 승인으로 처리되어 심사 대기열에서 빠집니다.`}
+                    {`${approvingNames.join(", ")}의 대기 중인 심사 신청은 이 인증과 함께 승인으로 처리되어 심사 대기열에서 빠집니다.`}
                   </Callout.Description>
                 </Callout.Root>
               ) : null}
@@ -152,18 +156,23 @@ export function GrantCertForm({ options, staffChannel, backHref }: GrantCertForm
             </FormSection>
           </VStack>
           <GrantSummary
-            rulebookLabel={book?.label}
-            nicknames={chosen.map((member) => member.nickname)}
-            approvingNicknames={approving.map((member) => member.nickname)}
+            rulebookLabels={chosenBooks.map((book) => book.label)}
+            nicknames={receiving.map(({ member }) => member.nickname)}
+            grantCount={grantCount}
+            approving={approving}
           />
         </Grid>
-        {book ? (
+        {firstBook ? (
           <NotificationPreview
             payload={{
               kind: NOTIFICATION_KIND.certGranted,
-              params: { rulebookId: book.id, rulebookName: book.label },
+              params: { rulebookId: firstBook.id, rulebookName: firstBook.label },
             }}
-            recipients={`고른 유저 ${chosen.length}명의 알림 탭으로 알립니다.`}
+            recipients={
+              chosenBooks.length > 1
+                ? `고른 유저 ${receiving.length}명의 알림 탭으로 룰북마다 1건씩 알립니다. 위는 ${firstBook.label}의 알림입니다.`
+                : `고른 유저 ${receiving.length}명의 알림 탭으로 알립니다.`
+            }
           />
         ) : null}
         {staffChannel ? (

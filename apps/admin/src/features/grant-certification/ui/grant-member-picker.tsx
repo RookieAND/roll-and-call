@@ -5,13 +5,13 @@ import { useState } from "react";
 
 import type { GrantOptions } from "@/shared/server";
 
-import { grantCandidateStatus } from "../model/grant-candidate-status";
+import { grantMemberPlan } from "../model/grant-candidate-status";
 import { searchGrantMembers } from "../model/search-grant-members";
 import { GrantMemberRow } from "./grant-member-row";
 
 interface GrantMemberPickerProps {
   options: GrantOptions;
-  book: GrantOptions["books"][number] | undefined;
+  books: GrantOptions["books"];
   selectedIds: string[];
   disabled: boolean;
   onChange: (selectedIds: string[]) => void;
@@ -20,7 +20,7 @@ interface GrantMemberPickerProps {
 // 고른 사람은 검색어와 상관없이 목록 위에 남는다. 검색 결과는 이 서버 멤버 중 20명까지다.
 export function GrantMemberPicker({
   options,
-  book,
+  books,
   selectedIds,
   disabled,
   onChange,
@@ -50,7 +50,7 @@ export function GrantMemberPicker({
             <GrantMemberRow
               key={member.id}
               member={member}
-              status={book ? grantCandidateStatus({ userId: member.id, book, options }) : null}
+              plan={grantMemberPlan({ userId: member.id, books, options })}
               checked={selectedIds.includes(member.id)}
               disabled={disabled}
               onCheckedChange={(checked) => toggle(member.id, checked)}

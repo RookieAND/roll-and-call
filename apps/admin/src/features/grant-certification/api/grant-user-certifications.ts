@@ -1,5 +1,6 @@
 "use server";
 
+import { uniq } from "es-toolkit";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { z } from "zod";
@@ -15,13 +16,13 @@ import {
 } from "@/shared/server";
 
 interface GrantUserCertificationsInput {
-  rulebookId: string;
+  rulebookIds: string[];
   userIds: string[];
   evidence: string;
 }
 
 const grantUserCertificationsSchema = z.object({
-  rulebookId: idSchema,
+  rulebookIds: z.array(idSchema).min(1).max(100),
   userIds: z.array(idSchema).max(500),
   evidence: z.string().max(2000),
 }) satisfies z.ZodType<GrantUserCertificationsInput>;
@@ -36,34 +37,34 @@ export async function grantUserCertifications(args: GrantUserCertificationsInput
   const server = await getCurrentServer();
   const result = await grantCertifications({
     serverId: server.id,
-    rulebookId: input.rulebookId,
+    rulebookIds: input.rulebookIds,
     userIds: input.userIds,
     actor: staff,
     evidence,
   });
   if (!result.ok) return { ok: false as const, error: "인증이 필요 없는 룰북입니다" };
   revalidatePath("/", "layout");
-  if (result.granted.length > 0) {
-    after(() =>
-      evaluateBadges({ serverId: server.id, userIds: result.granted.map((row) => row.userId) }),
+  const grantedBooks = result.books.filter((book) => book.granted.length > 0);
+  if (grantedBooks.length > 0) {
+    const grantedUserIds = uniq(
+      grantedBooks.flatMap((book) => book.granted.map((row) => row.userId)),
     );
-    after(() =>
-      postStaffNotice({
-        server,
-        notice: {
-          kind: STAFF_NOTICE_KIND.certGranted,
-          staffNickname: staff.nickname,
-          rulebookId: input.rulebookId,
-          rulebookLabel: result.rulebookLabel,
-          nicknames: result.granted.map((row) => row.nickname),
-        },
-      }),
-    );
+    after(() => evaluateBadges({ serverId: server.id, userIds: grantedUserIds }));
+    // 운영진 채널에는 룰북마다 한 건씩 올린다. 대상은 룰북마다 다르기 때문이다.
+    after(async () => {
+      for (const book of grantedBooks) {
+        await postStaffNotice({
+          server,
+          notice: {
+            kind: STAFF_NOTICE_KIND.certGranted,
+            staffNickname: staff.nickname,
+            rulebookId: book.rulebookId,
+            rulebookLabel: book.rulebookLabel,
+            nicknames: book.granted.map((row) => row.nickname),
+          },
+        });
+      }
+    });
   }
-  return {
-    ok: true as const,
-    rulebookLabel: result.rulebookLabel,
-    granted: result.granted,
-    skipped: result.skipped,
-  };
+  return { ok: true as const, books: result.books };
 }
