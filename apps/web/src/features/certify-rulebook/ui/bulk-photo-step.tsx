@@ -15,6 +15,7 @@ import { CERT_PHOTO_ACCEPT, CERT_PHOTO_UPLOAD_FAILED } from "../model/cert-photo
 import { PHOTO_SLOT, revokePreview, slotKey, type PhotoSlot } from "../model/photo-slot";
 import { removeBulkPhoto } from "../model/remove-bulk-photo";
 import { setBulkPhoto } from "../model/set-bulk-photo";
+import { PhotoAddPlaceholder } from "./photo-add-placeholder";
 import { PhotoTile } from "./photo-tile";
 
 const GUIDE = [
@@ -33,6 +34,7 @@ export function BulkPhotoStep({ serverId, nickname, draft, update }: BulkPhotoSt
   const photoInput = useRef<HTMLInputElement>(null);
   const pickedIndex = useRef(0);
   const tiles = bulkTileSlots(draft);
+  const showPlaceholder = tiles.length === 1;
 
   const setPhoto = (index: number, slot: PhotoSlot) =>
     update((previous) => setBulkPhoto({ draft: previous, index, slot }));
@@ -117,6 +119,7 @@ export function BulkPhotoStep({ serverId, nickname, draft, update }: BulkPhotoSt
               }}
             />
           ))}
+          {showPlaceholder && <PhotoAddPlaceholder label={bulkPhotoLabel(1)} />}
         </Grid>
         <Text typography="body4" foreground="hint" className="break-keep">
           한 장에 담기지 않으면 사진을 더 올려 주세요.
