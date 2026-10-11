@@ -12,7 +12,7 @@ import {
   VStack,
   toast,
 } from "@roll-and-call/ui";
-import { isUndefined, uniq } from "es-toolkit";
+import { compact, isUndefined, uniq } from "es-toolkit";
 import { ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -68,12 +68,24 @@ export function GrantCertForm({ options, staffChannel, backHref }: GrantCertForm
     chosenBooks.length > 0 && receiving.length > 0 && Boolean(evidence.trim()) && !pending;
 
   const changeBooks = (nextIds: string[]) => {
-    const next = options.books.filter((candidate) => nextIds.includes(candidate.id));
-    setBookIds(pruneBookSelection({ selectedIds: nextIds, books: options.books }));
+    const keptIds = pruneBookSelection({ selectedIds: nextIds, books: options.books });
+    const next = options.books.filter((candidate) => keptIds.includes(candidate.id));
     // 고른 룰북이 바뀌어 부여할 책이 하나도 남지 않은 유저는 선택에서 뺀다.
-    setUserIds(
-      userIds.filter((userId) => next.length === 0 || planOf(userId, next).grantable.length > 0),
+    const keptUserIds = userIds.filter(
+      (userId) => next.length === 0 || planOf(userId, next).grantable.length > 0,
     );
+    setBookIds(keptIds);
+    setUserIds(keptUserIds);
+    // 조건을 잃어 선택에서 빠진 것은 말없이 사라지지 않게 알린다.
+    const [title, description] = compact([
+      nextIds.length > keptIds.length
+        ? `서플리먼트 ${nextIds.length - keptIds.length}권을 선택에서 뺐습니다`
+        : null,
+      userIds.length > keptUserIds.length
+        ? `부여할 룰북이 없는 유저 ${userIds.length - keptUserIds.length}명을 선택에서 뺐습니다`
+        : null,
+    ]);
+    if (title) toast.info(title, { description });
   };
 
   const confirm = async () => {

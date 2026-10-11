@@ -6,7 +6,7 @@ import { useState } from "react";
 import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { GrantOptions } from "@/shared/server";
 
-import { isBookSelectable, pruneBookSelection } from "../model/grant-book-selection";
+import { isBookSelectable } from "../model/grant-book-selection";
 import { GrantSelectedChips } from "./grant-selected-chips";
 
 interface GrantBookPickerProps {
@@ -30,12 +30,7 @@ export function GrantBookPicker({ books, selectedIds, disabled, onChange }: Gran
       (!keyword || `${book.category} ${book.label}`.toLowerCase().includes(keyword)),
   );
   const toggle = (bookId: string, checked: boolean) =>
-    onChange(
-      pruneBookSelection({
-        selectedIds: checked ? [...selectedIds, bookId] : selectedIds.filter((id) => id !== bookId),
-        books,
-      }),
-    );
+    onChange(checked ? [...selectedIds, bookId] : selectedIds.filter((id) => id !== bookId));
 
   return (
     <VStack gap="100">

@@ -1,6 +1,6 @@
 "use client";
 
-import { TextInput, VStack } from "@roll-and-call/ui";
+import { Text, TextInput, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import type { GrantOptions } from "@/shared/server";
@@ -29,6 +29,8 @@ export function GrantMemberPicker({
   const [query, setQuery] = useState("");
   const selected = options.members.filter((member) => selectedIds.includes(member.id));
   const found = searchGrantMembers({ members: options.members, query, excludeIds: selectedIds });
+  const hasResults = found.length > 0;
+  const showEmpty = !hasResults && query.trim() !== "";
   const toggle = (memberId: string, checked: boolean) =>
     onChange(checked ? [...selectedIds, memberId] : selectedIds.filter((id) => id !== memberId));
 
@@ -50,7 +52,7 @@ export function GrantMemberPicker({
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      {found.length > 0 ? (
+      {hasResults ? (
         <ul
           aria-label="인증할 유저"
           className="overflow-hidden rounded-400 border border-gray-200 bg-surface"
@@ -66,6 +68,11 @@ export function GrantMemberPicker({
             />
           ))}
         </ul>
+      ) : null}
+      {showEmpty ? (
+        <Text typography="body4" foreground="hint" className="px-050">
+          검색한 유저가 없습니다.
+        </Text>
       ) : null}
     </VStack>
   );

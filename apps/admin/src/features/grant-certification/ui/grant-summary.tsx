@@ -19,7 +19,7 @@ export function GrantSummary({
       items={[
         {
           label: "인증을 부여할 룰북",
-          value: `${rulebookLabels.length}개`,
+          value: `${rulebookLabels.length}권`,
         },
         {
           label: "인증을 받는 유저",
