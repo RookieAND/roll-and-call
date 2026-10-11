@@ -12,7 +12,7 @@ import {
   Text,
   VStack,
 } from "@roll-and-call/ui";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, X } from "lucide-react";
 import { useState } from "react";
 
 import { BadgeMedal, FEATURED_BADGE_LIMIT } from "@/entities/badge";
@@ -72,7 +72,7 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
           <Callout.Description className="break-keep">
             프로필 이름 아래에 최대 {FEATURED_BADGE_LIMIT}개까지 보입니다.
             <br />
-            현재까지 받은 업적 중에서 고를 수 있습니다.
+            현재까지 받은 업적 중에서 고를 수 있고, 고른 뱃지를 누르면 취소됩니다.
           </Callout.Description>
         </Callout.Root>
         {pickedChoices.length > 0 ? (
@@ -80,9 +80,18 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
             {pickedChoices.map((choice, index) => (
               <VStack
                 key={choice.key}
+                render={
+                  <button
+                    type="button"
+                    aria-label={`${choice.name} 선택 취소`}
+                    onClick={() =>
+                      setPicked((current) => toggleFeatured({ picked: current, key: choice.key }))
+                    }
+                  />
+                }
                 align="center"
                 gap="150"
-                className="relative rounded-500 bg-gray-50 px-075 pt-175 pb-150 text-center"
+                className="relative cursor-pointer rounded-500 bg-gray-50 px-075 pt-175 pb-150 text-center transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 <Text
                   typography="body4"
@@ -97,6 +106,12 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
                 <Text typography="body4" weight="extrabold" className="leading-tight text-balance">
                   {choice.name}
                 </Text>
+                <X
+                  size={14}
+                  strokeWidth={2.4}
+                  aria-hidden
+                  className="absolute top-100 right-100 text-hint"
+                />
               </VStack>
             ))}
           </Grid>
