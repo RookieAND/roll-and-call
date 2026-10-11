@@ -13,7 +13,6 @@ import {
 const SHOTS = [
   { label: "앞면", note: "표지 + 닉네임 쪽지", question: "룰북·판본과 쪽지 닉네임이 맞는가" },
   { label: "뒷면", note: "뒤표지", question: "같은 책의 뒤표지인가" },
-  { label: "책등", note: "책 옆면의 제목", question: "실물 책이고 제목이 보이는가" },
 ] as const;
 
 export function CertReviewLoading() {
@@ -47,7 +46,7 @@ export function CertReviewLoading() {
               </Text>
               <Skeleton width={72} height={20} rounded="full" className="ml-auto" />
             </HStack>
-            <Grid className="grid-cols-3 gap-150">
+            <Grid className="grid-cols-2 gap-150">
               {SHOTS.map((shot) => (
                 <VStack
                   key={shot.label}

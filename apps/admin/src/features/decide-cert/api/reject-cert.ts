@@ -20,7 +20,7 @@ const rejectCertSchema = z.object({
     reasonTag: z.string().max(100).nullable(),
     userReason: z.string().max(2000),
     staffMemo: z.string().max(2000),
-    flaggedShots: z.array(z.enum(["front", "back", "side"])).max(3),
+    flaggedShots: z.array(z.enum(["front", "back"])).max(2),
   }) satisfies z.ZodType<RejectCertInput>,
 });
 

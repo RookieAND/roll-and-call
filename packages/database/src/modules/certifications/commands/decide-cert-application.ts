@@ -134,7 +134,7 @@ export async function decideCertApplication({
           action: "인증 승인",
           target,
           targetUserId: decided.userId,
-          reason: decided.format === "ebook" ? "구매 내역·영수증 확인 완료" : "사진 3장 확인 완료",
+          reason: decided.format === "ebook" ? "구매 내역·영수증 확인 완료" : "사진 확인 완료",
           before: { label: "심사 대기" },
           after: { label: "인증됨" },
         },

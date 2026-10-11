@@ -17,8 +17,9 @@ import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-st
 import { decisionToastText } from "../model/decision-toast-text";
 import { isReviewShotKey } from "../model/is-review-shot-key";
 import { rejectMessage } from "../model/reject-message";
+import { reviewShots } from "../model/review-shots";
 import { shotLabels } from "../model/shot-labels";
-import { EBOOK_SHOTS, SHOTS, type ReviewShotKey } from "../model/shots";
+import type { ReviewShotKey } from "../model/shots";
 
 interface UseCertDecisionOptions {
   applicationId: string;
@@ -26,6 +27,7 @@ interface UseCertDecisionOptions {
   rulebookId: string;
   rulebookLabel: string;
   format: CertFormat;
+  grouped: boolean;
   photoUrls: Partial<Record<ReviewShotKey, string>>;
   state: CertReviewState;
   nextHref?: string;
@@ -39,6 +41,7 @@ export function useCertDecision({
   rulebookId,
   rulebookLabel,
   format,
+  grouped,
   photoUrls,
   state,
   nextHref,
@@ -62,7 +65,7 @@ export function useCertDecision({
   const reviewable = state === CERT_REVIEW_STATE.open;
   const rejecting = searchParams.get("mode") === "reject" && reviewable;
   const ebook = format === "ebook";
-  const shots = ebook ? EBOOK_SHOTS : SHOTS;
+  const shots = reviewShots({ ebook, grouped, photoUrls });
   const pending = approval.pending || rejection.pending;
   const checkableShots: ReviewShotKey[] = reviewable
     ? shots.filter((shot) => photoUrls[shot.key]).map((shot) => shot.key)
@@ -166,6 +169,7 @@ export function useCertDecision({
 
   return {
     ebook,
+    grouped,
     shots,
     reviewable,
     rejecting,

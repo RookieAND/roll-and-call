@@ -16,7 +16,7 @@ function application(partial: Partial<CertApplication>): CertApplication {
     userId: "u",
     rulebookId: "r",
     memo: "",
-    photoUrls: { front: KEY, back: KEY, side: KEY },
+    photoUrls: { front: KEY, back: KEY },
     replacedShots: [],
     groupId: null,
     format: "physical",
@@ -68,8 +68,18 @@ describe("toBookResult", () => {
       rulebook: rulebook(application({ photoUrls: { front: KEY, back: "other" } })),
       signedUrls: new Map([[KEY, SIGNED]]),
     });
-    expect(result.thumbs.map((thumb) => thumb.src)).toEqual([SIGNED, "", null]);
+    expect(result.thumbs.map((thumb) => thumb.src)).toEqual([SIGNED, ""]);
     expect(result.deleted).toBe(false);
+  });
+
+  it("묶음으로 신청한 사진은 올린 순서대로 사진 번호를 붙인다", () => {
+    const result = toBookResult({
+      rulebook: rulebook(
+        application({ groupId: "g", photoUrls: { front: KEY, back: KEY, extra1: KEY } }),
+      ),
+      signedUrls: new Map([[KEY, SIGNED]]),
+    });
+    expect(result.thumbs.map((thumb) => thumb.label)).toEqual(["사진 1", "사진 2", "사진 3"]);
   });
 
   it("보관 기간이 지나 비운 신청은 사진 대신 삭제 안내를 보인다", () => {
@@ -85,7 +95,7 @@ describe("toBookResult", () => {
 
   it("운영진이 직접 인증한 책은 그 전 반려 신청의 형식·신청일·사진을 섞지 않는다", () => {
     const result = toBookResult({
-      rulebook: rulebook(application({ status: "rejected", flaggedShots: ["side"] })),
+      rulebook: rulebook(application({ status: "rejected", flaggedShots: ["back"] })),
       signedUrls: new Map([[KEY, SIGNED]]),
     });
     expect(result.mode).toBe("운영진 인증");

@@ -17,7 +17,7 @@ import {
   rulebookLabel,
 } from "@/entities/rulebook";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
-import { certPhotoPathOf, serverPath } from "@/shared/lib";
+import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
   notMemberError,
@@ -25,8 +25,10 @@ import {
   STAFF_NOTICE_KIND,
 } from "@/shared/server";
 
+import { isOwnCertFile } from "../model/is-own-cert-file";
 import { isQuizAnswer } from "../model/is-quiz-answer";
 import { QUIZ_ANSWER_FIELD } from "../model/quiz-answer-field";
+import { QUIZ_WRONG_ANSWER } from "../model/quiz-wrong-answer";
 
 const TEXT_INPUT_MAX = 1000;
 
@@ -59,14 +61,11 @@ export async function submitCertification(
     return { error: await notMemberError() };
   }
   const { server, user } = member;
-  // 옛 업로드는 `${user.id}/…`, 새 업로드는 `servers/${server.id}/${user.id}/…`에 있다.
-  const ownPrefixes = [`${user.id}/`, `servers/${server.id}/${user.id}/`];
-  const ownFile = (url: string) =>
-    ownPrefixes.some((prefix) => certPhotoPathOf(url)?.startsWith(prefix) ?? false);
+  const ownFile = (url: string) => isOwnCertFile({ url, serverId: server.id, userId: user.id });
   const physical = entry.format === CERT_FORMAT.physical;
   if (physical) {
     if (!CERT_SHOTS.every((shot) => ownFile(entry.photos[shot])))
-      return { error: "사진 3장을 모두 올려 주세요." };
+      return { error: "사진 2장을 모두 올려 주세요." };
   } else {
     if (!ownFile(entry.captureUrl) || !ownFile(entry.receiptUrl))
       return { error: "구매 내역과 영수증을 모두 올려 주세요." };
@@ -109,7 +108,7 @@ export async function submitCertification(
     return { error: "퀴즈가 바뀌었습니다. 화면을 새로 고쳐 주세요." };
   }
   if (quizQuestion && !isQuizAnswer({ answer: quiz!.answer, answers: quizQuestion.answers })) {
-    return { error: "답이 맞지 않습니다. 책을 다시 확인해 주세요.", field: QUIZ_ANSWER_FIELD };
+    return { error: QUIZ_WRONG_ANSWER, field: QUIZ_ANSWER_FIELD };
   }
 
   const previous = latest?.status === "rejected" ? latest.photoUrls : null;

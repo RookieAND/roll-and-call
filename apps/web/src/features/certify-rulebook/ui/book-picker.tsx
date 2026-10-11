@@ -1,5 +1,6 @@
 "use client";
 
+import { BULK_CERT_MAX_BOOKS } from "@roll-and-call/database/certifications/model";
 import {
   Badge,
   Button,
@@ -20,16 +21,20 @@ import { useState } from "react";
 import {
   certApplyHref,
   certOption,
+  CERT_OPTION,
   CERT_STATE,
   RULEBOOK_KIND,
   RULEBOOK_KIND_GROUP,
   type MyRulebook,
 } from "@/entities/rulebook";
 import { useServerPath } from "@/shared/lib";
+import { useIsTrial } from "@/shared/trial";
 
+import { isBulkSelectable, toggleBulkSelection } from "../model/bulk-selection";
 import { coreNeedNote } from "../model/core-need-note";
 import { pickerCategories } from "../model/picker-categories";
 import { recentCategories } from "../model/recent-categories";
+import { BulkModeSwitch } from "./bulk-mode-switch";
 import { PickerBookRow } from "./picker-book-row";
 import { PickerCategoryRow } from "./picker-category-row";
 import { pickerListing } from "./picker-listing";
@@ -42,10 +47,13 @@ interface BookPickerProps {
 
 export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }: BookPickerProps) {
   const toServerPath = useServerPath();
+  const trial = useIsTrial();
   const initial = rulebooks.find((rulebook) => rulebook.id === initialRulebookIds[0]);
   const [query, setQuery] = useState("");
   const [categoryId, setCategoryId] = useState(initial?.categoryId ?? null);
   const [showAll, setShowAll] = useState(false);
+  const [bulk, setBulk] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const allCategories = pickerCategories({ rulebooks, query: "" });
   const category = allCategories.find((candidate) => candidate.id === categoryId);
@@ -60,6 +68,9 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
     books.some((book) => book.kind === kind),
   );
   const needNote = coreNeedNote(books);
+  const showBulkSwitch = !trial;
+  const bulkApplyHref = toServerPath(certApplyHref({ rulebookIds: selectedIds, step: "photos" }));
+  const bulkApplying = bulk && selectedIds.length > 0;
   const requestHref = toServerPath(
     `/me/rulebooks/apply/request${query.trim() ? `?${new URLSearchParams({ name: query.trim() })}` : ""}`,
   );
@@ -77,9 +88,18 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
               인증할 책 고르기
             </Text>
             <Text typography="body2" foreground="muted" render={<p />}>
-              한 번에 한 권씩 신청합니다.
+              {bulk ? "함께 신청할 책을 모두 골라 주세요." : "한 번에 한 권씩 신청합니다."}
             </Text>
           </VStack>
+          {showBulkSwitch && (
+            <BulkModeSwitch
+              checked={bulk}
+              onCheckedChange={(checked) => {
+                setBulk(checked);
+                if (!checked) setSelectedIds([]);
+              }}
+            />
+          )}
           {!category && (
             <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 -my-100 bg-surface px-200 py-100">
               <TextInput
@@ -176,13 +196,36 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
                     .filter((book) => book.kind === kind)
                     .map((book) => {
                       const option = certOption({ rulebook: book, rulebooks });
+                      const available = isBulkSelectable({
+                        rulebook: book,
+                        rulebooks,
+                        selectedIds,
+                      });
+                      const withCore = bulk && option.type === CERT_OPTION.needsCore && available;
                       return (
                         <PickerBookRow
                           key={book.id}
                           title={book.shortName}
                           edition={book.edition}
                           type={option.type}
-                          note={option.note}
+                          note={withCore ? "기본 룰북과 함께 신청합니다" : option.note}
+                          selection={
+                            bulk
+                              ? {
+                                  checked: selectedIds.includes(book.id),
+                                  available,
+                                  limitReached: selectedIds.length >= BULK_CERT_MAX_BOOKS,
+                                  onToggle: () =>
+                                    setSelectedIds((current) =>
+                                      toggleBulkSelection({
+                                        rulebooks,
+                                        selectedIds: current,
+                                        rulebookId: book.id,
+                                      }),
+                                    ),
+                                }
+                              : null
+                          }
                           rejected={book.state === CERT_STATE.rejected}
                           href={toServerPath(
                             certApplyHref({ rulebookIds: [book.id], step: "photos" }),
@@ -196,20 +239,26 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
           )}
         </VStack>
         <div className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) -mx-200 mt-auto bg-surface px-200 pt-100 pb-200">
-          <Callout.Root colorPalette="gray">
-            <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
-            <Callout.Description className="break-keep">
-              추가 요청을 보내 주세요.
-              <br />
-              추가되면 알림 탭으로 알립니다.
-            </Callout.Description>
-            <Callout.Action>
-              <Button render={<Link href={requestHref} />} variant="outline" size="sm">
-                <Plus size={14} strokeWidth={2.4} aria-hidden />
-                추가 요청
-              </Button>
-            </Callout.Action>
-          </Callout.Root>
+          {bulkApplying ? (
+            <Button render={<Link href={bulkApplyHref} />} size="lg" className="w-full">
+              {`${selectedIds.length}권 신청하기`}
+            </Button>
+          ) : (
+            <Callout.Root colorPalette="gray">
+              <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
+              <Callout.Description className="break-keep">
+                추가 요청을 보내 주세요.
+                <br />
+                추가되면 알림 탭으로 알립니다.
+              </Callout.Description>
+              <Callout.Action>
+                <Button render={<Link href={requestHref} />} variant="outline" size="sm">
+                  <Plus size={14} strokeWidth={2.4} aria-hidden />
+                  추가 요청
+                </Button>
+              </Callout.Action>
+            </Callout.Root>
+          )}
         </div>
       </Container>
     </>

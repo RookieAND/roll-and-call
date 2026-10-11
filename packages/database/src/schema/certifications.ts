@@ -23,10 +23,13 @@ export const certApplicationStatus = pgEnum("cert_application_status", [
   "withdrawn",
 ]);
 
-// 인증 사진은 앞면(닉네임 쪽지와 함께)·뒷면·옆면(책등) 세 장이다.
-export type CertShot = "front" | "back" | "side";
+// 인증 사진은 앞면(닉네임 쪽지와 함께)과 뒷면 두 장이다.
+export type CertShot = "front" | "back";
 
-// 실물은 사진 3장, 전자책은 구매 내역·영수증 캡처로 확인한다.
+// 여러 권을 함께 신청할 때 앞면·뒷면 칸 뒤에 덧붙이는 추가 증빙 사진. 심사 대상 사진이 아니라 참고용이다.
+export type CertExtraShot = "extra1" | "extra2" | "extra3";
+
+// 실물은 사진, 전자책은 구매 내역·영수증 캡처로 확인한다.
 export const certFormat = pgEnum("cert_format", ["physical", "ebook"]);
 
 // 한 사람이 같은 룰북을 여러 번 신청할 수 있다. 반려된 이전 신청이 재신청 이력이다.
@@ -42,7 +45,10 @@ export const certApplications = pgTable(
       .notNull()
       .references(() => rulebooks.id, { onDelete: "cascade" }),
     memo: text("memo").notNull().default(""),
-    photoUrls: jsonb("photo_urls").$type<Partial<Record<CertShot, string>>>().notNull().default({}),
+    photoUrls: jsonb("photo_urls")
+      .$type<Partial<Record<CertShot | CertExtraShot, string>>>()
+      .notNull()
+      .default({}),
     // 재신청에서 이전 신청과 달라진 사진.
     replacedShots: text("replaced_shots").array().$type<CertShot[]>().notNull().default([]),
     // 여러 권을 한 번에 신청하면 권마다 한 건씩 만들고 같은 사진·구매 기록을 나눠 쓴다.

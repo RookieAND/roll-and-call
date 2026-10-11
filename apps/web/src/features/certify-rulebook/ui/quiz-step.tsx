@@ -1,5 +1,6 @@
-import { Callout, Field, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
-import { BookOpen } from "lucide-react";
+import { Text, VStack } from "@roll-and-call/ui";
+
+import { QuizQuestionField } from "./quiz-question-field";
 
 interface QuizStepProps {
   bookTitle: string;
@@ -30,38 +31,15 @@ export function QuizStep({
           책을 가지고 있다면 쉽게 답할 수 있는 질문입니다.
         </Text>
       </VStack>
-      <Callout.Root>
-        <Callout.Description>
-          <HStack align="center" gap="075" render={<span />}>
-            <BookOpen size={16} strokeWidth={2.1} aria-hidden className="flex-none" />
-            <Text typography="body3" weight="bold" foreground="inherit">
-              {bookTitle}
-            </Text>
-          </HStack>
-          <Text typography="body4" foreground="muted" className="pl-300">
-            {bookSub}
-          </Text>
-        </Callout.Description>
-      </Callout.Root>
-      <VStack gap="150" className="pt-100">
-        <Text
-          typography="subtitle1"
-          render={<label htmlFor={ANSWER_ID} />}
-          className="break-keep text-pretty"
-        >
-          {question}
-        </Text>
-        <Field.Root error={error ?? undefined}>
-          <TextInput
-            id={ANSWER_ID}
-            maxLength={200}
-            placeholder="답 입력"
-            value={answer}
-            invalid={Boolean(error)}
-            onChange={(event) => onAnswerChange(event.target.value)}
-          />
-        </Field.Root>
-      </VStack>
+      <QuizQuestionField
+        inputId={ANSWER_ID}
+        bookTitle={bookTitle}
+        bookSub={bookSub}
+        question={question}
+        answer={answer}
+        error={error}
+        onAnswerChange={onAnswerChange}
+      />
     </VStack>
   );
 }

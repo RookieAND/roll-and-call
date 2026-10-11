@@ -7,7 +7,6 @@ const COLOR = {
   paper: "var(--rc-color-bg-notice-weak)",
   paperEdge: "var(--rc-color-border-notice)",
   pen: "var(--rc-color-fg-notice)",
-  floor: "var(--rc-color-border-strong)",
   bar: "var(--rc-color-fg-muted)",
   base: "var(--rc-color-bg-canvas-base)",
 } as const;
@@ -102,42 +101,6 @@ const NICKNAME_NOTE = (
   </g>
 );
 
-const SPINE = (
-  <>
-    <rect
-      x={0}
-      y={14}
-      width={18}
-      height={92}
-      rx={2}
-      fill={COLOR.cover}
-      stroke={COLOR.edge}
-      strokeWidth={1.5}
-    />
-    <rect x={7} y={24} width={4} height={48} rx={2} fill={COLOR.ink} />
-    <rect x={6} y={80} width={6} height={6} rx={1} fill={COLOR.ink} opacity={0.6} />
-    <rect x={0} y={96} width={18} height={3} fill={COLOR.edge} opacity={0.6} />
-  </>
-);
-
-// 가운데 책 양옆에 흐리게 선 다른 책들. [x, y, 너비]
-const SHELF = {
-  single: {
-    spines: [37],
-    neighbors: [
-      [22, 30, 13],
-      [57, 38, 12],
-    ],
-  },
-  paired: {
-    spines: [26, 46],
-    neighbors: [
-      [12, 30, 12],
-      [66, 38, 12],
-    ],
-  },
-} as const;
-
 interface ShotArtProps {
   shot: CertShot;
   paired?: boolean;
@@ -145,44 +108,16 @@ interface ShotArtProps {
 
 export function ShotArt({ shot, paired = false }: ShotArtProps) {
   const book = shot === "front" ? FRONT_COVER : BACK_COVER;
-  const shelf = paired ? SHELF.paired : SHELF.single;
   return (
     <svg viewBox="0 0 90 120" width="100%" height="100%" aria-hidden className="block">
-      {shot === "side" ? (
-        <>
-          <path d="M8 106H82" stroke={COLOR.floor} strokeWidth={1.5} strokeLinecap="round" />
-          {shelf.neighbors.map(([x, y, width]) => (
-            <rect
-              key={x}
-              x={x}
-              y={y}
-              width={width}
-              height={106 - y}
-              rx={2}
-              fill="none"
-              stroke={COLOR.floor}
-              strokeWidth={1.2}
-              opacity={0.7}
-            />
-          ))}
-          {shelf.spines.map((x) => (
-            <g key={x} transform={`translate(${x} 0)`}>
-              {SPINE}
+      {paired
+        ? PAIR_TRANSFORMS.map((transform) => (
+            <g key={transform} transform={transform}>
+              {book}
             </g>
-          ))}
-        </>
-      ) : (
-        <>
-          {paired
-            ? PAIR_TRANSFORMS.map((transform) => (
-                <g key={transform} transform={transform}>
-                  {book}
-                </g>
-              ))
-            : book}
-          {shot === "front" && NICKNAME_NOTE}
-        </>
-      )}
+          ))
+        : book}
+      {shot === "front" && NICKNAME_NOTE}
     </svg>
   );
 }

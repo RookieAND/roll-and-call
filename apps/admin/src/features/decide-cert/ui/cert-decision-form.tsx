@@ -20,6 +20,7 @@ interface CertDecisionFormProps {
   rulebookId: string;
   rulebookLabel: string;
   format: CertFormat;
+  grouped: boolean;
   photoUrls: Partial<Record<ReviewShotKey, string>>;
   previousUrls: Partial<Record<ReviewShotKey, string>>;
   // 재신청이면 사진마다 「새로 올림」·「지난번과 같음」
@@ -67,6 +68,7 @@ export function CertDecisionForm({
           <ShotSection
             state={state}
             ebook={decision.ebook}
+            grouped={decision.grouped}
             shots={shots}
             photoUrls={photoUrls}
             freshLabels={freshLabels}

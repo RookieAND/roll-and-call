@@ -18,6 +18,8 @@ export {
   type AuditActorKind,
   type Sanction,
   type ShotKey,
+  type ExtraShotKey,
+  type PhotoKey,
   type AuditState,
   type AuditInput,
 } from "./types";

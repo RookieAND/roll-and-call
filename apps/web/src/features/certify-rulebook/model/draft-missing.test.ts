@@ -9,7 +9,7 @@ const empty = { status: PHOTO_SLOT.empty } as const;
 
 const draft = (overrides: Partial<BookDraft>): BookDraft => ({
   format: "physical",
-  shots: { front: done, back: done, side: done },
+  shots: { front: done, back: done },
   proofs: { order: empty, receipt: empty },
   seller: "",
   sellerOther: "",
@@ -20,8 +20,11 @@ const draft = (overrides: Partial<BookDraft>): BookDraft => ({
 
 describe("draftMissing", () => {
   it("비운 사진 칸을 알려 준다", () => {
-    expect(draftMissing(draft({ shots: { front: done, back: empty, side: empty } }))).toBe(
-      "뒷면·책등 사진을 올려 주세요",
+    expect(draftMissing(draft({ shots: { front: done, back: empty } }))).toBe(
+      "뒷면 사진을 올려 주세요",
+    );
+    expect(draftMissing(draft({ shots: { front: empty, back: empty } }))).toBe(
+      "사진 2장을 올려 주세요",
     );
     expect(draftMissing(draft({}))).toBeNull();
   });

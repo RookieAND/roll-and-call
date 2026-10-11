@@ -1,4 +1,10 @@
-export { CERT_SHOT, CERT_SHOT_LABEL, CERT_SHOTS, type CertShot } from "./model/cert-shot";
+export {
+  CERT_BULK_PHOTO_KEYS,
+  CERT_SHOT,
+  CERT_SHOT_LABEL,
+  CERT_SHOTS,
+  type CertShot,
+} from "./model/cert-shot";
 export { CERT_PROOF, CERT_PROOF_LABEL, CERT_PROOFS, type CertProof } from "./model/cert-proof";
 export { CERT_FORMAT, CERT_FORMAT_LABEL, type CertFormat } from "./model/cert-format";
 export { isCertFormat } from "./model/is-cert-format";

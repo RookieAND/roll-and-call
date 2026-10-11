@@ -1,4 +1,4 @@
-import { CERT_FORMAT, type CertFormat, type CertShot } from "@/entities/rulebook";
+import { CERT_FORMAT, type CertShot, type CertFormat } from "@/entities/rulebook";
 
 import type { BookDraft } from "./book-draft";
 import { slotKey } from "./photo-slot";
@@ -23,7 +23,6 @@ export function toCertEntry({ rulebookId, draft }: { rulebookId: string; draft: 
     photos: {
       front: ebook ? "" : slotKey(draft.shots.front),
       back: ebook ? "" : slotKey(draft.shots.back),
-      side: ebook ? "" : slotKey(draft.shots.side),
     },
     seller: ebook ? sellerName(draft) : "",
     captureUrl: ebook ? slotKey(draft.proofs.order) : "",

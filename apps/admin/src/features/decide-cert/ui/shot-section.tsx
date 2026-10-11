@@ -11,6 +11,8 @@ import { ShotSectionHeader } from "./shot-section-header";
 interface ShotSectionProps {
   state: CertReviewState;
   ebook: boolean;
+  // 묶음 신청의 사진은 책 여러 권에 함께 쓰여 한 장만 문제로 지정할 수 없다.
+  grouped: boolean;
   shots: readonly ReviewShot[];
   photoUrls: Partial<Record<ReviewShotKey, string>>;
   freshLabels: Partial<Record<ReviewShotKey, string>>;
@@ -29,6 +31,7 @@ interface ShotSectionProps {
 export function ShotSection({
   state,
   ebook,
+  grouped,
   shots,
   photoUrls,
   freshLabels,
@@ -73,7 +76,7 @@ export function ShotSection({
               checked={checked}
               disabled={!reviewable || pending}
               flagged={flagged}
-              flaggable={rejecting && !ebook && (!checked || flagged)}
+              flaggable={rejecting && !ebook && !grouped && (!checked || flagged)}
               onCheckedChange={() => onToggleCheck(shot.key)}
               onFlagToggle={() => isShotKey(shot.key) && onToggleFlag(shot.key)}
               onZoom={() => onZoom(shot.key)}

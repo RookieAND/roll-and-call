@@ -701,6 +701,13 @@
       "when": 1799100000000,
       "tag": "0105_ranking_mode",
       "breakpoints": true
+    },
+    {
+      "idx": 106,
+      "version": "7",
+      "when": 1799200000000,
+      "tag": "0106_drop_side_shot",
+      "breakpoints": true
     }
   ]
 }

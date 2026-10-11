@@ -13,7 +13,8 @@ export async function loadCertificationContext({
 }: {
   serverId: string;
   userId: string;
-  rulebookId: string;
+  // 한 책의 퀴즈 문항까지 함께 읽을 때만 준다(여러 권 신청은 loadBulkQuizQuestions가 맡는다).
+  rulebookId?: string;
 }) {
   const [books, certified, applications, sanction, quizQuestion] = await Promise.all([
     db
@@ -56,7 +57,7 @@ export async function loadCertificationContext({
       )
       .orderBy(desc(certApplications.createdAt)),
     findActiveSanction({ serverId, userId }),
-    findAssignedQuizQuestion({ serverId, rulebookId, userId }),
+    rulebookId ? findAssignedQuizQuestion({ serverId, rulebookId, userId }) : null,
   ]);
   return { books, certified, applications, sanction, quizQuestion };
 }

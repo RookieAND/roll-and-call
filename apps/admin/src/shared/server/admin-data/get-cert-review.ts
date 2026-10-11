@@ -8,7 +8,7 @@ import { filterCertQueue } from "./filter-cert-queue";
 import { nextReviewableId } from "./next-reviewable-id";
 import { signCertPhotoUrls } from "./sign-cert-photos";
 import { loadSnapshot } from "./snapshot";
-import type { ShotKey } from "./types";
+import type { PhotoKey } from "./types";
 import { waitedDays } from "./waited-days";
 
 // filter는 대기열에서 고른 필터다. [다음 건]은 그 안에서 다음 심사 가능 건이다.
@@ -32,7 +32,7 @@ export async function getCertReview({ id, filter }: { id: string; filter: CertQu
       ...Object.values(latestRejection?.photoUrls ?? {}),
     ]),
   );
-  const signedShots = (urls: Partial<Record<ShotKey, string>>) =>
+  const signedShots = (urls: Partial<Record<PhotoKey, string>>) =>
     mapValues(urls, (url) => (url ? signed.get(url) : undefined));
   const sign = (url: string | null) => (url ? (signed.get(url) ?? null) : null);
   const pending = application.status === "pending";
@@ -42,6 +42,16 @@ export async function getCertReview({ id, filter }: { id: string; filter: CertQu
       ? { status: application.status, at: application.processedAt! }
       : null;
   const photoUrls = signedShots(application.photoUrls);
+  const groupBooks = application.groupId
+    ? db.certApplications
+        .filter((candidate) => candidate.groupId === application.groupId)
+        .map((candidate) => ({
+          applicationId: candidate.id,
+          label: candidate.rulebook,
+          status: candidate.status,
+          current: candidate.id === id,
+        }))
+    : [];
   const captureUrl = sign(application.purchase.captureUrl);
   const receiptUrl = sign(application.purchase.receiptUrl);
   const hasProof = compact([...Object.values(photoUrls), captureUrl, receiptUrl]).length > 0;
@@ -51,6 +61,8 @@ export async function getCertReview({ id, filter }: { id: string; filter: CertQu
     rulebookId: application.rulebookId,
     rulebook: application.rulebook,
     format: application.format,
+    // 사진 한 묶음으로 함께 신청한 책들(이 신청 포함). 한 권만 낸 신청이면 비어 있다.
+    groupBooks,
     waitingOn: blockers?.waitingOn ?? [],
     duplicate: blockers?.duplicate ?? null,
     quiz: application.quiz ?? null,

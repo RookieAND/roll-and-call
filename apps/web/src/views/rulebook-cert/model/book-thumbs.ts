@@ -1,4 +1,5 @@
 import {
+  CERT_BULK_PHOTO_KEYS,
   CERT_FORMAT,
   CERT_PROOF,
   CERT_PROOF_LABEL,
@@ -27,6 +28,14 @@ export function bookThumbs({
         proof === CERT_PROOF.order ? application.purchaseCaptureUrl : application.receiptUrl,
       ),
       flagged: flagged(proof),
+    }));
+  }
+  if (application.groupId) {
+    // 묶음 사진은 앞면·뒷면이 아니라 올린 순서대로 부르고, 올리지 않은 칸은 보이지 않는다.
+    return CERT_BULK_PHOTO_KEYS.filter((key) => application.photoUrls[key]).map((key, index) => ({
+      label: `사진 ${index + 1}`,
+      src: src(application.photoUrls[key]),
+      flagged: false,
     }));
   }
   return CERT_SHOTS.map((shot) => ({

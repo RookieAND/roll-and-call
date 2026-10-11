@@ -10,8 +10,8 @@ describe("rejectionSummary", () => {
   });
 
   it("태그가 없고 문제 사진이 있으면 사진을 다시 올리라고 한다", () => {
-    expect(rejectionSummary({ rejectTag: null, flaggedShots: ["front", "side"] })).toBe(
-      "앞면·책등 사진을 다시 올려 주세요",
+    expect(rejectionSummary({ rejectTag: null, flaggedShots: ["front", "back"] })).toBe(
+      "앞면·뒷면 사진을 다시 올려 주세요",
     );
   });
 

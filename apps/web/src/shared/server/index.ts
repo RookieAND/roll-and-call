@@ -47,7 +47,11 @@ export {
 export { getProfileMemo, type MemberProfile } from "@roll-and-call/database/profiles";
 export { findActiveSanction } from "@roll-and-call/database/moderation";
 export { clearQuest, getQuestClears } from "@roll-and-call/database/onboarding";
-export { getRulebookRecords, type RulebookRecords } from "@roll-and-call/database/certifications";
+export {
+  getRulebookRecords,
+  loadBulkQuizQuestions as getBulkQuizQuestions,
+  type RulebookRecords,
+} from "@roll-and-call/database/certifications";
 export { markBadgesNotified, type BadgeRecord } from "@roll-and-call/database/badges";
 export {
   countUnreadNotifications,

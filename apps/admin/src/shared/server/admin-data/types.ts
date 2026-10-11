@@ -5,6 +5,7 @@ import type {
   AuditActorKind,
   AuditState,
   Sanction,
+  PhotoKey,
   ShotKey,
   StaffRole,
 } from "@roll-and-call/database/moderation";
@@ -16,6 +17,7 @@ import type { PostStatus } from "./post-status";
 export type {
   Actor,
   AuditState,
+  PhotoKey,
   Sanction,
   ShotKey,
   StaffRole,
@@ -76,7 +78,7 @@ export interface PreviousRejection {
   tags: string[];
   requests: string[];
   flaggedShots: ShotKey[];
-  photoUrls: Partial<Record<ShotKey, string>>;
+  photoUrls: Partial<Record<PhotoKey, string>>;
 }
 
 export type CertFormat = "physical" | "ebook";
@@ -94,7 +96,7 @@ export interface CertApplication {
   rejectReason?: string;
   appliedAt: Date;
   memo: string;
-  photoUrls: Partial<Record<ShotKey, string>>;
+  photoUrls: Partial<Record<PhotoKey, string>>;
   replacedShots: ShotKey[];
   purchase: {
     seller: string | null;

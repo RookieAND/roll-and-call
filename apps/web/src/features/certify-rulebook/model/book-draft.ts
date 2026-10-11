@@ -1,4 +1,4 @@
-import type { CertFormat, CertProof, CertShot } from "@/entities/rulebook";
+import type { CertShot, CertFormat, CertProof } from "@/entities/rulebook";
 
 import type { PhotoSlot } from "./photo-slot";
 

@@ -1,4 +1,4 @@
-import { CERT_PROOF, type CertProof, type CertShot } from "@/entities/rulebook";
+import { CERT_PROOF, type CertShot, type CertProof } from "@/entities/rulebook";
 
 import type { BookDraft } from "./book-draft";
 

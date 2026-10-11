@@ -23,7 +23,7 @@ interface TrialCertDetailProps {
   onBack: () => void;
 }
 
-const PHOTO_LABELS = ["앞면", "뒷면", "책등"] as const;
+const PHOTO_LABELS = ["앞면", "뒷면"] as const;
 
 // 신청 상세(U13-07). 체험 신청이라 [신청 취소]는 누를 수 없는 설명용 버튼이다.
 export function TrialCertDetail({ cert, onBack }: TrialCertDetailProps) {
@@ -64,7 +64,7 @@ export function TrialCertDetail({ cert, onBack }: TrialCertDetailProps) {
           </Card.Root>
           <VStack gap="100">
             <Text typography="subtitle2">제출한 사진</Text>
-            <Grid cols={3} gap="100">
+            <Grid cols={2} gap="100">
               {PHOTO_LABELS.map((label) => (
                 <VStack key={label} gap="050">
                   <img

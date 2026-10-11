@@ -10,6 +10,7 @@ import { AdminHeader, ConflictNotice, ItemCard, NextItemButton } from "@/shared/
 import { reviewState } from "../model/review-state";
 import { ApplicantCard } from "./applicant-card";
 import { EbookInputPanel } from "./ebook-input-panel";
+import { GroupBooksNotice } from "./group-books-notice";
 import { ReapplyNotice } from "./reapply-notice";
 import { WaitingCoreNotice } from "./waiting-core-notice";
 
@@ -38,7 +39,7 @@ export function CertReviewView({ review, viewerId, filter }: CertReviewViewProps
   const freshLabels =
     latestRejection && !ebook
       ? Object.fromEntries(
-          (["front", "back", "side"] as const).map((shot) => [
+          (["front", "back"] as const).map((shot) => [
             shot,
             review.replacedShots.includes(shot) ? FRESH_LABEL.new : FRESH_LABEL.same,
           ]),
@@ -62,6 +63,7 @@ export function CertReviewView({ review, viewerId, filter }: CertReviewViewProps
         rulebookId={review.rulebookId}
         rulebookLabel={review.rulebook}
         format={review.format}
+        grouped={review.groupBooks.length > 0}
         photoUrls={photoUrls}
         previousUrls={previousUrls}
         freshLabels={freshLabels}
@@ -72,6 +74,16 @@ export function CertReviewView({ review, viewerId, filter }: CertReviewViewProps
         viewerId={viewerId}
       >
         <ApplicantCard review={review} />
+        {review.groupBooks.length > 0 ? (
+          <GroupBooksNotice
+            books={review.groupBooks.map((book) => ({
+              label: book.label,
+              status: book.status,
+              current: book.current,
+              href: withQuery(`/cert/${book.applicationId}`, query, {}),
+            }))}
+          />
+        ) : null}
         {waitingCore ? (
           <WaitingCoreNotice
             coreLabel={waitingCore.label}

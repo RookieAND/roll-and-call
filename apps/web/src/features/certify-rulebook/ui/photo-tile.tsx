@@ -76,6 +76,7 @@ export function PhotoTile({
   const previewUrl = slotPreviewUrl(slot);
   const pdf = key.toLowerCase().endsWith(".pdf");
   const filled = key !== "";
+  const removable = filled || slot.status === PHOTO_SLOT.error;
   const labelForeground = photoLabelForeground({ status: slot.status, selected });
   const tag = photoTag({ status: slot.status, pdf });
 
@@ -142,7 +143,7 @@ export function PhotoTile({
             </HStack>
           )}
         </button>
-        {filled && (
+        {removable && (
           <IconButton
             size="sm"
             aria-label={`${label} 지우기`}
