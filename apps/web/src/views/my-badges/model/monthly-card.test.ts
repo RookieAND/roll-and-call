@@ -98,4 +98,19 @@ describe("monthlyCard 포인트제", () => {
     });
     expect(card.status).toBe("10월 -100점 · 순위 없음 · 1위 300점");
   });
+
+  it("동점이면 먼저 도달한 사람이 앞선 순위가 된다", () => {
+    const card = monthlyCard({
+      ladder: "gm.monthly",
+      records: [],
+      appearances: [
+        scored("me", "2026-10-12T03:00:00Z", 100),
+        scored("rival", "2026-10-11T03:00:00Z", 100),
+      ],
+      userId: "me",
+      now,
+      mode: "points",
+    });
+    expect(card.status).toBe("10월 100점 · 2위 · 1위 100점");
+  });
 });

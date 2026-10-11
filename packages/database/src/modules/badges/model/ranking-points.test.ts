@@ -122,4 +122,32 @@ describe("recordAppearances (포인트제)", () => {
       ),
     ).toEqual([]);
   });
+
+  it("포인트제는 공동 1위 없이 먼저 도달한 한 명만 이달의 뱃지를 받는다", () => {
+    const appearances = [
+      {
+        userId: "late",
+        role: BADGE_ROLE.gm,
+        startsAt: new Date("2026-09-20T00:00:00Z"),
+        weight: 100,
+        sessions: 1,
+      },
+      {
+        userId: "early",
+        role: BADGE_ROLE.gm,
+        startsAt: new Date("2026-09-05T00:00:00Z"),
+        weight: 100,
+        sessions: 1,
+      },
+    ];
+    const now = new Date("2026-10-20T00:00:00Z");
+    expect(
+      monthlyWinners(appearances, now)
+        .map((winner) => winner.userId)
+        .toSorted(),
+    ).toEqual(["early", "late"]);
+    expect(
+      monthlyWinners(appearances, now, { breakTies: true }).map((winner) => winner.userId),
+    ).toEqual(["early"]);
+  });
 });

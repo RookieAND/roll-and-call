@@ -15,12 +15,15 @@ export type MonthlyAppearance = {
 };
 
 // 끝난 달마다 역할별 1위. 동점이면 모두 받는다. 이번 달은 아직 끝나지 않아 뺀다.
+// breakTies(포인트제)면 공동 1위를 두지 않고, 그 점수에 먼저 도달한 사람(마지막 기록 시각이 빠른 쪽) 한 명만 받는다.
 export function monthlyWinners(
   appearances: MonthlyAppearance[],
   now: Date,
+  { breakTies = false }: { breakTies?: boolean } = {},
 ): (EarnedBadge & { userId: string })[] {
   const currentMonth = kstMonthKey(now);
   const counts = new Map<string, Map<string, number>>();
+  const reachedAt = new Map<string, number>();
   for (const appearance of appearances) {
     const month = kstMonthKey(appearance.startsAt);
     if (month >= currentMonth) continue;
@@ -28,6 +31,11 @@ export function monthlyWinners(
     const users = counts.get(group) ?? new Map<string, number>();
     users.set(appearance.userId, (users.get(appearance.userId) ?? 0) + appearance.weight);
     counts.set(group, users);
+    const reachedKey = `${group}|${appearance.userId}`;
+    reachedAt.set(
+      reachedKey,
+      Math.max(reachedAt.get(reachedKey) ?? 0, appearance.startsAt.getTime()),
+    );
   }
 
   return [...counts].flatMap(([group, users]) => {
@@ -35,14 +43,22 @@ export function monthlyWinners(
     const ladder = role === BADGE_ROLE.gm ? BADGE_LADDER.gmMonthly : BADGE_LADDER.playerMonthly;
     const top = Math.max(...users.values());
     if (top <= 0) return [];
-    return [...users]
-      .filter(([, count]) => count === top)
-      .map(([userId]) => ({
-        userId,
-        badgeKey: badgeKey({ ladder, subject: month }),
-        tier: 1,
-        earnedAt: nextMonthStart(month),
-        sourceGameId: null,
-      }));
+    const tied = [...users].filter(([, count]) => count === top);
+    const winners = breakTies
+      ? tied
+          .toSorted(
+            ([leftId], [rightId]) =>
+              reachedAt.get(`${group}|${leftId}`)! - reachedAt.get(`${group}|${rightId}`)! ||
+              leftId.localeCompare(rightId),
+          )
+          .slice(0, 1)
+      : tied;
+    return winners.map(([userId]) => ({
+      userId,
+      badgeKey: badgeKey({ ladder, subject: month }),
+      tier: 1,
+      earnedAt: nextMonthStart(month),
+      sourceGameId: null,
+    }));
   });
 }

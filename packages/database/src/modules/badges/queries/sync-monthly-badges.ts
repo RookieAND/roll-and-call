@@ -8,15 +8,17 @@ import { diffBadges } from "#/modules/badges/model/diff-badges";
 import { isMonthSettled } from "#/modules/badges/model/is-month-settled";
 import { monthlyWinners } from "#/modules/badges/model/monthly-winners";
 import { parseBadgeKey } from "#/modules/badges/model/parse-badge-key";
-import { userBadges } from "#/schema";
+import { RANKING_MODE } from "#/modules/servers/model/ranking-mode";
+import { servers, userBadges } from "#/schema";
 
 import { loadMonthlyAppearances } from "./load-monthly-appearances";
 
 // 이달의 GM·PL은 여러 사람을 견주므로 한 사람만 다시 계산할 수 없다. 전체 1위를 다시 정해 모두와 비교한다.
 // 굳은 달(다음 달 2일 00:00 KST, isMonthSettled)만 준다(R5). 굳기 전에 준 행은 회수하고, 이미 준 굳은 달은 건드리지 않는다.
 export async function syncMonthlyBadges({ serverId, now }: { serverId: string; now: Date }) {
-  const [appearances, stored] = await Promise.all([
+  const [appearances, [server], stored] = await Promise.all([
     loadMonthlyAppearances({ serverId, now }),
+    db.select({ rankingMode: servers.rankingMode }).from(servers).where(eq(servers.id, serverId)),
     db
       .select({
         userId: userBadges.userId,
@@ -41,7 +43,10 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
   const frozenKeys = new Set(
     stored.filter(isFrozen).map((badge) => `${badge.userId}|${badge.badgeKey}`),
   );
-  const winners = monthlyWinners(appearances, now).filter(
+  // 포인트제는 공동 1위를 두지 않고 먼저 도달한 한 명만 받는다.
+  const winners = monthlyWinners(appearances, now, {
+    breakTies: server?.rankingMode === RANKING_MODE.points,
+  }).filter(
     (winner) =>
       isMonthSettled(parseBadgeKey(winner.badgeKey)!.subject!, now) &&
       !frozenKeys.has(`${winner.userId}|${winner.badgeKey}`),
