@@ -14,6 +14,7 @@ import { Info } from "lucide-react";
 const NOTES = [
   "동점이면 그 점수에 먼저 도달한 사람이 앞섭니다.",
   "0점 이하는 순위에 오르지 않습니다.",
+  "타이만(1:1) 세션은 순위에 세지 않습니다.",
 ] as const;
 
 const RULES: { label: string; value: string }[] = [
