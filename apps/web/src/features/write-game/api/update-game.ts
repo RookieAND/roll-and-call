@@ -26,6 +26,7 @@ import {
 
 import { EDIT_FORBIDDEN_MESSAGE, editBlockReason } from "../model/edit-block-reason";
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
+import { hasThumbnailChanged } from "../model/has-thumbnail-changed";
 import { invalidInputResult } from "../model/invalid-input-result";
 import { reopensMinPlayersJudgement } from "../model/reopens-min-players-judgement";
 import { sessionTimeChanged } from "../model/session-time-change";
@@ -123,9 +124,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     await refreshRecruitPost({
       server,
       gameId: id,
-      thumbnailChanged:
-        (values.thumbnailUrl ?? null) !== before.thumbnailUrl ||
-        values.thumbnailSpoiler !== before.thumbnailSpoiler,
+      thumbnailChanged: hasThumbnailChanged({ before, after: values }),
     });
     if (timeChanged) {
       await notifySessionConfirmed({ server, gameId: id, previousConfirmedAt: before.confirmedAt });
