@@ -1,10 +1,10 @@
 import type { GameKind, PlayType } from "@roll-and-call/database/games/model";
-import { renameDiscordThread, updateForumThread } from "@roll-and-call/discord";
+import { updateForumThread } from "@roll-and-call/discord";
 
 import { recruitStatusTagIds } from "./recruit-status-tag-ids";
 import type { RecruitTarget } from "./recruit-target";
 
-// 모집 글 스레드의 이름과 상태 태그를 맞춘다. 포럼이면 한 요청으로 보내고, 텍스트 채널이면 이름만 바꾼다.
+// 모집 글 포럼 게시글의 이름과 상태 태그를 한 요청으로 맞춘다.
 export async function syncRecruitThread({
   target,
   threadId,
@@ -26,10 +26,6 @@ export async function syncRecruitThread({
   playType: PlayType;
   skipLocked?: boolean;
 }) {
-  if (!target.forum) {
-    await renameDiscordThread({ threadId, name });
-    return;
-  }
   await updateForumThread({
     threadId,
     name,

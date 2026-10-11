@@ -16,8 +16,6 @@ import { isNull } from "es-toolkit";
 import { fetchPhotoFiles } from "./fetch-photo-files";
 import { reviewForumPost } from "./review-forum-post";
 
-const MESSAGE_MAX_LENGTH = 2000;
-
 // 후기 채널이 포럼이면 게시글을, 텍스트 채널이면 메시지 하나를 올린다. 저장하는 id는 둘 다 threadId 칸에 둔다.
 // ponytail: 같은 후기를 동시에 두 번 부르면 게시글이 둘 생길 수 있다. 작성·수정은 한 사람이 하므로 드물다.
 export async function syncReviewForumPost({
@@ -56,13 +54,14 @@ export async function syncReviewForumPost({
     tagIds: forum ? await getForumTags(forumId) : new Map(),
     reviewsUrl: siteOrigin && `${siteOrigin}/${server.slug}/games/${review.gameId}/reviews`,
     template: await getReviewTemplate({ serverId }),
+    textChannel: !forum,
   });
   const input = { ...post, files: await fetchPhotoFiles(photos) };
   // 텍스트 채널엔 제목 칸이 없어 본문 첫 줄로 올린다.
-  // ponytail: 길면 잘라서 스포일러 ||가 닫히지 않을 수 있다.
+  // 글자 수는 reviewForumPost가 제목 몫까지 빼고 맞춰 두었다.
   const text = {
     channelId: forumId,
-    content: `**${post.name}**\n${post.content}`.slice(0, MESSAGE_MAX_LENGTH),
+    content: `**${post.name}**\n${post.content}`,
     files: input.files,
   };
   const update = forum

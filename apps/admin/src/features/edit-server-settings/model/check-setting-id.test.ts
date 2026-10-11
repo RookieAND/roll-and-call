@@ -45,6 +45,21 @@ describe("checkSettingId", () => {
     });
   });
 
+  it("모집 채널은 텍스트 채널이면 실패하고, 후기 채널은 포럼과 텍스트 채널을 모두 받는다", () => {
+    expect(checkSettingId({ field: "recruitChannelId", id: "text", guild })).toMatchObject({
+      reason: "wrong-type",
+    });
+    expect(checkSettingId({ field: "closedChannelId", id: "forum", guild })).toMatchObject({
+      reason: "wrong-type",
+    });
+    expect(checkSettingId({ field: "reviewForumChannelId", id: "forum", guild })).toMatchObject({
+      status: "ok",
+    });
+    expect(checkSettingId({ field: "reviewForumChannelId", id: "text", guild })).toMatchObject({
+      status: "ok",
+    });
+  });
+
   it("다른 서버의 채널이면 실패한다", () => {
     expect(checkSettingId({ field: "closedChannelId", id: "missing", guild })).toEqual({
       status: "fail",

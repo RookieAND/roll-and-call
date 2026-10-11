@@ -1,11 +1,17 @@
 import { type Server } from "@roll-and-call/database";
 import { getGameForDrawNotice } from "@roll-and-call/database/games";
 import { compareWaitlistOrder, PARTICIPANT_STATUS } from "@roll-and-call/database/games/model";
+import { DEFAULT_SELECTION_HEAD } from "@roll-and-call/database/servers";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
-import { gameNoticeEmbed, gameUrl } from "@roll-and-call/game-notices";
+import {
+  gameHeadValues,
+  gameNoticeEmbed,
+  gameUrl,
+  messageHeadInput,
+  messageText,
+} from "@roll-and-call/game-notices";
 
-// 선발 마치기가 커밋된 뒤 부른다. 확정자 멘션은 임베드가 아니라 메시지 본문에 따로 찍는다(D390 방향, 임시 처리).
-// 시스템이 붙이는 줄이라 서버별 문구 설정을 거치지 않는다.
+// 선발 마치기가 커밋된 뒤 부른다. 머리 줄은 「추첨 결과」 설정을 나눠 쓰고(저장 전에는 선발용 기본 문구), 확정자 멘션은 본문 줄에 찍는다.
 export async function notifySelectionResult({
   server,
   gameId,
@@ -25,6 +31,7 @@ export async function notifySelectionResult({
   const listOf = (rows: typeof confirmed) =>
     rows.map((participant, index) => `${index + 1}. ${participant.user?.username ?? "?"}`);
 
+  const headValues = gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" });
   const detailUrl = gameUrl({ slug: server.slug, gameId: game.id });
   const embed = gameNoticeEmbed({
     slug: server.slug,
@@ -33,7 +40,15 @@ export async function notifySelectionResult({
     url: detailUrl,
     emoji: "✅",
     color: DISCORD_COLOR.complete,
-    description: `선발이 끝났어요. 신청한 ${confirmed.length + waiting.length}명 중 ${confirmed.length}명이 확정됐어요.\n자리가 나면 GM이 대기 명단에서 확정해요.`,
+    description: `${await messageText({
+      serverId: server.id,
+      key: "selection",
+      values: {
+        ...headValues,
+        "신청 수": String(confirmed.length + waiting.length),
+        "확정 수": String(confirmed.length),
+      },
+    })}\n자리가 나면 GM이 대기 명단에서 확정해요.`,
     fields: [
       {
         name: `✅ 확정 ${confirmed.length}명`,
@@ -51,10 +66,23 @@ export async function notifySelectionResult({
     channelId: game.discordThreadId,
     input: {
       embeds: [embed],
-      ...(discordIds.length > 0 && {
-        content: `${discordIds.map((discordId) => `<@${discordId}>`).join(", ")}님이 확정되었어요.`,
-        userMentions: discordIds,
-      }),
+      ...(await messageHeadInput({
+        serverId: server.id,
+        key: "draw",
+        values: headValues,
+        defaultHead: DEFAULT_SELECTION_HEAD,
+        ...(discordIds.length > 0 && {
+          userMentions: discordIds,
+          after: await messageText({
+            serverId: server.id,
+            key: "selection_line",
+            values: {
+              ...headValues,
+              확정자: discordIds.map((discordId) => `<@${discordId}>`).join(", "),
+            },
+          }),
+        }),
+      })),
       buttons: detailUrl ? [{ label: "구인글 보기", url: detailUrl }] : [],
     },
   });

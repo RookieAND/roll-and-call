@@ -67,7 +67,10 @@ export { listDueLotteries } from "./queries/list-due-lotteries";
 export { listDueSelectionDeadlines } from "./queries/list-due-selection-deadlines";
 export { listDueMinPlayers } from "./queries/list-due-min-players";
 export { listDueEndNotices } from "./queries/list-due-end-notices";
-export { listConfirmedDiscordIds } from "./queries/list-confirmed-discord-ids";
+export {
+  listConfirmedDiscordIds,
+  listParticipantDiscordIds,
+} from "./queries/list-confirmed-discord-ids";
 export { listGameRuleOptions } from "./queries/list-game-rule-options";
 export { lockGame } from "./queries/lock-game";
 export { searchGameCandidates } from "./queries/search-game-candidates";

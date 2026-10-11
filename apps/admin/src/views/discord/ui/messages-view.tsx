@@ -25,7 +25,6 @@ interface MessagesViewProps {
   texts: Record<MessageTextKey, { body: string; updatedAt: Date | null }>;
   reviewTemplate: { title: string; body: string; updatedAt: Date | null };
   guildRoles?: MessageRole[];
-  recruitForum: boolean;
   readOnly: boolean;
 }
 
@@ -35,7 +34,6 @@ export function MessagesView({
   texts,
   reviewTemplate,
   guildRoles,
-  recruitForum,
   readOnly,
 }: MessagesViewProps) {
   const reviewSelected = selected === REVIEW_CASE_KEY;
@@ -125,7 +123,7 @@ export function MessagesView({
             title={current.label}
             right={
               <Text typography="body4" foreground="hint">
-                보내는 곳 {selected === "open" && recruitForum ? "모집 채널 (포럼)" : current.to}
+                보내는 곳 {selected === "open" ? "모집 채널 (포럼)" : current.to}
               </Text>
             }
             bodyClassName="p-0"
@@ -138,7 +136,6 @@ export function MessagesView({
               savedHead={heads[current.key].headLine}
               savedAt={heads[current.key].updatedAt?.toISOString() ?? null}
               guildRoles={guildRoles}
-              recruitForum={recruitForum}
               readOnly={readOnly}
             />
           </Panel>

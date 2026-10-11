@@ -4,7 +4,6 @@ import { recruitStatusTagIds } from "./recruit-status-tag-ids";
 import type { RecruitTarget } from "./recruit-target";
 
 const target = (cancelled?: string): RecruitTarget => ({
-  forum: true,
   tags: {
     open: "o",
     closed: "c",
@@ -46,7 +45,6 @@ it("플레이 유형 태그와 구분 태그(설명회·세션)를 붙인다", (
 
 it("연결하지 않은 태그는 빼고 붙인다", () => {
   const bare: RecruitTarget = {
-    forum: true,
     tags: { open: "o", categories: {}, playTypes: {}, managed: [] },
   };
   expect(

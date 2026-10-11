@@ -10,11 +10,9 @@ import {
 
 import { attachRecruitThumbnail } from "./attach-recruit-thumbnail";
 import { defaultBannerUrl } from "./default-banner-url";
-import { recruitButtons } from "./recruit-buttons";
-import { recruitEmbed } from "./recruit-embed";
 import { recruitForumPost } from "./recruit-forum-post";
 import { recruitPostTitle } from "./recruit-post-title";
-import { loadRecruitTarget, recruitMessageChannelId } from "./recruit-target";
+import { loadRecruitTarget } from "./recruit-target";
 import { syncRecruitThread } from "./sync-recruit-thread";
 
 export async function refreshRecruitPost({
@@ -39,17 +37,6 @@ export async function refreshRecruitPost({
   const gmName = game.gm?.username ?? "?";
 
   const updateMessage = async () => {
-    if (!target.forum) {
-      await editDiscordMessage({
-        channelId: recruitMessageChannelId({ server, target, threadId }),
-        messageId: threadId,
-        input: {
-          embeds: [recruitEmbed({ slug: server.slug, game, gmName, confirmedCount })],
-          buttons: recruitButtons({ slug: server.slug, gameId: game.id }),
-        },
-      });
-      return;
-    }
     const post = await recruitForumPost({ server, game, gmName, confirmedCount });
     await editDiscordMessage({ channelId: threadId, messageId: threadId, input: post.input });
     // 첨부 방식으로 바꾸기 전에 올린 글은 첨부가 없어, 고치는 김에 한 번 올려 준다. 썸네일이 없으면 기본 배너를 올린다.
@@ -69,15 +56,16 @@ export async function refreshRecruitPost({
 
   await Promise.all([
     updateMessage(),
-    syncRecruitThread({
-      target,
-      threadId,
-      name: target.forum ? recruitPostTitle({ title: game.title, gmName }) : game.title,
-      closed: confirmedCount >= game.maxPlayers,
-      categoryId,
-      kind: game.kind,
-      playType: game.playType,
-      skipLocked: true,
-    }),
+    target &&
+      syncRecruitThread({
+        target,
+        threadId,
+        name: recruitPostTitle({ title: game.title, gmName }),
+        closed: confirmedCount >= game.maxPlayers,
+        categoryId,
+        kind: game.kind,
+        playType: game.playType,
+        skipLocked: true,
+      }),
   ]);
 }

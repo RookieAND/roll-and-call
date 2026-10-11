@@ -3,27 +3,15 @@ import { DISCORD_CHANNEL_TYPE, getDiscordChannel } from "@roll-and-call/discord"
 
 import { resolveRecruitTags, type RecruitTags } from "./resolve-recruit-tags";
 
-export type RecruitTarget = { forum: boolean; tags: RecruitTags };
+export type RecruitTarget = { tags: RecruitTags };
 
-// 모집 채널이 포럼인지는 올릴 때마다 읽는다. 서버가 채널을 포럼으로 옮겨도 설정을 따로 고칠 필요가 없다.
-export async function loadRecruitTarget(server: Server): Promise<RecruitTarget> {
-  const channel = server.recruitChannelId
-    ? await getDiscordChannel(server.recruitChannelId)
-    : undefined;
-  const forum = channel?.type === DISCORD_CHANNEL_TYPE.forum;
-  const available = forum ? channel.availableTags : [];
-  return { forum, tags: resolveRecruitTags({ saved: server.forumTags, available }) };
-}
-
-// 포럼 게시글의 첫 메시지는 게시글 안에 있고, 텍스트 채널의 모집 메시지는 모집 채널에 있다.
-export function recruitMessageChannelId({
-  server,
-  target,
-  threadId,
-}: {
-  server: Server;
-  target: RecruitTarget;
-  threadId: string;
-}) {
-  return target.forum ? threadId : server.recruitChannelId;
+// 모집 채널은 포럼만 지원한다. 채널이 없거나 포럼이 아니거나 읽지 못하면 undefined라, 부르는 쪽이 모집 글을 올리지 않는다.
+// 포럼인지는 올릴 때마다 읽어 태그 구성이 바뀌어도 설정을 따로 고칠 필요가 없다.
+export async function loadRecruitTarget(server: Server): Promise<RecruitTarget | undefined> {
+  if (!server.recruitChannelId) return undefined;
+  const channel = await getDiscordChannel(server.recruitChannelId);
+  if (channel?.type !== DISCORD_CHANNEL_TYPE.forum) return undefined;
+  return {
+    tags: resolveRecruitTags({ saved: server.forumTags, available: channel.availableTags }),
+  };
 }

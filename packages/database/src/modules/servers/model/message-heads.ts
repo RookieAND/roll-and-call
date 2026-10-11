@@ -39,6 +39,9 @@ export const DEFAULT_MESSAGE_HEADS: Partial<Record<MessageCaseKey, string>> = {
 // 서버가 「추첨 결과」 머리 줄을 직접 고치지 않았을 때만 이 문구를 쓰고, 직접 고쳤으면 그 문구를 그대로 쓴다.
 export const DEFAULT_DRAW_SKIPPED_HEAD = "📢 {구인 제목} 신청자가 모두 확정됐어요!";
 
+// 선발 모집의 결과 안내도 「추첨 결과」 머리 줄을 나눠 쓴다. 서버가 그 머리 줄을 직접 고치지 않았을 때만 이 문구를 쓴다.
+export const DEFAULT_SELECTION_HEAD = "📢 {구인 제목} 선발 결과가 나왔어요!";
+
 const BASE_VARIABLES = ["구인 제목", "GM", "룰", "링크"] as const;
 
 export function messageVariables(key: MessageCaseKey): readonly string[] {

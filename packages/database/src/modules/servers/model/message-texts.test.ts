@@ -33,8 +33,10 @@ describe("MESSAGE_TEXTS", () => {
     expect(messageTextsOfCase("draw").map((text) => text.key)).toEqual([
       "draw",
       "draw_skipped",
+      "selection",
       "draw_line",
       "draw_skipped_line",
+      "selection_line",
     ]);
     expect(messageTextVariables("draw_skipped")).toContain("신청 수");
     expect(messageTextVariables("draw_skipped_line")).toContain("확정자");

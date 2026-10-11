@@ -38,8 +38,7 @@ export async function notifyGameEnded({ server, gameId }: { server: Server; game
         serverId: server.id,
         key: "end",
         values,
-        userMentions: discordIds,
-        after: discordIds.map((discordId) => `<@${discordId}>`).join(" "),
+        alsoMention: discordIds.map((id) => ({ id })),
       })),
       embeds: [
         gameNoticeEmbed({

@@ -32,17 +32,26 @@ export async function notifyGameLeft({
 
   const gmName = game.gm?.username ?? "?";
   const textKey = leftTextKey({ leftServer, removedByGm });
+  const values = gameHeadValues({ server, game, gmName });
+  const line = await memberNoticeLine({
+    serverId: server.id,
+    userIds: [userId],
+    key: `${textKey}_line`,
+    values,
+  });
   const embed = gameNoticeEmbed({
     slug: server.slug,
     game,
     gmName: game.gm?.username ?? "?",
     emoji: "🚪",
     color: DISCORD_COLOR.left,
-    description: await messageText({
-      serverId: server.id,
-      key: textKey,
-      values: { ...gameHeadValues({ server, game, gmName }), 참여자: name },
-    }),
+    description: line.after
+      ? undefined
+      : await messageText({
+          serverId: server.id,
+          key: textKey,
+          values: { ...values, 참여자: name },
+        }),
     fields: headcountFields({
       game,
       confirmedCount: countConfirmed(game.participants),
@@ -57,13 +66,8 @@ export async function notifyGameLeft({
       ...(await messageHeadInput({
         serverId: server.id,
         key: "leave",
-        values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
-        ...(await memberNoticeLine({
-          serverId: server.id,
-          userIds: [userId],
-          key: `${textKey}_line`,
-          values: gameHeadValues({ server, game, gmName }),
-        })),
+        values,
+        ...line,
       })),
     },
   });

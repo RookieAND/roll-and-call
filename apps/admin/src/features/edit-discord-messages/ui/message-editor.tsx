@@ -43,7 +43,6 @@ interface MessageEditorProps {
   }[];
   // 디스코드에서 못 읽으면 없다. 그때는 미리보기가 역할 이름을 못 보여 주고 경고도 내지 않는다.
   guildRoles?: MessageRole[];
-  recruitForum: boolean;
   readOnly: boolean;
 }
 
@@ -55,7 +54,6 @@ export function MessageEditor({
   savedAt,
   texts,
   guildRoles,
-  recruitForum,
   readOnly,
 }: MessageEditorProps) {
   const router = useRouter();
@@ -176,13 +174,10 @@ export function MessageEditor({
           bodyLine={line(bodyItem)}
           description={line(embedItem)}
           guildRoles={guildRoles}
-          recruitForum={recruitForum}
         />
         {caseKey === "open" ? (
           <Text typography="body4" foreground="hint">
-            {recruitForum
-              ? "포럼 글 맨 위에 구인글 상세 링크가 고정으로 붙습니다. 본문과 버튼은 고칠 수 없습니다."
-              : "텍스트 채널에는 임베드로 나가며 설명은 구인 줄거리를 그대로 씁니다."}
+            포럼 글 맨 위에 구인글 상세 링크가 고정으로 붙습니다. 본문과 버튼은 고칠 수 없습니다.
           </Text>
         ) : null}
         {caseKey === "monthly" ? (

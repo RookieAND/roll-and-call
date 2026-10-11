@@ -43,21 +43,29 @@ export async function notifyDirectConfirmed({
     ? `\n${unpaintedNames.join(", ")}님은 구인 페이지에서 가능 시간을 칠해 주세요.`
     : "";
 
+  const values = gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" });
+  const line = await memberNoticeLine({
+    serverId: server.id,
+    userIds,
+    variable: "확정자",
+    key: "direct_line",
+    values,
+  });
+  // 본문 알림 줄이 「누가 확정됐는지」를 말하므로 임베드에는 가능 시간 안내만 남긴다.
+  const description = line.after
+    ? availabilityLine.trim() || undefined
+    : (await messageText({
+        serverId: server.id,
+        key: "direct",
+        values: { ...values, 확정자: names },
+      })) + availabilityLine;
   const embed = gameNoticeEmbed({
     slug: server.slug,
     game,
     gmName: game.gm?.username ?? "?",
     emoji: "✅",
     color: DISCORD_COLOR.confirmed,
-    description:
-      (await messageText({
-        serverId: server.id,
-        key: "direct",
-        values: {
-          ...gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
-          확정자: names,
-        },
-      })) + availabilityLine,
+    description,
     fields: headcountFields({
       game,
       confirmedCount: countConfirmed(game.participants),
@@ -72,14 +80,8 @@ export async function notifyDirectConfirmed({
       ...(await messageHeadInput({
         serverId: server.id,
         key: "direct",
-        values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
-        ...(await memberNoticeLine({
-          serverId: server.id,
-          userIds,
-          variable: "확정자",
-          key: "direct_line",
-          values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
-        })),
+        values,
+        ...line,
       })),
     },
   });

@@ -28,17 +28,26 @@ export async function notifyGameJoined({
   if (!game.discordThreadId) return;
 
   const applicant = await memberName({ serverId: server.id, userId: applicantId });
+  const values = gameHeadValues({ server, game, gmName });
+  const line = await memberNoticeLine({
+    serverId: server.id,
+    userIds: [applicantId],
+    key: isWaiting ? "apply_waiting_line" : "apply_line",
+    values,
+  });
   const embed = gameNoticeEmbed({
     slug: server.slug,
     game,
     gmName,
     emoji: isWaiting ? "⏳" : "🙋",
     color: isWaiting ? DISCORD_COLOR.waiting : DISCORD_COLOR.confirmed,
-    description: await messageText({
-      serverId: server.id,
-      key: isWaiting ? "apply_waiting" : "apply",
-      values: { ...gameHeadValues({ server, game, gmName }), 참여자: applicant },
-    }),
+    description: line.after
+      ? undefined
+      : await messageText({
+          serverId: server.id,
+          key: isWaiting ? "apply_waiting" : "apply",
+          values: { ...values, 참여자: applicant },
+        }),
     fields: headcountFields({ game, confirmedCount, waitingCount }),
   });
 
@@ -49,13 +58,8 @@ export async function notifyGameJoined({
       ...(await messageHeadInput({
         serverId: server.id,
         key: "apply",
-        values: gameHeadValues({ server, game, gmName }),
-        ...(await memberNoticeLine({
-          serverId: server.id,
-          userIds: [applicantId],
-          key: isWaiting ? "apply_waiting_line" : "apply_line",
-          values: gameHeadValues({ server, game, gmName }),
-        })),
+        values,
+        ...line,
       })),
     },
   });

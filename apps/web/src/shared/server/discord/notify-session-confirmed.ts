@@ -1,5 +1,5 @@
 import { type Server } from "@roll-and-call/database";
-import { getGameForNotice } from "@roll-and-call/database/games";
+import { getGameForNotice, listConfirmedDiscordIds } from "@roll-and-call/database/games";
 import { countConfirmed, countWaiting } from "@roll-and-call/database/games/model";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import {
@@ -53,6 +53,8 @@ export async function notifySessionConfirmed({
     fields,
   });
 
+  // 시간이 정해지거나 바뀌면 이미 확정된 참여자가 알아야 한다.
+  const confirmedIds = await listConfirmedDiscordIds({ serverId: server.id, gameId });
   const sessionUrl = gameUrl({ slug: server.slug, gameId: game.id });
   await sendDiscordMessage({
     channelId: game.discordThreadId,
@@ -62,6 +64,7 @@ export async function notifySessionConfirmed({
         serverId: server.id,
         key: "time",
         values: gameHeadValues({ server, game, gmName: game.gm?.username ?? "?" }),
+        alsoMention: confirmedIds.map((id) => ({ id })),
       })),
       buttons: sessionUrl ? [{ label: "🕒 세션 확인하기", url: sessionUrl }] : [],
     },

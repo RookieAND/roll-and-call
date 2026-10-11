@@ -5,7 +5,7 @@ import {
 } from "@roll-and-call/database/servers/model";
 import type { Metadata } from "next";
 
-import { loadMessageRoles, loadRecruitForum } from "@/features/edit-discord-messages";
+import { loadMessageRoles } from "@/features/edit-discord-messages";
 import { stringParams } from "@/shared/lib";
 import {
   getCurrentServer,
@@ -32,12 +32,11 @@ export default async function DiscordMessagesPage({
       ? REVIEW_CASE_KEY
       : (MESSAGE_CASES.find((messageCase) => messageCase.key === query.case)?.key ??
         ("open" satisfies MessageCaseKey));
-  const [heads, texts, reviewTemplate, guildRoles, recruitForum] = await Promise.all([
+  const [heads, texts, reviewTemplate, guildRoles] = await Promise.all([
     getMessageHeads({ serverId: server.id }),
     getMessageTexts({ serverId: server.id }),
     getReviewTemplate({ serverId: server.id }),
     loadMessageRoles(server.discordGuildId),
-    loadRecruitForum(server.recruitChannelId),
   ]);
   return (
     <MessagesView
@@ -46,7 +45,6 @@ export default async function DiscordMessagesPage({
       texts={texts}
       reviewTemplate={reviewTemplate}
       guildRoles={guildRoles}
-      recruitForum={recruitForum}
       readOnly={viewer.role !== "owner"}
     />
   );
