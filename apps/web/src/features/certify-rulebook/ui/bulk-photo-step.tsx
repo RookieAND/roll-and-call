@@ -18,9 +18,8 @@ import { setBulkPhoto } from "../model/set-bulk-photo";
 import { PhotoTile } from "./photo-tile";
 
 const GUIDE = [
-  "책의 제목이 읽히게 모두 펼쳐 찍어 주세요.",
+  "책 제목이 읽히게 모두 펼쳐 찍어 주세요.",
   "닉네임과 서버명을 적은 쪽지를 함께 찍어 주세요.",
-  "책이 많아 한 장에 담기지 않으면 사진을 더 올려 주세요.",
 ] as const;
 
 interface BulkPhotoStepProps {
@@ -101,7 +100,7 @@ export function BulkPhotoStep({ serverId, nickname, draft, update }: BulkPhotoSt
       </VStack>
 
       <VStack gap="125">
-        <Grid cols={3} gap="100">
+        <Grid cols={2} gap="100">
           {tiles.map((slot, index) => (
             <PhotoTile
               // 칸 순서가 곧 사진 순서라 번호가 키다.
@@ -119,6 +118,9 @@ export function BulkPhotoStep({ serverId, nickname, draft, update }: BulkPhotoSt
             />
           ))}
         </Grid>
+        <Text typography="body4" foreground="hint" className="break-keep">
+          한 장에 담기지 않으면 사진을 더 올려 주세요.
+        </Text>
         {errorMessage && (
           <Callout.Root colorPalette="warning" role="alert">
             <Callout.Icon />
