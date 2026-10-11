@@ -5,7 +5,7 @@ import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { toast } from "@roll-and-call/ui";
 import { isNull, isUndefined, xor } from "es-toolkit";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { EBOOK_REJECT_REASONS, OTHER_REASON, REJECT_REASONS, useActionSubmit } from "@/shared/lib";
 import type { CertDecisionResult, CertFormat, ShotKey } from "@/shared/server";
@@ -18,6 +18,7 @@ import { rejectCertGroup } from "../api/reject-cert-group";
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
 import { decisionToastText } from "../model/decision-toast-text";
 import type { GroupBook } from "../model/group-book";
+import { groupDoneMessage } from "../model/group-done-message";
 import { groupApproveIds, groupRejectIds, pendingGroupBooks } from "../model/group-selection";
 import { isReviewShotKey } from "../model/is-review-shot-key";
 import { rejectMessage } from "../model/reject-message";
@@ -60,7 +61,8 @@ export function useCertDecision({
   const rejection = useActionSubmit(rejectCert);
   const groupApproval = useActionSubmit(approveCertGroup);
   const groupRejection = useActionSubmit(rejectCertGroup);
-  const [uncheckedBookIds, setUncheckedBookIds] = useState<string[]>([]);
+  const [rejectedBookIds, setRejectedBookIds] = useState<string[]>([]);
+  const approvedBookIds = useRef<string[]>([]);
   const [checkedShots, setCheckedShots] = useState<ReviewShotKey[]>([]);
   const [flaggedShots, setFlaggedShots] = useState<ShotKey[]>([]);
   const [reason, setReason] = useState("");
@@ -70,16 +72,17 @@ export function useCertDecision({
   const photoParam = searchParams.get("photo");
   const viewedShot = isReviewShotKey(photoParam) ? photoParam : null;
   const reviewable = state === CERT_REVIEW_STATE.open;
-  const rejecting = searchParams.get("mode") === "reject" && reviewable;
   const ebook = format === "ebook";
   const grouped = groupBooks.length > 0;
   const groupMode = reviewable && grouped;
+  const rejecting = !groupMode && searchParams.get("mode") === "reject" && reviewable;
   const approveBookIds = groupMode
-    ? groupApproveIds({ books: groupBooks, uncheckedIds: uncheckedBookIds })
+    ? groupApproveIds({ books: groupBooks, rejectedIds: rejectedBookIds })
     : [];
   const rejectBookIds = groupMode
-    ? groupRejectIds({ books: groupBooks, uncheckedIds: uncheckedBookIds })
+    ? groupRejectIds({ books: groupBooks, rejectedIds: rejectedBookIds })
     : [];
+  const showRejectPanel = rejecting || rejectBookIds.length > 0;
   const shots = reviewShots({ ebook, grouped, photoUrls });
   const approving = approval.pending || groupApproval.pending;
   const rejectingPending = rejection.pending || groupRejection.pending;
@@ -88,12 +91,18 @@ export function useCertDecision({
     ? shots.filter((shot) => photoUrls[shot.key]).map((shot) => shot.key)
     : [];
   const allChecked = checkableShots.every((key) => checkedShots.includes(key));
-  const canApprove =
-    reviewable && allChecked && !pending && (!groupMode || approveBookIds.length > 0);
   const other = reason === OTHER_REASON;
-  const canReject =
-    Boolean(reason && userReason.trim()) && !pending && (!groupMode || rejectBookIds.length > 0);
-  const canStartReject = reviewable && !pending && (!groupMode || rejectBookIds.length > 0);
+  const reasonReady = Boolean(reason && userReason.trim());
+  const groupPhotosReady = approveBookIds.length === 0 || allChecked;
+  const groupReasonReady = rejectBookIds.length === 0 || reasonReady;
+  const canSubmitGroup =
+    !pending &&
+    approveBookIds.length + rejectBookIds.length > 0 &&
+    groupPhotosReady &&
+    groupReasonReady;
+  const canApprove = groupMode ? canSubmitGroup : reviewable && allChecked && !pending;
+  const canReject = reasonReady && !pending;
+  const canStartReject = reviewable && !pending;
   const flaggedLabels = shotLabels(flaggedShots);
   const afterHref = nextHref ?? queueHref;
   const label = `${applicantNickname} · ${rulebookLabel}`;
@@ -120,69 +129,65 @@ export function useCertDecision({
     window.history.replaceState(null, "", next.size ? `${pathname}?${next}` : pathname);
   };
 
+  const fail = (failure: Extract<CertDecisionResult, { ok: false }>) => {
+    const text = decisionToastText({ failure, viewerId });
+    if (!isNull(text)) toast.info(text);
+    router.refresh();
+  };
+
   const finish = (result: CertDecisionResult | undefined, message: string) => {
     if (isUndefined(result)) return;
     if (!result.ok) {
-      const text = decisionToastText({ failure: result, viewerId });
-      if (!isNull(text)) toast.info(text);
-      router.refresh();
+      fail(result);
       return;
     }
     toast.success(message);
     router.push(toServerPath(afterHref));
   };
 
-  // 묶음의 일부만 처리했으면 남은 책을 이어서 처리하도록 그 책의 심사 화면으로 간다.
-  const finishGroup = ({
-    result,
-    decidedIds,
-    message,
-  }: {
-    result: CertDecisionResult | undefined;
-    decidedIds: string[];
-    message: string;
-  }) => {
-    if (isUndefined(result) || !result.ok) {
-      finish(result, message);
-      return;
+  // 승인과 반려를 이어서 보낸다. 승인이 끝난 책은 기억해 두어, 반려만 실패해 다시 시도할 때 건너뛴다.
+  const submitGroup = async () => {
+    const toApprove = approveBookIds.filter((id) => !approvedBookIds.current.includes(id));
+    if (toApprove.length > 0) {
+      const result = await groupApproval.submit(toApprove);
+      if (isUndefined(result)) return;
+      if (!result.ok) {
+        fail(result);
+        return;
+      }
+      approvedBookIds.current = [...approvedBookIds.current, ...toApprove];
     }
-    toast.success(message);
-    const remaining = pendingGroupBooks(groupBooks).find(
-      (book) => !decidedIds.includes(book.applicationId),
+    if (rejectBookIds.length > 0) {
+      const result = await groupRejection.submit(rejectBookIds, {
+        reasonTag: other ? null : reason,
+        userReason,
+        staffMemo,
+      });
+      if (isUndefined(result)) return;
+      if (!result.ok) {
+        fail(result);
+        return;
+      }
+    }
+    toast.success(
+      groupDoneMessage({
+        approveCount: approveBookIds.length,
+        rejectCount: rejectBookIds.length,
+        nickname: applicantNickname,
+      }),
     );
-    if (!remaining) {
-      router.push(toServerPath(afterHref));
-      return;
-    }
-    if (remaining.applicationId === applicationId) router.refresh();
-    else router.push(toServerPath(remaining.href));
+    router.push(toServerPath(afterHref));
   };
 
   const approve = async () => {
     if (groupMode) {
-      finishGroup({
-        result: await groupApproval.submit(approveBookIds),
-        decidedIds: approveBookIds,
-        message: `${approveBookIds.length}권을 승인했습니다 · ${applicantNickname}`,
-      });
+      await submitGroup();
       return;
     }
     finish(await approval.submit(applicationId), `승인했습니다 · ${label}`);
   };
 
   const reject = async () => {
-    if (groupMode) {
-      finishGroup({
-        result: await groupRejection.submit(rejectBookIds, {
-          reasonTag: other ? null : reason,
-          userReason,
-          staffMemo,
-        }),
-        decidedIds: rejectBookIds,
-        message: `${rejectBookIds.length}권을 반려했습니다 · ${applicantNickname}`,
-      });
-      return;
-    }
     finish(
       await rejection.submit(applicationId, {
         reasonTag: other ? null : reason,
@@ -215,14 +220,21 @@ export function useCertDecision({
     }
   };
 
-  const toggleBook = (bookApplicationId: string) =>
-    setUncheckedBookIds((current) => xor(current, [bookApplicationId]));
+  const setBookRejected = ({
+    bookApplicationId,
+    rejected,
+  }: {
+    bookApplicationId: string;
+    rejected: boolean;
+  }) =>
+    setRejectedBookIds((current) => {
+      const others = current.filter((id) => id !== bookApplicationId);
+      return rejected ? [...others, bookApplicationId] : others;
+    });
 
-  const toggleAllBooks = () =>
-    setUncheckedBookIds(
-      approveBookIds.length === pendingGroupBooks(groupBooks).length
-        ? pendingGroupBooks(groupBooks).map((book) => book.applicationId)
-        : [],
+  const setAllBooksRejected = (rejected: boolean) =>
+    setRejectedBookIds(
+      rejected ? pendingGroupBooks(groupBooks).map((book) => book.applicationId) : [],
     );
 
   const toggleCheck = (key: ReviewShotKey) => {
@@ -256,13 +268,14 @@ export function useCertDecision({
     approvalNetworkError: approval.networkError || groupApproval.networkError,
     rejectionNetworkError: rejection.networkError || groupRejection.networkError,
     groupMode,
-    uncheckedBookIds,
+    rejectedBookIds,
     approveBookCount: approveBookIds.length,
     rejectBookCount: rejectBookIds.length,
-    allBooksChecked: groupMode && rejectBookIds.length === 0,
+    showRejectPanel,
+    reasonReady,
     canStartReject,
-    toggleBook,
-    toggleAllBooks,
+    setBookRejected,
+    setAllBooksRejected,
     checkedShots,
     checkableShots,
     flaggedShots,

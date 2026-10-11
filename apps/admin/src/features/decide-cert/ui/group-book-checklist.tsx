@@ -1,25 +1,30 @@
-import { Badge, Button, Checkbox, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { GroupBook } from "../model/group-book";
-import { GROUP_STATUS_BADGE } from "../model/group-status-badge";
+import { pendingGroupBooks } from "../model/group-selection";
+import { GroupBookRow } from "./group-book-row";
+import { GroupDecisionSummary } from "./group-decision-summary";
 
 interface GroupBookChecklistProps {
   books: GroupBook[];
-  uncheckedIds: string[];
+  rejectedIds: string[];
   disabled: boolean;
-  allChecked: boolean;
-  onToggle: (applicationId: string) => void;
-  onToggleAll: () => void;
+  approveCount: number;
+  rejectCount: number;
+  onRejectedChange: (params: { bookApplicationId: string; rejected: boolean }) => void;
+  onSetAll: (rejected: boolean) => void;
 }
 
 export function GroupBookChecklist({
   books,
-  uncheckedIds,
+  rejectedIds,
   disabled,
-  allChecked,
-  onToggle,
-  onToggleAll,
+  approveCount,
+  rejectCount,
+  onRejectedChange,
+  onSetAll,
 }: GroupBookChecklistProps) {
+  const pendingCount = pendingGroupBooks(books).length;
   return (
     <VStack
       render={<section aria-label="함께 신청한 책" />}
@@ -35,44 +40,41 @@ export function GroupBookChecklist({
             {`함께 신청한 책 ${books.length}권`}
           </Text>
           <Text typography="body4" foreground="hint" className="break-keep">
-            사진에서 제목이 확인된 책을 체크해 주세요. 승인은 체크한 책만 처리하고, 반려하려는 책은
-            체크를 해제한 뒤 반려하세요.
+            책마다 승인할지 반려할지 정해 주세요. 사진에서 제목이 확인된 책만 승인합니다.
           </Text>
         </VStack>
-        <Button variant="ghost" size="sm" disabled={disabled} onClick={onToggleAll}>
-          {allChecked ? "모두 해제" : "모두 선택"}
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={disabled || approveCount === pendingCount}
+          onClick={() => onSetAll(false)}
+        >
+          모두 승인
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          colorPalette="danger"
+          disabled={disabled || rejectCount === pendingCount}
+          onClick={() => onSetAll(true)}
+        >
+          모두 반려
         </Button>
       </HStack>
       <VStack gap="025" className="p-100">
-        {books.map((book) => {
-          const decided = book.status !== "pending";
-          const badge = GROUP_STATUS_BADGE[book.status];
-          return (
-            <HStack
-              key={book.applicationId}
-              align="center"
-              gap="125"
-              render={decided ? <div /> : <label />}
-              className="px-050 py-075"
-            >
-              {decided ? null : (
-                <Checkbox.Root
-                  checked={!uncheckedIds.includes(book.applicationId)}
-                  disabled={disabled}
-                  onCheckedChange={() => onToggle(book.applicationId)}
-                  aria-label={book.label}
-                >
-                  <Checkbox.Indicator />
-                </Checkbox.Root>
-              )}
-              <Text typography="body2" className="min-w-0 flex-1">
-                {book.label}
-              </Text>
-              {decided ? <Badge colorPalette={badge.colorPalette}>{badge.label}</Badge> : null}
-            </HStack>
-          );
-        })}
+        {books.map((book) => (
+          <GroupBookRow
+            key={book.applicationId}
+            book={book}
+            rejected={rejectedIds.includes(book.applicationId)}
+            disabled={disabled}
+            onRejectedChange={(rejected) =>
+              onRejectedChange({ bookApplicationId: book.applicationId, rejected })
+            }
+          />
+        ))}
       </VStack>
+      <GroupDecisionSummary approveCount={approveCount} rejectCount={rejectCount} />
     </VStack>
   );
 }

@@ -13,13 +13,17 @@ const book = (applicationId: string, status: GroupBook["status"]): GroupBook => 
 const books = [book("a", "pending"), book("b", "pending"), book("c", "approved")];
 
 describe("묶음 책 선택", () => {
-  it("체크한 책은 승인, 체크하지 않은 책은 반려 대상이다", () => {
-    expect(groupApproveIds({ books, uncheckedIds: ["b"] })).toEqual(["a"]);
-    expect(groupRejectIds({ books, uncheckedIds: ["b"] })).toEqual(["b"]);
+  it("반려로 바꾼 책만 반려하고 나머지는 승인한다", () => {
+    expect(groupApproveIds({ books, rejectedIds: ["b"] })).toEqual(["a"]);
+    expect(groupRejectIds({ books, rejectedIds: ["b"] })).toEqual(["b"]);
+  });
+
+  it("아무것도 바꾸지 않으면 대기 중인 책을 모두 승인한다", () => {
+    expect(groupApproveIds({ books, rejectedIds: [] })).toEqual(["a", "b"]);
+    expect(groupRejectIds({ books, rejectedIds: [] })).toEqual([]);
   });
 
   it("이미 처리된 책은 대상이 아니다", () => {
-    expect(groupApproveIds({ books, uncheckedIds: [] })).toEqual(["a", "b"]);
-    expect(groupRejectIds({ books, uncheckedIds: ["c"] })).toEqual([]);
+    expect(groupRejectIds({ books, rejectedIds: ["c"] })).toEqual([]);
   });
 });

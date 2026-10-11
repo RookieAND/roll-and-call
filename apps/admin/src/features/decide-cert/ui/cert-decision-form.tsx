@@ -6,10 +6,13 @@ import { useRef, type ReactNode } from "react";
 import type { CertFormat } from "@/shared/server";
 
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
+import { footerNote } from "../model/footer-note";
 import type { GroupBook } from "../model/group-book";
+import { groupConfirmLabel } from "../model/group-confirm-label";
 import type { ReviewShotKey } from "../model/shots";
 import { CertDecisionFooter } from "./cert-decision-footer";
 import { GroupBookChecklist } from "./group-book-checklist";
+import { GroupDecisionFooter } from "./group-decision-footer";
 import { RejectSection } from "./reject-section";
 import { ShotSection } from "./shot-section";
 import { ShotViewer } from "./shot-viewer";
@@ -56,12 +59,32 @@ export function CertDecisionForm({
   });
   const { shots, setParam } = decision;
 
+  const rejectTargetLabels = groupBooks
+    .filter(
+      (book) => book.status === "pending" && decision.rejectedBookIds.includes(book.applicationId),
+    )
+    .map((book) => book.label);
+  const groupNote = footerNote({
+    reviewable: decision.reviewable,
+    allChecked: decision.allChecked,
+    group: {
+      approveCount: decision.approveBookCount,
+      rejectCount: decision.rejectBookCount,
+      reasonReady: decision.reasonReady,
+    },
+  });
+  const groupLabel = groupConfirmLabel({
+    approveCount: decision.approveBookCount,
+    rejectCount: decision.rejectBookCount,
+  });
+  const groupApproveOnly = decision.rejectBookCount === 0;
+
   useDecisionKeys({
     enabled: decision.reviewable && !decision.viewedShot && !decision.pending,
     rejecting: decision.rejecting,
-    canApprove: decision.canApprove,
+    canApprove: decision.canApprove && (!decision.groupMode || groupApproveOnly),
     onReject: () => {
-      if (decision.canStartReject) setParam("mode", "reject");
+      if (!decision.groupMode && decision.canStartReject) setParam("mode", "reject");
     },
     onCancelReject: () => setParam("mode", null),
     onApprove: () => void decision.approve(),
@@ -98,20 +121,22 @@ export function CertDecisionForm({
         {decision.groupMode ? (
           <GroupBookChecklist
             books={groupBooks}
-            uncheckedIds={decision.uncheckedBookIds}
+            rejectedIds={decision.rejectedBookIds}
             disabled={decision.pending}
-            allChecked={decision.allBooksChecked}
-            onToggle={decision.toggleBook}
-            onToggleAll={decision.toggleAllBooks}
+            approveCount={decision.approveBookCount}
+            rejectCount={decision.rejectBookCount}
+            onRejectedChange={decision.setBookRejected}
+            onSetAll={decision.setAllBooksRejected}
           />
         ) : null}
-        {decision.rejecting ? (
+        {decision.showRejectPanel ? (
           <RejectSection
             ebook={decision.ebook}
             reason={decision.reason}
             userReason={decision.userReason}
             staffMemo={decision.staffMemo}
             previewPayload={decision.previewPayload}
+            targetLabels={rejectTargetLabels}
             onReasonChange={decision.chooseReason}
             onUserReasonChange={decision.setUserReason}
             onStaffMemoChange={decision.setStaffMemo}
@@ -129,31 +154,43 @@ export function CertDecisionForm({
         onShotChange={(shot) => setParam("photo", shot)}
         onCheck={decision.checkInViewer}
       />
-      <CertDecisionFooter
-        state={state}
-        rejecting={decision.rejecting}
-        reviewable={decision.reviewable}
-        allChecked={decision.allChecked}
-        canApprove={decision.canApprove}
-        canReject={decision.canReject}
-        approving={decision.approving}
-        rejectingPending={decision.rejectingPending}
-        approvalNetworkError={decision.approvalNetworkError}
-        rejectionNetworkError={decision.rejectionNetworkError}
-        reason={decision.reason}
-        flaggedLabels={decision.flaggedLabels}
-        groupMode={decision.groupMode}
-        approveBookCount={decision.approveBookCount}
-        rejectBookCount={decision.rejectBookCount}
-        canStartReject={decision.canStartReject}
-        nextHref={nextHref}
-        approveRef={approveRef}
-        onSkip={decision.skip}
-        onStartReject={() => setParam("mode", "reject")}
-        onCancelReject={() => setParam("mode", null)}
-        onApprove={() => void decision.approve()}
-        onReject={() => void decision.reject()}
-      />
+      {decision.groupMode ? (
+        <GroupDecisionFooter
+          label={groupLabel}
+          note={groupNote}
+          danger={decision.approveBookCount === 0}
+          canSubmit={decision.canApprove}
+          submitting={decision.approving || decision.rejectingPending}
+          networkError={decision.approvalNetworkError || decision.rejectionNetworkError}
+          showEnterHint={groupApproveOnly}
+          approveRef={approveRef}
+          onSkip={decision.skip}
+          onSubmit={() => void decision.approve()}
+        />
+      ) : (
+        <CertDecisionFooter
+          state={state}
+          rejecting={decision.rejecting}
+          reviewable={decision.reviewable}
+          allChecked={decision.allChecked}
+          canApprove={decision.canApprove}
+          canReject={decision.canReject}
+          approving={decision.approving}
+          rejectingPending={decision.rejectingPending}
+          approvalNetworkError={decision.approvalNetworkError}
+          rejectionNetworkError={decision.rejectionNetworkError}
+          reason={decision.reason}
+          flaggedLabels={decision.flaggedLabels}
+          canStartReject={decision.canStartReject}
+          nextHref={nextHref}
+          approveRef={approveRef}
+          onSkip={decision.skip}
+          onStartReject={() => setParam("mode", "reject")}
+          onCancelReject={() => setParam("mode", null)}
+          onApprove={() => void decision.approve()}
+          onReject={() => void decision.reject()}
+        />
+      )}
     </>
   );
 }

@@ -23,9 +23,6 @@ interface CertDecisionFooterProps {
   rejectionNetworkError: boolean;
   reason: string;
   flaggedLabels: string[];
-  groupMode: boolean;
-  approveBookCount: number;
-  rejectBookCount: number;
   canStartReject: boolean;
   nextHref?: string;
   approveRef: RefObject<HTMLButtonElement | null>;
@@ -49,9 +46,6 @@ export function CertDecisionFooter({
   rejectionNetworkError,
   reason,
   flaggedLabels,
-  groupMode,
-  approveBookCount,
-  rejectBookCount,
   canStartReject,
   nextHref,
   approveRef,
@@ -63,11 +57,7 @@ export function CertDecisionFooter({
 }: CertDecisionFooterProps) {
   const networkError = approvalNetworkError || rejectionNetworkError;
   const footerNotice = networkError ? <ActionNetworkError /> : null;
-  const approveLabel = groupMode ? `체크한 ${approveBookCount}권 승인` : "승인";
-  const startRejectLabel =
-    groupMode && rejectBookCount > 0 ? `체크 해제한 ${rejectBookCount}권 반려` : "반려";
-  const rejectLabel = groupMode ? `${rejectBookCount}권 반려 확정` : "반려 확정";
-  const note = footerNote({ reviewable, allChecked, groupMode, approveBookCount });
+  const note = footerNote({ reviewable, allChecked });
 
   if (state === CERT_REVIEW_STATE.withdrawn) {
     return (
@@ -94,7 +84,7 @@ export function CertDecisionFooter({
           onClick={onReject}
         >
           {rejectionNetworkError ? <RotateCcw size={16} aria-hidden /> : null}
-          {rejectionNetworkError ? "다시 시도" : rejectLabel}
+          {rejectionNetworkError ? "다시 시도" : "반려 확정"}
         </Button>
       </DecisionFooter>
     );
@@ -107,7 +97,7 @@ export function CertDecisionFooter({
         disabled={!canStartReject}
         onClick={onStartReject}
       >
-        {startRejectLabel}
+        반려
         <KeyHint keyLabel="R" />
       </Button>
       <Button
@@ -118,7 +108,7 @@ export function CertDecisionFooter({
         onClick={onApprove}
       >
         {approvalNetworkError ? <RotateCcw size={16} aria-hidden /> : null}
-        {approvalNetworkError ? "다시 시도" : approveLabel}
+        {approvalNetworkError ? "다시 시도" : "승인"}
         {approvalNetworkError ? null : <KeyHint keyLabel="⏎" />}
       </Button>
       {state === CERT_REVIEW_STATE.processed ? <NextItemButton href={nextHref} /> : null}
