@@ -65,13 +65,13 @@ describe("recordAppearances (포인트제)", () => {
     expect(scoreOf(appearances, "p0", BADGE_ROLE.player)).toBe(100);
   });
 
-  it("미니룰은 50점, 타이만은 15점이고 타이만도 순위에 넣는다", () => {
+  it("미니룰은 70점, 타이만은 0점이고 타이만도 세션 횟수로는 센다", () => {
     expect(
       scoreOf(recordAppearances([game({ miniRule: true })], NOW, points), "a", BADGE_ROLE.player),
-    ).toBe(50);
+    ).toBe(70);
     const tie = recordAppearances([game({ participants: [player("a")] })], NOW, points);
-    expect(scoreOf(tie, "gm", BADGE_ROLE.gm)).toBe(15);
-    expect(scoreOf(tie, "a", BADGE_ROLE.player)).toBe(15);
+    expect(scoreOf(tie, "gm", BADGE_ROLE.gm)).toBe(0);
+    expect(scoreOf(tie, "a", BADGE_ROLE.player)).toBe(0);
   });
 
   it("참여 횟수제는 같은 타이만 세션을 순위에서 뺀다", () => {
@@ -105,12 +105,12 @@ describe("recordAppearances (포인트제)", () => {
 
   it("점수 합이 0 이하인 사람은 이달의 뱃지를 받지 못한다", () => {
     const appearances = recordAppearances(
-      [game({ participants: [player("a"), player("b", { absent: true })] })],
+      [game({ participants: [player("a"), player("c"), player("b", { absent: true })] })],
       NOW,
       points,
     );
     const winners = monthlyWinners(appearances, new Date("2026-10-20T00:00:00Z"));
-    expect(winners.map((winner) => winner.userId).sort()).toEqual(["a", "gm"]);
+    expect(winners.map((winner) => winner.userId).sort()).toEqual(["a", "c", "gm"]);
     expect(
       monthlyWinners(
         [{ userId: "x", role: BADGE_ROLE.player, startsAt: START, weight: -100, sessions: 0 }],

@@ -23,7 +23,7 @@ const RULES: { label: string; value: string }[] = [
     label: `GM 가점: 플레이어 ${CROWD_BASE_PLAYERS}명 초과 1명마다 (미니룰)`,
     value: `+${CROWD_BONUS_POINTS.mini}점`,
   },
-  { label: "세션 후기 1건 (공개, 10자 이상)", value: `${REVIEW_POINTS}점` },
+  { label: "세션 후기 1건", value: `${REVIEW_POINTS}점` },
   { label: "불참", value: `${ABSENCE_POINTS}점` },
 ];
 

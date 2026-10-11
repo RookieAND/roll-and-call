@@ -4,8 +4,8 @@ export type RankingSessionKind = (typeof RANKING_SESSION_KIND)[keyof typeof RANK
 
 export const SESSION_POINTS: Record<RankingSessionKind, number> = {
   regular: 100,
-  mini: 50,
-  tie: 15,
+  mini: 70,
+  tie: 0,
 };
 
 // 참석한 플레이어가 이 수를 넘으면 1명마다 GM에게 가점을 주고, 가점은 CROWD_BONUS_PLAYERS명분까지만 준다.
