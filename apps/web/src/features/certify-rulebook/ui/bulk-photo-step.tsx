@@ -40,8 +40,8 @@ export function BulkPhotoStep({ serverId, nickname, draft, update }: BulkPhotoSt
     update((previous) => setBulkPhoto({ draft: previous, index, slot }));
 
   const pick = (index: number) => {
-    const slot = tiles[index]!;
-    if (slot.status === PHOTO_SLOT.uploading || slotKey(slot)) return;
+    const slot = tiles[index];
+    if (slot && (slot.status === PHOTO_SLOT.uploading || slotKey(slot))) return;
     pickedIndex.current = index;
     photoInput.current?.click();
   };
@@ -119,7 +119,9 @@ export function BulkPhotoStep({ serverId, nickname, draft, update }: BulkPhotoSt
               }}
             />
           ))}
-          {showPlaceholder && <PhotoAddPlaceholder label={bulkPhotoLabel(1)} />}
+          {showPlaceholder && (
+            <PhotoAddPlaceholder label={bulkPhotoLabel(1)} onPick={() => pick(1)} />
+          )}
         </Grid>
         <Text typography="body4" foreground="hint" className="break-keep">
           한 장에 담기지 않으면 사진을 더 올려 주세요.
