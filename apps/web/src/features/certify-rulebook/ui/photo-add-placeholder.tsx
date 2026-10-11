@@ -14,7 +14,7 @@ export function PhotoAddPlaceholder({ label, onPick }: PhotoAddPlaceholderProps)
         type="button"
         aria-label={`${label} 올리기`}
         onClick={onPick}
-        className="flex aspect-[3/4] w-full items-center justify-center rounded-500 border-2 border-dashed border-gray-200 text-hint transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+        className="flex aspect-square w-full items-center justify-center rounded-500 border-2 border-dashed border-gray-200 text-hint transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         <Plus size={28} strokeWidth={2} aria-hidden />
       </button>

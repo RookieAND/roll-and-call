@@ -112,6 +112,7 @@ export function BulkPhotoStep({ serverId, nickname, draft, update }: BulkPhotoSt
               slot={slot}
               selected={false}
               needed={false}
+              compact
               onPick={() => pick(index)}
               onRemove={() => {
                 revokePreview(slot);

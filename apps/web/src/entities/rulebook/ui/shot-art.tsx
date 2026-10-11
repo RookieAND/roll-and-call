@@ -13,6 +13,10 @@ const COLOR = {
 
 const BACK_LINES = [22, 29, 36, 43] as const;
 const BARCODE = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const;
+// 두 권을 나란히 놓을 때는 쪽지를 책 아래로 빼지 않고 책 아랫부분에 겹쳐 그림 높이를 줄인다.
+const PAIRED_NOTE_OFFSET = "translate(-2 -26)";
+const PAIRED_VIEW_BOX = "0 12 90 74";
+const SINGLE_VIEW_BOX = "0 0 90 120";
 const PAIR_TRANSFORMS = ["translate(-4 16) scale(.6)", "translate(38 16) scale(.6)"] as const;
 
 const COVER = (
@@ -109,7 +113,13 @@ interface ShotArtProps {
 export function ShotArt({ shot, paired = false }: ShotArtProps) {
   const book = shot === "front" ? FRONT_COVER : BACK_COVER;
   return (
-    <svg viewBox="0 0 90 120" width="100%" height="100%" aria-hidden className="block">
+    <svg
+      viewBox={paired ? PAIRED_VIEW_BOX : SINGLE_VIEW_BOX}
+      width="100%"
+      height="100%"
+      aria-hidden
+      className="block"
+    >
       {paired
         ? PAIR_TRANSFORMS.map((transform) => (
             <g key={transform} transform={transform}>
@@ -117,7 +127,8 @@ export function ShotArt({ shot, paired = false }: ShotArtProps) {
             </g>
           ))
         : book}
-      {shot === "front" && NICKNAME_NOTE}
+      {shot === "front" &&
+        (paired ? <g transform={PAIRED_NOTE_OFFSET}>{NICKNAME_NOTE}</g> : NICKNAME_NOTE)}
     </svg>
   );
 }
