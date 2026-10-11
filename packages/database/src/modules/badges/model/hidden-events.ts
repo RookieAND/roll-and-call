@@ -140,6 +140,7 @@ export function hiddenEvents({
     case HIDDEN_LADDER.collectorKing:
       return collectorKingEvents(facts);
     case HIDDEN_LADDER.lantern:
+    case HIDDEN_LADDER.doubleCrown:
       return [];
     case HIDDEN_LADDER.boxOffice:
       return facts.hostedDraws

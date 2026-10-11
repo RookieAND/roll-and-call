@@ -27,6 +27,7 @@ export { countsAsAttended } from "./counts-as-attended";
 export { countsForRanking } from "./counts-for-ranking";
 export { diffBadges, type BadgeWrite } from "./diff-badges";
 export { isHiddenLadder } from "./is-hidden-ladder";
+export { doubleCrownBadges } from "./double-crown-badges";
 export { isMonthSettled } from "./is-month-settled";
 export { isRecognizedSession } from "./is-recognized-session";
 export { kstMonthKey } from "./kst-month-key";

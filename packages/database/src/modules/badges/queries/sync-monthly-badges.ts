@@ -3,8 +3,9 @@ import { groupBy, isNull, uniq } from "es-toolkit";
 
 import { db } from "#/client";
 import { applyBadgeWrites } from "#/modules/badges/commands/apply-badge-writes";
-import { BADGE_LADDER } from "#/modules/badges/model/badge-ladder";
+import { BADGE_LADDER, HIDDEN_LADDER } from "#/modules/badges/model/badge-ladder";
 import { diffBadges } from "#/modules/badges/model/diff-badges";
+import { doubleCrownBadges } from "#/modules/badges/model/double-crown-badges";
 import { isMonthSettled } from "#/modules/badges/model/is-month-settled";
 import { monthlyWinners } from "#/modules/badges/model/monthly-winners";
 import { parseBadgeKey } from "#/modules/badges/model/parse-badge-key";
@@ -33,6 +34,7 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
           or(
             like(userBadges.badgeKey, `${BADGE_LADDER.gmMonthly}.%`),
             like(userBadges.badgeKey, `${BADGE_LADDER.playerMonthly}.%`),
+            eq(userBadges.badgeKey, HIDDEN_LADDER.doubleCrown),
           ),
         ),
       ),
@@ -40,19 +42,28 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
   // 굳기 전에 줬다 회수한 사람은 굳은 뒤 다시 정해 준다. 굳은 달에 이미 받은 사람의 행만 건드리지 않는다(공동 1위 중 한 명이 받았다고 나머지를 막지 않는다).
   const isFrozen = (badge: { userId: string; badgeKey: string; revokedAt: Date | null }) =>
     isNull(badge.revokedAt) && isMonthSettled(parseBadgeKey(badge.badgeKey)!.subject!, now);
+  const monthlyStored = stored.filter((badge) => badge.badgeKey !== HIDDEN_LADDER.doubleCrown);
   const frozenKeys = new Set(
-    stored.filter(isFrozen).map((badge) => `${badge.userId}|${badge.badgeKey}`),
+    monthlyStored.filter(isFrozen).map((badge) => `${badge.userId}|${badge.badgeKey}`),
   );
   // 포인트제는 공동 1위를 두지 않고 먼저 도달한 한 명만 받는다.
-  const winners = monthlyWinners(appearances, now, {
+  const settledWinners = monthlyWinners(appearances, now, {
     breakTies: server?.rankingMode === RANKING_MODE.points,
-  }).filter(
-    (winner) =>
-      isMonthSettled(parseBadgeKey(winner.badgeKey)!.subject!, now) &&
-      !frozenKeys.has(`${winner.userId}|${winner.badgeKey}`),
+  }).filter((winner) => isMonthSettled(parseBadgeKey(winner.badgeKey)!.subject!, now));
+  const winners = settledWinners.filter(
+    (winner) => !frozenKeys.has(`${winner.userId}|${winner.badgeKey}`),
   );
-  const open = stored.filter((badge) => !isFrozen(badge));
-  const desiredByUser = groupBy(winners, (winner) => winner.userId);
+  // 쌍관왕은 굳은 달의 GM·PL 1위가 한 사람일 때 한 번만 주고, 받은 뒤에는 회수하지 않는다.
+  const crownHolders = new Set(
+    stored
+      .filter((badge) => badge.badgeKey === HIDDEN_LADDER.doubleCrown && isNull(badge.revokedAt))
+      .map((badge) => badge.userId),
+  );
+  const crowns = doubleCrownBadges(settledWinners).filter(
+    (crown) => !crownHolders.has(crown.userId),
+  );
+  const open = monthlyStored.filter((badge) => !isFrozen(badge));
+  const desiredByUser = groupBy([...winners, ...crowns], (winner) => winner.userId);
   const storedByUser = groupBy(open, (badge) => badge.userId);
   const userIds = uniq([...Object.keys(desiredByUser), ...Object.keys(storedByUser)]);
 
