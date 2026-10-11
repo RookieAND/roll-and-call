@@ -8,7 +8,7 @@ import { photoLabelForeground } from "./photo-label-foreground";
 import { photoTag } from "./photo-tag";
 
 const frame = cva(
-  "relative block w-full overflow-hidden rounded-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+  "relative block aspect-[3/4] w-full overflow-hidden rounded-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
   {
     variants: {
       status: {
@@ -18,7 +18,6 @@ const frame = cva(
         previous: "border border-gray-200 bg-secondary-strong",
         error: "border-2 border-warning-600 bg-secondary-strong",
       },
-      square: { true: "aspect-square", false: "aspect-[3/4]" },
       selected: { true: "border-2 border-primary-600", false: "" },
       needed: { true: "", false: "" },
     },
@@ -57,7 +56,6 @@ interface PhotoTileProps {
   slot: PhotoSlot;
   selected: boolean;
   needed: boolean;
-  square?: boolean;
   onPick: () => void;
   onRemove: () => void;
 }
@@ -68,7 +66,6 @@ export function PhotoTile({
   slot,
   selected,
   needed,
-  square = false,
   onPick,
   onRemove,
 }: PhotoTileProps) {
@@ -89,7 +86,7 @@ export function PhotoTile({
           aria-label={`${label} ${filled ? "보기" : "올리기"}`}
           aria-pressed={selected}
           onClick={onPick}
-          className={cn(frame({ status: slot.status, square, selected, needed }))}
+          className={cn(frame({ status: slot.status, selected, needed }))}
         >
           {previewUrl &&
             !pdf && (

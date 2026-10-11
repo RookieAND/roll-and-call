@@ -197,7 +197,6 @@ export function BookDraftCard({
               slot={slotOf({ draft, key })}
               selected={key === current}
               needed={highlightEmpty}
-              square={isProofKey(key)}
               onPick={() => pick(key)}
               onRemove={() => {
                 revokePreview(slotOf({ draft, key }));
