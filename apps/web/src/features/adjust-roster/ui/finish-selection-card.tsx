@@ -39,6 +39,7 @@ export function FinishSelectionCard({
   const confirmLines = [
     `확정 ${confirmedCount}명으로 선발을 마칩니다.`,
     leftoverLine,
+    `확정 ${confirmedCount}명${applicantCount > 0 ? `과 대기 ${applicantCount}명` : ""}에게 결과를 알립니다.`,
     ...(deadlinePassed ? [] : ["모집은 바로 닫힙니다."]),
   ];
 
@@ -90,7 +91,7 @@ export function FinishSelectionCard({
           <Callout.Description>
             선발을 마친 뒤에는 되돌릴 수 없습니다.
             <br />
-            결과는 디스코드 구인 글과 알림 탭으로 바로 알립니다.
+            지금까지 고른 선발 후보는 알리지 않았고, 마치는 순간 디스코드와 알림 탭으로 한 번에 알립니다.
           </Callout.Description>
         </Callout.Root>
       </ConfirmDialog>

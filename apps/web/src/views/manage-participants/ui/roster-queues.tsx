@@ -66,7 +66,7 @@ export function RosterQueues({
   return (
     <VStack gap="250">
       <RosterQueue
-        label="확정"
+        label={summary.selectionOpen ? "선발 후보" : "확정"}
         count={confirmedCount}
         tag={summary.hasDrawResult && <DrawResultLink gameId={gameId} />}
         trailing={

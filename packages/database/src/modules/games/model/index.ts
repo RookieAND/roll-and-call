@@ -20,6 +20,7 @@ export {
   isAwaitingResult,
   type AwaitingResultMethod,
 } from "./is-awaiting-result";
+export { isSelectionDraft } from "./is-selection-draft";
 export { seatOpenedRecipientIds } from "./seat-opened-recipient-ids";
 export { gameCancelledRecipients } from "./game-cancelled-recipients";
 export {
