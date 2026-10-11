@@ -41,7 +41,7 @@ export function HomeRecordGuide() {
         <Sheet.Handle />
         <Sheet.Title className="mb-075 text-heading3">점수 기준</Sheet.Title>
         <Sheet.Body>
-          <div className="mb-125 px-100">
+          <div className="mb-125">
             <Text typography="body4" foreground="muted" render={<p />}>
               세션 점수와 후기 점수, 불참 점수로 이 달의 순위를 정합니다.
             </Text>
