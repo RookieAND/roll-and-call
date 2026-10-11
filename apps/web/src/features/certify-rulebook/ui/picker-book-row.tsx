@@ -73,7 +73,7 @@ export function PickerBookRow({
   const selectable = selection?.available ?? false;
   const status = type === CERT_OPTION.pick || selectable ? null : STATUS[type];
   const Icon = status?.icon ?? BookOpen;
-  const titleForeground = bookTitleForeground(type);
+  const titleForeground = selectable ? "normal" : bookTitleForeground(type);
   const leading =
     selection && selectable ? null : (
       <Icon

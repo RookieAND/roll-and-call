@@ -133,7 +133,7 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
                     className="text-center break-keep"
                     render={<p />}
                   >
-                    {`한 번에 최대 ${BULK_CERT_MAX_BOOKS}권까지 신청할 수 있습니다. 더 고르려면 선택을 해제해 주세요.`}
+                    {`한 번에 최대 ${BULK_CERT_MAX_BOOKS}권까지 신청할 수 있습니다`}
                   </Text>
                 )}
                 <Button
