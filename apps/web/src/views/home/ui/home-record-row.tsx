@@ -49,11 +49,6 @@ export function HomeRecordRow({ row, position, mode }: HomeRecordRowProps) {
         <Text typography="body4" weight="extrabold" numeric>
           {points ? `${row.count}점` : row.count}
         </Text>
-        {points && (
-          <Text typography="body5" foreground="hint" numeric>
-            세션 {row.sessions}회
-          </Text>
-        )}
       </VStack>
     </ServerLink>
   );
