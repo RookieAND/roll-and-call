@@ -1,6 +1,7 @@
 "use server";
 
 import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/games";
+import { RECRUIT_METHOD } from "@roll-and-call/database/games/model";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { z } from "zod";
 
@@ -66,7 +67,10 @@ export async function promoteParticipant(
       });
       promotedIn = game;
       capacityRaised = seats.raised;
-      becameFull = !timing.started && seats.confirmedCount + 1 === seats.maxPlayers;
+      becameFull =
+        !timing.started &&
+        game.recruitMethod !== RECRUIT_METHOD.selection &&
+        seats.confirmedCount + 1 === seats.maxPlayers;
     },
     notify: async (server) => {
       if (!promotedIn) return;

@@ -5,6 +5,7 @@ import {
   insertParticipant,
   setParticipantStatus,
 } from "@roll-and-call/database/games";
+import { RECRUIT_METHOD } from "@roll-and-call/database/games/model";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { uniq } from "es-toolkit";
 import { z } from "zod";
@@ -89,7 +90,10 @@ export async function addParticipants(
       });
       addedTo = game;
       capacityRaised = seats.raised;
-      becameFull = !timing.started && seats.confirmedCount + invitedIds.length === seats.maxPlayers;
+      becameFull =
+        !timing.started &&
+        game.recruitMethod !== RECRUIT_METHOD.selection &&
+        seats.confirmedCount + invitedIds.length === seats.maxPlayers;
     },
     notify: async (server) => {
       if (!addedTo) return;
