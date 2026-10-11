@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { GrantOptions } from "@/shared/server";
 
+import { isBookSelectable, pruneBookSelection } from "./grant-book-selection";
 import {
   GRANT_CANDIDATE_STATUS,
   grantCandidateStatus,
@@ -93,6 +94,27 @@ describe("grantMemberPlan", () => {
 
   it("고른 책을 모두 인증했으면 부여할 책이 없다", () => {
     expect(plan("nut", [0, 1]).grantable).toEqual([]);
+  });
+});
+
+describe("서플리먼트 선택 제약", () => {
+  const selectable = (bookIndex: number, selectedIds: string[]) =>
+    isBookSelectable({ book: options.books[bookIndex]!, books: options.books, selectedIds });
+
+  it("같은 판본의 기본 룰북을 모두 골라야 서플리먼트를 고를 수 있다", () => {
+    expect(selectable(2, [])).toBe(false);
+    expect(selectable(2, ["1권"])).toBe(false);
+    expect(selectable(2, ["1권", "2권"])).toBe(true);
+    expect(selectable(0, [])).toBe(true);
+  });
+
+  it("기본 룰북을 빼면 조건을 잃은 서플리먼트도 함께 뺀다", () => {
+    expect(pruneBookSelection({ selectedIds: ["1권", "상급"], books: options.books })).toEqual([
+      "1권",
+    ]);
+    expect(
+      pruneBookSelection({ selectedIds: ["1권", "2권", "상급"], books: options.books }),
+    ).toEqual(["1권", "2권", "상급"]);
   });
 });
 

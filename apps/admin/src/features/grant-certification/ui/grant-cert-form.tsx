@@ -30,6 +30,7 @@ import {
 } from "@/shared/ui";
 
 import { grantUserCertifications } from "../api/grant-user-certifications";
+import { pruneBookSelection } from "../model/grant-book-selection";
 import { grantMemberPlan } from "../model/grant-candidate-status";
 import { grantResultToast } from "../model/grant-result-toast";
 import { GrantBookPicker } from "./grant-book-picker";
@@ -68,7 +69,7 @@ export function GrantCertForm({ options, staffChannel, backHref }: GrantCertForm
 
   const changeBooks = (nextIds: string[]) => {
     const next = options.books.filter((candidate) => nextIds.includes(candidate.id));
-    setBookIds(nextIds);
+    setBookIds(pruneBookSelection({ selectedIds: nextIds, books: options.books }));
     // 고른 룰북이 바뀌어 부여할 책이 하나도 남지 않은 유저는 선택에서 뺀다.
     setUserIds(
       userIds.filter((userId) => next.length === 0 || planOf(userId, next).grantable.length > 0),
