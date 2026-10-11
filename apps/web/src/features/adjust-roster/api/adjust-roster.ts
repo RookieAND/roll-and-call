@@ -1,5 +1,6 @@
 import "server-only";
 import { lockGame } from "@roll-and-call/database/games";
+import { isSelectionDraft } from "@roll-and-call/database/games/model";
 import { withTransaction, type Transaction } from "@roll-and-call/database/transaction";
 import { after } from "next/server";
 
@@ -45,6 +46,7 @@ export async function adjustRoster({
   const { server } = member;
   const gmId = member.user.id;
   const now = new Date();
+  let draft = false;
 
   try {
     await withTransaction(async (transaction) => {
@@ -53,6 +55,7 @@ export async function adjustRoster({
       if (game.gmId !== gmId) throw new RosterError("권한이 없습니다.");
       if (game.cancelledAt) throw new RosterError(GAME_CANCELLED_MESSAGE);
       if (isSessionEnded(game, now)) throw new RosterError(ROSTER_SESSION_ENDED_MESSAGE);
+      draft = isSelectionDraft(game);
       await work(transaction, game, { started: isSessionStarted(game, now), now });
     });
   } catch (error) {
@@ -61,6 +64,7 @@ export async function adjustRoster({
   }
 
   revalidateRoster({ slug: server.slug, gameId });
+  if (draft) return {};
   after(async () => {
     await notify?.(server);
     await refreshRecruitPost({ server, gameId });
