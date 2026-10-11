@@ -33,14 +33,14 @@ describe("roleGroups", () => {
     });
   });
 
-  it("특별 탭은 운영진 지급 칭호가 앞, 설명 한 줄과 받은 날", () => {
+  it("특별 탭은 운영진 지급 칭호도 구분 없이 받은 순서, 설명 한 줄과 받은 날", () => {
     const groups = groupsOf("special", [
-      record("sp.critical", "2026-09-20T03:00:00Z"),
       record("sp.dev", "2026-09-25T03:00:00Z"),
+      record("sp.critical", "2026-09-20T03:00:00Z"),
     ]);
     expect(groups[0]!.rows.map((row) => [row.name, row.requirement, row.dateLabel])).toEqual([
-      ["개발자", "롤앤콜을 만든 사람입니다.", "26.09.25"],
       ["대성공", expect.any(String), "26.09.20"],
+      ["개발자", "롤앤콜을 만든 사람입니다.", "26.09.25"],
     ]);
   });
 });
