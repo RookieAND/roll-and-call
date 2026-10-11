@@ -22,7 +22,10 @@ export async function addFileToMessage({
       payload: {},
       files: [{ name, blob: await response.blob() }],
     });
+    return true;
   } catch (error) {
-    console.warn("Discord file attach failed:", error);
+    // 실패하면 글에 이미지가 없는 채로 남는다. 어느 글인지 로그로 찾을 수 있게 식별자를 같이 남긴다.
+    console.error("Discord file attach failed:", { channelId, messageId, name, url }, error);
+    return false;
   }
 }
