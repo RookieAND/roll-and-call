@@ -66,3 +66,29 @@ describe("rankPeople 포인트제", () => {
     expect(ranking.runnersUp).toEqual([null, null]);
   });
 });
+
+describe("rankPeople 동점 가르기(포인트제)", () => {
+  it("같은 점수면 먼저 도달한 사람이 앞서고 공동 순위를 두지 않는다", () => {
+    const ranking = rankPeople(
+      [
+        { person: person("late"), weight: 100, sessions: 1, at: new Date("2026-10-20T00:00:00Z") },
+        { person: person("early"), weight: 100, sessions: 1, at: new Date("2026-10-05T00:00:00Z") },
+        { person: person("mid"), weight: 100, sessions: 1, at: new Date("2026-10-10T00:00:00Z") },
+      ],
+      { breakTies: true },
+    );
+    expect(ranking.leaders.map((target) => target.id)).toEqual(["early"]);
+    expect(ranking.runnersUp.map((row) => [row?.person.id, row?.rank])).toEqual([
+      ["mid", 2],
+      ["late", 3],
+    ]);
+  });
+
+  it("참여 횟수제는 그대로 공동 1위로 묶는다", () => {
+    const ranking = rankPeople([
+      { person: person("a"), weight: 1, sessions: 1, at: new Date("2026-10-05T00:00:00Z") },
+      { person: person("b"), weight: 1, sessions: 1, at: new Date("2026-10-06T00:00:00Z") },
+    ]);
+    expect(ranking.leaders).toHaveLength(2);
+  });
+});
