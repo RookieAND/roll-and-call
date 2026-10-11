@@ -11,6 +11,7 @@ import {
 } from "@/entities/rulebook";
 import { useServerPath } from "@/shared/lib";
 
+import { bulkRowNote } from "../model/bulk-row-note";
 import { isBulkSelectable } from "../model/bulk-selection";
 import { coreNeedNote } from "../model/core-need-note";
 import { PickerBookRow } from "./picker-book-row";
@@ -56,13 +57,21 @@ export function PickerCategoryBooks({
           const option = certOption({ rulebook: book, rulebooks });
           const available = isBulkSelectable({ rulebook: book, rulebooks, selectedIds });
           const withCore = bulk && option.type === CERT_OPTION.needsCore && available;
+          const limitBlocked = bulk && limitReached && available && !selectedIds.includes(book.id);
+          const note = bulkRowNote({
+            limitBlocked,
+            withCore,
+            needsCoreLocked: bulk && option.type === CERT_OPTION.needsCore && !available,
+            fallback: option.note,
+          });
           return (
             <PickerBookRow
               key={book.id}
               title={book.shortName}
               edition={book.edition}
               type={option.type}
-              note={withCore ? "기본 룰북과 함께 신청합니다" : option.note}
+              note={note}
+              noteDanger={limitBlocked}
               selection={
                 bulk
                   ? {

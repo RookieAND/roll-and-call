@@ -54,6 +54,7 @@ interface PickerBookRowProps {
   edition: string;
   type: CertOptionType;
   note: string;
+  noteDanger?: boolean;
   rejected: boolean;
   href: string;
   selection: PickerBookSelection | null;
@@ -64,6 +65,7 @@ export function PickerBookRow({
   edition,
   type,
   note,
+  noteDanger = false,
   rejected,
   href,
   selection,
@@ -81,6 +83,8 @@ export function PickerBookRow({
         className={cn("flex-none", status?.className ?? "text-tinted-ink")}
       />
     );
+  const rejectedForeground = rejected ? "warning" : "muted";
+  const noteForeground = noteDanger ? "danger" : rejectedForeground;
   const body = (
     <>
       {leading}
@@ -96,11 +100,7 @@ export function PickerBookRow({
           )}
         </HStack>
         {note && (
-          <Text
-            typography="body4"
-            foreground={rejected ? "warning" : "muted"}
-            className="break-keep"
-          >
+          <Text typography="body4" foreground={noteForeground} className="break-keep">
             {note}
           </Text>
         )}

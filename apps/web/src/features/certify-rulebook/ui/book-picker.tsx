@@ -211,8 +211,8 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
             {bulkApplying ? (
               <VStack gap="075">
                 {limitReached && (
-                  <Text typography="body4" foreground="muted" render={<p />}>
-                    {`한 번에 최대 ${BULK_CERT_MAX_BOOKS}권까지 신청할 수 있습니다`}
+                  <Text typography="body4" weight="bold" foreground="danger" render={<p />}>
+                    {`한 번에 최대 ${BULK_CERT_MAX_BOOKS}권까지 신청할 수 있습니다. 더 고르려면 선택을 해제해 주세요.`}
                   </Text>
                 )}
                 <Button
