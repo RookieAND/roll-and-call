@@ -4,6 +4,8 @@ import { formatDate } from "@/shared/lib";
 import type { CertReview } from "@/shared/server";
 import { FactRows, Tag, UserInitial } from "@/shared/ui";
 
+import { appliedRulebookLabel } from "../model/applied-rulebook-label";
+
 const LONG_WAIT_DAYS = 5;
 
 interface ApplicantCardProps {
@@ -12,6 +14,10 @@ interface ApplicantCardProps {
 
 export function ApplicantCard({ review }: ApplicantCardProps) {
   const { applicant, quiz } = review;
+  const rulebookLabel = appliedRulebookLabel({
+    rulebook: review.rulebook,
+    groupBookCount: review.groupBooks.length,
+  });
   const waitForeground = review.waitedDays >= LONG_WAIT_DAYS ? "danger" : "normal";
   return (
     <section className="rounded-600 border border-gray-200 bg-surface">
@@ -29,7 +35,7 @@ export function ApplicantCard({ review }: ApplicantCardProps) {
         <FactRows
           labelWidth={72}
           items={[
-            { label: "신청 룰북", value: review.rulebook },
+            { label: "신청 룰북", value: rulebookLabel },
             { label: "디스코드 ID", value: `@${applicant.discordHandle}` },
           ]}
         />
