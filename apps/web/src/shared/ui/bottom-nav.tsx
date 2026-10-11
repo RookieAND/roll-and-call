@@ -3,12 +3,14 @@
 import { Grid } from "@roll-and-call/ui";
 import { Bell, CalendarDays, List, User } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useRef } from "react";
 
 import { serverPath } from "@/shared/lib";
 
 import { ActiveBottomNavTab } from "./active-bottom-nav-tab";
 import { BottomNavTab } from "./bottom-nav-tab";
 import { isInRouteGroup } from "./is-in-route-group";
+import { usePublishBottomNavHeight } from "./use-publish-bottom-nav-height";
 
 // 점에는 숫자를 넣지 않는다. 홈은 막힌 할 일(세션 일시 미정), 알림은 이 서버의 안 읽은 알림.
 const tabs = [
@@ -34,10 +36,14 @@ interface BottomNavProps {
 export function BottomNav({ slug, dots }: BottomNavProps) {
   const serverHome = serverPath({ slug, path: "/" });
   const pathname = usePathname().slice(serverHome.length) || "/";
-  if (IMMERSIVE.test(pathname)) return null;
+  const element = useRef<HTMLDivElement>(null);
+  const hidden = IMMERSIVE.test(pathname);
+  usePublishBottomNavHeight({ ref: element, hidden });
+  if (hidden) return null;
 
   return (
     <Grid
+      ref={element}
       cols={4}
       render={<nav aria-label="주요 메뉴" />}
       className="sticky bottom-0 z-(--rc-z-sticky) h-(--rc-size-tabbar) border-t border-gray-200 bg-surface"

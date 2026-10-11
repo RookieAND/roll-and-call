@@ -9,10 +9,13 @@ export interface ToastViewportProps {
   offset?: number;
 }
 
-export function ToastViewport({ position = "top", max = 3, offset = 16 }: ToastViewportProps) {
+export function ToastViewport({ position = "bottom", max = 3, offset = 16 }: ToastViewportProps) {
+  // 하단 CTA(FloatingBar)나 하단 탭이 떠 있으면 둘 중 더 높은 쪽 위로 띄운다. 둘은 같은 자리를 쓰므로 합하지 않는다.
   const edge =
     position === "bottom"
-      ? { bottom: `calc(var(--rc-floating-bar-height, 0px) + ${offset}px)` }
+      ? {
+          bottom: `calc(max(var(--rc-floating-bar-height, 0px), var(--rc-bottom-nav-height, 0px)) + ${offset}px)`,
+        }
       : { top: `calc(env(safe-area-inset-top, 0px) + ${offset}px)` };
   return (
     <Toaster
