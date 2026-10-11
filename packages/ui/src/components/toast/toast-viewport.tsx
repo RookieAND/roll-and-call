@@ -17,12 +17,14 @@ export function ToastViewport({ position = "bottom", max = 3, offset = 16 }: Toa
           bottom: `calc(max(var(--rc-floating-bar-height, 0px), var(--rc-bottom-nav-height, 0px)) + ${offset}px)`,
         }
       : { top: `calc(env(safe-area-inset-top, 0px) + ${offset}px)` };
+  // sonner는 모바일에서 토스터를 left:16px, width:100%로 놓아 토스트가 16px 오른쪽으로 쏠린다. 좌우 여백을 0으로 두고 토스트 폭을 따로 줄여 가운데에 맞춘다.
+  const mobileEdge = { ...edge, left: 0, right: 0 };
   return (
     <Toaster
       position={`${position}-center`}
       visibleToasts={max}
       offset={edge}
-      mobileOffset={edge}
+      mobileOffset={mobileEdge}
       icons={{
         success: <CircleCheck size={16} className="text-success-600" aria-hidden />,
         error: <CircleAlert size={16} aria-hidden />,
@@ -33,7 +35,7 @@ export function ToastViewport({ position = "bottom", max = 3, offset = 16 }: Toa
           // inset-x-0 + mx-auto centers the absolute toast without touching transform (keeps sonner's animation)
           // sonner가 자기 font-family를 박아 넣어 브랜드 폰트가 빠진다. font-sans로 되돌린다.
           toast:
-            "inset-x-0 mx-auto flex w-fit items-center justify-center gap-100 rounded-300 px-200 py-125 font-sans text-sm font-semibold shadow-lg",
+            "inset-x-0 mx-auto flex w-fit! max-w-[calc(100%-2rem)] items-center justify-center gap-100 rounded-300 px-200 py-125 font-sans text-sm font-semibold shadow-lg",
           default: "bg-toast text-toast-ink",
           success: "bg-toast text-toast-ink",
           info: "bg-toast text-toast-ink",
