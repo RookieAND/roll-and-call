@@ -31,6 +31,7 @@ import { useServerPath } from "@/shared/lib";
 import { useIsTrial } from "@/shared/trial";
 
 import { isBulkSelectable, toggleBulkSelection } from "../model/bulk-selection";
+import { bulkSelectionSummary } from "../model/bulk-selection-summary";
 import { coreNeedNote } from "../model/core-need-note";
 import { pickerCategories } from "../model/picker-categories";
 import { recentCategories } from "../model/recent-categories";
@@ -71,6 +72,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
   const showBulkSwitch = !trial;
   const bulkApplyHref = toServerPath(certApplyHref({ rulebookIds: selectedIds, step: "photos" }));
   const bulkApplying = bulk && selectedIds.length > 0;
+  const selectionSummary = bulkSelectionSummary({ rulebooks, selectedIds });
   const requestHref = toServerPath(
     `/me/rulebooks/apply/request${query.trim() ? `?${new URLSearchParams({ name: query.trim() })}` : ""}`,
   );
@@ -88,7 +90,9 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
               인증할 책 고르기
             </Text>
             <Text typography="body2" foreground="muted" render={<p />}>
-              {bulk ? "함께 신청할 책을 모두 골라 주세요." : "한 번에 한 권씩 신청합니다."}
+              {bulk
+                ? "룰을 바꿔 가며 함께 신청할 책을 모두 골라 주세요."
+                : "한 번에 한 권씩 신청합니다."}
             </Text>
           </VStack>
           {showBulkSwitch && (
@@ -171,13 +175,20 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
                       ))}
                     </HStack>
                   </VStack>
-                  <IconButton
-                    variant="ghost"
-                    aria-label="카테고리 바꾸기"
-                    onClick={() => setCategoryId(null)}
-                  >
-                    <ArrowRightLeft size={20} />
-                  </IconButton>
+                  {bulk ? (
+                    <Button variant="tinted" size="sm" onClick={() => setCategoryId(null)}>
+                      <ArrowRightLeft size={14} aria-hidden />
+                      다른 룰 고르기
+                    </Button>
+                  ) : (
+                    <IconButton
+                      variant="ghost"
+                      aria-label="카테고리 바꾸기"
+                      onClick={() => setCategoryId(null)}
+                    >
+                      <ArrowRightLeft size={20} />
+                    </IconButton>
+                  )}
                 </HStack>
               </Card.Root>
               {kinds.map((kind) => (
@@ -240,9 +251,14 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
         </VStack>
         <div className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) -mx-200 mt-auto bg-surface px-200 pt-100 pb-200">
           {bulkApplying ? (
-            <Button render={<Link href={bulkApplyHref} />} size="lg" className="w-full">
-              {`${selectedIds.length}권 신청하기`}
-            </Button>
+            <VStack gap="075">
+              <Text typography="body4" foreground="muted" className="break-keep" render={<p />}>
+                {`고른 책: ${selectionSummary}`}
+              </Text>
+              <Button render={<Link href={bulkApplyHref} />} size="lg" className="w-full">
+                {`${selectedIds.length}권 신청하기`}
+              </Button>
+            </VStack>
           ) : (
             <Callout.Root colorPalette="gray">
               <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
