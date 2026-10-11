@@ -4,7 +4,7 @@ import { parseBadgeKey } from "./parse-badge-key";
 
 type MonthlyWinner = EarnedBadge & { userId: string };
 
-// 같은 달에 이달의 GM과 이달의 PL을 함께 받은 사람마다 1인 2역 하나. 여러 번 겹쳐도 가장 이른 달 기준으로 한 번만 준다.
+// 같은 달에 이달의 GM과 이달의 PL을 함께 받은 사람마다 더블 크라운 하나. 여러 번 겹쳐도 가장 이른 달 기준으로 한 번만 준다.
 export function doubleCrownBadges(winners: MonthlyWinner[]): MonthlyWinner[] {
   const rolesByUserMonth = new Map<string, { winner: MonthlyWinner; gm: boolean; pl: boolean }>();
   for (const winner of winners) {

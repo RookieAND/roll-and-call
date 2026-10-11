@@ -11,7 +11,7 @@ const winner = (userId: string, ladder: string, month: string, day: number) => (
 });
 
 describe("doubleCrownBadges", () => {
-  it("같은 달에 GM과 PL을 함께 받으면 1인 2역을 준다", () => {
+  it("같은 달에 GM과 PL을 함께 받으면 더블 크라운을 준다", () => {
     const result = doubleCrownBadges([
       winner("a", "gm.monthly", "2026-08", 1),
       winner("a", "pl.monthly", "2026-08", 1),

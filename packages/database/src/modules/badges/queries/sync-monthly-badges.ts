@@ -53,7 +53,7 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
   const winners = settledWinners.filter(
     (winner) => !frozenKeys.has(`${winner.userId}|${winner.badgeKey}`),
   );
-  // 1인 2역은 굳은 달의 GM·PL 1위가 한 사람일 때 한 번만 주고, 받은 뒤에는 회수하지 않는다.
+  // 더블 크라운은 굳은 달의 GM·PL 1위가 한 사람일 때 한 번만 주고, 받은 뒤에는 회수하지 않는다.
   const crownHolders = new Set(
     stored
       .filter((badge) => badge.badgeKey === HIDDEN_LADDER.doubleCrown && isNull(badge.revokedAt))
