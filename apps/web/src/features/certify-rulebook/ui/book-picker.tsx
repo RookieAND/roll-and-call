@@ -31,7 +31,6 @@ import { useServerPath } from "@/shared/lib";
 import { useIsTrial } from "@/shared/trial";
 
 import { isBulkSelectable, toggleBulkSelection } from "../model/bulk-selection";
-import { bulkSelectionSummary } from "../model/bulk-selection-summary";
 import { coreNeedNote } from "../model/core-need-note";
 import { pickerCategories } from "../model/picker-categories";
 import { recentCategories } from "../model/recent-categories";
@@ -72,7 +71,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
   const showBulkSwitch = !trial;
   const bulkApplyHref = toServerPath(certApplyHref({ rulebookIds: selectedIds, step: "photos" }));
   const bulkApplying = bulk && selectedIds.length > 0;
-  const selectionSummary = bulkSelectionSummary({ rulebooks, selectedIds });
+  const limitReached = selectedIds.length >= BULK_CERT_MAX_BOOKS;
   const requestHref = toServerPath(
     `/me/rulebooks/apply/request${query.trim() ? `?${new URLSearchParams({ name: query.trim() })}` : ""}`,
   );
@@ -225,7 +224,7 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
                               ? {
                                   checked: selectedIds.includes(book.id),
                                   available,
-                                  limitReached: selectedIds.length >= BULK_CERT_MAX_BOOKS,
+                                  limitReached,
                                   onToggle: () =>
                                     setSelectedIds((current) =>
                                       toggleBulkSelection({
@@ -252,9 +251,11 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
         <div className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) -mx-200 mt-auto bg-surface px-200 pt-100 pb-200">
           {bulkApplying ? (
             <VStack gap="075">
-              <Text typography="body4" foreground="muted" className="break-keep" render={<p />}>
-                {`고른 책: ${selectionSummary}`}
-              </Text>
+              {limitReached && (
+                <Text typography="body4" foreground="muted" render={<p />}>
+                  {`한 번에 최대 ${BULK_CERT_MAX_BOOKS}권까지 신청할 수 있습니다`}
+                </Text>
+              )}
               <Button render={<Link href={bulkApplyHref} />} size="lg" className="w-full">
                 {`${selectedIds.length}권 신청하기`}
               </Button>
