@@ -15,8 +15,12 @@ export function certBlockers(application: CertApplication, records: CertRecords)
   const waitingOn =
     book?.kind === "supplement"
       ? supplementCores(book, records.rulebooks).flatMap((core) => {
+          // 같은 묶음의 기본 룰북은 묶음을 한꺼번에 처리하므로 기다리지 않는다.
           const pendingCore = records.certApplications.find(
-            (row) => mine(core.id)(row) && row.status === "pending",
+            (row) =>
+              mine(core.id)(row) &&
+              row.status === "pending" &&
+              !(application.groupId && row.groupId === application.groupId),
           );
           if (!pendingCore || records.certifications.some(mine(core.id))) return [];
           return [{ label: rulebookLabel(core), applicationId: pendingCore.id }];

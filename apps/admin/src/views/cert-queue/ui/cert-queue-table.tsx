@@ -61,6 +61,7 @@ export function CertQueueTable({ rows, query }: CertQueueTableProps) {
                       {row.category}
                     </Text>
                   )}
+                  {row.groupCount > 1 ? <Tag>{`묶음 ${row.groupCount}권`}</Tag> : null}
                   {row.waiting ? <Tag>기본 룰북 심사 후</Tag> : null}
                   {row.sellerUnlisted ? <Tag>판매처 확인 필요</Tag> : null}
                 </HStack>

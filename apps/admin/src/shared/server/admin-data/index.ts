@@ -52,6 +52,7 @@ export {
   type CertDecisionResult,
 } from "@roll-and-call/database/certifications";
 export { decideCert } from "./decide-cert";
+export { decideCertGroup, type CertGroupDecisionResult } from "./decide-cert-group";
 export { getUserDetail, type UserDetail } from "./get-user-detail";
 export { getUserNickname } from "./get-user-nickname";
 export { getMemberOngoing, type MemberOngoingRow } from "./get-member-ongoing";

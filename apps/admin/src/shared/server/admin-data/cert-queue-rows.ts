@@ -1,6 +1,7 @@
 import type { RulebookKind } from "@roll-and-call/database";
 
 import { certBlockers } from "./cert-blockers";
+import { mergeGroupRows } from "./merge-group-rows";
 import type { Snapshot } from "./snapshot";
 import type { CertApplication, CertFormat } from "./types";
 import { waitedDays } from "./waited-days";
@@ -16,6 +17,8 @@ export interface CertQueueRow {
   waitedDays: number;
   previousRejectionCount: number;
   activeGm: boolean;
+  // 사진 한 묶음으로 함께 신청한 책 수. 묶음이 아니면 1이고, 묶음은 한 줄로 합쳐 맨 앞 신청을 대표로 둔다.
+  groupCount: number;
   // 같은 사람의 기본 룰북 심사를 기다리는 서플리먼트. 목록 뒤로 보낸다.
   waiting: boolean;
   // 전자책인데 판매처 목록에 없는 이름이다(신청자가 「기타」로 입력).
@@ -49,6 +52,7 @@ export function certQueueRows({
         format: application.format,
         appliedAt: application.appliedAt,
         waitedDays: waitedDays(application.appliedAt),
+        groupCount: 1,
         previousRejectionCount: application.previousRejections.length,
         activeGm: user.recentHostedCount > 0,
         sellerUnlisted:
@@ -60,5 +64,6 @@ export function certQueueRows({
           certBlockers(application, records).waitingOn.length > 0,
       };
     });
-  return [...rows.filter((row) => !row.waiting), ...rows.filter((row) => row.waiting)];
+  const merged = mergeGroupRows({ rows, applications });
+  return [...merged.filter((row) => !row.waiting), ...merged.filter((row) => row.waiting)];
 }

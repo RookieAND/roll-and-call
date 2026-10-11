@@ -6,8 +6,10 @@ import { useRef, type ReactNode } from "react";
 import type { CertFormat } from "@/shared/server";
 
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
+import type { GroupBook } from "../model/group-book";
 import type { ReviewShotKey } from "../model/shots";
 import { CertDecisionFooter } from "./cert-decision-footer";
+import { GroupBookChecklist } from "./group-book-checklist";
 import { RejectSection } from "./reject-section";
 import { ShotSection } from "./shot-section";
 import { ShotViewer } from "./shot-viewer";
@@ -20,7 +22,7 @@ interface CertDecisionFormProps {
   rulebookId: string;
   rulebookLabel: string;
   format: CertFormat;
-  grouped: boolean;
+  groupBooks: GroupBook[];
   photoUrls: Partial<Record<ReviewShotKey, string>>;
   previousUrls: Partial<Record<ReviewShotKey, string>>;
   // 재신청이면 사진마다 「새로 올림」·「지난번과 같음」
@@ -40,18 +42,27 @@ export function CertDecisionForm({
   state,
   proofDeleted,
   nextHref,
+  groupBooks,
   children,
   ...decisionOptions
 }: CertDecisionFormProps) {
   const approveRef = useRef<HTMLButtonElement>(null);
-  const decision = useCertDecision({ photoUrls, state, nextHref, ...decisionOptions });
+  const decision = useCertDecision({
+    photoUrls,
+    state,
+    nextHref,
+    groupBooks,
+    ...decisionOptions,
+  });
   const { shots, setParam } = decision;
 
   useDecisionKeys({
     enabled: decision.reviewable && !decision.viewedShot && !decision.pending,
     rejecting: decision.rejecting,
     canApprove: decision.canApprove,
-    onReject: () => setParam("mode", "reject"),
+    onReject: () => {
+      if (decision.canStartReject) setParam("mode", "reject");
+    },
     onCancelReject: () => setParam("mode", null),
     onApprove: () => void decision.approve(),
     onCheck: (index) => {
@@ -68,7 +79,7 @@ export function CertDecisionForm({
           <ShotSection
             state={state}
             ebook={decision.ebook}
-            grouped={decision.grouped}
+            grouped={groupBooks.length > 0}
             shots={shots}
             photoUrls={photoUrls}
             freshLabels={freshLabels}
@@ -84,6 +95,16 @@ export function CertDecisionForm({
             onZoom={(key) => setParam("photo", key)}
           />
         )}
+        {decision.groupMode ? (
+          <GroupBookChecklist
+            books={groupBooks}
+            uncheckedIds={decision.uncheckedBookIds}
+            disabled={decision.pending}
+            allChecked={decision.allBooksChecked}
+            onToggle={decision.toggleBook}
+            onToggleAll={decision.toggleAllBooks}
+          />
+        ) : null}
         {decision.rejecting ? (
           <RejectSection
             ebook={decision.ebook}
@@ -112,7 +133,6 @@ export function CertDecisionForm({
         state={state}
         rejecting={decision.rejecting}
         reviewable={decision.reviewable}
-        pending={decision.pending}
         allChecked={decision.allChecked}
         canApprove={decision.canApprove}
         canReject={decision.canReject}
@@ -122,6 +142,10 @@ export function CertDecisionForm({
         rejectionNetworkError={decision.rejectionNetworkError}
         reason={decision.reason}
         flaggedLabels={decision.flaggedLabels}
+        groupMode={decision.groupMode}
+        approveBookCount={decision.approveBookCount}
+        rejectBookCount={decision.rejectBookCount}
+        canStartReject={decision.canStartReject}
         nextHref={nextHref}
         approveRef={approveRef}
         onSkip={decision.skip}

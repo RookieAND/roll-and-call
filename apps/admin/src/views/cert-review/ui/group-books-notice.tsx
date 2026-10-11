@@ -1,9 +1,8 @@
 import { Badge, Callout, HStack, Text, VStack } from "@roll-and-call/ui";
 
+import { GROUP_STATUS_BADGE } from "@/features/decide-cert";
 import type { CertStatus } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
-
-import { GROUP_STATUS_BADGE } from "../model/group-status-badge";
 
 interface GroupBook {
   label: string;

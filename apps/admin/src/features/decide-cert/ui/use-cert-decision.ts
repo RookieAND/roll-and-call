@@ -12,9 +12,13 @@ import type { CertDecisionResult, CertFormat, ShotKey } from "@/shared/server";
 import { useServerPath } from "@/shared/ui";
 
 import { approveCert } from "../api/approve-cert";
+import { approveCertGroup } from "../api/approve-cert-group";
 import { rejectCert } from "../api/reject-cert";
+import { rejectCertGroup } from "../api/reject-cert-group";
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
 import { decisionToastText } from "../model/decision-toast-text";
+import type { GroupBook } from "../model/group-book";
+import { groupApproveIds, groupRejectIds, pendingGroupBooks } from "../model/group-selection";
 import { isReviewShotKey } from "../model/is-review-shot-key";
 import { rejectMessage } from "../model/reject-message";
 import { reviewShots } from "../model/review-shots";
@@ -27,7 +31,7 @@ interface UseCertDecisionOptions {
   rulebookId: string;
   rulebookLabel: string;
   format: CertFormat;
-  grouped: boolean;
+  groupBooks: GroupBook[];
   photoUrls: Partial<Record<ReviewShotKey, string>>;
   state: CertReviewState;
   nextHref?: string;
@@ -41,7 +45,7 @@ export function useCertDecision({
   rulebookId,
   rulebookLabel,
   format,
-  grouped,
+  groupBooks,
   photoUrls,
   state,
   nextHref,
@@ -54,6 +58,9 @@ export function useCertDecision({
   const searchParams = useSearchParams();
   const approval = useActionSubmit(approveCert);
   const rejection = useActionSubmit(rejectCert);
+  const groupApproval = useActionSubmit(approveCertGroup);
+  const groupRejection = useActionSubmit(rejectCertGroup);
+  const [uncheckedBookIds, setUncheckedBookIds] = useState<string[]>([]);
   const [checkedShots, setCheckedShots] = useState<ReviewShotKey[]>([]);
   const [flaggedShots, setFlaggedShots] = useState<ShotKey[]>([]);
   const [reason, setReason] = useState("");
@@ -65,15 +72,28 @@ export function useCertDecision({
   const reviewable = state === CERT_REVIEW_STATE.open;
   const rejecting = searchParams.get("mode") === "reject" && reviewable;
   const ebook = format === "ebook";
+  const grouped = groupBooks.length > 0;
+  const groupMode = reviewable && grouped;
+  const approveBookIds = groupMode
+    ? groupApproveIds({ books: groupBooks, uncheckedIds: uncheckedBookIds })
+    : [];
+  const rejectBookIds = groupMode
+    ? groupRejectIds({ books: groupBooks, uncheckedIds: uncheckedBookIds })
+    : [];
   const shots = reviewShots({ ebook, grouped, photoUrls });
-  const pending = approval.pending || rejection.pending;
+  const approving = approval.pending || groupApproval.pending;
+  const rejectingPending = rejection.pending || groupRejection.pending;
+  const pending = approving || rejectingPending;
   const checkableShots: ReviewShotKey[] = reviewable
     ? shots.filter((shot) => photoUrls[shot.key]).map((shot) => shot.key)
     : [];
   const allChecked = checkableShots.every((key) => checkedShots.includes(key));
-  const canApprove = reviewable && allChecked && !pending;
+  const canApprove =
+    reviewable && allChecked && !pending && (!groupMode || approveBookIds.length > 0);
   const other = reason === OTHER_REASON;
-  const canReject = Boolean(reason && userReason.trim()) && !pending;
+  const canReject =
+    Boolean(reason && userReason.trim()) && !pending && (!groupMode || rejectBookIds.length > 0);
+  const canStartReject = reviewable && !pending && (!groupMode || rejectBookIds.length > 0);
   const flaggedLabels = shotLabels(flaggedShots);
   const afterHref = nextHref ?? queueHref;
   const label = `${applicantNickname} · ${rulebookLabel}`;
@@ -112,11 +132,57 @@ export function useCertDecision({
     router.push(toServerPath(afterHref));
   };
 
+  // 묶음의 일부만 처리했으면 남은 책을 이어서 처리하도록 그 책의 심사 화면으로 간다.
+  const finishGroup = ({
+    result,
+    decidedIds,
+    message,
+  }: {
+    result: CertDecisionResult | undefined;
+    decidedIds: string[];
+    message: string;
+  }) => {
+    if (isUndefined(result) || !result.ok) {
+      finish(result, message);
+      return;
+    }
+    toast.success(message);
+    const remaining = pendingGroupBooks(groupBooks).find(
+      (book) => !decidedIds.includes(book.applicationId),
+    );
+    if (!remaining) {
+      router.push(toServerPath(afterHref));
+      return;
+    }
+    if (remaining.applicationId === applicationId) router.refresh();
+    else router.push(toServerPath(remaining.href));
+  };
+
   const approve = async () => {
+    if (groupMode) {
+      finishGroup({
+        result: await groupApproval.submit(approveBookIds),
+        decidedIds: approveBookIds,
+        message: `${approveBookIds.length}권을 승인했습니다 · ${applicantNickname}`,
+      });
+      return;
+    }
     finish(await approval.submit(applicationId), `승인했습니다 · ${label}`);
   };
 
   const reject = async () => {
+    if (groupMode) {
+      finishGroup({
+        result: await groupRejection.submit(rejectBookIds, {
+          reasonTag: other ? null : reason,
+          userReason,
+          staffMemo,
+        }),
+        decidedIds: rejectBookIds,
+        message: `${rejectBookIds.length}권을 반려했습니다 · ${applicantNickname}`,
+      });
+      return;
+    }
     finish(
       await rejection.submit(applicationId, {
         reasonTag: other ? null : reason,
@@ -149,6 +215,16 @@ export function useCertDecision({
     }
   };
 
+  const toggleBook = (bookApplicationId: string) =>
+    setUncheckedBookIds((current) => xor(current, [bookApplicationId]));
+
+  const toggleAllBooks = () =>
+    setUncheckedBookIds(
+      approveBookIds.length === pendingGroupBooks(groupBooks).length
+        ? pendingGroupBooks(groupBooks).map((book) => book.applicationId)
+        : [],
+    );
+
   const toggleCheck = (key: ReviewShotKey) => {
     if (!checkableShots.includes(key)) return;
     setCheckedShots(xor(checkedShots, [key]));
@@ -175,10 +251,18 @@ export function useCertDecision({
     rejecting,
     viewedShot,
     pending,
-    approving: approval.pending,
-    rejectingPending: rejection.pending,
-    approvalNetworkError: approval.networkError,
-    rejectionNetworkError: rejection.networkError,
+    approving,
+    rejectingPending,
+    approvalNetworkError: approval.networkError || groupApproval.networkError,
+    rejectionNetworkError: rejection.networkError || groupRejection.networkError,
+    groupMode,
+    uncheckedBookIds,
+    approveBookCount: approveBookIds.length,
+    rejectBookCount: rejectBookIds.length,
+    allBooksChecked: groupMode && rejectBookIds.length === 0,
+    canStartReject,
+    toggleBook,
+    toggleAllBooks,
     checkedShots,
     checkableShots,
     flaggedShots,

@@ -63,7 +63,12 @@ export function CertReviewView({ review, viewerId, filter }: CertReviewViewProps
         rulebookId={review.rulebookId}
         rulebookLabel={review.rulebook}
         format={review.format}
-        grouped={review.groupBooks.length > 0}
+        groupBooks={review.groupBooks.map((book) => ({
+          applicationId: book.applicationId,
+          label: book.label,
+          status: book.status,
+          href: withQuery(`/cert/${book.applicationId}`, query, {}),
+        }))}
         photoUrls={photoUrls}
         previousUrls={previousUrls}
         freshLabels={freshLabels}
@@ -74,7 +79,7 @@ export function CertReviewView({ review, viewerId, filter }: CertReviewViewProps
         viewerId={viewerId}
       >
         <ApplicantCard review={review} />
-        {review.groupBooks.length > 0 ? (
+        {review.groupBooks.length > 0 && state !== CERT_REVIEW_STATE.open ? (
           <GroupBooksNotice
             books={review.groupBooks.map((book) => ({
               label: book.label,

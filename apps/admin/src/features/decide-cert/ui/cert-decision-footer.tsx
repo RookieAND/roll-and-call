@@ -5,6 +5,7 @@ import type { RefObject } from "react";
 import { ActionNetworkError, KeyHint, NextItemButton } from "@/shared/ui";
 
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
+import { footerNote } from "../model/footer-note";
 import { DecisionFooter } from "./decision-footer";
 import { FlaggedStatus } from "./flagged-status";
 import { SkipStatus } from "./skip-status";
@@ -13,7 +14,6 @@ interface CertDecisionFooterProps {
   state: CertReviewState;
   rejecting: boolean;
   reviewable: boolean;
-  pending: boolean;
   allChecked: boolean;
   canApprove: boolean;
   canReject: boolean;
@@ -23,6 +23,10 @@ interface CertDecisionFooterProps {
   rejectionNetworkError: boolean;
   reason: string;
   flaggedLabels: string[];
+  groupMode: boolean;
+  approveBookCount: number;
+  rejectBookCount: number;
+  canStartReject: boolean;
   nextHref?: string;
   approveRef: RefObject<HTMLButtonElement | null>;
   onSkip: () => void;
@@ -36,7 +40,6 @@ export function CertDecisionFooter({
   state,
   rejecting,
   reviewable,
-  pending,
   allChecked,
   canApprove,
   canReject,
@@ -46,6 +49,10 @@ export function CertDecisionFooter({
   rejectionNetworkError,
   reason,
   flaggedLabels,
+  groupMode,
+  approveBookCount,
+  rejectBookCount,
+  canStartReject,
   nextHref,
   approveRef,
   onSkip,
@@ -56,6 +63,9 @@ export function CertDecisionFooter({
 }: CertDecisionFooterProps) {
   const networkError = approvalNetworkError || rejectionNetworkError;
   const footerNotice = networkError ? <ActionNetworkError /> : null;
+  const approveLabel = groupMode ? `체크한 ${approveBookCount}권 승인` : "승인";
+  const rejectLabel = groupMode ? `${rejectBookCount}권 반려 확정` : "반려 확정";
+  const note = footerNote({ reviewable, allChecked, groupMode, approveBookCount });
 
   if (state === CERT_REVIEW_STATE.withdrawn) {
     return (
@@ -82,27 +92,17 @@ export function CertDecisionFooter({
           onClick={onReject}
         >
           {rejectionNetworkError ? <RotateCcw size={16} aria-hidden /> : null}
-          {rejectionNetworkError ? "다시 시도" : "반려 확정"}
+          {rejectionNetworkError ? "다시 시도" : rejectLabel}
         </Button>
       </DecisionFooter>
     );
   }
   return (
-    <DecisionFooter
-      notice={footerNotice}
-      status={
-        <SkipStatus
-          note={
-            reviewable && !allChecked ? "모든 확인 항목을 체크해야 승인할 수 있습니다" : undefined
-          }
-          onSkip={onSkip}
-        />
-      }
-    >
+    <DecisionFooter notice={footerNotice} status={<SkipStatus note={note} onSkip={onSkip} />}>
       <Button
         variant="outline"
         colorPalette="danger"
-        disabled={!reviewable || pending}
+        disabled={!canStartReject}
         onClick={onStartReject}
       >
         반려
@@ -116,7 +116,7 @@ export function CertDecisionFooter({
         onClick={onApprove}
       >
         {approvalNetworkError ? <RotateCcw size={16} aria-hidden /> : null}
-        {approvalNetworkError ? "다시 시도" : "승인"}
+        {approvalNetworkError ? "다시 시도" : approveLabel}
         {approvalNetworkError ? null : <KeyHint keyLabel="⏎" />}
       </Button>
       {state === CERT_REVIEW_STATE.processed ? <NextItemButton href={nextHref} /> : null}
