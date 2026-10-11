@@ -106,6 +106,19 @@ describe("staffNoticeMessage", () => {
     ]);
   });
 
+  it("인증 부여: 여러 권이면 첫 룰북 외 N권으로 묶는다", () => {
+    expect(
+      valuesOf({
+        kind: STAFF_NOTICE_KIND.certGranted,
+        staffNickname: "새벽세시",
+        rulebookId: "book-1",
+        rulebookLabel: "D&D 5판",
+        otherCount: 4,
+        nicknames: ["가", "나"],
+      }),
+    ).toEqual(["D&D 5판 외 4권", "가, 나"]);
+  });
+
   it("ADMIN_APP_URL이 없으면 버튼이 없다", () => {
     vi.stubEnv("ADMIN_APP_URL", "");
     const result = message({

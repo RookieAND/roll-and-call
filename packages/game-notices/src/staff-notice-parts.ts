@@ -87,13 +87,18 @@ export function staffNoticeParts(notice: StaffNotice): StaffNoticeParts {
         notice.nicknames.length > SHOWN_NICKNAMES + 1
           ? `${notice.nicknames.slice(0, SHOWN_NICKNAMES).join(", ")} 외 ${hidden}명`
           : notice.nicknames.join(", ");
+      const others = notice.otherCount ?? 0;
       return {
         title: `${notice.staffNickname}님이 인증을 부여했습니다`,
         fields: [
-          { name: "📖 룰북", value: notice.rulebookLabel, inline: true },
+          {
+            name: "📖 룰북",
+            value: others > 0 ? `${notice.rulebookLabel} 외 ${others}권` : notice.rulebookLabel,
+            inline: true,
+          },
           { name: "🎖️ 대상", value: nicknames, inline: true },
         ],
-        path: `/cert/manage?rulebook=${notice.rulebookId}`,
+        path: others > 0 ? "/cert/manage" : `/cert/manage?rulebook=${notice.rulebookId}`,
         color: DISCORD_COLOR.confirmed,
       };
     }
