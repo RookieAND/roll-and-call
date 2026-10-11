@@ -20,12 +20,10 @@ export function GrantSummary({
         {
           label: "인증을 부여할 룰북",
           value: `${rulebookLabels.length}개`,
-          sub: rulebookLabels.join(", ") || undefined,
         },
         {
           label: "인증을 받는 유저",
           value: `${nicknames.length}명`,
-          sub: nicknames.join(", ") || undefined,
         },
         ...(several
           ? [{ label: "새로 부여되는 인증", value: `${grantCount}건`, sub: undefined }]
@@ -33,10 +31,6 @@ export function GrantSummary({
         {
           label: "승인으로 처리되는 심사",
           value: `${approving.length}건`,
-          sub:
-            approving
-              .map((row) => (several ? `${row.nickname} · ${row.label}` : row.nickname))
-              .join(", ") || undefined,
         },
       ]}
     />

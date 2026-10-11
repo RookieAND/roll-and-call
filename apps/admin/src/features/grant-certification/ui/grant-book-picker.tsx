@@ -1,13 +1,13 @@
 "use client";
 
-import { Checkbox, Chip, Text, TextInput, VStack, cn } from "@roll-and-call/ui";
-import { X } from "lucide-react";
+import { Checkbox, Text, TextInput, VStack, cn } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { GrantOptions } from "@/shared/server";
 
 import { isBookSelectable, pruneBookSelection } from "../model/grant-book-selection";
+import { GrantSelectedBooks } from "./grant-selected-books";
 
 interface GrantBookPickerProps {
   books: GrantOptions["books"];
@@ -16,7 +16,7 @@ interface GrantBookPickerProps {
   onChange: (bookIds: string[]) => void;
 }
 
-// 인증이 필요한 책만 고른다. 책이 20~30권이 될 수 있어 고른 책은 칩으로 모아 따로 스크롤하고, 목록도 자체 스크롤이다.
+// 인증이 필요한 책만 고른다. 책이 20~30권이 될 수 있어 고른 책은 칩으로 모아 3줄을 넘으면 「+N」으로 접고, 목록은 자체 스크롤이다.
 // 서플리먼트는 같은 판본의 기본 룰북을 먼저 골라야 고를 수 있다.
 export function GrantBookPicker({ books, selectedIds, disabled, onChange }: GrantBookPickerProps) {
   const [query, setQuery] = useState("");
@@ -47,21 +47,11 @@ export function GrantBookPicker({ books, selectedIds, disabled, onChange }: Gran
           <Text typography="body4" weight="bold" foreground="hint">
             {`고른 룰북 ${selected.length}권`}
           </Text>
-          <ul aria-label="고른 룰북" className="flex max-h-24 flex-wrap gap-075 overflow-y-auto">
-            {selected.map((book) => (
-              <li key={book.id}>
-                <Chip
-                  selected
-                  disabled={disabled}
-                  aria-label={`${book.label} 선택 해제`}
-                  onClick={() => toggle(book.id, false)}
-                >
-                  {book.label}
-                  <X size={12} aria-hidden />
-                </Chip>
-              </li>
-            ))}
-          </ul>
+          <GrantSelectedBooks
+            books={selected}
+            disabled={disabled}
+            onRemove={(bookId) => toggle(bookId, false)}
+          />
         </VStack>
       ) : null}
       <TextInput
