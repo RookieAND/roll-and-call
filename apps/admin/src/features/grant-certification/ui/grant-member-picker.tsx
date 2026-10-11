@@ -8,6 +8,7 @@ import type { GrantOptions } from "@/shared/server";
 import { grantMemberPlan } from "../model/grant-candidate-status";
 import { searchGrantMembers } from "../model/search-grant-members";
 import { GrantMemberRow } from "./grant-member-row";
+import { GrantSelectedChips } from "./grant-selected-chips";
 
 interface GrantMemberPickerProps {
   options: GrantOptions;
@@ -17,7 +18,7 @@ interface GrantMemberPickerProps {
   onChange: (selectedIds: string[]) => void;
 }
 
-// 고른 사람은 검색어와 상관없이 목록 위에 남는다. 검색 결과는 이 서버 멤버 중 20명까지다.
+// 고른 사람은 위 묶음에 칩으로만 보이고 검색 결과에서는 뺀다. 검색 결과는 이 서버 멤버 중 20명까지다.
 export function GrantMemberPicker({
   options,
   books,
@@ -28,12 +29,20 @@ export function GrantMemberPicker({
   const [query, setQuery] = useState("");
   const selected = options.members.filter((member) => selectedIds.includes(member.id));
   const found = searchGrantMembers({ members: options.members, query, excludeIds: selectedIds });
-  const rows = [...selected, ...found];
   const toggle = (memberId: string, checked: boolean) =>
     onChange(checked ? [...selectedIds, memberId] : selectedIds.filter((id) => id !== memberId));
 
   return (
     <VStack gap="100">
+      {selected.length > 0 ? (
+        <GrantSelectedChips
+          noun="유저"
+          unit="명"
+          items={selected.map((member) => ({ id: member.id, label: member.nickname }))}
+          disabled={disabled}
+          onRemove={(memberId) => toggle(memberId, false)}
+        />
+      ) : null}
       <TextInput
         type="search"
         placeholder="닉네임 또는 디스코드 ID"
@@ -41,12 +50,12 @@ export function GrantMemberPicker({
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      {rows.length > 0 ? (
+      {found.length > 0 ? (
         <ul
           aria-label="인증할 유저"
           className="overflow-hidden rounded-400 border border-gray-200 bg-surface"
         >
-          {rows.map((member) => (
+          {found.map((member) => (
             <GrantMemberRow
               key={member.id}
               member={member}

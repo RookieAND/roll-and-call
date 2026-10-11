@@ -7,7 +7,7 @@ import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { GrantOptions } from "@/shared/server";
 
 import { isBookSelectable, pruneBookSelection } from "../model/grant-book-selection";
-import { GrantSelectedBooks } from "./grant-selected-books";
+import { GrantSelectedChips } from "./grant-selected-chips";
 
 interface GrantBookPickerProps {
   books: GrantOptions["books"];
@@ -40,19 +40,13 @@ export function GrantBookPicker({ books, selectedIds, disabled, onChange }: Gran
   return (
     <VStack gap="100">
       {selected.length > 0 ? (
-        <VStack
-          gap="075"
-          className="rounded-400 border border-tinted-border bg-tinted-bg px-150 py-100"
-        >
-          <Text typography="body4" weight="bold" foreground="hint">
-            {`고른 룰북 ${selected.length}권`}
-          </Text>
-          <GrantSelectedBooks
-            books={selected}
-            disabled={disabled}
-            onRemove={(bookId) => toggle(bookId, false)}
-          />
-        </VStack>
+        <GrantSelectedChips
+          noun="룰북"
+          unit="권"
+          items={selected}
+          disabled={disabled}
+          onRemove={(bookId) => toggle(bookId, false)}
+        />
       ) : null}
       <TextInput
         type="search"
