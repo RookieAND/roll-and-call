@@ -83,8 +83,14 @@ export type NotificationParamsMap = {
   absence_restored: GameParams;
   attendance_auto_confirmed: GameParams;
   review_available: GameParams;
-  cert_approved: { rulebookId: string; rulebookName: string };
-  cert_rejected: { rulebookId: string; rulebookName: string; rejectionSummary: string };
+  // otherCount는 한 묶음으로 함께 처리된 나머지 룰북 수다. 없거나 0이면 한 권이다.
+  cert_approved: { rulebookId: string; rulebookName: string; otherCount?: number };
+  cert_rejected: {
+    rulebookId: string;
+    rulebookName: string;
+    rejectionSummary: string;
+    otherCount?: number;
+  };
   cert_revoked: { rulebookId: string; rulebookName: string; cancelledGameCount: number };
   // otherCount는 한 번에 함께 등록된 나머지 룰북 수다. 없거나 0이면 한 권이다.
   cert_granted: { rulebookId: string; rulebookName: string; otherCount?: number };

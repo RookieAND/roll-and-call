@@ -16,11 +16,13 @@ export async function decideCert({
   id,
   actor,
   decision,
+  notify,
 }: {
   serverId: string;
   id: string;
   actor: Actor;
   decision: CertDecision;
+  notify?: boolean;
 }): Promise<CertDecisionResult> {
   // ponytail: 막는 조건은 트랜잭션 밖 스냅숏으로 본다. 두 운영진이 같은 순간 기본 룰북과 서플리먼트를 처리하는 경합은 막지 않는다.
   const snapshot = await loadSnapshot();
@@ -33,6 +35,7 @@ export async function decideCert({
     id,
     actor,
     decision,
+    notify,
     waitingSupplements:
       application && decision.kind === "reject" ? waitingSupplements(snapshot, application) : null,
   });

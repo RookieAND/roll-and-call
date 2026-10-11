@@ -106,12 +106,16 @@ export function useCertDecision({
   const flaggedLabels = shotLabels(flaggedShots);
   const afterHref = nextHref ?? queueHref;
   const label = `${applicantNickname} · ${rulebookLabel}`;
+  const bookLabelOf = (ids: string[]) =>
+    groupBooks.find((book) => book.applicationId === ids[0])?.label ?? rulebookLabel;
+  const rejectOtherCount = Math.max(rejectBookIds.length - 1, 0);
   const previewPayload = reason
     ? {
         kind: NOTIFICATION_KIND.certRejected,
         params: {
           rulebookId,
-          rulebookName: rulebookLabel,
+          rulebookName: groupMode ? bookLabelOf(rejectBookIds) : rulebookLabel,
+          otherCount: groupMode ? rejectOtherCount : undefined,
           rejectionSummary: rejectionSummary({
             rejectTag: other ? null : reason,
             flaggedShots,
@@ -120,6 +124,17 @@ export function useCertDecision({
         },
       }
     : null;
+  const approvePreviewPayload =
+    groupMode && approveBookIds.length > 0
+      ? {
+          kind: NOTIFICATION_KIND.certApproved,
+          params: {
+            rulebookId,
+            rulebookName: bookLabelOf(approveBookIds),
+            otherCount: approveBookIds.length - 1,
+          },
+        }
+      : null;
 
   const setParam = (key: string, value: string | null) => {
     const next = new URLSearchParams(searchParams);
@@ -287,6 +302,7 @@ export function useCertDecision({
     userReason,
     staffMemo,
     previewPayload,
+    approvePreviewPayload,
     setUserReason,
     setStaffMemo,
     setParam,

@@ -4,6 +4,7 @@ import type { ShotKey } from "@/shared/server";
 
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
 import { isShotKey } from "../model/is-shot-key";
+import { PHOTO_SECTION_ID } from "../model/section-ids";
 import type { ReviewShot, ReviewShotKey } from "../model/shots";
 import { ShotCard } from "./shot-card";
 import { ShotSectionHeader } from "./shot-section-header";
@@ -49,7 +50,7 @@ export function ShotSection({
   return (
     <VStack
       gap="125"
-      render={<section aria-labelledby="shot-section-title" />}
+      render={<section id={PHOTO_SECTION_ID} aria-labelledby="shot-section-title" />}
       aria-disabled={!reviewable}
       className={cn(state === CERT_REVIEW_STATE.waiting && "opacity-50")}
     >

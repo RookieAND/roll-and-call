@@ -5,6 +5,7 @@ export {
   type CertDecision,
   type CertDecisionResult,
 } from "./commands/decide-cert-application";
+export { notifyCertGroupDecision } from "./commands/notify-cert-group-decision";
 export { discardRulebookRecord } from "./commands/discard-rulebook-record";
 export {
   grantCertifications,

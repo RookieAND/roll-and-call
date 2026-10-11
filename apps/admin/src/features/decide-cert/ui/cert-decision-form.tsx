@@ -6,9 +6,10 @@ import { useRef, type ReactNode } from "react";
 import type { CertFormat } from "@/shared/server";
 
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
-import { footerNote } from "../model/footer-note";
+import { FOOTER_NOTE_TARGET, footerNote, type FooterNote } from "../model/footer-note";
 import type { GroupBook } from "../model/group-book";
 import { groupConfirmLabel } from "../model/group-confirm-label";
+import { PHOTO_SECTION_ID, REJECT_SECTION_ID } from "../model/section-ids";
 import type { ReviewShotKey } from "../model/shots";
 import { CertDecisionFooter } from "./cert-decision-footer";
 import { GroupBookChecklist } from "./group-book-checklist";
@@ -66,7 +67,8 @@ export function CertDecisionForm({
     .map((book) => book.label);
   const groupNote = footerNote({
     reviewable: decision.reviewable,
-    allChecked: decision.allChecked,
+    checkedCount: decision.checkedShots.length,
+    checkableCount: decision.checkableShots.length,
     group: {
       approveCount: decision.approveBookCount,
       rejectCount: decision.rejectBookCount,
@@ -77,6 +79,18 @@ export function CertDecisionForm({
     approveCount: decision.approveBookCount,
     rejectCount: decision.rejectBookCount,
   });
+  // 막힌 이유를 누르면 풀어야 할 곳으로 스크롤하고 첫 입력에 포커스를 둔다.
+  const moveToNoteTarget = (note: FooterNote) => {
+    const section = document.getElementById(
+      note.target === FOOTER_NOTE_TARGET.photos ? PHOTO_SECTION_ID : REJECT_SECTION_ID,
+    );
+    section?.scrollIntoView({ behavior: "smooth", block: "center" });
+    section
+      ?.querySelector<HTMLElement>(
+        '[role="checkbox"]:not([aria-checked="true"]), [role="radio"], textarea',
+      )
+      ?.focus({ preventScroll: true });
+  };
   const groupApproveOnly = decision.rejectBookCount === 0;
 
   useDecisionKeys({
@@ -137,6 +151,7 @@ export function CertDecisionForm({
             staffMemo={decision.staffMemo}
             previewPayload={decision.previewPayload}
             targetLabels={rejectTargetLabels}
+            approvePreviewPayload={decision.approvePreviewPayload}
             onReasonChange={decision.chooseReason}
             onUserReasonChange={decision.setUserReason}
             onStaffMemoChange={decision.setStaffMemo}
@@ -165,6 +180,7 @@ export function CertDecisionForm({
           showEnterHint={groupApproveOnly}
           approveRef={approveRef}
           onSkip={decision.skip}
+          onNoteClick={moveToNoteTarget}
           onSubmit={() => void decision.approve()}
         />
       ) : (
@@ -172,7 +188,8 @@ export function CertDecisionForm({
           state={state}
           rejecting={decision.rejecting}
           reviewable={decision.reviewable}
-          allChecked={decision.allChecked}
+          checkedCount={decision.checkedShots.length}
+          checkableCount={decision.checkableShots.length}
           canApprove={decision.canApprove}
           canReject={decision.canReject}
           approving={decision.approving}
@@ -185,6 +202,7 @@ export function CertDecisionForm({
           nextHref={nextHref}
           approveRef={approveRef}
           onSkip={decision.skip}
+          onNoteClick={moveToNoteTarget}
           onStartReject={() => setParam("mode", "reject")}
           onCancelReject={() => setParam("mode", null)}
           onApprove={() => void decision.approve()}

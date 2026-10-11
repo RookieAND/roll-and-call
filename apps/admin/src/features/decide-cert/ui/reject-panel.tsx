@@ -1,7 +1,13 @@
 import { Field, Text, Textarea, VStack } from "@roll-and-call/ui";
 
-import { EBOOK_REJECT_REASONS, OTHER_REASON, REJECT_REASONS } from "@/shared/lib";
+import {
+  appliedRulebookLabel,
+  EBOOK_REJECT_REASONS,
+  OTHER_REASON,
+  REJECT_REASONS,
+} from "@/shared/lib";
 
+import { REJECT_SECTION_ID } from "../model/section-ids";
 import { ReasonRadio } from "./reason-radio";
 
 interface RejectPanelProps {
@@ -28,7 +34,7 @@ export function RejectPanel({
   const other = reason === OTHER_REASON;
   return (
     <VStack
-      render={<section aria-label="반려 사유" />}
+      render={<section id={REJECT_SECTION_ID} aria-label="반려 사유" />}
       className="overflow-hidden rounded-600 border border-danger-600 bg-surface"
     >
       <VStack gap="050" className="border-b border-(--rc-color-border-subtle) px-150 pt-175 pb-150">
@@ -37,7 +43,7 @@ export function RejectPanel({
         </Text>
         {targetLabels.length > 0 ? (
           <Text typography="body4" weight="bold" foreground="danger" className="break-keep">
-            {`반려 대상 ${targetLabels.length}권 · ${targetLabels.join(", ")}`}
+            {`반려 대상 · ${appliedRulebookLabel({ rulebook: targetLabels[0]!, groupBookCount: targetLabels.length })}`}
           </Text>
         ) : null}
         <Text typography="body4" foreground="hint">

@@ -24,7 +24,14 @@ export type CertDecision =
     };
 
 export type CertDecisionResult =
-  | { ok: true; userId: string }
+  | {
+      ok: true;
+      userId: string;
+      // 알림에 쓰는 책 정보. 묶음 처리는 이 값으로 알림을 한 번에 보낸다.
+      rulebookId: string;
+      rulebookName: string;
+      rejectionSummary: string | null;
+    }
   | {
       ok: false;
       conflict: {
@@ -44,12 +51,15 @@ export async function decideCertApplication({
   actor,
   decision,
   waitingSupplements,
+  notify = true,
 }: {
   serverId: string;
   id: string;
   actor: Actor;
   decision: CertDecision;
   waitingSupplements: WaitingSupplements | null;
+  // false면 알림을 만들지 않는다. 묶음 처리가 한 줄로 묶어 따로 보낸다.
+  notify?: boolean;
 }): Promise<CertDecisionResult> {
   const thisApplication = and(eq(certApplications.serverId, serverId), eq(certApplications.id, id));
   return db.transaction(async (tx) => {
@@ -139,15 +149,17 @@ export async function decideCertApplication({
           after: { label: "인증됨" },
         },
       });
-      await createNotifications({
-        executor: tx,
-        serverId,
-        actorId: actor.id,
-        notifications: [
-          { userId: decided.userId, kind: NOTIFICATION_KIND.certApproved, params: rulebook },
-        ],
-      });
-      return { ok: true, userId: decided.userId };
+      if (notify) {
+        await createNotifications({
+          executor: tx,
+          serverId,
+          actorId: actor.id,
+          notifications: [
+            { userId: decided.userId, kind: NOTIFICATION_KIND.certApproved, params: rulebook },
+          ],
+        });
+      }
+      return { ok: true, userId: decided.userId, ...rulebook, rejectionSummary: null };
     }
 
     await recordAudit({
@@ -165,18 +177,21 @@ export async function decideCertApplication({
         after: { label: "반려됨" },
       },
     });
-    await createNotifications({
-      executor: tx,
-      serverId,
-      actorId: actor.id,
-      notifications: [
-        {
-          userId: decided.userId,
-          kind: NOTIFICATION_KIND.certRejected,
-          params: { ...rulebook, rejectionSummary: rejectionSummary(decided) },
-        },
-      ],
-    });
+    const summary = rejectionSummary(decided);
+    if (notify) {
+      await createNotifications({
+        executor: tx,
+        serverId,
+        actorId: actor.id,
+        notifications: [
+          {
+            userId: decided.userId,
+            kind: NOTIFICATION_KIND.certRejected,
+            params: { ...rulebook, rejectionSummary: summary },
+          },
+        ],
+      });
+    }
     if (waitingSupplements) {
       await rejectWaitingSupplements({
         executor: tx,
@@ -185,6 +200,6 @@ export async function decideCertApplication({
         supplements: waitingSupplements,
       });
     }
-    return { ok: true, userId: decided.userId };
+    return { ok: true, userId: decided.userId, ...rulebook, rejectionSummary: summary };
   });
 }

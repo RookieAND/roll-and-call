@@ -4,12 +4,13 @@ import type { RefObject } from "react";
 
 import { ActionNetworkError, KeyHint } from "@/shared/ui";
 
+import type { FooterNote } from "../model/footer-note";
 import { DecisionFooter } from "./decision-footer";
 import { SkipStatus } from "./skip-status";
 
 interface GroupDecisionFooterProps {
   label: string;
-  note?: string;
+  note?: FooterNote;
   danger: boolean;
   canSubmit: boolean;
   submitting: boolean;
@@ -17,6 +18,7 @@ interface GroupDecisionFooterProps {
   showEnterHint: boolean;
   approveRef: RefObject<HTMLButtonElement | null>;
   onSkip: () => void;
+  onNoteClick: (note: FooterNote) => void;
   onSubmit: () => void;
 }
 
@@ -31,13 +33,14 @@ export function GroupDecisionFooter({
   showEnterHint,
   approveRef,
   onSkip,
+  onNoteClick,
   onSubmit,
 }: GroupDecisionFooterProps) {
   const palette = danger ? "danger" : "primary";
   return (
     <DecisionFooter
       notice={networkError ? <ActionNetworkError /> : null}
-      status={<SkipStatus note={note} onSkip={onSkip} />}
+      status={<SkipStatus note={note} onSkip={onSkip} onNoteClick={onNoteClick} />}
     >
       <Button
         ref={approveRef}

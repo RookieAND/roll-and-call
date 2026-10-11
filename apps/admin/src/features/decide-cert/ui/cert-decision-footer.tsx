@@ -5,7 +5,7 @@ import type { RefObject } from "react";
 import { ActionNetworkError, KeyHint, NextItemButton } from "@/shared/ui";
 
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
-import { footerNote } from "../model/footer-note";
+import { footerNote, type FooterNote } from "../model/footer-note";
 import { DecisionFooter } from "./decision-footer";
 import { FlaggedStatus } from "./flagged-status";
 import { SkipStatus } from "./skip-status";
@@ -14,7 +14,8 @@ interface CertDecisionFooterProps {
   state: CertReviewState;
   rejecting: boolean;
   reviewable: boolean;
-  allChecked: boolean;
+  checkedCount: number;
+  checkableCount: number;
   canApprove: boolean;
   canReject: boolean;
   approving: boolean;
@@ -27,6 +28,7 @@ interface CertDecisionFooterProps {
   nextHref?: string;
   approveRef: RefObject<HTMLButtonElement | null>;
   onSkip: () => void;
+  onNoteClick: (note: FooterNote) => void;
   onStartReject: () => void;
   onCancelReject: () => void;
   onApprove: () => void;
@@ -37,7 +39,8 @@ export function CertDecisionFooter({
   state,
   rejecting,
   reviewable,
-  allChecked,
+  checkedCount,
+  checkableCount,
   canApprove,
   canReject,
   approving,
@@ -50,6 +53,7 @@ export function CertDecisionFooter({
   nextHref,
   approveRef,
   onSkip,
+  onNoteClick,
   onStartReject,
   onCancelReject,
   onApprove,
@@ -57,7 +61,7 @@ export function CertDecisionFooter({
 }: CertDecisionFooterProps) {
   const networkError = approvalNetworkError || rejectionNetworkError;
   const footerNotice = networkError ? <ActionNetworkError /> : null;
-  const note = footerNote({ reviewable, allChecked });
+  const note = footerNote({ reviewable, checkedCount, checkableCount });
 
   if (state === CERT_REVIEW_STATE.withdrawn) {
     return (
@@ -90,7 +94,10 @@ export function CertDecisionFooter({
     );
   }
   return (
-    <DecisionFooter notice={footerNotice} status={<SkipStatus note={note} onSkip={onSkip} />}>
+    <DecisionFooter
+      notice={footerNotice}
+      status={<SkipStatus note={note} onSkip={onSkip} onNoteClick={onNoteClick} />}
+    >
       <Button
         variant="outline"
         colorPalette="danger"

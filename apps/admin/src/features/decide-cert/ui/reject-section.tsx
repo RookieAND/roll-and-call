@@ -12,16 +12,25 @@ interface RejectSectionProps {
   staffMemo: string;
   targetLabels: string[];
   previewPayload: ComponentProps<typeof NotificationPreview>["payload"];
+  approvePreviewPayload: ComponentProps<typeof NotificationPreview>["payload"];
   onReasonChange: (reason: string) => void;
   onUserReasonChange: (userReason: string) => void;
   onStaffMemoChange: (staffMemo: string) => void;
 }
 
-export function RejectSection({ previewPayload, ...panelProps }: RejectSectionProps) {
+export function RejectSection({
+  previewPayload,
+  approvePreviewPayload,
+  ...panelProps
+}: RejectSectionProps) {
   return (
     <VStack gap="150">
       <RejectPanel {...panelProps} />
-      <NotificationPreview payload={previewPayload} recipients="신청자의 알림 탭으로 알립니다." />
+      <NotificationPreview
+        payload={previewPayload}
+        precedingPayloads={approvePreviewPayload ? [approvePreviewPayload] : []}
+        recipients="신청자의 알림 탭으로 알립니다."
+      />
     </VStack>
   );
 }

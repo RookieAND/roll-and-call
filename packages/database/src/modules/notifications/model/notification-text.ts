@@ -6,6 +6,7 @@ import {
   SELECTION_EXPIRED_CANCEL_TEXT,
 } from "#/modules/games/model/game-cancel-kind";
 
+import { bookNames } from "./book-names";
 import { directionalParticle } from "./directional-particle";
 import { formatMonthDay } from "./format-month-day";
 import { formatMonthDayTime } from "./format-month-day-time";
@@ -180,13 +181,13 @@ export function notificationText(payload: NotificationPayload): NotificationText
       );
     case NOTIFICATION_KIND.certApproved:
       return bold(
-        payload.params.rulebookName,
+        bookNames(payload.params),
         " 인증이 승인되었습니다.",
         "내 인증 목록에서 확인할 수 있습니다.",
       );
     case NOTIFICATION_KIND.certRejected:
       return bold(
-        payload.params.rulebookName,
+        bookNames(payload.params),
         " 인증이 반려되었습니다.",
         payload.params.rejectionSummary,
       );
@@ -198,9 +199,7 @@ export function notificationText(payload: NotificationPayload): NotificationText
       );
     case NOTIFICATION_KIND.certGranted:
       return bold(
-        (payload.params.otherCount ?? 0) > 0
-          ? `${payload.params.rulebookName} 외 ${payload.params.otherCount}권`
-          : payload.params.rulebookName,
+        bookNames(payload.params),
         " 인증이 등록되었습니다.",
         "운영진이 직접 등록했습니다.",
       );
