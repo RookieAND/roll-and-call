@@ -1,4 +1,5 @@
 import type { Game, Server } from "@roll-and-call/database";
+import { RECRUIT_METHOD } from "@roll-and-call/database/games/model";
 import { sendDiscordMessage, DISCORD_COLOR } from "@roll-and-call/discord";
 import {
   gameHeadValues,
@@ -28,11 +29,13 @@ export async function notifyGameJoined({
   if (!game.discordThreadId) return;
 
   const applicant = await memberName({ serverId: server.id, userId: applicantId });
+  // 추첨·선발 모집의 신청은 대기가 아니라 결과를 기다리는 신청이라 문구를 따로 쓴다.
+  const applyTextKey = applyTextKeyOf({ recruitMethod: game.recruitMethod, isWaiting });
   const values = gameHeadValues({ server, game, gmName });
   const line = await memberNoticeLine({
     serverId: server.id,
     userIds: [applicantId],
-    key: isWaiting ? "apply_waiting_line" : "apply_line",
+    key: `${applyTextKey}_line`,
     values,
   });
   const embed = gameNoticeEmbed({
@@ -45,7 +48,7 @@ export async function notifyGameJoined({
       ? undefined
       : await messageText({
           serverId: server.id,
-          key: isWaiting ? "apply_waiting" : "apply",
+          key: applyTextKey,
           values: { ...values, 참여자: applicant },
         }),
     fields: headcountFields({ game, confirmedCount, waitingCount }),
@@ -63,4 +66,15 @@ export async function notifyGameJoined({
       })),
     },
   });
+}
+
+function applyTextKeyOf({
+  recruitMethod,
+  isWaiting,
+}: {
+  recruitMethod: Game["recruitMethod"];
+  isWaiting: boolean;
+}) {
+  if (recruitMethod !== RECRUIT_METHOD.firstCome) return "apply_pending";
+  return isWaiting ? "apply_waiting" : "apply";
 }

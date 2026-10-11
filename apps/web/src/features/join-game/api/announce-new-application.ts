@@ -1,6 +1,5 @@
 import "server-only";
 import { countParticipants } from "@roll-and-call/database/games";
-import { RECRUIT_METHOD } from "@roll-and-call/database/games/model";
 import { getMemberNickname } from "@roll-and-call/database/profiles";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
@@ -21,8 +20,6 @@ export async function announceNewApplication({
   isWaiting: boolean;
   confirmedCount: number;
 }) {
-  // 추첨·선발 모집은 신청이 곧 확정이 아니고 결과를 따로 알리므로, 신청마다 스레드를 울리지 않는다.
-  if (game.recruitMethod !== RECRUIT_METHOD.firstCome) return;
   const [gmName, waitingCount] = await Promise.all([
     getMemberNickname({ serverId: game.serverId, userId: game.gmId }),
     countParticipants({

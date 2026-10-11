@@ -20,6 +20,14 @@ export const MESSAGE_TEXTS = [
     extra: ["참여자"],
   },
   {
+    key: "apply_pending",
+    caseKey: "apply",
+    place: "embed",
+    label: "추첨·선발에 신청했어요",
+    body: "{참여자}님이 신청했어요.",
+    extra: ["참여자"],
+  },
+  {
     key: "leave",
     caseKey: "leave",
     place: "embed",
@@ -209,6 +217,14 @@ export const MESSAGE_TEXTS = [
     place: "body",
     label: "참여했어요",
     body: "{참여자}님이 세션에 참여하셨어요.",
+    extra: ["참여자"],
+  },
+  {
+    key: "apply_pending_line",
+    caseKey: "apply",
+    place: "body",
+    label: "추첨·선발에 신청했어요",
+    body: "{참여자}님이 신청하셨어요.",
     extra: ["참여자"],
   },
   {
