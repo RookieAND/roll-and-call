@@ -88,7 +88,7 @@ export function PickerBookRow({
   const body = (
     <>
       {leading}
-      <VStack gap="050" className="min-w-0 flex-1">
+      <VStack gap="025" className="min-w-0 flex-1">
         <HStack align="baseline" gap="075" wrap>
           <Text typography="body2" weight="medium" foreground={titleForeground}>
             {title}
