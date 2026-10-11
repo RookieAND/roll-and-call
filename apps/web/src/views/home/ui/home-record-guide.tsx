@@ -41,9 +41,18 @@ export function HomeRecordGuide() {
         <Sheet.Handle />
         <Sheet.Title className="mb-075 text-heading3">점수 기준</Sheet.Title>
         <Sheet.Body>
-          <Text typography="body4" foreground="muted" render={<p />} className="mb-125 px-100">
-            세션 점수와 후기 점수, 불참 점수로 이 달의 순위를 정합니다.
-          </Text>
+          <div className="mb-125 px-100">
+            <Text typography="body4" foreground="muted" render={<p />}>
+              세션 점수와 후기 점수, 불참 점수로 이 달의 순위를 정합니다.
+            </Text>
+            <ul className="mt-050 list-inside list-disc space-y-050">
+              {NOTES.map((note) => (
+                <Text key={note} typography="body4" foreground="muted" render={<li />}>
+                  {note}
+                </Text>
+              ))}
+            </ul>
+          </div>
           <ul className="divide-y divide-gray-100">
             {RULES.map((rule) => (
               <li
@@ -57,13 +66,6 @@ export function HomeRecordGuide() {
                   {rule.value}
                 </Text>
               </li>
-            ))}
-          </ul>
-          <ul className="mt-125 list-disc space-y-050 pr-100 pl-300">
-            {NOTES.map((note) => (
-              <Text key={note} typography="body4" foreground="muted" render={<li />}>
-                {note}
-              </Text>
             ))}
           </ul>
         </Sheet.Body>
