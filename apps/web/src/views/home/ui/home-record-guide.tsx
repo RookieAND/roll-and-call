@@ -11,6 +11,11 @@ import {
 import { Sheet, Text } from "@roll-and-call/ui";
 import { Info } from "lucide-react";
 
+const NOTES = [
+  "동점이면 그 점수에 먼저 도달한 사람이 앞섭니다.",
+  "0점 이하는 순위에 오르지 않습니다.",
+] as const;
+
 const RULES: { label: string; value: string }[] = [
   { label: "정식 룰 세션", value: `${SESSION_POINTS.regular}점` },
   { label: "미니룰 세션", value: `${SESSION_POINTS.mini}점` },
@@ -37,8 +42,7 @@ export function HomeRecordGuide() {
         <Sheet.Title className="mb-075 text-heading3">점수 기준</Sheet.Title>
         <Sheet.Body>
           <Text typography="body4" foreground="muted" render={<p />} className="mb-125 px-100">
-            세션 점수와 후기 점수를 더하고 불참 점수를 빼서 순위를 정합니다. 타이만 세션은 세지
-            않고, 0점 이하는 순위에 오르지 않습니다.
+            세션 점수와 후기 점수, 불참 점수로 이 달의 순위를 정합니다.
           </Text>
           <ul className="divide-y divide-gray-100">
             {RULES.map((rule) => (
@@ -53,6 +57,13 @@ export function HomeRecordGuide() {
                   {rule.value}
                 </Text>
               </li>
+            ))}
+          </ul>
+          <ul className="mt-125 list-disc space-y-050 pr-100 pl-300">
+            {NOTES.map((note) => (
+              <Text key={note} typography="body4" foreground="muted" render={<li />}>
+                {note}
+              </Text>
             ))}
           </ul>
         </Sheet.Body>
