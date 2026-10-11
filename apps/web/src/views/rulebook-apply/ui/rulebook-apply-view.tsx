@@ -42,11 +42,7 @@ export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps)
         }
       />
       <Progress value={1} max={2} className="h-[3px] rounded-none" aria-label="진행" />
-      <BookPicker
-        rulebooks={data.rulebooks}
-        initialRulebookIds={rulebookIds}
-        recentRulebookIds={data.recentRulebookIds}
-      />
+      <BookPicker rulebooks={data.rulebooks} initialRulebookIds={rulebookIds} />
     </>
   );
 }

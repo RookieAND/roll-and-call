@@ -1,19 +1,8 @@
 "use client";
 
 import { BULK_CERT_MAX_BOOKS } from "@roll-and-call/database/certifications/model";
-import {
-  Button,
-  Callout,
-  Card,
-  Container,
-  HStack,
-  IconButton,
-  Text,
-  TextInput,
-  UiImage,
-  VStack,
-} from "@roll-and-call/ui";
-import { ArrowRightLeft, Plus } from "lucide-react";
+import { Button, Callout, Container, Text, TextInput, UiImage, VStack } from "@roll-and-call/ui";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -24,32 +13,25 @@ import { useIsTrial } from "@/shared/trial";
 import { APPLY_MODE, type ApplyMode } from "../model/apply-mode";
 import { applySubtitle } from "../model/apply-subtitle";
 import { pickerCategories } from "../model/picker-categories";
-import { recentCategories } from "../model/recent-categories";
 import { useApplySteps } from "../model/use-apply-steps";
 import { useBulkSelection } from "../model/use-bulk-selection";
 import { ApplyModeStep } from "./apply-mode-step";
-import { BulkCategorySection } from "./bulk-category-section";
 import { BulkSelectedChips } from "./bulk-selected-chips";
-import { PickerCategoryBooks } from "./picker-category-books";
-import { PickerCategoryRow } from "./picker-category-row";
-import { pickerListing } from "./picker-listing";
+import { PickerCategorySection } from "./picker-category-section";
 
 interface BookPickerProps {
   rulebooks: MyRulebook[];
   initialRulebookIds: string[];
-  recentRulebookIds: string[];
 }
 
-export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }: BookPickerProps) {
+export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
   const toServerPath = useServerPath();
   const trial = useIsTrial();
   const initial = rulebooks.find((rulebook) => rulebook.id === initialRulebookIds[0]);
   const [query, setQuery] = useState("");
-  const { mode, categoryId, chooseMode, openCategory, closeCategory, restoreBulk } = useApplySteps({
+  const { mode, chooseMode, restoreBulk } = useApplySteps({
     initialMode: trial || initial ? APPLY_MODE.single : null,
-    initialCategoryId: initial?.categoryId ?? null,
   });
-  const [showAll, setShowAll] = useState(false);
   const bulk = mode === APPLY_MODE.bulk;
   const { selectedIds, clear, toggle, persist } = useBulkSelection({
     rulebooks,
@@ -57,18 +39,9 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
   });
 
   const choosingMode = mode === null;
-  const allCategories = pickerCategories({ rulebooks, query: "" });
-  const category = allCategories.find((candidate) => candidate.id === categoryId);
-  const recent = recentCategories({ categories: allCategories, rulebooks, recentRulebookIds });
-  const {
-    categories: listed,
-    title: listTitle,
-    recentOnly,
-  } = pickerListing({ rulebooks, query, recent, allCategories, showAll });
-  const books = category?.editions.flatMap((edition) => edition.rulebooks) ?? [];
-  const bulkCategories = bulk ? pickerCategories({ rulebooks, query }) : [];
-  const searching = !choosingMode && (bulk || !category);
-  const empty = bulk ? bulkCategories.length === 0 : listed.length === 0;
+  const categories = pickerCategories({ rulebooks, query });
+  const searching = !choosingMode;
+  const empty = categories.length === 0;
   const chooseApplyMode = (next: ApplyMode) => {
     if (next === APPLY_MODE.single) clear();
     chooseMode(next);
@@ -110,40 +83,10 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
               <TextInput
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder={bulk ? "룰북 찾기 (예: CoC, 더크)" : "카테고리 찾기 (예: CoC, 더크)"}
-                aria-label={bulk ? "룰북 찾기" : "카테고리 찾기"}
+                placeholder="룰북 찾기 (예: CoC, 더크)"
+                aria-label="룰북 찾기"
               />
             </div>
-          )}
-
-          {!choosingMode && !bulk && !category && listed.length > 0 && (
-            <VStack gap="050">
-              {listTitle && (
-                <Text typography="body3" weight="bold" foreground="muted">
-                  {listTitle}
-                </Text>
-              )}
-              <VStack>
-                {listed.map((candidate) => (
-                  <PickerCategoryRow
-                    key={candidate.id}
-                    category={candidate}
-                    onPick={() => openCategory(candidate.id)}
-                  />
-                ))}
-              </VStack>
-              {recentOnly && (
-                <Button
-                  variant="ghost"
-                  colorPalette="primary"
-                  size="sm"
-                  className="self-start w-full"
-                  onClick={() => setShowAll(true)}
-                >
-                  + 전체 룰 보기
-                </Button>
-              )}
-            </VStack>
           )}
 
           {searching && empty && (
@@ -161,47 +104,20 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
             </VStack>
           )}
 
-          {bulk && (
+          {!choosingMode && (
             <VStack gap="200">
-              {bulkCategories.map((candidate) => (
-                <BulkCategorySection
+              {categories.map((candidate) => (
+                <PickerCategorySection
                   key={candidate.id}
                   name={candidate.name}
                   books={candidate.editions.flatMap((edition) => edition.rulebooks)}
                   rulebooks={rulebooks}
+                  bulk={bulk}
                   selectedIds={selectedIds}
                   limitReached={limitReached}
                   onToggle={toggle}
                 />
               ))}
-            </VStack>
-          )}
-
-          {!bulk && category && (
-            <VStack gap="300">
-              <Card.Root background="subtle" padding="sm">
-                <HStack align="center" gap="100" className="pl-050">
-                  <VStack gap="050" className="min-w-0 flex-1">
-                    <Text typography="body4" weight="bold" foreground="muted">
-                      선택한 룰
-                    </Text>
-                    <HStack align="center" gap="075" wrap>
-                      <Text typography="subtitle1">{category.name}</Text>
-                    </HStack>
-                  </VStack>
-                  <IconButton variant="ghost" aria-label="카테고리 바꾸기" onClick={closeCategory}>
-                    <ArrowRightLeft size={20} />
-                  </IconButton>
-                </HStack>
-              </Card.Root>
-              <PickerCategoryBooks
-                books={books}
-                rulebooks={rulebooks}
-                bulk={bulk}
-                selectedIds={selectedIds}
-                limitReached={limitReached}
-                onToggle={toggle}
-              />
             </VStack>
           )}
         </VStack>

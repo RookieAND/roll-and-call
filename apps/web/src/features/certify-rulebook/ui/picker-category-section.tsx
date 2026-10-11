@@ -4,23 +4,25 @@ import type { MyRulebook } from "@/entities/rulebook";
 
 import { PickerCategoryBooks } from "./picker-category-books";
 
-interface BulkCategorySectionProps {
+interface PickerCategorySectionProps {
   name: string;
   books: MyRulebook[];
   rulebooks: MyRulebook[];
+  bulk: boolean;
   selectedIds: string[];
   limitReached: boolean;
   onToggle: (rulebookId: string) => void;
 }
 
-export function BulkCategorySection({
+export function PickerCategorySection({
   name,
   books,
   rulebooks,
+  bulk,
   selectedIds,
   limitReached,
   onToggle,
-}: BulkCategorySectionProps) {
+}: PickerCategorySectionProps) {
   const selectedCount = books.filter((book) => selectedIds.includes(book.id)).length;
 
   return (
@@ -30,12 +32,14 @@ export function BulkCategorySection({
           <Text typography="heading3" render={<h2 />}>
             {name}
           </Text>
-          {selectedCount > 0 && <Badge colorPalette="primary">{`${selectedCount}권 선택`}</Badge>}
+          {bulk && selectedCount > 0 && (
+            <Badge colorPalette="primary">{`${selectedCount}권 선택`}</Badge>
+          )}
         </HStack>
         <PickerCategoryBooks
           books={books}
           rulebooks={rulebooks}
-          bulk
+          bulk={bulk}
           selectedIds={selectedIds}
           limitReached={limitReached}
           onToggle={onToggle}
