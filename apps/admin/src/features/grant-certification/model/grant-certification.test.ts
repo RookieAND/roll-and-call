@@ -2,7 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import type { GrantOptions } from "@/shared/server";
 
-import { GRANT_CANDIDATE_STATUS, grantCandidateStatus } from "./grant-candidate-status";
+import { isBookSelectable, pruneBookSelection } from "./grant-book-selection";
+import {
+  GRANT_CANDIDATE_STATUS,
+  grantCandidateStatus,
+  grantMemberPlan,
+} from "./grant-candidate-status";
+import { grantMemberText } from "./grant-candidate-text";
 import { grantResultToast } from "./grant-result-toast";
 import { searchGrantMembers } from "./search-grant-members";
 
@@ -66,13 +72,90 @@ describe("searchGrantMembers", () => {
   });
 });
 
+describe("grantMemberPlan", () => {
+  const plan = (userId: string, bookIndexes: number[]) =>
+    grantMemberPlan({
+      userId,
+      books: bookIndexes.map((index) => options.books[index]!),
+      options,
+    });
+
+  it("함께 고른 기본 룰북은 서플리먼트 조건을 채운다", () => {
+    expect(plan("coco", [2]).grantable).toEqual([]);
+    expect(plan("coco", [0, 2]).grantable.map((row) => row.id)).toEqual(["1권", "상급"]);
+  });
+
+  it("이미 인증한 책은 빼고 나머지만 부여하며 대기 중인 심사를 센다", () => {
+    const result = plan("coco", [0, 1]);
+    expect(result.grantable.map((row) => row.id)).toEqual(["1권"]);
+    expect(result.alreadyCertified.map((row) => row.id)).toEqual(["2권"]);
+    expect(result.approving.map((row) => row.id)).toEqual(["1권"]);
+  });
+
+  it("고른 책을 모두 인증했으면 부여할 책이 없다", () => {
+    expect(plan("nut", [0, 1]).grantable).toEqual([]);
+  });
+});
+
+describe("서플리먼트 선택 제약", () => {
+  const selectable = (bookIndex: number, selectedIds: string[]) =>
+    isBookSelectable({ book: options.books[bookIndex]!, books: options.books, selectedIds });
+
+  it("같은 판본의 기본 룰북을 모두 골라야 서플리먼트를 고를 수 있다", () => {
+    expect(selectable(2, [])).toBe(false);
+    expect(selectable(2, ["1권"])).toBe(false);
+    expect(selectable(2, ["1권", "2권"])).toBe(true);
+    expect(selectable(0, [])).toBe(true);
+  });
+
+  it("기본 룰북을 빼면 조건을 잃은 서플리먼트도 함께 뺀다", () => {
+    expect(pruneBookSelection({ selectedIds: ["1권", "상급"], books: options.books })).toEqual([
+      "1권",
+    ]);
+    expect(
+      pruneBookSelection({ selectedIds: ["1권", "2권", "상급"], books: options.books }),
+    ).toEqual(["1권", "2권", "상급"]);
+  });
+});
+
+describe("grantMemberText", () => {
+  const textOf = (userId: string, bookIndexes: number[]) =>
+    grantMemberText(
+      grantMemberPlan({
+        userId,
+        books: bookIndexes.map((index) => options.books[index]!),
+        options,
+      }),
+    );
+
+  it("룰북을 고르지 않으면 상태 문구가 없다", () => {
+    expect(textOf("coco", [])).toBeNull();
+  });
+
+  it("책 하나는 그 책의 상태를 그대로 보인다", () => {
+    expect(textOf("nut", [0])).toBe("이미 이 책을 인증했습니다");
+    expect(textOf("kokoa", [0])).toBe("신청 기록이 없습니다");
+  });
+
+  it("여러 권이면 권수로 요약한다", () => {
+    expect(textOf("coco", [0, 1])).toBe(
+      "1권을 부여합니다 · 대기 중인 심사 1건을 승인합니다 · 1권은 이미 인증했습니다",
+    );
+    expect(textOf("nut", [0, 1])).toBe("고른 룰북을 모두 인증했습니다");
+  });
+});
+
 describe("grantResultToast", () => {
   it("부여한 수와 이미 인증되어 뺀 사람을 알린다", () => {
     expect(
       grantResultToast({
-        rulebookLabel: "1권 3rd",
-        granted: [{ nickname: "김코코" }, { nickname: "김코코아" }],
-        skipped: [{ nickname: "코코넛GM", reason: "alreadyCertified" }],
+        books: [
+          {
+            rulebookLabel: "1권 3rd",
+            granted: [{ nickname: "김코코" }, { nickname: "김코코아" }],
+            skipped: [{ nickname: "코코넛GM", reason: "alreadyCertified" }],
+          },
+        ],
       }),
     ).toEqual({
       success: true,
@@ -81,12 +164,39 @@ describe("grantResultToast", () => {
     });
   });
 
+  it("여러 권이면 사람 수와 권수를 알리고 빠진 사람은 룰북별로 밝힌다", () => {
+    expect(
+      grantResultToast({
+        books: [
+          {
+            rulebookLabel: "1권 3rd",
+            granted: [{ nickname: "김코코" }, { nickname: "김코코아" }],
+            skipped: [],
+          },
+          {
+            rulebookLabel: "2권 3rd",
+            granted: [{ nickname: "김코코아" }],
+            skipped: [{ nickname: "김코코", reason: "alreadyCertified" }],
+          },
+        ],
+      }),
+    ).toEqual({
+      success: true,
+      title: "2명에게 룰북 2권의 인증을 부여했습니다",
+      description: "2권 3rd: 김코코님은 이미 인증되어 빼고 부여했습니다",
+    });
+  });
+
   it("아무도 부여하지 못하면 실패로 알린다", () => {
     expect(
       grantResultToast({
-        rulebookLabel: "상급 3rd",
-        granted: [],
-        skipped: [{ nickname: "김코코", reason: "supplementBlocked" }],
+        books: [
+          {
+            rulebookLabel: "상급 3rd",
+            granted: [],
+            skipped: [{ nickname: "김코코", reason: "supplementBlocked" }],
+          },
+        ],
       }),
     ).toMatchObject({ success: false, title: "기본 룰북 인증이 먼저 필요합니다" });
   });

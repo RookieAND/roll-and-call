@@ -5,33 +5,27 @@ import { compact } from "es-toolkit";
 
 import type { GrantOptions } from "@/shared/server";
 
-import { GRANT_CANDIDATE_STATUS, type GrantCandidateStatus } from "../model/grant-candidate-status";
-import { GRANT_CANDIDATE_TEXT } from "../model/grant-candidate-text";
+import type { GrantMemberPlan } from "../model/grant-candidate-status";
+import { grantMemberText } from "../model/grant-candidate-text";
 
 interface GrantMemberRowProps {
   member: GrantOptions["members"][number];
-  status: GrantCandidateStatus | null;
+  plan: GrantMemberPlan;
   checked: boolean;
   disabled: boolean;
   onCheckedChange: (checked: boolean) => void;
 }
 
-const LOCKED: readonly (GrantCandidateStatus | null)[] = [
-  GRANT_CANDIDATE_STATUS.certified,
-  GRANT_CANDIDATE_STATUS.blocked,
-];
-
 export function GrantMemberRow({
   member,
-  status,
+  plan,
   checked,
   disabled,
   onCheckedChange,
 }: GrantMemberRowProps) {
-  const locked = LOCKED.includes(status);
-  const meta = compact([`@${member.discordHandle}`, status && GRANT_CANDIDATE_TEXT[status]]).join(
-    " · ",
-  );
+  // 룰북을 고르기 전에는 잠그지 않는다. 고른 뒤 부여할 책이 하나도 없는 유저만 잠근다.
+  const locked = plan.statuses.length > 0 && plan.grantable.length === 0;
+  const meta = compact([`@${member.discordHandle}`, grantMemberText(plan)]).join(" · ");
   return (
     <li
       className={cn(
