@@ -6,7 +6,7 @@ import { getActiveMembership, getServerByGuildId } from "@roll-and-call/database
 import { after } from "next/server";
 
 import { REVIEW_BODY_MIN_LENGTH, REVIEW_PHOTO_MAX_COUNT } from "@/entities/review";
-import { richTextLength, serverPath } from "@/shared/lib";
+import { richTextNonSpaceLength, serverPath } from "@/shared/lib";
 import {
   evaluateBadges,
   getReviewDraftTarget,
@@ -47,8 +47,8 @@ export async function writeReviewFromDiscord({
   if (!userId || !membership) return "아직 가입하지 않았습니다. 가입한 뒤 후기를 써 주세요.";
 
   const text = body.trim();
-  if (richTextLength(text) < REVIEW_BODY_MIN_LENGTH) {
-    return `${REVIEW_BODY_MIN_LENGTH}자 이상 적어 주세요.`;
+  if (richTextNonSpaceLength(text) < REVIEW_BODY_MIN_LENGTH) {
+    return `공백 제외 ${REVIEW_BODY_MIN_LENGTH}자 이상 적어 주세요.`;
   }
 
   if (photos.length > REVIEW_PHOTO_MAX_COUNT) {

@@ -7,7 +7,7 @@ import { useState, type ReactNode } from "react";
 
 import { SessionHeading } from "@/entities/game";
 import { REVIEW_BODY_MAX_LENGTH, REVIEW_BODY_MIN_LENGTH } from "@/entities/review";
-import { richTextLength, useServerPath } from "@/shared/lib";
+import { richTextLength, richTextNonSpaceLength, useServerPath } from "@/shared/lib";
 import { TRIAL_HANDLER, useIsTrial, useTrialHandler, useTrialPush } from "@/shared/trial";
 import { AppBar, ConfirmDialog, toast, useAction } from "@/shared/ui";
 
@@ -88,7 +88,7 @@ export function ReviewForm({
 
   function changeBody(next: string) {
     setBody(next);
-    if (bodyError && richTextLength(next) >= REVIEW_BODY_MIN_LENGTH) setBodyError(null);
+    if (bodyError && richTextNonSpaceLength(next) >= REVIEW_BODY_MIN_LENGTH) setBodyError(null);
     draft.save({ body: next, spoiler });
   }
 
@@ -107,8 +107,8 @@ export function ReviewForm({
   function submit(event: React.FormEvent) {
     event.preventDefault();
     setSubmitFailed(false);
-    if (richTextLength(body) < REVIEW_BODY_MIN_LENGTH) {
-      setBodyError("20자 이상 적어 주세요");
+    if (richTextNonSpaceLength(body) < REVIEW_BODY_MIN_LENGTH) {
+      setBodyError(`공백 제외 ${REVIEW_BODY_MIN_LENGTH}자 이상 적어 주세요`);
       return;
     }
     run(
@@ -180,7 +180,7 @@ export function ReviewForm({
             id="reviewBody"
             value={body}
             onChange={changeBody}
-            placeholder="20자 이상 적어 주세요"
+            placeholder={`공백 제외 ${REVIEW_BODY_MIN_LENGTH}자 이상 적어 주세요`}
             limit={REVIEW_BODY_MAX_LENGTH}
             invalid={!isNull(bodyError)}
           />

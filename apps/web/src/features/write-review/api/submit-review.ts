@@ -12,7 +12,12 @@ import {
   REVIEW_PHOTO_MAX_COUNT,
 } from "@/entities/review";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
-import { reviewPhotoPathOf, richTextLength, serverPath } from "@/shared/lib";
+import {
+  reviewPhotoPathOf,
+  richTextLength,
+  richTextNonSpaceLength,
+  serverPath,
+} from "@/shared/lib";
 import {
   evaluateBadges,
   getActingMember,
@@ -56,7 +61,9 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
 
   const body = form.body.trim();
   const bodyLength = richTextLength(body);
-  if (bodyLength < REVIEW_BODY_MIN_LENGTH) return { error: "20자 이상 적어 주세요", field: "body" };
+  if (richTextNonSpaceLength(body) < REVIEW_BODY_MIN_LENGTH) {
+    return { error: `공백 제외 ${REVIEW_BODY_MIN_LENGTH}자 이상 적어 주세요`, field: "body" };
+  }
   // 글자 수는 서식을 뺀 본문으로 세므로, 서식 JSON이 터무니없이 커지는 것은 따로 막는다.
   if (bodyLength > REVIEW_BODY_MAX_LENGTH || body.length > REVIEW_BODY_MAX_LENGTH * 10)
     return { error: "2,000자까지 쓸 수 있습니다", field: "body" };
