@@ -7,13 +7,6 @@ interface GrantSummaryProps {
   approving: { nickname: string; label: string }[];
 }
 
-// 룰북이 여러 권이면 첫 번째 룰북만 보이고 나머지는 「외 N개」로 줄인다.
-function foldedLabels(labels: string[]) {
-  const [first, ...rest] = labels;
-  if (!first) return undefined;
-  return rest.length > 0 ? `${first} 외 ${rest.length}개` : first;
-}
-
 export function GrantSummary({
   rulebookLabels,
   nicknames,
@@ -27,7 +20,6 @@ export function GrantSummary({
         {
           label: "인증을 부여할 룰북",
           value: `${rulebookLabels.length}개`,
-          sub: foldedLabels(rulebookLabels),
         },
         {
           label: "인증을 받는 유저",
