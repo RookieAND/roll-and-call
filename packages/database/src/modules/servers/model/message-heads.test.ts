@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { validateMessageHead } from "./message-heads";
+import { DEFAULT_DRAW_SKIPPED_HEAD, validateMessageHead } from "./message-heads";
 import { renderMessageHead } from "./render-message-head";
 
 describe("renderMessageHead", () => {
@@ -24,5 +24,11 @@ describe("validateMessageHead", () => {
     expect(validateMessageHead({ key: "open", text: "가".repeat(301) })).toBeDefined();
     expect(validateMessageHead({ key: "monthly", text: "{달} 발표" })).toBeUndefined();
     expect(validateMessageHead({ key: "monthly", text: "{GM}" })).toBeDefined();
+  });
+});
+
+describe("DEFAULT_DRAW_SKIPPED_HEAD", () => {
+  it("추첨 결과 경우가 허용하는 변수만 쓴다", () => {
+    expect(validateMessageHead({ key: "draw", text: DEFAULT_DRAW_SKIPPED_HEAD })).toBeUndefined();
   });
 });

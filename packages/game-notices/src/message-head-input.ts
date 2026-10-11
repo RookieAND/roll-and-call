@@ -34,15 +34,20 @@ export async function messageHeadInput({
   values,
   userMentions,
   after,
+  defaultHead,
 }: {
   serverId: string;
   key: MessageCaseKey;
   values: Record<string, string | undefined>;
   userMentions?: string[];
   after?: string;
+  // 서버가 이 경우의 머리 줄을 저장하지 않았을 때만 기본 머리 줄 대신 쓴다. 저장했으면 그 문구가 우선한다.
+  defaultHead?: string;
 }): Promise<Pick<DiscordMessageInput, "content" | "userMentions" | "roleMentions">> {
   const heads = await getMessageHeads({ serverId });
-  const head = renderMessageHead({ template: heads[key].headLine, values });
+  const saved = heads[key];
+  const template = saved.updatedAt === null && defaultHead ? defaultHead : saved.headLine;
+  const head = renderMessageHead({ template, values });
   const content = [head, after].filter(Boolean).join("\n") || undefined;
   if (!content) return {};
   return { content, userMentions, roleMentions: roleMentionIds(head) };

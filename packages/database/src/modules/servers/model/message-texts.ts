@@ -68,6 +68,14 @@ export const MESSAGE_TEXTS = [
     extra: ["신청 수", "확정 수"],
   },
   {
+    key: "draw_skipped",
+    caseKey: "draw",
+    place: "embed",
+    label: "추첨 없이 확정됐어요",
+    body: "신청한 {신청 수}명이 모두 확정됐어요.",
+    extra: ["신청 수"],
+  },
+  {
     key: "time",
     caseKey: "time",
     place: "embed",
@@ -170,6 +178,14 @@ export const MESSAGE_TEXTS = [
     label: "추첨이 끝났어요",
     body: "{당첨자}님이 확정되었어요.",
     extra: ["당첨자"],
+  },
+  {
+    key: "draw_skipped_line",
+    caseKey: "draw",
+    place: "body",
+    label: "추첨 없이 확정됐어요",
+    body: "{확정자}님이 확정되었어요.",
+    extra: ["확정자"],
   },
   {
     key: "apply_line",

@@ -8,6 +8,7 @@ import { notifyGameCancelled, refreshRecruitPost } from "@roll-and-call/game-not
 import { getGameById } from "./db/get-game-by-id";
 import { announceRecruitmentComplete } from "./discord/announce-recruitment-complete";
 import { notifyDrawResult } from "./discord/notify-draw-result";
+import { notifyDrawSkipped } from "./discord/notify-draw-skipped";
 import { seedAvailabilityFromProfile } from "./seed-availability-from-profile";
 
 // 추첨 명령이 커밋된 뒤 할 일. 단계마다 실패해도 다음 단계를 이어 간다(디스코드 실패가 칭호 판정을 막지 않게).
@@ -40,9 +41,13 @@ export async function finishLotteryDraw({
         await step("가능 시간", () => seedAvailabilityFromProfile({ game, userId }));
       }
     });
-    // 추첨을 생략한 글은 굴림이 없어 결과 공지·칭호 판정이 없다(D331).
+    // 추첨을 생략한 글은 굴림이 없어 결과 페이지·칭호 판정이 없고(D331), 구인 스레드에는 전원 확정 공지만 보낸다.
     if (result.kind === DRAW_RESULT_KIND.drawn) {
       await step("디스코드 결과", () => notifyDrawResult({ server, gameId }));
+    } else {
+      await step("디스코드 확정", () =>
+        notifyDrawSkipped({ server, gameId, confirmedUserIds: result.confirmedUserIds }),
+      );
     }
     if (result.becameFull) {
       await step("모집 완료", () => announceRecruitmentComplete({ server, gameId }));
