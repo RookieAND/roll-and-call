@@ -35,6 +35,10 @@ export const DEFAULT_MESSAGE_HEADS: Partial<Record<MessageCaseKey, string>> = {
   monthly: "📢 {달}에 활약한 분들을 소개해요!",
 };
 
+// 신청자가 뽑을 인원 이하라 추첨 없이 전원 확정된 글(D331)에는 「추첨 결과가 나왔어요」가 어긋난다.
+// 서버가 「추첨 결과」 머리 줄을 직접 고치지 않았을 때만 이 문구를 쓰고, 직접 고쳤으면 그 문구를 그대로 쓴다.
+export const DEFAULT_DRAW_SKIPPED_HEAD = "📢 {구인 제목} 신청자가 모두 확정됐어요!";
+
 const BASE_VARIABLES = ["구인 제목", "GM", "룰", "링크"] as const;
 
 export function messageVariables(key: MessageCaseKey): readonly string[] {

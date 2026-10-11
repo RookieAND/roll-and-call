@@ -28,6 +28,17 @@ describe("MESSAGE_TEXTS", () => {
     expect(messageTextsOfCase("time").map((text) => text.key)).toEqual(["time", "time_changed"]);
     expect(messageTextsOfCase("open")).toEqual([]);
   });
+
+  it("추첨 결과는 추첨 없이 확정된 글의 문장을 따로 둔다", () => {
+    expect(messageTextsOfCase("draw").map((text) => text.key)).toEqual([
+      "draw",
+      "draw_skipped",
+      "draw_line",
+      "draw_skipped_line",
+    ]);
+    expect(messageTextVariables("draw_skipped")).toContain("신청 수");
+    expect(messageTextVariables("draw_skipped_line")).toContain("확정자");
+  });
 });
 
 describe("validateMessageText", () => {
