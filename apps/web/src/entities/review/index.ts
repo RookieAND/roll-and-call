@@ -5,6 +5,7 @@ export {
   REVIEW_PHOTO_MAX_COUNT,
   REVIEW_WRITE_DAYS,
 } from "./model/review-rules";
+export { reviewBodyError } from "./model/review-body-error";
 export { reviewWriteDeadline } from "./model/review-write-deadline";
 export { reviewEditDeadline } from "./model/review-edit-deadline";
 export { REVIEW_STATE, type ReviewState } from "./model/review-state";
