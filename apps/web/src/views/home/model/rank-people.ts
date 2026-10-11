@@ -13,19 +13,28 @@ const RUNNER_UP_SIZE = 2;
 
 // 1위는 동점자를 한 장으로 묶고, 아래 두 줄은 다음 점수대부터 2·3위로 잇는다. 못 채운 자리는 null로 남긴다.
 // 점수가 0 이하인 사람은 순위에서 뺀다(포인트제에서 불참 점수가 더 클 때).
+// breakTies(포인트제)면 동점을 그 점수에 먼저 도달한 사람(마지막 기록 시각이 빠른 쪽)이 앞서게 가려 공동 순위를 두지 않는다.
 export function rankPeople(
-  appearances: { person: RecordPerson; weight: number; sessions: number }[],
+  appearances: { person: RecordPerson; weight: number; sessions: number; at?: Date }[],
+  { breakTies = false }: { breakTies?: boolean } = {},
 ): RecordRanking {
   const sorted = Object.values(groupBy(appearances, ({ person }) => person.id))
     .map((group) => ({
       person: group[0]!.person,
       count: sumBy(group, ({ weight }) => weight),
       sessions: sumBy(group, ({ sessions }) => sessions),
+      reachedAt: Math.max(0, ...group.map(({ at }) => at?.getTime() ?? 0)),
     }))
     .filter((row) => row.count > 0)
-    .toSorted((left, right) => right.count - left.count);
+    .toSorted(
+      (left, right) =>
+        right.count - left.count || (breakTies ? left.reachedAt - right.reachedAt : 0),
+    );
   const scores = uniq(sorted.map((row) => row.count));
-  const ranked = sorted.map((row) => ({ ...row, rank: scores.indexOf(row.count) + 1 }));
+  const ranked = sorted.map((row, index) => ({
+    ...row,
+    rank: breakTies ? index + 1 : scores.indexOf(row.count) + 1,
+  }));
   const leaders = ranked.filter((row) => row.rank === 1);
   const runnersUp = ranked.filter((row) => row.rank !== 1);
 

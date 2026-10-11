@@ -49,7 +49,9 @@ export function buildMonthRecord({
           person: people.get(appearance.userId)!,
           weight: appearance.weight,
           sessions: appearance.sessions,
+          at: appearance.startsAt,
         })),
+      { breakTies: mode === RANKING_MODE.points },
     );
 
   return {
