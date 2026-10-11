@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, Text, VStack } from "@roll-and-call/ui";
+import { Chip } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
 
@@ -64,59 +64,51 @@ export function GrantSelectedChips({
   const shown = expanded || !overflow ? items : items.slice(0, fitting);
 
   return (
-    <VStack
-      gap="075"
-      className="rounded-400 border border-tinted-border bg-tinted-bg px-150 py-100"
-    >
-      <Text typography="body4" weight="bold" foreground="hint">
-        {`고른 ${noun} ${items.length}${unit}`}
-      </Text>
-      <div className="relative">
-        <ul
-          ref={ghostRef}
-          aria-hidden
-          inert
-          className="pointer-events-none invisible absolute inset-x-0 top-0 flex flex-wrap gap-075"
-        >
-          {items.map((item) => (
-            <li key={item.id}>
-              <Chip selected tabIndex={-1}>
-                {item.label}
-                <X size={12} aria-hidden />
-              </Chip>
-            </li>
-          ))}
-        </ul>
-        <ul aria-label={`고른 ${noun}`} className="flex flex-wrap gap-075">
-          {shown.map((item) => (
-            <li key={item.id}>
-              <Chip
-                selected
-                disabled={disabled}
-                aria-label={`${item.label} 선택 해제`}
-                onClick={() => onRemove(item.id)}
-              >
-                {item.label}
-                <X size={12} aria-hidden />
-              </Chip>
-            </li>
-          ))}
-          {overflow ? (
-            <li>
-              <Chip
-                tone="outline"
-                aria-expanded={expanded}
-                aria-label={
-                  expanded ? `고른 ${noun} 접기` : `고른 ${noun} ${items.length}${unit} 모두 보기`
-                }
-                onClick={() => setExpanded(!expanded)}
-              >
-                {expanded ? "접기" : `+${hiddenCount}`}
-              </Chip>
-            </li>
-          ) : null}
-        </ul>
-      </div>
-    </VStack>
+    <div className="relative">
+      <ul
+        ref={ghostRef}
+        aria-hidden
+        inert
+        className="pointer-events-none invisible absolute inset-x-0 top-0 flex flex-wrap gap-075"
+      >
+        {items.map((item) => (
+          <li key={item.id}>
+            <Chip selected tabIndex={-1}>
+              {item.label}
+              <X size={12} aria-hidden />
+            </Chip>
+          </li>
+        ))}
+      </ul>
+      <ul aria-label={`고른 ${noun}`} className="flex flex-wrap gap-075">
+        {shown.map((item) => (
+          <li key={item.id}>
+            <Chip
+              selected
+              disabled={disabled}
+              aria-label={`${item.label} 선택 해제`}
+              onClick={() => onRemove(item.id)}
+            >
+              {item.label}
+              <X size={12} aria-hidden />
+            </Chip>
+          </li>
+        ))}
+        {overflow ? (
+          <li>
+            <Chip
+              tone="outline"
+              aria-expanded={expanded}
+              aria-label={
+                expanded ? `고른 ${noun} 접기` : `고른 ${noun} ${items.length}${unit} 모두 보기`
+              }
+              onClick={() => setExpanded(!expanded)}
+            >
+              {expanded ? "접기" : `+${hiddenCount}`}
+            </Chip>
+          </li>
+        ) : null}
+      </ul>
+    </div>
   );
 }
