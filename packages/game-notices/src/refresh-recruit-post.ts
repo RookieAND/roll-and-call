@@ -5,7 +5,6 @@ import { findGameCategoryId } from "@roll-and-call/database/rulebooks";
 import {
   editDiscordMessage,
   hasMessageAttachment,
-  renameDiscordThread,
   syncForumFollowUps,
 } from "@roll-and-call/discord";
 
@@ -16,7 +15,7 @@ import { recruitEmbed } from "./recruit-embed";
 import { recruitForumPost } from "./recruit-forum-post";
 import { recruitPostTitle } from "./recruit-post-title";
 import { loadRecruitTarget, recruitMessageChannelId } from "./recruit-target";
-import { syncRecruitStatusTag } from "./sync-recruit-status-tag";
+import { syncRecruitThread } from "./sync-recruit-thread";
 
 export async function refreshRecruitPost({
   server,
@@ -70,13 +69,10 @@ export async function refreshRecruitPost({
 
   await Promise.all([
     updateMessage(),
-    renameDiscordThread({
-      threadId,
-      name: target.forum ? recruitPostTitle({ title: game.title, gmName }) : game.title,
-    }),
-    syncRecruitStatusTag({
+    syncRecruitThread({
       target,
       threadId,
+      name: target.forum ? recruitPostTitle({ title: game.title, gmName }) : game.title,
       closed: confirmedCount >= game.maxPlayers,
       categoryId,
       kind: game.kind,

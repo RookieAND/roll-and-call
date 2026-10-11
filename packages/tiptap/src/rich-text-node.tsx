@@ -14,6 +14,9 @@ export function RichTextNode({ node }: RichTextNodeProps) {
     for (const mark of node.marks ?? []) {
       if (mark.type === "bold") text = <strong>{text}</strong>;
       if (mark.type === "italic") text = <em>{text}</em>;
+      if (mark.type === "underline") text = <u>{text}</u>;
+      if (mark.type === "strike") text = <s>{text}</s>;
+      if (mark.type === "code") text = <code>{text}</code>;
       // 클릭해서 펼치는 스포일러. 체크박스 하나면 되는 일이라 클라이언트 컴포넌트를 만들지 않는다.
       if (mark.type === "spoiler") {
         text = (
@@ -46,6 +49,14 @@ export function RichTextNode({ node }: RichTextNodeProps) {
       return <ol>{children}</ol>;
     case "listItem":
       return <li>{children}</li>;
+    case "blockquote":
+      return <blockquote>{children}</blockquote>;
+    case "codeBlock":
+      return (
+        <pre>
+          <code>{children}</code>
+        </pre>
+      );
     case "hardBreak":
       return <br />;
     default:

@@ -41,7 +41,7 @@ export type BadgeHostedDraw = {
 export type BadgeFacts = {
   played: BadgeSession[];
   hosted: BadgeSession[];
-  // 내가 GM인 구인에 달린 후기와 내가 쓴 후기. 공개 상태이고 공백 제외 10자 이상인 것만 담는다.
+  // 내가 GM인 구인에 달린 후기와 내가 쓴 후기. 공개 상태인 것만 담는다.
   reviews: BadgeReview[];
   written: BadgeReview[];
   draws: BadgeDraw[];

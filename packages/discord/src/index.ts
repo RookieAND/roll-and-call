@@ -30,6 +30,7 @@ export { getDiscordChannel, type DiscordChannelInfo } from "./forum/get-discord-
 export { createForumMessagePost } from "./forum/create-forum-message-post";
 export { syncForumFollowUps, FOLLOW_UP_MARK } from "./forum/sync-forum-follow-ups";
 export { setForumPostTags } from "./forum/set-forum-post-tags";
+export { updateForumThread } from "./forum/update-forum-thread";
 export { getGuildMember, type DiscordGuildMember } from "./guild/get-guild-member";
 export { guildMemberDisplayName } from "./guild/guild-member-display-name";
 export { getGuild, type DiscordGuild } from "./guild/get-guild";

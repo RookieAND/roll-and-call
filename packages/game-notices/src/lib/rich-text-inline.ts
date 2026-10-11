@@ -8,6 +8,9 @@ export function richTextInline(nodes: RichTextNodeData[] = []): string {
       for (const mark of node.marks ?? []) {
         if (mark.type === "bold") text = `**${text}**`;
         if (mark.type === "italic") text = `*${text}*`;
+        if (mark.type === "underline") text = `__${text}__`;
+        if (mark.type === "strike") text = `~~${text}~~`;
+        if (mark.type === "code") text = `\`${text}\``;
         if (mark.type === "spoiler") text = `||${text}||`;
         if (mark.type === "link" && mark.attrs?.href) {
           // 글자가 주소 그대로면 [주소](주소)로 감싸지 않는다. 디스코드가 그대로 글자로 보여 주고, 맨주소는 알아서 링크가 된다.

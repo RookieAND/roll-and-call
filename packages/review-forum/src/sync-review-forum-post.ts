@@ -1,5 +1,5 @@
 import { loadForumReview, saveThreadId } from "@roll-and-call/database/reviews";
-import { getServerById } from "@roll-and-call/database/servers";
+import { getReviewTemplate, getServerById } from "@roll-and-call/database/servers";
 import {
   createFileMessage,
   createForumPost,
@@ -55,6 +55,7 @@ export async function syncReviewForumPost({
     review,
     tagIds: forum ? await getForumTags(forumId) : new Map(),
     reviewsUrl: siteOrigin && `${siteOrigin}/${server.slug}/games/${review.gameId}/reviews`,
+    template: await getReviewTemplate({ serverId }),
   });
   const input = { ...post, files: await fetchPhotoFiles(photos) };
   // 텍스트 채널엔 제목 칸이 없어 본문 첫 줄로 올린다.

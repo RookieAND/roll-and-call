@@ -7,7 +7,6 @@ import { findGameCategoryId } from "@roll-and-call/database/rulebooks";
 import {
   sendDiscordMessage,
   editDiscordMessage,
-  renameDiscordThread,
   syncForumFollowUps,
   DISCORD_COLOR,
 } from "@roll-and-call/discord";
@@ -20,7 +19,7 @@ import { recruitEmbed } from "./recruit-embed";
 import { recruitForumPost } from "./recruit-forum-post";
 import { recruitPostTitle } from "./recruit-post-title";
 import { loadRecruitTarget, recruitMessageChannelId } from "./recruit-target";
-import { syncRecruitStatusTag } from "./sync-recruit-status-tag";
+import { syncRecruitThread } from "./sync-recruit-thread";
 
 // 취소한 행으로 부른다. 모집 공지는 취소한 때 인원 그대로 빨갛게 고쳐 남기고, 스레드에는 취소를 알린다.
 export async function notifyGameCancelled({ server, game }: { server: Server; game: Game }) {
@@ -93,15 +92,12 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
         ],
       },
     }),
-    renameDiscordThread({
+    syncRecruitThread({
+      target,
       threadId: game.discordThreadId,
       name: target.forum
         ? recruitPostTitle({ title: game.title, gmName, cancelled: true })
         : `${game.title} (취소됨)`,
-    }),
-    syncRecruitStatusTag({
-      target,
-      threadId: game.discordThreadId,
       closed: true,
       cancelled: true,
       categoryId,

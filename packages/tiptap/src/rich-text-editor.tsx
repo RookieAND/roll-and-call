@@ -35,13 +35,9 @@ export function RichTextEditor({
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({
+        // 디스코드가 그리는 서식은 모두 쓴다. 제목(#)과 구분선은 후기·개요에 필요 없어 뺀다.
         heading: false,
-        blockquote: false,
-        code: false,
-        codeBlock: false,
         horizontalRule: false,
-        strike: false,
-        underline: false,
         link: { openOnClick: false, protocols: ["http", "https"] },
       }),
       Spoiler,

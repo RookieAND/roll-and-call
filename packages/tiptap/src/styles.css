@@ -25,6 +25,30 @@
 .rich-text em {
   font-style: italic;
 }
+.rich-text blockquote {
+  border-left: 0.25rem solid var(--color-gray-300);
+  padding-left: 0.75rem;
+}
+.rich-text blockquote > p {
+  margin: 0;
+}
+.rich-text code {
+  border-radius: 0.25rem;
+  background: var(--color-gray-100);
+  padding: 0 0.25rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.875em;
+}
+.rich-text pre {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  background: var(--color-gray-100);
+  padding: 0.5rem 0.75rem;
+}
+.rich-text pre code {
+  background: none;
+  padding: 0;
+}
 .rich-text a {
   color: var(--color-primary-ink);
   text-decoration: underline;
