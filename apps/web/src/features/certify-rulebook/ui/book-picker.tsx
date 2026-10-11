@@ -28,6 +28,7 @@ import { recentCategories } from "../model/recent-categories";
 import { useApplySteps } from "../model/use-apply-steps";
 import { useBulkSelection } from "../model/use-bulk-selection";
 import { ApplyModeStep } from "./apply-mode-step";
+import { BulkCategorySection } from "./bulk-category-section";
 import { BulkSelectedChips } from "./bulk-selected-chips";
 import { PickerCategoryBooks } from "./picker-category-books";
 import { PickerCategoryRow } from "./picker-category-row";
@@ -161,19 +162,17 @@ export function BookPicker({ rulebooks, initialRulebookIds, recentRulebookIds }:
           )}
 
           {bulk && (
-            <VStack gap="400">
+            <VStack gap="200">
               {bulkCategories.map((candidate) => (
-                <VStack key={candidate.id} gap="200">
-                  <Text typography="subtitle1">{candidate.name}</Text>
-                  <PickerCategoryBooks
-                    books={candidate.editions.flatMap((edition) => edition.rulebooks)}
-                    rulebooks={rulebooks}
-                    bulk={bulk}
-                    selectedIds={selectedIds}
-                    limitReached={limitReached}
-                    onToggle={toggle}
-                  />
-                </VStack>
+                <BulkCategorySection
+                  key={candidate.id}
+                  name={candidate.name}
+                  books={candidate.editions.flatMap((edition) => edition.rulebooks)}
+                  rulebooks={rulebooks}
+                  selectedIds={selectedIds}
+                  limitReached={limitReached}
+                  onToggle={toggle}
+                />
               ))}
             </VStack>
           )}
