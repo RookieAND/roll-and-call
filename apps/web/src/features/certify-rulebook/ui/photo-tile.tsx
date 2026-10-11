@@ -8,7 +8,7 @@ import { photoLabelForeground } from "./photo-label-foreground";
 import { photoTag } from "./photo-tag";
 
 const frame = cva(
-  "relative block aspect-[3/4] w-full overflow-hidden rounded-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+  "relative block aspect-square w-full overflow-hidden rounded-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
   {
     variants: {
       status: {
