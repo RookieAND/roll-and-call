@@ -15,6 +15,12 @@ export function richTextToMarkdown(value: string): string {
           return (node.content ?? [])
             .map((item, index) => richTextListItem({ item, marker: `${index + 1}.` }))
             .join("\n");
+        case "blockquote":
+          return (node.content ?? [])
+            .map((child) => `> ${richTextInline(child.content)}`)
+            .join("\n");
+        case "codeBlock":
+          return `\`\`\`\n${richTextInline(node.content)}\n\`\`\``;
         default:
           return richTextInline(node.content);
       }

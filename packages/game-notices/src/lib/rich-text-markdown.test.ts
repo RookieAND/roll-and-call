@@ -72,4 +72,37 @@ describe("richTextToMarkdown", () => {
   it("리치 에디터 이전 평문은 그대로 남는다", () => {
     expect(richTextToMarkdown("옛날 시놉시스\n두 번째 줄")).toBe("옛날 시놉시스\n\n두 번째 줄");
   });
+
+  it("밑줄·취소선·코드는 디스코드 문법으로 나간다", () => {
+    const doc = {
+      type: "doc",
+      content: [
+        paragraph([
+          { type: "text", text: "밑줄", marks: [{ type: "underline" }] },
+          { type: "text", text: " " },
+          { type: "text", text: "취소", marks: [{ type: "strike" }] },
+          { type: "text", text: " " },
+          { type: "text", text: "1d100", marks: [{ type: "code" }] },
+        ]),
+      ],
+    };
+    expect(markdownOf(doc)).toBe("__밑줄__ ~~취소~~ `1d100`");
+  });
+
+  it("인용은 줄마다 > 를 붙이고 코드 블록은 ```로 감싼다", () => {
+    const doc = {
+      type: "doc",
+      content: [
+        {
+          type: "blockquote",
+          content: [
+            paragraph([{ type: "text", text: "첫 줄" }]),
+            paragraph([{ type: "text", text: "둘째 줄" }]),
+          ],
+        },
+        { type: "codeBlock", content: [{ type: "text", text: "HP 12\nMP 3" }] },
+      ],
+    };
+    expect(markdownOf(doc)).toBe("> 첫 줄\n> 둘째 줄\n\n```\nHP 12\nMP 3\n```");
+  });
 });
