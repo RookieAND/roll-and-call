@@ -23,7 +23,6 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
     : "사유";
   const tone = actionTone(entry.action);
   const afterTone = tone === "danger" ? "danger" : "normal";
-  const actionLabel = entry.targetDetail ? `${entry.action} ${entry.targetDetail}` : entry.action;
   const sameTargetHref = auditLogHref(entry.subject.sameTarget);
   const related = entry.related;
   const daysLeft = retentionDaysLeft(entry);
@@ -31,6 +30,7 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
     entry.staffChannelLine === STAFF_CHANNEL_RELATED.posted ? "글 올림" : "올리지 않음";
   const sideFacts = compact([
     { label: "대상", value: entry.targetName },
+    entry.targetDetail ? { label: "세부", value: entry.targetDetail } : null,
     isNull(daysLeft) ? null : { label: "보관", value: `${daysLeft}일 남음` },
     entry.staffChannelLine ? { label: "운영진 채널", value: staffChannelLabel } : null,
   ]);
@@ -50,7 +50,7 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
               <Text typography="heading3" render={<h2 />}>
                 {entry.targetName}
               </Text>
-              <Tag tone={tone}>{actionLabel}</Tag>
+              <Tag tone={tone}>{entry.action}</Tag>
             </HStack>
             <EntryMoreMenu
               subjectKind={entry.subject.kind}
