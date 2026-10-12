@@ -37,12 +37,7 @@ export function LotteryRosterSheet({
             className="max-h-[368px] overflow-y-auto"
           >
             {applicants.map((member) => (
-              <RosterSheetRow
-                key={member.userId}
-                member={member}
-                viewerId={viewerId}
-                showTitle={false}
-              />
+              <RosterSheetRow key={member.userId} member={member} viewerId={viewerId} />
             ))}
           </RosterGroup>
           <Text typography="body4" foreground="hint" render={<p />} className="break-keep">

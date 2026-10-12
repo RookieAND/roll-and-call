@@ -17,17 +17,9 @@ interface RosterMemberRowProps {
   avatarUrl: string | null | undefined;
   bio: string | null | undefined;
   tags?: string[];
-  showTitle?: boolean;
 }
 
-export function RosterMemberRow({
-  userId,
-  name,
-  avatarUrl,
-  bio,
-  tags = [],
-  showTitle = true,
-}: RosterMemberRowProps) {
+export function RosterMemberRow({ userId, name, avatarUrl, bio, tags = [] }: RosterMemberRowProps) {
   return (
     <ServerLink
       path={`/users/${userId}`}
@@ -38,7 +30,7 @@ export function RosterMemberRow({
         avatarUrl={avatarUrl}
         nameAddon={
           <>
-            {showTitle && <MemberTitle userId={userId} />}
+            <MemberTitle userId={userId} />
             {tags.map((tag) => (
               <Badge key={tag} colorPalette="primary" className="shrink-0">
                 {tag}

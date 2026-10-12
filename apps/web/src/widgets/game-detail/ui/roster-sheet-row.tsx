@@ -4,15 +4,9 @@ interface RosterSheetRowProps {
   member: DetailRosterMember;
   viewerId: string | null;
   rankTag?: string;
-  showTitle?: boolean;
 }
 
-export function RosterSheetRow({
-  member,
-  viewerId,
-  rankTag,
-  showTitle,
-}: RosterSheetRowProps) {
+export function RosterSheetRow({ member, viewerId, rankTag }: RosterSheetRowProps) {
   const tags = [rankTag, member.userId === viewerId ? "나" : undefined].filter(
     (tag): tag is string => Boolean(tag),
   );
@@ -23,7 +17,6 @@ export function RosterSheetRow({
       avatarUrl={member.user?.avatarUrl}
       bio={member.user?.bio}
       tags={tags}
-      showTitle={showTitle}
     />
   );
 }
