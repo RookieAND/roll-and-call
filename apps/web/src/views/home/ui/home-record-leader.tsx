@@ -1,6 +1,7 @@
 import { AvatarGroup, cn, HStack, Text } from "@roll-and-call/ui";
 import { Crown } from "lucide-react";
 
+import { MemberTitle } from "@/entities/badge";
 import { ServerLink } from "@/shared/ui";
 
 import type { RecordPerson } from "../model/rank-people";
@@ -42,6 +43,7 @@ export function HomeRecordLeader({ label, people, count, unit }: HomeRecordLeade
           >
             {people.length > 1 ? "공동 1위" : "1위"}
           </Text>
+          {people.length === 1 && <MemberTitle userId={first.id} />}
         </HStack>
         <Text
           typography="heading3"

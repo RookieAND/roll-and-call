@@ -2,6 +2,7 @@ import { formatPlayRange } from "@roll-and-call/database/games/model";
 import { Avatar, Badge, Card, HStack, Text } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
+import { MemberTitle } from "@/entities/badge";
 import { formatDateTime, formatGameSchedule } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
@@ -24,6 +25,7 @@ export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
         >
           <Avatar src={game.gm?.avatarUrl} name={game.gm?.username} size="sm" />
           <span className="truncate">{game.gm?.username ?? "?"}</span>
+          <MemberTitle userId={game.gmId} />
           {isGm && <Badge colorPalette="primary">나</Badge>}
         </ServerLink>
       ),

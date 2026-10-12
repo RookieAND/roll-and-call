@@ -1,6 +1,7 @@
 import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
 import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
 
+import { MemberTitle } from "@/entities/badge";
 import { ProfileRow } from "@/entities/profile";
 import { ServerLink } from "@/shared/ui";
 
@@ -44,7 +45,12 @@ export function HomeRecordRow({ row, position, mode }: HomeRecordRowProps) {
       className="flex items-center gap-125 px-150 py-125 transition-colors hover:bg-gray-50"
     >
       {rankNumber}
-      <ProfileRow size="sm" name={row.person.username} avatarUrl={row.person.avatarUrl} />
+      <ProfileRow
+        size="sm"
+        name={row.person.username}
+        avatarUrl={row.person.avatarUrl}
+        nameAddon={<MemberTitle userId={row.person.id} />}
+      />
       <VStack align="end" className="flex-none">
         <Text typography="body4" weight="extrabold" numeric>
           {points ? `${row.count}점` : row.count}
