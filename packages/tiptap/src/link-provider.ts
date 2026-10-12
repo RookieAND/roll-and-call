@@ -1,6 +1,7 @@
 export const LINK_PROVIDER = {
   discord: "discord",
   sheets: "sheets",
+  docs: "docs",
   notion: "notion",
 } as const;
 export type LinkProvider = (typeof LINK_PROVIDER)[keyof typeof LINK_PROVIDER];
@@ -9,5 +10,6 @@ export type LinkProvider = (typeof LINK_PROVIDER)[keyof typeof LINK_PROVIDER];
 export const LINK_PROVIDER_LABEL: Record<LinkProvider, string> = {
   discord: "디스코드 채널",
   sheets: "구글 스프레드시트",
+  docs: "구글 문서",
   notion: "노션 페이지",
 };

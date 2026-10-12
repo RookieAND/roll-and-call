@@ -8,11 +8,14 @@ describe("detectLinkProvider", () => {
     expect(detectLinkProvider("https://discord.com/channels/1/2")).toBe(LINK_PROVIDER.discord);
   });
 
-  it("구글 스프레드시트만 알아보고 문서·드라이브는 건너뛴다", () => {
+  it("구글 스프레드시트와 문서를 알아보고 드라이브는 건너뛴다", () => {
     expect(detectLinkProvider("https://docs.google.com/spreadsheets/d/abc/edit")).toBe(
       LINK_PROVIDER.sheets,
     );
-    expect(detectLinkProvider("https://docs.google.com/document/d/abc/edit")).toBeUndefined();
+    expect(detectLinkProvider("https://docs.google.com/document/u/0/d/abc/mobilebasic")).toBe(
+      LINK_PROVIDER.docs,
+    );
+    expect(detectLinkProvider("https://docs.google.com/presentation/d/abc/edit")).toBeUndefined();
     expect(detectLinkProvider("https://drive.google.com/file/d/abc")).toBeUndefined();
   });
 

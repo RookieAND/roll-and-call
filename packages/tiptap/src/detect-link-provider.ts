@@ -14,6 +14,9 @@ export function detectLinkProvider(href: string): LinkProvider | undefined {
   if (url.hostname === "docs.google.com" && url.pathname.startsWith("/spreadsheets/")) {
     return LINK_PROVIDER.sheets;
   }
+  if (url.hostname === "docs.google.com" && url.pathname.startsWith("/document/")) {
+    return LINK_PROVIDER.docs;
+  }
   if (
     isHostOrSubdomain(url.hostname, "notion.so") ||
     isHostOrSubdomain(url.hostname, "notion.site")

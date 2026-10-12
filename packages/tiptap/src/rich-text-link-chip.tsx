@@ -1,11 +1,12 @@
-import { FileText, Hash, Table2 } from "lucide-react";
+import { FileText, Hash, NotebookText, Table2 } from "lucide-react";
 
 import { LINK_PROVIDER, LINK_PROVIDER_LABEL, type LinkProvider } from "./link-provider";
 
 const PROVIDER_ICON = {
   [LINK_PROVIDER.discord]: Hash,
   [LINK_PROVIDER.sheets]: Table2,
-  [LINK_PROVIDER.notion]: FileText,
+  [LINK_PROVIDER.docs]: FileText,
+  [LINK_PROVIDER.notion]: NotebookText,
 } as const;
 
 interface RichTextLinkChipProps {
