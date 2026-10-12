@@ -82,6 +82,7 @@ export { notifyDrawResult } from "./discord/notify-draw-result";
 export { notifyDirectConfirmed } from "./discord/notify-direct-confirmed";
 export { notifySessionConfirmed } from "./discord/notify-session-confirmed";
 export { announceGameOpened } from "./discord/announce-game-opened";
+export { resolveNoticeLinkLabels } from "./discord/resolve-notice-link-labels";
 export { syncGameReviewForumPosts, syncReviewForumPost } from "@roll-and-call/review-forum";
 export { getGameById } from "./db/get-game-by-id";
 export { getProfile } from "./db/get-profile";

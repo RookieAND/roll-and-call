@@ -6,6 +6,7 @@ import {
   foreignKey,
   index,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   primaryKey,
@@ -75,6 +76,8 @@ export const games = pgTable(
     triggers: text("triggers").array().notNull().default([]),
     platforms: text("platforms").array().notNull().default([]),
     notice: text("notice"),
+    // 주의 사항 안 링크 주소 → 칩에 보여 줄 이름(디스코드 채널명). 저장할 때 한 번 가져와 담고 화면은 이 값만 읽는다.
+    linkLabels: jsonb("link_labels").$type<Record<string, string>>().notNull().default({}),
     // 세션 진행 중 AI 이미지를 쓸 수 있는지. 등록할 때 반드시 고르고, 목록에는 내보내지 않는다.
     aiImage: boolean("ai_image").notNull().default(false),
     maxPlayers: integer("max_players").notNull(),
