@@ -15,4 +15,8 @@ export { loadMonthlyAppearances } from "./queries/load-monthly-appearances";
 export { loadReviewAppearances } from "./queries/load-review-appearances";
 export { loadMonthlyWinners, type MonthlyWinner } from "./queries/load-monthly-winners";
 export { loadUserBadges, type BadgeRecord } from "./queries/load-user-badges";
+export {
+  loadMemberBadgeSummaries,
+  type MemberBadgeSummary,
+} from "./queries/load-member-badge-summaries";
 export * from "./model";

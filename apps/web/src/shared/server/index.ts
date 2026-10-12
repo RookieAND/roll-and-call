@@ -52,7 +52,11 @@ export {
   loadBulkQuizQuestions as getBulkQuizQuestions,
   type RulebookRecords,
 } from "@roll-and-call/database/certifications";
-export { markBadgesNotified, type BadgeRecord } from "@roll-and-call/database/badges";
+export {
+  loadMemberBadgeSummaries as getMemberBadgeSummaries,
+  markBadgesNotified,
+  type BadgeRecord,
+} from "@roll-and-call/database/badges";
 export {
   countUnreadNotifications,
   listNotifications,

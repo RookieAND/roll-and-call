@@ -19,6 +19,7 @@ const pill = cva(
       size: {
         md: "h-8 pr-125 pl-100 text-body4",
         sm: "h-[26px] pr-100 pl-075 text-body4",
+        xs: "h-[22px] pr-075 pl-050 text-body5 leading-none",
       },
     },
   },
@@ -31,6 +32,9 @@ const PILL_SPARKS = [
   [62, -5, 9, 1.6],
   [99, 40, 9, 2.0],
 ] as const;
+
+const EMOJI_SIZE = { md: "text-subtitle1", sm: "text-subtitle1", xs: "text-body5" } as const;
+const SPARK_SCALE = { md: 1, sm: 1, xs: 0.7 } as const;
 
 const PILL_SPARK_COLORS: Partial<Record<BadgeLook, string[]>> = {
   5: [
@@ -49,7 +53,7 @@ interface BadgePillProps {
   name: string;
   look: BadgeLook;
   tag?: string | null;
-  size?: "md" | "sm";
+  size?: "md" | "sm" | "xs";
   className?: string;
 }
 
@@ -61,7 +65,10 @@ export function BadgePill({ emoji, name, look, tag, size = "md", className }: Ba
     <span title={name} className={cn(pill({ look, size }), className)}>
       <span
         aria-hidden
-        className="flex size-[1em] flex-none items-center justify-center text-subtitle1 leading-none"
+        className={cn(
+          "flex size-[1em] flex-none items-center justify-center leading-none",
+          EMOJI_SIZE[size],
+        )}
       >
         {emoji}
       </span>
@@ -80,6 +87,7 @@ export function BadgePill({ emoji, name, look, tag, size = "md", className }: Ba
       {sparkColors &&
         PILL_SPARKS.map(([left, top, fontSize, baseDuration], index) => {
           const duration = baseDuration * 1.3;
+          const sparkSize = fontSize * SPARK_SCALE[size];
           return (
             <span
               key={left}
@@ -92,8 +100,8 @@ export function BadgePill({ emoji, name, look, tag, size = "md", className }: Ba
                 {
                   left: `${left}%`,
                   top: `${top}%`,
-                  margin: -fontSize / 2,
-                  fontSize,
+                  margin: -sparkSize / 2,
+                  fontSize: sparkSize,
                   "--badge-twinkle-duration": `${duration.toFixed(2)}s`,
                   "--badge-twinkle-delay": `-${((duration * index) / PILL_SPARKS.length).toFixed(2)}s`,
                 } as React.CSSProperties

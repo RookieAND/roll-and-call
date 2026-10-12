@@ -1,6 +1,7 @@
 import { Badge } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
+import { MemberTitle } from "@/entities/badge";
 import type { RosterMember } from "@/entities/game";
 import { EMPTY_BIO_TEXT, ProfileRow } from "@/entities/profile";
 import { ServerLink } from "@/shared/ui";
@@ -16,9 +17,17 @@ interface RosterMemberRowProps {
   avatarUrl: string | null | undefined;
   bio: string | null | undefined;
   tags?: string[];
+  showTitle?: boolean;
 }
 
-export function RosterMemberRow({ userId, name, avatarUrl, bio, tags = [] }: RosterMemberRowProps) {
+export function RosterMemberRow({
+  userId,
+  name,
+  avatarUrl,
+  bio,
+  tags = [],
+  showTitle = true,
+}: RosterMemberRowProps) {
   return (
     <ServerLink
       path={`/users/${userId}`}
@@ -27,11 +36,16 @@ export function RosterMemberRow({ userId, name, avatarUrl, bio, tags = [] }: Ros
       <ProfileRow
         name={name}
         avatarUrl={avatarUrl}
-        nameAddon={tags.map((tag) => (
-          <Badge key={tag} colorPalette="primary" className="shrink-0">
-            {tag}
-          </Badge>
-        ))}
+        nameAddon={
+          <>
+            {showTitle && <MemberTitle userId={userId} />}
+            {tags.map((tag) => (
+              <Badge key={tag} colorPalette="primary" className="shrink-0">
+                {tag}
+              </Badge>
+            ))}
+          </>
+        }
         subline={bio || EMPTY_BIO_TEXT}
         sublineForeground="hint"
       />

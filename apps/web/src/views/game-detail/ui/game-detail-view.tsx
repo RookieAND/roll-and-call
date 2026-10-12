@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 
+import { RepresentativeTitlesProvider } from "@/entities/badge";
+import { loadRepresentativeTitles } from "@/entities/badge/server";
 import {
   canViewHiddenGame,
   isGameGm,
@@ -51,18 +53,23 @@ export async function GameDetailView({ id }: GameDetailViewProps) {
     participant?.status === PARTICIPANT_STATUS.confirmed ||
     isGameGm({ gmId: game.gmId, userId: viewerId });
   const needsReview = viewerId && takesPartInGame && isSessionEnded(game, now);
-  const [sanction, reviewTarget] = await Promise.all([
+  const [sanction, reviewTarget, titles] = await Promise.all([
     needsSanction ? findActiveSanction({ serverId: server.id, userId: viewerId, now }) : null,
     needsReview
       ? getReviewDraftTarget({ serverId: server.id, gameId: id, userId: viewerId })
       : null,
+    loadRepresentativeTitles({
+      serverId: server.id,
+      userIds: [game.gmId, ...game.participants.map((row) => row.userId)],
+      now,
+    }),
   ]);
   const review = needsReview ? reviewStatusOf(reviewTarget, now) : REVIEW_STATUS.unavailable;
 
   return (
-    <>
+    <RepresentativeTitlesProvider titles={titles}>
       <GameDetail game={game} viewerId={viewerId} sanction={sanction} review={review} now={now} />
       <QueryNoticeToast messages={NOTICE_MESSAGES} />
-    </>
+    </RepresentativeTitlesProvider>
   );
 }

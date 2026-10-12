@@ -4,6 +4,7 @@ import { Sheet, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { MemberTitle } from "@/entities/badge";
 import { ProfileRow } from "@/entities/profile";
 import { ServerLink } from "@/shared/ui";
 
@@ -45,7 +46,11 @@ export function HomeRecordTieSheet({
               render={<ServerLink path={`/users/${person.id}`} />}
               className="min-h-14 justify-start gap-150 px-100"
             >
-              <ProfileRow name={person.username} avatarUrl={person.avatarUrl} />
+              <ProfileRow
+                name={person.username}
+                avatarUrl={person.avatarUrl}
+                nameAddon={<MemberTitle userId={person.id} />}
+              />
               <Text typography="subtitle2" weight="extrabold" foreground="primary" numeric>
                 {count}
                 {unit}
