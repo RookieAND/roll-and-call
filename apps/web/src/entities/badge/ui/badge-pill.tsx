@@ -19,7 +19,7 @@ const pill = cva(
       size: {
         md: "h-8 pr-125 pl-100 text-body4",
         sm: "h-[26px] pr-100 pl-075 text-body4",
-        xs: "h-[22px] pr-075 pl-050 text-body5 leading-none",
+        xs: "h-[18px] pr-050 pl-050 text-body5 leading-none",
       },
     },
   },
@@ -34,7 +34,7 @@ const PILL_SPARKS = [
 ] as const;
 
 const EMOJI_SIZE = { md: "text-subtitle1", sm: "text-subtitle1", xs: "text-body5" } as const;
-const SPARK_SCALE = { md: 1, sm: 1, xs: 0.7 } as const;
+const SPARK_SCALE = { md: 1, sm: 1, xs: 0.5 } as const;
 
 const PILL_SPARK_COLORS: Partial<Record<BadgeLook, string[]>> = {
   5: [
