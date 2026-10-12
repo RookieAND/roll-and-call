@@ -21,7 +21,7 @@ export function RosterGmGroup({ gm, viewerId }: RosterGmGroupProps) {
         name={gm.username}
         avatarUrl={gm.avatarUrl}
         bio={gm.bio}
-        tags={gm.userId === viewerId ? ["GM", "나"] : ["GM"]}
+        tags={gm.userId === viewerId ? ["나"] : []}
       />
     </RosterGroup>
   );
