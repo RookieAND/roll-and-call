@@ -43,17 +43,19 @@ export function HomeRecordLeader({ label, people, count, unit }: HomeRecordLeade
           >
             {people.length > 1 ? "공동 1위" : "1위"}
           </Text>
+        </HStack>
+        <HStack align="center" gap="075" className="min-w-0">
+          <Text
+            typography="heading3"
+            weight="extrabold"
+            truncate
+            render={<div />}
+            className="tracking-[-0.02em]"
+          >
+            {name}
+          </Text>
           {people.length === 1 && <MemberTitle userId={first.id} />}
         </HStack>
-        <Text
-          typography="heading3"
-          weight="extrabold"
-          truncate
-          render={<div />}
-          className="tracking-[-0.02em]"
-        >
-          {name}
-        </Text>
       </div>
       <HStack align="baseline" gap="025" className="flex-none text-tinted-ink">
         <Text typography="heading1" numeric foreground="inherit" className="tracking-[-0.03em]">
