@@ -16,10 +16,17 @@ import {
   uploadReviewPhotos,
 } from "@/shared/server";
 
-import { blockMessage } from "../model/block-message";
-import { PHOTO_ACCEPT, PHOTO_MAX_BYTES } from "../model/photo-rules";
-import { MY_REVIEWS_HREF, REVIEW_BLOCK } from "../model/review-block";
-import { reviewBlockOf } from "../model/review-block-of";
+import {
+  DISCORD_REVIEW_REFUSAL,
+  DISCORD_REVIEW_REFUSAL_MESSAGE,
+} from "../model/discord-review-refusal";
+import { discordReviewRefusalOf } from "../model/discord-review-refusal-of";
+import {
+  DISCORD_PHOTO_UPLOAD_FAILED_MESSAGE,
+  PHOTO_ACCEPT,
+  PHOTO_MAX_BYTES,
+} from "../model/photo-rules";
+import { MY_REVIEWS_HREF } from "../model/review-block";
 
 const UNIQUE_VIOLATION = "23505";
 
@@ -40,11 +47,12 @@ export async function writeReviewFromDiscord({
   photos: { url: string; content_type?: string; size: number }[];
 }): Promise<string> {
   const server = await getServerByGuildId(guildId);
-  if (!server) return "이 서버에서는 후기를 쓸 수 없습니다.";
+  if (!server) return DISCORD_REVIEW_REFUSAL_MESSAGE[DISCORD_REVIEW_REFUSAL.serverNotFound];
 
   const userId = await getUserIdByDiscordId(discordId);
-  const membership = userId && (await getActiveMembership({ serverId: server.id, userId }));
-  if (!userId || !membership) return "아직 가입하지 않았습니다. 가입한 뒤 후기를 써 주세요.";
+  if (!userId) return DISCORD_REVIEW_REFUSAL_MESSAGE[DISCORD_REVIEW_REFUSAL.notRegistered];
+  const membership = await getActiveMembership({ serverId: server.id, userId });
+  if (!membership) return DISCORD_REVIEW_REFUSAL_MESSAGE[DISCORD_REVIEW_REFUSAL.notServerMember];
 
   const text = body.trim();
   const bodyError = reviewBodyError(text);
@@ -64,19 +72,23 @@ export async function writeReviewFromDiscord({
   }
 
   const target = await getReviewDraftTarget({ serverId: server.id, gameId, userId });
-  if (!target) return blockMessage(REVIEW_BLOCK.unavailable);
-  if (target.review) return blockMessage(REVIEW_BLOCK.alreadyWritten);
-  const block = reviewBlockOf(target);
-  if (block) return blockMessage(block);
+  const refusal = discordReviewRefusalOf(target);
+  if (refusal) return DISCORD_REVIEW_REFUSAL_MESSAGE[refusal];
+  if (!target) return DISCORD_REVIEW_REFUSAL_MESSAGE[DISCORD_REVIEW_REFUSAL.gameNotFound];
 
-  const photoUrls =
-    photos.length === 0
-      ? []
-      : await uploadReviewPhotos({
-          serverId: server.id,
-          userId,
-          sources: photos.map(({ url, content_type }) => ({ url, contentType: content_type! })),
-        });
+  let photoUrls: string[] = [];
+  if (photos.length > 0) {
+    try {
+      photoUrls = await uploadReviewPhotos({
+        serverId: server.id,
+        userId,
+        sources: photos.map(({ url, content_type }) => ({ url, contentType: content_type! })),
+      });
+    } catch (error) {
+      console.error("디스코드 후기 사진 올리기 실패", { gameId, error });
+      return DISCORD_PHOTO_UPLOAD_FAILED_MESSAGE;
+    }
+  }
 
   let reviewId: string | undefined;
   try {
@@ -91,12 +103,14 @@ export async function writeReviewFromDiscord({
     });
   } catch (error) {
     if ((error as { code?: string }).code === UNIQUE_VIOLATION) {
-      return blockMessage(REVIEW_BLOCK.alreadyWritten);
+      return DISCORD_REVIEW_REFUSAL_MESSAGE[DISCORD_REVIEW_REFUSAL.alreadyWritten];
     }
     throw error;
   }
 
-  if (!reviewId) return "후기를 등록하지 못했습니다. 잠시 뒤에 다시 시도해 주세요.";
+  if (!reviewId) {
+    return "후기를 등록하지 못했습니다.\n쓴 글은 저장되지 않았으니 잠시 뒤에 다시 시도해 주세요.";
+  }
   const createdReviewId = reviewId;
   revalidateReviews({ slug: server.slug, gameId });
   after(() =>

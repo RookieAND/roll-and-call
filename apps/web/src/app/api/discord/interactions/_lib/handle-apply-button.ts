@@ -4,6 +4,7 @@ import { applyFromDiscord } from "@/features/join-game/server";
 
 import { applyNoteModalResponse } from "./apply-note-modal-response";
 import { ephemeralResponse } from "./ephemeral-response";
+import { INTERACTION_MESSAGE } from "./interaction-message";
 import type { DiscordInteraction, DiscordInteractionResponse } from "./interaction-types";
 
 export async function handleApplyButton(
@@ -11,8 +12,11 @@ export async function handleApplyButton(
 ): Promise<DiscordInteractionResponse> {
   const customId = interaction.data?.custom_id ?? "";
   const discordId = interaction.member?.user.id;
-  if (!customId.startsWith(APPLY_BUTTON_PREFIX) || !interaction.guild_id || !discordId) {
-    return ephemeralResponse("지원하지 않는 요청입니다.");
+  if (!customId.startsWith(APPLY_BUTTON_PREFIX)) {
+    return ephemeralResponse(INTERACTION_MESSAGE.unsupported);
+  }
+  if (!interaction.guild_id || !discordId) {
+    return ephemeralResponse(INTERACTION_MESSAGE.serverOnly);
   }
   try {
     const result = await applyFromDiscord({
@@ -25,6 +29,6 @@ export async function handleApplyButton(
       : ephemeralResponse(result.message);
   } catch (error) {
     console.error("디스코드 버튼 신청 실패", { customId, error });
-    return ephemeralResponse("신청하지 못했습니다. 잠시 뒤에 다시 시도해 주세요.");
+    return ephemeralResponse(INTERACTION_MESSAGE.applyFailed);
   }
 }

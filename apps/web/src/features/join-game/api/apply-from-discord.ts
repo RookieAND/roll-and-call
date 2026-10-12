@@ -6,7 +6,9 @@ import { RECRUIT_METHOD } from "@/entities/game";
 import { serverPath } from "@/shared/lib";
 import { siteOrigin } from "@/shared/server";
 
+import { discordNoteMessage } from "../model/discord-note-message";
 import { joinSuccessMessage } from "../model/join-success-message";
+import { NOTE_LENGTH_MESSAGE } from "../model/note-length-message";
 import { NOTE_REQUIRED_REASON } from "../model/note-required-rejection";
 import { applyToGame } from "./apply-to-game";
 import { finishApplication } from "./finish-application";
@@ -45,6 +47,9 @@ export async function applyFromDiscord({
     // 막힘 검사를 모두 통과했지만 신청글이 필요하면 글쓰기 모달을 열도록 알린다.
     if ("reason" in application && application.reason === NOTE_REQUIRED_REASON) {
       return { askNote: true };
+    }
+    if (application.error === NOTE_LENGTH_MESSAGE) {
+      return { message: discordNoteMessage(applicationNote) };
     }
     return { message: application.error };
   }

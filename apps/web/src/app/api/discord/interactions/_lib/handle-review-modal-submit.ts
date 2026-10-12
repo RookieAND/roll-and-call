@@ -6,6 +6,7 @@ import { writeReviewFromDiscord } from "@/features/write-review/server";
 import { deferredEphemeralResponse } from "./deferred-ephemeral-response";
 import { editOriginalResponse } from "./edit-original-response";
 import { ephemeralResponse } from "./ephemeral-response";
+import { INTERACTION_MESSAGE } from "./interaction-message";
 import type { DiscordInteraction, DiscordInteractionResponse } from "./interaction-types";
 import { parseReviewModal } from "./parse-review-modal";
 
@@ -16,8 +17,11 @@ export function handleReviewModalSubmit(
   const customId = interaction.data?.custom_id ?? "";
   const discordId = interaction.member?.user.id;
   const { body, spoiler, photos } = parseReviewModal(interaction);
-  if (!customId.startsWith(REVIEW_BUTTON_PREFIX) || !interaction.guild_id || !discordId || !body) {
-    return ephemeralResponse("지원하지 않는 요청입니다.");
+  if (!customId.startsWith(REVIEW_BUTTON_PREFIX)) {
+    return ephemeralResponse(INTERACTION_MESSAGE.unsupported);
+  }
+  if (!interaction.guild_id || !discordId) {
+    return ephemeralResponse(INTERACTION_MESSAGE.serverOnly);
   }
 
   const guildId = interaction.guild_id;
@@ -34,7 +38,7 @@ export function handleReviewModalSubmit(
       });
     } catch (error) {
       console.error("디스코드 후기 작성 실패", { customId, error });
-      content = "후기를 등록하지 못했습니다. 잠시 뒤에 다시 시도해 주세요.";
+      content = INTERACTION_MESSAGE.reviewFailed;
     }
     await editOriginalResponse({ interaction, content });
   });

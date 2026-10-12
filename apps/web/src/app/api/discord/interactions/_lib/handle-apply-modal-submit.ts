@@ -4,6 +4,7 @@ import { applyFromDiscord } from "@/features/join-game/server";
 
 import { APPLY_NOTE_FIELD_ID } from "./apply-note-modal-response";
 import { ephemeralResponse } from "./ephemeral-response";
+import { INTERACTION_MESSAGE } from "./interaction-message";
 import type { DiscordInteraction, DiscordInteractionResponse } from "./interaction-types";
 
 export async function handleApplyModalSubmit(
@@ -14,13 +15,14 @@ export async function handleApplyModalSubmit(
   const note = interaction.data?.components
     ?.map(({ component }) => component)
     .find((field) => field.custom_id === APPLY_NOTE_FIELD_ID)?.value;
-  if (
-    !customId.startsWith(APPLY_BUTTON_PREFIX) ||
-    !interaction.guild_id ||
-    !discordId ||
-    typeof note !== "string"
-  ) {
-    return ephemeralResponse("지원하지 않는 요청입니다.");
+  if (!customId.startsWith(APPLY_BUTTON_PREFIX)) {
+    return ephemeralResponse(INTERACTION_MESSAGE.unsupported);
+  }
+  if (!interaction.guild_id || !discordId) {
+    return ephemeralResponse(INTERACTION_MESSAGE.serverOnly);
+  }
+  if (typeof note !== "string") {
+    return ephemeralResponse(INTERACTION_MESSAGE.applyNoteLost);
   }
   try {
     const result = await applyFromDiscord({
@@ -29,9 +31,11 @@ export async function handleApplyModalSubmit(
       gameId: customId.slice(APPLY_BUTTON_PREFIX.length),
       applicationNote: note,
     });
-    return ephemeralResponse("message" in result ? result.message : "신청하지 못했습니다.");
+    return ephemeralResponse(
+      "message" in result ? result.message : INTERACTION_MESSAGE.applyNoteLost,
+    );
   } catch (error) {
     console.error("디스코드 신청글 신청 실패", { customId, error });
-    return ephemeralResponse("신청하지 못했습니다. 잠시 뒤에 다시 시도해 주세요.");
+    return ephemeralResponse(INTERACTION_MESSAGE.applyFailed);
   }
 }

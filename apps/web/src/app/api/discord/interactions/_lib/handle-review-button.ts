@@ -3,6 +3,7 @@ import { REVIEW_BUTTON_PREFIX } from "@roll-and-call/game-notices";
 import { checkReviewFromDiscord } from "@/features/write-review/server";
 
 import { ephemeralResponse } from "./ephemeral-response";
+import { INTERACTION_MESSAGE } from "./interaction-message";
 import type { DiscordInteraction, DiscordInteractionResponse } from "./interaction-types";
 import { reviewModalResponse } from "./review-modal-response";
 
@@ -11,7 +12,9 @@ export async function handleReviewButton(
 ): Promise<DiscordInteractionResponse> {
   const customId = interaction.data?.custom_id ?? "";
   const discordId = interaction.member?.user.id;
-  if (!interaction.guild_id || !discordId) return ephemeralResponse("지원하지 않는 요청입니다.");
+  if (!interaction.guild_id || !discordId) {
+    return ephemeralResponse(INTERACTION_MESSAGE.serverOnly);
+  }
 
   const blocked = await checkReviewFromDiscord({
     guildId: interaction.guild_id,

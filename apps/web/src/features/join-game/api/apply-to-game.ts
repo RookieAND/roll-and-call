@@ -6,6 +6,7 @@ import { withTransaction } from "@roll-and-call/database/transaction";
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { type Game } from "@/shared/server";
 
+import { NOTE_LENGTH_MESSAGE } from "../model/note-length-message";
 import {
   NOTE_REQUIRED_MESSAGE,
   NOTE_REQUIRED_REASON,
@@ -46,7 +47,7 @@ export async function applyToGame({
         if (!note) {
           return applicationNote === undefined
             ? { error: NOTE_REQUIRED_MESSAGE, reason: NOTE_REQUIRED_REASON }
-            : { error: "신청글은 1자 이상 500자 이하로 써 주세요." };
+            : { error: NOTE_LENGTH_MESSAGE };
         }
       }
 
