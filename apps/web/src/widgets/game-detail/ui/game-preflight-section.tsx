@@ -31,7 +31,7 @@ export function GamePreflightSection({ game }: GamePreflightSectionProps) {
           tone="notice"
         />
       )}
-      {game.notice && <GameNoticeBlock notice={game.notice} />}
+      {game.notice && <GameNoticeBlock notice={game.notice} linkLabels={game.linkLabels} />}
       <PlayTypeBlock playType={game.playType} />
       {game.platforms.length > 0 && (
         <GameTagBlock label={gameTagLabel[GAME_TAG.platforms]} tags={game.platforms} />

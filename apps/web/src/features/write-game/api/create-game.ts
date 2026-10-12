@@ -16,6 +16,7 @@ import {
   getActingMember,
   getRulebookRecords,
   notMemberError,
+  resolveNoticeLinkLabels,
 } from "@/shared/server";
 
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
@@ -71,6 +72,11 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     }
   }
 
+  const linkLabels = await resolveNoticeLinkLabels({
+    guildId: server.discordGuildId,
+    notice: columns.notice,
+  });
+
   const gameId = await createGameWithRoster({
     serverId: server.id,
     columns: {
@@ -78,6 +84,7 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
       rule: set.label,
       rulebookId: set.cores[0]!.id,
       ...columns,
+      linkLabels,
     },
     confirmedUserIds: invitedIds,
   });

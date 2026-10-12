@@ -53,6 +53,31 @@
   color: var(--color-primary-ink);
   text-decoration: underline;
 }
+.rich-text a.rich-text-chip {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.25rem;
+  vertical-align: bottom;
+  border-radius: 0.375rem;
+  background: var(--color-tinted-bg);
+  padding: 0 0.5rem 0 0.375rem;
+  color: var(--color-tinted-ink);
+  font-weight: 500;
+  text-decoration: none;
+}
+.rich-text a.rich-text-chip[data-named="false"] {
+  background: var(--color-gray-100);
+  color: var(--color-gray-600);
+}
+.rich-text a.rich-text-chip > svg {
+  flex: none;
+}
+.rich-text-chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .rich-text .spoiler {
   border-radius: 0.25rem;
   background: var(--color-gray-200);

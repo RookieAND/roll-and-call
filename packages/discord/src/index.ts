@@ -44,5 +44,7 @@ export { getBotUser } from "./user/get-bot-user";
 export { DISCORD_CHANNEL_TYPE, DISCORD_PERMISSION } from "./permission/discord-permission";
 export { computeGuildPermissions } from "./permission/compute-guild-permissions";
 export { computeChannelPermissions } from "./permission/compute-channel-permissions";
+export { isEveryoneViewable } from "./permission/is-everyone-viewable";
+export { resolvePublicChannelNames } from "./guild/resolve-public-channel-names";
 export { isGuildBanned } from "./guild/is-guild-banned";
 export { DiscordApiError } from "./api/discord-api-error";

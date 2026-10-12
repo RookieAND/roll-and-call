@@ -8,6 +8,8 @@ export const DISCORD_PERMISSION = {
 
 export const DISCORD_CHANNEL_TYPE = {
   text: 0,
+  voice: 2,
   announcement: 5,
+  publicThread: 11,
   forum: 15,
 } as const;

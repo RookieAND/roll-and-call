@@ -22,6 +22,7 @@ import {
   refreshRecruitPost,
   removeUnusedGameFiles,
   notMemberError,
+  resolveNoticeLinkLabels,
 } from "@/shared/server";
 
 import { EDIT_FORBIDDEN_MESSAGE, editBlockReason } from "../model/edit-block-reason";
@@ -48,6 +49,11 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
   const { server, user } = member;
   const values = parsed.data;
   const columns = toGameColumns(values);
+  // 디스코드를 부르므로 행을 잠그는 트랜잭션 밖에서 미리 가져온다.
+  const linkLabels = await resolveNoticeLinkLabels({
+    guildId: server.discordGuildId,
+    notice: columns.notice,
+  });
   const owner = { serverId: server.id, gameId: id, gmId: user.id };
 
   // 같은 구인의 신청·명단 조정·추첨과 줄을 서도록 행을 잠그고 검사와 저장을 한 번에 한다.
@@ -84,6 +90,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       ...owner,
       columns: {
         ...columns,
+        linkLabels,
         ...(clearsSession ? { confirmedAt: null } : {}),
         ...(timeChanged ? { notifiedAt: null } : {}),
         ...(reopensJudgement ? { minPlayersJudgedAt: null } : {}),

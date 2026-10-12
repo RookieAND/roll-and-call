@@ -84,6 +84,7 @@ export function buildTrialGame({
     triggers: [],
     platforms: ["디스코드"],
     notice: null,
+    linkLabels: {},
     aiImage: false,
     maxPlayers: 4,
     minPlayers: null,
