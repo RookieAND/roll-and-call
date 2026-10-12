@@ -34,7 +34,7 @@ const PILL_SPARKS = [
 ] as const;
 
 const EMOJI_SIZE = { md: "text-subtitle1", sm: "text-subtitle1", xs: "text-body5" } as const;
-const SPARK_SCALE = { md: 1, sm: 1, xs: 0.5 } as const;
+const SPARK_SCALE = { md: 1, sm: 1, xs: 0.65 } as const;
 
 const PILL_SPARK_COLORS: Partial<Record<BadgeLook, string[]>> = {
   5: [
