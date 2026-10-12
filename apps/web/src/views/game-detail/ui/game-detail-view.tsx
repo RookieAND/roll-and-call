@@ -60,7 +60,7 @@ export async function GameDetailView({ id }: GameDetailViewProps) {
       : null,
     loadRepresentativeTitles({
       serverId: server.id,
-      userIds: game.participants.map((row) => row.userId),
+      userIds: [game.gmId, ...game.participants.map((row) => row.userId)],
       now,
     }),
   ]);
