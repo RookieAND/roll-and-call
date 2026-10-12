@@ -32,6 +32,9 @@ export function Avatar({ src, name, size = "md", className }: AvatarProps) {
       data-size={size ?? undefined}
       className={cn(
         avatarVariants({ size }),
+        // 투명하거나 배경과 비슷한 밝은 사진도 동그라미가 보이도록 배경을 깔고 안쪽 테두리를 얹는다.
+        image &&
+          "relative bg-gray-100 after:absolute after:inset-0 after:rounded-full after:ring-1 after:ring-gray-200 after:ring-inset",
         resolveStateProp({ prop: className, state: { size } }),
       )}
       style={image ? undefined : { backgroundColor: background, color: foreground }}
