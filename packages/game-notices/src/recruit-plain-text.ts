@@ -36,7 +36,7 @@ export function recruitPlainText({
   const notice = markdown(game.notice);
   const section = (heading: string, body: string | undefined) =>
     body ? `${heading}\n${body}` : undefined;
-  const item = (label: string, value: string) => `- **${label}**　${value}`;
+  const item = (label: string, value: string) => `- **${label}** ${value}`;
   const playRange = formatPlayRange(game.playMinutesMin, game.playMinutes);
   const tagItem = (label: string, values: string[]) =>
     values.length > 0 ? item(label, inlineCodeTags(values)) : undefined;

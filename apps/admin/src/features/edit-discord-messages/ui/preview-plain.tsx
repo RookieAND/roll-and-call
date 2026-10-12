@@ -30,7 +30,7 @@ export function PreviewPlain() {
           </div>
           {items.map(([label, value]) => (
             <div key={label}>
-              • <b className="text-white">{label}</b>　{value}
+              • <b className="text-white">{label}</b> {value}
             </div>
           ))}
         </div>
