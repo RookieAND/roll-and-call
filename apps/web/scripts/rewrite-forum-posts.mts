@@ -1,5 +1,6 @@
 import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed } from "@roll-and-call/database/games/model";
+import { findGameCategoryLabel } from "@roll-and-call/database/rulebooks";
 import { getServerBySlug } from "@roll-and-call/database/servers";
 import {
   editDiscordMessage,
@@ -48,7 +49,8 @@ for (const row of rows) {
     confirmedCount: countConfirmed(game.participants),
     cancelled,
   });
-  const name = recruitPostTitle({ title: game.title, gmName, cancelled });
+  const ruleLabel = await findGameCategoryLabel({ serverId: server.id, gameId: row.id });
+  const name = recruitPostTitle({ title: game.title, gmName, ruleLabel, cancelled });
   console.log(
     `${apply ? "[재작성]" : "[계획]"} ${name} · 본문 ${post.input.content?.length}자 · 이어붙임 ${post.followUps.length} · 버튼 ${post.input.buttons?.length}`,
   );

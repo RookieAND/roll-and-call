@@ -14,6 +14,7 @@ export { unhideRulebook } from "./commands/unhide-rulebook";
 export { updateRulebook, type UpdateRulebookResult } from "./commands/update-rulebook";
 export { findRulebookCategoryId } from "./queries/find-rulebook-category-id";
 export { findGameCategoryId } from "./queries/find-game-category-id";
+export { findGameCategoryLabel } from "./queries/find-game-category-label";
 export { listRulebookCategories } from "./queries/list-rulebook-categories";
 export { getCertSellers } from "./queries/get-cert-sellers";
 export {
