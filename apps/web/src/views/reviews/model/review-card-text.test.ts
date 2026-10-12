@@ -21,20 +21,18 @@ const row = {
 } satisfies ReviewCardRow;
 
 describe("reviewCardText", () => {
-  it("세션 후기는 작성자를 제목 자리에 두고 보조 줄은 작성일만 적는다", () => {
+  it("세션 후기는 작성자를 첫 줄에 두고 둘째 줄은 작성일만 적는다", () => {
     expect(reviewCardText({ row, perspective: REVIEW_PERSPECTIVE.session })).toEqual({
       title: null,
-      byline: false,
       meta: "9월 20일",
     });
   });
 
-  it("진행한 세션 후기는 구인 제목 아래 작성자와 작성일을 적는다", () => {
+  it("진행한 세션 후기는 작성자를 첫 줄에 두고 둘째 줄에 구인 제목과 작성일을 적는다", () => {
     const edited = { ...row, updatedAt: new Date("2026-09-21T10:00:00+09:00") };
     expect(reviewCardText({ row: edited, perspective: REVIEW_PERSPECTIVE.received })).toEqual({
-      title: "물벼락",
-      byline: true,
-      meta: "9월 20일 · 수정됨",
+      title: null,
+      meta: "물벼락 · 9월 20일 · 수정됨",
     });
   });
 
@@ -49,11 +47,10 @@ describe("reviewCardText", () => {
 describe("reviewCardText GM 후기", () => {
   const gmRow = { ...row, authorRole: "gm" };
 
-  it("세션 후기에서는 제목에 작성자 이름을 넣고 보조 줄은 작성일만 적는다", () => {
+  it("세션 후기에서는 작성자를 첫 줄에 두고 둘째 줄을 마스터링 후기와 작성일로 적는다", () => {
     expect(reviewCardText({ row: gmRow, perspective: REVIEW_PERSPECTIVE.session })).toEqual({
-      title: "윤소라의 마스터링 후기",
-      byline: false,
-      meta: "9월 20일",
+      title: null,
+      meta: "마스터링 후기 · 9월 20일",
     });
   });
 

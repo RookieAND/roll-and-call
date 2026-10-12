@@ -25,22 +25,14 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
   return (
     <VStack gap="150">
       {rows.map((row) => {
-        const { title, byline, meta } = reviewCardText({ row, perspective });
+        const { title, meta } = reviewCardText({ row, perspective });
         const author = (
           <ServerLink path={`/users/${row.authorId}`} className="hover:underline">
             {row.authorName}
           </ServerLink>
         );
-        const authorTitle = <MemberTitle userId={row.authorId} />;
-        const metaLine = byline ? (
-          <>
-            {author} {authorTitle} · {meta}
-          </>
-        ) : (
-          meta
-        );
         const gm = row.authorRole === REVIEW_AUTHOR_ROLE.gm;
-        const titleAddon = title === null ? authorTitle : null;
+        const titleAddon = title === null && !gm ? <MemberTitle userId={row.authorId} /> : null;
         const own = row.authorId === viewerId;
         const editable = own && reviewEditDeadline(row.createdAt).getTime() > now;
         const menu = own && (
@@ -57,7 +49,7 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
             authorAvatarUrl={row.authorAvatarUrl}
             title={title ?? author}
             titleAddon={titleAddon}
-            meta={metaLine}
+            meta={meta}
             body={row.body}
             photoUrls={row.photoUrls}
             spoiler={row.spoiler}

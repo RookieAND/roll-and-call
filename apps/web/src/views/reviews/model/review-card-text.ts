@@ -5,7 +5,8 @@ import type { ReviewCardRow } from "@/shared/server";
 
 import { REVIEW_PERSPECTIVE, type ReviewPerspective } from "./review-perspective";
 
-// 작성자 이름은 프로필 링크로 그리므로 문구와 따로 낸다. 진행한 세션 후기는 보조 줄 앞에 붙는다. GM 마스터링 후기는 제목에 작성자 이름이 들어가 보조 줄에는 작성일만 남는다.
+// 카드 첫 줄은 늘 작성자(아바타 옆 이름)이고 둘째 줄이 맥락과 날짜다. 작성한 후기 목록만 작성자가 모두 같은 사람이라 첫 줄에 구인 제목을 둔다.
+// 작성자 이름은 프로필 링크로 그리므로 문구와 따로 낸다. title이 null이면 첫 줄은 작성자다.
 export function reviewCardText({
   row,
   perspective,
@@ -13,16 +14,16 @@ export function reviewCardText({
   row: ReviewCardRow;
   perspective: ReviewPerspective;
 }) {
-  const meta = formatDate(row.createdAt) + (row.updatedAt ? " · 수정됨" : "");
+  const date = formatDate(row.createdAt) + (row.updatedAt ? " · 수정됨" : "");
   switch (perspective) {
     case REVIEW_PERSPECTIVE.session:
       if (row.authorRole === REVIEW_AUTHOR_ROLE.gm) {
-        return { title: `${row.authorName}의 마스터링 후기`, byline: false, meta };
+        return { title: null, meta: `마스터링 후기 · ${date}` };
       }
-      return { title: null, byline: false, meta };
+      return { title: null, meta: date };
     case REVIEW_PERSPECTIVE.received:
-      return { title: row.gameTitle, byline: true, meta };
+      return { title: null, meta: `${row.gameTitle} · ${date}` };
     case REVIEW_PERSPECTIVE.written:
-      return { title: row.gameTitle, byline: false, meta };
+      return { title: row.gameTitle, meta: date };
   }
 }
