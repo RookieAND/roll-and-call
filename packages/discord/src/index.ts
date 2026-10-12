@@ -46,3 +46,4 @@ export { computeGuildPermissions } from "./permission/compute-guild-permissions"
 export { computeChannelPermissions } from "./permission/compute-channel-permissions";
 export { isGuildBanned } from "./guild/is-guild-banned";
 export { DiscordApiError } from "./api/discord-api-error";
+export { renameDiscordThread } from "./thread/rename-discord-thread";
