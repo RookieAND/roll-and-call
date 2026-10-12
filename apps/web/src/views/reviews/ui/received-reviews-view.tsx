@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 
+import { RepresentativeTitlesProvider } from "@/entities/badge";
+import { loadRepresentativeTitles } from "@/entities/badge/server";
 import {
   getCurrentSessionUser,
   getProfile,
@@ -25,6 +27,11 @@ export async function ReceivedReviewsView({ userId }: ReceivedReviewsViewProps) 
     getReceivedReviews({ serverId: server.id, gmId: targetId, viewerId: viewer?.id ?? null }),
   ]);
   if (!profile) notFound();
+  const titles = await loadRepresentativeTitles({
+    serverId: server.id,
+    userIds: rows.map((row) => row.authorId),
+    now: new Date(),
+  });
   const mine = targetId === viewer?.id;
 
   return (
@@ -32,12 +39,14 @@ export async function ReceivedReviewsView({ userId }: ReceivedReviewsViewProps) 
       title={mine ? "진행한 세션 후기" : `${profile.username}님이 진행한 세션 후기`}
       back={mine ? "/me" : `/users/${targetId}`}
     >
-      <ReviewList
-        rows={rows}
-        perspective={REVIEW_PERSPECTIVE.received}
-        viewerId={viewer?.id ?? null}
-        emptyText="아직 진행한 세션에 후기가 없습니다"
-      />
+      <RepresentativeTitlesProvider titles={titles}>
+        <ReviewList
+          rows={rows}
+          perspective={REVIEW_PERSPECTIVE.received}
+          viewerId={viewer?.id ?? null}
+          emptyText="아직 진행한 세션에 후기가 없습니다"
+        />
+      </RepresentativeTitlesProvider>
     </ReviewsPage>
   );
 }

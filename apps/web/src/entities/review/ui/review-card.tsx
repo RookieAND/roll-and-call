@@ -17,6 +17,7 @@ interface ReviewCardProps {
   photoUrls: string[];
   spoiler: boolean;
   menu?: ReactNode;
+  titleAddon?: ReactNode;
   gm?: boolean;
   highlighted?: boolean;
 }
@@ -30,6 +31,7 @@ export function ReviewCard({
   photoUrls,
   spoiler,
   menu,
+  titleAddon,
   gm = false,
   highlighted = false,
 }: ReviewCardProps) {
@@ -57,6 +59,7 @@ export function ReviewCard({
               <Text typography="subtitle2" truncate render={<h3 />}>
                 {title}
               </Text>
+              {titleAddon}
               {gm && <GmBadge />}
             </HStack>
             <Text typography="body4" foreground="hint" truncate numeric>

@@ -1,6 +1,7 @@
 import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import { VStack } from "@roll-and-call/ui";
 
+import { MemberTitle } from "@/entities/badge";
 import { ReviewCard, ReviewEmpty, reviewEditDeadline } from "@/entities/review";
 import { formatDate } from "@/shared/lib";
 import type { ReviewCardRow } from "@/shared/server";
@@ -24,20 +25,14 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
   return (
     <VStack gap="150">
       {rows.map((row) => {
-        const { title, byline, meta } = reviewCardText({ row, perspective });
+        const { title, meta } = reviewCardText({ row, perspective });
         const author = (
           <ServerLink path={`/users/${row.authorId}`} className="hover:underline">
             {row.authorName}
           </ServerLink>
         );
-        const metaLine = byline ? (
-          <>
-            {author} · {meta}
-          </>
-        ) : (
-          meta
-        );
         const gm = row.authorRole === REVIEW_AUTHOR_ROLE.gm;
+        const titleAddon = title === null && !gm ? <MemberTitle userId={row.authorId} /> : null;
         const own = row.authorId === viewerId;
         const editable = own && reviewEditDeadline(row.createdAt).getTime() > now;
         const menu = own && (
@@ -53,7 +48,8 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
             authorName={row.authorName}
             authorAvatarUrl={row.authorAvatarUrl}
             title={title ?? author}
-            meta={metaLine}
+            titleAddon={titleAddon}
+            meta={meta}
             body={row.body}
             photoUrls={row.photoUrls}
             spoiler={row.spoiler}

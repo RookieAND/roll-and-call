@@ -1,6 +1,8 @@
 import { Text, VStack } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
+import { RepresentativeTitlesProvider } from "@/entities/badge";
+import { loadRepresentativeTitles } from "@/entities/badge/server";
 import { PARTICIPANT_STATUS, SessionHeading } from "@/entities/game";
 import { formatDateTime } from "@/shared/lib";
 import {
@@ -50,6 +52,11 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
     gameId,
     viewerId,
   });
+  const titles = await loadRepresentativeTitles({
+    serverId: server.id,
+    userIds: [...(gmReview ? [gmReview] : []), ...participantReviews].map((row) => row.authorId),
+    now: new Date(),
+  });
   const when = game.confirmedAt ? `${formatDateTime(game.confirmedAt)} · ` : "";
   const hasReviews = gmReview || participantReviews.length > 0;
 
@@ -61,32 +68,34 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
         subline={`${when}후기 ${participantReviews.length}개`}
       />
       {hasReviews ? (
-        <VStack gap="150">
-          {gmReview && (
-            <ReviewList
-              rows={[gmReview]}
-              perspective={REVIEW_PERSPECTIVE.session}
-              viewerId={viewerId}
-              emptyText=""
-            />
-          )}
-          {participantReviews.length > 0 ? (
-            <ReviewList
-              rows={participantReviews}
-              perspective={REVIEW_PERSPECTIVE.session}
-              viewerId={viewerId}
-              emptyText=""
-            />
-          ) : (
-            <Text
-              typography="subtitle2"
-              foreground="muted"
-              className="rounded-500 bg-gray-50 px-150 py-300 text-center"
-            >
-              {NO_PARTICIPANT_REVIEWS}
-            </Text>
-          )}
-        </VStack>
+        <RepresentativeTitlesProvider titles={titles}>
+          <VStack gap="150">
+            {gmReview && (
+              <ReviewList
+                rows={[gmReview]}
+                perspective={REVIEW_PERSPECTIVE.session}
+                viewerId={viewerId}
+                emptyText=""
+              />
+            )}
+            {participantReviews.length > 0 ? (
+              <ReviewList
+                rows={participantReviews}
+                perspective={REVIEW_PERSPECTIVE.session}
+                viewerId={viewerId}
+                emptyText=""
+              />
+            ) : (
+              <Text
+                typography="subtitle2"
+                foreground="muted"
+                className="rounded-500 bg-gray-50 px-150 py-300 text-center"
+              >
+                {NO_PARTICIPANT_REVIEWS}
+              </Text>
+            )}
+          </VStack>
+        </RepresentativeTitlesProvider>
       ) : (
         <EmptyState
           image="empty-review"
