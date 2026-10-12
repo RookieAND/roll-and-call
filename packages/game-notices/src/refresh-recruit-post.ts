@@ -1,7 +1,7 @@
 import { type Server } from "@roll-and-call/database";
 import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed } from "@roll-and-call/database/games/model";
-import { findGameCategoryId } from "@roll-and-call/database/rulebooks";
+import { findGameCategoryId, findGameCategoryLabel } from "@roll-and-call/database/rulebooks";
 import {
   editDiscordMessage,
   hasMessageAttachment,
@@ -29,9 +29,10 @@ export async function refreshRecruitPost({
   if (!game?.discordThreadId || game.cancelledAt) return;
   const threadId = game.discordThreadId;
 
-  const [target, categoryId] = await Promise.all([
+  const [target, categoryId, ruleLabel] = await Promise.all([
     loadRecruitTarget(server),
     findGameCategoryId({ serverId: server.id, gameId }),
+    findGameCategoryLabel({ serverId: server.id, gameId }),
   ]);
   const confirmedCount = countConfirmed(game.participants);
   const gmName = game.gm?.username ?? "?";
@@ -60,7 +61,7 @@ export async function refreshRecruitPost({
       syncRecruitThread({
         target,
         threadId,
-        name: recruitPostTitle({ title: game.title, gmName }),
+        name: recruitPostTitle({ title: game.title, gmName, ruleLabel }),
         closed: confirmedCount >= game.maxPlayers,
         categoryId,
         kind: game.kind,

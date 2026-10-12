@@ -1,6 +1,6 @@
 import type { Game } from "@roll-and-call/database";
 import type { Server } from "@roll-and-call/database";
-import { findGameCategoryId } from "@roll-and-call/database/rulebooks";
+import { findGameCategoryId, findGameCategoryLabel } from "@roll-and-call/database/rulebooks";
 import { createForumMessagePost, syncForumFollowUps } from "@roll-and-call/discord";
 import {
   loadRecruitTarget,
@@ -24,9 +24,10 @@ export async function notifyGameCreated({
   gmName: string;
   confirmedCount: number;
 }): Promise<string | undefined> {
-  const [target, categoryId] = await Promise.all([
+  const [target, categoryId, ruleLabel] = await Promise.all([
     loadRecruitTarget(server),
     findGameCategoryId({ serverId: server.id, gameId: game.id }),
+    findGameCategoryLabel({ serverId: server.id, gameId: game.id }),
   ]);
   if (!target || !server.recruitChannelId) {
     console.warn("Recruit channel is not a forum; skipping recruit post", { serverId: server.id });
@@ -35,7 +36,7 @@ export async function notifyGameCreated({
   const post = await recruitForumPost({ server, game, gmName, confirmedCount });
   const threadId = await createForumMessagePost({
     forumId: server.recruitChannelId,
-    name: recruitPostTitle({ title: game.title, gmName }),
+    name: recruitPostTitle({ title: game.title, gmName, ruleLabel }),
     appliedTags: recruitStatusTagIds({
       target,
       closed: confirmedCount >= game.maxPlayers,
