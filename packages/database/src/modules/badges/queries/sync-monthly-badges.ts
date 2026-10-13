@@ -41,12 +41,15 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
       ),
   ]);
   // 알림은 부가 기능이라 실패해도 뱃지 계산을 막지 않는다.
-  if (server?.rankingMode === RANKING_MODE.points) {
-    try {
-      await notifyRankLeaders({ serverId, appearances, now });
-    } catch (error) {
-      console.error("notifyRankLeaders failed", error);
-    }
+  try {
+    await notifyRankLeaders({
+      serverId,
+      appearances,
+      now,
+      breakTies: server?.rankingMode === RANKING_MODE.points,
+    });
+  } catch (error) {
+    console.error("notifyRankLeaders failed", error);
   }
   // 굳기 전에 줬다 회수한 사람은 굳은 뒤 다시 정해 준다. 굳은 달에 이미 받은 사람의 행만 건드리지 않는다(공동 1위 중 한 명이 받았다고 나머지를 막지 않는다).
   const isFrozen = (badge: { userId: string; badgeKey: string; revokedAt: Date | null }) =>
