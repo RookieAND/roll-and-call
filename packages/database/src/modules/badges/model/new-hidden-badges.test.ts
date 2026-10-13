@@ -223,7 +223,7 @@ describe("숨겨진 칭호 4종 (D343)", () => {
     expect(earned({ played: atHours([0, 1, 6, 12, 17]) }, "times")).toBe(false);
   });
 
-  it("수집왕은 요일 수집가·시간 수집가·두루두루를 모두 받아야 하고 하나라도 빠지면 못 받는다", () => {
+  it("전천후는 요일 수집가·시간 수집가·두루두루를 모두 받아야 하고 하나라도 빠지면 못 받는다", () => {
     const rich = (weekdays: number, sizes: number[], hours: number[]) =>
       Array.from({ length: weekdays }, (_, index) => {
         const startsAt = new Date(Date.UTC(2026, 2, 1 + index, hours[index % hours.length]! - 9));

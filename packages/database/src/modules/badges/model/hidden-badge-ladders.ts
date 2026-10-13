@@ -244,7 +244,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
   }),
   [HIDDEN_LADDER.collectorKing]: hidden({
     emoji: "🗃️",
-    name: "수집왕",
+    name: "전천후",
     grade: 5,
     description: "모든 구간을 빠짐없이 채웠습니다.",
   }),
