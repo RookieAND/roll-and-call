@@ -69,9 +69,10 @@ describe("개근 사다리(꼬박꼬박·차곡차곡·한결같이)", () => {
     expect(earned({ played: weekly(run(26)) }, "weeks26")).toBe(true);
   });
 
-  it("한 주를 거르면 끊기고, GM과 PL을 합쳐 센다", () => {
+  it("한 주를 거르면 끊기고, 꼬박꼬박은 PL 참석만 센다", () => {
     expect(earned({ played: weekly([0, 1, 2, 4, 5]) }, "weeks4")).toBe(false);
-    expect(earned({ played: weekly([0, 1]), hosted: weekly([2, 3]) }, "weeks4")).toBe(true);
+    expect(earned({ played: weekly([0, 1]), hosted: weekly([2, 3]) }, "weeks4")).toBe(false);
+    expect(earned({ hosted: weekly(run(4)) }, "weeks4")).toBe(false);
   });
 
   it("한 주에 여러 세션이 있어도 1주로 센다", () => {

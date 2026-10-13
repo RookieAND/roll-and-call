@@ -298,7 +298,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     emoji: "🗓️",
     name: "꼬박꼬박",
     grade: 3,
-    description: "한 달 동안 꾸준히 테이블에 앉았습니다.",
+    description: "플레이어로 한 달 동안 꾸준히 테이블에 앉았습니다.",
   }),
   [HIDDEN_LADDER.weeks12]: hidden({
     emoji: "🧱",
@@ -316,7 +316,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     emoji: "🚪",
     name: "열린 대문",
     grade: 3,
-    description: "매주 한 번은 테이블을 열어 모험가를 맞았습니다.",
+    description: "GM으로서 매주 한 번은 테이블을 열어 모험가를 맞았습니다.",
   }),
   [HIDDEN_LADDER.tenTries]: hidden({
     emoji: "🪓",

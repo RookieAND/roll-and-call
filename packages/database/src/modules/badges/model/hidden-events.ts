@@ -155,7 +155,7 @@ export function hiddenEvents({
     case HIDDEN_LADDER.fresh:
       return freshReviewEvents(facts);
     case HIDDEN_LADDER.weeks4:
-      return weekStreakEvents({ sessions: [...facts.played, ...facts.hosted], length: 4 });
+      return weekStreakEvents({ sessions: facts.played, length: 4 });
     case HIDDEN_LADDER.weeks12:
       return weekStreakEvents({ sessions: [...facts.played, ...facts.hosted], length: 12 });
     case HIDDEN_LADDER.weeks26:
