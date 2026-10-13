@@ -101,7 +101,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
   [HIDDEN_LADDER.popular]: hidden({
     emoji: "🔥",
     name: "인기 폭발",
-    grade: 5,
+    grade: 4,
     description: "많은 사람이 이 테이블에 앉고 싶어 했습니다.",
   }),
   [HIDDEN_LADDER.needle]: hidden({
@@ -179,7 +179,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
   [HIDDEN_LADDER.coin]: hidden({
     emoji: "🪙",
     name: "동전 던지기",
-    grade: 3,
+    grade: 4,
     description: "주사위가 딱 반반의 눈을 보여 주었습니다.",
   }),
   [HIDDEN_LADDER.revive]: hidden({
@@ -245,7 +245,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
   [HIDDEN_LADDER.collectorKing]: hidden({
     emoji: "🗃️",
     name: "전천후",
-    grade: 5,
+    grade: 4,
     description: "모든 구간을 빠짐없이 채웠습니다.",
   }),
   [HIDDEN_LADDER.boxOffice]: hidden({
