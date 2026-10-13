@@ -42,7 +42,7 @@ const earned = (overrides: Partial<BadgeFacts>, key: string) =>
 const days = (count: number, from = 1) =>
   Array.from({ length: count }, (_, index) => session(from + index));
 
-describe("믿음직한 동료", () => {
+describe("약속 지킴이", () => {
   it("불참 기록 없이 PL로 10번 참석하면 받는다", () => {
     expect(earned({ played: days(9) }, "faithful")).toBe(false);
     expect(earned({ played: days(10) }, "faithful")).toBe(true);

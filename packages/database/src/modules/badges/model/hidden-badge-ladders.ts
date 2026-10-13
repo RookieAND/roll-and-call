@@ -272,7 +272,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
   }),
   [HIDDEN_LADDER.faithful]: hidden({
     emoji: "🤝",
-    name: "믿음직한 동료",
+    name: "약속 지킴이",
     grade: 3,
     description: "약속한 자리를 한 번도 비우지 않았습니다.",
   }),
