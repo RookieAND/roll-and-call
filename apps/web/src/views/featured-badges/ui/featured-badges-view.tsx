@@ -1,7 +1,7 @@
 import { VStack } from "@roll-and-call/ui";
 
 import {
-  badgeRequirement,
+  badgeRequirementLine,
   featuredOptions,
   heldBadges,
   monthLabel,
@@ -44,7 +44,7 @@ export async function FeaturedBadgesView() {
     tag: badge.monthKey ? monthLabel(badge.monthKey) : null,
     role: badge.role,
     ladder: badge.ladder,
-    requirement: badgeRequirement({
+    requirement: badgeRequirementLine({
       ladder: badge.ladder,
       step: badge.step,
       categoryName: badge.categoryName,

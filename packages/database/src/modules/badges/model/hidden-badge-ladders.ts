@@ -276,6 +276,12 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     grade: 3,
     description: "약속한 자리를 한 번도 비우지 않았습니다.",
   }),
+  [HIDDEN_LADDER.firstBriefing]: hidden({
+    emoji: "🎤",
+    name: "첫 강단",
+    grade: 2,
+    description: "처음으로 강단에 올라 룰을 풀어 주었습니다.",
+  }),
   [HIDDEN_LADDER.lecturer]: hidden({
     emoji: "🧑‍🏫",
     name: "명강사",

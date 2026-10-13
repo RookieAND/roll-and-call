@@ -1,4 +1,4 @@
-import { badgeRequirement } from "@/entities/badge";
+import { badgeRequirementLine } from "@/entities/badge";
 import { toKst } from "@/shared/lib";
 
 import type { AwardHighlight } from "./award-sheet";
@@ -10,7 +10,7 @@ export function toAwardHighlight(badge: HeldBadge): AwardHighlight {
   const source = badge.record.source;
   return {
     ...toAwardItem(badge),
-    line: badgeRequirement({
+    line: badgeRequirementLine({
       ladder: badge.ladder,
       step: badge.step,
       categoryName: badge.categoryName,

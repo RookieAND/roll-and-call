@@ -75,3 +75,15 @@ describe("명강사", () => {
     expect(earned({ hosted, briefingIds: [] }, "lecturer")).toBe(false);
   });
 });
+
+describe("첫 강단", () => {
+  const hosted = days(2);
+  it("설명회를 한 번 열어 인정 세션이 되면 받는다", () => {
+    expect(earned({ hosted, briefingIds: ["g1"] }, "briefing1")).toBe(true);
+  });
+
+  it("설명회가 아니거나 인정 세션이 아니면 받지 않는다", () => {
+    expect(earned({ hosted, briefingIds: [] }, "briefing1")).toBe(false);
+    expect(earned({ hosted: [], briefingIds: ["g1"] }, "briefing1")).toBe(false);
+  });
+});

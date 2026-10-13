@@ -9,7 +9,7 @@ import { drawEvents } from "./draw-events";
 import { faithfulEvents } from "./faithful-events";
 import { freshReviewEvents } from "./fresh-review-events";
 import { heavenHellEvents } from "./heaven-hell-events";
-import { lecturerEvents } from "./lecturer-events";
+import { firstBriefingEvents, lecturerEvents } from "./lecturer-events";
 import { lightningEvents } from "./lightning-events";
 import { owlEvents } from "./owl-events";
 import type { BadgeEvent } from "./reached-tier";
@@ -148,6 +148,8 @@ export function hiddenEvents({
       return collectorKingEvents(facts);
     case HIDDEN_LADDER.faithful:
       return faithfulEvents(facts);
+    case HIDDEN_LADDER.firstBriefing:
+      return firstBriefingEvents(facts);
     case HIDDEN_LADDER.lecturer:
       return lecturerEvents(facts);
     case HIDDEN_LADDER.fresh:

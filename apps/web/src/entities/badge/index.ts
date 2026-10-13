@@ -16,7 +16,7 @@ export { monthListLabel } from "./model/month-list-label";
 export { monthsOfLadder } from "./model/months-of-ladder";
 export { currentMonthStanding } from "./model/current-month-standing";
 export { ATTENDANCE_HINT } from "./model/attendance-hint";
-export { badgeCondition, DESCRIBED_LADDERS } from "./model/badge-condition";
+export { badgeCondition, badgeRequirementLine, DESCRIBED_LADDERS } from "./model/badge-condition";
 export { badgeCounts, type BadgeCounts, type RuleCount } from "./model/badge-counts";
 export { nextStep } from "./model/next-step";
 export { nextBadgeGoal } from "./model/next-badge-goal";

@@ -44,6 +44,7 @@ export const HIDDEN_LADDER = {
   lantern: "sp.lantern",
   doubleCrown: "sp.crown",
   faithful: "sp.faithful",
+  firstBriefing: "sp.briefing1",
   lecturer: "sp.lecturer",
   fresh: "sp.fresh",
   weeks4: "sp.weeks4",
