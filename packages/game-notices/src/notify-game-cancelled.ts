@@ -11,8 +11,9 @@ import {
   syncForumFollowUps,
   DISCORD_COLOR,
 } from "@roll-and-call/discord";
+import { compact } from "es-toolkit";
 
-import { cancelReasonLine, cancelTextKey } from "./cancel-description";
+import { cancelReasonField, cancelTextKey } from "./cancel-description";
 import { gameNoticeEmbed } from "./game-notice-embed";
 import { gameHeadValues, messageHeadInput } from "./message-head-input";
 import { messageText } from "./message-text";
@@ -82,12 +83,14 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
             gmName,
             emoji: "🚫",
             color: DISCORD_COLOR.cancelled,
-            description:
-              (await messageText({
-                serverId: server.id,
-                key: cancelTextKey(game.cancelKind),
-                values: gameHeadValues({ server, game, gmName }),
-              })) + cancelReasonLine({ kind: game.cancelKind, reason: game.cancelReason }),
+            description: await messageText({
+              serverId: server.id,
+              key: cancelTextKey(game.cancelKind),
+              values: gameHeadValues({ server, game, gmName }),
+            }),
+            fields: compact([
+              cancelReasonField({ kind: game.cancelKind, reason: game.cancelReason }),
+            ]),
             linked: false,
           }),
         ],

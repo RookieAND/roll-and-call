@@ -1,7 +1,7 @@
 import { GAME_CANCEL_KIND } from "@roll-and-call/database/games/model";
 import { describe, expect, it } from "vitest";
 
-import { cancelReasonLine, cancelTextKey } from "./cancel-description";
+import { cancelReasonField, cancelTextKey } from "./cancel-description";
 
 describe("cancelTextKey", () => {
   it("취소 종류마다 설명 문장 키가 다르다", () => {
@@ -13,17 +13,27 @@ describe("cancelTextKey", () => {
   });
 });
 
-describe("cancelReasonLine", () => {
-  it("GM 취소만 사유를 둘째 줄에 적는다", () => {
-    expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.gm, reason: "GM 사정" })).toBe(
-      "\n사유: GM 사정",
-    );
+describe("cancelReasonField", () => {
+  it("GM 취소만 사유를 필드로 내보낸다", () => {
+    expect(cancelReasonField({ kind: GAME_CANCEL_KIND.gm, reason: "GM 사정" })).toEqual({
+      name: "📝 사유",
+      value: "GM 사정",
+      inline: false,
+    });
   });
 
-  it("사유가 없거나 운영진·자동 취소면 붙이지 않는다", () => {
-    expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.gm, reason: null })).toBe("");
-    expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.staff, reason: "사유" })).toBe("");
-    expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.auto, reason: "사유" })).toBe("");
-    expect(cancelReasonLine({ kind: GAME_CANCEL_KIND.minPlayersUnmet, reason: "사유" })).toBe("");
+  it("사유가 없거나 운영진·자동 취소면 필드가 없다", () => {
+    expect(cancelReasonField({ kind: GAME_CANCEL_KIND.gm, reason: null })).toBeUndefined();
+    expect(cancelReasonField({ kind: GAME_CANCEL_KIND.gm, reason: "  " })).toBeUndefined();
+    expect(cancelReasonField({ kind: GAME_CANCEL_KIND.staff, reason: "사유" })).toBeUndefined();
+    expect(cancelReasonField({ kind: GAME_CANCEL_KIND.auto, reason: "사유" })).toBeUndefined();
+    expect(
+      cancelReasonField({ kind: GAME_CANCEL_KIND.minPlayersUnmet, reason: "사유" }),
+    ).toBeUndefined();
+  });
+
+  it("값은 1024자를 넘기지 않는다", () => {
+    const field = cancelReasonField({ kind: GAME_CANCEL_KIND.gm, reason: "가".repeat(2000) });
+    expect(field?.value).toHaveLength(1024);
   });
 });
