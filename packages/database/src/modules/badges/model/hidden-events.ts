@@ -157,11 +157,15 @@ export function hiddenEvents({
     case HIDDEN_LADDER.weeks4:
       return weekStreakEvents({ sessions: facts.played, length: 4 });
     case HIDDEN_LADDER.weeks12:
-      return weekStreakEvents({ sessions: [...facts.played, ...facts.hosted], length: 12 });
+      return weekStreakEvents({ sessions: facts.played, length: 12 });
     case HIDDEN_LADDER.weeks26:
-      return weekStreakEvents({ sessions: [...facts.played, ...facts.hosted], length: 26 });
+      return weekStreakEvents({ sessions: facts.played, length: 26 });
     case HIDDEN_LADDER.openDoor:
       return weekStreakEvents({ sessions: facts.hosted, length: 4 });
+    case HIDDEN_LADDER.openDoor12:
+      return weekStreakEvents({ sessions: facts.hosted, length: 12 });
+    case HIDDEN_LADDER.openDoor26:
+      return weekStreakEvents({ sessions: facts.hosted, length: 26 });
     case HIDDEN_LADDER.tenTries:
       return tenTriesEvents(draws);
     case HIDDEN_LADDER.tightrope:

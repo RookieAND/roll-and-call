@@ -98,11 +98,16 @@ describe("개근 사다리(꼬박꼬박·차곡차곡·한결같이)", () => {
   });
 });
 
-describe("열린 대문", () => {
-  it("GM으로 4주 연속 세션을 열어야 하고 PL 참석은 세지 않는다", () => {
+describe("문지방·불씨지기·등대지기 (GM 사다리)", () => {
+  it("GM으로 4·12·26주 연속 세션을 열어야 하고 PL 참석은 세지 않는다", () => {
     expect(earned({ hosted: weekly(run(4)) }, "opendoor")).toBe(true);
     expect(earned({ hosted: weekly(run(3)) }, "opendoor")).toBe(false);
     expect(earned({ played: weekly(run(4)) }, "opendoor")).toBe(false);
+    expect(earned({ hosted: weekly(run(12)) }, "opendoor12")).toBe(true);
+    expect(earned({ hosted: weekly(run(11)) }, "opendoor12")).toBe(false);
+    expect(earned({ hosted: weekly(run(26)) }, "opendoor26")).toBe(true);
+    expect(earned({ hosted: weekly(run(25)) }, "opendoor26")).toBe(false);
+    expect(earned({ played: weekly(run(26)) }, "opendoor26")).toBe(false);
   });
 });
 
