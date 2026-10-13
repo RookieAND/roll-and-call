@@ -13,6 +13,7 @@ import { RANKING_MODE } from "#/modules/servers/model/ranking-mode";
 import { servers, userBadges } from "#/schema";
 
 import { loadMonthlyAppearances } from "./load-monthly-appearances";
+import { notifyRankLeaders } from "./notify-rank-leaders";
 
 // 이달의 GM·PL은 여러 사람을 견주므로 한 사람만 다시 계산할 수 없다. 전체 1위를 다시 정해 모두와 비교한다.
 // 굳은 달(다음 달 2일 00:00 KST, isMonthSettled)만 준다(R5). 굳기 전에 준 행은 회수하고, 이미 준 굳은 달은 건드리지 않는다.
@@ -39,6 +40,14 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
         ),
       ),
   ]);
+  // 알림은 부가 기능이라 실패해도 뱃지 계산을 막지 않는다.
+  if (server?.rankingMode === RANKING_MODE.points) {
+    try {
+      await notifyRankLeaders({ serverId, appearances, now });
+    } catch (error) {
+      console.error("notifyRankLeaders failed", error);
+    }
+  }
   // 굳기 전에 줬다 회수한 사람은 굳은 뒤 다시 정해 준다. 굳은 달에 이미 받은 사람의 행만 건드리지 않는다(공동 1위 중 한 명이 받았다고 나머지를 막지 않는다).
   const isFrozen = (badge: { userId: string; badgeKey: string; revokedAt: Date | null }) =>
     isNull(badge.revokedAt) && isMonthSettled(parseBadgeKey(badge.badgeKey)!.subject!, now);

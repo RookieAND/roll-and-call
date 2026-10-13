@@ -34,6 +34,7 @@ const ACCOUNT_KINDS: readonly NotificationKind[] = [
   NOTIFICATION_KIND.badgeEarned,
   NOTIFICATION_KIND.hiddenTitleEarned,
   NOTIFICATION_KIND.monthlyAward,
+  NOTIFICATION_KIND.rankLeader,
 ];
 
 export function notificationGroup(kind: NotificationKind): NotificationGroup {
