@@ -1,14 +1,17 @@
 "use client";
 
 import { cn, textFieldVariants } from "@roll-and-call/ui";
-import { CharacterCount, Placeholder } from "@tiptap/extensions";
+import { Placeholder } from "@tiptap/extensions";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
-import { LinkChipPreview } from "./link-chip-preview";
-import { toRichTextDoc } from "./rich-text-doc";
+import { chipifyRichTextDoc } from "./chipify-rich-text-doc";
+import { LinkChip } from "./link-chip-node";
+import { RichTextCharacterCount } from "./rich-text-character-count";
+import { toRichTextDoc, type RichTextDoc } from "./rich-text-doc";
 import { RichTextMenu } from "./rich-text-menu";
 import { Spoiler } from "./spoiler";
+import { unchipifyRichTextDoc } from "./unchipify-rich-text-doc";
 
 const EDITOR_CLASS = "rich-text min-h-24 py-125 outline-none";
 
@@ -42,13 +45,14 @@ export function RichTextEditor({
         link: { openOnClick: false, protocols: ["http", "https"] },
       }),
       Spoiler,
-      LinkChipPreview,
-      CharacterCount.configure({ limit }),
+      LinkChip,
+      RichTextCharacterCount.configure({ limit }),
       Placeholder.configure({ placeholder: placeholder ?? "" }),
     ],
-    content: toRichTextDoc(value),
+    content: chipifyRichTextDoc(toRichTextDoc(value)),
     editorProps: { attributes: id ? { class: EDITOR_CLASS, id } : { class: EDITOR_CLASS } },
-    onUpdate: ({ editor }) => onChange(JSON.stringify(editor.getJSON())),
+    onUpdate: ({ editor }) =>
+      onChange(JSON.stringify(unchipifyRichTextDoc(editor.getJSON() as RichTextDoc))),
   });
 
   if (!editor) return null;

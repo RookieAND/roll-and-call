@@ -5,6 +5,7 @@ export type RichTextMark = { type: string; attrs?: { href?: string | null } };
 export type RichTextNodeData = {
   type: string;
   text?: string;
+  attrs?: { href?: string | null };
   marks?: RichTextMark[];
   content?: RichTextNodeData[];
 };
