@@ -10,18 +10,10 @@ interface GameInfoTableProps {
   game: GameDetailData;
   isGm: boolean;
   deadlineBadge: string | null;
-  deadlineWarn: boolean;
   sessionBadge: string | null;
 }
 
-export function GameInfoTable({
-  game,
-  isGm,
-  deadlineBadge,
-  deadlineWarn,
-  sessionBadge,
-}: GameInfoTableProps) {
-  const deadlinePalette = deadlineWarn ? "warning" : "gray";
+export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameInfoTableProps) {
   const playRange = formatPlayRange(game.playMinutesMin, game.playMinutes);
   const rows: { label: string; value: ReactNode }[] = [
     { label: "룰", value: game.rule },
@@ -44,11 +36,7 @@ export function GameInfoTable({
       value: (
         <HStack align="center" gap="100" wrap className="min-w-0">
           <span>{formatDateTime(game.endDate)}</span>
-          {deadlineBadge && (
-            <Badge colorPalette={deadlinePalette} className="tabular-nums">
-              {deadlineBadge}
-            </Badge>
-          )}
+          {deadlineBadge && <Badge className="tabular-nums">{deadlineBadge}</Badge>}
         </HStack>
       ),
     },
