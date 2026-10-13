@@ -43,6 +43,7 @@ export const NOTIFICATION_KIND = {
   badgeEarned: "badge_earned",
   hiddenTitleEarned: "hidden_title_earned",
   monthlyAward: "monthly_award",
+  rankLeader: "rank_leader",
 } as const;
 
 export type NotificationKind = (typeof NOTIFICATION_KIND)[keyof typeof NOTIFICATION_KIND];
@@ -109,6 +110,8 @@ export type NotificationParamsMap = {
   badge_earned: { emoji: string; name: string; criterion: string };
   hidden_title_earned: { emoji: string; name: string; description: string };
   monthly_award: { month: number; role: MonthlyAwardRole };
+  // 포인트제 서버에서 이 달의 기록 1위가 바뀌어 내가 1위가 되었을 때. month는 1~12다.
+  rank_leader: { month: number; role: MonthlyAwardRole };
 };
 
 export type NotificationPayload = {

@@ -55,6 +55,8 @@ export function notificationHref(payload: NotificationPayload): string | null {
     case NOTIFICATION_KIND.hiddenTitleEarned:
     case NOTIFICATION_KIND.monthlyAward:
       return "/me/badges";
+    case NOTIFICATION_KIND.rankLeader:
+      return "/";
     case NOTIFICATION_KIND.sanctionReleased:
     case NOTIFICATION_KIND.staffAdded:
     case NOTIFICATION_KIND.staffRemoved:
