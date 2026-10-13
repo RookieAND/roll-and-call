@@ -43,7 +43,7 @@ export function RichTextLinkChip({ href, provider, label }: RichTextLinkChipProp
       target="_blank"
       rel="noopener noreferrer"
     >
-      <Icon aria-hidden size={14} />
+      <Icon aria-hidden size={16} />
       <span className="rich-text-chip-label">{label || LINK_PROVIDER_LABEL[provider]}</span>
     </a>
   );
