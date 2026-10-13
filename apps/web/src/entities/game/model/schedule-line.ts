@@ -1,6 +1,6 @@
 import { isNull } from "es-toolkit";
 
-import { ddayKst, formatDate, formatDateTime } from "@/shared/lib";
+import { ddayKst, formatDate, formatDateTime, formatDday } from "@/shared/lib";
 import type { Game } from "@/shared/server";
 
 import { isDeadlinePassed } from "./is-deadline-passed";
@@ -36,7 +36,7 @@ export function scheduleLine(game: ScheduleGame, now: Date = new Date()) {
   let deadlineShort: string | null = null;
   if (!deadlinePassed) {
     deadline = days === 0 ? "오늘 마감" : `마감 D-${days}`;
-    deadlineShort = days === 0 ? "오늘" : `D-${days}`;
+    deadlineShort = formatDday(days);
   }
 
   return {
