@@ -322,7 +322,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     emoji: "🪵",
     name: "불씨지기",
     grade: 4,
-    description: "석 달 동안 매주 불씨를 지켰습니다.",
+    description: "석 달 동안 꾸준히 불씨를 지켰습니다.",
   }),
   [HIDDEN_LADDER.openDoor26]: hidden({
     emoji: "🔦",
