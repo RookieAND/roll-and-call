@@ -310,7 +310,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     emoji: "🚪",
     name: "열린 대문",
     grade: 3,
-    description: "한 달 내내 모험의 문을 열어 두었습니다.",
+    description: "한 달 내내 쉬지 않고 세션을 열어 모험가를 맞았습니다.",
   }),
   [HIDDEN_LADDER.tenTries]: hidden({
     emoji: "🪓",
