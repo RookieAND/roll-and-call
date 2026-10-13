@@ -5,6 +5,7 @@ import { CharacterCount, Placeholder } from "@tiptap/extensions";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
+import { LinkChipPreview } from "./link-chip-preview";
 import { toRichTextDoc } from "./rich-text-doc";
 import { RichTextMenu } from "./rich-text-menu";
 import { Spoiler } from "./spoiler";
@@ -41,6 +42,7 @@ export function RichTextEditor({
         link: { openOnClick: false, protocols: ["http", "https"] },
       }),
       Spoiler,
+      LinkChipPreview,
       CharacterCount.configure({ limit }),
       Placeholder.configure({ placeholder: placeholder ?? "" }),
     ],
