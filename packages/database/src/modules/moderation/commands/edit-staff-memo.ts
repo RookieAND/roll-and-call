@@ -4,6 +4,7 @@ import { db } from "#/client";
 import type { Actor } from "#/modules/moderation/model/types";
 import { staffMemos } from "#/schema";
 
+import { compactChanges, scalarChange } from "../model/audit-changes";
 import { lockStaffMemo, type StaffMemoChangeResult } from "./lock-staff-memo";
 import { recordAudit } from "./record-audit";
 
@@ -34,6 +35,10 @@ export async function editStaffMemo({
         target: memo.nickname,
         targetUserId: memo.userId,
         reason: "메모 고침",
+        after: {
+          label: "고침",
+          changes: compactChanges([scalarChange("메모", memo.body, body)]),
+        },
       },
     });
     return { ok: true };

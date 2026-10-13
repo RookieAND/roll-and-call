@@ -18,6 +18,7 @@ export type {
   AvailabilityInterval,
   ProfileLink,
   CertShot,
+  AuditChange,
   AuditState,
   Rulebook,
   RulebookKind,

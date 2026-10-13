@@ -20,9 +20,17 @@ export {
   type ShotKey,
   type ExtraShotKey,
   type PhotoKey,
+  type AuditChange,
   type AuditState,
   type AuditInput,
 } from "./types";
+export {
+  scalarChange,
+  listChange,
+  compactChanges,
+  addedChanges,
+  removedChanges,
+} from "./audit-changes";
 export { pickMemberOngoing, type MemberOngoing } from "./member-ongoing";
 export { ONGOING_ROLE, type OngoingRole } from "./ongoing-role";
 export { kickImpactOf, type KickImpact } from "./kick-impact-of";

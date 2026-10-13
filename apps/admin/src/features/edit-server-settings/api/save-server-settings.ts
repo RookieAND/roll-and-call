@@ -7,10 +7,12 @@ import { parseActionInput } from "@/shared/lib";
 import { getCurrentServer, requireOwner, updateServerSettings } from "@/shared/server";
 
 import { normalizeInviteUrl } from "../model/normalize-invite-url";
+import { previousChannelLabel } from "../model/previous-channel-label";
 import { SETTING_FIELDS, type SettingIds } from "../model/setting-field";
 import { settingIdsSchema } from "../model/setting-ids-schema";
 import { settingsAudit } from "../model/settings-audit";
 import { checkServerSettings, type SettingChecks } from "./check-server-settings";
+import { loadGuildSnapshot } from "./load-guild-snapshot";
 
 interface SaveServerSettingsInput {
   // 한 화면에서 한쪽만 고치므로 안 넘긴 쪽은 저장된 값 그대로 둔다.
@@ -53,14 +55,24 @@ export async function saveServerSettings(
   );
   if (Object.values(checks).some((check) => check?.status === "fail")) return { ok: false, checks };
 
+  const needsGuild = changedFields.some((field) => server[field.key]);
+  const guild = needsGuild ? await loadGuildSnapshot(server.discordGuildId) : null;
   const audit = settingsAudit({
     serverName: server.name,
     fields: changedFields.map((field) => {
       const check = checks[field.key];
       const display = check?.status === "ok" ? `#${check.name}` : null;
-      return { label: field.auditLabel, display };
+      return {
+        label: field.auditLabel,
+        display,
+        previous: previousChannelLabel({ id: server[field.key], guild }),
+      };
     }),
-    inviteChanged: invite.url !== server.inviteUrl,
+    invite: {
+      changed: invite.url !== server.inviteUrl,
+      before: server.inviteUrl,
+      after: invite.url,
+    },
   });
   if (!audit) return { ok: true };
 

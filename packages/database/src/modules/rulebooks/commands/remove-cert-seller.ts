@@ -25,7 +25,13 @@ export async function removeCertSeller({
       executor: tx,
       serverId,
       actor,
-      entry: { action: "판매처 빼기", target: removed.name, reason: "전자책 판매처 목록에서 뺌" },
+      entry: {
+        action: "판매처 빼기",
+        target: removed.name,
+        reason: "전자책 판매처 목록에서 뺌",
+        before: { label: "목록에 있음" },
+        after: { label: "목록에 없음" },
+      },
     });
   });
 }

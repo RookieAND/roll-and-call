@@ -1,3 +1,5 @@
+import type { AuditState } from "#/schema/moderation";
+
 import type { AuditAction } from "./audit-actions";
 
 export type StaffRole = "owner" | "staff";
@@ -24,10 +26,7 @@ export type ShotKey = "front" | "back";
 export type ExtraShotKey = "extra1" | "extra2" | "extra3";
 export type PhotoKey = ShotKey | ExtraShotKey;
 
-export interface AuditState {
-  label: string;
-  sub?: string;
-}
+export type { AuditChange, AuditState } from "#/schema/moderation";
 
 export interface AuditInput {
   action: AuditAction;

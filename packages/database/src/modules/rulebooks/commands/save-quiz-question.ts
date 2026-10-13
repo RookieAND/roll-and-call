@@ -3,6 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { quizChanges } from "#/modules/rulebooks/model/quiz-audit-changes";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
 import { rulebookQuizQuestions, rulebooks } from "#/schema";
 
@@ -58,10 +59,10 @@ export async function saveQuizQuestion({
         action: id ? "퀴즈 문항 수정" : "퀴즈 문항 추가",
         target: rulebookLabel(rulebook),
         reason: input.question,
-        before: before
-          ? { label: before.active ? "사용 중" : "비활성", sub: before.question }
-          : undefined,
-        after: { label: input.active ? "사용 중" : "비활성", sub: input.question },
+        after: {
+          label: id ? "수정됨" : "추가됨",
+          changes: quizChanges(before, input),
+        },
       },
     });
   });

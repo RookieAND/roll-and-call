@@ -12,6 +12,7 @@ import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-ki
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, sanctions, servers, type Game } from "#/schema";
 
+import { sanctionStateSub } from "../model/sanction-state-label";
 import { applyOngoingChoices, type OngoingChoice } from "./apply-ongoing-choices";
 import { type ModerationConflict } from "./moderation-conflict";
 import { recordAudit } from "./record-audit";
@@ -118,6 +119,8 @@ export async function applySanction({
         targetUserId: userId,
         reason,
         staffMemo: input.staffMemo || undefined,
+        before: { label: "정상" },
+        after: { label: "제재 중", sub: sanctionStateSub(until) },
         related: [
           ...(cancelledGames.length > 0 ? [`취소된 구인 ${cancelledGames.length}개`] : []),
           ...(leftGameIds.length > 0 ? [`참여에서 뺀 활동 ${leftGameIds.length}건`] : []),

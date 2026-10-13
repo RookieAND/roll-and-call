@@ -1,11 +1,12 @@
 import { and, eq, ne } from "drizzle-orm";
 
 import { db } from "#/client";
-import { certPolicyLabel } from "#/modules/certifications/model/cert-policy-label";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { rulebookChanges } from "#/modules/rulebooks/model/rulebook-audit-changes";
 import type { RulebookFields } from "#/modules/rulebooks/model/rulebook-fields";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
+import { describeRulebook } from "#/modules/rulebooks/queries/describe-rulebook";
 import { relinkGames } from "#/modules/rulebooks/queries/relink-games";
 import { rulebooks } from "#/schema";
 
@@ -46,6 +47,7 @@ export async function updateRulebook({
         ),
       );
     if (duplicate) return { ok: false, duplicate: true };
+    const before = await describeRulebook({ executor: tx, serverId, id });
     const values = await toRulebookValues({ executor: tx, serverId, fields, selfId: id });
     await tx.update(rulebooks).set(values).where(eq(rulebooks.id, id));
     const pointsHere = and(eq(rulebooks.serverId, serverId), eq(rulebooks.supersedesId, id));
@@ -59,6 +61,7 @@ export async function updateRulebook({
       );
     await removeEmptyCategories({ executor: tx, serverId });
     await relinkGames({ executor: tx, serverId });
+    const changes = rulebookChanges(before, await describeRulebook({ executor: tx, serverId, id }));
     const label = rulebookLabel(fields);
     await recordAudit({
       executor: tx,
@@ -68,8 +71,7 @@ export async function updateRulebook({
         action: "룰북 수정",
         target: label,
         reason,
-        before: { label: rulebookLabel(rulebook), sub: certPolicyLabel(rulebook.certRequired) },
-        after: { label, sub: certPolicyLabel(fields.certRequired) },
+        after: changes.length > 0 ? { label: "수정됨", changes } : undefined,
       },
     });
     return { ok: true };

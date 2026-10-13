@@ -22,7 +22,18 @@ export const staffRole = pgEnum("staff_role", ["owner", "staff"]);
 export const auditActorKind = pgEnum("audit_actor_kind", ["staff", "platform", "system"]);
 
 // 추가 정보(before/after/related)는 활동 기록 상세에만 쓰므로 jsonb 한 칸에 담는다.
-export type AuditState = { label: string; sub?: string };
+// 바뀐 칸 하나. before가 없으면 추가, after가 없으면 삭제, 둘 다 있으면 변경이다.
+// 다른 이름처럼 목록인 칸은 늘거나 줄어든 항목만 added·removed에 담는다.
+export type AuditChange = {
+  field: string;
+  before?: string;
+  after?: string;
+  added?: string[];
+  removed?: string[];
+};
+
+// changes는 값이 여러 칸에 걸쳐 바뀌는 조치(룰북 수정 등)가 상태 한 줄로 담지 못하는 내용을 남길 때 쓴다.
+export type AuditState = { label: string; sub?: string; changes?: AuditChange[] };
 
 // 해제하면 지우지 않고 released_at을 채운다. until이 null이면 무기한이다.
 export const sanctions = pgTable(

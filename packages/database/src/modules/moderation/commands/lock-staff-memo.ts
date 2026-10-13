@@ -24,7 +24,7 @@ export async function lockStaffMemo({
   owner: boolean;
 }) {
   const [memo] = await transaction
-    .select({ userId: staffMemos.userId, authorId: staffMemos.authorId })
+    .select({ userId: staffMemos.userId, authorId: staffMemos.authorId, body: staffMemos.body })
     .from(staffMemos)
     .where(and(eq(staffMemos.id, memoId), eq(staffMemos.serverId, serverId)))
     .for("update");
@@ -36,5 +36,10 @@ export async function lockStaffMemo({
     .select({ nickname: memberNicknameSql(serverId) })
     .from(profiles)
     .where(eq(profiles.id, memo.userId));
-  return { ok: true as const, userId: memo.userId, nickname: user?.nickname ?? "" };
+  return {
+    ok: true as const,
+    userId: memo.userId,
+    body: memo.body,
+    nickname: user?.nickname ?? "",
+  };
 }

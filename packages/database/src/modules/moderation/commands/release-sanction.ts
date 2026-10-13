@@ -10,6 +10,7 @@ import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-ki
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, sanctions } from "#/schema";
 
+import { sanctionStateSub } from "../model/sanction-state-label";
 import { recordAudit } from "./record-audit";
 
 export type ReleaseResult = { ok: true } | { ok: false; alreadyReleased: true };
@@ -42,8 +43,9 @@ export async function releaseSanction({
           or(isNull(sanctions.until), gt(sanctions.until, sql`now()`)),
         ),
       )
-      .returning({ id: sanctions.id });
-    if (released.length === 0) return { ok: false, alreadyReleased: true };
+      .returning({ id: sanctions.id, until: sanctions.until });
+    const [releasedSanction] = released;
+    if (!releasedSanction) return { ok: false, alreadyReleased: true };
     // 해제 사유는 활동 기록에만 남기고 알림에는 넣지 않는다(D86, R10).
     await createNotifications({
       executor: tx,
@@ -61,6 +63,8 @@ export async function releaseSanction({
         targetUserId: userId,
         reason: reasonLabel({ ...input.reason, reasons: USER_ACTION_REASON }),
         staffMemo: input.staffMemo || undefined,
+        before: { label: "제재 중", sub: sanctionStateSub(releasedSanction.until) },
+        after: { label: "해제" },
       },
     });
     return { ok: true };

@@ -2,6 +2,7 @@ import { and, eq, inArray } from "drizzle-orm";
 
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import { compactChanges, scalarChange } from "#/modules/moderation/model/audit-changes";
 import type { Actor } from "#/modules/moderation/model/types";
 import { serverMessageTexts } from "#/schema";
 
@@ -13,6 +14,10 @@ import {
 } from "../model/review-template";
 
 const PARTS = Object.keys(REVIEW_TEMPLATE_KEYS) as ReviewTemplatePart[];
+const PART_LABEL: Record<ReviewTemplatePart, string> = {
+  title: "후기 제목 양식",
+  body: "후기 본문 양식",
+};
 
 // expectedUpdatedAt은 편집을 시작할 때 읽은 값(두 양식 중 늦은 저장 시각)이다. 그사이 다른 운영진이 저장했으면 conflict로 돌려준다.
 // 비우거나 기본 양식과 같게 저장하면 행을 지워 기본으로 되돌린다.
@@ -33,6 +38,8 @@ export async function saveReviewTemplate({
   return db.transaction(async (tx) => {
     const current = await tx
       .select({
+        textKey: serverMessageTexts.textKey,
+        body: serverMessageTexts.body,
         updatedAt: serverMessageTexts.updatedAt,
         updatedBy: serverMessageTexts.updatedBy,
       })
@@ -90,6 +97,19 @@ export async function saveReviewTemplate({
           changed.length > 0
             ? `후기 ${changed.map((part) => (part === "title" ? "제목" : "본문")).join("·")} 양식을 변경`
             : "후기 양식을 기본으로 되돌림",
+        after: {
+          label: "변경됨",
+          changes: compactChanges(
+            PARTS.map((part) =>
+              scalarChange(
+                PART_LABEL[part],
+                current.find((row) => row.textKey === REVIEW_TEMPLATE_KEYS[part])?.body ??
+                  defaultReviewTemplate(part),
+                next[part] || defaultReviewTemplate(part),
+              ),
+            ),
+          ),
+        },
       },
     });
     return { ok: true } as const;

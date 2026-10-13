@@ -3,8 +3,14 @@
 import { revalidatePath } from "next/cache";
 
 import { parseActionInput } from "@/shared/lib";
-import { getCurrentServer, requireOwner, saveForumTags } from "@/shared/server";
+import {
+  getCurrentServer,
+  listRulebookCategories,
+  requireOwner,
+  saveForumTags,
+} from "@/shared/server";
 
+import { forumTagChanges } from "../model/forum-tag-changes";
 import type { ForumTagForm } from "../model/forum-tag-form";
 import { forumTagFormSchema } from "../model/forum-tag-form-schema";
 import { toForumTagMap } from "../model/to-forum-tag-map";
@@ -34,11 +40,18 @@ export async function saveForumTagsAction(rawForm: ForumTagForm): Promise<SaveFo
   const known = options.tags.map((tag) => tag.id);
   if (chosen.some((id) => id && !known.includes(id))) return { ok: false };
 
+  const categories = await listRulebookCategories({ serverId: server.id });
   await saveForumTags({
     serverId: server.id,
     forumTags: map,
     actor,
     reason: "모집 포럼 태그 연결 변경",
+    changes: forumTagChanges({
+      before: server.forumTags,
+      after: map,
+      categories,
+      tags: options.tags,
+    }),
   });
   revalidatePath("/", "layout");
   return { ok: true };

@@ -1,9 +1,10 @@
 import { db } from "#/client";
-import { certPolicyLabel } from "#/modules/certifications/model/cert-policy-label";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { rulebookChanges } from "#/modules/rulebooks/model/rulebook-audit-changes";
 import type { RulebookFields } from "#/modules/rulebooks/model/rulebook-fields";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
+import { describeRulebook } from "#/modules/rulebooks/queries/describe-rulebook";
 import { relinkGames } from "#/modules/rulebooks/queries/relink-games";
 import { rulebooks } from "#/schema";
 
@@ -39,7 +40,13 @@ export async function addRulebook({
         action: "룰북 추가",
         target: rulebookLabel(fields),
         reason,
-        after: { label: certPolicyLabel(fields.certRequired) },
+        after: {
+          label: "추가됨",
+          changes: rulebookChanges(
+            null,
+            await describeRulebook({ executor: tx, serverId, id: row.id }),
+          ),
+        },
       },
     });
     return { ok: true, id: row.id };

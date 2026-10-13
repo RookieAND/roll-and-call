@@ -16,6 +16,7 @@ import type { PostStatus } from "./post-status";
 
 export type {
   Actor,
+  AuditChange,
   AuditState,
   PhotoKey,
   Sanction,

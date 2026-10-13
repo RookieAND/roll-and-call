@@ -4,6 +4,7 @@ import { db } from "#/client";
 import type { Actor } from "#/modules/moderation/model/types";
 import { staffMemos } from "#/schema";
 
+import { removedChanges } from "../model/audit-changes";
 import { lockStaffMemo, type StaffMemoChangeResult } from "./lock-staff-memo";
 import { recordAudit } from "./record-audit";
 
@@ -32,6 +33,7 @@ export async function deleteStaffMemo({
         target: memo.nickname,
         targetUserId: memo.userId,
         reason: "메모 지움",
+        after: { label: "지움", changes: removedChanges([["메모", memo.body]]) },
       },
     });
     return { ok: true };

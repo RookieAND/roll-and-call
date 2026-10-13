@@ -2,6 +2,7 @@ import { and, eq, sql } from "drizzle-orm";
 
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import { compactChanges, listChange } from "#/modules/moderation/model/audit-changes";
 import type { Actor } from "#/modules/moderation/model/types";
 import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
@@ -58,7 +59,14 @@ export async function linkRulebookRequest({
         action: "룰북 연결",
         target: `${claim.label} · ${label}`,
         reason: `${claim.requester}의 추가 요청을 기존 룰북으로 처리`,
-        related: aliasAdded ? [`「${claim.label}」을 다른 이름에 추가`] : undefined,
+        after: aliasAdded
+          ? {
+              label: "연결됨",
+              changes: compactChanges([
+                listChange("다른 이름", rulebook.aliases, [...rulebook.aliases, claim.label]),
+              ]),
+            }
+          : undefined,
       },
     });
     return { ok: true };

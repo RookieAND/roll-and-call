@@ -8,6 +8,7 @@ import { AdminHeader, FactRows, FactSub, IconTile, Tag } from "@/shared/ui";
 
 import { actionIcon } from "../model/action-icon";
 import { USER_VISIBLE_REASON_ACTIONS } from "../model/user-visible-reason-actions";
+import { ChangesSection } from "./changes-section";
 import { EntryMoreMenu } from "./entry-more-menu";
 import { EntrySection } from "./entry-section";
 import { StateBox } from "./state-box";
@@ -25,6 +26,7 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
   const afterTone = tone === "danger" ? "danger" : "normal";
   const sameTargetHref = auditLogHref(entry.subject.sameTarget);
   const related = entry.related;
+  const changes = entry.after?.changes ?? [];
   const daysLeft = retentionDaysLeft(entry);
   const staffChannelLabel =
     entry.staffChannelLine === STAFF_CHANNEL_RELATED.posted ? "글 올림" : "올리지 않음";
@@ -80,6 +82,7 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
           </Grid>
         </section>
         <div className="divide-y divide-(--rc-color-border-subtle) rounded-600 border border-gray-200 bg-surface">
+          {changes.length > 0 ? <ChangesSection changes={changes} /> : null}
           {entry.before && entry.after ? (
             <EntrySection title="조치 전후">
               <HStack align="center" gap="125">

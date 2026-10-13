@@ -26,7 +26,13 @@ export async function addCertSeller({
       executor: tx,
       serverId,
       actor,
-      entry: { action: "판매처 추가", target: name, reason: "전자책 판매처 목록에 추가" },
+      entry: {
+        action: "판매처 추가",
+        target: name,
+        reason: "전자책 판매처 목록에 추가",
+        before: { label: "목록에 없음" },
+        after: { label: "목록에 있음" },
+      },
     });
     return { ok: true };
   });

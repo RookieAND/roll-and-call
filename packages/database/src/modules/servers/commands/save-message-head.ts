@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import { compactChanges, scalarChange } from "#/modules/moderation/model/audit-changes";
 import type { Actor } from "#/modules/moderation/model/types";
 import { serverMessageHeads } from "#/schema";
 
@@ -26,7 +27,11 @@ export async function saveMessageHead({
 }): Promise<{ ok: true } | { ok: false; conflict: { by: string | null; at: Date | null } }> {
   return db.transaction(async (tx) => {
     const [current] = await tx
-      .select({ updatedAt: serverMessageHeads.updatedAt, updatedBy: serverMessageHeads.updatedBy })
+      .select({
+        headLine: serverMessageHeads.headLine,
+        updatedAt: serverMessageHeads.updatedAt,
+        updatedBy: serverMessageHeads.updatedBy,
+      })
       .from(serverMessageHeads)
       .where(and(eq(serverMessageHeads.serverId, serverId), eq(serverMessageHeads.caseKey, key)))
       .for("update");
@@ -58,6 +63,12 @@ export async function saveMessageHead({
         action: "디스코드 메시지 변경",
         target: label,
         reason: headLine ? `머리 줄을 「${headLine}」로 변경` : "머리 줄을 비움",
+        after: {
+          label: "변경됨",
+          changes: compactChanges([
+            scalarChange("머리 줄", current?.headLine ?? defaultMessageHead(key), headLine),
+          ]),
+        },
       },
     });
     return { ok: true } as const;

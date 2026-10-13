@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import { compactChanges, scalarChange } from "#/modules/moderation/model/audit-changes";
 import type { Actor } from "#/modules/moderation/model/types";
 import { serverMessageTexts } from "#/schema";
 
@@ -27,6 +28,7 @@ export async function saveMessageText({
   return db.transaction(async (tx) => {
     const [current] = await tx
       .select({
+        body: serverMessageTexts.body,
         updatedAt: serverMessageTexts.updatedAt,
         updatedBy: serverMessageTexts.updatedBy,
       })
@@ -64,6 +66,16 @@ export async function saveMessageText({
           body && body !== defaultMessageText(key)
             ? `설명 문장을 「${body}」로 변경`
             : "설명 문장을 기본으로 되돌림",
+        after: {
+          label: "변경됨",
+          changes: compactChanges([
+            scalarChange(
+              "설명 문장",
+              current?.body ?? defaultMessageText(key),
+              body || defaultMessageText(key),
+            ),
+          ]),
+        },
       },
     });
     return { ok: true } as const;

@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor } from "#/modules/moderation/model/types";
+import type { Actor, AuditChange } from "#/modules/moderation/model/types";
 import { servers } from "#/schema";
 
 export interface ServerSettings {
@@ -24,7 +24,7 @@ export async function updateServerSettings({
   serverId: string;
   settings: ServerSettings;
   actor: Actor;
-  audit: { target: string; reason: string };
+  audit: { target: string; reason: string; changes: AuditChange[] };
 }) {
   await db.transaction(async (tx) => {
     await tx.update(servers).set(settings).where(eq(servers.id, serverId));
@@ -32,7 +32,12 @@ export async function updateServerSettings({
       executor: tx,
       serverId,
       actor,
-      entry: { action: "서버 설정 변경", target: audit.target, reason: audit.reason },
+      entry: {
+        action: "서버 설정 변경",
+        target: audit.target,
+        reason: audit.reason,
+        after: { label: "변경됨", changes: audit.changes },
+      },
     });
   });
 }
