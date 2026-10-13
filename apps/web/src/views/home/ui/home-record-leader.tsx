@@ -1,7 +1,7 @@
 import { AvatarGroup, cn, HStack, Text } from "@roll-and-call/ui";
 import { Crown } from "lucide-react";
 
-import { MemberTitle } from "@/entities/badge";
+import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
 import type { RecordPerson } from "../model/rank-people";

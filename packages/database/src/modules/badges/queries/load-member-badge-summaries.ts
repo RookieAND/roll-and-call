@@ -1,9 +1,9 @@
 import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 
 import { db } from "#/client";
-import { rulebookCategories, serverMembers, userBadges } from "#/schema";
+import { games, rulebookCategories, serverMembers, userBadges } from "#/schema";
 
-// 명단·순위처럼 여러 사람의 대표 칭호를 한 번에 보여 줄 때 쓴다. 한 사람 몫의 뱃지 기록은 loadUserBadges와 같은 모양이다.
+// 명단·순위처럼 여러 사람의 대표 칭호를 한 번에 보여 줄 때 쓴다. 한 사람 몫의 뱃지 기록은 loadUserBadges와 같은 모양이다(칭호를 눌러 여는 상세 시트가 받은 날·근거 세션을 쓴다).
 export async function loadMemberBadgeSummaries({
   serverId,
   userIds,
@@ -26,11 +26,18 @@ export async function loadMemberBadgeSummaries({
         userId: userBadges.userId,
         badgeKey: userBadges.badgeKey,
         tier: userBadges.tier,
+        earnedAt: userBadges.earnedAt,
+        notifiedAt: userBadges.notifiedAt,
         categoryName: sql<
           string | null
         >`coalesce(${rulebookCategories.alias}, ${rulebookCategories.name})`,
+        sourceGameId: userBadges.sourceGameId,
+        sourceTitle: games.title,
+        sourceStartsAt: games.confirmedAt,
+        sourceHiddenAt: games.hiddenAt,
       })
       .from(userBadges)
+      .leftJoin(games, and(eq(games.serverId, serverId), eq(games.id, userBadges.sourceGameId)))
       .leftJoin(
         rulebookCategories,
         sql`${rulebookCategories.id}::text = split_part(${userBadges.badgeKey}, '.', 3)`,
@@ -49,7 +56,13 @@ export async function loadMemberBadgeSummaries({
     ...member,
     records: records
       .filter((record) => record.userId === member.userId)
-      .map(({ badgeKey, tier, categoryName }) => ({ badgeKey, tier, categoryName })),
+      .map(({ userId, sourceGameId, sourceTitle, sourceStartsAt, sourceHiddenAt, ...record }) => ({
+        ...record,
+        source:
+          sourceGameId && sourceTitle && sourceStartsAt && !sourceHiddenAt
+            ? { gameId: sourceGameId, title: sourceTitle, startsAt: sourceStartsAt }
+            : null,
+      })),
   }));
 }
 

@@ -1,30 +1,28 @@
 import "server-only";
-
 import { getMemberBadgeSummaries } from "@/shared/server";
 
-import { pickRepresentativeTitle } from "./model/pick-representative-title";
-import type { RepresentativeTitle } from "./model/representative-title";
+import { pickRepresentativeBadge } from "./model/pick-representative-badge";
 
-interface LoadRepresentativeTitlesParams {
+interface LoadRepresentativeBadgesParams {
   serverId: string;
   userIds: string[];
   now: Date;
 }
 
-export async function loadRepresentativeTitles({
+// 사람마다 대표 뱃지 1번 칸과 그 사람의 뱃지 기록 전체(상세 시트가 이달의 뱃지 달 목록에 쓴다).
+export async function loadRepresentativeBadges({
   serverId,
   userIds,
   now,
-}: LoadRepresentativeTitlesParams): Promise<Record<string, RepresentativeTitle>> {
+}: LoadRepresentativeBadgesParams) {
   const summaries = await getMemberBadgeSummaries({ serverId, userIds: [...new Set(userIds)] });
-  const entries = summaries.flatMap((summary) => {
-    const title = pickRepresentativeTitle({
+  return summaries.flatMap((summary) => {
+    const badge = pickRepresentativeBadge({
       featuredKeys: summary.featuredBadges,
       showBadges: summary.showBadges,
       records: summary.records,
       now,
     });
-    return title ? [[summary.userId, title] as const] : [];
+    return badge ? [{ userId: summary.userId, badge, records: summary.records }] : [];
   });
-  return Object.fromEntries(entries);
 }
