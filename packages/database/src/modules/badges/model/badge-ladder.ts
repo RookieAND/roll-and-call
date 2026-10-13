@@ -45,6 +45,15 @@ export const HIDDEN_LADDER = {
   doubleCrown: "sp.crown",
   faithful: "sp.faithful",
   lecturer: "sp.lecturer",
+  fresh: "sp.fresh",
+  weeks4: "sp.weeks4",
+  weeks12: "sp.weeks12",
+  weeks26: "sp.weeks26",
+  openDoor: "sp.opendoor",
+  tenTries: "sp.tentries",
+  tightrope: "sp.tightrope",
+  heavenHell: "sp.heavenhell",
+  hallOfFame: "sp.hall",
 } as const;
 export type HiddenLadderKey = (typeof HIDDEN_LADDER)[keyof typeof HIDDEN_LADDER];
 

@@ -28,6 +28,7 @@ export { countsForRanking } from "./counts-for-ranking";
 export { diffBadges, type BadgeWrite } from "./diff-badges";
 export { isHiddenLadder } from "./is-hidden-ladder";
 export { doubleCrownBadges } from "./double-crown-badges";
+export { hallOfFameBadges } from "./hall-of-fame-badges";
 export { isMonthSettled } from "./is-month-settled";
 export { isRecognizedSession } from "./is-recognized-session";
 export { kstMonthKey } from "./kst-month-key";

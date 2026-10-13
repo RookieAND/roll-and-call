@@ -31,6 +31,7 @@ const NOTIFIED_GRANTED_LADDERS = new Set<string>([
   BADGE_LADDER.apprentice,
   BADGE_LADDER.lantern,
   BADGE_LADDER.doubleCrown,
+  BADGE_LADDER.hallOfFame,
 ]);
 
 // 알림 줄은 알린 적 없는 단계에만 만든다(출시 소급분 제외). 이달의 뱃지는 지난달 것만 monthly_award로 알린다.

@@ -1,4 +1,4 @@
-import { and, eq, like, or } from "drizzle-orm";
+import { and, eq, inArray, like, or } from "drizzle-orm";
 import { groupBy, isNull, uniq } from "es-toolkit";
 
 import { db } from "#/client";
@@ -6,6 +6,7 @@ import { applyBadgeWrites } from "#/modules/badges/commands/apply-badge-writes";
 import { BADGE_LADDER, HIDDEN_LADDER } from "#/modules/badges/model/badge-ladder";
 import { diffBadges } from "#/modules/badges/model/diff-badges";
 import { doubleCrownBadges } from "#/modules/badges/model/double-crown-badges";
+import { hallOfFameBadges } from "#/modules/badges/model/hall-of-fame-badges";
 import { isMonthSettled } from "#/modules/badges/model/is-month-settled";
 import { monthlyWinners } from "#/modules/badges/model/monthly-winners";
 import { parseBadgeKey } from "#/modules/badges/model/parse-badge-key";
@@ -35,7 +36,7 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
           or(
             like(userBadges.badgeKey, `${BADGE_LADDER.gmMonthly}.%`),
             like(userBadges.badgeKey, `${BADGE_LADDER.playerMonthly}.%`),
-            eq(userBadges.badgeKey, HIDDEN_LADDER.doubleCrown),
+            inArray(userBadges.badgeKey, [HIDDEN_LADDER.doubleCrown, HIDDEN_LADDER.hallOfFame]),
           ),
         ),
       ),
@@ -54,7 +55,10 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
   // 굳기 전에 줬다 회수한 사람은 굳은 뒤 다시 정해 준다. 굳은 달에 이미 받은 사람의 행만 건드리지 않는다(공동 1위 중 한 명이 받았다고 나머지를 막지 않는다).
   const isFrozen = (badge: { userId: string; badgeKey: string; revokedAt: Date | null }) =>
     isNull(badge.revokedAt) && isMonthSettled(parseBadgeKey(badge.badgeKey)!.subject!, now);
-  const monthlyStored = stored.filter((badge) => badge.badgeKey !== HIDDEN_LADDER.doubleCrown);
+  const monthlyStored = stored.filter(
+    (badge) =>
+      badge.badgeKey !== HIDDEN_LADDER.doubleCrown && badge.badgeKey !== HIDDEN_LADDER.hallOfFame,
+  );
   const frozenKeys = new Set(
     monthlyStored.filter(isFrozen).map((badge) => `${badge.userId}|${badge.badgeKey}`),
   );
@@ -74,8 +78,15 @@ export async function syncMonthlyBadges({ serverId, now }: { serverId: string; n
   const crowns = doubleCrownBadges(settledWinners).filter(
     (crown) => !crownHolders.has(crown.userId),
   );
+  // 명예의 전당은 굳은 달의 이달의 GM·PL을 통틀어 세 번 받았을 때 한 번만 주고, 받은 뒤에는 회수하지 않는다.
+  const hallHolders = new Set(
+    stored
+      .filter((badge) => badge.badgeKey === HIDDEN_LADDER.hallOfFame && isNull(badge.revokedAt))
+      .map((badge) => badge.userId),
+  );
+  const halls = hallOfFameBadges(settledWinners).filter((hall) => !hallHolders.has(hall.userId));
   const open = monthlyStored.filter((badge) => !isFrozen(badge));
-  const desiredByUser = groupBy([...winners, ...crowns], (winner) => winner.userId);
+  const desiredByUser = groupBy([...winners, ...crowns, ...halls], (winner) => winner.userId);
   const storedByUser = groupBy(open, (badge) => badge.userId);
   const userIds = uniq([...Object.keys(desiredByUser), ...Object.keys(storedByUser)]);
 

@@ -7,6 +7,8 @@ import { collectorKingEvents } from "./collector-king-events";
 import { dayStreakEvents } from "./day-streak-events";
 import { drawEvents } from "./draw-events";
 import { faithfulEvents } from "./faithful-events";
+import { freshReviewEvents } from "./fresh-review-events";
+import { heavenHellEvents } from "./heaven-hell-events";
 import { lecturerEvents } from "./lecturer-events";
 import { lightningEvents } from "./lightning-events";
 import { owlEvents } from "./owl-events";
@@ -14,7 +16,10 @@ import type { BadgeEvent } from "./reached-tier";
 import { sameDayEvents } from "./same-day-events";
 import { sizeEvents } from "./size-events";
 import { STREAK_OUTCOME, streakEvents } from "./streak-events";
+import { tenTriesEvents } from "./ten-tries-events";
+import { tightropeEvents } from "./tightrope-events";
 import { timeSlotEvents } from "./time-slot-events";
+import { weekStreakEvents } from "./week-streak-events";
 import { weekdayEvents } from "./weekday-events";
 
 const EXPEDITION_MIN_ATTENDED = 6;
@@ -145,8 +150,25 @@ export function hiddenEvents({
       return faithfulEvents(facts);
     case HIDDEN_LADDER.lecturer:
       return lecturerEvents(facts);
+    case HIDDEN_LADDER.fresh:
+      return freshReviewEvents(facts);
+    case HIDDEN_LADDER.weeks4:
+      return weekStreakEvents({ sessions: [...facts.played, ...facts.hosted], length: 4 });
+    case HIDDEN_LADDER.weeks12:
+      return weekStreakEvents({ sessions: [...facts.played, ...facts.hosted], length: 12 });
+    case HIDDEN_LADDER.weeks26:
+      return weekStreakEvents({ sessions: [...facts.played, ...facts.hosted], length: 26 });
+    case HIDDEN_LADDER.openDoor:
+      return weekStreakEvents({ sessions: facts.hosted, length: 4 });
+    case HIDDEN_LADDER.tenTries:
+      return tenTriesEvents(draws);
+    case HIDDEN_LADDER.tightrope:
+      return tightropeEvents(draws);
+    case HIDDEN_LADDER.heavenHell:
+      return heavenHellEvents(draws);
     case HIDDEN_LADDER.lantern:
     case HIDDEN_LADDER.doubleCrown:
+    case HIDDEN_LADDER.hallOfFame:
       return [];
     case HIDDEN_LADDER.boxOffice:
       return facts.hostedDraws
