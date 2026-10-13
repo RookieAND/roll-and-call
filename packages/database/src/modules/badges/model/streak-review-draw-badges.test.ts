@@ -75,6 +75,17 @@ describe("개근 사다리(꼬박꼬박·차곡차곡·한결같이)", () => {
     expect(earned({ hosted: weekly(run(4)) }, "weeks4")).toBe(false);
   });
 
+  it("12·26주는 연속이 아니어도 최근 16·32주 중 12·26주면 받는다", () => {
+    const withGap = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12];
+    expect(earned({ played: weekly(withGap) }, "weeks12")).toBe(true);
+    expect(earned({ played: weekly(withGap.slice(0, 11)) }, "weeks12")).toBe(false);
+    // 11주는 16주 창 안에 들어도 모자라고, 떨어진 20주는 창을 공유하지 못한다.
+    expect(earned({ played: weekly([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20]) }, "weeks12")).toBe(false);
+    const halfYear = Array.from({ length: 32 }, (_, index) => index).filter((index) => index % 5 !== 4);
+    expect(earned({ played: weekly(halfYear) }, "weeks26")).toBe(true);
+    expect(earned({ played: weekly(halfYear.slice(0, 25)) }, "weeks26")).toBe(false);
+  });
+
   it("한 주에 여러 세션이 있어도 1주로 센다", () => {
     const doubled = weekly(run(3)).flatMap((item, index) => [
       item,
@@ -105,6 +116,7 @@ describe("문지방·불씨지기·등대지기 (GM 사다리)", () => {
     expect(earned({ played: weekly(run(4)) }, "opendoor")).toBe(false);
     expect(earned({ hosted: weekly(run(12)) }, "opendoor12")).toBe(true);
     expect(earned({ hosted: weekly(run(11)) }, "opendoor12")).toBe(false);
+    expect(earned({ hosted: weekly([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12]) }, "opendoor12")).toBe(true);
     expect(earned({ hosted: weekly(run(26)) }, "opendoor26")).toBe(true);
     expect(earned({ hosted: weekly(run(25)) }, "opendoor26")).toBe(false);
     expect(earned({ played: weekly(run(26)) }, "opendoor26")).toBe(false);

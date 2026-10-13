@@ -39,3 +39,32 @@ export function weekStreakEvents({
   }
   return [];
 }
+
+// 최근 window주 중 need주 이상 인정 세션이 있으면 받는다. 중간에 쉰 주가 있어도 된다.
+// 사건은 need번째 참석 주에 속한 세션 가운데 가장 이른 종료 시각.
+export function weekWindowEvents({
+  sessions,
+  need,
+  window,
+}: {
+  sessions: BadgeSession[];
+  need: number;
+  window: number;
+}): BadgeEvent[] {
+  const byWeek = groupBy(sessions, (session) => String(weekNumber(session.startsAt)));
+  const weeks = Object.keys(byWeek)
+    .map(Number)
+    .toSorted((left, right) => left - right);
+  const inWindow: number[] = [];
+  for (const week of weeks) {
+    inWindow.push(week);
+    while (inWindow.length > 0 && inWindow[0]! <= week - window) inWindow.shift();
+    if (inWindow.length >= need) {
+      const first = byWeek[String(week)]!.toSorted(
+        (left, right) => left.endsAt.getTime() - right.endsAt.getTime(),
+      )[0]!;
+      return [{ at: first.endsAt, gameId: first.gameId }];
+    }
+  }
+  return [];
+}
