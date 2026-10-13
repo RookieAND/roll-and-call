@@ -9,7 +9,10 @@ import type { BadgeView } from "@/entities/badge";
 import { heldBadgeDetail } from "@/features/view-badge";
 import type { BadgeRecord } from "@/shared/server";
 
-const HIDDEN_TITLE_COUNT = Object.keys(HIDDEN_LADDER).length;
+// 「???」 카드는 기록으로 받는 숨겨진 칭호만 센다. 운영진·월 정산이 주는 지급형(작은 등불·더블 크라운·명예의 전당)은 뺀다(R29).
+const HIDDEN_TITLE_COUNT = Object.values(HIDDEN_LADDER).filter(
+  (ladder) => !BADGE_LADDERS[ladder].granted,
+).length;
 
 // 운영진 지급 칭호와 기록으로 받은 칭호(숨겨진 칭호·룰북 인증)를 구분하지 않고 받은 순서로. 못 받은 숨겨진 칭호 수만큼 「???」 카드를 잇는다(R29).
 export function specialTitles({
