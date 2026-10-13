@@ -67,6 +67,11 @@ export function AuditLogView({ log, query, sort }: AuditLogViewProps) {
     <>
       <AdminHeader title="활동 기록" />
       <VStack gap="150" className="flex-1 p-200">
+        {filteredByTarget ? null : (
+          <Text typography="body4" foreground="muted">
+            {RETENTION_NOTE}
+          </Text>
+        )}
         <HStack align="center" gap="100">
           <HStack align="center" gap="100" wrap>
             {filteredByTarget ? (
@@ -123,11 +128,6 @@ export function AuditLogView({ log, query, sort }: AuditLogViewProps) {
             listQuery={withQuery("", query, {})}
           />
         </Panel>
-        {filteredByTarget ? null : (
-          <Text typography="body4" foreground="hint">
-            {RETENTION_NOTE}
-          </Text>
-        )}
       </VStack>
     </>
   );

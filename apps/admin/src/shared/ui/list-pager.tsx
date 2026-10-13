@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Pagination, Text } from "@roll-and-call/ui";
+import { Pagination, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
@@ -39,25 +39,22 @@ export function ListPager({
   };
 
   return (
-    <HStack
-      align="center"
-      gap="150"
-      className="shrink-0 border-t border-(--rc-color-border-subtle) px-175 py-100 whitespace-nowrap"
-    >
-      <Text typography="body4" foreground="hint">
+    <div className="grid shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-150 border-t border-(--rc-color-border-subtle) px-175 py-125 whitespace-nowrap">
+      <Text typography="body4" foreground="muted">
         전체 {total}
         {unit} 중 {from}–{to}
       </Text>
-      <HStack align="center" gap="150" className="ml-auto">
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        siblings={1}
+        hrefFor={hrefFor}
+        renderLink={(href) => <Link href={href} />}
+        className="**:data-[slot^=pagination-]:h-8 **:data-[slot^=pagination-]:min-w-8"
+      />
+      <div className="flex justify-end">
         {pageSizeSelectable ? <PageSizeSelector value={pageSize} /> : null}
-        <Pagination
-          page={page}
-          totalPages={totalPages}
-          siblings={1}
-          hrefFor={hrefFor}
-          renderLink={(href) => <Link href={href} />}
-        />
-      </HStack>
-    </HStack>
+      </div>
+    </div>
   );
 }
