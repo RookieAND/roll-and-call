@@ -11,6 +11,7 @@ import {
   BADGE_TONE,
   badgeCondition,
   badgeRequirement,
+  DESCRIBED_LADDERS,
   lookTone,
   stepLook,
   stepName,
@@ -47,7 +48,7 @@ export function buildLadderDetail({
 }: LadderDetailInput): BadgeDetail {
   const { steps, granted } = BADGE_LADDERS[ladder];
   // 특별 칭호는 단계·진행도 없이 설명만 보인다. 숨겨진 칭호는 분류 대신 등급 이름을 등급 색으로 쓴다(R29).
-  const special = granted || isHiddenLadder(ladder);
+  const special = granted || isHiddenLadder(ladder) || DESCRIBED_LADDERS.has(ladder);
   const step = steps[stepIndex]!;
   const meta = LADDER_META[ladder];
   // 등급이 없는 칭호(개발자·길드장)만 「특별 칭호」로 부른다. 견습 모험가·작은 등불은 등급 이름을 쓴다.

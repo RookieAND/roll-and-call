@@ -15,8 +15,8 @@ const LONG_CONDITIONS: Partial<Record<BadgeLadderKey, string>> = {
   [BADGE_LADDER.guildMaster]: "디스코드 길드를 이끄는 길드장에게 붙습니다.",
 };
 
-// 룰북 인증 칭호는 목록에 보이는 설명을 시트에서도 같은 말로 먼저 보이고, 그 아래에 인증 기준을 적는다.
-const DESCRIBED_LADDERS: ReadonlySet<BadgeLadderKey> = new Set([
+// 룰북 인증 칭호는 시트에서 목록과 같은 설명만 보이고 인증 기준(몇 종)은 적지 않는다.
+export const DESCRIBED_LADDERS: ReadonlySet<BadgeLadderKey> = new Set([
   BADGE_LADDER.scholar,
   BADGE_LADDER.collector,
   BADGE_LADDER.polymath,
@@ -45,8 +45,6 @@ export function badgeCondition({
 }): string {
   const note = conditionNote(ladder);
   const base = LONG_CONDITIONS[ladder] ?? badgeRequirement({ ladder, step, categoryName });
-  const requirement = DESCRIBED_LADDERS.has(ladder)
-    ? `${BADGE_LADDERS[ladder].description!}\n${base}`
-    : base;
+  const requirement = DESCRIBED_LADDERS.has(ladder) ? BADGE_LADDERS[ladder].description! : base;
   return note ? `${requirement}\n${note}` : requirement;
 }
