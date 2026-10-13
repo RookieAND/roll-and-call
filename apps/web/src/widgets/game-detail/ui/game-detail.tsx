@@ -119,6 +119,7 @@ export function GameDetail({
               game={game}
               isGm={isGm}
               deadlineBadge={deadlineBadge}
+              deadlineWarn={statusLine.deadlineWarn}
               sessionBadge={sessionBadge}
             />
 
