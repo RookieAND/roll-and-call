@@ -1,8 +1,8 @@
 import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import { VStack } from "@roll-and-call/ui";
 
-import { MemberTitle } from "@/entities/badge";
 import { ReviewCard, ReviewEmpty, reviewEditDeadline } from "@/entities/review";
+import { MemberTitle } from "@/features/view-badge";
 import { formatDate } from "@/shared/lib";
 import type { ReviewCardRow } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";

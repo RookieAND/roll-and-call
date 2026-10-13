@@ -1,8 +1,8 @@
 import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
 import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { MemberTitle } from "@/entities/badge";
 import { ProfileRow } from "@/entities/profile";
+import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
 import type { RecordRow } from "../model/rank-people";

@@ -2,10 +2,10 @@ import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/
 import { Container, HStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
 
-import { RepresentativeTitlesProvider } from "@/entities/badge";
-import { loadRepresentativeTitles } from "@/entities/badge/server";
 import { BadgeAwardGate } from "@/features/acknowledge-badges";
 import { LoginButton } from "@/features/auth";
+import { MemberTitleSheetsProvider } from "@/features/view-badge";
+import { loadMemberTitleSheets } from "@/features/view-badge/server";
 import { serverPath } from "@/shared/lib";
 import {
   getCurrentServer,
@@ -18,8 +18,8 @@ import {
 import { AppBar, HelpButton, ServerSwitcher, ThemeToggleButton } from "@/shared/ui";
 
 import { buildMonthRecord } from "../model/build-month-record";
-import { recordPeopleIds } from "../model/record-people-ids";
 import { groupSessionsByDay } from "../model/group-sessions-by-day";
+import { recordPeopleIds } from "../model/record-people-ids";
 import { resolveCalendarView } from "../model/resolve-calendar-view";
 import { toCalendarSessions } from "../model/to-calendar-sessions";
 import { HomeCalendarSection } from "./home-calendar-section";
@@ -62,7 +62,7 @@ export async function HomeView({ date }: HomeViewProps) {
   const profile = user ? await getProfile(server.id, user.id) : undefined;
   const sessions = toCalendarSessions({ rows, viewerId: user?.id ?? null, now });
   const record = buildMonthRecord({ rows, now, mode, reviews });
-  const titles = await loadRepresentativeTitles({
+  const titleSheets = await loadMemberTitleSheets({
     serverId: server.id,
     userIds: recordPeopleIds(record),
     now,
@@ -112,9 +112,9 @@ export async function HomeView({ date }: HomeViewProps) {
           initialSelectedKey={selectedKey}
           todayKey={todayKey}
         />
-        <RepresentativeTitlesProvider titles={titles}>
+        <MemberTitleSheetsProvider sheets={titleSheets}>
           <HomeMonthRecord monthStart={monthStart} record={record} />
-        </RepresentativeTitlesProvider>
+        </MemberTitleSheetsProvider>
       </Container>
       {user && (
         <Suspense fallback={null}>

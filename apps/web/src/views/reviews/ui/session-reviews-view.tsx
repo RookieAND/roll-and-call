@@ -1,9 +1,9 @@
 import { Text, VStack } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
-import { RepresentativeTitlesProvider } from "@/entities/badge";
-import { loadRepresentativeTitles } from "@/entities/badge/server";
 import { PARTICIPANT_STATUS, SessionHeading } from "@/entities/game";
+import { MemberTitleSheetsProvider } from "@/features/view-badge";
+import { loadMemberTitleSheets } from "@/features/view-badge/server";
 import { formatDateTime } from "@/shared/lib";
 import {
   getCurrentSessionUser,
@@ -52,7 +52,7 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
     gameId,
     viewerId,
   });
-  const titles = await loadRepresentativeTitles({
+  const titleSheets = await loadMemberTitleSheets({
     serverId: server.id,
     userIds: [...(gmReview ? [gmReview] : []), ...participantReviews].map((row) => row.authorId),
     now: new Date(),
@@ -68,7 +68,7 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
         subline={`${when}후기 ${participantReviews.length}개`}
       />
       {hasReviews ? (
-        <RepresentativeTitlesProvider titles={titles}>
+        <MemberTitleSheetsProvider sheets={titleSheets}>
           <VStack gap="150">
             {gmReview && (
               <ReviewList
@@ -95,7 +95,7 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
               </Text>
             )}
           </VStack>
-        </RepresentativeTitlesProvider>
+        </MemberTitleSheetsProvider>
       ) : (
         <EmptyState
           image="empty-review"

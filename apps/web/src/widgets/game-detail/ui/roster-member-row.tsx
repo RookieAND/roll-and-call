@@ -1,9 +1,9 @@
 import { Badge } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { MemberTitle } from "@/entities/badge";
 import type { RosterMember } from "@/entities/game";
 import { EMPTY_BIO_TEXT, ProfileRow } from "@/entities/profile";
+import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
 export type DetailRosterMember = RosterMember<{
