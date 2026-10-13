@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 
 import { db } from "#/client";
+import { addedChanges } from "#/modules/moderation/model/audit-changes";
 import type { Actor } from "#/modules/moderation/model/types";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, staffMemos } from "#/schema";
@@ -29,7 +30,13 @@ export async function addStaffMemo({
       executor: tx,
       serverId,
       actor,
-      entry: { action: "운영진 메모", target: user.nickname, targetUserId: userId, reason: body },
+      entry: {
+        action: "운영진 메모",
+        target: user.nickname,
+        targetUserId: userId,
+        reason: body,
+        after: { label: "추가됨", changes: addedChanges([["메모", body]]) },
+      },
     });
   });
 }

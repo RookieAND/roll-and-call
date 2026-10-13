@@ -1,4 +1,5 @@
 import type { db } from "#/client";
+import { statesFromChanges } from "#/modules/moderation/model/states-from-changes";
 import type { Actor, AuditInput } from "#/modules/moderation/model/types";
 import { auditLog } from "#/schema";
 
@@ -16,6 +17,11 @@ export async function recordAudit({
   actor: Actor | null;
   entry: AuditInput;
 }) {
+  const changes = entry.after?.changes;
+  const derived =
+    !entry.before && entry.after && changes?.length
+      ? statesFromChanges({ changes, afterLabel: entry.after.label, target: entry.target })
+      : null;
   await executor.insert(auditLog).values({
     serverId,
     actorId: actor?.id ?? null,
@@ -27,8 +33,8 @@ export async function recordAudit({
     reason: entry.reason,
     reasonTag: entry.reasonTag,
     staffMemo: entry.staffMemo,
-    before: entry.before,
-    after: entry.after,
+    before: entry.before ?? derived?.before,
+    after: derived ? { ...derived.after, changes } : entry.after,
     related: entry.related ?? [],
   });
 }

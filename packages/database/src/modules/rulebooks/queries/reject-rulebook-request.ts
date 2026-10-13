@@ -40,6 +40,8 @@ export async function rejectRulebookRequest({
         target: `${claim.label} · ${claim.requester} 요청`,
         reason: input.userReason,
         staffMemo: input.staffMemo || undefined,
+        before: { label: "요청 대기" },
+        after: { label: "반려됨" },
       },
     });
     return { ok: true };
