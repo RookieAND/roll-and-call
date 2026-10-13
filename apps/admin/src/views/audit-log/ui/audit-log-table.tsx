@@ -1,4 +1,4 @@
-import { Table, Text } from "@roll-and-call/ui";
+import { Table, Text, Tooltip } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -43,14 +43,19 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
         {rows.length === 0 ? empty : null}
         {rows.map((row) => {
           const target = splitTarget(row.target);
+          const detailHref = `/log/${row.id}${listQuery}`;
           return (
-            <Table.Row key={row.id} interactive className="relative">
+            <Table.Row
+              key={row.id}
+              interactive
+              className="group/row relative has-focus-visible:outline-2 has-focus-visible:-outline-offset-2 has-focus-visible:outline-focus"
+            >
               <Table.Cell>
                 <Text
                   typography="body3"
                   foreground="hint"
                   numeric
-                  render={<ServerLink path={`/log/${row.id}${listQuery}`} />}
+                  render={<ServerLink path={detailHref} />}
                   className="whitespace-nowrap after:absolute after:inset-0"
                 >
                   {formatDateTime(row.at)}
@@ -70,13 +75,27 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
                 ) : null}
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" foreground="muted" truncate title={row.reason}>
-                  {row.reason}
-                </Text>
+                {row.reason ? (
+                  <Tooltip content={row.reason} side="bottom">
+                    <Text
+                      typography="body3"
+                      foreground="muted"
+                      truncate
+                      render={<ServerLink path={detailHref} tabIndex={-1} />}
+                      className="relative z-10 block"
+                    >
+                      {row.reason}
+                    </Text>
+                  </Tooltip>
+                ) : null}
               </Table.Cell>
               <Table.Cell className="truncate">{row.actor}</Table.Cell>
               <Table.Cell align="end">
-                <ChevronRight size={16} aria-hidden className="inline text-hint" />
+                <ChevronRight
+                  size={16}
+                  aria-hidden
+                  className="inline-block text-hint transition-[color,transform] group-hover/row:translate-x-0.5 group-hover/row:text-gray-700 motion-reduce:transition-none"
+                />
               </Table.Cell>
             </Table.Row>
           );

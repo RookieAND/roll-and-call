@@ -17,6 +17,9 @@ export function AuditLogLoading() {
     <>
       <AdminHeader title="활동 기록" />
       <LoadingRegion label="활동 기록을 불러오는 중입니다" className="gap-150 p-200">
+        <Text typography="body4" foreground="muted">
+          {RETENTION_NOTE}
+        </Text>
         <HStack align="center" gap="100">
           <HStack align="center" gap="100" wrap>
             <HStack align="center" className="relative w-55">
@@ -67,9 +70,6 @@ export function AuditLogLoading() {
             ]}
           />
         </Panel>
-        <Text typography="body4" foreground="hint">
-          {RETENTION_NOTE}
-        </Text>
       </LoadingRegion>
     </>
   );
