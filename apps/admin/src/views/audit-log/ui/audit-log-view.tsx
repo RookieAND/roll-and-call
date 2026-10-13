@@ -1,4 +1,4 @@
-import { Chip, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, Chip, HStack, Text, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
 import {
@@ -45,10 +45,18 @@ export function AuditLogView({ log, query, sort }: AuditLogViewProps) {
     page: undefined,
   });
   const allPeriodHref = withQuery("/log", query, { period: ALL_AUDIT_PERIOD, page: undefined });
+  const resetHref = withQuery("/log", query, {
+    q: undefined,
+    actor: undefined,
+    actions: undefined,
+    period: undefined,
+    page: undefined,
+  });
   const pageSize = parsePageSize(query.pageSize);
   const paged = paginate(log.rows, query.page, pageSize);
   const filteredByTarget = Boolean(query.target || query.targetUser || query.targetGame);
   const scoped = filteredByTarget || Boolean(query.q);
+  const filtered = ["q", "actor", "actions", "period"].some((param) => Boolean(query[param]));
   const showPager = !filteredByTarget || paged.totalPages > 1 || pageSize !== PAGE_SIZE;
   const pager = showPager ? (
     <ListPager
@@ -103,6 +111,15 @@ export function AuditLogView({ log, query, sort }: AuditLogViewProps) {
               defaultValue={defaultAuditPeriod({ scoped })}
               className="w-[128px]"
             />
+            {filtered && !filteredByTarget ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                render={<ServerLink path={resetHref} scroll={false} />}
+              >
+                필터 초기화
+              </Button>
+            ) : null}
           </HStack>
           {filteredByTarget ? null : (
             <div className="ml-auto">
@@ -120,7 +137,7 @@ export function AuditLogView({ log, query, sort }: AuditLogViewProps) {
             </div>
           )}
         </HStack>
-        <Panel footer={pager}>
+        <Panel footer={pager} stickyHead>
           <AuditLogTable
             rows={paged.rows}
             sort={sort}

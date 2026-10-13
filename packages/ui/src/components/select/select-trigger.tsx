@@ -11,6 +11,8 @@ import { SelectItemsContext } from "./select-items-context";
 
 export interface SelectTriggerProps {
   placeholder?: string;
+  // 기본은 ▾ 글자다. 앱이 아이콘으로 바꿀 때 쓴다.
+  icon?: ReactNode;
   invalid?: boolean;
   id?: string;
   "aria-label"?: string;
@@ -20,6 +22,7 @@ export interface SelectTriggerProps {
 
 export function SelectTrigger({
   placeholder = "선택",
+  icon = "▾",
   invalid = false,
   id,
   "aria-label": ariaLabel,
@@ -55,7 +58,7 @@ export function SelectTrigger({
             }
           </BaseSelect.Value>
           <BaseSelect.Icon data-slot="select-icon" className="text-gray-500">
-            ▾
+            {icon}
           </BaseSelect.Icon>
         </>
       )}

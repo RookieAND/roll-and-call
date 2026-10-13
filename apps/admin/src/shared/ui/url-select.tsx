@@ -1,6 +1,7 @@
 "use client";
 
 import { Select } from "@roll-and-call/ui";
+import { ChevronDown } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const ALL = "all";
@@ -32,7 +33,10 @@ export function UrlSelect({ param, allLabel, options, defaultValue, className }:
           router.replace(next.size ? `${pathname}?${next}` : pathname, { scroll: false });
         }}
       >
-        <Select.Trigger className="whitespace-nowrap" />
+        <Select.Trigger
+          icon={<ChevronDown size={14} aria-hidden />}
+          className="whitespace-nowrap"
+        />
         <Select.Popup>
           {items.map((item) => (
             <Select.Item key={item.value} value={item.value}>

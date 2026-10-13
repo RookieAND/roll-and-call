@@ -1,6 +1,7 @@
 "use client";
 
 import { Select } from "@roll-and-call/ui";
+import { ChevronDown } from "lucide-react";
 
 const PLACEHOLDER = "placeholder";
 
@@ -12,7 +13,7 @@ interface SkeletonSelectProps {
 export function SkeletonSelect({ label }: SkeletonSelectProps) {
   return (
     <Select.Root disabled value={PLACEHOLDER} items={[{ label, value: PLACEHOLDER }]}>
-      <Select.Trigger className="whitespace-nowrap" />
+      <Select.Trigger icon={<ChevronDown size={14} aria-hidden />} className="whitespace-nowrap" />
     </Select.Root>
   );
 }
