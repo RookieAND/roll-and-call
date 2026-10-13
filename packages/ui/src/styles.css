@@ -131,6 +131,7 @@
 
   --color-rank-gold: var(--rc-color-fg-rank-gold);
   --color-rank-bronze: var(--rc-color-fg-rank-bronze);
+  --color-rank-silver: var(--rc-color-fg-rank-silver);
 
   --color-critical-bg: var(--rc-color-bg-highlight-critical);
   --color-critical-ink: var(--rc-color-fg-highlight-critical);
@@ -401,6 +402,9 @@
   --rc-color-shadow-highlight-glow: rgb(79 70 229);
   --rc-color-fg-rank-gold: var(--rc-color-gold-700);
   --rc-color-fg-rank-bronze: #9a5b2e;
+  --rc-color-fg-rank-silver: #5f6875;
+  --rc-color-bg-rank-silver: #eef0f3;
+  --rc-color-shine-rank-silver: #ffffff;
 
   --rc-legacy-rank-gold: var(--rc-color-fg-rank-gold);
   --rc-legacy-rank-bronze: var(--rc-color-fg-rank-bronze);
@@ -505,6 +509,9 @@
   --rc-color-shadow-highlight-glow: rgb(251 191 36);
   --rc-color-fg-rank-gold: var(--rc-color-gold-350);
   --rc-color-fg-rank-bronze: #c9926a;
+  --rc-color-fg-rank-silver: #b4bcc8;
+  --rc-color-bg-rank-silver: #2b3038;
+  --rc-color-shine-rank-silver: #f1f4f8;
 
   --rc-legacy-rank-gold: var(--rc-color-fg-rank-gold);
   --rc-legacy-rank-bronze: var(--rc-color-fg-rank-bronze);
@@ -585,6 +592,7 @@
 
   --color-rank-gold: var(--rc-color-fg-rank-gold);
   --color-rank-bronze: var(--rc-color-fg-rank-bronze);
+  --color-rank-silver: var(--rc-color-fg-rank-silver);
 
   --color-critical-bg: var(--rc-color-bg-highlight-critical);
   --color-critical-ink: var(--rc-color-fg-highlight-critical);

@@ -11,7 +11,7 @@ const face = cva(
       look: {
         1: "border-2 border-gray-300 bg-gray-50 badge-highlight",
         2: "border-2 border-rank-bronze bg-gray-50 badge-highlight",
-        3: "border-2 border-tinted-border bg-primary-50 badge-highlight",
+        3: "border-3 badge-shaded badge-frame-silver",
         4: "border-3 badge-framed badge-shaded badge-frame-gold",
         5: "border-3 badge-framed badge-shaded badge-frame-prism badge-glow",
         monthly: "border-3 badge-framed badge-shaded badge-frame-gold badge-glow",

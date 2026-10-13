@@ -226,6 +226,27 @@ html {
   --badge-shade: radial-gradient(circle at 32% 24%, rgb(255 255 255 / 0.35), transparent 56%);
 }
 
+@utility badge-frame-silver {
+  --badge-fill: var(--rc-color-bg-rank-silver);
+  --badge-silver-deep: color-mix(in oklch, var(--rc-color-fg-rank-silver) 62%, black);
+  border-color: transparent;
+  background:
+    var(--badge-shade, linear-gradient(transparent, transparent)) padding-box,
+    linear-gradient(var(--badge-fill), var(--badge-fill)) padding-box,
+    conic-gradient(
+        from 135deg,
+        var(--rc-color-fg-rank-silver),
+        var(--rc-color-shine-rank-silver) 14%,
+        var(--rc-color-fg-rank-silver) 28%,
+        var(--badge-silver-deep) 44%,
+        var(--rc-color-fg-rank-silver) 58%,
+        var(--rc-color-shine-rank-silver) 74%,
+        var(--badge-silver-deep) 90%,
+        var(--rc-color-fg-rank-silver)
+      )
+      border-box;
+}
+
 @utility badge-frame-gold {
   --badge-glow-color: var(--rc-color-fg-rank-gold);
   --badge-fill: var(--rc-color-bg-warning-weak);
