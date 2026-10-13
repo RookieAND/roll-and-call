@@ -52,6 +52,10 @@ export type BadgeFacts = {
   rush: BadgeEvent[];
   // 내가 GM이고 참석자 4명 이상인 세션에서 참석자 전원이 후기를 남긴 순간(마지막 후기의 작성 시각).
   fullCasts: BadgeEvent[];
+  // 내가 PL로 참석하기로 하고 오지 않은 세션의 시작 시각. 운영진이 취소한 불참 기록은 담지 않는다.
+  absences: BadgeEvent[];
+  // 내가 GM으로 연 설명회의 게임 id. 인정 세션인지는 hosted가 가린다.
+  briefingIds: string[];
   // 유효한 룰북 인증(취소되지 않은 것)을 받은 시각순. 룰북 인증 칭호가 센다.
   certified: BadgeEvent[];
   asOf: Date;

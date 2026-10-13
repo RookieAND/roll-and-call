@@ -6,6 +6,8 @@ import { HIDDEN_LADDER, type HiddenLadderKey } from "./badge-ladder";
 import { collectorKingEvents } from "./collector-king-events";
 import { dayStreakEvents } from "./day-streak-events";
 import { drawEvents } from "./draw-events";
+import { faithfulEvents } from "./faithful-events";
+import { lecturerEvents } from "./lecturer-events";
 import { lightningEvents } from "./lightning-events";
 import { owlEvents } from "./owl-events";
 import type { BadgeEvent } from "./reached-tier";
@@ -139,6 +141,10 @@ export function hiddenEvents({
       return timeSlotEvents(facts);
     case HIDDEN_LADDER.collectorKing:
       return collectorKingEvents(facts);
+    case HIDDEN_LADDER.faithful:
+      return faithfulEvents(facts);
+    case HIDDEN_LADDER.lecturer:
+      return lecturerEvents(facts);
     case HIDDEN_LADDER.lantern:
     case HIDDEN_LADDER.doubleCrown:
       return [];

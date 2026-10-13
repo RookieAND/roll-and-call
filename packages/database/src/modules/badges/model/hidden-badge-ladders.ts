@@ -270,4 +270,16 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     description: "한 달, 두 개의 왕관이 한 사람의 머리 위에 놓였습니다.",
     granted: true,
   }),
+  [HIDDEN_LADDER.faithful]: hidden({
+    emoji: "🤝",
+    name: "믿음직한 동료",
+    grade: 3,
+    description: "약속한 자리를 한 번도 비우지 않았습니다.",
+  }),
+  [HIDDEN_LADDER.lecturer]: hidden({
+    emoji: "🧑‍🏫",
+    name: "명강사",
+    grade: 4,
+    description: "여러 번 강단에 올라 룰을 풀어 주었습니다.",
+  }),
 };

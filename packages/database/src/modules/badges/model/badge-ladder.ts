@@ -43,6 +43,8 @@ export const HIDDEN_LADDER = {
   boxOffice: "sp.boxoffice",
   lantern: "sp.lantern",
   doubleCrown: "sp.crown",
+  faithful: "sp.faithful",
+  lecturer: "sp.lecturer",
 } as const;
 export type HiddenLadderKey = (typeof HIDDEN_LADDER)[keyof typeof HIDDEN_LADDER];
 

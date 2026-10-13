@@ -3,6 +3,7 @@ import { and, count, eq, isNotNull, isNull, max, sql } from "drizzle-orm";
 import { db } from "#/client";
 import type { BadgeFacts } from "#/modules/badges/model/badge-facts";
 import { HIDDEN_LADDER } from "#/modules/badges/model/badge-ladder";
+import { GAME_KIND } from "#/modules/games/model/game-kind";
 import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
 import {
   drawResults,
@@ -50,7 +51,7 @@ const applicantsOfGame = sql<number>`(
 
 type HiddenBadgeFacts = Pick<
   BadgeFacts,
-  "draws" | "hostedDraws" | "joinedAt" | "rush" | "fullCasts"
+  "draws" | "hostedDraws" | "joinedAt" | "rush" | "fullCasts" | "absences" | "briefingIds"
 >;
 
 // 숨겨진 칭호만 쓰는 기록. 숨기거나 취소한 구인은 근거에서 빠져 칭호도 회수된다.
@@ -137,7 +138,27 @@ export async function loadHiddenBadgeFacts({
     .having(
       sql`${attendedCount} >= ${FULL_CAST_MIN_ATTENDED} and count(distinct ${participants.userId}) = ${attendedCount}`,
     );
+  const absences = await db
+    .select({ at: games.confirmedAt, gameId: games.id })
+    .from(participants)
+    .innerJoin(games, eq(games.id, participants.gameId))
+    .where(
+      and(
+        visibleGame,
+        eq(participants.userId, userId),
+        eq(participants.status, "confirmed"),
+        eq(participants.absent, true),
+        isNull(participants.absenceCancelledAt),
+        isNotNull(games.confirmedAt),
+      ),
+    );
+  const briefings = await db
+    .select({ gameId: games.id })
+    .from(games)
+    .where(and(visibleGame, eq(games.gmId, userId), eq(games.kind, GAME_KIND.briefing)));
   return {
+    absences: absences.map((absence) => ({ at: absence.at!, gameId: absence.gameId })),
+    briefingIds: briefings.map((briefing) => briefing.gameId),
     draws: draws.map((draw) => ({ ...draw, roll: draw.roll!, drawnAt: draw.drawnAt! })),
     hostedDraws: hostedDraws.map((draw) => ({ ...draw, drawnAt: draw.drawnAt! })),
     joinedAt: member?.joinedAt ?? null,
