@@ -274,13 +274,14 @@ export function notificationText(payload: NotificationPayload): NotificationText
           : `${payload.params.month}월의 PL로 뽑혔습니다.`,
         `${payload.params.month}월 활약을 인정받았습니다.`,
       );
-    case NOTIFICATION_KIND.rankLeader:
+    case NOTIFICATION_KIND.rankLeader: {
+      const { month, role, unit } = payload.params;
+      const roleLabel = role === MONTHLY_AWARD_ROLE.gm ? "GM" : "PL";
       return plain(
-        payload.params.role === MONTHLY_AWARD_ROLE.gm
-          ? `${payload.params.month}월 GM 점수 1위가 되었습니다.`
-          : `${payload.params.month}월 PL 점수 1위가 되었습니다.`,
+        `${month}월 ${roleLabel} ${unit === "count" ? "참여 횟수" : "점수"} 1위가 되었습니다.`,
         "달이 끝날 때까지 순위가 바뀔 수 있습니다.",
       );
+    }
   }
 
   function cancelledSub({

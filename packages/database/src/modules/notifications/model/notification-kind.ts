@@ -111,7 +111,8 @@ export type NotificationParamsMap = {
   hidden_title_earned: { emoji: string; name: string; description: string };
   monthly_award: { month: number; role: MonthlyAwardRole };
   // 포인트제 서버에서 이 달의 기록 1위가 바뀌어 내가 1위가 되었을 때. month는 1~12다.
-  rank_leader: { month: number; role: MonthlyAwardRole };
+  // unit이 없으면 점수 기준, "count"면 참여 횟수 기준이다.
+  rank_leader: { month: number; role: MonthlyAwardRole; unit?: "count" };
 };
 
 export type NotificationPayload = {

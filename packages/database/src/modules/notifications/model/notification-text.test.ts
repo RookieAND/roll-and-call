@@ -326,6 +326,14 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "10월 GM 점수 1위가 되었습니다.",
     "달이 끝날 때까지 순위가 바뀔 수 있습니다.",
   ],
+  [
+    {
+      kind: NOTIFICATION_KIND.rankLeader,
+      params: { month: 10, role: MONTHLY_AWARD_ROLE.pl, unit: "count" },
+    },
+    "10월 PL 참여 횟수 1위가 되었습니다.",
+    "달이 끝날 때까지 순위가 바뀔 수 있습니다.",
+  ],
 ];
 
 describe("notificationText", () => {
