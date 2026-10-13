@@ -51,6 +51,8 @@ export const HIDDEN_LADDER = {
   weeks12: "sp.weeks12",
   weeks26: "sp.weeks26",
   openDoor: "sp.opendoor",
+  openDoor12: "sp.opendoor12",
+  openDoor26: "sp.opendoor26",
   tenTries: "sp.tentries",
   tightrope: "sp.tightrope",
   heavenHell: "sp.heavenhell",

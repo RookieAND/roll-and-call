@@ -19,7 +19,7 @@ import { STREAK_OUTCOME, streakEvents } from "./streak-events";
 import { tenTriesEvents } from "./ten-tries-events";
 import { tightropeEvents } from "./tightrope-events";
 import { timeSlotEvents } from "./time-slot-events";
-import { weekStreakEvents } from "./week-streak-events";
+import { weekStreakEvents, weekWindowEvents } from "./week-streak-events";
 import { weekdayEvents } from "./weekday-events";
 
 const EXPEDITION_MIN_ATTENDED = 6;
@@ -157,11 +157,15 @@ export function hiddenEvents({
     case HIDDEN_LADDER.weeks4:
       return weekStreakEvents({ sessions: facts.played, length: 4 });
     case HIDDEN_LADDER.weeks12:
-      return weekStreakEvents({ sessions: [...facts.played, ...facts.hosted], length: 12 });
+      return weekWindowEvents({ sessions: facts.played, need: 12, window: 16 });
     case HIDDEN_LADDER.weeks26:
-      return weekStreakEvents({ sessions: [...facts.played, ...facts.hosted], length: 26 });
+      return weekWindowEvents({ sessions: facts.played, need: 26, window: 32 });
     case HIDDEN_LADDER.openDoor:
       return weekStreakEvents({ sessions: facts.hosted, length: 4 });
+    case HIDDEN_LADDER.openDoor12:
+      return weekWindowEvents({ sessions: facts.hosted, need: 12, window: 16 });
+    case HIDDEN_LADDER.openDoor26:
+      return weekWindowEvents({ sessions: facts.hosted, need: 26, window: 32 });
     case HIDDEN_LADDER.tenTries:
       return tenTriesEvents(draws);
     case HIDDEN_LADDER.tightrope:
