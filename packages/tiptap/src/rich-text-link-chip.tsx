@@ -1,4 +1,14 @@
-import { FileText, Hash, NotebookText, Table2 } from "lucide-react";
+import {
+  BookMarked,
+  ClipboardList,
+  FileText,
+  Hash,
+  HardDrive,
+  NotebookText,
+  PenLine,
+  Presentation,
+  Table2,
+} from "lucide-react";
 
 import { LINK_PROVIDER, LINK_PROVIDER_LABEL, type LinkProvider } from "./link-provider";
 
@@ -6,7 +16,12 @@ const PROVIDER_ICON = {
   [LINK_PROVIDER.discord]: Hash,
   [LINK_PROVIDER.sheets]: Table2,
   [LINK_PROVIDER.docs]: FileText,
+  [LINK_PROVIDER.slides]: Presentation,
+  [LINK_PROVIDER.forms]: ClipboardList,
+  [LINK_PROVIDER.drive]: HardDrive,
   [LINK_PROVIDER.notion]: NotebookText,
+  [LINK_PROVIDER.postype]: PenLine,
+  [LINK_PROVIDER.trpgDiary]: BookMarked,
 } as const;
 
 interface RichTextLinkChipProps {
