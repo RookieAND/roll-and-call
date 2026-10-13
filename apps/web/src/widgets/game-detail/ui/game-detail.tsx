@@ -13,6 +13,7 @@ import {
   scheduleLine,
   splitRoster,
 } from "@/entities/game";
+import { ddayKst, formatDday } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
@@ -68,6 +69,11 @@ export function GameDetail({
   // 마감 배지는 신청을 받는 동안(모집 중·대기 접수 중)에만 보인다.
   const accepting = status === GAME_STATUS.recruiting || status === GAME_STATUS.confirmed;
   const showDeadline = accepting && !ended && !isApplicationClosed(game, now);
+  const statusLine = scheduleLine(game, now);
+  const deadlineBadge = showDeadline ? statusLine.deadlineShort : null;
+  const sessionDays = game.confirmedAt ? ddayKst(game.confirmedAt, now) : null;
+  const showSessionDday = !game.cancelledAt && !ended && sessionDays !== null && sessionDays >= 0;
+  const sessionBadge = showSessionDday ? formatDday(sessionDays) : null;
 
   const actionView = deriveActionView({
     game,
@@ -106,11 +112,15 @@ export function GameDetail({
               kind={game.kind}
               status={status}
               ended={ended}
-              showDeadline={showDeadline}
-              statusLine={scheduleLine(game, now)}
+              statusLine={statusLine}
             />
 
-            <GameInfoTable game={game} isGm={isGm} />
+            <GameInfoTable
+              game={game}
+              isGm={isGm}
+              deadlineBadge={deadlineBadge}
+              sessionBadge={sessionBadge}
+            />
 
             {game.synopsis && <GameSynopsis synopsis={game.synopsis} />}
 

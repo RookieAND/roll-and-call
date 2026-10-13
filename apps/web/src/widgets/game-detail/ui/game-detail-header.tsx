@@ -14,7 +14,6 @@ interface GameDetailHeaderProps {
   kind: GameKind;
   status: GameStatus;
   ended: boolean;
-  showDeadline: boolean;
   statusLine: ScheduleLine;
 }
 
@@ -24,11 +23,8 @@ export function GameDetailHeader({
   kind,
   status,
   ended,
-  showDeadline,
   statusLine,
 }: GameDetailHeaderProps) {
-  const deadline = showDeadline ? statusLine.deadlineShort : null;
-
   return (
     <VStack gap="100">
       <HStack justify="between" align="start" gap="100">
@@ -40,7 +36,6 @@ export function GameDetailHeader({
             설명회
           </Badge>
         )}
-        {deadline && <Badge className="mt-025 tabular-nums">{deadline}</Badge>}
         <span className="mt-025">
           {ended ? <Badge colorPalette="gray">종료</Badge> : <GameStatusBadge status={status} />}
         </span>

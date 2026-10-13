@@ -9,9 +9,11 @@ import { ServerLink } from "@/shared/ui";
 interface GameInfoTableProps {
   game: GameDetailData;
   isGm: boolean;
+  deadlineBadge: string | null;
+  sessionBadge: string | null;
 }
 
-export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
+export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameInfoTableProps) {
   const playRange = formatPlayRange(game.playMinutesMin, game.playMinutes);
   const rows: { label: string; value: ReactNode }[] = [
     { label: "룰", value: game.rule },
@@ -29,8 +31,24 @@ export function GameInfoTable({ game, isGm }: GameInfoTableProps) {
       ),
     },
     ...(playRange ? [{ label: "플레이타임", value: playRange }] : []),
-    { label: "모집 마감일", value: formatDateTime(game.endDate) },
-    { label: "세션 일정", value: formatGameSchedule(game) },
+    {
+      label: "모집 마감일",
+      value: (
+        <HStack align="center" gap="100" wrap className="min-w-0">
+          <span>{formatDateTime(game.endDate)}</span>
+          {deadlineBadge && <Badge className="tabular-nums">{deadlineBadge}</Badge>}
+        </HStack>
+      ),
+    },
+    {
+      label: "세션 일정",
+      value: (
+        <HStack align="center" gap="100" wrap className="min-w-0">
+          <span>{formatGameSchedule(game)}</span>
+          {sessionBadge && <Badge className="tabular-nums">{sessionBadge}</Badge>}
+        </HStack>
+      ),
+    },
   ];
 
   return (
