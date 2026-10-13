@@ -9,7 +9,7 @@ const pill = cva(
       look: {
         1: "border-gray-200 bg-gray-50 text-gray-900",
         2: "border-rank-bronze bg-gray-50 text-rank-bronze",
-        3: "border-tinted-border bg-primary-50 text-tinted-ink",
+        3: "badge-frame-silver text-rank-silver",
         4: "badge-framed badge-frame-gold text-rank-gold",
         5: "badge-framed badge-frame-prism text-badge-prism",
         monthly: "badge-framed badge-frame-gold text-rank-gold",
