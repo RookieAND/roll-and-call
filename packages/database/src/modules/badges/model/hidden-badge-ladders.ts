@@ -274,7 +274,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     emoji: "🤝",
     name: "약속 지킴이",
     grade: 3,
-    description: "약속한 자리를 한 번도 비우지 않았습니다.",
+    description: "약속한 자리를 꾸준히 지켜 왔습니다.",
   }),
   [HIDDEN_LADDER.firstBriefing]: hidden({
     emoji: "🎤",
@@ -298,19 +298,19 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     emoji: "🗓️",
     name: "꼬박꼬박",
     grade: 3,
-    description: "한 달 내내 테이블이 비지 않았습니다.",
+    description: "한 달 동안 꾸준히 테이블에 앉았습니다.",
   }),
   [HIDDEN_LADDER.weeks12]: hidden({
     emoji: "🧱",
     name: "차곡차곡",
     grade: 4,
-    description: "벽돌을 쌓듯 열두 주를 한 주도 거르지 않고 이어 갔습니다.",
+    description: "벽돌을 쌓듯 석 달 동안 꾸준히 테이블을 이어 갔습니다.",
   }),
   [HIDDEN_LADDER.weeks26]: hidden({
     emoji: "🏔️",
     name: "한결같이",
     grade: 5,
-    description: "스물여섯 주, 반년 동안 테이블이 한 번도 멈추지 않았습니다.",
+    description: "반년 동안 한결같이 테이블을 이어 갔습니다.",
   }),
   [HIDDEN_LADDER.openDoor]: hidden({
     emoji: "🚪",
