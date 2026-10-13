@@ -15,8 +15,15 @@ const RECEIVED_POST_ACTIONS: readonly string[] = ["구인 숨김", "구인 취�
 
 const userOf = (db: Snapshot, userId: string) => db.users.find((user) => user.id === userId)!;
 
-// filter는 들어온 목록의 검색·필터·정렬이다. [다음 건]은 그 목록에서 다음 구인과 그 구인이 있는 쪽이다.
-export async function getPostDetail({ id, filter }: { id: string; filter: PostListFilter }) {
+interface GetPostDetailInput {
+  id: string;
+  filter: PostListFilter;
+  pageSize?: number;
+}
+
+// filter는 들어온 목록의 검색·필터·정렬이고 pageSize는 그 목록의 쪽 크기다.
+// [다음 건]은 그 목록에서 다음 구인과 그 구인이 있는 쪽이다.
+export async function getPostDetail({ id, filter, pageSize = PAGE_SIZE }: GetPostDetailInput) {
   const db = await loadSnapshot();
   const session = db.sessions.find((candidate) => candidate.id === id);
   if (!session) return null;
@@ -38,7 +45,7 @@ export async function getPostDetail({ id, filter }: { id: string; filter: PostLi
   const nextIndex = listIds.indexOf(id) + 1;
   const next =
     nextIndex > 0 && nextIndex < listIds.length
-      ? { id: listIds[nextIndex]!, page: Math.floor(nextIndex / PAGE_SIZE) + 1 }
+      ? { id: listIds[nextIndex]!, page: Math.floor(nextIndex / pageSize) + 1 }
       : null;
   const waitingIds = session.waitingIds ?? [];
   const cancelRecipientIds = new Set(session.staffCancelRecipientIds ?? []);

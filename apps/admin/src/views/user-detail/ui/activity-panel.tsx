@@ -1,7 +1,7 @@
 import { Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { formatSessionTime, paginate } from "@/shared/lib";
+import { formatSessionTime, paginate, parsePageSize } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import {
   EMPTY_IMAGE,
@@ -20,14 +20,21 @@ interface ActivityPanelProps {
   activities: UserDetail["activities"];
   role: ActivityRole;
   page?: string;
+  pageSize?: string;
 }
 
-export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
+export function ActivityPanel({
+  activities,
+  role,
+  page,
+  pageSize: pageSizeParam,
+}: ActivityPanelProps) {
   const rows =
     role === ACTIVITY_ROLE.all
       ? activities
       : activities.filter((activity) => activity.hosted === (role === ACTIVITY_ROLE.hosted));
-  const paged = paginate(rows, page);
+  const pageSize = parsePageSize(pageSizeParam);
+  const paged = paginate(rows, page, pageSize);
   return (
     <Panel
       right={
@@ -42,7 +49,13 @@ export function ActivityPanel({ activities, role, page }: ActivityPanelProps) {
         />
       }
       footer={
-        <ListPager page={paged.page} totalPages={paged.totalPages} total={rows.length} unit="건" />
+        <ListPager
+          page={paged.page}
+          totalPages={paged.totalPages}
+          total={rows.length}
+          unit="건"
+          pageSize={pageSize}
+        />
       }
     >
       <Table.Root className="table-equal">

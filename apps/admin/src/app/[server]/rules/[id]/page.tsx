@@ -24,7 +24,7 @@ export default async function RulebookDetailPage({
   searchParams,
 }: PageProps<"/[server]/rules/[id]">) {
   const [{ id }, query, staff] = await Promise.all([params, searchParams, requireStaff()]);
-  const { tab, page } = query;
+  const { tab, page, pageSize } = query;
   const rulebook = await getRulebookDetail(id);
   if (!rulebook) notFound();
   const detailTab: RulebookDetailTab =
@@ -44,6 +44,7 @@ export default async function RulebookDetailPage({
       gmSort={gmSort}
       viewerId={staff.id}
       page={isString(page) ? page : undefined}
+      pageSize={isString(pageSize) ? pageSize : undefined}
     />
   );
 }

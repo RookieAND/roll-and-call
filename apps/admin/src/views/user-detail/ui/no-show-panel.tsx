@@ -1,6 +1,6 @@
 import { Table, Text } from "@roll-and-call/ui";
 
-import { formatSessionTime, paginate } from "@/shared/lib";
+import { formatSessionTime, paginate, parsePageSize } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import {
   EMPTY_IMAGE,
@@ -17,10 +17,12 @@ import { NoShowRowMenu } from "./no-show-row-menu";
 interface NoShowPanelProps {
   noShows: UserDetail["noShows"];
   page?: string;
+  pageSize?: string;
 }
 
-export function NoShowPanel({ noShows, page }: NoShowPanelProps) {
-  const paged = paginate(noShows, page);
+export function NoShowPanel({ noShows, page, pageSize: pageSizeParam }: NoShowPanelProps) {
+  const pageSize = parsePageSize(pageSizeParam);
+  const paged = paginate(noShows, page, pageSize);
   return (
     <Panel
       footer={
@@ -29,6 +31,7 @@ export function NoShowPanel({ noShows, page }: NoShowPanelProps) {
           totalPages={paged.totalPages}
           total={noShows.length}
           unit="건"
+          pageSize={pageSize}
         />
       }
     >

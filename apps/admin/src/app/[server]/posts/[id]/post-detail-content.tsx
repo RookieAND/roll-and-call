@@ -12,12 +12,19 @@ interface PostDetailContentProps {
   id: string;
   tab: string | undefined;
   filter: PostListFilter;
+  pageSize: number;
   listQuery: Record<string, string | undefined>;
 }
 
-export async function PostDetailContent({ id, tab, filter, listQuery }: PostDetailContentProps) {
+export async function PostDetailContent({
+  id,
+  tab,
+  filter,
+  pageSize,
+  listQuery,
+}: PostDetailContentProps) {
   const [post, server, staff] = await Promise.all([
-    getPostDetail({ id, filter }),
+    getPostDetail({ id, filter, pageSize }),
     getCurrentServer(),
     requireStaff(),
   ]);

@@ -18,6 +18,7 @@ interface RulebookDetailViewProps {
   gmSort: TableSort<CertifiedGmSortColumn>;
   viewerId: string;
   page?: string;
+  pageSize?: string;
 }
 
 export function RulebookDetailView({
@@ -26,6 +27,7 @@ export function RulebookDetailView({
   gmSort,
   viewerId,
   page,
+  pageSize,
 }: RulebookDetailViewProps) {
   const logHref = `/log?target=${encodeURIComponent(rulebook.name)}`;
   const basePath = `/rules/${rulebook.id}`;
@@ -89,6 +91,7 @@ export function RulebookDetailView({
               certRequired={rulebook.certRequired}
               sort={gmSort}
               page={page}
+              pageSize={pageSize}
             />
           )}
         </VStack>

@@ -24,6 +24,7 @@ interface UserDetailViewProps {
   tab: UserDetailTab;
   role: ActivityRole;
   page?: string;
+  pageSize?: string;
   guildId: string;
   viewer: Viewer;
   kickBlock: string | null;
@@ -37,6 +38,7 @@ export function UserDetailView({
   tab,
   role,
   page,
+  pageSize,
   guildId,
   viewer,
   kickBlock,
@@ -83,9 +85,16 @@ export function UserDetailView({
               [USER_DETAIL_TAB.noShow]: user.noShows.length,
               [USER_DETAIL_TAB.memo]: user.memos.length,
             }}
-            activityPanel={<ActivityPanel activities={user.activities} role={role} page={page} />}
-            certPanel={<CertPanel user={user} page={page} />}
-            noShowPanel={<NoShowPanel noShows={user.noShows} page={page} />}
+            activityPanel={
+              <ActivityPanel
+                activities={user.activities}
+                role={role}
+                page={page}
+                pageSize={pageSize}
+              />
+            }
+            certPanel={<CertPanel user={user} page={page} pageSize={pageSize} />}
+            noShowPanel={<NoShowPanel noShows={user.noShows} page={page} pageSize={pageSize} />}
             memoPanel={
               <MemoPanel
                 userId={user.id}

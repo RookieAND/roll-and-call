@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { parseSort, stringParams } from "@/shared/lib";
+import { parsePageSize, parseSort, stringParams } from "@/shared/lib";
 import { getPostTitle, POST_DEFAULT_SORT, POST_SORT_COLUMNS } from "@/shared/server";
 import { PostDetailLoading } from "@/views/post-detail";
 
@@ -20,7 +20,7 @@ export default async function PostDetailPage({
   searchParams,
 }: PageProps<"/[server]/posts/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
-  const { tab, q, status, rulebook, sort, dir, page } = stringParams(query);
+  const { tab, q, status, rulebook, sort, dir, page, pageSize } = stringParams(query);
   const tableSort = parseSort({
     searchParams: query,
     columns: POST_SORT_COLUMNS,
@@ -32,7 +32,8 @@ export default async function PostDetailPage({
         id={id}
         tab={tab}
         filter={{ query: q, status, rulebook, sort: tableSort }}
-        listQuery={{ q, status, rulebook, sort, dir, page }}
+        pageSize={parsePageSize(pageSize)}
+        listQuery={{ q, status, rulebook, sort, dir, page, pageSize }}
       />
     </Suspense>
   );

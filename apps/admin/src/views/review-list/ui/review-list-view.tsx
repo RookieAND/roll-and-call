@@ -1,7 +1,7 @@
 import { Button, Chip, HStack, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
-import { paginate, reviewListHref, withQuery, type TableSort } from "@/shared/lib";
+import { paginate, parsePageSize, reviewListHref, withQuery, type TableSort } from "@/shared/lib";
 import {
   REVIEW_LIST_TAB,
   REVIEW_PHOTO_FILTER,
@@ -25,12 +25,13 @@ interface ReviewListViewProps {
   tab: ReviewListTab;
   sort: TableSort<ReviewSortColumn>;
   page?: string;
-  // 들어온 목록의 검색·사진·구인 칩·정렬(q, photo, game, sort, dir). 상세 주소에 그대로 싣는다.
+  // 들어온 목록의 검색·사진·구인 칩·정렬·쪽 크기(q, photo, game, sort, dir, pageSize). 상세 주소에 그대로 싣는다.
   query: Record<string, string | undefined>;
 }
 
 export function ReviewListView({ list, tab, sort, page, query }: ReviewListViewProps) {
-  const paged = paginate(list.rows, page);
+  const pageSize = parsePageSize(query.pageSize);
+  const paged = paginate(list.rows, page, pageSize);
   const hidden = tab === REVIEW_LIST_TAB.hidden;
   const { resettable, ...empty } = reviewEmptyCopy({ list, hidden });
   const resetHref = reviewListHref({ hidden, query: { ...query, q: undefined, photo: undefined } });
@@ -42,7 +43,13 @@ export function ReviewListView({ list, tab, sort, page, query }: ReviewListViewP
     { page: listPage },
   );
   const pager = (
-    <ListPager page={paged.page} totalPages={paged.totalPages} total={list.rows.length} unit="건" />
+    <ListPager
+      page={paged.page}
+      totalPages={paged.totalPages}
+      total={list.rows.length}
+      unit="건"
+      pageSize={pageSize}
+    />
   );
   const resetAction = resettable ? (
     <Button variant="outline" colorPalette="gray" render={<ServerLink path={resetHref} />}>

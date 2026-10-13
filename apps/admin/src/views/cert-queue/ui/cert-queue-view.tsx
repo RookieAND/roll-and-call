@@ -1,6 +1,6 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
 
-import { CERT_TABS, paginate, withQuery } from "@/shared/lib";
+import { CERT_TABS, paginate, parsePageSize, withQuery } from "@/shared/lib";
 import {
   CERT_QUEUE_FILTERS,
   type CertQueueFilter,
@@ -26,6 +26,7 @@ import { CertQueueTable } from "./cert-queue-table";
 interface CertQueueViewProps {
   queue: Awaited<ReturnType<typeof listCertQueue>>;
   page?: string;
+  pageSizeParam?: string;
   filter: CertQueueFilter;
 }
 
@@ -37,9 +38,15 @@ const FILTER_CHIPS = [
   })),
 ];
 
-export function CertQueueView({ queue, page, filter }: CertQueueViewProps) {
-  const paged = paginate(queue.rows, page);
-  const query = { q: filter.query, rulebook: filter.rulebook, filter: filter.filter };
+export function CertQueueView({ queue, page, pageSizeParam, filter }: CertQueueViewProps) {
+  const pageSize = parsePageSize(pageSizeParam);
+  const paged = paginate(queue.rows, page, pageSize);
+  const query = {
+    q: filter.query,
+    rulebook: filter.rulebook,
+    filter: filter.filter,
+    pageSize: pageSizeParam,
+  };
   const tabs = CERT_TABS.map((tab) =>
     tab.href === "/cert"
       ? {
@@ -96,6 +103,7 @@ export function CertQueueView({ queue, page, filter }: CertQueueViewProps) {
                   totalPages={paged.totalPages}
                   total={queue.rows.length}
                   unit="건"
+                  pageSize={pageSize}
                 />
               }
             >

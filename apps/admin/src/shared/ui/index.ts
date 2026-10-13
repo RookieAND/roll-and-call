@@ -35,6 +35,7 @@ export { OwnerOnlyView } from "./owner-only-view";
 export { ChoiceRowList, type ChoiceRow } from "./choice-row-list";
 export { OPEN_PALETTE_EVENT, openPalette } from "./open-palette";
 export { ListPager } from "./list-pager";
+export { PageSizeSelector } from "./page-size-selector";
 export { ManualNoticePreview } from "./manual-notice-preview";
 export { OutcomePanel, type Outcome } from "./outcome-panel";
 export { NextItemButton } from "./next-item-button";

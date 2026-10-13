@@ -6,6 +6,7 @@ import {
   CERT_MANAGE_STATUS_LABEL,
   CERT_TABS,
   paginate,
+  parsePageSize,
   withQuery,
   type CertManageStatus,
   type TableSort,
@@ -55,7 +56,8 @@ export function CertManageView({
   revokeTarget,
   staffChannel,
 }: CertManageViewProps) {
-  const paged = paginate(list.rows, query.page);
+  const pageSize = parsePageSize(query.pageSize);
+  const paged = paginate(list.rows, query.page, pageSize);
   const tabs = CERT_TABS.map((tab) =>
     tab.href === "/cert"
       ? {
@@ -131,6 +133,7 @@ export function CertManageView({
               totalPages={paged.totalPages}
               total={list.rows.length}
               unit="건"
+              pageSize={pageSize}
             />
           }
           className="flex-none"

@@ -1,6 +1,6 @@
 import { HStack, VStack } from "@roll-and-call/ui";
 
-import { paginate, sessionTimeLabel, withQuery, type TableSort } from "@/shared/lib";
+import { paginate, parsePageSize, sessionTimeLabel, withQuery, type TableSort } from "@/shared/lib";
 import type { listPosts, PostSortColumn } from "@/shared/server";
 import {
   AdminHeader,
@@ -37,12 +37,13 @@ interface PostsViewProps {
   posts: Awaited<ReturnType<typeof listPosts>>;
   sort: TableSort<PostSortColumn>;
   page?: string;
-  // 들어온 목록의 검색·필터·정렬·쪽. 상세 주소에 그대로 실어 [다음 건]과 뒤로 가기가 쓴다.
+  // 들어온 목록의 검색·필터·정렬·쪽·쪽 크기. 상세 주소에 그대로 실어 [다음 건]과 뒤로 가기가 쓴다.
   query: Record<string, string | undefined>;
 }
 
 export function PostsView({ posts, sort, page, query }: PostsViewProps) {
-  const paged = paginate(posts.rows, page);
+  const pageSize = parsePageSize(query.pageSize);
+  const paged = paginate(posts.rows, page, pageSize);
   const empty = posts.total === 0 ? EMPTY.none : EMPTY.filtered;
   const pager = (
     <ListPager
@@ -50,6 +51,7 @@ export function PostsView({ posts, sort, page, query }: PostsViewProps) {
       totalPages={paged.totalPages}
       total={posts.rows.length}
       unit="건"
+      pageSize={pageSize}
     />
   );
   const csvButton = (

@@ -128,6 +128,7 @@ export function RulebooksView({
                   total={groups.length}
                   unit="개 카테고리"
                   pageSize={CATEGORY_PAGE_SIZE}
+                  pageSizeSelectable={false}
                 />
               }
             >

@@ -2,7 +2,13 @@ import { Button, HStack, VStack } from "@roll-and-call/ui";
 
 import { AddNoShowDialog } from "@/features/add-no-show";
 import { CancelNoShowDialog, NoShowSummary } from "@/features/cancel-no-show";
-import { NO_SHOW_STATUS_LABEL, paginate, withQuery, type TableSort } from "@/shared/lib";
+import {
+  NO_SHOW_STATUS_LABEL,
+  paginate,
+  parsePageSize,
+  withQuery,
+  type TableSort,
+} from "@/shared/lib";
 import {
   type NoShowDetail,
   type NoShowRow,
@@ -58,7 +64,8 @@ export function NoShowsView({
   filtered,
   page,
 }: NoShowsViewProps) {
-  const paged = paginate(rows, page);
+  const pageSize = parsePageSize(query.pageSize);
+  const paged = paginate(rows, page, pageSize);
   const hrefOf = (id: string | undefined) => withQuery("/noshow", query, { record: id });
   const empty = filtered ? EMPTY.filtered : EMPTY.none;
   const addHref = withQuery("/noshow", query, { add: "1", record: undefined });
@@ -95,6 +102,7 @@ export function NoShowsView({
               totalPages={paged.totalPages}
               total={rows.length}
               unit="건"
+              pageSize={pageSize}
             />
           }
         >

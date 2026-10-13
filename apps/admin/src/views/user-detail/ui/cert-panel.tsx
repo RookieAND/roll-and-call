@@ -1,7 +1,7 @@
 import { Callout, Table, Text, Tooltip, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { paginate } from "@/shared/lib";
+import { paginate, parsePageSize } from "@/shared/lib";
 import type { UserDetail } from "@/shared/server";
 import {
   EMPTY_IMAGE,
@@ -18,11 +18,13 @@ import { CERT_ROW_LABEL, CERT_ROW_STATE, toCertRows } from "../model/to-cert-row
 interface CertPanelProps {
   user: UserDetail;
   page?: string;
+  pageSize?: string;
 }
 
-export function CertPanel({ user, page }: CertPanelProps) {
+export function CertPanel({ user, page, pageSize: pageSizeParam }: CertPanelProps) {
   const rows = toCertRows(user);
-  const paged = paginate(rows, page);
+  const pageSize = parsePageSize(pageSizeParam);
+  const paged = paginate(rows, page, pageSize);
   return (
     <VStack gap="150">
       {user.sanction ? (
@@ -41,6 +43,7 @@ export function CertPanel({ user, page }: CertPanelProps) {
             totalPages={paged.totalPages}
             total={rows.length}
             unit="개"
+            pageSize={pageSize}
           />
         }
       >

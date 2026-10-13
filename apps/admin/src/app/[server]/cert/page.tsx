@@ -14,6 +14,7 @@ export default async function CertQueuePage({ searchParams }: PageProps<"/[serve
     <CertQueueView
       queue={queue}
       page={isString(params.page) ? params.page : undefined}
+      pageSizeParam={isString(params.pageSize) ? params.pageSize : undefined}
       filter={filter}
     />
   );

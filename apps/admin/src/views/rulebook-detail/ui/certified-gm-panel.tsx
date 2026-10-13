@@ -3,7 +3,14 @@ import { RULEBOOK_KIND } from "@roll-and-call/database/rulebooks/model";
 import { Button, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { formatDate, paginate, sortRows, withQuery, type TableSort } from "@/shared/lib";
+import {
+  formatDate,
+  paginate,
+  parsePageSize,
+  sortRows,
+  withQuery,
+  type TableSort,
+} from "@/shared/lib";
 import type { CertifiedGm } from "@/shared/server";
 import {
   EMPTY_IMAGE,
@@ -24,6 +31,7 @@ interface CertifiedGmPanelProps {
   certRequired: boolean;
   sort: TableSort<CertifiedGmSortColumn>;
   page?: string;
+  pageSize?: string;
 }
 
 export function CertifiedGmPanel({
@@ -33,13 +41,15 @@ export function CertifiedGmPanel({
   certRequired,
   sort,
   page,
+  pageSize: pageSizeParam,
 }: CertifiedGmPanelProps) {
   const sorted = sortRows({
     rows: gms,
     sort,
     accessors: { approved: (gm) => gm.approvedAt, sessions: (gm) => gm.recentSessionCount },
   });
-  const paged = paginate(sorted, page);
+  const pageSize = parsePageSize(pageSizeParam);
+  const paged = paginate(sorted, page, pageSize);
   const title = kind === RULEBOOK_KIND.core ? "이 룰북으로 인증된 GM" : "인증한 사람";
   const right = certRequired ? (
     <Button
@@ -61,7 +71,13 @@ export function CertifiedGmPanel({
       right={right}
       footer={
         gms.length > 0 ? (
-          <ListPager page={paged.page} totalPages={paged.totalPages} total={gms.length} unit="명" />
+          <ListPager
+            page={paged.page}
+            totalPages={paged.totalPages}
+            total={gms.length}
+            unit="명"
+            pageSize={pageSize}
+          />
         ) : null
       }
     >

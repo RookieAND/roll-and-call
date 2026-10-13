@@ -6,15 +6,25 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 import { PAGE_SIZE } from "@/shared/lib";
 
+import { PageSizeSelector } from "./page-size-selector";
+
 interface ListPagerProps {
   page: number;
   totalPages: number;
   total: number;
   unit: string;
   pageSize?: number;
+  pageSizeSelectable?: boolean;
 }
 
-export function ListPager({ page, totalPages, total, unit, pageSize = PAGE_SIZE }: ListPagerProps) {
+export function ListPager({
+  page,
+  totalPages,
+  total,
+  unit,
+  pageSize = PAGE_SIZE,
+  pageSizeSelectable = true,
+}: ListPagerProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   if (!total) return null;
@@ -38,14 +48,16 @@ export function ListPager({ page, totalPages, total, unit, pageSize = PAGE_SIZE 
         전체 {total}
         {unit} 중 {from}–{to}
       </Text>
-      <Pagination
-        page={page}
-        totalPages={totalPages}
-        siblings={1}
-        hrefFor={hrefFor}
-        renderLink={(href) => <Link href={href} />}
-        className="ml-auto"
-      />
+      <HStack align="center" gap="150" className="ml-auto">
+        {pageSizeSelectable ? <PageSizeSelector value={pageSize} /> : null}
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          siblings={1}
+          hrefFor={hrefFor}
+          renderLink={(href) => <Link href={href} />}
+        />
+      </HStack>
     </HStack>
   );
 }

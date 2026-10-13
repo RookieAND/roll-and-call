@@ -34,7 +34,7 @@ export default async function UserDetailPage({
   params,
   searchParams,
 }: PageProps<"/[server]/users/[id]">) {
-  const [{ id }, { tab, role, page, action }, staff, server] = await Promise.all([
+  const [{ id }, { tab, role, page, pageSize, action }, staff, server] = await Promise.all([
     params,
     searchParams,
     requireStaff(),
@@ -67,6 +67,7 @@ export default async function UserDetailPage({
       tab={TABS.find((candidate) => candidate === tab) ?? USER_DETAIL_TAB.activity}
       role={ROLES.find((candidate) => candidate === role) ?? ACTIVITY_ROLE.all}
       page={isString(page) ? page : undefined}
+      pageSize={isString(pageSize) ? pageSize : undefined}
       guildId={server.discordGuildId}
       viewer={{ id: staff.id, owner: staff.role === "owner" }}
       kickBlock={kickBlock}

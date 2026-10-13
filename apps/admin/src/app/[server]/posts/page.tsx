@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "구인" };
 
 export default async function PostsPage({ searchParams }: PageProps<"/[server]/posts">) {
   const params = await searchParams;
-  const { q, status, rulebook, sort, dir, page } = stringParams(params);
+  const { q, status, rulebook, sort, dir, page, pageSize } = stringParams(params);
   const tableSort = parseSort({
     searchParams: params,
     columns: POST_SORT_COLUMNS,
@@ -20,7 +20,7 @@ export default async function PostsPage({ searchParams }: PageProps<"/[server]/p
       posts={posts}
       sort={tableSort}
       page={page}
-      query={{ q, status, rulebook, sort, dir, page }}
+      query={{ q, status, rulebook, sort, dir, page, pageSize }}
     />
   );
 }

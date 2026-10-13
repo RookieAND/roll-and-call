@@ -22,6 +22,7 @@ export { formatSessionTime } from "./format-session-time";
 export { sessionTimeLabel } from "./session-time-label";
 export { formatTime } from "./format-time";
 export { CATEGORY_PAGE_SIZE, PAGE_SIZE, paginate } from "./paginate";
+export { PAGE_SIZE_OPTIONS, parsePageSize, type PageSize } from "./parse-page-size";
 export { PENDING_COPY } from "./pending-copy";
 export { quoteWithParticle } from "./quote-with-particle";
 export { withQuery } from "./with-query";

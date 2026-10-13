@@ -1,7 +1,14 @@
 import { Chip, HStack, Text, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
-import { formatDateTime, paginate, withQuery, type TableSort } from "@/shared/lib";
+import {
+  formatDateTime,
+  PAGE_SIZE,
+  paginate,
+  parsePageSize,
+  withQuery,
+  type TableSort,
+} from "@/shared/lib";
 import {
   ALL_AUDIT_PERIOD,
   AUDIT_ACTION_GROUPS,
@@ -38,12 +45,19 @@ export function AuditLogView({ log, query, sort }: AuditLogViewProps) {
     page: undefined,
   });
   const allPeriodHref = withQuery("/log", query, { period: ALL_AUDIT_PERIOD, page: undefined });
-  const paged = paginate(log.rows, query.page);
+  const pageSize = parsePageSize(query.pageSize);
+  const paged = paginate(log.rows, query.page, pageSize);
   const filteredByTarget = Boolean(query.target || query.targetUser || query.targetGame);
   const scoped = filteredByTarget || Boolean(query.q);
-  const showPager = !filteredByTarget || paged.totalPages > 1;
+  const showPager = !filteredByTarget || paged.totalPages > 1 || pageSize !== PAGE_SIZE;
   const pager = showPager ? (
-    <ListPager page={paged.page} totalPages={paged.totalPages} total={log.rows.length} unit="건" />
+    <ListPager
+      page={paged.page}
+      totalPages={paged.totalPages}
+      total={log.rows.length}
+      unit="건"
+      pageSize={pageSize}
+    />
   ) : null;
   const empty = (
     <AuditLogEmpty periodLimited={log.period !== ALL_AUDIT_PERIOD} allPeriodHref={allPeriodHref} />

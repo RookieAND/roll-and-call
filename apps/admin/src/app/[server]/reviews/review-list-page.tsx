@@ -14,7 +14,7 @@ interface ReviewListPageProps {
 
 // 전체 후기·숨긴 후기 두 page.tsx가 tab만 다르게 넘긴다.
 export async function ReviewListPage({ tab, searchParams }: ReviewListPageProps) {
-  const { q, photo, game, sort, dir, page } = stringParams(searchParams);
+  const { q, photo, game, sort, dir, page, pageSize } = stringParams(searchParams);
   const tableSort = parseSort({
     searchParams,
     columns: REVIEW_SORT_COLUMNS,
@@ -27,7 +27,7 @@ export async function ReviewListPage({ tab, searchParams }: ReviewListPageProps)
       tab={tab}
       sort={tableSort}
       page={page}
-      query={{ q, photo, game, sort, dir }}
+      query={{ q, photo, game, sort, dir, pageSize }}
     />
   );
 }
