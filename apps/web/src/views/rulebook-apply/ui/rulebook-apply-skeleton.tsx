@@ -20,7 +20,7 @@ export function RulebookApplySkeleton() {
       <Progress value={1} max={2} className="h-[3px] rounded-none" aria-label="진행" />
       <Container
         size="sm"
-        className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-3px)] flex-col"
+        className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)] flex-col"
       >
         <VStack gap="200" aria-busy className="pt-250 pb-250">
           <VStack gap="050">
@@ -39,7 +39,7 @@ export function RulebookApplySkeleton() {
             ))}
           </VStack>
         </VStack>
-        <div className="sticky bottom-(--rc-size-tabbar) -mx-200 mt-auto bg-surface px-200 pt-100 pb-200">
+        <div className="sticky bottom-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] -mx-200 mt-auto bg-surface px-200 pt-100 pb-200">
           <Skeleton width="100%" height={104} rounded={300} />
         </div>
       </Container>

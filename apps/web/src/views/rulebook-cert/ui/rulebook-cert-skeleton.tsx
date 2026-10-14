@@ -12,7 +12,7 @@ export function RulebookCertSkeleton() {
       <Container size="sm" className="px-0">
         <VStack
           aria-busy
-          className="min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-3px)]"
+          className="min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)]"
         >
           <VStack gap="100" className="px-200 py-250">
             <HStack align="start" gap="125">
@@ -42,7 +42,7 @@ export function RulebookCertSkeleton() {
             </VStack>
           </VStack>
           <VStack className="flex-1" />
-          <VStack className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-200 pt-150 pb-200">
+          <VStack className="sticky bottom-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-200 pt-150 pb-200">
             <Skeleton width="100%" height={48} rounded={500} />
           </VStack>
         </VStack>

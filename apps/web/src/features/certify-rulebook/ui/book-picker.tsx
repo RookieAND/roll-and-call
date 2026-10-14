@@ -65,7 +65,7 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
       {/* ponytail: 3px는 AppBar 아래 Progress 높이. 목록이 짧아도 Callout이 탭바 바로 위에 붙도록 화면 높이를 채운다. */}
       <Container
         size="sm"
-        className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-3px)] flex-col"
+        className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)] flex-col"
       >
         <VStack gap="200" className="pt-250 pb-250">
           <VStack gap="050">
@@ -122,7 +122,7 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
           )}
         </VStack>
         {!choosingMode && (
-          <div className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) -mx-200 mt-auto bg-surface px-200 pt-100 pb-200">
+          <div className="sticky bottom-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] z-(--rc-z-sticky) -mx-200 mt-auto bg-surface px-200 pt-100 pb-200">
             {bulkApplying ? (
               <VStack gap="075">
                 {limitReached && (

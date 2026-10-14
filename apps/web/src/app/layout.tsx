@@ -1,7 +1,7 @@
 import { Toast } from "@roll-and-call/ui";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 
 import { OG_IMAGE } from "@/shared/lib";
@@ -30,6 +30,9 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
 };
+
+// iOS 홈 인디케이터 영역을 쓰려면 cover가 필요하다. 없으면 env(safe-area-inset-bottom)이 항상 0이다.
+export const viewport: Viewport = { viewportFit: "cover" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

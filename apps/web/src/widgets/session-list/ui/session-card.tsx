@@ -97,7 +97,13 @@ export function SessionCard({ model }: SessionCardProps) {
         {(model.action || model.canReopen) && (
           <HStack gap="100" className="mt-050 [&>*]:mt-0 [&>*]:min-w-0 *:flex-1">
             <SessionCardAction model={model} />
-            {model.canReopen && <ReopenGameLink gameId={model.id} variant="solid" size="md" />}
+            {model.canReopen && (
+              <ReopenGameLink
+                gameId={model.id}
+                variant={model.action ? "outline" : "solid"}
+                size="md"
+              />
+            )}
           </HStack>
         )}
       </VStack>

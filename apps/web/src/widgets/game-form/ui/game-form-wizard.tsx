@@ -8,7 +8,7 @@ import { use, useState } from "react";
 import type { FieldErrors } from "react-hook-form";
 
 import type { GameFormValues } from "@/features/write-game";
-import { useServerPath } from "@/shared/lib";
+import { useBeforeUnloadWarning, useServerPath } from "@/shared/lib";
 import { TrialContext, useTrialPush } from "@/shared/trial";
 import { ConfirmDialog } from "@/shared/ui";
 
@@ -48,6 +48,8 @@ export function GameFormWizard({
   const [step, setStep] = useState(0);
   const [confirmingExit, setConfirmingExit] = useState(false);
   const { watch, trigger, handleSubmit } = form;
+  // 새로고침·탭 닫기·브라우저 뒤로가기로 쓰던 내용이 사라지지 않도록 경고한다.
+  useBeforeUnloadWarning(form.formState.isDirty && !form.formState.isSubmitSuccessful);
 
   const intro = steps[step];
   const isLastStep = step === steps.length - 1;

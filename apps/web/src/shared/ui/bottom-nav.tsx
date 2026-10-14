@@ -46,7 +46,7 @@ export function BottomNav({ slug, dots }: BottomNavProps) {
       ref={element}
       cols={4}
       render={<nav aria-label="주요 메뉴" />}
-      className="sticky bottom-0 z-(--rc-z-sticky) h-(--rc-size-tabbar) border-t border-gray-200 bg-surface"
+      className="sticky bottom-0 z-(--rc-z-sticky) h-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] pb-(--rc-safe-bottom) border-t border-gray-200 bg-surface"
     >
       {tabs.map(({ path, label, Icon, dot }) => {
         const active = path === "/" ? pathname === "/" : isInRouteGroup({ pathname, base: path });

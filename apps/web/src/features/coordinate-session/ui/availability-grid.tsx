@@ -6,11 +6,10 @@ import { useParams } from "next/navigation";
 
 import { availabilityQuery } from "@/entities/availability";
 import { AppError } from "@/shared/api";
-import type { DayColumn, TimeRow } from "@/shared/lib";
+import { type DayColumn, type TimeRow, useBeforeUnloadWarning } from "@/shared/lib";
 import { SLOT_ROW_PX, SlotGrid, toast } from "@/shared/ui";
 
 import { saveAvailability } from "../api/save-availability";
-import { useBeforeUnloadWarning } from "../model/use-before-unload-warning";
 import { useSlotPainter } from "../model/use-slot-painter";
 import { AvailabilitySaveBar } from "./availability-save-bar";
 import { BLOCKED_STRIPES, cellTone, UNSAVED_SELECTED_TONE } from "./cell-tone";

@@ -76,7 +76,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
     <>
       <AppBar back="/me/rulebooks" title="신청 상세" />
       <Container size="sm" className="px-0">
-        <VStack className="min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-3px)]">
+        <VStack className="min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)]">
           {results.map((result, index) => (
             <BookResultSection
               key={result.id}
@@ -85,7 +85,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
             />
           ))}
           <VStack className="flex-1" />
-          <VStack className="sticky bottom-(--rc-size-tabbar) z-(--rc-z-sticky) bg-surface">
+          <VStack className="sticky bottom-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] z-(--rc-z-sticky) bg-surface">
             {results.map((result) =>
               result.retryHref ? (
                 <RetryBar

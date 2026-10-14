@@ -3,6 +3,7 @@
 import { Button, Dialog } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
+import { useServerPath } from "@/shared/lib";
 import { LineBreaks } from "@/shared/ui";
 
 interface OverlapNoticeDialogProps {
@@ -17,6 +18,7 @@ const BODY_LINES = [
 
 export function OverlapNoticeDialog({ overlapGameId, onClose }: OverlapNoticeDialogProps) {
   const router = useRouter();
+  const toServerPath = useServerPath();
 
   return (
     <Dialog.Root open={overlapGameId !== null} onOpenChange={(open) => !open && onClose()}>
@@ -34,7 +36,7 @@ export function OverlapNoticeDialog({ overlapGameId, onClose }: OverlapNoticeDia
           <Button
             size="lg"
             className="flex-1"
-            onClick={() => router.push(`/games/${overlapGameId}`)}
+            onClick={() => router.push(toServerPath(`/games/${overlapGameId}`))}
           >
             겹치는 세션 보기
           </Button>
