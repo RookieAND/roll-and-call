@@ -1,5 +1,5 @@
 import { Badge, HStack, IconButton, Text } from "@roll-and-call/ui";
-import { X } from "lucide-react";
+import { BookPlus, X } from "lucide-react";
 
 import type { SupplementValue } from "@/features/write-game";
 
@@ -11,7 +11,8 @@ interface SupplementRowProps {
 export function SupplementRow({ item, onRemove }: SupplementRowProps) {
   const manual = item.rulebookId === null;
   return (
-    <HStack align="center" gap="100" render={<li />} className="min-h-12 py-050 pr-050 pl-175">
+    <HStack align="center" gap="125" render={<li />} className="min-h-12 py-050 pr-050 pl-175">
+      <BookPlus size={18} strokeWidth={2.1} aria-hidden className="flex-none text-gray-600" />
       <Text typography="body2" className="min-w-0 flex-1 break-all">
         {item.name}
       </Text>
