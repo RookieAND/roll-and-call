@@ -8,6 +8,7 @@ import type { RulebookFields } from "#/modules/rulebooks/model/rulebook-fields";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
 import { describeRulebook } from "#/modules/rulebooks/queries/describe-rulebook";
 import { relinkGames } from "#/modules/rulebooks/queries/relink-games";
+import { renameGameSupplements } from "#/modules/rulebooks/queries/rename-game-supplements";
 import { rulebooks } from "#/schema";
 
 import { removeEmptyCategories } from "./remove-empty-categories";
@@ -16,6 +17,7 @@ import { toRulebookValues } from "./rulebook-values";
 export type UpdateRulebookResult = { ok: true } | { ok: false; duplicate: true };
 
 // 인증·신청·구인은 룰북을 id로 가리키므로 이름이 바뀌어도 따라 고칠 곳이 없다. 다른 이름만 구인에 다시 맞춘다.
+// 구인 서플리먼트만 이름을 함께 저장하므로 이름이 바뀌면 따라 고친다.
 export async function updateRulebook({
   serverId,
   id,
@@ -61,6 +63,9 @@ export async function updateRulebook({
       );
     await removeEmptyCategories({ executor: tx, serverId });
     await relinkGames({ executor: tx, serverId });
+    if (values.name !== rulebook.name) {
+      await renameGameSupplements({ executor: tx, serverId, rulebookId: id, name: values.name });
+    }
     const changes = rulebookChanges(before, await describeRulebook({ executor: tx, serverId, id }));
     const label = rulebookLabel(fields);
     await recordAudit({
