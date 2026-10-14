@@ -7,7 +7,12 @@ import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
 import { foldSupplements } from "@/entities/game";
-import { ruleSetOf, supplementOptions, type MyRulebooks } from "@/entities/rulebook";
+import {
+  isCertEnforced,
+  ruleSetOf,
+  supplementOptions,
+  type MyRulebooks,
+} from "@/entities/rulebook";
 import { manualSupplementError, type GameFormValues } from "@/features/write-game";
 import { LineBreaks } from "@/shared/ui";
 
@@ -32,7 +37,9 @@ export function GameSupplementField({ form, rulebooks, editing }: GameSupplement
   const items = watch("supplements");
   const rulebookId = watch("rulebookId");
   const set = rulebooks && rulebookId ? ruleSetOf({ myRulebooks: rulebooks, rulebookId }) : null;
-  const options = set ? supplementOptions(set) : [];
+  const options = set
+    ? supplementOptions(set, { enforced: isCertEnforced(rulebooks?.enforcementDate ?? null) })
+    : [];
   const hasOptions = options.length > 0;
   const ruleChosen = Boolean(rulebookId);
   const showListButton = hasOptions || !ruleChosen;

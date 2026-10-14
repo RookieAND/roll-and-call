@@ -27,6 +27,7 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
   const set = rulebooks ? ruleSetOf({ myRulebooks: rulebooks, rulebookId }) : null;
   const gate = set && rulebooks ? ruleGate({ set, myRulebooks: rulebooks }) : null;
   const error = gate?.type === RULE_GATE.blocked ? null : formState.errors.rule?.message;
+  const calloutPalette = gate?.type === RULE_GATE.blocked ? "danger" : "warning";
   const hint = rulebooks
     ? "구인을 열 룰과 판본을 고릅니다."
     : "룰북을 잘못 골랐다면 구인을 취소하고 새로 열어 주세요.";
@@ -98,8 +99,9 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
         </HStack>
       )}
       {gate && gate.type !== RULE_GATE.open && (
-        <Callout.Root colorPalette="danger">
+        <Callout.Root colorPalette={calloutPalette}>
           <Callout.Icon />
+          <Callout.Title className="break-keep">{gate.title}</Callout.Title>
           <Callout.Description className="break-keep">
             <LineBreaks lines={gate.lines} />
           </Callout.Description>

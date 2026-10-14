@@ -15,7 +15,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
-import { ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
+import { isCertEnforced, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
@@ -83,6 +83,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       supplements: values.supplements,
       set,
       previous: game.supplements,
+      enforced: isCertEnforced(myRulebooks.enforcementDate),
     });
     if (!supplementCheck.ok) return { error: supplementCheck.error, field: "supplements" };
 

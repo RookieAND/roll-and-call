@@ -14,12 +14,14 @@ export function checkSupplements({
   supplements,
   set,
   previous = [],
+  enforced,
 }: {
   supplements: SupplementValue[];
   set: EditionSet | null;
   previous?: GameSupplement[];
+  enforced: boolean;
 }): CheckResult {
-  const options = set ? supplementOptions(set) : [];
+  const options = set ? supplementOptions(set, { enforced }) : [];
   const accepted: GameSupplement[] = [];
   for (const item of supplements) {
     if (item.rulebookId === null) {

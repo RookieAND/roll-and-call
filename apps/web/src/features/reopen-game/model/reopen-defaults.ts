@@ -1,6 +1,12 @@
 import { pick } from "es-toolkit";
 
-import { RULE_GATE, ruleGate, ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
+import {
+  RULE_GATE,
+  isCertEnforced,
+  ruleGate,
+  ruleSetOf,
+  type MyRulebooks,
+} from "@/entities/rulebook";
 import type { Game } from "@/shared/server";
 
 import { openSupplements } from "./open-supplements";
@@ -69,7 +75,11 @@ export function reopenDefaults({
       ...carried,
       rule: set.label,
       rulebookId: set.cores[0]?.id ?? "",
-      supplements: openSupplements({ supplements: game.supplements, set }),
+      supplements: openSupplements({
+        supplements: game.supplements,
+        set,
+        enforced: isCertEnforced(rulebooks.enforcementDate, now),
+      }),
     },
     ruleNotice: null,
   };

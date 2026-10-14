@@ -9,7 +9,7 @@ import { uniq } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { RULE_GATE, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
+import { RULE_GATE, isCertEnforced, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
@@ -62,7 +62,11 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
       field: "rule",
     };
   }
-  const supplementCheck = checkSupplements({ supplements: parsed.data.supplements, set });
+  const supplementCheck = checkSupplements({
+    supplements: parsed.data.supplements,
+    set,
+    enforced: isCertEnforced(myRulebooks.enforcementDate),
+  });
   if (!supplementCheck.ok) return { error: supplementCheck.error, field: "supplements" };
 
   const invitedIds = uniq(parsed.data.preConfirmed.map((player) => player.userId));

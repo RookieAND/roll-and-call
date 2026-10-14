@@ -33,7 +33,7 @@ describe("supplementOptions", () => {
       book("핸드북", { kind: "handbook", state: CERT_STATE.certified }),
     ];
     const [set] = editionSets(rulebooks);
-    expect(supplementOptions(set!)).toEqual([
+    expect(supplementOptions(set!, { enforced: true })).toEqual([
       { id: "무료 책", name: "무료 책", state: SUPPLEMENT_OPTION_STATE.open },
       { id: "인비전", name: "인비전", state: SUPPLEMENT_OPTION_STATE.open },
       { id: "정인기", name: "정인기", state: SUPPLEMENT_OPTION_STATE.pending },
@@ -42,6 +42,18 @@ describe("supplementOptions", () => {
         name: "히라사카 기관 유파북",
         state: SUPPLEMENT_OPTION_STATE.locked,
       },
+    ]);
+  });
+
+  it("유예 기간에는 인증하지 않은 책도 모두 고를 수 있다", () => {
+    const [set] = editionSets([
+      book("코어", { kind: "core" }),
+      book("정인기", { state: CERT_STATE.pending }),
+      book("유파북"),
+    ]);
+    expect(supplementOptions(set!, { enforced: false }).map((option) => option.state)).toEqual([
+      SUPPLEMENT_OPTION_STATE.open,
+      SUPPLEMENT_OPTION_STATE.open,
     ]);
   });
 });
