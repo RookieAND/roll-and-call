@@ -2,7 +2,7 @@
 
 import { SUPPLEMENTS_MAX } from "@roll-and-call/database/games/model";
 import { Button, Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
-import { Plus } from "lucide-react";
+import { List, Plus } from "lucide-react";
 import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
@@ -34,16 +34,18 @@ export function GameSupplementField({ form, rulebooks, editing }: GameSupplement
   const set = rulebooks && rulebookId ? ruleSetOf({ myRulebooks: rulebooks, rulebookId }) : null;
   const options = set ? supplementOptions(set) : [];
   const hasOptions = options.length > 0;
+  const ruleChosen = Boolean(rulebookId);
+  const showListButton = hasOptions || !ruleChosen;
   const full = items.length >= SUPPLEMENTS_MAX;
   const { visible, foldable, hiddenCount } = foldSupplements({ items, expanded });
   const pickedIds = items.flatMap((item) =>
     options.some((option) => option.id === item.rulebookId) ? [item.rulebookId!] : [],
   );
   const room = SUPPLEMENTS_MAX - (items.length - pickedIds.length);
-  const hint = supplementHint({ full, hasOptions, editing });
+  const hint = ruleChosen
+    ? supplementHint({ full, hasOptions, editing })
+    : ["룰을 고르면 서플리먼트를 넣을 수 있습니다."];
   const fieldError = formState.errors.supplements?.message;
-
-  if (!rulebookId) return null;
 
   const update = (next: GameFormValues["supplements"]) =>
     setValue("supplements", next, { shouldDirty: true, shouldValidate: true });
@@ -92,40 +94,41 @@ export function GameSupplementField({ form, rulebooks, editing }: GameSupplement
         </Card.Root>
       )}
 
-      {inputOpen && (
+      {inputOpen ? (
         <SupplementManualInput
           validate={(name) => manualSupplementError({ name, items, set })}
           onAdd={(name) => {
             update([...items, { name, rulebookId: null }]);
             setInputOpen(false);
           }}
+          onCancel={() => setInputOpen(false)}
         />
-      )}
-
-      <Grid cols={hasOptions ? 2 : 1} gap="100">
-        {hasOptions && (
+      ) : (
+        <Grid cols={showListButton ? 2 : 1} gap="100">
+          {showListButton && (
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              disabled={!ruleChosen || (full && pickedIds.length === 0)}
+              onClick={openSheet}
+            >
+              <List size={16} strokeWidth={2.4} aria-hidden />
+              목록에서 고르기
+            </Button>
+          )}
           <Button
             type="button"
             variant="outline"
-            colorPalette="primary"
             size="lg"
-            disabled={full && pickedIds.length === 0}
-            onClick={openSheet}
+            disabled={!ruleChosen || full}
+            onClick={() => setInputOpen(true)}
           >
-            목록에서 고르기
+            <Plus size={16} strokeWidth={2.4} aria-hidden />
+            직접 입력하기
           </Button>
-        )}
-        <Button
-          type="button"
-          variant="outline"
-          size="lg"
-          disabled={full || inputOpen}
-          onClick={() => setInputOpen(true)}
-        >
-          <Plus size={15} strokeWidth={2.6} aria-hidden />
-          직접 입력하기
-        </Button>
-      </Grid>
+        </Grid>
+      )}
 
       {fieldError ? (
         <Text typography="body4" foreground="danger" role="alert">

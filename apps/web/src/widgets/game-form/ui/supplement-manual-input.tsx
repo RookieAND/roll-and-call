@@ -7,9 +7,10 @@ import { useState } from "react";
 interface SupplementManualInputProps {
   validate: (name: string) => string | null;
   onAdd: (name: string) => void;
+  onCancel: () => void;
 }
 
-export function SupplementManualInput({ validate, onAdd }: SupplementManualInputProps) {
+export function SupplementManualInput({ validate, onAdd, onCancel }: SupplementManualInputProps) {
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -45,8 +46,11 @@ export function SupplementManualInput({ validate, onAdd }: SupplementManualInput
             add();
           }}
         />
-        <Button type="button" size="lg" onClick={add}>
+        <Button type="button" className="h-11 px-200" onClick={add}>
           추가
+        </Button>
+        <Button type="button" variant="ghost" className="h-11 px-150" onClick={onCancel}>
+          취소
         </Button>
       </HStack>
     </Field.Root>
