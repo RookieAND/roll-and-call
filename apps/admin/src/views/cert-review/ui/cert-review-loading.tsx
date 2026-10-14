@@ -1,4 +1,4 @@
-import { Button, Checkbox, Grid, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { Button, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 
 import {
   AdminHeader,
@@ -6,15 +6,13 @@ import {
   KeyHint,
   LoadingRegion,
   NextItemButton,
-  SkeletonItem,
   skeletonFact,
 } from "@/shared/ui";
 
-const SHOTS = [
-  { label: "앞면", note: "표지 + 닉네임 쪽지", question: "룰북·판본과 쪽지 닉네임이 맞는가" },
-  { label: "뒷면", note: "뒤표지", question: "같은 책의 뒤표지인가" },
-] as const;
+const SHOT_SLOTS = ["first", "second"] as const;
 
+// 심사 대기 신청뿐 아니라 인증 관리의 「인증 사진 보기」로 승인·반려된 신청도 이 화면으로 온다.
+// 신청 방식(실물·전자책·묶음)과 처리 상태를 아직 모르므로 그에 따라 달라지는 글자는 그리지 않는다.
 export function CertReviewLoading() {
   return (
     <>
@@ -26,7 +24,7 @@ export function CertReviewLoading() {
         ]}
         actions={<NextItemButton />}
       />
-      <LoadingRegion fullBleed label="심사할 신청을 불러오는 중입니다">
+      <LoadingRegion fullBleed label="신청 내용을 불러오는 중입니다">
         <VStack gap="175" className="w-full flex-1 p-200">
           <section className="rounded-600 border border-gray-200 bg-surface">
             <HStack align="center" gap="150" className="px-200 py-175">
@@ -38,33 +36,30 @@ export function CertReviewLoading() {
               <FactRows labelWidth={72} items={["신청 일자", "대기"].map(skeletonFact)} />
             </Grid>
           </section>
-          <SkeletonItem />
           <VStack gap="125">
             <HStack align="center" gap="100">
-              <Text typography="heading3" render={<h2 />}>
-                사진 확인
-              </Text>
+              <Skeleton width={96} height={22} />
               <Skeleton width={72} height={20} rounded="full" className="ml-auto" />
             </HStack>
             <Grid className="grid-cols-2 gap-150">
-              {SHOTS.map((shot) => (
+              {SHOT_SLOTS.map((slot) => (
                 <VStack
-                  key={shot.label}
+                  key={slot}
                   className="min-w-0 overflow-hidden rounded-600 border border-gray-200 bg-surface"
                 >
-                  <VStack gap="025" className="px-150 py-125">
-                    <Text typography="subtitle1">{shot.label}</Text>
-                    <Text typography="body4" foreground="hint">
-                      {shot.note}
-                    </Text>
+                  <VStack gap="075" className="px-150 py-125">
+                    <Skeleton width={56} height={18} />
+                    <Skeleton width={112} height={14} />
                   </VStack>
-                  <Skeleton width="100%" height={360} rounded="none" />
-                  <Checkbox.Field className="px-150 py-125">
-                    <Checkbox.Root disabled>
-                      <Checkbox.Indicator />
-                    </Checkbox.Root>
-                    <Checkbox.Label>{shot.question}</Checkbox.Label>
-                  </Checkbox.Field>
+                  <Skeleton
+                    width="100%"
+                    rounded="none"
+                    className="h-90 border-y border-(--rc-color-border-subtle)"
+                  />
+                  <HStack align="center" gap="100" className="px-150 py-125">
+                    <Skeleton width={16} height={16} rounded={200} />
+                    <Skeleton width="64%" height={14} />
+                  </HStack>
                 </VStack>
               ))}
             </Grid>
@@ -78,9 +73,6 @@ export function CertReviewLoading() {
           <Button variant="outline" colorPalette="gray" size="sm" disabled>
             건너뛰기
           </Button>
-          <Text typography="body4" foreground="hint">
-            신청 내용을 불러오면 승인과 반려를 할 수 있습니다
-          </Text>
           <HStack gap="100" className="ml-auto">
             <Button variant="outline" colorPalette="danger" disabled>
               반려
