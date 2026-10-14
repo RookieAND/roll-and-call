@@ -100,9 +100,11 @@ describe("certManageRows", () => {
       method: CERT_GRANT_METHOD.photo,
       changedAt: day(18),
       editionEligible: false,
+      applicationId: "a1",
     });
     expect(row("dawn", "keeper")).toMatchObject({
       method: CERT_GRANT_METHOD.staff,
+      applicationId: null,
       editionEligible: true,
       sanctioned: true,
     });

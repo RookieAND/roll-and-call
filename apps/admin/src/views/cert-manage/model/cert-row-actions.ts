@@ -3,7 +3,7 @@ import type { CertManageRow } from "@/shared/server";
 
 import { CERT_ROW_ACTION, type CertRowActionLink } from "./cert-row-action";
 
-// 인증됨: 반려로 돌리기·활동 기록, 심사 중: 심사 상세·활동 기록, 반려됨: 활동 기록 하나(D288, D293).
+// 인증됨: 반려로 돌리기·(사진 심사였으면) 인증 사진 보기·활동 기록, 심사 중: 심사 상세·활동 기록, 반려됨: 활동 기록 하나(D288, D293).
 export function certRowActions({
   row,
   query,
@@ -18,7 +18,10 @@ export function certRowActions({
       user: row.userId,
       rulebook: row.rulebookId,
     });
-    return [{ action: CERT_ROW_ACTION.revoke, href: revoke }, log];
+    const proof = row.applicationId
+      ? [{ action: CERT_ROW_ACTION.proof, href: `/cert/${row.applicationId}` }]
+      : [];
+    return [{ action: CERT_ROW_ACTION.revoke, href: revoke }, ...proof, log];
   }
   if (row.status === CERT_MANAGE_STATUS.pending && row.applicationId) {
     return [{ action: CERT_ROW_ACTION.review, href: `/cert/${row.applicationId}` }, log];

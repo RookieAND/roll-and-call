@@ -19,5 +19,6 @@ export interface CertManageRow {
   method: CertGrantMethod;
   status: CertManageStatus;
   changedAt: Date;
+  // 심사 중·반려됨은 마지막 신청, 인증됨은 사진 심사로 승인된 신청. 운영진 부여면 null.
   applicationId: string | null;
 }

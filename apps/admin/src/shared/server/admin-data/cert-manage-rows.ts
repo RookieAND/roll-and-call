@@ -60,16 +60,18 @@ export function certManageRows({
             .map((item) => item.rulebookId),
         );
         const group = groups.find((candidate) => candidate.bookIds.has(rulebookId));
-        const photo = mine.some(
-          (application) => application.status === "approved" && !application.direct,
+        // 사진 심사로 받은 인증이면 승인된 신청 중 마지막 것의 심사 상세에서 증빙을 다시 본다.
+        const approved = maxBy(
+          mine.filter((application) => application.status === "approved" && !application.direct),
+          (application) => (application.processedAt ?? application.appliedAt).getTime(),
         );
         return {
           ...base,
           editionEligible: group ? group.eligible(certifiedIds) : null,
-          method: photo ? CERT_GRANT_METHOD.photo : CERT_GRANT_METHOD.staff,
+          method: approved ? CERT_GRANT_METHOD.photo : CERT_GRANT_METHOD.staff,
           status: CERT_MANAGE_STATUS.certified,
           changedAt: certification.approvedAt,
-          applicationId: null,
+          applicationId: approved?.id ?? null,
         };
       }
       if (!latest || latest.status === "approved") return null;

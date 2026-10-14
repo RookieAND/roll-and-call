@@ -1,7 +1,7 @@
 "use client";
 
 import { IconButton, Tooltip } from "@roll-and-call/ui";
-import { RotateCcw, ScrollText, Search } from "lucide-react";
+import { Images, RotateCcw, ScrollText, Search } from "lucide-react";
 
 import { MoreMenu, ServerLink } from "@/shared/ui";
 
@@ -10,6 +10,7 @@ import { CERT_ROW_ACTION, type CertRowActionLink } from "../model/cert-row-actio
 const ACTION_VIEW = {
   [CERT_ROW_ACTION.revoke]: { label: "반려로 돌리기", Icon: RotateCcw, danger: true },
   [CERT_ROW_ACTION.review]: { label: "심사 상세 열기", Icon: Search, danger: false },
+  [CERT_ROW_ACTION.proof]: { label: "인증 사진 보기", Icon: Images, danger: false },
   [CERT_ROW_ACTION.log]: { label: "활동 기록에서 보기", Icon: ScrollText, danger: false },
 } as const;
 
