@@ -7,27 +7,27 @@ import { SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
 import { addDays, fromKstDateTimeInput } from "@/shared/lib";
 import { DatePicker, DateTimePicker, LineBreaks, toast, useAction } from "@/shared/ui";
 
-import { openNextRound } from "../api/open-next-round";
-import { nextRoundGuide } from "../model/next-round-guide";
-import { NEXT_ROUND_MAX_DAYS } from "../model/next-round-rules";
-import { NextRoundCarryList } from "./next-round-carry-list";
+import { openSecondTeam } from "../api/open-second-team";
+import { secondTeamGuide } from "../model/second-team-guide";
+import { SECOND_TEAM_MAX_DAYS } from "../model/second-team-rules";
+import { SecondTeamCarryList } from "./second-team-carry-list";
 
-interface NextRoundSheetProps {
+interface SecondTeamSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   game: { id: string; title: string; scheduleMode: ScheduleMode };
   waitingCount: number;
-  // 고를 수 있는 첫날(KST YYYY-MM-DD). view가 nextRoundBaseDate로 계산해 넘긴다.
+  // 고를 수 있는 첫날(KST YYYY-MM-DD). view가 secondTeamBaseDate로 계산해 넘긴다.
   baseDate: string;
 }
 
-export function NextRoundSheet({
+export function SecondTeamSheet({
   open,
   onOpenChange,
   game,
   waitingCount,
   baseDate,
-}: NextRoundSheetProps) {
+}: SecondTeamSheetProps) {
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");
   const [startsAt, setStartsAt] = useState("");
@@ -35,9 +35,9 @@ export function NextRoundSheet({
   const coordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
   const ready = coordinate ? Boolean(rangeStart && rangeEnd) : Boolean(startsAt);
   const lastEnd = rangeStart
-    ? addDays({ date: rangeStart, count: NEXT_ROUND_MAX_DAYS - 1 })
+    ? addDays({ date: rangeStart, count: SECOND_TEAM_MAX_DAYS - 1 })
     : undefined;
-  const guide = nextRoundGuide({ coordinate, ready });
+  const guide = secondTeamGuide({ coordinate, ready });
 
   function changeOpen(nextOpen: boolean) {
     if (pending) return;
@@ -51,7 +51,7 @@ export function NextRoundSheet({
 
   function pickStart(date: string) {
     setRangeStart(date);
-    const last = addDays({ date, count: NEXT_ROUND_MAX_DAYS - 1 });
+    const last = addDays({ date, count: SECOND_TEAM_MAX_DAYS - 1 });
     if (rangeEnd && (rangeEnd < date || rangeEnd > last)) setRangeEnd("");
   }
 
@@ -59,8 +59,8 @@ export function NextRoundSheet({
     const input = coordinate
       ? { fromGameId: game.id, rangeStart, rangeEnd }
       : { fromGameId: game.id, startsAt: fromKstDateTimeInput(startsAt).toISOString() };
-    run(() => openNextRound(input), {
-      onSuccess: () => toast.success("다음 회차를 열었습니다"),
+    run(() => openSecondTeam(input), {
+      onSuccess: () => toast.success("2팀을 열었습니다"),
     });
   }
 
@@ -69,13 +69,13 @@ export function NextRoundSheet({
       <Sheet.Popup className="max-h-[85dvh] overflow-y-auto">
         <Sheet.Handle />
         <Sheet.Header>
-          <Sheet.Title className="mb-0">다음 회차 만들기</Sheet.Title>
+          <Sheet.Title className="mb-0">2팀 만들기</Sheet.Title>
           <Text typography="body3" foreground="muted">
             {game.title} · 대기 {waitingCount}명
           </Text>
         </Sheet.Header>
         <VStack gap="200">
-          <NextRoundCarryList waitingCount={waitingCount} />
+          <SecondTeamCarryList waitingCount={waitingCount} />
           {coordinate ? (
             <Grid cols={2} gap="100">
               <Field.Root label="조율 시작일">
@@ -113,7 +113,7 @@ export function NextRoundSheet({
               취소
             </Button>
             <Button size="lg" disabled={!ready} loading={pending} onClick={submit}>
-              회차 열기
+              2팀 열기
             </Button>
           </Grid>
         </Sheet.Footer>

@@ -1,6 +1,6 @@
 import { toKstDateInput } from "@/shared/lib";
 
-export function isNextRoundStartValid({
+export function isSecondTeamStartValid({
   baseDate,
   startsAt,
 }: {

@@ -1,15 +1,15 @@
 import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { CircleCheck } from "lucide-react";
 
-interface NextRoundCarryListProps {
+interface SecondTeamCarryListProps {
   waitingCount: number;
 }
 
 // 가능 시간은 넘기지 않으므로 「이미 낸 가능 시간」 줄은 두지 않는다.
-export function NextRoundCarryList({ waitingCount }: NextRoundCarryListProps) {
+export function SecondTeamCarryList({ waitingCount }: SecondTeamCarryListProps) {
   const rows = [
     { title: "구인 정보", description: "룰 · 시놉시스 · 플레이타임" },
-    { title: `대기 ${waitingCount}명`, description: "다음 회차의 확정 참여자가 됩니다" },
+    { title: `대기 ${waitingCount}명`, description: "2팀의 확정 참여자가 됩니다" },
   ];
 
   return (

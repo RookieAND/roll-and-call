@@ -5,7 +5,7 @@ import { AppBar } from "@/shared/ui";
 
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
-import { NextRoundBanner } from "./next-round-banner";
+import { SecondTeamBanner } from "./second-team-banner";
 import { RosterBody } from "./roster-body";
 import { RosterHeader } from "./roster-header";
 import { RosterStats } from "./roster-stats";
@@ -18,7 +18,7 @@ interface ParticipantManagerProps {
   waiting: ManagedMember[];
   summary: RosterSummary;
   isCoordinate: boolean;
-  nextRoundBaseDate: string;
+  secondTeamBaseDate: string;
 }
 
 export function ParticipantManager({
@@ -28,9 +28,9 @@ export function ParticipantManager({
   waiting,
   summary,
   isCoordinate,
-  nextRoundBaseDate,
+  secondTeamBaseDate,
 }: ParticipantManagerProps) {
-  const showNextRound = waiting.length > 0 && !summary.beforeDraw;
+  const showSecondTeam = waiting.length > 0 && !summary.beforeDraw;
 
   return (
     <>
@@ -63,11 +63,11 @@ export function ParticipantManager({
             isCoordinate={isCoordinate}
           />
 
-          {showNextRound && (
-            <NextRoundBanner
+          {showSecondTeam && (
+            <SecondTeamBanner
               game={game}
               waitingCount={waiting.length}
-              baseDate={nextRoundBaseDate}
+              baseDate={secondTeamBaseDate}
             />
           )}
         </VStack>

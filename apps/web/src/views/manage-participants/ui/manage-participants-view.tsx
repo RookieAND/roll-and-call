@@ -4,7 +4,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { isSessionEnded, isSessionStarted, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
-import { nextRoundBaseDate } from "@/features/open-next-round";
+import { secondTeamBaseDate } from "@/features/open-second-team";
 import { serverPath } from "@/shared/lib";
 import {
   getApplicationNotes,
@@ -98,7 +98,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
       waiting={waiting}
       summary={summary}
       isCoordinate={isCoordinate}
-      nextRoundBaseDate={nextRoundBaseDate({
+      secondTeamBaseDate={secondTeamBaseDate({
         confirmedAt: game.confirmedAt,
         rangeEnd: game.rangeEnd,
       })}

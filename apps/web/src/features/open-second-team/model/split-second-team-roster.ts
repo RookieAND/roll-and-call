@@ -1,5 +1,5 @@
 // 대기 순서대로 넘길 사람을 정원까지 확정, 나머지는 대기로 나눈다. excludedIds(정지·탈퇴)는 뺀다.
-export function splitNextRoundRoster({
+export function splitSecondTeamRoster({
   orderedIds,
   excludedIds,
   maxPlayers,

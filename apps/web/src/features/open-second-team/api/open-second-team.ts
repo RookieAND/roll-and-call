@@ -31,13 +31,13 @@ import {
   notMemberError,
 } from "@/shared/server";
 
-import { isNextRoundRangeValid } from "../model/is-next-round-range-valid";
-import { isNextRoundStartValid } from "../model/is-next-round-start-valid";
-import { nextRoundBaseDate } from "../model/next-round-base-date";
-import { nextRoundColumns } from "../model/next-round-columns";
-import { nextRoundDeadline } from "../model/next-round-deadline";
-import { NEXT_ROUND_RANGE_MESSAGE, NEXT_ROUND_START_MESSAGE } from "../model/next-round-rules";
-import { splitNextRoundRoster } from "../model/split-next-round-roster";
+import { isSecondTeamRangeValid } from "../model/is-second-team-range-valid";
+import { isSecondTeamStartValid } from "../model/is-second-team-start-valid";
+import { secondTeamBaseDate } from "../model/second-team-base-date";
+import { secondTeamColumns } from "../model/second-team-columns";
+import { secondTeamDeadline } from "../model/second-team-deadline";
+import { SECOND_TEAM_RANGE_MESSAGE, SECOND_TEAM_START_MESSAGE } from "../model/second-team-rules";
+import { splitSecondTeamRoster } from "../model/split-second-team-roster";
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -48,10 +48,10 @@ const inputSchema = z.object({
   startsAt: z.iso.datetime({ offset: true }).optional(),
 });
 
-// 다음 회차는 원 구인의 정보와 대기자를 넘겨 새 구인으로 연다. 원 구인과 그 명단은 바꾸지 않고, 가능 시간은 넘기지 않는다.
-export async function openNextRound(input: z.input<typeof inputSchema>): Promise<ActionResult> {
+// 2팀은 원 구인의 정보와 대기자를 넘겨 새 구인으로 연다. 원 구인과 그 명단은 바꾸지 않고, 가능 시간은 넘기지 않는다.
+export async function openSecondTeam(input: z.input<typeof inputSchema>): Promise<ActionResult> {
   const parsed = inputSchema.safeParse(input);
-  if (!parsed.success) return { error: "다음 회차 일정을 다시 골라 주세요." };
+  if (!parsed.success) return { error: "2팀 일정을 다시 골라 주세요." };
   const { fromGameId, rangeStart, rangeEnd, startsAt } = parsed.data;
 
   const member = await getActingMember();
@@ -69,7 +69,7 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
       if (!game) throw new AppError(GAME_NOT_FOUND_MESSAGE, ERROR_DISPLAY.page);
       if (game.gmId !== user.id) throw new AppError("권한이 없습니다.");
       if (game.cancelledAt) throw new AppError(GAME_CANCELLED_MESSAGE);
-      if (isSessionEnded(game, now)) throw new AppError("세션이 끝나 다음 회차를 열 수 없습니다.");
+      if (isSessionEnded(game, now)) throw new AppError("세션이 끝나 2팀을 열 수 없습니다.");
       const awaitingResult = awaitingResultMethod(game);
       if (awaitingResult) {
         throw new AppError(
@@ -88,7 +88,7 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
         userIds: [user.id, ...waiting.map((participant) => participant.userId)],
         now,
       });
-      const roster = splitNextRoundRoster({
+      const roster = splitSecondTeamRoster({
         orderedIds: waiting.map((participant) => participant.userId),
         excludedIds: [
           ...sanctionedIds,
@@ -99,7 +99,7 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
         maxPlayers: game.maxPlayers,
       });
       if (roster.confirmed.length === 0) {
-        throw new AppError("대기자가 없어 다음 회차를 열 수 없습니다.");
+        throw new AppError("대기자가 없어 2팀을 열 수 없습니다.");
       }
       if (sanctionedIds.includes(user.id)) {
         throw new AppError("활동 정지 기간에는 구인을 열 수 없습니다.");
@@ -109,7 +109,7 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
         throw new AppError("이 룰로는 지금 구인을 열 수 없습니다. 룰북 인증 상태를 확인해 주세요.");
       }
 
-      const baseDate = nextRoundBaseDate({
+      const baseDate = secondTeamBaseDate({
         confirmedAt: game.confirmedAt,
         rangeEnd: game.rangeEnd,
         now,
@@ -120,16 +120,16 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
         if (
           !rangeStart ||
           !rangeEnd ||
-          !isNextRoundRangeValid({ baseDate, rangeStart, rangeEnd })
+          !isSecondTeamRangeValid({ baseDate, rangeStart, rangeEnd })
         ) {
-          throw new AppError(NEXT_ROUND_RANGE_MESSAGE);
+          throw new AppError(SECOND_TEAM_RANGE_MESSAGE);
         }
-      } else if (!sessionStart || !isNextRoundStartValid({ baseDate, startsAt: sessionStart })) {
-        throw new AppError(NEXT_ROUND_START_MESSAGE);
+      } else if (!sessionStart || !isSecondTeamStartValid({ baseDate, startsAt: sessionStart })) {
+        throw new AppError(SECOND_TEAM_START_MESSAGE);
       }
       const endDate = coordinate
-        ? nextRoundDeadline({ rangeStart })
-        : nextRoundDeadline({ startsAt: sessionStart });
+        ? secondTeamDeadline({ rangeStart })
+        : secondTeamDeadline({ startsAt: sessionStart });
       if (endDate.getTime() <= now.getTime()) {
         throw new AppError("모집 마감이 이미 지난 일정입니다. 날짜를 하루 뒤로 골라 주세요.");
       }
@@ -137,7 +137,7 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
       const gameId = await createGameWithRoster({
         transaction,
         serverId: server.id,
-        columns: nextRoundColumns({
+        columns: secondTeamColumns({
           game,
           endDate,
           rangeStart: coordinate ? rangeStart! : null,
