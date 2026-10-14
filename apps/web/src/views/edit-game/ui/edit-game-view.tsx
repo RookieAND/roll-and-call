@@ -1,8 +1,14 @@
 import { Container, VStack } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
+import { toMyRulebooks } from "@/entities/rulebook";
 import { GmOnlyNotice } from "@/features/auth";
-import { getGameById, getCurrentSessionUser, getCurrentServer } from "@/shared/server";
+import {
+  getGameById,
+  getCurrentSessionUser,
+  getCurrentServer,
+  getRulebookRecords,
+} from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 import { EditGameForm } from "@/widgets/game-form";
 
@@ -19,7 +25,12 @@ export async function EditGameView({ id }: EditGameViewProps) {
   if (!game) notFound();
   const isGm = user?.id === game.gmId;
   const lockedTitle = isGm ? editLockedTitle(game) : null;
-  if (isGm && !lockedTitle) return <EditGameForm serverId={server.id} game={game} />;
+  if (isGm && !lockedTitle) {
+    const rulebooks = toMyRulebooks(
+      await getRulebookRecords({ serverId: server.id, userId: game.gmId }),
+    );
+    return <EditGameForm serverId={server.id} game={game} rulebooks={rulebooks} />;
+  }
 
   return (
     <>

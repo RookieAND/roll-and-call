@@ -73,6 +73,7 @@ export function buildTrialGame({
     playType: "voice",
     rule: "CoC 7th",
     rulebookId: null,
+    supplements: [],
     synopsis:
       "폭풍우가 치는 밤, 달빛 여관에서 손님 한 명이 사라진다. 남은 이들은 단서를 모아 그가 어디로 갔는지 찾는다.",
     thumbnailUrl: null,

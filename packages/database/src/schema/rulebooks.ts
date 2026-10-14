@@ -22,6 +22,10 @@ export const rulebookRequestOutcome = pgEnum("rulebook_request_outcome", [
   "rejected",
 ]);
 
+// user는 사용자가 직접 낸 요청, game은 구인에서 직접 입력한 서플리먼트로 자동으로 만든 요청이다.
+// 자동 요청은 요청자의 내 룰북에 보이지 않고 처리 결과 알림도 보내지 않는다.
+export const rulebookRequestSource = pgEnum("rulebook_request_source", ["user", "game"]);
+
 // core는 GM에 필요한 기본 룰북, supplement는 기본 룰북 위에 더하는 책, handbook은 플레이어용이라 GM 자격이 되지 않는다.
 export const rulebookKind = pgEnum("rulebook_kind", ["core", "supplement", "handbook"]);
 
@@ -93,6 +97,7 @@ export const rulebookRequests = pgTable(
       onDelete: "set null",
     }),
     categoryName: text("category_name"),
+    source: rulebookRequestSource("source").notNull().default("user"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     outcome: rulebookRequestOutcome("outcome"),
     processedBy: uuid("processed_by").references(() => profiles.id, { onDelete: "set null" }),

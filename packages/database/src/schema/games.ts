@@ -19,8 +19,13 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { profiles } from "./profiles";
-import { rulebooks } from "./rulebooks";
+import { rulebookRequests, rulebooks } from "./rulebooks";
 import { serverId } from "./server-id";
+
+export interface GameSupplement {
+  name: string;
+  rulebookId: string | null;
+}
 
 export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
 
@@ -63,6 +68,9 @@ export const games = pgTable(
     rule: text("rule").notNull(),
     // rule 글자를 룰북 이름·다른 이름에 맞춰 트리거가 채운다. 맞는 룰북이 없으면 null.
     rulebookId: uuid("rulebook_id").references(() => rulebooks.id, { onDelete: "set null" }),
+    // 함께 쓰는 서플리먼트. 순서대로 보여 주고 최대 10권이다. 직접 입력한 책은 rulebookId가 null이고,
+    // 운영진이 그 이름의 추가 요청을 등록·연결하면 등록된 룰북 ID와 이름으로 바뀐다.
+    supplements: jsonb("supplements").$type<GameSupplement[]>().notNull().default([]),
     synopsis: text("synopsis"),
     thumbnailUrl: text("thumbnail_url"),
     thumbnailSpoiler: boolean("thumbnail_spoiler").notNull().default(false),
@@ -179,6 +187,7 @@ export const games = pgTable(
       sql`cardinality(${table.genres}) <= 5 and cardinality(${table.triggers}) <= 10 and cardinality(${table.platforms}) <= 5`,
     ),
     check("games_cancel_reason_length", sql`char_length(${table.cancelReason}) <= 200`),
+    check("games_supplements_limit", sql`jsonb_array_length(${table.supplements}) <= 10`),
     check(
       "games_cancelled_has_kind",
       sql`${table.cancelledAt} is null or ${table.cancelKind} is not null`,
@@ -322,6 +331,31 @@ export const availabilities = pgTable(
     index("availabilities_user_id_game_id_idx").on(table.userId, table.gameId),
   ],
 );
+
+// 구인에서 직접 입력한 서플리먼트가 만든 룰북 추가 요청과 그 이름을 적은 구인. 같은 이름이면 요청 하나에 구인이 여럿 붙는다.
+// 구인이 취소되거나 그 이름을 지우면 행이 빠지고, 구인이 하나도 남지 않은 대기 중 자동 요청은 트리거가 지운다.
+export const rulebookRequestGames = pgTable(
+  "rulebook_request_games",
+  {
+    serverId: serverId(),
+    requestId: uuid("request_id")
+      .notNull()
+      .references(() => rulebookRequests.id, { onDelete: "cascade" }),
+    gameId: uuid("game_id")
+      .notNull()
+      .references(() => games.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.requestId, table.gameId] }),
+    foreignKey({
+      columns: [table.gameId, table.serverId],
+      foreignColumns: [games.id, games.serverId],
+      name: "rulebook_request_games_game_server_fk",
+    }).onDelete("cascade"),
+    index("rulebook_request_games_game_id_idx").on(table.gameId),
+  ],
+).enableRLS();
 
 export type Game = typeof games.$inferSelect;
 

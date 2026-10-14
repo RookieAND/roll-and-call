@@ -107,6 +107,7 @@ export async function getRulebookRecords({
           and(
             eq(rulebookRequests.serverId, serverId),
             eq(rulebookRequests.userId, userId),
+            eq(rulebookRequests.source, "user"),
             or(
               isNull(rulebookRequests.outcome),
               gt(

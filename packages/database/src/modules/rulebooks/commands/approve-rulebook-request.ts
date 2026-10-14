@@ -3,6 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { resolveRequestSupplements } from "#/modules/rulebooks/commands/resolve-request-supplements";
 import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
 import { rulebookChanges } from "#/modules/rulebooks/model/rulebook-audit-changes";
 import type { RulebookFields } from "#/modules/rulebooks/model/rulebook-fields";
@@ -56,6 +57,13 @@ export async function approveRulebookRequest({
       .returning({ id: rulebooks.id });
     if (!created) throw new Error("룰북을 만들지 못했습니다");
     await relinkGames({ executor: tx, serverId });
+    await resolveRequestSupplements({
+      executor: tx,
+      serverId,
+      requestId: id,
+      requestName: claim.name,
+      rulebook: { id: created.id, name: fields.name },
+    });
     await recordAudit({
       executor: tx,
       serverId,

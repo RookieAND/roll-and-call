@@ -43,6 +43,11 @@ export function recruitPlainText({
   // 트리거는 보고 싶지 않은 사람이 있으니 스포일러로 가린다. 코드 안의 ||는 문법이 아니라 가림막이 깨지지 않는다.
   const spoilerTags = (values: string[]) =>
     values.map((value) => `||${inlineCodeTags([value])}||`).join(" ");
+  // 서플리먼트는 룰 아래 한 단계 들여 쓴 목록이다. 없으면 항목째 뺀다.
+  const supplementItem =
+    game.supplements.length > 0
+      ? ["- **서플리먼트**", ...game.supplements.map((book) => `  - ${book.name}`)].join("\n")
+      : undefined;
   const list = (items: (string | undefined)[]) =>
     items.filter((value) => value !== undefined).join("\n");
   const text = [
@@ -52,6 +57,7 @@ export function recruitPlainText({
       "## 📋 모집 정보",
       list([
         item("룰", game.rule),
+        supplementItem,
         item("인원", `${formatRecruitHeadcount({ game, confirmedCount })} · ${method}`),
         item("GM", gmName),
       ]),

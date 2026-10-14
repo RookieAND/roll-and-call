@@ -132,6 +132,8 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
           rulebooks={rulebooks}
           selectedKey={set?.key ?? null}
           onSelect={(picked) => {
+            // 서플리먼트는 판본마다 다르므로 룰을 바꾸면 비운다.
+            if (picked.key !== set?.key) setValue("supplements", [], { shouldDirty: true });
             setValue("rulebookId", picked.cores[0]!.id, { shouldDirty: true });
             setValue("rule", picked.label, { shouldDirty: true, shouldValidate: true });
           }}

@@ -8,16 +8,19 @@ import {
 } from "@roll-and-call/database/games";
 import { createNotifications } from "@roll-and-call/database/notifications";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
+import { syncGameSupplementRequests } from "@roll-and-call/database/rulebooks";
 import { withTransaction } from "@roll-and-call/database/transaction";
 import { isNull } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
+import { ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
+  getRulebookRecords,
   notifySessionConfirmed,
   refreshRecruitPost,
   removeUnusedGameFiles,
@@ -25,10 +28,12 @@ import {
   resolveNoticeLinkLabels,
 } from "@/shared/server";
 
+import { checkSupplements } from "../model/check-supplements";
 import { EDIT_FORBIDDEN_MESSAGE, editBlockReason } from "../model/edit-block-reason";
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
 import { hasThumbnailChanged } from "../model/has-thumbnail-changed";
 import { invalidInputResult } from "../model/invalid-input-result";
+import { manualSupplementNames } from "../model/manual-supplement-names";
 import { reopensMinPlayersJudgement } from "../model/reopens-min-players-judgement";
 import { sessionTimeChanged } from "../model/session-time-change";
 import { toGameColumns } from "../model/to-game-columns";
@@ -55,6 +60,9 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     notice: columns.notice,
   });
   const owner = { serverId: server.id, gameId: id, gmId: user.id };
+  const myRulebooks = toMyRulebooks(
+    await getRulebookRecords({ serverId: server.id, userId: user.id }),
+  );
 
   // 같은 구인의 신청·명단 조정·추첨과 줄을 서도록 행을 잠그고 검사와 저장을 한 번에 한다.
   const result = await withTransaction(async (transaction) => {
@@ -68,6 +76,15 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       confirmedCount: roster.filter((status) => status === PARTICIPANT_STATUS.confirmed).length,
     });
     if (block || !game) return block ?? { error: EDIT_FORBIDDEN_MESSAGE };
+
+    // 룰은 바꿀 수 없으므로 서플리먼트는 저장된 룰의 판본에서 고른다.
+    const set = game.rulebookId ? ruleSetOf({ myRulebooks, rulebookId: game.rulebookId }) : null;
+    const supplementCheck = checkSupplements({
+      supplements: values.supplements,
+      set,
+      previous: game.supplements,
+    });
+    if (!supplementCheck.ok) return { error: supplementCheck.error, field: "supplements" };
 
     // 신청자 없이 일시 지정형을 조율형으로 바꾸면 예전 세션 시각을 지운다.
     const clearsSession =
@@ -90,6 +107,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       ...owner,
       columns: {
         ...columns,
+        supplements: supplementCheck.supplements,
         linkLabels,
         ...(clearsSession ? { confirmedAt: null } : {}),
         ...(timeChanged ? { notifiedAt: null } : {}),
@@ -97,6 +115,13 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       },
     });
     if (!updated) return { error: EDIT_FORBIDDEN_MESSAGE };
+    await syncGameSupplementRequests({
+      transaction,
+      ...owner,
+      categoryId: set?.categoryId ?? null,
+      edition: set?.edition ?? "",
+      names: manualSupplementNames(supplementCheck.supplements),
+    });
 
     if (timeChanged && game.confirmedAt && columns.confirmedAt) {
       const confirmedIds = await listParticipantUserIds({

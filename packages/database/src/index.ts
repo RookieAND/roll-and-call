@@ -3,6 +3,7 @@ export type {
   Profile,
   NewProfile,
   Game,
+  GameSupplement,
   NewGame,
   Participant,
   NewParticipant,

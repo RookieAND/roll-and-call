@@ -6,6 +6,8 @@ import { formatDateTime, formatGameSchedule } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
 
+import { GameSupplementList } from "./game-supplement-list";
+
 interface GameInfoTableProps {
   game: GameDetailData;
   isGm: boolean;
@@ -15,8 +17,17 @@ interface GameInfoTableProps {
 
 export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameInfoTableProps) {
   const playRange = formatPlayRange(game.playMinutesMin, game.playMinutes);
-  const rows: { label: string; value: ReactNode }[] = [
+  const rows: { label: string; value: ReactNode; top?: boolean }[] = [
     { label: "룰", value: game.rule },
+    ...(game.supplements.length > 0
+      ? [
+          {
+            label: "서플리먼트",
+            value: <GameSupplementList supplements={game.supplements} />,
+            top: true,
+          },
+        ]
+      : []),
     {
       label: "GM",
       value: (
@@ -59,7 +70,12 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
       className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
     >
       {rows.map((row) => (
-        <HStack key={row.label} align="center" gap="150" className="min-h-10 px-175 py-100">
+        <HStack
+          key={row.label}
+          align={row.top ? "start" : "center"}
+          gap="150"
+          className="min-h-10 px-175 py-100"
+        >
           <Text typography="body4" foreground="hint" className="w-18.5 shrink-0">
             {row.label}
           </Text>

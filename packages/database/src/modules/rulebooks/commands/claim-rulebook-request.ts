@@ -24,10 +24,18 @@ const OUTCOME_NOTIFICATION = {
 } as const;
 
 type ClaimResult =
-  | { ok: true; name: string; edition: string; label: string; requester: string }
+  | {
+      ok: true;
+      name: string;
+      edition: string;
+      label: string;
+      requester: string;
+      source: "user" | "game";
+    }
   | Extract<RulebookActionResult, { ok: false }>;
 
 // 대기 중인 요청만 처리됨으로 바꾸고 같은 트랜잭션에서 요청자에게 결과 알림을 만든다.
+// 구인에서 직접 입력해 생긴 자동 요청은 요청자가 낸 적이 없으므로 알리지 않는다.
 // 다른 운영진이 먼저 처리했으면 알림 없이 그 처리를 충돌로 돌려준다.
 export async function claimRulebookRequest({
   executor,
@@ -51,6 +59,7 @@ export async function claimRulebookRequest({
       name: rulebookRequests.name,
       edition: rulebookRequests.edition,
       userId: rulebookRequests.userId,
+      source: rulebookRequests.source,
     });
   if (claimed) {
     const [requester] = await executor
@@ -58,24 +67,27 @@ export async function claimRulebookRequest({
       .from(profiles)
       .where(eq(profiles.id, claimed.userId));
     const label = rulebookLabel(claimed);
-    await createNotifications({
-      executor,
-      serverId,
-      actorId: actor.id,
-      notifications: [
-        {
-          userId: claimed.userId,
-          kind: OUTCOME_NOTIFICATION[outcome],
-          params: { rulebookName: label },
-        },
-      ],
-    });
+    if (claimed.source === "user") {
+      await createNotifications({
+        executor,
+        serverId,
+        actorId: actor.id,
+        notifications: [
+          {
+            userId: claimed.userId,
+            kind: OUTCOME_NOTIFICATION[outcome],
+            params: { rulebookName: label },
+          },
+        ],
+      });
+    }
     return {
       ok: true,
       name: claimed.name,
       edition: claimed.edition,
       label,
       requester: requester?.nickname ?? "",
+      source: claimed.source,
     };
   }
   const [current] = await executor

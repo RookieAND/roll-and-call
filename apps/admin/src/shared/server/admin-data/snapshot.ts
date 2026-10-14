@@ -72,6 +72,7 @@ export const loadSnapshot = cache(async () => {
     participantRows,
     rulebookRows,
     requestRows,
+    requestGameRows,
     categoryRows,
     applicationRows,
     certificationRows,
@@ -341,6 +342,8 @@ export const loadSnapshot = cache(async () => {
     note: compact([row.publisher && `출판사 ${row.publisher}`, row.note]).join(" · "),
     requestedAt: row.createdAt,
     similarTo: similarRulebook(row.name, rulebookList),
+    source: row.source,
+    gameIds: requestGameRows.filter((link) => link.requestId === row.id).map((link) => link.gameId),
     processed:
       row.outcome && row.processedAt
         ? {

@@ -80,6 +80,7 @@ const original = {
   thumbnailSpoiler: false,
   images: [],
   rulebookId: "7판",
+  supplements: [],
 } as unknown as Parameters<typeof reopenDefaults>[0]["game"];
 
 describe("reopenDefaults", () => {
@@ -125,5 +126,28 @@ describe("reopenDefaults", () => {
     });
     expect(defaults).toMatchObject({ rule: "크툴루의 부름 7판" });
     expect(ruleNotice).toBeNull();
+  });
+
+  it("서플리먼트는 지금 고를 수 있는 등록된 책과 직접 입력한 책만 가져온다", () => {
+    const { defaults } = reopenDefaults({
+      game: {
+        ...original,
+        supplements: [
+          { name: "펄프 크툴루", rulebookId: "펄프" },
+          { name: "인증 안 한 책", rulebookId: "잠김" },
+          { name: "새 책", rulebookId: null },
+        ],
+      },
+      rulebooks: data([
+        book("7판"),
+        book("펄프", { kind: "supplement" }),
+        book("잠김", { kind: "supplement", state: null }),
+      ]),
+      now: NOW,
+    });
+    expect(defaults.supplements).toEqual([
+      { name: "펄프 크툴루", rulebookId: "펄프" },
+      { name: "새 책", rulebookId: null },
+    ]);
   });
 });

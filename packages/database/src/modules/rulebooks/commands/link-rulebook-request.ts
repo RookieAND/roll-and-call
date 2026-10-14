@@ -10,6 +10,7 @@ import { relinkGames } from "#/modules/rulebooks/queries/relink-games";
 import { rulebooks } from "#/schema";
 
 import { claimRulebookRequest } from "./claim-rulebook-request";
+import { resolveRequestSupplements } from "./resolve-request-supplements";
 
 export interface RulebookLinkInput {
   rulebookId: string;
@@ -51,6 +52,13 @@ export async function linkRulebookRequest({
         .where(eq(rulebooks.id, rulebook.id));
     }
     await relinkGames({ executor: tx, serverId });
+    await resolveRequestSupplements({
+      executor: tx,
+      serverId,
+      requestId: id,
+      requestName: claim.name,
+      rulebook: { id: rulebook.id, name: rulebook.name },
+    });
     await recordAudit({
       executor: tx,
       serverId,

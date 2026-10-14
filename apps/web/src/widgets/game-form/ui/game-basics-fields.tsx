@@ -12,11 +12,14 @@ import { richTextLength } from "@/shared/lib";
 
 import { GameKindField } from "./game-kind-field";
 import { GameRulebookField } from "./game-rulebook-field";
+import { GameSupplementField } from "./game-supplement-field";
 import { PlayTimeField } from "./play-time-field";
 
 interface GameBasicsFieldsProps {
   form: UseFormReturn<GameFormValues>;
   rulebooks?: MyRulebooks;
+  supplementRulebooks?: MyRulebooks;
+  editing?: boolean;
   kindLocked?: boolean;
   ruleNotice?: RuleNotice | null;
 }
@@ -24,6 +27,8 @@ interface GameBasicsFieldsProps {
 export function GameBasicsFields({
   form,
   rulebooks,
+  supplementRulebooks,
+  editing = false,
   kindLocked = false,
   ruleNotice,
 }: GameBasicsFieldsProps) {
@@ -50,6 +55,8 @@ export function GameBasicsFields({
       </Field.Root>
 
       <GameRulebookField form={form} rulebooks={rulebooks} ruleNotice={ruleNotice} />
+
+      <GameSupplementField form={form} rulebooks={supplementRulebooks} editing={editing} />
 
       <PlayTimeField
         min={watch("playMinutesMin")}

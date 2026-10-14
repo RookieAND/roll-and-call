@@ -37,3 +37,9 @@ export { editionSetKey, editionSets, setOf, type EditionSet } from "./model/edit
 export { SET_STATUS, setStatus, type SetStatus } from "./model/set-status";
 export { RULE_GATE, ruleGate, type RuleGate, type RuleGateType } from "./model/rule-gate";
 export { ruleSetOf } from "./model/rule-set-of";
+export {
+  SUPPLEMENT_OPTION_STATE,
+  supplementOptions,
+  type SupplementOption,
+  type SupplementOptionState,
+} from "./model/supplement-options";

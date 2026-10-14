@@ -33,6 +33,7 @@ interface GameFormProps {
   successMessage?: string;
   edit?: GameEditContext;
   rulebooks?: MyRulebooks;
+  supplementRulebooks?: MyRulebooks;
   initialRulebookId?: string;
   reopen?: ReopenContext;
 }
@@ -45,6 +46,7 @@ export function GameForm({
   successMessage = "저장되었습니다",
   edit,
   rulebooks,
+  supplementRulebooks,
   initialRulebookId,
   reopen,
 }: GameFormProps) {
@@ -68,6 +70,7 @@ export function GameForm({
       playType: defaultGame?.playType ?? PLAY_TYPE.voice,
       rule: defaultGame?.rule ?? initialSet?.label ?? "",
       rulebookId: defaultGame?.rulebookId ?? initialSet?.cores[0]?.id ?? "",
+      supplements: defaultGame?.supplements ?? [],
       synopsis: defaultGame?.synopsis ?? "",
       genres: defaultGame?.genres ?? [],
       triggers: defaultGame?.triggers ?? [],
@@ -122,6 +125,7 @@ export function GameForm({
       steps={steps}
       edit={edit}
       rulebooks={rulebooks}
+      supplementRulebooks={supplementRulebooks}
       reopen={reopen}
     />
   );

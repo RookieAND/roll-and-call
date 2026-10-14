@@ -38,6 +38,7 @@ export function GameFormWizard({
   steps,
   edit,
   rulebooks,
+  supplementRulebooks,
   reopen,
 }: GameFormLayoutProps) {
   const push = useTrialPush();
@@ -101,6 +102,8 @@ export function GameFormWizard({
           <GameBasicsFields
             form={form}
             rulebooks={rulebooks}
+            supplementRulebooks={supplementRulebooks ?? rulebooks}
+            editing={!!edit}
             kindLocked={locked}
             ruleNotice={reopen?.failed ? null : reopen?.ruleNotice}
           />

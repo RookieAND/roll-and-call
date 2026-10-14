@@ -1,3 +1,4 @@
+import { SUPPLEMENT_NAME_MAX, SUPPLEMENTS_MAX } from "@roll-and-call/database/games/model";
 import { z } from "zod";
 
 import {
@@ -49,6 +50,19 @@ export const gameFormSchema = z
     // rule은 고른 룰북의 이름(표시용)이고, 등록할 때 서버는 rulebookId로 룰북을 다시 찾는다.
     rule: z.string().trim().min(1, "룰북을 선택해 주세요.").max(100),
     rulebookId: z.string(),
+    // 등록된 책은 rulebookId를, 직접 입력한 책은 null을 둔다. 등록된 책의 이름은 서버가 룰북 목록에서 다시 채운다.
+    supplements: z
+      .array(
+        z.object({
+          name: z
+            .string()
+            .trim()
+            .min(1, "서플리먼트 이름을 적어 주세요.")
+            .max(SUPPLEMENT_NAME_MAX, `${SUPPLEMENT_NAME_MAX}자까지 적을 수 있습니다.`),
+          rulebookId: z.string().nullable(),
+        }),
+      )
+      .max(SUPPLEMENTS_MAX, `서플리먼트는 최대 ${SUPPLEMENTS_MAX}권까지 넣을 수 있습니다.`),
     // 저장값은 리치 텍스트 JSON이라 문자 수는 본문 길이로 센다.
     synopsis: z
       .string()
@@ -222,3 +236,4 @@ export const gameFormSchema = z
 export type GameFormValues = z.infer<typeof gameFormSchema>;
 
 export type PreConfirmedPlayer = GameFormValues["preConfirmed"][number];
+export type SupplementValue = GameFormValues["supplements"][number];

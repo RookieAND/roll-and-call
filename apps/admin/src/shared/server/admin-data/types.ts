@@ -141,6 +141,9 @@ export interface RulebookRequest {
   requestedAt: Date;
   similarTo?: string;
   processed?: { action: AuditAction; by: string; at: Date };
+  // game이면 구인에서 직접 입력한 서플리먼트로 자동으로 생긴 요청이고, gameIds는 그 이름을 적은 구인이다.
+  source: "user" | "game";
+  gameIds: string[];
 }
 
 export interface Session {

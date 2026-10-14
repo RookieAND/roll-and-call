@@ -3,6 +3,8 @@
 import { createGameWithRoster } from "@roll-and-call/database/games";
 import { listSanctionedUserIds } from "@roll-and-call/database/moderation";
 import { countServerMembers } from "@roll-and-call/database/profiles";
+import { syncGameSupplementRequests } from "@roll-and-call/database/rulebooks";
+import { withTransaction } from "@roll-and-call/database/transaction";
 import { uniq } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
@@ -19,8 +21,10 @@ import {
   resolveNoticeLinkLabels,
 } from "@/shared/server";
 
+import { checkSupplements } from "../model/check-supplements";
 import { gameFormSchema, type GameFormValues } from "../model/game-form";
 import { invalidInputResult } from "../model/invalid-input-result";
+import { manualSupplementNames } from "../model/manual-supplement-names";
 import { pastScheduleError } from "../model/past-schedule-error";
 import { toGameColumns } from "../model/to-game-columns";
 
@@ -58,6 +62,8 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
       field: "rule",
     };
   }
+  const supplementCheck = checkSupplements({ supplements: parsed.data.supplements, set });
+  if (!supplementCheck.ok) return { error: supplementCheck.error, field: "supplements" };
 
   const invitedIds = uniq(parsed.data.preConfirmed.map((player) => player.userId));
   if (invitedIds.includes(user.id)) return { error: "GM은 참여자로 넣을 수 없습니다." };
@@ -77,16 +83,31 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     notice: columns.notice,
   });
 
-  const gameId = await createGameWithRoster({
-    serverId: server.id,
-    columns: {
+  const supplements = supplementCheck.supplements;
+  const gameId = await withTransaction(async (transaction) => {
+    const createdId = await createGameWithRoster({
+      transaction,
+      serverId: server.id,
+      columns: {
+        gmId: user.id,
+        rule: set.label,
+        rulebookId: set.cores[0]!.id,
+        ...columns,
+        supplements,
+        linkLabels,
+      },
+      confirmedUserIds: invitedIds,
+    });
+    await syncGameSupplementRequests({
+      transaction,
+      serverId: server.id,
+      gameId: createdId,
       gmId: user.id,
-      rule: set.label,
-      rulebookId: set.cores[0]!.id,
-      ...columns,
-      linkLabels,
-    },
-    confirmedUserIds: invitedIds,
+      categoryId: set.categoryId,
+      edition: set.edition,
+      names: manualSupplementNames(supplements),
+    });
+    return createdId;
   });
 
   after(() =>

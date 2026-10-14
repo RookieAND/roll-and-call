@@ -12,6 +12,7 @@ import {
   profiles,
   rulebookCategories,
   rulebookQuizQuestions,
+  rulebookRequestGames,
   rulebookRequests,
   rulebooks,
   sanctions,
@@ -67,6 +68,10 @@ export async function loadAdminTables(serverId: string) {
     .select()
     .from(rulebookRequests)
     .where(eq(rulebookRequests.serverId, serverId));
+  const requestGameRows = await db
+    .select()
+    .from(rulebookRequestGames)
+    .where(eq(rulebookRequestGames.serverId, serverId));
   const categoryRows = await db
     .select()
     .from(rulebookCategories)
@@ -111,6 +116,7 @@ export async function loadAdminTables(serverId: string) {
     participantRows,
     rulebookRows,
     requestRows,
+    requestGameRows,
     categoryRows,
     applicationRows,
     certificationRows,

@@ -53,6 +53,12 @@ export { findOverlappingGame, type MySessionTiming } from "./find-overlapping-ga
 export { APPLICATION_NOTE_MAX_LENGTH, normalizeApplicationNote } from "./application-note";
 export { PARTICIPANT_STATUS, type ParticipantStatus } from "./participant-status";
 export { formatPlayMinutes } from "./format-play-minutes";
+export {
+  SUPPLEMENT_NAME_MAX,
+  SUPPLEMENT_SEARCH_THRESHOLD,
+  SUPPLEMENTS_MAX,
+} from "./supplement-limits";
+export { supplementNameKey } from "./supplement-name-key";
 export { formatPlayRange } from "./format-play-range";
 export {
   DEFAULT_PLAY_MINUTES,

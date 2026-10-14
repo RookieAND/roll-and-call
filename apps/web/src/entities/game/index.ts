@@ -101,3 +101,4 @@ export { isRecruitMethod } from "./model/is-recruit-method";
 export { isScheduleMode } from "./model/is-schedule-mode";
 export { isGameKind } from "./model/is-game-kind";
 export { isPlayType } from "./model/is-play-type";
+export { foldSupplements } from "./model/fold-supplements";

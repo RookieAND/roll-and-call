@@ -9,6 +9,8 @@ import { formatDate, RULEBOOK_KIND_LABEL } from "@/shared/lib";
 import type { RulebookRequestRow } from "@/shared/server";
 import { EMPTY_IMAGE, EmptyState, Panel, SortFixedNote, TableColumns, Tag } from "@/shared/ui";
 
+import { RequestGamesPopover } from "./request-games-popover";
+
 interface RequestPanelProps {
   requests: RulebookRequestRow[];
   actionHref: (action: RequestAction, requestId: string) => string;
@@ -83,13 +85,22 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" truncate>
-                  {request.requesterNickname}
+                  {request.otherRequesterCount > 0
+                    ? `${request.requesterNickname} 외 ${request.otherRequesterCount}명`
+                    : request.requesterNickname}
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" foreground={request.note ? "normal" : "hint"}>
-                  {request.note || "—"}
-                </Text>
+                {request.games ? (
+                  <VStack align="start" gap="025">
+                    <Text typography="body3">구인에서 직접 입력</Text>
+                    <RequestGamesPopover games={request.games} />
+                  </VStack>
+                ) : (
+                  <Text typography="body3" foreground={request.note ? "normal" : "hint"}>
+                    {request.note || "—"}
+                  </Text>
+                )}
               </Table.Cell>
               <Table.Cell align="end">
                 <RequestActions

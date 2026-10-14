@@ -35,6 +35,7 @@ const form: GameFormValues = {
   playType: PLAY_TYPE.voice,
   rule: "CoC 7판",
   rulebookId: "",
+  supplements: [],
   maxPlayers: "4",
   minPlayers: "",
   recruitMethod: RECRUIT_METHOD.firstCome,

@@ -13,4 +13,6 @@ export {
   GAME_RANGE_MAX_DAYS,
   type GameFormValues,
   type PreConfirmedPlayer,
+  type SupplementValue,
 } from "./model/game-form";
+export { manualSupplementError } from "./model/manual-supplement-error";

@@ -715,6 +715,13 @@
       "when": 1799300000000,
       "tag": "0107_link_labels",
       "breakpoints": true
+    },
+    {
+      "idx": 108,
+      "version": "7",
+      "when": 1799400000000,
+      "tag": "0108_game_supplements",
+      "breakpoints": true
     }
   ]
 }

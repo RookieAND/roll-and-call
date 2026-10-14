@@ -7,6 +7,7 @@ export {
 export { createRulebookRequest } from "./commands/create-rulebook-request";
 export { hideRulebook } from "./commands/hide-rulebook";
 export { linkRulebookRequest, type RulebookLinkInput } from "./commands/link-rulebook-request";
+export { syncGameSupplementRequests } from "./commands/sync-game-supplement-requests";
 export { removeCertSeller } from "./commands/remove-cert-seller";
 export { saveQuizQuestion, type QuizQuestionInput } from "./commands/save-quiz-question";
 export { setCategoryMiniRule } from "./commands/set-category-mini-rule";

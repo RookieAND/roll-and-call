@@ -139,7 +139,11 @@ export { type CategoryEdition } from "./category-editions";
 export { getRulebookDetail, type CertifiedGm, type RulebookDetail } from "./get-rulebook-detail";
 export { getRulebookImpact, type RulebookImpactCase } from "./get-rulebook-impact";
 export { getKindImpact, type KindImpactPage } from "./get-kind-impact";
-export { listRulebookRequests, type RulebookRequestRow } from "./list-rulebook-requests";
+export {
+  listRulebookRequests,
+  type RequestGame,
+  type RulebookRequestRow,
+} from "./list-rulebook-requests";
 export { listRulebooks, type RulebookCategory, type RulebookRow } from "./list-rulebooks";
 export { getGrantOptions, type GrantOptions } from "./get-grant-options";
 export type * from "./types";
