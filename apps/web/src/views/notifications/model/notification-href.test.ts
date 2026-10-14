@@ -121,6 +121,7 @@ const CASES: [NotificationPayload, string | null][] = [
     { kind: NOTIFICATION_KIND.monthlyAward, params: { month: 9, role: MONTHLY_AWARD_ROLE.gm } },
     "/me/badges",
   ],
+  [{ kind: NOTIFICATION_KIND.rankLeader, params: { month: 10, role: MONTHLY_AWARD_ROLE.gm } }, "/"],
 ];
 
 describe("notificationHref", () => {
