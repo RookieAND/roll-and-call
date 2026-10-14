@@ -15,7 +15,7 @@ describe("bulkFormHint", () => {
 
   it("틀린 답이 있으면 고치라고 한다", () => {
     expect(bulkFormHint({ ...base, onQuiz: true, hasQuizError: true })).toBe(
-      "답을 고친 뒤 다시 신청해 주세요",
+      "답을 고친 뒤 다시 신청해야 합니다",
     );
   });
 });

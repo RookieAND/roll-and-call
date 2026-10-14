@@ -70,7 +70,7 @@ export function Stepper({
           <button
             type="button"
             data-slot="stepper-decrement"
-            aria-label="줄이기"
+            aria-label={safeValue <= min ? "더 줄일 수 없습니다" : "줄이기"}
             disabled={disabled || safeValue <= min}
             onClick={() => onChange(Math.max(min, safeValue - 1))}
             className={STEP_BUTTON}
@@ -93,7 +93,7 @@ export function Stepper({
           <button
             type="button"
             data-slot="stepper-increment"
-            aria-label="늘리기"
+            aria-label={safeValue >= max ? "더 늘릴 수 없습니다" : "늘리기"}
             disabled={disabled || safeValue >= max}
             onClick={() => onChange(Math.min(max, safeValue + 1))}
             className={STEP_BUTTON}

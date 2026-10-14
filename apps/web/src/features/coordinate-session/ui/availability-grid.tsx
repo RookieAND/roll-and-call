@@ -6,10 +6,11 @@ import { useParams } from "next/navigation";
 
 import { availabilityQuery } from "@/entities/availability";
 import { AppError } from "@/shared/api";
-import { type DayColumn, type TimeRow, useBeforeUnloadWarning } from "@/shared/lib";
+import { type DayColumn, formatDateTime, type TimeRow, useBeforeUnloadWarning } from "@/shared/lib";
 import { SLOT_ROW_PX, SlotGrid, toast } from "@/shared/ui";
 
 import { saveAvailability } from "../api/save-availability";
+import { useSlotFocus } from "../model/use-slot-focus";
 import { useSlotPainter } from "../model/use-slot-painter";
 import { AvailabilitySaveBar } from "./availability-save-bar";
 import { BLOCKED_STRIPES, cellTone, UNSAVED_SELECTED_TONE } from "./cell-tone";
@@ -23,7 +24,8 @@ interface AvailabilityGridProps {
   blocked: string[];
 }
 
-const CELL = "touch-none rounded-100";
+const CELL =
+  "touch-none rounded-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus";
 
 export function AvailabilityGrid({
   gameId,
@@ -33,6 +35,7 @@ export function AvailabilityGrid({
   blocked,
 }: AvailabilityGridProps) {
   const painter = useSlotPainter({ initial: savedMine, saved: savedMine, blocked });
+  const focus = useSlotFocus({ days, timeRows, isBlocked: painter.isBlocked });
   const queryClient = useQueryClient();
   const { server } = useParams<{ server: string }>();
   const { mutate, isPending: pending } = useMutation({
@@ -67,10 +70,21 @@ export function AvailabilityGrid({
     }
     const tone = cellTone({ selected: painter.selected.has(key), saved: painter.isSaved(key) });
     return (
-      <div
+      <button
         key={key}
+        type="button"
+        aria-label={formatDateTime(key)}
+        aria-pressed={painter.selected.has(key)}
+        data-slot-key={key}
+        tabIndex={key === focus.tabKey ? 0 : -1}
         className={cn(CELL, tone)}
         style={{ height: SLOT_ROW_PX }}
+        // detail 0은 Space·Enter로 일어난 클릭이다. 포인터는 pointerdown에서 이미 칠했다.
+        onClick={(event) => {
+          if (event.detail === 0) painter.toggle(key);
+        }}
+        onFocus={(event) => focus.onFocus(event, key)}
+        onKeyDown={(event) => focus.onKeyDown(event, key)}
         {...painter.cellHandlers(key)}
       />
     );

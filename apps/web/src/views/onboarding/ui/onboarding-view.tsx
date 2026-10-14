@@ -76,7 +76,7 @@ export function OnboardingView({ doneHref, fromHelp }: OnboardingViewProps) {
 
   return (
     <VStack className="h-dvh break-keep" style={{ backgroundImage: "var(--gradient-onboarding)" }}>
-      <span className="h-[52px] flex-none" />
+      <span aria-hidden className="h-[52px] flex-none" />
       <Container size="sm" className="flex min-h-0 flex-1 flex-col">
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
           <div
@@ -105,14 +105,24 @@ export function OnboardingView({ doneHref, fromHelp }: OnboardingViewProps) {
           </div>
         </div>
         <HStack justify="center" gap="075" className="py-200">
+          <Text render={<span />} className="sr-only" role="status" aria-live="polite">
+            {index + 1} / {ONBOARDING_SLIDES.length}
+          </Text>
           {ONBOARDING_SLIDES.map((item, itemIndex) =>
             itemIndex === index ? <ActiveSlideDot key={item.key} /> : <SlideDot key={item.key} />,
           )}
         </HStack>
         <VStack gap="050" className="mb-[calc(var(--spacing-300)+var(--rc-safe-bottom))]">
-          <Button size="lg" className="w-full" onClick={goNext}>
-            {nextLabel({ welcome, last, fromHelp })}
-          </Button>
+          <HStack gap="100">
+            {index > 0 && (
+              <Button variant="ghost" size="lg" className="min-w-0 flex-1" onClick={goPrevious}>
+                이전
+              </Button>
+            )}
+            <Button size="lg" className="min-w-0 flex-1" onClick={goNext}>
+              {nextLabel({ welcome, last, fromHelp })}
+            </Button>
+          </HStack>
           {!last && (
             <Button variant="ghost" size="lg" className="w-full" onClick={skip}>
               건너뛰기

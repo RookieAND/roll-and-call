@@ -55,7 +55,7 @@ describe("bulkBlockedReason", () => {
 
   it("목록에 없는 책이 있으면 다시 고르라고 한다", () => {
     expect(bulkBlockedReason({ ...base, rulebookIds: ["x"], books: [book("a")] })).toBe(
-      "책을 다시 골라 주세요.",
+      "책을 다시 골라야 합니다.",
     );
   });
 });

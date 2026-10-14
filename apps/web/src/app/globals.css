@@ -15,6 +15,12 @@ html {
   html {
     scrollbar-width: thin;
   }
+
+  /* 한글은 낱말 중간에서 줄이 바뀌지 않게 하고, 긴 URL·닉네임은 넘치지 않게 꺾는다. */
+  body {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
 }
 
 :root {

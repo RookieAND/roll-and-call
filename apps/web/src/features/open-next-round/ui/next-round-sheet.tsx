@@ -79,10 +79,16 @@ export function NextRoundSheet({
           {coordinate ? (
             <Grid cols={2} gap="100">
               <Field.Root label="조율 시작일">
-                <DatePicker value={rangeStart} min={baseDate} onChange={pickStart} />
+                <DatePicker
+                  label="조율 시작일"
+                  value={rangeStart}
+                  min={baseDate}
+                  onChange={pickStart}
+                />
               </Field.Root>
               <Field.Root label="조율 종료일">
                 <DatePicker
+                  label="조율 종료일"
                   value={rangeEnd}
                   min={rangeStart || baseDate}
                   max={lastEnd}

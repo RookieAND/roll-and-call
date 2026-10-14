@@ -40,10 +40,10 @@ export function checkSupplements({
     const kept = previous.some((old) => old.rulebookId === rulebookId);
     const option = options.find((candidate) => candidate.id === rulebookId);
     if (!option && !kept) {
-      return { ok: false, error: "목록에 없는 서플리먼트가 있습니다. 다시 골라 주세요." };
+      return { ok: false, error: "목록에 없는 서플리먼트가 있습니다. 다시 골라야 합니다." };
     }
     if (option && option.state !== SUPPLEMENT_OPTION_STATE.open && !kept) {
-      return { ok: false, error: "인증하지 않은 서플리먼트가 있습니다. 다시 골라 주세요." };
+      return { ok: false, error: "인증하지 않은 서플리먼트가 있습니다. 다시 골라야 합니다." };
     }
     accepted.push({ name: option?.name ?? item.name.trim(), rulebookId });
   }

@@ -35,7 +35,7 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
   if (!user) {
     return (
       <>
-        <AppBar back="/me/rulebooks" title="인증 신청" />
+        <AppBar back="/me/rulebooks/apply" title="인증 신청" />
         <Container size="sm">
           <div className="py-300">
             <LoginRequired />

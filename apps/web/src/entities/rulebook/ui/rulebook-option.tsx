@@ -27,6 +27,7 @@ interface RulebookOptionProps {
   disabled?: boolean;
   locked?: boolean;
   reason?: ReactNode;
+  tabbable?: boolean;
   onClick?: () => void;
 }
 
@@ -37,6 +38,7 @@ export function RulebookOption({
   disabled = false,
   locked = false,
   reason,
+  tabbable = true,
   onClick,
 }: RulebookOptionProps) {
   const nameForeground = disabled || locked ? "hint" : "normal";
@@ -49,6 +51,7 @@ export function RulebookOption({
       role="radio"
       aria-checked={selected}
       aria-disabled={inactive}
+      tabIndex={tabbable ? 0 : -1}
       onClick={inactive ? undefined : onClick}
       className={row({ selected, disabled: inactive })}
     >

@@ -55,25 +55,20 @@ export function GameCard({ game }: GameCardProps) {
   );
 
   return (
-    <Card.Root
-      interactive
-      padding="none"
-      className={cn("h-full overflow-hidden rounded-600", !live && "opacity-72")}
-    >
+    <Card.Root interactive padding="none" className={"h-full overflow-hidden rounded-600"}>
       <GameThumbnail
         url={game.thumbnailUrl}
         sizes="(max-width: 412px) 100vw, 412px"
         spoilerLabel={game.thumbnailSpoiler ? "스포일러" : undefined}
-        className="aspect-video w-full"
+        className={cn("aspect-video w-full", !live && "grayscale")}
       />
       <VStack gap="125" className="px-175 pt-175">
         <VStack gap="075">
           <HStack align="center" gap="100">
             <Text
-              truncate
               typography="heading2"
               foreground={live ? "normal" : "muted"}
-              className="min-w-0 flex-1"
+              className="line-clamp-2 min-w-0 flex-1"
             >
               {game.title}
             </Text>

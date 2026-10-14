@@ -16,7 +16,7 @@ export function AbsenceNotice({ absences }: AbsenceNoticeProps) {
   return (
     <Callout.Root colorPalette="danger">
       <Callout.Icon>
-        <AlertCircle size={15} strokeWidth={2.2} />
+        <AlertCircle size={15} strokeWidth={2.2} aria-hidden />
       </Callout.Icon>
       <Callout.Title>{`최근 ${ABSENCE_WINDOW_DAYS}일 안에 세션 불참 기록이 있습니다`}</Callout.Title>
     </Callout.Root>

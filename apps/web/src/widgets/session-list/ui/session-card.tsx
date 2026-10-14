@@ -37,7 +37,8 @@ export function SessionCard({ model }: SessionCardProps) {
   if (model.hidden) return <HiddenSessionCard />;
 
   const ScheduleIcon = SCHEDULE_ICON[model.scheduleIcon];
-  const titleForeground = sessionTitleForeground(model);
+  const titleForeground =
+    model.cancelled && !model.titleDanger ? "muted" : sessionTitleForeground(model);
 
   const captionForeground = model.caption?.strong ? "primary" : "hint";
   const captionWeight = model.caption?.strong ? "bold" : "regular";
@@ -47,10 +48,7 @@ export function SessionCard({ model }: SessionCardProps) {
       padding="sm"
       radius={600}
       background="none"
-      className={cn(
-        model.urgent ? "border-danger-200 bg-danger-50" : "bg-surface",
-        model.cancelled && "opacity-72",
-      )}
+      className={cn(model.urgent ? "border-danger-200 bg-danger-50" : "bg-surface")}
     >
       <VStack gap={model.chip === SESSION_CHIP.ended ? "075" : "100"} className="p-025">
         <ServerLink path={`/games/${model.id}`} className="flex flex-col gap-100">
@@ -69,7 +67,10 @@ export function SessionCard({ model }: SessionCardProps) {
             typography="body4"
             foreground="inherit"
             render={<p />}
-            className={cn("flex items-center gap-075", TONE_CLASS[model.scheduleTone])}
+            className={cn(
+              "flex items-center gap-075",
+              model.cancelled ? "text-gray-600" : TONE_CLASS[model.scheduleTone],
+            )}
           >
             <ScheduleIcon size={13} strokeWidth={2.2} aria-hidden className="shrink-0" />
             <span className="min-w-0 truncate">{model.schedule}</span>

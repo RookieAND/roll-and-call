@@ -64,7 +64,7 @@ describe("checkSupplements", () => {
     });
     expect(result).toEqual({
       ok: false,
-      error: "목록에 있는 서플리먼트입니다. 목록에서 골라 주세요.",
+      error: "목록에 있는 서플리먼트입니다. 목록에서 골라야 합니다.",
     });
     expect(
       checkSupplements({

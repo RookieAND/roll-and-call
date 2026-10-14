@@ -179,7 +179,7 @@ describe("editBlockReason", () => {
     };
     expect(reason({ ...coordinate, rosterCount: 1 })).toEqual({
       error:
-        "신청자가 있어 조율 시간대는 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔 주세요.",
+        "신청자가 있어 조율 시간대는 바꿀 수 없습니다. 참여자 관리에서 명단을 비우면 바꿀 수 있습니다.",
       field: "windowStartHour",
     });
     expect(reason(coordinate)).toBeNull();
@@ -197,7 +197,7 @@ describe("editBlockReason", () => {
     const pastEnd = { overrides: { endDate: new Date("2026-09-09T11:00:00Z") } };
     expect(reason({ ...pastEnd, values: { endDate: "2026-09-09T20:00" } })).toBeNull();
     expect(reason({ values: { endDate: "2026-09-09T21:00" } })).toEqual({
-      error: "모집 마감은 지금 이후로 정해 주세요.",
+      error: "모집 마감은 지금 이후로 정해야 합니다.",
       field: "endDate",
     });
     expect(
@@ -208,6 +208,6 @@ describe("editBlockReason", () => {
         ...pastEnd,
         values: { endDate: "2026-09-09T20:00", confirmedAt: "2026-09-10T18:00" },
       }),
-    ).toEqual({ error: "세션 일시는 지금 이후로 정해 주세요.", field: "confirmedAt" });
+    ).toEqual({ error: "세션 일시는 지금 이후로 정해야 합니다.", field: "confirmedAt" });
   });
 });

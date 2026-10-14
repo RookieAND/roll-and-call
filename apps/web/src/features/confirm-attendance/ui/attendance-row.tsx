@@ -86,6 +86,8 @@ export function AttendanceRow({
         <VStack className="px-150 pb-125">
           <TextInput
             value={reason}
+            autoComplete="off"
+            enterKeyHint="done"
             maxLength={ABSENCE_REASON_MAX_LENGTH}
             placeholder="사유(선택) · 운영진만 봅니다"
             aria-label={`${attendee.username} 불참 사유`}

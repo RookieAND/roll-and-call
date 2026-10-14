@@ -16,7 +16,7 @@ export function SelectionAppliedActions({ gameId, endDate, closed }: SelectionAp
   if (closed) {
     return (
       <ActionNotice
-        title="모집이 끝나 GM이 선발하고 있습니다."
+        title="모집이 끝나 GM이 선발하고 있습니다"
         lines={["결과는 알림 탭으로 알립니다."]}
         colorPalette="gray"
       />

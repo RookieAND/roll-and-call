@@ -19,12 +19,12 @@ export function PastGameCard({ game }: PastGameCardProps) {
 
   return (
     <Card.Root interactive padding="sm">
-      <HStack align="center" gap="150" className="opacity-72">
+      <HStack align="center" gap="150">
         {view.thumbnailUrl ? (
           <GameThumbnail
             url={view.thumbnailUrl}
             sizes="56px"
-            className="size-14 flex-none rounded-400"
+            className="size-14 flex-none rounded-400 grayscale"
           />
         ) : (
           <span className="size-14 flex-none rounded-400 bg-gray-100" />

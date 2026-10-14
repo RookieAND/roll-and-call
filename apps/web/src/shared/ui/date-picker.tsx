@@ -15,6 +15,7 @@ export interface DatePickerProps {
   onChange: (date: string) => void;
   placeholder?: string;
   id?: string;
+  label?: string;
   invalid?: boolean;
   min?: string;
   max?: string;
@@ -26,6 +27,7 @@ export function DatePicker({
   onChange,
   placeholder = "날짜 선택",
   id,
+  label,
   invalid,
   min,
   max,
@@ -41,6 +43,7 @@ export function DatePicker({
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger
         id={id}
+        aria-label={label && (value ? `${label} ${formatPickerDate(value)}` : label)}
         disabled={disabled}
         {...fieldAria}
         className={cn(triggerClass, toneClass)}

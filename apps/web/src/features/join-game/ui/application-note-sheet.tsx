@@ -42,6 +42,8 @@ export function ApplicationNoteSheet({
         >
           <Textarea
             id="applicationNote"
+            aria-label="신청글"
+            autoComplete="off"
             value={note}
             onChange={(event) => setNote(event.target.value)}
             placeholder="GM에게 전할 내용을 적어 주세요."

@@ -63,21 +63,22 @@ export function editBlockReason(
   if (rosterCount > 0) {
     if (columns.kind !== game.kind) {
       return {
-        error: "신청자가 있어 구분은 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔 주세요.",
+        error:
+          "신청자가 있어 구분은 바꿀 수 없습니다. 참여자 관리에서 명단을 비우면 바꿀 수 있습니다.",
         field: "kind",
       };
     }
     if (columns.scheduleMode !== game.scheduleMode) {
       return {
         error:
-          "신청자가 있어 일정 방식은 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔 주세요.",
+          "신청자가 있어 일정 방식은 바꿀 수 없습니다. 참여자 관리에서 명단을 비우면 바꿀 수 있습니다.",
         field: "scheduleMode",
       };
     }
     if (columns.recruitMethod !== game.recruitMethod) {
       return {
         error:
-          "신청자가 있어 모집 방식은 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔 주세요.",
+          "신청자가 있어 모집 방식은 바꿀 수 없습니다. 참여자 관리에서 명단을 비우면 바꿀 수 있습니다.",
         field: "recruitMethod",
       };
     }
@@ -94,7 +95,7 @@ export function editBlockReason(
     ) {
       return {
         error:
-          "신청자가 있어 조율 시간대는 바꿀 수 없습니다. 참여자 관리에서 명단을 비운 뒤 바꿔 주세요.",
+          "신청자가 있어 조율 시간대는 바꿀 수 없습니다. 참여자 관리에서 명단을 비우면 바꿀 수 있습니다.",
         field: "windowStartHour",
       };
     }

@@ -35,7 +35,7 @@ export async function saveWelcomeUsername(input: {
 
   const nickname = username.trim();
   if (nickname.length < 1 || nickname.length > USERNAME_MAX_LENGTH) {
-    return { error: `닉네임은 1~${USERNAME_MAX_LENGTH}자로 입력해 주세요.`, field: "username" };
+    return { error: `닉네임은 1~${USERNAME_MAX_LENGTH}자로 입력해야 합니다.`, field: "username" };
   }
 
   const { server, user } = member;

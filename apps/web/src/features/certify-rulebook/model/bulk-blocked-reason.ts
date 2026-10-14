@@ -31,7 +31,7 @@ export function bulkBlockedReason({
   const openable = books.map((book) => ({ ...book, category: book.categoryId }));
   for (const rulebookId of rulebookIds) {
     const book = books.find((candidate) => candidate.id === rulebookId);
-    if (!book) return "책을 다시 골라 주세요.";
+    if (!book) return "책을 다시 골라야 합니다.";
     const reason = blockedReason({ book, openable, certifiedIds, pendingIds, openedIds });
     if (reason) return `${rulebookLabel(book)}: ${reason}`;
   }

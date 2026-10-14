@@ -47,6 +47,8 @@ export function GameBasicsFields({
       <Field.Root label="구인 제목" htmlFor="title" required error={errors.title?.message}>
         <TextInput
           id="title"
+          autoComplete="off"
+          enterKeyHint="next"
           placeholder="예: 마지막 열차"
           maxLength={100}
           invalid={!!errors.title}

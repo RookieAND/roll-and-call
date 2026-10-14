@@ -21,21 +21,21 @@ const draft = (overrides: Partial<BookDraft>): BookDraft => ({
 describe("draftMissing", () => {
   it("비운 사진 칸을 알려 준다", () => {
     expect(draftMissing(draft({ shots: { front: done, back: empty } }))).toBe(
-      "뒷면 사진을 올려 주세요",
+      "뒷면 사진을 올려야 합니다",
     );
     expect(draftMissing(draft({ shots: { front: empty, back: empty } }))).toBe(
-      "사진 2장을 올려 주세요",
+      "사진 2장을 올려야 합니다",
     );
     expect(draftMissing(draft({}))).toBeNull();
   });
 
   it("전자책은 판매처 → 주문일 → 주문번호 순서로 묻는다", () => {
     const ebook = draft({ format: "ebook", proofs: { order: done, receipt: done } });
-    expect(draftMissing(ebook)).toBe("판매처를 골라 주세요");
-    expect(draftMissing({ ...ebook, seller: "리디" })).toBe("주문일을 적어 주세요");
+    expect(draftMissing(ebook)).toBe("판매처를 골라야 합니다");
+    expect(draftMissing({ ...ebook, seller: "리디" })).toBe("주문일을 적어야 합니다");
     const dated = { ...ebook, seller: "리디", orderDate: "2026.09.12" };
-    expect(draftMissing(dated)).toBe("주문번호를 적어 주세요");
-    expect(draftMissing({ ...dated, orderNumber: "  " })).toBe("주문번호를 적어 주세요");
+    expect(draftMissing(dated)).toBe("주문번호를 적어야 합니다");
+    expect(draftMissing({ ...dated, orderNumber: "  " })).toBe("주문번호를 적어야 합니다");
     expect(draftMissing({ ...dated, orderNumber: "A-1" })).toBeNull();
   });
 });

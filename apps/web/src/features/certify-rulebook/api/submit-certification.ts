@@ -65,13 +65,13 @@ export async function submitCertification(
   const physical = entry.format === CERT_FORMAT.physical;
   if (physical) {
     if (!CERT_SHOTS.every((shot) => ownFile(entry.photos[shot])))
-      return { error: "사진 2장을 모두 올려 주세요." };
+      return { error: "사진 2장을 모두 올려야 합니다." };
   } else {
     if (!ownFile(entry.captureUrl) || !ownFile(entry.receiptUrl))
-      return { error: "구매 내역과 영수증을 모두 올려 주세요." };
+      return { error: "구매 내역과 영수증을 모두 올려야 합니다." };
     if (!entry.seller.trim() || !entry.orderDate.trim())
-      return { error: "판매처와 주문일을 적어 주세요." };
-    if (!entry.orderNumber.trim()) return { error: "주문번호를 적어 주세요." };
+      return { error: "판매처와 주문일을 적어야 합니다." };
+    if (!entry.orderNumber.trim()) return { error: "주문번호를 적어야 합니다." };
   }
 
   const { books, certified, applications, sanction, quizQuestion } = await loadCertificationContext(
@@ -84,7 +84,7 @@ export async function submitCertification(
   if (sanction) return { error: "활동 정지 기간에는 인증을 신청할 수 없습니다." };
 
   const book = books.find((candidate) => candidate.id === entry.rulebookId);
-  if (!book) return { error: "책을 다시 골라 주세요." };
+  if (!book) return { error: "책을 다시 골라야 합니다." };
   if (!book.certRequired) return { error: "인증 없이 구인을 열 수 있는 룰입니다." };
   const certifiedIds = new Set(certified.map((row) => row.rulebookId));
   if (certifiedIds.has(book.id)) return { error: "이미 인증된 룰북입니다." };

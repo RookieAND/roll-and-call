@@ -1,7 +1,7 @@
 "use client";
 
 import { RichTextEditor } from "@roll-and-call/tiptap";
-import { Button, Callout, Field, FloatingBar, VStack } from "@roll-and-call/ui";
+import { Button, Callout, Field, FloatingBar, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useState, type ReactNode } from "react";
 
@@ -211,6 +211,17 @@ export function ReviewForm({
           >
             {submitLabel}
           </Button>
+          {photos.uploading && (
+            <Text
+              typography="body4"
+              foreground="hint"
+              render={<p />}
+              role="status"
+              className="mt-075 text-center"
+            >
+              사진을 올리는 중입니다.
+            </Text>
+          )}
         </FloatingBar.Content>
         <FloatingBar.Spacer />
       </FloatingBar.Root>

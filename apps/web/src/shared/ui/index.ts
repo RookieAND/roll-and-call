@@ -19,6 +19,7 @@ export { HeatSample } from "./heat-sample";
 export { HelpButton } from "./help-button";
 export { IconTile } from "./icon-tile";
 export { ErrorScreen } from "./error-screen";
+export { SegmentError } from "./segment-error";
 export { TagInput } from "./tag-input";
 export { SummaryLine } from "./summary-line";
 export { ThemeSetting } from "./theme-setting";

@@ -54,6 +54,16 @@ export function useSlotPainter({
     paint(key);
   }
 
+  function toggle(key: string) {
+    if (readOnly || blockedSet.has(key)) return;
+    setSelected((previous) => {
+      const next = new Set(previous);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }
+
   let unsavedCount = 0;
   for (const key of selected) if (!saved.has(key)) unsavedCount++;
   for (const key of saved) if (!selected.has(key)) unsavedCount++;
@@ -65,6 +75,7 @@ export function useSlotPainter({
     isSaved: (key: string) => saved.has(key),
     isBlocked: (key: string) => blockedSet.has(key),
     markSaved: (keys: Iterable<string>) => setSaved(new Set(keys)),
+    toggle,
     reset: () => setSelected(new Set(saved)),
     cellHandlers: (key: string) => ({
       onPointerDown: (event: React.PointerEvent) => start(event, key),

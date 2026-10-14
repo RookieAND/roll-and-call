@@ -25,13 +25,20 @@ export function ThumbnailSpoilerField({ value, disabled, onChange }: ThumbnailSp
           <Text typography="body4" foreground="muted" render={<p />} id="thumbnailSpoiler-hint">
             목록과 상세 페이지에서 이미지를 흐리게 덮습니다
           </Text>
+          {disabled && (
+            <Text typography="body4" foreground="muted" render={<p />} id="thumbnailSpoiler-reason">
+              썸네일을 올리면 켤 수 있습니다.
+            </Text>
+          )}
         </VStack>
         <Switch.Root
           id="thumbnailSpoiler"
           checked={checked}
           disabled={disabled}
           onCheckedChange={onChange}
-          aria-describedby="thumbnailSpoiler-hint"
+          aria-describedby={
+            disabled ? "thumbnailSpoiler-hint thumbnailSpoiler-reason" : "thumbnailSpoiler-hint"
+          }
         >
           <Switch.Control />
         </Switch.Root>

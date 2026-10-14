@@ -8,10 +8,10 @@ export function pastScheduleError(
   now: Date = new Date(),
 ): PastScheduleError | null {
   if (!isUndefined(endDate) && endDate.getTime() < now.getTime()) {
-    return { error: "모집 마감은 지금 이후로 정해 주세요.", field: "endDate" };
+    return { error: "모집 마감은 지금 이후로 정해야 합니다.", field: "endDate" };
   }
   if (!isUndefined(confirmedAt) && confirmedAt.getTime() < now.getTime()) {
-    return { error: "세션 일시는 지금 이후로 정해 주세요.", field: "confirmedAt" };
+    return { error: "세션 일시는 지금 이후로 정해야 합니다.", field: "confirmedAt" };
   }
   return null;
 }

@@ -78,6 +78,7 @@ export function MarkAbsentDialog({ gameId, member, onClose }: MarkAbsentDialogPr
         >
           <Textarea
             id={reasonId}
+            autoComplete="off"
             rows={2}
             value={reason}
             maxLength={ABSENCE_REASON_MAX_LENGTH}

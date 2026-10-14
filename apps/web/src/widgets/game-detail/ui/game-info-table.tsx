@@ -33,7 +33,7 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
       value: (
         <ServerLink
           path={`/users/${game.gmId}`}
-          className="inline-flex min-w-0 items-center gap-100"
+          className="relative inline-flex min-w-0 items-center gap-100 after:absolute after:inset-x-0 after:-inset-y-075"
         >
           <Avatar src={game.gm?.avatarUrl} name={game.gm?.username} size="sm" />
           <span className="truncate">{game.gm?.username ?? "?"}</span>

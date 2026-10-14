@@ -16,19 +16,19 @@ export function draftMissing(draft: BookDraft): string | null {
     ? CERT_PROOFS.map((proof) => [CERT_PROOF_LABEL[proof], draft.proofs[proof]])
     : CERT_SHOTS.map((shot) => [CERT_SHOT_LABEL[shot], draft.shots[shot]]);
   const failed = slots.find(([, slot]) => slot.status === PHOTO_SLOT.error);
-  if (failed) return `${failed[0]} 사진을 다시 올려 주세요`;
+  if (failed) return `${failed[0]} 사진을 다시 올려야 합니다`;
   if (slots.some(([, slot]) => slot.status === PHOTO_SLOT.uploading))
     return "사진을 올리는 중입니다";
   const empty = slots.filter(([, slot]) => !slotKey(slot)).map(([label]) => label);
   if (empty.length > 0) {
     return empty.length === slots.length
-      ? `사진 ${slots.length}장을 올려 주세요`
-      : `${empty.join("·")} 사진을 올려 주세요`;
+      ? `사진 ${slots.length}장을 올려야 합니다`
+      : `${empty.join("·")} 사진을 올려야 합니다`;
   }
   if (!ebook) return null;
   const seller = draft.seller === OTHER_SELLER ? draft.sellerOther.trim() : draft.seller;
-  if (!seller) return "판매처를 골라 주세요";
-  if (!draft.orderDate.trim()) return "주문일을 적어 주세요";
-  if (!draft.orderNumber.trim()) return "주문번호를 적어 주세요";
+  if (!seller) return "판매처를 골라야 합니다";
+  if (!draft.orderDate.trim()) return "주문일을 적어야 합니다";
+  if (!draft.orderNumber.trim()) return "주문번호를 적어야 합니다";
   return null;
 }

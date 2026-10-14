@@ -88,6 +88,7 @@ export function CancelGameDialog({
         >
           <Textarea
             id={reasonId}
+            autoComplete="off"
             rows={3}
             value={reason}
             maxLength={CANCEL_REASON_MAX_LENGTH}

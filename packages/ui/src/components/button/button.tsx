@@ -64,7 +64,7 @@ export function Button({
             <span
               aria-hidden
               data-slot="button-spinner"
-              className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/45 border-t-white"
+              className="h-3.5 w-3.5 animate-spin rounded-full motion-reduce:animate-pulse border-2 border-white/45 border-t-white"
             />
           )}
           <ButtonLabel>{children}</ButtonLabel>

@@ -49,7 +49,7 @@ export function GameThumbnail({
           align="center"
           justify="center"
           gap="075"
-          className="absolute inset-0 bg-black/30 text-white"
+          className="absolute inset-0 bg-dim text-on-primary"
         >
           <EyeOff size={16} aria-hidden />
           <Text typography="subtitle2" foreground="onPrimary">

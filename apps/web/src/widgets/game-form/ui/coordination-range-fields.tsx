@@ -42,6 +42,7 @@ export function CoordinationRangeFields({ form }: CoordinationRangeFieldsProps) 
               render={({ field }) => (
                 <DatePicker
                   id="rangeStart"
+                  label="조율 시작일"
                   placeholder="시작일"
                   value={field.value}
                   invalid={!!errors.rangeStart}
@@ -67,6 +68,7 @@ export function CoordinationRangeFields({ form }: CoordinationRangeFieldsProps) 
               render={({ field }) => (
                 <DatePicker
                   id="rangeEnd"
+                  label="조율 종료일"
                   placeholder="종료일"
                   value={field.value}
                   invalid={!!errors.rangeEnd}

@@ -29,7 +29,10 @@ export function PreConfirmedField({
   const [picking, setPicking] = useState(false);
   const count = players.length;
   const openSeats = Math.max(maxPlayers - count, 0);
-  const hint = preConfirmedHint({ count, openSeats, method });
+  const hint =
+    openSeats === 0
+      ? "남은 자리가 없어 추가할 수 없습니다."
+      : preConfirmedHint({ count, openSeats, method });
 
   return (
     <VStack gap="100">

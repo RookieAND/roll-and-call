@@ -38,7 +38,7 @@ export function ShareButton({ gameId, title }: ShareButtonProps) {
 
   return (
     <IconButton variant="ghost" aria-label="공유" onClick={share}>
-      <Share2 size={20} />
+      <Share2 size={20} aria-hidden />
     </IconButton>
   );
 }

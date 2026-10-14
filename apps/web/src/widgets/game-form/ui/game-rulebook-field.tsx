@@ -8,7 +8,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { RULE_GATE, ruleGate, ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
 import type { RuleNotice } from "@/features/reopen-game";
 import type { GameFormValues } from "@/features/write-game";
-import { LineBreaks, ServerLink } from "@/shared/ui";
+import { LineBreaks, ServerLink, toast } from "@/shared/ui";
 
 import { GameRulebookSheet } from "./game-rulebook-sheet";
 import { RuleNoticeCallout } from "./rule-notice-callout";
@@ -50,7 +50,7 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
         <button
           type="button"
           id="rule"
-          aria-labelledby="rulebook-label"
+          aria-labelledby="rulebook-label rule"
           aria-invalid={Boolean(error) || gate?.type === RULE_GATE.blocked}
           onClick={() => setOpen(true)}
           className="flex min-h-14 w-full items-center gap-125 rounded-500 border border-gray-300 py-075 pr-075 pl-175 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus aria-invalid:border-danger-600"
@@ -135,7 +135,12 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
           selectedKey={set?.key ?? null}
           onSelect={(picked) => {
             // 서플리먼트는 판본마다 다르므로 룰을 바꾸면 비운다.
-            if (picked.key !== set?.key) setValue("supplements", [], { shouldDirty: true });
+            if (picked.key !== set?.key) {
+              if (form.getValues("supplements").length > 0) {
+                toast.info("룰이 바뀌어 고른 서플리먼트를 비웠습니다");
+              }
+              setValue("supplements", [], { shouldDirty: true });
+            }
             setValue("rulebookId", picked.cores[0]!.id, { shouldDirty: true });
             setValue("rule", picked.label, { shouldDirty: true, shouldValidate: true });
           }}

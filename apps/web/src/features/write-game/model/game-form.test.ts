@@ -52,8 +52,8 @@ describe("gameFormSchema 최소 인원", () => {
   });
 
   it("0이나 정수가 아닌 값은 범위 오류다", () => {
-    expect(minPlayersError("0")).toBe("1~6 사이로 적어 주세요.");
-    expect(minPlayersError("2.5")).toBe("1~6 사이로 적어 주세요.");
+    expect(minPlayersError("0")).toBe("1~6 사이로 적어야 합니다.");
+    expect(minPlayersError("2.5")).toBe("1~6 사이로 적어야 합니다.");
   });
 
   it("정원보다 크면 오류다", () => {
@@ -98,7 +98,7 @@ describe("gameFormSchema", () => {
     const issue = gameFormSchema.safeParse({ ...base, ...window, endDate: "2026-09-12T21:00" })
       .error?.issues[0];
     expect(issue?.message).toBe(
-      "모집 마감이 조율 시작 시각보다 늦습니다.\n마감을 9월 12일 21:00 이전으로 바꿔 주세요.",
+      "모집 마감이 조율 시작 시각보다 늦습니다.\n마감을 9월 12일 21:00 이전으로 바꿔야 합니다.",
     );
   });
 

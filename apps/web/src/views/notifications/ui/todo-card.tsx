@@ -12,7 +12,6 @@ interface TodoCardProps {
 
 export function TodoCard({ item }: TodoCardProps) {
   const buttonVariant = item.blocked ? "solid" : "tinted";
-  const buttonPalette = item.blocked ? "success" : "primary";
 
   return (
     <VStack gap="050" render={<Card.Root padding="none" className="p-175" />}>
@@ -21,7 +20,7 @@ export function TodoCard({ item }: TodoCardProps) {
       <Button
         render={<ServerLink path={item.action.href} />}
         variant={buttonVariant}
-        colorPalette={buttonPalette}
+        colorPalette="primary"
         size="lg"
         className="mt-125 w-full"
       >

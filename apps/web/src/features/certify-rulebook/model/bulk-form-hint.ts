@@ -13,5 +13,5 @@ export function bulkFormHint({
   hasQuizError,
 }: BulkFormHintInput) {
   if (!onQuiz) return photoMissing;
-  return hasQuizError ? "답을 고친 뒤 다시 신청해 주세요" : quizMissing;
+  return hasQuizError ? "답을 고친 뒤 다시 신청해야 합니다" : quizMissing;
 }

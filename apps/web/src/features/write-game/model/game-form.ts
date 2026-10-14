@@ -30,7 +30,7 @@ export const GAME_TAGS_MAX = {
 export const GAME_TAG_MAX_LENGTH = 20;
 export const GAME_NOTICE_MAX = 500;
 export const GAME_SYNOPSIS_MAX = 2000;
-export const INVALID_INPUT_MESSAGE = "입력값을 확인해 주세요.";
+export const INVALID_INPUT_MESSAGE = "입력값을 확인해야 합니다.";
 
 const DAY_MS = 86_400_000;
 
@@ -43,12 +43,12 @@ const tagList = (label: string, max: number) =>
 // re-validates and converts strings to DB types (Number/Date).
 export const gameFormSchema = z
   .object({
-    title: z.string().trim().min(1, "구인 제목을 입력해 주세요.").max(100),
+    title: z.string().trim().min(1, "구인 제목을 입력해야 합니다.").max(100),
     kind: z.enum(GAME_KINDS),
     // 설명회는 보이스로 고정이다. 화면은 문항을 숨기고, 여기서 다른 값을 거부한다.
     playType: z.enum(PLAY_TYPES),
     // rule은 고른 룰북의 이름(표시용)이고, 등록할 때 서버는 rulebookId로 룰북을 다시 찾는다.
-    rule: z.string().trim().min(1, "룰북을 선택해 주세요.").max(100),
+    rule: z.string().trim().min(1, "룰북을 선택해야 합니다.").max(100),
     rulebookId: z.string(),
     // 등록된 책은 rulebookId를, 직접 입력한 책은 null을 둔다. 등록된 책의 이름은 서버가 룰북 목록에서 다시 채운다.
     supplements: z
@@ -57,7 +57,7 @@ export const gameFormSchema = z
           name: z
             .string()
             .trim()
-            .min(1, "서플리먼트 이름을 적어 주세요.")
+            .min(1, "서플리먼트 이름을 적어야 합니다.")
             .max(SUPPLEMENT_NAME_MAX, `${SUPPLEMENT_NAME_MAX}자까지 적을 수 있습니다.`),
           rulebookId: z.string().nullable(),
         }),
@@ -83,19 +83,19 @@ export const gameFormSchema = z
         `주의 사항은 ${GAME_NOTICE_MAX}자까지 쓸 수 있습니다.`,
       )
       .optional(),
-    aiImage: z.boolean({ error: "AI 이미지 사용 여부를 골라 주세요." }),
+    aiImage: z.boolean({ error: "AI 이미지 사용 여부를 골라야 합니다." }),
     // 최소는 필수, 최대는 비우면 최소와 같다. 범위는 superRefine에서 함께 본다.
     playMinutesMin: z.number().int(),
     playMinutes: z.number().int().nullable(),
     maxPlayers: z.string().refine((value) => {
       const count = Number(value);
       return value !== "" && Number.isInteger(count) && count >= 1 && count <= GAME_MAX_PLAYERS;
-    }, `1~${GAME_MAX_PLAYERS} 사이로 적어 주세요.`),
+    }, `1~${GAME_MAX_PLAYERS} 사이로 적어야 합니다.`),
     // 비우면 최소 인원 없음. 범위(정원 이하)는 정원과 함께 보므로 superRefine에서 검사한다.
     minPlayers: z.string(),
     recruitMethod: z.enum(RECRUIT_METHODS),
     scheduleMode: z.enum(SCHEDULE_MODES),
-    endDate: z.string().min(1, "모집 마감 기한을 입력해 주세요."),
+    endDate: z.string().min(1, "모집 마감 기한을 입력해야 합니다."),
     confirmedAt: z.string().optional(),
     rangeStart: z.string().optional(),
     rangeEnd: z.string().optional(),
@@ -147,7 +147,7 @@ export const gameFormSchema = z
     if (values.scheduleMode === SCHEDULE_MODE.fixed && !values.confirmedAt) {
       context.addIssue({
         code: "custom",
-        message: "세션 일시를 입력해 주세요.",
+        message: "세션 일시를 입력해야 합니다.",
         path: ["confirmedAt"],
       });
     }
@@ -160,7 +160,7 @@ export const gameFormSchema = z
     ) {
       context.addIssue({
         code: "custom",
-        message: `모집 마감이 세션 일시보다 늦습니다.\n마감을 ${monthDayLabel(values.confirmedAt)} 이전으로 바꿔 주세요.`,
+        message: `모집 마감이 세션 일시보다 늦습니다.\n마감을 ${monthDayLabel(values.confirmedAt)} 이전으로 바꿔야 합니다.`,
         path: ["endDate"],
       });
     }
@@ -174,7 +174,7 @@ export const gameFormSchema = z
       if (values.endDate >= firstSlot) {
         context.addIssue({
           code: "custom",
-          message: `모집 마감이 조율 시작 시각보다 늦습니다.\n마감을 ${monthDayLabel(firstSlot)} ${firstSlot.slice(11)} 이전으로 바꿔 주세요.`,
+          message: `모집 마감이 조율 시작 시각보다 늦습니다.\n마감을 ${monthDayLabel(firstSlot)} ${firstSlot.slice(11)} 이전으로 바꿔야 합니다.`,
           path: ["endDate"],
         });
       }
@@ -184,14 +184,14 @@ export const gameFormSchema = z
     if (!values.rangeStart) {
       context.addIssue({
         code: "custom",
-        message: "시작일을 입력해 주세요.",
+        message: "시작일을 입력해야 합니다.",
         path: ["rangeStart"],
       });
     }
     if (!values.rangeEnd) {
       context.addIssue({
         code: "custom",
-        message: "종료일을 입력해 주세요.",
+        message: "종료일을 입력해야 합니다.",
         path: ["rangeEnd"],
       });
     } else if (values.rangeStart && values.rangeEnd < values.rangeStart) {
@@ -215,19 +215,19 @@ export const gameFormSchema = z
     if (!isWindowHour(windowStartHour)) {
       context.addIssue({
         code: "custom",
-        message: "조율 시간대 시작 시각을 골라 주세요.",
+        message: "조율 시간대 시작 시각을 골라야 합니다.",
         path: ["windowStartHour"],
       });
     } else if (!isWindowHour(windowEndHour)) {
       context.addIssue({
         code: "custom",
-        message: "조율 시간대 끝 시각을 골라 주세요.",
+        message: "조율 시간대 끝 시각을 골라야 합니다.",
         path: ["windowEndHour"],
       });
     } else if (Number(windowStartHour) === Number(windowEndHour)) {
       context.addIssue({
         code: "custom",
-        message: "조율 시간대의 시작과 끝을 다르게 골라 주세요.",
+        message: "조율 시간대의 시작과 끝을 다르게 골라야 합니다.",
         path: ["windowEndHour"],
       });
     }

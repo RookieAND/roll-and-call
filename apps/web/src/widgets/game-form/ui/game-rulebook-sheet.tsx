@@ -2,9 +2,9 @@
 
 import { Button, HStack, Sheet, Text, TextInput } from "@roll-and-call/ui";
 import { uniq } from "es-toolkit";
-import { useState } from "react";
+import { type KeyboardEvent, useState } from "react";
 
-import type { EditionSet, MyRulebooks } from "@/entities/rulebook";
+import { RULE_GATE, type EditionSet, type MyRulebooks } from "@/entities/rulebook";
 import { RulebookRequestSheet } from "@/features/certify-rulebook";
 import { useIsTrial } from "@/shared/trial";
 import { EmptyState } from "@/shared/ui";
@@ -12,6 +12,9 @@ import { EmptyState } from "@/shared/ui";
 import { ruleSheetGroups } from "../model/rule-sheet-groups";
 import { RulebookSheetGroup } from "./rulebook-sheet-group";
 import { RulebookSheetOption } from "./rulebook-sheet-option";
+
+// 방향키는 선택이 아니라 초점만 옮긴다. 고르면 시트가 닫히기 때문이다.
+const ARROW_STEP = { ArrowUp: -1, ArrowLeft: -1, ArrowDown: 1, ArrowRight: 1 } as const;
 
 interface GameRulebookSheetProps {
   open: boolean;
@@ -43,6 +46,27 @@ export function GameRulebookSheet({
     setRequestOpen(true);
   };
 
+  const pickable = groups.flatMap((group) =>
+    group.options.filter(({ gate }) => gate.type !== RULE_GATE.blocked),
+  );
+  const tabbableKey = pickable.some(({ set }) => set.key === selectedKey)
+    ? selectedKey
+    : pickable[0]?.set.key;
+
+  const moveFocus = (event: KeyboardEvent<HTMLElement>) => {
+    const step = ARROW_STEP[event.key as keyof typeof ARROW_STEP];
+    if (!step) return;
+    const radios = [
+      ...event.currentTarget.querySelectorAll<HTMLElement>(
+        '[role="radio"]:not([aria-disabled="true"])',
+      ),
+    ];
+    const current = radios.indexOf(document.activeElement as HTMLElement);
+    if (current < 0) return;
+    event.preventDefault();
+    radios.at((current + step) % radios.length)?.focus();
+  };
+
   return (
     <>
       <Sheet.Root open={open} onOpenChange={onOpenChange}>
@@ -63,7 +87,12 @@ export function GameRulebookSheet({
               aria-label="룰 이름으로 찾기"
             />
           </div>
-          <Sheet.Body className="px-200 pb-200" role="radiogroup" aria-label="룰북">
+          <Sheet.Body
+            className="px-200 pb-200"
+            role="radiogroup"
+            aria-label="룰북"
+            onKeyDown={moveFocus}
+          >
             {groups.map((group) => (
               <RulebookSheetGroup key={group.name} title={group.name}>
                 {group.options.map(({ set, gate }) => (
@@ -72,6 +101,7 @@ export function GameRulebookSheet({
                     set={set}
                     gate={gate}
                     selected={set.key === selectedKey}
+                    tabbable={set.key === tabbableKey}
                     onPick={() => pick(set)}
                   />
                 ))}

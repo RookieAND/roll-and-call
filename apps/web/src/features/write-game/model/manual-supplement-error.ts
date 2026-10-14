@@ -15,7 +15,7 @@ export function manualSupplementError({
   set: Pick<EditionSet, "cores" | "extras"> | null;
 }) {
   const trimmed = name.trim();
-  if (!trimmed) return "서플리먼트 이름을 적어 주세요.";
+  if (!trimmed) return "서플리먼트 이름을 적어야 합니다.";
   if (trimmed.length > SUPPLEMENT_NAME_MAX) return `${SUPPLEMENT_NAME_MAX}자까지 적을 수 있습니다.`;
   const key = supplementNameKey(trimmed);
   const registered = [...(set?.cores ?? []), ...(set?.extras ?? [])].some((book) =>
@@ -23,7 +23,7 @@ export function manualSupplementError({
       (candidate) => supplementNameKey(candidate) === key,
     ),
   );
-  if (registered) return "목록에 있는 서플리먼트입니다. 목록에서 골라 주세요.";
+  if (registered) return "목록에 있는 서플리먼트입니다. 목록에서 골라야 합니다.";
   if (items.some((item) => supplementNameKey(item.name) === key)) {
     return "이미 넣은 서플리먼트입니다.";
   }

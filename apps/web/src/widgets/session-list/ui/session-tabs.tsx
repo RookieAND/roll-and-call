@@ -24,7 +24,7 @@ export function SessionTabs({ label, tabs, activeKey }: SessionTabsProps) {
         {tabs.map((tab) => (
           <Tabs.Trigger key={tab.key} value={tab.key} className="flex-1">
             {tab.label}
-            <span className="tabular-nums opacity-72">{tab.count}</span>
+            <span className="tabular-nums text-hint">{tab.count}</span>
           </Tabs.Trigger>
         ))}
         <Tabs.Indicator />
