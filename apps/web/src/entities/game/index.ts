@@ -9,18 +9,14 @@ export {
   type GameStatus,
 } from "@roll-and-call/database/games/model";
 export { gameStatusColor } from "./model/game-status-color";
-export { isDeadlineUrgent } from "./model/is-deadline-urgent";
 export { isDeadlinePassed } from "./model/is-deadline-passed";
 export { PARTICIPANT_STATUS, countConfirmed, type ParticipantStatus } from "./model/participant";
 export { splitRoster, type RosterMember } from "./model/split-roster";
 export { isGameGm } from "./model/is-game-gm";
-export { hasUserJoined } from "./model/has-user-joined";
-export { canCoordinate } from "./model/can-coordinate";
 export { GameCard } from "./ui/game-card";
 export { PastGameCard } from "./ui/past-game-card";
 export { GameThumbnail } from "./ui/game-thumbnail";
 export { GameStatusBadge } from "./ui/game-status-badge";
-export { GameRuleChip } from "./ui/game-rule-chip";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
 export { GameGmLabel } from "./ui/game-gm-label";
 export { GameScheduleRow } from "./ui/game-schedule-row";
@@ -43,7 +39,6 @@ export {
 } from "@roll-and-call/database/games/model";
 export { coordinationWindowOf } from "./model/coordination-window-of";
 export { isAttendanceDue } from "./model/is-attendance-due";
-export { isAttendanceSettled } from "./model/is-attendance-settled";
 export {
   ATTENDANCE_EDIT_HOURS,
   attendanceDeadline,

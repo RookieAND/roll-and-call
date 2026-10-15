@@ -33,7 +33,7 @@ export { groupByCategory } from "./model/group-by-category";
 export { isOpened } from "./model/is-opened";
 export { missingCores } from "./model/missing-cores";
 export { CERT_OPTION, certOption, type CertOptionType } from "./model/cert-option";
-export { editionSetKey, editionSets, setOf, type EditionSet } from "./model/edition-sets";
+export { editionSets, setOf, type EditionSet } from "./model/edition-sets";
 export { SET_STATUS, setStatus, type SetStatus } from "./model/set-status";
 export { RULE_GATE, ruleGate, type RuleGate, type RuleGateType } from "./model/rule-gate";
 export { ruleSetOf } from "./model/rule-set-of";

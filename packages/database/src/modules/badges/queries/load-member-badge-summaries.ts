@@ -56,13 +56,22 @@ export async function loadMemberBadgeSummaries({
     ...member,
     records: records
       .filter((record) => record.userId === member.userId)
-      .map(({ userId, sourceGameId, sourceTitle, sourceStartsAt, sourceHiddenAt, ...record }) => ({
-        ...record,
-        source:
-          sourceGameId && sourceTitle && sourceStartsAt && !sourceHiddenAt
-            ? { gameId: sourceGameId, title: sourceTitle, startsAt: sourceStartsAt }
-            : null,
-      })),
+      .map(
+        ({
+          userId: _userId,
+          sourceGameId,
+          sourceTitle,
+          sourceStartsAt,
+          sourceHiddenAt,
+          ...record
+        }) => ({
+          ...record,
+          source:
+            sourceGameId && sourceTitle && sourceStartsAt && !sourceHiddenAt
+              ? { gameId: sourceGameId, title: sourceTitle, startsAt: sourceStartsAt }
+              : null,
+        }),
+      ),
   }));
 }
 

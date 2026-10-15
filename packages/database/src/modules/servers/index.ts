@@ -1,4 +1,3 @@
-export { applyNicknameSync } from "./commands/apply-nickname-sync";
 export { claimMonthlyAnnouncement } from "./commands/claim-monthly-announcement";
 export { ensureMembership } from "./commands/ensure-membership";
 export { leaveServer, type LeaveServerResult } from "./commands/leave-server";
@@ -16,7 +15,6 @@ export { updateRankingMode } from "./commands/update-ranking-mode";
 export { saveReviewTemplate } from "./commands/save-review-template";
 export { updateServerSettings, type ServerSettings } from "./commands/update-server-settings";
 export { getActiveMembership } from "./queries/get-active-membership";
-export { getDefaultServer } from "./queries/get-default-server";
 export { getMessageHeads, type MessageHead } from "./queries/get-message-heads";
 export { getMessageTexts, type MessageText } from "./queries/get-message-texts";
 export { getReviewTemplate, type ReviewTemplate } from "./queries/get-review-template";
@@ -25,10 +23,6 @@ export { getServerById } from "./queries/get-server-by-id";
 export { getServerBySlug } from "./queries/get-server-by-slug";
 export { getServerOwnerProfile } from "./queries/get-server-owner-profile";
 export { listActiveMembers } from "./queries/list-active-members";
-export {
-  listMembersForNicknameSync,
-  type NicknameSyncMember,
-} from "./queries/list-members-for-nickname-sync";
 export { listJoinCandidateServers } from "./queries/list-join-candidate-servers";
 export { listMemberServers } from "./queries/list-member-servers";
 export { listServers } from "./queries/list-servers";

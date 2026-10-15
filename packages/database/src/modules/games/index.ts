@@ -38,7 +38,6 @@ export { getGameForDrawNotice } from "./queries/get-game-for-draw-notice";
 export { getGameForNotice } from "./queries/get-game-for-notice";
 export { getGameForRecruitmentNotice } from "./queries/get-game-for-recruitment-notice";
 export { getGameParticipants } from "./queries/get-game-participants";
-export { getGameSchedule } from "./queries/get-game-schedule";
 export { getGameWithGmName } from "./queries/get-game-with-gm-name";
 export { getGameWithRoster } from "./queries/get-game-with-roster";
 export { getGamesByGm } from "./queries/get-games-by-gm";
