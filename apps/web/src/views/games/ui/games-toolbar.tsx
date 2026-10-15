@@ -7,8 +7,8 @@ import {
   type GamesFilter,
 } from "@/shared/api";
 import type { GamesCounts } from "@/shared/server";
+import { FRAME_INNER_PX } from "@/shared/ui";
 
-import { GAMES_INNER_PX } from "../lib/games-desktop-class";
 import type { RuleOption } from "../model/rule-option";
 import { statusCounts } from "../model/status-counts";
 import { GameFilterButton } from "./game-filter-button";
@@ -49,7 +49,7 @@ export function GamesToolbar({
         gap="125"
         className={cn(
           "py-150 desktop:border-b desktop:border-gray-200 desktop:bg-surface",
-          GAMES_INNER_PX,
+          FRAME_INNER_PX,
         )}
       >
         <HStack align="center" gap="050">

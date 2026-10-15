@@ -11,10 +11,9 @@ import {
   type GameTab,
 } from "@/shared/api";
 import { useServerPath } from "@/shared/lib";
-import { TabCount } from "@/shared/ui";
+import { FRAME_INNER_PX, TabCount } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
-import { GAMES_INNER_PX } from "../lib/games-desktop-class";
 import { gamesHref } from "../lib/games-href";
 
 interface GameScopeTabsProps {
@@ -47,7 +46,7 @@ export function GameScopeTabs({ filter, counts }: GameScopeTabsProps) {
         );
       }}
     >
-      <Tabs.List aria-label="구인 범위" scrollable={false} className={cn("w-full", GAMES_INNER_PX)}>
+      <Tabs.List aria-label="구인 범위" scrollable={false} className={cn("w-full", FRAME_INNER_PX)}>
         <Tabs.Trigger value={GAME_TAB.live} className="flex-1 desktop:flex-none">
           진행 중<TabCount count={counts?.live} />
         </Tabs.Trigger>

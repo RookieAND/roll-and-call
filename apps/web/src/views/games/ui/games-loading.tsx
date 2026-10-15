@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { GAME_TAB, parseGameTab } from "@/shared/api";
 import { PageShell, ServerSwitcher } from "@/shared/ui";
 
-import { GAMES_SHELL_CLASS } from "../lib/games-desktop-class";
 import { GameListSkeleton } from "./game-list-skeleton";
 import { GamesAppBarFrame } from "./games-app-bar-frame";
 import { GamesFilterPanelSkeleton } from "./games-filter-panel-skeleton";
@@ -18,7 +17,6 @@ export function GamesLoading() {
   return (
     <PageShell
       appBar={<GamesAppBarFrame sanction={null} serverSwitch={<ServerSwitcher />} />}
-      className={GAMES_SHELL_CLASS}
       bare
       stickyAppBar
     >

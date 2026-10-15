@@ -7,7 +7,7 @@ import { Badge, Container, FloatingBar, Button, Text, VStack, HStack } from "@ro
 
 import { FinishOnboardingButton } from "@/features/finish-onboarding";
 import { getCurrentServer, getCurrentSessionUser, getQuestClears } from "@/shared/server";
-import { AppBar, ServerLink } from "@/shared/ui";
+import { AppBar, PageShell, ServerLink } from "@/shared/ui";
 
 import { toQuestCards } from "../model/quest-card";
 import { AchievementSheet } from "./achievement-sheet";
@@ -30,15 +30,20 @@ export async function QuestListView({ review, justCleared, achievement }: QuestL
   const justClearedQuest = justCleared && isOnboardingQuest(justCleared) ? justCleared : null;
 
   return (
-    <>
-      <AppBar
-        title="튜토리얼 퀘스트"
-        action={
-          <Text typography="body4" foreground="hint" numeric className="px-100 desktop:hidden">
-            {cleared.length} / 4
-          </Text>
-        }
-      />
+    <PageShell
+      readable
+      appBar={
+        <AppBar
+          title="튜토리얼 퀘스트"
+          action={
+            <Text typography="body4" foreground="hint" numeric className="px-100 desktop:hidden">
+              {cleared.length} / 4
+            </Text>
+          }
+        />
+      }
+      panel={<QuestProgressPanel clearedCount={cleared.length} allCleared={allCleared} />}
+    >
       <Container size="sm">
         <VStack gap="150" className="px-050 pt-200 pb-250">
           <HStack align="center" gap="075" wrap>
@@ -55,7 +60,6 @@ export async function QuestListView({ review, justCleared, achievement }: QuestL
           ))}
         </VStack>
       </Container>
-      <QuestProgressPanel clearedCount={cleared.length} allCleared={allCleared} />
       {(review || firstApplyCleared) && (
         <FloatingBar.Root elevated={false}>
           <FloatingBar.Content>
@@ -79,6 +83,6 @@ export async function QuestListView({ review, justCleared, achievement }: QuestL
         </FloatingBar.Root>
       )}
       <AchievementSheet open={achievement && allCleared} />
-    </>
+    </PageShell>
   );
 }

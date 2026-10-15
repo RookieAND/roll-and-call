@@ -25,8 +25,8 @@ export function RulePicker({ options, selected, onDone }: RulePickerProps) {
   return (
     <>
       <Sheet.Title className="mb-100">룰 고르기</Sheet.Title>
-      <Sheet.Body>
-        <VStack gap="150" className="h-[min(60dvh,28rem)]">
+      <Sheet.Body className="desktop:min-h-0 desktop:flex-1 desktop:overflow-hidden">
+        <VStack gap="150" className="h-[min(60dvh,28rem)] desktop:h-full desktop:min-h-0">
           <div className="relative">
             <Search
               size={16}
@@ -44,7 +44,7 @@ export function RulePicker({ options, selected, onDone }: RulePickerProps) {
           <Text typography="body4" foreground="hint">
             {caption}
           </Text>
-          <ul className="min-h-0 flex-1 divide-y divide-gray-200 overflow-y-auto border-t border-gray-200">
+          <ul className="min-h-0 flex-1 divide-y divide-gray-200 overflow-y-auto border-t border-gray-200 desktop:scrollbar-none desktop:[&::-webkit-scrollbar]:hidden">
             {visible.map((option) => (
               <li key={option.key}>
                 <label className="flex min-h-13 cursor-pointer items-center gap-150">

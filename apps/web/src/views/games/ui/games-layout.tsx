@@ -1,7 +1,7 @@
 import { Container, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
-import { GAMES_INNER_PX } from "../lib/games-desktop-class";
+import { FRAME_INNER_PX } from "@/shared/ui";
 
 interface GamesLayoutProps {
   callout?: ReactNode;
@@ -18,7 +18,7 @@ export function GamesLayout({ callout, toolbar, list, panel }: GamesLayoutProps)
       {callout}
       {toolbar}
       <div
-        className={`desktop:flex desktop:items-start desktop:gap-200 desktop:pt-200 ${GAMES_INNER_PX}`}
+        className={`desktop:flex desktop:items-start desktop:gap-200 desktop:pt-200 ${FRAME_INNER_PX}`}
       >
         <VStack
           gap="150"
