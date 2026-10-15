@@ -8,7 +8,7 @@ import { useServerPath } from "@/shared/lib";
 
 import type { MonthCell } from "../model/build-month-cells";
 import { CALENDAR_CELL_TONE, calendarCellState } from "../model/calendar-cell-tone";
-import { MAX_CALENDAR_DOTS, MAX_CALENDAR_NAMES, splitDotRows } from "../model/split-dot-rows";
+import { MAX_CALENDAR_DOTS, MAX_CALENDAR_LINES, splitDotRows } from "../model/split-dot-rows";
 import type { CalendarSession } from "../model/to-calendar-sessions";
 import { WEEKDAY_TONE } from "../model/weekday-tone";
 
@@ -42,7 +42,9 @@ export function HomeCalendarCell({
   const redDayTone = holidayNames ? "text-sunday" : WEEKDAY_TONE[cell.weekday];
   const weekdayTone = cell.inMonth ? (redDayTone ?? "text-gray-600") : "text-hint";
   const selectedInMonth = selected && cell.inMonth;
-  const hiddenNameCount = sessions.length - MAX_CALENDAR_NAMES;
+  const nameCount =
+    sessions.length <= MAX_CALENDAR_LINES ? sessions.length : MAX_CALENDAR_LINES - 1;
+  const hiddenNameCount = sessions.length - nameCount;
   const dotTone = (session: CalendarSession) =>
     tone.dot ?? (session.mine ? "bg-primary-600" : "bg-hint");
   const nameDotTone = (session: CalendarSession) => (session.mine ? "bg-primary-600" : "bg-hint");
@@ -132,7 +134,7 @@ export function HomeCalendarCell({
       {lead && (
         <span aria-hidden className="hidden min-w-0 desktop:block">
           <VStack gap="050" render={<span />}>
-            {dots.slice(0, MAX_CALENDAR_NAMES).map((session) => (
+            {dots.slice(0, nameCount).map((session) => (
               <HStack
                 key={session.id}
                 align="center"
