@@ -12,6 +12,7 @@ import { AppBar, ServerLink } from "@/shared/ui";
 import { toQuestCards } from "../model/quest-card";
 import { AchievementSheet } from "./achievement-sheet";
 import { QuestCard } from "./quest-card";
+import { QuestProgressPanel } from "./quest-progress-panel";
 
 interface QuestListViewProps {
   // 마이페이지에서 다시 보러 왔으면 [나가기], 처음이면 [온보딩 마치기]가 하단에 선다.
@@ -33,7 +34,7 @@ export async function QuestListView({ review, justCleared, achievement }: QuestL
       <AppBar
         title="튜토리얼 퀘스트"
         action={
-          <Text typography="body4" foreground="hint" numeric className="px-100">
+          <Text typography="body4" foreground="hint" numeric className="px-100 desktop:hidden">
             {cleared.length} / 4
           </Text>
         }
@@ -54,6 +55,7 @@ export async function QuestListView({ review, justCleared, achievement }: QuestL
           ))}
         </VStack>
       </Container>
+      <QuestProgressPanel clearedCount={cleared.length} allCleared={allCleared} />
       {(review || firstApplyCleared) && (
         <FloatingBar.Root elevated={false}>
           <FloatingBar.Content>

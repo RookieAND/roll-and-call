@@ -181,3 +181,6 @@ return <Button variant={buttonVariant} />;
 - 서버 화면의 데스크톱 틀은 `PageShell`(`shared/ui`)이 그린다. `appBar`는 영역 전폭 띠로 늘어나고 아래에 본문 열(기본 640px)과 `panel`(320px, sticky `top: 16px`)이 가운데 정렬로 놓인다. 패널이 없으면 자리도 만들지 않는다.
 - 본문 열 폭을 바꿀 때는 `className`으로 `--shell-w`를 덮는다(예: 알림 `[--shell-w:880px]`). 목록처럼 영역 전체를 직접 짜는 화면은 `bare`를 쓴다. 1100px 미만은 앱바 아래에 children이 그대로 이어진다.
 - 시트는 별도 래퍼 없이 CSS로 가운데 Dialog가 된다. 데스크톱에만 있는 패널은 모바일 본문과 따로 컴포넌트로 만들어 `panel`에 넣는다.
+- 앱바를 본문 카드 안에 두는 화면(튜토리얼 퀘스트)은 기본 틀(`app/app-frame.tsx`)에 `DesktopPanel`만 본문 뒤에 넣는다. 탭 순서가 본문 → 패널이 되도록 패널은 항상 본문 뒤에 둔다.
+- 파일: 틀 `app/app-frame.tsx`·`shared/ui/{page-shell,desktop-panel,desktop-wide-frame,desktop-nav*}.tsx`, 브레이크포인트 `desktop`(1100px, `globals.css`), 화면별 우측 패널은 각 `views/*/ui`에 있다.
+- 포커스 링은 `outline-none`과 `focus-visible:outline-2`를 함께 쓰지 않는다(Tailwind 4에서 `outline-style`이 `none`으로 남아 링이 그려지지 않는다). 링만 켜면 된다.

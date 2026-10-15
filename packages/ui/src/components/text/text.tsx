@@ -8,6 +8,7 @@ import type { StateComponentProps } from "../../lib/state-props";
 const text = cva("", {
   variants: {
     typography: {
+      stat: "text-stat font-extrabold tracking-tight",
       heading1: "text-heading1 font-extrabold tracking-tight",
       heading2: "text-heading2 font-extrabold",
       heading3: "text-heading3 font-bold",

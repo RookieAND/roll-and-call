@@ -18,7 +18,7 @@ export function AchievementSheet({ open }: AchievementSheetProps) {
   return (
     <Sheet.Root open={open} onOpenChange={(next) => !next && router.replace(listPath)}>
       <Sheet.Overlay />
-      <Sheet.Popup aria-label="업적을 받았습니다" className="motion-safe:animate-quest-rise">
+      <Sheet.Popup aria-label="업적을 받았습니다" className="motion-safe:animate-quest-rise desktop:animate-none">
         <Sheet.Handle />
         <VStack align="center" gap="175" className="pt-200 text-center">
           <span

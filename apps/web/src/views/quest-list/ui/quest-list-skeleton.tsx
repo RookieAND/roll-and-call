@@ -1,7 +1,7 @@
 import { Container, Skeleton, Text, VStack } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar, DesktopPanel } from "@/shared/ui";
 
 export function QuestListSkeleton() {
   return (
@@ -9,7 +9,7 @@ export function QuestListSkeleton() {
       <AppBar
         title="튜토리얼 퀘스트"
         action={
-          <Text typography="body4" foreground="hint" numeric className="px-100">
+          <Text typography="body4" foreground="hint" numeric className="px-100 desktop:hidden">
             0 / 4
           </Text>
         }
@@ -22,6 +22,9 @@ export function QuestListSkeleton() {
           ))}
         </VStack>
       </Container>
+      <DesktopPanel>
+        <Skeleton width="100%" height={172} rounded={700} />
+      </DesktopPanel>
     </>
   );
 }
