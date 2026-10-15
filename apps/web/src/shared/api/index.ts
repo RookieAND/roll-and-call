@@ -2,7 +2,7 @@
 export type { ActionResult } from "./action-result";
 export { idSchema } from "./id-schema";
 export { parseActionInput, type ParsedActionInput } from "./parse-action-input";
-export { createSupabaseBrowserClient } from "./supabase-browser";
+export { createSupabaseBrowserClient } from "@roll-and-call/app-kit/supabase/browser";
 export {
   GAME_RULE_OTHER,
   GAME_SORT,

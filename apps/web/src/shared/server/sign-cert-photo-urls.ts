@@ -1,9 +1,8 @@
 import "server-only";
+import { createSupabaseServerClient } from "@roll-and-call/app-kit/supabase/server";
 import { compact, uniq } from "es-toolkit";
 
 import { CERT_PHOTO_BUCKET, certPhotoPathOf } from "@/shared/lib";
-
-import { createSupabaseServerClient } from "./auth/create-supabase-server-client";
 
 const SIGNED_URL_SECONDS = 3600;
 

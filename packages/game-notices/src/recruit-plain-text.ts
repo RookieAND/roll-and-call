@@ -1,9 +1,9 @@
+import { formatDateTime } from "@roll-and-call/app-kit/date";
+import { formatGameSchedule } from "@roll-and-call/app-kit/date";
 import type { Game } from "@roll-and-call/database";
 import { formatPlayRange, RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
 
 import { inlineCodeTags } from "./inline-code-tags";
-import { formatDateTime } from "./lib/format-date-time";
-import { formatGameSchedule } from "./lib/format-game-schedule";
 import { formatRecruitHeadcount } from "./lib/format-recruit-headcount";
 import { richTextToMarkdown } from "./lib/rich-text-markdown";
 import { splitMessage } from "./split-message";

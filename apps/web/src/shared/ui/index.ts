@@ -13,7 +13,7 @@ export { DatePicker } from "./date-picker";
 export { DateTimePicker } from "./date-time-picker";
 export { EmptyState } from "./empty-state";
 export { GoBackButton } from "./go-back-button";
-export { LineBreaks } from "./line-breaks";
+export { LineBreaks } from "@roll-and-call/app-kit/line-breaks";
 export { ExpandableRows } from "./expandable-rows";
 export { HeatSample } from "./heat-sample";
 export { HelpButton } from "./help-button";

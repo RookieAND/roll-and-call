@@ -225,6 +225,9 @@ importers:
       '@ant-design/plots':
         specifier: ^2.6.8
         version: 2.6.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@roll-and-call/app-kit':
+        specifier: workspace:*
+        version: link:../../packages/app-kit
       '@roll-and-call/database':
         specifier: workspace:*
         version: link:../../packages/database
@@ -310,6 +313,9 @@ importers:
       '@hyunbinseo/holidays-kr':
         specifier: ^5.2027.2
         version: 5.2027.2
+      '@roll-and-call/app-kit':
+        specifier: workspace:*
+        version: link:../../packages/app-kit
       '@roll-and-call/database':
         specifier: workspace:*
         version: link:../../packages/database
@@ -412,6 +418,40 @@ importers:
 
   configs/typescript-config: {}
 
+  packages/app-kit:
+    dependencies:
+      '@supabase/ssr':
+        specifier: ^0.12.4
+        version: 0.12.4(@supabase/supabase-js@2.112.2)
+      dayjs:
+        specifier: ^1.11.23
+        version: 1.11.23
+      next:
+        specifier: ^16.3.0
+        version: 16.3.0(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.8
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@roll-and-call/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/typescript-config
+      '@types/node':
+        specifier: ^26.2.0
+        version: 26.2.0
+      '@types/react':
+        specifier: ^19.2.18
+        version: 19.2.18
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/database:
     dependencies:
       drizzle-orm:
@@ -467,6 +507,9 @@ importers:
 
   packages/game-notices:
     dependencies:
+      '@roll-and-call/app-kit':
+        specifier: workspace:*
+        version: link:../app-kit
       '@roll-and-call/database':
         specifier: workspace:*
         version: link:../database
@@ -476,9 +519,6 @@ importers:
       '@roll-and-call/tiptap':
         specifier: workspace:*
         version: link:../tiptap
-      dayjs:
-        specifier: ^1.11.23
-        version: 1.11.23
       es-toolkit:
         specifier: ^1.52.0
         version: 1.52.0

@@ -1,3 +1,4 @@
+import { THEME_INIT_SCRIPT } from "@roll-and-call/app-kit/lib";
 import { Toast } from "@roll-and-call/ui";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -53,7 +54,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           // eslint-disable-next-line react/no-danger -- pre-paint theme to avoid FOUC
           // shared/ui ThemeSetting과 같은 규칙: 'system'(또는 없음)은 OS 설정을 따른다.
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.dataset.theme='dark'}catch(e){}`,
+            __html: THEME_INIT_SCRIPT,
           }}
         />
       </head>

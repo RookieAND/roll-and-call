@@ -1,3 +1,4 @@
+import { THEME_INIT_SCRIPT } from "@roll-and-call/app-kit/lib";
 import { Toast } from "@roll-and-call/ui";
 import type { Metadata } from "next";
 
@@ -15,7 +16,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script
           // eslint-disable-next-line react/no-danger -- pre-paint theme to avoid FOUC
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.dataset.theme='dark'}catch(e){}`,
+            __html: THEME_INIT_SCRIPT,
           }}
         />
         <link

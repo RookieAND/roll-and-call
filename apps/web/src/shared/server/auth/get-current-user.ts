@@ -1,7 +1,6 @@
 import "server-only";
+import { createSupabaseServerClient } from "@roll-and-call/app-kit/supabase/server";
 import { cache } from "react";
-
-import { createSupabaseServerClient } from "./create-supabase-server-client";
 
 export const getCurrentUser = cache(async () => {
   const supabase = await createSupabaseServerClient();

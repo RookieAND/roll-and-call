@@ -1,5 +1,5 @@
 export * from "./admin-data";
-export { createSupabaseServerClient } from "./auth/create-supabase-server-client";
+export { createSupabaseServerClient } from "@roll-and-call/app-kit/supabase/server";
 export { getCurrentStaff, type CurrentStaff } from "./auth/get-current-staff";
 export { requireOwner, requireStaff } from "./auth/require-staff";
 export { getSessionAccount, type SessionAccount } from "./auth/get-session-account";

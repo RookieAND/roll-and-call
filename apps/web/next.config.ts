@@ -4,6 +4,7 @@ const supabaseHost = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).hostname;
 
 const nextConfig: NextConfig = {
   transpilePackages: [
+    "@roll-and-call/app-kit",
     "@roll-and-call/database",
     "@roll-and-call/discord",
     "@roll-and-call/game-notices",

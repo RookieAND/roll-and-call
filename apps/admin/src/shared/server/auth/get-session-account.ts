@@ -1,9 +1,8 @@
 import "server-only";
+import { createSupabaseServerClient } from "@roll-and-call/app-kit/supabase/server";
 import { isPlatformAdmin } from "@roll-and-call/database/moderation";
 import { cache } from "react";
 import { z } from "zod";
-
-import { createSupabaseServerClient } from "./create-supabase-server-client";
 
 const text = z.string().optional().catch(undefined);
 const metadataSchema = z.object({ provider_id: text, full_name: text, name: text });

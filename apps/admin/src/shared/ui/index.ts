@@ -62,4 +62,4 @@ export { useChartTokens, type ChartTokens } from "./use-chart-tokens";
 export { UserInitial } from "./user-initial";
 export { useServerPath } from "./use-server-path";
 export * from "./skeleton";
-export { LineBreaks } from "./line-breaks";
+export { LineBreaks } from "@roll-and-call/app-kit/line-breaks";

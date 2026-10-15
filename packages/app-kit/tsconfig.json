@@ -1,0 +1,8 @@
+{
+  "extends": "@roll-and-call/typescript-config/react-library.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules"]
+}

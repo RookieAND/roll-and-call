@@ -1,4 +1,4 @@
-import { dayjs } from "./dayjs";
+import { dayjs } from "@roll-and-call/app-kit/date";
 
 const MAX_COLUMNS = 60;
 

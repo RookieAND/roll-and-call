@@ -1,4 +1,5 @@
-import { dayjs, KST } from "./dayjs";
+import { dayjs, KST } from "@roll-and-call/app-kit/date";
+
 import { padTwoDigits } from "./pad-two-digits";
 
 // KST 벽시계 칸 → UTC ISO. 서버 타임존과 무관하게 읽기·쓰기가 같은 키를 쓴다.

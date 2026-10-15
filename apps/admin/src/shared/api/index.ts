@@ -1,1 +1,1 @@
-export { createSupabaseBrowserClient } from "./supabase-browser";
+export { createSupabaseBrowserClient } from "@roll-and-call/app-kit/supabase/browser";

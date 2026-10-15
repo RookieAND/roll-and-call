@@ -97,7 +97,7 @@ export { removeUnusedGameFiles } from "./game-files";
 export { seedAvailabilityFromProfile } from "./seed-availability-from-profile";
 export { finishLotteryDraw } from "./finish-lottery-draw";
 export { finishSelectionNotices } from "./finish-selection-notices";
-export { createSupabaseServerClient } from "./auth/create-supabase-server-client";
+export { createSupabaseServerClient } from "@roll-and-call/app-kit/supabase/server";
 export { getCurrentUser } from "./auth/get-current-user";
 export { getCurrentSessionUser } from "./auth/get-current-session-user";
 export { getCurrentServer } from "./auth/get-current-server";

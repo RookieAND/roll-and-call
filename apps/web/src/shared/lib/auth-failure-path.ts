@@ -1,7 +1,7 @@
+import { serverPath } from "@roll-and-call/app-kit/lib";
 import { isServerSlug } from "@roll-and-call/database/servers/model";
 
 import { serverJoinPath } from "./server-join-path";
-import { serverPath } from "./server-path";
 
 const AUTH_ERROR_PARAM = "auth_error";
 const BASE = "http://localhost";

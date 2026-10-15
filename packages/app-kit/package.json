@@ -1,0 +1,32 @@
+{
+  "name": "@roll-and-call/app-kit",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./date": "./src/date/index.ts",
+    "./lib": "./src/lib/index.ts",
+    "./line-breaks": "./src/ui/line-breaks.tsx",
+    "./supabase/browser": "./src/supabase/create-supabase-browser-client.ts",
+    "./supabase/server": "./src/supabase/create-supabase-server-client.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.4",
+    "dayjs": "^1.11.23",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@roll-and-call/typescript-config": "workspace:*",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "next": "^16.3.0",
+    "react": "^19.0.0",
+    "zod": "^4.4.3"
+  }
+}
