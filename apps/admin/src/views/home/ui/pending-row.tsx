@@ -4,16 +4,15 @@ import { PENDING_COPY } from "@/shared/lib";
 import type { PendingItem } from "@/shared/server";
 import { IconTile, ServerLink } from "@/shared/ui";
 
+import { isLongWait } from "../model/is-long-wait";
+
 interface PendingRowProps {
   item: PendingItem;
 }
 
-const LONG_WAIT_DAYS = 3;
-
-// 보라 강조는 가장 오래된 건이 3일 이상 기다린 행에만 둔다(D193).
 export function PendingRow({ item }: PendingRowProps) {
   const copy = PENDING_COPY[item.kind];
-  const primary = item.oldestDays >= LONG_WAIT_DAYS;
+  const primary = isLongWait(item.oldestDays);
   const tone = primary ? "primary" : "gray";
   const countClassName = primary ? "text-(--rc-color-bg-primary)" : undefined;
   return (

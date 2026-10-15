@@ -6,7 +6,8 @@ import type { MyServer } from "@/shared/server";
 import { Panel, UrlSearchInput } from "@/shared/ui";
 
 import { filterServers } from "../model/filter-servers";
-import { SERVER_FILTER, type ServerFilter } from "../model/server-filter";
+import type { ServerFilter } from "../model/server-filter";
+import { serverFilterChips } from "../model/server-filter-chips";
 import { PlatformServerTable } from "./platform-server-table";
 import { SelectTop } from "./select-top";
 
@@ -22,17 +23,7 @@ export function PlatformServerSelectView({
   query,
 }: PlatformServerSelectViewProps) {
   const rows = filterServers({ servers, query: query.q ?? "", filter: query.filter });
-  const chips = [
-    { key: undefined, label: `전체 ${servers.length}` },
-    {
-      key: SERVER_FILTER.bot,
-      label: `봇 연결 끊김 ${servers.filter((server) => !server.botConnected).length}`,
-    },
-    {
-      key: SERVER_FILTER.pending,
-      label: `처리 대기 있음 ${servers.filter((server) => server.pending > 0).length}`,
-    },
-  ];
+  const chips = serverFilterChips(servers);
 
   return (
     <VStack className="min-h-dvh bg-canvas">

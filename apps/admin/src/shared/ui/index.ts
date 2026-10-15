@@ -69,3 +69,5 @@ export { ListEndHint } from "./mobile/list-end-hint";
 export { StatusBadges } from "./mobile/status-badges";
 export { KeyValueList, type KeyValueItem } from "./mobile/key-value-list";
 export { useDesktop } from "./mobile/use-desktop";
+export { MobileGate } from "./mobile/mobile-gate";
+export { ThemeToggleButton } from "./theme-toggle-button";

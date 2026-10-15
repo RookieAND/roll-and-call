@@ -1,26 +1,12 @@
 "use client";
 
-import { IconButton, Tooltip, toast } from "@roll-and-call/ui";
+import { IconButton, Tooltip } from "@roll-and-call/ui";
 import { LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 
-import { signOut } from "../api/sign-out";
+import { useSignOut } from "../model/use-sign-out";
 
 export function SignOutIconButton() {
-  const router = useRouter();
-  const [busy, startSigningOut] = useTransition();
-
-  const signOutAndLeave = () =>
-    startSigningOut(async () => {
-      try {
-        await signOut();
-      } catch {
-        toast.danger("로그아웃하지 못했습니다.", { description: "다시 시도해 주세요." });
-        return;
-      }
-      router.replace("/login?signedOut=1");
-    });
+  const { busy, signOutAndLeave } = useSignOut();
 
   return (
     <Tooltip content="로그아웃">
