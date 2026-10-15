@@ -1,4 +1,4 @@
-import { Container, VStack } from "@roll-and-call/ui";
+import { Container } from "@roll-and-call/ui";
 import { CircleCheck, Clock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
@@ -12,7 +12,7 @@ import { GmOnlyNotice, LoginRequired } from "@/features/auth";
 import { AttendancePanel, attendancePhaseOf, type Attendee } from "@/features/confirm-attendance";
 import { formatDateTime, serverPath, toKst } from "@/shared/lib";
 import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
-import { AppBar, SummaryLine } from "@/shared/ui";
+import { AppBar, PageShell, SummaryLine } from "@/shared/ui";
 
 import { toAttendee } from "../model/to-attendee";
 import { AttendanceHeader } from "./attendance-header";
@@ -32,22 +32,20 @@ export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
 
   if (!user) {
     return (
-      <>
-        <AppBar back={`/games/${id}`} title="출석 확인" />
-        <Container size="sm">
-          <div className="py-300">
+      <PageShell appBar={<AppBar back={`/games/${id}`} title="출석 확인" />}>
+        <Container size="sm" className="desktop:px-0">
+          <div className="py-300 desktop:py-0">
             <LoginRequired />
           </div>
         </Container>
-      </>
+      </PageShell>
     );
   }
   if (user.id !== game.gmId) {
     return (
-      <>
-        <AppBar back={`/games/${id}`} title="출석 확인" />
-        <Container size="sm">
-          <div className="py-300">
+      <PageShell appBar={<AppBar back={`/games/${id}`} title="출석 확인" />}>
+        <Container size="sm" className="desktop:px-0">
+          <div className="py-300 desktop:py-0">
             <GmOnlyNotice
               gameId={id}
               signedIn
@@ -55,7 +53,7 @@ export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
             />
           </div>
         </Container>
-      </>
+      </PageShell>
     );
   }
 
@@ -82,33 +80,29 @@ export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
     : startedAt;
 
   return (
-    <>
-      <AppBar back={`/games/${id}/manage`} title="출석 확인" />
-      <Container size="sm">
-        <VStack gap="150" className="py-200">
-          <AttendanceHeader
-            title={game.title}
-            rule={game.rule}
-            confirmedCount={confirmed.length}
-            attendanceConfirmed={Boolean(game.attendanceConfirmedAt)}
-          />
-          <AttendancePanel
-            gameId={id}
-            attendees={attendees}
-            phase={attendancePhaseOf({ game, now })}
-            deadline={attendanceDeadline(game)!}
-            attendanceConfirmedAt={game.attendanceConfirmedAt}
-          >
-            <SummaryLine
-              icon={game.endedAt ? CircleCheck : Clock}
-              tone="muted"
-              label="세션 시각"
-              value={sessionValue}
-              badge={game.endedAt ? undefined : "끝남"}
-            />
-          </AttendancePanel>
-        </VStack>
-      </Container>
-    </>
+    <AttendancePanel
+      appBar={<AppBar back={`/games/${id}/manage`} title="출석 확인" />}
+      header={
+        <AttendanceHeader
+          title={game.title}
+          rule={game.rule}
+          confirmedCount={confirmed.length}
+          attendanceConfirmed={Boolean(game.attendanceConfirmedAt)}
+        />
+      }
+      gameId={id}
+      attendees={attendees}
+      phase={attendancePhaseOf({ game, now })}
+      deadline={attendanceDeadline(game)!}
+      attendanceConfirmedAt={game.attendanceConfirmedAt}
+    >
+      <SummaryLine
+        icon={game.endedAt ? CircleCheck : Clock}
+        tone="muted"
+        label="세션 시각"
+        value={sessionValue}
+        badge={game.endedAt ? undefined : "끝남"}
+      />
+    </AttendancePanel>
   );
 }

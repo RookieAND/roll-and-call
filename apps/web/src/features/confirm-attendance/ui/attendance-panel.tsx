@@ -11,6 +11,8 @@ import { AttendanceGuide } from "./attendance-guide";
 import { ConfirmedAttendance } from "./confirmed-attendance";
 
 interface AttendancePanelProps {
+  appBar: ReactNode;
+  header: ReactNode;
   gameId: string;
   attendees: Attendee[];
   phase: AttendancePhase;
@@ -21,6 +23,8 @@ interface AttendancePanelProps {
 
 // 다시 고치는 동안에도 서버에는 직전 확정 결과가 남아 후기·업적이 열린 채다.
 export function AttendancePanel({
+  appBar,
+  header,
   gameId,
   attendees,
   phase,
@@ -56,6 +60,8 @@ export function AttendancePanel({
   if (editing && canEdit) {
     return (
       <AttendanceForm
+        appBar={appBar}
+        header={header}
         gameId={gameId}
         attendees={attendees}
         onConfirmed={() => setEditing(false)}
@@ -72,6 +78,8 @@ export function AttendancePanel({
   }
   return (
     <ConfirmedAttendance
+      appBar={appBar}
+      header={header}
       attendees={attendees}
       canReopen={canEdit && phase === ATTENDANCE_PHASE.confirmed}
       deadline={deadline}

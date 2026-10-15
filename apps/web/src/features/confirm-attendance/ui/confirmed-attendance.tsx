@@ -4,11 +4,14 @@ import type { ReactNode } from "react";
 import { formatDateTime } from "@/shared/lib";
 
 import type { Attendee } from "../model/attendee";
+import { AttendanceFrame } from "./attendance-frame";
 import { AttendanceRow } from "./attendance-row";
 import { AttendanceStats } from "./attendance-stats";
 import { ReopenAttendanceButton } from "./reopen-attendance-button";
 
 interface ConfirmedAttendanceProps {
+  appBar: ReactNode;
+  header: ReactNode;
   attendees: Attendee[];
   canReopen: boolean;
   deadline: Date;
@@ -17,6 +20,8 @@ interface ConfirmedAttendanceProps {
 }
 
 export function ConfirmedAttendance({
+  appBar,
+  header,
   attendees,
   canReopen,
   deadline,
@@ -28,35 +33,40 @@ export function ConfirmedAttendance({
   ).length;
 
   return (
-    <VStack gap="200">
-      <VStack gap="100">
-        <AttendanceStats presentCount={attendees.length - absentCount} absentCount={absentCount} />
-        {children}
+    <AttendanceFrame appBar={appBar} header={header}>
+      <VStack gap="200">
+        <VStack gap="100">
+          <AttendanceStats
+            presentCount={attendees.length - absentCount}
+            absentCount={absentCount}
+          />
+          {children}
+        </VStack>
+        <VStack gap="150">
+          <Card.Root
+            radius={500}
+            padding="none"
+            className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
+          >
+            {attendees.map((attendee) => (
+              <AttendanceRow
+                key={attendee.userId}
+                attendee={attendee}
+                absent={attendee.absent}
+                readOnly
+              />
+            ))}
+          </Card.Root>
+          {canReopen && (
+            <VStack gap="100">
+              <Text typography="body4" foreground="hint">
+                {formatDateTime(deadline)}까지 고칠 수 있습니다.
+              </Text>
+              <ReopenAttendanceButton onReopen={onReopen} />
+            </VStack>
+          )}
+        </VStack>
       </VStack>
-      <VStack gap="150">
-        <Card.Root
-          radius={500}
-          padding="none"
-          className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
-        >
-          {attendees.map((attendee) => (
-            <AttendanceRow
-              key={attendee.userId}
-              attendee={attendee}
-              absent={attendee.absent}
-              readOnly
-            />
-          ))}
-        </Card.Root>
-        {canReopen && (
-          <VStack gap="100">
-            <Text typography="body4" foreground="hint">
-              {formatDateTime(deadline)}까지 고칠 수 있습니다.
-            </Text>
-            <ReopenAttendanceButton onReopen={onReopen} />
-          </VStack>
-        )}
-      </VStack>
-    </VStack>
+    </AttendanceFrame>
   );
 }
