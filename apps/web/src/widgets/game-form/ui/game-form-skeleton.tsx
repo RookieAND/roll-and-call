@@ -8,7 +8,7 @@ import {
   VStack,
 } from "@roll-and-call/ui";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar, DesktopWideFrame } from "@/shared/ui";
 
 import { GAME_FORM_STEPS } from "../model/game-form-steps";
 
@@ -21,67 +21,85 @@ export function GameFormSkeleton({ title, edit = false }: GameFormSkeletonProps)
   const total = GAME_FORM_STEPS.length;
 
   return (
-    <VStack className="min-h-dvh">
-      <AppBar
-        back="/games"
-        backIcon="close"
-        title={title}
-        action={
-          <Text numeric typography="body4" foreground="hint" className="mr-050">
-            1 / {total}
-          </Text>
-        }
-      />
-      <Progress
-        value={1}
-        max={total}
-        colorPalette="primary"
-        aria-label={`${title} 불러오는 중`}
-        className="h-[3px] rounded-none"
-      />
-      <Container size="md" className="flex-1">
-        <VStack gap="250" className="py-300">
-          <div>
-            <Skeleton width={96} height={26} />
-            <Skeleton width={220} height={20} className="mt-050" />
-          </div>
-          {edit && <Skeleton width="100%" height={88} rounded={500} />}
-          <VStack gap="075">
+    <div className="flex min-h-dvh flex-col desktop:flex-row">
+      <DesktopWideFrame />
+      <div className="flex min-w-0 flex-1 flex-col desktop:bg-surface">
+        <AppBar
+          back="/games"
+          backIcon="close"
+          title={title}
+          action={
+            <Text numeric typography="body4" foreground="hint" className="mr-050">
+              1 / {total}
+            </Text>
+          }
+        />
+        <Progress
+          value={1}
+          max={total}
+          colorPalette="primary"
+          aria-label={`${title} 불러오는 중`}
+          className="h-[3px] rounded-none"
+        />
+        <Container size="md" className="flex-1 desktop:max-w-184 desktop:px-12">
+          <VStack gap="250" className="py-300 desktop:py-10">
+            <div>
+              <Skeleton width={96} height={26} />
+              <Skeleton width={220} height={20} className="mt-050" />
+            </div>
+            {edit && <Skeleton width="100%" height={88} rounded={500} />}
+            <VStack gap="075">
+              <Skeleton width={56} height={18} />
+              <Skeleton width="100%" height={44} rounded={400} />
+            </VStack>
+            <VStack gap="100">
+              <Skeleton width={16} height={18} />
+              <Skeleton width="100%" height={56} rounded={500} />
+            </VStack>
+            <VStack gap="075">
+              <Skeleton width={64} height={18} />
+              <HStack gap="100">
+                <Skeleton height={44} rounded={400} className="flex-1" />
+                <Skeleton height={44} rounded={400} className="flex-1" />
+              </HStack>
+            </VStack>
+            <VStack gap="075">
+              <Skeleton width={56} height={18} />
+              <Skeleton width="100%" height={180} rounded={400} />
+            </VStack>
+            <VStack gap="075">
+              <Skeleton width={32} height={18} />
+              <Skeleton width="100%" height={44} rounded={400} />
+            </VStack>
+          </VStack>
+        </Container>
+        <FloatingBar.Root elevated={false}>
+          <FloatingBar.Content className="desktop:w-full">
+            <Container size="md" className="desktop:max-w-160 desktop:px-0">
+              <HStack gap="100" className="[&>*]:flex-1">
+                {edit && <Skeleton height={48} rounded={500} />}
+                <Skeleton height={48} rounded={500} />
+              </HStack>
+            </Container>
+          </FloatingBar.Content>
+          <FloatingBar.Spacer />
+        </FloatingBar.Root>
+      </div>
+      <aside
+        aria-hidden
+        className="hidden w-80 flex-none border-l border-gray-200 bg-gray-50 px-6 py-7 desktop:block"
+      >
+        <VStack gap="250" className="sticky top-7">
+          <VStack gap="125">
             <Skeleton width={56} height={18} />
-            <Skeleton width="100%" height={44} rounded={400} />
+            <Skeleton width="100%" height={112} rounded={500} />
           </VStack>
-          <VStack gap="100">
-            <Skeleton width={16} height={18} />
-            <Skeleton width="100%" height={56} rounded={500} />
-          </VStack>
-          <VStack gap="075">
-            <Skeleton width={64} height={18} />
-            <HStack gap="100">
-              <Skeleton height={44} rounded={400} className="flex-1" />
-              <Skeleton height={44} rounded={400} className="flex-1" />
-            </HStack>
-          </VStack>
-          <VStack gap="075">
+          <VStack gap="125">
             <Skeleton width={56} height={18} />
-            <Skeleton width="100%" height={180} rounded={400} />
-          </VStack>
-          <VStack gap="075">
-            <Skeleton width={32} height={18} />
-            <Skeleton width="100%" height={44} rounded={400} />
+            <Skeleton width="100%" height={236} rounded={400} />
           </VStack>
         </VStack>
-      </Container>
-      <FloatingBar.Root elevated={false}>
-        <FloatingBar.Content>
-          <Container size="md">
-            <HStack gap="100" className="[&>*]:flex-1">
-              {edit && <Skeleton height={48} rounded={500} />}
-              <Skeleton height={48} rounded={500} />
-            </HStack>
-          </Container>
-        </FloatingBar.Content>
-        <FloatingBar.Spacer />
-      </FloatingBar.Root>
-    </VStack>
+      </aside>
+    </div>
   );
 }

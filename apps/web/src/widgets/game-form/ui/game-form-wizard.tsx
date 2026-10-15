@@ -10,12 +10,13 @@ import type { FieldErrors } from "react-hook-form";
 import type { GameFormValues } from "@/features/write-game";
 import { useBeforeUnloadWarning, useServerPath } from "@/shared/lib";
 import { TrialContext, useTrialPush } from "@/shared/trial";
-import { ConfirmDialog } from "@/shared/ui";
+import { ConfirmDialog, DesktopWideFrame } from "@/shared/ui";
 
 import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";
 import { FORM_SECTION, SECTION_FIELDS, type SectionKey } from "../model/game-form-steps";
 import { stepOfField } from "../model/step-of-field";
+import { wizardStepLabel } from "../model/wizard-step-label";
 import { EditWithApplicantsNotice } from "./edit-with-applicants-notice";
 import { EditWithoutApplicantsNotice } from "./edit-without-applicants-notice";
 import { GameBasicsFields } from "./game-basics-fields";
@@ -28,6 +29,7 @@ import { WizardDraftSummary } from "./wizard-draft-summary";
 import { WizardFooter } from "./wizard-footer";
 import { WizardHeader } from "./wizard-header";
 import { WizardIntro } from "./wizard-intro";
+import { WizardSidePanel } from "./wizard-side-panel";
 
 export function GameFormWizard({
   serverId,
@@ -92,6 +94,10 @@ export function GameFormWizard({
     watch("rule"),
     formatPlayRange(watch("playMinutesMin"), watch("playMinutes")),
   ]).join(" · ");
+  const panelSteps = steps.map((config, index) => ({
+    number: (trialWizard?.stepIndexes[index] ?? index) + 1,
+    label: wizardStepLabel(config.sections),
+  }));
   const exitDescription =
     thumbnail || images.length > 0
       ? "지금까지 쓴 내용은 저장되지 않습니다. 올린 썸네일도 함께 사라집니다."
@@ -138,80 +144,100 @@ export function GameFormWizard({
   }
 
   return (
-    <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex min-h-dvh flex-col">
-      <WizardHeader
-        step={(trialWizard?.stepIndexes[step] ?? step) + 1}
-        total={trialWizard?.total ?? steps.length}
-        title={edit ? "구인 수정" : "구인 등록"}
-        onBack={goBack}
-      />
-      {trialWizard?.banner}
+    <form
+      onSubmit={handleSubmit(onValid, onInvalid)}
+      className="flex min-h-dvh flex-col desktop:flex-row"
+    >
+      <DesktopWideFrame />
+      <div className="flex min-w-0 flex-1 flex-col desktop:bg-surface">
+        <WizardHeader
+          step={(trialWizard?.stepIndexes[step] ?? step) + 1}
+          total={trialWizard?.total ?? steps.length}
+          title={edit ? "구인 수정" : "구인 등록"}
+          onBack={goBack}
+        />
+        {trialWizard?.banner}
 
-      <Container size="md" className="flex-1">
-        <VStack gap="250" className="py-300">
-          {intro?.title && <WizardIntro title={intro.title} description={intro.description} />}
+        <Container size="md" className="flex-1 desktop:max-w-184 desktop:px-12">
+          <VStack gap="250" className="py-300 desktop:py-10">
+            {intro?.title && <WizardIntro title={intro.title} description={intro.description} />}
 
-          {trialWizard?.hints[step] && (
-            <Callout.Root colorPalette="primary" size="sm">
-              <Callout.Icon />
-              <Callout.Description>
-                {trialWizard.hints[step].map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </Callout.Description>
-            </Callout.Root>
-          )}
-
-          {reopen && step === 0 && <ReopenNotice reopen={reopen} />}
-          {edit && step === 0 && applicants > 0 && <EditWithApplicantsNotice />}
-          {edit && step === 0 && applicants === 0 && <EditWithoutApplicantsNotice />}
-
-          {!edit && step > 0 && (
-            <WizardDraftSummary title={watch("title") || "제목 미입력"} line={summaryLine} />
-          )}
-
-          <fieldset
-            disabled={pending}
-            className={cn(
-              "m-0 flex min-w-0 flex-col gap-250 border-0 p-0",
-              pending && "opacity-45",
+            {trialWizard?.hints[step] && (
+              <Callout.Root colorPalette="primary" size="sm">
+                <Callout.Icon />
+                <Callout.Description>
+                  {trialWizard.hints[step].map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </Callout.Description>
+              </Callout.Root>
             )}
-          >
-            {/* 언마운트하면 입력·업로드 상태가 날아가서 지나간 단계도 숨긴 채 마운트해 둔다. */}
-            {steps.map((config, index) => (
-              <div
-                key={config.sections.join()}
-                className={index === step ? "flex flex-col gap-250" : "hidden"}
-              >
-                {config.sections.map((section) => (
-                  <VStack key={section} gap="250">
-                    {renderSection(section)}
-                  </VStack>
-                ))}
-              </div>
-            ))}
-          </fieldset>
-        </VStack>
-      </Container>
 
-      <WizardFooter
-        step={step}
-        total={steps.length}
-        pending={pending}
-        submitLabel={submitLabel}
-        error={
-          form.formState.errors.root?.message ??
-          // 마감이 세션·조율 시작보다 늦은 교차 검증은 한 칸의 잘못이 아니라 제출 버튼 위에서 알린다.
-          (form.formState.errors.endDate?.type === "custom"
-            ? form.formState.errors.endDate.message
-            : undefined)
-        }
-        cancelLabel={edit ? "취소" : undefined}
-        onNext={goNext}
-        onBack={goBack}
-      />
+            {reopen && step === 0 && <ReopenNotice reopen={reopen} />}
+            {edit && step === 0 && applicants > 0 && <EditWithApplicantsNotice />}
+            {edit && step === 0 && applicants === 0 && <EditWithoutApplicantsNotice />}
+
+            {!edit && step > 0 && (
+              <div className="desktop:hidden">
+                <WizardDraftSummary title={watch("title") || "제목 미입력"} line={summaryLine} />
+              </div>
+            )}
+
+            <fieldset
+              disabled={pending}
+              className={cn(
+                "m-0 flex min-w-0 flex-col gap-250 border-0 p-0",
+                pending && "opacity-45",
+              )}
+            >
+              {/* 언마운트하면 입력·업로드 상태가 날아가서 지나간 단계도 숨긴 채 마운트해 둔다. */}
+              {steps.map((config, index) => (
+                <div
+                  key={config.sections.join()}
+                  className={index === step ? "flex flex-col gap-250" : "hidden"}
+                >
+                  {config.sections.map((section) => (
+                    <VStack key={section} gap="250">
+                      {renderSection(section)}
+                    </VStack>
+                  ))}
+                </div>
+              ))}
+            </fieldset>
+          </VStack>
+        </Container>
+
+        <WizardFooter
+          step={step}
+          total={steps.length}
+          pending={pending}
+          submitLabel={submitLabel}
+          error={
+            form.formState.errors.root?.message ??
+            // 마감이 세션·조율 시작보다 늦은 교차 검증은 한 칸의 잘못이 아니라 제출 버튼 위에서 알린다.
+            (form.formState.errors.endDate?.type === "custom"
+              ? form.formState.errors.endDate.message
+              : undefined)
+          }
+          cancelLabel={edit ? "취소" : undefined}
+          onNext={goNext}
+          onBack={goBack}
+        />
+      </div>
+
+      <aside className="hidden w-80 flex-none border-l border-gray-200 bg-gray-50 px-6 py-7 desktop:block">
+        <WizardSidePanel
+          steps={panelSteps}
+          current={step}
+          editing={!!edit}
+          title={watch("title") || (edit ? "제목 미입력" : "새 구인")}
+          ruleLabel={watch("rule") || "룰북 미선택"}
+          timeLabel={formatPlayRange(watch("playMinutesMin"), watch("playMinutes")) ?? ""}
+          capacity={Number(watch("maxPlayers")) || 0}
+        />
+      </aside>
 
       <ConfirmDialog
         open={confirmingExit}
