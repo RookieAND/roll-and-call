@@ -18,6 +18,9 @@ interface SidebarProps {
   countPromises: Partial<Record<NavKey, Promise<number | undefined>>>;
   // shared는 features를 못 가져오므로 로그아웃 버튼은 레이아웃이 넘긴다.
   signOutButton: ReactNode;
+  // 모바일 드로어로 쓸 때 로고 줄 오른쪽에 닫기 버튼을 둔다.
+  brandAction?: ReactNode;
+  className?: string;
 }
 
 export function Sidebar({
@@ -28,15 +31,22 @@ export function Sidebar({
   servers,
   countPromises,
   signOutButton,
+  brandAction,
+  className,
 }: SidebarProps) {
   const roleLabel = platformAdmin ? "플랫폼 관리자" : `${server.name} ${STAFF_ROLE_LABEL[role]}`;
   const emphasizedRole = platformAdmin || role === "owner";
   return (
-    <VStack className="sticky top-0 h-dvh w-53 shrink-0 border-r border-gray-200 bg-surface">
+    <VStack
+      className={cn(
+        "sticky top-0 h-dvh w-53 shrink-0 border-r border-gray-200 bg-surface",
+        className,
+      )}
+    >
       <HStack
         align="center"
         gap="100"
-        className="border-b border-(--rc-color-border-subtle) px-175 pt-175 pb-150"
+        className="border-b border-(--rc-color-border-subtle) px-175 pt-175 pb-150 max-lg:h-14 max-lg:shrink-0 max-lg:py-0 max-lg:pr-050 max-lg:pl-200"
       >
         <UiImage name="logo" alt="Roll & Call" width={78} height={19} loading="eager" />
         <Text
@@ -47,6 +57,7 @@ export function Sidebar({
         >
           ADMIN
         </Text>
+        {brandAction}
       </HStack>
       <SidebarRefresher />
       <ServerSwitch current={server} servers={servers} platformAdmin={platformAdmin} />
@@ -60,7 +71,7 @@ export function Sidebar({
             href={serverPath({ slug: server.slug, path: item.href })}
             exact={item.href === "/"}
             label={item.label}
-            icon={<item.icon size={16} />}
+            icon={<item.icon size={16} className="max-lg:size-5" />}
             countPromise={countPromises[item.key]}
           />
         ))}

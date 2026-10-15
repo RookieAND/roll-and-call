@@ -9,7 +9,7 @@ import { ServerIcon } from "./server-icon";
 export function ModalServerLabel() {
   const server = useCurrentServer();
   return (
-    <HStack align="center" gap="075">
+    <HStack align="center" gap="075" className="max-lg:hidden">
       <ServerIcon name={server.name} icon={server.icon} size={20} />
       <Text typography="body4" weight="bold" foreground="muted">
         {server.name} 서버

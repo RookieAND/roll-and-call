@@ -10,6 +10,7 @@ export { formatDayRange } from "./format-day-range";
 export { formatRelativeTime } from "./format-relative-time";
 export { formatSessionTime } from "./format-session-time";
 export { sessionTimeLabel } from "./session-time-label";
+export { serverSwitchMeta } from "./server-switch-meta";
 export { formatTime } from "./format-time";
 export { CATEGORY_PAGE_SIZE, PAGE_SIZE, paginate } from "./paginate";
 export { PAGE_SIZE_OPTIONS, parsePageSize, type PageSize } from "./parse-page-size";

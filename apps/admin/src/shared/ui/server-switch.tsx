@@ -3,11 +3,14 @@
 import { Button, cn, HStack, Popover, Text, VStack } from "@roll-and-call/ui";
 import { Check, ChevronDown } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
-import { STAFF_ROLE_LABEL } from "@/shared/lib";
+import { serverSwitchMeta, type STAFF_ROLE_LABEL } from "@/shared/lib";
 
+import { MobileDrawerContext } from "./mobile/mobile-drawer-context";
+import { useDesktop } from "./mobile/use-desktop";
 import { ServerIcon } from "./server-icon";
+import { ServerSummary } from "./server-summary";
 import { Tag } from "./tag";
 
 // 스위처 목록에 보일 서버. 플랫폼 관리자는 전체 서버 중 앞의 몇 개만 보이고 나머지는 서버 목록 화면에서 찾는다.
@@ -30,27 +33,11 @@ interface ServerSwitchProps {
 
 export function ServerSwitch({ current, servers, platformAdmin }: ServerSwitchProps) {
   const [open, setOpen] = useState(false);
+  const desktop = useDesktop();
+  const { openServerSwitch } = useContext(MobileDrawerContext);
   const multiple = servers.length > 1;
   const listed = platformAdmin ? servers.slice(0, PLATFORM_LIST_SIZE) : servers;
-  const summary = (
-    <HStack align="center" gap="100" className="min-w-0 flex-1 text-left">
-      <ServerIcon name={current.name} icon={current.icon} size={32} />
-      <VStack gap="025" className="min-w-0 flex-1">
-        <Text typography="subtitle2" truncate className="leading-[1.25]">
-          {current.name}
-        </Text>
-        {current.botConnected ? (
-          <Text typography="body4" foreground="hint" className="leading-[1.3]">
-            /{current.slug}
-          </Text>
-        ) : (
-          <Text typography="body4" weight="bold" foreground="danger" className="leading-[1.3]">
-            봇 연결 끊김
-          </Text>
-        )}
-      </VStack>
-    </HStack>
-  );
+  const summary = <ServerSummary server={current} />;
 
   if (!multiple) {
     return (
@@ -66,19 +53,36 @@ export function ServerSwitch({ current, servers, platformAdmin }: ServerSwitchPr
     );
   }
 
+  const triggerClassName = cn(
+    "flex min-h-11 w-full items-center gap-100 rounded-400 border px-100 py-075",
+    open
+      ? "border-(--rc-color-border-primary) bg-tinted-bg"
+      : "border-transparent hover:bg-gray-50",
+  );
+
+  // 모바일 드로어 안에서는 목록을 팝오버 대신 아래에서 올라오는 시트로 연다.
+  if (!desktop) {
+    return (
+      <div className="border-b border-(--rc-color-border-subtle) p-100">
+        {/* ponytail: 데스크톱 팝오버 트리거와 같은 모양을 쓰는 시안 전용 트리거다. */}
+        <button
+          type="button"
+          aria-label={`현재 서버: ${current.name}`}
+          onClick={openServerSwitch}
+          className={cn(triggerClassName, "active:bg-gray-50")}
+        >
+          {summary}
+          <ChevronDown size={16} aria-hidden className="text-gray-600" />
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="border-b border-(--rc-color-border-subtle) p-100">
       <Popover.Root open={open} onOpenChange={setOpen}>
         {/* ponytail: 서버 이름·slug 두 줄과 ▾를 담는 시안 전용 트리거라 Button 대신 Trigger에 직접 모양을 준다. */}
-        <Popover.Trigger
-          aria-label={`현재 서버: ${current.name}`}
-          className={cn(
-            "flex min-h-11 w-full items-center gap-100 rounded-400 border px-100 py-075",
-            open
-              ? "border-(--rc-color-border-primary) bg-tinted-bg"
-              : "border-transparent hover:bg-gray-50",
-          )}
-        >
+        <Popover.Trigger aria-label={`현재 서버: ${current.name}`} className={triggerClassName}>
           {summary}
           <ChevronDown size={16} aria-hidden className="text-gray-600" />
         </Popover.Trigger>
@@ -94,8 +98,7 @@ export function ServerSwitch({ current, servers, platformAdmin }: ServerSwitchPr
             </Text>
             {listed.map((server) => {
               const selected = server.slug === current.slug;
-              const where = platformAdmin ? `/${server.slug}` : STAFF_ROLE_LABEL[server.role];
-              const meta = server.pending > 0 ? `${where} · 처리 대기 ${server.pending}건` : where;
+              const meta = serverSwitchMeta({ ...server, platformAdmin });
               return (
                 <HStack
                   key={server.slug}

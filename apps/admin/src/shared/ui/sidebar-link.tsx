@@ -27,7 +27,7 @@ export function SidebarLink({ href, label, icon, exact, countPromise }: SidebarL
       aria-current={active ? "page" : undefined}
       render={<Link href={href} />}
       className={cn(
-        "rounded-400 px-125 py-100 text-gray-600 hover:bg-gray-50",
+        "rounded-400 px-125 py-100 text-gray-600 hover:bg-gray-50 max-lg:min-h-12 max-lg:px-150 max-lg:py-0 max-lg:active:bg-gray-50",
         active && "bg-tinted-bg text-(--rc-color-fg-primary-strong) hover:bg-tinted-bg",
       )}
     >
@@ -36,7 +36,7 @@ export function SidebarLink({ href, label, icon, exact, countPromise }: SidebarL
         typography="body3"
         foreground="inherit"
         weight={active ? "bold" : undefined}
-        className={cn("flex-1 leading-normal", !active && "font-medium")}
+        className={cn("flex-1 leading-normal max-lg:text-body2", !active && "font-medium")}
       >
         {label}
       </Text>

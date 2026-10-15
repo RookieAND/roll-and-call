@@ -12,8 +12,14 @@ import {
   listMyServers,
   type PendingKind,
 } from "@/shared/server";
-import { BotBanner, CurrentServerProvider, Sidebar } from "@/shared/ui";
-import { PhoneNotice } from "@/views/phone";
+import {
+  AdminMobileShell,
+  BotBanner,
+  CurrentServerProvider,
+  MobileDrawerClose,
+  ServerSwitchSheet,
+  Sidebar,
+} from "@/shared/ui";
 
 export default async function AdminLayout({ children }: LayoutProps<"/[server]">) {
   const staff = await getCurrentStaff();
@@ -44,37 +50,55 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
   const countOf = (kind: PendingKind) =>
     pendingItemsPromise.then((items) => items.find((item) => item.kind === kind)?.count);
 
+  const sidebarProps = {
+    nickname: staff.nickname,
+    role: staff.role,
+    platformAdmin: staff.platformAdmin,
+    server: current,
+    servers,
+    countPromises: { cert: countOf("cert"), rules: countOf("rulebookRequest") },
+    signOutButton: <SignOutIconButton />,
+  };
+
+  // 1024px 아래는 같은 화면을 모바일 틀로 그린다. 사이드바는 햄버거 드로어로 들어가고 본문은 한 번만 그린다.
   return (
     <CurrentServerProvider server={{ slug: server.slug, name: server.name, icon: server.icon }}>
-      <div className="md:hidden">
-        <Suspense>
-          <PhoneNotice pendingItemsPromise={pendingItemsPromise} />
-        </Suspense>
-      </div>
-      <HStack align="start" className="hidden min-h-dvh min-w-[1280px] md:flex">
-        <Sidebar
-          nickname={staff.nickname}
-          role={staff.role}
-          platformAdmin={staff.platformAdmin}
-          server={current}
-          servers={servers}
-          countPromises={{ cert: countOf("cert"), rules: countOf("rulebookRequest") }}
-          signOutButton={<SignOutIconButton />}
-        />
-        <VStack
-          data-slot="admin-main"
-          className="min-h-dvh min-w-0 flex-1 overflow-x-clip bg-gray-50"
-        >
-          {server.botConnected ? null : <BotBanner />}
-          {children}
-        </VStack>
-        <Suspense>
-          <QuickSearchPalette
-            pendingItemsPromise={pendingItemsPromise}
-            owner={staff.role === "owner"}
+      <AdminMobileShell
+        drawer={
+          <Sidebar
+            {...sidebarProps}
+            brandAction={<MobileDrawerClose />}
+            className="static h-full w-full border-r-0"
           />
-        </Suspense>
-      </HStack>
+        }
+        serverSwitch={
+          <ServerSwitchSheet
+            current={current}
+            servers={servers}
+            platformAdmin={staff.platformAdmin}
+          />
+        }
+      >
+        <HStack
+          align="start"
+          className="min-h-dvh max-lg:flex-col max-lg:items-stretch lg:min-w-[1280px]"
+        >
+          <Sidebar {...sidebarProps} className="max-lg:hidden" />
+          <VStack
+            data-slot="admin-main"
+            className="min-h-dvh min-w-0 flex-1 overflow-x-clip bg-gray-50"
+          >
+            {server.botConnected ? null : <BotBanner />}
+            {children}
+          </VStack>
+          <Suspense>
+            <QuickSearchPalette
+              pendingItemsPromise={pendingItemsPromise}
+              owner={staff.role === "owner"}
+            />
+          </Suspense>
+        </HStack>
+      </AdminMobileShell>
     </CurrentServerProvider>
   );
 }
