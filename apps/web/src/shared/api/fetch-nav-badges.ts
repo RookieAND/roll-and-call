@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const navBadgesSchema = z.object({ unread: z.boolean(), blockedTodo: z.boolean() });
+const navBadgesSchema = z.object({ unread: z.number().int().min(0), blockedTodo: z.boolean() });
 
 export type NavBadges = z.infer<typeof navBadgesSchema>;
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { Grid } from "@roll-and-call/ui";
+import { isNumber } from "es-toolkit";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
 
@@ -16,7 +17,7 @@ const IMMERSIVE = /^\/(games\/(new$|[^/]+)|join$|welcome$)/;
 
 interface BottomNavProps {
   slug: string;
-  dots: { home: boolean; notifications: boolean };
+  dots: { home: boolean; notifications: number };
 }
 
 export function BottomNav({ slug, dots }: BottomNavProps) {
@@ -35,6 +36,7 @@ export function BottomNav({ slug, dots }: BottomNavProps) {
       className="sticky bottom-0 z-(--rc-z-sticky) h-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] pb-(--rc-safe-bottom) border-t border-gray-200 bg-surface desktop:hidden"
     >
       {NAV_TABS.map(({ path, label, Icon, dot }) => {
+        const badge = dot ? dots[dot.key] : false;
         const active = isNavTabActive({ pathname, path });
         const Tab = active ? ActiveBottomNavTab : BottomNavTab;
         return (
@@ -43,7 +45,8 @@ export function BottomNav({ slug, dots }: BottomNavProps) {
             href={serverPath({ slug, path })}
             label={label}
             Icon={Icon}
-            dot={dot && dots[dot.key] ? dot.label : undefined}
+            dot={dot && badge ? dot.label : undefined}
+            count={isNumber(badge) ? badge : undefined}
           />
         );
       })}

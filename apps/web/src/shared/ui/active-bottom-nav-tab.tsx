@@ -7,7 +7,7 @@ import type { BottomNavTabProps } from "./bottom-nav-tab";
 import { BOTTOM_NAV_TAB_CLASS } from "./bottom-nav-tab-class";
 import { NavIcon } from "./nav-icon";
 
-export function ActiveBottomNavTab({ href, label, Icon, dot }: BottomNavTabProps) {
+export function ActiveBottomNavTab({ href, label, Icon, dot, count }: BottomNavTabProps) {
   return (
     <Link
       href={href}
@@ -15,7 +15,7 @@ export function ActiveBottomNavTab({ href, label, Icon, dot }: BottomNavTabProps
       aria-label={label}
       className={cn(BOTTOM_NAV_TAB_CLASS, "text-tinted-ink")}
     >
-      <NavIcon Icon={Icon} dot={dot} />
+      <NavIcon Icon={Icon} dot={dot} count={count} />
     </Link>
   );
 }

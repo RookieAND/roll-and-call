@@ -12,7 +12,15 @@ interface DesktopNavItemProps extends BottomNavTabProps {
 }
 
 // 현재 항목은 연한 면 + 왼쪽 막대. 체험 중에는 흐리게 두고 누를 수 없다.
-export function DesktopNavItem({ href, label, Icon, dot, active, disabled }: DesktopNavItemProps) {
+export function DesktopNavItem({
+  href,
+  label,
+  Icon,
+  dot,
+  count,
+  active,
+  disabled,
+}: DesktopNavItemProps) {
   return (
     <Link
       href={href}
@@ -31,7 +39,7 @@ export function DesktopNavItem({ href, label, Icon, dot, active, disabled }: Des
           className="absolute inset-y-[10px] left-0 w-[3px] rounded-full bg-tinted-ink"
         />
       )}
-      <NavIcon Icon={Icon} dot={dot} size={22} />
+      <NavIcon Icon={Icon} dot={dot} count={count} size={22} />
       <Text typography="body2" weight={active ? "bold" : "medium"} foreground="inherit">
         {label}
       </Text>

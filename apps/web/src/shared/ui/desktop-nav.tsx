@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar, HStack, Text } from "@roll-and-call/ui";
+import { isNumber } from "es-toolkit";
 import { CircleHelp } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -51,18 +52,22 @@ export function DesktopNav({ current, servers = [], memberCount, profile }: Desk
           <DesktopNavServer current={current} servers={servers} memberCount={memberCount} />
         </div>
         <ul className="flex flex-col gap-050 px-150">
-          {NAV_TABS.map(({ path, label, Icon, dot }) => (
-            <li key={path}>
-              <DesktopNavItem
-                href={serverPath({ slug: current.slug, path })}
-                label={label}
-                Icon={Icon}
-                dot={dot && badges?.dots[dot.key] ? dot.label : undefined}
-                active={isNavTabActive({ pathname: relative, path })}
-                disabled={inTrial}
-              />
-            </li>
-          ))}
+          {NAV_TABS.map(({ path, label, Icon, dot }) => {
+            const badge = dot ? badges?.dots[dot.key] : false;
+            return (
+              <li key={path}>
+                <DesktopNavItem
+                  href={serverPath({ slug: current.slug, path })}
+                  label={label}
+                  Icon={Icon}
+                  dot={dot && badge ? dot.label : undefined}
+                  count={isNumber(badge) ? badge : undefined}
+                  active={isNavTabActive({ pathname: relative, path })}
+                  disabled={inTrial}
+                />
+              </li>
+            );
+          })}
         </ul>
         <div className="mt-auto flex flex-col gap-050 border-t border-gray-200 p-150">
           <Link

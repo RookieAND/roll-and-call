@@ -33,7 +33,7 @@ export function useNavBadges() {
     server,
     dots: {
       home: !isError && (data?.blockedTodo ?? false),
-      notifications: !isError && (data?.unread ?? false),
+      notifications: isError ? 0 : (data?.unread ?? 0),
     },
   };
 }

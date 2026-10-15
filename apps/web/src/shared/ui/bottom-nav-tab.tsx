@@ -13,12 +13,14 @@ export interface BottomNavTabProps {
   Icon: LucideIcon;
   // 점의 이름. 없으면 점을 그리지 않는다.
   dot?: string;
+  // 숫자 뱃지. 없으면 점을 그린다.
+  count?: number;
 }
 
-export function BottomNavTab({ href, label, Icon, dot }: BottomNavTabProps) {
+export function BottomNavTab({ href, label, Icon, dot, count }: BottomNavTabProps) {
   return (
     <Link href={href} aria-label={label} className={cn(BOTTOM_NAV_TAB_CLASS, "text-hint")}>
-      <NavIcon Icon={Icon} dot={dot} />
+      <NavIcon Icon={Icon} dot={dot} count={count} />
     </Link>
   );
 }
