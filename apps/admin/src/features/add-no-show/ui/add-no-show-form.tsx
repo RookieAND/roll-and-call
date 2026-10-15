@@ -6,7 +6,7 @@ import {
   type AbsenceAddedTag,
 } from "@roll-and-call/database/games/model";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
-import { Button, Dialog, Text, TextInput, VStack, toast } from "@roll-and-call/ui";
+import { Button, Text, TextInput, VStack, toast } from "@roll-and-call/ui";
 import { isNull, isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState } from "react";
@@ -26,6 +26,7 @@ import {
   ModalServerLabel,
   UrlSearchInput,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { addNoShowRecord } from "../api/add-no-show-record";
@@ -86,12 +87,14 @@ export function AddNoShowForm({ search, onClose, onAdded }: AddNoShowFormProps) 
 
   return (
     <>
-      <Dialog.Header>
+      <ResponsiveDialog.Header>
         <ModalServerLabel />
-        <Dialog.Title>불참 기록 추가</Dialog.Title>
-        <Dialog.Description>참석으로 기록된 참여자를 불참으로 바꿉니다.</Dialog.Description>
-      </Dialog.Header>
-      <Dialog.Body>
+        <ResponsiveDialog.Title>불참 기록 추가</ResponsiveDialog.Title>
+        <ResponsiveDialog.Description>
+          참석으로 기록된 참여자를 불참으로 바꿉니다.
+        </ResponsiveDialog.Description>
+      </ResponsiveDialog.Header>
+      <ResponsiveDialog.Body>
         <VStack gap="150">
           {action.networkError ? <ActionNetworkError /> : null}
           <VStack gap="100">
@@ -195,20 +198,20 @@ export function AddNoShowForm({ search, onClose, onAdded }: AddNoShowFormProps) 
             />
           ) : null}
         </VStack>
-      </Dialog.Body>
-      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-        <Dialog.Close
+      </ResponsiveDialog.Body>
+      <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <ResponsiveDialog.Close
           render={<Button variant="outline" colorPalette="gray" />}
           disabled={action.pending}
           className="ml-auto"
         >
           닫기
-        </Dialog.Close>
+        </ResponsiveDialog.Close>
         <Button disabled={!ready} onClick={() => void confirm()}>
           {action.networkError ? <RotateCcw size={16} aria-hidden /> : null}
           {confirmLabel}
         </Button>
-      </Dialog.Footer>
+      </ResponsiveDialog.Footer>
     </>
   );
 }

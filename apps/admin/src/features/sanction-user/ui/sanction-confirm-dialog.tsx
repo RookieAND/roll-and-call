@@ -1,4 +1,4 @@
-import { AlertDialog, Button, Text, VStack } from "@roll-and-call/ui";
+import { Button, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRef } from "react";
@@ -10,6 +10,7 @@ import {
   FactSub,
   ModalServerLabel,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 const BLOCKED_TEXT = "참가 신청·구인 개설·룰북 인증 신청을 막습니다.";
@@ -50,12 +51,16 @@ export function SanctionConfirmDialog({
       ? `해제하기 전까지 ${BLOCKED_TEXT}`
       : `${days}일 동안, ${formatDateTime(end)}까지 ${BLOCKED_TEXT}`;
   return (
-    <AlertDialog.Root open={open} onOpenChange={(nextOpen) => nextOpen || pending || onBack()}>
-      <AlertDialog.Popup initialFocus={backRef} className="max-w-[480px]">
-        <AlertDialog.Header>
+    <ResponsiveDialog.Root
+      alert
+      open={open}
+      onOpenChange={(nextOpen) => nextOpen || pending || onBack()}
+    >
+      <ResponsiveDialog.Popup initialFocus={backRef} className="max-w-[480px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <AlertDialog.Title>{nickname} 제재를 확정할까요?</AlertDialog.Title>
-          <AlertDialog.Description>
+          <ResponsiveDialog.Title>{nickname} 제재를 확정할까요?</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
             {blocked}
             {cancelCount > 0 ? (
               <>
@@ -63,9 +68,9 @@ export function SanctionConfirmDialog({
                 {`구인 ${cancelCount}건이 취소되고 확정자·대기자 ${notifiedCount}명에게 알림 탭으로 알립니다.`}
               </>
             ) : null}
-          </AlertDialog.Description>
-        </AlertDialog.Header>
-        <AlertDialog.Body>
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="125">
             {networkError ? <ActionNetworkError /> : null}
             <FactBox
@@ -99,8 +104,8 @@ export function SanctionConfirmDialog({
               </Text>
             ) : null}
           </VStack>
-        </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <Button
             ref={backRef}
             variant="outline"
@@ -114,8 +119,8 @@ export function SanctionConfirmDialog({
             {networkError ? <RotateCcw size={16} aria-hidden /> : null}
             {networkError ? "다시 시도" : "제재 확정"}
           </Button>
-        </AlertDialog.Footer>
-      </AlertDialog.Popup>
-    </AlertDialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

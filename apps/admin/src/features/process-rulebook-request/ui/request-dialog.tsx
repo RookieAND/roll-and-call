@@ -1,12 +1,11 @@
 "use client";
 
-import { Dialog } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import type { RulebookRequestRow, RulebookRow } from "@/entities/rulebook/server";
-import { useServerPath } from "@/shared/ui";
+import { useServerPath, ResponsiveDialog } from "@/shared/ui";
 
 import { REQUEST_ACTION, type RequestAction } from "../model/request-action";
 import { LinkRequestForm } from "./link-request-form";
@@ -29,8 +28,8 @@ export function RequestDialog({ opened, rulebooks, closeHref, viewerId }: Reques
   if (opened && openedKey !== formKey) setShown(opened);
   const close = () => router.replace(toServerPath(closeHref), { scroll: false });
   return (
-    <Dialog.Root open={!isNull(opened)} onOpenChange={(open) => open || close()}>
-      <Dialog.Popup size="lg" className="max-w-[560px]">
+    <ResponsiveDialog.Root open={!isNull(opened)} onOpenChange={(open) => open || close()}>
+      <ResponsiveDialog.Popup size="lg" className="max-w-[560px]">
         {shown?.action === REQUEST_ACTION.link ? (
           <LinkRequestForm
             key={formKey ?? undefined}
@@ -48,7 +47,7 @@ export function RequestDialog({ opened, rulebooks, closeHref, viewerId }: Reques
             onDone={close}
           />
         ) : null}
-      </Dialog.Popup>
-    </Dialog.Root>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

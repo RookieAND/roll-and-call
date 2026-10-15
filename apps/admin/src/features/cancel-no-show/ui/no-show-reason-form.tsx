@@ -1,14 +1,19 @@
 "use client";
 
 import type { NotificationPayload } from "@roll-and-call/database/notifications/model";
-import { Button, Dialog, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { NotificationPreview } from "@/entities/notification";
 import { conflictToastText, useActionSubmit } from "@/shared/lib";
-import { ActionNetworkError, ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
+} from "@/shared/ui";
 
 type SubmitResult =
   | { ok: true }
@@ -61,12 +66,12 @@ export function NoShowReasonForm({
 
   return (
     <>
-      <Dialog.Header>
+      <ResponsiveDialog.Header>
         <ModalServerLabel />
-        <Dialog.Title>{copy.title}</Dialog.Title>
-        <Dialog.Description>{copy.description}</Dialog.Description>
-      </Dialog.Header>
-      <Dialog.Body>
+        <ResponsiveDialog.Title>{copy.title}</ResponsiveDialog.Title>
+        <ResponsiveDialog.Description>{copy.description}</ResponsiveDialog.Description>
+      </ResponsiveDialog.Header>
+      <ResponsiveDialog.Body>
         <VStack gap="150">
           {action.networkError ? <ActionNetworkError /> : null}
           {summary}
@@ -87,20 +92,20 @@ export function NoShowReasonForm({
           </Field.Root>
           <NotificationPreview payload={notification} recipients="당사자와 GM에게 알립니다." />
         </VStack>
-      </Dialog.Body>
-      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-        <Dialog.Close
+      </ResponsiveDialog.Body>
+      <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <ResponsiveDialog.Close
           render={<Button variant="outline" colorPalette="gray" />}
           disabled={action.pending}
           className="ml-auto"
         >
           닫기
-        </Dialog.Close>
+        </ResponsiveDialog.Close>
         <Button disabled={!canConfirm} loading={action.pending} onClick={() => void confirm()}>
           {action.networkError ? <RotateCcw size={16} aria-hidden /> : null}
           {confirmLabel}
         </Button>
-      </Dialog.Footer>
+      </ResponsiveDialog.Footer>
     </>
   );
 }

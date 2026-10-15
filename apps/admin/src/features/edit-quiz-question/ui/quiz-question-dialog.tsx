@@ -4,7 +4,6 @@ import {
   Badge,
   Button,
   Callout,
-  Dialog,
   Field,
   HStack,
   Text,
@@ -18,7 +17,7 @@ import { X } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import type { QuizQuestion } from "@/shared/server";
-import { ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
+import { ModalServerLabel, MODAL_FOOTER_CLASS, ResponsiveDialog } from "@/shared/ui";
 
 import { submitQuizQuestion } from "../api/submit-quiz-question";
 import { addAnswer } from "../model/add-answer";
@@ -63,16 +62,21 @@ export function QuizQuestionDialog({
     });
 
   return (
-    <Dialog.Root open={open} onOpenChange={(nextOpen) => nextOpen || pending || onClose()}>
-      <Dialog.Popup className="max-w-[600px]">
-        <Dialog.Header>
+    <ResponsiveDialog.Root
+      open={open}
+      onOpenChange={(nextOpen) => nextOpen || pending || onClose()}
+    >
+      <ResponsiveDialog.Popup className="max-w-[600px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <Dialog.Title>본문 퀴즈 문항 {editing ? "수정" : "추가"}</Dialog.Title>
-          <Dialog.Description>
+          <ResponsiveDialog.Title>
+            본문 퀴즈 문항 {editing ? "수정" : "추가"}
+          </ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
             책을 가진 사람이 쉽게 답할 수 있는 질문으로 적어 주세요.
-          </Dialog.Description>
-        </Dialog.Header>
-        <Dialog.Body>
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="150">
             <Field.Root label="질문" htmlFor="quiz-question" required>
               <Textarea
@@ -148,8 +152,8 @@ export function QuizQuestionDialog({
               </Text>
             )}
           </VStack>
-        </Dialog.Body>
-        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           {editing ? (
             <Button
               variant="outline"
@@ -166,12 +170,12 @@ export function QuizQuestionDialog({
               {question.active ? "비활성화" : "다시 사용"}
             </Button>
           ) : null}
-          <Dialog.Close
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </Dialog.Close>
+          </ResponsiveDialog.Close>
           <Button
             loading={pending}
             disabled={!canSave}
@@ -184,8 +188,8 @@ export function QuizQuestionDialog({
           >
             {editing ? "저장" : "추가"}
           </Button>
-        </Dialog.Footer>
-      </Dialog.Popup>
-    </Dialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
-import { Button, Dialog, Text, VStack, toast } from "@roll-and-call/ui";
+import { Button, Text, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,7 @@ import {
   ModalServerLabel,
   UrlSearchInput,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { addStaffMember } from "../api/add-staff-member";
@@ -50,14 +51,19 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
-      <Dialog.Popup className="max-w-[520px]">
-        <Dialog.Header>
+    <ResponsiveDialog.Root
+      open={open}
+      onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}
+    >
+      <ResponsiveDialog.Popup className="max-w-[520px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <Dialog.Title>운영진 추가</Dialog.Title>
-          <Dialog.Description>디스코드 서버에 있는 멤버 중에서 찾습니다</Dialog.Description>
-        </Dialog.Header>
-        <Dialog.Body>
+          <ResponsiveDialog.Title>운영진 추가</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
+            디스코드 서버에 있는 멤버 중에서 찾습니다
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <UrlSearchInput placeholder="디스코드 닉네임 검색" className="w-full" />
@@ -94,14 +100,14 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
               recipients="당사자의 알림 탭으로 알립니다."
             />
           </VStack>
-        </Dialog.Body>
-        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <Dialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </Dialog.Close>
+          </ResponsiveDialog.Close>
           <Button
             loading={pending}
             disabled={!selected || pending}
@@ -111,8 +117,8 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
             {networkError ? <RotateCcw size={14} aria-hidden /> : null}
             {confirmLabel}
           </Button>
-        </Dialog.Footer>
-      </Dialog.Popup>
-    </Dialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

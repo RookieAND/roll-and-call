@@ -2,7 +2,7 @@
 
 import type { RulebookKind } from "@roll-and-call/database";
 import { directionalParticle, objectParticle } from "@roll-and-call/database/notifications/model";
-import { AlertDialog, Button, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -15,6 +15,7 @@ import {
   RetryableLabel,
   Tag,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { loadKindImpact } from "../api/load-kind-impact";
@@ -104,19 +105,20 @@ export function KindImpactDialog({
   };
 
   return (
-    <AlertDialog.Root
+    <ResponsiveDialog.Root
+      alert
       open={!isNull(initial)}
       onOpenChange={(nextOpen) => nextOpen || pending || onClose()}
     >
-      <AlertDialog.Popup className="max-w-[560px]">
-        <AlertDialog.Header>
+      <ResponsiveDialog.Popup className="max-w-[560px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <AlertDialog.Title>종류를 바꿀까요?</AlertDialog.Title>
-          <AlertDialog.Description>
+          <ResponsiveDialog.Title>종류를 바꿀까요?</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
             {`${rulebookLabel}${objectParticle(rulebookLabel)} ${fromLabel}에서 ${toLabel}${directionalParticle(toLabel)} 바꿉니다`}
-          </AlertDialog.Description>
-        </AlertDialog.Header>
-        <AlertDialog.Body>
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="125">
             {networkError || loadFailed ? <ActionNetworkError /> : null}
             <HStack align="center" gap="075">
@@ -146,19 +148,19 @@ export function KindImpactDialog({
               onLoadMore={() => void loadMore()}
             />
           </VStack>
-        </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <AlertDialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </AlertDialog.Close>
+          </ResponsiveDialog.Close>
           <Button colorPalette="danger" loading={pending} onClick={onConfirm}>
             <RetryableLabel failed={networkError}>{"종류 바꾸기"}</RetryableLabel>
           </Button>
-        </AlertDialog.Footer>
-      </AlertDialog.Popup>
-    </AlertDialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

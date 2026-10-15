@@ -1,7 +1,7 @@
 "use client";
 
 import { reasonLabel, USER_ACTION_REASON } from "@roll-and-call/database/moderation/model";
-import { AlertDialog, Button, HStack, Text, VStack, toast } from "@roll-and-call/ui";
+import { Button, HStack, Text, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ import {
   ReasonChips,
   useCurrentServer,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { kickServerMember } from "../api/kick-server-member";
@@ -71,18 +72,24 @@ export function KickMemberDialog({
   };
 
   return (
-    <AlertDialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
-      <AlertDialog.Popup initialFocus={cancelRef} className="max-w-[600px]">
-        <AlertDialog.Header>
+    <ResponsiveDialog.Root
+      alert
+      open={open}
+      onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}
+    >
+      <ResponsiveDialog.Popup initialFocus={cancelRef} className="max-w-[600px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <AlertDialog.Title>{withObjectParticle(nickname)} 서버에서 추방할까요?</AlertDialog.Title>
-          <AlertDialog.Description>
+          <ResponsiveDialog.Title>
+            {withObjectParticle(nickname)} 서버에서 추방할까요?
+          </ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
             디스코드에서 차단(ban)해 서버에서 내보냅니다.
             <br />
             서버에 남기고 활동만 막으려면 제재를 사용해 주세요.
-          </AlertDialog.Description>
-        </AlertDialog.Header>
-        <AlertDialog.Body>
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="175">
             {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">
@@ -132,15 +139,15 @@ export function KickMemberDialog({
               text={kickNoticeText({ serverName: server.name, reason: reasonText })}
             />
           </VStack>
-        </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <AlertDialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             ref={cancelRef}
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </AlertDialog.Close>
+          </ResponsiveDialog.Close>
           <Button
             colorPalette="danger"
             loading={pending}
@@ -150,8 +157,8 @@ export function KickMemberDialog({
             {networkError ? <RotateCcw size={16} aria-hidden /> : null}
             {networkError ? "다시 시도" : "추방 확정"}
           </Button>
-        </AlertDialog.Footer>
-      </AlertDialog.Popup>
-    </AlertDialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

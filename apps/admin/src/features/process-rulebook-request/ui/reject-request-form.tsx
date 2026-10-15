@@ -1,7 +1,7 @@
 "use client";
 
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
-import { Button, Dialog, Field, Text, TextInput, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Field, Text, TextInput, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState } from "react";
@@ -15,7 +15,12 @@ import {
   withObjectParticle,
   withSubjectParticle,
 } from "@/shared/lib";
-import { ActionNetworkError, ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
+} from "@/shared/ui";
 
 import { rejectRequest } from "../api/reject-request";
 import { REJECT_REASON_MAX_LENGTH } from "../model/reject-reason-max-length";
@@ -50,15 +55,15 @@ export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFo
 
   return (
     <>
-      <Dialog.Header>
+      <ResponsiveDialog.Header>
         <ModalServerLabel />
-        <Dialog.Title>룰북 추가 요청 반려</Dialog.Title>
-        <Dialog.Description>
+        <ResponsiveDialog.Title>룰북 추가 요청 반려</ResponsiveDialog.Title>
+        <ResponsiveDialog.Description>
           {withSubjectParticle(request.requesterNickname)} 요청한{" "}
           {quoteWithParticle(request.name, withObjectParticle)} 등록하지 않습니다
-        </Dialog.Description>
-      </Dialog.Header>
-      <Dialog.Body>
+        </ResponsiveDialog.Description>
+      </ResponsiveDialog.Header>
+      <ResponsiveDialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <Field.Root
@@ -94,11 +99,14 @@ export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFo
             사유를 입력해야 반려할 수 있습니다.
           </Text>
         </VStack>
-      </Dialog.Body>
-      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-        <Dialog.Close render={<Button variant="outline" colorPalette="gray" />} disabled={pending}>
+      </ResponsiveDialog.Body>
+      <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <ResponsiveDialog.Close
+          render={<Button variant="outline" colorPalette="gray" />}
+          disabled={pending}
+        >
           취소
-        </Dialog.Close>
+        </ResponsiveDialog.Close>
         <Button
           colorPalette="danger"
           loading={pending}
@@ -108,7 +116,7 @@ export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFo
           {networkError ? <RotateCcw size={16} aria-hidden /> : null}
           {networkError ? "다시 시도" : "반려"}
         </Button>
-      </Dialog.Footer>
+      </ResponsiveDialog.Footer>
     </>
   );
 }

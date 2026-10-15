@@ -1,7 +1,7 @@
 "use client";
 
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
-import { AlertDialog, Button, Callout, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Callout, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -16,6 +16,7 @@ import {
   ModalServerLabel,
   Tag,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { removeStaffMember } from "../api/remove-staff-member";
@@ -47,18 +48,22 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
   };
 
   return (
-    <AlertDialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
-      <AlertDialog.Popup className="max-w-[520px]">
-        <AlertDialog.Header>
+    <ResponsiveDialog.Root
+      alert
+      open={open}
+      onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}
+    >
+      <ResponsiveDialog.Popup className="max-w-[520px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <AlertDialog.Title>
+          <ResponsiveDialog.Title>
             {withObjectParticle(staff.nickname)} 운영진에서 해제할까요?
-          </AlertDialog.Title>
-          <AlertDialog.Description>
+          </ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
             권한을 해제하면 어드민에 로그인할 수 없습니다.
-          </AlertDialog.Description>
-        </AlertDialog.Header>
-        <AlertDialog.Body>
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">
@@ -90,14 +95,14 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
             </Field.Root>
             <NotificationPreview payload={{ kind: NOTIFICATION_KIND.staffRemoved, params: {} }} />
           </VStack>
-        </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <AlertDialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </AlertDialog.Close>
+          </ResponsiveDialog.Close>
           <Button
             colorPalette="danger"
             loading={pending}
@@ -108,8 +113,8 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
             {networkError ? <RotateCcw size={14} aria-hidden /> : null}
             {confirmLabel}
           </Button>
-        </AlertDialog.Footer>
-      </AlertDialog.Popup>
-    </AlertDialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

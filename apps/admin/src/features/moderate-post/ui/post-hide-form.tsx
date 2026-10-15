@@ -1,7 +1,7 @@
 "use client";
 
 import { CONTENT_REASON, reasonLabel } from "@roll-and-call/database/moderation/model";
-import { Button, Dialog, Field, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Field, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState } from "react";
@@ -9,7 +9,13 @@ import { useState } from "react";
 import { NotificationPreview } from "@/entities/notification";
 import type { PostDetail } from "@/entities/post/server";
 import { draftReason, useActionSubmit } from "@/shared/lib";
-import { ActionNetworkError, ModalServerLabel, ReasonChips, MODAL_FOOTER_CLASS } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  ReasonChips,
+  MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
+} from "@/shared/ui";
 
 import { submitPostModeration } from "../api/submit-post-moderation";
 import { ACTION_COPY } from "../model/action-copy";
@@ -53,12 +59,12 @@ export function PostHideForm({ post, onSettled }: PostHideFormProps) {
 
   return (
     <>
-      <Dialog.Header>
+      <ResponsiveDialog.Header>
         <ModalServerLabel />
-        <Dialog.Title>{COPY.title}</Dialog.Title>
-        <Dialog.Description>{COPY.description}</Dialog.Description>
-      </Dialog.Header>
-      <Dialog.Body>
+        <ResponsiveDialog.Title>{COPY.title}</ResponsiveDialog.Title>
+        <ResponsiveDialog.Description>{COPY.description}</ResponsiveDialog.Description>
+      </ResponsiveDialog.Header>
+      <ResponsiveDialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <ReasonChips
@@ -85,16 +91,19 @@ export function PostHideForm({ post, onSettled }: PostHideFormProps) {
             언제든 숨김 해제할 수 있습니다.
           </Text>
         </VStack>
-      </Dialog.Body>
-      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-        <Dialog.Close render={<Button variant="outline" colorPalette="gray" />} disabled={pending}>
+      </ResponsiveDialog.Body>
+      <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <ResponsiveDialog.Close
+          render={<Button variant="outline" colorPalette="gray" />}
+          disabled={pending}
+        >
           취소
-        </Dialog.Close>
+        </ResponsiveDialog.Close>
         <Button disabled={!canConfirm} loading={pending} onClick={() => void confirm()}>
           {networkError ? <RotateCcw size={16} aria-hidden /> : null}
           {networkError ? "다시 시도" : COPY.confirmLabel}
         </Button>
-      </Dialog.Footer>
+      </ResponsiveDialog.Footer>
     </>
   );
 }

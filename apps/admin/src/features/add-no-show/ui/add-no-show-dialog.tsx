@@ -1,11 +1,10 @@
 "use client";
 
-import { Dialog } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 
 import type { NoShowSessionSearch } from "@/entities/no-show/server";
-import { useServerPath } from "@/shared/ui";
+import { useServerPath, ResponsiveDialog } from "@/shared/ui";
 
 import { AddNoShowForm } from "./add-no-show-form";
 
@@ -27,10 +26,10 @@ export function AddNoShowDialog({ search, closeHref }: AddNoShowDialogProps) {
   };
 
   return (
-    <Dialog.Root open={!isNull(search)} onOpenChange={(open) => open || close()}>
-      <Dialog.Popup size="lg" className="max-w-[560px]">
+    <ResponsiveDialog.Root open={!isNull(search)} onOpenChange={(open) => open || close()}>
+      <ResponsiveDialog.Popup size="lg" className="max-w-[560px]">
         {search ? <AddNoShowForm search={search} onClose={close} onAdded={showAdded} /> : null}
-      </Dialog.Popup>
-    </Dialog.Root>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

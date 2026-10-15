@@ -1,11 +1,11 @@
 "use client";
 
-import { Button, Dialog, Field, TextInput, toast } from "@roll-and-call/ui";
+import { Button, Field, TextInput, toast } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
 import { useState, useTransition } from "react";
 
 import { quoteWithParticle, withObjectParticle } from "@/shared/lib";
-import { ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
+import { ModalServerLabel, MODAL_FOOTER_CLASS, ResponsiveDialog } from "@/shared/ui";
 
 import { saveSeller } from "../api/save-seller";
 
@@ -29,20 +29,20 @@ export function AddSellerButton() {
     });
 
   return (
-    <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || setOpen(nextOpen)}>
-      <Dialog.Trigger render={<Button size="sm" className="gap-050" />}>
+    <ResponsiveDialog.Root open={open} onOpenChange={(nextOpen) => pending || setOpen(nextOpen)}>
+      <ResponsiveDialog.Trigger render={<Button size="sm" className="gap-050" />}>
         <Plus size={14} aria-hidden />
         판매처 추가
-      </Dialog.Trigger>
-      <Dialog.Popup className="max-w-[480px]">
-        <Dialog.Header>
+      </ResponsiveDialog.Trigger>
+      <ResponsiveDialog.Popup className="max-w-[480px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <Dialog.Title>전자책 판매처 추가</Dialog.Title>
-          <Dialog.Description>
+          <ResponsiveDialog.Title>전자책 판매처 추가</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
             신청자가 전자책을 신청할 때 고르는 목록에 들어갑니다.
-          </Dialog.Description>
-        </Dialog.Header>
-        <Dialog.Body>
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <Field.Root
             label="판매처 이름"
             htmlFor="seller-name"
@@ -60,19 +60,19 @@ export function AddSellerButton() {
               }}
             />
           </Field.Root>
-        </Dialog.Body>
-        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <Dialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </Dialog.Close>
+          </ResponsiveDialog.Close>
           <Button loading={pending} disabled={!name.trim() || pending} onClick={save}>
             추가
           </Button>
-        </Dialog.Footer>
-      </Dialog.Popup>
-    </Dialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

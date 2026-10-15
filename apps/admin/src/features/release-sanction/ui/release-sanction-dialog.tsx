@@ -1,7 +1,7 @@
 "use client";
 
 import { USER_ACTION_REASON } from "@roll-and-call/database/moderation/model";
-import { Button, Dialog, Field, TextInput, VStack, toast } from "@roll-and-call/ui";
+import { Button, Field, TextInput, VStack, toast } from "@roll-and-call/ui";
 import { isNull, isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,7 @@ import {
   ModalServerLabel,
   ReasonChips,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { releaseUserSanction } from "../api/release-user-sanction";
@@ -63,14 +64,17 @@ export function ReleaseSanctionDialog({
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
-      <Dialog.Popup className="max-w-[540px]">
-        <Dialog.Header>
+    <ResponsiveDialog.Root
+      open={open}
+      onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}
+    >
+      <ResponsiveDialog.Popup className="max-w-[540px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <Dialog.Title>{nickname} 제재 해제</Dialog.Title>
-          <Dialog.Description>{description}</Dialog.Description>
-        </Dialog.Header>
-        <Dialog.Body>
+          <ResponsiveDialog.Title>{nickname} 제재 해제</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>{description}</ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="175">
             {networkError ? <ActionNetworkError /> : null}
             <FactBox
@@ -108,20 +112,20 @@ export function ReleaseSanctionDialog({
             </Field.Root>
             <NotificationPreview payload={{ kind: "sanction_released", params: {} }} />
           </VStack>
-        </Dialog.Body>
-        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <Dialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </Dialog.Close>
+          </ResponsiveDialog.Close>
           <Button loading={pending} disabled={!canRelease} onClick={() => void release()}>
             {networkError ? <RotateCcw size={16} aria-hidden /> : null}
             {networkError ? "다시 시도" : "해제 확정"}
           </Button>
-        </Dialog.Footer>
-      </Dialog.Popup>
-    </Dialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

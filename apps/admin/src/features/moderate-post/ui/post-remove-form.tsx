@@ -1,7 +1,7 @@
 "use client";
 
 import { OTHER_REASON_CODE } from "@roll-and-call/database/moderation/model";
-import { Button, Callout, Dialog, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Callout, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw, X } from "lucide-react";
 import { useState, type RefObject } from "react";
@@ -9,7 +9,13 @@ import { useState, type RefObject } from "react";
 import { NotificationPreview } from "@/entities/notification";
 import type { PostDetail } from "@/entities/post/server";
 import { draftReason, sessionTimeLabel, useActionSubmit } from "@/shared/lib";
-import { ActionNetworkError, FactBox, ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  FactBox,
+  ModalServerLabel,
+  MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
+} from "@/shared/ui";
 
 import { submitPostModeration } from "../api/submit-post-moderation";
 import { ACTION_COPY } from "../model/action-copy";
@@ -48,12 +54,12 @@ export function PostRemoveForm({ post, cancelRef, onSettled }: PostRemoveFormPro
 
   return (
     <>
-      <Dialog.Header>
+      <ResponsiveDialog.Header>
         <ModalServerLabel />
-        <Dialog.Title>{post.title} 구인을 취소할까요?</Dialog.Title>
-        <Dialog.Description>{COPY.description}</Dialog.Description>
-      </Dialog.Header>
-      <Dialog.Body>
+        <ResponsiveDialog.Title>{post.title} 구인을 취소할까요?</ResponsiveDialog.Title>
+        <ResponsiveDialog.Description>{COPY.description}</ResponsiveDialog.Description>
+      </ResponsiveDialog.Header>
+      <ResponsiveDialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <FactBox
@@ -98,15 +104,15 @@ export function PostRemoveForm({ post, cancelRef, onSettled }: PostRemoveFormPro
             </Field.Root>
           ) : null}
         </VStack>
-      </Dialog.Body>
-      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-        <Dialog.Close
+      </ResponsiveDialog.Body>
+      <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <ResponsiveDialog.Close
           ref={cancelRef}
           render={<Button variant="outline" colorPalette="gray" />}
           disabled={pending}
         >
           취소
-        </Dialog.Close>
+        </ResponsiveDialog.Close>
         <Button
           colorPalette="danger"
           disabled={!canConfirm}
@@ -116,7 +122,7 @@ export function PostRemoveForm({ post, cancelRef, onSettled }: PostRemoveFormPro
           {networkError ? <RotateCcw size={16} aria-hidden /> : <X size={16} aria-hidden />}
           {networkError ? "다시 시도" : COPY.confirmLabel}
         </Button>
-      </Dialog.Footer>
+      </ResponsiveDialog.Footer>
     </>
   );
 }

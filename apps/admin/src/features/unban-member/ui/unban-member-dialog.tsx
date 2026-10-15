@@ -1,7 +1,7 @@
 "use client";
 
 import { reasonLabel, USER_ACTION_REASON } from "@roll-and-call/database/moderation/model";
-import { Button, Dialog, Text, VStack, toast } from "@roll-and-call/ui";
+import { Button, Text, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,7 @@ import {
   ModalServerLabel,
   ReasonChips,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { unbanServerMember } from "../api/unban-server-member";
@@ -59,14 +60,19 @@ export function UnbanMemberDialog({
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
-      <Dialog.Popup className="max-w-[560px]">
-        <Dialog.Header>
+    <ResponsiveDialog.Root
+      open={open}
+      onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}
+    >
+      <ResponsiveDialog.Popup className="max-w-[560px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <Dialog.Title>{nickname}의 차단을 해제할까요?</Dialog.Title>
-          <Dialog.Description>디스코드 차단도 함께 해제됩니다.</Dialog.Description>
-        </Dialog.Header>
-        <Dialog.Body>
+          <ResponsiveDialog.Title>{nickname}의 차단을 해제할까요?</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
+            디스코드 차단도 함께 해제됩니다.
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="175">
             {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">
@@ -94,20 +100,20 @@ export function UnbanMemberDialog({
               복구됩니다.
             </Text>
           </VStack>
-        </Dialog.Body>
-        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <Dialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </Dialog.Close>
+          </ResponsiveDialog.Close>
           <Button loading={pending} disabled={!canUnban} onClick={() => void unban()}>
             {networkError ? <RotateCcw size={16} aria-hidden /> : null}
             {networkError ? "다시 시도" : "차단 해제"}
           </Button>
-        </Dialog.Footer>
-      </Dialog.Popup>
-    </Dialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

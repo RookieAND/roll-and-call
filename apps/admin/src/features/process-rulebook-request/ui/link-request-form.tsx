@@ -4,7 +4,6 @@ import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import {
   Button,
   Checkbox,
-  Dialog,
   HStack,
   RadioCard,
   RadioGroup,
@@ -32,6 +31,7 @@ import {
   ModalServerLabel,
   RetryableLabel,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { linkRequest } from "../api/link-request";
@@ -80,15 +80,15 @@ export function LinkRequestForm({ request, rulebooks, viewerId, onDone }: LinkRe
 
   return (
     <>
-      <Dialog.Header>
+      <ResponsiveDialog.Header>
         <ModalServerLabel />
-        <Dialog.Title>기존 룰북에 연결</Dialog.Title>
-        <Dialog.Description>
+        <ResponsiveDialog.Title>기존 룰북에 연결</ResponsiveDialog.Title>
+        <ResponsiveDialog.Description>
           {withSubjectParticle(request.requesterNickname)} 요청한 {requestedName} 이미 등록된
           룰북으로 처리합니다
-        </Dialog.Description>
-      </Dialog.Header>
-      <Dialog.Body>
+        </ResponsiveDialog.Description>
+      </ResponsiveDialog.Header>
+      <ResponsiveDialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <VStack gap="075">
@@ -144,15 +144,18 @@ export function LinkRequestForm({ request, rulebooks, viewerId, onDone }: LinkRe
             recipients="요청자의 알림 탭으로 알립니다."
           />
         </VStack>
-      </Dialog.Body>
-      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-        <Dialog.Close render={<Button variant="outline" colorPalette="gray" />} disabled={pending}>
+      </ResponsiveDialog.Body>
+      <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <ResponsiveDialog.Close
+          render={<Button variant="outline" colorPalette="gray" />}
+          disabled={pending}
+        >
           취소
-        </Dialog.Close>
+        </ResponsiveDialog.Close>
         <Button loading={pending} disabled={!canConfirm} onClick={() => void confirm()}>
           <RetryableLabel failed={networkError}>{"연결"}</RetryableLabel>
         </Button>
-      </Dialog.Footer>
+      </ResponsiveDialog.Footer>
     </>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Dialog, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isString, isUndefined } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import {
   ModalServerLabel,
   RetryableLabel,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { submitStaffMemo } from "../api/submit-staff-memo";
@@ -53,14 +54,19 @@ export function StaffMemoDialog({
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
-      <Dialog.Popup className="max-w-[560px]">
-        <Dialog.Header>
+    <ResponsiveDialog.Root
+      open={open}
+      onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}
+    >
+      <ResponsiveDialog.Popup className="max-w-[560px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <Dialog.Title>{title}</Dialog.Title>
-          <Dialog.Description>운영진 메모는 사용자에게 보이지 않습니다.</Dialog.Description>
-        </Dialog.Header>
-        <Dialog.Body>
+          <ResponsiveDialog.Title>{title}</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
+            운영진 메모는 사용자에게 보이지 않습니다.
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <Textarea
@@ -71,19 +77,19 @@ export function StaffMemoDialog({
               onChange={(event) => setBody(event.target.value)}
             />
           </VStack>
-        </Dialog.Body>
-        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <Dialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </Dialog.Close>
+          </ResponsiveDialog.Close>
           <Button loading={pending} disabled={!canSave} onClick={() => void save()}>
             <RetryableLabel failed={networkError}>{saveLabel}</RetryableLabel>
           </Button>
-        </Dialog.Footer>
-      </Dialog.Popup>
-    </Dialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

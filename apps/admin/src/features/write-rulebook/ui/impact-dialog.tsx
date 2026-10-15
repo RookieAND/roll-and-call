@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertDialog, Button, Callout, Text, VStack } from "@roll-and-call/ui";
+import { Button, Callout, Text, VStack } from "@roll-and-call/ui";
 import { sumBy } from "es-toolkit";
 
 import type { RulebookImpactCase } from "@/entities/rulebook/server";
@@ -10,6 +10,7 @@ import {
   ModalServerLabel,
   RetryableLabel,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { ImpactList } from "./impact-list";
@@ -40,17 +41,18 @@ export function ImpactDialog({
   const loserCount = sumBy(cases, (item) => item.losers.length);
   const gameCount = sumBy(cases, (item) => item.games.length);
   return (
-    <AlertDialog.Root
+    <ResponsiveDialog.Root
+      alert
       open={cases.length > 0}
       onOpenChange={(nextOpen) => nextOpen || pending || onClose()}
     >
-      <AlertDialog.Popup className="max-w-[600px]">
-        <AlertDialog.Header>
+      <ResponsiveDialog.Popup className="max-w-[600px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <AlertDialog.Title>{title}</AlertDialog.Title>
-          <AlertDialog.Description>{description}</AlertDialog.Description>
-        </AlertDialog.Header>
-        <AlertDialog.Body>
+          <ResponsiveDialog.Title>{title}</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>{description}</ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <Callout.Root colorPalette="warning">
@@ -85,19 +87,19 @@ export function ImpactDialog({
               </VStack>
             ))}
           </VStack>
-        </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <AlertDialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             뒤로
-          </AlertDialog.Close>
+          </ResponsiveDialog.Close>
           <Button colorPalette="danger" loading={pending} onClick={onConfirm}>
             <RetryableLabel failed={networkError}>{"변경 확정"}</RetryableLabel>
           </Button>
-        </AlertDialog.Footer>
-      </AlertDialog.Popup>
-    </AlertDialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

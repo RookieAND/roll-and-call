@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertDialog, Button, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { EyeOff, RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,13 @@ import {
   useActionSubmit,
   withObjectParticle,
 } from "@/shared/lib";
-import { ActionNetworkError, FactRows, ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  FactRows,
+  ModalServerLabel,
+  MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
+} from "@/shared/ui";
 
 import { submitRulebookHide } from "../api/submit-rulebook-hide";
 
@@ -57,15 +63,19 @@ export function HideRulebookDialog({
   };
 
   return (
-    <AlertDialog.Root open={open} onOpenChange={(nextOpen) => nextOpen || pending || onClose()}>
-      <AlertDialog.Popup className="max-w-[560px]">
-        <AlertDialog.Header>
+    <ResponsiveDialog.Root
+      alert
+      open={open}
+      onOpenChange={(nextOpen) => nextOpen || pending || onClose()}
+    >
+      <ResponsiveDialog.Popup className="max-w-[560px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <AlertDialog.Title>
+          <ResponsiveDialog.Title>
             {`${quoteWithParticle(rulebookLabel, withObjectParticle)} 숨길까요?`}
-          </AlertDialog.Title>
-        </AlertDialog.Header>
-        <AlertDialog.Body>
+          </ResponsiveDialog.Title>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <FactRows
@@ -84,14 +94,14 @@ export function HideRulebookDialog({
               />
             </Field.Root>
           </VStack>
-        </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <AlertDialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </AlertDialog.Close>
+          </ResponsiveDialog.Close>
           <Button
             colorPalette="danger"
             loading={pending}
@@ -101,8 +111,8 @@ export function HideRulebookDialog({
             {networkError ? <RotateCcw size={16} aria-hidden /> : <EyeOff size={16} aria-hidden />}
             {networkError ? "다시 시도" : "숨기기"}
           </Button>
-        </AlertDialog.Footer>
-      </AlertDialog.Popup>
-    </AlertDialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

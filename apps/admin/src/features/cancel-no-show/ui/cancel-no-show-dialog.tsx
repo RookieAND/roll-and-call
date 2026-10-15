@@ -1,13 +1,12 @@
 "use client";
 
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
-import { Dialog } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 
 import type { NoShowDetail } from "@/entities/no-show/server";
-import { useServerPath } from "@/shared/ui";
+import { useServerPath, ResponsiveDialog } from "@/shared/ui";
 
 import { cancelNoShowRecord } from "../api/cancel-no-show-record";
 import { restoreNoShowRecord } from "../api/restore-no-show-record";
@@ -29,8 +28,8 @@ export function CancelNoShowDialog({ record, summary, closeHref }: CancelNoShowD
   const close = () => router.replace(toServerPath(closeHref), { scroll: false });
 
   return (
-    <Dialog.Root open={!isNull(record)} onOpenChange={(open) => open || close()}>
-      <Dialog.Popup
+    <ResponsiveDialog.Root open={!isNull(record)} onOpenChange={(open) => open || close()}>
+      <ResponsiveDialog.Popup
         size="lg"
         className="max-w-[600px]"
         initialFocus={() => document.getElementById(NO_SHOW_REASON_FIELD_ID)}
@@ -82,7 +81,7 @@ export function CancelNoShowDialog({ record, summary, closeHref }: CancelNoShowD
             onClose={close}
           />
         ) : null}
-      </Dialog.Popup>
-    </Dialog.Root>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

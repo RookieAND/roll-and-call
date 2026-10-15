@@ -5,7 +5,7 @@ import {
   REASON_TEXT_MAX_LENGTH,
   reasonLabel,
 } from "@roll-and-call/database/moderation/model";
-import { Button, Callout, Dialog, VStack, toast } from "@roll-and-call/ui";
+import { Button, Callout, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw, X } from "lucide-react";
 import { useState, type RefObject } from "react";
@@ -13,7 +13,13 @@ import { useState, type RefObject } from "react";
 import { NotificationPreview } from "@/entities/notification";
 import type { ReviewDetail } from "@/entities/review";
 import { draftReason, useActionSubmit } from "@/shared/lib";
-import { ActionNetworkError, ModalServerLabel, ReasonChips, MODAL_FOOTER_CLASS } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  ReasonChips,
+  MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
+} from "@/shared/ui";
 
 import { submitReviewModeration } from "../api/submit-review-moderation";
 import { ACTION_COPY } from "../model/action-copy";
@@ -57,11 +63,11 @@ export function ReviewRemoveForm({ review, cancelRef, onSettled }: ReviewRemoveF
 
   return (
     <>
-      <Dialog.Header>
+      <ResponsiveDialog.Header>
         <ModalServerLabel />
-        <Dialog.Title>{COPY.title}</Dialog.Title>
-      </Dialog.Header>
-      <Dialog.Body>
+        <ResponsiveDialog.Title>{COPY.title}</ResponsiveDialog.Title>
+      </ResponsiveDialog.Header>
+      <ResponsiveDialog.Body>
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <Callout.Root colorPalette="danger" size="sm">
@@ -87,15 +93,15 @@ export function ReviewRemoveForm({ review, cancelRef, onSettled }: ReviewRemoveF
           />
           <NotificationPreview payload={payload} />
         </VStack>
-      </Dialog.Body>
-      <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-        <Dialog.Close
+      </ResponsiveDialog.Body>
+      <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <ResponsiveDialog.Close
           ref={cancelRef}
           render={<Button variant="outline" colorPalette="gray" />}
           disabled={pending}
         >
           취소
-        </Dialog.Close>
+        </ResponsiveDialog.Close>
         <Button
           colorPalette="danger"
           disabled={!canConfirm}
@@ -105,7 +111,7 @@ export function ReviewRemoveForm({ review, cancelRef, onSettled }: ReviewRemoveF
           {networkError ? <RotateCcw size={16} aria-hidden /> : <X size={16} aria-hidden />}
           {networkError ? "다시 시도" : COPY.confirmLabel}
         </Button>
-      </Dialog.Footer>
+      </ResponsiveDialog.Footer>
     </>
   );
 }

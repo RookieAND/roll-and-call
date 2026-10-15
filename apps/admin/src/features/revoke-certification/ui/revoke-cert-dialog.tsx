@@ -3,7 +3,6 @@
 import { OTHER_REASON_CODE } from "@roll-and-call/database/moderation/model";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import {
-  AlertDialog,
   Button,
   Callout,
   Field,
@@ -22,7 +21,13 @@ import { EBOOK_REJECT_REASONS, REJECT_REASONS } from "@/entities/cert";
 import type { RevokeTarget } from "@/entities/cert/server";
 import { NotificationPreview } from "@/entities/notification";
 import { conflictToastText, OTHER_REASON, useActionSubmit } from "@/shared/lib";
-import { ActionNetworkError, ModalServerLabel, ReasonChips, MODAL_FOOTER_CLASS } from "@/shared/ui";
+import {
+  ActionNetworkError,
+  ModalServerLabel,
+  ReasonChips,
+  MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
+} from "@/shared/ui";
 
 import { revokeUserCertification } from "../api/revoke-user-certification";
 import { RevokeGameList } from "./revoke-game-list";
@@ -80,16 +85,16 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
   };
 
   return (
-    <AlertDialog.Root open onOpenChange={(nextOpen) => nextOpen || pending || onClose()}>
-      <AlertDialog.Popup initialFocus={backRef} className="max-w-[600px]">
-        <AlertDialog.Header>
+    <ResponsiveDialog.Root alert open onOpenChange={(nextOpen) => nextOpen || pending || onClose()}>
+      <ResponsiveDialog.Popup initialFocus={backRef} className="max-w-[600px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <AlertDialog.Title>인증을 반려로 돌릴까요?</AlertDialog.Title>
-          <AlertDialog.Description>
+          <ResponsiveDialog.Title>인증을 반려로 돌릴까요?</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
             {`${target.nickname}님의 「${target.rulebook}」 인증을 반려 상태로 바꿉니다.`}
-          </AlertDialog.Description>
-        </AlertDialog.Header>
-        <AlertDialog.Body>
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="175">
             {networkError ? <ActionNetworkError /> : null}
             <VStack gap="150">
@@ -169,8 +174,8 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
               </Text>
             ) : null}
           </VStack>
-        </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
           <Button
             ref={backRef}
             variant="outline"
@@ -189,8 +194,8 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
             {networkError ? <RotateCcw size={16} aria-hidden /> : null}
             {networkError ? "다시 시도" : confirmLabel}
           </Button>
-        </AlertDialog.Footer>
-      </AlertDialog.Popup>
-    </AlertDialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

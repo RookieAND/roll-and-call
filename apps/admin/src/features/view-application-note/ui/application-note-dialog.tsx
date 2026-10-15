@@ -1,11 +1,11 @@
 "use client";
 
-import { Button, Dialog } from "@roll-and-call/ui";
+import { Button } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import { MODAL_FOOTER_CLASS, ModalServerLabel, useServerPath } from "@/shared/ui";
+import { MODAL_FOOTER_CLASS, ModalServerLabel, useServerPath, ResponsiveDialog } from "@/shared/ui";
 
 import { ApplicationNoteBody } from "./application-note-body";
 
@@ -29,25 +29,25 @@ export function ApplicationNoteDialog({
   const close = () => window.history.replaceState(null, "", toServerPath(closeHref));
 
   return (
-    <Dialog.Root open={!isNull(userId)} onOpenChange={(open) => open || close()}>
-      <Dialog.Popup size="lg" className="max-w-[480px]">
+    <ResponsiveDialog.Root open={!isNull(userId)} onOpenChange={(open) => open || close()}>
+      <ResponsiveDialog.Popup size="lg" className="max-w-[480px]">
         {shownUserId && (
           <>
-            <Dialog.Header>
+            <ResponsiveDialog.Header>
               <ModalServerLabel />
-              <Dialog.Title className="truncate">{`${nicknames[shownUserId]}님의 신청글`}</Dialog.Title>
-            </Dialog.Header>
-            <Dialog.Body>
+              <ResponsiveDialog.Title className="truncate">{`${nicknames[shownUserId]}님의 신청글`}</ResponsiveDialog.Title>
+            </ResponsiveDialog.Header>
+            <ResponsiveDialog.Body>
               <ApplicationNoteBody key={shownUserId} gameId={gameId} userId={shownUserId} />
-            </Dialog.Body>
-            <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-              <Dialog.Close render={<Button variant="outline" colorPalette="gray" />}>
+            </ResponsiveDialog.Body>
+            <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+              <ResponsiveDialog.Close render={<Button variant="outline" colorPalette="gray" />}>
                 닫기
-              </Dialog.Close>
-            </Dialog.Footer>
+              </ResponsiveDialog.Close>
+            </ResponsiveDialog.Footer>
           </>
         )}
-      </Dialog.Popup>
-    </Dialog.Root>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

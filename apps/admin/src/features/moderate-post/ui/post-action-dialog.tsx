@@ -1,13 +1,13 @@
 "use client";
 
-import { AlertDialog, Dialog, toast } from "@roll-and-call/ui";
+import { toast } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 
 import type { PostDetail } from "@/entities/post/server";
 import { conflictToastText } from "@/shared/lib";
-import { useServerPath } from "@/shared/ui";
+import { useServerPath, ResponsiveDialog } from "@/shared/ui";
 
 import { ACTION_COPY } from "../model/action-copy";
 import { POST_ACTION, type PostAction } from "../model/post-action";
@@ -57,10 +57,10 @@ export function PostActionDialog({
     toast.info(conflictToastText({ conflict: outcome.conflict, self, target: CONFLICT_TARGET }));
   };
   const removing = shownAction === POST_ACTION.remove;
-  const Root = removing ? AlertDialog.Root : Dialog.Root;
+  const Root = removing ? ResponsiveDialog.Root : ResponsiveDialog.Root;
   return (
     <Root open={!isNull(action)} onOpenChange={(open) => open || close()}>
-      <Dialog.Popup
+      <ResponsiveDialog.Popup
         size="lg"
         initialFocus={removing ? cancelRef : undefined}
         className={shownAction ? ACTION_COPY[shownAction].widthClassName : undefined}
@@ -70,7 +70,7 @@ export function PostActionDialog({
           <PostUnhideForm post={post} onSettled={settle} />
         ) : null}
         {removing ? <PostRemoveForm post={post} cancelRef={cancelRef} onSettled={settle} /> : null}
-      </Dialog.Popup>
+      </ResponsiveDialog.Popup>
     </Root>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { objectParticle } from "@roll-and-call/database/notifications/model";
-import { AlertDialog, Button, Text, VStack } from "@roll-and-call/ui";
+import { Button, Text, VStack } from "@roll-and-call/ui";
 
 import {
   ActionNetworkError,
@@ -9,6 +9,7 @@ import {
   ModalServerLabel,
   RetryableLabel,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 interface FreeImpactDialogProps {
@@ -34,16 +35,20 @@ export function FreeImpactDialog({
   onClose,
 }: FreeImpactDialogProps) {
   return (
-    <AlertDialog.Root open={open} onOpenChange={(nextOpen) => nextOpen || pending || onClose()}>
-      <AlertDialog.Popup className="max-w-[560px]">
-        <AlertDialog.Header>
+    <ResponsiveDialog.Root
+      alert
+      open={open}
+      onOpenChange={(nextOpen) => nextOpen || pending || onClose()}
+    >
+      <ResponsiveDialog.Popup className="max-w-[560px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <AlertDialog.Title>인증 정책을 인증 불필요로 바꿀까요?</AlertDialog.Title>
-          <AlertDialog.Description>
+          <ResponsiveDialog.Title>인증 정책을 인증 불필요로 바꿀까요?</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
             {`${rulebookLabel}${objectParticle(rulebookLabel)} 누구나 구인을 열 수 있는 룰북으로 바꿉니다.`}
-          </AlertDialog.Description>
-        </AlertDialog.Header>
-        <AlertDialog.Body>
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
             <FactRows
@@ -52,19 +57,19 @@ export function FreeImpactDialog({
             />
             <Text typography="body3">{`심사 중 신청 ${pendingApplicationCount}건은 대기열에 남습니다.`}</Text>
           </VStack>
-        </AlertDialog.Body>
-        <AlertDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <AlertDialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             뒤로
-          </AlertDialog.Close>
+          </ResponsiveDialog.Close>
           <Button loading={pending} onClick={onConfirm}>
             <RetryableLabel failed={networkError}>{"변경 확정"}</RetryableLabel>
           </Button>
-        </AlertDialog.Footer>
-      </AlertDialog.Popup>
-    </AlertDialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

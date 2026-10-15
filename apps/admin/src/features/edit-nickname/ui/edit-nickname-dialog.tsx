@@ -1,7 +1,7 @@
 "use client";
 
 import { reasonLabel } from "@roll-and-call/database/moderation/model";
-import { Button, Dialog, Field, Text, TextInput, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Field, Text, TextInput, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -23,6 +23,7 @@ import {
   ModalServerLabel,
   ReasonChips,
   MODAL_FOOTER_CLASS,
+  ResponsiveDialog,
 } from "@/shared/ui";
 
 import { editMemberNickname } from "../api/edit-member-nickname";
@@ -93,16 +94,19 @@ export function EditNicknameDialog({
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}>
-      <Dialog.Popup className="max-w-[600px]">
-        <Dialog.Header>
+    <ResponsiveDialog.Root
+      open={open}
+      onOpenChange={(nextOpen) => pending || onOpenChange(nextOpen)}
+    >
+      <ResponsiveDialog.Popup className="max-w-[600px]">
+        <ResponsiveDialog.Header>
           <ModalServerLabel />
-          <Dialog.Title>닉네임 수정</Dialog.Title>
-          <Dialog.Description>
+          <ResponsiveDialog.Title>닉네임 수정</ResponsiveDialog.Title>
+          <ResponsiveDialog.Description>
             수정한 닉네임은 앱 전체와 지난 구인, 후기에 바로 반영됩니다.
-          </Dialog.Description>
-        </Dialog.Header>
-        <Dialog.Body>
+          </ResponsiveDialog.Description>
+        </ResponsiveDialog.Header>
+        <ResponsiveDialog.Body>
           <VStack gap="200">
             {networkError ? <ActionNetworkError /> : null}
             <FactBox
@@ -179,20 +183,20 @@ export function EditNicknameDialog({
               수정 내역은 활동 기록에 남습니다.
             </Text>
           </VStack>
-        </Dialog.Body>
-        <Dialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
-          <Dialog.Close
+        </ResponsiveDialog.Body>
+        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+          <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
           >
             취소
-          </Dialog.Close>
+          </ResponsiveDialog.Close>
           <Button loading={pending} disabled={!canConfirm} onClick={() => void confirm()}>
             {networkError ? <RotateCcw size={16} aria-hidden /> : null}
             {networkError ? "다시 시도" : "수정 확정"}
           </Button>
-        </Dialog.Footer>
-      </Dialog.Popup>
-    </Dialog.Root>
+        </ResponsiveDialog.Footer>
+      </ResponsiveDialog.Popup>
+    </ResponsiveDialog.Root>
   );
 }

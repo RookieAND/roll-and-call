@@ -1,13 +1,13 @@
 "use client";
 
-import { AlertDialog, Dialog, toast } from "@roll-and-call/ui";
+import { toast } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 
 import type { ReviewDetail } from "@/entities/review";
 import { conflictToastText } from "@/shared/lib";
-import { useServerPath } from "@/shared/ui";
+import { useServerPath, ResponsiveDialog } from "@/shared/ui";
 
 import { ACTION_COPY } from "../model/action-copy";
 import { REVIEW_ACTION, type ReviewAction } from "../model/review-action";
@@ -85,11 +85,11 @@ export function ReviewActionDialog({
   };
 
   const removing = shownAction === REVIEW_ACTION.remove && !gone;
-  const Root = removing ? AlertDialog.Root : Dialog.Root;
+  const Root = removing ? ResponsiveDialog.Root : ResponsiveDialog.Root;
   const width = gone ? GONE_WIDTH : shownAction && ACTION_COPY[shownAction].widthClassName;
   return (
     <Root open={!isNull(action)} onOpenChange={(open) => open || (gone ? backToList() : close())}>
-      <Dialog.Popup
+      <ResponsiveDialog.Popup
         size="lg"
         initialFocus={removing ? cancelRef : undefined}
         className={width || undefined}
@@ -106,7 +106,7 @@ export function ReviewActionDialog({
         {removing ? (
           <ReviewRemoveForm review={review} cancelRef={cancelRef} onSettled={settle} />
         ) : null}
-      </Dialog.Popup>
+      </ResponsiveDialog.Popup>
     </Root>
   );
 }
