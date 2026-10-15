@@ -23,7 +23,10 @@ const iconButton = cva(
 type IconButtonState = VariantProps<typeof iconButton> & { disabled: boolean };
 
 export interface IconButtonProps
-  extends StateComponentProps<"button", IconButtonState>, VariantProps<typeof iconButton> {}
+  extends StateComponentProps<"button", IconButtonState>, VariantProps<typeof iconButton> {
+  // 아이콘만 있는 단추라 읽어 줄 이름이 꼭 있어야 한다.
+  "aria-label": string;
+}
 
 export function IconButton({
   variant = "ghost",

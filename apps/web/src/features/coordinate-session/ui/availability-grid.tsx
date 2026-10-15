@@ -62,6 +62,7 @@ export function AvailabilityGrid({
       return (
         <div
           key={key}
+          role="img"
           aria-label="다른 확정 세션"
           className={cn(CELL, "cursor-not-allowed")}
           style={{ height: SLOT_ROW_PX, backgroundImage: BLOCKED_STRIPES }}
@@ -69,6 +70,7 @@ export function AvailabilityGrid({
       );
     }
     const tone = cellTone({ selected: painter.selected.has(key), saved: painter.isSaved(key) });
+    // ponytail: 끌어 칠하는 격자 칸이라 Button 대신 직접 그린다.
     return (
       <button
         key={key}

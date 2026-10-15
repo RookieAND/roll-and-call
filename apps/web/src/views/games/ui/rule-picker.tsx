@@ -57,12 +57,17 @@ export function RulePicker({ options, selected, onDone }: RulePickerProps) {
                       <Check size={14} strokeWidth={3} aria-hidden />
                     </Checkbox.Indicator>
                   </Checkbox.Root>
-                  <span className="min-w-0 flex-1 text-subtitle1 font-semibold">
+                  <Text
+                    typography="subtitle1"
+                    weight="medium"
+                    foreground="inherit"
+                    className="min-w-0 flex-1"
+                  >
                     {option.label}
-                  </span>
-                  <span className="flex-none text-body4 text-hint tabular-nums">
+                  </Text>
+                  <Text typography="body4" foreground="hint" numeric className="flex-none">
                     {option.count}건
-                  </span>
+                  </Text>
                 </label>
               </li>
             ))}

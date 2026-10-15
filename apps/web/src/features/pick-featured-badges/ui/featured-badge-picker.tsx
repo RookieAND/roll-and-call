@@ -78,6 +78,7 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
         {pickedChoices.length > 0 ? (
           <Grid cols={3} gap="100">
             {pickedChoices.map((choice, index) => (
+              // ponytail: 메달을 담은 고르기 칸이라 Button 변형이 없어 VStack을 단추로 그린다.
               <VStack
                 key={choice.key}
                 render={

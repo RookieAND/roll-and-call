@@ -40,6 +40,7 @@ export function ThumbnailDropzone({
   onDraggingChange,
   onDrop,
 }: ThumbnailDropzoneProps) {
+  // ponytail: 끌어 놓기를 받는 넓은 칸이라 Button 변형이 없어 직접 그린다.
   return (
     <button
       type="button"

@@ -23,6 +23,7 @@ interface HeatCellProps {
   onPick: () => void;
 }
 
+// ponytail: 겹침 정도로 바탕색이 바뀌는 격자 칸이라 Button 대신 직접 그린다.
 export function HeatCell({ label, count, step, ring, interactive, onPick }: HeatCellProps) {
   return (
     <button

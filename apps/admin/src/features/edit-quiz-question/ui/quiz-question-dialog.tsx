@@ -97,6 +97,7 @@ export function QuizQuestionDialog({
                 {answers.map((answer) => (
                   <Badge key={answer} className="gap-025">
                     {answer}
+                    {/* ponytail: 배지 안의 12px 지우기 단추라 IconButton(최소 32px)으로는 배지가 커진다. */}
                     <button
                       type="button"
                       aria-label={`${answer} 삭제`}

@@ -1,7 +1,7 @@
 import { Badge, cn, IconButton, type IconButtonProps } from "@roll-and-call/ui";
 import { ListFilter } from "lucide-react";
 
-interface GameFilterButtonProps extends IconButtonProps {
+interface GameFilterButtonProps extends Omit<IconButtonProps, "aria-label"> {
   count: number;
 }
 
