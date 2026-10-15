@@ -25,8 +25,11 @@ export function RulePicker({ options, selected, onDone }: RulePickerProps) {
   return (
     <>
       <Sheet.Title className="mb-100">룰 고르기</Sheet.Title>
-      <Sheet.Body className="desktop:min-h-0 desktop:flex-1 desktop:overflow-hidden">
-        <VStack gap="150" className="h-[min(60dvh,28rem)] desktop:h-full desktop:min-h-0">
+      <Sheet.Body className="desktop:flex desktop:min-h-0 desktop:flex-1 desktop:flex-col">
+        <VStack
+          gap="150"
+          className="h-[min(60dvh,28rem)] desktop:h-auto desktop:min-h-0 desktop:flex-1"
+        >
           <div className="relative">
             <Search
               size={16}
