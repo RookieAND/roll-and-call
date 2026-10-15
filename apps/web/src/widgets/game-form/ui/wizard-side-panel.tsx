@@ -2,7 +2,7 @@ import { Badge, Callout, Card, Text, VStack } from "@roll-and-call/ui";
 
 import { GameStatusBadge, type GameStatus } from "@/entities/game";
 
-import { wizardStepState } from "../model/wizard-step-state";
+import { isWizardStepSelectable, wizardStepState } from "../model/wizard-step-state";
 import { WizardStepRow } from "./wizard-step-row";
 
 export interface WizardPanelStep {
@@ -20,6 +20,7 @@ interface WizardSidePanelProps {
   ruleLabel: string;
   timeLabel: string;
   capacity: number;
+  onSelectStep: (index: number) => void;
 }
 
 // 1100px 이상에서 위저드 오른쪽에 서는 요약과 진행 상황. 입력 값은 폼에서 바로 읽어 온다.
@@ -32,6 +33,7 @@ export function WizardSidePanel({
   ruleLabel,
   timeLabel,
   capacity,
+  onSelectStep,
 }: WizardSidePanelProps) {
   return (
     <VStack gap="250" className="sticky top-7">
@@ -64,15 +66,19 @@ export function WizardSidePanel({
           진행 상황
         </Text>
         <ol className="flex flex-col gap-025">
-          {steps.map((step, index) => (
-            <WizardStepRow
-              key={step.number}
-              number={step.number}
-              label={step.label}
-              state={wizardStepState({ index, current })}
-              editing={editing}
-            />
-          ))}
+          {steps.map((step, index) => {
+            const state = wizardStepState({ index, current });
+            return (
+              <WizardStepRow
+                key={step.number}
+                number={step.number}
+                label={step.label}
+                state={state}
+                editing={editing}
+                onSelect={isWizardStepSelectable(state) ? () => onSelectStep(index) : undefined}
+              />
+            );
+          })}
         </ol>
       </VStack>
 

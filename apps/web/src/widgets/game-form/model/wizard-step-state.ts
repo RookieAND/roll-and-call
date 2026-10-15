@@ -10,3 +10,8 @@ export function wizardStepState({ index, current }: { index: number; current: nu
   if (index === current) return WIZARD_STEP_STATE.current;
   return index < current ? WIZARD_STEP_STATE.done : WIZARD_STEP_STATE.waiting;
 }
+
+// 지나온(완료) 단계로만 돌아갈 수 있다. 되돌아가는 데는 검증이 필요 없지만 앞으로 건너뛰면 단계별 검증을 거르게 된다.
+export function isWizardStepSelectable(state: WizardStepState) {
+  return state === WIZARD_STEP_STATE.done;
+}

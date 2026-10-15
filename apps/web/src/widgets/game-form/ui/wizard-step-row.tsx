@@ -1,4 +1,4 @@
-import { Badge, cn, HStack, Text } from "@roll-and-call/ui";
+import { Badge, cn, Text } from "@roll-and-call/ui";
 
 import { WIZARD_STEP_STATE, type WizardStepState } from "../model/wizard-step-state";
 
@@ -7,6 +7,8 @@ interface WizardStepRowProps {
   label: string;
   state: WizardStepState;
   editing: boolean;
+  // 있으면 지나온 단계로 돌아가는 버튼이 된다. 없는 행은 눌리지 않는다.
+  onSelect?: () => void;
 }
 
 const STATE_BADGE = {
@@ -24,17 +26,17 @@ const DOT_CLASS = {
   [WIZARD_STEP_STATE.waiting]: "bg-gray-100 text-gray-600",
 } as const;
 
-export function WizardStepRow({ number, label, state, editing }: WizardStepRowProps) {
+export function WizardStepRow({ number, label, state, editing, onSelect }: WizardStepRowProps) {
   const current = state === WIZARD_STEP_STATE.current;
   const badge = STATE_BADGE[state];
-  return (
-    <HStack
-      align="center"
-      gap="125"
-      render={<li />}
-      aria-current={current ? "step" : undefined}
-      className={cn("min-h-11 rounded-400 px-125", current && "bg-tinted-bg")}
-    >
+  const rowClass = cn(
+    "flex min-h-11 w-full items-center gap-125 rounded-400 px-125 text-left",
+    current && "bg-tinted-bg",
+    onSelect &&
+      "cursor-pointer transition-[filter] hover:brightness-[.96] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink",
+  );
+  const content = (
+    <>
       <span
         aria-hidden
         className={cn(
@@ -54,6 +56,22 @@ export function WizardStepRow({ number, label, state, editing }: WizardStepRowPr
         {label}
       </Text>
       <Badge colorPalette={badge.palette}>{badge.label(editing)}</Badge>
-    </HStack>
+    </>
+  );
+  return (
+    <li aria-current={current ? "step" : undefined}>
+      {onSelect ? (
+        <button
+          type="button"
+          aria-label={`${label} 단계로 이동`}
+          onClick={onSelect}
+          className={rowClass}
+        >
+          {content}
+        </button>
+      ) : (
+        <div className={rowClass}>{content}</div>
+      )}
+    </li>
   );
 }

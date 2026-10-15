@@ -78,6 +78,11 @@ export function GameFormWizard({
     window.scrollTo({ top: 0 });
   }
 
+  function goToStep(index: number) {
+    setStep(index);
+    window.scrollTo({ top: 0 });
+  }
+
   function goBack() {
     if (step > 0) {
       setStep(step - 1);
@@ -165,10 +170,16 @@ export function GameFormWizard({
             ruleLabel={watch("rule") || "룰북 미선택"}
             timeLabel={formatPlayRange(watch("playMinutesMin"), watch("playMinutes")) ?? ""}
             capacity={Number(watch("maxPlayers")) || 0}
+            onSelectStep={goToStep}
           />
         }
       >
-        <div className={cn("flex min-h-[calc(100dvh-var(--rc-size-appbar)-3px)] flex-col desktop:min-h-0", DESKTOP_CARD_CLASS)}>
+        <div
+          className={cn(
+            "flex min-h-[calc(100dvh-var(--rc-size-appbar)-3px)] flex-col desktop:min-h-0",
+            DESKTOP_CARD_CLASS,
+          )}
+        >
           {trialWizard?.banner}
 
           <Container size="md" className="flex-1 desktop:max-w-none desktop:px-400">
