@@ -37,7 +37,7 @@ export function UserDetailMobileLoading() {
         <SkeletonTabs items={USER_DETAIL_MOBILE_TABS.map((item) => item.label)} />
         <SkeletonListRows count={4} />
       </LoadingRegion>
-      <MobileActionBar>
+      <MobileActionBar elevated={false}>
         <HStack gap="100">
           <Button variant="outline" colorPalette="danger" size="lg" disabled className="flex-1">
             제재하기

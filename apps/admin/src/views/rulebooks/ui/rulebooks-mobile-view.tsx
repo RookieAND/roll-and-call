@@ -121,7 +121,7 @@ export function RulebooksMobileView({
               ))}
             />
           )}
-          <MobileActionBar>
+          <MobileActionBar elevated={false}>
             <Button size="lg" render={<ServerLink path="/rules/new" />}>
               룰북 추가
             </Button>
@@ -144,7 +144,7 @@ export function RulebooksMobileView({
           <Text typography="body4" foreground="hint" render={<p />} className="px-200 py-150">
             목록에 없는 판매처는 신청자가 「기타」를 고른 뒤 직접 입력합니다.
           </Text>
-          <MobileActionBar>
+          <MobileActionBar elevated={false}>
             <MobileAddSellerButton />
           </MobileActionBar>
         </>

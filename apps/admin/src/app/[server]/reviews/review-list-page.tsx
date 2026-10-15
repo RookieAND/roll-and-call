@@ -1,7 +1,7 @@
 import { REVIEW_DEFAULT_SORT, REVIEW_SORT_COLUMNS, type ReviewListTab } from "@/entities/review";
 import { listReviews } from "@/entities/review/server";
 import { parseSort, stringParams } from "@/shared/lib";
-import { ReviewListView } from "@/views/review-list";
+import { ReviewListMobileView, ReviewListView } from "@/views/review-list";
 
 interface ReviewListPageProps {
   tab: ReviewListTab;
@@ -17,13 +17,15 @@ export async function ReviewListPage({ tab, searchParams }: ReviewListPageProps)
     fallback: REVIEW_DEFAULT_SORT,
   });
   const list = await listReviews({ tab, query: q, photo, game, sort: tableSort });
+  const query = { q, photo, game, sort, dir, pageSize };
   return (
-    <ReviewListView
-      list={list}
-      tab={tab}
-      sort={tableSort}
-      page={page}
-      query={{ q, photo, game, sort, dir, pageSize }}
-    />
+    <>
+      <div className="contents max-lg:hidden">
+        <ReviewListView list={list} tab={tab} sort={tableSort} page={page} query={query} />
+      </div>
+      <div className="contents lg:hidden">
+        <ReviewListMobileView list={list} tab={tab} sort={tableSort} query={query} />
+      </div>
+    </>
   );
 }

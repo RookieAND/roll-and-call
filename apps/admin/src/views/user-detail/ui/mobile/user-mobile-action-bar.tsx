@@ -22,7 +22,7 @@ export function UserMobileActionBar({ user, tab, kickBlock }: UserMobileActionBa
   );
   if (user.membership === MEMBERSHIP_STATUS.banned) {
     return (
-      <MobileActionBar>
+      <MobileActionBar elevated={false}>
         <Button size="lg" render={actionLink(USER_ACTION.unban)}>
           차단 해제
         </Button>
@@ -45,7 +45,7 @@ export function UserMobileActionBar({ user, tab, kickBlock }: UserMobileActionBa
     </Button>
   );
   return (
-    <MobileActionBar>
+    <MobileActionBar elevated={false}>
       <HStack gap="100">
         {primary}
         <MobileMoreSheet title={user.nickname}>

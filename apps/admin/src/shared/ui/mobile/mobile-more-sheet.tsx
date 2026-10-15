@@ -31,7 +31,11 @@ export function MobileMoreSheet({
       <Sheet.Popup>
         <Sheet.Handle />
         <Sheet.Title className="mb-150 text-heading3">{title}</Sheet.Title>
-        <VStack gap="075" onClickCapture={() => setOpen(false)}>
+        <VStack
+          gap="075"
+          className="[&>*]:min-h-12 [&>*]:w-full"
+          onClickCapture={() => setOpen(false)}
+        >
           {children}
         </VStack>
         <Sheet.Footer className="mt-150 border-t border-gray-200">

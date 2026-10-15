@@ -1,5 +1,14 @@
-import { PostDetailLoading } from "@/views/post-detail";
+import { PostDetailLoading, PostDetailMobileLoading } from "@/views/post-detail";
 
 export default function Loading() {
-  return <PostDetailLoading />;
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <PostDetailLoading />
+      </div>
+      <div className="contents lg:hidden">
+        <PostDetailMobileLoading />
+      </div>
+    </>
+  );
 }

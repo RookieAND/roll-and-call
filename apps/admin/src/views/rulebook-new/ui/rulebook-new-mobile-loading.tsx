@@ -34,7 +34,7 @@ export function RulebookNewMobileLoading() {
           <SkeletonField label="변경 사유" height={64} />
         </VStack>
       </LoadingRegion>
-      <MobileActionBar>
+      <MobileActionBar elevated={false}>
         <Text typography="body4" foreground="hint">
           추가한 내용과 사유는 활동 기록에 남습니다.
         </Text>

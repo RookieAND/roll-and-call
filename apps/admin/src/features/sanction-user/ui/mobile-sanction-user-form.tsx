@@ -50,7 +50,7 @@ export function MobileSanctionUserForm({
         />
         <NotificationPreview payload={form.preview} />
       </VStack>
-      <MobileActionBar>
+      <MobileActionBar elevated={false}>
         <Text typography="body4" foreground="hint">
           {form.reason
             ? "확정하면 당사자의 알림 탭으로 알리고, 제재는 활동 기록에 남습니다."

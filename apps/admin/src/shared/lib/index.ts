@@ -60,3 +60,4 @@ export { isRecognizedPost } from "./recognized-session";
 export { supplementCores } from "./supplement-cores";
 export { waitedDays } from "./waited-days";
 export { gameStatus } from "./game-status";
+export { withoutYear } from "./without-year";

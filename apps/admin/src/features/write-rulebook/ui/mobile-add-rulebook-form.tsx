@@ -101,7 +101,7 @@ export function MobileAddRulebookForm({
           />
         ) : null}
       </VStack>
-      <MobileActionBar>
+      <MobileActionBar elevated={false}>
         <Text typography="body4" foreground="hint">
           {category.error ? "카테고리를 골라야 추가할 수 있습니다" : form.footerNote}
         </Text>

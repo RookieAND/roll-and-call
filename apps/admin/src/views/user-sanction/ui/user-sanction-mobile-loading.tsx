@@ -29,7 +29,7 @@ export function UserSanctionMobileLoading() {
           </FormSection>
         </VStack>
       </LoadingRegion>
-      <MobileActionBar>
+      <MobileActionBar elevated={false}>
         <Text typography="body4" foreground="hint">
           사유를 입력해야 확정할 수 있습니다
         </Text>

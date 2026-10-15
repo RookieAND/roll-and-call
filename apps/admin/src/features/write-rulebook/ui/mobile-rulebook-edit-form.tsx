@@ -86,7 +86,7 @@ export function MobileRulebookEditForm({ rulebook, viewerId }: MobileRulebookEdi
           </Field.Root>
         </MobileFormSection>
       </VStack>
-      <MobileActionBar>
+      <MobileActionBar elevated={false}>
         <Button
           size="lg"
           loading={form.checking || (form.saving.pending && !form.dialogOpen)}

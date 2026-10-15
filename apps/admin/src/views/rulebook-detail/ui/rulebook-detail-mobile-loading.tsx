@@ -27,7 +27,7 @@ export function RulebookDetailMobileLoading() {
           <Skeleton width="100%" height={160} rounded={400} />
         </VStack>
       </LoadingRegion>
-      <MobileActionBar>
+      <MobileActionBar elevated={false}>
         <Button size="lg" disabled>
           저장
         </Button>

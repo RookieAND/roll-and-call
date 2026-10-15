@@ -25,7 +25,7 @@ export function RulebooksMobileLoading() {
         </VStack>
         <SkeletonListRows />
       </LoadingRegion>
-      <MobileActionBar>
+      <MobileActionBar elevated={false}>
         <Button size="lg" disabled>
           룰북 추가
         </Button>

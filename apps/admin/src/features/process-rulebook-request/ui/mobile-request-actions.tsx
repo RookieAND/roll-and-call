@@ -15,7 +15,7 @@ export function MobileRequestActions({ similar, actionHrefs }: MobileRequestActi
   const primary = similar ? REQUEST_ACTION.link : REQUEST_ACTION.add;
   const others = Object.values(REQUEST_ACTION).filter((action) => action !== primary);
   return (
-    <MobileActionBar>
+    <MobileActionBar elevated={false}>
       <HStack gap="100">
         <Button
           size="lg"
