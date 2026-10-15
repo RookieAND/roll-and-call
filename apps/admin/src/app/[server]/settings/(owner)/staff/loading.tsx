@@ -1,5 +1,14 @@
-import { SettingsStaffLoading } from "@/views/settings";
+import { SettingsStaffLoading, SettingsMobileLoading } from "@/views/settings";
 
 export default function Loading() {
-  return <SettingsStaffLoading />;
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <SettingsStaffLoading />
+      </div>
+      <div className="contents lg:hidden">
+        <SettingsMobileLoading active="/settings/staff" />
+      </div>
+    </>
+  );
 }

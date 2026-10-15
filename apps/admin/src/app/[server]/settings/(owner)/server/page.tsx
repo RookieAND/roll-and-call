@@ -2,7 +2,7 @@ import type { RankingMode } from "@roll-and-call/database/servers/model";
 import type { Metadata } from "next";
 
 import { getCurrentServer } from "@/shared/server";
-import { ServerSettingsForm } from "@/views/settings";
+import { ServerSettingsForm, ServerSettingsMobileForm } from "@/views/settings";
 
 export const metadata: Metadata = { title: "설정 · 서버 설정" };
 
@@ -10,12 +10,20 @@ export const metadata: Metadata = { title: "설정 · 서버 설정" };
 export default async function SettingsServerPage() {
   const server = await getCurrentServer();
   const userAppUrl = process.env.NEXT_PUBLIC_USER_APP_URL ?? "";
+  const props = {
+    server: { name: server.name, slug: server.slug, icon: server.icon },
+    savedInviteUrl: server.inviteUrl ?? "",
+    savedRankingMode: server.rankingMode as RankingMode,
+    joinUrl: `${userAppUrl}/${server.slug}/join`,
+  };
   return (
-    <ServerSettingsForm
-      server={{ name: server.name, slug: server.slug, icon: server.icon }}
-      savedInviteUrl={server.inviteUrl ?? ""}
-      savedRankingMode={server.rankingMode as RankingMode}
-      joinUrl={`${userAppUrl}/${server.slug}/join`}
-    />
+    <>
+      <div className="contents max-lg:hidden">
+        <ServerSettingsForm {...props} />
+      </div>
+      <div className="contents lg:hidden">
+        <ServerSettingsMobileForm {...props} />
+      </div>
+    </>
   );
 }

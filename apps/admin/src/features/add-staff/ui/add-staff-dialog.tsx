@@ -36,6 +36,7 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
   const selected = candidates.find((candidate) => candidate.id === selectedId);
   const emptyResult = searched && candidates.length === 0;
   const confirmLabel = networkError ? "다시 시도" : "운영진으로 추가";
+  const disabledReason = selected ? null : "운영진으로 추가할 사람을 골라 주세요";
 
   const add = async () => {
     if (!selected) return;
@@ -101,7 +102,11 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
             />
           </VStack>
         </ResponsiveDialog.Body>
-        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <ResponsiveDialog.Footer
+          layout="row"
+          className={MODAL_FOOTER_CLASS}
+          disabledReason={disabledReason}
+        >
           <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}
