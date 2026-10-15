@@ -10,3 +10,4 @@ export { supplementCoresOpened } from "./supplement-cores-opened";
 export { rejectionSummary } from "./rejection-summary";
 export { revokeCancelRulebookIds } from "./revoke-cancel-rulebook-ids";
 export { pickBulkQuizBooks } from "./pick-bulk-quiz-books";
+export { CERT_PHOTO_BUCKET, certPhotoPathOf } from "./cert-photo-path";

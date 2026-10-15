@@ -1,15 +1,8 @@
+import { certPhotoPathOf as storedCertPhotoPathOf } from "@roll-and-call/database/certifications/model";
+
 import { isSupabaseUrl } from "./is-supabase-url";
 
-export const CERT_PHOTO_BUCKET = "cert-photos";
-
-// 버킷은 비공개지만 DB에는 공개 URL 모양 문자열을 "파일 키"로 저장한다.
-// 하루 정리 함수 orphan_storage_objects(0041)가 이 모양으로 연결 여부를 판단하므로, 경로로 바꾸면 모든 인증 사진이 지워진다.
-// 화면에는 이 키를 그리지 않고 signCertPhotoUrls의 서명 URL만 그린다.
-const PUBLIC_PREFIX = `/storage/v1/object/public/${CERT_PHOTO_BUCKET}/`;
-
-export function certPhotoPathOf(url: string): string | null {
-  const prefixIndex = url.indexOf(PUBLIC_PREFIX);
-  if (prefixIndex < 0 || !isSupabaseUrl(url)) return null;
-  const path = decodeURIComponent(url.slice(prefixIndex + PUBLIC_PREFIX.length).split("?")[0]!);
-  return path || null;
+// 우리 Supabase 주소일 때만 경로로 본다. 지우기·본인 파일 확인이 다른 호스트 주소를 믿지 않게 한다.
+export function certPhotoPathOf(url: string) {
+  return isSupabaseUrl(url) ? storedCertPhotoPathOf(url) : null;
 }
