@@ -4,7 +4,7 @@ import { Card, Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/
 import { range } from "es-toolkit";
 import { useParams } from "next/navigation";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar, PageShell } from "@/shared/ui";
 
 const QUEUES = [
   { key: "confirmed", rows: 3 },
@@ -14,11 +14,26 @@ const QUEUES = [
 export function ManageParticipantsSkeleton() {
   const { id } = useParams<{ id: string }>();
   return (
-    <>
-      <AppBar back={`/games/${id}/manage`} title="참여자 관리" />
-      <Container size="md">
-        <VStack gap="250" className="py-200" aria-busy>
-          <VStack gap="150">
+    <PageShell
+      appBar={<AppBar back={`/games/${id}/manage`} title="참여자 관리" />}
+      panel={
+        <VStack gap="150" aria-busy>
+          <HStack align="center" gap="075">
+            <Skeleton height={28} className="min-w-0 flex-1" />
+            <Skeleton width={56} height={21} rounded={300} />
+            <Skeleton width={64} height={21} rounded={300} />
+          </HStack>
+          <Grid cols={2} gap="100">
+            <Skeleton height={73} rounded={500} />
+            <Skeleton height={73} rounded={500} />
+          </Grid>
+          <Skeleton height={45} rounded={500} />
+        </VStack>
+      }
+    >
+      <Container size="md" className="desktop:px-0">
+        <VStack gap="250" className="py-200 desktop:pt-0 desktop:pb-0" aria-busy>
+          <VStack gap="150" className="desktop:hidden">
             <HStack align="center" gap="075">
               <Skeleton height={28} className="min-w-0 flex-1" />
               <Skeleton width={56} height={21} rounded={300} />
@@ -64,6 +79,6 @@ export function ManageParticipantsSkeleton() {
           ))}
         </VStack>
       </Container>
-    </>
+    </PageShell>
   );
 }

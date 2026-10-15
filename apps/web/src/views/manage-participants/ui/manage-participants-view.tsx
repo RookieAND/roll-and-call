@@ -12,7 +12,7 @@ import {
   getGameParticipants,
   getCurrentServer,
 } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, PageShell } from "@/shared/ui";
 
 import { summarizeRoster } from "../model/roster-summary";
 import { toManagedMember } from "../model/to-managed-member";
@@ -33,10 +33,9 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
 
   if (!user || user.id !== game.gmId) {
     return (
-      <>
-        <AppBar back={`/games/${id}`} title="참여자 관리" />
-        <Container size="sm">
-          <div className="py-300">
+      <PageShell appBar={<AppBar back={`/games/${id}`} title="참여자 관리" />}>
+        <Container size="sm" className="desktop:px-0">
+          <div className="py-300 desktop:py-0">
             <GmOnlyNotice
               gameId={id}
               signedIn={!!user}
@@ -44,7 +43,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
             />
           </div>
         </Container>
-      </>
+      </PageShell>
     );
   }
   if (game.cancelledAt || isSessionEnded(game)) {
