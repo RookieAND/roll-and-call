@@ -6,7 +6,7 @@ import {
   type SettingIds,
 } from "@/features/edit-server-settings";
 import { getCurrentServer, requireStaff } from "@/shared/server";
-import { DiscordSettingsForm } from "@/views/discord";
+import { DiscordSettingsForm, DiscordSettingsMobileForm } from "@/views/discord";
 
 export const metadata: Metadata = { title: "Discord · 디스코드 연동" };
 
@@ -18,12 +18,20 @@ export default async function DiscordLinkPage() {
   ) as SettingIds;
   const canCheck = viewer.role === "owner" && server.botConnected;
   const savedChecks = canCheck ? await checkServerSettings(savedIds) : {};
+  const props = {
+    serverName: server.name,
+    botConnected: server.botConnected,
+    savedIds,
+    savedChecks,
+  };
   return (
-    <DiscordSettingsForm
-      serverName={server.name}
-      botConnected={server.botConnected}
-      savedIds={savedIds}
-      savedChecks={savedChecks}
-    />
+    <>
+      <div className="contents max-lg:hidden">
+        <DiscordSettingsForm {...props} />
+      </div>
+      <div className="contents lg:hidden">
+        <DiscordSettingsMobileForm {...props} />
+      </div>
+    </>
   );
 }

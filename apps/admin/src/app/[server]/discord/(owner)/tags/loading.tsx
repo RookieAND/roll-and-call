@@ -1,5 +1,14 @@
-import { ForumTagsLoading } from "@/views/discord";
+import { DiscordMobileLoading, ForumTagsLoading } from "@/views/discord";
 
 export default function Loading() {
-  return <ForumTagsLoading />;
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <ForumTagsLoading />
+      </div>
+      <div className="contents lg:hidden">
+        <DiscordMobileLoading active="/discord/tags" />
+      </div>
+    </>
+  );
 }

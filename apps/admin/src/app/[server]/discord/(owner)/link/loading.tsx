@@ -1,5 +1,14 @@
-import { DiscordSettingsLoading } from "@/views/discord";
+import { DiscordSettingsMobileLoading, DiscordSettingsLoading } from "@/views/discord";
 
 export default function Loading() {
-  return <DiscordSettingsLoading />;
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <DiscordSettingsLoading />
+      </div>
+      <div className="contents lg:hidden">
+        <DiscordSettingsMobileLoading />
+      </div>
+    </>
+  );
 }
