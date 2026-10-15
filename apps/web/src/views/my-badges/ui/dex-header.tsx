@@ -11,7 +11,11 @@ interface DexHeaderProps {
 export function DexHeader({ earnedCount, featured }: DexHeaderProps) {
   return (
     <>
-      <HStack align="baseline" gap="100" className="border-b-8 border-gray-50 p-200">
+      <HStack
+        align="baseline"
+        gap="100"
+        className="border-b-8 border-gray-50 p-200 desktop:border-b desktop:border-gray-200"
+      >
         <Text typography="body2" weight="bold" foreground="muted" className="flex-1">
           받은 업적
         </Text>
@@ -19,7 +23,7 @@ export function DexHeader({ earnedCount, featured }: DexHeaderProps) {
           {earnedCount}개
         </Text>
       </HStack>
-      <VStack gap="150" className="border-b-8 border-gray-50 p-200">
+      <VStack gap="150" className="border-b-8 border-gray-50 p-200 desktop:border-b-0">
         <HStack align="center" gap="150">
           <VStack gap="025" className="min-w-0 flex-1">
             <Text typography="heading3" render={<h2 />}>

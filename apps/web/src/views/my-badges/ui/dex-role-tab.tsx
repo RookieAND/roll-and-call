@@ -52,9 +52,11 @@ export function DexRoleTab({ role, board }: DexRoleTabProps) {
         <DexNextCard next={board.reviews.next} />
       </DexSection>
 
-      <DexSection title={board.monthly.title}>
-        <DexMonthlyCard card={board.monthly} />
-      </DexSection>
+      <div className="desktop:hidden">
+        <DexSection title={board.monthly.title}>
+          <DexMonthlyCard card={board.monthly} />
+        </DexSection>
+      </div>
     </>
   );
 }

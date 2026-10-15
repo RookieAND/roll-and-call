@@ -12,7 +12,7 @@ import {
   getUserBadges,
   getCurrentServer,
 } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { SessionTabs } from "@/widgets/session-list";
 
 import { roleGroups } from "../model/role-groups";
@@ -38,9 +38,12 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
   const back = `/users/${id}`;
   if (!profile.showBadges) {
     return (
-      <>
-        <AppBar back={back} title={title} />
-        <VStack align="center" gap="100" className="px-300 pt-500 pb-600 text-center">
+      <PageShell appBar={<AppBar back={back} title={title} />}>
+        <VStack
+          align="center"
+          gap="100"
+          className={`px-300 pt-500 pb-600 text-center ${DESKTOP_CARD_CLASS}`}
+        >
           <span className="flex size-16 items-center justify-center rounded-full border-2 border-dashed border-gray-300 bg-canvas text-hint">
             <Lock size={24} aria-hidden />
           </span>
@@ -49,7 +52,7 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
             프로필 주인이 업적을 숨겨 두었습니다.
           </Text>
         </VStack>
-      </>
+      </PageShell>
     );
   }
 
@@ -66,17 +69,21 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
   const groups = roleGroups({ tab: activeTab, held, records, now });
 
   return (
-    <>
-      <AppBar
-        back={back}
-        title={title}
-        action={
-          <Text typography="body3" foreground="hint" numeric className="pr-125">
-            {counts.total}개
-          </Text>
-        }
-      />
-      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface">
+    <PageShell
+      appBar={
+        <AppBar
+          back={back}
+          title={title}
+          action={
+            <Text typography="body3" foreground="hint" numeric className="pr-125">
+              {counts.total}개
+            </Text>
+          }
+        />
+      }
+    >
+      <div className={DESKTOP_CARD_CLASS}>
+      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface desktop:static">
         <Container size="sm" className="px-0">
           <SessionTabs label="분류" tabs={tabs} activeKey={activeTab} />
         </Container>
@@ -88,6 +95,7 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
           <UserBadgesEmpty tab={activeTab} />
         )}
       </Container>
-    </>
+      </div>
+    </PageShell>
   );
 }
