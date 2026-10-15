@@ -11,6 +11,7 @@
     "./doc": "./src/rich-text-doc.ts",
     "./viewer": "./src/rich-text.tsx",
     "./links": "./src/links.ts",
+    "./markdown": "./src/rich-text-markdown.ts",
     "./styles.css": "./src/styles.css"
   },
   "scripts": {

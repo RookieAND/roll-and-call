@@ -2,10 +2,10 @@ import { formatDateTime } from "@roll-and-call/app-kit/date";
 import { formatGameSchedule } from "@roll-and-call/app-kit/date";
 import type { Game } from "@roll-and-call/database";
 import { formatPlayRange, RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
+import { richTextToMarkdown } from "@roll-and-call/tiptap/markdown";
 
 import { inlineCodeTags } from "./inline-code-tags";
 import { formatRecruitHeadcount } from "./lib/format-recruit-headcount";
-import { richTextToMarkdown } from "./lib/rich-text-markdown";
 import { splitMessage } from "./split-message";
 
 const MESSAGE_LIMIT = 2000;

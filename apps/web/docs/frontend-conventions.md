@@ -10,11 +10,15 @@
 | `packages/tiptap`  | 리치 텍스트(Tiptap) 에디터·뷰어·문서 모델                 | RichTextEditor, RichText, toRichTextDoc                                               |
 | `packages/discord` | Discord REST 클라이언트(도메인 무관)                      | sendDiscordMessage, editDiscordMessage, createForumMessagePost                       |
 | `packages/database` | `src/schema/<도메인>.ts`와 `src/modules/<도메인>/{queries,commands,model}`. 도메인은 servers·profiles·games·reviews·badges·rulebooks·certifications·moderation·notifications·onboarding. 서버 코드는 `@roll-and-call/database/<도메인>`, 클라이언트에서도 쓰는 순수 값·규칙은 `/<도메인>/model`(db를 읽지 않는다)에서 가져온다. 서버별 표를 쓰는 함수는 `serverId` 필수. 앱은 `.`에서 타입만 가져오고 `db`·표·drizzle-orm을 직접 쓰지 않는다 | GAME_STATUS, PARTICIPANT_STATUS, deriveGameStatus, countConfirmed |
+| `packages/game-notices` | 두 앱이 함께 보내는 디스코드 구인글·공지, 후기 포럼 동기화(`/review-forum`) | notifyGameCancelled, syncReviewForumPost |
+| `packages/app-kit` | 두 앱이 똑같이 쓰는 KST 날짜·Supabase 클라이언트·작은 유틸 | formatDateTime, serverPath, parseJson |
 | `shared/ui`        | 앱 공용(도메인 약함) 조합 컴포넌트                        | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                                  |
 | `entities/*`       | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위 | game, profile, availability                                                           |
 | `features/*`       | **단일 사용자 동작**(server action·toggle 등 상태 변경)   | JoinGameButton, CancelGameRow, GameStatusChips, ThumbnailUpload                       |
 | `widgets/*`        | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)    | game-form, session-list                                                               |
 | `views/*`          | 한 화면의 조합 전체 + 라우트 글루                         | GamesView, GameDetail, ParticipantManager                                             |
+
+패키지는 두 앱이 같이 쓸 때만 만든다. 한 앱만 쓰는 코드는 그 앱의 `shared`나 slice에 둔다.
 
 `@roll-and-call/tiptap`을 `@roll-and-call/ui`에서 떼어 둔 이유는 하나다. UI 키트 배럴은 거의 모든 화면이 import하므로 여기에 tiptap이 섞이면 에디터를 안 쓰는 화면까지 번들이 무거워진다. 시놉시스 저장값은 Tiptap JSON 문자열이고, 서버(디스코드 문구)는 React 없이 `@roll-and-call/tiptap/doc`의 문서 모델만 가져다 쓴다.
 

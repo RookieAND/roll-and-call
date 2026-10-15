@@ -3,7 +3,7 @@ import {
   DEFAULT_REVIEW_TEMPLATE,
   renderReviewTemplate,
 } from "@roll-and-call/database/servers/model";
-import { richTextToMarkdown } from "@roll-and-call/game-notices/rich-text-markdown";
+import { richTextToMarkdown } from "@roll-and-call/tiptap/markdown";
 
 import { extensionOf } from "./extension-of";
 import { ruleTagName } from "./rule-tag-name";

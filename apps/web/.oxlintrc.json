@@ -27,7 +27,7 @@
                   "@roll-and-call/discord",
                   "@roll-and-call/discord/*",
                   "@roll-and-call/game-notices",
-                  "@roll-and-call/review-forum"
+                  "@roll-and-call/game-notices/*"
                 ],
                 "message": "체험 환경은 디스코드를 부르지 않는다.",
                 "allowTypeImports": true

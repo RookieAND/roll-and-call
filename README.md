@@ -12,7 +12,8 @@ ORPG 세션 구인·예약 서비스. 구인글을 올리면 디스코드로 알
 | `packages/ui`           | 디자인 시스템 (`@roll-and-call/ui`)                           |
 | `packages/tiptap`       | 리치 텍스트 에디터·뷰어·문서 모델                             |
 | `packages/discord`      | Discord REST 클라이언트                                       |
-| `packages/review-forum` | 공개 후기를 디스코드 포럼 글로 동기화                         |
+| `packages/game-notices` | 디스코드 구인글·공지 작성과 발송, 후기 포럼 동기화            |
+| `packages/app-kit`      | 두 앱이 같이 쓰는 날짜·Supabase 클라이언트·유틸               |
 | `supabase/functions/*`  | Supabase Edge Functions (세션 알림, 고아 파일 정리)           |
 | `configs/*`             | 공용 TypeScript·oxlint 설정                                   |
 

@@ -18,7 +18,6 @@
     "@roll-and-call/database": "workspace:*",
     "@roll-and-call/discord": "workspace:*",
     "@roll-and-call/game-notices": "workspace:*",
-    "@roll-and-call/review-forum": "workspace:*",
     "@roll-and-call/tiptap": "workspace:*",
     "@roll-and-call/ui": "workspace:*",
     "@supabase/ssr": "^0.12.4",

@@ -5,7 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./rich-text-markdown": "./src/lib/rich-text-markdown.ts"
+    "./review-forum": "./src/review-forum/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
