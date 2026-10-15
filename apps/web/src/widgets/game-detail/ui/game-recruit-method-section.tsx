@@ -52,7 +52,12 @@ export function GameRecruitMethodSection({ game, now }: GameRecruitMethodSection
             <Text typography="subtitle1" weight="extrabold" render={<p />}>
               {recruitMethodLabel(game.recruitMethod)}
             </Text>
-            <Text typography="body3" foreground="muted" render={<p />} className="text-pretty break-keep">
+            <Text
+              typography="body3"
+              foreground="muted"
+              render={<p />}
+              className="text-pretty break-keep"
+            >
               {lines[0]}
               <br />
               {lines[1]}

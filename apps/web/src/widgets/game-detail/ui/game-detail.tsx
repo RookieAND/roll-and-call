@@ -13,13 +13,16 @@ import {
   scheduleLine,
   splitRoster,
 } from "@/entities/game";
+import { ERROR_DISPLAY } from "@/shared/api";
+import { ErrorBoundary } from "@/shared/error-boundary";
 import { ddayKst, formatDday } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, PageShell } from "@/shared/ui";
 
 import { deriveActionView } from "../model/derive-action-view";
 import type { ActionSanction } from "../model/game-action-view";
 import type { ReviewStatus } from "../model/review-status";
+import { GameActionZone } from "./game-action-zone";
 import { GameDetailActions } from "./game-detail-actions";
 import { GameDetailHeader } from "./game-detail-header";
 import { GameDetailThumbnail } from "./game-detail-thumbnail";
@@ -92,21 +95,47 @@ export function GameDetail({
     now,
   });
 
+  // 모집 방식·명단·신청 막대는 모바일에서는 본문 안에, 1100px 이상에서는 우측 패널에 둔다. 같은 요소를 두 자리에 그리고 폭으로 한쪽을 숨긴다.
+  const recruitMethod = <GameRecruitMethodSection game={game} now={now} />;
+  const roster = (
+    <GameRosterSection
+      gm={{ userId: game.gmId, ...game.gm }}
+      confirmed={confirmed}
+      waiting={waiting}
+      maxPlayers={game.maxPlayers}
+      awaitingResult={isAwaitingResult(game)}
+      selection={game.recruitMethod === RECRUIT_METHOD.selection}
+      viewerId={viewerId}
+    />
+  );
+
   return (
-    <>
-      <AppBar
-        back="/games"
-        backHistory={false}
-        title="구인 상세"
-        heading={false}
-        action={<ShareButton gameId={game.id} title={game.title} />}
-      />
+    <PageShell
+      appBar={
+        <AppBar
+          back="/games"
+          backHistory={false}
+          title="구인 상세"
+          heading={false}
+          action={<ShareButton gameId={game.id} title={game.title} />}
+        />
+      }
+      panel={
+        <VStack gap="200">
+          {recruitMethod}
+          {roster}
+          <ErrorBoundary display={ERROR_DISPLAY.toast}>
+            <GameActionZone game={game} view={actionView} />
+          </ErrorBoundary>
+        </VStack>
+      }
+    >
       {belowAppBar}
       <Container size="md" className="px-0">
         <VStack gap="200">
           <GameDetailThumbnail url={game.thumbnailUrl} spoiler={game.thumbnailSpoiler} />
 
-          <VStack gap="250" className="px-200 pb-100">
+          <VStack gap="250" className="px-200 pb-100 desktop:px-0 desktop:pb-0">
             <GameDetailHeader
               title={game.title}
               kind={game.kind}
@@ -126,24 +155,18 @@ export function GameDetail({
 
             <GamePreflightSection game={game} />
 
-            <GameRecruitMethodSection game={game} now={now} />
+            <div className="desktop:hidden">{recruitMethod}</div>
 
             {game.images.length > 0 && <GameImageGallery images={game.images} />}
 
-            <GameRosterSection
-              gm={{ userId: game.gmId, ...game.gm }}
-              confirmed={confirmed}
-              waiting={waiting}
-              maxPlayers={game.maxPlayers}
-              awaitingResult={isAwaitingResult(game)}
-              selection={game.recruitMethod === RECRUIT_METHOD.selection}
-              viewerId={viewerId}
-            />
+            <div className="desktop:hidden">{roster}</div>
           </VStack>
 
-          <GameDetailActions game={game} view={actionView} />
+          <div className="desktop:hidden">
+            <GameDetailActions game={game} view={actionView} />
+          </div>
         </VStack>
       </Container>
-    </>
+    </PageShell>
   );
 }

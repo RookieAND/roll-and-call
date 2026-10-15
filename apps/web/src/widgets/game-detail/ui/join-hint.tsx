@@ -7,7 +7,12 @@ interface JoinHintProps {
 
 export function JoinHint({ children }: JoinHintProps) {
   return (
-    <Text typography="body4" foreground="hint" render={<p />} className="text-center text-pretty break-keep">
+    <Text
+      typography="body4"
+      foreground="hint"
+      render={<p />}
+      className="text-center text-pretty break-keep"
+    >
       {children}
     </Text>
   );

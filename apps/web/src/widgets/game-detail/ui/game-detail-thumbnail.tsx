@@ -5,7 +5,7 @@ import { useState } from "react";
 import { GameThumbnail } from "@/entities/game";
 
 const THUMBNAIL_SIZES = "(max-width: 412px) 100vw, 412px";
-const THUMBNAIL_CLASS = "h-42 w-full";
+const THUMBNAIL_CLASS = "h-42 w-full desktop:h-50 desktop:rounded-600";
 
 interface GameDetailThumbnailProps {
   url: string | null;
