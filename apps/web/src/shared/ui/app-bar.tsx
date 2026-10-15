@@ -76,7 +76,10 @@ export function AppBar({
         <>
           <HStack align="center" gap="100" className="min-w-0 desktop:hidden">
             <HStack render={titleElement} className="flex-none">
-              <ServerLink path="/">
+              <ServerLink
+                path="/"
+                className="rounded-300 focus-visible:outline-2 focus-visible:outline-tinted-ink"
+              >
                 <BrandLogo label={title} />
               </ServerLink>
             </HStack>

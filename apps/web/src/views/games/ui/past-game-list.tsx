@@ -31,7 +31,7 @@ export function PastGameList({ gamesPage, page, filter }: PastGameListProps) {
             {group.label}
           </Text>
           {group.items.map((game) => (
-            <ServerLink key={game.id} path={`/games/${game.id}`} className="block h-full">
+            <ServerLink key={game.id} path={`/games/${game.id}`} className="block h-full rounded-600 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink">
               <PastGameCard game={game} />
             </ServerLink>
           ))}

@@ -42,7 +42,7 @@ export function DesktopNavServer({ current, servers, memberCount }: DesktopNavSe
       trigger={
         <HStack
           render={<button type="button" aria-label={`${current.name}, 다른 서버로 옮기기`} />}
-          className={`${className} cursor-pointer outline-none hover:brightness-[.96] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink`}
+          className={`${className} cursor-pointer hover:brightness-[.96] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink`}
         >
           {body}
         </HStack>

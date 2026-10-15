@@ -42,7 +42,7 @@ export function DesktopNav({ current, servers = [], memberCount, profile }: Desk
       >
         <Link
           href={serverHome}
-          className="outline-none focus-visible:outline-2 focus-visible:outline-tinted-ink"
+          className="focus-visible:outline-2 focus-visible:outline-tinted-ink"
         >
           <BrandLogo label="롤앤콜" />
         </Link>
@@ -72,7 +72,7 @@ export function DesktopNav({ current, servers = [], memberCount, profile }: Desk
         <div className="mt-auto flex flex-col gap-050 border-t border-gray-200 p-150">
           <Link
             href={`/help?from=${current.slug}`}
-            className="flex min-h-11 items-center gap-150 rounded-500 px-150 text-gray-600 outline-none hover:brightness-[.96] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink"
+            className="flex min-h-11 items-center gap-150 rounded-500 px-150 text-gray-600 hover:brightness-[.96] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink"
           >
             <CircleHelp size={22} strokeWidth={1.9} aria-hidden />
             <Text typography="body2" weight="medium" foreground="inherit">

@@ -28,7 +28,7 @@ export function DesktopNavItem({
       aria-disabled={disabled || undefined}
       tabIndex={disabled ? -1 : undefined}
       className={cn(
-        "relative flex min-h-11 items-center gap-150 rounded-500 px-150 outline-none transition-[filter] hover:brightness-[.96] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink",
+        "relative flex min-h-11 items-center gap-150 rounded-500 px-150 transition-[filter] hover:brightness-[.96] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink",
         active ? "bg-tinted-bg text-tinted-ink" : "text-gray-600",
         disabled && "pointer-events-none",
       )}

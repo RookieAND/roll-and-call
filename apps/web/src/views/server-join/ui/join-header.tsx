@@ -10,7 +10,10 @@ export function JoinHeader() {
       render={<header />}
       className="relative h-(--rc-size-appbar) flex-none px-200"
     >
-      <Link href="/" className="flex h-11 items-center">
+      <Link
+        href="/"
+        className="flex h-11 items-center rounded-300 focus-visible:outline-2 focus-visible:outline-tinted-ink"
+      >
         <BrandLogo label="롤앤콜 소개" />
       </Link>
     </HStack>

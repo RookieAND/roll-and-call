@@ -27,7 +27,7 @@ export function TrialJobList({ applied, now, mine = null }: TrialJobListProps) {
       <Container size="md">
         <VStack gap="125" className="py-200">
           {games.map((game) => (
-            <ServerLink key={game.id} path={`/games/${game.id}`} className="block h-full">
+            <ServerLink key={game.id} path={`/games/${game.id}`} className="block h-full rounded-600 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink">
               <GameCard game={game} />
             </ServerLink>
           ))}

@@ -27,7 +27,7 @@ export async function LiveGameList({ gamesPage, page, filter }: LiveGameListProp
           <Link
             key={game.id}
             href={serverPath({ slug: server.slug, path: `/games/${game.id}` })}
-            className="block h-full"
+            className="block h-full rounded-600 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink"
           >
             <GameCard game={game} />
           </Link>
