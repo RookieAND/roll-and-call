@@ -5,12 +5,7 @@ import { HStack } from "@roll-and-call/ui";
 import { MoreMenu } from "@/shared/ui";
 
 import { REQUEST_ACTION, type RequestAction } from "../model/request-action";
-
-const ACTION_LABEL = {
-  [REQUEST_ACTION.add]: "룰북 추가 심사하기",
-  [REQUEST_ACTION.link]: "기존 룰북에 연결",
-  [REQUEST_ACTION.reject]: "요청 반려",
-} as const;
+import { REQUEST_ACTION_LABEL } from "../model/request-action-label";
 
 interface RequestActionsProps {
   label: string;
@@ -30,7 +25,7 @@ export function RequestActions({ label, similar, actionHrefs }: RequestActionsPr
       <MoreMenu
         label={`${label} 처리`}
         items={actions.map((action) => ({
-          label: ACTION_LABEL[action],
+          label: REQUEST_ACTION_LABEL[action],
           href: actionHrefs[action],
           scroll: false,
           danger: action === REQUEST_ACTION.reject,

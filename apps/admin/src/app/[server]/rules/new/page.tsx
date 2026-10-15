@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { listRulebookRequests, listRulebooks } from "@/entities/rulebook/server";
 import { serverPath } from "@/shared/lib";
 import { getCurrentServer, requireStaff } from "@/shared/server";
-import { RulebookNewView } from "@/views/rulebook-new";
+import { RulebookNewMobileView, RulebookNewView } from "@/views/rulebook-new";
 
 export const metadata: Metadata = { title: "룰북 추가" };
 
@@ -23,12 +23,25 @@ export default async function RulebookNewPage({ searchParams }: PageProps<"/[ser
   if (isString(requestId) && !request) {
     redirect(serverPath({ slug: server.slug, path: "/rules?tab=requests" }));
   }
+  const initialCategory = isString(category) ? category : undefined;
   return (
-    <RulebookNewView
-      rulebooks={rows}
-      request={request}
-      initialCategory={isString(category) ? category : undefined}
-      viewerId={staff.id}
-    />
+    <>
+      <div data-view="desktop" className="contents max-lg:hidden">
+        <RulebookNewView
+          rulebooks={rows}
+          request={request}
+          initialCategory={initialCategory}
+          viewerId={staff.id}
+        />
+      </div>
+      <div data-view="mobile" className="contents lg:hidden">
+        <RulebookNewMobileView
+          rulebooks={rows}
+          request={request}
+          initialCategory={initialCategory}
+          viewerId={staff.id}
+        />
+      </div>
+    </>
   );
 }

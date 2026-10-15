@@ -6,7 +6,9 @@
   --container-page: 1280px;
 }
 
-[data-slot="admin-main"] > :not([data-full-bleed]) {
+/* 데스크톱·모바일 View를 감싼 전환 상자(display: contents) 안쪽도 본문의 바로 아래 칸으로 본다. */
+[data-slot="admin-main"] > :not([data-full-bleed], [data-view]),
+[data-slot="admin-main"] > [data-view] > :not([data-full-bleed]) {
   width: 100%;
   max-width: var(--container-page);
   margin-inline: auto;

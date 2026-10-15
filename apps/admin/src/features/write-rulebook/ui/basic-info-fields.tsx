@@ -13,6 +13,8 @@ interface BasicInfoFieldsProps {
   nameError?: string;
   disabled?: boolean;
   withAliases?: boolean;
+  // 모바일은 입력란을 한 줄에 하나씩 쌓는다.
+  stacked?: boolean;
   onChange: (changes: Partial<RulebookDraft>) => void;
   children?: ReactNode;
 }
@@ -26,6 +28,7 @@ export function BasicInfoFields({
   nameError,
   disabled,
   withAliases = true,
+  stacked,
   onChange,
   children,
 }: BasicInfoFieldsProps) {
@@ -33,7 +36,13 @@ export function BasicInfoFields({
     draft.kind === "core" && draft.name.trim() ? draft.name.trim() : "검색 또는 새 이름";
   return (
     <VStack gap="150">
-      <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_120px] items-start gap-125">
+      <div
+        className={
+          stacked
+            ? "grid grid-cols-1 gap-150"
+            : "grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_120px] items-start gap-125"
+        }
+      >
         <Field.Root
           label="카테고리"
           htmlFor={`${idPrefix}-category`}

@@ -8,7 +8,7 @@ import {
 } from "@/entities/user";
 import { listUsers } from "@/entities/user/server";
 import { MEMBERSHIP_STATUS, parseSort, stringParams } from "@/shared/lib";
-import { UsersView } from "@/views/users";
+import { UsersMobileView, UsersView } from "@/views/users";
 
 export const metadata: Metadata = { title: "유저" };
 
@@ -29,14 +29,28 @@ export default async function UsersPage({ searchParams }: PageProps<"/[server]/u
     sort,
   });
   return (
-    <UsersView
-      rows={rows}
-      membershipCounts={membershipCounts}
-      sort={sort}
-      page={page}
-      query={query}
-      filter={activeFilter}
-      membership={activeMembership}
-    />
+    <>
+      <div data-view="desktop" className="contents max-lg:hidden">
+        <UsersView
+          rows={rows}
+          membershipCounts={membershipCounts}
+          sort={sort}
+          page={page}
+          query={query}
+          filter={activeFilter}
+          membership={activeMembership}
+        />
+      </div>
+      <div data-view="mobile" className="contents lg:hidden">
+        <UsersMobileView
+          rows={rows}
+          membershipCounts={membershipCounts}
+          sort={sort}
+          query={query}
+          filter={activeFilter}
+          membership={activeMembership}
+        />
+      </div>
+    </>
   );
 }

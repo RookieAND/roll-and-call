@@ -8,6 +8,7 @@ import {
   Textarea,
   VStack,
 } from "@roll-and-call/ui";
+import { useId } from "react";
 
 import { ChoiceRowList, FormSection, ReasonChips, Tag, type ChoiceRow } from "@/shared/ui";
 
@@ -33,6 +34,8 @@ export function SanctionForm({
   onDraftChange,
   onChoiceChange,
 }: SanctionFormProps) {
+  // 데스크톱·모바일 폼이 한 화면에 같이 있어 id가 겹치지 않게 한다.
+  const memoId = useId();
   return (
     <VStack gap="250" className="rounded-600 border border-gray-200 bg-surface p-250">
       <FormSection
@@ -86,9 +89,9 @@ export function SanctionForm({
           onValueChange={(reasonCode) => onDraftChange({ reasonCode })}
           onOtherTextChange={(otherReason) => onDraftChange({ otherReason })}
         />
-        <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor="sanction-staff-memo">
+        <Field.Root label="운영진 메모 (사용자에게 안 보임)" htmlFor={memoId}>
           <Textarea
-            id="sanction-staff-memo"
+            id={memoId}
             rows={2}
             placeholder="판단한 근거나 확인한 내용을 적어 주세요"
             value={draft.staffMemo}

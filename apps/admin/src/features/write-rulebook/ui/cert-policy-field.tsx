@@ -5,10 +5,16 @@ const CERT_POLICY = { required: "required", free: "free" } as const;
 interface CertPolicyFieldProps {
   certRequired: boolean;
   disabled?: boolean;
+  stacked?: boolean;
   onChange: (certRequired: boolean) => void;
 }
 
-export function CertPolicyField({ certRequired, disabled, onChange }: CertPolicyFieldProps) {
+export function CertPolicyField({
+  certRequired,
+  disabled,
+  stacked,
+  onChange,
+}: CertPolicyFieldProps) {
   const value = certRequired ? CERT_POLICY.required : CERT_POLICY.free;
   return (
     <RadioGroup
@@ -16,7 +22,7 @@ export function CertPolicyField({ certRequired, disabled, onChange }: CertPolicy
       disabled={disabled}
       onValueChange={(next) => onChange(next === CERT_POLICY.required)}
       aria-label="인증 정책"
-      className="grid grid-cols-2 gap-100"
+      className={stacked ? "grid grid-cols-1 gap-075" : "grid grid-cols-2 gap-100"}
     >
       <RadioCard.Root value={CERT_POLICY.required}>
         <RadioCard.Title>인증 필요</RadioCard.Title>
