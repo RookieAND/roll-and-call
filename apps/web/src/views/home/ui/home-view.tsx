@@ -15,7 +15,14 @@ import {
   getReviewAppearances,
   hasSessionsBetween,
 } from "@/shared/server";
-import { AppBar, HelpButton, ServerSwitcher, ThemeToggleButton } from "@/shared/ui";
+import {
+  AppBar,
+  DESKTOP_CARD_CLASS,
+  HelpButton,
+  PageShell,
+  ServerSwitcher,
+  ThemeToggleButton,
+} from "@/shared/ui";
 
 import { buildMonthRecord } from "../model/build-month-record";
 import { groupSessionsByDay } from "../model/group-sessions-by-day";
@@ -23,6 +30,7 @@ import { recordPeopleIds } from "../model/record-people-ids";
 import { resolveCalendarView } from "../model/resolve-calendar-view";
 import { toCalendarSessions } from "../model/to-calendar-sessions";
 import { HomeCalendarSection } from "./home-calendar-section";
+import { HomeDayPanel } from "./home-day-panel";
 import { HomeMonthRecord } from "./home-month-record";
 import { HomeNicknameNotice } from "./home-nickname-notice";
 import { HomeServerSwitch } from "./home-server-switch";
@@ -68,10 +76,12 @@ export async function HomeView({ date }: HomeViewProps) {
     now,
   });
 
-  return (
+  const sessionsByDay = groupSessionsByDay(sessions);
+  const appBar = (
     <>
       <AppBar
         title="롤앤콜"
+        desktopTitle="홈"
         brand
         serverSwitch={
           user && (
@@ -94,26 +104,36 @@ export async function HomeView({ date }: HomeViewProps) {
           )
         }
       />
+      {user && (
+        <Suspense fallback={null}>
+          <HomeTodoBanner serverId={server.id} userId={user.id} />
+        </Suspense>
+      )}
+    </>
+  );
+
+  return (
+    <PageShell
+      appBar={appBar}
+      panel={<HomeDayPanel sessionsByDay={sessionsByDay} initialSelectedKey={selectedKey} />}
+    >
       <Container size="sm" className="max-w-3xl px-0">
         {profile?.nicknameSuffixBase && (
-          <div className="px-200 pt-150">
+          <div className="px-200 pt-150 desktop:px-0 desktop:pt-0 desktop:pb-150">
             <HomeNicknameNotice nickname={profile.username} />
           </div>
         )}
-        {user && (
-          <Suspense fallback={null}>
-            <HomeTodoBanner serverId={server.id} userId={user.id} />
-          </Suspense>
-        )}
         <HomeCalendarSection
           monthStart={monthStart.toDate()}
-          sessionsByDay={groupSessionsByDay(sessions)}
+          sessionsByDay={sessionsByDay}
           hasNextMonthSessions={hasNextMonthSessions}
           initialSelectedKey={selectedKey}
           todayKey={todayKey}
         />
         <MemberTitleSheetsProvider sheets={titleSheets}>
-          <HomeMonthRecord monthStart={monthStart} record={record} />
+          <div className={`${DESKTOP_CARD_CLASS} desktop:mt-300`}>
+            <HomeMonthRecord monthStart={monthStart} record={record} />
+          </div>
         </MemberTitleSheetsProvider>
       </Container>
       {user && (
@@ -121,6 +141,6 @@ export async function HomeView({ date }: HomeViewProps) {
           <BadgeAwardGate userId={user.id} />
         </Suspense>
       )}
-    </>
+    </PageShell>
   );
 }

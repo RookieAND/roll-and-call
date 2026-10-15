@@ -1,11 +1,10 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-
 import { toKst } from "@/shared/lib";
+import { DESKTOP_CARD_CLASS } from "@/shared/ui";
 
-import { resolveCalendarView } from "../model/resolve-calendar-view";
 import type { CalendarSession } from "../model/to-calendar-sessions";
+import { useSelectedDay } from "../model/use-selected-day";
 import { HomeCalendar } from "./home-calendar";
 import { HomeDaySessions } from "./home-day-sessions";
 
@@ -17,7 +16,7 @@ interface HomeCalendarSectionProps {
   todayKey: string;
 }
 
-// 같은 달 안의 날짜 선택은 pushState로 주소만 바꾸므로, 선택 날짜는 서버 props가 아니라 주소에서 읽는다.
+// 모바일은 달력 아래에 고른 날의 세션이 이어지고, 1100px 이상은 세션이 우측 패널(HomeDayPanel)로 간다.
 export function HomeCalendarSection({
   monthStart,
   sessionsByDay,
@@ -25,13 +24,10 @@ export function HomeCalendarSection({
   initialSelectedKey,
   todayKey,
 }: HomeCalendarSectionProps) {
-  const searchParams = useSearchParams();
-  const { selected, selectedKey } = resolveCalendarView(
-    searchParams.get("date") ?? initialSelectedKey,
-  );
+  const { selected, selectedKey } = useSelectedDay(initialSelectedKey);
 
   return (
-    <>
+    <div className={DESKTOP_CARD_CLASS}>
       <HomeCalendar
         monthStart={toKst(monthStart)}
         sessionsByDay={sessionsByDay}
@@ -39,7 +35,9 @@ export function HomeCalendarSection({
         selectedKey={selectedKey}
         todayKey={todayKey}
       />
-      <HomeDaySessions date={selected.toDate()} sessions={sessionsByDay[selectedKey] ?? []} />
-    </>
+      <div className="desktop:hidden">
+        <HomeDaySessions date={selected.toDate()} sessions={sessionsByDay[selectedKey] ?? []} />
+      </div>
+    </div>
   );
 }

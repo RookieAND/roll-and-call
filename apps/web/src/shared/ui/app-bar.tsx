@@ -16,6 +16,8 @@ interface AppBarProps {
   brand?: boolean;
   // brand 옆 서버 배지 자리. 서버 홈만 전환 메뉴가 달린 배지를 넘긴다.
   serverSwitch?: ReactNode;
+  // brand일 때 1100px 이상 앱바에 그릴 제목. 넘기면 제목 옆에 서버 배지도 붙는다(전환 메뉴는 좌측 내비에 있다).
+  desktopTitle?: string;
   // 제목을 페이지의 h1로 그린다. 본문이 자기 h1을 가지면 false로 끈다.
   heading?: boolean;
   // 진입 경로가 없을 때(직접 URL·디스코드 링크)만 쓰는 폴백. 평소엔 히스토리 뒤로.
@@ -33,6 +35,7 @@ export function AppBar({
   subtitle,
   brand,
   serverSwitch,
+  desktopTitle,
   heading = true,
   back,
   backHistory = true,
@@ -80,13 +83,12 @@ export function AppBar({
             {serverSwitch ?? <ServerSwitcher />}
           </HStack>
           {/* 데스크톱은 로고와 서버 전환이 좌측 내비에 있어 앱바에는 화면 제목을 둔다. */}
-          <Text
-            typography="heading2"
-            render={titleElement}
-            className="hidden tracking-tight desktop:block"
-          >
-            {title}
-          </Text>
+          <HStack align="center" gap="100" className="hidden min-w-0 desktop:flex">
+            <Text typography="heading2" render={titleElement} className="tracking-tight">
+              {desktopTitle ?? title}
+            </Text>
+            {desktopTitle && <ServerSwitcher />}
+          </HStack>
         </>
       ) : (
         <Text
