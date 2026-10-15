@@ -34,6 +34,7 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
 
   const canRemove = Boolean(reason.trim()) && !pending;
   const confirmLabel = networkError ? "다시 시도" : "해제 확정";
+  const disabledReason = reason.trim() ? null : "해제 사유를 입력해야 합니다";
 
   const remove = async () => {
     const result = await submit(staff.userId, reason);
@@ -96,7 +97,11 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
             <NotificationPreview payload={{ kind: NOTIFICATION_KIND.staffRemoved, params: {} }} />
           </VStack>
         </ResponsiveDialog.Body>
-        <ResponsiveDialog.Footer layout="row" className={MODAL_FOOTER_CLASS}>
+        <ResponsiveDialog.Footer
+          layout="row"
+          className={MODAL_FOOTER_CLASS}
+          disabledReason={disabledReason}
+        >
           <ResponsiveDialog.Close
             render={<Button variant="outline" colorPalette="gray" />}
             disabled={pending}

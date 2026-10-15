@@ -2,7 +2,7 @@ import { Button, VStack } from "@roll-and-call/ui";
 
 import {
   AdminHeader,
-  ListRowsSkeleton,
+  SkeletonListRows,
   LoadingRegion,
   MobileDetailBar,
   MobileTitle,
@@ -21,7 +21,7 @@ export function NoShowsMobileLoading() {
           <UrlSearchInput placeholder="닉네임 · 세션 검색" />
           <UrlFilterChips param="status" options={NO_SHOW_STATUS_CHIPS} />
         </VStack>
-        <ListRowsSkeleton />
+        <SkeletonListRows sortBar meta />
       </LoadingRegion>
       <MobileDetailBar primary={<Button disabled>불참 기록 추가</Button>} />
     </>

@@ -14,7 +14,7 @@ import {
   getReviewTemplate,
   requireStaff,
 } from "@/shared/server";
-import { MessagesView } from "@/views/discord";
+import { MessagesMobileView, MessagesView } from "@/views/discord";
 
 export const metadata: Metadata = { title: "Discord · 디스코드 메시지" };
 
@@ -38,14 +38,22 @@ export default async function DiscordMessagesPage({
     getReviewTemplate({ serverId: server.id }),
     loadMessageRoles(server.discordGuildId),
   ]);
+  const props = {
+    selected: selected as MessageCaseKey | typeof REVIEW_CASE_KEY,
+    heads,
+    texts,
+    reviewTemplate,
+    guildRoles,
+    readOnly: viewer.role !== "owner",
+  };
   return (
-    <MessagesView
-      selected={selected}
-      heads={heads}
-      texts={texts}
-      reviewTemplate={reviewTemplate}
-      guildRoles={guildRoles}
-      readOnly={viewer.role !== "owner"}
-    />
+    <>
+      <div className="contents max-lg:hidden">
+        <MessagesView {...props} />
+      </div>
+      <div className="contents lg:hidden">
+        <MessagesMobileView {...props} />
+      </div>
+    </>
   );
 }

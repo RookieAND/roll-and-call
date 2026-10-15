@@ -3,7 +3,7 @@ import { Button, Skeleton, VStack } from "@roll-and-call/ui";
 import {
   AdminHeader,
   KeyValueList,
-  ListRowsSkeleton,
+  SkeletonListRows,
   LoadingRegion,
   MobileDetailBar,
   MobileSection,
@@ -35,7 +35,7 @@ export function PostDetailMobileLoading() {
             />
           </MobileSection>
         </VStack>
-        <ListRowsSkeleton />
+        <SkeletonListRows sortBar meta />
       </LoadingRegion>
       <MobileDetailBar
         primary={

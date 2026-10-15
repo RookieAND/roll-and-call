@@ -35,7 +35,7 @@ export function UserDetailMobileLoading() {
           </VStack>
         </VStack>
         <SkeletonTabs items={USER_DETAIL_MOBILE_TABS.map((item) => item.label)} />
-        <SkeletonListRows count={4} />
+        <SkeletonListRows rows={4} />
       </LoadingRegion>
       <MobileActionBar elevated={false}>
         <HStack gap="100">

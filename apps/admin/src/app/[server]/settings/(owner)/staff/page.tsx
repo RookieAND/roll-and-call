@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { searchStaffCandidates } from "@/entities/staff/server";
 import { stringParams } from "@/shared/lib";
 import { listStaff, requireStaff } from "@/shared/server";
-import { SettingsStaffView } from "@/views/settings";
+import { SettingsStaffMobileView, SettingsStaffView } from "@/views/settings";
 
 export const metadata: Metadata = { title: "설정 · 운영진 관리" };
 
@@ -18,11 +18,18 @@ export default async function SettingsStaffPage({
   const candidates = query.action === "add" ? await searchStaffCandidates(query.q ?? "") : [];
   const removing = staff.find((member) => member.userId === query.staff && member.role !== "owner");
   return (
-    <SettingsStaffView
-      staff={staff}
-      viewerId={viewer.id}
-      candidates={candidates}
-      removing={removing}
-    />
+    <>
+      <div className="contents max-lg:hidden">
+        <SettingsStaffView
+          staff={staff}
+          viewerId={viewer.id}
+          candidates={candidates}
+          removing={removing}
+        />
+      </div>
+      <div className="contents lg:hidden">
+        <SettingsStaffMobileView staff={staff} viewerId={viewer.id} />
+      </div>
+    </>
   );
 }

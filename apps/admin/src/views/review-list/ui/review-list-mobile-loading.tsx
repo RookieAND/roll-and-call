@@ -2,7 +2,7 @@ import { VStack } from "@roll-and-call/ui";
 
 import {
   AdminHeader,
-  ListRowsSkeleton,
+  SkeletonListRows,
   LoadingRegion,
   MobileTitle,
   UrlFilterChips,
@@ -22,7 +22,7 @@ export function ReviewListMobileLoading() {
           <UrlSearchInput placeholder="작성자 · 구인 제목 검색" />
           <UrlFilterChips param="photo" options={REVIEW_PHOTO_CHIPS} allLabel="사진 전체" />
         </VStack>
-        <ListRowsSkeleton />
+        <SkeletonListRows sortBar meta />
       </LoadingRegion>
     </>
   );

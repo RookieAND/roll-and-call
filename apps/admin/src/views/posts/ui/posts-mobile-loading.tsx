@@ -2,7 +2,7 @@ import { VStack } from "@roll-and-call/ui";
 
 import {
   AdminHeader,
-  ListRowsSkeleton,
+  SkeletonListRows,
   LoadingRegion,
   MobileTitle,
   UrlFilterChips,
@@ -20,7 +20,7 @@ export function PostsMobileLoading() {
           <UrlSearchInput placeholder="제목 · GM 닉네임 검색" />
           <UrlFilterChips param="status" options={POST_STATUS_CHIPS} />
         </VStack>
-        <ListRowsSkeleton />
+        <SkeletonListRows sortBar meta />
       </LoadingRegion>
     </>
   );

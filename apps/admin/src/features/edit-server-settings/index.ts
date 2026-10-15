@@ -5,3 +5,4 @@ export { normalizeInviteUrl } from "./model/normalize-invite-url";
 export type { SettingCheck } from "./model/setting-check";
 export { SETTING_FIELDS, type SettingFieldKey, type SettingIds } from "./model/setting-field";
 export { IdRow } from "./ui/id-row";
+export { MobileIdCard } from "./ui/mobile-id-card";
