@@ -1,6 +1,6 @@
 "use client";
 
-import { RichText } from "@roll-and-call/tiptap";
+import { RichText } from "@roll-and-call/tiptap/viewer";
 import { Button, Text, VStack, cn } from "@roll-and-call/ui";
 import { useLayoutEffect, useRef, useState } from "react";
 

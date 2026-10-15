@@ -3,9 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": "./src/index.ts",
     "./doc": "./src/rich-text-doc.ts",
+    "./viewer": "./src/rich-text.tsx",
     "./links": "./src/links.ts",
     "./styles.css": "./src/styles.css"
   },

@@ -1,31 +1,12 @@
-import { rulebookLabel } from "@roll-and-call/database/rulebooks/model";
-
+import { certWaitingOn } from "./cert-waiting-on";
 import type { Snapshot } from "./snapshot";
-import { supplementCores } from "./supplement-cores";
 import type { CertApplication } from "./types";
 
 type CertRecords = Pick<Snapshot, "rulebooks" | "certifications" | "certApplications" | "users">;
 
-// 지금 심사할 수 없는 이유. waitingOn은 신청자가 심사 대기 중인 기본 룰북과 그 신청(서플리먼트는 그 결정 뒤에 심사),
-// duplicate는 같은 판매처·주문번호를 쓴 다른 사람의 인증됨·심사 대기 신청(경고만 하고 승인은 막지 않는다).
+// 지금 심사할 수 없는 이유. waitingOn은 certWaitingOn, duplicate는 같은 판매처·주문번호를 쓴 다른 사람의 인증됨·심사 대기 신청(경고만 하고 승인은 막지 않는다).
 export function certBlockers(application: CertApplication, records: CertRecords) {
-  const book = records.rulebooks.find((rulebook) => rulebook.id === application.rulebookId);
-  const mine = (rulebookId: string) => (row: { userId: string; rulebookId: string }) =>
-    row.userId === application.userId && row.rulebookId === rulebookId;
-  const waitingOn =
-    book?.kind === "supplement"
-      ? supplementCores(book, records.rulebooks).flatMap((core) => {
-          // 같은 묶음의 기본 룰북은 묶음을 한꺼번에 처리하므로 기다리지 않는다.
-          const pendingCore = records.certApplications.find(
-            (row) =>
-              mine(core.id)(row) &&
-              row.status === "pending" &&
-              !(application.groupId && row.groupId === application.groupId),
-          );
-          if (!pendingCore || records.certifications.some(mine(core.id))) return [];
-          return [{ label: rulebookLabel(core), applicationId: pendingCore.id }];
-        })
-      : [];
+  const waitingOn = certWaitingOn(application, records);
 
   const { seller, orderNumber } = application.purchase;
   const duplicate =

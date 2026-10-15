@@ -31,5 +31,6 @@ export { loadMemberOngoing } from "./queries/load-member-ongoing";
 export { findActiveSanction } from "./queries/find-active-sanction";
 export { listSanctionedUserIds } from "./queries/list-sanctioned-user-ids";
 export { loadAdminTables, type AdminTables } from "./queries/load-admin-tables";
+export { loadPendingQueue } from "./queries/load-pending-queue";
 export { getStaffRole, isPlatformAdmin } from "./queries/staff";
 export * from "./model";

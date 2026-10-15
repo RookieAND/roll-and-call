@@ -1,7 +1,10 @@
 import type { Rulebook } from "./types";
 
 // 사용자 앱(entities/rulebook setCores)과 같은 규칙이다.
-export function supplementCores(supplement: Rulebook, rulebooks: Rulebook[]) {
+export function supplementCores<Book extends Pick<Rulebook, "category" | "kind" | "edition">>(
+  supplement: Book,
+  rulebooks: Book[],
+) {
   const cores = rulebooks.filter(
     (rulebook) => rulebook.category === supplement.category && rulebook.kind === "core",
   );

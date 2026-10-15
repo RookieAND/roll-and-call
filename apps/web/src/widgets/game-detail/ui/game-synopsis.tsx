@@ -1,4 +1,4 @@
-import { RichText } from "@roll-and-call/tiptap";
+import { RichText } from "@roll-and-call/tiptap/viewer";
 import { Text, VStack } from "@roll-and-call/ui";
 
 interface GameSynopsisProps {
