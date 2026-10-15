@@ -1,76 +1,93 @@
 import { Card, Container, Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 export function UserProfileSkeleton() {
   return (
-    <>
-      <AppBar back="/games" title="프로필" />
-      <Container size="sm" className="px-0">
-        <div className="px-200 pt-250 pb-050">
-          <HStack align="center" gap="175">
-            <Skeleton width={64} height={64} rounded="full" />
-            <div className="min-w-0 flex-1">
-              <Skeleton width={128} height={27} />
-              <Skeleton width={112} height={20} className="mt-050" />
-            </div>
-          </HStack>
-          <Skeleton width="75%" height={24} className="mt-175" />
-          <div className="mt-175">
-            <Grid cols={2} className="-mx-200 border-y border-gray-200">
-              {range(2).map((index) => (
-                <VStack
-                  key={index}
-                  align="center"
-                  gap="050"
-                  className="border-gray-200 py-175 not-first:border-l"
-                >
-                  <Skeleton width={24} height={27} />
-                  <Skeleton width={64} height={17} />
-                </VStack>
-              ))}
-            </Grid>
-          </div>
-          <div className="mt-175">
-            <Skeleton width={56} height={17} className="mb-100" />
-            <HStack align="center" gap="075" className="min-h-11">
-              <Skeleton width={96} height={28} rounded="full" />
-              <Skeleton width={80} height={28} rounded="full" />
-            </HStack>
-          </div>
-          <div className="mt-175">
-            <Skeleton width={40} height={17} className="mb-100" />
-            <HStack gap="075">
-              <Skeleton width={80} height={32} rounded="full" />
-              <Skeleton width={64} height={32} rounded="full" />
-            </HStack>
-          </div>
-        </div>
-
-        <VStack render={<section />} className="px-200 pt-200">
-          <Skeleton width={32} height={17} className="mb-100" />
-          <Card.Root padding="none" radius={500} className="overflow-hidden">
-            {range(2).map((index) => (
-              <Skeleton key={index} width="100%" height={52} rounded="none" />
-            ))}
-          </Card.Root>
-        </VStack>
-
-        <section className="p-200">
+    <PageShell
+      appBar={<AppBar back="/games" title="프로필" />}
+      panel={
+        <div className={`${DESKTOP_CARD_CLASS} p-200`}>
           <Skeleton width={40} height={17} className="mb-100" />
           <HStack gap="100">
             {range(3).map((index) => (
               <Skeleton key={index} width={44} height={44} rounded={500} />
             ))}
           </HStack>
-        </section>
-
-        <section className="px-200 pb-200">
-          <Skeleton width={80} height={17} className="mb-100" />
+          <Skeleton width={80} height={17} className="mt-200 mb-100" />
           <Skeleton width="100%" height={52} rounded={500} />
-        </section>
-      </Container>
-    </>
+        </div>
+      }
+    >
+      <div className={DESKTOP_CARD_CLASS}>
+        <Container size="sm" className="px-0">
+          <div className="px-200 pt-250 pb-050">
+            <HStack align="center" gap="175">
+              <Skeleton width={64} height={64} rounded="full" />
+              <div className="min-w-0 flex-1">
+                <Skeleton width={128} height={27} />
+                <Skeleton width={112} height={20} className="mt-050" />
+              </div>
+            </HStack>
+            <Skeleton width="75%" height={24} className="mt-175" />
+            <div className="mt-175">
+              <Grid cols={2} className="-mx-200 border-y border-gray-200">
+                {range(2).map((index) => (
+                  <VStack
+                    key={index}
+                    align="center"
+                    gap="050"
+                    className="border-gray-200 py-175 not-first:border-l"
+                  >
+                    <Skeleton width={24} height={27} />
+                    <Skeleton width={64} height={17} />
+                  </VStack>
+                ))}
+              </Grid>
+            </div>
+            <div className="mt-175">
+              <Skeleton width={56} height={17} className="mb-100" />
+              <HStack align="center" gap="075" className="min-h-11">
+                <Skeleton width={96} height={28} rounded="full" />
+                <Skeleton width={80} height={28} rounded="full" />
+              </HStack>
+            </div>
+            <div className="mt-175">
+              <Skeleton width={40} height={17} className="mb-100" />
+              <HStack gap="075">
+                <Skeleton width={80} height={32} rounded="full" />
+                <Skeleton width={64} height={32} rounded="full" />
+              </HStack>
+            </div>
+          </div>
+
+          <VStack render={<section />} className="px-200 pt-200">
+            <Skeleton width={32} height={17} className="mb-100" />
+            <Card.Root padding="none" radius={500} className="overflow-hidden">
+              {range(2).map((index) => (
+                <Skeleton key={index} width="100%" height={52} rounded="none" />
+              ))}
+            </Card.Root>
+          </VStack>
+
+          <div className="desktop:hidden">
+            <section className="p-200">
+              <Skeleton width={40} height={17} className="mb-100" />
+              <HStack gap="100">
+                {range(3).map((index) => (
+                  <Skeleton key={index} width={44} height={44} rounded={500} />
+                ))}
+              </HStack>
+            </section>
+
+            <section className="px-200 pb-200">
+              <Skeleton width={80} height={17} className="mb-100" />
+              <Skeleton width="100%" height={52} rounded={500} />
+            </section>
+          </div>
+        </Container>
+      </div>
+    </PageShell>
   );
 }

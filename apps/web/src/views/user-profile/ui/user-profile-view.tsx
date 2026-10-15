@@ -3,9 +3,8 @@ import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { countBadges, heldBadges, pickFeaturedBadges } from "@/entities/badge";
-import { AvailabilityRows, DepartedMemberScreen, ProfileLinks } from "@/entities/profile";
+import { DepartedMemberScreen } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
-import { ProfileMemoBlock } from "@/features/profile-memo";
 import { heldBadgeDetail } from "@/features/view-badge";
 import { serverPath } from "@/shared/lib";
 import {
@@ -16,12 +15,12 @@ import {
   getUserBadges,
   getCurrentServer,
 } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { loadProfile } from "@/widgets/session-list/server";
 
-import { ProfileBlockLabel } from "./profile-block-label";
 import { ProfileReviews } from "./profile-reviews";
 import { ProfileRulebooks } from "./profile-rulebooks";
+import { ProfileSide } from "./profile-side";
 import { ProfileSummary } from "./profile-summary";
 
 interface UserProfileViewProps {
@@ -69,40 +68,38 @@ export async function UserProfileView({ id }: UserProfileViewProps) {
   );
 
   return (
-    <>
-      <AppBar back="/games" title="프로필" />
-      <Container size="sm" className="px-0">
-        <ProfileSummary
-          profile={profile}
-          absences={absences}
-          hosted={counts.hosted}
-          played={counts.played}
-          featuredBadges={featuredBadges}
-          badgeTotal={profile.showBadges ? countBadges(badgeRecords, now).total : 0}
-        />
+    <PageShell
+      appBar={<AppBar back="/games" title="프로필" />}
+      panel={
+        <div className="overflow-clip rounded-700 border border-gray-200 bg-surface">
+          <ProfileSide profile={profile} signedIn={!!viewer} memo={memo} />
+        </div>
+      }
+    >
+      <div className={DESKTOP_CARD_CLASS}>
+        <Container size="sm" className="px-0">
+          <ProfileSummary
+            profile={profile}
+            absences={absences}
+            hosted={counts.hosted}
+            played={counts.played}
+            featuredBadges={featuredBadges}
+            badgeTotal={profile.showBadges ? countBadges(badgeRecords, now).total : 0}
+          />
 
-        {certified.length > 0 && <ProfileRulebooks rulebooks={certified} />}
+          {certified.length > 0 && <ProfileRulebooks rulebooks={certified} />}
 
-        <ProfileReviews
-          userId={profile.id}
-          received={counts.hosted >= 1 ? reviewCounts.received : null}
-          written={reviewCounts.written}
-        />
+          <ProfileReviews
+            userId={profile.id}
+            received={counts.hosted >= 1 ? reviewCounts.received : null}
+            written={reviewCounts.written}
+          />
 
-        <section className="p-200">
-          <ProfileBlockLabel label="링크" />
-          <ProfileLinks links={profile.links} discordId={profile.discordId} />
-        </section>
-
-        <section className="px-200 pb-200">
-          <ProfileBlockLabel label="가능 시간대" />
-          <AvailabilityRows intervals={profile.availability} />
-        </section>
-
-        {viewer && (
-          <ProfileMemoBlock targetId={profile.id} targetName={profile.username} memo={memo} />
-        )}
-      </Container>
-    </>
+          <div className="desktop:hidden">
+            <ProfileSide profile={profile} signedIn={!!viewer} memo={memo} />
+          </div>
+        </Container>
+      </div>
+    </PageShell>
   );
 }
