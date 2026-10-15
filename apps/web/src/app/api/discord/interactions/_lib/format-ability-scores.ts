@@ -1,6 +1,6 @@
 import { DISCORD_COLOR, type DiscordEmbed } from "@roll-and-call/discord";
 
-import { abilityScoreTable } from "./ability-score-table";
+import { abilityScoreTable } from "@/features/roll-dice";
 
 type AbilityScore = { label: string; columns: number[] };
 

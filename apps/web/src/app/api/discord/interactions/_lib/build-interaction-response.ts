@@ -1,3 +1,12 @@
+import {
+  judgeCocCheck,
+  pickRandomOption,
+  rollAbilityScores,
+  rollDiceNotation,
+  rollDndAbilityScores,
+  rollPercentile,
+} from "@/features/roll-dice";
+
 import { embedResponse } from "./embed-response";
 import { formatAbilityScores } from "./format-ability-scores";
 import { formatCocCheck } from "./format-coc-check";
@@ -5,13 +14,7 @@ import { formatDiceRoll } from "./format-dice-roll";
 import { formatDndAbilityScores } from "./format-dnd-ability-scores";
 import { formatRandomPick } from "./format-random-pick";
 import type { DiscordInteraction, DiscordInteractionResponse } from "./interaction-types";
-import { judgeCocCheck } from "./judge-coc-check";
 import { messageResponse } from "./message-response";
-import { pickRandomOption } from "./pick-random-option";
-import { rollAbilityScores } from "./roll-ability-scores";
-import { rollDiceNotation } from "./roll-dice-notation";
-import { rollDndAbilityScores } from "./roll-dnd-ability-scores";
-import { rollPercentile } from "./roll-percentile";
 
 const INTERACTION_PING = 1;
 const INTERACTION_APPLICATION_COMMAND = 2;

@@ -1,6 +1,6 @@
 import { DISCORD_COLOR, type DiscordEmbed } from "@roll-and-call/discord";
 
-import type { rollDndAbilityScores } from "./roll-dnd-ability-scores";
+import type { rollDndAbilityScores } from "@/features/roll-dice";
 
 export function formatDndAbilityScores({
   playerName,

@@ -83,11 +83,16 @@ export { postStaffNotice, STAFF_NOTICE_KIND } from "@roll-and-call/game-notices"
 export { announceRecruitmentComplete } from "./discord/announce-recruitment-complete";
 export { announceMonthlyAwards } from "./discord/announce-monthly-awards";
 export { notifyDrawResult } from "./discord/notify-draw-result";
+export { notifyDrawSkipped } from "./discord/notify-draw-skipped";
+export { notifySelectionResult } from "./discord/notify-selection-result";
 export { notifyDirectConfirmed } from "./discord/notify-direct-confirmed";
 export { notifySessionConfirmed } from "./discord/notify-session-confirmed";
 export { announceGameOpened } from "./discord/announce-game-opened";
 export { resolveNoticeLinkLabels } from "./discord/resolve-notice-link-labels";
-export { syncGameReviewForumPosts, syncReviewForumPost } from "@roll-and-call/game-notices/review-forum";
+export {
+  syncGameReviewForumPosts,
+  syncReviewForumPost,
+} from "@roll-and-call/game-notices/review-forum";
 export { getGameById } from "./db/get-game-by-id";
 export { getProfile } from "./db/get-profile";
 export { getUserBadges } from "./db/get-user-badges";
@@ -95,8 +100,6 @@ export { siteOrigin } from "./site-origin";
 export { isCronRequest } from "./cron/is-cron-request";
 export { removeUnusedGameFiles } from "./game-files";
 export { seedAvailabilityFromProfile } from "./seed-availability-from-profile";
-export { finishLotteryDraw } from "./finish-lottery-draw";
-export { finishSelectionNotices } from "./finish-selection-notices";
 export { createSupabaseServerClient } from "@roll-and-call/app-kit/supabase/server";
 export { getCurrentUser } from "./auth/get-current-user";
 export { getCurrentSessionUser } from "./auth/get-current-session-user";

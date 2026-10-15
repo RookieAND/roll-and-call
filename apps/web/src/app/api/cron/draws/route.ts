@@ -3,7 +3,8 @@ import { DRAW_RESULT_KIND } from "@roll-and-call/database/games/model";
 import { getServerById } from "@roll-and-call/database/servers";
 import { withTransaction } from "@roll-and-call/database/transaction";
 
-import { finishLotteryDraw, isCronRequest } from "@/shared/server";
+import { finishLotteryDraw } from "@/features/adjust-roster/server";
+import { isCronRequest } from "@/shared/server";
 
 export const maxDuration = 60;
 

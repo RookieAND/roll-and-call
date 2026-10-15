@@ -6,9 +6,10 @@ import { withTransaction } from "@roll-and-call/database/transaction";
 import { after } from "next/server";
 
 import { ERROR_DISPLAY, idSchema, parseActionInput, type ActionResult } from "@/shared/api";
-import { finishSelectionNotices, getActingMember, notMemberError } from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 import { selectionRejectionMessage } from "../model/selection-rejection-message";
+import { finishSelectionNotices } from "./finish-selection-notices";
 import { revalidateRoster } from "./revalidate-roster";
 
 // GM의 [선발 마치기]. 잠금·GM·취소·상태 확인은 명령이 모두 하므로 adjustRoster를 거치지 않는다.

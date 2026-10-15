@@ -1,6 +1,6 @@
 import { DISCORD_COLOR, type DiscordEmbed } from "@roll-and-call/discord";
 
-import type { CocCheckLevel } from "./judge-coc-check";
+import type { CocCheckLevel } from "@/features/roll-dice";
 
 export function formatCocCheck({
   playerName,

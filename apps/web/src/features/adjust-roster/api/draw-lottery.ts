@@ -8,9 +8,10 @@ import { after } from "next/server";
 
 import { ERROR_DISPLAY, idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import { finishLotteryDraw, getActingMember, notMemberError } from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 import { drawRejectionMessage } from "../model/draw-rejection-message";
+import { finishLotteryDraw } from "./finish-lottery-draw";
 import { revalidateRoster } from "./revalidate-roster";
 
 export type DrawLotteryResult = ActionResult & { alreadyDrawn?: boolean };
