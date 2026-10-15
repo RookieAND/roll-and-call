@@ -10,6 +10,7 @@ export { NavigationTracker } from "./navigation-tracker";
 export { BottomNav } from "./bottom-nav";
 export { DesktopNav } from "./desktop-nav";
 export { DesktopPanel } from "./desktop-panel";
+export { DesktopWideFrame } from "./desktop-wide-frame";
 export { ConfirmDialog } from "./confirm-dialog";
 export { DatePicker } from "./date-picker";
 export { DateTimePicker } from "./date-time-picker";

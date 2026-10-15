@@ -6,6 +6,7 @@ import { serverJoinPath, serverPath } from "@/shared/lib";
 import { getCurrentMembership, getCurrentServer } from "@/shared/server";
 
 import { filterParams } from "../lib/filter-params";
+import { GAMES_INNER_MX } from "../lib/games-desktop-class";
 import { gamesHref } from "../lib/games-href";
 
 interface GamesJoinCalloutProps {
@@ -22,7 +23,7 @@ export async function GamesJoinCallout({ page, filter }: GamesJoinCalloutProps) 
     path: gamesHref(filterParams({ ...filter, page })),
   });
   return (
-    <Callout.Root colorPalette="primary" className="my-150">
+    <Callout.Root colorPalette="primary" className={`my-150 ${GAMES_INNER_MX}`}>
       <Callout.Description className="break-keep">
         이 서버 멤버가 되면 구인에 신청할 수 있습니다.
       </Callout.Description>

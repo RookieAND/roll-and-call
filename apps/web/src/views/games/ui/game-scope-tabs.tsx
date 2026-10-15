@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs } from "@roll-and-call/ui";
+import { Tabs, cn } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
 import {
@@ -14,6 +14,7 @@ import { useServerPath } from "@/shared/lib";
 import { TabCount } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
+import { GAMES_INNER_PX } from "../lib/games-desktop-class";
 import { gamesHref } from "../lib/games-href";
 
 interface GameScopeTabsProps {
@@ -46,11 +47,11 @@ export function GameScopeTabs({ filter, counts }: GameScopeTabsProps) {
         );
       }}
     >
-      <Tabs.List aria-label="구인 범위" scrollable={false} className="w-full">
-        <Tabs.Trigger value={GAME_TAB.live} className="flex-1">
+      <Tabs.List aria-label="구인 범위" scrollable={false} className={cn("w-full", GAMES_INNER_PX)}>
+        <Tabs.Trigger value={GAME_TAB.live} className="flex-1 desktop:flex-none">
           진행 중<TabCount count={counts?.live} />
         </Tabs.Trigger>
-        <Tabs.Trigger value={GAME_TAB.past} className="flex-1">
+        <Tabs.Trigger value={GAME_TAB.past} className="flex-1 desktop:flex-none">
           지난 구인
           <TabCount count={counts?.past} />
         </Tabs.Trigger>

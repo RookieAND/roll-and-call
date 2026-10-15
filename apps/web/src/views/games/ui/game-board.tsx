@@ -1,4 +1,3 @@
-import { Container, VStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
 
 import { GAME_TAB, GAME_TAB_DEFAULT, hasGameFilters, type GamesFilter } from "@/shared/api";
@@ -13,7 +12,9 @@ import { filterParams } from "../lib/filter-params";
 import { CrossTabHint } from "./cross-tab-hint";
 import { GameList } from "./game-list";
 import { GameListSkeleton } from "./game-list-skeleton";
+import { GamesFilterPanel } from "./games-filter-panel";
 import { GamesJoinCallout } from "./games-join-callout";
+import { GamesLayout } from "./games-layout";
 import { GamesToolbar } from "./games-toolbar";
 import { PastGameListSkeleton } from "./past-game-list-skeleton";
 
@@ -38,28 +39,35 @@ export async function GameBoard({ page = 1, filter }: GameBoardProps) {
   const key = JSON.stringify(filterParams({ ...filter, page }));
 
   return (
-    <Container className="group/games">
-      <GamesJoinCallout page={page} filter={filter} />
-      <GamesToolbar
-        filter={filter}
-        counts={counts}
-        tabCounts={allCounts ?? counts}
-        ruleOptions={ruleOptions}
-      />
-      <VStack gap="150" className="pt-150 pb-200">
-        <div className="hidden group-has-[input[aria-busy=true]]/games:contents">
-          {listSkeleton}
-        </div>
-        <div className="contents group-has-[input[aria-busy=true]]/games:hidden">
-          <Suspense key={key} fallback={listSkeleton}>
-            <GameList promise={gamesPage} page={page} filter={filter} />
-          </Suspense>
-          <CrossTabHint
-            filter={filter}
-            otherCount={tab === GAME_TAB.past ? counts.live : counts.past}
-          />
-        </div>
-      </VStack>
-    </Container>
+    <GamesLayout
+      callout={<GamesJoinCallout page={page} filter={filter} />}
+      toolbar={
+        <GamesToolbar
+          filter={filter}
+          counts={counts}
+          tabCounts={allCounts ?? counts}
+          ruleOptions={ruleOptions}
+        />
+      }
+      panel={
+        tab === GAME_TAB.live && <GamesFilterPanel filter={filter} ruleOptions={ruleOptions} />
+      }
+      list={
+        <>
+          <div className="hidden group-has-[input[aria-busy=true]]/games:contents">
+            {listSkeleton}
+          </div>
+          <div className="contents group-has-[input[aria-busy=true]]/games:hidden">
+            <Suspense key={key} fallback={listSkeleton}>
+              <GameList promise={gamesPage} page={page} filter={filter} />
+            </Suspense>
+            <CrossTabHint
+              filter={filter}
+              otherCount={tab === GAME_TAB.past ? counts.live : counts.past}
+            />
+          </div>
+        </>
+      }
+    />
   );
 }

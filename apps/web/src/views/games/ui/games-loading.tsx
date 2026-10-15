@@ -1,13 +1,14 @@
 "use client";
 
-import { Container, VStack } from "@roll-and-call/ui";
 import { useSearchParams } from "next/navigation";
 
 import { GAME_TAB, parseGameTab } from "@/shared/api";
-import { ServerSwitcher } from "@/shared/ui";
+import { DesktopWideFrame, ServerSwitcher } from "@/shared/ui";
 
 import { GameListSkeleton } from "./game-list-skeleton";
 import { GamesAppBarFrame } from "./games-app-bar-frame";
+import { GamesFilterPanelSkeleton } from "./games-filter-panel-skeleton";
+import { GamesLayout } from "./games-layout";
 import { GamesToolbar } from "./games-toolbar";
 import { PastGameListSkeleton } from "./past-game-list-skeleton";
 
@@ -15,13 +16,13 @@ export function GamesLoading() {
   const tab = parseGameTab(useSearchParams().get("tab") ?? undefined);
   return (
     <>
+      <DesktopWideFrame />
       <GamesAppBarFrame sanction={null} serverSwitch={<ServerSwitcher />} />
-      <Container>
-        <GamesToolbar filter={{ tab }} />
-        <VStack gap="150" className="pt-150 pb-200">
-          {tab === GAME_TAB.past ? <PastGameListSkeleton /> : <GameListSkeleton />}
-        </VStack>
-      </Container>
+      <GamesLayout
+        toolbar={<GamesToolbar filter={{ tab }} />}
+        panel={tab === GAME_TAB.live && <GamesFilterPanelSkeleton />}
+        list={tab === GAME_TAB.past ? <PastGameListSkeleton /> : <GameListSkeleton />}
+      />
     </>
   );
 }

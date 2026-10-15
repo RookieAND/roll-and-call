@@ -1,8 +1,10 @@
+import { cn } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { AppBar } from "@/shared/ui";
 
+import { GAMES_INNER_PX } from "../lib/games-desktop-class";
 import type { NewGameSanction } from "../model/new-game-sanction";
 import { NewGameButton } from "./new-game-button";
 
@@ -17,6 +19,7 @@ export function GamesAppBarFrame({ sanction, serverSwitch }: GamesAppBarFramePro
       title="구인 목록"
       brand
       serverSwitch={serverSwitch}
+      className={cn("desktop:static", GAMES_INNER_PX)}
       action={
         <NewGameButton
           sanction={sanction}

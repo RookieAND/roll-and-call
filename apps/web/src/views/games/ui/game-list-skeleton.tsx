@@ -1,9 +1,11 @@
-import { Card, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { Card, HStack, Skeleton, VStack, cn } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
+
+import { LIVE_GRID_CLASS } from "../lib/games-desktop-class";
 
 export function GameListSkeleton() {
   return (
-    <VStack className="gap-125">
+    <VStack className={cn("gap-125", LIVE_GRID_CLASS)}>
       {range(3).map((index) => (
         <Card.Root
           key={index}

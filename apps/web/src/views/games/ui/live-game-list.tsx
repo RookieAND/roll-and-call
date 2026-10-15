@@ -1,4 +1,4 @@
-import { Pagination, VStack } from "@roll-and-call/ui";
+import { Pagination, VStack, cn } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { GameCard } from "@/entities/game";
@@ -7,6 +7,7 @@ import { serverPath } from "@/shared/lib";
 import { getCurrentServer } from "@/shared/server";
 
 import { filterParams } from "../lib/filter-params";
+import { LIVE_GRID_CLASS } from "../lib/games-desktop-class";
 import { gamesHref } from "../lib/games-href";
 import type { GamesPage } from "../model/games-page";
 
@@ -21,7 +22,7 @@ export async function LiveGameList({ gamesPage, page, filter }: LiveGameListProp
   const { rows, total, pageSize } = gamesPage;
   return (
     <>
-      <VStack className="gap-125">
+      <VStack className={cn("gap-125", LIVE_GRID_CLASS)}>
         {rows.map((game) => (
           <Link
             key={game.id}

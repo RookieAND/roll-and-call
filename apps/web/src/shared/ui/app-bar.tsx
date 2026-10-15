@@ -25,6 +25,7 @@ interface AppBarProps {
   onBack?: () => void;
   backIcon?: "back" | "close";
   action?: ReactNode;
+  className?: string;
 }
 
 export function AppBar({
@@ -38,6 +39,7 @@ export function AppBar({
   onBack,
   backIcon = "back",
   action,
+  className,
 }: AppBarProps) {
   const hasBack = !isUndefined(back) || !isUndefined(onBack);
   const BackIcon = backIcon === "close" ? X : ChevronLeft;
@@ -52,6 +54,7 @@ export function AppBar({
       className={cn(
         "sticky top-0 z-(--rc-z-sticky) h-(--rc-size-appbar) border-b border-gray-200 bg-surface/90 backdrop-blur",
         hasBack ? "px-125" : "px-175",
+        className,
       )}
     >
       {onBack ? (
@@ -67,14 +70,24 @@ export function AppBar({
         back && <BackButton fallback={back} useHistory={backHistory} />
       )}
       {brand ? (
-        <HStack align="center" gap="100" className="min-w-0">
-          <HStack render={titleElement} className="flex-none">
-            <ServerLink path="/">
-              <BrandLogo label={title} />
-            </ServerLink>
+        <>
+          <HStack align="center" gap="100" className="min-w-0 desktop:hidden">
+            <HStack render={titleElement} className="flex-none">
+              <ServerLink path="/">
+                <BrandLogo label={title} />
+              </ServerLink>
+            </HStack>
+            {serverSwitch ?? <ServerSwitcher />}
           </HStack>
-          {serverSwitch ?? <ServerSwitcher />}
-        </HStack>
+          {/* 데스크톱은 로고와 서버 전환이 좌측 내비에 있어 앱바에는 화면 제목을 둔다. */}
+          <Text
+            typography="heading2"
+            render={titleElement}
+            className="hidden tracking-tight desktop:block"
+          >
+            {title}
+          </Text>
+        </>
       ) : (
         <Text
           typography={hasBack ? "heading3" : "heading2"}

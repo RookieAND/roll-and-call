@@ -80,7 +80,9 @@ export function GameFilterSheet({ filter, count, ruleOptions }: GameFilterSheetP
 
   return (
     <Sheet.Root open={open} onOpenChange={changeOpen}>
-      <Sheet.Trigger render={<GameFilterButton count={gameFilterCount(filter)} />} />
+      <Sheet.Trigger
+        render={<GameFilterButton count={gameFilterCount(filter)} className="desktop:hidden" />}
+      />
       <Sheet.Popup>
         <Sheet.Handle />
         {pickingRules ? (

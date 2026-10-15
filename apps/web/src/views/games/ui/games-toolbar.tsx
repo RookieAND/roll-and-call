@@ -1,4 +1,4 @@
-import { HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { HStack, Skeleton, VStack, cn } from "@roll-and-call/ui";
 
 import {
   GAME_STATUS_FILTER_DEFAULT,
@@ -8,6 +8,7 @@ import {
 } from "@/shared/api";
 import type { GamesCounts } from "@/shared/server";
 
+import { GAMES_INNER_PX } from "../lib/games-desktop-class";
 import type { RuleOption } from "../model/rule-option";
 import { statusCounts } from "../model/status-counts";
 import { GameFilterButton } from "./game-filter-button";
@@ -40,10 +41,16 @@ export function GamesToolbar({
   const chipCounts = counts ? statusCounts({ counts, tab }) : undefined;
   return (
     <>
-      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 border-b border-gray-200 bg-surface">
+      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 border-b border-gray-200 bg-surface desktop:static desktop:mx-0">
         <GameScopeTabs filter={filter} counts={tabCounts} />
       </div>
-      <VStack gap="125" className="py-150">
+      <VStack
+        gap="125"
+        className={cn(
+          "py-150 desktop:border-b desktop:border-gray-200 desktop:bg-surface",
+          GAMES_INNER_PX,
+        )}
+      >
         <HStack align="center" gap="050">
           <GameSearchForm key={filter.q ?? ""} filter={filter} />
           {chipCounts ? (
@@ -53,7 +60,7 @@ export function GamesToolbar({
               count={chipCounts[filter.status ?? GAME_STATUS_FILTER_DEFAULT] ?? 0}
             />
           ) : (
-            <GameFilterButton count={0} />
+            <GameFilterButton count={0} className="desktop:hidden" />
           )}
         </HStack>
         <HStack align="center" gap="075">

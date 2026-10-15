@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 interface FilterSectionProps {
   title: string;
   hint?: string;
-  columns: "grid-cols-7" | "grid-cols-4";
+  columns: "grid-cols-7" | "grid-cols-4" | "grid-cols-2";
   children: ReactNode;
 }
 
