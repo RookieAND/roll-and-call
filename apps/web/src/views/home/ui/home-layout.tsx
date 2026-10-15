@@ -15,7 +15,7 @@ export function HomeLayout({ appBar, panel, children }: HomeLayoutProps) {
   return (
     <PageShell appBar={appBar} bare className={WIDE_SHELL_CLASS}>
       <div
-        className={`desktop:flex desktop:items-start desktop:gap-300 desktop:pt-300 desktop:pb-400 ${WIDE_INNER_PX}`}
+        className={`desktop:flex desktop:items-start desktop:gap-200 desktop:pt-300 desktop:pb-400 ${WIDE_INNER_PX}`}
       >
         <Container
           size="sm"

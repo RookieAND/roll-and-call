@@ -18,7 +18,7 @@ export function GamesLayout({ callout, toolbar, list, panel }: GamesLayoutProps)
       {callout}
       {toolbar}
       <div
-        className={`desktop:flex desktop:items-start desktop:gap-300 desktop:pt-200 ${GAMES_INNER_PX}`}
+        className={`desktop:flex desktop:items-start desktop:gap-200 desktop:pt-200 ${GAMES_INNER_PX}`}
       >
         <VStack
           gap="150"

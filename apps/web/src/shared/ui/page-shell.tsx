@@ -15,7 +15,7 @@ interface PageShellProps {
 }
 
 const BAND_PADDING =
-  "desktop:[&>header]:static desktop:[&>header]:px-[max(2rem,calc((100%-var(--shell-w)-var(--shell-extra))/2))]";
+  "desktop:[&>header]:static desktop:[&>header]:px-[max(var(--shell-pad,2rem),calc((100%-var(--shell-w)-var(--shell-extra))/2))]";
 
 // 1100px 이상 화면의 공용 틀: 앱바는 영역 전폭 띠이고(안쪽 제목은 본문 열 왼쪽 끝에 맞춘다), 아래에 본문 열(기본 640px)과 선택적 패널이 가운데 정렬로 놓인다.
 // 모바일(1100px 미만)은 앱바 아래에 children이 그대로 이어진다.
