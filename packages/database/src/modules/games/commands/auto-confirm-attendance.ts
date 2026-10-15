@@ -88,8 +88,12 @@ export async function autoConfirmAttendanceForGame({
   return transaction ? run(transaction) : db.transaction(run);
 }
 
-// 매시 5분 크론(/api/cron/attendance)이 부른다. 모든 서버에서 기한이 지난 미확정 세션을 고른다.
-export async function autoConfirmAttendance(now: Date = new Date()): Promise<AutoConfirmedGame[]> {
+// 매시 5분 크론(/api/cron/attendance)이 부른다. 모든 서버에서 기한이 지난 미확정 세션을 한 번에 limit건 고른다.
+// 밀린 세션이 많아도 크론 시간 안에 칭호 판정까지 마치도록 나머지는 다음 회차가 집는다.
+export async function autoConfirmAttendance(
+  now: Date = new Date(),
+  limit = 50,
+): Promise<AutoConfirmedGame[]> {
   const deadline = sql`${sessionEndAtSql} + ${ATTENDANCE_EDIT_HOURS} * interval '1 hour'`;
   const candidates = await db
     .select({ id: games.id })
@@ -113,7 +117,8 @@ export async function autoConfirmAttendance(now: Date = new Date()): Promise<Aut
             ),
         ),
       ),
-    );
+    )
+    .limit(limit);
   const confirmed: AutoConfirmedGame[] = [];
   for (const { id } of candidates) {
     const result = await autoConfirmAttendanceForGame({ gameId: id, now, onlyPastDeadline: true });

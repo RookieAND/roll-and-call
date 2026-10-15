@@ -1,30 +1,28 @@
 import "server-only";
 import { getGuildMember } from "@roll-and-call/discord";
+import { isNull } from "es-toolkit";
 import { unstable_cache } from "next/cache";
 
 import { guildMemberTag } from "./guild-member-tag";
 
-class NotGuildMemberSignal extends Error {}
-
-// 봇으로 디스코드 서버 멤버인지 본다. 가입과 탈퇴 확인이 같이 쓰고, 멤버라는 결과만 5분 캐시한다.
-// "멤버 아님"은 캐시하지 않는다. 가입 전에 열어 캐시된 결과가 가입한 뒤에도 5분간 가입을 막기 때문이다.
-// 가입 화면 [다시 확인하기]가 guildMemberTag로 그 사람의 캐시만 지운다(D173).
-// 봇이 그 서버에 없는 등 확인 자체가 안 되면 던지고, 던진 결과는 캐시하지 않는다.
-// ponytail: unstable_cache는 던진 결과를 캐시하지 않는 점을 써서 비멤버를 신호로 던진다. cacheComponents를 켜면 "use cache" + cacheLife + cacheTag로 바꾼다.
+// 봇으로 디스코드 서버 멤버인지 본다. 가입과 탈퇴 확인이 같이 쓰고, 결과를 5분 캐시한다.
+// unstable_cache는 만료된 값을 먼저 돌려주고 뒤에서 다시 묻는다. 뒤에서 던지면 옛 값이 남으므로 던지지 않고 값으로 돌려준다.
+// 확인 자체가 안 되면(봇이 그 서버에 없음·5xx·시간 초과) null로 캐시하고 밖에서 던진다.
+// 가입은 늘 guildMemberTag로 그 사람의 캐시를 지우고 다시 묻는다(D173).
+// ponytail: cacheComponents를 켜면 "use cache" + cacheLife + cacheTag로 바꾼다.
 export async function isDiscordGuildMember(guildId: string, discordUserId: string) {
-  try {
-    return await unstable_cache(
-      async () => {
-        if ((await getGuildMember({ guildId, discordUserId })) === null) {
-          throw new NotGuildMemberSignal();
-        }
-        return true;
-      },
-      ["discord-guild-member", guildId, discordUserId],
-      { revalidate: 300, tags: [guildMemberTag({ guildId, discordUserId })] },
-    )();
-  } catch (error) {
-    if (error instanceof NotGuildMemberSignal) return false;
-    throw error;
-  }
+  const member = await unstable_cache(
+    async () => {
+      try {
+        return !isNull(await getGuildMember({ guildId, discordUserId }));
+      } catch (error) {
+        console.warn("디스코드 멤버 여부를 확인하지 못했습니다:", error);
+        return null;
+      }
+    },
+    ["discord-guild-member", guildId, discordUserId],
+    { revalidate: 300, tags: [guildMemberTag({ guildId, discordUserId })] },
+  )();
+  if (isNull(member)) throw new Error("디스코드 멤버 여부를 확인하지 못했습니다.");
+  return member;
 }

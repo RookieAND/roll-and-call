@@ -1,3 +1,5 @@
+import { unstable_rethrow } from "next/navigation";
+
 interface RunActionSubmitOptions<Result> {
   run: () => Promise<Result>;
   setNetworkError: (networkError: boolean) => void;
@@ -11,7 +13,8 @@ export async function runActionSubmit<Result>({
   setNetworkError(false);
   try {
     return await run();
-  } catch {
+  } catch (error) {
+    unstable_rethrow(error);
     setNetworkError(true);
     return undefined;
   }

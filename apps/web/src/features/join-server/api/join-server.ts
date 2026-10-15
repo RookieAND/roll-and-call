@@ -23,16 +23,15 @@ export type JoinServerResult = ActionResult & { notGuildMember?: boolean };
 
 const joinServerSchema = z.object({
   next: z.string().max(2000),
-  recheck: z.boolean().optional(),
 });
 
-// recheck면 5분 캐시를 지우고 디스코드에 다시 묻는다(가입 불가 화면의 [다시 확인하기], D173).
+// 5분 캐시를 지우고 디스코드에 다시 묻는다. 가입 전에 캐시된 "멤버 아님"이 가입을 막지 않게 한다(D173).
 export async function joinServer(
   input: z.input<typeof joinServerSchema>,
 ): Promise<JoinServerResult> {
   const parsed = parseActionInput(joinServerSchema, input);
   if (!parsed.ok) return parsed.result;
-  const { next, recheck = false } = parsed.data;
+  const { next } = parsed.data;
 
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentUser()]);
   if (!user) return { error: AUTH_REQUIRED_MESSAGE };
@@ -40,8 +39,7 @@ export async function joinServer(
   const discordId = await getDiscordId(user.id);
   if (isUndefined(discordId)) return { error: JOIN_CHECK_FAILED_MESSAGE };
 
-  if (recheck)
-    updateTag(guildMemberTag({ guildId: server.discordGuildId, discordUserId: discordId }));
+  updateTag(guildMemberTag({ guildId: server.discordGuildId, discordUserId: discordId }));
 
   let guildMember: boolean;
   try {

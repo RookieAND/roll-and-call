@@ -13,6 +13,7 @@ export { expireSelection, type ExpireSelectionResult } from "./commands/expire-s
 export { drawLottery, type DrawLotteryResult } from "./commands/draw-lottery";
 export { deleteParticipant } from "./commands/delete-participant";
 export { claimEndNotice } from "./commands/claim-end-notice";
+export { releaseEndNotice } from "./commands/release-end-notice";
 export { setSessionEndedAt } from "./commands/end-session";
 export { insertParticipant } from "./commands/insert-participant";
 export { lockUserApplications } from "./commands/lock-user-applications";

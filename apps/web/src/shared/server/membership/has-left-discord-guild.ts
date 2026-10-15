@@ -15,8 +15,7 @@ export async function hasLeftDiscordGuild({
   if (isTestDiscordId(discordId)) return false;
   try {
     return !(await isDiscordGuildMember(server.discordGuildId, discordId));
-  } catch (error) {
-    console.warn("디스코드 멤버 여부를 확인하지 못했습니다:", error);
+  } catch {
     return false;
   }
 }

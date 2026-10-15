@@ -2,6 +2,7 @@
 
 import { Callout, Field, Textarea, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
+import { unstable_rethrow } from "next/navigation";
 import { useId, useState, useTransition } from "react";
 
 import { ConfirmDialog, handleActionResult, toast } from "@/shared/ui";
@@ -47,7 +48,8 @@ export function MarkAbsentDialog({ gameId, member, onClose }: MarkAbsentDialogPr
             close(false);
           },
         });
-      } catch {
+      } catch (error) {
+        unstable_rethrow(error);
         setFailed(true);
       }
     });

@@ -1,8 +1,9 @@
 "use client";
 
-import { Button } from "@roll-and-call/ui";
+import { Button, toast } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+
+import { useActionSubmit } from "@/shared/lib";
 
 import { retryGuildBan } from "../api/retry-guild-ban";
 
@@ -12,12 +13,15 @@ interface RetryBanButtonProps {
 
 export function RetryBanButton({ userId }: RetryBanButtonProps) {
   const router = useRouter();
-  const [pending, startTransition] = useTransition();
-  const retry = () =>
-    startTransition(async () => {
-      await retryGuildBan(userId);
-      router.refresh();
-    });
+  const { pending, submit } = useActionSubmit(retryGuildBan);
+  const retry = async () => {
+    const result = await submit(userId);
+    if (!result?.ok) {
+      toast.danger("디스코드 차단에 다시 실패했습니다.");
+      return;
+    }
+    router.refresh();
+  };
   return (
     <Button
       variant="outline"

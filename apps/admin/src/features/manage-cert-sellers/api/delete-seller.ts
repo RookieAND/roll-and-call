@@ -11,4 +11,5 @@ export async function deleteSeller(rawId: string) {
   const server = await getCurrentServer();
   await removeCertSeller({ serverId: server.id, id, actor: staff });
   revalidatePath("/", "layout");
+  return { ok: true as const };
 }

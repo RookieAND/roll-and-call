@@ -6,7 +6,7 @@ import { z } from "zod";
 import { parseActionInput } from "@/shared/lib";
 import {
   getCurrentServer,
-  requireStaff,
+  requireOwner,
   updateCertEnforcementDate,
   type EnforcementChange,
 } from "@/shared/server";
@@ -17,10 +17,10 @@ const schema = z.object({
 });
 
 export async function changeEnforcementDate(dateArg: Date, changeArg: EnforcementChange) {
-  const staff = await requireStaff();
+  const staff = await requireOwner();
   const { date, change } = parseActionInput(schema, { date: dateArg, change: changeArg });
-  if (staff.role !== "owner") throw new Error("소유자만 적용일을 바꿀 수 있습니다");
   const server = await getCurrentServer();
   await updateCertEnforcementDate({ serverId: server.id, date, change, actor: staff });
   revalidatePath("/", "layout");
+  return { ok: true as const };
 }

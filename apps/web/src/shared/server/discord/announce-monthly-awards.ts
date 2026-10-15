@@ -17,7 +17,7 @@ import { monthlyAnnouncementText } from "./monthly-announcement-text";
 const ANNOUNCE_DEADLINE_MS = 14 * 24 * 60 * 60 * 1000;
 
 // 매달 2일 그 서버의 공지 채널에 지난달 이달의 GM·PL을 한 번 올린다(R6). 보낸 서버 수를 돌려준다.
-// 굳은 뒤 13일(15일 00:00 KST)이 지나면 올리지 않는다. 배포가 늦은 달에 지난 발표를 뒤늦게 올리지 않기 위해서다.
+// 한 서버가 실패해도 다음 서버로 넘어간다. 굳은 뒤 13일(15일 00:00 KST)이 지나면 올리지 않는다. 배포가 늦은 달에 지난 발표를 뒤늦게 올리지 않기 위해서다.
 export async function announceMonthlyAwards({ now }: { now: Date }): Promise<number> {
   const month = previousMonthKey(now);
   const deadline = nextMonthStart(month).getTime() + ANNOUNCE_DEADLINE_MS;
@@ -30,26 +30,31 @@ export async function announceMonthlyAwards({ now }: { now: Date }): Promise<num
 
   let announced = 0;
   for (const server of await listServers()) {
-    if (!server.announceChannelId) continue;
-    const { gm, pl } = await loadMonthlyWinners({ serverId: server.id, month });
-    if (gm.length === 0 && pl.length === 0) continue;
-    if (!(await claimMonthlyAnnouncement({ serverId: server.id, month }))) continue;
-    const body = monthlyAnnouncementText({
-      month,
-      gm,
-      pl,
-      mode: server.rankingMode as RankingMode,
-      profileUrl: (userId) =>
-        `${origin}${serverPath({ slug: server.slug, path: `/users/${userId}` })}`,
-    });
-    const input = await messageHeadInput({
-      serverId: server.id,
-      key: "monthly",
-      values: { 달: `${Number(month.slice(5))}월` },
-      after: body,
-    });
-    await sendDiscordMessage({ channelId: server.announceChannelId, input });
-    announced += 1;
+    const channelId = server.announceChannelId;
+    if (!channelId) continue;
+    try {
+      const { gm, pl } = await loadMonthlyWinners({ serverId: server.id, month });
+      if (gm.length === 0 && pl.length === 0) continue;
+      if (!(await claimMonthlyAnnouncement({ serverId: server.id, month }))) continue;
+      const body = monthlyAnnouncementText({
+        month,
+        gm,
+        pl,
+        mode: server.rankingMode as RankingMode,
+        profileUrl: (userId) =>
+          `${origin}${serverPath({ slug: server.slug, path: `/users/${userId}` })}`,
+      });
+      const input = await messageHeadInput({
+        serverId: server.id,
+        key: "monthly",
+        values: { 달: `${Number(month.slice(5))}월` },
+        after: body,
+      });
+      await sendDiscordMessage({ channelId, input });
+      announced += 1;
+    } catch (error) {
+      console.error("월간 발표 실패", { serverId: server.id, month, error });
+    }
   }
   return announced;
 }

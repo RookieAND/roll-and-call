@@ -2,9 +2,9 @@
 
 import { Button, Calendar, HStack, Popover, Text, VStack, toast } from "@roll-and-call/ui";
 import { CalendarDays } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
-import { formatDate } from "@/shared/lib";
+import { formatDate, useActionSubmit } from "@/shared/lib";
 import { FactRows, Tag } from "@/shared/ui";
 
 import { changeEnforcementDate } from "../api/change-enforcement-date";
@@ -18,7 +18,7 @@ interface EnforcementDateFormProps {
 }
 
 export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProps) {
-  const [pending, startTransition] = useTransition();
+  const { pending, submit } = useActionSubmit(changeEnforcementDate);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [picked, setPicked] = useState<Date | null>(null);
 
@@ -32,13 +32,16 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
     setPicked(new Date(`${key}T00:00:00+09:00`));
   };
 
-  const confirm = () =>
-    startTransition(async () => {
-      if (!picked) return;
-      await changeEnforcementDate(picked, isPostpone ? "postpone" : "set");
-      toast.success(`적용일을 ${formatDate(picked)}로 ${isPostpone ? "연기" : "지정"}했습니다`);
-      setPicked(null);
-    });
+  const confirm = async () => {
+    if (!picked) return;
+    const result = await submit(picked, isPostpone ? "postpone" : "set");
+    if (!result) {
+      toast.danger("적용일을 바꾸지 못했습니다.", { description: "다시 시도해 주세요." });
+      return;
+    }
+    toast.success(`적용일을 ${formatDate(picked)}로 ${isPostpone ? "연기" : "지정"}했습니다`);
+    setPicked(null);
+  };
 
   return (
     <FactRows

@@ -7,6 +7,8 @@ import { syncApprenticeBadges } from "@roll-and-call/database/onboarding";
 
 import { announceMonthlyAwards, isCronRequest } from "@/shared/server";
 
+export const maxDuration = 300;
+
 const SUNDAY = 0;
 const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 

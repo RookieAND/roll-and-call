@@ -11,34 +11,26 @@ export function useJoinServer({ next }: { next: string }) {
   const [status, setStatus] = useState<JoinStatus>("checking");
   const [, startTransition] = useTransition();
 
-  const check = useCallback(
-    (recheck: boolean) => {
-      startTransition(async () => {
-        let result: JoinServerResult;
-        try {
-          result = await joinServer({ next, recheck });
-        } catch (error) {
-          unstable_rethrow(error);
-          setStatus("failed");
-          return;
-        }
-        setStatus(result.notGuildMember ? "denied" : "failed");
-      });
-    },
-    [next],
-  );
+  const check = useCallback(() => {
+    startTransition(async () => {
+      let result: JoinServerResult;
+      try {
+        result = await joinServer({ next });
+      } catch (error) {
+        unstable_rethrow(error);
+        setStatus("failed");
+        return;
+      }
+      setStatus(result.notGuildMember ? "denied" : "failed");
+    });
+  }, [next]);
 
-  useEffect(() => check(false), [check]);
+  useEffect(() => check(), [check]);
 
   function retry() {
     setStatus("checking");
-    check(false);
+    check();
   }
 
-  function recheck() {
-    setStatus("checking");
-    check(true);
-  }
-
-  return { status, retry, recheck };
+  return { status, retry, recheck: retry };
 }

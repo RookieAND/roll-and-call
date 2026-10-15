@@ -19,8 +19,15 @@ export async function detectRosterDepartures({
     (member) => member.userId,
   );
   for (const member of roster) {
-    if (await hasLeftDiscordGuild({ server, discordId: member.discordId })) {
+    if (!(await hasLeftDiscordGuild({ server, discordId: member.discordId }))) continue;
+    try {
       await handleMemberLeft({ server, userId: member.userId });
+    } catch (error) {
+      console.error("detectRosterDepartures 탈퇴 처리 실패", {
+        gameId,
+        userId: member.userId,
+        error,
+      });
     }
   }
 }

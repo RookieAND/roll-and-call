@@ -6,7 +6,7 @@ import { isCronRequest, notifyGameEnded } from "@/shared/server";
 export const maxDuration = 60;
 
 // pg_cron notify-session-ended가 5분마다, 끝났는데 안내하지 않은 구인이 있을 때만 부른다(0091). GM이 마치기를 누르면 그 자리에서 이미 나가고, 예정 종료 시각이 지난 세션을 여기서 올린다.
-// 한 건이 실패해도 나머지를 이어 간다. 안내 권리를 먼저 가져가므로 실패한 글은 다시 집히지 않는다.
+// 한 건이 실패해도 나머지를 이어 간다. 잠깐의 실패면 notifyGameEnded가 안내 권리를 돌려줘 다음 회차에 다시 집힌다.
 export async function POST(request: Request) {
   if (!isCronRequest(request)) return new Response("Unauthorized", { status: 401 });
   const due = await listDueEndNotices({ now: new Date() });

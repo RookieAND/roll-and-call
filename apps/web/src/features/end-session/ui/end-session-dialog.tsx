@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, unstable_rethrow } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { useServerPath } from "@/shared/lib";
@@ -40,7 +40,8 @@ export function EndSessionDialog({
       let result: EndSessionResult;
       try {
         result = await endSession(gameId);
-      } catch {
+      } catch (error) {
+        unstable_rethrow(error);
         setFailed(true);
         return;
       }
