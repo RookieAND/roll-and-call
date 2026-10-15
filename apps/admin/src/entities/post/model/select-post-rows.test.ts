@@ -49,6 +49,13 @@ describe("selectPostRows", () => {
     expect(ids(selectPostRows({ rows, sort }))).toEqual(["undecided", "new", "old", "mid"]);
   });
 
+  it("상태 칸에 「숨김」을 주면 숨긴 구인만 남긴다", () => {
+    const filtered = [row({ id: "shown" }), row({ id: "hidden", staffAction: "숨김" })];
+    expect(
+      ids(selectPostRows({ rows: filtered, sort: POST_DEFAULT_SORT, status: "숨김" })),
+    ).toEqual(["hidden"]);
+  });
+
   it("제목·GM 검색은 대소문자를 가리지 않고, 상태·룰북으로 거른다", () => {
     const sort = POST_DEFAULT_SORT;
     expect(ids(selectPostRows({ rows, sort, query: " red inn " }))).toEqual(["mid"]);

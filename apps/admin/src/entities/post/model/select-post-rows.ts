@@ -29,7 +29,7 @@ export function selectPostRows({
       (!keyword ||
         row.title.toLowerCase().includes(keyword) ||
         row.gmNickname.toLowerCase().includes(keyword)) &&
-      (!status || row.status === status) &&
+      (!status || row.status === status || row.staffAction === status) &&
       (!rulebook || row.rulebook === rulebook),
   );
   const bySessionAt = sortRows({ rows: matched, sort: POST_DEFAULT_SORT, accessors: ACCESSORS });
