@@ -1,5 +1,3 @@
-"use client";
-
 import { Button, Grid, HStack, Skeleton, Tabs, Text, VStack } from "@roll-and-call/ui";
 import { Ban, Gavel, User } from "lucide-react";
 

@@ -1,4 +1,4 @@
-import { isString } from "es-toolkit";
+import { isNull, isString } from "es-toolkit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -44,7 +44,7 @@ export default async function UserDetailPage({
   if (!user) notFound();
   const kickBlock = kickBlockReason({
     serverOwner: user.discordId === server.ownerDiscordId,
-    staff: user.staffRole !== null,
+    staff: !isNull(user.staffRole),
     self: user.id === staff.id,
   });
   const banned = user.membership === MEMBERSHIP_STATUS.banned;

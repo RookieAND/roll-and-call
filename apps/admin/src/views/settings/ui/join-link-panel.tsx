@@ -20,8 +20,12 @@ export function JoinLinkPanel({
   onInviteUrlChange,
 }: JoinLinkPanelProps) {
   const copy = async () => {
-    await navigator.clipboard.writeText(joinUrl);
-    toast.success("가입 링크를 복사했습니다");
+    try {
+      await navigator.clipboard.writeText(joinUrl);
+      toast.success("가입 링크를 복사했습니다");
+    } catch {
+      toast.danger("가입 링크를 복사하지 못했습니다");
+    }
   };
   return (
     <Panel title="가입 링크" bodyClassName="p-175">

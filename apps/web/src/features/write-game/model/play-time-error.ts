@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 export const MAX_PLAY_MINUTES = 720;
 
 export const PLAY_TIME_ERROR = {
@@ -16,7 +18,7 @@ export function playTimeError({
 }): { field: "playMinutesMin" | "playMinutes"; message: string } | null {
   if (min < 1) return { field: "playMinutesMin", message: PLAY_TIME_ERROR.zero };
   if (min > MAX_PLAY_MINUTES) return { field: "playMinutesMin", message: PLAY_TIME_ERROR.tooLong };
-  if (max === null) return null;
+  if (isNull(max)) return null;
   if (max > MAX_PLAY_MINUTES) return { field: "playMinutes", message: PLAY_TIME_ERROR.tooLong };
   if (min > max) return { field: "playMinutes", message: PLAY_TIME_ERROR.minOverMax };
   return null;

@@ -1,4 +1,5 @@
 import { Badge, Button, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { ReopenGameLink } from "@/features/reopen-game";
 import { formatDateWeekday, formatDday } from "@/shared/lib";
@@ -64,7 +65,7 @@ export function EndedGmActions({
                 className="w-full"
               >
                 마스터링 후기 쓰기
-                {reviewDaysLeft !== null && (
+                {!isNull(reviewDaysLeft) && (
                   <Badge colorPalette="gray" className="bg-white/20 text-current">
                     후기 마감 {formatDday(reviewDaysLeft)}
                   </Badge>

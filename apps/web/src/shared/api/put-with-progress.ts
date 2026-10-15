@@ -13,11 +13,11 @@ export function putWithProgress({
     request.open("PUT", url);
     request.setRequestHeader("content-type", file.type);
     request.setRequestHeader("x-upsert", "false");
-    request.upload.onprogress = (event) => {
+    request.upload.addEventListener("progress", (event) => {
       if (event.lengthComputable) onProgress(event.loaded / event.total);
-    };
-    request.onload = () => resolve(request.status);
-    request.onerror = () => reject(new Error("upload failed"));
+    });
+    request.addEventListener("load", () => resolve(request.status));
+    request.addEventListener("error", () => reject(new Error("upload failed")));
     request.send(file);
   });
 }

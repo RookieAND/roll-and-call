@@ -24,7 +24,7 @@ export async function syncForumFollowUps({
     });
     const existing = messages
       .filter((message) => message.content.startsWith(FOLLOW_UP_MARK))
-      .reverse();
+      .toReversed();
     for (const [index, chunk] of chunks.entries()) {
       const body = discordMessageBody({
         content: `${FOLLOW_UP_MARK}\n${chunk}`,

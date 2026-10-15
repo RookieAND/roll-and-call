@@ -17,9 +17,9 @@ interface MemberJoinCheckProps {
 }
 
 export function MemberJoinCheck({ target, next }: MemberJoinCheckProps) {
-  const { status, retry, recheck } = useJoinServer({ next });
+  const { status, retry } = useJoinServer({ next });
   const recheckButton = (
-    <Button variant="outline" size="lg" className="w-full" onClick={recheck}>
+    <Button variant="outline" size="lg" className="w-full" onClick={retry}>
       <RotateCw size={17} aria-hidden />
       다시 확인하기
     </Button>

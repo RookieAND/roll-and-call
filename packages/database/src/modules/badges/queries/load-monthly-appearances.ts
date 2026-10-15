@@ -33,7 +33,7 @@ export async function loadMonthlyAppearances({
       hiddenAt: true,
       cancelledAt: true,
     },
-    where: (game, { and, eq, isNotNull, isNull }) =>
+    where: (game, { and, isNotNull, isNull }) =>
       and(
         eq(game.serverId, serverId),
         isNotNull(game.confirmedAt),
@@ -44,7 +44,7 @@ export async function loadMonthlyAppearances({
       rulebook: { columns: {}, with: { category: { columns: { miniRule: true } } } },
       participants: {
         columns: { userId: true, status: true, absent: true, absenceCancelledAt: true },
-        where: (participant, { eq }) => eq(participant.serverId, serverId),
+        where: (participant) => eq(participant.serverId, serverId),
       },
     },
   });

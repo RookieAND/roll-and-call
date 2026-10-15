@@ -1,7 +1,8 @@
-import "server-only";
 import { insertParticipant } from "@roll-and-call/database/games";
+import "server-only";
 import { normalizeApplicationNote } from "@roll-and-call/database/games/model";
 import { withTransaction } from "@roll-and-call/database/transaction";
+import { isUndefined } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { type Game } from "@/shared/server";
@@ -45,7 +46,7 @@ export async function applyToGame({
       if (game.applicationNoteEnabled) {
         note = normalizeApplicationNote(applicationNote);
         if (!note) {
-          return applicationNote === undefined
+          return isUndefined(applicationNote)
             ? { error: NOTE_REQUIRED_MESSAGE, reason: NOTE_REQUIRED_REASON }
             : { error: NOTE_LENGTH_MESSAGE };
         }

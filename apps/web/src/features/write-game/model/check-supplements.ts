@@ -1,5 +1,6 @@
 import type { GameSupplement } from "@roll-and-call/database";
 import { supplementNameKey } from "@roll-and-call/database/games/model";
+import { isNull } from "es-toolkit";
 
 import { SUPPLEMENT_OPTION_STATE, supplementOptions, type EditionSet } from "@/entities/rulebook";
 
@@ -24,11 +25,11 @@ export function checkSupplements({
   const options = set ? supplementOptions(set, { enforced }) : [];
   const accepted: GameSupplement[] = [];
   for (const item of supplements) {
-    if (item.rulebookId === null) {
+    if (isNull(item.rulebookId)) {
       const name = item.name.trim();
       const key = supplementNameKey(name);
       const saved = previous.some(
-        (old) => old.rulebookId === null && supplementNameKey(old.name) === key,
+        (old) => isNull(old.rulebookId) && supplementNameKey(old.name) === key,
       );
       const error = manualSupplementError({ name, items: accepted, set: saved ? null : set });
       if (error) return { ok: false, error };

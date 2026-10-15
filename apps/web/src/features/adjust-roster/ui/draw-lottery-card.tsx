@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Callout, Text } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -70,12 +71,12 @@ export function DrawLotteryCard({
           <Button
             size="lg"
             className="w-full"
-            disabled={blockedMinPlayers !== null}
+            disabled={!isNull(blockedMinPlayers)}
             onClick={() => setConfirming(true)}
           >
             지금 추첨하기
           </Button>
-          {blockedMinPlayers !== null && (
+          {!isNull(blockedMinPlayers) && (
             <Text typography="body4" foreground="muted" render={<p />} className="mt-100">
               <LineBreaks
                 lines={[`최소 인원 ${blockedMinPlayers}명에 못 미쳐`, "지금 추첨할 수 없습니다."]}

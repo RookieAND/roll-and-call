@@ -2,6 +2,7 @@
 
 import { BULK_CERT_MAX_BOOKS } from "@roll-and-call/database/certifications/model";
 import { Button, Callout, Container, Text, TextInput, UiImage, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -38,7 +39,7 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
     onRestore: restoreBulk,
   });
 
-  const choosingMode = mode === null;
+  const choosingMode = isNull(mode);
   const categories = pickerCategories({ rulebooks, query });
   const searching = !choosingMode;
   const empty = categories.length === 0;

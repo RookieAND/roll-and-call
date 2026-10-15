@@ -1,5 +1,6 @@
 "use client";
 
+import { isUndefined } from "es-toolkit";
 import { type FocusEvent, type KeyboardEvent, useMemo, useState } from "react";
 
 import { type DayColumn, rowSlotIso, type TimeRow } from "@/shared/lib";
@@ -39,7 +40,7 @@ export function useSlotFocus({ days, timeRows, isBlocked }: UseSlotFocusOptions)
     // 다른 확정 세션으로 막힌 칸은 건너뛴다.
     let row = start.row + step.row;
     let column = start.column + step.column;
-    while (keys[row]?.[column] !== undefined) {
+    while (!isUndefined(keys[row]?.[column])) {
       const next = keys[row]![column]!;
       if (!isBlocked(next)) {
         const target = event.currentTarget.parentElement?.querySelector<HTMLElement>(

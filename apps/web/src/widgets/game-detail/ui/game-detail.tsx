@@ -72,7 +72,7 @@ export function GameDetail({
   const statusLine = scheduleLine(game, now);
   const deadlineBadge = showDeadline ? statusLine.deadlineShort : null;
   const sessionDays = game.confirmedAt ? ddayKst(game.confirmedAt, now) : null;
-  const showSessionDday = !game.cancelledAt && !ended && sessionDays !== null && sessionDays >= 0;
+  const showSessionDday = !game.cancelledAt && !ended && !isNull(sessionDays) && sessionDays >= 0;
   const sessionBadge = showSessionDday ? formatDday(sessionDays) : null;
 
   const actionView = deriveActionView({

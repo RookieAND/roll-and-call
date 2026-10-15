@@ -1,5 +1,6 @@
 import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import { VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { ReviewCard, ReviewEmpty, reviewEditDeadline } from "@/entities/review";
 import { MemberTitle } from "@/features/view-badge";
@@ -32,7 +33,7 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
           </ServerLink>
         );
         const gm = row.authorRole === REVIEW_AUTHOR_ROLE.gm;
-        const titleAddon = title === null && !gm ? <MemberTitle userId={row.authorId} /> : null;
+        const titleAddon = isNull(title) && !gm ? <MemberTitle userId={row.authorId} /> : null;
         const own = row.authorId === viewerId;
         const editable = own && reviewEditDeadline(row.createdAt).getTime() > now;
         const menu = own && (

@@ -5,6 +5,7 @@ import {
   type MessageTextKey,
 } from "@roll-and-call/database/servers/model";
 import { Skeleton } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import Image from "next/image";
 
 import { DISCORD } from "@/shared/lib";
@@ -70,7 +71,7 @@ function renderHead({
       const roleId = part.match(/^<@&(\d+)>$/)?.[1];
       if (roleId) {
         const role = guildRoles?.find((candidate) => candidate.id === roleId);
-        const unknown = guildRoles !== undefined && !role;
+        const unknown = !isUndefined(guildRoles) && !role;
         return (
           <Mention key={index} unknown={unknown}>
             {unknown ? "@알 수 없는 역할" : `@${role?.name ?? "역할"}`}

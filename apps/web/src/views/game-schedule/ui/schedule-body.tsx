@@ -3,7 +3,7 @@
 import { VStack } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
 import { chunk, isNull, uniq } from "es-toolkit";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { availabilityQuery, type ScheduleAvailability } from "@/entities/availability";
@@ -11,6 +11,7 @@ import { AvailabilityGrid } from "@/features/coordinate-session";
 import { toKstDateInput, type DayColumn, type TimeRow } from "@/shared/lib";
 
 import { DAYS_PER_PAGE } from "../model/days-per-page";
+import { isScheduleTab } from "../model/is-schedule-tab";
 import { pageIndexOf } from "../model/page-index-of";
 import { SCHEDULE_BODY_MODE, type ScheduleBodyMode } from "../model/schedule-body-mode";
 import { SCHEDULE_NOTICE } from "../model/schedule-notices";
@@ -54,9 +55,17 @@ export function ScheduleBody({
   const pages = chunk(days, DAYS_PER_PAGE);
   const confirmedDate = isNull(confirmedAt) ? null : toKstDateInput(confirmedAt);
   const [pageIndex, setPageIndex] = useState(() => pageIndexOf({ pages, date: confirmedDate }));
-  const [tab, setTab] = useState<ScheduleTab>(
-    confirmedAt ? SCHEDULE_TAB.overlap : SCHEDULE_TAB.mine,
-  );
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const defaultTab = confirmedAt ? SCHEDULE_TAB.overlap : SCHEDULE_TAB.mine;
+  const tab: ScheduleTab = isScheduleTab(tabParam) ? tabParam : defaultTab;
+  // ponytail: 탭은 주소만 바꾼다(history.replaceState). 칠하던 칸을 잃지 않도록 서버를 다시 부르지 않는다.
+  const setTab = (next: ScheduleTab) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("tab", next);
+    window.history.replaceState(null, "", `${pathname}?${params}`);
+  };
   const pageDays = pages[pageIndex] ?? days;
   const pager = <DayPager pages={pages} index={pageIndex} onChange={setPageIndex} />;
 

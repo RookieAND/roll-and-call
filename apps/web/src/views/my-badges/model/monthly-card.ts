@@ -63,7 +63,7 @@ export function monthlyCard({
     breakTies: points,
   });
   const month = monthLabel(kstMonthKey(now));
-  const rankLabel = standing.rank === null ? "순위 없음" : `${standing.rank}위`;
+  const rankLabel = isNull(standing.rank) ? "순위 없음" : `${standing.rank}위`;
   const monthLine = points
     ? `${month} ${standing.count}점 · ${rankLabel} · 1위 ${standing.topCount}점`
     : `${month} ${verb} ${standing.count}회 · 1위 ${standing.topCount}회`;

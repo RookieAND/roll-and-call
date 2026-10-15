@@ -3,6 +3,7 @@ import { isNull } from "es-toolkit";
 import type { ReactNode } from "react";
 
 import { BrandMark } from "@/entities/profile";
+import { JOIN_STATUS } from "@/features/join-server";
 import { EntrySheet, ServerStage } from "@/widgets/server-entry";
 
 import { EMBLEM_MARKS } from "../model/emblem-marks";
@@ -23,7 +24,7 @@ export function JoinLayout({ target, status, action }: JoinLayoutProps) {
       name={target.name}
       icon={target.icon}
       mark={EMBLEM_MARKS[status]}
-      dimmed={status === "denied"}
+      dimmed={status === JOIN_STATUS.denied}
       header={<JoinHeader />}
       sheet={
         <EntrySheet>

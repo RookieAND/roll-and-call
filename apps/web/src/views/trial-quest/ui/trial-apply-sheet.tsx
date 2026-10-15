@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Card, HStack, Sheet, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { LineBreaks } from "@/shared/ui";
 
@@ -31,7 +32,7 @@ const SUMMARY_META = {
 
 export function TrialApplySheet({ kind, onConfirm, onCancel }: TrialApplySheetProps) {
   return (
-    <Sheet.Root open={kind !== null} onOpenChange={(open) => !open && onCancel()}>
+    <Sheet.Root open={!isNull(kind)} onOpenChange={(open) => !open && onCancel()}>
       <Sheet.Popup>
         <Sheet.Handle />
         <Sheet.Title className="mb-075 text-heading3">이 구인에 신청할까요?</Sheet.Title>

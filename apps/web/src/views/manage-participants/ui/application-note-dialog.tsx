@@ -1,4 +1,5 @@
 import { Button, Dialog, Text } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { toKst } from "@/shared/lib";
 
@@ -11,7 +12,7 @@ interface ApplicationNoteDialogProps {
 
 export function ApplicationNoteDialog({ member, onClose }: ApplicationNoteDialogProps) {
   return (
-    <Dialog.Root open={member !== null} onOpenChange={(open) => !open && onClose()}>
+    <Dialog.Root open={!isNull(member)} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Popup>
         {member && (
           <>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Field, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 
 import { PlayTimeRow } from "./play-time-row";
 
@@ -16,8 +17,8 @@ export function PlayTimeField({ min, max, onChangeMin, onChangeMax, error }: Pla
   return (
     <Field.Root label="플레이타임" required>
       <VStack gap="150">
-        <PlayTimeRow name={max === null ? undefined : "최소"} value={min} onChange={onChangeMin} />
-        {max === null ? (
+        <PlayTimeRow name={isNull(max) ? undefined : "최소"} value={min} onChange={onChangeMin} />
+        {isNull(max) ? (
           <Button
             type="button"
             variant="outline"
@@ -50,7 +51,7 @@ export function PlayTimeField({ min, max, onChangeMin, onChangeMax, error }: Pla
             {error}
           </Text>
         )}
-        {!error && max === null && (
+        {!error && isNull(max) && (
           <Text typography="body4" foreground="hint">
             최대를 추가하지 않으면 최소와 같은 시간으로 정해집니다.
           </Text>

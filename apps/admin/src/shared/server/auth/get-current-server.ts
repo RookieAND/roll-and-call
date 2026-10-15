@@ -1,5 +1,6 @@
-import "server-only";
 import { getServerBySlug, syncServerGuild } from "@roll-and-call/database/servers";
+import "server-only";
+import { isNull } from "es-toolkit";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { cache } from "react";
@@ -19,7 +20,7 @@ export const getCurrentServer = cache(async () => {
     console.error(error);
     return undefined;
   });
-  if (guild === null) return { ...server, botConnected: false };
+  if (isNull(guild)) return { ...server, botConnected: false };
   const synced = guild ? await syncServerGuild({ server, guild }) : server;
   return { ...synced, botConnected: true };
 });

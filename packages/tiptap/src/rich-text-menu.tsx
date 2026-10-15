@@ -68,7 +68,7 @@ export function RichTextMenu({ editor }: RichTextMenuProps) {
   return (
     <BubbleMenu
       editor={editor}
-      shouldShow={({ editor }) => !isNull(linkDraft) || !editor.state.selection.empty}
+      shouldShow={({ editor: shown }) => !isNull(linkDraft) || !shown.state.selection.empty}
       className="flex gap-025 rounded-300 border border-gray-200 bg-surface p-050 shadow-md"
     >
       {isNull(linkDraft) ? (

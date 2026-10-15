@@ -51,8 +51,8 @@ export function RichTextEditor({
     ],
     content: chipifyRichTextDoc(toRichTextDoc(value)),
     editorProps: { attributes: id ? { class: EDITOR_CLASS, id } : { class: EDITOR_CLASS } },
-    onUpdate: ({ editor }) =>
-      onChange(JSON.stringify(unchipifyRichTextDoc(editor.getJSON() as RichTextDoc))),
+    onUpdate: ({ editor: updated }) =>
+      onChange(JSON.stringify(unchipifyRichTextDoc(updated.getJSON() as RichTextDoc))),
   });
 
   if (!editor) return null;

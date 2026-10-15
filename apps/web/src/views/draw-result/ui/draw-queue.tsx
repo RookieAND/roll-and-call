@@ -1,4 +1,5 @@
 import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 
 import type { DrawEntry } from "../model/draw-entry";
 import { DrawQueueMore } from "./draw-queue-more";
@@ -19,7 +20,7 @@ export function DrawQueue({ label, caption, entries, meUserId, previewCount }: D
   const rows = entries.map((entry) => (
     <DrawRow key={entry.userId} entry={entry} isMe={entry.userId === meUserId} />
   ));
-  const folds = entries.length > UNFOLDED_MAX && previewCount !== undefined;
+  const folds = entries.length > UNFOLDED_MAX && !isUndefined(previewCount);
   const shownCount = folds ? previewCount : entries.length;
   const hiddenRows = rows.slice(shownCount);
 

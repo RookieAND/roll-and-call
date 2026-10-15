@@ -1,3 +1,5 @@
+import { isUndefined } from "es-toolkit";
+
 import type { BadgeView } from "./badge-view";
 import { describeBadge } from "./describe-badge";
 
@@ -10,7 +12,7 @@ export function resolveFeaturedEntry<View extends HeldView>(
   const [key, tierText] = entry.split("@");
   const badge = held.find((candidate) => candidate.key === key);
   if (!badge) return null;
-  if (tierText === undefined) return badge;
+  if (isUndefined(tierText)) return badge;
   const tier = Number(tierText);
   if (!Number.isInteger(tier) || tier < 1 || tier > badge.tier) return null;
   if (tier === badge.tier) return badge;

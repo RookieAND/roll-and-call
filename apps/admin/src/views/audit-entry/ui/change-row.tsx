@@ -1,4 +1,5 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import { ArrowRight } from "lucide-react";
 
 import type { AuditChange } from "@/shared/server";
@@ -35,13 +36,13 @@ function ScalarChangeLine({ change }: ChangeRowProps) {
   return (
     <HStack align="start" gap="100" wrap>
       <ChangeTag kind={kind} />
-      {change.before !== undefined ? (
+      {!isUndefined(change.before) ? (
         <ChangeValue struck={kind === "removed"}>{change.before}</ChangeValue>
       ) : null}
       {kind === "changed" ? (
         <ArrowRight size={16} aria-label="에서" className="mt-025 shrink-0 text-hint" />
       ) : null}
-      {kind !== "removed" && change.after !== undefined ? (
+      {kind !== "removed" && !isUndefined(change.after) ? (
         <ChangeValue>{change.after}</ChangeValue>
       ) : null}
     </HStack>
@@ -49,7 +50,7 @@ function ScalarChangeLine({ change }: ChangeRowProps) {
 }
 
 export function ChangeRow({ change }: ChangeRowProps) {
-  const isList = change.added !== undefined || change.removed !== undefined;
+  const isList = !isUndefined(change.added) || !isUndefined(change.removed);
   return (
     <div className="grid grid-cols-[120px_minmax(0,1fr)] items-start gap-x-150 py-100">
       <Text typography="body4" foreground="hint" render={<dt />} className="pt-025">

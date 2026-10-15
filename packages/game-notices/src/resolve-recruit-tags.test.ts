@@ -23,7 +23,7 @@ describe("resolveRecruitTags", () => {
     });
     expect(tags.open).toBe("3");
     expect(tags.categories).toEqual({ cat: "3" });
-    expect(tags.managed.sort()).toEqual(["2", "3"]);
+    expect(tags.managed.toSorted()).toEqual(["2", "3"]);
   });
 
   it("사라진 태그 id는 이름으로 찾거나 비운다", () => {

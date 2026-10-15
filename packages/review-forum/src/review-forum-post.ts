@@ -89,7 +89,7 @@ export function reviewForumPost({
 
   return {
     name,
-    appliedTags: tagNames.flatMap((name) => tagIds.get(name) ?? []),
+    appliedTags: tagNames.flatMap((tagName) => tagIds.get(tagName) ?? []),
     // 넘치면 아래 한 줄을 빼고, 그래도 넘치면 후기 원문을 줄인다.
     content:
       withMeta.length <= contentMax

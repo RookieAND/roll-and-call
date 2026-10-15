@@ -9,8 +9,13 @@ interface ManualNoticePreviewProps {
 // 추방과 차단 해제에서만 쓴다. 당사자가 서버 멤버가 아니라 알림 탭을 볼 수 없어서 운영진이 직접 전한다(D185, D203).
 // 본문은 줄바꿈(\n)마다 한 줄로 그린다.
 export function ManualNoticePreview({ text }: ManualNoticePreviewProps) {
-  const copy = () => {
-    void navigator.clipboard.writeText(text).then(() => toast.success("문구를 복사했습니다"));
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("문구를 복사했습니다");
+    } catch {
+      toast.danger("문구를 복사하지 못했습니다");
+    }
   };
   return (
     <Card.Root radius={500} padding="sm" render={<VStack gap="100" />}>

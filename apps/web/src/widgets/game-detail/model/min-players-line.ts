@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import { RECRUIT_METHOD } from "@/entities/game";
 
 const SUBJECT: Record<string, string> = {
@@ -18,7 +20,7 @@ export function minPlayersLine({
   now: Date;
   recruitMethod: string;
 }): string | null {
-  if (minPlayers === null || endDate.getTime() <= now.getTime()) return null;
+  if (isNull(minPlayers) || endDate.getTime() <= now.getTime()) return null;
   const subject = SUBJECT[recruitMethod] ?? SUBJECT[RECRUIT_METHOD.firstCome];
   return `${subject} ${minPlayers}명 미만이면 취소됩니다.`;
 }

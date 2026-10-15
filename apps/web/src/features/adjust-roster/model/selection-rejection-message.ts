@@ -1,4 +1,5 @@
 import { SELECTION_REJECTION, type SelectionRejection } from "@roll-and-call/database/games/model";
+import { isNull } from "es-toolkit";
 
 import { APPLICATION_CLOSED_MESSAGE, GAME_NOT_FOUND_MESSAGE } from "@/shared/api";
 
@@ -17,7 +18,7 @@ export function selectionRejectionMessage(
   reason: SelectionRejection,
   minPlayers: number | null,
 ): string {
-  if (reason === SELECTION_REJECTION.minPlayersUnmet && minPlayers !== null) {
+  if (reason === SELECTION_REJECTION.minPlayersUnmet && !isNull(minPlayers)) {
     return `최소 인원 ${minPlayers}명에 못 미쳐 선발을 마칠 수 없습니다.`;
   }
   return MESSAGES[reason];

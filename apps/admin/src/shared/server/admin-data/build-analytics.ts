@@ -1,5 +1,5 @@
 import { RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
-import { sumBy, uniq } from "es-toolkit";
+import { isNull, sumBy, uniq } from "es-toolkit";
 
 import { percent } from "./percent";
 import { POST_STATUS } from "./post-status";
@@ -255,7 +255,7 @@ export function buildAnalytics({ previewEarly, now, ...db }: BuildAnalyticsOptio
 
   return {
     early,
-    compare: previous !== null,
+    compare: !isNull(previous),
     sections,
     today: now,
     period: {

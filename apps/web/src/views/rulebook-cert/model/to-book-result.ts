@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import {
   CERT_FORMAT_LABEL,
   CERT_STATE,
@@ -65,7 +67,7 @@ export function toBookResult({
   const purged = !direct && Boolean(application?.filesPurgedAt);
   const thumbs =
     photosKept && application && !direct ? bookThumbs({ application, signedUrls }) : [];
-  const kept = thumbs.filter((thumb) => thumb.src !== null);
+  const kept = thumbs.filter((thumb) => !isNull(thumb.src));
   return {
     id: rulebook.id,
     title: rulebook.shortName,

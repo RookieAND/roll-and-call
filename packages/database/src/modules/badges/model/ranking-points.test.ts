@@ -114,7 +114,7 @@ describe("recordAppearances (포인트제)", () => {
       points,
     );
     const winners = monthlyWinners(appearances, new Date("2026-10-20T00:00:00Z"));
-    expect(winners.map((winner) => winner.userId).sort()).toEqual(["a", "c", "gm"]);
+    expect(winners.map((winner) => winner.userId).toSorted()).toEqual(["a", "c", "gm"]);
     expect(
       monthlyWinners(
         [{ userId: "x", role: BADGE_ROLE.player, startsAt: START, weight: -100, sessions: 0 }],

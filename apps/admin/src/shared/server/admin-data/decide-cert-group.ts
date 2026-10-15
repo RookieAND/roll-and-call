@@ -1,10 +1,11 @@
-import "server-only";
 import {
   notifyCertGroupDecision,
   type CertDecision,
   type CertDecisionResult,
 } from "@roll-and-call/database/certifications";
+import "server-only";
 import { type Actor } from "@roll-and-call/database/moderation";
+import { isUndefined } from "es-toolkit";
 
 import { decideCert } from "./decide-cert";
 import { loadSnapshot } from "./snapshot";
@@ -34,14 +35,14 @@ export async function decideCertGroup({
     throw new Error("같은 묶음의 신청이 아닙니다");
   }
   const byId = new Map(
-    applications.filter((row) => row !== undefined).map((row) => [row.id, row.rulebookId]),
+    applications.filter((row) => !isUndefined(row)).map((row) => [row.id, row.rulebookId]),
   );
   const isCore = (rulebookId: string) =>
     snapshot.rulebooks.find((rulebook) => rulebook.id === rulebookId)?.kind === "core";
   const approving = decision.kind === "approve";
   const direction = approving ? -1 : 1;
   const ordered = applications
-    .filter((row) => row !== undefined)
+    .filter((row) => !isUndefined(row))
     .toSorted((a, b) => direction * (Number(isCore(a.rulebookId)) - Number(isCore(b.rulebookId))));
   const decidedBooks: Extract<CertDecisionResult, { ok: true }>[] = [];
   let failure: Extract<CertDecisionResult, { ok: false }> | null = null;
@@ -62,7 +63,7 @@ export async function decideCertGroup({
   // 알림은 책마다가 아니라 한 건으로 보낸다. 대표 책은 화면 목록(ids) 순서의 첫 책이다.
   const representative = ids
     .map((id) => decidedBooks.find((book) => book.rulebookId === byId.get(id)))
-    .find((book) => book !== undefined);
+    .find((book) => !isUndefined(book));
   if (representative) {
     await notifyCertGroupDecision({
       serverId,

@@ -1,5 +1,6 @@
 "use server";
 
+import { isNull } from "es-toolkit";
 import { z } from "zod";
 
 import { idSchema, parseActionInput } from "@/shared/lib";
@@ -17,7 +18,7 @@ export async function fetchApplicationNote(args: {
   const server = await getCurrentServer();
   try {
     const note = await getApplicationNote({ serverId: server.id, gameId, userId });
-    return note === null ? { ok: false } : { ok: true, note };
+    return isNull(note) ? { ok: false } : { ok: true, note };
   } catch {
     return { ok: false };
   }

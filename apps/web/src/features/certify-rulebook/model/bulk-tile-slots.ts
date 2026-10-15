@@ -1,4 +1,5 @@
 import { BULK_CERT_MAX_PHOTOS } from "@roll-and-call/database/certifications/model";
+import { isUndefined } from "es-toolkit";
 
 import type { BulkDraft } from "./bulk-draft";
 import { PHOTO_SLOT, slotKey, type PhotoSlot } from "./photo-slot";
@@ -7,6 +8,6 @@ import { PHOTO_SLOT, slotKey, type PhotoSlot } from "./photo-slot";
 export function bulkTileSlots(draft: BulkDraft): PhotoSlot[] {
   const last = draft.photos.at(-1);
   const canAdd =
-    last !== undefined && slotKey(last) !== "" && draft.photos.length < BULK_CERT_MAX_PHOTOS;
+    !isUndefined(last) && slotKey(last) !== "" && draft.photos.length < BULK_CERT_MAX_PHOTOS;
   return canAdd ? [...draft.photos, { status: PHOTO_SLOT.empty }] : draft.photos;
 }

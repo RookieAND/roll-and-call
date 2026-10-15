@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 export const BULK_SELECTION_STORAGE_KEY = "rc:bulk-cert-selection";
 const MAX_AGE_MS = 30 * 60 * 1000;
 
@@ -15,7 +17,7 @@ export function parseBulkSelection({ raw, now }: ParseInput): string[] {
   if (!raw) return [];
   try {
     const parsed: unknown = JSON.parse(raw);
-    if (typeof parsed !== "object" || parsed === null) return [];
+    if (typeof parsed !== "object" || isNull(parsed)) return [];
     const { ids, savedAt } = parsed as { ids?: unknown; savedAt?: unknown };
     if (typeof savedAt !== "number" || now - savedAt > MAX_AGE_MS) return [];
     if (!Array.isArray(ids)) return [];

@@ -1,4 +1,5 @@
 import { DIE_FACES, DRAW_REJECTION, type DrawRejection } from "@roll-and-call/database/games/model";
+import { isNull } from "es-toolkit";
 
 import {
   APPLICATION_CLOSED_MESSAGE,
@@ -19,7 +20,7 @@ const MESSAGES: Record<DrawRejection, string> = {
 };
 
 export function drawRejectionMessage(reason: DrawRejection, minPlayers: number | null): string {
-  if (reason === DRAW_REJECTION.minPlayersUnmet && minPlayers !== null) {
+  if (reason === DRAW_REJECTION.minPlayersUnmet && !isNull(minPlayers)) {
     return `최소 인원 ${minPlayers}명에 못 미쳐 추첨할 수 없습니다.`;
   }
   return MESSAGES[reason];

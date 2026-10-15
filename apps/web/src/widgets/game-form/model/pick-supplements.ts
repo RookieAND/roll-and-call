@@ -1,3 +1,5 @@
+import { isNull } from "es-toolkit";
+
 import type { SupplementOption } from "@/entities/rulebook";
 import type { SupplementValue } from "@/features/write-game";
 
@@ -16,8 +18,8 @@ export function pickSupplements({
     .filter((option) => ids.includes(option.id))
     .map((option) => ({ name: option.name, rulebookId: option.id }));
   const unlisted = items.filter(
-    (item) => item.rulebookId !== null && !options.some((option) => option.id === item.rulebookId),
+    (item) => !isNull(item.rulebookId) && !options.some((option) => option.id === item.rulebookId),
   );
-  const manual = items.filter((item) => item.rulebookId === null);
+  const manual = items.filter((item) => isNull(item.rulebookId));
   return [...picked, ...unlisted, ...manual];
 }

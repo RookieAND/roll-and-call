@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Dialog } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 
 import { useServerPath } from "@/shared/lib";
@@ -21,7 +22,7 @@ export function OverlapNoticeDialog({ overlapGameId, onClose }: OverlapNoticeDia
   const toServerPath = useServerPath();
 
   return (
-    <Dialog.Root open={overlapGameId !== null} onOpenChange={(open) => !open && onClose()}>
+    <Dialog.Root open={!isNull(overlapGameId)} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Popup>
         <Dialog.Header>
           <Dialog.Title>세션을 신청할 수 없습니다</Dialog.Title>

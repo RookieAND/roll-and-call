@@ -2,6 +2,7 @@
 
 import type { SELECTION_REJECTION } from "@roll-and-call/database/games/model";
 import { Button, Callout } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState } from "react";
 
 import { ConfirmDialog, LineBreaks, toast, useAction } from "@/shared/ui";
@@ -68,7 +69,7 @@ export function FinishSelectionCard({
           <Button
             size="lg"
             className="w-full"
-            disabled={block !== null}
+            disabled={!isNull(block)}
             onClick={() => setConfirming(true)}
           >
             선발 마치기
@@ -91,7 +92,8 @@ export function FinishSelectionCard({
           <Callout.Description>
             선발을 마친 뒤에는 되돌릴 수 없습니다.
             <br />
-            지금까지 고른 선발 후보는 알리지 않았고, 마치는 순간 디스코드와 알림 탭으로 한 번에 알립니다.
+            지금까지 고른 선발 후보는 알리지 않았고, 마치는 순간 디스코드와 알림 탭으로 한 번에
+            알립니다.
           </Callout.Description>
         </Callout.Root>
       </ConfirmDialog>

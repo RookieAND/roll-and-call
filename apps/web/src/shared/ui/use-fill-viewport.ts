@@ -1,3 +1,4 @@
+import { isNull } from "es-toolkit";
 import { type RefObject, useEffect } from "react";
 
 // 문서 높이는 화면보다 짧아질 수 없어서(앱 틀의 min-h-dvh) 그대로 재면 남는 높이가 늘 0이다.
@@ -28,7 +29,7 @@ export function useFillViewport({
     if (!node) return;
 
     function fit() {
-      if (!node || node.offsetParent === null) return;
+      if (!node || isNull(node.offsetParent)) return;
       node.style.height = `${minHeight}px`;
       const spare = window.innerHeight - contentHeight(node);
       node.style.height = `${Math.max(minHeight, minHeight + spare)}px`;
