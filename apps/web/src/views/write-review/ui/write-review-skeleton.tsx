@@ -10,7 +10,10 @@ import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 export function WriteReviewSkeleton() {
   const { id } = useParams<{ id: string }>();
   return (
-    <PageShell appBar={<AppBar back={`/games/${id}`} backIcon="close" title="후기 쓰기" />}>
+    <PageShell
+      readable
+      appBar={<AppBar back={`/games/${id}`} backIcon="close" title="후기 쓰기" />}
+    >
       <div className={DESKTOP_CARD_CLASS}>
         <VStack gap="250" className="p-200" aria-busy>
           <VStack gap="050">

@@ -126,6 +126,7 @@ export function ConfirmSessionForm({
 
   return (
     <PageShell
+      readable
       appBar={appBar}
       panel={
         <>

@@ -77,7 +77,7 @@ export async function UserProfileView({ id }: UserProfileViewProps) {
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm" className="px-0">
+        <Container size="sm" className="px-0 desktop:max-w-none">
           <ProfileSummary
             profile={profile}
             absences={absences}

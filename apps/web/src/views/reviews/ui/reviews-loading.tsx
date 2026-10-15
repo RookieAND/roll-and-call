@@ -18,7 +18,7 @@ export function ReviewsLoading({ backBase, title, heading = false }: ReviewsLoad
   return (
     <PageShell appBar={<AppBar back={`${backBase}/${id}`} title={title} />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm">
+        <Container size="sm" className="desktop:max-w-none">
           <VStack gap="150" className="py-200">
             {heading && (
               <VStack gap="050">

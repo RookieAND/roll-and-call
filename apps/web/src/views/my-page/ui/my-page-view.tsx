@@ -29,7 +29,7 @@ export async function MyPageView() {
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm">
+        <Container size="sm" className="desktop:max-w-none">
           {user ? (
             <VStack gap="250" className="py-225">
               <Suspense fallback={<MyPageSummarySkeleton />}>

@@ -13,7 +13,7 @@ export function ReviewsPage({ title, back, children }: ReviewsPageProps) {
   return (
     <PageShell appBar={<AppBar back={back} title={title} />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm">
+        <Container size="sm" className="desktop:max-w-none">
           <VStack gap="150" className="py-200 break-keep">
             {children}
           </VStack>

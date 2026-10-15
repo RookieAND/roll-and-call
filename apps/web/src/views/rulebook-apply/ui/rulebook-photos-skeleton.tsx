@@ -5,6 +5,7 @@ import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 export function RulebookPhotosSkeleton() {
   return (
     <PageShell
+      readable
       appBar={
         <AppBar
           back="/me/rulebooks/apply"

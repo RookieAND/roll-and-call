@@ -31,7 +31,7 @@ export function ManageParticipantsSkeleton() {
         </VStack>
       }
     >
-      <Container size="md" className="desktop:px-0">
+      <Container size="md" className="desktop:px-0 desktop:max-w-none">
         <VStack gap="250" className="py-200 desktop:pt-0 desktop:pb-0" aria-busy>
           <VStack gap="150" className="desktop:hidden">
             <HStack align="center" gap="075">

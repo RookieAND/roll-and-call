@@ -16,7 +16,10 @@ export function ManageGameSkeleton() {
   return (
     <PageShell appBar={<AppBar back={`/games/${id}`} title="운영 관리" />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm" className="px-0">
+        <Container
+          size="sm"
+          className="px-0 desktop:grid desktop:max-w-none desktop:grid-cols-2 desktop:items-start"
+        >
           <div className="px-200 pt-200">
             <Card.Root padding="md" radius={600}>
               <HStack align="start" gap="100">

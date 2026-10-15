@@ -31,7 +31,7 @@ export async function MyRulebooksView() {
     return (
       <PageShell appBar={<AppBar back="/me" title={TITLE} />}>
         <div className={DESKTOP_CARD_CLASS}>
-          <Container size="sm">
+          <Container size="sm" className="desktop:max-w-none">
             <div className="py-300">
               <LoginRequired />
             </div>
@@ -48,7 +48,7 @@ export async function MyRulebooksView() {
   return (
     <PageShell appBar={<AppBar back="/me" title={TITLE} />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm">
+        <Container size="sm" className="desktop:max-w-none">
           <VStack gap="250" className="pt-200 pb-250">
             {home.banner && <EnforcementBanner title={home.banner.title} dday={home.banner.dday} />}
             {home.suspension && (
@@ -123,7 +123,7 @@ export async function MyRulebooksView() {
         </Container>
         <FloatingBar.Root elevated={false}>
           <FloatingBar.Content>
-            <Container size="sm">
+            <Container size="sm" className="desktop:max-w-none">
               {applyDisabled ? (
                 <Button size="lg" disabled className="w-full">
                   <Plus size={16} strokeWidth={2.2} aria-hidden />

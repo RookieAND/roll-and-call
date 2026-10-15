@@ -21,7 +21,7 @@ export function UserProfileSkeleton() {
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm" className="px-0">
+        <Container size="sm" className="px-0 desktop:max-w-none">
           <div className="px-200 pt-250 pb-050">
             <HStack align="center" gap="175">
               <Skeleton width={64} height={64} rounded="full" />

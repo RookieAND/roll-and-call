@@ -10,7 +10,7 @@ export default function Loading() {
       panel={<MyPagePanelLoading />}
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm">
+        <Container size="sm" className="desktop:max-w-none">
           <VStack gap="250" className="py-225">
             <MyPageLoading />
           </VStack>

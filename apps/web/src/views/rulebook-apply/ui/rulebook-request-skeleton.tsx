@@ -5,6 +5,7 @@ import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 export function RulebookRequestSkeleton() {
   return (
     <PageShell
+      readable
       appBar={<AppBar back="/me/rulebooks/apply" title="룰북 추가 요청" heading={false} />}
     >
       <div className={DESKTOP_CARD_CLASS}>

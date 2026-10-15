@@ -34,7 +34,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
   if (!user || user.id !== game.gmId) {
     return (
       <PageShell appBar={<AppBar back={`/games/${id}`} title="참여자 관리" />}>
-        <Container size="sm" className="desktop:px-0">
+        <Container size="sm" className="desktop:px-0 desktop:max-w-none">
           <div className="py-300 desktop:py-0">
             <GmOnlyNotice
               gameId={id}

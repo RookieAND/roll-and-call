@@ -9,7 +9,7 @@ export function MyRulebooksSkeleton() {
   return (
     <PageShell appBar={<AppBar back="/me" title="내 룰북" />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm">
+        <Container size="sm" className="desktop:max-w-none">
           <VStack gap="250" aria-busy className="pt-200 pb-250">
             {SECTION_ROW_COUNTS.map((rowCount) => (
               <VStack key={rowCount} gap="125">
@@ -40,7 +40,7 @@ export function MyRulebooksSkeleton() {
         </Container>
         <FloatingBar.Root elevated={false}>
           <FloatingBar.Content>
-            <Container size="sm">
+            <Container size="sm" className="desktop:max-w-none">
               <Skeleton width="100%" height={48} rounded={500} />
             </Container>
           </FloatingBar.Content>

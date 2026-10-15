@@ -77,6 +77,7 @@ export function BulkCertApplyForm({
 
   return (
     <PageShell
+      readable
       appBar={
         <AppBar
           title="인증 신청"

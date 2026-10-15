@@ -84,11 +84,11 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
     >
       <div className={DESKTOP_CARD_CLASS}>
       <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface desktop:static">
-        <Container size="sm" className="px-0">
+        <Container size="sm" className="px-0 desktop:max-w-none">
           <SessionTabs label="분류" tabs={tabs} activeKey={activeTab} />
         </Container>
       </div>
-      <Container size="sm" className="pb-250">
+      <Container size="sm" className="pb-250 desktop:max-w-none">
         {groups.length > 0 ? (
           groups.map((group) => <UserBadgeGroup key={group.key} group={group} />)
         ) : (

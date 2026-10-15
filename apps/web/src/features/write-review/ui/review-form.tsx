@@ -154,6 +154,7 @@ export function ReviewForm({
 
   return (
     <PageShell
+      readable
       appBar={
         <AppBar title={reviewFormTitle({ editing, gm })} backIcon="close" onBack={requestLeave} />
       }

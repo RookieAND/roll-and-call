@@ -32,7 +32,7 @@ export async function MySessionsView({ tab, status }: MySessionsViewProps) {
     return (
       <PageShell appBar={<AppBar back="/me" title="내 세션" />}>
         <div className={DESKTOP_CARD_CLASS}>
-          <Container size="sm">
+          <Container size="sm" className="desktop:max-w-none">
             <div className="py-300">
               <LoginRequired />
             </div>
@@ -68,7 +68,7 @@ export async function MySessionsView({ tab, status }: MySessionsViewProps) {
           <SessionStatusChips activeTab={activeTab} activeChip={activeChip} counts={chipCounts} />
         </div>
 
-        <Container size="sm">
+        <Container size="sm" className="desktop:max-w-none">
           <div className="py-150">
             {items.length > 0 ? (
               <SessionList items={items} />

@@ -13,7 +13,7 @@ export function UserBadgesSkeleton() {
     <PageShell appBar={<AppBar back={`/users/${id}`} title="업적" />}>
       <div className={DESKTOP_CARD_CLASS}>
       <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface desktop:static">
-        <Container size="sm" className="px-0">
+        <Container size="sm" className="px-0 desktop:max-w-none">
           <HStack align="center" gap="100" className="h-[46px] border-b border-gray-200 px-200">
             {range(3).map((index) => (
               <HStack key={index} justify="center" className="flex-1">
@@ -23,7 +23,7 @@ export function UserBadgesSkeleton() {
           </HStack>
         </Container>
       </div>
-      <Container size="sm" className="pb-250">
+      <Container size="sm" className="pb-250 desktop:max-w-none">
         <VStack aria-busy gap="100" className="pt-175">
           <Skeleton width={72} height={14} />
           <Card.Root padding="none" radius={600} className="overflow-hidden">

@@ -27,7 +27,7 @@ export async function RulebookBulkPhotosView({ rulebookIds }: RulebookBulkPhotos
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
-      <PageShell appBar={<AppBar back="/me/rulebooks" title="인증 신청" />}>
+      <PageShell readable appBar={<AppBar back="/me/rulebooks" title="인증 신청" />}>
         <div className={DESKTOP_CARD_CLASS}>
           <Container size="sm">
             <div className="py-300">

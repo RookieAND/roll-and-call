@@ -13,7 +13,7 @@ interface AttendanceFrameProps {
 
 export function AttendanceFrame({ appBar, header, panel, children }: AttendanceFrameProps) {
   return (
-    <PageShell appBar={appBar} panel={panel}>
+    <PageShell readable appBar={appBar} panel={panel}>
       <div className={DESKTOP_CARD_CLASS}>
         <Container size="sm">
           <VStack gap="150" className="py-200">

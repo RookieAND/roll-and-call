@@ -56,7 +56,7 @@ export function ParticipantManager({
       appBar={<AppBar back={`/games/${game.id}/manage`} title="참여자 관리" />}
       panel={header}
     >
-      <Container size="md" className="desktop:px-0">
+      <Container size="md" className="desktop:px-0 desktop:max-w-none">
         <VStack gap="250" className="py-200 desktop:pt-0 desktop:pb-0">
           <div className="desktop:hidden">{header}</div>
 

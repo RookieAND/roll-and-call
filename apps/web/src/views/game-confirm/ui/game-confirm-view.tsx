@@ -40,7 +40,7 @@ export async function GameConfirmView({ id }: GameConfirmViewProps) {
   if (!game) notFound();
   if (user?.id !== game.gmId) {
     return (
-      <PageShell appBar={<AppBar back={`/games/${id}`} title="세션 시간 결정" />}>
+      <PageShell readable appBar={<AppBar back={`/games/${id}`} title="세션 시간 결정" />}>
         <Container size="sm" className="py-300 desktop:px-0 desktop:py-0">
           <GmOnlyNotice
             gameId={id}
@@ -58,6 +58,7 @@ export async function GameConfirmView({ id }: GameConfirmViewProps) {
       redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
     return (
       <PageShell
+        readable
         appBar={
           <AppBar
             back={`/games/${id}/manage`}
@@ -93,7 +94,7 @@ export async function GameConfirmView({ id }: GameConfirmViewProps) {
   if (awaitingResult) {
     const isLottery = awaitingResult === "lottery";
     return (
-      <PageShell appBar={appBar}>
+      <PageShell readable appBar={appBar}>
         <Container size="sm" className="py-200 desktop:px-0 desktop:py-0">
           <EmptyState
             size="section"

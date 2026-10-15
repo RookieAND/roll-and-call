@@ -14,7 +14,7 @@ export default function Loading() {
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm" className="px-0">
+        <Container size="sm" className="px-0 desktop:max-w-none">
           <DexSkeleton />
         </Container>
       </div>

@@ -13,6 +13,7 @@ export function GameConfirmSkeleton() {
 
   return (
     <PageShell
+      readable
       appBar={
         <AppBar
           back={`/games/${id}/manage`}

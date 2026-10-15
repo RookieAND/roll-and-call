@@ -17,7 +17,7 @@ export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
-      <PageShell appBar={<AppBar back={`/games/${gameId}`} title="후기 쓰기" />}>
+      <PageShell readable appBar={<AppBar back={`/games/${gameId}`} title="후기 쓰기" />}>
         <div className={DESKTOP_CARD_CLASS}>
           <Container size="sm" className="py-300">
             <LoginRequired />

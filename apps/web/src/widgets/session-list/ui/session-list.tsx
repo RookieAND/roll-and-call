@@ -9,7 +9,10 @@ interface SessionListProps {
 
 export function SessionList({ items }: SessionListProps) {
   return (
-    <VStack gap="125">
+    <VStack
+      gap="125"
+      className="desktop:grid desktop:grid-cols-[repeat(auto-fill,minmax(22.5rem,1fr))]"
+    >
       {items.map((model) => (
         <SessionCard key={model.id} model={model} />
       ))}

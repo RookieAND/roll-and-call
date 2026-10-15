@@ -93,7 +93,7 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm" className="px-0 pb-300">
+        <Container size="sm" className="px-0 pb-300 desktop:max-w-none">
           <div className="desktop:hidden">
             <DexHeader earnedCount={badgeCount.total} featured={featured} />
           </div>

@@ -5,7 +5,7 @@ import { AppBar, ErrorScreen, PageShell, ServerLink } from "@/shared/ui";
 // 운영진이 숨긴 구인을 GM도 참여자도 아닌 사람이 열었을 때(R7). 없는 구인 화면과 같은 틀이다.
 export function GameHiddenView() {
   return (
-    <PageShell appBar={<AppBar back="/games" backHistory={false} title="구인 상세" />}>
+    <PageShell readable appBar={<AppBar back="/games" backHistory={false} title="구인 상세" />}>
       <ErrorScreen
         image="empty-search"
         title="운영진이 숨긴 구인입니다"

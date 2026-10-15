@@ -13,7 +13,7 @@ export function GameAttendanceSkeleton() {
   const { id } = useParams<{ id: string }>();
 
   return (
-    <PageShell appBar={<AppBar back={`/games/${id}/manage`} title="출석 확인" />}>
+    <PageShell readable appBar={<AppBar back={`/games/${id}/manage`} title="출석 확인" />}>
       <div className={DESKTOP_CARD_CLASS}>
         <Container size="sm">
           <VStack gap="150" className="py-200">

@@ -7,7 +7,7 @@ import { AppBar, EmptyState, PageShell } from "@/shared/ui";
 // views/games 배럴은 서버 모듈을 끌고 와 클라이언트 경계에서 쓸 수 없어 앱바를 여기서 그린다.
 export default function ErrorPage({ retry }: { error: Error; retry: () => void }) {
   return (
-    <PageShell appBar={<AppBar title="구인 목록" brand />}>
+    <PageShell readable appBar={<AppBar title="구인 목록" brand />}>
       <Container className="py-300">
         <EmptyState
           image="empty-error"

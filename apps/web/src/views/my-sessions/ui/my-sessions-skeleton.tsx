@@ -24,7 +24,7 @@ export function MySessionsSkeleton() {
             ))}
           </HStack>
         </div>
-        <Container size="sm">
+        <Container size="sm" className="desktop:max-w-none">
           <div className="py-150">
             <SessionListSkeleton />
           </div>

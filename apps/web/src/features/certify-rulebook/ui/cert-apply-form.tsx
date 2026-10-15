@@ -87,6 +87,7 @@ export function CertApplyForm({
 
   return (
     <PageShell
+      readable
       appBar={
         <AppBar
           title={retry ? "다시 신청" : "인증 신청"}

@@ -32,7 +32,7 @@ export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
 
   if (!user) {
     return (
-      <PageShell appBar={<AppBar back={`/games/${id}`} title="출석 확인" />}>
+      <PageShell readable appBar={<AppBar back={`/games/${id}`} title="출석 확인" />}>
         <Container size="sm" className="desktop:px-0">
           <div className="py-300 desktop:py-0">
             <LoginRequired />
@@ -43,7 +43,7 @@ export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
   }
   if (user.id !== game.gmId) {
     return (
-      <PageShell appBar={<AppBar back={`/games/${id}`} title="출석 확인" />}>
+      <PageShell readable appBar={<AppBar back={`/games/${id}`} title="출석 확인" />}>
         <Container size="sm" className="desktop:px-0">
           <div className="py-300 desktop:py-0">
             <GmOnlyNotice

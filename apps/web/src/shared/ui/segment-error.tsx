@@ -17,7 +17,7 @@ interface SegmentErrorProps {
 
 export function SegmentError({ appBarTitle, back, subject, retry }: SegmentErrorProps) {
   return (
-    <PageShell appBar={<AppBar back={back} title={appBarTitle} />}>
+    <PageShell readable appBar={<AppBar back={back} title={appBarTitle} />}>
       <ErrorScreen
         title={`${subject} 불러오지 못했습니다`}
         description={

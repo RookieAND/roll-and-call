@@ -18,7 +18,7 @@ export async function MyReviewsView() {
   return (
     <PageShell appBar={<AppBar back="/me" title="작성한 후기" />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm">
+        <Container size="sm" className="desktop:max-w-none">
           <VStack gap="150" className="py-200 break-keep">
             <MyReviewsContent signedIn={!!user} cards={cards} />
           </VStack>
