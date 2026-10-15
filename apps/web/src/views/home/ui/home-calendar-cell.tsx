@@ -41,11 +41,11 @@ export function HomeCalendarCell({
     CALENDAR_CELL_TONE[calendarCellState({ selected, today, hasSessions: sessions.length > 0 })];
   const redDayTone = holidayNames ? "text-sunday" : WEEKDAY_TONE[cell.weekday];
   const weekdayTone = cell.inMonth ? (redDayTone ?? "text-gray-600") : "text-hint";
-  const dayTone = tone.day ?? weekdayTone;
-  const nameTone = tone.day ?? "text-gray-600";
+  const selectedInMonth = selected && cell.inMonth;
   const hiddenNameCount = sessions.length - MAX_CALENDAR_NAMES;
   const dotTone = (session: CalendarSession) =>
     tone.dot ?? (session.mine ? "bg-primary-600" : "bg-hint");
+  const nameDotTone = (session: CalendarSession) => (session.mine ? "bg-primary-600" : "bg-hint");
 
   // 같은 달은 이미 받은 세션으로 그리므로 서버를 다시 부르지 않는다. 다른 달 칸과 새 탭 열기는 원래대로 이동한다.
   function selectDay(event: MouseEvent<HTMLAnchorElement>) {
@@ -64,7 +64,10 @@ export function HomeCalendarCell({
       aria-current={selected ? "date" : undefined}
       className={cn(
         "flex h-14 min-w-0 flex-col justify-evenly rounded-300 px-050 transition-colors",
-        "desktop:h-auto desktop:min-h-24 desktop:justify-start desktop:gap-050 desktop:px-075 desktop:py-075",
+        "desktop:h-auto desktop:min-h-28 desktop:justify-start desktop:gap-050 desktop:overflow-hidden desktop:rounded-none desktop:p-100 desktop:transition-none desktop:hover:brightness-97",
+        cell.inMonth ? "desktop:bg-surface" : "desktop:bg-canvas",
+        selectedInMonth &&
+          "desktop:bg-tinted-bg desktop:ring-2 desktop:ring-selected-ring desktop:ring-inset",
         tone.cell,
       )}
     >
@@ -72,7 +75,13 @@ export function HomeCalendarCell({
         typography="body4"
         weight={tone.day ? "extrabold" : "medium"}
         tight
-        className={cn("block text-center desktop:text-left", dayTone)}
+        className={cn(
+          "block text-center desktop:flex desktop:h-6 desktop:min-w-6 desktop:items-center desktop:justify-center desktop:self-start desktop:rounded-full desktop:px-075",
+          weekdayTone,
+          tone.day,
+          today && "desktop:bg-primary-600 desktop:text-on-primary",
+          !today && selectedInMonth && "desktop:text-tinted-ink",
+        )}
       >
         {cell.day}
       </Text>
@@ -122,7 +131,7 @@ export function HomeCalendarCell({
       )}
       {lead && (
         <span aria-hidden className="hidden min-w-0 desktop:block">
-          <VStack gap="025" render={<span />}>
+          <VStack gap="050" render={<span />}>
             {dots.slice(0, MAX_CALENDAR_NAMES).map((session) => (
               <HStack
                 key={session.id}
@@ -132,12 +141,13 @@ export function HomeCalendarCell({
                 title={session.title}
                 className="min-w-0"
               >
-                <span className={cn("size-1.5 flex-none rounded-full", dotTone(session))} />
+                <span className={cn("size-1.5 flex-none rounded-full", nameDotTone(session))} />
                 <Text
                   typography="body5"
+                  weight={session.mine ? "bold" : "medium"}
                   tight
                   render={<span />}
-                  className={cn("min-w-0 flex-1 truncate", nameTone)}
+                  className={cn("min-w-0 flex-1 truncate", !session.mine && "text-gray-600")}
                 >
                   {session.title}
                 </Text>
@@ -146,13 +156,13 @@ export function HomeCalendarCell({
             {hiddenNameCount > 0 && (
               <Text
                 typography="body5"
-                weight="extrabold"
-                numeric
+                weight="bold"
                 tight
+                foreground="hint"
                 render={<span />}
-                className={cn("self-start rounded-full px-050", tone.pill)}
+                className="pl-125"
               >
-                +{hiddenNameCount}
+                +{hiddenNameCount}건
               </Text>
             )}
           </VStack>
@@ -163,12 +173,12 @@ export function HomeCalendarCell({
           weight="bold"
           typography="body5"
           tight
-          className={cn("block text-center", tone.today)}
+          className={cn("block text-center desktop:hidden", tone.today)}
         >
           오늘
         </Text>
       )}
-      {!lead && !today && <span aria-hidden className="h-1.5" />}
+      {!lead && !today && <span aria-hidden className="h-1.5 desktop:hidden" />}
     </Link>
   );
 }

@@ -76,36 +76,45 @@ export function HomeCalendar({
         </IconButton>
       </HStack>
 
-      <Grid className="grid-cols-7 px-150 pb-050">
-        {WEEKDAYS.map((weekday, index) => (
-          <Text
-            weight="bold"
-            key={weekday}
-            typography="body4"
-            foreground="hint"
-            className={cn("text-center desktop:pl-075 desktop:text-left", WEEKDAY_TONE[index])}
-          >
-            {weekday}
-          </Text>
-        ))}
-      </Grid>
+      <div className="desktop:mx-200 desktop:mb-175 desktop:grid desktop:grid-cols-7 desktop:gap-px desktop:overflow-hidden desktop:rounded-500 desktop:border desktop:border-gray-200 desktop:bg-gray-200">
+        <Grid className="grid-cols-7 px-150 pb-050 desktop:contents">
+          {WEEKDAYS.map((weekday, index) => (
+            <Text
+              weight="bold"
+              key={weekday}
+              typography="body4"
+              foreground="hint"
+              className={cn(
+                "text-center desktop:bg-gray-100 desktop:px-125 desktop:py-100 desktop:text-left",
+                WEEKDAY_TONE[index],
+              )}
+            >
+              {weekday}
+            </Text>
+          ))}
+        </Grid>
 
-      <Grid className="grid-cols-7 gap-025 px-150 pb-150">
-        {cells.map((cell) =>
-          sessionsByDay ? (
-            <HomeCalendarCell
-              key={cell.key}
-              cell={cell}
-              sessions={sessionsByDay[cell.key] ?? []}
-              holidayNames={holidays?.[cell.key]}
-              selected={cell.key === selectedKey}
-              today={cell.key === todayKey}
-            />
-          ) : (
-            <Skeleton key={cell.key} rounded={300} className="h-14 desktop:h-24" />
-          ),
-        )}
-      </Grid>
+        <Grid className="grid-cols-7 gap-025 px-150 pb-150 desktop:contents">
+          {cells.map((cell) =>
+            sessionsByDay ? (
+              <HomeCalendarCell
+                key={cell.key}
+                cell={cell}
+                sessions={sessionsByDay[cell.key] ?? []}
+                holidayNames={holidays?.[cell.key]}
+                selected={cell.key === selectedKey}
+                today={cell.key === todayKey}
+              />
+            ) : (
+              <Skeleton
+                key={cell.key}
+                rounded={300}
+                className="h-14 desktop:h-28 desktop:rounded-none"
+              />
+            ),
+          )}
+        </Grid>
+      </div>
       <HStack align="center" gap="150" className="px-200 pb-150 text-body4 text-hint">
         <span className="flex items-center gap-075">
           <span className="size-1.5 rounded-full bg-primary-600" />

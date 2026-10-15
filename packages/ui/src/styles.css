@@ -152,6 +152,7 @@
   --color-on-primary: var(--rc-color-fg-on-primary);
   --color-inverse: var(--rc-color-fg-inverse);
   --color-focus: var(--rc-color-border-focus);
+  --color-selected-ring: var(--rc-color-border-primary-strong);
   --color-gm: var(--rc-color-fg-gm);
 }
 
@@ -612,6 +613,7 @@
   --color-on-primary: var(--rc-color-fg-on-primary);
   --color-inverse: var(--rc-color-fg-inverse);
   --color-focus: var(--rc-color-border-focus);
+  --color-selected-ring: var(--rc-color-border-primary-strong);
   --color-gm: var(--rc-color-fg-gm);
 
   --color-heat-0: var(--rc-color-bg-canvas-base);
