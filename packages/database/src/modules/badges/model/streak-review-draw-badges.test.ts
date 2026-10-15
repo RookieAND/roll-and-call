@@ -82,7 +82,9 @@ describe("개근 사다리(꼬박꼬박·차곡차곡·한결같이)", () => {
     expect(earned({ played: weekly(withGap.slice(0, 8)) }, "weeks12")).toBe(false);
     // 8주는 12주 창 안에 들어도 모자라고, 떨어진 20주는 창을 공유하지 못한다.
     expect(earned({ played: weekly([0, 1, 2, 3, 4, 5, 6, 7, 20]) }, "weeks12")).toBe(false);
-    const halfYear = Array.from({ length: 24 }, (_, index) => index).filter((index) => index % 6 !== 5);
+    const halfYear = Array.from({ length: 24 }, (_, index) => index).filter(
+      (index) => index % 6 !== 5,
+    );
     expect(earned({ played: weekly(halfYear) }, "weeks26")).toBe(true);
     expect(earned({ played: weekly(halfYear.slice(0, 19)) }, "weeks26")).toBe(false);
   });

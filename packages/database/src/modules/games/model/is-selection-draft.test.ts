@@ -12,7 +12,10 @@ describe("isSelectionDraft", () => {
 
   it("선발을 마친 뒤에는 초안이 아니다", () => {
     expect(
-      isSelectionDraft({ recruitMethod: RECRUIT_METHOD.selection, selectionFinishedAt: new Date() }),
+      isSelectionDraft({
+        recruitMethod: RECRUIT_METHOD.selection,
+        selectionFinishedAt: new Date(),
+      }),
     ).toBe(false);
   });
 

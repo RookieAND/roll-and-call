@@ -13,7 +13,7 @@ import { parseBadgeKey } from "#/modules/badges/model/parse-badge-key";
 import { RANKING_MODE } from "#/modules/servers/model/ranking-mode";
 import { servers, userBadges } from "#/schema";
 
-import { loadMonthlyAppearances } from "./load-monthly-appearances";
+import { loadMonthlyAppearances } from "../queries/load-monthly-appearances";
 import { notifyRankLeaders } from "./notify-rank-leaders";
 
 // 이달의 GM·PL은 여러 사람을 견주므로 한 사람만 다시 계산할 수 없다. 전체 1위를 다시 정해 모두와 비교한다.

@@ -12,9 +12,9 @@ import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-ki
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, sanctions, servers, type Game } from "#/schema";
 
+import { type ModerationConflict } from "../model/moderation-conflict";
 import { sanctionStateSub } from "../model/sanction-state-label";
 import { applyOngoingChoices, type OngoingChoice } from "./apply-ongoing-choices";
-import { type ModerationConflict } from "./moderation-conflict";
 import { recordAudit } from "./record-audit";
 
 const DAY = 86_400_000;

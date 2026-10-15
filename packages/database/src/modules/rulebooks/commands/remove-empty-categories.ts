@@ -1,6 +1,6 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import type { Executor } from "#/modules/moderation/commands/record-audit";
+import type { Executor } from "#/modules/transaction/executor";
 import { rulebookCategories } from "#/schema";
 
 export async function removeEmptyCategories({

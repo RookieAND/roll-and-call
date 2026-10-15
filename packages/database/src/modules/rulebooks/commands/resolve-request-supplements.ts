@@ -1,7 +1,7 @@
 import { and, eq, inArray } from "drizzle-orm";
 
 import { replaceManualSupplement } from "#/modules/games/model/replace-manual-supplement";
-import type { Executor } from "#/modules/moderation/commands/record-audit";
+import type { Executor } from "#/modules/transaction/executor";
 import { games, rulebookRequestGames } from "#/schema";
 
 // 추가 요청을 룰북으로 등록·연결하면, 그 이름을 직접 입력한 구인의 서플리먼트를 등록된 룰북으로 바꾼다.

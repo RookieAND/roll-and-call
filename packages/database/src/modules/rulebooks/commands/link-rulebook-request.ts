@@ -4,9 +4,9 @@ import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import { compactChanges, listChange } from "#/modules/moderation/model/audit-changes";
 import type { Actor } from "#/modules/moderation/model/types";
+import { relinkGames } from "#/modules/rulebooks/commands/relink-games";
 import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
-import { relinkGames } from "#/modules/rulebooks/queries/relink-games";
 import { rulebooks } from "#/schema";
 
 import { claimRulebookRequest } from "./claim-rulebook-request";

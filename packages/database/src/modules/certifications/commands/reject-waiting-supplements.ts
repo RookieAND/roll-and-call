@@ -1,9 +1,10 @@
 import { and, eq, inArray, sql } from "drizzle-orm";
 
-import { recordAudit, type Executor } from "#/modules/moderation/commands/record-audit";
+import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
 import { createNotifications } from "#/modules/notifications/commands/create-notifications";
 import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
+import type { Executor } from "#/modules/transaction/executor";
 import { certApplications } from "#/schema";
 
 import { rejectionSummary } from "../model/rejection-summary";

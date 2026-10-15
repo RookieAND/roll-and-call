@@ -8,7 +8,7 @@ import { USER_ACTION_REASON } from "#/modules/moderation/model/user-action-reaso
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { auditLog, profiles, serverMembers } from "#/schema";
 
-import { type ModerationConflict } from "./moderation-conflict";
+import { type ModerationConflict } from "../model/moderation-conflict";
 import { recordAudit } from "./record-audit";
 
 export type UnbanResult =

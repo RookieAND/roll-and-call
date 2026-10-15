@@ -1,3 +1,1 @@
-import { rulebookKind } from "#/schema";
-
-export const RULEBOOK_KINDS = rulebookKind.enumValues;
+export const RULEBOOK_KINDS = ["core", "supplement", "handbook"] as const;

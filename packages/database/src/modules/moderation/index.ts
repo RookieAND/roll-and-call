@@ -23,7 +23,7 @@ export {
 export { releaseSanction, type ReleaseResult } from "./commands/release-sanction";
 export { removeStaff } from "./commands/remove-staff";
 export { kickMember, type KickResult } from "./commands/kick-member";
-export { type ModerationConflict } from "./commands/moderation-conflict";
+export { type ModerationConflict } from "./model/moderation-conflict";
 export { unbanMember, type UnbanResult } from "./commands/unban-member";
 export { editNickname, type EditNicknameResult } from "./commands/edit-nickname";
 export { getKickImpact } from "./queries/get-kick-impact";

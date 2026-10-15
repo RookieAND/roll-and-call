@@ -1,9 +1,7 @@
-import type { db } from "#/client";
 import { statesFromChanges } from "#/modules/moderation/model/states-from-changes";
 import type { Actor, AuditInput } from "#/modules/moderation/model/types";
+import type { Executor } from "#/modules/transaction/executor";
 import { auditLog } from "#/schema";
-
-export type Executor = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 // 조치와 같은 트랜잭션(tx)으로 넘긴다. actor가 null이면 시스템 조치다.
 export async function recordAudit({

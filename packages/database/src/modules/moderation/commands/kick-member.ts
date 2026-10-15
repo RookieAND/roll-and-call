@@ -11,7 +11,7 @@ import { USER_ACTION_REASON } from "#/modules/moderation/model/user-action-reaso
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, serverMembers, type Game } from "#/schema";
 
-import { type ModerationConflict } from "./moderation-conflict";
+import { type ModerationConflict } from "../model/moderation-conflict";
 import { recordAudit } from "./record-audit";
 
 const bannedByProfile = alias(profiles, "banned_by_profile");

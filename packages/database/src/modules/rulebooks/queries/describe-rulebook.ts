@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import type { Executor } from "#/modules/moderation/commands/record-audit";
 import type { RulebookDescription } from "#/modules/rulebooks/model/rulebook-description";
+import type { Executor } from "#/modules/transaction/executor";
 import { rulebookCategories, rulebooks } from "#/schema";
 
 import { rulebookLabel } from "../model/rulebook-label";

@@ -12,6 +12,7 @@ import {
   type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 
+import { RULEBOOK_KINDS } from "../modules/rulebooks/model/rulebook-kinds";
 import { profiles } from "./profiles";
 import { serverId } from "./server-id";
 
@@ -27,7 +28,7 @@ export const rulebookRequestOutcome = pgEnum("rulebook_request_outcome", [
 export const rulebookRequestSource = pgEnum("rulebook_request_source", ["user", "game"]);
 
 // core는 GM에 필요한 기본 룰북, supplement는 기본 룰북 위에 더하는 책, handbook은 플레이어용이라 GM 자격이 되지 않는다.
-export const rulebookKind = pgEnum("rulebook_kind", ["core", "supplement", "handbook"]);
+export const rulebookKind = pgEnum("rulebook_kind", RULEBOOK_KINDS);
 
 // 같은 TRPG의 책을 묶는다. 단권 룰도 카테고리 하나에 책 하나다.
 // 룰북 목록은 서버마다 따로 두고, 새 서버는 trpia의 목록을 복사해 시작한다(copy_default_rulebooks, 퀴즈 제외).

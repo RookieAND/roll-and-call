@@ -9,7 +9,7 @@ import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sq
 import { isUniqueViolation } from "#/modules/transaction/is-unique-violation";
 import { auditLog, profiles, serverMembers } from "#/schema";
 
-import { type ModerationConflict } from "./moderation-conflict";
+import { type ModerationConflict } from "../model/moderation-conflict";
 import { recordAudit } from "./record-audit";
 
 export type EditNicknameResult =

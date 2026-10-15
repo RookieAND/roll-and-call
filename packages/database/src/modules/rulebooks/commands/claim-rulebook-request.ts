@@ -1,12 +1,12 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
-import type { Executor } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
 import { createNotifications } from "#/modules/notifications/commands/create-notifications";
 import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
+import type { Executor } from "#/modules/transaction/executor";
 import { profiles, rulebookRequests } from "#/schema";
 
 const OUTCOME_ACTION = {

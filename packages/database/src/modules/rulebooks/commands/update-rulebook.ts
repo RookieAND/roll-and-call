@@ -3,12 +3,12 @@ import { and, eq, ne } from "drizzle-orm";
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
 import type { Actor } from "#/modules/moderation/model/types";
+import { relinkGames } from "#/modules/rulebooks/commands/relink-games";
+import { renameGameSupplements } from "#/modules/rulebooks/commands/rename-game-supplements";
 import { rulebookChanges } from "#/modules/rulebooks/model/rulebook-audit-changes";
 import type { RulebookFields } from "#/modules/rulebooks/model/rulebook-fields";
 import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
 import { describeRulebook } from "#/modules/rulebooks/queries/describe-rulebook";
-import { relinkGames } from "#/modules/rulebooks/queries/relink-games";
-import { renameGameSupplements } from "#/modules/rulebooks/queries/rename-game-supplements";
 import { rulebooks } from "#/schema";
 
 import { removeEmptyCategories } from "./remove-empty-categories";
