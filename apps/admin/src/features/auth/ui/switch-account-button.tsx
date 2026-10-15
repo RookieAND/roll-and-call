@@ -5,12 +5,17 @@ import { useRouter } from "next/navigation";
 
 import { signOut } from "../api/sign-out";
 
-export function SwitchAccountButton() {
+interface SwitchAccountButtonProps {
+  className?: string;
+}
+
+export function SwitchAccountButton({ className }: SwitchAccountButtonProps) {
   const router = useRouter();
   return (
     <Button
       variant="outline"
       colorPalette="gray"
+      className={className}
       onClick={async () => {
         await signOut();
         router.replace("/login");

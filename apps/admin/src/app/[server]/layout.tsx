@@ -3,7 +3,7 @@ import { HStack, VStack } from "@roll-and-call/ui";
 import { forbidden, redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { SignOutIconButton } from "@/features/auth";
+import { SignOutIconButton, SignOutMobileButton } from "@/features/auth";
 import { QuickSearchPalette } from "@/features/quick-search";
 import {
   getCurrentServer,
@@ -67,6 +67,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
         drawer={
           <Sidebar
             {...sidebarProps}
+            signOutButton={<SignOutMobileButton />}
             brandAction={<MobileDrawerClose />}
             className="static h-full w-full border-r-0"
           />

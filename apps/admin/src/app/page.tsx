@@ -3,7 +3,13 @@ import { redirect } from "next/navigation";
 
 import { stringParams } from "@/shared/lib";
 import { getSessionAccount, listMyServers } from "@/shared/server";
-import { PlatformServerSelectView, SERVER_FILTER, ServerSelectView } from "@/views/server-select";
+import {
+  PlatformServerSelectMobileView,
+  PlatformServerSelectView,
+  SERVER_FILTER,
+  ServerSelectMobileView,
+  ServerSelectView,
+} from "@/views/server-select";
 
 export const metadata: Metadata = { title: "서버 선택" };
 
@@ -17,15 +23,28 @@ export default async function ServerSelectPage({ searchParams }: PageProps<"/">)
     const joined = servers.filter((server) => server.joined);
     if (!all && joined.length === 1) redirect(`/${joined[0]!.slug}`);
     const knownFilter = Object.values(SERVER_FILTER).find((value) => value === filter);
+    const query = { q, filter: knownFilter, all };
     return (
-      <PlatformServerSelectView
-        nickname={account.nickname}
-        servers={servers}
-        query={{ q, filter: knownFilter, all }}
-      />
+      <>
+        <div className="contents max-lg:hidden">
+          <PlatformServerSelectView nickname={account.nickname} servers={servers} query={query} />
+        </div>
+        <div className="contents lg:hidden">
+          <PlatformServerSelectMobileView servers={servers} query={query} />
+        </div>
+      </>
     );
   }
   if (servers.length === 0) redirect("/denied");
   if (servers.length === 1) redirect(`/${servers[0]!.slug}`);
-  return <ServerSelectView nickname={account.nickname} servers={servers} />;
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <ServerSelectView nickname={account.nickname} servers={servers} />
+      </div>
+      <div className="contents lg:hidden">
+        <ServerSelectMobileView servers={servers} />
+      </div>
+    </>
+  );
 }

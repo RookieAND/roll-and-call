@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@roll-and-call/ui";
+import { Button, cn } from "@roll-and-call/ui";
 
 import { DiscordIcon } from "@/shared/ui";
 
@@ -9,11 +9,16 @@ import { signInWithDiscord } from "../api/sign-in";
 interface LoginButtonProps {
   label: string;
   withIcon: boolean;
+  className?: string;
 }
 
-export function LoginButton({ label, withIcon }: LoginButtonProps) {
+export function LoginButton({ label, withIcon, className }: LoginButtonProps) {
   return (
-    <Button colorPalette="discord" className="w-full" onClick={() => signInWithDiscord()}>
+    <Button
+      colorPalette="discord"
+      className={cn("w-full", className)}
+      onClick={() => signInWithDiscord()}
+    >
       {withIcon ? <DiscordIcon /> : null}
       {label}
     </Button>
