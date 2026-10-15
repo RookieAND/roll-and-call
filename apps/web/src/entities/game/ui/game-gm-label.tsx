@@ -9,7 +9,7 @@ export function GameGmLabel({ name, avatarUrl }: GameGmLabelProps) {
   return (
     <HStack gap="100" align="center" className="min-w-0 flex-1">
       <Avatar src={avatarUrl} name={name} size="sm" />
-      <HStack align="baseline" gap="075" className="min-w-0">
+      <HStack align="baseline" gap="075" className="min-w-0 desktop:hidden">
         <Text typography="body4" weight="bold" foreground="hint" className="shrink-0">
           GM
         </Text>
@@ -17,6 +17,9 @@ export function GameGmLabel({ name, avatarUrl }: GameGmLabelProps) {
           {name ?? "?"}
         </Text>
       </HStack>
+      <Text truncate typography="body3" foreground="muted" className="hidden min-w-0 desktop:block">
+        GM {name ?? "?"}
+      </Text>
     </HStack>
   );
 }

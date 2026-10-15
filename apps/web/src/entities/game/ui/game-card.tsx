@@ -55,28 +55,48 @@ export function GameCard({ game }: GameCardProps) {
   );
 
   return (
-    <Card.Root interactive padding="none" className={"h-full overflow-hidden rounded-600"}>
+    <Card.Root
+      interactive
+      padding="none"
+      className="h-full overflow-hidden rounded-600 desktop:flex desktop:flex-col"
+    >
       <GameThumbnail
         url={game.thumbnailUrl}
         sizes="(max-width: 412px) 100vw, 412px"
         spoilerLabel={game.thumbnailSpoiler ? "스포일러" : undefined}
         className={cn("aspect-video w-full", !live && "grayscale")}
       />
-      <VStack gap="125" className="px-175 pt-175">
-        <VStack gap="075">
-          <HStack align="center" gap="100">
+      <VStack gap="125" className="px-175 pt-175 desktop:flex-1">
+        <VStack gap="075" className="desktop:flex-1">
+          {/* 데스크톱은 배지 줄이 제목 위로 올라간다: 줄바꿈 + order로 순서만 바꾼다. */}
+          <HStack align="center" gap="100" className="desktop:flex-wrap desktop:gap-075">
             <Text
               typography="heading2"
               foreground={live ? "normal" : "muted"}
-              className="line-clamp-2 min-w-0 flex-1"
+              className="line-clamp-2 min-w-0 flex-1 desktop:order-2 desktop:line-clamp-none desktop:basis-full desktop:text-heading3 desktop:font-bold desktop:text-pretty"
             >
               {game.title}
             </Text>
-            {live && line.deadlineShort && <GameDeadlineCount label={line.deadlineShort} />}
-            {ended ? <Badge colorPalette="gray">종료</Badge> : <GameStatusBadge status={status} />}
+            {live && line.deadlineShort && (
+              <span className="contents desktop:order-1 desktop:flex">
+                <GameDeadlineCount label={line.deadlineShort} />
+              </span>
+            )}
+            <span className="contents desktop:order-0 desktop:flex">
+              {ended ? (
+                <Badge colorPalette="gray">종료</Badge>
+              ) : (
+                <GameStatusBadge status={status} />
+              )}
+            </span>
           </HStack>
           {meta && (
-            <Text truncate typography="body3" foreground="muted">
+            <Text
+              truncate
+              typography="body3"
+              foreground="muted"
+              className="desktop:overflow-visible desktop:text-clip desktop:whitespace-normal"
+            >
               {meta}
             </Text>
           )}
@@ -86,7 +106,7 @@ export function GameCard({ game }: GameCardProps) {
       <HStack
         align="center"
         gap="100"
-        className="mx-175 mt-150 border-t border-gray-200 pt-125 pb-150"
+        className="mx-175 mt-150 border-t border-gray-200 pt-125 pb-150 desktop:border-t-0 desktop:pt-0 desktop:pb-175"
       >
         <GameGmLabel name={game.gm?.username} avatarUrl={game.gm?.avatarUrl} />
         <GameCapacity
