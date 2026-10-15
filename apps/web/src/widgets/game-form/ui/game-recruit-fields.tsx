@@ -43,36 +43,38 @@ export function GameRecruitFields({
 
   return (
     <>
-      <VStack gap="100">
-        <Field.Root
-          label="최대 참여 인원"
-          htmlFor="maxPlayers"
-          required
-          error={errors.maxPlayers?.message}
-        >
-          <Stepper
-            id="maxPlayers"
-            value={maxPlayers}
-            min={playersFloor}
-            max={GAME_MAX_PLAYERS}
-            invalid={!!errors.maxPlayers}
-            onChange={(count) =>
-              setValue("maxPlayers", String(count), { shouldDirty: true, shouldValidate: true })
-            }
-          />
-        </Field.Root>
-        {confirmedCount > 1 && (
-          <Callout.Root colorPalette="gray" size="sm">
-            <Callout.Description>
-              {`확정 참여자가 ${confirmedCount}명이라 정원을 ${confirmedCount}명보다 줄일 수 없습니다.`}
-              <br />
-              줄이려면 참여자 관리에서 확정을 먼저 풀어 주세요.
-            </Callout.Description>
-          </Callout.Root>
-        )}
-      </VStack>
+      <div className="grid gap-250 desktop:grid-cols-2 desktop:items-start">
+        <VStack gap="100">
+          <Field.Root
+            label="최대 참여 인원"
+            htmlFor="maxPlayers"
+            required
+            error={errors.maxPlayers?.message}
+          >
+            <Stepper
+              id="maxPlayers"
+              value={maxPlayers}
+              min={playersFloor}
+              max={GAME_MAX_PLAYERS}
+              invalid={!!errors.maxPlayers}
+              onChange={(count) =>
+                setValue("maxPlayers", String(count), { shouldDirty: true, shouldValidate: true })
+              }
+            />
+          </Field.Root>
+          {confirmedCount > 1 && (
+            <Callout.Root colorPalette="gray" size="sm">
+              <Callout.Description>
+                {`확정 참여자가 ${confirmedCount}명이라 정원을 ${confirmedCount}명보다 줄일 수 없습니다.`}
+                <br />
+                줄이려면 참여자 관리에서 확정을 먼저 풀어 주세요.
+              </Callout.Description>
+            </Callout.Root>
+          )}
+        </VStack>
 
-      <MinPlayersField form={form} locked={minPlayersLocked} savedMinPlayers={savedMinPlayers} />
+        <MinPlayersField form={form} locked={minPlayersLocked} savedMinPlayers={savedMinPlayers} />
+      </div>
 
       {preConfirmable && (
         <PreConfirmedField

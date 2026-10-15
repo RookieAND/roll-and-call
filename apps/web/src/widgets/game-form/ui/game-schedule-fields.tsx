@@ -42,38 +42,40 @@ export function GameScheduleFields({
         onChange={(next) => setValue("scheduleMode", next, { shouldDirty: true })}
       />
 
-      {mode === SCHEDULE_MODE.fixed ? (
-        <FixedSessionField form={form} locked={sessionLocked} />
-      ) : (
-        <>
-          <CoordinationRangeFields form={form} />
-          <CoordinationWindowField form={form} locked={modeLocked} />
-        </>
-      )}
-
-      <VStack gap="075">
-        <Field.Root label="모집 마감" htmlFor="endDate" required error={errors.endDate?.message}>
-          <Controller
-            name="endDate"
-            control={control}
-            render={({ field }) => (
-              <DateTimePicker
-                id="endDate"
-                value={field.value}
-                onChange={field.onChange}
-                invalid={!!errors.endDate}
-                min={toKstDateInput(new Date())}
-                disabled={endDateLocked}
-              />
-            )}
-          />
-        </Field.Root>
-        {endDateLocked && (
-          <Text typography="body4" foreground="hint" render={<p />}>
-            추첨을 마친 구인은 모집 마감을 바꿀 수 없습니다.
-          </Text>
+      <div className="grid gap-250 desktop:grid-cols-2 desktop:items-start">
+        {mode === SCHEDULE_MODE.fixed ? (
+          <FixedSessionField form={form} locked={sessionLocked} />
+        ) : (
+          <>
+            <CoordinationRangeFields form={form} />
+            <CoordinationWindowField form={form} locked={modeLocked} />
+          </>
         )}
-      </VStack>
+
+        <VStack gap="075">
+          <Field.Root label="모집 마감" htmlFor="endDate" required error={errors.endDate?.message}>
+            <Controller
+              name="endDate"
+              control={control}
+              render={({ field }) => (
+                <DateTimePicker
+                  id="endDate"
+                  value={field.value}
+                  onChange={field.onChange}
+                  invalid={!!errors.endDate}
+                  min={toKstDateInput(new Date())}
+                  disabled={endDateLocked}
+                />
+              )}
+            />
+          </Field.Root>
+          {endDateLocked && (
+            <Text typography="body4" foreground="hint" render={<p />}>
+              추첨을 마친 구인은 모집 마감을 바꿀 수 없습니다.
+            </Text>
+          )}
+        </VStack>
+      </div>
     </>
   );
 }

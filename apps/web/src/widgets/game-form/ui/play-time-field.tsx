@@ -17,35 +17,37 @@ export function PlayTimeField({ min, max, onChangeMin, onChangeMax, error }: Pla
   return (
     <Field.Root label="플레이타임" required>
       <VStack gap="150">
-        <PlayTimeRow name={isNull(max) ? undefined : "최소"} value={min} onChange={onChangeMin} />
-        {isNull(max) ? (
-          <Button
-            type="button"
-            variant="outline"
-            colorPalette="gray"
-            className="h-11 w-full"
-            onClick={() => onChangeMax(min)}
-          >
-            + 최대 추가
-          </Button>
-        ) : (
-          <PlayTimeRow
-            name="최대"
-            value={max}
-            onChange={onChangeMax}
-            action={
-              <Button
-                type="button"
-                variant="ghost"
-                colorPalette="gray"
-                size="sm"
-                onClick={() => onChangeMax(null)}
-              >
-                지우기
-              </Button>
-            }
-          />
-        )}
+        <div className="grid gap-150 desktop:grid-cols-2 desktop:items-start">
+          <PlayTimeRow name={isNull(max) ? undefined : "최소"} value={min} onChange={onChangeMin} />
+          {isNull(max) ? (
+            <Button
+              type="button"
+              variant="outline"
+              colorPalette="gray"
+              className="h-11 w-full"
+              onClick={() => onChangeMax(min)}
+            >
+              + 최대 추가
+            </Button>
+          ) : (
+            <PlayTimeRow
+              name="최대"
+              value={max}
+              onChange={onChangeMax}
+              action={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  colorPalette="gray"
+                  size="sm"
+                  onClick={() => onChangeMax(null)}
+                >
+                  지우기
+                </Button>
+              }
+            />
+          )}
+        </div>
         {error && (
           <Text role="alert" typography="body4" foreground="danger">
             {error}

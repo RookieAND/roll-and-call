@@ -151,7 +151,6 @@ export function GameFormWizard({
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)}>
       <PageShell
-        readable
         appBar={
           <WizardHeader
             step={(trialWizard?.stepIndexes[step] ?? step) + 1}
