@@ -20,6 +20,7 @@ export function GamesLoading() {
       appBar={<GamesAppBarFrame sanction={null} serverSwitch={<ServerSwitcher />} />}
       className={GAMES_SHELL_CLASS}
       bare
+      stickyAppBar
     >
       <GamesLayout
         toolbar={<GamesToolbar filter={{ tab }} />}

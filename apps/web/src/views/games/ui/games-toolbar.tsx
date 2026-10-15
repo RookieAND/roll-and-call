@@ -17,6 +17,7 @@ import { GameScopeTabs } from "./game-scope-tabs";
 import { GameSearchForm } from "./game-search-form";
 import { GameSortSheet } from "./game-sort-sheet";
 import { GameStatusChips } from "./game-status-chips";
+import { GamesStickyBar } from "./games-sticky-bar";
 
 const CHIP_SKELETON_WIDTHS = [48, 64, 88] as const;
 
@@ -40,7 +41,7 @@ export function GamesToolbar({
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
   const chipCounts = counts ? statusCounts({ counts, tab }) : undefined;
   return (
-    <>
+    <GamesStickyBar>
       <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) -mx-200 border-b border-gray-200 bg-surface desktop:static desktop:mx-0">
         <GameScopeTabs filter={filter} counts={tabCounts} />
       </div>
@@ -76,6 +77,6 @@ export function GamesToolbar({
           {tab === GAME_TAB.live && <GameSortSheet filter={filter} />}
         </HStack>
       </VStack>
-    </>
+    </GamesStickyBar>
   );
 }

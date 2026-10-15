@@ -12,7 +12,7 @@ interface GamesViewProps {
 
 export function GamesView({ page, filter }: GamesViewProps) {
   return (
-    <PageShell appBar={<GamesAppBar />} className={GAMES_SHELL_CLASS} bare>
+    <PageShell appBar={<GamesAppBar />} className={GAMES_SHELL_CLASS} bare stickyAppBar>
       <GameBoard page={page} filter={filter} />
     </PageShell>
   );

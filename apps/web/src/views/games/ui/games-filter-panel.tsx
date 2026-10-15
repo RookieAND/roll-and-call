@@ -38,7 +38,10 @@ export function GamesFilterPanel({ filter, ruleOptions }: GamesFilterPanelProps)
   }
 
   return (
-    <aside aria-label="구인 필터" className="sticky top-4 hidden w-80 flex-none desktop:block">
+    <aside
+      aria-label="구인 필터"
+      className="sticky top-4 desktop:top-[calc(var(--rc-size-appbar)+var(--games-bar-h,7rem)+1rem)] hidden w-80 flex-none desktop:block"
+    >
       <Card.Root radius={600} padding="none" className="p-250">
         <VStack gap="225">
           <Text typography="subtitle1" render={<h2 />}>
