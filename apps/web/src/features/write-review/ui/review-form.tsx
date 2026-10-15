@@ -9,7 +9,14 @@ import { SessionHeading } from "@/entities/game";
 import { REVIEW_BODY_MAX_LENGTH, REVIEW_BODY_MIN_LENGTH, reviewBodyError } from "@/entities/review";
 import { richTextLength, useServerPath } from "@/shared/lib";
 import { TRIAL_HANDLER, useIsTrial, useTrialHandler, useTrialPush } from "@/shared/trial";
-import { AppBar, ConfirmDialog, toast, useAction } from "@/shared/ui";
+import {
+  AppBar,
+  ConfirmDialog,
+  DESKTOP_CARD_CLASS,
+  PageShell,
+  toast,
+  useAction,
+} from "@/shared/ui";
 
 import { discardReviewPhotos } from "../api/discard-review-photos";
 import { submitReview } from "../api/submit-review";
@@ -146,98 +153,107 @@ export function ReviewForm({
   }
 
   return (
-    <VStack render={<form onSubmit={submit} />} className="break-keep">
-      <AppBar title={reviewFormTitle({ editing, gm })} backIcon="close" onBack={requestLeave} />
-      {belowAppBar}
-      <VStack gap="250" className="p-200">
-        <SessionHeading {...heading} />
+    <PageShell
+      appBar={
+        <AppBar title={reviewFormTitle({ editing, gm })} backIcon="close" onBack={requestLeave} />
+      }
+    >
+      <div className={DESKTOP_CARD_CLASS}>
+        <VStack render={<form onSubmit={submit} />} className="break-keep">
+          {belowAppBar}
+          <VStack gap="250" className="p-200">
+            <SessionHeading {...heading} />
 
-        {draft.restored && (
-          <Callout.Root colorPalette="primary" size="sm">
-            <Callout.Icon />
-            <Callout.Description>쓰던 후기를 불러왔습니다</Callout.Description>
-            <Callout.Action>
-              <Button type="button" variant="ghost" size="sm" onClick={startOver}>
-                새로 쓰기
-              </Button>
-            </Callout.Action>
-          </Callout.Root>
-        )}
+            {draft.restored && (
+              <Callout.Root colorPalette="primary" size="sm">
+                <Callout.Icon />
+                <Callout.Description>쓰던 후기를 불러왔습니다</Callout.Description>
+                <Callout.Action>
+                  <Button type="button" variant="ghost" size="sm" onClick={startOver}>
+                    새로 쓰기
+                  </Button>
+                </Callout.Action>
+              </Callout.Root>
+            )}
 
-        <Callout.Root colorPalette={notice.palette}>
-          <Callout.Icon />
-          <Callout.Title>{notice.title}</Callout.Title>
-          <Callout.Description>{notice.description}</Callout.Description>
-        </Callout.Root>
+            <Callout.Root colorPalette={notice.palette}>
+              <Callout.Icon />
+              <Callout.Title>{notice.title}</Callout.Title>
+              <Callout.Description>{notice.description}</Callout.Description>
+            </Callout.Root>
 
-        <Field.Root
-          label="후기"
-          htmlFor="reviewBody"
-          counter={`${richTextLength(body).toLocaleString("ko-KR")} / ${REVIEW_BODY_MAX_LENGTH.toLocaleString("ko-KR")}`}
-          error={bodyError ?? undefined}
-        >
-          <RichTextEditor
-            key={editorKey}
-            id="reviewBody"
-            value={body}
-            onChange={changeBody}
-            placeholder={`${REVIEW_BODY_MIN_LENGTH}자 이상 적어 주세요`}
-            limit={REVIEW_BODY_MAX_LENGTH}
-            invalid={!isNull(bodyError)}
-          />
-        </Field.Root>
-
-        <ReviewPhotosField photos={photos} />
-
-        <ReviewSpoilerField value={spoiler} onChange={changeSpoiler} />
-
-        {submitFailed && (
-          <Callout.Root colorPalette="danger">
-            <Callout.Icon />
-            <Callout.Title>등록하지 못했습니다</Callout.Title>
-            <Callout.Description>쓴 내용은 저장되어 있습니다.</Callout.Description>
-          </Callout.Root>
-        )}
-      </VStack>
-
-      <FloatingBar.Root elevated={false}>
-        <FloatingBar.Content>
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full"
-            loading={pending}
-            disabled={photos.uploading}
-          >
-            {submitLabel}
-          </Button>
-          {photos.uploading && (
-            <Text
-              typography="body4"
-              foreground="hint"
-              render={<p />}
-              role="status"
-              className="mt-075 text-center"
+            <Field.Root
+              label="후기"
+              htmlFor="reviewBody"
+              counter={`${richTextLength(body).toLocaleString("ko-KR")} / ${REVIEW_BODY_MAX_LENGTH.toLocaleString("ko-KR")}`}
+              error={bodyError ?? undefined}
             >
-              사진을 올리는 중입니다.
-            </Text>
-          )}
-        </FloatingBar.Content>
-        <FloatingBar.Spacer />
-      </FloatingBar.Root>
+              <RichTextEditor
+                key={editorKey}
+                id="reviewBody"
+                value={body}
+                onChange={changeBody}
+                placeholder={`${REVIEW_BODY_MIN_LENGTH}자 이상 적어 주세요`}
+                limit={REVIEW_BODY_MAX_LENGTH}
+                invalid={!isNull(bodyError)}
+              />
+            </Field.Root>
 
-      <ConfirmDialog
-        open={confirmingLeave}
-        onOpenChange={setConfirmingLeave}
-        title="작성을 그만둘까요?"
-        description={
-          editing ? "고친 내용과 새로 올린 사진은 지워집니다." : "글은 저장되고 사진은 지워집니다."
-        }
-        cancelLabel="계속 쓰기"
-        confirmLabel="나가기"
-        onConfirm={leave}
-      />
-      <ReviewBlockedDialog block={block} fallbackHref={gameHref} />
-    </VStack>
+            <ReviewPhotosField photos={photos} />
+
+            <ReviewSpoilerField value={spoiler} onChange={changeSpoiler} />
+
+            {submitFailed && (
+              <Callout.Root colorPalette="danger">
+                <Callout.Icon />
+                <Callout.Title>등록하지 못했습니다</Callout.Title>
+                <Callout.Description>쓴 내용은 저장되어 있습니다.</Callout.Description>
+              </Callout.Root>
+            )}
+          </VStack>
+
+          <FloatingBar.Root elevated={false}>
+            <FloatingBar.Content>
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full"
+                loading={pending}
+                disabled={photos.uploading}
+              >
+                {submitLabel}
+              </Button>
+              {photos.uploading && (
+                <Text
+                  typography="body4"
+                  foreground="hint"
+                  render={<p />}
+                  role="status"
+                  className="mt-075 text-center"
+                >
+                  사진을 올리는 중입니다.
+                </Text>
+              )}
+            </FloatingBar.Content>
+            <FloatingBar.Spacer />
+          </FloatingBar.Root>
+
+          <ConfirmDialog
+            open={confirmingLeave}
+            onOpenChange={setConfirmingLeave}
+            title="작성을 그만둘까요?"
+            description={
+              editing
+                ? "고친 내용과 새로 올린 사진은 지워집니다."
+                : "글은 저장되고 사진은 지워집니다."
+            }
+            cancelLabel="계속 쓰기"
+            confirmLabel="나가기"
+            onConfirm={leave}
+          />
+          <ReviewBlockedDialog block={block} fallbackHref={gameHref} />
+        </VStack>
+      </div>
+    </PageShell>
   );
 }

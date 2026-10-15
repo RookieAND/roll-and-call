@@ -1,7 +1,7 @@
 import { Container, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 interface ReviewsPageProps {
   title: string;
@@ -11,13 +11,14 @@ interface ReviewsPageProps {
 
 export function ReviewsPage({ title, back, children }: ReviewsPageProps) {
   return (
-    <>
-      <AppBar back={back} title={title} />
-      <Container size="sm">
-        <VStack gap="150" className="py-200 break-keep">
-          {children}
-        </VStack>
-      </Container>
-    </>
+    <PageShell appBar={<AppBar back={back} title={title} />}>
+      <div className={DESKTOP_CARD_CLASS}>
+        <Container size="sm">
+          <VStack gap="150" className="py-200 break-keep">
+            {children}
+          </VStack>
+        </Container>
+      </div>
+    </PageShell>
   );
 }

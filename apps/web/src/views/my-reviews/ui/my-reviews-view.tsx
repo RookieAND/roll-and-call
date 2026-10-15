@@ -1,7 +1,7 @@
 import { Container, VStack } from "@roll-and-call/ui";
 
 import { getCurrentSessionUser, getMyReviews, getCurrentServer } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 import { toMyReviewCard } from "../model/my-review-card";
 import { MyReviewsContent } from "./my-reviews-content";
@@ -16,13 +16,14 @@ export async function MyReviewsView() {
     : [];
 
   return (
-    <>
-      <AppBar back="/me" title="작성한 후기" />
-      <Container size="sm">
-        <VStack gap="150" className="py-200 break-keep">
-          <MyReviewsContent signedIn={!!user} cards={cards} />
-        </VStack>
-      </Container>
-    </>
+    <PageShell appBar={<AppBar back="/me" title="작성한 후기" />}>
+      <div className={DESKTOP_CARD_CLASS}>
+        <Container size="sm">
+          <VStack gap="150" className="py-200 break-keep">
+            <MyReviewsContent signedIn={!!user} cards={cards} />
+          </VStack>
+        </Container>
+      </div>
+    </PageShell>
   );
 }

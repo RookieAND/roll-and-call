@@ -7,7 +7,7 @@ import { LoginRequired } from "@/features/auth";
 import { ReviewForm, reviewBlockOf } from "@/features/write-review";
 import { formatDateTime } from "@/shared/lib";
 import { getCurrentSessionUser, getReviewDraftTarget, getCurrentServer } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 interface WriteReviewViewProps {
   gameId: string;
@@ -17,12 +17,13 @@ export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
-      <>
-        <AppBar back={`/games/${gameId}`} title="후기 쓰기" />
-        <Container size="sm" className="py-300">
-          <LoginRequired />
-        </Container>
-      </>
+      <PageShell appBar={<AppBar back={`/games/${gameId}`} title="후기 쓰기" />}>
+        <div className={DESKTOP_CARD_CLASS}>
+          <Container size="sm" className="py-300">
+            <LoginRequired />
+          </Container>
+        </div>
+      </PageShell>
     );
   }
 
