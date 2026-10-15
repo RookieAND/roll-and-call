@@ -1,5 +1,5 @@
 import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
-import { Container, HStack } from "@roll-and-call/ui";
+import { HStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
 
 import { BadgeAwardGate } from "@/features/acknowledge-badges";
@@ -19,7 +19,6 @@ import {
   AppBar,
   DESKTOP_CARD_CLASS,
   HelpButton,
-  PageShell,
   ServerSwitcher,
   ThemeToggleButton,
 } from "@/shared/ui";
@@ -31,6 +30,7 @@ import { resolveCalendarView } from "../model/resolve-calendar-view";
 import { toCalendarSessions } from "../model/to-calendar-sessions";
 import { HomeCalendarSection } from "./home-calendar-section";
 import { HomeDayPanel } from "./home-day-panel";
+import { HomeLayout } from "./home-layout";
 import { HomeMonthRecord } from "./home-month-record";
 import { HomeNicknameNotice } from "./home-nickname-notice";
 import { HomeServerSwitch } from "./home-server-switch";
@@ -113,34 +113,32 @@ export async function HomeView({ date }: HomeViewProps) {
   );
 
   return (
-    <PageShell
+    <HomeLayout
       appBar={appBar}
       panel={<HomeDayPanel sessionsByDay={sessionsByDay} initialSelectedKey={selectedKey} />}
     >
-      <Container size="sm" className="max-w-3xl px-0">
-        {profile?.nicknameSuffixBase && (
-          <div className="px-200 pt-150 desktop:px-0 desktop:pt-0 desktop:pb-150">
-            <HomeNicknameNotice nickname={profile.username} />
-          </div>
-        )}
-        <HomeCalendarSection
-          monthStart={monthStart.toDate()}
-          sessionsByDay={sessionsByDay}
-          hasNextMonthSessions={hasNextMonthSessions}
-          initialSelectedKey={selectedKey}
-          todayKey={todayKey}
-        />
-        <MemberTitleSheetsProvider sheets={titleSheets}>
-          <div className={`${DESKTOP_CARD_CLASS} desktop:mt-300`}>
-            <HomeMonthRecord monthStart={monthStart} record={record} />
-          </div>
-        </MemberTitleSheetsProvider>
-      </Container>
+      {profile?.nicknameSuffixBase && (
+        <div className="px-200 pt-150 desktop:px-0 desktop:pt-0 desktop:pb-150">
+          <HomeNicknameNotice nickname={profile.username} />
+        </div>
+      )}
+      <HomeCalendarSection
+        monthStart={monthStart.toDate()}
+        sessionsByDay={sessionsByDay}
+        hasNextMonthSessions={hasNextMonthSessions}
+        initialSelectedKey={selectedKey}
+        todayKey={todayKey}
+      />
+      <MemberTitleSheetsProvider sheets={titleSheets}>
+        <div className={`${DESKTOP_CARD_CLASS} desktop:mt-300`}>
+          <HomeMonthRecord monthStart={monthStart} record={record} />
+        </div>
+      </MemberTitleSheetsProvider>
       {user && (
         <Suspense fallback={null}>
           <BadgeAwardGate userId={user.id} />
         </Suspense>
       )}
-    </PageShell>
+    </HomeLayout>
   );
 }

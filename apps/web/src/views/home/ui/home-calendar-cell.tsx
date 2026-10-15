@@ -8,7 +8,7 @@ import { useServerPath } from "@/shared/lib";
 
 import type { MonthCell } from "../model/build-month-cells";
 import { CALENDAR_CELL_TONE, calendarCellState } from "../model/calendar-cell-tone";
-import { MAX_CALENDAR_DOTS, splitDotRows } from "../model/split-dot-rows";
+import { MAX_CALENDAR_DOTS, MAX_CALENDAR_NAMES, splitDotRows } from "../model/split-dot-rows";
 import type { CalendarSession } from "../model/to-calendar-sessions";
 import { WEEKDAY_TONE } from "../model/weekday-tone";
 
@@ -42,6 +42,8 @@ export function HomeCalendarCell({
   const redDayTone = holidayNames ? "text-sunday" : WEEKDAY_TONE[cell.weekday];
   const weekdayTone = cell.inMonth ? (redDayTone ?? "text-gray-600") : "text-hint";
   const dayTone = tone.day ?? weekdayTone;
+  const nameTone = tone.day ?? "text-gray-600";
+  const hiddenNameCount = sessions.length - MAX_CALENDAR_NAMES;
   const dotTone = (session: CalendarSession) =>
     tone.dot ?? (session.mine ? "bg-primary-600" : "bg-hint");
 
@@ -62,6 +64,7 @@ export function HomeCalendarCell({
       aria-current={selected ? "date" : undefined}
       className={cn(
         "flex h-14 min-w-0 flex-col justify-evenly rounded-300 px-050 transition-colors",
+        "desktop:h-auto desktop:min-h-24 desktop:justify-start desktop:gap-050 desktop:px-075 desktop:py-075",
         tone.cell,
       )}
     >
@@ -69,12 +72,19 @@ export function HomeCalendarCell({
         typography="body4"
         weight={tone.day ? "extrabold" : "medium"}
         tight
-        className={cn("block text-center", dayTone)}
+        className={cn("block text-center desktop:text-left", dayTone)}
       >
         {cell.day}
       </Text>
       {lead && (
-        <VStack aria-hidden align="center" justify="center" gap="050" render={<span />}>
+        <VStack
+          aria-hidden
+          align="center"
+          justify="center"
+          gap="050"
+          render={<span />}
+          className="desktop:hidden"
+        >
           {!overflow &&
             splitDotRows(dots).map((row) => (
               <HStack
@@ -109,6 +119,44 @@ export function HomeCalendarCell({
             </Text>
           )}
         </VStack>
+      )}
+      {lead && (
+        <span aria-hidden className="hidden min-w-0 desktop:block">
+          <VStack gap="025" render={<span />}>
+            {dots.slice(0, MAX_CALENDAR_NAMES).map((session) => (
+              <HStack
+                key={session.id}
+                align="center"
+                gap="050"
+                render={<span />}
+                title={session.title}
+                className="min-w-0"
+              >
+                <span className={cn("size-1.5 flex-none rounded-full", dotTone(session))} />
+                <Text
+                  typography="body5"
+                  tight
+                  render={<span />}
+                  className={cn("min-w-0 flex-1 truncate", nameTone)}
+                >
+                  {session.title}
+                </Text>
+              </HStack>
+            ))}
+            {hiddenNameCount > 0 && (
+              <Text
+                typography="body5"
+                weight="extrabold"
+                numeric
+                tight
+                render={<span />}
+                className={cn("self-start rounded-full px-050", tone.pill)}
+              >
+                +{hiddenNameCount}
+              </Text>
+            )}
+          </VStack>
+        </span>
       )}
       {today && sessions.length === 0 && (
         <Text

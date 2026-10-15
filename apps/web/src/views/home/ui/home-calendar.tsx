@@ -83,7 +83,7 @@ export function HomeCalendar({
             key={weekday}
             typography="body4"
             foreground="hint"
-            className={cn("text-center", WEEKDAY_TONE[index])}
+            className={cn("text-center desktop:pl-075 desktop:text-left", WEEKDAY_TONE[index])}
           >
             {weekday}
           </Text>
@@ -102,7 +102,7 @@ export function HomeCalendar({
               today={cell.key === todayKey}
             />
           ) : (
-            <Skeleton key={cell.key} rounded={300} className="h-14" />
+            <Skeleton key={cell.key} rounded={300} className="h-14 desktop:h-24" />
           ),
         )}
       </Grid>

@@ -9,6 +9,7 @@ export { useDebouncedValue } from "./use-debounced-value";
 export { NavigationTracker } from "./navigation-tracker";
 export { BottomNav } from "./bottom-nav";
 export { DESKTOP_CARD_CLASS } from "./desktop-card-class";
+export { WIDE_INNER_PX, WIDE_SHELL_CLASS } from "./wide-frame-class";
 export { DesktopNav } from "./desktop-nav";
 export { DesktopPanel } from "./desktop-panel";
 export { DesktopWideFrame } from "./desktop-wide-frame";
