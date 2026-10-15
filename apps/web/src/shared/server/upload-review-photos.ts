@@ -31,7 +31,7 @@ export async function uploadReviewPhotos({
   return Promise.all(
     sources.map(async ({ url, contentType }) => {
       if (!DISCORD_CDN_HOSTS.includes(new URL(url).hostname)) throw new Error("not a discord url");
-      const response = await fetch(url);
+      const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
       if (!response.ok) throw new Error(`photo download failed (${response.status})`);
 
       const path = `servers/${serverId}/${userId}/${crypto.randomUUID()}.${EXTENSION_BY_CONTENT_TYPE[contentType]}`;

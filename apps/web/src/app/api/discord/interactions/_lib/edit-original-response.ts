@@ -14,6 +14,7 @@ export async function editOriginalResponse({
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content, allowed_mentions: { parse: [] } }),
+      signal: AbortSignal.timeout(15000),
     },
   );
   if (!response.ok) console.error("디스코드 응답 수정 실패", response.status);

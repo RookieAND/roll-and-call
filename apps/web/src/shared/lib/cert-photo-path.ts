@@ -1,3 +1,5 @@
+import { isSupabaseUrl } from "./is-supabase-url";
+
 export const CERT_PHOTO_BUCKET = "cert-photos";
 
 // 버킷은 비공개지만 DB에는 공개 URL 모양 문자열을 "파일 키"로 저장한다.
@@ -7,7 +9,7 @@ const PUBLIC_PREFIX = `/storage/v1/object/public/${CERT_PHOTO_BUCKET}/`;
 
 export function certPhotoPathOf(url: string): string | null {
   const prefixIndex = url.indexOf(PUBLIC_PREFIX);
-  if (prefixIndex < 0) return null;
+  if (prefixIndex < 0 || !isSupabaseUrl(url)) return null;
   const path = decodeURIComponent(url.slice(prefixIndex + PUBLIC_PREFIX.length).split("?")[0]!);
   return path || null;
 }

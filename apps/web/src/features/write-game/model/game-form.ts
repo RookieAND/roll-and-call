@@ -11,7 +11,7 @@ import {
   SCHEDULE_MODE,
   SCHEDULE_MODES,
 } from "@/entities/game";
-import { richTextLength } from "@/shared/lib";
+import { isGameImageUrl, richTextLength } from "@/shared/lib";
 
 import { isWindowHour } from "./is-window-hour";
 import { minPlayersRangeError } from "./min-players-range-error";
@@ -102,10 +102,13 @@ export const gameFormSchema = z
     // 조율 시간대(KST 시, "0"~"23"). 끝이 시작 이하면 자정을 넘긴다. 일시 지정형은 쓰지 않는다.
     windowStartHour: z.string().optional(),
     windowEndHour: z.string().optional(),
-    thumbnailUrl: z.string().optional(),
+    thumbnailUrl: z
+      .string()
+      .refine((url) => url === "" || isGameImageUrl(url), "이미지를 다시 올려 주세요.")
+      .optional(),
     thumbnailSpoiler: z.boolean(),
     images: z
-      .array(z.url())
+      .array(z.url().refine(isGameImageUrl, "이미지를 다시 올려 주세요."))
       .max(GAME_IMAGES_MAX, `이미지는 최대 ${GAME_IMAGES_MAX}장까지 올릴 수 있습니다.`),
     waitlistEnabled: z.boolean(),
     applicationNoteEnabled: z.boolean(),

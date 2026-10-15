@@ -20,6 +20,7 @@ export { fromKstDateTimeInput } from "./from-kst-date-time-input";
 export { addDays } from "./add-days";
 export { endDateBounds } from "./end-date-bounds";
 export { GAME_IMAGE_BUCKET, gameImagePathOf } from "./storage-path";
+export { isGameImageUrl } from "./is-game-image-url";
 export { richTextLength } from "./rich-text-length";
 export { richTextNonSpaceLength } from "./rich-text-non-space-length";
 export { OG_IMAGE } from "./og-image";

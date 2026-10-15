@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { gameImagePathOf } from "./storage-path";
 
@@ -17,5 +17,14 @@ describe("gameImagePathOf", () => {
     ).toBeNull();
     expect(gameImagePathOf("https://cdn.discordapp.com/a.png")).toBeNull();
     expect(gameImagePathOf(base)).toBeNull();
+  });
+
+  it("Supabase 주소가 정해져 있으면 다른 호스트의 같은 경로는 받지 않는다", () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://bnxtukraoqqdhzknuqqp.supabase.co");
+    expect(gameImagePathOf(`${base}u1/a.png`)).toBe("u1/a.png");
+    expect(
+      gameImagePathOf("http://169.254.169.254/storage/v1/object/public/game-thumbnails/u1/a.png"),
+    ).toBeNull();
+    vi.unstubAllEnvs();
   });
 });
