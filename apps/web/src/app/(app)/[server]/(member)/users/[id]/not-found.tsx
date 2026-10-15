@@ -1,9 +1,8 @@
-import { AppBar, ErrorScreen, GoBackButton } from "@/shared/ui";
+import { AppBar, ErrorScreen, GoBackButton, PageShell } from "@/shared/ui";
 
 export default function NotFound() {
   return (
-    <>
-      <AppBar back="/games" title="프로필" />
+    <PageShell appBar={<AppBar back="/games" title="프로필" />}>
       <ErrorScreen
         image="empty-profile"
         title="프로필을 찾을 수 없습니다"
@@ -11,6 +10,6 @@ export default function NotFound() {
         action={<GoBackButton fallback="/games" />}
         homeLink={false}
       />
-    </>
+    </PageShell>
   );
 }

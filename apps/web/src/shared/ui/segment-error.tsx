@@ -4,6 +4,7 @@ import { Button } from "@roll-and-call/ui";
 
 import { AppBar } from "./app-bar";
 import { ErrorScreen } from "./error-screen";
+import { PageShell } from "./page-shell";
 
 interface SegmentErrorProps {
   // 앱바 제목. 오류가 나도 화면 이름과 뒤로 가기가 남는다.
@@ -16,8 +17,7 @@ interface SegmentErrorProps {
 
 export function SegmentError({ appBarTitle, back, subject, retry }: SegmentErrorProps) {
   return (
-    <>
-      <AppBar back={back} title={appBarTitle} />
+    <PageShell appBar={<AppBar back={back} title={appBarTitle} />}>
       <ErrorScreen
         title={`${subject} 불러오지 못했습니다`}
         description={
@@ -34,6 +34,6 @@ export function SegmentError({ appBarTitle, back, subject, retry }: SegmentError
         }
         homeLink={false}
       />
-    </>
+    </PageShell>
   );
 }

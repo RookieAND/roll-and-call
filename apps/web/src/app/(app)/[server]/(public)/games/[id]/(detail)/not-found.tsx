@@ -1,11 +1,10 @@
 import { Button } from "@roll-and-call/ui";
 
-import { AppBar, ErrorScreen, ServerLink } from "@/shared/ui";
+import { AppBar, ErrorScreen, PageShell, ServerLink } from "@/shared/ui";
 
 export default function NotFound() {
   return (
-    <>
-      <AppBar back="/games" title="구인 상세" />
+    <PageShell appBar={<AppBar back="/games" title="구인 상세" />}>
       <ErrorScreen
         image="empty-search"
         title="찾을 수 없는 구인입니다"
@@ -23,6 +22,6 @@ export default function NotFound() {
         }
         homeLink={false}
       />
-    </>
+    </PageShell>
   );
 }
