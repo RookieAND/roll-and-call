@@ -7,7 +7,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { certApplyHref, type MyRulebook } from "@/entities/rulebook";
 import { useServerPath } from "@/shared/lib";
 import { TRIAL_HANDLER, useIsTrial, useTrialHandler } from "@/shared/trial";
-import { AppBar, LineBreaks, toast, useAction } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, LineBreaks, PageShell, toast, useAction } from "@/shared/ui";
 
 import { submitCertification } from "../api/submit-certification";
 import { toCertEntry } from "../model/cert-entry";
@@ -86,111 +86,121 @@ export function CertApplyForm({
   const quizHint = quizHintText({ quizError, answer });
 
   return (
-    <>
-      <AppBar
-        title={retry ? "다시 신청" : "인증 신청"}
-        {...(onQuiz
-          ? { onBack: () => setOnQuiz(false) }
-          : {
-              back: toServerPath(
-                retry
-                  ? `/me/rulebooks/${rulebook.id}`
-                  : certApplyHref({ rulebookIds: [rulebook.id] }),
-              ),
-            })}
-        action={
-          retry || trial ? undefined : (
-            <Text typography="body4" foreground="hint" numeric className="px-100">
-              {step} / {totalSteps}
-            </Text>
-          )
-        }
-      />
-      {belowAppBar}
-      {!retry && !trial && (
-        <Progress
-          value={step}
-          max={totalSteps}
-          className="h-[3px] rounded-none"
-          aria-label="진행"
+    <PageShell
+      appBar={
+        <AppBar
+          title={retry ? "다시 신청" : "인증 신청"}
+          {...(onQuiz
+            ? { onBack: () => setOnQuiz(false) }
+            : {
+                back: toServerPath(
+                  retry
+                    ? `/me/rulebooks/${rulebook.id}`
+                    : certApplyHref({ rulebookIds: [rulebook.id] }),
+                ),
+              })}
+          action={
+            retry || trial ? undefined : (
+              <Text typography="body4" foreground="hint" numeric className="px-100">
+                {step} / {totalSteps}
+              </Text>
+            )
+          }
         />
-      )}
-      {rejection && !onQuiz && (
-        <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) border-b border-gray-100 bg-surface px-200 py-150">
-          <Callout.Root colorPalette="danger">
-            <Callout.Icon />
-            <Callout.Title>{rejection.title}</Callout.Title>
-            {rejection.lines.length > 0 && (
-              <Callout.Description className="break-keep">
-                <LineBreaks lines={rejection.lines} />
-              </Callout.Description>
+      }
+    >
+      <div className={DESKTOP_CARD_CLASS}>
+        {belowAppBar}
+        {!retry && !trial && (
+          <Progress
+            value={step}
+            max={totalSteps}
+            className="h-[3px] rounded-none"
+            aria-label="진행"
+          />
+        )}
+        {rejection && !onQuiz && (
+          <div className="sticky top-(--rc-size-appbar) desktop:top-0 z-(--rc-z-sticky) border-b border-gray-100 bg-surface px-200 py-150">
+            <Callout.Root colorPalette="danger">
+              <Callout.Icon />
+              <Callout.Title>{rejection.title}</Callout.Title>
+              {rejection.lines.length > 0 && (
+                <Callout.Description className="break-keep">
+                  <LineBreaks lines={rejection.lines} />
+                </Callout.Description>
+              )}
+            </Callout.Root>
+          </div>
+        )}
+
+        <Container size="sm">
+          <div className="pt-200 pb-250">
+            {onQuiz && quiz ? (
+              <QuizStep
+                bookTitle={rulebook.shortName}
+                bookSub={`${rulebook.categoryName} ${rulebook.edition}`.trim()}
+                question={quiz.question}
+                answer={answer}
+                error={quizError}
+                onAnswerChange={(value) => {
+                  setAnswer(value);
+                  setQuizError(null);
+                }}
+              />
+            ) : (
+              <BookDraftCard
+                serverId={serverId}
+                rulebook={rulebook}
+                draft={draft}
+                nickname={nickname}
+                sellers={sellers}
+                highlightEmpty={retry}
+                update={setDraft}
+              />
             )}
-          </Callout.Root>
-        </div>
-      )}
+          </div>
+        </Container>
 
-      <Container size="sm">
-        <div className="pt-200 pb-250">
-          {onQuiz && quiz ? (
-            <QuizStep
-              bookTitle={rulebook.shortName}
-              bookSub={`${rulebook.categoryName} ${rulebook.edition}`.trim()}
-              question={quiz.question}
-              answer={answer}
-              error={quizError}
-              onAnswerChange={(value) => {
-                setAnswer(value);
-                setQuizError(null);
-              }}
-            />
-          ) : (
-            <BookDraftCard
-              serverId={serverId}
-              rulebook={rulebook}
-              draft={draft}
-              nickname={nickname}
-              sellers={sellers}
-              highlightEmpty={retry}
-              update={setDraft}
-            />
-          )}
-        </div>
-      </Container>
-
-      <FloatingBar.Root elevated={false}>
-        <FloatingBar.Content>
-          <Container size="sm">
-            <VStack gap="100">
-              {(onQuiz ? quizHint : photoHint) && (
-                <Text typography="body4" weight="medium" foreground="muted" className="text-center">
-                  {onQuiz ? quizHint : photoHint}
-                </Text>
-              )}
-              {onQuiz || !quiz ? (
-                <Button
-                  size="lg"
-                  className="w-full"
-                  disabled={!isNull(missing) || (onQuiz && !answer.trim())}
-                  loading={pending}
-                  onClick={submit}
-                >
-                  {submitLabel}
-                </Button>
-              ) : (
-                <Button
-                  size="lg"
-                  className="w-full"
-                  disabled={!isNull(missing)}
-                  onClick={() => setOnQuiz(true)}
-                >
-                  다음
-                </Button>
-              )}
-            </VStack>
-          </Container>
-        </FloatingBar.Content>
-        <FloatingBar.Spacer />
-      </FloatingBar.Root>
-    </>
+        <FloatingBar.Root elevated={false}>
+          <FloatingBar.Content>
+            <Container size="sm">
+              <VStack gap="100">
+                {(onQuiz ? quizHint : photoHint) && (
+                  <Text
+                    typography="body4"
+                    weight="medium"
+                    foreground="muted"
+                    className="text-center"
+                  >
+                    {onQuiz ? quizHint : photoHint}
+                  </Text>
+                )}
+                {onQuiz || !quiz ? (
+                  <Button
+                    size="lg"
+                    className="w-full"
+                    disabled={!isNull(missing) || (onQuiz && !answer.trim())}
+                    loading={pending}
+                    onClick={submit}
+                  >
+                    {submitLabel}
+                  </Button>
+                ) : (
+                  <Button
+                    size="lg"
+                    className="w-full"
+                    disabled={!isNull(missing)}
+                    onClick={() => setOnQuiz(true)}
+                  >
+                    다음
+                  </Button>
+                )}
+              </VStack>
+            </Container>
+          </FloatingBar.Content>
+          <FloatingBar.Spacer />
+        </FloatingBar.Root>
+      </div>
+    </PageShell>
   );
 }

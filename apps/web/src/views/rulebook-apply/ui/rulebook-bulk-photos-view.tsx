@@ -15,7 +15,7 @@ import {
   getProfile,
   getRulebookRecords,
 } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 const rulebookIdsSchema = z.array(z.uuid()).min(2).max(BULK_CERT_MAX_BOOKS);
 
@@ -27,14 +27,15 @@ export async function RulebookBulkPhotosView({ rulebookIds }: RulebookBulkPhotos
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
-      <>
-        <AppBar back="/me/rulebooks" title="인증 신청" />
-        <Container size="sm">
-          <div className="py-300">
-            <LoginRequired />
-          </div>
-        </Container>
-      </>
+      <PageShell appBar={<AppBar back="/me/rulebooks" title="인증 신청" />}>
+        <div className={DESKTOP_CARD_CLASS}>
+          <Container size="sm">
+            <div className="py-300">
+              <LoginRequired />
+            </div>
+          </Container>
+        </div>
+      </PageShell>
     );
   }
   const backToPicker = serverPath({ slug: server.slug, path: certApplyHref({ rulebookIds }) });

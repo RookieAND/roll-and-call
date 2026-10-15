@@ -24,7 +24,7 @@ import {
   getCurrentServer,
   signCertPhotoUrls,
 } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 interface RulebookPhotosViewProps {
   rulebookId: string;
@@ -34,14 +34,15 @@ export async function RulebookPhotosView({ rulebookId }: RulebookPhotosViewProps
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
-      <>
-        <AppBar back="/me/rulebooks/apply" title="인증 신청" />
-        <Container size="sm">
-          <div className="py-300">
-            <LoginRequired />
-          </div>
-        </Container>
-      </>
+      <PageShell appBar={<AppBar back="/me/rulebooks/apply" title="인증 신청" />}>
+        <div className={DESKTOP_CARD_CLASS}>
+          <Container size="sm">
+            <div className="py-300">
+              <LoginRequired />
+            </div>
+          </Container>
+        </div>
+      </PageShell>
     );
   }
   const [records, profile, sellers, quiz] = await Promise.all([
