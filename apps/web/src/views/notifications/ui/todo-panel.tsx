@@ -1,14 +1,11 @@
-import { VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
 import { EmptyState } from "@/shared/ui";
-import { TODO_ITEM_TYPE } from "@/widgets/session-list";
 import { loadTodos } from "@/widgets/session-list/server";
 
 import { nullOnError } from "../api/null-on-error";
-import { CertTodoCard } from "./cert-todo-card";
 import { ReloadButton } from "./reload-button";
-import { TodoCard } from "./todo-card";
+import { TodoCardList } from "./todo-card-list";
 
 interface TodoPanelProps {
   serverId: string;
@@ -37,15 +34,5 @@ export async function TodoPanel({ serverId, userId }: TodoPanelProps) {
       />
     );
   }
-  return (
-    <VStack gap="125">
-      {list.items.map((item) =>
-        item.type === TODO_ITEM_TYPE.cert ? (
-          <CertTodoCard key={item.key} item={item} />
-        ) : (
-          <TodoCard key={item.key} item={item} />
-        ),
-      )}
-    </VStack>
-  );
+  return <TodoCardList list={list} />;
 }

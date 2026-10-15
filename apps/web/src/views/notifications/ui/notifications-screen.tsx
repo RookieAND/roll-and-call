@@ -7,13 +7,13 @@ import { Suspense, useState, type ReactNode } from "react";
 
 import { markNotificationRead } from "@/features/read-notifications";
 import { navBadgesQueryKey } from "@/shared/api";
-import { AppBar } from "@/shared/ui";
 
 import type { InboxPage } from "../model/inbox-page";
 import { NOTIFICATIONS_TAB, type NotificationsTab } from "../model/notifications-tab";
 import { CountSkeleton } from "./count-skeleton";
 import { InboxPanel } from "./inbox-panel";
 import { InboxSkeleton } from "./inbox-skeleton";
+import { NotificationsFrame } from "./notifications-frame";
 import { ReadAllBar } from "./read-all-bar";
 import { UnreadCount } from "./unread-count";
 
@@ -53,13 +53,12 @@ export function NotificationsScreen({ todoCount, todoPanel, inbox }: Notificatio
   };
 
   return (
-    <>
-      <AppBar title="알림" />
+    <NotificationsFrame>
       <Tabs.Root value={tab} onValueChange={changeTab}>
         <Tabs.List
           aria-label="알림"
           scrollable={false}
-          className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) w-full bg-surface"
+          className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) w-full bg-surface desktop:relative desktop:top-0"
         >
           <Tabs.Trigger value={NOTIFICATIONS_TAB.todo} className="flex-1">
             할 일{todoCount}
@@ -73,7 +72,7 @@ export function NotificationsScreen({ todoCount, todoPanel, inbox }: Notificatio
           <Tabs.Indicator />
         </Tabs.List>
         <Tabs.Panel value={NOTIFICATIONS_TAB.todo} keepMounted className="pt-0">
-          <Container size="sm" className="py-200">
+          <Container size="sm" className="py-200 desktop:max-w-none">
             {todoPanel}
           </Container>
         </Tabs.Panel>
@@ -91,6 +90,6 @@ export function NotificationsScreen({ todoCount, todoPanel, inbox }: Notificatio
           </Suspense>
         </Tabs.Panel>
       </Tabs.Root>
-    </>
+    </NotificationsFrame>
   );
 }
