@@ -79,14 +79,14 @@ export function Sidebar({
       <HStack
         align="center"
         gap="100"
-        className="mt-auto border-t border-(--rc-color-border-subtle) px-175 py-150"
+        className="mt-auto border-t border-(--rc-color-border-subtle) px-175 py-150 max-lg:gap-125 max-lg:px-150 max-lg:py-125"
       >
         <Text
           typography="body4"
           weight="bold"
           foreground="muted"
           aria-hidden
-          className="grid size-7 shrink-0 place-items-center rounded-full bg-gray-200"
+          className="grid size-7 shrink-0 place-items-center rounded-full bg-gray-200 max-lg:size-10 max-lg:bg-(--rc-color-bg-primary-weakest) max-lg:text-(--rc-color-fg-primary)"
         >
           {nickname.slice(0, 1)}
         </Text>
