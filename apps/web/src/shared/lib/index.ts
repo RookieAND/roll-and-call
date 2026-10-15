@@ -24,13 +24,16 @@ export { isGameImageUrl } from "./is-game-image-url";
 export { richTextLength } from "./rich-text-length";
 export { richTextNonSpaceLength } from "./rich-text-non-space-length";
 export { OG_IMAGE } from "./og-image";
-export { comitativeParticle } from "./comitative-particle";
-export { directionalParticle } from "./directional-particle";
-export { objectParticle } from "./object-particle";
-export { subjectParticle } from "./subject-particle";
-export { topicParticle } from "./topic-particle";
+export {
+  comitativeParticle,
+  directionalParticle,
+  objectParticle,
+  subjectParticle,
+  topicParticle,
+} from "@roll-and-call/database/notifications/model";
 export { CLOCK_PARTICLE_KIND, clockParticle, type ClockParticleKind } from "./clock-particle";
-export { CERT_PHOTO_BUCKET, certPhotoPathOf } from "./cert-photo-path";
+export { CERT_PHOTO_BUCKET } from "@roll-and-call/database/certifications/model";
+export { certPhotoPathOf } from "./cert-photo-path";
 export { REVIEW_PHOTO_BUCKET, reviewPhotoPathOf } from "./review-photo-path";
 export { formatMonthDayTime } from "./format-month-day-time";
 export { SERVER_SLUG_HEADER } from "./server-slug-header";

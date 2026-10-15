@@ -7,7 +7,13 @@ import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { conflictToastText, draftReason, useActionSubmit } from "@/shared/lib";
+import {
+  conflictToastText,
+  draftReason,
+  quoteWithParticle,
+  useActionSubmit,
+  withDirectionParticle,
+} from "@/shared/lib";
 import {
   ActionNetworkError,
   FactBox,
@@ -22,7 +28,6 @@ import {
 import { editMemberNickname } from "../api/edit-member-nickname";
 import { NICKNAME_REASON } from "../model/nickname-reasons";
 import { NICKNAME_TAKEN_ERROR } from "../model/nickname-rule";
-import { quoteWithDirection } from "../model/quote-with-direction";
 import { useNicknameCheck } from "../model/use-nickname-check";
 
 interface EditNicknameDialogProps {
@@ -71,7 +76,7 @@ export function EditNicknameDialog({
     });
     if (isUndefined(result)) return;
     if (result.ok) {
-      toast.success(`닉네임을 ${quoteWithDirection(typed)} 바꿨습니다`);
+      toast.success(`닉네임을 ${quoteWithParticle(typed, withDirectionParticle)} 바꿨습니다`);
       onOpenChange(false);
       router.refresh();
       return;

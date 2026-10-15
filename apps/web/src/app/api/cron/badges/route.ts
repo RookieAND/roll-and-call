@@ -3,6 +3,7 @@ import {
   evaluateAnniversaryBadges,
   syncAllMonthlyBadges,
 } from "@roll-and-call/database/badges";
+import { kstShifted } from "@roll-and-call/database/badges/model";
 import { syncApprenticeBadges } from "@roll-and-call/database/onboarding";
 
 import { announceMonthlyAwards, isCronRequest } from "@/shared/server";
@@ -10,7 +11,6 @@ import { announceMonthlyAwards, isCronRequest } from "@/shared/server";
 export const maxDuration = 300;
 
 const SUNDAY = 0;
-const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
 // Vercel Cron이 매일 00:05(KST)에 부른다. 2일에는 지난달이 굳어 이달의 GM·PL을 붙이고 디스코드 공지 채널에 발표한다.
 // 개인 뱃지는 이벤트가 바로 맞추므로 매일은 가입 기념일(날짜가 지나서 붙는 칭호)만 보고, 일요일에는 놓친 이벤트를 전체 재계산으로 보정한다.
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
   }
   await evaluateAnniversaryBadges(now);
   await syncApprenticeBadges();
-  const isSunday = new Date(now.getTime() + KST_OFFSET_MS).getUTCDay() === SUNDAY;
+  const isSunday = kstShifted(now).getUTCDay() === SUNDAY;
   if (isSunday) await evaluateAllBadges({ now });
   return Response.json({ ok: true, announced, recomputed: isSunday });
 }

@@ -1,9 +1,9 @@
+import { KST_OFFSET_MS } from "./kst-offset";
 import type { ScheduleMode } from "./schedule-mode";
 
 type Moment = Date | string;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
 export const SELECTION_GRACE_DAYS = 7;
 

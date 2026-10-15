@@ -22,3 +22,5 @@ export { objectParticle } from "./object-particle";
 export { subjectParticle } from "./subject-particle";
 export { topicParticle } from "./topic-particle";
 export { directionalParticle } from "./directional-particle";
+export { comitativeParticle } from "./comitative-particle";
+export { endsWithHangulSyllable } from "./ends-with-hangul-syllable";

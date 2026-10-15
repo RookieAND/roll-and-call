@@ -1,6 +1,6 @@
 import { compactChanges, scalarChange } from "@roll-and-call/database/moderation/model";
 
-import { withDirectionParticle } from "./with-direction-particle";
+import { withDirectionParticle } from "@/shared/lib";
 
 interface SettingsChanges {
   serverName: string;

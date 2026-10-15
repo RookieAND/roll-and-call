@@ -1,5 +1,4 @@
-import { directionalParticle } from "./directional-particle";
-import { subjectParticle } from "./subject-particle";
+import { directionalParticle, subjectParticle } from "@roll-and-call/database/notifications/model";
 
 export const CLOCK_PARTICLE_KIND = {
   subject: "subject",

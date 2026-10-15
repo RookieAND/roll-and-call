@@ -1,6 +1,6 @@
 import { type CoordinationWindow, crossesMidnight } from "./coordination-window";
+import { KST_OFFSET_MS } from "./kst-offset";
 
-const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 // 세션 시작의 KST 날짜가 조율 기간 안인지. 자정을 넘는 시간대면 마지막 열의 자정 뒤 줄(다음 날 끝 시각 전)도 안이다.

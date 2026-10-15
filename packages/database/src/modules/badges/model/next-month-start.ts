@@ -1,4 +1,4 @@
-const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+import { KST_OFFSET_MS } from "#/modules/games/model/kst-offset";
 
 // "2026-09" → 2026-10-01 00:00 KST. 이달의 뱃지가 붙는 시각이다.
 export function nextMonthStart(monthKey: string): Date {

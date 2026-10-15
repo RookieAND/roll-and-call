@@ -29,6 +29,8 @@ export { withQuery } from "./with-query";
 export { serverPath } from "./server-path";
 export { STATUS_TONE, type StatusTone } from "./status-tone";
 export { SERVER_SLUG_HEADER } from "./server-slug-header";
+export { withAndParticle } from "./with-and-particle";
+export { withDirectionParticle } from "./with-direction-particle";
 export { withObjectParticle } from "./with-object-particle";
 export { withSubjectParticle } from "./with-subject-particle";
 export { withTopicParticle } from "./with-topic-particle";

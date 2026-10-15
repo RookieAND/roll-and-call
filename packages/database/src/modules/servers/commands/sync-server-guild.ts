@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "#/client";
 import { recordAudit } from "#/modules/moderation/commands/record-audit";
+import { topicParticle } from "#/modules/notifications/model/topic-particle";
 import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
 import { profiles, servers, staff, type Server } from "#/schema";
 
@@ -43,8 +44,6 @@ export async function syncServerGuild({
         .onConflictDoUpdate({ target: [staff.serverId, staff.userId], set: { role: "staff" } });
     }
     const previousName = previous?.nickname ?? "알 수 없음";
-    const lastCode = previousName.charCodeAt(previousName.length - 1) - 0xac00;
-    const particle = lastCode >= 0 && lastCode < 11172 && lastCode % 28 !== 0 ? "은" : "는";
     await recordAudit({
       executor: tx,
       serverId: server.id,
@@ -53,7 +52,7 @@ export async function syncServerGuild({
         action: "소유권 자동 이전",
         target: `${guild.name} · ${next?.nickname ?? "알 수 없음"}`,
         targetUserId: next?.id,
-        reason: `디스코드 서버 소유권 이전 · 이전 소유자 ${previousName}${particle} 운영진으로 변경`,
+        reason: `디스코드 서버 소유권 이전 · 이전 소유자 ${previousName}${topicParticle(previousName)} 운영진으로 변경`,
         before: { label: previousName },
         after: { label: next?.nickname ?? "알 수 없음" },
       },

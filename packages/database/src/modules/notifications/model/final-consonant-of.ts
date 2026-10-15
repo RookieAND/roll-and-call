@@ -1,7 +1,7 @@
 import { isUndefined } from "es-toolkit";
 
-const HANGUL_START = 0xac00;
-const HANGUL_END = 0xd7a3;
+export const HANGUL_START = 0xac00;
+export const HANGUL_END = 0xd7a3;
 const JONGSEONG_COUNT = 28;
 
 export const NO_FINAL_CONSONANT = 0;

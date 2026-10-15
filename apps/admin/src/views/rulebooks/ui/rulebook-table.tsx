@@ -1,10 +1,9 @@
 import { Table } from "@roll-and-call/ui";
 
-import { quoteWithParticle } from "@/shared/lib";
+import { quoteWithParticle, withAndParticle } from "@/shared/lib";
 import type { RulebookCategory, RulebookRow } from "@/shared/server";
 import { EMPTY_IMAGE, TableColumns, TableEmptyRow } from "@/shared/ui";
 
-import { withAndParticle } from "../model/with-and-particle";
 import { CategoryRow } from "./category-row";
 import { RulebookBookRow } from "./rulebook-book-row";
 
