@@ -42,19 +42,21 @@ async function evaluateUser({
   await applyBadgeWrites({ serverId, userId, writes, now, silent });
 }
 
-// 지난달 기록이 바뀌었을 수 있어 이달의 뱃지도 다시 맞춘다.
+// 지난달 기록이 바뀌었을 수 있어 이달의 뱃지도 다시 맞춘다. 여러 번 부르는 일괄 작업은 syncMonthly를 끄고 서버마다 한 번만 맞춘다.
 // 실패해도 원래 동작(출석 확인 등)을 되돌리지 않도록 after()에서 부르고, 매일 밤 크론이 전체를 다시 맞춘다.
 export async function evaluateBadges({
   serverId,
   userIds,
   now = new Date(),
   silent = false,
+  syncMonthly = true,
 }: {
   serverId: string;
   userIds: string[];
   now?: Date;
   silent?: boolean;
+  syncMonthly?: boolean;
 }) {
   for (const userId of uniq(userIds)) await evaluateUser({ serverId, userId, now, silent });
-  await syncMonthlyBadges({ serverId, now });
+  if (syncMonthly) await syncMonthlyBadges({ serverId, now });
 }

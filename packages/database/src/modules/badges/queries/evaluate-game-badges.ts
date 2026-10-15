@@ -8,9 +8,11 @@ import { evaluateBadges } from "./evaluate-badges";
 export async function evaluateGameBadges({
   serverId,
   gameId,
+  syncMonthly,
 }: {
   serverId: string;
   gameId: string;
+  syncMonthly?: boolean;
 }) {
   const [game] = await db
     .select({ gmId: games.gmId })
@@ -24,5 +26,6 @@ export async function evaluateGameBadges({
   await evaluateBadges({
     serverId,
     userIds: [game.gmId, ...members.map((member) => member.userId)],
+    syncMonthly,
   });
 }

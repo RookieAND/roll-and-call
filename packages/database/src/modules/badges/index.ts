@@ -9,6 +9,7 @@ export { evaluateBadges } from "./queries/evaluate-badges";
 export { evaluateGameBadges } from "./queries/evaluate-game-badges";
 export { evaluateReviewBadges } from "./queries/evaluate-review-badges";
 export { syncAllMonthlyBadges } from "./queries/sync-all-monthly-badges";
+export { syncMonthlyBadges } from "./queries/sync-monthly-badges";
 export { loadBadgeFacts } from "./queries/load-badge-facts";
 export { loadMonthlyAppearances } from "./queries/load-monthly-appearances";
 export { loadReviewAppearances } from "./queries/load-review-appearances";

@@ -37,6 +37,10 @@ export async function applyBadgeWrites({
   if (writes.length === 0) return;
   const grants = writes.filter((write): write is Grant => write.kind === "grant");
   await db.transaction(async (transaction) => {
+    // 같은 사람의 동시 재계산이 notified_tier를 같이 읽고 알림을 두 번 넣지 않게 직렬화한다.
+    await transaction.execute(
+      sql`select pg_advisory_xact_lock(hashtext(${`badges:${serverId}:${userId}`}))`,
+    );
     const grantKeys = grants.map((write) => write.badge.badgeKey);
     const categoryIds = ruleCategoryIds(grants);
     const [stored, categories] = await Promise.all([

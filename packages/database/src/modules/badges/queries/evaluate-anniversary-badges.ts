@@ -14,7 +14,7 @@ const ANNIVERSARY_INTERVALS = [
 ];
 const WINDOW_DAYS = 2;
 
-// 최근 이틀 안에 가입 기념일이 지난 멤버만 다시 계산한다. 하루 실패해도 다음 날 잡힌다.
+// 최근 이틀 안에 가입 기념일이 지난 멤버만 다시 계산한다. 하루 실패해도 다음 날 잡힌다. 이달의 뱃지는 badges 크론이 먼저 맞춘다.
 export async function evaluateAnniversaryBadges(now: Date = new Date()) {
   for (const server of await db.select({ id: servers.id }).from(servers)) {
     const members = await db
@@ -32,7 +32,12 @@ export async function evaluateAnniversaryBadges(now: Date = new Date()) {
         ),
       );
     if (members.length > 0) {
-      await evaluateBadges({ serverId: server.id, userIds: members.map((m) => m.userId), now });
+      await evaluateBadges({
+        serverId: server.id,
+        userIds: members.map((m) => m.userId),
+        now,
+        syncMonthly: false,
+      });
     }
   }
 }
