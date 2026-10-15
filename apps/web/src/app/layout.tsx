@@ -70,7 +70,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <NavigationTracker />
           {children}
         </QueryProvider>
-        <Toast.Viewport />
+        <Toast.Viewport desktopTopRight />
         <Analytics />
         <SpeedInsights />
       </body>
