@@ -9,6 +9,7 @@ import { AppBar } from "@/shared/ui";
 
 import { toDrawOutcome } from "../model/to-draw-outcome";
 import { AppliedDraw } from "./applied-draw";
+import { DrawResultFrame } from "./draw-result-frame";
 import { EmptyDraw } from "./empty-draw";
 import { MyDrawResult } from "./my-draw-result";
 import { NoDrawEmpty } from "./no-draw-empty";
@@ -37,10 +38,9 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
   const resultAppBar = <AppBar back={`/games/${id}`} title="추첨 결과" />;
   if (isNull(drawnAt)) {
     return (
-      <>
-        {resultAppBar}
+      <DrawResultFrame appBar={resultAppBar}>
         <NoDrawEmpty gameId={id} />
-      </>
+      </DrawResultFrame>
     );
   }
 
@@ -55,10 +55,9 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
   const legacyDraw = game.participants.some((participant) => !isNull(participant.drawRank));
   if (!hasRolls && legacyDraw) {
     return (
-      <>
-        {resultAppBar}
+      <DrawResultFrame appBar={resultAppBar}>
         <NoDrawEmpty gameId={id} />
-      </>
+      </DrawResultFrame>
     );
   }
 
@@ -89,11 +88,10 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
   }
 
   return (
-    <>
-      {resultAppBar}
+    <DrawResultFrame appBar={resultAppBar}>
       <Container size="sm" className="py-200">
         {content}
       </Container>
-    </>
+    </DrawResultFrame>
   );
 }

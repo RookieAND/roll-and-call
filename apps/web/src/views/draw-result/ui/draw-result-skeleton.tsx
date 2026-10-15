@@ -2,6 +2,7 @@ import { Card, Container, FloatingBar, Grid, HStack, Skeleton, VStack } from "@r
 import { range } from "es-toolkit";
 
 import { DrawResultAppBar } from "./draw-result-app-bar";
+import { DrawResultFrame } from "./draw-result-frame";
 
 const CONFIRMED_ROW_COUNT = 3;
 const WAITING_ROW_COUNT = 2;
@@ -12,8 +13,7 @@ const QUEUES = [
 
 export function DrawResultSkeleton() {
   return (
-    <>
-      <DrawResultAppBar />
+    <DrawResultFrame appBar={<DrawResultAppBar />}>
       <Container size="sm" className="py-200">
         <VStack gap="250" aria-busy>
           <VStack gap="150">
@@ -58,6 +58,6 @@ export function DrawResultSkeleton() {
           <Skeleton height={48} rounded={500} />
         </FloatingBar.Content>
       </FloatingBar.Root>
-    </>
+    </DrawResultFrame>
   );
 }
