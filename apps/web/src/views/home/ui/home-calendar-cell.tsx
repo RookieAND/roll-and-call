@@ -67,7 +67,7 @@ export function HomeCalendarCell({
         "desktop:h-auto desktop:min-h-28 desktop:justify-start desktop:gap-050 desktop:overflow-hidden desktop:rounded-none desktop:p-100 desktop:transition-none desktop:hover:brightness-97",
         cell.inMonth ? "desktop:bg-surface" : "desktop:bg-canvas",
         selectedInMonth &&
-          "desktop:bg-tinted-bg desktop:ring-2 desktop:ring-selected-ring desktop:ring-inset",
+          "desktop:bg-tinted-bg desktop:ring-2 desktop:ring-(color:--rc-color-border-primary-strong) desktop:ring-inset",
         tone.cell,
       )}
     >
