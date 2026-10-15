@@ -7,7 +7,7 @@ import {
   SESSION_CHIP,
   SESSION_ICON,
   SESSION_TONE,
-  type SessionCardModel,
+  type SessionCardBase,
   type SessionGame,
 } from "./session-card-model";
 
@@ -20,7 +20,7 @@ export function toCancelledSessionCard({
   game: SessionGame;
   role: SessionRole;
   cancelledAt: Date;
-}): SessionCardModel {
+}): SessionCardBase {
   return {
     id: game.id,
     title: game.title,

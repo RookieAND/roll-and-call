@@ -9,6 +9,7 @@ export { useDebouncedValue } from "./use-debounced-value";
 export { NavigationTracker } from "./navigation-tracker";
 export { BottomNav } from "./bottom-nav";
 export { DESKTOP_CARD_CLASS } from "./desktop-card-class";
+export { CARD_GRID_CLASS } from "./card-grid-class";
 export { FRAME_INNER_MX, FRAME_INNER_PX } from "./frame-class";
 export { DesktopNav } from "./desktop-nav";
 export { PageShell } from "./page-shell";

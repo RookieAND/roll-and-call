@@ -16,7 +16,7 @@ import {
   SESSION_CHIP,
   SESSION_ICON,
   type SessionTodo,
-  type SessionCardModel,
+  type SessionCardBase,
   type SessionContext,
   type SessionGame,
 } from "./session-card-model";
@@ -29,7 +29,7 @@ export function toPastSessionCard({
   game: SessionGame;
   facts: SessionFacts;
   context: SessionContext;
-}): SessionCardModel {
+}): SessionCardBase {
   const { base, state, viewerAbsent } = facts;
   const finished = state === SESSION_STATE.finished && game.confirmedAt;
   const player = base.role === SESSION_ROLE.player;

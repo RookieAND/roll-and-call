@@ -10,7 +10,7 @@ import {
   SESSION_CHIP,
   SESSION_ICON,
   SESSION_TONE,
-  type SessionCardModel,
+  type SessionCardBase,
   type SessionContext,
   type SessionGame,
 } from "./session-card-model";
@@ -23,7 +23,7 @@ export function toJoinedSessionCard({
   game: SessionGame;
   facts: SessionFacts;
   context: SessionContext;
-}): SessionCardModel {
+}): SessionCardBase {
   const { base, line, awaitingTime, timeSet, sessionWhen, sessionAgo, sortKey, waitingCount } =
     facts;
   const common = { ...base, gm: game.gm ?? null, sortKey, waitingCount, todo: null };

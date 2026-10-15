@@ -1,3 +1,4 @@
-// 진행 중 목록은 데스크톱에서 카드 폭 300px 이상으로 가능한 만큼 열을 늘린다(1280px에서 2열).
-export const LIVE_GRID_CLASS =
-  "desktop:grid desktop:grid-cols-[repeat(auto-fill,minmax(18.75rem,1fr))] desktop:items-stretch desktop:gap-200";
+import { CARD_GRID_CLASS } from "@/shared/ui";
+
+// 진행 중 구인 목록의 카드 격자. 내 세션도 같은 격자를 쓰므로 정의는 shared/ui에 있다.
+export const LIVE_GRID_CLASS = CARD_GRID_CLASS;

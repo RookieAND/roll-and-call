@@ -7,7 +7,7 @@ import { hostScheduleIcon } from "./host-schedule-icon";
 import { hostScheduleTone } from "./host-schedule-tone";
 import { hostSessionChip } from "./host-session-chip";
 import { hostTodo } from "./host-todo";
-import { type SessionCardModel, type SessionContext, type SessionGame } from "./session-card-model";
+import { type SessionCardBase, type SessionContext, type SessionGame } from "./session-card-model";
 
 export function toHostedSessionCard({
   game,
@@ -17,7 +17,7 @@ export function toHostedSessionCard({
   game: SessionGame;
   facts: SessionFacts;
   context: SessionContext;
-}): SessionCardModel {
+}): SessionCardBase {
   const { base, state, confirmedCount, awaitingTime, timeSet, waitingCount } = facts;
   const status = deriveGameStatus({
     maxPlayers: game.maxPlayers,

@@ -1,6 +1,7 @@
 import { Avatar, Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { CalendarDays, CircleAlert, Clock } from "lucide-react";
 
+import { GameThumbnail } from "@/entities/game";
 import { ReopenGameLink } from "@/features/reopen-game";
 import { ServerLink } from "@/shared/ui";
 
@@ -48,20 +49,42 @@ export function SessionCard({ model }: SessionCardProps) {
       padding="sm"
       radius={600}
       background="none"
-      className={cn(model.urgent ? "border-danger-200 bg-danger-50" : "bg-surface")}
+      className={cn(
+        "desktop:flex desktop:h-full desktop:flex-col desktop:overflow-hidden desktop:p-0",
+        model.urgent ? "border-danger-200 bg-danger-50" : "bg-surface",
+      )}
     >
-      <VStack gap={model.chip === SESSION_CHIP.ended ? "075" : "100"} className="p-025">
-        <ServerLink path={`/games/${model.id}`} className="flex flex-col gap-100">
-          <HStack align="start" gap="100">
+      {/* 1100px 이상: 위 16:9 썸네일. 끝났거나 취소된 세션은 흑백이고, 스포일러는 회색 칸이다. */}
+      {model.thumbnailSpoiler ? (
+        <span className="hidden aspect-video w-full flex-none bg-gray-100 desktop:block" />
+      ) : (
+        <GameThumbnail
+          url={model.thumbnailUrl}
+          sizes="412px"
+          className={cn(
+            "hidden aspect-video w-full flex-none desktop:block",
+            (model.cancelled || model.chip === SESSION_CHIP.ended) && "grayscale",
+          )}
+        />
+      )}
+      <VStack
+        gap={model.chip === SESSION_CHIP.ended ? "075" : "100"}
+        className="p-025 desktop:flex-1 desktop:px-175 desktop:pt-175 desktop:pb-175"
+      >
+        <ServerLink path={`/games/${model.id}`} className="flex flex-col gap-100 desktop:flex-1">
+          {/* 데스크톱은 배지 줄이 제목 위로 올라간다: 줄바꿈 + order로 순서만 바꾼다. */}
+          <HStack align="start" gap="100" className="desktop:flex-wrap desktop:gap-075">
             <Text
               truncate
               typography="heading3"
               foreground={titleForeground}
-              className="min-w-0 flex-1"
+              className="min-w-0 flex-1 desktop:order-2 desktop:basis-full desktop:overflow-visible desktop:text-clip desktop:whitespace-normal desktop:text-pretty"
             >
               {model.title}
             </Text>
-            <Badge colorPalette={model.badgeColor}>{model.badge}</Badge>
+            <Badge colorPalette={model.badgeColor} className="desktop:order-1">
+              {model.badge}
+            </Badge>
           </HStack>
           <Text
             typography="body4"

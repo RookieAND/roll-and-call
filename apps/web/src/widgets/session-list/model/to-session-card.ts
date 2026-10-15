@@ -4,7 +4,12 @@ import { SESSION_ROLE, type SessionRole } from "@/entities/game";
 import { canReopenGame } from "@/features/reopen-game";
 
 import { deriveSessionFacts } from "./derive-session-facts";
-import type { SessionCardModel, SessionContext, SessionGame } from "./session-card-model";
+import type {
+  SessionCardBase,
+  SessionCardModel,
+  SessionContext,
+  SessionGame,
+} from "./session-card-model";
 import { toCancelledSessionCard } from "./to-cancelled-session-card";
 import { toHostedSessionCard } from "./to-hosted-session-card";
 import { toJoinedSessionCard } from "./to-joined-session-card";
@@ -19,7 +24,11 @@ export function toSessionCard({
   role: SessionRole;
   context: SessionContext;
 }): SessionCardModel {
-  const card = buildSessionCard({ game, role, context });
+  const card = {
+    ...buildSessionCard({ game, role, context }),
+    thumbnailUrl: game.thumbnailUrl,
+    thumbnailSpoiler: game.thumbnailSpoiler,
+  };
   // 남의 세션 기록은 viewerId에 프로필 주인이 들어가므로, 판정하지 않고 다시 열기를 두지 않는다.
   if (context.readOnly) return card;
   const canReopen = canReopenGame({
@@ -39,7 +48,7 @@ function buildSessionCard({
   game: SessionGame;
   role: SessionRole;
   context: SessionContext;
-}): SessionCardModel {
+}): SessionCardBase {
   const { cancelledAt } = game;
   if (!isNil(cancelledAt)) return toCancelledSessionCard({ game, role, cancelledAt });
   const facts = deriveSessionFacts({ game, role, context });
