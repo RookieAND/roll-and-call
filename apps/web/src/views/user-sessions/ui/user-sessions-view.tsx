@@ -6,7 +6,7 @@ import { SESSION_ROLE } from "@/entities/game";
 import { DepartedMemberScreen } from "@/entities/profile";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import {
   countableCards,
   PROFILE_SESSION_SECTIONS,
@@ -48,20 +48,23 @@ export async function UserSessionsView({ id, tab }: UserSessionsViewProps) {
   }));
 
   return (
-    <>
-      <AppBar back={`/users/${profile.id}`} title={`${profile.username}의 세션`} />
-      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface">
-        <SessionTabs label="세션 기록" tabs={tabs} activeKey={activeSection.key} />
-      </div>
-      <Container size="sm">
-        <div className="py-250">
-          {items.length > 0 ? (
-            <SessionList items={items} />
-          ) : (
-            <SessionEmptyLine text={activeSection.empty} />
-          )}
+    <PageShell
+      appBar={<AppBar back={`/users/${profile.id}`} title={`${profile.username}의 세션`} />}
+    >
+      <div className={DESKTOP_CARD_CLASS}>
+        <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) bg-surface desktop:static">
+          <SessionTabs label="세션 기록" tabs={tabs} activeKey={activeSection.key} />
         </div>
-      </Container>
-    </>
+        <Container size="sm" className="desktop:max-w-none">
+          <div className="py-250">
+            {items.length > 0 ? (
+              <SessionList items={items} />
+            ) : (
+              <SessionEmptyLine text={activeSection.empty} />
+            )}
+          </div>
+        </Container>
+      </div>
+    </PageShell>
   );
 }

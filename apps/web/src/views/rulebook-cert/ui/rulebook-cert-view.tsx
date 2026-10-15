@@ -18,7 +18,7 @@ import {
   getCurrentServer,
   signCertPhotoUrls,
 } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 import { applicationGroup } from "../model/application-group";
 import { toBookResult } from "../model/to-book-result";
@@ -33,14 +33,15 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
-      <>
-        <AppBar back="/me/rulebooks" title="신청 상세" />
-        <Container size="sm">
-          <VStack className="py-300">
-            <LoginRequired />
-          </VStack>
-        </Container>
-      </>
+      <PageShell readable appBar={<AppBar back="/me/rulebooks" title="신청 상세" />}>
+        <div className={DESKTOP_CARD_CLASS}>
+          <Container size="sm">
+            <VStack className="py-300">
+              <LoginRequired />
+            </VStack>
+          </Container>
+        </div>
+      </PageShell>
     );
   }
 
@@ -73,62 +74,63 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
       : null;
 
   return (
-    <>
-      <AppBar back="/me/rulebooks" title="신청 상세" />
-      <Container size="sm" className="px-0">
-        <VStack className="min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)]">
-          {results.map((result, index) => (
-            <BookResultSection
-              key={result.id}
-              result={result}
-              guide={index === 0 ? setGuide : null}
-            />
-          ))}
-          <VStack className="flex-1" />
-          <VStack className="sticky bottom-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] z-(--rc-z-sticky) bg-surface">
-            {results.map((result) =>
-              result.retryHref ? (
-                <RetryBar
-                  key={result.id}
-                  rulebookId={result.id}
-                  retryHref={serverPath({ slug: server.slug, path: result.retryHref })}
-                  discardable={result.discardable}
-                />
-              ) : null,
-            )}
-            {allCertified && (
-              <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
-                <Button
-                  render={
-                    <Link
-                      href={serverPath({
-                        slug: server.slug,
-                        path: certApplyHref({ rulebookIds: [] }),
-                      })}
-                    />
-                  }
-                  size="lg"
-                  className="w-full"
-                >
-                  다른 룰북 인증하기
-                </Button>
-              </VStack>
-            )}
-            {pending && (
-              <VStack gap="100" className="border-t border-gray-200 px-200 pt-150 pb-200">
-                <Text typography="body4" foreground="muted" className="text-center">
-                  운영진이 확인하기 전까지 신청을 취소할 수 있습니다.
-                </Text>
-                <WithdrawApplicationButton
-                  rulebookId={rulebookId}
-                  bookCount={books.length}
-                  size="lg"
-                />
-              </VStack>
-            )}
+    <PageShell readable flush appBar={<AppBar back="/me/rulebooks" title="신청 상세" />}>
+      <div className={DESKTOP_CARD_CLASS}>
+        <Container size="sm" className="px-0">
+          <VStack className="min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)] desktop:min-h-[calc(100dvh-var(--rc-size-appbar)-1.5rem)]">
+            {results.map((result, index) => (
+              <BookResultSection
+                key={result.id}
+                result={result}
+                guide={index === 0 ? setGuide : null}
+              />
+            ))}
+            <VStack className="flex-1" />
+            <VStack className="sticky bottom-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] z-(--rc-z-sticky) bg-surface desktop:bottom-0">
+              {results.map((result) =>
+                result.retryHref ? (
+                  <RetryBar
+                    key={result.id}
+                    rulebookId={result.id}
+                    retryHref={serverPath({ slug: server.slug, path: result.retryHref })}
+                    discardable={result.discardable}
+                  />
+                ) : null,
+              )}
+              {allCertified && (
+                <VStack className="border-t border-gray-200 px-200 pt-150 pb-200">
+                  <Button
+                    render={
+                      <Link
+                        href={serverPath({
+                          slug: server.slug,
+                          path: certApplyHref({ rulebookIds: [] }),
+                        })}
+                      />
+                    }
+                    size="lg"
+                    className="w-full"
+                  >
+                    다른 룰북 인증하기
+                  </Button>
+                </VStack>
+              )}
+              {pending && (
+                <VStack gap="100" className="border-t border-gray-200 px-200 pt-150 pb-200">
+                  <Text typography="body4" foreground="muted" className="text-center">
+                    운영진이 확인하기 전까지 신청을 취소할 수 있습니다.
+                  </Text>
+                  <WithdrawApplicationButton
+                    rulebookId={rulebookId}
+                    bookCount={books.length}
+                    size="lg"
+                  />
+                </VStack>
+              )}
+            </VStack>
           </VStack>
-        </VStack>
-      </Container>
-    </>
+        </Container>
+      </div>
+    </PageShell>
   );
 }

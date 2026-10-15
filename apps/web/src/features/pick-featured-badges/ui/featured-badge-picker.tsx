@@ -50,7 +50,7 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
   return (
     <Container
       size="sm"
-      className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)] flex-col px-0"
+      className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)] flex-col px-0 desktop:min-h-[calc(100dvh-var(--rc-size-appbar)-1.5rem)]"
     >
       <VStack gap="200" className="p-200">
         <HStack align="center" gap="050" className="-my-050 -mr-100">
@@ -154,7 +154,7 @@ export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePicke
           />
         ))}
       </VStack>
-      <div className="sticky bottom-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] z-(--rc-z-sticky) mt-auto border-t border-gray-100 bg-surface px-200 py-150">
+      <div className="sticky bottom-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] z-(--rc-z-sticky) mt-auto border-t border-gray-100 bg-surface px-200 py-150 desktop:bottom-0">
         <Button
           size="lg"
           className="w-full"

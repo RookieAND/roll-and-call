@@ -9,7 +9,7 @@ import {
   getCurrentServer,
   getRulebookRecords,
 } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { EditGameForm } from "@/widgets/game-form";
 
 import { editLockedTitle } from "../model/edit-locked-title";
@@ -33,21 +33,22 @@ export async function EditGameView({ id }: EditGameViewProps) {
   }
 
   return (
-    <>
-      <AppBar back={`/games/${id}`} title="구인 수정" />
-      <Container size="md">
-        <VStack gap="300" className="py-300">
-          {lockedTitle ? (
-            <EditLockedNotice gameId={id} title={lockedTitle} />
-          ) : (
-            <GmOnlyNotice
-              gameId={id}
-              signedIn={!!user}
-              description="이 구인글의 수정은 GM만 할 수 있습니다."
-            />
-          )}
-        </VStack>
-      </Container>
-    </>
+    <PageShell readable appBar={<AppBar back={`/games/${id}`} title="구인 수정" />}>
+      <div className={DESKTOP_CARD_CLASS}>
+        <Container size="md">
+          <VStack gap="300" className="py-300">
+            {lockedTitle ? (
+              <EditLockedNotice gameId={id} title={lockedTitle} />
+            ) : (
+              <GmOnlyNotice
+                gameId={id}
+                signedIn={!!user}
+                description="이 구인글의 수정은 GM만 할 수 있습니다."
+              />
+            )}
+          </VStack>
+        </Container>
+      </div>
+    </PageShell>
   );
 }

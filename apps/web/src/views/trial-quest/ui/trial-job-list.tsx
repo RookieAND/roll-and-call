@@ -2,7 +2,7 @@ import { Container, VStack } from "@roll-and-call/ui";
 
 import { GameCard } from "@/entities/game";
 import type { GameDetailData } from "@/shared/server";
-import { AppBar, ServerLink } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell, ServerLink } from "@/shared/ui";
 
 import { buildTrialGame } from "../model/build-trial-game";
 import { TRIAL_KIND, type TrialKind } from "../model/trial-kind";
@@ -21,18 +21,23 @@ export function TrialJobList({ applied, now, mine = null }: TrialJobListProps) {
   );
   const games = mine ? [mine, ...others] : others;
   return (
-    <>
-      <AppBar title="구인 목록" />
-      <TrialBanner />
-      <Container size="md">
-        <VStack gap="125" className="py-200">
-          {games.map((game) => (
-            <ServerLink key={game.id} path={`/games/${game.id}`} className="block h-full rounded-600 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink">
-              <GameCard game={game} />
-            </ServerLink>
-          ))}
-        </VStack>
-      </Container>
-    </>
+    <PageShell readable appBar={<AppBar title="구인 목록" />}>
+      <div className={DESKTOP_CARD_CLASS}>
+        <TrialBanner />
+        <Container size="md">
+          <VStack gap="125" className="py-200">
+            {games.map((game) => (
+              <ServerLink
+                key={game.id}
+                path={`/games/${game.id}`}
+                className="block h-full rounded-600 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink"
+              >
+                <GameCard game={game} />
+              </ServerLink>
+            ))}
+          </VStack>
+        </Container>
+      </div>
+    </PageShell>
   );
 }

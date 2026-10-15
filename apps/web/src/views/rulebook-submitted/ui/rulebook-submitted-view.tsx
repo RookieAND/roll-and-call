@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { CERT_FORMAT_LABEL, CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 interface RulebookSubmittedViewProps {
   rulebookId: string;
@@ -29,45 +29,49 @@ export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedVie
     : [rulebook];
 
   return (
-    <>
-      <AppBar back="/me/rulebooks" backIcon="close" title="인증 신청" heading={false} />
-      <Container size="sm">
-        <VStack justify="center" gap="300" className="min-h-[70dvh] px-050 py-400">
-          <VStack align="center" gap="125" className="text-center">
-            <span className="mb-050 flex size-16 items-center justify-center rounded-full bg-success-50 text-success-700">
-              <Check size={30} strokeWidth={2.4} aria-hidden />
-            </span>
-            <Text typography="heading1" render={<h1 />}>
-              신청이 완료되었습니다
-            </Text>
-            <Text typography="body2" foreground="muted" render={<p />} className="break-keep">
-              운영진이 확인하면 결과를 알림 탭으로 알립니다.
-              <br />
-              보통 2~3일 안에 확인합니다.
-            </Text>
+    <PageShell
+      readable
+      appBar={<AppBar back="/me/rulebooks" backIcon="close" title="인증 신청" heading={false} />}
+    >
+      <div className={DESKTOP_CARD_CLASS}>
+        <Container size="sm">
+          <VStack justify="center" gap="300" className="min-h-[70dvh] px-050 py-400">
+            <VStack align="center" gap="125" className="text-center">
+              <span className="mb-050 flex size-16 items-center justify-center rounded-full bg-success-50 text-success-700">
+                <Check size={30} strokeWidth={2.4} aria-hidden />
+              </span>
+              <Text typography="heading1" render={<h1 />}>
+                신청이 완료되었습니다
+              </Text>
+              <Text typography="body2" foreground="muted" render={<p />} className="break-keep">
+                운영진이 확인하면 결과를 알림 탭으로 알립니다.
+                <br />
+                보통 2~3일 안에 확인합니다.
+              </Text>
+            </VStack>
+            <Card.Root padding="none" className="overflow-hidden">
+              {books.map((book) => (
+                <div
+                  key={book.id}
+                  className="flex min-h-14 items-center gap-125 border-t border-gray-100 px-175 py-100 first:border-t-0"
+                >
+                  <VStack className="min-w-0 flex-1">
+                    <Text typography="body2" weight="bold">
+                      {book.shortName}
+                    </Text>
+                    <Text typography="body4" foreground="hint">
+                      {`${book.categoryName} ${book.edition}`.trim()}
+                      {book.latestApplication &&
+                        ` · ${CERT_FORMAT_LABEL[book.latestApplication.format]}`}
+                    </Text>
+                  </VStack>
+                  <Badge className="flex-none">심사 중</Badge>
+                </div>
+              ))}
+            </Card.Root>
           </VStack>
-          <Card.Root padding="none" className="overflow-hidden">
-            {books.map((book) => (
-              <div
-                key={book.id}
-                className="flex min-h-14 items-center gap-125 border-t border-gray-100 px-175 py-100 first:border-t-0"
-              >
-                <VStack className="min-w-0 flex-1">
-                  <Text typography="body2" weight="bold">
-                    {book.shortName}
-                  </Text>
-                  <Text typography="body4" foreground="hint">
-                    {`${book.categoryName} ${book.edition}`.trim()}
-                    {book.latestApplication &&
-                      ` · ${CERT_FORMAT_LABEL[book.latestApplication.format]}`}
-                  </Text>
-                </VStack>
-                <Badge className="flex-none">심사 중</Badge>
-              </div>
-            ))}
-          </Card.Root>
-        </VStack>
-      </Container>
+        </Container>
+      </div>
       <FloatingBar.Root elevated={false}>
         <FloatingBar.Content>
           <Container size="sm">
@@ -82,6 +86,6 @@ export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedVie
         </FloatingBar.Content>
         <FloatingBar.Spacer />
       </FloatingBar.Root>
-    </>
+    </PageShell>
   );
 }

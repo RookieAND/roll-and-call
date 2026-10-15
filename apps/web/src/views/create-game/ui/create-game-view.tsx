@@ -8,7 +8,7 @@ import {
   getCurrentSessionUser,
   getRulebookRecords,
 } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { CreateGameForm } from "@/widgets/game-form";
 
 import { loadReopen } from "../api/load-reopen";
@@ -24,14 +24,15 @@ export async function CreateGameView({ rulebookId, fromGameId }: CreateGameViewP
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
-      <>
-        <AppBar back="/games" title="구인 등록" />
-        <Container size="sm">
-          <div className="py-300">
-            <LoginRequired description="구인을 올리려면 로그인이 필요합니다. 로그인하면 이 화면으로 돌아옵니다." />
-          </div>
-        </Container>
-      </>
+      <PageShell readable appBar={<AppBar back="/games" title="구인 등록" />}>
+        <div className={DESKTOP_CARD_CLASS}>
+          <Container size="sm">
+            <div className="py-300">
+              <LoginRequired description="구인을 올리려면 로그인이 필요합니다. 로그인하면 이 화면으로 돌아옵니다." />
+            </div>
+          </Container>
+        </div>
+      </PageShell>
     );
   }
 

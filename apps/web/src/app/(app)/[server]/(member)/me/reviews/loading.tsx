@@ -1,15 +1,16 @@
 import { Container } from "@roll-and-call/ui";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { ReviewListSkeleton } from "@/views/reviews";
 
 export default function Loading() {
   return (
-    <>
-      <AppBar back="/me" title="작성한 후기" />
-      <Container size="sm" className="py-200">
-        <ReviewListSkeleton actions />
-      </Container>
-    </>
+    <PageShell appBar={<AppBar back="/me" title="작성한 후기" />}>
+      <div className={DESKTOP_CARD_CLASS}>
+        <Container size="sm" className="py-200 desktop:max-w-none">
+          <ReviewListSkeleton actions />
+        </Container>
+      </div>
+    </PageShell>
   );
 }

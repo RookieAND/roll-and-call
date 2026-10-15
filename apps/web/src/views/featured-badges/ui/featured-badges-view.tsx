@@ -15,18 +15,17 @@ import {
   getUserBadges,
   getCurrentServer,
 } from "@/shared/server";
-import { AppBar, EmptyState, ServerLink } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, EmptyState, PageShell, ServerLink } from "@/shared/ui";
 
 export async function FeaturedBadgesView() {
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
-      <>
-        <AppBar back="/me/badges" title="대표 뱃지 설정" />
-        <VStack className="py-300">
+      <PageShell readable appBar={<AppBar back="/me/badges" title="대표 뱃지 설정" />}>
+        <VStack className={`py-300 ${DESKTOP_CARD_CLASS}`}>
           <LoginRequired />
         </VStack>
-      </>
+      </PageShell>
     );
   }
 
@@ -55,29 +54,30 @@ export async function FeaturedBadgesView() {
   );
 
   return (
-    <>
-      <AppBar back="/me/badges" title="대표 뱃지 설정" />
-      {choices.length > 0 ? (
-        <FeaturedBadgePicker choices={choices} initialKeys={initialKeys} />
-      ) : (
-        <VStack className="py-300">
-          <EmptyState
-            size="section"
-            image="empty-achievement"
-            title="아직 받은 뱃지가 없습니다"
-            description="첫 세션을 마치면 뱃지를 받습니다."
-            action={
-              <Button
-                render={<ServerLink path="/me/badges" />}
-                variant="outline"
-                className="mt-100"
-              >
-                뱃지 목록 보기
-              </Button>
-            }
-          />
-        </VStack>
-      )}
-    </>
+    <PageShell readable flush appBar={<AppBar back="/me/badges" title="대표 뱃지 설정" />}>
+      <div className={DESKTOP_CARD_CLASS}>
+        {choices.length > 0 ? (
+          <FeaturedBadgePicker choices={choices} initialKeys={initialKeys} />
+        ) : (
+          <VStack className="py-300">
+            <EmptyState
+              size="section"
+              image="empty-achievement"
+              title="아직 받은 뱃지가 없습니다"
+              description="첫 세션을 마치면 뱃지를 받습니다."
+              action={
+                <Button
+                  render={<ServerLink path="/me/badges" />}
+                  variant="outline"
+                  className="mt-100"
+                >
+                  뱃지 목록 보기
+                </Button>
+              }
+            />
+          </VStack>
+        )}
+      </div>
+    </PageShell>
   );
 }
