@@ -54,7 +54,7 @@ pnpm -F @roll-and-call/database db:generate | db:migrate | db:studio
 
 ## 크론
 
-매일 도는 앱 작업은 Vercel Cron(`apps/web/vercel.json`, GET)이, 앱 로직이 필요한 분 단위 작업은 Supabase pg_cron이 `net.http_post`로 Next 라우트(`/api/cron/*`, POST)를 부른다. 두 방식 모두 `Authorization: Bearer {CRON_SECRET}`을 보내고, 라우트는 `isCronRequest`(`apps/web/src/shared/server`)로 확인한다. 일정은 UTC다.
+모든 크론은 Supabase pg_cron이 Next 라우트(`/api/cron/*`)를 부른다(분 단위 작업은 `net.http_post`/POST, 매일 도는 badges·members는 `net.http_get`/GET). Vercel Cron은 쓰지 않는다. 모두 `Authorization: Bearer {CRON_SECRET}`을 보내고, 라우트는 `isCronRequest`(`apps/web/src/shared/server`)로 확인한다. 일정은 UTC다.
 
 | 이름                         | 일정 (UTC)     | 부르는 곳                          | 방식                    |
 | ---------------------------- | -------------- | ---------------------------------- | ----------------------- |
@@ -67,8 +67,8 @@ pnpm -F @roll-and-call/database db:generate | db:migrate | db:studio
 | `judge-min-players`          | `*/10 * * * *` | `/api/cron/min-players`            | pg_cron → Next 라우트   |
 | `expire-selection-deadlines` | `*/10 * * * *` | `/api/cron/selection-deadline`     | pg_cron → Next 라우트   |
 | `notify-session-ended`       | `*/5 * * * *`  | `/api/cron/session-ended`          | pg_cron → Next 라우트   |
-| badges                       | `5 15 * * *`   | `/api/cron/badges`                 | Vercel Cron             |
-| members                      | `10 19 * * *`  | `/api/cron/members`                | Vercel Cron             |
+| badges                       | `5 15 * * *`   | `/api/cron/badges`                 | pg_cron `refresh-badges` (0109) |
+| members                      | `10 19 * * *`  | `/api/cron/members`                | pg_cron `check-guild-members` (0109) |
 
 pg_cron → Next 라우트 규칙: 라우트는 `export async function POST`만 두고 Vercel이 부르지 않는다. 한 번 실행에 처리한 수를 `{ ok: true, ... }`로 돌려준다. 오래 걸릴 수 있으면 `export const maxDuration = 60`을 둔다.
 
