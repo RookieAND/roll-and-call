@@ -9,6 +9,7 @@ import type { CertifiedGmSortColumn } from "../model/certified-gm-sort";
 import { RULEBOOK_DETAIL_TAB, type RulebookDetailTab } from "../model/rulebook-detail-tab";
 import { CertifiedGmRows } from "./mobile/certified-gm-rows";
 import { QuizRows } from "./mobile/quiz-rows";
+import { RulebookKindNotices } from "./mobile/rulebook-kind-notices";
 
 interface RulebookDetailMobileViewProps {
   rulebook: RulebookDetail;
@@ -52,6 +53,7 @@ export function RulebookDetailMobileView({
   return (
     <>
       <AdminHeader title={rulebook.label} trail={[{ href: "/rules", label: "룰북" }]} />
+      {tab === RULEBOOK_DETAIL_TAB.info ? <RulebookKindNotices rulebook={rulebook} /> : null}
       <RouteTabs label="룰북 상세 화면" items={tabs} value={tabHref} />
       {tab === RULEBOOK_DETAIL_TAB.info ? (
         <MobileRulebookEditForm key={rulebook.label} rulebook={rulebook} viewerId={viewerId} />
