@@ -179,8 +179,8 @@ return <Button variant={buttonVariant} />;
 ## 9. 데스크톱 화면 틀(1100px 이상)
 
 - 서버 화면은 모두 한 가지 틀 `PageShell`(`shared/ui`)을 쓴다. `appBar`는 영역 전폭 띠이고, 아래에 본문 열과 선택적 `panel`(320px, sticky `top: 16px`, 본문 뒤 DOM)이 최대 1296px(본문 최대 960 + 간격 16 + 패널 320)로 가운데에 놓인다. 좌우 여백은 16px이고 앱바 제목은 틀 왼쪽 끝에 맞는다. 패널이 없으면 자리도 만들지 않는다.
-- 폭 규칙은 하나다: 목록·상세·대시보드는 본문 열을 그대로 채우고(패널이 없으면 1296px), 폼·글 위주 화면은 `readable`로 안쪽을 640px로 줄여 본문 열 가운데에 둔다. 바깥 틀(앱바 띠·패널 열)은 화면마다 같다. 전폭 띠가 있는 구인 목록만 `bare`로 `FRAME_INNER_PX`를 직접 쓴다.
-- 하단 버튼 막대(`FloatingBar`)는 데스크톱에서도 뷰포트 아래에 고정되고, 가로 자리(`--bar-left`·`--bar-w`)는 `PageShell`이 본문 열(readable이면 640px) 가장자리에 맞춰 준다. 직접 짠 `sticky bottom-*` 막대는 `flush`로 본문 아래 여백을 없애고 `desktop:bottom-0`을 준다.
+- 폭 규칙은 하나다: 목록·상세·대시보드는 본문 열을 그대로 채우고(패널이 없으면 1296px), 폼·글 위주 화면은 `readable`로 안쪽을 640px로 줄인다. 패널이 없으면 본문 열 가운데에, 패널이 있으면 왼쪽(앱바 제목 선)에 둔다. 바깥 틀(앱바 띠·패널 열)은 화면마다 같다. 전폭 띠가 있는 구인 목록만 `bare`로 `FRAME_INNER_PX`를 직접 쓴다.
+- 하단 버튼 막대(`FloatingBar`)는 데스크톱에서도 뷰포트 아래에 고정되고, 가로 자리(`--bar-left`·`--bar-w`)는 `PageShell`이 본문 열(readable이면 640px, 같은 위치 규칙) 가장자리에 맞춰 준다. 직접 짠 `sticky bottom-*` 막대는 `flush`로 본문 아래 여백을 없애고 `desktop:bottom-0`을 준다.
 - 시트는 별도 래퍼 없이 CSS로 가운데 Dialog가 된다. 데스크톱에만 있는 패널은 모바일 본문과 따로 컴포넌트로 만들어 `panel`에 넣는다. 서버 밖 화면(도움말·온보딩)과 가입·환영(`ServerStage`)은 이 틀을 쓰지 않는다.
 - 파일: 틀 `shared/ui/{page-shell,frame-class,desktop-nav*}.tsx`, 브레이크포인트 `desktop`(1100px, `globals.css`), 화면별 우측 패널은 각 `views/*/ui`에 있다.
 - 포커스 링은 `outline-none`과 `focus-visible:outline-2`를 함께 쓰지 않는다(Tailwind 4에서 `outline-style`이 `none`으로 남아 링이 그려지지 않는다). 링만 켜면 된다.
