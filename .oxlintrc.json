@@ -1,4 +1,4 @@
 {
   "extends": ["./configs/oxlint-config/base.json"],
-  "ignorePatterns": [".design-sync/**", "design_handoff_admin_mobile/**"]
+  "ignorePatterns": [".design-sync/**", "design_handoff_admin_mobile/**", "design_handoff_desktop_view/**"]
 }

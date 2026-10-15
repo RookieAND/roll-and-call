@@ -22,6 +22,7 @@ export { getServerByGuildId } from "./queries/get-server-by-guild-id";
 export { getServerById } from "./queries/get-server-by-id";
 export { getServerBySlug } from "./queries/get-server-by-slug";
 export { getServerOwnerProfile } from "./queries/get-server-owner-profile";
+export { countActiveMembers } from "./queries/count-active-members";
 export { listActiveMembers } from "./queries/list-active-members";
 export { listJoinCandidateServers } from "./queries/list-join-candidate-servers";
 export { listMemberServers } from "./queries/list-member-servers";

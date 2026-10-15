@@ -2,6 +2,11 @@
 @import "@roll-and-call/ui/styles.css";
 @import "@roll-and-call/tiptap/styles.css";
 
+/* 데스크톱 뷰의 기준 폭. 이 폭 미만은 모바일 레이아웃 그대로다(중간 단계 없음). JS는 packages/ui의 useDesktop이 같은 값을 쓴다. */
+@theme {
+  --breakpoint-desktop: 1100px;
+}
+
 /* 로딩 화면은 짧고 실제 화면은 길어 스크롤바가 생겼다 사라진다. 자리를 늘 비워 두면 폭이 튀지 않는다. */
 html {
   scrollbar-gutter: stable;

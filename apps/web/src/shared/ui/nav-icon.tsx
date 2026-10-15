@@ -3,12 +3,14 @@ import type { LucideIcon } from "lucide-react";
 interface NavIconProps {
   Icon: LucideIcon;
   dot?: string;
+  // 하단 탭은 26px, 데스크톱 좌측 내비는 22px.
+  size?: number;
 }
 
-export function NavIcon({ Icon, dot }: NavIconProps) {
+export function NavIcon({ Icon, dot, size = 26 }: NavIconProps) {
   return (
     <span className="relative flex">
-      <Icon size={26} strokeWidth={1.9} aria-hidden />
+      <Icon size={size} strokeWidth={1.9} aria-hidden />
       {dot && (
         <span
           role="img"

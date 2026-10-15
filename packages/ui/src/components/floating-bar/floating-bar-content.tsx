@@ -11,7 +11,7 @@ import { FloatingBarContext } from "./floating-bar-context";
 import { useScrolledToBottom } from "./use-scrolled-to-bottom";
 
 const bar = cva(
-  "fixed inset-x-0 bottom-0 z-(--rc-z-floating-bar) mx-auto max-w-103 border-t border-gray-200 bg-surface px-250 pt-150 transition-[translate,box-shadow] duration-(--rc-duration-base) ease-(--rc-ease-out)",
+  "fixed inset-x-0 bottom-0 z-(--rc-z-floating-bar) mx-auto max-w-103 desktop:sticky desktop:max-w-none border-t border-gray-200 bg-surface px-250 pt-150 transition-[translate,box-shadow] duration-(--rc-duration-base) ease-(--rc-ease-out)",
   {
     variants: {
       safeArea: { true: "pb-[calc(var(--spacing-150)+var(--rc-safe-bottom))]", false: "pb-150" },
@@ -26,6 +26,7 @@ type FloatingBarState = { elevated: boolean; hidden: boolean };
 export type FloatingBarContentProps = StateComponentProps<"div", FloatingBarState>;
 
 // 화면 하단 주 CTA 자리. 본문 끝에 FloatingBar.Spacer를 꼭 같이 둔다.
+// 1100px 이상(웹 데스크톱 뷰)에서는 뷰포트에 고정하지 않고 본문 카드 안에 붙는(sticky) 막대가 되어 카드 폭(640px)을 따르고, 자리는 스스로 차지하므로 Spacer는 숨는다.
 export function FloatingBarContent({
   className,
   style,
