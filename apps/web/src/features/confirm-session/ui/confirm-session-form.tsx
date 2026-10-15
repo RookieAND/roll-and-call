@@ -1,13 +1,13 @@
 "use client";
 
-import { Button, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, Container, FloatingBar, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull, uniq } from "es-toolkit";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import { rankWindows, windowMembers } from "@/entities/availability";
 import { coordinationWindowOf } from "@/entities/game";
 import { buildDayColumns, buildTimeRows, SLOT_MINUTES, toKst } from "@/shared/lib";
-import { ConfirmDialog, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, PageShell, toast, useAction } from "@/shared/ui";
 
 import { confirmSession } from "../api/confirm-session";
 import { confirmButtonLabel } from "../model/confirm-button-label";
@@ -32,9 +32,20 @@ interface ConfirmSessionFormProps {
   game: ConfirmSessionGame;
   names: Record<string, string[]>;
   playLabel: string;
+  appBar: ReactNode;
+  // 모바일은 본문 위에 두는 요약. 1100px 이상에서는 숨기고 panelStats가 우측 패널 맨 위에 선다.
+  summary: ReactNode;
+  panelStats: ReactNode;
 }
 
-export function ConfirmSessionForm({ game, names, playLabel }: ConfirmSessionFormProps) {
+export function ConfirmSessionForm({
+  game,
+  names,
+  playLabel,
+  appBar,
+  summary,
+  panelStats,
+}: ConfirmSessionFormProps) {
   const { id: gameId, playMinutes, confirmedAt } = game;
   const days = buildDayColumns({ rangeStart: game.rangeStart, rangeEnd: game.rangeEnd });
   const window = coordinationWindowOf(game);
@@ -92,78 +103,101 @@ export function ConfirmSessionForm({ game, names, playLabel }: ConfirmSessionFor
   const confirmLabel = confirmButtonLabel({ failed: !!error, changing });
   const pickedCandidate = candidates.find((candidate) => candidate.iso === startIso)?.iso ?? null;
 
+  const confirmButton = (
+    <Button
+      variant="solid"
+      colorPalette="success"
+      size="lg"
+      className="w-full"
+      onClick={openConfirm}
+    >
+      {startLabel}
+      {changing ? "으로 변경" : "으로 확정"}
+    </Button>
+  );
+  const windowSummary = (
+    <SessionWindowSummary
+      windowLabel={windowLabel}
+      memberCount={members.length}
+      respondentCount={respondents.length}
+      everyone={absentNames.length === 0}
+    />
+  );
+
   return (
-    <VStack gap="250">
-      <VStack gap="125" render={<section />}>
-        <Text typography="subtitle2" render={<h2 />}>
-          세션 시간
-        </Text>
-        <SessionTimeFields days={days} window={window} start={start} onChange={setStart} />
-        <Text typography="body4" foreground="hint" render={<p />}>
-          시작 시각부터 {playLabel}이 끊기지 않고 비는 시간만 셉니다.
-        </Text>
-        <SessionWindowSummary
-          windowLabel={windowLabel}
-          memberCount={members.length}
-          respondentCount={respondents.length}
-          everyone={absentNames.length === 0}
-        />
-        {absentNames.length > 0 && <UnavailableWarning names={absentNames} />}
-      </VStack>
+    <PageShell
+      appBar={appBar}
+      panel={
+        <>
+          {panelStats}
+          {windowSummary}
+          {confirmButton}
+        </>
+      }
+    >
+      <Container size="sm" className="desktop:px-0">
+        <VStack gap="200" className="pt-200 pb-200 desktop:pt-0 desktop:pb-0">
+          <div className="desktop:hidden">{summary}</div>
+          <VStack gap="250">
+            <VStack gap="125" render={<section />}>
+              <Text typography="subtitle2" render={<h2 />}>
+                세션 시간
+              </Text>
+              <SessionTimeFields days={days} window={window} start={start} onChange={setStart} />
+              <Text typography="body4" foreground="hint" render={<p />}>
+                시작 시각부터 {playLabel}이 끊기지 않고 비는 시간만 셉니다.
+              </Text>
+              <div className="desktop:hidden">{windowSummary}</div>
+              {absentNames.length > 0 && <UnavailableWarning names={absentNames} />}
+            </VStack>
 
-      <VStack gap="125" render={<section />}>
-        <HStack align="baseline" gap="075">
-          <Text typography="subtitle2" render={<h2 />}>
-            추천 후보
-          </Text>
-          <Text numeric typography="subtitle2" foreground="muted" render={<span />}>
-            {candidates.length}개
-          </Text>
-          <span className="flex-1" />
-          <Text typography="body4" foreground="hint" render={<span />}>
-            겹치는 인원 순
-          </Text>
-        </HStack>
-        {candidates.length === 0 ? (
-          <NoCandidatesNotice playLabel={playLabel} respondentCount={respondents.length} />
-        ) : (
-          <SessionCandidateList
-            candidates={candidates}
-            playMinutes={playMinutes}
-            respondents={respondents}
-            value={pickedCandidate}
-            onPick={(iso) => setStart(toSessionStart({ iso, window }))}
-          />
-        )}
-      </VStack>
+            <VStack gap="125" render={<section />}>
+              <HStack align="baseline" gap="075">
+                <Text typography="subtitle2" render={<h2 />}>
+                  추천 후보
+                </Text>
+                <Text numeric typography="subtitle2" foreground="muted" render={<span />}>
+                  {candidates.length}개
+                </Text>
+                <span className="flex-1" />
+                <Text typography="body4" foreground="hint" render={<span />}>
+                  겹치는 인원 순
+                </Text>
+              </HStack>
+              {candidates.length === 0 ? (
+                <NoCandidatesNotice playLabel={playLabel} respondentCount={respondents.length} />
+              ) : (
+                <SessionCandidateList
+                  candidates={candidates}
+                  playMinutes={playMinutes}
+                  respondents={respondents}
+                  value={pickedCandidate}
+                  onPick={(iso) => setStart(toSessionStart({ iso, window }))}
+                />
+              )}
+            </VStack>
 
-      <FloatingBar.Root elevated={false}>
-        <FloatingBar.Content>
-          <Button
-            variant="solid"
-            colorPalette="success"
-            size="lg"
-            className="w-full"
-            onClick={openConfirm}
-          >
-            {startLabel}
-            {changing ? "으로 변경" : "으로 확정"}
-          </Button>
-        </FloatingBar.Content>
-        <FloatingBar.Spacer />
-      </FloatingBar.Root>
+            <div className="desktop:hidden">
+              <FloatingBar.Root elevated={false}>
+                <FloatingBar.Content>{confirmButton}</FloatingBar.Content>
+                <FloatingBar.Spacer />
+              </FloatingBar.Root>
+            </div>
 
-      <ConfirmDialog
-        open={confirming}
-        onOpenChange={setConfirming}
-        title={changing ? "세션 시간을 바꿀까요?" : "이 시간으로 확정할까요?"}
-        confirmLabel={confirmLabel}
-        confirmColorPalette="success"
-        pending={pending}
-        onConfirm={submit}
-      >
-        <ConfirmSessionDialogBody content={dialogContent} failure={failure} />
-      </ConfirmDialog>
-    </VStack>
+            <ConfirmDialog
+              open={confirming}
+              onOpenChange={setConfirming}
+              title={changing ? "세션 시간을 바꿀까요?" : "이 시간으로 확정할까요?"}
+              confirmLabel={confirmLabel}
+              confirmColorPalette="success"
+              pending={pending}
+              onConfirm={submit}
+            >
+              <ConfirmSessionDialogBody content={dialogContent} failure={failure} />
+            </ConfirmDialog>
+          </VStack>
+        </VStack>
+      </Container>
+    </PageShell>
   );
 }

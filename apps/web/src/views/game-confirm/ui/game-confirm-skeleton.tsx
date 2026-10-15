@@ -4,7 +4,7 @@ import { Badge, Container, FloatingBar, Grid, HStack, Skeleton, VStack } from "@
 import { range } from "es-toolkit";
 import { useParams } from "next/navigation";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar, PageShell } from "@/shared/ui";
 
 const CANDIDATE_COUNT = 3;
 
@@ -12,15 +12,28 @@ export function GameConfirmSkeleton() {
   const { id } = useParams<{ id: string }>();
 
   return (
-    <>
-      <AppBar
-        back={`/games/${id}/manage`}
-        title="세션 시간 결정"
-        action={<Badge colorPalette="primary">GM</Badge>}
-      />
-      <Container size="sm">
-        <VStack gap="200" className="pt-200 pb-200">
-          <VStack gap="200">
+    <PageShell
+      appBar={
+        <AppBar
+          back={`/games/${id}/manage`}
+          title="세션 시간 결정"
+          action={<Badge colorPalette="primary">GM</Badge>}
+        />
+      }
+      panel={
+        <VStack gap="150" aria-busy>
+          <VStack gap="100">
+            <Skeleton height={70} rounded={500} />
+            <Skeleton height={70} rounded={500} />
+          </VStack>
+          <Skeleton height={82} rounded={500} />
+          <Skeleton height={48} rounded={500} />
+        </VStack>
+      }
+    >
+      <Container size="sm" className="desktop:px-0">
+        <VStack gap="200" className="pt-200 pb-200 desktop:pt-0 desktop:pb-0">
+          <VStack gap="200" className="desktop:hidden">
             <HStack gap="075" align="center">
               <Skeleton height={26} className="min-w-0 flex-1" />
               <Skeleton width={56} height={24} rounded={300} />
@@ -58,12 +71,14 @@ export function GameConfirmSkeleton() {
           </VStack>
         </VStack>
       </Container>
-      <FloatingBar.Root elevated={false}>
-        <FloatingBar.Content>
-          <Skeleton width="100%" height={48} rounded={500} />
-        </FloatingBar.Content>
-        <FloatingBar.Spacer />
-      </FloatingBar.Root>
-    </>
+      <div className="desktop:hidden">
+        <FloatingBar.Root elevated={false}>
+          <FloatingBar.Content>
+            <Skeleton width="100%" height={48} rounded={500} />
+          </FloatingBar.Content>
+          <FloatingBar.Spacer />
+        </FloatingBar.Root>
+      </div>
+    </PageShell>
   );
 }
