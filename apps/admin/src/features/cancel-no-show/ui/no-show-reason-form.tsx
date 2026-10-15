@@ -6,13 +6,9 @@ import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
 import { conflictToastText, useActionSubmit } from "@/shared/lib";
-import {
-  ActionNetworkError,
-  ModalServerLabel,
-  NotificationPreview,
-  MODAL_FOOTER_CLASS,
-} from "@/shared/ui";
+import { ActionNetworkError, ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
 
 type SubmitResult =
   | { ok: true }

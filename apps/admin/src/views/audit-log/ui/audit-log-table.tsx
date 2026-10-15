@@ -2,7 +2,8 @@ import { Table, Text, Tooltip } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { actionTone, formatDateTime, type TableSort } from "@/shared/lib";
+import { actionTone } from "@/entities/audit";
+import { formatDateTime, type TableSort } from "@/shared/lib";
 import type { AuditEntry } from "@/shared/server";
 import { ServerLink, SortableHead, TableColumns, Tag } from "@/shared/ui";
 

@@ -1,5 +1,6 @@
-import { RULEBOOK_KIND_LABEL, withTopicParticle } from "@/shared/lib";
-import type { RulebookRow } from "@/shared/server";
+import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
+import type { RulebookRow } from "@/entities/rulebook/server";
+import { withTopicParticle } from "@/shared/lib";
 
 import type { RulebookDraft } from "./rulebook-draft";
 

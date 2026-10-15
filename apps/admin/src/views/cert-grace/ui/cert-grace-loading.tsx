@@ -1,6 +1,6 @@
 import { VStack } from "@roll-and-call/ui";
 
-import { CERT_TABS } from "@/shared/lib";
+import { CERT_TABS } from "@/entities/cert";
 import { AdminHeader, FactRows, LoadingRegion, Panel, RouteTabs, skeletonFact } from "@/shared/ui";
 
 export function CertGraceLoading() {

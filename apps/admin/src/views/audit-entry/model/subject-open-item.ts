@@ -1,6 +1,6 @@
 import { BookOpen, NotebookText, Quote, User, type LucideIcon } from "lucide-react";
 
-import type { AuditSubjectKind } from "@/shared/server";
+import type { AuditSubjectKind } from "@/entities/audit";
 
 // 조치 상세 ⋯ 메뉴의 첫 항목(시안 log_detail_menus: 유저, 구인, 후기, 룰북).
 export const SUBJECT_OPEN_ITEM: Record<

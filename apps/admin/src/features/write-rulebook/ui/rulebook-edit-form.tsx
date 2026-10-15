@@ -5,8 +5,12 @@ import { isUndefined, uniq } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState, useTransition, type ReactNode } from "react";
 
+import type {
+  KindImpactPage,
+  RulebookDetail,
+  RulebookImpactCase,
+} from "@/entities/rulebook/server";
 import { conflictToastText, useActionSubmit } from "@/shared/lib";
-import type { KindImpactPage, RulebookDetail, RulebookImpactCase } from "@/shared/server";
 import { ActionNetworkError, Panel } from "@/shared/ui";
 
 import { checkRulebookImpact } from "../api/check-rulebook-impact";

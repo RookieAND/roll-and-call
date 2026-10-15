@@ -1,6 +1,8 @@
 import { Button, Chip, HStack, Text, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
+import { ALL_AUDIT_PERIOD, AUDIT_PERIODS, defaultAuditPeriod } from "@/entities/audit";
+import { type listAuditLog } from "@/entities/audit/server";
 import {
   formatDateTime,
   PAGE_SIZE,
@@ -9,13 +11,7 @@ import {
   withQuery,
   type TableSort,
 } from "@/shared/lib";
-import {
-  ALL_AUDIT_PERIOD,
-  AUDIT_ACTION_GROUPS,
-  AUDIT_PERIODS,
-  defaultAuditPeriod,
-  type listAuditLog,
-} from "@/shared/server";
+import { AUDIT_ACTION_GROUPS } from "@/shared/server";
 import {
   AdminHeader,
   CsvExportButton,

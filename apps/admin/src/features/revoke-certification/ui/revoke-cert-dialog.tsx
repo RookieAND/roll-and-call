@@ -18,21 +18,11 @@ import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
-import {
-  conflictToastText,
-  EBOOK_REJECT_REASONS,
-  OTHER_REASON,
-  REJECT_REASONS,
-  useActionSubmit,
-} from "@/shared/lib";
-import type { RevokeTarget } from "@/shared/server";
-import {
-  ActionNetworkError,
-  ModalServerLabel,
-  NotificationPreview,
-  ReasonChips,
-  MODAL_FOOTER_CLASS,
-} from "@/shared/ui";
+import { EBOOK_REJECT_REASONS, REJECT_REASONS } from "@/entities/cert";
+import type { RevokeTarget } from "@/entities/cert/server";
+import { NotificationPreview } from "@/entities/notification";
+import { conflictToastText, OTHER_REASON, useActionSubmit } from "@/shared/lib";
+import { ActionNetworkError, ModalServerLabel, ReasonChips, MODAL_FOOTER_CLASS } from "@/shared/ui";
 
 import { revokeUserCertification } from "../api/revoke-user-certification";
 import { RevokeGameList } from "./revoke-game-list";

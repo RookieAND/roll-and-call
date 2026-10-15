@@ -17,19 +17,19 @@ import { isUndefined } from "es-toolkit";
 import { Search } from "lucide-react";
 import { useState } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
+import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
+import type { RulebookRequestRow, RulebookRow } from "@/entities/rulebook/server";
 import {
-  RULEBOOK_KIND_LABEL,
   conflictToastText,
   quoteWithParticle,
   useActionSubmit,
   withObjectParticle,
   withSubjectParticle,
 } from "@/shared/lib";
-import type { RulebookRequestRow, RulebookRow } from "@/shared/server";
 import {
   ActionNetworkError,
   ModalServerLabel,
-  NotificationPreview,
   RetryableLabel,
   MODAL_FOOTER_CLASS,
 } from "@/shared/ui";

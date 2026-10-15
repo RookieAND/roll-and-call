@@ -1,5 +1,6 @@
-import { auditLogHref, CERT_MANAGE_STATUS, withQuery } from "@/shared/lib";
-import type { CertManageRow } from "@/shared/server";
+import { auditLogHref } from "@/entities/audit";
+import { CERT_MANAGE_STATUS, type CertManageRow } from "@/entities/cert";
+import { withQuery } from "@/shared/lib";
 
 import { CERT_ROW_ACTION, type CertRowActionLink } from "./cert-row-action";
 

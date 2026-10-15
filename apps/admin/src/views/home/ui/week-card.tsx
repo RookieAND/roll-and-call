@@ -1,8 +1,8 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import type { LucideIcon } from "lucide-react";
 
+import type { WeeklySeries } from "@/entities/analytics/server";
 import { deltaArrow } from "@/shared/lib";
-import type { WeeklySeries } from "@/shared/server";
 
 import { WeekChart } from "./week-chart";
 

@@ -1,7 +1,7 @@
 import { HStack, Text } from "@roll-and-call/ui";
 import { Fragment } from "react";
 
-import type { CategoryEdition } from "@/shared/server";
+import type { CategoryEdition } from "@/entities/rulebook";
 import { Tag } from "@/shared/ui";
 
 interface GmConditionProps {

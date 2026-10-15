@@ -1,18 +1,18 @@
 import { Button, Callout, HStack, VStack } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
 
+import type {
+  CertSellerRow,
+  RulebookCategory,
+  RulebookRequestRow,
+  RulebookRow,
+} from "@/entities/rulebook/server";
 import {
   REQUEST_ACTION,
   RequestDialog,
   type RequestAction,
 } from "@/features/process-rulebook-request";
 import { CATEGORY_PAGE_SIZE, paginate, withQuery } from "@/shared/lib";
-import type {
-  CertSellerRow,
-  RulebookCategory,
-  RulebookRequestRow,
-  RulebookRow,
-} from "@/shared/server";
 import {
   AdminHeader,
   ListPager,

@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-import type { WeeklyPoint } from "@/shared/server";
+import type { WeeklyPoint } from "@/entities/analytics/server";
 import { useChartTokens } from "@/shared/ui";
 
 import { axisLabel } from "../model/axis-label";

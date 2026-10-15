@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
+import { getMemberOngoing, getUserDetail } from "@/entities/user/server";
 import { serverPath } from "@/shared/lib";
-import { getCurrentServer, getMemberOngoing, getUserDetail, requireStaff } from "@/shared/server";
+import { getCurrentServer, requireStaff } from "@/shared/server";
 import { UserSanctionView } from "@/views/user-sanction";
 
 export async function generateMetadata({

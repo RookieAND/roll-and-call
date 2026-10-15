@@ -1,4 +1,4 @@
-import type { GrantOptions } from "@/shared/server";
+import type { GrantOptions } from "@/entities/cert/server";
 
 const RESULT_LIMIT = 20;
 

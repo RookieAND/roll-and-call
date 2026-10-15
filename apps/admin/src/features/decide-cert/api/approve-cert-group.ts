@@ -5,8 +5,9 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { z } from "zod";
 
+import { decideCertGroup } from "@/entities/cert/server";
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { decideCertGroup, evaluateBadges, getCurrentServer, requireStaff } from "@/shared/server";
+import { evaluateBadges, getCurrentServer, requireStaff } from "@/shared/server";
 
 const idsSchema = z.array(idSchema).min(1).max(BULK_CERT_MAX_BOOKS);
 

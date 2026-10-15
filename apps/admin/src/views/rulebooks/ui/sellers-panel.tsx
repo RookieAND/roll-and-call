@@ -1,7 +1,7 @@
 import { Table, Text } from "@roll-and-call/ui";
 
+import type { CertSellerRow } from "@/entities/rulebook/server";
 import { AddSellerButton, RemoveSellerButton } from "@/features/manage-cert-sellers";
-import type { CertSellerRow } from "@/shared/server";
 import { Panel, TableColumns } from "@/shared/ui";
 
 interface SellersPanelProps {

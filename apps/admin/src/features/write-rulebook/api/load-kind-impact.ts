@@ -4,8 +4,9 @@ import type { RulebookKind } from "@roll-and-call/database";
 import { RULEBOOK_KIND } from "@roll-and-call/database/rulebooks/model";
 import { z } from "zod";
 
+import { getKindImpact } from "@/entities/rulebook/server";
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { getKindImpact, requireStaff } from "@/shared/server";
+import { requireStaff } from "@/shared/server";
 
 const schema = z.object({
   rulebookId: idSchema,

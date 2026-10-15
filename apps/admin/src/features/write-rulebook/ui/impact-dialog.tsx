@@ -3,8 +3,8 @@
 import { AlertDialog, Button, Callout, Text, VStack } from "@roll-and-call/ui";
 import { sumBy } from "es-toolkit";
 
+import type { RulebookImpactCase } from "@/entities/rulebook/server";
 import { withObjectParticle } from "@/shared/lib";
-import type { RulebookImpactCase } from "@/shared/server";
 import {
   ActionNetworkError,
   ModalServerLabel,

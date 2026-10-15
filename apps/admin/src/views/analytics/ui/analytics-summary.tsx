@@ -2,7 +2,7 @@ import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import type { ReactNode } from "react";
 
-import type { AnalyticsData } from "@/shared/server";
+import type { AnalyticsData } from "@/entities/analytics";
 
 import { Delta } from "./delta";
 

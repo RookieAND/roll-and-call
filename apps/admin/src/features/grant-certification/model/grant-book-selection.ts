@@ -1,6 +1,6 @@
 import { supplementCoresOpened } from "@roll-and-call/database/certifications/model";
 
-import type { GrantOptions } from "@/shared/server";
+import type { GrantOptions } from "@/entities/cert/server";
 
 type GrantBook = GrantOptions["books"][number];
 

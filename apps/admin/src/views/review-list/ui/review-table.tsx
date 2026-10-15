@@ -1,9 +1,10 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
+import { REVIEW_SORT_COLUMN, type ReviewRow, type ReviewSortColumn } from "@/entities/review";
+import { GmBadge } from "@/entities/user";
 import { formatDateTime, type TableSort } from "@/shared/lib";
-import { REVIEW_SORT_COLUMN, type ReviewRow, type ReviewSortColumn } from "@/shared/server";
-import { ServerLink, SortableHead, TableColumns, TableEmptyRow, Tag, GmBadge } from "@/shared/ui";
+import { ServerLink, SortableHead, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
 
 interface ReviewTableProps {
   rows: ReviewRow[];

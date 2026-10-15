@@ -1,7 +1,8 @@
 import { Button } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
 
-import type { StaffCandidate, StaffRow } from "@/shared/server";
+import type { StaffCandidate } from "@/entities/staff";
+import type { StaffRow } from "@/shared/server";
 import { Panel, ServerLink } from "@/shared/ui";
 
 import { PermissionPanel } from "./permission-panel";

@@ -1,8 +1,8 @@
 import { Button, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { Check } from "lucide-react";
 
+import type { StaffCandidate } from "@/entities/staff";
 import { formatDate } from "@/shared/lib";
-import type { StaffCandidate } from "@/shared/server";
 
 interface StaffCandidateRowProps {
   candidate: StaffCandidate;

@@ -1,14 +1,15 @@
 import { Button, Chip, HStack, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
-import { paginate, parsePageSize, reviewListHref, withQuery, type TableSort } from "@/shared/lib";
 import {
+  reviewListHref,
   REVIEW_LIST_TAB,
   REVIEW_PHOTO_FILTER,
-  type ReviewList,
   type ReviewListTab,
   type ReviewSortColumn,
-} from "@/shared/server";
+} from "@/entities/review";
+import { type ReviewList } from "@/entities/review/server";
+import { paginate, parsePageSize, withQuery, type TableSort } from "@/shared/lib";
 import { AdminHeader, ListPager, Panel, ServerLink, UrlSearchInput, UrlSelect } from "@/shared/ui";
 
 import { reviewEmptyCopy } from "../model/review-empty-copy";

@@ -1,8 +1,9 @@
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { CalendarDays, FileText, User } from "lucide-react";
 
+import type { WeeklySummary } from "@/entities/analytics/server";
 import { formatDayRange } from "@/shared/lib";
-import type { PendingItem, WeeklySummary } from "@/shared/server";
+import type { PendingItem } from "@/shared/server";
 import { AdminHeader, EMPTY_IMAGE, EmptyState, Panel } from "@/shared/ui";
 
 import { PendingRow } from "./pending-row";

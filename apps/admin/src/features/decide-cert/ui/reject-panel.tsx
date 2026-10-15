@@ -1,11 +1,8 @@
 import { Field, Text, Textarea, VStack } from "@roll-and-call/ui";
 
-import {
-  appliedRulebookLabel,
-  EBOOK_REJECT_REASONS,
-  OTHER_REASON,
-  REJECT_REASONS,
-} from "@/shared/lib";
+import { EBOOK_REJECT_REASONS, REJECT_REASONS } from "@/entities/cert";
+import { appliedRulebookLabel } from "@/entities/rulebook";
+import { OTHER_REASON } from "@/shared/lib";
 
 import { REJECT_SECTION_ID } from "../model/section-ids";
 import { ReasonRadio } from "./reason-radio";

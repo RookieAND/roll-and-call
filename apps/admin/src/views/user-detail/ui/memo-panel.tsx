@@ -1,7 +1,7 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 
+import type { UserDetail } from "@/entities/user/server";
 import { formatDateTime } from "@/shared/lib";
-import type { UserDetail } from "@/shared/server";
 import { EMPTY_IMAGE, EmptyState, Panel, ServerLink, Tag } from "@/shared/ui";
 
 import { USER_ACTION } from "../model/user-action";

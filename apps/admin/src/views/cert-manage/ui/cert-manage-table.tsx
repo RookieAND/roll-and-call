@@ -1,12 +1,13 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
-import { CERT_MANAGE_STATUS_LABEL, formatDate, type TableSort } from "@/shared/lib";
 import {
+  CERT_MANAGE_STATUS_LABEL,
   CERT_GRANT_METHOD,
   type CertManageSortColumn,
   type OrderedCertManageRow,
-} from "@/shared/server";
+} from "@/entities/cert";
+import { formatDate, type TableSort } from "@/shared/lib";
 import {
   EMPTY_IMAGE,
   ServerLink,

@@ -1,4 +1,4 @@
-import { NO_SHOW_STATUS, type NoShowStatus } from "@/shared/lib";
+import { NO_SHOW_STATUS, type NoShowStatus } from "@/entities/no-show";
 
 interface NoShowState {
   cancelled: boolean;

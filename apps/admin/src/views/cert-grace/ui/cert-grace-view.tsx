@@ -1,7 +1,7 @@
 import { VStack } from "@roll-and-call/ui";
 
+import { CERT_TABS } from "@/entities/cert";
 import { EnforcementDateForm } from "@/features/set-cert-enforcement-date";
-import { CERT_TABS } from "@/shared/lib";
 import { AdminHeader, Panel, RouteTabs } from "@/shared/ui";
 
 interface CertGraceViewProps {

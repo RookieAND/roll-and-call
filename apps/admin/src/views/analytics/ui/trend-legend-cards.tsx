@@ -1,7 +1,7 @@
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { sumBy } from "es-toolkit";
 
-import type { AnalyticsTrendWeek } from "@/shared/server";
+import type { AnalyticsTrendWeek } from "@/entities/analytics";
 
 import { TREND_SEGMENTS } from "../model/trend-segments";
 

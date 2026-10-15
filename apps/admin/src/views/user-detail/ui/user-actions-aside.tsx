@@ -1,8 +1,8 @@
 import { Text, Tooltip, VStack } from "@roll-and-call/ui";
 import { Ban, CircleCheck, Gavel, RefreshCw, User } from "lucide-react";
 
+import type { UserDetail } from "@/entities/user/server";
 import { MEMBERSHIP_STATUS } from "@/shared/lib";
-import type { UserDetail } from "@/shared/server";
 import { ActionCard, ServerLink } from "@/shared/ui";
 
 import { USER_ACTION, type UserAction } from "../model/user-action";

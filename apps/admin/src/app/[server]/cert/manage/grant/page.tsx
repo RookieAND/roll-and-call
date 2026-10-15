@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import { getCurrentServer, getGrantOptions, requireStaff } from "@/shared/server";
+import { getGrantOptions } from "@/entities/cert/server";
+import { getCurrentServer, requireStaff } from "@/shared/server";
 import { CertGrantView } from "@/views/cert-grant";
 
 export const metadata: Metadata = { title: "인증 부여" };

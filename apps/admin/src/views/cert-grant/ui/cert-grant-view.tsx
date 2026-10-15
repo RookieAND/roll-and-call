@@ -1,5 +1,5 @@
+import type { GrantOptions } from "@/entities/cert/server";
 import { GrantCertForm } from "@/features/grant-certification";
-import type { GrantOptions } from "@/shared/server";
 import { AdminHeader } from "@/shared/ui";
 
 const BACK_HREF = "/cert/manage";

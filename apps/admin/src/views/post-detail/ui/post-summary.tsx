@@ -1,6 +1,6 @@
 import { Card, Grid, HStack, Text } from "@roll-and-call/ui";
 
-import type { PostDetail } from "@/shared/server";
+import type { PostDetail } from "@/entities/post/server";
 import { FactRows } from "@/shared/ui";
 
 import { receivedActionValue } from "../model/received-action-value";

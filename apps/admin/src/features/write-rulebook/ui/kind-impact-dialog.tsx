@@ -7,8 +7,8 @@ import { isNull } from "es-toolkit";
 import { Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
-import type { KindImpactPage } from "@/shared/server";
+import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
+import type { KindImpactPage } from "@/entities/rulebook/server";
 import {
   ActionNetworkError,
   ModalServerLabel,

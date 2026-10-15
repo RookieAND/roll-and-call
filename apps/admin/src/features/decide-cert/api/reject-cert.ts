@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { decideCert } from "@/entities/cert/server";
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { decideCert, getCurrentServer, requireStaff, type ShotKey } from "@/shared/server";
+import { getCurrentServer, requireStaff, type ShotKey } from "@/shared/server";
 
 interface RejectCertInput {
   // 고른 반려 사유 이름. 기타면 null이고 userReason이 사유다.

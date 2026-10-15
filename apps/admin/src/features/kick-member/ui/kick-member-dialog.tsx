@@ -7,13 +7,13 @@ import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
+import { ManualNoticePreview } from "@/entities/notification";
 import { conflictToastText, draftReason, useActionSubmit, withObjectParticle } from "@/shared/lib";
 import type { KickImpact } from "@/shared/server";
 import {
   ActionNetworkError,
   FactRows,
   FactSub,
-  ManualNoticePreview,
   ModalServerLabel,
   ReasonChips,
   useCurrentServer,

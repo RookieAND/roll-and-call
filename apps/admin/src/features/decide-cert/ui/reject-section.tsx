@@ -1,7 +1,7 @@
 import { VStack } from "@roll-and-call/ui";
 import type { ComponentProps } from "react";
 
-import { NotificationPreview } from "@/shared/ui";
+import { NotificationPreview } from "@/entities/notification";
 
 import { RejectPanel } from "./reject-panel";
 

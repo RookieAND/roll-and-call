@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
+import type { PostDetail } from "@/entities/post/server";
 import { formatDate, formatDateTime, sessionTimeLabel } from "@/shared/lib";
-import type { PostDetail } from "@/shared/server";
 import type { FactRow } from "@/shared/ui";
 
 // GM 줄의 값(닉네임과 받은 조치 hint)은 그리는 쪽이 넘긴다.

@@ -2,8 +2,9 @@ import { isString } from "es-toolkit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { getRulebookDetail } from "@/entities/rulebook/server";
 import { parseSort } from "@/shared/lib";
-import { getRulebookDetail, requireStaff } from "@/shared/server";
+import { requireStaff } from "@/shared/server";
 import {
   CERTIFIED_GM_SORT_COLUMNS,
   CERTIFIED_GM_SORT_FALLBACK,

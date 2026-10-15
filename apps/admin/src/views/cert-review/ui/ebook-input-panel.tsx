@@ -1,6 +1,6 @@
 import { HStack, Text } from "@roll-and-call/ui";
 
-import type { CertReview } from "@/shared/server";
+import type { CertReview } from "@/entities/cert/server";
 import { FactRows, Panel, Tag } from "@/shared/ui";
 
 interface EbookInputPanelProps {

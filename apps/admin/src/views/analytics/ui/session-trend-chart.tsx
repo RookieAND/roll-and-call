@@ -3,7 +3,7 @@
 import { sumBy } from "es-toolkit";
 import dynamic from "next/dynamic";
 
-import type { AnalyticsTrendWeek } from "@/shared/server";
+import type { AnalyticsTrendWeek } from "@/entities/analytics";
 import { useChartTokens } from "@/shared/ui";
 
 import { TREND_SEGMENTS } from "../model/trend-segments";

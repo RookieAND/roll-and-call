@@ -3,7 +3,7 @@ import { RULEBOOK_KIND } from "@roll-and-call/database/rulebooks/model";
 import { RadioCard, RadioGroup } from "@roll-and-call/ui";
 import { BookOpen, BookPlus, BookUser } from "lucide-react";
 
-import { RULEBOOK_KIND_DESCRIPTION, RULEBOOK_KIND_LABEL } from "@/shared/lib";
+import { RULEBOOK_KIND_DESCRIPTION, RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
 import { LineBreaks } from "@/shared/ui";
 
 import { isRulebookKind } from "../model/is-rulebook-kind";

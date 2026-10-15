@@ -1,8 +1,8 @@
 import { Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
+import type { UserDetail } from "@/entities/user/server";
 import { formatSessionTime, paginate, parsePageSize } from "@/shared/lib";
-import type { UserDetail } from "@/shared/server";
 import {
   EMPTY_IMAGE,
   ListPager,

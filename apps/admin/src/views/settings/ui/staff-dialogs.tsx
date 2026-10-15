@@ -2,9 +2,10 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 
+import type { StaffCandidate } from "@/entities/staff";
 import { AddStaffDialog } from "@/features/add-staff";
 import { RemoveStaffDialog } from "@/features/remove-staff";
-import type { StaffCandidate, StaffRow } from "@/shared/server";
+import type { StaffRow } from "@/shared/server";
 
 interface StaffDialogsProps {
   candidates: StaffCandidate[];

@@ -1,6 +1,6 @@
 import { Grid, cn } from "@roll-and-call/ui";
 
-import type { AnalyticsData } from "@/shared/server";
+import type { AnalyticsData } from "@/entities/analytics";
 
 import { AnalyticsSection } from "./analytics-section";
 import { PeopleChart } from "./people-chart";

@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
 
+import { getUserDetail } from "@/entities/user/server";
 import { idSchema, MEMBERSHIP_STATUS, parseActionInput } from "@/shared/lib";
-import { banGuildMember, getCurrentServer, getUserDetail, requireStaff } from "@/shared/server";
+import { banGuildMember, getCurrentServer, requireStaff } from "@/shared/server";
 
 // 추방은 끝났는데 디스코드 차단만 실패한 유저를 다시 차단한다. 롤앤콜 데이터와 활동 기록은 바꾸지 않는다.
 export async function retryGuildBan(rawUserId: string) {

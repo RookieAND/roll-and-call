@@ -4,7 +4,7 @@ import { HStack, Skeleton } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { usePathname, useSearchParams } from "next/navigation";
 
-import { REVIEW_LIST_PATH } from "@/shared/lib";
+import { REVIEW_LIST_PATH } from "@/entities/review";
 import { RouteTabs, TabCount } from "@/shared/ui";
 
 interface ReviewTabsProps {

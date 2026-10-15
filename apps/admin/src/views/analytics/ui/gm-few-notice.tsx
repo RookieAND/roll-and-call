@@ -1,6 +1,6 @@
 import { Text } from "@roll-and-call/ui";
 
-import { GMS_NEEDED } from "@/shared/server";
+import { GMS_NEEDED } from "@/entities/analytics";
 
 import { AnalyticsSection } from "./analytics-section";
 

@@ -1,7 +1,8 @@
 import { HStack, VStack } from "@roll-and-call/ui";
 
+import type { PostSortColumn } from "@/entities/post";
+import type { listPosts } from "@/entities/post/server";
 import { paginate, parsePageSize, sessionTimeLabel, withQuery, type TableSort } from "@/shared/lib";
-import type { listPosts, PostSortColumn } from "@/shared/server";
 import {
   AdminHeader,
   CsvExportButton,

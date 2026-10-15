@@ -1,11 +1,11 @@
 import "server-only";
 import { isUndefined, sortBy } from "es-toolkit";
 
-import { countPlayedSessions } from "./count-played-sessions";
-import { countRecentNoShows } from "./count-recent-no-shows";
+import { countPlayedSessions } from "../../lib/count-played-sessions";
+import { countRecentNoShows } from "../../lib/count-recent-no-shows";
+import { waitedDays } from "../../lib/waited-days";
 import { nicknameMatchRank } from "./nickname-match-rank";
 import { loadSnapshot, type Snapshot } from "./snapshot";
-import { waitedDays } from "./waited-days";
 
 export interface UserSearchResult {
   id: string;

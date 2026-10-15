@@ -1,8 +1,8 @@
 import { Button, HStack, VStack } from "@roll-and-call/ui";
 
+import type { RulebookDetail } from "@/entities/rulebook/server";
 import { RulebookEditForm } from "@/features/write-rulebook";
 import type { TableSort } from "@/shared/lib";
-import type { RulebookDetail } from "@/shared/server";
 import { AdminHeader, RouteTabs, TabCount, ServerLink } from "@/shared/ui";
 
 import type { CertifiedGmSortColumn } from "../model/certified-gm-sort";

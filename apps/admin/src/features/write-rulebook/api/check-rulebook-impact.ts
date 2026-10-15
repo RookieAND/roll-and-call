@@ -2,8 +2,9 @@
 
 import { z } from "zod";
 
+import { getRulebookImpact } from "@/entities/rulebook/server";
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { getRulebookImpact, requireStaff } from "@/shared/server";
+import { requireStaff } from "@/shared/server";
 
 import { rulebookDraftSchema } from "../model/rulebook-draft-schema";
 

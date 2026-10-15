@@ -1,7 +1,7 @@
 import { Button, Table, Text } from "@roll-and-call/ui";
 
+import type { PostDetail } from "@/entities/post/server";
 import { formatDateTime } from "@/shared/lib";
-import type { PostDetail } from "@/shared/server";
 import { EMPTY_IMAGE, TableEmptyRow, TableColumns, ServerLink } from "@/shared/ui";
 
 const NO_SHOW_WARNING_COUNT = 2;

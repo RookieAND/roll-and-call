@@ -4,8 +4,9 @@ import { BULK_CERT_MAX_BOOKS } from "@roll-and-call/database/certifications/mode
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { decideCertGroup } from "@/entities/cert/server";
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { decideCertGroup, getCurrentServer, requireStaff } from "@/shared/server";
+import { getCurrentServer, requireStaff } from "@/shared/server";
 
 interface RejectCertGroupInput {
   // 고른 반려 사유 이름. 기타면 null이고 userReason이 사유다.

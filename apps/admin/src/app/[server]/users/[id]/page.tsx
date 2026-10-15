@@ -2,14 +2,13 @@ import { isNull, isString } from "es-toolkit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { getUserDetail, getUserNickname } from "@/entities/user/server";
 import { MEMBERSHIP_STATUS } from "@/shared/lib";
 import {
   checkDiscordBanFailed,
   checkDiscordUnbanFailed,
   getCurrentServer,
   getKickImpact,
-  getUserDetail,
-  getUserNickname,
   requireStaff,
 } from "@/shared/server";
 import {

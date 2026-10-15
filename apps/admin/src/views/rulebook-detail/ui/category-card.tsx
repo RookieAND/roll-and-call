@@ -1,8 +1,8 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Plus } from "lucide-react";
 
+import type { RulebookDetail } from "@/entities/rulebook/server";
 import { withQuery } from "@/shared/lib";
-import type { RulebookDetail } from "@/shared/server";
 import { Panel, ServerLink, Tag } from "@/shared/ui";
 
 import { CategoryBookItem } from "./category-book-item";

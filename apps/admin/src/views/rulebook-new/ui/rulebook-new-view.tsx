@@ -1,5 +1,5 @@
+import type { RulebookRequestRow, RulebookRow } from "@/entities/rulebook/server";
 import { AddRulebookForm } from "@/features/write-rulebook";
-import type { RulebookRequestRow, RulebookRow } from "@/shared/server";
 import { AdminHeader } from "@/shared/ui";
 
 interface RulebookNewViewProps {

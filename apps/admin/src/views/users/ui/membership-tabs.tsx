@@ -3,12 +3,8 @@
 import { Tabs } from "@roll-and-call/ui";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import {
-  isMembershipStatus,
-  MEMBERSHIP_LABEL,
-  MEMBERSHIP_STATUS,
-  type MembershipStatus,
-} from "@/shared/lib";
+import { isMembershipStatus } from "@/entities/user";
+import { MEMBERSHIP_LABEL, MEMBERSHIP_STATUS, type MembershipStatus } from "@/shared/lib";
 import { TabCount } from "@/shared/ui";
 
 const MEMBERSHIPS = Object.values(MEMBERSHIP_STATUS);

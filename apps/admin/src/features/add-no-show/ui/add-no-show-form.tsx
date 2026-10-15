@@ -11,19 +11,19 @@ import { isNull, isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState } from "react";
 
+import type { NoShowSessionCandidate, NoShowSessionSearch } from "@/entities/no-show/server";
+import { NotificationPreview } from "@/entities/notification";
 import {
   conflictToastText,
   formatDateTime,
   isAbsenceAddedTag,
   useActionSubmit,
 } from "@/shared/lib";
-import type { NoShowSessionCandidate, NoShowSessionSearch } from "@/shared/server";
 import {
   ActionNetworkError,
   EMPTY_IMAGE,
   EmptyState,
   ModalServerLabel,
-  NotificationPreview,
   UrlSearchInput,
   MODAL_FOOTER_CLASS,
 } from "@/shared/ui";

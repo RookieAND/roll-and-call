@@ -1,7 +1,8 @@
 import { Button, HStack, VStack } from "@roll-and-call/ui";
 
-import { auditLogHref } from "@/shared/lib";
-import type { KickImpact, UserDetail } from "@/shared/server";
+import { auditLogHref } from "@/entities/audit";
+import type { UserDetail } from "@/entities/user/server";
+import type { KickImpact } from "@/shared/server";
 import { AdminHeader, ServerLink } from "@/shared/ui";
 
 import type { ActivityRole } from "../model/activity-role";

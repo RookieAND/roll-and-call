@@ -2,13 +2,9 @@ import { isString } from "es-toolkit";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+import { listRulebookRequests, listRulebooks } from "@/entities/rulebook/server";
 import { serverPath } from "@/shared/lib";
-import {
-  getCurrentServer,
-  listRulebookRequests,
-  listRulebooks,
-  requireStaff,
-} from "@/shared/server";
+import { getCurrentServer, requireStaff } from "@/shared/server";
 import { RulebookNewView } from "@/views/rulebook-new";
 
 export const metadata: Metadata = { title: "룰북 추가" };

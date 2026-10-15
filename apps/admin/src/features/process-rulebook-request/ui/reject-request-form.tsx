@@ -6,6 +6,8 @@ import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
+import type { RulebookRequestRow } from "@/entities/rulebook/server";
 import {
   conflictToastText,
   quoteWithParticle,
@@ -13,13 +15,7 @@ import {
   withObjectParticle,
   withSubjectParticle,
 } from "@/shared/lib";
-import type { RulebookRequestRow } from "@/shared/server";
-import {
-  ActionNetworkError,
-  ModalServerLabel,
-  NotificationPreview,
-  MODAL_FOOTER_CLASS,
-} from "@/shared/ui";
+import { ActionNetworkError, ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
 
 import { rejectRequest } from "../api/reject-request";
 import { REJECT_REASON_MAX_LENGTH } from "../model/reject-reason-max-length";

@@ -1,7 +1,7 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { BookOpen } from "lucide-react";
 
-import type { RulebookCategory } from "@/shared/server";
+import type { RulebookCategory } from "@/entities/rulebook/server";
 
 interface CategoryRowProps {
   category: RulebookCategory;

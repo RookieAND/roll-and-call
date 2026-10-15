@@ -2,8 +2,8 @@ import { Callout, VStack } from "@roll-and-call/ui";
 import { Eye, Shield, X } from "lucide-react";
 import type { ReactElement } from "react";
 
+import type { PostDetail } from "@/entities/post/server";
 import { POST_ACTION, type PostAction } from "@/features/moderate-post";
-import type { PostDetail } from "@/shared/server";
 import { ActionCard, ServerLink } from "@/shared/ui";
 
 import { AsideHeading } from "./aside-heading";

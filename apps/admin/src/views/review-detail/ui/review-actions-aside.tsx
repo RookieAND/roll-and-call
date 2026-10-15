@@ -2,8 +2,8 @@ import { VStack } from "@roll-and-call/ui";
 import { Eye, X } from "lucide-react";
 import type { ReactElement } from "react";
 
+import type { ReviewDetail } from "@/entities/review";
 import { REVIEW_ACTION, type ReviewAction } from "@/features/moderate-review";
-import type { ReviewDetail } from "@/shared/server";
 import { ActionCard, ServerLink } from "@/shared/ui";
 
 import { AsideHeading } from "./aside-heading";

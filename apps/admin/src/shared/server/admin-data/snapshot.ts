@@ -1,7 +1,7 @@
 import "server-only";
 import type { Game } from "@roll-and-call/database";
-import type { ReviewAuthorRole } from "@roll-and-call/database/games/model";
 import {
+  type ReviewAuthorRole,
   ABSENCE_ADDED_TAG_LABEL,
   cancelBlockReason,
   compareWaitlistOrder,
@@ -26,14 +26,14 @@ import { cache } from "react";
 
 import { isAbsenceAddedTag } from "@/shared/lib";
 
+import { gameStatus } from "../../lib/game-status";
+import { plainText } from "../../lib/plain-text";
 import { getCurrentServer } from "../auth/get-current-server";
 import { requireStaff } from "../auth/require-staff";
 import { gameStartsAt } from "./game-starts-at";
-import { gameStatus } from "./game-status";
 import { loadSharedTables } from "./load-shared-tables";
 import { membershipOf } from "./membership-of";
 import { noShowId } from "./no-show-id";
-import { plainText } from "./plain-text";
 import { similarRulebook } from "./similar-rulebook";
 import type {
   AdminUser,

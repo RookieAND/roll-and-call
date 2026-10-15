@@ -1,8 +1,8 @@
 import { HStack, Table, Text, cn } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
-import type { RulebookRow } from "@/shared/server";
+import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
+import type { RulebookRow } from "@/entities/rulebook/server";
 import { ServerLink, Tag } from "@/shared/ui";
 
 import { TreeGuide } from "./tree-guide";

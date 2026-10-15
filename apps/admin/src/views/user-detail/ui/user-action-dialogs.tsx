@@ -2,12 +2,13 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 
+import type { UserDetail } from "@/entities/user/server";
 import { EditNicknameDialog } from "@/features/edit-nickname";
 import { KickMemberDialog } from "@/features/kick-member";
 import { ReleaseSanctionDialog } from "@/features/release-sanction";
 import { UnbanMemberDialog } from "@/features/unban-member";
 import { StaffMemoDialog } from "@/features/write-staff-memo";
-import type { KickImpact, UserDetail } from "@/shared/server";
+import type { KickImpact } from "@/shared/server";
 
 import { USER_ACTION } from "../model/user-action";
 

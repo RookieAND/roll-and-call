@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
+import { decideCert } from "@/entities/cert/server";
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { decideCert, evaluateBadges, getCurrentServer, requireStaff } from "@/shared/server";
+import { evaluateBadges, getCurrentServer, requireStaff } from "@/shared/server";
 
 export async function approveCert(rawApplicationId: string) {
   const staff = await requireStaff();

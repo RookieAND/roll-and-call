@@ -1,5 +1,5 @@
+import type { AnalyticsData } from "@/entities/analytics";
 import { formatDayRange } from "@/shared/lib";
-import type { AnalyticsData } from "@/shared/server";
 
 const NO_COMPARE = "비교할 지난 기간이 없습니다";
 

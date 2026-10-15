@@ -5,7 +5,7 @@ import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import type { RulebookRequestRow, RulebookRow } from "@/shared/server";
+import type { RulebookRequestRow, RulebookRow } from "@/entities/rulebook/server";
 import { useServerPath } from "@/shared/ui";
 
 import { REQUEST_ACTION, type RequestAction } from "../model/request-action";

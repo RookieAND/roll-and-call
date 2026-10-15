@@ -1,5 +1,5 @@
+import type { CertReview } from "@/entities/cert/server";
 import { CERT_REVIEW_STATE, type CertReviewState } from "@/features/decide-cert";
-import type { CertReview } from "@/shared/server";
 
 export function reviewState(review: CertReview): CertReviewState {
   if (review.withdrawnAt) return CERT_REVIEW_STATE.withdrawn;

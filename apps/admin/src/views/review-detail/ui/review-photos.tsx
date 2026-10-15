@@ -1,7 +1,7 @@
 import { Grid, Text, VStack } from "@roll-and-call/ui";
 
+import type { ReviewDetail } from "@/entities/review";
 import { formatDateTime } from "@/shared/lib";
-import type { ReviewDetail } from "@/shared/server";
 import { ZoomablePhotos } from "@/shared/ui";
 
 interface ReviewPhotosProps {

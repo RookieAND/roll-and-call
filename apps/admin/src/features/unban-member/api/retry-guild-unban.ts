@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
 
+import { getUserDetail } from "@/entities/user/server";
 import { idSchema, MEMBERSHIP_STATUS, parseActionInput } from "@/shared/lib";
-import { getCurrentServer, getUserDetail, requireStaff, unbanGuildMember } from "@/shared/server";
+import { getCurrentServer, requireStaff, unbanGuildMember } from "@/shared/server";
 
 // 롤앤콜에서는 차단을 풀었는데 디스코드 해제만 실패한 유저의 디스코드 차단만 다시 푼다. 데이터와 활동 기록은 바꾸지 않는다.
 export async function retryGuildUnban(userIdArg: string) {

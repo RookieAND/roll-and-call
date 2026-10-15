@@ -1,7 +1,7 @@
 import { Text, VStack } from "@roll-and-call/ui";
 
+import type { RevokeTarget } from "@/entities/cert/server";
 import { formatSessionTime } from "@/shared/lib";
-import type { RevokeTarget } from "@/shared/server";
 
 interface RevokeGameListProps {
   games: RevokeTarget["games"];

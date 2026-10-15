@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { OTHER_REASON, REJECT_REASONS } from "@/shared/lib";
+import { REJECT_REASONS } from "@/entities/cert";
+import { OTHER_REASON } from "@/shared/lib";
 
 import { rejectMessage } from "./reject-message";
 

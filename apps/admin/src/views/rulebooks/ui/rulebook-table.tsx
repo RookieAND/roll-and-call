@@ -1,7 +1,7 @@
 import { Table } from "@roll-and-call/ui";
 
+import type { RulebookCategory, RulebookRow } from "@/entities/rulebook/server";
 import { quoteWithParticle, withAndParticle } from "@/shared/lib";
-import type { RulebookCategory, RulebookRow } from "@/shared/server";
 import { EMPTY_IMAGE, TableColumns, TableEmptyRow } from "@/shared/ui";
 
 import { CategoryRow } from "./category-row";

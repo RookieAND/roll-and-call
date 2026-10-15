@@ -7,6 +7,7 @@ import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
 import {
   conflictToastText,
   draftReason,
@@ -20,7 +21,6 @@ import {
   FactSub,
   FormSection,
   ModalServerLabel,
-  NotificationPreview,
   ReasonChips,
   MODAL_FOOTER_CLASS,
 } from "@/shared/ui";

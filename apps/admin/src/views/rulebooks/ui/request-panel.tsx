@@ -1,12 +1,13 @@
 import { Table, Text, VStack } from "@roll-and-call/ui";
 
+import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
+import type { RulebookRequestRow } from "@/entities/rulebook/server";
 import {
   REQUEST_ACTION,
   RequestActions,
   type RequestAction,
 } from "@/features/process-rulebook-request";
-import { formatDate, RULEBOOK_KIND_LABEL } from "@/shared/lib";
-import type { RulebookRequestRow } from "@/shared/server";
+import { formatDate } from "@/shared/lib";
 import { EMPTY_IMAGE, EmptyState, Panel, SortFixedNote, TableColumns, Tag } from "@/shared/ui";
 
 import { RequestGamesPopover } from "./request-games-popover";

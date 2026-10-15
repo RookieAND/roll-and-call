@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 
-import { parseSort, stringParams } from "@/shared/lib";
 import {
   CERT_MANAGE_SORT_COLUMNS,
   CERT_MANAGE_SORT_FALLBACK,
-  getCurrentServer,
-  getRevokeTarget,
-  listCertManage,
   parseCertManageFilter,
-} from "@/shared/server";
+} from "@/entities/cert";
+import { getRevokeTarget, listCertManage } from "@/entities/cert/server";
+import { parseSort, stringParams } from "@/shared/lib";
+import { getCurrentServer } from "@/shared/server";
 import { CERT_ROW_ACTION, CertManageView } from "@/views/cert-manage";
 
 export const metadata: Metadata = { title: "인증 관리" };

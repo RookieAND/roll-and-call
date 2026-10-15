@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
 
+import { getWeeklySummary } from "@/entities/analytics/server";
 import { stringParams } from "@/shared/lib";
-import {
-  getCurrentServer,
-  getCurrentStaff,
-  getPendingItems,
-  getWeeklySummary,
-} from "@/shared/server";
+import { getCurrentServer, getCurrentStaff, getPendingItems } from "@/shared/server";
 import { HomeView } from "@/views/home";
 
 export const metadata: Metadata = { title: "홈" };

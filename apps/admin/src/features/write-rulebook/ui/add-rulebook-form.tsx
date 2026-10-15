@@ -7,12 +7,12 @@ import { TriangleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
+import type { RulebookRequestRow, RulebookRow } from "@/entities/rulebook/server";
 import { conflictToastText, useActionSubmit } from "@/shared/lib";
-import type { RulebookRequestRow, RulebookRow } from "@/shared/server";
 import {
   ActionNetworkError,
   FormSection,
-  NotificationPreview,
   RetryableLabel,
   ServerLink,
   useServerPath,

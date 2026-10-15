@@ -1,5 +1,6 @@
 import { HStack, VStack } from "@roll-and-call/ui";
 
+import type { UserFilter, UserRow, UserSortColumn } from "@/entities/user";
 import {
   MEMBERSHIP_STATUS,
   paginate,
@@ -7,7 +8,6 @@ import {
   type MembershipStatus,
   type TableSort,
 } from "@/shared/lib";
-import type { UserFilter, UserRow, UserSortColumn } from "@/shared/server";
 import { AdminHeader, ListPager, Panel, UrlSearchInput } from "@/shared/ui";
 
 import { MembershipTabs } from "./membership-tabs";

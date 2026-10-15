@@ -1,5 +1,6 @@
-import { formatDate, RULEBOOK_KIND_LABEL } from "@/shared/lib";
-import type { RulebookRequestRow } from "@/shared/server";
+import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
+import type { RulebookRequestRow } from "@/entities/rulebook/server";
+import { formatDate } from "@/shared/lib";
 import { FactRows, Panel } from "@/shared/ui";
 
 interface RequestSummaryProps {

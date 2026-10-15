@@ -7,6 +7,7 @@ import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
 import { draftReason, formatDate, useActionSubmit } from "@/shared/lib";
 import type { Sanction } from "@/shared/server";
 import {
@@ -14,7 +15,6 @@ import {
   FactBox,
   FactSub,
   ModalServerLabel,
-  NotificationPreview,
   ReasonChips,
   MODAL_FOOTER_CLASS,
 } from "@/shared/ui";

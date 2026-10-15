@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
+import { POST_DEFAULT_SORT, POST_SORT_COLUMNS } from "@/entities/post";
+import { listPosts } from "@/entities/post/server";
 import { parseSort, stringParams } from "@/shared/lib";
-import { listPosts, POST_DEFAULT_SORT, POST_SORT_COLUMNS } from "@/shared/server";
 import { PostsView } from "@/views/posts";
 
 export const metadata: Metadata = { title: "구인" };

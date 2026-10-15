@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
+import { POST_DEFAULT_SORT, POST_SORT_COLUMNS } from "@/entities/post";
+import { getPostTitle } from "@/entities/post/server";
 import { parsePageSize, parseSort, stringParams } from "@/shared/lib";
-import { getPostTitle, POST_DEFAULT_SORT, POST_SORT_COLUMNS } from "@/shared/server";
 import { PostDetailLoading } from "@/views/post-detail";
 
 import { PostDetailContent } from "./post-detail-content";

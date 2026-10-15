@@ -12,7 +12,7 @@ import type {
 
 import type { MembershipStatus } from "@/shared/lib";
 
-import type { PostStatus } from "./post-status";
+import type { PostStatus } from "../../lib/post-status";
 
 export type {
   Actor,

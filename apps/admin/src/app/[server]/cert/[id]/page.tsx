@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { getCertReview, parseCertQueueFilter, requireStaff } from "@/shared/server";
+import { parseCertQueueFilter } from "@/entities/cert";
+import { getCertReview } from "@/entities/cert/server";
+import { requireStaff } from "@/shared/server";
 import { CertReviewView } from "@/views/cert-review";
 
 export const metadata: Metadata = { title: "룰북 인증 심사" };

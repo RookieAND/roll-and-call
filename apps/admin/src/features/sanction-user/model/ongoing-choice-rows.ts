@@ -1,5 +1,6 @@
+import type { MemberOngoingRow } from "@/entities/user/server";
 import { ONGOING_ROLE } from "@/shared/lib";
-import type { MemberOngoingRow, OngoingChoice } from "@/shared/server";
+import type { OngoingChoice } from "@/shared/server";
 import type { ChoiceRow } from "@/shared/ui";
 
 import { ongoingMeta } from "./ongoing-meta";

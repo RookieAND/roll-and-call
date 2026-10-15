@@ -7,13 +7,13 @@ import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
 import { formatDate, STAFF_ROLE_LABEL, useActionSubmit, withObjectParticle } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
 import {
   ActionNetworkError,
   FactRows,
   ModalServerLabel,
-  NotificationPreview,
   Tag,
   MODAL_FOOTER_CLASS,
 } from "@/shared/ui";

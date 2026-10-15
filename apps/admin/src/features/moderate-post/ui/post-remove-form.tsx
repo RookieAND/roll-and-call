@@ -6,15 +6,10 @@ import { isUndefined } from "es-toolkit";
 import { RotateCcw, X } from "lucide-react";
 import { useState, type RefObject } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
+import type { PostDetail } from "@/entities/post/server";
 import { draftReason, sessionTimeLabel, useActionSubmit } from "@/shared/lib";
-import type { PostDetail } from "@/shared/server";
-import {
-  ActionNetworkError,
-  FactBox,
-  ModalServerLabel,
-  NotificationPreview,
-  MODAL_FOOTER_CLASS,
-} from "@/shared/ui";
+import { ActionNetworkError, FactBox, ModalServerLabel, MODAL_FOOTER_CLASS } from "@/shared/ui";
 
 import { submitPostModeration } from "../api/submit-post-moderation";
 import { ACTION_COPY } from "../model/action-copy";

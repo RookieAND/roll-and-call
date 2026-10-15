@@ -1,4 +1,4 @@
-import type { AnalyticsData } from "@/shared/server";
+import type { AnalyticsData } from "@/entities/analytics";
 
 import { trendInsight } from "../model/trend-insight";
 import { AnalyticsSection } from "./analytics-section";

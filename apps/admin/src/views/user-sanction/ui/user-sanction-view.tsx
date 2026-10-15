@@ -1,5 +1,5 @@
+import type { MemberOngoingRow, UserDetail } from "@/entities/user/server";
 import { SanctionUserForm } from "@/features/sanction-user";
-import type { MemberOngoingRow, UserDetail } from "@/shared/server";
 import { AdminHeader } from "@/shared/ui";
 
 interface UserSanctionViewProps {

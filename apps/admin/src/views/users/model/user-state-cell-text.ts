@@ -1,5 +1,5 @@
+import type { UserRow } from "@/entities/user";
 import { formatDate, MEMBERSHIP_LABEL, MEMBERSHIP_STATUS } from "@/shared/lib";
-import type { UserRow } from "@/shared/server";
 
 type UserStateSource = Pick<UserRow, "membership" | "sanctioned" | "sanctionUntil">;
 

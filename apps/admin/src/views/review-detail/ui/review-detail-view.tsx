@@ -1,8 +1,15 @@
 import { HStack, VStack } from "@roll-and-call/ui";
 
+import { auditLogHref } from "@/entities/audit";
+import {
+  REVIEW_LIST_PATH,
+  reviewListHref,
+  REVIEW_LIST_TAB,
+  type ReviewDetail,
+  type ReviewListTab,
+} from "@/entities/review";
 import { REVIEW_ACTION, ReviewActionDialog, type ReviewAction } from "@/features/moderate-review";
-import { auditLogHref, REVIEW_LIST_PATH, reviewListHref, withQuery } from "@/shared/lib";
-import { REVIEW_LIST_TAB, type ReviewDetail, type ReviewListTab } from "@/shared/server";
+import { withQuery } from "@/shared/lib";
 import { AdminHeader, NextItemButton } from "@/shared/ui";
 
 import { ReviewActionsAside } from "./review-actions-aside";

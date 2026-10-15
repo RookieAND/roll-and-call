@@ -1,5 +1,5 @@
+import type { MemberOngoingRow } from "@/entities/user/server";
 import { formatSessionTime, ONGOING_ROLE } from "@/shared/lib";
-import type { MemberOngoingRow } from "@/shared/server";
 
 export function ongoingMeta(activity: MemberOngoingRow) {
   const when = activity.startsAt ? formatSessionTime(activity.startsAt) : "일정 미정";

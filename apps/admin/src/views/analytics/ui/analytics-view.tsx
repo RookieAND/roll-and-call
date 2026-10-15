@@ -1,6 +1,6 @@
 import { Text, VStack } from "@roll-and-call/ui";
 
-import type { AnalyticsData } from "@/shared/server";
+import type { AnalyticsData } from "@/entities/analytics";
 import { AdminHeader } from "@/shared/ui";
 
 import type { GridMode } from "../model/grid-mode";

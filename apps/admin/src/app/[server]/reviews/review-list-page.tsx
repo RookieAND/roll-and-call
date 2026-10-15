@@ -1,10 +1,6 @@
+import { REVIEW_DEFAULT_SORT, REVIEW_SORT_COLUMNS, type ReviewListTab } from "@/entities/review";
+import { listReviews } from "@/entities/review/server";
 import { parseSort, stringParams } from "@/shared/lib";
-import {
-  listReviews,
-  REVIEW_DEFAULT_SORT,
-  REVIEW_SORT_COLUMNS,
-  type ReviewListTab,
-} from "@/shared/server";
 import { ReviewListView } from "@/views/review-list";
 
 interface ReviewListPageProps {

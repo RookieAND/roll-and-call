@@ -7,12 +7,12 @@ import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
+import type { StaffCandidate } from "@/entities/staff";
 import { conflictToastText, useActionSubmit } from "@/shared/lib";
-import type { StaffCandidate } from "@/shared/server";
 import {
   ActionNetworkError,
   ModalServerLabel,
-  NotificationPreview,
   UrlSearchInput,
   MODAL_FOOTER_CLASS,
 } from "@/shared/ui";

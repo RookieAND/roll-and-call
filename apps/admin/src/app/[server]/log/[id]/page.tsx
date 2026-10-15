@@ -1,8 +1,8 @@
 import { Button } from "@roll-and-call/ui";
 import type { Metadata } from "next";
 
+import { getAuditEntry } from "@/entities/audit/server";
 import { withQuery, stringParams } from "@/shared/lib";
-import { getAuditEntry } from "@/shared/server";
 import { AdminHeader, EMPTY_IMAGE, EmptyState, ServerLink } from "@/shared/ui";
 import { AuditEntryView } from "@/views/audit-entry";
 

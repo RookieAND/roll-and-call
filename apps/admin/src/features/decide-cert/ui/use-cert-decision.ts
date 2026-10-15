@@ -7,7 +7,8 @@ import { isNull, isUndefined, xor } from "es-toolkit";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 
-import { EBOOK_REJECT_REASONS, OTHER_REASON, REJECT_REASONS, useActionSubmit } from "@/shared/lib";
+import { EBOOK_REJECT_REASONS, REJECT_REASONS } from "@/entities/cert";
+import { OTHER_REASON, useActionSubmit } from "@/shared/lib";
 import type { CertDecisionResult, CertFormat, ShotKey } from "@/shared/server";
 import { useServerPath } from "@/shared/ui";
 

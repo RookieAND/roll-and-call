@@ -1,0 +1,46 @@
+import { findUserNickname } from "@/shared/lib";
+import type { Snapshot, NoShow } from "@/shared/server";
+
+import type { NoShowStatus } from "./no-show-status";
+import { noShowStatusOf } from "./no-show-status-of";
+
+export interface NoShowRow {
+  id: string;
+  gameId: string;
+  userId: string;
+  nickname: string;
+  sessionTitle: string;
+  rulebook: string;
+  startsAt: Date;
+  gmNickname: string;
+  // GM이 기록했으면 GM 닉네임, 운영진이 추가했으면 「{운영진} · 운영진」.
+  handler: string;
+  status: NoShowStatus;
+  cancelled: boolean;
+}
+
+interface ToNoShowRowOptions {
+  db: Pick<Snapshot, "sessions" | "users">;
+  noShow: NoShow;
+  now: number;
+}
+
+export function toNoShowRow({ db, noShow, now }: ToNoShowRowOptions): NoShowRow {
+  const session = db.sessions.find((candidate) => candidate.id === noShow.sessionId);
+  if (!session) throw new Error(`스냅샷에 없는 세션입니다: ${noShow.sessionId}`);
+  const nicknameOf = (userId: string) => findUserNickname({ users: db.users, userId });
+  const gmNickname = nicknameOf(session.gmId);
+  return {
+    id: noShow.id,
+    gameId: noShow.sessionId,
+    userId: noShow.userId,
+    nickname: nicknameOf(noShow.userId),
+    sessionTitle: session.title,
+    rulebook: session.rulebook,
+    startsAt: session.startsAt,
+    gmNickname,
+    handler: noShow.added ? `${noShow.added.by} · 운영진` : gmNickname,
+    status: noShowStatusOf({ cancelled: noShow.cancelled, startsAt: session.startsAt, now }),
+    cancelled: noShow.cancelled,
+  };
+}

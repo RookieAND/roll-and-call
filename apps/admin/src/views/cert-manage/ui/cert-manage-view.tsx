@@ -5,18 +5,12 @@ import {
   CERT_MANAGE_STATUS,
   CERT_MANAGE_STATUS_LABEL,
   CERT_TABS,
-  paginate,
-  parsePageSize,
-  withQuery,
   type CertManageStatus,
-  type TableSort,
-} from "@/shared/lib";
-import type {
-  CertManageFilter,
-  CertManageList,
-  CertManageSortColumn,
-  RevokeTarget,
-} from "@/shared/server";
+  type CertManageFilter,
+  type CertManageSortColumn,
+} from "@/entities/cert";
+import type { CertManageList, RevokeTarget } from "@/entities/cert/server";
+import { paginate, parsePageSize, withQuery, type TableSort } from "@/shared/lib";
 import {
   AdminHeader,
   ListPager,

@@ -3,8 +3,8 @@
 import { Checkbox, Text, TextInput, VStack, cn } from "@roll-and-call/ui";
 import { useState } from "react";
 
-import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
-import type { GrantOptions } from "@/shared/server";
+import type { GrantOptions } from "@/entities/cert/server";
+import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
 
 import { isBookSelectable } from "../model/grant-book-selection";
 import { GrantSelectedChips } from "./grant-selected-chips";

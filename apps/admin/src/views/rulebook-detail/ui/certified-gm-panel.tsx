@@ -3,6 +3,7 @@ import { RULEBOOK_KIND } from "@roll-and-call/database/rulebooks/model";
 import { Button, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
+import type { CertifiedGm } from "@/entities/rulebook/server";
 import {
   formatDate,
   paginate,
@@ -11,7 +12,6 @@ import {
   withQuery,
   type TableSort,
 } from "@/shared/lib";
-import type { CertifiedGm } from "@/shared/server";
 import {
   EMPTY_IMAGE,
   ListPager,

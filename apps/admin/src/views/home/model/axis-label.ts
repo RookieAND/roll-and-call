@@ -1,4 +1,4 @@
-import type { WeeklyPoint } from "@/shared/server";
+import type { WeeklyPoint } from "@/entities/analytics/server";
 
 interface AxisLabelOptions {
   weeks: WeeklyPoint[];

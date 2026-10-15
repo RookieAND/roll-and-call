@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
 
+import { listCertSellers, listRulebookRequests, listRulebooks } from "@/entities/rulebook/server";
 import { stringParams } from "@/shared/lib";
-import {
-  listCertSellers,
-  listRulebookRequests,
-  listRulebooks,
-  requireStaff,
-} from "@/shared/server";
+import { requireStaff } from "@/shared/server";
 import { RULEBOOKS_TAB, RulebooksView, type RulebooksTab } from "@/views/rulebooks";
 
 export const metadata: Metadata = { title: "룰북" };

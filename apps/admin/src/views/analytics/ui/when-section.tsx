@@ -1,6 +1,6 @@
 import { Callout, HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { ANALYTICS_EARLY_THRESHOLD, type AnalyticsData } from "@/shared/server";
+import { ANALYTICS_EARLY_THRESHOLD, type AnalyticsData } from "@/entities/analytics";
 
 import { finishedGridInsight } from "../model/finished-grid-insight";
 import { GRID_MODE, type GridMode } from "../model/grid-mode";

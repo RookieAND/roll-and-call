@@ -1,14 +1,8 @@
 import { Button, Grid, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
 import { TriangleAlert } from "lucide-react";
 
-import {
-  AdminHeader,
-  FormSection,
-  LoadingRegion,
-  NotificationPreview,
-  Panel,
-  SkeletonField,
-} from "@/shared/ui";
+import { NotificationPreview } from "@/entities/notification";
+import { AdminHeader, FormSection, LoadingRegion, Panel, SkeletonField } from "@/shared/ui";
 
 export function UserSanctionLoading() {
   return (

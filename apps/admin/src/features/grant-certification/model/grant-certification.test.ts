@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { GrantOptions } from "@/shared/server";
+import type { GrantOptions } from "@/entities/cert/server";
 
 import { isBookSelectable, pruneBookSelection } from "./grant-book-selection";
 import {

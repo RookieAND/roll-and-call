@@ -4,7 +4,7 @@ import { Dialog } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 
-import type { NoShowSessionSearch } from "@/shared/server";
+import type { NoShowSessionSearch } from "@/entities/no-show/server";
 import { useServerPath } from "@/shared/ui";
 
 import { AddNoShowForm } from "./add-no-show-form";

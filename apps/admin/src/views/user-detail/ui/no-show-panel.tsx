@@ -1,15 +1,9 @@
 import { Table, Text } from "@roll-and-call/ui";
 
+import { NoShowStatusTag } from "@/entities/no-show";
+import type { UserDetail } from "@/entities/user/server";
 import { formatSessionTime, paginate, parsePageSize } from "@/shared/lib";
-import type { UserDetail } from "@/shared/server";
-import {
-  EMPTY_IMAGE,
-  ListPager,
-  NoShowStatusTag,
-  Panel,
-  TableColumns,
-  TableEmptyRow,
-} from "@/shared/ui";
+import { EMPTY_IMAGE, ListPager, Panel, TableColumns, TableEmptyRow } from "@/shared/ui";
 
 import { noShowStatus } from "../model/no-show-status";
 import { NoShowRowMenu } from "./no-show-row-menu";

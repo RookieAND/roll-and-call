@@ -2,8 +2,8 @@ import { HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
 import { ChevronRight } from "lucide-react";
 
-import { RULEBOOK_KIND_LABEL } from "@/shared/lib";
-import type { RulebookRow } from "@/shared/server";
+import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
+import type { RulebookRow } from "@/entities/rulebook/server";
 import { ServerLink, Tag } from "@/shared/ui";
 
 const KIND_NOTE = {

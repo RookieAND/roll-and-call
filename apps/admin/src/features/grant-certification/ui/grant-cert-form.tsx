@@ -17,12 +17,12 @@ import { ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import type { GrantOptions } from "@/entities/cert/server";
+import { NotificationPreview } from "@/entities/notification";
 import { useActionSubmit } from "@/shared/lib";
-import type { GrantOptions } from "@/shared/server";
 import {
   ActionNetworkError,
   FormSection,
-  NotificationPreview,
   RetryableLabel,
   ServerLink,
   Tag,

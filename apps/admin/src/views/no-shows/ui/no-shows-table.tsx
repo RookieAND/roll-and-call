@@ -1,10 +1,14 @@
 import { Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import { formatSessionTime, type TableSort } from "@/shared/lib";
-import { NO_SHOW_SORT_COLUMN, type NoShowRow, type NoShowSortColumn } from "@/shared/server";
 import {
+  NO_SHOW_SORT_COLUMN,
+  type NoShowRow,
+  type NoShowSortColumn,
   NoShowStatusTag,
+} from "@/entities/no-show";
+import { formatSessionTime, type TableSort } from "@/shared/lib";
+import {
   TableEmptyRow,
   TableColumns,
   ServerLink,

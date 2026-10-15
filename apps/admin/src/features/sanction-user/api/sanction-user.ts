@@ -7,11 +7,11 @@ import { notFound } from "next/navigation";
 import { after } from "next/server";
 import { z } from "zod";
 
+import { getUserDetail } from "@/entities/user/server";
 import { chosenReasonSchema, idSchema, parseActionInput } from "@/shared/lib";
 import {
   applySanction,
   getCurrentServer,
-  getUserDetail,
   notifyGameCancelled,
   notifyGameLeft,
   postStaffNotice,

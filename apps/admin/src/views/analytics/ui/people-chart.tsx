@@ -1,6 +1,6 @@
 import { Grid, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 
-import type { AnalyticsData } from "@/shared/server";
+import type { AnalyticsData } from "@/entities/analytics";
 
 const ROW_COLUMNS = "grid-cols-[88px_minmax(0,1fr)_148px]";
 

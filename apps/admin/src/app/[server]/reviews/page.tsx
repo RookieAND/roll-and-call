@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { REVIEW_LIST_TAB } from "@/shared/server";
+import { REVIEW_LIST_TAB } from "@/entities/review";
 
 import { ReviewListPage } from "./review-list-page";
 

@@ -1,8 +1,8 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
+import type { UserRow, UserSortColumn } from "@/entities/user";
 import { formatDate, type TableSort } from "@/shared/lib";
-import type { UserRow, UserSortColumn } from "@/shared/server";
 import {
   EMPTY_IMAGE,
   ServerLink,

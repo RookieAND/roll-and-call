@@ -2,8 +2,10 @@ import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { compact, isNull } from "es-toolkit";
 import { ArrowRight } from "lucide-react";
 
-import { actionTone, auditLogHref, formatDateTime, STAFF_ROLE_LABEL } from "@/shared/lib";
-import { retentionDaysLeft, STAFF_CHANNEL_RELATED, type AuditEntryDetail } from "@/shared/server";
+import { actionTone, auditLogHref, retentionDaysLeft } from "@/entities/audit";
+import { type AuditEntryDetail } from "@/entities/audit/server";
+import { formatDateTime, STAFF_ROLE_LABEL } from "@/shared/lib";
+import { STAFF_CHANNEL_RELATED } from "@/shared/server";
 import { AdminHeader, FactRows, FactSub, IconTile, Tag } from "@/shared/ui";
 
 import { actionIcon } from "../model/action-icon";

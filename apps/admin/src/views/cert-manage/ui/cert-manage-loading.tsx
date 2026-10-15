@@ -1,7 +1,7 @@
 import { Button, Chip, HStack, TextInput } from "@roll-and-call/ui";
 import { Plus, Search } from "lucide-react";
 
-import { CERT_TABS } from "@/shared/lib";
+import { CERT_TABS } from "@/entities/cert";
 import {
   AdminHeader,
   LoadingRegion,

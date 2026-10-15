@@ -1,6 +1,6 @@
 import { HStack, Progress, Text, VStack } from "@roll-and-call/ui";
 
-import type { AnalyticsData } from "@/shared/server";
+import type { AnalyticsData } from "@/entities/analytics";
 
 type MethodShare = AnalyticsData["methodShare"]["open"];
 

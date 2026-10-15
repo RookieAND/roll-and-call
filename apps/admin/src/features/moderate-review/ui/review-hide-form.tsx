@@ -10,15 +10,10 @@ import { isUndefined } from "es-toolkit";
 import { Eye, RotateCcw } from "lucide-react";
 import { useState } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
+import type { ReviewDetail } from "@/entities/review";
 import { draftReason, useActionSubmit } from "@/shared/lib";
-import type { ReviewDetail } from "@/shared/server";
-import {
-  ActionNetworkError,
-  ModalServerLabel,
-  NotificationPreview,
-  ReasonChips,
-  MODAL_FOOTER_CLASS,
-} from "@/shared/ui";
+import { ActionNetworkError, ModalServerLabel, ReasonChips, MODAL_FOOTER_CLASS } from "@/shared/ui";
 
 import { submitReviewModeration } from "../api/submit-review-moderation";
 import { ACTION_COPY } from "../model/action-copy";

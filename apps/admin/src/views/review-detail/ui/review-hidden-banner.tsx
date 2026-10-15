@@ -1,7 +1,7 @@
 import { Callout } from "@roll-and-call/ui";
 
+import type { ReviewDetail } from "@/entities/review";
 import { formatDateTime } from "@/shared/lib";
-import type { ReviewDetail } from "@/shared/server";
 
 interface ReviewHiddenBannerProps {
   hidden: NonNullable<ReviewDetail["hidden"]>;

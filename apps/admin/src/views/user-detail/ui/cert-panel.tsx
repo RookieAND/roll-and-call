@@ -1,8 +1,8 @@
 import { Callout, Table, Text, Tooltip, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
+import type { UserDetail } from "@/entities/user/server";
 import { paginate, parsePageSize } from "@/shared/lib";
-import type { UserDetail } from "@/shared/server";
 import {
   EMPTY_IMAGE,
   ListPager,

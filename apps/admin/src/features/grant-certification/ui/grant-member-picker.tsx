@@ -3,7 +3,7 @@
 import { Text, TextInput, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
-import type { GrantOptions } from "@/shared/server";
+import type { GrantOptions } from "@/entities/cert/server";
 
 import { grantMemberPlan } from "../model/grant-candidate-status";
 import { searchGrantMembers } from "../model/search-grant-members";

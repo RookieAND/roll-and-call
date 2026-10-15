@@ -2,7 +2,7 @@
 
 import { ScrollText } from "lucide-react";
 
-import type { AuditSubjectKind } from "@/shared/server";
+import type { AuditSubjectKind } from "@/entities/audit";
 import { MoreMenu } from "@/shared/ui";
 
 import { SUBJECT_OPEN_ITEM } from "../model/subject-open-item";

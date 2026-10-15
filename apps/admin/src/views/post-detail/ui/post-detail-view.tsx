@@ -1,9 +1,10 @@
 import { HStack, VStack } from "@roll-and-call/ui";
 
+import { auditLogHref } from "@/entities/audit";
+import type { PostDetail } from "@/entities/post/server";
 import { POST_ACTION, PostActionDialog, type PostAction } from "@/features/moderate-post";
 import { ApplicationNoteDialog } from "@/features/view-application-note";
-import { auditLogHref, withQuery } from "@/shared/lib";
-import type { PostDetail } from "@/shared/server";
+import { withQuery } from "@/shared/lib";
 import { AdminHeader, HiddenBanner, NextItemButton, Panel, Tag } from "@/shared/ui";
 
 import { POST_DETAIL_TAB, type PostDetailTab } from "../model/post-detail-tab";

@@ -1,7 +1,7 @@
 import { HStack, Text } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
-import type { UserRow } from "@/shared/server";
+import type { UserRow } from "@/entities/user";
 import { Tag } from "@/shared/ui";
 
 import { userStateCellText } from "../model/user-state-cell-text";

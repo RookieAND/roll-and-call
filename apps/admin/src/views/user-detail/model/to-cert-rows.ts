@@ -1,6 +1,5 @@
-import { formatDate, withQuery } from "@/shared/lib";
-import type { StatusTone } from "@/shared/lib";
-import type { UserDetail } from "@/shared/server";
+import type { UserDetail } from "@/entities/user/server";
+import { formatDate, withQuery, type StatusTone } from "@/shared/lib";
 
 export const CERT_ROW_STATE = {
   certified: "certified",

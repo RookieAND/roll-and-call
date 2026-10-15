@@ -1,11 +1,8 @@
 import { notFound } from "next/navigation";
 
-import {
-  getCurrentServer,
-  getPostDetail,
-  requireStaff,
-  type PostListFilter,
-} from "@/shared/server";
+import { type PostListFilter } from "@/entities/post";
+import { getPostDetail } from "@/entities/post/server";
+import { getCurrentServer, requireStaff } from "@/shared/server";
 import { PostDetailView } from "@/views/post-detail";
 
 interface PostDetailContentProps {

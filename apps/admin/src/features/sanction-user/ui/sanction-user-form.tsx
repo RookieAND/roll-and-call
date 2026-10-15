@@ -7,9 +7,10 @@ import { TriangleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { NotificationPreview } from "@/entities/notification";
+import type { MemberOngoingRow } from "@/entities/user/server";
 import { conflictToastText, draftReason, useActionSubmit } from "@/shared/lib";
-import type { MemberOngoingRow } from "@/shared/server";
-import { NotificationPreview, ServerLink, useServerPath } from "@/shared/ui";
+import { ServerLink, useServerPath } from "@/shared/ui";
 
 import { sanctionUser } from "../api/sanction-user";
 import { isOngoingAction } from "../model/is-ongoing-action";

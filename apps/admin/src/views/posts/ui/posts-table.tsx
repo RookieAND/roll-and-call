@@ -2,14 +2,8 @@ import { Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { sessionTimeLabel, type TableSort } from "@/shared/lib";
-import {
-  POST_SORT_COLUMN,
-  POST_STATUS,
-  type PostRow,
-  type PostSortColumn,
-  type PostStatus,
-} from "@/shared/server";
+import { POST_SORT_COLUMN, type PostRow, type PostSortColumn } from "@/entities/post";
+import { sessionTimeLabel, type TableSort, POST_STATUS, type PostStatus } from "@/shared/lib";
 import {
   ServerLink,
   SortableHead,

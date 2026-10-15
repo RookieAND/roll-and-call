@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 
-import { isMembershipStatus, MEMBERSHIP_STATUS, parseSort, stringParams } from "@/shared/lib";
-import { USER_SORT_COLUMNS, USER_SORT_FALLBACK, listUsers, isUserFilter } from "@/shared/server";
+import {
+  isMembershipStatus,
+  USER_SORT_COLUMNS,
+  USER_SORT_FALLBACK,
+  isUserFilter,
+} from "@/entities/user";
+import { listUsers } from "@/entities/user/server";
+import { MEMBERSHIP_STATUS, parseSort, stringParams } from "@/shared/lib";
 import { UsersView } from "@/views/users";
 
 export const metadata: Metadata = { title: "유저" };

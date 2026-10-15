@@ -1,5 +1,5 @@
+import type { UserDetail } from "@/entities/user/server";
 import { MEMBERSHIP_LABEL, MEMBERSHIP_STATUS } from "@/shared/lib";
-import type { UserDetail } from "@/shared/server";
 import { Tag } from "@/shared/ui";
 
 interface UserStateTagProps {

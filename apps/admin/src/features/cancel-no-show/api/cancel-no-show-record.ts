@@ -3,12 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
+import { parseNoShowId } from "@/entities/no-show";
 import { parseActionInput } from "@/shared/lib";
 import {
   cancelNoShow,
   evaluateGameBadges,
   getCurrentServer,
-  parseNoShowId,
   requireStaff,
   syncGameReviewForumPosts,
 } from "@/shared/server";

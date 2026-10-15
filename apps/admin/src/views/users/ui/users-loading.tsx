@@ -1,8 +1,8 @@
 import { HStack, TextInput } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
+import { USER_SORT_FALLBACK } from "@/entities/user";
 import { MEMBERSHIP_STATUS } from "@/shared/lib";
-import { USER_SORT_FALLBACK } from "@/shared/server";
 import { AdminHeader, LoadingRegion, Panel, SkeletonPager, SkeletonTable } from "@/shared/ui";
 
 import { USER_COLUMNS, USER_STATE_COLUMN } from "../model/user-columns";

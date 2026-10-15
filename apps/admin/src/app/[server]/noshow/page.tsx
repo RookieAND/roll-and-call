@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
 
-import { isNoShowStatus, parseSort, stringParams } from "@/shared/lib";
-import {
-  getNoShow,
-  listNoShows,
-  NO_SHOW_DEFAULT_SORT,
-  NO_SHOW_SORT_COLUMNS,
-  searchNoShowSessions,
-} from "@/shared/server";
+import { isNoShowStatus, NO_SHOW_DEFAULT_SORT, NO_SHOW_SORT_COLUMNS } from "@/entities/no-show";
+import { getNoShow, listNoShows, searchNoShowSessions } from "@/entities/no-show/server";
+import { parseSort, stringParams } from "@/shared/lib";
 import { NoShowsView } from "@/views/no-shows";
 
 export const metadata: Metadata = { title: "불참 기록" };

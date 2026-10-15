@@ -1,12 +1,13 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
 
-import { CERT_TABS, paginate, parsePageSize, withQuery } from "@/shared/lib";
 import {
+  CERT_TABS,
   CERT_QUEUE_FILTERS,
   type CertQueueFilter,
   type CertQueueFilterKey,
-  type listCertQueue,
-} from "@/shared/server";
+} from "@/entities/cert";
+import { type listCertQueue } from "@/entities/cert/server";
+import { paginate, parsePageSize, withQuery } from "@/shared/lib";
 import {
   AdminHeader,
   EMPTY_IMAGE,

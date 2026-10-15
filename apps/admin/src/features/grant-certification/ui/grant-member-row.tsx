@@ -3,7 +3,7 @@
 import { Checkbox, Text, VStack, cn } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
 
-import type { GrantOptions } from "@/shared/server";
+import type { GrantOptions } from "@/entities/cert/server";
 
 import type { GrantMemberPlan } from "../model/grant-candidate-status";
 import { grantMemberText } from "../model/grant-candidate-text";

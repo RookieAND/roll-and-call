@@ -1,8 +1,9 @@
 import { Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
+import type { ReviewDetail } from "@/entities/review";
+import { GmBadge } from "@/entities/user";
 import { formatDateTime } from "@/shared/lib";
-import type { ReviewDetail } from "@/shared/server";
-import { FactRows, GmBadge, Tag } from "@/shared/ui";
+import { FactRows, Tag } from "@/shared/ui";
 
 import { ReviewMoreMenu } from "./review-more-menu";
 import { ReviewPhotos } from "./review-photos";

@@ -1,8 +1,8 @@
 import { compact } from "es-toolkit";
 import type { Metadata } from "next";
 
+import { listAuditLog } from "@/entities/audit/server";
 import { parseSort, stringParams } from "@/shared/lib";
-import { listAuditLog } from "@/shared/server";
 import { AUDIT_LOG_SORT, AuditLogView } from "@/views/audit-log";
 
 export const metadata: Metadata = { title: "활동 기록" };

@@ -1,7 +1,7 @@
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
+import type { UserDetail } from "@/entities/user/server";
 import { formatDate, MEMBERSHIP_STATUS } from "@/shared/lib";
-import type { UserDetail } from "@/shared/server";
 import { FactRows, UserInitial } from "@/shared/ui";
 
 import { rejoinedNotice } from "../model/rejoined-notice";

@@ -1,6 +1,6 @@
 import { sumBy } from "es-toolkit";
 
-import type { AnalyticsTrendWeek } from "@/shared/server";
+import type { AnalyticsTrendWeek } from "@/entities/analytics";
 
 const scheduledCount = (week: AnalyticsTrendWeek) =>
   week.confirmed + week.coordinating + week.recruiting;

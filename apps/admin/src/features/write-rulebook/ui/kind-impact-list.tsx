@@ -3,7 +3,7 @@
 import { Text, VStack } from "@roll-and-call/ui";
 import { useEffect, useRef } from "react";
 
-import type { KindImpactPage } from "@/shared/server";
+import type { KindImpactPage } from "@/entities/rulebook/server";
 
 interface KindImpactListProps {
   rows: KindImpactPage["rows"];

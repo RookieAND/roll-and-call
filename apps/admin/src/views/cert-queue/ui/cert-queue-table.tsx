@@ -1,13 +1,9 @@
 import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
-import {
-  appliedRulebookLabel,
-  CERT_FORMAT_LABEL,
-  RULEBOOK_KIND_LABEL,
-  withQuery,
-} from "@/shared/lib";
-import type { CertQueueRow } from "@/shared/server";
+import { CERT_FORMAT_LABEL, type CertQueueRow } from "@/entities/cert";
+import { appliedRulebookLabel, RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
+import { withQuery } from "@/shared/lib";
 import { EMPTY_IMAGE, ServerLink, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
 
 const LONG_WAIT_DAYS = 5;

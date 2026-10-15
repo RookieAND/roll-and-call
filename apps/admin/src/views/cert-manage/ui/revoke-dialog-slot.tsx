@@ -2,8 +2,8 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import type { RevokeTarget } from "@/entities/cert/server";
 import { RevokeCertDialog } from "@/features/revoke-certification";
-import type { RevokeTarget } from "@/shared/server";
 
 interface RevokeDialogSlotProps {
   target: RevokeTarget;

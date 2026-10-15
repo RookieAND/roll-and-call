@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
+import { getAnalytics } from "@/entities/analytics/server";
 import { stringParams } from "@/shared/lib";
-import { getAnalytics } from "@/shared/server";
 import { AnalyticsView, GRID_MODE } from "@/views/analytics";
 
 export const metadata: Metadata = { title: "분석" };

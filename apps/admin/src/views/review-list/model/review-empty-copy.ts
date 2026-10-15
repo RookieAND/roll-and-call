@@ -1,4 +1,4 @@
-import type { ReviewList } from "@/shared/server";
+import type { ReviewList } from "@/entities/review/server";
 import { EMPTY_IMAGE } from "@/shared/ui";
 
 import { reviewWindowEmptyCopy } from "./review-window-empty-copy";

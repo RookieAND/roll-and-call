@@ -1,20 +1,10 @@
 import { Button, HStack, VStack } from "@roll-and-call/ui";
 
+import { NO_SHOW_STATUS_LABEL, type NoShowRow, type NoShowSortColumn } from "@/entities/no-show";
+import { type NoShowDetail, type NoShowSessionSearch } from "@/entities/no-show/server";
 import { AddNoShowDialog } from "@/features/add-no-show";
 import { CancelNoShowDialog, NoShowSummary } from "@/features/cancel-no-show";
-import {
-  NO_SHOW_STATUS_LABEL,
-  paginate,
-  parsePageSize,
-  withQuery,
-  type TableSort,
-} from "@/shared/lib";
-import {
-  type NoShowDetail,
-  type NoShowRow,
-  type NoShowSessionSearch,
-  type NoShowSortColumn,
-} from "@/shared/server";
+import { paginate, parsePageSize, withQuery, type TableSort } from "@/shared/lib";
 import {
   AdminHeader,
   EMPTY_IMAGE,

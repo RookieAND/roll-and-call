@@ -1,5 +1,6 @@
+import { REVIEW_WINDOW_STATE } from "@/entities/review";
+import { type ReviewList } from "@/entities/review/server";
 import { formatDate } from "@/shared/lib";
-import { REVIEW_WINDOW_STATE, type ReviewList } from "@/shared/server";
 import { EMPTY_IMAGE } from "@/shared/ui";
 
 type ReviewWindow = NonNullable<ReviewList["game"]>["window"];

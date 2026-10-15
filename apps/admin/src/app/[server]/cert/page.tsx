@@ -1,7 +1,8 @@
 import { isString } from "es-toolkit";
 import type { Metadata } from "next";
 
-import { listCertQueue, parseCertQueueFilter } from "@/shared/server";
+import { parseCertQueueFilter } from "@/entities/cert";
+import { listCertQueue } from "@/entities/cert/server";
 import { CertQueueView } from "@/views/cert-queue";
 
 export const metadata: Metadata = { title: "룰북 인증" };

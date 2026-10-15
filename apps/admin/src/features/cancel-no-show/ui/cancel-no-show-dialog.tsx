@@ -6,7 +6,7 @@ import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 
-import type { NoShowDetail } from "@/shared/server";
+import type { NoShowDetail } from "@/entities/no-show/server";
 import { useServerPath } from "@/shared/ui";
 
 import { cancelNoShowRecord } from "../api/cancel-no-show-record";

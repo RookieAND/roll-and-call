@@ -1,0 +1,89 @@
+import "server-only";
+import { compact, mean } from "es-toolkit";
+
+import { isRecognizedPost } from "@/shared/lib";
+import { loadSnapshot } from "@/shared/server";
+
+import { weekLabel } from "../model/week-label";
+
+const WEEK = 7 * 86_400_000;
+const WEEKS = 8;
+
+export interface WeeklyPoint {
+  label: string;
+  count: number;
+}
+
+export interface WeeklySeries {
+  weeks: WeeklyPoint[];
+  current: number;
+  previous: number;
+  delta: number;
+  deltaPercent: number;
+  average: number;
+}
+
+export interface WeeklySummary {
+  from: Date;
+  to: Date;
+  newPosts: WeeklySeries;
+  finishedSessions: WeeklySeries;
+  signups: WeeklySeries;
+  leaves: WeeklySeries;
+}
+
+// 이번 주는 오늘까지의 7일이다. 평균은 최근 7일을 뺀 지난 7주로 낸다.
+// 새 구인은 숨김·취소를 뺀 만든 시각(R6), 진행된 세션은 인정 세션의 시작 시각(R5)으로 센다.
+export async function getWeeklySummary(now: Date = new Date()): Promise<WeeklySummary> {
+  const db = await loadSnapshot();
+  const end = now.getTime();
+  const weekIndex = (date: Date) => {
+    const weeksAgo = Math.floor((end - date.getTime()) / WEEK);
+    return date.getTime() > end || weeksAgo >= WEEKS ? -1 : WEEKS - 1 - weeksAgo;
+  };
+  const countBy = (dates: Date[]) => {
+    const counts = Array.from({ length: WEEKS }, () => 0);
+    for (const date of dates) {
+      const index = weekIndex(date);
+      if (index >= 0) counts[index]!++;
+    }
+    return counts;
+  };
+  const toSeries = (counts: number[]): WeeklySeries => {
+    const weeks = counts.map((count, index) => ({
+      label: weekLabel(new Date(end - (counts.length - 1 - index) * WEEK)),
+      count,
+    }));
+    const current = counts.at(-1) ?? 0;
+    const previous = counts.at(-2) ?? 0;
+    const past = counts.slice(0, -1);
+    return {
+      weeks,
+      current,
+      previous,
+      delta: current - previous,
+      deltaPercent: previous ? Math.round(((current - previous) / previous) * 100) : 0,
+      average: past.length ? Math.round(mean(past)) : 0,
+    };
+  };
+  return {
+    from: new Date(end - WEEK + 86_400_000),
+    to: now,
+    newPosts: toSeries(
+      countBy(
+        db.sessions
+          .filter((session) => !session.hidden && !session.cancelled)
+          .flatMap((session) => (session.createdAt ? [session.createdAt] : [])),
+      ),
+    ),
+    finishedSessions: toSeries(
+      countBy(
+        db.sessions
+          .filter((session) => isRecognizedPost(session, now))
+          .map((session) => session.startsAt),
+      ),
+    ),
+    signups: toSeries(countBy(db.users.map((user) => user.memberJoinedAt))),
+    leaves: toSeries(countBy(compact(db.users.map((user) => user.leftAt)))),
+  };
+}

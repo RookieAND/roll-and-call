@@ -1,7 +1,7 @@
 운영진 전용 어드민(PC 1280px 기준). 규칙은 사용자 앱과 같다: @../web/docs/frontend-conventions.md
 
 - 시안: design_handoff_admin/(README.md, SCREENS.md, design/admin/*.jsx)은 저장소에 없다. 필요하면 사용자에게 받는다.
-- 서버 데이터는 전부 `src/shared/server/admin-data`를 거친다. 쿼리는 `@roll-and-call/database/<도메인>`(rulebooks·certifications·moderation 등)에 있고 모두 `serverId`를 받는다(앱은 `getCurrentServer()`의 id를 넘긴다). 조회는 `loadSnapshot()`(요청마다 현재 서버의 표 전체를 읽는다), 조치는 트랜잭션 + 조건부 UPDATE로 충돌을 가린다.
+- 서버 데이터는 `src/shared/server/admin-data`(스냅숏·DB 쿼리 재노출)와 `src/entities/<도메인>`(목록 가공 규칙은 `index.ts`, 스냅숏을 읽는 조회는 `server.ts`)을 거친다. 쿼리는 `@roll-and-call/database/<도메인>`(rulebooks·certifications·moderation 등)에 있고 모두 `serverId`를 받는다(앱은 `getCurrentServer()`의 id를 넘긴다). 조회는 `loadSnapshot()`(요청마다 현재 서버의 표 전체를 읽는다), 조치는 트랜잭션 + 조건부 UPDATE로 충돌을 가린다.
 - 확정 조치는 `AUDIT_ACTIONS` 하나에 대응하고 활동 기록을 한 건 남긴다.
 
 ## 서버 분리 (2026-10 핸드오프)

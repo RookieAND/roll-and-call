@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
+import { searchStaffCandidates } from "@/entities/staff/server";
 import { stringParams } from "@/shared/lib";
-import { listStaff, requireStaff, searchStaffCandidates } from "@/shared/server";
+import { listStaff, requireStaff } from "@/shared/server";
 import { SettingsStaffView } from "@/views/settings";
 
 export const metadata: Metadata = { title: "설정 · 운영진 관리" };

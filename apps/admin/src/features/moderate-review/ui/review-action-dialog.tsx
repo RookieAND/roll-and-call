@@ -5,8 +5,8 @@ import { isNull } from "es-toolkit";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 
+import type { ReviewDetail } from "@/entities/review";
 import { conflictToastText } from "@/shared/lib";
-import type { ReviewDetail } from "@/shared/server";
 import { useServerPath } from "@/shared/ui";
 
 import { ACTION_COPY } from "../model/action-copy";

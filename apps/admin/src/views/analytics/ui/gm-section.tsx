@@ -1,7 +1,7 @@
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull, sumBy } from "es-toolkit";
 
-import type { AnalyticsData } from "@/shared/server";
+import type { AnalyticsData } from "@/entities/analytics";
 
 import { AnalyticsSection } from "./analytics-section";
 import { Delta } from "./delta";

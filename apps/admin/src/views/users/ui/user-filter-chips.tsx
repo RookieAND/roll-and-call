@@ -1,7 +1,7 @@
 import { Chip, HStack, Tooltip } from "@roll-and-call/ui";
 
+import { USER_FILTER_HINT, USER_FILTERS, type UserFilter } from "@/entities/user";
 import { withQuery } from "@/shared/lib";
-import { USER_FILTER_HINT, USER_FILTERS, type UserFilter } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
 
 const FILTERS = Object.entries(USER_FILTERS) as [UserFilter, string][];

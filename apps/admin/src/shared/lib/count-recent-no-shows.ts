@@ -1,0 +1,15 @@
+import { isAbsenceActive } from "@roll-and-call/database/games/model";
+
+import type { Snapshot } from "../server/admin-data/snapshot";
+
+export function countRecentNoShows(
+  db: Pick<Snapshot, "noShows" | "sessions">,
+  userId: string,
+  now: number = Date.now(),
+) {
+  return db.noShows.filter((noShow) => {
+    if (noShow.userId !== userId || noShow.cancelled) return false;
+    const session = db.sessions.find((candidate) => candidate.id === noShow.sessionId)!;
+    return isAbsenceActive({ sessionStartsAt: session.startsAt, now });
+  }).length;
+}

@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { REVIEW_DEFAULT_SORT, REVIEW_LIST_TAB, REVIEW_SORT_COLUMNS } from "@/entities/review";
+import { getReviewDetail, getReviewTitle } from "@/entities/review/server";
 import { parseSort, stringParams } from "@/shared/lib";
-import {
-  getReviewDetail,
-  getReviewTitle,
-  REVIEW_DEFAULT_SORT,
-  REVIEW_LIST_TAB,
-  REVIEW_SORT_COLUMNS,
-  requireStaff,
-} from "@/shared/server";
+import { requireStaff } from "@/shared/server";
 import { ReviewDetailView } from "@/views/review-detail";
 
 export async function generateMetadata({

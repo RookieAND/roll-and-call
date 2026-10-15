@@ -2,7 +2,7 @@
 
 import { Button, Popover, Text, VStack } from "@roll-and-call/ui";
 
-import type { RequestGame } from "@/shared/server";
+import type { RequestGame } from "@/entities/rulebook/server";
 import { ServerLink } from "@/shared/ui";
 
 interface RequestGamesPopoverProps {

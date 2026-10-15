@@ -1,7 +1,7 @@
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { Hourglass } from "lucide-react";
 
-import { GMS_NEEDED, PEOPLE_WEEKS_NEEDED, type AnalyticsData } from "@/shared/server";
+import { GMS_NEEDED, PEOPLE_WEEKS_NEEDED, type AnalyticsData } from "@/entities/analytics";
 
 interface EarlyNoticeProps {
   serviceWeeks: number;

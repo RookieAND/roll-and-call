@@ -5,7 +5,10 @@ export { requireOwner, requireStaff } from "./auth/require-staff";
 export { getSessionAccount, type SessionAccount } from "./auth/get-session-account";
 export { getCurrentServer, type CurrentServer } from "./auth/get-current-server";
 export { listMyServers, type MyServer } from "./auth/list-my-servers";
-export { syncGameReviewForumPosts, syncReviewForumPost } from "@roll-and-call/game-notices/review-forum";
+export {
+  syncGameReviewForumPosts,
+  syncReviewForumPost,
+} from "@roll-and-call/game-notices/review-forum";
 export {
   evaluateBadges,
   evaluateGameBadges,
