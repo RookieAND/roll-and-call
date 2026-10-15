@@ -1,6 +1,7 @@
 import type { GamesFilter } from "@/shared/api";
-import { DesktopWideFrame } from "@/shared/ui";
+import { PageShell } from "@/shared/ui";
 
+import { GAMES_SHELL_CLASS } from "../lib/games-desktop-class";
 import { GameBoard } from "./game-board";
 import { GamesAppBar } from "./games-app-bar";
 
@@ -11,10 +12,8 @@ interface GamesViewProps {
 
 export function GamesView({ page, filter }: GamesViewProps) {
   return (
-    <>
-      <DesktopWideFrame />
-      <GamesAppBar />
+    <PageShell appBar={<GamesAppBar />} className={GAMES_SHELL_CLASS} bare>
       <GameBoard page={page} filter={filter} />
-    </>
+    </PageShell>
   );
 }

@@ -175,3 +175,9 @@ return <Button variant={buttonVariant} />;
   - `ErrorBoundary`는 `next/error`의 `catchError`를 쓰는데, 번들러 밖에서 named import가 안 돼 `shared/ui` 배럴에 넣으면 테스트가 깨진다. 그래서 세그먼트를 따로 둔다.
 - **React Query**: 조회는 보여 줄 데이터가 없을 때만 경계로 던지고(재조회 실패로 편집 중 상태를 날리지 않는다), 뮤테이션 실패는 `MutationCache`가 토스트로 알린다. 문구는 `meta.errorMessage`로 바꾼다. `mutationFn`에서 `ActionResult.error`는 `AppError`로 바꿔 던진다.
 - **경계 밖**(토스트 콜백, 파일 업로드 같은 비트랜지션 async)은 `try/catch`에서 `reportError`(토스트) 또는 인라인 상태로 처리한다.
+
+## 9. 데스크톱 화면 틀(1100px 이상)
+
+- 서버 화면의 데스크톱 틀은 `PageShell`(`shared/ui`)이 그린다. `appBar`는 영역 전폭 띠로 늘어나고 아래에 본문 열(기본 640px)과 `panel`(320px, sticky `top: 16px`)이 가운데 정렬로 놓인다. 패널이 없으면 자리도 만들지 않는다.
+- 본문 열 폭을 바꿀 때는 `className`으로 `--shell-w`를 덮는다(예: 알림 `[--shell-w:880px]`). 목록처럼 영역 전체를 직접 짜는 화면은 `bare`를 쓴다. 1100px 미만은 앱바 아래에 children이 그대로 이어진다.
+- 시트는 별도 래퍼 없이 CSS로 가운데 Dialog가 된다. 데스크톱에만 있는 패널은 모바일 본문과 따로 컴포넌트로 만들어 `panel`에 넣는다.
