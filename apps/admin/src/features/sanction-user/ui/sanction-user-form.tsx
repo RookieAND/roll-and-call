@@ -28,6 +28,8 @@ interface SanctionUserFormProps {
   ongoing: MemberOngoingRow[];
   staffChannel: boolean;
   backHref: string;
+  // 렌더 중에 시계를 읽으면 서버와 브라우저의 기한 안내가 분 단위로 어긋나 페이지가 받은 시각으로 계산한다.
+  now: Date;
 }
 
 export function SanctionUserForm({
@@ -36,6 +38,7 @@ export function SanctionUserForm({
   ongoing,
   staffChannel,
   backHref,
+  now,
 }: SanctionUserFormProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
@@ -43,7 +46,6 @@ export function SanctionUserForm({
   const [draft, setDraft] = useState<SanctionDraft>(EMPTY_SANCTION_DRAFT);
   const [confirming, setConfirming] = useState(false);
 
-  const now = new Date();
   const days =
     draft.period === "indefinite"
       ? null

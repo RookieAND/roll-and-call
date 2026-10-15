@@ -20,6 +20,11 @@ export default async function UserSanctionPage({
   if (!user) notFound();
   if (user.sanction) redirect(serverPath({ slug: server.slug, path: `/users/${id}` }));
   return (
-    <UserSanctionView user={user} ongoing={ongoing} staffChannel={Boolean(server.staffChannelId)} />
+    <UserSanctionView
+      user={user}
+      ongoing={ongoing}
+      staffChannel={Boolean(server.staffChannelId)}
+      now={new Date()}
+    />
   );
 }

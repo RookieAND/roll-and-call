@@ -173,7 +173,7 @@ export function ReviewForm({
         <Field.Root
           label="후기"
           htmlFor="reviewBody"
-          counter={`${richTextLength(body).toLocaleString()} / ${REVIEW_BODY_MAX_LENGTH.toLocaleString()}`}
+          counter={`${richTextLength(body).toLocaleString("ko-KR")} / ${REVIEW_BODY_MAX_LENGTH.toLocaleString("ko-KR")}`}
           error={bodyError ?? undefined}
         >
           <RichTextEditor

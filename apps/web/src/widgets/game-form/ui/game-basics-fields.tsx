@@ -75,7 +75,7 @@ export function GameBasicsFields({
       <Field.Root
         label="시놉시스"
         htmlFor="synopsis"
-        counter={`${synopsisLength.toLocaleString()} / ${GAME_SYNOPSIS_MAX.toLocaleString()}`}
+        counter={`${synopsisLength.toLocaleString("ko-KR")} / ${GAME_SYNOPSIS_MAX.toLocaleString("ko-KR")}`}
         error={errors.synopsis?.message}
       >
         <RichTextEditor

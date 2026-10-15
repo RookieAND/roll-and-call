@@ -6,9 +6,10 @@ interface UserSanctionViewProps {
   user: UserDetail;
   ongoing: MemberOngoingRow[];
   staffChannel: boolean;
+  now: Date;
 }
 
-export function UserSanctionView({ user, ongoing, staffChannel }: UserSanctionViewProps) {
+export function UserSanctionView({ user, ongoing, staffChannel, now }: UserSanctionViewProps) {
   const backHref = `/users/${user.id}`;
   return (
     <>
@@ -26,6 +27,7 @@ export function UserSanctionView({ user, ongoing, staffChannel }: UserSanctionVi
         ongoing={ongoing}
         staffChannel={staffChannel}
         backHref={backHref}
+        now={now}
       />
     </>
   );
