@@ -232,6 +232,7 @@ export function GameFormWizard({
           steps={panelSteps}
           current={step}
           editing={!!edit}
+          status={edit?.status}
           title={watch("title") || (edit ? "제목 미입력" : "새 구인")}
           ruleLabel={watch("rule") || "룰북 미선택"}
           timeLabel={formatPlayRange(watch("playMinutesMin"), watch("playMinutes")) ?? ""}

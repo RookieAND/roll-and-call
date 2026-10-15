@@ -1,5 +1,7 @@
 import { Badge, Callout, Card, Text, VStack } from "@roll-and-call/ui";
 
+import { GameStatusBadge, type GameStatus } from "@/entities/game";
+
 import { wizardStepState } from "../model/wizard-step-state";
 import { WizardStepRow } from "./wizard-step-row";
 
@@ -12,6 +14,8 @@ interface WizardSidePanelProps {
   steps: readonly WizardPanelStep[];
   current: number;
   editing: boolean;
+  // 수정 중인 구인의 상태. 새 구인은 없다.
+  status?: GameStatus;
   title: string;
   ruleLabel: string;
   timeLabel: string;
@@ -23,6 +27,7 @@ export function WizardSidePanel({
   steps,
   current,
   editing,
+  status,
   title,
   ruleLabel,
   timeLabel,
@@ -43,7 +48,11 @@ export function WizardSidePanel({
               {ruleLabel} · {timeLabel}
             </Text>
             <div className="flex flex-wrap gap-075 pt-050">
-              <Badge colorPalette="primary">{editing ? "모집 중" : "작성 중"}</Badge>
+              {status ? (
+                <GameStatusBadge status={status} />
+              ) : (
+                <Badge colorPalette="primary">작성 중</Badge>
+              )}
               <Badge colorPalette="gray">정원 {capacity}명</Badge>
             </div>
           </VStack>

@@ -14,6 +14,7 @@ const edit: GameEditContext = {
   confirmedCount: 0,
   drawn: false,
   minPlayers: 4,
+  status: "recruiting",
 };
 
 function errors({

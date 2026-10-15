@@ -1,5 +1,6 @@
 import type { UseFormReturn } from "react-hook-form";
 
+import type { GameStatus } from "@/entities/game";
 import type { MyRulebooks } from "@/entities/rulebook";
 import type { GameFormValues } from "@/features/write-game";
 
@@ -12,6 +13,8 @@ export type GameEditContext = {
   confirmedCount: number;
   drawn: boolean;
   minPlayers: number | null;
+  // 저장된 구인의 상태. 위저드 요약 뱃지가 쓴다.
+  status: GameStatus;
 };
 
 export interface GameFormLayoutProps {

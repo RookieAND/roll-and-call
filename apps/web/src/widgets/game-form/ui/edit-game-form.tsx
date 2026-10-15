@@ -2,7 +2,7 @@
 
 import { isNull } from "es-toolkit";
 
-import { countConfirmed } from "@/entities/game";
+import { countConfirmed, deriveGameStatus } from "@/entities/game";
 import type { MyRulebooks } from "@/entities/rulebook";
 import { updateGame } from "@/features/write-game";
 import type { GameDetailData } from "@/shared/server";
@@ -16,6 +16,7 @@ interface EditGameFormProps {
 }
 
 export function EditGameForm({ serverId, game, rulebooks }: EditGameFormProps) {
+  const confirmedCount = countConfirmed(game.participants);
   return (
     <GameForm
       serverId={serverId}
@@ -27,9 +28,18 @@ export function EditGameForm({ serverId, game, rulebooks }: EditGameFormProps) {
       edit={{
         gameId: game.id,
         applicantCount: game.participants.length,
-        confirmedCount: countConfirmed(game.participants),
+        confirmedCount,
         drawn: !isNull(game.drawnAt),
         minPlayers: game.minPlayers,
+        status: deriveGameStatus({
+          maxPlayers: game.maxPlayers,
+          endDate: game.endDate,
+          participantCount: confirmedCount,
+          waitlistEnabled: game.waitlistEnabled,
+          scheduleMode: game.scheduleMode,
+          confirmedAt: game.confirmedAt,
+          cancelledAt: game.cancelledAt,
+        }),
       }}
     />
   );
