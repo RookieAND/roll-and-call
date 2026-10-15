@@ -33,7 +33,11 @@ export function SheetHandle({ className }: SheetHandleProps) {
     <div
       aria-hidden
       data-slot="sheet-handle"
-      className={cn("-mt-100 pt-100 pb-200", draggable && "cursor-grab touch-none", className)}
+      className={cn(
+        "-mt-100 pt-100 pb-200 desktop:hidden",
+        draggable && "cursor-grab touch-none",
+        className,
+      )}
       onPointerDown={(event) => {
         if (!draggable) return;
         const popup = event.currentTarget.closest<HTMLElement>('[data-slot="sheet-popup"]');
