@@ -4,7 +4,9 @@ export function MyPageAccountSkeleton() {
   return (
     <>
       <MyPageBlockSkeleton titleWidth={40} height={52} />
-      <MyPageBlockSkeleton titleWidth={40} height={104} />
+      <div className="desktop:hidden">
+        <MyPageBlockSkeleton titleWidth={40} height={104} />
+      </div>
     </>
   );
 }

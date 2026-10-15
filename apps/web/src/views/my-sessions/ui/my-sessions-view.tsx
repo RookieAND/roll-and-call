@@ -4,7 +4,7 @@ import { SESSION_ROLE } from "@/entities/game";
 import { LoginRequired } from "@/features/auth";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import {
   countableCards,
   isOngoingCard,
@@ -30,14 +30,15 @@ export async function MySessionsView({ tab, status }: MySessionsViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
-      <>
-        <AppBar back="/me" title="내 세션" />
-        <Container size="sm">
-          <div className="py-300">
-            <LoginRequired />
-          </div>
-        </Container>
-      </>
+      <PageShell appBar={<AppBar back="/me" title="내 세션" />}>
+        <div className={DESKTOP_CARD_CLASS}>
+          <Container size="sm">
+            <div className="py-300">
+              <LoginRequired />
+            </div>
+          </Container>
+        </div>
+      </PageShell>
     );
   }
 
@@ -60,22 +61,23 @@ export async function MySessionsView({ tab, status }: MySessionsViewProps) {
   );
 
   return (
-    <>
-      <AppBar back="/me" title="내 세션" />
-      <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) border-b border-gray-200 bg-surface pb-150">
-        <SessionTabs label="역할" tabs={roleTabs} activeKey={activeTab} />
-        <SessionStatusChips activeTab={activeTab} activeChip={activeChip} counts={chipCounts} />
-      </div>
-
-      <Container size="sm">
-        <div className="py-150">
-          {items.length > 0 ? (
-            <SessionList items={items} />
-          ) : (
-            <SessionsEmpty activeTab={activeTab} activeChip={activeChip} />
-          )}
+    <PageShell appBar={<AppBar back="/me" title="내 세션" />}>
+      <div className={DESKTOP_CARD_CLASS}>
+        <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) border-b border-gray-200 bg-surface pb-150 desktop:static">
+          <SessionTabs label="역할" tabs={roleTabs} activeKey={activeTab} />
+          <SessionStatusChips activeTab={activeTab} activeChip={activeChip} counts={chipCounts} />
         </div>
-      </Container>
-    </>
+
+        <Container size="sm">
+          <div className="py-150">
+            {items.length > 0 ? (
+              <SessionList items={items} />
+            ) : (
+              <SessionsEmpty activeTab={activeTab} activeChip={activeChip} />
+            )}
+          </div>
+        </Container>
+      </div>
+    </PageShell>
   );
 }

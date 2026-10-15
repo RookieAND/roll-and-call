@@ -13,3 +13,7 @@ export function MyPageLoading() {
     </>
   );
 }
+
+export function MyPagePanelLoading() {
+  return <MyPageBlockSkeleton titleWidth={40} height={208} />;
+}

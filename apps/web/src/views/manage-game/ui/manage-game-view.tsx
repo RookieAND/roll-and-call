@@ -21,7 +21,7 @@ import {
   getResponseCounts,
   getCurrentServer,
 } from "@/shared/server";
-import { AppBar } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { reviewStatusOf } from "@/widgets/game-detail";
 
 import { cancelRowDetail } from "../model/cancel-row-detail";
@@ -53,16 +53,15 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
   if (!game) notFound();
   if (user?.id !== game.gmId) {
     return (
-      <>
-        <AppBar back={`/games/${id}`} title="운영 관리" />
-        <Container size="sm" className="py-300">
+      <PageShell appBar={<AppBar back={`/games/${id}`} title="운영 관리" />}>
+        <Container size="sm" className="py-300 desktop:px-0 desktop:py-0">
           <GmOnlyNotice
             gameId={id}
             signedIn={!!user}
             description="이 구인글의 운영 관리는 GM만 열 수 있습니다."
           />
         </Container>
-      </>
+      </PageShell>
     );
   }
   const responses = responseCounts.get(id) ?? 0;
@@ -83,61 +82,62 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
   const rows = manageRows({ game, reviewCount: reviews.length, gmReview });
 
   return (
-    <>
-      <AppBar back={`/games/${id}`} title="운영 관리" />
-      <Container size="sm" className="px-0">
-        <div className="px-200 pt-200">
-          <Card.Root padding="md" radius={600}>
-            <HStack align="start" gap="100">
-              <Text
-                typography="heading3"
-                weight="extrabold"
-                render={<h2 />}
-                className="min-w-0 flex-1 truncate"
-              >
-                {game.title}
-              </Text>
-              <Badge colorPalette={MANAGE_STAGE_TONE[stage]}>{MANAGE_STAGE_LABEL[stage]}</Badge>
-            </HStack>
-            <HStack align="stretch" className="mt-150 border-t border-gray-200 pt-150">
-              {isNil(cancelNote) ? (
-                stats.map((stat) => <ManageGameStat key={stat.label} stat={stat} />)
-              ) : (
-                <ManageCancelNote note={cancelNote} />
+    <PageShell appBar={<AppBar back={`/games/${id}`} title="운영 관리" />}>
+      <div className={DESKTOP_CARD_CLASS}>
+        <Container size="sm" className="px-0">
+          <div className="px-200 pt-200">
+            <Card.Root padding="md" radius={600}>
+              <HStack align="start" gap="100">
+                <Text
+                  typography="heading3"
+                  weight="extrabold"
+                  render={<h2 />}
+                  className="min-w-0 flex-1 truncate"
+                >
+                  {game.title}
+                </Text>
+                <Badge colorPalette={MANAGE_STAGE_TONE[stage]}>{MANAGE_STAGE_LABEL[stage]}</Badge>
+              </HStack>
+              <HStack align="stretch" className="mt-150 border-t border-gray-200 pt-150">
+                {isNil(cancelNote) ? (
+                  stats.map((stat) => <ManageGameStat key={stat.label} stat={stat} />)
+                ) : (
+                  <ManageCancelNote note={cancelNote} />
+                )}
+              </HStack>
+              {deadlineNote && <ManageDeadlineLine note={deadlineNote} />}
+              {canReopen && (
+                <div className="mt-150">
+                  <ReopenGameLink gameId={id} variant="solid" />
+                </div>
               )}
-            </HStack>
-            {deadlineNote && <ManageDeadlineLine note={deadlineNote} />}
-            {canReopen && (
-              <div className="mt-150">
-                <ReopenGameLink gameId={id} variant="solid" />
-              </div>
-            )}
-          </Card.Root>
-        </div>
+            </Card.Root>
+          </div>
 
-        <div className="p-200">
-          <Card.Root
-            radius={600}
-            padding="none"
-            className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
-          >
-            {rows.map((row) => (
-              <ManageRow key={row.key} row={row} gameId={id} plannedEndAt={plannedEndAt(game)} />
-            ))}
-            <CancelGameRow
-              gameId={id}
-              notifyCount={notifyCount}
-              detail={cancelRowDetail({ game, notifyCount })}
-              lockedReason={cancelRowLock({ game })}
-            />
-          </Card.Root>
-          {showNextSessionHint && (
-            <Text typography="body4" foreground="hint" className="mt-150 px-100">
-              다음 세션은 새 구인을 열고 참여자로 확정해 초대해 주세요
-            </Text>
-          )}
-        </div>
-      </Container>
-    </>
+          <div className="p-200">
+            <Card.Root
+              radius={600}
+              padding="none"
+              className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
+            >
+              {rows.map((row) => (
+                <ManageRow key={row.key} row={row} gameId={id} plannedEndAt={plannedEndAt(game)} />
+              ))}
+              <CancelGameRow
+                gameId={id}
+                notifyCount={notifyCount}
+                detail={cancelRowDetail({ game, notifyCount })}
+                lockedReason={cancelRowLock({ game })}
+              />
+            </Card.Root>
+            {showNextSessionHint && (
+              <Text typography="body4" foreground="hint" className="mt-150 px-100">
+                다음 세션은 새 구인을 열고 참여자로 확정해 초대해 주세요
+              </Text>
+            )}
+          </div>
+        </Container>
+      </div>
+    </PageShell>
   );
 }
