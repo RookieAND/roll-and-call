@@ -41,8 +41,8 @@ export function GameFormSkeleton({ title, edit = false }: GameFormSkeletonProps)
           aria-label={`${title} 불러오는 중`}
           className="h-[3px] rounded-none"
         />
-        <Container size="md" className="flex-1 desktop:max-w-184 desktop:px-12">
-          <VStack gap="250" className="py-300 desktop:py-10">
+        <Container size="md" className="flex-1 desktop:max-w-184 desktop:px-600">
+          <VStack gap="250" className="py-300 desktop:py-500">
             <div>
               <Skeleton width={96} height={26} />
               <Skeleton width={220} height={20} className="mt-050" />
@@ -87,7 +87,7 @@ export function GameFormSkeleton({ title, edit = false }: GameFormSkeletonProps)
       </div>
       <aside
         aria-hidden
-        className="hidden w-80 flex-none border-l border-gray-200 bg-gray-50 px-6 py-7 desktop:block"
+        className="hidden w-80 flex-none border-l border-gray-200 bg-gray-50 px-300 py-7 desktop:block"
       >
         <VStack gap="250" className="sticky top-7">
           <VStack gap="125">

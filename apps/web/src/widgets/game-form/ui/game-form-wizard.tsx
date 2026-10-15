@@ -158,8 +158,8 @@ export function GameFormWizard({
         />
         {trialWizard?.banner}
 
-        <Container size="md" className="flex-1 desktop:max-w-184 desktop:px-12">
-          <VStack gap="250" className="py-300 desktop:py-10">
+        <Container size="md" className="flex-1 desktop:max-w-184 desktop:px-600">
+          <VStack gap="250" className="py-300 desktop:py-500">
             {intro?.title && <WizardIntro title={intro.title} description={intro.description} />}
 
             {trialWizard?.hints[step] && (
@@ -227,7 +227,7 @@ export function GameFormWizard({
         />
       </div>
 
-      <aside className="hidden w-80 flex-none border-l border-gray-200 bg-gray-50 px-6 py-7 desktop:block">
+      <aside className="hidden w-80 flex-none border-l border-gray-200 bg-gray-50 px-300 py-7 desktop:block">
         <WizardSidePanel
           steps={panelSteps}
           current={step}
