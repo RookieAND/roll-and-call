@@ -1,5 +1,6 @@
 import "server-only";
 import { drizzle } from "drizzle-orm/postgres-js";
+import { isDate } from "es-toolkit";
 import postgres from "postgres";
 
 import {
@@ -68,3 +69,9 @@ export const db = drizzle(client, {
     auditLog,
   },
 });
+
+// drizzle이 timestamp 직렬화를 그대로 통과로 바꿔 둬서, sql`` 식과 비교하는 Date가 문자열로 바뀌지 않아 쿼리가 터진다.
+for (const type of [1184, 1114]) {
+  client.options.serializers[type] = (value: unknown) =>
+    isDate(value) ? value.toISOString() : value;
+}
