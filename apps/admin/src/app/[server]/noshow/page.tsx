@@ -29,7 +29,7 @@ export default async function NoShowsPage({ searchParams }: PageProps<"/[server]
   const filtered = Boolean(q || status);
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <NoShowsView
           rows={rows}
           record={recordDetail}
@@ -40,7 +40,7 @@ export default async function NoShowsPage({ searchParams }: PageProps<"/[server]
           filtered={filtered}
         />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <NoShowsMobileView
           rows={rows}
           detail={mobileDetail}

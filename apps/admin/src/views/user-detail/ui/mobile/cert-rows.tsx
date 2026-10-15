@@ -1,7 +1,7 @@
 import { Callout, VStack } from "@roll-and-call/ui";
 
 import type { UserDetail } from "@/entities/user/server";
-import { EMPTY_IMAGE, EmptyState, InfiniteRows, ListRow, Tag } from "@/shared/ui";
+import { EMPTY_IMAGE, EmptyState, InfiniteList, ListRow, Tag } from "@/shared/ui";
 
 import { CERT_ROW_LABEL, CERT_ROW_STATE, toCertRows } from "../../model/to-cert-rows";
 
@@ -31,9 +31,8 @@ export function CertRows({ user }: CertRowsProps) {
           description="인증을 신청하면 심사 결과가 이곳에 쌓입니다."
         />
       ) : (
-        <InfiniteRows
-          unit="개"
-          rows={rows.map((row) => {
+        <InfiniteList unit="개">
+          {rows.map((row) => {
             const state = CERT_ROW_LABEL[row.state];
             return (
               <ListRow
@@ -47,7 +46,7 @@ export function CertRows({ user }: CertRowsProps) {
               />
             );
           })}
-        />
+        </InfiniteList>
       )}
     </>
   );

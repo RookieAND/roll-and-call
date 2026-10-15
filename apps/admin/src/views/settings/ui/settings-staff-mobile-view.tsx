@@ -7,7 +7,6 @@ import { ListRow, MobileActionBar, ServerLink, StatusBadges, Tag } from "@/share
 import { formatLastActive } from "../model/format-last-active";
 import { PERMISSION_NOTES } from "../model/permission-notes";
 import { MobileSettingsFrame } from "./mobile/mobile-settings-frame";
-import { StaffOwnerRow } from "./mobile/staff-owner-row";
 
 interface SettingsStaffMobileViewProps {
   staff: StaffRow[];
@@ -38,7 +37,7 @@ export function SettingsStaffMobileView({ staff, viewerId }: SettingsStaffMobile
         const meta = row.lastActiveAt ? `최근 활동 ${formatLastActive(row.lastActiveAt)}` : null;
         if (row.role === "owner") {
           return (
-            <StaffOwnerRow
+            <ListRow
               key={row.userId}
               title={title}
               trailing={trailing}

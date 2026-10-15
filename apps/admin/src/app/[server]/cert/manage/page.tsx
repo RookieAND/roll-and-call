@@ -31,7 +31,7 @@ export default async function CertManagePage({ searchParams }: PageProps<"/[serv
   ]);
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <CertManageView
           list={list}
           filter={filter}
@@ -41,7 +41,7 @@ export default async function CertManagePage({ searchParams }: PageProps<"/[serv
           staffChannel={Boolean(server.staffChannelId)}
         />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <CertManageMobileView list={list} filter={filter} sort={sort} query={query} />
       </div>
     </>

@@ -58,6 +58,8 @@ export function UrlSearchInput({
       <Search size={14} aria-hidden className="pointer-events-none absolute left-125 text-hint" />
       <TextInput
         type="search"
+        enterKeyHint="search"
+        inputMode="search"
         value={value}
         onChange={(event) => change(event.target.value)}
         placeholder={placeholder}

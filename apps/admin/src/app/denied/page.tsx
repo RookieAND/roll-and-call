@@ -13,10 +13,10 @@ export default async function DeniedPage() {
   const userAppUrl = process.env.NEXT_PUBLIC_USER_APP_URL ?? "/";
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <DeniedView nickname={account.nickname} userAppUrl={userAppUrl} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <DeniedMobileView nickname={account.nickname} userAppUrl={userAppUrl} />
       </div>
     </>

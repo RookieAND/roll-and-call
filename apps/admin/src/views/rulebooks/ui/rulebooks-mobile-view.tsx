@@ -13,7 +13,7 @@ import {
   AdminHeader,
   EMPTY_IMAGE,
   EmptyState,
-  InfiniteRows,
+  InfiniteList,
   MobileActionBar,
   RouteTabs,
   ServerLink,
@@ -109,9 +109,8 @@ export function RulebooksMobileView({
               description="이름, 판본, 카테고리, 다른 이름에서 찾았습니다. 추가 요청 탭에 같은 이름이 있는지 확인하거나 룰북을 새로 추가해 주세요."
             />
           ) : (
-            <InfiniteRows
-              unit="개 카테고리"
-              rows={groups.map(({ category, rows }) => (
+            <InfiniteList unit="개 카테고리">
+              {groups.map(({ category, rows }) => (
                 <section key={category.name} aria-label={category.name}>
                   <CategoryHead category={category} />
                   {rows.map((row) => (
@@ -119,7 +118,7 @@ export function RulebooksMobileView({
                   ))}
                 </section>
               ))}
-            />
+            </InfiniteList>
           )}
           <MobileActionBar elevated={false}>
             <Button size="lg" render={<ServerLink path="/rules/new" />}>

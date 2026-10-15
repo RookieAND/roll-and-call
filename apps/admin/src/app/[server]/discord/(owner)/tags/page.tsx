@@ -29,10 +29,10 @@ export default async function DiscordTagsPage() {
   };
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <ForumTagsView {...props} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <ForumTagsMobileView {...props} />
       </div>
     </>

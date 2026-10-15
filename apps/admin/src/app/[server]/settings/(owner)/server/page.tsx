@@ -18,10 +18,10 @@ export default async function SettingsServerPage() {
   };
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <ServerSettingsForm {...props} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <ServerSettingsMobileForm {...props} />
       </div>
     </>

@@ -9,10 +9,10 @@ export default async function CertGracePage() {
   const server = await getCurrentServer();
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <CertGraceView enforcementDate={server.certEnforcementDate} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <CertGraceMobileView enforcementDate={server.certEnforcementDate} />
       </div>
     </>

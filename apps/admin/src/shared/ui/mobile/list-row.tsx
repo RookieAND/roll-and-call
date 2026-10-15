@@ -5,8 +5,8 @@ import type { ReactNode } from "react";
 import { ServerLink } from "../server-link";
 
 interface ListRowProps {
-  // 줄 전체가 상세로 가는 링크다. 서버 안 경로를 받는다.
-  path: string;
+  // 줄 전체가 상세로 가는 링크다. 서버 안 경로를 받는다. 없으면 눌러지지 않는 줄이다(소유자 줄처럼 들어갈 곳이 없을 때).
+  path?: string;
   title: ReactNode;
   // 예외일 때만 붙이는 뱃지(전자책, 재신청, 제재 중 등)
   badges?: ReactNode;
@@ -22,9 +22,10 @@ export function ListRow({ path, title, badges, trailing, description, meta, mute
   return (
     <VStack
       gap="050"
-      render={<ServerLink path={path} />}
+      render={path ? <ServerLink path={path} /> : <div />}
       className={cn(
-        "border-b border-(--rc-color-border-subtle) bg-surface px-200 py-175 active:bg-gray-50",
+        "border-b border-(--rc-color-border-subtle) bg-surface px-200 py-175",
+        path && "active:bg-gray-50",
         muted && "opacity-60",
       )}
     >

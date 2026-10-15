@@ -19,10 +19,10 @@ export default async function PostsPage({ searchParams }: PageProps<"/[server]/p
   const query = { q, status, rulebook, sort, dir, page, pageSize };
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <PostsView posts={posts} sort={tableSort} page={page} query={query} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <PostsMobileView posts={posts} sort={tableSort} query={query} />
       </div>
     </>

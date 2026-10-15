@@ -12,10 +12,10 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   // 로그아웃 토스트는 데스크톱 View가 한 번만 띄운다. 숨긴 쪽도 마운트되므로 모바일 View에는 두지 않는다.
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <LoginView failed={Boolean(error)} signedOut={Boolean(signedOut)} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <LoginMobileView failed={Boolean(error)} />
       </div>
     </>

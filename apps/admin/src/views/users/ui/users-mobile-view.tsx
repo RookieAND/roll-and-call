@@ -6,7 +6,7 @@ import {
   AdminHeader,
   EMPTY_IMAGE,
   EmptyState,
-  InfiniteRows,
+  InfiniteList,
   ListSortBar,
   UrlSearchInput,
 } from "@/shared/ui";
@@ -56,12 +56,11 @@ export function UsersMobileView({
           description="검색어나 필터를 바꿔 보세요."
         />
       ) : (
-        <InfiniteRows
-          unit="명"
-          rows={rows.map((row) => (
+        <InfiniteList unit="명">
+          {rows.map((row) => (
             <UserListRow key={row.id} row={row} />
           ))}
-        />
+        </InfiniteList>
       )}
     </>
   );

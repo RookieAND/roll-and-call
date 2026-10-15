@@ -5,7 +5,7 @@ import { AdminHeader, EMPTY_IMAGE, EmptyState, ServerLink } from "@/shared/ui";
 export default function ServerNotFound() {
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <AdminHeader title="" />
         <EmptyState
           size="full"
@@ -20,7 +20,7 @@ export default function ServerNotFound() {
           className="flex-1"
         />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <AdminHeader title="" />
         <EmptyState
           image={EMPTY_IMAGE.search}

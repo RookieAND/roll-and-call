@@ -9,10 +9,10 @@ export default async function SettingsLayout({ children }: LayoutProps<"/[server
   const props = { title: "설정", scope: "운영진 관리와 서버 설정", ownerNickname: owner?.nickname };
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <OwnerOnlyView {...props} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <OwnerOnlyMobileView {...props} />
       </div>
     </>

@@ -12,10 +12,10 @@ export default async function Forbidden() {
   const userAppUrl = process.env.NEXT_PUBLIC_USER_APP_URL ?? "/";
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <DeniedOtherServerView serverName={serverName} userAppUrl={userAppUrl} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <DeniedOtherServerMobileView serverName={serverName} userAppUrl={userAppUrl} />
       </div>
     </>

@@ -13,7 +13,7 @@ import {
   EMPTY_IMAGE,
   EmptyState,
   ListSortBar,
-  MobileListReveal,
+  InfiniteList,
   RouteTabs,
   ServerLink,
   TabCount,
@@ -95,7 +95,7 @@ export function CertQueueMobileView({ queue, filter }: CertQueueMobileViewProps)
           {queue.rows.length === 0 ? (
             <EmptyState image={EMPTY_IMAGE.search} title="조건에 맞는 신청이 없습니다" />
           ) : (
-            <MobileListReveal>
+            <InfiniteList>
               {queue.rows.map((row) => (
                 <CertQueueMobileRow
                   key={row.id}
@@ -103,7 +103,7 @@ export function CertQueueMobileView({ queue, filter }: CertQueueMobileViewProps)
                   path={withQuery(`/cert/${row.id}`, query, {})}
                 />
               ))}
-            </MobileListReveal>
+            </InfiniteList>
           )}
         </>
       )}

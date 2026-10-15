@@ -2,12 +2,11 @@ import { Button, HStack, Text } from "@roll-and-call/ui";
 import { RotateCcw } from "lucide-react";
 
 import { OTHER_REASON } from "@/shared/lib";
-import { ActionNetworkError } from "@/shared/ui";
+import { ActionNetworkError, MobileActionBar } from "@/shared/ui";
 
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
 import { footerNote, type FooterNote } from "../model/footer-note";
 import { NOTIFY_NOTE } from "../model/notify-note";
-import { MobileFooterBar } from "./mobile-footer-bar";
 import { MobileNextButton } from "./mobile-next-button";
 
 interface MobileDecisionFooterProps {
@@ -63,16 +62,16 @@ export function MobileDecisionFooter({
 
   if (state === CERT_REVIEW_STATE.withdrawn) {
     return (
-      <MobileFooterBar>
+      <MobileActionBar elevated={false}>
         <MobileNextButton href={nextHref} />
-      </MobileFooterBar>
+      </MobileActionBar>
     );
   }
   if (rejecting) {
     const flagged = Boolean(reason && flaggedLabels.length);
     const picked = reason === OTHER_REASON ? "기타 사유를 입력했고" : "사유 1개를 골랐고";
     return (
-      <MobileFooterBar>
+      <MobileActionBar elevated={false}>
         {networkError ? <ActionNetworkError /> : null}
         <Text
           typography="body4"
@@ -102,12 +101,12 @@ export function MobileDecisionFooter({
             {rejectionNetworkError ? "다시 시도" : "반려 확정"}
           </Button>
         </HStack>
-      </MobileFooterBar>
+      </MobileActionBar>
     );
   }
   if (state === CERT_REVIEW_STATE.processed) {
     return (
-      <MobileFooterBar>
+      <MobileActionBar elevated={false}>
         <Text typography="body4" foreground="hint" className="text-center">
           {NOTIFY_NOTE}
         </Text>
@@ -122,11 +121,11 @@ export function MobileDecisionFooter({
           </Button>
           <MobileNextButton href={nextHref} />
         </HStack>
-      </MobileFooterBar>
+      </MobileActionBar>
     );
   }
   return (
-    <MobileFooterBar>
+    <MobileActionBar elevated={false}>
       {networkError ? <ActionNetworkError /> : null}
       <HStack align="center" gap="100">
         {note ? (
@@ -169,6 +168,6 @@ export function MobileDecisionFooter({
           {approvalNetworkError ? "다시 시도" : "승인"}
         </Button>
       </HStack>
-    </MobileFooterBar>
+    </MobileActionBar>
   );
 }

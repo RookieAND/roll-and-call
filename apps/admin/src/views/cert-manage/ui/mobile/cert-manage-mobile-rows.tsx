@@ -1,5 +1,5 @@
 import type { CertManageList } from "@/entities/cert/server";
-import { EMPTY_IMAGE, EmptyState, MobileListReveal } from "@/shared/ui";
+import { EMPTY_IMAGE, EmptyState, InfiniteList } from "@/shared/ui";
 
 import { certRowActions } from "../../model/cert-row-actions";
 import { CertManageMobileRow } from "./cert-manage-mobile-row";
@@ -29,10 +29,10 @@ export function CertManageMobileRows({ list, query }: CertManageMobileRowsProps)
     );
   }
   return (
-    <MobileListReveal>
+    <InfiniteList>
       {list.rows.map((row) => (
         <CertManageMobileRow key={row.key} row={row} actions={certRowActions({ row, query })} />
       ))}
-    </MobileListReveal>
+    </InfiniteList>
   );
 }

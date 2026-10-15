@@ -1,10 +1,8 @@
 import { Text } from "@roll-and-call/ui";
 
 import type { UserRow } from "@/entities/user";
-import { MEMBERSHIP_LABEL, MEMBERSHIP_STATUS } from "@/shared/lib";
+import { formatDate, MEMBERSHIP_LABEL, MEMBERSHIP_STATUS, withoutYear } from "@/shared/lib";
 import { ListRow, Tag } from "@/shared/ui";
-
-import { withoutYear } from "../../model/without-year";
 
 const NO_SHOW_WARNING_COUNT = 2;
 
@@ -31,7 +29,9 @@ export function UserListRow({ row }: UserListRowProps) {
   }
   const frequentNoShow = row.recentNoShowCount >= NO_SHOW_WARNING_COUNT;
   const sanctionMeta =
-    row.sanctioned && row.sanctionUntil ? `${withoutYear(row.sanctionUntil)}까지 제재` : null;
+    row.sanctioned && row.sanctionUntil
+      ? `${withoutYear(formatDate(row.sanctionUntil))}까지 제재`
+      : null;
   return (
     <ListRow
       path={path}

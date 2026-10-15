@@ -26,10 +26,10 @@ export default async function DiscordLinkPage() {
   };
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <DiscordSettingsForm {...props} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <DiscordSettingsMobileForm {...props} />
       </div>
     </>

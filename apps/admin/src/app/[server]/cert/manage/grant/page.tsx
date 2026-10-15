@@ -15,10 +15,10 @@ export default async function CertGrantPage() {
   const staffChannel = Boolean(server.staffChannelId);
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <CertGrantView options={options} staffChannel={staffChannel} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <CertGrantMobileView options={options} staffChannel={staffChannel} />
       </div>
     </>

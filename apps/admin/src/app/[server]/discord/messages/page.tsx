@@ -48,10 +48,10 @@ export default async function DiscordMessagesPage({
   };
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <MessagesView {...props} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <MessagesMobileView {...props} />
       </div>
     </>

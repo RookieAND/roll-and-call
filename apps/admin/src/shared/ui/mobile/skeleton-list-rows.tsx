@@ -9,7 +9,11 @@ interface SkeletonListRowsProps {
 }
 
 // ListRow와 같은 틀에 서버 값 자리만 뼈대로 채운다.
-export function SkeletonListRows({ rows = 6, meta = false, sortBar = false }: SkeletonListRowsProps) {
+export function SkeletonListRows({
+  rows = 6,
+  meta = false,
+  sortBar = false,
+}: SkeletonListRowsProps) {
   return (
     <>
       {sortBar ? (

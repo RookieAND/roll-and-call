@@ -14,10 +14,10 @@ export default async function AnalyticsPage({ searchParams }: PageProps<"/[serve
   const gridMode = grid === GRID_MODE.open ? GRID_MODE.open : GRID_MODE.finished;
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <AnalyticsView analytics={analytics} gridMode={gridMode} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <AnalyticsMobileView analytics={analytics} gridMode={gridMode} />
       </div>
     </>

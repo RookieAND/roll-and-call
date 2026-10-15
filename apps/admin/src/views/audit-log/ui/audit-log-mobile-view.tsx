@@ -11,7 +11,7 @@ import {
   EmptyState,
   ListRow,
   ListSortBar,
-  RevealList,
+  InfiniteList,
   ServerLink,
   UrlSearchInput,
   UrlSelect,
@@ -95,7 +95,7 @@ export function AuditLogMobileView({ log, query, sort }: AuditLogMobileViewProps
       </VStack>
       <ListSortBar total={`${log.rows.length}건`} sort={sort} options={SORT_OPTIONS} />
       {rows.length ? (
-        <RevealList rows={rows} />
+        <InfiniteList>{rows}</InfiniteList>
       ) : (
         <EmptyState
           image={EMPTY_IMAGE.search}

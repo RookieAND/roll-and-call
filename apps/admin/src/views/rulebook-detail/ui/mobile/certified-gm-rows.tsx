@@ -4,7 +4,7 @@ import { Button, Text, VStack } from "@roll-and-call/ui";
 
 import type { CertifiedGm } from "@/entities/rulebook/server";
 import { formatDate, sortRows, withQuery, type TableSort } from "@/shared/lib";
-import { EMPTY_IMAGE, EmptyState, InfiniteRows, ListRow, ServerLink } from "@/shared/ui";
+import { EMPTY_IMAGE, EmptyState, InfiniteList, ListRow, ServerLink } from "@/shared/ui";
 
 import type { CertifiedGmSortColumn } from "../../model/certified-gm-sort";
 
@@ -63,9 +63,8 @@ export function CertifiedGmRows({
           }
         />
       ) : (
-        <InfiniteRows
-          unit="명"
-          rows={sorted.map((gm) => (
+        <InfiniteList unit="명">
+          {sorted.map((gm) => (
             <ListRow
               key={gm.userId}
               path={`/users/${gm.userId}`}
@@ -74,7 +73,7 @@ export function CertifiedGmRows({
               description={`${formatDate(gm.approvedAt)} 인증`}
             />
           ))}
-        />
+        </InfiniteList>
       )}
     </>
   );

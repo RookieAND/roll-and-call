@@ -19,7 +19,7 @@ export default async function SettingsStaffPage({
   const removing = staff.find((member) => member.userId === query.staff && member.role !== "owner");
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <SettingsStaffView
           staff={staff}
           viewerId={viewer.id}
@@ -27,7 +27,7 @@ export default async function SettingsStaffPage({
           removing={removing}
         />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <SettingsStaffMobileView staff={staff} viewerId={viewer.id} />
       </div>
     </>

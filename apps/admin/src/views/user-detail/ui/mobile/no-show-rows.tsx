@@ -1,10 +1,9 @@
 import { NO_SHOW_STATUS, NoShowStatusTag } from "@/entities/no-show";
 import type { UserDetail } from "@/entities/user/server";
-import { formatSessionTime, withQuery } from "@/shared/lib";
-import { EMPTY_IMAGE, EmptyState, InfiniteRows, ListRow } from "@/shared/ui";
+import { formatSessionTime, withoutYear, withQuery } from "@/shared/lib";
+import { EMPTY_IMAGE, EmptyState, InfiniteList, ListRow } from "@/shared/ui";
 
 import { noShowStatus } from "../../model/no-show-status";
-import { stripYear } from "../../model/strip-year";
 
 interface NoShowRowsProps {
   noShows: UserDetail["noShows"];
@@ -21,8 +20,8 @@ export function NoShowRows({ noShows }: NoShowRowsProps) {
     );
   }
   return (
-    <InfiniteRows
-      rows={noShows.map((noShow) => {
+    <InfiniteList>
+      {noShows.map((noShow) => {
         const status = noShowStatus(noShow);
         return (
           <ListRow
@@ -30,11 +29,11 @@ export function NoShowRows({ noShows }: NoShowRowsProps) {
             path={withQuery("/noshow", {}, { record: noShow.id })}
             title={noShow.sessionTitle}
             trailing={status === NO_SHOW_STATUS.valid ? null : <NoShowStatusTag status={status} />}
-            meta={`${stripYear(formatSessionTime(noShow.startsAt))} · ${noShow.recordedBy}`}
+            meta={`${withoutYear(formatSessionTime(noShow.startsAt))} · ${noShow.recordedBy}`}
             muted={noShow.cancelled}
           />
         );
       })}
-    />
+    </InfiniteList>
   );
 }

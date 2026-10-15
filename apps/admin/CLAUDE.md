@@ -11,7 +11,8 @@
 - 권한: 서버 액션 첫 줄에서 `requireStaff()`(운영진 이상) / `requireOwner()`(설정). 다른 서버면 `forbidden()`(403). 소유자는 디스코드 서버장, 플랫폼 관리자는 `ADMIN_OWNER_DISCORD_IDS`. `requireStaff()`가 돌려주는 staff를 그대로 `actor`로 넘기면 활동 기록에 플랫폼 관리자가 표시된다(`kind`). 시스템 조치는 `recordAudit({ actor: null })`.
 - 뱃지: `Tag`(`@/shared/ui`) — 글자가 `STATUS_TONE`에 있으면 그 색이 우선. 뱃지에 아이콘을 넣지 않는다(`essentialIcon`만 예외).
 - 확인 모달: `ResponsiveDialog`(`@/shared/ui`, 데스크톱 Dialog / 모바일 Sheet, 되돌릴 수 없으면 `Root alert`). `Header` 맨 앞에 `<ModalServerLabel />`(서버 아이콘 + 「{이름} 서버」, 모바일에선 숨김).
-- 모바일 조각: `@/shared/ui`의 `ListRow`·`ListSortBar`·`ListEndHint`·`StatusBadges`·`KeyValueList`. 모바일 헤더는 각 화면의 `AdminHeader`가 맡는다(trail이 있으면 뒤로, 없으면 햄버거).
+- 모바일 조각: `@/shared/ui`의 `ListRow`(path 없으면 눌리지 않는 줄)·`ListSortBar`·`InfiniteList`·`ListEndHint`·`StatusBadges`·`KeyValueList`·`SkeletonListRows`·`MobileActionBar`(폼·확정, `note`로 비활성 이유)·`MobileDetailBar`(상세: 조치 1개 + ⋯)·`MobileMoreSheet`·`MobileSection`·`UrlFilterChips`. 모바일 헤더는 각 화면의 `AdminHeader`가 맡는다(trail이 있으면 뒤로, 없으면 햄버거).
+- 데스크톱/모바일 View는 따로 만든다(`*-mobile-view.tsx`, JSX 공유 없음). page·loading은 데이터를 한 번 읽고 `<div data-view="desktop" className="contents max-lg:hidden">`·`<div data-view="mobile" className="contents lg:hidden">`로 둘 다 렌더한다. `data-view`가 있어야 `globals.css`의 본문 최대 폭(1280px)이 안쪽 칸에 걸린다.
 - 패널 제목은 heading3(`Panel`), 페이지 제목은 heading1(`AdminHeader`, 뒤로 가기는 「{label} ›」 글자 링크).
 - 룰북·카테고리·퀴즈 문항·전자책 판매처·추가 요청 모두 서버별(server_id). 새 서버는 DB 트리거가 trpia의 룰북·카테고리·판매처를 복사한다(퀴즈 제외). 룰북 관리는 `/[server]/rules`. 무료 배포 = 그 서버 룰북의 `cert_required = false`.
 

@@ -20,10 +20,10 @@ export async function ReviewListPage({ tab, searchParams }: ReviewListPageProps)
   const query = { q, photo, game, sort, dir, pageSize };
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <ReviewListView list={list} tab={tab} sort={tableSort} page={page} query={query} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <ReviewListMobileView list={list} tab={tab} sort={tableSort} query={query} />
       </div>
     </>

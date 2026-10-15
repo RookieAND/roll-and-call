@@ -1,11 +1,10 @@
 import { Badge, Button, HStack, Text } from "@roll-and-call/ui";
 import { RotateCcw } from "lucide-react";
 
-import { ActionNetworkError } from "@/shared/ui";
+import { ActionNetworkError, MobileActionBar } from "@/shared/ui";
 
 import type { FooterNote } from "../model/footer-note";
 import { NOTIFY_NOTE } from "../model/notify-note";
-import { MobileFooterBar } from "./mobile-footer-bar";
 
 interface MobileGroupDecisionFooterProps {
   label: string;
@@ -36,7 +35,7 @@ export function MobileGroupDecisionFooter({
   onSubmit,
 }: MobileGroupDecisionFooterProps) {
   return (
-    <MobileFooterBar>
+    <MobileActionBar elevated={false}>
       {networkError ? <ActionNetworkError /> : null}
       <HStack align="center" gap="075" wrap aria-live="polite">
         <Badge
@@ -79,6 +78,6 @@ export function MobileGroupDecisionFooter({
           {networkError ? "다시 시도" : label}
         </Button>
       </HStack>
-    </MobileFooterBar>
+    </MobileActionBar>
   );
 }

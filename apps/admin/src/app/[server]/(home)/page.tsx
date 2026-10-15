@@ -25,10 +25,10 @@ export default async function HomePage({ searchParams }: PageProps<"/[server]">)
   };
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <HomeView {...props} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <HomeMobileView today={new Date()} {...props} />
       </div>
     </>

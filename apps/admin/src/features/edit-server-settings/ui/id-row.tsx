@@ -5,16 +5,10 @@ import { isUndefined } from "es-toolkit";
 
 import { Tag } from "@/shared/ui";
 
+import { checkBadge } from "../model/check-badge";
 import type { SettingCheck } from "../model/setting-check";
 import { BOT_DISCONNECTED_MESSAGE } from "../model/setting-check-message";
 import { CheckStatus } from "./check-status";
-
-function checkBadge(check: IdRowProps["check"]) {
-  if (check === "checking") return { label: "확인 중", tone: "gray" } as const;
-  if (check?.status === "ok") return { label: "확인됨", tone: "success" } as const;
-  if (check?.status === "fail") return { label: "확인 실패", tone: "danger" } as const;
-  return undefined;
-}
 
 interface IdRowProps {
   id: string;

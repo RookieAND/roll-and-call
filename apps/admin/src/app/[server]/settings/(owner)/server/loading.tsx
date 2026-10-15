@@ -3,10 +3,10 @@ import { ServerSettingsLoading, SettingsMobileLoading } from "@/views/settings";
 export default function Loading() {
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <ServerSettingsLoading />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <SettingsMobileLoading active="/settings/server" />
       </div>
     </>

@@ -26,10 +26,10 @@ export default async function ServerSelectPage({ searchParams }: PageProps<"/">)
     const query = { q, filter: knownFilter, all };
     return (
       <>
-        <div className="contents max-lg:hidden">
+        <div data-view="desktop" className="contents max-lg:hidden">
           <PlatformServerSelectView nickname={account.nickname} servers={servers} query={query} />
         </div>
-        <div className="contents lg:hidden">
+        <div data-view="mobile" className="contents lg:hidden">
           <PlatformServerSelectMobileView servers={servers} query={query} />
         </div>
       </>
@@ -39,10 +39,10 @@ export default async function ServerSelectPage({ searchParams }: PageProps<"/">)
   if (servers.length === 1) redirect(`/${servers[0]!.slug}`);
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <ServerSelectView nickname={account.nickname} servers={servers} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <ServerSelectMobileView servers={servers} />
       </div>
     </>

@@ -3,10 +3,10 @@ import { AuditLogLoading, AuditLogMobileLoading } from "@/views/audit-log";
 export default function Loading() {
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <AuditLogLoading />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <AuditLogMobileLoading />
       </div>
     </>

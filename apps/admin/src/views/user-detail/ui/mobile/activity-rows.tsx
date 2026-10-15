@@ -1,8 +1,6 @@
 import type { UserDetail } from "@/entities/user/server";
-import { formatSessionTime } from "@/shared/lib";
-import { EMPTY_IMAGE, EmptyState, InfiniteRows, ListRow, Tag } from "@/shared/ui";
-
-import { stripYear } from "../../model/strip-year";
+import { formatSessionTime, withoutYear } from "@/shared/lib";
+import { EMPTY_IMAGE, EmptyState, InfiniteList, ListRow, Tag } from "@/shared/ui";
 
 interface ActivityRowsProps {
   activities: UserDetail["activities"];
@@ -19,8 +17,8 @@ export function ActivityRows({ activities }: ActivityRowsProps) {
     );
   }
   return (
-    <InfiniteRows
-      rows={activities.map((activity) => (
+    <InfiniteList>
+      {activities.map((activity) => (
         <ListRow
           key={activity.sessionId}
           path={`/posts/${activity.sessionId}`}
@@ -35,10 +33,10 @@ export function ActivityRows({ activities }: ActivityRowsProps) {
           }
           trailing={<Tag>{activity.hosted ? "GM" : "참여"}</Tag>}
           description={activity.rulebook}
-          meta={stripYear(formatSessionTime(activity.startsAt))}
+          meta={withoutYear(formatSessionTime(activity.startsAt))}
           muted={activity.noShow?.cancelled}
         />
       ))}
-    />
+    </InfiniteList>
   );
 }

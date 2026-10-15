@@ -18,10 +18,10 @@ export default async function CertReviewPage({
   if (!review) notFound();
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <CertReviewView review={review} viewerId={staff.id} filter={filter} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <CertReviewMobileView review={review} viewerId={staff.id} filter={filter} />
       </div>
     </>

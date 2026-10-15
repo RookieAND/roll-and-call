@@ -26,10 +26,10 @@ export default async function AuditEntryPage({
   if (!entry) {
     return (
       <>
-        <div className="contents lg:hidden">
+        <div data-view="mobile" className="contents lg:hidden">
           <AuditEntryGoneMobileView />
         </div>
-        <div className="contents max-lg:hidden">
+        <div data-view="desktop" className="contents max-lg:hidden">
           <AdminHeader title="활동 기록" />
           <EmptyState
             size="full"
@@ -49,10 +49,10 @@ export default async function AuditEntryPage({
   const listHref = withQuery("/log", stringParams(query), {});
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <AuditEntryView entry={entry} listHref={listHref} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <AuditEntryMobileView entry={entry} listHref={listHref} />
       </div>
     </>

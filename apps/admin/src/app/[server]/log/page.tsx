@@ -22,10 +22,10 @@ export default async function AuditLogPage({ searchParams }: PageProps<"/[server
   });
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <AuditLogView log={log} query={query} sort={sort} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <AuditLogMobileView log={log} query={query} sort={sort} />
       </div>
     </>

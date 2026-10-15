@@ -13,10 +13,10 @@ export default async function DiscordOwnerLayout({ children }: LayoutProps<"/[se
   };
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <OwnerOnlyView {...props} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <OwnerOnlyMobileView {...props} />
       </div>
     </>

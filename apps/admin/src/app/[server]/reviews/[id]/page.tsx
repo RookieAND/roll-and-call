@@ -36,10 +36,10 @@ export default async function ReviewDetailPage({
   // 조치 모달은 데스크톱 화면이 띄우고, 모바일에선 같은 모달이 시트로 열린다.
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <ReviewDetailView review={review} tab={listTab} listQuery={listQuery} viewerId={staff.id} />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <ReviewDetailMobileView review={review} tab={listTab} listQuery={listQuery} />
       </div>
     </>

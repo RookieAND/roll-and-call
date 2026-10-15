@@ -13,7 +13,7 @@ export default async function CertQueuePage({ searchParams }: PageProps<"/[serve
   const queue = await listCertQueue(filter);
   return (
     <>
-      <div className="contents max-lg:hidden">
+      <div data-view="desktop" className="contents max-lg:hidden">
         <CertQueueView
           queue={queue}
           page={isString(params.page) ? params.page : undefined}
@@ -21,7 +21,7 @@ export default async function CertQueuePage({ searchParams }: PageProps<"/[serve
           filter={filter}
         />
       </div>
-      <div className="contents lg:hidden">
+      <div data-view="mobile" className="contents lg:hidden">
         <CertQueueMobileView queue={queue} filter={filter} />
       </div>
     </>
