@@ -1,5 +1,14 @@
-import { AuditEntryLoading } from "@/views/audit-entry";
+import { AuditEntryLoading, AuditEntryMobileLoading } from "@/views/audit-entry";
 
 export default function Loading() {
-  return <AuditEntryLoading />;
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <AuditEntryLoading />
+      </div>
+      <div className="contents lg:hidden">
+        <AuditEntryMobileLoading />
+      </div>
+    </>
+  );
 }

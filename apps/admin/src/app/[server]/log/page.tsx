@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 import { listAuditLog } from "@/entities/audit/server";
 import { parseSort, stringParams } from "@/shared/lib";
-import { AUDIT_LOG_SORT, AuditLogView } from "@/views/audit-log";
+import { AUDIT_LOG_SORT, AuditLogMobileView, AuditLogView } from "@/views/audit-log";
 
 export const metadata: Metadata = { title: "활동 기록" };
 
@@ -20,5 +20,14 @@ export default async function AuditLogPage({ searchParams }: PageProps<"/[server
     targetGame: query.targetGame,
     dir: sort.dir,
   });
-  return <AuditLogView log={log} query={query} sort={sort} />;
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <AuditLogView log={log} query={query} sort={sort} />
+      </div>
+      <div className="contents lg:hidden">
+        <AuditLogMobileView log={log} query={query} sort={sort} />
+      </div>
+    </>
+  );
 }
