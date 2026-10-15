@@ -16,6 +16,7 @@ import {
   kickBlockReason,
   USER_ACTION,
   USER_DETAIL_TAB,
+  UserDetailMobileView,
   UserDetailView,
 } from "@/views/user-detail";
 
@@ -60,19 +61,36 @@ export default async function UserDetailPage({
       ? getKickImpact({ serverId: server.id, userId: user.id })
       : null,
   ]);
+  const detailTab = TABS.find((candidate) => candidate === tab) ?? USER_DETAIL_TAB.activity;
+  const viewer = { id: staff.id, owner: staff.role === "owner" };
   return (
-    <UserDetailView
-      user={user}
-      tab={TABS.find((candidate) => candidate === tab) ?? USER_DETAIL_TAB.activity}
-      role={ROLES.find((candidate) => candidate === role) ?? ACTIVITY_ROLE.all}
-      page={isString(page) ? page : undefined}
-      pageSize={isString(pageSize) ? pageSize : undefined}
-      guildId={server.discordGuildId}
-      viewer={{ id: staff.id, owner: staff.role === "owner" }}
-      kickBlock={kickBlock}
-      discordBanFailed={discordBanFailed}
-      discordUnbanFailed={discordUnbanFailed}
-      kickImpact={kickImpact}
-    />
+    <>
+      <div data-view="desktop" className="contents max-lg:hidden">
+        <UserDetailView
+          user={user}
+          tab={detailTab}
+          role={ROLES.find((candidate) => candidate === role) ?? ACTIVITY_ROLE.all}
+          page={isString(page) ? page : undefined}
+          pageSize={isString(pageSize) ? pageSize : undefined}
+          guildId={server.discordGuildId}
+          viewer={viewer}
+          kickBlock={kickBlock}
+          discordBanFailed={discordBanFailed}
+          discordUnbanFailed={discordUnbanFailed}
+          kickImpact={kickImpact}
+        />
+      </div>
+      <div data-view="mobile" className="contents lg:hidden">
+        <UserDetailMobileView
+          user={user}
+          tab={detailTab}
+          guildId={server.discordGuildId}
+          viewer={viewer}
+          kickBlock={kickBlock}
+          discordBanFailed={discordBanFailed}
+          discordUnbanFailed={discordUnbanFailed}
+        />
+      </div>
+    </>
   );
 }

@@ -4,7 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { getMemberOngoing, getUserDetail } from "@/entities/user/server";
 import { serverPath } from "@/shared/lib";
 import { getCurrentServer, requireStaff } from "@/shared/server";
-import { UserSanctionView } from "@/views/user-sanction";
+import { UserSanctionMobileView, UserSanctionView } from "@/views/user-sanction";
 
 export async function generateMetadata({
   params,
@@ -20,12 +20,21 @@ export default async function UserSanctionPage({
   const [user, ongoing] = await Promise.all([getUserDetail(id), getMemberOngoing(id)]);
   if (!user) notFound();
   if (user.sanction) redirect(serverPath({ slug: server.slug, path: `/users/${id}` }));
+  const staffChannel = Boolean(server.staffChannelId);
+  const now = new Date();
   return (
-    <UserSanctionView
-      user={user}
-      ongoing={ongoing}
-      staffChannel={Boolean(server.staffChannelId)}
-      now={new Date()}
-    />
+    <>
+      <div data-view="desktop" className="contents max-lg:hidden">
+        <UserSanctionView user={user} ongoing={ongoing} staffChannel={staffChannel} now={now} />
+      </div>
+      <div data-view="mobile" className="contents lg:hidden">
+        <UserSanctionMobileView
+          user={user}
+          ongoing={ongoing}
+          staffChannel={staffChannel}
+          now={now}
+        />
+      </div>
+    </>
   );
 }
