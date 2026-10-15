@@ -9,9 +9,9 @@
       "cache": false,
       "persistent": true
     },
-    "typecheck": {
-      "dependsOn": ["^build"]
-    },
+    "typecheck": {},
+    "lint:fsd": { "cache": false },
+    "lint:tokens": { "cache": false },
     "test": {}
   }
 }

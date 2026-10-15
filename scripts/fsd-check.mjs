@@ -1,10 +1,8 @@
-// FSD 경계 검사. 규칙은 docs/frontend-conventions.md §1.
+// FSD 경계 검사. 규칙은 apps/web/docs/frontend-conventions.md §1. 인자는 검사할 src 폴더.
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 
-const SRC = process.argv[2]
-  ? resolve(process.argv[2])
-  : resolve(new URL(".", import.meta.url).pathname, "../src");
+const SRC = resolve(process.argv[2] ?? "src");
 const LAYERS = ["shared", "entities", "features", "widgets", "views", "app"];
 
 function* walk(dir) {
@@ -26,7 +24,7 @@ for (const file of walk(SRC)) {
   const rel = relative(SRC, file);
   const from = unit(rel);
   const src = readFileSync(file, "utf8");
-  for (const m of src.matchAll(/from\s+"([^"]+)"/g)) {
+  for (const m of src.matchAll(/(?:\bfrom\s+|\bimport\s*\(?\s*)"([^"]+)"/g)) {
     const spec = m[1];
     if (spec.startsWith("@/")) {
       const parts = spec.slice(2).split("/");

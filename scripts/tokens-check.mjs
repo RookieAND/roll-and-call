@@ -4,11 +4,9 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 
 const ROOTS = [
-  process.argv[2]
-    ? resolve(process.argv[2])
-    : resolve(new URL(".", import.meta.url).pathname, "../src"),
-  resolve(new URL(".", import.meta.url).pathname, "../../../packages/ui/src"),
-  resolve(new URL(".", import.meta.url).pathname, "../../../packages/tiptap/src"),
+  resolve(process.argv[2] ?? "src"),
+  resolve(new URL(".", import.meta.url).pathname, "../packages/ui/src"),
+  resolve(new URL(".", import.meta.url).pathname, "../packages/tiptap/src"),
 ];
 const ALLOW = [/styles\.css$/];
 const SCALE_ALLOW = [/packages\/ui\/src\/text\.tsx$/, /packages\/ui\/src\/tokens\.ts$/];

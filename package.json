@@ -11,6 +11,8 @@
     "build": "turbo build",
     "start": "pnpm -F @roll-and-call/web start",
     "typecheck": "turbo typecheck",
+    "lint:fsd": "turbo lint:fsd",
+    "lint:tokens": "turbo lint:tokens",
     "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",

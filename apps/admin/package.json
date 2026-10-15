@@ -8,8 +8,8 @@
     "build": "next build",
     "start": "next start -p 3001",
     "typecheck": "tsc --noEmit",
-    "lint:fsd": "node ../web/scripts/fsd-check.mjs src",
-    "lint:tokens": "node ../web/scripts/tokens-check.mjs src",
+    "lint:fsd": "node ../../scripts/fsd-check.mjs src",
+    "lint:tokens": "node ../../scripts/tokens-check.mjs src",
     "test": "vitest run"
   },
   "dependencies": {
