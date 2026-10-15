@@ -1,5 +1,14 @@
-import { CertGraceLoading } from "@/views/cert-grace";
+import { CertGraceLoading, CertGraceMobileLoading } from "@/views/cert-grace";
 
 export default function Loading() {
-  return <CertGraceLoading />;
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <CertGraceLoading />
+      </div>
+      <div className="contents lg:hidden">
+        <CertGraceMobileLoading />
+      </div>
+    </>
+  );
 }

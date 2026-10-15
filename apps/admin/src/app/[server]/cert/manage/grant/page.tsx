@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { getGrantOptions } from "@/entities/cert/server";
 import { getCurrentServer, requireStaff } from "@/shared/server";
-import { CertGrantView } from "@/views/cert-grant";
+import { CertGrantMobileView, CertGrantView } from "@/views/cert-grant";
 
 export const metadata: Metadata = { title: "인증 부여" };
 
@@ -12,5 +12,15 @@ export default async function CertGrantPage() {
     getCurrentServer(),
     requireStaff(),
   ]);
-  return <CertGrantView options={options} staffChannel={Boolean(server.staffChannelId)} />;
+  const staffChannel = Boolean(server.staffChannelId);
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <CertGrantView options={options} staffChannel={staffChannel} />
+      </div>
+      <div className="contents lg:hidden">
+        <CertGrantMobileView options={options} staffChannel={staffChannel} />
+      </div>
+    </>
+  );
 }

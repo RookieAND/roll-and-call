@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 import { parseCertQueueFilter } from "@/entities/cert";
 import { listCertQueue } from "@/entities/cert/server";
-import { CertQueueView } from "@/views/cert-queue";
+import { CertQueueMobileView, CertQueueView } from "@/views/cert-queue";
 
 export const metadata: Metadata = { title: "룰북 인증" };
 
@@ -12,11 +12,18 @@ export default async function CertQueuePage({ searchParams }: PageProps<"/[serve
   const filter = parseCertQueueFilter(params);
   const queue = await listCertQueue(filter);
   return (
-    <CertQueueView
-      queue={queue}
-      page={isString(params.page) ? params.page : undefined}
-      pageSizeParam={isString(params.pageSize) ? params.pageSize : undefined}
-      filter={filter}
-    />
+    <>
+      <div className="contents max-lg:hidden">
+        <CertQueueView
+          queue={queue}
+          page={isString(params.page) ? params.page : undefined}
+          pageSizeParam={isString(params.pageSize) ? params.pageSize : undefined}
+          filter={filter}
+        />
+      </div>
+      <div className="contents lg:hidden">
+        <CertQueueMobileView queue={queue} filter={filter} />
+      </div>
+    </>
   );
 }

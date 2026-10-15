@@ -8,7 +8,7 @@ import {
 import { getRevokeTarget, listCertManage } from "@/entities/cert/server";
 import { parseSort, stringParams } from "@/shared/lib";
 import { getCurrentServer } from "@/shared/server";
-import { CERT_ROW_ACTION, CertManageView } from "@/views/cert-manage";
+import { CERT_ROW_ACTION, CertManageMobileView, CertManageView } from "@/views/cert-manage";
 
 export const metadata: Metadata = { title: "인증 관리" };
 
@@ -30,13 +30,20 @@ export default async function CertManagePage({ searchParams }: PageProps<"/[serv
     revoking ? getRevokeTarget(revoking) : null,
   ]);
   return (
-    <CertManageView
-      list={list}
-      filter={filter}
-      sort={sort}
-      query={query}
-      revokeTarget={revokeTarget}
-      staffChannel={Boolean(server.staffChannelId)}
-    />
+    <>
+      <div className="contents max-lg:hidden">
+        <CertManageView
+          list={list}
+          filter={filter}
+          sort={sort}
+          query={query}
+          revokeTarget={revokeTarget}
+          staffChannel={Boolean(server.staffChannelId)}
+        />
+      </div>
+      <div className="contents lg:hidden">
+        <CertManageMobileView list={list} filter={filter} sort={sort} query={query} />
+      </div>
+    </>
   );
 }

@@ -1,47 +1,32 @@
 "use client";
 
-import { Button, Calendar, HStack, Popover, Text, VStack, toast } from "@roll-and-call/ui";
+import { Button, Calendar, HStack, Popover, Text, VStack } from "@roll-and-call/ui";
 import { CalendarDays } from "lucide-react";
-import { useState } from "react";
 
-import { formatDate, useActionSubmit } from "@/shared/lib";
 import { FactRows, Tag } from "@/shared/ui";
 
-import { changeEnforcementDate } from "../api/change-enforcement-date";
 import { formatEnforcementDate } from "../model/format-enforcement-date";
 import { toSeoulDateKey } from "../model/to-seoul-date-key";
 import { DateShiftPreview } from "./date-shift-preview";
 import { EnforcementScope } from "./enforcement-scope";
+import { useEnforcementDate } from "./use-enforcement-date";
 
 interface EnforcementDateFormProps {
   enforcementDate: Date | null;
 }
 
 export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProps) {
-  const { pending, submit } = useActionSubmit(changeEnforcementDate);
-  const [calendarOpen, setCalendarOpen] = useState(false);
-  const [picked, setPicked] = useState<Date | null>(null);
-
-  const current = enforcementDate ? formatEnforcementDate(enforcementDate) : null;
-  const dateKey = picked ? toSeoulDateKey(picked) : undefined;
-  const changeLabel = enforcementDate ? "적용일 변경" : "적용일 설정";
-  const isPostpone = Boolean(enforcementDate && picked && picked > enforcementDate);
-
-  const pickDate = (key: string) => {
-    setCalendarOpen(false);
-    setPicked(new Date(`${key}T00:00:00+09:00`));
-  };
-
-  const confirm = async () => {
-    if (!picked) return;
-    const result = await submit(picked, isPostpone ? "postpone" : "set");
-    if (!result) {
-      toast.danger("적용일을 바꾸지 못했습니다.", { description: "다시 시도해 주세요." });
-      return;
-    }
-    toast.success(`적용일을 ${formatDate(picked)}로 ${isPostpone ? "연기" : "지정"}했습니다`);
-    setPicked(null);
-  };
+  const {
+    pending,
+    calendarOpen,
+    setCalendarOpen,
+    picked,
+    current,
+    dateKey,
+    changeLabel,
+    pickDate,
+    confirm,
+  } = useEnforcementDate(enforcementDate);
 
   return (
     <FactRows

@@ -1,5 +1,14 @@
-import { CertManageLoading } from "@/views/cert-manage";
+import { CertManageLoading, CertManageMobileLoading } from "@/views/cert-manage";
 
 export default function Loading() {
-  return <CertManageLoading />;
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <CertManageLoading />
+      </div>
+      <div className="contents lg:hidden">
+        <CertManageMobileLoading />
+      </div>
+    </>
+  );
 }
