@@ -1,5 +1,14 @@
-import { NoShowsLoading } from "@/views/no-shows";
+import { NoShowsLoading, NoShowsMobileLoading } from "@/views/no-shows";
 
 export default function Loading() {
-  return <NoShowsLoading />;
+  return (
+    <>
+      <div className="contents max-lg:hidden">
+        <NoShowsLoading />
+      </div>
+      <div className="contents lg:hidden">
+        <NoShowsMobileLoading />
+      </div>
+    </>
+  );
 }

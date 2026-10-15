@@ -5,7 +5,7 @@ import { REVIEW_DEFAULT_SORT, REVIEW_LIST_TAB, REVIEW_SORT_COLUMNS } from "@/ent
 import { getReviewDetail, getReviewTitle } from "@/entities/review/server";
 import { parseSort, stringParams } from "@/shared/lib";
 import { requireStaff } from "@/shared/server";
-import { ReviewDetailView } from "@/views/review-detail";
+import { ReviewDetailMobileView, ReviewDetailView } from "@/views/review-detail";
 
 export async function generateMetadata({
   params,
@@ -32,12 +32,16 @@ export default async function ReviewDetailPage({
     requireStaff(),
   ]);
   if (!review) notFound();
+  const listQuery = { q, photo, game, sort, dir, page, pageSize };
+  // 조치 모달은 데스크톱 화면이 띄우고, 모바일에선 같은 모달이 시트로 열린다.
   return (
-    <ReviewDetailView
-      review={review}
-      tab={listTab}
-      listQuery={{ q, photo, game, sort, dir, page, pageSize }}
-      viewerId={staff.id}
-    />
+    <>
+      <div className="contents max-lg:hidden">
+        <ReviewDetailView review={review} tab={listTab} listQuery={listQuery} viewerId={staff.id} />
+      </div>
+      <div className="contents lg:hidden">
+        <ReviewDetailMobileView review={review} tab={listTab} listQuery={listQuery} />
+      </div>
+    </>
   );
 }

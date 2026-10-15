@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { POST_DEFAULT_SORT, POST_SORT_COLUMNS } from "@/entities/post";
 import { listPosts } from "@/entities/post/server";
 import { parseSort, stringParams } from "@/shared/lib";
-import { PostsView } from "@/views/posts";
+import { PostsMobileView, PostsView } from "@/views/posts";
 
 export const metadata: Metadata = { title: "구인" };
 
@@ -16,12 +16,15 @@ export default async function PostsPage({ searchParams }: PageProps<"/[server]/p
     fallback: POST_DEFAULT_SORT,
   });
   const posts = await listPosts({ query: q, status, rulebook, sort: tableSort });
+  const query = { q, status, rulebook, sort, dir, page, pageSize };
   return (
-    <PostsView
-      posts={posts}
-      sort={tableSort}
-      page={page}
-      query={{ q, status, rulebook, sort, dir, page, pageSize }}
-    />
+    <>
+      <div className="contents max-lg:hidden">
+        <PostsView posts={posts} sort={tableSort} page={page} query={query} />
+      </div>
+      <div className="contents lg:hidden">
+        <PostsMobileView posts={posts} sort={tableSort} query={query} />
+      </div>
+    </>
   );
 }

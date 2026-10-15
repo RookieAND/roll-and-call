@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { POST_DEFAULT_SORT, POST_SORT_COLUMNS } from "@/entities/post";
 import { getPostTitle } from "@/entities/post/server";
 import { parsePageSize, parseSort, stringParams } from "@/shared/lib";
-import { PostDetailLoading } from "@/views/post-detail";
+import { PostDetailLoading, PostDetailMobileLoading } from "@/views/post-detail";
 
 import { PostDetailContent } from "./post-detail-content";
 
@@ -28,7 +28,19 @@ export default async function PostDetailPage({
     fallback: POST_DEFAULT_SORT,
   });
   return (
-    <Suspense key={tab} fallback={<PostDetailLoading />}>
+    <Suspense
+      key={tab}
+      fallback={
+        <>
+          <div className="contents max-lg:hidden">
+            <PostDetailLoading />
+          </div>
+          <div className="contents lg:hidden">
+            <PostDetailMobileLoading />
+          </div>
+        </>
+      }
+    >
       <PostDetailContent
         id={id}
         tab={tab}
