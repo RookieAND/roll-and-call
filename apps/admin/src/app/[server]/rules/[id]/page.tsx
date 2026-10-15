@@ -9,6 +9,7 @@ import {
   CERTIFIED_GM_SORT_COLUMNS,
   CERTIFIED_GM_SORT_FALLBACK,
   RULEBOOK_DETAIL_TAB,
+  RulebookDetailMobileView,
   RulebookDetailView,
   type RulebookDetailTab,
 } from "@/views/rulebook-detail";
@@ -39,13 +40,25 @@ export default async function RulebookDetailPage({
     fallback: CERTIFIED_GM_SORT_FALLBACK,
   });
   return (
-    <RulebookDetailView
-      rulebook={rulebook}
-      tab={detailTab}
-      gmSort={gmSort}
-      viewerId={staff.id}
-      page={isString(page) ? page : undefined}
-      pageSize={isString(pageSize) ? pageSize : undefined}
-    />
+    <>
+      <div data-view="desktop" className="contents max-lg:hidden">
+        <RulebookDetailView
+          rulebook={rulebook}
+          tab={detailTab}
+          gmSort={gmSort}
+          viewerId={staff.id}
+          page={isString(page) ? page : undefined}
+          pageSize={isString(pageSize) ? pageSize : undefined}
+        />
+      </div>
+      <div data-view="mobile" className="contents lg:hidden">
+        <RulebookDetailMobileView
+          rulebook={rulebook}
+          tab={detailTab}
+          gmSort={gmSort}
+          viewerId={staff.id}
+        />
+      </div>
+    </>
   );
 }

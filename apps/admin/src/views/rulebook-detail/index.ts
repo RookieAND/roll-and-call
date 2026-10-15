@@ -2,3 +2,5 @@ export { RULEBOOK_DETAIL_TAB, type RulebookDetailTab } from "./model/rulebook-de
 export { RulebookDetailView } from "./ui/rulebook-detail-view";
 export { RulebookDetailLoading } from "./ui/rulebook-detail-loading";
 export { CERTIFIED_GM_SORT_COLUMNS, CERTIFIED_GM_SORT_FALLBACK } from "./model/certified-gm-sort";
+export { RulebookDetailMobileView } from "./ui/rulebook-detail-mobile-view";
+export { RulebookDetailMobileLoading } from "./ui/rulebook-detail-mobile-loading";

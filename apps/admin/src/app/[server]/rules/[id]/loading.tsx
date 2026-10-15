@@ -1,5 +1,14 @@
-import { RulebookDetailLoading } from "@/views/rulebook-detail";
+import { RulebookDetailLoading, RulebookDetailMobileLoading } from "@/views/rulebook-detail";
 
 export default function Loading() {
-  return <RulebookDetailLoading />;
+  return (
+    <>
+      <div data-view="desktop" className="contents max-lg:hidden">
+        <RulebookDetailLoading />
+      </div>
+      <div data-view="mobile" className="contents lg:hidden">
+        <RulebookDetailMobileLoading />
+      </div>
+    </>
+  );
 }
