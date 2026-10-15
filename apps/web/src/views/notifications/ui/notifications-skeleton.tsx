@@ -26,7 +26,7 @@ export function NotificationsSkeleton() {
           <Tabs.Indicator />
         </Tabs.List>
         <Tabs.Panel value={NOTIFICATIONS_TAB.inbox} className="pt-0">
-          <Container size="sm" className="px-0">
+          <Container size="sm" className="px-0 desktop:max-w-none">
             <InboxSkeleton />
           </Container>
         </Tabs.Panel>

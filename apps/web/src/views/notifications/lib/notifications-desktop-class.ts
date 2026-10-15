@@ -1,7 +1,7 @@
-// [할 일] 탭에 카드가 둘 이상이면(TodoPanel이 data-todo-layout="multi"를 단다) 본문이 880px로 넓어진다. 그 밖은 640px.
-// has는 보이는 탭 패널 안의 표지만 본다(숨겨진 패널은 keepMounted라 DOM에 남는다). 클래스는 Tailwind가 읽도록 문자열 그대로 적는다.
-export const NOTIFICATIONS_SHELL_CLASS =
-  "desktop:has-[[role=tabpanel]:not([hidden])_[data-todo-layout=multi]]:[--shell-w:880px]";
-
+// 1100px 이상에서 탭과 목록을 담는 흰 카드. 폭은 구인 목록과 같은 넓은 틀(shared/ui WIDE_*)이 정한다.
 export const NOTIFICATIONS_CARD_CLASS =
   "desktop:overflow-clip desktop:rounded-700 desktop:border desktop:border-gray-200 desktop:bg-surface";
+
+// [할 일] 카드 격자: 카드 하나의 최소 폭 22.5rem, 남는 폭만큼 열이 늘어난다(1100px 2열, 1440px 3열). 카드가 하나면 첫 칸만 쓴다.
+export const TODO_GRID_CLASS =
+  "desktop:grid desktop:grid-cols-[repeat(auto-fill,minmax(22.5rem,1fr))]";

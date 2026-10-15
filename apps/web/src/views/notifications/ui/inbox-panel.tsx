@@ -49,7 +49,7 @@ export function InboxPanel({ inbox, read, onRead }: InboxPanelProps) {
     );
   }
   return (
-    <Container size="sm" className="px-0">
+    <Container size="sm" className="px-0 desktop:max-w-none">
       <InboxList inbox={page} read={read} onRead={onRead} />
     </Container>
   );
