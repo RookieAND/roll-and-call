@@ -1,4 +1,4 @@
-// 어드민이 읽고 쓰는 서버 데이터의 유일한 입구. 쿼리는 @roll-and-call/database/admin에 있고, 여기서는 스냅숏 가공만 한다.
+// 어드민이 읽고 쓰는 서버 데이터의 유일한 입구. 쿼리는 @roll-and-call/database/<도메인>에 있고, 여기서는 스냅숏 가공만 한다.
 export {
   addCertSeller,
   addRulebook,
@@ -8,7 +8,6 @@ export {
   rejectRulebookRequest,
   removeCertSeller,
   saveQuizQuestion,
-  setCategoryMiniRule,
   unhideRulebook,
   updateRulebook,
   type QuizQuestionInput,
