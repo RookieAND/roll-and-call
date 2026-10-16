@@ -14,7 +14,7 @@ const QUEUES = [
 export function DrawResultSkeleton() {
   return (
     <DrawResultFrame appBar={<DrawResultAppBar />}>
-      <Container size="sm" className="py-200">
+      <Container size="sm" className="py-200 desktop:max-w-none">
         <VStack gap="250" aria-busy>
           <VStack gap="150">
             <HStack align="center" gap="100">

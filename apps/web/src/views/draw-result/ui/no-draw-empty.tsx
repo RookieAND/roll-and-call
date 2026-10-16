@@ -8,7 +8,7 @@ interface NoDrawEmptyProps {
 
 export function NoDrawEmpty({ gameId }: NoDrawEmptyProps) {
   return (
-    <Container size="sm" className="py-200">
+    <Container size="sm" className="py-200 desktop:max-w-none">
       <FloatingBar.Root elevated={false}>
         <VStack align="center" gap="100" className="px-150 pt-400 pb-300 text-center">
           <UiImage name="empty-party" width={140} height={140} />

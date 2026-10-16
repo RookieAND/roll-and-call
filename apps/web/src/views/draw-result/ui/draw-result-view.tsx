@@ -89,7 +89,7 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
 
   return (
     <DrawResultFrame appBar={resultAppBar}>
-      <Container size="sm" className="py-200">
+      <Container size="sm" className="py-200 desktop:max-w-none">
         {content}
       </Container>
     </DrawResultFrame>
