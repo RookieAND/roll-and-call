@@ -69,7 +69,7 @@ export async function UserProfileView({ id }: UserProfileViewProps) {
 
   return (
     <PageShell
-      appBar={<AppBar back="/games" title="프로필" />}
+      appBar={<AppBar back="/games" title={`${profile.username}님의 프로필`} />}
       panel={
         <div className="overflow-clip rounded-700 border border-gray-200 bg-surface">
           <ProfileSide profile={profile} signedIn={!!viewer} memo={memo} />

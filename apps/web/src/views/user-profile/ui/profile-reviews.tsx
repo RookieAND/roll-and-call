@@ -16,7 +16,7 @@ interface ProfileReviewsProps {
 export async function ProfileReviews({ userId, received, written }: ProfileReviewsProps) {
   const server = await getCurrentServer();
   return (
-    <VStack render={<section />} className="px-200 pt-200">
+    <VStack render={<section />} className="px-200 pt-200 desktop:pb-200">
       <ProfileBlockLabel label="후기" />
       <Card.Root padding="none" radius={500} className="overflow-hidden">
         {!isNull(received) && (

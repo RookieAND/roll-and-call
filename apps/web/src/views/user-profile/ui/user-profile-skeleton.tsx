@@ -62,7 +62,7 @@ export function UserProfileSkeleton() {
             </div>
           </div>
 
-          <VStack render={<section />} className="px-200 pt-200">
+          <VStack render={<section />} className="px-200 pt-200 desktop:pb-200">
             <Skeleton width={32} height={17} className="mb-100" />
             <Card.Root padding="none" radius={500} className="overflow-hidden">
               {range(2).map((index) => (
