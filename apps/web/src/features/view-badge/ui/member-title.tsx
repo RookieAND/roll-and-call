@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, type MouseEvent } from "react";
+import { useContext, type ComponentProps, type MouseEvent } from "react";
 
 import { BadgePill } from "@/entities/badge";
 
@@ -9,10 +9,11 @@ import { BadgeDetailSheet } from "./badge-detail-sheet";
 
 interface MemberTitleProps {
   userId: string;
+  size?: ComponentProps<typeof BadgePill>["size"];
 }
 
 // 닉네임 옆 대표 칭호. 누르면 그 뱃지의 상세 시트가 열린다. 명단·순위 줄은 통째로 프로필 링크라, 칭호를 눌러도 링크가 따라 열리지 않게 막는다.
-export function MemberTitle({ userId }: MemberTitleProps) {
+export function MemberTitle({ userId, size = "xs" }: MemberTitleProps) {
   const sheet = useContext(MemberTitleSheetsContext)[userId];
   if (!sheet) return null;
 
@@ -25,7 +26,7 @@ export function MemberTitle({ userId }: MemberTitleProps) {
   return (
     <span className="inline-flex min-w-0 shrink-0" onClick={keepOutOfLink}>
       <BadgeDetailSheet detail={sheet.detail} className="inline-flex min-w-0 items-center">
-        <BadgePill size="xs" emoji={sheet.emoji} name={sheet.name} look={sheet.look} />
+        <BadgePill size={size} emoji={sheet.emoji} name={sheet.name} look={sheet.look} />
       </BadgeDetailSheet>
     </span>
   );

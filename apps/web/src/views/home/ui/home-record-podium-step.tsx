@@ -36,7 +36,7 @@ export function HomeRecordPodiumStep({ row, position, mode }: HomeRecordPodiumSt
           <Text typography="subtitle2" weight="extrabold" truncate className="max-w-full">
             {row.person.username}
           </Text>
-          <MemberTitle userId={row.person.id} />
+          <MemberTitle userId={row.person.id} size="md" />
           <span className={`flex items-baseline gap-025 ${scoreTone}`}>
             <Text typography="heading2" weight="extrabold" numeric foreground="inherit">
               {row.count}

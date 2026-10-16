@@ -53,7 +53,7 @@ export function HomeRecordPodium({ label, ranking, leaders, mode }: HomeRecordPo
       <Text typography="heading3" weight="extrabold" truncate className="max-w-full">
         {leaderName(leaders)}
       </Text>
-      {leaders.length === 1 && <MemberTitle userId={first.id} />}
+      {leaders.length === 1 && <MemberTitle userId={first.id} size="md" />}
       <span className="flex items-baseline gap-025 text-rank-gold">
         <Text typography="heading1" weight="extrabold" numeric foreground="inherit">
           {ranking.leaderCount}
