@@ -1,6 +1,7 @@
 import { RANKING_MODE } from "@roll-and-call/database/servers/model";
 import { HStack, Text } from "@roll-and-call/ui";
 import type { Dayjs } from "dayjs";
+import { Crown, Dices } from "lucide-react";
 
 import type { MonthRecord } from "../model/build-month-record";
 import { HomeRecordEmpty } from "./home-record-empty";
@@ -41,7 +42,12 @@ export function HomeMonthRecord({ monthStart, record }: HomeMonthRecordProps) {
         {summary}
       </Text>
 
-      <HomeRecordSection label={GM_LABEL}>
+      <HomeRecordSection
+        label={GM_LABEL}
+        kind="GM 부문"
+        accent="var(--rc-color-data-purple-ink)"
+        icon={Crown}
+      >
         {topGm ? (
           <HomeRecordRanking
             label={GM_LABEL}
@@ -58,7 +64,13 @@ export function HomeMonthRecord({ monthStart, record }: HomeMonthRecordProps) {
         )}
       </HomeRecordSection>
 
-      <HomeRecordSection label={PLAYER_LABEL} className="mt-200 border-t border-gray-100 pt-200">
+      <HomeRecordSection
+        label={PLAYER_LABEL}
+        kind="플레이어 부문"
+        accent="var(--rc-color-data-green-ink)"
+        icon={Dices}
+        className="mt-200 border-t border-gray-100 pt-200 desktop:mt-200"
+      >
         {topPlayer ? (
           <HomeRecordRanking
             label={PLAYER_LABEL}
