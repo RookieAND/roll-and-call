@@ -28,7 +28,6 @@ interface MobileCertDecisionFormProps {
   groupBooks: GroupBook[];
   photoUrls: Partial<Record<ReviewShotKey, string>>;
   previousUrls: Partial<Record<ReviewShotKey, string>>;
-  freshLabels: Partial<Record<ReviewShotKey, string>>;
   state: CertReviewState;
   proofDeleted: boolean;
   nextHref?: string;
@@ -42,7 +41,6 @@ interface MobileCertDecisionFormProps {
 export function MobileCertDecisionForm({
   photoUrls,
   previousUrls,
-  freshLabels,
   state,
   proofDeleted,
   nextHref,
@@ -89,7 +87,6 @@ export function MobileCertDecisionForm({
             grouped={groupBooks.length > 0}
             shots={decision.shots}
             photoUrls={photoUrls}
-            freshLabels={freshLabels}
             proofDeleted={proofDeleted}
             reviewable={decision.reviewable}
             rejecting={decision.rejecting}
@@ -97,7 +94,6 @@ export function MobileCertDecisionForm({
             checkedShots={decision.checkedShots}
             checkableCount={decision.checkableShots.length}
             flaggedShots={decision.flaggedShots}
-            onToggleCheck={decision.toggleCheck}
             onToggleFlag={decision.toggleFlag}
             onZoom={setZoomedShot}
           />
@@ -145,8 +141,6 @@ export function MobileCertDecisionForm({
             rejectCount: decision.rejectBookCount,
           })}
           note={groupNote}
-          approveCount={decision.approveBookCount}
-          rejectCount={decision.rejectBookCount}
           danger={decision.approveBookCount === 0}
           canSubmit={decision.canApprove}
           submitting={decision.approving || decision.rejectingPending}

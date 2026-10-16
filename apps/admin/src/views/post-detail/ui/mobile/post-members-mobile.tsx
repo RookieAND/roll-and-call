@@ -41,7 +41,6 @@ export function PostMembersMobile({ members, gmId, waiting, noteHref }: PostMemb
         path={note ? noteHref(member.userId) : `/users/${member.userId}`}
         title={member.nickname}
         trailing={<StatusBadges status={status} />}
-        description={note ? "신청글 보기" : undefined}
       />
     );
   });

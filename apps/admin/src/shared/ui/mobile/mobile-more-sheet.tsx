@@ -1,11 +1,12 @@
 "use client";
 
-import { Button, IconButton, Sheet, VStack } from "@roll-and-call/ui";
+import { Button, IconButton, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { Ellipsis } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 interface MobileMoreSheetProps {
   title: ReactNode;
+  description?: ReactNode;
   // 화면 아래 고정 바는 outline, 목록 줄 안은 ghost
   triggerVariant?: "outline" | "ghost";
   // 폭을 가득 채운 버튼들. 되돌릴 수 없는 조치는 맨 아래 빨간 outline이다.
@@ -15,6 +16,7 @@ interface MobileMoreSheetProps {
 // [⋯]가 여는 시트. 버튼을 누르면 시트를 닫아 다음 시트·확인창과 겹치지 않게 한다.
 export function MobileMoreSheet({
   title,
+  description,
   triggerVariant = "outline",
   children,
 }: MobileMoreSheetProps) {
@@ -30,7 +32,14 @@ export function MobileMoreSheet({
       </Sheet.Trigger>
       <Sheet.Popup>
         <Sheet.Handle />
-        <Sheet.Title className="mb-150 text-heading3">{title}</Sheet.Title>
+        <Sheet.Title className={description ? "mb-050 text-heading3" : "mb-150 text-heading3"}>
+          {title}
+        </Sheet.Title>
+        {description ? (
+          <Text typography="body3" foreground="muted" className="mb-150">
+            {description}
+          </Text>
+        ) : null}
         <VStack
           gap="075"
           className="[&>*]:min-h-12 [&>*]:w-full"

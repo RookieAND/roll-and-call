@@ -27,6 +27,7 @@ import {
   ReasonChips,
   MODAL_FOOTER_CLASS,
   ResponsiveDialog,
+  useDesktop,
 } from "@/shared/ui";
 
 import { revokeUserCertification } from "../api/revoke-user-certification";
@@ -57,7 +58,10 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
   };
   const gameCount = target.games.length;
   const canRevoke = Boolean(chip && userReason.trim()) && !pending;
-  const confirmLabel = gameCount > 0 ? `반려로 돌리고 구인 ${gameCount}개 취소` : "반려로 돌리기";
+  // 시트는 폭이 좁아 확정 버튼 글자를 줄이고, 취소되는 구인 수는 본문 Callout이 알린다.
+  const desktop = useDesktop();
+  const confirmLabel =
+    desktop && gameCount > 0 ? `반려로 돌리고 구인 ${gameCount}개 취소` : "반려로 돌리기";
 
   const revoke = async () => {
     const result = await submit({
@@ -183,7 +187,7 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
             disabled={pending}
             onClick={onClose}
           >
-            돌아가기
+            {desktop ? "돌아가기" : "취소"}
           </Button>
           <Button
             colorPalette="danger"

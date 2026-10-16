@@ -6,7 +6,7 @@ import { ShieldCheck } from "lucide-react";
 
 import type { GrantOptions } from "@/entities/cert/server";
 import { NotificationPreview } from "@/entities/notification";
-import { ActionNetworkError, KeyValueList, RetryableLabel, ServerLink, Tag } from "@/shared/ui";
+import { ActionNetworkLine, KeyValueList, RetryableLabel, ServerLink, Tag } from "@/shared/ui";
 
 import { grantBlockedReason } from "../model/grant-blocked-reason";
 import { GrantSelectedChips } from "./grant-selected-chips";
@@ -146,15 +146,18 @@ export function MobileGrantCertForm({ options, staffChannel, backHref }: MobileG
         gap="075"
         className="sticky bottom-0 z-(--rc-z-sticky) mt-auto border-t border-gray-200 bg-surface px-150 pt-100 pb-[calc(var(--spacing-150)+var(--rc-safe-bottom))]"
       >
-        {grant.networkError ? <ActionNetworkError /> : null}
-        <Text
-          typography="body4"
-          foreground={blockedReason ? "hint" : "muted"}
-          className="text-center"
-        >
-          {blockedReason ??
-            `룰북 ${chosenBooks.length}권 · 유저 ${receiving.length}명 · 인증 ${grant.grantCount}건을 부여합니다`}
-        </Text>
+        {grant.networkError ? (
+          <ActionNetworkLine />
+        ) : (
+          <Text
+            typography="body4"
+            foreground={blockedReason ? "hint" : "muted"}
+            className="text-center"
+          >
+            {blockedReason ??
+              `룰북 ${chosenBooks.length}권 · 유저 ${receiving.length}명 · 인증 ${grant.grantCount}건을 부여합니다`}
+          </Text>
+        )}
         <HStack gap="100">
           <Button
             variant="outline"

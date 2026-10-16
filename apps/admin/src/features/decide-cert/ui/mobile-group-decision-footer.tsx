@@ -1,16 +1,14 @@
-import { Badge, Button, HStack, Text } from "@roll-and-call/ui";
+import { Button, HStack } from "@roll-and-call/ui";
 import { RotateCcw } from "lucide-react";
 
-import { ActionNetworkError, MobileActionBar } from "@/shared/ui";
+import { ActionNetworkLine, MobileActionBar, MobileMoreSheet } from "@/shared/ui";
 
 import type { FooterNote } from "../model/footer-note";
-import { NOTIFY_NOTE } from "../model/notify-note";
+import { FooterLine } from "./footer-line";
 
 interface MobileGroupDecisionFooterProps {
   label: string;
   note?: FooterNote;
-  approveCount: number;
-  rejectCount: number;
   danger: boolean;
   canSubmit: boolean;
   submitting: boolean;
@@ -20,12 +18,10 @@ interface MobileGroupDecisionFooterProps {
   onSubmit: () => void;
 }
 
-// 묶음은 확정 버튼 하나다. 승인·반려 개수와 막힌 이유를 버튼 위에 둔다.
+// 묶음은 확정 버튼 하나다. 막힌 이유를 버튼 위 한 줄에 둔다. 승인·반려 개수는 확정 버튼 글자가 말한다.
 export function MobileGroupDecisionFooter({
   label,
   note,
-  approveCount,
-  rejectCount,
   danger,
   canSubmit,
   submitting,
@@ -36,37 +32,13 @@ export function MobileGroupDecisionFooter({
 }: MobileGroupDecisionFooterProps) {
   return (
     <MobileActionBar elevated={false}>
-      {networkError ? <ActionNetworkError /> : null}
-      <HStack align="center" gap="075" wrap aria-live="polite">
-        <Badge
-          colorPalette={approveCount > 0 ? "success" : "gray"}
-        >{`승인 ${approveCount}권`}</Badge>
-        <Badge colorPalette={rejectCount > 0 ? "danger" : "gray"}>{`반려 ${rejectCount}권`}</Badge>
-        {note ? (
-          <Button
-            variant="ghost"
-            size="sm"
-            colorPalette="danger"
-            onClick={() => onNoteClick(note)}
-            className="h-auto min-h-10 w-full basis-full justify-start px-0 py-0 text-left font-bold whitespace-normal"
-          >
-            {note.text}
-          </Button>
-        ) : (
-          <Text typography="body4" foreground="hint" className="basis-full">
-            {NOTIFY_NOTE}
-          </Text>
-        )}
-      </HStack>
+      {networkError ? <ActionNetworkLine /> : <FooterLine note={note} onNoteClick={onNoteClick} />}
       <HStack gap="100">
-        <Button
-          variant="outline"
-          colorPalette="gray"
-          onClick={onSkip}
-          className="min-h-12 w-24 shrink-0"
-        >
-          건너뛰기
-        </Button>
+        <MobileMoreSheet title="다른 처리" description="이 신청은 대기열에 그대로 남습니다.">
+          <Button variant="outline" colorPalette="gray" onClick={onSkip}>
+            건너뛰기
+          </Button>
+        </MobileMoreSheet>
         <Button
           colorPalette={danger ? "danger" : "primary"}
           disabled={!canSubmit}

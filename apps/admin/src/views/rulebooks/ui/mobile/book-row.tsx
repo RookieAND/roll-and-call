@@ -7,16 +7,19 @@ import { ListRow, Tag } from "@/shared/ui";
 
 interface BookRowProps {
   row: RulebookRow;
+  last: boolean;
 }
 
 // 대부분인 기본 룰북·인증 필요는 줄에서 빼고 예외만 뱃지로 붙인다.
-export function BookRow({ row }: BookRowProps) {
+export function BookRow({ row, last }: BookRowProps) {
   const exceptional = row.kind !== RULEBOOK_KIND.core || !row.certRequired || row.hidden;
   return (
     <ListRow
       path={`/rules/${row.id}`}
       title={row.name}
       muted={row.hidden}
+      indent
+      last={last}
       badges={
         exceptional || row.categoryMiniRule ? (
           <>

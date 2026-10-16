@@ -113,8 +113,8 @@ export function RulebooksMobileView({
               {groups.map(({ category, rows }) => (
                 <section key={category.name} aria-label={category.name}>
                   <CategoryHead category={category} />
-                  {rows.map((row) => (
-                    <BookRow key={row.id} row={row} />
+                  {rows.map((row, index) => (
+                    <BookRow key={row.id} row={row} last={index === rows.length - 1} />
                   ))}
                 </section>
               ))}

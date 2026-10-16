@@ -14,8 +14,6 @@ import { EbookInputMobileCard } from "./mobile/ebook-input-mobile-card";
 import { GroupBooksMobileNotice } from "./mobile/group-books-mobile-notice";
 import { ReapplyMobileCard } from "./mobile/reapply-mobile-card";
 
-const FRESH_LABEL = { new: "새로 올림", same: "지난번과 같음" } as const;
-
 interface CertReviewMobileViewProps {
   review: CertReview;
   viewerId: string;
@@ -36,15 +34,6 @@ export function CertReviewMobileView({ review, viewerId, filter }: CertReviewMob
   const previousUrls = latestRejection
     ? pick(latestRejection.photoUrls, latestRejection.flaggedShots)
     : {};
-  const freshLabels =
-    latestRejection && !ebook
-      ? Object.fromEntries(
-          (["front", "back"] as const).map((shot) => [
-            shot,
-            review.replacedShots.includes(shot) ? FRESH_LABEL.new : FRESH_LABEL.same,
-          ]),
-        )
-      : {};
 
   return (
     <>
@@ -63,7 +52,6 @@ export function CertReviewMobileView({ review, viewerId, filter }: CertReviewMob
         }))}
         photoUrls={photoUrls}
         previousUrls={previousUrls}
-        freshLabels={freshLabels}
         state={state}
         proofDeleted={review.proofDeleted}
         nextHref={nextHref}

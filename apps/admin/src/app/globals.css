@@ -51,6 +51,11 @@ body {
   word-break: keep-all;
 }
 
+/* DS 하단 시트는 412px에서 끊긴다. 어드민은 화면 폭을 따라 늘어난다. */
+[data-slot="sheet-popup"][data-side="bottom"] {
+  max-width: none;
+}
+
 /* .text-heading3는 DS 기본값일 때만 붙어 있어서, 크기를 따로 준 제목(사진 확대 보기)은 건드리지 않는다. */
 [data-slot="dialog-title"].text-heading3 {
   font-size: var(--text-heading2);

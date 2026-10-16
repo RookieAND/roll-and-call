@@ -7,7 +7,7 @@ import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-st
 import { isShotKey } from "../model/is-shot-key";
 import { MOBILE_PHOTO_SECTION_ID } from "../model/section-ids";
 import type { ReviewShot, ReviewShotKey } from "../model/shots";
-import { MobileShotCard } from "./mobile-shot-card";
+import { MobileShotRow } from "./mobile-shot-row";
 
 interface MobileShotSectionProps {
   state: CertReviewState;
@@ -15,7 +15,6 @@ interface MobileShotSectionProps {
   grouped: boolean;
   shots: readonly ReviewShot[];
   photoUrls: Partial<Record<ReviewShotKey, string>>;
-  freshLabels: Partial<Record<ReviewShotKey, string>>;
   proofDeleted: boolean;
   reviewable: boolean;
   rejecting: boolean;
@@ -23,19 +22,17 @@ interface MobileShotSectionProps {
   checkedShots: ReviewShotKey[];
   checkableCount: number;
   flaggedShots: ShotKey[];
-  onToggleCheck: (key: ReviewShotKey) => void;
   onToggleFlag: (key: ShotKey) => void;
   onZoom: (key: ReviewShotKey) => void;
 }
 
-// 사진은 한 줄에 하나씩 쌓는다. 묶음 신청은 옆으로 넘겨 본다.
+// 사진은 한 줄에 한 장씩 작은 목록으로 보인다. 줄을 누르면 확대 화면이 열리고 확인 체크는 그곳에서 한다.
 export function MobileShotSection({
   state,
   ebook,
   grouped,
   shots,
   photoUrls,
-  freshLabels,
   proofDeleted,
   reviewable,
   rejecting,
@@ -43,7 +40,6 @@ export function MobileShotSection({
   checkedShots,
   checkableCount,
   flaggedShots,
-  onToggleCheck,
   onToggleFlag,
   onZoom,
 }: MobileShotSectionProps) {
@@ -68,38 +64,29 @@ export function MobileShotSection({
         )}
       </HStack>
       <VStack
-        gap="125"
-        className={cn(grouped && "-mx-150 snap-x snap-mandatory flex-row overflow-x-auto px-150")}
+        render={<div />}
+        className="overflow-hidden rounded-600 border border-gray-200 bg-surface"
       >
         {shots.map((shot) => {
           const checked = checkedShots.includes(shot.key);
           const flagged = rejecting && isShotKey(shot.key) && flaggedShots.includes(shot.key);
           return (
-            <MobileShotCard
+            <MobileShotRow
               key={shot.key}
               label={shot.label}
               note={shot.note}
-              question={shot.question}
-              url={photoUrls[shot.key]}
-              fresh={freshLabels[shot.key]}
-              deleted={proofDeleted}
+              url={proofDeleted ? undefined : photoUrls[shot.key]}
               checked={checked}
-              disabled={!reviewable || pending}
               flagged={flagged}
               flaggable={rejecting && !ebook && !grouped && (!checked || flagged)}
-              compact={grouped}
-              onCheckedChange={() => onToggleCheck(shot.key)}
+              rejecting={rejecting}
+              disabled={!reviewable || pending}
               onFlagToggle={() => isShotKey(shot.key) && onToggleFlag(shot.key)}
               onZoom={() => onZoom(shot.key)}
             />
           );
         })}
       </VStack>
-      {grouped ? (
-        <Text typography="body4" foreground="hint">
-          {`옆으로 넘겨 ${shots.length}장을 모두 확인해 주세요`}
-        </Text>
-      ) : null}
     </VStack>
   );
 }

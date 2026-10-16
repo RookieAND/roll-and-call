@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, TextInput, VStack } from "@roll-and-call/ui";
+import { Button, Field, HStack, TextInput, VStack } from "@roll-and-call/ui";
 
 import type { RulebookDetail } from "@/entities/rulebook/server";
 import { ActionNetworkError, MobileActionBar } from "@/shared/ui";
@@ -87,35 +87,38 @@ export function MobileRulebookEditForm({ rulebook, viewerId }: MobileRulebookEdi
         </MobileFormSection>
       </VStack>
       <MobileActionBar elevated={false}>
-        <Button
-          size="lg"
-          loading={form.checking || (form.saving.pending && !form.dialogOpen)}
-          disabled={!form.canSave}
-          onClick={form.save}
-        >
-          저장
-        </Button>
-        {rulebook.hidden ? (
+        <HStack gap="100">
+          {rulebook.hidden ? (
+            <Button
+              variant="outline"
+              colorPalette="gray"
+              disabled={!form.hasReason || pending}
+              loading={form.unhiding.pending}
+              onClick={() => void form.unhide()}
+              className="min-h-12 flex-1"
+            >
+              숨김 해제
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              colorPalette="gray"
+              disabled={pending}
+              onClick={() => form.setHiding(true)}
+              className="min-h-12 flex-1"
+            >
+              숨김 처리
+            </Button>
+          )}
           <Button
-            variant="outline"
-            size="lg"
-            disabled={!form.hasReason || pending}
-            loading={form.unhiding.pending}
-            onClick={() => void form.unhide()}
+            loading={form.checking || (form.saving.pending && !form.dialogOpen)}
+            disabled={!form.canSave}
+            onClick={form.save}
+            className="min-h-12 flex-1"
           >
-            숨김 해제
+            저장
           </Button>
-        ) : (
-          <Button
-            variant="outline"
-            colorPalette="danger"
-            size="lg"
-            disabled={pending}
-            onClick={() => form.setHiding(true)}
-          >
-            숨김 처리
-          </Button>
-        )}
+        </HStack>
       </MobileActionBar>
       <RulebookEditDialogs rulebook={rulebook} viewerId={viewerId} form={form} />
     </>

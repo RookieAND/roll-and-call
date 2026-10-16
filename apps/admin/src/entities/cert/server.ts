@@ -3,6 +3,7 @@ export { decideCert } from "./api/decide-cert";
 export { decideCertGroup, type CertGroupDecisionResult } from "./api/decide-cert-group";
 export { getCertReview, type CertReview } from "./api/get-cert-review";
 export { getGrantOptions, type GrantOptions } from "./api/get-grant-options";
+export { getCertManageRow } from "./api/get-cert-manage-row";
 export { getRevokeTarget, type RevokeTarget } from "./api/get-revoke-target";
 export { listCertManage, type CertManageList } from "./api/list-cert-manage";
 export { listCertQueue } from "./api/list-cert-queue";

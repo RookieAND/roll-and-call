@@ -24,7 +24,7 @@ interface MobileIdCardProps {
   onCheck?: () => void;
 }
 
-// 채널 ID 하나를 카드 한 장으로 보인다. 확인 결과는 오른쪽 위 뱃지와 아래 문장으로 알린다.
+// 채널 ID 하나를 카드 한 장으로 보인다. 확인 결과는 오른쪽 위 뱃지로 알리고, 통과하지 못했을 때만 아래 문장을 붙인다.
 export function MobileIdCard({
   id,
   label,
@@ -42,6 +42,7 @@ export function MobileIdCard({
   const disabled = locked || loading;
   const showEmptyHint = !disabled && isUndefined(check) && !isUndefined(emptyHint) && !value.trim();
   const failed = !disabled && check !== "checking" && check?.status === "fail";
+  const passed = !disabled && check !== "checking" && check?.status === "ok";
   const badge = disabled ? undefined : checkBadge(check);
   const buttonLabel = checking ? "확인 중" : "확인";
   return (
@@ -88,7 +89,7 @@ export function MobileIdCard({
           {BOT_DISCONNECTED_MESSAGE}
         </Text>
       ) : null}
-      {!disabled && check ? <CheckStatus check={check} serverName={serverName} /> : null}
+      {!disabled && check && !passed ? <CheckStatus check={check} serverName={serverName} /> : null}
       {showEmptyHint ? (
         <Text typography="body4" foreground="hint">
           {emptyHint}

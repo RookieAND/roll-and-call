@@ -1,15 +1,13 @@
 import type { CertManageList } from "@/entities/cert/server";
 import { EMPTY_IMAGE, EmptyState, InfiniteList } from "@/shared/ui";
 
-import { certRowActions } from "../../model/cert-row-actions";
 import { CertManageMobileRow } from "./cert-manage-mobile-row";
 
 interface CertManageMobileRowsProps {
   list: CertManageList;
-  query: Record<string, string | undefined>;
 }
 
-export function CertManageMobileRows({ list, query }: CertManageMobileRowsProps) {
+export function CertManageMobileRows({ list }: CertManageMobileRowsProps) {
   if (list.total === 0) {
     return (
       <EmptyState
@@ -31,7 +29,7 @@ export function CertManageMobileRows({ list, query }: CertManageMobileRowsProps)
   return (
     <InfiniteList>
       {list.rows.map((row) => (
-        <CertManageMobileRow key={row.key} row={row} actions={certRowActions({ row, query })} />
+        <CertManageMobileRow key={row.key} row={row} />
       ))}
     </InfiniteList>
   );

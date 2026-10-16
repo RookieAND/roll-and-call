@@ -2,11 +2,12 @@ import { Button, HStack, Text } from "@roll-and-call/ui";
 import { RotateCcw } from "lucide-react";
 
 import { OTHER_REASON } from "@/shared/lib";
-import { ActionNetworkError, MobileActionBar } from "@/shared/ui";
+import { ActionNetworkLine, MobileActionBar, MobileMoreSheet } from "@/shared/ui";
 
 import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-state";
 import { footerNote, type FooterNote } from "../model/footer-note";
 import { NOTIFY_NOTE } from "../model/notify-note";
+import { FooterLine } from "./footer-line";
 import { MobileNextButton } from "./mobile-next-button";
 
 interface MobileDecisionFooterProps {
@@ -59,6 +60,11 @@ export function MobileDecisionFooter({
 }: MobileDecisionFooterProps) {
   const networkError = approvalNetworkError || rejectionNetworkError;
   const note = footerNote({ reviewable, checkedCount, checkableCount });
+  const footerLine = networkError ? (
+    <ActionNetworkLine />
+  ) : (
+    <FooterLine note={note} onNoteClick={onNoteClick} />
+  );
 
   if (state === CERT_REVIEW_STATE.withdrawn) {
     return (
@@ -72,15 +78,18 @@ export function MobileDecisionFooter({
     const picked = reason === OTHER_REASON ? "기타 사유를 입력했고" : "사유 1개를 골랐고";
     return (
       <MobileActionBar elevated={false}>
-        {networkError ? <ActionNetworkError /> : null}
-        <Text
-          typography="body4"
-          weight={flagged ? "bold" : undefined}
-          foreground={flagged ? "danger" : "hint"}
-          className="text-center"
-        >
-          {flagged ? `${picked}, ${flaggedLabels.join("·")} 사진을 지정했습니다` : NOTIFY_NOTE}
-        </Text>
+        {networkError ? (
+          <ActionNetworkLine />
+        ) : (
+          <Text
+            typography="body4"
+            weight={flagged ? "bold" : undefined}
+            foreground={flagged ? "danger" : "hint"}
+            className="text-center"
+          >
+            {flagged ? `${picked}, ${flaggedLabels.join("·")} 사진을 지정했습니다` : NOTIFY_NOTE}
+          </Text>
+        )}
         <HStack gap="100">
           <Button
             variant="ghost"
@@ -111,14 +120,6 @@ export function MobileDecisionFooter({
           {NOTIFY_NOTE}
         </Text>
         <HStack gap="100">
-          <Button
-            variant="outline"
-            colorPalette="gray"
-            onClick={onSkip}
-            className="min-h-12 w-24 shrink-0"
-          >
-            건너뛰기
-          </Button>
           <MobileNextButton href={nextHref} />
         </HStack>
       </MobileActionBar>
@@ -126,28 +127,13 @@ export function MobileDecisionFooter({
   }
   return (
     <MobileActionBar elevated={false}>
-      {networkError ? <ActionNetworkError /> : null}
-      <HStack align="center" gap="100">
-        {note ? (
-          <Button
-            variant="ghost"
-            size="sm"
-            colorPalette="danger"
-            onClick={() => onNoteClick(note)}
-            className="min-w-0 flex-1 justify-start px-0 text-left font-bold whitespace-normal"
-          >
-            {note.text}
-          </Button>
-        ) : (
-          <Text typography="body4" foreground="hint" className="flex-1">
-            {NOTIFY_NOTE}
-          </Text>
-        )}
-        <Button variant="ghost" colorPalette="gray" onClick={onSkip} className="min-h-10 shrink-0">
-          건너뛰기
-        </Button>
-      </HStack>
+      {footerLine}
       <HStack gap="100">
+        <MobileMoreSheet title="다른 처리" description="이 신청은 대기열에 그대로 남습니다.">
+          <Button variant="outline" colorPalette="gray" onClick={onSkip}>
+            건너뛰기
+          </Button>
+        </MobileMoreSheet>
         <Button
           variant="outline"
           colorPalette="danger"

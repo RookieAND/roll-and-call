@@ -110,7 +110,7 @@ export function CertManageMobileView({ list, filter, sort, query }: CertManageMo
         </HStack>
       </VStack>
       <ListSortBar total={`${list.rows.length}건`} sort={sort} options={SORT_OPTIONS} />
-      <CertManageMobileRows list={list} query={query} />
+      <CertManageMobileRows list={list} />
       <VStack className="sticky bottom-0 mt-auto border-t border-gray-200 bg-surface px-150 pt-125 pb-[calc(var(--spacing-150)+var(--rc-safe-bottom))]">
         <Button className="min-h-12 w-full" render={<ServerLink path="/cert/manage/grant" />}>
           인증 부여
