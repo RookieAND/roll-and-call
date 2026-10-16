@@ -2,7 +2,7 @@ import { BANNER_RATIO } from "./banner-crop";
 
 const TALLEST_STAGE_RATIO = 1.6;
 
-// 자르는 마당을 이미지 모양에 맞춘다. 이미 4:1로 잘린 배너는 틀과 같은 크기라 위아래에 빈 회색이 생기지 않는다.
+// 자르는 마당을 이미지 모양에 맞춘다. 이미 3:1로 잘린 배너는 틀과 같은 크기라 위아래에 빈 회색이 생기지 않는다.
 export function stageAspectRatio(natural: { width: number; height: number }) {
   return Math.min(BANNER_RATIO, Math.max(TALLEST_STAGE_RATIO, natural.width / natural.height));
 }

@@ -7,7 +7,7 @@ interface CropRect {
   height: number;
 }
 
-// 원본에서 틀 영역을 4:1 JPEG로 잘라 파일로 만든다. 실패하면 null이다.
+// 원본에서 틀 영역을 3:1 JPEG로 잘라 파일로 만든다. 실패하면 null이다.
 export async function cropBannerFile({
   image,
   source,
