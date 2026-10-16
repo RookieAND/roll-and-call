@@ -52,6 +52,6 @@ export async function notifyGameCreated({
     chunks: post.followUps,
     buttons: post.followUpButtons,
   });
-  await sendGameImages({ slug: server.slug, game, threadId });
+  await sendGameImages({ game, threadId });
   return threadId;
 }
