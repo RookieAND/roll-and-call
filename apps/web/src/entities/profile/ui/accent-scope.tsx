@@ -11,7 +11,7 @@ interface AccentScopeProps {
 export function AccentScope({ accentColor, className, children }: AccentScopeProps) {
   const style = accentColor ? ({ "--acc": accentColor } as CSSProperties) : undefined;
   return (
-    <div style={style} className={cn(className)}>
+    <div style={style} data-accent={accentColor ? "" : undefined} className={cn(className)}>
       {children}
     </div>
   );

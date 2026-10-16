@@ -7,6 +7,17 @@
   --breakpoint-desktop: 1100px;
 }
 
+/* 강조색을 고른 프로필(AccentScope) 안에서는 primary 계열 색을 강조색으로 갈아 끼운다. 스위치·뱃지·버튼이 함께 따라간다. */
+[data-accent] {
+  --color-primary-50: color-mix(in oklch, var(--acc) 14%, var(--rc-color-bg-canvas-base));
+  --color-primary-600: var(--acc);
+  --color-primary-700: color-mix(in oklch, var(--acc) 85%, black);
+  --color-tinted-bg: color-mix(in oklch, var(--acc) 12%, transparent);
+  --color-tinted-bg-hover: color-mix(in oklch, var(--acc) 20%, transparent);
+  --color-tinted-border: color-mix(in oklch, var(--acc) 55%, transparent);
+  --color-tinted-ink: color-mix(in oklch, var(--acc) 70%, var(--rc-color-fg-normal));
+}
+
 /* 로딩 화면은 짧고 실제 화면은 길어 스크롤바가 생겼다 사라진다. 자리를 늘 비워 두면 폭이 튀지 않는다. */
 html {
   scrollbar-gutter: stable;

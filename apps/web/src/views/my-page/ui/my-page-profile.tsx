@@ -74,7 +74,7 @@ export function MyPageProfile({
               size="lg"
               aria-label="프로필 편집"
               className={cn(
-                "-mb-1.5 h-10 w-10 desktop:mb-0 desktop:h-11 desktop:w-11",
+                "-mb-075 h-10 w-10 desktop:mb-0 desktop:h-11 desktop:w-11",
                 ACCENT_TINT_TEXT,
                 ACCENT_TINT_HOVER,
               )}
