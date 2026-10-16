@@ -20,6 +20,7 @@ export async function MyPageView() {
   return (
     <PageShell
       readable
+      scrollTop
       appBar={<AppBar title="마이페이지" action={<HelpButton />} />}
       panel={
         user ? (

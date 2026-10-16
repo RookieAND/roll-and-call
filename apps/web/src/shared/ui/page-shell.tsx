@@ -2,6 +2,7 @@ import { cn } from "@roll-and-call/ui";
 import type { CSSProperties, ReactNode } from "react";
 
 import { FRAME_INNER_PX } from "./frame-class";
+import { ScrollToTop } from "./scroll-to-top";
 
 interface PageShellProps {
   appBar: ReactNode;
@@ -16,6 +17,8 @@ interface PageShellProps {
   flush?: boolean;
   // true면 1100px 이상에서 앱바 띠를 화면 위에 고정한다(구인 목록). 기본은 본문과 함께 스크롤된다.
   stickyAppBar?: boolean;
+  // true면 화면에 들어올 때 맨 위로 올린다.
+  scrollTop?: boolean;
 }
 
 const NAV_WIDTH = "224px";
@@ -34,6 +37,7 @@ export function PageShell({
   bare,
   flush,
   stickyAppBar,
+  scrollTop,
 }: PageShellProps) {
   const barStyle = {
     "--bar-body": bodyWidth(!!panel),
@@ -50,6 +54,7 @@ export function PageShell({
           : "desktop:[&>header]:static",
       )}
     >
+      {scrollTop && <ScrollToTop />}
       {appBar}
       {bare ? (
         children
