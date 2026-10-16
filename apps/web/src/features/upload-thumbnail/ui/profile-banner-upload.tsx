@@ -7,6 +7,7 @@ import { uploadThumbnail } from "../api/upload-thumbnail";
 import { imageFileError } from "../model/image-file-error";
 import { uploadFailedMessage } from "../model/upload-failed-message";
 import { IMAGE_ACCEPT } from "../model/upload-rules";
+import { BannerCropSheet } from "./banner-crop-sheet";
 
 interface ProfileBannerUploadProps {
   serverId: string;
@@ -19,14 +20,25 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // 이번에 고른 원본. 있으면 위치 조정이 원본에서 다시 자르고, 없으면 올라가 있는 배너를 자른다.
+  const [original, setOriginal] = useState<string | null>(null);
+  const [cropping, setCropping] = useState<string | null>(null);
 
-  async function upload(file: File) {
+  function pick(file: File) {
     setError(null);
     const invalid = imageFileError(file);
     if (invalid) {
       setError(invalid);
       return;
     }
+    const url = URL.createObjectURL(file);
+    setOriginal(url);
+    setCropping(url);
+  }
+
+  async function upload(file: File) {
+    setCropping(null);
+    setError(null);
     setUploading(true);
     try {
       const result = await uploadThumbnail({ serverId, file });
@@ -43,11 +55,19 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
   return (
     <VStack gap="100">
       <Text typography="subtitle2">배너 (선택)</Text>
-      <div className="relative aspect-[3/1] max-h-40 overflow-hidden rounded-400 desktop:max-w-120 border border-dashed border-gray-300 bg-gray-50">
+      <div className="relative aspect-[3/1] overflow-hidden rounded-400 border border-dashed border-gray-300 bg-gray-50">
         {/* ponytail: 업로드한 이미지는 외부 저장소 주소라 next/image 대신 img로 그린다. */}
         {value && <img src={value} alt="배너 미리보기" className="size-full object-cover" />}
       </div>
       <HStack gap="100" className="[&>*]:min-h-11 [&>*]:flex-1">
+        <Button
+          type="button"
+          variant="outline"
+          disabled={!value || uploading}
+          onClick={() => setCropping(original ?? value)}
+        >
+          위치 조정
+        </Button>
         <Button
           type="button"
           variant="outline"
@@ -60,7 +80,10 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
           type="button"
           variant="outline"
           disabled={!value || uploading}
-          onClick={() => onChange("")}
+          onClick={() => {
+            setOriginal(null);
+            onChange("");
+          }}
         >
           배너 지우기
         </Button>
@@ -76,8 +99,13 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
         onChange={(event) => {
           const file = event.target.files?.[0];
           event.target.value = "";
-          if (file) void upload(file);
+          if (file) pick(file);
         }}
+      />
+      <BannerCropSheet
+        imageUrl={cropping}
+        onApply={(file) => void upload(file)}
+        onClose={() => setCropping(null)}
       />
     </VStack>
   );

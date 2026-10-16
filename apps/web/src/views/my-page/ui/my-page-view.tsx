@@ -19,6 +19,7 @@ export async function MyPageView() {
   const user = await getCurrentSessionUser();
   return (
     <PageShell
+      readable
       appBar={<AppBar title="마이페이지" action={<HelpButton />} />}
       panel={
         user ? (
