@@ -93,7 +93,7 @@ export function DesktopNav({
             <HStack align="center" gap="125" className="min-h-11 px-150">
               <Avatar src={profile.avatar} name={profile.name} size="md" />
               <VStack className="min-w-0">
-                <Text typography="heading3" weight="bold" className="truncate">
+                <Text typography="subtitle1" weight="bold" className="truncate">
                   {profile.name}
                 </Text>
                 <Text typography="body4" foreground="hint" className="truncate">
