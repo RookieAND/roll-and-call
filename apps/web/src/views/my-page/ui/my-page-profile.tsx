@@ -1,8 +1,12 @@
-import { IconButton, Text, VStack } from "@roll-and-call/ui";
+import { cn, IconButton, Text, VStack } from "@roll-and-call/ui";
 import { Pencil } from "lucide-react";
 import type { ReactNode } from "react";
 
 import {
+  ACCENT_TINT_BORDER,
+  ACCENT_TINT_HOVER,
+  ACCENT_TINT_TEXT,
+  AccentScope,
   AvailabilityRows,
   KeywordChips,
   PlayStyleBlock,
@@ -56,63 +60,66 @@ export function MyPageProfile({
   const bioForeground = bio ? "muted" : "hint";
 
   return (
-    <VStack gap="175" render={<section />}>
-      {notices}
-      <ProfileHero
-        className="-mt-225"
-        name={name}
-        avatarUrl={avatarUrl}
-        bannerUrl={bannerUrl}
-        accentColor={accentColor}
-        action={
-          <IconButton
-            render={<ServerLink path={"/me/edit"} />}
-            variant="outline"
-            size="lg"
-            aria-label="프로필 편집"
-          >
-            <Pencil size={18} aria-hidden />
-          </IconButton>
-        }
-      />
-      <VStack gap="025" className="min-w-0">
-        <Text typography="heading3" weight="extrabold" truncate render={<h2 />}>
-          {name}
-        </Text>
-        <Text typography="body3" foreground={bioForeground}>
-          {bioText}
-        </Text>
-      </VStack>
-
-      {links.length > 0 && <ProfileLinks links={links} discordId={discordId} />}
-
-      {keywords.length > 0 && <KeywordChips keywords={keywords} selected />}
-
-      <SessionCountStats hosted={hosted} played={played} />
-
-      {featuredBadges.length > 0 && (
-        <MyPageFeaturedBadges badges={featuredBadges} heldCount={heldBadgeCount} />
-      )}
-
-      <PlayStyleBlock playStyle={playStyle} showEmpty />
-
-      <div>
-        <MyPageBlockLabel
-          label="가능 시간대"
-          action={{
-            path: "/me/availability?from=me",
-            label: availability.length > 0 ? "편집" : "추가",
-          }}
-        />
-        <AvailabilityRows
-          intervals={availability}
-          note={
-            availability.length > 0
-              ? "일정 조율 화면을 열면 이 시간대가 미리 칠해져 있습니다."
-              : "적어두면 일정 조율 화면에 미리 칠해져 있습니다."
+    <AccentScope accentColor={accentColor}>
+      <VStack gap="175" render={<section />}>
+        {notices}
+        <ProfileHero
+          className="-mt-225"
+          name={name}
+          avatarUrl={avatarUrl}
+          bannerUrl={bannerUrl}
+          accentColor={accentColor}
+          action={
+            <IconButton
+              render={<ServerLink path={"/me/edit"} />}
+              variant="outline"
+              size="lg"
+              aria-label="프로필 편집"
+              className={cn("bg-surface", ACCENT_TINT_BORDER, ACCENT_TINT_TEXT, ACCENT_TINT_HOVER)}
+            >
+              <Pencil size={18} aria-hidden />
+            </IconButton>
           }
         />
-      </div>
-    </VStack>
+        <VStack gap="025" className="min-w-0">
+          <Text typography="heading3" weight="extrabold" truncate render={<h2 />}>
+            {name}
+          </Text>
+          <Text typography="body3" foreground={bioForeground}>
+            {bioText}
+          </Text>
+        </VStack>
+
+        {links.length > 0 && <ProfileLinks links={links} discordId={discordId} variant="circle" />}
+
+        {keywords.length > 0 && <KeywordChips keywords={keywords} />}
+
+        <SessionCountStats hosted={hosted} played={played} />
+
+        {featuredBadges.length > 0 && (
+          <MyPageFeaturedBadges badges={featuredBadges} heldCount={heldBadgeCount} />
+        )}
+
+        <PlayStyleBlock playStyle={playStyle} showEmpty />
+
+        <div>
+          <MyPageBlockLabel
+            label="가능 시간대"
+            action={{
+              path: "/me/availability?from=me",
+              label: availability.length > 0 ? "편집" : "추가",
+            }}
+          />
+          <AvailabilityRows
+            intervals={availability}
+            note={
+              availability.length > 0
+                ? "일정 조율 화면을 열면 이 시간대가 미리 칠해져 있습니다."
+                : "적어두면 일정 조율 화면에 미리 칠해져 있습니다."
+            }
+          />
+        </div>
+      </VStack>
+    </AccentScope>
   );
 }

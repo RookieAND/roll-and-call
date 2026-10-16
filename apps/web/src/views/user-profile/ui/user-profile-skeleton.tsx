@@ -24,7 +24,7 @@ export function UserProfileSkeleton() {
         <Container size="sm" className="px-0 desktop:max-w-none">
           <div className="px-200 pb-050">
             <div className="-mx-200">
-              <div className="aspect-[3/1] max-h-40 bg-gray-50" />
+              <div className="aspect-[4/1] max-h-50 bg-gray-50" />
               <div className="-mt-9 px-200">
                 <Skeleton width={84} height={84} rounded="full" />
               </div>

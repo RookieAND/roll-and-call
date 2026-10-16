@@ -32,3 +32,10 @@ export { ACCENT_COLOR_ERROR, normalizeAccentColor } from "./model/accent-color";
 export { normalizePlayStyle, PLAY_STYLE_MAX_LENGTH } from "./model/play-style";
 export { PlayStyleBlock } from "./ui/play-style-block";
 export { ProfileHero } from "./ui/profile-hero";
+export { AccentScope } from "./ui/accent-scope";
+export {
+  ACCENT_TINT_BORDER,
+  ACCENT_TINT_FILL,
+  ACCENT_TINT_HOVER,
+  ACCENT_TINT_TEXT,
+} from "./model/accent-tint";

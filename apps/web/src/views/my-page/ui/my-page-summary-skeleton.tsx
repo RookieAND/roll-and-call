@@ -8,7 +8,7 @@ export function MyPageSummarySkeleton() {
   return (
     <VStack gap="175" render={<section />}>
       <div className="-mx-200 -mt-225">
-        <div className="aspect-[3/1] max-h-40 bg-gray-50" />
+        <div className="aspect-[4/1] max-h-50 bg-gray-50" />
         <HStack align="end" gap="100" className="-mt-9 px-200">
           <Skeleton width={84} height={84} rounded="full" className="flex-none" />
           <span className="flex-1" />

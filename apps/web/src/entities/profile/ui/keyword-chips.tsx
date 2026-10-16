@@ -1,11 +1,13 @@
-import { Chip, HStack, Text } from "@roll-and-call/ui";
+import { cn, HStack, Text } from "@roll-and-call/ui";
+
+import { ACCENT_TINT_FILL, ACCENT_TINT_TEXT } from "../model/accent-tint";
 
 interface KeywordChipsProps {
   keywords: readonly string[];
-  selected?: boolean;
 }
 
-export function KeywordChips({ keywords, selected = false }: KeywordChipsProps) {
+// 칩 색은 프로필의 강조색(--acc)을 따른다. AccentScope 밖이면 기본 primary다.
+export function KeywordChips({ keywords }: KeywordChipsProps) {
   if (keywords.length === 0) {
     return (
       <HStack
@@ -26,9 +28,19 @@ export function KeywordChips({ keywords, selected = false }: KeywordChipsProps) 
   return (
     <HStack gap="075" wrap>
       {keywords.map((keyword) => (
-        <Chip key={keyword} shape="pill" tone="neutral" selected={selected} render={<span />}>
+        <Text
+          key={keyword}
+          typography="body3"
+          weight="bold"
+          render={<span />}
+          className={cn(
+            "inline-flex h-[30px] flex-none items-center rounded-full px-150 whitespace-nowrap",
+            ACCENT_TINT_FILL,
+            ACCENT_TINT_TEXT,
+          )}
+        >
           #{keyword}
-        </Chip>
+        </Text>
       ))}
     </HStack>
   );

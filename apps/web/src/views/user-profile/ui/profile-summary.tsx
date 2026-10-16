@@ -1,7 +1,13 @@
 import { Text, VStack } from "@roll-and-call/ui";
 
 import { SESSION_ROLE } from "@/entities/game";
-import { EMPTY_BIO_TEXT, KeywordChips, PlayStyleBlock, ProfileHero } from "@/entities/profile";
+import {
+  AccentScope,
+  EMPTY_BIO_TEXT,
+  KeywordChips,
+  PlayStyleBlock,
+  ProfileHero,
+} from "@/entities/profile";
 import { toKst, serverPath } from "@/shared/lib";
 import { getCurrentServer, type MemberProfile } from "@/shared/server";
 import {
@@ -37,7 +43,7 @@ export async function ProfileSummary({
   const bioForeground = profile.bio ? "normal" : "hint";
 
   return (
-    <div className="px-200 pb-050">
+    <AccentScope accentColor={profile.accentColor} className="px-200 pb-050">
       {absences.length > 0 && (
         <div className="pt-250 pb-200">
           <AbsenceNotice absences={absences} />
@@ -95,6 +101,6 @@ export async function ProfileSummary({
       <div className="mt-175">
         <PlayStyleBlock playStyle={profile.playStyle} />
       </div>
-    </div>
+    </AccentScope>
   );
 }

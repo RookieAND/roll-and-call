@@ -3,19 +3,29 @@
 import { HStack, Text, Tooltip, cn } from "@roll-and-call/ui";
 import { Link2 } from "lucide-react";
 
+import { ACCENT_TINT_BORDER, ACCENT_TINT_HOVER, ACCENT_TINT_TEXT } from "../model/accent-tint";
 import { linkHref, linkLabel, linkServiceOf, type ProfileLink } from "../model/link-services";
 import { BrandMark } from "./brand-mark";
 
-const ICON_CLASS =
-  "flex h-11 w-11 items-center justify-center rounded-500 border border-gray-200 text-gray-900";
+const ICON_CLASS = {
+  square:
+    "flex h-11 w-11 items-center justify-center rounded-500 border border-gray-200 text-gray-900",
+  // 마이페이지: 강조색 테두리의 동그란 아이콘
+  circle: cn(
+    "flex h-11 w-11 items-center justify-center rounded-full border",
+    ACCENT_TINT_BORDER,
+    ACCENT_TINT_TEXT,
+  ),
+} as const;
 
 interface ProfileLinksProps {
   links: readonly ProfileLink[];
   discordId?: string;
+  variant?: keyof typeof ICON_CLASS;
 }
 
 // 클라이언트 컴포넌트다: 서버에서 만든 요소를 Tooltip(render 복제)에 넘기면 lazy 참조라 undefined가 된다.
-export function ProfileLinks({ links, discordId }: ProfileLinksProps) {
+export function ProfileLinks({ links, discordId, variant = "square" }: ProfileLinksProps) {
   if (links.length === 0) {
     return (
       <HStack
@@ -47,14 +57,18 @@ export function ProfileLinks({ links, discordId }: ProfileLinksProps) {
               target="_blank"
               rel="noreferrer noopener"
               aria-label={label}
-              className={cn(ICON_CLASS, "transition-colors hover:bg-gray-50")}
+              className={cn(
+                ICON_CLASS[variant],
+                "transition-colors",
+                variant === "circle" ? ACCENT_TINT_HOVER : "hover:bg-gray-50",
+              )}
             >
               {mark}
             </a>
           </Tooltip>
         ) : (
           <Tooltip key={`${link.service}-${index}`} content={label}>
-            <span role="img" aria-label={label} tabIndex={0} className={ICON_CLASS}>
+            <span role="img" aria-label={label} tabIndex={0} className={ICON_CLASS[variant]}>
               {mark}
             </span>
           </Tooltip>

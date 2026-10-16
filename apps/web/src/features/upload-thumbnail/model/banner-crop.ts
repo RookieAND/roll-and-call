@@ -1,4 +1,4 @@
-export const BANNER_RATIO = 3;
+export const BANNER_RATIO = 4;
 export const BANNER_OUTPUT_WIDTH = 1200;
 export const ZOOM_MIN = 100;
 export const ZOOM_MAX = 300;
@@ -10,7 +10,7 @@ interface BannerCropInput {
   offset: { x: number; y: number };
 }
 
-// 틀(3:1)이 이미지를 항상 덮도록 이동량을 가두고, 틀이 가리키는 원본 영역을 돌려준다. zoom은 100~300(%)이다.
+// 틀(4:1)이 이미지를 항상 덮도록 이동량을 가두고, 틀이 가리키는 원본 영역을 돌려준다. zoom은 100~300(%)이다.
 export function bannerCrop({ natural, frameWidth, zoom, offset }: BannerCropInput) {
   const frameHeight = frameWidth / BANNER_RATIO;
   const base = Math.max(frameWidth / natural.width, frameHeight / natural.height);

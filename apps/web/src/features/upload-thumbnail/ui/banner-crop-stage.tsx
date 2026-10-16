@@ -23,7 +23,7 @@ interface BannerCropStageProps {
   aspectRatio: number;
 }
 
-// 원본을 끌어 움직이고, 가운데 3:1 틀 안이 배너가 된다. 틀 밖은 어둡게 덮는다.
+// 원본을 끌어 움직이고, 가운데 4:1 틀 안이 배너가 된다. 틀 밖은 어둡게 덮는다.
 export function BannerCropStage({
   image,
   zoom,
@@ -95,7 +95,7 @@ export function BannerCropStage({
       )}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-1/2 flex aspect-[3/1] -translate-y-1/2 items-center justify-center border-2 border-white shadow-[0_0_0_999px_rgb(0_0_0/0.55)]"
+        className="pointer-events-none absolute inset-x-0 top-1/2 flex aspect-[4/1] -translate-y-1/2 items-center justify-center border-2 border-white shadow-[0_0_0_999px_rgb(0_0_0/0.55)]"
         style={{ background: GRID_BACKGROUND }}
       >
         <span className="flex items-center gap-050 rounded-full bg-black/65 px-125 py-075 text-body4 font-bold text-white">

@@ -17,7 +17,7 @@ interface ProfileBannerUploadProps {
   onChange: (url: string) => void;
 }
 
-// 프로필 배너(3:1). 게임 썸네일과 같은 저장소·축소 규칙을 쓴다. 바꾸거나 지워도 이전 파일은 지우지 않는다.
+// 프로필 배너(4:1). 게임 썸네일과 같은 저장소·축소 규칙을 쓴다. 바꾸거나 지워도 이전 파일은 지우지 않는다.
 export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBannerUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -57,7 +57,7 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
   return (
     <VStack gap="100">
       <Text typography="subtitle2">배너 (선택)</Text>
-      <div className="relative aspect-[3/1] overflow-hidden rounded-400 border border-dashed border-gray-300 bg-gray-50">
+      <div className="relative aspect-[4/1] overflow-hidden rounded-400 border border-dashed border-gray-300 bg-gray-50">
         {/* ponytail: 업로드한 이미지는 외부 저장소 주소라 next/image 대신 img로 그린다. */}
         {value && <img src={value} alt="배너 미리보기" className="size-full object-cover" />}
         <HStack gap="100" className="absolute top-100 right-100">
