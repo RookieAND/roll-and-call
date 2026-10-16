@@ -52,7 +52,7 @@ export function ListPager({
         renderLink={(href) => <Link href={href} />}
         className="**:data-[slot^=pagination-]:h-8 **:data-[slot^=pagination-]:min-w-8"
       />
-      <div className="flex justify-end">
+      <div className="col-start-3 flex justify-end">
         {pageSizeSelectable ? <PageSizeSelector value={pageSize} /> : null}
       </div>
     </div>
