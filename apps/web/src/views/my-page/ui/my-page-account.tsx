@@ -3,7 +3,6 @@ import { getCurrentSessionUser } from "@/shared/server";
 
 import { loadMyProfile } from "../api/load-my-profile";
 import { loadMyQuestClears } from "../api/load-my-quest-clears";
-import { MyPageLinks } from "./my-page-links";
 import { MyPageSettings } from "./my-page-settings";
 
 interface MyPageAccountProps {
@@ -28,10 +27,5 @@ export async function MyPageAccount({ part }: MyPageAccountProps) {
 
   if (part === "panel")
     return <div className="rounded-700 border border-gray-200 bg-surface p-200">{settings}</div>;
-  return (
-    <>
-      <MyPageLinks links={profile?.links ?? []} discordId={profile?.discordId} />
-      <div className="desktop:hidden">{settings}</div>
-    </>
-  );
+  return <div className="desktop:hidden">{settings}</div>;
 }

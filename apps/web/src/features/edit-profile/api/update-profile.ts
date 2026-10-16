@@ -9,14 +9,18 @@ import {
   KEYWORD_MAX_COUNT,
   KEYWORD_MAX_LENGTH,
   LINK_MAX_COUNT,
+  ACCENT_COLOR_ERROR,
   nicknameTakenMessage,
+  normalizeAccentColor,
+  normalizePlayStyle,
+  PLAY_STYLE_MAX_LENGTH,
   linkError,
   normalizeKeywords,
   normalizeLinks,
   type ProfileLink,
 } from "@/entities/profile";
 import { parseActionInput, type ActionResult } from "@/shared/api";
-import { serverPath } from "@/shared/lib";
+import { isGameImageUrl, serverPath } from "@/shared/lib";
 import { getActingMember, notMemberError } from "@/shared/server";
 
 import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
@@ -24,6 +28,9 @@ import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/pro
 export type UpdateProfileInput = {
   username: string;
   bio: string;
+  playStyle: string;
+  bannerUrl: string;
+  accentColor: string;
   keywords: string[];
   links: ProfileLink[];
 };
@@ -33,6 +40,9 @@ const LINK_VALUE_INPUT_MAX_LENGTH = 1000;
 const updateProfileSchema = z.object({
   username: z.string().max(USERNAME_MAX_LENGTH * 10),
   bio: z.string().max(BIO_MAX_LENGTH * 10),
+  playStyle: z.string().max(PLAY_STYLE_MAX_LENGTH * 10),
+  bannerUrl: z.string().max(1000),
+  accentColor: z.string().max(50),
   keywords: z.array(z.string().max(KEYWORD_MAX_LENGTH * 10)).max(KEYWORD_MAX_COUNT * 10),
   links: z
     .array(
@@ -70,6 +80,22 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     };
   }
 
+  const playStyle = normalizePlayStyle(values.playStyle);
+  if (playStyle && playStyle.length > PLAY_STYLE_MAX_LENGTH) {
+    return {
+      error: `플레이 스타일은 ${PLAY_STYLE_MAX_LENGTH}자 이내로 입력해 주세요.`,
+      field: PROFILE_FIELD.playStyle,
+    };
+  }
+  const accentColor = normalizeAccentColor(values.accentColor);
+  if (accentColor === undefined) {
+    return { error: ACCENT_COLOR_ERROR, field: PROFILE_FIELD.accentColor };
+  }
+  const bannerUrl = values.bannerUrl.trim();
+  if (bannerUrl && !isGameImageUrl(bannerUrl)) {
+    return { error: "배너 이미지를 다시 올려 주세요." };
+  }
+
   const invalidLink = values.links.map(linkError).find(Boolean);
   if (invalidLink) {
     return { error: invalidLink };
@@ -80,6 +106,9 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     userId: user.id,
     nickname,
     bio: bio || null,
+    playStyle,
+    bannerUrl: bannerUrl || null,
+    accentColor,
     keywords: normalizeKeywords(values.keywords),
     links: normalizeLinks(values.links),
   });

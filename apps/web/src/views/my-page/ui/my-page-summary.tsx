@@ -63,6 +63,11 @@ export async function MyPageSummary() {
       name={name}
       avatarUrl={avatar}
       bio={profile?.bio ?? null}
+      playStyle={profile?.playStyle ?? null}
+      bannerUrl={profile?.bannerUrl ?? null}
+      accentColor={profile?.accentColor ?? null}
+      links={profile?.links ?? []}
+      discordId={profile?.discordId}
       featuredBadges={featuredBadges}
       heldBadgeCount={countBadges(badgeRecords, now).total}
       keywords={profile?.keywords ?? []}

@@ -28,3 +28,7 @@ export { ProfileRow } from "./ui/profile-row";
 export { USERNAME_MAX_LENGTH } from "./model/username-max-length";
 export { nicknameTakenMessage } from "./model/nickname-taken-message";
 export { DepartedMemberScreen } from "./ui/departed-member-screen";
+export { ACCENT_COLOR_ERROR, normalizeAccentColor } from "./model/accent-color";
+export { normalizePlayStyle, PLAY_STYLE_MAX_LENGTH } from "./model/play-style";
+export { PlayStyleBlock } from "./ui/play-style-block";
+export { ProfileHero } from "./ui/profile-hero";

@@ -1,11 +1,15 @@
-import { Button, HStack, VStack } from "@roll-and-call/ui";
+import { IconButton, Text, VStack } from "@roll-and-call/ui";
+import { Pencil } from "lucide-react";
 import type { ReactNode } from "react";
 
 import {
   AvailabilityRows,
   KeywordChips,
-  ProfileRow,
+  PlayStyleBlock,
+  ProfileHero,
+  ProfileLinks,
   type AvailabilityInterval,
+  type ProfileLink,
 } from "@/entities/profile";
 import { ServerLink } from "@/shared/ui";
 import { SessionCountStats } from "@/widgets/session-list";
@@ -18,6 +22,11 @@ interface MyPageProfileProps {
   name: string;
   avatarUrl: string | null;
   bio: string | null;
+  playStyle: string | null;
+  bannerUrl: string | null;
+  accentColor: string | null;
+  links: ProfileLink[];
+  discordId?: string;
   featuredBadges: FeaturedBadge[];
   heldBadgeCount: number;
   keywords: string[];
@@ -31,6 +40,11 @@ export function MyPageProfile({
   name,
   avatarUrl,
   bio,
+  playStyle,
+  bannerUrl,
+  accentColor,
+  links,
+  discordId,
   featuredBadges,
   heldBadgeCount,
   keywords,
@@ -44,19 +58,35 @@ export function MyPageProfile({
   return (
     <VStack gap="175" render={<section />}>
       {notices}
-      <HStack align="center" gap="175">
-        <ProfileRow
-          size="xl"
-          name={name}
-          avatarUrl={avatarUrl}
-          nameRender={<h2 />}
-          subline={bioText}
-          sublineForeground={bioForeground}
-        />
-        <Button render={<ServerLink path={"/me/edit"} />} variant="outline" size="sm">
-          편집
-        </Button>
-      </HStack>
+      <ProfileHero
+        className="-mt-225"
+        name={name}
+        avatarUrl={avatarUrl}
+        bannerUrl={bannerUrl}
+        accentColor={accentColor}
+        action={
+          <IconButton
+            render={<ServerLink path={"/me/edit"} />}
+            variant="outline"
+            size="lg"
+            aria-label="프로필 편집"
+          >
+            <Pencil size={18} aria-hidden />
+          </IconButton>
+        }
+      />
+      <VStack gap="025" className="min-w-0">
+        <Text typography="heading3" weight="extrabold" truncate render={<h2 />}>
+          {name}
+        </Text>
+        <Text typography="body3" foreground={bioForeground}>
+          {bioText}
+        </Text>
+      </VStack>
+
+      {links.length > 0 && <ProfileLinks links={links} discordId={discordId} />}
+
+      <KeywordChips keywords={keywords} selected />
 
       <SessionCountStats hosted={hosted} played={played} />
 
@@ -64,10 +94,7 @@ export function MyPageProfile({
         <MyPageFeaturedBadges badges={featuredBadges} heldCount={heldBadgeCount} />
       )}
 
-      <div>
-        <MyPageBlockLabel label="성향" />
-        <KeywordChips keywords={keywords} selected />
-      </div>
+      <PlayStyleBlock playStyle={playStyle} showEmpty />
 
       <div>
         <MyPageBlockLabel

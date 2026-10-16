@@ -22,14 +22,17 @@ export function UserProfileSkeleton() {
     >
       <div className={DESKTOP_CARD_CLASS}>
         <Container size="sm" className="px-0 desktop:max-w-none">
-          <div className="px-200 pt-250 pb-050">
-            <HStack align="center" gap="175">
-              <Skeleton width={64} height={64} rounded="full" />
-              <div className="min-w-0 flex-1">
-                <Skeleton width={128} height={27} />
-                <Skeleton width={112} height={20} className="mt-050" />
+          <div className="px-200 pb-050">
+            <div className="-mx-200">
+              <div className="aspect-[3/1] bg-gray-50" />
+              <div className="-mt-9 px-200">
+                <Skeleton width={84} height={84} rounded="full" />
               </div>
-            </HStack>
+            </div>
+            <div className="mt-175 min-w-0">
+              <Skeleton width={128} height={27} />
+              <Skeleton width={112} height={20} className="mt-050" />
+            </div>
             <Skeleton width="75%" height={24} className="mt-175" />
             <div className="mt-175">
               <Grid cols={2} className="-mx-200 border-y border-gray-200">

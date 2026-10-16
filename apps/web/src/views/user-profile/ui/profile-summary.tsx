@@ -1,7 +1,7 @@
-import { Text } from "@roll-and-call/ui";
+import { Text, VStack } from "@roll-and-call/ui";
 
 import { SESSION_ROLE } from "@/entities/game";
-import { EMPTY_BIO_TEXT, KeywordChips, ProfileRow } from "@/entities/profile";
+import { EMPTY_BIO_TEXT, KeywordChips, PlayStyleBlock, ProfileHero } from "@/entities/profile";
 import { toKst, serverPath } from "@/shared/lib";
 import { getCurrentServer, type MemberProfile } from "@/shared/server";
 import {
@@ -37,20 +37,26 @@ export async function ProfileSummary({
   const bioForeground = profile.bio ? "normal" : "hint";
 
   return (
-    <div className="px-200 pt-250 pb-050">
+    <div className="px-200 pb-050">
       {absences.length > 0 && (
-        <div className="mb-200">
+        <div className="pt-250 pb-200">
           <AbsenceNotice absences={absences} />
         </div>
       )}
-      <ProfileRow
-        size="xl"
+      <ProfileHero
         name={profile.username}
         avatarUrl={profile.avatarUrl}
-        nameRender={<h2 />}
-        subline={joinedLabel}
-        sublineForeground="hint"
+        bannerUrl={profile.bannerUrl}
+        accentColor={profile.accentColor}
       />
+      <VStack gap="025" className="mt-175 min-w-0">
+        <Text typography="heading2" truncate render={<h2 />}>
+          {profile.username}
+        </Text>
+        <Text typography="body3" foreground="hint">
+          {joinedLabel}
+        </Text>
+      </VStack>
       <Text
         typography="body2"
         foreground={bioForeground}
@@ -85,6 +91,9 @@ export async function ProfileSummary({
       <div className="mt-175">
         <ProfileBlockLabel label="성향" />
         <KeywordChips keywords={profile.keywords} />
+      </div>
+      <div className="mt-175">
+        <PlayStyleBlock playStyle={profile.playStyle} />
       </div>
     </div>
   );

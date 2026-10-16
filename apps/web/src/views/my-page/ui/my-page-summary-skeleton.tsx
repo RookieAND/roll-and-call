@@ -7,14 +7,18 @@ const KEYWORD_WIDTHS = [60, 72, 56];
 export function MyPageSummarySkeleton() {
   return (
     <VStack gap="175" render={<section />}>
-      <HStack align="center" gap="175">
-        <Skeleton width={52} height={52} rounded="full" className="flex-none" />
-        <VStack gap="025" className="min-w-0 flex-1">
-          <Skeleton width={80} height={22} />
-          <Skeleton width={200} height={20} />
-        </VStack>
-        <Skeleton width={48} height={34} rounded={400} className="flex-none" />
-      </HStack>
+      <div className="-mx-200 -mt-225">
+        <div className="aspect-[3/1] bg-gray-50" />
+        <HStack align="end" gap="100" className="-mt-9 px-200">
+          <Skeleton width={84} height={84} rounded="full" className="flex-none" />
+          <span className="flex-1" />
+          <Skeleton width={44} height={44} rounded={500} className="flex-none" />
+        </HStack>
+      </div>
+      <VStack gap="025" className="min-w-0">
+        <Skeleton width={80} height={22} />
+        <Skeleton width={200} height={20} />
+      </VStack>
       <Grid cols={2} className="-mx-200 border-y border-gray-200">
         {range(2).map((index) => (
           <VStack

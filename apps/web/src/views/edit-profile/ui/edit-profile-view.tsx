@@ -3,6 +3,7 @@ import { Container, VStack } from "@roll-and-call/ui";
 import { profileDisplay } from "@/entities/profile";
 import { LoginRequired } from "@/features/auth";
 import { EditProfileForm } from "@/features/edit-profile";
+import { ProfileBannerUpload } from "@/features/upload-thumbnail";
 import { getProfile, getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
@@ -22,6 +23,12 @@ export async function EditProfileView() {
                 serverName={server.name}
                 defaultUsername={profile?.username ?? ""}
                 defaultBio={profile?.bio ?? ""}
+                defaultPlayStyle={profile?.playStyle ?? ""}
+                defaultBannerUrl={profile?.bannerUrl ?? ""}
+                defaultAccentColor={profile?.accentColor ?? ""}
+                renderBannerField={({ value, onChange }) => (
+                  <ProfileBannerUpload serverId={server.id} value={value} onChange={onChange} />
+                )}
                 defaultKeywords={profile?.keywords ?? []}
                 defaultLinks={profile?.links ?? []}
                 availability={profile?.availability ?? []}

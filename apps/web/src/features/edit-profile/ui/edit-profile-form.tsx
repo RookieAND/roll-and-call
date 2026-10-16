@@ -11,11 +11,12 @@ import {
   VStack,
 } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import {
   KEYWORD_MAX_COUNT,
   KEYWORD_MAX_LENGTH,
+  PLAY_STYLE_MAX_LENGTH,
   type AvailabilityInterval,
   type ProfileLink,
 } from "@/entities/profile";
@@ -24,35 +25,49 @@ import { ConfirmDialog, LineBreaks, TagInput, toast, useAction } from "@/shared/
 
 import { updateProfile } from "../api/update-profile";
 import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
+import { AccentColorField } from "./accent-color-field";
 import { AvailabilitySummaryField } from "./availability-summary-field";
 import { AvatarRefreshField } from "./avatar-refresh-field";
 import { ProfileLinksField } from "./profile-links-field";
+import { ProfilePreviewSheet } from "./profile-preview-sheet";
 
 interface EditProfileFormProps {
   serverName: string;
   defaultUsername: string;
   defaultBio?: string;
+  defaultPlayStyle?: string;
+  defaultBannerUrl?: string;
+  defaultAccentColor?: string;
   defaultKeywords?: string[];
   defaultLinks?: ProfileLink[];
   availability?: AvailabilityInterval[];
   avatarUrl?: string | null;
   discordHandle?: string | null;
+  // 배너 올리기. 업로드는 다른 feature라 화면(view)이 조립해 넘긴다.
+  renderBannerField: (props: { value: string; onChange: (url: string) => void }) => ReactNode;
 }
 
 export function EditProfileForm({
   serverName,
   defaultUsername,
   defaultBio = "",
+  defaultPlayStyle = "",
+  defaultBannerUrl = "",
+  defaultAccentColor = "",
   defaultKeywords = [],
   defaultLinks = [],
   availability = [],
   avatarUrl,
   discordHandle,
+  renderBannerField,
 }: EditProfileFormProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
   const [username, setUsername] = useState(defaultUsername);
   const [bio, setBio] = useState(defaultBio);
+  const [playStyle, setPlayStyle] = useState(defaultPlayStyle);
+  const [bannerUrl, setBannerUrl] = useState(defaultBannerUrl);
+  const [accentColor, setAccentColor] = useState(defaultAccentColor);
   const [keywords, setKeywords] = useState(defaultKeywords);
   const [links, setLinks] = useState(defaultLinks);
   const [failure, setFailure] = useState<{ error: string; field?: string } | null>(null);
@@ -62,16 +77,22 @@ export function EditProfileForm({
   const dirty =
     username !== defaultUsername ||
     bio !== defaultBio ||
+    playStyle !== defaultPlayStyle ||
+    bannerUrl !== defaultBannerUrl ||
+    accentColor !== defaultAccentColor ||
     keywords.join() !== defaultKeywords.join() ||
     JSON.stringify(links) !== JSON.stringify(defaultLinks);
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
     setFailure(null);
-    run(() => updateProfile({ username, bio, keywords, links }), {
-      onSuccess: () => toast.success("프로필을 저장했습니다"),
-      onError: (result) => setFailure({ error: result.error, field: result.field }),
-    });
+    run(
+      () => updateProfile({ username, bio, playStyle, bannerUrl, accentColor, keywords, links }),
+      {
+        onSuccess: () => toast.success("프로필을 저장했습니다"),
+        onError: (result) => setFailure({ error: result.error, field: result.field }),
+      },
+    );
   }
 
   function requestLeave() {
@@ -81,12 +102,30 @@ export function EditProfileForm({
 
   const usernameError = failure?.field === PROFILE_FIELD.username ? failure.error : undefined;
   const bioError = failure?.field === PROFILE_FIELD.bio ? failure.error : undefined;
+  const playStyleError = failure?.field === PROFILE_FIELD.playStyle ? failure.error : undefined;
+  const accentColorError = failure?.field === PROFILE_FIELD.accentColor ? failure.error : undefined;
   const formError = failure && !failure.field ? failure.error : null;
 
   return (
     <form onSubmit={submit} className="flex flex-col">
       <VStack gap="250" className="pb-200">
+        <HStack align="center" justify="end">
+          <ProfilePreviewSheet
+            name={username}
+            avatarUrl={avatarUrl}
+            bio={bio}
+            keywords={keywords}
+            playStyle={playStyle}
+            bannerUrl={bannerUrl}
+            accentColor={accentColor}
+          />
+        </HStack>
+
         <AvatarRefreshField defaultUrl={avatarUrl} name={username} />
+
+        {renderBannerField({ value: bannerUrl, onChange: setBannerUrl })}
+
+        <AccentColorField value={accentColor} error={accentColorError} onChange={setAccentColor} />
 
         <Field.Root
           label="닉네임"
@@ -118,6 +157,23 @@ export function EditProfileForm({
             maxLength={BIO_MAX_LENGTH}
             invalid={!!bioError}
             rows={3}
+          />
+        </Field.Root>
+
+        <Field.Root
+          label="플레이 스타일 (선택)"
+          htmlFor="play-style"
+          counter={`${playStyle.length} / ${PLAY_STYLE_MAX_LENGTH}`}
+          description="프로필의 플레이 스타일 칸에 그대로 보입니다. 줄바꿈이 유지됩니다."
+          error={playStyleError}
+        >
+          <Textarea
+            id="play-style"
+            value={playStyle}
+            onChange={(event) => setPlayStyle(event.target.value)}
+            maxLength={PLAY_STYLE_MAX_LENGTH}
+            invalid={!!playStyleError}
+            rows={6}
           />
         </Field.Root>
 
