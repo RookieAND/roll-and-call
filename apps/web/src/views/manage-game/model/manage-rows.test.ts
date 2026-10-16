@@ -187,10 +187,13 @@ describe("manageRows", () => {
     expect(cancelRowLock({ game: cancelled, now: NOW })).toBe("취소한 구인입니다");
   });
 
-  it("구인 취소 줄은 시작 전에만 열린다", () => {
+  it("구인 취소 줄은 세션이 끝나기 전까지 열린다", () => {
     expect(cancelRowLock({ game: gameWith({ confirmedAt: at(HOUR) }), now: NOW })).toBeUndefined();
+    expect(
+      cancelRowLock({ game: gameWith({ confirmedAt: at(-HOUR / 2) }), now: NOW }),
+    ).toBeUndefined();
     expect(cancelRowLock({ game: gameWith({ confirmedAt: at(-HOUR) }), now: NOW })).toBe(
-      "시작한 세션은 취소할 수 없습니다",
+      "끝난 세션은 취소할 수 없습니다",
     );
   });
 });

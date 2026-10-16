@@ -10,28 +10,46 @@ const at = (hours: number) => new Date(now.getTime() + hours * HOUR);
 
 describe("cancelBlockReason", () => {
   it("이미 취소한 구인은 다시 취소하지 않는다", () => {
-    const game = { cancelledAt: at(-1), confirmedAt: at(5) };
+    const game = { cancelledAt: at(-1), confirmedAt: at(5), playMinutes: null, endedAt: null };
     expect(cancelBlockReason({ game, now })).toBe("already_cancelled");
   });
 
   it("시간이 정해지지 않은 구인은 취소할 수 있다", () => {
-    const game = { cancelledAt: null, confirmedAt: null };
+    const game = { cancelledAt: null, confirmedAt: null, playMinutes: null, endedAt: null };
     expect(cancelBlockReason({ game, now })).toBeNull();
   });
 
   it("시작 1분 전에는 취소할 수 있다", () => {
-    const game = { cancelledAt: null, confirmedAt: new Date(now.getTime() + 60_000) };
+    const game = {
+      cancelledAt: null,
+      confirmedAt: new Date(now.getTime() + 60_000),
+      playMinutes: null,
+      endedAt: null,
+    };
     expect(cancelBlockReason({ game, now })).toBeNull();
   });
 
   it("진행 중인 세션은 취소하지 않는다", () => {
-    const game = { cancelledAt: null, confirmedAt: at(-1) };
+    const game = { cancelledAt: null, confirmedAt: at(-1), playMinutes: null, endedAt: null };
     expect(cancelBlockReason({ game, now })).toBe("session_started");
   });
 
   it("끝난 세션도 시작한 세션으로 보고 취소하지 않는다", () => {
-    const game = { cancelledAt: null, confirmedAt: at(-48) };
+    const game = { cancelledAt: null, confirmedAt: at(-48), playMinutes: null, endedAt: null };
     expect(cancelBlockReason({ game, now })).toBe("session_started");
+  });
+});
+
+describe("cancelBlockReason allowStarted", () => {
+  const started = { cancelledAt: null, confirmedAt: at(-1), playMinutes: null, endedAt: null };
+
+  it("진행 중인 세션도 GM은 취소할 수 있다", () => {
+    expect(cancelBlockReason({ game: started, now, allowStarted: true })).toBeNull();
+  });
+
+  it("끝난 세션은 GM도 취소할 수 없다", () => {
+    const ended = { ...started, confirmedAt: at(-48) };
+    expect(cancelBlockReason({ game: ended, now, allowStarted: true })).toBe("session_ended");
   });
 });
 

@@ -13,6 +13,7 @@ import {
   GAME_NOT_FOUND_RESULT,
   idSchema,
   parseActionInput,
+  SESSION_ENDED_CANCEL_MESSAGE,
   SESSION_STARTED_CANCEL_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
@@ -30,6 +31,7 @@ const BLOCKED_RESULT = {
   not_found: GAME_NOT_FOUND_RESULT,
   already_cancelled: { error: GAME_ALREADY_CANCELLED_MESSAGE },
   session_started: { error: SESSION_STARTED_CANCEL_MESSAGE },
+  session_ended: { error: SESSION_ENDED_CANCEL_MESSAGE },
 } as const satisfies Record<string, ActionResult>;
 
 export async function cancelGameAsGm(input: z.input<typeof inputSchema>): Promise<ActionResult> {
@@ -53,6 +55,7 @@ export async function cancelGameAsGm(input: z.input<typeof inputSchema>): Promis
     kind: GAME_CANCEL_KIND.gm,
     actorId: user.id,
     reason: reason.trim(),
+    allowStarted: true,
   });
   if (!result.ok) return BLOCKED_RESULT[result.reason];
 

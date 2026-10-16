@@ -13,7 +13,7 @@ import { games, participants, type Game } from "#/schema";
 
 export type CancelGameResult =
   | { ok: true; game: Game; notifiedCount: number }
-  | { ok: false; reason: "not_found" | "already_cancelled" | "session_started" };
+  | { ok: false; reason: "not_found" | "already_cancelled" | "session_started" | "session_ended" };
 
 // GM·운영진·자동 취소가 모두 여기를 지난다. 구인 행과 참여자·가능 시간·후기는 그대로 남는다.
 export async function cancelGame({
@@ -23,6 +23,7 @@ export async function cancelGame({
   kind,
   actorId,
   reason,
+  allowStarted = false,
   now = new Date(),
 }: {
   transaction?: Transaction;
@@ -31,12 +32,13 @@ export async function cancelGame({
   kind: GameCancelKind;
   actorId: string | null;
   reason: string | null;
+  allowStarted?: boolean;
   now?: Date;
 }): Promise<CancelGameResult> {
   const run = async (tx: Transaction): Promise<CancelGameResult> => {
     const game = await lockGame({ transaction: tx, serverId, gameId });
     if (!game) return { ok: false, reason: "not_found" };
-    const blocked = cancelBlockReason({ game, now });
+    const blocked = cancelBlockReason({ game, now, allowStarted });
     if (blocked) return { ok: false, reason: blocked };
     const [cancelled] = await tx
       .update(games)

@@ -18,6 +18,7 @@ export const HIDDEN_GAME_APPLY_MESSAGE = "운영진이 숨긴 구인입니다.";
 // 세션 종료 뒤 명단 조정 거부.
 export const ROSTER_SESSION_ENDED_MESSAGE = "세션이 끝나 명단을 바꿀 수 없습니다.";
 export const GAME_ALREADY_CANCELLED_MESSAGE = "이미 취소한 구인입니다.";
+export const SESSION_ENDED_CANCEL_MESSAGE = "끝난 세션은 취소할 수 없습니다.";
 export const SESSION_STARTED_CANCEL_MESSAGE = "시작한 세션은 취소할 수 없습니다.";
 export const SIGN_OUT_FAILED_MESSAGE = "로그아웃하지 못했습니다. 다시 시도해 주세요.";
 export const INVALID_REQUEST_MESSAGE = "잘못된 요청입니다.";
