@@ -25,7 +25,6 @@ export function ProfileHero({
   const faceClass = accentColor
     ? "bg-[color-mix(in_srgb,var(--acc)_28%,var(--rc-color-bg-canvas-base))]"
     : "bg-primary-100";
-  const ringClass = accentColor ? "shadow-[0_0_0_2px_var(--acc)]" : "";
 
   return (
     <div style={accent} className={cn("-mx-200", className)}>
@@ -34,7 +33,7 @@ export function ProfileHero({
         {bannerUrl && <img src={bannerUrl} alt="" className="size-full object-cover" />}
       </div>
       <HStack align="end" gap="100" className="relative z-10 -mt-13 px-200">
-        <span className={cn("flex flex-none rounded-full bg-surface p-050", ringClass)}>
+        <span className={"flex flex-none rounded-full bg-surface p-050"}>
           <Avatar
             src={avatarUrl}
             name={name}
