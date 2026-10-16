@@ -49,9 +49,7 @@ export async function GameBoard({ page = 1, filter }: GameBoardProps) {
           ruleOptions={ruleOptions}
         />
       }
-      panel={
-        tab === GAME_TAB.live && <GamesFilterPanel filter={filter} ruleOptions={ruleOptions} />
-      }
+      panel={<GamesFilterPanel filter={filter} ruleOptions={ruleOptions} />}
       list={
         <>
           <div className="hidden group-has-[input[aria-busy=true]]/games:contents">

@@ -22,7 +22,7 @@ export function GamesLoading() {
     >
       <GamesLayout
         toolbar={<GamesToolbar filter={{ tab }} />}
-        panel={tab === GAME_TAB.live && <GamesFilterPanelSkeleton />}
+        panel={<GamesFilterPanelSkeleton />}
         list={tab === GAME_TAB.past ? <PastGameListSkeleton /> : <GameListSkeleton />}
       />
     </PageShell>

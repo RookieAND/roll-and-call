@@ -7,7 +7,7 @@ interface GamesLayoutProps {
   callout?: ReactNode;
   toolbar: ReactNode;
   list: ReactNode;
-  // 데스크톱 우측 필터 패널. 지난 구인 탭에는 없다.
+  // 데스크톱 우측 필터 패널.
   panel?: ReactNode;
 }
 
