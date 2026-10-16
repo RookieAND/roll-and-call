@@ -29,7 +29,7 @@ export function ProfileHero({
 
   return (
     <div style={accent} className={cn("-mx-200", className)}>
-      <div className={cn("relative aspect-[4/1] max-h-50 overflow-hidden", faceClass)}>
+      <div className={cn("relative aspect-[4/1] max-h-50 w-full overflow-hidden", faceClass)}>
         {/* ponytail: 업로드한 이미지는 외부 저장소 주소라 next/image 대신 img로 그린다. */}
         {bannerUrl && <img src={bannerUrl} alt="" className="size-full object-cover" />}
       </div>

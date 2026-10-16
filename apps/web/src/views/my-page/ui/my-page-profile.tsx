@@ -3,7 +3,6 @@ import { Pencil } from "lucide-react";
 import type { ReactNode } from "react";
 
 import {
-  ACCENT_TINT_BORDER,
   ACCENT_TINT_HOVER,
   ACCENT_TINT_TEXT,
   AccentScope,
@@ -72,10 +71,10 @@ export function MyPageProfile({
           action={
             <IconButton
               render={<ServerLink path={"/me/edit"} />}
-              variant="outline"
+              variant="ghost"
               size="lg"
               aria-label="프로필 편집"
-              className={cn("bg-surface", ACCENT_TINT_BORDER, ACCENT_TINT_TEXT, ACCENT_TINT_HOVER)}
+              className={cn(ACCENT_TINT_TEXT, ACCENT_TINT_HOVER)}
             >
               <Pencil size={18} aria-hidden />
             </IconButton>
