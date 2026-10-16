@@ -14,14 +14,11 @@ interface DrawQueueProps {
   previewCount?: number;
 }
 
-const UNFOLDED_MAX = 3;
-
 export function DrawQueue({ label, caption, entries, meUserId, previewCount }: DrawQueueProps) {
   const rows = entries.map((entry) => (
     <DrawRow key={entry.userId} entry={entry} isMe={entry.userId === meUserId} />
   ));
-  const folds = entries.length > UNFOLDED_MAX && !isUndefined(previewCount);
-  const shownCount = folds ? previewCount : entries.length;
+  const shownCount = isUndefined(previewCount) ? entries.length : previewCount;
   const hiddenRows = rows.slice(shownCount);
 
   return (

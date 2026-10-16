@@ -5,7 +5,7 @@ import { BackToGameBar } from "./back-to-game-bar";
 import { DrawQueue } from "./draw-queue";
 import { DrawSummary } from "./draw-summary";
 
-const WAITING_PREVIEW = 2;
+const WAITING_PREVIEW = 5;
 
 interface AppliedDrawProps {
   gameId: string;

@@ -11,7 +11,7 @@ import { DrawSummary } from "./draw-summary";
 import { MyDrawActions } from "./my-draw-actions";
 import { MyDrawStatus } from "./my-draw-status";
 
-const WAITING_PREVIEW = 2;
+const WAITING_PREVIEW = 5;
 
 interface MyDrawResultProps {
   gameId: string;
