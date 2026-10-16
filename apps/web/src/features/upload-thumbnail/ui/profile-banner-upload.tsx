@@ -43,7 +43,7 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
   return (
     <VStack gap="100">
       <Text typography="subtitle2">배너 (선택)</Text>
-      <div className="relative aspect-[3/1] overflow-hidden rounded-400 border border-dashed border-gray-300 bg-gray-50">
+      <div className="relative aspect-[3/1] max-h-40 overflow-hidden rounded-400 border border-dashed border-gray-300 bg-gray-50">
         {/* ponytail: 업로드한 이미지는 외부 저장소 주소라 next/image 대신 img로 그린다. */}
         {value && <img src={value} alt="배너 미리보기" className="size-full object-cover" />}
       </div>
