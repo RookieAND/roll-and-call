@@ -76,7 +76,7 @@ export function HomeRecordPodium({ label, ranking, leaders, mode }: HomeRecordPo
         />
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 bottom-600 z-[1] overflow-hidden rounded-t-600"
+          className="pointer-events-none absolute inset-0 z-[1] overflow-hidden rounded-t-600"
         >
           <span className="animate-badge-shine absolute inset-0 opacity-40" />
         </span>
