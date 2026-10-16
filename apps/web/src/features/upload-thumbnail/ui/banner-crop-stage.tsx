@@ -19,7 +19,8 @@ interface BannerCropStageProps {
   offset: { x: number; y: number };
   onOffsetChange: (offset: { x: number; y: number }) => void;
   onFrameWidthChange: (width: number) => void;
-  className: string;
+  // 마당(스테이지)의 가로세로비. 이미지가 틀보다 크면 틀 밖이 어둡게 보인다.
+  aspectRatio: number;
 }
 
 // 원본을 끌어 움직이고, 가운데 3:1 틀 안이 배너가 된다. 틀 밖은 어둡게 덮는다.
@@ -29,7 +30,7 @@ export function BannerCropStage({
   offset,
   onOffsetChange,
   onFrameWidthChange,
-  className,
+  aspectRatio,
 }: BannerCropStageProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [frameWidth, setFrameWidth] = useState(0);
@@ -68,7 +69,8 @@ export function BannerCropStage({
   return (
     <div
       ref={stageRef}
-      className={`relative cursor-grab touch-none overflow-hidden rounded-400 bg-gray-100 select-none active:cursor-grabbing ${className}`}
+      className="relative cursor-grab touch-none overflow-hidden rounded-400 bg-gray-100 select-none active:cursor-grabbing"
+      style={{ aspectRatio }}
       onPointerDown={(event) => {
         event.currentTarget.setPointerCapture(event.pointerId);
         drag.current = { x: event.clientX - offset.x, y: event.clientY - offset.y };

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { ZOOM_MAX, ZOOM_MIN, bannerCrop } from "../model/banner-crop";
 import { cropBannerFile } from "../model/crop-banner-file";
+import { fitsFrameExactly, stageAspectRatio } from "../model/stage-aspect-ratio";
 import { BannerCropStage } from "./banner-crop-stage";
 
 interface BannerCropSheetProps {
@@ -78,8 +79,17 @@ export function BannerCropSheet({ imageUrl, onApply, onClose }: BannerCropSheetP
                 offset={offset}
                 onOffsetChange={setOffset}
                 onFrameWidthChange={handleFrameWidth}
-                className="aspect-[4/3] desktop:aspect-[16/10]"
+                aspectRatio={stageAspectRatio({
+                  width: image.naturalWidth,
+                  height: image.naturalHeight,
+                })}
               />
+              {fitsFrameExactly({ width: image.naturalWidth, height: image.naturalHeight }) &&
+                zoom === ZOOM_MIN && (
+                  <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
+                    이미 틀에 꼭 맞는 이미지입니다. 확대하면 위치를 옮길 수 있습니다.
+                  </Text>
+                )}
               <HStack align="center" gap="150" className="mt-150">
                 <Text typography="body3" weight="bold" className="flex-none">
                   확대
