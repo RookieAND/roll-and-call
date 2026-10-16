@@ -1,6 +1,6 @@
 import type { MemberRole } from "@roll-and-call/database/servers/model";
 
-const ROLE_LABEL = { owner: "서버장", staff: "관리자" } as const satisfies Record<
+const ROLE_LABEL = { owner: "소유주", staff: "관리자" } as const satisfies Record<
   MemberRole,
   string
 >;

@@ -91,12 +91,12 @@ export function DesktopNav({
           {signOut}
           {profile && (
             <HStack align="center" gap="125" className="min-h-11 px-150">
-              <Avatar src={profile.avatar} name={profile.name} size="sm" />
+              <Avatar src={profile.avatar} name={profile.name} size="md" />
               <VStack className="min-w-0">
-                <Text typography="subtitle2" weight="bold" className="truncate">
+                <Text typography="heading3" weight="bold" className="truncate">
                   {profile.name}
                 </Text>
-                <Text typography="body5" foreground="hint" className="truncate">
+                <Text typography="body4" foreground="hint" className="truncate">
                   {profile.role}
                 </Text>
               </VStack>
