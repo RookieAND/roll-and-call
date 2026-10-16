@@ -8,7 +8,7 @@ interface PageShellProps {
   children: ReactNode;
   // 1100px 이상에서 본문 오른쪽에 붙는 sticky 패널(320px). 없으면 패널 자리를 만들지 않는다.
   panel?: ReactNode;
-  // 폼·글 위주 화면: 본문 안쪽을 640px로 줄인다. 패널이 없으면 본문 열 가운데에 두고, 패널이 있으면 왼쪽(앱바 제목 선)에 붙인다. 바깥 틀(앱바 띠·패널 자리)은 그대로다.
+  // 폼·글 위주 화면: 본문 안쪽을 640px로 줄인다. 패널이 있으면 패널과 한 덩어리로 묶어 가운데에 둔다. 바깥 틀(앱바 띠·패널 자리)은 그대로다.
   readable?: boolean;
   // true면 본문 틀을 두지 않고 children이 FRAME_INNER_PX로 직접 짠다(전폭 띠가 있는 구인 목록).
   bare?: boolean;
@@ -38,7 +38,7 @@ export function PageShell({
   const barStyle = {
     "--bar-body": bodyWidth(!!panel),
     "--bar-w": readable ? "min(640px, var(--bar-body))" : "var(--bar-body)",
-    "--bar-left": `calc(${NAV_WIDTH} + ${FRAME_PAD}${panel ? "" : " + (var(--bar-body) - var(--bar-w)) / 2"})`,
+    "--bar-left": `calc(${NAV_WIDTH} + ${FRAME_PAD} + (var(--bar-body) - var(--bar-w)) / 2)`,
   } as CSSProperties;
   return (
     <div
@@ -56,17 +56,13 @@ export function PageShell({
       ) : (
         <div
           className={cn(
-            "desktop:flex desktop:items-start desktop:gap-200 desktop:pt-300",
+            "desktop:flex desktop:items-start desktop:justify-center desktop:gap-200 desktop:pt-300",
             !flush && "desktop:pb-400",
             FRAME_INNER_PX,
           )}
         >
-          <div className="min-w-0 desktop:flex-1">
-            {readable ? (
-              <div className={cn("desktop:max-w-160", !panel && "desktop:mx-auto")}>{children}</div>
-            ) : (
-              children
-            )}
+          <div className={cn("min-w-0 desktop:flex-1", readable && "desktop:max-w-160")}>
+            {children}
           </div>
           {panel && (
             <aside className="sticky top-4 hidden w-80 flex-none desktop:flex desktop:flex-col desktop:gap-150">

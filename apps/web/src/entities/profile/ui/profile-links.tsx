@@ -3,19 +3,15 @@
 import { HStack, Text, Tooltip, cn } from "@roll-and-call/ui";
 import { Link2 } from "lucide-react";
 
-import { ACCENT_TINT_BORDER, ACCENT_TINT_HOVER, ACCENT_TINT_TEXT } from "../model/accent-tint";
+import { ACCENT_TINT_HOVER, ACCENT_TINT_TEXT } from "../model/accent-tint";
 import { linkHref, linkLabel, linkServiceOf, type ProfileLink } from "../model/link-services";
 import { BrandMark } from "./brand-mark";
 
 const ICON_CLASS = {
   square:
     "flex h-11 w-11 items-center justify-center rounded-500 border border-gray-200 text-gray-900",
-  // 마이페이지: 강조색 테두리의 동그란 아이콘
-  circle: cn(
-    "flex h-11 w-11 items-center justify-center rounded-full border",
-    ACCENT_TINT_BORDER,
-    ACCENT_TINT_TEXT,
-  ),
+  // 마이페이지: 테두리 없이 강조색 아이콘만
+  circle: cn("flex h-11 w-11 items-center justify-center rounded-full", ACCENT_TINT_TEXT),
 } as const;
 
 interface ProfileLinksProps {
