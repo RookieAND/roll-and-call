@@ -33,9 +33,14 @@ export function ProfileHero({
         {/* ponytail: 업로드한 이미지는 외부 저장소 주소라 next/image 대신 img로 그린다. */}
         {bannerUrl && <img src={bannerUrl} alt="" className="size-full object-cover" />}
       </div>
-      <HStack align="end" gap="100" className="relative z-10 -mt-9 px-200">
+      <HStack align="end" gap="100" className="relative z-10 -mt-9 px-200 desktop:-mt-13">
         <span className={cn("flex flex-none rounded-full bg-surface p-050", ringClass)}>
-          <Avatar src={avatarUrl} name={name} size="3xl" />
+          <Avatar
+            src={avatarUrl}
+            name={name}
+            size="3xl"
+            className="desktop:size-28 desktop:text-3xl"
+          />
         </span>
         <span className="flex-1" />
         {action}
