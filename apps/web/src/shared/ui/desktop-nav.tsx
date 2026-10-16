@@ -1,10 +1,11 @@
 "use client";
 
-import { Avatar, HStack, Text } from "@roll-and-call/ui";
+import { Avatar, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNumber } from "es-toolkit";
 import { CircleHelp } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
 
 import { useNavBadges } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
@@ -19,11 +20,19 @@ interface DesktopNavProps {
   current: MenuServer;
   servers?: MenuServer[];
   memberCount?: number;
-  profile?: { name: string; avatar: string | null };
+  profile?: { name: string; avatar: string | null; role: string };
+  // 도움말 아래 로그아웃 버튼. 로그인한 사람에게만 넘긴다.
+  signOut?: ReactNode;
 }
 
 // 1100px 이상에서만 보이는 좌측 내비(224px). 모바일 하단 탭과 같은 메뉴·점을 쓴다.
-export function DesktopNav({ current, servers = [], memberCount, profile }: DesktopNavProps) {
+export function DesktopNav({
+  current,
+  servers = [],
+  memberCount,
+  profile,
+  signOut,
+}: DesktopNavProps) {
   const badges = useNavBadges();
   const serverHome = serverPath({ slug: current.slug, path: "/" });
   const pathname = usePathname();
@@ -79,12 +88,18 @@ export function DesktopNav({ current, servers = [], memberCount, profile }: Desk
               도움말
             </Text>
           </Link>
+          {signOut}
           {profile && (
             <HStack align="center" gap="125" className="min-h-11 px-150">
               <Avatar src={profile.avatar} name={profile.name} size="sm" />
-              <Text typography="subtitle2" weight="bold" className="truncate">
-                {profile.name}
-              </Text>
+              <VStack className="min-w-0">
+                <Text typography="subtitle2" weight="bold" className="truncate">
+                  {profile.name}
+                </Text>
+                <Text typography="body5" foreground="hint" className="truncate">
+                  {profile.role}
+                </Text>
+              </VStack>
             </HStack>
           )}
         </div>
