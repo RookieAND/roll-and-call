@@ -729,6 +729,13 @@
       "when": 1799500000000,
       "tag": "0109_move_vercel_crons",
       "breakpoints": true
+    },
+    {
+      "idx": 110,
+      "version": "7",
+      "when": 1799500000001,
+      "tag": "0110_hide_from_ranking",
+      "breakpoints": true
     }
   ]
 }

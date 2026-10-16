@@ -80,6 +80,8 @@ export const serverMembers = pgTable(
     // 인증된 룰북이 있어도 Player로 보이고 싶으면 끈다.
     showGmBadge: boolean("show_gm_badge").notNull().default(true),
     showBadges: boolean("show_badges").notNull().default(true),
+    // 홈의 이 달의 기록 순위에서만 뺀다. 이달의 GM·PL 뱃지 집계는 그대로다. 요청이 있을 때 DB에서 직접 켠다.
+    hideFromRanking: boolean("hide_from_ranking").notNull().default(false),
     // 이름 아래 고정할 뱃지 키. 누른 순서대로 최대 3개이고, 비어 있으면 최근에 받은 3개를 보인다.
     featuredBadges: text("featured_badges").array().notNull().default([]),
     joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),

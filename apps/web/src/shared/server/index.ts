@@ -71,6 +71,7 @@ export {
   grantRushBadge,
   loadBadgeFacts as getBadgeFacts,
   loadMonthlyAppearances as getMonthlyAppearances,
+  listRankingHiddenUserIds,
   loadReviewAppearances as getReviewAppearances,
 } from "@roll-and-call/database/badges";
 export { notifyGameCreated } from "./discord/notify-game-created";

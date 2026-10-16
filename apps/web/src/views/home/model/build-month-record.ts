@@ -22,11 +22,14 @@ export function buildMonthRecord({
   now,
   mode = RANKING_MODE.count,
   reviews = [],
+  hiddenUserIds = [],
 }: {
   rows: MonthSessionRow[];
   now: Date;
   mode?: RankingMode;
   reviews?: MonthlyAppearance[];
+  // 본인 요청으로 순위에서만 뺀 사람. 세션 건수와 뱃지 집계에는 영향이 없다.
+  hiddenUserIds?: string[];
 }) {
   const people = new Map(
     rows
@@ -40,7 +43,9 @@ export function buildMonthRecord({
       { mode },
     ),
     ...(mode === RANKING_MODE.points ? reviews : []),
-  ].filter((appearance) => people.has(appearance.userId));
+  ].filter(
+    (appearance) => people.has(appearance.userId) && !hiddenUserIds.includes(appearance.userId),
+  );
   const rankRole = (role: BadgeRole) =>
     rankPeople(
       appearances

@@ -14,6 +14,7 @@ import {
   getProfile,
   getReviewAppearances,
   hasSessionsBetween,
+  listRankingHiddenUserIds,
 } from "@/shared/server";
 import {
   AppBar,
@@ -46,7 +47,7 @@ export async function HomeView({ date }: HomeViewProps) {
   const server = await getCurrentServer();
   const nextMonthStart = monthStart.add(1, "month");
   const mode = server.rankingMode as RankingMode;
-  const [user, rows, hasNextMonthSessions, reviews] = await Promise.all([
+  const [user, rows, hasNextMonthSessions, reviews, hiddenUserIds] = await Promise.all([
     getCurrentSessionUser(),
     getMonthSessions({
       serverId: server.id,
@@ -65,11 +66,12 @@ export async function HomeView({ date }: HomeViewProps) {
           to: nextMonthStart.toDate(),
         })
       : [],
+    listRankingHiddenUserIds({ serverId: server.id }),
   ]);
 
   const profile = user ? await getProfile(server.id, user.id) : undefined;
   const sessions = toCalendarSessions({ rows, viewerId: user?.id ?? null, now });
-  const record = buildMonthRecord({ rows, now, mode, reviews });
+  const record = buildMonthRecord({ rows, now, mode, reviews, hiddenUserIds });
   const titleSheets = await loadMemberTitleSheets({
     serverId: server.id,
     userIds: recordPeopleIds(record),

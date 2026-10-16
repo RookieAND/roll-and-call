@@ -12,6 +12,7 @@ export { syncAllMonthlyBadges } from "./commands/sync-all-monthly-badges";
 export { syncMonthlyBadges } from "./commands/sync-monthly-badges";
 export { loadBadgeFacts } from "./queries/load-badge-facts";
 export { loadMonthlyAppearances } from "./queries/load-monthly-appearances";
+export { listRankingHiddenUserIds } from "./queries/list-ranking-hidden-user-ids";
 export { loadReviewAppearances } from "./queries/load-review-appearances";
 export { loadMonthlyWinners, type MonthlyWinner } from "./queries/load-monthly-winners";
 export { loadUserBadges, type BadgeRecord } from "./queries/load-user-badges";
