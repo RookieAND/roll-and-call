@@ -4,9 +4,9 @@ import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 export function EditProfileSkeleton() {
   return (
-    <PageShell appBar={<AppBar back="/me" title="프로필 편집" />}>
+    <PageShell readable appBar={<AppBar back="/me" title="프로필 편집" />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm" className="desktop:max-w-none">
+        <Container size="md">
           <VStack gap="250" className="pt-300 pb-500">
             <HStack align="center" gap="150">
               <Skeleton width={60} height={60} rounded="full" />

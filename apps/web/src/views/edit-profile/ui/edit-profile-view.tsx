@@ -16,6 +16,7 @@ export async function EditProfileView() {
 
   return (
     <PageShell
+      readable
       appBar={
         <AppBar back="/me" title="프로필 편집" action={<div id={PROFILE_PREVIEW_SLOT_ID} />} />
       }
