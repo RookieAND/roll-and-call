@@ -1,6 +1,4 @@
-import { listMemberServers } from "@roll-and-call/database/servers";
-
-import { getCurrentSessionUser } from "@/shared/server";
+import { getCurrentSessionUser, listMemberServers } from "@/shared/server";
 import { ServerSwitcher } from "@/shared/ui";
 
 export async function GamesServerSwitch() {

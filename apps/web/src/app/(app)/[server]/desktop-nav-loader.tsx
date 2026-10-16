@@ -1,7 +1,7 @@
 import type { Server } from "@roll-and-call/database";
-import { countActiveMembers, listMemberServers } from "@roll-and-call/database/servers";
+import { countActiveMembers } from "@roll-and-call/database/servers";
 
-import { getProfile } from "@/shared/server";
+import { getProfile, listMemberServers } from "@/shared/server";
 import { DesktopNav } from "@/shared/ui";
 
 interface DesktopNavLoaderProps {

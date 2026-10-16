@@ -96,6 +96,7 @@ export {
 } from "@roll-and-call/game-notices/review-forum";
 export { getGameById } from "./db/get-game-by-id";
 export { getProfile } from "./db/get-profile";
+export { listMemberServers } from "./db/list-member-servers";
 export { getUserBadges } from "./db/get-user-badges";
 export { siteOrigin } from "./site-origin";
 export { isCronRequest } from "./cron/is-cron-request";
