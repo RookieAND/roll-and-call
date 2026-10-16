@@ -2,6 +2,7 @@ import { Container, VStack } from "@roll-and-call/ui";
 
 import { profileDisplay } from "@/entities/profile";
 import { LoginRequired } from "@/features/auth";
+import { PROFILE_PREVIEW_SLOT_ID } from "@/features/edit-profile";
 import { getProfile, getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
@@ -14,9 +15,14 @@ export async function EditProfileView() {
   const display = user ? profileDisplay({ profile, user }) : null;
 
   return (
-    <PageShell readable appBar={<AppBar back="/me" title="프로필 편집" />}>
+    <PageShell
+      readable
+      appBar={
+        <AppBar back="/me" title="프로필 편집" action={<div id={PROFILE_PREVIEW_SLOT_ID} />} />
+      }
+    >
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="md">
+        <Container size="sm" className="desktop:max-w-none">
           <VStack gap="300" className="py-300">
             {user && display ? (
               <EditProfileWithBanner

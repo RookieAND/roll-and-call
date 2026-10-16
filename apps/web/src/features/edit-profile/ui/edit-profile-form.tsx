@@ -11,7 +11,8 @@ import {
   VStack,
 } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 import {
   KEYWORD_MAX_COUNT,
@@ -25,6 +26,7 @@ import { ConfirmDialog, LineBreaks, TagInput, toast, useAction } from "@/shared/
 
 import { updateProfile } from "../api/update-profile";
 import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
+import { PROFILE_PREVIEW_SLOT_ID } from "../model/profile-preview-slot";
 import { AccentColorField } from "./accent-color-field";
 import { AvailabilitySummaryField } from "./availability-summary-field";
 import { AvatarRefreshField } from "./avatar-refresh-field";
@@ -95,6 +97,10 @@ export function EditProfileForm({
     );
   }
 
+  // 미리보기 버튼은 앱바 오른쪽에 있다. 입력값은 이 폼이 쥐고 있어서 앱바 자리에 끼워 그린다.
+  const [previewSlot, setPreviewSlot] = useState<HTMLElement | null>(null);
+  useEffect(() => setPreviewSlot(document.getElementById(PROFILE_PREVIEW_SLOT_ID)), []);
+
   function requestLeave() {
     if (dirty) setConfirmingLeave(true);
     else router.push(toServerPath("/me"));
@@ -106,21 +112,22 @@ export function EditProfileForm({
   const accentColorError = failure?.field === PROFILE_FIELD.accentColor ? failure.error : undefined;
   const formError = failure && !failure.field ? failure.error : null;
 
+  const preview = (
+    <ProfilePreviewSheet
+      name={username}
+      avatarUrl={avatarUrl}
+      bio={bio}
+      keywords={keywords}
+      playStyle={playStyle}
+      bannerUrl={bannerUrl}
+      accentColor={accentColor}
+    />
+  );
+
   return (
     <form onSubmit={submit} className="flex flex-col">
+      {previewSlot && createPortal(preview, previewSlot)}
       <VStack gap="250" className="pb-200">
-        <HStack align="center" justify="end">
-          <ProfilePreviewSheet
-            name={username}
-            avatarUrl={avatarUrl}
-            bio={bio}
-            keywords={keywords}
-            playStyle={playStyle}
-            bannerUrl={bannerUrl}
-            accentColor={accentColor}
-          />
-        </HStack>
-
         <AvatarRefreshField defaultUrl={avatarUrl} name={username} />
 
         {renderBannerField({ value: bannerUrl, onChange: setBannerUrl })}
