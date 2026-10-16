@@ -15,7 +15,11 @@ export function HomeDayPanel({ sessionsByDay, initialSelectedKey }: HomeDayPanel
 
   return (
     <div className="overflow-clip rounded-700 border border-gray-200 bg-surface [&>section]:border-t-0">
-      <HomeDaySessions date={selected.toDate()} sessions={sessionsByDay[selectedKey] ?? []} />
+      <HomeDaySessions
+        stacked
+        date={selected.toDate()}
+        sessions={sessionsByDay[selectedKey] ?? []}
+      />
     </div>
   );
 }
