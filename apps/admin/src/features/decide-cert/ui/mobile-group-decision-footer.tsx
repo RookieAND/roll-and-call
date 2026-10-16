@@ -48,12 +48,12 @@ export function MobileGroupDecisionFooter({
             size="sm"
             colorPalette="danger"
             onClick={() => onNoteClick(note)}
-            className="min-w-0 flex-1 justify-start px-0 text-left font-bold whitespace-normal"
+            className="h-auto min-h-10 w-full basis-full justify-start px-0 py-0 text-left font-bold whitespace-normal"
           >
             {note.text}
           </Button>
         ) : (
-          <Text typography="body4" foreground="hint" className="flex-1">
+          <Text typography="body4" foreground="hint" className="basis-full">
             {NOTIFY_NOTE}
           </Text>
         )}
