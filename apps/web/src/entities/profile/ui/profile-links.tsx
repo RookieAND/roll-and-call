@@ -8,7 +8,7 @@ import { linkHref, linkLabel, linkServiceOf, type ProfileLink } from "../model/l
 import { BrandMark } from "./brand-mark";
 
 const ICON_CLASS = {
-  square: "flex h-10 w-10 items-center justify-center rounded-500 text-gray-900",
+  square: "flex h-10 w-10 items-center justify-center rounded-full text-muted",
   // 마이페이지: 테두리 없이 강조색 아이콘만
   circle: cn("flex h-10 w-10 items-center justify-center rounded-full", ACCENT_TINT_TEXT),
 } as const;

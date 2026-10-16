@@ -6,7 +6,6 @@ import {
   ACCENT_TINT_HOVER,
   ACCENT_TINT_TEXT,
   AccentScope,
-  AvailabilityRows,
   KeywordChips,
   PlayStyleBlock,
   ProfileHero,
@@ -17,7 +16,7 @@ import {
 import { ServerLink } from "@/shared/ui";
 import { SessionCountStats } from "@/widgets/session-list";
 
-import { MyPageBlockLabel } from "./my-page-block-label";
+import { MyPageAvailability } from "./my-page-availability";
 import { MyPageFeaturedBadges, type FeaturedBadge } from "./my-page-featured-badges";
 
 interface MyPageProfileProps {
@@ -74,7 +73,11 @@ export function MyPageProfile({
               variant="ghost"
               size="lg"
               aria-label="프로필 편집"
-              className={cn(ACCENT_TINT_TEXT, ACCENT_TINT_HOVER)}
+              className={cn(
+                "-mb-1.5 h-10 w-10 desktop:mb-0 desktop:h-11 desktop:w-11",
+                ACCENT_TINT_TEXT,
+                ACCENT_TINT_HOVER,
+              )}
             >
               <Pencil size={18} aria-hidden />
             </IconButton>
@@ -95,7 +98,11 @@ export function MyPageProfile({
           </Text>
         </VStack>
 
-        {links.length > 0 && <ProfileLinks links={links} discordId={discordId} variant="circle" />}
+        {links.length > 0 && (
+          <div className="desktop:hidden">
+            <ProfileLinks links={links} discordId={discordId} variant="circle" />
+          </div>
+        )}
 
         {keywords.length > 0 && <KeywordChips keywords={keywords} />}
 
@@ -107,22 +114,8 @@ export function MyPageProfile({
 
         <PlayStyleBlock playStyle={playStyle} showEmpty />
 
-        <div>
-          <MyPageBlockLabel
-            label="가능 시간대"
-            action={{
-              path: "/me/availability?from=me",
-              label: availability.length > 0 ? "편집" : "추가",
-            }}
-          />
-          <AvailabilityRows
-            intervals={availability}
-            note={
-              availability.length > 0
-                ? "일정 조율 화면을 열면 이 시간대가 미리 칠해져 있습니다."
-                : "적어두면 일정 조율 화면에 미리 칠해져 있습니다."
-            }
-          />
+        <div className="desktop:hidden">
+          <MyPageAvailability availability={availability} />
         </div>
       </VStack>
     </AccentScope>

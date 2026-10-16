@@ -1,8 +1,11 @@
-import { profileDisplay } from "@/entities/profile";
+import { Text, VStack } from "@roll-and-call/ui";
+
+import { AccentScope, ProfileLinks, profileDisplay } from "@/entities/profile";
 import { getCurrentSessionUser } from "@/shared/server";
 
 import { loadMyProfile } from "../api/load-my-profile";
 import { loadMyQuestClears } from "../api/load-my-quest-clears";
+import { MyPageAvailability } from "./my-page-availability";
 import { MyPageSettings } from "./my-page-settings";
 
 interface MyPageAccountProps {
@@ -25,7 +28,25 @@ export async function MyPageAccount({ part }: MyPageAccountProps) {
     />
   );
 
-  if (part === "panel")
-    return <div className="rounded-700 border border-gray-200 bg-surface p-200">{settings}</div>;
+  if (part === "panel") {
+    const links = profile?.links ?? [];
+    return (
+      <AccentScope accentColor={profile?.accentColor}>
+        <VStack gap="225" className="rounded-700 border border-gray-200 bg-surface p-200">
+          {links.length > 0 && (
+            <VStack gap="100">
+              <Text weight="bold" typography="body4" foreground="muted" render={<h2 />}>
+                링크
+              </Text>
+              <ProfileLinks links={links} discordId={profile?.discordId} variant="circle" />
+            </VStack>
+          )}
+          <MyPageAvailability availability={profile?.availability ?? []} />
+          <hr className="border-gray-200" />
+          {settings}
+        </VStack>
+      </AccentScope>
+    );
+  }
   return <div className="desktop:hidden">{settings}</div>;
 }
