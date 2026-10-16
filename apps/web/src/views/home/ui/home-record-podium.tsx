@@ -68,11 +68,18 @@ export function HomeRecordPodium({ label, ranking, leaders, mode }: HomeRecordPo
   return (
     <HStack align="end" gap="125" className="pt-175">
       <HomeRecordPodiumStep row={second ?? null} position={2} mode={mode} />
-      <div className="relative order-2 flex min-w-0 flex-[1.25] flex-col">
+      <div className="animate-rank-rise relative order-2 flex min-w-0 flex-[1.25] flex-col">
         <PodiumRankMark
           rank={1}
+          shine
           className="-top-[17px] h-[34px] w-[34px] bg-rank-gold shadow-[0_4px_12px_color-mix(in_srgb,var(--color-rank-gold)_55%,transparent)]"
         />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 bottom-600 z-[1] overflow-hidden rounded-t-600"
+        >
+          <span className="animate-badge-shine absolute inset-0 opacity-40" />
+        </span>
         {leaders.length > 1 ? (
           <HomeRecordTieSheet
             label={label}

@@ -10,7 +10,8 @@ import { leaderName } from "./leader-name";
 
 // 공동 1위가 많아도 아바타가 이름과 점수 자리를 밀어내지 않도록 둘까지만 보이고 나머지는 +N으로 묶는다.
 const MAX_AVATARS = 2;
-const CARD = "flex items-center gap-150 rounded-600 bg-primary-50 p-175 transition-colors";
+const CARD =
+  "animate-rank-rise flex items-center gap-150 rounded-600 bg-primary-50 p-175 transition-colors";
 
 interface HomeRecordLeaderProps {
   label: string;

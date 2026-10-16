@@ -7,13 +7,17 @@ export function MyPageLoading() {
     <>
       <MyPageSummarySkeleton />
       <MyPageBlockSkeleton titleWidth={40} height={124} />
-      <MyPageBlockSkeleton titleWidth={64} height={120} />
-      <MyPageBlockSkeleton titleWidth={40} height={96} />
+      <MyPageBlockSkeleton titleWidth={64} height={238} />
+      <MyPageBlockSkeleton titleWidth={40} height={97} />
       <MyPageAccountSkeleton />
     </>
   );
 }
 
 export function MyPagePanelLoading() {
-  return <MyPageBlockSkeleton titleWidth={40} height={208} />;
+  return (
+    <div className="rounded-700 border border-gray-200 bg-surface p-200">
+      <MyPageBlockSkeleton titleWidth={40} height={242} />
+    </div>
+  );
 }

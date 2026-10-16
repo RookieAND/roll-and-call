@@ -38,10 +38,10 @@ export async function MyPageView() {
               <Suspense fallback={<MyPageBlockSkeleton titleWidth={40} height={124} />}>
                 <MyPageBadgesSection />
               </Suspense>
-              <Suspense fallback={<MyPageBlockSkeleton titleWidth={64} height={120} />}>
+              <Suspense fallback={<MyPageBlockSkeleton titleWidth={64} height={238} />}>
                 <MyPageRulebooksSection />
               </Suspense>
-              <Suspense fallback={<MyPageBlockSkeleton titleWidth={40} height={96} />}>
+              <Suspense fallback={<MyPageBlockSkeleton titleWidth={40} height={97} />}>
                 <MyPageReviewsSection />
               </Suspense>
               <Suspense fallback={<MyPageAccountSkeleton />}>

@@ -1,27 +1,20 @@
 import { Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
 
+const BADGE_WIDTHS = [84, 96, 72];
+const KEYWORD_WIDTHS = [60, 72, 56];
+
 export function MyPageSummarySkeleton() {
   return (
     <VStack gap="175" render={<section />}>
       <HStack align="center" gap="175">
-        <Skeleton width={60} height={60} rounded="full" />
-        <VStack gap="050" className="min-w-0 flex-1">
-          <Skeleton width={112} height={25} />
-          <Skeleton width={176} height={20} />
+        <Skeleton width={52} height={52} rounded="full" className="flex-none" />
+        <VStack gap="025" className="min-w-0 flex-1">
+          <Skeleton width={80} height={22} />
+          <Skeleton width={200} height={20} />
         </VStack>
-        <Skeleton width={52} height={36} rounded={400} className="flex-none" />
+        <Skeleton width={48} height={34} rounded={400} className="flex-none" />
       </HStack>
-      <VStack gap="075">
-        <HStack align="center" className="min-h-7">
-          <Skeleton width={52} height={17} />
-        </HStack>
-        <Grid cols={3} gap="075">
-          {range(3).map((index) => (
-            <Skeleton key={index} width="100%" height={26} rounded="full" />
-          ))}
-        </Grid>
-      </VStack>
       <Grid cols={2} className="-mx-200 border-y border-gray-200">
         {range(2).map((index) => (
           <VStack
@@ -30,21 +23,39 @@ export function MyPageSummarySkeleton() {
             gap="050"
             className="border-gray-200 py-175 not-first:border-l"
           >
-            <Skeleton width={24} height={27} />
-            <Skeleton width={72} height={17} />
+            <Skeleton width={24} height={24} />
+            <Skeleton width={64} height={18} />
           </VStack>
         ))}
       </Grid>
-      <VStack gap="100">
-        <Skeleton width={40} height={17} />
-        <HStack gap="075">
-          <Skeleton width={80} height={30} rounded="full" />
-          <Skeleton width={64} height={30} rounded="full" />
+      <VStack gap="075">
+        <HStack align="center" className="min-h-7">
+          <Skeleton width={52} height={18} />
+        </HStack>
+        <HStack wrap gap="075">
+          {BADGE_WIDTHS.map((width) => (
+            <Skeleton key={width} width={width} height={32} rounded="full" />
+          ))}
         </HStack>
       </VStack>
       <VStack gap="100">
-        <Skeleton width={80} height={17} />
-        <Skeleton width="100%" height={52} rounded={500} />
+        <HStack align="center" className="min-h-8">
+          <Skeleton width={30} height={18} />
+        </HStack>
+        <HStack wrap gap="075">
+          {KEYWORD_WIDTHS.map((width) => (
+            <Skeleton key={width} width={width} height={32} rounded="full" />
+          ))}
+        </HStack>
+      </VStack>
+      <VStack gap="075">
+        <HStack align="center" justify="between" className="min-h-8">
+          <Skeleton width={60} height={18} />
+          <Skeleton width={40} height={32} rounded={400} />
+        </HStack>
+        {range(3).map((index) => (
+          <Skeleton key={index} width="100%" height={44} rounded={400} />
+        ))}
       </VStack>
     </VStack>
   );

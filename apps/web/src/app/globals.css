@@ -486,3 +486,15 @@ html {
 @utility animate-quest-rise {
   animation: quest-rise 500ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
 }
+
+/* 화면에 처음 들어올 때 아래에서 올라온다. 스크롤 타임라인을 못 쓰는 브라우저는 그냥 보인다. */
+@utility animate-rank-rise {
+  @supports (animation-timeline: view()) {
+    animation: quest-rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
