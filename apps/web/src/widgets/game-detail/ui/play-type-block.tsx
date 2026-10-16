@@ -15,7 +15,7 @@ export function PlayTypeBlock({ playType }: PlayTypeBlockProps) {
         플레이 유형
       </Text>
       <HStack>
-        <Chip tone="outline" render={<span />} className="gap-050 desktop:text-body2">
+        <Chip tone="outline" render={<span />} className="gap-050">
           <Icon size={14} strokeWidth={2} aria-hidden />
           {playTypeLabel(playType)}
         </Chip>

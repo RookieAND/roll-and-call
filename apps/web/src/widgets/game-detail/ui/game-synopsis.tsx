@@ -14,7 +14,7 @@ export function GameSynopsis({ synopsis }: GameSynopsisProps) {
       <Text
         typography="body2"
         render={<RichText value={synopsis} />}
-        className="[text-wrap:pretty] desktop:text-heading3"
+        className="[text-wrap:pretty]"
       />
     </VStack>
   );

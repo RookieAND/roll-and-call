@@ -16,7 +16,7 @@ export function GameNoticeBlock({ notice, linkLabels }: GameNoticeBlockProps) {
         typography="body3"
         foreground="muted"
         render={<RichText value={notice} linkLabels={linkLabels} />}
-        className="[text-wrap:pretty] desktop:text-heading3"
+        className="[text-wrap:pretty]"
       />
     </VStack>
   );

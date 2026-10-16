@@ -17,18 +17,13 @@ export function GameTagBlock({ label, tags, noteLines, tone = "outline" }: GameT
       </Text>
       <HStack gap="075" wrap>
         {tags.map((tag) => (
-          <Chip key={tag} tone={tone} render={<span />} className="desktop:text-body2">
+          <Chip key={tag} tone={tone} render={<span />}>
             {tag}
           </Chip>
         ))}
       </HStack>
       {noteLines && (
-        <Text
-          typography="body4"
-          foreground="hint"
-          render={<p />}
-          className="break-keep desktop:text-body2"
-        >
+        <Text typography="body4" foreground="hint" render={<p />} className="break-keep">
           <LineBreaks lines={noteLines} />
         </Text>
       )}

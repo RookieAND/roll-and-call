@@ -80,11 +80,7 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
           gap="150"
           className="min-h-10 px-175 py-100"
         >
-          <Text
-            typography="body4"
-            foreground="hint"
-            className="w-18.5 shrink-0 desktop:w-22 desktop:text-body2"
-          >
+          <Text typography="body4" foreground="hint" className="w-18.5 shrink-0">
             {row.label}
           </Text>
           <Text
@@ -92,7 +88,7 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
             weight="medium"
             numeric
             render={<div />}
-            className="flex min-w-0 flex-1 items-center desktop:text-heading3"
+            className="flex min-w-0 flex-1 items-center desktop:text-body2"
           >
             {row.value}
           </Text>
