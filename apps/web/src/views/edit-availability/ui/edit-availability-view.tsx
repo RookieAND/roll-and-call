@@ -13,9 +13,9 @@ export async function EditAvailabilityView({ from }: EditAvailabilityViewProps) 
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
-      <PageShell readable appBar={<AppBar back="/me" title="가능 시간대" />}>
+      <PageShell appBar={<AppBar back="/me" title="가능 시간대" />}>
         <div className={DESKTOP_CARD_CLASS}>
-          <Container size="sm">
+          <Container size="sm" className="desktop:max-w-none">
             <div className="py-300">
               <LoginRequired />
             </div>
@@ -29,7 +29,7 @@ export async function EditAvailabilityView({ from }: EditAvailabilityViewProps) 
   const profile = await getProfile(server.id, user.id);
 
   return (
-    <Container size="sm" className="px-0">
+    <Container size="sm" className="px-0 desktop:max-w-none">
       <AvailabilityEditor defaultValue={profile?.availability ?? []} from={from} />
     </Container>
   );

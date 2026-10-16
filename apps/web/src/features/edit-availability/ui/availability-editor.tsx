@@ -34,7 +34,7 @@ export function AvailabilityEditor({ defaultValue, from }: AvailabilityEditorPro
   }
 
   return (
-    <PageShell readable appBar={<AppBar back={returnPath} title="가능 시간대" />}>
+    <PageShell appBar={<AppBar back={returnPath} title="가능 시간대" />}>
       <div className={DESKTOP_CARD_CLASS}>
         <div className="border-b border-gray-200 px-200 py-175">
           <Callout.Root colorPalette="gray" size="sm">

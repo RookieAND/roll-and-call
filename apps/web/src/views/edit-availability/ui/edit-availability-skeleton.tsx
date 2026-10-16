@@ -5,9 +5,9 @@ import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 export function EditAvailabilitySkeleton() {
   return (
-    <PageShell readable appBar={<AppBar back="/me/edit" title="가능 시간대" />}>
+    <PageShell appBar={<AppBar back="/me/edit" title="가능 시간대" />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm" className="px-0">
+        <Container size="sm" className="px-0 desktop:max-w-none">
           <div className="border-b border-gray-200 px-200 py-175">
             <Skeleton width="100%" height={62} rounded={400} />
           </div>
