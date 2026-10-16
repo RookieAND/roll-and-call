@@ -6,7 +6,6 @@ import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 export function UserProfileSkeleton() {
   return (
     <PageShell
-      readable
       appBar={<AppBar back="/games" title="프로필" />}
       panel={
         <div className={`${DESKTOP_CARD_CLASS} p-200`}>

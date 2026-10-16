@@ -198,8 +198,8 @@ export function EditProfileForm({
             prefix="#"
             placeholder="수사중심"
             delimited
-            hint={`${KEYWORD_MAX_LENGTH}자까지 · 앞에 #가 붙습니다.`}
-            typingHint="쉼표나 띄어쓰기로도 끊깁니다. 같은 성향은 한 번만 들어갑니다."
+            hint={`최대 ${KEYWORD_MAX_COUNT}개 · ${KEYWORD_MAX_LENGTH}자까지 · #는 자동으로 붙습니다.`}
+            typingHint="쉼표나 띄어쓰기로 구분합니다."
           />
         </Field.Root>
 

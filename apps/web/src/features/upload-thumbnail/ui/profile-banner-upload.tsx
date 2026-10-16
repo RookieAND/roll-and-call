@@ -1,12 +1,14 @@
 "use client";
 
-import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { ImageIcon, Move, Trash2 } from "lucide-react";
 import { useRef, useState } from "react";
 
 import { uploadThumbnail } from "../api/upload-thumbnail";
 import { imageFileError } from "../model/image-file-error";
 import { uploadFailedMessage } from "../model/upload-failed-message";
 import { IMAGE_ACCEPT } from "../model/upload-rules";
+import { BannerActionButton } from "./banner-action-button";
 import { BannerCropSheet } from "./banner-crop-sheet";
 
 interface ProfileBannerUploadProps {
@@ -58,36 +60,30 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
       <div className="relative aspect-[3/1] overflow-hidden rounded-400 border border-dashed border-gray-300 bg-gray-50">
         {/* ponytail: 업로드한 이미지는 외부 저장소 주소라 next/image 대신 img로 그린다. */}
         {value && <img src={value} alt="배너 미리보기" className="size-full object-cover" />}
+        <HStack gap="100" className="absolute top-100 right-100">
+          <BannerActionButton
+            icon={Move}
+            label="위치 조정"
+            disabled={!value || uploading}
+            onClick={() => setCropping(original ?? value)}
+          />
+          <BannerActionButton
+            icon={ImageIcon}
+            label="이미지 바꾸기"
+            disabled={uploading}
+            onClick={() => inputRef.current?.click()}
+          />
+          <BannerActionButton
+            icon={Trash2}
+            label="배너 지우기"
+            disabled={!value || uploading}
+            onClick={() => {
+              setOriginal(null);
+              onChange("");
+            }}
+          />
+        </HStack>
       </div>
-      <HStack gap="100" className="[&>*]:min-h-11 [&>*]:flex-1">
-        <Button
-          type="button"
-          variant="outline"
-          disabled={!value || uploading}
-          onClick={() => setCropping(original ?? value)}
-        >
-          위치 조정
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          loading={uploading}
-          onClick={() => inputRef.current?.click()}
-        >
-          이미지 바꾸기
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          disabled={!value || uploading}
-          onClick={() => {
-            setOriginal(null);
-            onChange("");
-          }}
-        >
-          배너 지우기
-        </Button>
-      </HStack>
       <Text typography="body4" foreground={error ? "danger" : "hint"}>
         {error ?? "배너가 없으면 강조색 면으로 보입니다."}
       </Text>

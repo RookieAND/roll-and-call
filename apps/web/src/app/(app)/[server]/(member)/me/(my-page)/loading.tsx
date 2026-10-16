@@ -6,7 +6,6 @@ import { MyPageLoading, MyPagePanelLoading } from "@/views/my-page";
 export default function Loading() {
   return (
     <PageShell
-      readable
       appBar={<AppBar title="마이페이지" action={<HelpButton />} />}
       panel={<MyPagePanelLoading />}
     >
