@@ -1,3 +1,4 @@
+export { MEMBER_ROLE, type MemberRole } from "./member-role";
 export { isRankingMode, RANKING_MODE, RANKING_MODE_LABEL, type RankingMode } from "./ranking-mode";
 export { RESERVED_SERVER_SLUGS } from "./reserved-server-slugs";
 export { isServerSlug } from "./is-server-slug";

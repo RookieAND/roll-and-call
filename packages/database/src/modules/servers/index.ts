@@ -15,6 +15,7 @@ export { updateRankingMode } from "./commands/update-ranking-mode";
 export { saveReviewTemplate } from "./commands/save-review-template";
 export { updateServerSettings, type ServerSettings } from "./commands/update-server-settings";
 export { getActiveMembership } from "./queries/get-active-membership";
+export { getMemberRole } from "./queries/get-member-role";
 export { getMessageHeads, type MessageHead } from "./queries/get-message-heads";
 export { getMessageTexts, type MessageText } from "./queries/get-message-texts";
 export { getReviewTemplate, type ReviewTemplate } from "./queries/get-review-template";

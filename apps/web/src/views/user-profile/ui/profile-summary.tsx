@@ -1,4 +1,5 @@
-import { Text, VStack } from "@roll-and-call/ui";
+import { getMemberRole } from "@roll-and-call/database/servers";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { SESSION_ROLE } from "@/entities/game";
 import {
@@ -19,6 +20,7 @@ import {
 
 import { ProfileBadges, type ProfileFeaturedBadge } from "./profile-badges";
 import { ProfileBlockLabel } from "./profile-block-label";
+import { ProfileRoleMark } from "./profile-role-mark";
 
 interface ProfileSummaryProps {
   profile: MemberProfile;
@@ -38,6 +40,7 @@ export async function ProfileSummary({
   badgeTotal,
 }: ProfileSummaryProps) {
   const server = await getCurrentServer();
+  const role = await getMemberRole({ serverId: server.id, userId: profile.id });
   const joinedLabel = toKst(profile.joinedAt).format("YYYY년 M월부터");
   const bioText = profile.bio || EMPTY_BIO_TEXT;
   const bioForeground = profile.bio ? "normal" : "hint";
@@ -56,9 +59,12 @@ export async function ProfileSummary({
         accentColor={profile.accentColor}
       />
       <VStack gap="025" className="mt-175 min-w-0">
-        <Text typography="heading2" truncate className="desktop:text-heading1" render={<h2 />}>
-          {profile.username}
-        </Text>
+        <HStack align="center" gap="075" className="min-w-0">
+          <Text typography="heading2" truncate className="desktop:text-heading1" render={<h2 />}>
+            {profile.username}
+          </Text>
+          {role && <ProfileRoleMark role={role} />}
+        </HStack>
         <Text typography="body3" foreground="hint">
           {joinedLabel}
         </Text>
