@@ -1,7 +1,7 @@
 import { Card, HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
 
-import { CARD_GRID_CLASS } from "@/shared/ui";
+import { SESSION_GRID_CLASS } from "./session-grid-class";
 
 interface SessionListSkeletonProps {
   count?: number;
@@ -11,7 +11,7 @@ interface SessionListSkeletonProps {
 // 1100px 이상은 세로 카드 모양(위 16:9 썸네일, 배지·제목·일정·GM)을 그린다.
 export function SessionListSkeleton({ count = 3 }: SessionListSkeletonProps) {
   return (
-    <VStack className={`gap-125 ${CARD_GRID_CLASS}`}>
+    <VStack className={`gap-125 ${SESSION_GRID_CLASS}`}>
       {range(count).map((index) => (
         <div key={index} className="contents">
           <Skeleton width="100%" height={118} rounded={600} className="desktop:hidden" />

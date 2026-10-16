@@ -78,7 +78,7 @@ export function SessionCard({ model }: SessionCardProps) {
               truncate
               typography="heading3"
               foreground={titleForeground}
-              className="min-w-0 flex-1 desktop:order-2 desktop:basis-full desktop:overflow-visible desktop:text-clip desktop:whitespace-normal desktop:text-pretty"
+              className="min-w-0 flex-1 desktop:order-2 desktop:min-h-11 desktop:basis-full desktop:overflow-visible desktop:text-clip desktop:whitespace-normal desktop:text-pretty"
             >
               {model.title}
             </Text>

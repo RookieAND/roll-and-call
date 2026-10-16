@@ -69,7 +69,7 @@ export async function MySessionsView({ tab, status }: MySessionsViewProps) {
         </div>
 
         <Container size="sm" className="desktop:max-w-none">
-          <div className="py-150">
+          <div className="py-150 desktop:py-200">
             {items.length > 0 ? (
               <SessionList items={items} />
             ) : (
