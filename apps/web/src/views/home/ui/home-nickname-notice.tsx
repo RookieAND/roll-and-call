@@ -10,7 +10,7 @@ interface HomeNicknameNoticeProps {
 
 export function HomeNicknameNotice({ nickname }: HomeNicknameNoticeProps) {
   return (
-    <Callout.Root colorPalette="gray" size="sm">
+    <Callout.Root colorPalette="warning" size="sm">
       <Callout.Icon />
       <Callout.Description className="text-pretty break-keep">
         <LineBreaks

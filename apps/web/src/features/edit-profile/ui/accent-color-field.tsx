@@ -16,7 +16,7 @@ export function AccentColorField({ value, error, onChange }: AccentColorFieldPro
   const pickerValue = normalizeAccentColor(value) ?? PICKER_FALLBACK;
   return (
     <Field.Root
-      label="강조색 (선택)"
+      label="강조색"
       htmlFor="accent-color"
       description="색을 고르거나 Hex 값(#RRGGBB)을 입력합니다."
       error={error}

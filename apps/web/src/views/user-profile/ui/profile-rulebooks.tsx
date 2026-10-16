@@ -1,9 +1,9 @@
 "use client";
 
 import { Button, Chip, HStack, Sheet, Text } from "@roll-and-call/ui";
-import { Check } from "lucide-react";
 
 import { ProfileBlockLabel } from "./profile-block-label";
+import { RulebookSheetList } from "./rulebook-sheet-list";
 
 const FOLDED_COUNT = 5;
 
@@ -13,7 +13,6 @@ interface ProfileRulebooksProps {
 
 export function ProfileRulebooks({ rulebooks }: ProfileRulebooksProps) {
   const hiddenCount = rulebooks.length - FOLDED_COUNT;
-  const sorted = rulebooks.toSorted((left, right) => left.label.localeCompare(right.label, "ko"));
 
   return (
     <section className="px-200 pt-200">
@@ -31,7 +30,6 @@ export function ProfileRulebooks({ rulebooks }: ProfileRulebooksProps) {
             aria-label={`${rulebook.label} 인증 룰북`}
             render={<span />}
           >
-            <Check size={13} strokeWidth={3} aria-hidden className="mr-050 text-success-700" />
             {rulebook.label}
           </Chip>
         ))}
@@ -55,22 +53,7 @@ export function ProfileRulebooks({ rulebooks }: ProfileRulebooksProps) {
                 </Text>
                 <Sheet.Close render={<Button variant="ghost" />}>닫기</Sheet.Close>
               </HStack>
-              <Text typography="body4" foreground="hint" render={<p />} className="px-200 pb-050">
-                가나다순
-              </Text>
-              <Sheet.Body className="border-t border-gray-200 px-200 pb-200">
-                {sorted.map((rulebook) => (
-                  <Text
-                    key={rulebook.id}
-                    typography="body2"
-                    weight="medium"
-                    render={<div />}
-                    className="flex min-h-11 items-center border-t border-gray-200 first:border-t-0"
-                  >
-                    {rulebook.label}
-                  </Text>
-                ))}
-              </Sheet.Body>
+              <RulebookSheetList rulebooks={rulebooks} />
             </Sheet.Popup>
           </Sheet.Root>
         )}

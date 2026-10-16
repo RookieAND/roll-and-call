@@ -46,7 +46,7 @@ export async function saveWelcomeUsername(input: {
     nickname,
     keepSuffixNotice: mode === "later" && nickname === profile?.username,
   });
-  if (!saved.ok) return { error: nicknameTakenMessage(), field: "username" };
+  if (!saved.ok) return { error: nicknameTakenMessage(server.name), field: "username" };
 
   revalidatePath(serverPath({ slug: server.slug, path: "/" }), "layout");
   redirect(

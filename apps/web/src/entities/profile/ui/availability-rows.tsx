@@ -26,7 +26,7 @@ export function AvailabilityRows({ intervals, note }: AvailabilityRowsProps) {
       >
         <Clock size={15} className="flex-none text-hint" aria-hidden />
         <Text typography="body4" foreground="hint" className="min-w-0 flex-1">
-          적어두지 않았습니다
+          적어둔 가능 시간대가 없습니다
         </Text>
       </HStack>
     );

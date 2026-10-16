@@ -52,7 +52,7 @@ export function AvailabilitySummaryField({ intervals }: AvailabilitySummaryField
           className="min-h-11 rounded-400 border border-dashed border-gray-300"
         >
           <Text typography="body4" foreground="hint">
-            적어둔 시간대가 없습니다
+            적어둔 가능 시간대가 없습니다
           </Text>
         </HStack>
       )}

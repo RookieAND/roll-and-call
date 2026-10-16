@@ -6,16 +6,20 @@ import { SESSION_ROLE } from "@/entities/game";
 import { DepartedMemberScreen } from "@/entities/profile";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
-import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, EmptyState, PageShell } from "@/shared/ui";
 import {
   countableCards,
   PROFILE_SESSION_SECTIONS,
-  SessionEmptyLine,
   SessionList,
   SessionTabs,
   userSessionsHref,
 } from "@/widgets/session-list";
 import { loadProfile } from "@/widgets/session-list/server";
+
+const EMPTY_IMAGE = {
+  [SESSION_ROLE.player]: "empty-my-games",
+  [SESSION_ROLE.host]: "empty-hosted",
+} as const;
 
 interface UserSessionsViewProps {
   id: string;
@@ -60,7 +64,11 @@ export async function UserSessionsView({ id, tab }: UserSessionsViewProps) {
             {items.length > 0 ? (
               <SessionList items={items} />
             ) : (
-              <SessionEmptyLine text={activeSection.empty} />
+              <EmptyState
+                image={EMPTY_IMAGE[activeSection.key]}
+                size="section"
+                title={activeSection.empty}
+              />
             )}
           </div>
         </Container>

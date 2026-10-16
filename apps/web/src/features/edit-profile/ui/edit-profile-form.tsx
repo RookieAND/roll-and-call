@@ -156,7 +156,7 @@ export function EditProfileForm({
             placeholder="어떤 판을 즐겨 하는지 한 줄로 적어 주세요."
             maxLength={BIO_MAX_LENGTH}
             invalid={!!bioError}
-            rows={3}
+            rows={2}
           />
         </Field.Root>
 

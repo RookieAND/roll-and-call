@@ -86,7 +86,7 @@ export function MyPageProfile({
 
       {links.length > 0 && <ProfileLinks links={links} discordId={discordId} />}
 
-      <KeywordChips keywords={keywords} selected />
+      {keywords.length > 0 && <KeywordChips keywords={keywords} selected />}
 
       <SessionCountStats hosted={hosted} played={played} />
 

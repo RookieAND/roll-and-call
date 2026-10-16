@@ -14,6 +14,8 @@ import {
   type ProfileLink,
 } from "@/entities/profile";
 
+const SNS_GUIDE_MAX_LINKS = 3;
+
 const SERVICE_OPTIONS = LINK_SERVICES.map((service) => ({
   value: service.key,
   label: service.label,
@@ -33,10 +35,13 @@ export function ProfileLinksField({ value, onChange, discordHandle }: ProfileLin
   const replace = (index: number, link: ProfileLink) =>
     onChange(value.map((item, itemIndex) => (itemIndex === index ? link : item)));
 
+  // 링크가 적을 때만 SNS 입력 방법을 먼저 알린다.
+  const guideSns = value.length <= SNS_GUIDE_MAX_LINKS;
+
   return (
     <VStack gap="100">
       <HStack align="baseline" gap="100">
-        <Text weight="bold" typography="body4" className="flex-1">
+        <Text typography="subtitle2" className="flex-1">
           링크
         </Text>
         <Text numeric typography="body4" foreground="hint">
@@ -128,7 +133,14 @@ export function ProfileLinksField({ value, onChange, discordHandle }: ProfileLin
       )}
 
       <Text typography="body4" foreground="hint" render={<p />}>
-        위에서부터 마이페이지와 타인 프로필에 같은 순서로 보입니다.
+        {guideSns && (
+          <span className="block">SNS는 서비스를 고르고 핸들만 적으면 주소를 만듭니다.</span>
+        )}
+        <span className="block">
+          {guideSns
+            ? "위에서부터 마이페이지와 타인 프로필에 그대로 나옵니다."
+            : "위에서부터 마이페이지와 타인 프로필에 같은 순서로 보입니다."}
+        </span>
       </Text>
     </VStack>
   );
