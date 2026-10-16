@@ -11,11 +11,11 @@ export function PlayTypeBlock({ playType }: PlayTypeBlockProps) {
   const Icon = playType === PLAY_TYPE.voice ? Mic : MessageSquare;
   return (
     <VStack gap="100">
-      <Text typography="subtitle2" render={<h2 />}>
+      <Text typography="subtitle2" className="desktop:text-heading2" render={<h2 />}>
         플레이 유형
       </Text>
       <HStack>
-        <Chip tone="outline" render={<span />} className="gap-050">
+        <Chip tone="outline" render={<span />} className="gap-050 desktop:text-body2">
           <Icon size={14} strokeWidth={2} aria-hidden />
           {playTypeLabel(playType)}
         </Chip>

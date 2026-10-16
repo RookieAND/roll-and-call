@@ -12,18 +12,23 @@ interface GameTagBlockProps {
 export function GameTagBlock({ label, tags, noteLines, tone = "outline" }: GameTagBlockProps) {
   return (
     <VStack gap="100">
-      <Text typography="subtitle2" render={<h2 />}>
+      <Text typography="subtitle2" className="desktop:text-heading2" render={<h2 />}>
         {label}
       </Text>
       <HStack gap="075" wrap>
         {tags.map((tag) => (
-          <Chip key={tag} tone={tone} render={<span />}>
+          <Chip key={tag} tone={tone} render={<span />} className="desktop:text-body2">
             {tag}
           </Chip>
         ))}
       </HStack>
       {noteLines && (
-        <Text typography="body4" foreground="hint" render={<p />} className="break-keep">
+        <Text
+          typography="body4"
+          foreground="hint"
+          render={<p />}
+          className="break-keep desktop:text-body2"
+        >
           <LineBreaks lines={noteLines} />
         </Text>
       )}

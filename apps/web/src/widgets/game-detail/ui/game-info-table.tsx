@@ -2,6 +2,7 @@ import { formatPlayRange } from "@roll-and-call/database/games/model";
 import { Avatar, Badge, Card, HStack, Text } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
+import { MemberTitle } from "@/features/view-badge";
 import { formatDateTime, formatGameSchedule } from "@/shared/lib";
 import type { GameDetailData } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
@@ -37,6 +38,9 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
         >
           <Avatar src={game.gm?.avatarUrl} name={game.gm?.username} size="sm" />
           <span className="truncate">{game.gm?.username ?? "?"}</span>
+          <span className="hidden min-w-0 desktop:inline-flex">
+            <MemberTitle userId={game.gmId} size="sm" />
+          </span>
           {isGm && <Badge colorPalette="primary">나</Badge>}
         </ServerLink>
       ),
@@ -76,7 +80,11 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
           gap="150"
           className="min-h-10 px-175 py-100"
         >
-          <Text typography="body4" foreground="hint" className="w-18.5 shrink-0">
+          <Text
+            typography="body4"
+            foreground="hint"
+            className="w-18.5 shrink-0 desktop:w-22 desktop:text-body2"
+          >
             {row.label}
           </Text>
           <Text
@@ -84,7 +92,7 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
             weight="medium"
             numeric
             render={<div />}
-            className="flex min-w-0 flex-1 items-center"
+            className="flex min-w-0 flex-1 items-center desktop:text-heading3"
           >
             {row.value}
           </Text>
