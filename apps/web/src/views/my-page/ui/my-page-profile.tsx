@@ -81,7 +81,13 @@ export function MyPageProfile({
           }
         />
         <VStack gap="025" className="min-w-0">
-          <Text typography="heading3" weight="extrabold" truncate render={<h2 />}>
+          <Text
+            typography="heading3"
+            weight="extrabold"
+            truncate
+            className="desktop:text-heading1"
+            render={<h2 />}
+          >
             {name}
           </Text>
           <Text typography="body3" foreground={bioForeground}>

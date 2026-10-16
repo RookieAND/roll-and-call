@@ -56,7 +56,7 @@ export async function ProfileSummary({
         accentColor={profile.accentColor}
       />
       <VStack gap="025" className="mt-175 min-w-0">
-        <Text typography="heading2" truncate render={<h2 />}>
+        <Text typography="heading2" truncate className="desktop:text-heading1" render={<h2 />}>
           {profile.username}
         </Text>
         <Text typography="body3" foreground="hint">
