@@ -1,5 +1,5 @@
 import "server-only";
-import { uniq } from "es-toolkit";
+import { sumBy, uniq } from "es-toolkit";
 
 import { loadSnapshot } from "@/shared/server";
 
@@ -14,7 +14,8 @@ export async function listCertQueue(filter: CertQueueFilter) {
     applications: db.certApplications.filter((application) => application.status === "pending"),
   });
   return {
-    total: pending.length,
+    // 한 묶음 신청은 한 줄로 합쳐 보이지만, 사이드바 건수와 같게 책 수로 센다.
+    total: sumBy(pending, (row) => row.groupCount),
     rows: filterCertQueue({ rows: pending, filter }),
     rulebookOptions: uniq(pending.map((row) => row.rulebook)).toSorted(),
   };
