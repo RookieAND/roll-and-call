@@ -8,9 +8,9 @@ import { linkHref, linkLabel, linkServiceOf, type ProfileLink } from "../model/l
 import { BrandMark } from "./brand-mark";
 
 const ICON_CLASS = {
-  square: "flex h-11 w-11 items-center justify-center rounded-500 text-gray-900",
+  square: "flex h-9 w-9 items-center justify-center rounded-500 text-gray-900",
   // 마이페이지: 테두리 없이 강조색 아이콘만
-  circle: cn("flex h-11 w-11 items-center justify-center rounded-full", ACCENT_TINT_TEXT),
+  circle: cn("flex h-9 w-9 items-center justify-center rounded-full", ACCENT_TINT_TEXT),
 } as const;
 
 interface ProfileLinksProps {
@@ -42,7 +42,7 @@ export function ProfileLinks({ links, discordId, variant = "square" }: ProfileLi
         const label = linkLabel(link);
         const href = linkHref(link, discordId);
         const service = linkServiceOf(link.service).key;
-        const mark = <BrandMark service={service} />;
+        const mark = <BrandMark service={service} size={24} />;
 
         return href ? (
           // 같은 서비스를 둘 이상 적을 수 있어 순서를 키에 같이 쓴다.
