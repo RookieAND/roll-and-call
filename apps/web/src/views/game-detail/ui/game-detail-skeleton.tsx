@@ -26,7 +26,7 @@ export function GameDetailSkeleton() {
         </VStack>
       }
     >
-      <Container size="md" className="px-0">
+      <Container size="md" className="px-0 desktop:max-w-none">
         <VStack gap="200">
           <div className="desktop:hidden">
             <Skeleton width="100%" height={168} rounded="none" />

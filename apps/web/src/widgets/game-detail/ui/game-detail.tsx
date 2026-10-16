@@ -131,7 +131,7 @@ export function GameDetail({
       }
     >
       {belowAppBar}
-      <Container size="md" className="px-0">
+      <Container size="md" className="px-0 desktop:max-w-none">
         <VStack gap="200">
           <GameDetailThumbnail url={game.thumbnailUrl} spoiler={game.thumbnailSpoiler} />
 
