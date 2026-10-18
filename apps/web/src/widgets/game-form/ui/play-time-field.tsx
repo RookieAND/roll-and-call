@@ -17,7 +17,7 @@ export function PlayTimeField({ min, max, onChangeMin, onChangeMax, error }: Pla
   return (
     <Field.Root label="플레이타임" required>
       <VStack gap="150">
-        <div className="grid gap-150 desktop:grid-cols-2 desktop:items-start">
+        <VStack gap="150">
           <PlayTimeRow name={isNull(max) ? undefined : "최소"} value={min} onChange={onChangeMin} />
           {isNull(max) ? (
             <Button
@@ -47,7 +47,7 @@ export function PlayTimeField({ min, max, onChangeMin, onChangeMax, error }: Pla
               }
             />
           )}
-        </div>
+        </VStack>
         {error && (
           <Text role="alert" typography="body4" foreground="danger">
             {error}
