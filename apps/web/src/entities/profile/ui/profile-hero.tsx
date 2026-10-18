@@ -1,6 +1,8 @@
 import { Avatar, cn, HStack } from "@roll-and-call/ui";
 import type { CSSProperties, ReactNode } from "react";
 
+import { BannerImage } from "@/shared/ui";
+
 interface ProfileHeroProps {
   name: string;
   avatarUrl: string | null | undefined;
@@ -29,8 +31,7 @@ export function ProfileHero({
   return (
     <div style={accent} className={cn("-mx-200", className)}>
       <div className={cn("relative aspect-[3/1] w-full overflow-hidden", faceClass)}>
-        {/* ponytail: 업로드한 이미지는 외부 저장소 주소라 next/image 대신 img로 그린다. */}
-        {bannerUrl && <img src={bannerUrl} alt="" className="size-full object-cover" />}
+        {bannerUrl && <BannerImage src={bannerUrl} />}
       </div>
       <HStack align="end" gap="100" className="relative z-10 -mt-600 px-200 desktop:-mt-13">
         <span className={"flex flex-none rounded-full bg-surface p-050"}>

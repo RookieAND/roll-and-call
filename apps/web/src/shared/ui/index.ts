@@ -1,4 +1,5 @@
 export { AppBar } from "./app-bar";
+export { BannerImage } from "./banner-image";
 export { BrandLogo } from "./brand-logo";
 export { BoundaryFallback } from "./boundary-fallback";
 export { InlineRetry } from "./inline-retry";
