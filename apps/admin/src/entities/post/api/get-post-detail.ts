@@ -93,6 +93,12 @@ export async function getPostDetail({ id, filter, pageSize = PAGE_SIZE }: GetPos
     },
     next,
     applicationNoteEnabled: session.applicationNoteEnabled ?? false,
+    conditionLines: [
+      ...(session.minRulePlays
+        ? [`${session.rulebook} 플레이 ${session.minRulePlays}회 이상`]
+        : []),
+      ...(session.requireRulebookCert ? [`${session.rulebook} 룰북 인증`] : []),
+    ],
     members: session.memberIds.map((userId) => ({
       userId,
       hasApplicationNote: session.applicationNoteUserIds?.has(userId) ?? false,

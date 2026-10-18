@@ -67,6 +67,8 @@ export function buildSessions({
       playTypeLabel: game.playType === "text" ? "텍스트" : "보이스",
       joinedAt: new Map(roster.map((row) => [row.userId, row.joinedAt])),
       applicationNoteEnabled: game.applicationNoteEnabled,
+      minRulePlays: game.minRulePlays,
+      requireRulebookCert: game.requireRulebookCert,
       applicationNoteUserIds: new Set(
         roster.filter((row) => row.hasApplicationNote).map((row) => row.userId),
       ),

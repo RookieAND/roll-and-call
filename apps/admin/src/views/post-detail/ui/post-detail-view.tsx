@@ -11,6 +11,7 @@ import { POST_DETAIL_TAB, type PostDetailTab } from "../model/post-detail-tab";
 import { ContentPanel } from "./content-panel";
 import { MemberPanel } from "./member-panel";
 import { PostActionsAside } from "./post-actions-aside";
+import { PostConditions } from "./post-conditions";
 import { PostDetailTabs } from "./post-detail-tabs";
 import { PostSummary } from "./post-summary";
 
@@ -72,6 +73,7 @@ export function PostDetailView({
         <VStack gap="150" className="min-w-0 flex-1 px-center-200 py-200">
           {post.hidden ? <HiddenBanner hidden={post.hidden} /> : null}
           <PostSummary post={post} userAppHref={userAppHref} logHref={logHref} />
+          <PostConditions lines={post.conditionLines} />
           <Panel>
             <PostDetailTabs
               tab={currentTab}
