@@ -43,6 +43,7 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
     certRequired: rulebook.certRequired,
   };
   const [draft, setDraft] = useState(saved);
+  const [miniRule, setMiniRule] = useState(rulebook.categoryMiniRule);
   const [reason, setReason] = useState("");
   const [duplicate, setDuplicate] = useState(false);
   const [impact, setImpact] = useState<RulebookImpactCase[]>([]);
@@ -53,9 +54,12 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
   const pending = checking || saving.pending || unhiding.pending;
   const category = draftCategory(draft, rulebook.allRulebooks, rulebook.id);
   const next = { ...draft, supersedesId: category.supersedesId };
-  const dirty = (Object.keys(saved) as (keyof RulebookDraft)[]).some(
-    (key) => saved[key] !== next[key],
-  );
+  // 분류를 바꾼 초안이면 그 분류의 값을 따르므로 미니룰은 바꾸지 않는다.
+  const miniRuleEditable = draft.category === saved.category;
+  const miniRuleDirty = miniRuleEditable && miniRule !== rulebook.categoryMiniRule;
+  const dirty =
+    miniRuleDirty ||
+    (Object.keys(saved) as (keyof RulebookDraft)[]).some((key) => saved[key] !== next[key]);
   const categories = uniq(rulebook.allRulebooks.map((row) => row.category));
   const certifiedCount = rulebook.certifiedGms.length;
   const kindDescription = `종류를 바꾸면 인증된 GM ${certifiedCount}명의 구인 자격도 함께 바뀝니다.`;
@@ -76,7 +80,12 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
   };
 
   const persist = async () => {
-    const result = await saving.submit(rulebook.id, next, reason);
+    const result = await saving.submit(
+      rulebook.id,
+      next,
+      reason,
+      miniRuleEditable ? miniRule : undefined,
+    );
     if (isUndefined(result)) return;
     closeDialogs();
     if (!result.ok) {
@@ -134,6 +143,9 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
     draft,
     next,
     change,
+    miniRule,
+    setMiniRule,
+    miniRuleEditable,
     reason,
     setReason,
     category,

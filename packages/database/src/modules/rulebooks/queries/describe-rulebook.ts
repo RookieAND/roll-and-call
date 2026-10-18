@@ -26,6 +26,7 @@ export async function describeRulebook({
       certRequired: rulebooks.certRequired,
       category: rulebookCategories.name,
       categoryAlias: rulebookCategories.alias,
+      miniRule: rulebookCategories.miniRule,
     })
     .from(rulebooks)
     .innerJoin(rulebookCategories, eq(rulebooks.categoryId, rulebookCategories.id))

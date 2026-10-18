@@ -1,4 +1,5 @@
 import { and, eq, ne } from "drizzle-orm";
+import { isUndefined } from "es-toolkit";
 
 import { db } from "#db/client";
 import { recordAudit } from "#db/modules/audit";
@@ -9,7 +10,7 @@ import { rulebookChanges } from "#db/modules/rulebooks/model/rulebook-audit-chan
 import type { RulebookFields } from "#db/modules/rulebooks/model/rulebook-fields";
 import { rulebookLabel } from "#db/modules/rulebooks/model/rulebook-label";
 import { describeRulebook } from "#db/modules/rulebooks/queries/describe-rulebook";
-import { rulebooks } from "#db/schema";
+import { rulebookCategories, rulebooks } from "#db/schema";
 
 import { removeEmptyCategories } from "./remove-empty-categories";
 import { toRulebookValues } from "./rulebook-values";
@@ -52,6 +53,12 @@ export async function updateRulebook({
     const before = await describeRulebook({ executor: tx, serverId, id });
     const values = await toRulebookValues({ executor: tx, serverId, fields, selfId: id });
     await tx.update(rulebooks).set(values).where(eq(rulebooks.id, id));
+    if (!isUndefined(fields.miniRule)) {
+      await tx
+        .update(rulebookCategories)
+        .set({ miniRule: fields.miniRule })
+        .where(eq(rulebookCategories.id, values.categoryId));
+    }
     const pointsHere = and(eq(rulebooks.serverId, serverId), eq(rulebooks.supersedesId, id));
     await tx
       .update(rulebooks)

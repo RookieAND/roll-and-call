@@ -10,6 +10,7 @@ import { useRulebookEditForm } from "../model/use-rulebook-edit-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
 import { KindCards } from "./kind-cards";
+import { MiniRuleField } from "./mini-rule-field";
 import { RulebookEditDialogs } from "./rulebook-edit-dialogs";
 import { SupersedesField } from "./supersedes-field";
 
@@ -63,6 +64,13 @@ export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditForm
                 </div>
               </VStack>
             </BasicInfoFields>
+          </Panel>
+          <Panel title="미니룰" bodyClassName="p-175">
+            <MiniRuleField
+              miniRule={form.miniRule}
+              disabled={pending || !form.miniRuleEditable}
+              onChange={form.setMiniRule}
+            />
           </Panel>
           <Panel title="인증 정책" bodyClassName="p-175">
             <CertPolicyField

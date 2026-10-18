@@ -12,12 +12,19 @@ const base: RulebookDescription = {
   supersedes: "",
   aliases: [],
   certRequired: true,
+  miniRule: false,
 };
 
 describe("rulebookChanges", () => {
   it("다른 이름만 바뀌면 그 칸만 남긴다", () => {
     expect(rulebookChanges(base, { ...base, aliases: ["둘이서 수사 구판"] })).toEqual([
       { field: "다른 이름", added: ["둘이서 수사 구판"] },
+    ]);
+  });
+
+  it("분류의 미니룰이 바뀌면 켜짐·꺼짐으로 남긴다", () => {
+    expect(rulebookChanges(base, { ...base, miniRule: true })).toEqual([
+      { field: "미니룰", before: "꺼짐", after: "켜짐" },
     ]);
   });
 

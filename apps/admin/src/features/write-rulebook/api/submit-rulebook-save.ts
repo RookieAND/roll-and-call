@@ -10,12 +10,22 @@ import type { RulebookDraft } from "../model/rulebook-draft";
 import { rulebookDraftSchema } from "../model/rulebook-draft-schema";
 import { toRulebookFields } from "../model/to-rulebook-fields";
 
-const schema = z.object({ id: idSchema, draft: rulebookDraftSchema, reason: z.string().max(2000) });
+const schema = z.object({
+  id: idSchema,
+  draft: rulebookDraftSchema,
+  reason: z.string().max(2000),
+  miniRule: z.boolean().optional(),
+});
 
-export async function submitRulebookSave(id: string, draft: RulebookDraft, reason: string) {
+export async function submitRulebookSave(
+  id: string,
+  draft: RulebookDraft,
+  reason: string,
+  miniRule?: boolean,
+) {
   const staff = await requireStaff();
-  const input = parseActionInput(schema, { id, draft, reason });
-  const fields = toRulebookFields(input.draft);
+  const input = parseActionInput(schema, { id, draft, reason, miniRule });
+  const fields = { ...toRulebookFields(input.draft), miniRule: input.miniRule };
   if (!fields.name || !input.reason.trim())
     throw new Error("룰북 이름과 변경 사유를 입력해 주세요");
   const server = await getCurrentServer();

@@ -10,6 +10,8 @@ const KIND_LABEL = {
   handbook: "핸드북",
 } as const;
 
+const miniRuleLabel = (miniRule: boolean) => (miniRule ? "켜짐" : "꺼짐");
+
 // 활동 기록에 남기는 칸 이름은 어드민 룰북 화면의 입력 이름과 같다.
 // before가 null이면 새로 만든 룰북이라 값이 있는 칸을 모두 추가로 남긴다.
 export function rulebookChanges(
@@ -35,6 +37,7 @@ export function rulebookChanges(
     scalarChange("판본", before.edition, after.edition),
     scalarChange("분류", before.category, after.category),
     scalarChange("분류 약어", before.categoryAlias, after.categoryAlias),
+    scalarChange("미니룰", miniRuleLabel(before.miniRule), miniRuleLabel(after.miniRule)),
     scalarChange("종류", KIND_LABEL[before.kind], KIND_LABEL[after.kind]),
     scalarChange("포함하는 구판", before.supersedes, after.supersedes),
     listChange("다른 이름", before.aliases, after.aliases),

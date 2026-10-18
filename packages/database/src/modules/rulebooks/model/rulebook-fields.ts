@@ -9,6 +9,6 @@ export interface RulebookFields {
   supersedesId: string | null;
   aliases: string[];
   certRequired: boolean;
-  // 새 카테고리를 만들 때만 쓴다. 이미 있는 카테고리의 값은 바꾸지 않는다.
+  // 추가할 때는 새 카테고리를 만들 때만 쓴다. 수정할 때는 룰북의 카테고리 값을 바꾼다.
   miniRule?: boolean;
 }

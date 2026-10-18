@@ -9,6 +9,7 @@ import { useRulebookEditForm } from "../model/use-rulebook-edit-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
 import { KindCards } from "./kind-cards";
+import { MiniRuleField } from "./mini-rule-field";
 import { MobileFormSection } from "./mobile-form-section";
 import { RulebookEditDialogs } from "./rulebook-edit-dialogs";
 import { SupersedesField } from "./supersedes-field";
@@ -67,6 +68,13 @@ export function MobileRulebookEditForm({ rulebook, viewerId }: MobileRulebookEdi
             certRequired={draft.certRequired}
             disabled={pending}
             onChange={(certRequired) => form.change({ certRequired })}
+          />
+        </MobileFormSection>
+        <MobileFormSection title="미니룰">
+          <MiniRuleField
+            miniRule={form.miniRule}
+            disabled={pending || !form.miniRuleEditable}
+            onChange={form.setMiniRule}
           />
         </MobileFormSection>
         <MobileFormSection title="변경 사유">

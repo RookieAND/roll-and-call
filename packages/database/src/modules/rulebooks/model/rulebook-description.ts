@@ -9,4 +9,5 @@ export interface RulebookDescription {
   supersedes: string;
   aliases: string[];
   certRequired: boolean;
+  miniRule: boolean;
 }

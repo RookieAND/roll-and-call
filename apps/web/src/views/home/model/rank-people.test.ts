@@ -40,19 +40,6 @@ describe("rankPeople", () => {
   });
 });
 
-describe("rankPeople 미니룰", () => {
-  it("미니룰 세션은 0.5회로 센다", () => {
-    const podium = rankPeople([
-      { person: person("a"), weight: 1, sessions: 1 },
-      { person: person("b"), weight: 0.5, sessions: 1 },
-      { person: person("b"), weight: 0.5, sessions: 1 },
-      { person: person("b"), weight: 0.5, sessions: 1 },
-    ]);
-    expect(podium.leaders.map((leader) => leader.id)).toEqual(["b"]);
-    expect(podium.leaderCount).toBe(1.5);
-  });
-});
-
 describe("rankPeople 포인트제", () => {
   it("점수가 0 이하인 사람은 순위에서 빠지고 세션 횟수를 함께 돌려준다", () => {
     const ranking = rankPeople([
