@@ -64,9 +64,11 @@ export function monthlyCard({
   });
   const month = monthLabel(kstMonthKey(now));
   const rankLabel = isNull(standing.rank) ? "순위 없음" : `${standing.rank}위`;
-  const monthLine = points
-    ? `${month} ${standing.count}점 · ${rankLabel} · 1위 ${standing.topCount}점`
-    : `${month} ${verb} ${standing.count}회 · 1위 ${standing.topCount}회`;
+  // 데스크톱은 내 기록과 1위 기록을 두 줄로 나눠 그린다.
+  const monthLines = points
+    ? [`${month} ${standing.count}점 · ${rankLabel}`, `1위 ${standing.topCount}점`]
+    : [`${month} ${verb} ${standing.count}회`, `1위 ${standing.topCount}회`];
+  const monthLine = monthLines.join(" · ");
   const heldStatus = (heldKey: string) =>
     points
       ? `${monthLabel(heldKey)} 점수 1위 · ${countOf(heldKey)}점`
@@ -84,6 +86,7 @@ export function monthlyCard({
       ? `${toKst(now).endOf("month").format("M월 D일")}까지 프로필에 붙습니다.`
       : `이번 달 ${goal} 1위가 다음 달 한 달 동안 답니다.`,
     monthLine: heldMonth ? monthLine : null,
+    monthLines,
     history:
       months.length > 0
         ? `×${months.length} · ${monthListLabel(months)}`

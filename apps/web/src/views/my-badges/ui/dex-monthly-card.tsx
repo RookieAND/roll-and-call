@@ -9,6 +9,15 @@ interface DexMonthlyCardProps {
   card: MonthlyCard;
 }
 
+function MonthLines({ lines }: { lines: string[] }) {
+  return lines.map((line, index) => (
+    <span key={line} className="desktop:block">
+      {index > 0 && <span className="desktop:hidden"> · </span>}
+      {line}
+    </span>
+  ));
+}
+
 export function DexMonthlyCard({ card }: DexMonthlyCardProps) {
   const frameClass = card.held ? "border-rank-gold bg-warning-50" : "border-gray-200";
   return (
@@ -29,14 +38,14 @@ export function DexMonthlyCard({ card }: DexMonthlyCardProps) {
         />
         <VStack gap="050" className="min-w-0 flex-1">
           <Text typography="subtitle1" weight="extrabold" className="break-keep">
-            {card.status}
+            {card.held ? card.status : <MonthLines lines={card.monthLines} />}
           </Text>
           <Text typography="body3" foreground="muted" className="break-keep text-pretty">
             {card.description}
           </Text>
           {card.monthLine && (
             <Text typography="body4" foreground="hint" numeric className="break-keep">
-              {card.monthLine}
+              <MonthLines lines={card.monthLines} />
             </Text>
           )}
         </VStack>
